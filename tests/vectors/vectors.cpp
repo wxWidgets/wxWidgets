@@ -3,7 +3,6 @@
 // Purpose:     wxVector<T> unit test
 // Author:      Vaclav Slavik
 // Created:     2007-07-07
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vaclav Slavik
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -4,7 +4,6 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2004-10-27
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 David Elliott <dfe@cox.net>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -81,9 +80,9 @@ static wxString BundleRelativeURLToPath(CFURLRef relativeURL)
 {
     CFURLRef absoluteURL = CFURLCopyAbsoluteURL(relativeURL);
     wxCHECK_MSG(absoluteURL, wxEmptyString, wxT("Failed to resolve relative URL to absolute URL"));
-    CFStringRef cfStrPath = CFURLCopyFileSystemPath(absoluteURL,kDefaultPathStyle);
+    wxCFStringRef cfStrPath( CFURLCopyFileSystemPath(absoluteURL,kDefaultPathStyle) );
     CFRelease(absoluteURL);
-    return wxCFStringRef(cfStrPath).AsString(wxLocale::GetSystemEncoding());
+    return wxCFStringRef::AsStringWithNormalizationFormC(cfStrPath);
 }
 
 wxString wxStandardPathsCF::GetFromFunc(wxCFURLRef (*func)(wxCFBundleRef)) const

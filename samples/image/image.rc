@@ -1,0 +1,5 @@
+#include "../sample.rc"
+
+// The exact PNG file used here doesn't really matter but it's the same one we
+// embed into the sample code too.
+cursor RCDATA "cursor.png"

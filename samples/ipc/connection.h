@@ -3,7 +3,6 @@
 // Purpose:     DDE sample: MyConnection class
 // Author:      Vadim Zeitlin
 // Created:     2008-02-11 (extracted from client.cpp)
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Julian Smart
 //                  2008 Vadim Zeitlin
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        tests/net/ipc.cpp
 // Purpose:     IPC classes unit tests
 // Author:      Vadim Zeitlin
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -262,4 +261,4 @@ void IPCTestCase::Disconnect()
 
 #endif // wxUSE_THREADS
 
-#endif // !__WXMSW__
+#endif // !__WINDOWS__

@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -23,6 +22,7 @@
 
 #include "wx/tokenzr.h"
 #include "wx/stockitem.h"
+#include "wx/modalhook.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -113,7 +113,6 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                            long style, const wxPoint& pos, const wxSize& sz, const wxString& name)
              :wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name)
 {
-    m_filterIndex = 1;
 }
 
 static void wxChangeListBoxColours(wxWindow* WXUNUSED(win), Widget widget)
@@ -152,6 +151,8 @@ static void wxChangeListBoxColours(wxWindow* WXUNUSED(win), Widget widget)
 
 int wxFileDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
     wxBeginBusyCursor();
 
     //  static char fileBuf[512];

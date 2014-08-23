@@ -2,7 +2,6 @@
 // Name:        gbsizer.h
 // Purpose:     interface of wxGBPosition
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -48,9 +47,9 @@ public:
     void SetRow(int row);
 
     /**
-        Checks if the position is valid. An invalid position is (-1,-1).
+        Compare inequality of two wxGBPositions.
     */
-    bool operator!(const wxGBPosition& p) const;
+    bool operator!=(const wxGBPosition& p) const;
 
     /**
         Compare equality of two wxGBPositions.
@@ -93,12 +92,20 @@ public:
     wxSizerItem* Add(wxSizer* sizer, const wxGBPosition& pos,
                      const wxGBSpan& span = wxDefaultSpan,
                      int flag = 0, int border = 0, wxObject* userData = NULL);
+    wxSizerItem* Add(wxGBSizerItem* item);
+
+    /**
+        Adds a spacer to the given position.
+        @a width and @a height specify the dimension of the spacer to be added.
+
+        @return A valid pointer if the spacer was successfully placed at the
+                 given position, or @NULL if something was already there.
+    */
     wxSizerItem* Add(int width, int height, const wxGBPosition& pos,
                      const wxGBSpan& span = wxDefaultSpan,
                      int flag = 0, int border = 0, wxObject* userData = NULL);
-    wxSizerItem* Add(wxGBSizerItem* item);
-    //@}
 
+    //@}
     /**
         Called when the managed size of the sizer is needed or when layout
         needs done.
@@ -231,20 +238,20 @@ public:
         Construct a sizer item for tracking a spacer.
     */
     wxGBSizerItem(int width, int height, const wxGBPosition& pos,
-                  const wxGBSpan& span, int flag, int border,
-                  wxObject* userData);
+                  const wxGBSpan& span=wxDefaultSpan, int flag=0, int border=0,
+                  wxObject* userData=NULL);
     /**
         Construct a sizer item for tracking a window.
     */
     wxGBSizerItem(wxWindow* window, const wxGBPosition& pos,
-                  const wxGBSpan& span, int flag, int border,
-                  wxObject* userData);
+                  const wxGBSpan& span=wxDefaultSpan, int flag=0, int border=0,
+                  wxObject* userData=NULL);
     /**
         Construct a sizer item for tracking a subsizer.
     */
     wxGBSizerItem(wxSizer* sizer, const wxGBPosition& pos,
-                  const wxGBSpan& span, int flag, int border,
-                  wxObject* userData);
+                  const wxGBSpan& span=wxDefaultSpan, int flag=0, int border=0,
+                  wxObject* userData=NULL);
 
     /**
         Get the row and column of the endpoint of this item.
@@ -291,6 +298,10 @@ public:
         is successful and after the next Layout the item will be resized.
     */
     bool SetSpan(const wxGBSpan& span);
+
+    
+    wxGridBagSizer* GetGBSizer() const;
+    void SetGBSizer(wxGridBagSizer* sizer);
 };
 
 
@@ -338,9 +349,9 @@ public:
     void SetRowspan(int rowspan);
 
     /**
-        Checks if the span is valid. An invalid span is (-1,-1).
+        Compare inequality of two wxGBSpans.
     */
-    bool operator!(const wxGBSpan& o) const;
+    bool operator!=(const wxGBSpan& o) const;
 
     /**
         Compare equality of two wxGBSpans.
@@ -348,3 +359,5 @@ public:
     bool operator==(const wxGBSpan& o) const;
 };
 
+
+const wxGBSpan wxDefaultSpan;

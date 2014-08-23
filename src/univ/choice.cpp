@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     15.12.00
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -81,7 +80,7 @@ void wxChoice::OnComboBox(wxCommandEvent& event)
 {
     if ( event.GetId() == GetId() )
     {
-        event.SetEventType(wxEVT_COMMAND_CHOICE_SELECTED);
+        event.SetEventType(wxEVT_CHOICE);
         event.Skip();
         GetEventHandler()->ProcessEvent(event);
     }

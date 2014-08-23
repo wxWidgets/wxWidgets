@@ -2,7 +2,6 @@
 // Name:        richtext/richtextxml.h
 // Purpose:     interface of wxRichTextXMLHandler
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -50,55 +49,25 @@ public:
     virtual bool CanSave() const;
 
     /**
-        Creates XML code for a given character or paragraph style.
-    */
-    wxString CreateStyle(const wxTextAttr& attr, bool isPara = false);
-
-    /**
         Recursively exports an object to the stream.
     */
-    bool ExportXML(wxOutputStream& stream, wxMBConv* convMem,
-                   wxMBConv* convFile,
-                   wxRichTextObject& obj,
-                   int level);
-
-    /**
-        Helper function: gets node context.
-    */
-    wxString GetNodeContent(wxXmlNode* node);
-
-    /**
-        Helper function: gets a named parameter from the XML node.
-    */
-    wxXmlNode* GetParamNode(wxXmlNode* node, const wxString& param);
-
-    /**
-        Helper function: gets a named parameter from the XML node.
-    */
-    wxString GetParamValue(wxXmlNode* node, const wxString& param);
-
-    /**
-        Helper function: gets style parameters from the given XML node.
-    */
-    bool GetStyle(wxTextAttr& attr, wxXmlNode* node,
-                  bool isPara = false);
-
-    /**
-        Helper function: gets text from the node.
-    */
-    wxString GetText(wxXmlNode* node,
-                     const wxString& param = wxEmptyString,
-                     bool translate = false);
-
-    /**
-        Helper function: returns @true if the node has the given parameter.
-    */
-    bool HasParam(wxXmlNode* node, const wxString& param);
+    bool ExportXML(wxOutputStream& stream, wxRichTextObject& obj, int level);
 
     /**
         Recursively imports an object.
     */
-    bool ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node);
+    bool ImportXML(wxRichTextBuffer* buffer, wxRichTextObject* obj, wxXmlNode* node);
+
+    /**
+        Call with XML node name, C++ class name so that wxRTC can read in the node.
+        If you add a custom object, call this.
+    */
+    static void RegisterNodeName(const wxString& nodeName, const wxString& className) { sm_nodeNameToClassMap[nodeName] = className; }
+
+    /**
+        Cleans up the mapping between node name and C++ class.
+    */
+    static void ClearNodeToClassMap() { sm_nodeNameToClassMap.clear(); }
 
 protected:
 

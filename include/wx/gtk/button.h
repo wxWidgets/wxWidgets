@@ -2,7 +2,6 @@
 // Name:        wx/gtk/button.h
 // Purpose:     wxGTK wxButton class declaration
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -35,8 +34,8 @@ public:
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxButtonNameStr);
 
-    virtual wxWindow *SetDefault();
-    virtual void SetLabel( const wxString &label );
+    virtual wxWindow *SetDefault() wxOVERRIDE;
+    virtual void SetLabel( const wxString &label ) wxOVERRIDE;
 
     // implementation
     // --------------
@@ -55,11 +54,11 @@ public:
     void GTKReleased();
 
 protected:
-    virtual wxSize DoGetBestSize() const;
-    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style) wxOVERRIDE;
 
 #if wxUSE_MARKUP
-    virtual bool DoSetLabelMarkup(const wxString& markup);
+    virtual bool DoSetLabelMarkup(const wxString& markup) wxOVERRIDE;
 #endif // wxUSE_MARKUP
 
 private:

@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -34,7 +33,7 @@ public:
     wxCursorRefData(const wxCursorRefData& cursor);
     virtual ~wxCursorRefData();
 
-    virtual bool IsOk() const
+    virtual bool IsOk() const wxOVERRIDE
     {
 #if wxOSX_USE_COCOA_OR_CARBON
         if ( m_hCursor != NULL )

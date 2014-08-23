@@ -4,7 +4,6 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2002/12/15
-// RCS-ID:      $Id$
 // Copyright:   2002 David Elliott
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -19,6 +18,7 @@
     #include "wx/settings.h"
 #endif //WX_PRECOMP
 
+#include "wx/modalhook.h"
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
 
@@ -127,6 +127,8 @@ bool wxDialog::Show(bool show)
 // is stopped (via EndModal()) it returns the exit code.
 int wxDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
     wxCHECK_MSG(!IsModal(),GetReturnCode(),wxT("wxDialog::ShowModal called within its own modal loop"));
 
     // Show(true) will set m_isShown = true

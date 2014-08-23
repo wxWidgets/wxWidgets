@@ -2,7 +2,6 @@
 // Name:        window.h
 // Purpose:     interface of wxWindow
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -47,24 +46,39 @@ enum wxShowEffect
     wxSHOW_EFFECT_BLEND,
 
     /// Expanding or collapsing effect
-    wxSHOW_EFFECT_EXPAND
+    wxSHOW_EFFECT_EXPAND,
+
+    wxSHOW_EFFECT_MAX
+};
+
+
+/**
+   flags for SendSizeEvent()
+*/
+enum
+{
+    wxSEND_EVENT_POST = 1
 };
 
 
 
+
 /**
-   struct containing all the visual attributes of a control
+    Struct containing all the visual attributes of a control.
 */
 struct  wxVisualAttributes
 {
-    // the font used for control label/text inside it
+    /// The font used for control label/text inside it.
     wxFont font;
 
-    // the foreground colour
+    /// The foreground colour.
     wxColour colFg;
 
-    // the background colour, may be wxNullColour if the controls background
-    // colour is not solid
+    /**
+        The background colour.
+
+        May be wxNullColour if the controls background colour is not solid.
+     */
     wxColour colBg;
 };
 
@@ -334,8 +348,8 @@ public:
 
     /**
         This method may be overridden in the derived classes to return @false to
-        indicate that this control doesn't accept input at all (i.e. behaves like
-        e.g. wxStaticText) and so doesn't need focus.
+        indicate that this control doesn't accept input at all (i.e.\ behaves like
+        e.g.\ wxStaticText) and so doesn't need focus.
 
         @see AcceptsFocusFromKeyboard()
     */
@@ -355,10 +369,32 @@ public:
         container windows.
      */
     virtual bool AcceptsFocusRecursively() const;
+    
+    /**
+     Can this window itself have focus?
+    */
+    bool IsFocusable() const;
+
+    /**
+       Can this window have focus right now?
+        
+       If this method returns true, it means that calling SetFocus() will
+       put focus either to this window or one of its children, if you need
+       to know whether this window accepts focus itself, use IsFocusable()
+    */
+    bool CanAcceptFocus() const;
+
+    /**
+       Can this window be assigned focus from keyboard right now?
+    */
+    bool CanAcceptFocusFromKeyboard() const;
+
 
     /**
         Returns @true if the window (or in case of composite controls, its main
         child window) has focus.
+
+        @since 2.9.0
 
         @see FindFocus()
     */
@@ -419,13 +455,21 @@ public:
 
     /**
         Find a child of this window, by @a id.
+
         May return @a this if it matches itself.
+
+        Notice that only real children, not top level windows using this window
+        as parent, are searched by this function.
     */
     wxWindow* FindWindow(long id) const;
 
     /**
         Find a child of this window, by name.
+
         May return @a this if it matches itself.
+
+        Notice that only real children, not top level windows using this window
+        as parent, are searched by this function.
     */
     wxWindow* FindWindow(const wxString& name) const;
 
@@ -490,10 +534,30 @@ public:
         @see GetNextSibling()
     */
     wxWindow* GetPrevSibling() const;
+
     /**
-        Reparents the window, i.e. the window will be removed from its
+        Check if the specified window is a descendant of this one.
+
+        Returns @true if the window is a descendant (i.e. a child or
+        grand-child or grand-grand-child or ...) of this one.
+
+        Notice that a window can never be a descendant of another one if they
+        are in different top level windows, i.e. a child of a wxDialog is not
+        considered to be a descendant of dialogs parent wxFrame.
+
+        @param win Any window, possible @NULL (@false is always returned then).
+
+        @since 2.9.4
+     */
+    bool IsDescendant(wxWindowBase* win) const;
+
+    /**
+        Reparents the window, i.e.\ the window will be removed from its
         current parent window (e.g. a non-standard toolbar in a wxFrame)
         and then re-inserted into another.
+
+        Notice that currently you need to explicitly call
+        wxNotebook::RemovePage() before reparenting a notebook page.
 
         @param newParent
             New parent.
@@ -714,9 +778,74 @@ public:
     /**
         @name Sizing functions
 
-        See also the protected functions DoGetBestSize() and SetInitialBestSize().
+        See also the protected functions DoGetBestSize() and
+        DoGetBestClientSize().
     */
     //@{
+
+    /**
+        Helper for ensuring EndRepositioningChildren() is called correctly.
+
+        This class wraps the calls to BeginRepositioningChildren() and
+        EndRepositioningChildren() by performing the former in its constructor
+        and the latter in its destructor if, and only if, the first call
+        returned @true. This is the simplest way to call these methods and if
+        this class is created as a local variable, it also ensures that
+        EndRepositioningChildren() is correctly called (or not) on scope exit,
+        so its use instead of calling these methods manually is highly
+        recommended.
+
+        @since 2.9.5
+     */
+    class ChildrenRepositioningGuard
+    {
+    public:
+        /**
+            Constructor calls wxWindow::BeginRepositioningChildren().
+
+            @param win The window to call BeginRepositioningChildren() on. If
+                it is @NULL, nothing is done.
+         */
+        explicit ChildrenRepositioningGuard(wxWindow* win);
+
+        /**
+            Destructor calls wxWindow::EndRepositioningChildren() if necessary.
+
+            EndRepositioningChildren() is called only if a valid window was
+            passed to the constructor and if BeginRepositioningChildren()
+            returned @true.
+         */
+        ~ChildrenRepositioningGuard();
+    };
+
+    /**
+        Prepare for changing positions of multiple child windows.
+
+        This method should be called before changing positions of multiple
+        child windows to reduce flicker and, in MSW case, even avoid display
+        corruption in some cases. It is used internally by wxWidgets and called
+        automatically when the window size changes but it can also be useful to
+        call it from outside of the library if a repositioning involving
+        multiple children is done without changing the window size.
+
+        If this method returns @true, then EndRepositioningChildren() must be
+        called after setting all children positions. Use
+        ChildrenRepositioningGuard class to ensure that this requirement is
+        satisfied.
+
+        @since 2.9.5
+     */
+    bool BeginRepositioningChildren();
+
+    /**
+        Fix child window positions after setting all of them at once.
+
+        This method must be called if and only if the previous call to
+        BeginRepositioningChildren() returned @true.
+
+        @since 2.9.5
+     */
+    void EndRepositioningChildren();
 
     /**
         Sets the cached best size value.
@@ -795,12 +924,37 @@ public:
         wxPanel), the size returned by this function will be the same as the size
         the window would have had after calling Fit().
 
-        Note that when you write your own widget you need to override the
-        DoGetBestSize() function instead of this (non-virtual!) function.
+        Override virtual DoGetBestSize() or, better, because it's usually more
+        convenient, DoGetBestClientSize() when writing your own custom window
+        class to change the value returned by this public non-virtual method.
+
+        Notice that the best size respects the minimal and maximal size
+        explicitly set for the window, if any. So even if some window believes
+        that it needs 200 pixels horizontally, calling SetMaxSize() with a
+        width of 100 would ensure that GetBestSize() returns the width of at
+        most 100 pixels.
 
         @see CacheBestSize(), @ref overview_windowsizing
     */
     wxSize GetBestSize() const;
+
+    /**
+        Returns the best height needed by this window if it had the given width.
+
+        @see DoGetBestClientHeight()
+
+        @since 2.9.4
+     */
+    int GetBestHeight(int width) const;
+
+    /**
+        Returns the best width needed by this window if it had the given height.
+
+        @see DoGetBestClientWidth()
+
+        @since 2.9.4
+     */
+    int GetBestWidth(int height) const;
 
     /**
         Returns the size of the window 'client area' in pixels.
@@ -879,9 +1033,40 @@ public:
     */
     virtual wxSize GetMinSize() const;
 
+    /**
+        Returns the horizontal component of window minimal size.
+
+        The returned value is wxDefaultCoord if the minimal width was not set.
+
+        @see GetMinSize()
+     */
     int GetMinWidth() const;
+
+    /**
+        Returns the vertical component of window minimal size.
+
+        The returned value is wxDefaultCoord if the minimal height was not set.
+
+        @see GetMinSize()
+     */
     int GetMinHeight() const;
+
+    /**
+        Returns the horizontal component of window maximal size.
+
+        The returned value is wxDefaultCoord if the maximal width was not set.
+
+        @see GetMaxSize()
+     */
     int GetMaxWidth() const;
+
+    /**
+        Returns the vertical component of window maximal size.
+
+        The returned value is wxDefaultCoord if the maximal width was not set.
+
+        @see GetMaxSize()
+     */
     int GetMaxHeight() const;
 
     /**
@@ -935,6 +1120,14 @@ public:
     */
     virtual wxSize GetBestVirtualSize() const;
 
+    /**
+       Returns the magnification of the backing store of this window, eg 2.0
+       for a window on a retina screen.
+
+       @since 2.9.5
+    */
+    virtual double GetContentScaleFactor() const;
+    
     /**
         Returns the size of the left/right and top/bottom borders of this window in x
         and y components of the result respectively.
@@ -1193,6 +1386,9 @@ public:
     virtual void SetSizeHints( const wxSize& minSize,
                                const wxSize& maxSize=wxDefaultSize,
                                const wxSize& incSize=wxDefaultSize);
+    /**
+        @overload
+    */
     virtual void SetSizeHints( int minW, int minH,
                                int maxW = -1, int maxH = -1,
                                int incW = -1, int incH = -1 );
@@ -1328,7 +1524,7 @@ public:
     virtual wxPoint GetClientAreaOrigin() const;
 
     /**
-       Get the client rectangle in window (i.e. client) coordinates
+       Get the client rectangle in window (i.e.\ client) coordinates
     */
     wxRect GetClientRect() const;
 
@@ -1391,12 +1587,6 @@ public:
         @param y
             A pointer to a integer value for the y coordinate. Pass the client
             coordinate in, and a screen coordinate will be passed out.
-
-        @beginWxPythonOnly
-        In place of a single overloaded method name, wxPython implements the following methods:
-            - ClientToScreen(point): Accepts and returns a wxPoint
-            - ClientToScreenXY(x, y): Returns a 2-tuple, (x, y)
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method returns a 2-element list instead of
@@ -1694,13 +1884,18 @@ public:
 
     /**
         Sets the background colour of the window.
+
+        Notice that as with SetForegroundColour(), setting the background
+        colour of a native control may not affect the entire control and could
+        be not supported at all depending on the control and platform.
+
         Please see InheritAttributes() for explanation of the difference between
         this method and SetOwnBackgroundColour().
 
         @param colour
             The colour to be used as the background colour; pass
             wxNullColour to reset to the default colour.
-            Note that you may want to use wxSystemSettings::GetColour() to retrieve 
+            Note that you may want to use wxSystemSettings::GetColour() to retrieve
             a suitable colour to use rather than setting an hard-coded one.
 
         @remarks The background colour is usually painted by the default
@@ -1747,10 +1942,56 @@ public:
         @c wxBG_STYLE_PAINT is a simpler and more efficient solution to the same
         problem.
 
+
+        Under wxGTK and wxOSX, you can use ::wxBG_STYLE_TRANSPARENT to obtain
+        full transparency of the window background. Note that wxGTK supports
+        this only since GTK 2.12 with a compositing manager enabled, call
+        IsTransparentBackgroundSupported() to check whether this is the case.
+
+        Also, on order for @c SetBackgroundStyle(wxBG_STYLE_TRANSPARENT) to
+        work, it must be called before Create(). If you're using your own
+        wxWindow-derived class you should write your code in the following way:
+        @code
+            class MyWidget : public wxWindow
+            {
+            public:
+                MyWidget(wxWindow* parent, ...)
+                    : wxWindow() // Use default ctor here!
+                {
+                    // Do this first:
+                    SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
+
+                    // And really create the window afterwards:
+                    Create(parent, ...);
+                }
+            };
+        @endcode
+
         @see SetBackgroundColour(), GetForegroundColour(),
-             SetTransparent()
+             SetTransparent(), IsTransparentBackgroundSupported()
     */
     virtual bool SetBackgroundStyle(wxBackgroundStyle style);
+
+    /**
+        Checks whether using transparent background might work.
+
+        If this function returns @false, calling SetBackgroundStyle() with
+        ::wxBG_STYLE_TRANSPARENT is not going to work. If it returns @true,
+        setting transparent style should normally succeed.
+
+        Notice that this function would typically be called on the parent of a
+        window you want to set transparent background style for as the window
+        for which this method is called must be fully created.
+
+        @param reason
+            If not @NULL, a reason message is provided if transparency is not
+            supported.
+
+        @return @true if background transparency is supported.
+
+        @since 2.9.4
+    */
+    virtual bool IsTransparentBackgroundSupported(wxString *reason = NULL) const;
 
     /**
         Sets the font for this window. This function should not be called for the
@@ -1777,15 +2018,19 @@ public:
 
     /**
         Sets the foreground colour of the window.
+
+        The meaning of foreground colour varies according to the window class;
+        it may be the text colour or other colour, or it may not be used at
+        all. Additionally, not all native controls support changing their
+        foreground colour so this method may change their colour only partially
+        or even not at all.
+
         Please see InheritAttributes() for explanation of the difference between
         this method and SetOwnForegroundColour().
 
         @param colour
             The colour to be used as the foreground colour; pass
             wxNullColour to reset to the default colour.
-
-        @remarks The meaning of foreground colour varies according to the window class;
-                 it may be the text colour or other colour, or it may not be used at all.
 
         @return @true if the colour was really changed, @false if it was already set
                 to this colour and nothing was done.
@@ -1802,6 +2047,18 @@ public:
         @see SetBackgroundColour(), InheritAttributes()
     */
     void SetOwnBackgroundColour(const wxColour& colour);
+
+    /**
+        Return @true if this window inherits the background colour from its parent.
+
+        @see SetOwnBackgroundColour(), InheritAttributes()
+    */
+    bool InheritsBackgroundColour() const;
+
+    /**
+        Return @true if a background colour has been set for this window.
+    */
+    bool UseBgCol() const;
 
     /**
         Sets the font of the window but prevents it from being inherited by the
@@ -2230,7 +2487,7 @@ public:
     virtual bool HideWithEffect(wxShowEffect effect,
                                 unsigned int timeout = 0);
     /**
-        Returns @true if the window is enabled, i.e. if it accepts user input,
+        Returns @true if the window is enabled, i.e.\ if it accepts user input,
         @false otherwise.
 
         Notice that this method can return @false even if this window itself hadn't
@@ -2270,7 +2527,7 @@ public:
     virtual bool IsShown() const;
 
     /**
-        Returns @true if the window is physically visible on the screen, i.e. it
+        Returns @true if the window is physically visible on the screen, i.e.\ it
         is shown and all its parents up to the toplevel window are shown as well.
 
         @see IsShown()
@@ -2407,7 +2664,7 @@ public:
 
         @see GetToolTip(), wxToolTip
     */
-    void SetToolTip(const wxString& tip);
+    void SetToolTip(const wxString& tipString);
 
     /**
         @overload
@@ -2593,6 +2850,14 @@ public:
     virtual wxLayoutDirection GetLayoutDirection() const;
 
     /**
+       Mirror coordinates for RTL layout if this window uses it and if the
+       mirroring is not done automatically like Win32.
+    */
+    virtual wxCoord AdjustForLayoutDirection(wxCoord x,
+                                             wxCoord width,
+                                             wxCoord widthTotal) const;
+
+    /**
         Returns the window's name.
 
         @remarks This name is not guaranteed to be unique; it is up to the
@@ -2646,12 +2911,17 @@ public:
     virtual void SetName(const wxString& name);
 
     /**
-        This function can be called under all platforms but only does anything under
-        Mac OS X 10.3+ currently. Under this system, each of the standard control can
-        exist in several sizes which correspond to the elements of wxWindowVariant enum.
+        Chooses a different variant of the window display to use.
 
-        By default the controls use the normal size, of course, but this function can
-        be used to change this.
+        Window variants currently just differ in size, as can be seen from
+        ::wxWindowVariant documentation. Under all platforms but OS X, this
+        function does nothing more than change the font used by the window.
+        However under OS X it is implemented natively and selects the
+        appropriate variant of the native widget, which has better appearance
+        than just scaled down or up version of the normal variant, so it should
+        be preferred to directly tweaking the font size.
+
+        By default the controls naturally use the normal variant.
     */
     void SetWindowVariant(wxWindowVariant variant);
 
@@ -2693,6 +2963,8 @@ public:
         @param force
             @false if the window's close handler should be able to veto the destruction
             of this window, @true if it cannot.
+
+        @return @true if the event was handled and not vetoed, @false otherwise.
 
         @remarks Close calls the close handler for the window, providing an
                  opportunity for the window to choose whether to destroy
@@ -3030,7 +3302,7 @@ public:
     /**
         Returns the platform-specific handle of the physical window.
         Cast it to an appropriate handle, such as @b HWND for Windows,
-        @b Widget for Motif, @b GtkWidget for GTK or @b WinHandle for PalmOS.
+        @b Widget for Motif or @b GtkWidget for GTK.
 
         @beginWxPerlOnly
         This method will return an integer in wxPerl.
@@ -3079,7 +3351,7 @@ public:
     virtual void InitDialog();
 
     /**
-        Returns @true if the window contents is double-buffered by the system, i.e. if
+        Returns @true if the window contents is double-buffered by the system, i.e.\ if
         any drawing done on the window is really done on a temporary backing surface
         and transferred to the screen all at once later.
 
@@ -3087,6 +3359,9 @@ public:
     */
     virtual bool IsDoubleBuffered() const;
 
+    /**
+       Turn on or off double buffering of the window if the system supports it.
+    */
     void SetDoubleBuffered(bool on);
 
     /**
@@ -3098,7 +3373,7 @@ public:
 
     /**
         Returns @true if this window is intrinsically enabled, @false otherwise,
-        i.e. if @ref Enable() Enable(@false) had been called. This method is
+        i.e.\ if @ref Enable() Enable(@false) had been called. This method is
         mostly used for wxWidgets itself, user code should normally use
         IsEnabled() instead.
     */
@@ -3110,17 +3385,6 @@ public:
         window).
     */
     virtual bool IsTopLevel() const;
-
-    /**
-        Disables all other windows in the application so that
-        the user can only interact with this window.
-
-        @param modal
-            If @true, this call disables all other windows in the application so that
-            the user can only interact with this window. If @false, the effect is
-            reversed.
-    */
-    virtual void MakeModal(bool modal = true);
 
     
     /**
@@ -3134,6 +3398,12 @@ public:
         in order to send update events to the window in idle time.
     */
     virtual void OnInternalIdle();
+
+    /**
+       Send idle event to window and all subwindows. Returns true if more idle
+       time is requested.
+    */
+    virtual bool SendIdleEvents(wxIdleEvent& event);
 
     /**
         Registers a system wide hotkey. Every time the user presses the hotkey
@@ -3374,9 +3644,11 @@ protected:
     virtual void DoCentre(int direction);
 
     /**
-        Gets the size which best suits the window: for a control, it would be
-        the minimal size which doesn't truncate the control, for a panel - the
-        same size as it would have after a call to Fit().
+        Implementation of GetBestSize() that can be overridden.
+
+        Notice that it is usually more convenient to override
+        DoGetBestClientSize() rather than this method itself as you need to
+        explicitly account for the window borders size if you do the latter.
 
         The default implementation of this function is designed for use in container
         windows, such as wxPanel, and works something like this:
@@ -3394,11 +3666,70 @@ protected:
     */
     virtual wxSize DoGetBestSize() const;
 
+    /**
+        Override this method to return the best size for a custom control.
+
+        A typical implementation of this method should compute the minimal size
+        needed to fully display the control contents taking into account the
+        current font size.
+
+        The default implementation simply returns ::wxDefaultSize and
+        GetBestSize() returns an arbitrary hardcoded size for the window, so
+        you must override it when implementing a custom window class.
+
+        Notice that the best size returned by this function is cached
+        internally, so if anything that results in the best size changing (e.g.
+        change to the control contents) happens, you need to call
+        InvalidateBestSize() to notify wxWidgets about it.
+
+        @see @ref overview_windowsizing
+
+        @since 2.9.0
+     */
+    virtual wxSize DoGetBestClientSize() const;
 
     /**
-        Sets the initial window size if none is given (i.e. at least one of the
+        Override this method to implement height-for-width best size
+        calculation.
+
+        Return the height needed to fully display the control contents if its
+        width is fixed to the given value. Custom classes implementing
+        wrapping should override this method and return the height
+        corresponding to the number of lines needed to lay out the control
+        contents at this width.
+
+        Currently this method is not used by wxWidgets yet, however it is
+        planned that it will be used by the new sizer classes implementing
+        height-for-width layout strategy in the future.
+
+        Notice that implementing this method or even implementing both it and
+        DoGetBestClientWidth() doesn't replace overriding DoGetBestClientSize(),
+        i.e. you still need to implement the latter as well in order to provide
+        the best size when neither width nor height are constrained.
+
+        By default returns ::wxDefaultCoord meaning that the vertical component
+        of DoGetBestClientSize() return value should be used.
+
+        @since 2.9.4
+     */
+    virtual int DoGetBestClientHeight(int width) const;
+
+    /**
+        Override this method to implement width-for-height best size
+        calculation.
+
+        This method is exactly the same as DoGetBestClientHeight() except that
+        it determines the width assuming the height is fixed instead of vice
+        versa.
+
+        @since 2.9.4
+     */
+    virtual int DoGetBestClientWidth(int height) const;
+
+    /**
+        Sets the initial window size if none is given (i.e.\ at least one of the
         components of the size passed to ctor/Create() is wxDefaultCoord).
-        @deprecated @todo provide deprecation description
+        @deprecated Use SetInitialSize() instead.
     */
     virtual void SetInitialBestSize(const wxSize& size);
 
@@ -3470,6 +3801,8 @@ wxWindow* wxGetActiveWindow();
 /**
     Returns the first top level parent of the given window, or in other words,
     the frame or dialog containing it, or @NULL.
+
+    Notice that if @a window is itself already a TLW, it is returned directly.
 
     @header{wx/window.h}
 */

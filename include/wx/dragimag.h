@@ -5,7 +5,6 @@
 // Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
-// RCS-ID:      $Id$
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -39,10 +38,6 @@ class WXDLLIMPEXP_FWD_CORE wxDC;
 #   define wxDragImage wxGenericDragImage
 
 #elif defined(__WXMAC__)
-#   include "wx/generic/dragimgg.h"
-#   define wxDragImage wxGenericDragImage
-
-#elif defined(__WXPM__)
 #   include "wx/generic/dragimgg.h"
 #   define wxDragImage wxGenericDragImage
 

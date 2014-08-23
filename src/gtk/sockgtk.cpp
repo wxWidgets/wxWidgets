@@ -3,7 +3,6 @@
 // Purpose:     implementation of wxGTK-specific socket event handling
 // Author:      Guilhem Lavaux, Vadim Zeitlin
 // Created:     1999
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999, 2007 wxWidgets dev team
 //              (c) 2009 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -12,7 +11,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_SOCKETS
+#if wxUSE_SOCKETS && defined(__UNIX__)
 
 #include "wx/apptrait.h"
 #include "wx/private/fdiomanager.h"
@@ -45,17 +44,20 @@ static gboolean wxSocket_Input(GIOChannel*, GIOCondition condition, gpointer dat
 class GTKFDIOManager : public wxFDIOManager
 {
 public:
-    virtual int AddInput(wxFDIOHandler *handler, int fd, Direction d)
+    virtual int AddInput(wxFDIOHandler *handler, int fd, Direction d) wxOVERRIDE
     {
-        return g_io_add_watch(
-            g_io_channel_unix_new(fd),
+        GIOChannel* channel = g_io_channel_unix_new(fd);
+        unsigned id = g_io_add_watch(
+            channel,
             d == OUTPUT ? G_IO_OUT : G_IO_IN,
             wxSocket_Input,
             handler);
+        g_io_channel_unref(channel);
+        return id;
     }
 
     virtual void
-    RemoveInput(wxFDIOHandler* WXUNUSED(handler), int fd, Direction WXUNUSED(d))
+    RemoveInput(wxFDIOHandler* WXUNUSED(handler), int fd, Direction WXUNUSED(d)) wxOVERRIDE
     {
         g_source_remove(fd);
     }
@@ -67,4 +69,4 @@ wxFDIOManager *wxGUIAppTraits::GetFDIOManager()
     return &s_manager;
 }
 
-#endif // wxUSE_SOCKETS
+#endif // wxUSE_SOCKETS && __UNIX__

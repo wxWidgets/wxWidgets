@@ -26,7 +26,7 @@ public:
     enum Style
     {
         /**
-            This flag cab be used to indicate absence of any other flags below.
+            This flag can be used to indicate absence of any other flags below.
          */
         Style_None              = 0x00,
 

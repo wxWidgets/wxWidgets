@@ -5,7 +5,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -18,6 +17,7 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/event.h"       // for the base class
+#include "wx/eventfilter.h" // (and another one)
 #include "wx/build.h"
 #include "wx/cmdargs.h"     // for wxCmdLineArgsArray used by wxApp::argv
 #include "wx/init.h"        // we must declare wxEntry()
@@ -70,7 +70,8 @@ extern WXDLLIMPEXP_DATA_BASE(wxList) wxPendingDelete;
 // wxAppConsoleBase: wxApp for non-GUI applications
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxAppConsoleBase : public wxEvtHandler
+class WXDLLIMPEXP_BASE wxAppConsoleBase : public wxEvtHandler,
+                                          public wxEventFilter
 {
 public:
     // ctor and dtor
@@ -101,6 +102,9 @@ public:
     // be done here. When OnRun() returns, the programs starts shutting down.
     virtual int OnRun();
 
+    // Called before the first events are handled, called from within MainLoop()
+    virtual void OnLaunched();
+    
     // This is called by wxEventLoopBase::SetActive(): you should put the code
     // which needs an active event loop here.
     // Note that this function is called whenever an event loop is activated;
@@ -226,6 +230,13 @@ public:
     // for it
     static wxAppTraits *GetTraitsIfExists();
 
+    // Return some valid traits object.
+    //
+    // This method checks if we have wxTheApp and returns its traits if it does
+    // exist and the traits are non-NULL, similarly to GetTraitsIfExists(), but
+    // falls back to wxConsoleAppTraits to ensure that it always returns
+    // something valid.
+    static wxAppTraits& GetValidTraits();
     // returns the main event loop instance, i.e. the event loop which is started
     // by OnRun() and which dispatches all events sent from the native toolkit
     // to the application (except when new event loops are temporarily set-up).
@@ -234,18 +245,24 @@ public:
     wxEventLoopBase* GetMainLoop() const
         { return m_mainLoop; }
 
+    // This function sets the C locale to the default locale for the current
+    // environment. It is advised to call this to ensure that the underlying
+    // toolkit uses the locale in which the numbers and monetary amounts are
+    // shown in the format expected by user and so on.
+    //
+    // Notice that this does _not_ change the global C++ locale, you need to do
+    // it explicitly if you want.
+    //
+    // Finally, notice that while this function is virtual, it is not supposed
+    // to be overridden outside of the library itself.
+    virtual void SetCLocale();
 
     // event processing functions
     // --------------------------
 
-    // this method allows to filter all the events processed by the program, so
-    // you should try to return quickly from it to avoid slowing down the
-    // program to the crawl
-    //
-    // return value should be -1 to continue with the normal event processing,
-    // or TRUE or FALSE to stop further processing and pretend that the event
-    // had been already processed or won't be processed at all, respectively
-    virtual int FilterEvent(wxEvent& event);
+    // Implement the inherited wxEventFilter method but just return -1 from it
+    // to indicate that default processing should take place.
+    virtual int FilterEvent(wxEvent& event) wxOVERRIDE;
 
     // return true if we're running event loop, i.e. if the events can
     // (already) be dispatched
@@ -497,7 +514,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxAppConsoleBase);
 };
 
-#if defined(__UNIX__) && !defined(__CYGWIN__)
+#if defined(__UNIX__) && !defined(__WXMSW__)
     #include "wx/unix/app.h"
 #else
     // this has to be a class and not a typedef as we forward declare it
@@ -522,7 +539,7 @@ public:
         // very first initialization function
         //
         // Override: very rarely
-    virtual bool Initialize(int& argc, wxChar **argv);
+    virtual bool Initialize(int& argc, wxChar **argv) wxOVERRIDE;
 
         // a platform-dependent version of OnInit(): the code here is likely to
         // depend on the toolkit. default version does nothing.
@@ -537,15 +554,15 @@ public:
         // of the program really starts here
         //
         // Override: rarely in GUI applications, always in console ones.
-    virtual int OnRun();
+    virtual int OnRun() wxOVERRIDE;
 
         // a matching function for OnInit()
-    virtual int OnExit();
+    virtual int OnExit() wxOVERRIDE;
 
         // very last clean up function
         //
         // Override: very rarely
-    virtual void CleanUp();
+    virtual void CleanUp() wxOVERRIDE;
 
 
     // the worker functions - usually not used directly by the user code
@@ -560,10 +577,10 @@ public:
         // parties
         //
         // it should return true if more idle events are needed, false if not
-    virtual bool ProcessIdle();
+    virtual bool ProcessIdle() wxOVERRIDE;
 
         // override base class version: GUI apps always use an event loop
-    virtual bool UsesEventLoop() const { return true; }
+    virtual bool UsesEventLoop() const wxOVERRIDE { return true; }
 
 
     // top level window functions
@@ -595,10 +612,10 @@ public:
     // ------------------------------------------------------------------------
 
         // Get display mode that is used use. This is only used in framebuffer
-        // wxWin ports (such as wxMGL or wxDFB).
+        // wxWin ports such as wxDFB.
     virtual wxVideoMode GetDisplayMode() const;
         // Set display mode to use. This is only used in framebuffer wxWin
-        // ports (such as wxMGL or wxDFB). This method should be called from
+        // ports such as wxDFB. This method should be called from
         // wxApp::OnInitGui
     virtual bool SetDisplayMode(const wxVideoMode& WXUNUSED(info)) { return true; }
 
@@ -626,8 +643,8 @@ public:
     // ------------------------------------------------------------------------
 
 #if wxUSE_CMDLINE_PARSER
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
-    virtual void OnInitCmdLine(wxCmdLineParser& parser);
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
 #endif
 
     // miscellaneous other stuff
@@ -638,16 +655,10 @@ public:
     // deactivated
     virtual void SetActive(bool isActive, wxWindow *lastFocus);
 
-#if WXWIN_COMPATIBILITY_2_6
-    // OBSOLETE: don't use, always returns true
-    //
-    // returns true if the program is successfully initialized
-    wxDEPRECATED( bool Initialized() );
-#endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
     // override base class method to use GUI traits
-    virtual wxAppTraits *CreateTraits();
+    virtual wxAppTraits *CreateTraits() wxOVERRIDE;
 
 
     // the main top level window (may be NULL)
@@ -676,22 +687,15 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxAppBase);
 };
 
-#if WXWIN_COMPATIBILITY_2_6
-    inline bool wxAppBase::Initialized() { return true; }
-#endif // WXWIN_COMPATIBILITY_2_6
 
 // ----------------------------------------------------------------------------
 // now include the declaration of the real class
 // ----------------------------------------------------------------------------
 
-#if defined(__WXPALMOS__)
-    #include "wx/palmos/app.h"
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
     #include "wx/msw/app.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/app.h"
-#elif defined(__WXMGL__)
-    #include "wx/mgl/app.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/app.h"
 #elif defined(__WXGTK20__)
@@ -704,8 +708,6 @@ protected:
     #include "wx/osx/app.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/app.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/app.h"
 #elif defined(__WXQT__)
     #include "wx/qt/app.h"
 #endif
@@ -775,13 +777,26 @@ public:
 // your compiler really, really wants main() to be in your main program (e.g.
 // hello.cpp). Now wxIMPLEMENT_APP should add this code if required.
 
-#define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                        \
-    int main(int argc, char **argv)                                           \
-    {                                                                         \
-        wxDISABLE_DEBUG_SUPPORT();                                            \
+// For compilers that support it, prefer to use wmain() as this ensures any
+// Unicode strings can be passed as command line parameters and not just those
+// representable in the current locale.
+#if wxUSE_UNICODE && defined(__VISUALC__)
+    #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                    \
+        int wmain(int argc, wchar_t **argv)                                   \
+        {                                                                     \
+            wxDISABLE_DEBUG_SUPPORT();                                        \
                                                                               \
-        return wxEntry(argc, argv);                                           \
-    }
+            return wxEntry(argc, argv);                                       \
+        }
+#else // Use standard main()
+    #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                    \
+        int main(int argc, char **argv)                                       \
+        {                                                                     \
+            wxDISABLE_DEBUG_SUPPORT();                                        \
+                                                                              \
+            return wxEntry(argc, argv);                                       \
+        }
+#endif
 
 // port-specific header could have defined it already in some special way
 #ifndef wxIMPLEMENT_WXWIN_MAIN
@@ -804,6 +819,7 @@ public:
 // Use this macro if you want to define your own main() or WinMain() function
 // and call wxEntry() from there.
 #define wxIMPLEMENT_APP_NO_MAIN(appname)                                    \
+    appname& wxGetApp() { return *static_cast<appname*>(wxApp::GetInstance()); }    \
     wxAppConsole *wxCreateApp()                                             \
     {                                                                       \
         wxAppConsole::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE,         \
@@ -811,9 +827,7 @@ public:
         return new appname;                                                 \
     }                                                                       \
     wxAppInitializer                                                        \
-        wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp);        \
-    appname& wxGetApp() { return *static_cast<appname*>(wxApp::GetInstance()); }    \
-    wxDECLARE_APP(appname)
+        wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp)
 
 // Same as wxIMPLEMENT_APP() normally but doesn't include themes support in
 // wxUniversal builds

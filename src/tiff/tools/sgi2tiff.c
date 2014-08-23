@@ -1,4 +1,3 @@
-/* $Id$ */
 
 /*
  * Copyright (c) 1991-1997 Sam Leffler
@@ -326,3 +325,10 @@ usage(void)
 		fprintf(stderr, "%s\n", stuff[i]);
 	exit(-1);
 }
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

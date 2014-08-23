@@ -3,7 +3,6 @@
 // Purpose:     Test if a type is movable using memmove() etc.
 // Author:      Vaclav Slavik
 // Created:     2008-01-21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -21,7 +20,7 @@
 template<typename T>
 struct wxIsMovable
 {
-    wxDEFINE_TEMPLATE_BOOL_VALUE(wxIsPod<T>::value);
+    static const bool value = wxIsPod<T>::value;
 };
 
 // Macro to add wxIsMovable<T> specialization for given type that marks it

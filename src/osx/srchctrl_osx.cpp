@@ -3,7 +3,6 @@
 // Purpose:     implements mac carbon wxSearchCtrl
 // Author:      Vince Harron
 // Created:     2006-02-19
-// RCS-ID:      $Id$
 // Copyright:   Vince Harron
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -63,7 +62,9 @@ wxSearchCtrl::wxSearchCtrl(wxWindow *parent, wxWindowID id,
 
 void wxSearchCtrl::Init()
 {
+#if wxUSE_MENUS
     m_menu = 0;
+#endif
 }
 
 wxSearchWidgetImpl* wxSearchCtrl::GetSearchPeer() const
@@ -73,7 +74,9 @@ wxSearchWidgetImpl* wxSearchCtrl::GetSearchPeer() const
 
 wxSearchCtrl::~wxSearchCtrl()
 {
+#if wxUSE_MENUS
     delete m_menu;
+#endif
 }
 
 wxSize wxSearchCtrl::DoGetBestSize() const
@@ -86,6 +89,7 @@ wxSize wxSearchCtrl::DoGetBestSize() const
     return size;
 }
 
+#if wxUSE_MENUS
 
 // search control specific interfaces
 // wxSearchCtrl owns menu after this call
@@ -117,6 +121,8 @@ wxMenu* wxSearchCtrl::GetMenu()
 {
     return m_menu;
 }
+
+#endif  // wxUSE_MENUS
 
 void wxSearchCtrl::ShowSearchButton( bool show )
 {
@@ -203,7 +209,7 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
 
 bool wxSearchCtrl::HandleSearchFieldSearchHit()
 {
-    wxCommandEvent event(wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, m_windowId );
+    wxCommandEvent event(wxEVT_SEARCHCTRL_SEARCH_BTN, m_windowId );
     event.SetEventObject(this);
 
     // provide the string to search for directly in the event, this is more
@@ -215,7 +221,7 @@ bool wxSearchCtrl::HandleSearchFieldSearchHit()
 
 bool wxSearchCtrl::HandleSearchFieldCancelHit()
 {
-    wxCommandEvent event(wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, m_windowId );
+    wxCommandEvent event(wxEVT_SEARCHCTRL_CANCEL_BTN, m_windowId );
     event.SetEventObject(this);
     return ProcessCommand(event);
 }

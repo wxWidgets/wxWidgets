@@ -3,7 +3,6 @@
 // Purpose:     interface of wxRearrangeList
 // Author:      Vadim Zeitlin
 // Created:     2008-12-15
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -180,7 +179,7 @@ public:
     @library{wxcore}
     @category{ctrl}
  */
-class wxRearrangeCtrl
+class wxRearrangeCtrl : public wxPanel
 {
 public:
     /**
@@ -269,7 +268,7 @@ public:
     @library{wxcore}
     @category{cmndlg}
  */
-class wxRearrangeDialog
+class wxRearrangeDialog : public wxDialog
 {
 public:
     /**

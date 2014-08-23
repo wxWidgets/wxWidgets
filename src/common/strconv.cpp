@@ -5,7 +5,6 @@
 //              Ryan Norton, Fredrik Roubert (UTF7)
 // Modified by:
 // Created:     29/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Ove Kaaven, Robert Roebling, Vaclav Slavik
 //              (c) 2000-2003 Vadim Zeitlin
 //              (c) 2004 Ryan Norton, Fredrik Roubert
@@ -460,7 +459,6 @@ wxMBConv::cMB2WC(const char *inBuff, size_t inLen, size_t *outLen) const
         // because we want the buffer to always be NUL-terminated, even if the
         // input isn't (as otherwise the caller has no way to know its length)
         wxWCharBuffer wbuf(dstLen);
-        wbuf.data()[dstLen] = L'\0';
         if ( ToWChar(wbuf.data(), dstLen, inBuff, inLen) != wxCONV_FAILED )
         {
             if ( outLen )
@@ -1145,6 +1143,8 @@ wxMBConvStrictUTF8::FromWChar(char *dst, size_t dstLen,
         {
             // skip the next char too as we decoded a surrogate
             wp++;
+            if ( srcLen != wxNO_LEN )
+                srcLen--;
         }
 #else // wchar_t is UTF-32
         code = *wp & 0x7fffffff;
@@ -1230,7 +1230,10 @@ size_t wxMBConvUTF8::ToWChar(wchar_t *buf, size_t n,
 
     size_t len = 0;
 
-    while ((srcLen == wxNO_LEN ? *psz : srcLen--) && ((!buf) || (len < n)))
+    // The length can be either given explicitly or computed implicitly for the
+    // NUL-terminated strings.
+    const bool isNulTerminated = srcLen == wxNO_LEN;
+    while ((isNulTerminated ? *psz : srcLen--) && ((!buf) || (len < n)))
     {
         const char *opsz = psz;
         bool invalid = false;
@@ -1269,6 +1272,14 @@ size_t wxMBConvUTF8::ToWChar(wchar_t *buf, size_t n,
                 wxUint32 res = cc & (0x3f >> cnt);
                 while (cnt--)
                 {
+                    if (!isNulTerminated && !srcLen)
+                    {
+                        // invalid UTF-8 sequence ending before the end of code
+                        // point.
+                        invalid = true;
+                        break;
+                    }
+
                     cc = *psz;
                     if ((cc & 0xC0) != 0x80)
                     {
@@ -1278,6 +1289,8 @@ size_t wxMBConvUTF8::ToWChar(wchar_t *buf, size_t n,
                     }
 
                     psz++;
+                    if (!isNulTerminated)
+                        srcLen--;
                     res = (res << 6) | (cc & 0x3f);
                 }
 
@@ -1364,10 +1377,17 @@ size_t wxMBConvUTF8::ToWChar(wchar_t *buf, size_t n,
         }
     }
 
-    if (srcLen == wxNO_LEN && buf && (len < n))
-        *buf = 0;
+    if ( isNulTerminated )
+    {
+        // Add the trailing NUL in this case if we have a large enough buffer.
+        if ( buf && (len < n) )
+            *buf = 0;
 
-    return len + 1;
+        // And count it in any case.
+        len++;
+    }
+
+    return len;
 }
 
 static inline bool isoctal(wchar_t wch)
@@ -1383,7 +1403,10 @@ size_t wxMBConvUTF8::FromWChar(char *buf, size_t n,
 
     size_t len = 0;
 
-    while ((srcLen == wxNO_LEN ? *psz : srcLen--) && ((!buf) || (len < n)))
+    // The length can be either given explicitly or computed implicitly for the
+    // NUL-terminated strings.
+    const bool isNulTerminated = srcLen == wxNO_LEN;
+    while ((isNulTerminated ? *psz : srcLen--) && ((!buf) || (len < n)))
     {
         wxUint32 cc;
 
@@ -1451,10 +1474,17 @@ size_t wxMBConvUTF8::FromWChar(char *buf, size_t n,
         }
     }
 
-    if (srcLen == wxNO_LEN && buf && (len < n))
-        *buf = 0;
+    if ( isNulTerminated )
+    {
+        // Add the trailing NUL in this case if we have a large enough buffer.
+        if ( buf && (len < n) )
+            *buf = 0;
 
-    return len + 1;
+        // And count it in any case.
+        len++;
+    }
+
+    return len;
 }
 
 // ============================================================================
@@ -1645,7 +1675,7 @@ wxMBConvUTF16straight::FromWChar(char *dst, size_t dstLen,
     wxUint16 *outBuff = reinterpret_cast<wxUint16 *>(dst);
     for ( size_t n = 0; n < srcLen; n++ )
     {
-        wxUint16 cc[2];
+        wxUint16 cc[2] = { 0 };
         const size_t numChars = encode_utf16(*src++, cc);
         if ( numChars == wxCONV_FAILED )
             return wxCONV_FAILED;
@@ -1728,7 +1758,7 @@ wxMBConvUTF16swap::FromWChar(char *dst, size_t dstLen,
     wxUint16 *outBuff = reinterpret_cast<wxUint16 *>(dst);
     for ( const wchar_t *srcEnd = src + srcLen; src < srcEnd; src++ )
     {
-        wxUint16 cc[2];
+        wxUint16 cc[2] = { 0 };
         const size_t numChars = encode_utf16(*src, cc);
         if ( numChars == wxCONV_FAILED )
             return wxCONV_FAILED;
@@ -1812,7 +1842,7 @@ wxMBConvUTF32straight::ToWChar(wchar_t *dst, size_t dstLen,
     size_t outLen = 0;
     for ( size_t n = 0; n < inLen; n++ )
     {
-        wxUint16 cc[2];
+        wxUint16 cc[2] = { 0 };
         const size_t numChars = encode_utf16(*inBuff++, cc);
         if ( numChars == wxCONV_FAILED )
             return wxCONV_FAILED;
@@ -1890,7 +1920,7 @@ wxMBConvUTF32swap::ToWChar(wchar_t *dst, size_t dstLen,
     size_t outLen = 0;
     for ( size_t n = 0; n < inLen; n++, inBuff++ )
     {
-        wxUint16 cc[2];
+        wxUint16 cc[2] = { 0 };
         const size_t numChars = encode_utf16(wxUINT32_SWAP_ALWAYS(*inBuff), cc);
         if ( numChars == wxCONV_FAILED )
             return wxCONV_FAILED;
@@ -2102,16 +2132,16 @@ public:
 
     // implement base class virtual methods
     virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
-                           const char *src, size_t srcLen = wxNO_LEN) const;
+                           const char *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
     virtual size_t FromWChar(char *dst, size_t dstLen,
-                             const wchar_t *src, size_t srcLen = wxNO_LEN) const;
-    virtual size_t GetMBNulLen() const;
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+    virtual size_t GetMBNulLen() const wxOVERRIDE;
 
 #if wxUSE_UNICODE_UTF8
-    virtual bool IsUTF8() const;
+    virtual bool IsUTF8() const wxOVERRIDE;
 #endif
 
-    virtual wxMBConv *Clone() const
+    virtual wxMBConv *Clone() const wxOVERRIDE
     {
         wxMBConv_iconv *p = new wxMBConv_iconv(m_name);
         p->m_minMBCharWidth = m_minMBCharWidth;
@@ -2556,11 +2586,9 @@ public:
         // wouldn't work if reading an incomplete MB char didn't result in an
         // error
         //
-        // Moreover, MB_ERR_INVALID_CHARS is only supported on Win 2K SP4 or
-        // Win XP or newer and it is not supported for UTF-[78] so we always
-        // use our own conversions in this case. See
-        //     http://blogs.msdn.com/michkap/archive/2005/04/19/409566.aspx
-        //     http://msdn.microsoft.com/library/en-us/intl/unicode_17si.asp
+        // Moreover, MB_ERR_INVALID_CHARS is not supported for UTF-8 under XP
+        // and for UTF-7 under any Windows version, so we always use our own
+        // conversions in this case.
         if ( m_CodePage == CP_UTF8 )
         {
             return wxMBConvUTF8().MB2WC(buf, psz, n);
@@ -2571,52 +2599,17 @@ public:
             return wxMBConvUTF7().MB2WC(buf, psz, n);
         }
 
-        int flags = 0;
-        if ( (m_CodePage < 50000 && m_CodePage != CP_SYMBOL) &&
-                IsAtLeastWin2kSP4() )
-        {
-            flags = MB_ERR_INVALID_CHARS;
-        }
-
         const size_t len = ::MultiByteToWideChar
                              (
                                 m_CodePage,     // code page
-                                flags,          // flags: fall on error
+                                MB_ERR_INVALID_CHARS,  // flags: fall on error
                                 psz,            // input string
                                 -1,             // its length (NUL-terminated)
                                 buf,            // output string
                                 buf ? n : 0     // size of output buffer
                              );
         if ( !len )
-        {
-            // function totally failed
             return wxCONV_FAILED;
-        }
-
-        // if we were really converting and didn't use MB_ERR_INVALID_CHARS,
-        // check if we succeeded, by doing a double trip:
-        if ( !flags && buf )
-        {
-            const size_t mbLen = strlen(psz);
-            wxCharBuffer mbBuf(mbLen);
-            if ( ::WideCharToMultiByte
-                   (
-                      m_CodePage,
-                      0,
-                      buf,
-                      -1,
-                      mbBuf.data(),
-                      mbLen + 1,        // size in bytes, not length
-                      NULL,
-                      NULL
-                   ) == 0 ||
-                  strcmp(mbBuf, psz) != 0 )
-            {
-                // we didn't obtain the same thing we started from, hence
-                // the conversion was lossy and we consider that it failed
-                return wxCONV_FAILED;
-            }
-        }
 
         // note that it returns count of written chars for buf != NULL and size
         // of the needed buffer for buf == NULL so in either case the length of
@@ -2627,28 +2620,20 @@ public:
     virtual size_t WC2MB(char *buf, const wchar_t *pwz, size_t n) const
     {
         /*
-            we have a problem here: by default, WideCharToMultiByte() may
-            replace characters unrepresentable in the target code page with bad
-            quality approximations such as turning "1/2" symbol (U+00BD) into
-            "1" for the code pages which don't have it and we, obviously, want
-            to avoid this at any price
+            We need to WC_NO_BEST_FIT_CHARS to prevent WideCharToMultiByte()
+            from replacing characters unrepresentable in the target code page
+            with bad quality approximations such as turning "1/2" symbol
+            (U+00BD) into "1" for the code pages which don't have the fraction
+            symbol.
 
-            the trouble is that this function does it _silently_, i.e. it won't
-            even tell us whether it did or not... Win98/2000 and higher provide
-            WC_NO_BEST_FIT_CHARS but it doesn't work for the older systems and
-            we have to resort to a round trip, i.e. check that converting back
-            results in the same string -- this is, of course, expensive but
-            otherwise we simply can't be sure to not garble the data.
+            Unfortunately this flag can't be used with CJK encodings nor
+            UTF-7/8 and so if the code page is one of those, we need to resort
+            to a round trip to verify that no replacements have been done.
          */
-
-        // determine if we can rely on WC_NO_BEST_FIT_CHARS: according to MSDN
-        // it doesn't work with CJK encodings (which we test for rather roughly
-        // here...) nor with UTF-7/8 nor, of course, with Windows versions not
-        // supporting it
         BOOL usedDef wxDUMMY_INITIALIZE(false);
         BOOL *pUsedDef;
         int flags;
-        if ( CanUseNoBestFit() && m_CodePage < 50000 )
+        if ( m_CodePage < 50000 )
         {
             // it's our lucky day
             flags = WC_NO_BEST_FIT_CHARS;
@@ -2761,63 +2746,6 @@ public:
     bool IsOk() const { return m_CodePage != -1; }
 
 private:
-    static bool CanUseNoBestFit()
-    {
-        static int s_isWin98Or2k = -1;
-
-        if ( s_isWin98Or2k == -1 )
-        {
-            int verMaj, verMin;
-            switch ( wxGetOsVersion(&verMaj, &verMin) )
-            {
-                case wxOS_WINDOWS_9X:
-                    s_isWin98Or2k = verMaj >= 4 && verMin >= 10;
-                    break;
-
-                case wxOS_WINDOWS_NT:
-                    s_isWin98Or2k = verMaj >= 5;
-                    break;
-
-                default:
-                    // unknown: be conservative by default
-                    s_isWin98Or2k = 0;
-                    break;
-            }
-
-            wxASSERT_MSG( s_isWin98Or2k != -1, wxT("should be set above") );
-        }
-
-        return s_isWin98Or2k == 1;
-    }
-
-    static bool IsAtLeastWin2kSP4()
-    {
-#ifdef __WXWINCE__
-        return false;
-#else
-        static int s_isAtLeastWin2kSP4 = -1;
-
-        if ( s_isAtLeastWin2kSP4 == -1 )
-        {
-            OSVERSIONINFOEX ver;
-
-            memset(&ver, 0, sizeof(ver));
-            ver.dwOSVersionInfoSize = sizeof(ver);
-            GetVersionEx((OSVERSIONINFO*)&ver);
-
-            s_isAtLeastWin2kSP4 =
-              ((ver.dwMajorVersion > 5) || // Vista+
-               (ver.dwMajorVersion == 5 && ver.dwMinorVersion > 0) || // XP/2003
-               (ver.dwMajorVersion == 5 && ver.dwMinorVersion == 0 &&
-               ver.wServicePackMajor >= 4)) // 2000 SP4+
-              ? 1 : 0;
-        }
-
-        return s_isAtLeastWin2kSP4 == 1;
-#endif
-    }
-
-
     // the code page we're working with
     long m_CodePage;
 
@@ -2867,7 +2795,7 @@ public:
         Init();
     }
 
-    size_t MB2WC(wchar_t *buf, const char *psz, size_t WXUNUSED(n)) const
+    size_t MB2WC(wchar_t *buf, const char *psz, size_t WXUNUSED(n)) const wxOVERRIDE
     {
         size_t inbuf = strlen(psz);
         if (buf)
@@ -2878,7 +2806,7 @@ public:
         return inbuf;
     }
 
-    size_t WC2MB(char *buf, const wchar_t *psz, size_t WXUNUSED(n)) const
+    size_t WC2MB(char *buf, const wchar_t *psz, size_t WXUNUSED(n)) const wxOVERRIDE
     {
         const size_t inbuf = wxWcslen(psz);
         if (buf)
@@ -2890,7 +2818,7 @@ public:
         return inbuf;
     }
 
-    virtual size_t GetMBNulLen() const
+    virtual size_t GetMBNulLen() const wxOVERRIDE
     {
         switch ( m_enc )
         {
@@ -2907,7 +2835,7 @@ public:
         }
     }
 
-    virtual wxMBConv *Clone() const { return new wxMBConv_wxwin(m_enc); }
+    virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConv_wxwin(m_enc); }
 
     bool IsOk() const { return m_ok; }
 

@@ -2,7 +2,6 @@
 // Name:        src/common/imagjpeg.cpp
 // Purpose:     wxImage JPEG handler
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -207,9 +206,9 @@ void wx_jpeg_io_src( j_decompress_ptr cinfo, wxInputStream& infile )
 
 static inline void wx_cmyk_to_rgb(unsigned char* rgb, const unsigned char* cmyk)
 {
-    register int k = 255 - cmyk[3];
-    register int k2 = cmyk[3];
-    register int c;
+    int k = 255 - cmyk[3];
+    int k2 = cmyk[3];
+    int c;
 
     c = k + k2 * (255 - cmyk[0]) / 255;
     rgb[0] = (unsigned char)((c > 255) ? 0 : (255 - c));
@@ -332,6 +331,13 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
         // we use the same values for this option as libjpeg so we don't need
         // any conversion here
         image->SetOption(wxIMAGE_OPTION_RESOLUTIONUNIT, cinfo.density_unit);
+    }
+
+    if ( cinfo.image_width != cinfo.output_width || cinfo.image_height != cinfo.output_height )
+    {
+        // save the original image size
+        image->SetOption(wxIMAGE_OPTION_ORIGINAL_WIDTH, cinfo.image_width);
+        image->SetOption(wxIMAGE_OPTION_ORIGINAL_HEIGHT, cinfo.image_height);
     }
 
     jpeg_finish_decompress( &cinfo );

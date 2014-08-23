@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -13,6 +12,7 @@
 #define _WX_BITMAP_H_
 
 #include "wx/msw/gdiimage.h"
+#include "wx/math.h"
 #include "wx/palette.h"
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
@@ -43,7 +43,8 @@ enum wxBitmapTransparency
 // NOTE: for wxMSW we don't use the wxBitmapBase base class declared in bitmap.h!
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxBitmap : public wxGDIImage
+class WXDLLIMPEXP_CORE wxBitmap : public wxGDIImage,
+                                  public wxBitmapHelpers
 {
 public:
     // default ctor creates an invalid bitmap, you must Create() it later
@@ -135,6 +136,8 @@ public:
 #if wxUSE_WXDIB
     // copies from a device independent bitmap
     bool CopyFromDIB(const wxDIB& dib);
+    bool IsDIB() const;
+    bool ConvertToDIB();
 #endif
 
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
@@ -143,6 +146,9 @@ public:
 
     virtual bool Create(int width, int height, const wxDC& dc);
     virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
+    virtual bool CreateScaled(int w, int h, int d, double logicalScale)
+        { return Create(wxRound(w*logicalScale), wxRound(h*logicalScale), d); }
+
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
 
@@ -159,16 +165,27 @@ public:
 #endif // wxUSE_PALETTE
 
     wxMask *GetMask() const;
-    wxBitmap GetMaskBitmap() const;
     void SetMask(wxMask *mask);
 
     // these functions are internal and shouldn't be used, they risk to
     // disappear in the future
     bool HasAlpha() const;
-    void UseAlpha();
+    void UseAlpha(bool use = true);
+    void ResetAlpha() { UseAlpha(false); }
+
+    // support for scaled bitmaps
+    virtual double GetScaleFactor() const { return 1.0; }
+    virtual double GetScaledWidth() const { return GetWidth() / GetScaleFactor(); }
+    virtual double GetScaledHeight() const { return GetHeight() / GetScaleFactor(); }
+    virtual wxSize GetScaledSize() const
+        { return wxSize(wxRound(GetScaledWidth()), wxRound(GetScaledHeight())); }
 
     // implementation only from now on
     // -------------------------------
+
+    // Set alpha flag to true if this is a 32bpp bitmap which has any non-0
+    // values in its alpha channel.
+    void MSWUpdateAlpha();
 
 public:
     void SetHBITMAP(WXHBITMAP bmp) { SetHandle((WXHANDLE)bmp); }
@@ -236,6 +253,8 @@ public:
     bool Create(const wxBitmap& bitmap, const wxColour& colour);
     bool Create(const wxBitmap& bitmap, int paletteIndex);
     bool Create(const wxBitmap& bitmap);
+
+    wxBitmap GetBitmap() const;
 
     // Implementation
     WXHBITMAP GetMaskBitmap() const { return m_maskBitmap; }

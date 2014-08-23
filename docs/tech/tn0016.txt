@@ -217,4 +217,3 @@ j) Also please add 4 #pragma comment(lib, "foo") (for Unicode/ANSI
 
 === EOF ===
 
-Version: $Id$

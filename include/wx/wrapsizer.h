@@ -3,7 +3,6 @@
 // Purpose:     provide wrapping sizer for layout (wxWrapSizer)
 // Author:      Arne Steinarson
 // Created:     2008-05-08
-// RCS-ID:      $Id$
 // Copyright:   (c) Arne Steinarson
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -36,12 +35,12 @@ public:
     virtual ~wxWrapSizer();
 
     // override base class virtual methods
-    virtual wxSize CalcMin();
-    virtual void RecalcSizes();
+    virtual wxSize CalcMin() wxOVERRIDE;
+    virtual void RecalcSizes() wxOVERRIDE;
 
     virtual bool InformFirstDirection(int direction,
                                       int size,
-                                      int availableOtherDir);
+                                      int availableOtherDir) wxOVERRIDE;
 
 protected:
     // This method is called to decide if an item represents empty space or

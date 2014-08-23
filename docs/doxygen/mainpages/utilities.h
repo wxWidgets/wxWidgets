@@ -2,13 +2,14 @@
 // Name:        utilities.h
 // Purpose:     Utilities page of the Doxygen manual
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
 
 @page page_utils Utilities Overview
+
+@tableofcontents
 
 In addition to the wxWidgets libraries (see @ref page_libs), some utilities
 are available to the users in the @c utils hierarchy (even if some of them are
@@ -21,14 +22,6 @@ There are lots of other user-contributed and user-maintained packages;
 see the wxWidgets download page: http://www.wxwidgets.org/downloads
 or directly http://wxcode.sourceforge.net or http://www.wxcommunity.com/ .
 
-@li @ref page_utils_emulator
-@li @ref page_utils_helpview
-@li @ref page_utils_hhp2cached
-@li @ref page_utils_ifacecheck
-@li @ref page_utils_wxrc
-
-
-<hr>
 
 
 @section page_utils_emulator Emulator
@@ -54,13 +47,13 @@ You can find Helpview in @c utils/helpview.
 @section page_utils_hhp2cached HHP2Cached
 
 This utility creates a "cached" version of a @c .hhp file; using cached @c .hhp
-files in wxHtmlHelpController can drammatically improve the performances
+files in wxHtmlHelpController can dramatically improve the performance
 of the help viewer. See wxHtmlHelpController for more details.
 
 You can find HHP2Cached in @c utils/hhp2cached.
 
 
-@section page_utils_ifacecheck Interface checker
+@section page_utils_ifacecheck Interface Checker
 
 This utility compares the wxWidgets real interface contained in the @c include
 hierarchy with the wxWidgets interface used for documentation purposes and
@@ -75,6 +68,14 @@ It's explicitly designed for wxWidgets documentation needs and is probably of li
 use for anything else than wxWidgets docs reviewing.
 
 You can find it in @c utils/ifacecheck.
+
+
+@section page_utils_screenshotgen Screenshot Generator
+
+This utility automates the process of taking screenshots of various GUI
+components for use in the HTML documentation of wxWidgets.
+
+You can find it in @c utils/screenshotgen.
 
 
 @section page_utils_wxrc wxWidgets XML Resource Compiler

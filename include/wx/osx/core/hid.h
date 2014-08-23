@@ -4,7 +4,6 @@
 // Author:      Ryan Norton
 // Modified by:
 // Created:     11/11/2003
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -34,7 +33,6 @@
 
 //Darn apple - doesn't properly wrap their headers in extern "C"!
 //http://www.macosx.com/forums/archive/index.php/t-68069.html
-//Needed for codewarrior link error with mach_port_deallocate()
 extern "C" {
 #include <mach/mach_port.h>
 }

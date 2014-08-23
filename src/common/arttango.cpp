@@ -3,7 +3,6 @@
 // Purpose:     art provider using embedded PNG versions of Tango icons
 // Author:      Vadim Zeitlin
 // Created:     2010-12-27
-// RCS-ID:      $Id: wxhead.cpp,v 1.11 2010-04-22 12:44:51 zeitlin Exp $
 // Copyright:   (c) 2010 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -92,7 +91,7 @@ public:
 protected:
     virtual wxBitmap CreateBitmap(const wxArtID& id,
                                   const wxArtClient& client,
-                                  const wxSize& size);
+                                  const wxSize& size) wxOVERRIDE;
 
 private:
     bool m_imageHandledAdded;
@@ -266,7 +265,7 @@ wxTangoArtProvider::CreateBitmap(const wxArtID& id,
         {
             default:
                 wxFAIL_MSG( "Unsupported Tango bitmap size" );
-                // fall through
+                wxFALLTHROUGH;
 
             case TangoSize_16:
                 data = entry.data16;
@@ -322,7 +321,7 @@ wxTangoArtProvider::CreateBitmap(const wxArtID& id,
 /* static */
 void wxArtProvider::InitTangoProvider()
 {
-    wxArtProvider::Push(new wxTangoArtProvider);
+    wxArtProvider::PushBack(new wxTangoArtProvider);
 }
 
 #endif // wxUSE_ARTPROVIDER_TANGO

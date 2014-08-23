@@ -1,10 +1,10 @@
 # Bare bones description file (Makefile) for OpenVMS
 
 PACKAGE = expat
-VERSION = 1.95.3
+VERSION = 1.95.8
 EXPAT_MAJOR_VERSION=1
 EXPAT_MINOR_VERSION=95
-EXPAT_EDIT=3
+EXPAT_EDIT=8
 
 O = .obj
 OLB = .olb
@@ -22,7 +22,7 @@ HEADERS = $(LIBDIR)ascii.h $(LIBDIR)iasciitab.h $(LIBDIR)utf8tab.h $(LIBDIR)xmlt
  
 CONFIG_HEADER = expat_config.h
 INCLUDES = /INCLUDE=([],[.lib])
-DEFS = /DEFINE=(PACKAGE="""$(PACKAGE)""",VERSION="""$(PACKAGE)_$(VERSION)""")
+DEFS = /DEFINE=(PACKAGE="""$(PACKAGE)""",VERSION="""$(PACKAGE)_$(VERSION)""",HAVE_EXPAT_CONFIG_H)
 LIBREVISION = 0
 LIBCURRENT  = 1
 LIBAGE      = 0
@@ -38,6 +38,7 @@ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
        IF F$SEARCH("$(LIBRARY)") .EQS. "" THEN $(LIBR) /CREATE /OBJECT $(LIBRARY)
 
 all : $(LIBRARY)
+        @ write sys$output "All made."
  
 .SUFFIXES : 
 .SUFFIXES : $(OLB) $(O) .C .H  

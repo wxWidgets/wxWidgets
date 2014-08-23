@@ -2,9 +2,20 @@
 // Name:        config.h
 // Purpose:     interface of wxConfigBase
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+
+// Flags for constructor style parameter
+enum
+{
+    wxCONFIG_USE_LOCAL_FILE = 1,
+    wxCONFIG_USE_GLOBAL_FILE = 2,
+    wxCONFIG_USE_RELATIVE_PATH = 4,
+    wxCONFIG_USE_NO_ESCAPE_CHARACTERS = 8,
+    wxCONFIG_USE_SUBDIR = 16
+};
+
 
 /**
     @class wxConfigBase
@@ -240,21 +251,10 @@
     contain an arbitrary path (either relative or absolute), not just the
     key name.
 
-    @beginWxPythonOnly
-    In place of a single overloaded method name, wxPython implements the
-    following methods:
-    - Read(key, default="") - Returns a string.
-    - ReadInt(key, default=0) - Returns an integer.
-    - ReadFloat(key, default=0.0) - Returns a floating point number.
-    - ReadBool(key, default=0) - Returns a boolean.
-    - Write(key, value) - Writes a string.
-    - WriteInt(key, value) - Writes an int.
-    - WriteFloat(key, value) - Writes a floating point number.
-    @endWxPythonOnly
-
-
     @library{wxbase}
     @category{cfg}
+    
+    @see wxConfigPathChanger
 */
 class wxConfigBase : public wxObject
 {
@@ -352,7 +352,9 @@ public:
     /**
         Set current path: if the first character is '/', it is the absolute
         path, otherwise it is a relative path. '..' is supported. If @a strPath
-        doesn't exist it is created.
+        doesn't exist, it is created.
+        
+        @see wxConfigPathChanger
     */
     virtual void SetPath(const wxString& strPath) = 0;
 
@@ -369,11 +371,6 @@ public:
     /**
         Gets the first entry.
 
-        @beginWxPythonOnly
-        The wxPython version of this method returns a 3-tuple consisting of the
-        continue flag, the value string, and the index for the next call.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         In wxPerl this method takes no parameters and returns a 3-element
         list (continue_flag, string, index_for_getnextentry).
@@ -383,11 +380,6 @@ public:
 
     /**
         Gets the first group.
-
-        @beginWxPythonOnly
-        The wxPython version of this method returns a 3-tuple consisting of the
-        continue flag, the value string, and the index for the next call.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method takes no parameters and returns a 3-element
@@ -399,11 +391,6 @@ public:
     /**
         Gets the next entry.
 
-        @beginWxPythonOnly
-        The wxPython version of this method returns a 3-tuple consisting of the
-        continue flag, the value string, and the index for the next call.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         In wxPerl this method only takes the @a index parameter and
         returns a 3-element list (continue_flag, string,
@@ -414,11 +401,6 @@ public:
 
     /**
         Gets the next group.
-
-        @beginWxPythonOnly
-        The wxPython version of this method returns a 3-tuple consisting of the
-        continue flag, the value string, and the index for the next call.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method only takes the @a index parameter and
@@ -592,8 +574,7 @@ public:
     /**
         Reads a float value, returning @true if the value was found.
 
-        With the second overload, if the value was not found, @a defaultVal is
-        used instead.
+        If the value was not found, @a f is not changed.
 
         Notice that the value is read as a double but must be in a valid range
         for floats for the function to return @true.
@@ -604,13 +585,25 @@ public:
         Not supported by wxPerl.
         @endWxPerlOnly
     */
-    //@{
     bool Read(const wxString& key, float* f) const;
+    /**
+        Reads a float value, returning @true if the value was found.
+
+        If the value was not found, @a defaultVal is used instead.
+
+        Notice that the value is read as a double but must be in a valid range
+        for floats for the function to return @true.
+
+        @since 2.9.1
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
+    */
     bool Read(const wxString& key, float* f, float defaultVal) const;
-    //@}
 
     /**
-        Reads a float value, returning @true if the value was found. If the
+        Reads a boolean value, returning @true if the value was found. If the
         value was not found, @a b is not changed.
 
         @since 2.9.1
@@ -621,7 +614,7 @@ public:
     */
     bool Read(const wxString& key, bool* b) const;
     /**
-        Reads a bool value, returning @true if the value was found. If the
+        Reads a boolean value, returning @true if the value was found. If the
         value was not found, @a defaultVal is used instead.
 
         @beginWxPerlOnly
@@ -797,7 +790,7 @@ public:
         # config file for my program
         UserData = $HOME/data
 
-        # the following syntax is valud only under Windows
+        # the following syntax is valid only under Windows
         UserData = %windir%\\data.dat
         @endcode
 
@@ -805,7 +798,7 @@ public:
         @c "/home/zeitlin/data" on linux for example.
 
         Although this feature is very useful, it may be annoying if you read a
-        value which containts '$' or '%' symbols (% is used for environment
+        value which contains '$' or '%' symbols (% is used for environment
         variables expansion under Windows) which are not used for environment
         variable expansion. In this situation you may call
         SetExpandEnvVars(@false) just before reading this value and
@@ -889,5 +882,81 @@ public:
         @NULL).
     */
     static wxConfigBase* Set(wxConfigBase* pConfig);
+};
+
+
+/**
+    @class wxConfigPathChanger
+
+    A handy little class which changes the current path in a wxConfig object and restores it in dtor.
+    Declaring a local variable of this type, it's possible to work in a specific directory 
+    and ensure that the path is automatically restored when the function returns.
+
+    For example:
+    @code
+    // this function loads somes settings from the given wxConfig object;
+    // the path selected inside it is left unchanged
+    bool LoadMySettings(wxConfigBase* cfg)
+    {
+        wxConfigPathChanger changer(cfg, "/Foo/Data/SomeString");
+        wxString str;
+        if ( !config->Read("SomeString", &str) ) {
+            wxLogError("Couldn't read SomeString!");
+            return false;     
+                // NOTE: without wxConfigPathChanger it would be easy to forget to
+                //       set the old path back into the wxConfig object before this return!
+        }
+        
+        // do something useful with SomeString...
+        
+        return true;    // again: wxConfigPathChanger dtor will restore the original wxConfig path
+    }
+    @endcode
+
+    @library{wxbase}
+    @category{cfg}
+*/
+class wxConfigPathChanger
+{
+public:
+
+    /**
+        Changes the path of the given wxConfigBase object so that the key @a strEntry is accessible
+        (for read or write).
+        
+        In other words, the ctor uses wxConfigBase::SetPath() with everything which precedes the 
+        last slash of @a strEntry, so that:
+        @code
+        wxConfigPathChanger(wxConfigBase::Get(), "/MyProgram/SomeKeyName");
+        @endcode        
+        has the same effect of:
+        @code
+        wxConfigPathChanger(wxConfigBase::Get(), "/MyProgram/");
+        @endcode        
+    */
+    wxConfigPathChanger(const wxConfigBase *pContainer, const wxString& strEntry);
+
+    /**
+        Restores the path selected, inside the wxConfig object passed to the ctor, to the path which was 
+        selected when the wxConfigPathChanger ctor was called.
+    */
+    ~wxConfigPathChanger();
+
+    /**
+        Returns the name of the key which was passed to the ctor.
+        The "name" is just anything which follows the last slash of the string given to the ctor.
+    */
+    const wxString& Name() const;
+
+    /**
+        This method must be called if the original path inside the wxConfig object 
+        (i.e. the current path at the moment of creation of this wxConfigPathChanger object) 
+        could have been deleted, thus preventing wxConfigPathChanger from restoring the not 
+        existing (any more) path.
+
+        If the original path doesn't exist any more, the path will be restored to
+        the deepest still existing component of the old path.
+    */
+    void UpdateIfDeleted();
 };
 

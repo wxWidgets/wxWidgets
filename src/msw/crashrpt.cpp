@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     13.07.03
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -201,9 +200,7 @@ bool wxCrashReportImpl::Generate(int flags, EXCEPTION_POINTERS *ep)
             // if we use the flags below, but the minidump is much more useful
             // as it contains the values of many (but not all) local variables
             dumpFlags = (MINIDUMP_TYPE)(MiniDumpScanMemory
-#if _MSC_VER > 1300
                                         |MiniDumpWithIndirectlyReferencedMemory
-#endif
                                         );
         }
 
@@ -227,7 +224,9 @@ bool wxCrashReportImpl::Generate(int flags, EXCEPTION_POINTERS *ep)
     }
     else // dbghelp.dll couldn't be loaded
     {
-        Output(wxT("%s"), wxDbgHelpDLL::GetErrorMessage().c_str());
+        Output(wxT("%s"), static_cast<const wxChar*>(
+                    wxDbgHelpDLL::GetErrorMessage().c_str()
+              ));
     }
 #else // !wxUSE_DBGHELP
     wxUnusedVar(flags);
@@ -247,7 +246,7 @@ bool wxCrashReportImpl::Generate(int flags, EXCEPTION_POINTERS *ep)
 /* static */
 void wxCrashReport::SetFileName(const wxString& filename)
 {
-    wxStrlcpy(gs_reportFilename, filename.wx_str(), WXSIZEOF(gs_reportFilename));
+    wxStrlcpy(gs_reportFilename, filename.t_str(), WXSIZEOF(gs_reportFilename));
 }
 
 /* static */

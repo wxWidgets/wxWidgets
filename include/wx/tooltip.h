@@ -5,7 +5,6 @@
 // Modified by:
 // Created:
 // Copyright:   (c) Robert Roebling
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -29,9 +28,7 @@
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/tooltip.h"
 #elif defined(__WXPM__)
-    #include "wx/os2/tooltip.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/tooltip.h"
+#include "wx/os2/tooltip.h"
 #endif
 
 #endif

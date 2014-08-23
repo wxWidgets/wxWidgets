@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/univ/dialog.cpp
 // Author:      Robert Roebling, Vaclav Slavik
-// Id:          $Id$
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -29,6 +28,7 @@
 #endif
 
 #include "wx/evtloop.h"
+#include "wx/modalhook.h"
 
 //-----------------------------------------------------------------------------
 // wxDialog
@@ -128,7 +128,7 @@ void wxDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
     s_closing.Append(this);
 
-    wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+    wxCommandEvent cancelEvent(wxEVT_BUTTON, wxID_CANCEL);
     cancelEvent.SetEventObject(this);
     GetEventHandler()->ProcessEvent(cancelEvent);
     s_closing.DeleteObject(this);
@@ -165,6 +165,8 @@ bool wxDialog::IsModal() const
 
 int wxDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
     if ( IsModal() )
     {
        wxFAIL_MSG( wxT("wxDialog:ShowModal called twice") );
@@ -185,9 +187,8 @@ int wxDialog::ShowModal()
 
     wxASSERT_MSG( !m_windowDisabler, wxT("disabling windows twice?") );
 
-#if defined(__WXGTK__) || defined(__WXMGL__)
+#if defined(__WXGTK__)
     wxBusyCursorSuspender suspender;
-    // FIXME (FIXME_MGL) - make sure busy cursor disappears under MSW too
 #endif
 
     m_windowDisabler = new wxWindowDisabler(this);

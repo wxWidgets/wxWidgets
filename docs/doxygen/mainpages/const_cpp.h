@@ -2,39 +2,27 @@
 // Name:        const_cpp.h
 // Purpose:     Preprocessor symbols
 // Author:      Vadim Zeitlin
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
 /**
 
-@page page_cppconst Preprocessor symbols defined by wxWidgets
+@page page_cppconst Preprocessor Symbols
 
-These are preprocessor symbols used in the wxWidgets source, grouped
-by category (and sorted by alphabetical order inside each category).
-All of these macros except for the @c wxUSE_XXX variety is defined if the
-corresponding condition is @true and undefined if it isn't, so they should be
-always tested using @ifdef_ and not @if_.
+@tableofcontents
 
-@li @ref page_cppconst_guisystem
-@li @ref page_cppconst_os
-@li @ref page_cppconst_cpu
-@li @ref page_cppconst_hardware
-@li @ref page_cppconst_compiler
-@li @ref page_cppconst_featuretests
-@li @ref page_cppconst_msvc_setup_h
-@li @ref page_cppconst_miscellaneous
+These are preprocessor symbols used in the wxWidgets source, grouped by
+category (and sorted by alphabetical order inside each category). All of these
+macros except for the @c wxUSE_XXX variety is defined if the corresponding
+condition is @true and undefined if it isn't, so they should be always tested
+using @ifdef_ and not @if_.
 
-<hr>
 
 
 @section page_cppconst_guisystem GUI system
 
 @beginDefList
-@itemdef{__WINDOWS__, any Windows, you may also use __WXMSW__}
-@itemdef{__WIN16__, Win16 API (not supported since wxWidgets 2.6)}
-@itemdef{__WIN32__, Win32 API}
 @itemdef{__WXBASE__, Only wxBase, no GUI features (same as @c wxUSE_GUI == 0)}
 @itemdef{__WXCOCOA__, OS X using wxCocoa Port}
 @itemdef{__WXDFB__, wxUniversal using DirectFB}
@@ -45,20 +33,21 @@ always tested using @ifdef_ and not @if_.
 @itemdef{__WXGTK24__, GTK+ 2.4 or higher}
 @itemdef{__WXGTK26__, GTK+ 2.6 or higher}
 @itemdef{__WXGTK210__, GTK+ 2.10 or higher}
-@itemdef{__WXMAC__, old define for Mac OS X}
+@itemdef{__WXMAC__, old define, same as @c __WXOSX__}
 @itemdef{__WXMOTIF__, Motif}
 @itemdef{__WXMOTIF20__, Motif 2.0 or higher}
-@itemdef{__WXMGL__, SciTech Soft MGL (__WXUNIVERSAL__ will be also defined)}
-@itemdef{__WXMSW__, Any Windows}
-@itemdef{__WXOSX__, any OS X}
-@itemdef{__WXOSX_IPHONE__, OS X iPhone}
+@itemdef{__WXMSW__, GUI using <a href="http://en.wikipedia.org/wiki/Windows_User">Windows Controls</a>.
+Notice that for compatibility reasons, this symbol is defined for console
+applications under Windows as well, but it should only be used in the GUI code
+while @c __WINDOWS__ should be used for the platform tests.}
+@itemdef{__WXOSX__, OS X GUI using any Apple widget framework (Carbon, AppKit or UIKit)}
+@itemdef{__WXOSX_IPHONE__, OS X iPhone (UIKit)}
 @itemdef{__WXOSX_CARBON__, Mac OS X using Carbon}
-@itemdef{__WXOSX_COCOA__, Mac OS X using Cocoa}
+@itemdef{__WXOSX_COCOA__, Mac OS X using Cocoa (AppKit)}
 @itemdef{__WXOSX_MAC__, Mac OS X (Carbon or Cocoa)}
 @itemdef{__WXOSX_OR_COCOA__, Any Mac OS X port (wxOSX-Carbon, wxOSX-Cocoa or 
                         wxCocoa)}
-@itemdef{__WXPALMOS__, PalmOS}
-@itemdef{__WXPM__, OS/2 native Presentation Manager}
+@itemdef{__WXPM__, OS/2 native Presentation Manager (not used any longer).}
 @itemdef{__WXSTUBS__, Stubbed version ('template' wxWin implementation)}
 @itemdef{__WXXT__, Xt; mutually exclusive with WX_MOTIF, not implemented in wxWidgets 2.x}
 @itemdef{__WXX11__, wxX11 (__WXUNIVERSAL__ will be also defined)}
@@ -86,17 +75,16 @@ The convention is to use the @c __WX prefix for these
 symbols, although this has not always been followed.
 
 
-@section page_cppconst_os Operating systems
+
+@section page_cppconst_os Operating Systems
 
 @beginDefList
 @itemdef{__APPLE__, any Mac OS version}
 @itemdef{__AIX__, AIX}
 @itemdef{__BSD__, Any *BSD system}
 @itemdef{__CYGWIN__, Cygwin: Unix on Win32}
-@itemdef{__DARWIN__, Mac OS X using the BSD Unix C library
-                    (as opposed to using the Metrowerks MSL C/C++ library)}
+@itemdef{__DARWIN__, Mac OS X (with BSD C library), using any port (see also @c __WXOSX__)}
 @itemdef{__DATA_GENERAL__, DG-UX}
-@itemdef{__DOS_GENERAL__, DOS (used with wxMGL only)}
 @itemdef{__FREEBSD__, FreeBSD}
 @itemdef{__HPUX__, HP-UX (Unix)}
 @itemdef{__GNU__, GNU Hurd}
@@ -104,7 +92,6 @@ symbols, although this has not always been followed.
 @itemdef{__MACH__, Mach-O Architecture (Mac OS X only builds)}
 @itemdef{__OSF__, OSF/1}
 @itemdef{__QNX__, QNX Neutrino RTOS}
-@itemdef{__PALMOS__, PalmOS}
 @itemdef{__SGI__, IRIX}
 @itemdef{__SOLARIS__, Solaris}
 @itemdef{__SUN__, Any Sun}
@@ -115,14 +102,17 @@ symbols, although this has not always been followed.
 @itemdef{__UNIX__, any Unix}
 @itemdef{__UNIX_LIKE__, Unix, BeOS or VMS}
 @itemdef{__VMS__, VMS}
-@itemdef{__WINDOWS__, any Windows}
+@itemdef{__WINDOWS__, Any Windows platform, using any port (see also @c __WXMSW__)}
+@itemdef{__WIN16__, Win16 API (not supported since wxWidgets 2.6)}
+@itemdef{__WIN32__, Win32 API}
+@itemdef{__WIN64__, Win64 (mostly same as Win32 but data type sizes are different)}
 @itemdef{__WINE__, Wine}
 @itemdef{_WIN32_WCE, Windows CE version}
 @endDefList
 
 
 
-@section page_cppconst_cpu Hardware architectures (CPU)
+@section page_cppconst_cpu Hardware Architectures (CPU)
 
 Note that not all of these symbols are always defined, it depends on the
 compiler used.
@@ -136,7 +126,7 @@ compiler used.
 
 
 
-@section page_cppconst_hardware Hardware type
+@section page_cppconst_hardware Hardware Type
 
 @beginDefList
 @itemdef{__SMARTPHONE__, Generic mobile devices with phone buttons and a small display}
@@ -156,30 +146,34 @@ compiler used.
 @itemdef{__BORLANDC__, Borland C++. The value of the macro corresponds
                         to the compiler version: 500 is 5.0.}
 @itemdef{__DJGPP__, DJGPP}
-@itemdef{__DIGITALMARS__, Digital Mars}
+@itemdef{__DIGITALMARS__, Digital Mars (not used any more).}
 @itemdef{__EVC4__, Embedded Visual C++ 4 (can be only used for building wxWinCE)}
 @itemdef{__GNUG__, Gnu C++ on any platform, see also wxCHECK_GCC_VERSION}
 @itemdef{__GNUWIN32__, Gnu-Win32 compiler, see also wxCHECK_W32API_VERSION}
-@itemdef{__MINGW32__, MinGW}
-@itemdef{__MWERKS__, CodeWarrior MetroWerks compiler}
+@itemdef{__INTELC__, Intel C++ compiler}
+@itemdef{__MINGW32__, Either MinGW32 or MinGW-w64 in either 32 or 64 bits}
+@itemdef{__MINGW32_TOOLCHAIN, MinGW32 only (32 bits only right now)}
+@itemdef{__MINGW64__, MinGW-w64 in 64 bit builds}
+@itemdef{__MINGW64_TOOLCHAIN__, MinGW-w64 in either 32 or 64 bit builds}
 @itemdef{__SUNCC__, Sun CC, see also wxCHECK_SUNCC_VERSION}
-@itemdef{__SYMANTECC__, Symantec C++}
-@itemdef{__VISAGECPP__, IBM Visual Age (OS/2)}
+@itemdef{__SYMANTECC__, Symantec C++ (not used any more).}
+@itemdef{__VISAGECPP__, IBM Visual Age (OS/2) (not used any more).}
 @itemdef{__VISUALC__, Microsoft Visual C++, see also ::wxCHECK_VISUALC_VERSION.
                     The value of this macro corresponds to the compiler version:
                     @c 1020 for @c 4.2 (the first supported version), @c 1100 for
                     @c 5.0, @c 1200 for @c 6.0 and so on. For convenience, the symbols
                     __VISUALCn__ are also defined for each major compiler version from
-                    5 to 10, i.e. you can use tests such @ifdef_ __VISUALC7__ to test
+                    5 to 12, i.e. you can use tests such @ifdef_ __VISUALC7__ to test
                     for compiler version being precisely 7.}
 @itemdef{__XLC__, AIX compiler}
 @itemdef{__WATCOMC__, Watcom C++. The value of this macro corresponds to
-                    the compiler version, @c 1100 is @c 11.0 and @c 1200 is OpenWatcom.}
+                    the compiler version, @c 1100 is @c 11.0 and @c 1200 is OpenWatcom
+                    (not used any more).}
 @endDefList
 
 
 
-@section page_cppconst_featuretests Feature tests
+@section page_cppconst_featuretests Feature Tests
 
 Some library features may not be always available even if they were selected
 by the user. To make it possible to check if this is the case, the library
@@ -217,6 +211,8 @@ Currently the following symbols exist:
     decide whether some function should be overloaded for both
     <code>long</code> and <code>long long</code> types.}
 @itemdef{wxHAS_MULTIPLE_FILEDLG_FILTERS, Defined if wxFileDialog supports multiple ('|'-separated) filters.}
+@itemdef{wxHAS_IMAGES_IN_RESOURCES, Defined if <a href="http://en.wikipedia.org/wiki/Resource_(Windows)">
+    Windows resource files</a> or OS/2 resource files are available on the current platform.}
 @itemdef{wxHAS_POWER_EVENTS, Defined if wxPowerEvent are ever generated on the current platform.}
 @itemdef{wxHAS_RADIO_MENU_ITEMS,
         Defined if the current port supports radio menu items (see wxMenu::AppendRadioItem).}
@@ -228,7 +224,7 @@ Currently the following symbols exist:
 
 
 
-@section page_cppconst_msvc_setup_h Libraries selection for MSVC setup.h
+@section page_cppconst_msvc_setup_h Library Selection for MSVC
 
 Microsoft Visual C++ users may use the special @c wx/setup.h file for this
 compiler in @c include/msvc subdirectory. This file implicitly links in all the
@@ -238,6 +234,7 @@ configurations. However sometimes linking with all the libraries is not
 desirable, for example because some of them were not built and this is where
 the symbols in this section can be helpful: defining them allows to not link
 with the corresponding library. The following symbols are honoured:
+
     - wxNO_ADV_LIB
     - wxNO_AUI_LIB
     - wxNO_HTML_LIB
@@ -246,6 +243,7 @@ with the corresponding library. The following symbols are honoured:
     - wxNO_PROPGRID_LIB
     - wxNO_QA_LIB
     - wxNO_RICHTEXT_LIB
+    - wxNO_WEBVIEW_LIB
     - wxNO_XML_LIB
     - wxNO_REGEX_LIB
     - wxNO_EXPAT_LIB
@@ -257,6 +255,12 @@ with the corresponding library. The following symbols are honoured:
 Notice that the base library is always included and the core is always included
 for the GUI applications (i.e. those which don't define @c wxUSE_GUI as 0).
 
+If the makefiles have been used to build the libraries from source and the @c CFG
+variable has been set to specify a different output path for that particular
+configuration of build then the @c wxCFG preprocessor symbol should be set in
+the project that uses wxWidgets to the same value as the @c CFG variable in
+order for the correct @c wx/setup.h file to automatically be included for that
+configuration.
 
 @section page_cppconst_miscellaneous Miscellaneous
 
@@ -304,8 +308,6 @@ for the GUI applications (i.e. those which don't define @c wxUSE_GUI as 0).
         defined when compiling code which uses wxWidgets as a DLL/shared library}
 @itemdef{WXBUILDING,
         defined when building wxWidgets itself, whether as a static or shared library}
-@itemdef{wxNO_T,
-        may be predefined to prevent the library from defining _T() macro}
 @endDefList
 
 */

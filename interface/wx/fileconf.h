@@ -2,7 +2,6 @@
 // Name:        fileconf.h
 // Purpose:     interface of wxFileConfig
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -27,6 +26,28 @@
 class wxFileConfig : public wxConfigBase
 {
 public:
+    /**
+        Constructor allowing to choose the file names to use.
+
+        If @a localFilename and/or @a globalFilename are explicitly specified,
+        they are used as the names of the user and system-wide configuration
+        files (the latter is only read by the program while the former is read
+        from and written to). Otherwise the behaviour depends on @a style
+        parameter. If it includes ::wxCONFIG_USE_LOCAL_FILE, then the local
+        file name is constructed from the information in @a appName and @a
+        vendorName arguments in a system-dependent way. If
+        ::wxCONFIG_USE_GLOBAL_FILE is not specified at all (and @a
+        globalFilename is empty) then the system-wide file is not used at all.
+        Otherwise its name and path are also constructed in the way appropriate
+        for the current platform from the application and vendor names.
+     */
+    wxFileConfig(const wxString& appName = wxEmptyString,
+               const wxString& vendorName = wxEmptyString,
+               const wxString& localFilename = wxEmptyString,
+               const wxString& globalFilename = wxEmptyString,
+               long style = wxCONFIG_USE_LOCAL_FILE | wxCONFIG_USE_GLOBAL_FILE,
+               const wxMBConv& conv = wxConvAuto());
+
     /**
         Read the config data from the specified stream instead of the associated file,
         as usual.
@@ -57,6 +78,9 @@ public:
     */
     static wxFileName GetLocalFile(const wxString& basename, int style = 0);
 
+    static wxString GetGlobalFileName(const wxString& szFile);
+    static wxString GetLocalFileName(const wxString& szFile, int style = 0);
+
     /**
         Saves all config data to the given stream, returns @true if data was saved
         successfully or @false on error.
@@ -81,5 +105,29 @@ public:
         @see wxCHANGE_UMASK()
     */
     void SetUmask(int mode);
+    
+  // implement inherited pure virtual functions
+  virtual void SetPath(const wxString& strPath);
+  virtual const wxString& GetPath() const;
+
+  virtual bool GetFirstGroup(wxString& str, long& lIndex) const;
+  virtual bool GetNextGroup (wxString& str, long& lIndex) const;
+  virtual bool GetFirstEntry(wxString& str, long& lIndex) const;
+  virtual bool GetNextEntry (wxString& str, long& lIndex) const;
+
+  virtual size_t GetNumberOfEntries(bool bRecursive = false) const;
+  virtual size_t GetNumberOfGroups(bool bRecursive = false) const;
+
+  virtual bool HasGroup(const wxString& strName) const;
+  virtual bool HasEntry(const wxString& strName) const;
+
+  virtual bool Flush(bool bCurrentOnly = false);
+
+  virtual bool RenameEntry(const wxString& oldName, const wxString& newName);
+  virtual bool RenameGroup(const wxString& oldName, const wxString& newName);
+
+  virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso = true);
+  virtual bool DeleteGroup(const wxString& szKey);
+  virtual bool DeleteAll();
 };
 

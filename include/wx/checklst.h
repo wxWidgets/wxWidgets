@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     12.09.00
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -37,6 +36,7 @@ public:
     virtual bool IsChecked(unsigned int item) const = 0;
     virtual void Check(unsigned int item, bool check = true) = 0;
 
+    virtual unsigned int GetCheckedItems(wxArrayInt& checkedItems) const;
     wxDECLARE_NO_COPY_CLASS(wxCheckListBoxBase);
 };
 
@@ -56,8 +56,6 @@ public:
     #include "wx/osx/checklst.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/checklst.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/checklst.h"
 #elif defined(__WXQT__)
     #include "wx/qt/checklst.h"
 #endif

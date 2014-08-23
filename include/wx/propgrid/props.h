@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     2007-03-28
-// RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -317,6 +316,8 @@ public:
                                 const wxString& text,
                                 int argFlags = 0 ) const;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
+    virtual wxVariant DoGetAttribute( const wxString& name ) const;
+
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const;
 
@@ -398,7 +399,7 @@ public:
     // Special constructor for caching choices (used by derived class)
     wxEnumProperty( const wxString& label,
                     const wxString& name,
-                    const wxChar* const* labels,
+                    const char* const* untranslatedLabels,
                     const long* values,
                     wxPGChoices* choicesCache,
                     int value = 0 );
@@ -501,7 +502,7 @@ public:
     // Special constructor for caching choices (used by derived class)
     wxEditEnumProperty( const wxString& label,
                         const wxString& name,
-                        const wxChar* const* labels,
+                        const char* const* untranslatedLabels,
                         const long* values,
                         wxPGChoices* choicesCache,
                         const wxString& value );
@@ -564,7 +565,7 @@ public:
     // helpers
     size_t GetItemCount() const { return m_choices.GetCount(); }
     const wxString& GetLabel( size_t ind ) const
-        { return m_choices.GetLabel(ind); }
+        { return m_choices.GetLabel(static_cast<int>(ind)); }
 
 protected:
     // Used to detect if choices have been changed
@@ -838,7 +839,7 @@ PROPNAME::~PROPNAME() { } \
 bool PROPNAME::OnEvent( wxPropertyGrid* propgrid, \
                         wxWindow* primary, wxEvent& event ) \
 { \
-    if ( event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED ) \
+    if ( event.GetEventType() == wxEVT_BUTTON ) \
         return OnButtonClick(propgrid,primary,(const wxChar*) CUSTBUTTXT); \
     return false; \
 }

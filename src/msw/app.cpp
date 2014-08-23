@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -61,14 +60,6 @@
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
-
-// OLE is used for drag-and-drop, clipboard, OLE Automation..., but some
-// compilers don't support it (missing headers, libs, ...)
-#if defined(__GNUWIN32_OLD__) || defined(__SYMANTEC__)
-    #undef wxUSE_OLE
-
-    #define  wxUSE_OLE 0
-#endif // broken compilers
 
 #if defined(__POCKETPC__) || defined(__SMARTPHONE__)
     #include <ole2.h>
@@ -172,12 +163,12 @@ void *wxGUIAppTraits::BeforeChildWaitLoop()
        focus/activation entirely when the child process terminates which would
        happen if we simply disabled everything using wxWindowDisabler. Indeed,
        remember that Windows will never activate a disabled window and when the
-       last childs window is closed and Windows looks for a window to activate
+       last child's window is closed and Windows looks for a window to activate
        all our windows are still disabled. There is no way to enable them in
-       time because we don't know when the childs windows are going to be
-       closed, so the solution we use here is to keep one special tiny frame
+       time because we don't know when the child's windows are going to be
+       closed, so the solution we use here is to keep one special tiny dialog
        enabled all the time. Then when the child terminates it will get
-       activated and when we close it below -- after reenabling all the other
+       activated and when we close it below -- after re-enabling all the other
        windows! -- the previously active window becomes activated again and
        everything is ok.
      */
@@ -186,16 +177,16 @@ void *wxGUIAppTraits::BeforeChildWaitLoop()
     // first disable all existing windows
     wxWindowDisabler *wd = new wxWindowDisabler;
 
-    // then create an "invisible" frame: it has minimal size, is positioned
-    // (hopefully) outside the screen and doesn't appear on the taskbar
-    wxWindow *winActive = new wxFrame
+    // then create an "invisible" dialog: it has minimal size, is positioned
+    // (hopefully) outside the screen and doesn't appear in the Alt-TAB list
+    // (unlike the frames, which is why we use a dialog here)
+    wxWindow *winActive = new wxDialog
                     (
                         wxTheApp->GetTopWindow(),
                         wxID_ANY,
                         wxEmptyString,
                         wxPoint(32600, 32600),
-                        wxSize(1, 1),
-                        wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR
+                        wxSize(1, 1)
                     );
     winActive->Show();
 
@@ -210,9 +201,9 @@ void wxGUIAppTraits::AfterChildWaitLoop(void *dataOrig)
 
     delete data->wd;
 
-    // finally delete the dummy frame and, as wd has been already destroyed and
-    // the other windows reenabled, the activation is going to return to the
-    // window which had had it before
+    // finally delete the dummy dialog and, as wd has been already destroyed
+    // and the other windows reenabled, the activation is going to return to
+    // the window which had had it before
     data->winActive->Destroy();
 
     // also delete the temporary data object itself
@@ -234,7 +225,7 @@ bool wxGUIAppTraits::DoMessageFromThreadWait()
     return evtLoop->Dispatch();
 }
 
-DWORD wxGUIAppTraits::WaitForThread(WXHANDLE hThread, int flags)
+WXDWORD wxGUIAppTraits::WaitForThread(WXHANDLE hThread, int flags)
 {
     // We only ever dispatch messages from the main thread and, additionally,
     // even from the main thread we shouldn't wait for the message if we don't
@@ -263,19 +254,9 @@ DWORD wxGUIAppTraits::WaitForThread(WXHANDLE hThread, int flags)
 
 wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer, int *minVer) const
 {
-    OSVERSIONINFO info;
-    wxZeroMemory(info);
-
     // on Windows, the toolkit version is the same of the OS version
     // as Windows integrates the OS kernel with the GUI toolkit.
-    info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    if ( ::GetVersionEx(&info) )
-    {
-        if ( majVer )
-            *majVer = info.dwMajorVersion;
-        if ( minVer )
-            *minVer = info.dwMinorVersion;
-    }
+    wxGetOsVersion(majVer, minVer);
 
 #if defined(__WXHANDHELD__) || defined(__WXWINCE__)
     return wxPORT_WINCE;
@@ -557,7 +538,7 @@ bool wxConsoleStderr::Write(const wxString& text)
         return false;
     }
 
-    if ( !::WriteConsole(m_hStderr, text.wx_str(), text.length(), &ret, NULL) )
+    if ( !::WriteConsole(m_hStderr, text.t_str(), text.length(), &ret, NULL) )
     {
         wxLogLastError(wxT("WriteConsole"));
         return false;
@@ -631,9 +612,9 @@ private:
 };
 
 //// Initialize
-bool wxApp::Initialize(int& argc, wxChar **argv)
+bool wxApp::Initialize(int& argc_, wxChar **argv_)
 {
-    if ( !wxAppBase::Initialize(argc, argv) )
+    if ( !wxAppBase::Initialize(argc_, argv_) )
         return false;
 
     // ensure that base cleanup is done if we return too early
@@ -645,12 +626,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
 #if defined(__SMARTPHONE__) || defined(__POCKETPC__)
     SHInitExtraControls();
-#endif
-
-#ifndef __WXWINCE__
-    // Don't show a message box if a function such as SHGetFileInfo
-    // fails to find a device.
-    SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
 #endif
 
     wxOleInitialize();
@@ -692,7 +667,7 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
 
 
     ClassRegInfo regClass(name);
-    wndclass.lpszClassName = regClass.regname.wx_str();
+    wndclass.lpszClassName = regClass.regname.t_str();
     if ( !::RegisterClass(&wndclass) )
     {
         wxLogLastError(wxString::Format(wxT("RegisterClass(%s)"),
@@ -701,7 +676,7 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
     }
 
     wndclass.style &= ~(CS_HREDRAW | CS_VREDRAW);
-    wndclass.lpszClassName = regClass.regnameNR.wx_str();
+    wndclass.lpszClassName = regClass.regnameNR.t_str();
     if ( !::RegisterClass(&wndclass) )
     {
         wxLogLastError(wxString::Format(wxT("RegisterClass(%s)"),
@@ -716,7 +691,7 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
     // function returns (it could be invalidated later if new elements are
     // added to the vector and it's reallocated but this shouldn't matter as
     // this pointer should be used right now, not stored)
-    return gs_regClassesInfo.back().regname.wx_str();
+    return gs_regClassesInfo.back().regname.t_str();
 }
 
 bool wxApp::IsRegisteredClassName(const wxString& name)
@@ -826,11 +801,15 @@ void wxApp::WakeUpIdle()
         if ( !::PeekMessage(&msg, hwndTop, 0, 1, PM_NOREMOVE) ||
               ::PeekMessage(&msg, hwndTop, 1, 1, PM_NOREMOVE) )
         {
-            if ( !::PostMessage(hwndTop, WM_NULL, 0, 0) )
-            {
-                // should never happen
-                wxLogLastError(wxT("PostMessage(WM_NULL)"));
-            }
+            // If this fails too, there is really not much we can do, but then
+            // neither do we need to, as it normally indicates that the window
+            // queue is full to the brim with the messages and so the main loop
+            // is running and doesn't need to be woken up.
+            //
+            // Notice that we especially should not try use wxLogLastError()
+            // here as this would lead to another call to wxWakeUpIdle() from
+            // inside wxLog and stack overflow due to the resulting recursion.
+            ::PostMessage(hwndTop, WM_NULL, 0, 0);
         }
     }
 #if wxUSE_THREADS

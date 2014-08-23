@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -18,7 +17,10 @@
     #include "wx/app.h"
 #endif
 
+#include "wx/control.h"
 #include "wx/thread.h"
+#include "wx/evtloop.h"
+#include "wx/modalhook.h"
 #include "wx/osx/private.h"
 
 
@@ -60,6 +62,10 @@ wxMessageDialog::~wxMessageDialog()
 
 int wxMessageDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
+    wxCFEventLoopPauseIdleEvents pause;
+    
     int resultbutton = wxID_CANCEL;
 
     const long style = GetMessageDialogStyle();
@@ -94,10 +100,10 @@ int wxMessageDialog::ShowModal()
         wxCFStringRef cfTitle( msgtitle, GetFont().GetEncoding() );
         wxCFStringRef cfText( msgtext, GetFont().GetEncoding() );
 
-        wxCFStringRef cfNoString( GetNoLabel(), GetFont().GetEncoding() );
-        wxCFStringRef cfYesString( GetYesLabel(), GetFont().GetEncoding() );
-        wxCFStringRef cfOKString( GetOKLabel(), GetFont().GetEncoding()) ;
-        wxCFStringRef cfCancelString( GetCancelLabel(), GetFont().GetEncoding() );
+        wxCFStringRef cfNoString( wxControl::GetLabelText(GetNoLabel()), GetFont().GetEncoding() );
+        wxCFStringRef cfYesString( wxControl::GetLabelText(GetYesLabel()), GetFont().GetEncoding() );
+        wxCFStringRef cfOKString( wxControl::GetLabelText(GetOKLabel()), GetFont().GetEncoding()) ;
+        wxCFStringRef cfCancelString( wxControl::GetLabelText(GetCancelLabel()), GetFont().GetEncoding() );
 
         NSAlertStyle alertType = GetAlertStyleFromWXStyle(style);
                 
@@ -137,6 +143,8 @@ int wxMessageDialog::ShowModal()
                 m_buttonId[1] = wxID_CANCEL;
             }
         }
+
+        wxASSERT_MSG( !(style & wxHELP), "wxHELP not supported in non-GUI thread" );
 
         CFOptionFlags exitButton;
         OSStatus err = CFUserNotificationDisplayAlert(
@@ -225,10 +233,10 @@ void* wxMessageDialog::ConstructNSAlert()
     NSAlert* alert = [[NSAlert alloc] init];
     NSAlertStyle alertType = GetAlertStyleFromWXStyle(style);
 
-    wxCFStringRef cfNoString( GetNoLabel(), GetFont().GetEncoding() );
-    wxCFStringRef cfYesString( GetYesLabel(), GetFont().GetEncoding() );
-    wxCFStringRef cfOKString( GetOKLabel(), GetFont().GetEncoding() );
-    wxCFStringRef cfCancelString( GetCancelLabel(), GetFont().GetEncoding() );
+    wxCFStringRef cfNoString( wxControl::GetLabelText(GetNoLabel()), GetFont().GetEncoding() );
+    wxCFStringRef cfYesString( wxControl::GetLabelText(GetYesLabel()), GetFont().GetEncoding() );
+    wxCFStringRef cfOKString( wxControl::GetLabelText(GetOKLabel()), GetFont().GetEncoding() );
+    wxCFStringRef cfCancelString( wxControl::GetLabelText(GetCancelLabel()), GetFont().GetEncoding() );
 
     wxCFStringRef cfTitle( msgtitle, GetFont().GetEncoding() );
     wxCFStringRef cfText( msgtext, GetFont().GetEncoding() );
@@ -285,5 +293,15 @@ void* wxMessageDialog::ConstructNSAlert()
         }
 
     }
+
+    if ( style & wxHELP )
+    {
+        wxCFStringRef cfHelpString( GetHelpLabel(), GetFont().GetEncoding() );
+        [alert addButtonWithTitle:cfHelpString.AsNSString()];
+        m_buttonId[ m_buttonCount++ ] = wxID_HELP;
+    }
+
+    wxASSERT_MSG( m_buttonCount <= WXSIZEOF(m_buttonId), "Too many buttons" );
+
     return alert;
 }

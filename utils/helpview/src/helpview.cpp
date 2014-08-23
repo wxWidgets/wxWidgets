@@ -5,7 +5,6 @@
 // Author:      Vaclav Slavik, Julian Smart
 // Modified by:
 // Created:     2002-07-09
-// RCS-ID:      $Id$
 // Copyright:   (c) 2002 Vaclav Slavik, Julian Smart and others
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -194,6 +193,12 @@ bool hvApp::OnInit()
 
     m_helpController = new wxHtmlHelpController( istyle );
 
+    // By default, the application doesn't continue running if only the help
+    // frame remains. This makes sense for the programs doing something else
+    // and also showing help, but as this one only shows help, we should keep
+    // it running as long as this frame is opened.
+    m_helpController->SetShouldPreventAppExit(true);
+
     if ( !hasWindowName )
     {
         titleFormat = wxT("Help: %s") ;
@@ -279,10 +284,10 @@ bool hvApp::OpenBook(wxHtmlHelpController* controller)
 
 #ifdef __WXMAC__
 /// Respond to Apple Event for opening a document
-void hvApp::MacOpenFile(const wxString& filename)
+void hvApp::MacOpenFiles(const wxArrayString& fileNames)
 {
     wxBusyCursor bcur;
-    wxFileName fileName(filename);
+    wxFileName fileName(fileNames[0]);
     m_helpController->AddBook(fileName);
     m_helpController->DisplayContents();
 }

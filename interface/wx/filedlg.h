@@ -2,9 +2,29 @@
 // Name:        filedlg.h
 // Purpose:     interface of wxFileDialog
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+enum
+{
+    wxFD_OPEN              = 0x0001,
+    wxFD_SAVE              = 0x0002,
+    wxFD_OVERWRITE_PROMPT  = 0x0004,
+    wxFD_NO_FOLLOW         = 0x0008,
+    wxFD_FILE_MUST_EXIST   = 0x0010,
+    wxFD_MULTIPLE          = 0x0020,
+    wxFD_CHANGE_DIR        = 0x0080,
+    wxFD_PREVIEW           = 0x0100
+};
+
+#define wxFD_DEFAULT_STYLE      wxFD_OPEN
+
+/**
+    Default wildcard string used in wxFileDialog corresponding to all files.
+
+    It is defined as "*.*" under MSW and OS/2 and "*" everywhere else.
+*/
+const char wxFileSelectorDefaultWildcardStr[];
 
 /**
     @class wxFileDialog
@@ -100,6 +120,13 @@
     @style{wxFD_OVERWRITE_PROMPT}
            For save dialog only: prompt for a confirmation if a file will be
            overwritten.
+    @style{wxFD_NO_FOLLOW}
+           Directs the dialog to return the path and file name of the selected
+           shortcut file, not its target as it does by default. Currently this
+           flag is only implemented in wxMSW and the non-dereferenced link path
+           is always returned, even without this flag, under Unix and so using
+           it there doesn't do anything. This flag was added in wxWidgets
+           3.1.0.
     @style{wxFD_FILE_MUST_EXIST}
            For open dialog only: the user may only select files that actually
            exist. Notice that under OS X the file dialog with @c wxFD_OPEN
@@ -162,6 +189,26 @@ public:
         Destructor.
     */
     virtual ~wxFileDialog();
+
+    /**
+        Returns the path of the file currently selected in dialog.
+
+        Notice that this file is not necessarily going to be accepted by the
+        user, so calling this function mostly makes sense from an update UI
+        event handler of a custom file dialog extra control to update its state
+        depending on the currently selected file.
+
+        Currently this function is fully implemented under GTK and MSW and
+        always returns an empty string elsewhere.
+
+        @since 2.9.5
+
+        @return The path of the currently selected file or an empty string if
+            nothing is selected.
+
+        @see SetExtraControlCreator()
+    */
+    virtual wxString GetCurrentlySelectedFilename() const;
 
     /**
         Returns the default directory.
@@ -347,11 +394,40 @@ wxString wxFileSelector(const wxString& message,
                         const wxString& default_path = wxEmptyString,
                         const wxString& default_filename = wxEmptyString,
                         const wxString& default_extension = wxEmptyString,
-                        const wxString& wildcard = ".",
+                        const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
                         int flags = 0,
                         wxWindow* parent = NULL,
-                        int x = -1,
-                        int y = -1);
+                        int x = wxDefaultCoord,
+                        int y = wxDefaultCoord);
+
+/**
+    An extended version of wxFileSelector
+*/
+wxString wxFileSelectorEx(const wxString& message = wxFileSelectorPromptStr,
+                          const wxString& default_path = wxEmptyString,
+                          const wxString& default_filename = wxEmptyString,
+                          int *indexDefaultExtension = NULL,
+                          const wxString& wildcard = wxFileSelectorDefaultWildcardStr,
+                          int flags = 0,
+                          wxWindow *parent = NULL,
+                          int x = wxDefaultCoord,
+                          int y = wxDefaultCoord);
+
+/**
+    Ask for filename to load
+*/
+wxString wxLoadFileSelector(const wxString& what,
+                            const wxString& extension,
+                            const wxString& default_name = wxEmptyString,
+                            wxWindow *parent = NULL);
+
+/**
+    Ask for filename to save
+*/
+wxString wxSaveFileSelector(const wxString& what,
+                            const wxString& extension,
+                            const wxString& default_name = wxEmptyString,
+                            wxWindow *parent = NULL);
 
 //@}
 

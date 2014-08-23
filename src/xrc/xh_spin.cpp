@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for wxSpinButton
 // Author:      Bob Mitchell
 // Created:     2000/03/21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -95,6 +94,10 @@ wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
                     GetLong(wxT("max"), DEFAULT_MAX),
                     GetLong(wxT("value"), DEFAULT_VALUE),
                     GetName());
+
+    const long base = GetLong(wxS("base"), 10);
+    if ( base != 10 )
+        control->SetBase(base);
 
     SetupWindow(control);
 

@@ -3,7 +3,6 @@
 // Purpose:     wxHyperlinkCtrl unit test
 // Author:      Steven Lamerton
 // Created:     2010-08-05
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -94,10 +93,7 @@ void HyperlinkCtrlTestCase::Url()
 void HyperlinkCtrlTestCase::Click()
 {
 #if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_hyperlink, wxEVT_COMMAND_HYPERLINK);
+    EventCounter hyperlink(m_hyperlink, wxEVT_HYPERLINK);
 
     wxUIActionSimulator sim;
 
@@ -107,7 +103,7 @@ void HyperlinkCtrlTestCase::Click()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, hyperlink.GetCount());
 #endif
 }
 

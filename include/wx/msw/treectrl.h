@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin to be less MSW-specific on 10/10/98
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -33,15 +32,6 @@
 class  WXDLLIMPEXP_FWD_CORE wxImageList;
 class  WXDLLIMPEXP_FWD_CORE wxDragImage;
 struct WXDLLIMPEXP_FWD_CORE wxTreeViewItem;
-
-#if WXWIN_COMPATIBILITY_2_6
-    // NB: all the following flags are for compatbility only and will be removed in the
-    //     next versions
-    // flags for deprecated InsertItem() variant (their values are the same as of
-    // TVI_FIRST and TVI_LAST)
-    #define wxTREE_INSERT_FIRST 0xFFFF0001
-    #define wxTREE_INSERT_LAST  0xFFFF0002
-#endif
 
 // hash storing attributes for our items
 WX_DECLARE_EXPORTED_VOIDPTR_HASH_MAP(wxTreeItemAttr *, wxMapTreeAttr);
@@ -212,6 +202,14 @@ public:
     virtual bool CanApplyThemeBorder() const { return false; }
 
 protected:
+    // Implement "update locking" in a custom way for this control.
+    virtual void DoFreeze();
+    virtual void DoThaw();
+
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+
     // SetImageList helper
     void SetAnyImageList(wxImageList *imageList, int which);
 
@@ -297,6 +295,9 @@ private:
     // item visually spans the entire breadth of the window then
     bool MSWIsOnItem(unsigned flags) const;
 
+    // Delete the given item from the native control.
+    bool MSWDeleteItem(const wxTreeItemId& item);
+
 
     // the hash storing the items attributes (indexed by item ids)
     wxMapTreeAttr m_attrs;
@@ -331,6 +332,9 @@ private:
 
     // whether we need to deselect other items on mouse up
     bool m_mouseUpDeselect;
+
+    // The size to restore the control to when it is thawed, see DoThaw().
+    wxSize m_thawnSize;
 
     friend class wxTreeItemIndirectData;
     friend class wxTreeSortHelper;

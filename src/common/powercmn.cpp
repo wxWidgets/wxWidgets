@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2006-05-27
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -43,7 +42,7 @@
 #endif
 
 // provide stubs for the systems not implementing these functions
-#if !defined(__WXPALMOS__) && !defined(__WXMSW__)
+#if !defined(__WINDOWS__)
 
 wxPowerType wxGetPowerType()
 {

@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     30.08.00
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -1092,7 +1091,7 @@ void wxListBox::SelectAndNotify(int item)
 {
     DoSelect(item);
 
-    SendEvent(wxEVT_COMMAND_LISTBOX_SELECTED);
+    SendEvent(wxEVT_LISTBOX);
 }
 
 void wxListBox::Activate(int item)
@@ -1111,7 +1110,7 @@ void wxListBox::Activate(int item)
     {
         DoSelect(item);
 
-        SendEvent(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED);
+        SendEvent(wxEVT_LISTBOX_DCLICK);
     }
 }
 

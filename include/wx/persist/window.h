@@ -3,7 +3,6 @@
 // Purpose:     wxPersistentWindow declaration
 // Author:      Vadim Zeitlin
 // Created:     2009-01-23
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -22,19 +21,16 @@
 // ----------------------------------------------------------------------------
 
 // type-independent part of wxPersistentWindow
-class wxPersistentWindowBase :
-    wxBIND_OR_CONNECT_HACK_BASE_CLASS
-    public wxPersistentObject
+class wxPersistentWindowBase : public wxPersistentObject
 {
 public:
     wxPersistentWindowBase(wxWindow *win)
         : wxPersistentObject(win)
     {
-        wxBIND_OR_CONNECT_HACK(win, wxEVT_DESTROY, wxWindowDestroyEventHandler,
-                               wxPersistentWindowBase::HandleDestroy, this);
+        win->Bind(wxEVT_DESTROY, &wxPersistentWindowBase::HandleDestroy, this);
     }
 
-    virtual wxString GetName() const
+    virtual wxString GetName() const wxOVERRIDE
     {
         const wxString name = GetWindow()->GetName();
         wxASSERT_MSG( !name.empty(), "persistent windows should be named!" );

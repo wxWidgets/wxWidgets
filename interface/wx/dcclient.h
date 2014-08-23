@@ -2,7 +2,6 @@
 // Name:        dcclient.h
 // Purpose:     interface of wxClientDC and wxPaintDC
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -33,7 +32,7 @@
 
     @see wxDC, wxClientDC, wxMemoryDC, wxWindowDC, wxScreenDC
 */
-class wxPaintDC : public wxWindowDC
+class wxPaintDC : public wxClientDC
 {
 public:
     /**

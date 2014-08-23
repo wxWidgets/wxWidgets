@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     06.08.00
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -61,9 +60,7 @@
 #include "wx/notebook.h"
 #include "wx/spinbutt.h"
 #include "wx/artprov.h"
-#ifdef wxUSE_TOGGLEBTN
 #include "wx/tglbtn.h"
-#endif // wxUSE_TOGGLEBTN
 
 #include "wx/univ/scrtimer.h"
 #include "wx/univ/stdrend.h"
@@ -2212,7 +2209,6 @@ void wxWin32Renderer::DrawSliderThumb(wxDC& dc,
         }
         rectInt.Deflate(2);
 
-#if !defined(__WXMGL__)
         static const char *stipple_xpm[] = {
             /* columns rows colors chars-per-pixel */
             "2 2 2 1",
@@ -2222,24 +2218,6 @@ void wxWin32Renderer::DrawSliderThumb(wxDC& dc,
             "w ",
             " w",
         };
-#else
-        // VS: MGL can only do 8x8 stipple brushes
-        static const char *stipple_xpm[] = {
-            /* columns rows colors chars-per-pixel */
-            "8 8 2 1",
-            "  c None",
-            "w c white",
-            /* pixels */
-            "w w w w ",
-            " w w w w",
-            "w w w w ",
-            " w w w w",
-            "w w w w ",
-            " w w w w",
-            "w w w w ",
-            " w w w w",
-        };
-#endif
         dc.SetBrush(wxBrush(stipple_xpm));
 
         dc.SetTextForeground(wxSCHEME_COLOUR(m_scheme, SHADOW_HIGHLIGHT));
@@ -3142,14 +3120,12 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
 #if wxUSE_SCROLLBAR
     if ( wxDynamicCast(window, wxScrollBar) )
     {
-        // we only set the width of vert scrollbars and height of the
-        // horizontal ones
-        if ( window->GetWindowStyle() & wxSB_HORIZONTAL )
-            size->y = m_sizeScrollbarArrow.y;
-        else
-            size->x = m_sizeScrollbarArrow.x;
-
-        // skip border width adjustments, they don't make sense for us
+        /*
+        Don't adjust the size for a scrollbar as its DoGetBestClientSize
+        already has the correct size set. Any size changes here would get
+        added to the best size, making the scrollbar larger.
+        Also skip border width adjustments, they don't make sense for us.
+        */
         return;
     }
 #endif // wxUSE_SCROLLBAR
@@ -3777,7 +3753,7 @@ void wxWin32FrameInputHandler::PopupSystemMenu(wxTopLevelWindow *window) const
     if ( window->GetWindowStyle() & wxMAXIMIZE_BOX )
         menu.Append(wxID_MAXIMIZE_FRAME , _("Ma&ximize"));
     menu.AppendSeparator();
-    menu.Append(wxID_CLOSE_FRAME, _("Close\tAlt-F4"));
+    menu.Append(wxID_CLOSE_FRAME, _("&Close") + wxT("\t") + _("Alt+") + wxT("F4"));
 
     if ( window->GetWindowStyle() & wxMAXIMIZE_BOX )
     {

@@ -135,12 +135,11 @@
           <property category="win32.*.win32b.bcc32" name="option.whid.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.y.enabled" value="1"/>
           <property category="win32.*.win32b.brcc32" name="option.D.arg.1" value="INC_OLE2"/>
-          <property category="win32.*.win32b.brcc32" name="option.D.arg.2" value="__WIN95__"/>
-          <property category="win32.*.win32b.brcc32" name="option.D.arg.3" value="__WXMSW__"/>
-          <property category="win32.*.win32b.brcc32" name="option.D.arg.4" value="__WINDOWS__"/>
-          <property category="win32.*.win32b.brcc32" name="option.D.arg.5" value="WIN32"/>
-          <property category="win32.*.win32b.brcc32" name="option.D.arg.6" value="__BIDE__"/>
-          <property category="win32.*.win32b.brcc32" name="option.D.arg.7" value="NO_STRICT"/>
+          <property category="win32.*.win32b.brcc32" name="option.D.arg.2" value="__WXMSW__"/>
+          <property category="win32.*.win32b.brcc32" name="option.D.arg.3" value="__WINDOWS__"/>
+          <property category="win32.*.win32b.brcc32" name="option.D.arg.4" value="WIN32"/>
+          <property category="win32.*.win32b.brcc32" name="option.D.arg.5" value="__BIDE__"/>
+          <property category="win32.*.win32b.brcc32" name="option.D.arg.6" value="NO_STRICT"/>
           <property category="win32.*.win32b.brcc32" name="option.D.arg.merge" value="1"/>
           <property category="win32.*.win32b.brcc32" name="option.D.enabled" value="0"/>
           <property category="win32.*.win32b.brcc32" name="option.INCLUDEPATH.arg.1" value="$(BDS)\include"/>
@@ -186,12 +185,11 @@
           <property category="win32.*.win32b.ilink32" name="param.objfiles.3" value="sysinit.obj"/>
           <property category="win32.*.win32b.ilink32" name="param.objfiles.merge" value="1"/>
           <property category="win32.*.win32b.tasm32" name="option.d.arg.1" value="INC_OLE2"/>
-          <property category="win32.*.win32b.tasm32" name="option.d.arg.2" value="__WIN95__"/>
-          <property category="win32.*.win32b.tasm32" name="option.d.arg.3" value="__WXMSW__"/>
-          <property category="win32.*.win32b.tasm32" name="option.d.arg.4" value="__WINDOWS__"/>
-          <property category="win32.*.win32b.tasm32" name="option.d.arg.5" value="WIN32"/>
-          <property category="win32.*.win32b.tasm32" name="option.d.arg.6" value="__BIDE__"/>
-          <property category="win32.*.win32b.tasm32" name="option.d.arg.7" value="NO_STRICT"/>
+          <property category="win32.*.win32b.tasm32" name="option.d.arg.2" value="__WXMSW__"/>
+          <property category="win32.*.win32b.tasm32" name="option.d.arg.3" value="__WINDOWS__"/>
+          <property category="win32.*.win32b.tasm32" name="option.d.arg.4" value="WIN32"/>
+          <property category="win32.*.win32b.tasm32" name="option.d.arg.5" value="__BIDE__"/>
+          <property category="win32.*.win32b.tasm32" name="option.d.arg.6" value="NO_STRICT"/>
           <property category="win32.*.win32b.tasm32" name="option.d.arg.merge" value="1"/>
           <property category="win32.*.win32b.tasm32" name="option.d.enabled" value="1"/>
           <property category="win32.*.win32b.tasm32" name="option.i.arg.1" value="$(BDS)\include"/>

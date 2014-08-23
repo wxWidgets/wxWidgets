@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -47,6 +46,7 @@
 #include <string.h>
 
 #include "wx/filename.h"
+#include "wx/modalhook.h"
 
 // ============================================================================
 // implementation
@@ -112,6 +112,8 @@ void wxFileDialog::SetPath(const wxString& path)
 
 int wxFileDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
     wxWindow* parentWindow = GetParent();
     if (!parentWindow)
         parentWindow = wxTheApp->GetTopWindow();

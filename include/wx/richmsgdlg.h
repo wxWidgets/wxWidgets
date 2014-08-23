@@ -3,7 +3,6 @@
 // Purpose:     wxRichMessageDialogBase
 // Author:      Rickard Westerlund
 // Created:     2010-07-03
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -27,8 +26,8 @@ public:
                              const wxString& caption,
                              long style )
         : wxGenericMessageDialog( parent, message, caption, style ),
-          m_detailsExpanderCollapsedLabel( _("&See details") ),
-          m_detailsExpanderExpandedLabel( _("&Hide details") ),
+          m_detailsExpanderCollapsedLabel( wxGetTranslation("&See details") ),
+          m_detailsExpanderExpandedLabel( wxGetTranslation("&Hide details") ),
           m_checkBoxValue( false )
         { }
 
@@ -45,7 +44,7 @@ public:
 
     wxString GetDetailedText() const { return m_detailedText; }
 
-    virtual bool IsCheckBoxChecked() const { return m_checkBoxValue; };
+    virtual bool IsCheckBoxChecked() const { return m_checkBoxValue; }
 
 protected:
     const wxString m_detailsExpanderCollapsedLabel;

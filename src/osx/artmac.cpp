@@ -3,7 +3,6 @@
 // Purpose:     wxArtProvider instance with native Mac stock icons
 // Author:      Alan Shouls
 // Created:     2006-10-30
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWindows team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -36,12 +35,12 @@ class wxMacArtProvider : public wxArtProvider
 protected:
 #if wxOSX_USE_COCOA_OR_CARBON
     virtual wxIconBundle CreateIconBundle(const wxArtID& id,
-                                          const wxArtClient& client);
+                                          const wxArtClient& client) wxOVERRIDE;
 #endif
 #if wxOSX_USE_COCOA_OR_IPHONE
     virtual wxBitmap CreateBitmap(const wxArtID& id,
                                   const wxArtClient& client,
-                                  const wxSize& size)
+                                  const wxSize& size) wxOVERRIDE
     {
         return wxOSXCreateSystemBitmap(id, client, size);
     }
@@ -50,7 +49,7 @@ protected:
 
 /* static */ void wxArtProvider::InitNativeProvider()
 {
-    wxArtProvider::Push(new wxMacArtProvider);
+    PushBack(new wxMacArtProvider);
 }
 
 #if wxOSX_USE_COCOA_OR_CARBON

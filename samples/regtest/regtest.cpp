@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     03.04.98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,7 +30,7 @@
 #include "wx/imaglist.h"
 #include "wx/tokenzr.h"
 
-#if wxUSE_CONFIG_NATIVE && defined( __WXMSW__ )
+#if wxUSE_CONFIG_NATIVE && defined( __WINDOWS__ )
 #   define DO_REGTEST 1
 #else
 #   define DO_REGTEST 0
@@ -175,7 +174,7 @@ public:
     void AddStdKeys();
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // #if DO_REGTEST
@@ -211,7 +210,7 @@ public:
 
     void OnViewChange (wxCommandEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
 private:
 
@@ -252,7 +251,7 @@ enum
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(RegFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(RegFrame, wxFrame)
     EVT_MENU(Menu_Test,        RegFrame::OnTest)
     EVT_MENU(Menu_About,       RegFrame::OnAbout)
     EVT_MENU(Menu_Quit,        RegFrame::OnQuit)
@@ -269,11 +268,11 @@ BEGIN_EVENT_TABLE(RegFrame, wxFrame)
     EVT_MENU(Menu_ViewDefault, RegFrame::OnViewChange)
     EVT_MENU(Menu_View32,      RegFrame::OnViewChange)
     EVT_MENU(Menu_View64,      RegFrame::OnViewChange)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #if DO_REGTEST
 
-BEGIN_EVENT_TABLE(RegTreeCtrl, wxTreeCtrl)
+wxBEGIN_EVENT_TABLE(RegTreeCtrl, wxTreeCtrl)
     EVT_TREE_DELETE_ITEM    (Ctrl_RegTree, RegTreeCtrl::OnDeleteItem)
     EVT_TREE_ITEM_EXPANDING (Ctrl_RegTree, RegTreeCtrl::OnItemExpanding)
     EVT_TREE_ITEM_COLLAPSING(Ctrl_RegTree, RegTreeCtrl::OnItemExpanding)
@@ -289,7 +288,7 @@ BEGIN_EVENT_TABLE(RegTreeCtrl, wxTreeCtrl)
     EVT_CHAR      (RegTreeCtrl::OnChar)
     EVT_RIGHT_DOWN(RegTreeCtrl::OnRightClick)
     EVT_IDLE      (RegTreeCtrl::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #endif
 
@@ -367,7 +366,7 @@ RegFrame::RegFrame(wxFrame *parent, const wxChar *title, int x, int y, int w, in
         : wxFrame(parent, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
     // this reduces flicker effects
-    SetBackgroundColour(wxColour(255, 255, 255));
+    SetBackgroundColour(*wxWHITE);
 
     // set the icon
     // ------------
@@ -378,7 +377,7 @@ RegFrame::RegFrame(wxFrame *parent, const wxChar *title, int x, int y, int w, in
     wxMenu *pMenuFile = new wxMenu;
     pMenuFile->Append(Menu_Test, wxT("Te&st"), wxT("Test key creation"));
     pMenuFile->AppendSeparator();
-    pMenuFile->Append(Menu_About, wxT("&About..."), wxT("Show an extraordinarly beautiful dialog"));
+    pMenuFile->Append(Menu_About, wxT("&About"), wxT("Show an extraordinarly beautiful dialog"));
     pMenuFile->AppendSeparator();
     pMenuFile->Append(Menu_Quit,  wxT("E&xit"), wxT("Quit this program"));
 
@@ -784,7 +783,7 @@ void RegTreeCtrl::OnSelChanged(wxTreeEvent& event)
 void RegTreeCtrl::OnItemExpanding(wxTreeEvent& event)
 {
     TreeNode *pNode = GetNode(event);
-    bool bExpanding = event.GetEventType() == wxEVT_COMMAND_TREE_ITEM_EXPANDING;
+    bool bExpanding = event.GetEventType() == wxEVT_TREE_ITEM_EXPANDING;
 
     // expansion might take some time
     wxSetCursor(*wxHOURGLASS_CURSOR);
@@ -858,7 +857,7 @@ void RegTreeCtrl::OnEndEdit(wxTreeEvent& event)
 
 void RegTreeCtrl::OnBeginDrag(wxTreeEvent& event)
 {
-    m_copyOnDrop = event.GetEventType() == wxEVT_COMMAND_TREE_BEGIN_DRAG;
+    m_copyOnDrop = event.GetEventType() == wxEVT_TREE_BEGIN_DRAG;
 
     TreeNode *pNode = GetNode(event);
     if ( pNode->IsRoot() || pNode->Parent()->IsRoot() )
@@ -1193,7 +1192,7 @@ const wxChar *RegTreeCtrl::TreeNode::FullName() const
         s_strName = Parent()->FullName();
         s_strName << wxT('\\') << m_strName;
 
-        return s_strName;
+        return s_strName.t_str();
     }
 }
 

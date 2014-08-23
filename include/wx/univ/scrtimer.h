@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     18.02.01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,7 +34,7 @@ public:
     void StartAutoScroll();
 
     // the base class method
-    virtual void Notify();
+    virtual void Notify() wxOVERRIDE;
 
 protected:
     // to implement in derived classes: perform the scroll action and return

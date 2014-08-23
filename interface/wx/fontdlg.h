@@ -2,7 +2,6 @@
 // Name:        fontdlg.h
 // Purpose:     interface of wxFontDialog
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -14,7 +13,7 @@
     @library{wxcore}
     @category{cmndlg}
 
-    @see overview_cmndlg_font, wxFontData, wxGetFontFromUser()
+    @see @ref overview_cmndlg_font, wxFontData, wxGetFontFromUser()
 */
 class wxFontDialog : public wxDialog
 {

@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by: Francesco Montorsi
 // Created:     27/07/03
-// RCS-ID:      $Id$
 // Copyright:   (c) 1997 Julian Smart
 //              (c) 2003 Stefan Csomor
 // Licence:     wxWindows licence
@@ -96,7 +95,7 @@ typedef bool (*wxObjectStreamingCallback) ( const wxObject *, wxObjectWriter *, 
 class WXDLLIMPEXP_BASE wxClassInfo
 {
     friend class WXDLLIMPEXP_BASE wxPropertyInfo;
-    friend class WXDLLIMPEXP_BASE wxHandlerInfo;
+    friend class /* WXDLLIMPEXP_BASE */ wxHandlerInfo;
     friend wxObject *wxCreateDynamicObject(const wxString& name);
 
 public:
@@ -333,7 +332,6 @@ private:
     wxPropertyInfoFn          m_firstPropertyFn;
     wxHandlerInfoFn           m_firstHandlerFn;
 
-    mutable bool              m_firstInited;
 
 protected:
     void                      EnsureInfosInited() const
@@ -351,6 +349,8 @@ protected:
     mutable wxHandlerInfo*    m_firstHandler;
 
 private:
+    mutable bool              m_firstInited;
+
     const wxClassInfo**       m_parents;
     const wxChar*             m_unitName;
 

@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     29/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -38,9 +37,7 @@ class WXDLLIMPEXP_FWD_BASE wxArrayInt;
 // needed for wxOperatingSystemId, wxLinuxDistributionInfo
 #include "wx/platinfo.h"
 
-#ifdef __WATCOMC__
-    #include <direct.h>
-#elif defined(__X__)
+#if defined(__X__)
     #include <dirent.h>
     #include <unistd.h>
 #endif
@@ -54,7 +51,7 @@ class WXDLLIMPEXP_FWD_BASE wxArrayInt;
 class WXDLLIMPEXP_FWD_BASE wxProcess;
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
-class WXDLLIMPEXP_FWD_CORE wxWindowList;
+class wxWindowList;
 class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 
 // ----------------------------------------------------------------------------
@@ -113,7 +110,7 @@ wxClip(T1 a, T2 b, T3 c)
 // String functions (deprecated, use wxString)
 // ----------------------------------------------------------------------------
 
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
 // A shorter way of using strcmp
 wxDEPRECATED_INLINE(inline bool wxStringEq(const char *s1, const char *s2),
     return wxCRT_StrcmpA(s1, s2) == 0; )
@@ -130,12 +127,7 @@ wxDEPRECATED_INLINE(inline bool wxStringEq(const wchar_t *s1, const wchar_t *s2)
 // ----------------------------------------------------------------------------
 
 // Sound the bell
-#if !defined __EMX__ && \
-    (defined __WXMOTIF__ || defined __WXGTK__ || defined __WXX11__)
 WXDLLIMPEXP_CORE void wxBell();
-#else
-WXDLLIMPEXP_BASE void wxBell();
-#endif
 
 #if wxUSE_MSGDLG
 // Show wxWidgets information
@@ -278,13 +270,13 @@ inline bool wxPlatformIs(int platform) { return wxPlatform::Is(platform); }
 // ----------------------------------------------------------------------------
 
 // Ensure subsequent IDs don't clash with this one
-WXDLLIMPEXP_BASE void wxRegisterId(long id);
+WXDLLIMPEXP_BASE void wxRegisterId(int id);
 
 // Return the current ID
-WXDLLIMPEXP_BASE long wxGetCurrentId();
+WXDLLIMPEXP_BASE int wxGetCurrentId();
 
 // Generate a unique ID
-WXDLLIMPEXP_BASE long wxNewId();
+WXDLLIMPEXP_BASE int wxNewId();
 
 // ----------------------------------------------------------------------------
 // Various conversions
@@ -334,10 +326,17 @@ enum
 
     // under Windows, don't hide the child even if it's IO is redirected (this
     // is done by default)
-    wxEXEC_NOHIDE   = 2,
+    wxEXEC_SHOW_CONSOLE   = 2,
+
+    // deprecated synonym for wxEXEC_SHOW_CONSOLE, use the new name as it's
+    // more clear
+    wxEXEC_NOHIDE = wxEXEC_SHOW_CONSOLE,
 
     // under Unix, if the process is the group leader then passing wxKILL_CHILDREN to wxKill
     // kills all children as well as pid
+    // under Windows (NT family only), sets the CREATE_NEW_PROCESS_GROUP flag,
+    // which allows to target Ctrl-Break signal to the spawned process.
+    // applies to console processes only.
     wxEXEC_MAKE_GROUP_LEADER = 4,
 
     // by default synchronous execution disables all program windows to avoid
@@ -349,6 +348,10 @@ enum
     // to complete and this flag can be used to simply block the main process
     // until the child process finishes
     wxEXEC_NOEVENTS = 16,
+
+    // under Windows, hide the console of the child process if it has one, even
+    // if its IO is not redirected
+    wxEXEC_HIDE_CONSOLE = 32,
 
     // convenient synonym for flags given system()-like behaviour
     wxEXEC_BLOCK = wxEXEC_SYNC | wxEXEC_NOEVENTS
@@ -399,12 +402,12 @@ WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
                                 int flags = 0,
                                 const wxExecuteEnv *env = NULL);
 
-#if defined(__WXMSW__) && wxUSE_IPC
+#if defined(__WINDOWS__) && wxUSE_IPC
 // ask a DDE server to execute the DDE request with given parameters
 WXDLLIMPEXP_BASE bool wxExecuteDDE(const wxString& ddeServer,
                                    const wxString& ddeTopic,
                                    const wxString& ddeCommand);
-#endif // __WXMSW__ && wxUSE_IPC
+#endif // __WINDOWS__ && wxUSE_IPC
 
 enum wxSignal
 {
@@ -588,14 +591,14 @@ WXDLLIMPEXP_BASE bool wxGetDiskSpace(const wxString& path,
 
 
 
-extern "C"
-{
-typedef int (wxCMPFUNC_CONV *CMPFUNCDATA)(const void* pItem1, const void* pItem2, const void* user_data);
-}
+typedef int (*wxSortCallback)(const void* pItem1,
+                              const void* pItem2,
+                              const void* user_data);
 
 
-WXDLLIMPEXP_BASE void wxQsort(void *const pbase, size_t total_elems,
-                              size_t size, CMPFUNCDATA cmp, const void* user_data);
+WXDLLIMPEXP_BASE void wxQsort(void* pbase, size_t total_elems,
+                              size_t size, wxSortCallback cmp,
+                              const void* user_data);
 
 
 #if wxUSE_GUI // GUI only things from now on
@@ -637,23 +640,6 @@ enum
 // strip mnemonics and/or accelerators from the label
 WXDLLIMPEXP_CORE wxString
 wxStripMenuCodes(const wxString& str, int flags = wxStrip_All);
-
-#if WXWIN_COMPATIBILITY_2_6
-// obsolete and deprecated version, do not use, use the above overload instead
-wxDEPRECATED(
-    WXDLLIMPEXP_CORE wxChar* wxStripMenuCodes(const wxChar *in, wxChar *out = NULL)
-);
-
-#if wxUSE_ACCEL
-class WXDLLIMPEXP_FWD_CORE wxAcceleratorEntry;
-
-// use wxAcceleratorEntry::Create() or FromString() methods instead
-wxDEPRECATED(
-    WXDLLIMPEXP_CORE wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
-);
-#endif // wxUSE_ACCEL
-
-#endif // WXWIN_COMPATIBILITY_2_6
 
 // ----------------------------------------------------------------------------
 // Window search
@@ -804,13 +790,17 @@ WXDLLIMPEXP_CORE bool wxYieldIfNeeded();
 // Windows resources access
 // ----------------------------------------------------------------------------
 
-// MSW only: get user-defined resource from the .res file.
-#ifdef __WXMSW__
+// Windows only: get user-defined resource from the .res file.
+#ifdef __WINDOWS__
     // default resource type for wxLoadUserResource()
     extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxUserResourceStr;
 
     // Return the pointer to the resource data. This pointer is read-only, use
     // the overload below if you need to modify the data.
+    //
+    // Notice that the resource type can be either a real string or an integer
+    // produced by MAKEINTRESOURCE(). In particular, any standard resource type,
+    // i.e any RT_XXX constant, could be passed here.
     //
     // Returns true on success, false on failure. Doesn't log an error message
     // if the resource is not found (because this could be expected) but does
@@ -819,7 +809,7 @@ WXDLLIMPEXP_CORE bool wxYieldIfNeeded();
     wxLoadUserResource(const void **outData,
                        size_t *outLen,
                        const wxString& resourceName,
-                       const wxString& resourceType = wxUserResourceStr,
+                       const wxChar* resourceType = wxUserResourceStr,
                        WXHINSTANCE module = 0);
 
     // This function allocates a new buffer and makes a copy of the resource
@@ -829,10 +819,10 @@ WXDLLIMPEXP_CORE bool wxYieldIfNeeded();
     // Returns NULL on failure.
     WXDLLIMPEXP_BASE char*
     wxLoadUserResource(const wxString& resourceName,
-                       const wxString& resourceType = wxUserResourceStr,
+                       const wxChar* resourceType = wxUserResourceStr,
                        int* pLen = NULL,
                        WXHINSTANCE module = 0);
-#endif // MSW
+#endif // __WINDOWS__
 
 #endif
     // _WX_UTILSH__

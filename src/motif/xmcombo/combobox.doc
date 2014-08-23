@@ -30,7 +30,7 @@ Whats new? (changes since the last version are marked with an asterisk)
     them. These mirror resources instead belong to child widgets. With 1.23 
     the resource list (which can be queried by XtGetResourceList()) contains 
     entries for all mirror resources although the initial value setting is 
-    always zero. But this should'nt matter. You can switch off these entries
+    always zero. But this shouldn't matter. You can switch off these entries
     by setting -DDONT_LOOK_IN_THE_MIRROR when compiling ComboBox.c.
   - The selection policies XmSINGLE_SELECT and XmBROWSE_SELECT are now
     supported.
@@ -172,7 +172,7 @@ the place you're living in, don't hesitate... 8-)
    This should do it's job with twm as well as fvwm. With olwm you shouldn't
    need to set one of the special resources.
 
-6. The combo box has been reported to run sucessfully on:
+6. The combo box has been reported to run successfully on:
    Silicon Graphics, Sun, HP, IBM RS6000, PC, even VMS!
    Linux, of course...!
    Attention VMS folks! You'll find two files called "motif11.opt" or 

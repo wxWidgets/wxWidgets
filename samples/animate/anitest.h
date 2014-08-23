@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     02/07/2001
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -49,5 +48,5 @@ protected:
     wxAnimationCtrl*    m_animationCtrl;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };

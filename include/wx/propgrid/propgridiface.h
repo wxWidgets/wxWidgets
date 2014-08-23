@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     2008-08-24
-// RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -29,7 +28,6 @@
 class WXDLLIMPEXP_PROPGRID wxPGPropArgCls
 {
 public:
-    wxPGPropArgCls() { }
     wxPGPropArgCls( const wxPGProperty* property )
     {
         m_ptr.property = (wxPGProperty*) property;

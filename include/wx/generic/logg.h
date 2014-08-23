@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     29/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -34,7 +33,7 @@ public:
 
 protected:
     // implement sink function
-    virtual void DoLogText(const wxString& msg);
+    virtual void DoLogText(const wxString& msg) wxOVERRIDE;
 
 private:
     // the control we use
@@ -58,12 +57,12 @@ public:
     wxLogGui();
 
     // show all messages that were logged since the last Flush()
-    virtual void Flush();
+    virtual void Flush() wxOVERRIDE;
 
 protected:
     virtual void DoLogRecord(wxLogLevel level,
                              const wxString& msg,
-                             const wxLogRecordInfo& info);
+                             const wxLogRecordInfo& info) wxOVERRIDE;
 
     // return the title to be used for the log dialog, depending on m_bErrors
     // and m_bWarnings values
@@ -127,9 +126,6 @@ public:
     wxFrame *GetFrame() const;
 
     // overridables
-        // called immediately after the log frame creation allowing for
-        // any extra initializations
-    virtual void OnFrameCreate(wxFrame *frame);
         // called if the user closes the window interactively, will not be
         // called if it is destroyed for another reason (such as when program
         // exits) - return true from here to allow the frame to close, false
@@ -140,7 +136,7 @@ public:
     virtual void OnFrameDelete(wxFrame *frame);
 
 protected:
-    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg);
+    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg) wxOVERRIDE;
 
 private:
     wxLogFrame *m_pLogFrame;      // the log frame

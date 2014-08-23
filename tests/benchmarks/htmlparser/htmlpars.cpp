@@ -2,7 +2,6 @@
 // Name:        src/html/htmlpars.cpp
 // Purpose:     wx28HtmlParser class (generic parser)
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -295,7 +294,7 @@ void wx28HtmlParser::DoParsing(int begin_pos, int end_pos)
             // Add text:
             AddText(GetEntitiesParser()->Parse(
                        m_Source.Mid(pieces[m_CurTextPiece].m_pos,
-                                    pieces[m_CurTextPiece].m_lng)));
+                                    pieces[m_CurTextPiece].m_lng)).t_str());
             begin_pos = pieces[m_CurTextPiece].m_pos +
                         pieces[m_CurTextPiece].m_lng;
             m_CurTextPiece++;

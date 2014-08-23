@@ -4,7 +4,6 @@
 // Authors:     Lukasz Michalski
 // Created:     April 2007
 // Copyright:   (c) Lukasz Michalski
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

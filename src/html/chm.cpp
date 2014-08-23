@@ -3,7 +3,6 @@
 // Purpose:     CHM (Help) support for wxHTML
 // Author:      Markus Sinner
 // Copyright:   (c) 2003 Herd Software Development
-// CVS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -563,7 +562,6 @@ void
 wxChmInputStream::CreateHHPStream()
 {
     wxFileName file;
-    bool topic = false;
     bool hhc = false;
     bool hhk = false;
     wxInputStream *i;
@@ -631,7 +629,6 @@ wxChmInputStream::CreateHHPStream()
                     break;
                 case 2: // DEFAULT_TOPIC
                     tmp = "Default Topic=";
-                    topic = true;
                     break;
                 case 3: // TITLE
                     tmp = "Title=";

@@ -2,7 +2,6 @@
 // Name:        src/x11/textctrl.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -1896,7 +1895,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
         {
             if (m_windowStyle & wxTE_PROCESS_ENTER)
             {
-                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+                wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
                 event.SetEventObject(this);
                 event.SetString(GetValue());
                 if (HandleWindowEvent(event)) return;

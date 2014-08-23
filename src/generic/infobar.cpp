@@ -3,7 +3,6 @@
 // Purpose:     generic wxInfoBar implementation
 // Author:      Vadim Zeitlin
 // Created:     2009-07-28
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -38,40 +37,11 @@
 #endif // WX_PRECOMP
 
 #include "wx/artprov.h"
-#include "wx/renderer.h"
 #include "wx/scopeguard.h"
 
 BEGIN_EVENT_TABLE(wxInfoBarGeneric, wxInfoBarBase)
     EVT_BUTTON(wxID_ANY, wxInfoBarGeneric::OnButton)
 END_EVENT_TABLE()
-
-// ----------------------------------------------------------------------------
-// local helpers
-// ----------------------------------------------------------------------------
-
-namespace
-{
-
-#ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
-
-wxBitmap
-GetCloseButtonBitmap(wxWindow *win,
-                     const wxSize& size,
-                     const wxColour& colBg,
-                     int flags = 0)
-{
-    wxBitmap bmp(size);
-    wxMemoryDC dc(bmp);
-    dc.SetBackground(colBg);
-    dc.Clear();
-    wxRendererNative::Get().
-        DrawTitleBarBitmap(win, dc, size, wxTITLEBAR_BUTTON_CLOSE, flags);
-    return bmp;
-}
-
-#endif // wxHAS_DRAW_TITLE_BAR_BITMAP
-
-} // anonymous namespace
 
 // ============================================================================
 // implementation
@@ -99,9 +69,7 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
         return false;
 
     // use special, easy to notice, colours
-    const wxColour colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK);
-    SetBackgroundColour(colBg);
-    SetOwnForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK));
 
     // create the controls: icon, text and the button to dismiss the
     // message.
@@ -110,32 +78,9 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     m_icon = new wxStaticBitmap(this, wxID_ANY, wxNullBitmap);
 
     m_text = new wxStaticText(this, wxID_ANY, "");
+    m_text->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
 
-#ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
-    const wxSize sizeBmp = wxArtProvider::GetSizeHint(wxART_BUTTON);
-    wxBitmap bmp = GetCloseButtonBitmap(this, sizeBmp, colBg);
-#else // !wxHAS_DRAW_TITLE_BAR_BITMAP
-    wxBitmap bmp = wxArtProvider::GetBitmap(wxART_CLOSE, wxART_BUTTON);
-#endif // wxHAS_DRAW_TITLE_BAR_BITMAP
-    m_button = new wxBitmapButton
-                   (
-                    this,
-                    wxID_ANY,
-                    bmp,
-                    wxDefaultPosition,
-                    wxDefaultSize,
-                    wxBORDER_NONE
-                   );
-
-#ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
-    m_button->SetBitmapPressed(
-        GetCloseButtonBitmap(this, sizeBmp, colBg, wxCONTROL_PRESSED));
-
-    m_button->SetBitmapCurrent(
-        GetCloseButtonBitmap(this, sizeBmp, colBg, wxCONTROL_CURRENT));
-#endif // wxHAS_DRAW_TITLE_BAR_BITMAP
-
-    m_button->SetBackgroundColour(colBg);
+    m_button = wxBitmapButton::NewCloseButton(this, wxID_ANY);
     m_button->SetToolTip(_("Hide this notification message."));
 
     // center the text inside the sizer with an icon to the left of it and a
@@ -165,19 +110,27 @@ bool wxInfoBarGeneric::SetFont(const wxFont& font)
     return true;
 }
 
+bool wxInfoBarGeneric::SetForegroundColour(const wxColor& colour)
+{
+    if ( !wxInfoBarBase::SetForegroundColour(colour) )
+        return false;
+
+    if ( m_text )
+        m_text->SetForegroundColour(colour);
+
+    return true;
+}
+
 wxInfoBarGeneric::BarPlacement wxInfoBarGeneric::GetBarPlacement() const
 {
     wxSizer * const sizer = GetContainingSizer();
     if ( !sizer )
         return BarPlacement_Unknown;
 
-    // FIXME-VC6: can't compare "const wxInfoBarGeneric *" and "wxWindow *",
-    //            so need this workaround
-    wxWindow * const self = const_cast<wxInfoBarGeneric *>(this);
     const wxSizerItemList& siblings = sizer->GetChildren();
-    if ( siblings.GetFirst()->GetData()->GetWindow() == self )
+    if ( siblings.GetFirst()->GetData()->GetWindow() == this )
         return BarPlacement_Top;
-    else if ( siblings.GetLast()->GetData()->GetWindow() == self )
+    else if ( siblings.GetLast()->GetData()->GetWindow() == this )
         return BarPlacement_Bottom;
     else
         return BarPlacement_Unknown;
@@ -198,7 +151,7 @@ wxShowEffect wxInfoBarGeneric::GetShowEffect() const
 
         default:
             wxFAIL_MSG( "unknown info bar placement" );
-            // fall through
+            wxFALLTHROUGH;
 
         case BarPlacement_Unknown:
             return wxSHOW_EFFECT_NONE;
@@ -220,7 +173,7 @@ wxShowEffect wxInfoBarGeneric::GetHideEffect() const
 
         default:
             wxFAIL_MSG( "unknown info bar placement" );
-            // fall through
+            wxFALLTHROUGH;
 
         case BarPlacement_Unknown:
             return wxSHOW_EFFECT_NONE;

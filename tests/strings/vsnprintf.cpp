@@ -5,7 +5,6 @@
 //              (part of this file was taken from CMP.c of TRIO package
 //               written by Bjorn Reese and Daniel Stenberg)
 // Created:     2006-04-01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Francesco Montorsi, Bjorn Reese and Daniel Stenberg
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -425,7 +424,7 @@ void VsnprintfTestCase::LongLong()
 
     CMP3("123456789", "%llu", (wxULongLong_t)123456789);
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     CMP3("123456789", "%I64d", (wxLongLong_t)123456789);
     CMP3("123456789abcdef", "%I64x", wxLL(0x123456789abcdef));
 #endif
@@ -515,8 +514,6 @@ void VsnprintfTestCase::DoBigToSmallBuffer(T *buffer, int size)
 
 void VsnprintfTestCase::BigToSmallBuffer()
 {
-    // VC6 can't compile this code
-#if !defined(__VISUALC__) || (__VISUALC__ >= 1310)
 #if wxUSE_UNICODE
     wchar_t bufw[1024], bufw2[16], bufw3[4], bufw4;
     DoBigToSmallBuffer(bufw, 1024);
@@ -530,7 +527,6 @@ void VsnprintfTestCase::BigToSmallBuffer()
     DoBigToSmallBuffer(bufa2, 16);
     DoBigToSmallBuffer(bufa3, 4);
     DoBigToSmallBuffer(&bufa4, 1);
-#endif // !VC6
 }
 
 // Miscellaneous() test case helper:

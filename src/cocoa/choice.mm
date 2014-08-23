@@ -4,7 +4,6 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/03/16
-// Id:          $Id$
 // Copyright:   (c) 2003 David Elliott
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -117,7 +116,7 @@ void wxChoice::CocoaNotification_menuDidSendAction(WX_NSNotification notificatio
     int index = [[(NSPopUpButton*)m_cocoaNSView menu] indexOfItem: menuitem];
     int selectedItem = [(NSPopUpButton*)m_cocoaNSView indexOfSelectedItem];
     wxLogTrace(wxTRACE_COCOA,wxT("menuDidSendAction, index=%d, selectedItem=%d"), index, selectedItem);
-    wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId);
+    wxCommandEvent event(wxEVT_CHOICE, m_windowId);
     event.SetInt(index);
     event.SetEventObject(this);
     event.SetString(GetStringSelection());

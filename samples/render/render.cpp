@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     04.08.03
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -47,7 +46,7 @@
 // ----------------------------------------------------------------------------
 
 // the application icon (under Windows and OS/2 it is in resources)
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__) || defined(__WXQT__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -67,7 +66,7 @@ public:
                                   int WXUNUSED(flags) = 0,
                                   wxHeaderSortIconType WXUNUSED(sortArrow)
                                     = wxHDR_SORT_ICON_NONE,
-                                  wxHeaderButtonParams* params = NULL)
+                                  wxHeaderButtonParams* params = NULL) wxOVERRIDE
     {
         wxDCBrushChanger setBrush(dc, *wxBLUE_BRUSH);
         wxDCTextColourChanger setFgCol(dc, *wxWHITE);
@@ -87,7 +86,7 @@ public:
 // cases, but we show this here just for completeness)
 class MyTraits : public wxGUIAppTraits
 {
-    virtual wxRendererNative *CreateRenderer()
+    virtual wxRendererNative *CreateRenderer() wxOVERRIDE
     {
         // it will be deleted on program shutdown by wxWidgets itself
         return new MyRenderer;
@@ -98,10 +97,10 @@ class MyTraits : public wxGUIAppTraits
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
     // if we want MyTraits to be used we must override CreateTraits()
-    virtual wxAppTraits *CreateTraits() { return new MyTraits; }
+    virtual wxAppTraits *CreateTraits() wxOVERRIDE { return new MyTraits; }
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -150,7 +149,7 @@ private:
     class MyPanel *m_panel;
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // a very simple class just to have something to draw on
@@ -275,12 +274,12 @@ private:
     bool m_useIcon,
          m_useBitmap;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(MyPanel, wxPanel)
+wxBEGIN_EVENT_TABLE(MyPanel, wxPanel)
     EVT_PAINT(MyPanel::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // constants
@@ -325,7 +324,7 @@ enum
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Render_DrawDisabled, MyFrame::OnDrawDisabled)
     EVT_MENU(Render_DrawFocused, MyFrame::OnDrawFocused)
     EVT_MENU(Render_DrawPressed, MyFrame::OnDrawPressed)
@@ -346,7 +345,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Render_Quit,  MyFrame::OnQuit)
 
     EVT_MENU(Render_About, MyFrame::OnAbout)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a

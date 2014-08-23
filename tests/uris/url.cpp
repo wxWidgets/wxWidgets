@@ -3,7 +3,6 @@
 // Purpose:     wxURL unit test
 // Author:      Francesco Montorsi
 // Created:     2009-5-31
-// RCS-ID:      $Id: uris.cpp 58272 2009-01-21 17:02:11Z VZ $
 // Copyright:   (c) 2009 Francesco Montorsi
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -71,7 +70,7 @@ void URLTestCase::GetInputStream()
         return;
     }
 
-    wxURL url("http://wxwidgets.org/logo9.jpg");
+    wxURL url("http://www.wxwidgets.org/assets/img/header-logo.png");
     CPPUNIT_ASSERT_EQUAL(wxURL_NOERR, url.GetError());
 
     wxInputStream *in_stream = url.GetInputStream();
@@ -80,8 +79,7 @@ void URLTestCase::GetInputStream()
     wxMemoryOutputStream ostream;
     CPPUNIT_ASSERT(in_stream->Read(ostream).GetLastError() == wxSTREAM_EOF);
 
-    // wx logo image currently is 13219 bytes
-    CPPUNIT_ASSERT(ostream.GetSize() == 13219);
+    CPPUNIT_ASSERT_EQUAL(13677, ostream.GetSize());
 
     // we have to delete the object created by GetInputStream()
     delete in_stream;

@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin: merge with the MDI version and general cleanup
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 //              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -79,6 +78,16 @@ DocumentIstream& DrawingDocument::LoadObject(DocumentIstream& istream)
 
     wxInt32 count = 0;
     stream >> count;
+    if ( count < 0 )
+    {
+        wxLogWarning("Drawing document corrupted: invalid segments count.");
+#if wxUSE_STD_IOSTREAM
+        istream.clear(std::ios::badbit);
+#else
+        istream.Reset(wxSTREAM_READ_ERROR);
+#endif
+        return istream;
+    }
 
     for ( int n = 0; n < count; n++ )
     {
@@ -186,7 +195,7 @@ bool wxTextDocument::OnCreate(const wxString& path, long flags)
     // when it's modified
     GetTextCtrl()->Connect
     (
-        wxEVT_COMMAND_TEXT_UPDATED,
+        wxEVT_TEXT,
         wxCommandEventHandler(wxTextDocument::OnTextChange),
         NULL,
         this
@@ -250,7 +259,7 @@ wxTextCtrl* TextEditDocument::GetTextCtrl() const
 }
 
 // ----------------------------------------------------------------------------
-// ImageDocument and wxImageDetailsDocument implementation
+// ImageDocument and ImageDetailsDocument implementation
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(ImageDocument, wxDocument)
@@ -260,3 +269,29 @@ bool ImageDocument::DoOpenDocument(const wxString& file)
     return m_image.LoadFile(file);
 }
 
+bool ImageDocument::OnOpenDocument(const wxString& filename)
+{
+    if ( !wxDocument::OnOpenDocument(filename) )
+        return false;
+
+    // we don't have a wxDocTemplate for the image details document as it's
+    // never created by wxWidgets automatically, instead just do it manually
+    ImageDetailsDocument * const docDetails = new ImageDetailsDocument(this);
+    docDetails->SetFilename(filename);
+
+    new ImageDetailsView(docDetails);
+
+    return true;
+}
+
+ImageDetailsDocument::ImageDetailsDocument(ImageDocument *parent)
+    : wxDocument(parent)
+{
+    const wxImage image = parent->GetImage();
+
+    m_size.x = image.GetWidth();
+    m_size.y = image.GetHeight();
+    m_numColours = image.CountColours();
+    m_type = image.GetType();
+    m_hasAlpha = image.HasAlpha();
+}

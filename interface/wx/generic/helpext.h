@@ -2,7 +2,6 @@
 // Name:        helpext.h
 // Purpose:     interface of wxExtHelpController
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -32,7 +31,7 @@
 
     @see wxHelpController
 */
-class wxExtHelpController : public wxHelpController
+class wxExtHelpController : public wxHelpControllerBase
 {
 public:
     wxExtHelpController(wxWindow* parentWindow = NULL);
@@ -83,7 +82,7 @@ public:
 
         @return @true on success
     */
-    virtual bool DisplayContents(void);
+    virtual bool DisplayContents();
 
     /**
         Display help for id sectionNo.
@@ -135,12 +134,12 @@ public:
     /**
         Call the browser using a relative URL.
     */
-    virtual bool DisplayHelp(const wxString &) ;
+    virtual bool DisplayHelp(const wxString& relativeURL) ;
 
     /**
         Allows one to override the default settings for the help frame.
     */
-    virtual void SetFrameParameters(const wxString& title,
+    virtual void SetFrameParameters(const wxString& titleFormat,
                                     const wxSize& size,
                                     const wxPoint& pos = wxDefaultPosition,
                                     bool newFrameEachTime = false);

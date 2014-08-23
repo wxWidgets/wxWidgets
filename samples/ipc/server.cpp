@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Jurgen Doornik
 // Created:     25/01/99
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -32,7 +31,7 @@
 // we're using TCP/IP or real DDE.
 #include "ipcsetup.h"
 
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -46,14 +45,14 @@
 
 IMPLEMENT_APP(MyApp)
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_CLOSE( MyFrame::OnClose )
 
     EVT_BUTTON( ID_START,          MyFrame::OnStart )
     EVT_CHOICE( ID_SERVERNAME,     MyFrame::OnServerName )
     EVT_BUTTON( ID_DISCONNECT,     MyFrame::OnDisconnect )
     EVT_BUTTON( ID_ADVISE,         MyFrame::OnAdvise )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 // ============================================================================

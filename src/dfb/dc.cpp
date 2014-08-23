@@ -3,7 +3,6 @@
 // Purpose:     wxDFBDCImpl class
 // Author:      Vaclav Slavik
 // Created:     2006-08-07
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 REA Elektronik GmbH
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -239,7 +238,7 @@ void wxDFBDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
     // FIXME_DFB: implement special cases for common formats (RGB24,RGBA/RGB32)
 }
 
-void wxDFBDCImpl::DoDrawPolygon(int WXUNUSED(n), wxPoint WXUNUSED(points)[],
+void wxDFBDCImpl::DoDrawPolygon(int WXUNUSED(n), const wxPoint WXUNUSED(points)[],
                                 wxCoord WXUNUSED(xoffset), wxCoord WXUNUSED(yoffset),
                                 wxPolygonFillMode WXUNUSED(fillStyle))
 {
@@ -248,7 +247,7 @@ void wxDFBDCImpl::DoDrawPolygon(int WXUNUSED(n), wxPoint WXUNUSED(points)[],
     wxFAIL_MSG( "DrawPolygon not implemented" );
 }
 
-void wxDFBDCImpl::DoDrawLines(int WXUNUSED(n), wxPoint WXUNUSED(points)[],
+void wxDFBDCImpl::DoDrawLines(int WXUNUSED(n), const wxPoint WXUNUSED(points)[],
                               wxCoord WXUNUSED(xoffset), wxCoord WXUNUSED(yoffset))
 {
     wxCHECK_RET( IsOk(), wxT("invalid dc") );
@@ -675,9 +674,7 @@ void wxDFBDCImpl::DoDrawSubBitmap(const wxBitmap &bmp,
 
     if ( useMask && bmp.GetMask() )
     {
-        // FIXME_DFB: see MGL sources for a way to do it, but it's not directly
-        //            applicable because DirectFB doesn't implement ROPs; OTOH,
-        //            it has blitting modes that can be useful; finally, see
+        // FIXME_DFB: Could use blitting modes for this; also see
         //            DFB's SetSrcBlendFunction() and SetSrcColorKey()
         wxFAIL_MSG( "drawing bitmaps with masks not implemented" );
         return;

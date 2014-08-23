@@ -4,7 +4,6 @@
 // Authors:     Guilhem Lavaux, Guillermo Rodriguez Garcia, David Elliott,
 //              Vadim Zeitlin
 // Created:     April 1997
-// RCS-ID:      $Id$
 // Copyright:   (c) 1997 Guilhem Lavaux
 //              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -21,18 +20,10 @@
 
 #include <errno.h>
 
-#if defined(__WATCOMC__)
-    #include <nerrno.h>
-#endif
-
 #include <sys/types.h>
 
 #ifdef HAVE_SYS_SELECT_H
 #   include <sys/select.h>
-#endif
-
-#ifdef __EMX__
-    #include <sys/select.h>
 #endif
 
 #ifndef WX_SOCKLEN_T
@@ -179,7 +170,7 @@ void wxSocketImplUnix::OnReadWaiting()
 
             default:
                 wxFAIL_MSG( "unexpected CheckForInput() return value" );
-                // fall through
+                wxFALLTHROUGH;
 
             case -1:
                 if ( GetLastError() == wxSOCKET_WOULDBLOCK )

@@ -2,9 +2,14 @@
 // Name:        hyperlink.h
 // Purpose:     interface of wxHyperlinkEvent
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+#define wxHL_CONTEXTMENU        0x0001
+#define wxHL_ALIGN_LEFT         0x0002
+#define wxHL_ALIGN_RIGHT        0x0004
+#define wxHL_ALIGN_CENTRE       0x0008
+#define wxHL_DEFAULT_STYLE      (wxHL_CONTEXTMENU|wxNO_BORDER|wxHL_ALIGN_CENTRE)
 
 /**
     @class wxHyperlinkEvent
@@ -39,6 +44,7 @@ public:
 };
 
 
+wxEventType wxEVT_HYPERLINK;
 
 /**
     @class wxHyperlinkCtrl
@@ -87,13 +93,15 @@ public:
 
     @library{wxadv}
     @category{ctrl}
-    @appearance{hyperlinkctrl.png}
+    @appearance{hyperlinkctrl}
 
     @see wxURL, wxHyperlinkEvent
 */
 class wxHyperlinkCtrl : public wxControl
 {
 public:
+    wxHyperlinkCtrl();
+    
     /**
         Constructor. See Create() for more info.
     */
@@ -140,7 +148,7 @@ public:
 
     /**
         Returns the colour used to print the label when the link has never been clicked
-        before (i.e. the link has not been @e visited) and the mouse is not over the control.
+        before (i.e.\ the link has not been @e visited) and the mouse is not over the control.
     */
     virtual wxColour GetNormalColour() const;
 
@@ -157,7 +165,7 @@ public:
 
     /**
         Returns the colour used to print the label when the mouse is not over the
-        control and the link has already been clicked before (i.e. the link has
+        control and the link has already been clicked before (i.e.\ the link has
         been @e visited).
     */
     virtual wxColour GetVisitedColour() const;
@@ -170,7 +178,7 @@ public:
 
     /**
         Sets the colour used to print the label when the link has never been clicked before
-        (i.e. the link has not been @e visited) and the mouse is not over the control.
+        (i.e.\ the link has not been @e visited) and the mouse is not over the control.
     */
     virtual void SetNormalColour(const wxColour& colour);
 
@@ -186,7 +194,7 @@ public:
 
     /**
         Sets the colour used to print the label when the mouse is not over the control
-        and the link has already been clicked before (i.e. the link has been @e visited).
+        and the link has already been clicked before (i.e.\ the link has been @e visited).
     */
     virtual void SetVisitedColour(const wxColour& colour);
 };

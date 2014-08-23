@@ -34,11 +34,12 @@
 
 #if wxOSX_USE_COCOA_OR_CARBON
 
-#import <CoreFoundation/CoreFoundation.h>
-#import <ApplicationServices/ApplicationServices.h>
-#import <OpenGL/OpenGL.h>
-#import <OpenGL/gl.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include <ApplicationServices/ApplicationServices.h>
+#include <OpenGL/OpenGL.h>
+#include <OpenGL/gl.h>
 
+#include "wx/osx/core/private.h"
 #include "wx/osx/private/glgrab.h"
 
 extern CGColorSpaceRef wxMacGetGenericRGBColorSpace();
@@ -114,7 +115,6 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
     void * data;
     long bytewidth;
     GLint width, height;
-    long bytes;
 
     CGLContextObj    glContextObj;
     CGLPixelFormatObj pixelFormatObj ;
@@ -156,7 +156,6 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
 
     bytewidth = width * 4; // Assume 4 bytes/pixel for now
     bytewidth = (bytewidth + 3) & ~3; // Align to 4 bytes
-    bytes = bytewidth * height; // width * height
 
     /* Build bitmap context */
     data = malloc(height * bytewidth);

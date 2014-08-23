@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -29,7 +28,7 @@ public:
     wxPaletteRefData(const wxPaletteRefData& data);
     virtual ~wxPaletteRefData();
 
-    virtual bool IsOk() const { return m_count > 0; }
+    virtual bool IsOk() const wxOVERRIDE { return m_count > 0; }
 
 protected:
     wxColour* m_palette;

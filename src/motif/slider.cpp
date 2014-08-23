@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -222,7 +221,7 @@ void wxSliderCallback (Widget widget, XtPointer clientData,
     slider->HandleWindowEvent(event);
 
     // Also send a wxCommandEvent for compatibility.
-    wxCommandEvent event2(wxEVT_COMMAND_SLIDER_UPDATED, slider->GetId());
+    wxCommandEvent event2(wxEVT_SLIDER, slider->GetId());
     event2.SetEventObject(slider);
     event2.SetInt( event.GetInt() );
     slider->HandleWindowEvent(event2);

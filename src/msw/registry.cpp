@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     03.04.98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 // TODO:        - parsing of registry key names
@@ -33,10 +32,10 @@
 #include "wx/dynlib.h"
 #include "wx/file.h"
 #include "wx/wfstream.h"
+#include "wx/msw/private.h"
 
 // Windows headers
 #ifdef __WXWINCE__
-#include "wx/msw/private.h"
 #include <winbase.h>
 #include <winreg.h>
 #endif
@@ -326,7 +325,7 @@ void wxRegKey::SetHkey(WXHKEY hKey)
   m_mode = Write;
 
   // reset old data
-  m_strKey.empty();
+  m_strKey.clear();
   m_dwLastError = 0;
 }
 
@@ -373,14 +372,7 @@ bool wxRegKey::GetKeyInfo(size_t *pnSubKeys,
 
   #define REG_PARAM(name) &dw##name
 #else // Win32
-  // Old gcc headers incorrectly prototype RegQueryInfoKey() as taking
-  // size_t but normally we need a cast, even when sizeof(size_t) is the same
-  // as sizeof(DWORD).
-  #if defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__)
-    #define REG_PARAM(name) pn##name
-  #else
-    #define REG_PARAM(name)   (LPDWORD)(pn##name)
-  #endif
+  #define REG_PARAM(name)   (LPDWORD)(pn##name)
 #endif
 
 
@@ -1057,7 +1049,7 @@ bool wxRegKey::SetValue(const wxString& szValue, const wxString& strValue)
       m_dwLastError = RegSetValueEx((HKEY) m_hKey,
                                     RegValueStr(szValue),
                                     (DWORD) RESERVED, REG_SZ,
-                                    (RegString)strValue.t_str(),
+                                    (RegString)wxMSW_CONV_LPCTSTR(strValue),
                                     (strValue.Len() + 1)*sizeof(wxChar));
       if ( m_dwLastError == ERROR_SUCCESS )
         return true;

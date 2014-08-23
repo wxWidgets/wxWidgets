@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -128,7 +127,7 @@ bool wxCheckBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
     
     if (sendEvent)
     {
-        wxCommandEvent event( wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId );
+        wxCommandEvent event( wxEVT_CHECKBOX, m_windowId );
         event.SetInt( newState );
         event.SetEventObject( this );
         ProcessCommand( event );

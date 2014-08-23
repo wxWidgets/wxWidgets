@@ -3,7 +3,6 @@
 // Purpose:     Main file of the benchmarking suite
 // Author:      Vadim Zeitlin
 // Created:     2008-07-19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -19,6 +18,10 @@
 #include "wx/app.h"
 #include "wx/cmdline.h"
 #include "wx/stopwatch.h"
+
+#if wxUSE_GUI
+    #include "wx/frame.h"
+#endif
 
 #include "bench.h"
 

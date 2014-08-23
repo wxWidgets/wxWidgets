@@ -2,7 +2,6 @@
 // Name:        clipboard.cpp
 // Purpose:     clipboard wxWidgets sample
 // Author:      Robert Roebling
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -22,7 +21,7 @@
 
 #include "wx/clipbrd.h"
 
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -32,7 +31,7 @@
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 #if USE_ASYNCHRONOUS_CLIPBOARD_REQUEST
@@ -64,7 +63,7 @@ private:
     bool               m_clipboardSupportsText;
 #endif
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 enum
@@ -75,7 +74,7 @@ enum
     ID_Text   = 101
 };
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Quit,  MyFrame::OnQuit)
     EVT_MENU(ID_About, MyFrame::OnAbout)
     EVT_BUTTON(ID_Write, MyFrame::OnWriteClipboardContents)
@@ -83,7 +82,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #if USE_ASYNCHRONOUS_CLIPBOARD_REQUEST
     EVT_CLIPBOARD_CHANGED(MyFrame::OnClipboardChange)
 #endif
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
 
@@ -115,7 +114,7 @@ MyFrame::MyFrame(const wxString& title)
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(ID_About, "&About...\tF1", "Show about dialog");
+    helpMenu->Append(ID_About, "&About\tF1", "Show about dialog");
 
     fileMenu->Append(ID_Quit, "E&xit\tAlt-X", "Quit this program");
 
@@ -131,7 +130,7 @@ MyFrame::MyFrame(const wxString& title)
     wxPanel *panel = new wxPanel( this, -1 );
 
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
-    main_sizer->Add( new wxButton( panel, ID_Write, "Get clipboard text" ) );
+    main_sizer->Add( new wxButton( panel, ID_Write, "Get clipboard text" ), 0, wxALL, 5 );
     m_textctrl = new wxTextCtrl( panel, ID_Text, "", wxDefaultPosition,
       wxDefaultSize, wxTE_MULTILINE );
     main_sizer->Add( m_textctrl, 1, wxGROW );

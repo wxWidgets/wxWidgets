@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.07.2003
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -53,6 +52,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 // control state flags used in wxRenderer and wxColourScheme
 enum
 {
+    wxCONTROL_NONE       = 0x00000000,  // absence of any other flags
     wxCONTROL_DISABLED   = 0x00000001,  // control is disabled
     wxCONTROL_FOCUSED    = 0x00000002,  // currently has keyboard focus
     wxCONTROL_PRESSED    = 0x00000004,  // (button) is pressed

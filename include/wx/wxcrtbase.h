@@ -5,7 +5,6 @@
  * Author:      Joel Farley, Ove Kaaven
  * Modified by: Vadim Zeitlin, Robert Roebling, Ron Lee
  * Created:     1998/06/12
- * RCS-ID:      $Id$
  * Copyright:   (c) 1998-2006 wxWidgets dev team
  * Licence:     wxWindows licence
  */
@@ -32,17 +31,11 @@
 
  */
 
-#if !defined(__WXPALMOS5__)
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#if defined(__WXPALMOS__)
-    #include <wchar.h>
-#else
-    #include <wctype.h>
-#endif
+#include <wctype.h>
 #include <time.h>
-#endif
 
 #if defined(__WINDOWS__) && !defined(__WXWINCE__)
     #include <io.h>
@@ -69,7 +62,7 @@
    define it ourselves for them
  */
 #ifndef isascii
-    #if defined(__MWERKS__) || defined(__WX_STRICT_ANSI_GCC__)
+    #if defined(__WX_STRICT_ANSI_GCC__)
         #define wxNEED_ISASCII
     #elif defined(_WIN32_WCE)
         #if _WIN32_WCE <= 211
@@ -90,9 +83,7 @@
 
 /* string.h functions */
 #ifndef strdup
-    #if defined(__MWERKS__) && !defined(__MACH__) && (__MSL__ < 0x00008000)
-        #define wxNEED_STRDUP
-    #elif defined(__WXWINCE__)
+    #if defined(__WXWINCE__)
         #if _WIN32_WCE <= 211
             #define wxNEED_STRDUP
         #endif
@@ -109,21 +100,6 @@
 WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 #endif
 #endif /* _WIN32_WCE */
-
-
-#if defined(__MWERKS__)
-    /* Metrowerks only has wide char support for OS X >= 10.3 */
-    #if !defined(__DARWIN__) || \
-         (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3)
-        #define wxHAVE_MWERKS_UNICODE
-    #endif
-
-    #ifdef wxHAVE_MWERKS_UNICODE
-        #define HAVE_WPRINTF   1
-        #define HAVE_WCSRTOMBS 1
-        #define HAVE_VSWPRINTF 1
-    #endif
-#endif /* __MWERKS__ */
 
 
 /* -------------------------------------------------------------------------
@@ -179,7 +155,7 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 #define wxCRT_StrstrW    wcsstr
 
 /* these functions are not defined under CE, at least in VC8 CRT */
-#if !defined(__WXWINCE__) && !defined(__WXPALMOS__)
+#if !defined(__WXWINCE__)
     #define wxCRT_StrcollA   strcoll
     #define wxCRT_StrxfrmA   strxfrm
 
@@ -187,14 +163,15 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
     #define wxCRT_StrxfrmW   wcsxfrm
 #endif /* __WXWINCE__ */
 
-/* Almost all compiler have strdup(), but not quite all: CodeWarrior under
-   Mac and VC++ for Windows CE don't provide it; additionally, gcc under
-   Mac and OpenVMS do not have wcsdup: */
-#if defined(__VISUALC__) && __VISUALC__ >= 1400
+/* Almost all compilers have strdup(), but VC++ and MinGW call it _strdup().
+   And it's not available in MinGW strict ANSI mode nor under Windows CE. */
+#if (defined(__VISUALC__) && __VISUALC__ >= 1400)
     #define wxCRT_StrdupA _strdup
-#elif !((defined(__MWERKS__) && defined(__WXMAC__)) || \
-        defined(__WXWINCE__) || \
-        defined(__WX_STRICT_ANSI_GCC__))
+#elif defined(__MINGW32__)
+    #ifndef __WX_STRICT_ANSI_GCC__
+        #define wxCRT_StrdupA _strdup
+    #endif
+#elif !defined(__WXWINCE__)
     #define wxCRT_StrdupA strdup
 #endif
 
@@ -225,12 +202,10 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 #define wxCRT_StrtoulW   wcstoul
 
 #ifdef __VISUALC__
-    #if __VISUALC__ >= 1300 && !defined(__WXWINCE__)
-        #define wxCRT_StrtollA   _strtoi64
-        #define wxCRT_StrtoullA  _strtoui64
-        #define wxCRT_StrtollW   _wcstoi64
-        #define wxCRT_StrtoullW  _wcstoui64
-    #endif /* VC++ 7+ */
+    #define wxCRT_StrtollA   _strtoi64
+    #define wxCRT_StrtoullA  _strtoui64
+    #define wxCRT_StrtollW   _wcstoi64
+    #define wxCRT_StrtoullW  _wcstoui64
 #else
     #ifdef HAVE_STRTOULL
         #define wxCRT_StrtollA   strtoll
@@ -266,19 +241,10 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 
 /* define wxCRT_StricmpA/W and wxCRT_StrnicmpA/W for various compilers */
 
-#if defined(__BORLANDC__) || defined(__WATCOMC__) || \
-        defined(__VISAGECPP__) || \
-        defined(__EMX__) || defined(__DJGPP__)
+#if defined(__BORLANDC__) || defined(__DJGPP__)
     #define wxCRT_StricmpA stricmp
     #define wxCRT_StrnicmpA strnicmp
-#elif defined(__WXPALMOS__)
-    /* FIXME: There is no equivalent to strnicmp in the Palm OS API.  This
-     * quick hack should do until one can be written.
-     */
-    #define wxCRT_StricmpA StrCaselessCompare
-    #define wxCRT_StrnicmpA StrNCaselessCompare
-#elif defined(__SYMANTEC__) || defined(__VISUALC__) || \
-        (defined(__MWERKS__) && defined(__INTEL__))
+#elif defined(__SYMANTEC__) || (defined(__VISUALC__) && !defined(__WXWINCE__))
     #define wxCRT_StricmpA _stricmp
     #define wxCRT_StrnicmpA _strnicmp
 #elif defined(__UNIX__) || (defined(__GNUWIN32__) && !defined(__WX_STRICT_ANSI_GCC__))
@@ -456,7 +422,7 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
                                   stdio.h
    ------------------------------------------------------------------------- */
 
-#if defined(__UNIX__) || defined(__WXMAC__) || defined(__WXPALMOS__)
+#if defined(__UNIX__) || defined(__WXMAC__)
     #define wxMBFILES 1
 #else
     #define wxMBFILES 0
@@ -473,30 +439,17 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
     #define wxCRT_Rename  rename
 
 #else /* Unicode filenames */
-    /* special case: these functions are missing under Win9x with Unicows so we
-       have to implement them ourselves */
-    #if wxUSE_UNICODE_MSLU || defined(__WX_STRICT_ANSI_GCC__)
-            WXDLLIMPEXP_BASE FILE* wxMSLU__wfopen(const wchar_t *name, const wchar_t *mode);
-            WXDLLIMPEXP_BASE FILE* wxMSLU__wfreopen(const wchar_t *name, const wchar_t *mode, FILE *stream);
-            WXDLLIMPEXP_BASE int wxMSLU__wrename(const wchar_t *oldname, const wchar_t *newname);
-            WXDLLIMPEXP_BASE int wxMSLU__wremove(const wchar_t *name);
-            #define wxCRT_Fopen     wxMSLU__wfopen
-            #define wxCRT_Freopen   wxMSLU__wfreopen
-            #define wxCRT_Remove    wxMSLU__wremove
-            #define wxCRT_Rename    wxMSLU__wrename
+    /* WinCE CRT doesn't provide these functions so use our own */
+    #ifdef __WXWINCE__
+        WXDLLIMPEXP_BASE int wxCRT_Rename(const wchar_t *src,
+                                          const wchar_t *dst);
+        WXDLLIMPEXP_BASE int wxCRT_Remove(const wchar_t *path);
     #else
-        /* WinCE CRT doesn't provide these functions so use our own */
-        #ifdef __WXWINCE__
-            WXDLLIMPEXP_BASE int wxCRT_Rename(const wchar_t *src,
-                                              const wchar_t *dst);
-            WXDLLIMPEXP_BASE int wxCRT_Remove(const wchar_t *path);
-        #else
-            #define wxCRT_Rename   _wrename
-            #define wxCRT_Remove _wremove
-        #endif
-        #define wxCRT_Fopen    _wfopen
-        #define wxCRT_Freopen  _wfreopen
+        #define wxCRT_Rename   _wrename
+        #define wxCRT_Remove _wremove
     #endif
+    #define wxCRT_Fopen    _wfopen
+    #define wxCRT_Freopen  _wfreopen
 
 #endif /* wxMBFILES/!wxMBFILES */
 
@@ -583,14 +536,7 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
 #define wxCRT_AtoiA                 atoi
 #define wxCRT_AtolA                 atol
 
-#if defined(__MWERKS__)
-    #if defined(__MSL__)
-        #define wxCRT_AtofW         watof
-        #define wxCRT_AtoiW         watoi
-        #define wxCRT_AtolW         watol
-    /* else: use ANSI versions */
-    #endif
-#elif defined(wxHAVE_TCHAR_SUPPORT) && !defined(__WX_STRICT_ANSI_GCC__)
+#if defined(wxHAVE_TCHAR_SUPPORT) && !defined(__WX_STRICT_ANSI_GCC__)
     #define  wxCRT_AtoiW           _wtoi
     #define  wxCRT_AtolW           _wtol
     /* _wtof doesn't exist */
@@ -601,42 +547,6 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
     #define wxCRT_AtolW(s)         wcstol(s, NULL, 10)
     /* wcstoi doesn't exist */
 #endif
-
-/*
-    There are 2 unrelated problems with these functions under Mac:
-        a) Metrowerks MSL CRT implements them strictly in C99 sense and
-           doesn't support (very common) extension of allowing to call
-           mbstowcs(NULL, ...) which makes it pretty useless as you can't
-           know the size of the needed buffer
-        b) OS X <= 10.2 declares and even defined these functions but
-           doesn't really implement them -- they always return an error
-
-    So use our own replacements in both cases.
- */
-#if defined(__MWERKS__) && defined(__MSL__)
-    #define wxNEED_WX_MBSTOWCS
-#endif
-#if defined(__WXPALMOS__)
-    #define wxNEED_WX_MBSTOWCS
-#endif
-
-#ifdef __DARWIN__
-    #if !defined(__WXOSX_IPHONE__) && MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2
-        #define wxNEED_WX_MBSTOWCS
-    #endif
-#endif
-
-#ifdef wxNEED_WX_MBSTOWCS
-    /* even though they are defined and "implemented", they are bad and just
-       stubs so we need our own - we need these even in ANSI builds!! */
-    WXDLLIMPEXP_BASE size_t wxMbstowcs(wchar_t *, const char *, size_t);
-    WXDLLIMPEXP_BASE size_t wxWcstombs(char *, const wchar_t *, size_t);
-#else
-    #define wxMbstowcs mbstowcs
-    #define wxWcstombs wcstombs
-#endif
-
-
 
 /* -------------------------------------------------------------------------
                                 time.h
@@ -665,15 +575,13 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
     #define wxCRT_StrftimeW _xpg5_wcsftime
 #else
     /*
-        Assume it's always available under non-Unix systems with the
-        exception of Palm OS, this does seem to be the case for now. And
-        under Unix we trust configure to detect it (except for SGI special
-        case above).
+        Assume it's always available under non-Unix systems as this does seem
+        to be the case for now. And under Unix we trust configure to detect it
+        (except for SGI special case above).
      */
-    #if defined(HAVE_WCSFTIME) || \
-        !(defined(__UNIX__) || defined(__WXPALMOS__))
+    #if defined(HAVE_WCSFTIME) || !defined(__UNIX__)
         #define wxCRT_StrftimeW  wcsftime
-    #endif /* ! __WXPALMOS__ */
+    #endif
 #endif
 
 #ifndef wxCRT_StrftimeW
@@ -688,23 +596,17 @@ WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,
                                 ctype.h
    ------------------------------------------------------------------------- */
 
-#ifdef __WATCOMC__
-  #define WXWCHAR_T_CAST(c) (wint_t)(c)
-#else
-  #define WXWCHAR_T_CAST(c) c
-#endif
-
-#define wxCRT_IsalnumW(c)   iswalnum(WXWCHAR_T_CAST(c))
-#define wxCRT_IsalphaW(c)   iswalpha(WXWCHAR_T_CAST(c))
-#define wxCRT_IscntrlW(c)   iswcntrl(WXWCHAR_T_CAST(c))
-#define wxCRT_IsdigitW(c)   iswdigit(WXWCHAR_T_CAST(c))
-#define wxCRT_IsgraphW(c)   iswgraph(WXWCHAR_T_CAST(c))
-#define wxCRT_IslowerW(c)   iswlower(WXWCHAR_T_CAST(c))
-#define wxCRT_IsprintW(c)   iswprint(WXWCHAR_T_CAST(c))
-#define wxCRT_IspunctW(c)   iswpunct(WXWCHAR_T_CAST(c))
-#define wxCRT_IsspaceW(c)   iswspace(WXWCHAR_T_CAST(c))
-#define wxCRT_IsupperW(c)   iswupper(WXWCHAR_T_CAST(c))
-#define wxCRT_IsxdigitW(c)  iswxdigit(WXWCHAR_T_CAST(c))
+#define wxCRT_IsalnumW(c)   iswalnum(c)
+#define wxCRT_IsalphaW(c)   iswalpha(c)
+#define wxCRT_IscntrlW(c)   iswcntrl(c)
+#define wxCRT_IsdigitW(c)   iswdigit(c)
+#define wxCRT_IsgraphW(c)   iswgraph(c)
+#define wxCRT_IslowerW(c)   iswlower(c)
+#define wxCRT_IsprintW(c)   iswprint(c)
+#define wxCRT_IspunctW(c)   iswpunct(c)
+#define wxCRT_IsspaceW(c)   iswspace(c)
+#define wxCRT_IsupperW(c)   iswupper(c)
+#define wxCRT_IsxdigitW(c)  iswxdigit(c)
 
 #ifdef __GLIBC__
     #if defined(__GLIBC__) && (__GLIBC__ == 2) && (__GLIBC_MINOR__ == 0)
@@ -718,7 +620,7 @@ WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,
         #define wxCRT_ToupperW   towupper
     #endif
 #else /* !__GLIBC__ */
-    /* There is a bug in VC6 C RTL: toxxx() functions dosn't do anything
+    /* There is a bug in MSVC RTL: toxxx() functions dosn't do anything
        with signed chars < 0, so "fix" it here. */
     #define wxCRT_TolowerW(c)   towlower((wxUChar)(wxChar)(c))
     #define wxCRT_ToupperW(c)   towupper((wxUChar)(wxChar)(c))

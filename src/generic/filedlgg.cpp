@@ -4,7 +4,6 @@
 // Author:      Robert Roebling
 // Modified by:
 // Created:     12/12/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -19,7 +18,7 @@
 #if wxUSE_FILEDLG
 
 // NOTE : it probably also supports MAC, untested
-#if !defined(__UNIX__) && !defined(__DOS__) && !defined(__WIN32__) && !defined(__OS2__) && !defined(__PALMOS__)
+#if !defined(__UNIX__) && !defined(__DOS__) && !defined(__WIN32__)
 #error wxGenericFileDialog currently only supports Unix, win32 and DOS
 #endif
 
@@ -49,6 +48,7 @@
 #include "wx/filectrl.h"
 #include "wx/generic/filedlgg.h"
 #include "wx/debug.h"
+#include "wx/modalhook.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -57,7 +57,6 @@
     #include "wx/config.h"
 #endif
 
-#ifndef __WXPALMOS5__
 #ifndef __WXWINCE__
     #include <sys/types.h>
     #include <sys/stat.h>
@@ -71,14 +70,6 @@
     #endif
 #endif
 
-#ifdef __WINDOWS__
-    #include "wx/msw/mslu.h"
-#endif
-
-#ifdef __WATCOMC__
-    #include <direct.h>
-#endif
-
 #ifndef __WXWINCE__
 #include <time.h>
 #endif
@@ -86,11 +77,10 @@
 #if defined(__UNIX__) || defined(__DOS__)
 #include <unistd.h>
 #endif
-#endif // ! __WXPALMOS5__
 
 #if defined(__WXWINCE__)
 #define IsTopMostDir(dir) (dir == wxT("\\") || dir == wxT("/"))
-#elif (defined(__DOS__) || defined(__WINDOWS__) || defined (__OS2__))
+#elif defined(__DOS__) || defined(__WINDOWS__)
 #define IsTopMostDir(dir)   (dir.empty())
 #else
 #define IsTopMostDir(dir)   (dir == wxT("/"))
@@ -119,9 +109,9 @@ BEGIN_EVENT_TABLE(wxGenericFileDialog,wxDialog)
     EVT_FILECTRL_FILEACTIVATED(ID_FILE_CTRL, wxGenericFileDialog::OnFileActivated)
 
     EVT_UPDATE_UI(ID_UP_DIR, wxGenericFileDialog::OnUpdateButtonsUI)
-#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
+#if defined(__DOS__) || defined(__WINDOWS__)
     EVT_UPDATE_UI(ID_NEW_DIR, wxGenericFileDialog::OnUpdateButtonsUI)
-#endif // defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
+#endif // defined(__DOS__) || defined(__WINDOWS__)
 END_EVENT_TABLE()
 
 long wxGenericFileDialog::ms_lastViewStyle = wxLC_LIST;
@@ -310,6 +300,8 @@ wxBitmapButton* wxGenericFileDialog::AddBitmapButton( wxWindowID winId,
 
 int wxGenericFileDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
     if (CreateExtraControl())
     {
         wxSizer *sizer = GetSizer();

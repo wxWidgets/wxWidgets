@@ -2,7 +2,6 @@
 // Name:        src/gtk/button.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -18,7 +17,10 @@
 
 #include "wx/stockitem.h"
 
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/list.h"
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -33,7 +35,7 @@ wxgtk_button_clicked_callback(GtkWidget *WXUNUSED(widget), wxButton *button)
     if ( button->GTKShouldIgnoreEvent() )
         return;
 
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
+    wxCommandEvent event(wxEVT_BUTTON, button->GetId());
     event.SetEventObject(button);
     button->HandleWindowEvent(event);
 }
@@ -168,12 +170,12 @@ wxSize wxButtonBase::GetDefaultSize()
         //     button's size. We have to retrieve both values and combine them.
 
         GtkWidget *wnd = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-        GtkWidget *box = gtk_hbutton_box_new();
+        GtkWidget *box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
         GtkWidget *btn = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
         gtk_container_add(GTK_CONTAINER(box), btn);
         gtk_container_add(GTK_CONTAINER(wnd), box);
         GtkRequisition req;
-        gtk_widget_size_request(btn, &req);
+        gtk_widget_get_preferred_size(btn, NULL, &req);
 
         gint minwidth, minheight;
         gtk_widget_style_get(box,
@@ -244,7 +246,6 @@ bool wxButton::DoSetLabelMarkup(const wxString& markup)
 
     return true;
 }
-#endif // wxUSE_MARKUP
 
 GtkLabel *wxButton::GTKGetLabel() const
 {
@@ -253,26 +254,25 @@ GtkLabel *wxButton::GTKGetLabel() const
     {
         GtkWidget* box = gtk_bin_get_child(GTK_BIN(child));
         GtkLabel* label = NULL;
-        GList* list = gtk_container_get_children(GTK_CONTAINER(box));
+        wxGtkList list(gtk_container_get_children(GTK_CONTAINER(box)));
         for (GList* item = list; item; item = item->next)
         {
-            GtkBoxChild* boxChild = static_cast<GtkBoxChild*>(item->data);
-            if ( GTK_IS_LABEL(boxChild->widget) )
-                label = GTK_LABEL(boxChild->widget);
+            if (GTK_IS_LABEL(item->data))
+                label = GTK_LABEL(item->data);
         }
-        g_list_free(list);
 
         return label;
     }
 
     return GTK_LABEL(child);
 }
+#endif // wxUSE_MARKUP
 
 void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    gtk_widget_modify_style(m_widget, style);
+    GTKApplyStyle(m_widget, style);
     GtkWidget* child = gtk_bin_get_child(GTK_BIN(m_widget));
-    gtk_widget_modify_style(child, style);
+    GTKApplyStyle(child, style);
 
     // for buttons with images, the path to the label is (at least in 2.12)
     // GtkButton -> GtkAlignment -> GtkHBox -> GtkLabel
@@ -281,13 +281,11 @@ void wxButton::DoApplyWidgetStyle(GtkRcStyle *style)
         GtkWidget* box = gtk_bin_get_child(GTK_BIN(child));
         if ( GTK_IS_BOX(box) )
         {
-            GList* list = gtk_container_get_children(GTK_CONTAINER(box));
+            wxGtkList list(gtk_container_get_children(GTK_CONTAINER(box)));
             for (GList* item = list; item; item = item->next)
             {
-                GtkBoxChild* boxChild = static_cast<GtkBoxChild*>(item->data);
-                gtk_widget_modify_style(boxChild->widget, style);
+                GTKApplyStyle(GTK_WIDGET(item->data), style);
             }
-            g_list_free(list);
         }
     }
 }
@@ -298,7 +296,7 @@ wxSize wxButton::DoGetBestSize() const
     // extra border around it, but we don't want to take it into account in
     // our size calculations (otherwise the result is visually ugly), so
     // always return the size of non default button from here
-    const bool isDefault = gtk_widget_has_default(m_widget);
+    const bool isDefault = gtk_widget_has_default(m_widget) != 0;
     if ( isDefault )
     {
         // temporarily unset default flag
@@ -330,7 +328,7 @@ wxSize wxButton::DoGetBestSize() const
 wxVisualAttributes
 wxButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_button_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_button_new());
 }
 
 #endif // wxUSE_BUTTON

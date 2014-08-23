@@ -3,7 +3,6 @@
 // Purpose:     wxControl and wxStaticText label tests
 // Author:      Francesco Montorsi
 // Created:     2010-3-21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Francesco Montorsi
 ///////////////////////////////////////////////////////////////////////////////
 

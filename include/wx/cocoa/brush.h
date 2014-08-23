@@ -4,7 +4,6 @@
 // Author:      David Elliott <dfe@cox.net>
 // Modified by:
 // Created:     2003/07/03
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -30,9 +29,6 @@ class WXDLLIMPEXP_CORE wxBrush: public wxBrushBase
 public:
     wxBrush();
     wxBrush(const wxColour& col, wxBrushStyle style = wxBRUSHSTYLE_SOLID);
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED_FUTURE( wxBrush(const wxColour& col, int style) );
-#endif
     wxBrush(const wxBitmap& stipple);
     virtual ~wxBrush();
 
@@ -55,10 +51,12 @@ public:
     virtual wxBrushStyle GetStyle() const;
     wxBitmap *GetStipple() const;
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED_FUTURE( void SetStyle(int style) )
-        { SetStyle((wxBrushStyle)style); }
-#endif
+
+    wxDEPRECATED_MSG("use wxBRUSHSTYLE_XXX constants")
+    wxBrush(const wxColour& col, int style);
+
+    wxDEPRECATED_MSG("use wxBRUSHSTYLE_XXX constants")
+    void SetStyle(int style) { SetStyle((wxBrushStyle)style); }
 
     // wxCocoa
     WX_NSColor GetNSColor();

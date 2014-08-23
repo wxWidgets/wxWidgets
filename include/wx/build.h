@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin, Vaclav Slavik
 // Modified by:
 // Created:     07.05.02
-// RCS-ID:      $Id$
 // Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,33 +54,32 @@
 #if defined(__GXX_ABI_VERSION)
     #define __WX_BO_COMPILER \
             ",compiler with C++ ABI " __WX_BO_STRINGIZE(__GXX_ABI_VERSION)
-#elif defined(__INTEL_COMPILER)
-    #define __WX_BO_COMPILER ",Intel C++"
 #elif defined(__GNUG__)
     #define __WX_BO_COMPILER ",GCC " \
             __WX_BO_STRINGIZE(__GNUC__) "." __WX_BO_STRINGIZE(__GNUC_MINOR__)
 #elif defined(__VISUALC__)
     #define __WX_BO_COMPILER ",Visual C++ " __WX_BO_STRINGIZE(_MSC_VER)
+#elif defined(__INTEL_COMPILER)
+    // Notice that this must come after MSVC check as ICC under Windows is
+    // ABI-compatible with the corresponding version of the MSVC and we want to
+    // allow using it compile the application code using MSVC-built DLLs.
+    #define __WX_BO_COMPILER ",Intel C++"
 #elif defined(__BORLANDC__)
     #define __WX_BO_COMPILER ",Borland C++"
-#elif defined(__DIGITALMARS__)
-    #define __WX_BO_COMPILER ",DigitalMars"
-#elif defined(__WATCOMC__)
-    #define __WX_BO_COMPILER ",Watcom C++"
 #else
     #define __WX_BO_COMPILER
 #endif
 
 // WXWIN_COMPATIBILITY macros affect presence of virtual functions
-#if WXWIN_COMPATIBILITY_2_6
-    #define __WX_BO_WXWIN_COMPAT_2_6 ",compatible with 2.6"
-#else
-    #define __WX_BO_WXWIN_COMPAT_2_6
-#endif
 #if WXWIN_COMPATIBILITY_2_8
     #define __WX_BO_WXWIN_COMPAT_2_8 ",compatible with 2.8"
 #else
     #define __WX_BO_WXWIN_COMPAT_2_8
+#endif
+#if WXWIN_COMPATIBILITY_3_0
+    #define __WX_BO_WXWIN_COMPAT_3_0 ",compatible with 3.0"
+#else
+    #define __WX_BO_WXWIN_COMPAT_3_0
 #endif
 
 // deriving wxWin containers from STL ones changes them completely:
@@ -97,7 +95,7 @@
     " (" __WX_BO_UNICODE \
      __WX_BO_COMPILER \
      __WX_BO_STL \
-     __WX_BO_WXWIN_COMPAT_2_6 __WX_BO_WXWIN_COMPAT_2_8 \
+     __WX_BO_WXWIN_COMPAT_2_8 __WX_BO_WXWIN_COMPAT_3_0 \
      ")"
 
 

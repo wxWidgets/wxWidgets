@@ -44,14 +44,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;__WXMSW__;_UNICODE;WXBUILDING;wxUSE_BASE=0"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;wxUSE_BASE=0"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;__WXMSW__;_UNICODE;WXBUILDING;wxUSE_BASE=0"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;wxUSE_BASE=0"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -62,7 +62,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswud\wxprec_corelib.pch"
 				ObjectFile="vc_mswud\core\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw29ud_core.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw31ud_core.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -73,7 +73,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;_UNICODE;WXBUILDING;wxUSE_BASE=0"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;wxUSE_BASE=0"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
@@ -82,7 +82,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmsw29ud_core.lib"
+				OutputFile="..\..\lib\vc_lib\wxmsw31ud_core.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -129,14 +129,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;wxUSE_BASE=0"
+				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;wxUSE_BASE=0"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="WIN32;_LIB;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;wxUSE_BASE=0"
+				PreprocessorDefinitions="WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;wxUSE_BASE=0"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -144,7 +144,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswu\wxprec_corelib.pch"
 				ObjectFile="vc_mswu\core\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw29u_core.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw31u_core.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -155,7 +155,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;wxUSE_BASE=0"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;wxUSE_BASE=0"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
@@ -164,174 +164,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmsw29u_core.lib"
-				SuppressStartupBanner="true"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_vc8_core.bsc"
-				SuppressStartupBanner="true"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Universal Debug|Win32"
-			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswunivud\core"
-			ConfigurationType="4"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;wxUSE_BASE=0"
-				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;wxUSE_BASE=0"
-				MinimalRebuild="true"
-				ExceptionHandling="1"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				BufferSecurityCheck="true"
-				RuntimeTypeInfo="true"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivud\wxprec_corelib.pch"
-				ObjectFile="vc_mswunivud\core\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmswuniv29ud_core.pdb"
-				WarningLevel="4"
-				SuppressStartupBanner="true"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;wxUSE_BASE=0"
-				Culture="1033"
-				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmswuniv29ud_core.lib"
-				SuppressStartupBanner="true"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_vc8_core.bsc"
-				SuppressStartupBanner="true"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Universal Release|Win32"
-			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswunivu\core"
-			ConfigurationType="4"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXBUILDING;wxUSE_BASE=0"
-				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="2"
-				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="WIN32;_LIB;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXBUILDING;wxUSE_BASE=0"
-				ExceptionHandling="1"
-				RuntimeLibrary="2"
-				RuntimeTypeInfo="true"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivu\wxprec_corelib.pch"
-				ObjectFile="vc_mswunivu\core\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmswuniv29u_core.pdb"
-				WarningLevel="4"
-				SuppressStartupBanner="true"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXBUILDING;wxUSE_BASE=0"
-				Culture="1033"
-				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmswuniv29u_core.lib"
+				OutputFile="..\..\lib\vc_lib\wxmsw31u_core.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -378,14 +211,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
+				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
+				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -396,7 +229,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswuddll\wxprec_coredll.pch"
 				ObjectFile="vc_mswuddll\core\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw292ud_core_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw310ud_core_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -407,7 +240,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw292ud_core_vc_custom;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw310ud_core_vc_custom;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
@@ -417,15 +250,15 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxbase29ud.lib"
-				OutputFile="..\..\lib\vc_dll\wxmsw292ud_core_vc_custom.dll"
+				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxbase31ud.lib"
+				OutputFile="..\..\lib\vc_dll\wxmsw310ud_core_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxmsw29ud_core.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxmsw31ud_core.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw292ud_core_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw310ud_core_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -472,14 +305,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
+				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
+				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -487,7 +320,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswudll\wxprec_coredll.pch"
 				ObjectFile="vc_mswudll\core\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw292u_core_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw310u_core_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -498,7 +331,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw292u_core_vc_custom;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw310u_core_vc_custom;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
@@ -508,202 +341,15 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxbase29u.lib"
-				OutputFile="..\..\lib\vc_dll\wxmsw292u_core_vc_custom.dll"
+				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxbase31u.lib"
+				OutputFile="..\..\lib\vc_dll\wxmsw310u_core_vc_custom.dll"
 				LinkIncremental="1"
-				ImportLibrary="..\..\lib\vc_dll\wxmsw29u_core.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxmsw31u_core.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw292u_core_vc_custom.pdb"
-				TargetMachine="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_vc8_core.bsc"
-				SuppressStartupBanner="true"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="DLL Universal Debug|Win32"
-			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswunivuddll\core"
-			ConfigurationType="2"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
-				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
-				MinimalRebuild="true"
-				ExceptionHandling="1"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				BufferSecurityCheck="true"
-				RuntimeTypeInfo="true"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivuddll\wxprec_coredll.pch"
-				ObjectFile="vc_mswunivuddll\core\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv292ud_core_vc_custom.pdb"
-				WarningLevel="4"
-				SuppressStartupBanner="true"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv292ud_core_vc_custom;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
-				Culture="1033"
-				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalOptions=""
-				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxbase29ud.lib"
-				OutputFile="..\..\lib\vc_dll\wxmswuniv292ud_core_vc_custom.dll"
-				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29ud_core.lib"
-				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\lib\vc_dll"
-				GenerateManifest="true"
-				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv292ud_core_vc_custom.pdb"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_vc8_core.bsc"
-				SuppressStartupBanner="true"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="DLL Universal Release|Win32"
-			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswunivudll\core"
-			ConfigurationType="2"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
-				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="2"
-				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="WIN32;_USRDLL;DLL_EXPORTS;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
-				ExceptionHandling="1"
-				RuntimeLibrary="2"
-				RuntimeTypeInfo="true"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivudll\wxprec_coredll.pch"
-				ObjectFile="vc_mswunivudll\core\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv292u_core_vc_custom.pdb"
-				WarningLevel="4"
-				SuppressStartupBanner="true"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv292u_core_vc_custom;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
-				Culture="1033"
-				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalOptions=""
-				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxbase29u.lib"
-				OutputFile="..\..\lib\vc_dll\wxmswuniv292u_core_vc_custom.dll"
-				LinkIncremental="1"
-				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29u_core.lib"
-				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\lib\vc_dll"
-				GenerateManifest="true"
-				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv292u_core_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw310u_core_vc_custom.pdb"
 				TargetMachine="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -914,22 +560,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="DLL Debug|Win32"
 					>
 					<Tool
@@ -939,22 +569,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1139,6 +753,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\modalhook.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\mousemanager.cpp"
 				>
 			</File>
@@ -1176,6 +794,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\common\popupcmn.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\common\preferencescmn.cpp"
 				>
 			</File>
 			<File
@@ -1267,11 +889,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\common\textdlg.cpp"
+				RelativePath="..\..\src\common\textentrycmn.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\common\textentrycmn.cpp"
+				RelativePath="..\..\src\common\textmeasurecmn.cpp"
 				>
 			</File>
 			<File
@@ -1330,74 +952,10 @@
 			<File
 				RelativePath="..\..\src\msw\accel.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_accel.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_accel.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_accel.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_accel.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\ole\access.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\ole\activex.cpp"
@@ -1406,22 +964,6 @@
 			<File
 				RelativePath="..\..\src\msw\anybutton.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\app.cpp"
@@ -1430,22 +972,6 @@
 			<File
 				RelativePath="..\..\src\msw\artmsw.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\ole\automtn.cpp"
@@ -1458,54 +984,6 @@
 			<File
 				RelativePath="..\..\src\msw\bmpbuttn.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_bmpbuttn.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_bmpbuttn.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_bmpbuttn.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_bmpbuttn.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\brush.cpp"
@@ -1514,54 +992,6 @@
 			<File
 				RelativePath="..\..\src\msw\button.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_button.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_button.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_button.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_button.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\caret.cpp"
@@ -1570,158 +1000,14 @@
 			<File
 				RelativePath="..\..\src\msw\checkbox.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_checkbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_checkbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_checkbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_checkbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\checklst.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_checklst.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_checklst.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_checklst.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_checklst.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\choice.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_choice.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_choice.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_choice.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_choice.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\clipbrd.cpp"
@@ -1730,22 +1016,6 @@
 			<File
 				RelativePath="..\..\src\msw\colordlg.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\colour.cpp"
@@ -1754,126 +1024,14 @@
 			<File
 				RelativePath="..\..\src\msw\combo.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\combobox.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_combobox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_combobox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_combobox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_combobox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\control.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_control.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_control.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_control.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_control.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\cursor.cpp"
@@ -1910,54 +1068,6 @@
 			<File
 				RelativePath="..\..\src\msw\dialog.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_dialog.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_dialog.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_dialog.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_dialog.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\dialup.cpp"
@@ -1970,22 +1080,6 @@
 			<File
 				RelativePath="..\..\src\msw\dirdlg.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\display.cpp"
@@ -1994,22 +1088,6 @@
 			<File
 				RelativePath="..\..\src\msw\dragimag.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\ole\dropsrc.cpp"
@@ -2030,74 +1108,10 @@
 			<File
 				RelativePath="..\..\src\msw\fdrepdlg.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_fdrepdlg.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_fdrepdlg.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_fdrepdlg.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_fdrepdlg.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\filedlg.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\font.cpp"
@@ -2106,22 +1120,6 @@
 			<File
 				RelativePath="..\..\src\msw\fontdlg.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\fontenum.cpp"
@@ -2134,74 +1132,10 @@
 			<File
 				RelativePath="..\..\src\msw\frame.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\gauge.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_gauge.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_gauge.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_gauge.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_gauge.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\gdiimage.cpp"
@@ -2222,22 +1156,6 @@
 			<File
 				RelativePath="..\..\src\msw\headerctrl.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\helpchm.cpp"
@@ -2258,126 +1176,14 @@
 			<File
 				RelativePath="..\..\src\msw\iniconf.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\listbox.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_listbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_listbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_listbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_listbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\listctrl.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_listctrl.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_listctrl.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_listctrl.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_listctrl.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\main.cpp"
@@ -2386,114 +1192,18 @@
 			<File
 				RelativePath="..\..\src\msw\mdi.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\menu.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_menu.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_menu.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_menu.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_menu.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\menuitem.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\metafile.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\minifram.cpp"
@@ -2502,118 +1212,22 @@
 			<File
 				RelativePath="..\..\src\msw\msgdlg.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\msw\mslu.cpp"
-				>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\nativdlg.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\nativewin.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
+			</File>
+			<File
+				RelativePath="..\..\src\msw\nonownedwnd.cpp"
+				>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\notebook.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_notebook.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_notebook.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_notebook.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_notebook.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\ole\oleutils.cpp"
@@ -2622,22 +1236,6 @@
 			<File
 				RelativePath="..\..\src\msw\ownerdrw.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\palette.cpp"
@@ -2646,22 +1244,6 @@
 			<File
 				RelativePath="..\..\src\msw\panel.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\pen.cpp"
@@ -2682,126 +1264,14 @@
 			<File
 				RelativePath="..\..\src\msw\progdlg.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\radiobox.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_radiobox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_radiobox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_radiobox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_radiobox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\radiobut.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_radiobut.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_radiobut.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_radiobut.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_radiobut.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\region.cpp"
@@ -2814,74 +1284,14 @@
 			<File
 				RelativePath="..\..\src\msw\richmsgdlg.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
+			</File>
+			<File
+				RelativePath="..\..\src\msw\ole\safearray.cpp"
+				>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\scrolbar.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_scrolbar.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_scrolbar.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_scrolbar.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_scrolbar.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\settings.cpp"
@@ -2890,530 +1300,54 @@
 			<File
 				RelativePath="..\..\src\msw\slider.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_slider.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_slider.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_slider.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_slider.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\spinbutt.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_spinbutt.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_spinbutt.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_spinbutt.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_spinbutt.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\spinctrl.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\statbmp.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_statbmp.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_statbmp.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_statbmp.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_statbmp.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\statbox.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_statbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_statbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_statbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_statbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\statline.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_statline.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_statline.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_statline.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_statline.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\stattext.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_stattext.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_stattext.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_stattext.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_stattext.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\statusbar.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\textctrl.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_textctrl.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_textctrl.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_textctrl.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_textctrl.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\textentry.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
+			</File>
+			<File
+				RelativePath="..\..\src\msw\textmeasure.cpp"
+				>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\tglbtn.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_tglbtn.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_tglbtn.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_tglbtn.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_tglbtn.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\toolbar.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\msw_toolbar.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\msw_toolbar.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\msw_toolbar.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\msw_toolbar.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\tooltip.cpp"
@@ -3426,22 +1360,6 @@
 			<File
 				RelativePath="..\..\src\msw\treectrl.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\uiaction.cpp"
@@ -3449,6 +1367,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\msw\utilsgui.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\msw\utilswin.cpp"
 				>
 			</File>
 			<File
@@ -3470,14 +1392,6 @@
 					Name="Release|Win32"
 					ExcludedFromBuild="true"
 				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\volume.cpp"
@@ -3492,58 +1406,6 @@
 			Name="Generic Sources"
 			UniqueIdentifier="{FEA0C02F-F300-53BA-B784-52A5086B8093}"
 			>
-			<File
-				RelativePath="..\..\src\generic\accel.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\generic_accel.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\generic_accel.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\generic_accel.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\generic_accel.obj"
-					/>
-				</FileConfiguration>
-			</File>
 			<File
 				RelativePath="..\..\src\generic\busyinfo.cpp"
 				>
@@ -3569,26 +1431,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\generic\colrdlgg.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
 				RelativePath="..\..\src\generic\combog.cpp"
 				>
 			</File>
@@ -3601,128 +1443,16 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\generic\dirdlgg.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
 				RelativePath="..\..\src\generic\dragimgg.cpp"
 				>
-			</File>
-			<File
-				RelativePath="..\..\src\generic\fdrepdlg.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\generic_fdrepdlg.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\generic_fdrepdlg.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\generic_fdrepdlg.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\generic_fdrepdlg.obj"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\src\generic\filectrlg.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\generic\filedlgg.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
 				RelativePath="..\..\src\generic\filepickerg.cpp"
 				>
-			</File>
-			<File
-				RelativePath="..\..\src\generic\fontdlgg.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\generic\fontpickerg.cpp"
@@ -3745,84 +1475,12 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\generic\listctrl.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\generic_listctrl.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\generic_listctrl.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\generic_listctrl.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\generic_listctrl.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\src\generic\logg.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\src\generic\markuptext.cpp"
 				>
-			</File>
-			<File
-				RelativePath="..\..\src\generic\mdig.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\generic\msgdlgg.cpp"
@@ -3833,7 +1491,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\generic\panelg.cpp"
+				RelativePath="..\..\src\generic\preferencesg.cpp"
 				>
 			</File>
 			<File
@@ -3887,54 +1545,10 @@
 			<File
 				RelativePath="..\..\src\generic\statusbr.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswud\core\generic_statusbr.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswu\core\generic_statusbr.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswuddll\core\generic_statusbr.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswudll\core\generic_statusbr.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
+			</File>
+			<File
+				RelativePath="..\..\src\generic\textdlgg.cpp"
+				>
 			</File>
 			<File
 				RelativePath="..\..\src\generic\tipwin.cpp"
@@ -3949,1617 +1563,16 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\generic\treectlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\generic\vlbox.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\src\generic\vscroll.cpp"
 				>
-			</File>
-		</Filter>
-		<Filter
-			Name="wxUniv Sources"
-			UniqueIdentifier="{6F354595-5EA6-5848-AAA1-6C4820DE7AEE}"
-			>
-			<File
-				RelativePath="..\..\src\univ\bmpbuttn.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_bmpbuttn.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_bmpbuttn.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_bmpbuttn.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_bmpbuttn.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\button.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_button.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_button.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_button.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_button.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\checkbox.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_checkbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_checkbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_checkbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_checkbox.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\checklst.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_checklst.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_checklst.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_checklst.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_checklst.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\choice.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_choice.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_choice.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_choice.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_choice.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\combobox.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_combobox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_combobox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_combobox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_combobox.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\control.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_control.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_control.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_control.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_control.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\ctrlrend.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\dialog.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_dialog.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_dialog.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_dialog.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_dialog.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\framuniv.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\gauge.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_gauge.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_gauge.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_gauge.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_gauge.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\themes\gtk.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\inpcons.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\inphand.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\listbox.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_listbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_listbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_listbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_listbox.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\menu.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_menu.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_menu.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_menu.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_menu.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\themes\metal.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\themes\mono.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\notebook.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_notebook.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_notebook.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_notebook.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_notebook.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\radiobox.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_radiobox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_radiobox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_radiobox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_radiobox.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\radiobut.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_radiobut.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_radiobut.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_radiobut.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_radiobut.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\scrarrow.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\scrolbar.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_scrolbar.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_scrolbar.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_scrolbar.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_scrolbar.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\scrthumb.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\settingsuniv.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\slider.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_slider.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_slider.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_slider.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_slider.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\spinbutt.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_spinbutt.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_spinbutt.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_spinbutt.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_spinbutt.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\statbmp.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_statbmp.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_statbmp.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_statbmp.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_statbmp.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\statbox.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_statbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_statbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_statbox.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_statbox.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\statline.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_statline.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_statline.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_statline.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_statline.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\stattext.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_stattext.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_stattext.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_stattext.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_stattext.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\statusbr.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_statusbr.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_statusbr.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_statusbr.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_statusbr.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\stdrend.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\textctrl.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_textctrl.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_textctrl.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_textctrl.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_textctrl.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\tglbtn.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_tglbtn.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_tglbtn.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_tglbtn.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_tglbtn.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\theme.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\toolbar.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivud\core\univ_toolbar.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivu\core\univ_toolbar.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivuddll\core\univ_toolbar.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="vc_mswunivudll\core\univ_toolbar.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\topluniv.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\themes\win32.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\univ\winuniv.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 		</Filter>
 		<Filter
@@ -5590,12 +1603,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Universal Debug|Win32"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-				/>
-				<FileConfiguration
 					Name="DLL Debug|Win32"
 					>
 					<Tool
@@ -5615,12 +1622,6 @@
 						Outputs="..\..\lib\vc_dll\mswu\wx\setup.h"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\include\wx\univ\setup.h"
@@ -5632,51 +1633,11 @@
 					Name="Release|Win32"
 				/>
 				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Creating ..\..\lib\vc_lib\mswunivud\wx\setup.h"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswunivud\wx\setup.h"
-						Outputs="..\..\lib\vc_lib\mswunivud\wx\setup.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Creating ..\..\lib\vc_lib\mswunivu\wx\setup.h"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswunivu\wx\setup.h"
-						Outputs="..\..\lib\vc_lib\mswunivu\wx\setup.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="DLL Debug|Win32"
 				/>
 				<FileConfiguration
 					Name="DLL Release|Win32"
 				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Creating ..\..\lib\vc_dll\mswunivud\wx\setup.h"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswunivud\wx\setup.h"
-						Outputs="..\..\lib\vc_dll\mswunivud\wx\setup.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Creating ..\..\lib\vc_dll\mswunivu\wx\setup.h"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswunivu\wx\setup.h"
-						Outputs="..\..\lib\vc_dll\mswunivu\wx\setup.h"
-					/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -5784,6 +1745,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\custombgwin.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\ole\dataform.h"
 				>
 			</File>
@@ -5797,6 +1762,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\datectrl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\datetimectrl.h"
 				>
 			</File>
 			<File
@@ -5905,28 +1874,6 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Creating ..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h"
-						CommandLine="cl /EP /nologo &quot;$(InputPath)&quot; &gt; &quot;..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h&quot;"
-						Outputs="..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h"
-						AdditionalDependencies="&quot;..\..\lib\vc_lib\mswunivud\wx\msw&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Creating ..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h"
-						CommandLine="cl /EP /nologo &quot;$(InputPath)&quot; &gt; &quot;..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h&quot;"
-						Outputs="..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h"
-						AdditionalDependencies="&quot;..\..\lib\vc_lib\mswunivu\wx\msw&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="DLL Debug|Win32"
 					>
 					<Tool
@@ -5946,28 +1893,6 @@
 						CommandLine="cl /EP /nologo &quot;$(InputPath)&quot; &gt; &quot;..\..\lib\vc_dll\mswu\wx\msw\rcdefs.h&quot;"
 						Outputs="..\..\lib\vc_dll\mswu\wx\msw\rcdefs.h"
 						AdditionalDependencies="&quot;..\..\lib\vc_dll\mswu\wx\msw&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Creating ..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h"
-						CommandLine="cl /EP /nologo &quot;$(InputPath)&quot; &gt; &quot;..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h&quot;"
-						Outputs="..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h"
-						AdditionalDependencies="&quot;..\..\lib\vc_dll\mswunivud\wx\msw&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Creating ..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h"
-						CommandLine="cl /EP /nologo &quot;$(InputPath)&quot; &gt; &quot;..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h&quot;"
-						Outputs="..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h"
-						AdditionalDependencies="&quot;..\..\lib\vc_dll\mswunivu\wx\msw&quot;"
 					/>
 				</FileConfiguration>
 			</File>
@@ -6009,6 +1934,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\iniconf.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\init.h"
 				>
 			</File>
 			<File
@@ -6056,6 +1985,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\nonownedwnd.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\notebook.h"
 				>
 			</File>
@@ -6065,6 +1998,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\ole\oleutils.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\ownerdrawnbutton.h"
 				>
 			</File>
 			<File
@@ -6120,11 +2057,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\msw\scrolbar.h"
+				RelativePath="..\..\include\wx\msw\ole\safearray.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\msw\setup0.h"
+				RelativePath="..\..\include\wx\msw\scrolbar.h"
 				>
 			</File>
 			<File
@@ -6180,6 +2117,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\timectrl.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\toolbar.h"
 				>
 			</File>
@@ -6205,6 +2146,18 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\uxthemep.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\webview_ie.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\webview_missing.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\webviewhistoryitem_ie.h"
 				>
 			</File>
 			<File
@@ -6257,15 +2210,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\generic\colrdlgg.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\generic\combo.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\generic\ctrlsub.h"
+				RelativePath="..\..\include\wx\generic\custombgwin.h"
 				>
 			</File>
 			<File
@@ -6285,10 +2234,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\generic\dirdlgg.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\generic\dragimgg.h"
 				>
 			</File>
@@ -6301,23 +2246,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\generic\fdrepdlg.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\generic\filectrlg.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\generic\filedlgg.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\generic\filepickerg.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\generic\fontdlgg.h"
 				>
 			</File>
 			<File
@@ -6361,15 +2294,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\generic\listctrl.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\generic\logg.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\generic\mdig.h"
 				>
 			</File>
 			<File
@@ -6445,180 +2370,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\generic\statusbr.h"
+				RelativePath="..\..\include\wx\generic\textdlgg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\generic\textdlgg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\generic\treectlg.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\wizard.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="wxUniv Headers"
-			UniqueIdentifier="{46168D7C-2783-50F3-AE9D-A740D5FF0B44}"
-			>
-			<File
-				RelativePath="..\..\include\wx\univ\app.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\bmpbuttn.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\button.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\checkbox.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\checklst.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\chkconf.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\choice.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\colschem.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\combobox.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\control.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\dialog.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\frame.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\gauge.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\inpcons.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\inphand.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\listbox.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\menu.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\menuitem.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\notebook.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\panel.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\radiobox.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\radiobut.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\renderer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\scrarrow.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\scrolbar.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\scrthumb.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\scrtimer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\slider.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\spinbutt.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\statbmp.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\statbox.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\statline.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\stattext.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\statusbr.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\stdrend.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\textctrl.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\tglbtn.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\theme.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\toolbar.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\toplevel.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\univ\window.h"
 				>
 			</File>
 		</Filter>
@@ -6760,6 +2524,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\bannerwindow.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\ribbon\bar.h"
 				>
 			</File>
@@ -6797,10 +2565,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\ribbon\buttonbar.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\cairo.h"
 				>
 			</File>
 			<File
@@ -6900,6 +2664,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\custombgwin.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\dataobj.h"
 				>
 			</File>
@@ -6913,6 +2681,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\dateevt.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\datetimectrl.h"
 				>
 			</File>
 			<File
@@ -7220,6 +2992,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\itemid.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\joystick.h"
 				>
 			</File>
@@ -7277,6 +3053,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\minifram.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\modalhook.h"
 				>
 			</File>
 			<File
@@ -7357,6 +3137,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\position.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\preferences.h"
 				>
 			</File>
 			<File
@@ -7516,11 +3300,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtexttabspage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextuicustomization.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\include\wx\richtext\richtextxml.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\richtooltip.h"
 				>
 			</File>
 			<File
@@ -7548,6 +3340,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\simplebook.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\sizer.h"
 				>
 			</File>
@@ -7569,6 +3365,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\splash.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\persist\splitter.h"
 				>
 			</File>
 			<File
@@ -7604,6 +3404,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\aui\tabart.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\aui\tabmdi.h"
 				>
 			</File>
@@ -7613,6 +3417,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\tbarbase.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\testing.h"
 				>
 			</File>
 			<File
@@ -7637,6 +3445,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\tglbtn.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\timectrl.h"
 				>
 			</File>
 			<File
@@ -7688,6 +3500,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\treelist.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\uiaction.h"
 				>
 			</File>
@@ -7724,6 +3540,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\webview.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\webviewarchivehandler.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\webviewfshandler.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\persist\window.h"
 				>
 			</File>
@@ -7733,6 +3561,14 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\windowid.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\windowptr.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\withimages.h"
 				>
 			</File>
 			<File
@@ -7757,6 +3593,18 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\xrc\xh_animatctrl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\xrc\xh_auinotbk.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\xrc\xh_auitoolb.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\xrc\xh_bannerwindow.h"
 				>
 			</File>
 			<File
@@ -7916,6 +3764,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_ribbon.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\xrc\xh_richtext.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_scrol.h"
 				>
 			</File>
@@ -7972,6 +3828,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_timectrl.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_toolb.h"
 				>
 			</File>
@@ -8000,11 +3860,25 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xmlreshandler.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xpmdecod.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\include\wx\xpmhand.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			>
+			<File
+				RelativePath="..\..\src\xrc\xmlreshandler.cpp"
 				>
 			</File>
 		</Filter>

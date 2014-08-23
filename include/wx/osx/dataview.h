@@ -2,7 +2,6 @@
 // Name:        wx/osx/dataview.h
 // Purpose:     wxDataViewCtrl native implementation header for OSX
 // Author:
-// Id:          $Id$
 // Copyright:   (c) 2009
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -55,7 +54,7 @@ public:
 
     virtual void SetAlignment  (wxAlignment align);
     virtual void SetBitmap     (wxBitmap const& bitmap);
-    virtual void SetFlags      (int flags) { SetIndividualFlags(flags); }
+    virtual void SetFlags      (int flags) { m_flags = flags; /*SetIndividualFlags(flags); */ }
     virtual void SetHidden     (bool hidden);
     virtual void SetMaxWidth   (int maxWidth);
     virtual void SetMinWidth   (int minWidth);
@@ -65,7 +64,6 @@ public:
     virtual void SetSortOrder  (bool ascending);
     virtual void SetTitle      (wxString const& title);
     virtual void SetWidth      (int  width);
-    virtual void SetAsSortKey  (bool sort = true);
 
    // implementation only
     wxDataViewColumnNativeData* GetNativeData() const
@@ -151,7 +149,7 @@ public:
               const wxValidator& validator = wxDefaultValidator,
               const wxString& name = wxDataViewCtrlNameStr);
 
-  virtual wxControl* GetMainWindow() // not used for the native implementation
+  virtual wxWindow* GetMainWindow() // not used for the native implementation
   {
     return this;
   }
@@ -175,8 +173,9 @@ public:
   virtual bool IsExpanded(const wxDataViewItem & item) const;
 
   virtual unsigned int GetCount() const;
-  virtual wxRect GetItemRect(const wxDataViewItem& item, const wxDataViewColumn* columnPtr) const;
-  virtual wxDataViewItem GetSelection() const;
+  virtual wxRect GetItemRect(const wxDataViewItem& item,
+                             const wxDataViewColumn* columnPtr = NULL) const;
+  virtual int GetSelectedItemsCount() const;
   virtual int GetSelections(wxDataViewItemArray& sel) const;
 
   virtual void HitTest(const wxPoint& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const;
@@ -202,7 +201,7 @@ public:
  // finishes editing of custom items; if no custom item is currently edited the method does nothing
   void FinishCustomItemEditing();
   
-  virtual void StartEditor( const wxDataViewItem & item, unsigned int column );
+  virtual void EditItem(const wxDataViewItem& item, const wxDataViewColumn *column);
 
  // returns the n-th pointer to a column;
  // this method is different from GetColumn(unsigned int pos) because here 'n' is not a position in the control but the n-th
@@ -257,6 +256,8 @@ public:
     m_Deleting = deleting;
   }
 
+  virtual wxDataViewColumn *GetCurrentColumn() const;
+
   virtual wxVisualAttributes GetDefaultAttributes() const
   {
       return GetClassDefaultAttributes(GetWindowVariant());
@@ -297,6 +298,8 @@ private:
   wxDataViewItem m_CustomRendererItem; // currently edited item by the customrenderer; it is invalid while not editing a custom item
 
   wxDataViewColumnPtrArrayType m_ColumnPtrs; // all column pointers are stored in an array
+
+  wxDataViewModelNotifier* m_ModelNotifier; // stores the model notifier for the control (does not own the notifier)
 
  // wxWidget internal stuff:
   DECLARE_DYNAMIC_CLASS(wxDataViewCtrl)

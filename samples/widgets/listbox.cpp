@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing wxListbox
 // Author:      Vadim Zeitlin
 // Created:     27.03.01
-// Id:          $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -82,12 +81,12 @@ class ListboxWidgetsPage : public ItemContainerWidgetsPage
 public:
     ListboxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxControl *GetWidget() const { return m_lbox; }
-    virtual wxItemContainer* GetContainer() const { return m_lbox; }
-    virtual void RecreateWidget() { CreateLbox(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_lbox; }
+    virtual wxItemContainer* GetContainer() const wxOVERRIDE { return m_lbox; }
+    virtual void RecreateWidget() wxOVERRIDE { CreateLbox(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
     // event handlers
@@ -173,7 +172,7 @@ protected:
                *m_textDelete;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(ListboxWidgetsPage)
 };
 
@@ -181,7 +180,7 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(ListboxWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(ListboxWidgetsPage, WidgetsPage)
     EVT_BUTTON(ListboxPage_Reset, ListboxWidgetsPage::OnButtonReset)
     EVT_BUTTON(ListboxPage_Change, ListboxWidgetsPage::OnButtonChange)
     EVT_BUTTON(ListboxPage_Delete, ListboxWidgetsPage::OnButtonDelete)
@@ -213,7 +212,7 @@ BEGIN_EVENT_TABLE(ListboxWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, ListboxWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, ListboxWidgetsPage::OnCheckOrRadioBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

@@ -4,7 +4,6 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/03/16
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -130,7 +129,7 @@ void wxCheckBox::Cocoa_wxNSButtonAction(void)
         // skip mixed, go right back to on
         [GetNSButton() setState: NSOnState];
     }
-    wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, GetId());
+    wxCommandEvent event(wxEVT_CHECKBOX, GetId());
     InitCommandEvent(event); //    event.SetEventObject(this);
     event.SetInt(Get3StateValue());
     Command(event);

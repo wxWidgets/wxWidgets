@@ -5,7 +5,6 @@
 // Modified by:
 // Created:     14/4/2006
 // Copyright:   (c) Francesco Montorsi
-// RCS-ID:      $Id$
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -17,8 +16,8 @@
 #include "wx/dirdlg.h"
 
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_DIRPICKER_CHANGED, wxFileDirPickerEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRPICKER_CHANGED, wxFileDirPickerEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_FILEPICKER_CHANGED, wxFileDirPickerEvent );
 
 
 //-----------------------------------------------------------------------------
@@ -58,6 +57,8 @@ public:     // overridable
 
     virtual wxEventType GetEventType() const = 0;
 
+    virtual void SetInitialDirectory(const wxString& dir);
+
 public:
 
     bool Create(wxWindow *parent, wxWindowID id,
@@ -81,6 +82,9 @@ protected:
     // wxButton as some of our bits can conflict with wxButton styles and it
     // just doesn't make sense to use picker styles for wxButton anyhow
     long m_pickerStyle;
+
+    // Initial directory set by SetInitialDirectory() call or empty.
+    wxString m_initialDir;
 
 private:
     // common part of all ctors
@@ -140,19 +144,10 @@ public:     // overridable
         return filedlgstyle;
     }
 
-    virtual wxDialog *CreateDialog()
-    {
-        wxFileDialog *p = new wxFileDialog(GetDialogParent(), m_message,
-                                    wxEmptyString, wxEmptyString,
-                                    m_wildcard, GetDialogStyle());
-
-        // this sets both the default folder and the default file of the dialog
-        p->SetPath(m_path);
-        return p;
-    }
+    virtual wxDialog *CreateDialog();
 
     wxEventType GetEventType() const
-        { return wxEVT_COMMAND_FILEPICKER_CHANGED; }
+        { return wxEVT_FILEPICKER_CHANGED; }
 
 protected:
     void UpdateDialogPath(wxDialog *p)
@@ -204,14 +199,10 @@ public:     // overridable
         return dirdlgstyle;
     }
 
-    virtual wxDialog *CreateDialog()
-    {
-        return new wxDirDialog(GetDialogParent(), m_message, m_path,
-                                   GetDialogStyle());
-    }
+    virtual wxDialog *CreateDialog();
 
     wxEventType GetEventType() const
-        { return wxEVT_COMMAND_DIRPICKER_CHANGED; }
+        { return wxEVT_DIRPICKER_CHANGED; }
 
 protected:
     void UpdateDialogPath(wxDialog *p)
@@ -223,5 +214,8 @@ private:
     DECLARE_DYNAMIC_CLASS(wxGenericDirButton)
 };
 
+// old wxEVT_COMMAND_* constants
+//#define wxEVT_COMMAND_DIRPICKER_CHANGED wxEVT_DIRPICKER_CHANGED
+//#define wxEVT_COMMAND_FILEPICKER_CHANGED wxEVT_FILEPICKER_CHANGED
 
 #endif // _WX_FILEDIRPICKER_H_

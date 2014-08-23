@@ -2,7 +2,6 @@
 // Name:        animate.h
 // Purpose:     interface of wxAnimation* classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -22,6 +21,11 @@ enum wxAnimationType
     /** autodetect the filetype. */
     wxANIMATION_TYPE_ANY
 };
+
+
+#define wxAC_NO_AUTORESIZE       (0x0010)
+#define wxAC_DEFAULT_STYLE       (wxBORDER_NONE)
+
 
 /**
     @class wxAnimationCtrl
@@ -49,7 +53,7 @@ enum wxAnimationType
 
     @nativeimpl{wxgtk,wxmsw}
 
-    @appearance{animationctrl.png}
+    @appearance{animationctrl}
 
     @see wxAnimation, @sample{animate}
 */
@@ -195,9 +199,14 @@ public:
 
     @see wxAnimationCtrl, @sample{animate}
 */
-class wxAnimation : public wxGDIObject
+class wxAnimation : public wxObject
 {
 public:
+    /**
+       Default ctor.
+    */
+    wxAnimation();
+    
     /**
         Copy ctor.
     */
@@ -228,11 +237,17 @@ public:
 
     /**
         Returns the i-th frame as a wxImage.
+
+        This method is not implemented in the native wxGTK implementation of
+        this class and always returns an invalid image there.
     */
     virtual wxImage GetFrame(unsigned int i) const;
 
     /**
         Returns the number of frames for this animation.
+
+        This method is not implemented in the native wxGTK implementation of
+        this class and always returns 0 there.
     */
     virtual unsigned int GetFrameCount() const;
 

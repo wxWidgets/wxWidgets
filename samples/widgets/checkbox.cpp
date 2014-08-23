@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing wxCheckBox
 // Author:      Dimitri Schoolwerth, Vadim Zeitlin
 // Created:     27 Sep 2003
-// Id:          $Id$
 // Copyright:   (c) 2003 wxWindows team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -76,11 +75,11 @@ public:
     CheckBoxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~CheckBoxWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const { return m_checkbox; }
-    virtual void RecreateWidget() { CreateCheckbox(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_checkbox; }
+    virtual void RecreateWidget() wxOVERRIDE { CreateCheckbox(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
     // event handlers
@@ -124,7 +123,7 @@ protected:
     wxTextCtrl *m_textLabel;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(CheckBoxWidgetsPage)
 };
 
@@ -132,7 +131,7 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(CheckBoxWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(CheckBoxWidgetsPage, WidgetsPage)
     EVT_CHECKBOX(CheckboxPage_Checkbox, CheckBoxWidgetsPage::OnCheckBox)
 
     EVT_BUTTON(CheckboxPage_Reset, CheckBoxWidgetsPage::OnButtonReset)
@@ -145,7 +144,7 @@ BEGIN_EVENT_TABLE(CheckBoxWidgetsPage, WidgetsPage)
 
     EVT_RADIOBOX(wxID_ANY, CheckBoxWidgetsPage::OnStyleChange)
     EVT_CHECKBOX(CheckboxPage_ChkRight, CheckBoxWidgetsPage::OnStyleChange)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

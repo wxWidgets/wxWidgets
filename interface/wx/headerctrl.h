@@ -3,10 +3,25 @@
 // Purpose:     interface of wxHeaderCtrl
 // Author:      Vadim Zeitlin
 // Created:     2008-12-01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+
+enum
+{
+    // allow column drag and drop
+    wxHD_ALLOW_REORDER = 0x0001,
+
+    // allow hiding (and showing back) the columns using the menu shown by
+    // right clicking the header
+    wxHD_ALLOW_HIDE = 0x0002,
+
+    // style used by default when creating the control
+    wxHD_DEFAULT_STYLE = wxHD_ALLOW_REORDER
+};
+
+
 
 /**
     @class wxHeaderCtrl
@@ -374,6 +389,13 @@ public:
      */
     bool ShowCustomizeDialog();
 
+    /**
+        Returns width needed for given column's title.
+
+        @since 2.9.4
+     */
+    int GetColumnTitleWidth(const wxHeaderColumn& col);
+
 protected:
     /**
         Method to be implemented by the derived classes to return the
@@ -652,27 +674,49 @@ protected:
 class wxHeaderCtrlEvent : public wxNotifyEvent
 {
 public:
+    wxHeaderCtrlEvent(wxEventType commandType = wxEVT_NULL, int winid = 0);
+    wxHeaderCtrlEvent(const wxHeaderCtrlEvent& event);
+
     /**
         Return the index of the column affected by this event.
 
         This method can be called for all header control events.
      */
     int GetColumn() const;
-
+    void SetColumn(int col);
+    
     /**
         Return the current width of the column.
 
         This method can only be called for the dragging events.
      */
     int GetWidth() const;
-
+    void SetWidth(int width);
+    
     /**
         Return the new order of the column.
 
-        This method can only be called for end reorder event for which it
+        This method can only be called for a reorder event for which it
         indicates the tentative new position for the column GetColumn()
         selected by the user. If the event is not vetoed, this will become the
         new column position in wxHeaderCtrl::GetColumnsOrder().
      */
     unsigned int GetNewOrder() const;
+    void SetNewOrder(unsigned int order);
 };
+
+
+
+wxEventType wxEVT_HEADER_CLICK;
+wxEventType wxEVT_HEADER_RIGHT_CLICK;
+wxEventType wxEVT_HEADER_MIDDLE_CLICK;
+wxEventType wxEVT_HEADER_DCLICK;
+wxEventType wxEVT_HEADER_RIGHT_DCLICK;
+wxEventType wxEVT_HEADER_MIDDLE_DCLICK;
+wxEventType wxEVT_HEADER_SEPARATOR_DCLICK;
+wxEventType wxEVT_HEADER_BEGIN_RESIZE;
+wxEventType wxEVT_HEADER_RESIZING;
+wxEventType wxEVT_HEADER_END_RESIZE;
+wxEventType wxEVT_HEADER_BEGIN_REORDER;
+wxEventType wxEVT_HEADER_END_REORDER;
+wxEventType wxEVT_HEADER_DRAGGING_CANCELLED;

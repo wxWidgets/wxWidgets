@@ -3,7 +3,6 @@
 // Purpose:     OwnerDrawnComboBox unit test
 // Author:      Jaakko Salli
 // Created:     2010-12-17
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Jaakko Salli
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -129,21 +128,19 @@ void OwnerDrawnComboBoxTestCase::Size()
 
 void OwnerDrawnComboBoxTestCase::PopDismiss()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_combo, wxEVT_COMMAND_COMBOBOX_DROPDOWN);
-    EventCounter count1(m_combo, wxEVT_COMMAND_COMBOBOX_CLOSEUP);
+    EventCounter drop(m_combo, wxEVT_COMBOBOX_DROPDOWN);
+    EventCounter close(m_combo, wxEVT_COMBOBOX_CLOSEUP);
 
     m_combo->Popup();
     m_combo->Dismiss();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_COMBOBOX_DROPDOWN));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_COMBOBOX_CLOSEUP));
+    CPPUNIT_ASSERT_EQUAL(1, drop.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, close.GetCount());
 }
 
 void OwnerDrawnComboBoxTestCase::Sort()
 {
+    delete m_combo;
     m_combo = new wxOwnerDrawnComboBox(wxTheApp->GetTopWindow(),
                                        wxID_ANY, "",
                                        wxDefaultPosition, wxDefaultSize,
@@ -175,6 +172,7 @@ void OwnerDrawnComboBoxTestCase::ReadOnly()
     testitems.Add("item 1");
     testitems.Add("item 2");
 
+    delete m_combo;
     m_combo = new wxOwnerDrawnComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "",
                                        wxDefaultPosition, wxDefaultSize,
                                        testitems,

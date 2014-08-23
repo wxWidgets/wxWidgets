@@ -2,7 +2,6 @@
 // Name:        geometry.h
 // Purpose:     interface of geometry classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -147,8 +146,8 @@ public:
 
     // single attribute accessors
 
-    wxPoint2DDouble GetPosition();
-    wxSize GetSize();
+    wxPoint2DDouble GetPosition() const;
+    wxSize GetSize() const;
 
     // for the edge and corner accessors there are two setters counterparts, the Set.. functions keep the other corners at their
         // position whenever sensible, the Move.. functions keep the size of the rect and move the other corners appropriately
@@ -238,8 +237,8 @@ public:
 
         // single attribute accessors
 
-    wxPoint2DInt GetPosition();
-    wxSize GetSize();
+    wxPoint2DInt GetPosition() const;
+    wxSize GetSize() const;
 
         // for the edge and corner accessors there are two setters counterparts, the Set.. functions keep the other corners at their
         // position whenever sensible, the Move.. functions keep the size of the rect and move the other corners appropriately
@@ -316,7 +315,7 @@ public:
 class wxTransform2D
 {
 public :
-    virtual ~wxTransform2D() { }
+    virtual ~wxTransform2D();
     virtual void                    Transform( wxPoint2DInt* pt )const  = 0;
     virtual void                    Transform( wxRect2DInt* r ) const;
     virtual wxPoint2DInt    Transform( const wxPoint2DInt &pt ) const;

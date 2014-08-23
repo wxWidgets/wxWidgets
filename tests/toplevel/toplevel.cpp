@@ -3,7 +3,6 @@
 // Purpose:     Tests for wxTopLevelWindow
 // Author:      Kevin Ollivier
 // Created:     2008-05-25
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Kevin Ollivier <kevino@theolliviers.com>
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -35,9 +34,6 @@ class TopLevelWindowTestCase : public CppUnit::TestCase
 public:
     TopLevelWindowTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
-
 private:
     CPPUNIT_TEST_SUITE( TopLevelWindowTestCase );
         CPPUNIT_TEST( DialogShowTest );
@@ -56,18 +52,6 @@ private:
 
 // also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TopLevelWindowTestCase, "fixme" );
-
-// ----------------------------------------------------------------------------
-// test initialization
-// ----------------------------------------------------------------------------
-
-void TopLevelWindowTestCase::setUp()
-{
-}
-
-void TopLevelWindowTestCase::tearDown()
-{
-}
 
 // ----------------------------------------------------------------------------
 // tests themselves
@@ -90,25 +74,25 @@ void TopLevelWindowTestCase::FrameShowTest()
 void TopLevelWindowTestCase::TopLevelWindowShowTest(wxTopLevelWindow* tlw)
 {
     CPPUNIT_ASSERT(!tlw->IsShown());
-    
+
     wxTextCtrl* textCtrl = new wxTextCtrl(tlw, -1, "test");
     textCtrl->SetFocus();
-    
+
 // only run this test on platforms where ShowWithoutActivating is implemented.
 #if defined(__WXMSW__) || defined(__WXMAC__)
     tlw->ShowWithoutActivating();
     CPPUNIT_ASSERT(tlw->IsShown());
     CPPUNIT_ASSERT(!tlw->IsActive());
-    
+
     tlw->Hide();
     CPPUNIT_ASSERT(!tlw->IsShown());
     CPPUNIT_ASSERT(!tlw->IsActive());
 #endif
-    
+
     tlw->Show(true);
     CPPUNIT_ASSERT(tlw->IsActive());
     CPPUNIT_ASSERT(tlw->IsShown());
-    
+
     tlw->Hide();
     CPPUNIT_ASSERT(!tlw->IsShown());
     CPPUNIT_ASSERT(tlw->IsActive());

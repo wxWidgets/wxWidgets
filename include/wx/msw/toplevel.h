@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.09.01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -57,12 +56,10 @@ public:
 
     virtual void SetLayoutDirection(wxLayoutDirection dir);
 
-#ifndef __WXWINCE__
-    virtual bool SetShape(const wxRegion& region);
-#endif // __WXWINCE__
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
 
     virtual bool Show(bool show = true);
+    virtual void Raise();
 
     virtual void ShowWithoutActivating();
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
@@ -75,6 +72,19 @@ public:
     // Set window transparency if the platform supports it
     virtual bool SetTransparent(wxByte alpha);
     virtual bool CanSetTransparent();
+
+
+    // MSW-specific methods
+    // --------------------
+
+    // Return the menu representing the "system" menu of the window. You can
+    // call wxMenu::AppendWhatever() methods on it but removing items from it
+    // is in general not a good idea.
+    //
+    // The pointer returned by this method belongs to the window and will be
+    // deleted when the window itself is, do not delete it yourself. May return
+    // NULL if getting the system menu failed.
+    wxMenu *MSWGetSystemMenu() const;
 
 
     // implementation from now on
@@ -111,6 +121,22 @@ public:
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const { return false; }
 
+#if wxUSE_MENUS && !defined(__WXUNIVERSAL__)
+    bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);
+
+    // handle WM_EXITMENULOOP message for Win95 only
+    bool HandleExitMenuLoop(WXWORD isPopup);
+
+    // handle WM_(UN)INITMENUPOPUP message to generate wxEVT_MENU_OPEN/CLOSE
+    bool HandleMenuPopup(wxEventType evtType, WXHMENU hMenu);
+
+    // Command part of HandleMenuPopup() and HandleExitMenuLoop().
+    bool DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu, bool popup);
+
+    // Find the menu corresponding to the given handle.
+    virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu);
+#endif // wxUSE_MENUS && !__WXUNIVERSAL__
+
 protected:
     // common part of all ctors
     void Init();
@@ -141,8 +167,6 @@ protected:
     virtual void DoFreeze();
     virtual void DoThaw();
 
-    virtual void DoEnable(bool enable);
-
     // helper of SetIcons(): calls gets the icon with the size specified by the
     // given system metrics (SM_C{X|Y}[SM]ICON) from the bundle and sets it
     // using WM_SETICON with the specified wParam (ICOM_SMALL or ICON_BIG);
@@ -170,7 +194,16 @@ protected:
     bool                  m_fsIsMaximized;
     bool                  m_fsIsShowing;
 
-    // the last focused child: we restore focus to it on activation
+    // Save the current focus to m_winLastFocused if we're not iconized (the
+    // focus is always NULL when we're iconized).
+    void DoSaveLastFocus();
+
+    // Restore focus to m_winLastFocused if possible and needed.
+    void DoRestoreLastFocus();
+
+    // The last focused child: we remember it when we're deactivated and
+    // restore focus to it when we're activated (this is done here) or restored
+    // from iconic state (done by wxFrame).
     wxWindow             *m_winLastFocused;
 
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
@@ -213,6 +246,14 @@ private:
 #if defined(__SMARTPHONE__) || defined(__POCKETPC__)
     void* m_activateInfo;
 #endif
+
+    // The system menu: initially NULL but can be set (once) by
+    // MSWGetSystemMenu(). Owned by this window.
+    wxMenu *m_menuSystem;
+
+    // The number of currently opened menus: 0 initially, 1 when a top level
+    // menu is opened, 2 when its submenu is opened and so on.
+    int m_menuDepth;
 
     DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxTopLevelWindowMSW);

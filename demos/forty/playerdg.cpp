@@ -4,7 +4,6 @@
 // Author:      Chris Breeze
 // Modified by:
 // Created:     21/07/97
-// RCS-ID:      $Id$
 // Copyright:   (c) 1993-1998 Chris Breeze
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -102,7 +101,7 @@ void PlayerSelectionDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
 void PlayerSelectionDialog::SelectCallback(wxCommandEvent& event)
 {
-    if (event.GetEventType() == wxEVT_COMMAND_LISTBOX_SELECTED)
+    if (event.GetEventType() == wxEVT_LISTBOX)
     {
 //        if (event.IsSelection())
         m_textField->SetValue(event.GetString());

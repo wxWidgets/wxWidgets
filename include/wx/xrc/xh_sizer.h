@@ -3,7 +3,6 @@
 // Purpose:     XML resource handler for wxBoxSizer
 // Author:      Vaclav Slavik
 // Created:     2000/04/24
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -51,6 +50,7 @@ private:
     wxSizer*  Handle_wxWrapSizer();
 
     bool ValidateGridSizerChildren();
+    void SetFlexibleMode(wxFlexGridSizer* fsizer);
     void SetGrowables(wxFlexGridSizer* fsizer, const wxChar* param, bool rows);
     wxGBPosition GetGBPos(const wxString& param);
     wxGBSpan GetGBSpan(const wxString& param);

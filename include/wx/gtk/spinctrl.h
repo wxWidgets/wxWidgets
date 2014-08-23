@@ -3,7 +3,6 @@
 // Purpose:     wxSpinCtrl class
 // Author:      Robert Roebling
 // Modified by:
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -40,17 +39,17 @@ public:
     // T GetMin() const
     // T GetMax() const
     // T GetIncrement() const
-    virtual bool GetSnapToTicks() const;
+    virtual bool GetSnapToTicks() const wxOVERRIDE;
 
     // operations
-    virtual void SetValue(const wxString& value);
+    virtual void SetValue(const wxString& value) wxOVERRIDE;
     // void SetValue(T val)
     // void SetRange(T minVal, T maxVal)
     // void SetIncrement(T inc)
-    void SetSnapToTicks( bool snap_to_ticks );
+    void SetSnapToTicks( bool snap_to_ticks ) wxOVERRIDE;
 
     // Select text in the textctrl
-    void SetSelection(long from, long to);
+    void SetSelection(long from, long to) wxOVERRIDE;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -72,14 +71,16 @@ protected:
     void GtkDisableEvents() const;
     void GtkEnableEvents() const;
 
-    virtual wxSize DoGetBestSize() const;
-    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
 
     // Widgets that use the style->base colour for the BG colour should
     // override this and return true.
-    virtual bool UseGTKStyleBase() const { return true; }
+    virtual bool UseGTKStyleBase() const wxOVERRIDE { return true; }
 
-    DECLARE_DYNAMIC_CLASS(wxSpinCtrlGTKBase)
+    friend class wxSpinCtrlEventDisabler;
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -90,7 +91,7 @@ protected:
 class WXDLLIMPEXP_CORE wxSpinCtrl : public wxSpinCtrlGTKBase
 {
 public:
-    wxSpinCtrl() {}
+    wxSpinCtrl() { Init(); }
     wxSpinCtrl(wxWindow *parent,
                wxWindowID id = wxID_ANY,
                const wxString& value = wxEmptyString,
@@ -100,6 +101,8 @@ public:
                int min = 0, int max = 100, int initial = 0,
                const wxString& name = wxS("wxSpinCtrl"))
     {
+        Init();
+
         Create(parent, id, value, pos, size, style, min, max, initial, name);
     }
 
@@ -123,10 +126,22 @@ public:
     int GetIncrement() const { return int(DoGetIncrement()); }
 
     // operations
-    void SetValue(const wxString& value)    { wxSpinCtrlGTKBase::SetValue(value); } // visibility problem w/ gcc
+    void SetValue(const wxString& value) wxOVERRIDE    { wxSpinCtrlGTKBase::SetValue(value); } // visibility problem w/ gcc
     void SetValue( int value )              { DoSetValue(value); }
     void SetRange( int minVal, int maxVal ) { DoSetRange(minVal, maxVal); }
     void SetIncrement(int inc) { DoSetIncrement(inc); }
+
+    virtual int GetBase() const wxOVERRIDE { return m_base; }
+    virtual bool SetBase(int base) wxOVERRIDE;
+
+private:
+    // Common part of all ctors.
+    void Init()
+    {
+        m_base = 10;
+    }
+
+    int m_base;
 
     DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
 };
@@ -175,11 +190,14 @@ public:
     unsigned GetDigits() const;
 
     // operations
-    void SetValue(const wxString& value)        { wxSpinCtrlGTKBase::SetValue(value); } // visibility problem w/ gcc
+    void SetValue(const wxString& value) wxOVERRIDE        { wxSpinCtrlGTKBase::SetValue(value); } // visibility problem w/ gcc
     void SetValue(double value)                 { DoSetValue(value); }
     void SetRange(double minVal, double maxVal) { DoSetRange(minVal, maxVal); }
     void SetIncrement(double inc)               { DoSetIncrement(inc); }
     void SetDigits(unsigned digits);
+
+    virtual int GetBase() const wxOVERRIDE { return 10; }
+    virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
 
     DECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble)
 };

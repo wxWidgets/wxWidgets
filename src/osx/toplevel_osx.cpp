@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     24.09.01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2001-2004 Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -106,7 +105,13 @@ bool wxTopLevelWindowMac::Destroy()
     if (m_nowpeer && m_nowpeer->GetWXWindow())
         ClearKeyboardFocus( (WindowRef)m_nowpeer->GetWXWindow() );
 #endif
-    return wxTopLevelWindowBase::Destroy();
+    // delayed destruction: the tlw will be deleted during the next idle
+    // loop iteration
+    if ( !wxPendingDelete.Member(this) )
+        wxPendingDelete.Append(this);
+    
+    Hide();
+    return true;
 }
 
 
@@ -181,7 +186,13 @@ void wxTopLevelWindowMac::ShowWithoutActivating()
 
     m_nowpeer->ShowWithoutActivating();
 
-    // TODO: Should we call EVT_SIZE here?
+    // because apps expect a size event to occur at this moment
+    SendSizeEvent();
+}
+
+bool wxTopLevelWindowMac::EnableFullScreenView(bool enable)
+{
+    return m_nowpeer->EnableFullScreenView(enable);
 }
 
 bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)
@@ -212,4 +223,9 @@ void wxTopLevelWindowMac::OSXSetModified(bool modified)
 bool wxTopLevelWindowMac::OSXIsModified() const
 {
     return m_nowpeer->IsModified();
+}
+
+void wxTopLevelWindowMac::SetRepresentedFilename(const wxString& filename)
+{
+    m_nowpeer->SetRepresentedFilename(filename);
 }

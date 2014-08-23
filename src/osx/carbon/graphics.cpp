@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -67,8 +66,6 @@ int UMAGetSystemVersion()
 }
 
 
-#define wxOSX_USE_CORE_TEXT 1
-
 #endif
 
 #if wxOSX_USE_COCOA_OR_IPHONE
@@ -78,10 +75,6 @@ extern bool wxOSXLockFocus( WXWidget view) ;
 extern void wxOSXUnlockFocus( WXWidget view) ;
 #endif
 #endif
-
-#if 1 // MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
-
-// TODO test whether this private API also works under 10.3
 
 // copying values from NSCompositingModes (see also webkit and cairo sources)
 
@@ -107,19 +100,13 @@ extern "C"
    CG_EXTERN void CGContextSetCompositeOperation (CGContextRef context, int operation);
 } ;
 
-#endif
-
 //-----------------------------------------------------------------------------
 // constants
 //-----------------------------------------------------------------------------
 
-#if !defined( __DARWIN__ ) || defined(__MWERKS__)
 #ifndef M_PI
 const double M_PI = 3.14159265358979;
 #endif
-#endif
-
-static const double RAD2DEG = 180.0 / M_PI;
 
 //
 // Pen, Brushes and Fonts
@@ -149,26 +136,11 @@ OSStatus wxMacDrawCGImage(
 
 CGColorRef wxMacCreateCGColor( const wxColour& col )
 {
-    CGColorRef retval = 0;
-#ifdef __WXMAC__
-    retval = col.CreateCGColor();
-#else
-// TODO add conversion NSColor - CGColorRef (obj-c)
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-    if ( CGColorCreateGenericRGB )
-        retval = CGColorCreateGenericRGB( col.Red() / 255.0 , col.Green() / 255.0, col.Blue() / 255.0, col.Alpha() / 255.0 );
-    else
-#endif
-    {
-        CGFloat components[4] = { col.Red() / 255.0, col.Green() / 255.0, col.Blue()  / 255.0, col.Alpha() / 255.0 } ;
-        retval = CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ;
-    }
+    CGColorRef retval = col.CreateCGColor();
 
-#endif
+    wxASSERT(retval != NULL);
     return retval;
 }
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && wxOSX_USE_CORE_TEXT
 
 CTFontRef wxMacCreateCTFont( const wxFont& font )
 {
@@ -178,8 +150,6 @@ CTFontRef wxMacCreateCTFont( const wxFont& font )
     return CTFontCreateWithName( wxCFStringRef( font.GetFaceName(), wxLocale::GetSystemEncoding() ) , font.GetPointSize() , NULL );
 #endif
 }
-
-#endif
 
 // CGPattern wrapper class: always allocate on heap, never call destructor
 
@@ -240,7 +210,7 @@ public :
         Init( image , transform );
     }
 
-    virtual void Render( CGContextRef ctxRef )
+    virtual void Render( CGContextRef ctxRef ) wxOVERRIDE
     {
         if (m_image != NULL)
             wxMacDrawCGImage( ctxRef, &m_imageBounds, m_image );
@@ -288,7 +258,7 @@ public :
         CGContextStrokeLineSegments( ctxRef , pts , count );
     }
 
-    virtual void Render( CGContextRef ctxRef )
+    virtual void Render( CGContextRef ctxRef ) wxOVERRIDE
     {
         switch ( m_hatch )
         {
@@ -627,7 +597,7 @@ wxMacCoreGraphicsColour::wxMacCoreGraphicsColour()
 wxMacCoreGraphicsColour::wxMacCoreGraphicsColour( const wxBrush &brush )
 {
     Init();
-    if ( brush.GetStyle() == wxSOLID )
+    if ( brush.GetStyle() == wxBRUSHSTYLE_SOLID )
     {
         m_color.reset( wxMacCreateCGColor( brush.GetColour() ));
     }
@@ -882,9 +852,7 @@ public:
 #if wxOSX_USE_ATSU_TEXT
     virtual ATSUStyle GetATSUStyle() { return m_macATSUIStyle; }
 #endif
-#if wxOSX_USE_CORE_TEXT
     CTFontRef OSXGetCTFont() const { return m_ctFont ; }
-#endif
     wxColour GetColour() const { return m_colour ; }
 
     bool GetUnderlined() const { return m_underlined ; }
@@ -897,9 +865,7 @@ private :
 #if wxOSX_USE_ATSU_TEXT
     ATSUStyle m_macATSUIStyle;
 #endif
-#if wxOSX_USE_CORE_TEXT
     wxCFRef< CTFontRef > m_ctFont;
-#endif
 #if wxOSX_USE_IPHONE
     UIFont*  m_uiFont;
 #endif
@@ -910,9 +876,7 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
     m_colour = col;
     m_underlined = font.GetUnderlined();
 
-#if wxOSX_USE_CORE_TEXT
     m_ctFont.reset( wxMacCreateCTFont( font ) );
-#endif
 #if wxOSX_USE_IPHONE
     m_uiFont = CreateUIFont(font);
     wxMacCocoaRetain( m_uiFont );
@@ -956,8 +920,6 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
 
 wxMacCoreGraphicsFontData::~wxMacCoreGraphicsFontData()
 {
-#if wxOSX_USE_CORE_TEXT
-#endif
 #if wxOSX_USE_ATSU_TEXT
     if ( m_macATSUIStyle )
     {
@@ -970,20 +932,29 @@ wxMacCoreGraphicsFontData::~wxMacCoreGraphicsFontData()
 #endif
 }
 
-class wxMacCoreGraphicsBitmapData : public wxGraphicsObjectRefData
+class wxMacCoreGraphicsBitmapData : public wxGraphicsBitmapData
 {
 public:
     wxMacCoreGraphicsBitmapData( wxGraphicsRenderer* renderer, CGImageRef bitmap, bool monochrome );
     ~wxMacCoreGraphicsBitmapData();
 
     virtual CGImageRef GetBitmap() { return m_bitmap; }
+    virtual void* GetNativeBitmap() const wxOVERRIDE { return m_bitmap; }
     bool IsMonochrome() { return m_monochrome; }
+
+#if wxUSE_IMAGE
+    wxImage ConvertToImage() const
+    {
+        return wxBitmap(m_bitmap).ConvertToImage();
+    }
+#endif // wxUSE_IMAGE
+
 private :
     CGImageRef m_bitmap;
     bool m_monochrome;
 };
 
-wxMacCoreGraphicsBitmapData::wxMacCoreGraphicsBitmapData( wxGraphicsRenderer* renderer, CGImageRef bitmap, bool monochrome ) : wxGraphicsObjectRefData( renderer ),
+wxMacCoreGraphicsBitmapData::wxMacCoreGraphicsBitmapData( wxGraphicsRenderer* renderer, CGImageRef bitmap, bool monochrome ) : wxGraphicsBitmapData( renderer ),
     m_bitmap(bitmap), m_monochrome(monochrome)
 {
 }
@@ -992,6 +963,7 @@ wxMacCoreGraphicsBitmapData::~wxMacCoreGraphicsBitmapData()
 {
     CGImageRelease( m_bitmap );
 }
+
 
 //
 // Graphics Matrix
@@ -1008,53 +980,53 @@ public :
 
     virtual ~wxMacCoreGraphicsMatrixData() ;
 
-    virtual wxGraphicsObjectRefData *Clone() const ;
+    virtual wxGraphicsObjectRefData *Clone() const wxOVERRIDE ;
 
     // concatenates the matrix
-    virtual void Concat( const wxGraphicsMatrixData *t );
+    virtual void Concat( const wxGraphicsMatrixData *t ) wxOVERRIDE;
 
     // sets the matrix to the respective values
     virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
-        wxDouble tx=0.0, wxDouble ty=0.0);
+        wxDouble tx=0.0, wxDouble ty=0.0) wxOVERRIDE;
 
     // gets the component valuess of the matrix
     virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
-                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const;
+                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const wxOVERRIDE;
 
     // makes this the inverse matrix
-    virtual void Invert();
+    virtual void Invert() wxOVERRIDE;
 
     // returns true if the elements of the transformation matrix are equal ?
-    virtual bool IsEqual( const wxGraphicsMatrixData* t) const ;
+    virtual bool IsEqual( const wxGraphicsMatrixData* t) const wxOVERRIDE ;
 
     // return true if this is the identity matrix
-    virtual bool IsIdentity() const;
+    virtual bool IsIdentity() const wxOVERRIDE;
 
     //
     // transformation
     //
 
     // add the translation to this matrix
-    virtual void Translate( wxDouble dx , wxDouble dy );
+    virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
 
     // add the scale to this matrix
-    virtual void Scale( wxDouble xScale , wxDouble yScale );
+    virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
 
     // add the rotation to this matrix (radians)
-    virtual void Rotate( wxDouble angle );
+    virtual void Rotate( wxDouble angle ) wxOVERRIDE;
 
     //
     // apply the transforms
     //
 
     // applies that matrix to the point
-    virtual void TransformPoint( wxDouble *x, wxDouble *y ) const;
+    virtual void TransformPoint( wxDouble *x, wxDouble *y ) const wxOVERRIDE;
 
     // applies the matrix except for translations
-    virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) const;
+    virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) const wxOVERRIDE;
 
     // returns the native representation
-    virtual void * GetNativeMatrix() const;
+    virtual void * GetNativeMatrix() const wxOVERRIDE;
 
 private :
     CGAffineTransform m_matrix;
@@ -1187,25 +1159,25 @@ public :
 
     ~wxMacCoreGraphicsPathData();
 
-    virtual wxGraphicsObjectRefData *Clone() const;
+    virtual wxGraphicsObjectRefData *Clone() const wxOVERRIDE;
 
     // begins a new subpath at (x,y)
-    virtual void MoveToPoint( wxDouble x, wxDouble y );
+    virtual void MoveToPoint( wxDouble x, wxDouble y ) wxOVERRIDE;
 
     // adds a straight line from the current point to (x,y)
-    virtual void AddLineToPoint( wxDouble x, wxDouble y );
+    virtual void AddLineToPoint( wxDouble x, wxDouble y ) wxOVERRIDE;
 
     // adds a cubic Bezier curve from the current point, using two control points and an end point
-    virtual void AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y );
+    virtual void AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y ) wxOVERRIDE;
 
     // closes the current sub-path
-    virtual void CloseSubpath();
+    virtual void CloseSubpath() wxOVERRIDE;
 
     // gets the last point of the current path, (0,0) if not yet set
-    virtual void GetCurrentPoint( wxDouble* x, wxDouble* y) const;
+    virtual void GetCurrentPoint( wxDouble* x, wxDouble* y) const wxOVERRIDE;
 
     // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
-    virtual void AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise );
+    virtual void AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise ) wxOVERRIDE;
 
     //
     // These are convenience functions which - if not available natively will be assembled
@@ -1213,36 +1185,36 @@ public :
     //
 
     // adds a quadratic Bezier curve from the current point, using a control point and an end point
-    virtual void AddQuadCurveToPoint( wxDouble cx, wxDouble cy, wxDouble x, wxDouble y );
+    virtual void AddQuadCurveToPoint( wxDouble cx, wxDouble cy, wxDouble x, wxDouble y ) wxOVERRIDE;
 
     // appends a rectangle as a new closed subpath
-    virtual void AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+    virtual void AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
 
     // appends a circle as a new closed subpath
-    virtual void AddCircle( wxDouble x, wxDouble y, wxDouble r );
+    virtual void AddCircle( wxDouble x, wxDouble y, wxDouble r ) wxOVERRIDE;
 
     // appends an ellipsis as a new closed subpath fitting the passed rectangle
-    virtual void AddEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h);
+    virtual void AddEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
 
     // draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
-    virtual void AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r );
+    virtual void AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r ) wxOVERRIDE;
 
     // adds another path
-    virtual void AddPath( const wxGraphicsPathData* path );
+    virtual void AddPath( const wxGraphicsPathData* path ) wxOVERRIDE;
 
     // returns the native path
-    virtual void * GetNativePath() const { return m_path; }
+    virtual void * GetNativePath() const wxOVERRIDE { return m_path; }
 
     // give the native path returned by GetNativePath() back (there might be some deallocations necessary)
-    virtual void UnGetNativePath(void *WXUNUSED(p)) const {}
+    virtual void UnGetNativePath(void *WXUNUSED(p)) const wxOVERRIDE {}
 
     // transforms each point of this path by the matrix
-    virtual void Transform( const wxGraphicsMatrixData* matrix );
+    virtual void Transform( const wxGraphicsMatrixData* matrix ) wxOVERRIDE;
 
     // gets the bounding box enclosing all points (possibly including control points)
-    virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const;
+    virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const wxOVERRIDE;
 
-    virtual bool Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxODDEVEN_RULE) const;
+    virtual bool Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxODDEVEN_RULE) const wxOVERRIDE;
 private :
     CGMutablePathRef m_path;
 };
@@ -1384,80 +1356,78 @@ public:
 
     wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer);
 
-    wxMacCoreGraphicsContext();
-
     ~wxMacCoreGraphicsContext();
 
     void Init();
 
-    virtual void StartPage( wxDouble width, wxDouble height );
+    virtual void StartPage( wxDouble width, wxDouble height ) wxOVERRIDE;
 
-    virtual void EndPage();
+    virtual void EndPage() wxOVERRIDE;
 
-    virtual void Flush();
+    virtual void Flush() wxOVERRIDE;
 
     // push the current state of the context, ie the transformation matrix on a stack
-    virtual void PushState();
+    virtual void PushState() wxOVERRIDE;
 
     // pops a stored state from the stack
-    virtual void PopState();
+    virtual void PopState() wxOVERRIDE;
 
     // clips drawings to the region
-    virtual void Clip( const wxRegion &region );
+    virtual void Clip( const wxRegion &region ) wxOVERRIDE;
 
     // clips drawings to the rect
-    virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+    virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
 
     // resets the clipping to original extent
-    virtual void ResetClip();
+    virtual void ResetClip() wxOVERRIDE;
 
-    virtual void * GetNativeContext();
+    virtual void * GetNativeContext() wxOVERRIDE;
 
-    virtual bool SetAntialiasMode(wxAntialiasMode antialias);
+    virtual bool SetAntialiasMode(wxAntialiasMode antialias) wxOVERRIDE;
 
-    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation);
+    virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) wxOVERRIDE;
     
-    virtual bool SetCompositionMode(wxCompositionMode op);
+    virtual bool SetCompositionMode(wxCompositionMode op) wxOVERRIDE;
 
-    virtual void BeginLayer(wxDouble opacity);
+    virtual void BeginLayer(wxDouble opacity) wxOVERRIDE;
 
-    virtual void EndLayer();
+    virtual void EndLayer() wxOVERRIDE;
 
     //
     // transformation
     //
 
     // translate
-    virtual void Translate( wxDouble dx , wxDouble dy );
+    virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
 
     // scale
-    virtual void Scale( wxDouble xScale , wxDouble yScale );
+    virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
 
     // rotate (radians)
-    virtual void Rotate( wxDouble angle );
+    virtual void Rotate( wxDouble angle ) wxOVERRIDE;
 
     // concatenates this transform with the current transform of this context
-    virtual void ConcatTransform( const wxGraphicsMatrix& matrix );
+    virtual void ConcatTransform( const wxGraphicsMatrix& matrix ) wxOVERRIDE;
 
     // sets the transform of this context
-    virtual void SetTransform( const wxGraphicsMatrix& matrix );
+    virtual void SetTransform( const wxGraphicsMatrix& matrix ) wxOVERRIDE;
 
     // gets the matrix of this context
-    virtual wxGraphicsMatrix GetTransform() const;
+    virtual wxGraphicsMatrix GetTransform() const wxOVERRIDE;
     //
     // setting the paint
     //
 
     // strokes along a path with the current pen
-    virtual void StrokePath( const wxGraphicsPath &path );
+    virtual void StrokePath( const wxGraphicsPath &path ) wxOVERRIDE;
 
     // fills a path with the current brush
-    virtual void FillPath( const wxGraphicsPath &path, wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
+    virtual void FillPath( const wxGraphicsPath &path, wxPolygonFillMode fillStyle = wxODDEVEN_RULE ) wxOVERRIDE;
 
     // draws a path by first filling and then stroking
-    virtual void DrawPath( const wxGraphicsPath &path, wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
+    virtual void DrawPath( const wxGraphicsPath &path, wxPolygonFillMode fillStyle = wxODDEVEN_RULE ) wxOVERRIDE;
 
-    virtual bool ShouldOffset() const
+    virtual bool ShouldOffset() const wxOVERRIDE
     {
         if ( !m_enableOffset )
             return false;
@@ -1476,34 +1446,35 @@ public:
     //
 
     virtual void GetTextExtent( const wxString &text, wxDouble *width, wxDouble *height,
-        wxDouble *descent, wxDouble *externalLeading ) const;
+        wxDouble *descent, wxDouble *externalLeading ) const wxOVERRIDE;
 
-    virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const;
+    virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const wxOVERRIDE;
 
     //
     // image support
     //
 
-    virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+    virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
 
-    virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+    virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
 
-    virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+    virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
     
     // fast convenience methods
     
     
-    virtual void DrawRectangleX( wxDouble x, wxDouble y, wxDouble w, wxDouble h ); 
+    virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
 
     void SetNativeContext( CGContextRef cg );
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsContext)
+    wxDECLARE_NO_COPY_CLASS(wxMacCoreGraphicsContext);
 
 private:
     bool EnsureIsValid();
+    void CheckInvariants() const;
 
-    virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y );
-    virtual void DoDrawRotatedText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle );
+    virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y ) wxOVERRIDE;
+    virtual void DoDrawRotatedText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle ) wxOVERRIDE;
 
     CGContextRef m_cgContext;
 #if wxOSX_USE_CARBON
@@ -1535,8 +1506,6 @@ private:
 //-----------------------------------------------------------------------------
 // wxMacCoreGraphicsContext implementation
 //-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxMacCoreGraphicsContext, wxGraphicsContext)
 
 class wxQuartzOffsetHelper
 {
@@ -1642,16 +1611,17 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext(wxGraphicsRenderer* renderer)
     Init();
 }
 
-wxMacCoreGraphicsContext::wxMacCoreGraphicsContext() : wxGraphicsContext(NULL)
-{
-    Init();
-    wxLogDebug(wxT("Illegal Constructor called"));
-}
-
 wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()
 {
     SetNativeContext(NULL);
 }
+
+
+void wxMacCoreGraphicsContext::CheckInvariants() const
+{
+    // check invariants here for debugging ...
+}
+
 
 
 void wxMacCoreGraphicsContext::StartPage( wxDouble width, wxDouble height )
@@ -1679,6 +1649,8 @@ void wxMacCoreGraphicsContext::Flush()
 
 bool wxMacCoreGraphicsContext::EnsureIsValid()
 {
+    CheckInvariants();
+    
     if ( !m_cgContext )
     {
         if (m_invisible)
@@ -1752,6 +1724,8 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
 #endif
         }
     }
+    CheckInvariants();
+
     return m_cgContext != NULL;
 }
 
@@ -1778,6 +1752,7 @@ bool wxMacCoreGraphicsContext::SetAntialiasMode(wxAntialiasMode antialias)
             return false;
     }
     CGContextSetShouldAntialias(m_cgContext, antialiasMode);
+    CheckInvariants();
     return true;
 }
 
@@ -1804,7 +1779,11 @@ bool wxMacCoreGraphicsContext::SetInterpolationQuality(wxInterpolationQuality in
             quality = kCGInterpolationLow;
             break;
         case wxINTERPOLATION_GOOD:
+#if wxOSX_USE_COCOA_OR_CARBON
             quality = UMAGetSystemVersion() < 0x1060 ? kCGInterpolationHigh : (CGInterpolationQuality) 4 /*kCGInterpolationMedium only on 10.6*/;
+#else
+            quality = kCGInterpolationMedium;
+#endif
             break;
         case wxINTERPOLATION_BEST:
             quality = kCGInterpolationHigh;
@@ -1813,6 +1792,7 @@ bool wxMacCoreGraphicsContext::SetInterpolationQuality(wxInterpolationQuality in
             return false;
     }
     CGContextSetInterpolationQuality(m_cgContext, quality);
+    CheckInvariants();
     return true;
 }
 
@@ -1829,8 +1809,8 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
     if (m_composition == wxCOMPOSITION_DEST)
         return true;
 
-#if wxOSX_USE_COCOA_OR_CARBON
-    if ( UMAGetSystemVersion() < 0x1060 )
+    // TODO REMOVE if we don't need it because of bugs in 10.5
+#if 0
     {
         CGCompositeOperation cop = kCGCompositeOperationSourceOver;
         CGBlendMode mode = kCGBlendModeNormal;
@@ -1869,11 +1849,9 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
         case wxCOMPOSITION_XOR:
             cop = kCGCompositeOperationXOR;
             break;
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
         case wxCOMPOSITION_ADD:
             mode = kCGBlendModePlusLighter ;
             break;
-#endif
         default:
             return false;
         }
@@ -1883,8 +1861,6 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
             CGContextSetBlendMode(m_cgContext, mode);
     }
 #endif
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
-    else
     {
         CGBlendMode mode = kCGBlendModeNormal;
         switch( op )
@@ -1920,7 +1896,7 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
            mode = kCGBlendModeDestinationAtop;
             break;
         case wxCOMPOSITION_XOR:
-            mode = kCGBlendModeXOR;
+            mode = kCGBlendModeExclusion; // Not kCGBlendModeXOR!
             break;
 
         case wxCOMPOSITION_ADD:
@@ -1931,25 +1907,31 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
         }
         CGContextSetBlendMode(m_cgContext, mode);
     }
-#endif
+
+    CheckInvariants();
     return true;
 }
 
 void wxMacCoreGraphicsContext::BeginLayer(wxDouble opacity)
 {
+    CheckInvariants();
     CGContextSaveGState(m_cgContext);
     CGContextSetAlpha(m_cgContext, (CGFloat) opacity);
     CGContextBeginTransparencyLayer(m_cgContext, 0);
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::EndLayer()
 {
+    CheckInvariants();
     CGContextEndTransparencyLayer(m_cgContext);
     CGContextRestoreGState(m_cgContext);
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
 {
+    CheckInvariants();
 #if wxOSX_USE_COCOA_OR_CARBON
     if( m_cgContext )
     {
@@ -1980,11 +1962,13 @@ void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
     // allow usage as measuring context
     // wxASSERT_MSG( m_cgContext != NULL, "Needs a valid context for clipping" );
 #endif
+    CheckInvariants();    
 }
 
 // clips drawings to the rect
 void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
+    CheckInvariants();
     CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
     if ( m_cgContext )
     {
@@ -2003,6 +1987,7 @@ void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDoubl
     // wxFAIL_MSG( "Needs a valid context for clipping" );
 #endif
     }
+    CheckInvariants();    
 }
 
     // resets the clipping to original extent
@@ -2029,6 +2014,7 @@ void wxMacCoreGraphicsContext::ResetClip()
     // wxFAIL_MSG( "Needs a valid context for clipping" );
 #endif
     }
+    CheckInvariants();    
 }
 
 void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
@@ -2047,6 +2033,8 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
     ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
     CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
     CGContextStrokePath( m_cgContext );
+    
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath &path , wxPolygonFillMode fillStyle )
@@ -2100,6 +2088,8 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath &path , wxPolygonF
 
     CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
     CGContextDrawPath( m_cgContext , mode );
+    
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath &path , wxPolygonFillMode fillStyle )
@@ -2130,6 +2120,8 @@ void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath &path , wxPolygonF
         else
             CGContextFillPath( m_cgContext );
     }
+    
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
@@ -2139,6 +2131,7 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
 
     if ( m_cgContext )
     {
+        CheckInvariants();
         CGContextRestoreGState( m_cgContext );
         CGContextRestoreGState( m_cgContext );
         if ( m_contextSynthesized )
@@ -2212,7 +2205,7 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble
         return;
 
 #ifdef __WXMAC__
-    wxMacCoreGraphicsBitmapData* refdata  =static_cast<wxMacCoreGraphicsBitmapData*>(bmp.GetRefData());
+    wxMacCoreGraphicsBitmapData* refdata = static_cast<wxMacCoreGraphicsBitmapData*>(bmp.GetRefData());
     CGImageRef image = refdata->GetBitmap();
     CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
     if ( refdata->IsMonochrome() == 1 )
@@ -2243,6 +2236,8 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble
         wxMacDrawCGImage( m_cgContext , &r , image );
     }
 #endif
+    
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
@@ -2253,15 +2248,40 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    CGRect r = CGRectMake( (CGFloat) 0.0 , (CGFloat) 0.0 , (CGFloat) w , (CGFloat) h );
-    CGContextSaveGState( m_cgContext );
-    CGContextTranslateCTM( m_cgContext,(CGFloat) x ,(CGFloat) (y + h) );
-    CGContextScaleCTM( m_cgContext, 1, -1 );
-#if wxOSX_USE_COCOA_OR_CARBON
-    PlotIconRefInContext( m_cgContext , &r , kAlignNone , kTransformNone ,
-        NULL , kPlotIconRefNormalFlags , icon.GetHICON() );
+    // the carbon version must be used on 10.5, or if the SDK is 10.5
+#if wxOSX_USE_CARBON || ( wxOSX_USE_COCOA && MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_6 )
+#if wxOSX_USE_COCOA 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+    if ( UMAGetSystemVersion() < 0x1060 )
 #endif
-    CGContextRestoreGState( m_cgContext );
+    {
+#endif // wxOSX_USE_COCOA
+        CGContextSaveGState( m_cgContext );
+        CGContextTranslateCTM( m_cgContext,(CGFloat) x ,(CGFloat) (y + h) );
+        CGContextScaleCTM( m_cgContext, 1, -1 );
+        CGRect r = CGRectMake( (CGFloat) 0.0 , (CGFloat) 0.0 , (CGFloat) w , (CGFloat) h );
+        PlotIconRefInContext( m_cgContext , &r , kAlignNone , kTransformNone ,
+                             NULL , kPlotIconRefNormalFlags , icon.GetHICON() );
+        CGContextRestoreGState( m_cgContext );
+#if wxOSX_USE_COCOA
+    }
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+    else
+#endif
+#endif // wxOSX_USE_COCOA
+#endif // wxOSX_USE_CARBON || ( wxOSX_USE_COCOA && MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_6 )
+        
+#if wxOSX_USE_COCOA && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+    {
+        CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
+        const WX_NSImage nsImage = icon.GetNSImage();
+    
+        CGImageRef cgImage = wxOSXGetCGImageFromNSImage( nsImage , &r, m_cgContext );
+        wxMacDrawCGImage( m_cgContext, &r, cgImage);
+    }
+#endif
+    
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::PushState()
@@ -2290,55 +2310,52 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-#if wxOSX_USE_CORE_TEXT
-    if ( UMAGetSystemVersion() >= 0x1050 )
-    {
-        wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
-        wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
-        CTFontRef font = fref->OSXGetCTFont();
-        CGColorRef col = wxMacCreateCGColor( fref->GetColour() );
-        CTUnderlineStyle ustyle = fref->GetUnderlined() ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone ;
-        wxCFRef<CFNumberRef> underlined( CFNumberCreate(NULL, kCFNumberSInt32Type, &ustyle) );
-         CFStringRef keys[] = { kCTFontAttributeName , kCTForegroundColorAttributeName, kCTUnderlineStyleAttributeName };
-        CFTypeRef values[] = { font, col, underlined };
-        wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values,
-                                                        WXSIZEOF( keys ), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) );
-        wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, attributes) );
-        wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
-
-        y += CTFontGetAscent(font);
-
-        CGContextSaveGState(m_cgContext);
-        CGContextTranslateCTM(m_cgContext, (CGFloat) x, (CGFloat) y);
-        CGContextScaleCTM(m_cgContext, 1, -1);
-        CGContextSetTextPosition(m_cgContext, 0, 0);
-        CTLineDraw( line, m_cgContext );
-        CGContextRestoreGState(m_cgContext);
-        CFRelease( col );
-        return;
-    }
-#endif
-#if wxOSX_USE_ATSU_TEXT
-    {
-        DrawText(str, x, y, 0.0);
-        return;
-    }
-#endif
-#if wxOSX_USE_IPHONE
     wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
+    wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
+    CTFontRef font = fref->OSXGetCTFont();
+    CGColorRef col = wxMacCreateCGColor( fref->GetColour() );
+#if 0
+    // right now there's no way to get continuous underlines, only words, so we emulate it
+    CTUnderlineStyle ustyle = fref->GetUnderlined() ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone ;
+    wxCFRef<CFNumberRef> underlined( CFNumberCreate(NULL, kCFNumberSInt32Type, &ustyle) );
+     CFStringRef keys[] = { kCTFontAttributeName , kCTForegroundColorAttributeName, kCTUnderlineStyleAttributeName };
+    CFTypeRef values[] = { font, col, underlined };
+#else
+    CFStringRef keys[] = { kCTFontAttributeName , kCTForegroundColorAttributeName };
+    CFTypeRef values[] = { font, col };
+#endif
+    wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values,
+                                                    WXSIZEOF( keys ), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) );
+    wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, attributes) );
+    wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
+
+    y += CTFontGetAscent(font);
 
     CGContextSaveGState(m_cgContext);
+    CGAffineTransform textMatrix = CGContextGetTextMatrix(m_cgContext);
 
-    CGColorRef col = wxMacCreateCGColor( fref->GetColour() );
-    CGContextSetTextDrawingMode (m_cgContext, kCGTextFill);
-    CGContextSetFillColorWithColor( m_cgContext, col );
+    CGContextTranslateCTM(m_cgContext, (CGFloat) x, (CGFloat) y);
+    CGContextScaleCTM(m_cgContext, 1, -1);
+    CGContextSetTextMatrix(m_cgContext, CGAffineTransformIdentity);
 
-    wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
-    DrawTextInContext( m_cgContext, CGPointMake( x, y ), fref->GetUIFont() , text.AsNSString() );
+    CTLineDraw( line, m_cgContext );
+
+    if ( fref->GetUnderlined() ) {
+        //AKT: draw horizontal line 1 pixel thick and with 1 pixel gap under baseline
+        CGFloat width = CTLineGetTypographicBounds(line, NULL, NULL, NULL);
+
+        CGPoint points[] = { {0.0, -2.0},  {width, -2.0} };
+        
+        CGContextSetStrokeColorWithColor(m_cgContext, col);
+        CGContextSetShouldAntialias(m_cgContext, false);
+        CGContextSetLineWidth(m_cgContext, 1.0);
+        CGContextStrokeLineSegments(m_cgContext, points, 2);
+    }
 
     CGContextRestoreGState(m_cgContext);
-    CFRelease( col );
-#endif
+    CGContextSetTextMatrix(m_cgContext, textMatrix);
+    CGColorRelease( col );
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::DoDrawRotatedText(const wxString &str,
@@ -2353,102 +2370,10 @@ void wxMacCoreGraphicsContext::DoDrawRotatedText(const wxString &str,
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-#if wxOSX_USE_CORE_TEXT
-    if ( UMAGetSystemVersion() >= 0x1050 )
-    {
-        // default implementation takes care of rotation and calls non rotated DrawText afterwards
-        wxGraphicsContext::DoDrawRotatedText( str, x, y, angle );
-        return;
-    }
-#endif
-#if wxOSX_USE_ATSU_TEXT
-    {
-        OSStatus status = noErr;
-        ATSUTextLayout atsuLayout;
-        wxMacUniCharBuffer unibuf( str );
-        UniCharCount chars = unibuf.GetChars();
-
-        ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
-        status = ::ATSUCreateTextLayoutWithTextPtr( unibuf.GetBuffer() , 0 , chars , chars , 1 ,
-                                                   &chars , &style , &atsuLayout );
-
-        wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the rotated text") );
-
-        status = ::ATSUSetTransientFontMatching( atsuLayout , true );
-        wxASSERT_MSG( status == noErr , wxT("couldn't setup transient font matching") );
-
-        int iAngle = int( angle * RAD2DEG );
-        if ( abs(iAngle) > 0 )
-        {
-            Fixed atsuAngle = IntToFixed( iAngle );
-            ATSUAttributeTag atsuTags[] =
-            {
-                kATSULineRotationTag ,
-            };
-            ByteCount atsuSizes[WXSIZEOF(atsuTags)] =
-            {
-                sizeof( Fixed ) ,
-            };
-            ATSUAttributeValuePtr    atsuValues[WXSIZEOF(atsuTags)] =
-            {
-                &atsuAngle ,
-            };
-            status = ::ATSUSetLayoutControls(atsuLayout , WXSIZEOF(atsuTags),
-                                             atsuTags, atsuSizes, atsuValues );
-        }
-
-        {
-            ATSUAttributeTag atsuTags[] =
-            {
-                kATSUCGContextTag ,
-            };
-            ByteCount atsuSizes[WXSIZEOF(atsuTags)] =
-            {
-                sizeof( CGContextRef ) ,
-            };
-            ATSUAttributeValuePtr    atsuValues[WXSIZEOF(atsuTags)] =
-            {
-                &m_cgContext ,
-            };
-            status = ::ATSUSetLayoutControls(atsuLayout , WXSIZEOF(atsuTags),
-                                             atsuTags, atsuSizes, atsuValues );
-        }
-
-        ATSUTextMeasurement textBefore, textAfter;
-        ATSUTextMeasurement ascent, descent;
-
-        status = ::ATSUGetUnjustifiedBounds( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
-                                            &textBefore , &textAfter, &ascent , &descent );
-
-        wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
-
-        Rect rect;
-        x += (int)(sin(angle) * FixedToFloat(ascent));
-        y += (int)(cos(angle) * FixedToFloat(ascent));
-
-        status = ::ATSUMeasureTextImage( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
-                                        IntToFixed(x) , IntToFixed(y) , &rect );
-        wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
-
-        CGContextSaveGState(m_cgContext);
-        CGContextTranslateCTM(m_cgContext, (CGFloat) x, (CGFloat) y);
-        CGContextScaleCTM(m_cgContext, 1, -1);
-        status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
-                                IntToFixed(0) , IntToFixed(0) );
-
-        wxASSERT_MSG( status == noErr , wxT("couldn't draw the rotated text") );
-
-        CGContextRestoreGState(m_cgContext);
-
-        ::ATSUDisposeTextLayout(atsuLayout);
-
-        return;
-    }
-#endif
-#if wxOSX_USE_IPHONE
     // default implementation takes care of rotation and calls non rotated DrawText afterwards
     wxGraphicsContext::DoDrawRotatedText( str, x, y, angle );
-#endif
+
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
@@ -2465,91 +2390,41 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
     if ( externalLeading )
         *externalLeading = 0;
 
+    // In wxWidgets (MSW-inspired) API it is possible to call GetTextExtent()
+    // with an empty string to get just the descent and the leading of the
+    // font, so support this (mis)use.
+    wxString strToMeasure(str);
     if (str.empty())
-        return;
+        strToMeasure = wxS(" ");
 
-#if wxOSX_USE_CORE_TEXT
-    if ( UMAGetSystemVersion() >= 0x1050 )
+    wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
+    CTFontRef font = fref->OSXGetCTFont();
+
+    wxCFStringRef text(strToMeasure, wxLocale::GetSystemEncoding() );
+    CFStringRef keys[] = { kCTFontAttributeName  };
+    CFTypeRef values[] = { font };
+    wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values,
+                                                            WXSIZEOF( keys ), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) );
+    wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, attributes) );
+    wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
+
+    CGFloat a, d, l, w;
+    w = CTLineGetTypographicBounds(line, &a, &d, &l);
+
+    if ( !str.empty() )
     {
-        wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
-        CTFontRef font = fref->OSXGetCTFont();
-
-        wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
-        CFStringRef keys[] = { kCTFontAttributeName  };
-        CFTypeRef values[] = { font };
-        wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values,
-                                                                WXSIZEOF( keys ), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) );
-        wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, attributes) );
-        wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
-
-        CGFloat a, d, l, w;
-        w = CTLineGetTypographicBounds(line, &a, &d, &l);
-
-        if ( height )
-            *height = a+d+l;
-        if ( descent )
-            *descent = d;
-        if ( externalLeading )
-            *externalLeading = l;
         if ( width )
             *width = w;
-        return;
-    }
-#endif
-#if wxOSX_USE_ATSU_TEXT
-    {
-        OSStatus status = noErr;
-
-        ATSUTextLayout atsuLayout;
-        wxMacUniCharBuffer unibuf( str );
-        UniCharCount chars = unibuf.GetChars();
-
-        ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
-        status = ::ATSUCreateTextLayoutWithTextPtr( unibuf.GetBuffer() , 0 , chars , chars , 1 ,
-                                                   &chars , &style , &atsuLayout );
-
-        wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the text") );
-
-        status = ::ATSUSetTransientFontMatching( atsuLayout , true );
-        wxASSERT_MSG( status == noErr , wxT("couldn't setup transient font matching") );
-
-        ATSUTextMeasurement textBefore, textAfter;
-        ATSUTextMeasurement textAscent, textDescent;
-
-        status = ::ATSUGetUnjustifiedBounds( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
-                                            &textBefore , &textAfter, &textAscent , &textDescent );
-
         if ( height )
-            *height = FixedToFloat(textAscent + textDescent);
-        if ( descent )
-            *descent = FixedToFloat(textDescent);
-        if ( externalLeading )
-            *externalLeading = 0;
-        if ( width )
-            *width = FixedToFloat(textAfter - textBefore);
-
-        ::ATSUDisposeTextLayout(atsuLayout);
-
-        return;
+            *height = a+d+l;
     }
-#endif
-#if wxOSX_USE_IPHONE
-    wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
 
-    wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
-    CGSize sz = MeasureTextInContext( fref->GetUIFont() , text.AsNSString() );
-
-    if ( height )
-        *height = sz.height;
-        /*
     if ( descent )
-        *descent = FixedToFloat(textDescent);
+        *descent = d;
     if ( externalLeading )
-        *externalLeading = 0;
-        */
-    if ( width )
-        *width = sz.width;
-#endif
+        *externalLeading = l;
+
+    CheckInvariants();    
 }
 
 void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const
@@ -2562,92 +2437,24 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
     if (text.empty())
         return;
 
-#if wxOSX_USE_CORE_TEXT
+    wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
+    CTFontRef font = fref->OSXGetCTFont();
+
+    wxCFStringRef t(text, wxLocale::GetSystemEncoding() );
+    CFStringRef keys[] = { kCTFontAttributeName  };
+    CFTypeRef values[] = { font };
+    wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values,
+                                                            WXSIZEOF( keys ), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) );
+    wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, t, attributes) );
+    wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
+
+    int chars = text.length();
+    for ( int pos = 0; pos < (int)chars; pos ++ )
     {
-        wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
-        CTFontRef font = fref->OSXGetCTFont();
-
-        wxCFStringRef t(text, wxLocale::GetSystemEncoding() );
-        CFStringRef keys[] = { kCTFontAttributeName  };
-        CFTypeRef values[] = { font };
-        wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values,
-                                                                WXSIZEOF( keys ), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) );
-        wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, t, attributes) );
-        wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
-
-        int chars = text.length();
-        for ( int pos = 0; pos < (int)chars; pos ++ )
-        {
-            widths[pos] = CTLineGetOffsetForStringIndex( line, pos+1 , NULL );
-        }
-
-        return;
+        widths[pos] = CTLineGetOffsetForStringIndex( line, pos+1 , NULL );
     }
-#endif
-#if wxOSX_USE_ATSU_TEXT
-    {
-        OSStatus status = noErr;
-        ATSUTextLayout atsuLayout;
-        wxMacUniCharBuffer unibuf( text );
-        UniCharCount chars = unibuf.GetChars();
 
-        ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
-        status = ::ATSUCreateTextLayoutWithTextPtr( unibuf.GetBuffer() , 0 , chars , chars , 1 ,
-                                          &chars , &style , &atsuLayout );
-
-        wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the text") );
-
-        status = ::ATSUSetTransientFontMatching( atsuLayout , true );
-        wxASSERT_MSG( status == noErr , wxT("couldn't setup transient font matching") );
-
-// new implementation from JS, keep old one just in case
-#if 0
-        for ( int pos = 0; pos < (int)chars; pos ++ )
-        {
-            unsigned long actualNumberOfBounds = 0;
-            ATSTrapezoid glyphBounds;
-
-            // We get a single bound, since the text should only require one. If it requires more, there is an issue
-            OSStatus result;
-            result = ATSUGetGlyphBounds( atsuLayout, 0, 0, kATSUFromTextBeginning, pos + 1,
-                                        kATSUseDeviceOrigins, 1, &glyphBounds, &actualNumberOfBounds );
-            if (result != noErr || actualNumberOfBounds != 1 )
-                return;
-
-            widths[pos] = FixedToFloat( glyphBounds.upperRight.x - glyphBounds.upperLeft.x );
-            //unsigned char uch = s[i];
-        }
-#else
-        ATSLayoutRecord *layoutRecords = NULL;
-        ItemCount glyphCount = 0;
-
-        // Get the glyph extents
-        OSStatus err = ::ATSUDirectGetLayoutDataArrayPtrFromTextLayout(atsuLayout,
-                                                                       0,
-                                                                       kATSUDirectDataLayoutRecordATSLayoutRecordCurrent,
-                                                                       (void **)
-                                                                       &layoutRecords,
-                                                                       &glyphCount);
-        wxASSERT(glyphCount == (text.length()+1));
-
-        if ( err == noErr && glyphCount == (text.length()+1))
-        {
-            for ( int pos = 1; pos < (int)glyphCount ; pos ++ )
-            {
-                widths[pos-1] = FixedToFloat( layoutRecords[pos].realPos );
-            }
-        }
-
-        ::ATSUDirectReleaseLayoutDataArrayPtr(NULL,
-                                              kATSUDirectDataLayoutRecordATSLayoutRecordCurrent,
-                                              (void **) &layoutRecords);
-#endif
-        ::ATSUDisposeTextLayout(atsuLayout);
-    }
-#endif
-#if wxOSX_USE_IPHONE
-    // TODO core graphics text implementation here
-#endif
+    CheckInvariants();
 }
 
 void * wxMacCoreGraphicsContext::GetNativeContext()
@@ -2656,10 +2463,20 @@ void * wxMacCoreGraphicsContext::GetNativeContext()
 }
 
 
-void wxMacCoreGraphicsContext::DrawRectangleX( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+void wxMacCoreGraphicsContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
+    if (!EnsureIsValid())
+        return;
+
     if (m_composition == wxCOMPOSITION_DEST) 
         return; 
+
+    // when using shading, we have to go back to drawing paths 
+    if ( !m_brush.IsNull() && ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
+    {
+        wxGraphicsContext::DrawRectangle( x,y,w,h );
+        return;
+    }
 
     CGRect rect = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
     if ( !m_brush.IsNull() )
@@ -2688,6 +2505,7 @@ void wxMacCoreGraphicsContext::ConcatTransform( const wxGraphicsMatrix& matrix )
 // sets the transform of this context
 void wxMacCoreGraphicsContext::SetTransform( const wxGraphicsMatrix& matrix )
 {
+    CheckInvariants();
     if ( m_cgContext )
     {
         CGAffineTransform transform = CGContextGetCTM( m_cgContext );
@@ -2699,6 +2517,7 @@ void wxMacCoreGraphicsContext::SetTransform( const wxGraphicsMatrix& matrix )
     {
         m_windowTransform = *(CGAffineTransform*) matrix.GetNativeMatrix();
     }
+    CheckInvariants();
 }
 
 // gets the matrix of this context
@@ -2709,6 +2528,49 @@ wxGraphicsMatrix wxMacCoreGraphicsContext::GetTransform() const
         CGContextGetCTM( m_cgContext ));
     return m;
 }
+
+
+#if wxUSE_IMAGE
+
+// ----------------------------------------------------------------------------
+// wxMacCoreGraphicsImageContext
+// ----------------------------------------------------------------------------
+
+// This is a GC that can be used to draw on wxImage. In this implementation we
+// simply draw on a wxBitmap using wxMemoryDC and then convert it to wxImage in
+// the end so it's not especially interesting and exists mainly for
+// compatibility with the other platforms.
+class wxMacCoreGraphicsImageContext : public wxMacCoreGraphicsContext
+{
+public:
+    wxMacCoreGraphicsImageContext(wxGraphicsRenderer* renderer,
+                                  wxImage& image) :
+        wxMacCoreGraphicsContext(renderer),
+        m_image(image),
+        m_bitmap(image),
+        m_memDC(m_bitmap)
+    {
+        SetNativeContext
+        (
+            (CGContextRef)(m_memDC.GetGraphicsContext()->GetNativeContext())
+        );
+        m_width = image.GetWidth();
+        m_height = image.GetHeight();
+    }
+
+    virtual ~wxMacCoreGraphicsImageContext()
+    {
+        m_memDC.SelectObject(wxNullBitmap);
+        m_image = m_bitmap.ConvertToImage();
+    }
+
+private:
+    wxImage& m_image;
+    wxBitmap m_bitmap;
+    wxMemoryDC m_memDC;
+};
+
+#endif // wxUSE_IMAGE
 
 //
 // Renderer
@@ -2727,56 +2589,73 @@ public :
 
     // Context
 
-    virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc);
-    virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc);
+    virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) wxOVERRIDE;
+    virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc) wxOVERRIDE;
 #if wxUSE_PRINTING_ARCHITECTURE
-    virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc);
+    virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc) wxOVERRIDE;
 #endif
 
-    virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
+    virtual wxGraphicsContext * CreateContextFromNativeContext( void * context ) wxOVERRIDE;
 
-    virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window );
+    virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window ) wxOVERRIDE;
 
-    virtual wxGraphicsContext * CreateContext( wxWindow* window );
+    virtual wxGraphicsContext * CreateContext( wxWindow* window ) wxOVERRIDE;
 
-    virtual wxGraphicsContext * CreateMeasuringContext();
+#if wxUSE_IMAGE
+    virtual wxGraphicsContext * CreateContextFromImage(wxImage& image) wxOVERRIDE;
+#endif // wxUSE_IMAGE
+
+    virtual wxGraphicsContext * CreateMeasuringContext() wxOVERRIDE;
 
     // Path
 
-    virtual wxGraphicsPath CreatePath();
+    virtual wxGraphicsPath CreatePath() wxOVERRIDE;
 
     // Matrix
 
     virtual wxGraphicsMatrix CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
-        wxDouble tx=0.0, wxDouble ty=0.0);
+        wxDouble tx=0.0, wxDouble ty=0.0) wxOVERRIDE;
 
 
-    virtual wxGraphicsPen CreatePen(const wxPen& pen) ;
+    virtual wxGraphicsPen CreatePen(const wxPen& pen) wxOVERRIDE ;
 
-    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) ;
+    virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) wxOVERRIDE ;
 
     virtual wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
-                              const wxGraphicsGradientStops& stops);
+                              const wxGraphicsGradientStops& stops) wxOVERRIDE;
 
     virtual wxGraphicsBrush
     CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                               wxDouble xc, wxDouble yc,
                               wxDouble radius,
-                              const wxGraphicsGradientStops& stops);
+                              const wxGraphicsGradientStops& stops) wxOVERRIDE;
 
    // sets the font
-    virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
+    virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) wxOVERRIDE ;
+    virtual wxGraphicsFont CreateFont(double sizeInPixels,
+                                      const wxString& facename,
+                                      int flags = wxFONTFLAG_DEFAULT,
+                                      const wxColour& col = *wxBLACK) wxOVERRIDE;
 
     // create a native bitmap representation
-    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) ;
+    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) wxOVERRIDE ;
+
+#if wxUSE_IMAGE
+    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image) wxOVERRIDE;
+    virtual wxImage CreateImageFromBitmap(const wxGraphicsBitmap& bmp) wxOVERRIDE;
+#endif // wxUSE_IMAGE
 
     // create a graphics bitmap from a native bitmap
-    virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap );
+    virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap ) wxOVERRIDE;
 
     // create a native bitmap representation
-    virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) ;
+    virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) wxOVERRIDE ;
+
+    virtual wxString GetName() const wxOVERRIDE;
+    virtual void GetVersion(int *major, int *minor, int *micro) const wxOVERRIDE;
+
 private :
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsRenderer)
 } ;
@@ -2881,6 +2760,16 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateMeasuringContext()
     return new wxMacCoreGraphicsContext(this);
 }
 
+#if wxUSE_IMAGE
+
+wxGraphicsContext*
+wxMacCoreGraphicsRenderer::CreateContextFromImage(wxImage& image)
+{
+    return new wxMacCoreGraphicsImageContext(this, image);
+}
+
+#endif // wxUSE_IMAGE
+
 // Path
 
 wxGraphicsPath wxMacCoreGraphicsRenderer::CreatePath()
@@ -2905,7 +2794,7 @@ wxGraphicsMatrix wxMacCoreGraphicsRenderer::CreateMatrix( wxDouble a, wxDouble b
 
 wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxPen& pen)
 {
-    if ( !pen.IsOk() || pen.GetStyle() == wxTRANSPARENT )
+    if ( !pen.IsOk() || pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
         return wxNullGraphicsPen;
     else
     {
@@ -2917,7 +2806,7 @@ wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxPen& pen)
 
 wxGraphicsBrush wxMacCoreGraphicsRenderer::CreateBrush(const wxBrush& brush )
 {
-    if ( !brush.IsOk() || brush.GetStyle() == wxTRANSPARENT )
+    if ( !brush.IsOk() || brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT )
         return wxNullGraphicsBrush;
     else
     {
@@ -2938,6 +2827,28 @@ wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
     else
         return wxNullGraphicsBitmap;
 }
+
+#if wxUSE_IMAGE
+
+wxGraphicsBitmap
+wxMacCoreGraphicsRenderer::CreateBitmapFromImage(const wxImage& image)
+{
+    // We don't have any direct way to convert wxImage to CGImage so pass by
+    // wxBitmap. This makes this function pretty useless in this implementation
+    // but it allows to have the same API as with Cairo backend where we can
+    // convert wxImage to a Cairo surface directly, bypassing wxBitmap.
+    return CreateBitmap(wxBitmap(image));
+}
+
+wxImage wxMacCoreGraphicsRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
+{
+    wxMacCoreGraphicsBitmapData* const
+        data = static_cast<wxMacCoreGraphicsBitmapData*>(bmp.GetRefData());
+
+    return data ? data->ConvertToImage() : wxNullImage;
+}
+
+#endif // wxUSE_IMAGE
 
 wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateBitmapFromNativeBitmap( void* bitmap )
 {
@@ -2966,6 +2877,21 @@ wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateSubBitmap( const wxGraphicsBit
         return wxNullGraphicsBitmap;
 }
 
+wxString wxMacCoreGraphicsRenderer::GetName() const
+{
+    return "cg";
+}
+
+void wxMacCoreGraphicsRenderer::GetVersion(int *major, int *minor, int *micro) const
+{
+    if ( major )
+        *major = wxPlatformInfo::Get().GetOSMajorVersion();
+    if ( minor )
+        *minor = wxPlatformInfo::Get().GetOSMinorVersion();
+    if ( micro )
+        *micro = 0;
+}
+
 wxGraphicsBrush
 wxMacCoreGraphicsRenderer::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                                                      wxDouble x2, wxDouble y2,
@@ -2991,7 +2917,6 @@ wxMacCoreGraphicsRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
     return p;
 }
 
-// sets the font
 wxGraphicsFont wxMacCoreGraphicsRenderer::CreateFont( const wxFont &font , const wxColour &col )
 {
     if ( font.IsOk() )
@@ -3002,6 +2927,32 @@ wxGraphicsFont wxMacCoreGraphicsRenderer::CreateFont( const wxFont &font , const
     }
     else
         return wxNullGraphicsFont;
+}
+
+wxGraphicsFont
+wxMacCoreGraphicsRenderer::CreateFont(double sizeInPixels,
+                                      const wxString& facename,
+                                      int flags,
+                                      const wxColour& col)
+{
+    // This implementation is not ideal as we don't support fractional font
+    // sizes right now, but it's the simplest one.
+    //
+    // Notice that under Mac we always use 72 DPI so the font size in pixels is
+    // the same as the font size in points and we can pass it directly to wxFont
+    // ctor.
+    wxFont font(wxRound(sizeInPixels),
+                wxFONTFAMILY_DEFAULT,
+                flags & wxFONTFLAG_ITALIC ? wxFONTSTYLE_ITALIC
+                                          : wxFONTSTYLE_NORMAL,
+                flags & wxFONTFLAG_BOLD ? wxFONTWEIGHT_BOLD
+                                        : wxFONTWEIGHT_NORMAL,
+                (flags & wxFONTFLAG_UNDERLINED) != 0,
+                facename);
+
+    wxGraphicsFont f;
+    f.SetRefData(new wxMacCoreGraphicsFontData(this, font, col));
+    return f;
 }
 
 //
@@ -3066,7 +3017,10 @@ CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffe
 {
     wxMemoryBuffer* b = new wxMemoryBuffer( buf );
     if ( b->GetDataLen() == 0 )
+    {
+        delete b;
         return NULL;
+    }
 
     return CGDataProviderCreateWithData( b , (const void *) b->GetData() , b->GetDataLen() ,
                                                  wxMacReleaseMemoryBufferProviderCallback );

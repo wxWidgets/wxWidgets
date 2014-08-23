@@ -2,7 +2,6 @@
 // Name:        src/gtk1/dcclient.cpp
 // Purpose:
 // Author:      Robert Roebling
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling, Chris Breeze
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -71,8 +70,6 @@ const double RAD2DEG  = 180.0 / M_PI;
 
 static inline double dmax(double a, double b) { return a > b ? a : b; }
 static inline double dmin(double a, double b) { return a < b ? a : b; }
-
-static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
 //-----------------------------------------------------------------------------
 // temporary implementation of the missing GDK function
@@ -649,7 +646,7 @@ void wxWindowDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
     CalcBoundingBox (x, y);
 }
 
-void wxWindowDCImpl::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset )
+void wxWindowDCImpl::DoDrawLines( int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
@@ -680,7 +677,7 @@ void wxWindowDCImpl::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCo
     delete[] gpts;
 }
 
-void wxWindowDCImpl::DoDrawPolygon( int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode WXUNUSED(fillStyle) )
+void wxWindowDCImpl::DoDrawPolygon( int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode WXUNUSED(fillStyle) )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
@@ -1478,7 +1475,7 @@ void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord
     dc.SelectObject(wxNullBitmap);
 
     // Calculate the size of the rotated bounding box.
-    double rad = DegToRad(angle);
+    double rad = wxDegToRad(angle);
     double dx = cos(rad),
            dy = sin(rad);
 
@@ -2102,7 +2099,7 @@ void wxWindowDCImpl::ComputeScaleAndOrigin()
 
     wxGTKDCImpl::ComputeScaleAndOrigin();
 
-    // if scale has changed call SetPen to recalulate the line width
+    // if scale has changed call SetPen to recalculate the line width
     if ( wxRealPoint(m_scaleX, m_scaleY) != origScale && m_pen.IsOk() )
     {
         // this is a bit artificial, but we need to force wxDC to think the pen

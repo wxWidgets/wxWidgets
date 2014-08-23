@@ -3,7 +3,6 @@
 // Purpose:     implementation of wxFDIOHandler for wxSocket
 // Author:      Angel Vidal, Lukasz Michalski
 // Created:     08.24.06
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Angel vidal
 //              (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

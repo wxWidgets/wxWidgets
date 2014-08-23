@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     06.01.01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -45,7 +44,7 @@ public:
     virtual void Position(const wxPoint& ptOrigin,
                           const wxSize& size);
 
-    virtual bool IsTopLevel() const { return true; }
+    virtual bool IsTopLevel() const wxOVERRIDE { return true; }
 
     wxDECLARE_NO_COPY_CLASS(wxPopupWindowBase);
 };
@@ -54,8 +53,6 @@ public:
 // include the real class declaration
 #if defined(__WXMSW__)
     #include "wx/msw/popupwin.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/popupwin.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/popupwin.h"
 #elif defined(__WXGTK__)
@@ -66,8 +63,6 @@ public:
     #include "wx/motif/popupwin.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/popupwin.h"
-#elif defined(__WXMGL__)
-    #include "wx/mgl/popupwin.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/popupwin.h"
 #elif defined(__WXQT__)
@@ -112,7 +107,10 @@ public:
     virtual bool ProcessLeftDown(wxMouseEvent& event);
 
     // Overridden to grab the input on some plaforms
-    virtual bool Show( bool show = true );
+    virtual bool Show( bool show = true ) wxOVERRIDE;
+
+    // Override to implement delayed destruction of this window.
+    virtual bool Destroy() wxOVERRIDE;
 
 protected:
     // common part of all ctors
@@ -131,8 +129,9 @@ protected:
     // get alerted when child gets deleted from under us
     void OnDestroy(wxWindowDestroyEvent& event);
 
-#if defined( __WXMSW__ ) || defined( __WXMAC__)
-    // check if the mouse needs captured or released
+#if defined(__WXMSW__) ||(defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON)
+    // Check if the mouse needs to be captured or released: we must release
+    // when it's inside our window if we want the embedded controls to work.
     void OnIdle(wxIdleEvent& event);
 #endif
 

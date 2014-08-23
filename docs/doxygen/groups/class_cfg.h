@@ -2,7 +2,6 @@
 // Name:        class_cfg.h
 // Purpose:     Application and System configuration classes group docs
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

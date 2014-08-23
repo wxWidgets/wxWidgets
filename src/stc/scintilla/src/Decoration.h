@@ -17,10 +17,10 @@ public:
 	RunStyles rs;
 	int indicator;
 
-	Decoration(int indicator_);
+	explicit Decoration(int indicator_);
 	~Decoration();
 
-	bool Empty();
+	bool Empty() const;
 };
 
 class DecorationList {
@@ -40,10 +40,10 @@ public:
 	~DecorationList();
 
 	void SetCurrentIndicator(int indicator);
-	int GetCurrentIndicator() { return currentIndicator; }
+	int GetCurrentIndicator() const { return currentIndicator; }
 
 	void SetCurrentValue(int value);
-	int GetCurrentValue() { return currentValue; }
+	int GetCurrentValue() const { return currentValue; }
 
 	// Returns true if some values may have changed
 	bool FillRange(int &position, int value, int &fillLength);
@@ -51,7 +51,7 @@ public:
 	void InsertSpace(int position, int insertLength);
 	void DeleteRange(int position, int deleteLength);
 
-	int AllOnFor(int position);
+	int AllOnFor(int position) const;
 	int ValueAt(int indicator, int position);
 	int Start(int indicator, int position);
 	int End(int indicator, int position);

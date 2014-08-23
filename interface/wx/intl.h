@@ -2,7 +2,6 @@
 // Name:        intl.h
 // Purpose:     interface of wxLocale
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -19,7 +18,7 @@ enum wxLayoutDirection
 };
 
 /**
-    Encapsulates a ::wxLanguage indentifier together with OS-specific information
+    Encapsulates a ::wxLanguage identifier together with OS-specific information
     related to that language.
 
     @beginWxPerlOnly
@@ -27,7 +26,7 @@ enum wxLayoutDirection
     - Wx::LanguageInfo->new(language, canonicalName, WinLang, WinSubLang, Description)
     @endWxPerlOnly
 */
-struct WXDLLIMPEXP_BASE wxLanguageInfo
+struct wxLanguageInfo
 {
     /// ::wxLanguage id.
     /// It should be greater than @c wxLANGUAGE_USER_DEFINED when defining your own
@@ -355,13 +354,13 @@ public:
     const wxString& GetName() const;
 
     /**
-        Calls wxTranslations::GetString(const wxString&, const wxString&) const.
+        Calls wxGetTranslation(const wxString&, const wxString&).
     */
     virtual const wxString& GetString(const wxString& origString,
                                       const wxString& domain = wxEmptyString) const;
 
     /**
-        Calls wxTranslations::GetString(const wxString&, const wxString&, unsigned, const wxString&) const.
+        Calls wxGetTranslation(const wxString&, const wxString&, unsigned, const wxString&).
     */
     virtual const wxString& GetString(const wxString& origString,
                                       const wxString& origString2, unsigned n,
@@ -391,10 +390,17 @@ public:
     static wxString GetSystemEncodingName();
 
     /**
-        Tries to detect the user's default language setting.
+        Tries to detect the user's default locale setting.
 
         Returns the ::wxLanguage value or @c wxLANGUAGE_UNKNOWN if the language-guessing
         algorithm failed.
+
+        @note This function works with @em locales and returns the user's default
+              locale. This may be, and usually is, the same as their preferred UI
+              language, but it's not the same thing. Use wxTranslation to obtain
+              @em language information.
+
+        @see wxTranslations::GetBestTranslation().
     */
     static int GetSystemLanguage();
 
@@ -448,7 +454,7 @@ public:
 
         @param name
             The name of the locale. Only used in diagnostic messages.
-        @param short
+        @param shortName
             The standard 2 letter locale abbreviation; it is used as the
             directory prefix when looking for the message catalog files.
         @param locale

@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.07.2003
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,6 +30,7 @@
 #include "wx/renderer.h"
 #include "wx/graphics.h"
 #include "wx/dcgraph.h"
+#include "wx/splitter.h"
 #include "wx/osx/private.h"
 
 #ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
@@ -40,7 +40,7 @@
 
 
 // check if we're having a CGContext we can draw into
-inline bool wxHasCGContext(wxWindow* win, wxDC& dc)
+inline bool wxHasCGContext(wxWindow* WXUNUSED(win), wxDC& dc)
 {
     wxGCDCImpl* gcdc = wxDynamicCast( dc.GetImpl() , wxGCDCImpl);
     
@@ -63,17 +63,17 @@ public:
         const wxRect& rect,
         int flags = 0,
         wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-        wxHeaderButtonParams* params = NULL );
+        wxHeaderButtonParams* params = NULL ) wxOVERRIDE;
 
-    virtual int GetHeaderButtonHeight(wxWindow *win);
+    virtual int GetHeaderButtonHeight(wxWindow *win) wxOVERRIDE;
 
-    virtual int GetHeaderButtonMargin(wxWindow *win);
+    virtual int GetHeaderButtonMargin(wxWindow *win) wxOVERRIDE;
 
     // draw the expanded/collapsed icon for a tree control item
     virtual void DrawTreeItemButton( wxWindow *win,
         wxDC& dc,
         const wxRect& rect,
-        int flags = 0 );
+        int flags = 0 ) wxOVERRIDE;
 
     // draw a (vertical) sash
     virtual void DrawSplitterSash( wxWindow *win,
@@ -81,47 +81,49 @@ public:
         const wxSize& size,
         wxCoord position,
         wxOrientation orient,
-        int flags = 0 );
+        int flags = 0 ) wxOVERRIDE;
 
     virtual void DrawCheckBox(wxWindow *win,
                               wxDC& dc,
                               const wxRect& rect,
-                              int flags = 0);
+                              int flags = 0) wxOVERRIDE;
 
-    virtual wxSize GetCheckBoxSize(wxWindow* win);
+    virtual wxSize GetCheckBoxSize(wxWindow* win) wxOVERRIDE;
 
     virtual void DrawComboBoxDropButton(wxWindow *win,
                                         wxDC& dc,
                                         const wxRect& rect,
-                                        int flags = 0);
+                                        int flags = 0) wxOVERRIDE;
 
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
-                                int flags = 0);
+                                int flags = 0) wxOVERRIDE;
 
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
                                        const wxRect& rect,
-                                       int flags = 0);
+                                       int flags = 0) wxOVERRIDE;
 
-    virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0);
+    virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0) wxOVERRIDE;
 
-    virtual void DrawChoice(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
+    virtual void DrawChoice(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) wxOVERRIDE;
 
-    virtual void DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
+    virtual void DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) wxOVERRIDE;
 
-    virtual void DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
+    virtual void DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) wxOVERRIDE;
 
-    virtual void DrawRadioBitmap(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
+    virtual void DrawRadioBitmap(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) wxOVERRIDE;
 
 #ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
     virtual void DrawTitleBarBitmap(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
                                     wxTitleBarButton button,
-                                    int flags = 0);
+                                    int flags = 0) wxOVERRIDE;
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
+
+    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win) wxOVERRIDE;
 
 private:
     void DrawMacThemeButton(wxWindow *win,
@@ -182,7 +184,7 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
             drawInfo.version = 0;
             drawInfo.kind = kThemeListHeaderButton;
             drawInfo.state = (flags & wxCONTROL_DISABLED) ? kThemeStateInactive : kThemeStateActive;
-            drawInfo.value = (flags & wxCONTROL_SELECTED) ? kThemeButtonOn : kThemeButtonOff;
+            drawInfo.value = (flags & wxCONTROL_PRESSED) ? kThemeButtonOn : kThemeButtonOff;
             drawInfo.adornment = kThemeAdornmentNone;
 
             // The down arrow is drawn automatically, change it to an up arrow if needed.
@@ -192,7 +194,7 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
             HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
 
             // If we don't want any arrows we need to draw over the one already there
-            if ( (flags & wxCONTROL_SELECTED) && (sortArrow == wxHDR_SORT_ICON_NONE) )
+            if ( (flags & wxCONTROL_PRESSED) && (sortArrow == wxHDR_SORT_ICON_NONE) )
             {
                 // clip to the header rectangle
                 CGContextSaveGState( cgContext );
@@ -208,12 +210,12 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     // Reserve room for the arrows before writing the label, and turn off the
     // flags we've already handled
     wxRect newRect(rect);
-    if ( (flags & wxCONTROL_SELECTED) && (sortArrow != wxHDR_SORT_ICON_NONE) )
+    if ( (flags & wxCONTROL_PRESSED) && (sortArrow != wxHDR_SORT_ICON_NONE) )
     {
         newRect.width -= 12;
         sortArrow = wxHDR_SORT_ICON_NONE;
     }
-    flags &= ~wxCONTROL_SELECTED;
+    flags &= ~wxCONTROL_PRESSED;
 
     return DrawHeaderButtonContents(win, dc, newRect, flags, sortArrow, params);
 }
@@ -279,6 +281,37 @@ void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     }
 }
 
+wxSplitterRenderParams
+wxRendererMac::GetSplitterParams(const wxWindow *win)
+{
+    // see below
+    SInt32 sashWidth,
+            border;
+#if wxOSX_USE_COCOA
+    if ( win->HasFlag(wxSP_3DSASH) )
+        GetThemeMetric( kThemeMetricPaneSplitterHeight, &sashWidth ); // Cocoa == Carbon == 7
+    else if ( win->HasFlag(wxSP_NOSASH) ) // actually Cocoa doesn't allow 0
+        sashWidth = 0;
+    else // no 3D effect - Cocoa [NSSplitView dividerThickNess] for NSSplitViewDividerStyleThin
+        sashWidth = 1;
+#else // Carbon
+    if ( win->HasFlag(wxSP_3DSASH) )
+        GetThemeMetric( kThemeMetricPaneSplitterHeight, &sashWidth );
+    else if ( win->HasFlag(wxSP_NOSASH) )
+        sashWidth = 0;
+    else // no 3D effect
+        GetThemeMetric( kThemeMetricSmallPaneSplitterHeight, &sashWidth );
+#endif // Cocoa/Carbon
+
+    if ( win->HasFlag(wxSP_3DBORDER) )
+        border = 2;
+    else // no 3D effect
+        border = 0;
+
+    return wxSplitterRenderParams(sashWidth, border, false);
+}
+
+
 void wxRendererMac::DrawSplitterSash( wxWindow *win,
     wxDC& dc,
     const wxSize& size,
@@ -288,7 +321,9 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
 {
     bool hasMetal = win->MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL;
     SInt32 height;
-    GetThemeMetric( kThemeMetricSmallPaneSplitterHeight, &height );
+
+    height = wxRendererNative::Get().GetSplitterParams(win).widthSash;
+
     HIRect splitterRect;
     if (orient == wxVERTICAL)
         splitterRect = CGRectMake( position, 0, height, size.y );
@@ -323,11 +358,14 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
             CGContextFillRect(cgContext,splitterRect);
         }
 
-        HIThemeSplitterDrawInfo drawInfo;
-        drawInfo.version = 0;
-        drawInfo.state = kThemeStateActive;
-        drawInfo.adornment = hasMetal ? kHIThemeSplitterAdornmentMetal : kHIThemeSplitterAdornmentNone;
-        HIThemeDrawPaneSplitter( &splitterRect, &drawInfo, cgContext, kHIThemeOrientationNormal );
+        if ( win->HasFlag(wxSP_3DSASH) )
+        {
+            HIThemeSplitterDrawInfo drawInfo;
+            drawInfo.version = 0;
+            drawInfo.state = kThemeStateActive;
+            drawInfo.adornment = hasMetal ? kHIThemeSplitterAdornmentMetal : kHIThemeSplitterAdornmentNone;
+            HIThemeDrawPaneSplitter( &splitterRect, &drawInfo, cgContext, kHIThemeOrientationNormal );
+        }
     }
 }
 
@@ -385,7 +423,7 @@ wxRendererMac::DrawMacThemeButton(wxWindow *win,
         drawInfo.version = 0;
         drawInfo.kind = kind;
         drawInfo.state = (flags & wxCONTROL_DISABLED) ? kThemeStateInactive : kThemeStateActive;
-        drawInfo.value = (flags & wxCONTROL_SELECTED) ? kThemeButtonOn : kThemeButtonOff;
+        drawInfo.value = (flags & wxCONTROL_PRESSED) ? kThemeButtonOn : kThemeButtonOff;
         if (flags & wxCONTROL_UNDETERMINED)
             drawInfo.value = kThemeButtonMixed;
         drawInfo.adornment = adornment;
@@ -403,7 +441,7 @@ wxRendererMac::DrawCheckBox(wxWindow *win,
                             int flags)
 {
     if (flags & wxCONTROL_CHECKED)
-        flags |= wxCONTROL_SELECTED;
+        flags |= wxCONTROL_PRESSED;
 
     int kind;
 
@@ -555,7 +593,7 @@ void wxRendererMac::DrawRadioBitmap(wxWindow* win, wxDC& dc,
         kind = kThemeRadioButton;
 
     if (flags & wxCONTROL_CHECKED)
-        flags |= wxCONTROL_SELECTED;
+        flags |= wxCONTROL_PRESSED;
 
     DrawMacThemeButton(win, dc, rect, flags,
                           kind, kThemeAdornmentNone);

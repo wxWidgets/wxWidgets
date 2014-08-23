@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -32,6 +31,7 @@ protected:
 
     void OnYes(wxCommandEvent& event);
     void OnNo(wxCommandEvent& event);
+    void OnHelp(wxCommandEvent& event);
     void OnCancel(wxCommandEvent& event);
 
     // can be overridden to provide more contents to the dialog

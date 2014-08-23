@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 8 April 2011                                                        *
+# Date : 27 August 2013                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -32,40 +32,40 @@ all :
 gtk : [.include.wx]setup.h
 	set default [.src.generic]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 	set default [-.common]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 	set default [-.html]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 	set default [-.xml]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.aui]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 	set default [-.xrc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 	set default [-.unix]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 	set default [-.propgrid]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 	set default [-.regex]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.ribbon]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 	set default [-.richtext]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 	set default [-.stc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.gtk1]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 	set default [--.demos.bombs]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.forty]
@@ -136,6 +136,8 @@ gtk : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.minimal]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.notebook]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.propgrid]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.regtest]
@@ -146,9 +148,15 @@ gtk : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.sockets]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.splash]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.stc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.thread]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.xrc]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.widgets]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [--.tests]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)/ignore=warning
@@ -158,40 +166,40 @@ gtk2 : [.include.wx]setup.h
 	@gnome$root:[000000]glib2
 	set default [.src.generic]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
-	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 	set default [-.common]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
-	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 	set default [-.html]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
-	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 	set default [-.aui]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
-	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 	set default [-.xml]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.xrc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
-	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 	set default [-.unix]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
-	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 	set default [-.propgrid]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
-	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 	set default [-.regex]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.ribbon]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
-	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 	set default [-.richtext]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
-	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 	set default [-.stc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.gtk]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
-	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 	set default [--.demos.bombs]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [--.samples.calendar]
@@ -224,49 +232,51 @@ gtk2 : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.richedit]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
+	set default [-.thread]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [--]
 	@gnome$root:[000000]glib
 
 x11 : [.include.wx]setup.h
 	set default [.src.generic]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
-	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [-.common]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
-	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [-.html]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
-	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [-.xml]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.xrc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
-	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [-.aui]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
-	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [-.unix]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
-	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [-.propgrid]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
-	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [-.regex]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.ribbon]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
-	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [-.richtext]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
-	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [-.stc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.x11]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
-	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [-.univ]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
-	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [--.demos.bombs]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [--.samples.calendar]
@@ -297,28 +307,37 @@ x11 : [.include.wx]setup.h
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.minimal]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
+	set default [-.notebook]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.richedit]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
+	set default [-.thread]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
+	set default [-.stc]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [--]
 
 motif : [.include.wx]setup.h
 	set default [.src.generic]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
-	library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
 	set default [-.common]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
-	library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
 	set default [-.unix]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
-	library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
+	set default [-.html]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
 	set default [-.aui]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
-	library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
 	set default [-.regex]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.motif]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
-	library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
 	set default [-.x11]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [--.demos.bombs]
@@ -326,6 +345,8 @@ motif : [.include.wx]setup.h
 	set default [--.samples.calendar]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.caret]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+	set default [-.aui]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.combo]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
@@ -340,6 +361,12 @@ motif : [.include.wx]setup.h
 	set default [-.menu]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.minimal]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+	set default [-.notebook]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+	set default [-.thread]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+	set default [-.widgets]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [--]
 

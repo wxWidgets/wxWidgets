@@ -5,7 +5,6 @@
 // Modified by: Vadim Zeitlin (wxTimerBase)
 //              Guillermo Rodriguez (global clean up)
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -80,6 +79,10 @@ public:
     // it is now valid to call Start() multiple times: this just restarts the
     // timer if it is already running
     virtual bool Start(int milliseconds = -1, bool oneShot = false);
+
+    // start the timer for one iteration only, this is just a simple wrapper
+    // for Start()
+    bool StartOnce(int milliseconds = -1) { return Start(milliseconds, true); }
 
     // stop the timer, does nothing if the timer is not running
     virtual void Stop();
@@ -171,8 +174,8 @@ public:
     wxTimer& GetTimer() const { return *m_timer; }
 
     // implement the base class pure virtual
-    virtual wxEvent *Clone() const { return new wxTimerEvent(*this); }
-    virtual wxEventCategory GetEventCategory() const { return wxEVT_CATEGORY_TIMER; }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxTimerEvent(*this); }
+    virtual wxEventCategory GetEventCategory() const wxOVERRIDE { return wxEVT_CATEGORY_TIMER; }
 
 private:
     wxTimer* m_timer;

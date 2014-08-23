@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -20,11 +19,11 @@
 #include "wx/wx.h"
 #endif
 
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "bitmaps/toolbrai.xpm"
     #include "bitmaps/toolchar.xpm"
     #include "bitmaps/tooldata.xpm"
@@ -109,7 +108,7 @@ bool MyApp::OnInit()
 // MyFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_SIZE(MyFrame::OnSize)
 
     EVT_MENU(LIST_QUIT, MyFrame::OnQuit)
@@ -137,6 +136,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_SORT, MyFrame::OnSort)
     EVT_MENU(LIST_SET_FG_COL, MyFrame::OnSetFgColour)
     EVT_MENU(LIST_SET_BG_COL, MyFrame::OnSetBgColour)
+    EVT_MENU(LIST_ROW_LINES, MyFrame::OnSetRowLines)
     EVT_MENU(LIST_TOGGLE_MULTI_SEL, MyFrame::OnToggleMultiSel)
     EVT_MENU(LIST_SHOW_COL_INFO, MyFrame::OnShowColInfo)
     EVT_MENU(LIST_SHOW_SEL_INFO, MyFrame::OnShowSelInfo)
@@ -149,6 +149,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_THAW, MyFrame::OnThaw)
     EVT_MENU(LIST_TOGGLE_LINES, MyFrame::OnToggleLines)
     EVT_MENU(LIST_TOGGLE_HEADER, MyFrame::OnToggleHeader)
+    EVT_MENU(LIST_TOGGLE_BELL, MyFrame::OnToggleBell)
 #ifdef __WXOSX__
     EVT_MENU(LIST_MAC_USE_GENERIC, MyFrame::OnToggleMacUseGeneric)
 #endif // __WXOSX__
@@ -159,7 +160,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_UPDATE_UI(LIST_TOGGLE_MULTI_SEL, MyFrame::OnUpdateToggleMultiSel)
     EVT_UPDATE_UI(LIST_TOGGLE_HEADER, MyFrame::OnUpdateToggleHeader)
-END_EVENT_TABLE()
+    EVT_UPDATE_UI(LIST_ROW_LINES, MyFrame::OnUpdateRowLines)
+wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(const wxChar *title)
@@ -177,7 +179,7 @@ MyFrame::MyFrame(const wxChar *title)
     m_imageListNormal = new wxImageList(32, 32, true);
     m_imageListSmall = new wxImageList(16, 16, true);
 
-#ifdef __WXMSW__
+#ifdef wxHAS_IMAGES_IN_RESOURCES
     m_imageListNormal->Add( wxIcon(wxT("icon1"), wxBITMAP_TYPE_ICO_RESOURCE) );
     m_imageListNormal->Add( wxIcon(wxT("icon2"), wxBITMAP_TYPE_ICO_RESOURCE) );
     m_imageListNormal->Add( wxIcon(wxT("icon3"), wxBITMAP_TYPE_ICO_RESOURCE) );
@@ -258,10 +260,12 @@ MyFrame::MyFrame(const wxChar *title)
     menuList->Check(LIST_TOGGLE_MULTI_SEL, true);
     menuList->AppendCheckItem(LIST_TOGGLE_HEADER, "Toggle &header\tCtrl-H");
     menuList->Check(LIST_TOGGLE_HEADER, true);
+    menuList->AppendCheckItem(LIST_TOGGLE_BELL, "Toggle &bell on no match");
 
     wxMenu *menuCol = new wxMenu;
     menuCol->Append(LIST_SET_FG_COL, wxT("&Foreground colour..."));
     menuCol->Append(LIST_SET_BG_COL, wxT("&Background colour..."));
+    menuCol->AppendCheckItem(LIST_ROW_LINES, wxT("Alternating colours"));
 
     wxMenuBar *menubar = new wxMenuBar;
     menubar->Append(menuFile, wxT("&File"));
@@ -335,7 +339,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageDialog dialog(this, wxT("List test sample\nJulian Smart (c) 1997"),
-            wxT("About list test"), wxOK|wxCANCEL);
+            wxT("About list test"));
 
     dialog.ShowModal();
 }
@@ -364,6 +368,11 @@ void MyFrame::OnToggleHeader(wxCommandEvent& event)
     wxLogMessage("%s the header", event.IsChecked() ? "Showing" : "Hiding");
 
     m_listCtrl->ToggleWindowStyle(wxLC_NO_HEADER);
+}
+
+void MyFrame::OnToggleBell(wxCommandEvent& event)
+{
+    m_listCtrl->EnableBellOnNoMatch(event.IsChecked());
 }
 
 #ifdef __WXOSX__
@@ -468,9 +477,15 @@ void MyFrame::RecreateList(long flags, bool withText)
             default:
                 wxFAIL_MSG( wxT("unknown listctrl mode") );
         }
+
+        wxMenuBar* const mb = GetMenuBar();
+        if ( mb )
+            m_listCtrl->EnableBellOnNoMatch(mb->IsChecked(LIST_TOGGLE_BELL));
     }
 
     DoSize();
+
+    GetMenuBar()->Check(LIST_ROW_LINES, false);
 
     m_logWindow->Clear();
 }
@@ -571,8 +586,14 @@ void MyFrame::InitWithIconItems(bool withText, bool sameIcon)
 
         if ( withText )
         {
-            m_listCtrl->InsertItem(i, wxString::Format(wxT("Label %d"), i),
-                                   image);
+            // Make labels of different widths to test the layout.
+            wxString label;
+            if ( !(i % 5) )
+                label.Printf("Longer label %d", i);
+            else
+                label.Printf("Label %d", i);
+
+            m_listCtrl->InsertItem(i, label, image);
         }
         else
         {
@@ -644,14 +665,14 @@ void MyFrame::InitWithVirtualItems()
 
     if ( m_smallVirtual )
     {
-        m_listCtrl->InsertColumn(0, wxT("Animal"));
-        m_listCtrl->InsertColumn(1, wxT("Sound"));
+        m_listCtrl->AppendColumn(wxT("Animal"));
+        m_listCtrl->AppendColumn(wxT("Sound"));
         m_listCtrl->SetItemCount(WXSIZEOF(SMALL_VIRTUAL_VIEW_ITEMS));
     }
     else
     {
-        m_listCtrl->InsertColumn(0, wxT("First Column"));
-        m_listCtrl->InsertColumn(1, wxT("Second Column"));
+        m_listCtrl->AppendColumn(wxT("First Column"));
+        m_listCtrl->AppendColumn(wxT("Second Column"));
         m_listCtrl->SetColumnWidth(0, 150);
         m_listCtrl->SetColumnWidth(1, 150);
         m_listCtrl->SetItemCount(1000000);
@@ -819,6 +840,11 @@ void MyFrame::OnUpdateToggleHeader(wxUpdateUIEvent& event)
     event.Check(!m_listCtrl->HasFlag(wxLC_NO_HEADER));
 }
 
+void MyFrame::OnUpdateRowLines(wxUpdateUIEvent& event)
+{
+    event.Enable(m_listCtrl->HasFlag(wxLC_VIRTUAL));
+}
+
 void MyFrame::OnSetFgColour(wxCommandEvent& WXUNUSED(event))
 {
     m_listCtrl->SetForegroundColour(wxGetColourFromUser(this));
@@ -831,6 +857,12 @@ void MyFrame::OnSetBgColour(wxCommandEvent& WXUNUSED(event))
     m_listCtrl->Refresh();
 }
 
+void MyFrame::OnSetRowLines(wxCommandEvent& event)
+{
+    m_listCtrl->EnableAlternateRowColours(event.IsChecked());
+    m_listCtrl->Refresh();
+}
+
 void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))
 {
     m_listCtrl->InsertItem(m_listCtrl->GetItemCount(), wxT("Appended item"));
@@ -839,7 +871,7 @@ void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnEdit(wxCommandEvent& WXUNUSED(event))
 {
     // demonstrate cancelling editing: this currently is wxMSW-only
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     if ( m_listCtrl->GetEditControl() )
     {
         m_listCtrl->EndEditLabel(true);
@@ -891,7 +923,7 @@ void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))
 // MyListCtrl
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
+wxBEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
     EVT_LIST_BEGIN_DRAG(LIST_CTRL, MyListCtrl::OnBeginDrag)
     EVT_LIST_BEGIN_RDRAG(LIST_CTRL, MyListCtrl::OnBeginRDrag)
     EVT_LIST_BEGIN_LABEL_EDIT(LIST_CTRL, MyListCtrl::OnBeginLabelEdit)
@@ -918,7 +950,7 @@ BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
     EVT_CHAR(MyListCtrl::OnChar)
 
     EVT_RIGHT_DOWN(MyListCtrl::OnRightClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void MyListCtrl::OnCacheHint(wxListEvent& event)
 {
@@ -1090,6 +1122,13 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
 {
     long item;
 
+    if ( !wxGetKeyState(WXK_SHIFT) )
+    {
+        LogEvent(event, wxT("OnListKeyDown"));
+        event.Skip();
+        return;
+    }
+
     switch ( event.GetKeyCode() )
     {
         case 'C': // colorize
@@ -1231,26 +1270,7 @@ void MyListCtrl::OnChar(wxKeyEvent& event)
 {
     wxLogMessage(wxT("Got char event."));
 
-    switch ( event.GetKeyCode() )
-    {
-        case 'n':
-        case 'N':
-        case 'c':
-        case 'C':
-        case 'r':
-        case 'R':
-        case 'u':
-        case 'U':
-        case 'd':
-        case 'D':
-        case 'i':
-        case 'I':
-            // these are the keys we process ourselves
-            break;
-
-        default:
-            event.Skip();
-    }
+    event.Skip();
 }
 
 void MyListCtrl::OnRightClick(wxMouseEvent& event)
@@ -1287,7 +1307,7 @@ void MyListCtrl::LogEvent(const wxListEvent& event, const wxChar *eventName)
 {
     wxLogMessage(wxT("Item %ld: %s (item text = %s, data = %ld)"),
                  event.GetIndex(), eventName,
-                 event.GetText().c_str(), event.GetData());
+                 event.GetText(), static_cast<long>(event.GetData()));
 }
 
 wxString MyListCtrl::OnGetItemText(long item, long column) const
@@ -1323,7 +1343,7 @@ wxListItemAttr *MyListCtrl::OnGetItemAttr(long item) const
         return &s_attrHighlight;
     }
 
-    return item % 2 ? NULL : (wxListItemAttr *)&m_attr;
+    return wxListCtrl::OnGetItemAttr(item);
 }
 
 void MyListCtrl::InsertItemInReportView(int i)

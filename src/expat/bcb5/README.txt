@@ -63,7 +63,8 @@ application. Fortunately, it is not hard to do by hand.
 
                               Threading
 
-The libexpat libraries are all built with the multi-threaded dynamic RTL's.
+The libexpat libraries are all built to link with the multi-threaded dynamic RTL's.
+That means they require CC32xxMT.DLL present on the installation target.
 To create single-threaded libs, do the following:
 
 1. The compiler option for multi-threading must be turned off. Following the

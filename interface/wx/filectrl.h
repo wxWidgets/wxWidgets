@@ -2,9 +2,18 @@
 // Name:        filectrl.h
 // Purpose:     interface of wxFileCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+enum
+{
+    wxFC_OPEN              = 0x0001,
+    wxFC_SAVE              = 0x0002,
+    wxFC_MULTIPLE          = 0x0004,
+    wxFC_NOSHOWHIDDEN      = 0x0008
+};
+
+#define wxFC_DEFAULT_STYLE wxFC_OPEN
 
 /**
     @class wxFileCtrl
@@ -45,9 +54,9 @@
 
     @endEventTable
 
-    @library{wxbase}
+    @library{wxcore}
     @category{ctrl}
-    @appearance{filectrl.png}
+    @appearance{filectrl}
 
     @nativeimpl{wxgtk}
 
@@ -90,7 +99,7 @@ public:
     wxFileCtrl(wxWindow* parent, wxWindowID id,
                const wxString& defaultDirectory = wxEmptyString,
                const wxString& defaultFilename = wxEmptyString,
-               const wxPoint& wildCard = wxFileSelectorDefaultWildcardStr,
+               const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
                long style = wxFC_DEFAULT_STYLE,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
@@ -108,7 +117,7 @@ public:
                 const wxString& name = wxFileCtrlNameStr);
 
     /**
-        Returns the current directory of the file control (i.e. the directory shown by it).
+        Returns the current directory of the file control (i.e.\ the directory shown by it).
     */
     virtual wxString GetDirectory() const;
 
@@ -170,6 +179,16 @@ public:
     virtual bool SetFilename(const wxString& filename);
 
     /**
+        Changes to a certain directory and selects a certain file.
+        
+        In case the filename specified isn't found/couldn't be shown with
+        currently selected filter, false is returned.
+
+        @return Returns @true on success, @false otherwise
+    */
+    virtual bool SetPath(const wxString& path);
+
+    /**
         Sets the current filter index, starting from zero.
     */
     virtual void SetFilterIndex(int filterIndex);
@@ -186,6 +205,11 @@ public:
     virtual void ShowHidden(bool show);
 };
 
+
+wxEventType wxEVT_FILECTRL_SELECTIONCHANGED;
+wxEventType wxEVT_FILECTRL_FILEACTIVATED;
+wxEventType wxEVT_FILECTRL_FOLDERCHANGED;
+wxEventType wxEVT_FILECTRL_FILTERCHANGED;
 
 
 /**
@@ -205,7 +229,7 @@ public:
         The current file filter of the file control has been changed
     @endEventTable
 
-    @library{wxbase}
+    @library{wxcore}
     @category{events}
 */
 class wxFileCtrlEvent : public wxCommandEvent

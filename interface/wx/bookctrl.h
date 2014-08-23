@@ -2,9 +2,44 @@
 // Name:        bookctrl.h
 // Purpose:     interface of wxBookCtrlBase
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+    Bit flags returned by wxBookCtrl::HitTest().
+
+    Notice that wxOSX currently only returns wxBK_HITTEST_ONLABEL or
+    wxBK_HITTEST_NOWHERE and never the other values, so you should only test
+    for these two in the code that should be portable under OS X.
+ */
+enum
+{
+    /// No tab at the specified point.
+    wxBK_HITTEST_NOWHERE = 1,
+
+    /// The point is over an icon.
+    wxBK_HITTEST_ONICON  = 2,
+
+    /// The point is over a tab label.
+    wxBK_HITTEST_ONLABEL = 4,
+
+    /// The point if over a tab item but not over its icon or label.
+    wxBK_HITTEST_ONITEM  = wxBK_HITTEST_ONICON | wxBK_HITTEST_ONLABEL,
+
+    /// The point is over the page area.
+    wxBK_HITTEST_ONPAGE  = 8
+};
+
+/**
+   wxBookCtrl flags (common for wxNotebook, wxListbook, wxChoicebook, wxTreebook)
+*/
+#define wxBK_DEFAULT          0x0000
+#define wxBK_TOP              0x0010
+#define wxBK_BOTTOM           0x0020
+#define wxBK_LEFT             0x0040
+#define wxBK_RIGHT            0x0080
+#define wxBK_ALIGN_MASK       (wxBK_TOP | wxBK_BOTTOM | wxBK_LEFT | wxBK_RIGHT)
+
 
 /**
     @class wxBookCtrlBase
@@ -27,9 +62,15 @@
 
     @see @ref overview_bookctrl
 */
-class wxBookCtrlBase : public wxControl
+class wxBookCtrlBase : public wxControl, public wxWithImages
 {
 public:
+    enum
+    {
+        /// Symbolic constant indicating that no image should be used.
+        NO_IMAGE = -1
+    };
+
     /**
         Default ctor.
     */
@@ -65,32 +106,11 @@ public:
     */
     //@{
 
-    /**
-        Sets the image list for the page control and takes ownership of the list.
-
-        @see wxImageList, SetImageList()
-    */
-    void AssignImageList(wxImageList* imageList);
-
-    /**
-        Returns the associated image list.
-
-        @see wxImageList, SetImageList()
-    */
-    wxImageList* GetImageList() const;
 
     /**
         Returns the image index for the given page.
     */
     virtual int GetPageImage(size_t nPage) const = 0;
-
-    /**
-        Sets the image list for the page control.
-        It does not take ownership of the image list, you must delete it yourself.
-
-        @see wxImageList, AssignImageList()
-    */
-    virtual void SetImageList(wxImageList* imageList);
 
     /**
         Sets the image index for the given page. @a image is an index into
@@ -146,7 +166,7 @@ public:
     wxWindow* GetCurrentPage() const;
 
     /**
-        Sets the selection for the given page, returning the previous selection.
+        Sets the selection to the given page, returning the previous selection.
 
         Notice that the call to this function generates the page changing
         events, use the ChangeSelection() function if you don't want these
@@ -163,7 +183,7 @@ public:
     void AdvanceSelection(bool forward = true);
 
     /**
-        Changes the selection for the given page, returning the previous selection.
+        Changes the selection to the given page, returning the previous selection.
 
         This function behaves as SetSelection() but does @em not generate the
         page changing events.
@@ -171,6 +191,17 @@ public:
         See @ref overview_events_prog for more information.
     */
     virtual int ChangeSelection(size_t page) = 0;
+
+    /**
+        Returns the index of the specified tab window or @c wxNOT_FOUND
+        if not found.
+
+        @param page One of the control pages.
+        @return The zero-based tab index or @c wxNOT_FOUND if not found.
+
+        @since 2.9.5
+    */
+    int FindPage(const wxWindow* page) const;
 
     //@}
 
@@ -191,19 +222,10 @@ public:
         @param pt
             Specifies the point for the hit test.
         @param flags
-            Return value for detailed information. One of the following values:
-            <TABLE><TR><TD>wxBK_HITTEST_NOWHERE</TD>
-            <TD>There was no tab under this point.</TD></TR>
-            <TR><TD>wxBK_HITTEST_ONICON</TD>
-            <TD>The point was over an icon (currently wxMSW only).</TD></TR>
-            <TR><TD>wxBK_HITTEST_ONLABEL</TD>
-            <TD>The point was over a label (currently wxMSW only).</TD></TR>
-            <TR><TD>wxBK_HITTEST_ONITEM</TD>
-            <TD>The point was over an item, but not on the label or icon.</TD></TR>
-            <TR><TD>wxBK_HITTEST_ONPAGE</TD>
-            <TD>The point was over a currently selected page, not over any tab.
-            Note that this flag is present only if wxNOT_FOUND is returned.</TD></TR>
-            </TABLE>
+            Return more details about the point, see returned value is a
+            combination of ::wxBK_HITTEST_NOWHERE, ::wxBK_HITTEST_ONICON,
+            ::wxBK_HITTEST_ONLABEL, ::wxBK_HITTEST_ONITEM,
+            ::wxBK_HITTEST_ONPAGE.
 
         @return Returns the zero-based tab index or @c wxNOT_FOUND if there is no
                 tab at the specified position.
@@ -221,6 +243,10 @@ public:
 
     /**
         Adds a new page.
+
+        The page must have the book control itself as the parent and must not
+        have been added to this control previously.
+
         The call to this function may generate the page changing events.
 
         @param page
@@ -239,7 +265,7 @@ public:
         @see InsertPage()
     */
     virtual bool AddPage(wxWindow* page, const wxString& text,
-                         bool select = false, int imageId = wxNOT_FOUND);
+                         bool select = false, int imageId = NO_IMAGE);
 
     /**
         Deletes all pages.
@@ -276,7 +302,7 @@ public:
                             wxWindow* page,
                             const wxString& text,
                             bool select = false,
-                            int imageId = wxNOT_FOUND) = 0;
+                            int imageId = NO_IMAGE) = 0;
 
     /**
         Deletes the specified page, without deleting the associated window.
@@ -346,7 +372,7 @@ public:
     @class wxBookCtrlEvent
 
     This class represents the events generated by book controls (wxNotebook,
-    wxListbook, wxChoicebook, wxTreebook).
+    wxListbook, wxChoicebook, wxTreebook, wxAuiNotebook).
 
     The PAGE_CHANGING events are sent before the current page is changed.
     It allows the program to examine the current page (which can be retrieved
@@ -365,7 +391,7 @@ public:
     @library{wxcore}
     @category{events,bookctrl}
 
-    @see wxNotebook, wxListbook, wxChoicebook, wxTreebook, wxToolbook
+    @see wxNotebook, wxListbook, wxChoicebook, wxTreebook, wxToolbook, wxAuiNotebook
 */
 class wxBookCtrlEvent : public wxNotifyEvent
 {

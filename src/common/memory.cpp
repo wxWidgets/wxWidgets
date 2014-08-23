@@ -4,7 +4,6 @@
 // Author:      Arthur Seaton, Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -21,7 +20,7 @@
 #include "wx/memory.h"
 
 #ifndef WX_PRECOMP
-    #ifdef __WXMSW__
+    #ifdef __WINDOWS__
         #include "wx/msw/wrapwin.h"
     #endif
     #include "wx/utils.h"
@@ -38,8 +37,7 @@
 
 #include "wx/ioswrap.h"
 
-#if !defined(__WATCOMC__) && !(defined(__VMS__) && ( __VMS_VER < 70000000 ) )\
-     && !defined( __MWERKS__ )
+#if !(defined(__VMS__) && ( __VMS_VER < 70000000 ) )
 #include <memory.h>
 #endif
 
@@ -888,7 +886,7 @@ static MemoryCriticalSection memLocker;
 #endif // USE_THREADSAFE_MEMORY_ALLOCATION
 
 
-#if !(defined(__WXMSW__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL_BASE)))
+#if !(defined(__WINDOWS__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL_BASE)))
 #if wxUSE_GLOBAL_MEMORY_OPERATORS
 void * operator new (size_t size, wxChar * fileName, int lineNum)
 {
@@ -922,7 +920,7 @@ void operator delete[] (void * buf)
 }
 #endif // wxUSE_ARRAY_MEMORY_OPERATORS
 #endif // wxUSE_GLOBAL_MEMORY_OPERATORS
-#endif // !(defined(__WXMSW__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL_BASE)))
+#endif // !(defined(__WINDOWS__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL_BASE)))
 
 // TODO: store whether this is a vector or not.
 void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool WXUNUSED(isVect) )
@@ -934,10 +932,6 @@ void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, 
   // If not in debugging allocation mode, do the normal thing
   // so we don't leave any trace of ourselves in the node list.
 
-#if defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )
-// VA 3.0 still has trouble in here
-  return (void *)malloc(size);
-#endif
   if (!wxDebugContext::GetDebugMode())
   {
     return (void *)malloc(size);
@@ -994,10 +988,6 @@ void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
   if (!buf)
     return;
 
-#if defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )
-// VA 3.0 still has trouble in here
-  free((char *)buf);
-#endif
   // If not in debugging allocation mode, do the normal thing
   // so we don't leave any trace of ourselves in the node list.
   if (!wxDebugContext::GetDebugMode())
@@ -1045,7 +1035,7 @@ void wxTrace(const wxChar * ...)
 
   va_start(ap, fmt);
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
   wvsprintf(buffer,fmt,ap) ;
 #else
   vsprintf(buffer,fmt,ap) ;
@@ -1059,7 +1049,7 @@ void wxTrace(const wxChar * ...)
     wxDebugContext::GetStream().flush();
   }
   else
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
 #ifdef __WIN32__
     OutputDebugString((LPCTSTR)buffer) ;
 #else
@@ -1085,7 +1075,7 @@ void wxTraceLevel(int, const wxChar * ...)
 
   va_start(ap, fmt);
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
   wxWvsprintf(buffer,fmt,ap) ;
 #else
   vsprintf(buffer,fmt,ap) ;
@@ -1099,7 +1089,7 @@ void wxTraceLevel(int, const wxChar * ...)
     wxDebugContext::GetStream().flush();
   }
   else
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
 #ifdef __WIN32__
     OutputDebugString((LPCTSTR)buffer) ;
 #else

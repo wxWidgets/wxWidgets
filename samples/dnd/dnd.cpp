@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -27,7 +26,7 @@
 #include "wx/metafile.h"
 #include "wx/dirctrl.h"
 
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXQT__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #if wxUSE_DRAG_AND_DROP
     #include "dnd_copy.xpm"
@@ -48,7 +47,7 @@ class DnDText : public wxTextDropTarget
 public:
     DnDText(wxListBox *pOwner) { m_pOwner = pOwner; }
 
-    virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& text);
+    virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& text) wxOVERRIDE;
 
 private:
     wxListBox *m_pOwner;
@@ -60,7 +59,7 @@ public:
     DnDFile(wxListBox *pOwner = NULL) { m_pOwner = pOwner; }
 
     virtual bool OnDropFiles(wxCoord x, wxCoord y,
-                             const wxArrayString& filenames);
+                             const wxArrayString& filenames) wxOVERRIDE;
 
 private:
     wxListBox *m_pOwner;
@@ -84,14 +83,14 @@ public:
 
     // URLs can't be moved, only copied
     virtual wxDragResult OnDragOver(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
-                                    wxDragResult WXUNUSED(def))
+                                    wxDragResult WXUNUSED(def)) wxOVERRIDE
         {
             return wxDragLink;  // At least IE 5.x needs wxDragLink, the
                                 // other browsers on MSW seem okay with it too.
         }
 
     // translate this to calls to OnDropURL() just for convenience
-    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def)
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE
     {
         if ( !GetData() )
             return wxDragNone;
@@ -111,7 +110,7 @@ public:
 class DnDApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 IMPLEMENT_APP(DnDApp)
@@ -152,7 +151,7 @@ public:
 private:
     wxBitmap m_bitmap;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #if wxUSE_METAFILE
@@ -188,7 +187,7 @@ public:
 private:
     wxMetafile m_metafile;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // wxUSE_METAFILE
@@ -227,6 +226,7 @@ public:
 #endif // wxUSE_METAFILE
 
     void OnCopyFiles(wxCommandEvent& event);
+    void OnCopyURL(wxCommandEvent& event);
 
     void OnUsePrimary(wxCommandEvent& event);
 
@@ -271,7 +271,7 @@ private:
     wxString m_strText;
 
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -341,7 +341,7 @@ public:
 
     virtual void Draw(wxDC& dc)
     {
-        dc.SetPen(wxPen(m_col, 1, wxSOLID));
+        dc.SetPen(wxPen(m_col));
     }
 
 protected:
@@ -378,8 +378,8 @@ public:
         wxLogMessage(wxT("DnDTriangularShape is being deleted"));
     }
 
-    virtual Kind GetKind() const { return Triangle; }
-    virtual void Draw(wxDC& dc)
+    virtual Kind GetKind() const wxOVERRIDE { return Triangle; }
+    virtual void Draw(wxDC& dc) wxOVERRIDE
     {
         DnDShape::Draw(dc);
 
@@ -394,7 +394,7 @@ public:
         dc.DrawLine(p3, p1);
 
         //works in multicolor modes; on GTK (at least) will fail in 16-bit color
-        dc.SetBrush(wxBrush(m_col, wxSOLID));
+        dc.SetBrush(wxBrush(m_col));
         dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
     }
 };
@@ -415,8 +415,8 @@ public:
         wxLogMessage(wxT("DnDRectangularShape is being deleted"));
     }
 
-    virtual Kind GetKind() const { return Rectangle; }
-    virtual void Draw(wxDC& dc)
+    virtual Kind GetKind() const wxOVERRIDE { return Rectangle; }
+    virtual void Draw(wxDC& dc) wxOVERRIDE
     {
         DnDShape::Draw(dc);
 
@@ -430,7 +430,7 @@ public:
         dc.DrawLine(p3, p4);
         dc.DrawLine(p4, p1);
 
-        dc.SetBrush(wxBrush(m_col, wxSOLID));
+        dc.SetBrush(wxBrush(m_col));
         dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
     }
 };
@@ -451,14 +451,14 @@ public:
         wxLogMessage(wxT("DnDEllipticShape is being deleted"));
     }
 
-    virtual Kind GetKind() const { return Ellipse; }
-    virtual void Draw(wxDC& dc)
+    virtual Kind GetKind() const wxOVERRIDE { return Ellipse; }
+    virtual void Draw(wxDC& dc) wxOVERRIDE
     {
         DnDShape::Draw(dc);
 
         dc.DrawEllipse(m_pos, m_size);
 
-        dc.SetBrush(wxBrush(m_col, wxSOLID));
+        dc.SetBrush(wxBrush(m_col));
         dc.FloodFill(GetCentre(), m_col, wxFLOOD_BORDER);
     }
 };
@@ -529,12 +529,12 @@ public:
     // implement base class pure virtuals
     // ----------------------------------
 
-    virtual wxDataFormat GetPreferredFormat(Direction WXUNUSED(dir)) const
+    virtual wxDataFormat GetPreferredFormat(Direction WXUNUSED(dir)) const wxOVERRIDE
     {
         return m_formatShape;
     }
 
-    virtual size_t GetFormatCount(Direction dir) const
+    virtual size_t GetFormatCount(Direction dir) const wxOVERRIDE
     {
         // our custom format is supported by both GetData() and SetData()
         size_t nFormats = 1;
@@ -551,7 +551,7 @@ public:
         return nFormats;
     }
 
-    virtual void GetAllFormats(wxDataFormat *formats, Direction dir) const
+    virtual void GetAllFormats(wxDataFormat *formats, Direction dir) const wxOVERRIDE
     {
         formats[0] = m_formatShape;
         if ( dir == Get )
@@ -568,7 +568,7 @@ public:
         }
     }
 
-    virtual size_t GetDataSize(const wxDataFormat& format) const
+    virtual size_t GetDataSize(const wxDataFormat& format) const wxOVERRIDE
     {
         if ( format == m_formatShape )
         {
@@ -595,7 +595,7 @@ public:
         }
     }
 
-    virtual bool GetDataHere(const wxDataFormat& format, void *pBuf) const
+    virtual bool GetDataHere(const wxDataFormat& format, void *pBuf) const wxOVERRIDE
     {
         if ( format == m_formatShape )
         {
@@ -625,7 +625,7 @@ public:
     }
 
     virtual bool SetData(const wxDataFormat& format,
-                         size_t WXUNUSED(len), const void *buf)
+                         size_t WXUNUSED(len), const void *buf) wxOVERRIDE
     {
         wxCHECK_MSG( format == m_formatShape, false,
                      wxT( "unsupported format") );
@@ -674,8 +674,8 @@ public:
 
     DnDShape *GetShape() const;
 
-    virtual bool TransferDataToWindow();
-    virtual bool TransferDataFromWindow();
+    virtual bool TransferDataToWindow() wxOVERRIDE;
+    virtual bool TransferDataFromWindow() wxOVERRIDE;
 
     void OnColour(wxCommandEvent& event);
 
@@ -696,7 +696,7 @@ private:
                *m_textW,
                *m_textH;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -735,7 +735,7 @@ private:
 
     static DnDShapeFrame *ms_lastDropTarget;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -752,20 +752,20 @@ public:
     }
 
     // override base class (pure) virtuals
-    virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
+    virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE
     {
 #if wxUSE_STATUSBAR
         m_frame->SetStatusText(wxT("Mouse entered the frame"));
 #endif // wxUSE_STATUSBAR
         return OnDragOver(x, y, def);
     }
-    virtual void OnLeave()
+    virtual void OnLeave() wxOVERRIDE
     {
 #if wxUSE_STATUSBAR
         m_frame->SetStatusText(wxT("Mouse left the frame"));
 #endif // wxUSE_STATUSBAR
     }
-    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def)
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE
     {
         if ( !GetData() )
         {
@@ -816,6 +816,7 @@ enum
     Menu_PasteBitmap,
     Menu_PasteMFile,
     Menu_CopyFiles,
+    Menu_CopyURL,
     Menu_UsePrimary,
     Menu_Shape_New = 500,
     Menu_Shape_Edit,
@@ -825,7 +826,7 @@ enum
     Button_Colour = 1001
 };
 
-BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(DnDFrame, wxFrame)
     EVT_MENU(Menu_Quit,       DnDFrame::OnQuit)
     EVT_MENU(Menu_About,      DnDFrame::OnAbout)
     EVT_MENU(Menu_Drag,       DnDFrame::OnDrag)
@@ -844,6 +845,7 @@ BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
     EVT_MENU(Menu_PasteMFile, DnDFrame::OnPasteMetafile)
 #endif // wxUSE_METAFILE
     EVT_MENU(Menu_CopyFiles,  DnDFrame::OnCopyFiles)
+    EVT_MENU(Menu_CopyURL,    DnDFrame::OnCopyURL)
     EVT_MENU(Menu_UsePrimary, DnDFrame::OnUsePrimary)
 
     EVT_UPDATE_UI(Menu_DragMoveDef, DnDFrame::OnUpdateUIMoveByDefault)
@@ -855,11 +857,11 @@ BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
     EVT_RIGHT_DOWN(           DnDFrame::OnRightDown)
     EVT_PAINT(                DnDFrame::OnPaint)
     EVT_SIZE(                 DnDFrame::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #if wxUSE_DRAG_AND_DROP
 
-BEGIN_EVENT_TABLE(DnDShapeFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(DnDShapeFrame, wxFrame)
     EVT_MENU(Menu_Shape_New,    DnDShapeFrame::OnNewShape)
     EVT_MENU(Menu_Shape_Edit,   DnDShapeFrame::OnEditShape)
     EVT_MENU(Menu_Shape_Clear,  DnDShapeFrame::OnClearShape)
@@ -873,22 +875,22 @@ BEGIN_EVENT_TABLE(DnDShapeFrame, wxFrame)
     EVT_LEFT_DOWN(DnDShapeFrame::OnDrag)
 
     EVT_PAINT(DnDShapeFrame::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(DnDShapeDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(DnDShapeDialog, wxDialog)
     EVT_BUTTON(Button_Colour, DnDShapeDialog::OnColour)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #endif // wxUSE_DRAG_AND_DROP
 
-BEGIN_EVENT_TABLE(DnDCanvasBitmap, wxScrolledWindow)
+wxBEGIN_EVENT_TABLE(DnDCanvasBitmap, wxScrolledWindow)
     EVT_PAINT(DnDCanvasBitmap::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #if wxUSE_METAFILE
-BEGIN_EVENT_TABLE(DnDCanvasMetafile, wxScrolledWindow)
+wxBEGIN_EVENT_TABLE(DnDCanvasMetafile, wxScrolledWindow)
     EVT_PAINT(DnDCanvasMetafile::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 #endif // wxUSE_METAFILE
 
 #endif // wxUSE_DRAG_AND_DROP
@@ -974,6 +976,7 @@ DnDFrame::DnDFrame()
 #endif // wxUSE_METAFILE
     clip_menu->AppendSeparator();
     clip_menu->Append(Menu_CopyFiles, wxT("Copy &files\tCtrl-F"));
+    clip_menu->Append(Menu_CopyURL, wxT("Copy &URL\tCtrl-U"));
     clip_menu->AppendSeparator();
     clip_menu->AppendCheckItem(Menu_UsePrimary, wxT("Use &primary selection\tCtrl-P"));
 
@@ -1018,7 +1021,7 @@ DnDFrame::DnDFrame()
     m_ctrlDir->Connect
     (
         wxID_ANY,
-        wxEVT_COMMAND_TREE_BEGIN_DRAG,
+        wxEVT_TREE_BEGIN_DRAG,
         wxTreeEventHandler(DnDFrame::OnBeginDrag),
         NULL,
         this
@@ -1081,8 +1084,7 @@ void DnDFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
     GetClientSize( &w, &h );
 
     wxPaintDC dc(this);
-    // dc.Clear(); -- this kills wxGTK
-    dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL, false, wxT("charter") ) );
+    dc.SetFont( wxFontInfo(24).Family(wxFONTFAMILY_DECORATIVE).FaceName("charter") );
     dc.DrawText( wxT("Drag text from here!"), 100, h-50 );
 }
 
@@ -1485,6 +1487,26 @@ void DnDFrame::OnCopyFiles(wxCommandEvent& WXUNUSED(event))
 #endif // MSW/!MSW
 }
 
+void DnDFrame::OnCopyURL(wxCommandEvent& WXUNUSED(event))
+{
+    // Just hard code it for now, we could ask the user but the point here is
+    // to test copying URLs, it doesn't really matter what it is.
+    const wxString url("http://www.wxwidgets.org/");
+
+    wxClipboardLocker locker;
+    if ( !!locker && wxTheClipboard->AddData(new wxURLDataObject(url)) )
+    {
+        wxLogStatus(this, "Copied URL \"%s\" to %s.",
+                    url,
+                    GetMenuBar()->IsChecked(Menu_UsePrimary)
+                        ? "primary selection"
+                        : "clipboard");
+    }
+    else
+    {
+        wxLogError("Failed to copy URL.");
+    }
+}
 // ---------------------------------------------------------------------------
 // text clipboard
 // ---------------------------------------------------------------------------
@@ -1998,7 +2020,7 @@ void DnDShapeDataObject::CreateBitmap() const
     wxBitmap bitmap(x, y);
     wxMemoryDC dc;
     dc.SelectObject(bitmap);
-    dc.SetBrush(wxBrush(wxT("white"), wxSOLID));
+    dc.SetBrush(*wxWHITE_BRUSH);
     dc.Clear();
     m_shape->Draw(dc);
     dc.SelectObject(wxNullBitmap);

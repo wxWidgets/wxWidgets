@@ -4,7 +4,6 @@
 // Author:      Ryan Norton
 // Modified by:
 // Created:     11/10/04
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -66,6 +65,7 @@
 #include "wx/dnd.h"         // drag and drop for the playlist
 #include "wx/filename.h"    // For wxFileName::GetName()
 #include "wx/config.h"      // for native wxConfig
+#include "wx/vector.h"
 
 // Under MSW we have several different backends but when linking statically
 // they may be discarded by the linker (this definitely happens with MSVC) so
@@ -78,7 +78,7 @@
     wxFORCE_LINK_MODULE(wxmediabackend_wmp10)
 #endif // static wxMSW build
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -143,10 +143,18 @@ class wxMediaPlayerApp : public wxApp
 {
 public:
 #ifdef __WXMAC__
-    virtual void MacOpenFile(const wxString & fileName );
+    virtual void MacOpenFiles(const wxArrayString & fileNames );
 #endif
 
-    virtual bool OnInit();
+#if wxUSE_CMDLINE_PARSER
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
+
+    // Files specified on the command line, if any.
+    wxVector<wxString> m_params;
+#endif // wxUSE_CMDLINE_PARSER
+
+    virtual bool OnInit() wxOVERRIDE;
 
 protected:
     class wxMediaPlayerFrame* m_frame;
@@ -279,7 +287,7 @@ public:
     wxMediaPlayerTimer(wxMediaPlayerFrame* frame) {m_frame = frame;}
 
     // Called each time the timer's timeout expires
-    void Notify();
+    void Notify() wxOVERRIDE;
 
     wxMediaPlayerFrame* m_frame;       // The wxMediaPlayerFrame
 };
@@ -345,7 +353,7 @@ public:
     wxPlayListDropTarget(wxMediaPlayerListCtrl& list) : m_list(list) {}
     ~wxPlayListDropTarget(){}
         virtual bool OnDropFiles(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
-                         const wxArrayString& files)
+                         const wxArrayString& files) wxOVERRIDE
     {
         for (size_t i = 0; i < files.GetCount(); ++i)
         {
@@ -409,6 +417,34 @@ const wxChar* wxGetMediaStateText(int nState)
 IMPLEMENT_APP(wxMediaPlayerApp)
 
 // ----------------------------------------------------------------------------
+// wxMediaPlayerApp command line parsing
+// ----------------------------------------------------------------------------
+
+#if wxUSE_CMDLINE_PARSER
+
+void wxMediaPlayerApp::OnInitCmdLine(wxCmdLineParser& parser)
+{
+    wxApp::OnInitCmdLine(parser);
+
+    parser.AddParam("input files",
+                    wxCMD_LINE_VAL_STRING,
+                    wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE);
+}
+
+bool wxMediaPlayerApp::OnCmdLineParsed(wxCmdLineParser& parser)
+{
+    if ( !wxApp::OnCmdLineParsed(parser) )
+        return false;
+
+    for (size_t paramNr=0; paramNr < parser.GetParamCount(); ++paramNr)
+        m_params.push_back(parser.GetParam(paramNr));
+
+    return true;
+}
+
+#endif // wxUSE_CMDLINE_PARSER
+
+// ----------------------------------------------------------------------------
 // wxMediaPlayerApp::OnInit
 //
 // Where execution starts - akin to a main or WinMain.
@@ -429,44 +465,25 @@ bool wxMediaPlayerApp::OnInit()
     frame->Show(true);
 
 #if wxUSE_CMDLINE_PARSER
-    //
-    //  What this does is get all the command line arguments
-    //  and treat each one as a file to put to the initial playlist
-    //
-    wxCmdLineEntryDesc cmdLineDesc[2];
-    cmdLineDesc[0].kind = wxCMD_LINE_PARAM;
-    cmdLineDesc[0].shortName = NULL;
-    cmdLineDesc[0].longName = NULL;
-    cmdLineDesc[0].description = "input files";
-    cmdLineDesc[0].type = wxCMD_LINE_VAL_STRING;
-    cmdLineDesc[0].flags = wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE;
-
-    cmdLineDesc[1].kind = wxCMD_LINE_NONE;
-
-    // gets the passed media files from cmd line
-    wxCmdLineParser parser (cmdLineDesc, argc, argv);
-
-    // get filenames from the commandline
-    if (parser.Parse() == 0)
+    if ( !m_params.empty() )
     {
-        for (size_t paramNr=0; paramNr < parser.GetParamCount(); ++paramNr)
-        {
-            frame->AddToPlayList((parser.GetParam (paramNr)));
-        }
-        wxCommandEvent theEvent(wxEVT_COMMAND_MENU_SELECTED, wxID_NEXT);
+        for ( size_t n = 0; n < m_params.size(); n++ )
+            frame->AddToPlayList(m_params[n]);
+
+        wxCommandEvent theEvent(wxEVT_MENU, wxID_NEXT);
         frame->AddPendingEvent(theEvent);
     }
-#endif
+#endif // wxUSE_CMDLINE_PARSER
 
     return true;
 }
 
 #ifdef __WXMAC__
 
-void wxMediaPlayerApp::MacOpenFile(const wxString & fileName )
+void wxMediaPlayerApp::MacOpenFiles(const wxArrayString & fileNames )
 {
-    // Called when a user drags a file over our app
-    m_frame->DoOpenFile(fileName, true /* new page */);
+    // Called when a user drags files over our app
+    m_frame->DoOpenFile(fileNames[0], true /* new page */);
 }
 
 #endif // __WXMAC__
@@ -535,7 +552,7 @@ wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
                      wxT("Select a backend manually"));
 
     helpMenu->Append(wxID_ABOUT,
-                     wxT("&About...\tF1"),
+                     wxT("&About\tF1"),
                      wxT("Show about dialog"));
 
 
@@ -572,9 +589,9 @@ wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
     //  class you want to use for events, such as wxMediaPlayerFrame.
     //
     //  Then after your class declaration you put
-    //  BEGIN_EVENT_TABLE(wxMediaPlayerFrame, wxFrame)
+    //  wxBEGIN_EVENT_TABLE(wxMediaPlayerFrame, wxFrame)
     //  EVT_XXX(XXX)...
-    //  END_EVENT_TABLE()
+    //  wxEND_EVENT_TABLE()
     //
     //  Where wxMediaPlayerFrame is the class with the DECLARE_MESSAGE_MAP
     //  in it.  EVT_XXX(XXX) are each of your handlers, such
@@ -633,46 +650,46 @@ wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
     //
     // Menu events
     //
-    this->Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_EXIT, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnQuit));
 
-    this->Connect(wxID_ABOUT, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_ABOUT, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnAbout));
 
-    this->Connect(wxID_LOOP, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_LOOP, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnLoop));
 
-    this->Connect(wxID_SHOWINTERFACE, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_SHOWINTERFACE, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnShowInterface));
 
-    this->Connect(wxID_OPENFILENEWPAGE, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_OPENFILENEWPAGE, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnOpenFileNewPage));
 
-    this->Connect(wxID_OPENFILESAMEPAGE, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_OPENFILESAMEPAGE, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnOpenFileSamePage));
 
-    this->Connect(wxID_OPENURLNEWPAGE, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_OPENURLNEWPAGE, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnOpenURLNewPage));
 
-    this->Connect(wxID_OPENURLSAMEPAGE, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_OPENURLSAMEPAGE, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnOpenURLSamePage));
 
-    this->Connect(wxID_CLOSECURRENTPAGE, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_CLOSECURRENTPAGE, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnCloseCurrentPage));
 
-    this->Connect(wxID_PLAY, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_PLAY, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnPlay));
 
-    this->Connect(wxID_STOP, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_STOP, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnStop));
 
-    this->Connect(wxID_NEXT, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_NEXT, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnNext));
 
-    this->Connect(wxID_PREV, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_PREV, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnPrev));
 
-    this->Connect(wxID_SELECTBACKEND, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_SELECTBACKEND, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnSelectBackend));
 
     //
@@ -702,24 +719,34 @@ wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
                         wxT(""),
                         true);
 
-    //
-    //  Here we load the our configuration -
-    //  in our case we load all the files that were left in
-    //  the playlist the last time the user closed our application
-    //
-    //  As an exercise to the reader try modifying it so that
-    //  it properly loads the playlist for each page without
-    //  conflicting (loading the same data) with the other ones.
-    //
-    wxConfig conf;
-    wxString key, outstring;
-    for(int i = 0; ; ++i)
+
+    // Don't load previous files if we have some specified on the command line,
+    // we wouldn't play them otherwise (they'd have to be inserted into the
+    // play list at the beginning instead of being appended but we don't
+    // support this).
+#if wxUSE_CMDLINE_PARSER
+    if ( wxGetApp().m_params.empty() )
+#endif // wxUSE_CMDLINE_PARSER
     {
-        key.clear();
-        key << i;
-        if(!conf.Read(key, &outstring))
-            break;
-        page->m_playlist->AddToPlayList(outstring);
+        //
+        //  Here we load the our configuration -
+        //  in our case we load all the files that were left in
+        //  the playlist the last time the user closed our application
+        //
+        //  As an exercise to the reader try modifying it so that
+        //  it properly loads the playlist for each page without
+        //  conflicting (loading the same data) with the other ones.
+        //
+        wxConfig conf;
+        wxString key, outstring;
+        for(int i = 0; ; ++i)
+        {
+            key.clear();
+            key << i;
+            if(!conf.Read(key, &outstring))
+                break;
+            page->m_playlist->AddToPlayList(outstring);
+        }
     }
 
     //
@@ -985,7 +1012,7 @@ void wxMediaPlayerFrame::DoPlayFile(const wxString& path)
       )
     {
         if(currentpage->m_mediactrl->GetState() == wxMEDIASTATE_PLAYING)
-    {
+        {
             if( !currentpage->m_mediactrl->Pause() )
                 wxMessageBox(wxT("Couldn't pause movie!"));
         }
@@ -1272,7 +1299,7 @@ void wxMediaPlayerFrame::OnChangeSong(wxListEvent& WXUNUSED(evt))
     wxListItem listitem;
     currentpage->m_playlist->GetSelectedItem(listitem);
     if(listitem.GetData())
-    DoPlayFile((*((wxString*) listitem.GetData())));
+        DoPlayFile((*((wxString*) listitem.GetData())));
     else
         wxMessageBox(wxT("No selected item!"));
 }
@@ -1575,7 +1602,7 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
                     | wxSUNKEN_BORDER);
 
     //  Set the background of our listctrl to white
-    m_playlist->SetBackgroundColour(wxColour(255,255,255));
+    m_playlist->SetBackgroundColour(*wxWHITE);
 
     //  The layout of the headers of the listctrl are like
     //  |   | File               |  Length
@@ -1592,9 +1619,9 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     //  Column two is the name of the file
     //
     //  Column three is the length in seconds of the file
-    m_playlist->InsertColumn(0,_(""), wxLIST_FORMAT_CENTER, 20);
-    m_playlist->InsertColumn(1,_("File"), wxLIST_FORMAT_LEFT, /*wxLIST_AUTOSIZE_USEHEADER*/305);
-    m_playlist->InsertColumn(2,_("Length"), wxLIST_FORMAT_CENTER, 75);
+    m_playlist->AppendColumn(_(""), wxLIST_FORMAT_CENTER, 20);
+    m_playlist->AppendColumn(_("File"), wxLIST_FORMAT_LEFT, /*wxLIST_AUTOSIZE_USEHEADER*/305);
+    m_playlist->AppendColumn(_("Length"), wxLIST_FORMAT_CENTER, 75);
 
 #if wxUSE_DRAG_AND_DROP
     m_playlist->SetDropTarget(new wxPlayListDropTarget(*m_playlist));
@@ -1685,7 +1712,7 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     //
     // ListCtrl events
     //
-    this->Connect( wxID_LISTCTRL, wxEVT_COMMAND_LIST_ITEM_ACTIVATED,
+    this->Connect( wxID_LISTCTRL, wxEVT_LIST_ITEM_ACTIVATED,
         wxListEventHandler(wxMediaPlayerFrame::OnChangeSong),
         (wxObject*)0, parentFrame);
 
@@ -1719,22 +1746,22 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     //
     // Button events
     //
-    this->Connect( wxID_BUTTONPREV, wxEVT_COMMAND_BUTTON_CLICKED,
+    this->Connect( wxID_BUTTONPREV, wxEVT_BUTTON,
         wxCommandEventHandler(wxMediaPlayerFrame::OnPrev),
         (wxObject*)0, parentFrame);
-    this->Connect( wxID_BUTTONPLAY, wxEVT_COMMAND_BUTTON_CLICKED,
+    this->Connect( wxID_BUTTONPLAY, wxEVT_BUTTON,
         wxCommandEventHandler(wxMediaPlayerFrame::OnPlay),
         (wxObject*)0, parentFrame);
-    this->Connect( wxID_BUTTONSTOP, wxEVT_COMMAND_BUTTON_CLICKED,
+    this->Connect( wxID_BUTTONSTOP, wxEVT_BUTTON,
         wxCommandEventHandler(wxMediaPlayerFrame::OnStop),
         (wxObject*)0, parentFrame);
-    this->Connect( wxID_BUTTONNEXT, wxEVT_COMMAND_BUTTON_CLICKED,
+    this->Connect( wxID_BUTTONNEXT, wxEVT_BUTTON,
         wxCommandEventHandler(wxMediaPlayerFrame::OnNext),
         (wxObject*)0, parentFrame);
-    this->Connect( wxID_BUTTONVD, wxEVT_COMMAND_BUTTON_CLICKED,
+    this->Connect( wxID_BUTTONVD, wxEVT_BUTTON,
         wxCommandEventHandler(wxMediaPlayerFrame::OnVolumeDown),
         (wxObject*)0, parentFrame);
-    this->Connect( wxID_BUTTONVU, wxEVT_COMMAND_BUTTON_CLICKED,
+    this->Connect( wxID_BUTTONVU, wxEVT_BUTTON,
         wxCommandEventHandler(wxMediaPlayerFrame::OnVolumeUp),
         (wxObject*)0, parentFrame);
 }

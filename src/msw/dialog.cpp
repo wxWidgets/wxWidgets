@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -25,6 +24,7 @@
 #endif
 
 #include "wx/dialog.h"
+#include "wx/modalhook.h"
 
 #ifndef WX_PRECOMP
     #include "wx/msw/wrapcdlg.h"
@@ -194,14 +194,11 @@ bool wxDialog::Show(bool show)
     return true;
 }
 
-void wxDialog::Raise()
-{
-    ::SetForegroundWindow(GetHwnd());
-}
-
 // show dialog modally
 int wxDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
     wxASSERT_MSG( !IsModal(), wxT("ShowModal() can't be called twice") );
 
     Show();
@@ -338,7 +335,7 @@ bool wxDialog::DoOK()
     if ( EmulateButtonClickIfPresent(idOk) )
         return true;
 
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetAffirmativeId());
+    wxCommandEvent event(wxEVT_BUTTON, GetAffirmativeId());
     event.SetEventObject(this);
 
     return HandleWindowEvent(event);
@@ -433,38 +430,10 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
                 ::InvalidateRect(GetHwnd(), NULL, false /* erase bg */);
             }
             break;
-
-#ifndef __WXMICROWIN__
-        case WM_SETCURSOR:
-            // we want to override the busy cursor for modal dialogs:
-            // typically, wxBeginBusyCursor() is called and then a modal dialog
-            // is shown, but the modal dialog shouldn't have hourglass cursor
-            if ( IsModal() && wxIsBusy() )
-            {
-                // set our cursor for all windows (but see below)
-                wxCursor cursor = m_cursor;
-                if ( !cursor.IsOk() )
-                    cursor = wxCURSOR_ARROW;
-
-                ::SetCursor(GetHcursorOf(cursor));
-
-                // in any case, stop here and don't let wxWindow process this
-                // message (it would set the busy cursor)
-                processed = true;
-
-                // but return false to tell the child window (if the event
-                // comes from one of them and not from ourselves) that it can
-                // set its own cursor if it has one: thus, standard controls
-                // (e.g. text ctrl) still have correct cursors in a dialog
-                // invoked while wxIsBusy()
-                rc = false;
-            }
-            break;
-#endif // __WXMICROWIN__
     }
 
     if ( !processed )
-        rc = wxWindow::MSWWindowProc(message, wParam, lParam);
+        rc = wxDialogBase::MSWWindowProc(message, wParam, lParam);
 
     return rc;
 }

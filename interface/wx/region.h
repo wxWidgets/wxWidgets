@@ -2,7 +2,6 @@
 // Name:        region.h
 // Purpose:     interface of wxRegionIterator
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -115,10 +114,6 @@ public:
 
     /**
         Increment operator. Increments the iterator to the next region.
-
-        @beginWxPythonOnly
-        A wxPython alias for this operator is called Next.
-        @endWxPythonOnly
     */
     wxRegionIterator& operator ++();
 
@@ -157,6 +152,9 @@ class wxRegion : public wxGDIObject
 public:
     /**
         Default constructor.
+
+        This constructor creates an invalid, or null, object, i.e. calling
+        IsOk() on it returns @false and IsEmpty() returns @true.
     */
     wxRegion();
     /**
@@ -202,11 +200,16 @@ public:
 
     /**
         Clears the current region.
+
+        The object becomes invalid, or null, after being cleared.
     */
     virtual void Clear();
 
     /**
         Returns a value indicating whether the given point is contained within the region.
+
+        This method always returns @c wxOutRegion for an invalid region but
+        may, nevertheless, be safely called in this case.
 
         @return The return value is one of @c wxOutRegion and @c wxInRegion.
     */
@@ -214,12 +217,18 @@ public:
     /**
         Returns a value indicating whether the given point is contained within the region.
 
+        This method always returns @c wxOutRegion for an invalid region but
+        may, nevertheless, be safely called in this case.
+
         @return The return value is one of @c wxOutRegion and @c wxInRegion.
     */
     wxRegionContain Contains(const wxPoint& pt) const;
     /**
         Returns a value indicating whether the given rectangle is contained within the
         region.
+
+        This method always returns @c wxOutRegion for an invalid region but
+        may, nevertheless, be safely called in this case.
 
         @return One of ::wxOutRegion, ::wxPartRegion or ::wxInRegion.
 
@@ -232,6 +241,9 @@ public:
         Returns a value indicating whether the given rectangle is contained within the
         region.
 
+        This method always returns @c wxOutRegion for an invalid region but
+        may, nevertheless, be safely called in this case.
+
         @return One of ::wxOutRegion, ::wxPartRegion or ::wxInRegion.
 
         @note On Windows, only ::wxOutRegion and ::wxInRegion are returned; a value
@@ -243,12 +255,16 @@ public:
     /**
         Convert the region to a black and white bitmap with the white pixels
         being inside the region.
+
+        This method can't be used for invalid region.
     */
     wxBitmap ConvertToBitmap() const;
 
     //@{
     /**
         Returns the outer bounds of the region.
+
+        This method returns 0-sized bounding box for invalid regions.
     */
     void GetBox(wxCoord& x, wxCoord& y, wxCoord& width,
                 wxCoord& height) const;
@@ -258,6 +274,9 @@ public:
     /**
         Finds the intersection of this region and another, rectangular region,
         specified using position and size.
+
+        This method always fails, i.e. returns @false, if this region is
+        invalid but may nevertheless be safely used even in this case.
 
         @return @true if successful, @false otherwise.
 
@@ -270,6 +289,9 @@ public:
     /**
         Finds the intersection of this region and another, rectangular region.
 
+        This method always fails, i.e. returns @false, if this region is
+        invalid but may nevertheless be safely used even in this case.
+
         @return @true if successful, @false otherwise.
 
         @remarks Creates the intersection of the two regions, that is, the parts
@@ -279,6 +301,9 @@ public:
     bool Intersect(const wxRect& rect);
     /**
         Finds the intersection of this region and another region.
+
+        This method always fails, i.e. returns @false, if this region is
+        invalid but may nevertheless be safely used even in this case.
 
         @return @true if successful, @false otherwise.
 
@@ -290,15 +315,17 @@ public:
 
     /**
         Returns @true if the region is empty, @false otherwise.
+
+        Always returns @true if the region is invalid.
     */
     virtual bool IsEmpty() const;
 
     /**
-        Returns @true if the region is equal to, i.e. covers the same area as,
+        Returns @true if the region is equal to, i.e.\ covers the same area as,
         another one.
 
-        @note If both this region and @a region are invalid, they are
-              considered to be equal.
+        If both this region and @a region are both invalid, they are considered
+        to be equal.
     */
     bool IsEqual(const wxRegion& region) const;
 
@@ -306,6 +333,10 @@ public:
     /**
         Moves the region by the specified offsets in horizontal and vertical
         directions.
+
+        This method can't be called if the region is invalid as it doesn't make
+        sense to offset it then. Attempts to do it will result in assert
+        failure.
 
         @return @true if successful, @false otherwise (the region is unchanged
                  then).
@@ -317,6 +348,9 @@ public:
     /**
         Subtracts a rectangular region from this region.
 
+        This method always fails, i.e. returns @false, if this region is
+        invalid but may nevertheless be safely used even in this case.
+
         @return @true if successful, @false otherwise.
 
         @remarks This operation combines the parts of 'this' region that are not
@@ -326,6 +360,9 @@ public:
     bool Subtract(const wxRect& rect);
     /**
         Subtracts a region from this region.
+
+        This method always fails, i.e. returns @false, if this region is
+        invalid but may nevertheless be safely used even in this case.
 
         @return @true if successful, @false otherwise.
 
@@ -339,6 +376,10 @@ public:
         Finds the union of this region and another, rectangular region, specified using
         position and size.
 
+        This method can be used even if this region is invalid and has the
+        natural behaviour in this case, i.e. makes this region equal to the
+        given rectangle.
+
         @return @true if successful, @false otherwise.
 
         @remarks This operation creates a region that combines all of this region
@@ -349,6 +390,10 @@ public:
     /**
         Finds the union of this region and another, rectangular region.
 
+        This method can be used even if this region is invalid and has the
+        natural behaviour in this case, i.e. makes this region equal to the
+        given rectangle.
+
         @return @true if successful, @false otherwise.
 
         @remarks This operation creates a region that combines all of this region
@@ -358,6 +403,10 @@ public:
     bool Union(const wxRect& rect);
     /**
         Finds the union of this region and another region.
+
+        This method can be used even if this region is invalid and has the
+        natural behaviour in this case, i.e. makes this region equal to the
+        given @a region.
 
         @return @true if successful, @false otherwise.
 
@@ -396,6 +445,10 @@ public:
         Finds the Xor of this region and another, rectangular region, specified using
         position and size.
 
+        This method can be used even if this region is invalid and has the
+        natural behaviour in this case, i.e. makes this region equal to the
+        given rectangle.
+
         @return @true if successful, @false otherwise.
 
         @remarks This operation creates a region that combines all of this region
@@ -406,6 +459,10 @@ public:
     /**
         Finds the Xor of this region and another, rectangular region.
 
+        This method can be used even if this region is invalid and has the
+        natural behaviour in this case, i.e. makes this region equal to the
+        given rectangle.
+
         @return @true if successful, @false otherwise.
 
         @remarks This operation creates a region that combines all of this region
@@ -415,6 +472,10 @@ public:
     bool Xor(const wxRect& rect);
     /**
         Finds the Xor of this region and another region.
+
+        This method can be used even if this region is invalid and has the
+        natural behaviour in this case, i.e. makes this region equal to the
+        given @a region.
 
         @return @true if successful, @false otherwise.
 

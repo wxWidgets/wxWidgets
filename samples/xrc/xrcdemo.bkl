@@ -18,6 +18,8 @@
             custclas.h
             objrefdlg.h
         </headers>
+        <wx-lib>aui</wx-lib>
+        <wx-lib>ribbon</wx-lib>
         <wx-lib>xrc</wx-lib>
         <wx-lib>html</wx-lib>
         <wx-lib>adv</wx-lib>
@@ -30,6 +32,7 @@
         <dstdir>$(BUILDDIR)/rc</dstdir>
         <srcdir>$(SRCDIR)/rc</srcdir>
         <files>
+            aui.xpm aui.xrc
             artprov.xpm artprov.xrc basicdlg.xpm
             basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc
             derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc
@@ -38,6 +41,7 @@
             objref.xrc objrefdlg.xpm
             uncenter.xrc update.gif variable.xpm variable.xrc
             throbber.gif stop.xpm
+            wxbanner.gif
         </files>
     </wx-data>
 

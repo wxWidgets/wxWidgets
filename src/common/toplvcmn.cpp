@@ -3,7 +3,6 @@
 // Purpose:     common (for all platforms) wxTopLevelWindow functions
 // Author:      Julian Smart, Vadim Zeitlin
 // Created:     01/02/97
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling and Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -39,10 +38,7 @@
 BEGIN_EVENT_TABLE(wxTopLevelWindowBase, wxWindow)
     EVT_CLOSE(wxTopLevelWindowBase::OnCloseWindow)
     EVT_SIZE(wxTopLevelWindowBase::OnSize)
-    WX_EVENT_TABLE_CONTROL_CONTAINER(wxTopLevelWindowBase)
 END_EVENT_TABLE()
-
-WX_DELEGATE_TO_CONTROL_CONTAINER(wxTopLevelWindowBase, wxWindow)
 
 // ============================================================================
 // implementation
@@ -58,8 +54,6 @@ wxTopLevelWindowBase::wxTopLevelWindowBase()
 {
     // Unlike windows, top level windows are created hidden by default.
     m_isShown = false;
-
-    WX_INIT_CONTROL_CONTAINER();
 }
 
 wxTopLevelWindowBase::~wxTopLevelWindowBase()
@@ -82,7 +76,7 @@ wxTopLevelWindowBase::~wxTopLevelWindowBase()
           )
     {
         wxWindow * const win = wxDynamicCast(*i, wxWindow);
-        if ( win && win->GetParent() == this )
+        if ( win && wxGetTopLevelParent(win->GetParent()) == this )
         {
             wxPendingDelete.erase(i);
 
@@ -107,6 +101,16 @@ wxTopLevelWindowBase::~wxTopLevelWindowBase()
 
 bool wxTopLevelWindowBase::Destroy()
 {
+    // We can't delay the destruction if our parent is being already destroyed
+    // as we will be deleted anyhow during its destruction and the pointer
+    // stored in wxPendingDelete would become invalid, so just delete ourselves
+    // immediately in this case.
+    if ( wxWindow* parent = GetParent() )
+    {
+        if ( parent->IsBeingDeleted() )
+            return wxNonOwnedWindow::Destroy();
+    }
+
     // delayed destruction: the frame will be deleted during the next idle
     // loop iteration
     if ( !wxPendingDelete.Member(this) )
@@ -142,6 +146,14 @@ bool wxTopLevelWindowBase::IsLastBeforeExit() const
     // first of all, automatically exiting the app on last window close can be
     // completely disabled at wxTheApp level
     if ( !wxTheApp || !wxTheApp->GetExitOnFrameDelete() )
+        return false;
+
+    // second, never terminate the application after closing a child TLW
+    // because this would close its parent unexpectedly -- notice that this
+    // check is not redundant with the loop below, as the parent might return
+    // false from its ShouldPreventAppExit() -- except if the child is being
+    // deleted as part of the parent destruction
+    if ( GetParent() && !GetParent()->IsBeingDeleted() )
         return false;
 
     wxWindowList::const_iterator i;
@@ -366,6 +378,14 @@ void wxTopLevelWindowBase::SetIcon(const wxIcon& icon)
 // whole client area
 void wxTopLevelWindowBase::DoLayout()
 {
+    // We are called during the window destruction several times, e.g. as
+    // wxFrame tries to adjust to its tool/status bars disappearing. But
+    // actually doing the layout is pretty useless in this case as the window
+    // will disappear anyhow -- so just don't bother.
+    if ( IsBeingDeleted() )
+        return;
+
+
     // if we're using constraints or sizers - do use them
     if ( GetAutoLayout() )
     {

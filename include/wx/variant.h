@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/09/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -384,8 +383,8 @@ public:
 
 // Attributes
 protected:
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxObjectRefData *CreateRefData() const wxOVERRIDE;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const wxOVERRIDE;
 
     wxString        m_name;
 
@@ -431,7 +430,7 @@ public:
     {
     }
 
-    virtual wxAnyValueType* GetAssociatedType()
+    virtual wxAnyValueType* GetAssociatedType() wxOVERRIDE
     {
         return wxAnyValueTypeImpl<T>::GetInstance();
     }
@@ -458,7 +457,7 @@ bool CLASSNAME::GetAsAny(wxAny* any) const \
 } \
 wxVariantData* CLASSNAME::VariantDataFactory(const wxAny& any) \
 { \
-    return new CLASSNAME(wxANY_AS(any, T)); \
+    return new CLASSNAME(any.As<T>()); \
 } \
 REGISTER_WXANY_CONVERSION(T, CLASSNAME)
 
@@ -570,7 +569,11 @@ bool classname##VariantData::Eq(wxVariantData& data) const \
                   var.GetWxObjectPtr() : NULL));
 
 // Replacement for using wxDynamicCast on a wxVariantData object
-#define wxDynamicCastVariantData(data, classname) dynamic_cast<classname*>(data)
+#ifndef wxNO_RTTI
+    #define wxDynamicCastVariantData(data, classname) dynamic_cast<classname*>(data)
+#endif
+
+#define wxStaticCastVariantData(data, classname) static_cast<classname*>(data)
 
 extern wxVariant WXDLLIMPEXP_BASE wxNullVariant;
 

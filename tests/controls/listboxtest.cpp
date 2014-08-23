@@ -3,7 +3,6 @@
 // Purpose:     wxListBox unit test
 // Author:      Steven Lamerton
 // Created:     2010-06-29
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -184,8 +183,8 @@ void ListBoxTestCase::ClickEvents()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                               wxTestableFrame);
 
-    EventCounter count(frame, wxEVT_COMMAND_LISTBOX_SELECTED);
-    EventCounter count1(frame, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED);
+    EventCounter selected(frame, wxEVT_LISTBOX);
+    EventCounter dclicked(frame, wxEVT_LISTBOX_DCLICK);
 
     wxUIActionSimulator sim;
 
@@ -205,12 +204,12 @@ void ListBoxTestCase::ClickEvents()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, selected.GetCount());
 
     sim.MouseDblClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, dclicked.GetCount());
 #endif
 }
 
@@ -220,8 +219,8 @@ void ListBoxTestCase::ClickNotOnItem()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                               wxTestableFrame);
 
-    EventCounter count(frame, wxEVT_COMMAND_LISTBOX_SELECTED);
-    EventCounter count1(frame, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED);
+    EventCounter selected(frame, wxEVT_LISTBOX);
+    EventCounter dclicked(frame, wxEVT_LISTBOX_DCLICK);
 
     wxUIActionSimulator sim;
 
@@ -252,7 +251,8 @@ void ListBoxTestCase::ClickNotOnItem()
     wxYield();
 
     //If we are not clicking on an item we shouldn't have any events
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(0, selected.GetCount());
+    CPPUNIT_ASSERT_EQUAL(0, dclicked.GetCount());
 #endif
 }
 

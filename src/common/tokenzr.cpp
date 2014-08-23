@@ -4,7 +4,6 @@
 // Author:      Guilhem Lavaux
 // Modified by: Vadim Zeitlin (almost full rewrite)
 // Created:     04/22/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -191,7 +190,7 @@ bool wxStringTokenizer::DoHasMoreTokens() const
         case wxTOKEN_INVALID:
         case wxTOKEN_DEFAULT:
             wxFAIL_MSG( wxT("unexpected tokenizer mode") );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxTOKEN_STRTOK:
             // never return empty delimiters

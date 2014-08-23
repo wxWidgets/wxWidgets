@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     22.10.99
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,7 +48,7 @@ public:
 
     // multiple selection logic
     virtual bool IsSelected(int n) const = 0;
-    virtual void SetSelection(int n);
+    virtual void SetSelection(int n) wxOVERRIDE;
     void SetSelection(int n, bool select) { DoSetSelection(n, select); }
     void Deselect(int n) { DoSetSelection(n, false); }
     void DeselectAll(int itemToLeaveSelected = -1);
@@ -85,11 +84,11 @@ public:
     }
 
     // override wxItemContainer::IsSorted
-    virtual bool IsSorted() const { return HasFlag( wxLB_SORT ); }
+    virtual bool IsSorted() const wxOVERRIDE { return HasFlag( wxLB_SORT ); }
 
     // emulate selecting or deselecting the item event.GetInt() (depending on
     // event.GetExtraLong())
-    void Command(wxCommandEvent& event);
+    void Command(wxCommandEvent& event) wxOVERRIDE;
 
     // return the index of the item at this position or wxNOT_FOUND
     int HitTest(const wxPoint& point) const { return DoListHitTest(point); }
@@ -154,8 +153,6 @@ private:
   #include "wx/gtk1/listbox.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/listbox.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/listbox.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/listbox.h"
 #elif defined(__WXQT__)

@@ -4,7 +4,6 @@
 // Author:      Vaclav Slavik
 // Modified by:
 // Created:     2003/02/28
-// RCS-ID:      $Id$
 // Copyright:   (c) Vaclav Slavik, 2003
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,10 +23,13 @@
     #include "wx/intl.h"
 #endif
 
+#include "wx/modalhook.h"
+
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/messagetype.h"
 #include "wx/gtk/private/mnemonics.h"
-#include <gtk/gtk.h>
+#include "wx/gtk/private/dialogcount.h"
 
 #if wxUSE_LIBHILDON
     #include <hildon-widgets/hildon-note.h>
@@ -72,6 +74,11 @@ wxString wxMessageDialog::GetDefaultOKLabel() const
 wxString wxMessageDialog::GetDefaultCancelLabel() const
 {
     return GTK_STOCK_CANCEL;
+}
+
+wxString wxMessageDialog::GetDefaultHelpLabel() const
+{
+    return GTK_STOCK_HELP;
 }
 
 void wxMessageDialog::DoSetCustomLabel(wxString& var, const ButtonLabel& label)
@@ -135,16 +142,21 @@ void wxMessageDialog::GTKCreateMsgDialog()
     // when using custom labels, we have to add all the buttons ourselves
     if ( !HasCustomLabels() )
     {
-        if ( m_dialogStyle & wxYES_NO )
+        // "Help" button is not supported by predefined combinations so we
+        // always need to create the buttons manually when it's used.
+        if ( !(m_dialogStyle & wxHELP) )
         {
-            if ( !(m_dialogStyle & wxCANCEL) )
-                buttons = GTK_BUTTONS_YES_NO;
-            //else: no standard GTK_BUTTONS_YES_NO_CANCEL so leave as NONE
-        }
-        else if ( m_dialogStyle & wxOK )
-        {
-            buttons = m_dialogStyle & wxCANCEL ? GTK_BUTTONS_OK_CANCEL
-                                               : GTK_BUTTONS_OK;
+            if ( m_dialogStyle & wxYES_NO )
+            {
+                if ( !(m_dialogStyle & wxCANCEL) )
+                    buttons = GTK_BUTTONS_YES_NO;
+                //else: no standard GTK_BUTTONS_YES_NO_CANCEL so leave as NONE
+            }
+            else if ( m_dialogStyle & wxOK )
+            {
+                buttons = m_dialogStyle & wxCANCEL ? GTK_BUTTONS_OK_CANCEL
+                                                   : GTK_BUTTONS_OK;
+            }
         }
     }
 
@@ -156,15 +168,13 @@ void wxMessageDialog::GTKCreateMsgDialog()
     }
 
     wxString message;
-#if GTK_CHECK_VERSION(2, 6, 0)
     bool needsExtMessage = false;
-    if ( gtk_check_version(2, 6, 0) == NULL && !m_extendedMessage.empty() )
+    if (!m_extendedMessage.empty())
     {
         message = m_message;
         needsExtMessage = true;
     }
-    else // extended message not needed or not supported
-#endif // GTK+ 2.6+
+    else // extended message not needed
     {
         message = GetFullMessage();
     }
@@ -176,7 +186,6 @@ void wxMessageDialog::GTKCreateMsgDialog()
                                       "%s",
                                       (const char*)wxGTK_CONV(message));
 
-#if GTK_CHECK_VERSION(2, 6, 0)
     if ( needsExtMessage )
     {
         gtk_message_dialog_format_secondary_text
@@ -186,7 +195,6 @@ void wxMessageDialog::GTKCreateMsgDialog()
             (const char *)wxGTK_CONV(m_extendedMessage)
         );
     }
-#endif // GTK+ 2.6+
 #endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2/!wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
 
     g_object_ref(m_widget);
@@ -211,9 +219,16 @@ void wxMessageDialog::GTKCreateMsgDialog()
     const bool addButtons = buttons == GTK_BUTTONS_NONE;
 #endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
 
-    if ( m_dialogStyle & wxYES_NO ) // Yes/No or Yes/No/Cancel dialog
+
+    if ( addButtons )
     {
-        if ( addButtons )
+        if ( m_dialogStyle & wxHELP )
+        {
+            gtk_dialog_add_button(dlg, wxGTK_CONV(GetHelpLabel()),
+                                  GTK_RESPONSE_HELP);
+        }
+
+        if ( m_dialogStyle & wxYES_NO ) // Yes/No or Yes/No/Cancel dialog
         {
             // Add the buttons in the correct order which is, according to
             // http://library.gnome.org/devel/hig-book/stable/windows-alert.html.en
@@ -233,36 +248,35 @@ void wxMessageDialog::GTKCreateMsgDialog()
             gtk_dialog_add_button(dlg, wxGTK_CONV(GetYesLabel()),
                                   GTK_RESPONSE_YES);
         }
-
-        // it'd probably be harmless to call gtk_dialog_set_default_response()
-        // twice but why do it if we're going to change the default below
-        // anyhow
-        if ( !(m_dialogStyle & wxCANCEL_DEFAULT) )
+        else // Ok or Ok/Cancel dialog
         {
-            gtk_dialog_set_default_response(dlg,
-                                            m_dialogStyle & wxNO_DEFAULT
-                                                ? GTK_RESPONSE_NO
-                                                : GTK_RESPONSE_YES);
-        }
-    }
-    else if ( addButtons ) // Ok or Ok/Cancel dialog
-    {
-        gtk_dialog_add_button(dlg, wxGTK_CONV(GetOKLabel()), GTK_RESPONSE_OK);
-        if ( m_dialogStyle & wxCANCEL )
-        {
-            gtk_dialog_add_button(dlg, wxGTK_CONV(GetCancelLabel()),
-                                  GTK_RESPONSE_CANCEL);
+            gtk_dialog_add_button(dlg, wxGTK_CONV(GetOKLabel()), GTK_RESPONSE_OK);
+            if ( m_dialogStyle & wxCANCEL )
+            {
+                gtk_dialog_add_button(dlg, wxGTK_CONV(GetCancelLabel()),
+                                      GTK_RESPONSE_CANCEL);
+            }
         }
     }
 
+    gint defaultButton;
     if ( m_dialogStyle & wxCANCEL_DEFAULT )
-    {
-        gtk_dialog_set_default_response(dlg, GTK_RESPONSE_CANCEL);
-    }
+        defaultButton = GTK_RESPONSE_CANCEL;
+    else if ( m_dialogStyle & wxNO_DEFAULT )
+        defaultButton = GTK_RESPONSE_NO;
+    else if ( m_dialogStyle & wxYES_NO )
+        defaultButton = GTK_RESPONSE_YES;
+    else // No need to change the default value, whatever it is.
+        defaultButton = GTK_RESPONSE_NONE;
+
+    if ( defaultButton != GTK_RESPONSE_NONE )
+        gtk_dialog_set_default_response(dlg, defaultButton);
 }
 
 int wxMessageDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
     // break the mouse capture as it would interfere with modal dialog (see
     // wxDialog::ShowModal)
     wxWindow * const win = wxWindow::GetCapture();
@@ -281,7 +295,10 @@ int wxMessageDialog::ShowModal()
     if (m_parent)
         gtk_window_present( GTK_WINDOW(m_parent->m_widget) );
 
+    wxOpenModalDialogLocker modalLocker;
+
     gint result = gtk_dialog_run(GTK_DIALOG(m_widget));
+    GTKDisconnect(m_widget);
     gtk_widget_destroy(m_widget);
     g_object_unref(m_widget);
     m_widget = NULL;
@@ -302,6 +319,8 @@ int wxMessageDialog::ShowModal()
             return wxID_YES;
         case GTK_RESPONSE_NO:
             return wxID_NO;
+        case GTK_RESPONSE_HELP:
+            return wxID_HELP;
     }
 }
 

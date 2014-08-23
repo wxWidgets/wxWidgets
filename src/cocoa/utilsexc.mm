@@ -4,7 +4,6 @@
 // Author:      Ryan Norton
 // Modified by:
 // Created:     2004-10-05
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 // Notes:       This code may be useful on platforms other than Darwin.
@@ -16,8 +15,6 @@
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
 #endif
-
-#include "wx/unix/execute.h"
 
 #if 0
 

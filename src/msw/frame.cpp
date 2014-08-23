@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -61,9 +60,9 @@
 // globals
 // ----------------------------------------------------------------------------
 
-#if wxUSE_MENUS_NATIVE
+#if wxUSE_MENUS || wxUSE_MENUS_NATIVE
     extern wxMenu *wxCurrentPopupMenu;
-#endif // wxUSE_MENUS_NATIVE
+#endif // wxUSE_MENUS || wxUSE_MENUS_NATIVE
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -233,11 +232,6 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
 // wxFrame: various geometry-related functions
 // ----------------------------------------------------------------------------
 
-void wxFrame::Raise()
-{
-    ::SetForegroundWindow(GetHwnd());
-}
-
 // generate an artificial resize event
 void wxFrame::SendSizeEvent(int flags)
 {
@@ -291,6 +285,13 @@ void wxFrame::PositionStatusBar()
 
     int w, h;
     GetClientSize(&w, &h);
+
+    // Resize the status bar to its default height, as it could have been set
+    // to a wrong value before by WM_SIZE sent during the frame creation and
+    // our status bars preserve their programmatically set size to avoid being
+    // resized by DefWindowProc() to the full window width, so if we didn't do
+    // this here, the status bar would retain the possibly wrong current height.
+    m_frameStatusBar->SetSize(wxDefaultSize, wxSIZE_AUTO_HEIGHT);
 
     int sw, sh;
     m_frameStatusBar->GetSize(&sw, &sh);
@@ -379,7 +380,7 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
         // adjust for menu / titlebar height
         rc.bottom -= (2*menuHeight-1);
 
-        ::MoveWindow(Gethwnd(), rc.left, rc.top, rc.right, rc.bottom, FALSE);
+        ::MoveWindow(GetHwnd(), rc.left, rc.top, rc.right, rc.bottom, FALSE);
     }
 #endif
 
@@ -428,11 +429,22 @@ void wxFrame::InternalSetMenuBar()
 
 #endif // wxUSE_MENUS_NATIVE
 
+#if wxUSE_MENUS
+wxMenu* wxFrame::MSWFindMenuFromHMENU(WXHMENU hMenu)
+{
+    return GetMenuBar() ? GetMenuBar()->MSWGetMenu(hMenu) : NULL;
+}
+#endif // wxUSE_MENUS
+
 // Responds to colour changes, and passes event on to children.
 void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
-    Refresh();
+    // Don't override the colour explicitly set by the user, if any.
+    if ( !UseBgCol() )
+    {
+        SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
+        Refresh();
+    }
 
 #if wxUSE_STATUSBAR
     if ( m_frameStatusBar )
@@ -819,62 +831,6 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     return wxFrameBase::HandleCommand(id, cmd, control);;
 }
 
-#if wxUSE_MENUS
-
-bool
-wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU WXUNUSED(hMenu))
-{
-    // sign extend to int from unsigned short we get from Windows
-    int item = (signed short)nItem;
-
-    // WM_MENUSELECT is generated for both normal items and menus, including
-    // the top level menus of the menu bar, which can't be represented using
-    // any valid identifier in wxMenuEvent so use an otherwise unused value for
-    // them
-    if ( flags & (MF_POPUP | MF_SEPARATOR) )
-        item = wxID_NONE;
-
-    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item);
-    event.SetEventObject(this);
-
-    if ( HandleWindowEvent(event) )
-        return true;
-
-    // by default, i.e. if the event wasn't handled above, clear the status bar
-    // text when an item which can't have any associated help string in wx API
-    // is selected
-    if ( item == wxID_NONE )
-        DoGiveHelp(wxEmptyString, true);
-
-    return false;
-}
-
-bool wxFrame::HandleMenuLoop(const wxEventType& evtType, WXWORD isPopup)
-{
-    // we don't have the menu id here, so we use the id to specify if the event
-    // was from a popup menu or a normal one
-    wxMenuEvent event(evtType, isPopup ? -1 : 0);
-    event.SetEventObject(this);
-
-    return HandleWindowEvent(event);
-}
-
-bool wxFrame::HandleInitMenuPopup(WXHMENU hMenu)
-{
-    wxMenu* menu = NULL;
-    if (GetMenuBar())
-    {
-        menu = GetMenuBar()->MSWGetMenu(hMenu);
-    }
-
-    wxMenuEvent event(wxEVT_MENU_OPEN, 0, menu);
-    event.SetEventObject(this);
-
-    return HandleWindowEvent(event);
-}
-
-#endif // wxUSE_MENUS
-
 // ---------------------------------------------------------------------------
 // the window proc for wxFrame
 // ---------------------------------------------------------------------------
@@ -915,26 +871,6 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
             break;
 
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
-#if wxUSE_MENUS
-        case WM_INITMENUPOPUP:
-            processed = HandleInitMenuPopup((WXHMENU) wParam);
-            break;
-
-        case WM_MENUSELECT:
-            {
-                WXWORD item, flags;
-                WXHMENU hmenu;
-                UnpackMenuSelect(wParam, lParam, &item, &flags, &hmenu);
-
-                processed = HandleMenuSelect(item, flags, hmenu);
-            }
-            break;
-
-        case WM_EXITMENULOOP:
-            processed = HandleMenuLoop(wxEVT_MENU_CLOSE, (WXWORD)wParam);
-            break;
-#endif // wxUSE_MENUS
-
         case WM_QUERYDRAGICON:
             {
                 const wxIcon& icon = GetIcon();

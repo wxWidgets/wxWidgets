@@ -28,7 +28,13 @@
 
 version=$1
 if [ -z "$version" ]; then
-    echo "Must specify the distribution version." >2
+    echo "Must specify the distribution version." >&2
+    exit 1
+fi
+
+EOL_FILE=../eol-native
+if [ ! -r "$EOL_FILE" ]; then
+    echo "Use build/tools/svn-find-native-eols.pl to generate $EOL_FILE." >&2
     exit 1
 fi
 
@@ -48,21 +54,31 @@ cleanup
 
 git archive --prefix=$prefix/ HEAD | (cd ..; tar x)
 cd ..
-mv $prefix/include/wx/msw/setup0.h $prefix/include/wx/msw/setup.h
+# All setup0.h files are supposed to be renamed to just setup.h when checked
+# out and in the distribution.
+find $prefix/include/wx -type f -name setup0.h | while read f; do
+    mv $f ${f%0.h}.h
+done
+
+# Compile gettext catalogs.
+make -C $prefix/locale allmo
 
 tar cjf $prefix.tar.bz2 $prefix
 
 cd $prefix
 set +x
-for f in `cat ../eol-native`; do
-    if [ $f == "include/wx/msw/setup0.h" ]; then
-        # we renamed this file above so adjust
-        f="include/wx/msw/setup.h"
-    fi
-    unix2dos $f
+for f in `cat $EOL_FILE`; do
+    case $f in
+        */setup0.h)
+            # we renamed this file above so adjust
+            f=${f%0.h}.h
+            ;;
+    esac
+    unix2dos -q $f
 done
 set -x
 
 zip -q -r ../$prefix.zip .
 
 7z a ../$prefix.7z . >/dev/null
+7z a ../${prefix}_headers.7z include >/dev/null

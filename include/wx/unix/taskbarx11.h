@@ -4,7 +4,6 @@
 // Author:      Vaclav Slavik
 // Modified by:
 // Created:     04/04/2003
-// RCS-ID:      $Id$
 // Copyright:   (c) Vaclav Slavik, 2003
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////
@@ -25,9 +24,9 @@ public:
     bool IsIconInstalled() const;
 
     // Operations:
-    bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString);
-    bool RemoveIcon();
-    bool PopupMenu(wxMenu *menu);
+    bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString) wxOVERRIDE;
+    bool RemoveIcon() wxOVERRIDE;
+    bool PopupMenu(wxMenu *menu) wxOVERRIDE;
 
 protected:
     wxTaskBarIconArea *m_iconWnd;

@@ -4,7 +4,6 @@
 // Author:      Karsten Ballueder
 // Modified by: Francesco Montorsi
 // Created:     09.05.1999
-// RCS-ID:      $Id$
 // Copyright:   (c) Karsten Ballueder
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -27,12 +26,19 @@ class WXDLLIMPEXP_FWD_CORE wxWindowDisabler;
 class WXDLLIMPEXP_CORE wxGenericProgressDialog : public wxDialog
 {
 public:
+    wxGenericProgressDialog();
     wxGenericProgressDialog(const wxString& title, const wxString& message,
                             int maximum = 100,
                             wxWindow *parent = NULL,
                             int style = wxPD_APP_MODAL | wxPD_AUTO_HIDE);
 
     virtual ~wxGenericProgressDialog();
+
+    bool Create(const wxString& title,
+                const wxString& message,
+                int maximum = 100,
+                wxWindow *parent = NULL,
+                int style = wxPD_APP_MODAL | wxPD_AUTO_HIDE);
 
     virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL);
     virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool *skip = NULL);
@@ -51,9 +57,9 @@ public:
     bool WasSkipped() const;
 
     // Must provide overload to avoid hiding it (and warnings about it)
-    virtual void Update() { wxDialog::Update(); }
+    virtual void Update() wxOVERRIDE { wxDialog::Update(); }
 
-    virtual bool Show( bool show = true );
+    virtual bool Show( bool show = true ) wxOVERRIDE;
 
     // This enum is an implementation detail and should not be used
     // by user code.
@@ -67,15 +73,6 @@ public:
     };
 
 protected:
-    // This ctor is used by the native MSW implementation only.
-    wxGenericProgressDialog(wxWindow *parent, int style);
-
-    void Create(const wxString& title,
-                const wxString& message,
-                int maximum,
-                wxWindow *parent,
-                int style);
-
     // Update just the m_maximum field, this is used by public SetRange() but,
     // unlike it, doesn't update the controls state. This makes it useful for
     // both this class and its derived classes that don't use m_gauge to
@@ -95,7 +92,7 @@ protected:
 
     // Return the progress dialog style. Prefer to use HasPDFlag() if possible.
     int GetPDStyle() const { return m_pdStyle; }
-
+    void SetPDStyle(int pdStyle) { m_pdStyle = pdStyle; }
 
     // Updates estimated times from a given progress bar value and stores the
     // results in provided arguments.
@@ -123,6 +120,10 @@ protected:
     // the dialog was shown
     void ReenableOtherWindows();
 
+    // Set the top level parent we store from the parent window provided when
+    // creating the dialog.
+    void SetTopParent(wxWindow* parent);
+
     // return the top level parent window of this dialog (may be NULL)
     wxWindow *GetTopParent() const { return m_parentTop; }
 
@@ -133,7 +134,7 @@ protected:
     // the maximum value
     int m_maximum;
 
-#if defined(__WXMSW__ ) || defined(__WXPM__)
+#if defined(__WXMSW__)
     // the factor we use to always keep the value in 16 bit range as the native
     // control only supports ranges from 0 to 65,535
     size_t m_factor;
@@ -151,7 +152,7 @@ private:
     static void SetTimeLabel(unsigned long val, wxStaticText *label);
 
     // common part of all ctors
-    void Init(wxWindow *parent, int style);
+    void Init();
 
     // create the label with given text and another one to show the time nearby
     // as the next windows in the sizer, returns the created control

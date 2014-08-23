@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -29,7 +28,6 @@
 BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
   EVT_ACTIVATE(wxFrame::OnActivate)
   EVT_SYS_COLOUR_CHANGED(wxFrame::OnSysColourChanged)
-  EVT_SIZE(wxFrame::OnSize)
 END_EVENT_TABLE()
 
 #define WX_MAC_STATUSBAR_HEIGHT 18
@@ -216,14 +214,6 @@ void wxFrame::OnActivate(wxActivateEvent& event)
     }
 }
 
-
-void wxFrame::OnSize(wxSizeEvent& event)
-{
-    PositionBars();
-    
-    event.Skip();
-}
-
 #if wxUSE_MENUS
 void wxFrame::DetachMenuBar()
 {
@@ -234,8 +224,10 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
 {
 #if wxOSX_USE_CARBON
     wxFrame* tlf = wxDynamicCast( wxNonOwnedWindow::GetFromWXWindow( (WXWindow) FrontNonFloatingWindow() ) , wxFrame );
+#elif wxOSX_USE_COCOA
+    wxFrame* tlf = wxDynamicCast( wxNonOwnedWindow::GetFromWXWindow( wxOSXGetMainWindow() ) , wxFrame );
 #else
-    wxFrame* tlf = (wxFrame*) wxTheApp->GetTopWindow();
+    wxFrame* tlf = wxDynamicCast( wxTheApp->GetTopWindow(), wxFrame );
 #endif
     bool makeCurrent = false;
 

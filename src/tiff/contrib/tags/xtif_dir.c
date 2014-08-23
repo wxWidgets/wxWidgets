@@ -341,3 +341,10 @@ XTIFFClose(TIFF *tif)
 	_XTIFFFreeDirectory(xt);
 	_TIFFfree(xt);
 }
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

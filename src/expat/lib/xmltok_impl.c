@@ -2,6 +2,9 @@
    See the file COPYING for copying permission.
 */
 
+/* This file is included! */
+#ifdef XML_TOK_IMPL_C
+
 #ifndef IS_INVALID_CHAR
 #define IS_INVALID_CHAR(enc, ptr, n) (0)
 #endif
@@ -1714,7 +1717,7 @@ PREFIX(nameLength)(const ENCODING *enc, const char *ptr)
       ptr += MINBPC(enc);
       break;
     default:
-      return ptr - start;
+      return (int)(ptr - start);
     }
   }
 }
@@ -1741,7 +1744,7 @@ PREFIX(updatePosition)(const ENCODING *enc,
                        const char *end,
                        POSITION *pos)
 {
-  while (ptr != end) {
+  while (ptr < end) {
     switch (BYTE_TYPE(enc, ptr)) {
 #define LEAD_CASE(n) \
     case BT_LEAD ## n: \
@@ -1750,7 +1753,7 @@ PREFIX(updatePosition)(const ENCODING *enc,
     LEAD_CASE(2) LEAD_CASE(3) LEAD_CASE(4)
 #undef LEAD_CASE
     case BT_LF:
-      pos->columnNumber = (unsigned)-1;
+      pos->columnNumber = (XML_Size)-1;
       pos->lineNumber++;
       ptr += MINBPC(enc);
       break;
@@ -1759,7 +1762,7 @@ PREFIX(updatePosition)(const ENCODING *enc,
       ptr += MINBPC(enc);
       if (ptr != end && BYTE_TYPE(enc, ptr) == BT_LF)
         ptr += MINBPC(enc);
-      pos->columnNumber = (unsigned)-1;
+      pos->columnNumber = (XML_Size)-1;
       break;
     default:
       ptr += MINBPC(enc);
@@ -1777,3 +1780,4 @@ PREFIX(updatePosition)(const ENCODING *enc,
 #undef CHECK_NMSTRT_CASE
 #undef CHECK_NMSTRT_CASES
 
+#endif /* XML_TOK_IMPL_C */

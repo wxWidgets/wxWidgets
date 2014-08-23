@@ -5,7 +5,6 @@
 //              David Elliott
 // Modified by:
 // Created:     2004-10-05
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 //              2007, Software 2000 Ltd.
 // Licence:     wxWindows licence

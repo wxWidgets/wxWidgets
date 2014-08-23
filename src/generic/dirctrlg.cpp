@@ -4,7 +4,6 @@
 // Author:      Harm van der Heijden, Robert Roebling, Julian Smart
 // Modified by:
 // Created:     12/12/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Harm van der Heijden, Robert Roebling and Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -55,35 +54,21 @@
     #include  "wx/osx/private.h"  // includes mac headers
 #endif
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
 #include <windows.h>
 #include "wx/msw/winundef.h"
 #include "wx/volume.h"
 
-// FIXME - Mingw32 1.0 has both _getdrive() and _chdrive(). For now, let's assume
-//         older releases don't, but it should be verified and the checks modified
-//         accordingly.
-#if !defined(__GNUWIN32__) || (defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
-#if !defined(__WXWINCE__)
+// MinGW has _getdrive() and _chdrive(), Cygwin doesn't.
+#if defined(__GNUWIN32__) && !defined(__CYGWIN__)
+    #define wxHAS_DRIVE_FUNCTIONS
+#endif
+
+#ifdef wxHAS_DRIVE_FUNCTIONS
     #include <direct.h>
 #endif
-    #include <stdlib.h>
-    #include <ctype.h>
-#endif
 
-#endif
-
-#if defined(__OS2__) || defined(__DOS__)
-    #ifdef __OS2__
-        #define INCL_BASE
-        #include <os2.h>
-        #ifndef __EMX__
-            #include <direct.h>
-        #endif
-        #include <stdlib.h>
-        #include <ctype.h>
-    #endif
-#endif // __OS2__
+#endif // __WINDOWS__
 
 #if defined(__WXMAC__)
 //    #include "MoreFilesX.h"
@@ -103,7 +88,14 @@ extern WXDLLEXPORT_DATA(const char) wxFileSelectorDefaultWildcardStr[];
 bool wxIsDriveAvailable(const wxString& dirName);
 
 // ----------------------------------------------------------------------------
-// wxGetAvailableDrives, for WINDOWS, DOS, OS2, MAC, UNIX (returns "/")
+// events
+// ----------------------------------------------------------------------------
+
+wxDEFINE_EVENT( wxEVT_DIRCTRL_SELECTIONCHANGED, wxTreeEvent );
+wxDEFINE_EVENT( wxEVT_DIRCTRL_FILEACTIVATED, wxTreeEvent );
+
+// ----------------------------------------------------------------------------
+// wxGetAvailableDrives, for WINDOWS, DOS, MAC, UNIX (returns "/")
 // ----------------------------------------------------------------------------
 
 size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayInt &icon_ids)
@@ -152,56 +144,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
         names.Add(vol.GetDisplayName());
         icon_ids.Add(imageId);
     }
-#elif defined(__OS2__)
-    APIRET rc;
-    ULONG ulDriveNum = 0;
-    ULONG ulDriveMap = 0;
-    rc = ::DosQueryCurrentDisk(&ulDriveNum, &ulDriveMap);
-    if ( rc == 0)
-    {
-        size_t i = 0;
-        while (i < 26)
-        {
-            if (ulDriveMap & ( 1 << i ))
-            {
-                const wxString path = wxFileName::GetVolumeString(
-                                        'A' + i, wxPATH_GET_SEPARATOR);
-                const wxString name = wxFileName::GetVolumeString(
-                                        'A' + i, wxPATH_NO_SEPARATOR);
-
-                // Note: If _filesys is unsupported by some compilers,
-                //       we can always replace it by DosQueryFSAttach
-                char filesysname[20];
-#ifdef __WATCOMC__
-                ULONG cbBuffer = sizeof(filesysname);
-                PFSQBUFFER2 pfsqBuffer = (PFSQBUFFER2)filesysname;
-                APIRET rc = ::DosQueryFSAttach(name.fn_str(),0,FSAIL_QUERYNAME,pfsqBuffer,&cbBuffer);
-                if (rc != NO_ERROR)
-                {
-                    filesysname[0] = '\0';
-                }
-#else
-                _filesys(name.fn_str(), filesysname, sizeof(filesysname));
-#endif
-                /* FAT, LAN, HPFS, CDFS, NFS */
-                int imageId;
-                if (path == wxT("A:\\") || path == wxT("B:\\"))
-                    imageId = wxFileIconsTable::floppy;
-                else if (!strcmp(filesysname, "CDFS"))
-                    imageId = wxFileIconsTable::cdrom;
-                else if (!strcmp(filesysname, "LAN") ||
-                         !strcmp(filesysname, "NFS"))
-                    imageId = wxFileIconsTable::drive;
-                else
-                    imageId = wxFileIconsTable::drive;
-                paths.Add(path);
-                names.Add(name);
-                icon_ids.Add(imageId);
-            }
-            i ++;
-        }
-    }
-#else // !__WIN32__, !__OS2__
+#else // !__WIN32__
     /* If we can switch to the drive, it exists. */
     for ( char drive = 'A'; drive <= 'Z'; drive++ )
     {
@@ -250,7 +193,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
         }
     }
 
-#elif defined(__UNIX__) || defined(__WXPALMOS__)
+#elif defined(__UNIX__)
     paths.Add(wxT("/"));
     names.Add(wxT("/"));
     icon_ids.Add(wxFileIconsTable::computer);
@@ -270,10 +213,6 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
 
 bool wxIsDriveAvailable(const wxString& dirName)
 {
-    // FIXME_MGL - this method leads to hang up under Watcom for some reason
-#ifdef __WATCOMC__
-    wxUnusedVar(dirName);
-#else
     if ( dirName.length() == 3 && dirName[1u] == wxT(':') )
     {
         wxString dirNameLower(dirName.Lower());
@@ -284,18 +223,16 @@ bool wxIsDriveAvailable(const wxString& dirName)
                 wxDirExists(dirNameLower));
     }
     else
-#endif
         return true;
 }
 
-#elif defined(__WINDOWS__) || defined(__OS2__)
+#elif defined(__WINDOWS__)
 
 int setdrive(int WXUNUSED_IN_WINCE(drive))
 {
 #ifdef __WXWINCE__
     return 0;
-#elif defined(__GNUWIN32__) && \
-    (defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
+#elif defined(wxHAS_DRIVE_FUNCTIONS)
     return _chdrive(drive);
 #else
     wxChar  newdrive[4];
@@ -304,13 +241,8 @@ int setdrive(int WXUNUSED_IN_WINCE(drive))
         return -1;
     newdrive[0] = (wxChar)(wxT('A') + drive - 1);
     newdrive[1] = wxT(':');
-#ifdef __OS2__
-    newdrive[2] = wxT('\\');
-    newdrive[3] = wxT('\0');
-#else
     newdrive[2] = wxT('\0');
-#endif
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
     if (::SetCurrentDirectory(newdrive))
 #else
     // VA doesn't know what LPSTR is and has its own set
@@ -337,14 +269,9 @@ bool wxIsDriveAvailable(const wxString& WXUNUSED_IN_WINCE(dirName))
     if (dirName.length() == 3 && dirName[(size_t)1] == wxT(':'))
     {
         wxString dirNameLower(dirName.Lower());
-#if defined(__GNUWIN32__) && !(defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
+#ifndef wxHAS_DRIVE_FUNCTIONS
         success = wxDirExists(dirNameLower);
 #else
-        #if defined(__OS2__)
-        // Avoid changing to drive since no media may be inserted.
-        if (dirNameLower[(size_t)0] == 'a' || dirNameLower[(size_t)0] == 'b')
-            return success;
-        #endif
         int currentDrive = _getdrive();
         int thisDrive = (int) (dirNameLower[(size_t)0] - 'a' + 1) ;
         int err = setdrive( thisDrive ) ;
@@ -363,7 +290,7 @@ bool wxIsDriveAvailable(const wxString& WXUNUSED_IN_WINCE(dirName))
     return success;
 #endif
 }
-#endif // __WINDOWS__ || __OS2__
+#endif // __WINDOWS__
 
 #endif // wxUSE_DIRDLG || wxUSE_FILEDLG
 
@@ -441,6 +368,8 @@ BEGIN_EVENT_TABLE(wxGenericDirCtrl, wxControl)
   EVT_TREE_ITEM_COLLAPSED     (wxID_TREECTRL, wxGenericDirCtrl::OnCollapseItem)
   EVT_TREE_BEGIN_LABEL_EDIT   (wxID_TREECTRL, wxGenericDirCtrl::OnBeginEditItem)
   EVT_TREE_END_LABEL_EDIT     (wxID_TREECTRL, wxGenericDirCtrl::OnEndEditItem)
+  EVT_TREE_SEL_CHANGED        (wxID_TREECTRL, wxGenericDirCtrl::OnTreeSelChange)
+  EVT_TREE_ITEM_ACTIVATED     (wxID_TREECTRL, wxGenericDirCtrl::OnItemActivated)
   EVT_SIZE                    (wxGenericDirCtrl::OnSize)
 END_EVENT_TABLE()
 
@@ -511,7 +440,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     m_treeCtrl = CreateTreeCtrl(this, wxID_TREECTRL,
                                 wxPoint(0,0), GetClientSize(), treeStyle);
 
-    if (!filter.empty())
+    if (!filter.empty() && (style & wxDIRCTRL_SHOW_FILTERS))
         m_filterListCtrl = new wxDirFilterListCtrl(this, wxID_FILTERLISTCTRL);
 
     m_defaultPath = dir;
@@ -532,7 +461,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     wxString rootName;
 
-#if defined(__WINDOWS__) || defined(__OS2__) || defined(__DOS__)
+#if defined(__WINDOWS__) || defined(__DOS__)
     rootName = _("Computer");
 #else
     rootName = _("Sections");
@@ -666,7 +595,7 @@ void wxGenericDirCtrl::OnEndEditItem(wxTreeEvent &event)
     }
 
     wxTreeItemId treeid = event.GetItem();
-    wxDirItemData *data = (wxDirItemData*)m_treeCtrl->GetItemData( treeid );
+    wxDirItemData *data = GetItemData( treeid );
     wxASSERT( data );
 
     wxString new_name( wxPathOnly( data->m_path ) );
@@ -694,6 +623,46 @@ void wxGenericDirCtrl::OnEndEditItem(wxTreeEvent &event)
     }
 }
 
+void wxGenericDirCtrl::OnTreeSelChange(wxTreeEvent &event)
+{
+    wxTreeEvent changedEvent(wxEVT_DIRCTRL_SELECTIONCHANGED, GetId());
+
+    changedEvent.SetEventObject(this);
+    changedEvent.SetItem(event.GetItem());
+    changedEvent.SetClientObject(m_treeCtrl->GetItemData(event.GetItem()));
+
+    if (GetEventHandler()->SafelyProcessEvent(changedEvent) && !changedEvent.IsAllowed())
+        event.Veto();
+    else
+        event.Skip();
+}
+
+void wxGenericDirCtrl::OnItemActivated(wxTreeEvent &event)
+{
+    wxTreeItemId treeid = event.GetItem();
+    const wxDirItemData *data = GetItemData(treeid);
+
+    if (data->m_isDir)
+    {
+        // is dir
+        event.Skip();
+    }
+    else
+    {
+        // is file
+        wxTreeEvent changedEvent(wxEVT_DIRCTRL_FILEACTIVATED, GetId());
+
+        changedEvent.SetEventObject(this);
+        changedEvent.SetItem(treeid);
+        changedEvent.SetClientObject(m_treeCtrl->GetItemData(treeid));
+
+        if (GetEventHandler()->SafelyProcessEvent(changedEvent) && !changedEvent.IsAllowed())
+            event.Veto();
+        else
+            event.Skip();
+    }
+}
+
 void wxGenericDirCtrl::OnExpandItem(wxTreeEvent &event)
 {
     wxTreeItemId parentId = event.GetItem();
@@ -716,7 +685,7 @@ void wxGenericDirCtrl::CollapseDir(wxTreeItemId parentId)
 {
     wxTreeItemId child;
 
-    wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(parentId);
+    wxDirItemData *data = GetItemData(parentId);
     if (!data->m_isExpanded)
         return;
 
@@ -731,7 +700,7 @@ void wxGenericDirCtrl::CollapseDir(wxTreeItemId parentId)
 
 void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
 {
-    wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(parentId);
+    wxDirItemData *data = GetItemData(parentId);
 
     if (data->m_isExpanded)
         return;
@@ -750,9 +719,9 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
 
     wxString dirName(data->m_path);
 
-#if (defined(__WINDOWS__) && !defined(__WXWINCE__)) || defined(__DOS__) || defined(__OS2__)
+#if (defined(__WINDOWS__) && !defined(__WXWINCE__)) || defined(__DOS__)
     // Check if this is a root directory and if so,
-    // whether the drive is avaiable.
+    // whether the drive is available.
     if (!wxIsDriveAvailable(dirName))
     {
         data->m_isExpanded = false;
@@ -764,7 +733,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
     // This may take a longish time. Go to busy cursor
     wxBusyCursor busy;
 
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
+#if defined(__WINDOWS__) || defined(__DOS__)
     if (dirName.Last() == ':')
         dirName += wxString(wxFILE_SEP_PATH);
 #endif
@@ -913,8 +882,8 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
     // Append a separator to foil bogus substring matching
     path2 += wxString(wxFILE_SEP_PATH);
 
-    // In MSW or PM, case is not significant
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
+    // In MSW case is not significant
+#if defined(__WINDOWS__) || defined(__DOS__)
     path2.MakeLower();
 #endif
 
@@ -922,7 +891,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
     wxTreeItemId childId = m_treeCtrl->GetFirstChild(parentId, cookie);
     while (childId.IsOk())
     {
-        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(childId);
+        wxDirItemData* data = GetItemData(childId);
 
         if (data && !data->m_path.empty())
         {
@@ -930,8 +899,8 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
             if (!wxEndsWithPathSeparator(childPath))
                 childPath += wxString(wxFILE_SEP_PATH);
 
-            // In MSW and PM, case is not significant
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
+            // In MSW case is not significant
+#if defined(__WINDOWS__) || defined(__DOS__)
             childPath.MakeLower();
 #endif
 
@@ -973,7 +942,7 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
     if (!lastId.IsOk())
         return false;
 
-    wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(lastId);
+    wxDirItemData *data = GetItemData(lastId);
     if (data->m_isDir)
     {
         m_treeCtrl->Expand(lastId);
@@ -986,7 +955,7 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
         bool selectedChild = false;
         while (childId.IsOk())
         {
-            data = (wxDirItemData*) m_treeCtrl->GetItemData(childId);
+            data = GetItemData(childId);
 
             if (data && data->m_path != wxEmptyString && !data->m_isDir)
             {
@@ -1038,6 +1007,18 @@ bool wxGenericDirCtrl::CollapsePath(const wxString& path)
     return true;
 }
 
+wxDirItemData* wxGenericDirCtrl::GetItemData(wxTreeItemId itemId)
+{
+    return static_cast<wxDirItemData*>(m_treeCtrl->GetItemData(itemId));
+}
+
+wxString wxGenericDirCtrl::GetPath(wxTreeItemId itemId) const
+{
+    const wxDirItemData*
+        data = static_cast<wxDirItemData*>(m_treeCtrl->GetItemData(itemId));
+
+    return data->m_path;
+}
 
 wxString wxGenericDirCtrl::GetPath() const
 {
@@ -1050,8 +1031,7 @@ wxString wxGenericDirCtrl::GetPath() const
         {
             // return first string only
             wxTreeItemId treeid = items[0];
-            wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(treeid);
-            return data->m_path;
+            return GetPath(treeid);
         }
 
         return wxEmptyString;
@@ -1060,8 +1040,7 @@ wxString wxGenericDirCtrl::GetPath() const
     wxTreeItemId treeid = m_treeCtrl->GetSelection();
     if (treeid)
     {
-        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(treeid);
-        return data->m_path;
+        return GetPath(treeid);
     }
     else
         return wxEmptyString;
@@ -1076,8 +1055,7 @@ void wxGenericDirCtrl::GetPaths(wxArrayString& paths) const
     for ( unsigned n = 0; n < items.size(); n++ )
     {
         wxTreeItemId treeid = items[n];
-        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(treeid);
-        paths.Add(data->m_path);
+        paths.push_back(GetPath(treeid));
     }
 }
 
@@ -1170,7 +1148,7 @@ void wxGenericDirCtrl::FindChildFiles(wxTreeItemId treeid, int dirFlags, wxArray
 
     wxString dirName(data->m_path);
 
-#if defined(__WXMSW__) || defined(__OS2__)
+#if defined(__WINDOWS__)
     if (dirName.Last() == ':')
         dirName += wxString(wxFILE_SEP_PATH);
 #endif
@@ -1217,7 +1195,7 @@ void wxGenericDirCtrl::SetFilter(const wxString& filter)
 {
     m_filter = filter;
 
-    if (!filter.empty() && !m_filterListCtrl)
+    if (!filter.empty() && !m_filterListCtrl && HasFlag(wxDIRCTRL_SHOW_FILTERS))
         m_filterListCtrl = new wxDirFilterListCtrl(this, wxID_FILTERLISTCTRL);
     else if (filter.empty() && m_filterListCtrl)
     {
@@ -1472,8 +1450,8 @@ class wxFileIconsTableModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxFileIconsTableModule)
 public:
     wxFileIconsTableModule() {}
-    bool OnInit() { wxTheFileIconsTable = new wxFileIconsTable; return true; }
-    void OnExit()
+    bool OnInit() wxOVERRIDE { wxTheFileIconsTable = new wxFileIconsTable; return true; }
+    void OnExit() wxOVERRIDE
     {
         wxDELETE(wxTheFileIconsTable);
     }
@@ -1572,7 +1550,7 @@ wxImageList *wxFileIconsTable::GetSmallImageList()
     return m_smallImageList;
 }
 
-#if wxUSE_MIMETYPE && wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
+#if wxUSE_MIMETYPE && wxUSE_IMAGE && (!defined(__WINDOWS__) || wxUSE_WXDIB)
 // VS: we don't need this function w/o wxMimeTypesManager because we'll only have
 //     one icon and we won't resize it
 
@@ -1732,7 +1710,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     {
         m_smallImageList->Add(bmp);
     }
-#if wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
+#if wxUSE_IMAGE && (!defined(__WINDOWS__) || wxUSE_WXDIB)
     else
     {
         wxImage img = bmp.ConvertToImage();

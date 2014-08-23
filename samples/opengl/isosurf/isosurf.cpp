@@ -4,7 +4,6 @@
 // Author:      Brian Paul (original gltk version), Wolfram Gloger
 // Modified by: Julian Smart, Francesco Montorsi
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -57,7 +56,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame(NULL, wxT("wxWidgets OpenGL Isosurf Sample"));
+    new MyFrame(NULL, wxT("wxWidgets OpenGL Isosurf Sample"));
 
     return true;
 }
@@ -88,9 +87,9 @@ bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
 // MyFrame
 //---------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
                  const wxSize& size, long style)
@@ -136,10 +135,13 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
         g_doubleBuffer = GL_FALSE;
     }
 
+    m_canvas = new TestGLCanvas(this, wxID_ANY, gl_attrib);
+
     // Show the frame
     Show(true);
+    Raise();
 
-    m_canvas = new TestGLCanvas(this, wxID_ANY, gl_attrib);
+    m_canvas->InitGL();
 }
 
 MyFrame::~MyFrame()
@@ -159,12 +161,12 @@ void MyFrame::OnExit( wxCommandEvent& WXUNUSED(event) )
 // TestGLCanvas
 //---------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
+wxBEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
     EVT_SIZE(TestGLCanvas::OnSize)
     EVT_PAINT(TestGLCanvas::OnPaint)
     EVT_CHAR(TestGLCanvas::OnChar)
     EVT_MOUSE_EVENTS(TestGLCanvas::OnMouseEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 TestGLCanvas::TestGLCanvas(wxWindow *parent,
                            wxWindowID id,
@@ -177,13 +179,6 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent,
 
     // Explicitly create a new rendering context instance for this canvas.
     m_glRC = new wxGLContext(this);
-
-    // Make the new context current (activate it for use) with this canvas.
-    SetCurrent(*m_glRC);
-
-    InitGL();
-    InitMaterials();
-    LoadSurface("isosurf.dat.gz");
 }
 
 TestGLCanvas::~TestGLCanvas()
@@ -279,6 +274,8 @@ void TestGLCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
 void TestGLCanvas::OnSize(wxSizeEvent& event)
 {
+    if ( !IsShownOnScreen() )
+        return;
     // This is normally only necessary if there is more than one wxGLCanvas
     // or more than one wxGLContext in the application.
     SetCurrent(*m_glRC);
@@ -406,6 +403,9 @@ void TestGLCanvas::InitMaterials()
 
 void TestGLCanvas::InitGL()
 {
+    // Make the new context current (activate it for use) with this canvas.
+    SetCurrent(*m_glRC);
+
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
     glShadeModel(GL_SMOOTH);
@@ -428,5 +428,8 @@ void TestGLCanvas::InitGL()
         glEnable( GL_VERTEX_ARRAY );
         glEnable( GL_NORMAL_ARRAY );
     }
+
+    InitMaterials();
+    LoadSurface("isosurf.dat.gz");
 }
 

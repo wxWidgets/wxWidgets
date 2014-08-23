@@ -2,7 +2,6 @@
 // Name:        versioninfo.h
 // Purpose:     interface of wxVersionInfo
 // Author:      Troels K
-// RCS-ID:      $Id: versioninfo.h
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -17,8 +16,8 @@
     that you use.
 
     @library{wxbase}
+
     @category{data}
-    @header{wx/versioninfo.h}
 
     @since 2.9.2
 */
@@ -40,9 +39,9 @@ public:
             default.
         @param copyright Copyright string, none by default.
     */
-    wxVersionInfo(const wxString& name,
-                  int major,
-                  int minor,
+    wxVersionInfo(const wxString& name = wxString(),
+                  int major = 0,
+                  int minor = 0,
                   int micro = 0,
                   const wxString& description = wxString(),
                   const wxString& copyright = wxString());
@@ -92,7 +91,7 @@ public:
 
         @return The version string in the form "name major.minor[.micro]".
     */
-    wxString GetVersionString() const
+    wxString GetVersionString() const;
 
     /**
         Return @true if a description string has been specified.

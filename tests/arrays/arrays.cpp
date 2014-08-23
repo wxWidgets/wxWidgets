@@ -3,7 +3,6 @@
 // Purpose:     wxArray unit test
 // Author:      Vadim Zeitlin, Wlodzimierz ABX Skiba
 // Created:     2004-04-01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Vadim Zeitlin, Wlodzimierz Skiba
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -173,6 +172,7 @@ private:
         CPPUNIT_TEST( Alloc );
         CPPUNIT_TEST( Clear );
         CPPUNIT_TEST( Swap );
+        CPPUNIT_TEST( IndexFromEnd );
     CPPUNIT_TEST_SUITE_END();
 
     void wxStringArrayTest();
@@ -188,6 +188,7 @@ private:
     void Alloc();
     void Clear();
     void Swap();
+    void IndexFromEnd();
 
     DECLARE_NO_COPY_CLASS(ArraysTestCase)
 };
@@ -307,6 +308,13 @@ void ArraysTestCase::wxStringArrayTest()
     CPPUNIT_ASSERT( a1.Index( wxT("thermit") ) == 3 );
     CPPUNIT_ASSERT( a1.Index( wxT("alligator") ) == 4 );
 
+    CPPUNIT_ASSERT( a1.Index( wxT("dog"), /*bCase=*/true, /*fromEnd=*/true ) == 0 );
+    CPPUNIT_ASSERT( a1.Index( wxT("human"), /*bCase=*/true, /*fromEnd=*/true ) == 1 );
+    CPPUNIT_ASSERT( a1.Index( wxT("humann"), /*bCase=*/true, /*fromEnd=*/true ) == wxNOT_FOUND );
+    CPPUNIT_ASSERT( a1.Index( wxT("condor"), /*bCase=*/true, /*fromEnd=*/true ) == 2 );
+    CPPUNIT_ASSERT( a1.Index( wxT("thermit"), /*bCase=*/true, /*fromEnd=*/true ) == 3 );
+    CPPUNIT_ASSERT( a1.Index( wxT("alligator"), /*bCase=*/true, /*fromEnd=*/true ) == 4 );
+
     wxArrayString a5;
 
     CPPUNIT_ASSERT( a5.Add( wxT("x"), 1 ) == 0 );
@@ -323,12 +331,10 @@ void ArraysTestCase::wxStringArrayTest()
     a5.assign(a1.begin(), a1.end());
     CPPUNIT_ASSERT( a5 == a1 );
 
-#ifdef wxHAS_VECTOR_TEMPLATE_ASSIGN
     const wxString months[] = { "Jan", "Feb", "Mar" };
     a5.assign(months, months + WXSIZEOF(months));
     CPPUNIT_ASSERT_EQUAL( WXSIZEOF(months), a5.size() );
     CPPUNIT_ASSERT( COMPARE_3_VALUES(a5, "Jan", "Feb", "Mar") );
-#endif // wxHAS_VECTOR_TEMPLATE_ASSIGN
 
     a5.clear();
     CPPUNIT_ASSERT_EQUAL( 0, a5.size() );
@@ -616,8 +622,7 @@ namespace
 {
 
 template <typename A, typename T>
-void DoTestSwap(T v1, T v2, T v3,
-                A * WXUNUSED(dummyUglyVC6Workaround))
+void DoTestSwap(T v1, T v2, T v3)
 {
     A a1, a2;
     a1.swap(a2);
@@ -645,10 +650,10 @@ void DoTestSwap(T v1, T v2, T v3,
 
 void ArraysTestCase::Swap()
 {
-    DoTestSwap("Foo", "Bar", "Baz", (wxArrayString *)NULL);
+    DoTestSwap<wxArrayString>("Foo", "Bar", "Baz");
 
-    DoTestSwap(1, 10, 100, (wxArrayInt *)NULL);
-    DoTestSwap(6, 28, 496, (wxArrayLong *)NULL);
+    DoTestSwap<wxArrayInt>(1, 10, 100);
+    DoTestSwap<wxArrayLong>(6, 28, 496);
 }
 
 void ArraysTestCase::TestSTL()
@@ -705,4 +710,19 @@ void ArraysTestCase::TestSTL()
     items.push_back(new Item(17));
     CPPUNIT_ASSERT_EQUAL( 17, (*(items.rbegin()))->n );
     CPPUNIT_ASSERT_EQUAL( 17, (**items.begin()).n );
+}
+
+void ArraysTestCase::IndexFromEnd()
+{
+    wxArrayInt a;
+    a.push_back(10);
+    a.push_back(1);
+    a.push_back(42);
+
+    CPPUNIT_ASSERT_EQUAL( 0, a.Index(10) );
+    CPPUNIT_ASSERT_EQUAL( 1, a.Index(1) );
+    CPPUNIT_ASSERT_EQUAL( 2, a.Index(42) );
+    CPPUNIT_ASSERT_EQUAL( 0, a.Index(10, /*bFromEnd=*/true) );
+    CPPUNIT_ASSERT_EQUAL( 1, a.Index(1, /*bFromEnd=*/true) );
+    CPPUNIT_ASSERT_EQUAL( 2, a.Index(42, /*bFromEnd=*/true) );
 }

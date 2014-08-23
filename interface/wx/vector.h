@@ -2,7 +2,6 @@
 // Name:        vector.h
 // Purpose:     interface of wxVector<T>
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -35,31 +34,6 @@ public:
     typedef value_type& reference;
 
     /**
-        Reverse iterator interface
-    */
-    class reverse_iterator
-    {
-    public:
-        reverse_iterator();
-        explicit reverse_iterator(iterator it);
-        reverse_iterator(const reverse_iterator& it);
-        reference operator*() const;
-        pointer operator->() const;
-        iterator base() const;
-        reverse_iterator& operator++();
-        reverse_iterator operator++(int);
-        reverse_iterator& operator--();
-        reverse_iterator operator--(int);
-        reverse_iterator operator+(difference_type n) const;
-        reverse_iterator& operator+=(difference_type n);
-        reverse_iterator operator-(difference_type n) const;
-        reverse_iterator& operator-=(difference_type n);
-        reference operator[](difference_type n) const;
-        bool operator ==(const reverse_iterator& it) const;
-        bool operator !=(const reverse_iterator& it) const;
-    };
-
-    /**
         Constructor.
     */
     wxVector();
@@ -77,6 +51,19 @@ public:
     wxVector(size_type size, const value_type& value);
 
     /**
+        Constructor initializing the vector with the elements in the given
+        range.
+
+        The @a InputIterator template parameter must be an input iterator type.
+        This constructor adds all elements from @a first until, not not
+        including, @a last to the vector.
+
+        @since 2.9.5
+     */
+    template <class InputIterator>
+    wxVector(InputIterator first, InputIterator last);
+
+    /**
         Copy constructor.
     */
     wxVector(const wxVector<T>& c);
@@ -85,6 +72,27 @@ public:
         Destructor.
     */
     ~wxVector();
+
+    /**
+        Resizes the vector to @a n and assigns @a v to all elements.
+
+        @see resize()
+
+        @since 2.9.5
+     */
+    void assign(size_type n, const value_type& v);
+
+    /**
+        Assigns the elements in the given range to the vector.
+
+        The @a InputIterator template parameter must be an input iterator type.
+        This method clears the vector and then adds all elements from @a first
+        until, not not including, @a last to it.
+
+        @since 2.9.5
+     */
+    template <class InputIterator>
+    void assign(InputIterator first, InputIterator last);
 
     /**
         Returns item at position @a idx.
@@ -128,7 +136,7 @@ public:
 
 
     /**
-        Returns vector's current capacity, i.e. how much memory is allocated.
+        Returns vector's current capacity, i.e.\ how much memory is allocated.
 
         @see reserve()
     */

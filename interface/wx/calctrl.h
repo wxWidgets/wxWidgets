@@ -2,9 +2,38 @@
 // Name:        calctrl.h
 // Purpose:     interface of wxCalendarCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+enum
+{
+    // show Sunday as the first day of the week (default)
+    wxCAL_SUNDAY_FIRST               = 0x0000,
+
+    // show Monday as the first day of the week
+    wxCAL_MONDAY_FIRST               = 0x0001,
+
+    // highlight holidays
+    wxCAL_SHOW_HOLIDAYS              = 0x0002,
+
+    // disable the year change control, show only the month change one
+    // deprecated
+    wxCAL_NO_YEAR_CHANGE             = 0x0004,
+
+    // don't allow changing neither month nor year (implies
+    // wxCAL_NO_YEAR_CHANGE)
+    wxCAL_NO_MONTH_CHANGE            = 0x000c,
+
+    // use MS-style month-selection instead of combo-spin combination
+    wxCAL_SEQUENTIAL_MONTH_SELECTION = 0x0010,
+
+    // show the neighbouring weeks in the previous and next month
+    wxCAL_SHOW_SURROUNDING_WEEKS     = 0x0020,
+
+    // show week numbers on the left side of the calendar.
+    wxCAL_SHOW_WEEK_NUMBERS          = 0x0040
+};
+
 
 /**
     @class wxCalendarEvent
@@ -19,6 +48,9 @@
 class wxCalendarEvent : public wxDateEvent
 {
 public:
+    wxCalendarEvent();
+    wxCalendarEvent(wxWindow *win, const wxDateTime& dt, wxEventType type);
+
     /**
         Returns the week day on which the user clicked in
         @c EVT_CALENDAR_WEEKDAY_CLICKED handler. It doesn't make sense to call
@@ -32,6 +64,12 @@ public:
     */
     void SetWeekDay(const wxDateTime::WeekDay day);
 };
+
+wxEventType wxEVT_CALENDAR_SEL_CHANGED;
+wxEventType wxEVT_CALENDAR_PAGE_CHANGED;
+wxEventType wxEVT_CALENDAR_DOUBLECLICKED;
+wxEventType wxEVT_CALENDAR_WEEKDAY_CLICKED;
+wxEventType wxEVT_CALENDAR_WEEK_CLICKED;
 
 
 
@@ -106,7 +144,7 @@ public:
     bool HasBackgroundColour() const;
 
     /**
-        Returns @true if a non-default (i.e. any) border is set.
+        Returns @true if a non-default (i.e.\ any) border is set.
     */
     bool HasBorder() const;
 
@@ -170,7 +208,7 @@ public:
         Set the attributes that will be used to Mark() days on the generic
         wxCalendarCtrl.
     */
-    static void SetMark(wxCalendarDateAttr const& m);
+    static void SetMark(const wxCalendarDateAttr& m);
 };
 
 
@@ -255,7 +293,7 @@ enum wxCalendarHitTestResult
 
     @library{wxadv}
     @category{ctrl}
-    @appearance{calendarctrl.png}
+    @appearance{calendarctrl}
 
     @nativeimpl{wxgtk,wxmsw}
 
@@ -424,7 +462,9 @@ public:
     /**
         Sets the current date.
 
-        The @a date parameter must be valid.
+        The @a date parameter must be valid and in the currently valid range as
+        set by SetDateRange(), otherwise the current date is not changed and
+        the function returns @false.
     */
     virtual bool SetDate(const wxDateTime& date);
 
@@ -476,14 +516,12 @@ public:
 
     /**
         @name Date Range Functions
-
-        The functions in this section are currently implemented in the generic
-        and MSW versions and do nothing in the native GTK implementation.
      */
     //@{
 
     /**
-        Restrict the dates shown by the control to the specified range.
+        Restrict the dates that can be selected in the control to the specified
+        range.
 
         If either date is set, the corresponding limit will be enforced and
         @true returned. If none are set, the existing restrictions are removed

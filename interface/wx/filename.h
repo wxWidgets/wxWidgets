@@ -2,7 +2,6 @@
 // Name:        filename.h
 // Purpose:     interface of wxFileName
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -88,6 +87,30 @@ enum
       after asking the user for confirmation.
      */
     wxPATH_RMDIR_RECURSIVE = 2
+};
+
+/**
+    Flags for wxFileName::Exists().
+
+    @since 2.9.5
+ */
+enum
+{
+    wxFILE_EXISTS_REGULAR   = 0x0001,  //!< Check for existence of a regular file
+    wxFILE_EXISTS_DIR       = 0x0002,  //!< Check for existence of a directory
+    /**
+        Check for existence of a symlink.
+
+        Notice that this flag also sets ::wxFILE_EXISTS_NO_FOLLOW, otherwise it
+        would never be satisfied as wxFileName::Exists() would be checking for
+        the existence of the symlink target and not the symlink itself.
+     */
+    wxFILE_EXISTS_SYMLINK   = 0x1004,
+    wxFILE_EXISTS_DEVICE    = 0x0008,  //!< Check for existence of a device
+    wxFILE_EXISTS_FIFO      = 0x0016,  //!< Check for existence of a FIFO
+    wxFILE_EXISTS_SOCKET    = 0x0032,  //!< Check for existence of a socket
+    wxFILE_EXISTS_NO_FOLLOW = 0x1000   //!< Don't dereference a contained symbolic link
+    wxFILE_EXISTS_ANY       = 0x1FFF,  //!< Check for existence of anything
 };
 
 /**
@@ -313,12 +336,17 @@ public:
                wxPathFormat format = wxPATH_NATIVE);
 
     /**
-        Appends a directory component to the path. This component should contain a
-        single directory name level, i.e. not contain any path or volume separators nor
-        should it be empty, otherwise the function does nothing (and generates an
-        assert failure in debug build).
+        Appends a directory component to the path.
+
+        This component should contain a single directory name level, i.e. not
+        contain any path or volume separators nor should it be empty, otherwise
+        the function does nothing and returns false (and generates an assert
+        failure in debug build).
+
+        Notice that the return value is only available in wxWidgets 2.9.5 or
+        later.
     */
-    void AppendDir(const wxString& dir);
+    bool AppendDir(const wxString& dir);
 
     /**
         Creates the file name from another filename object.
@@ -421,42 +449,59 @@ public:
     */
     void ClearExt();
 
-    //@{
+
     /**
         Returns a temporary file name starting with the given @e prefix.
-        If the @a prefix is an absolute path, the temporary file is created in this
-        directory, otherwise it is created in the default system directory for the
-        temporary files or in the current directory.
+        If @a prefix is an absolute path and ends in a separator, the
+        temporary file is created in this directory; if it is an absolute
+        filepath or there is no separator, the temporary file is created in its
+        path, with the 'name' segment prepended to the temporary filename;
+        otherwise it is created in the default system directory for temporary
+        files or in the current directory.
 
         If the function succeeds, the temporary file is actually created.
-        If @a fileTemp is not @NULL, this file will be opened using the name of
-        the temporary file. When possible, this is done in an atomic way ensuring that
-        no race condition occurs between the temporary file name generation and opening
-        it which could often lead to security compromise on the multiuser systems.
-        If @a fileTemp is @NULL, the file is only created, but not opened.
+        If @a fileTemp is not @NULL, this wxFile will be opened using the name of
+        the temporary file. Where possible this is done in an atomic way to ensure that
+        no race condition occurs between creating the temporary file name and opening
+        it, which might lead to a security compromise on multiuser systems.
+        If @a fileTemp is @NULL, the file is created but not opened.
         Under Unix, the temporary file will have read and write permissions for the
-        owner only to minimize the security problems.
+        owner only, to minimize security problems.
 
         @param prefix
-            Prefix to use for the temporary file name construction
+            Location to use for the temporary file name construction. If @a prefix
+            is a directory it must have a terminal separator
         @param fileTemp
-            The file to open or @NULL to just get the name
+            The file to open, or @NULL just to get the name
 
-        @return The full temporary file name or an empty string on error.
+        @return The full temporary filepath, or an empty string on error.
     */
     static wxString CreateTempFileName(const wxString& prefix,
                                        wxFile* fileTemp = NULL);
+
+    /**
+        This is the same as CreateTempFileName(const wxString &prefix, wxFile *fileTemp)
+        but takes a wxFFile parameter instead of wxFile.
+    */
     static wxString CreateTempFileName(const wxString& prefix,
                                        wxFFile* fileTemp = NULL);
-    //@}
+
 
     /**
         Returns @true if the directory with this name exists.
+
+        Notice that this function tests the directory part of this object,
+        i.e. the string returned by GetPath(), and not the full path returned
+        by GetFullPath().
+
+        @see FileExists(), Exists()
     */
     bool DirExists() const;
 
     /**
         Returns @true if the directory with name @a dir exists.
+
+        @see FileExists(), Exists()
     */
     static bool DirExists(const wxString& dir);
 
@@ -468,16 +513,68 @@ public:
                               wxPathFormat format = wxPATH_NATIVE);
 
     /**
+        Turns off symlink dereferencing.
+
+        By default, all operations in this class work on the target of a
+        symbolic link (symlink) if the path of the file is actually a symlink.
+        Using this method allows to turn off this "symlink following" behaviour
+        and apply the operations to this path itself, even if it is a symlink.
+
+        The following methods are currently affected by this option:
+            - GetTimes() (but not SetTimes() as there is no portable way to
+              change the time of symlink itself).
+            - Existence checks: FileExists(), DirExists() and Exists() (notice
+              that static versions of these methods always follow symlinks).
+            - IsSameAs().
+
+        @see ShouldFollowLink()
+
+        @since 2.9.5
+    */
+    void DontFollowLink();
+
+     /**
+        Calls the static overload of this function with the full path of this
+        object.
+
+        @since 2.9.4 (@a flags is new since 2.9.5)
+     */
+    bool Exists(int flags = wxFILE_EXISTS_ANY) const;
+
+    /**
+        Returns @true if either a file or a directory or something else with
+        this name exists in the file system.
+
+        Don't dereference @a path if it is a symbolic link and @a flags
+        argument contains ::wxFILE_EXISTS_NO_FOLLOW.
+
+        This method is equivalent to @code FileExists() || DirExists() @endcode
+        under Windows, but under Unix it also returns true if the file
+        identifies a special file system object such as a device, a socket or a
+        FIFO.
+
+        Alternatively you may check for the existence of a file system entry of
+        a specific type by passing the appropriate @a flags (this parameter is
+        new since wxWidgets 2.9.5). E.g. to test for a symbolic link existence
+        you could use ::wxFILE_EXISTS_SYMLINK.
+
+        @since 2.9.4
+
+        @see FileExists(), DirExists()
+     */
+    static bool Exists(const wxString& path, int flags = wxFILE_EXISTS_ANY);
+
+    /**
         Returns @true if the file with this name exists.
 
-        @see DirExists()
+        @see DirExists(), Exists()
     */
     bool FileExists() const;
 
     /**
         Returns @true if the file with name @a file exists.
 
-        @see DirExists()
+        @see DirExists(), Exists()
     */
     static bool FileExists(const wxString& file);
 
@@ -748,10 +845,16 @@ public:
     bool HasVolume() const;
 
     /**
-        Inserts a directory component before the zero-based position in the directory
-        list. Please see AppendDir() for important notes.
+        Inserts a directory component before the zero-based position in the
+        directory list.
+
+        As with AppendDir(), @a dir must be a single directory name and the
+        function returns @false and does nothing else if it isn't.
+
+        Notice that the return value is only available in wxWidgets 2.9.5 or
+        later.
     */
-    void InsertDir(size_t before, const wxString& dir);
+    bool InsertDir(size_t before, const wxString& dir);
 
     /**
         Returns @true if this filename is absolute.
@@ -878,6 +981,8 @@ public:
 
     /**
         On Mac OS, gets the common type and creator for the given extension.
+
+        @onlyfor{wxosx}
     */
     static bool MacFindDefaultTypeAndCreator(const wxString& ext,
                                             wxUint32* type,
@@ -886,6 +991,8 @@ public:
     /**
         On Mac OS, registers application defined extensions and their default type
         and creator.
+
+        @onlyfor{wxosx}
     */
     static void MacRegisterDefaultTypeAndCreator(const wxString& ext,
                                                 wxUint32 type,
@@ -894,6 +1001,8 @@ public:
     /**
         On Mac OS, looks up the appropriate type and creator from the registration
         and then sets it.
+
+        @onlyfor{wxosx}
     */
     bool MacSetDefaultTypeAndCreator();
 
@@ -1134,18 +1243,43 @@ public:
     void SetName(const wxString& name);
 
     /**
-        Sets the full path.
+        Sets the path.
 
-        The @a path argument includes both the path (and the volume, if
-        supported by @a format) and the name and extension.
+        The @a path argument includes both the path and the volume, if
+        supported by @a format.
+
+        Calling this function doesn't affect the name and extension components,
+        to change them as well you can use Assign() or just an assignment
+        operator.
 
         @see GetPath()
      */
     void SetPath(const wxString& path, wxPathFormat format = wxPATH_NATIVE);
 
     /**
+        Sets permissions for this file or directory.
+
+        @param permissions
+            The new permissions: this should be a combination of
+            ::wxPosixPermissions enum elements.
+
+        @since 3.0
+
+        @note If this is a symbolic link and it should not be followed
+              this call will fail.
+
+        @return @true on success, @false if an error occurred (for example,
+                the file doesn't exist).
+    */
+    bool SetPermissions(int permissions);
+
+    /**
         Sets the file creation and last access/modification times (any of the pointers
         may be @NULL).
+
+        Notice that the file creation time can't be changed under Unix, so @a
+        dtCreate is ignored there (but @true is still returned). Under Windows
+        all three times can be set.
     */
     bool SetTimes(const wxDateTime* dtAccess,
                   const wxDateTime* dtMod,
@@ -1155,6 +1289,17 @@ public:
         Sets the volume specifier.
     */
     void SetVolume(const wxString& volume);
+
+    /**
+        Return whether some operations will follow symlink.
+
+        By default, file operations "follow symlink", i.e. operate on its
+        target and not on the symlink itself. See DontFollowLink() for more
+        information.
+
+        @since 2.9.5
+    */
+    bool ShouldFollowLink() const;
 
     //@{
     /**

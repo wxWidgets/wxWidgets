@@ -3,7 +3,6 @@
 // Purpose:     wxXmlDocument - XML parser & data holder class
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -216,6 +215,7 @@ private:
     int m_lineNo; // line number in original file, or -1
     bool m_noConversion; // don't do encoding conversion - node is plain text
 
+    void DoFree();
     void DoCopy(const wxXmlNode& node);
 };
 

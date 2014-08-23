@@ -4,7 +4,6 @@
 # Purpose:   checks all wxWidgets headers looking for headers not referenced anywhere
 # Usage:     run with --verbose for verbose output
 # Copyright: (c) 2007 Francesco Montorsi
-# Version:   $Id$
 # Licence:   wxWindows licence
 ################################################################################
 

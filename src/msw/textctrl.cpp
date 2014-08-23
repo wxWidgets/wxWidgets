@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -30,6 +29,7 @@
     #include "wx/textctrl.h"
     #include "wx/settings.h"
     #include "wx/brush.h"
+    #include "wx/dcclient.h"
     #include "wx/utils.h"
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -40,6 +40,7 @@
     #include "wx/wxcrtvararg.h"
 #endif
 
+#include "wx/stack.h"
 #include "wx/sysopt.h"
 
 #if wxUSE_CLIPBOARD
@@ -52,7 +53,6 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/winundef.h"
-#include "wx/msw/mslu.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -62,17 +62,7 @@
 #endif
 
 #if wxUSE_RICHEDIT
-
-#if wxUSE_INKEDIT
-#include "wx/dynlib.h"
-#endif
-
-// old mingw32 has richedit stuff directly in windows.h and doesn't have
-// richedit.h at all
-#if !defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__)
     #include <richedit.h>
-#endif
-
 #endif // wxUSE_RICHEDIT
 
 #include "wx/msw/missing.h"
@@ -171,6 +161,21 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(UpdatesCountFilter);
 };
+
+namespace
+{
+
+// This stack stores the length of the text being currently inserted into the
+// current control.
+//
+// It is used to pass information from DoWriteText() to AdjustSpaceLimit()
+// and is global as text can only be inserted into a few text controls at a
+// time (but possibly more than into one, if wxEVT_TEXT event handler does
+// something that results in another text control update), and we don't want to
+// waste space in every wxTextCtrl object for this field unnecessarily.
+wxStack<int> gs_lenOfInsertedText;
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // event tables and other macros
@@ -426,7 +431,7 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
     // implementation detail
     m_updatesCount = -2;
 
-    if ( !MSWCreateControl(windowClass.wx_str(), msStyle, pos, size, valueWin) )
+    if ( !MSWCreateControl(windowClass.t_str(), msStyle, pos, size, valueWin) )
         return false;
 
     m_updatesCount = -1;
@@ -497,7 +502,37 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
     SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
                 SWP_NOZORDER|SWP_NOMOVE|SWP_NOSIZE|SWP_NOACTIVATE|
                 SWP_FRAMECHANGED);
-#endif
+
+    if ( IsSingleLine() )
+    {
+        // If we don't set the margins explicitly, their size depends on the
+        // control initial size, see #2438. So explicitly set them to something
+        // consistent. And for this we have 2 candidates: EC_USEFONTINFO (which
+        // sets the left margin to 3 pixels, at least under Windows 7) or 0. We
+        // use the former because it looks like it was meant to be used as the
+        // default (what else would it be there for?) and 0 looks bad in
+        // classic mode, i.e. without themes. Also, the margin can be reset to
+        // 0 easily by calling SetMargins() explicitly but setting it to the
+        // default value is not currently supported.
+        //
+        // Finally, notice that EC_USEFONTINFO is used differently for plain
+        // and rich text controls.
+        WPARAM wParam;
+        LPARAM lParam;
+        if ( IsRich() )
+        {
+            wParam = EC_USEFONTINFO;
+            lParam = 0;
+        }
+        else // plain EDIT, EC_USEFONTINFO is used in lParam with them.
+        {
+            wParam = EC_LEFTMARGIN | EC_RIGHTMARGIN;
+            lParam = MAKELPARAM(EC_USEFONTINFO, EC_USEFONTINFO);
+        }
+
+        ::SendMessage(GetHwnd(), EM_SETMARGINS, wParam, lParam);
+    }
+#endif // !__WXWINCE__
 
     return true;
 }
@@ -855,7 +890,7 @@ void wxTextCtrl::DoSetValue(const wxString& value, int flags)
     }
 }
 
-#if wxUSE_RICHEDIT && (!wxUSE_UNICODE || wxUSE_UNICODE_MSLU)
+#if wxUSE_RICHEDIT && !wxUSE_UNICODE
 
 // TODO: using memcpy() would improve performance a lot for big amounts of text
 
@@ -917,20 +952,11 @@ wxRichEditStreamOut(DWORD_PTR dwCookie, BYTE *buf, LONG cb, LONG *pcb)
 }
 
 
-#if wxUSE_UNICODE_MSLU
-    #define UNUSED_IF_MSLU(param)
-#else
-    #define UNUSED_IF_MSLU(param) param
-#endif
-
 bool
 wxTextCtrl::StreamIn(const wxString& value,
-                     wxFontEncoding UNUSED_IF_MSLU(encoding),
+                     wxFontEncoding encoding,
                      bool selectionOnly)
 {
-#if wxUSE_UNICODE_MSLU
-    const wchar_t *wpc = value.c_str();
-#else // !wxUSE_UNICODE_MSLU
     wxCSConv conv(encoding);
 
     const size_t len = conv.MB2WC(NULL, value.mb_str(), value.length());
@@ -942,7 +968,6 @@ wxTextCtrl::StreamIn(const wxString& value,
     wchar_t *wpc = wchBuf.data();
 
     conv.MB2WC(wpc, value.mb_str(), len + 1);
-#endif // wxUSE_UNICODE_MSLU
 
     // finally, stream it in the control
     EDITSTREAM eds;
@@ -973,8 +998,6 @@ wxTextCtrl::StreamIn(const wxString& value,
     return true;
 }
 
-#if !wxUSE_UNICODE_MSLU
-
 wxString
 wxTextCtrl::StreamOut(wxFontEncoding encoding, bool selectionOnly) const
 {
@@ -991,7 +1014,7 @@ wxTextCtrl::StreamOut(wxFontEncoding encoding, bool selectionOnly) const
 
     EDITSTREAM eds;
     wxZeroMemory(eds);
-    eds.dwCookie = (DWORD)&data;
+    eds.dwCookie = (DWORD_PTR)&data;
     eds.pfnCallback = wxRichEditStreamOut;
 
     ::SendMessage
@@ -1026,8 +1049,6 @@ wxTextCtrl::StreamOut(wxFontEncoding encoding, bool selectionOnly) const
     return out;
 }
 
-#endif // !wxUSE_UNICODE_MSLU
-
 #endif // wxUSE_RICHEDIT
 
 void wxTextCtrl::WriteText(const wxString& value)
@@ -1056,15 +1077,6 @@ void wxTextCtrl::DoWriteText(const wxString& value, int flags)
             GetSelection(&start, &end);
             SetStyle(start, end, m_defaultStyle);
         }
-
-#if wxUSE_UNICODE_MSLU
-        // RichEdit doesn't have Unicode version of EM_REPLACESEL on Win9x,
-        // but EM_STREAMIN works
-        if ( wxUsingUnicowsDll() && GetRichVersion() > 1 )
-        {
-           done = StreamIn(valueDos, wxFONTENCODING_SYSTEM, selectionOnly);
-        }
-#endif // wxUSE_UNICODE_MSLU
 
 #if !wxUSE_UNICODE
         // next check if the text we're inserting must be shown in a non
@@ -1106,9 +1118,30 @@ void wxTextCtrl::DoWriteText(const wxString& value, int flags)
 
         UpdatesCountFilter ucf(m_updatesCount);
 
+        // Remember the length of the text we're inserting so that
+        // AdjustSpaceLimit() could adjust the limit to be big enough for it:
+        // and also signal us whether it did it by resetting it to 0.
+        gs_lenOfInsertedText.push(valueDos.length());
+
         ::SendMessage(GetHwnd(), selectionOnly ? EM_REPLACESEL : WM_SETTEXT,
                       // EM_REPLACESEL takes 1 to indicate the operation should be redoable
-                      selectionOnly ? 1 : 0, (LPARAM)valueDos.wx_str());
+                      selectionOnly ? 1 : 0, wxMSW_CONV_LPARAM(valueDos));
+
+        const int lenActuallyInserted = gs_lenOfInsertedText.top();
+        gs_lenOfInsertedText.pop();
+
+        if ( lenActuallyInserted == -1 )
+        {
+            // Text size limit has been hit and added text has been truncated.
+            // But the max length has been increased by the EN_MAXTEXT message
+            // handler, which also reset the top of the lengths stack to -1),
+            // so we should be able to set it successfully now if we try again.
+            if ( selectionOnly )
+                Undo();
+
+            ::SendMessage(GetHwnd(), selectionOnly ? EM_REPLACESEL : WM_SETTEXT,
+                          selectionOnly ? 1 : 0, wxMSW_CONV_LPARAM(valueDos));
+        }
 
         if ( !ucf.GotUpdate() && (flags & SetValue_SendEvent) )
         {
@@ -1312,23 +1345,6 @@ void wxTextCtrl::DoSetSelection(long from, long to, int flags)
 }
 
 // ----------------------------------------------------------------------------
-// Working with files
-// ----------------------------------------------------------------------------
-
-bool wxTextCtrl::DoLoadFile(const wxString& file, int fileType)
-{
-    if ( wxTextCtrlBase::DoLoadFile(file, fileType) )
-    {
-        // update the size limit if needed
-        AdjustSpaceLimit();
-
-        return true;
-    }
-
-    return false;
-}
-
-// ----------------------------------------------------------------------------
 // dirty status
 // ----------------------------------------------------------------------------
 
@@ -1488,6 +1504,93 @@ wxTextCtrl::HitTest(const wxPoint& pt, long *posOut) const
 
     return rc;
 }
+
+wxPoint wxTextCtrl::DoPositionToCoords(long pos) const
+{
+    // FIXME: This code is broken for rich edit version 2.0 as it uses the same
+    // API as plain edit i.e. the coordinates are returned directly instead of
+    // filling the POINT passed as WPARAM with them but we can't distinguish
+    // between 2.0 and 3.0 unfortunately (see also the use of EM_POSFROMCHAR
+    // above).
+#if wxUSE_RICHEDIT
+    if ( IsRich() )
+    {
+        POINT pt;
+        LRESULT rc = ::SendMessage(GetHwnd(), EM_POSFROMCHAR, (WPARAM)&pt, pos);
+        if ( rc != -1 )
+            return wxPoint(pt.x, pt.y);
+    }
+    else
+#endif // wxUSE_RICHEDIT
+    {
+        LRESULT rc = ::SendMessage(GetHwnd(), EM_POSFROMCHAR, pos, 0);
+        if ( rc == -1 )
+        {
+            // Finding coordinates for the last position of the control fails
+            // in plain EDIT control, try to compensate for it by finding it
+            // ourselves from the position of the previous character.
+            if ( pos < GetLastPosition() )
+            {
+                // It's not the expected correctable failure case so just fail.
+                return wxDefaultPosition;
+            }
+
+            if ( pos == 0 )
+            {
+                // We're being asked the coordinates of the first (and last and
+                // only) position in an empty control. There is no way to get
+                // it directly with EM_POSFROMCHAR but EM_GETMARGINS returns
+                // the correct value for at least the horizontal offset.
+                rc = ::SendMessage(GetHwnd(), EM_GETMARGINS, 0, 0);
+
+                // Text control seems to effectively add 1 to margin.
+                return wxPoint(LOWORD(rc) + 1, 1);
+            }
+
+            // We do have a previous character, try to get its coordinates.
+            rc = ::SendMessage(GetHwnd(), EM_POSFROMCHAR, pos - 1, 0);
+            if ( rc == -1 )
+            {
+                // If getting coordinates of the previous character failed as
+                // well, just give up.
+                return wxDefaultPosition;
+            }
+
+            wxString prevChar = GetRange(pos - 1, pos);
+            wxSize prevCharSize = GetTextExtent(prevChar);
+
+            if ( prevChar == wxT("\n" ))
+            {
+                // 'pos' is at the beginning of a new line so its X coordinate
+                // should be the same as X coordinate of the first character of
+                // any other line while its Y coordinate will be approximately
+                // (but we can't compute it exactly...) one character height
+                // more than that of the previous character.
+                LRESULT coords0 = ::SendMessage(GetHwnd(), EM_POSFROMCHAR, 0, 0);
+                if ( coords0 == -1 )
+                    return wxDefaultPosition;
+
+                rc = MAKELPARAM(LOWORD(coords0), HIWORD(rc) + prevCharSize.y);
+            }
+            else
+            {
+                // Simple case: previous character is in the same line so this
+                // one is just after it.
+                rc += MAKELPARAM(prevCharSize.x, 0);
+            }
+        }
+
+        // Notice that {LO,HI}WORD macros return WORDs, i.e. unsigned shorts,
+        // while we want to have signed values here (the y coordinate of any
+        // position above the first currently visible line is negative, for
+        // example), hence the need for casts.
+        return wxPoint(static_cast<short>(LOWORD(rc)),
+                        static_cast<short>(HIWORD(rc)));
+    }
+
+    return wxDefaultPosition;
+}
+
 
 // ----------------------------------------------------------------------------
 //
@@ -1693,8 +1796,19 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
                     // fall through
 
                 case 0:
-                    if ( IsMultiLine() && vkey == VK_RETURN )
-                        return false;
+                    switch ( vkey )
+                    {
+                        case VK_RETURN:
+                            // This one is only special for multi line controls.
+                            if ( !IsMultiLine() )
+                                break;
+                            // fall through
+
+                        case VK_DELETE:
+                        case VK_HOME:
+                        case VK_END:
+                            return false;
+                    }
                     // fall through
                 case 2:
                     break;
@@ -1733,7 +1847,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     {
         case WXK_RETURN:
             {
-                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+                wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
                 InitCommandEvent(event);
                 event.SetString(GetValue());
                 if ( HandleWindowEvent(event) )
@@ -1810,6 +1924,14 @@ void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
         }
     }
 
+    // Default window procedure of multiline edit controls posts WM_CLOSE to
+    // the parent window when it gets Escape key press for some reason, prevent
+    // it from doing this as this resulted in dialog boxes being closed on
+    // Escape even when they shouldn't be (we do handle Escape ourselves
+    // correctly in the situations when it should close them).
+    if ( event.GetKeyCode() == WXK_ESCAPE && IsMultiLine() )
+        return;
+
     // no, we didn't process it
     event.Skip();
 }
@@ -1856,6 +1978,9 @@ WXLRESULT wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                     //     live with it.
                     lRc = lDlgCode;
                 }
+                if (IsMultiLine())
+                    // Clear the DLGC_HASSETSEL bit from the return value
+                    lRc &= ~DLGC_HASSETSEL;
             }
             break;
 
@@ -1925,7 +2050,7 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             // the text size limit has been hit -- try to increase it
             if ( !AdjustSpaceLimit() )
             {
-                wxCommandEvent event(wxEVT_COMMAND_TEXT_MAXLEN, m_windowId);
+                wxCommandEvent event(wxEVT_TEXT_MAXLEN, m_windowId);
                 InitCommandEvent(event);
                 event.SetString(GetValue());
                 ProcessCommand(event);
@@ -1945,7 +2070,7 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
 WXHBRUSH wxTextCtrl::MSWControlColor(WXHDC hDC, WXHWND hWnd)
 {
-    if ( !IsEnabled() && !HasFlag(wxTE_MULTILINE) )
+    if ( !IsThisEnabled() && !HasFlag(wxTE_MULTILINE) )
         return MSWControlColorDisabled(hDC);
 
     return wxTextCtrlBase::MSWControlColor(hDC, hWnd);
@@ -1979,8 +2104,32 @@ bool wxTextCtrl::AdjustSpaceLimit()
     unsigned int len = ::GetWindowTextLength(GetHwnd());
     if ( len >= limit )
     {
-        // increment in 32Kb chunks
-        SetMaxLength(len + 0x8000);
+        unsigned long increaseBy;
+
+        // We need to increase the size of the buffer and to avoid increasing
+        // it too many times make sure that we make it at least big enough to
+        // fit all the text we are currently inserting into the control, if
+        // we're inserting any, i.e. if we're called from DoWriteText().
+        if ( !gs_lenOfInsertedText.empty() )
+        {
+            increaseBy = gs_lenOfInsertedText.top();
+
+            // Indicate to the caller that we increased the limit.
+            gs_lenOfInsertedText.top() = -1;
+        }
+        else // Not inserting text, must be text actually typed by user.
+        {
+            increaseBy = 0;
+        }
+
+        // But also increase it by at least 32KB chunks -- again, to avoid
+        // doing it too often -- and round it up to 32KB in any case.
+        if ( increaseBy < 0x8000 )
+            increaseBy = 0x8000;
+        else
+            increaseBy = (increaseBy + 0x7fff) & ~0x7fff;
+
+        SetMaxLength(len + increaseBy);
     }
 
     // we changed the limit
@@ -1997,21 +2146,60 @@ bool wxTextCtrl::AcceptsFocusFromKeyboard() const
 
 wxSize wxTextCtrl::DoGetBestSize() const
 {
+    return DoGetSizeFromTextSize( DEFAULT_ITEM_WIDTH );
+}
+
+wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
+{
     int cx, cy;
     wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
 
-    int wText = DEFAULT_ITEM_WIDTH;
+    DWORD wText = 1;
+    ::SystemParametersInfo(SPI_GETCARETWIDTH, 0, &wText, 0);
+    wText += xlen;
 
     int hText = cy;
     if ( m_windowStyle & wxTE_MULTILINE )
     {
-        hText *= wxMax(wxMin(GetNumberOfLines(), 10), 2);
-    }
-    //else: for single line control everything is ok
+        // add space for vertical scrollbar
+        if ( !(m_windowStyle & wxTE_NO_VSCROLL) )
+            wText += ::GetSystemMetrics(SM_CXVSCROLL);
 
-    // we have to add the adjustments for the control height only once, not
-    // once per line, so do it after multiplication above
-    hText += EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy) - cy;
+        if ( ylen <= 0 )
+        {
+            hText *= wxMax(wxMin(GetNumberOfLines(), 10), 2);
+            // add space for horizontal scrollbar
+            if ( m_windowStyle & wxHSCROLL )
+                hText += ::GetSystemMetrics(SM_CYHSCROLL);
+        }
+    }
+    // for single line control cy (height + external leading) is ok
+    else
+    {
+        // Add the margins we have previously set
+        wxPoint marg( GetMargins() );
+        wText += wxMax(0, marg.x);
+        hText += wxMax(0, marg.y);
+    }
+
+    // Text controls without border are special and have the same height as
+    // static labels (they also have the same appearance when they're disable
+    // and are often used as a sort of copyable to the clipboard label so it's
+    // important that they have the same height as the normal labels to not
+    // stand out).
+    if ( !HasFlag(wxBORDER_NONE) )
+    {
+        wText += 9; // borders and inner margins
+
+        // we have to add the adjustments for the control height only once, not
+        // once per line, so do it after multiplication above
+        hText += EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy) - cy;
+    }
+
+    // Perhaps the user wants something different from CharHeight, or ylen
+    // is used as the height of a multiline text.
+    if ( ylen > 0 )
+        hText += ylen - GetCharHeight();
 
     return wxSize(wText, hText);
 }
@@ -2279,9 +2467,7 @@ bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
     if ( IsRich() )
     {
         // change the colour of everything
-        CHARFORMAT cf;
-        wxZeroMemory(cf);
-        cf.cbSize = sizeof(cf);
+        WinStruct<CHARFORMAT> cf;
         cf.dwMask = CFM_COLOR;
         cf.crTextColor = wxColourToRGB(colour);
         ::SendMessage(GetHwnd(), EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&cf);
@@ -2292,6 +2478,11 @@ bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
 
 bool wxTextCtrl::SetFont(const wxFont& font)
 {
+    // Native text control sends EN_CHANGE when the font changes, producing
+    // a wxEVT_TEXT event as if the user changed the value. This is not
+    // the case, so supress the event.
+    wxEventBlocker block(this, wxEVT_TEXT);
+
     if ( !wxTextCtrlBase::SetFont(font) )
         return false;
 
@@ -2623,7 +2814,10 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 
 
     LOGFONT lf;
-    lf.lfHeight = cf.yHeight;
+    // Convert the height from the units of 1/20th of the point in which
+    // CHARFORMAT stores it to pixel-based units used by LOGFONT.
+    const wxCoord ppi = wxClientDC(this).GetPPI().y;
+    lf.lfHeight = -MulDiv(cf.yHeight/20, ppi, 72);
     lf.lfWidth = 0;
     lf.lfCharSet = ANSI_CHARSET; // FIXME: how to get correct charset?
     lf.lfClipPrecision = 0;

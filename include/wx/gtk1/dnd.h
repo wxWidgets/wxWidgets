@@ -2,7 +2,6 @@
 // Name:        wx/gtk1/dnd.h
 // Purpose:     declaration of the wxDropTarget class
 // Author:      Robert Roebling
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin, Robert Roebling
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,13 +64,13 @@ public:
     GdkDragContext     *m_dragContext;
     GtkWidget          *m_dragWidget;
     GtkSelectionData   *m_dragData;
-    guint               m_dragTime;
+    unsigned            m_dragTime;
     bool                m_firstMotion;     // gdk has no "gdk_drag_enter" event
 
     void SetDragContext( GdkDragContext *dc ) { m_dragContext = dc; }
     void SetDragWidget( GtkWidget *w ) { m_dragWidget = w; }
     void SetDragData( GtkSelectionData *sd ) { m_dragData = sd; }
-    void SetDragTime( guint time ) { m_dragTime = time; }
+    void SetDragTime(unsigned time) { m_dragTime = time; }
 };
 
 //-------------------------------------------------------------------------

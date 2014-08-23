@@ -4,7 +4,6 @@
 // Author:      Francesco Montorsi
 // Modified by:
 // Created:     14/10/06
-// RCS-ID:      $Id$
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -44,7 +43,7 @@
 #include "wx/fontpicker.h"
 #include "wx/aboutdlg.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -76,7 +75,7 @@ class MyApp: public wxApp
 public:
     MyApp() { }
 
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
     wxDECLARE_NO_COPY_CLASS(MyApp);
 };
@@ -103,7 +102,7 @@ private:
     wxCollapsiblePane *m_collPane;
     wxBoxSizer *m_paneSizer;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(MyFrame);
 };
 
@@ -119,7 +118,7 @@ private:
     wxCollapsiblePane *m_collPane;
     wxGridSizer *m_paneSizer;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(MyDialog);
 };
 
@@ -152,7 +151,7 @@ bool MyApp::OnInit()
 // MyFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(PANE_COLLAPSE, MyFrame::OnCollapse)
     EVT_MENU(PANE_EXPAND, MyFrame::OnExpand)
     EVT_MENU(PANE_SETLABEL, MyFrame::OnSetLabel)
@@ -162,7 +161,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_UPDATE_UI(PANE_COLLAPSE, MyFrame::OnCollapseUpdateUI)
     EVT_UPDATE_UI(PANE_EXPAND, MyFrame::OnExpandUpdateUI)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame()
@@ -198,11 +197,16 @@ MyFrame::MyFrame()
     m_collPane = new wxCollapsiblePane(this, -1, wxT("test!"));
     wxWindow *win = m_collPane->GetPane();
 
-    m_paneSizer = new wxBoxSizer( wxVERTICAL );
-    m_paneSizer->Add( new wxStaticText(win, -1, wxT("Static text") ), 0, wxALIGN_LEFT );
-    m_paneSizer->Add( new wxStaticText(win, -1, wxT("Yet another one!") ), 0, wxALIGN_LEFT );
-    m_paneSizer->Add( new wxTextCtrl(win, PANE_TEXTCTRL, wxT("Text control"), wxDefaultPosition, wxSize(80,-1) ), 0, wxALIGN_LEFT );
-    m_paneSizer->Add( new wxButton(win, PANE_BUTTON, wxT("Press to align right") ), 0, wxALIGN_LEFT );
+    m_paneSizer = new wxBoxSizer( wxHORIZONTAL );
+    wxBoxSizer* paneSubSizer = new wxBoxSizer( wxVERTICAL );
+    m_paneSizer->AddSpacer( 20 );
+    m_paneSizer->Add( paneSubSizer, 1 );
+
+    paneSubSizer->Add( new wxStaticText(win, -1, wxT("Static text") ), 0, wxALIGN_LEFT | wxALL, 3 );
+    paneSubSizer->Add( new wxStaticText(win, -1, wxT("Yet another one!") ), 0, wxALIGN_LEFT | wxALL, 3 );
+    paneSubSizer->Add( new wxTextCtrl(win, PANE_TEXTCTRL, wxT("Text control"), wxDefaultPosition, wxSize(80,-1) ), 0, wxALIGN_LEFT | wxALL, 3 );
+    paneSubSizer->Add( new wxButton(win, PANE_BUTTON, wxT("Press to align right") ), 0, wxALIGN_LEFT | wxALL, 3 );
+
     win->SetSizer( m_paneSizer );
 }
 
@@ -274,11 +278,11 @@ enum
     PANEDLG_TOGGLESTATUS_BTN = wxID_HIGHEST
 };
 
-BEGIN_EVENT_TABLE(MyDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(MyDialog, wxDialog)
     EVT_BUTTON(PANEDLG_TOGGLESTATUS_BTN, MyDialog::OnToggleStatus)
     EVT_COLLAPSIBLEPANE_CHANGED(wxID_ANY, MyDialog::OnPaneChanged)
     EVT_BUTTON(PANE_BUTTON, MyDialog::OnAlignButton)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyDialog::MyDialog(wxFrame *parent)
                 : wxDialog(parent, wxID_ANY, wxT("Test dialog"),

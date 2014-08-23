@@ -25,11 +25,6 @@ Prerequisites
 
 you need the xml scripting additions from latenightsw, 
 
-http://www.latenightsw.com/freeware/XMLTools2/index.html
-
-currently the 2.9.3 version available from that download is not appropriate for OS X 10.6, you
-can download a beta from a newer version here:
-
-http://www.latenightsw.com/blog/?p=231
+http://www.latenightsw.com/freeware/XMLTools2/
 
 Stefan Csomor

@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by: Marcin Malich
 // Created:     11.11.97
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -136,8 +135,6 @@ private:
 
 #if defined(__WXMSW__)
     #include "wx/msw/ownerdrw.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/ownerdrw.h"
 #endif
 
 #endif // wxUSE_OWNER_DRAWN

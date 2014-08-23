@@ -2,7 +2,6 @@
 // Name:        gdiobj.h
 // Purpose:     interface of wxGDIObject
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

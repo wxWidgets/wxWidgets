@@ -3,7 +3,6 @@
 // Purpose:     String-related benchmarks
 // Author:      Vadim Zeitlin
 // Created:     2008-07-19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -315,28 +314,28 @@ BENCHMARK_FUNC(StrcmpA)
 {
     const wxString& s = GetTestAsciiString();
 
-    return wxCRT_StrcmpA(s, s) == 0;
+    return wxCRT_StrcmpA(s.c_str(), s.c_str()) == 0;
 }
 
 BENCHMARK_FUNC(StrcmpW)
 {
     const wxString& s = GetTestAsciiString();
 
-    return wxCRT_StrcmpW(s, s) == 0;
+    return wxCRT_StrcmpW(s.wc_str(), s.wc_str()) == 0;
 }
 
 BENCHMARK_FUNC(StricmpA)
 {
     const wxString& s = GetTestAsciiString();
 
-    return wxCRT_StricmpA(s, s) == 0;
+    return wxCRT_StricmpA(s.c_str(), s.c_str()) == 0;
 }
 
 BENCHMARK_FUNC(StricmpW)
 {
     const wxString& s = GetTestAsciiString();
 
-    return wxCRT_StricmpW(s, s) == 0;
+    return wxCRT_StricmpW(s.wc_str(), s.wc_str()) == 0;
 }
 
 BENCHMARK_FUNC(StringCmp)
@@ -356,7 +355,7 @@ BENCHMARK_FUNC(StringCmpNoCase)
 // Also benchmark various native functions under MSW. Surprisingly/annoyingly
 // they sometimes have vastly better performance than alternatives, especially
 // for case-sensitive comparison (see #10375).
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
 
 #include "wx/msw/wrapwin.h"
 
@@ -400,7 +399,7 @@ BENCHMARK_FUNC(MSWCompareStringIgnoreCase)
              ) == CSTR_EQUAL;
 }
 
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
 // ----------------------------------------------------------------------------
 // string buffers: wx[W]CharBuffer

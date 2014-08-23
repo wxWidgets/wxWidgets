@@ -4,7 +4,6 @@
 // Author:      Vaclav Slavik
 // Modified by:
 // Created:     2004/06/04
-// RCS-ID:      $Id$
 // Copyright:   (c) Vaclav Slavik, 2004
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,7 +23,10 @@
     #include "wx/intl.h"
 #endif
 
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/dialogcount.h"
 
 #if wxUSE_LIBHILDON
     #include <hildon-widgets/hildon-color-selector.h>
@@ -35,6 +37,13 @@ extern "C" {
     #include <hildon/hildon.h>
 }
 #endif // wxUSE_LIBHILDON2
+
+extern "C" {
+static void response(GtkDialog*, int response_id, wxColourDialog* win)
+{
+    win->EndModal(response_id == GTK_RESPONSE_OK ? wxID_OK : wxID_CANCEL);
+}
+}
 
 IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)
 
@@ -82,32 +91,23 @@ int wxColourDialog::ShowModal()
 {
     ColourDataToDialog();
 
-    gint result = gtk_dialog_run(GTK_DIALOG(m_widget));
-    gtk_widget_hide(m_widget);
+    gulong id = g_signal_connect(m_widget, "response", G_CALLBACK(response), this);
+    int rc = wxDialog::ShowModal();
+    g_signal_handler_disconnect(m_widget, id);
 
-    switch (result)
-    {
-        default:
-            wxFAIL_MSG(wxT("unexpected GtkColorSelectionDialog return code"));
-            // fall through
+    if (rc == wxID_OK)
+        DialogToColourData();
 
-        case GTK_RESPONSE_CANCEL:
-        case GTK_RESPONSE_DELETE_EVENT:
-        case GTK_RESPONSE_CLOSE:
-            return wxID_CANCEL;
-
-        case GTK_RESPONSE_OK:
-            DialogToColourData();
-            return wxID_OK;
-    }
+    return rc;
 }
 
 void wxColourDialog::ColourDataToDialog()
 {
+#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
     const GdkColor * const
         col = m_data.GetColour().IsOk() ? m_data.GetColour().GetColor()
                                       : NULL;
-
+#endif
 #if wxUSE_LIBHILDON
     HildonColorSelector * const sel = HILDON_COLOR_SELECTOR(m_widget);
     hildon_color_selector_set_color(sel, const_cast<GdkColor *>(col));
@@ -128,14 +128,21 @@ void wxColourDialog::ColourDataToDialog()
         gtk_color_selection_dialog_get_color_selection(
         GTK_COLOR_SELECTION_DIALOG(m_widget)));
 
-    if ( col )
-        gtk_color_selection_set_current_color(sel, col);
+    const wxColour& color = m_data.GetColour();
+    if (color.IsOk())
+    {
+#ifdef __WXGTK3__
+        gtk_color_selection_set_current_rgba(sel, color);
+#else
+        gtk_color_selection_set_current_color(sel, color.GetColor());
+#endif
+    }
 
     // setup the palette:
 
-    GdkColor colors[16];
+    GdkColor colors[wxColourData::NUM_CUSTOM];
     gint n_colors = 0;
-    for (unsigned i = 0; i < 16; i++)
+    for (unsigned i = 0; i < WXSIZEOF(colors); i++)
     {
         wxColour c = m_data.GetCustomColour(i);
         if (c.IsOk())
@@ -182,8 +189,13 @@ void wxColourDialog::DialogToColourData()
         gtk_color_selection_dialog_get_color_selection(
         GTK_COLOR_SELECTION_DIALOG(m_widget)));
 
+#ifdef __WXGTK3__
+    GdkRGBA clr;
+    gtk_color_selection_get_current_rgba(sel, &clr);
+#else
     GdkColor clr;
     gtk_color_selection_get_current_color(sel, &clr);
+#endif
     m_data.SetColour(clr);
 
     // Extract custom palette:
@@ -196,7 +208,7 @@ void wxColourDialog::DialogToColourData()
     gint n_colors;
     if (gtk_color_selection_palette_from_string(pal, &colors, &n_colors))
     {
-        for (int i = 0; i < wxMin(n_colors, 16); i++)
+        for (int i = 0; i < n_colors && i < wxColourData::NUM_CUSTOM; i++)
         {
             m_data.SetCustomColour(i, wxColour(colors[i]));
         }

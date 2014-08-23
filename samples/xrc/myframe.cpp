@@ -2,7 +2,6 @@
 // Name:        myframe.cpp
 // Purpose:     XML resources sample: A derived frame, called MyFrame
 // Author:      Robert O'Connor (rob@medicalmnemonics.com), Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert O'Connor and Vaclav Slavik
 // Licence:     wxWindows licence
 //-----------------------------------------------------------------------------
@@ -51,7 +50,8 @@
 #include "custclas.h"
 // And our objref dialog, for the object reference and ID range example.
 #include "objrefdlg.h"
-// For functions to manipulate our wxTreeCtrl and wxListCtrl
+// For functions to manipulate the corresponding controls.
+#include "wx/animate.h"
 #include "wx/treectrl.h"
 #include "wx/listctrl.h"
 
@@ -61,7 +61,7 @@
 
 // the application icon (under Windows and OS/2 it is in resources and even
 // though we could still include the XPM here it would be unused)
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -77,7 +77,7 @@
 // to fire the same kind of event (an EVT_MENU) and thus I give them the same
 // ID name to help new users emphasize this point which is often overlooked
 // when starting out with wxWidgets.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("unload_resource_menuitem"), MyFrame::OnUnloadResourceMenuCommand)
     EVT_MENU(XRCID("reload_resource_menuitem"), MyFrame::OnReloadResourceMenuCommand)
     EVT_MENU(wxID_EXIT,  MyFrame::OnExitToolOrMenuCommand)
@@ -85,6 +85,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("derived_tool_or_menuitem"), MyFrame::OnDerivedDialogToolOrMenuCommand)
     EVT_MENU(XRCID("controls_tool_or_menuitem"), MyFrame::OnControlsToolOrMenuCommand)
     EVT_MENU(XRCID("uncentered_tool_or_menuitem"), MyFrame::OnUncenteredToolOrMenuCommand)
+    EVT_MENU(XRCID("aui_demo_tool_or_menuitem"), MyFrame::OnAuiDemoToolOrMenuCommand)
     EVT_MENU(XRCID("obj_ref_tool_or_menuitem"), MyFrame::OnObjRefToolOrMenuCommand)
     EVT_MENU(XRCID("custom_class_tool_or_menuitem"), MyFrame::OnCustomClassToolOrMenuCommand)
     EVT_MENU(XRCID("platform_property_tool_or_menuitem"), MyFrame::OnPlatformPropertyToolOrMenuCommand)
@@ -92,7 +93,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("variable_expansion_tool_or_menuitem"), MyFrame::OnVariableExpansionToolOrMenuCommand)
     EVT_MENU(XRCID("recursive_load"), MyFrame::OnRecursiveLoad)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAboutToolOrMenuCommand)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 //-----------------------------------------------------------------------------
 // Public methods
@@ -229,9 +230,9 @@ void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
     // XRCCTRL
     wxListCtrl * const list = XRCCTRL(dlg, "controls_listctrl", wxListCtrl);
 
-    list->InsertItem(0, "Athos");   list->SetItem(0, 1, "90");
-    list->InsertItem(1, "Porthos"); list->SetItem(1, 1, "120");
-    list->InsertItem(2, "Aramis");  list->SetItem(2, 1, "80");
+    list->InsertItem(0, "Athos", 0);   list->SetItem(0, 1, "90", 2);
+    list->InsertItem(1, "Porthos", 5); list->SetItem(1, 1, "120", 3);
+    list->InsertItem(2, "Aramis", 1);  list->SetItem(2, 1, "80", 4);
 #endif // wxUSE_LISTCTRL
 
 #if wxUSE_TREECTRL
@@ -254,7 +255,7 @@ void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_ANIMATIONCTRL
     // dynamically connect our event handler for the "clicked" event of the "play" button
     // in the animation ctrl page of our dialog
-    dlg.Connect(XRCID("controls_animation_button_play"), wxEVT_COMMAND_BUTTON_CLICKED,
+    dlg.Connect(XRCID("controls_animation_button_play"), wxEVT_BUTTON,
                 wxCommandEventHandler(MyFrame::OnAnimationCtrlPlay));
 #endif
 
@@ -270,6 +271,17 @@ void MyFrame::OnUncenteredToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
     dlg.ShowModal();
 }
 
+void MyFrame::OnAuiDemoToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
+{
+#if wxUSE_AUI
+    wxDialog dlg;
+    wxXmlResource::Get()->LoadDialog(&dlg, this, wxS("aui_dialog"));
+    dlg.SetSize(-1,300);
+    dlg.ShowModal();
+#else
+    wxLogWarning("wxUSE_AUI must be set to 1 in 'setup.h' to view the AUI demo.");
+#endif
+}
 
 void MyFrame::OnObjRefToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {

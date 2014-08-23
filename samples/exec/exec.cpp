@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     15.01.00
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -55,6 +54,7 @@
 #include "wx/numdlg.h"
 #include "wx/textdlg.h"
 #include "wx/ffile.h"
+#include "wx/scopedptr.h"
 #include "wx/stopwatch.h"
 
 #include "wx/process.h"
@@ -64,6 +64,10 @@
 #ifdef __WINDOWS__
     #include "wx/dde.h"
 #endif // __WINDOWS__
+
+#ifndef wxHAS_IMAGES_IN_RESOURCES
+    #include "../sample.xpm"
+#endif
 
 // ----------------------------------------------------------------------------
 // the usual application and main frame classes
@@ -79,7 +83,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 // Define an array of process pointers used by MyFrame
@@ -108,7 +112,6 @@ public:
     void OnEndBusyCursor(wxCommandEvent& event);
 
     void OnSyncExec(wxCommandEvent& event);
-    void OnSyncNoEventsExec(wxCommandEvent& event);
     void OnAsyncExec(wxCommandEvent& event);
     void OnShell(wxCommandEvent& event);
     void OnExecWithRedirect(wxCommandEvent& event);
@@ -119,6 +122,7 @@ public:
     void OnFileExec(wxCommandEvent& event);
     void OnFileLaunch(wxCommandEvent& event);
     void OnOpenURL(wxCommandEvent& event);
+    void OnShowCommandForExt(wxCommandEvent& event);
 
     void OnAbout(wxCommandEvent& event);
 
@@ -140,6 +144,8 @@ private:
     void ShowOutput(const wxString& cmd,
                     const wxArrayString& output,
                     const wxString& title);
+
+    int GetExecFlags() const;
 
     void DoAsyncExec(const wxString& cmd);
 
@@ -183,7 +189,7 @@ private:
     wxTimer m_timerBg;
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -237,7 +243,7 @@ private:
                *m_textIn,
                *m_textErr;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -257,7 +263,7 @@ public:
     // instead of overriding this virtual function we might as well process the
     // event from it in the frame class - this might be more convenient in some
     // cases
-    virtual void OnTerminate(int pid, int status);
+    virtual void OnTerminate(int pid, int status) wxOVERRIDE;
 
 protected:
     MyFrame *m_parent;
@@ -274,7 +280,7 @@ public:
             Redirect();
         }
 
-    virtual void OnTerminate(int pid, int status);
+    virtual void OnTerminate(int pid, int status) wxOVERRIDE;
 
     virtual bool HasInput();
 };
@@ -289,7 +295,7 @@ public:
         {
         }
 
-    virtual bool HasInput();
+    virtual bool HasInput() wxOVERRIDE;
 
 private:
     wxString m_input;
@@ -307,24 +313,27 @@ enum
     Exec_TimerBg,
 
     // menu items
-    Exec_Quit = 100,
-    Exec_Kill,
+    Exec_Kill = 100,
     Exec_ClearLog,
     Exec_BeginBusyCursor,
     Exec_EndBusyCursor,
     Exec_SyncExec = 200,
-    Exec_SyncNoEventsExec,
     Exec_AsyncExec,
     Exec_Shell,
     Exec_POpen,
     Exec_OpenFile,
+    Exec_ShowCommandForExt,
     Exec_LaunchFile,
     Exec_OpenURL,
     Exec_DDEExec,
     Exec_DDERequest,
     Exec_Redirect,
     Exec_Pipe,
+    Exec_Flags_HideConsole,
+    Exec_Flags_ShowConsole,
+    Exec_Flags_NoEvents,
     Exec_About = wxID_ABOUT,
+    Exec_Quit = wxID_EXIT,
 
     // control ids
     Exec_Btn_Send = 1000,
@@ -342,7 +351,7 @@ static const wxChar *DIALOG_TITLE = wxT("Exec sample");
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_Quit,  MyFrame::OnQuit)
     EVT_MENU(Exec_Kill,  MyFrame::OnKill)
     EVT_MENU(Exec_ClearLog,  MyFrame::OnClear)
@@ -350,7 +359,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_EndBusyCursor,  MyFrame::OnEndBusyCursor)
 
     EVT_MENU(Exec_SyncExec, MyFrame::OnSyncExec)
-    EVT_MENU(Exec_SyncNoEventsExec, MyFrame::OnSyncNoEventsExec)
     EVT_MENU(Exec_AsyncExec, MyFrame::OnAsyncExec)
     EVT_MENU(Exec_Shell, MyFrame::OnShell)
     EVT_MENU(Exec_Redirect, MyFrame::OnExecWithRedirect)
@@ -359,6 +367,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_POpen, MyFrame::OnPOpen)
 
     EVT_MENU(Exec_OpenFile, MyFrame::OnFileExec)
+    EVT_MENU(Exec_ShowCommandForExt, MyFrame::OnShowCommandForExt)
     EVT_MENU(Exec_LaunchFile, MyFrame::OnFileLaunch)
     EVT_MENU(Exec_OpenURL, MyFrame::OnOpenURL)
 
@@ -373,9 +382,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_TIMER(Exec_TimerIdle, MyFrame::OnIdleTimer)
     EVT_TIMER(Exec_TimerBg, MyFrame::OnBgTimer)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(MyPipeFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyPipeFrame, wxFrame)
     EVT_BUTTON(Exec_Btn_Send, MyPipeFrame::OnBtnSend)
     EVT_BUTTON(Exec_Btn_SendFile, MyPipeFrame::OnBtnSendFile)
     EVT_BUTTON(Exec_Btn_Get, MyPipeFrame::OnBtnGet)
@@ -386,7 +395,7 @@ BEGIN_EVENT_TABLE(MyPipeFrame, wxFrame)
     EVT_CLOSE(MyPipeFrame::OnClose)
 
     EVT_END_PROCESS(wxID_ANY, MyPipeFrame::OnProcessTerm)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
@@ -436,6 +445,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
          m_timerIdleWakeUp(this, Exec_TimerIdle),
          m_timerBg(this, Exec_TimerBg)
 {
+    SetIcon(wxICON(sample));
+
     m_pidLast = 0;
 
 #ifdef __WXMAC__
@@ -449,19 +460,35 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(Exec_Kill, wxT("&Kill process...\tCtrl-K"),
                      wxT("Kill a process by PID"));
     menuFile->AppendSeparator();
-    menuFile->Append(Exec_ClearLog, wxT("&Clear log\tCtrl-L"),
-                     wxT("Clear the log window"));
+    menuFile->Append(Exec_OpenFile, wxT("Open &file...\tCtrl-F"),
+                     wxT("Launch the command to open this kind of files"));
+    menuFile->Append(Exec_ShowCommandForExt,
+                     "Show association for extension...\tShift-Ctrl-A",
+                     "Show the command associated with the given extension");
+    menuFile->Append(Exec_LaunchFile, wxT("La&unch file...\tShift-Ctrl-F"),
+                     wxT("Launch the default application associated with the file"));
+    menuFile->Append(Exec_OpenURL, wxT("Open &URL...\tCtrl-U"),
+                     wxT("Launch the default browser with the given URL"));
     menuFile->AppendSeparator();
     menuFile->Append(Exec_BeginBusyCursor, wxT("Show &busy cursor\tCtrl-C"));
     menuFile->Append(Exec_EndBusyCursor, wxT("Show &normal cursor\tShift-Ctrl-C"));
     menuFile->AppendSeparator();
+    menuFile->Append(Exec_ClearLog, wxT("&Clear log\tCtrl-L"),
+                     wxT("Clear the log window"));
+    menuFile->AppendSeparator();
     menuFile->Append(Exec_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
+    wxMenu *flagsMenu = new wxMenu;
+    flagsMenu->AppendCheckItem(Exec_Flags_HideConsole, "Always &hide console");
+    flagsMenu->AppendCheckItem(Exec_Flags_ShowConsole, "Always &show console");
+    flagsMenu->AppendCheckItem(Exec_Flags_NoEvents, "Disable &events",
+                               "This flag is valid for sync execution only");
+
     wxMenu *execMenu = new wxMenu;
+    execMenu->AppendSubMenu(flagsMenu, "Execution flags");
+    execMenu->AppendSeparator();
     execMenu->Append(Exec_SyncExec, wxT("Sync &execution...\tCtrl-E"),
                      wxT("Launch a program and return when it terminates"));
-    execMenu->Append(Exec_SyncNoEventsExec, wxT("Sync execution and &block...\tCtrl-B"),
-                     wxT("Launch a program and block until it terminates"));
     execMenu->Append(Exec_AsyncExec, wxT("&Async execution...\tCtrl-A"),
                      wxT("Launch a program and return immediately"));
     execMenu->Append(Exec_Shell, wxT("Execute &shell command...\tCtrl-S"),
@@ -474,13 +501,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     execMenu->Append(Exec_POpen, wxT("&Open a pipe to a command...\tCtrl-P"),
                      wxT("Open a pipe to and from another program"));
 
-    execMenu->AppendSeparator();
-    execMenu->Append(Exec_OpenFile, wxT("Open &file...\tCtrl-F"),
-                     wxT("Launch the command to open this kind of files"));
-    execMenu->Append(Exec_LaunchFile, wxT("La&unch file...\tShift-Ctrl-F"),
-                     wxT("Launch the default application associated with the file"));
-    execMenu->Append(Exec_OpenURL, wxT("Open &URL...\tCtrl-U"),
-                     wxT("Launch the default browser with the given URL"));
 #ifdef __WINDOWS__
     execMenu->AppendSeparator();
     execMenu->Append(Exec_DDEExec, wxT("Execute command via &DDE...\tCtrl-D"));
@@ -488,7 +508,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif
 
     wxMenu *helpMenu = new wxMenu(wxEmptyString, wxMENU_TEAROFF);
-    helpMenu->Append(Exec_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(Exec_About, wxT("&About\tF1"), wxT("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
@@ -712,13 +732,13 @@ private:
     wxCheckBox* m_useCWD;
     wxCheckBox* m_useEnv;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(ExecQueryDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(ExecQueryDialog, wxDialog)
     EVT_UPDATE_UI(TEXT_CWD, ExecQueryDialog::OnUpdateWorkingDirectoryUI)
     EVT_UPDATE_UI(TEXT_ENVIRONMENT, ExecQueryDialog::OnUpdateEnvironmentUI)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 ExecQueryDialog::ExecQueryDialog(const wxString& cmd)
     : wxDialog(NULL, wxID_ANY, DIALOG_TITLE,
@@ -812,10 +832,26 @@ static bool QueryExec(wxString& cmd, wxExecuteEnv& env)
 // event handlers: exec menu
 // ----------------------------------------------------------------------------
 
+int MyFrame::GetExecFlags() const
+{
+    wxMenuBar* const mbar = GetMenuBar();
+
+    int flags = 0;
+
+    if ( mbar->IsChecked(Exec_Flags_HideConsole) )
+        flags |= wxEXEC_HIDE_CONSOLE;
+    if ( mbar->IsChecked(Exec_Flags_ShowConsole) )
+        flags |= wxEXEC_SHOW_CONSOLE;
+    if ( mbar->IsChecked(Exec_Flags_NoEvents) )
+        flags |= wxEXEC_NOEVENTS;
+
+    return flags;
+}
+
 void MyFrame::DoAsyncExec(const wxString& cmd)
 {
     MyProcess * const process = new MyProcess(this, cmd);
-    m_pidLast = wxExecute(cmd, wxEXEC_ASYNC, process);
+    m_pidLast = wxExecute(cmd, wxEXEC_ASYNC | GetExecFlags(), process);
     if ( !m_pidLast )
     {
         wxLogError(wxT("Execution of '%s' failed."), cmd.c_str());
@@ -843,26 +879,7 @@ void MyFrame::OnSyncExec(wxCommandEvent& WXUNUSED(event))
 
     wxLogStatus( wxT("'%s' is running please wait..."), cmd.c_str() );
 
-    int code = wxExecute(cmd, wxEXEC_SYNC, NULL, &env);
-
-    wxLogStatus(wxT("Process '%s' terminated with exit code %d."),
-        cmd.c_str(), code);
-
-    m_cmdLast = cmd;
-}
-
-void MyFrame::OnSyncNoEventsExec(wxCommandEvent& WXUNUSED(event))
-{
-    wxString cmd = wxGetTextFromUser(wxT("Enter the command: "),
-                                     DIALOG_TITLE,
-                                     m_cmdLast);
-
-    if ( !cmd )
-        return;
-
-    wxLogStatus( wxT("'%s' is running please wait..."), cmd.c_str() );
-
-    int code = wxExecute(cmd, wxEXEC_BLOCK);
+    int code = wxExecute(cmd, wxEXEC_SYNC | GetExecFlags(), NULL, &env);
 
     wxLogStatus(wxT("Process '%s' terminated with exit code %d."),
         cmd.c_str(), code);
@@ -944,11 +961,8 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
         wxLogStatus("Command \"%s\" terminated after %ldms; exit code %d.",
                     cmd, sw.Time(), code);
 
-        if ( code != -1 )
-        {
-            ShowOutput(cmd, output, wxT("Output"));
-            ShowOutput(cmd, errors, wxT("Errors"));
-        }
+        ShowOutput(cmd, output, wxT("Output"));
+        ShowOutput(cmd, errors, wxT("Errors"));
     }
     else // async exec
     {
@@ -1085,6 +1099,41 @@ void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
     }
 
     DoAsyncExec(cmd);
+}
+
+void MyFrame::OnShowCommandForExt(wxCommandEvent& WXUNUSED(event))
+{
+    static wxString s_ext;
+
+    wxString ext = wxGetTextFromUser
+                   (
+                    "Enter the extension without leading dot",
+                    "Exec sample",
+                    s_ext,
+                    this
+                   );
+    if ( ext.empty() )
+        return;
+
+    s_ext = ext;
+
+    wxScopedPtr<wxFileType>
+        ft(wxTheMimeTypesManager->GetFileTypeFromExtension(ext));
+    if ( !ft )
+    {
+        wxLogError("Information for extension \"%s\" not found", ext);
+        return;
+    }
+
+    const wxString cmd = ft->GetOpenCommand("file." + ext);
+    if ( cmd.empty() )
+    {
+        wxLogWarning("Open command for extension \"%s\" not defined.", ext);
+        return;
+    }
+
+    wxLogMessage("Open command for files of extension \"%s\" is\n%s",
+                 ext, cmd);
 }
 
 void MyFrame::OnFileLaunch(wxCommandEvent& WXUNUSED(event))
@@ -1470,8 +1519,8 @@ void MyPipeFrame::DoGetFromStream(wxTextCtrl *text, wxInputStream& in)
 {
     while ( in.CanRead() )
     {
-        wxChar buffer[4096];
-        buffer[in.Read(buffer, WXSIZEOF(buffer) - 1).LastRead()] = wxT('\0');
+        char buffer[4096];
+        buffer[in.Read(buffer, WXSIZEOF(buffer) - 1).LastRead()] = '\0';
 
         text->AppendText(buffer);
     }

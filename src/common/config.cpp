@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     07.04.98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1997 Karsten Ballueder  Ballueder@usa.net
 //                       Vadim Zeitlin      <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -63,10 +62,8 @@ bool          wxConfigBase::ms_bAutoCreate = true;
 wxConfigBase *wxAppTraitsBase::CreateConfig()
 {
     return new
-    #if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
+    #if defined(__WINDOWS__) && wxUSE_CONFIG_NATIVE
         wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
-    #elif defined(__WXPALMOS__) && wxUSE_CONFIG_NATIVE
-        wxPrefConfig(wxTheApp->GetAppName());
     #else // either we're under Unix or wish to use files even under Windows
         wxFileConfig(wxTheApp->GetAppName());
     #endif
@@ -387,7 +384,7 @@ enum Bracket
   Bracket_None,
   Bracket_Normal  = ')',
   Bracket_Curly   = '}',
-#ifdef  __WXMSW__
+#ifdef  __WINDOWS__
   Bracket_Windows = '%',    // yeah, Windows people are a bit strange ;-)
 #endif
   Bracket_Max
@@ -401,17 +398,17 @@ wxString wxExpandEnvVars(const wxString& str)
   size_t m;
   for ( size_t n = 0; n < str.length(); n++ ) {
     switch ( str[n].GetValue() ) {
-#ifdef  __WXMSW__
+#ifdef __WINDOWS__
       case wxT('%'):
-#endif  //WINDOWS
+#endif // __WINDOWS__
       case wxT('$'):
         {
           Bracket bracket;
-          #ifdef  __WXMSW__
+          #ifdef __WINDOWS__
             if ( str[n] == wxT('%') )
               bracket = Bracket_Windows;
             else
-          #endif  //WINDOWS
+          #endif // __WINDOWS__
           if ( n == str.length() - 1 ) {
             bracket = Bracket_None;
           }
@@ -455,7 +452,7 @@ wxString wxExpandEnvVars(const wxString& str)
 #endif
           {
             // variable doesn't exist => don't change anything
-            #ifdef  __WXMSW__
+            #ifdef  __WINDOWS__
               if ( bracket != Bracket_Windows )
             #endif
                 if ( bracket != Bracket_None )
@@ -472,10 +469,10 @@ wxString wxExpandEnvVars(const wxString& str)
               //
               // under Unix, OTOH, this warning could be useful for the user to
               // understand why isn't the variable expanded as intended
-              #ifndef __WXMSW__
+              #ifndef __WINDOWS__
                 wxLogWarning(_("Environment variables expansion failed: missing '%c' at position %u in '%s'."),
                              (char)bracket, (unsigned int) (m + 1), str.c_str());
-              #endif // __WXMSW__
+              #endif // __WINDOWS__
             }
             else {
               // skip closing bracket unless the variables wasn't expanded
@@ -497,7 +494,7 @@ wxString wxExpandEnvVars(const wxString& str)
 
           break;
         }
-        //else: fall through
+        wxFALLTHROUGH;
 
       default:
         strResult += str[n];

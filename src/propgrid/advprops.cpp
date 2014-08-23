@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     2004-09-25
-// RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -63,6 +62,7 @@
 #endif
 
 #include "wx/odcombo.h"
+#include "wx/numformatter.h"
 
 // -----------------------------------------------------------------------
 
@@ -340,13 +340,13 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
 
         int mode = wxPG_PROPERTY_VALIDATION_SATURATE;
 
-        if ( property->GetAttributeAsLong(wxT("Wrap"), 0) )
+        if ( property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_WRAP, 0) )
             mode = wxPG_PROPERTY_VALIDATION_WRAP;
 
         if ( property->GetValueType() == wxT("double") )
         {
             double v_d;
-            double step = property->GetAttributeAsDouble(wxT("Step"), 1.0);
+            double step = property->GetAttributeAsDouble(wxPG_ATTR_SPINCTRL_STEP, 1.0);
 
             // Try double
             if ( s.ToDouble(&v_d) )
@@ -362,7 +362,14 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
                 // Min/Max check
                 wxFloatProperty::DoValidation(property, v_d, NULL, mode);
 
-                wxPropertyGrid::DoubleToString(s, v_d, 6, true, NULL);
+                int precision = -1;
+                wxVariant v = property->GetAttribute(wxPG_FLOAT_PRECISION);
+                if ( !v.IsNull() )
+                {
+                    precision = v.GetInteger();
+                }
+
+                s = wxNumberFormatter::ToString(v_d, precision, wxNumberFormatter::Style_NoTrailingZeroes);
             }
             else
             {
@@ -372,7 +379,7 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
         else
         {
             wxLongLong_t v_ll;
-            wxLongLong_t step = property->GetAttributeAsLong(wxT("Step"), 1);
+            wxLongLong_t step = property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_STEP, 1);
 
             // Try (long) long
             if ( s.ToLongLong(&v_ll, 10) )
@@ -429,16 +436,16 @@ class wxPGDatePickerCtrlEditor : public wxPGEditor
 public:
     virtual ~wxPGDatePickerCtrlEditor();
 
-    wxString GetName() const;
+    wxString GetName() const wxOVERRIDE;
     virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
                                           wxPGProperty* property,
                                           const wxPoint& pos,
-                                          const wxSize& size) const;
-    virtual void UpdateControl( wxPGProperty* property, wxWindow* wnd ) const;
+                                          const wxSize& size) const wxOVERRIDE;
+    virtual void UpdateControl( wxPGProperty* property, wxWindow* wnd ) const wxOVERRIDE;
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
-        wxWindow* wnd, wxEvent& event ) const;
-    virtual bool GetValueFromControl( wxVariant& variant, wxPGProperty* property, wxWindow* wnd ) const;
-    virtual void SetValueToUnspecified( wxPGProperty* WXUNUSED(property), wxWindow* wnd ) const;
+        wxWindow* wnd, wxEvent& event ) const wxOVERRIDE;
+    virtual bool GetValueFromControl( wxVariant& variant, wxPGProperty* property, wxWindow* wnd ) const wxOVERRIDE;
+    virtual void SetValueToUnspecified( wxPGProperty* WXUNUSED(property), wxWindow* wnd ) const wxOVERRIDE;
 };
 
 
@@ -457,7 +464,7 @@ wxPGWindowList wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgri
                                                          const wxPoint& pos,
                                                          const wxSize& sz ) const
 {
-    wxCHECK_MSG( property->IsKindOf(CLASSINFO(wxDateProperty)),
+    wxCHECK_MSG( wxDynamicCast(property, wxDateProperty),
                  NULL,
                  wxT("DatePickerCtrl editor can only be used with wxDateProperty or derivative.") );
 
@@ -498,7 +505,7 @@ void wxPGDatePickerCtrlEditor::UpdateControl( wxPGProperty* property,
                                               wxWindow* wnd ) const
 {
     wxDatePickerCtrl* ctrl = (wxDatePickerCtrl*) wnd;
-    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxDatePickerCtrl)) );
+    wxASSERT( wxDynamicCast(ctrl, wxDatePickerCtrl) );
 
     wxDateTime dateValue(wxInvalidDateTime);
     wxVariant v(property->GetValue());
@@ -523,7 +530,7 @@ bool wxPGDatePickerCtrlEditor::OnEvent( wxPropertyGrid* WXUNUSED(propgrid),
 bool wxPGDatePickerCtrlEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* WXUNUSED(property), wxWindow* wnd ) const
 {
     wxDatePickerCtrl* ctrl = (wxDatePickerCtrl*) wnd;
-    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxDatePickerCtrl)) );
+    wxASSERT( wxDynamicCast(ctrl, wxDatePickerCtrl) );
 
     variant = ctrl->GetValue();
 
@@ -534,7 +541,7 @@ void wxPGDatePickerCtrlEditor::SetValueToUnspecified( wxPGProperty* property,
                                                       wxWindow* wnd ) const
 {
     wxDatePickerCtrl* ctrl = (wxDatePickerCtrl*) wnd;
-    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxDatePickerCtrl)) );
+    wxASSERT( wxDynamicCast(ctrl, wxDatePickerCtrl) );
 
     wxDateProperty* prop = wxDynamicCast(property, wxDateProperty);
 
@@ -583,9 +590,9 @@ static const wxChar* const gs_fp_es_style_labels[] = {
 };
 
 static const long gs_fp_es_style_values[] = {
-    wxNORMAL,
-    wxSLANT,
-    wxITALIC
+    wxFONTSTYLE_NORMAL,
+    wxFONTSTYLE_SLANT,
+    wxFONTSTYLE_ITALIC
 };
 
 static const wxChar* const gs_fp_es_weight_labels[] = {
@@ -596,9 +603,9 @@ static const wxChar* const gs_fp_es_weight_labels[] = {
 };
 
 static const long gs_fp_es_weight_values[] = {
-    wxNORMAL,
-    wxLIGHT,
-    wxBOLD
+    wxFONTWEIGHT_NORMAL,
+    wxFONTWEIGHT_LIGHT,
+    wxFONTWEIGHT_BOLD
 };
 
 // Class body is in advprops.h
@@ -752,7 +759,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
              st != wxFONTSTYLE_SLANT &&
              st != wxFONTSTYLE_ITALIC )
              st = wxFONTWEIGHT_NORMAL;
-        font.SetStyle( st );
+        font.SetStyle( static_cast<wxFontStyle>(st) );
     }
     else if ( ind == 3 )
     {
@@ -761,7 +768,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
              wt != wxFONTWEIGHT_LIGHT &&
              wt != wxFONTWEIGHT_BOLD )
              wt = wxFONTWEIGHT_NORMAL;
-        font.SetWeight( wt );
+        font.SetWeight( static_cast<wxFontWeight>(wt) );
     }
     else if ( ind == 4 )
     {
@@ -770,10 +777,10 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
     else if ( ind == 5 )
     {
         int fam = childValue.GetLong();
-        if ( fam < wxDEFAULT ||
-             fam > wxTELETYPE )
-             fam = wxDEFAULT;
-        font.SetFamily( fam );
+        if ( fam < wxFONTFAMILY_DEFAULT ||
+             fam > wxFONTFAMILY_TELETYPE )
+             fam = wxFONTFAMILY_DEFAULT;
+        font.SetFamily( static_cast<wxFontFamily>(fam) );
     }
 
     wxVariant newVariant;
@@ -806,9 +813,7 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
         dc.DrawRectangle( rect );
 
         wxFont oldFont = dc.GetFont();
-        wxFont drawFont(oldFont.GetPointSize(),
-                        wxDEFAULT,wxNORMAL,wxBOLD,false,drawFace);
-        dc.SetFont(drawFont);
+        dc.SetFont(wxFontInfo(oldFont.GetPointSize().Bold().FaceName(drawFace));
 
         dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT) );
         dc.DrawText( wxT("Aa"), rect.x+2, rect.y+1 );
@@ -835,33 +840,33 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
 #include "wx/colordlg.h"
 
 //#define wx_cp_es_syscolours_len 25
-static const wxChar* const gs_cp_es_syscolour_labels[] = {
-    wxT("AppWorkspace"),
-    wxT("ActiveBorder"),
-    wxT("ActiveCaption"),
-    wxT("ButtonFace"),
-    wxT("ButtonHighlight"),
-    wxT("ButtonShadow"),
-    wxT("ButtonText"),
-    wxT("CaptionText"),
-    wxT("ControlDark"),
-    wxT("ControlLight"),
-    wxT("Desktop"),
-    wxT("GrayText"),
-    wxT("Highlight"),
-    wxT("HighlightText"),
-    wxT("InactiveBorder"),
-    wxT("InactiveCaption"),
-    wxT("InactiveCaptionText"),
-    wxT("Menu"),
-    wxT("Scrollbar"),
-    wxT("Tooltip"),
-    wxT("TooltipText"),
-    wxT("Window"),
-    wxT("WindowFrame"),
-    wxT("WindowText"),
-    wxT("Custom"),
-    (const wxChar*) NULL
+static const char* const gs_cp_es_syscolour_labels[] = {
+    wxTRANSLATE("AppWorkspace"),
+    wxTRANSLATE("ActiveBorder"),
+    wxTRANSLATE("ActiveCaption"),
+    wxTRANSLATE("ButtonFace"),
+    wxTRANSLATE("ButtonHighlight"),
+    wxTRANSLATE("ButtonShadow"),
+    wxTRANSLATE("ButtonText"),
+    wxTRANSLATE("CaptionText"),
+    wxTRANSLATE("ControlDark"),
+    wxTRANSLATE("ControlLight"),
+    wxTRANSLATE("Desktop"),
+    wxTRANSLATE("GrayText"),
+    wxTRANSLATE("Highlight"),
+    wxTRANSLATE("HighlightText"),
+    wxTRANSLATE("InactiveBorder"),
+    wxTRANSLATE("InactiveCaption"),
+    wxTRANSLATE("InactiveCaptionText"),
+    wxTRANSLATE("Menu"),
+    wxTRANSLATE("Scrollbar"),
+    wxTRANSLATE("Tooltip"),
+    wxTRANSLATE("TooltipText"),
+    wxTRANSLATE("Window"),
+    wxTRANSLATE("WindowFrame"),
+    wxTRANSLATE("WindowText"),
+    wxTRANSLATE("Custom"),
+    NULL
 };
 
 static const long gs_cp_es_syscolour_values[] = {
@@ -938,7 +943,7 @@ wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxS
 
 
 wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxString& name,
-    const wxChar* const* labels, const long* values, wxPGChoices* choicesCache,
+    const char* const* labels, const long* values, wxPGChoices* choicesCache,
     const wxColourPropertyValue& value )
     : wxEnumProperty( label, name, labels, values, choicesCache )
 {
@@ -950,7 +955,7 @@ wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxS
 
 
 wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxString& name,
-    const wxChar* const* labels, const long* values, wxPGChoices* choicesCache,
+    const char* const* labels, const long* values, wxPGChoices* choicesCache,
     const wxColour& value )
     : wxEnumProperty( label, name, labels, values, choicesCache )
 {
@@ -1287,7 +1292,7 @@ bool wxSystemColourProperty::OnEvent( wxPropertyGrid* propgrid,
         // switched to one that has wxButton as well.
         askColour = true;
     }
-    else if ( event.GetEventType() == wxEVT_COMMAND_COMBOBOX_SELECTED )
+    else if ( event.GetEventType() == wxEVT_COMBOBOX )
     {
         // Must override index detection since at this point GetIndex()
         // will return old value.
@@ -1320,7 +1325,7 @@ public:
                          const wxPropertyGrid* propertyGrid, wxPGProperty* property,
                          int WXUNUSED(column), int item, int WXUNUSED(flags) ) const
     {
-        wxASSERT( property->IsKindOf(CLASSINFO(wxSystemColourProperty)) );
+        wxASSERT( wxDynamicCast(property, wxSystemColourProperty) );
         wxSystemColourProperty* prop = wxStaticCast(property, wxSystemColourProperty);
 
         dc.SetPen(*wxBLACK_PEN);
@@ -1437,7 +1442,7 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
     {
         if ( !(argFlags & wxPG_EDITABLE_VALUE ))
         {
-            // This really should not occurr...
+            // This really should not occur...
             // wxASSERT(false);
             ResetNextIndex();
             return false;
@@ -1498,7 +1503,7 @@ bool wxSystemColourProperty::DoSetAttribute( const wxString& name, wxVariant& va
         if ( ival && (m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
         {
             // Show custom choice
-            m_choices.Insert(wxT("Custom"), GetCustomColourIndex(), wxPG_COLOUR_CUSTOM);
+            m_choices.Insert(_("Custom"), GetCustomColourIndex(), wxPG_COLOUR_CUSTOM);
             m_flags &= ~(wxPG_PROP_HIDE_CUSTOM_COLOUR);
         }
         else if ( !ival && !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
@@ -1517,48 +1522,30 @@ bool wxSystemColourProperty::DoSetAttribute( const wxString& name, wxVariant& va
 // wxColourProperty
 // -----------------------------------------------------------------------
 
-static const wxChar* const gs_cp_es_normcolour_labels[] = {
-    wxT("Black"),
-    wxT("Maroon"),
-    wxT("Navy"),
-    wxT("Purple"),
-    wxT("Teal"),
-    wxT("Gray"),
-    wxT("Green"),
-    wxT("Olive"),
-    wxT("Brown"),
-    wxT("Blue"),
-    wxT("Fuchsia"),
-    wxT("Red"),
-    wxT("Orange"),
-    wxT("Silver"),
-    wxT("Lime"),
-    wxT("Aqua"),
-    wxT("Yellow"),
-    wxT("White"),
-    wxT("Custom"),
-    (const wxChar*) NULL
+static const char* const gs_cp_es_normcolour_labels[] = {
+    wxTRANSLATE("Black"),
+    wxTRANSLATE("Red"),
+    wxTRANSLATE("Green"),
+    wxTRANSLATE("Blue"),
+    wxTRANSLATE("Cyan"),
+    wxTRANSLATE("Magenta"),
+    wxTRANSLATE("Yellow"),
+    wxTRANSLATE("White"),
+    wxTRANSLATE("Grey"),
+    wxTRANSLATE("Custom"),
+    NULL
 };
 
 static const unsigned long gs_cp_es_normcolour_colours[] = {
     wxPG_COLOUR(0,0,0),
-    wxPG_COLOUR(128,0,0),
-    wxPG_COLOUR(0,0,128),
-    wxPG_COLOUR(128,0,128),
-    wxPG_COLOUR(0,128,128),
-    wxPG_COLOUR(128,128,128),
-    wxPG_COLOUR(0,128,0),
-    wxPG_COLOUR(128,128,0),
-    wxPG_COLOUR(166,124,81),
-    wxPG_COLOUR(0,0,255),
-    wxPG_COLOUR(255,0,255),
     wxPG_COLOUR(255,0,0),
-    wxPG_COLOUR(247,148,28),
-    wxPG_COLOUR(192,192,192),
     wxPG_COLOUR(0,255,0),
+    wxPG_COLOUR(0,0,255),
     wxPG_COLOUR(0,255,255),
+    wxPG_COLOUR(255,0,255),
     wxPG_COLOUR(255,255,0),
     wxPG_COLOUR(255,255,255),
+    wxPG_COLOUR(128,128,128),
     wxPG_COLOUR(0,0,0)
 };
 
@@ -1624,41 +1611,43 @@ wxVariant wxColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 // wxCursorProperty
 // -----------------------------------------------------------------------
 
+#if wxPG_CAN_DRAW_CURSOR
 #define wxPG_CURSOR_IMAGE_WIDTH     32
+#endif
 
 #define NUM_CURSORS 28
 
 //#define wx_cp_es_syscursors_len 28
-static const wxChar* const gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
-    wxT("Default"),
-    wxT("Arrow"),
-    wxT("Right Arrow"),
-    wxT("Blank"),
-    wxT("Bullseye"),
-    wxT("Character"),
-    wxT("Cross"),
-    wxT("Hand"),
-    wxT("I-Beam"),
-    wxT("Left Button"),
-    wxT("Magnifier"),
-    wxT("Middle Button"),
-    wxT("No Entry"),
-    wxT("Paint Brush"),
-    wxT("Pencil"),
-    wxT("Point Left"),
-    wxT("Point Right"),
-    wxT("Question Arrow"),
-    wxT("Right Button"),
-    wxT("Sizing NE-SW"),
-    wxT("Sizing N-S"),
-    wxT("Sizing NW-SE"),
-    wxT("Sizing W-E"),
-    wxT("Sizing"),
-    wxT("Spraycan"),
-    wxT("Wait"),
-    wxT("Watch"),
-    wxT("Wait Arrow"),
-    (const wxChar*) NULL
+static const char* const gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
+    wxTRANSLATE("Default"),
+    wxTRANSLATE("Arrow"),
+    wxTRANSLATE("Right Arrow"),
+    wxTRANSLATE("Blank"),
+    wxTRANSLATE("Bullseye"),
+    wxTRANSLATE("Character"),
+    wxTRANSLATE("Cross"),
+    wxTRANSLATE("Hand"),
+    wxTRANSLATE("I-Beam"),
+    wxTRANSLATE("Left Button"),
+    wxTRANSLATE("Magnifier"),
+    wxTRANSLATE("Middle Button"),
+    wxTRANSLATE("No Entry"),
+    wxTRANSLATE("Paint Brush"),
+    wxTRANSLATE("Pencil"),
+    wxTRANSLATE("Point Left"),
+    wxTRANSLATE("Point Right"),
+    wxTRANSLATE("Question Arrow"),
+    wxTRANSLATE("Right Button"),
+    wxTRANSLATE("Sizing NE-SW"),
+    wxTRANSLATE("Sizing N-S"),
+    wxTRANSLATE("Sizing NW-SE"),
+    wxTRANSLATE("Sizing W-E"),
+    wxTRANSLATE("Sizing"),
+    wxTRANSLATE("Spraycan"),
+    wxTRANSLATE("Wait"),
+    wxTRANSLATE("Watch"),
+    wxTRANSLATE("Wait Arrow"),
+    NULL
 };
 
 static const long gs_cp_es_syscursors_values[NUM_CURSORS] = {
@@ -1694,12 +1683,15 @@ static const long gs_cp_es_syscursors_values[NUM_CURSORS] = {
 
 IMPLEMENT_DYNAMIC_CLASS(wxCursorProperty, wxEnumProperty)
 
+static wxPGChoices gs_wxCursorProperty_choicesCache;
+
 wxCursorProperty::wxCursorProperty( const wxString& label, const wxString& name,
     int value )
     : wxEnumProperty( label,
                       name,
                       gs_cp_es_syscursors_labels,
                       gs_cp_es_syscursors_values,
+                      &gs_wxCursorProperty_choicesCache,
                       value )
 {
     m_flags |= wxPG_PROP_STATIC_CHOICES; // Cursor selection cannot be changed.
@@ -1828,6 +1820,8 @@ wxImageFileProperty::wxImageFileProperty( const wxString& label, const wxString&
 
     m_pImage = NULL;
     m_pBitmap = NULL;
+
+    LoadImageFromFile();
 }
 
 wxImageFileProperty::~wxImageFileProperty()
@@ -1846,6 +1840,11 @@ void wxImageFileProperty::OnSetValue()
     wxDELETE(m_pImage);
     wxDELETE(m_pBitmap);
 
+    LoadImageFromFile();
+}
+
+void wxImageFileProperty::LoadImageFromFile()
+{
     wxFileName filename = GetFileName();
 
     // Create the image thumbnail
@@ -2204,7 +2203,7 @@ wxString wxDateProperty::ValueToString( wxVariant& value,
 
 wxString wxDateProperty::DetermineDefaultDateFormat( bool showCentury )
 {
-    // This code is basicly copied from datectlg.cpp's SetFormat
+    // This code is basically copied from datectlg.cpp's SetFormat
     //
     wxString format;
 

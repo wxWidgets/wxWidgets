@@ -2,12 +2,22 @@
 // Name:        wx/debug.h
 // Purpose:     interface of global functions
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /** @addtogroup group_funcmacro_debug */
 //@{
+
+/**
+    Exits the program immediately.
+
+    This is a simple wrapper for the standard abort() function which is not
+    available under all platforms (currently only Windows CE doesn't provide
+    it).
+
+    @since 2.9.4
+ */
+void wxAbort();
 
 /**
     @def wxDEBUG_LEVEL
@@ -306,7 +316,7 @@ void wxDisableAsserts();
     Returns @true if the program is running under debugger, @false otherwise.
 
     Please note that this function is currently only implemented for Win32 and
-    Mac builds using CodeWarrior and always returns @false elsewhere.
+    always returns @false elsewhere.
 
     @header{wx/debug.h}
 */

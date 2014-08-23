@@ -4,7 +4,6 @@
 // Author:      Vaclav Slavik
 // Modified by:
 // Created:     2006-12-24
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 TT-Solutions
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -29,7 +28,7 @@ class wxDFBEventsHandler;
 // wxFrame is non-owned, because even though it can have a parent, it's
 // location is independent of it.  This class is for internal use only, it's
 // the base class for wxTopLevelWindow and wxPopupWindow.
-class WXDLLIMPEXP_CORE wxNonOwnedWindow : public wxWindow
+class WXDLLIMPEXP_CORE wxNonOwnedWindow : public wxNonOwnedWindowBase
 {
 public:
     // construction

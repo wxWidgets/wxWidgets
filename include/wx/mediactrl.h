@@ -4,7 +4,6 @@
 // Author:      Ryan Norton <wxprojects@comcast.net>
 // Modified by:
 // Created:     11/07/04
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -107,7 +106,7 @@ public:
     // Allocates a copy of this object.
     // Required for wxEvtHandler::AddPendingEvent
     // ------------------------------------------------------------------------
-    virtual wxEvent *Clone() const
+    virtual wxEvent *Clone() const wxOVERRIDE
     {   return new wxMediaEvent(*this);     }
 
 
@@ -216,8 +215,8 @@ protected:
     static const wxClassInfo* NextBackend(wxClassInfo::const_iterator* it);
 
     void OnMediaFinished(wxMediaEvent& evt);
-    virtual void DoMoveWindow(int x, int y, int w, int h);
-    wxSize DoGetBestSize() const;
+    virtual void DoMoveWindow(int x, int y, int w, int h) wxOVERRIDE;
+    wxSize DoGetBestSize() const wxOVERRIDE;
 
     //FIXME:  This is nasty... find a better way to work around
     //inheritance issues
@@ -242,7 +241,7 @@ protected:
 // for wxMediaCtrl.  Backends are searched alphabetically -
 // the one with the earliest letter is tried first.
 //
-// Note that this is currently not API or ABI compatable -
+// Note that this is currently not API or ABI compatible -
 // so statically link or make the client compile on-site.
 //
 // ----------------------------------------------------------------------------
@@ -392,7 +391,7 @@ protected:
 };
 
 // ----------------------------------------------------------------------------
-// End compilation gaurd
+// End compilation guard
 // ----------------------------------------------------------------------------
 #endif // wxUSE_MEDIACTRL
 

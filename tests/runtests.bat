@@ -11,7 +11,6 @@ REM    http://www.infionline.net/~wtnewton/batch/batguide.html
 REM for general info about DOS batch files.
 
 REM Author: Francesco Montorsi
-REM $Id$
 
 rem set the path for running the tests if they use DLL build of wx
 for /d %%x in ("..\lib\*_dll") do @set PATH=%%x;%PATH%
@@ -20,7 +19,12 @@ set failure=0
 
 for /d %%x in (*) do @(
     if exist %%x\test.exe (
-        %%x\test.exe >tmp
+        echo.
+        echo ========================================================================
+        echo Running non-GUI unit test
+        echo ========================================================================
+        echo.
+        %%x\test.exe -t >tmp
         
         REM show the output of the test in the buildbot log:
         type tmp
@@ -32,15 +36,19 @@ for /d %%x in (*) do @(
 
         REM separe the output of the test we just executed from the next one
         echo.
-        echo.
         echo ========================================================================
+        echo Non-GUI test done
         echo ========================================================================
-        echo.
         echo.
     )
     
     if exist %%x\test_gui.exe (
-        %%x\test_gui.exe >tmp
+        echo.
+        echo ========================================================================
+        echo Running GUI unit test
+        echo ========================================================================
+        echo.
+        %%x\test_gui.exe -t >tmp
         
         REM show the output of the test in the buildbot log:
         type tmp
@@ -49,6 +57,12 @@ for /d %%x in (*) do @(
         REM (failure=1 is set if "OK" does not appear in the test output)
         type tmp | find "OK" >NUL
         if ERRORLEVEL 1 set failure=1
+
+        echo.
+        echo ========================================================================
+        echo GUI test done
+        echo ========================================================================
+        echo.
     )
 )
 

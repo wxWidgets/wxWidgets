@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     29/2/2000
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -78,55 +77,6 @@ void wxGenericDragImage::Init()
     m_pBackingBitmap = NULL;
 #endif
 }
-
-#if WXWIN_COMPATIBILITY_2_6
-wxGenericDragImage::wxGenericDragImage(const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-{
-    Init();
-    Create(cursor);
-}
-
-wxGenericDragImage::wxGenericDragImage(const wxBitmap& image, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-{
-    Init();
-
-    Create(image, cursor);
-}
-
-wxGenericDragImage::wxGenericDragImage(const wxIcon& image, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-{
-    Init();
-
-    Create(image, cursor);
-}
-
-wxGenericDragImage::wxGenericDragImage(const wxString& str, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-{
-    Init();
-
-    Create(str, cursor);
-}
-
-bool wxGenericDragImage::Create(const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-{
-    return Create(cursor);
-}
-
-bool wxGenericDragImage::Create(const wxBitmap& image, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-{
-    return Create(image, cursor);
-}
-
-bool wxGenericDragImage::Create(const wxIcon& image, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-{
-    return Create(image, cursor);
-}
-
-bool wxGenericDragImage::Create(const wxString& str, const wxCursor& cursor, const wxPoint& WXUNUSED(cursorHotspot))
-{
-    return Create(str, cursor);
-}
-#endif // WXWIN_COMPATIBILITY_2_6
 
 // Attributes
 ////////////////////////////////////////////////////////////////////////////
@@ -247,7 +197,7 @@ bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot,
         m_boundingRect = * rect;
 
     m_isDirty = false;
-    m_isDirty = false;
+    m_isShown = false;
 
     if (m_cursor.IsOk())
     {
@@ -324,7 +274,7 @@ bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, wxW
 
     wxSize sz = fullScreenRect->GetSize();
 
-    if (fullScreenRect->GetParent() && !fullScreenRect->IsKindOf(CLASSINFO(wxFrame)))
+    if (fullScreenRect->GetParent() && !wxDynamicCast(fullScreenRect, wxFrame))
         fullScreenRect->GetParent()->ClientToScreen(& x, & y);
 
     rect.x = x; rect.y = y;

@@ -3,7 +3,6 @@
 // Purpose:     STC test module
 // Maintainer:  Wyo
 // Created:     2003-09-01
-// RCS-ID:      $Id$
 // Copyright:   (c) wxGuide
 // Licence:     wxWindows licence
 //////////////////////////////////////////////////////////////////////////////
@@ -28,6 +27,7 @@
 // need because it includes almost all 'standard' wxWidgets headers)
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
+    #include "wx/textdlg.h"
 #endif
 
 //! wxWidgets headers
@@ -49,6 +49,8 @@
 // declarations
 //============================================================================
 
+// The (uniform) style used for the annotations.
+const int ANNOTATION_STYLE = wxSTC_STYLE_LASTPREDEFINED + 1;
 
 //============================================================================
 // implementation
@@ -58,7 +60,7 @@
 // Edit
 //----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
+wxBEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
     // common
     EVT_SIZE (                         Edit::OnSize)
     // edit
@@ -93,17 +95,29 @@ BEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
     EVT_MENU (myID_WRAPMODEON,         Edit::OnWrapmodeOn)
     EVT_MENU (myID_CHARSETANSI,        Edit::OnUseCharset)
     EVT_MENU (myID_CHARSETMAC,         Edit::OnUseCharset)
+    // annotations
+    EVT_MENU (myID_ANNOTATION_ADD,     Edit::OnAnnotationAdd)
+    EVT_MENU (myID_ANNOTATION_REMOVE,  Edit::OnAnnotationRemove)
+    EVT_MENU (myID_ANNOTATION_CLEAR,   Edit::OnAnnotationClear)
+    EVT_MENU (myID_ANNOTATION_STYLE_HIDDEN,   Edit::OnAnnotationStyle)
+    EVT_MENU (myID_ANNOTATION_STYLE_STANDARD, Edit::OnAnnotationStyle)
+    EVT_MENU (myID_ANNOTATION_STYLE_BOXED,    Edit::OnAnnotationStyle)
     // extra
-    EVT_MENU (myID_CHANGELOWER,        Edit::OnChangeCase)
-    EVT_MENU (myID_CHANGEUPPER,        Edit::OnChangeCase)
-    EVT_MENU (myID_CONVERTCR,          Edit::OnConvertEOL)
-    EVT_MENU (myID_CONVERTCRLF,        Edit::OnConvertEOL)
-    EVT_MENU (myID_CONVERTLF,          Edit::OnConvertEOL)
+    EVT_MENU (myID_CHANGELOWER,                 Edit::OnChangeCase)
+    EVT_MENU (myID_CHANGEUPPER,                 Edit::OnChangeCase)
+    EVT_MENU (myID_CONVERTCR,                   Edit::OnConvertEOL)
+    EVT_MENU (myID_CONVERTCRLF,                 Edit::OnConvertEOL)
+    EVT_MENU (myID_CONVERTLF,                   Edit::OnConvertEOL)
+    EVT_MENU(myID_MULTIPLE_SELECTIONS,          Edit::OnMultipleSelections)
+    EVT_MENU(myID_MULTI_PASTE,                  Edit::OnMultiPaste)
+    EVT_MENU(myID_MULTIPLE_SELECTIONS_TYPING,   Edit::OnMultipleSelectionsTyping)
     // stc
     EVT_STC_MARGINCLICK (wxID_ANY,     Edit::OnMarginClick)
     EVT_STC_CHARADDED (wxID_ANY,       Edit::OnCharAdded)
     EVT_STC_KEY( wxID_ANY , Edit::OnKey )
-END_EVENT_TABLE()
+
+    EVT_KEY_DOWN( Edit::OnKeyDown )
+wxEND_EVENT_TABLE()
 
 Edit::Edit (wxWindow *parent, wxWindowID id,
             const wxPoint &pos,
@@ -120,6 +134,9 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     // initialize language
     m_language = NULL;
 
+    // Use all the bits in the style byte as styles, not indicators.
+    SetStyleBits(8);
+    
     // default font for all styles
     SetViewEOL (g_CommonPrefs.displayEOLEnable);
     SetIndentationGuides (g_CommonPrefs.indentGuideEnable);
@@ -131,7 +148,7 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     SetReadOnly (g_CommonPrefs.readOnlyInitial);
     SetWrapMode (g_CommonPrefs.wrapModeInitial?
                  wxSTC_WRAP_WORD: wxSTC_WRAP_NONE);
-    wxFont font (10, wxMODERN, wxNORMAL, wxNORMAL);
+    wxFont font(wxFontInfo(10).Family(wxFONTFAMILY_MODERN));
     StyleSetFont (wxSTC_STYLE_DEFAULT, font);
     StyleSetForeground (wxSTC_STYLE_DEFAULT, *wxBLACK);
     StyleSetBackground (wxSTC_STYLE_DEFAULT, *wxWHITE);
@@ -154,7 +171,10 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     MarkerDefine (wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY,     wxT("BLACK"), wxT("BLACK"));
     MarkerDefine (wxSTC_MARKNUM_FOLDERTAIL,    wxSTC_MARK_EMPTY,     wxT("BLACK"), wxT("BLACK"));
 
-    // miscelaneous
+    // annotations
+    AnnotationSetVisible(wxSTC_ANNOTATION_BOXED);
+
+    // miscellaneous
     m_LineNrMargin = TextWidth (wxSTC_STYLE_LINENUMBER, wxT("_999999"));
     m_FoldingMargin = 16;
     CmdKeyClear (wxSTC_KEY_TAB, 0); // this is done by the menu accelerator key
@@ -193,6 +213,22 @@ void Edit::OnEditClear (wxCommandEvent &WXUNUSED(event)) {
 void Edit::OnKey (wxStyledTextEvent &WXUNUSED(event))
 {
     wxMessageBox("OnKey");
+}
+
+void Edit::OnKeyDown (wxKeyEvent &event)
+{
+    if (CallTipActive())
+        CallTipCancel();
+    if (event.GetKeyCode() == WXK_SPACE && event.ControlDown() && event.ShiftDown())
+    {
+        int pos = GetCurrentPos();
+        CallTipSetBackground(*wxYELLOW);
+        CallTipShow(pos,
+                    "This is a CallTip with multiple lines.\n"
+                    "It is meant to be a context sensitive popup helper for the user.");
+        return;
+    }
+    event.Skip();
 }
 
 void Edit::OnEditCut (wxCommandEvent &WXUNUSED(event)) {
@@ -309,6 +345,79 @@ void Edit::OnUseCharset (wxCommandEvent &event) {
     SetCodePage (charset);
 }
 
+void Edit::OnAnnotationAdd(wxCommandEvent& WXUNUSED(event))
+{
+    const int line = GetCurrentLine();
+
+    wxString ann = AnnotationGetText(line);
+    ann = wxGetTextFromUser
+          (
+            wxString::Format("Enter annotation for the line %d", line),
+            "Edit annotation",
+            ann,
+            this
+          );
+    if ( ann.empty() )
+        return;
+
+    AnnotationSetText(line, ann);
+    AnnotationSetStyle(line, ANNOTATION_STYLE);
+
+    // Scintilla doesn't update the scroll width for annotations, even with
+    // scroll width tracking on, so do it manually.
+    const int width = GetScrollWidth();
+
+    // NB: The following adjustments are only needed when using
+    //     wxSTC_ANNOTATION_BOXED annotations style, but we apply them always
+    //     in order to make things simpler and not have to redo the width
+    //     calculations when the annotations visibility changes. In a real
+    //     program you'd either just stick to a fixed annotations visibility or
+    //     update the width when it changes.
+
+    // Take into account the fact that the annotation is shown indented, with
+    // the same indent as the line it's attached to.
+    int indent = GetLineIndentation(line);
+
+    // This is just a hack to account for the width of the box, there doesn't
+    // seem to be any way to get it directly from Scintilla.
+    indent += 3;
+
+    const int widthAnn = TextWidth(ANNOTATION_STYLE, ann + wxString(indent, ' '));
+
+    if (widthAnn > width)
+        SetScrollWidth(widthAnn);
+}
+
+void Edit::OnAnnotationRemove(wxCommandEvent& WXUNUSED(event))
+{
+    AnnotationSetText(GetCurrentLine(), wxString());
+}
+
+void Edit::OnAnnotationClear(wxCommandEvent& WXUNUSED(event))
+{
+    AnnotationClearAll();
+}
+
+void Edit::OnAnnotationStyle(wxCommandEvent& event)
+{
+    int style = 0;
+    switch (event.GetId()) {
+        case myID_ANNOTATION_STYLE_HIDDEN:
+            style = wxSTC_ANNOTATION_HIDDEN;
+            break;
+
+        case myID_ANNOTATION_STYLE_STANDARD:
+            style = wxSTC_ANNOTATION_STANDARD;
+            break;
+
+        case myID_ANNOTATION_STYLE_BOXED:
+            style = wxSTC_ANNOTATION_BOXED;
+            break;
+    }
+
+    AnnotationSetVisible(style);
+}
+
 void Edit::OnChangeCase (wxCommandEvent &event) {
     switch (event.GetId()) {
         case myID_CHANGELOWER: {
@@ -331,6 +440,26 @@ void Edit::OnConvertEOL (wxCommandEvent &event) {
     }
     ConvertEOLs (eolMode);
     SetEOLMode (eolMode);
+}
+
+void Edit::OnMultipleSelections(wxCommandEvent& WXUNUSED(event)) {
+    bool isSet = GetMultipleSelection();
+    SetMultipleSelection(!isSet);
+}
+
+void Edit::OnMultiPaste(wxCommandEvent& WXUNUSED(event)) {
+    int pasteMode = GetMultiPaste();
+    if (wxSTC_MULTIPASTE_EACH == pasteMode) {
+        SetMultiPaste(wxSTC_MULTIPASTE_ONCE);
+    }
+    else {
+        SetMultiPaste(wxSTC_MULTIPASTE_EACH);
+    }
+}
+
+void Edit::OnMultipleSelectionsTyping(wxCommandEvent& WXUNUSED(event)) {
+    bool isSet = GetAdditionalSelectionTyping();
+    SetAdditionalSelectionTyping(!isSet);
 }
 
 //! misc
@@ -414,10 +543,16 @@ bool Edit::InitializePrefs (const wxString &name) {
     StyleSetBackground (wxSTC_STYLE_LINENUMBER, *wxWHITE);
     SetMarginWidth (m_LineNrID, 0); // start out not visible
 
+    // annotations style
+    StyleSetBackground(ANNOTATION_STYLE, wxColour(244, 220, 220));
+    StyleSetForeground(ANNOTATION_STYLE, *wxBLACK);
+    StyleSetSizeFractional(ANNOTATION_STYLE,
+            (StyleGetSizeFractional(wxSTC_STYLE_DEFAULT)*4)/5);
+
     // default fonts for all styles!
     int Nr;
     for (Nr = 0; Nr < wxSTC_STYLE_LASTPREDEFINED; Nr++) {
-        wxFont font (10, wxMODERN, wxNORMAL, wxNORMAL);
+        wxFont font(wxFontInfo(10).Family(wxFONTFAMILY_MODERN));
         StyleSetFont (Nr, font);
     }
 
@@ -431,8 +566,9 @@ bool Edit::InitializePrefs (const wxString &name) {
         for (Nr = 0; Nr < STYLE_TYPES_COUNT; Nr++) {
             if (curInfo->styles[Nr].type == -1) continue;
             const StyleInfo &curType = g_StylePrefs [curInfo->styles[Nr].type];
-            wxFont font (curType.fontsize, wxMODERN, wxNORMAL, wxNORMAL, false,
-                         curType.fontname);
+            wxFont font(wxFontInfo(curType.fontsize)
+                            .Family(wxFONTFAMILY_MODERN)
+                            .FaceName(curType.fontname));
             StyleSetFont (Nr, font);
             if (curType.foreground) {
                 StyleSetForeground (Nr, wxColour (curType.foreground));
@@ -530,18 +666,6 @@ bool Edit::LoadFile (const wxString &filename) {
 
     // load file in edit and clear undo
     if (!filename.empty()) m_filename = filename;
-//     wxFile file (m_filename);
-//     if (!file.IsOpened()) return false;
-    ClearAll ();
-//     long lng = file.Length ();
-//     if (lng > 0) {
-//         wxString buf;
-//         wxChar *buff = buf.GetWriteBuf (lng);
-//         file.Read (buff, lng);
-//         buf.UngetWriteBuf ();
-//         InsertText (0, buf);
-//     }
-//     file.Close();
 
     wxStyledTextCtrl::LoadFile(m_filename);
 

@@ -21,9 +21,7 @@
 #include "wx/numformatter.h"
 #include "wx/intl.h"
 
-#if !wxUSE_STD_STRING
-    #include <locale.h> // for setlocale and LC_ALL
-#endif
+#include <locale.h> // for setlocale and LC_ALL
 
 // ----------------------------------------------------------------------------
 // local helpers
@@ -212,8 +210,7 @@ wxString wxNumberFormatter::ToString(wxLongLong_t val, int style)
 
 wxString wxNumberFormatter::ToString(double val, int precision, int style)
 {
-    const wxString fmt = wxString::Format("%%.%df", precision);
-    wxString s = wxString::Format(fmt, val);
+    wxString s = wxString::FromDouble(val,precision);
 
     if ( style & Style_WithThousandsSep )
         AddThousandsSeparators(s);
@@ -226,6 +223,10 @@ wxString wxNumberFormatter::ToString(double val, int precision, int style)
 
 void wxNumberFormatter::AddThousandsSeparators(wxString& s)
 {
+    // Thousands separators for numbers in scientific format are not relevant.
+    if ( s.find_first_of("eE") != wxString::npos )
+        return;
+
     wxChar thousandsSep;
     if ( !GetThousandsSeparatorIfUsed(&thousandsSep) )
         return;
@@ -237,6 +238,10 @@ void wxNumberFormatter::AddThousandsSeparators(wxString& s)
         pos = s.length();
     }
 
+    // End grouping at the beginning of the digits -- there could be at a sign
+    // before their start.
+    const size_t start = s.find_first_of("0123456789");
+
     // We currently group digits by 3 independently of the locale. This is not
     // the right thing to do and we should use lconv::grouping (under POSIX)
     // and GetLocaleInfo(LOCALE_SGROUPING) (under MSW) to get information about
@@ -244,7 +249,7 @@ void wxNumberFormatter::AddThousandsSeparators(wxString& s)
     // wxLocale level first and then used here in the future (TODO).
     const size_t GROUP_LEN = 3;
 
-    while ( pos > GROUP_LEN )
+    while ( pos > start + GROUP_LEN )
     {
         pos -= GROUP_LEN;
         s.insert(pos, thousandsSep);
@@ -253,9 +258,14 @@ void wxNumberFormatter::AddThousandsSeparators(wxString& s)
 
 void wxNumberFormatter::RemoveTrailingZeroes(wxString& s)
 {
+    // If number is in scientific format, trailing zeroes belong to the exponent and cannot be removed.
+    if ( s.find_first_of("eE") != wxString::npos )
+        return;
+
     const size_t posDecSep = s.find(GetDecimalSeparator());
-    wxCHECK_RET( posDecSep != wxString::npos,
-                 wxString::Format("No decimal separator in \"%s\"", s) );
+    // No decimal point => removing trailing zeroes irrelevant for integer number.
+    if ( posDecSep == wxString::npos )
+        return;
     wxCHECK_RET( posDecSep, "Can't start with decimal separator" );
 
     // Find the last character to keep.
@@ -266,6 +276,9 @@ void wxNumberFormatter::RemoveTrailingZeroes(wxString& s)
         posLastNonZero--;
 
     s.erase(posLastNonZero + 1);
+    // Remove sign from orphaned zero.
+    if ( s.compare("-0") == 0 )
+        s = "0";
 }
 
 // ----------------------------------------------------------------------------

@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for wxStaticText
 // Author:      Bob Mitchell
 // Created:     2000/03/21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -48,7 +47,7 @@ wxObject *wxStaticTextXmlHandler::DoCreateResource()
 
     SetupWindow(text);
 
-    long wrap = GetLong(wxT("wrap"), -1);
+    long wrap = GetDimension(wxT("wrap"), -1);
     if (wrap != -1)
         text->Wrap(wrap);
 

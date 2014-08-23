@@ -4,7 +4,6 @@
 // Author:      Francesco Montorsi
 // Modified By:
 // Created:     24/09/2006
-// Id:          $Id$
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -23,6 +22,7 @@
 #endif
 
 #include "wx/wfstream.h"
+#include "wx/gtk/private.h"
 
 #include <gtk/gtk.h>
 
@@ -84,7 +84,7 @@ wxAnimation& wxAnimation::operator=(const wxAnimation& that)
 bool wxAnimation::LoadFile(const wxString &name, wxAnimationType WXUNUSED(type))
 {
     UnRef();
-    m_pixbuf = gdk_pixbuf_animation_new_from_file(name.fn_str(), NULL);
+    m_pixbuf = gdk_pixbuf_animation_new_from_file(wxGTK_CONV_FN(name), NULL);
     return IsOk();
 }
 
@@ -233,7 +233,6 @@ bool wxAnimationCtrl::Create( wxWindow *parent, wxWindowID id,
 
     m_widget = gtk_image_new();
     g_object_ref(m_widget);
-    gtk_widget_show(m_widget);
 
     m_parent->DoAddChild( this );
 
@@ -363,20 +362,8 @@ void wxAnimationCtrl::DisplayStaticImage()
     if (m_bmpStaticReal.IsOk())
     {
         // show inactive bitmap
-        GdkBitmap *mask = NULL;
-        if (m_bmpStaticReal.GetMask())
-            mask = m_bmpStaticReal.GetMask()->GetBitmap();
-
-        if (m_bmpStaticReal.HasPixbuf())
-        {
-            gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget),
+        gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget),
                                       m_bmpStaticReal.GetPixbuf());
-        }
-        else
-        {
-            gtk_image_set_from_pixmap(GTK_IMAGE(m_widget),
-                                      m_bmpStaticReal.GetPixmap(), mask);
-        }
     }
     else
     {

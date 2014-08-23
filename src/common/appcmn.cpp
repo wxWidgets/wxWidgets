@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     18.10.99
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -84,6 +83,27 @@ wxAppBase::wxAppBase()
 
 bool wxAppBase::Initialize(int& argcOrig, wxChar **argvOrig)
 {
+#ifdef __WXOSX__
+    // Mac OS X passes a process serial number command line argument when
+    // the application is launched from the Finder. This argument must be
+    // removed from the command line arguments before being handled by the
+    // application (otherwise applications would need to handle it)
+    //
+    // Notice that this has to be done for all ports that can be used under OS
+    // X (e.g. wxGTK) and not just wxOSX itself, hence this code is here and
+    // not in a port-specific file.
+    if ( argcOrig > 1 )
+    {
+        static const wxChar *ARG_PSN = wxT("-psn_");
+        if ( wxStrncmp(argvOrig[1], ARG_PSN, wxStrlen(ARG_PSN)) == 0 )
+        {
+            // remove this argument
+            --argcOrig;
+            memmove(argvOrig + 1, argvOrig + 2, argcOrig * sizeof(wxChar*));
+        }
+    }
+#endif // __WXOSX__
+
     if ( !wxAppConsole::Initialize(argcOrig, argvOrig) )
         return false;
 
@@ -174,8 +194,12 @@ wxLayoutDirection wxAppBase::GetLayoutDirection() const
 // GUI-specific command line options handling
 // ----------------------------------------------------------------------------
 
+#ifdef __WXUNIVERSAL__
 #define OPTION_THEME   "theme"
+#endif
+#if defined(__WXDFB__)
 #define OPTION_MODE    "mode"
+#endif
 
 void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
 {
@@ -196,10 +220,10 @@ void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
         },
 #endif // __WXUNIVERSAL__
 
-#if defined(__WXMGL__)
-        // VS: this is not specific to wxMGL, all fullscreen (framebuffer) ports
+#if defined(__WXDFB__)
+        // VS: this is not specific to wxDFB, all fullscreen (framebuffer) ports
         //     should provide this option. That's why it is in common/appcmn.cpp
-        //     and not mgl/app.cpp
+        //     and not dfb/app.cpp
         {
             wxCMD_LINE_OPTION,
             NULL,
@@ -208,7 +232,7 @@ void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
             wxCMD_LINE_VAL_STRING,
             0x0
         },
-#endif // __WXMGL__
+#endif // __WXDFB__
 
         // terminator
         wxCMD_LINE_DESC_END
@@ -236,7 +260,7 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
     }
 #endif // __WXUNIVERSAL__
 
-#if defined(__WXMGL__)
+#if defined(__WXDFB__)
     wxString modeDesc;
     if ( parser.Found(OPTION_MODE, &modeDesc) )
     {
@@ -250,7 +274,7 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
         if ( !SetDisplayMode(wxVideoMode(w, h, bpp)) )
             return false;
     }
-#endif // __WXMGL__
+#endif // __WXDFB__
 
     return wxAppConsole::OnCmdLineParsed(parser);
 }
@@ -349,7 +373,10 @@ bool wxAppBase::ProcessIdle()
     while (node)
     {
         wxWindow* win = node->GetData();
-        if (win->SendIdleEvents(event))
+
+        // Don't send idle events to the windows that are about to be destroyed
+        // anyhow, this is wasteful and unexpected.
+        if ( !wxPendingDelete.Member(win) && win->SendIdleEvents(event) )
             needMore = true;
         node = node->GetNext();
     }

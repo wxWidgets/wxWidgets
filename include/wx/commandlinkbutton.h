@@ -3,7 +3,6 @@
 // Purpose:     wxCommandLinkButtonBase and wxGenericCommandLinkButton classes
 // Author:      Rickard Westerlund
 // Created:     2010-06-11
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -121,7 +120,7 @@ public:
                 const wxString& name = wxButtonNameStr);
 
     virtual void SetMainLabelAndNote(const wxString& mainLabel,
-                                     const wxString& note)
+                                     const wxString& note) wxOVERRIDE
     {
         wxButton::SetLabel(mainLabel + '\n' + note);
     }

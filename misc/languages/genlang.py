@@ -35,7 +35,7 @@ def WriteEnum(f, table):
 */
 enum wxLanguage
 {
-    /// User's default/preffered language as got from OS.
+    /// User's default/preferred language as got from OS.
     wxLANGUAGE_DEFAULT,
 
     /// Unknown language, returned if wxLocale::GetSystemLanguage fails.
@@ -49,7 +49,11 @@ enum wxLanguage
           knownLangs.append(i[0])
    f.write("""
     /// For custom, user-defined languages.
-    wxLANGUAGE_USER_DEFINED
+    wxLANGUAGE_USER_DEFINED,
+
+
+    /// Obsolete synonym.
+    wxLANGUAGE_CAMBODIAN = wxLANGUAGE_KHMER
 };
 
 """)

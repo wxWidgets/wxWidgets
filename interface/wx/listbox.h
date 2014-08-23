@@ -2,7 +2,6 @@
 // Name:        listbox.h
 // Purpose:     interface of wxListBox
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -17,11 +16,18 @@
     (clicking an item toggles the item on or off independently of other
     selections).
 
-    List box elements are numbered from zero.
-    Their number may be limited under some platforms.
+    List box elements are numbered from zero and while the maximal number of
+    elements is unlimited, it is usually better to use a virtual control, not
+    requiring to add all the items to it at once, such as wxDataViewCtrl or
+    wxListCtrl with @c wxLC_VIRTUAL style, once more than a few hundreds items
+    need to be displayed because this control is not optimized, neither from
+    performance nor from user interface point of view, for large number of
+    items.
 
-    A listbox callback gets an event @c wxEVT_COMMAND_LISTBOX_SELECTED for
-    single clicks, and @c wxEVT_COMMAND_LISTBOX_DOUBLECLICKED for double clicks.
+    Notice that currently @c TAB characters in list box items text are not
+    handled consistently under all platforms, so they should be replaced by
+    spaces to display strings properly everywhere. The list box doesn't
+    support any other control characters at all.
 
     @beginStyleTable
     @style{wxLB_SINGLE}
@@ -51,20 +57,21 @@
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_LISTBOX(id, func)}
-        Process a @c wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the
+        Process a @c wxEVT_LISTBOX event, when an item on the
         list is selected or the selection changes.
     @event{EVT_LISTBOX_DCLICK(id, func)}
-        Process a @c wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event, when the listbox
+        Process a @c wxEVT_LISTBOX_DCLICK event, when the listbox
         is double-clicked.
     @endEventTable
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{listbox.png}
+    @appearance{listbox}
 
     @see wxEditableListBox, wxChoice, wxComboBox, wxListCtrl, wxCommandEvent
 */
-class wxListBox : public wxControlWithItems
+class wxListBox : public wxControl,
+                  public wxItemContainer
 {
 public:
     /**
@@ -166,6 +173,13 @@ public:
     */
     void Deselect(int n);
 
+    virtual void SetSelection(int n);
+    
+    virtual int GetSelection() const;
+    
+    virtual bool SetStringSelection(const wxString& s, bool select);
+    virtual bool SetStringSelection(const wxString& s);
+
     /**
         Fill an array of ints with the positions of the currently selected items.
 
@@ -253,30 +267,6 @@ public:
     virtual bool IsSelected(int n) const;
 
     /**
-        Clears the list box and adds the given strings to it.
-
-        @param n
-            The number of strings to set.
-        @param choices
-            An array of strings to set.
-        @param clientData
-            Options array of client data pointers
-    */
-    void Set(unsigned int n, const wxString* choices, void *clientData);
-
-    /**
-        Clears the list box and adds the given strings to it.
-        You may free the array from the calling program after this method
-        has been called.
-
-        @param choices
-            An array of strings to set.
-        @param clientData
-            Options array of client data pointers
-    */
-    void Set(const wxArrayString& choices, void *clientData);
-
-    /**
         Set the specified item to be the first visible item.
 
         @param n
@@ -291,5 +281,32 @@ public:
             The string that should be visible.
     */
     void SetFirstItem(const wxString& string);
+
+    /**
+        Ensure that the item with the given index is currently shown.
+
+        Scroll the listbox if necessary.
+
+        This method is currently only implemented in wxGTK and wxOSX and does
+        nothing in other ports.
+
+        @see SetFirstItem()
+     */
+    virtual void EnsureVisible(int n);
+
+    /**
+        Return true if the listbox has ::wxLB_SORT style.
+
+        This method is mostly meant for internal use only.
+     */
+    virtual bool IsSorted() const;
+
+
+    // NOTE: Phoenix needs to see the implementation of pure virtuals so it
+    // knows that this class is not abstract.
+    virtual unsigned int GetCount() const; 
+    virtual wxString GetString(unsigned int n) const; 
+    virtual void SetString(unsigned int n, const wxString& s); 
+    virtual int FindString(const wxString& s, bool bCase = false) const;     
 };
 

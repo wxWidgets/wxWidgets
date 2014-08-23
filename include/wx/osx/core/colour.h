@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -42,10 +41,10 @@ public:
 
     bool operator != (const wxColour& colour) const { return !(*this == colour); }
 
-    CGColorRef GetPixel() const { return m_cgColour; };
+    CGColorRef GetPixel() const { return m_cgColour; }
 
-    CGColorRef GetCGColor() const { return m_cgColour; };
-    CGColorRef CreateCGColor() const { return wxCFRetain( (CGColorRef)m_cgColour ); };
+    CGColorRef GetCGColor() const { return m_cgColour; }
+    CGColorRef CreateCGColor() const { return wxCFRetain( (CGColorRef)m_cgColour ); }
 
 #if wxOSX_USE_COCOA_OR_CARBON
     void GetRGBColor( RGBColor *col ) const;

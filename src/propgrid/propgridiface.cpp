@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     2008-08-24
-// RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -806,7 +805,7 @@ public:
         m_it.Init( state, flags );
     }
     virtual ~wxPGVIteratorBase_State() { }
-    virtual void Next() { m_it.Next(); }
+    virtual void Next() wxOVERRIDE { m_it.Next(); }
 };
 
 wxPGVIterator wxPropertyGridInterface::GetVIterator( int flags ) const

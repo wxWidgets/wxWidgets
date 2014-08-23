@@ -4,7 +4,6 @@
 // Author:      DavidStefan Csomor
 // Modified by:
 // Created:     2008-06-20
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -92,6 +91,19 @@ bool shouldHandleSelector(SEL selector)
 
 }
 
+
+#define wxHAS_FULL_SCREEN_API (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7)
+
+#if wxHAS_FULL_SCREEN_API
+
+static bool IsUsingFullScreenApi(WXWindow macWindow)
+{
+    return [macWindow respondsToSelector:@selector(toggleFullScreen:)]
+        && ([macWindow collectionBehavior] & NSWindowCollectionBehaviorFullScreenPrimary);
+}
+
+#endif
+
 //
 // wx category for NSWindow (our own and wrapped instances)
 //
@@ -111,7 +123,7 @@ bool shouldHandleSelector(SEL selector)
     return (wxNonOwnedWindowCocoaImpl*) wxNonOwnedWindowImpl::FindFromWXWindow( self );
 }
 
-// TODO in cocoa everything during a drag is sent to the NSWindow the mouse down occured, 
+// TODO in cocoa everything during a drag is sent to the NSWindow the mouse down occurred,
 // this does not conform to the wx behaviour if the window is not captured, so try to resend
 // or capture all wx mouse event handling at the tlw as we did for carbon
 
@@ -120,11 +132,21 @@ bool shouldHandleSelector(SEL selector)
     bool handled = false;
     if ( ([event type] >= NSLeftMouseDown) && ([event type] <= NSMouseExited) )
     {
+        WXEVENTREF formerEvent = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEvent();
+        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEventHandlerCallRef();
+
         wxWindow* cw = wxWindow::GetCapture();
         if ( cw != NULL )
         {
+            if (wxTheApp)
+                wxTheApp->MacSetCurrentEvent(event, NULL);
             ((wxWidgetCocoaImpl*)cw->GetPeer())->DoHandleMouseEvent( event);
             handled = true;
+        }
+        if ( handled )
+        {
+            if (wxTheApp)
+                wxTheApp->MacSetCurrentEvent(formerEvent , formerHandler);
         }
     }
     return handled;
@@ -135,6 +157,9 @@ bool shouldHandleSelector(SEL selector)
 // wx native implementation 
 //
 
+static NSResponder* s_nextFirstResponder = NULL;
+static NSResponder* s_formerFirstResponder = NULL;
+
 @interface wxNSWindow : NSWindow
 {
 }
@@ -142,6 +167,7 @@ bool shouldHandleSelector(SEL selector)
 - (void) sendEvent:(NSEvent *)event;
 - (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen;
 - (void)noResponderFor: (SEL) selector;
+- (BOOL)makeFirstResponder:(NSResponder *)aResponder;
 @end
 
 @implementation wxNSWindow
@@ -196,6 +222,18 @@ bool shouldHandleSelector(SEL selector)
     return YES;
 }
 
+- (BOOL)makeFirstResponder:(NSResponder *)aResponder
+{
+    NSResponder* tempFormer = s_formerFirstResponder;
+    NSResponder* tempNext = s_nextFirstResponder;
+    s_nextFirstResponder = aResponder;
+    s_formerFirstResponder = [[NSApp keyWindow] firstResponder];
+    BOOL retval = [super makeFirstResponder:aResponder];
+    s_nextFirstResponder = tempNext;
+    s_formerFirstResponder = tempFormer;
+    return retval;
+}
+
 @end
 
 @interface wxNSPanel : NSPanel
@@ -205,6 +243,7 @@ bool shouldHandleSelector(SEL selector)
 - (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen;
 - (void)noResponderFor: (SEL) selector;
 - (void)sendEvent:(NSEvent *)event;
+- (BOOL)makeFirstResponder:(NSResponder *)aResponder;
 @end
 
 @implementation wxNSPanel
@@ -241,7 +280,30 @@ bool shouldHandleSelector(SEL selector)
 - (void)sendEvent:(NSEvent *) event
 {
     if ( ![self WX_filterSendEvent: event] )
+    {
+        WXEVENTREF formerEvent = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEvent();
+        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEventHandlerCallRef();
+        
+        if (wxTheApp)
+            wxTheApp->MacSetCurrentEvent(event, NULL);
+        
         [super sendEvent: event];
+        
+        if (wxTheApp)
+            wxTheApp->MacSetCurrentEvent(formerEvent , formerHandler);
+    }
+}
+
+- (BOOL)makeFirstResponder:(NSResponder *)aResponder
+{
+    NSResponder* tempFormer = s_formerFirstResponder;
+    NSResponder* tempNext = s_nextFirstResponder;
+    s_nextFirstResponder = aResponder;
+    s_formerFirstResponder = [[NSApp keyWindow] firstResponder];
+    BOOL retval = [super makeFirstResponder:aResponder];
+    s_nextFirstResponder = tempNext;
+    s_formerFirstResponder = tempFormer;
+    return retval;
 }
 
 @end
@@ -429,12 +491,19 @@ extern int wxOSXGetIdFromSelector(SEL action );
         if ( wxpeer )
         {
             wxpeer->HandleActivated(0, false);
+            // as for wx the deactivation also means losing focus we
+            // must trigger this manually
+            [window makeFirstResponder:nil];
+            
+            // TODO Remove if no problems arise with Popup Windows
+#if 0
             // Needed for popup window since the firstResponder
             // (focus in wx) doesn't change when this
             // TLW becomes inactive.
             wxFocusEvent event( wxEVT_KILL_FOCUS, wxpeer->GetId());
             event.SetEventObject(wxpeer);
             wxpeer->HandleWindowEvent(event);
+#endif
         }
     }
 }
@@ -451,12 +520,27 @@ extern int wxOSXGetIdFromSelector(SEL action );
         {
             editor = [[wxNSTextFieldEditor alloc] init];
             [editor setFieldEditor:YES];
+            [editor setTextField:tf];
             [tf setFieldEditor:editor];
             [editor release];
         }
         return editor;
-    }
-
+    } 
+    else if ([anObject isKindOfClass:[wxNSComboBox class]])
+    {
+        wxNSComboBox * cb = (wxNSComboBox*) anObject;
+        wxNSTextFieldEditor* editor = [cb fieldEditor];
+        if ( editor == nil )
+        {
+            editor = [[wxNSTextFieldEditor alloc] init];
+            [editor setFieldEditor:YES];
+            [editor setTextField:cb];
+            [cb setFieldEditor:editor];
+            [editor release];
+        }
+        return editor;
+    }    
+ 
     return nil;
 }
 
@@ -496,6 +580,12 @@ wxNonOwnedWindowCocoaImpl::~wxNonOwnedWindowCocoaImpl()
     if ( !m_wxPeer->IsNativeWindowWrapper() )
     {
         [m_macWindow setDelegate:nil];
+     
+        // make sure we remove this first, otherwise the ref count will not lead to the 
+        // native window's destruction
+        if ([m_macWindow parentWindow] != 0)
+            [[m_macWindow parentWindow] removeChildWindow: m_macWindow];
+
         [m_macWindow release];
     }
 }
@@ -521,41 +611,21 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
 
     if ( style & wxFRAME_TOOL_WINDOW || ( style & wxPOPUP_WINDOW ) ||
             GetWXPeer()->GetExtraStyle() & wxTOPLEVEL_EX_DIALOG )
-    {
         m_macWindow = [wxNSPanel alloc];
-    }
     else
         m_macWindow = [wxNSWindow alloc];
+
+    [m_macWindow setAcceptsMouseMovedEvents:YES];
 
     CGWindowLevel level = kCGNormalWindowLevel;
 
     if ( style & wxFRAME_TOOL_WINDOW )
     {
         windowstyle |= NSUtilityWindowMask;
-        if ( ( style & wxMINIMIZE_BOX ) || ( style & wxMAXIMIZE_BOX ) ||
-            ( style & wxCLOSE_BOX ) || ( style & wxSYSTEM_MENU ) )
-        {
-            windowstyle |= NSTitledWindowMask ;
-        }
     }
     else if ( ( style & wxPOPUP_WINDOW ) )
     {
         level = kCGPopUpMenuWindowLevel;
-        /*
-        if ( ( style & wxBORDER_NONE ) )
-        {
-            wclass = kHelpWindowClass ;   // has no border
-            attr |= kWindowNoShadowAttribute;
-        }
-        else
-        {
-            wclass = kPlainWindowClass ;  // has a single line border, it will have to do for now
-        }
-        */
-    }
-    else if ( ( style & wxCAPTION ) )
-    {
-        windowstyle |= NSTitledWindowMask ;
     }
     else if ( ( style & wxFRAME_DRAWER ) )
     {
@@ -563,40 +633,24 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
         wclass = kDrawerWindowClass;
         */
     }
-    else
+ 
+    if ( ( style & wxMINIMIZE_BOX ) || ( style & wxMAXIMIZE_BOX ) ||
+        ( style & wxCLOSE_BOX ) || ( style & wxSYSTEM_MENU ) || ( style & wxCAPTION ) )
     {
-        // set these even if we have no title, otherwise the controls won't be visible
-        if ( ( style & wxMINIMIZE_BOX ) || ( style & wxMAXIMIZE_BOX ) ||
-            ( style & wxCLOSE_BOX ) || ( style & wxSYSTEM_MENU ) )
-        {
-            windowstyle |= NSTitledWindowMask ;
-        }
-        /*
-        else if ( ( style & wxNO_BORDER ) )
-        {
-            wclass = kSimpleWindowClass ;
-        }
-        else
-        {
-            wclass = kPlainWindowClass ;
-        }
-        */
-    }
-
-    if ( windowstyle & NSTitledWindowMask )
-    {
+        windowstyle |= NSTitledWindowMask ;
         if ( ( style & wxMINIMIZE_BOX ) )
             windowstyle |= NSMiniaturizableWindowMask ;
-
+        
         if ( ( style & wxMAXIMIZE_BOX ) )
-            windowstyle |= NSResizableWindowMask ; // TODO showing ZOOM ?
-
-        if ( ( style & wxRESIZE_BORDER ) )
             windowstyle |= NSResizableWindowMask ;
-
+        
         if ( ( style & wxCLOSE_BOX) )
             windowstyle |= NSClosableWindowMask ;
     }
+    
+    if ( ( style & wxRESIZE_BORDER ) )
+        windowstyle |= NSResizableWindowMask ;
+
     if ( extraStyle & wxFRAME_EX_METAL)
         windowstyle |= NSTexturedBackgroundWindowMask;
 
@@ -615,11 +669,20 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
         backing:NSBackingStoreBuffered
         defer:NO
         ];
-
+    
+    // if we just have a title bar with no buttons needed, hide them
+    if ( (windowstyle & NSTitledWindowMask) && 
+        !(style & wxCLOSE_BOX) && !(style & wxMAXIMIZE_BOX) && !(style & wxMINIMIZE_BOX) )
+    {
+        [[m_macWindow standardWindowButton:NSWindowZoomButton] setHidden:YES];
+        [[m_macWindow standardWindowButton:NSWindowCloseButton] setHidden:YES];
+        [[m_macWindow standardWindowButton:NSWindowMiniaturizeButton] setHidden:YES];
+    }
+    
     // If the parent is modal, windows with wxFRAME_FLOAT_ON_PARENT style need
     // to be in kCGUtilityWindowLevel and not kCGFloatingWindowLevel to stay
     // above the parent.
-    wxDialog * const parentDialog = wxDynamicCast(parent, wxDialog);
+    wxDialog * const parentDialog = parent == NULL ? NULL : wxDynamicCast(parent->MacGetTopLevelWindow(), wxDialog);
     if (parentDialog && parentDialog->IsModal())
     {
         if (level == kCGFloatingWindowLevel)
@@ -644,8 +707,6 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
 
     [m_macWindow setDelegate:controller];
 
-    [m_macWindow setAcceptsMouseMovedEvents: YES];
-    
     if ( ( style & wxFRAME_SHAPED) )
     {
         [m_macWindow setOpaque:NO];
@@ -687,14 +748,35 @@ bool wxNonOwnedWindowCocoaImpl::Show(bool show)
     if ( show )
     {
         wxNonOwnedWindow* wxpeer = GetWXPeer(); 
-        if (wxpeer && !(wxpeer->GetWindowStyle() & wxFRAME_TOOL_WINDOW)) 
-            [m_macWindow makeKeyAndOrderFront:nil];
-        else 
-            [m_macWindow orderFront:nil]; 
+        if ( wxpeer )
+        {
+            // add to parent window before showing
+            wxDialog * const dialog = wxDynamicCast(wxpeer, wxDialog);
+            if ( wxpeer->GetParent() && dialog && dialog->IsModal())
+            {
+                NSView * parentView = wxpeer->GetParent()->GetPeer()->GetWXWidget();
+                if ( parentView )
+                {
+                    NSWindow* parentNSWindow = [parentView window];
+                    if ( parentNSWindow )
+                        [parentNSWindow addChildWindow:m_macWindow ordered:NSWindowAbove];
+                }
+            }
+            
+            if (!(wxpeer->GetWindowStyle() & wxFRAME_TOOL_WINDOW)) 
+                [m_macWindow makeKeyAndOrderFront:nil];
+            else 
+                [m_macWindow orderFront:nil]; 
+        }
         [[m_macWindow contentView] setNeedsDisplay: YES];
     }
     else
+    {
+        // avoid propagation of orderOut to parent 
+        if ([m_macWindow parentWindow] != 0)
+            [[m_macWindow parentWindow] removeChildWindow: m_macWindow];
         [m_macWindow orderOut:nil];
+    }
     return true;
 }
 
@@ -745,7 +827,8 @@ void wxNonOwnedWindowCocoaImpl::SetExtraStyle( long exStyle )
 
 void wxNonOwnedWindowCocoaImpl::SetWindowStyleFlag( long style )
 {
-    if (m_macWindow)
+    // don't mess with native wrapped windows, they might throw an exception when their level is changed
+    if (!m_wxPeer->IsNativeWindowWrapper() && m_macWindow)
     {
         CGWindowLevel level = kCGNormalWindowLevel;
         
@@ -858,17 +941,62 @@ void wxNonOwnedWindowCocoaImpl::Maximize(bool WXUNUSED(maximize))
 
 typedef struct
 {
+    NSUInteger m_formerStyleMask;
     int m_formerLevel;
     NSRect m_formerFrame;
 } FullScreenData ;
 
 bool wxNonOwnedWindowCocoaImpl::IsFullScreen() const
 {
+#if wxHAS_FULL_SCREEN_API
+    if ( IsUsingFullScreenApi(m_macWindow) )
+    {
+        return [m_macWindow styleMask] & NSFullScreenWindowMask;
+    }
+#endif
+
     return m_macFullScreenData != NULL ;
+}
+
+bool wxNonOwnedWindowCocoaImpl::EnableFullScreenView(bool enable)
+{
+#if wxHAS_FULL_SCREEN_API
+    if ( [ m_macWindow respondsToSelector:@selector(setCollectionBehavior:) ] )
+    {
+        NSUInteger collectionBehavior = [m_macWindow collectionBehavior];
+        if (enable)
+        {
+            collectionBehavior |= NSWindowCollectionBehaviorFullScreenPrimary;
+        }
+        else
+        {
+            collectionBehavior &= ~NSWindowCollectionBehaviorFullScreenPrimary;
+        }
+        [m_macWindow setCollectionBehavior: collectionBehavior];
+
+        return true;
+    }
+#else
+    wxUnusedVar(enable);
+#endif
+
+    return false;
 }
 
 bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
 {
+#if wxHAS_FULL_SCREEN_API
+    if ( IsUsingFullScreenApi(m_macWindow) )
+    {
+        if ( show != IsFullScreen() )
+        {
+            [m_macWindow toggleFullScreen: nil];
+        }
+
+        return true;
+    }
+#endif
+
     if ( show )
     {
         FullScreenData *data = (FullScreenData *)m_macFullScreenData ;
@@ -878,6 +1006,7 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
         m_macFullScreenData = data ;
         data->m_formerLevel = [m_macWindow level];
         data->m_formerFrame = [m_macWindow frame];
+        data->m_formerStyleMask = [m_macWindow styleMask];
 #if 0
         // CGDisplayCapture( kCGDirectMainDisplay );
         //[m_macWindow setLevel:NSMainMenuWindowLevel+1/*CGShieldingWindowLevel()*/];
@@ -885,6 +1014,12 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
         NSRect screenframe = [[NSScreen mainScreen] frame];
         NSRect frame = NSMakeRect (0, 0, 100, 100);
         NSRect contentRect;
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+        if ( [ m_macWindow respondsToSelector:@selector(setStyleMask:) ] )
+            [m_macWindow setStyleMask:data->m_formerStyleMask & ~ NSResizableWindowMask];
+#endif
+        
         contentRect = [NSWindow contentRectForFrameRect: frame
                                 styleMask: [m_macWindow styleMask]];
         screenframe.origin.y += (frame.origin.y - contentRect.origin.y);
@@ -907,6 +1042,10 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
 #endif
         
         [m_macWindow setFrame:data->m_formerFrame display:YES];
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+        if ( [ m_macWindow respondsToSelector:@selector(setStyleMask:) ] )
+            [m_macWindow setStyleMask:data->m_formerStyleMask];
+#endif
         delete data ;
         m_macFullScreenData = NULL ;
 
@@ -978,10 +1117,25 @@ bool wxNonOwnedWindowCocoaImpl::IsModified() const
     return [m_macWindow isDocumentEdited];
 }
 
+void wxNonOwnedWindowCocoaImpl::SetRepresentedFilename(const wxString& filename)
+{
+    [m_macWindow setRepresentedFilename:wxCFStringRef(filename).AsNSString()];
+}
+
 void wxNonOwnedWindowCocoaImpl::RestoreWindowLevel()
 {
     if ( [m_macWindow level] != m_macWindowLevel )
         [m_macWindow setLevel:m_macWindowLevel];
+}
+
+WX_NSResponder wxNonOwnedWindowCocoaImpl::GetNextFirstResponder()
+{
+    return s_nextFirstResponder;
+}
+
+WX_NSResponder wxNonOwnedWindowCocoaImpl::GetFormerFirstResponder()
+{
+    return s_formerFirstResponder;
 }
 
 //

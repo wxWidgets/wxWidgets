@@ -2,7 +2,6 @@
 // Name:        menu.h
 // Purpose:     interface of wxMenuBar
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -108,6 +107,16 @@ public:
     void Enable(int id, bool enable);
 
     /**
+        Returns true if the menu with the given index is enabled.
+
+        @param pos
+            The menu position (0-based)
+
+        @since 2.9.4
+    */
+    bool IsEnabledTop(size_t pos) const;
+
+    /**
         Enables or disables a whole menu.
 
         @param pos
@@ -135,7 +144,7 @@ public:
         context it returns a 2-element list (item, submenu).
         @endWxPerlOnly
     */
-    virtual wxMenuItem* FindItem(int id, wxMenu* menu = NULL) const;
+    virtual wxMenuItem* FindItem(int id, wxMenu** menu = NULL) const;
 
     /**
         Returns the index of the menu with the given @a title or @c wxNOT_FOUND if no
@@ -373,6 +382,49 @@ public:
         @remarks Use only after the menubar has been associated with a frame.
     */
     virtual void SetMenuLabel(size_t pos, const wxString& label);
+    
+    /**        
+        Enables you to set the global menubar on Mac, that is, the menubar displayed
+        when the app is running without any frames open.
+        
+        @param menubar
+            The menubar to set.
+            
+        @remarks Only exists on Mac, other platforms do not have this method. 
+
+        @onlyfor{wxosx}
+    */
+    static void MacSetCommonMenuBar(wxMenuBar* menubar);
+    
+    /**        
+        Enables you to get the global menubar on Mac, that is, the menubar displayed
+        when the app is running without any frames open.
+        
+        @return The global menubar.
+            
+        @remarks Only exists on Mac, other platforms do not have this method. 
+
+        @onlyfor{wxosx}
+    */
+    static wxMenuBar* MacGetCommonMenuBar();
+
+    /**
+        Returns the Apple menu.
+
+        This is the leftmost menu with application's name as its title. You
+        shouldn't remove any items from it, but it is safe to insert extra menu
+        items or submenus into it.
+
+        @onlyfor{wxosx}
+        @since 3.0.1
+     */
+    wxMenu *OSXGetAppleMenu() const;
+
+    wxFrame *GetFrame() const;
+    bool IsAttached() const;
+    virtual void Attach(wxFrame *frame);
+    virtual void Detach();
+
 };
 
 
@@ -393,9 +445,8 @@ public:
     @note
     Please note that @e wxID_ABOUT and @e wxID_EXIT are predefined by wxWidgets
     and have a special meaning since entries using these IDs will be taken out
-    of the normal menus under MacOS X and will be inserted into the system menu
-    (following the appropriate MacOS X interface guideline).
-    On PalmOS @e wxID_EXIT is disabled according to Palm OS Companion guidelines.
+    of the normal menus under OS X and will be inserted into the system menu
+    (following the appropriate OS X interface guideline).
 
     Menu items may be either @e normal items, @e check items or @e radio items.
     Normal items don't have any special properties while the check items have a
@@ -434,7 +485,7 @@ public:
     If the menu is part of a menubar, then wxMenuBar event processing is used.
 
     With a popup menu (see wxWindow::PopupMenu), there is a variety of ways to
-    handle a menu selection event (@c wxEVT_COMMAND_MENU_SELECTED):
+    handle a menu selection event (@c wxEVT_MENU):
     - Provide @c EVT_MENU handlers in the window which pops up the menu, or in an
       ancestor of that window (the simplest method);
     - Derive a new class from wxMenu and define event table entries using the @c EVT_MENU macro;
@@ -453,6 +504,12 @@ public:
 class wxMenu : public wxEvtHandler
 {
 public:
+
+    /**
+        Constructs a wxMenu object.
+    */
+    wxMenu();
+    
     /**
         Constructs a wxMenu object.
 
@@ -595,6 +652,8 @@ public:
         Adds the given @a submenu to this menu. @a text is the text shown in the
         menu for it and @a help is the help string shown in the status bar when the
         submenu item is selected.
+
+        @see Insert(), Prepend()
     */
     wxMenuItem* AppendSubMenu(wxMenu* submenu, const wxString& text,
                               const wxString& help = wxEmptyString);
@@ -774,7 +833,7 @@ public:
         wxMenuItemList is a pseudo-template list class containing wxMenuItem
         pointers, see wxList.
     */
-    wxMenuItemList& GetMenuItems() const;
+    wxMenuItemList& GetMenuItems();
     const wxMenuItemList& GetMenuItems() const;
     //@}
 
@@ -793,7 +852,7 @@ public:
 
         @see Append(), Prepend()
     */
-    wxMenuItem* Insert(size_t pos, wxMenuItem* item);
+    wxMenuItem* Insert(size_t pos, wxMenuItem* menuItem);
 
     /**
         Inserts the given @a item before the position @a pos.
@@ -807,6 +866,16 @@ public:
                        const wxString& item = wxEmptyString,
                        const wxString& helpString = wxEmptyString,
                        wxItemKind kind = wxITEM_NORMAL);
+
+    /**
+        Inserts the given @a submenu before the position @a pos.
+        @a text is the text shown in the menu for it and @a help is the
+        help string shown in the status bar when the submenu item is selected.
+
+        @see AppendSubMenu(), Prepend()
+    */
+    wxMenuItem* Insert(size_t pos, int id, const wxString& text,
+                       wxMenu* submenu, const wxString& help = wxEmptyString);
 
     /**
         Inserts a checkable item at the given position.
@@ -856,7 +925,7 @@ public:
     bool IsEnabled(int id) const;
 
     /**
-        Inserts the given @a item at position 0, i.e. before all the other
+        Inserts the given @a item at position 0, i.e.\ before all the other
         existing items.
 
         @see Append(), Insert()
@@ -864,7 +933,7 @@ public:
     wxMenuItem* Prepend(wxMenuItem* item);
 
     /**
-        Inserts the given @a item at position 0, i.e. before all the other
+        Inserts the given @a item at position 0, i.e.\ before all the other
         existing items.
 
         @see Append(), Insert()
@@ -872,6 +941,14 @@ public:
     wxMenuItem* Prepend(int id, const wxString& item = wxEmptyString,
                         const wxString& helpString = wxEmptyString,
                         wxItemKind kind = wxITEM_NORMAL);
+
+    /**
+        Inserts the given @a submenu at position 0.
+
+        @see AppendSubMenu(), Insert()
+    */
+    wxMenuItem* Prepend(int id, const wxString& text, wxMenu* submenu,
+                        const wxString& help = wxEmptyString);
 
     /**
         Inserts a checkable item at position 0.
@@ -966,5 +1043,18 @@ public:
         but the application may call it at other times if required.
     */
     void UpdateUI(wxEvtHandler* source = NULL);
+
+    
+    void SetInvokingWindow(wxWindow *win);
+    wxWindow *GetInvokingWindow() const;
+    wxWindow *GetWindow() const;
+    long GetStyle() const;
+    void SetParent(wxMenu *parent);
+    wxMenu *GetParent() const;
+
+    virtual void Attach(wxMenuBar *menubar);
+    virtual void Detach();
+    bool IsAttached() const;
+
 };
 

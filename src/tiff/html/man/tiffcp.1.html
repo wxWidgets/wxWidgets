@@ -1,5 +1,5 @@
 <!-- Creator     : groff version 1.18.1 -->
-<!-- CreationDate: Mon Mar 13 18:03:13 2006 -->
+<!-- CreationDate: Sat Feb 24 18:37:20 2007 -->
 <html>
 <head>
 <meta name="generator" content="groff -Thtml, see www.gnu.org">
@@ -74,7 +74,7 @@ any way.</p>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p><b>&minus;b image</b></p></td>
+<p><b>&minus;b</b> <i>image</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -201,6 +201,20 @@ tag set to <small>MSB2LSB.</small></p>
 <td width="10%"></td>
 <td width="3%">
 
+<p><b>&minus;i</b></p>
+</td>
+<td width="5%"></td>
+<td width="80%">
+
+<p>Ignore non-fatal read errors and continue processing of
+the input file.</p>
+</td>
+<td width="0%">
+</td>
+<tr valign="top" align="left">
+<td width="10%"></td>
+<td width="3%">
+
 <p><b>&minus;l</b></p>
 </td>
 <td width="5%"></td>
@@ -274,7 +288,7 @@ force samples to be written in separate planes.</p>
 data written to the output file. By default (or when value
 <b>0</b> is specified), <i>tiffcp</i> attempts to set the
 rows/strip that no more than 8 kilobytes of data appear in a
-strip. If you specify special value <b>-1</b> it will
+strip. If you specify special value <b>&minus;1</b> it will
 results in infinite number of the rows per strip. The entire
 image will be the one strip in that case.</p>
 </td>
@@ -327,6 +341,20 @@ of data appear in a tile.</p>
 </td>
 <td width="0%">
 </td>
+<tr valign="top" align="left">
+<td width="10%"></td>
+<td width="3%">
+
+<p><b>&minus;x</b></p>
+</td>
+<td width="5%"></td>
+<td width="80%">
+
+<p>Force the output file to be written with PAGENUMBER value
+in sequence.</p>
+</td>
+<td width="0%">
+</td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -334,7 +362,7 @@ of data appear in a tile.</p>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p><b>&minus;,={character}</b></p></td>
+<p><b>&minus;,=</b><i>character</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -342,11 +370,11 @@ of data appear in a tile.</p>
 <tr valign="top" align="left">
 <td width="19%"></td>
 <td width="80%">
-<p>substitute {character} for &rsquo;,&rsquo; in parsing
-image directory indices in files. This is necessary if
-filenames contain commas. Note that &rsquo;,=&rsquo; with
+<p>substitute <i>character</i> for &lsquo;,&rsquo; in
+parsing image directory indices in files. This is necessary
+if filenames contain commas. Note that <b>&minus;,=</b> with
 whitespace immediately following will disable the special
-meaning of the &rsquo;,&rsquo; entirely. See examples.</p>
+meaning of the &lsquo;,&rsquo; entirely. See examples.</p>
 </td>
 </table>
 <a name="EXAMPLES"></a>
@@ -366,7 +394,7 @@ result using <small>LZW</small> encoding:</p></td>
 <tr valign="top" align="left">
 <td width="17%"></td>
 <td width="82%">
-<pre>tiffcp -c lzw a.tif b.tif result.tif
+<pre>tiffcp &minus;c lzw a.tif b.tif result.tif
 </pre>
 </td>
 </table>
@@ -387,7 +415,7 @@ used:</p></td>
 <tr valign="top" align="left">
 <td width="17%"></td>
 <td width="82%">
-<pre>tiffcp -c g4 -r 10000 g3.tif g4.tif
+<pre>tiffcp &minus;c g4 &minus;r 10000 g3.tif g4.tif
 </pre>
 </td>
 </table>
@@ -403,10 +431,11 @@ rows in the source file.)</p>
 <!-- INDENTATION -->
 <p>To extract a selected set of images from a multi-image
 TIFF file, the file name may be immediately followed by a
-&rsquo;,&rsquo; separated list of image directory indices.
+&lsquo;,&rsquo; separated list of image directory indices.
 The first image is always in directory 0. Thus, to copy the
-1st and 3rd images of image file &quot;album.tif&quot; to
-&quot;result.tif&quot;:</p></td>
+1st and 3rd images of image file
+&lsquo;&lsquo;album.tif&rsquo;&rsquo; to
+&lsquo;&lsquo;result.tif&rsquo;&rsquo;:</p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -425,10 +454,9 @@ The first image is always in directory 0. Thus, to copy the
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p>Given file &quot;CCD.tif&quot; whose first image is a
-noise bias followed by images which include that bias,
-subtract the noise from all those images following it (while
-decompressing) with the command:</p></td>
+<p>A trailing comma denotes remaining images in sequence.
+The following command will copy all image with except the
+first one:</p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -436,7 +464,7 @@ decompressing) with the command:</p></td>
 <tr valign="top" align="left">
 <td width="17%"></td>
 <td width="82%">
-<pre>tiffcp -c none -b CCD.tif CCD.tif,1, result.tif
+<pre>tiffcp album.tif,1, result.tif
 </pre>
 </td>
 </table>
@@ -447,9 +475,11 @@ decompressing) with the command:</p></td>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p>If the file above were named &quot;CCD,X.tif&quot;, the
-&quot;-,=&quot; option would be required to correctly parse
-this filename with image numbers, as follows:</p></td>
+<p>Given file &lsquo;&lsquo;CCD.tif&rsquo;&rsquo; whose
+first image is a noise bias followed by images which include
+that bias, subtract the noise from all those images
+following it (while decompressing) with the
+command:</p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -457,7 +487,29 @@ this filename with image numbers, as follows:</p></td>
 <tr valign="top" align="left">
 <td width="17%"></td>
 <td width="82%">
-<pre>tiffcp -c none -,=% -b CCD,X.tif CCD,X%1%.tif result.tif
+<pre>tiffcp &minus;c none &minus;b CCD.tif CCD.tif,1, result.tif
+</pre>
+</td>
+</table>
+<!-- INDENTATION -->
+
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="8%"></td>
+<td width="91%">
+<p>If the file above were named
+&lsquo;&lsquo;CCD,X.tif&rsquo;&rsquo;, the <b>&minus;,=</b>
+option would be required to correctly parse this filename
+with image numbers, as follows:</p></td>
+</table>
+<!-- INDENTATION -->
+<table width="100%" border=0 rules="none" frame="void"
+       cols="2" cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%"></td>
+<td width="82%">
+<pre>tiffcp &minus;c none &minus;,=% &minus;b CCD,X.tif CCD,X%1%.tif result.tif
 
 </pre>
 </td>

@@ -3,7 +3,6 @@
 // Purpose:     Unicode unit test
 // Author:      Vadim Zeitlin, Wlodzimierz ABX Skiba
 // Created:     2004-04-28
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Vadim Zeitlin, Wlodzimierz Skiba
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -329,8 +328,9 @@ void UnicodeTestCase::ConversionUTF7()
         //    fine, go figure)
         //
         // I have no idea how to fix this so just disable the test for now
-#if 0
-        d.Test(n, wxCSConv("utf-7"));
+#ifdef __WINDOWS__
+        wxCSConv conv("utf-7");
+        d.Test(n, conv);
 #endif
         d.Test(n, wxConvUTF7);
     }
@@ -353,6 +353,13 @@ void UnicodeTestCase::ConversionUTF8()
         d.Test(n, conv);
         d.Test(n, wxConvUTF8);
     }
+
+    static const char* const u25a6 = "\xe2\x96\xa6";
+    wxMBConvUTF8 c(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL);
+    CPPUNIT_ASSERT_EQUAL( 2, c.ToWChar(NULL, 0, u25a6, wxNO_LEN) );
+    CPPUNIT_ASSERT_EQUAL( 0, c.ToWChar(NULL, 0, u25a6, 0) );
+    CPPUNIT_ASSERT_EQUAL( 1, c.ToWChar(NULL, 0, u25a6, 3) );
+    CPPUNIT_ASSERT_EQUAL( 2, c.ToWChar(NULL, 0, u25a6, 4) );
 }
 
 void UnicodeTestCase::ConversionUTF16()

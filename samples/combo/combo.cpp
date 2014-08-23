@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     Apr-30-2006
-// RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -45,7 +44,7 @@
 
 // the application icon (under Windows and OS/2 it is in resources and even
 // though we could still include the XPM here it would be unused)
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -63,7 +62,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -95,7 +94,7 @@ protected:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -123,7 +122,7 @@ enum
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_TEXT(wxID_ANY,MyFrame::OnComboBoxUpdate)
     EVT_TEXT_ENTER(wxID_ANY,MyFrame::OnComboBoxUpdate)
     EVT_COMBOBOX(wxID_ANY,MyFrame::OnComboBoxUpdate)
@@ -133,7 +132,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ComboCtrl_About,    MyFrame::OnAbout)
 
     EVT_IDLE(MyFrame::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
@@ -180,7 +179,7 @@ public:
     virtual void OnDrawItem( wxDC& dc,
                              const wxRect& rect,
                              int item,
-                             int flags ) const
+                             int flags ) const wxOVERRIDE
     {
         if ( item == wxNOT_FOUND )
             return;
@@ -189,29 +188,29 @@ public:
         r.Deflate(3);
         r.height -= 2;
 
-        int penStyle = wxSOLID;
+        wxPenStyle penStyle = wxPENSTYLE_SOLID;
         if ( item == 1 )
-            penStyle = wxTRANSPARENT;
+            penStyle = wxPENSTYLE_TRANSPARENT;
         else if ( item == 2 )
-            penStyle = wxDOT;
+            penStyle = wxPENSTYLE_DOT;
         else if ( item == 3 )
-            penStyle = wxLONG_DASH;
+            penStyle = wxPENSTYLE_LONG_DASH;
         else if ( item == 4 )
-            penStyle = wxSHORT_DASH;
+            penStyle = wxPENSTYLE_SHORT_DASH;
         else if ( item == 5 )
-            penStyle = wxDOT_DASH;
+            penStyle = wxPENSTYLE_DOT_DASH;
         else if ( item == 6 )
-            penStyle = wxBDIAGONAL_HATCH;
+            penStyle = wxPENSTYLE_BDIAGONAL_HATCH;
         else if ( item == 7 )
-            penStyle = wxCROSSDIAG_HATCH;
+            penStyle = wxPENSTYLE_CROSSDIAG_HATCH;
         else if ( item == 8 )
-            penStyle = wxFDIAGONAL_HATCH;
+            penStyle = wxPENSTYLE_FDIAGONAL_HATCH;
         else if ( item == 9 )
-            penStyle = wxCROSS_HATCH;
+            penStyle = wxPENSTYLE_CROSS_HATCH;
         else if ( item == 10 )
-            penStyle = wxHORIZONTAL_HATCH;
+            penStyle = wxPENSTYLE_HORIZONTAL_HATCH;
         else if ( item == 11 )
-            penStyle = wxVERTICAL_HATCH;
+            penStyle = wxPENSTYLE_VERTICAL_HATCH;
 
         wxPen pen( dc.GetTextForeground(), 3, penStyle );
 
@@ -234,7 +233,7 @@ public:
     }
 
     virtual void OnDrawBackground( wxDC& dc, const wxRect& rect,
-                                   int item, int flags ) const
+                                   int item, int flags ) const wxOVERRIDE
     {
 
         // If item is selected or even, or we are painting the
@@ -253,7 +252,7 @@ public:
         dc.DrawRectangle(rect);
     }
 
-    virtual wxCoord OnMeasureItem( size_t item ) const
+    virtual wxCoord OnMeasureItem( size_t item ) const wxOVERRIDE
     {
         // Simply demonstrate the ability to have variable-height items
         if ( item & 1 )
@@ -262,7 +261,7 @@ public:
             return 24;
     }
 
-    virtual wxCoord OnMeasureItemWidth( size_t WXUNUSED(item) ) const
+    virtual wxCoord OnMeasureItemWidth( size_t WXUNUSED(item) ) const wxOVERRIDE
     {
         return -1; // default - will be measured from text width
     }
@@ -280,13 +279,13 @@ class ListViewComboPopup : public wxListView, public wxComboPopup
 {
 public:
 
-    virtual void Init()
+    virtual void Init() wxOVERRIDE
     {
         m_value = -1;
         m_itemHere = -1; // hot item in list
     }
 
-    virtual bool Create( wxWindow* parent )
+    virtual bool Create( wxWindow* parent ) wxOVERRIDE
     {
         return wxListView::Create(parent,1,
                                   wxPoint(0,0),wxDefaultSize,
@@ -294,16 +293,16 @@ public:
                                   wxLC_SORT_ASCENDING|wxSIMPLE_BORDER);
     }
 
-    virtual wxWindow *GetControl() { return this; }
+    virtual wxWindow *GetControl() wxOVERRIDE { return this; }
 
-    virtual void SetStringValue( const wxString& s )
+    virtual void SetStringValue( const wxString& s ) wxOVERRIDE
     {
         int n = wxListView::FindItem(-1,s);
         if ( n >= 0 && n < GetItemCount() )
             wxListView::Select(n);
     }
 
-    virtual wxString GetStringValue() const
+    virtual wxString GetStringValue() const wxOVERRIDE
     {
         if ( m_value >= 0 )
             return wxListView::GetItemText(m_value);
@@ -352,16 +351,16 @@ protected:
     int             m_itemHere; // hot item in popup
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(ListViewComboPopup, wxListView)
+wxBEGIN_EVENT_TABLE(ListViewComboPopup, wxListView)
     EVT_MOTION(ListViewComboPopup::OnMouseMove)
     // NOTE: Left down event is used instead of left up right now
     //       since MSW wxListCtrl doesn't seem to emit left ups
     //       consistently.
     EVT_LEFT_DOWN(ListViewComboPopup::OnMouseClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 // ----------------------------------------------------------------------------
@@ -374,7 +373,7 @@ class TreeCtrlComboPopup : public wxTreeCtrl, public wxComboPopup
 {
 public:
 
-    virtual void Init()
+    virtual void Init() wxOVERRIDE
     {
     }
     virtual ~TreeCtrlComboPopup()
@@ -386,7 +385,7 @@ public:
         SendDestroyEvent();
     }
 
-    virtual bool Create( wxWindow* parent )
+    virtual bool Create( wxWindow* parent ) wxOVERRIDE
     {
         return wxTreeCtrl::Create(parent,1,
                                   wxPoint(0,0),wxDefaultSize,
@@ -402,12 +401,12 @@ public:
 
     virtual wxSize GetAdjustedSize( int minWidth,
                                     int WXUNUSED(prefHeight),
-                                    int maxHeight )
+                                    int maxHeight ) wxOVERRIDE
     {
         return wxSize(wxMax(300,minWidth),wxMin(250,maxHeight));
     }
 
-    virtual wxWindow *GetControl() { return this; }
+    virtual wxWindow *GetControl() wxOVERRIDE { return this; }
 
     // Needed by SetStringValue
     wxTreeItemId FindItemByText( wxTreeItemId parent, const wxString& text )
@@ -431,7 +430,7 @@ public:
         return wxTreeItemId();
     }
 
-    virtual void SetStringValue( const wxString& s )
+    virtual void SetStringValue( const wxString& s ) wxOVERRIDE
     {
         wxTreeItemId root = GetRootItem();
         if ( !root.IsOk() )
@@ -445,7 +444,7 @@ public:
         }
     }
 
-    virtual wxString GetStringValue() const
+    virtual wxString GetStringValue() const wxOVERRIDE
     {
         if ( m_value.IsOk() )
             return wxTreeCtrl::GetItemText(m_value);
@@ -490,16 +489,16 @@ protected:
     wxTreeItemId        m_itemHere; // hot item in popup
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(TreeCtrlComboPopup, wxTreeCtrl)
+wxBEGIN_EVENT_TABLE(TreeCtrlComboPopup, wxTreeCtrl)
     EVT_MOTION(TreeCtrlComboPopup::OnMouseMove)
     // NOTE: Left down event is used instead of left up right now
     //       since MSW wxTreeCtrl doesn't seem to emit left ups
     //       consistently.
     EVT_LEFT_DOWN(TreeCtrlComboPopup::OnMouseClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // wxComboCtrl with custom popup animation, using wxWindow::ShowWithEffect().
@@ -508,7 +507,7 @@ END_EVENT_TABLE()
 class wxComboCtrlWithCustomPopupAnim : public wxComboCtrl
 {
 protected:
-    virtual bool AnimateShow( const wxRect& rect, int WXUNUSED(flags) )
+    virtual bool AnimateShow( const wxRect& rect, int WXUNUSED(flags) ) wxOVERRIDE
     {
         wxWindow* win = GetPopupWindow();
         win->SetSize(rect);
@@ -573,7 +572,7 @@ public:
         SetButtonBitmaps(bmp,true);
     }
 
-    virtual void OnButtonClick()
+    virtual void OnButtonClick() wxOVERRIDE
     {
         // Show standard wxFileDialog on button click
 
@@ -591,7 +590,7 @@ public:
     }
 
     // Implement empty DoSetPopupControl to prevent assertion failure.
-    virtual void DoSetPopupControl(wxComboPopup* WXUNUSED(popup))
+    virtual void DoSetPopupControl(wxComboPopup* WXUNUSED(popup)) wxOVERRIDE
     {
     }
 
@@ -624,7 +623,7 @@ MyFrame::MyFrame(const wxString& title)
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(ComboCtrl_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(ComboCtrl_About, wxT("&About\tF1"), wxT("Show about dialog"));
 
     fileMenu->Append(ComboCtrl_Compare, wxT("&Compare against wxComboBox..."),
         wxT("Show some wxOwnerDrawnComboBoxes side-by-side with native wxComboBoxes."));
@@ -927,7 +926,7 @@ MyFrame::MyFrame(const wxString& title)
     panel->SetSizer( topSizer );
     topSizer->SetSizeHints( panel );
 
-    SetSize(740,400);
+    Fit();
     Centre();
 }
 
@@ -939,15 +938,15 @@ void MyFrame::OnComboBoxUpdate( wxCommandEvent& event )
     if ( !event.GetEventObject()->IsKindOf(CLASSINFO(wxComboCtrl)) )
         return;
 
-    if ( event.GetEventType() == wxEVT_COMMAND_COMBOBOX_SELECTED )
+    if ( event.GetEventType() == wxEVT_COMBOBOX )
     {
         wxLogDebug(wxT("EVT_COMBOBOX(id=%i,selection=%i)"),event.GetId(),event.GetSelection());
     }
-    else if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED )
+    else if ( event.GetEventType() == wxEVT_TEXT )
     {
         wxLogDebug(wxT("EVT_TEXT(id=%i,string=\"%s\")"),event.GetId(),event.GetString().c_str());
     }
-    else if ( event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER )
+    else if ( event.GetEventType() == wxEVT_TEXT_ENTER )
     {
         wxLogDebug("EVT_TEXT_ENTER(id=%i,string=\"%s\")",
                    event.GetId(), event.GetString().c_str());
@@ -981,7 +980,8 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     groupSizer = new wxStaticBoxSizer(new wxStaticBox(dlg,wxID_ANY,wxT(" wxOwnerDrawnComboBox ")),
                                       wxVERTICAL);
 
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,wxT("Writable, sorted:")), 0,
+    groupSizer->Add( new wxStaticText(dlg, wxID_ANY,
+                     wxT("Writable, with margins, sorted:")), 0,
                      wxALIGN_CENTER_VERTICAL|wxRIGHT|wxEXPAND, border );
 
     odc = new wxOwnerDrawnComboBox(dlg,wxID_ANY,wxEmptyString,
@@ -993,12 +993,14 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     odc->Append(wxT("H - Appended Item")); // test sorting in append
 
     odc->SetValue(wxT("Dot Dash"));
-
-    groupSizer->Add( odc, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
+    odc->SetMargins(15, 10);
+    groupSizer->Add( odc, 0, wxALIGN_CENTER_VERTICAL|wxALL, border );
+    groupSizer->AddStretchSpacer();
 
     //
     // Readonly ODComboBox
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,wxT("Read-only:")), 0,
+    groupSizer->Add( new wxStaticText(dlg, wxID_ANY,
+                     wxT("Read-only, big font:")), 0,
                      wxALIGN_CENTER_VERTICAL|wxRIGHT, border );
 
     odc = new wxOwnerDrawnComboBox(dlg,wxID_ANY,wxEmptyString,
@@ -1007,10 +1009,12 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
                                    wxCB_SORT|wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
                                   );
 
+    odc->SetFont(odc->GetFont().Scale(1.5));
     odc->SetValue(wxT("Dot Dash"));
     odc->SetText(wxT("Dot Dash (Testing SetText)"));
 
-    groupSizer->Add( odc, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
+    groupSizer->Add( odc, 0, wxALL, border );
+    groupSizer->AddStretchSpacer();
 
     //
     // Disabled ODComboBox
@@ -1026,7 +1030,7 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     odc->SetValue(wxT("Dot Dash"));
     odc->Enable(false);
 
-    groupSizer->Add( odc, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
+    groupSizer->Add( odc, 3, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
 
     rowSizer->Add( groupSizer, 1, wxEXPAND|wxALL, border );
 
@@ -1037,7 +1041,8 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     //
     // wxComboBox
     //
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,wxT("Writable, sorted:")), 0,
+    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,
+                     wxT("Writable, with margins, sorted:")), 0,
                      wxALIGN_CENTER_VERTICAL|wxRIGHT|wxEXPAND, border );
 
     cb = new wxComboBox(dlg,wxID_ANY,wxEmptyString,
@@ -1049,12 +1054,14 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     cb->Append(wxT("H - Appended Item")); // test sorting in append
 
     cb->SetValue(wxT("Dot Dash"));
-
-    groupSizer->Add( cb, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
+    cb->SetMargins(15, 10);
+    groupSizer->Add( cb, 0, wxALIGN_CENTER_VERTICAL|wxALL, border );
+    groupSizer->AddStretchSpacer();
 
     //
     // Readonly wxComboBox
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,wxT("Read-only:")), 0,
+    groupSizer->Add( new wxStaticText(dlg, wxID_ANY,
+                     wxT("Read-only, big font:")), 0,
                      wxALIGN_CENTER_VERTICAL|wxRIGHT, border );
 
     cb = new wxComboBox(dlg,wxID_ANY,wxEmptyString,
@@ -1063,9 +1070,11 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
                         wxCB_SORT|wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
                        );
 
+    cb->SetFont(cb->GetFont().Scale(1.5));
     cb->SetValue(wxT("Dot Dash"));
 
-    groupSizer->Add( cb, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
+    groupSizer->Add( cb, 0, wxALL, border );
+    groupSizer->AddStretchSpacer();
 
     //
     // Disabled wxComboBox
@@ -1081,11 +1090,11 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     cb->SetValue(wxT("Dot Dash"));
     cb->Enable(false);
 
-    groupSizer->Add( cb, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
+    groupSizer->Add( cb, 3, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
 
     rowSizer->Add( groupSizer, 1, wxEXPAND|wxALL, border );
 
-    colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, border );
+    colSizer->Add( rowSizer, 1, wxEXPAND|wxALL, border );
 
     dlg->SetSizer( colSizer );
     colSizer->SetSizeHints( dlg );

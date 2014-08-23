@@ -1,5 +1,4 @@
 #ifndef lint
-static char id[] = "$Id$"; 
 #endif
 /*-
  * tif2ras.c - Converts from a Tagged Image File Format image to a Sun Raster.
@@ -335,3 +334,10 @@ main(argc, argv)
 
     exit(0);
 }
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

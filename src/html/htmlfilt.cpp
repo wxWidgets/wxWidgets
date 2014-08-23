@@ -2,7 +2,6 @@
 // Name:        src/html/htmlfilt.cpp
 // Purpose:     wxHtmlFilter - input filter for translating into HTML format
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -85,8 +84,8 @@ class wxHtmlFilterImage : public wxHtmlFilter
     DECLARE_DYNAMIC_CLASS(wxHtmlFilterImage)
 
     public:
-        virtual bool CanRead(const wxFSFile& file) const;
-        virtual wxString ReadFile(const wxFSFile& file) const;
+        virtual bool CanRead(const wxFSFile& file) const wxOVERRIDE;
+        virtual wxString ReadFile(const wxFSFile& file) const wxOVERRIDE;
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlFilterImage, wxHtmlFilter)
@@ -154,9 +153,8 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     else
     {
         size_t size = s->GetSize();
-        wxCharBuffer buf( size+1 );
+        wxCharBuffer buf( size );
         s->Read( buf.data(), size );
-        *(buf.data() + size) = 0;
         wxString tmpdoc( buf, wxConvISO8859_1);
 
         wxString charset = wxHtmlParser::ExtractCharsetInformation(tmpdoc);
@@ -193,13 +191,13 @@ class wxHtmlFilterModule : public wxModule
     DECLARE_DYNAMIC_CLASS(wxHtmlFilterModule)
 
     public:
-        virtual bool OnInit()
+        virtual bool OnInit() wxOVERRIDE
         {
             wxHtmlWindow::AddFilter(new wxHtmlFilterHTML);
             wxHtmlWindow::AddFilter(new wxHtmlFilterImage);
             return true;
         }
-        virtual void OnExit() {}
+        virtual void OnExit() wxOVERRIDE {}
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlFilterModule, wxModule)

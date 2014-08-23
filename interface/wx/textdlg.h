@@ -2,9 +2,20 @@
 // Name:        textdlg.h
 // Purpose:     interface of wxPasswordEntryDialog
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+    Default text dialog style.
+*/
+#define wxTextEntryDialogStyle (wxOK | wxCANCEL | wxCENTRE | wxWS_EX_VALIDATE_RECURSIVELY)
+
+/// Default text dialog caption.
+const char wxGetTextFromUserPromptStr[] = "Input Text";
+
+/// Default password dialog caption.
+const char wxGetPasswordFromUserPromptStr[] = "Enter Password";
+
 
 /**
     @class wxPasswordEntryDialog
@@ -45,7 +56,7 @@ public:
     wxPasswordEntryDialog(wxWindow* parent, const wxString& message,
                           const wxString& caption = wxGetPasswordFromUserPromptStr,
                           const wxString& defaultValue = wxEmptyString,
-                          long style = wxOK | wxCANCEL | wxCENTRE,
+                          long style = wxTextEntryDialogStyle,
                           const wxPoint& pos = wxDefaultPosition);
 };
 
@@ -66,8 +77,28 @@ class wxTextEntryDialog : public wxDialog
 {
 public:
     /**
-        Constructor. Use ShowModal() to show the dialog.
+        Default constructor.
 
+        Call Create() to really create the dialog later.
+
+        @since 2.9.5
+     */
+    wxTextEntryDialog();
+
+    /**
+        Constructor.
+
+        Use ShowModal() to show the dialog.
+
+        See Create() method for parameter description.
+    */
+    wxTextEntryDialog(wxWindow* parent, const wxString& message,
+                      const wxString& caption = wxGetTextFromUserPromptStr,
+                      const wxString& value = wxEmptyString,
+                      long style = wxTextEntryDialogStyle,
+                      const wxPoint& pos = wxDefaultPosition);
+
+    /**
         @param parent
             Parent window.
         @param message
@@ -83,11 +114,13 @@ public:
             here.
         @param pos
             Dialog position.
+
+        @since 2.9.5
     */
-    wxTextEntryDialog(wxWindow* parent, const wxString& message,
+    bool Create(wxWindow* parent, const wxString& message,
                       const wxString& caption = wxGetTextFromUserPromptStr,
                       const wxString& value = wxEmptyString,
-                      long style = wxOK | wxCANCEL | wxCENTRE,
+                      long style = wxTextEntryDialogStyle,
                       const wxPoint& pos = wxDefaultPosition);
 
     /**
@@ -102,6 +135,40 @@ public:
     wxString GetValue() const;
 
     /**
+        Associate a validator with the text control used by the dialog.
+
+        These methods can be used to limit the user entry to only some
+        characters, e.g.
+        @code
+            wxTextEntryDialog dlg(this, ...);
+            dlg.SetTextValidator(wxFILTER_ALPHA);
+            if ( dlg.ShowModal() == wxID_OK )
+            {
+                // We can be certain that this string contains letters only.
+                wxString value = dlg.GetValue();
+            }
+        @endcode
+
+        The first overload uses the provided @a validator which can be of a
+        custom class derived from wxTextValidator while the second one creates
+        a wxTextValidator with the specified @a style.
+     */
+    //@{
+    void SetTextValidator(const wxTextValidator& validator);
+    void SetTextValidator(wxTextValidatorStyle style = wxFILTER_NONE);
+    //@}
+
+    /**
+        This function sets the maximum number of characters the user can enter
+        into this dialog.
+
+        @see wxTextEntry::SetMaxLength()
+
+        @since 2.9.5
+    */
+    void SetMaxLength(unsigned long len);
+
+    /**
         Sets the default text value.
     */
     void SetValue(const wxString& value);
@@ -109,6 +176,9 @@ public:
     /**
         Shows the dialog, returning wxID_OK if the user pressed OK, and wxID_CANCEL
         otherwise.
+
+        Call GetValue() to retrieve the values of the string entered by the
+        user after showing the dialog.
     */
     int ShowModal();
 };
@@ -139,7 +209,7 @@ public:
     @header{wx/textdlg.h}
 */
 wxString wxGetTextFromUser(const wxString& message,
-                           const wxString& caption = "Input text",
+                           const wxString& caption = wxGetTextFromUserPromptStr,
                            const wxString& default_value = wxEmptyString,
                            wxWindow* parent = NULL,
                            int x = wxDefaultCoord,
@@ -154,7 +224,7 @@ wxString wxGetTextFromUser(const wxString& message,
     @header{wx/textdlg.h}
 */
 wxString wxGetPasswordFromUser(const wxString& message,
-                               const wxString& caption = "Input text",
+                               const wxString& caption = wxGetPasswordFromUserPromptStr,
                                const wxString& default_value = wxEmptyString,
                                wxWindow* parent = NULL,
                                int x = wxDefaultCoord,

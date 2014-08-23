@@ -1,5 +1,5 @@
 <!-- Creator     : groff version 1.18.1 -->
-<!-- CreationDate: Mon Mar 13 18:03:11 2006 -->
+<!-- CreationDate: Sat Feb 24 18:37:18 2007 -->
 <html>
 <head>
 <meta name="generator" content="groff -Thtml, see www.gnu.org">
@@ -28,7 +28,7 @@
 <td width="8%"></td>
 <td width="91%">
 <p>fax2ps &minus; convert a <small>TIFF</small> facsimile to
-compressed &trade;</p>
+compressed PostScript&trade;</p>
 </td>
 </table>
 <a name="SYNOPSIS"></a>
@@ -39,7 +39,7 @@ compressed &trade;</p>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p><b>fax2ps</b> [ <i>options</i> ] [ <i>file</i>... ]</p>
+<p><b>fax2ps</b> [ <i>options</i> ] [ <i>file ...</i> ]</p>
 </td>
 </table>
 <a name="DESCRIPTION"></a>
@@ -51,8 +51,9 @@ compressed &trade;</p>
 <td width="8%"></td>
 <td width="91%">
 <p><i>fax2ps</i> reads one or more <small>TIFF</small>
-facsimile image files and prints a compressed form of on the
-standard output that is suitable for printing.</p>
+facsimile image files and prints a compressed form of
+PostScript on the standard output that is suitable for
+printing.</p>
 <!-- INDENTATION -->
 <p>By default, each page is scaled to reflect the image
 dimensions and resolutions stored in the file. The
@@ -64,38 +65,38 @@ default output page is 8.5 by 11 inches. Alternate page
 dimensions can be specified in inches with the
 <b>&minus;W</b> and <b>&minus;H</b> options.</p>
 <!-- INDENTATION -->
-<p>By default <i>fax2ps</i> generates for all pages in the
-file. The <b>&minus;p</b> option can be used to select one
-or more pages from a multi-page document.</p>
+<p>By default <i>fax2ps</i> generates PostScript for all
+pages in the file. The <b>&minus;p</b> option can be used to
+select one or more pages from a multi-page document.</p>
 <!-- INDENTATION -->
-<p><i>fax2ps</i> generates a compressed form of that is
-optimized for sending pages of text to a printer attached to
-a host through a low-speed link (such as a serial line).
-Each output page is filled with white and then only the
-black areas are drawn. The specification of the black
-drawing operations is optimized by using a special font that
-encodes the move-draw operations required to fill the black
-regions on the page. This compression scheme typically
-results in a substantially reduced description, relative to
-the straightforward imaging of the page with a <i>image</i>
-operator. This algorithm can, however, be ineffective for
-continuous-tone and white-on-black images. For these images,
-it sometimes is more efficient to send the raster bitmap
-image directly; see <i>tiff2ps</i>(1).</p>
+<p><i>fax2ps</i> generates a compressed form of PostScript
+that is optimized for sending pages of text to a PostScript
+printer attached to a host through a low-speed link (such as
+a serial line). Each output page is filled with white and
+then only the black areas are drawn. The PostScript
+specification of the black drawing operations is optimized
+by using a special font that encodes the move-draw
+operations required to fill the black regions on the page.
+This compression scheme typically results in a substantially
+reduced PostScript description, relative to the
+straightforward imaging of the page with a PostScript
+<i>image</i> operator. This algorithm can, however, be
+ineffective for continuous-tone and white-on-black images.
+For these images, it sometimes is more efficient to send the
+raster bitmap image directly; see <b>tiff2ps</b>(1).</p>
 </td>
 </table>
 <a name="OPTIONS"></a>
 <h2>OPTIONS</h2>
 <!-- TABS -->
 <table width="100%" border=0 rules="none" frame="void"
-       cols="5" cellspacing="0" cellpadding="0">
+       cols="4" cellspacing="0" cellpadding="0">
 <tr valign="top" align="left">
-<td width="10%"></td>
+<td width="11%"></td>
 <td width="11%">
 
 <p><b>&minus;p</b> <i>number</i></p>
 </td>
-<td width="1%"></td>
 <td width="76%">
 
 <p>Print only the indicated page. Multiple pages may be
@@ -144,14 +145,13 @@ taken from the file.</p>
 </table>
 <!-- TABS -->
 <table width="100%" border=0 rules="none" frame="void"
-       cols="5" cellspacing="0" cellpadding="0">
+       cols="4" cellspacing="0" cellpadding="0">
 <tr valign="top" align="left">
 <td width="10%"></td>
-<td width="11%">
+<td width="12%">
 
 <p><b>&minus;S</b></p>
 </td>
-<td width="1%"></td>
 <td width="76%">
 
 <p>Scale each page of image data to fill the output page
@@ -163,11 +163,10 @@ file.</p>
 </td>
 <tr valign="top" align="left">
 <td width="10%"></td>
-<td width="11%">
+<td width="12%">
 
 <p><b>&minus;W</b> <i>width</i></p>
 </td>
-<td width="1%"></td>
 <td width="76%">
 
 <p>Use <i>width</i> as the width, in inches, of the output
@@ -177,11 +176,10 @@ page.</p>
 </td>
 <tr valign="top" align="left">
 <td width="10%"></td>
-<td width="11%">
+<td width="12%">
 
 <p><b>&minus;H</b> <i>height</i></p>
 </td>
-<td width="1%"></td>
 <td width="76%">
 
 <p>Use <i>height</i> as the height, in inches, of the
@@ -206,7 +204,7 @@ may be generated due to transmission errors in received
 facsimile. <i>fax2ps</i> attempts to recover from such data
 errors by resynchronizing decoding at the end of the current
 scanline. This can result in long horizontal black lines in
-the resultant image.</p>
+the resultant PostScript image.</p>
 </td>
 </table>
 <a name="NOTES"></a>
@@ -217,9 +215,9 @@ the resultant image.</p>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p>If the destination printer supports Level II then it is
-always faster to just send the encoded bitmap generated by
-the <b>tiff2ps</b>(1) program.</p>
+<p>If the destination printer supports PostScript Level II
+then it is always faster to just send the encoded bitmap
+generated by the <b>tiff2ps</b>(1) program.</p>
 </td>
 </table>
 <a name="BUGS"></a>
@@ -231,8 +229,8 @@ the <b>tiff2ps</b>(1) program.</p>
 <td width="8%"></td>
 <td width="91%">
 <p><i>fax2ps</i> should probably figure out when it is doing
-a poor job of compressing the output and just generate to
-image the bitmap raster instead.</p>
+a poor job of compressing the output and just generate
+PostScript to image the bitmap raster instead.</p>
 </td>
 </table>
 <a name="SEE ALSO"></a>

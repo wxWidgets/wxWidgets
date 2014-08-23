@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -97,6 +96,7 @@ public:
     // override some base class methods
     virtual bool Show(bool show = true);
     virtual bool Enable(bool enable = true);
+    virtual bool CanBeFocused() const;
     virtual void SetFocus();
     virtual bool SetFont(const wxFont& font);
     virtual bool ContainsHWND(WXHWND hWnd) const;
@@ -112,10 +112,6 @@ public:
 #endif // wxUSE_HELP
 
     virtual bool Reparent(wxWindowBase *newParent);
-
-    // we inherit a version always returning false from wxStaticBox, override
-    // it to behave normally
-    virtual bool AcceptsFocus() const { return wxControl::AcceptsFocus(); }
 
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const { return false; }
@@ -149,6 +145,9 @@ protected:
     // get the total size occupied by the radio box buttons
     wxSize GetTotalButtonSize(const wxSize& sizeBtn) const;
 
+    // Adjust all the buttons to the new window size.
+    void PositionAllButtons(int x, int y, int width, int height);
+
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
@@ -163,6 +162,8 @@ protected:
     virtual WXHRGN MSWGetRegionWithoutChildren();
 #endif // __WXWINCE__
 
+    // resolve ambiguity in base classes
+    virtual wxBorder GetDefaultBorder() const { return wxRadioBoxBase::GetDefaultBorder(); }
 
     // the buttons we contain
     wxSubwindows *m_radioButtons;

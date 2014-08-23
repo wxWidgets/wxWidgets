@@ -4,7 +4,6 @@
 // Author:      Francesco Montorsi
 // Modified by:
 // Created:     07.07.2006 (based on wxToolkitInfo)
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Francesco Montorsi
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -58,11 +57,7 @@ enum wxOperatingSystemId
     // 1<<13 and 1<<14 available for other Unix flavours
 
     wxOS_DOS            = 1 << 15,      // Microsoft DOS
-    wxOS_OS2            = 1 << 16,       // OS/2
-
-    wxOS_PALM_OS        = 1 << 17,       // Pure Palm OS
-    wxOS_PALM_LINUX     = 1 << 18,       // Palm over linux
-    wxOS_PALM = wxOS_PALM_OS | wxOS_PALM_LINUX
+    wxOS_OS2            = 1 << 16       // OS/2
 };
 
 // list of wxWidgets ports - some of them can be used with more than
@@ -76,7 +71,7 @@ enum wxPortId
     wxPORT_MSW      = 1 << 1,       // wxMSW, native toolkit is Windows API
     wxPORT_MOTIF    = 1 << 2,       // wxMotif, using [Open]Motif or Lesstif
     wxPORT_GTK      = 1 << 3,       // wxGTK, using GTK+ 1.x, 2.x, GPE or Maemo
-    wxPORT_MGL      = 1 << 4,       // wxMGL, using wxUniversal
+    wxPORT_DFB      = 1 << 4,       // wxDFB, using wxUniversal
     wxPORT_X11      = 1 << 5,       // wxX11, using wxUniversal
     wxPORT_PM       = 1 << 6,       // wxOS2, using OS/2 Presentation Manager
     wxPORT_OS2      = wxPORT_PM,    // wxOS2, using OS/2 Presentation Manager
@@ -84,9 +79,7 @@ enum wxPortId
     wxPORT_OSX      = wxPORT_MAC,   // wxOSX, using Cocoa, Carbon or iPhone API
     wxPORT_COCOA    = 1 << 8,       // wxCocoa, using Cocoa NextStep/Mac API
     wxPORT_WINCE    = 1 << 9,       // wxWinCE, toolkit is WinCE SDK API
-    wxPORT_PALMOS   = 1 << 10,      // wxPalmOS, toolkit is PalmOS API
-    wxPORT_DFB      = 1 << 11,      // wxDFB, using wxUniversal
-    wxPORT_QT       = 1 << 12       // wxQT, using QT4
+    wxPORT_QT       = 1 << 10       // wxQT, using QT4
 };
 
 // architecture of the operating system
@@ -357,24 +350,5 @@ protected:
 };
 
 
-#if WXWIN_COMPATIBILITY_2_6
-    #define wxUNKNOWN_PLATFORM      wxOS_UNKNOWN
-    #define wxUnix                  wxOS_UNIX
-    #define wxWin95                 wxOS_WINDOWS_9X
-    #define wxWIN95                 wxOS_WINDOWS_9X
-    #define wxWINDOWS_NT            wxOS_WINDOWS_NT
-    #define wxMSW                   wxOS_WINDOWS
-    #define wxWinCE                 wxOS_WINDOWS_CE
-    #define wxWIN32S                wxOS_WINDOWS_9X
-
-    #define wxPalmOS                wxPORT_PALMOS
-    #define wxOS2                   wxPORT_OS2
-    #define wxMGL                   wxPORT_MGL
-    #define wxCocoa                 wxPORT_MAC
-    #define wxMac                   wxPORT_MAC
-    #define wxMotif                 wxPORT_MOTIF
-    #define wxGTK                   wxPORT_GTK
-    #define wxQT                    wxPORT_QT
-#endif // WXWIN_COMPATIBILITY_2_6
 
 #endif // _WX_PLATINFO_H_

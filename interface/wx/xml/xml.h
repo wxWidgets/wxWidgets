@@ -2,7 +2,6 @@
 // Name:        xml/xml.h
 // Purpose:     interface of wxXmlNode, wxXmlAttribute, wxXmlDocument
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -434,6 +433,17 @@ public:
 };
 
 
+//* special indentation value for wxXmlDocument::Save
+#define wxXML_NO_INDENTATION           (-1)
+
+//* flags for wxXmlDocument::Load
+enum wxXmlDocumentLoadFlag
+{
+    wxXMLDOC_NONE,
+    wxXMLDOC_KEEP_WHITESPACE_NODES
+};
+
+
 
 /**
     @class wxXmlDocument
@@ -581,7 +591,7 @@ public:
         any prologue nodes, but IsOk() will return @false since the root entity
         will be missing.
 
-        Note that the caller is reponsible for deleting the returned node in order
+        Note that the caller is responsible for deleting the returned node in order
         to avoid memory leaks.
     */
     wxXmlNode* DetachRoot();

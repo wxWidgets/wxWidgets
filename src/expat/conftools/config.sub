@@ -424,7 +424,7 @@ case $basic_machine in
 		basic_machine=a29k-amd
 		os=-udi
 		;;
-	abacus)
+    	abacus)
 		basic_machine=abacus-unknown
 		;;
 	adobe68k)
@@ -1561,7 +1561,7 @@ case $basic_machine in
 	*-ibm)
 		os=-aix
 		;;
-	*-knuth)
+    	*-knuth)
 		os=-mmixware
 		;;
 	*-wec)

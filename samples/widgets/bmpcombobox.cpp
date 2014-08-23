@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing wxBitmapComboBox
 // Author:      Jaakko Salli
 // Created:     Sep-01-2006
-// Id:          $Id$
 // Copyright:   (c) 2006 Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -104,12 +103,12 @@ class BitmapComboBoxWidgetsPage : public ItemContainerWidgetsPage
 public:
     BitmapComboBoxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxControl *GetWidget() const { return m_combobox; }
-    virtual wxItemContainer* GetContainer() const { return m_combobox; }
-    virtual void RecreateWidget() { CreateCombo(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_combobox; }
+    virtual wxItemContainer* GetContainer() const wxOVERRIDE { return m_combobox; }
+    virtual void RecreateWidget() wxOVERRIDE { CreateCombo(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
     // event handlers
@@ -186,7 +185,7 @@ protected:
                *m_textDelete;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(BitmapComboBoxWidgetsPage)
 };
 
@@ -194,7 +193,7 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(BitmapComboBoxWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(BitmapComboBoxWidgetsPage, WidgetsPage)
     EVT_BUTTON(BitmapComboBoxPage_Reset, BitmapComboBoxWidgetsPage::OnButtonReset)
     EVT_BUTTON(BitmapComboBoxPage_Change, BitmapComboBoxWidgetsPage::OnButtonChange)
     EVT_BUTTON(BitmapComboBoxPage_Delete, BitmapComboBoxWidgetsPage::OnButtonDelete)
@@ -231,7 +230,7 @@ BEGIN_EVENT_TABLE(BitmapComboBoxWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, BitmapComboBoxWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, BitmapComboBoxWidgetsPage::OnCheckOrRadioBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
@@ -803,7 +802,7 @@ void BitmapComboBoxWidgetsPage::OnComboText(wxCommandEvent& event)
     wxASSERT_MSG( s == m_combobox->GetValue(),
                   wxT("event and combobox values should be the same") );
 
-    if (event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER)
+    if (event.GetEventType() == wxEVT_TEXT_ENTER)
     {
         wxLogMessage(wxT("BitmapCombobox enter pressed (now '%s')"), s.c_str());
     }

@@ -4,7 +4,6 @@
 //              platform-specific wxFileCtrl's
 // Author:      Diaa M. Sami
 // Created:     2007-07-07
-// RCS-ID:      $Id$
 // Copyright:   (c) Diaa M. Sami
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -64,7 +63,7 @@ void GenerateSelectionChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd)
     wnd->GetEventHandler()->ProcessEvent( event );
 }
 
-void GenerateFileActivatedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd, const wxString filename )
+void GenerateFileActivatedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd, const wxString& filename )
 {
     wxFileCtrlEvent event( wxEVT_FILECTRL_FILEACTIVATED, wnd, wnd->GetId() );
     event.SetDirectory( fileCtrl->GetDirectory() );

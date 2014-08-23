@@ -2,9 +2,25 @@
 // Name:        dirctrl.h
 // Purpose:     interface of wxGenericDirCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+enum
+{
+    // Only allow directory viewing/selection, no files
+    wxDIRCTRL_DIR_ONLY       = 0x0010,
+    // When setting the default path, select the first file in the directory
+    wxDIRCTRL_SELECT_FIRST   = 0x0020,
+    // Show the filter list
+    wxDIRCTRL_SHOW_FILTERS   = 0x0040,
+    // Use 3D borders on internal controls
+    wxDIRCTRL_3D_INTERNAL    = 0x0080,
+    // Editable labels
+    wxDIRCTRL_EDIT_LABELS    = 0x0100,
+    // Allow multiple selection
+    wxDIRCTRL_MULTIPLE       = 0x0200
+};
+
 
 /**
     @class wxGenericDirCtrl
@@ -23,15 +39,29 @@
     @style{wxDIRCTRL_SELECT_FIRST}
            When setting the default path, select the first file in the
            directory.
+    @style{wxDIRCTRL_SHOW_FILTERS}
+           Show the drop-down filter list.
     @style{wxDIRCTRL_EDIT_LABELS}
            Allow the folder and file labels to be editable.
     @style{wxDIRCTRL_MULTIPLE}
            Allows multiple files and folders to be selected.
     @endStyleTable
 
-    @library{wxbase}
+    @library{wxcore}
     @category{ctrl}
-    @appearance{genericdirctrl.png}
+    @appearance{genericdirctrl}
+    
+    @beginEventEmissionTable
+    @event{EVT_DIRCTRL_SELECTIONCHANGED(id, func)}
+          Selected directory has changed.
+          Processes a @c wxEVT_DIRCTRL_SELECTIONCHANGED event type.
+          Notice that this event is generated even for the changes done by the
+          program itself and not only those done by the user.
+          Available since wxWidgets 2.9.5.
+    @event{EVT_DIRCTRL_FILEACTIVATED(id, func)}
+          The user activated a file by double-clicking or pressing Enter.
+          Available since wxWidgets 2.9.5.
+    @endEventTable
 */
 class wxGenericDirCtrl : public wxControl
 {
@@ -148,6 +178,13 @@ public:
     virtual wxString GetPath() const;
 
     /**
+        Gets the path corresponding to the given tree control item.
+
+        @since 2.9.5
+    */
+    wxString GetPath(wxTreeItemId itemId) const;
+
+    /**
         Fills the array @a paths with the selected directories and filenames.
     */
     virtual void GetPaths(wxArrayString& paths) const;
@@ -223,3 +260,28 @@ public:
     virtual void UnselectAll();
 };
 
+
+
+class wxDirFilterListCtrl: public wxChoice
+{
+public:
+    wxDirFilterListCtrl();
+    wxDirFilterListCtrl(wxGenericDirCtrl* parent, const wxWindowID id = wxID_ANY,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = 0);
+    bool Create(wxGenericDirCtrl* parent, const wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0);
+
+    virtual ~wxDirFilterListCtrl() {}
+
+    void Init();
+
+    //// Operations
+    void FillFilterList(const wxString& filter, int defaultFilter);
+};
+
+wxEventType wxEVT_DIRCTRL_SELECTIONCHANGED;
+wxEventType wxEVT_DIRCTRL_FILEACTIVATED;

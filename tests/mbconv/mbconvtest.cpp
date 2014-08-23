@@ -3,7 +3,6 @@
 // Purpose:     wxMBConv unit test
 // Author:      Vadim Zeitlin, Mike Wetherell, Vince Harron
 // Created:     14.02.04
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 TT-Solutions, (c) 2005 Mike Wetherell, Vince Harron
 ///////////////////////////////////////////////////////////////////////////////
 

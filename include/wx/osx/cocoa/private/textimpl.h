@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     03/02/99
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -28,6 +27,9 @@ public :
     wxNSTextFieldControl( wxWindow *wxPeer, wxTextEntry *entry, WXWidget w );
     virtual ~wxNSTextFieldControl();
 
+    virtual bool CanClipMaxLength() const { return true; }
+    virtual void SetMaxLength(unsigned long len);
+        
     virtual wxString GetStringValue() const ;
     virtual void SetStringValue( const wxString &str) ;
     virtual void Copy() ;
@@ -42,7 +44,11 @@ public :
     virtual bool SetHint(const wxString& hint);
 
     virtual void controlAction(WXWidget slf, void* _cmd, void *sender);
+    virtual bool becomeFirstResponder(WXWidget slf, void *_cmd);
+    virtual bool resignFirstResponder(WXWidget slf, void *_cmd);
 
+    virtual void SetInternalSelection( long from , long to );
+    virtual void UpdateInternalSelectionFromEditor( wxNSTextFieldEditor* editor);
 protected :
     NSTextField* m_textField;
     long m_selStart;
@@ -59,6 +65,8 @@ public:
     wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w );
     virtual ~wxNSTextViewControl();
 
+    virtual void insertText(NSString* text, WXWidget slf, void *_cmd);
+    
     virtual wxString GetStringValue() const ;
     virtual void SetStringValue( const wxString &str) ;
     virtual void Copy() ;
@@ -105,6 +113,13 @@ public :
     virtual wxString GetStringAtIndex(int pos) const;
 
     virtual int FindString(const wxString& text) const;
+    virtual void Popup();
+    virtual void Dismiss();
+
+    virtual void SetEditable(bool editable);
+
+    virtual void mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd);
+
 private:
     NSComboBox* m_comboBox;
 };

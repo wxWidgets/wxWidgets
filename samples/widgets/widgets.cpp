@@ -4,7 +4,6 @@
 // Purpose:     Sample showing most of the simple wxWidgets widgets
 // Author:      Vadim Zeitlin
 // Created:     27.03.01
-// Id:          $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -88,6 +87,8 @@ enum
     Widgets_BorderDouble,
     Widgets_BorderDefault,
 
+    Widgets_LayoutDirection,
+
     Widgets_GlobalBusyCursor,
     Widgets_BusyCursor,
 
@@ -99,6 +100,7 @@ enum
     TextEntry_DisableAutoComplete = TextEntry_Begin,
     TextEntry_AutoCompleteFixed,
     TextEntry_AutoCompleteFilenames,
+    TextEntry_AutoCompleteDirectories,
     TextEntry_AutoCompleteCustom,
 
     TextEntry_SetHint,
@@ -134,7 +136,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -167,6 +169,8 @@ protected:
     void OnEnable(wxCommandEvent& event);
     void OnSetBorder(wxCommandEvent& event);
 
+    void OnToggleLayoutDirection(wxCommandEvent& event);
+
     void OnToggleGlobalBusyCursor(wxCommandEvent& event);
     void OnToggleBusyCursor(wxCommandEvent& event);
 
@@ -174,6 +178,7 @@ protected:
     void OnDisableAutoComplete(wxCommandEvent& event);
     void OnAutoCompleteFixed(wxCommandEvent& event);
     void OnAutoCompleteFilenames(wxCommandEvent& event);
+    void OnAutoCompleteDirectories(wxCommandEvent& event);
     void OnAutoCompleteCustom(wxCommandEvent& event);
 
     void OnSetHint(wxCommandEvent& event);
@@ -213,7 +218,7 @@ private:
 #endif // wxUSE_MENUS
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #if USE_LOG
@@ -235,7 +240,7 @@ public:
 
 private:
     // implement sink functions
-    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg)
+    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg) wxOVERRIDE
     {
         if ( level == wxLOG_Trace )
         {
@@ -273,7 +278,7 @@ IMPLEMENT_APP(WidgetsApp)
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
 #if USE_LOG
     EVT_BUTTON(Widgets_ClearLog, WidgetsFrame::OnButtonClearLog)
 #endif // USE_LOG
@@ -297,12 +302,15 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
     EVT_MENU_RANGE(Widgets_BorderNone, Widgets_BorderDefault,
                    WidgetsFrame::OnSetBorder)
 
+    EVT_MENU(Widgets_LayoutDirection,   WidgetsFrame::OnToggleLayoutDirection)
+
     EVT_MENU(Widgets_GlobalBusyCursor,  WidgetsFrame::OnToggleGlobalBusyCursor)
     EVT_MENU(Widgets_BusyCursor,        WidgetsFrame::OnToggleBusyCursor)
 
     EVT_MENU(TextEntry_DisableAutoComplete,   WidgetsFrame::OnDisableAutoComplete)
     EVT_MENU(TextEntry_AutoCompleteFixed,     WidgetsFrame::OnAutoCompleteFixed)
     EVT_MENU(TextEntry_AutoCompleteFilenames, WidgetsFrame::OnAutoCompleteFilenames)
+    EVT_MENU(TextEntry_AutoCompleteDirectories, WidgetsFrame::OnAutoCompleteDirectories)
     EVT_MENU(TextEntry_AutoCompleteCustom,    WidgetsFrame::OnAutoCompleteCustom)
 
     EVT_MENU(TextEntry_SetHint, WidgetsFrame::OnSetHint)
@@ -312,7 +320,7 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
 
     EVT_MENU(wxID_EXIT, WidgetsFrame::OnExit)
 #endif // wxUSE_MENUS
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
@@ -344,10 +352,6 @@ bool WidgetsApp::OnInit()
     title += wxT("wxMAC");
 #elif defined(__WXMOTIF__)
     title += wxT("wxMOTIF");
-#elif defined(__WXPALMOS5__)
-    title += wxT("wxPALMOS5");
-#elif defined(__WXPALMOS6__)
-    title += wxT("wxPALMOS6");
 #else
     title += wxT("wxWidgets");
 #endif
@@ -402,6 +406,10 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     menuWidget->AppendSubMenu(menuBorders, wxT("Set &border"));
 
     menuWidget->AppendSeparator();
+    menuWidget->AppendCheckItem(Widgets_LayoutDirection,
+                                "Toggle &layout direction\tCtrl-L");
+
+    menuWidget->AppendSeparator();
     menuWidget->AppendCheckItem(Widgets_GlobalBusyCursor,
                                 wxT("Toggle &global busy cursor\tCtrl-Shift-U"));
     menuWidget->AppendCheckItem(Widgets_BusyCursor,
@@ -418,6 +426,8 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
                                    wxT("Fixed-&list auto-completion"));
     menuTextEntry->AppendRadioItem(TextEntry_AutoCompleteFilenames,
                                    wxT("&Files names auto-completion"));
+    menuTextEntry->AppendRadioItem(TextEntry_AutoCompleteDirectories,
+                                   wxT("&Directories names auto-completion"));
     menuTextEntry->AppendRadioItem(TextEntry_AutoCompleteCustom,
                                    wxT("&Custom auto-completion"));
     menuTextEntry->AppendSeparator();
@@ -874,6 +884,10 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
         (*it)->SetFont(m_font);
         (*it)->Refresh();
     }
+
+    // The best size of the widget could have changed after changing its font,
+    // so re-layout to show it correctly.
+    page->Layout();
 #else
     wxLogMessage(wxT("Font selection dialog not available in current build."));
 #endif
@@ -915,6 +929,21 @@ void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
     WidgetsPage *page = CurrentPage();
 
     page->RecreateWidget();
+}
+
+void WidgetsFrame::OnToggleLayoutDirection(wxCommandEvent& event)
+{
+    wxLayoutDirection dir = event.IsChecked() ? wxLayout_RightToLeft
+                                              : wxLayout_LeftToRight;
+
+    const Widgets widgets = CurrentPage()->GetWidgets();
+    for ( Widgets::const_iterator it = widgets.begin();
+          it != widgets.end();
+          ++it )
+    {
+        (*it)->SetLayoutDirection(dir);
+        (*it)->Refresh();
+    }
 }
 
 void WidgetsFrame::OnToggleGlobalBusyCursor(wxCommandEvent& event)
@@ -995,6 +1024,21 @@ void WidgetsFrame::OnAutoCompleteFilenames(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+void WidgetsFrame::OnAutoCompleteDirectories(wxCommandEvent& WXUNUSED(event))
+{
+    wxTextEntryBase *entry = CurrentPage()->GetTextEntry();
+    wxCHECK_RET( entry, "menu item should be disabled" );
+
+    if ( entry->AutoCompleteDirectories() )
+    {
+        wxLogMessage("Enabled auto completion of directories.");
+    }
+    else
+    {
+        wxLogMessage("AutoCompleteDirectories() failed.");
+    }
+}
+
 void WidgetsFrame::OnAutoCompleteCustom(wxCommandEvent& WXUNUSED(event))
 {
     wxTextEntryBase *entry = CurrentPage()->GetTextEntry();
@@ -1009,7 +1053,7 @@ void WidgetsFrame::OnAutoCompleteCustom(wxCommandEvent& WXUNUSED(event))
     class CustomTextCompleter : public wxTextCompleterSimple
     {
     public:
-        virtual void GetCompletions(const wxString& prefix, wxArrayString& res)
+        virtual void GetCompletions(const wxString& prefix, wxArrayString& res) wxOVERRIDE
         {
             // This is used for illustrative purposes only and shows how many
             // completions we return every time when we're called.

@@ -3,7 +3,6 @@
 // Purpose:     Sample showing how to use wx from a DLL
 // Author:      Vaclav Slavik
 // Created:     2009-12-03
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -22,8 +21,8 @@
     #pragma hdrstop
 #endif
 
-#ifndef __WXMSW__
-    #error "This sample is MSW-only"
+#ifndef __WINDOWS__
+    #error "This sample is Windows-only"
 #endif
 
 #include "wx/app.h"
@@ -52,7 +51,7 @@ public:
 
     void OnAbout(wxCommandEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -78,9 +77,9 @@ private:
 // MyDllFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyDllFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyDllFrame, wxFrame)
     EVT_BUTTON(wxID_ABOUT, MyDllFrame::OnAbout)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyDllFrame::MyDllFrame(wxWindow *parent, const wxString& label)
     : wxFrame(parent, wxID_ANY, label)
@@ -148,12 +147,11 @@ MyDllApp::MyDllApp()
     // by shutting the thread down when it's no longer needed, though.
     SetExitOnFrameDelete(false);
 
-    Connect(wxEVT_IDLE, wxIdleEventHandler(MyDllApp::OnIdle));
     Connect(CMD_SHOW_WINDOW,
-            wxEVT_COMMAND_THREAD,
+            wxEVT_THREAD,
             wxThreadEventHandler(MyDllApp::OnShowWindow));
     Connect(CMD_TERMINATE,
-            wxEVT_COMMAND_THREAD,
+            wxEVT_THREAD,
             wxThreadEventHandler(MyDllApp::OnTerminate));
 }
 
@@ -288,7 +286,7 @@ void run_wx_gui_from_dll(const char *title)
 
     // Send a message to wx thread to show a new frame:
     wxThreadEvent *event =
-        new wxThreadEvent(wxEVT_COMMAND_THREAD, CMD_SHOW_WINDOW);
+        new wxThreadEvent(wxEVT_THREAD, CMD_SHOW_WINDOW);
     event->SetString(title);
     wxQueueEvent(wxApp::GetInstance(), event);
 }
@@ -303,7 +301,7 @@ void wx_dll_cleanup()
     // If wx main thread is running, we need to stop it. To accomplish this,
     // send a message telling it to terminate the app.
     wxThreadEvent *event =
-        new wxThreadEvent(wxEVT_COMMAND_THREAD, CMD_TERMINATE);
+        new wxThreadEvent(wxEVT_THREAD, CMD_TERMINATE);
     wxQueueEvent(wxApp::GetInstance(), event);
 
     // We must then wait for the thread to actually terminate.

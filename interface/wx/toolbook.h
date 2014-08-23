@@ -2,9 +2,15 @@
 // Name:        toolbook.h
 // Purpose:     interface of wxToolbook
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+#define wxTBK_BUTTONBAR            0x0100
+#define wxTBK_HORZ_LAYOUT          0x8000
+
+wxEventType wxEVT_TOOLBOOK_PAGE_CHANGED;
+wxEventType wxEVT_TOOLBOOK_PAGE_CHANGING;
+
 
 /**
     @class wxToolbook
@@ -33,10 +39,10 @@
     @beginEventEmissionTable{wxBookCtrlEvent}
     @event{EVT_TOOLBOOK_PAGE_CHANGED(id, func)}
         The page selection was changed.
-        Processes a @c wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED event.
+        Processes a @c wxEVT_TOOLBOOK_PAGE_CHANGED event.
     @event{EVT_TOOLBOOK_PAGE_CHANGING(id, func)}
         The page selection is about to be changed.
-        Processes a @c wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING event.
+        Processes a @c wxEVT_TOOLBOOK_PAGE_CHANGING event.
         This event can be vetoed (using wxNotifyEvent::Veto()).
     @endEventTable
 
@@ -58,8 +64,19 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
-                 const wxString& name = wxEmptyStr);
+                 const wxString& name = wxEmptyString);
     //@}
+
+    /**
+       Create the tool book control that has already been constructed with
+       the default constructor.
+    */
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxEmptyString);
 
     /**
         Returns the wxToolBarBase associated with the control.

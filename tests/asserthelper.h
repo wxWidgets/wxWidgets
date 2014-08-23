@@ -3,7 +3,6 @@
 // Purpose:     Helper functions for cppunit
 // Author:      Steven Lamerton
 // Created:     2010-07-23
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -11,9 +10,9 @@
 #define _WX_TESTS_ASSERTHELPER_H_
 
 #include <ostream>
-#include <wx/colour.h>
-#include <wx/gdicmn.h>
-#include <wx/font.h>
+#include "wx/colour.h"
+#include "wx/gdicmn.h"
+#include "wx/font.h"
 
 namespace
 {

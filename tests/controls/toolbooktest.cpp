@@ -3,7 +3,6 @@
 // Purpose:     wxToolbook unit test
 // Author:      Steven Lamerton
 // Created:     2010-07-02
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -36,10 +35,12 @@ private:
     virtual wxBookCtrlBase *GetBase() const { return m_toolbook; }
 
     virtual wxEventType GetChangedEvent() const
-    { return wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED; }
+    { return wxEVT_TOOLBOOK_PAGE_CHANGED; }
 
     virtual wxEventType GetChangingEvent() const
-    { return wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING; }
+    { return wxEVT_TOOLBOOK_PAGE_CHANGING; }
+
+    virtual void Realize() { m_toolbook->GetToolBar()->Realize(); }
 
     CPPUNIT_TEST_SUITE( ToolbookTestCase );
         wxBOOK_CTRL_BASE_TESTS();

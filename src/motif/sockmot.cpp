@@ -3,7 +3,6 @@
 // Purpose:     implementation of wxMotif-specific socket event handling
 // Author:      Guilhem Lavaux, Vadim Zeitlin
 // Created:     1999
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999, 2007 wxWidgets dev team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

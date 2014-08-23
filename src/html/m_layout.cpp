@@ -2,7 +2,6 @@
 // Name:        src/html/m_layout.cpp
 // Purpose:     wxHtml module for basic paragraphs/layout handling
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -71,18 +70,22 @@ public:
     wxHtmlPageBreakCell() {}
 
     bool AdjustPagebreak(int* pagebreak,
-                         wxArrayInt& known_pagebreaks) const;
+                         const wxArrayInt& known_pagebreaks,
+                         int pageHeight) const wxOVERRIDE;
 
     void Draw(wxDC& WXUNUSED(dc),
               int WXUNUSED(x), int WXUNUSED(y),
               int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-              wxHtmlRenderingInfo& WXUNUSED(info)) {}
+              wxHtmlRenderingInfo& WXUNUSED(info)) wxOVERRIDE {}
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxHtmlPageBreakCell);
 };
 
-bool wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, wxArrayInt& known_pagebreaks) const
+bool
+wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak,
+                                     const wxArrayInt& known_pagebreaks,
+                                     int WXUNUSED(pageHeight)) const
 {
     // When we are counting pages, 'known_pagebreaks' is non-NULL.
     // That's the only time we change 'pagebreak'. Otherwise, pages
@@ -209,9 +212,10 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
 
     TAG_HANDLER_PROC(tag)
     {
-        if(tag.HasParam(wxT("STYLE")))
+        wxString style;
+        if(tag.GetParamAsString(wxT("STYLE"), &style))
         {
-            if(tag.GetParam(wxT("STYLE")).IsSameAs(wxT("PAGE-BREAK-BEFORE:ALWAYS"), false))
+            if(style.IsSameAs(wxT("PAGE-BREAK-BEFORE:ALWAYS"), false))
             {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer()->InsertCell(new wxHtmlPageBreakCell);
@@ -327,13 +331,10 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
         if ( !winIface )
             return false;
 
-        if (tag.HasParam(wxT("BACKGROUND")))
+        wxString bg;
+        if (tag.GetParamAsString(wxT("BACKGROUND"), &bg))
         {
-            wxFSFile *fileBgImage = m_WParser->OpenURL
-                                               (
-                                                wxHTML_URL_IMAGE,
-                                                tag.GetParam(wxT("BACKGROUND"))
-                                               );
+            wxFSFile *fileBgImage = m_WParser->OpenURL(wxHTML_URL_IMAGE, bg);
             if ( fileBgImage )
             {
                 wxInputStream *is = fileBgImage->GetStream();
@@ -351,7 +352,7 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
         if (tag.GetParamAsColour(wxT("BGCOLOR"), &clr))
         {
             m_WParser->GetContainer()->InsertCell(
-                new wxHtmlColourCell(clr, wxHTML_CLR_BACKGROUND));
+                new wxHtmlColourCell(clr, wxHTML_CLR_TRANSPARENT_BACKGROUND));
             winIface->SetHTMLBackgroundColour(clr);
         }
 

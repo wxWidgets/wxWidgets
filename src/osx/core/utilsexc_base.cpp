@@ -4,7 +4,6 @@
 // Author:      Ryan Norton
 // Modified by:
 // Created:     2005-06-21
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 // Notes:       Source was originally in utilsexc_cf.cpp,1.6 then moved
@@ -54,12 +53,6 @@ extern WXDLLIMPEXP_BASE wxSocketManager *wxOSXSocketManagerCF;
 wxSocketManager *wxOSXSocketManagerCF = NULL;
 #endif // wxUSE_SOCKETS
 
-extern bool WXDLLEXPORT wxIsDebuggerRunning()
-{
-    // TODO : try to find out ...
-    return false;
-}
-
 #if ( !wxUSE_GUI && !wxOSX_USE_IPHONE ) || wxOSX_USE_COCOA_OR_CARBON
 
 // have a fast version for mac code that returns the version as a return value
@@ -77,6 +70,19 @@ long UMAGetSystemVersion()
 // our OS version is the same in non GUI and GUI cases
 wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
+    // This returns 10 and 6 for OS X 10.6, consistent with behaviour on
+    // other platforms.
+    SInt32 maj, min;
+    Gestalt(gestaltSystemVersionMajor, &maj);
+    Gestalt(gestaltSystemVersionMinor, &min);
+
+    if ( majorVsn != NULL )
+        *majorVsn = maj;
+
+    if ( minorVsn != NULL )
+        *minorVsn = min;
+
+#if 0
     SInt32 theSystem;
     Gestalt(gestaltSystemVersion, &theSystem);
 
@@ -85,7 +91,7 @@ wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
 
     if ( minorVsn != NULL )
         *minorVsn = (theSystem & 0xFF);
-
+#endif
     return wxOS_MAC_OSX_DARWIN;
 }
 

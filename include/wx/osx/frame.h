@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -59,7 +58,6 @@ public:
     // event handlers
     void OnActivate(wxActivateEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
-    void OnSize(wxSizeEvent& event);
 
     // Toolbar
 #if wxUSE_TOOLBAR
@@ -84,6 +82,8 @@ public:
 
     void PositionBars();
 
+    // internal response to size events
+    virtual void MacOnInternalSize() { PositionBars(); }
 
 protected:
     // common part of all ctors

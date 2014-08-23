@@ -4,7 +4,6 @@
 // Author:      Julian Smart, Vadim Zeitlin
 // Modified by:
 // Created:     23.07.99
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -89,8 +88,6 @@ protected:
     #include "wx/osx/spinbutt.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/spinbutt.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/spinbutt.h"
 #elif defined(__WXQT__)
     #include "wx/qt/spinbutt.h"
 #endif
@@ -116,7 +113,7 @@ public:
     int GetPosition() const { return m_commandInt; }
     void SetPosition(int pos) { m_commandInt = pos; }
 
-    virtual wxEvent *Clone() const { return new wxSpinEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxSpinEvent(*this); }
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSpinEvent)

@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     25.08.00
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -1207,6 +1206,10 @@ void wxMenu::Attach(wxMenuBarBase *menubar)
 
 void wxMenu::Detach()
 {
+    // After the menu is detached from the menu bar, it shouldn't send its
+    // events to it.
+    SetNextHandler(NULL);
+
     wxMenuBase::Detach();
 }
 

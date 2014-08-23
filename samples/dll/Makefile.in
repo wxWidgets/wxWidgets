@@ -36,6 +36,7 @@ TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
 TOOLKIT_VERSION = @TOOLKIT_VERSION@
 TOOLCHAIN_FULLNAME = @TOOLCHAIN_FULLNAME@
 EXTRALIBS = @EXTRALIBS@
+EXTRALIBS_XML = @EXTRALIBS_XML@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 CXXWARNINGS = @CXXWARNINGS@
 HOST_SUFFIX = @HOST_SUFFIX@
@@ -45,8 +46,8 @@ wx_top_builddir = @wx_top_builddir@
 ### Variables: ###
 
 DESTDIR = 
-WX_RELEASE = 2.9
-WX_VERSION = $(WX_RELEASE).2
+WX_RELEASE = 3.1
+WX_VERSION = $(WX_RELEASE).0
 LIBDIRNAME = $(wx_top_builddir)/lib
 MY_DLL_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
@@ -60,7 +61,6 @@ WX_EXE_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(CPPFLAGS) $(CXXFLAGS)
 WX_EXE_OBJECTS =  \
 	$(__wx_exe___win32rc) \
-	$(__wx_exe_os2_lib_res) \
 	wx_exe_wx_exe.o
 SDK_EXE_CXXFLAGS =          $(CPPFLAGS) $(CXXFLAGS)
 SDK_EXE_OBJECTS =  \
@@ -77,7 +77,8 @@ SDK_EXE_OBJECTS =  \
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_BASE = $(EXTRALIBS)
-@COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) $(EXTRALIBS_GUI)
+@COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) \
+@COND_MONOLITHIC_1@	$(EXTRALIBS_XML) $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_GUI = $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_1@EXTRALIBS_FOR_GUI = 
 @COND_PLATFORM_WIN32_1@__my_dll___depname = $(DLLPREFIX)my_dll.$(SO_SUFFIX)
@@ -101,8 +102,6 @@ COND_PLATFORM_OS2_1___wx_exe___os2_emxbindcmd = $(NM) wx_exe$(EXEEXT) | if grep 
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__wx_exe___win32rc = wx_exe_sample_rc.o
-@COND_PLATFORM_OS2_1@__wx_exe_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0@__wx_exe_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0@	= \
 @COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0@	wx_exe.app/Contents/PkgInfo
@@ -140,6 +139,9 @@ COND_MONOLITHIC_0___WXLIB_BASE_p = \
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
+@COND_MONOLITHIC_1_USE_STC_1@__LIB_SCINTILLA_IF_MONO_p \
+@COND_MONOLITHIC_1_USE_STC_1@	= \
+@COND_MONOLITHIC_1_USE_STC_1@	-lwxscintilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@__LIB_TIFF_p \
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@	= \
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@	-lwxtiff$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
@@ -180,10 +182,10 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 @COND_PLATFORM_WIN32_1@$(DLLPREFIX)my_dll.$(SO_SUFFIX): $(MY_DLL_OBJECTS)
-@COND_PLATFORM_WIN32_1@	$(SHARED_LD_CXX) $@ $(MY_DLL_OBJECTS)  $(__my_dll___importlib)   -L$(LIBDIRNAME) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+@COND_PLATFORM_WIN32_1@	$(SHARED_LD_CXX) $@ $(MY_DLL_OBJECTS)  $(__my_dll___importlib)   -L$(LIBDIRNAME) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 
 @COND_PLATFORM_WIN32_1_SHARED_0@wx_exe$(EXEEXT): $(WX_EXE_OBJECTS) $(__wx_exe___win32rc) $(__my_dll___depname)
-@COND_PLATFORM_WIN32_1_SHARED_0@	$(CXX) -o $@ $(WX_EXE_OBJECTS) -L.    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  -lmy_dll $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+@COND_PLATFORM_WIN32_1_SHARED_0@	$(CXX) -o $@ $(WX_EXE_OBJECTS) -L.    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  -lmy_dll $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 @COND_PLATFORM_WIN32_1_SHARED_0@	
 @COND_PLATFORM_WIN32_1_SHARED_0@	$(__wx_exe___mac_setfilecmd)
 @COND_PLATFORM_WIN32_1_SHARED_0@	$(__wx_exe___os2_emxbindcmd)
@@ -200,7 +202,7 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0@	$(top_srcdir)/src/osx/carbon/Info.plist.in >wx_exe.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0@	
 @COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0@	
-@COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0@	echo -n "APPL????" >wx_exe.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0@	/bin/echo "APPL????" >wx_exe.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0@	
 @COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0@	
 @COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0@	ln -f wx_exe$(EXEEXT) wx_exe.app/Contents/MacOS/wx_exe
@@ -220,7 +222,7 @@ my_dll_my_dll.o: $(srcdir)/my_dll.cpp
 	$(CXXC) -c -o $@ $(MY_DLL_CXXFLAGS) $(srcdir)/my_dll.cpp
 
 wx_exe_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_4) $(__DEBUG_DEFINE_p_4)  $(__EXCEPTIONS_DEFINE_p_4) $(__RTTI_DEFINE_p_4) $(__THREAD_DEFINE_p_4)   --include-dir $(srcdir) $(__DLLFLAG_p_4) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_4) $(__DEBUG_DEFINE_p_4)  $(__EXCEPTIONS_DEFINE_p_4) $(__RTTI_DEFINE_p_4) $(__THREAD_DEFINE_p_4)  --include-dir $(srcdir) $(__DLLFLAG_p_4) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 wx_exe_wx_exe.o: $(srcdir)/wx_exe.cpp
 	$(CXXC) -c -o $@ $(WX_EXE_CXXFLAGS) $(srcdir)/wx_exe.cpp

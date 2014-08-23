@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Francesco Montorsi
 // Created:
-// RCS-ID:      $Id$
 // Copyright:   Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -66,7 +65,7 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxColour,WXDLLIMPEXP_CORE)
     not need the wxGDIObject machinery to handle colors, please add it to the
     list of ports which do not need it.
  */
-#if defined( __WXMAC__ ) || defined( __WXMSW__ ) || defined( __WXPM__ ) || defined( __WXCOCOA__ )
+#if defined( __WXMAC__ ) || defined( __WXMSW__ ) || defined( __WXCOCOA__ )
 #define wxCOLOUR_IS_GDIOBJECT 0
 #else
 #define wxCOLOUR_IS_GDIOBJECT 1
@@ -168,13 +167,7 @@ public:
 
     wxColour ChangeLightness(int ialpha) const;
 
-    // old, deprecated
-    // ---------------
-
-#if WXWIN_COMPATIBILITY_2_6
-    static wxDEPRECATED( wxColour CreateByName(const wxString& name) );
-    wxDEPRECATED( void InitFromName(const wxString& col) );
-#endif
+    wxColour& MakeDisabled(unsigned char brightness = 255);
 
 protected:
     // Some ports need Init() and while we don't, provide a stub so that the
@@ -190,14 +183,14 @@ protected:
     // wxColour doesn't use reference counted data (at least not in all ports)
     // so provide stubs for the functions which need to be defined if we do use
     // them
-    virtual wxGDIRefData *CreateGDIRefData() const
+    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE
     {
         wxFAIL_MSG( "must be overridden if used" );
 
         return NULL;
     }
 
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const wxOVERRIDE
     {
         wxFAIL_MSG( "must be overridden if used" );
 
@@ -213,9 +206,7 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxColourBase* col);
 
 
 
-#if defined(__WXPALMOS__)
-    #include "wx/generic/colour.h"
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
     #include "wx/msw/colour.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/colour.h"
@@ -223,8 +214,6 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxColourBase* col);
     #include "wx/gtk/colour.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk1/colour.h"
-#elif defined(__WXMGL__)
-    #include "wx/generic/colour.h"
 #elif defined(__WXDFB__)
     #include "wx/generic/colour.h"
 #elif defined(__WXX11__)
@@ -233,8 +222,6 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxColourBase* col);
     #include "wx/osx/colour.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/colour.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/colour.h"
 #elif defined(__WXQT__)
     #include "wx/qt/colour.h"
 #endif

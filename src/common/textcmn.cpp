@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     13.07.99
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -103,8 +102,8 @@ wxEND_FLAGS( wxTextCtrlStyle )
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxTextCtrl, wxControl, "wx/textctrl.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxTextCtrl)
-wxEVENT_PROPERTY( TextUpdated, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent )
-wxEVENT_PROPERTY( TextEnter, wxEVT_COMMAND_TEXT_ENTER, wxCommandEvent )
+wxEVENT_PROPERTY( TextUpdated, wxEVT_TEXT, wxCommandEvent )
+wxEVENT_PROPERTY( TextEnter, wxEVT_TEXT_ENTER, wxCommandEvent )
 
 wxPROPERTY( Font, wxFont, SetFont, GetFont , wxEMPTY_PARAMETER_VALUE, \
            0 /*flags*/, wxT("Helpstring"), wxT("group") )
@@ -125,10 +124,10 @@ wxCONSTRUCTOR_6( wxTextCtrl, wxWindow*, Parent, wxWindowID, Id, \
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextUrlEvent, wxCommandEvent)
 
-wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_ENTER, wxCommandEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_URL, wxTextUrlEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_MAXLEN, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_TEXT, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_TEXT_ENTER, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_TEXT_URL, wxTextUrlEvent );
+wxDEFINE_EVENT( wxEVT_TEXT_MAXLEN, wxCommandEvent );
 
 IMPLEMENT_ABSTRACT_CLASS(wxTextCtrlBase, wxControl)
 
@@ -164,6 +163,7 @@ void wxTextAttr::Init()
     m_fontStyle = wxFONTSTYLE_NORMAL;
     m_fontWeight = wxFONTWEIGHT_NORMAL;
     m_fontUnderlined = false;
+    m_fontStrikethrough = false;
     m_fontEncoding = wxFONTENCODING_DEFAULT;
     m_fontFamily = wxFONTFAMILY_DEFAULT;
 
@@ -193,6 +193,7 @@ void wxTextAttr::Copy(const wxTextAttr& attr)
     m_fontStyle = attr.m_fontStyle;
     m_fontWeight = attr.m_fontWeight;
     m_fontUnderlined = attr.m_fontUnderlined;
+    m_fontStrikethrough = attr.m_fontStrikethrough;
     m_fontFaceName = attr.m_fontFaceName;
     m_fontEncoding = attr.m_fontEncoding;
     m_fontFamily = attr.m_fontFamily;
@@ -226,156 +227,184 @@ bool wxTextAttr::operator== (const wxTextAttr& attr) const
 {
     return  GetFlags() == attr.GetFlags() &&
 
-            GetTextColour() == attr.GetTextColour() &&
-            GetBackgroundColour() == attr.GetBackgroundColour() &&
+            (!HasTextColour() || (GetTextColour() == attr.GetTextColour())) &&
+            (!HasBackgroundColour() || (GetBackgroundColour() == attr.GetBackgroundColour())) &&
 
-            GetAlignment() == attr.GetAlignment() &&
-            GetLeftIndent() == attr.GetLeftIndent() &&
-            GetLeftSubIndent() == attr.GetLeftSubIndent() &&
-            GetRightIndent() == attr.GetRightIndent() &&
-            TabsEq(GetTabs(), attr.GetTabs()) &&
+            (!HasAlignment() || (GetAlignment() == attr.GetAlignment())) &&
+            (!HasLeftIndent() || (GetLeftIndent() == attr.GetLeftIndent() &&
+                                  GetLeftSubIndent() == attr.GetLeftSubIndent())) &&
+            (!HasRightIndent() || (GetRightIndent() == attr.GetRightIndent())) &&
+            (!HasTabs() || (TabsEq(GetTabs(), attr.GetTabs()))) &&
 
-            GetParagraphSpacingAfter() == attr.GetParagraphSpacingAfter() &&
-            GetParagraphSpacingBefore() == attr.GetParagraphSpacingBefore() &&
-            GetLineSpacing() == attr.GetLineSpacing() &&
-            GetCharacterStyleName() == attr.GetCharacterStyleName() &&
-            GetParagraphStyleName() == attr.GetParagraphStyleName() &&
-            GetListStyleName() == attr.GetListStyleName() &&
+            (!HasParagraphSpacingAfter() || (GetParagraphSpacingAfter() == attr.GetParagraphSpacingAfter())) &&
+            (!HasParagraphSpacingBefore() || (GetParagraphSpacingBefore() == attr.GetParagraphSpacingBefore())) &&
+            (!HasLineSpacing() || (GetLineSpacing() == attr.GetLineSpacing())) &&
+            (!HasCharacterStyleName() || (GetCharacterStyleName() == attr.GetCharacterStyleName())) &&
+            (!HasParagraphStyleName() || (GetParagraphStyleName() == attr.GetParagraphStyleName())) &&
+            (!HasListStyleName() || (GetListStyleName() == attr.GetListStyleName())) &&
 
-            GetBulletStyle() == attr.GetBulletStyle() &&
-            GetBulletText() == attr.GetBulletText() &&
-            GetBulletNumber() == attr.GetBulletNumber() &&
-            GetBulletFont() == attr.GetBulletFont() &&
-            GetBulletName() == attr.GetBulletName() &&
+            (!HasBulletStyle() || (GetBulletStyle() == attr.GetBulletStyle())) &&
+            (!HasBulletText() || (GetBulletText() == attr.GetBulletText())) &&
+            (!HasBulletNumber() || (GetBulletNumber() == attr.GetBulletNumber())) &&
+            (GetBulletFont() == attr.GetBulletFont()) &&
+            (!HasBulletName() || (GetBulletName() == attr.GetBulletName())) &&
 
-            GetTextEffects() == attr.GetTextEffects() &&
-            GetTextEffectFlags() == attr.GetTextEffectFlags() &&
+            (!HasTextEffects() || (GetTextEffects() == attr.GetTextEffects() &&
+                                   GetTextEffectFlags() == attr.GetTextEffectFlags())) &&
 
-            GetOutlineLevel() == attr.GetOutlineLevel() &&
+            (!HasOutlineLevel() || (GetOutlineLevel() == attr.GetOutlineLevel())) &&
 
-            GetFontSize() == attr.GetFontSize() &&
-            GetFontStyle() == attr.GetFontStyle() &&
-            GetFontWeight() == attr.GetFontWeight() &&
-            GetFontUnderlined() == attr.GetFontUnderlined() &&
-            GetFontFaceName() == attr.GetFontFaceName() &&
-            GetFontEncoding() == attr.GetFontEncoding() &&
-            GetFontFamily() == attr.GetFontFamily() &&
+            (!HasFontSize() || (GetFontSize() == attr.GetFontSize())) &&
+            (!HasFontItalic() || (GetFontStyle() == attr.GetFontStyle())) &&
+            (!HasFontWeight() || (GetFontWeight() == attr.GetFontWeight())) &&
+            (!HasFontUnderlined() || (GetFontUnderlined() == attr.GetFontUnderlined())) &&
+            (!HasFontStrikethrough() || (GetFontStrikethrough() == attr.GetFontStrikethrough())) &&
+            (!HasFontFaceName() || (GetFontFaceName() == attr.GetFontFaceName())) &&
+            (!HasFontEncoding() || (GetFontEncoding() == attr.GetFontEncoding())) &&
+            (!HasFontFamily() || (GetFontFamily() == attr.GetFontFamily())) &&
 
-            GetURL() == attr.GetURL();
+            (!HasURL() || (GetURL() == attr.GetURL()));
 }
 
 // Partial equality test. Only returns false if an attribute doesn't match.
-bool wxTextAttr::EqPartial(const wxTextAttr& attr) const
+bool wxTextAttr::EqPartial(const wxTextAttr& attr, bool weakTest) const
 {
     int flags = attr.GetFlags();
-    
-    if ((flags & wxTEXT_ATTR_TEXT_COLOUR) && GetTextColour() != attr.GetTextColour())
+
+    if (!weakTest &&
+        ((!HasTextColour() && attr.HasTextColour()) ||
+         (!HasBackgroundColour() && attr.HasBackgroundColour()) ||
+         (!HasFontFaceName() && attr.HasFontFaceName()) ||
+         (!HasFontSize() && attr.HasFontSize()) ||
+         (!HasFontWeight() && attr.HasFontWeight()) ||
+         (!HasFontItalic() && attr.HasFontItalic()) ||
+         (!HasFontUnderlined() && attr.HasFontUnderlined()) ||
+         (!HasFontStrikethrough() && attr.HasFontStrikethrough()) ||
+         (!HasFontEncoding() && attr.HasFontEncoding()) ||
+         (!HasFontFamily() && attr.HasFontFamily()) ||
+         (!HasURL() && attr.HasURL()) ||
+         (!HasAlignment() && attr.HasAlignment()) ||
+         (!HasLeftIndent() && attr.HasLeftIndent()) ||
+         (!HasParagraphSpacingAfter() && attr.HasParagraphSpacingAfter()) ||
+         (!HasParagraphSpacingBefore() && attr.HasParagraphSpacingBefore()) ||
+         (!HasLineSpacing() && attr.HasLineSpacing()) ||
+         (!HasCharacterStyleName() && attr.HasCharacterStyleName()) ||
+         (!HasParagraphStyleName() && attr.HasParagraphStyleName()) ||
+         (!HasListStyleName() && attr.HasListStyleName()) ||
+         (!HasBulletStyle() && attr.HasBulletStyle()) ||
+         (!HasBulletNumber() && attr.HasBulletNumber()) ||
+         (!HasBulletText() && attr.HasBulletText()) ||
+         (!HasBulletName() && attr.HasBulletName()) ||
+         (!HasTabs() && attr.HasTabs()) ||
+         (!HasTextEffects() && attr.HasTextEffects()) ||
+         (!HasOutlineLevel() && attr.HasOutlineLevel())))
+    {
+        return false;
+    }
+
+    if (HasTextColour() && attr.HasTextColour() && GetTextColour() != attr.GetTextColour())
         return false;
 
-    if ((flags & wxTEXT_ATTR_BACKGROUND_COLOUR) && GetBackgroundColour() != attr.GetBackgroundColour())
+    if (HasBackgroundColour() && attr.HasBackgroundColour() && GetBackgroundColour() != attr.GetBackgroundColour())
         return false;
 
-    if ((flags & wxTEXT_ATTR_FONT_FACE) &&
-        GetFontFaceName() != attr.GetFontFaceName())
+    if (HasFontFaceName() && attr.HasFontFaceName() && GetFontFaceName() != attr.GetFontFaceName())
         return false;
 
-    if ((flags & wxTEXT_ATTR_FONT_SIZE) &&
-        GetFontSize() != attr.GetFontSize())
+    // This checks whether the two objects have the same font size dimension (px versus pt)
+    if (HasFontSize() && attr.HasFontSize() && (flags & wxTEXT_ATTR_FONT) != (GetFlags() & wxTEXT_ATTR_FONT))
         return false;
 
-    if ((flags & wxTEXT_ATTR_FONT_WEIGHT) &&
-        GetFontWeight() != attr.GetFontWeight())
+    if (HasFontPointSize() && attr.HasFontPointSize() && GetFontSize() != attr.GetFontSize())
         return false;
 
-    if ((flags & wxTEXT_ATTR_FONT_ITALIC) &&
-        GetFontStyle() != attr.GetFontStyle())
+    if (HasFontPixelSize() && attr.HasFontPixelSize() && GetFontSize() != attr.GetFontSize())
         return false;
 
-    if ((flags & wxTEXT_ATTR_FONT_UNDERLINE) &&
-        GetFontUnderlined() != attr.GetFontUnderlined())
+    if (HasFontWeight() && attr.HasFontWeight() && GetFontWeight() != attr.GetFontWeight())
         return false;
 
-    if ((flags & wxTEXT_ATTR_FONT_ENCODING) &&
-        GetFontEncoding() != attr.GetFontEncoding())
+    if (HasFontItalic() && attr.HasFontItalic() && GetFontStyle() != attr.GetFontStyle())
         return false;
 
-    if ((flags & wxTEXT_ATTR_FONT_FAMILY) &&
-        GetFontFamily() != attr.GetFontFamily())
+    if (HasFontUnderlined() && attr.HasFontUnderlined() && GetFontUnderlined() != attr.GetFontUnderlined())
         return false;
 
-    if ((flags & wxTEXT_ATTR_URL) && GetURL() != attr.GetURL())
+    if (HasFontStrikethrough() && attr.HasFontStrikethrough() && GetFontStrikethrough() != attr.GetFontStrikethrough())
         return false;
 
-    if ((flags & wxTEXT_ATTR_ALIGNMENT) && GetAlignment() != attr.GetAlignment())
+    if (HasFontEncoding() && attr.HasFontEncoding() && GetFontEncoding() != attr.GetFontEncoding())
         return false;
 
-    if ((flags & wxTEXT_ATTR_LEFT_INDENT) &&
+    if (HasFontFamily() && attr.HasFontFamily() && GetFontFamily() != attr.GetFontFamily())
+        return false;
+
+    if (HasURL() && attr.HasURL() && GetURL() != attr.GetURL())
+        return false;
+
+    if (HasAlignment() && attr.HasAlignment() && GetAlignment() != attr.GetAlignment())
+        return false;
+
+    if (HasLeftIndent() && attr.HasLeftIndent() &&
         ((GetLeftIndent() != attr.GetLeftIndent()) || (GetLeftSubIndent() != attr.GetLeftSubIndent())))
         return false;
 
-    if ((flags & wxTEXT_ATTR_RIGHT_INDENT) &&
-        (GetRightIndent() != attr.GetRightIndent()))
+    if (HasRightIndent() && attr.HasRightIndent() && (GetRightIndent() != attr.GetRightIndent()))
         return false;
 
-    if ((flags & wxTEXT_ATTR_PARA_SPACING_AFTER) &&
+    if (HasParagraphSpacingAfter() && attr.HasParagraphSpacingAfter() &&
         (GetParagraphSpacingAfter() != attr.GetParagraphSpacingAfter()))
         return false;
 
-    if ((flags & wxTEXT_ATTR_PARA_SPACING_BEFORE) &&
+    if (HasParagraphSpacingBefore() && attr.HasParagraphSpacingBefore() &&
         (GetParagraphSpacingBefore() != attr.GetParagraphSpacingBefore()))
         return false;
 
-    if ((flags & wxTEXT_ATTR_LINE_SPACING) &&
-        (GetLineSpacing() != attr.GetLineSpacing()))
+    if (HasLineSpacing() && attr.HasLineSpacing() && (GetLineSpacing() != attr.GetLineSpacing()))
         return false;
 
-    if ((flags & wxTEXT_ATTR_CHARACTER_STYLE_NAME) &&
-        (GetCharacterStyleName() != attr.GetCharacterStyleName()))
+    if (HasCharacterStyleName() && attr.HasCharacterStyleName() && (GetCharacterStyleName() != attr.GetCharacterStyleName()))
         return false;
 
-    if ((flags & wxTEXT_ATTR_PARAGRAPH_STYLE_NAME) &&
-        (GetParagraphStyleName() != attr.GetParagraphStyleName()))
+    if (HasParagraphStyleName() && attr.HasParagraphStyleName() && (GetParagraphStyleName() != attr.GetParagraphStyleName()))
         return false;
 
-    if ((flags & wxTEXT_ATTR_LIST_STYLE_NAME) &&
-        (GetListStyleName() != attr.GetListStyleName()))
+    if (HasListStyleName() && attr.HasListStyleName() && (GetListStyleName() != attr.GetListStyleName()))
         return false;
 
-    if ((flags & wxTEXT_ATTR_BULLET_STYLE) &&
-        (GetBulletStyle() != attr.GetBulletStyle()))
+    if (HasBulletStyle() && attr.HasBulletStyle() && (GetBulletStyle() != attr.GetBulletStyle()))
          return false;
 
-    if ((flags & wxTEXT_ATTR_BULLET_NUMBER) &&
-        (GetBulletNumber() != attr.GetBulletNumber()))
+    if (HasBulletNumber() && attr.HasBulletNumber() && (GetBulletNumber() != attr.GetBulletNumber()))
          return false;
 
-    if ((flags & wxTEXT_ATTR_BULLET_TEXT) &&
+    if (HasBulletText() && attr.HasBulletText() &&
         (GetBulletText() != attr.GetBulletText()) &&
         (GetBulletFont() != attr.GetBulletFont()))
          return false;
 
-    if ((flags & wxTEXT_ATTR_BULLET_NAME) &&
-        (GetBulletName() != attr.GetBulletName()))
+    if (HasBulletName() && attr.HasBulletName() && (GetBulletName() != attr.GetBulletName()))
          return false;
 
-    if ((flags & wxTEXT_ATTR_TABS) &&
-        !TabsEq(GetTabs(), attr.GetTabs()))
+    if (HasTabs() && attr.HasTabs() && !TabsEq(GetTabs(), attr.GetTabs()))
         return false;
 
-    if ((flags & wxTEXT_ATTR_PAGE_BREAK) &&
-        (HasPageBreak() != attr.HasPageBreak()))
+    if ((HasPageBreak() != attr.HasPageBreak()))
          return false;
 
-    if (flags & wxTEXT_ATTR_EFFECTS)
+    if ((GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE) != (attr.GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE))
+         return false;
+
+    if ((GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER) != (attr.GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER))
+         return false;
+
+    if (HasTextEffects() && attr.HasTextEffects())
     {
-        if (HasTextEffects() != attr.HasTextEffects())
-            return false;
-        if (!BitlistsEqPartial(GetTextEffects(), attr.GetTextEffects(), attr.GetTextEffectFlags()))
+        if (!BitlistsEqPartial(GetTextEffects(), attr.GetTextEffects(), GetTextEffectFlags()))
             return false;
     }
 
-    if ((flags & wxTEXT_ATTR_OUTLINE_LEVEL) &&
-        (GetOutlineLevel() != attr.GetOutlineLevel()))
+    if (HasOutlineLevel() && attr.HasOutlineLevel() && (GetOutlineLevel() != attr.GetOutlineLevel()))
          return false;
 
     return true;
@@ -391,17 +420,21 @@ wxFont wxTextAttr::GetFont() const
     if (HasFontSize())
         fontSize = GetFontSize();
 
-    int fontStyle = wxNORMAL;
+    wxFontStyle fontStyle = wxFONTSTYLE_NORMAL;
     if (HasFontItalic())
         fontStyle = GetFontStyle();
 
-    int fontWeight = wxNORMAL;
+    wxFontWeight fontWeight = wxFONTWEIGHT_NORMAL;
     if (HasFontWeight())
         fontWeight = GetFontWeight();
 
     bool underlined = false;
     if (HasFontUnderlined())
         underlined = GetFontUnderlined();
+
+    bool strikethrough = false;
+    if (HasFontStrikethrough())
+        strikethrough = GetFontStrikethrough();
 
     wxString fontFaceName;
     if (HasFontFaceName())
@@ -415,8 +448,20 @@ wxFont wxTextAttr::GetFont() const
     if (HasFontFamily())
         fontFamily = GetFontFamily();
 
-    wxFont font(fontSize, fontFamily, fontStyle, fontWeight, underlined, fontFaceName, encoding);
-    return font;
+    if (HasFontPixelSize())
+    {
+        wxFont font(wxSize(0, fontSize), fontFamily, fontStyle, fontWeight, underlined, fontFaceName, encoding);
+        if (strikethrough)
+            font.SetStrikethrough(true);
+        return font;
+    }
+    else
+    {
+        wxFont font(fontSize, fontFamily, fontStyle, fontWeight, underlined, fontFaceName, encoding);
+        if (strikethrough)
+            font.SetStrikethrough(true);
+        return font;
+    }
 }
 
 // Get attributes from font.
@@ -425,8 +470,30 @@ bool wxTextAttr::GetFontAttributes(const wxFont& font, int flags)
     if (!font.IsOk())
         return false;
 
-    if (flags & wxTEXT_ATTR_FONT_SIZE)
+    // If we pass both pixel and point size attributes, this is an indication
+    // to choose the most appropriate units.
+    if ((flags & wxTEXT_ATTR_FONT) == wxTEXT_ATTR_FONT)
+    {
+        if (font.IsUsingSizeInPixels())
+        {
+            m_fontSize = font.GetPixelSize().y;
+            flags &= ~wxTEXT_ATTR_FONT_POINT_SIZE;
+        }
+        else
+        {
+            m_fontSize = font.GetPointSize();
+            flags &= ~wxTEXT_ATTR_FONT_PIXEL_SIZE;
+        }
+    }
+    else if (flags & wxTEXT_ATTR_FONT_POINT_SIZE)
+    {
         m_fontSize = font.GetPointSize();
+        flags &= ~wxTEXT_ATTR_FONT_PIXEL_SIZE;
+    }
+    else if (flags & wxTEXT_ATTR_FONT_PIXEL_SIZE)
+    {
+        m_fontSize = font.GetPixelSize().y;
+    }
 
     if (flags & wxTEXT_ATTR_FONT_ITALIC)
         m_fontStyle = font.GetStyle();
@@ -436,6 +503,9 @@ bool wxTextAttr::GetFontAttributes(const wxFont& font, int flags)
 
     if (flags & wxTEXT_ATTR_FONT_UNDERLINE)
         m_fontUnderlined = font.GetUnderlined();
+
+    if (flags & wxTEXT_ATTR_FONT_STRIKETHROUGH)
+        m_fontStrikethrough = font.GetStrikethrough();
 
     if (flags & wxTEXT_ATTR_FONT_FACE)
         m_fontFaceName = font.GetFaceName();
@@ -482,10 +552,15 @@ bool wxTextAttr::Apply(const wxTextAttr& style, const wxTextAttr* compareWith)
             destStyle.SetFontWeight(style.GetFontWeight());
     }
 
-    if (style.HasFontSize())
+    if (style.HasFontPointSize())
     {
-        if (!(compareWith && compareWith->HasFontSize() && compareWith->GetFontSize() == style.GetFontSize()))
-            destStyle.SetFontSize(style.GetFontSize());
+        if (!(compareWith && compareWith->HasFontPointSize() && compareWith->GetFontSize() == style.GetFontSize()))
+            destStyle.SetFontPointSize(style.GetFontSize());
+    }
+    else if (style.HasFontPixelSize())
+    {
+        if (!(compareWith && compareWith->HasFontPixelSize() && compareWith->GetFontSize() == style.GetFontSize()))
+            destStyle.SetFontPixelSize(style.GetFontSize());
     }
 
     if (style.HasFontItalic())
@@ -498,6 +573,12 @@ bool wxTextAttr::Apply(const wxTextAttr& style, const wxTextAttr* compareWith)
     {
         if (!(compareWith && compareWith->HasFontUnderlined() && compareWith->GetFontUnderlined() == style.GetFontUnderlined()))
             destStyle.SetFontUnderlined(style.GetFontUnderlined());
+    }
+
+    if (style.HasFontStrikethrough())
+    {
+        if (!(compareWith && compareWith->HasFontStrikethrough() && compareWith->GetFontStrikethrough() == style.GetFontStrikethrough()))
+            destStyle.SetFontStrikethrough(style.GetFontStrikethrough());
     }
 
     if (style.HasFontFaceName())
@@ -630,6 +711,18 @@ bool wxTextAttr::Apply(const wxTextAttr& style, const wxTextAttr* compareWith)
             destStyle.SetPageBreak();
     }
 
+    if (style.GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE)
+    {
+        if (!(compareWith && (compareWith->GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE)))
+            destStyle.SetFlags(destStyle.GetFlags()|wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE);
+    }
+
+    if (style.GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER)
+    {
+        if (!(compareWith && (compareWith->GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER)))
+            destStyle.SetFlags(destStyle.GetFlags()|wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER);
+    }
+
     if (style.HasTextEffects())
     {
         if (!(compareWith && compareWith->HasTextEffects() && compareWith->GetTextEffects() == style.GetTextEffects()))
@@ -743,6 +836,19 @@ bool wxTextAttr::RemoveStyle(wxTextAttr& destStyle, const wxTextAttr& style)
     int flags = style.GetFlags();
     int destFlags = destStyle.GetFlags();
 
+    // We must treat text effects specially, since we must remove only some.
+    if (style.HasTextEffects() && (style.GetTextEffectFlags() != 0))
+    {
+        int newTextEffectFlags = destStyle.GetTextEffectFlags() & ~style.GetTextEffectFlags();
+        int newTextEffects = destStyle.GetTextEffects() & ~style.GetTextEffectFlags();
+        destStyle.SetTextEffects(newTextEffects);
+        destStyle.SetTextEffectFlags(newTextEffectFlags);
+
+        // Don't remove wxTEXT_ATTR_EFFECTS unless the resulting flags are zero
+        if (newTextEffectFlags != 0)
+            flags &= ~wxTEXT_ATTR_EFFECTS;
+    }
+
     destStyle.SetFlags(destFlags & ~flags);
 
     return true;
@@ -773,7 +879,7 @@ bool wxTextAttr::BitlistsEqPartial(int valueA, int valueB, int flags)
 {
     int relevantBitsA = valueA & flags;
     int relevantBitsB = valueB & flags;
-    return (relevantBitsA != relevantBitsB);
+    return relevantBitsA == relevantBitsB;
 }
 
 /// Split into paragraph and character styles
@@ -834,23 +940,18 @@ bool wxTextAreaBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType)
         {
             SetValue(text);
 
+            DiscardEdits();
+            m_filename = filename;
+
             return true;
         }
     }
+#else
+    (void)filename;   // avoid compiler warning about unreferenced parameter
 #endif // wxUSE_FFILE
 
-    return false;
-}
-
-bool wxTextCtrlBase::DoLoadFile(const wxString& filename, int fileType)
-{
-    if ( wxTextAreaBase::DoLoadFile(filename, fileType) )
-    {
-        DiscardEdits();
-        m_filename = filename;
-        return true;
-    }
     wxLogError(_("File couldn't be loaded."));
+
     return false;
 }
 
@@ -858,10 +959,21 @@ bool wxTextAreaBase::DoSaveFile(const wxString& filename, int WXUNUSED(fileType)
 {
 #if wxUSE_FFILE
     wxFFile file(filename, wxT("w"));
-    return file.IsOpened() && file.Write(GetValue(), *wxConvCurrent);
+    if ( file.IsOpened() && file.Write(GetValue()) )
+    {
+        // if it worked, save for future calls
+        m_filename = filename;
+
+        // it's not modified any longer
+        DiscardEdits();
+
+        return true;
+    }
 #else
-    return false;
+    (void)filename;   // avoid compiler warning about unreferenced parameter
 #endif // wxUSE_FFILE
+
+    return false;
 }
 
 bool wxTextAreaBase::SaveFile(const wxString& filename, int fileType)
@@ -876,21 +988,6 @@ bool wxTextAreaBase::SaveFile(const wxString& filename, int fileType)
     }
 
     return DoSaveFile(filenameToUse, fileType);
-}
-
-bool wxTextCtrlBase::DoSaveFile(const wxString& filename, int fileType)
-{
-    if ( wxTextAreaBase::DoSaveFile(filename, fileType) )
-    {
-        // if it worked, save for future calls
-        m_filename = filename;
-
-        // it's not modified any longer
-        DiscardEdits();
-
-        return true;
-    }
-    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -940,12 +1037,47 @@ int wxTextCtrlBase::overflow(int c)
 
 bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
 {
+    bool handled = false;
     // we have a native implementation for Win32 and so don't need this one
 #ifndef __WIN32__
     wxChar ch = 0;
     int keycode = event.GetKeyCode();
+
+    long from, to;
+    GetSelection(&from,&to);
+    long insert = GetInsertionPoint();
+    long last = GetLastPosition();
+
+    // catch arrow left and right
+
     switch ( keycode )
     {
+        case WXK_LEFT:
+            if ( event.ShiftDown() )
+                SetSelection( (from > 0 ? from - 1 : 0) , to );
+            else
+            {
+                if ( from != to )
+                    insert = from;
+                else if ( insert > 0 )
+                    insert -= 1;
+                SetInsertionPoint( insert );
+            }
+            handled = true;
+            break;
+        case WXK_RIGHT:
+            if ( event.ShiftDown() )
+                SetSelection( from, (to < last ? to + 1 : last) );
+            else
+            {
+                if ( from != to )
+                    insert = to;
+                else if ( insert < last )
+                    insert += 1;
+                SetInsertionPoint( insert );
+            }
+            handled = true;
+            break;
         case WXK_NUMPAD0:
         case WXK_NUMPAD1:
         case WXK_NUMPAD2:
@@ -991,6 +1123,7 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
                 const long pos = GetInsertionPoint();
                 if ( pos < GetLastPosition() )
                     Remove(pos, pos + 1);
+                handled = true;
             }
             break;
 
@@ -1000,6 +1133,7 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
                 const long pos = GetInsertionPoint();
                 if ( pos > 0 )
                     Remove(pos - 1, pos);
+                handled = true;
             }
             break;
 
@@ -1031,13 +1165,25 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
     {
         WriteText(ch);
 
-        return true;
+        handled = true;
     }
 #else // __WIN32__
     wxUnusedVar(event);
 #endif // !__WIN32__/__WIN32__
 
-    return false;
+    return handled;
+}
+
+// ----------------------------------------------------------------------------
+// Other miscellaneous stuff
+// ----------------------------------------------------------------------------
+
+bool wxTextCtrlBase::SetHint(const wxString& hint)
+{
+    wxCHECK_MSG( IsSingleLine(), false,
+                 wxS("Hints can only be set for single line text controls") );
+
+    return wxTextEntry::SetHint(hint);
 }
 
 // do the window-specific processing after processing the update event
@@ -1084,11 +1230,24 @@ wxTextAreaBase::HitTest(const wxPoint& WXUNUSED(pt), long * WXUNUSED(pos)) const
     return wxTE_HT_UNKNOWN;
 }
 
+wxPoint wxTextAreaBase::PositionToCoords(long pos) const
+{
+    wxCHECK_MSG( IsValidPosition(pos), wxDefaultPosition,
+                 wxS("Position argument out of range.") );
+
+    return DoPositionToCoords(pos);
+}
+
+wxPoint wxTextAreaBase::DoPositionToCoords(long WXUNUSED(pos)) const
+{
+    return wxDefaultPosition;
+}
+
 #else // !wxUSE_TEXTCTRL
 
 // define this one even if !wxUSE_TEXTCTRL because it is also used by other
 // controls (wxComboBox and wxSpinCtrl)
 
-wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_TEXT, wxCommandEvent );
 
 #endif // wxUSE_TEXTCTRL/!wxUSE_TEXTCTRL

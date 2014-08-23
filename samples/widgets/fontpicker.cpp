@@ -4,7 +4,6 @@
 // Purpose:     Shows wxFontPickerCtrl
 // Author:      Francesco Montorsi
 // Created:     20/6/2006
-// Id:          $Id$
 // Copyright:   (c) 2006 Francesco Montorsi
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -66,11 +65,11 @@ public:
     FontPickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~FontPickerWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const { return m_fontPicker; }
-    virtual void RecreateWidget() { RecreatePicker(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_fontPicker; }
+    virtual void RecreateWidget() wxOVERRIDE { RecreatePicker(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
 
@@ -104,7 +103,7 @@ protected:
     wxBoxSizer *m_sizer;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(FontPickerWidgetsPage)
 };
 
@@ -112,13 +111,13 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(FontPickerWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(FontPickerWidgetsPage, WidgetsPage)
     EVT_BUTTON(PickerPage_Reset, FontPickerWidgetsPage::OnButtonReset)
 
     EVT_FONTPICKER_CHANGED(PickerPage_Font, FontPickerWidgetsPage::OnFontChange)
 
     EVT_CHECKBOX(wxID_ANY, FontPickerWidgetsPage::OnCheckBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
@@ -147,7 +146,7 @@ void FontPickerWidgetsPage::CreateContent()
     wxStaticBoxSizer *fontbox = new wxStaticBoxSizer(wxVERTICAL, this, wxT("&FontPicker style"));
     m_chkFontTextCtrl = CreateCheckBoxAndAddToSizer(fontbox, wxT("With textctrl"));
     m_chkFontDescAsLabel = CreateCheckBoxAndAddToSizer(fontbox, wxT("Font desc as btn label"));
-    m_chkFontUseFontForLabel = CreateCheckBoxAndAddToSizer(fontbox, wxT("Use font for label"), false);
+    m_chkFontUseFontForLabel = CreateCheckBoxAndAddToSizer(fontbox, wxT("Use font for label"));
     boxleft->Add(fontbox, 0, wxALL|wxGROW, 5);
 
     boxleft->Add(new wxButton(this, PickerPage_Reset, wxT("&Reset")),

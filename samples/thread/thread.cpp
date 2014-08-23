@@ -4,7 +4,6 @@
 // Author:      Guilhem Lavaux, Vadim Zeitlin
 // Modified by:
 // Created:     06/16/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998-2009 wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -69,7 +68,7 @@ public:
     MyApp();
     virtual ~MyApp(){};
 
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
     // critical section protects access to all of the fields below
     wxCriticalSection m_critsect;
@@ -103,7 +102,7 @@ public:
 protected:
     virtual void DoLogRecord(wxLogLevel level,
                              const wxString& msg,
-                             const wxLogRecordInfo& info);
+                             const wxLogRecordInfo& info) wxOVERRIDE;
 
 private:
     // event handlers
@@ -173,7 +172,7 @@ private:
     bool m_cancelled;
     wxCriticalSection m_csCancelled;        // protects m_cancelled
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -214,7 +213,7 @@ public:
     virtual ~MyThread();
 
     // thread execution starts here
-    virtual void *Entry();
+    virtual void *Entry() wxOVERRIDE;
 
 public:
     unsigned m_count;
@@ -230,11 +229,11 @@ public:
     MyWorkerThread(MyFrame *frame);
 
     // thread execution starts here
-    virtual void *Entry();
+    virtual void *Entry() wxOVERRIDE;
 
     // called when the thread exits - whether it terminates normally or is
     // stopped with Delete() (but not when it is Kill()ed!)
-    virtual void OnExit();
+    virtual void OnExit() wxOVERRIDE;
 
 public:
     MyFrame *m_frame;
@@ -257,7 +256,7 @@ public:
         m_dlg = dlg;
     }
 
-    virtual ExitCode Entry();
+    virtual ExitCode Entry() wxOVERRIDE;
 
 private:
     MyImageDialog *m_dlg;
@@ -285,7 +284,7 @@ private:
     MyGUIThread m_thread;
     int m_nCurrentProgress;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ============================================================================
@@ -324,7 +323,7 @@ bool MyApp::OnInit()
 // MyFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(THREAD_QUIT, MyFrame::OnQuit)
     EVT_MENU(THREAD_CLEAR, MyFrame::OnClear)
     EVT_MENU(THREAD_START_THREAD, MyFrame::OnStartThread)
@@ -343,7 +342,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(THREAD_START_WORKER, MyFrame::OnUpdateWorker)
     EVT_THREAD(WORKER_EVENT, MyFrame::OnWorkerEvent)
     EVT_IDLE(MyFrame::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(const wxString& title)
@@ -378,7 +377,7 @@ MyFrame::MyFrame(const wxString& title)
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(THREAD_SHOWCPUS, wxT("&Show CPU count"));
     menuHelp->AppendSeparator();
-    menuHelp->Append(THREAD_ABOUT, wxT("&About..."));
+    menuHelp->Append(THREAD_ABOUT, wxT("&About"));
     menuBar->Append(menuHelp, wxT("&Help"));
 
     SetMenuBar(menuBar);
@@ -479,7 +478,7 @@ MyFrame::DoLogRecord(wxLogLevel level,
         wxDateTime(info.timestamp).FormatISOTime(),
         info.threadId == wxThread::GetMainId()
             ? wxString("main")
-            : wxString::Format("%x", info.threadId),
+            : wxString::Format("%lx", info.threadId),
         msg + "\n"
     );
 }
@@ -559,11 +558,11 @@ void MyFrame::OnStartThreads(wxCommandEvent& WXUNUSED(event) )
         // have the lowest priority, the second - the highest, all the rest
         // the normal one
         if ( n == 0 )
-            thr->SetPriority(WXTHREAD_MIN_PRIORITY);
+            thr->SetPriority(wxPRIORITY_MIN);
         else if ( n == 1 )
-            thr->SetPriority(WXTHREAD_MAX_PRIORITY);
+            thr->SetPriority(wxPRIORITY_MAX);
         else
-            thr->SetPriority(WXTHREAD_DEFAULT_PRIORITY);
+            thr->SetPriority(wxPRIORITY_DEFAULT);
 
         threads.Add(thr);
     }
@@ -597,6 +596,8 @@ void MyFrame::OnStartThread(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
 {
+    wxThread* toDelete = NULL;
+    {
     wxCriticalSectionLocker enter(wxGetApp().m_critsect);
 
     // stop the last thread
@@ -606,7 +607,15 @@ void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
     }
     else
     {
-        wxGetApp().m_threads.Last()->Delete();
+        toDelete = wxGetApp().m_threads.Last();
+    }
+    }
+
+    if ( toDelete )
+    {
+        // This can still crash if the thread gets to delete itself
+        // in the mean time.
+        toDelete->Delete();
 
 #if wxUSE_STATUSBAR
         SetStatusText(wxT("Last thread stopped."), 1);
@@ -808,10 +817,10 @@ void MyFrame::OnStartGUIThread(wxCommandEvent& WXUNUSED(event))
 // MyImageDialog
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyImageDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(MyImageDialog, wxDialog)
     EVT_THREAD(GUITHREAD_EVENT, MyImageDialog::OnGUIThreadEvent)
     EVT_PAINT(MyImageDialog::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyImageDialog::MyImageDialog(wxFrame *parent)
     : wxDialog(parent, wxID_ANY, "Image created by a secondary thread",
@@ -969,7 +978,7 @@ wxThread::ExitCode MyWorkerThread::Entry()
     if ( TestDestroy() )
         return NULL;
 
-    wxThreadEvent event( wxEVT_COMMAND_THREAD, WORKER_EVENT );
+    wxThreadEvent event( wxEVT_THREAD, WORKER_EVENT );
 
     event.SetInt( 50 );
     wxQueueEvent( m_frame, event.Clone() );
@@ -984,7 +993,7 @@ wxThread::ExitCode MyWorkerThread::Entry()
             break;
 
         // create any type of command event here
-        wxThreadEvent event( wxEVT_COMMAND_THREAD, WORKER_EVENT );
+        wxThreadEvent event( wxEVT_THREAD, WORKER_EVENT );
         event.SetInt( m_count );
 
         // send in a thread-safe way
@@ -993,7 +1002,7 @@ wxThread::ExitCode MyWorkerThread::Entry()
         wxMilliSleep(200);
     }
 
-    wxThreadEvent event( wxEVT_COMMAND_THREAD, WORKER_EVENT );
+    wxThreadEvent event( wxEVT_THREAD, WORKER_EVENT );
     event.SetInt(-1); // that's all
     wxQueueEvent( m_frame, event.Clone() );
 #endif
@@ -1043,7 +1052,7 @@ wxThread::ExitCode MyGUIThread::Entry()
         wxMutexGuiLeave();
 
         // notify the dialog that another piece of our masterpiece is complete:
-        wxThreadEvent event( wxEVT_COMMAND_THREAD, GUITHREAD_EVENT );
+        wxThreadEvent event( wxEVT_THREAD, GUITHREAD_EVENT );
         event.SetInt(i+1);
         wxQueueEvent( m_dlg, event.Clone() );
 

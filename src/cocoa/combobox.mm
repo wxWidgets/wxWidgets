@@ -4,7 +4,6 @@
 // Author:      Ryan Norton
 // Modified by:
 // Created:     2005/02/16
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -142,7 +141,7 @@ WX_DECLARE_GET_OBJC_CLASS(wxPoserNSComboBox,NSComboBox)
 - (void)comboBoxSelectionDidChange:(NSNotification *)notification
 {
     wxCocoaNSComboBox *win = wxCocoaNSComboBox::GetFromCocoa(self);
-    win->doWxEvent(wxEVT_COMMAND_COMBOBOX_SELECTED);
+    win->doWxEvent(wxEVT_COMBOBOX);
 }
 
 - (void)comboBoxSelectionIsChanging:(NSNotification *)notification
@@ -224,7 +223,7 @@ wxComboBox::~wxComboBox()
 
 void wxComboBox::doWxEvent(int nEvent)
 {
-    wxCommandEvent event2(wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );
+    wxCommandEvent event2(wxEVT_COMBOBOX, GetId() );
     event2.SetInt(GetSelection());
     event2.SetEventObject(this);
     event2.SetString(GetStringSelection());
@@ -232,7 +231,7 @@ void wxComboBox::doWxEvent(int nEvent)
 
     // For consistency with MSW and GTK, also send a text updated event
     // After all, the text is updated when a selection is made
-    wxCommandEvent TextEvent( wxEVT_COMMAND_TEXT_UPDATED, GetId() );
+    wxCommandEvent TextEvent( wxEVT_TEXT, GetId() );
     TextEvent.SetString( GetStringSelection() );
     TextEvent.SetEventObject( this );
     HandleWindowEvent( TextEvent );

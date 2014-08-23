@@ -3,7 +3,6 @@
 // Purpose:     wxFileSystemWatcher sample
 // Author:      Bartosz Bekier
 // Created:     2009-06-27
-// RCS-ID:      $Id$
 // Copyright:   (c) Bartosz Bekier
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -17,7 +16,7 @@
     #include "wx/wx.h"
 #endif
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -46,11 +45,15 @@ private:
     void OnClear(wxCommandEvent& WXUNUSED(event)) { m_evtConsole->Clear(); }
     void OnQuit(wxCommandEvent& WXUNUSED(event)) { Close(true); }
     void OnWatch(wxCommandEvent& event);
+    void OnFollowLinks(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
     void OnAdd(wxCommandEvent& event);
     void OnAddTree(wxCommandEvent& event);
     void OnRemove(wxCommandEvent& event);
+    void OnRemoveAll(wxCommandEvent& WXUNUSED(event));
+    void OnRemoveUpdateUI(wxUpdateUIEvent& event);
+    void OnRemoveAllUpdateUI(wxUpdateUIEvent& event);
 
     void OnFileSystemEvent(wxFileSystemWatcherEvent& event);
     void LogEvent(const wxFileSystemWatcherEvent& event);
@@ -58,6 +61,7 @@ private:
     wxTextCtrl *m_evtConsole;         // events console
     wxListView *m_filesList;          // list of watched paths
     wxFileSystemWatcher* m_watcher;   // file system watcher
+    bool m_followLinks;               // should symlinks be dereferenced
 
     const static wxString LOG_FORMAT; // how to format events
 };
@@ -69,7 +73,7 @@ class MyApp : public wxApp
 {
 public:
     // 'Main program' equivalent: the program execution "starts" here
-    virtual bool OnInit()
+    virtual bool OnInit() wxOVERRIDE
     {
         if ( !wxApp::OnInit() )
             return false;
@@ -85,7 +89,7 @@ public:
     }
 
     // create the file system watcher here, because it needs an active loop
-    virtual void OnEventLoopEnter(wxEventLoopBase* WXUNUSED(loop))
+    virtual void OnEventLoopEnter(wxEventLoopBase* WXUNUSED(loop)) wxOVERRIDE
     {
         if ( m_frame->CreateWatcherIfNecessary() )
         {
@@ -94,7 +98,7 @@ public:
         }
     }
 
-    virtual void OnInitCmdLine(wxCmdLineParser& parser)
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE
     {
         wxApp::OnInitCmdLine(parser);
         parser.AddParam("directory to watch",
@@ -102,7 +106,7 @@ public:
                         wxCMD_LINE_PARAM_OPTIONAL);
     }
 
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser)
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE
     {
         if ( !wxApp::OnCmdLineParsed(parser) )
             return false;
@@ -135,7 +139,7 @@ IMPLEMENT_APP(MyApp)
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
     : wxFrame(NULL, wxID_ANY, title),
-      m_watcher(NULL)
+      m_watcher(NULL), m_followLinks(false)
 {
     SetIcon(wxICON(sample));
 
@@ -145,10 +149,12 @@ MyFrame::MyFrame(const wxString& title)
         MENU_ID_QUIT = wxID_EXIT,
         MENU_ID_CLEAR = wxID_CLEAR,
         MENU_ID_WATCH = 101,
+        MENU_ID_DEREFERENCE,
 
         BTN_ID_ADD = 200,
         BTN_ID_ADD_TREE,
-        BTN_ID_REMOVE
+        BTN_ID_REMOVE,
+        BTN_ID_REMOVE_ALL
     };
 
     // ================================================================
@@ -166,9 +172,21 @@ MyFrame::MyFrame(const wxString& title)
     // started by default, because file system watcher is started by default
     it->Check(true);
 
+#if defined(__UNIX__)
+    // Let the user decide whether to dereference symlinks. If he makes the
+    // wrong choice, asserts will occur if the symlink target is also watched
+    it = menuMon->AppendCheckItem(MENU_ID_DEREFERENCE,
+                                  "&Follow symlinks\tCtrl-F",
+                                  _("If checked, dereference symlinks")
+                                 );
+    it->Check(false);
+    Connect(MENU_ID_DEREFERENCE, wxEVT_MENU,
+            wxCommandEventHandler(MyFrame::OnFollowLinks));
+#endif // __UNIX__
+
     // the "About" item should be in the help menu
     wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append(wxID_ABOUT, "&About...\tF1", "Show about dialog");
+    menuHelp->Append(wxID_ABOUT, "&About\tF1", "Show about dialog");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
@@ -200,10 +218,12 @@ MyFrame::MyFrame(const wxString& title)
     wxButton* buttonAdd = new wxButton(panel, BTN_ID_ADD, "&Add");
     wxButton* buttonAddTree = new wxButton(panel, BTN_ID_ADD_TREE, "Add &tree");
     wxButton* buttonRemove = new wxButton(panel, BTN_ID_REMOVE, "&Remove");
+    wxButton* buttonRemoveAll = new wxButton(panel, BTN_ID_REMOVE_ALL, "Remove a&ll");
     wxSizer *btnSizer = new wxGridSizer(2);
     btnSizer->Add(buttonAdd, wxSizerFlags().Center().Border(wxALL));
     btnSizer->Add(buttonAddTree, wxSizerFlags().Center().Border(wxALL));
     btnSizer->Add(buttonRemove, wxSizerFlags().Center().Border(wxALL));
+    btnSizer->Add(buttonRemoveAll, wxSizerFlags().Center().Border(wxALL));
 
     // and put it all together
     leftSizer->Add(btnSizer, wxSizerFlags(0).Expand());
@@ -247,22 +267,28 @@ MyFrame::MyFrame(const wxString& title)
     // event handlers & show
 
     // menu
-    Connect(MENU_ID_CLEAR, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(MENU_ID_CLEAR, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnClear));
-    Connect(MENU_ID_QUIT, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(MENU_ID_QUIT, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnQuit));
-    Connect(MENU_ID_WATCH, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(MENU_ID_WATCH, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnWatch));
-    Connect(wxID_ABOUT, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(wxID_ABOUT, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnAbout));
 
     // buttons
-    Connect(BTN_ID_ADD, wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(BTN_ID_ADD, wxEVT_BUTTON,
             wxCommandEventHandler(MyFrame::OnAdd));
-    Connect(BTN_ID_ADD_TREE, wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(BTN_ID_ADD_TREE, wxEVT_BUTTON,
             wxCommandEventHandler(MyFrame::OnAddTree));
-    Connect(BTN_ID_REMOVE, wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(BTN_ID_REMOVE, wxEVT_BUTTON,
             wxCommandEventHandler(MyFrame::OnRemove));
+    Connect(BTN_ID_REMOVE, wxEVT_UPDATE_UI,
+            wxUpdateUIEventHandler(MyFrame::OnRemoveUpdateUI));
+    Connect(BTN_ID_REMOVE_ALL, wxEVT_BUTTON,
+            wxCommandEventHandler(MyFrame::OnRemoveAll));
+    Connect(BTN_ID_REMOVE_ALL, wxEVT_UPDATE_UI,
+            wxUpdateUIEventHandler(MyFrame::OnRemoveAllUpdateUI));
 
     // and show itself (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -324,6 +350,11 @@ void MyFrame::OnWatch(wxCommandEvent& event)
     }
 }
 
+void MyFrame::OnFollowLinks(wxCommandEvent& event)
+{
+    m_followLinks = event.IsChecked();
+}
+
 void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))
 {
     AddEntry(wxFSWPath_Dir);
@@ -351,15 +382,26 @@ void MyFrame::AddEntry(wxFSWPathType type, wxString filename)
                filename,
                type == wxFSWPath_Dir ? "directory" : "directory tree");
 
+    wxString prefix;
     bool ok = false;
+
+    // This will tell wxFileSystemWatcher whether to dereference symlinks
+    wxFileName fn = wxFileName::DirName(filename);
+    if (!m_followLinks)
+    {
+        fn.DontFollowLink();
+    }
+
     switch ( type )
     {
         case wxFSWPath_Dir:
-            ok = m_watcher->Add(wxFileName::DirName(filename));
+            ok = m_watcher->Add(fn);
+            prefix = "Dir:  ";
             break;
 
         case wxFSWPath_Tree:
-            ok = m_watcher->AddTree(wxFileName::DirName(filename));
+            ok = m_watcher->AddTree(fn);
+            prefix = "Tree: ";
             break;
 
         case wxFSWPath_File:
@@ -373,7 +415,10 @@ void MyFrame::AddEntry(wxFSWPathType type, wxString filename)
         return;
     }
 
-    m_filesList->InsertItem(m_filesList->GetItemCount(), filename);
+    // Prepend 'prefix' to the filepath, partly for display
+    // but mostly so that OnRemove() can work out the correct way to remove it
+    m_filesList->InsertItem(m_filesList->GetItemCount(),
+                            prefix + wxFileName::DirName(filename).GetFullPath());
 }
 
 void MyFrame::OnRemove(wxCommandEvent& WXUNUSED(event))
@@ -383,10 +428,31 @@ void MyFrame::OnRemove(wxCommandEvent& WXUNUSED(event))
     if (idx == -1)
         return;
 
-    wxString path = m_filesList->GetItemText(idx);
+    bool ret = false;
+    wxString path = m_filesList->GetItemText(idx).Mid(6);
+
+    // This will tell wxFileSystemWatcher whether to dereference symlinks
+    wxFileName fn = wxFileName::DirName(path);
+    if (!m_followLinks)
+    {
+        fn.DontFollowLink();
+    }
 
     // TODO we know it is a dir, but it doesn't have to be
-    if (!m_watcher->Remove(wxFileName::DirName(path)))
+    if (m_filesList->GetItemText(idx).StartsWith("Dir:  "))
+    {
+        ret = m_watcher->Remove(fn);
+    }
+    else if (m_filesList->GetItemText(idx).StartsWith("Tree: "))
+    {
+        ret = m_watcher->RemoveTree(fn);
+    }
+    else
+    {
+        wxFAIL_MSG("Unexpected item in wxListView.");
+    }
+
+    if (!ret)
     {
         wxLogError("Error removing '%s' from watched paths", path);
     }
@@ -396,11 +462,85 @@ void MyFrame::OnRemove(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+void MyFrame::OnRemoveAll(wxCommandEvent& WXUNUSED(event))
+{
+    if ( !m_watcher->RemoveAll() )
+    {
+        wxLogError("Error removing all paths from watched paths");
+    }
+
+    m_filesList->DeleteAllItems();
+}
+
+void MyFrame::OnRemoveUpdateUI(wxUpdateUIEvent& event)
+{
+    event.Enable(m_filesList->GetFirstSelected() != wxNOT_FOUND);
+}
+
+void MyFrame::OnRemoveAllUpdateUI(wxUpdateUIEvent& event)
+{
+    event.Enable( m_filesList->GetItemCount() != 0 );
+}
+
 void MyFrame::OnFileSystemEvent(wxFileSystemWatcherEvent& event)
 {
     // TODO remove when code is rock-solid
     wxLogTrace(wxTRACE_FSWATCHER, "*** %s ***", event.ToString());
     LogEvent(event);
+
+    int type = event.GetChangeType();
+    if ((type == wxFSW_EVENT_DELETE) || (type == wxFSW_EVENT_RENAME))
+    {
+        // If path is one of our watched dirs, we need to react to this
+        // otherwise there'll be asserts if later we try to remove it
+        wxString eventpath = event.GetPath().GetFullPath();
+        bool found(false);
+        for (size_t n = m_filesList->GetItemCount(); n > 0; --n)
+        {
+            wxString path, foo = m_filesList->GetItemText(n-1);
+            if ((!m_filesList->GetItemText(n-1).StartsWith("Dir:  ", &path)) &&
+                (!m_filesList->GetItemText(n-1).StartsWith("Tree: ", &path)))
+            {
+                wxFAIL_MSG("Unexpected item in wxListView.");
+            }
+            if (path == eventpath)
+            {
+                if (type == wxFSW_EVENT_DELETE)
+                {
+                    m_filesList->DeleteItem(n-1);
+                }
+                else
+                {
+                    // At least in wxGTK, we'll never get here: renaming the top
+                    // watched dir gives IN_MOVE_SELF and no new-name info.
+                    // However I'll leave the code in case other platforms do
+                    wxString newname = event.GetNewPath().GetFullPath();
+                    if (newname.empty() ||
+                        newname == event.GetPath().GetFullPath())
+                    {
+                        // Just in case either of these are possible...
+                        wxLogTrace(wxTRACE_FSWATCHER,
+                                   "Invalid attempt to rename to %s", newname);
+                        return;
+                    }
+                    wxString prefix =
+                        m_filesList->GetItemText(n-1).StartsWith("Dir:  ") ?
+                                      "Dir:  " : "Tree: ";
+                    m_filesList->SetItemText(n-1, prefix + newname);
+                }
+                found = true;
+                // Don't break: a filepath may have been added more than once
+            }
+        }
+
+        if (found)
+        {
+            wxString msg = wxString::Format(
+                           "Your watched path %s has been deleted or renamed\n",
+                           eventpath);
+            m_evtConsole->AppendText(msg);
+        }
+    }
 }
 
 
@@ -418,6 +558,16 @@ static wxString GetFSWEventChangeTypeName(int changeType)
         return "MODIFY";
     case wxFSW_EVENT_ACCESS:
         return "ACCESS";
+    case wxFSW_EVENT_ATTRIB:  // Currently this is wxGTK-only
+        return "ATTRIBUTE";
+#ifdef wxHAS_INOTIFY
+    case wxFSW_EVENT_UNMOUNT: // Currently this is wxGTK-only
+        return "UNMOUNT";
+#endif
+    case wxFSW_EVENT_WARNING:
+        return "WARNING";
+    case wxFSW_EVENT_ERROR:
+        return "ERROR";
     }
 
     return "INVALID_TYPE";

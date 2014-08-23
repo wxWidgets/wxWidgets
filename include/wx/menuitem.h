@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     25.10.99
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -82,7 +81,13 @@ public:
     void SetKind(wxItemKind kind) { m_kind = kind; }
     bool IsSeparator() const { return m_kind == wxITEM_SEPARATOR; }
 
-    virtual void SetCheckable(bool checkable) { m_kind = checkable ? wxITEM_CHECK : wxITEM_NORMAL; }
+    bool IsCheck() const { return m_kind == wxITEM_CHECK; }
+    bool IsRadio() const { return m_kind == wxITEM_RADIO; }
+
+    virtual void SetCheckable(bool checkable)
+        { m_kind = checkable ? wxITEM_CHECK : wxITEM_NORMAL; }
+
+    // Notice that this doesn't quite match SetCheckable().
     bool IsCheckable() const
         { return m_kind == wxITEM_CHECK || m_kind == wxITEM_RADIO; }
 
@@ -189,8 +194,6 @@ inline void wxMenuItemBase::SetText(const wxString& text) { SetItemLabel(text); 
 #else // !wxUSE_BASE_CLASSES_ONLY
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/menuitem.h"
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/menuitem.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/menuitem.h"
 #elif defined(__WXMOTIF__)
@@ -203,8 +206,6 @@ inline void wxMenuItemBase::SetText(const wxString& text) { SetItemLabel(text); 
     #include "wx/osx/menuitem.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/menuitem.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/menuitem.h"
 #elif defined(__WXQT__)
     #include "wx/qt/menuitem.h"
 #endif

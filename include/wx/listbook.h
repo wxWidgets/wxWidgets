@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     19.08.03
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -17,12 +16,13 @@
 #if wxUSE_LISTBOOK
 
 #include "wx/bookctrl.h"
+#include "wx/containr.h"
 
 class WXDLLIMPEXP_FWD_CORE wxListView;
 class WXDLLIMPEXP_FWD_CORE wxListEvent;
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED,  wxBookCtrlEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING, wxBookCtrlEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_LISTBOOK_PAGE_CHANGED,  wxBookCtrlEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_LISTBOOK_PAGE_CHANGING, wxBookCtrlEvent );
 
 // wxListbook flags
 #define wxLB_DEFAULT          wxBK_DEFAULT
@@ -36,7 +36,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING
 // wxListbook
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxListbook : public wxBookCtrlBase
+class WXDLLIMPEXP_CORE wxListbook : public wxNavigationEnabled<wxBookCtrlBase>
 {
 public:
     wxListbook() { }
@@ -61,35 +61,34 @@ public:
 
 
     // overridden base class methods
-    virtual bool SetPageText(size_t n, const wxString& strText);
-    virtual wxString GetPageText(size_t n) const;
-    virtual int GetPageImage(size_t n) const;
-    virtual bool SetPageImage(size_t n, int imageId);
+    virtual bool SetPageText(size_t n, const wxString& strText) wxOVERRIDE;
+    virtual wxString GetPageText(size_t n) const wxOVERRIDE;
+    virtual int GetPageImage(size_t n) const wxOVERRIDE;
+    virtual bool SetPageImage(size_t n, int imageId) wxOVERRIDE;
     virtual bool InsertPage(size_t n,
                             wxWindow *page,
                             const wxString& text,
                             bool bSelect = false,
-                            int imageId = -1);
-    virtual int SetSelection(size_t n) { return DoSetSelection(n, SetSelection_SendEvent); }
-    virtual int ChangeSelection(size_t n) { return DoSetSelection(n); }
-    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
-    virtual void SetImageList(wxImageList *imageList);
+                            int imageId = NO_IMAGE) wxOVERRIDE;
+    virtual int SetSelection(size_t n) wxOVERRIDE { return DoSetSelection(n, SetSelection_SendEvent); }
+    virtual int ChangeSelection(size_t n) wxOVERRIDE { return DoSetSelection(n); }
+    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const wxOVERRIDE;
+    virtual void SetImageList(wxImageList *imageList) wxOVERRIDE;
 
-    virtual bool DeleteAllPages();
+    virtual bool DeleteAllPages() wxOVERRIDE;
 
     wxListView* GetListView() const { return (wxListView*)m_bookctrl; }
 
 protected:
-    virtual wxWindow *DoRemovePage(size_t page);
+    virtual wxWindow *DoRemovePage(size_t page) wxOVERRIDE;
 
-    void UpdateSelectedPage(size_t newsel);
+    void UpdateSelectedPage(size_t newsel) wxOVERRIDE;
 
-    wxBookCtrlEvent* CreatePageChangingEvent() const;
-    void MakeChangedEvent(wxBookCtrlEvent &event);
+    wxBookCtrlEvent* CreatePageChangingEvent() const wxOVERRIDE;
+    void MakeChangedEvent(wxBookCtrlEvent &event) wxOVERRIDE;
 
-    // get flags for different list control modes
-    long GetListCtrlIconViewFlags() const;
-    long GetListCtrlReportViewFlags() const;
+    // Get the correct wxListCtrl flags to use depending on our own flags.
+    long GetListCtrlFlags() const;
 
     // event handlers
     void OnListSelected(wxListEvent& event);
@@ -116,10 +115,14 @@ typedef wxBookCtrlEventFunction wxListbookEventFunction;
 #define wxListbookEventHandler(func) wxBookCtrlEventHandler(func)
 
 #define EVT_LISTBOOK_PAGE_CHANGED(winid, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED, winid, wxBookCtrlEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_LISTBOOK_PAGE_CHANGED, winid, wxBookCtrlEventHandler(fn))
 
 #define EVT_LISTBOOK_PAGE_CHANGING(winid, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING, winid, wxBookCtrlEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_LISTBOOK_PAGE_CHANGING, winid, wxBookCtrlEventHandler(fn))
+
+// old wxEVT_COMMAND_* constants
+#define wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED    wxEVT_LISTBOOK_PAGE_CHANGED
+#define wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING   wxEVT_LISTBOOK_PAGE_CHANGING
 
 #endif // wxUSE_LISTBOOK
 

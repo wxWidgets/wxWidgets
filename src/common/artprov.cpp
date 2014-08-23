@@ -4,7 +4,6 @@
 // Author:      Vaclav Slavik
 // Modified by:
 // Created:     18/03/2002
-// RCS-ID:      $Id$
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -339,7 +338,7 @@ wxArtID wxArtProvider::GetMessageBoxIconId(int flags)
     {
         default:
             wxFAIL_MSG(wxT("incorrect message box icon flags"));
-            // fall through
+            wxFALLTHROUGH;
 
         case wxICON_ERROR:
             return wxART_ERROR;
@@ -398,32 +397,6 @@ bool wxArtProvider::HasNativeProvider()
 // deprecated wxArtProvider methods
 // ----------------------------------------------------------------------------
 
-#if WXWIN_COMPATIBILITY_2_6
-
-/* static */ void wxArtProvider::PushProvider(wxArtProvider *provider)
-{
-    Push(provider);
-}
-
-/* static */ void wxArtProvider::InsertProvider(wxArtProvider *provider)
-{
-    Insert(provider);
-}
-
-/* static */ bool wxArtProvider::PopProvider()
-{
-    return Pop();
-}
-
-/* static */ bool wxArtProvider::RemoveProvider(wxArtProvider *provider)
-{
-    // RemoveProvider() used to delete the provider being removed so this is
-    // not a typo, we must call Delete() and not Remove() here
-    return Delete(provider);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_6
-
 #if WXWIN_COMPATIBILITY_2_8
 /* static */ void wxArtProvider::Insert(wxArtProvider *provider)
 {
@@ -438,18 +411,21 @@ bool wxArtProvider::HasNativeProvider()
 class wxArtProviderModule: public wxModule
 {
 public:
-    bool OnInit()
+    bool OnInit() wxOVERRIDE
     {
-#if wxUSE_ARTPROVIDER_STD
-        wxArtProvider::InitStdProvider();
-#endif // wxUSE_ARTPROVIDER_STD
+        // The order here is such that the native provider will be used first
+        // and the standard one last as all these default providers add
+        // themselves to the bottom of the stack.
+        wxArtProvider::InitNativeProvider();
 #if wxUSE_ARTPROVIDER_TANGO
         wxArtProvider::InitTangoProvider();
 #endif // wxUSE_ARTPROVIDER_TANGO
-        wxArtProvider::InitNativeProvider();
+#if wxUSE_ARTPROVIDER_STD
+        wxArtProvider::InitStdProvider();
+#endif // wxUSE_ARTPROVIDER_STD
         return true;
     }
-    void OnExit()
+    void OnExit() wxOVERRIDE
     {
         wxArtProvider::CleanUpProviders();
     }

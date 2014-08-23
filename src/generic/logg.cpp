@@ -5,7 +5,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.09.99 (extracted from src/common/log.cpp)
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -59,24 +58,18 @@
 #endif // Windows
 
 
-#ifdef  __WXPM__
-    #include <time.h>
-#endif
-
 #if wxUSE_LOG_DIALOG
     #include "wx/listctrl.h"
     #include "wx/imaglist.h"
     #include "wx/image.h"
 #endif // wxUSE_LOG_DIALOG/!wxUSE_LOG_DIALOG
 
-#if defined(__MWERKS__) && wxUSE_UNICODE
-    #include <wtime.h>
-#endif
+#include "wx/time.h"
 
-#include "wx/datetime.h"
-
+#ifdef __SMARTPHONE__
 // the suffix we add to the button to show that the dialog can be expanded
 #define EXPAND_SUFFIX wxT(" >>")
+#endif
 
 #define CAN_SAVE_FILES (wxUSE_FILE && wxUSE_FILEDLG)
 
@@ -90,7 +83,6 @@
 // allows to exclude the usage of wxDateTime
 static wxString TimeStamp(const wxString& format, time_t t)
 {
-#if wxUSE_DATETIME
     wxChar buf[4096];
     struct tm tm;
     if ( !wxStrftime(buf, WXSIZEOF(buf), format, wxLocaltime_r(&t, &tm)) )
@@ -99,9 +91,6 @@ static wxString TimeStamp(const wxString& format, time_t t)
         wxFAIL_MSG(wxT("strftime() failed"));
     }
     return wxString(buf);
-#else // !wxUSE_DATETIME
-    return wxEmptyString;
-#endif // wxUSE_DATETIME/!wxUSE_DATETIME
 }
 
 
@@ -245,7 +234,7 @@ wxString wxLogGui::GetTitle() const
 
         default:
             wxFAIL_MSG( "unexpected icon severity" );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxICON_INFORMATION:
             titleFormat = _("%s Information");
@@ -380,7 +369,7 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
                 // find the top window and set it's status text if it has any
                 if ( pFrame == NULL ) {
                     wxWindow *pWin = wxTheApp->GetTopWindow();
-                    if ( pWin != NULL && pWin->IsKindOf(CLASSINFO(wxFrame)) ) {
+                    if ( wxDynamicCast(pWin, wxFrame) ) {
                         pFrame = (wxFrame *)pWin;
                     }
                 }
@@ -403,7 +392,7 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
 #endif // wxUSE_LOG_DIALOG
                 m_bErrors = true;
             }
-            // fall through
+            wxFALLTHROUGH;
 
         case wxLOG_Warning:
             if ( !m_bErrors ) {
@@ -455,6 +444,9 @@ public:
     // ctor & dtor
     wxLogFrame(wxWindow *pParent, wxLogWindow *log, const wxString& szTitle);
     virtual ~wxLogFrame();
+
+    // Don't prevent the application from exiting if just this frame remains.
+    virtual bool ShouldPreventAppExit() const wxOVERRIDE { return false; }
 
     // menu callbacks
     void OnClose(wxCommandEvent& event);
@@ -521,7 +513,7 @@ wxLogFrame::wxLogFrame(wxWindow *pParent, wxLogWindow *log, const wxString& szTi
     wxMenuBar *pMenuBar = new wxMenuBar;
     wxMenu *pMenu = new wxMenu;
 #if CAN_SAVE_FILES
-    pMenu->Append(Menu_Save,  _("&Save..."), _("Save log contents to file"));
+    pMenu->Append(Menu_Save,  _("Save &As..."), _("Save log contents to file"));
 #endif // CAN_SAVE_FILES
     pMenu->Append(Menu_Clear, _("C&lear"), _("Clear the log contents"));
     pMenu->AppendSeparator();
@@ -534,8 +526,6 @@ wxLogFrame::wxLogFrame(wxWindow *pParent, wxLogWindow *log, const wxString& szTi
     // status bar for menu prompts
     CreateStatusBar();
 #endif // wxUSE_STATUSBAR
-
-    m_log->OnFrameCreate(this);
 }
 
 void wxLogFrame::DoClose()
@@ -649,10 +639,6 @@ wxFrame *wxLogWindow::GetFrame() const
     return m_pLogFrame;
 }
 
-void wxLogWindow::OnFrameCreate(wxFrame * WXUNUSED(frame))
-{
-}
-
 bool wxLogWindow::OnFrameClose(wxFrame * WXUNUSED(frame))
 {
     // allow to close
@@ -757,11 +743,17 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
 
     // add the details pane
 #ifndef __SMARTPHONE__
+
+#if wxUSE_COLLPANE
     wxCollapsiblePane * const
         collpane = new wxCollapsiblePane(this, wxID_ANY, ms_details);
     sizerTop->Add(collpane, wxSizerFlags(1).Expand().Border());
 
     wxWindow *win = collpane->GetPane();
+#else
+    wxPanel* win = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                               wxBORDER_NONE);
+#endif
     wxSizer * const paneSz = new wxBoxSizer(wxVERTICAL);
 
     CreateDetailsControls(win);
@@ -782,7 +774,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     btnSizer->Add(new wxButton(win, wxID_SAVE), flagsBtn);
 #endif // CAN_SAVE_FILES
 
-    paneSz->Add(btnSizer, wxSizerFlags().Right().Border(wxTOP));
+    paneSz->Add(btnSizer, wxSizerFlags().Right().Border(wxTOP|wxBOTTOM));
 #endif // wxUSE_CLIPBOARD || CAN_SAVE_FILES
 
     win->SetSizer(paneSz);

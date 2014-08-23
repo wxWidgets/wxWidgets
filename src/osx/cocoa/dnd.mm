@@ -4,12 +4,15 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#ifndef WX_PRECOMP
+#include "wx/object.h"
+#endif
 
 #if wxUSE_DRAG_AND_DROP
 
@@ -32,6 +35,8 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 {
     switch (code)
     {
+        case NSDragOperationGeneric:
+            return wxDragCopy;
         case NSDragOperationCopy:
             return wxDragCopy;
         case NSDragOperationMove:
@@ -214,7 +219,7 @@ wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
         wxASSERT_MSG(theEvent, "DoDragDrop must be called in response to a mouse down or drag event.");
 
         NSPoint down = [theEvent locationInWindow];
-        NSPoint p = [view convertPoint:down toView:nil];
+        NSPoint p = [view convertPoint:down fromView:nil];
                 
         gCurrentSource = this;
         
@@ -246,6 +251,23 @@ wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
         result = NSDragOperationToWxDragResult([delegate code]);
         [delegate release];
         [image release];
+        
+        wxWindow* mouseUpTarget = wxWindow::GetCapture();
+
+        if ( mouseUpTarget == NULL )
+        {
+            mouseUpTarget = m_window;
+        }
+        
+        if ( mouseUpTarget != NULL )
+        {
+            wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
+            ((wxWidgetCocoaImpl*)mouseUpTarget->GetPeer())->SetupMouseEvent(wxevent , theEvent) ;
+            wxevent.SetEventType(wxEVT_LEFT_UP);
+        
+            mouseUpTarget->HandleWindowEvent(wxevent);
+        }
+        
         gCurrentSource = NULL;
     }
 

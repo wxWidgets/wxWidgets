@@ -9,10 +9,6 @@ To compile it, you will need Apple's Developer Tools.  However, please
 note that any work to make it suitable for GNUstep (which will require
 a GCC release with Objective-C++) will be much appreciated.
 
-Some users also report success with Metrowerks CodeWarrior IDE and I've even
-on occasion used the command-line MW compilers (see docs/metrowerks) with
-configure instead of GCC and Apple's LD.
-
 Like most UNIX ports, the standard configure/make method works.  You should
 be able to build the library as static or shared.  I usually build static.
 

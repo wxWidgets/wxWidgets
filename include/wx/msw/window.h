@@ -5,7 +5,6 @@
 // Modified by: Vadim Zeitlin on 13.05.99: complete refont of message handling,
 //              elimination of Default(), ...
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -34,9 +33,6 @@ class WXDLLIMPEXP_CORE wxWindowMSW : public wxWindowBase
     friend class wxSpinCtrl;
     friend class wxSlider;
     friend class wxRadioBox;
-#if defined __VISUALC__ && __VISUALC__ <= 1200
-    friend class wxWindowMSW;
-#endif
 public:
     wxWindowMSW() { Init(); }
 
@@ -66,6 +62,9 @@ public:
 
     virtual void Raise();
     virtual void Lower();
+
+    virtual bool BeginRepositioningChildren();
+    virtual void EndRepositioningChildren();
 
     virtual bool Show(bool show = true);
     virtual bool ShowWithEffect(wxShowEffect effect,
@@ -126,7 +125,7 @@ public:
 #ifndef __WXUNIVERSAL__
     // Native resource loading (implemented in src/msw/nativdlg.cpp)
     // FIXME: should they really be all virtual?
-    virtual bool LoadNativeDialog(wxWindow* parent, wxWindowID& id);
+    virtual bool LoadNativeDialog(wxWindow* parent, wxWindowID id);
     virtual bool LoadNativeDialog(wxWindow* parent, const wxString& name);
     wxWindow* GetWindowChild1(wxWindowID id);
     wxWindow* GetWindowChild(wxWindowID id);
@@ -204,7 +203,7 @@ public:
     // to understand why does it work, look at SubclassWin() code and comments
     bool IsOfStandardClass() const { return m_oldWndProc != NULL; }
 
-    wxWindow *FindItem(long id) const;
+    wxWindow *FindItem(long id, WXHWND hWnd = NULL) const;
     wxWindow *FindItemByHWND(WXHWND hWnd, bool controlOnly = false) const;
 
     // MSW only: true if this control is part of the main control
@@ -345,12 +344,13 @@ public:
 
     bool HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags);
     bool HandleMouseMove(int x, int y, WXUINT flags);
-    bool HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam);
+    bool HandleMouseWheel(wxMouseWheelAxis axis,
+                          WXWPARAM wParam, WXLPARAM lParam);
 
     bool HandleChar(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam);
-#if wxUSE_ACCEL
+#if wxUSE_HOTKEY
     bool HandleHotKey(WXWPARAM wParam, WXLPARAM lParam);
 #endif
 #ifdef __WIN32__
@@ -366,7 +366,21 @@ public:
     bool HandlePower(WXWPARAM wParam, WXLPARAM lParam, bool *vetoed);
 
 
-    // Window procedure
+    // The main body of common window proc for all wxWindow objects. It tries
+    // to handle the given message and returns true if it was handled (the
+    // appropriate return value is then put in result, which must be non-NULL)
+    // or false if it wasn't.
+    //
+    // This function should be overridden in any new code instead of
+    // MSWWindowProc() even if currently most of the code overrides
+    // MSWWindowProc() as it had been written before this function was added.
+    virtual bool MSWHandleMessage(WXLRESULT *result,
+                                  WXUINT message,
+                                  WXWPARAM wParam,
+                                  WXLPARAM lParam);
+
+    // Common Window procedure for all wxWindow objects: forwards to
+    // MSWHandleMessage() and MSWDefWindowProc() if the message wasn't handled.
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
     // Calls an appropriate default window procedure
@@ -394,6 +408,17 @@ public:
     // function is called by MSWGetBgBrushForChild() which only exists for the
     // weird wxToolBar case and MSWGetBgBrushForChild() itself is used by
     // MSWGetBgBrush() to actually find the right brush to use.
+
+    // Adjust the origin for the brush returned by MSWGetBgBrushForChild().
+    //
+    // This needs to be overridden for scrolled windows to ensure that the
+    // scrolling of their associated DC is taken into account.
+    //
+    // Both parameters must be non-NULL.
+    virtual void MSWAdjustBrushOrg(int* WXUNUSED(xOrg),
+                                   int* WXUNUSED(yOrg)) const
+    {
+    }
 
     // The brush returned from here must remain valid at least until the next
     // event loop iteration. Returning 0, as is done by default, indicates
@@ -453,7 +478,13 @@ public:
     // This should be overridden to return true for the controls which have
     // themed background that should through their children. Currently only
     // wxNotebook uses this.
-    virtual bool MSWHasInheritableBackground() const { return false; }
+    //
+    // The base class version already returns true if we have a solid
+    // background colour that should be propagated to our children.
+    virtual bool MSWHasInheritableBackground() const
+    {
+        return InheritsBackgroundColour();
+    }
 
 #if !defined(__WXWINCE__) && !defined(__WXUNIVERSAL__)
     #define wxHAS_MSW_BACKGROUND_ERASE_HOOK
@@ -628,6 +659,15 @@ protected:
                                           int& w, int& h) const;
 
     bool MSWEnableHWND(WXHWND hWnd, bool enable);
+
+    // Return the pointer to this window or one of its sub-controls if this ID
+    // and HWND combination belongs to one of them.
+    //
+    // This is used by FindItem() and is overridden in wxControl, see there.
+    virtual wxWindow* MSWFindItem(long WXUNUSED(id), WXHWND WXUNUSED(hWnd)) const
+    {
+        return NULL;
+    }
 
 private:
     // common part of all ctors

@@ -4,7 +4,6 @@
 // Author:      Julian Smart, after Robert Roebling, Vadim Zeitlin, SciTech
 // Modified by:
 // Created:     2006-04-13
-// Id:          $Id$
 // Copyright:   (c) Julian Smart, Robert Roebling, Vadim Zeitlin,
 //              SciTech Software, Inc.
 // Licence:     wxWindows licence
@@ -140,7 +139,10 @@ bool wxButtonToolBar::Create(wxWindow *parent,
 
     // wxColour lightBackground(244, 244, 244);
 
-    wxFont font(wxSMALL_FONT->GetPointSize(), wxNORMAL_FONT->GetFamily(), wxNORMAL_FONT->GetStyle(), wxNORMAL);
+    wxFont font(wxSMALL_FONT->GetPointSize(),
+                wxNORMAL_FONT->GetFamily(),
+                wxNORMAL_FONT->GetStyle(),
+                wxFONTWEIGHT_NORMAL);
     SetFont(font);
 
     // Calculate the label height if necessary
@@ -547,7 +549,7 @@ void wxButtonToolBar::OnLeftUp(wxMouseEvent& event)
         wxButtonToolBarTool* tool = (wxButtonToolBarTool*) FindToolForPosition(event.GetX(), event.GetY());
         if (tool && tool->GetButton() && (event.GetY() > (tool->m_y + tool->GetButton()->GetSize().y)))
         {
-            wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, tool->GetId());
+            wxCommandEvent event(wxEVT_BUTTON, tool->GetId());
             event.SetEventObject(tool->GetButton());
             if (!GetEventHandler()->ProcessEvent(event))
                 event.Skip();

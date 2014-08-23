@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -22,7 +21,7 @@ public:
 * Public interface
     */
 
-    wxJoystick(int joystick = wxJOYSTICK1) { m_joystick = joystick; };
+    wxJoystick(int joystick = wxJOYSTICK1) { m_joystick = joystick; }
 
     // Attributes
     ////////////////////////////////////////////////////////////////////////////

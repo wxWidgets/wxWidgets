@@ -4,7 +4,6 @@
  *  Author:      Julian Smart and others
  *  Modified by: Ryan Norton (Converted to C)
  *  Created:     01/02/97
- *  RCS-ID:      $Id$
  *  Copyright:   (c) Julian Smart
  *  Licence:     wxWindows licence
  */
@@ -13,13 +12,6 @@
 
 #ifndef _WX_DEFS_H_
 #define _WX_DEFS_H_
-
-/*
-    NOTE: this symbol will be replaced with "WXWIN_COMPATIBILITY_3_0" as soon
-          as the development branch for 3.1 is created
- */
-#define FUTURE_WXWIN_COMPATIBILITY_3_0      1
-#define wxDEPRECATED_FUTURE( x )            x
 
 /*  ---------------------------------------------------------------------------- */
 /*  compiler and OS identification */
@@ -30,20 +22,15 @@
 #ifdef __cplusplus
 /*  Make sure the environment is set correctly */
 #   if defined(__WXMSW__) && defined(__X__)
-#       error "Target can't be both X and Windows"
-#   elif defined(__WXMSW__) && defined(__PALMOS__)
-#       error "Target can't be both PalmOS and Windows"
+#       error "Target can't be both X and MSW"
 #   elif !defined(__WXMOTIF__) && \
          !defined(__WXMSW__)   && \
-         !defined(__WXPALMOS__)&& \
          !defined(__WXGTK__)   && \
-         !defined(__WXPM__)    && \
          !defined(__WXOSX_CARBON__)   && \
          !defined(__WXOSX_COCOA__)   && \
          !defined(__WXOSX_IPHONE__)   && \
          !defined(__WXCOCOA__) && \
          !defined(__X__)       && \
-         !defined(__WXMGL__)   && \
          !defined(__WXDFB__)   && \
          !defined(__WXX11__)   && \
          !defined(__WXQT__)    && \
@@ -118,21 +105,6 @@
 #   endif
 
     /*
-       VC6 insists on complaining about
-
-        return type for 'wxVector<T>::reverse_iterator::operator ->' is 'T **'
-        (ie; not a UDT or reference to a UDT.  Will produce errors if applied
-        using infix notation)
-
-       which is perfectly fine because template classes do routinely define
-       operators which don't make sense for all template parameter values
-       (besides this warning was removed in subsequent versions).
-     */
-    #ifdef __VISUALC6__
-        #pragma warning(disable: 4284)
-    #endif /* VC6 */
-
-    /*
        When compiling with VC++ 7 /Wp64 option we get thousands of warnings for
        conversion from size_t to int or long. Some precious few of them might
        be worth looking into but unfortunately it seems infeasible to fix all
@@ -180,6 +152,18 @@
 #   define wxSUPPRESS_GCC_PRIVATE_DTOR_WARNING(name)
 #endif
 
+/*
+   Clang Support
+ */
+ 
+#ifndef WX_HAS_CLANG_FEATURE
+#   ifndef __has_feature      
+#       define WX_HAS_CLANG_FEATURE(x) 0 
+#   else
+#       define WX_HAS_CLANG_FEATURE(x) __has_feature(x)
+#   endif
+#endif
+
 /*  ---------------------------------------------------------------------------- */
 /*  wxWidgets version and compatibility defines */
 /*  ---------------------------------------------------------------------------- */
@@ -210,7 +194,7 @@
 
 /* Prevents conflicts between sys/types.h and winsock.h with Cygwin, */
 /* when using Windows sockets. */
-#ifdef __CYGWIN__
+#if defined(__CYGWIN__) && defined(__WXMSW__)
 #define __USE_W32_SOCKETS
 #endif
 
@@ -237,6 +221,8 @@ typedef short int WXTYPE;
 /*  other feature tests */
 /*  ---------------------------------------------------------------------------- */
 
+#ifdef __cplusplus
+
 /*  Every ride down a slippery slope begins with a single step.. */
 /*  */
 /*  Yes, using nested classes is indeed against our coding standards in */
@@ -247,22 +233,12 @@ typedef short int WXTYPE;
 
 /*  check for explicit keyword support */
 #ifndef HAVE_EXPLICIT
-    #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
-        /*  VC++ 6.0 and 5.0 have explicit (what about earlier versions?) */
+    #if defined(__VISUALC__)
         #define HAVE_EXPLICIT
-    #elif ( defined(__MINGW32__) || defined(__CYGWIN32__) ) \
-          && wxCHECK_GCC_VERSION(2, 95)
-        /*  GCC 2.95 has explicit, what about earlier versions? */
+    #elif defined(__GNUC__)
         #define HAVE_EXPLICIT
     #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x0520)
         /*  BC++ 4.52 doesn't support explicit, CBuilder 1 does */
-        #define HAVE_EXPLICIT
-    #elif defined(__MWERKS__) && (__MWERKS__ >= 0x2400)
-        /*  Metrowerks CW6 or higher has explicit */
-        #define HAVE_EXPLICIT
-    #elif defined(__DIGITALMARS__)
-        #define HAVE_EXPLICIT
-    #elif defined(__WATCOMC__)
         #define HAVE_EXPLICIT
     #endif
 #endif /*  !HAVE_EXPLICIT */
@@ -272,6 +248,46 @@ typedef short int WXTYPE;
 #else /*  !HAVE_EXPLICIT */
     #define wxEXPLICIT
 #endif /*  HAVE_EXPLICIT/!HAVE_EXPLICIT */
+
+/* check for override keyword support */
+#ifndef HAVE_OVERRIDE
+    #if __cplusplus >= 201103L
+        /* All C++11 compilers should have it. */
+        #define HAVE_OVERRIDE
+    #elif wxCHECK_VISUALC_VERSION(11)
+        /*
+           VC++ supports override keyword since version 8 but doesn't define
+           __cplusplus as indicating C++11 support (at least up to and
+           including 12), so handle its case specially.
+
+           Also note that while the keyword is supported, using it with
+           versions 8, 9 and 10 results in C4481 compiler warning ("nonstandard
+           extension used") and so we avoid using it there, you could disable
+           this warning and predefine HAVE_OVERRIDE if you don't care about it.
+         */
+        #define HAVE_OVERRIDE
+    #elif WX_HAS_CLANG_FEATURE(cxx_override_control)
+        #define HAVE_OVERRIDE
+    #endif
+#endif /* !HAVE_OVERRIDE */
+
+#ifdef HAVE_OVERRIDE
+    #define wxOVERRIDE override
+#else /*  !HAVE_OVERRIDE */
+    #define wxOVERRIDE
+#endif /*  HAVE_OVERRIDE/!HAVE_EXPLICIT */
+
+/* wxFALLTHROUGH is used to notate explicit fallthroughs in switch statements */
+
+#if __cplusplus >= 201103L && defined(__has_warning)
+    #if WX_HAS_CLANG_FEATURE(cxx_attributes)
+        #define wxFALLTHROUGH [[clang::fallthrough]]
+    #endif
+#endif
+
+#ifndef wxFALLTHROUGH
+    #define wxFALLTHROUGH ((void)0)
+#endif
 
 /* these macros are obsolete, use the standard C++ casts directly now */
 #define wx_static_cast(t, x) static_cast<t>(x)
@@ -283,7 +299,7 @@ typedef short int WXTYPE;
    truncate from a larger to smaller type, static_cast<> can't be used for it
    as it results in warnings when using some compilers (SGI mipspro for example)
  */
-#if defined(__INTELC__) && defined(__cplusplus)
+#if defined(__INTELC__)
     template <typename T, typename X>
     inline T wx_truncate_cast_impl(X x)
     {
@@ -302,13 +318,15 @@ typedef short int WXTYPE;
 
     #define wx_truncate_cast(t, x) wx_truncate_cast_impl<t>(x)
 
-#elif defined(__cplusplus) && defined(__VISUALC__) && __VISUALC__ >= 1310
+#elif defined(__VISUALC__) && __VISUALC__ >= 1310
     template <typename T, typename X>
     inline T wx_truncate_cast_impl(X x)
     {
         #pragma warning(push)
-        /* conversion from 'X' to 'T', possible loss of data */
+        /* conversion from 'size_t' to 'type', possible loss of data */
         #pragma warning(disable: 4267)
+        /* conversion from 'type1' to 'type2', possible loss of data */
+        #pragma warning(disable: 4242)
 
         return x;
 
@@ -324,24 +342,17 @@ typedef short int WXTYPE;
 #define wxConstCast(obj, className) wx_const_cast(className *, obj)
 
 #ifndef HAVE_STD_WSTRING
-    #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
-        /*  VC++ 6.0 and 5.0 have std::wstring (what about earlier versions?) */
+    #if defined(__VISUALC__)
         #define HAVE_STD_WSTRING
-    #elif defined(__MINGW32__) && wxCHECK_GCC_VERSION(3, 3)
-        /*  GCC 3.1 has std::wstring; 3.0 never was in MinGW, 2.95 hasn't it */
+    #elif defined(__MINGW32__)
         #define HAVE_STD_WSTRING
     #endif
 #endif
 
 #ifndef HAVE_STD_STRING_COMPARE
-    #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
-        /*  VC++ 6.0 and 5.0 have std::string::compare */
-        /*  (what about earlier versions?) */
+    #if defined(__VISUALC__)
         #define HAVE_STD_STRING_COMPARE
-    #elif ( defined(__MINGW32__) || defined(__CYGWIN32__) ) \
-          && wxCHECK_GCC_VERSION(3, 1)
-        /*  GCC 3.1 has std::string::compare; */
-        /*  3.0 never was in MinGW, 2.95 hasn't it */
+    #elif defined(__MINGW32__) || defined(__CYGWIN32__)
         #define HAVE_STD_STRING_COMPARE
     #endif
 #endif
@@ -351,6 +362,41 @@ typedef short int WXTYPE;
         #define HAVE_TR1_TYPE_TRAITS
     #endif
 #endif
+
+#if defined(__has_include)
+    /*
+        Notice that we trust our configure tests more than __has_include(),
+        notably the latter can return true even if the header exists but isn't
+        actually usable, as it happens with <type_traits> in non C++11 mode.
+        So if configure already detected at least one working alternative,
+        just use it.
+     */
+    #if !defined(HAVE_TYPE_TRAITS) && !defined(HAVE_TR1_TYPE_TRAITS)
+        #if __has_include(<type_traits>)
+            #define HAVE_TYPE_TRAITS
+        #elif __has_include(<tr1/type_traits>)
+            #define HAVE_TR1_TYPE_TRAITS
+        #endif
+    #endif
+
+    #if !defined(HAVE_STD_UNORDERED_MAP) && !defined(HAVE_TR1_UNORDERED_MAP)
+        #if __has_include(<unordered_map>)
+            #define HAVE_STD_UNORDERED_MAP
+        #elif __has_include(<tr1/unordered_map>)
+            #define HAVE_TR1_UNORDERED_MAP
+        #endif
+    #endif
+
+    #if !defined(HAVE_STD_UNORDERED_SET) && !defined(HAVE_TR1_UNORDERED_SET)
+        #if __has_include(<unordered_set>)
+            #define HAVE_STD_UNORDERED_SET
+        #elif __has_include(<tr1/unordered_set>)
+            #define HAVE_TR1_UNORDERED_SET
+        #endif
+    #endif
+#endif /* defined(__has_include) */
+
+#endif /* __cplusplus */
 
 /* provide replacement for C99 va_copy() if the compiler doesn't have it */
 
@@ -365,13 +411,6 @@ typedef short int WXTYPE;
            type, but it may not be used under Windows, so deal with a few
            special cases.
          */
-
-        #ifdef __WATCOMC__
-            /* Watcom uses array type for va_list except for PPC and Alpha */
-            #if !defined(__PPC__) && !defined(__AXP__)
-                #define VA_LIST_IS_ARRAY
-            #endif
-        #endif /* __WATCOMC__ */
 
         #if defined(__PPC__) && (defined(_CALL_SYSV) || defined (_WIN32))
             /*
@@ -395,20 +434,11 @@ typedef short int WXTYPE;
     #endif /* va_copy/!va_copy */
 #endif /* wxVaCopy */
 
-#ifndef HAVE_VARIADIC_MACROS
-    #if wxCHECK_WATCOM_VERSION(1,2)
-        #define HAVE_VARIADIC_MACROS
-    #endif
-#endif /* HAVE_VARIADIC_MACROS */
-
-
 #ifndef HAVE_WOSTREAM
     /*
-        Mingw <= 3.4 and all versions of Cygwin as well as any gcc version (so
-        far) targeting PalmOS don't have std::wostream
+        Mingw <= 3.4 and all versions of Cygwin don't have std::wostream
      */
-    #if defined(__PALMOS__) || \
-        (defined(__MINGW32__) && !wxCHECK_GCC_VERSION(4, 0)) || \
+    #if (defined(__MINGW32__) && !wxCHECK_GCC_VERSION(4, 0)) || \
         defined(__CYGWIN__)
         #define wxNO_WOSTREAM
     #endif
@@ -468,7 +498,7 @@ typedef short int WXTYPE;
     #define wxSTDCALL
 #endif /*  platform */
 
-/*  LINKAGEMODE mode is empty for everyting except OS/2 */
+/*  LINKAGEMODE mode is empty for everything except OS/2 */
 #ifndef LINKAGEMODE
     #define LINKAGEMODE
 #endif /*  LINKAGEMODE */
@@ -486,8 +516,6 @@ typedef short int WXTYPE;
 
 #if defined(__VISUALC__)
   #define   wxC_CALLING_CONV    _cdecl
-#elif defined(__VISAGECPP__)
-  #define   wxC_CALLING_CONV    _Optlink
 #else   /*  !Visual C++ */
   #define   wxC_CALLING_CONV
 #endif  /*  compiler */
@@ -520,25 +548,79 @@ typedef short int WXTYPE;
 #   define WX_ATTRIBUTE_PRINTF_5 WX_ATTRIBUTE_PRINTF(5, 6)
 #endif /* !defined(WX_ATTRIBUTE_PRINTF) */
 
+#ifndef WX_ATTRIBUTE_NORETURN
+#   if WX_HAS_CLANG_FEATURE(attribute_analyzer_noreturn)
+#       define WX_ATTRIBUTE_NORETURN __attribute__((analyzer_noreturn))
+#   elif defined( __GNUC__ )
+#       define WX_ATTRIBUTE_NORETURN __attribute__ ((noreturn))
+#   elif defined(__VISUALC__)
+#       define WX_ATTRIBUTE_NORETURN __declspec(noreturn)
+#   else
+#       define WX_ATTRIBUTE_NORETURN
+#   endif
+#endif
 
-/*  Macro to issue warning when using deprecated functions with gcc3 or MSVC7: */
-#if wxCHECK_GCC_VERSION(3, 1)
-    #define wxDEPRECATED(x) __attribute__((deprecated)) x
-#elif defined(__VISUALC__) && (__VISUALC__ >= 1300)
-    #define wxDEPRECATED(x) __declspec(deprecated) x
+#if defined(__GNUC__)
+    #define WX_ATTRIBUTE_UNUSED __attribute__ ((unused))
 #else
-    #define wxDEPRECATED(x) x
+    #define WX_ATTRIBUTE_UNUSED
 #endif
 
 /*
-    explicitly specifying inline allows gcc < 3.4 to
-    handle the deprecation attribute even in the constructor.
-    doesn't seem to work on Apple's gcc 4.0.1 unless using -O0
-*/
-#if wxCHECK_GCC_VERSION(3, 4) || defined( __DARWIN__ )
-    #define  wxDEPRECATED_CONSTRUCTOR(x) x
+    Macros for marking functions as being deprecated.
+
+    The preferred macro in the new code is wxDEPRECATED_MSG() which allows to
+    explain why is the function deprecated. Almost all the existing code uses
+    the older wxDEPRECATED() or its variants currently, but this will hopefully
+    change in the future.
+ */
+
+/* The basic compiler-specific construct to generate a deprecation warning. */
+#ifdef __clang__
+    #define wxDEPRECATED_DECL __attribute__((deprecated))
+#elif defined(__GNUC__)
+    #define wxDEPRECATED_DECL __attribute__((deprecated))
+#elif defined(__VISUALC__)
+    #define wxDEPRECATED_DECL __declspec(deprecated)
 #else
+    #define wxDEPRECATED_DECL
+#endif
+
+/*
+    Macro taking the deprecation message. It applies to the next declaration.
+
+    If the compiler doesn't support showing the message, this degrades to a
+    simple wxDEPRECATED(), i.e. at least gives a warning, if possible.
+ */
+#if defined(__clang__) && defined(__has_extension)
+    #if __has_extension(attribute_deprecated_with_message)
+        #define wxDEPRECATED_MSG(msg) __attribute__((deprecated(msg)))
+    #else
+        #define wxDEPRECATED_MSG(msg) __attribute__((deprecated))
+    #endif
+#elif wxCHECK_GCC_VERSION(4, 5)
+    #define wxDEPRECATED_MSG(msg) __attribute__((deprecated(msg)))
+#elif wxCHECK_VISUALC_VERSION(8)
+    #define wxDEPRECATED_MSG(msg) __declspec(deprecated("deprecated: " msg))
+#else
+    #define wxDEPRECATED_MSG(msg) wxDEPRECATED_DECL
+#endif
+
+/*
+    Macro taking the declaration that it deprecates. Prefer to use
+    wxDEPRECATED_MSG() instead as it's simpler (wrapping the entire declaration
+    makes the code unclear) and allows to specify the explanation.
+ */
+#define wxDEPRECATED(x) wxDEPRECATED_DECL x
+
+#if defined(__GNUC__) && !wxCHECK_GCC_VERSION(3, 4)
+    /*
+        We need to add dummy "inline" to allow gcc < 3.4 to handle the
+        deprecation attribute on the constructors.
+    */
     #define  wxDEPRECATED_CONSTRUCTOR(x) wxDEPRECATED( inline x)
+#else
+    #define  wxDEPRECATED_CONSTRUCTOR(x) wxDEPRECATED(x)
 #endif
 
 /*
@@ -568,6 +650,27 @@ typedef short int WXTYPE;
 #endif
 
 /*
+   Macros to suppress and restore gcc warnings, requires g++ >= 4.6 and don't
+   do anything otherwise.
+
+   Example of use:
+
+        wxGCC_WARNING_SUPPRESS(float-equal)
+        inline bool wxIsSameDouble(double x, double y) { return x == y; }
+        wxGCC_WARNING_RESTORE(float-equal)
+ */
+#if wxCHECK_GCC_VERSION(4, 6)
+#   define wxGCC_WARNING_SUPPRESS(x) \
+        _Pragma (wxSTRINGIZE(GCC diagnostic push)) \
+        _Pragma (wxSTRINGIZE(GCC diagnostic ignored wxSTRINGIZE(wxCONCAT(-W,x))))
+#   define wxGCC_WARNING_RESTORE(x) \
+       _Pragma (wxSTRINGIZE(GCC diagnostic pop))
+#else /* gcc < 4.6 or not gcc at all */
+#   define wxGCC_WARNING_SUPPRESS(x)
+#   define wxGCC_WARNING_RESTORE(x)
+#endif
+
+/*
     Combination of the two variants above: should be used for deprecated
     functions which are defined inline and are used by wxWidgets itself.
  */
@@ -581,7 +684,7 @@ typedef short int WXTYPE;
 /*  NULL declaration: it must be defined as 0 for C++ programs (in particular, */
 /*  it must not be defined as "(void *)0" which is standard for C but completely */
 /*  breaks C++ code) */
-#if !defined(__HANDHELDPC__) && !defined(__PALMOS__)
+#if !defined(__HANDHELDPC__)
 #include <stddef.h>
 #endif
 
@@ -594,7 +697,7 @@ typedef short int WXTYPE;
     template <typename T>
     inline void wxDELETE(T*& ptr)
     {
-        typedef char TypeIsCompleteCheck[sizeof(T)];
+        typedef char TypeIsCompleteCheck[sizeof(T)] WX_ATTRIBUTE_UNUSED;
 
         if ( ptr != NULL )
         {
@@ -607,7 +710,7 @@ typedef short int WXTYPE;
     template <typename T>
     inline void wxDELETEA(T*& ptr)
     {
-        typedef char TypeIsCompleteCheck[sizeof(T)];
+        typedef char TypeIsCompleteCheck[sizeof(T)] WX_ATTRIBUTE_UNUSED;
 
         if ( ptr != NULL )
         {
@@ -657,9 +760,13 @@ typedef short int WXTYPE;
     m(==,x,y,z) m(!=,x,y,z) m(>=,x,y,z) m(<=,x,y,z) m(>,x,y,z) m(<,x,y,z)
 
 /*
-    This is only used with wxDEFINE_COMPARISON_REV: it passes both the normal
-    and the reversed comparison operators to the macro.
+    These are only used with wxDEFINE_COMPARISON_[BY_]REV: they pass both the
+    normal and the reversed comparison operators to the macro.
  */
+#define wxFOR_ALL_COMPARISONS_2_REV(m, x, y) \
+    m(==,x,y,==) m(!=,x,y,!=) m(>=,x,y,<=) \
+    m(<=,x,y,>=) m(>,x,y,<) m(<,x,y,>)
+
 #define wxFOR_ALL_COMPARISONS_3_REV(m, x, y, z) \
     m(==,x,y,z,==) m(!=,x,y,z,!=) m(>=,x,y,z,<=) \
     m(<=,x,y,z,>=) m(>,x,y,z,<) m(<,x,y,z,>)
@@ -671,6 +778,9 @@ typedef short int WXTYPE;
 #define wxDEFINE_COMPARISON_REV(op, T1, T2, cmp, oprev) \
     inline bool operator op(T2 y, T1 x) { return cmp(x, y, oprev); }
 
+#define wxDEFINE_COMPARISON_BY_REV(op, T1, T2, oprev) \
+    inline bool operator op(T1 x, T2 y) { return y oprev x; }
+
 /*
     Define all 6 comparison operators (==, !=, <, <=, >, >=) for the given
     types in the specified order. The implementation is provided by the cmp
@@ -679,6 +789,14 @@ typedef short int WXTYPE;
  */
 #define wxDEFINE_COMPARISONS(T1, T2, cmp) \
     wxFOR_ALL_COMPARISONS_3(wxDEFINE_COMPARISON, T1, T2, cmp)
+
+/*
+    Define all 6 comparison operators (==, !=, <, <=, >, >=) for the given
+    types in the specified order, implemented in terms of existing operators
+    for the reverse order.
+ */
+#define wxDEFINE_COMPARISONS_BY_REV(T1, T2) \
+    wxFOR_ALL_COMPARISONS_2_REV(wxDEFINE_COMPARISON_BY_REV, T1, T2)
 
 /*
     This macro allows to define all 12 comparison operators (6 operators for
@@ -748,27 +866,13 @@ typedef short int WXTYPE;
 /*  compiler specific settings */
 /*  ---------------------------------------------------------------------------- */
 
-#if defined(__MWERKS__)
-    #undef try
-    #undef except
-    #undef finally
-    #define except(x) catch(...)
-#endif /*  Metrowerks */
-
-#if wxONLY_WATCOM_EARLIER_THAN(1,4)
-    typedef short mode_t;
-#endif
-
 /*  where should i put this? we need to make sure of this as it breaks */
 /*  the <iostream> code. */
 #if !wxUSE_IOSTREAMH && defined(__WXDEBUG__)
-#  ifndef __MWERKS__
-/*  #undef __WXDEBUG__ */
 #    ifdef wxUSE_DEBUG_NEW_ALWAYS
 #    undef wxUSE_DEBUG_NEW_ALWAYS
 #    define wxUSE_DEBUG_NEW_ALWAYS 0
 #    endif
-#  endif
 #endif
 
 /*  ---------------------------------------------------------------------------- */
@@ -784,10 +888,8 @@ enum {  wxDefaultCoord = -1 };
 /*  define fixed length types */
 /*  ---------------------------------------------------------------------------- */
 
-#if defined(__WXPALMOS__) || defined(__MINGW32__)
-  #if !defined(__MWERKS__)
+#if defined(__MINGW32__)
     #include <sys/types.h>
-  #endif
 #endif
 
 /*  chars are always one byte (by definition), shorts are always two (in */
@@ -836,19 +938,7 @@ typedef wxUint16 wxWord;
  */
 
 /*  32bit */
-#ifdef __PALMOS__
-    typedef int wxInt32;
-    typedef unsigned int wxUint32;
-    #define SIZEOF_INT 4
-    #define SIZEOF_LONG 4
-    #define SIZEOF_WCHAR_T 2
-    #define SIZEOF_SIZE_T 4
-    #ifdef __WXPALMOS6__
-        #define wxSIZE_T_IS_UINT
-    #endif
-    #define SIZEOF_VOID_P 4
-    #define SIZEOF_SIZE_T 4
-#elif defined(__WINDOWS__)
+#if defined(__WINDOWS__)
     #if defined(__WIN32__)
         typedef int wxInt32;
         typedef unsigned int wxUint32;
@@ -863,6 +953,10 @@ typedef wxUint16 wxWord;
 
         #ifndef SIZEOF_LONG
             #define SIZEOF_LONG 4
+        #endif
+
+        #ifndef SIZEOF_LONG_LONG
+            #define SIZEOF_LONG_LONG 8
         #endif
 
         #ifndef SIZEOF_WCHAR_T
@@ -1006,7 +1100,7 @@ typedef wxUint32 wxDword;
    architectures to be able to pass wxLongLong_t to the standard functions
    prototyped as taking "long long" such as strtoll().
  */
-#if (defined(__VISUALC__) && defined(__WIN32__))
+#if (defined(__VISUALC__) || defined(__INTELC__)) && defined(__WIN32__)
     #define wxLongLong_t __int64
     #define wxLongLongSuffix i64
     #define wxLongLongFmtSpec "I64"
@@ -1014,37 +1108,10 @@ typedef wxUint32 wxDword;
     #define wxLongLong_t __int64
     #define wxLongLongSuffix i64
     #define wxLongLongFmtSpec "L"
-#elif (defined(__WATCOMC__) && (defined(__WIN32__) || defined(__DOS__) || defined(__OS2__)))
-      #define wxLongLong_t __int64
-      #define wxLongLongSuffix i64
-      #define wxLongLongFmtSpec "L"
-#elif defined(__DIGITALMARS__)
-      #define wxLongLong_t __int64
-      #define wxLongLongSuffix LL
-      #define wxLongLongFmtSpec "ll"
 #elif defined(__MINGW32__)
     #define wxLongLong_t long long
     #define wxLongLongSuffix ll
     #define wxLongLongFmtSpec "I64"
-#elif defined(__MWERKS__)
-    #if __option(longlong)
-        #define wxLongLong_t long long
-        #define wxLongLongSuffix ll
-        #define wxLongLongFmtSpec "ll"
-    #else
-        #error "The 64 bit integer support in CodeWarrior has been disabled."
-        #error "See the documentation on the 'longlong' pragma."
-    #endif
-#elif defined(__WXPALMOS__)
-    #if defined(__WXPALMOS6__)
-        #define wxLongLong_t int64_t
-    #else
-        #define wxLongLong_t long long
-    #endif /* __WXPALMOS6__ */
-    #define wxLongLongSuffix ll
-    #define wxLongLongFmtSpec "ll"
-#elif defined(__VISAGECPP__) && __IBMCPP__ >= 400
-    #define wxLongLong_t long long
 #elif (defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8)  || \
         defined(__GNUC__) || \
         defined(__CYGWIN__) || \
@@ -1062,16 +1129,7 @@ typedef wxUint32 wxDword;
 
 
 #ifdef wxLongLong_t
-
-    #ifdef __WXPALMOS__
-    #if defined(__WXPALMOS6__)
-        #define wxULongLong_t uint64_t
-    #else
-        #define wxULongLong_t unsigned long long
-    #endif /* __WXPALMOS6__ */
-    #else
-        #define wxULongLong_t unsigned wxLongLong_t
-    #endif
+    #define wxULongLong_t unsigned wxLongLong_t
 
     /*
         wxLL() and wxULL() macros allow to define 64 bit constants in a
@@ -1113,6 +1171,17 @@ typedef wxUint32 wxDword;
 
 #endif
 
+/*
+    Helper macro for conditionally compiling some code only if wxLongLong_t is
+    available and is a type different from the other integer types (i.e. not
+    long).
+ */
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+    #define wxIF_LONG_LONG_TYPE(x) x
+#else
+    #define wxIF_LONG_LONG_TYPE(x)
+#endif
+
 
 /* Make sure ssize_t is defined (a signed type the same size as size_t). */
 /* (HAVE_SSIZE_T is not already defined by configure) */
@@ -1121,10 +1190,6 @@ typedef wxUint32 wxDword;
     #if defined(_SSIZE_T_) || defined(_SSIZE_T_DEFINED)
         #define HAVE_SSIZE_T
     #endif
-#elif defined(__PALMOS__)
-    #define HAVE_SSIZE_T
-#elif wxCHECK_WATCOM_VERSION(1,4)
-    #define HAVE_SSIZE_T
 #endif
 #endif /* !HAVE_SSIZE_T */
 
@@ -1153,7 +1218,7 @@ typedef wxUint32 wxDword;
     each time we cast it to a pointer or a handle (which results in hundreds
     of warnings as Win32 API often passes pointers in them)
  */
-#if wxCHECK_VISUALC_VERSION(7)
+#ifdef __VISUALC__
     #define wxW64 __w64
 #else
     #define wxW64
@@ -1197,9 +1262,7 @@ inline wxUIntPtr wxPtrToUInt(const void *p)
        doing here. Same thing with icc with -Wall.
      */
 #ifdef __VISUALC__
-    #if __VISUALC__ >= 1200
-        #pragma warning(push)
-    #endif
+    #pragma warning(push)
     /* pointer truncation from '' to '' */
     #pragma warning(disable: 4311)
 #elif defined(__INTELC__)
@@ -1210,7 +1273,7 @@ inline wxUIntPtr wxPtrToUInt(const void *p)
 
     return wx_reinterpret_cast(wxUIntPtr, p);
 
-#if (defined(__VISUALC__) && __VISUALC__ >= 1200) || defined(__INTELC__)
+#if defined(__VISUALC__) || defined(__INTELC__)
     #pragma warning(pop)
 #endif
 }
@@ -1218,9 +1281,7 @@ inline wxUIntPtr wxPtrToUInt(const void *p)
 inline void *wxUIntToPtr(wxUIntPtr p)
 {
 #ifdef __VISUALC__
-    #if __VISUALC__ >= 1200
-        #pragma warning(push)
-    #endif
+    #pragma warning(push)
     /* conversion to type of greater size */
     #pragma warning(disable: 4312)
 #elif defined(__INTELC__)
@@ -1231,7 +1292,7 @@ inline void *wxUIntToPtr(wxUIntPtr p)
 
     return wx_reinterpret_cast(void *, p);
 
-#if (defined(__VISUALC__) && __VISUALC__ >= 1200) || defined(__INTELC__)
+#if defined(__VISUALC__) || defined(__INTELC__)
     #pragma warning(pop)
 #endif
 }
@@ -1247,11 +1308,7 @@ inline void *wxUIntToPtr(wxUIntPtr p)
 /*            calculations */
 
 typedef float wxFloat32;
-#if (defined( __WXMAC__ ) || defined(__WXCOCOA__))  && defined (__MWERKS__)
-    typedef short double wxFloat64;
-#else
-    typedef double wxFloat64;
-#endif
+typedef double wxFloat64;
 
 typedef double wxDouble;
 
@@ -1311,6 +1368,63 @@ typedef double wxDouble;
 #endif
 
 
+/*
+    Helper macro expanding into the given "m" macro invoked with each of the
+    integer types as parameter (notice that this does not include char/unsigned
+    char and bool but does include wchar_t).
+ */
+#define wxDO_FOR_INT_TYPES(m) \
+    m(short) \
+    m(unsigned short) \
+    m(int) \
+    m(unsigned int) \
+    m(long) \
+    m(unsigned long) \
+    wxIF_LONG_LONG_TYPE( m(wxLongLong_t) ) \
+    wxIF_LONG_LONG_TYPE( m(wxULongLong_t) ) \
+    wxIF_WCHAR_T_TYPE( m(wchar_t) )
+
+/*
+    Same as wxDO_FOR_INT_TYPES() but does include char and unsigned char.
+
+    Notice that we use "char" and "unsigned char" here but not "signed char"
+    which would be more correct as "char" could be unsigned by default. But
+    wxWidgets code currently supposes that char is signed and we'd need to
+    clean up assumptions about it, notably in wx/unichar.h, to be able to use
+    "signed char" here.
+ */
+#define wxDO_FOR_CHAR_INT_TYPES(m) \
+    m(char) \
+    m(unsigned char) \
+    wxDO_FOR_INT_TYPES(m)
+
+/*
+    Same as wxDO_FOR_INT_TYPES() above except that m macro takes the
+    type as the first argument and some extra argument, passed from this macro
+    itself, as the second one.
+ */
+#define wxDO_FOR_INT_TYPES_1(m, arg) \
+    m(short, arg) \
+    m(unsigned short, arg) \
+    m(int, arg) \
+    m(unsigned int, arg) \
+    m(long, arg) \
+    m(unsigned long, arg) \
+    wxIF_LONG_LONG_TYPE( m(wxLongLong_t, arg) ) \
+    wxIF_LONG_LONG_TYPE( m(wxULongLong_t, arg) ) \
+    wxIF_WCHAR_T_TYPE( m(wchar_t, arg) )
+
+/*
+    Combination of wxDO_FOR_CHAR_INT_TYPES() and wxDO_FOR_INT_TYPES_1():
+    invokes the given macro with the specified argument as its second parameter
+    for all char and int types.
+ */
+#define wxDO_FOR_CHAR_INT_TYPES_1(m, arg) \
+    m(char, arg) \
+    m(unsigned char, arg) \
+    wxDO_FOR_INT_TYPES_1(m, arg)
+
+
 /*  ---------------------------------------------------------------------------- */
 /*  byte ordering related definition and macros */
 /*  ---------------------------------------------------------------------------- */
@@ -1329,36 +1443,6 @@ typedef double wxDouble;
 
 /*  byte swapping */
 
-#if defined (__MWERKS__) && ( (__MWERKS__ < 0x0900) || macintosh )
-/*  assembler versions for these */
-#ifdef __POWERPC__
-    inline wxUint16 wxUINT16_SWAP_ALWAYS( wxUint16 i )
-        {return (__lhbrx( &i , 0 ) );}
-    inline wxInt16 wxINT16_SWAP_ALWAYS( wxInt16 i )
-        {return (__lhbrx( &i , 0 ) );}
-    inline wxUint32 wxUINT32_SWAP_ALWAYS( wxUint32 i )
-        {return (__lwbrx( &i , 0 ) );}
-    inline wxInt32 wxINT32_SWAP_ALWAYS( wxInt32 i )
-        {return (__lwbrx( &i , 0 ) );}
-#else
-    #pragma parameter __D0 wxUINT16_SWAP_ALWAYS(__D0)
-    pascal wxUint16 wxUINT16_SWAP_ALWAYS(wxUint16 value)
-        = { 0xE158 };
-
-    #pragma parameter __D0 wxINT16_SWAP_ALWAYS(__D0)
-    pascal wxInt16 wxINT16_SWAP_ALWAYS(wxInt16 value)
-        = { 0xE158 };
-
-    #pragma parameter __D0 wxUINT32_SWAP_ALWAYS (__D0)
-    pascal wxUint32 wxUINT32_SWAP_ALWAYS(wxUint32 value)
-        = { 0xE158, 0x4840, 0xE158 };
-
-    #pragma parameter __D0 wxINT32_SWAP_ALWAYS (__D0)
-    pascal wxInt32 wxINT32_SWAP_ALWAYS(wxInt32 value)
-        = { 0xE158, 0x4840, 0xE158 };
-
-#endif
-#else /*  !MWERKS */
 #define wxUINT16_SWAP_ALWAYS(val) \
    ((wxUint16) ( \
     (((wxUint16) (val) & (wxUint16) 0x00ffU) << 8) | \
@@ -1382,7 +1466,6 @@ typedef double wxDouble;
     (((wxUint32) (val) & (wxUint32) 0x0000ff00U) <<  8) | \
     (((wxUint32) (val) & (wxUint32) 0x00ff0000U) >>  8) | \
     (((wxUint32) (val) & (wxUint32) 0xff000000U) >> 24)))
-#endif
 /*  machine specific byte swapping */
 
 #ifdef wxLongLong_t
@@ -1461,45 +1544,6 @@ typedef double wxDouble;
         #define wxINT64_SWAP_ON_LE(val)  wxINT64_SWAP_ALWAYS(val)
         #define wxINT64_SWAP_ON_BE(val)  (val)
     #endif
-#endif
-
-/*  ---------------------------------------------------------------------------- */
-/*  template workarounds for buggy compilers */
-/*  ---------------------------------------------------------------------------- */
-
-#if defined(__GNUC__) && !wxCHECK_GCC_VERSION( 3, 4 )
-    /* GCC <= 3.4 has buggy template support */
-#  define wxUSE_MEMBER_TEMPLATES 0
-#endif
-
-#if defined(_MSC_VER) && _MSC_VER <= 1200
-    /* MSVC <= 6.0 has buggy template support */
-#  define wxUSE_MEMBER_TEMPLATES 0
-#  define wxUSE_FUNC_TEMPLATE_POINTER 0
-#endif
-
-#ifndef wxUSE_MEMBER_TEMPLATES
-#  define wxUSE_MEMBER_TEMPLATES 1
-#endif
-
-#ifndef wxUSE_FUNC_TEMPLATE_POINTER
-#  define wxUSE_FUNC_TEMPLATE_POINTER 1
-#endif
-
-#if wxUSE_MEMBER_TEMPLATES
-#  define wxTEMPLATED_MEMBER_CALL( method, type ) method<type>()
-#  define wxTEMPLATED_MEMBER_FIX( type )
-#else
-#  define wxTEMPLATED_MEMBER_CALL( method, type ) method((type*)NULL)
-#  define wxTEMPLATED_MEMBER_FIX( type ) type* =NULL
-#endif
-
-#if defined(_MSC_VER) && _MSC_VER <= 1200
-#  define wxTEMPLATED_FUNCTION_FIX( type ), wxTEMPLATED_MEMBER_FIX(type)
-#  define wxINFUNC_CLASS_TYPE_FIX( type ) typedef type type;
-#else
-#  define wxTEMPLATED_FUNCTION_FIX( type )
-#  define wxINFUNC_CLASS_TYPE_FIX( type )
 #endif
 
 /*  ---------------------------------------------------------------------------- */
@@ -1844,12 +1888,6 @@ enum wxBorder
 /*  always show an entire number of rows */
 #define wxLB_INT_HEIGHT     0x0800
 
-#if WXWIN_COMPATIBILITY_2_6
-    /*  deprecated synonyms */
-    #define wxPROCESS_ENTER   0x0400  /*  wxTE_PROCESS_ENTER */
-    #define wxPASSWORD        0x0800  /*  wxTE_PASSWORD */
-#endif
-
 /*
  * wxComboBox style flags
  */
@@ -1873,14 +1911,12 @@ enum wxBorder
 /*  Old names for compatibility */
 #define wxRA_HORIZONTAL     wxHORIZONTAL
 #define wxRA_VERTICAL       wxVERTICAL
-#define wxRA_USE_CHECKBOX   0x0010 /* alternative native subcontrols (wxPalmOS) */
 
 /*
  * wxRadioButton style flag
  */
 #define wxRB_GROUP          0x0004
 #define wxRB_SINGLE         0x0008
-#define wxRB_USE_CHECKBOX   0x0010 /* alternative native control (wxPalmOS) */
 
 /*
  * wxScrollBar flags
@@ -1954,16 +1990,17 @@ enum wxBorder
 #define wxICON_STOP             wxICON_HAND
 #define wxICON_ASTERISK         wxICON_INFORMATION
 
-#define  wxFORWARD              0x00001000
-#define  wxBACKWARD             0x00002000
-#define  wxRESET                0x00004000
-#define  wxHELP                 0x00008000
-#define  wxMORE                 0x00010000
-#define  wxSETUP                0x00020000
+#define wxHELP                  0x00001000
+#define wxFORWARD               0x00002000
+#define wxBACKWARD              0x00004000
+#define wxRESET                 0x00008000
+#define wxMORE                  0x00010000
+#define wxSETUP                 0x00020000
 #define wxICON_NONE             0x00040000
+#define wxICON_AUTH_NEEDED      0x00080000
 
 #define wxICON_MASK \
-    (wxICON_EXCLAMATION|wxICON_HAND|wxICON_QUESTION|wxICON_INFORMATION|wxICON_NONE)
+    (wxICON_EXCLAMATION|wxICON_HAND|wxICON_QUESTION|wxICON_INFORMATION|wxICON_NONE|wxICON_AUTH_NEEDED)
 
 /*
  * Background styles. See wxWindow::SetBackgroundStyle
@@ -1990,8 +2027,10 @@ enum wxBackgroundStyle
      */
     wxBG_STYLE_PAINT,
 
-
-    /* this is a Mac-only style, don't use in portable code */
+    /*
+        Indicates that the window background is not erased, letting the parent
+        window show through.
+     */
     wxBG_STYLE_TRANSPARENT,
 
     /* this style is deprecated and doesn't do anything, don't use */
@@ -2197,8 +2236,13 @@ enum wxStandardID
     wxID_OSX_HIDE = wxID_OSX_MENU_FIRST,
     wxID_OSX_HIDEOTHERS,
     wxID_OSX_SHOWALL,
+#if wxABI_VERSION >= 30001
+    wxID_OSX_SERVICES,
+    wxID_OSX_MENU_LAST = wxID_OSX_SERVICES,
+#else
     wxID_OSX_MENU_LAST = wxID_OSX_SHOWALL,
-    
+#endif
+
     /*  IDs used by generic file dialog (13 consecutive starting from this value) */
     wxID_FILEDLGG = 5900,
 
@@ -2235,6 +2279,18 @@ enum wxItemKind
     wxITEM_DROPDOWN,
     wxITEM_MAX
 };
+
+/*
+ * The possible states of a 3-state checkbox (Compatible
+ * with the 2-state checkbox).
+ */
+enum wxCheckBoxState
+{
+    wxCHK_UNCHECKED,
+    wxCHK_CHECKED,
+    wxCHK_UNDETERMINED /* 3-state checkbox only */
+};
+
 
 /*  hit test results */
 enum wxHitTest
@@ -2288,13 +2344,33 @@ enum wxHitTest
 /*  GDI descriptions */
 /*  ---------------------------------------------------------------------------- */
 
+// Hatch styles used by both pen and brush styles.
+//
+// NB: Do not use these constants directly, they're for internal use only, use
+//     wxBRUSHSTYLE_XXX_HATCH and wxPENSTYLE_XXX_HATCH instead.
+enum wxHatchStyle
+{
+    wxHATCHSTYLE_INVALID = -1,
+
+    /*
+        The value of the first style is chosen to fit with
+        wxDeprecatedGUIConstants values below, don't change it.
+     */
+    wxHATCHSTYLE_FIRST = 111,
+    wxHATCHSTYLE_BDIAGONAL = wxHATCHSTYLE_FIRST,
+    wxHATCHSTYLE_CROSSDIAG,
+    wxHATCHSTYLE_FDIAGONAL,
+    wxHATCHSTYLE_CROSS,
+    wxHATCHSTYLE_HORIZONTAL,
+    wxHATCHSTYLE_VERTICAL,
+    wxHATCHSTYLE_LAST = wxHATCHSTYLE_VERTICAL
+};
+
 /*
     WARNING: the following styles are deprecated; use the
              wxFontFamily, wxFontStyle, wxFontWeight, wxBrushStyle,
              wxPenStyle, wxPenCap, wxPenJoin enum values instead!
 */
-
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
 
 /* don't use any elements of this enum in the new code */
 enum wxDeprecatedGUIConstants
@@ -2336,16 +2412,15 @@ enum wxDeprecatedGUIConstants
     /*  drawn with a Pen, and without any Brush -- and it can be stippled. */
     wxSTIPPLE =          110,
 
-    wxBDIAGONAL_HATCH,     /* In wxWidgets < 2.6 use WX_HATCH macro  */
-    wxCROSSDIAG_HATCH,     /* to verify these wx*_HATCH are in style */
-    wxFDIAGONAL_HATCH,     /* of wxBrush. In wxWidgets >= 2.6 use    */
-    wxCROSS_HATCH,         /* wxBrush::IsHatch() instead.            */
-    wxHORIZONTAL_HATCH,
-    wxVERTICAL_HATCH,
-    wxFIRST_HATCH = wxBDIAGONAL_HATCH,
-    wxLAST_HATCH = wxVERTICAL_HATCH
+    wxBDIAGONAL_HATCH = wxHATCHSTYLE_BDIAGONAL,
+    wxCROSSDIAG_HATCH = wxHATCHSTYLE_CROSSDIAG,
+    wxFDIAGONAL_HATCH = wxHATCHSTYLE_FDIAGONAL,
+    wxCROSS_HATCH = wxHATCHSTYLE_CROSS,
+    wxHORIZONTAL_HATCH = wxHATCHSTYLE_HORIZONTAL,
+    wxVERTICAL_HATCH = wxHATCHSTYLE_VERTICAL,
+    wxFIRST_HATCH = wxHATCHSTYLE_FIRST,
+    wxLAST_HATCH = wxHATCHSTYLE_LAST
 };
-#endif
 
 /*  ToolPanel in wxFrame (VZ: unused?) */
 enum
@@ -2499,11 +2574,6 @@ enum wxKeyCode
     WXK_SCROLL,
     WXK_PAGEUP,
     WXK_PAGEDOWN,
-#if WXWIN_COMPATIBILITY_2_6
-    WXK_PRIOR = WXK_PAGEUP,
-    WXK_NEXT  = WXK_PAGEDOWN,
-#endif
-
     WXK_NUMPAD_SPACE,
     WXK_NUMPAD_TAB,
     WXK_NUMPAD_ENTER,
@@ -2518,10 +2588,6 @@ enum wxKeyCode
     WXK_NUMPAD_DOWN,
     WXK_NUMPAD_PAGEUP,
     WXK_NUMPAD_PAGEDOWN,
-#if WXWIN_COMPATIBILITY_2_6
-    WXK_NUMPAD_PRIOR = WXK_NUMPAD_PAGEUP,
-    WXK_NUMPAD_NEXT  = WXK_NUMPAD_PAGEDOWN,
-#endif
     WXK_NUMPAD_END,
     WXK_NUMPAD_BEGIN,
     WXK_NUMPAD_INSERT,
@@ -2537,7 +2603,12 @@ enum wxKeyCode
     WXK_WINDOWS_LEFT,
     WXK_WINDOWS_RIGHT,
     WXK_WINDOWS_MENU ,
-    WXK_COMMAND,
+#ifdef __WXOSX__
+    WXK_RAW_CONTROL,
+#else
+    WXK_RAW_CONTROL = WXK_CONTROL,
+#endif
+    WXK_COMMAND = WXK_CONTROL,
 
     /* Hardware-specific buttons */
     WXK_SPECIAL1 = 193,
@@ -2573,10 +2644,11 @@ enum wxKeyModifier
     wxMOD_META      = 0x0008,
     wxMOD_WIN       = wxMOD_META,
 #if defined(__WXMAC__) || defined(__WXCOCOA__)
-    wxMOD_CMD       = wxMOD_META,
+    wxMOD_RAW_CONTROL = 0x0010,
 #else
-    wxMOD_CMD       = wxMOD_CONTROL,
+    wxMOD_RAW_CONTROL = wxMOD_CONTROL,
 #endif
+    wxMOD_CMD       = wxMOD_CONTROL,
     wxMOD_ALL       = 0xffff
 };
 
@@ -2784,7 +2856,7 @@ typedef int (* LINKAGEMODE wxListIterateFunction)(void *current);
 #endif
 
 /*  macro to specify "All Files" on different platforms */
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__)
 #   define wxALL_FILES_PATTERN   wxT("*.*")
 #   define wxALL_FILES           gettext_noop("All files (*.*)|*.*")
 #else
@@ -2808,9 +2880,14 @@ typedef int (* LINKAGEMODE wxListIterateFunction)(void *current);
 
 /*  --------------------------------------------------------------------------- */
 /*  macros that enable wxWidgets apps to be compiled in absence of the */
-/*  sytem headers, although some platform specific types are used in the */
+/*  system headers, although some platform specific types are used in the */
 /*  platform specific (implementation) parts of the headers */
 /*  --------------------------------------------------------------------------- */
+
+#ifdef __DARWIN__
+#define DECLARE_WXOSX_OPAQUE_CFREF( name ) typedef struct __##name* name##Ref;
+#define DECLARE_WXOSX_OPAQUE_CONST_CFREF( name ) typedef const struct __##name* name##Ref;
+#endif
 
 #ifdef __WXMAC__
 
@@ -2847,9 +2924,6 @@ typedef void*       WXDisplay;
 typedef const void * CFTypeRef;
 
 /* typedef const struct __CFString * CFStringRef; */
-
-#define DECLARE_WXOSX_OPAQUE_CFREF( name ) typedef struct __##name* name##Ref;
-#define DECLARE_WXOSX_OPAQUE_CONST_CFREF( name ) typedef const struct __##name* name##Ref;
 
 DECLARE_WXOSX_OPAQUE_CONST_CFREF( CFString )
 typedef struct __CFString * CFMutableStringRef;
@@ -2923,7 +2997,7 @@ typedef unsigned int NSUInteger;
  */
 
 /*  NOTE: This ought to work with other compilers too, but I'm being cautious */
-#if (defined(__GNUC__) && defined(__APPLE__)) || defined(__MWERKS__)
+#if (defined(__GNUC__) && defined(__APPLE__))
 /* It's desirable to have type safety for Objective-C(++) code as it does
 at least catch typos of method names among other things.  However, it
 is not possible to declare an Objective-C class from plain old C or C++
@@ -2943,7 +3017,7 @@ typedef klass *WX_##klass
 typedef struct klass *WX_##klass
 #endif /*  defined(__OBJC__) */
 
-#else /*  not Apple's GNU or CodeWarrior */
+#else /*  not Apple's gcc */
 #warning "Objective-C types will not be checked by the compiler."
 /*  NOTE: typedef struct objc_object *id; */
 /*  IOW, we're declaring these using the id type without using that name, */
@@ -2953,7 +3027,7 @@ typedef struct klass *WX_##klass
 #define DECLARE_WXCOCOA_OBJC_CLASS(klass) \
 typedef struct objc_object *WX_##klass
 
-#endif /*  (defined(__GNUC__) && defined(__APPLE__)) || defined(__MWERKS__) */
+#endif /*  (defined(__GNUC__) && defined(__APPLE__)) */
 
 DECLARE_WXCOCOA_OBJC_CLASS(NSApplication);
 DECLARE_WXCOCOA_OBJC_CLASS(NSBitmapImageRep);
@@ -2976,6 +3050,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSMutableArray);
 DECLARE_WXCOCOA_OBJC_CLASS(NSNotification);
 DECLARE_WXCOCOA_OBJC_CLASS(NSObject);
 DECLARE_WXCOCOA_OBJC_CLASS(NSPanel);
+DECLARE_WXCOCOA_OBJC_CLASS(NSResponder);
 DECLARE_WXCOCOA_OBJC_CLASS(NSScrollView);
 DECLARE_WXCOCOA_OBJC_CLASS(NSSound);
 DECLARE_WXCOCOA_OBJC_CLASS(NSStatusItem);
@@ -3026,41 +3101,6 @@ typedef WX_NSString* WXGLPixelFormat;
 
 #endif /* __WXMAC__ */
 
-#if defined(__WXPALMOS__)
-
-typedef void *          WXHWND;
-typedef void *          WXHANDLE;
-typedef void *          WXHICON;
-typedef void *          WXHFONT;
-typedef void *          WXHMENU;
-typedef void *          WXHPEN;
-typedef void *          WXHBRUSH;
-typedef void *          WXHPALETTE;
-typedef void *          WXHCURSOR;
-typedef void *          WXHRGN;
-typedef void *          WXHACCEL;
-typedef void *          WXHINSTANCE;
-typedef void *          WXHBITMAP;
-typedef void *          WXHIMAGELIST;
-typedef void *          WXHGLOBAL;
-typedef void *          WXHDC;
-typedef unsigned int    WXUINT;
-typedef unsigned long   WXDWORD;
-typedef unsigned short  WXWORD;
-
-typedef unsigned long   WXCOLORREF;
-typedef struct tagMSG   WXMSG;
-
-typedef WXHWND          WXWINHANDLE; /* WinHandle of PalmOS */
-typedef WXWINHANDLE     WXWidget;
-
-typedef void *          WXFORMPTR;
-typedef void *          WXEVENTPTR;
-typedef void *          WXRECTANGLEPTR;
-
-#endif /* __WXPALMOS__ */
-
-
 /* ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port */
 #if defined(__WIN32__)
 
@@ -3108,12 +3148,14 @@ typedef void *          WXDRAWITEMSTRUCT;
 typedef void *          WXMEASUREITEMSTRUCT;
 typedef void *          WXLPCREATESTRUCT;
 
+#ifdef __WXMSW__
 typedef WXHWND          WXWidget;
+#endif
 
 #ifdef __WIN64__
-typedef unsigned __int64   WXWPARAM;
-typedef __int64            WXLPARAM;
-typedef __int64            WXLRESULT;
+typedef wxUint64           WXWPARAM;
+typedef wxInt64            WXLPARAM;
+typedef wxInt64            WXLRESULT;
 #else
 typedef wxW64 unsigned int WXWPARAM;
 typedef wxW64 long         WXLPARAM;
@@ -3126,115 +3168,6 @@ typedef int             (*WXFARPROC)();
 typedef int             (__stdcall *WXFARPROC)();
 #endif
 #endif /*  __WIN32__ */
-
-
-#if defined(__OS2__)
-typedef unsigned long   DWORD;
-typedef unsigned short  WORD;
-#endif
-
-#if defined(__WXPM__) || defined(__EMX__)
-#ifdef __WXPM__
-/*  Stand-ins for OS/2 types, to avoid #including all of os2.h */
-typedef unsigned long   WXHWND;
-typedef unsigned long   WXHANDLE;
-typedef unsigned long   WXHICON;
-typedef unsigned long   WXHFONT;
-typedef unsigned long   WXHMENU;
-typedef unsigned long   WXHPEN;
-typedef unsigned long   WXHBRUSH;
-typedef unsigned long   WXHPALETTE;
-typedef unsigned long   WXHCURSOR;
-typedef unsigned long   WXHRGN;
-typedef unsigned long   WXHACCEL;
-typedef unsigned long   WXHINSTANCE;
-typedef unsigned long   WXHMODULE;
-typedef unsigned long   WXHBITMAP;
-typedef unsigned long   WXHDC;
-typedef unsigned int    WXUINT;
-typedef unsigned long   WXDWORD;
-typedef unsigned short  WXWORD;
-
-typedef unsigned long   WXCOLORREF;
-typedef void *          WXMSG;
-typedef unsigned long   WXHTREEITEM;
-
-typedef void *          WXDRAWITEMSTRUCT;
-typedef void *          WXMEASUREITEMSTRUCT;
-typedef void *          WXLPCREATESTRUCT;
-
-typedef WXHWND          WXWidget;
-#endif
-#ifdef __EMX__
-/* Need a well-known type for WXFARPROC
-   below. MPARAM is typedef'ed too late. */
-#define WXWPARAM        void *
-#define WXLPARAM        void *
-#else
-#define WXWPARAM        MPARAM
-#define WXLPARAM        MPARAM
-#endif
-#define RECT            RECTL
-#define LOGFONT         FATTRS
-#define LOWORD          SHORT1FROMMP
-#define HIWORD          SHORT2FROMMP
-
-typedef unsigned long   WXMPARAM;
-typedef unsigned long   WXMSGID;
-typedef void*           WXRESULT;
-/* typedef int             (*WXFARPROC)(); */
-/*  some windows handles not defined by PM */
-typedef unsigned long   HANDLE;
-typedef unsigned long   HICON;
-typedef unsigned long   HFONT;
-typedef unsigned long   HMENU;
-typedef unsigned long   HPEN;
-typedef unsigned long   HBRUSH;
-typedef unsigned long   HPALETTE;
-typedef unsigned long   HCURSOR;
-typedef unsigned long   HINSTANCE;
-typedef unsigned long   HIMAGELIST;
-typedef unsigned long   HGLOBAL;
-#endif /*  WXPM || EMX */
-
-#if defined (__WXPM__)
-/*  WIN32 graphics types for OS/2 GPI */
-
-/*  RGB under OS2 is more like a PALETTEENTRY struct under Windows so we need a real RGB def */
-#define OS2RGB(r,g,b) ((DWORD)((unsigned char)(b) | ((unsigned char)(g) << 8)) | ((unsigned char)(r) << 16))
-
-typedef unsigned long COLORREF;
-#define GetRValue(rgb) ((unsigned char)((rgb) >> 16))
-#define GetGValue(rgb) ((unsigned char)(((unsigned short)(rgb)) >> 8))
-#define GetBValue(rgb) ((unsigned char)(rgb))
-#define PALETTEINDEX(i) ((COLORREF)(0x01000000 | (DWORD)(WORD)(i)))
-#define PALETTERGB(r,g,b) (0x02000000 | OS2RGB(r,g,b))
-/*  OS2's RGB/RGB2 is backwards from this */
-typedef struct tagPALETTEENTRY
-{
-    char bRed;
-    char bGreen;
-    char bBlue;
-    char bFlags;
-} PALETTEENTRY;
-typedef struct tagLOGPALETTE
-{
-    WORD palVersion;
-    WORD palNumentries;
-    WORD PALETTEENTRY[1];
-} LOGPALETTE;
-
-#if (defined(__VISAGECPP__) && (__IBMCPP__ < 400)) || defined (__WATCOMC__)
-    /*  VA 3.0 for some reason needs base data types when typedefing a proc proto??? */
-typedef void* (_System *WXFARPROC)(unsigned long, unsigned long, void*, void*);
-#else
-#if defined(__EMX__) && !defined(_System)
-#define _System
-#endif
-typedef WXRESULT (_System *WXFARPROC)(WXHWND, WXMSGID, WXWPARAM, WXLPARAM);
-#endif
-
-#endif /* __WXPM__ */
 
 
 #if defined(__WXMOTIF__) || defined(__WXX11__)
@@ -3268,52 +3201,45 @@ typedef long            WXPixel; /* safety catch in src/motif/colour.cpp */
 #ifdef __WXGTK__
 
 /* Stand-ins for GLIB types */
-typedef char           gchar;
-typedef signed char    gint8;
-typedef int            gint;
-typedef unsigned       guint;
-typedef unsigned long  gulong;
-typedef void*          gpointer;
 typedef struct _GSList GSList;
 
 /* Stand-ins for GDK types */
 typedef struct _GdkColor        GdkColor;
-typedef struct _GdkColormap     GdkColormap;
-typedef struct _GdkFont         GdkFont;
-typedef struct _GdkGC           GdkGC;
-typedef struct _GdkVisual       GdkVisual;
-
-#ifdef __WXGTK20__
-typedef struct _GdkAtom        *GdkAtom;
-typedef struct _GdkDrawable     GdkWindow;
-typedef struct _GdkDrawable     GdkBitmap;
-typedef struct _GdkDrawable     GdkPixmap;
-#else /*  GTK+ 1.2 */
-typedef gulong                  GdkAtom;
-typedef struct _GdkWindow       GdkWindow;
-typedef struct _GdkWindow       GdkBitmap;
-typedef struct _GdkWindow       GdkPixmap;
-#endif /*  GTK+ 1.2/2.0 */
-
 typedef struct _GdkCursor       GdkCursor;
-typedef struct _GdkRegion       GdkRegion;
 typedef struct _GdkDragContext  GdkDragContext;
 
-#ifdef HAVE_XIM
-typedef struct _GdkIC           GdkIC;
-typedef struct _GdkICAttr       GdkICAttr;
+#if defined(__WXGTK20__)
+    typedef struct _GdkAtom* GdkAtom;
+#else
+    typedef unsigned long GdkAtom;
+#endif
+
+#if !defined(__WXGTK3__)
+    typedef struct _GdkColormap GdkColormap;
+    typedef struct _GdkFont GdkFont;
+    typedef struct _GdkGC GdkGC;
+    typedef struct _GdkRegion GdkRegion;
+#endif
+
+#if defined(__WXGTK3__)
+    typedef struct _GdkWindow GdkWindow;
+#elif defined(__WXGTK20__)
+    typedef struct _GdkDrawable GdkWindow;
+    typedef struct _GdkDrawable GdkPixmap;
+#else
+    typedef struct _GdkWindow GdkWindow;
+    typedef struct _GdkWindow GdkBitmap;
+    typedef struct _GdkWindow GdkPixmap;
 #endif
 
 /* Stand-ins for GTK types */
 typedef struct _GtkWidget         GtkWidget;
 typedef struct _GtkRcStyle        GtkRcStyle;
 typedef struct _GtkAdjustment     GtkAdjustment;
-typedef struct _GtkList           GtkList;
 typedef struct _GtkToolbar        GtkToolbar;
 typedef struct _GtkNotebook       GtkNotebook;
 typedef struct _GtkNotebookPage   GtkNotebookPage;
 typedef struct _GtkAccelGroup     GtkAccelGroup;
-typedef struct _GtkItemFactory    GtkItemFactory;
 typedef struct _GtkSelectionData  GtkSelectionData;
 typedef struct _GtkTextBuffer     GtkTextBuffer;
 typedef struct _GtkRange          GtkRange;
@@ -3341,10 +3267,6 @@ typedef struct _PangoLayout          PangoLayout;
 typedef struct _PangoFontDescription PangoFontDescription;
 #endif
 
-#ifdef __WXMGL__
-typedef struct window_t *WXWidget;
-#endif /*  MGL */
-
 #ifdef __WXDFB__
 /* DirectFB doesn't have the concept of non-TLW window, so use
    something arbitrary */
@@ -3359,9 +3281,9 @@ typedef const void* WXWidget;
 /*  included before or after wxWidgets classes, and therefore must be */
 /*  disabled here before any significant wxWidgets headers are included. */
 #ifdef __cplusplus
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
 #include "wx/msw/winundef.h"
-#endif /* __WXMSW__ */
+#endif /* __WINDOWS__ */
 #endif /* __cplusplus */
 
 
@@ -3403,14 +3325,15 @@ typedef const void* WXWidget;
 /*  If a manifest is being automatically generated, add common controls 6 to it */
 /*  --------------------------------------------------------------------------- */
 
-#if (!defined wxUSE_NO_MANIFEST || wxUSE_NO_MANIFEST == 0 ) && \
+#if wxUSE_GUI && \
+    (!defined wxUSE_NO_MANIFEST || wxUSE_NO_MANIFEST == 0 ) && \
     ( defined _MSC_FULL_VER && _MSC_FULL_VER >= 140040130 )
 
 #define WX_CC_MANIFEST(cpu)                     \
     "/manifestdependency:\"type='win32'         \
      name='Microsoft.Windows.Common-Controls'   \
      version='6.0.0.0'                          \
-     processorArchitecture='"cpu"'              \
+     processorArchitecture='" cpu "'            \
      publicKeyToken='6595b64144ccf1df'          \
      language='*'\""
 
@@ -3425,6 +3348,14 @@ typedef const void* WXWidget;
 #endif
 
 #endif /* !wxUSE_NO_MANIFEST && _MSC_FULL_VER >= 140040130 */
+
+/* wxThread and wxProcess priorities */
+enum
+{
+    wxPRIORITY_MIN     = 0u,   /* lowest possible priority */
+    wxPRIORITY_DEFAULT = 50u,  /* normal priority */
+    wxPRIORITY_MAX     = 100u  /* highest possible priority */
+};
 
 #endif
     /*  _WX_DEFS_H_ */

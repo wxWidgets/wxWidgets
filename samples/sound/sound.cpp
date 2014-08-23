@@ -4,7 +4,6 @@
 // Author:      Vaclav Slavik
 // Modified by:
 // Created:     2004/01/29
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Vaclav Salvik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -36,7 +35,7 @@
 // ----------------------------------------------------------------------------
 
 // the application icon (under Windows and OS/2 it is in resources)
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__) || defined(__WXQT__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -49,7 +48,7 @@
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 
@@ -93,7 +92,7 @@ private:
     wxTextCtrl* m_tc;
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -128,7 +127,7 @@ enum
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Sound_SelectFile,       MyFrame::OnSelectFile)
 #ifdef __WXMSW__
     EVT_MENU(Sound_SelectResource,   MyFrame::OnSelectResource)
@@ -142,7 +141,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Sound_PlayLoop,         MyFrame::OnPlayLoop)
     EVT_MENU(Sound_Stop,             MyFrame::OnStop)
     EVT_MENU(Sound_PlayBell,         MyFrame::OnPlayBell)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
@@ -213,7 +212,7 @@ MyFrame::MyFrame(const wxString& title)
     playMenu->Append(Sound_PlayBell, wxT("Play system bell"));
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Sound_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(Sound_About, wxT("&About\tF1"), wxT("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();

@@ -2,7 +2,6 @@
 // Name:        tipdlg.h
 // Purpose:     interface of wxTipProvider
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -34,8 +33,10 @@ public:
     */
     wxTipProvider(size_t currentTip);
 
+    virtual ~wxTipProvider();
+
     /**
-        Returns the index of the current tip (i.e. the one which would be returned by GetTip()).
+        Returns the index of the current tip (i.e.\ the one which would be returned by GetTip()).
 
         The program usually remembers the value returned by this function after calling
         wxShowTip(). Note that it is not the same as the value which was passed to
@@ -49,18 +50,6 @@ public:
         This function is pure virtual, it should be implemented in the derived classes.
     */
     virtual wxString GetTip() = 0;
-
-    /**
-        Returns a modified tip.
-
-        This function will be called immediately after read, and before being check
-        whether it is a comment, an empty string or a string to translate.
-        You can optionally override this in your custom user-derived class
-        to optionally to modify the tip as soon as it is read. You can return any
-        modification to the string. If you return wxEmptyString, then this tip is
-        skipped, and the next one is read.
-    */
-    virtual wxString PreProcessTip(const wxString& tip);
 };
 
 

@@ -2,7 +2,6 @@
 // Name:        guiframe.cpp
 // Purpose:     Implement the Application Frame
 // Author:      Utensil Candel (UtensilCandel@@gmail.com)
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -93,7 +92,7 @@ void GUIFrame::AddMenuBar()
     //Help Menu
     helpMenu = new wxMenu();
     wxMenuItem* m_menuHelpAbout;
-    m_menuHelpAbout = new wxMenuItem( helpMenu, wxID_ABOUT, wxString( _("&About...") ) + wxT('\t') + wxT("F1"), _("Shows info about this application."), wxITEM_NORMAL );
+    m_menuHelpAbout = new wxMenuItem( helpMenu, wxID_ABOUT, wxString( _("&About") ) + wxT('\t') + wxT("F1"), _("Shows info about this application."), wxITEM_NORMAL );
     helpMenu->Append( m_menuHelpAbout );
 
     mbar->Append( helpMenu, _("&Help") );
@@ -101,11 +100,11 @@ void GUIFrame::AddMenuBar()
     this->SetMenuBar( mbar );
 
     // Connect Events
-    this->Connect( m_menuSeeScr->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnSeeScreenshots ) );
-    this->Connect( m_menuFileQuit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnQuit ) );
-    this->Connect( m_menuCapFullScreen->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnCaptureFullScreen ) );
-    this->Connect( m_menuCapAll->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnCaptureAllControls ) );
-    this->Connect( m_menuHelpAbout->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnAbout ) );
+    this->Connect( m_menuSeeScr->GetId(), wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnSeeScreenshots ) );
+    this->Connect( m_menuFileQuit->GetId(), wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnQuit ) );
+    this->Connect( m_menuCapFullScreen->GetId(), wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnCaptureFullScreen ) );
+    this->Connect( m_menuCapAll->GetId(), wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnCaptureAllControls ) );
+    this->Connect( m_menuHelpAbout->GetId(), wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnAbout ) );
 }
 
 void GUIFrame::AddPanel_1()
@@ -485,9 +484,9 @@ GUIFrame::~GUIFrame()
 {
     // Disconnect Events
     this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( GUIFrame::OnClose ) );
-    this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnSeeScreenshots ) );
-    this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnQuit ) );
-    this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnCaptureFullScreen ) );
-    this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnCaptureAllControls ) );
-    this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnAbout ) );
+    this->Disconnect( wxID_ANY, wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnSeeScreenshots ) );
+    this->Disconnect( wxID_ANY, wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnQuit ) );
+    this->Disconnect( wxID_ANY, wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnCaptureFullScreen ) );
+    this->Disconnect( wxID_ANY, wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnCaptureAllControls ) );
+    this->Disconnect( wxID_ANY, wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnAbout ) );
 }

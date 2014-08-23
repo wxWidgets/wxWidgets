@@ -2,7 +2,6 @@
 // Name:        pen.h
 // Purpose:     interface of wxPen* classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -64,8 +63,11 @@ enum wxPenStyle
     wxPENSTYLE_VERTICAL_HATCH,
         /**< Vertical hatch. */
 
-    wxPENSTYLE_FIRST_HATCH = wxPENSTYLE_BDIAGONAL_HATCH,
-    wxPENSTYLE_LAST_HATCH = wxPENSTYLE_VERTICAL_HATCH
+    wxPENSTYLE_FIRST_HATCH,
+        /**< First of the hatch styles (inclusive). */
+
+    wxPENSTYLE_LAST_HATCH
+        /**< Last of the hatch styles (inclusive). */
 };
 
 /**
@@ -329,7 +331,7 @@ public:
     //@}
 
     /**
-        Associates an array of pointers to dashes (defined as @c char in X, @c DWORD under
+        Associates an array of dash values (defined as @c char in X, @c DWORD under
         Windows) with the pen.
 
         The array is not deallocated by wxPen, but neither must it be deallocated by

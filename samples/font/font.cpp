@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     30.09.99
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -57,7 +56,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 // MyCanvas is a canvas on which we show the font sample
@@ -80,7 +79,7 @@ private:
     wxColour m_colour;
     wxFont   m_font;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -97,6 +96,8 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
+    void OnGetBaseFont(wxCommandEvent& WXUNUSED(event))
+        { DoChangeFont(m_canvas->GetTextFont().GetBaseFont()); }
     void OnIncFont(wxCommandEvent& WXUNUSED(event)) { DoResizeFont(+2); }
     void OnDecFont(wxCommandEvent& WXUNUSED(event)) { DoResizeFont(-2); }
 
@@ -107,6 +108,7 @@ public:
     void OnSlant(wxCommandEvent& event);
 
     void OnUnderline(wxCommandEvent& event);
+    void OnStrikethrough(wxCommandEvent& event);
 
     void OnwxPointerFont(wxCommandEvent& event);
     void OnwxSystemSettingsFont(wxCommandEvent& event);
@@ -151,7 +153,7 @@ protected:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -171,6 +173,8 @@ enum
     Font_IncSize,
     Font_DecSize,
 
+    Font_GetBaseFont,
+
     Font_Bold,
     Font_Light,
 
@@ -178,6 +182,7 @@ enum
     Font_Slant,
 
     Font_Underlined,
+    Font_Strikethrough,
 
     // standard global wxFont objects:
     Font_wxNORMAL_FONT,
@@ -215,12 +220,13 @@ enum
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_Quit,  MyFrame::OnQuit)
     EVT_MENU(Font_TestTextValue, MyFrame::OnTestTextValue)
     EVT_MENU(Font_ViewMsg, MyFrame::OnViewMsg)
     EVT_MENU(Font_About, MyFrame::OnAbout)
 
+    EVT_MENU(Font_GetBaseFont, MyFrame::OnGetBaseFont)
     EVT_MENU(Font_IncSize, MyFrame::OnIncFont)
     EVT_MENU(Font_DecSize, MyFrame::OnDecFont)
 
@@ -231,6 +237,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_Slant, MyFrame::OnSlant)
 
     EVT_MENU(Font_Underlined, MyFrame::OnUnderline)
+    EVT_MENU(Font_Strikethrough, MyFrame::OnStrikethrough)
 
     EVT_MENU(Font_wxNORMAL_FONT, MyFrame::OnwxPointerFont)
     EVT_MENU(Font_wxSMALL_FONT, MyFrame::OnwxPointerFont)
@@ -255,7 +262,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_EnumFamilies, MyFrame::OnEnumerateFamilies)
     EVT_MENU(Font_EnumFixedFamilies, MyFrame::OnEnumerateFixedFamilies)
     EVT_MENU(Font_EnumEncodings, MyFrame::OnEnumerateEncodings)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
@@ -311,13 +318,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(Font_ViewMsg, wxT("&View...\tCtrl-V"),
                      wxT("View an email message file"));
     menuFile->AppendSeparator();
-    menuFile->Append(Font_About, wxT("&About...\tCtrl-A"), wxT("Show about dialog"));
+    menuFile->Append(Font_About, wxT("&About\tCtrl-A"), wxT("Show about dialog"));
     menuFile->AppendSeparator();
     menuFile->Append(Font_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
     wxMenu *menuFont = new wxMenu;
     menuFont->Append(Font_IncSize, wxT("&Increase font size by 2 points\tCtrl-I"));
     menuFont->Append(Font_DecSize, wxT("&Decrease font size by 2 points\tCtrl-D"));
+    menuFont->Append(Font_GetBaseFont, wxT("Use &base version of the font\tCtrl-0"));
     menuFont->AppendSeparator();
     menuFont->AppendCheckItem(Font_Bold, wxT("&Bold\tCtrl-B"), wxT("Toggle bold state"));
     menuFont->AppendCheckItem(Font_Light, wxT("&Light\tCtrl-L"), wxT("Toggle light state"));
@@ -330,6 +338,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFont->AppendSeparator();
     menuFont->AppendCheckItem(Font_Underlined, wxT("&Underlined\tCtrl-U"),
                               wxT("Toggle underlined state"));
+    menuFont->AppendCheckItem(Font_Strikethrough, wxT("&Strikethrough"),
+                              wxT("Toggle strikethrough state"));
 
     menuFont->AppendSeparator();
     menuFont->Append(Font_SetNativeDesc,
@@ -418,7 +428,7 @@ public:
 
 protected:
     virtual bool OnFontEncoding(const wxString& facename,
-                                const wxString& encoding)
+                                const wxString& encoding) wxOVERRIDE
     {
         wxString text;
         text.Printf(wxT("Encoding %u: %s (available in facename '%s')\n"),
@@ -454,7 +464,7 @@ public:
         { return m_facenames; }
 
 protected:
-    virtual bool OnFacename(const wxString& facename)
+    virtual bool OnFacename(const wxString& facename) wxOVERRIDE
     {
         m_facenames.Add(facename);
         return true;
@@ -513,9 +523,7 @@ bool MyFrame::DoEnumerateFamilies(bool fixedWidthOnly,
 
         if ( !facename.empty() )
         {
-            wxFont font(wxNORMAL_FONT->GetPointSize(),
-                        wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
-                        wxFONTWEIGHT_NORMAL, false, facename, encoding);
+            wxFont font(wxFontInfo().FaceName(facename).Encoding(encoding));
 
             DoChangeFont(font);
         }
@@ -735,6 +743,13 @@ void MyFrame::OnUnderline(wxCommandEvent& event)
     DoChangeFont(font);
 }
 
+void MyFrame::OnStrikethrough(wxCommandEvent& event)
+{
+    wxFont font = m_canvas->GetTextFont();
+    font.SetStrikethrough(event.IsChecked());
+    DoChangeFont(font);
+}
+
 void MyFrame::OnwxPointerFont(wxCommandEvent& event)
 {
     wxFont font;
@@ -813,6 +828,7 @@ void MyFrame::DoChangeFont(const wxFont& font, const wxColour& col)
     m_textctrl->SetFont(font);
     if ( col.IsOk() )
         m_textctrl->SetForegroundColour(col);
+    m_textctrl->Refresh();
 
     // update the state of the bold/italic/underlined menu items
     wxMenuBar *mbar = GetMenuBar();
@@ -827,6 +843,7 @@ void MyFrame::DoChangeFont(const wxFont& font, const wxColour& col)
 #endif
 
         mbar->Check(Font_Underlined, font.GetUnderlined());
+        mbar->Check(Font_Strikethrough, font.GetStrikethrough());
     }
 }
 
@@ -964,10 +981,7 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
     // and now create the correct font
     if ( !DoEnumerateFamilies(false, fontenc, true /* silent */) )
     {
-        wxFont font(wxNORMAL_FONT->GetPointSize(),
-                    wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
-                    wxFONTWEIGHT_NORMAL, false /* !underlined */,
-                    wxEmptyString /* facename */, fontenc);
+        wxFont font(wxFontInfo(wxNORMAL_FONT->GetPointSize()).Encoding(fontenc));
         if ( font.IsOk() )
         {
             DoChangeFont(font);
@@ -993,9 +1007,9 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 // MyCanvas
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyCanvas, wxWindow)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxWindow)
     EVT_PAINT(MyCanvas::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent )
         : wxWindow( parent, wxID_ANY ),
@@ -1009,7 +1023,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     PrepareDC(dc);
 
     // set background
-    dc.SetBackground(wxBrush(wxT("white"), wxSOLID));
+    dc.SetBackground(*wxWHITE_BRUSH);
     dc.Clear();
     dc.SetFont(m_font);
 
@@ -1091,7 +1105,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
 
     // draw the lines between them
-    dc.SetPen(wxPen(wxColour(wxT("blue")), 1, wxSOLID));
+    dc.SetPen(*wxBLUE_PEN);
     int l;
 
     // horizontal

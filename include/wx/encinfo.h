@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     19.09.2003 (extracted from wx/fontenc.h)
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,11 +34,9 @@
 struct WXDLLIMPEXP_CORE wxNativeEncodingInfo
 {
     wxString facename;          // may be empty meaning "any"
-#ifndef __WXPALMOS__
     wxFontEncoding encoding;    // so that we know what this struct represents
 
 #if defined(__WXMSW__) || \
-    defined(__WXPM__)  || \
     defined(__WXMAC__) || \
     defined(__WXCOCOA__) || \
     defined(__WXQT__)
@@ -56,12 +53,9 @@ struct WXDLLIMPEXP_CORE wxNativeEncodingInfo
              xencoding;
 #elif defined(wxHAS_UTF8_FONTS)
     // ports using UTF-8 for text don't need encoding information for fonts
-#elif defined(__WXMGL__)
-    int      mglEncoding;
 #else
     #error "Unsupported toolkit"
 #endif
-#endif // !__WXPALMOS__
     // this struct is saved in config by wxFontMapper, so it should know to
     // serialise itself (implemented in platform-specific code)
     bool FromString(const wxString& s);

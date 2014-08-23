@@ -7,12 +7,6 @@
     <centered>1</centered>
     <object class="wxBoxSizer">
         <orient>wxVERTICAL</orient>
-        <cols>1</cols>
-        <rows>0</rows>
-        <vgap>0</vgap>
-        <hgap>0</hgap>
-        <growablecols>0</growablecols>
-        <growablerows>0</growablerows>
         <object class="sizeritem">
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <border>5</border>

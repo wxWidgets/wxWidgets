@@ -285,4 +285,3 @@ Note that the abicheck.sh script is in the "lib" folder.
 === EOF ===
 
 Author:  RN
-Version: $Id$

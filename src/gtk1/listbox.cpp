@@ -2,7 +2,6 @@
 // Name:        src/gtk1/listbox.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -160,7 +159,7 @@ static gint gtk_listitem_focus_out_callback( GtkWidget *WXUNUSED(widget),
 // "button_release_event"
 //-----------------------------------------------------------------------------
 
-/* we would normally emit a wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event once
+/* we would normally emit a wxEVT_LISTBOX_DCLICK event once
    a GDK_2BUTTON_PRESS occurs, but this has the particular problem of the
    listbox keeping the focus until it receives a GDK_BUTTON_RELEASE event.
    this can lead to race conditions so that we emit the dclick event
@@ -181,7 +180,7 @@ gtk_listbox_button_release_callback( GtkWidget * WXUNUSED(widget),
 
     if (!g_hasDoubleClicked) return FALSE;
 
-    wxCommandEvent event( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
+    wxCommandEvent event( wxEVT_LISTBOX_DCLICK, listbox->GetId() );
     event.SetEventObject( listbox );
 
     wxArrayInt aSelections;
@@ -234,7 +233,7 @@ gtk_listbox_button_press_callback( GtkWidget *widget,
 
         clb->Check( sel, !clb->IsChecked(sel) );
 
-        wxCommandEvent event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, listbox->GetId() );
+        wxCommandEvent event( wxEVT_CHECKLISTBOX, listbox->GetId() );
         event.SetEventObject( listbox );
         event.SetInt( sel );
         listbox->HandleWindowEvent( event );
@@ -257,7 +256,7 @@ gtk_listbox_button_press_callback( GtkWidget *widget,
             return false;
     }
 
-    /* emit wxEVT_COMMAND_LISTBOX_DOUBLECLICKED later */
+    /* emit wxEVT_LISTBOX_DCLICK later */
     g_hasDoubleClicked = (gdk_event->type == GDK_2BUTTON_PRESS);
 
     return FALSE;
@@ -306,7 +305,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
 
         clb->Check( sel, !clb->IsChecked(sel) );
 
-        wxCommandEvent new_event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, listbox->GetId() );
+        wxCommandEvent new_event( wxEVT_CHECKLISTBOX, listbox->GetId() );
         new_event.SetEventObject( listbox );
         new_event.SetInt( sel );
         ret = listbox->HandleWindowEvent( new_event );
@@ -329,7 +328,7 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
             else
                 gtk_list_select_item( listbox->m_list, sel );
 
-            wxCommandEvent new_event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
+            wxCommandEvent new_event(wxEVT_LISTBOX, listbox->GetId() );
             new_event.SetEventObject( listbox );
             wxArrayInt aSelections;
             int n, count = listbox->GetSelections(aSelections);
@@ -376,7 +375,7 @@ static void gtk_listitem_select_cb( GtkWidget *widget,
 
     if (listbox->m_blockEvent) return;
 
-    wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
+    wxCommandEvent event(wxEVT_LISTBOX, listbox->GetId() );
     event.SetEventObject( listbox );
 
     // indicate whether this is a selection or a deselection

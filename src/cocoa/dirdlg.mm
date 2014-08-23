@@ -4,7 +4,6 @@
 // Author:      Ryan Norton
 // Modified by: Hiroyuki Nakamura(maloninc)
 // Created:     2006-01-10
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -31,6 +30,7 @@
 #endif
 
 #include "wx/filename.h"
+#include "wx/modalhook.h"
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
@@ -104,6 +104,8 @@ wxDirDialog::~wxDirDialog()
 
 int wxDirDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
     wxAutoNSAutoreleasePool thePool;
 
     m_fileNames.Empty();

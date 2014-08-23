@@ -2,7 +2,6 @@
 // Name:        dialog.h
 // Purpose:     interface of wxDialog
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -16,6 +15,16 @@ enum wxDialogLayoutAdaptationMode
     wxDIALOG_ADAPTATION_MODE_DISABLED = 2   ///< Disable this dialog overriding global status.
 };
 
+#define wxDIALOG_NO_PARENT      0x00000020  ///< Don't make owned by apps top window
+
+#define wxDEFAULT_DIALOG_STYLE  (wxCAPTION | wxSYSTEM_MENU | wxCLOSE_BOX)
+
+
+#define wxDIALOG_ADAPTATION_NONE             0  ///< Don't do any layout adaptation
+#define wxDIALOG_ADAPTATION_STANDARD_SIZER   1  ///< Only look for wxStdDialogButtonSizer for non-scrolling part
+#define wxDIALOG_ADAPTATION_ANY_SIZER        2  ///< Also look for any suitable sizer for non-scrolling part
+#define wxDIALOG_ADAPTATION_LOOSE_BUTTONS    3  ///< Also look for 'loose' standard buttons for non-scrolling part
+
 /**
     @class wxDialog
 
@@ -28,7 +37,7 @@ enum wxDialogLayoutAdaptationMode
     resolution screens: please see @ref overview_dialog_autoscrolling for
     further details.
 
-    Dialogs usually contains either a single button allowing to close the
+    Dialogs usually contain either a single button allowing to close the
     dialog or two buttons, one accepting the changes and the other one
     discarding them (such button, if present, is automatically activated if the
     user presses the "Esc" key). By default, buttons with the standard wxID_OK
@@ -102,8 +111,8 @@ enum wxDialogLayoutAdaptationMode
     @style{wxSTAY_ON_TOP}
            The dialog stays on top of all other windows.
     @style{wxNO_3D}
-           Under Windows, specifies that the child controls should not have 3D
-           borders unless specified in the control.
+           This style is obsolete and doesn't do anything any more, don't use
+           it in any new code.
     @style{wxDIALOG_NO_PARENT}
            By default, a dialog created with a @NULL parent window will be
            given the @ref wxApp::GetTopWindow() "application's top level window"
@@ -282,6 +291,12 @@ public:
     wxStdDialogButtonSizer* CreateStdDialogButtonSizer(long flags);
 
     /**
+       Splits text up at newlines and places the lines into wxStaticText
+       objects in a vertical wxBoxSizer.
+    */
+    wxSizer *CreateTextSizer( const wxString& message );
+
+    /**
         Performs layout adaptation, usually if the dialog is too large to fit
         on the display.
 
@@ -452,23 +467,6 @@ public:
     virtual bool IsModal() const;
 
     /**
-        The default handler for @c wxEVT_SYS_COLOUR_CHANGED.
-
-        @param event
-            The colour change event.
-
-        @remarks Changes the dialog's colour to conform to the current settings
-                 (Windows only). Add an event table entry for your dialog class
-                 if you wish the behaviour to be different (such as keeping a
-                 user-defined background colour). If you do override this
-                 function, call wxEvent::Skip() to propagate the notification
-                 to child windows and controls.
-
-        @see wxSysColourChangedEvent
-    */
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-
-    /**
         Sets the identifier to be used as OK button. When the button with this
         identifier is pressed, the dialog calls wxWindow::Validate() and
         wxWindow::TransferDataFromWindow() and, if they both return @true,
@@ -556,19 +554,6 @@ public:
     static wxDialogLayoutAdapter* SetLayoutAdapter(wxDialogLayoutAdapter* adapter);
 
     /**
-        @deprecated This function doesn't work for all ports, just use
-                    ShowModal() to show a modal dialog instead.
-
-        Allows the programmer to specify whether the dialog box is modal
-        (Show() blocks control until the dialog is hidden) or modeless (control
-        returns immediately).
-
-        @param flag
-            If @true, the dialog will be modal, otherwise it will be modeless.
-    */
-    void SetModal(bool flag);
-
-    /**
         Sets the return code for this window.
 
         A return code is normally associated with a modal dialog, where
@@ -611,7 +596,8 @@ public:
 
         @return The value set with SetReturnCode().
 
-        @see ShowWindowModal(), EndModal(), GetReturnCode(), SetReturnCode()
+        @see ShowWindowModal(), ShowWindowModalThenDo(),
+             EndModal(), GetReturnCode(), SetReturnCode()
     */
     virtual int ShowModal();
 
@@ -622,15 +608,58 @@ public:
         user from interacting with their parent frame only but not with the
         rest of the application. They also don't block the program execution
         but instead return immediately, as Show(), and generate a
-        wxEVT_WINDOW_MODAL_DIALOG_CLOSED event later when the dialog is closed.
+        wxEVT_WINDOW_MODAL_DIALOG_CLOSED event (wxWindowModalDialogEvent)
+        later when the dialog is closed.
 
         Currently this function is only fully implemented in wxOSX ports, under
         the other platforms it behaves like ShowModal() (but also sends the
         above mentioned event).
 
+        @see wxWindowModalDialogEvent, ShowWindowModalThenDo()
+
         @since 2.9.0
      */
     void ShowWindowModal();
+
+    /**
+        Shows a dialog modal to the parent top level window only and call a
+        functor after the dialog is closed.
+
+        Same as the other ShowWindowModal() overload, but calls the functor
+        passed as the argument upon completion, instead of generating the
+        wxEVT_WINDOW_MODAL_DIALOG_CLOSED event.
+
+        This form is particularly useful in combination with C++11 lambdas,
+        when it allows writing window-modal very similarly to how ShowModal()
+        is used (with the notable exception of not being able to create
+        the dialog on stack):
+
+        @code
+        wxWindowPtr<wxDialog> dlg(new wxMessageDialog(this, "Hello!"));
+
+        dlg->ShowWindowModalThenDo([this,dlg](int retcode){
+            if ( retcode == wxID_OK )
+                DoSomething();
+            // dlg is implicitly destroyed here, because the pointer was
+            // explicitly captured by the lambda
+        });
+        @endcode
+
+        @param onEndModal  Function object to call when the dialog is
+                           closed. The functor is called with a single
+                           integer argument, dialog's return code.
+
+        @note The dialog instance must not be destroyed until @a onEndModal
+              is called. The best way to ensure that is to use wxWindowPtr
+              to hold a pointer and include it in the lambda's capture,
+              by value (not reference!), as shown in the example above.
+
+        @since 3.0
+
+        @see wxWindowPtr<T>
+     */
+    template<typename Functor>
+    void ShowWindowModalThenDo(const Functor& onEndModal);
 };
 
 
@@ -673,3 +702,24 @@ public:
     virtual bool DoLayoutAdaptation(wxDialog* dialog) = 0;
 };
 
+
+/**
+    Event sent by wxDialog::ShowWindowModal() when the dialog closes.
+
+    @since 2.9.0
+ */
+class wxWindowModalDialogEvent  : public wxCommandEvent
+{
+public:
+    /// Constructor
+    wxWindowModalDialogEvent (wxEventType commandType = wxEVT_NULL, int id = 0);
+
+    /// Return the corresponding dialog.
+    wxDialog *GetDialog() const;
+
+    /// Return the dialog's return code.
+    int GetReturnCode() const;
+
+    /// Clone the event.
+    virtual wxEvent *Clone() const;
+};

@@ -2,7 +2,6 @@
 // Name:        filesys.h
 // Purpose:     interface of wxFileSystem, wxFileSystemHandler, wxFSFile
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -61,6 +60,11 @@ public:
     */
     static void AddHandler(wxFileSystemHandler* handler);
 
+    /**
+       Remove a filesystem handler from the list of handlers.
+    */
+    static wxFileSystemHandler* RemoveHandler(wxFileSystemHandler *handler);
+    
     /**
         Sets the current location. @a location parameter passed to OpenFile() is
         relative to this path.
@@ -182,7 +186,7 @@ public:
     @class wxFSFile
 
     This class represents a single file opened by wxFileSystem.
-    It provides more informations than wxWidgets' input streams
+    It provides more information than wxWidgets' input streams
     (stream, filename, mime type, anchor).
 
     @note Any pointer returned by a method of wxFSFile is valid only as long as
@@ -243,7 +247,7 @@ public:
 
     /**
         Detaches the stream from the wxFSFile object. That is, the
-        stream obtained with GetStream() will continue its existance
+        stream obtained with GetStream() will continue its existence
         after the wxFSFile object is deleted.
 
         You will have to delete the stream yourself.
@@ -458,3 +462,41 @@ protected:
     static wxString GetRightLocation(const wxString& location);
 };
 
+
+/**
+    Input stream for virtual file stream files.
+
+    The stream reads data from wxFSFile obtained from wxFileSystem. It is
+    especially useful to allow using virtual files with other wxWidgets
+    functions and classes working with streams, e.g. for loading images or
+    animations from virtual files and not only physical ones.
+
+    @library{wxbase}
+    @category{streams}
+
+    @see wxWrapperInputStream, wxFSFile
+
+    @since 2.9.4
+*/
+class wxFSInputStream : public wxWrapperInputStream
+{
+public:
+    /**
+        Create a stream associated with the data of the given virtual file
+        system file.
+
+        @param filename
+            The name of the input file passed to wxFileSystem::OpenFile().
+        @param flags
+            Combination of flags from wxFileSystemOpenFlags. ::wxFS_READ is
+            implied, i.e. it is always added to the flags value.
+
+        Use wxStreamBase::IsOk() to verify if the constructor succeeded.
+    */
+    wxFileInputStream(const wxString& filename, int flags = 0);
+
+    /**
+        Returns @true if the stream is initialized and ready.
+    */
+    bool IsOk() const;
+};

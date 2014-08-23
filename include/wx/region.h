@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
@@ -181,10 +180,8 @@ protected:
 // some ports implement a generic Combine() function while others only
 // implement individual wxRegion operations, factor out the common code for the
 // ports with Combine() in this class
-#if defined(__WXPALMOS__) || \
-    defined(__WXMSW__) || \
-    ( defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON ) || \
-    defined(__WXPM__)
+#if defined(__WXMSW__) || \
+    ( defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON )
 
 #define wxHAS_REGION_COMBINE
 
@@ -213,9 +210,7 @@ protected:
 
 #endif // ports with wxRegion::Combine()
 
-#if defined(__WXPALMOS__)
-    #include "wx/palmos/region.h"
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
     #include "wx/msw/region.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/region.h"
@@ -223,16 +218,12 @@ protected:
     #include "wx/gtk1/region.h"
 #elif defined(__WXMOTIF__) || defined(__WXX11__)
     #include "wx/x11/region.h"
-#elif defined(__WXMGL__)
-    #include "wx/mgl/region.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/region.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/region.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/region.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/region.h"
 #elif defined(__WXQT__)
     #include "wx/qt/region.h"
 #endif

@@ -4,7 +4,6 @@
 // Author:      Benjamin I. Williams
 // Modified by:
 // Created:     2005-10-03
-// RCS-ID:      $Id$
 // Copyright:   (C) Copyright 2005, Kirix Corporation, All Rights Reserved.
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
@@ -43,7 +42,7 @@
 class MyApp : public wxApp
 {
 public:
-    bool OnInit();
+    bool OnInit() wxOVERRIDE;
 };
 
 DECLARE_APP(MyApp)
@@ -174,7 +173,7 @@ private:
     long m_notebook_style;
     long m_notebook_theme;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -251,14 +250,14 @@ private:
 
     wxAuiManager* m_mgr;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(wxSizeReportCtrl, wxControl)
+wxBEGIN_EVENT_TABLE(wxSizeReportCtrl, wxControl)
     EVT_PAINT(wxSizeReportCtrl::OnPaint)
     EVT_SIZE(wxSizeReportCtrl::OnSize)
     EVT_ERASE_BACKGROUND(wxSizeReportCtrl::OnEraseBackground)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 class SettingsPanel : public wxPanel
@@ -540,10 +539,10 @@ private:
     wxBitmapButton* m_border_color;
     wxBitmapButton* m_gripper_color;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(SettingsPanel, wxPanel)
+wxBEGIN_EVENT_TABLE(SettingsPanel, wxPanel)
     EVT_SPINCTRL(ID_PaneBorderSize, SettingsPanel::OnPaneBorderSize)
     EVT_SPINCTRL(ID_SashSize, SettingsPanel::OnSashSize)
     EVT_SPINCTRL(ID_CaptionSize, SettingsPanel::OnCaptionSize)
@@ -557,7 +556,7 @@ BEGIN_EVENT_TABLE(SettingsPanel, wxPanel)
     EVT_BUTTON(ID_ActiveCaptionTextColor, SettingsPanel::OnSetColor)
     EVT_BUTTON(ID_BorderColor, SettingsPanel::OnSetColor)
     EVT_BUTTON(ID_GripperColor, SettingsPanel::OnSetColor)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 bool MyApp::OnInit()
@@ -575,7 +574,7 @@ bool MyApp::OnInit()
     return true;
 }
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_ERASE_BACKGROUND(MyFrame::OnEraseBackground)
     EVT_SIZE(MyFrame::OnSize)
     EVT_MENU(MyFrame::ID_CreateTree, MyFrame::OnCreateTree)
@@ -654,7 +653,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_AUINOTEBOOK_ALLOW_DND(wxID_ANY, MyFrame::OnAllowNotebookDnD)
     EVT_AUINOTEBOOK_PAGE_CLOSE(wxID_ANY, MyFrame::OnNotebookPageClose)
     EVT_AUINOTEBOOK_PAGE_CLOSED(wxID_ANY, MyFrame::OnNotebookPageClosed)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 MyFrame::MyFrame(wxWindow* parent,
@@ -798,7 +797,7 @@ MyFrame::MyFrame(wxWindow* parent,
     tb2->SetToolBitmapSize(wxSize(16,16));
 
     wxBitmap tb2_bmp1 = wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(16,16));
-    tb2->AddTool(ID_SampleItem+6, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+6, wxT("Disabled"), tb2_bmp1);
     tb2->AddTool(ID_SampleItem+7, wxT("Test"), tb2_bmp1);
     tb2->AddTool(ID_SampleItem+8, wxT("Test"), tb2_bmp1);
     tb2->AddTool(ID_SampleItem+9, wxT("Test"), tb2_bmp1);
@@ -811,6 +810,7 @@ MyFrame::MyFrame(wxWindow* parent,
     tb2->AddTool(ID_SampleItem+14, wxT("Test"), tb2_bmp1);
     tb2->AddTool(ID_SampleItem+15, wxT("Test"), tb2_bmp1);
     tb2->SetCustomOverflowItems(prepend_items, append_items);
+    tb2->EnableTool(ID_SampleItem+6, false);
     tb2->Realize();
 
 
@@ -1643,6 +1643,7 @@ wxAuiNotebook* MyFrame::CreateNotebook()
    wxBitmap page_bmp = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
 
    ctrl->AddPage(CreateHTMLCtrl(ctrl), wxT("Welcome to wxAUI") , false, page_bmp);
+   ctrl->SetPageToolTip(0, "Welcome to wxAUI (this is a page tooltip)");
 
    wxPanel *panel = new wxPanel( ctrl, wxID_ANY );
    wxFlexGridSizer *flex = new wxFlexGridSizer( 4, 2, 0, 0 );
@@ -1681,6 +1682,8 @@ wxAuiNotebook* MyFrame::CreateNotebook()
 
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 7 (longer title)") );
+   ctrl->SetPageToolTip(ctrl->GetPageCount()-1,
+                        "wxTextCtrl 7: and the tooltip message can be even longer!");
 
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 8") );

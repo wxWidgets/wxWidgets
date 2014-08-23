@@ -4,7 +4,6 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/02/15
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
 //              (c) 2007 Software 2000 Ltd.
 // Licence:     wxWindows licence
@@ -268,7 +267,7 @@ wxSize wxRadioBox::DoGetBestSize() const
 
 void wxRadioBox::CocoaTarget_action(void)
 {
-    wxCommandEvent event(wxEVT_COMMAND_RADIOBOX_SELECTED, GetId());
+    wxCommandEvent event(wxEVT_RADIOBOX, GetId());
     InitCommandEvent(event);
     event.SetInt(GetSelection()); // i.e. SetSelection.
     Command(event);

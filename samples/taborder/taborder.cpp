@@ -2,7 +2,6 @@
 // Name:        taborder.cpp
 // Purpose:     Sample for testing TAB navigation
 // Author:      Vadim Zeitlin
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -39,7 +38,7 @@
 
 #include "wx/notebook.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -79,7 +78,7 @@ enum
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 // and the main sample window
@@ -111,7 +110,7 @@ private:
 
     wxPanel *m_panel;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // and the panel taking up MyFrame client area
@@ -184,7 +183,7 @@ bool MyApp::OnInit()
 // MyFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TabOrder_Quit,   MyFrame::OnQuit)
     EVT_MENU(TabOrder_About,  MyFrame::OnAbout)
 
@@ -192,7 +191,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TabOrder_TabBackward, MyFrame::OnTabBackward)
 
     EVT_IDLE(MyFrame::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
        : wxFrame(NULL, wxID_ANY, wxT("TabOrder wxWidgets Sample"),

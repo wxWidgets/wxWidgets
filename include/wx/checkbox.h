@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     07.09.00
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -41,16 +40,6 @@
  */
 #define wxCHK_ALLOW_3RD_STATE_FOR_USER 0x2000
 
-/*
- * The possible states of a 3-state checkbox (Compatible
- * with the 2-state checkbox).
- */
-enum wxCheckBoxState
-{
-    wxCHK_UNCHECKED,
-    wxCHK_CHECKED,
-    wxCHK_UNDETERMINED /* 3-state checkbox only */
-};
 
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
@@ -110,10 +99,10 @@ public:
         return HasFlag(wxCHK_ALLOW_3RD_STATE_FOR_USER);
     }
 
-    virtual bool HasTransparentBackground() { return true; }
+    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
 
     // wxCheckBox-specific processing after processing the update event
-    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event)
+    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) wxOVERRIDE
     {
         wxControl::DoUpdateWindowUI(event);
 
@@ -123,7 +112,7 @@ public:
 
 protected:
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
     virtual void DoSet3StateValue(wxCheckBoxState WXUNUSED(state)) { wxFAIL; }
 
@@ -193,11 +182,6 @@ private:
     #include "wx/osx/checkbox.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/checkbox.h"
-#elif defined(__WXPM__)
-    #undef wxHAS_3STATE_CHECKBOX
-    #include "wx/os2/checkbox.h"
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/checkbox.h"
 #elif defined(__WXQT__)
     #include "wx/qt/checkbox.h"
 #endif

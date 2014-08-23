@@ -2,7 +2,6 @@
 // Name:        combobox.h
 // Purpose:     interface of wxComboBox
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -41,40 +40,39 @@
     @style{wxCB_SORT}
            Sorts the entries in the list alphabetically.
     @style{wxTE_PROCESS_ENTER}
-           The control will generate the event @c wxEVT_COMMAND_TEXT_ENTER
+           The control will generate the event @c wxEVT_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
-           control or used for navigation between dialog controls). Windows
-           only.
+           control or used for navigation between dialog controls).
     @endStyleTable
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_COMBOBOX(id, func)}
-           Process a @c wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
+           Process a @c wxEVT_COMBOBOX event, when an item on
            the list is selected. Note that calling GetValue() returns the new
            value of selection.
     @event{EVT_TEXT(id, func)}
-           Process a @c wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text
+           Process a @c wxEVT_TEXT event, when the combobox text
            changes.
     @event{EVT_TEXT_ENTER(id, func)}
-           Process a @c wxEVT_COMMAND_TEXT_ENTER event, when RETURN is pressed in
+           Process a @c wxEVT_TEXT_ENTER event, when RETURN is pressed in
            the combobox (notice that the combobox must have been created with
            wxTE_PROCESS_ENTER style to receive this event).
     @event{EVT_COMBOBOX_DROPDOWN(id, func)}
-           Process a @c wxEVT_COMMAND_COMBOBOX_DROPDOWN event, which is generated
+           Process a @c wxEVT_COMBOBOX_DROPDOWN event, which is generated
            when the list box part of the combo box is shown (drops down).
-           Notice that this event is currently only supported by wxMSW and
-           wxGTK with GTK+ 2.10 or later.
+           Notice that this event is only supported by wxMSW, wxGTK with GTK+
+           2.10 or later, and wxOSX/Cocoa.
     @event{EVT_COMBOBOX_CLOSEUP(id, func)}
-           Process a @c wxEVT_COMMAND_COMBOBOX_CLOSEUP event, which is generated
+           Process a @c wxEVT_COMBOBOX_CLOSEUP event, which is generated
            when the list box of the combo box disappears (closes up). This
            event is only generated for the same platforms as
-           @c wxEVT_COMMAND_COMBOBOX_DROPDOWN above. Also note that only wxMSW
-           supports adding or deleting items in this event.
+           @c wxEVT_COMBOBOX_DROPDOWN above. Also note that only wxMSW and
+           wxOSX/Cocoa support adding or deleting items in this event.
     @endEventTable
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{combobox.png}
+    @appearance{combobox}
 
     @see wxListBox, wxTextCtrl, wxChoice, wxCommandEvent
 */
@@ -116,11 +114,6 @@ public:
         @param name
             Window name.
 
-        @beginWxPythonOnly
-        The wxComboBox constructor in wxPython reduces the @a n and @a choices
-        arguments are to a single argument, which is a list of strings.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         Not supported by wxPerl.
         @endWxPerlOnly
@@ -158,11 +151,6 @@ public:
             Window validator.
         @param name
             Window name.
-
-        @beginWxPythonOnly
-        The wxComboBox constructor in wxPython reduces the @a n and @a choices
-        arguments are to a single argument, which is a list of strings.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         Use an array reference for the @a choices parameter.
@@ -225,19 +213,47 @@ public:
     virtual long GetInsertionPoint() const;
 
     /**
-        Same as wxTextEntry::SetSelection().
+        IsEmpty() is not available in this class.
 
-        @beginWxPythonOnly
-        This method is called SetMark() in wxPython, "SetSelection" is kept for
-        wxControlWithItems::SetSelection().
-        @endWxPythonOnly
+        This method is documented here only to notice that it can't be used
+        with this class because of the ambiguity between the methods with the
+        same name inherited from wxItemContainer and wxTextEntry base classes.
+
+        Because of this, any attempt to call it results in a compilation error
+        and you should use either IsListEmpty() or IsTextEmpty() depending on
+        what exactly do you want to test.
+     */
+    bool IsEmpty() const;
+
+    /**
+        Returns true if the list of combobox choices is empty.
+
+        Use this method instead of (not available in this class) IsEmpty() to
+        test if the list of items is empty.
+
+        @since 2.9.3
+     */
+    bool IsListEmpty() const;
+
+    /**
+        Returns true if the text of the combobox is empty.
+
+        Use this method instead of (not available in this class) IsEmpty() to
+        test if the text currently entered into the combobox is empty.
+
+        @since 2.9.3
+     */
+    bool IsTextEmpty() const;
+
+    /**
+        Same as wxTextEntry::SetSelection().
     */
     virtual void SetSelection(long from, long to);
 
     /**
         Sets the text for the combobox text field.
 
-        Notice that this method will generate a @c wxEVT_COMMAND_TEXT_UPDATED
+        Notice that this method will generate a @c wxEVT_TEXT
         event, use wxTextEntry::ChangeValue() if this is undesirable.
 
         @note For a combobox with @c wxCB_READONLY style the string must be in
@@ -252,10 +268,11 @@ public:
     /**
         Shows the list box portion of the combo box.
 
-        Currently only implemented in wxMSW and wxGTK.
+        Currently this method is implemented in wxMSW, wxGTK and wxOSX/Cocoa.
 
         Notice that calling this function will generate a
-        @c wxEVT_COMMAND_COMBOBOX_DROPDOWN event.
+        @c wxEVT_COMBOBOX_DROPDOWN event except under wxOSX where
+        generation of this event is not supported at all.
 
         @since 2.9.1
     */
@@ -264,13 +281,32 @@ public:
     /**
         Hides the list box portion of the combo box.
 
-        Currently only implemented in wxMSW and wxGTK.
+        Currently this method is implemented in wxMSW, wxGTK and wxOSX/Cocoa.
 
         Notice that calling this function will generate a
-        @c wxEVT_COMMAND_COMBOBOX_CLOSEUP event.
+        @c wxEVT_COMBOBOX_CLOSEUP event except under wxOSX where
+        generation of this event is not supported at all.
 
         @since 2.9.1
     */
     virtual void Dismiss();
+
+    virtual int GetSelection() const;
+    virtual void GetSelection(long *from, long *to) const;
+    virtual void SetSelection(int n);
+    virtual int FindString(const wxString& s, bool bCase = false) const;
+    virtual wxString GetString(unsigned int n) const;
+    virtual wxString GetStringSelection() const;
+
+    /**
+        Changes the text of the specified combobox item.
+
+        Notice that if the item is the currently selected one, i.e. if its text
+        is displayed in the text part of the combobox, then the text is also
+        replaced with the new @a text.
+     */
+    virtual void SetString(unsigned int n, const wxString& text);
+
+    virtual unsigned int GetCount() const;
 };
 

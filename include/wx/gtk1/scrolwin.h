@@ -4,7 +4,6 @@
 // Author:      Robert Roebling
 // Modified by: Vadim Zeitlin (2005-10-10): wxScrolledWindow is now common
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -26,6 +25,7 @@ public:
                                int noUnitsX, int noUnitsY,
                                int xPos = 0, int yPos = 0,
                                bool noRefresh = false);
+    virtual bool IsScrollbarShown(int orient) const;
     virtual void AdjustScrollbars();
 
 protected:

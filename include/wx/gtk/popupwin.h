@@ -3,7 +3,6 @@
 // Purpose:
 // Author:      Robert Roebling
 // Created:
-// Id:          $Id$
 // Copyright:   (c) 2001 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -25,9 +24,9 @@ public:
         { (void)Create(parent, flags); }
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
-    virtual bool Show(bool show = true);
+    virtual bool Show(bool show = true) wxOVERRIDE;
 
-    virtual void SetFocus();
+    virtual void SetFocus() wxOVERRIDE;
 
     // implementation
     // --------------
@@ -38,12 +37,9 @@ public:
 protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
 
-    virtual void DoMoveWindow(int x, int y, int width, int height);
-
-private:
-    virtual void AddChildGTK(wxWindowGTK* child);
+    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
 
 #ifdef __WXUNIVERSAL__
     DECLARE_EVENT_TABLE()

@@ -2,9 +2,16 @@
 // Name:        frame.h
 // Purpose:     interface of wxFrame
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+   Frame specific styles
+*/
+#define wxFRAME_NO_TASKBAR      0x0002  // No taskbar button (MSW only)
+#define wxFRAME_TOOL_WINDOW     0x0004  // No taskbar button, no system menu
+#define wxFRAME_FLOAT_ON_PARENT 0x0008  // Always above its parent
+
 
 /**
     @class wxFrame
@@ -118,7 +125,8 @@
 
     @beginEventEmissionTable
     @event{EVT_CLOSE(func)}
-        The frame is being closed by the user or programmatically (see wxWindow::Close).
+        Process a @c wxEVT_CLOSE_WINDOW event when the frame is being
+        closed by the user or programmatically (see wxWindow::Close).
         The user may generate this event clicking the close button
         (typically the 'X' on the top-right of the title bar) if it's present
         (see the @c wxCLOSE_BOX style). See wxCloseEvent.
@@ -234,7 +242,7 @@ public:
     */
     virtual wxStatusBar* CreateStatusBar(int number = 1, long style = wxSTB_DEFAULT_STYLE,
                                          wxWindowID id = 0,
-                                         const wxString& name = wxStatusLineNameStr);
+                                         const wxString& name = wxStatusBarNameStr);
 
     /**
         Creates a toolbar at the top or left of the frame.
@@ -265,7 +273,7 @@ public:
 
         @see CreateStatusBar(), OnCreateToolBar(), SetToolBar(), GetToolBar()
     */
-    virtual wxToolBar* CreateToolBar(long style = wxBORDER_NONE | wxTB_HORIZONTAL,
+    virtual wxToolBar* CreateToolBar(long style = wxTB_DEFAULT_STYLE,
                                      wxWindowID id = wxID_ANY,
                                      const wxString& name = wxToolBarNameStr);
 

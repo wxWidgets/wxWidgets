@@ -1,5 +1,5 @@
 <!-- Creator     : groff version 1.18.1 -->
-<!-- CreationDate: Mon Mar 13 18:03:13 2006 -->
+<!-- CreationDate: Sat Feb 24 18:37:20 2007 -->
 <html>
 <head>
 <meta name="generator" content="groff -Thtml, see www.gnu.org">
@@ -37,7 +37,7 @@ header</p>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p><b>tiffset</b> [ options ] <i>filename.tif</i></p>
+<p><b>tiffset</b> [ <i>options</i> ] <i>filename.tif</i></p>
 </td>
 </table>
 <a name="DESCRIPTION"></a>
@@ -60,7 +60,8 @@ header to a specified value.</p>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p><b>&minus;s tagnumber [count] value ...</b></p></td>
+<p><b>&minus;s</b> <i>tagnumber</i> [ <i>count</i> ]
+<i>value ...</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -78,7 +79,7 @@ specified.</p>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p><b>&minus;sf tagnumber filename</b></p></td>
+<p><b>&minus;sf</b> <i>tagnumber filename</i></p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -107,7 +108,7 @@ This option is supported for ASCII tags only.</p>
 <tr valign="top" align="left">
 <td width="17%"></td>
 <td width="82%">
-<pre>tiffset -sf 270 descrip a.tif
+<pre>tiffset &minus;sf 270 descrip a.tif
 </pre>
 </td>
 </table>
@@ -119,7 +120,8 @@ This option is supported for ASCII tags only.</p>
 <td width="8%"></td>
 <td width="91%">
 <p>The following example sets the artist tag (315) of a.tif
-to the string &quot;Anonymous&quot;:</p></td>
+to the string
+&lsquo;&lsquo;Anonymous&rsquo;&rsquo;:</p></td>
 </table>
 <!-- INDENTATION -->
 <table width="100%" border=0 rules="none" frame="void"
@@ -127,7 +129,7 @@ to the string &quot;Anonymous&quot;:</p></td>
 <tr valign="top" align="left">
 <td width="17%"></td>
 <td width="82%">
-<pre>tiffset -s 305 Anonymous a.tif
+<pre>tiffset &minus;s 305 Anonymous a.tif
 </pre>
 </td>
 </table>
@@ -147,9 +149,9 @@ dpi:</p></td>
 <tr valign="top" align="left">
 <td width="17%"></td>
 <td width="82%">
-<pre>tiffset -s 296 2 a.tif
-tiffset -s 282 300.0 a.tif
-tiffset -s 283 300.0 a.tif
+<pre>tiffset &minus;s 296 2 a.tif
+tiffset &minus;s 282 300.0 a.tif
+tiffset &minus;s 283 300.0 a.tif
 </pre>
 </td>
 </table>

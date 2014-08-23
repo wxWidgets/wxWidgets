@@ -2,7 +2,6 @@
 // Name:        clipbrd.h
 // Purpose:     interface of wxClipboard
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -102,6 +101,9 @@ public:
         (possibly eating memory), otherwise the clipboard will be emptied on
         exit.
 
+        Currently this method is not implemented in X11-based ports, i.e.
+        wxGTK, wxX11 and wxMotif and always returns @false there.
+
         @return @false if the operation is unsuccessful for any reason.
     */
     virtual bool Flush();
@@ -174,5 +176,11 @@ public:
         platforms.
     */
     virtual void UsePrimarySelection(bool primary = false);
+
+    /**
+       Returns the global instance (wxTheClipboard) of the clipboard object.
+    */
+    static wxClipboard *Get();
+
 };
 

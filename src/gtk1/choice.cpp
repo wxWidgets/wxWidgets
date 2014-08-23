@@ -2,7 +2,6 @@
 // Name:        src/gtk1/choice.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -66,7 +65,7 @@ static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *
 
     choice->m_selection_hack = selection;
 
-    wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, choice->GetId() );
+    wxCommandEvent event(wxEVT_CHOICE, choice->GetId() );
     int n = choice->GetSelection();
 
     event.SetInt( n );

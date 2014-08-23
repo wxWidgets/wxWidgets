@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -580,7 +579,7 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
     if ( conv )
     {
         const char * const text = (const char *)data;
-        const size_t len = size/sizeof(char);
+        const size_t len = size;
 
         realSize = conv->ToWChar(NULL, 0, text, len);
         if ( realSize == wxCONV_FAILED )
@@ -593,6 +592,10 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
         realSize = conv->ToWChar((wchar_t *)realData, realSize, text, len);
         if ( realSize == wxCONV_FAILED )
             return false;
+
+        // We need to pass the size of the buffer to DdeClientTransaction() and
+        // not the length of the string.
+        realSize *= sizeof(wchar_t);
     }
 #else // !wxUSE_UNICODE
     if ( format == wxIPC_UNICODETEXT )
@@ -623,7 +626,7 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
         if ( realSize == wxCONV_FAILED )
             return false;
 
-        realData = (LPBYTE)buffer.GetWriteBuf(realSize*sizeof(char));
+        realData = (LPBYTE)buffer.GetWriteBuf(realSize);
         if ( !realData )
             return false;
 
@@ -635,7 +638,7 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
 
     DWORD result;
     bool ok = DdeClientTransaction(realData,
-                                   realSize*sizeof(wxChar),
+                                   realSize,
                                    GetHConv(),
                                    NULL,
                                    // MSDN: if the transaction specified by
@@ -1064,7 +1067,7 @@ static HSZ DDEAtomFromString(const wxString& s)
 {
     wxASSERT_MSG( DDEIdInst, wxT("DDE not initialized") );
 
-    HSZ hsz = DdeCreateStringHandle(DDEIdInst, (wxChar*)s.wx_str(), DDE_CP);
+    HSZ hsz = DdeCreateStringHandle(DDEIdInst, wxMSW_CONV_LPTSTR(s), DDE_CP);
     if ( !hsz )
     {
         DDELogError(_("Failed to create DDE string"));

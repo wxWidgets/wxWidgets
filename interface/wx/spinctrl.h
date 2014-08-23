@@ -2,7 +2,6 @@
 // Name:        spinctrl.h
 // Purpose:     interface of wxSpinCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -17,13 +16,13 @@
     @style{wxSP_WRAP}
         The value wraps at the minimum and maximum.
     @style{wxTE_PROCESS_ENTER}
-        Indicates that the control should generate @c wxEVT_COMMAND_TEXT_ENTER
+        Indicates that the control should generate @c wxEVT_TEXT_ENTER
         events. Using this style will prevent the user from using the Enter key
         for dialog navigation (e.g. activating the default button in the
         dialog) under MSW.
     @style{wxALIGN_LEFT}
         Same as wxTE_LEFT for wxTextCtrl: the text is left aligned.
-    @style{wxALIGN_CENTRE}
+    @style{wxALIGN_CENTRE_HORIZONTAL}
         Same as wxTE_CENTRE for wxTextCtrl: the text is centered.
     @style{wxALIGN_RIGHT}
         Same as wxTE_RIGHT for wxTextCtrl: the text is right aligned (this is
@@ -33,7 +32,7 @@
 
     @beginEventEmissionTable{wxSpinEvent}
     @event{EVT_SPINCTRL(id, func)}
-        Process a wxEVT_COMMAND_SPINCTRL_UPDATED event, which is generated
+        Process a wxEVT_SPINCTRL event, which is generated
         whenever the numeric value of the spin control is updated.
     @endEventTable
 
@@ -47,7 +46,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{spinctrl.png}
+    @appearance{spinctrl}
 
     @see wxSpinButton, wxSpinCtrlDouble, wxControl
 */
@@ -61,6 +60,14 @@ public:
 
     /**
         Constructor, creating and showing a spin control.
+
+        If @a value is non-empty, it will be shown in the text entry part of
+        the control and if it has numeric value, the initial numeric value of
+        the control, as returned by GetValue() will also be determined by it
+        instead of by @a initial. Hence, it only makes sense to specify @a
+        initial if @a value is an empty string or is not convertible to a
+        number, otherwise @a initial is simply ignored and the number specified
+        by @a value is used.
 
         @param parent
             Parent window. Must not be @NULL.
@@ -107,6 +114,15 @@ public:
                 int initial = 0, const wxString& name = "wxSpinCtrl");
 
     /**
+        Returns the numerical base being currently used, 10 by default.
+
+        @see SetBase()
+
+        @since 2.9.5
+     */
+    int GetBase() const;
+
+    /**
         Gets maximal allowable value.
     */
     int GetMax() const;
@@ -122,7 +138,33 @@ public:
     int GetValue() const;
 
     /**
+        Sets the base to use for the numbers in this control.
+
+        Currently the only supported values are 10 (which is the default) and
+        16.
+
+        Changing the base allows the user to enter the numbers in the specified
+        base, e.g. with "0x" prefix for hexadecimal numbers, and also displays
+        the numbers in the specified base when they are changed using the spin
+        control arrows.
+
+        @param base
+            Numeric base, currently only 10 and 16 are supported.
+        @return
+            @true if the base was successfully changed or @false if it failed,
+            usually meaning that either the base is not 10 or 16.
+
+        @since 2.9.5
+     */
+    bool SetBase(int base);
+
+    /**
         Sets range of allowable values.
+
+        Notice that calling this method may change the value of the control if
+        it's not inside the new valid range, e.g. it will become @a minVal if
+        it is less than it now. However no @c wxEVT_SPINCTRL
+        event is generated, even if it the value does change.
     */
     void SetRange(int minVal, int maxVal);
 
@@ -137,12 +179,20 @@ public:
     virtual void SetSelection(long from, long to);
 
     /**
-        Sets the value of the spin control. Use the variant using int instead.
+        Sets the value of the spin control.
+
+        It is recommended to use the overload taking an integer value instead.
+
+        Notice that, unlike wxTextCtrl::SetValue(), but like most of the other
+        setter methods in wxWidgets, calling this method does not generate any
+        events as events are only generated for the user actions.
     */
     virtual void SetValue(const wxString& text);
 
     /**
         Sets the value of the spin control.
+
+        Calling this method doesn't generate any @c wxEVT_SPINCTRL events.
     */
     void SetValue(int value);
 };
@@ -170,7 +220,7 @@ public:
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{spinctrldouble.png}
+    @appearance{spinctrldouble}
 
     @see wxSpinButton, wxSpinCtrl, wxControl
 */
@@ -265,6 +315,8 @@ public:
 
     /**
         Sets the increment value.
+        @note You may also need to increase the number of visible digits
+        using SetDigits
     */
     void SetIncrement(double inc);
 
@@ -274,12 +326,20 @@ public:
     void SetRange(double minVal, double maxVal);
 
     /**
-        Sets the value of the spin control. Use the variant using double instead.
+        Sets the value of the spin control.
+
+        It is recommended to use the overload taking a double value instead.
+
+        Notice that, unlike wxTextCtrl::SetValue(), but like most of the other
+        setter methods in wxWidgets, calling this method does not generate any
+        events as events are only generated for the user actions.
     */
     virtual void SetValue(const wxString& text);
 
     /**
         Sets the value of the spin control.
+
+        Calling this method doesn't generate any @c wxEVT_SPINCTRLDOUBLE events.
     */
     void SetValue(double value);
 };
@@ -327,3 +387,6 @@ public:
     */
     void SetValue(double value);
 };
+
+wxEventType wxEVT_SPINCTRL;
+wxEventType wxEVT_SPINCTRLDOUBLE;

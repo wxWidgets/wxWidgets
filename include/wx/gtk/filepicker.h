@@ -5,7 +5,6 @@
 // Modified by:
 // Created:     14/4/2006
 // Copyright:   (c) Francesco Montorsi
-// RCS-ID:      $Id$
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -32,13 +31,6 @@
     virtual wxWindow *GetDialogParent()                                       \
     {                                                                         \
         return NULL;                                                          \
-    }                                                                         \
-                                                                              \
-    virtual bool Destroy()                                                    \
-    {                                                                         \
-        if (m_dialog)                                                         \
-            m_dialog->Destroy();                                              \
-        return wxButton::Destroy();                                           \
     }                                                                         \
                                                                               \
     /* even if wx derive from wxGenericFileButton, i.e. from wxButton, our */ \
@@ -101,13 +93,12 @@ public:     // overrides
     void OnDialogOK(wxCommandEvent &);
 
     virtual void SetPath(const wxString &str);
+    virtual void SetInitialDirectory(const wxString& dir);
 
     // see macro defined above
     FILEDIRBTN_OVERRIDES
 
 protected:
-    virtual bool GTKShouldConnectSizeRequest() const { return false; }
-
     wxDialog *m_dialog;
 
 private:
@@ -171,18 +162,12 @@ public:     // overrides
     }
 
     virtual void SetPath(const wxString &str);
+    virtual void SetInitialDirectory(const wxString& dir);
 
     // see macro defined above
     FILEDIRBTN_OVERRIDES
 
 protected:
-    // common part of all ctors
-    void Init()
-    {
-        m_dialog = NULL;
-        m_bIgnoreNextChange = false;
-    }
-
     wxDialog *m_dialog;
 
 public:    // used by the GTK callback only
@@ -192,6 +177,12 @@ public:    // used by the GTK callback only
     void GTKUpdatePath(const char *gtkpath);
 
 private:
+    void Init()
+    {
+        m_dialog = NULL;
+        m_bIgnoreNextChange = false;
+    }
+
     DECLARE_DYNAMIC_CLASS(wxDirButton)
 };
 

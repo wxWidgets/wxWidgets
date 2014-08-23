@@ -2,7 +2,6 @@
 // Name:        src/common/imagfill.cpp
 // Purpose:     FloodFill for wxImage
 // Author:      Julian Smart
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -58,8 +57,7 @@ static bool LINKAGEMODE MatchBoundaryPixel(wxImage *img, int x, int y, int w, in
 static void LINKAGEMODE
 wxImageFloodFill(wxImage *image,
                  wxCoord x, wxCoord y, const wxBrush & fillBrush,
-                 const wxColour& testColour, int style,
-                 int WXUNUSED(LogicalFunction))
+                 const wxColour& testColour, int style)
 {
     /* A diamond flood-fill using a circular queue system.
     Each pixel surrounding the current pixel is added to
@@ -313,8 +311,7 @@ bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
     memdc.SelectObject(wxNullBitmap);
 
     wxImage image = bitmap.ConvertToImage();
-    wxImageFloodFill(&image, x_dev, y_dev, dc->GetBrush(), col, style,
-                     dc->GetLogicalFunction());
+    wxImageFloodFill(&image, x_dev, y_dev, dc->GetBrush(), col, style);
     bitmap = wxBitmap(image);
     memdc.SelectObject(bitmap);
     dc->Blit(x0_log, y0_log, w_log, h_log, &memdc, 0, 0);

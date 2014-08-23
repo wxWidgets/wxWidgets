@@ -3,7 +3,6 @@
 // Purpose:     wxWidgets power management sample
 // Author:      Vadim Zeitlin
 // Created:     2006-05-27
-// RCS-ID:      $Id$
 // Copyright:   (C) 2006 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -33,7 +32,7 @@
 
 #include "wx/power.h"
 
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -168,10 +167,10 @@ private:
 
     wxLog *m_logOld;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_IDLE(MyFrame::OnIdle)
 
 #ifdef wxHAS_POWER_EVENTS
@@ -180,7 +179,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_POWER_SUSPEND_CANCEL(MyFrame::OnSuspendCancel)
     EVT_POWER_RESUME(MyFrame::OnResume)
 #endif // wxHAS_POWER_EVENTS
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // main application class

@@ -2,7 +2,6 @@
 // Name:        translation.h
 // Purpose:     wxTranslation class
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -30,7 +29,7 @@
 
     @since 2.9.1
 
-    @see wxLocale
+    @see wxLocale, wxTranslationsLoader, wxFileTranslationsLoader
  */
 class wxTranslations
 {
@@ -85,8 +84,57 @@ public:
         This method can be used e.g. to populate list of application's
         translations offered to the user. To do this, pass the app's main
         catalog as @a domain.
+
+        @see GetBestTranslation()
      */
     wxArrayString GetAvailableTranslations(const wxString& domain) const;
+
+    /**
+        Returns the best UI language for the @a domain.
+
+        The language is determined from the preferred UI language or languages
+        list the user configured in the OS. Notice that this may or may not
+        correspond to the default @em locale as obtained from
+        wxLocale::GetSystemLanguage(); modern operation systems (Windows
+        Vista+, OS X) have separate language and regional (= locale) settings.
+
+        @param domain
+            The catalog domain to look for.
+
+        @param msgIdLanguage
+            Specifies the language of "msgid" strings in source code
+            (i.e. arguments to GetString(), wxGetTranslation() and the _() macro).
+
+        @return Language code if a suitable match was found, empty string
+                otherwise.
+
+        @since 2.9.5
+     */
+    wxString GetBestTranslation(const wxString& domain, wxLanguage msgIdLanguage);
+
+    /**
+        Returns the best UI language for the @a domain.
+
+        The language is determined from the preferred UI language or languages
+        list the user configured in the OS. Notice that this may or may not
+        correspond to the default @em locale as obtained from
+        wxLocale::GetSystemLanguage(); modern operation systems (Windows
+        Vista+, OS X) have separate language and regional (= locale) settings.
+
+        @param domain
+            The catalog domain to look for.
+
+        @param msgIdLanguage
+            Specifies the language of "msgid" strings in source code
+            (i.e. arguments to GetString(), wxGetTranslation() and the _() macro).
+
+        @return Language code if a suitable match was found, empty string
+                otherwise.
+
+        @since 2.9.5
+     */
+    wxString GetBestTranslation(const wxString& domain,
+                                const wxString& msgIdLanguage = "en");
 
     /**
         Add standard wxWidgets catalogs ("wxstd" and possible port-specific
@@ -182,47 +230,51 @@ public:
         Retrieves the translation for a string in all loaded domains unless the @a domain
         parameter is specified (and then only this catalog/domain is searched).
 
-        Returns original string if translation is not available (in this case an
-        error message is generated the first time a string is not found; use
-        wxLogNull to suppress it).
+        Returns @NULL if translation is not available.
+
+        This function is thread-safe.
 
         @remarks Domains are searched in the last to first order, i.e. catalogs
                  added later override those added before.
+
+        @since 3.0
     */
-    const wxString& GetString(const wxString& origString,
-                              const wxString& domain = wxEmptyString) const;
+    const wxString *GetTranslatedString(const wxString& origString,
+                                        const wxString& domain = wxEmptyString) const;
 
     /**
         Retrieves the translation for a string in all loaded domains unless the @a domain
         parameter is specified (and then only this catalog/domain is searched).
 
-        Returns original string if translation is not available (in this case an
-        error message is generated the first time a string is not found; use
-        wxLogNull to suppress it).
+        Returns @NULL if translation is not available.
 
         This form is used when retrieving translation of string that has different
         singular and plural form in English or different plural forms in some
         other language.
-        It takes two extra arguments: @a origString parameter must contain the
-        singular form of the string to be converted.
 
-        It is also used as the key for the search in the catalog.
-        The @a origString2 parameter is the plural form (in English).
-
-        The parameter @a n is used to determine the plural form.
-        If no message catalog is found @a origString is returned if 'n == 1',
-        otherwise @a origString2.
+        @param origString  The singular form of the string to be converted.
+        @param n           The number on which the plural form choice depends on.
+                           (In some languages, there are different plural forms
+                           for e.g. n=2 and n=3 etc., in addition to the singular
+                           form (n=1) being different.)
+        @param domain      The only domain (i.e. message catalog) to search if
+                           specified. By default this parameter is empty,
+                           indicating that all loaded catalogs should be
+                           searched.
 
         See GNU gettext manual for additional information on plural forms handling.
         This method is called by the wxGetTranslation() function and _() macro.
 
+        This function is thread-safe.
+
         @remarks Domains are searched in the last to first order, i.e. catalogs
                  added later override those added before.
+
+        @since 3.0
     */
-    const wxString& GetString(const wxString& origString,
-                              const wxString& origString2,
-                              unsigned n,
-                              const wxString& domain = wxEmptyString) const;
+    const wxString *GetTranslatedString(const wxString& origString,
+                                        unsigned n,
+                                        const wxString& domain = wxEmptyString) const;
 
     /**
         Returns the header value for header @a header.
@@ -253,8 +305,8 @@ public:
 class wxTranslationsLoader
 {
 public:
-    /// Constructor
-    wxTranslationsLoader() {}
+    /// Trivial default constructor.
+    wxTranslationsLoader();
 
     /**
         Called to load requested catalog.
@@ -288,9 +340,11 @@ public:
     This is the default unless you change the loader with
     wxTranslations::SetLoader().
 
-    Catalogs are searched for in standard places (current directory first, then
-    the system one), but you may also prepend additional directories to the
-    search path with AddCatalogLookupPathPrefix().
+    Catalogs are searched for in standard places (system locales directory,
+    `LC_PATH` on Unix systems, Resources subdirectory of the application bundle
+    on OS X, executable's directory on Windows), but you may also prepend
+    additional directories to the search path with
+    AddCatalogLookupPathPrefix().
 
     @since 2.9.1
  */
@@ -299,7 +353,7 @@ class wxFileTranslationsLoader : public wxTranslationsLoader
 public:
     /**
         Add a prefix to the catalog lookup path: the message catalog files will
-        be looked up under prefix/lang/LC_MESSAGES, prefix/lang and prefix
+        be looked up under prefix/lang/LC_MESSAGES and prefix/lang directories
         (in this order).
 
         This only applies to subsequent invocations of
@@ -463,13 +517,13 @@ public:
     provided: the _() macro is defined to do the same thing as
     wxGetTranslation().
 
-    This function calls wxTranslations::GetString().
+    This function is thread-safe.
 
     @note This function is not suitable for literal strings in Unicode builds
-          since the literal strings must be enclosed into _T() or wxT() macro
-          which makes them unrecognised by @c xgettext, and so they are not
-          extracted to the message catalog. Instead, use the _() and wxPLURAL()
-          macro for all literal strings.
+          since the literal strings must be enclosed in wxT() macro which makes
+          them unrecognised by @c xgettext, and so they are not extracted to
+          the message catalog. Instead, use the _() and wxPLURAL() macro for
+          all literal strings.
 
     @see wxGetTranslation(const wxString&, const wxString&, unsigned, const wxString&)
 
@@ -496,7 +550,7 @@ const wxString& wxGetTranslation(const wxString& string,
     <http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms>
     For a shorter alternative see the wxPLURAL() macro.
 
-    This function calls wxLocale::GetString().
+    This function is thread-safe.
 
     @header{wx/intl.h}
 */
@@ -505,12 +559,14 @@ const wxString& wxGetTranslation(const wxString& string,
                                  const wxString& domain = wxEmptyString);
 
 /**
+    Macro to be used around all literal strings that should be translated.
+
     This macro expands into a call to wxGetTranslation(), so it marks the
     message for the extraction by @c xgettext just as wxTRANSLATE() does, but
     also returns the translation of the string for the current locale during
     execution.
 
-    Don't confuse this with _T()!
+    This macro is thread-safe.
 
     @header{wx/intl.h}
 */

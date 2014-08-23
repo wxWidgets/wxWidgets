@@ -3,7 +3,6 @@
 // Purpose:
 // Author:      Robert Roebling
 // Created:
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:           wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -35,21 +34,18 @@ public:
             const wxString &name = wxDialogNameStr );
     virtual ~wxDialog();
 
-    virtual bool Show( bool show = true );
-    virtual int ShowModal();
-    virtual void EndModal( int retCode );
-    virtual bool IsModal() const;
-    void SetModal( bool modal );
-
-    // implementation
-    // --------------
-
-    bool       m_modalShowing;
+    virtual bool Show( bool show = true ) wxOVERRIDE;
+    virtual int ShowModal() wxOVERRIDE;
+    virtual void EndModal( int retCode ) wxOVERRIDE;
+    virtual bool IsModal() const wxOVERRIDE;
 
 private:
     // common part of all ctors
     void Init();
+
+    bool m_modalShowing;
     wxGUIEventLoop *m_modalLoop;
+
     DECLARE_DYNAMIC_CLASS(wxDialog)
 };
 

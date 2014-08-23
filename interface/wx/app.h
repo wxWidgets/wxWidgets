@@ -2,7 +2,6 @@
 // Name:        app.h
 // Purpose:     interface of wxApp
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -37,7 +36,8 @@
 
     @see @ref overview_app, wxApp, wxAppTraits, wxEventLoopBase
 */
-class wxAppConsole : public wxEvtHandler
+class wxAppConsole : public wxEvtHandler,
+                     public wxEventFilter
 {
 protected:
     /**
@@ -81,18 +81,19 @@ public:
     virtual void ExitMainLoop();
 
     /**
-        This function is called before processing any event and allows the application
-        to preempt the processing of some events.
+        Overridden wxEventFilter method.
 
-        If this method returns -1 the event is processed normally, otherwise either
-        @true or @false should be returned and the event processing stops immediately
-        considering that the event had been already processed (for the former return
-        value) or that it is not going to be processed at all (for the latter one).
+        This function is called before processing any event and allows the application
+        to preempt the processing of some events, see wxEventFilter
+        documentation for more information.
+
+        wxApp implementation of this method always return -1 indicating that
+        the event should be processed normally.
     */
     virtual int FilterEvent(wxEvent& event);
 
     /**
-        Returns the main event loop instance, i.e. the event loop which is started
+        Returns the main event loop instance, i.e.\ the event loop which is started
         by OnRun() and which dispatches all events sent from the native toolkit
         to the application (except when new event loops are temporarily set-up).
         The returned value maybe @NULL. Put initialization code which needs a
@@ -221,6 +222,8 @@ public:
     //@}
 
 
+    bool Yield(bool onlyIfNeeded = false);
+
     /**
         Allows external code to modify global ::wxTheApp, but you should really
         know what you're doing if you call it.
@@ -241,7 +244,7 @@ public:
     static wxAppConsole* GetInstance();
 
     /**
-        Returns @true if the main event loop is currently running, i.e. if the
+        Returns @true if the main event loop is currently running, i.e.\ if the
         application is inside OnRun().
 
         This can be useful to test whether events can be dispatched. For example,
@@ -250,14 +253,13 @@ public:
     */
     static bool IsMainLoopRunning();
 
-
     /**
         @name Callbacks for application-wide "events"
     */
     //@{
 
     /**
-        This function is called when an assert failure occurs, i.e. the condition
+        This function is called when an assert failure occurs, i.e.\ the condition
         specified in wxASSERT() macro evaluated to @false.
 
         It is only called in debug mode (when @c __WXDEBUG__ is defined) as
@@ -285,7 +287,7 @@ public:
                                  const wxChar *msg);
 
     /**
-        Called when command line parsing fails (i.e. an incorrect command line option
+        Called when command line parsing fails (i.e.\ an incorrect command line option
         was specified by the user). The default behaviour is to show the program usage
         text and abort the program.
 
@@ -442,7 +444,7 @@ public:
 
 
     /**
-        @name Application informations
+        @name Application information
     */
     //@{
 
@@ -558,6 +560,33 @@ public:
 
     //@}
 
+    /**
+        Sets the C locale to the default locale for the current environment.
+
+        It is advised to call this to ensure that the underlying toolkit uses
+        the locale in which the numbers and monetary amounts are shown in the
+        format expected by user and so on.
+
+        Calling this function is roughly equivalent to calling
+        @code
+            setlocale(LC_ALL, "");
+        @endcode
+        but performs additional toolkit-specific tasks under some platforms and
+        so should be used instead of @c setlocale() itself. Alternatively, you
+        can use wxLocale to change the locale with more control.
+
+        Notice that this does @em not change the global C++ locale, you need to
+        do it explicitly if you want, e.g.
+        @code
+            std::locale::global(std::locale(""));
+        @endcode
+        but be warned that locale support in C++ standard library can be poor
+        or worse under some platforms, e.g. the above line results in an
+        immediate crash under OS X up to the version 10.8.2.
+
+        @since 2.9.5
+     */
+    void SetCLocale();
 
     /**
         Number of command line arguments (after environment-specific processing).
@@ -569,7 +598,7 @@ public:
 
         Under Windows and Linux/Unix, you should parse the command line
         arguments and check for files to be opened when starting your
-        application. Under OS X, you need to override MacOpenFile()
+        application. Under OS X, you need to override MacOpenFiles()
         since command line arguments are used differently there.
 
         You may use the wxCmdLineParser to parse command line arguments.
@@ -632,7 +661,7 @@ public:
 
     /**
         Get display mode that is used use. This is only used in framebuffer
-        wxWidgets ports (such as wxMGL or wxDFB).
+        wxWidgets ports such as wxDFB.
     */
     virtual wxVideoMode GetDisplayMode() const;
 
@@ -670,7 +699,7 @@ public:
     virtual wxWindow* GetTopWindow() const;
 
     /**
-        Returns @true if the application is active, i.e. if one of its windows is
+        Returns @true if the application is active, i.e.\ if one of its windows is
         currently in the foreground.
 
         If this function returns @false and you need to attract users attention to
@@ -724,7 +753,7 @@ public:
 
     /**
         Set display mode to use. This is only used in framebuffer wxWidgets
-        ports (such as wxMGL or wxDFB).
+        ports such as wxDFB.
     */
     virtual bool SetDisplayMode(const wxVideoMode& info);
 
@@ -803,11 +832,28 @@ public:
     virtual void MacNewFile();
 
     /**
+        Called in response of an openFiles message with Cocoa, or an
+        "open-document" Apple event with Carbon.
+
+        You need to override this method in order to open one or more document
+        files after the user double clicked on it or if the files and/or
+        folders were dropped on either the application in the dock or the
+        application icon in Finder.
+
+        By default this method calls MacOpenFile for each file/folder.
+
+        @onlyfor{wxosx}
+
+        @since 2.9.3
+    */
+    virtual void MacOpenFiles(const wxArrayString& fileNames);
+
+    /**
         Called in response of an "open-document" Apple event.
 
-        You need to override this method in order to open a document file after the
-        user double clicked on it or if the document file was dropped on either the
-        running application or the application icon in Finder.
+        @deprecated
+        This function is kept mostly for backwards compatibility. Please
+        override wxApp::MacOpenFiles method instead in any new code.
 
         @onlyfor{wxosx}
     */
@@ -834,16 +880,26 @@ public:
     */
     virtual void MacReopenApp();
 
+    /**
+        May be overridden to indicate that the application is not a foreground
+        GUI application under OS X.
 
-    static long GetMacAboutMenuItemId();
-    static long GetMacPreferencesMenuItemId();
-    static long GetMacExitMenuItemId();
-    static wxString GetMacHelpMenuTitleName();
+        This method is called during the application startup and returns @true
+        by default. In this case, wxWidgets ensures that the application is ran
+        as a foreground, GUI application so that the user can interact with it
+        normally, even if it is not bundled. If this is undesired, i.e. if the
+        application doesn't need to be brought to the foreground, this method
+        can be overridden to return @false.
 
-    static void SetMacAboutMenuItemId(long val);
-    static void SetMacPreferencesMenuItemId(long val);
-    static void SetMacExitMenuItemId(long val);
-    static void SetMacHelpMenuTitleName(const wxString& val);
+        Notice that overriding it doesn't make any difference for the bundled
+        applications which are always foreground unless @c LSBackgroundOnly key
+        is specified in the @c Info.plist file.
+
+        @onlyfor{wxosx}
+        
+        @since 3.0.1
+    */
+    virtual bool OSXIsGUIApplication();
 
     //@}
 

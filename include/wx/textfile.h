@@ -6,7 +6,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     03.04.98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,12 +34,12 @@ public:
 
 protected:
     // implement the base class pure virtuals
-    virtual bool OnExists() const;
+    virtual bool OnExists() const wxOVERRIDE;
     virtual bool OnOpen(const wxString &strBufferName,
-                        wxTextBufferOpenMode OpenMode);
-    virtual bool OnClose();
-    virtual bool OnRead(const wxMBConv& conv);
-    virtual bool OnWrite(wxTextFileType typeNew, const wxMBConv& conv);
+                        wxTextBufferOpenMode OpenMode) wxOVERRIDE;
+    virtual bool OnClose() wxOVERRIDE;
+    virtual bool OnRead(const wxMBConv& conv) wxOVERRIDE;
+    virtual bool OnWrite(wxTextFileType typeNew, const wxMBConv& conv) wxOVERRIDE;
 
 private:
 

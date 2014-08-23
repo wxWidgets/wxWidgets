@@ -4,7 +4,6 @@
 // Author:      Andreas Pflug
 // Modified by:
 // Created:     2005-01-19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2005 Andreas Pflug <pgadmin@pse-consulting.de>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -64,14 +63,14 @@ public:
     {
     }
 
-    virtual void Init()
+    virtual void Init() wxOVERRIDE
     {
     }
 
     // NB: Don't create lazily since it didn't work that way before
     //     wxComboCtrl was used, and changing behaviour would almost
     //     certainly introduce new bugs.
-    virtual bool Create(wxWindow* parent)
+    virtual bool Create(wxWindow* parent) wxOVERRIDE
     {
         if ( !wxCalendarCtrl::Create(parent, wxID_ANY, wxDefaultDateTime,
                               wxPoint(0, 0), wxDefaultSize,
@@ -96,12 +95,12 @@ public:
 
     virtual wxSize GetAdjustedSize(int WXUNUSED(minWidth),
                                    int WXUNUSED(prefHeight),
-                                   int WXUNUSED(maxHeight))
+                                   int WXUNUSED(maxHeight)) wxOVERRIDE
     {
         return m_useSize;
     }
 
-    virtual wxWindow *GetControl() { return this; }
+    virtual wxWindow *GetControl() wxOVERRIDE { return this; }
 
     void SetDateValue(const wxDateTime& date)
     {
@@ -130,7 +129,7 @@ public:
 
         if ( !s.empty() )
         {
-            pDt->ParseFormat(s.c_str(), m_format);
+            pDt->ParseFormat(s, m_format);
             if ( !pDt->IsValid() )
                 return false;
         }
@@ -252,7 +251,7 @@ private:
         return true;
     }
 
-    virtual void SetStringValue(const wxString& s)
+    virtual void SetStringValue(const wxString& s) wxOVERRIDE
     {
         wxDateTime dt;
         if ( !s.empty() && ParseDateTime(s, &dt) )
@@ -260,7 +259,7 @@ private:
         //else: keep the old value
     }
 
-    virtual wxString GetStringValue() const
+    virtual wxString GetStringValue() const wxOVERRIDE
     {
         return GetStringValueFor(GetDate());
     }
@@ -379,16 +378,26 @@ bool wxDatePickerCtrlGeneric::Destroy()
 
 wxSize wxDatePickerCtrlGeneric::DoGetBestSize() const
 {
-    return m_combo->GetBestSize();
+    // A better solution would be to use a custom text control that would have
+    // the best size determined by the current date format and let m_combo take
+    // care of the best size computation, but this isn't easily possible with
+    // wxComboCtrl currently, so we compute our own best size here instead even
+    // if this means adding some extra margins to account for text control
+    // borders, space between it and the button and so on.
+    wxSize size = m_combo->GetButtonSize();
+
+    wxTextCtrl* const text = m_combo->GetTextCtrl();
+    size.x += text->GetTextExtent(text->GetValue()).x;
+    size.x += 2*text->GetCharWidth(); // This is the margin mentioned above.
+
+    return size;
 }
 
 wxWindowList wxDatePickerCtrlGeneric::GetCompositeWindowParts() const
 {
     wxWindowList parts;
-    if (m_combo)
-        parts.push_back(m_combo);
-    if (m_popup)
-        parts.push_back(m_popup);
+    parts.push_back(m_combo);
+    parts.push_back(m_popup);
     return parts;
 }
 

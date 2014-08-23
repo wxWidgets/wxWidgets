@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for wxToggleButton
 // Author:      Bob Mitchell
 // Created:     2000/03/21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -36,7 +35,7 @@ wxObject *wxToggleButtonXmlHandler::DoCreateResource()
 
    wxObject *control = m_instance;
 
-#if !defined(__WXUNIVERSAL__) && !defined(__WXMOTIF__) && !defined(__WXPALMOS__) && !defined(__WXPM__) && !(defined(__WXGTK__) && !defined(__WXGTK20__))
+#if !defined(__WXUNIVERSAL__) && !defined(__WXMOTIF__) && !(defined(__WXGTK__) && !defined(__WXGTK20__))
 
     if (m_class == wxT("wxBitmapToggleButton"))
     {
@@ -82,7 +81,7 @@ void wxToggleButtonXmlHandler::DoCreateToggleButton(wxObject *control)
     button->SetValue(GetBool( wxT("checked")));
 }
 
-#if !defined(__WXUNIVERSAL__) && !defined(__WXMOTIF__) && !defined(__WXPALMOS__) && !defined(__WXPM__) && !(defined(__WXGTK__) && !defined(__WXGTK20__))
+#if !defined(__WXUNIVERSAL__) && !defined(__WXMOTIF__) && !(defined(__WXGTK__) && !defined(__WXGTK20__))
 void wxToggleButtonXmlHandler::DoCreateBitmapToggleButton(wxObject *control)
 {
     wxBitmapToggleButton *button = wxDynamicCast(control, wxBitmapToggleButton);

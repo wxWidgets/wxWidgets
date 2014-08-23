@@ -2,13 +2,16 @@
 // Name:        wx/gtk/colour.h
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_GTK_COLOUR_H_
 #define _WX_GTK_COLOUR_H_
+
+#ifdef __WXGTK3__
+typedef struct _GdkRGBA GdkRGBA;
+#endif
 
 //-----------------------------------------------------------------------------
 // wxColour
@@ -21,29 +24,35 @@ public:
     // ------------
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
     wxColour(const GdkColor& gdkColor);
+#ifdef __WXGTK3__
+    wxColour(const GdkRGBA& gdkRGBA);
+#endif
 
     virtual ~wxColour();
 
     bool operator==(const wxColour& col) const;
     bool operator!=(const wxColour& col) const { return !(*this == col); }
 
-    unsigned char Red() const;
-    unsigned char Green() const;
-    unsigned char Blue() const;
-    unsigned char Alpha() const;
+    unsigned char Red() const wxOVERRIDE;
+    unsigned char Green() const wxOVERRIDE;
+    unsigned char Blue() const wxOVERRIDE;
+    unsigned char Alpha() const wxOVERRIDE;
 
     // Implementation part
+#ifdef __WXGTK3__
+    operator const GdkRGBA*() const;
+#else
     void CalcPixel( GdkColormap *cmap );
     int GetPixel() const;
+#endif
     const GdkColor *GetColor() const;
 
 protected:
     virtual void
-    InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+    InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a) wxOVERRIDE;
 
-    virtual bool FromString(const wxString& str);
+    virtual bool FromString(const wxString& str) wxOVERRIDE;
 
-private:
     DECLARE_DYNAMIC_CLASS(wxColour)
 };
 

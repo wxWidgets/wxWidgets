@@ -2,9 +2,19 @@
 // Name:        gauge.h
 // Purpose:     interface of wxGauge
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+
+// ----------------------------------------------------------------------------
+// wxGauge style flags
+// ----------------------------------------------------------------------------
+
+#define wxGA_HORIZONTAL      wxHORIZONTAL
+#define wxGA_VERTICAL        wxVERTICAL
+
+// Win32 only, is default (and only) on some other platforms
+#define wxGA_SMOOTH          0x0020
 
 /**
     @class wxGauge
@@ -37,7 +47,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{gauge.png}
+    @appearance{gauge}
 
     @see wxSlider, wxScrollBar
 */

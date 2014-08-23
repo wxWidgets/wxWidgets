@@ -60,82 +60,18 @@ PRectangle PRectangleFromwxRect(wxRect rc) {
                       rc.GetRight()+1, rc.GetBottom()+1);
 }
 
-wxColour wxColourFromCA(const ColourAllocated& ca) {
-    ColourDesired cd(ca.AsLong());
+wxColour wxColourFromCD(ColourDesired& cd) {
     return wxColour((unsigned char)cd.GetRed(),
                     (unsigned char)cd.GetGreen(),
                     (unsigned char)cd.GetBlue());
 }
 
-wxColour wxColourFromCAandAlpha(const ColourAllocated& ca, int alpha) {
-    ColourDesired cd(ca.AsLong());
+wxColour wxColourFromCDandAlpha(ColourDesired& cd, int alpha) {
     return wxColour((unsigned char)cd.GetRed(),
                     (unsigned char)cd.GetGreen(),
                     (unsigned char)cd.GetBlue(),
                     (unsigned char)alpha);
 }
-
-//----------------------------------------------------------------------
-
-Palette::Palette() {
-    used = 0;
-    allowRealization = false;
-    size = 100;
-    entries = new ColourPair[size];
-}
-
-Palette::~Palette() {
-    Release();
-    wxDELETEA(entries);
-}
-
-void Palette::Release() {
-    used = 0;
-    delete [] entries;
-    size = 100;
-    entries = new ColourPair[size];
-}
-
-// This method either adds a colour to the list of wanted colours (want==true)
-// or retrieves the allocated colour back to the ColourPair.
-// This is one method to make it easier to keep the code for wanting and retrieving in sync.
-void Palette::WantFind(ColourPair &cp, bool want) {
-    if (want) {
-        for (int i=0; i < used; i++) {
-            if (entries[i].desired == cp.desired)
-                return;
-        }
-
-        if (used >= size) {
-            int sizeNew = size * 2;
-            ColourPair *entriesNew = new ColourPair[sizeNew];
-            for (int j=0; j<size; j++) {
-                entriesNew[j] = entries[j];
-            }
-            delete []entries;
-            entries = entriesNew;
-            size = sizeNew;
-        }
-
-        entries[used].desired = cp.desired;
-        entries[used].allocated.Set(cp.desired.AsLong());
-        used++;
-    } else {
-        for (int i=0; i < used; i++) {
-            if (entries[i].desired == cp.desired) {
-                cp.allocated = entries[i].allocated;
-                return;
-            }
-        }
-        cp.allocated.Set(cp.desired.AsLong());
-    }
-}
-
-void Palette::Allocate(Window &) {
-    if (allowRealization) {
-    }
-}
-
 
 //----------------------------------------------------------------------
 
@@ -147,28 +83,34 @@ Font::Font() {
 Font::~Font() {
 }
 
-void Font::Create(const char *faceName, int characterSet,
-                  int size, bool bold, bool italic,
-                  int WXUNUSED(extraFontFlag)) {
+void Font::Create(const FontParameters &fp) {
     Release();
 
-    // The minus one is done because since Scintilla uses SC_SHARSET_DEFAULT
+    // The minus one is done because since Scintilla uses SC_CHARSET_DEFAULT
     // internally and we need to have wxFONENCODING_DEFAULT == SC_SHARSET_DEFAULT
     // so we adjust the encoding before passing it to Scintilla.  See also
     // wxStyledTextCtrl::StyleSetCharacterSet
-    wxFontEncoding encoding = (wxFontEncoding)(characterSet-1);
+    wxFontEncoding encoding = (wxFontEncoding)(fp.characterSet-1);
 
     wxFontEncodingArray ea = wxEncodingConverter::GetPlatformEquivalents(encoding);
     if (ea.GetCount())
         encoding = ea[0];
 
-    wxFont* font = new wxFont(size,
-                    wxDEFAULT,
-                    italic ? wxITALIC :  wxNORMAL,
-                    bold ? wxBOLD : wxNORMAL,
-                    false,
-                    stc2wx(faceName),
-                    encoding);
+    wxFontWeight weight;
+    if (fp.weight <= 300)
+        weight = wxFONTWEIGHT_LIGHT;
+    else if (fp.weight >= 700)
+        weight = wxFONTWEIGHT_BOLD;
+    else
+        weight = wxFONTWEIGHT_NORMAL;
+
+    wxFont* font = new wxFont(fp.size,
+                              wxFONTFAMILY_DEFAULT,
+                              fp.italic ? wxFONTSTYLE_ITALIC :  wxFONTSTYLE_NORMAL,
+                              weight,
+                              false,
+                              stc2wx(fp.faceName),
+                              encoding);
     fid = font;
 }
 
@@ -194,48 +136,49 @@ public:
     SurfaceImpl();
     ~SurfaceImpl();
 
-    virtual void Init(WindowID wid);
-    virtual void Init(SurfaceID sid, WindowID wid);
-    virtual void InitPixMap(int width, int height, Surface *surface_, WindowID wid);
+    virtual void Init(WindowID wid) wxOVERRIDE;
+    virtual void Init(SurfaceID sid, WindowID wid) wxOVERRIDE;
+    virtual void InitPixMap(int width, int height, Surface *surface_, WindowID wid) wxOVERRIDE;
 
-    virtual void Release();
-    virtual bool Initialised();
-    virtual void PenColour(ColourAllocated fore);
-    virtual int LogPixelsY();
-    virtual int DeviceHeightFont(int points);
-    virtual void MoveTo(int x_, int y_);
-    virtual void LineTo(int x_, int y_);
-    virtual void Polygon(Point *pts, int npts, ColourAllocated fore, ColourAllocated back);
-    virtual void RectangleDraw(PRectangle rc, ColourAllocated fore, ColourAllocated back);
-    virtual void FillRectangle(PRectangle rc, ColourAllocated back);
-    virtual void FillRectangle(PRectangle rc, Surface &surfacePattern);
-    virtual void RoundedRectangle(PRectangle rc, ColourAllocated fore, ColourAllocated back);
-    virtual void AlphaRectangle(PRectangle rc, int cornerSize, ColourAllocated fill, int alphaFill,
-                                ColourAllocated outline, int alphaOutline, int flags);
-    virtual void Ellipse(PRectangle rc, ColourAllocated fore, ColourAllocated back);
-    virtual void Copy(PRectangle rc, Point from, Surface &surfaceSource);
+    virtual void Release() wxOVERRIDE;
+    virtual bool Initialised() wxOVERRIDE;
+    virtual void PenColour(ColourDesired fore) wxOVERRIDE;
+    virtual int LogPixelsY() wxOVERRIDE;
+    virtual int DeviceHeightFont(int points) wxOVERRIDE;
+    virtual void MoveTo(int x_, int y_) wxOVERRIDE;
+    virtual void LineTo(int x_, int y_) wxOVERRIDE;
+    virtual void Polygon(Point *pts, int npts, ColourDesired fore, ColourDesired back) wxOVERRIDE;
+    virtual void RectangleDraw(PRectangle rc, ColourDesired fore, ColourDesired back) wxOVERRIDE;
+    virtual void FillRectangle(PRectangle rc, ColourDesired back) wxOVERRIDE;
+    virtual void FillRectangle(PRectangle rc, Surface &surfacePattern) wxOVERRIDE;
+    virtual void RoundedRectangle(PRectangle rc, ColourDesired fore, ColourDesired back) wxOVERRIDE;
+    virtual void AlphaRectangle(PRectangle rc, int cornerSize, ColourDesired fill, int alphaFill,
+                                ColourDesired outline, int alphaOutline, int flags) wxOVERRIDE;
+    virtual void DrawRGBAImage(PRectangle rc, int width, int height,
+                               const unsigned char *pixelsImage) wxOVERRIDE;
+    virtual void Ellipse(PRectangle rc, ColourDesired fore, ColourDesired back) wxOVERRIDE;
+    virtual void Copy(PRectangle rc, Point from, Surface &surfaceSource) wxOVERRIDE;
 
-    virtual void DrawTextNoClip(PRectangle rc, Font &font_, int ybase, const char *s, int len, ColourAllocated fore, ColourAllocated back);
-    virtual void DrawTextClipped(PRectangle rc, Font &font_, int ybase, const char *s, int len, ColourAllocated fore, ColourAllocated back);
-    virtual void DrawTextTransparent(PRectangle rc, Font &font_, int ybase, const char *s, int len, ColourAllocated fore);
-    virtual void MeasureWidths(Font &font_, const char *s, int len, int *positions);
-    virtual int WidthText(Font &font_, const char *s, int len);
-    virtual int WidthChar(Font &font_, char ch);
-    virtual int Ascent(Font &font_);
-    virtual int Descent(Font &font_);
-    virtual int InternalLeading(Font &font_);
-    virtual int ExternalLeading(Font &font_);
-    virtual int Height(Font &font_);
-    virtual int AverageCharWidth(Font &font_);
+    virtual void DrawTextNoClip(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len, ColourDesired fore, ColourDesired back) wxOVERRIDE;
+    virtual void DrawTextClipped(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len, ColourDesired fore, ColourDesired back) wxOVERRIDE;
+    virtual void DrawTextTransparent(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len, ColourDesired fore) wxOVERRIDE;
+    virtual void MeasureWidths(Font &font_, const char *s, int len, XYPOSITION *positions) wxOVERRIDE;
+    virtual XYPOSITION WidthText(Font &font_, const char *s, int len) wxOVERRIDE;
+    virtual XYPOSITION WidthChar(Font &font_, char ch) wxOVERRIDE;
+    virtual XYPOSITION Ascent(Font &font_) wxOVERRIDE;
+    virtual XYPOSITION Descent(Font &font_) wxOVERRIDE;
+    virtual XYPOSITION InternalLeading(Font &font_) wxOVERRIDE;
+    virtual XYPOSITION ExternalLeading(Font &font_) wxOVERRIDE;
+    virtual XYPOSITION Height(Font &font_) wxOVERRIDE;
+    virtual XYPOSITION AverageCharWidth(Font &font_) wxOVERRIDE;
 
-    virtual int SetPalette(Palette *pal, bool inBackGround);
-    virtual void SetClip(PRectangle rc);
-    virtual void FlushCachedState();
+    virtual void SetClip(PRectangle rc) wxOVERRIDE;
+    virtual void FlushCachedState() wxOVERRIDE;
 
-    virtual void SetUnicodeMode(bool unicodeMode_);
-    virtual void SetDBCSMode(int codePage);
+    virtual void SetUnicodeMode(bool unicodeMode_) wxOVERRIDE;
+    virtual void SetDBCSMode(int codePage) wxOVERRIDE;
 
-    void BrushColour(ColourAllocated back);
+    void BrushColour(ColourDesired back);
     void SetFont(Font &font_);
 };
 
@@ -268,13 +211,17 @@ void SurfaceImpl::Init(SurfaceID hdc_, WindowID) {
     hdc = (wxDC*)hdc_;
 }
 
-void SurfaceImpl::InitPixMap(int width, int height, Surface *WXUNUSED(surface_), WindowID) {
+void SurfaceImpl::InitPixMap(int width, int height, Surface *surface, WindowID winid) {
     Release();
-    hdc = new wxMemoryDC();
+    if (surface)
+        hdc = new wxMemoryDC(static_cast<SurfaceImpl*>(surface)->hdc);
+    else
+        hdc = new wxMemoryDC();
     hdcOwned = true;
     if (width < 1) width = 1;
     if (height < 1) height = 1;
-    bitmap = new wxBitmap(width, height);
+    bitmap = new wxBitmap();
+    bitmap->CreateScaled(width, height,wxBITMAP_SCREEN_DEPTH,((wxWindow*)winid)->GetContentScaleFactor());
     ((wxMemoryDC*)hdc)->SelectObject(*bitmap);
 }
 
@@ -298,12 +245,12 @@ bool SurfaceImpl::Initialised() {
 }
 
 
-void SurfaceImpl::PenColour(ColourAllocated fore) {
-    hdc->SetPen(wxPen(wxColourFromCA(fore)));
+void SurfaceImpl::PenColour(ColourDesired fore) {
+    hdc->SetPen(wxPen(wxColourFromCD(fore)));
 }
 
-void SurfaceImpl::BrushColour(ColourAllocated back) {
-    hdc->SetBrush(wxBrush(wxColourFromCA(back)));
+void SurfaceImpl::BrushColour(ColourDesired back) {
+    hdc->SetBrush(wxBrush(wxColourFromCD(back)));
 }
 
 void SurfaceImpl::SetFont(Font &font_) {
@@ -331,19 +278,26 @@ void SurfaceImpl::LineTo(int x_, int y_) {
     y = y_;
 }
 
-void SurfaceImpl::Polygon(Point *pts, int npts, ColourAllocated fore, ColourAllocated back) {
+void SurfaceImpl::Polygon(Point *pts, int npts, ColourDesired fore, ColourDesired back) {
     PenColour(fore);
     BrushColour(back);
-    hdc->DrawPolygon(npts, (wxPoint*)pts);
+    wxPoint *p = new wxPoint[npts];
+
+    for (int i=0; i<npts; i++) {
+        p[i].x = pts[i].x;
+        p[i].y = pts[i].y;
+    }
+    hdc->DrawPolygon(npts, p);
+    delete [] p;
 }
 
-void SurfaceImpl::RectangleDraw(PRectangle rc, ColourAllocated fore, ColourAllocated back) {
+void SurfaceImpl::RectangleDraw(PRectangle rc, ColourDesired fore, ColourDesired back) {
     PenColour(fore);
     BrushColour(back);
     hdc->DrawRectangle(wxRectFromPRectangle(rc));
 }
 
-void SurfaceImpl::FillRectangle(PRectangle rc, ColourAllocated back) {
+void SurfaceImpl::FillRectangle(PRectangle rc, ColourDesired back) {
     BrushColour(back);
     hdc->SetPen(*wxTRANSPARENT_PEN);
     hdc->DrawRectangle(wxRectFromPRectangle(rc));
@@ -360,26 +314,26 @@ void SurfaceImpl::FillRectangle(PRectangle rc, Surface &surfacePattern) {
     hdc->DrawRectangle(wxRectFromPRectangle(rc));
 }
 
-void SurfaceImpl::RoundedRectangle(PRectangle rc, ColourAllocated fore, ColourAllocated back) {
+void SurfaceImpl::RoundedRectangle(PRectangle rc, ColourDesired fore, ColourDesired back) {
     PenColour(fore);
     BrushColour(back);
     hdc->DrawRoundedRectangle(wxRectFromPRectangle(rc), 4);
 }
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
 #define wxPy_premultiply(p, a)   ((p) * (a) / 0xff)
 #else
 #define wxPy_premultiply(p, a)   (p)
 #endif
 
 void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
-                                 ColourAllocated fill, int alphaFill,
-                                 ColourAllocated outline, int alphaOutline,
+                                 ColourDesired fill, int alphaFill,
+                                 ColourDesired outline, int alphaOutline,
                                  int /*flags*/) {
 #if wxUSE_GRAPHICS_CONTEXT
     wxGCDC dc(*(wxMemoryDC*)hdc);
-    wxColour penColour(wxColourFromCAandAlpha(outline, alphaOutline));
-    wxColour brushColour(wxColourFromCAandAlpha(fill, alphaFill));
+    wxColour penColour(wxColourFromCDandAlpha(outline, alphaOutline));
+    wxColour brushColour(wxColourFromCDandAlpha(fill, alphaFill));
     dc.SetPen(wxPen(penColour));
     dc.SetBrush(wxBrush(brushColour));
     dc.DrawRoundedRectangle(wxRectFromPRectangle(rc), cornerSize);
@@ -394,55 +348,60 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
     int x, y;
     wxRect r = wxRectFromPRectangle(rc);
     wxBitmap bmp(r.width, r.height, 32);
-    wxAlphaPixelData pixData(bmp);
 
-    // Set the fill pixels
-    ColourDesired cdf(fill.AsLong());
-    int red   = cdf.GetRed();
-    int green = cdf.GetGreen();
-    int blue  = cdf.GetBlue();
+    // This block is needed to ensure that the changes done to the bitmap via
+    // pixel data object are committed before the bitmap is drawn.
+    {
+        wxAlphaPixelData pixData(bmp);
 
-    wxAlphaPixelData::Iterator p(pixData);
-    for (y=0; y<r.height; y++) {
-        p.MoveTo(pixData, 0, y);
-        for (x=0; x<r.width; x++) {
-            p.Red()   = wxPy_premultiply(red,   alphaFill);
-            p.Green() = wxPy_premultiply(green, alphaFill);
-            p.Blue()  = wxPy_premultiply(blue,  alphaFill);
-            p.Alpha() = alphaFill;
-            ++p;
+        // Set the fill pixels
+        ColourDesired cdf(fill.AsLong());
+        int red   = cdf.GetRed();
+        int green = cdf.GetGreen();
+        int blue  = cdf.GetBlue();
+
+        wxAlphaPixelData::Iterator p(pixData);
+        for (y=0; y<r.height; y++) {
+            p.MoveTo(pixData, 0, y);
+            for (x=0; x<r.width; x++) {
+                p.Red()   = wxPy_premultiply(red,   alphaFill);
+                p.Green() = wxPy_premultiply(green, alphaFill);
+                p.Blue()  = wxPy_premultiply(blue,  alphaFill);
+                p.Alpha() = alphaFill;
+                ++p;
+            }
         }
-    }
 
-    // Set the outline pixels
-    ColourDesired cdo(outline.AsLong());
-    red   = cdo.GetRed();
-    green = cdo.GetGreen();
-    blue  = cdo.GetBlue();
-    for (x=0; x<r.width; x++) {
-        p.MoveTo(pixData, x, 0);
-        p.Red()   = wxPy_premultiply(red,   alphaOutline);
-        p.Green() = wxPy_premultiply(green, alphaOutline);
-        p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
-        p.Alpha() = alphaOutline;
-        p.MoveTo(pixData, x, r.height-1);
-        p.Red()   = wxPy_premultiply(red,   alphaOutline);
-        p.Green() = wxPy_premultiply(green, alphaOutline);
-        p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
-        p.Alpha() = alphaOutline;
-    }
+        // Set the outline pixels
+        ColourDesired cdo(outline.AsLong());
+        red   = cdo.GetRed();
+        green = cdo.GetGreen();
+        blue  = cdo.GetBlue();
+        for (x=0; x<r.width; x++) {
+            p.MoveTo(pixData, x, 0);
+            p.Red()   = wxPy_premultiply(red,   alphaOutline);
+            p.Green() = wxPy_premultiply(green, alphaOutline);
+            p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
+            p.Alpha() = alphaOutline;
+            p.MoveTo(pixData, x, r.height-1);
+            p.Red()   = wxPy_premultiply(red,   alphaOutline);
+            p.Green() = wxPy_premultiply(green, alphaOutline);
+            p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
+            p.Alpha() = alphaOutline;
+        }
 
-    for (y=0; y<r.height; y++) {
-        p.MoveTo(pixData, 0, y);
-        p.Red()   = wxPy_premultiply(red,   alphaOutline);
-        p.Green() = wxPy_premultiply(green, alphaOutline);
-        p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
-        p.Alpha() = alphaOutline;
-        p.MoveTo(pixData, r.width-1, y);
-        p.Red()   = wxPy_premultiply(red,   alphaOutline);
-        p.Green() = wxPy_premultiply(green, alphaOutline);
-        p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
-        p.Alpha() = alphaOutline;
+        for (y=0; y<r.height; y++) {
+            p.MoveTo(pixData, 0, y);
+            p.Red()   = wxPy_premultiply(red,   alphaOutline);
+            p.Green() = wxPy_premultiply(green, alphaOutline);
+            p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
+            p.Alpha() = alphaOutline;
+            p.MoveTo(pixData, r.width-1, y);
+            p.Red()   = wxPy_premultiply(red,   alphaOutline);
+            p.Green() = wxPy_premultiply(green, alphaOutline);
+            p.Blue()  = wxPy_premultiply(blue,  alphaOutline);
+            p.Alpha() = alphaOutline;
+        }
     }
 
     // Draw the bitmap
@@ -457,7 +416,46 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
 #endif
 }
 
-void SurfaceImpl::Ellipse(PRectangle rc, ColourAllocated fore, ColourAllocated back) {
+#ifdef wxHAS_RAW_BITMAP
+wxBitmap BitmapFromRGBAImage(int width, int height, const unsigned char *pixelsImage)
+{
+    int x, y;
+    wxBitmap bmp(width, height, 32);
+    wxAlphaPixelData pixData(bmp);
+
+    wxAlphaPixelData::Iterator p(pixData);
+    for (y=0; y<height; y++) {
+        p.MoveTo(pixData, 0, y);
+        for (x=0; x<width; x++) {
+            unsigned char red   = *pixelsImage++;
+            unsigned char green = *pixelsImage++;
+            unsigned char blue  = *pixelsImage++;
+            unsigned char alpha = *pixelsImage++;
+
+            p.Red()   = wxPy_premultiply(red,   alpha);
+            p.Green() = wxPy_premultiply(green, alpha);
+            p.Blue()  = wxPy_premultiply(blue,  alpha);
+            p.Alpha() = alpha;
+            ++p;
+        }
+    }
+    return bmp;
+}
+#endif
+
+
+void SurfaceImpl::DrawRGBAImage(PRectangle rc, int width, int height,
+                                const unsigned char *pixelsImage)
+{
+#ifdef wxHAS_RAW_BITMAP
+    wxRect r = wxRectFromPRectangle(rc);
+    wxBitmap bmp = BitmapFromRGBAImage(width, height, pixelsImage);
+    hdc->DrawBitmap(bmp, r.x, r.y, true);
+#endif
+}
+
+
+void SurfaceImpl::Ellipse(PRectangle rc, ColourDesired fore, ColourDesired back) {
     PenColour(fore);
     BrushColour(back);
     hdc->DrawEllipse(wxRectFromPRectangle(rc));
@@ -470,12 +468,12 @@ void SurfaceImpl::Copy(PRectangle rc, Point from, Surface &surfaceSource) {
               from.x, from.y, wxCOPY);
 }
 
-void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font, int ybase,
+void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font, XYPOSITION ybase,
                                  const char *s, int len,
-                                 ColourAllocated fore, ColourAllocated back) {
+                                 ColourDesired fore, ColourDesired back) {
     SetFont(font);
-    hdc->SetTextForeground(wxColourFromCA(fore));
-    hdc->SetTextBackground(wxColourFromCA(back));
+    hdc->SetTextForeground(wxColourFromCD(fore));
+    hdc->SetTextBackground(wxColourFromCD(back));
     FillRectangle(rc, back);
 
     // ybase is where the baseline should be, but wxWin uses the upper left
@@ -483,12 +481,12 @@ void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font, int ybase,
     hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent);
 }
 
-void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, int ybase,
+void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, XYPOSITION ybase,
                                   const char *s, int len,
-                                  ColourAllocated fore, ColourAllocated back) {
+                                  ColourDesired fore, ColourDesired back) {
     SetFont(font);
-    hdc->SetTextForeground(wxColourFromCA(fore));
-    hdc->SetTextBackground(wxColourFromCA(back));
+    hdc->SetTextForeground(wxColourFromCD(fore));
+    hdc->SetTextBackground(wxColourFromCD(back));
     FillRectangle(rc, back);
     hdc->SetClippingRegion(wxRectFromPRectangle(rc));
 
@@ -498,12 +496,12 @@ void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, int ybase,
 }
 
 
-void SurfaceImpl::DrawTextTransparent(PRectangle rc, Font &font, int ybase,
+void SurfaceImpl::DrawTextTransparent(PRectangle rc, Font &font, XYPOSITION ybase,
                                       const char *s, int len,
-                                      ColourAllocated fore) {
+                                      ColourDesired fore) {
 
     SetFont(font);
-    hdc->SetTextForeground(wxColourFromCA(fore));
+    hdc->SetTextForeground(wxColourFromCD(fore));
     hdc->SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     // ybase is where the baseline should be, but wxWin uses the upper left
@@ -514,7 +512,7 @@ void SurfaceImpl::DrawTextTransparent(PRectangle rc, Font &font, int ybase,
 }
 
 
-void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, int *positions) {
+void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, XYPOSITION *positions) {
 
     wxString   str = stc2wx(s, len);
     wxArrayInt tpos;
@@ -542,19 +540,16 @@ void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, int *positio
         }
         ui++;
     }
-#else
-
+#else // !wxUSE_UNICODE
     // If not unicode then just use the widths we have
-#if wxUSE_STD_CONTAINERS
-    std::copy(tpos.begin(), tpos.end(), positions);
-#else
-    memcpy(positions, tpos.begin(), len * sizeof(int));
-#endif
-#endif
+    for (int i = 0; i < len; i++) {
+        positions[i] = tpos[i];
+    }
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 }
 
 
-int SurfaceImpl::WidthText(Font &font, const char *s, int len) {
+XYPOSITION SurfaceImpl::WidthText(Font &font, const char *s, int len) {
     SetFont(font);
     int w;
     int h;
@@ -564,7 +559,7 @@ int SurfaceImpl::WidthText(Font &font, const char *s, int len) {
 }
 
 
-int SurfaceImpl::WidthChar(Font &font, char ch) {
+XYPOSITION SurfaceImpl::WidthChar(Font &font, char ch) {
     SetFont(font);
     int w;
     int h;
@@ -576,7 +571,7 @@ int SurfaceImpl::WidthChar(Font &font, char ch) {
 
 #define EXTENT_TEST wxT(" `~!@#$%^&*()-_=+\\|[]{};:\"\'<,>.?/1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
-int SurfaceImpl::Ascent(Font &font) {
+XYPOSITION SurfaceImpl::Ascent(Font &font) {
     SetFont(font);
     int w, h, d, e;
     hdc->GetTextExtent(EXTENT_TEST, &w, &h, &d, &e);
@@ -584,36 +579,32 @@ int SurfaceImpl::Ascent(Font &font) {
     return font.ascent;
 }
 
-int SurfaceImpl::Descent(Font &font) {
+XYPOSITION SurfaceImpl::Descent(Font &font) {
     SetFont(font);
     int w, h, d, e;
     hdc->GetTextExtent(EXTENT_TEST, &w, &h, &d, &e);
     return d;
 }
 
-int SurfaceImpl::InternalLeading(Font &WXUNUSED(font)) {
+XYPOSITION SurfaceImpl::InternalLeading(Font &WXUNUSED(font)) {
     return 0;
 }
 
-int SurfaceImpl::ExternalLeading(Font &font) {
+XYPOSITION SurfaceImpl::ExternalLeading(Font &font) {
     SetFont(font);
     int w, h, d, e;
     hdc->GetTextExtent(EXTENT_TEST, &w, &h, &d, &e);
     return e;
 }
 
-int SurfaceImpl::Height(Font &font) {
+XYPOSITION SurfaceImpl::Height(Font &font) {
     SetFont(font);
     return hdc->GetCharHeight() + 1;
 }
 
-int SurfaceImpl::AverageCharWidth(Font &font) {
+XYPOSITION SurfaceImpl::AverageCharWidth(Font &font) {
     SetFont(font);
     return hdc->GetCharWidth();
-}
-
-int SurfaceImpl::SetPalette(Palette *WXUNUSED(pal), bool WXUNUSED(inBackGround)) {
-    return 0;
 }
 
 void SurfaceImpl::SetClip(PRectangle rc) {
@@ -632,7 +623,7 @@ void SurfaceImpl::SetDBCSMode(int WXUNUSED(codePage)) {
 }
 
 
-Surface *Surface::Allocate() {
+Surface *Surface::Allocate(int WXUNUSED(technology)) {
     return new SurfaceImpl;
 }
 
@@ -850,13 +841,17 @@ public:
 #ifdef __WXMSW__
         lv->Show();
 #endif
+#if defined(__WXOSX_COCOA__) || defined(__WXGTK__)
+        // This color will end up being our border
+        SetBackgroundColour(wxColour(0xC0, 0xC0, 0xC0));
+#endif
     }
 
 
     // Set position in client coords
     virtual void DoSetSize(int x, int y,
                            int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) {
+                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE {
         if (x != wxDefaultCoord) {
             GetParent()->ClientToScreen(&x, NULL);
         }
@@ -867,7 +862,7 @@ public:
     }
 
     // return position as if it were in client coords
-    virtual void DoGetPosition( int *x, int *y ) const {
+    virtual void DoGetPosition( int *x, int *y ) const wxOVERRIDE {
         int sx, sy;
         wxPopupWindow::DoGetPosition(&sx, &sy);
         GetParent()->ScreenToClient(&sx, &sy);
@@ -876,7 +871,7 @@ public:
     }
 
 
-    bool Destroy() {
+    bool Destroy() wxOVERRIDE {
         if ( !wxPendingDelete.Member(this) )
             wxPendingDelete.Append(this);
         return true;
@@ -908,10 +903,20 @@ public:
     void OnSize(wxSizeEvent& event) {
         // resize the child to fill the popup
         wxSize sz = GetClientSize();
-        lv->SetSize(0, 0, sz.x, sz.y);
+        int x, y, w, h;
+        x = y = 0;
+        w = sz.x;
+        h = sz.y;
+#if defined(__WXOSX_COCOA__) || defined(__WXGTK__)
+        // make room for the parent's bg color to show, to act as a border
+        x = y = 1;
+        w -= 2;
+        h -= 2;
+#endif
+        lv->SetSize(x, y, w, h);
         // reset the column widths
         lv->SetColumnWidth(0, IconWidth()+4);
-        lv->SetColumnWidth(1, sz.x - 2 - lv->GetColumnWidth(0) -
+        lv->SetColumnWidth(1, w - 2 - lv->GetColumnWidth(0) -
                            wxSystemSettings::GetMetric(wxSYS_VSCROLL_X));
         event.Skip();
     }
@@ -1112,26 +1117,29 @@ private:
 public:
     ListBoxImpl();
     ~ListBoxImpl();
+    static ListBox *Allocate();
 
-    virtual void SetFont(Font &font);
-    virtual void Create(Window &parent, int ctrlID, Point location_, int lineHeight_, bool unicodeMode_);
-    virtual void SetAverageCharWidth(int width);
-    virtual void SetVisibleRows(int rows);
-    virtual int GetVisibleRows() const;
-    virtual PRectangle GetDesiredRect();
-    virtual int CaretFromEdge();
-    virtual void Clear();
-    virtual void Append(char *s, int type = -1);
+    virtual void SetFont(Font &font) wxOVERRIDE;
+    virtual void Create(Window &parent, int ctrlID, Point location_, int lineHeight_, bool unicodeMode_, int technology_) wxOVERRIDE;
+    virtual void SetAverageCharWidth(int width) wxOVERRIDE;
+    virtual void SetVisibleRows(int rows) wxOVERRIDE;
+    virtual int GetVisibleRows() const wxOVERRIDE;
+    virtual PRectangle GetDesiredRect() wxOVERRIDE;
+    virtual int CaretFromEdge() wxOVERRIDE;
+    virtual void Clear() wxOVERRIDE;
+    virtual void Append(char *s, int type = -1) wxOVERRIDE;
             void Append(const wxString& text, int type);
-    virtual int Length();
-    virtual void Select(int n);
-    virtual int GetSelection();
-    virtual int Find(const char *prefix);
-    virtual void GetValue(int n, char *value, int len);
-    virtual void RegisterImage(int type, const char *xpm_data);
-    virtual void ClearRegisteredImages();
-    virtual void SetDoubleClickAction(CallBackAction, void *);
-    virtual void SetList(const char* list, char separator, char typesep);
+    virtual int Length() wxOVERRIDE;
+    virtual void Select(int n) wxOVERRIDE;
+    virtual int GetSelection() wxOVERRIDE;
+    virtual int Find(const char *prefix) wxOVERRIDE;
+    virtual void GetValue(int n, char *value, int len) wxOVERRIDE;
+    virtual void RegisterImage(int type, const char *xpm_data) wxOVERRIDE;
+            void RegisterImageHelper(int type, wxBitmap& bmp);
+    virtual void RegisterRGBAImage(int type, int width, int height, const unsigned char *pixelsImage) wxOVERRIDE;
+    virtual void ClearRegisteredImages() wxOVERRIDE;
+    virtual void SetDoubleClickAction(CallBackAction, void *) wxOVERRIDE;
+    virtual void SetList(const char* list, char separator, char typesep) wxOVERRIDE;
 };
 
 
@@ -1153,7 +1161,7 @@ void ListBoxImpl::SetFont(Font &font) {
 }
 
 
-void ListBoxImpl::Create(Window &parent, int ctrlID, Point location_, int lineHeight_, bool unicodeMode_) {
+void ListBoxImpl::Create(Window &parent, int ctrlID, Point location_, int lineHeight_, bool unicodeMode_, int WXUNUSED(technology_)) {
     location = location_;
     lineHeight =  lineHeight_;
     unicodeMode = unicodeMode_;
@@ -1298,12 +1306,8 @@ void ListBoxImpl::GetValue(int n, char *value, int len) {
     value[len-1] = '\0';
 }
 
-
-void ListBoxImpl::RegisterImage(int type, const char *xpm_data) {
-    wxMemoryInputStream stream(xpm_data, strlen(xpm_data)+1);
-    wxImage img(stream, wxBITMAP_TYPE_XPM);
-    wxBitmap bmp(img);
-
+void ListBoxImpl::RegisterImageHelper(int type, wxBitmap& bmp)
+{
     if (! imgList) {
         // assumes all images are the same size
         imgList = new wxImageList(bmp.GetWidth(), bmp.GetHeight(), true);
@@ -1320,6 +1324,24 @@ void ListBoxImpl::RegisterImage(int type, const char *xpm_data) {
     // Add an item that maps type to the image index
     itm[type] = idx;
 }
+
+void ListBoxImpl::RegisterImage(int type, const char *xpm_data) {
+    wxMemoryInputStream stream(xpm_data, strlen(xpm_data)+1);
+    wxImage img(stream, wxBITMAP_TYPE_XPM);
+    wxBitmap bmp(img);
+    RegisterImageHelper(type, bmp);
+}
+
+
+void ListBoxImpl::RegisterRGBAImage(int type, int width, int height,
+                                    const unsigned char *pixelsImage)
+{
+#ifdef wxHAS_RAW_BITMAP
+    wxBitmap bmp = BitmapFromRGBAImage(width, height, pixelsImage);
+    RegisterImageHelper(type, bmp);
+#endif
+}
+
 
 void ListBoxImpl::ClearRegisteredImages() {
     wxDELETE(imgList);
@@ -1388,7 +1410,7 @@ ColourDesired Platform::ChromeHighlight() {
 
 const char *Platform::DefaultFont() {
     static char buf[128];
-    strcpy(buf, wxNORMAL_FONT->GetFaceName().mbc_str());
+    wxStrlcpy(buf, wxNORMAL_FONT->GetFaceName().mbc_str(), WXSIZEOF(buf));
     return buf;
 }
 
@@ -1570,7 +1592,7 @@ wxString stc2wx(const char* str)
 }
 
 
-const wxWX2MBbuf wx2stc(const wxString& str)
+wxWX2MBbuf wx2stc(const wxString& str)
 {
     const wchar_t* wcstr = str.c_str();
     size_t wclen         = str.length();

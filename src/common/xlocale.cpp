@@ -3,7 +3,6 @@
 // Purpose:     xlocale wrappers/impl to provide some xlocale wrappers
 // Author:      Brian Vanderburg II, Vadim Zeitlin
 // Created:     2008-01-07
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Brian Vanderburg II
 //                  2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -55,8 +54,8 @@ wxXLocale wxNullXLocale;
 class wxXLocaleModule : public wxModule
 {
 public:
-    virtual bool OnInit() { return true; }
-    virtual void OnExit() { wxDELETE(gs_cLocale); }
+    virtual bool OnInit() wxOVERRIDE { return true; }
+    virtual void OnExit() wxOVERRIDE { wxDELETE(gs_cLocale); }
 
     DECLARE_DYNAMIC_CLASS(wxXLocaleModule)
 };
@@ -77,9 +76,10 @@ wxXLocale& wxXLocale::GetCLocale()
 {
     if ( !gs_cLocale )
     {
-        // NOTE: bcc551 has trouble doing static_cast with incomplete
-        //       type definition. reinterpret_cast used as workaround
-        gs_cLocale = new wxXLocale( reinterpret_cast<wxXLocaleCTag *>(NULL) );
+        // Notice that we need a separate variable because clang 3.1 refuses to
+        // cast nullptr (which is how NULL is defined in it) to anything.
+        static wxXLocaleCTag* const tag = NULL;
+        gs_cLocale = new wxXLocale(tag);
     }
 
     return *gs_cLocale;

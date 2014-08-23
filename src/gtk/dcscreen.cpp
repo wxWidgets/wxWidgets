@@ -2,7 +2,6 @@
 // Name:        src/gtk/dcscreen.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,11 +9,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/dcscreen.h"
 #include "wx/gtk/dcscreen.h"
 
 #include <gtk/gtk.h>
-#include <gdk/gdkx.h>
 
 //-----------------------------------------------------------------------------
 // wxScreenDCImpl

@@ -5,7 +5,6 @@
 // Author:      Joel Farley, Ove Kåven
 // Modified by: Vadim Zeitlin, Robert Roebling, Ron Lee
 // Created:     2007-02-19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 REA Elektronik GmbH
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -93,10 +92,6 @@
     #endif
 #endif /* __MINGW32__ */
 
-#if defined(__WATCOMC__)
-    #define HAVE_VSWPRINTF 1
-#endif
-
 #if wxUSE_PRINTF_POS_PARAMS
     /*
         The systems where vsnprintf() supports positional parameters should
@@ -146,16 +141,9 @@
             #define wxCRT_VsnprintfW    _vsnwprintf
         #elif defined(HAVE_VSWPRINTF)
             #define wxCRT_VsnprintfW     vswprintf
-        #elif defined(__WATCOMC__)
-            #define wxCRT_VsnprintfW    _vsnwprintf
         #endif
 
-        /*
-           All versions of CodeWarrior supported by wxWidgets apparently
-           have both snprintf() and vsnprintf()
-         */
-        #if defined(HAVE_VSNPRINTF) \
-            || defined(__MWERKS__) || defined(__WATCOMC__)
+        #if defined(HAVE_VSNPRINTF)
             #ifdef HAVE_BROKEN_VSNPRINTF_DECL
                 #define wxCRT_VsnprintfA    wx_fixed_vsnprintf
             #else
@@ -207,10 +195,10 @@
    so on but not all systems have them so use our own implementations in this
    case.
  */
-#if wxUSE_UNICODE && !defined(wxHAVE_TCHAR_SUPPORT) && !defined(HAVE_WPRINTF)
+#if !defined(wxHAVE_TCHAR_SUPPORT) && !defined(HAVE_WPRINTF)
     #define wxNEED_WPRINTF
 #endif
-#if wxUSE_UNICODE && !defined(wxHAVE_TCHAR_SUPPORT) && !defined(HAVE_VSWSCANF)
+#if !defined(wxHAVE_TCHAR_SUPPORT) && !defined(HAVE_VSWSCANF) && defined(HAVE_VSSCANF)
     #define wxNEED_VSWSCANF
 #endif
 
@@ -243,7 +231,17 @@
 #define wxCRT_ScanfA     scanf
 #define wxCRT_SscanfA    sscanf
 #define wxCRT_FscanfA    fscanf
-#define wxCRT_VsscanfA   vsscanf
+
+/* vsscanf() may have a wrong declaration with non-const first parameter, fix
+ * this by wrapping it if necessary. */
+#if defined __cplusplus && defined HAVE_BROKEN_VSSCANF_DECL
+    inline int wxCRT_VsscanfA(const char *str, const char *format, va_list ap)
+    {
+        return vsscanf(const_cast<char *>(str), format, ap);
+    }
+#else
+    #define wxCRT_VsscanfA   vsscanf
+#endif
 
 #if defined(wxNEED_WPRINTF)
     int wxCRT_ScanfW(const wchar_t *format, ...);
@@ -263,14 +261,6 @@
 // ----------------------------------------------------------------------------
 // user-friendly wrappers to CRT functions
 // ----------------------------------------------------------------------------
-
-#ifdef __WATCOMC__
-    // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-    #define wxPrintf    wxPrintf_Impl
-    #define wxFprintf   wxFprintf_Impl
-    #define wxSprintf   wxSprintf_Impl
-    #define wxSnprintf  wxSnprintf_Impl
-#endif
 
     // FIXME-UTF8: remove this
 #if wxUSE_UNICODE
@@ -387,27 +377,6 @@ int WXDLLIMPEXP_BASE
 wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argptr);
 
 #endif // wxUSE_UNICODE
-
-#ifdef __WATCOMC__
-    // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-    //
-    // fortunately, OpenWatcom implements __VA_ARGS__, so we can provide macros
-    // that cast the format argument to wxString:
-    #undef wxPrintf
-    #undef wxFprintf
-    #undef wxSprintf
-    #undef wxSnprintf
-
-    #define wxPrintf(fmt, ...) \
-            wxPrintf_Impl(wxFormatString(fmt), __VA_ARGS__)
-    #define wxFprintf(f, fmt, ...) \
-            wxFprintf_Impl(f, wxFormatString(fmt), __VA_ARGS__)
-    #define wxSprintf(s, fmt, ...) \
-            wxSprintf_Impl(s, wxFormatString(fmt), __VA_ARGS__)
-    #define wxSnprintf(s, n, fmt, ...) \
-            wxSnprintf_Impl(s, n, wxFormatString(fmt), __VA_ARGS__)
-#endif // __WATCOMC__
-
 
 // We can't use wxArgNormalizer<T> for variadic arguments to wxScanf() etc.
 // because they are writable, so instead of providing friendly template

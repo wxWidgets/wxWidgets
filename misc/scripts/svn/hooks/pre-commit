@@ -16,13 +16,16 @@ rc=0
 # exclude all third-party files from consideration, we don't want to do any
 # checks for them
 #
-# also exclude message catalog files as they may be not in UTF-8
+# Also don't impose any constraints on commits to previous 2.x branches.
 all_changed_files=`svnl changed | \
                     grep "^[AU]" | \
                     sed 's/^....//' | \
-                    egrep -v "locale/.*\.po$" | \
-                    egrep -v "src/(tiff|regex|jpeg|stc/scintilla)" | \
-                    egrep -v "_wrap.cpp"`
+                    egrep -v "branches/WX_2_" | \
+                    egrep -v "wxWidgets/vendor" | \
+                    egrep -v "src/(expat|tiff|regex|jpeg|stc/scintilla|zlib)" | \
+                    egrep -v "src/msw/version.rc" | \
+                    egrep -v "_wrap.cpp" | \
+                    egrep -v "wxPython/.*/docs/.*\.html$"`
 
 # analyze the changed files to find all non-binary and all source files
 for f in $all_changed_files; do
@@ -52,6 +55,23 @@ for f in $changed_sources; do
          echo "Please remove TABs from $f before committing." >&2
          rc=1
      fi
+
+     case $f in
+        */wx/chartype.h)
+            # This file defines _T() for compatibility so don't check it.
+            ;;
+
+        */docs/doxygen/overviews/changes_since28.h)
+            # And this one describes changes from _T() to wxT().
+            ;;
+
+        *)
+            if  svnl cat $f | fgrep -qw '_T'; then
+                echo "Please use wxT() instead of _T() in $f." >&2
+                rc=1
+            fi
+            ;;
+    esac
 done
 
 for f in $changed_text_files; do

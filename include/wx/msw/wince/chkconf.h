@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2005-03-07
-// RCS-ID:      $Id$
 // Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -117,9 +116,6 @@
     #undef wxUSE_TOOLTIPS
     #define wxUSE_TOOLTIPS 0
 #endif
-
-#undef wxUSE_UNICODE_MSLU
-#define wxUSE_UNICODE_MSLU 0
 
 #undef wxUSE_UXTHEME
 #define wxUSE_UXTHEME 0

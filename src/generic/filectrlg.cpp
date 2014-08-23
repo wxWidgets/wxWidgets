@@ -3,7 +3,6 @@
 // Purpose:     wxGenericFileCtrl Implementation
 // Author:      Diaa M. Sami
 // Created:     2007-07-07
-// RCS-ID:      $Id$
 // Copyright:   (c) Diaa M. Sami
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,13 +34,13 @@
 #include "wx/tokenzr.h"
 #include "wx/imaglist.h"
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     #include "wx/msw/wrapwin.h"
 #endif
 
 #if defined(__WXWINCE__)
 #define IsTopMostDir(dir) (dir == wxT("\\") || dir == wxT("/"))
-#elif (defined(__DOS__) || defined(__WINDOWS__) || defined (__OS2__))
+#elif defined(__DOS__) || defined(__WINDOWS__)
 #define IsTopMostDir(dir)   (dir.empty())
 #else
 #define IsTopMostDir(dir)   (dir == wxT("/"))
@@ -176,7 +175,7 @@ void wxFileData::ReadData()
         return;
     }
 
-#if defined(__DOS__) || (defined(__WINDOWS__) && !defined(__WXWINCE__)) || defined(__OS2__)
+#if defined(__DOS__) || (defined(__WINDOWS__) && !defined(__WXWINCE__))
     // c:\.. is a drive don't stat it
     if ((m_fileName == wxT("..")) && (m_filePath.length() <= 5))
     {
@@ -222,33 +221,40 @@ void wxFileData::ReadData()
 
     wxStructStat buff;
 
-#if defined(__UNIX__) && (!defined( __OS2__ ) && !defined(__VMS))
-    lstat( m_filePath.fn_str(), &buff );
-    m_type |= S_ISLNK(buff.st_mode) ? is_link : 0;
+#if defined(__UNIX__) && !defined(__VMS)
+    const bool hasStat = lstat( m_filePath.fn_str(), &buff ) == 0;
+    if ( hasStat )
+        m_type |= S_ISLNK(buff.st_mode) ? is_link : 0;
 #else // no lstat()
-    wxStat( m_filePath, &buff );
+    const bool hasStat = wxStat( m_filePath, &buff ) == 0;
 #endif
 
-    m_type |= (buff.st_mode & S_IFDIR) != 0 ? is_dir : 0;
-    m_type |= (buff.st_mode & wxS_IXUSR) != 0 ? is_exe : 0;
+    if ( hasStat )
+    {
+        m_type |= (buff.st_mode & S_IFDIR) != 0 ? is_dir : 0;
+        m_type |= (buff.st_mode & wxS_IXUSR) != 0 ? is_exe : 0;
 
-    m_size = buff.st_size;
+        m_size = buff.st_size;
 
-    m_dateTime = buff.st_mtime;
+        m_dateTime = buff.st_mtime;
+    }
 #endif
     // __WXWINCE__
 
 #if defined(__UNIX__)
-    m_permissions.Printf(wxT("%c%c%c%c%c%c%c%c%c"),
-                         buff.st_mode & wxS_IRUSR ? wxT('r') : wxT('-'),
-                         buff.st_mode & wxS_IWUSR ? wxT('w') : wxT('-'),
-                         buff.st_mode & wxS_IXUSR ? wxT('x') : wxT('-'),
-                         buff.st_mode & wxS_IRGRP ? wxT('r') : wxT('-'),
-                         buff.st_mode & wxS_IWGRP ? wxT('w') : wxT('-'),
-                         buff.st_mode & wxS_IXGRP ? wxT('x') : wxT('-'),
-                         buff.st_mode & wxS_IROTH ? wxT('r') : wxT('-'),
-                         buff.st_mode & wxS_IWOTH ? wxT('w') : wxT('-'),
-                         buff.st_mode & wxS_IXOTH ? wxT('x') : wxT('-'));
+    if ( hasStat )
+    {
+        m_permissions.Printf(wxT("%c%c%c%c%c%c%c%c%c"),
+                             buff.st_mode & wxS_IRUSR ? wxT('r') : wxT('-'),
+                             buff.st_mode & wxS_IWUSR ? wxT('w') : wxT('-'),
+                             buff.st_mode & wxS_IXUSR ? wxT('x') : wxT('-'),
+                             buff.st_mode & wxS_IRGRP ? wxT('r') : wxT('-'),
+                             buff.st_mode & wxS_IWGRP ? wxT('w') : wxT('-'),
+                             buff.st_mode & wxS_IXGRP ? wxT('x') : wxT('-'),
+                             buff.st_mode & wxS_IROTH ? wxT('r') : wxT('-'),
+                             buff.st_mode & wxS_IWOTH ? wxT('w') : wxT('-'),
+                             buff.st_mode & wxS_IXOTH ? wxT('x') : wxT('-'));
+    }
 #elif defined(__WIN32__)
     DWORD attribs = ::GetFileAttributes(m_filePath.c_str());
     if (attribs != (DWORD)-1)
@@ -528,7 +534,7 @@ void wxFileListCtrl::UpdateFiles()
     item.m_itemId = 0;
     item.m_col = 0;
 
-#if (defined(__WINDOWS__) || defined(__DOS__) || defined(__WXMAC__) || defined(__OS2__)) && !defined(__WXWINCE__)
+#if (defined(__WINDOWS__) || defined(__DOS__) || defined(__WXMAC__)) && !defined(__WXWINCE__)
     if ( IsTopMostDir(m_dirName) )
     {
         wxArrayString names, paths;
@@ -563,7 +569,7 @@ void wxFileListCtrl::UpdateFiles()
         if ( !IsTopMostDir(m_dirName) && !m_dirName.empty() )
         {
             wxString p(wxPathOnly(m_dirName));
-#if (defined(__UNIX__) || defined(__WXWINCE__)) && !defined(__OS2__)
+#if (defined(__UNIX__) || defined(__WXWINCE__))
             if (p.empty()) p = wxT("/");
 #endif // __UNIX__
             wxFileData *fd = new wxFileData(p, wxT(".."), wxFileData::is_dir, wxFileIconsTable::folder);
@@ -574,10 +580,10 @@ void wxFileListCtrl::UpdateFiles()
         }
 
         wxString dirname(m_dirName);
-#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
+#if defined(__DOS__) || defined(__WINDOWS__)
         if (dirname.length() == 2 && dirname[1u] == wxT(':'))
             dirname << wxT('\\');
-#endif // defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
+#endif // defined(__DOS__) || defined(__WINDOWS__)
 
         if (dirname.empty())
             dirname = wxFILE_SEP_PATH;
@@ -699,7 +705,7 @@ void wxFileListCtrl::GoToParentDir()
             m_dirName.Remove( len-1, 1 );
         wxString fname( wxFileNameFromPath(m_dirName) );
         m_dirName = wxPathOnly( m_dirName );
-#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
+#if defined(__DOS__) || defined(__WINDOWS__)
         if (!m_dirName.empty())
         {
             if (m_dirName.Last() == wxT('.'))
@@ -883,9 +889,9 @@ wxFileListCtrl::~wxFileListCtrl()
 // wxGenericFileCtrl implementation
 ///////////////////////////////////////////////////////////////////////////////
 
-IMPLEMENT_DYNAMIC_CLASS( wxGenericFileCtrl, wxPanel )
+IMPLEMENT_DYNAMIC_CLASS( wxGenericFileCtrl, wxNavigationEnabled<wxControl> )
 
-BEGIN_EVENT_TABLE( wxGenericFileCtrl, wxPanel )
+BEGIN_EVENT_TABLE( wxGenericFileCtrl, wxNavigationEnabled<wxControl> )
     EVT_LIST_ITEM_SELECTED( ID_FILELIST_CTRL, wxGenericFileCtrl::OnSelected )
     EVT_LIST_ITEM_ACTIVATED( ID_FILELIST_CTRL, wxGenericFileCtrl::OnActivated )
     EVT_CHOICE( ID_CHOICE, wxGenericFileCtrl::OnChoiceFilter )
@@ -916,7 +922,11 @@ bool wxGenericFileCtrl::Create( wxWindow *parent,
     wxASSERT_MSG( !( ( m_style & wxFC_SAVE ) && ( m_style & wxFC_MULTIPLE ) ),
                   wxT( "wxFC_MULTIPLE can't be used with wxFC_SAVE" ) );
 
-    wxPanel::Create( parent, id, pos, size, wxTAB_TRAVERSAL, name );
+    wxNavigationEnabled<wxControl>::Create( parent, id,
+                                            pos, size,
+                                            wxTAB_TRAVERSAL,
+                                            wxDefaultValidator,
+                                            name );
 
     m_dir = defaultDirectory;
 

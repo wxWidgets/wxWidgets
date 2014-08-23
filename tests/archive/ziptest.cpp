@@ -2,7 +2,6 @@
 // Name:        tests/archive/ziptest.cpp
 // Purpose:     Test the zip classes
 // Author:      Mike Wetherell
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Mike Wetherell
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -233,11 +232,8 @@ ArchiveTestSuite *ziptest::makeSuite()
 {
     ArchiveTestSuite::makeSuite();
 
-#if !defined WXARC_NO_POPEN && !defined __WXMSW__
-    // If have popen then can check the piped output of 'zip - -'.
-    // The gnuwin32 build of infozip does work for this, e.g.:
-    //  C:\>echo test data to pipe through zip | zip -q > foo.zip 
-    // doesn't produce a valid zip, so disabled for now.
+#if 0
+    // zip doesn't support this any more so disabled
     if (IsInPath(wxT("zip")))
         for (int options = 0; options <= PipeIn; options += PipeIn) {
             string name = Description(wxT("ZipPipeTestCase"), options,

@@ -3,7 +3,6 @@
 // Purpose:     wxSpinCtrlDouble unit test
 // Author:      Steven Lamerton
 // Created:     2010-07-22
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -31,6 +30,7 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( SpinCtrlDoubleTestCase );
+        CPPUNIT_TEST( NoEventsInCtor );
         WXUISIM_TEST( Arrows );
         WXUISIM_TEST( Wrap );
         CPPUNIT_TEST( Range );
@@ -39,6 +39,7 @@ private:
         CPPUNIT_TEST( Digits );
     CPPUNIT_TEST_SUITE_END();
 
+    void NoEventsInCtor();
     void Arrows();
     void Wrap();
     void Range();
@@ -67,13 +68,29 @@ void SpinCtrlDoubleTestCase::tearDown()
     wxDELETE(m_spin);
 }
 
+void SpinCtrlDoubleTestCase::NoEventsInCtor()
+{
+    // Verify that creating the control does not generate any events. This is
+    // unexpected and shouldn't happen.
+    wxWindow* const parent = m_spin->GetParent();
+    delete m_spin;
+    m_spin = new wxSpinCtrlDouble;
+
+    EventCounter updatedSpin(m_spin, wxEVT_SPINCTRLDOUBLE);
+    EventCounter updatedText(m_spin, wxEVT_TEXT);
+
+    m_spin->Create(parent, wxID_ANY, "",
+                   wxDefaultPosition, wxDefaultSize, 0,
+                   0., 100., 17.);
+
+    CPPUNIT_ASSERT_EQUAL(0, updatedSpin.GetCount());
+    CPPUNIT_ASSERT_EQUAL(0, updatedText.GetCount());
+}
+
 void SpinCtrlDoubleTestCase::Arrows()
 {
 #ifndef __WXGTK__
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_spin, wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED);
+    EventCounter updated(m_spin, wxEVT_SPINCTRLDOUBLE);
 
     wxUIActionSimulator sim;
 
@@ -83,13 +100,14 @@ void SpinCtrlDoubleTestCase::Arrows()
     sim.Char(WXK_UP);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, updated.GetCount());
     CPPUNIT_ASSERT_EQUAL(1.0, m_spin->GetValue());
+    updated.Clear();
 
     sim.Char(WXK_DOWN);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, updated.GetCount());
     CPPUNIT_ASSERT_EQUAL(0.0, m_spin->GetValue());
 #endif
 }
@@ -125,7 +143,21 @@ void SpinCtrlDoubleTestCase::Range()
     CPPUNIT_ASSERT_EQUAL(0.0, m_spin->GetMin());
     CPPUNIT_ASSERT_EQUAL(100.0, m_spin->GetMax());
 
-    //Test neagtive ranges
+    // Test that the value is adjusted to be inside the new valid range but
+    // that this doesn't result in any events (as this is not something done by
+    // the user).
+    {
+        EventCounter updatedSpin(m_spin, wxEVT_SPINCTRLDOUBLE);
+        EventCounter updatedText(m_spin, wxEVT_TEXT);
+
+        m_spin->SetRange(1., 10.);
+        CPPUNIT_ASSERT_EQUAL(1., m_spin->GetValue());
+
+        CPPUNIT_ASSERT_EQUAL(0, updatedSpin.GetCount());
+        CPPUNIT_ASSERT_EQUAL(0, updatedText.GetCount());
+    }
+
+    //Test negative ranges
     m_spin->SetRange(-10.0, 10.0);
 
     CPPUNIT_ASSERT_EQUAL(-10.0, m_spin->GetMin());
@@ -140,18 +172,23 @@ void SpinCtrlDoubleTestCase::Range()
 
 void SpinCtrlDoubleTestCase::Value()
 {
+    EventCounter updatedSpin(m_spin, wxEVT_SPINCTRLDOUBLE);
+    EventCounter updatedText(m_spin, wxEVT_TEXT);
+
     m_spin->SetDigits(2);
     m_spin->SetIncrement(0.1);
 
     CPPUNIT_ASSERT_EQUAL(0.0, m_spin->GetValue());
 
     m_spin->SetValue(50.0);
-
     CPPUNIT_ASSERT_EQUAL(50.0, m_spin->GetValue());
 
     m_spin->SetValue(49.1);
-
     CPPUNIT_ASSERT_EQUAL(49.1, m_spin->GetValue());
+
+    // Calling SetValue() shouldn't have generated any events.
+    CPPUNIT_ASSERT_EQUAL(0, updatedSpin.GetCount());
+    CPPUNIT_ASSERT_EQUAL(0, updatedText.GetCount());
 }
 
 void SpinCtrlDoubleTestCase::Increment()

@@ -5,7 +5,6 @@
 # Author:      Ron <ron@debian.org>
 # Modified by: VZ on 2005-09-20 to make it work with Bourne shell
 # Created:     14/9/2004
-# RCS-ID:      $Id$
 # Copyright:   (c) 2004 Ron <ron@debian.org>
 # Licence:     wxWindows licence
 ############################################################################

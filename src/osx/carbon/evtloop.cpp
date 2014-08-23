@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2006-01-12
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -83,13 +82,31 @@ int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
     }
 }
 
-void wxGUIEventLoop::DoRun()
+void wxGUIEventLoop::WakeUp()
 {
-    wxMacAutoreleasePool autoreleasepool;
-    RunApplicationEventLoop();
+    OSStatus err = noErr;
+    wxMacCarbonEvent wakeupEvent;
+    wakeupEvent.Create( 'WXMC', 'WXMC', GetCurrentEventTime(),
+                        kEventAttributeNone );
+    err = PostEventToQueue(GetMainEventQueue(), wakeupEvent,
+                            kEventPriorityHigh );
 }
 
-void wxGUIEventLoop::DoStop()
+void wxGUIEventLoop::OSXDoRun()
+{
+    wxMacAutoreleasePool autoreleasepool;
+
+    while (!m_shouldExit)
+    {
+        RunApplicationEventLoop();
+    }
+
+    // Force enclosing event loop to temporarily exit and check
+    // if it should be stopped.
+    QuitApplicationEventLoop();
+}
+
+void wxGUIEventLoop::OSXDoStop()
 {
     QuitApplicationEventLoop();
 }
@@ -117,7 +134,7 @@ wxModalEventLoop::wxModalEventLoop(WXWindow modalNativeWindow)
 
 // END move into a evtloop_osx.cpp
 
-void wxModalEventLoop::DoRun()
+void wxModalEventLoop::OSXDoRun()
 {
     wxWindowDisabler disabler(m_modalWindow);
     wxMacAutoreleasePool autoreleasepool;
@@ -153,7 +170,7 @@ void wxModalEventLoop::DoRun()
 
 }
 
-void wxModalEventLoop::DoStop()
+void wxModalEventLoop::OSXDoStop()
 {
     wxMacAutoreleasePool autoreleasepool;
     QuitAppModalLoopForWindow(m_modalNativeWindow);

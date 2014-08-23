@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     25.08.00
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -298,7 +297,7 @@ void wxCheckBox::ChangeValue(bool value)
 
 void wxCheckBox::SendEvent()
 {
-    wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, GetId());
+    wxCommandEvent event(wxEVT_CHECKBOX, GetId());
     InitCommandEvent(event);
     wxCheckBoxState state = Get3StateValue();
 

@@ -3,7 +3,6 @@
 // Purpose:     wxStaticLine class for wxUniversal
 // Author:      Vadim Zeitlin
 // Created:     28.06.99
-// Version:     $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -46,7 +45,7 @@ public:
                 const wxString &name = wxStaticLineNameStr );
 
 protected:
-    virtual void DoDraw(wxControlRenderer *renderer);
+    virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxStaticLine)

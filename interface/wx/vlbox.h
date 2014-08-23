@@ -2,7 +2,6 @@
 // Name:        vlbox.h
 // Purpose:     interface of wxVListBox
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -190,7 +189,7 @@ public:
     bool IsSelected(size_t item) const;
 
     /**
-        Selects or deselects the specified item which must be valid (i.e. not
+        Selects or deselects the specified item which must be valid (i.e.\ not
         equal to @c wxNOT_FOUND).
 
         @return @true if the items selection status has changed or @false
@@ -270,7 +269,7 @@ public:
     void SetSelectionBackground(const wxColour& col);
 
     /**
-        Toggles the state of the specified @a item, i.e. selects it if it was
+        Toggles the state of the specified @a item, i.e.\ selects it if it was
         unselected and deselects it if it was selected.
 
         This method is only valid for multi selection listboxes.
@@ -298,7 +297,7 @@ protected:
     virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const = 0;
 
     /**
-        This method is used to draw the items background and, maybe, a border
+        This method is used to draw the item's background and, maybe, a border
         around it.
 
         The base class version implements a reasonable default behaviour which

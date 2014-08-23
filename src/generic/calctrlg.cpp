@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     29.12.99
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -274,7 +273,7 @@ void wxGenericCalendarCtrl::CreateMonthComboBox()
                           wxDefaultCoord,
                           wxSIZE_AUTO_WIDTH|wxSIZE_AUTO_HEIGHT);
 
-    m_comboMonth->Connect(m_comboMonth->GetId(), wxEVT_COMMAND_COMBOBOX_SELECTED,
+    m_comboMonth->Connect(m_comboMonth->GetId(), wxEVT_COMBOBOX,
                           wxCommandEventHandler(wxGenericCalendarCtrl::OnMonthChange),
                           NULL, this);
 }
@@ -288,11 +287,11 @@ void wxGenericCalendarCtrl::CreateYearSpinCtrl()
                                 wxSP_ARROW_KEYS | wxCLIP_SIBLINGS,
                                 -4300, 10000, GetDate().GetYear());
 
-    m_spinYear->Connect(m_spinYear->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
+    m_spinYear->Connect(m_spinYear->GetId(), wxEVT_TEXT,
                         wxCommandEventHandler(wxGenericCalendarCtrl::OnYearTextChange),
                         NULL, this);
 
-    m_spinYear->Connect(m_spinYear->GetId(), wxEVT_COMMAND_SPINCTRL_UPDATED,
+    m_spinYear->Connect(m_spinYear->GetId(), wxEVT_SPINCTRL,
                         wxSpinEventHandler(wxGenericCalendarCtrl::OnYearChange),
                         NULL, this);
 }
@@ -917,8 +916,8 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     if ( HasFlag( wxCAL_SHOW_WEEK_NUMBERS ) && IsExposed( 0, y, m_calendarWeekWidth, m_heightRow * 6 ))
     {
         dc.SetBackgroundMode(wxTRANSPARENT);
-        dc.SetBrush(wxBrush(m_colHeaderBg, wxSOLID));
-        dc.SetPen(wxPen(m_colHeaderBg, 1, wxSOLID));
+        dc.SetBrush(wxBrush(m_colHeaderBg, wxBRUSHSTYLE_SOLID));
+        dc.SetPen(wxPen(m_colHeaderBg, 1, wxPENSTYLE_SOLID));
         dc.DrawRectangle( 0, y, m_calendarWeekWidth, m_heightRow * 6 );
         wxDateTime date = GetStartDate();
         for ( size_t i = 0; i < 6; ++i )
@@ -1379,7 +1378,7 @@ void wxGenericCalendarCtrl::OnClick(wxMouseEvent& event)
 
         default:
             wxFAIL_MSG(wxT("unknown hittest code"));
-            // fall through
+            wxFALLTHROUGH;
 
         case wxCAL_HITTEST_NOWHERE:
             event.Skip();

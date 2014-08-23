@@ -3,7 +3,6 @@
 // Purpose:     wxBrush class implementation
 // Author:      Vaclav Slavik
 // Created:     2006-08-04
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 REA Elektronik GmbH
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -69,12 +68,10 @@ wxBrush::wxBrush(const wxColour &colour, wxBrushStyle style)
     m_refData = new wxBrushRefData(colour, style);
 }
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
 wxBrush::wxBrush(const wxColour& col, int style)
 {
     m_refData = new wxBrushRefData(col, (wxBrushStyle)style);
 }
-#endif
 
 wxBrush::wxBrush(const wxBitmap &stippleBitmap)
 {
@@ -85,7 +82,7 @@ wxBrush::wxBrush(const wxBitmap &stippleBitmap)
 
 bool wxBrush::operator==(const wxBrush& brush) const
 {
-#warning "this is incorrect (MGL too)"
+#warning "this is incorrect"
     return m_refData == brush.m_refData;
 }
 

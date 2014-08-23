@@ -2,38 +2,26 @@
 // Name:        const_wxusedef.h
 // Purpose:     wxUSE preprocessor symbols
 // Author:      Tim Stahlhut
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
 /**
 
-@page page_wxusedef wxUSE preprocessor symbols defined by wxWidgets
+@page page_wxusedef wxUSE Preprocessor Symbols
+
+@tableofcontents
 
 This section documents the wxUSE preprocessor symbols used in the wxWidgets
 source, grouped by category (and sorted by alphabetical order inside each
 category). These symbols are always defined and whether the given feature is
 active or not depends on their value: if defined as @c 1, feature is active,
-otherwise it is disabled. Because of this these symbols should be always tested
+otherwise it is disabled. Because of this these symbols should always be tested
 using @if_ and not @ifdef_.
 
-@li @ref page_wxusedef_important
-@li @ref page_wxusedef_multi
-@li @ref page_wxusedef_unix
-@li @ref page_wxusedef_x11
-@li @ref page_wxusedef_gtk
-@li @ref page_wxusedef_mac
-@li @ref page_wxusedef_motif
-@li @ref page_wxusedef_cocoa
-@li @ref page_wxusedef_os2
-@li @ref page_wxusedef_msw
-@li @ref page_wxusedef_univ
 
 
-<hr>
-
-@section page_wxusedef_important Most important wxUSE symbols
+@section page_wxusedef_important Most Important Symbols
 
 This table summarizes some of the global build features affecting the entire
 library:
@@ -60,7 +48,7 @@ library:
 @endDefList
 
 
-@section page_wxusedef_multi Generic wxUSE preprocessor symbols
+@section page_wxusedef_multi Generic Symbols
 
 @beginDefList
 @itemdef{wxUSE_ABOUTDLG, Use wxAboutDialogInfo class.}
@@ -70,7 +58,7 @@ library:
 @itemdef{wxUSE_ARTPROVIDER_STD, Use standard low quality icons in wxArtProvider.}
 @itemdef{wxUSE_ARTPROVIDER_TANGO, Use Tango icons in wxArtProvider.}
 @itemdef{wxUSE_ANY, Use wxAny class.}
-@itemdef{wxUSE_APPLE_IEEE, IEEE Extended to/from double routines; see src/common/extended.c file.}
+@itemdef{wxUSE_APPLE_IEEE, IEEE Extended to/from double routines, see wxDataOutputStream.}
 @itemdef{wxUSE_ARCHIVE_STREAMS, Enable streams for archive formats.}
 @itemdef{wxUSE_AUI, Use AUI (dockable windows) library.}
 @itemdef{wxUSE_BASE64, Enables Base64 support.}
@@ -92,6 +80,7 @@ library:
 @itemdef{wxUSE_COLOURPICKERCTRL, Use wxColourPickerCtrl class.}
 @itemdef{wxUSE_COMBOBOX, Use wxComboBox class.}
 @itemdef{wxUSE_COMBOCTRL, Use wxComboCtrl class.}
+@itemdef{wxUSE_COMPILER_TLS, Can be set to 0 to prevent using compile thread-specific variables support.}
 @itemdef{wxUSE_CONFIG, Use wxConfig and related classes.}
 @itemdef{wxUSE_CONFIG_NATIVE, When enabled use native OS configuration instead of the wxFileConfig class.}
 @itemdef{wxUSE_CONSOLE_EVENTLOOP, Enable event loop in console programs.}
@@ -101,7 +90,7 @@ library:
 @itemdef{wxUSE_DATAVIEWCTRL, Use wxDataViewCtrl class.}
 @itemdef{wxUSE_DATEPICKCTRL, Use wxDatePickerCtrl class.}
 @itemdef{wxUSE_DATETIME, Use wxDateTime and related classes.}
-@itemdef{wxUSE_DBGHELP, Use wxDbgHelpDLL class.}
+@itemdef{wxUSE_DBGHELP, Predefine as 0 to avoid using wxDbgHelpDLL and related classes.}
 @itemdef{wxUSE_DC_TRANSFORM_MATRIX, Use wxDC::SetTransformMatrix() and related methods.}
 @itemdef{wxUSE_DEBUG_CONTEXT, Use wxDebugContext class.}
 @itemdef{wxUSE_DEBUG_NEW_ALWAYS, See @ref overview_debugging}
@@ -251,11 +240,13 @@ library:
 @itemdef{wxUSE_TOOLTIPS, Use wxToolTip class.}
 @itemdef{wxUSE_TREEBOOK, Use wxTreebook class.}
 @itemdef{wxUSE_TREECTRL, Use wxTreeCtrl class.}
+@itemdef{wxUSE_TREELISTCTRL, Use wxTreeListCtrl class.}
 @itemdef{wxUSE_TTM_WINDOWFROMPOINT, Obsolete, do not use.}
 @itemdef{wxUSE_URL, Use wxURL class.}
 @itemdef{wxUSE_URL_NATIVE, Use native support for some operations with wxURL.}
 @itemdef{wxUSE_VALIDATORS, Use wxValidator class.}
 @itemdef{wxUSE_VARIANT, Use wxVariant class.}
+@itemdef{wxUSE_WEBVIEW, Use wxWebView class.}
 @itemdef{wxUSE_WIZARDDLG, Use wxWizard class.}
 @itemdef{wxUSE_WXHTML_HELP, Use wxHtmlHelpController and related classes.}
 @itemdef{wxUSE_XML, Use XML parsing classes.}
@@ -266,7 +257,7 @@ library:
 @endDefList
 
 
-@section page_wxusedef_unix wxUSE preprocessor symbols used only under Unix platforms
+@section page_wxusedef_unix Unix Platform Symbols
 
 @beginDefList
 @itemdef{wxUSE_EPOLL_DISPATCHER, Use wxEpollDispatcher class. See also wxUSE_SELECT_DISPATCHER.}
@@ -278,7 +269,7 @@ library:
 @endDefList
 
 
-@section page_wxusedef_x11 wxUSE preprocessor symbols used only in wxX11 Platform
+@section page_wxusedef_x11 wxX11 Symbols
 
 @beginDefList
 @itemdef{wxUSE_NANOX, Use NanoX.}
@@ -286,18 +277,17 @@ library:
 @endDefList
 
 
-@section page_wxusedef_gtk wxUSE preprocessor symbols used only in wxGTK port
+@section page_wxusedef_gtk wxGTK Symbols
 
 @beginDefList
 @itemdef{wxUSE_DETECT_SM, Use code to detect X11 session manager.}
 @itemdef{wxUSE_GTKPRINT, Use GTK+ printing support.}
-@itemdef{wxUSE_LIBGNOMEPRINT, Use GNOME printing support.}
 @itemdef{wxUSE_LIBGNOMEVFS, Use GNOME VFS support. Currently has no effect. }
 @itemdef{wxUSE_LIBHILDON, Use Hildon framework for Nokia 770. Currently has no effect. }
 @endDefList
 
 
-@section page_wxusedef_mac wxUSE preprocessor symbols used only in wxMac port
+@section page_wxusedef_mac wxMac Symbols
 
 @beginDefList
 @itemdef{wxUSE_MAC_CRITICAL_REGION_MUTEX, See src/osx/carbon/thread.cpp file.}
@@ -307,7 +297,7 @@ library:
 @endDefList
 
 
-@section page_wxusedef_motif wxUSE preprocessor symbols used only in wxMotif port
+@section page_wxusedef_motif wxMotif Symbols
 
 @beginDefList
 @itemdef{wxUSE_GADGETS, Use xmCascadeButtonGadgetClass, xmLabelGadgetClass, xmPushButtonGadgetClass and xmToggleButtonGadgetClass classes.}
@@ -315,26 +305,14 @@ library:
 @endDefList
 
 
-@section page_wxusedef_cocoa wxUSE preprocessor symbols used only in Cocoa port
+@section page_wxusedef_cocoa Cocoa Symbols
 
 @beginDefList
 @itemdef{wxUSE_OBJC_UNIQUIFYING, Enable Objective-C class name uniquifying.}
 @endDefList
 
 
-@section page_wxusedef_os2 wxUSE preprocessor symbols used only in OS2 port
-
-@beginDefList
-@itemdef{wxUSE_CONSOLEDEBUG, See src/os2/app.cpp file.}
-@itemdef{wxUSE_DDE, See src/os2/mimetype.cpp file.}
-@itemdef{wxUSE_IMAGE_LOADING_IN_MSW, See src/os2/clipbrd.cpp file.}
-@itemdef{wxUSE_IMAGE_LOADING_IN_OS2, See src/os2/gdiimage.cpp file.}
-@itemdef{wxUSE_NET_API, Use NetBios32GetInfo API call.}
-@itemdef{wxUSE_RESOURCE_LOADING_IN_OS2, See src/os2/gdiimage.cpp file.}
-@endDefList
-
-
-@section page_wxusedef_msw wxUSE preprocessor symbols used only in wxMSW port
+@section page_wxusedef_msw wxMSW Symbols
 
 @beginDefList
 @itemdef{wxUSE_ACCESSIBILITY, Enable accessibility support}
@@ -350,27 +328,30 @@ library:
 @itemdef{wxUSE_HOTKEY, Use wxWindow::RegisterHotKey() and wxWindow::UnregisterHotKey}
 @itemdef{wxUSE_INKEDIT, Use InkEdit library. Related to Tablet PCs.}
 @itemdef{wxUSE_MS_HTML_HELP, Use wxCHMHelpController class.}
-@itemdef{wxUSE_NO_MANIFEST, Use to prevent the auto generation, under MSVC, of manifest file needed by windows XP and above.}
-@itemdef{wxUSE_NORLANDER_HEADERS, Using headers whose author is Anders Norlander.}
+@itemdef{wxUSE_NO_MANIFEST, Can be predefined to disable inclusion of the
+manifest from wxWidgets RC file. See also wxUSE_RC_MANIFEST.}
 @itemdef{wxUSE_OLE, Enables OLE helper routines.}
 @itemdef{wxUSE_OLE_AUTOMATION, Enable OLE automation utilities.}
 @itemdef{wxUSE_OLE_CLIPBOARD, Use OLE clipboard.}
 @itemdef{wxUSE_PENWINDOWS, See src/msw/penwin.cpp file.}
 @itemdef{wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW, Use PS printing in wxMSW.}
 @itemdef{wxUSE_PS_PRINTING, See src/msw/dcprint.cpp file.}
+@itemdef{wxUSE_RC_MANIFEST, Include manifest for common controls library v6
+from wxWidgets RC file. This may be needed to be defined explicitly for MSVC 7
+(a.k.a. MSVS 2003) only as later versions of MSVC generate this manifest
+themselves and the manifest generation is enabled by default for the other
+compilers. See also wxUSE_NO_MANIFEST.}
 @itemdef{wxUSE_REGKEY, Use wxRegKey class.}
 @itemdef{wxUSE_RICHEDIT, Enable use of riched32.dll in wxTextCtrl}
 @itemdef{wxUSE_RICHEDIT2, Enable use of riched20.dll in wxTextCtrl}
 @itemdef{wxUSE_VC_CRTDBG, See wx/msw/msvcrt.h file.}
-@itemdef{wxUSE_UNICODE_MSLU, Use MSLU for Unicode support under Windows 9x systems.}
 @itemdef{wxUSE_UXTHEME, Enable support for XP themes.}
 @itemdef{wxUSE_WIN_METAFILES_ALWAYS, Use wxMetaFile even when wxUSE_ENH_METAFILE=1.}
 @itemdef{wxUSE_WXDIB, Use wxDIB class.}
-@itemdef{wxUSE_XPM_IN_MSW, See also wxUSE_XPM}
 @endDefList
 
 
-@section page_wxusedef_univ wxUSE preprocessor symbols used only in wxUniversal
+@section page_wxusedef_univ wxUniversal Symbols
 
 @beginDefList
 @itemdef{wxUSE_ALL_THEMES, Use all themes in wxUniversal; See wx/univ/theme.h file.}

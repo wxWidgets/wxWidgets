@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     04.10.99
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -101,6 +100,14 @@ int main(int argc, char **argv)
 
         default:
             break;
+    }
+
+    if ( argc == 1 )
+    {
+        // If there were no command-line options supplied, emit a message
+        // otherwise it's not obvious that the sample ran successfully
+        wxPrintf("Welcome to the wxWidgets 'console' sample!\n");
+        wxPrintf("For more information, run it again with the --help option\n");
     }
 
     // do something useful here

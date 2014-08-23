@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     20.09.01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2001 Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -51,9 +50,6 @@ public:
 
     virtual wxPoint GetClientAreaOrigin() const;
 
-    virtual bool SetShape(const wxRegion& region)
-        { return DoSetShape(region); }
-
     // Attracts the users attention to this window if the application is
     // inactive (should be called when a background event occurs)
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
@@ -68,6 +64,7 @@ public:
     virtual bool IsActive();
 
     virtual void ShowWithoutActivating();
+    bool EnableFullScreenView(bool enable = true) wxOVERRIDE;
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) ;
     virtual bool IsFullScreen() const ;
 
@@ -77,8 +74,13 @@ public:
     virtual void SetTitle( const wxString& title);
     virtual wxString GetTitle() const;
 
+    virtual void SetLabel(const wxString& label) { SetTitle( label ); }
+    virtual wxString GetLabel() const            { return GetTitle(); }
+    
     virtual void OSXSetModified(bool modified);
     virtual bool OSXIsModified() const;
+
+    virtual void SetRepresentedFilename(const wxString& filename);
 
 protected:
     // common part of all ctors

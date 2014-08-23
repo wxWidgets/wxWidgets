@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for wxComboBox
 // Author:      Bob Mitchell
 // Created:     2000/03/21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,6 +23,8 @@
     #include "wx/combobox.h"
     #include "wx/textctrl.h"    // for wxTE_PROCESS_ENTER
 #endif
+
+#include "wx/xml/xml.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxComboBoxXmlHandler, wxXmlResourceHandler)
 
