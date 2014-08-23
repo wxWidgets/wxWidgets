@@ -472,22 +472,38 @@ bool wxListCtrl::Arrange(int flag)
 
 bool wxListCtrl::DeleteItem(long item)
 {
-    return false;
+    QTreeWidgetItem *qitem = QtGetItem(item);
+    if ( qitem != NULL )
+    {
+        delete qitem;
+        return true;
+    }
+    else
+        return false;
 }
 
 bool wxListCtrl::DeleteAllItems()
 {
-    return false;
+    m_qtTreeWidget->clear();
+    return true;
 }
 
 bool wxListCtrl::DeleteColumn(int col)
 {
-    return false;
+    // Qt cannot easily add or remove columns, so only the last one can be deleted
+    if ( col == GetColumnCount() - 1 )
+    {
+        m_qtTreeWidget->setColumnCount(col);
+        return true;
+    }
+    else
+        return false;
 }
 
 bool wxListCtrl::DeleteAllColumns()
 {
-    return false;
+    m_qtTreeWidget->setColumnCount(0);
+    return true;
 }
 
 void wxListCtrl::ClearAll()
