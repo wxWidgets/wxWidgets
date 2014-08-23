@@ -186,7 +186,7 @@ protected:
 //    #include "wx/gtk1/anybutton.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/anybutton.h"
-#else
+#elif defined(__WXQT__)
     #include "wx/qt/anybutton.h"
 #endif
 
