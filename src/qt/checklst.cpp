@@ -60,6 +60,10 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
     return wxCheckListBoxBase::Create( parent, id, pos, size, choices, style, validator, name );
 }
 
+void wxCheckListBox::Init()
+{
+    m_hasCheckBoxes = true;
+}
 
 bool wxCheckListBox::IsChecked(unsigned int item) const
 {

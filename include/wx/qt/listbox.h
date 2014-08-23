@@ -77,7 +77,13 @@ protected:
     virtual void DoClear();
     virtual void DoDeleteOneItem(unsigned int pos);
     
+#if wxUSE_CHECKLISTBOX
+    bool       m_hasCheckBoxes;
+#endif // wxUSE_CHECKLISTBOX
+
 private:
+    virtual void Init(); //common construction
+
     wxQtPointer< QListWidget > m_qtListWidget;
 
     DECLARE_DYNAMIC_CLASS(wxListBox)

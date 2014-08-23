@@ -41,6 +41,7 @@ void wxQtListWidget::doubleClicked( const QModelIndex &index )
 
 wxListBox::wxListBox()
 {
+    Init();
 }
 
 wxListBox::wxListBox(wxWindow *parent, wxWindowID id,
@@ -73,11 +74,21 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name)
 {
+    Init();
+    QListWidgetItem* item;
     m_qtListWidget = new wxQtListWidget( parent, this );
 
     while ( n-- > 0 )
-        m_qtListWidget->addItem( wxQtConvertString( *choices++ ));
-
+    {
+        item = new QListWidgetItem();
+        item->setText(wxQtConvertString( *choices++ ));
+        if ( m_hasCheckBoxes )
+        {
+            item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+            item->setCheckState(Qt::Unchecked);
+        }
+        m_qtListWidget->addItem(item);
+    }
     return wxListBoxBase::Create( parent, id, pos, size, style, validator, name );
 }
 
@@ -89,9 +100,17 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name)
 {
+    Init();
     m_qtListWidget = new wxQtListWidget( parent, this );
 
     return wxListBoxBase::Create( parent, id, pos, size, style, validator, name );
+}
+
+void wxListBox::Init()
+{
+#if wxUSE_CHECKLISTBOX
+    m_hasCheckBoxes = false;
+#endif // wxUSE_CHECKLISTBOX
 }
 
 bool wxListBox::IsSelected(int n) const
@@ -121,7 +140,11 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
 {
     QListWidgetItem* item = m_qtListWidget->item(n);
     wxCHECK_RET(item != NULL, wxT("wrong listbox index") );
-    item->setText(wxQtConvertString(s));
+    if ( m_hasCheckBoxes )
+    {
+        item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        item->setCheckState(Qt::Unchecked);
+    }
 }
 
 void wxListBox::SetSelection(int n)
@@ -154,9 +177,16 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
     return n;
 }
 
-int wxListBox::DoInsertOneItem(const wxString& item, unsigned int pos)
+int wxListBox::DoInsertOneItem(const wxString& text, unsigned int pos)
 {
-    m_qtListWidget->insertItem(pos, wxQtConvertString(item));
+    QListWidgetItem* item = new QListWidgetItem();
+    item->setText(wxQtConvertString( text ));
+    if ( m_hasCheckBoxes )
+    {
+        item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        item->setCheckState(Qt::Unchecked);
+    }
+    m_qtListWidget->insertItem(pos, item);
 }
 
 void wxListBox::DoSetItemClientData(unsigned int n, void *clientData)
