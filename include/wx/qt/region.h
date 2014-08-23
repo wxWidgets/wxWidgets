@@ -26,6 +26,7 @@ public:
     virtual void Clear();
 
     virtual QRegion GetHandle() const;
+    virtual void QtSetRegion(QRegion region); // Hangs on to this region
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;

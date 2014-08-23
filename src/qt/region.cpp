@@ -113,6 +113,11 @@ void wxRegion::Clear()
     M_REGIONDATA = QRegion();
 }
 
+void wxRegion::QtSetRegion(QRegion region)
+{
+    M_REGIONDATA = region;
+}
+
 wxGDIRefData *wxRegion::CreateGDIRefData() const
 {
     return new wxRegionRefData;
