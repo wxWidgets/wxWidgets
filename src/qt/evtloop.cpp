@@ -63,6 +63,11 @@ wxQtEventLoopBase::wxQtEventLoopBase()
     qApp->installEventFilter( m_qtIdleTimer );
 }
 
+wxQtEventLoopBase::~wxQtEventLoopBase()
+{
+    delete m_qtIdleTimer;
+}
+
 void wxQtEventLoopBase::ScheduleExit(int rc)
 {
     wxCHECK_RET( IsInsideRun(), wxT("can't call ScheduleExit() if not started") );
