@@ -8,8 +8,6 @@
 #ifndef _WX_QT_FONT_H_
 #define _WX_QT_FONT_H_
 
-class QFont;
-
 class WXDLLIMPEXP_CORE wxFont : public wxFontBase
 {
 public:
@@ -41,7 +39,7 @@ public:
            const wxString& face = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
-    bool Create(int size,
+    bool Create(wxSize size,
                 wxFontFamily family,
                 wxFontStyle style,
                 wxFontWeight weight,
@@ -51,7 +49,6 @@ public:
 
     // accessors: get the font characteristics
     virtual int GetPointSize() const;
-    virtual wxFontFamily GetFamily() const;
     virtual wxFontStyle GetStyle() const;
     virtual wxFontWeight GetWeight() const;
     virtual bool GetUnderlined() const;
