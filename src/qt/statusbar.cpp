@@ -47,6 +47,8 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID WXUNUSED(winid),
 
     PostCreation();
 
+    SetFieldsCount(1);
+
     return true;
 }
 
