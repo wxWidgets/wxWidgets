@@ -843,6 +843,7 @@ bool wxWindow::QtSetBackgroundStyle()
     {
         if (m_backgroundStyle == wxBG_STYLE_PAINT)
         {
+            // wx paint handler will draw the invalidated region completely:
             widget->setAttribute(Qt::WA_OpaquePaintEvent);
         }
         else if (m_backgroundStyle == wxBG_STYLE_TRANSPARENT)
@@ -856,12 +857,15 @@ bool wxWindow::QtSetBackgroundStyle()
             // let Qt erase the background by default
             // (note that wxClientDC will not work)
             widget->setAutoFillBackground(true);
+            // use system colors for background (default in Qt)
             widget->setAttribute(Qt::WA_NoSystemBackground, false);
         }
         else if (m_backgroundStyle == wxBG_STYLE_ERASE)
         {
+            // erase events will be fired, if not handled, wx will clear the DC
             widget->setAttribute(Qt::WA_OpaquePaintEvent);
-            widget->setAutoFillBackground(true);
+            // Qt should not clear the background (default):
+            widget->setAutoFillBackground(false);
         }
     }
     return true;
