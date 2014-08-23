@@ -9,7 +9,8 @@
 #define _WX_QT_PANEL_H_
 
 #include "wx/qt/pointer_qt.h"
-#include "wx/qt/window_qt.h"
+
+#include <QtWidgets/QWidget>
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxPanelNameStr[];
 
@@ -40,7 +41,7 @@ public:
     virtual QWidget *GetHandle() const;
 
 private:
-    wxQtPointer< wxQtWidget > m_qtWidget;
+    wxQtPointer< QWidget > m_qtWidget;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxPanel );
 };

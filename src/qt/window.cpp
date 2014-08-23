@@ -14,22 +14,40 @@
 #include "wx/scrolbar.h"
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
-#include "wx/qt/window_qt.h"
 
 #include <QtGui/QPicture>
 #include <QtGui/QPainter>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QWidget>
 
 #define VERT_SCROLLBAR_POSITION 0, 1
 #define HORZ_SCROLLBAR_POSITION 1, 0
+
+
+class wxQtWidget : public wxQtEventSignalHandler< QWidget, wxWindow >
+{
+
+    public:
+        wxQtWidget( wxWindow *parent, wxWindow *handler );
+};
 
 wxQtWidget::wxQtWidget( wxWindow *parent, wxWindow *handler )
     : wxQtEventSignalHandler< QWidget, wxWindow >( parent, handler )
 {
 }
 
-#if wxUSE_ACCEL
+#if wxUSE_ACCEL || defined( Q_MOC_RUN )
+class wxQtShortcutHandler : public QObject, public wxQtSignalHandler< wxWindow >
+{
+
+public:
+    wxQtShortcutHandler( wxWindow *window );
+
+public:
+    void activated();
+};
+
 wxQtShortcutHandler::wxQtShortcutHandler( wxWindow *window )
     : wxQtSignalHandler< wxWindow >( window )
 {
