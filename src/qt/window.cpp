@@ -208,6 +208,9 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
         }
         // Do not let Qt erase the background by default (needed by wxClientDC)
         GetHandle()->setAttribute(Qt::WA_OpaquePaintEvent);
+        // Set the default color so Paint Event default handler clears it:
+        m_hasBgCol = true;
+        SetBackgroundColour(GetHandle()->palette().color(GetHandle()->backgroundRole()));
     }
 
     if ( !wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
@@ -918,17 +921,20 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                             wxWindowDC dc( (wxWindow*)this );
                             dc.SetDeviceClippingRegion( m_updateRegion );
 
-                            // Ensure DC is cleared if Qt didn't it
-                            if ( UseBgCol() && !GetHandle()->autoFillBackground() )
-                            {
-                                dc.SetBackground(GetBackgroundColour());
-                                dc.Clear();
-                            }
                             wxEraseEvent erase( GetId(), &dc );
                             if ( ProcessWindowEvent(erase) )
                             {
                                 // background erased, don't do it again
                                 break;
+                            }
+                            // Ensure DC is cleared if handler didn't and Qt will not do it
+                            if ( UseBgCol() && !GetHandle()->autoFillBackground() )
+                            {
+                                wxLogDebug(wxT("wxWindow::QtHandlePaintEvent %s clearing DC to %s"),
+                                           (const char*)GetName(), GetBackgroundColour().GetAsString()
+                                           );
+                                dc.SetBackground(GetBackgroundColour());
+                                dc.Clear();
                             }
                         }
                         // fall through
