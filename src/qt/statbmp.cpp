@@ -66,7 +66,11 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 
 wxBitmap wxStaticBitmap::GetBitmap() const
 {
-    return wxBitmap( *m_qtLabel->pixmap() );
+    const QPixmap* pix = m_qtLabel->pixmap();
+    if ( pix != NULL )
+        return wxBitmap( *pix );
+    else
+        return wxBitmap();
 }
 
 wxIcon wxStaticBitmap::GetIcon() const
