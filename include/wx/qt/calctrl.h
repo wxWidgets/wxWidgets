@@ -16,8 +16,6 @@
 #include "wx/qt/pointer_qt.h"
 #include <QtWidgets/QCalendarWidget>
 
-class WXDLLIMPEXP_FWD_ADV wxQtCalendarWidget;
-
 class WXDLLIMPEXP_ADV wxCalendarCtrl : public wxCalendarCtrlBase
 {
 public:
@@ -84,7 +82,7 @@ private:
     void Init();
     void UpdateStyle();
 
-    wxQtPointer< wxQtCalendarWidget > m_qtCalendar;
+    wxQtPointer< QCalendarWidget > m_qtCalendar;
     wxColour m_colHeaderFg,
              m_colHeaderBg,
              m_colHolidayFg,
@@ -94,22 +92,6 @@ private:
 
 
     DECLARE_DYNAMIC_CLASS(wxCalendarCtrl)
-};
-
-
-
-class WXDLLIMPEXP_ADV wxQtCalendarWidget : public wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >
-{
-
-public:
-    wxQtCalendarWidget( wxWindow *parent, wxCalendarCtrl *handler );
-
-private:
-    void OnSelectionChanged();
-    void OnActivated(const QDate &date);
-
-private:
-    QDate m_date;
 };
 
 #endif // _WX_QT_CALCTRL_H_

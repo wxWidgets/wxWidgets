@@ -22,6 +22,21 @@
 #include <QtGui/QTextCharFormat>
 
 
+class wxQtCalendarWidget : public wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >
+{
+
+public:
+    wxQtCalendarWidget( wxWindow *parent, wxCalendarCtrl *handler );
+
+private:
+    void selectionChanged();
+    void activated(const QDate &date);
+
+private:
+    QDate m_date;
+};
+
+
 void wxCalendarCtrl::Init()
 {
     m_qtCalendar = NULL;
@@ -306,17 +321,17 @@ wxQtCalendarWidget::wxQtCalendarWidget( wxWindow *parent, wxCalendarCtrl *handle
     : wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >( parent, handler )
 {
     m_date = selectedDate();
-    connect(this, &QCalendarWidget::selectionChanged, this, &wxQtCalendarWidget::OnSelectionChanged);
-    connect(this, &QCalendarWidget::activated, this, &wxQtCalendarWidget::OnActivated);
+    connect(this, &QCalendarWidget::selectionChanged, this, &wxQtCalendarWidget::selectionChanged);
+    connect(this, &QCalendarWidget::activated, this, &wxQtCalendarWidget::activated);
 }
 
-void wxQtCalendarWidget::OnSelectionChanged()
+void wxQtCalendarWidget::selectionChanged()
 {
     GetHandler()->GenerateAllChangeEvents(wxQtConvertDate(m_date));
     m_date = selectedDate();
 }
 
-void wxQtCalendarWidget::OnActivated(const QDate &WXUNUSED(date))
+void wxQtCalendarWidget::activated(const QDate &WXUNUSED(date))
 {
     GetHandler()->GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED);
 }
