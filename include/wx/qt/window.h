@@ -118,8 +118,6 @@ public:
 
     QImage *QtGetPaintBuffer();
 
-    virtual void QtPaintClientDCPicture( QWidget *handler );
-
     virtual bool QtHandlePaintEvent  ( QWidget *handler, QPaintEvent *event );
     virtual bool QtHandleResizeEvent ( QWidget *handler, QResizeEvent *event );
     virtual bool QtHandleWheelEvent  ( QWidget *handler, QWheelEvent *event );
