@@ -12,6 +12,43 @@
 #include "wx/qt/converter.h"
 #include "wx/qt/utils.h"
 
+class wxQtLineEdit : public wxQtEventSignalHandler< QLineEdit, wxTextCtrl >
+{
+public:
+    wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler );
+
+private:
+    void textChanged(const QString &text);
+    void returnPressed();
+};
+
+wxQtLineEdit::wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler )
+    : wxQtEventSignalHandler< QLineEdit, wxTextCtrl >( parent, handler )
+{
+    connect(this, &QLineEdit::textChanged,
+            this, &wxQtLineEdit::textChanged);
+    connect(this, &QLineEdit::returnPressed,
+            this, &wxQtLineEdit::returnPressed);
+}
+
+void wxQtLineEdit::textChanged(const QString &text)
+{
+    wxCommandEvent event( wxEVT_TEXT, GetHandler()->GetId() );
+    event.SetString( wxQtConvertString( text ) );
+    EmitEvent( event );
+}
+
+void wxQtLineEdit::returnPressed()
+{
+    if ( GetHandler()->HasFlag(wxTE_PROCESS_ENTER) )
+    {
+        wxCommandEvent event( wxEVT_TEXT_ENTER, GetHandler()->GetId() );
+        event.SetString( GetHandler()->GetValue() );
+        EmitEvent( event );
+    }
+}
+
+
 wxTextCtrl::wxTextCtrl()
 {
 }
@@ -41,7 +78,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
     if (!multiline)
     {
-        m_qtLineEdit = new QLineEdit( wxQtConvertString( value ), parent->GetHandle() );
+        m_qtLineEdit = new wxQtLineEdit( parent, this );
+        m_qtLineEdit->setText( wxQtConvertString( value ) );
     }
     else
     {
