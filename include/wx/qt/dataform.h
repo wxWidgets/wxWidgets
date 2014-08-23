@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/qt/dataform.h
-// Author:      Peter Most
-// Copyright:   (c) Peter Most
+// Name:        wx/qt/toolbar.h
+// Author:      Sean D'Epagnier
+// Copyright:   (c) Sean D'Epagnier 2014
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -14,6 +14,7 @@ public:
     wxDataFormat();
     wxDataFormat( wxDataFormatId formatId );
     wxDataFormat(const wxString &id);
+    wxDataFormat(const QString &id);
     wxDataFormat(const wxChar *id);
 
     void SetId( const wxChar *id );
@@ -22,6 +23,8 @@ public:
     bool operator!=(wxDataFormatId format) const;
     bool operator==(const wxDataFormat& format) const;
     bool operator!=(const wxDataFormat& format) const;
+
+    QString m_MimeType;
 };
 
 #endif // _WX_QT_DATAFORM_H_
