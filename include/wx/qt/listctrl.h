@@ -34,6 +34,7 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxListCtrlNameStr);
 
+    virtual ~wxListCtrl();
 
     // Attributes
     ////////////////////////////////////////////////////////////////////////////
@@ -279,11 +280,19 @@ public:
     virtual QTreeWidget *GetHandle() const;
 
 protected:
+    void Init();
+
     // Implement base class pure virtual methods.
     long DoInsertColumn(long col, const wxListItem& info);
 
     QTreeWidgetItem *QtGetItem(int id) const;
 
+    wxImageList *     m_imageListNormal; // The image list for normal icons
+    wxImageList *     m_imageListSmall;  // The image list for small icons
+    wxImageList *     m_imageListState;  // The image list state icons (not implemented yet)
+    bool              m_ownsImageListNormal,
+                      m_ownsImageListSmall,
+                      m_ownsImageListState;
 private:
     QTreeWidget *m_qtTreeWidget;
 

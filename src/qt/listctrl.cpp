@@ -9,6 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/listctrl.h"
+#include "wx/imaglist.h"
 #include "wx/qt/private/winevent.h"
 
 #include <QHeaderView>
@@ -100,6 +101,7 @@ wxListColumnFormat wxQtConvertAlignFlag(int align)
 
 wxListCtrl::wxListCtrl()
 {
+    Init();
 }
 
 wxListCtrl::wxListCtrl(wxWindow *parent,
@@ -110,6 +112,7 @@ wxListCtrl::wxListCtrl(wxWindow *parent,
            const wxValidator& validator,
            const wxString& name)
 {
+    Init();
     Create( parent, id, pos, size, style, validator, name );
 }
 
@@ -125,6 +128,27 @@ bool wxListCtrl::Create(wxWindow *parent,
     m_qtTreeWidget = new wxQtTreeWidget( parent, this );
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
+}
+
+void wxListCtrl::Init()
+{
+    m_imageListNormal = NULL;
+    m_ownsImageListNormal = false;
+    m_imageListSmall = NULL;
+    m_ownsImageListSmall = false;
+    m_imageListState = NULL;
+    m_ownsImageListState = false;
+}
+
+wxListCtrl::~wxListCtrl()
+{
+
+    if (m_ownsImageListNormal)
+        delete m_imageListNormal;
+    if (m_ownsImageListSmall)
+        delete m_imageListSmall;
+    if (m_ownsImageListState)
+        delete m_imageListState;
 }
 
 bool wxListCtrl::SetForegroundColour(const wxColour& col)
@@ -278,6 +302,25 @@ bool wxListCtrl::SetItem(wxListItem& info)
             if (info.m_stateMask & wxLIST_STATE_SELECTED)
                 qitem->setSelected(info.m_state & wxLIST_STATE_SELECTED);
         }
+        if (info.m_mask & wxLIST_MASK_IMAGE)
+        {
+            if (info.m_image >= 0)
+            {
+                wxImageList *imglst = GetImageList(wxIMAGE_LIST_SMALL);
+                wxCHECK_MSG(imglst, false, "invalid listctrl imagelist");
+                const wxBitmap* bitmap = imglst->GetBitmapPtr(info.m_image);
+                if (bitmap != NULL)
+                {
+                    // set the new image:
+                    qitem->setIcon( info.GetColumn(), QIcon( *bitmap->GetHandle() ));
+                }
+            }
+            else
+            {
+                // remove the image using and empty qt icon:
+                qitem->setIcon( info.GetColumn(), QIcon() );
+            }
+        }
         for (int col=0; col<GetColumnCount(); col++)
         {
             if ( info.GetFont().IsOk() )
@@ -336,12 +379,19 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
 
 bool wxListCtrl::SetItemImage(long item, int image, int selImage)
 {
-    return false;
+    return SetItemColumnImage(item, 0, image);
 }
 
 bool wxListCtrl::SetItemColumnImage(long item, long column, int image)
 {
-    return false;
+    wxListItem info;
+
+    info.m_mask = wxLIST_MASK_IMAGE;
+    info.m_image = image;
+    info.m_itemId = item;
+    info.m_col = column;
+
+    return SetItem(info);
 }
 
 wxString wxListCtrl::GetItemText(long item, int col) const
@@ -545,16 +595,53 @@ long wxListCtrl::GetNextItem(long item, int WXUNUSED(geometry), int state) const
 
 wxImageList *wxListCtrl::GetImageList(int which) const
 {
+    if ( which == wxIMAGE_LIST_NORMAL )
+    {
+        return m_imageListNormal;
+    }
+    else if ( which == wxIMAGE_LIST_SMALL )
+    {
+        return m_imageListSmall;
+    }
+    else if ( which == wxIMAGE_LIST_STATE )
+    {
+        return m_imageListState;
+    }
     return NULL;
 }
 
 
 void wxListCtrl::SetImageList(wxImageList *imageList, int which)
 {
+    if ( which == wxIMAGE_LIST_NORMAL )
+    {
+        if (m_ownsImageListNormal) delete m_imageListNormal;
+        m_imageListNormal = imageList;
+        m_ownsImageListNormal = false;
+    }
+    else if ( which == wxIMAGE_LIST_SMALL )
+    {
+        if (m_ownsImageListSmall) delete m_imageListSmall;
+        m_imageListSmall = imageList;
+        m_ownsImageListSmall = false;
+    }
+    else if ( which == wxIMAGE_LIST_STATE )
+    {
+        if (m_ownsImageListState) delete m_imageListState;
+        m_imageListState = imageList;
+        m_ownsImageListState = false;
+    }
 }
 
 void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
 {
+    SetImageList(imageList, which);
+    if ( which == wxIMAGE_LIST_NORMAL )
+        m_ownsImageListNormal = true;
+    else if ( which == wxIMAGE_LIST_SMALL )
+        m_ownsImageListSmall = true;
+    else if ( which == wxIMAGE_LIST_STATE )
+        m_ownsImageListState = true;
 }
 
 bool wxListCtrl::InReportView() const
@@ -752,6 +839,7 @@ long wxListCtrl::InsertItem(long index, const wxString& label, int imageIndex)
     //info.m_image = imageIndex == -1 ? I_IMAGENONE : imageIndex;
     info.m_text = label;
     info.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_IMAGE;
+    info.m_image = imageIndex;
     info.m_itemId = index;
     return InsertItem(info);
 }
