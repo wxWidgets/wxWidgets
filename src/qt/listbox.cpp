@@ -160,10 +160,13 @@ void *wxListBox::DoGetItemClientData(unsigned int n) const
 
 void wxListBox::DoClear()
 {
+    m_qtListWidget->clear();
 }
 
 void wxListBox::DoDeleteOneItem(unsigned int pos)
 {
+    QListWidgetItem* item = m_qtListWidget->item(pos);
+    delete item;
 }
 
 QListWidget *wxListBox::GetHandle() const
