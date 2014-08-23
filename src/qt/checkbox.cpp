@@ -34,6 +34,10 @@ void wxQtCheckBox::clicked( bool checked )
     if ( handler )
     {
         wxCommandEvent event( wxEVT_CHECKBOX, handler->GetId() );
+        if (!handler->Is3rdStateAllowedForUser() &&
+            checkState() == Qt::PartiallyChecked)
+            setCheckState(Qt::Checked);
+
         event.SetInt( checked );
         EmitEvent( event );
     }
@@ -58,15 +62,12 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     m_qtCheckBox = new wxQtCheckBox( parent, this );
     m_qtCheckBox->setText( wxQtConvertString( label ) );
 
+    WXValidateStyle(&style);
+
     if ( style & wxCHK_2STATE )
         m_qtCheckBox->setTristate( false );
     else if ( style & wxCHK_3STATE )
-    {
         m_qtCheckBox->setTristate( true );
-
-        if ( style & wxCHK_ALLOW_3RD_STATE_FOR_USER )
-            wxMISSING_IMPLEMENTATION( wxSTRINGIZE( wxCHK_ALLOW_3RD_STATE_FOR_USER ));
-    }
     if ( style & wxALIGN_RIGHT )
         m_qtCheckBox->setLayoutDirection( Qt::RightToLeft );
 
@@ -82,6 +83,39 @@ void wxCheckBox::SetValue(bool value)
 bool wxCheckBox::GetValue() const
 {
     return m_qtCheckBox->isChecked();
+}
+
+void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)
+{
+    switch (state)
+    {
+    case wxCHK_UNCHECKED:
+        m_qtCheckBox->setCheckState(Qt::Unchecked);
+        break;
+
+    case wxCHK_CHECKED:
+        m_qtCheckBox->setCheckState(Qt::Checked);
+        break;
+
+    case wxCHK_UNDETERMINED:
+        m_qtCheckBox->setCheckState(Qt::PartiallyChecked);
+        break;
+    }
+}
+
+wxCheckBoxState wxCheckBox::DoGet3StateValue() const
+{
+    switch (m_qtCheckBox->checkState())
+    {
+    case Qt::Unchecked:
+        return wxCHK_UNCHECKED;
+
+    case Qt::Checked:
+        return wxCHK_CHECKED;
+
+    case Qt::PartiallyChecked:
+        return wxCHK_UNDETERMINED;
+    }
 }
 
 QCheckBox *wxCheckBox::GetHandle() const
