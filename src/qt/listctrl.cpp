@@ -81,9 +81,9 @@ Qt::AlignmentFlag wxQtConvertTextAlign(wxListColumnFormat align)
         case wxLIST_FORMAT_RIGHT:
             return Qt::AlignRight;
         case wxLIST_FORMAT_CENTRE:
-        default:
             return Qt::AlignCenter;
     }
+    return Qt::AlignLeft;
 }
 
 wxListColumnFormat wxQtConvertAlignFlag(int align)
@@ -95,9 +95,9 @@ wxListColumnFormat wxQtConvertAlignFlag(int align)
         case Qt::AlignRight:
             return wxLIST_FORMAT_RIGHT;
         case Qt::AlignCenter:
-        default:
             return wxLIST_FORMAT_CENTRE;
     }
+    return wxLIST_FORMAT_LEFT;
 }
 
 

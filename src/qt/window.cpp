@@ -1015,7 +1015,7 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                         // nothing to do: window will be painted over in EVT_PAINT
                         break;
 
-                    default:
+                    case wxBG_STYLE_COLOUR:
                         wxFAIL_MSG( "unsupported background style" );
                 }
 

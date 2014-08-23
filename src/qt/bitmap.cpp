@@ -302,7 +302,36 @@ bool wxBitmap::SaveFile(const wxString &name, wxBitmapType type,
         case wxBITMAP_TYPE_ICO:  type_name = "ico";  break;
         case wxBITMAP_TYPE_JPEG: type_name = "jpeg"; break;
         case wxBITMAP_TYPE_PNG:  type_name = "png";  break;
-        default: break;
+        case wxBITMAP_TYPE_GIF:  type_name = "gif";  break;
+        case wxBITMAP_TYPE_CUR:  type_name = "cur";  break;
+        case wxBITMAP_TYPE_TIFF: type_name = "tif";  break;
+        case wxBITMAP_TYPE_XBM:  type_name = "xbm";  break;
+        case wxBITMAP_TYPE_PCX:  type_name = "pcx";  break;
+        case wxBITMAP_TYPE_BMP_RESOURCE:
+        case wxBITMAP_TYPE_ICO_RESOURCE:
+        case wxBITMAP_TYPE_CUR_RESOURCE:
+        case wxBITMAP_TYPE_XBM_DATA:
+        case wxBITMAP_TYPE_XPM:
+        case wxBITMAP_TYPE_XPM_DATA:
+        case wxBITMAP_TYPE_TIFF_RESOURCE:
+        case wxBITMAP_TYPE_GIF_RESOURCE:
+        case wxBITMAP_TYPE_PNG_RESOURCE:
+        case wxBITMAP_TYPE_JPEG_RESOURCE:
+        case wxBITMAP_TYPE_PNM:
+        case wxBITMAP_TYPE_PNM_RESOURCE:
+        case wxBITMAP_TYPE_PCX_RESOURCE:
+        case wxBITMAP_TYPE_PICT:
+        case wxBITMAP_TYPE_PICT_RESOURCE:
+        case wxBITMAP_TYPE_ICON:
+        case wxBITMAP_TYPE_ICON_RESOURCE:
+        case wxBITMAP_TYPE_ANI:
+        case wxBITMAP_TYPE_IFF:
+        case wxBITMAP_TYPE_TGA:
+        case wxBITMAP_TYPE_MACCURSOR:
+        case wxBITMAP_TYPE_MACCURSOR_RESOURCE:
+        case wxBITMAP_TYPE_MAX:
+        case wxBITMAP_TYPE_ANY:
+            break;
     }
     return type_name &&
         M_PIXDATA.save(wxQtConvertString(name), type_name);
