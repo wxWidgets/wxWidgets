@@ -61,6 +61,7 @@ public:
     virtual void SetPointSize( int pointSize );
     virtual void SetFamily( wxFontFamily family );
     virtual void SetStyle( wxFontStyle style );
+    virtual bool SetFaceName(const wxString& facename);
     virtual void SetWeight( wxFontWeight weight );
     virtual void SetUnderlined( bool underlined );
     virtual void SetEncoding(wxFontEncoding encoding);
