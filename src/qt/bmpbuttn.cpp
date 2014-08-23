@@ -42,9 +42,15 @@ bool wxBitmapButton::Create(wxWindow *parent,
 {
     if ( !wxBitmapButtonBase::Create( parent, id, pos, size, style, validator, name ))
         return false;
-    QPixmap *pixmap = bitmap.GetHandle();
-    m_qtPushButton->setIcon(QIcon( *pixmap ));
-    m_qtPushButton->setIconSize(pixmap->rect().size());
+    // Show the initial bitmap and resize accordingly:
+    if ( bitmap.IsOk() )
+    {
+        wxBitmapButtonBase::SetBitmapLabel(bitmap);
+
+        // we need to adjust the size after setting the bitmap as it may be too
+        // big for the default button size
+        SetInitialSize(size);
+    }
     return true;
 }
 

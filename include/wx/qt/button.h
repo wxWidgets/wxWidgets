@@ -54,6 +54,8 @@ public:
     virtual wxWindow *SetDefault();
     virtual void SetLabel( const wxString &label );
 
+    virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
+
     virtual QPushButton *GetHandle() const;
 
 protected:
