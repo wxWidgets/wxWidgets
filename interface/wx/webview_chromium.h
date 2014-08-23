@@ -44,6 +44,8 @@
 
     @section instructions Builing Instructions
     
+    wxWebViewChromium backend feature is shipped in an extra `libwebview_chromium` which depends on `libwebview`.
+
     __Windows Platform__
     
     wxWidgets provides Visual Stdio 2010/2012/2013 project file to build wxWebViewChromium.
@@ -85,7 +87,8 @@
        - Reuqire link frameworks: Chromium Embedded Framework.framework, AppKit.frameworks.
        - Reuqire app bundle configuration: Info.plist
        - Use system tool `install_name_tool -change` to correct `Chromium Embedded Framework.framework/Chromium Embedded Framework` location.
-    4. Create a `Contents/Frameworks` directory in `webviewchromium.app` bundle and copy `helper.app`, `webviewchromium.dylib` and `Chromium Embedded Framework` in it.
+    4. Create a `Contents/Frameworks` directory in `webviewchromium.app` bundle and copy `helper.app`, `webviewchromium.dylib`, 'webview.dylib'
+       and `Chromium Embedded Framework` in it.
     5. Use `samples/webview_chromium/mac/tools/make_more_helper.sh` to make sub-process helper app bundles based on `helper` app.
     
     
@@ -100,6 +103,7 @@
             |   |   |   `-- ffmpegsumo.so
             |   |   `-- Resources\
             |   |-- libwx_osx_cocoau_webviewchromium-3.1.dylib  <= wxWebviewChromium library supports webviewChromium backend.
+            |   |-- libwx_osx_cocoau_webview-3.1.dylib          <= wxWebview library supports other backends.
             |   |-- webview_chromium Helper EH.app              <= helper app
             |   |   `-- Contents
             |   |       |-- Info.plist
