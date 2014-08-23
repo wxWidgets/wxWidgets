@@ -659,18 +659,35 @@ bool wxListCtrl::EnsureVisible(long item)
 }
 
 long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
-{
-    return 0;
+{    
+    int ret;
+    QList <QTreeWidgetItem *> qitems = m_qtTreeWidget->findItems(
+                wxQtConvertString(str),
+                !partial ? Qt::MatchExactly : Qt::MatchContains );
+    for (int i=0; i<qitems.length(); i++)
+    {
+        ret = m_qtTreeWidget->indexOfTopLevelItem(qitems.at(0));
+        if ( ret >= start )
+            return ret;
+    }
+    return -1;
 }
 
 long wxListCtrl::FindItem(long start, wxUIntPtr data)
 {
-    return 0;
+    QVariant variant = qVariantFromValue(data);
+    // search only one hit (if any):
+    QModelIndexList qindexes = m_qtTreeWidget->model()->match(
+                 m_qtTreeWidget->model()->index(start, 0),
+                Qt::UserRole, variant, 1 );
+    if (qindexes.isEmpty())
+        return -1;
+    return qindexes.at(0).row();
 }
 
 long wxListCtrl::FindItem(long start, const wxPoint& pt, int direction)
 {
-    return 0;
+    return -1;
 }
 
 long wxListCtrl::HitTest(const wxPoint& point, int &flags, long* ptrSubItem) const
