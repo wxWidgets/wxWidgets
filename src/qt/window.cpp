@@ -774,7 +774,7 @@ void wxWindow::SetAcceleratorTable( const wxAcceleratorTable& accel )
 }
 #endif // wxUSE_ACCEL
 
-bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent * WXUNUSED( event ))
+bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
 {
     /* If this window has scrollbars, only let wx handle the event if it is
      * for the client area (the scrolled part). Events for the whole window
@@ -788,6 +788,8 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent * WXUNUSED( ev
     {
         // QScrollArea can only draw in the viewport:
         QWidget *widget = QtGetScrollBarsContainer() ? QtGetScrollBarsContainer()->viewport() : GetHandle();
+        // use the bounding rect as a region in Qt could be complex or even elliptical:
+        m_updateRegion = wxRegion( wxQtConvertRect( event->region().boundingRect() ) );
         if ( !m_qtPicture->isNull() )
         {
             // Data from wxClientDC, paint it
