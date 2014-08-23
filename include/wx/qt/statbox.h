@@ -30,6 +30,8 @@ public:
                 long style = 0,
                 const wxString& name = wxStaticBoxNameStr);
 
+    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
+
     virtual QGroupBox *GetHandle() const;
 
 protected:
