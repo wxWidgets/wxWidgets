@@ -452,7 +452,7 @@ public:
         @param cancel If @true, discard the changes made by user, as if @c
             Escape key was pressed. Otherwise, accept the changes as if @c
             Return was pressed.
-        @return @true if item editing wad finished or @false if no item as
+        @return @true if item editing was finished or @false if no item as
             being edited.
      */
     bool EndEditLabel(bool cancel);

@@ -627,7 +627,7 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI;
     #define wxFNCONV(name) wxConvFileName->cWX2MB(name)
     #define wxFNSTRINGCAST wxMBSTRINGCAST
 #else
-#if defined( __WXOSX_OR_COCOA__ ) && wxMBFILES
+#if defined(__WXOSX__) && wxMBFILES
     #define wxFNCONV(name) wxConvFileName->cWC2MB( wxConvLocal.cWX2WC(name) )
 #else
     #define wxFNCONV(name) name

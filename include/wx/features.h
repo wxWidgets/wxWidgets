@@ -32,7 +32,7 @@
 #endif
 
 /*  taskbar is implemented in the major ports */
-#if defined(__WXMSW__) || defined(__WXCOCOA__) \
+#if defined(__WXMSW__) \
     || defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXX11__) \
     || defined(__WXOSX_MAC__) || defined(__WXQT__)
     #define wxHAS_TASK_BAR_ICON

@@ -38,6 +38,7 @@
 #endif
 
 #include "wx/private/textmeasure.h"
+
 #ifdef __WXMSW__
     #include "wx/msw/dcclient.h"
     #include "wx/msw/dcmemory.h"
@@ -62,13 +63,6 @@
     #include "wx/osx/dcscreen.h"
 #endif
 
-
-#ifdef __WXCOCOA__
-    #include "wx/cocoa/dcclient.h"
-    #include "wx/cocoa/dcmemory.h"
-    #include "wx/cocoa/dcscreen.h"
-#endif
-
 #ifdef __WXMOTIF__
     #include "wx/motif/dcclient.h"
     #include "wx/motif/dcmemory.h"
@@ -86,7 +80,6 @@
     #include "wx/dfb/dcmemory.h"
     #include "wx/dfb/dcscreen.h"
 #endif
-
 
 #ifdef __WXQT__
     #include "wx/qt/dcclient.h"
@@ -512,8 +505,6 @@ void wxDCImpl::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
     m_signY = (yBottomUp  ? -1 :  1);
     ComputeScaleAndOrigin();
 }
-
-
 
 bool wxDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
 {

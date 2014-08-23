@@ -23,9 +23,8 @@
 #endif
 
 #include "wx/osx/private.h"
-#if defined( __WXCOCOA__ )
-#include "wx/cocoa/string.h"
-#endif
+#include "wx/osx/core/cfref.h"
+
 #include "wx/hashmap.h"
 #include "wx/filesys.h"
 

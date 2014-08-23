@@ -83,7 +83,7 @@ bool wxListBox::Create(
         return false;
 
     if ( IsSorted() )
-        m_strings.sorted = new wxSortedArrayString;
+        m_strings.sorted = new wxSortedArrayString(wxDictionaryStringSortAscending);
     else
         m_strings.unsorted = new wxArrayString;
 

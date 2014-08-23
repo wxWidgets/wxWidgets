@@ -13,7 +13,7 @@
 
 #if wxUSE_WEBKIT
 
-#if !defined(__WXMAC__) && !defined(__WXCOCOA__)
+#if !defined(__WXMAC__)
 #error "wxWebKitCtrl not implemented for this platform"
 #endif
 

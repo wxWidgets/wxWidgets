@@ -1096,9 +1096,8 @@ bool wxBoolProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 // wxEnumProperty
 // -----------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxEnumProperty, wxPGProperty)
-
-WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(wxEnumProperty,long,Choice)
+WX_PG_IMPLEMENT_PROPERTY_CLASS(wxEnumProperty, wxPGProperty,
+                               long, const long*, Choice)
 
 wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name, const wxChar* const* labels,
     const long* values, int value ) : wxPGProperty(label,name)
@@ -1171,11 +1170,11 @@ int wxEnumProperty::GetIndexForValue( int value ) const
     if ( !m_choices.IsOk() )
         return -1;
 
-    int intVal = m_choices.Index(value);
+    const int intVal = m_choices.Index(value);
     if ( intVal >= 0 )
         return intVal;
 
-    return value;
+    return -1;
 }
 
 wxEnumProperty::~wxEnumProperty ()
@@ -1370,9 +1369,8 @@ int wxEnumProperty::GetIndex() const
 // wxEditEnumProperty
 // -----------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxEditEnumProperty, wxPGProperty)
-
-WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(wxEditEnumProperty,wxString,ComboBox)
+WX_PG_IMPLEMENT_PROPERTY_CLASS(wxEditEnumProperty, wxPGProperty,
+                               wxString, const wxString&, ComboBox)
 
 wxEditEnumProperty::wxEditEnumProperty( const wxString& label, const wxString& name, const wxChar* const* labels,
     const long* values, const wxString& value )
@@ -1410,9 +1408,8 @@ wxEditEnumProperty::~wxEditEnumProperty()
 // wxFlagsProperty
 // -----------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFlagsProperty,wxPGProperty)
-
-WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(wxFlagsProperty,long,TextCtrl)
+WX_PG_IMPLEMENT_PROPERTY_CLASS(wxFlagsProperty, wxPGProperty,
+                               long, long, TextCtrl)
 
 void wxFlagsProperty::Init()
 {
@@ -2181,7 +2178,7 @@ bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGr
     long edStyle = wxTE_MULTILINE;
     if ( prop->HasFlag(wxPG_PROP_READONLY) )
         edStyle |= wxTE_READONLY;
-    wxTextCtrl* ed = new wxTextCtrl(dlg,11,value,
+    wxTextCtrl* ed = new wxTextCtrl(dlg,wxID_ANY,value,
         wxDefaultPosition,wxDefaultSize,edStyle);
 
     rowsizer->Add( ed, 1, wxEXPAND|wxALL, spacing );
@@ -2870,7 +2867,7 @@ bool wxPGInDialogValidator::DoValidate( wxPropertyGrid* propGrid,
     if ( !tc )
     {
         {
-            tc = new wxTextCtrl( propGrid, wxPG_SUBID_TEMP1, wxEmptyString,
+            tc = new wxTextCtrl( propGrid, wxID_ANY, wxEmptyString,
                                  wxPoint(30000,30000));
             tc->Hide();
         }
