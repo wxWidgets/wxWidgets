@@ -10,6 +10,7 @@
 
 #include "wx/bitmap.h"
 #include "wx/image.h"
+#include "wx/rawbmp.h"
 #include "wx/qt/converter.h"
 #include "wx/qt/utils.h"
 
@@ -367,8 +368,21 @@ void wxBitmap::SetDepth(int depth)
 
 void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-    return 0;
+    void* bits = NULL;
+    // allow access if bpp is valid and matches existence of alpha
+    if ( !M_PIXDATA.isNull() )
+    {
+        QImage qimage = M_PIXDATA.toImage();
+        bool hasAlpha = M_PIXDATA.hasAlphaChannel();
+        if ((bpp == 24 && !hasAlpha) || (bpp == 32 && hasAlpha))
+        {
+            data.m_height = qimage.height();
+            data.m_width = qimage.width();
+            data.m_stride = qimage.bytesPerLine();
+            bits = (void*) qimage.bits();
+        }
+    }
+    return bits;
 }
 
 void wxBitmap::UngetRawData(wxPixelDataBase& data)
