@@ -2,7 +2,6 @@
 // Name:        cursor.h
 // Purpose:
 // Author:      Peter Most
-// Id:          $Id: cursor.h 60648 2009-05-16 10:42:48Z FM $
 // Copyright:   (c) 2009 Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

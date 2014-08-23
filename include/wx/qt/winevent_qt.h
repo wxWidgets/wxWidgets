@@ -4,7 +4,6 @@
 // Author:      Javier Torres, Peter Most
 // Modified by:
 // Created:     21.06.10
-// RCS-ID:      $Id$
 // Copyright:   (c) Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

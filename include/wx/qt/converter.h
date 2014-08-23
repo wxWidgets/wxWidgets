@@ -3,7 +3,6 @@
 // Purpose:     Converter utility classes and functions
 // Author:      Peter Most, Kolya Kosenko
 // Created:     02/28/10
-// RCS-ID:      $Id$
 // Copyright:   (c) Peter Most
 //              (c) 2010 Kolya Kosenko
 // Licence:     wxWindows licence

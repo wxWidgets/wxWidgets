@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/converter.cpp
 // Author:      Peter Most, Kolya Kosenko
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 //              (c) 2010 Kolya Kosenko
 // Licence:     wxWindows licence

@@ -1,7 +1,6 @@
 /*
  *  Name:        wx/qt/defs.h
  *  Author:      Peter Most
- *  RCS-ID:      $Id$
  *  Copyright:   (c) Peter Most
  *  Licence:     wxWindows licence
  */

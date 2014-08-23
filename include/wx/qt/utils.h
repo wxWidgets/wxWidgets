@@ -3,7 +3,6 @@
 // Purpose:     utility classes and/or functions
 // Author:      Peter Most, Javier Torres
 // Created:     15/05/10
-// RCS-ID:      $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
