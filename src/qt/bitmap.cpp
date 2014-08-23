@@ -344,8 +344,8 @@ void wxBitmap::SetPalette(const wxPalette& palette)
 // copies the contents and mask of the given (colour) icon to the bitmap
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-    return 0;
+    *this = icon;
+    return IsOk();
 }
 
 
@@ -353,11 +353,13 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 void wxBitmap::SetHeight(int height)
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    // untested: M_PIXDATA = M_PIXDATA.copy(0, 0, GetWidth(), height);
 }
 
 void wxBitmap::SetWidth(int width)
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    // untested: M_PIXDATA = M_PIXDATA.copy(0, 0, width, GetHeight());
 }
 
 void wxBitmap::SetDepth(int depth)
