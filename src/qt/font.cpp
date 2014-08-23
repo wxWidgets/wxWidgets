@@ -283,7 +283,7 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 
-    return NULL;
+    return new wxNativeFontInfo();
 }
 
 
