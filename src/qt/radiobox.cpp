@@ -94,10 +94,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     else if ( style & wxRA_SPECIFY_COLS )
         wxMISSING_IMPLEMENTATION( wxSTRINGIZE( wxRA_SPECIFY_COLS ));
 
-    if ( style & wxRA_USE_CHECKBOX )
-        AddChoices< QCheckBox >( m_qtButtonGroup, n, choices );
-    else
-        AddChoices< QRadioButton >( m_qtButtonGroup, n, choices );
+    AddChoices< QRadioButton >( m_qtButtonGroup, n, choices );
 
     return QtCreateControl( parent, id, pos, size, style, val, name );
 }
