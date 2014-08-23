@@ -122,12 +122,7 @@ void wxTopLevelWindowNative::SetWindowStyleFlag( long style )
     if ( HasFlag( wxSTAY_ON_TOP ) != qtFlags.testFlag( Qt::WindowStaysOnTopHint ) )
         qtFlags ^= Qt::WindowStaysOnTopHint;
 
-    if ( ( (style & wxSIMPLE_BORDER) || (style & wxNO_BORDER) )
-         != qtFlags.testFlag( Qt::FramelessWindowHint ) )
-    {
-        qtFlags ^= Qt::FramelessWindowHint;
-    }
-    else if ( HasFlag( wxCAPTION ) )
+    if ( HasFlag( wxCAPTION ) )
     {
         // Only show buttons if window has caption
         if ( HasFlag( wxSYSTEM_MENU ) )
