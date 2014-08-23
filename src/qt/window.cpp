@@ -950,7 +950,7 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                         {
                             // the background should be cleared by qt auto fill
                             // send the erase event (properly creating a DC for it)
-                            wxWindowDC dc( (wxWindow*)this );
+                            wxPaintDC dc( this );
                             dc.SetDeviceClippingRegion( m_updateRegion );
 
                             wxEraseEvent erase( GetId(), &dc );
