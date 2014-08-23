@@ -85,7 +85,9 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         const wxString& name )
 {
     m_qtComboBox = new wxQtChoice( parent, this );
-    //m_qtComboBox->AddChoices( n, choices );
+
+    while ( n-- > 0 )
+        m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
@@ -105,26 +107,28 @@ wxSize wxChoice::DoGetBestSize() const
 
 unsigned wxChoice::GetCount() const
 {
-    return 0;
+    return m_qtComboBox->count();
 }
 
 wxString wxChoice::GetString(unsigned int n) const
 {
-    return wxString();
+    return wxQtConvertString( m_qtComboBox->itemText(n) );
 }
 
 void wxChoice::SetString(unsigned int n, const wxString& s)
 {
+    m_qtComboBox->setItemText(n, wxQtConvertString(s));
 }
 
 
 void wxChoice::SetSelection(int n)
 {
+    m_qtComboBox->setCurrentIndex(n);
 }
 
 int wxChoice::GetSelection() const
 {
-    return 0;
+    return m_qtComboBox->currentIndex();
 }
 
 
@@ -133,26 +137,37 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
                   void **clientData,
                   wxClientDataType type)
 {
-    return 0;
+    InvalidateBestSize();
+    int n = DoInsertItemsInLoop(items, pos, clientData, type);
+    return n;
 }
 
+int wxChoice::DoInsertOneItem(const wxString& item, unsigned int pos)
+{
+    m_qtComboBox->insertItem(pos, wxQtConvertString(item));
+}
 
 void wxChoice::DoSetItemClientData(unsigned int n, void *clientData)
 {
+    QVariant variant = qVariantFromValue(clientData);
+    m_qtComboBox->setItemData(n, variant);
 }
 
 void *wxChoice::DoGetItemClientData(unsigned int n) const
 {
-    return NULL;
+    QVariant variant = m_qtComboBox->itemData(n);
+    return variant.value<void *>();
 }
 
 
 void wxChoice::DoClear()
 {
+    m_qtComboBox->clear();
 }
 
 void wxChoice::DoDeleteOneItem(unsigned int pos)
 {
+    m_qtComboBox->removeItem(pos);
 }
 
 QComboBox *wxChoice::GetHandle() const
