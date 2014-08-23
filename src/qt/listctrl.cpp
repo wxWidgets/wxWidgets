@@ -157,12 +157,31 @@ bool wxListCtrl::GetItem(wxListItem& info) const
 
 bool wxListCtrl::SetItem(wxListItem& info)
 {
-    return false;
+    const long id = info.GetId();
+    wxCHECK_MSG( id >= 0 && id < GetItemCount(), false,
+                 wxT("invalid item index in SetItem") );
+
+    QModelIndex index = m_qtTreeWidget->model()->index(id, 0);
+    // note that itemFromIndex(index) is protected
+    QTreeWidgetItem *item = (QTreeWidgetItem*)index.internalPointer();
+    if ( !info.GetText().IsNull() )
+        item->setText(info.GetColumn(), wxQtConvertString(info.GetText()));
+    item->setTextAlignment(info.GetColumn(), wxQtConvertTextAlign(info.GetAlign()));
 }
 
 long wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId)
 {
-    return 0;
+    wxListItem info;
+    info.m_text = label;
+    info.m_mask = wxLIST_MASK_TEXT;
+    info.m_itemId = index;
+    info.m_col = col;
+    if ( imageId > -1 )
+    {
+        info.m_image = imageId;
+        info.m_mask |= wxLIST_MASK_IMAGE;
+    }
+    return SetItem(info);
 }
 
 int  wxListCtrl::GetItemState(long item, long stateMask) const
@@ -231,7 +250,7 @@ bool wxListCtrl::SetItemPosition(long item, const wxPoint& pos)
 
 int wxListCtrl::GetItemCount() const
 {
-    return 0;
+    return m_qtTreeWidget->topLevelItemCount();
 }
 
 int wxListCtrl::GetColumnCount() const
@@ -404,6 +423,7 @@ long wxListCtrl::InsertItem(const wxListItem& info)
     QTreeWidgetItem *item = new QTreeWidgetItem(m_qtTreeWidget);
     item->setText(info.GetColumn(), wxQtConvertString(info.GetText()));
     item->setTextAlignment(info.GetColumn(), wxQtConvertTextAlign(info.GetAlign()));
+    return GetItemCount() - 1;
 }
 
 long wxListCtrl::InsertItem(long index, const wxString& label)
