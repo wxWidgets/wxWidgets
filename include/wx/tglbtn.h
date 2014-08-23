@@ -60,6 +60,8 @@ public:
 
 protected:
 
+    void QtCreate(wxWindow *parent);
+
     wxDECLARE_NO_COPY_CLASS(wxToggleButtonBase);
 };
 

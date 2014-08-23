@@ -12,6 +12,31 @@
 #include "wx/bitmap.h"
 #include "wx/qt/converter.h"
 
+class wxQtToggleButton : public wxQtEventSignalHandler< QPushButton, wxAnyButton >
+{
+
+public:
+    wxQtToggleButton( wxWindow *parent, wxAnyButton *handler);
+
+private:
+    void clicked( bool checked );
+};
+
+wxQtToggleButton::wxQtToggleButton(wxWindow *parent, wxAnyButton *handler)
+    : wxQtEventSignalHandler< QPushButton, wxAnyButton >( parent, handler )
+{
+    setCheckable( true );
+    connect(this, &QPushButton::clicked, this, &wxQtToggleButton::clicked);
+}
+
+void wxQtToggleButton::clicked( bool checked )
+{
+    // for toggle buttons, send the checked state in the wx event:
+    wxCommandEvent event( wxEVT_TOGGLEBUTTON, GetHandler()->GetId() );
+    event.SetInt( checked );
+    EmitEvent( event );
+}
+
 wxDEFINE_EVENT( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEvent );
 
 IMPLEMENT_DYNAMIC_CLASS( wxBitmapToggleButton, wxToggleButtonBase )
@@ -40,9 +65,7 @@ bool wxBitmapToggleButton::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    m_qtPushButton = new wxQtPushButton( parent, this, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED);
     // this button is toggleable and has a bitmap label:
-    m_qtPushButton->setCheckable( true );
     QtSetBitmap( label );
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
@@ -89,9 +112,8 @@ bool wxToggleButton::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    m_qtPushButton = new wxQtPushButton( parent, this, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED );
+    QtCreate(parent);
     // this button is toggleable and has a text label
-    m_qtPushButton->setCheckable( true );
     SetLabel( wxIsStockID( id ) ? wxGetStockLabel( id ) : label );
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
@@ -111,3 +133,10 @@ QPushButton *wxToggleButton::GetHandle() const
 {
     return m_qtPushButton;
 }
+
+void wxToggleButtonBase::QtCreate(wxWindow *parent)
+{
+    // create a checkable push button
+    m_qtPushButton = new wxQtToggleButton( parent, this );
+}
+
