@@ -111,14 +111,16 @@ unsigned wxListBox::GetCount() const
 }
 
 wxString wxListBox::GetString(unsigned int n) const
-{
+{    
     QListWidgetItem* item = m_qtListWidget->item(n);
+    wxCHECK_MSG(item != NULL, wxString(), wxT("wrong listbox index") );
     return wxQtConvertString( item->text() );
 }
 
 void wxListBox::SetString(unsigned int n, const wxString& s)
 {
     QListWidgetItem* item = m_qtListWidget->item(n);
+    wxCHECK_RET(item != NULL, wxT("wrong listbox index") );
     item->setText(wxQtConvertString(s));
 }
 
