@@ -31,7 +31,7 @@ public:
            bool underlined = false,
            const wxString& face = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
+
     wxFont(int size,
            int family,
            int style,
@@ -39,7 +39,6 @@ public:
            bool underlined = false,
            const wxString& face = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-#endif
 
     bool Create(int size,
                 wxFontFamily family,

@@ -101,7 +101,6 @@ wxBrush::wxBrush(const wxColour& col, wxBrushStyle style )
     M_STYLEDATA = style;
 }
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
 wxBrush::wxBrush(const wxColour& col, int style)
 {
     m_refData = new wxBrushRefData();
@@ -110,7 +109,6 @@ wxBrush::wxBrush(const wxColour& col, int style)
     M_STYLEDATA = (wxBrushStyle)style;
 }
 
-#endif
 wxBrush::wxBrush(const wxBitmap& stipple)
 {
     m_refData = new wxBrushRefData();

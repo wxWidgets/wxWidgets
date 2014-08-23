@@ -147,7 +147,6 @@ wxFont::wxFont(const wxSize& pixelSize,
     m_refData = new wxFontRefData();
 }
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
 wxFont::wxFont(int size,
        int family,
        int style,
@@ -159,7 +158,6 @@ wxFont::wxFont(int size,
     Create(size, (wxFontFamily)family, (wxFontStyle)style, (wxFontWeight)weight, underlined, face, encoding);
 }
 
-#endif
 
 bool wxFont::Create(int size, wxFontFamily family, wxFontStyle style,
         wxFontWeight weight, bool underlined, const wxString& face,

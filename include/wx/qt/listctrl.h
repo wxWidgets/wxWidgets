@@ -285,10 +285,6 @@ public:
     bool SortItems(wxListCtrlCompare fn, wxIntPtr data);
 
 
-#if WXWIN_COMPATIBILITY_2_6
-    // obsolete stuff, for compatibility only -- don't use
-    wxDEPRECATED( int GetItemSpacing(bool isSmall) const);
-#endif // WXWIN_COMPATIBILITY_2_6
 
     virtual QListWidget *GetHandle() const;
 
