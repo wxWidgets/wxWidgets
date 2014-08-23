@@ -30,6 +30,12 @@ bool wxDropTarget::GetData()
     return false;
 }
 
+wxDataFormat wxDropTarget::GetMatchingPair()
+{
+    wxFAIL_MSG("wxDropTarget::GetMatchingPair() not implemented in src/qt/dnd.cpp");
+    return wxDF_INVALID;
+}
+
 //##############################################################################
 
 
