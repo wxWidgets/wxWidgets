@@ -12,27 +12,6 @@
 #include "wx/button.h"
 #include "wx/qt/pointer_qt.h"
 #include "wx/qt/winevent_qt.h"
-#include <QtWidgets/QPushButton>
-
-class WXDLLIMPEXP_CORE wxQtPushButton : public wxQtEventSignalHandler< QPushButton, wxControl >
-{
-
-public:
-    wxQtPushButton( wxWindow *parent, wxControl *handler, wxEventType eventType );
-
-    void SetToggleable();
-
-    void SetValue( bool state );
-    bool GetValue() const;
-
-    void SetDefault();
-    void SetLabel( const wxString &label );
-    void SetBitmap( const wxBitmap &bitmap );
-
-private:
-    void OnButtonClicked( bool checked );
-    wxEventType m_eventType;
-};
 
 class WXDLLIMPEXP_CORE wxButton : public wxButtonBase
 {
@@ -52,15 +31,7 @@ public:
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxButtonNameStr);
 
-    virtual wxWindow *SetDefault();
-    virtual void SetLabel( const wxString &label );
-
-    virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
-
-    virtual QPushButton *GetHandle() const;
-
-protected:
-    wxQtPointer< wxQtPushButton > m_qtPushButton;
+   virtual wxWindow *SetDefault();
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxButton);

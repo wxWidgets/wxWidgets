@@ -267,6 +267,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/bitmap.h
     wx/qt/bmpbuttn.h
     wx/qt/brush.h
+    wx/qt/anybutton.h
     wx/qt/button.h
     wx/qt/checkbox.h
     wx/qt/checklst.h
@@ -351,6 +352,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/bitmap.cpp
     src/qt/bmpbuttn.cpp
     src/qt/brush.cpp
+    src/qt/anybutton.cpp
     src/qt/button.cpp
     src/generic/caret.cpp
     src/qt/checkbox.cpp

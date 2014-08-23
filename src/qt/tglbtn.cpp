@@ -41,20 +41,21 @@ bool wxBitmapToggleButton::Create(wxWindow *parent,
             const wxString& name)
 {
     m_qtPushButton = new wxQtPushButton( parent, this, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED);
-    m_qtPushButton->SetToggleable();
-    m_qtPushButton->SetBitmap( label );
+    // this button is toggleable and has a bitmap label:
+    m_qtPushButton->setCheckable( true );
+    QtSetBitmap( label );
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
 void wxBitmapToggleButton::SetValue(bool state)
 {
-    m_qtPushButton->SetValue( state );
+    m_qtPushButton->setChecked( state );
 }
 
 bool wxBitmapToggleButton::GetValue() const
 {
-    return m_qtPushButton->GetValue();
+    return m_qtPushButton->isChecked();
 }
 
 QPushButton *wxBitmapToggleButton::GetHandle() const
@@ -89,20 +90,21 @@ bool wxToggleButton::Create(wxWindow *parent,
             const wxString& name)
 {
     m_qtPushButton = new wxQtPushButton( parent, this, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED );
-    m_qtPushButton->SetToggleable();
-    m_qtPushButton->SetLabel( label );
+    // this button is toggleable and has a text label
+    m_qtPushButton->setCheckable( true );
+    SetLabel( wxIsStockID( id ) ? wxGetStockLabel( id ) : label );
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
 void wxToggleButton::SetValue(bool state)
 {
-    m_qtPushButton->SetValue( state );
+    m_qtPushButton->setChecked( state );
 }
 
 bool wxToggleButton::GetValue() const
 {
-    return m_qtPushButton->GetValue();
+    return m_qtPushButton->isChecked();
 }
 
 QPushButton *wxToggleButton::GetHandle() const

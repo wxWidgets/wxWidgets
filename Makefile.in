@@ -2763,6 +2763,7 @@ COND_TOOLKIT_QT_LOWLEVEL_HDR =  \
 	wx/qt/bitmap.h \
 	wx/qt/bmpbuttn.h \
 	wx/qt/brush.h \
+	wx/qt/anybutton.h \
 	wx/qt/button.h \
 	wx/qt/checkbox.h \
 	wx/qt/checklst.h \
@@ -5325,6 +5326,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_bitmap.o \
 	monodll_qt_bmpbuttn.o \
 	monodll_qt_brush.o \
+	monodll_qt_anybutton.o \
 	monodll_qt_button.o \
 	monodll_generic_caret.o \
 	monodll_qt_checkbox.o \
@@ -6276,6 +6278,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_bitmap.o \
 	monodll_qt_bmpbuttn.o \
 	monodll_qt_brush.o \
+	monodll_qt_anybutton.o \
 	monodll_qt_button.o \
 	monodll_generic_caret.o \
 	monodll_qt_checkbox.o \
@@ -7671,6 +7674,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_bitmap.o \
 	monolib_qt_bmpbuttn.o \
 	monolib_qt_brush.o \
+	monolib_qt_anybutton.o \
 	monolib_qt_button.o \
 	monolib_generic_caret.o \
 	monolib_qt_checkbox.o \
@@ -8622,6 +8626,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_bitmap.o \
 	monolib_qt_bmpbuttn.o \
 	monolib_qt_brush.o \
+	monolib_qt_anybutton.o \
 	monolib_qt_button.o \
 	monolib_generic_caret.o \
 	monolib_qt_checkbox.o \
@@ -10175,6 +10180,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_bitmap.o \
 	coredll_qt_bmpbuttn.o \
 	coredll_qt_brush.o \
+	coredll_qt_anybutton.o \
 	coredll_qt_button.o \
 	coredll_generic_caret.o \
 	coredll_qt_checkbox.o \
@@ -11126,6 +11132,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_bitmap.o \
 	coredll_qt_bmpbuttn.o \
 	coredll_qt_brush.o \
+	coredll_qt_anybutton.o \
 	coredll_qt_button.o \
 	coredll_generic_caret.o \
 	coredll_qt_checkbox.o \
@@ -11944,6 +11951,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_bitmap.o \
 	corelib_qt_bmpbuttn.o \
 	corelib_qt_brush.o \
+	corelib_qt_anybutton.o \
 	corelib_qt_button.o \
 	corelib_generic_caret.o \
 	corelib_qt_checkbox.o \
@@ -12895,6 +12903,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_bitmap.o \
 	corelib_qt_bmpbuttn.o \
 	corelib_qt_brush.o \
+	corelib_qt_anybutton.o \
 	corelib_qt_button.o \
 	corelib_generic_caret.o \
 	corelib_qt_checkbox.o \
@@ -20444,6 +20453,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_brush.o: $(srcdir)/src/qt/brush.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/brush.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_anybutton.o: $(srcdir)/src/qt/anybutton.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/anybutton.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_button.o: $(srcdir)/src/qt/button.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/button.cpp
 
@@ -26308,6 +26320,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_brush.o: $(srcdir)/src/qt/brush.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/brush.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_anybutton.o: $(srcdir)/src/qt/anybutton.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/anybutton.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_button.o: $(srcdir)/src/qt/button.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/button.cpp
@@ -32288,6 +32303,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_brush.o: $(srcdir)/src/qt/brush.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/brush.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_anybutton.o: $(srcdir)/src/qt/anybutton.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/anybutton.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_button.o: $(srcdir)/src/qt/button.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/button.cpp
 
@@ -36670,6 +36688,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_brush.o: $(srcdir)/src/qt/brush.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/brush.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_anybutton.o: $(srcdir)/src/qt/anybutton.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/anybutton.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_button.o: $(srcdir)/src/qt/button.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/button.cpp
