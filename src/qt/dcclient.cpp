@@ -76,14 +76,26 @@ wxClientDCImpl::~wxClientDCImpl()
     {
         m_qtPainter->end();
         m_ok = false;
+        QPicture *pict = m_window->QtGetPicture();
 
         if ( m_window != NULL )
         {
+            // get the inner widget in scroll areas:
+            QWidget *widget;
+            if ( m_window->QtGetScrollBarsContainer() )
+            {
+                widget = m_window->QtGetScrollBarsContainer()->viewport();
+            } else {
+                widget = m_window->GetHandle();
+            }
             // force paint event if there is something to replay and
             // if not currently inside a paint event (to avoid recursion)
-            if ( !m_window->QtGetPicture()->isNull() &&
-                 !m_window->GetHandle()->paintingActive() )
-                m_window->GetHandle()->repaint();
+            if ( !pict->isNull() && !widget->paintingActive() )
+            {
+                // only force the update of the rect affected by the DC
+                QRect rect = pict->boundingRect();
+                widget->repaint( pict->boundingRect() );
+            }
             // let destroy the m_qtPainter (see inherited classes destructors)
             m_window = NULL;
         }
