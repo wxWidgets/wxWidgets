@@ -557,7 +557,7 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect *rect )
 }
     
 
-void wxWindow::SetDropTarget( wxDropTarget *dropTarget )
+void wxWindow::SetDropTarget( wxDropTarget * WXUNUSED( dropTarget ) )
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
@@ -649,8 +649,9 @@ void wxWindow::SetWindowStyleFlag( long style )
 //    }
 }
 
-void wxWindow::SetExtraStyle( long exStyle )
+void wxWindow::SetExtraStyle( long WXUNUSED( exStyle ) )
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
 
 
@@ -840,6 +841,7 @@ bool wxWindow::SetTransparent(wxByte alpha)
 {
     // For Qt, range is between 1 (opaque) and 0 (transparent)
     GetHandle()->setWindowOpacity(1 - alpha/255.0);
+    return true;
 }
 
 
@@ -942,6 +944,11 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
             m_qtPainter->end();
 
             return handled;
+        }
+        else
+        {
+            // Painter didn't begun, not handled by wxWidgets:
+            return false;
         }
     }
 }
@@ -1200,6 +1207,7 @@ bool wxWindow::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
                     break;
                 case Qt::NoButton:
                 case Qt::MouseButtonMask: // Not documented ?
+                default:
                     return false;
             }
             break;
@@ -1222,6 +1230,7 @@ bool wxWindow::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
                     wxType = wxEVT_AUX2_DOWN;
                 case Qt::NoButton:
                 case Qt::MouseButtonMask: // Not documented ?
+                default:
                     return false;
             }
             break;
@@ -1244,6 +1253,7 @@ bool wxWindow::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
                     wxType = wxEVT_AUX2_UP;
                 case Qt::NoButton:
                 case Qt::MouseButtonMask: // Not documented ?
+                default:
                     return false;
             }
             break;
@@ -1360,7 +1370,7 @@ bool wxWindow::QtHandleCloseEvent ( QWidget *handler, QCloseEvent *WXUNUSED( eve
     return ProcessWindowEvent( e );
 }
 
-bool wxWindow::QtHandleContextMenuEvent ( QWidget *handler, QContextMenuEvent *event )
+bool wxWindow::QtHandleContextMenuEvent ( QWidget *WXUNUSED( handler ), QContextMenuEvent *event )
 {
     wxContextMenuEvent e( wxEVT_CONTEXT_MENU );
     e.SetPosition( wxQtConvertPoint( event->globalPos() ) );
@@ -1368,7 +1378,7 @@ bool wxWindow::QtHandleContextMenuEvent ( QWidget *handler, QContextMenuEvent *e
     return ProcessWindowEvent( e );
 }
 
-bool wxWindow::QtHandleFocusEvent ( QWidget *handler, QFocusEvent *event )
+bool wxWindow::QtHandleFocusEvent ( QWidget *WXUNUSED( handler ), QFocusEvent *event )
 {
     wxFocusEvent e( event->gotFocus() ? wxEVT_SET_FOCUS : wxEVT_KILL_FOCUS );
 
