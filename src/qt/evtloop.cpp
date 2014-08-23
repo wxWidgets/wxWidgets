@@ -33,12 +33,14 @@ wxQtEventLoopBase::wxQtEventLoopBase()
     QCoreApplication::instance()->installEventFilter( m_qtIdleTimer );
 }
 
-void wxQtEventLoopBase::Exit(int rc)
+void wxQtEventLoopBase::ScheduleExit(int rc)
 {
+    wxCHECK_RET( IsInsideRun(), wxT("can't call ScheduleExit() if not started") );
+    
     QCoreApplication::exit( rc );
 }
 
-int wxQtEventLoopBase::Run()
+int wxQtEventLoopBase::DoRun()
 {
     return QCoreApplication::exec();
 }
@@ -67,9 +69,13 @@ void wxQtEventLoopBase::WakeUp()
     QAbstractEventDispatcher::instance()->wakeUp();
 }
 
-bool wxQtEventLoopBase::YieldFor(long WXUNUSED( eventsToProcess ))
+void wxQtEventLoopBase::DoYieldFor(long eventsToProcess)
 {
-    return Dispatch();
+    while (wxTheApp && wxTheApp->Pending())
+        // TODO: implement event filtering using the eventsToProcess mask
+        wxTheApp->Dispatch();
+
+    wxEventLoopBase::DoYieldFor(eventsToProcess);
 }
 
 #if wxUSE_EVENTLOOP_SOURCE

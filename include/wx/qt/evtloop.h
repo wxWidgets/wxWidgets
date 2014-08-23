@@ -17,13 +17,13 @@ class WXDLLIMPEXP_BASE wxQtEventLoopBase : public wxEventLoopBase
 public:
     wxQtEventLoopBase();
 
-    virtual int Run();
-    virtual void Exit(int rc = 0);
+    virtual int DoRun();
+    virtual void ScheduleExit(int rc = 0);
     virtual bool Pending() const;
     virtual bool Dispatch();
     virtual int DispatchTimeout(unsigned long timeout);
     virtual void WakeUp();
-    virtual bool YieldFor(long eventsToProcess);
+    virtual void DoYieldFor(long eventsToProcess);
 
 #if wxUSE_EVENTLOOP_SOURCE
     virtual wxEventLoopSource *AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags);
