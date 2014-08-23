@@ -73,6 +73,8 @@ bool wxSlider::Create(wxWindow *parent,
     m_qtSlider = new wxQtSlider( parent, this );
     m_qtSlider->setOrientation( wxQtConvertOrientation( style, wxSL_HORIZONTAL ) );
 
+    m_qtSlider->setInvertedAppearance( style & wxSL_INVERSE );
+
     m_qtSlider->blockSignals(true);
     SetRange( minValue, maxValue );
     m_qtSlider->blockSignals(false);
