@@ -204,7 +204,7 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
     parent->AddChild( this );
 
     DoMoveWindow( pos.x, pos.y, size.GetWidth(), size.GetHeight() );
-    
+
 //    // Use custom Qt window flags (allow to turn on or off
 //    // the minimize/maximize/close buttons and title bar)
 //    Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
@@ -221,6 +221,12 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
 //
 //    m_backgroundColour = wxColour( GetHandle()->palette().color( GetHandle()->backgroundRole() ) );
 //    m_foregroundColour = wxColour( GetHandle()->palette().color( GetHandle()->foregroundRole() ) );
+
+    // Create the scroll bars if needed:
+    if ( style & wxHSCROLL )
+        QtSetScrollBar( wxHORIZONTAL );
+    if ( style & wxVSCROLL )
+        QtSetScrollBar( wxVERTICAL );
 
     return ( true );
 }
@@ -379,23 +385,20 @@ wxScrollBar *wxWindow::QtGetScrollBar( int orientation ) const
         scrollBar = m_horzScrollBar;
     else
         scrollBar = m_vertScrollBar;
-    
+
     return scrollBar;
 }
 
-void wxWindow::SetScrollbar( int orientation, int pos, int thumbvisible, int range, bool refresh )
+/* Returns a new scrollbar for the given orientation, or set the scrollbar
+ * passed as parameter */
+wxScrollBar *wxWindow::QtSetScrollBar( int orientation, wxScrollBar *scrollBar )
 {
-    wxCHECK_RET( CanScroll( orientation ), "Window can't scroll in that orientation" );
-
-    //If range is zero, don't create the scrollbar
-    wxScrollBar *scrollBar = QtGetScrollBar( orientation );
+    QScrollArea *scrollArea = QtGetScrollBarsContainer();
+    wxCHECK_MSG( scrollArea, NULL, "Window without scrolling area" );
 
     // Create a new scrollbar if needed
-    if ( !scrollBar && range != 0 )
+    if ( !scrollBar )
     {
-        QScrollArea *scrollArea = QtGetScrollBarsContainer();
-        wxCHECK_RET( scrollArea, "Window without scrolling area" );
-        
         scrollBar = new wxScrollBar( const_cast< wxWindow* >( this ), wxID_ANY,
                                      wxDefaultPosition, wxDefaultSize,
                                      orientation == wxHORIZONTAL ? wxSB_HORIZONTAL : wxSB_VERTICAL);
@@ -409,20 +412,32 @@ void wxWindow::SetScrollbar( int orientation, int pos, int thumbvisible, int ran
         scrollBar->Bind( wxEVT_SCROLL_BOTTOM, &wxWindow::QtOnScrollBarEvent, this );
         scrollBar->Bind( wxEVT_SCROLL_THUMBTRACK, &wxWindow::QtOnScrollBarEvent, this );
         scrollBar->Bind( wxEVT_SCROLL_THUMBRELEASE, &wxWindow::QtOnScrollBarEvent, this );
-        
-        // Let Qt handle layout
-        if ( orientation == wxHORIZONTAL )
-        {
-            scrollArea->setHorizontalScrollBar( scrollBar->GetHandle() );
-            m_horzScrollBar = scrollBar;
-        }
-        else
-        {
-            scrollArea->setVerticalScrollBar( scrollBar->GetHandle() );
-            m_vertScrollBar = scrollBar;
-        }
     }
-    
+
+    // Let Qt handle layout
+    if ( orientation == wxHORIZONTAL )
+    {
+        scrollArea->setHorizontalScrollBar( scrollBar->GetHandle() );
+        m_horzScrollBar = scrollBar;
+    }
+    else
+    {
+        scrollArea->setVerticalScrollBar( scrollBar->GetHandle() );
+        m_vertScrollBar = scrollBar;
+    }
+    return scrollBar;
+}
+
+
+void wxWindow::SetScrollbar( int orientation, int pos, int thumbvisible, int range, bool refresh )
+{
+    wxCHECK_RET( CanScroll( orientation ), "Window can't scroll in that orientation" );
+
+    //If not exist, create the scrollbar
+    wxScrollBar *scrollBar = QtGetScrollBar( orientation );
+    if ( scrollBar == NULL )
+        scrollBar = QtSetScrollBar( orientation );
+
     // Configure the scrollbar if it exists. If range is zero we can get here with
     // scrollBar == NULL and it is not a problem
     if ( scrollBar )

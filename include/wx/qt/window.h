@@ -188,6 +188,7 @@ private:
     void QtOnScrollBarEvent( wxScrollEvent& event );
     
     wxScrollBar *QtGetScrollBar( int orientation ) const;
+    wxScrollBar *QtSetScrollBar( int orientation, wxScrollBar *scrollBar=NULL );
 
     QPicture *m_qtPicture;
     QImage *m_qtPaintBuffer;
