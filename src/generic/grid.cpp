@@ -2267,7 +2267,7 @@ void wxGrid::Create()
     // now that we have the grid window, use its font to compute the default
     // row height
     m_defaultRowHeight = m_gridWin->GetCharHeight();
-#if defined(__WXMOTIF__) || defined(__WXGTK__)  // see also text ctrl sizing in ShowCellEditControl()
+#if defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXQT__)  // see also text ctrl sizing in ShowCellEditControl()
     m_defaultRowHeight += 8;
 #else
     m_defaultRowHeight += 4;
