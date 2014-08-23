@@ -33,6 +33,11 @@ void wxQtSlider::valueChanged(int position)
     wxSlider *handler = GetHandler();
     if ( handler )
     {
+        wxScrollEvent e(wxEVT_SCROLL_CHANGED, handler->GetId(), position,
+                        wxQtConvertOrientation( orientation( ) ));
+        EmitEvent( e );
+
+        // and also generate a command event for compatibility
         wxCommandEvent event( wxEVT_SLIDER, handler->GetId() );
         event.SetInt( position );
         EmitEvent( event );
@@ -72,6 +77,7 @@ bool wxSlider::Create(wxWindow *parent,
     SetRange( minValue, maxValue );
     m_qtSlider->blockSignals(false);
 
+#if 0 // there are not normally ticks for a wxSlider
     // draw ticks marks (default bellow if horizontal, right if vertical):
     if ( style & wxSL_VERTICAL )
     {
@@ -83,6 +89,7 @@ bool wxSlider::Create(wxWindow *parent,
         m_qtSlider->setTickPosition( style & wxSL_TOP ? QSlider::TicksAbove :
                                                         QSlider::TicksBelow );
     }
+#endif
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
