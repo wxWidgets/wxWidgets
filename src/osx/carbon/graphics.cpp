@@ -1757,11 +1757,7 @@ bool wxMacCoreGraphicsContext::SetInterpolationQuality(wxInterpolationQuality in
             quality = kCGInterpolationLow;
             break;
         case wxINTERPOLATION_GOOD:
-#if wxOSX_USE_COCOA_OR_CARBON
-            quality = UMAGetSystemVersion() < 0x1060 ? kCGInterpolationHigh : (CGInterpolationQuality) 4 /*kCGInterpolationMedium only on 10.6*/;
-#else
             quality = kCGInterpolationMedium;
-#endif
             break;
         case wxINTERPOLATION_BEST:
             quality = kCGInterpolationHigh;
@@ -2226,14 +2222,8 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    // the carbon version must be used on 10.5, or if the SDK is 10.5
-#if wxOSX_USE_CARBON || ( wxOSX_USE_COCOA && MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_6 )
-#if wxOSX_USE_COCOA 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
-    if ( UMAGetSystemVersion() < 0x1060 )
-#endif
+#if wxOSX_USE_CARBON
     {
-#endif // wxOSX_USE_COCOA
         CGContextSaveGState( m_cgContext );
         CGContextTranslateCTM( m_cgContext,(CGFloat) x ,(CGFloat) (y + h) );
         CGContextScaleCTM( m_cgContext, 1, -1 );
@@ -2241,15 +2231,10 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
         PlotIconRefInContext( m_cgContext , &r , kAlignNone , kTransformNone ,
                              NULL , kPlotIconRefNormalFlags , icon.GetHICON() );
         CGContextRestoreGState( m_cgContext );
-#if wxOSX_USE_COCOA
     }
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
-    else
 #endif
-#endif // wxOSX_USE_COCOA
-#endif // wxOSX_USE_CARBON || ( wxOSX_USE_COCOA && MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_6 )
-        
-#if wxOSX_USE_COCOA && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+    
+#if wxOSX_USE_COCOA
     {
         CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
         const WX_NSImage nsImage = icon.GetNSImage();

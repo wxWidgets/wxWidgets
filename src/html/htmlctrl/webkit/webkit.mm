@@ -427,7 +427,6 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
 */
     // now create and attach WebKit view...
     DontCreatePeer();
-    DontCreatePeer();
     wxControl::Create(parent, winID, pos, size, style , validator , name);
 #if wxOSX_USE_CARBON
     wxMacControl* peer = new wxMacControl(this);

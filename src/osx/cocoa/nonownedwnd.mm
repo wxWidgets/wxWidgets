@@ -1034,18 +1034,12 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
         data->m_formerLevel = [m_macWindow level];
         data->m_formerFrame = [m_macWindow frame];
         data->m_formerStyleMask = [m_macWindow styleMask];
-#if 0
-        // CGDisplayCapture( kCGDirectMainDisplay );
-        //[m_macWindow setLevel:NSMainMenuWindowLevel+1/*CGShieldingWindowLevel()*/];
-#endif
+
         NSRect screenframe = [[NSScreen mainScreen] frame];
         NSRect frame = NSMakeRect (0, 0, 100, 100);
         NSRect contentRect;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
-        if ( [ m_macWindow respondsToSelector:@selector(setStyleMask:) ] )
-            [m_macWindow setStyleMask:data->m_formerStyleMask & ~ NSResizableWindowMask];
-#endif
+        [m_macWindow setStyleMask:data->m_formerStyleMask & ~ NSResizableWindowMask];
         
         contentRect = [NSWindow contentRectForFrameRect: frame
                                 styleMask: [m_macWindow styleMask]];
@@ -1063,16 +1057,10 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
     else if ( m_macFullScreenData != NULL )
     {
         FullScreenData *data = (FullScreenData *) m_macFullScreenData ;
-#if 0
-        // CGDisplayRelease( kCGDirectMainDisplay );
-        // [m_macWindow setLevel:data->m_formerLevel];
-#endif
         
         [m_macWindow setFrame:data->m_formerFrame display:YES];
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
-        if ( [ m_macWindow respondsToSelector:@selector(setStyleMask:) ] )
-            [m_macWindow setStyleMask:data->m_formerStyleMask];
-#endif
+        [m_macWindow setStyleMask:data->m_formerStyleMask];
+
         delete data ;
         m_macFullScreenData = NULL ;
 

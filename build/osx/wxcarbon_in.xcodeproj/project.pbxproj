@@ -186,6 +186,11 @@
 			baseConfigurationReference = 40E3507E10EF2C130029DC34 /* wxcarbon.xcconfig */;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					WXMAKINGDLL,
+					"wxUSE_BASE=1",
+				);
 				INSTALL_PATH = "@executable_path/../Frameworks/";
 				OTHER_LDFLAGS = "$(OTHER_LDFLAGS)";
 			};
@@ -196,6 +201,11 @@
 			baseConfigurationReference = 40E3507E10EF2C130029DC34 /* wxcarbon.xcconfig */;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					WXMAKINGDLL,
+					"wxUSE_BASE=1",
+				);
 				INSTALL_PATH = "@executable_path/../Frameworks/";
 				OTHER_LDFLAGS = "$(OTHER_LDFLAGS)";
 			};
@@ -221,6 +231,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 40E3507E10EF2C130029DC34 /* wxcarbon.xcconfig */;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					"wxUSE_BASE=1",
+				);
 				PRODUCT_NAME = "$(PRODUCT_NAME)_static";
 			};
 			name = Debug;
@@ -229,6 +243,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 40E3507E10EF2C130029DC34 /* wxcarbon.xcconfig */;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					"wxUSE_BASE=1",
+				);
 				PRODUCT_NAME = "$(PRODUCT_NAME)_static";
 			};
 			name = Release;

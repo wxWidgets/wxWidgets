@@ -2577,7 +2577,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             }
         }
 
-        if ( ::IsDialogMessage(GetHwnd(), msg) )
+        if ( MSWSafeIsDialogMessage(msg) )
         {
             // IsDialogMessage() did something...
             return true;
@@ -2608,12 +2608,16 @@ bool wxWindowMSW::MSWTranslateMessage(WXMSG* pMsg)
 #endif // wxUSE_ACCEL
 }
 
-bool wxWindowMSW::MSWShouldPreProcessMessage(WXMSG* msg)
+bool wxWindowMSW::MSWShouldPreProcessMessage(WXMSG* WXUNUSED(msg))
 {
-    // all tests below have to deal with various bugs/misfeatures of
-    // IsDialogMessage(): we have to prevent it from being called from our
-    // MSWProcessMessage() in some situations
+    // We don't have any reason to not preprocess messages at this level.
+    return true;
+}
 
+#ifndef __WXUNIVERSAL__
+
+bool wxWindowMSW::MSWSafeIsDialogMessage(WXMSG* msg)
+{
     // don't let IsDialogMessage() get VK_ESCAPE as it _always_ eats the
     // message even when there is no cancel button and when the message is
     // needed by the control itself: in particular, it prevents the tree in
@@ -2627,48 +2631,45 @@ bool wxWindowMSW::MSWShouldPreProcessMessage(WXMSG* msg)
     // going into an infinite loop when it tries to find the control to give
     // focus to when Alt-<key> is pressed, so we try to detect [some of] the
     // situations when this may happen and not call it then
-    if ( msg->message != WM_SYSCHAR )
-        return true;
-
-    // assume we can call it by default
-    bool canSafelyCallIsDlgMsg = true;
-
-    HWND hwndFocus = ::GetFocus();
-
-    // if the currently focused window itself has WS_EX_CONTROLPARENT style,
-    // ::IsDialogMessage() will also enter an infinite loop, because it will
-    // recursively check the child windows but not the window itself and so if
-    // none of the children accepts focus it loops forever (as it only stops
-    // when it gets back to the window it started from)
-    //
-    // while it is very unusual that a window with WS_EX_CONTROLPARENT
-    // style has the focus, it can happen. One such possibility is if
-    // all windows are either toplevel, wxDialog, wxPanel or static
-    // controls and no window can actually accept keyboard input.
-#if !defined(__WXWINCE__)
-    if ( ::GetWindowLong(hwndFocus, GWL_EXSTYLE) & WS_EX_CONTROLPARENT )
+    if ( msg->message == WM_SYSCHAR )
     {
-        // pessimistic by default
-        canSafelyCallIsDlgMsg = false;
-        for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-              node;
-              node = node->GetNext() )
-        {
-            wxWindow * const win = node->GetData();
-            if ( win->CanAcceptFocus() &&
-                    !wxHasWindowExStyle(win, WS_EX_CONTROLPARENT) )
-            {
-                // it shouldn't hang...
-                canSafelyCallIsDlgMsg = true;
+        HWND hwndFocus = ::GetFocus();
 
-                break;
+        // if the currently focused window itself has WS_EX_CONTROLPARENT style,
+        // ::IsDialogMessage() will also enter an infinite loop, because it will
+        // recursively check the child windows but not the window itself and so if
+        // none of the children accepts focus it loops forever (as it only stops
+        // when it gets back to the window it started from)
+        //
+        // while it is very unusual that a window with WS_EX_CONTROLPARENT
+        // style has the focus, it can happen. One such possibility is if
+        // all windows are either toplevel, wxDialog, wxPanel or static
+        // controls and no window can actually accept keyboard input.
+#if !defined(__WXWINCE__)
+        if ( ::GetWindowLong(hwndFocus, GWL_EXSTYLE) & WS_EX_CONTROLPARENT )
+        {
+            // pessimistic by default
+            bool canSafelyCallIsDlgMsg = false;
+            for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+                  node;
+                  node = node->GetNext() )
+            {
+                wxWindow * const win = node->GetData();
+                if ( win->CanAcceptFocus() &&
+                        !wxHasWindowExStyle(win, WS_EX_CONTROLPARENT) )
+                {
+                    // it shouldn't hang...
+                    canSafelyCallIsDlgMsg = true;
+
+                    break;
+                }
             }
+
+            if ( !canSafelyCallIsDlgMsg )
+                return false;
         }
-    }
 #endif // !__WXWINCE__
 
-    if ( canSafelyCallIsDlgMsg )
-    {
         // ::IsDialogMessage() can enter in an infinite loop when the
         // currently focused window is disabled or hidden and its
         // parent has WS_EX_CONTROLPARENT style, so don't call it in
@@ -2679,9 +2680,7 @@ bool wxWindowMSW::MSWShouldPreProcessMessage(WXMSG* msg)
                     !::IsWindowVisible(hwndFocus) )
             {
                 // it would enter an infinite loop if we do this!
-                canSafelyCallIsDlgMsg = false;
-
-                break;
+                return false;
             }
 
             if ( !(::GetWindowLong(hwndFocus, GWL_STYLE) & WS_CHILD) )
@@ -2696,8 +2695,10 @@ bool wxWindowMSW::MSWShouldPreProcessMessage(WXMSG* msg)
         }
     }
 
-    return canSafelyCallIsDlgMsg;
+    return ::IsDialogMessage(GetHwnd(), msg) != 0;
 }
+
+#endif // __WXUNIVERSAL__
 
 // ---------------------------------------------------------------------------
 // message params unpackers
