@@ -16,19 +16,19 @@
 #include "wx/qt/private/winevent.h"
 
 template< typename T, typename Widget >
-wxQtSpinCtrlBase< T, Widget >::wxQtSpinCtrlBase()
+wxSpinCtrlQt< T, Widget >::wxSpinCtrlQt()
 {
 }
 
 template< typename T, typename Widget >
-wxQtSpinCtrlBase< T, Widget >::wxQtSpinCtrlBase( wxWindow *WXUNUSED(WXUNUSED(parent)), wxWindowID WXUNUSED(WXUNUSED(id)),
+wxSpinCtrlQt< T, Widget >::wxSpinCtrlQt( wxWindow *WXUNUSED(WXUNUSED(parent)), wxWindowID WXUNUSED(WXUNUSED(id)),
     const wxString& WXUNUSED(WXUNUSED(value)), const wxPoint& WXUNUSED(WXUNUSED(pos)), const wxSize& WXUNUSED(WXUNUSED(size)), long WXUNUSED(WXUNUSED(style)),
     T WXUNUSED(WXUNUSED(min)), T WXUNUSED(WXUNUSED(max)), T WXUNUSED(WXUNUSED(initial)), T WXUNUSED(WXUNUSED(inc)), const wxString& WXUNUSED(WXUNUSED(name)) )
 {
 }
 
 template< typename T, typename Widget >
-bool wxQtSpinCtrlBase< T, Widget >::Create( wxWindow *parent, wxWindowID id,
+bool wxSpinCtrlQt< T, Widget >::Create( wxWindow *parent, wxWindowID id,
     const wxString& value, const wxPoint& pos, const wxSize& size, long style,
     T min, T max, T initial, T inc, const wxString& name )
 {
@@ -51,55 +51,55 @@ bool wxQtSpinCtrlBase< T, Widget >::Create( wxWindow *parent, wxWindowID id,
 }
 
 template< typename T, typename Widget >
-void wxQtSpinCtrlBase< T, Widget >::SetValue( T val )
+void wxSpinCtrlQt< T, Widget >::SetValue( T val )
 {
     m_qtSpinBox->setValue( val );
 }
 
 template< typename T, typename Widget >
-void wxQtSpinCtrlBase< T, Widget >::SetRange( T min, T max )
+void wxSpinCtrlQt< T, Widget >::SetRange( T min, T max )
 {
     m_qtSpinBox->setRange( min, max );
 }
 
 template< typename T, typename Widget >
-void wxQtSpinCtrlBase< T, Widget >::SetIncrement( T inc )
+void wxSpinCtrlQt< T, Widget >::SetIncrement( T inc )
 {
     m_qtSpinBox->setSingleStep( inc );
 }
 
 template< typename T, typename Widget >
-T wxQtSpinCtrlBase< T, Widget >::GetValue() const
+T wxSpinCtrlQt< T, Widget >::GetValue() const
 {
     return m_qtSpinBox->value();
 }
 
 template< typename T, typename Widget >
-T wxQtSpinCtrlBase< T, Widget >::GetMin() const
+T wxSpinCtrlQt< T, Widget >::GetMin() const
 {
     return m_qtSpinBox->minimum();
 }
 
 template< typename T, typename Widget >
-T wxQtSpinCtrlBase< T, Widget >::GetMax() const
+T wxSpinCtrlQt< T, Widget >::GetMax() const
 {
     return m_qtSpinBox->maximum();
 }
 
 template< typename T, typename Widget >
-T wxQtSpinCtrlBase< T, Widget >::GetIncrement() const
+T wxSpinCtrlQt< T, Widget >::GetIncrement() const
 {
     return m_qtSpinBox->singleStep();
 }
 
 template< typename T, typename Widget >
-void wxQtSpinCtrlBase< T, Widget >::SetSnapToTicks(bool WXUNUSED(WXUNUSED(snap_to_ticks)))
+void wxSpinCtrlQt< T, Widget >::SetSnapToTicks(bool WXUNUSED(WXUNUSED(snap_to_ticks)))
 {
     wxMISSING_FUNCTION();
 }
 
 template< typename T, typename Widget >
-bool wxQtSpinCtrlBase< T, Widget >::GetSnapToTicks() const
+bool wxSpinCtrlQt< T, Widget >::GetSnapToTicks() const
 {
     wxMISSING_FUNCTION();
 
@@ -107,13 +107,13 @@ bool wxQtSpinCtrlBase< T, Widget >::GetSnapToTicks() const
 }
 
 template< typename T, typename Widget >
-void wxQtSpinCtrlBase< T, Widget >::SetSelection(long WXUNUSED(WXUNUSED(from)), long WXUNUSED(WXUNUSED(to)))
+void wxSpinCtrlQt< T, Widget >::SetSelection(long WXUNUSED(WXUNUSED(from)), long WXUNUSED(WXUNUSED(to)))
 {
     wxMISSING_FUNCTION();
 }
 
 template< typename T, typename Widget >
-Widget *wxQtSpinCtrlBase< T, Widget >::GetHandle() const
+Widget *wxSpinCtrlQt< T, Widget >::GetHandle() const
 {
     return m_qtSpinBox;
 }
@@ -156,7 +156,7 @@ public:
 
 //##############################################################################
 
-template class wxQtSpinCtrlBase< int, QSpinBox >;
+template class wxSpinCtrlQt< int, QSpinBox >;
 
 wxSpinCtrl::wxSpinCtrl()
 {
@@ -168,7 +168,7 @@ wxSpinCtrl::wxSpinCtrl(wxWindow *parent, wxWindowID id, const wxString& value,
     int min, int max, int initial,
     const wxString& name )
 
-: wxQtSpinCtrlBase< int, QSpinBox >( parent, id, value, pos, size, style,
+: wxSpinCtrlQt< int, QSpinBox >( parent, id, value, pos, size, style,
      min, max, initial, 1, name )
 {
     Init();
@@ -181,7 +181,7 @@ bool wxSpinCtrl::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     const wxString& name )
 {
     m_qtSpinBox = new wxQtSpinBox( parent, this );
-    return wxQtSpinCtrlBase< int, QSpinBox >::Create( parent, id, value,
+    return wxSpinCtrlQt< int, QSpinBox >::Create( parent, id, value,
         pos, size, style, min, max, initial, 1, name );
 }
 
@@ -221,7 +221,7 @@ void wxQtSpinBox::valueChanged(int value)
 
 //##############################################################################
 
-template class wxQtSpinCtrlBase< double, QDoubleSpinBox >;
+template class wxSpinCtrlQt< double, QDoubleSpinBox >;
 
 wxIMPLEMENT_DYNAMIC_CLASS( wxSpinCtrlDouble, wxSpinCtrlBase );
 
@@ -234,7 +234,7 @@ wxSpinCtrlDouble::wxSpinCtrlDouble(wxWindow *parent, wxWindowID id, const wxStri
     double min, double max, double initial, double inc,
     const wxString& name )
 
-: wxQtSpinCtrlBase< double, QDoubleSpinBox >( parent, id, value, pos, size, style,
+: wxSpinCtrlQt< double, QDoubleSpinBox >( parent, id, value, pos, size, style,
         min, max, initial, inc, name )
 {
     Create( parent, id, value, pos, size, style, min, max, initial, inc, name );
@@ -246,7 +246,7 @@ bool wxSpinCtrlDouble::Create(wxWindow *parent, wxWindowID id, const wxString& v
     const wxString& name )
 {
     m_qtSpinBox = new wxQtDoubleSpinBox( parent, this );
-    return wxQtSpinCtrlBase< double, QDoubleSpinBox >::Create( parent, id, value,
+    return wxSpinCtrlQt< double, QDoubleSpinBox >::Create( parent, id, value,
         pos, size, style, min, max, initial, inc, name );
 }
 
