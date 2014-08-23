@@ -229,3 +229,8 @@ void wxListBox::QtSendEvent(wxEventType evtType, const QModelIndex &index, bool 
 {
     SendEvent(evtType, index.row(), selected);
 }
+
+QScrollArea *wxListBox::QtGetScrollBarsContainer() const
+{
+    return (QScrollArea *) m_qtListWidget;
+}
