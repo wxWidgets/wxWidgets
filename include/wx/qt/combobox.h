@@ -74,6 +74,9 @@ public:
     bool IsListEmpty() const { return wxItemContainer::IsEmpty(); }
     bool IsTextEmpty() const { return wxTextEntry::IsEmpty(); }
 
+    virtual void Popup();
+    virtual void Dismiss();
+
 protected:
 
     // From wxTextEntry:
