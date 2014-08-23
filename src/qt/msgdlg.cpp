@@ -135,6 +135,16 @@ QMessageBox *wxMessageDialog::GetHandle() const
     return m_qtMessageBox;
 }
 
+wxMessageDialog::~wxMessageDialog()
+{
+    // Destroy the Qt object (delayed, once all pending events are processed)
+    // NOTE: don't do delete directly as it cause SIGSEGV on children
+    //       done here to not continue receiving events from Qt
+    m_qtMessageBox->deleteLater();
+    // Also, avoid base destructor to do it again (just in case):
+    m_qtMessageBox = NULL;
+}
+
 //=============================================================================
 
 wxQtMessageDialog::wxQtMessageDialog( wxWindow *parent, wxMessageDialog *handler )
