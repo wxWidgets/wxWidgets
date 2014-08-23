@@ -18,7 +18,7 @@ class WXDLLIMPEXP_CORE wxQtPushButton : public wxQtEventSignalHandler< QPushButt
 {
 
 public:
-    wxQtPushButton( wxWindow *parent, wxControl *handler );
+    wxQtPushButton( wxWindow *parent, wxControl *handler, wxEventType eventType );
 
     void SetToggleable();
 
@@ -31,6 +31,7 @@ public:
 
 private:
     void OnButtonClicked( bool checked );
+    wxEventType m_eventType;
 };
 
 class WXDLLIMPEXP_CORE wxButton : public wxButtonBase
