@@ -285,7 +285,7 @@ void wxTextCtrl::SetSelection( long from, long to )
 
 void wxTextCtrl::GetSelection(long* from, long* to) const
 {
-    if ( !IsMultiLine() )
+    if ( IsMultiLine() )
     {
         QTextCursor cursor = m_qtTextEdit->textCursor();
         *from = cursor.selectionStart();
