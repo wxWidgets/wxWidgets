@@ -68,8 +68,23 @@ int wxNotebook::GetPageImage(size_t n) const
 
 bool wxNotebook::SetPageImage(size_t n, int imageId)
 {
-    wxMISSING_FUNCTION();
-    return false;
+    wxCHECK_MSG(n < GetPageCount(), false, "invalid notebook index");
+
+    if (imageId >= 0)
+    {
+        wxCHECK_MSG(HasImageList(), false, "invalid notebook imagelist");
+        const wxBitmap* bitmap = GetImageList()->GetBitmapPtr(imageId);
+        if (bitmap == NULL)
+            return false;
+        // set the new image:
+        m_qtTabWidget->setTabIcon( n, QIcon( *bitmap->GetHandle() ));
+    }
+    else
+    {
+        // remove the image using and empty qt icon:
+        m_qtTabWidget->setTabIcon( n, QIcon() );
+    }
+    return true;
 }
 
 bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
