@@ -10,7 +10,7 @@
 
 #include "wx/pen.h"
 #include "wx/colour.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
 #include <QtGui/QPen>
 
 static Qt::PenStyle ConvertPenStyle(wxPenStyle style)

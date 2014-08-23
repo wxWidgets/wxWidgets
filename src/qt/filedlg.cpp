@@ -10,7 +10,7 @@
 
 #include "wx/filename.h"
 
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 #include "wx/filedlg.h"
 #include "wx/dirdlg.h"

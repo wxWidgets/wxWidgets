@@ -12,7 +12,7 @@
 #include "wx/display_impl.h"
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDesktopWidget>
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 
 class wxDisplayImplQt : public wxDisplayImpl
 {

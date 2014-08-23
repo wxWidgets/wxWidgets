@@ -9,7 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/tooltip.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
 
 /* static */ void wxToolTip::Enable(bool flag)
 {

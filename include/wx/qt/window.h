@@ -1,9 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/window.h
 // Purpose:     wxWindow class
-// Author:      Peter Most, Javier Torres
+// Author:      Peter Most, Javier Torres, Mariano Reingart
 // Created:     09/08/09
-// Copyright:   (c) Peter Most, Javier Torres
+// Copyright:   (c) 2009 wxWidgets dev team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

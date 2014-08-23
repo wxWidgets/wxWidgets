@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/button.cpp
-// Author:      Peter Most
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,7 +10,7 @@
 
 #include "wx/button.h"
 #include "wx/bitmap.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
 #include "wx/qt/private/winevent.h"
 
 

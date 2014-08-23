@@ -15,7 +15,7 @@
 #endif
 
 #include "wx/bitmap.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
 #include "wx/qt/private/winevent.h"
 
 

@@ -9,9 +9,9 @@
 #include "wx/wxprec.h"
 
 #include "wx/qt/defs.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
 #include "wx/uiaction.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 
 #include <QtTest/QtTestGui>
 

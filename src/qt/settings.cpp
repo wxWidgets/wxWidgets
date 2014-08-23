@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/settings.cpp
-// Author:      Peter Most
-// Copyright:   (c) Peter Most
+// Author:      Mariano Reingart, Peter Most
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -9,7 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/settings.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 #include <QtGui/QPalette>
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)

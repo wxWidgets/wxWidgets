@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/window.cpp
-// Author:      Peter Most, Javier Torres
-// Copyright:   (c) Peter Most, Javier Torres
+// Author:      Peter Most, Javier Torres, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -13,8 +13,8 @@
 #include "wx/menu.h"
 #include "wx/tooltip.h"
 #include "wx/scrolbar.h"
-#include "wx/qt/utils.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
 #include <QtGui/QPicture>

@@ -11,8 +11,8 @@
 #include "wx/bitmap.h"
 #include "wx/image.h"
 #include "wx/rawbmp.h"
-#include "wx/qt/converter.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/converter.h"
+#include "wx/qt/private/utils.h"
 
 #include <QtGui/QPixmap>
 #include <QtGui/QBitmap>
