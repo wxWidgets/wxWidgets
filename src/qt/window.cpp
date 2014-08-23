@@ -172,7 +172,7 @@ wxWindow::~wxWindow()
     delete m_qtPainter;
 
 #if wxUSE_ACCEL
-    delete m_qtShortcutHandler;
+    m_qtShortcutHandler->deleteLater();
 #endif
 
     // delete QWidget when control return to event loop (safer)
