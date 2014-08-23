@@ -53,7 +53,10 @@ bool wxControl::QtCreateControl( wxWindow *parent, wxWindowID id,
     int height = ( size.GetHeight() == wxDefaultCoord ) ? bestSize.GetHeight() : size.GetHeight();
 
     DoMoveWindow( pos.x, pos.y, width, height );
-    PostCreation();
+
+    // Let Qt handle the background:
+    SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+    PostCreation(false);
 
     return CreateControl( parent, id, pos, size, style, validator, name );
 }

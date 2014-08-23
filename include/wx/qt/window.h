@@ -56,7 +56,7 @@ public:
                 const wxString& name = wxPanelNameStr);
     
     // Used by all window classes in the widget creation process.
-    void PostCreation();
+    void PostCreation( bool generic = true );
 
     void AddChild( wxWindowBase *child );
 

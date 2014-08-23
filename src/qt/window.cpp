@@ -237,7 +237,7 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
     return ( true );
 }
 
-void wxWindow::PostCreation()
+void wxWindow::PostCreation(bool generic)
 {
     if ( m_qtWindow == NULL )
     {
@@ -248,7 +248,9 @@ void wxWindow::PostCreation()
                (const char*)GetName(), m_qtWindow);
 
     // set the background style after creation (not before like in wxGTK)
-    QtSetBackgroundStyle();
+    // (only for generic controls, to use qt defaults elsewere)
+    if (generic)
+        QtSetBackgroundStyle();
 
 //    // Use custom Qt window flags (allow to turn on or off
 //    // the minimize/maximize/close buttons and title bar)
@@ -892,7 +894,7 @@ bool wxWindow::QtSetBackgroundStyle()
         {
             // let Qt erase the background by default
             // (note that wxClientDC will not work)
-            widget->setAutoFillBackground(true);
+            //widget->setAutoFillBackground(true);
             // use system colors for background (default in Qt)
             widget->setAttribute(Qt::WA_NoSystemBackground, false);
         }
