@@ -14,6 +14,7 @@
 #include "wx/qt/converter.h"
 
 #include <QtGui/QFont>
+#include <QtGui/QFontInfo>
 
 static QFont::StyleHint ConvertFontFamily(wxFontFamily family)
 {
@@ -266,7 +267,9 @@ bool wxFont::GetUnderlined() const
 
 wxString wxFont::GetFaceName() const
 {
-    return wxQtConvertString(M_FONTDATA.family());
+    // use font info to get the matched face name (not the family given)
+    QFontInfo info = QFontInfo(M_FONTDATA);
+    return wxQtConvertString(info.family());
 }
 
 wxFontEncoding wxFont::GetEncoding() const
