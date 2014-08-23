@@ -56,9 +56,10 @@ public:
 
     virtual QPushButton *GetHandle() const;
 
-private:
+protected:
     wxQtPointer< wxQtPushButton > m_qtPushButton;
 
+private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxButton);
 };
 
