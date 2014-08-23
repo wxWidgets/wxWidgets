@@ -46,6 +46,10 @@ bool wxStaticText::Create(wxWindow *parent,
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
+void wxStaticText::SetLabel(const wxString& label)
+{
+    m_qtLabel->setText( wxQtConvertString( label ) );
+}
 
 QLabel *wxStaticText::GetHandle() const
 {
