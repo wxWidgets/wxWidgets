@@ -63,31 +63,34 @@ bool wxSlider::Create(wxWindow *parent,
 {
     m_qtSlider = new wxQtSlider( parent, this );
     m_qtSlider->setOrientation( wxQtConvertOrientation( style, wxSL_HORIZONTAL ) );
+    SetRange( minValue, maxValue );
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
 int wxSlider::GetValue() const
 {
-    return 0;
+    return m_qtSlider->value();
 }
 
 void wxSlider::SetValue(int value)
 {
+    m_qtSlider->setValue( value );
 }
 
 void wxSlider::SetRange(int minValue, int maxValue)
 {
+    m_qtSlider->setRange( minValue, maxValue );
 }
 
 int wxSlider::GetMin() const
 {
-    return 0;
+    return m_qtSlider->minimum();
 }
 
 int wxSlider::GetMax() const
 {
-    return 0;
+    return m_qtSlider->maximum();
 }
 
 void wxSlider::SetLineSize(int lineSize)
