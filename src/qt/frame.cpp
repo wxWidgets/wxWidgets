@@ -86,11 +86,19 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 
 void wxFrame::SetStatusBar( wxStatusBar *statusBar )
 {
-    GetHandle()->setStatusBar( statusBar->GetHandle() );
-
-    // Update statusbar sizes now that it has a size
-    statusBar->Refresh();
-
+    // The current status bar could be deleted by Qt when dereferencing it
+    // TODO: add a mechanism like Detach in menus to avoid issues
+    if ( statusBar != NULL )
+    {
+        GetHandle()->setStatusBar( statusBar->GetHandle() );
+        // Update statusbar sizes now that it has a size
+        statusBar->Refresh();
+    }
+    else
+    {
+        // Remove the current status bar
+        GetHandle()->setStatusBar(NULL);
+    }
     wxFrameBase::SetStatusBar( statusBar );
 }
 
