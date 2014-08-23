@@ -2797,7 +2797,6 @@ COND_TOOLKIT_QT_LOWLEVEL_HDR =  \
 	wx/qt/fontdlg.h \
 	wx/qt/frame.h \
 	wx/qt/gauge.h \
-	wx/qt/groupbox_qt.h \
 	wx/generic/icon.h \
 	wx/generic/imaglist.h \
 	wx/qt/listbox.h \

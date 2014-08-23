@@ -10,12 +10,14 @@
 
 #include "wx/radiobox.h"
 #include "wx/qt/utils.h"
-#include "wx/qt/groupbox_qt.h"
 #include "wx/qt/converter.h"
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QRadioButton>
 
+
 IMPLEMENT_DYNAMIC_CLASS( wxRadioBox, wxControl )
+
 
 wxRadioBox::wxRadioBox()
 {
@@ -92,7 +94,7 @@ bool wxRadioBox::Create(wxWindow *parent,
             const wxValidator& val,
             const wxString& name)
 {
-    m_qtGroupBox = new wxQtGroupBox( parent, title );
+    m_qtGroupBox = new QGroupBox( wxQtConvertString( title ), parent->GetHandle() );
     m_qtButtonGroup = new QButtonGroup( m_qtGroupBox );
 
     if ( style & wxRA_SPECIFY_ROWS )

@@ -10,13 +10,9 @@
 
 #include "wx/statbox.h"
 #include "wx/window.h"
-#include "wx/qt/groupbox_qt.h"
 #include "wx/qt/converter.h"
+#include <QtWidgets/QGroupBox>
 
-wxQtGroupBox::wxQtGroupBox( wxWindow *parent, const wxString &label )
-    : QGroupBox( wxQtConvertString( label ), parent->GetHandle() )
-{
-}
 
 wxStaticBox::wxStaticBox()
 {
@@ -39,7 +35,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
             long style,
             const wxString& name)
 {
-    m_qtGroupBox = new wxQtGroupBox( parent, label );
+    m_qtGroupBox = new QGroupBox( wxQtConvertString( label ), parent->GetHandle() );
 
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }

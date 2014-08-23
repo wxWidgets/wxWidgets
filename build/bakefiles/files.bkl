@@ -301,7 +301,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/fontdlg.h
     wx/qt/frame.h
     wx/qt/gauge.h
-    wx/qt/groupbox_qt.h
     wx/generic/icon.h
     wx/generic/imaglist.h
     wx/qt/listbox.h
