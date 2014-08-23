@@ -30,9 +30,13 @@ wxQtSpinButton::wxQtSpinButton( wxWindow *parent, wxSpinButton *handler )
 
 void wxQtSpinButton::valueChanged(int value)
 {
-    wxCommandEvent event( wxEVT_SPIN, GetHandler()->GetId() );
-    event.SetInt( value );
-    EmitEvent( event );
+    wxSpinButton *handler = GetHandler();
+    if ( handler )
+    {
+        wxCommandEvent event( wxEVT_SPIN, handler->GetId() );
+        event.SetInt( value );
+        EmitEvent( event );
+    }
 }
 
 

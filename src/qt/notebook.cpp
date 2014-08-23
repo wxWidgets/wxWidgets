@@ -28,18 +28,22 @@ wxQtTabWidget::wxQtTabWidget( wxWindow *parent, wxNotebook *handler )
 
 void wxQtTabWidget::currentChanged(int index)
 {
-    int old = GetHandler()->GetSelection();
-    // revert change be able to simulate veto (select back the old tab):
-    if (old >= 0)
+    wxNotebook *handler = GetHandler();
+    if ( handler )
     {
-        GetHandler()->ChangeSelection(old);
-    }
-    // send the wx event and check if accepted (and then show the new tab):
-    if (GetHandler()->SendPageChangingEvent(index))
-    {
-        // not vetoed, send the event and store new index
-        GetHandler()->ChangeSelection(index);
-        GetHandler()->SendPageChangedEvent(old, index);
+        int old = handler->GetSelection();
+        // revert change be able to simulate veto (select back the old tab):
+        if (old >= 0)
+        {
+            handler->ChangeSelection(old);
+        }
+        // send the wx event and check if accepted (and then show the new tab):
+        if (handler->SendPageChangingEvent(index))
+        {
+            // not vetoed, send the event and store new index
+            handler->ChangeSelection(index);
+            handler->SendPageChangedEvent(old, index);
+        }
     }
 }
 

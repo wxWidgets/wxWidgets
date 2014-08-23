@@ -31,7 +31,9 @@ wxQtChoice::wxQtChoice( wxWindow *parent, wxChoice *handler )
 
 void wxQtChoice::activated(int index)
 {
-    GetHandler()->SendSelectionChangedEvent(wxEVT_CHOICE);
+    wxChoice *handler = GetHandler();
+    if ( handler )
+        handler->SendSelectionChangedEvent(wxEVT_CHOICE);
 }
 
 

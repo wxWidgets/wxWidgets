@@ -41,10 +41,14 @@ private:
 };
 
 void wxQtButtonGroup::buttonClicked(int index) {
-    wxCommandEvent event( wxEVT_RADIOBOX, GetHandler()->GetId() );
-    event.SetInt(index);
-    event.SetString(wxQtConvertString(button(index)->text()));
-    EmitEvent( event );
+    wxRadioBox *handler = GetHandler();
+    if ( handler )
+    {
+        wxCommandEvent event( wxEVT_RADIOBOX, handler->GetId() );
+        event.SetInt(index);
+        event.SetString(wxQtConvertString(button(index)->text()));
+        EmitEvent( event );
+    }
 }
 
 
