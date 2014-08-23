@@ -167,6 +167,11 @@ bool wxListCtrl::SetItem(wxListItem& info)
     if ( !info.GetText().IsNull() )
         item->setText(info.GetColumn(), wxQtConvertString(info.GetText()));
     item->setTextAlignment(info.GetColumn(), wxQtConvertTextAlign(info.GetAlign()));
+    if ( info.GetTextColour().IsOk() )
+        item->setTextColor(info.GetColumn(), info.GetTextColour().GetHandle());
+    if ( info.GetBackgroundColour().IsOk() )
+        item->setBackgroundColor(info.GetColumn(), info.GetBackgroundColour().GetHandle());
+
 }
 
 long wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId)
@@ -423,6 +428,10 @@ long wxListCtrl::InsertItem(const wxListItem& info)
     QTreeWidgetItem *item = new QTreeWidgetItem(m_qtTreeWidget);
     item->setText(info.GetColumn(), wxQtConvertString(info.GetText()));
     item->setTextAlignment(info.GetColumn(), wxQtConvertTextAlign(info.GetAlign()));
+    if ( info.GetTextColour().IsOk() )
+        item->setTextColor(info.GetColumn(), info.GetTextColour().GetHandle());
+    if ( info.GetBackgroundColour().IsOk() )
+        item->setBackgroundColor(info.GetColumn(), info.GetBackgroundColour().GetHandle());
     return GetItemCount() - 1;
 }
 
