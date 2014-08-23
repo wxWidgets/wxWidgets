@@ -401,22 +401,37 @@ long wxListCtrl::HitTest(const wxPoint& point, int& flags, long* ptrSubItem) con
 
 long wxListCtrl::InsertItem(const wxListItem& info)
 {
-    return 0;
+    QTreeWidgetItem *item = new QTreeWidgetItem(m_qtTreeWidget);
+    item->setText(info.GetColumn(), wxQtConvertString(info.GetText()));
+    item->setTextAlignment(info.GetColumn(), wxQtConvertTextAlign(info.GetAlign()));
 }
 
 long wxListCtrl::InsertItem(long index, const wxString& label)
 {
-    return 0;
+    wxListItem info;
+    info.m_text = label;
+    info.m_mask = wxLIST_MASK_TEXT;
+    info.m_itemId = index;
+    return InsertItem(info);
 }
 
 long wxListCtrl::InsertItem(long index, int imageIndex)
 {
-    return 0;
+    wxListItem info;
+    info.m_image = imageIndex;
+    info.m_mask = wxLIST_MASK_IMAGE;
+    info.m_itemId = index;
+    return InsertItem(info);
 }
 
 long wxListCtrl::InsertItem(long index, const wxString& label, int imageIndex)
 {
-    return 0;
+    wxListItem info;
+    //info.m_image = imageIndex == -1 ? I_IMAGENONE : imageIndex;
+    info.m_text = label;
+    info.m_mask = wxLIST_MASK_TEXT | wxLIST_MASK_IMAGE;
+    info.m_itemId = index;
+    return InsertItem(info);
 }
 
 long wxListCtrl::DoInsertColumn(long col, const wxListItem& info)
