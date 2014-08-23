@@ -57,5 +57,12 @@ bool wxControl::QtCreateControl( wxWindow *parent, wxWindowID id,
 
 wxSize wxControl::DoGetBestSize() const
 {
-    return wxQtConvertSize( GetHandle()->sizeHint() );
+    wxSize minsize = wxQtConvertSize( GetHandle()->minimumSizeHint() );
+    wxSize size = wxQtConvertSize( GetHandle()->sizeHint() );
+    // best effort to ensure a correct size (note that some qt controls implement just one or both size hints)
+    if (size.GetWidth() < minsize.GetWidth())
+        size.SetWidth(minsize.GetWidth());
+    if (size.GetHeight() < minsize.GetHeight())
+        size.SetHeight(minsize.GetHeight());
+    return size;
 }
