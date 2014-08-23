@@ -782,6 +782,41 @@ void wxWindow::SetAcceleratorTable( const wxAcceleratorTable& accel )
 }
 #endif // wxUSE_ACCEL
 
+bool wxWindow::SetBackgroundStyle(wxBackgroundStyle style)
+{
+    if (!wxWindowBase::SetBackgroundStyle(style))
+        return false;
+
+    if (style == wxBG_STYLE_PAINT)
+    {
+        GetHandle()->setAttribute(Qt::WA_OpaquePaintEvent);
+    }
+    else if (style == wxBG_STYLE_TRANSPARENT)
+    {
+        GetHandle()->setAttribute(Qt::WA_TranslucentBackground);
+    }
+    else if (style == wxBG_STYLE_SYSTEM)
+    {
+        GetHandle()->setAttribute(Qt::WA_NoSystemBackground, false);
+        GetHandle()->autoFillBackground(true);
+    }
+
+    return true;
+}
+
+
+bool wxWindow::IsTransparentBackgroundSupported(wxString* WXUNUSED(reason)) const
+{
+    return true;
+}
+
+bool wxWindow::SetTransparent(wxByte alpha)
+{
+    // For Qt, range is between 1 (opaque) and 0 (transparent)
+    GetHandle()->setWindowOpacity(1 - alpha/255.0);
+}
+
+
 bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
 {
     /* If this window has scrollbars, only let wx handle the event if it is
