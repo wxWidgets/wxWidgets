@@ -312,12 +312,11 @@ void wxQtDCImpl::DoGetTextExtent(const wxString& string,
     QFontMetrics metrics(f);
     if (x != NULL || y != NULL)
     {
-        QRect bounding = metrics.boundingRect( wxQtConvertString(string) );
-
+        // note that boundingRect doesn't return "advance width" for spaces
         if (x != NULL)
-            *x = bounding.width();
+            *x = metrics.width( wxQtConvertString(string) );
         if (y != NULL)
-            *y = bounding.height();
+            *y = metrics.height();
     }
 
     if (descent != NULL)
