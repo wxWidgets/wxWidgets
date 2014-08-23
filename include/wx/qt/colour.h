@@ -30,6 +30,8 @@ public:
     bool operator!=(const wxColour& color) const
         { return m_qtColor != color.m_qtColor; }
 
+    int GetPixel() const;
+
     QColor GetHandle() const { return m_qtColor; };
 
 protected:
