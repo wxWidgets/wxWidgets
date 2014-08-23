@@ -196,14 +196,19 @@ wxTextCtrl* wxListCtrl::GetEditControl() const
     return NULL;
 }
 
+QTreeWidgetItem *wxListCtrl::QtGetItem(int id) const
+{
+    wxCHECK_MSG( id >= 0 && id < GetItemCount(), NULL,
+                 wxT("invalid item index in wxListCtrl") );
+    QModelIndex index = m_qtTreeWidget->model()->index(id, 0);
+    // note that itemFromIndex(index) is protected
+    return (QTreeWidgetItem*)index.internalPointer();
+}
+
 bool wxListCtrl::GetItem(wxListItem& info) const
 {
     const long id = info.GetId();
-    wxCHECK_MSG( id >= 0 && id < GetItemCount(), false,
-                 wxT("invalid item index in GetItem") );
-    QModelIndex index = m_qtTreeWidget->model()->index(id, 0);
-    // note that itemFromIndex(index) is protected
-    QTreeWidgetItem *item = (QTreeWidgetItem*)index.internalPointer();
+    QTreeWidgetItem *item = QtGetItem(id);
     info.SetText(wxQtConvertString(item->text(info.GetColumn())));
     return true;
 }
@@ -211,12 +216,7 @@ bool wxListCtrl::GetItem(wxListItem& info) const
 bool wxListCtrl::SetItem(wxListItem& info)
 {
     const long id = info.GetId();
-    wxCHECK_MSG( id >= 0 && id < GetItemCount(), false,
-                 wxT("invalid item index in SetItem") );
-
-    QModelIndex index = m_qtTreeWidget->model()->index(id, info.GetColumn());
-    // note that itemFromIndex(index) is protected
-    QTreeWidgetItem *item = (QTreeWidgetItem*)index.internalPointer();
+    QTreeWidgetItem *item = QtGetItem(id);
     if ( !info.GetText().IsNull() )
         item->setText(info.GetColumn(), wxQtConvertString(info.GetText()));
     item->setTextAlignment(info.GetColumn(), wxQtConvertTextAlign(info.GetAlign()));

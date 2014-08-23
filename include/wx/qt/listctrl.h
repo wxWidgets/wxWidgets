@@ -282,6 +282,8 @@ protected:
     // Implement base class pure virtual methods.
     long DoInsertColumn(long col, const wxListItem& info);
 
+    QTreeWidgetItem *QtGetItem(int id) const;
+
 private:
     QTreeWidget *m_qtTreeWidget;
 
