@@ -10,7 +10,6 @@
 #ifndef _WX_QT_WINDOW_H_
 #define _WX_QT_WINDOW_H_
 
-#include "wx/qt/pointer.h"
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QScrollBar>
 
@@ -181,8 +180,8 @@ protected:
 
 private:
     void Init();
-    wxQtPointer< QWidget > m_qtWindow;
-    wxQtPointer< QWidget > m_qtContainer;
+    QWidget *m_qtWindow;
+    QWidget *m_qtContainer;
 
     wxScrollBar *m_horzScrollBar;
     wxScrollBar *m_vertScrollBar;

@@ -8,7 +8,6 @@
 #ifndef _WX_QT_TEXTCTRL_H_
 #define _WX_QT_TEXTCTRL_H_
 
-#include "wx/qt/pointer.h"
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QTextEdit>
 
@@ -68,8 +67,8 @@ protected:
     virtual bool DoSaveFile(const wxString& file, int fileType);
     
 private:
-    wxQtPointer< QLineEdit > m_qtLineEdit;
-    wxQtPointer< QTextEdit > m_qtTextEdit;
+    QLineEdit *m_qtLineEdit;
+    QTextEdit *m_qtTextEdit;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxTextCtrl );
 };

@@ -10,7 +10,6 @@
 
 #include "wx/menuitem.h"
 #include <QtWidgets/QAction>
-#include "wx/qt/pointer.h"
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxMenu;
@@ -41,7 +40,7 @@ public:
 
 private:
     // Qt is using an action instead of a menu item.
-    wxQtPointer< QAction > m_qtAction;
+    QAction *m_qtAction;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxMenuItem );
 };

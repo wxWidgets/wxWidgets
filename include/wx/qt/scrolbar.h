@@ -45,7 +45,7 @@ public:
     virtual QScrollBar* GetHandle() const;
 
 private:
-    wxQtPointer< QScrollBar > m_qtScrollBar;
+    QScrollBar *m_qtScrollBar;
 
     DECLARE_DYNAMIC_CLASS(wxScrollBar)
 };

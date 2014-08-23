@@ -8,7 +8,6 @@
 #ifndef _WX_QT_STATTEXT_H_
 #define _WX_QT_STATTEXT_H_
 
-#include "wx/qt/pointer.h"
 #include <QtWidgets/QLabel>
 
 class WXDLLIMPEXP_CORE wxStaticText : public wxStaticTextBase
@@ -35,7 +34,7 @@ public:
 
     QLabel *GetHandle() const;
 private:
-    wxQtPointer< QLabel > m_qtLabel;
+    QLabel *m_qtLabel;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxStaticText );
 };

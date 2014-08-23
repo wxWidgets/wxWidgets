@@ -32,7 +32,7 @@ public:
 
 protected:
 
-    wxQtPointer< QPushButton > m_qtPushButton;
+    QPushButton *m_qtPushButton;
 
     void QtCreate(wxWindow *parent);
     void QtSetBitmap( const wxBitmap &bitmap );

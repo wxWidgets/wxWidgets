@@ -11,7 +11,6 @@
 #ifndef _WX_QT_APP_H_
 #define _WX_QT_APP_H_
 
-#include "wx/qt/pointer.h"
 #include <QtWidgets/QApplication>
 
 class WXDLLIMPEXP_CORE wxApp : public wxAppBase
@@ -23,7 +22,7 @@ public:
     virtual bool Initialize(int& argc, wxChar **argv);
 
 private:
-    wxQtPointer< QApplication > m_qtApplication;
+    QApplication *m_qtApplication;
     int m_qtArgc;
     char **m_qtArgv;
     

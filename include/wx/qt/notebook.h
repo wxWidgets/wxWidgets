@@ -8,7 +8,6 @@
 #ifndef _WX_QT_NOTEBOOK_H_
 #define _WX_QT_NOTEBOOK_H_
 
-#include "wx/qt/pointer.h"
 #include <QtWidgets/QTabWidget>
 
 class WXDLLIMPEXP_CORE wxNotebook : public wxNotebookBase
@@ -53,7 +52,7 @@ protected:
     int DoSetSelection(size_t nPage, int flags = 0);
 
 private:
-    wxQtPointer< QTabWidget > m_qtTabWidget;
+    QTabWidget *m_qtTabWidget;
 
     // internal array to store imageId for each page:
     wxVector<int> m_images;

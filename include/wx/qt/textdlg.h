@@ -19,7 +19,6 @@
 //#endif
 //
 //#include "wx/dialog.h"
-//#include "wx/qt/pointer.h"
 //#include <QtGui/QInputDialog>
 //
 //class WXDLLIMPEXP_CORE wxTextEntryDialog : public wxDialog

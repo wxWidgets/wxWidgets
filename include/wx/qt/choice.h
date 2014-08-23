@@ -8,7 +8,6 @@
 #ifndef _WX_QT_CHOICE_H_
 #define _WX_QT_CHOICE_H_
 
-#include "wx/qt/pointer.h"
 #include <QtWidgets/QComboBox>
 
 class WXDLLIMPEXP_CORE wxChoice : public wxChoiceBase
@@ -72,7 +71,7 @@ protected:
     virtual void DoClear();
     virtual void DoDeleteOneItem(unsigned int pos);
 
-    wxQtPointer< QComboBox > m_qtComboBox;
+    QComboBox *m_qtComboBox;
 
 private:
 
