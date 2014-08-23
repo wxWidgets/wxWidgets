@@ -47,7 +47,6 @@ private:
 
 class WXDLLIMPEXP_CORE wxQtDialog : public wxQtEventSignalHandler< QDialog, wxDialog >
 {
-    Q_OBJECT
 
     public:
         wxQtDialog( wxWindow *parent, wxDialog *handler );

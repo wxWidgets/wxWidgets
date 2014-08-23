@@ -53,7 +53,6 @@ private:
 
 class WXDLLIMPEXP_CORE wxQtAction : public QAction, public wxQtSignalHandler< wxMenuItem >
 {
-    Q_OBJECT
 
 public:
     wxQtAction( wxMenu *parent, int id, const wxString &text, const wxString &help,
@@ -71,7 +70,7 @@ public:
     void SetBitmap( const wxBitmap &bitmap );
     const wxBitmap &GetBitmap() const;
 
-private Q_SLOTS:
+private:
     void OnActionTriggered( bool checked );
 };
 

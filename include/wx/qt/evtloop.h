@@ -63,13 +63,12 @@ class wxQtEventLoopBase;
 
 class wxQtIdleTimer : public QTimer
 {
-Q_OBJECT
 
 public:
     wxQtIdleTimer( wxQtEventLoopBase *eventLoop );
     virtual bool eventFilter( QObject * watched, QEvent * event  );
 
-private Q_SLOTS:
+private:
     void idle();
 
 private:

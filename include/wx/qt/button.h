@@ -16,7 +16,6 @@
 
 class WXDLLIMPEXP_CORE wxQtPushButton : public wxQtEventSignalHandler< QPushButton, wxControl >
 {
-    Q_OBJECT
 
 public:
     wxQtPushButton( wxWindow *parent, wxControl *handler );
@@ -30,7 +29,7 @@ public:
     void SetLabel( const wxString &label );
     void SetBitmap( const wxBitmap &bitmap );
 
-private Q_SLOTS:
+private:
     void OnButtonClicked( bool checked );
 };
 

@@ -59,12 +59,11 @@ private:
 
 class WXDLLIMPEXP_CORE wxQtMainWindow : public wxQtEventSignalHandler< QMainWindow, wxFrame >
 {
-    Q_OBJECT
 
 public:
     wxQtMainWindow( wxWindow *parent, wxFrame *handler );
 
-private Q_SLOTS:
+private:
 };
 
 
