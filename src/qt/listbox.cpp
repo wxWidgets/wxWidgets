@@ -96,7 +96,8 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
 bool wxListBox::IsSelected(int n) const
 {
-    return false;
+    QListWidgetItem* item = m_qtListWidget->item(n);
+    return item->isSelected();
 }
 
 int wxListBox::GetSelections(wxArrayInt& aSelections) const
@@ -106,7 +107,7 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
 
 unsigned wxListBox::GetCount() const
 {
-    return 0;
+    return m_qtListWidget->count();
 }
 
 wxString wxListBox::GetString(unsigned int n) const
@@ -123,11 +124,12 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
 
 void wxListBox::SetSelection(int n)
 {
+    return m_qtListWidget->setCurrentRow(n);
 }
 
 int wxListBox::GetSelection() const
 {
-    return 0;
+    return m_qtListWidget->currentIndex().row();
 }
 
 void wxListBox::DoSetFirstItem(int n)
@@ -136,6 +138,7 @@ void wxListBox::DoSetFirstItem(int n)
 
 void wxListBox::DoSetSelection(int n, bool select)
 {
+    return m_qtListWidget->setCurrentRow(n, select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect );
 }
 
 int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
