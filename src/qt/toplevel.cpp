@@ -12,11 +12,11 @@
 #include "wx/qt/private/converter.h"
 #include <QtGui/QIcon>
 
-wxTopLevelWindowNative::wxTopLevelWindowNative()
+wxTopLevelWindowQt::wxTopLevelWindowQt()
 {
 }
 
-wxTopLevelWindowNative::wxTopLevelWindowNative(wxWindow *parent,
+wxTopLevelWindowQt::wxTopLevelWindowQt(wxWindow *parent,
            wxWindowID winId,
            const wxString &title,
            const wxPoint &pos,
@@ -27,7 +27,7 @@ wxTopLevelWindowNative::wxTopLevelWindowNative(wxWindow *parent,
     Create( parent, winId, title, pos, size, style, name );
 }
 
-bool wxTopLevelWindowNative::Create( wxWindow *parent, wxWindowID winId,
+bool wxTopLevelWindowQt::Create( wxWindow *parent, wxWindowID winId,
     const wxString &title, const wxPoint &pos, const wxSize &sizeOrig,
     long style, const wxString &name )
 {
@@ -61,50 +61,50 @@ bool wxTopLevelWindowNative::Create( wxWindow *parent, wxWindowID winId,
     return true;
 }
 
-void wxTopLevelWindowNative::Maximize(bool WXUNUSED(maximize)) 
+void wxTopLevelWindowQt::Maximize(bool WXUNUSED(maximize)) 
 {
 }
 
-void wxTopLevelWindowNative::Restore()
+void wxTopLevelWindowQt::Restore()
 {
 }
 
-void wxTopLevelWindowNative::Iconize(bool WXUNUSED(iconize) )
+void wxTopLevelWindowQt::Iconize(bool WXUNUSED(iconize) )
 {
 }
 
-bool wxTopLevelWindowNative::IsMaximized() const
-{
-    return false;
-}
-
-bool wxTopLevelWindowNative::IsIconized() const
+bool wxTopLevelWindowQt::IsMaximized() const
 {
     return false;
 }
 
-
-bool wxTopLevelWindowNative::ShowFullScreen(bool WXUNUSED(show), long WXUNUSED(style))
+bool wxTopLevelWindowQt::IsIconized() const
 {
     return false;
 }
 
-bool wxTopLevelWindowNative::IsFullScreen() const
+
+bool wxTopLevelWindowQt::ShowFullScreen(bool WXUNUSED(show), long WXUNUSED(style))
 {
     return false;
 }
 
-void wxTopLevelWindowNative::SetTitle(const wxString& title)
+bool wxTopLevelWindowQt::IsFullScreen() const
+{
+    return false;
+}
+
+void wxTopLevelWindowQt::SetTitle(const wxString& title)
 {
     GetHandle()->setWindowTitle( wxQtConvertString( title ));
 }
 
-wxString wxTopLevelWindowNative::GetTitle() const
+wxString wxTopLevelWindowQt::GetTitle() const
 {
     return ( wxQtConvertString( GetHandle()->windowTitle() ));
 }
 
-void wxTopLevelWindowNative::SetIcons( const wxIconBundle& icons )
+void wxTopLevelWindowQt::SetIcons( const wxIconBundle& icons )
 {
     wxTopLevelWindowBase::SetIcons( icons );
     
@@ -116,7 +116,7 @@ void wxTopLevelWindowNative::SetIcons( const wxIconBundle& icons )
     GetHandle()->setWindowIcon( qtIcons );
 }
 
-void wxTopLevelWindowNative::SetWindowStyleFlag( long style )
+void wxTopLevelWindowQt::SetWindowStyleFlag( long style )
 {
     wxWindow::SetWindowStyleFlag( style );
     
@@ -173,7 +173,7 @@ void wxTopLevelWindowNative::SetWindowStyleFlag( long style )
     }
 }
 
-long wxTopLevelWindowNative::GetWindowStyleFlag() const
+long wxTopLevelWindowQt::GetWindowStyleFlag() const
 {
     // Update maximized/minimized state
     long winStyle = wxWindow::GetWindowStyleFlag();
