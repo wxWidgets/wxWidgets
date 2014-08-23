@@ -373,18 +373,11 @@ long wxListCtrl::InsertItem(long index, const wxString& label, int imageIndex)
     return 0;
 }
 
-long wxListCtrl::InsertColumn(long col, const wxListItem& info)
+long wxListCtrl::DoInsertColumn(long col, const wxListItem& info)
 {
     return 0;
 }
 
-long wxListCtrl::InsertColumn(long col,
-                  const wxString& heading,
-                  int format,
-                  int width)
-{
-    return 0;
-}
 
 void wxListCtrl::SetItemCount(long count)
 {

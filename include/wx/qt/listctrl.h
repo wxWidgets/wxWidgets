@@ -13,7 +13,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
-class WXDLLIMPEXP_CORE wxListCtrl: public wxControl
+class WXDLLIMPEXP_CORE wxListCtrl: public wxListCtrlBase
 {
 public:
     wxListCtrl();
@@ -251,14 +251,6 @@ public:
     // Insert an image/string item
     long InsertItem(long index, const wxString& label, int imageIndex);
 
-    // For list view mode (only), inserts a column.
-    long InsertColumn(long col, const wxListItem& info);
-
-    long InsertColumn(long col,
-                      const wxString& heading,
-                      int format = wxLIST_FORMAT_LEFT,
-                      int width = -1);
-
     // set the number of items in a virtual list control
     void SetItemCount(long count);
 
@@ -285,6 +277,10 @@ public:
 
 
     virtual QListWidget *GetHandle() const;
+
+protected:
+    // Implement base class pure virtual methods.
+    long DoInsertColumn(long col, const wxListItem& info);
 
 private:
     QListWidget *m_qtListWidget;
