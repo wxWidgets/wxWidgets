@@ -148,7 +148,7 @@ public:
     virtual void QtHandleShortcut ( int command );
 #endif // wxUSE_ACCEL
 
-    virtual QScrollArea *QtGetScrollBarsContainer() const;
+    virtual QAbstractScrollArea *QtGetScrollBarsContainer() const;
 
 protected:
     virtual void DoGetTextExtent(const wxString& string,

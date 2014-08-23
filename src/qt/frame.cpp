@@ -159,9 +159,9 @@ void wxFrame::RemoveChild( wxWindowBase *child )
     wxFrameBase::RemoveChild( child );
 }
 
-QScrollArea *wxFrame::QtGetScrollBarsContainer() const
+QAbstractScrollArea *wxFrame::QtGetScrollBarsContainer() const
 {
-    return dynamic_cast <QScrollArea *> (GetHandle()->centralWidget() );
+    return dynamic_cast <QAbstractScrollArea *> (GetHandle()->centralWidget() );
 }
 
 //=============================================================================

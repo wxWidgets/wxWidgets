@@ -470,7 +470,7 @@ wxScrollBar *wxWindow::QtGetScrollBar( int orientation ) const
  * passed as parameter */
 wxScrollBar *wxWindow::QtSetScrollBar( int orientation, wxScrollBar *scrollBar )
 {
-    QScrollArea *scrollArea = QtGetScrollBarsContainer();
+    QAbstractScrollArea *scrollArea = QtGetScrollBarsContainer();
     wxCHECK_MSG( scrollArea, NULL, "Window without scrolling area" );
 
     // Create a new scrollbar if needed
@@ -1396,7 +1396,7 @@ QWidget *wxWindow::GetHandle() const
     return m_qtWindow;
 }
 
-QScrollArea *wxWindow::QtGetScrollBarsContainer() const
+QAbstractScrollArea *wxWindow::QtGetScrollBarsContainer() const
 {
     return m_qtContainer;
 }
