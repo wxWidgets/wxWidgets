@@ -88,6 +88,7 @@ using namespace std;
 
 #ifdef __WXQT__
 #include <QtGui/QPainter>
+#include "wx/qt/dc.h"
 #endif
 
 #ifdef __WXMAC__
@@ -478,6 +479,7 @@ protected:
 
 #ifdef __WXQT__
     QPainter* m_qtPainter;
+    QImage* m_qtImage;
     cairo_surface_t* m_qtSurface;
 #endif
 
@@ -1743,14 +1745,15 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 
 #ifdef __WXQT__
     m_qtPainter = (QPainter*) dc.GetHandle();
-    QImage *qimage = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
-    qimage->fill(Qt::transparent);
-    m_qtSurface = cairo_image_surface_create_for_data(qimage->bits(),
+    // create a internal buffer (fallback if cairo_qt_surface is missing)
+    m_qtImage = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
+    // clear the buffer to be painted over the current contents
+    m_qtImage->fill(Qt::transparent);
+    m_qtSurface = cairo_image_surface_create_for_data(m_qtImage->bits(),
                                                       CAIRO_FORMAT_ARGB32,
                                                       width, height,
-                                                      qimage->bytesPerLine());
+                                                      m_qtImage->bytesPerLine());
     Init( cairo_create( m_qtSurface ) );
-    delete qimage;
 #endif
 }
 
@@ -1922,11 +1925,10 @@ wxCairoContext::~wxCairoContext()
 #ifdef __WXQT__
     if ( m_qtPainter != NULL )
     {
-        const uchar* data = (const uchar*)cairo_image_surface_get_data(m_qtSurface);
-        int stride = cairo_image_surface_get_stride(m_qtSurface);
-        QImage qimage = QImage(data, m_width, m_height, stride,
-                               QImage::Format_ARGB32_Premultiplied);
-        m_qtPainter->drawImage( 0,0, qimage );
+        // draw the internal buffered image to the widget
+        cairo_surface_flush(m_qtSurface);
+        m_qtPainter->drawImage( 0,0, *m_qtImage );
+        delete m_qtImage;
         cairo_surface_destroy( m_qtSurface );
     }
 #endif
