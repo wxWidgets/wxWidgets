@@ -443,6 +443,11 @@ wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *data) const
     return new wxBitmapRefData(*(wxBitmapRefData *)data);
 }
 
+bool wxBitmap::HasAlpha() const
+{
+    return M_PIXDATA.hasAlphaChannel();
+}
+
 //-----------------------------------------------------------------------------
 // wxMask
 //-----------------------------------------------------------------------------
