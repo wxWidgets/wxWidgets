@@ -738,7 +738,7 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent * WXUNUSED( ev
         {
             // Data from wxClientDC, paint it
             QPainter p( GetHandle() );
-            p.drawImage( QPoint( 0, 0 ), *m_qtPaintBuffer );
+            p.drawPicture( QPoint( 0, 0 ), *m_qtPicture );
             p.end();
             QtPaintClientDCPicture( handler );
 
