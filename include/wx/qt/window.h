@@ -61,6 +61,7 @@ public:
     virtual void SetLabel(const wxString& label);
     virtual wxString GetLabel() const;
 
+    virtual void DoEnable( bool enable );
     virtual void SetFocus();
 
     // Parent/Child:
