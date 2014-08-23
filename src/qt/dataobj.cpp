@@ -9,6 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/qt/private/converter.h"
+#include "wx/qt/private/utils.h"
 #include "wx/dataobj.h"
 
 
@@ -67,6 +68,27 @@ wxDataFormat::wxDataFormat(const QString &id)
 void wxDataFormat::SetId( const wxChar *id )
 {
     m_MimeType = wxQtConvertString(id);
+}
+
+void wxDataFormat::SetId( const wxString& id )
+{
+    m_MimeType = wxQtConvertString(id);
+}
+
+wxString wxDataFormat::GetId() const
+{
+    return wxQtConvertString(m_MimeType);
+}
+
+wxDataFormatId wxDataFormat::GetType() const
+{
+    wxMISSING_IMPLEMENTATION( "wxDataFormat GetType" );
+    return wxDataFormatId();
+}
+
+void wxDataFormat::SetType( wxDataFormatId WXUNUSED(type) )
+{
+    wxMISSING_IMPLEMENTATION( "wxDataFormat SetType" );
 }
 
 bool wxDataFormat::operator==(wxDataFormatId format) const
