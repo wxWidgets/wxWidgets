@@ -946,7 +946,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/stockitem.cpp
     src/common/tbarbase.cpp
     src/common/textcmn.cpp
-    src/common/textdlg.cpp
     src/common/textentrycmn.cpp
     src/common/textmeasurecmn.cpp
     src/common/toplvcmn.cpp
@@ -988,10 +987,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/srchctlg.cpp
     src/generic/statbmpg.cpp
     src/generic/stattextg.cpp
-    <!-- FIXME: src/generic/textdlgg.cpp -->
+    src/generic/textdlgg.cpp
     src/generic/tipwin.cpp
     src/generic/toolbkg.cpp
-    <!-- FIXME: src/generic/treectlg.cpp -->
+    src/generic/treectlg.cpp
     src/generic/treebkg.cpp
     src/generic/vlbox.cpp
     src/generic/vscroll.cpp
@@ -1059,8 +1058,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/srchctlg.h
     wx/generic/statbmpg.h
     wx/generic/stattextg.h
-    <!-- FIXME: wx/generic/textdlgg.h -->
-    <!-- FIXME: wx/generic/treectlg.h -->
+    wx/generic/textdlgg.h
+    wx/generic/treectlg.h
     wx/graphics.h
     wx/headercol.h
     wx/headerctrl.h
@@ -1249,7 +1248,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/displayx11.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
-    <!-- FIXME: src/unix/uiactionx11.cpp -->
+    src/unix/uiactionx11.cpp
     src/unix/utilsx11.cpp
 </set>
 <set var="XWIN_LOWLEVEL_HDR" hints="files">
