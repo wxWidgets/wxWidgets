@@ -69,14 +69,14 @@ bool wxRadioBox::Create(wxWindow *parent,
 
 
 template < typename Button >
-static void AddChoices( QButtonGroup *qtButtonGroup, QVBoxLayout *qtVBoxLayout, int count, const wxString choices[] )
+static void AddChoices( QButtonGroup *qtButtonGroup, QBoxLayout *qtBoxLayout, int count, const wxString choices[] )
 {
     Button *btn;
     while ( count-- > 0 )
     {
         btn = new Button( wxQtConvertString( *choices++ ));
         qtButtonGroup->addButton( btn );
-        qtVBoxLayout->addWidget( btn );
+        qtBoxLayout->addWidget( btn );
     }
 }
 
@@ -96,17 +96,15 @@ bool wxRadioBox::Create(wxWindow *parent,
     m_qtButtonGroup = new QButtonGroup( m_qtGroupBox );
 
     if ( style & wxRA_SPECIFY_ROWS )
-        wxMISSING_IMPLEMENTATION( wxSTRINGIZE( wxRA_SPECIFY_ROWS ));
+        m_qtBoxLayout = new QHBoxLayout;
     else if ( style & wxRA_SPECIFY_COLS )
-        wxMISSING_IMPLEMENTATION( wxSTRINGIZE( wxRA_SPECIFY_COLS ));
+        m_qtBoxLayout = new QVBoxLayout;
 
-    m_qtVBoxLayout = new QVBoxLayout;
-    AddChoices< QRadioButton >( m_qtButtonGroup, m_qtVBoxLayout, n, choices );
-    m_qtVBoxLayout->addStretch(1);
-    m_qtGroupBox->setLayout(m_qtVBoxLayout);
+    AddChoices< QRadioButton >( m_qtButtonGroup, m_qtBoxLayout, n, choices );
+    m_qtBoxLayout->addStretch(1);
+    m_qtGroupBox->setLayout(m_qtBoxLayout);
 
-    wxSize newsize = wxQtConvertSize( GetHandle()->minimumSizeHint() );
-    return QtCreateControl( parent, id, pos, newsize, style, val, name );
+    return QtCreateControl( parent, id, pos, size, style, val, name );
 }
 
 static QAbstractButton *GetButtonAt( const QButtonGroup *group, unsigned int n )

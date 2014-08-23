@@ -86,8 +86,8 @@ private:
     // Handles the mutual exclusion of buttons:
     wxQtPointer< QButtonGroup > m_qtButtonGroup;
 
-    // Autofit layout
-    wxQtPointer< QVBoxLayout > m_qtVBoxLayout;
+    // Autofit layout for buttons (either vert. or horiz.):
+    wxQtPointer< QBoxLayout > m_qtBoxLayout;
 
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
 };
