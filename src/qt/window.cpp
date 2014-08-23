@@ -135,8 +135,10 @@ void wxWindow::Init()
 
     m_mouseInside = false;
 
+#if wxUSE_ACCEL
     m_qtShortcutHandler = new wxQtShortcutHandler( this );
     m_processingShortcut = false;
+#endif
     m_qtWindow = NULL;
     m_qtContainer = NULL;
 }
@@ -166,7 +168,11 @@ wxWindow::~wxWindow()
     DestroyChildren(); // This also destroys scrollbars
 
     delete m_qtPicture;
+
+#if wxUSE_ACCEL
     delete m_qtShortcutHandler;
+#endif
+
     // delete QWidget when control return to event loop (safer)
     if (GetHandle())
     {
