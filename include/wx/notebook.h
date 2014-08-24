@@ -193,6 +193,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_NOTEBOOK_PAGE_CHANGING, wxBook
     #include  "wx/gtk1/notebook.h"
 #elif defined(__WXMAC__)
     #include  "wx/osx/notebook.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/notebook.h"
 #endif
 
 // old wxEVT_COMMAND_* constants

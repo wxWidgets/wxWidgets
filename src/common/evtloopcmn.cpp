@@ -24,7 +24,6 @@
 #include "wx/scopeguard.h"
 #include "wx/apptrait.h"
 #include "wx/private/eventloopsourcesmanager.h"
-
 // ----------------------------------------------------------------------------
 // wxEventLoopBase
 // ----------------------------------------------------------------------------
@@ -35,7 +34,6 @@ wxEventLoopBase::wxEventLoopBase()
 {
     m_isInsideRun = false;
     m_shouldExit = false;
-
     m_isInsideYield = false;
     m_eventsToProcessInsideYield = wxEVT_CATEGORY_ALL;
 }
@@ -84,7 +82,6 @@ void wxEventLoopBase::Exit(int rc)
 
     ScheduleExit(rc);
 }
-
 void wxEventLoopBase::OnExit()
 {
     if (wxTheApp)
@@ -179,7 +176,6 @@ wxEventLoopBase::AddSourceForFD(int fd,
 }
 
 #endif // wxUSE_EVENTLOOP_SOURCE
-
 // wxEventLoopManual is unused in the other ports
 #if defined(__WINDOWS__) || defined(__WXDFB__) || ( ( defined(__UNIX__) && !defined(__WXOSX__) ) && wxUSE_BASE)
 
@@ -211,12 +207,12 @@ bool wxEventLoopManual::ProcessEvents()
         if ( m_shouldExit )
             return false;
     }
-
     return Dispatch();
 }
 
 int wxEventLoopManual::DoRun()
 {
+
     // we must ensure that OnExit() is called even if an exception is thrown
     // from inside ProcessEvents() but we must call it from Exit() in normal
     // situations because it is supposed to be called synchronously,
@@ -241,6 +237,7 @@ int wxEventLoopManual::DoRun()
                     ;
 
                 if ( m_shouldExit )
+
                     break;
 
                 // a message came or no more idle processing to do, dispatch
@@ -279,7 +276,6 @@ int wxEventLoopManual::DoRun()
                 if ( !hasMoreEvents )
                     break;
             }
-
 #if wxUSE_EXCEPTIONS
             // exit the outer loop as well
             break;

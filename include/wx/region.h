@@ -222,6 +222,8 @@ protected:
     #include "wx/dfb/region.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/region.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/region.h"
 #endif
 
 // ----------------------------------------------------------------------------

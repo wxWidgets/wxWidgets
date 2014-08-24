@@ -23,6 +23,8 @@
     #include "wx/osx/colordlg.h"
 #elif defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/colordlg.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/colordlg.h"
 #else
     #include "wx/generic/colrdlgg.h"
 

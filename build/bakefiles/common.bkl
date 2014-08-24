@@ -21,6 +21,9 @@
         <set var="PLATFORM_MACOS">0</set>
     </if>
 
+    <set var="PLATFORM_QT">0</set>
+
+
     <include file="config.bkl"/>
 
     <include file="plugins_deps.bkl"/>
@@ -61,12 +64,10 @@
     <set var="COMPILER_VERSION" make_var="1">
         <if cond="PLATFORM_WIN32=='1' and OFFICIAL_BUILD=='1'">ERROR-COMPILER-VERSION-MUST-BE-SET-FOR-OFFICIAL-BUILD</if>
     </set>
-
     <set var="COMPILERORGCC">
         <if cond="isdefined('COMPILER')">$(COMPILER)</if>
         <if cond="not isdefined('COMPILER')">gcc</if>
     </set>
-
     <!--
         In the official builds we use not only the compiler name but also its
         version and architecture we compile for in the libraries names.
@@ -181,6 +182,7 @@
     <set var="WXLIB_STC">
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('stc')))</if>
     </set>
+
     <set var="WXLIB_WEBVIEW">
         <if cond="MONOLITHIC=='0' and USE_WEBVIEW=='1'">$(mk.evalExpr(wxwin.mkLibName('webview')))</if>
     </set>
@@ -192,6 +194,7 @@
     <!-- =============================================================== -->
     <!--             Where to store built libraries and objects:         -->
     <!-- =============================================================== -->
+
 
     <if cond="FORMAT!='autoconf'">
         <set var="WXDLLFLAG">
@@ -336,7 +339,6 @@
             <define>_CRT_NON_CONFORMING_SWPRINTFS=1</define>
             <define>_SCL_SECURE_NO_WARNINGS=1</define>
         </if>
-
         <define>$(NO_VC_CRTDBG)</define>
         <define>$(WIN32_WINNT)</define>
         <if cond="FORMAT=='msvc'">
@@ -553,6 +555,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
 
         <ldlibs>$(EXTRALIBS_FOR_BASE)</ldlibs>
 
+
         <!-- system libraries on windows: -->
         <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
             <sys-lib>$(CAIRO_LIB)</sys-lib>
@@ -614,7 +617,6 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
     <set var="LIB_SCINTILLA_IF_MONO">
         <if cond="MONOLITHIC=='1' and USE_STC=='1'">$(LIB_SCINTILLA)</if>
     </set>
-
     <template id="wx_append_base" template_append="wx_append_base_nomono">
         <!-- Always link against the full wx library in monolithic build and
              also against the PNG one as core code references it for Tango
@@ -697,7 +699,6 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
             <postlink-command>$(DYLIB_RPATH_POSTLINK)</postlink-command>
         </if>
         <win32-res>$(WXTOPDIR)src/msw/version.rc</win32-res>
-
     </template>
 
     <template id="wx_3rdparty_dependencies_gui" cond="USE_GUI=='1'">

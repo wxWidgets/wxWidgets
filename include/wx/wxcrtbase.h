@@ -626,7 +626,16 @@ WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,
     #define wxCRT_ToupperW(c)   towupper((wxUChar)(wxChar)(c))
 #endif /* __GLIBC__/!__GLIBC__ */
 
+/* The Android platform, as of 2014, only support most wide-char function with
+   the exception of multi-byte encoding/decoding functions & wsprintf/wsscanf
+   See android-ndk-r9d/docs/STANDALONE-TOOLCHAIN.html (section 7.2)
+   In fact, mbstowcs/wcstombs are defined and compile, but don't work correctly
+*/
 
+#if defined(__WXQT__) && defined(__ANDROID__)
+    #define wxNEED_WX_MBSTOWCS
+    #undef HAVE_WCSRTOMBS
+#endif
 
 
 

@@ -32,6 +32,7 @@
          !defined(__X__)       && \
          !defined(__WXDFB__)   && \
          !defined(__WXX11__)   && \
+         !defined(__WXQT__)    && \
           wxUSE_GUI
 #       ifdef __UNIX__
 #           error "No Target! You should use wx-config program for compilation flags!"
@@ -3302,6 +3303,10 @@ typedef struct _PangoFontDescription PangoFontDescription;
    something arbitrary */
 typedef const void* WXWidget;
 #endif /*  DFB */
+
+#ifdef __WXQT__
+#include "wx/qt/defs.h"
+#endif
 
 /*  This is required because of clashing macros in windows.h, which may be */
 /*  included before or after wxWidgets classes, and therefore must be */

@@ -236,7 +236,7 @@ public:
         Returns @true if the item is enabled or @false if it was disabled using
         @ref Enable(unsigned int,bool) "Enable(n, false)".
 
-        This function is currently only implemented in wxMSW, wxGTK and
+        This function is currently only implemented in wxMSW, wxGTK, wxQT and
         wxUniversal and always returns @true in the other ports.
 
         @param n
@@ -251,7 +251,7 @@ public:
         Note that this function returns @true for an item which hadn't been hidden
         even if the entire radiobox is not currently shown.
 
-        This function is currently only implemented in wxMSW, wxGTK and
+        This function is currently only implemented in wxMSW, wxGTK, wxQT and
         wxUniversal and always returns @true in the other ports.
 
         @param n

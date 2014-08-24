@@ -191,6 +191,9 @@ enum wxStockCursor
 #elif defined(__WXX11__)
     // Initialize from an included XPM
     #define wxICON(X) wxIcon( X##_xpm )
+#elif defined(__WXQT__)
+    // Initialize from an included XPM
+    #define wxICON(X) wxIcon( X##_xpm )
 #else
     // This will usually mean something on any platform
     #define wxICON(X) wxIcon(wxT(#X))

@@ -78,7 +78,8 @@ enum wxPortId
     wxPORT_MAC      = 1 << 7,       // wxOSX (former wxMac), using Cocoa, Carbon or iPhone API
     wxPORT_OSX      = wxPORT_MAC,   // wxOSX, using Cocoa, Carbon or iPhone API
     wxPORT_COCOA    = 1 << 8,       // wxCocoa, using Cocoa NextStep/Mac API
-    wxPORT_WINCE    = 1 << 9        // wxWinCE, toolkit is WinCE SDK API
+    wxPORT_WINCE    = 1 << 9,       // wxWinCE, toolkit is WinCE SDK API
+    wxPORT_QT       = 1 << 10       // wxQT, using QT4
 };
 
 // architecture of the operating system
@@ -347,5 +348,7 @@ protected:
     // endianness of the machine
     wxEndianness m_endian;
 };
+
+
 
 #endif // _WX_PLATINFO_H_

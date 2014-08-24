@@ -103,7 +103,7 @@ wxFLAGS_MEMBER(wxLC_SORT_DESCENDING)
 wxFLAGS_MEMBER(wxLC_VIRTUAL)
 wxEND_FLAGS( wxListCtrlStyle )
 
-#if ((!defined(__WXMSW__) && !(defined(__WXMAC__) && wxOSX_USE_CARBON)) || defined(__WXUNIVERSAL__))
+#if ((!defined(__WXMSW__) && !defined(__WXQT__) && !(defined(__WXMAC__) && wxOSX_USE_CARBON)) || defined(__WXUNIVERSAL__))
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxListCtrl, wxGenericListCtrl, "wx/listctrl.h")
 #else
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxListCtrl, wxControl, "wx/listctrl.h")

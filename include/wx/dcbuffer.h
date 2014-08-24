@@ -17,7 +17,7 @@
 
 // Split platforms into two groups - those which have well-working
 // double-buffering by default, and those which do not.
-#if defined(__WXMAC__) || defined(__WXGTK20__) || defined(__WXDFB__)
+#if defined(__WXMAC__) || defined(__WXGTK20__) || defined(__WXDFB__) || defined(__WXQT__)
     #define wxALWAYS_NATIVE_DOUBLE_BUFFER       1
 #else
     #define wxALWAYS_NATIVE_DOUBLE_BUFFER       0

@@ -360,6 +360,8 @@ public:
         #include "wx/gtk1/dialog.h"
     #elif defined(__WXMAC__)
         #include "wx/osx/dialog.h"
+    #elif defined(__WXQT__)
+        #include "wx/qt/dialog.h"
     #endif
 #endif
 

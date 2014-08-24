@@ -466,6 +466,8 @@ private:
     #include "wx/generic/treectlg.h"
 #elif defined(__WXMAC__)
     #include "wx/generic/treectlg.h"
+#elif defined(__WXQT__)
+    #include "wx/generic/treectlg.h"
 #endif
 
 #endif // wxUSE_TREECTRL

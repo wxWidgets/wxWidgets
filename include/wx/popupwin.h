@@ -65,6 +65,8 @@ public:
     #include "wx/dfb/popupwin.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/popupwin.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/popupwin.h"
 #else
     #error "wxPopupWindow is not supported under this platform."
 #endif

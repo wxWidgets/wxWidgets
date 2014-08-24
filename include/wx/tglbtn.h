@@ -80,6 +80,8 @@ protected:
 #elif defined(__WXMAC__)
     #include "wx/osx/tglbtn.h"
     #define wxHAS_BITMAPTOGGLEBUTTON
+#elif defined(__WXQT__)
+    #include "wx/qt/tglbtn.h"
 #endif
 
 // old wxEVT_COMMAND_* constants

@@ -462,6 +462,8 @@ private:
     #include "wx/msw/ctrlsub.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/ctrlsub.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/ctrlsub.h"
 #else
     class WXDLLIMPEXP_CORE wxControlWithItems : public wxControlWithItemsBase
     {

@@ -2005,6 +2005,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_stockitem.o \
 	$(OBJS)\monodll_tbarbase.o \
 	$(OBJS)\monodll_textcmn.o \
+	$(OBJS)\monodll_textdlg.o \
 	$(OBJS)\monodll_textentrycmn.o \
 	$(OBJS)\monodll_textmeasurecmn.o \
 	$(OBJS)\monodll_toplvcmn.o \
@@ -2046,10 +2047,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_srchctlg.o \
 	$(OBJS)\monodll_statbmpg.o \
 	$(OBJS)\monodll_stattextg.o \
-	$(OBJS)\monodll_textdlgg.o \
 	$(OBJS)\monodll_tipwin.o \
 	$(OBJS)\monodll_toolbkg.o \
-	$(OBJS)\monodll_treectlg.o \
 	$(OBJS)\monodll_treebkg.o \
 	$(OBJS)\monodll_vlbox.o \
 	$(OBJS)\monodll_vscroll.o \
@@ -2282,6 +2281,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_stockitem.o \
 	$(OBJS)\monodll_tbarbase.o \
 	$(OBJS)\monodll_textcmn.o \
+	$(OBJS)\monodll_textdlg.o \
 	$(OBJS)\monodll_textentrycmn.o \
 	$(OBJS)\monodll_textmeasurecmn.o \
 	$(OBJS)\monodll_toplvcmn.o \
@@ -2323,10 +2323,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_srchctlg.o \
 	$(OBJS)\monodll_statbmpg.o \
 	$(OBJS)\monodll_stattextg.o \
-	$(OBJS)\monodll_textdlgg.o \
 	$(OBJS)\monodll_tipwin.o \
 	$(OBJS)\monodll_toolbkg.o \
-	$(OBJS)\monodll_treectlg.o \
 	$(OBJS)\monodll_treebkg.o \
 	$(OBJS)\monodll_vlbox.o \
 	$(OBJS)\monodll_vscroll.o \
@@ -2819,6 +2817,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_stockitem.o \
 	$(OBJS)\monolib_tbarbase.o \
 	$(OBJS)\monolib_textcmn.o \
+	$(OBJS)\monolib_textdlg.o \
 	$(OBJS)\monolib_textentrycmn.o \
 	$(OBJS)\monolib_textmeasurecmn.o \
 	$(OBJS)\monolib_toplvcmn.o \
@@ -2860,10 +2859,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_srchctlg.o \
 	$(OBJS)\monolib_statbmpg.o \
 	$(OBJS)\monolib_stattextg.o \
-	$(OBJS)\monolib_textdlgg.o \
 	$(OBJS)\monolib_tipwin.o \
 	$(OBJS)\monolib_toolbkg.o \
-	$(OBJS)\monolib_treectlg.o \
 	$(OBJS)\monolib_treebkg.o \
 	$(OBJS)\monolib_vlbox.o \
 	$(OBJS)\monolib_vscroll.o \
@@ -3096,6 +3093,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_stockitem.o \
 	$(OBJS)\monolib_tbarbase.o \
 	$(OBJS)\monolib_textcmn.o \
+	$(OBJS)\monolib_textdlg.o \
 	$(OBJS)\monolib_textentrycmn.o \
 	$(OBJS)\monolib_textmeasurecmn.o \
 	$(OBJS)\monolib_toplvcmn.o \
@@ -3137,10 +3135,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_srchctlg.o \
 	$(OBJS)\monolib_statbmpg.o \
 	$(OBJS)\monolib_stattextg.o \
-	$(OBJS)\monolib_textdlgg.o \
 	$(OBJS)\monolib_tipwin.o \
 	$(OBJS)\monolib_toolbkg.o \
-	$(OBJS)\monolib_treectlg.o \
 	$(OBJS)\monolib_treebkg.o \
 	$(OBJS)\monolib_vlbox.o \
 	$(OBJS)\monolib_vscroll.o \
@@ -3519,6 +3515,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_stockitem.o \
 	$(OBJS)\coredll_tbarbase.o \
 	$(OBJS)\coredll_textcmn.o \
+	$(OBJS)\coredll_textdlg.o \
 	$(OBJS)\coredll_textentrycmn.o \
 	$(OBJS)\coredll_textmeasurecmn.o \
 	$(OBJS)\coredll_toplvcmn.o \
@@ -3560,10 +3557,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_srchctlg.o \
 	$(OBJS)\coredll_statbmpg.o \
 	$(OBJS)\coredll_stattextg.o \
-	$(OBJS)\coredll_textdlgg.o \
 	$(OBJS)\coredll_tipwin.o \
 	$(OBJS)\coredll_toolbkg.o \
-	$(OBJS)\coredll_treectlg.o \
 	$(OBJS)\coredll_treebkg.o \
 	$(OBJS)\coredll_vlbox.o \
 	$(OBJS)\coredll_vscroll.o \
@@ -3796,6 +3791,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_stockitem.o \
 	$(OBJS)\coredll_tbarbase.o \
 	$(OBJS)\coredll_textcmn.o \
+	$(OBJS)\coredll_textdlg.o \
 	$(OBJS)\coredll_textentrycmn.o \
 	$(OBJS)\coredll_textmeasurecmn.o \
 	$(OBJS)\coredll_toplvcmn.o \
@@ -3837,10 +3833,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_srchctlg.o \
 	$(OBJS)\coredll_statbmpg.o \
 	$(OBJS)\coredll_stattextg.o \
-	$(OBJS)\coredll_textdlgg.o \
 	$(OBJS)\coredll_tipwin.o \
 	$(OBJS)\coredll_toolbkg.o \
-	$(OBJS)\coredll_treectlg.o \
 	$(OBJS)\coredll_treebkg.o \
 	$(OBJS)\coredll_vlbox.o \
 	$(OBJS)\coredll_vscroll.o \
@@ -4087,6 +4081,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_stockitem.o \
 	$(OBJS)\corelib_tbarbase.o \
 	$(OBJS)\corelib_textcmn.o \
+	$(OBJS)\corelib_textdlg.o \
 	$(OBJS)\corelib_textentrycmn.o \
 	$(OBJS)\corelib_textmeasurecmn.o \
 	$(OBJS)\corelib_toplvcmn.o \
@@ -4128,10 +4123,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_srchctlg.o \
 	$(OBJS)\corelib_statbmpg.o \
 	$(OBJS)\corelib_stattextg.o \
-	$(OBJS)\corelib_textdlgg.o \
 	$(OBJS)\corelib_tipwin.o \
 	$(OBJS)\corelib_toolbkg.o \
-	$(OBJS)\corelib_treectlg.o \
 	$(OBJS)\corelib_treebkg.o \
 	$(OBJS)\corelib_vlbox.o \
 	$(OBJS)\corelib_vscroll.o \
@@ -4364,6 +4357,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_stockitem.o \
 	$(OBJS)\corelib_tbarbase.o \
 	$(OBJS)\corelib_textcmn.o \
+	$(OBJS)\corelib_textdlg.o \
 	$(OBJS)\corelib_textentrycmn.o \
 	$(OBJS)\corelib_textmeasurecmn.o \
 	$(OBJS)\corelib_toplvcmn.o \
@@ -4405,10 +4399,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_srchctlg.o \
 	$(OBJS)\corelib_statbmpg.o \
 	$(OBJS)\corelib_stattextg.o \
-	$(OBJS)\corelib_textdlgg.o \
 	$(OBJS)\corelib_tipwin.o \
 	$(OBJS)\corelib_toolbkg.o \
-	$(OBJS)\corelib_treectlg.o \
 	$(OBJS)\corelib_treebkg.o \
 	$(OBJS)\corelib_vlbox.o \
 	$(OBJS)\corelib_vscroll.o \
@@ -8444,6 +8436,11 @@ $(OBJS)\monodll_textcmn.o: ../../src/common/textcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_textdlg.o: ../../src/common/textdlg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_textentrycmn.o: ../../src/common/textentrycmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8649,22 +8646,12 @@ $(OBJS)\monodll_stattextg.o: ../../src/generic/stattextg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_textdlgg.o: ../../src/generic/textdlgg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_tipwin.o: ../../src/generic/tipwin.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_toolbkg.o: ../../src/generic/toolbkg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_treectlg.o: ../../src/generic/treectlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10915,6 +10902,11 @@ $(OBJS)\monolib_textcmn.o: ../../src/common/textcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_textdlg.o: ../../src/common/textdlg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_textentrycmn.o: ../../src/common/textentrycmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11120,22 +11112,12 @@ $(OBJS)\monolib_stattextg.o: ../../src/generic/stattextg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_textdlgg.o: ../../src/generic/textdlgg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_tipwin.o: ../../src/generic/tipwin.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_toolbkg.o: ../../src/generic/toolbkg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_treectlg.o: ../../src/generic/treectlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -13332,6 +13314,11 @@ $(OBJS)\coredll_textcmn.o: ../../src/common/textcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_textdlg.o: ../../src/common/textdlg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_textentrycmn.o: ../../src/common/textentrycmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13537,22 +13524,12 @@ $(OBJS)\coredll_stattextg.o: ../../src/generic/stattextg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_textdlgg.o: ../../src/generic/textdlgg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_tipwin.o: ../../src/generic/tipwin.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_toolbkg.o: ../../src/generic/toolbkg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_treectlg.o: ../../src/generic/treectlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -14779,6 +14756,11 @@ $(OBJS)\corelib_textcmn.o: ../../src/common/textcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_textdlg.o: ../../src/common/textdlg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_textentrycmn.o: ../../src/common/textentrycmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -14984,22 +14966,12 @@ $(OBJS)\corelib_stattextg.o: ../../src/generic/stattextg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_textdlgg.o: ../../src/generic/textdlgg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_tipwin.o: ../../src/generic/tipwin.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_toolbkg.o: ../../src/generic/toolbkg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_treectlg.o: ../../src/generic/treectlg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

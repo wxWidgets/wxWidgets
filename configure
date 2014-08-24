@@ -709,6 +709,9 @@ COND_TOOLKIT_WINCE_WXUNIV_0
 COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_WINCE_USE_GUI_1
 COND_TOOLKIT_WINCE
+COND_TOOLKIT_Qt
+COND_TOOLKIT_QT_USE_GUI_1
+COND_TOOLKIT_QT
 COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_OSX_IPHONE_USE_GUI_1
 COND_TOOLKIT_OSX_IPHONE
@@ -910,6 +913,7 @@ CPPUNIT_LIBS
 CPPUNIT_CFLAGS
 HOST_SUFFIX
 HEADER_PAD_OPTION
+SAMPLES_CXXFLAGS
 SAMPLES_RPATH_FLAG
 DYLIB_RPATH_POSTLINK
 DYLIB_RPATH_INSTALL
@@ -1088,6 +1092,7 @@ with_msw
 with_directfb
 with_microwin
 with_x11
+with_qt
 enable_nanox
 enable_gpe
 with_libpng
@@ -2311,6 +2316,7 @@ Optional Packages:
   --with-directfb         use DirectFB
   --with-microwin         use MicroWindows
   --with-x11              use X11
+  --with-qt               use Qt
   --with-libpng           use libpng (PNG image format)
   --with-libjpeg          use libjpeg (JPEG file format)
   --with-libtiff          use libtiff (TIFF file format)
@@ -3830,7 +3836,7 @@ USE_ALPHA=
 
 NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 
-ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA OSX_IPHONE MICROWIN MOTIF MSW X11 DFB"
+ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA OSX_IPHONE MGL MICROWIN MOTIF MSW PM X11 DFB QT"
 
 DEFAULT_wxUSE_GTK=0
 DEFAULT_wxUSE_OSX_CARBON=0
@@ -3841,6 +3847,7 @@ DEFAULT_wxUSE_MOTIF=0
 DEFAULT_wxUSE_MSW=0
 DEFAULT_wxUSE_X11=0
 DEFAULT_wxUSE_DFB=0
+DEFAULT_wxUSE_QT=0
 
 DEFAULT_DEFAULT_wxUSE_GTK=0
 DEFAULT_DEFAULT_wxUSE_OSX_CARBON=0
@@ -3851,8 +3858,10 @@ DEFAULT_DEFAULT_wxUSE_MOTIF=0
 DEFAULT_DEFAULT_wxUSE_MSW=0
 DEFAULT_DEFAULT_wxUSE_X11=0
 DEFAULT_DEFAULT_wxUSE_DFB=0
+DEFAULT_DEFAULT_wxUSE_QT=0
 
 PROGRAM_EXT=
+SAMPLES_CXXFLAGS=
 SAMPLES_RPATH_FLAG=
 DYLIB_RPATH_INSTALL=
 DYLIB_RPATH_POSTLINK=
@@ -4575,6 +4584,12 @@ if test "${with_x11+set}" = set; then :
 fi
 
 
+# Check whether --with-qt was given.
+if test "${with_qt+set}" = set; then :
+  withval=$with_qt; wxUSE_QT="$withval" CACHE_QT=1 TOOLKIT_GIVEN=1
+fi
+
+
           enablestring=
           defaultval=
           if test -z "$defaultval"; then
@@ -4709,7 +4724,9 @@ if test "$wxUSE_GUI" = "yes"; then
 
             NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
                   + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_OSX_IPHONE:-0} + ${wxUSE_DFB:-0} \
-                  + ${wxUSE_MICROWIN:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} + ${wxUSE_X11:-0}`
+                  + ${wxUSE_MICROWIN:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} \
+                  + ${wxUSE_X11:-0} + ${wxUSE_QT:-0}`
+
 
     case "$NUM_TOOLKITS" in
       1)
@@ -26200,6 +26217,19 @@ $as_echo "none" >&6; }
         TOOLKIT=OSX_IPHONE
     fi
 
+
+    if test "$wxUSE_QT" = 1; then
+        TOOLKIT=QT
+        GUIDIST=QT_DIST
+        TOOLKIT_DIR="qt"
+        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXQT__"
+        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test --cflags` -DQT_WIDGETS_LIB"
+        GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test --libs`"
+        if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
+                        SAMPLES_CXXFLAGS="-fPIC $SAMPLES_CXXFLAGS"
+            WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS $TOOLKIT_INCLUDE"
+        fi
+    fi
         TOOLKIT_DIR=`echo ${TOOLKIT} | tr '[A-Z]' '[a-z]'`
 
     if test "$wxUSE_UNIVERSAL" = "yes"; then
@@ -27389,7 +27419,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
-    elif test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK" = 1; then
+    elif test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1; then
 
                         { $as_echo "$as_me:${as_lineno-$LINENO}: checking for OpenGL headers" >&5
 $as_echo_n "checking for OpenGL headers... " >&6; }
@@ -32725,6 +32755,12 @@ _ACEOF
 
 fi
 
+if test "$WXQT" = 1 ; then
+  cat >>confdefs.h <<_ACEOF
+#define __WXQT__ $WXQT
+_ACEOF
+
+fi
 DEBUG_CFLAGS=
 if `echo $CXXFLAGS $CFLAGS | grep " -g" >/dev/null`; then
                     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: CXXFLAGS/CFLAGS already contains -g flag; ignoring the --enable-debug_info option" >&5
@@ -36663,7 +36699,7 @@ $as_echo "$wx_cv_lib_gdiplus" >&6; }
         if test "$wx_cv_lib_gdiplus" = "yes"; then
             wx_has_graphics=1
         fi
-    elif test "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
+    elif test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CAIRO" >&5
@@ -37124,7 +37160,7 @@ $as_echo "$wx_cv_target_x86_64" >&6; }
         fi
     fi
 fi
-if test "$USE_DARWIN" = 1 -a "$wxUSE_MAC" != 1; then
+if test "$USE_DARWIN" = 1 -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1 ; then
     EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework IOKit -framework CoreServices -framework System -framework ApplicationServices"
 fi
 
@@ -37381,6 +37417,7 @@ fi
 
 
 TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr '[A-Z]' '[a-z]'`
+
 
 
 
@@ -39812,6 +39849,21 @@ EOF
     COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xOSX_IPHONE" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
         COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0=""
+    fi
+
+    COND_TOOLKIT_QT="#"
+    if test "x$TOOLKIT" = "xQT" ; then
+        COND_TOOLKIT_QT=""
+    fi
+
+    COND_TOOLKIT_QT_USE_GUI_1="#"
+    if test "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" ; then
+        COND_TOOLKIT_QT_USE_GUI_1=""
+    fi
+
+    COND_TOOLKIT_Qt="#"
+    if test "x$TOOLKIT" = "xQt" ; then
+        COND_TOOLKIT_Qt=""
     fi
 
     COND_TOOLKIT_WINCE="#"

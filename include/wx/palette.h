@@ -35,6 +35,8 @@ public:
     #include "wx/generic/paletteg.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/palette.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/palette.h"
 #endif
 
 #endif // wxUSE_PALETTE

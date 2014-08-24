@@ -81,6 +81,8 @@ public:
     #include "wx/dfb/brush.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/brush.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/brush.h"
 #endif
 
 class WXDLLIMPEXP_CORE wxBrushList: public wxGDIObjListBase

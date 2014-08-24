@@ -86,6 +86,11 @@ using namespace std;
 #endif
 #endif
 
+#ifdef __WXQT__
+#include <QtGui/QPainter>
+#include "wx/qt/dc.h"
+#endif
+
 #ifdef __WXMAC__
 #include "wx/osx/private.h"
 #include <cairo-quartz.h>
@@ -473,6 +478,12 @@ protected:
     virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y );
 
     void Init(cairo_t *context);
+
+#ifdef __WXQT__
+    QPainter* m_qtPainter;
+    QImage* m_qtImage;
+    cairo_surface_t* m_qtSurface;
+#endif
 
 private:
     cairo_t* m_context;
@@ -1735,6 +1746,19 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
     Init( cairo_create( surface ) );
     cairo_surface_destroy( surface );
 #endif
+
+#ifdef __WXQT__
+    m_qtPainter = (QPainter*) dc.GetHandle();
+    // create a internal buffer (fallback if cairo_qt_surface is missing)
+    m_qtImage = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
+    // clear the buffer to be painted over the current contents
+    m_qtImage->fill(Qt::transparent);
+    m_qtSurface = cairo_image_surface_create_for_data(m_qtImage->bits(),
+                                                      CAIRO_FORMAT_ARGB32,
+                                                      width, height,
+                                                      m_qtImage->bytesPerLine());
+    Init( cairo_create( m_qtSurface ) );
+#endif
 }
 
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc )
@@ -1810,6 +1834,19 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     Init( cairo_create( surface ) );
     cairo_surface_destroy( surface );
 #endif
+
+#ifdef __WXQT__
+    m_qtPainter = NULL;
+    // create a internal buffer (fallback if cairo_qt_surface is missing)
+    m_qtImage = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
+    // clear the buffer to be painted over the current contents
+    m_qtImage->fill(Qt::transparent);
+    m_qtSurface = cairo_image_surface_create_for_data(m_qtImage->bits(),
+                                                      CAIRO_FORMAT_ARGB32,
+                                                      width, height,
+                                                      m_qtImage->bytesPerLine());
+    Init( cairo_create( m_qtSurface ) );
+#endif
 }
 
 #ifdef __WXGTK20__
@@ -1882,6 +1919,9 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
     Init(cairo_create(m_mswSurface));
 #endif
 
+#ifdef __WXQT__
+    // direct m_qtSurface is not being used yet (this needs cairo qt surface)
+#endif
 }
 
 wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer) :
@@ -1902,6 +1942,17 @@ wxCairoContext::~wxCairoContext()
     if ( m_mswSurface )
         cairo_surface_destroy(m_mswSurface);
 #endif
+#ifdef __WXQT__
+    if ( m_qtPainter != NULL )
+    {
+        // draw the internal buffered image to the widget
+        cairo_surface_flush(m_qtSurface);
+        m_qtPainter->drawImage( 0,0, *m_qtImage );
+        delete m_qtImage;
+        cairo_surface_destroy( m_qtSurface );
+    }
+#endif
+
 }
 
 void wxCairoContext::Init(cairo_t *context)

@@ -27,6 +27,8 @@
 #include "wx/osx/core/joystick.h"
 #elif defined(__WXMAC__)
 #include "wx/osx/joystick.h"
+#elif defined(__WXQT__)
+#include "wx/unix/joystick.h"
 #endif
 
 #endif // wxUSE_JOYSTICK

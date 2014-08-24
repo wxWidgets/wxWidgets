@@ -79,6 +79,8 @@ protected:
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/clrpicker.h"
     #define wxColourPickerWidget      wxColourButton
+#elif defined(__WXQT__) && !defined(__WXUNIVERSAL__)
+    #include "wx/qt/clrpicker.h"
 #else
     #include "wx/generic/clrpickerg.h"
     #define wxColourPickerWidget      wxGenericColourButton

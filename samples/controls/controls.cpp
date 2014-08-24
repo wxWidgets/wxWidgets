@@ -106,6 +106,8 @@ public:
     void OnSpinUp( wxSpinEvent &event );
     void OnSpinDown( wxSpinEvent &event );
     void OnSpinUpdate( wxSpinEvent &event );
+    void OnSpinTextChanged(wxCommandEvent& event);
+    void OnSpinTextEnter(wxCommandEvent& WXUNUSED(event));
 #if wxUSE_PROGRESSDLG
     void OnUpdateShowProgress( wxUpdateUIEvent& event );
     void OnShowProgress( wxCommandEvent &event );
@@ -121,13 +123,14 @@ public:
 
     void OnEnableAll(wxCommandEvent& event);
     void OnChangeColour(wxCommandEvent& event);
+    void OnChangeCheck(wxCommandEvent& event);
     void OnTestButton(wxCommandEvent& event);
     void OnBmpButton(wxCommandEvent& event);
     void OnBmpButtonToggle(wxCommandEvent& event);
 
     void OnSizerCheck (wxCommandEvent &event);
 
-    wxListBox     *m_listbox,
+    wxCheckListBox     *m_listbox,
                   *m_listboxSorted;
 #if wxUSE_CHOICE
     wxChoice      *m_choice,
@@ -367,7 +370,7 @@ private:
 // other
 //----------------------------------------------------------------------
 
-static void SetListboxClientData(const wxChar *name, wxListBox *control);
+static void SetListboxClientData(const wxChar *name, wxCheckListBox *control);
 
 #if wxUSE_CHOICE
 static void SetChoiceClientData(const wxChar *name, wxChoice *control);
@@ -502,6 +505,8 @@ const int  ID_SIZER_CHECK14     = 205;
 const int  ID_SIZER_CHECKBIG    = 206;
 
 const int  ID_HYPERLINK         = 300;
+const int  ID_SPIN_TEXT         = 301;
+const int  ID_CHANGE_CHECK      = 302;
 
 wxBEGIN_EVENT_TABLE(MyPanel, wxPanel)
 EVT_IDLE      (                         MyPanel::OnIdle)
@@ -555,6 +560,8 @@ EVT_SLIDER    (ID_SLIDER,               MyPanel::OnSliderUpdate)
 EVT_SPIN      (ID_SPIN,                 MyPanel::OnSpinUpdate)
 EVT_SPIN_UP   (ID_SPIN,                 MyPanel::OnSpinUp)
 EVT_SPIN_DOWN (ID_SPIN,                 MyPanel::OnSpinDown)
+EVT_TEXT      (ID_SPIN_TEXT,            MyPanel::OnSpinTextChanged)
+EVT_TEXT_ENTER(ID_SPIN_TEXT,            MyPanel::OnSpinTextEnter)
 #if wxUSE_PROGRESSDLG
 EVT_UPDATE_UI (ID_BTNPROGRESS,          MyPanel::OnUpdateShowProgress)
 EVT_BUTTON    (ID_BTNPROGRESS,          MyPanel::OnShowProgress)
@@ -569,6 +576,7 @@ EVT_TEXT      (ID_SPINCTRL,             MyPanel::OnSpinCtrlText)
 EVT_BUTTON    (ID_BTNNEWTEXT,           MyPanel::OnNewText)
 EVT_TOGGLEBUTTON(ID_BUTTON_LABEL,       MyPanel::OnUpdateLabel)
 EVT_CHECKBOX  (ID_CHANGE_COLOUR,        MyPanel::OnChangeColour)
+EVT_CHECKBOX  (ID_CHANGE_CHECK,         MyPanel::OnChangeCheck)
 EVT_BUTTON    (ID_BUTTON_TEST1,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BUTTON_TEST2,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BITMAP_BTN,           MyPanel::OnBmpButton)
@@ -650,6 +658,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_logTargetOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_text));
 
+    // use default position and size (will be recalculated automatically)
     m_book = new wxBookCtrl(this, ID_BOOK);
 
     wxString choices[] =
@@ -735,10 +744,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     // listbox page
     // ------------------------------------------------------------------------
     wxPanel *panel = new wxPanel(m_book);
-    m_listbox = new wxListBox( panel, ID_LISTBOX,
+    m_listbox = new wxCheckListBox( panel, ID_LISTBOX,
                                wxPoint(10,10), wxSize(120,70),
                                5, choices, wxLB_MULTIPLE | wxLB_ALWAYS_SB | wxHSCROLL );
-    m_listboxSorted = new wxListBox( panel, ID_LISTBOX_SORTED,
+    m_listboxSorted = new wxCheckListBox( panel, ID_LISTBOX_SORTED,
                                      wxPoint(10,90), wxSize(120,70),
                                      3, choices, wxLB_SORT );
 
@@ -761,8 +770,15 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     button->MoveAfterInTabOrder(m_checkbox);
     (void)new wxCheckBox( panel, ID_CHANGE_COLOUR, wxT("&Toggle colour"),
                           wxPoint(110,170) );
+    (void)new wxCheckBox( panel, ID_CHANGE_CHECK, wxT("&Toggle check"),
+                          wxPoint(270,170) );
     panel->SetCursor(wxCursor(wxCURSOR_HAND));
-    m_book->AddPage(panel, wxT("wxListBox"), true, Image_List);
+    m_book->AddPage(panel, wxT("wxCheckListBox"), true);
+    m_book->SetPageImage(0, Image_List);
+    wxASSERT_MSG(m_book->GetPageImage(m_book->GetPageCount()-1) == Image_List, "invalid imageId");
+    //m_book->SetPageImage(0, -1);  // remove the image to test wxQT
+    //m_book->RemovePage(0);  // remove the page to test wxQT
+
 
     // ------------------------------------------------------------------------
     // choice page
@@ -786,6 +802,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxCheckBox( panel, ID_CHOICE_ENABLE, wxT("&Disable"), wxPoint(20,130), wxSize(140,30) );
 
     m_book->AddPage(panel, wxT("wxChoice"), false, Image_Choice);
+    wxASSERT_MSG(m_book->GetPageImage(m_book->GetPageCount()-1) == Image_Choice, "invalid imageId");
+
 #endif // wxUSE_CHOICE
 
     // ------------------------------------------------------------------------
@@ -796,10 +814,15 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                               wxPoint(15,25), wxDefaultSize,
                               5, choices,
                               wxTE_PROCESS_ENTER);
+
+    wxASSERT_MSG(!m_combo->GetString(2).IsNull(), "Invalid item not null");
+
     wxSize combosize(m_combo->GetBestSize().x + 20, 100);
     (void)new wxStaticBox( panel, wxID_ANY, wxT("&Box around combobox"),
                            wxPoint(5, 5), combosize);
-
+#ifdef __WXQT__
+    m_combo->Raise();
+#endif
     (void)new wxButton( panel, ID_COMBO_SEL_NUM, wxT("Select #&2"), wxPoint(220,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_SEL_STR, wxT("&Select 'This'"), wxPoint(380,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_CLEAR, wxT("&Clear"), wxPoint(220,80), wxSize(140,30) );
@@ -809,6 +832,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxButton( panel, ID_COMBO_SET_TEXT, wxT("Set 'Hi!' at #2"), wxPoint(380,180), wxSize(140,30) );
     (void)new wxCheckBox( panel, ID_COMBO_ENABLE, wxT("&Disable"), wxPoint(20,130), wxSize(140,30) );
     m_book->AddPage(panel, wxT("wxComboBox"), false, Image_Combo);
+    wxASSERT_MSG(m_book->GetPageImage(m_book->GetPageCount()-1) == Image_Combo, "invalid imageId");
 
     // ------------------------------------------------------------------------
     // radio box
@@ -885,7 +909,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     gauge_page_first_row_sizer->Add( gauge_sizer, 0, wxALL, 5 );
     wxBoxSizer *sz = new wxBoxSizer( wxVERTICAL );
     gauge_sizer->Add( sz );
-    m_gauge = new wxGauge( panel, wxID_ANY, 200, wxDefaultPosition, wxSize(155, 30), wxGA_HORIZONTAL|wxNO_BORDER );
+    m_gauge = new wxGauge( panel, wxID_ANY, 200, wxDefaultPosition, wxSize(155, 30), wxGA_HORIZONTAL|wxNO_BORDER|wxGA_TEXT );
     sz->Add( m_gauge, 0, wxALL, 10 );
     m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200,
                              wxDefaultPosition, wxSize(155,wxDefaultCoord),
@@ -943,7 +967,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     int initialSpinValue = -5;
     wxString s;
     s << initialSpinValue;
-    m_spintext = new wxTextCtrl( panel, wxID_ANY, s );
+    m_spintext = new wxTextCtrl( panel, ID_SPIN_TEXT, s );
     gauge_page_second_row_sizer->Add( m_spintext, 0, wxALL, 5 );
 
 #if wxUSE_SPINBTN
@@ -957,6 +981,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_spinctrl = new wxSpinCtrl( panel, ID_SPINCTRL, wxEmptyString );
     m_spinctrl->SetRange(-10,30);
     m_spinctrl->SetValue(15);
+    m_spinctrl->SetValue("20");
     gauge_page_second_row_sizer->Add( m_spinctrl, 0, wxALL, 5 );
 #endif // wxUSE_SPINCTRL
 
@@ -994,7 +1019,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     wxBitmap bitmap( 100, 100 );
     wxMemoryDC dc;
+    wxFont font;
+    font.SetFamily(wxFONTFAMILY_ROMAN);
+    font.SetPointSize(10);
     dc.SelectObject( bitmap );
+    dc.SetFont(font);
     dc.SetBackground(*wxGREEN);
     dc.SetPen(*wxRED_PEN);
     dc.Clear();
@@ -1260,9 +1289,17 @@ void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
     Refresh();
 }
 
+void MyPanel::OnChangeCheck(wxCommandEvent& event)
+{
+    // check/uncheck all the items in the wxCheckListBox
+    for (unsigned int n=0; n < m_listbox->GetCount(); n++) {
+        m_listbox->Check(n, event.GetInt());
+    }
+}
+
 void MyPanel::OnListBox( wxCommandEvent &event )
 {
-    wxListBox *listbox = event.GetId() == ID_LISTBOX ? m_listbox
+    wxCheckListBox *listbox = event.GetId() == ID_LISTBOX ? m_listbox
                                                      : m_listboxSorted;
 
     bool deselect = false;
@@ -1301,6 +1338,11 @@ void MyPanel::OnListBox( wxCommandEvent &event )
     else
         m_text->AppendText( wxString(wxT("none")) );
     m_text->AppendText( wxT("'\n") );
+
+    if (listbox->IsChecked(event.GetInt()))
+        m_text->AppendText( "Item checked \n" );
+    else
+        m_text->AppendText( "Item unchecked \n" );
 }
 
 void MyPanel::OnListBoxDoubleClick( wxCommandEvent &event )
@@ -1690,13 +1732,33 @@ void MyPanel::OnSpinUpdate( wxSpinEvent &event )
 {
     wxString value;
     value.Printf( wxT("%d"), event.GetPosition() );
-    m_spintext->SetValue( value );
+    // update the value of the text control without sending an event
+    m_spintext->ChangeValue( value );
 
     value.Printf( wxT("Spin control range: (%d, %d), current = %d\n"),
                  m_spinbutton->GetMin(), m_spinbutton->GetMax(),
                  m_spinbutton->GetValue());
 
     m_text->AppendText(value);
+}
+
+void MyPanel::OnSpinTextChanged(wxCommandEvent& event)
+{
+    if (m_spintext)
+    {
+        wxLogMessage(wxT("EVT_TEXT for the spin text: \"%s\" (event) or \"%s\" (control)."),
+                     event.GetString().c_str(),
+                     m_spintext->GetValue().c_str());
+    }
+}
+
+void MyPanel::OnSpinTextEnter(wxCommandEvent& WXUNUSED(event))
+{
+    if (m_spintext)
+    {
+        wxLogMessage(wxT("Enter pressed in the spin text: value is '%s'."),
+                     m_spintext->GetValue().c_str());
+    }
 }
 
 void MyPanel::OnNewText( wxCommandEvent& /* event */)
@@ -2108,7 +2170,7 @@ void MyComboBox::OnKeyUp(wxKeyEvent& event)
     event.Skip();
 }
 
-static void SetListboxClientData(const wxChar *name, wxListBox *control)
+static void SetListboxClientData(const wxChar *name, wxCheckListBox *control)
 {
     size_t count = control->GetCount();
     for ( size_t n = 0; n < count; n++ )

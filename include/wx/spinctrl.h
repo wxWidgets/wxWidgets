@@ -53,7 +53,6 @@ public:
     // The base for numbers display, e.g. 10 or 16.
     virtual int GetBase() const = 0;
     virtual bool SetBase(int base) = 0;
-
     // Select text in the textctrl
     virtual void SetSelection(long from, long to) = 0;
 
@@ -128,12 +127,15 @@ typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
 #elif defined(__WXGTK__)
     #define wxHAS_NATIVE_SPINCTRL
     #include "wx/gtk1/spinctrl.h"
+#elif defined(__WXQT__)
+    #define wxHAS_NATIVE_SPINCTRL
+    #define wxHAS_NATIVE_SPINCTRLDOUBLE
+    #include "wx/qt/spinctrl.h"
 #endif // platform
 
 #if !defined(wxHAS_NATIVE_SPINCTRL) || !defined(wxHAS_NATIVE_SPINCTRLDOUBLE)
     #include "wx/generic/spinctlg.h"
 #endif
-
 namespace wxPrivate
 {
 

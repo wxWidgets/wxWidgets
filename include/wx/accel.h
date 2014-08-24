@@ -164,6 +164,8 @@ private:
     #include "wx/gtk1/accel.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/accel.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/accel.h"
 #endif
 
 extern WXDLLIMPEXP_DATA_CORE(wxAcceleratorTable) wxNullAcceleratorTable;

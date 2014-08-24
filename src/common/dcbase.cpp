@@ -81,6 +81,11 @@
     #include "wx/dfb/dcscreen.h"
 #endif
 
+#ifdef __WXQT__
+    #include "wx/qt/dcclient.h"
+    #include "wx/qt/dcmemory.h"
+    #include "wx/qt/dcscreen.h"
+#endif
 //----------------------------------------------------------------------------
 // wxDCFactory
 //----------------------------------------------------------------------------

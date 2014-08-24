@@ -27,6 +27,9 @@ Changes in behaviour which may result in build errors
 3.1.0: (released 2014-xx-xx)
 ----------------------------
 
+- wxQt branch implementing Qt5-based port of wxWidgets API was merged into
+  the trunk (Mariano Reingart, Google Summer of Code project).
+
 All:
 
 - Allow iterating over wxCmdLineParser arguments in order (Armel Asselin).

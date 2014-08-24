@@ -43,6 +43,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
      ====================================================================== -->
 
+
 <if cond="FORMAT in ['borland','mingw','msvc','watcom']">
     <define-rule name="__mm-to-$(OBJEXT[1:])" extends="__any,compilation_rule">
     </define-rule>
@@ -251,6 +252,223 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="BASE_MSDOS_HDR" hints="files">
     wx/msdos/mimetype.h
+</set>
+
+<!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
+<!--                               wxQT                                       -->
+<!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
+
+<set var="QT_LOWLEVEL_HDR" hints="files">
+    wx/qt/accel.h
+    wx/qt/app.h
+    wx/qt/apptbase.h
+    wx/qt/apptrait.h
+    wx/qt/bitmap.h
+    wx/qt/bmpbuttn.h
+    wx/qt/brush.h
+    wx/qt/anybutton.h
+    wx/qt/button.h
+    wx/qt/checkbox.h
+    wx/qt/checklst.h
+    wx/qt/choice.h
+    wx/qt/clipbrd.h
+    wx/qt/clrpicker.h
+    wx/qt/generic/clrpickerg.h
+    wx/generic/collpaneg.h
+    wx/qt/colordlg.h
+    wx/qt/colour.h
+    wx/qt/combobox.h
+    wx/qt/control.h
+    wx/qt/converter.h
+    wx/qt/ctrlsub.h
+    wx/qt/cursor.h
+    wx/qt/dataform.h
+    wx/qt/dataobj2.h
+    wx/qt/dataobj.h
+    wx/qt/dcclient.h
+    wx/qt/dc.h
+    wx/qt/dcmemory.h
+    wx/qt/dcprint.h
+    wx/qt/dcscreen.h
+    wx/qt/defs.h
+    wx/qt/dialog.h
+    wx/qt/dirdlg.h
+    wx/qt/dnd.h
+    wx/qt/evtloop.h
+    wx/qt/filedlg.h
+    wx/qt/font.h
+    wx/qt/fontdlg.h
+    wx/qt/frame.h
+    wx/qt/gauge.h
+    wx/generic/icon.h
+    wx/generic/imaglist.h
+    wx/qt/listbox.h
+    wx/qt/listctrl.h
+    wx/qt/mdi.h
+    wx/qt/menu.h
+    wx/qt/menuitem.h
+    wx/qt/minifram.h
+    wx/qt/msgdlg.h
+    wx/qt/notebook.h
+    wx/qt/palette.h
+    wx/qt/pen.h
+    wx/qt/popupwin.h
+    wx/qt/printdlg.h
+    wx/generic/prntdlgg.h
+    wx/qt/printqt.h
+    wx/qt/radiobox.h
+    wx/qt/radiobut.h
+    wx/qt/region.h
+    wx/qt/scrolbar.h
+    wx/qt/slider.h
+    wx/qt/spinbutt.h
+    wx/qt/spinctrl.h
+    wx/qt/statbmp.h
+    wx/qt/statbox.h
+    wx/qt/statline.h
+    wx/qt/statusbar.h
+    wx/qt/stattext.h
+    wx/qt/textctrl.h
+    wx/qt/textdlg.h
+    wx/qt/textentry.h
+    wx/qt/tglbtn.h
+    wx/qt/timer.h
+    wx/qt/toolbar.h
+    wx/qt/tooltip.h
+    wx/qt/toplevel.h
+    <!-- wx/qt/treectrl.h -->
+    wx/qt/utils.h
+    wx/qt/window.h
+    wx/qt/private/winevent.h
+</set>
+
+<set var="QT_LOWLEVEL_SRC" hints="files">
+    src/qt/accel.cpp
+    src/qt/app.cpp
+    src/qt/apptraits.cpp
+    src/qt/bitmap.cpp
+    src/qt/bmpbuttn.cpp
+    src/qt/brush.cpp
+    src/qt/anybutton.cpp
+    src/qt/button.cpp
+    src/generic/caret.cpp
+    src/qt/checkbox.cpp
+    src/qt/checklst.cpp
+    src/qt/choice.cpp
+    src/qt/clipbrd.cpp
+    src/qt/clrpicker.cpp
+    src/generic/clrpickerg.cpp
+    src/generic/collpaneg.cpp
+    src/qt/colordlg.cpp
+    src/qt/colour.cpp
+    src/qt/combobox.cpp
+    src/qt/control.cpp
+    src/qt/converter.cpp
+    src/qt/ctrlsub.cpp
+    src/qt/cursor.cpp
+    src/qt/dataobj.cpp
+    src/qt/dcclient.cpp
+    src/qt/dc.cpp
+    src/qt/dcmemory.cpp
+    src/qt/dcprint.cpp
+    src/qt/dcscreen.cpp
+    src/qt/defs.cpp
+    src/qt/dialog.cpp
+    src/unix/dialup.cpp
+    src/qt/display.cpp
+    src/qt/dnd.cpp
+    src/qt/evtloop.cpp
+    src/generic/fdrepdlg.cpp
+    src/qt/filedlg.cpp
+    src/generic/filepickerg.cpp
+    src/qt/font.cpp
+    src/qt/fontdlg.cpp
+    src/qt/fontutil.cpp
+    src/qt/fontenum.cpp
+    src/generic/fontpickerg.cpp
+    src/qt/frame.cpp
+    src/qt/gauge.cpp
+    src/generic/icon.cpp
+    src/generic/imaglist.cpp
+    src/qt/listbox.cpp
+    src/qt/listctrl.cpp
+    src/qt/mdi.cpp
+    src/qt/menu.cpp
+    src/qt/menuitem.cpp
+    src/qt/minifram.cpp
+    src/qt/msgdlg.cpp
+    src/qt/notebook.cpp
+    src/qt/palette.cpp
+    src/qt/pen.cpp
+    src/qt/popupwin.cpp
+    src/qt/printdlg.cpp
+    src/generic/prntdlgg.cpp
+    src/qt/printqt.cpp
+    src/qt/radiobox.cpp
+    src/qt/radiobut.cpp
+    src/qt/region.cpp
+    src/qt/scrolbar.cpp
+    src/qt/settings.cpp
+    src/qt/sockqt.cpp
+    src/qt/slider.cpp
+    src/qt/spinbutt.cpp
+    src/qt/spinctrl.cpp
+    src/qt/statbmp.cpp
+    src/qt/statbox.cpp
+    src/qt/statline.cpp
+    src/qt/stattext.cpp
+    src/qt/statusbar.cpp
+    src/qt/textctrl.cpp
+    src/qt/textentry.cpp
+    src/generic/textmeasure.cpp
+    src/qt/tglbtn.cpp
+    src/qt/timer.cpp
+    src/qt/toolbar.cpp
+    src/qt/tooltip.cpp
+    src/qt/toplevel.cpp
+    <!-- src/qt/treectrl.cpp -->
+    src/qt/uiaction.cpp
+    src/qt/utils.cpp
+    src/qt/window.cpp
+</set>
+
+<set var="ADVANCED_QT_HDR" hints="files">
+    wx/generic/animate.h
+    wx/qt/calctrl.h
+    wx/qt/dataview.h
+    wx/qt/dvrenderer.h
+    wx/qt/dvrenderers.h
+    wx/qt/taskbar.h
+</set>
+
+<set var="ADVANCED_QT_SRC" hints="files">
+    src/generic/animateg.cpp
+    src/qt/calctrl.cpp
+    src/qt/converter.cpp
+    src/qt/dataview.cpp
+    src/qt/dvrenderer.cpp
+    src/qt/dvrenderers.cpp
+    src/unix/joystick.cpp
+    src/unix/sound.cpp
+    src/qt/taskbar.cpp
+    src/common/taskbarcmn.cpp
+    src/qt/utils.cpp
+</set>
+
+<set var="QT_HDR" hints="files">
+</set>
+
+<set var="QT_SRC" hints="files">
+</set>
+
+<set var="MEDIA_QT_SRC" hints="files">
+    src/qt/mediactrl.cpp
+</set>
+
+<set var="MEDIA_QT_HDR" hints="files">
+</set>
+
+<set var="NET_QT_SRC" hints="files">
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
@@ -544,6 +762,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="NET_WINCE_HDR" hints="files">
     <if cond="TOOLKIT=='WINCE'">wx/msw/wince/net.h</if>
 </set>
+
 
 <set var="NET_CMN_SRC" hints="files">
     src/common/fs_inet.cpp
@@ -2592,7 +2811,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         wx/msw/evtloop.h
     </if>
 </set>
-
 <set var="UNIV_SRC" hints="files">
     $(UNIV_PLATFORM_SRC)
     src/generic/accel.cpp
@@ -2925,6 +3143,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/core/joystick.h
 </set>
 
+
 <set var="ADVANCED_UNIX_SRC" hints="files">
     src/common/taskbarcmn.cpp
     src/unix/joystick.cpp
@@ -3082,6 +3301,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="MEDIA_COCOA_HDR" hints="files">
 </set>
+
 
 <set var="MEDIA_UNIX_SRC" hints="files">
     src/unix/mediactrl.cpp
@@ -3394,6 +3614,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         src/gtk1/glcanvas.cpp
         src/unix/glx11.cpp
     </if>
+    <if cond="TOOLKIT=='QT'">src/qt/glcanvas.cpp</if>
     <if cond="TOOLKIT=='MSW'">src/msw/glcanvas.cpp</if>
     <if cond="TOOLKIT=='WINCE'">src/msw/glcanvas.cpp</if>
     <if cond="TOOLKIT=='MOTIF'">src/x11/glcanvas.cpp src/unix/glx11.cpp</if>
@@ -3421,6 +3642,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         wx/gtk1/glcanvas.h
         wx/unix/glx11.h
     </if>
+    <if cond="TOOLKIT=='Qt'">wx/qt/glcanvas.h</if>
     <if cond="TOOLKIT=='MSW'">wx/msw/glcanvas.h</if>
     <if cond="TOOLKIT=='WINCE'">wx/msw/glcanvas.h</if>
     <if cond="TOOLKIT=='MOTIF'">wx/x11/glcanvas.h wx/unix/glx11.h</if>
@@ -3701,6 +3923,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='COCOA'">$(COCOA_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_SRC)</if>
+        <if cond="TOOLKIT=='QT'">$(QT_LOWLEVEL_SRC)</if>
     </set>
     <set var="LOWLEVEL_HDR" hints="files">
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(GTK_LOWLEVEL_HDR)</if>
@@ -3715,6 +3938,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='COCOA'">$(COCOA_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_HDR)</if>
+        <if cond="TOOLKIT=='QT'">$(QT_LOWLEVEL_HDR)</if>
     </set>
 
     <set var="PLATFORM_SRC" hints="files">
@@ -3733,6 +3957,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_COCOA_SRC)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_IPHONE_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_SRC)</if>
+        <if cond="TOOLKIT=='QT'">$(QT_SRC)</if>
     </set>
     <set var="GUI_HDR" hints="files">
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK2_HDR)</if>
@@ -3745,6 +3970,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_SHARED_HDR) $(OSX_COCOA_HDR)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_SHARED_HDR) $(OSX_IPHONE_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_HDR)</if>
+        <if cond="TOOLKIT=='QT'">$(QT_HDR)</if>
     </set>
 
     <set var="CORE_SRC" hints="files">
@@ -3769,6 +3995,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_GTK_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK1_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC)</if>
+        <if cond="TOOLKIT=='QT'">$(ADVANCED_QT_SRC)</if>
     </set>
     <set var="ADVANCED_PLATFORM_HDR" hints="files">
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_HDR) $(ADVANCED_MSW_DESKTOP_HDR)</if>
@@ -3782,6 +4009,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_GTK_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK1_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>
+        <if cond="TOOLKIT=='QT'">$(ADVANCED_QT_HDR)</if>
     </set>
 
     <!-- wxAdv files not used by wxUniv -->
@@ -3818,6 +4046,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MOTIF'">$(MEDIA_UNIX_SRC)</if>
         <if cond="TOOLKIT=='GTK'">$(MEDIA_UNIX_SRC) $(MEDIA_GTK_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(MEDIA_UNIX_SRC)</if>
+        <if cond="TOOLKIT=='QT'">$(MEDIA_QT_SRC)</if>
     </set>
     <set var="MEDIA_PLATFORM_HDR" hints="files">
         <if cond="TOOLKIT=='MSW'">$(MEDIA_MSW_HDR) $(MEDIA_MSW_DESKTOP_HDR)</if>
@@ -3829,6 +4058,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MOTIF'">$(MEDIA_UNIX_HDR)</if>
         <if cond="TOOLKIT=='GTK'">$(MEDIA_UNIX_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(MEDIA_UNIX_HDR)</if>
+        <if cond="TOOLKIT=='QT'">$(MEDIA_QT_HDR)</if>
     </set>
     <set var="MEDIA_SRC">$(MEDIA_CMN_SRC) $(MEDIA_PLATFORM_SRC)</set>
     <set var="MEDIA_HDR">$(MEDIA_CMN_HDR) $(MEDIA_PLATFORM_HDR)</set>

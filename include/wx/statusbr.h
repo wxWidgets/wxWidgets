@@ -237,6 +237,8 @@ protected:
     #define wxStatusBarMac wxStatusBar
     #include "wx/generic/statusbr.h"
     #include "wx/osx/statusbr.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/statusbar.h"
 #else
     #define wxStatusBarGeneric wxStatusBar
     #include "wx/generic/statusbr.h"
