@@ -658,13 +658,13 @@ typedef short int WXTYPE;
         inline bool wxIsSameDouble(double x, double y) { return x == y; }
         wxGCC_WARNING_RESTORE(float-equal)
  */
-#if wxCHECK_GCC_VERSION(4, 6)
+#if defined(__clang__) || wxCHECK_GCC_VERSION(4, 6)
 #   define wxGCC_WARNING_SUPPRESS(x) \
         _Pragma (wxSTRINGIZE(GCC diagnostic push)) \
         _Pragma (wxSTRINGIZE(GCC diagnostic ignored wxSTRINGIZE(wxCONCAT(-W,x))))
 #   define wxGCC_WARNING_RESTORE(x) \
        _Pragma (wxSTRINGIZE(GCC diagnostic pop))
-#else /* gcc < 4.6 or not gcc at all */
+#else /* gcc < 4.6 or not gcc and not clang at all */
 #   define wxGCC_WARNING_SUPPRESS(x)
 #   define wxGCC_WARNING_RESTORE(x)
 #endif
