@@ -499,11 +499,11 @@ void ScintillaWX::Copy() {
 void ScintillaWX::Paste() {
     pdoc->BeginUndoAction();
     ClearSelection(multiPasteMode == SC_MULTIPASTE_EACH);
-    bool isRectangularClipboard = false;
 
 #if wxUSE_DATAOBJ
     wxTextDataObject data;
     bool gotData = false;
+    bool isRectangularClipboard = false;
 
     wxTheClipboard->UsePrimarySelection(false);
     if (wxTheClipboard->Open()) {
