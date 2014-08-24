@@ -131,6 +131,13 @@ public:
     static wxString AppendExtension(const wxString &filePath,
                                     const wxString &extensionList);
 
+    // Set the filter index to match the given extension.
+    //
+    // This is always valid to call, even if the extension is empty or the
+    // filter list doesn't contain it, the function will just do nothing in
+    // these cases.
+    void SetFilterIndexFromExt(const wxString& ext);
+
 protected:
     wxString      m_message;
     wxString      m_dir;
