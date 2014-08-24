@@ -298,10 +298,24 @@ public:
 
     // Function called if an uncaught exception is caught inside the main
     // event loop: it may return true to continue running the event loop or
-    // false to stop it (in the latter case it may rethrow the exception as
-    // well)
+    // false to stop it. If this function rethrows the exception, as it does by
+    // default, simply because there is no general way to handle exceptions,
+    // StoreCurrentException() will be called to store it because in any case
+    // the exception can't be allowed to escape.
     virtual bool OnExceptionInMainLoop();
 
+    // This function can be overridden to store the current exception, in view
+    // of rethrowing it later when RethrowStoredException() is called. If the
+    // exception was stored, return true. The default implementation returns
+    // false, indicating that the exception wasn't stored and that the program
+    // should be simply aborted.
+    virtual bool StoreCurrentException();
+
+    // If StoreCurrentException() is overridden, this function should be
+    // overridden as well to rethrow the exceptions stored by it when the
+    // control gets back to our code, i.e. when it's safe to do it. The default
+    // version does nothing.
+    virtual void RethrowStoredException() { }
 #endif // wxUSE_EXCEPTIONS
 
 

@@ -76,6 +76,11 @@ static void DoCrash()
 class MyApp : public wxApp
 {
 public:
+    MyApp()
+    {
+        m_numStoredExceptions = 0;
+    }
+
     // override base class virtuals
     // ----------------------------
 
@@ -85,6 +90,12 @@ public:
     // 2nd-level exception handling: we get all the exceptions occurring in any
     // event handler here
     virtual bool OnExceptionInMainLoop() wxOVERRIDE;
+
+    // 2nd-level exception handling helpers: if we can't deal with the
+    // exception immediately, we may also store it and rethrow it later, when
+    // we're back from events processing loop.
+    virtual bool StoreCurrentException() wxOVERRIDE;
+    virtual void RethrowStoredException() wxOVERRIDE;
 
     // 3rd, and final, level exception handling: whenever an unhandled
     // exception is caught, this function is called
@@ -101,6 +112,11 @@ public:
                                  const wxChar *func,
                                  const wxChar *cond,
                                  const wxChar *msg) wxOVERRIDE;
+
+private:
+    // This stores the number of times StoreCurrentException() was called,
+    // typically at most 1.
+    int m_numStoredExceptions;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -155,6 +171,7 @@ public:
     // event handlers
     void OnThrowInt(wxCommandEvent& event);
     void OnThrowObject(wxCommandEvent& event);
+    void OnThrowUnhandled(wxCommandEvent& event);
     void OnCrash(wxCommandEvent& event);
 
 private:
@@ -174,6 +191,9 @@ private:
 };
 
 // Another exception class which just has to be different from anything else
+//
+// It is not handled by OnExceptionInMainLoop() but is still handled by
+// explicit try/catch blocks so it's not quite completely unhandled, actually.
 class UnhandledException
 {
 };
@@ -236,6 +256,7 @@ wxEND_EVENT_TABLE()
 wxBEGIN_EVENT_TABLE(MyDialog, wxDialog)
     EVT_BUTTON(Except_ThrowInt, MyDialog::OnThrowInt)
     EVT_BUTTON(Except_ThrowObject, MyDialog::OnThrowObject)
+    EVT_BUTTON(Except_ThrowUnhandled, MyDialog::OnThrowUnhandled)
     EVT_BUTTON(Except_Crash, MyDialog::OnCrash)
 wxEND_EVENT_TABLE()
 
@@ -289,6 +310,41 @@ bool MyApp::OnExceptionInMainLoop()
     }
 
     return true;
+}
+
+bool MyApp::StoreCurrentException()
+{
+    try
+    {
+        throw;
+    }
+    catch ( UnhandledException& )
+    {
+        if ( m_numStoredExceptions )
+        {
+            wxLogWarning("Unexpectedly many exceptions to store.");
+        }
+
+        m_numStoredExceptions++;
+
+        return true;
+    }
+    catch ( ... )
+    {
+        // Don't know how to store other exceptions.
+    }
+
+    return false;
+}
+
+void MyApp::RethrowStoredException()
+{
+    if ( m_numStoredExceptions )
+    {
+        m_numStoredExceptions = 0;
+
+        throw UnhandledException();
+    }
 }
 
 void MyApp::OnUnhandledException()
@@ -424,6 +480,10 @@ void MyFrame::OnDialog(wxCommandEvent& WXUNUSED(event))
 
         dlg.ShowModal();
     }
+    catch ( UnhandledException& )
+    {
+        wxLogMessage("Caught unhandled exception inside the dialog.");
+    }
     catch ( ... )
     {
         wxLogWarning(wxT("An exception in MyDialog"));
@@ -457,8 +517,12 @@ void MyFrame::OnThrowFromYield(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_UIACTIONSIMULATOR
     // Simulate selecting the "Throw unhandled" menu item, its handler will be
-    // executed from inside wxYield(), so we may not be able to catch the
-    // exception here under Win64 even in spite of an explicit catch.
+    // executed from inside wxYield() and as the exception is not handled by
+    // our OnExceptionInMainLoop(), will call StoreCurrentException() and, when
+    // wxYield() regains control, RethrowStoredException().
+    //
+    // Notice that if we didn't override these methods we wouldn't be able to
+    // catch this exception here!
     try
     {
         wxUIActionSimulator sim;
@@ -550,13 +614,15 @@ MyDialog::MyDialog(wxFrame *parent)
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
 
     sizerTop->Add(new wxButton(this, Except_ThrowInt, wxT("Throw &int")),
-                  0, wxCENTRE | wxALL, 5);
+                  0, wxEXPAND | wxALL, 5);
     sizerTop->Add(new wxButton(this, Except_ThrowObject, wxT("Throw &object")),
-                  0, wxCENTRE | wxALL, 5);
+                  0, wxEXPAND | wxALL, 5);
+    sizerTop->Add(new wxButton(this, Except_ThrowUnhandled, wxT("Throw &unhandled")),
+                  0, wxEXPAND | wxALL, 5);
     sizerTop->Add(new wxButton(this, Except_Crash, wxT("&Crash")),
-                  0, wxCENTRE | wxALL, 5);
+                  0, wxEXPAND | wxALL, 5);
     sizerTop->Add(new wxButton(this, wxID_CANCEL, wxT("&Cancel")),
-                  0, wxCENTRE | wxALL, 5);
+                  0, wxEXPAND | wxALL, 5);
 
     SetSizerAndFit(sizerTop);
 }
@@ -569,6 +635,11 @@ void MyDialog::OnThrowInt(wxCommandEvent& WXUNUSED(event))
 void MyDialog::OnThrowObject(wxCommandEvent& WXUNUSED(event))
 {
     throw MyException(wxT("Exception thrown from MyDialog"));
+}
+
+void MyDialog::OnThrowUnhandled(wxCommandEvent& WXUNUSED(event))
+{
+    throw UnhandledException();
 }
 
 void MyDialog::OnCrash(wxCommandEvent& WXUNUSED(event))

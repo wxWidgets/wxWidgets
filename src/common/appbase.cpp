@@ -662,6 +662,11 @@ bool wxAppConsoleBase::OnExceptionInMainLoop()
     throw;
 }
 
+bool wxAppConsoleBase::StoreCurrentException()
+{
+    return false;
+}
+
 #endif // wxUSE_EXCEPTIONS
 
 // ----------------------------------------------------------------------------

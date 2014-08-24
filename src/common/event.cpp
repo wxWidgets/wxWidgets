@@ -1624,24 +1624,59 @@ bool wxEvtHandler::SafelyProcessEvent(wxEvent& event)
                     loop->Exit();
             }
             //else: continue running current event loop
-
-            return false;
         }
         catch ( ... )
         {
             // OnExceptionInMainLoop() threw, possibly rethrowing the same
-            // exception again: very good, but we still need Exit() to
-            // be called, unless we're not called from the loop directly but
-            // from Yield(), in which case we shouldn't exit the loop but just
-            // unwind to the point where Yield() is called where the exception
-            // might be handled -- and if not, then it will unwind further and
-            // exit the loop when it is caught.
+            // exception again. We have to deal with it here because we can't
+            // allow the exception to escape from the handling code, this will
+            // result in a crash at best (e.g. when using wxGTK as C++
+            // exceptions can't propagate through the C GTK+ code and corrupt
+            // the stack) and in something even more weird at worst (like
+            // exceptions completely disappearing into the void under some
+            // 64 bit versions of Windows).
             if ( loop && !loop->IsYielding() )
                 loop->Exit();
-            throw;
+
+            // Give the application one last possibility to store the exception
+            // for rethrowing it later, when we get back to our code.
+            bool stored = false;
+            try
+            {
+                if ( wxTheApp )
+                    stored = wxTheApp->StoreCurrentException();
+            }
+            catch ( ... )
+            {
+                // StoreCurrentException() really shouldn't throw, but if it
+                // did, take it as an indication that it didn't store it.
+            }
+
+            // If it didn't take it, just abort, at least like this we behave
+            // consistently everywhere.
+            if ( !stored )
+            {
+                try
+                {
+                    if ( wxTheApp )
+                        wxTheApp->OnUnhandledException();
+                }
+                catch ( ... )
+                {
+                    // And OnUnhandledException() absolutely shouldn't throw,
+                    // but we still must account for the possibility that it
+                    // did. At least show some information about the exception
+                    // in this case.
+                    wxTheApp->wxAppConsoleBase::OnUnhandledException();
+                }
+
+                wxAbort();
+            }
         }
     }
 #endif // wxUSE_EXCEPTIONS
+
+    return false;
 }
 
 bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)

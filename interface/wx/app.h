@@ -420,16 +420,47 @@ public:
         This function is called if an unhandled exception occurs inside the main
         application event loop. It can return @true to ignore the exception and to
         continue running the loop or @false to exit the loop and terminate the
-        program. In the latter case it can also use C++ @c throw keyword to
-        rethrow the current exception.
+        program.
 
         The default behaviour of this function is the latter in all ports except under
         Windows where a dialog is shown to the user which allows him to choose between
         the different options. You may override this function in your class to do
         something more appropriate.
 
-        Finally note that if the exception is rethrown from here, it can be caught in
-        OnUnhandledException().
+        If this method rethrows the exception and if the exception can't be
+        stored for later processing using StoreCurrentException(), the program
+        will terminate after calling OnUnhandledException().
+
+        You should consider overriding this method to perform whichever last
+        resort exception handling that would be done in a typical C++ program
+        in a @c try/catch block around the entire @c main() function. As this
+        method is called during exception handling, you may use the C++ @c
+        throw keyword to rethrow the current exception to catch it again and
+        analyze it. For example:
+
+        @code
+        class MyApp : public wxApp {
+        public:
+            virtual bool OnExceptionInMainLoop()
+            {
+                wxString error;
+                try {
+                    throw; // Rethrow the current exception.
+                } catch (const MyException& e) {
+                    error = e.GetMyErrorMessage();
+                } catch (const std::exception& e) {
+                    error = e.what();
+                } catch ( ... ) {
+                    error = "unknown error.";
+                }
+
+                wxLogError("Unexpected exception has occurred: %s, the program will terminate.", error);
+
+                // Exit the main loop and thus terminate the program.
+                return false;
+            }
+        };
+        @endcode
     */
     virtual bool OnExceptionInMainLoop();
 
@@ -451,6 +482,105 @@ public:
         wxMessageOutputBest.
     */
     virtual void OnUnhandledException();
+
+    /**
+        Method to store exceptions not handled by OnExceptionInMainLoop().
+
+        This function can be overridden to store the current exception, in view
+        of rethrowing it later when RethrowStoredException() is called. If the
+        exception was stored, return true. If the exception can't be stored,
+        i.e. if this function returns false, the program will abort after
+        calling OnUnhandledException().
+
+        It is necessary to override this function if OnExceptionInMainLoop()
+        doesn't catch all exceptions, but you still want to handle them using
+        explicit @c try/catch statements. Typical use could be to allow code
+        like the following to work:
+
+        @code
+        void MyFrame::SomeFunction()
+        {
+            try {
+                MyDialog dlg(this);
+                dlg.ShowModal();
+            } catch ( const MyExpectedException& e ) {
+                // Deal with the exceptions thrown from the dialog.
+            }
+        }
+        @endcode
+
+        By default, throwing an exception from an event handler called from the
+        dialog modal event loop would terminate the application as the
+        exception can't be safely propagated to the code in the catch clause
+        because of the presence of the native system functions (through which
+        C++ exceptions can't, generally speaking, propagate) in the call stack
+        between them.
+
+        Overriding this method allows the exception to be stored when it is
+        detected and rethrown using RethrowStoredException() when the native
+        system function dispatching the dialog events terminates, with the
+        result that the code above works as expected.
+
+        An example of implementing this method:
+        @code
+        class MyApp : public wxApp {
+        public:
+            virtual bool StoreCurrentException()
+            {
+                try {
+                    throw;
+                } catch ( const std::runtime_exception& e ) {
+                    if ( !m_runtimeError.empty() ) {
+                        // This is not supposed to happen, only one exception,
+                        // at most, should be stored.
+                        return false;
+                    }
+
+                    m_runtimeError = e.what();
+
+                    // Don't terminate, let our code handle this exception later.
+                    return true;
+                } catch ( ... ) {
+                    // This could be extended to store information about any
+                    // other exceptions too, but if we don't store them, we
+                    // should return false to let the program die.
+                }
+
+                return false;
+            }
+
+            virtual void RethrowStoredException()
+            {
+                if ( !m_runtimeError.empty() ) {
+                    std::runtime_exception e(m_runtimeError);
+                    m_runtimeError.clear();
+                    throw e;
+                }
+            }
+
+        private:
+            std::string m_runtimeError;
+        };
+        @endcode
+
+        @see OnExceptionInMainLoop(), RethrowStoredException()
+
+        @since 3.1.0
+    */
+    virtual bool StoreCurrentException();
+
+    /**
+        Method to rethrow exceptions stored by StoreCurrentException().
+
+        If StoreCurrentException() is overridden, this function should be
+        overridden as well to rethrow the exceptions stored by it when the
+        control gets back to our code, i.e. when it's safe to do it.
+
+        See StoreCurrentException() for an example of implementing this method.
+
+        @since 3.1.0
+    */
+    virtual void RethrowStoredException();
 
     //@}
 

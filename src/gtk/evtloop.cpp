@@ -78,6 +78,11 @@ int wxGUIEventLoop::DoRun()
 
     OnExit();
 
+    // Rethrow any exceptions which could have been produced by the handlers
+    // ran by the event loop.
+    if ( wxTheApp )
+        wxTheApp->RethrowStoredException();
+
     return m_exitcode;
 }
 

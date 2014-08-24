@@ -32,6 +32,7 @@ Changes in behaviour which may result in build errors
 
 All:
 
+- Add wxApp::StoreCurrentException() and RethrowStoredException().
 - Allow iterating over wxCmdLineParser arguments in order (Armel Asselin).
 - Add wxScopedArray ctor taking the number of elements to allocate.
 - Add wxDynamicLibrary::GetModuleFromAddress() (Luca Bacci).
