@@ -344,23 +344,6 @@ public:
     virtual void OnEventLoopExit(wxEventLoopBase* loop);
 
     /**
-        This function is called if an unhandled exception occurs inside the main
-        application event loop. It can return @true to ignore the exception and to
-        continue running the loop or @false to exit the loop and terminate the
-        program. In the latter case it can also use C++ @c throw keyword to
-        rethrow the current exception.
-
-        The default behaviour of this function is the latter in all ports except under
-        Windows where a dialog is shown to the user which allows him to choose between
-        the different options. You may override this function in your class to do
-        something more appropriate.
-
-        Finally note that if the exception is rethrown from here, it can be caught in
-        OnUnhandledException().
-    */
-    virtual bool OnExceptionInMainLoop();
-
-    /**
         Override this member function for any processing which needs to be
         done as the application is about to exit. OnExit is called after
         destroying all application windows and controls, but before
@@ -420,6 +403,35 @@ public:
         should return 0 in case of successful termination.
     */
     virtual int OnRun();
+
+    //@}
+
+
+    /**
+        @name Exceptions support
+
+        Methods related to C++ exceptions handling.
+
+        @see overview_exceptions
+    */
+    //@{
+
+    /**
+        This function is called if an unhandled exception occurs inside the main
+        application event loop. It can return @true to ignore the exception and to
+        continue running the loop or @false to exit the loop and terminate the
+        program. In the latter case it can also use C++ @c throw keyword to
+        rethrow the current exception.
+
+        The default behaviour of this function is the latter in all ports except under
+        Windows where a dialog is shown to the user which allows him to choose between
+        the different options. You may override this function in your class to do
+        something more appropriate.
+
+        Finally note that if the exception is rethrown from here, it can be caught in
+        OnUnhandledException().
+    */
+    virtual bool OnExceptionInMainLoop();
 
     /**
         This function is called when an unhandled C++ exception occurs in user
