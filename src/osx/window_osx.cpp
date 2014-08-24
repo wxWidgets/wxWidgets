@@ -1607,8 +1607,6 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
     if ( IsTopLevel() )
         return ;
 
-    bool hasFocus = GetPeer()->NeedsFocusRect() && HasFocus();
-
     // back to the surrounding frame rectangle
     int tx,ty,tw,th;
 
@@ -1616,8 +1614,9 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
     GetPeer()->GetPosition( tx, ty );
 
 #if wxOSX_USE_COCOA_OR_CARBON
-
     {
+        const bool hasFocus = GetPeer()->NeedsFocusRect() && HasFocus();
+
         CGRect cgrect = CGRectMake( tx-1 , ty-1 , tw+2 ,
             th+2 ) ;
 
