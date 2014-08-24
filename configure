@@ -26222,12 +26222,12 @@ $as_echo "none" >&6; }
         TOOLKIT=QT
         GUIDIST=QT_DIST
         TOOLKIT_DIR="qt"
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXQT__"
         TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test --cflags` -DQT_WIDGETS_LIB"
         GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test --libs`"
         if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
                         SAMPLES_CXXFLAGS="-fPIC $SAMPLES_CXXFLAGS"
             WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS $TOOLKIT_INCLUDE"
+            LDFLAGS=" $LDFLAGS -fPIE"
         fi
     fi
         TOOLKIT_DIR=`echo ${TOOLKIT} | tr '[A-Z]' '[a-z]'`
