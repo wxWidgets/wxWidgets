@@ -59,11 +59,6 @@ struct PerfCounter
         init = false;
     }
 
-    bool CanBeUsed() const
-    {
-        return freq.QuadPart != 0;
-    }
-
     wxCRIT_SECT_DECLARE_MEMBER(cs);
     LARGE_INTEGER freq;
     bool init;
@@ -97,17 +92,6 @@ void wxStopWatch::DoStart()
         wxCRIT_SECT_LOCKER(lock, perfCounter.cs);
         ::QueryPerformanceFrequency(&perfCounter.freq);
 
-        // Just a sanity check: it's not supposed to happen but verify that
-        // ::QueryPerformanceCounter() succeeds so that we can really use it.
-        LARGE_INTEGER counter;
-        if ( !::QueryPerformanceCounter(&counter) )
-        {
-            wxLogDebug("QueryPerformanceCounter() unexpected failed (%s), "
-                       "will not use it.", wxSysErrorMsg());
-
-            perfCounter.freq.QuadPart = 0;
-        }
-
         perfCounter.init = true;
     }
 #endif // __WINDOWS__
@@ -120,11 +104,8 @@ wxLongLong wxStopWatch::GetClockFreq() const
 #ifdef __WINDOWS__
     // Under MSW we use the high resolution performance counter timer which has
     // its own frequency (usually related to the CPU clock speed).
-    if ( GetPerfCounterState().CanBeUsed() )
-        return GetPerfCounterState().freq.QuadPart;
-#endif // __WINDOWS__
-
-#ifdef HAVE_GETTIMEOFDAY
+    return GetPerfCounterState().freq.QuadPart;
+#elif defined(HAVE_GETTIMEOFDAY)
     // With gettimeofday() we can have nominally microsecond precision and
     // while this is not the case in practice, it's still better than
     // millisecond.
@@ -132,7 +113,7 @@ wxLongLong wxStopWatch::GetClockFreq() const
 #else // !HAVE_GETTIMEOFDAY
     // Currently milliseconds are used everywhere else.
     return MILLISECONDS_PER_SECOND;
-#endif // HAVE_GETTIMEOFDAY/!HAVE_GETTIMEOFDAY
+#endif // __WINDOWS__/HAVE_GETTIMEOFDAY/else
 }
 
 void wxStopWatch::Start(long t0)
@@ -149,19 +130,14 @@ void wxStopWatch::Start(long t0)
 wxLongLong wxStopWatch::GetCurrentClockValue() const
 {
 #ifdef __WINDOWS__
-    if ( GetPerfCounterState().CanBeUsed() )
-    {
-        LARGE_INTEGER counter;
-        ::QueryPerformanceCounter(&counter);
-        return counter.QuadPart;
-    }
-#endif // __WINDOWS__
-
-#ifdef HAVE_GETTIMEOFDAY
+    LARGE_INTEGER counter;
+    ::QueryPerformanceCounter(&counter);
+    return counter.QuadPart;
+#elif defined(HAVE_GETTIMEOFDAY)
     return wxGetUTCTimeUSec();
 #else // !HAVE_GETTIMEOFDAY
     return wxGetUTCTimeMillis();
-#endif // HAVE_GETTIMEOFDAY/!HAVE_GETTIMEOFDAY
+#endif // __WINDOWS__/HAVE_GETTIMEOFDAY/else
 }
 
 wxLongLong wxStopWatch::TimeInMicro() const
