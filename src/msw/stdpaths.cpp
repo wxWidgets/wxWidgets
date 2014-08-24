@@ -295,6 +295,14 @@ void wxStandardPaths::IgnoreAppBuildSubDirs()
     IgnoreAppSubDir("debug");
     IgnoreAppSubDir("release");
 
+    // there can also be an architecture-dependent parent directory, ignore it
+    // as well
+#ifdef __WIN64__
+    IgnoreAppSubDir("x64");
+#else // __WIN32__
+    IgnoreAppSubDir("Win32");
+#endif // __WIN64__/__WIN32__
+
     wxString compilerPrefix;
 #ifdef __VISUALC__
     compilerPrefix = "vc";
