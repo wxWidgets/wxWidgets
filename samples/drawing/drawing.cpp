@@ -1351,8 +1351,31 @@ void MyCanvas::DrawGradients(wxDC& dc)
         pth.CloseSubpath();
         gc->FillPath(pth);
 
+        wxGraphicsGradientStops simpleStops(*wxRED, *wxBLUE);
+
         gfr.Offset(0, gfr.height + 10);
-        dc.DrawText(wxT("Radial Gradient with Stops"), gfr.x, gfr.y);
+        dc.DrawText(wxT("Radial Gradient from Red to Blue without intermediary Stops"),
+            gfr.x, gfr.y);
+        gfr.Offset(0, TEXT_HEIGHT);
+
+        gc->SetBrush(gc->CreateRadialGradientBrush(gfr.x + gfr.width / 2,
+            gfr.y + gfr.height / 2,
+            gfr.x + gfr.width / 2,
+            gfr.y + gfr.height / 2,
+            gfr.width / 2,
+            simpleStops));
+
+        pth = gc->CreatePath();
+        pth.MoveToPoint(gfr.x,gfr.y);
+        pth.AddLineToPoint(gfr.x + gfr.width,gfr.y);
+        pth.AddLineToPoint(gfr.x + gfr.width,gfr.y+gfr.height);
+        pth.AddLineToPoint(gfr.x,gfr.y+gfr.height);
+        pth.CloseSubpath();
+        gc->FillPath(pth);
+
+        gfr.Offset(0, gfr.height + 10);
+        dc.DrawText(wxT("Radial Gradient from Red to Blue with Yellow and Green Stops"),
+            gfr.x, gfr.y);
         gfr.Offset(0, TEXT_HEIGHT);
 
         gc->SetBrush(gc->CreateRadialGradientBrush(gfr.x + gfr.width / 2,
