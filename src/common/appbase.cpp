@@ -51,9 +51,6 @@
         #include <exception>
         #include <typeinfo>
     #endif
-    #if wxUSE_INTL
-        #include <locale>
-    #endif
 #endif // wxUSE_STL
 
 #if !defined(__WINDOWS__) || defined(__WXMICROWIN__)
