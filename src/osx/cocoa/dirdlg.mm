@@ -76,6 +76,12 @@ WX_NSOpenPanel wxDirDialog::OSXCreatePanel() const
     return oPanel;
 }
 
+// We use several deprecated methods of NSOpenPanel in the code below, we
+// should replace them with newer equivalents now that we don't support OS X
+// versions which didn't have them (pre 10.6), but until then, get rid of
+// the warning.
+wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
 void wxDirDialog::ShowWindowModal()
 {
     wxNonOwnedWindow* parentWindow = NULL;
@@ -132,5 +138,7 @@ void wxDirDialog::ModalFinishedCallback(void* panel, int returnCode)
     if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
         SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
 }
+
+wxGCC_WARNING_RESTORE(deprecated-declarations)
 
 #endif // wxUSE_DIRDLG

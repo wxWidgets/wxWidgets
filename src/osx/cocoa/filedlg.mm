@@ -112,13 +112,18 @@ bool HasAppKit_10_6()
 - (BOOL)panel:(id)sender shouldShowFilename:(NSString *)filename
 {
     BOOL showObject = YES;
-    
+
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
     NSString* resolvedLink = [[NSFileManager defaultManager] pathContentOfSymbolicLinkAtPath:filename];
     if ( resolvedLink != nil )
         filename = resolvedLink;
-    
+
     NSDictionary* fileAttribs = [[NSFileManager defaultManager]
                                  fileAttributesAtPath:filename traverseLink:YES];
+
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
+
     if (fileAttribs)
     {
         // check for packages
@@ -335,6 +340,8 @@ void wxFileDialog::ShowWindowModal()
 
     wxASSERT_MSG(parentWindow, "Window modal display requires parent.");
 
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
     NSArray* types = GetTypesFromFilter( m_wildCard, m_filterNames, m_filterExtensions ) ;
     if ( HasFlag(wxFD_SAVE) )
     {
@@ -378,6 +385,8 @@ void wxFileDialog::ShowWindowModal()
             didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
             contextInfo: nil];
     }
+
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 }
 
 // Create a panel with the file type drop down list
@@ -582,6 +591,8 @@ int wxFileDialog::ShowModal()
         }
     }
 
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
     if ( HasFlag(wxFD_SAVE) )
     {
         NSSavePanel* sPanel = [NSSavePanel savePanel];
@@ -650,11 +661,15 @@ int wxFileDialog::ShowModal()
         ModalFinishedCallback(oPanel, returnCode);
     }
 
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
+
     return GetReturnCode();
 }
 
 void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
 {
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
     int result = wxID_CANCEL;
     if (HasFlag(wxFD_SAVE))
     {
@@ -709,6 +724,8 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
     if ( m_isNativeWindowWrapper )
         UnsubclassWin();
     [(NSSavePanel*) panel setAccessoryView:nil];
+
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 }
 
 #endif // wxUSE_FILEDLG
