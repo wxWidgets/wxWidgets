@@ -97,13 +97,16 @@ void TestNewDocument()
 }
 @endcode
 
-Unfortunately, by default this example does @e not work because an exception
-can't be safely propagated back to the code handling it in @c TestNewDocument()
-through the system event dispatch functions which are not compatible with C++
-exceptions. Because of this, you need to override wxApp::StoreCurrentException() 
-and wxApp::RethrowStoredException() to help wxWidgets to safely transport the
-exception from the event handler that throws it to the @c catch clause. Please
-see the documentation of these functions for more details.
+Unfortunately, by default this example only works when using a C++11 compiler
+because the exception can't be safely propagated back to the code handling it
+in @c TestNewDocument() through the system event dispatch functions which are
+not compatible with C++ exceptions and needs to be stored by wxWidgets when it
+is first caught and rethrown later, when it is safe to do it. And such storing
+and rethrowing of exceptions is only possible in C++11, so while everything
+just works if you do use C++11, there is an extra step if you are using C++98:
+In this case you need to override wxApp::StoreCurrentException() and
+wxApp::RethrowStoredException() to help wxWidgets to do this, please see the
+documentation of these functions for more details.
 
 
 @section overview_exceptions_tech Technicalities

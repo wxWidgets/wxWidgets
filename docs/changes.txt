@@ -32,7 +32,8 @@ Changes in behaviour which may result in build errors
 
 All:
 
-- Add wxApp::StoreCurrentException() and RethrowStoredException().
+- Add wxApp::StoreCurrentException() and RethrowStoredException() and implement
+  their functionality by default when using C++11 compiler.
 - Allow iterating over wxCmdLineParser arguments in order (Armel Asselin).
 - Add wxScopedArray ctor taking the number of elements to allocate.
 - Add wxDynamicLibrary::GetModuleFromAddress() (Luca Bacci).

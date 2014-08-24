@@ -94,6 +94,10 @@ public:
     // 2nd-level exception handling helpers: if we can't deal with the
     // exception immediately, we may also store it and rethrow it later, when
     // we're back from events processing loop.
+    //
+    // Notice that overriding these methods is not necessary when using C++11
+    // as they have a perfectly serviceable implementation inside the library
+    // itself in this case.
     virtual bool StoreCurrentException() wxOVERRIDE;
     virtual void RethrowStoredException() wxOVERRIDE;
 

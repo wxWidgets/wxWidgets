@@ -46,12 +46,28 @@
 #include "wx/tokenzr.h"
 #include "wx/thread.h"
 
-#if wxUSE_STL
-    #if wxUSE_EXCEPTIONS
+#if wxUSE_EXCEPTIONS
+    // Do we have a C++ compiler with enough C++11 support for
+    // std::exception_ptr and functions working with it?
+    #if __cplusplus >= 201103L
+        // Any conforming C++11 compiler should have it.
+        #define HAS_EXCEPTION_PTR
+    #elif wxCHECK_VISUALC_VERSION(10)
+        // VC++ supports it since version 10, even though it doesn't define
+        // __cplusplus to C++11 value.
+        #define HAS_EXCEPTION_PTR
+    #endif
+
+    #ifdef HAS_EXCEPTION_PTR
+        #include <exception>        // for std::current_exception()
+        #include <utility>          // for std::swap()
+    #endif
+
+    #if wxUSE_STL
         #include <exception>
         #include <typeinfo>
     #endif
-#endif // wxUSE_STL
+#endif // wxUSE_EXCEPTIONS
 
 #if !defined(__WINDOWS__) || defined(__WXMICROWIN__)
   #include  <signal.h>      // for SIGTRAP used by wxTrap()
@@ -659,10 +675,48 @@ bool wxAppConsoleBase::OnExceptionInMainLoop()
     throw;
 }
 
+#ifdef HAS_EXCEPTION_PTR
+static std::exception_ptr gs_storedException;
+
+bool wxAppConsoleBase::StoreCurrentException()
+{
+    if ( gs_storedException )
+    {
+        // We can't store more than one exception currently: while we could
+        // support this by just using a vector<exception_ptr>, it shouldn't be
+        // actually necessary because we should never have more than one active
+        // exception anyhow.
+        return false;
+    }
+
+    gs_storedException = std::current_exception();
+
+    return true;
+}
+
+void wxAppConsoleBase::RethrowStoredException()
+{
+    if ( gs_storedException )
+    {
+        std::exception_ptr storedException;
+        std::swap(storedException, gs_storedException);
+
+        std::rethrow_exception(storedException);
+    }
+}
+
+#else // !HAS_EXCEPTION_PTR
+
 bool wxAppConsoleBase::StoreCurrentException()
 {
     return false;
 }
+
+void wxAppConsoleBase::RethrowStoredException()
+{
+}
+
+#endif // HAS_EXCEPTION_PTR/!HAS_EXCEPTION_PTR
 
 #endif // wxUSE_EXCEPTIONS
 

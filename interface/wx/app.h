@@ -486,6 +486,14 @@ public:
     /**
         Method to store exceptions not handled by OnExceptionInMainLoop().
 
+        @note The default implementation of this function when using C++98
+            compiler just returns false, as there is no generic way to store an
+            arbitrary exception in C++98 and each application must do it on its
+            own for the exceptions it uses in its overridden version. When
+            using C++11, the default implementation uses
+            std::current_exception() and returns true, so it's normally not
+            necessary to override this method when using C++11.
+
         This function can be overridden to store the current exception, in view
         of rethrowing it later when RethrowStoredException() is called. If the
         exception was stored, return true. If the exception can't be stored,
@@ -572,11 +580,17 @@ public:
     /**
         Method to rethrow exceptions stored by StoreCurrentException().
 
+        @note Just as with StoreCurrentException(), it is usually not necessary
+            to override this method when using C++11.
+
         If StoreCurrentException() is overridden, this function should be
         overridden as well to rethrow the exceptions stored by it when the
         control gets back to our code, i.e. when it's safe to do it.
 
         See StoreCurrentException() for an example of implementing this method.
+
+        The default version does nothing when using C++98 and uses
+        std::rethrow_exception() in C++11.
 
         @since 3.1.0
     */
