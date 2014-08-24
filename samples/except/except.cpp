@@ -47,6 +47,8 @@
     #include "wx/thread.h"
 #endif
 
+#include "wx/uiaction.h"
+
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
@@ -117,6 +119,7 @@ public:
     void OnThrowString(wxCommandEvent& event);
     void OnThrowObject(wxCommandEvent& event);
     void OnThrowUnhandled(wxCommandEvent& event);
+    void OnThrowFromYield(wxCommandEvent& event);
 
     void OnCrash(wxCommandEvent& event);
     void OnTrap(wxCommandEvent& event);
@@ -187,6 +190,7 @@ enum
     Except_ThrowString,
     Except_ThrowObject,
     Except_ThrowUnhandled,
+    Except_ThrowFromYield,
     Except_Crash,
     Except_Trap,
 #if wxUSE_ON_FATAL_EXCEPTION
@@ -217,6 +221,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Except_ThrowString, MyFrame::OnThrowString)
     EVT_MENU(Except_ThrowObject, MyFrame::OnThrowObject)
     EVT_MENU(Except_ThrowUnhandled, MyFrame::OnThrowUnhandled)
+    EVT_MENU(Except_ThrowFromYield, MyFrame::OnThrowFromYield)
     EVT_MENU(Except_Crash, MyFrame::OnCrash)
     EVT_MENU(Except_Trap, MyFrame::OnTrap)
 #if wxUSE_ON_FATAL_EXCEPTION
@@ -354,6 +359,8 @@ MyFrame::MyFrame()
     menuFile->Append(Except_ThrowObject, wxT("Throw an &object\tCtrl-O"));
     menuFile->Append(Except_ThrowUnhandled,
                         wxT("Throw &unhandled exception\tCtrl-U"));
+    menuFile->Append(Except_ThrowFromYield,
+                        wxT("Throw from wx&Yield()\tCtrl-Y"));
     menuFile->Append(Except_Crash, wxT("&Crash\tCtrl-C"));
     menuFile->Append(Except_Trap, "&Trap\tCtrl-T",
                      "Break into the debugger (if one is running)");
@@ -444,6 +451,29 @@ void MyFrame::OnThrowObject(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnThrowUnhandled(wxCommandEvent& WXUNUSED(event))
 {
     throw UnhandledException();
+}
+
+void MyFrame::OnThrowFromYield(wxCommandEvent& WXUNUSED(event))
+{
+#if wxUSE_UIACTIONSIMULATOR
+    // Simulate selecting the "Throw unhandled" menu item, its handler will be
+    // executed from inside wxYield(), so we may not be able to catch the
+    // exception here under Win64 even in spite of an explicit catch.
+    try
+    {
+        wxUIActionSimulator sim;
+        sim.Char('U', wxMOD_CONTROL);
+        wxYield();
+    }
+    catch ( UnhandledException& )
+    {
+        wxLogMessage("Caught unhandled exception inside wxYield().");
+    }
+#else // !wxUSE_UIACTIONSIMULATOR
+    wxLogError("Can't trigger an exception inside wxYield() "
+               "without wxUIActionSimulator, please rebuild "
+               "with wxUSE_UIACTIONSIMULATOR=1.");
+#endif // wxUSE_UIACTIONSIMULATOR/!wxUSE_UIACTIONSIMULATOR
 }
 
 void MyFrame::OnCrash(wxCommandEvent& WXUNUSED(event))
