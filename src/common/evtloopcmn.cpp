@@ -140,6 +140,7 @@ bool wxEventLoopBase::YieldFor(long eventsToProcess)
 
     DoYieldFor(eventsToProcess);
 
+#if wxUSE_EXCEPTIONS
     // If any handlers called from inside DoYieldFor() threw exceptions, they
     // may have been stored for later rethrow as it's unsafe to let them escape
     // from inside DoYieldFor() itself, as it calls native functions through
@@ -147,6 +148,7 @@ bool wxEventLoopBase::YieldFor(long eventsToProcess)
     // code, we may rethrow them.
     if ( wxTheApp )
         wxTheApp->RethrowStoredException();
+#endif // wxUSE_EXCEPTIONS
 
     return true;
 }
@@ -218,10 +220,12 @@ bool wxEventLoopManual::ProcessEvents()
 
     const bool res = Dispatch();
 
+#if wxUSE_EXCEPTIONS
     // Rethrow any exceptions which could have been produced by the handlers
     // ran by Dispatch().
     if ( wxTheApp )
         wxTheApp->RethrowStoredException();
+#endif // wxUSE_EXCEPTIONS
 
     return res;
 }

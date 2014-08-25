@@ -78,10 +78,12 @@ int wxGUIEventLoop::DoRun()
 
     OnExit();
 
+#if wxUSE_EXCEPTIONS
     // Rethrow any exceptions which could have been produced by the handlers
     // ran by the event loop.
     if ( wxTheApp )
         wxTheApp->RethrowStoredException();
+#endif // wxUSE_EXCEPTIONS
 
     return m_exitcode;
 }
