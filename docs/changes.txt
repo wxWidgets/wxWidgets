@@ -609,6 +609,7 @@ wxMSW:
 - Fix wxGrid appearance and behaviour in RTL (Artur Wieczorek).
 - Add paragraph spacing attributes support to wxTextCtrl (dannchr).
 - Show new style directory selector even for non existent paths (raychow).
+- Fix order of radial gradient stops (Alexandru Pana).
 
 
 3.0.1: (released 2014-06-15)
