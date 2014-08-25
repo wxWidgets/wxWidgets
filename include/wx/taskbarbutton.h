@@ -22,7 +22,7 @@
 /**
     State of the task bar button.
 */
-enum wxTaskBarButtonState
+enum WXDLLIMPEXP_CORE wxTaskBarButtonState
 {
     wxTASKBAR_BUTTON_NO_PROGRESS   = 0,
     wxTASKBAR_BUTTON_INDETERMINATE = 1,
@@ -31,7 +31,7 @@ enum wxTaskBarButtonState
     wxTASKBAR_BUTTON_PAUSED        = 8
 };
 
-class WXDLLIMPEXP_ADV wxThumbBarButton {
+class WXDLLIMPEXP_CORE wxThumbBarButton {
 public:
     wxThumbBarButton(int id,
                      const wxIcon& icon,
@@ -64,7 +64,7 @@ private:
     bool m_interactive;
 };
 
-class WXDLLIMPEXP_ADV wxTaskBarButton
+class WXDLLIMPEXP_CORE wxTaskBarButton
 {
 public:
     wxTaskBarButton() { }
