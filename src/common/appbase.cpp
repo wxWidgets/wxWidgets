@@ -52,9 +52,12 @@
     #if __cplusplus >= 201103L
         // Any conforming C++11 compiler should have it.
         #define HAS_EXCEPTION_PTR
-    #elif wxCHECK_VISUALC_VERSION(10)
+    #elif wxCHECK_VISUALC_VERSION(11)
         // VC++ supports it since version 10, even though it doesn't define
-        // __cplusplus to C++11 value.
+        // __cplusplus to C++11 value, but MSVC 2010 doesn't have a way to test
+        // whether exception_ptr is valid, so we'd need to use a separate bool
+        // flag for it if we wanted to make it work. For now just settle for
+        // only using exception_ptr for VC11 and later.
         #define HAS_EXCEPTION_PTR
     #endif
 
