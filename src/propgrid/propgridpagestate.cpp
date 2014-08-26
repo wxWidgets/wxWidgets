@@ -291,7 +291,7 @@ void wxPropertyGridPageState::DoClear()
     if ( m_pPropGrid && m_pPropGrid->m_processedEvent )
     {
         wxPropertyGridIterator it;
-        for ( it = m_pPropGrid->GetIterator(wxPG_ITERATE_ALL);
+        for ( it = wxPropertyGridIterator(this, wxPG_ITERATE_ALL, wxNullProperty);
               !it.AtEnd();
               it++ )
         {
