@@ -39,6 +39,10 @@ WINOLEAPI PropVariantClear(PROPVARIANT* pvar);
 #define PropVariantInit(pvar) memset ( (pvar), 0, sizeof(PROPVARIANT) )
 #endif
 
+#ifndef INFOTIPSIZE
+#define INFOTIPSIZE 1024
+#endif
+
 namespace {
 
 // The maximum number of thumbnail toolbar buttons allowed on windows is 7.
@@ -1201,9 +1205,9 @@ void wxTaskBarJumpList::Update()
 wxTaskBarJumpListImpl::wxTaskBarJumpListImpl(wxTaskBarJumpList *jumpList,
                                              const wxString& appID)
     : m_jumpList(jumpList),
-      m_appID(appID),
       m_destinationList(NULL)
 {
+    m_appID = appID;
     HRESULT hr = CoCreateInstance
                  (
                     wxCLSID_DestinationList,
