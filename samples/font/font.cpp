@@ -109,6 +109,7 @@ public:
     void OnStrikethrough(wxCommandEvent& event);
 
     void OnwxPointerFont(wxCommandEvent& event);
+    void OnFontDefault(wxCommandEvent& event);
     void OnwxSystemSettingsFont(wxCommandEvent& event);
 
     void OnTestTextValue(wxCommandEvent& event);
@@ -185,6 +186,7 @@ enum
     Font_wxSMALL_FONT,
     Font_wxITALIC_FONT,
     Font_wxSWISS_FONT,
+    Font_wxFont_Default,
     Font_Standard,
 
     // wxSystemSettings::GetFont possible objects:
@@ -238,6 +240,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_wxSMALL_FONT, MyFrame::OnwxPointerFont)
     EVT_MENU(Font_wxITALIC_FONT, MyFrame::OnwxPointerFont)
     EVT_MENU(Font_wxSWISS_FONT, MyFrame::OnwxPointerFont)
+    EVT_MENU(Font_wxFont_Default, MyFrame::OnFontDefault)
 
     EVT_MENU(Font_wxSYS_OEM_FIXED_FONT, MyFrame::OnwxSystemSettingsFont)
     EVT_MENU(Font_wxSYS_ANSI_FIXED_FONT, MyFrame::OnwxSystemSettingsFont)
@@ -354,6 +357,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuStdFonts->Append(Font_wxSMALL_FONT,  wxT("wxSMALL_FONT"),  wxT("Small font used by wxWidgets"));
     menuStdFonts->Append(Font_wxITALIC_FONT, wxT("wxITALIC_FONT"), wxT("Italic font used by wxWidgets"));
     menuStdFonts->Append(Font_wxSWISS_FONT,  wxT("wxSWISS_FONT"),  wxT("Swiss font used by wxWidgets"));
+    menuStdFonts->Append(Font_wxFont_Default,  wxT("wxFont()"),  wxT("wxFont constructed from default wxFontInfo"));
     menuSelect->Append(Font_Standard, wxT("Standar&d fonts"), menuStdFonts);
 
     wxMenu *menuSettingFonts = new wxMenu;
@@ -772,6 +776,11 @@ void MyFrame::OnwxPointerFont(wxCommandEvent& event)
     }
 
     DoChangeFont(font);
+}
+
+void MyFrame::OnFontDefault(wxCommandEvent& WXUNUSED(event))
+{
+    DoChangeFont(wxFont(wxFontInfo()));
 }
 
 void MyFrame::OnwxSystemSettingsFont(wxCommandEvent& event)
