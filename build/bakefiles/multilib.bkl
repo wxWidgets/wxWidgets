@@ -199,7 +199,7 @@
          cond="SHARED=='1' and USE_GUI=='1' and USE_WEBVIEW_CHROMIUM=='1' and MONOLITHIC=='0'">
         <define>wxUSE_WEBVIEW_CHROMIUM=1</define>
         <define>WXUSINGDLL</define>
-        <define>WXMAKINGDLL_WEBVIEW</define>
+        <define>WXMAKINGDLL_WEBVIEW_CHROMIUM</define>
         <sources>$(WEBVIEWCHROMIUM_SRC)</sources>
         <msvc-headers>$(WEBVIEWCHROMIUM_HDR)</msvc-headers>
         <library>coredll</library>
