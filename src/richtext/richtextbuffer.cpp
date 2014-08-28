@@ -12522,6 +12522,10 @@ bool wxRichTextImage::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
         wxCheckSetBrush(dc, *wxBLACK_BRUSH);
         wxCheckSetPen(dc, *wxBLACK_PEN);
         dc.SetLogicalFunction(wxINVERT);
+#ifdef __WXMAC__
+        if (m_imageCache.IsOk())
+            dc.DrawBitmap(m_imageCache, contentRect.x, contentRect.y, true);
+#endif
         dc.DrawRectangle(contentRect);
         dc.SetLogicalFunction(wxCOPY);
     }
