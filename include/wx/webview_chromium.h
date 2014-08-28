@@ -29,7 +29,7 @@
 #pragma warning(pop)
 #endif
 
-extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendChromium[];
+extern WXDLLIMPEXP_DATA_WEBVIEW_CHROMIUM(const char) wxWebViewBackendChromium[];
 
 class wxWebViewChromium;
 
@@ -162,7 +162,7 @@ private:
     wxSharedPtr<wxWebViewHandler> m_handler;
 };
 
-class WXDLLIMPEXP_WEBVIEW wxWebViewChromium : public wxWebView
+class WXDLLIMPEXP_WEBVIEW_CHROMIUM wxWebViewChromium : public wxWebView
 {
 public:
     wxWebViewChromium() {}
@@ -296,7 +296,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxWebViewChromium);
 };
 
-class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryChromium : public wxWebViewFactory
+class WXDLLIMPEXP_WEBVIEW_CHROMIUM wxWebViewFactoryChromium : public wxWebViewFactory
 {
 public:
     virtual wxWebView* Create() { return new wxWebViewChromium; }
