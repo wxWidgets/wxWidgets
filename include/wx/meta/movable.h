@@ -28,7 +28,7 @@ struct wxIsMovable
 #define WX_DECLARE_TYPE_MOVABLE(type)                       \
     template<> struct wxIsMovable<type>                     \
     {                                                       \
-        wxDEFINE_TEMPLATE_BOOL_VALUE(true);                 \
+        static const bool value = true;                     \
     };
 
 // Our implementation of wxString is written in such way that it's safe to move
