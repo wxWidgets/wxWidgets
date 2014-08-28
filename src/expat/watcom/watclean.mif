@@ -1,0 +1,57 @@
+#############################################################
+#
+#  ***** Project make release directories procedures *****
+#
+#############################################################
+
+!include watclean.tmp
+
+os2: .SYMBOLIC
+  @set CLEANDIR = $(RELDIR)\os2
+  @%make rmtargdir
+
+os2d: .SYMBOLIC
+  @set CLEANDIR = $(DEBDIR)\os2
+  @%make rmtargdir
+
+nt: .SYMBOLIC
+  @set CLEANDIR = $(RELDIR)\nt
+  @%make rmtargdir
+
+ntd: .SYMBOLIC
+  @set CLEANDIR = $(DEBDIR)\nt
+  @%make rmtargdir
+
+linux: .SYMBOLIC
+  @set CLEANDIR = $(RELDIR)\linux
+  @%make rmtargdir
+
+linuxd: .SYMBOLIC
+  @set CLEANDIR = $(DEBDIR)\linux
+  @%make rmtargdir
+
+rmtargdir: .PROCEDURE
+  -@rm $(%CLEANDIR)\lib\*.lib
+  -@rd $(%CLEANDIR)\lib
+  -@rm $(%CLEANDIR)\include\*.h
+  -@rd $(%CLEANDIR)\include
+  @if EXIST $(%CLEANDIR)\dll -@rm $(%CLEANDIR)\dll\*.dll
+  @if EXIST $(%CLEANDIR)\dll -@rd $(%CLEANDIR)\dll
+  @if EXIST $(%CLEANDIR)\bin\xmlwf @%make cleanl
+  @if EXIST $(%CLEANDIR)\bin\xmlwf.exe @%make cleano
+  -@rd $(%CLEANDIR)\bin
+  -@rd $(%CLEANDIR)
+
+# cleanup build files
+clean: .SYMBOLIC
+CLEANEXTS   = obj exe err lst map sym lib dll
+  @for %a in ($(CLEANEXTS)) do -@rm *.%a
+  @if EXIST xmlwf @%make cleanl
+
+cleanl: .PROCEDURE
+CLEANLINUX  = xmlwf runtests elements outline benchmark
+  @for %a in ($(CLEANLINUX))  do -@rm $(%CLEANDIR)\bin\%a
+
+cleano: .PROCEDURE
+  -@rm $(%CLEANDIR)\bin\*.exe
+

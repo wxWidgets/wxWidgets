@@ -4,7 +4,6 @@
 // Author:      Robert Roebling
 // Modified by: Francesco Montorsi
 // Created:     1998
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998-2005 Robert Roebling
 //              (c) 2005-2009 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -24,9 +23,11 @@
 #include "wx/image.h"
 #include "wx/file.h"
 #include "wx/filename.h"
+#include "wx/graphics.h"
 #include "wx/mstream.h"
 #include "wx/wfstream.h"
 #include "wx/quantize.h"
+#include "wx/scopedptr.h"
 #include "wx/stopwatch.h"
 #include "wx/versioninfo.h"
 
@@ -48,7 +49,7 @@
 
 #include "canvas.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -63,7 +64,7 @@
 class MyApp: public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 // ----------------------------------------------------------------------------
@@ -83,6 +84,9 @@ public:
 #ifdef wxHAVE_RAW_BITMAP
     void OnTestRawBitmap( wxCommandEvent &event );
 #endif // wxHAVE_RAW_BITMAP
+#if wxUSE_GRAPHICS_CONTEXT
+    void OnTestGraphics(wxCommandEvent& event);
+#endif // wxUSE_GRAPHICS_CONTEXT
     void OnQuit( wxCommandEvent &event );
 
 #if wxUSE_CLIPBOARD
@@ -100,8 +104,8 @@ private:
     static wxString LoadUserImage(wxImage& image);
 
 
-    DECLARE_DYNAMIC_CLASS(MyFrame)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(MyFrame);
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -145,7 +149,7 @@ private:
         m_zoom = 1.;
 
         wxMenu *menu = new wxMenu;
-        menu->Append(wxID_SAVE);
+        menu->Append(wxID_SAVEAS);
         menu->AppendSeparator();
         menu->AppendCheckItem(ID_PAINT_BG, wxT("&Paint background"),
                               "Uncheck this for transparent images");
@@ -209,7 +213,7 @@ private:
         wxString savefilename = wxFileSelector( wxT("Save Image"),
                                                 wxEmptyString,
                                                 wxEmptyString,
-                                                (const wxChar *)NULL,
+                                                wxEmptyString,
                                                 wxT("BMP files (*.bmp)|*.bmp|")
 #if wxUSE_LIBPNG
                                                 wxT("PNG files (*.png)|*.png|")
@@ -226,9 +230,12 @@ private:
 #if wxUSE_PCX
                                                 wxT("PCX files (*.pcx)|*.pcx|")
 #endif
+#if wxUSE_XPM
+                                                wxT("X PixMap files (*.xpm)|*.xpm|")
+#endif
                                                 wxT("ICO files (*.ico)|*.ico|")
                                                 wxT("CUR files (*.cur)|*.cur"),
-                                                wxFD_SAVE,
+                                                wxFD_SAVE | wxFD_OVERWRITE_PROMPT,
                                                 this);
 
         if ( savefilename.empty() )
@@ -430,7 +437,7 @@ private:
     wxBitmap m_bitmap;
     double m_zoom;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #ifdef wxHAVE_RAW_BITMAP
@@ -567,7 +574,7 @@ private:
     wxBitmap m_bitmap;
     wxBitmap m_alphaBitmap;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // wxHAVE_RAW_BITMAP
@@ -581,18 +588,18 @@ private:
 // MyImageFrame
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyImageFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyImageFrame, wxFrame)
     EVT_ERASE_BACKGROUND(MyImageFrame::OnEraseBackground)
     EVT_PAINT(MyImageFrame::OnPaint)
 
-    EVT_MENU(wxID_SAVE, MyImageFrame::OnSave)
+    EVT_MENU(wxID_SAVEAS, MyImageFrame::OnSave)
     EVT_MENU_RANGE(ID_ROTATE_LEFT, ID_ROTATE_RIGHT, MyImageFrame::OnRotate)
     EVT_MENU(ID_RESIZE, MyImageFrame::OnResize)
 
     EVT_MENU(wxID_ZOOM_IN, MyImageFrame::OnZoom)
     EVT_MENU(wxID_ZOOM_OUT, MyImageFrame::OnZoom)
     EVT_MENU(wxID_ZOOM_100, MyImageFrame::OnZoom)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 //-----------------------------------------------------------------------------
 // MyRawBitmapFrame
@@ -600,9 +607,9 @@ END_EVENT_TABLE()
 
 #ifdef wxHAVE_RAW_BITMAP
 
-BEGIN_EVENT_TABLE(MyRawBitmapFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyRawBitmapFrame, wxFrame)
     EVT_PAINT(MyRawBitmapFrame::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #endif // wxHAVE_RAW_BITMAP
 
@@ -617,11 +624,12 @@ enum
     ID_NEW = 100,
     ID_INFO,
     ID_SHOWRAW,
+    ID_GRAPHICS,
     ID_SHOWTHUMBNAIL
 };
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU    (ID_ABOUT, MyFrame::OnAbout)
     EVT_MENU    (ID_QUIT,  MyFrame::OnQuit)
     EVT_MENU    (ID_NEW,   MyFrame::OnNewFrame)
@@ -630,11 +638,14 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #ifdef wxHAVE_RAW_BITMAP
     EVT_MENU    (ID_SHOWRAW, MyFrame::OnTestRawBitmap)
 #endif
+#if wxUSE_GRAPHICS_CONTEXT
+    EVT_MENU    (ID_GRAPHICS, MyFrame::OnTestGraphics)
+#endif // wxUSE_GRAPHICS_CONTEXT
 #if wxUSE_CLIPBOARD
     EVT_MENU(wxID_COPY, MyFrame::OnCopy)
     EVT_MENU(wxID_PASTE, MyFrame::OnPaste)
 #endif // wxUSE_CLIPBOARD
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
     : wxFrame( (wxFrame *)NULL, wxID_ANY, wxT("wxImage sample"),
@@ -651,11 +662,15 @@ MyFrame::MyFrame()
     menuImage->AppendSeparator();
     menuImage->Append( ID_SHOWRAW, wxT("Test &raw bitmap...\tCtrl-R"));
 #endif
+#if wxUSE_GRAPHICS_CONTEXT
+    menuImage->AppendSeparator();
+    menuImage->Append(ID_GRAPHICS, "Test &graphics context...\tCtrl-G");
+#endif // wxUSE_GRAPHICS_CONTEXT
     menuImage->AppendSeparator();
     menuImage->Append( ID_SHOWTHUMBNAIL, wxT("Test &thumbnail...\tCtrl-T"),
                         "Test scaling the image during load (try with JPEG)");
     menuImage->AppendSeparator();
-    menuImage->Append( ID_ABOUT, wxT("&About...\tF1"));
+    menuImage->Append( ID_ABOUT, wxT("&About\tF1"));
     menuImage->AppendSeparator();
     menuImage->Append( ID_QUIT, wxT("E&xit\tCtrl-Q"));
     menu_bar->Append(menuImage, wxT("&Image"));
@@ -796,6 +811,85 @@ void MyFrame::OnTestRawBitmap( wxCommandEvent &WXUNUSED(event) )
 
 #endif // wxHAVE_RAW_BITMAP
 
+#if wxUSE_GRAPHICS_CONTEXT
+
+class MyGraphicsFrame : public wxFrame
+{
+public:
+    enum
+    {
+        WIDTH = 256,
+        HEIGHT = 90
+    };
+
+    MyGraphicsFrame(wxWindow* parent) :
+        wxFrame(parent, wxID_ANY, "Graphics context test"),
+        m_image(WIDTH, HEIGHT, false)
+    {
+        // Create a test image: it has 3 horizontal primary colour bands with
+        // alpha increasing from left to right.
+        m_image.SetAlpha();
+        unsigned char* alpha = m_image.GetAlpha();
+        unsigned char* data = m_image.GetData();
+
+        for ( int y = 0; y < HEIGHT; y++ )
+        {
+            unsigned char r = 0,
+                          g = 0,
+                          b = 0;
+            if ( y < HEIGHT/3 )
+                r = 0xff;
+            else if ( y < (2*HEIGHT)/3 )
+                g = 0xff;
+            else
+                b = 0xff;
+
+            for ( int x = 0; x < WIDTH; x++ )
+            {
+                *alpha++ = x;
+                *data++ = r;
+                *data++ = g;
+                *data++ = b;
+            }
+        }
+
+        m_bitmap = wxBitmap(m_image);
+
+        Connect(wxEVT_PAINT, wxPaintEventHandler(MyGraphicsFrame::OnPaint));
+
+        Show();
+    }
+
+private:
+    void OnPaint(wxPaintEvent& WXUNUSED(event))
+    {
+        wxPaintDC dc(this);
+        wxScopedPtr<wxGraphicsContext> gc(wxGraphicsContext::Create(dc));
+        wxGraphicsBitmap gb(gc->CreateBitmapFromImage(m_image));
+
+        gc->SetFont(*wxNORMAL_FONT, *wxBLACK);
+        gc->DrawText("Bitmap", 0, HEIGHT/2);
+        gc->DrawBitmap(m_bitmap, 0, 0, WIDTH, HEIGHT);
+
+        wxGraphicsFont gf = gc->CreateFont(wxNORMAL_FONT->GetPixelSize().y, "");
+        gc->SetFont(gf);
+        gc->DrawText("Graphics bitmap", 0, (3*HEIGHT)/2);
+        gc->DrawBitmap(gb, 0, HEIGHT, WIDTH, HEIGHT);
+    }
+
+    wxImage m_image;
+    wxBitmap m_bitmap;
+
+    wxDECLARE_NO_COPY_CLASS(MyGraphicsFrame);
+};
+
+void MyFrame::OnTestGraphics(wxCommandEvent& WXUNUSED(event))
+{
+    new MyGraphicsFrame(this);
+}
+
+#endif // wxUSE_GRAPHICS_CONTEXT
+
 #if wxUSE_CLIPBOARD
 
 void MyFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
@@ -852,10 +946,14 @@ void MyFrame::OnThumbnail( wxCommandEvent &WXUNUSED(event) )
         return;
     }
 
+    int origWidth = image.GetOptionInt( wxIMAGE_OPTION_ORIGINAL_WIDTH );
+    int origHeight = image.GetOptionInt( wxIMAGE_OPTION_ORIGINAL_HEIGHT );
+
     const long loadTime = sw.Time();
 
     MyImageFrame * const frame = new MyImageFrame(this, filename, image);
-    wxLogStatus(frame, "Loaded \"%s\" in %ldms", filename, loadTime);
+    wxLogStatus(frame, "Loaded \"%s\" in %ldms; original size was (%d, %d)",
+                filename, loadTime, origWidth, origHeight);
 #else
     wxLogError( wxT("Couldn't create file selector dialog") );
     return;

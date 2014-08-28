@@ -2,7 +2,6 @@
 // Name:        xrcdemo.cpp
 // Purpose:     XML resources sample: Main application file
 // Author:      Robert O'Connor (rob@medicalmnemonics.com), Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert O'Connor and Vaclav Slavik
 // Licence:     wxWindows licence
 //-----------------------------------------------------------------------------
@@ -37,6 +36,15 @@
 #include "wx/image.h"               // wxImage
 
 #include "wx/xrc/xmlres.h"          // XRC XML resources
+
+#if wxUSE_RIBBON
+    #include "wx/xrc/xh_ribbon.h"
+#endif // wxUSE_RIBBON
+
+#if wxUSE_AUI
+    #include "wx/xrc/xh_auinotbk.h"
+    #include "wx/xrc/xh_auitoolb.h"
+#endif // wxUSE_AUI
 
 #include "wx/cshelp.h"              // wxSimpleHelpProvider for helptext
 
@@ -77,6 +85,15 @@ bool MyApp::OnInit()
     // save some space to only initialize the ones you will be using. See
     // wxXRC docs for details.
     wxXmlResource::Get()->InitAllHandlers();
+
+#if wxUSE_RIBBON
+    wxXmlResource::Get()->AddHandler(new wxRibbonXmlHandler);
+#endif
+
+#if wxUSE_AUI
+    wxXmlResource::Get()->AddHandler(new wxAuiNotebookXmlHandler);
+    wxXmlResource::Get()->AddHandler(new wxAuiToolBarXmlHandler);
+#endif
 
     // Load all of the XRC files that will be used. You can put everything
     // into one giant XRC file if you wanted, but then they become more

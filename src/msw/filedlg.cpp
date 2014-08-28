@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -43,8 +42,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "wx/dynlib.h"
 #include "wx/filename.h"
+#include "wx/scopeguard.h"
 #include "wx/tokenzr.h"
+#include "wx/modalhook.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -75,6 +77,78 @@ static wxRect gs_rectDialog(0, 0, 428, 266);
 IMPLEMENT_CLASS(wxFileDialog, wxFileDialogBase)
 
 // ----------------------------------------------------------------------------
+
+namespace
+{
+
+#if wxUSE_DYNLIB_CLASS
+
+typedef BOOL (WINAPI *GetProcessUserModeExceptionPolicy_t)(LPDWORD);
+typedef BOOL (WINAPI *SetProcessUserModeExceptionPolicy_t)(DWORD);
+
+GetProcessUserModeExceptionPolicy_t gs_pfnGetProcessUserModeExceptionPolicy
+    = (GetProcessUserModeExceptionPolicy_t) -1;
+
+SetProcessUserModeExceptionPolicy_t gs_pfnSetProcessUserModeExceptionPolicy
+    = (SetProcessUserModeExceptionPolicy_t) -1;
+
+DWORD gs_oldExceptionPolicyFlags = 0;
+
+bool gs_changedPolicy = false;
+
+#endif // #if wxUSE_DYNLIB_CLASS
+
+/*
+Since Windows 7 by default (callback) exceptions aren't swallowed anymore
+with native x64 applications. Exceptions can occur in a file dialog when
+using the hook procedure in combination with third-party utilities.
+Since Windows 7 SP1 the swallowing of exceptions can be enabled again
+by using SetProcessUserModeExceptionPolicy.
+*/
+void ChangeExceptionPolicy()
+{
+#if wxUSE_DYNLIB_CLASS
+    gs_changedPolicy = false;
+
+    wxLoadedDLL dllKernel32(wxT("kernel32.dll"));
+
+    if ( gs_pfnGetProcessUserModeExceptionPolicy
+        == (GetProcessUserModeExceptionPolicy_t) -1)
+    {
+        wxDL_INIT_FUNC(gs_pfn, GetProcessUserModeExceptionPolicy, dllKernel32);
+        wxDL_INIT_FUNC(gs_pfn, SetProcessUserModeExceptionPolicy, dllKernel32);
+    }
+
+    if ( !gs_pfnGetProcessUserModeExceptionPolicy
+        || !gs_pfnSetProcessUserModeExceptionPolicy
+        || !gs_pfnGetProcessUserModeExceptionPolicy(&gs_oldExceptionPolicyFlags) )
+    {
+        return;
+    }
+
+    if ( gs_pfnSetProcessUserModeExceptionPolicy(gs_oldExceptionPolicyFlags
+        | 0x1 /* PROCESS_CALLBACK_FILTER_ENABLED */ ) )
+    {
+        gs_changedPolicy = true;
+    }
+
+#endif // wxUSE_DYNLIB_CLASS
+}
+
+void RestoreExceptionPolicy()
+{
+#if wxUSE_DYNLIB_CLASS
+    if (gs_changedPolicy)
+    {
+        gs_changedPolicy = false;
+        (void) gs_pfnSetProcessUserModeExceptionPolicy(gs_oldExceptionPolicyFlags);
+    }
+#endif // wxUSE_DYNLIB_CLASS
+}
+
+} // unnamed namespace
+
+// ----------------------------------------------------------------------------
 // hook function for moving the dialog
 // ----------------------------------------------------------------------------
 
@@ -98,13 +172,27 @@ wxFileDialogHookFunction(HWND      hDlg,
 
         case WM_NOTIFY:
             {
-                OFNOTIFY *pNotifyCode = reinterpret_cast<OFNOTIFY *>(lParam);
-                if ( pNotifyCode->hdr.code == CDN_INITDONE )
+                NMHDR* const pNM = reinterpret_cast<NMHDR*>(lParam);
+                if ( pNM->code > CDN_LAST && pNM->code <= CDN_FIRST )
                 {
-                    reinterpret_cast<wxFileDialog *>(
-                                        pNotifyCode->lpOFN->lCustData)
-                        ->MSWOnInitDone((WXHWND)hDlg);
-                 }
+                    OFNOTIFY* const
+                        pNotifyCode = reinterpret_cast<OFNOTIFY *>(lParam);
+                    wxFileDialog* const
+                        dialog = reinterpret_cast<wxFileDialog *>(
+                                        pNotifyCode->lpOFN->lCustData
+                                    );
+
+                    switch ( pNotifyCode->hdr.code )
+                    {
+                        case CDN_INITDONE:
+                            dialog->MSWOnInitDone((WXHWND)hDlg);
+                            break;
+
+                        case CDN_SELCHANGE:
+                            dialog->MSWOnSelChange((WXHWND)hDlg);
+                            break;
+                    }
+                }
             }
             break;
 
@@ -156,7 +244,7 @@ void wxFileDialog::GetPaths(wxArrayString& paths) const
     paths.Empty();
 
     wxString dir(m_dir);
-    if ( m_dir.Last() != wxT('\\') )
+    if ( m_dir.empty() || m_dir.Last() != wxT('\\') )
         dir += wxT('\\');
 
     size_t count = m_fileNames.GetCount();
@@ -248,8 +336,27 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
         SetPosition(gs_rectDialog.GetPosition());
     }
 
+    // Call selection change handler so that update handler will be
+    // called once with no selection.
+    MSWOnSelChange(hDlg);
+
     // we shouldn't destroy this HWND
     SetHWND(NULL);
+}
+
+void wxFileDialog::MSWOnSelChange(WXHWND hDlg)
+{
+    TCHAR buf[MAX_PATH];
+    LRESULT len = SendMessage(::GetParent(hDlg), CDM_GETFILEPATH,
+                              MAX_PATH, reinterpret_cast<LPARAM>(buf));
+
+    if ( len > 0 )
+        m_currentlySelectedFilename = buf;
+    else
+        m_currentlySelectedFilename.clear();
+
+    if ( m_extraControl )
+        m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
 }
 
 // helper used below in ShowCommFileDialog(): style is used to determine
@@ -375,6 +482,8 @@ void wxFileDialog::MSWOnInitDialogHook(WXHWND hwnd)
 
 int wxFileDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
     HWND hWnd = 0;
     if (m_parent) hWnd = (HWND) m_parent->GetHWND();
     if (!hWnd && wxTheApp->GetTopWindow())
@@ -388,6 +497,9 @@ int wxFileDialog::ShowModal()
 
     long msw_flags = OFN_HIDEREADONLY;
 
+    if ( HasFdFlag(wxFD_NO_FOLLOW) )
+        msw_flags |= OFN_NODEREFERENCELINKS;
+
     if ( HasFdFlag(wxFD_FILE_MUST_EXIST) )
         msw_flags |= OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
     /*
@@ -400,11 +512,14 @@ int wxFileDialog::ShowModal()
     */
     if (m_bMovedWindow || HasExtraControlCreator()) // we need these flags.
     {
+        ChangeExceptionPolicy();
         msw_flags |= OFN_EXPLORER|OFN_ENABLEHOOK;
 #ifndef __WXWINCE__
         msw_flags |= OFN_ENABLESIZING;
 #endif
     }
+
+    wxON_BLOCK_EXIT0(RestoreExceptionPolicy);
 
     if ( HasFdFlag(wxFD_MULTIPLE) )
     {
@@ -430,7 +545,7 @@ int wxFileDialog::ShowModal()
 
     of.lStructSize       = gs_ofStructSize;
     of.hwndOwner         = hWnd;
-    of.lpstrTitle        = m_message.wx_str();
+    of.lpstrTitle        = m_message.t_str();
     of.lpstrFileTitle    = titleBuffer;
     of.nMaxFileTitle     = wxMAXFILE + 1 + wxMAXEXT;
 
@@ -532,7 +647,7 @@ int wxFileDialog::ShowModal()
         }
     }
 
-    of.lpstrFilter  = (LPTSTR)filterBuffer.wx_str();
+    of.lpstrFilter  = filterBuffer.t_str();
     of.nFilterIndex = m_filterIndex + 1;
 
     //=== Setting defaultFileName >>=========================================
@@ -549,7 +664,7 @@ int wxFileDialog::ShowModal()
     wxString defextBuffer; // we need it to be alive until GetSaveFileName()!
     if (HasFdFlag(wxFD_SAVE))
     {
-        const wxChar* extension = filterBuffer.wx_str();
+        const wxChar* extension = filterBuffer.t_str();
         int maxFilter = (int)(of.nFilterIndex*2L) - 1;
 
         for( int i = 0; i < maxFilter; i++ )           // get extension
@@ -631,7 +746,7 @@ int wxFileDialog::ShowModal()
              (of.nFileExtension && fileNameBuffer[of.nFileExtension] == wxT('\0')) )
         {
             // User has typed a filename without an extension:
-            const wxChar* extension = filterBuffer.wx_str();
+            const wxChar* extension = filterBuffer.t_str();
             int   maxFilter = (int)(of.nFilterIndex*2L) - 1;
 
             for( int i = 0; i < maxFilter; i++ )           // get extension

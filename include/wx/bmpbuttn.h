@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     25.08.00
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,6 +23,8 @@
 #if (defined(__WXMSW__) || defined(__WXGTK20__) || defined(__WXOSX__) || defined(__WXQT__)) && !defined(__WXUNIVERSAL__)
     #define wxHAS_BUTTON_BITMAP
 #endif
+
+class WXDLLIMPEXP_FWD_CORE wxBitmapButton;
 
 // ----------------------------------------------------------------------------
 // wxBitmapButton: a button which shows bitmaps instead of the usual string.
@@ -64,6 +65,12 @@ public:
                                 validator, name);
     }
 
+    // Special creation function for a standard "Close" bitmap. It allows to
+    // simply create a close button with the image appropriate for the common
+    // platform.
+    static wxBitmapButton* NewCloseButton(wxWindow* parent, wxWindowID winid);
+
+
     // set/get the margins around the button
     virtual void SetMargins(int x, int y)
     {
@@ -72,16 +79,6 @@ public:
 
     int GetMarginX() const { return DoGetBitmapMargins().x; }
     int GetMarginY() const { return DoGetBitmapMargins().y; }
-
-    // deprecated synonym for SetBitmapLabel()
-#if WXWIN_COMPATIBILITY_2_6
-    wxDEPRECATED_INLINE( void SetLabel(const wxBitmap& bitmap),
-       SetBitmapLabel(bitmap); )
-
-    // prevent virtual function hiding
-    virtual void SetLabel(const wxString& label)
-        { wxWindow::SetLabel(label); }
-#endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
 #ifndef wxHAS_BUTTON_BITMAP
@@ -126,12 +123,6 @@ protected:
     #include "wx/gtk1/bmpbuttn.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/bmpbuttn.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/bmpbuttn.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/bmpbuttn.h"
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/bmpbuttn.h"
 #elif defined(__WXQT__)
     #include "wx/qt/bmpbuttn.h"
 #endif

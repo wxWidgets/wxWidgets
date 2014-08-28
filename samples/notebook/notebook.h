@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Dimitri Schoolwerth
 // Created:     25/10/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998-2002 wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -13,7 +12,9 @@
 #include "wx/listbook.h"
 #include "wx/treebook.h"
 #include "wx/notebook.h"
+#include "wx/simplebook.h"
 #include "wx/toolbook.h"
+#include "wx/aui/auibook.h"
 
 #if wxUSE_LOG && !defined( __SMARTPHONE__ )
     #define USE_LOG 1
@@ -25,7 +26,7 @@
 class MyApp : public wxApp
 {
 public:
-    bool OnInit();
+    bool OnInit() wxOVERRIDE;
 };
 
 DECLARE_APP(MyApp)
@@ -51,6 +52,8 @@ public:
     void OnNextPage(wxCommandEvent& event);
     void OnChangeSelection(wxCommandEvent &event);
     void OnSetSelection(wxCommandEvent &event);
+    void OnGetPageSize(wxCommandEvent &event);
+    void OnSetPageSize(wxCommandEvent &event);
 
     void OnAddSubPage(wxCommandEvent& event);
     void OnAddPageBefore(wxCommandEvent& event);
@@ -77,6 +80,9 @@ public:
 #if wxUSE_TOOLBOOK
     void OnToolbook(wxToolbookEvent& event) { OnBookCtrl(event); }
 #endif
+#if wxUSE_AUI
+    void OnAuiNotebook(wxAuiNotebookEvent& event) { OnBookCtrl(event); }
+#endif
 
     void OnIdle(wxIdleEvent& event);
 
@@ -91,7 +97,6 @@ private:
 
     void RecreateBook();
     wxPanel *CreateNewPage() const;
-    int TranslateBookFlag(int nb, int lb, int chb, int tbk, int toolbk) const;
     void AddFlagStrIfFlagPresent(wxString & flagStr, long flags, long flag, const wxChar * flagName) const;
 
     // Sample setup
@@ -102,6 +107,8 @@ private:
         Type_Choicebook,
         Type_Treebook,
         Type_Toolbook,
+        Type_AuiNotebook,
+        Type_Simplebook,
         Type_Max
     } m_type;
     int m_orient;
@@ -126,7 +133,7 @@ private:
 
     wxImageList *m_imageList;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 enum ID_COMMANDS
@@ -137,6 +144,8 @@ enum ID_COMMANDS
     ID_BOOK_CHOICEBOOK,
     ID_BOOK_TREEBOOK,
     ID_BOOK_TOOLBOOK,
+    ID_BOOK_AUINOTEBOOK,
+    ID_BOOK_SIMPLEBOOK,
     ID_BOOK_MAX,
 
     ID_ORIENT_DEFAULT,
@@ -161,6 +170,8 @@ enum ID_COMMANDS
     ID_ADD_SUB_PAGE,
     ID_CHANGE_SELECTION,
     ID_SET_SELECTION,
+    ID_GET_PAGE_SIZE,
+    ID_SET_PAGE_SIZE,
 
 #if wxUSE_HELP
     ID_CONTEXT_HELP,

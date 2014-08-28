@@ -8,6 +8,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#ifdef __WATCOMC__
+#ifndef __LINUX__
+#include <io.h>
+#else
+#include <unistd.h>
+#endif
+#endif
+
+#ifdef __BEOS__
+#include <unistd.h>
+#endif
+
 #ifndef S_ISREG
 #ifndef S_IFREG
 #define S_IFREG _S_IFREG
@@ -46,16 +58,26 @@ filemap(const char *name,
   }
   if (fstat(fd, &sb) < 0) {
     perror(name);
+    close(fd);
     return 0;
   }
   if (!S_ISREG(sb.st_mode)) {
     fprintf(stderr, "%s: not a regular file\n", name);
+    close(fd);
     return 0;
   }
   nbytes = sb.st_size;
+  /* malloc will return NULL with nbytes == 0, handle files with size 0 */
+  if (nbytes == 0) {
+    static const char c = '\0';
+    processor(&c, 0, name, arg);
+    close(fd);
+    return 1;
+  }
   p = malloc(nbytes);
   if (!p) {
     fprintf(stderr, "%s: out of memory\n", name);
+    close(fd);
     return 0;
   }
   n = read(fd, p, nbytes);

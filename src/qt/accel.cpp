@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/accel.cpp
 // Author:      Peter Most, Javier Torres
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -11,7 +10,7 @@
 
 #include "wx/accel.h"
 #include "wx/list.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 #include <QtCore/QVariant>
 
 // ----------------------------------------------------------------------------
@@ -104,3 +103,7 @@ wxObjectRefData *wxAcceleratorTable::CloneRefData(const wxObjectRefData *data) c
     return new wxAccelRefData(*(wxAccelRefData *)data);
 }
 
+bool wxAcceleratorTable::IsOk() const
+{
+    return (m_refData != NULL);
+}

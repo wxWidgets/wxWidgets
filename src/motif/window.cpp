@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -1253,8 +1252,8 @@ void wxWindow::DoSetSizeIntr(int x, int y, int width, int height,
 
     if (x == -1)
         x = oldX;
-    if (x == -1)
-        x = oldY;
+    if (y == -1)
+        y = oldY;
 
     if ( !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
     {
@@ -1692,7 +1691,7 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
                     wxMenuItem* item = frame->GetMenuBar()->FindItem(entry->GetCommand());
                     if (item)
                     {
-                        wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, entry->GetCommand());
+                        wxCommandEvent commandEvent(wxEVT_MENU, entry->GetCommand());
                         commandEvent.SetEventObject(frame);
 
                         // If ProcessEvent returns true (it was handled), then
@@ -1714,7 +1713,7 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
             // For now, only buttons.
             if ( wxDynamicCast(child, wxButton) )
             {
-                wxCommandEvent commandEvent (wxEVT_COMMAND_BUTTON_CLICKED, child->GetId());
+                wxCommandEvent commandEvent (wxEVT_BUTTON, child->GetId());
                 commandEvent.SetEventObject(child);
                 return child->HandleWindowEvent(commandEvent);
             }

@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/dataview.cpp
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -9,7 +8,11 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_DATAVIEWCTRL
+
 #include "wx/dataview.h"
+
+#ifndef wxUSE_GENERICDATAVIEWCTRL
 
 wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *renderer,
                   unsigned int model_column, int width,
@@ -312,3 +315,7 @@ wxDataViewItem wxDataViewCtrl::DoGetCurrentItem() const
 void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
 {
 }
+
+#endif // !wxUSE_GENERICDATAVIEWCTRL
+
+#endif // wxUSE_DATAVIEWCTRL

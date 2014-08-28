@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -58,9 +57,17 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
     if ( cg == NULL )
     {
         SetGraphicsContext( wxGraphicsContext::Create( window ) ) ;
+        m_contentScaleFactor = window->GetContentScaleFactor();
+        SetDeviceOrigin(-window->MacGetLeftBorderSize() , -window->MacGetTopBorderSize());
     }
     else
     {
+        // determine content scale
+        CGRect userrect = CGRectMake(0, 0, 10, 10);
+        CGRect devicerect;
+        devicerect = CGContextConvertRectToDeviceSpace(cg, userrect);
+        m_contentScaleFactor = devicerect.size.height / userrect.size.height;
+
         CGContextSaveGState( cg );
         m_release = true ;
         // make sure the context is having its origin at the wx-window coordinates of the
@@ -74,7 +81,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
     }
     DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
 
-    SetBackground(wxBrush(window->GetBackgroundColour(),wxSOLID));
+    SetBackground(wxBrush(window->GetBackgroundColour(),wxBRUSHSTYLE_SOLID));
 
     SetFont( window->GetFont() ) ;
 }
@@ -157,13 +164,17 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window ) :
     m_window->GetClientSize( &m_width , &m_height);
     if ( !m_window->IsShownOnScreen() )
         m_width = m_height = 0;
-    SetDeviceOrigin( origin.x, origin.y );
+    
+    int x0,y0;
+    DoGetDeviceOrigin(&x0,&y0);
+    SetDeviceOrigin( origin.x + x0, origin.y + y0 );
+    
     DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
 }
 
 wxClientDCImpl::~wxClientDCImpl()
 {
-    if( GetGraphicsContext() && GetGraphicsContext()->GetNativeContext() )
+    if( GetGraphicsContext() && GetGraphicsContext()->GetNativeContext() && !m_release )
         Flush();
 }
 

@@ -4,7 +4,6 @@
 // Author:      Robert Roebling
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWindows team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -31,7 +30,7 @@
 // ----------------------------------------------------------------------------
 
 // the application icon
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -49,7 +48,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 // MyCanvas is a canvas on which you can type
@@ -106,8 +105,8 @@ private:
     // the text
     wxChar  *m_text;
 
-    DECLARE_DYNAMIC_CLASS(MyCanvas)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(MyCanvas);
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -129,7 +128,7 @@ private:
     MyCanvas *m_canvas;
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -157,13 +156,13 @@ enum
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Caret_Quit,  MyFrame::OnQuit)
     EVT_MENU(Caret_About, MyFrame::OnAbout)
     EVT_MENU(Caret_SetBlinkTime, MyFrame::OnSetBlinkTime)
     EVT_MENU(Caret_SetFontSize, MyFrame::OnSetFontSize)
     EVT_MENU(Caret_Move, MyFrame::OnCaretMove)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
@@ -216,7 +215,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(Caret_SetFontSize, wxT("&Font size...\tCtrl-S"));
     menuFile->Append(Caret_Move, wxT("&Move caret\tCtrl-C"));
     menuFile->AppendSeparator();
-    menuFile->Append(Caret_About, wxT("&About...\tCtrl-A"), wxT("Show about dialog"));
+    menuFile->Append(Caret_About, wxT("&About\tCtrl-A"), wxT("Show about dialog"));
     menuFile->AppendSeparator();
     menuFile->Append(Caret_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
@@ -297,11 +296,11 @@ void MyFrame::OnSetFontSize(wxCommandEvent& WXUNUSED(event))
 
 IMPLEMENT_DYNAMIC_CLASS(MyCanvas, wxScrolledWindow)
 
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_PAINT(MyCanvas::OnPaint)
     EVT_SIZE(MyCanvas::OnSize)
     EVT_CHAR(MyCanvas::OnChar)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent )
         : wxScrolledWindow( parent, wxID_ANY,

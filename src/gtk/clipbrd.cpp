@@ -2,7 +2,6 @@
 // Name:        src/gtk/clipbrd.cpp
 // Purpose:     wxClipboard implementation for wxGTK
 // Author:      Robert Roebling, Vadim Zeitlin
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 //              (c) 2007 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -328,7 +327,7 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     {
         gtk_selection_data_set(
             selection_data,
-            GDK_SELECTION_TYPE_STRING,
+            format.GetFormatId(),
             8*sizeof(gchar),
             (const guchar*)buf.data(),
             size );
@@ -344,7 +343,7 @@ void wxClipboard::GTKOnSelectionReceived(const GtkSelectionData& sel)
     wxLogTrace(TRACE_CLIPBOARD, wxT("Received selection %s"),
                format.GetId().c_str());
 
-    if ( !m_receivedData->IsSupportedFormat(format) )
+    if ( !m_receivedData->IsSupportedFormat(format, wxDataObject::Set) )
         return;
 
     m_receivedData->SetData(format,
@@ -434,6 +433,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxClipboard,wxObject)
 
 wxClipboard::wxClipboard()
 {
+    m_idSelectionGetHandler = 0;
+
     m_open = false;
 
     m_dataPrimary =
@@ -507,7 +508,7 @@ bool wxClipboard::SetSelectionOwner(bool set)
                 set ? m_clipboardWidget : NULL,
                 GTKGetClipboardAtom(),
                 (guint32)GDK_CURRENT_TIME
-              );
+              ) != 0;
 
     if ( !rc )
     {
@@ -625,7 +626,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 
     // get formats from wxDataObjects
     const size_t count = data->GetFormatCount();
-    wxDataFormatArray formats(new wxDataFormat[count]);
+    wxDataFormatArray formats(count);
     data->GetAllFormats(formats.get());
 
     // always provide TIMESTAMP as a target, see comments in selection_handler
@@ -642,9 +643,13 @@ bool wxClipboard::AddData( wxDataObject *data )
         AddSupportedTarget(format);
     }
 
-    g_signal_connect (m_clipboardWidget, "selection_get",
+    if ( !m_idSelectionGetHandler )
+    {
+        m_idSelectionGetHandler = g_signal_connect (
+                      m_clipboardWidget, "selection_get",
                       G_CALLBACK (selection_handler),
                       GUINT_TO_POINTER (gtk_get_current_event_time()) );
+    }
 
     // tell the world we offer clipboard data
     return SetSelectionOwner();
@@ -685,7 +690,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     // get all supported formats from wxDataObjects: notice that we are setting
     // the object data, so we need them in "Set" direction
     const size_t count = data.GetFormatCount(wxDataObject::Set);
-    wxDataFormatArray formats(new wxDataFormat[count]);
+    wxDataFormatArray formats(count);
     data.GetAllFormats(formats.get(), wxDataObject::Set);
 
     for ( size_t i = 0; i < count; i++ )

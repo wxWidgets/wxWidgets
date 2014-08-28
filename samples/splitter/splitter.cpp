@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -39,7 +38,7 @@
 #include "wx/splitter.h"
 #include "wx/dcmirror.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -60,7 +59,8 @@ enum
     SPLIT_SETPOSITION,
     SPLIT_SETMINSIZE,
     SPLIT_SETGRAVITY,
-    SPLIT_REPLACE
+    SPLIT_REPLACE,
+    SPLIT_INVISIBLE
 };
 
 // ----------------------------------------------------------------------------
@@ -72,7 +72,7 @@ class MyApp: public wxApp
 public:
     MyApp() { }
 
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
     wxDECLARE_NO_COPY_CLASS(MyApp);
 };
@@ -99,6 +99,7 @@ public:
     void OnSetMinSize(wxCommandEvent& event);
     void OnSetGravity(wxCommandEvent& event);
     void OnReplace(wxCommandEvent &event);
+    void OnToggleInvisible(wxCommandEvent &event);
 
     void OnQuit(wxCommandEvent& event);
 
@@ -106,14 +107,15 @@ public:
     void OnUpdateUIHorizontal(wxUpdateUIEvent& event);
     void OnUpdateUIVertical(wxUpdateUIEvent& event);
     void OnUpdateUIUnsplit(wxUpdateUIEvent& event);
+    void OnUpdateUIInvisible(wxUpdateUIEvent& event);
 
 private:
-    wxScrolledWindow *m_left, *m_right;
+    wxWindow *m_left, *m_right;
 
     wxSplitterWindow* m_splitter;
     wxWindow *m_replacewindow;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(MyFrame);
 };
 
@@ -131,7 +133,7 @@ public:
 private:
     wxFrame *m_frame;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(MySplitterWindow);
 };
 
@@ -141,7 +143,7 @@ public:
     MyCanvas(wxWindow* parent, bool mirror);
     virtual ~MyCanvas(){};
 
-    virtual void OnDraw(wxDC& dc);
+    virtual void OnDraw(wxDC& dc) wxOVERRIDE;
 
 private:
     bool m_mirror;
@@ -176,7 +178,7 @@ bool MyApp::OnInit()
 // MyFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(SPLIT_VERTICAL, MyFrame::OnSplitVertical)
     EVT_MENU(SPLIT_HORIZONTAL, MyFrame::OnSplitHorizontal)
     EVT_MENU(SPLIT_UNSPLIT, MyFrame::OnUnsplit)
@@ -187,13 +189,15 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(SPLIT_SETMINSIZE, MyFrame::OnSetMinSize)
     EVT_MENU(SPLIT_SETGRAVITY, MyFrame::OnSetGravity)
     EVT_MENU(SPLIT_REPLACE, MyFrame::OnReplace)
+    EVT_MENU(SPLIT_INVISIBLE, MyFrame::OnToggleInvisible)
 
     EVT_MENU(SPLIT_QUIT, MyFrame::OnQuit)
 
     EVT_UPDATE_UI(SPLIT_VERTICAL, MyFrame::OnUpdateUIVertical)
     EVT_UPDATE_UI(SPLIT_HORIZONTAL, MyFrame::OnUpdateUIHorizontal)
     EVT_UPDATE_UI(SPLIT_UNSPLIT, MyFrame::OnUpdateUIUnsplit)
-END_EVENT_TABLE()
+    EVT_UPDATE_UI(SPLIT_INVISIBLE, MyFrame::OnUpdateUIInvisible)
+wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame()
@@ -218,6 +222,9 @@ MyFrame::MyFrame()
     splitMenu->Append(SPLIT_UNSPLIT,
                       wxT("&Unsplit\tCtrl-U"),
                       wxT("Unsplit"));
+    splitMenu->AppendCheckItem(SPLIT_INVISIBLE,
+                      wxT("Toggle sash &invisibility\tCtrl-I"),
+                      wxT("Toggle sash invisibility"));
     splitMenu->AppendSeparator();
 
     splitMenu->AppendCheckItem(SPLIT_LIVE,
@@ -257,17 +264,21 @@ MyFrame::MyFrame()
     menuBar->Check(SPLIT_LIVE, true);
     m_splitter = new MySplitterWindow(this);
 
+    // If you use non-zero gravity you must initialize the splitter with its
+    // correct initial size, otherwise it will change the sash position by a
+    // huge amount when it's resized from its initial default size to its real
+    // size when the frame lays it out. This wouldn't be necessary if default
+    // zero gravity were used (although it would do no harm neither).
+    m_splitter->SetSize(GetClientSize());
     m_splitter->SetSashGravity(1.0);
 
 #if 1
     m_left = new MyCanvas(m_splitter, true);
     m_left->SetBackgroundColour(*wxRED);
-    m_left->SetScrollbars(20, 20, 5, 5);
     m_left->SetCursor(wxCursor(wxCURSOR_MAGNIFIER));
 
     m_right = new MyCanvas(m_splitter, false);
     m_right->SetBackgroundColour(*wxCYAN);
-    m_right->SetScrollbars(20, 20, 5, 5);
 #else // for testing kbd navigation inside the splitter
     m_left = new wxTextCtrl(m_splitter, wxID_ANY, wxT("first text"));
     m_right = new wxTextCtrl(m_splitter, wxID_ANY, wxT("second text"));
@@ -430,6 +441,12 @@ void MyFrame::OnReplace(wxCommandEvent& WXUNUSED(event) )
     }
 }
 
+void MyFrame::OnToggleInvisible(wxCommandEvent& WXUNUSED(event) )
+{
+    m_splitter->SetSashInvisible(!m_splitter->IsSashInvisible());
+    m_splitter->SizeWindows();
+}
+
 // Update UI handlers
 
 void MyFrame::OnUpdateUIHorizontal(wxUpdateUIEvent& event)
@@ -447,18 +464,23 @@ void MyFrame::OnUpdateUIUnsplit(wxUpdateUIEvent& event)
     event.Enable( m_splitter->IsSplit() );
 }
 
+void MyFrame::OnUpdateUIInvisible(wxUpdateUIEvent& event)
+{
+    event.Check( m_splitter->IsSashInvisible() );
+}
+
 // ----------------------------------------------------------------------------
 // MySplitterWindow
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MySplitterWindow, wxSplitterWindow)
+wxBEGIN_EVENT_TABLE(MySplitterWindow, wxSplitterWindow)
     EVT_SPLITTER_SASH_POS_CHANGED(wxID_ANY, MySplitterWindow::OnPositionChanged)
     EVT_SPLITTER_SASH_POS_CHANGING(wxID_ANY, MySplitterWindow::OnPositionChanging)
 
     EVT_SPLITTER_DCLICK(wxID_ANY, MySplitterWindow::OnDClick)
 
     EVT_SPLITTER_UNSPLIT(wxID_ANY, MySplitterWindow::OnUnsplitEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MySplitterWindow::MySplitterWindow(wxFrame *parent)
                 : wxSplitterWindow(parent, wxID_ANY,
@@ -512,6 +534,7 @@ MyCanvas::MyCanvas(wxWindow* parent, bool mirror)
                            wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE)
 {
     m_mirror = mirror;
+    SetScrollbars(20, 20, 5, 5);
 }
 
 void MyCanvas::OnDraw(wxDC& dcOrig)

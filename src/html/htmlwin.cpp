@@ -2,7 +2,6 @@
 // Name:        src/html/htmlwin.cpp
 // Purpose:     wxHtmlWindow class for parsing & displaying HTML (implementation)
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -43,9 +42,9 @@
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlLinkEvent, wxCommandEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlCellEvent, wxCommandEvent)
 
-wxDEFINE_EVENT( wxEVT_COMMAND_HTML_CELL_CLICKED, wxHtmlCellEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_HTML_CELL_HOVER, wxHtmlCellEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEvent );
+wxDEFINE_EVENT( wxEVT_HTML_CELL_CLICKED, wxHtmlCellEvent );
+wxDEFINE_EVENT( wxEVT_HTML_CELL_HOVER, wxHtmlCellEvent );
+wxDEFINE_EVENT( wxEVT_HTML_LINK_CLICKED, wxHtmlLinkEvent );
 
 
 #if wxUSE_CLIPBOARD
@@ -67,7 +66,7 @@ public:
         m_orient = orient;
     }
 
-    virtual void Notify();
+    virtual void Notify() wxOVERRIDE;
 
 private:
     wxScrolledWindow *m_win;
@@ -206,7 +205,7 @@ void wxHtmlWindowMouseHelper::HandleIdle(wxHtmlCell *rootCell,
 
         wxCursor cur;
         if (cell)
-            cur = cell->GetMouseCursor(m_interface);
+            cur = cell->GetMouseCursorAt(m_interface, pos);
         else
             cur = m_interface->GetHTMLCursor(
                         wxHtmlWindowInterface::HTMLCursor_Default);
@@ -229,6 +228,11 @@ void wxHtmlWindowMouseHelper::HandleIdle(wxHtmlCell *rootCell,
     {
         if ( cell )
         {
+            // A single cell can have different cursors for different positions,
+            // so update cursor for this case as well.
+            wxCursor cur = cell->GetMouseCursorAt(m_interface, pos);
+            m_interface->GetHTMLWindow()->SetCursor(cur);
+
             OnCellMouseHover(cell, pos.x, pos.y);
         }
     }
@@ -240,7 +244,7 @@ bool wxHtmlWindowMouseHelper::OnCellClicked(wxHtmlCell *cell,
                                             wxCoord x, wxCoord y,
                                             const wxMouseEvent& event)
 {
-    wxHtmlCellEvent ev(wxEVT_COMMAND_HTML_CELL_CLICKED,
+    wxHtmlCellEvent ev(wxEVT_HTML_CELL_CLICKED,
                        m_interface->GetHTMLWindow()->GetId(),
                        cell, wxPoint(x,y), event);
 
@@ -250,7 +254,10 @@ bool wxHtmlWindowMouseHelper::OnCellClicked(wxHtmlCell *cell,
 
         wxASSERT_MSG( cell, wxT("can't be called with NULL cell") );
 
-        cell->ProcessMouseClick(m_interface, ev.GetPoint(), ev.GetMouseEvent());
+        // If we don't return true, HTML listboxes will always think that they should take
+        // the focus
+        if (cell->ProcessMouseClick(m_interface, ev.GetPoint(), ev.GetMouseEvent()))
+            return true;
     }
 
     // true if a link was clicked, false otherwise
@@ -261,7 +268,7 @@ void wxHtmlWindowMouseHelper::OnCellMouseHover(wxHtmlCell * cell,
                                                wxCoord x,
                                                wxCoord y)
 {
-    wxHtmlCellEvent ev(wxEVT_COMMAND_HTML_CELL_HOVER,
+    wxHtmlCellEvent ev(wxEVT_HTML_CELL_HOVER,
                        m_interface->GetHTMLWindow()->GetId(),
                        cell, wxPoint(x,y), wxMouseEvent());
     m_interface->GetHTMLWindow()->GetEventHandler()->ProcessEvent(ev);
@@ -279,6 +286,7 @@ wxHtmlFilter *wxHtmlWindow::m_DefaultFilter = NULL;
 wxHtmlProcessorList *wxHtmlWindow::m_GlobalProcessors = NULL;
 wxCursor *wxHtmlWindow::ms_cursorLink = NULL;
 wxCursor *wxHtmlWindow::ms_cursorText = NULL;
+wxCursor *wxHtmlWindow::ms_cursorDefault = NULL;
 
 void wxHtmlWindow::CleanUpStatics()
 {
@@ -289,6 +297,7 @@ void wxHtmlWindow::CleanUpStatics()
     wxDELETE(m_GlobalProcessors);
     wxDELETE(ms_cursorLink);
     wxDELETE(ms_cursorText);
+    wxDELETE(ms_cursorDefault);
 }
 
 void wxHtmlWindow::Init()
@@ -374,6 +383,14 @@ void wxHtmlWindow::SetRelatedFrame(wxFrame* frame, const wxString& format)
 {
     m_RelatedFrame = frame;
     m_TitleFormat = format;
+
+    // Check if the format provided can actually be used: it's more
+    // user-friendly to do it here and now rather than triggering the same
+    // assert much later when it's really used.
+
+    // If you get an assert here, it means that the title doesn't contain
+    // exactly one "%s" format specifier, which is an error in the caller.
+    wxString::Format(m_TitleFormat, wxString());
 }
 
 
@@ -1090,7 +1107,7 @@ void wxHtmlWindow::DoEraseBackground(wxDC& dc)
     if ( m_bmpBg.IsOk() )
     {
         // draw the background bitmap tiling it over the entire window area
-        const wxSize sz = GetClientSize();
+        const wxSize sz = GetVirtualSize();
         const wxSize sizeBmp(m_bmpBg.GetWidth(), m_bmpBg.GetHeight());
         for ( wxCoord x = 0; x < sz.x; x += sizeBmp.x )
         {
@@ -1100,6 +1117,19 @@ void wxHtmlWindow::DoEraseBackground(wxDC& dc)
             }
         }
     }
+}
+
+void wxHtmlWindow::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
+{
+    // We never get real erase background events as we changed our background
+    // style to wxBG_STYLE_PAINT in our ctor so the only time when we get here
+    // is when an artificial wxEraseEvent is generated by our own OnPaint()
+    // below. This handler only exists to stop the event from propagating
+    // downwards to wxWindow which may erase the background itself when it gets
+    // it in some ports (currently this happens in wxUniv), so we simply stop
+    // processing here and set a special flag allowing OnPaint() to see that
+    // the event hadn't been really processed.
+    m_isBgReallyErased = false;
 }
 
 void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
@@ -1134,11 +1164,17 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     PrepareDC(*dc);
 
-    // erase the background: for compatibility, we must generate the event to
-    // allow the user-defined handlers to do it
+    // Erase the background: for compatibility, we must generate the event to
+    // allow the user-defined handlers to do it, hence this hack with sending
+    // an artificial wxEraseEvent to trigger the execution of such handlers.
     wxEraseEvent eraseEvent(GetId(), dc);
     eraseEvent.SetEventObject(this);
-    if ( !ProcessWindowEvent(eraseEvent) )
+
+    // Hack inside a hack: the background wasn't really erased if our own
+    // OnEraseBackground() was executed, so we need to check for the flag set
+    // by it whenever it's called.
+    m_isBgReallyErased = true; // Initially assume it wasn't.
+    if ( !ProcessWindowEvent(eraseEvent) || !m_isBgReallyErased )
     {
         // erase background ourselves
         DoEraseBackground(*dc);
@@ -1148,7 +1184,7 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     // draw the HTML window contents
     dc->SetMapMode(wxMM_TEXT);
-    dc->SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
+    dc->SetBackgroundMode(wxTRANSPARENT);
     dc->SetLayoutDirection(GetLayoutDirection());
 
     wxHtmlRenderingInfo rinfo;
@@ -1214,7 +1250,7 @@ void wxHtmlWindow::OnSize(wxSizeEvent& event)
     {
         m_selection->Set(m_selection->GetFromCell(),
                          m_selection->GetToCell());
-        m_selection->ClearPrivPos();
+        m_selection->ClearFromToCharacterPos();
     }
 
     Refresh();
@@ -1282,7 +1318,8 @@ void wxHtmlWindow::OnMouseUp(wxMouseEvent& event)
 #endif // wxUSE_CLIPBOARD
 
     wxPoint pos = CalcUnscrolledPosition(event.GetPosition());
-    wxHtmlWindowMouseHelper::HandleMouseClick(m_Cell, pos, event);
+    if ( !wxHtmlWindowMouseHelper::HandleMouseClick(m_Cell, pos, event) )
+        event.Skip();
 }
 
 #if wxUSE_CLIPBOARD
@@ -1415,7 +1452,7 @@ void wxHtmlWindow::OnInternalIdle()
                         m_selection->Set(wxPoint(x,y), selcell,
                                          m_tmpSelFromPos, m_tmpSelFromCell);
                     }
-                    m_selection->ClearPrivPos();
+                    m_selection->ClearFromToCharacterPos();
                     Refresh();
                 }
             }
@@ -1518,11 +1555,15 @@ void wxHtmlWindow::OnKeyUp(wxKeyEvent& event)
     if ( IsSelectionEnabled() &&
             (event.GetKeyCode() == 'C' && event.CmdDown()) )
     {
-        wxClipboardTextEvent evt(wxEVT_COMMAND_TEXT_COPY, GetId());
+        wxClipboardTextEvent evt(wxEVT_TEXT_COPY, GetId());
 
         evt.SetEventObject(this);
 
         GetEventHandler()->ProcessEvent(evt);
+    }
+    else
+    {
+        event.Skip();
     }
 }
 
@@ -1664,6 +1705,7 @@ BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_RIGHT_UP(wxHtmlWindow::OnMouseUp)
     EVT_MOTION(wxHtmlWindow::OnMouseMove)
     EVT_PAINT(wxHtmlWindow::OnPaint)
+    EVT_ERASE_BACKGROUND(wxHtmlWindow::OnEraseBackground)
 #if wxUSE_CLIPBOARD
     EVT_LEFT_DCLICK(wxHtmlWindow::OnDoubleClick)
     EVT_ENTER_WINDOW(wxHtmlWindow::OnMouseEnter)
@@ -1758,7 +1800,9 @@ wxCursor wxHtmlWindow::GetDefaultHTMLCursor(HTMLCursor type)
 
         case HTMLCursor_Default:
         default:
-            return *wxSTANDARD_CURSOR;
+            if ( !ms_cursorDefault )
+                ms_cursorDefault = new wxCursor(wxCURSOR_ARROW);
+            return *ms_cursorDefault;
     }
 }
 
@@ -1767,6 +1811,27 @@ wxCursor wxHtmlWindow::GetHTMLCursor(HTMLCursor type) const
     return GetDefaultHTMLCursor(type);
 }
 
+/*static*/
+void wxHtmlWindow::SetDefaultHTMLCursor(HTMLCursor type, const wxCursor& cursor)
+{
+    switch (type)
+    {
+        case HTMLCursor_Link:
+            delete ms_cursorLink;
+            ms_cursorLink = new wxCursor(cursor);
+            return;
+
+        case HTMLCursor_Text:
+            delete ms_cursorText;
+            ms_cursorText = new wxCursor(cursor);
+            return;
+
+        case HTMLCursor_Default:
+        default:
+            delete ms_cursorText;
+            ms_cursorDefault = new wxCursor(cursor);
+    }
+}
 
 //-----------------------------------------------------------------------------
 // wxHtmlWinModule
@@ -1781,8 +1846,8 @@ class wxHtmlWinModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxHtmlWinModule)
 public:
     wxHtmlWinModule() : wxModule() {}
-    bool OnInit() { return true; }
-    void OnExit() { wxHtmlWindow::CleanUpStatics(); }
+    bool OnInit() wxOVERRIDE { return true; }
+    void OnExit() wxOVERRIDE { wxHtmlWindow::CleanUpStatics(); }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlWinModule, wxModule)

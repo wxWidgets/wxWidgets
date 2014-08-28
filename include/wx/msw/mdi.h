@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: 2008-10-31 Vadim Zeitlin: derive from the base classes
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) 1997 Julian Smart
 //              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -110,9 +109,6 @@ public:
 #endif // wxUSE_MENUS
 
 protected:
-    // override to pass menu/toolbar events to the active child first
-    virtual bool TryBefore(wxEvent& event);
-
 #if wxUSE_MENUS_NATIVE
     virtual void InternalSetMenuBar();
 #endif // wxUSE_MENUS_NATIVE
@@ -229,7 +225,6 @@ protected:
     void Init();
 
 private:
-    bool m_needsInitialShow; // Show must be called in idle time after Creation
     bool m_needsResize; // flag which tells us to artificially resize the frame
 
     DECLARE_EVENT_TABLE()

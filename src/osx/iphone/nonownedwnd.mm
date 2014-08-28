@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     2008-06-20
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -55,7 +54,7 @@ wxPoint wxFromNSPoint( UIView* parent, const CGPoint& p )
 
 @end
 
-@interface wxUIContentView : wxUIView
+@interface wxUIContentView : UIView
 {
     wxUIContentViewController* _controller;
 }
@@ -285,6 +284,11 @@ bool wxNonOwnedWindowIPhoneImpl::IsFullScreen() const
     return m_macFullScreenData != NULL ;
 }
 
+bool wxNonOwnedWindowIPhoneImpl::EnableFullScreenView(bool WXUNUSED(enable))
+{
+    return true;
+}
+
 bool wxNonOwnedWindowIPhoneImpl::ShowFullScreen(bool show, long style)
 {
     return true;
@@ -352,7 +356,15 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     
     wxWidgetIPhoneImpl* impl = new wxWidgetIPhoneImpl( now, contentview, true );
     impl->InstallEventHandler();
-    [toplevelwindow addSubview:contentview];
+    
+    if ([toplevelwindow respondsToSelector:@selector(setRootViewController:)])
+    {
+        toplevelwindow.rootViewController = controller;
+    }
+    else
+    {
+        [toplevelwindow addSubview:contentview];
+    }
     return impl;
 }
 
@@ -372,6 +384,16 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     return _controller;
 }
 
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized)
+    {
+        initialized = YES;
+        wxOSXIPhoneClassAddWXMethods( self );
+    }
+}
+ 
 @end
 
 @implementation wxUIContentViewController
@@ -385,6 +407,21 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     
     return YES;
 }
+
+// iOS 6 support, right now unconditionally supporting all orientations, TODO use a orientation mask
+
+-(BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+ - (NSUInteger)supportedInterfaceOrientations
+{
+     return UIInterfaceOrientationMaskAll;
+}
+ 
+ 
+
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
@@ -444,6 +481,7 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
             footerView = frame->GetToolBar()->GetHandle();
         }
     }
+    return footerView;
 }
 
 @end

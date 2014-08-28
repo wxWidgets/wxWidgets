@@ -5,7 +5,6 @@
 // Author:      John Norris, minor changes by Axel Schlueter
 // Modified by:
 // Created:     08.02.01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Johnny C. Norris II
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
@@ -22,7 +21,7 @@
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TOGGLEBUTTON, wxCommandEvent );
 
 // ----------------------------------------------------------------------------
 // wxToggleButtonBase
@@ -37,7 +36,7 @@ public:
     virtual void SetValue(bool state) = 0;
     virtual bool GetValue() const = 0;
 
-    void UpdateWindowUI(long flags)
+    void UpdateWindowUI(long flags) wxOVERRIDE
     {
         wxControl::UpdateWindowUI(flags);
 
@@ -58,21 +57,17 @@ public:
         }
     }
 
-    // Buttons on MSW can look bad if they are not native colours, because
-    // then they become owner-drawn and not theme-drawn.  Disable it here
-    // in wxToggleButtonBase to make it consistent.
-    virtual bool ShouldInheritColours() const { return false; }
 
 protected:
-    // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
+    void QtCreate(wxWindow *parent);
 
     wxDECLARE_NO_COPY_CLASS(wxToggleButtonBase);
 };
 
 
 #define EVT_TOGGLEBUTTON(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, id, wxCommandEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_TOGGLEBUTTON, id, wxCommandEventHandler(fn))
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/tglbtn.h"
@@ -89,13 +84,11 @@ protected:
 #elif defined(__WXMAC__)
     #include "wx/osx/tglbtn.h"
     #define wxHAS_BITMAPTOGGLEBUTTON
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/tglbtn.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/tglbtn.h"
 #elif defined(__WXQT__)
     #include "wx/qt/tglbtn.h"
 #endif
+// old wxEVT_COMMAND_* constants
+#define wxEVT_COMMAND_TOGGLEBUTTON_CLICKED   wxEVT_TOGGLEBUTTON
 
 #endif // wxUSE_TOGGLEBTN
 

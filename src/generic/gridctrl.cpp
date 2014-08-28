@@ -4,7 +4,6 @@
 // Author:      Paul Gammans, Roger Gammans
 // Modified by:
 // Created:     11/04/2001
-// RCS-ID:      $Id$
 // Copyright:   (c) The Computer Surgery (paul@compsurg.co.uk)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -295,57 +294,141 @@ wxGridCellAutoWrapStringRenderer::GetTextLines(wxGrid& grid,
                                                const wxRect& rect,
                                                int row, int col)
 {
-    wxString  data = grid.GetCellValue(row, col);
-
-    wxArrayString lines;
     dc.SetFont(attr.GetFont());
+    const wxCoord maxWidth = rect.GetWidth();
 
-    //Taken from wxGrid again!
-    wxCoord x = 0, y = 0, curr_x = 0;
-    wxCoord max_x = rect.GetWidth();
+    // Transform logical lines into physical ones, wrapping the longer ones.
+    const wxArrayString
+        logicalLines = wxSplit(grid.GetCellValue(row, col), '\n', '\0');
 
-    dc.SetFont(attr.GetFont());
-    wxStringTokenizer tk(data , wxT(" \n\t\r"));
-    wxString thisline = wxEmptyString;
+    // Trying to do anything if the column is hidden anyhow doesn't make sense
+    // and we run into problems in BreakLine() in this case.
+    if ( maxWidth <= 0 )
+        return logicalLines;
 
-    while ( tk.HasMoreTokens() )
+    wxArrayString physicalLines;
+    for ( wxArrayString::const_iterator it = logicalLines.begin();
+          it != logicalLines.end();
+          ++it )
     {
-        wxString tok = tk.GetNextToken();
-        //FIXME: this causes us to print an extra unnecessary
-        //       space at the end of the line. But it
-        //       is invisible , simplifies the size calculation
-        //       and ensures tokens are separated in the display
-        tok += wxT(" ");
+        const wxString& line = *it;
 
-        dc.GetTextExtent(tok, &x, &y);
-        if ( curr_x + x > max_x)
+        if ( dc.GetTextExtent(line).x > maxWidth )
         {
-            if ( curr_x == 0 )
-            {
-                // this means that a single token is wider than the maximal
-                // width -- still use it as is as we need to show at least the
-                // part of it which fits
-                lines.Add(tok);
-            }
-            else
-            {
-                lines.Add(thisline);
-                thisline = tok;
-                curr_x = x;
-            }
+            // Line does not fit, break it up.
+            BreakLine(dc, line, maxWidth, physicalLines);
+        }
+        else // The entire line fits as is
+        {
+            physicalLines.push_back(line);
+        }
+    }
+
+    return physicalLines;
+}
+
+void
+wxGridCellAutoWrapStringRenderer::BreakLine(wxDC& dc,
+                                            const wxString& logicalLine,
+                                            wxCoord maxWidth,
+                                            wxArrayString& lines)
+{
+    wxCoord lineWidth = 0;
+    wxString line;
+
+    // For each word
+    wxStringTokenizer wordTokenizer(logicalLine, wxS(" \t"), wxTOKEN_RET_DELIMS);
+    while ( wordTokenizer.HasMoreTokens() )
+    {
+        const wxString word = wordTokenizer.GetNextToken();
+        const wxCoord wordWidth = dc.GetTextExtent(word).x;
+        if ( lineWidth + wordWidth < maxWidth )
+        {
+            // Word fits, just add it to this line.
+            line += word;
+            lineWidth += wordWidth;
         }
         else
         {
-            thisline+= tok;
-            curr_x += x;
+            // Word does not fit, check whether the word is itself wider that
+            // available width
+            if ( wordWidth < maxWidth )
+            {
+                // Word can fit in a new line, put it at the beginning
+                // of the new line.
+                lines.push_back(line);
+                line = word;
+                lineWidth = wordWidth;
+            }
+            else // Word cannot fit in available width at all.
+            {
+                if ( !line.empty() )
+                {
+                    lines.push_back(line);
+                    line.clear();
+                    lineWidth = 0;
+                }
+
+                // Break it up in several lines.
+                lineWidth = BreakWord(dc, word, maxWidth, lines, line);
+            }
         }
     }
-    //Add last line
-    lines.Add( wxString(thisline) );
 
-    return lines;
+    if ( !line.empty() )
+        lines.push_back(line);
 }
 
+
+wxCoord
+wxGridCellAutoWrapStringRenderer::BreakWord(wxDC& dc,
+                                            const wxString& word,
+                                            wxCoord maxWidth,
+                                            wxArrayString& lines,
+                                            wxString& line)
+{
+    wxArrayInt widths;
+    dc.GetPartialTextExtents(word, widths);
+
+    // TODO: Use binary search to find the first element > maxWidth.
+    const unsigned count = widths.size();
+    unsigned n;
+    for ( n = 0; n < count; n++ )
+    {
+        if ( widths[n] > maxWidth )
+            break;
+    }
+
+    if ( n == 0 )
+    {
+        // This is a degenerate case: the first character of the word is
+        // already wider than the available space, so we just can't show it
+        // completely and have to put the first character in this line.
+        n = 1;
+    }
+
+    lines.push_back(word.substr(0, n));
+
+    // Check if the remainder of the string fits in one line.
+    //
+    // Unfortunately we can't use the existing partial text extents as the
+    // extent of the remainder may be different when it's rendered in a
+    // separate line instead of as part of the same one, so we have to
+    // recompute it.
+    const wxString rest = word.substr(n);
+    const wxCoord restWidth = dc.GetTextExtent(rest).x;
+    if ( restWidth <= maxWidth )
+    {
+        line = rest;
+        return restWidth;
+    }
+
+    // Break the rest of the word into lines.
+    //
+    // TODO: Perhaps avoid recursion? The code is simpler like this but using a
+    // loop in this function would probably be more efficient.
+    return BreakWord(dc, rest, maxWidth, lines, line);
+}
 
 wxSize
 wxGridCellAutoWrapStringRenderer::GetBestSize(wxGrid& grid,
@@ -353,30 +436,58 @@ wxGridCellAutoWrapStringRenderer::GetBestSize(wxGrid& grid,
                                               wxDC& dc,
                                               int row, int col)
 {
-    wxCoord x,y, height , width = grid.GetColSize(col) -20;
-    // for width, subtract 20 because ColSize includes a magin of 10 pixels
-    // that we do not want here and because we always start with an increment
-    // by 10 in the loop below.
-    int count = 250; //Limit iterations..
+    // We have to make a choice here and fix either width or height because we
+    // don't have any naturally best size. This choice is mostly arbitrary, but
+    // we need to be consistent about it, otherwise wxGrid auto-sizing code
+    // would get confused. For now we decide to use a single line of text and
+    // compute the width needed to fully display everything.
+    const int height = dc.GetCharHeight();
 
-    wxRect rect(0,0,width,10);
-
-    // M is a nice large character 'y' gives descender!.
-    dc.GetTextExtent(wxT("My"), &x, &y);
-
-    do
-    {
-        width+=10;
-        rect.SetWidth(width);
-        height = y * (wx_truncate_cast(wxCoord, GetTextLines(grid,dc,attr,rect,row,col).GetCount()));
-        count--;
-    // Search for a shape no taller than the golden ratio.
-    } while (count && (width  < (height*1.68)) );
-
-
-    return wxSize(width,height);
+    return wxSize(GetBestWidth(grid, attr, dc, row, col, height), height);
 }
 
+static const int AUTOWRAP_Y_MARGIN = 4;
+
+int
+wxGridCellAutoWrapStringRenderer::GetBestHeight(wxGrid& grid,
+                                                wxGridCellAttr& attr,
+                                                wxDC& dc,
+                                                int row, int col,
+                                                int width)
+{
+    const int lineHeight = dc.GetCharHeight();
+
+    // Use as many lines as we need for this width and add a small border to
+    // improve the appearance.
+    return GetTextLines(grid, dc, attr, wxSize(width, lineHeight),
+                        row, col).size() * lineHeight + AUTOWRAP_Y_MARGIN;
+}
+
+int
+wxGridCellAutoWrapStringRenderer::GetBestWidth(wxGrid& grid,
+                                               wxGridCellAttr& attr,
+                                               wxDC& dc,
+                                               int row, int col,
+                                               int height)
+{
+    const int lineHeight = dc.GetCharHeight();
+
+    // Maximal number of lines that fully fit but at least 1.
+    const size_t maxLines = height - AUTOWRAP_Y_MARGIN < lineHeight
+                                ? 1
+                                : (height - AUTOWRAP_Y_MARGIN)/lineHeight;
+
+    // Increase width until all the text fits.
+    //
+    // TODO: this is not the most efficient to do it for the long strings.
+    const int charWidth = dc.GetCharWidth();
+    int width = 2*charWidth;
+    while ( GetTextLines(grid, dc, attr, wxSize(width, height),
+                         row, col).size() > maxLines )
+        width += charWidth;
+
+    return width;
+}
 
 // ----------------------------------------------------------------------------
 // wxGridCellStringRenderer
@@ -598,10 +709,13 @@ wxSize wxGridCellNumberRenderer::GetBestSize(wxGrid& grid,
 // wxGridCellFloatRenderer
 // ----------------------------------------------------------------------------
 
-wxGridCellFloatRenderer::wxGridCellFloatRenderer(int width, int precision)
+wxGridCellFloatRenderer::wxGridCellFloatRenderer(int width,
+                                                 int precision,
+                                                 int format)
 {
     SetWidth(width);
     SetPrecision(precision);
+    SetFormat(format);
 }
 
 wxGridCellRenderer *wxGridCellFloatRenderer::Clone() const
@@ -609,6 +723,7 @@ wxGridCellRenderer *wxGridCellFloatRenderer::Clone() const
     wxGridCellFloatRenderer *renderer = new wxGridCellFloatRenderer;
     renderer->m_width = m_width;
     renderer->m_precision = m_precision;
+    renderer->m_style = m_style;
     renderer->m_format = m_format;
 
     return renderer;
@@ -641,22 +756,30 @@ wxString wxGridCellFloatRenderer::GetString(const wxGrid& grid, int row, int col
                 if ( m_precision == -1 )
                 {
                     // default width/precision
-                    m_format = wxT("%f");
+                    m_format = wxT("%");
                 }
                 else
                 {
-                    m_format.Printf(wxT("%%.%df"), m_precision);
+                    m_format.Printf(wxT("%%.%d"), m_precision);
                 }
             }
             else if ( m_precision == -1 )
             {
                 // default precision
-                m_format.Printf(wxT("%%%d.f"), m_width);
+                m_format.Printf(wxT("%%%d."), m_width);
             }
             else
             {
-                m_format.Printf(wxT("%%%d.%df"), m_width, m_precision);
+                m_format.Printf(wxT("%%%d.%d"), m_width, m_precision);
             }
+
+            bool isUpper = ( ( m_style & wxGRID_FLOAT_FORMAT_UPPER ) == wxGRID_FLOAT_FORMAT_UPPER);
+            if ( ( m_style & wxGRID_FLOAT_FORMAT_SCIENTIFIC ) == wxGRID_FLOAT_FORMAT_SCIENTIFIC)
+                m_format += isUpper ? wxT('E') : wxT('e');
+            else if ( ( m_style & wxGRID_FLOAT_FORMAT_COMPACT ) == wxGRID_FLOAT_FORMAT_COMPACT)
+                m_format += isUpper ? wxT('G') : wxT('g');
+            else
+                m_format += wxT('f');
         }
 
         text.Printf(m_format, val);
@@ -704,10 +827,12 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
         // reset to defaults
         SetWidth(-1);
         SetPrecision(-1);
+        SetFormat(wxGRID_FLOAT_FORMAT_DEFAULT);
     }
     else
     {
-        wxString tmp = params.BeforeFirst(wxT(','));
+        wxString rest;
+        wxString tmp = params.BeforeFirst(wxT(','), &rest);
         if ( !tmp.empty() )
         {
             long width;
@@ -721,7 +846,7 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
             }
         }
 
-        tmp = params.AfterFirst(wxT(','));
+        tmp = rest.BeforeFirst(wxT(','));
         if ( !tmp.empty() )
         {
             long precision;
@@ -732,6 +857,43 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
             else
             {
                 wxLogDebug(wxT("Invalid wxGridCellFloatRenderer precision parameter string '%s ignored"), params.c_str());
+            }
+        }
+
+        tmp = rest.AfterFirst(wxT(','));
+        if ( !tmp.empty() )
+        {
+            if ( tmp[0] == wxT('f') )
+            {
+                SetFormat(wxGRID_FLOAT_FORMAT_FIXED);
+            }
+            else if ( tmp[0] == wxT('e') )
+            {
+                SetFormat(wxGRID_FLOAT_FORMAT_SCIENTIFIC);
+            }
+            else if ( tmp[0] == wxT('g') )
+            {
+                SetFormat(wxGRID_FLOAT_FORMAT_COMPACT);
+            }
+            else if ( tmp[0] == wxT('E') )
+            {
+                SetFormat(wxGRID_FLOAT_FORMAT_SCIENTIFIC |
+                          wxGRID_FLOAT_FORMAT_UPPER);
+            }
+            else if ( tmp[0] == wxT('F') )
+            {
+                SetFormat(wxGRID_FLOAT_FORMAT_FIXED |
+                          wxGRID_FLOAT_FORMAT_UPPER);
+            }
+            else if ( tmp[0] == wxT('G') )
+            {
+                SetFormat(wxGRID_FLOAT_FORMAT_COMPACT |
+                          wxGRID_FLOAT_FORMAT_UPPER);
+            }
+            else
+            {
+                wxLogDebug("Invalid wxGridCellFloatRenderer format "
+                           "parameter string '%s ignored", params);
             }
         }
     }

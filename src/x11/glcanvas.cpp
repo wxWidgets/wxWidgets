@@ -5,7 +5,6 @@
 // Author:      Julian Smart and Wolfram Gloger
 // Modified by: Vadim Zeitlin to update to new API
 // Created:     1995, 1999
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart, Wolfram Gloger
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

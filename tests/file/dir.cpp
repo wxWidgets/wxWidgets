@@ -3,7 +3,6 @@
 // Purpose:     wxDir unit test
 // Author:      Francesco Montorsi (extracted from console sample)
 // Created:     2010-06-19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets team
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -41,11 +40,13 @@ private:
         CPPUNIT_TEST( DirExists );
         CPPUNIT_TEST( Traverse );
         CPPUNIT_TEST( Enum );
+        CPPUNIT_TEST( GetName );
     CPPUNIT_TEST_SUITE_END();
 
     void DirExists();
     void Traverse();
     void Enum();
+    void GetName();
 
     void CreateTempFile(const wxString& path);
     wxArrayString DirEnumHelper(wxDir& dir,
@@ -80,15 +81,19 @@ void DirTestCase::setUp()
     wxDir::Make(DIRTEST_FOLDER + SEP + "folder1" + SEP + "subfolder2", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
     wxDir::Make(DIRTEST_FOLDER + SEP + "folder2", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
     wxDir::Make(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
-    
+
     CreateTempFile(DIRTEST_FOLDER + SEP + "folder1" + SEP + "subfolder2" + SEP + "dummy");
     CreateTempFile(DIRTEST_FOLDER + SEP + "dummy");
+    CreateTempFile(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1" + SEP + "dummy.foo");
+    CreateTempFile(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1" + SEP + "dummy.foo.bar");
 }
 
 void DirTestCase::tearDown()
 {
     wxRemove(DIRTEST_FOLDER + SEP + "folder1" + SEP + "subfolder2" + SEP + "dummy");
     wxRemove(DIRTEST_FOLDER + SEP + "dummy");
+    wxRemove(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1" + SEP + "dummy.foo");
+    wxRemove(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1" + SEP + "dummy.foo.bar");
     wxDir::Remove(DIRTEST_FOLDER, wxPATH_RMDIR_RECURSIVE);
 }
 
@@ -158,7 +163,10 @@ void DirTestCase::Traverse()
 {
     // enum all files
     wxArrayString files;
-    CPPUNIT_ASSERT_EQUAL(2, wxDir::GetAllFiles(DIRTEST_FOLDER, &files));
+    CPPUNIT_ASSERT_EQUAL(4, wxDir::GetAllFiles(DIRTEST_FOLDER, &files));
+
+    // enum all files according to the filter
+    CPPUNIT_ASSERT_EQUAL(1, wxDir::GetAllFiles(DIRTEST_FOLDER, &files, "*.foo"));
 
     // enum again with custom traverser
     wxDir dir(DIRTEST_FOLDER);
@@ -178,7 +186,7 @@ void DirTestCase::DirExists()
         { ".", true },
         { "..", true },
         { "$USER_DOCS_DIR", true },
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
         { "$USER_DOCS_DIR\\", true },
         { "$USER_DOCS_DIR\\\\", true },
         { "..\\..", true },
@@ -202,20 +210,20 @@ void DirTestCase::DirExists()
 #endif
     };
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     wxString homedrive = wxGetenv("HOMEDRIVE");
     if ( homedrive.empty() )
         homedrive = "c:";
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
     for ( size_t n = 0; n < WXSIZEOF(testData); n++ )
     {
         wxString dirname = testData[n].dirname;
         dirname.Replace("$USER_DOCS_DIR", wxStandardPaths::Get().GetDocumentsDir());
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
         dirname.Replace("$MSW_DRIVE", homedrive);
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
         std::string errDesc = wxString::Format("failed on directory '%s'", dirname).ToStdString();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(errDesc, testData[n].shouldExist, wxDir::Exists(dirname));
@@ -227,3 +235,19 @@ void DirTestCase::DirExists()
     CPPUNIT_ASSERT( wxDir::Exists(wxGetCwd()) );
 }
 
+void DirTestCase::GetName()
+{
+    wxDir d;
+
+    CPPUNIT_ASSERT( d.Open(".") );
+    CPPUNIT_ASSERT( d.GetName().Last() != wxFILE_SEP_PATH );
+    CPPUNIT_ASSERT( d.GetNameWithSep().Last() == wxFILE_SEP_PATH );
+    CPPUNIT_ASSERT_EQUAL( d.GetName() + wxFILE_SEP_PATH,
+                          d.GetNameWithSep() );
+
+#ifdef __UNIX__
+    CPPUNIT_ASSERT( d.Open("/") );
+    CPPUNIT_ASSERT_EQUAL( "/", d.GetName() );
+    CPPUNIT_ASSERT_EQUAL( "/", d.GetNameWithSep() );
+#endif
+}

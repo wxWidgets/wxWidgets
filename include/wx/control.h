@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     26.07.99
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -72,7 +71,7 @@ public:
     int GetAlignment() const { return m_windowStyle & wxALIGN_MASK; }
 
     // set label with mnemonics
-    virtual void SetLabel(const wxString& label)
+    virtual void SetLabel(const wxString& label) wxOVERRIDE
     {
         m_labelOrig = label;
 
@@ -83,7 +82,7 @@ public:
 
     // return the original string, as it was passed to SetLabel()
     // (i.e. with wx-style mnemonics)
-    virtual wxString GetLabel() const { return m_labelOrig; }
+    virtual wxString GetLabel() const wxOVERRIDE { return m_labelOrig; }
 
     // set label text (mnemonics will be escaped)
     virtual void SetLabelText(const wxString& text)
@@ -120,7 +119,7 @@ public:
     // controls by default inherit the colours of their parents, if a
     // particular control class doesn't want to do it, it can override
     // ShouldInheritColours() to return false
-    virtual bool ShouldInheritColours() const { return true; }
+    virtual bool ShouldInheritColours() const wxOVERRIDE { return true; }
 
 
     // WARNING: this doesn't work for all controls nor all platforms!
@@ -129,11 +128,15 @@ public:
     // if the button was clicked)
     virtual void Command(wxCommandEvent &event);
 
-    virtual bool SetFont(const wxFont& font);
+    virtual bool SetFont(const wxFont& font) wxOVERRIDE;
 
     // wxControl-specific processing after processing the update event
-    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event);
+    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) wxOVERRIDE;
 
+    wxSize GetSizeFromTextSize(int xlen, int ylen = -1) const
+        { return DoGetSizeFromTextSize(xlen, ylen); }
+    wxSize GetSizeFromTextSize(const wxSize& tsize) const
+        { return DoGetSizeFromTextSize(tsize.x, tsize.y); }
 
 
     // static utilities for mnemonics char (&) handling
@@ -173,7 +176,7 @@ public:
 
 protected:
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const;
+    virtual wxBorder GetDefaultBorder() const wxOVERRIDE;
 
     // creates the control (calls wxWindowBase::CreateBase inside) and adds it
     // to the list of parents children
@@ -192,6 +195,8 @@ protected:
     virtual bool DoSetLabelMarkup(const wxString& markup);
 #endif // wxUSE_MARKUP
 
+    // override this to return the total control's size from a string size
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const;
 
     // initialize the common fields of wxCommandEvent
     void InitCommandEvent(wxCommandEvent& event) const;
@@ -221,8 +226,6 @@ protected:
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/control.h"
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/control.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/control.h"
 #elif defined(__WXMOTIF__)
@@ -233,10 +236,6 @@ protected:
     #include "wx/gtk1/control.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/control.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/control.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/control.h"
 #elif defined(__WXQT__)
     #include "wx/qt/control.h"
 #endif

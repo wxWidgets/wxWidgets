@@ -2,7 +2,6 @@
 // Name:        cpprttidisabled.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,21 +9,7 @@
 
 @page overview_cpp_rtti_disabled Caveats When Not Using C++ RTTI
 
-@li @ref overview_cpp_rtti_disabled_intro
-@li @ref overview_cpp_rtti_disabled_bind
-@li @ref overview_cpp_rtti_disabled_wxany
-
-@see
-
-@li @ref overview_rtti
-@li wxEvtHandler::Bind()
-@li wxAny
-
-
-<hr>
-
-
-@section overview_cpp_rtti_disabled_intro Introduction
+@tableofcontents
 
 @note C++ RTTI is usually enabled by default in most wxWidgets builds. If you
       do not know if your build has C++ RTTI enabled or not, then it probably
@@ -42,6 +27,9 @@ is a shared library or DLL build. More specifically, a template class instance
 created in one physical binary may not be recognized as its correct type when
 used in another one.
 
+@see @ref overview_rtti, wxEvtHandler::Bind(), wxAny
+
+
 
 @section overview_cpp_rtti_disabled_bind Bind() Issues
 
@@ -55,6 +43,7 @@ to this problem simply if you only need to use Bind<>() and not Unbind<>().
 
 Also, if you only bind and unbind same event handler inside same binary, you
 should be fine.
+
 
 
 @section overview_cpp_rtti_disabled_wxany wxAny Issues
@@ -92,4 +81,3 @@ library that called the WX_IMPLEMENT_ANY_VALUE_TYPE() macro, and WXIMPORT
 otherwise.
 
 */
-

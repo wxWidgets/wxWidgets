@@ -3,7 +3,6 @@
 // Purpose:     wxWidgets sample demonstrating wxWrapSizer use
 // Author:      Arne Steinarson
 // Created:     21.01.2008
-// RCS-ID:      $Id$
 // Copyright:   (c) Arne Steinarson
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -21,7 +20,7 @@
 #include "wx/wrapsizer.h"
 #include "wx/artprov.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -74,7 +73,7 @@ class WrapSizerApp : public wxApp
 public:
     WrapSizerApp() {}
 
-    virtual bool OnInit()
+    virtual bool OnInit() wxOVERRIDE
     {
         new WrapSizerFrame;
         return true;
@@ -145,7 +144,7 @@ WrapSizerFrame::WrapSizerFrame()
     // OK Button
     sizerRoot->Add(new wxButton(m_panel, wxID_OK),
                     wxSizerFlags().Centre().DoubleBorder());
-    Connect(wxID_OK, wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(wxID_OK, wxEVT_BUTTON,
                 wxCommandEventHandler(WrapSizerFrame::OnButton));
 
     // Set sizer for the panel

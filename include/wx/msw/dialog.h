@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -92,9 +91,9 @@ public:
     // override some base class virtuals
     virtual bool Show(bool show = true);
 
-    virtual void Raise();
-
+#if wxUSE_DIALOG_SIZEGRIP
     virtual void SetWindowStyleFlag(long style);
+#endif // wxUSE_DIALOG_SIZEGRIP
 
 #ifdef __POCKETPC__
     // Responds to the OK button in a PocketPC titlebar. This

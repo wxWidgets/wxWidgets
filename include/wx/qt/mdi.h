@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/mdi.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -29,12 +28,18 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                 const wxString& name = wxFrameNameStr);
 
+    // override/implement base class [pure] virtual methods
+    // ----------------------------------------------------
+
+    static bool IsTDI() { return false; }
+
     virtual void ActivateNext();
     virtual void ActivatePrevious();
 
 protected:
 
 private:
+    DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
 };
 
 

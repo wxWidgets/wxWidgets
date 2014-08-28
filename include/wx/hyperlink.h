@@ -4,7 +4,6 @@
 // Author:      David Norris <danorris@gmail.com>, Otto Wyss
 // Modified by: Ryan Norton, Francesco Montorsi
 // Created:     04/02/2005
-// RCS-ID:      $Id$
 // Copyright:   (c) 2005 David Norris
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -68,10 +67,10 @@ public:
     // NOTE: also wxWindow::Set/GetLabel, wxWindow::Set/GetBackgroundColour,
     //       wxWindow::Get/SetFont, wxWindow::Get/SetCursor are important !
 
-    virtual bool HasTransparentBackground() { return true; }
+    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
 
 protected:
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
     // checks for validity some of the ctor/Create() function parameters
     void CheckParams(const wxString& label, const wxString& url, long style);
@@ -88,7 +87,7 @@ public:
 
 class WXDLLIMPEXP_FWD_ADV wxHyperlinkEvent;
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_HYPERLINK, wxHyperlinkEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_HYPERLINK, wxHyperlinkEvent );
 
 //
 // An event fired when the user clicks on the label in a hyperlink control.
@@ -99,7 +98,7 @@ class WXDLLIMPEXP_ADV wxHyperlinkEvent : public wxCommandEvent
 public:
     wxHyperlinkEvent() {}
     wxHyperlinkEvent(wxObject *generator, wxWindowID id, const wxString& url)
-        : wxCommandEvent(wxEVT_COMMAND_HYPERLINK, id),
+        : wxCommandEvent(wxEVT_HYPERLINK, id),
           m_url(url)
     {
         SetEventObject(generator);
@@ -111,7 +110,7 @@ public:
     void SetURL(const wxString &url) { m_url=url; }
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const { return new wxHyperlinkEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxHyperlinkEvent(*this); }
 
 private:
 
@@ -132,7 +131,7 @@ typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
     wxEVENT_HANDLER_CAST(wxHyperlinkEventFunction, func)
 
 #define EVT_HYPERLINK(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_HYPERLINK, id, wxHyperlinkEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_HYPERLINK, id, wxHyperlinkEventHandler(fn))
 
 
 #if defined(__WXGTK210__) && !defined(__WXUNIVERSAL__)
@@ -166,6 +165,8 @@ typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
     };
 #endif
 
+// old wxEVT_COMMAND_* constants
+#define wxEVT_COMMAND_HYPERLINK   wxEVT_HYPERLINK
 
 #endif // wxUSE_HYPERLINKCTRL
 

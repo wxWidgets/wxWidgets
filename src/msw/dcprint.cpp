@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -118,8 +117,8 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name,
     {
         if ( !driver_name.empty() && !device_name.empty() && !file.empty() )
         {
-            m_hDC = (WXHDC) CreateDC(driver_name.wx_str(),
-                                     device_name.wx_str(),
+            m_hDC = (WXHDC) CreateDC(driver_name.t_str(),
+                                     device_name.t_str(),
                                      file.fn_str(),
                                      NULL);
         }
@@ -186,14 +185,14 @@ bool wxPrinterDCImpl::StartDoc(const wxString& message)
 {
     DOCINFO docinfo;
     docinfo.cbSize = sizeof(DOCINFO);
-    docinfo.lpszDocName = message.wx_str();
+    docinfo.lpszDocName = message.t_str();
 
     wxString filename(m_printData.GetFilename());
 
     if (filename.empty())
         docinfo.lpszOutput = NULL;
     else
-        docinfo.lpszOutput = filename.wx_str();
+        docinfo.lpszOutput = filename.t_str();
 
     docinfo.lpszDatatype = NULL;
     docinfo.fwType = 0;
@@ -252,16 +251,8 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
     LPTSTR      lpszPortName;
 
     PRINTDLG    pd;
-
-    // Cygwin has trouble believing PRINTDLG is 66 bytes - thinks it is 68
-#ifdef __GNUWIN32__
-    memset(&pd, 0, 66);
-    pd.lStructSize    = 66; // sizeof(PRINTDLG);
-#else
     memset(&pd, 0, sizeof(PRINTDLG));
     pd.lStructSize    = sizeof(PRINTDLG);
-#endif
-
     pd.hwndOwner      = (HWND)NULL;
     pd.hDevMode       = NULL; // Will be created by PrintDlg
     pd.hDevNames      = NULL; // Ditto
@@ -335,7 +326,7 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
     HDC hDC = ::CreateDC
                 (
                     NULL,               // no driver name as we use device name
-                    deviceName.wx_str(),
+                    deviceName.t_str(),
                     NULL,               // unused
                     static_cast<DEVMODE *>(lockDevMode.Get())
                 );

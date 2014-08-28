@@ -2,7 +2,6 @@
 // Name:        src/html/m_fonts.cpp
 // Purpose:     wxHtml module for fonts & colors of fonts
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -39,7 +38,6 @@ TAG_HANDLER_BEGIN(FONT, "FONT" )
         int oldsize = m_WParser->GetFontSize();
         wxString oldface = m_WParser->GetFontFace();
 
-        if (tag.HasParam(wxT("COLOR")))
         {
             wxColour clr;
             if (tag.GetParamAsColour(wxT("COLOR"), &clr))
@@ -49,11 +47,10 @@ TAG_HANDLER_BEGIN(FONT, "FONT" )
             }
         }
 
-        if (tag.HasParam(wxT("SIZE")))
         {
             long tmp = 0;
-            const wxString sizeStr = tag.GetParam(wxT("SIZE"));
-            if (sizeStr.ToLong(&tmp))
+            wxString sizeStr;
+            if (tag.GetParamAsString(wxT("SIZE"), &sizeStr) && sizeStr.ToLong(&tmp))
             {
                 wxChar c = sizeStr[0];
                 if (c == wxT('+') || c == wxT('-'))
@@ -65,12 +62,13 @@ TAG_HANDLER_BEGIN(FONT, "FONT" )
             }
         }
 
-        if (tag.HasParam(wxT("FACE")))
+        wxString faces;
+        if (tag.GetParamAsString(wxT("FACE"), &faces))
         {
             if (m_Faces.GetCount() == 0)
                 m_Faces = wxFontEnumerator::GetFacenames();
 
-            wxStringTokenizer tk(tag.GetParam(wxT("FACE")), wxT(","));
+            wxStringTokenizer tk(faces, wxT(","));
             int index;
 
             while (tk.HasMoreTokens())
@@ -107,7 +105,7 @@ TAG_HANDLER_BEGIN(FONT, "FONT" )
 TAG_HANDLER_END(FONT)
 
 
-TAG_HANDLER_BEGIN(FACES_U, "U,STRIKE")
+TAG_HANDLER_BEGIN(FACES_U, "U,STRIKE,DEL")
 
     TAG_HANDLER_CONSTR(FACES_U) { }
 

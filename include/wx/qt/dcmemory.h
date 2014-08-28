@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/dcmemory.h
 // Author:      Peter Most, Javier Torres
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -20,10 +19,14 @@ public:
     ~wxMemoryDCImpl();
 
     virtual void DoSelect(const wxBitmap& bitmap);
+
+    virtual const wxBitmap& GetSelectedBitmap() const;
+    virtual wxBitmap& GetSelectedBitmap();
+
 protected:
 
 private:
-    QPixmap *m_pixmap;
+    wxBitmap m_selected;
 };
 
 #endif // _WX_QT_DCMEMORY_H_

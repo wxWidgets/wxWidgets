@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/statusbar.h
 // Author:      Peter Most, Javier Torres
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,17 +9,14 @@
 #define _WX_QT_STATUSBAR_H_
 
 #include "wx/statusbr.h"
-#include "wx/qt/winevent_qt.h"
 
-#include <QtGui/QLabel>
-#include <QtGui/QStatusBar>
-
-class WXDLLIMPEXP_FWD_CORE wxQtStatusBar;
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QStatusBar>
 
 class WXDLLIMPEXP_CORE wxStatusBar : public wxStatusBarBase
 {
 public:
-    wxStatusBar();
+    wxStatusBar() {}
     wxStatusBar(wxWindow *parent, wxWindowID winid = wxID_ANY,
                 long style = wxSTB_DEFAULT_STYLE,
                 const wxString& name = wxStatusBarNameStr);
@@ -45,20 +41,11 @@ private:
     void Init();
     void UpdateFields();
 
-    wxQtPointer< wxQtStatusBar > m_qtStatusBar;
+    QStatusBar *m_qtStatusBar;
     QList< QLabel* > m_qtPanes;
 
     DECLARE_DYNAMIC_CLASS( wxStatusBar )
 };
 
-class WXDLLIMPEXP_CORE wxQtStatusBar : public wxQtEventSignalHandler< QStatusBar, wxStatusBar >
-{
-    Q_OBJECT
-
-public:
-    wxQtStatusBar( wxWindow *parent, wxStatusBar *handler );
-
-private Q_SLOTS:
-};
 
 #endif // _WX_QT_STATUSBAR_H_

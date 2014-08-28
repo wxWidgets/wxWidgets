@@ -1,18 +1,17 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/combobox.h
-// Author:      Peter Most
-// Id:          $Id$
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_COMBOBOX_H_
 #define _WX_QT_COMBOBOX_H_
 
-#include "wx/qt/pointer_qt.h"
-#include "wx/qt/combobox_qt.h"
+#include "wx/choice.h"
+#include <QtWidgets/QComboBox>
 
-class WXDLLIMPEXP_CORE wxComboBox : public wxControl, public wxComboBoxBase
+class WXDLLIMPEXP_CORE wxComboBox : public wxChoice, public wxTextEntry
 {
 public:
     wxComboBox();
@@ -53,33 +52,39 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);
 
-    virtual void SetSelection(int n);
+    virtual void SetSelection(int n) { wxChoice::SetSelection(n); }
     virtual void SetSelection(long from, long to);
 
-    virtual int GetSelection() const;
+    virtual int GetSelection() const { return wxChoice::GetSelection(); }
     virtual void GetSelection(long *from, long *to) const;
-    virtual wxString GetStringSelection() const;
 
-    virtual unsigned int GetCount() const;
-    virtual wxString GetString(unsigned int n) const;
-    virtual void SetString(unsigned int n, const wxString& s);
-    
-    virtual QComboBox *GetHandle() const;
+    virtual wxString GetStringSelection() const
+    {
+        return wxItemContainer::GetStringSelection();
+    }
+
+    virtual void Clear()
+    {
+        wxTextEntry::Clear();
+        wxItemContainer::Clear();
+    }
+
+    // See wxComboBoxBase discussion of IsEmpty().
+    bool IsListEmpty() const { return wxItemContainer::IsEmpty(); }
+    bool IsTextEmpty() const { return wxTextEntry::IsEmpty(); }
+
+    virtual void Popup();
+    virtual void Dismiss();
 
 protected:
-    virtual int DoInsertItems(const wxArrayStringsAdapter & items,
-                              unsigned int pos,
-                              void **clientData,
-                              wxClientDataType type);
-    
-    virtual void DoSetItemClientData(unsigned int n, void *clientData);
-    virtual void *DoGetItemClientData(unsigned int n) const;
-    
-    virtual void DoClear();
-    virtual void DoDeleteOneItem(unsigned int pos);
+
+    // From wxTextEntry:
+    virtual wxString DoGetValue() const;
 
 private:
-    wxQtPointer< wxQtComboBox > m_qtComboBox;
+
+    // From wxTextEntry:
+    virtual wxWindow *GetEditableWindow() wxOVERRIDE { return this; }
 
     DECLARE_DYNAMIC_CLASS(wxComboBox)
 };

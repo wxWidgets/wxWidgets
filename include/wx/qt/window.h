@@ -1,19 +1,17 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/window.h
 // Purpose:     wxWindow class
-// Author:      Peter Most, Javier Torres
+// Author:      Peter Most, Javier Torres, Mariano Reingart
 // Created:     09/08/09
-// RCS-ID:      $Id$
-// Copyright:   (c) Peter Most, Javier Torres
+// Copyright:   (c) 2009 wxWidgets dev team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_WINDOW_H_
 #define _WX_QT_WINDOW_H_
 
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QWidget>
-#include <QtGui/QScrollBar>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QScrollArea>
 
 class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 class WXDLLIMPEXP_FWD_CORE wxQtShortcutHandler;
@@ -38,30 +36,36 @@ class WXDLLIMPEXP_FWD_CORE wxQtShortcutHandler;
  * as some events need different handling (paintEvent) depending on that.
  * We pass the QWidget pointer to all event handlers for consistency.
  */
-class WXDLLIMPEXP_CORE wxWindow : public wxWindowBase
+class WXDLLIMPEXP_CORE wxWindowQt : public wxWindowBase
 {
 public:
-    wxWindow();
-    ~wxWindow();
-    wxWindow(wxWindow *parent,
+    wxWindowQt();
+    ~wxWindowQt();
+    wxWindowQt(wxWindowQt *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxPanelNameStr);
     
-    bool Create(wxWindow *parent,
+    bool Create(wxWindowQt *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxPanelNameStr);
     
+    // Used by all window classes in the widget creation process.
+    void PostCreation( bool generic = true );
+
+    void AddChild( wxWindowBase *child );
+
     virtual bool Show( bool show = true );
 
     virtual void SetLabel(const wxString& label);
     virtual wxString GetLabel() const;
 
+    virtual void DoEnable( bool enable );
     virtual void SetFocus();
 
     // Parent/Child:
@@ -102,7 +106,12 @@ public:
     // Styles
     virtual void SetWindowStyleFlag( long style );
     virtual void SetExtraStyle( long exStyle );
-                               
+
+    virtual bool SetBackgroundStyle(wxBackgroundStyle style);
+    virtual bool IsTransparentBackgroundSupported(wxString* reason = NULL) const;
+    virtual bool SetTransparent(wxByte alpha);
+    virtual bool CanSetTransparent() { return true; }
+
     virtual WXWidget GetHandle() const;
 
     virtual void SetDropTarget( wxDropTarget *dropTarget );
@@ -117,9 +126,7 @@ public:
 
     virtual QPicture *QtGetPicture() const;
 
-    QImage *QtGetPaintBuffer();
-
-    virtual void QtPaintClientDCPicture( QWidget *handler );
+    QPainter *QtGetPainter();
 
     virtual bool QtHandlePaintEvent  ( QWidget *handler, QPaintEvent *event );
     virtual bool QtHandleResizeEvent ( QWidget *handler, QResizeEvent *event );
@@ -134,13 +141,15 @@ public:
     virtual bool QtHandleContextMenuEvent  ( QWidget *handler, QContextMenuEvent *event );
     virtual bool QtHandleFocusEvent  ( QWidget *handler, QFocusEvent *event );
 
-    static void QtStoreWindowPointer( QWidget *widget, const wxWindow *window );
-    static wxWindow *QtRetrieveWindowPointer( const QWidget *widget );
+    static void QtStoreWindowPointer( QWidget *widget, const wxWindowQt *window );
+    static wxWindowQt *QtRetrieveWindowPointer( const QWidget *widget );
 
 #if wxUSE_ACCEL
     virtual void QtHandleShortcut ( int command );
 #endif // wxUSE_ACCEL
-    
+
+    virtual QAbstractScrollArea *QtGetScrollBarsContainer() const;
+
 protected:
     virtual void DoGetTextExtent(const wxString& string,
                                  int *x, int *y,
@@ -161,7 +170,6 @@ protected:
 
     virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
     virtual void DoGetSize(int *width, int *height) const;
-    virtual wxSize DoGetBestSize() const;
 
     // same as DoSetSize() for the client size
     virtual void DoSetClientSize(int width, int height);
@@ -177,21 +185,23 @@ protected:
     virtual bool DoPopupMenu(wxMenu *menu, int x, int y);
 #endif // wxUSE_MENUS
 
-
-    virtual WXWidget QtGetScrollBarsContainer() const;
+    QWidget *m_qtWindow;
 
 private:
-    wxQtPointer< QWidget > m_qtWindow;
-    wxQtPointer< QWidget > m_qtContainer;
+    void Init();
+    QScrollArea *m_qtContainer;
 
     wxScrollBar *m_horzScrollBar;
     wxScrollBar *m_vertScrollBar;
     void QtOnScrollBarEvent( wxScrollEvent& event );
     
     wxScrollBar *QtGetScrollBar( int orientation ) const;
+    wxScrollBar *QtSetScrollBar( int orientation, wxScrollBar *scrollBar=NULL );
+
+    bool QtSetBackgroundStyle();
 
     QPicture *m_qtPicture;
-    QImage *m_qtPaintBuffer;
+    QPainter *m_qtPainter;
 
     bool m_mouseInside;
 
@@ -202,7 +212,7 @@ private:
 #endif // wxUSE_ACCEL
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxWindow );
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxWindowQt );
 };
 
 #endif // _WX_QT_WINDOW_H_

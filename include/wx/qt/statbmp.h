@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/statbmp.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -9,8 +8,7 @@
 #ifndef _WX_QT_STATBMP_H_
 #define _WX_QT_STATBMP_H_
 
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QLabel>
+#include <QtWidgets/QLabel>
 
 class WXDLLIMPEXP_CORE wxStaticBitmap : public wxStaticBitmapBase
 {
@@ -41,7 +39,7 @@ public:
 protected:
 
 private:
-    wxQtPointer< QLabel > m_qtLabel;
+    QLabel *m_qtLabel;
 
     DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
 };

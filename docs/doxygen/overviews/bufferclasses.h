@@ -2,13 +2,14 @@
 // Name:        bufferclasses.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
 
 @page overview_bufferclasses Buffer Classes
+
+@tableofcontents
 
 wxWidgets uses two classes of classes for dealing with buffers in memory.
 
@@ -19,10 +20,6 @@ wide character c strings.
 Secondly, wxWidgets uses, although only rarely currently, wxMemoryBuffer for
 dealing with raw buffers in memory.
 
-@li @ref overview_bufferclasses_xcb
-
-
-<hr>
 
 
 @section overview_bufferclasses_xcb wxXCharBuffer
@@ -46,4 +43,3 @@ the buffer and don't want wxCharBuffer to delete it on destruction, use the
 member function release to do so.
 
 */
-

@@ -3,7 +3,6 @@
 // Purpose:     Base class for wxListCtrl and wxListView tests
 // Author:      Steven Lamerton
 // Created:     2010-07-20
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>,
 //              (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
@@ -131,6 +130,21 @@ void ListBaseTestCase::ItemRect()
 
     WX_ASSERT_FAILS_WITH_ASSERT( list->GetSubItemRect(0, 3, r) );
 
+
+    // As we have a header, the top item shouldn't be at (0, 0), but somewhere
+    // below the header.
+    //
+    // Notice that we consider that the header can't be less than 10 pixels
+    // because we don't know its exact height.
+    CPPUNIT_ASSERT( list->GetItemRect(0, r) );
+    CPPUNIT_ASSERT( r.y >= 10 );
+
+    // However if we remove the header now, the item should be at (0, 0).
+    list->SetWindowStyle(wxLC_REPORT | wxLC_NO_HEADER);
+    CPPUNIT_ASSERT( list->GetItemRect(0, r) );
+    CPPUNIT_ASSERT_EQUAL( 0, r.y );
+
+
     //tidy up when we are finished
     list->ClearAll();
 }
@@ -175,20 +189,15 @@ void ListBaseTestCase::ChangeMode()
 
 void ListBaseTestCase::ItemClick()
 {
-    // FIXME: This test fail under wxGTK because we get 3 FOCUSED events and
-    //        2 SELECTED ones instead of the one of each we expect for some
-    //        reason, this needs to be debugged as it may indicate a bug in the
-    //        generic wxListCtrl implementation.
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
+#if wxUSE_UIACTIONSIMULATOR 
 
+#ifdef __WXMSW__
     // FIXME: This test fails on MSW buildbot slaves although works fine on
     //        development machine, no idea why. It seems to be a problem with
     //        wxUIActionSimulator rather the wxListCtrl control itself however.
-    if ( wxGetUserId().Lower().Matches("buildslave*") )
+    if ( IsAutomaticTest() )
         return;
-
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
+#endif // __WXMSW__
 
     wxListCtrl* const list = GetList();
 
@@ -200,10 +209,10 @@ void ListBaseTestCase::ItemClick()
     list->SetItem(0, 1, "first column");
     list->SetItem(0, 2, "second column");
 
-    EventCounter count(list, wxEVT_COMMAND_LIST_ITEM_SELECTED);
-    EventCounter count1(list, wxEVT_COMMAND_LIST_ITEM_FOCUSED);
-    EventCounter count2(list, wxEVT_COMMAND_LIST_ITEM_ACTIVATED);
-    EventCounter count3(list, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK);
+    EventCounter selected(list, wxEVT_LIST_ITEM_SELECTED);
+    EventCounter focused(list, wxEVT_LIST_ITEM_FOCUSED);
+    EventCounter activated(list, wxEVT_LIST_ITEM_ACTIVATED);
+    EventCounter rclick(list, wxEVT_LIST_ITEM_RIGHT_CLICK);
 
     wxUIActionSimulator sim;
 
@@ -211,7 +220,7 @@ void ListBaseTestCase::ItemClick()
     list->GetItemRect(0, pos);
 
     //We move in slightly so we are not on the edge
-    wxPoint point = list->ClientToScreen(pos.GetPosition()) + wxPoint(2, 2);
+    wxPoint point = list->ClientToScreen(pos.GetPosition()) + wxPoint(10, 5);
 
     sim.MouseMove(point);
     wxYield();
@@ -227,10 +236,17 @@ void ListBaseTestCase::ItemClick()
 
     // when the first item was selected the focus changes to it, but not
     // on subsequent clicks
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_FOCUSED));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_SELECTED));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_ACTIVATED));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK));
+    
+    // FIXME: This test fail under wxGTK & wxOSX because we get 3 FOCUSED events and
+    //        2 SELECTED ones instead of the one of each we expect for some
+    //        reason, this needs to be debugged as it may indicate a bug in the
+    //        generic wxListCtrl implementation.
+#ifndef _WX_GENERIC_LISTCTRL_H_
+    CPPUNIT_ASSERT_EQUAL(1, focused.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, selected.GetCount());
+#endif
+    CPPUNIT_ASSERT_EQUAL(1, activated.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, rclick.GetCount());
 
     //tidy up when we are finished
     list->ClearAll();
@@ -240,12 +256,9 @@ void ListBaseTestCase::ItemClick()
 void ListBaseTestCase::KeyDown()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
     wxListCtrl* const list = GetList();
 
-    EventCounter count(list, wxEVT_COMMAND_LIST_KEY_DOWN);
+    EventCounter keydown(list, wxEVT_LIST_KEY_DOWN);
 
     wxUIActionSimulator sim;
 
@@ -253,20 +266,17 @@ void ListBaseTestCase::KeyDown()
     sim.Text("aAbB");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(6, keydown.GetCount());
 #endif
 }
 
 void ListBaseTestCase::DeleteItems()
 {
 #ifndef __WXOSX__
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
     wxListCtrl* const list = GetList();
 
-    EventCounter count(list, wxEVT_COMMAND_LIST_DELETE_ITEM);
-    EventCounter count1(list, wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS);
+    EventCounter deleteitem(list, wxEVT_LIST_DELETE_ITEM);
+    EventCounter deleteall(list, wxEVT_LIST_DELETE_ALL_ITEMS);
 
 
     list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
@@ -294,19 +304,16 @@ void ListBaseTestCase::DeleteItems()
     list->ClearAll();
     list->DeleteAllItems();
 
-    CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_DELETE_ITEM));
-    CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS));
+    CPPUNIT_ASSERT_EQUAL(2, deleteitem.GetCount());
+    CPPUNIT_ASSERT_EQUAL(2, deleteall.GetCount());
 #endif
 }
 
 void ListBaseTestCase::InsertItem()
 {
-   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
     wxListCtrl* const list = GetList();
 
-    EventCounter count(list, wxEVT_COMMAND_LIST_INSERT_ITEM);
+    EventCounter insert(list, wxEVT_LIST_INSERT_ITEM);
 
     list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
 
@@ -317,7 +324,7 @@ void ListBaseTestCase::InsertItem()
     list->InsertItem(item);
     list->InsertItem(1, "more text");
 
-    CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_INSERT_ITEM));
+    CPPUNIT_ASSERT_EQUAL(2, insert.GetCount());
 }
 
 void ListBaseTestCase::Find()
@@ -401,11 +408,8 @@ void ListBaseTestCase::EditLabel()
     list->InsertItem(0, "Item 0");
     list->InsertItem(1, "Item 1");
 
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(list, wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT);
-    EventCounter count1(list, wxEVT_COMMAND_LIST_END_LABEL_EDIT);
+    EventCounter beginedit(list, wxEVT_LIST_BEGIN_LABEL_EDIT);
+    EventCounter endedit(list, wxEVT_LIST_END_LABEL_EDIT);
 
     wxUIActionSimulator sim;
 
@@ -416,8 +420,8 @@ void ListBaseTestCase::EditLabel()
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_END_LABEL_EDIT));
+    CPPUNIT_ASSERT_EQUAL(1, beginedit.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, endedit.GetCount());
 #endif
 }
 
@@ -441,7 +445,7 @@ namespace
 {
     //From the sample but fixed so it actually inverts
     int wxCALLBACK
-    MyCompareFunction(long item1, long item2, wxIntPtr WXUNUSED(sortData))
+    MyCompareFunction(wxIntPtr item1, wxIntPtr item2, wxIntPtr WXUNUSED(sortData))
     {
         // inverse the order
         if (item1 < item2)

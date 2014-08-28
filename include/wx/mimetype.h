@@ -5,7 +5,6 @@
 // Modified by:
 //  Chris Elliott (biol75@york.ac.uk) 5 Dec 00: write support for Win32
 // Created:     23.09.98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence (part of wxExtra library)
 /////////////////////////////////////////////////////////////////////////////
@@ -176,49 +175,6 @@ public:
                                    const CtorString&,
                                    const CtorString&),
                                VarArgInit, VarArgInit)
-#ifdef __WATCOMC__
-    // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-    WX_VARARG_WATCOM_WORKAROUND_CTOR(
-                                wxFileTypeInfo,
-                                4, (const wxString&,
-                                    const wxString&,
-                                    const wxString&,
-                                    const wxString&),
-                                (CtorString(f1),
-                                 CtorString(f2),
-                                 CtorString(f3),
-                                 CtorString(f4)));
-    WX_VARARG_WATCOM_WORKAROUND_CTOR(
-                                wxFileTypeInfo,
-                                4, (const wxCStrData&,
-                                    const wxCStrData&,
-                                    const wxCStrData&,
-                                    const wxCStrData&),
-                                (CtorString(f1),
-                                 CtorString(f2),
-                                 CtorString(f3),
-                                 CtorString(f4)));
-    WX_VARARG_WATCOM_WORKAROUND_CTOR(
-                                wxFileTypeInfo,
-                                4, (const char*,
-                                    const char*,
-                                    const char*,
-                                    const char*),
-                                (CtorString(f1),
-                                 CtorString(f2),
-                                 CtorString(f3),
-                                 CtorString(f4)));
-    WX_VARARG_WATCOM_WORKAROUND_CTOR(
-                                wxFileTypeInfo,
-                                4, (const wchar_t*,
-                                    const wchar_t*,
-                                    const wchar_t*,
-                                    const wchar_t*),
-                                (CtorString(f1),
-                                 CtorString(f2),
-                                 CtorString(f3),
-                                 CtorString(f4)));
-#endif
 
         // the array elements correspond to the parameters of the ctor above in
         // the same order

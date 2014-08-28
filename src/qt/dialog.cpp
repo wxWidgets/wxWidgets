@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/dialog.cpp
 // Author:      Peter Most, Javier Torres
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,8 +9,22 @@
 #include "wx/wxprec.h"
 
 #include "wx/dialog.h"
-#include "wx/qt/utils.h"
-#include "wx/qt/dialog_qt.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/winevent.h"
+
+
+class wxQtDialog : public wxQtEventSignalHandler< QDialog, wxDialog >
+{
+
+    public:
+        wxQtDialog( wxWindow *parent, wxDialog *handler );
+};
+
+
+wxQtDialog::wxQtDialog( wxWindow *parent, wxDialog *handler )
+    : wxQtEventSignalHandler< QDialog, wxDialog >( parent, handler )
+{
+}
 
 wxDialog::wxDialog()
 {
@@ -29,7 +42,6 @@ wxDialog::wxDialog( wxWindow *parent, wxWindowID id,
 
 wxDialog::~wxDialog()
 {
-    SendDestroyEvent();
 }
 
 
@@ -40,8 +52,13 @@ bool wxDialog::Create( wxWindow *parent, wxWindowID id,
         long style,
         const wxString &name)
 {
-    m_qtDialog = new wxQtDialog( parent, this );
-    
+    SetExtraStyle(GetExtraStyle() | wxTOPLEVEL_EX_DIALOG);
+
+    // all dialogs should have tab traversal enabled
+    style |= wxTAB_TRAVERSAL;
+
+    m_qtWindow = new wxQtDialog( parent, this );
+    PostCreation();
     return wxTopLevelWindow::Create( parent, id, title, pos, size, style, name );
 }
 
@@ -49,7 +66,7 @@ int wxDialog::ShowModal()
 {
     wxCHECK_MSG( GetHandle() != NULL, -1, "Invalid dialog" );
     
-    return GetHandle()->exec();
+    return GetHandle()->exec() ? wxID_OK : wxID_CANCEL;
 }
 
 void wxDialog::EndModal(int retCode)
@@ -68,6 +85,6 @@ bool wxDialog::IsModal() const
 
 QDialog *wxDialog::GetHandle() const
 {
-    return m_qtDialog;
+    return static_cast<QDialog*>(m_qtWindow);
 }
 

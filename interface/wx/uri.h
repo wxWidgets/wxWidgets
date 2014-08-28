@@ -2,7 +2,6 @@
 // Name:        uri.h
 // Purpose:     interface of wxURI
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -49,7 +48,7 @@ enum wxURIHostType
     @endcode
 
     @note On URIs with a "file" scheme wxURI does not parse the userinfo,
-          server, or port portion. This is to keep compatability with
+          server, or port portion. This is to keep compatibility with
           wxFileSystem, the old wxURL, and older url specifications.
 
     @library{wxbase}
@@ -242,7 +241,7 @@ public:
     /**
         Returns @true if the User component of the URI exists.
     */
-    bool HasUser() const;
+    bool HasUserInfo() const;
 
     /**
         Returns @true if a valid [absolute] URI, otherwise this URI is a URI

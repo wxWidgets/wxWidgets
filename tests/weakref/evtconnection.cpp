@@ -3,7 +3,6 @@
 // Purpose:     wxWeakRef<T> unit test
 // Author:      Arne Steinarson
 // Created:     2008-01-10
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Arne Steinarson
 ///////////////////////////////////////////////////////////////////////////////
 

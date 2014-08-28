@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/statline.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -9,8 +8,7 @@
 #ifndef _WX_QT_STATLINE_H_
 #define _WX_QT_STATLINE_H_
 
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QFrame>
+#include <QtWidgets/QFrame>
 
 class WXDLLIMPEXP_CORE wxStaticLine : public wxStaticLineBase
 {
@@ -34,9 +32,9 @@ public:
     virtual QFrame *GetHandle() const;
 
 private:
-    wxQtPointer< QFrame > m_qtFrame;
+    QFrame *m_qtFrame;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxStaticLine );
+    wxDECLARE_DYNAMIC_CLASS( wxStaticLine );
 };
 
 #endif // _WX_QT_STATLINE_H_

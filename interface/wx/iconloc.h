@@ -2,7 +2,6 @@
 // Name:        iconloc.h
 // Purpose:     interface of wxIconLocation
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -30,9 +29,13 @@ class wxIconLocation
 {
 public:
     /**
-        Returns @true if the object is valid, i.e. was properly initialized, and
+        Returns @true if the object is valid, i.e.\ was properly initialized, and
         @false otherwise.
     */
     bool IsOk() const;
+
+    void SetFileName(const wxString& filename);
+    const wxString& GetFileName() const;
+
 };
 

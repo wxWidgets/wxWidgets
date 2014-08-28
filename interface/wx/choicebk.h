@@ -2,9 +2,20 @@
 // Name:        choicebk.h
 // Purpose:     interface of wxChoicebook
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+
+// wxChoicebook flags
+#define wxCHB_DEFAULT          wxBK_DEFAULT
+#define wxCHB_TOP              wxBK_TOP
+#define wxCHB_BOTTOM           wxBK_BOTTOM
+#define wxCHB_LEFT             wxBK_LEFT
+#define wxCHB_RIGHT            wxBK_RIGHT
+#define wxCHB_ALIGN_MASK       wxBK_ALIGN_MASK
+
+wxEventType wxEVT_CHOICEBOOK_PAGE_CHANGED;
+wxEventType wxEVT_CHOICEBOOK_PAGE_CHANGING;
 
 /**
     @class wxChoicebook
@@ -38,16 +49,16 @@
     @beginEventEmissionTable{wxBookCtrlEvent}
     @event{EVT_CHOICEBOOK_PAGE_CHANGED(id, func)}
         The page selection was changed.
-        Processes a @c wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED event.
+        Processes a @c wxEVT_CHOICEBOOK_PAGE_CHANGED event.
     @event{EVT_CHOICEBOOK_PAGE_CHANGING(id, func)}
         The page selection is about to be changed.
-        Processes a @c wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING event.
+        Processes a @c wxEVT_CHOICEBOOK_PAGE_CHANGING event.
         This event can be vetoed (using wxNotifyEvent::Veto()).
     @endEventTable
 
     @library{wxcore}
     @category{bookctrl}
-    @appearance{choicebook.png}
+    @appearance{choicebook}
 
     @see @ref overview_bookctrl, wxNotebook, @ref page_samples_notebook
 */
@@ -63,9 +74,21 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
-                 const wxString& name = wxEmptyStr);
+                 const wxString& name = wxEmptyString);
     //@}
 
+    /**
+       Create the choicebook control that has already been constructed with
+       the default constructor.
+    */
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxEmptyString);
+
+    
     /**
         Returns the wxChoice associated with the control.
     */

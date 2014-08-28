@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/scrolbar.h
 // Author:      Peter Most, Javier Torres
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,9 +9,8 @@
 #define _WX_QT_SCROLBAR_H_
 
 #include "wx/scrolbar.h"
-#include "wx/qt/winevent_qt.h"
 
-#include <QtGui/QScrollBar>
+#include <QtWidgets/QScrollBar>
 
 class WXDLLIMPEXP_FWD_CORE wxQtScrollBar;
 
@@ -47,23 +45,10 @@ public:
     virtual QScrollBar* GetHandle() const;
 
 private:
-    wxQtPointer< wxQtScrollBar > m_qtScrollBar;
+    QScrollBar *m_qtScrollBar;
 
     DECLARE_DYNAMIC_CLASS(wxScrollBar)
 };
 
-
-class WXDLLIMPEXP_CORE wxQtScrollBar : public wxQtEventSignalHandler< QScrollBar, wxScrollBar >
-{
-    Q_OBJECT
-    
-    public:
-        wxQtScrollBar( wxWindow *parent, wxScrollBar *handler );
-                       
-    private Q_SLOTS:
-        void OnActionTriggered( int action );
-        void OnSliderReleased();
-        void OnValueChanged( int position );
-};
 
 #endif // _WX_QT_SCROLBAR_H_

@@ -4,7 +4,6 @@
 // Author:      Lukasz Michalski
 // Modified by:
 // Created:     27.06.2005
-// RCS-ID:      $Id$
 // Copyright:   (c) 2005 Lukasz Michalski <lmichalski@user.sourceforge.net>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -79,7 +78,7 @@ public:
         m_workerFailed = false;
     }
 
-    virtual wxEvent* Clone() const
+    virtual wxEvent* Clone() const wxOVERRIDE
     {
         return new WorkerEvent(*this);
     }
@@ -101,7 +100,7 @@ WX_DECLARE_LIST(EventWorker, EList);
 //and list of two type worker classes that serve clients
 class Server : public wxApp
 {
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 public:
     Server() : m_maxConnections(-1) {}
     ~Server() {}
@@ -113,11 +112,11 @@ private:
       EVENTS
     };
 
-    virtual bool OnInit();
-    virtual int OnExit();
+    virtual bool OnInit() wxOVERRIDE;
+    virtual int OnExit() wxOVERRIDE;
 
-    void OnInitCmdLine(wxCmdLineParser& pParser);
-    bool OnCmdLineParsed(wxCmdLineParser& pParser);
+    void OnInitCmdLine(wxCmdLineParser& pParser) wxOVERRIDE;
+    bool OnCmdLineParsed(wxCmdLineParser& pParser) wxOVERRIDE;
 
     void OnSocketEvent(wxSocketEvent& pEvent);
     void OnWorkerEvent(WorkerEvent& pEvent);
@@ -142,7 +141,7 @@ private:
 
     long int m_maxConnections;
 
-    long m_port;
+    unsigned short m_port;
 
     wxTimer mTimer;
 };
@@ -169,7 +168,7 @@ class ThreadWorker : public wxThread, private WorkerBase
 {
 public:
     ThreadWorker(wxSocketBase* pSocket);
-    virtual ExitCode Entry();
+    virtual ExitCode Entry() wxOVERRIDE;
 
 private:
     wxSocketBase* m_socket;
@@ -198,7 +197,7 @@ private:
     void DoWrite();
     void DoRead();
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 /******************* Implementation ******************/
@@ -258,7 +257,7 @@ Server::DumpStatistics()
 
     if ((int)(m_threadWorkersDone+m_eventWorkersDone) == m_maxConnections)
     {
-        wxLogMessage("%d connection(s) served, exiting",m_maxConnections);
+        wxLogMessage("%ld connection(s) served, exiting",m_maxConnections);
         ExitMainLoop();
     }
 }
@@ -279,12 +278,21 @@ Server::OnCmdLineParsed(wxCmdLineParser& pParser)
 
     if (pParser.Found("m",&m_maxConnections))
     {
-        wxLogMessage("%d connection(s) to exit",m_maxConnections);
+        wxLogMessage("%ld connection(s) to exit",m_maxConnections);
     }
 
-    if (pParser.Found("p",&m_port))
+    long port;
+    if (pParser.Found("p", &port))
     {
-        wxLogMessage("%d connection(s) to exit",m_maxConnections);
+        if ( port <= 0 || port > USHRT_MAX )
+        {
+            wxLogError("Invalid port number %ld, must be in 0..%u range.",
+                       port, USHRT_MAX);
+            return false;
+        }
+
+        m_port = static_cast<unsigned short>(port);
+        wxLogMessage("Will listen on port %u", m_port);
     }
 
     if (pParser.Found("t"))
@@ -331,7 +339,7 @@ bool Server::OnInit()
     m_eventWorkersFailed = 0;
     m_maxEventWorkers = 0;
 
-    wxLogMessage("Server listening at port %d, waiting for connections", m_port);
+    wxLogMessage("Server listening at port %u, waiting for connections", m_port);
     return true;
 }
 
@@ -425,8 +433,8 @@ void  Server::OnWorkerEvent(WorkerEvent& pEvent)
     {
         if (it->GetData() == pEvent.m_sender)
         {
-            wxLogVerbose("Deleting thread worker (%d left)",
-                         m_threadWorkers.GetCount());
+            wxLogVerbose("Deleting thread worker (%lu left)",
+                         static_cast<unsigned long>( m_threadWorkers.GetCount() ));
             it->GetData()->Wait();
             delete it->GetData();
             m_threadWorkers.DeleteNode(it);
@@ -441,8 +449,8 @@ void  Server::OnWorkerEvent(WorkerEvent& pEvent)
     {
         if (it2->GetData() == pEvent.m_sender)
         {
-            wxLogVerbose("Deleting event worker (%d left)",
-                         m_eventWorkers.GetCount());
+            wxLogVerbose("Deleting event worker (%lu left)",
+                         static_cast<unsigned long>( m_eventWorkers.GetCount() ));
             delete it2->GetData();
             m_eventWorkers.DeleteNode(it2);
             if (!pEvent.m_workerFailed)
@@ -465,11 +473,11 @@ void Server::OnTimerEvent(wxTimerEvent&)
 }
 
 
-BEGIN_EVENT_TABLE(Server,wxEvtHandler)
+wxBEGIN_EVENT_TABLE(Server,wxEvtHandler)
   EVT_SOCKET(wxID_ANY,Server::OnSocketEvent)
   EVT_WORKER(Server::OnWorkerEvent)
   EVT_TIMER(wxID_ANY,Server::OnTimerEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 ThreadWorker::ThreadWorker(wxSocketBase* pSocket) : wxThread(wxTHREAD_JOINABLE)
@@ -751,6 +759,6 @@ void  EventWorker::DoWrite()
     while (!m_socket->Error());
 }
 
-BEGIN_EVENT_TABLE(EventWorker,wxEvtHandler)
+wxBEGIN_EVENT_TABLE(EventWorker,wxEvtHandler)
     EVT_SOCKET(wxID_ANY,EventWorker::OnSocketEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()

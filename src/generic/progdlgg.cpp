@@ -4,7 +4,6 @@
 // Author:      Karsten Ballueder
 // Modified by:
 // Created:     09.05.1999
-// RCS-ID:      $Id$
 // Copyright:   (c) Karsten Ballueder
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -87,7 +86,7 @@ wxIMPLEMENT_CLASS(wxProgressDialog, wxDialog)
 // wxGenericProgressDialog creation
 // ----------------------------------------------------------------------------
 
-void wxGenericProgressDialog::Init(wxWindow *parent, int style)
+void wxGenericProgressDialog::Init()
 {
     // we may disappear at any moment, let the others know about it
     SetExtraStyle(GetExtraStyle() | wxWS_EX_TRANSIENT);
@@ -95,9 +94,8 @@ void wxGenericProgressDialog::Init(wxWindow *parent, int style)
     // Initialize all our members that we always use (even when we don't
     // create a valid window in this class).
 
-    m_pdStyle = style;
-
-    m_parentTop = wxGetTopLevelParent(parent);
+    m_pdStyle = 0;
+    m_parentTop = NULL;
 
     m_gauge = NULL;
     m_msg = NULL;
@@ -129,10 +127,10 @@ void wxGenericProgressDialog::Init(wxWindow *parent, int style)
     m_tempEventLoop = NULL;
 }
 
-wxGenericProgressDialog::wxGenericProgressDialog(wxWindow *parent, int style)
+wxGenericProgressDialog::wxGenericProgressDialog()
                        : wxDialog()
 {
-    Init(parent, style);
+    Init();
 }
 
 wxGenericProgressDialog::wxGenericProgressDialog(const wxString& title,
@@ -142,21 +140,32 @@ wxGenericProgressDialog::wxGenericProgressDialog(const wxString& title,
                                                  int style)
                        : wxDialog()
 {
-    Init(parent, style);
+    Init();
 
     Create( title, message, maximum, parent, style );
 }
 
-void wxGenericProgressDialog::Create( const wxString& title,
+void wxGenericProgressDialog::SetTopParent(wxWindow* parent)
+{
+    m_parentTop = GetParentForModalDialog(parent, GetWindowStyle());
+}
+
+bool wxGenericProgressDialog::Create( const wxString& title,
                                       const wxString& message,
                                       int maximum,
                                       wxWindow *parent,
                                       int style )
 {
-    wxDialog::Create(GetParentForModalDialog(parent, style), wxID_ANY, title);
+    SetTopParent(parent);
 
-    SetParent( GetParentForModalDialog(parent, style) );
-    SetTitle( title );
+    m_parentTop = wxGetTopLevelParent(parent);
+    m_pdStyle = style;
+
+    wxWindow* const
+        realParent = GetParentForModalDialog(parent, GetWindowStyle());
+
+    if (!wxDialog::Create(realParent, wxID_ANY, title))
+        return false;
 
     SetMaximum(maximum);
 
@@ -192,7 +201,7 @@ void wxGenericProgressDialog::Create( const wxString& title,
     wxSizer * const sizerTop = new wxBoxSizer(wxVERTICAL);
 
     m_msg = new wxStaticText(this, wxID_ANY, message);
-    sizerTop->Add(m_msg, 0, wxLEFT | wxTOP, 2*LAYOUT_MARGIN);
+    sizerTop->Add(m_msg, 0, wxLEFT | wxRIGHT | wxTOP, 2*LAYOUT_MARGIN);
 
     int gauge_style = wxGA_HORIZONTAL;
     if ( style & wxPD_SMOOTH )
@@ -261,7 +270,7 @@ void wxGenericProgressDialog::Create( const wxString& title,
 
     // Windows dialogs usually have buttons in the lower right corner
     const int sizerFlags =
-#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXOSX__)
+#if defined(__WXMSW__) || defined(__WXOSX__)
                            wxALIGN_RIGHT | wxALL
 #else // !MSW
                            wxALIGN_CENTER_HORIZONTAL | wxBOTTOM | wxTOP
@@ -306,6 +315,7 @@ void wxGenericProgressDialog::Create( const wxString& title,
     }
 
     Update();
+    return true;
 }
 
 void wxGenericProgressDialog::UpdateTimeEstimates(int value,
@@ -393,7 +403,7 @@ wxGenericProgressDialog::CreateLabel(const wxString& text, wxSizer *sizer)
     // value and time to the left in two rows
     sizer->Add(label, 1, wxALIGN_LEFT);
     sizer->Add(value, 1, wxALIGN_LEFT);
-#elif defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMAC__) || defined(__WXGTK20__)
+#elif defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK20__)
     // value and time centered in one row
     sizer->Add(label, 1, wxLARGESMALL(wxALIGN_RIGHT,wxALIGN_LEFT) | wxTOP | wxRIGHT, LAYOUT_MARGIN);
     sizer->Add(value, 1, wxALIGN_LEFT | wxTOP, LAYOUT_MARGIN);
@@ -610,7 +620,7 @@ void wxGenericProgressDialog::SetMaximum(int maximum)
 {
     m_maximum = maximum;
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__)
     // we can't have values > 65,536 in the progress control under Windows, so
     // scale everything down
     m_factor = m_maximum / 65536 + 1;

@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by: Ryan Norton (MLTE GetLineLength and GetLineText)
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -57,11 +56,18 @@
 - (void)setSelectable:(BOOL)flag;
 @end
 
+// An object of this class is created before the text is modified
+// programmatically and destroyed as soon as this is done. It does several
+// things, like ensuring that the control is editable to allow setting its text
+// at all and eating any unwanted focus loss events from textDidEndEditing:
+// which don't really correspond to focus change.
 class wxMacEditHelper
 {
 public :
     wxMacEditHelper( NSView* textView )
     {
+        m_viewPreviouslyEdited = ms_viewCurrentlyEdited;
+        ms_viewCurrentlyEdited =
         m_textView = textView;
         m_formerEditable = YES;
         if ( textView )
@@ -79,13 +85,91 @@ public :
             [m_textView setEditable:m_formerEditable];
             [m_textView setSelectable:m_formerSelectable];
         }
+
+        ms_viewCurrentlyEdited = m_viewPreviouslyEdited;
+    }
+
+    // Returns true if this view is the one currently being changed by the
+    // program.
+    static bool IsCurrentlyEditedView(NSView* v)
+    {
+        return v == ms_viewCurrentlyEdited;
+    }
+
+    // Returns true if this editor is the one currently being modified.
+    static bool IsCurrentEditor(wxNSTextFieldEditor* e)
+    {
+        return e == [(NSTextField*)ms_viewCurrentlyEdited currentEditor];
     }
 
 protected :
     BOOL m_formerEditable ;
     BOOL m_formerSelectable;
     NSView* m_textView;
+
+    // The original value of ms_viewCurrentlyEdited when this object was
+    // created.
+    NSView* m_viewPreviouslyEdited;
+
+    static NSView* ms_viewCurrentlyEdited;
 } ;
+
+NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
+
+// a minimal NSFormatter that just avoids getting too long entries
+@interface wxMaximumLengthFormatter : NSFormatter
+{
+    int maxLength;
+    wxTextEntry* field;
+}
+
+@end
+
+@implementation wxMaximumLengthFormatter
+
+- (id)init 
+{
+    self = [super init];
+    maxLength = 0;
+    return self;
+}
+
+- (void) setMaxLength:(int) maxlen 
+{
+    maxLength = maxlen;
+}
+
+- (NSString *)stringForObjectValue:(id)anObject 
+{
+    if(![anObject isKindOfClass:[NSString class]])
+        return nil;
+    return [NSString stringWithString:anObject];
+}
+
+- (BOOL)getObjectValue:(id *)obj forString:(NSString *)string errorDescription:(NSString  **)error 
+{
+    *obj = [NSString stringWithString:string];
+    return YES;
+}
+
+- (BOOL)isPartialStringValid:(NSString **)partialStringPtr proposedSelectedRange:(NSRangePointer)proposedSelRangePtr 
+              originalString:(NSString *)origString originalSelectedRange:(NSRange)origSelRange errorDescription:(NSString **)error
+{
+    int len = [*partialStringPtr length];
+    if ( maxLength > 0 && len > maxLength )
+    {
+        field->SendMaxLenEvent();
+        return NO;
+    }
+    return YES;
+}
+
+- (void) setTextEntry:(wxTextEntry*) tf
+{
+    field = tf;
+}
+
+@end
 
 @implementation wxNSSecureTextField
 
@@ -112,9 +196,40 @@ protected :
     wxUnusedVar(aNotification);
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
+        impl->DoNotifyFocusLost();
+}
+
+- (BOOL)control:(NSControl*)control textView:(NSTextView*)textView doCommandBySelector:(SEL)commandSelector
+{
+    wxUnusedVar(textView);
+    
+    BOOL handled = NO;
+    
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( control );
+    if ( impl  )
     {
-        impl->DoNotifyFocusEvent( false, NULL );
+        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+        if ( wxpeer )
+        {
+            if (commandSelector == @selector(insertNewline:))
+            {
+                wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(wxpeer), wxTopLevelWindow);
+                if ( tlw && tlw->GetDefaultItem() )
+                {
+                    wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
+                    if ( def && def->IsEnabled() )
+                    {
+                        wxCommandEvent event(wxEVT_BUTTON, def->GetId() );
+                        event.SetEventObject(def);
+                        def->Command(event);
+                        handled = YES;
+                    }
+                }
+            }
+        }
     }
+    
+    return handled;
 }
 
 @end
@@ -171,12 +286,40 @@ protected :
 
 - (void) insertText:(id) str
 {
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
-    if ( impl == NULL || lastKeyDownEvent==nil || !impl->DoHandleCharEvent(lastKeyDownEvent, str) )
+    // We should never generate char events for the text being inserted
+    // programmatically.
+    if ( !wxMacEditHelper::IsCurrentEditor(self) )
     {
-        [super insertText:str];
+        wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
+        if ( impl && lastKeyDownEvent && impl->DoHandleCharEvent(lastKeyDownEvent, str) )
+            return;
     }
+
+    [super insertText:str];
 }
+
+- (BOOL) resignFirstResponder
+{
+    return [super resignFirstResponder];
+}
+
+- (BOOL) becomeFirstResponder
+{
+    // we need the stored text field, as at this point the delegate is not yet set
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) textField );
+
+    BOOL r = [super becomeFirstResponder];
+    if ( impl != NULL && r )
+        impl->DoNotifyFocusSet();
+    
+    return r;
+}
+
+- (void) setTextField:(NSTextField*) field
+{
+    textField = field;
+}
+
 
 @end
 
@@ -222,11 +365,18 @@ protected :
 - (void)textDidEndEditing:(NSNotification *)aNotification
 {
     wxUnusedVar(aNotification);
+
+    if ( wxMacEditHelper::IsCurrentlyEditedView(self) )
+    {
+        // This notification is generated as the result of calling our own
+        // wxTextCtrl method (e.g. WriteText()) and doesn't correspond to any
+        // real focus loss event so skip generating it.
+        return;
+    }
+
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
-    {
-        impl->DoNotifyFocusEvent( false, NULL );
-    }
+        impl->DoNotifyFocusLost();
 }
 
 @end
@@ -296,7 +446,7 @@ protected :
 }
 
 - (NSArray *)control:(NSControl *)control textView:(NSTextView *)textView completions:(NSArray *)words
- forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int*)index
+ forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger*)index
 {
     NSMutableArray* matches = NULL;
 
@@ -388,7 +538,10 @@ protected :
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
     {
-        impl->DoNotifyFocusEvent( false, NULL );
+        wxNSTextFieldControl* timpl = dynamic_cast<wxNSTextFieldControl*>(impl);
+        if ( timpl )
+            timpl->UpdateInternalSelectionFromEditor(fieldEditor);
+        impl->DoNotifyFocusLost();
     }
 }
 @end
@@ -404,7 +557,8 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w )
 
     [m_scrollView setHasVerticalScroller:YES];
     [m_scrollView setHasHorizontalScroller:NO];
-    [m_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+    // TODO Remove if no regression, this was causing automatic resizes of multi-line textfields when the tlw changed
+    // [m_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
     NSSize contentSize = [m_scrollView contentSize];
 
     wxNSTextView* tv = [[wxNSTextView alloc] initWithFrame: NSMakeRect(0, 0,
@@ -433,6 +587,15 @@ bool wxNSTextViewControl::CanFocus() const
     // if (m_textView)
     //    return [m_textView canBecomeKeyView];
     return true;
+}
+
+void wxNSTextViewControl::insertText(NSString* text, WXWidget slf, void *_cmd)
+{
+    if ( m_lastKeyDownEvent ==NULL || !DoHandleCharEvent(m_lastKeyDownEvent, text) )
+    {
+        wxOSX_TextEventHandlerPtr superimpl = (wxOSX_TextEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+        superimpl(slf, (SEL)_cmd, text);
+    }
 }
 
 wxString wxNSTextViewControl::GetStringValue() const
@@ -577,24 +740,35 @@ void wxNSTextViewControl::SetStyle(long start,
                                 long end,
                                 const wxTextAttr& style)
 {
-    if (m_textView) {
+    if ( !m_textView )
+        return;
+
+    if ( start == -1 && end == -1 )
+    {
+        NSMutableDictionary* const
+            attrs = [NSMutableDictionary dictionaryWithCapacity:3];
+        if ( style.HasFont() )
+            [attrs setValue:style.GetFont().OSXGetNSFont() forKey:NSFontAttributeName];
+        if ( style.HasBackgroundColour() )
+            [attrs setValue:style.GetBackgroundColour().OSXGetNSColor() forKey:NSBackgroundColorAttributeName];
+        if ( style.HasTextColour() )
+            [attrs setValue:style.GetTextColour().OSXGetNSColor() forKey:NSForegroundColorAttributeName];
+
+        [m_textView setTypingAttributes:attrs];
+    }
+    else // Set the attributes just for this range.
+    {
         NSRange range = NSMakeRange(start, end-start);
-        if (start == -1 && end == -1)
-            range = [m_textView selectedRange];
 
         NSTextStorage* storage = [m_textView textStorage];
-        
-        wxFont font = style.GetFont();
-        if (style.HasFont() && font.IsOk())
-            [storage addAttribute:NSFontAttributeName value:font.OSXGetNSFont() range:range];
-        
-        wxColour bgcolor = style.GetBackgroundColour();
-        if (style.HasBackgroundColour() && bgcolor.IsOk())
-            [storage addAttribute:NSBackgroundColorAttributeName value:bgcolor.OSXGetNSColor() range:range];
-        
-        wxColour fgcolor = style.GetTextColour();
-        if (style.HasTextColour() && fgcolor.IsOk())
-            [storage addAttribute:NSForegroundColorAttributeName value:fgcolor.OSXGetNSColor() range:range];
+        if ( style.HasFont() )
+            [storage addAttribute:NSFontAttributeName value:style.GetFont().OSXGetNSFont() range:range];
+
+        if ( style.HasBackgroundColour() )
+            [storage addAttribute:NSBackgroundColorAttributeName value:style.GetBackgroundColour().OSXGetNSColor() range:range];
+
+        if ( style.HasTextColour() )
+            [storage addAttribute:NSForegroundColorAttributeName value:style.GetTextColour().OSXGetNSColor() range:range];
     }
 }
 
@@ -657,6 +831,14 @@ void wxNSTextFieldControl::SetStringValue( const wxString &str)
 {
     wxMacEditHelper helper(m_textField);
     [m_textField setStringValue: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+}
+
+void wxNSTextFieldControl::SetMaxLength(unsigned long len)
+{
+    wxMaximumLengthFormatter* formatter = [[[wxMaximumLengthFormatter alloc] init] autorelease];
+    [formatter setMaxLength:len];
+    [formatter setTextEntry:GetTextEntry()];
+    [m_textField setFormatter:formatter];
 }
 
 void wxNSTextFieldControl::Copy()
@@ -734,11 +916,11 @@ void wxNSTextFieldControl::SetSelection( long from , long to )
     {
         [editor setSelectedRange:NSMakeRange(from, to-from)];
     }
-    else
-    {
-        m_selStart = from;
-        m_selEnd = to;
-    }
+
+    // the editor might still be in existence, but we might be already passed our 'focus lost' storage
+    // of the selection, so make sure we copy this
+    m_selStart = from;
+    m_selEnd = to;
 }
 
 void wxNSTextFieldControl::WriteText(const wxString& str)
@@ -749,7 +931,12 @@ void wxNSTextFieldControl::WriteText(const wxString& str)
     if ( editor )
     {
         wxMacEditHelper helper(m_textField);
+        BOOL hasUndo = [editor respondsToSelector:@selector(setAllowsUndo:)];
+        if ( hasUndo )
+            [(NSTextView*)editor setAllowsUndo:NO];
         [editor insertText:wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+        if ( hasUndo )
+            [(NSTextView*)editor setAllowsUndo:YES];
     }
     else
     {
@@ -770,11 +957,66 @@ void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
     if ( wxpeer && (wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER) )
     {
-        wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
+        wxCommandEvent event(wxEVT_TEXT_ENTER, wxpeer->GetId());
         event.SetEventObject( wxpeer );
         event.SetString( GetTextEntry()->GetValue() );
         wxpeer->HandleWindowEvent( event );
     }
+}
+
+void wxNSTextFieldControl::SetInternalSelection( long from , long to )
+{
+    m_selStart = from;
+    m_selEnd = to;
+}
+
+void wxNSTextFieldControl::UpdateInternalSelectionFromEditor( wxNSTextFieldEditor* fieldEditor )
+{
+    if ( fieldEditor )
+    {
+        NSRange range = [fieldEditor selectedRange];
+        SetInternalSelection(range.location, range.location + range.length);
+    }
+}
+
+// as becoming first responder on a window - triggers a resign on the same control, we have to avoid
+// the resign notification writing back native selection values before we can set our own
+
+static WXWidget s_widgetBecomingFirstResponder = nil;
+
+bool wxNSTextFieldControl::becomeFirstResponder(WXWidget slf, void *_cmd)
+{
+    s_widgetBecomingFirstResponder = slf;
+    bool retval = wxWidgetCocoaImpl::becomeFirstResponder(slf, _cmd);
+    s_widgetBecomingFirstResponder = nil;
+    if ( retval )
+    {
+        NSText* editor = [m_textField currentEditor];
+        if ( editor )
+        {
+            long textLength = [[m_textField stringValue] length];
+            m_selStart = wxMin(textLength,wxMax(m_selStart,0)) ;
+            m_selEnd = wxMax(0,wxMin(textLength,m_selEnd)) ;
+            
+            [editor setSelectedRange:NSMakeRange(m_selStart, m_selEnd-m_selStart)];
+        }
+    }
+    return retval;
+}
+
+bool wxNSTextFieldControl::resignFirstResponder(WXWidget slf, void *_cmd)
+{
+    if ( slf != s_widgetBecomingFirstResponder )
+    {
+        NSText* editor = [m_textField currentEditor];
+        if ( editor )
+        {
+            NSRange range = [editor selectedRange];
+            m_selStart = range.location;
+            m_selEnd = range.location + range.length;
+        }
+    }
+    return wxWidgetCocoaImpl::resignFirstResponder(slf, _cmd);
 }
 
 bool wxNSTextFieldControl::SetHint(const wxString& hint)
@@ -800,11 +1042,12 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxWidgetCocoaImpl* c = NULL;
 
-    if ( style & wxTE_MULTILINE || style & wxTE_RICH || style & wxTE_RICH2 )
+    if ( style & wxTE_MULTILINE )
     {
         wxNSTextScrollView* v = nil;
         v = [[wxNSTextScrollView alloc] initWithFrame:r];
         c = new wxNSTextViewControl( wxpeer, v );
+        c->SetNeedsFocusRect( true );
     }
     else
     {
@@ -814,24 +1057,39 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         else
             v = [[wxNSTextField alloc] initWithFrame:r];
 
-        if ( style & wxNO_BORDER )
+        if ( style & wxTE_RIGHT)
         {
-            // FIXME: How can we remove the native control's border?
-            // setBordered is separate from the text ctrl's border.
+            [v setAlignment:NSRightTextAlignment];
         }
-        
+        else if ( style & wxTE_CENTRE)
+        {
+            [v setAlignment:NSCenterTextAlignment];
+        }
+                
         NSTextFieldCell* cell = [v cell];
         [cell setScrollable:YES];
         // TODO: Remove if we definitely are sure, it's not needed
         // as setting scrolling to yes, should turn off any wrapping
         // [cell setLineBreakMode:NSLineBreakByClipping]; 
 
-        [v setBezeled:NO];
-        [v setBordered:NO];
-
         c = new wxNSTextFieldControl( wxpeer, wxpeer, v );
+        
+        if ( (style & wxNO_BORDER) || (style & wxSIMPLE_BORDER) )
+        {
+            // under 10.7 the textcontrol can draw its own focus
+            // even if no border is shown, on previous systems
+            // we have to emulate this
+            [v setBezeled:NO];
+            [v setBordered:NO];
+            if ( UMAGetSystemVersion() < 0x1070 )
+                c->SetNeedsFocusRect( true );
+        }
+        else
+        {
+            // use native border
+            c->SetNeedsFrame(false);
+        }
     }
-    c->SetNeedsFocusRect( true );
 
     return c;
 }

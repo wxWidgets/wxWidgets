@@ -4,7 +4,6 @@
 // Author:      Peter Most
 // Modified by:
 // Created:     09.08.09
-// RCS-ID:      $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -13,10 +12,8 @@
 #define _WX_QT_FRAME_H_
 
 #include "wx/frame.h"
-#include "wx/qt/winevent_qt.h"
-
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QMainWindow>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QScrollArea>
 
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
@@ -29,7 +26,6 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxDEFAULT_FRAME_STYLE,
                const wxString& name = wxFrameNameStr);
-
     virtual ~wxFrame();
 
     bool Create(wxWindow *parent,
@@ -42,30 +38,23 @@ public:
 
     virtual void SetMenuBar(wxMenuBar *menubar);
     virtual void SetStatusBar(wxStatusBar *statusBar );
+    virtual void SetToolBar(wxToolBar *toolbar);
     
     virtual void SetWindowStyleFlag( long style );
 
     virtual void AddChild( wxWindowBase *child );
     virtual void RemoveChild( wxWindowBase *child );
 
-    virtual QMainWindow *GetHandle() const;
+    virtual QMainWindow *GetHandle() const
+    {
+        return static_cast<QMainWindow*>(m_qtWindow);
+    }
+
+    virtual QAbstractScrollArea *QtGetScrollBarsContainer() const;
 
 private:
-    wxQtPointer< QMainWindow > m_qtMainWindow;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxFrame );
-};
-
-
-
-class WXDLLIMPEXP_CORE wxQtMainWindow : public wxQtEventSignalHandler< QMainWindow, wxFrame >
-{
-    Q_OBJECT
-
-public:
-    wxQtMainWindow( wxWindow *parent, wxFrame *handler );
-
-private Q_SLOTS:
+    wxDECLARE_DYNAMIC_CLASS( wxFrame );
 };
 
 

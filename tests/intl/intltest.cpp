@@ -3,7 +3,6 @@
 // Purpose:     wxLocale unit test
 // Author:      Vaclav Slavik
 // Created:     2007-03-26
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vaclav Slavik
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -39,6 +38,7 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( IntlTestCase );
+        CPPUNIT_TEST( RestoreLocale );
         CPPUNIT_TEST( Domain );
         CPPUNIT_TEST( Headers );
         CPPUNIT_TEST( DateTimeFmtFrench );
@@ -46,11 +46,17 @@ private:
         CPPUNIT_TEST( IsAvailable );
     CPPUNIT_TEST_SUITE_END();
 
+    void RestoreLocale();
     void Domain();
     void Headers();
     void DateTimeFmtFrench();
     void DateTimeFmtC();
     void IsAvailable();
+
+    static wxString GetDecimalPoint()
+    {
+        return wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER);
+    }
 
     wxLocale *m_locale;
 
@@ -92,6 +98,25 @@ void IntlTestCase::tearDown()
     }
 }
 
+void IntlTestCase::RestoreLocale()
+{
+    if ( !m_locale )
+        return;
+
+    // We must be using the French locale now, it was changed in setUp().
+    CPPUNIT_ASSERT_EQUAL( ",", GetDecimalPoint() );
+
+    // Switch to the English locale.
+    {
+        wxLocale locEn(wxLANGUAGE_ENGLISH);
+        CPPUNIT_ASSERT_EQUAL( ".", GetDecimalPoint() );
+    }
+
+    // Verify that after destroying the English locale object, French locale is
+    // restored.
+    CPPUNIT_ASSERT_EQUAL( ",", GetDecimalPoint() );
+}
+
 void IntlTestCase::Domain()
 {
     if (!m_locale)
@@ -117,7 +142,7 @@ void IntlTestCase::Headers()
     CPPUNIT_ASSERT_EQUAL( "YEAR-MO-DA HO:MI+ZONE", m_locale->GetHeaderValue("PO-Revision-Date") );
     CPPUNIT_ASSERT_EQUAL( "Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>", m_locale->GetHeaderValue("Last-Translator") );
     CPPUNIT_ASSERT_EQUAL( "1.0", m_locale->GetHeaderValue("MIME-Version") );
-    CPPUNIT_ASSERT_EQUAL( "text/plain; charset=iso-8859-1", m_locale->GetHeaderValue("Content-Type") );
+    CPPUNIT_ASSERT_EQUAL( "text/plain; charset=utf-8", m_locale->GetHeaderValue("Content-Type") );
     CPPUNIT_ASSERT_EQUAL( "8bit", m_locale->GetHeaderValue("Content-Transfer-Encoding") );
 
     // check that it fails with a bogus domain:
@@ -152,9 +177,13 @@ void IntlTestCase::DateTimeFmtFrench()
         return;
 
 #ifdef __GLIBC__
-    // glibc also uses dots for French locale separator for some reason (the
-    // standard format uses slashes)
+    // Versions of glibc up to 2.7 wrongly used periods for French locale
+    // separator.
+#if __GLIBC__ > 2 || __GLIBC_MINOR__ >= 8
+    static const char *FRENCH_DATE_FMT = "%d/%m/%Y";
+#else
     static const char *FRENCH_DATE_FMT = "%d.%m.%Y";
+#endif
     static const char *FRENCH_LONG_DATE_FMT = "%a %d %b %Y";
     static const char *FRENCH_DATE_TIME_FMT = "%a %d %b %Y %H:%M:%S %Z";
 #else

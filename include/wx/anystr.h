@@ -3,7 +3,6 @@
 // Purpose:     wxAnyStrPtr class declaration
 // Author:      Vadim Zeitlin
 // Created:     2009-03-23
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -61,7 +60,7 @@ public:
     // different conversions to pointers)
     operator bool() const { return m_str != NULL; }
 
-    // at least VC6 and VC7 also need this one or they complain about ambiguity
+    // at least VC7 also needs this one or it complains about ambiguity
     // for !anystr expressions
     bool operator!() const { return !((bool)*this); }
 

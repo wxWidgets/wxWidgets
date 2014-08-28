@@ -25,7 +25,6 @@
             <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
             <border>5</border>
             <object class="wxNotebook" name="platform_notebook">
-                <usenotebooksizer>1</usenotebooksizer>
                 <size>200,160</size>
                 <object class="notebookpage">
                     <label>Shared options</label>
@@ -125,7 +124,7 @@
                 <label>Get latest update at www.mycompany.com/download/unix</label>
             </object>
         </object>    
-        <object platform="os2kurva" class="sizeritem">
+        <object platform="os2" class="sizeritem">
             <flag>wxALIGN_CENTRE|wxALL</flag>
             <border>5</border>
             <object class="wxStaticText" name="download_os2_statictext">

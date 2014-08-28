@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,7 +23,7 @@
 #error Sorry, this sample is only appropriate under Windows.
 #endif
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -70,10 +69,10 @@ bool MyApp::OnInit(void)
   return true;
 }
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(RESOURCE_QUIT, MyFrame::OnQuit)
     EVT_MENU(RESOURCE_TEST1, MyFrame::OnTest1)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Define my frame constructor
 MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size):
@@ -91,7 +90,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 {
-#if ( defined(__WXPM__) || defined(__WXMSW__) ) && !defined(__WXUNIVERSAL__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     MyDialog dialog;
     if (dialog.LoadNativeDialog(this, wxT("dialog1")))
     {
@@ -102,10 +101,10 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 #endif
 }
 
-BEGIN_EVENT_TABLE(MyDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(MyDialog, wxDialog)
     EVT_BUTTON(wxID_OK, MyDialog::OnOk)
     EVT_BUTTON(wxID_CANCEL, MyDialog::OnCancel)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 void MyDialog::OnOk(wxCommandEvent& WXUNUSED(event))

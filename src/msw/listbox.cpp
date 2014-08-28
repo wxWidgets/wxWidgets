@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin (owner drawn stuff)
 // Created:
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,6 +25,7 @@
     #include "wx/brush.h"
     #include "wx/font.h"
     #include "wx/dc.h"
+    #include "wx/dcclient.h"
     #include "wx/utils.h"
     #include "wx/log.h"
     #include "wx/window.h"
@@ -38,7 +38,13 @@
 
 #if wxUSE_OWNER_DRAWN
     #include  "wx/ownerdrw.h"
-#endif
+
+    namespace
+    {
+        // space beneath/above each row in pixels
+        const int LISTBOX_EXTRA_SPACE = 1;
+    } // anonymous namespace
+#endif // wxUSE_OWNER_DRAWN
 
 // ============================================================================
 // list box item declaration and implementation
@@ -84,7 +90,6 @@ void wxListBox::Init()
 {
     m_noItems = 0;
     m_updateHorizontalExtent = false;
-    m_selectedByKeyboard = false;
 }
 
 bool wxListBox::Create(wxWindow *parent,
@@ -251,7 +256,7 @@ int wxListBox::FindString(const wxString& s, bool bCase) const
     if (bCase)
        return wxItemContainerImmutable::FindString( s, bCase );
 
-    int pos = ListBox_FindStringExact(GetHwnd(), -1, s.wx_str());
+    int pos = ListBox_FindStringExact(GetHwnd(), -1, s.t_str());
     if (pos == LB_ERR)
         return wxNOT_FOUND;
     else
@@ -306,7 +311,19 @@ bool wxListBox::IsSelected(int N) const
 
 void *wxListBox::DoGetItemClientData(unsigned int n) const
 {
-    return (void *)SendMessage(GetHwnd(), LB_GETITEMDATA, n, 0);
+    // This is done here for the same reasons as in wxChoice method with the
+    // same name.
+    SetLastError(ERROR_SUCCESS);
+
+    LPARAM rc = SendMessage(GetHwnd(), LB_GETITEMDATA, n, 0);
+    if ( rc == LB_ERR && GetLastError() != ERROR_SUCCESS )
+    {
+        wxLogLastError(wxT("LB_GETITEMDATA"));
+
+        return NULL;
+    }
+
+    return (void *)rc;
 }
 
 void wxListBox::DoSetItemClientData(unsigned int n, void *clientData)
@@ -465,7 +482,7 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
     if ( n == (m_noItems - 1) )
         newN = -1;
 
-    ListBox_InsertString(GetHwnd(), newN, s.wx_str());
+    ListBox_InsertString(GetHwnd(), newN, s.t_str());
 
     // restore the client data
     if ( oldData )
@@ -574,29 +591,24 @@ wxSize wxListBox::DoGetBestClientSize() const
 bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
     wxEventType evtType;
-    int n = wxNOT_FOUND;
     if ( param == LBN_SELCHANGE )
     {
         if ( HasMultipleSelection() )
             return CalcAndSendEvent();
 
-        evtType = wxEVT_COMMAND_LISTBOX_SELECTED;
-
-        if ( m_selectedByKeyboard )
-        {
-            // We shouldn't use the mouse position to find the item as mouse
-            // can be anywhere, ask the listbox itself. Notice that this can't
-            // be used when the item is selected using the mouse however as
-            // LB_GETCARETINDEX will always return a valid item, even if the
-            // mouse is clicked below all the items, which is why we find the
-            // item ourselves below in this case.
-            n = SendMessage(GetHwnd(), LB_GETCARETINDEX, 0, 0);
-        }
-        //else: n will be determined below from the mouse position
+        evtType = wxEVT_LISTBOX;
     }
     else if ( param == LBN_DBLCLK )
     {
-        evtType = wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
+        // Clicking under the last item in the listbox generates double click
+        // event for the currently selected item which is rather surprising.
+        // Avoid the surprise by checking that we do have an item under mouse.
+        const DWORD pos = ::GetMessagePos();
+        const wxPoint pt(GET_X_LPARAM(pos), GET_Y_LPARAM(pos));
+        if ( HitTest(ScreenToClient(pt)) == wxNOT_FOUND )
+            return false;
+
+        evtType = wxEVT_LISTBOX_DCLICK;
     }
     else
     {
@@ -604,14 +616,7 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         return false;
     }
 
-    // Find the item position if it was a mouse-generated selection event or a
-    // double click event (which is always generated using the mouse)
-    if ( n == wxNOT_FOUND )
-    {
-        const DWORD pos = ::GetMessagePos();
-        const wxPoint pt(GET_X_LPARAM(pos), GET_Y_LPARAM(pos));
-        n = HitTest(ScreenToClient(wxPoint(pt)));
-    }
+    const int n = ListBox_GetCurSel(GetHwnd());
 
     // We get events even when mouse is clicked outside of any valid item from
     // Windows, just ignore them.
@@ -626,20 +631,6 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
     // Do generate an event otherwise.
     return SendEvent(evtType, n, true /* selection */);
-}
-
-WXLRESULT
-wxListBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-    // Remember whether there was a keyboard or mouse event before
-    // LBN_SELCHANGE: this allows us to correctly determine the item affected
-    // by it in MSWCommand() above in any case.
-    if ( WM_KEYFIRST <= nMsg && nMsg <= WM_KEYLAST )
-        m_selectedByKeyboard = true;
-    else if ( WM_MOUSEFIRST <= nMsg && nMsg <= WM_MOUSELAST )
-        m_selectedByKeyboard = false;
-
-    return wxListBoxBase::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 // ----------------------------------------------------------------------------
@@ -658,6 +649,13 @@ bool wxListBox::SetFont(const wxFont &font)
         const unsigned count = m_aItems.GetCount();
         for ( unsigned i = 0; i < count; i++ )
             m_aItems[i]->SetFont(font);
+
+        // Non owner drawn list boxes update the item height on their own, but
+        // we need to do it manually in the owner drawn case.
+        wxClientDC dc(this);
+        dc.SetFont(font);
+        SendMessage(GetHwnd(), LB_SETITEMHEIGHT, 0,
+                    dc.GetCharHeight() + 2 * LISTBOX_EXTRA_SPACE);
     }
 
     wxListBoxBase::SetFont(font);
@@ -699,13 +697,6 @@ bool wxListBox::RefreshItem(size_t n)
 
 // drawing
 // -------
-
-namespace
-{
-    // space beneath/above each row in pixels
-    static const int LISTBOX_EXTRA_SPACE = 1;
-
-} // anonymous namespace
 
 // the height is the same for all items
 // TODO should be changed for LBS_OWNERDRAWVARIABLE style listboxes

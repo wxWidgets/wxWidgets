@@ -2,7 +2,6 @@
 // Name:        scrolbar.h
 // Purpose:     interface of wxScrollBar
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -47,17 +46,17 @@
     @event{EVT_SCROLL(func)}
         Process all scroll events.
     @event{EVT_SCROLL_TOP(func)}
-        Process @c wxEVT_SCROLL_TOP scroll-to-top events (minimum position).
+        Process @c wxEVT_SCROLL_TOP scroll to top or leftmost (minimum) position events.
     @event{EVT_SCROLL_BOTTOM(func)}
-        Process @c wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position).
+        Process @c wxEVT_SCROLL_BOTTOM scroll to bottom or rightmost (maximum) position events.
     @event{EVT_SCROLL_LINEUP(func)}
-        Process @c wxEVT_SCROLL_LINEUP line up events.
+        Process @c wxEVT_SCROLL_LINEUP line up or left events.
     @event{EVT_SCROLL_LINEDOWN(func)}
-        Process @c wxEVT_SCROLL_LINEDOWN line down events.
+        Process @c wxEVT_SCROLL_LINEDOWN line down or right events.
     @event{EVT_SCROLL_PAGEUP(func)}
-        Process @c wxEVT_SCROLL_PAGEUP page up events.
+        Process @c wxEVT_SCROLL_PAGEUP page up or left events.
     @event{EVT_SCROLL_PAGEDOWN(func)}
-        Process @c wxEVT_SCROLL_PAGEDOWN page down events.
+        Process @c wxEVT_SCROLL_PAGEDOWN page down or right events.
     @event{EVT_SCROLL_THUMBTRACK(func)}
         Process @c wxEVT_SCROLL_THUMBTRACK thumbtrack events
         (frequent events sent as the user drags the thumbtrack).
@@ -68,17 +67,17 @@
     @event{EVT_COMMAND_SCROLL(id, func)}
         Process all scroll events.
     @event{EVT_COMMAND_SCROLL_TOP(id, func)}
-        Process @c wxEVT_SCROLL_TOP scroll-to-top events (minimum position).
+        Process @c wxEVT_SCROLL_TOP scroll to top or leftmost (minimum) position events.
     @event{EVT_COMMAND_SCROLL_BOTTOM(id, func)}
-        Process @c wxEVT_SCROLL_BOTTOM scroll-to-bottom events (maximum position).
+        Process @c wxEVT_SCROLL_BOTTOM scroll to bottom or rightmost (maximum) position events.
     @event{EVT_COMMAND_SCROLL_LINEUP(id, func)}
-        Process @c wxEVT_SCROLL_LINEUP line up events.
+        Process @c wxEVT_SCROLL_LINEUP line up or left events.
     @event{EVT_COMMAND_SCROLL_LINEDOWN(id, func)}
-        Process @c wxEVT_SCROLL_LINEDOWN line down events.
+        Process @c wxEVT_SCROLL_LINEDOWN line down or right events.
     @event{EVT_COMMAND_SCROLL_PAGEUP(id, func)}
-        Process @c wxEVT_SCROLL_PAGEUP page up events.
+        Process @c wxEVT_SCROLL_PAGEUP page up or left events.
     @event{EVT_COMMAND_SCROLL_PAGEDOWN(id, func)}
-        Process @c wxEVT_SCROLL_PAGEDOWN page down events.
+        Process @c wxEVT_SCROLL_PAGEDOWN page down or right events.
     @event{EVT_COMMAND_SCROLL_THUMBTRACK(id, func)}
         Process @c wxEVT_SCROLL_THUMBTRACK thumbtrack events
         (frequent events sent as the user drags the thumbtrack).
@@ -105,7 +104,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{scrollbar.png}
+    @appearance{scrollbar}
 
     @see @ref overview_scrolling, @ref overview_events, wxScrolled
 */
@@ -240,5 +239,10 @@ public:
         @see GetThumbPosition()
     */
     virtual void SetThumbPosition(int viewStart);
+
+    /**
+       Returns @true for scrollbars that have the vertical style set.
+    */
+    bool IsVertical() const;
 };
 

@@ -4,7 +4,6 @@
 // Author:      Guilhem Lavaux
 // Modified by:
 // Created:     1997
-// RCS-ID:      $Id$
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,10 +23,10 @@ public:
     wxFileProto();
     virtual ~wxFileProto();
 
-    bool Abort() { return true; }
-    wxString GetContentType() const { return wxEmptyString; }
+    bool Abort() wxOVERRIDE { return true; }
+    wxString GetContentType() const wxOVERRIDE { return wxEmptyString; }
 
-    wxInputStream *GetInputStream(const wxString& path);
+    wxInputStream *GetInputStream(const wxString& path) wxOVERRIDE;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxFileProto)

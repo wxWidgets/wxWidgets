@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -29,7 +28,7 @@
 #endif
 
 // the application icon (under Windows and OS/2 it is in resources)
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__) || defined(__WXQT__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -83,12 +82,12 @@ bool MyApp::OnInit()
 // MyDialog implementation
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(MyDialog, wxDialog)
     EVT_BUTTON(wxID_ABOUT, MyDialog::OnAbout)
     EVT_BUTTON(wxID_OK, MyDialog::OnOK)
     EVT_BUTTON(wxID_EXIT, MyDialog::OnExit)
     EVT_CLOSE(MyDialog::OnCloseWindow)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 MyDialog::MyDialog(const wxString& title)
@@ -138,7 +137,7 @@ MyDialog::MyDialog(const wxString& title)
     }
 
 #if defined(__WXOSX__) && wxOSX_USE_COCOA
-    m_dockIcon = new MyTaskBarIcon(wxTaskBarIcon::DOCK);
+    m_dockIcon = new MyTaskBarIcon(wxTBI_DOCK);
     if ( !m_dockIcon->SetIcon(wxICON(sample)) )
     {
         wxLogError(wxT("Could not set icon."));
@@ -149,9 +148,6 @@ MyDialog::MyDialog(const wxString& title)
 MyDialog::~MyDialog()
 {
     delete m_taskBarIcon;
-#if defined(__WXCOCOA__)
-    delete m_dockIcon;
-#endif
 }
 
 void MyDialog::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -202,7 +198,7 @@ enum
 };
 
 
-BEGIN_EVENT_TABLE(MyTaskBarIcon, wxTaskBarIcon)
+wxBEGIN_EVENT_TABLE(MyTaskBarIcon, wxTaskBarIcon)
     EVT_MENU(PU_RESTORE, MyTaskBarIcon::OnMenuRestore)
     EVT_MENU(PU_EXIT,    MyTaskBarIcon::OnMenuExit)
     EVT_MENU(PU_NEW_ICON,MyTaskBarIcon::OnMenuSetNewIcon)
@@ -211,7 +207,7 @@ BEGIN_EVENT_TABLE(MyTaskBarIcon, wxTaskBarIcon)
     EVT_TASKBAR_LEFT_DCLICK  (MyTaskBarIcon::OnLeftButtonDClick)
     EVT_MENU(PU_SUB1, MyTaskBarIcon::OnMenuSub)
     EVT_MENU(PU_SUB2, MyTaskBarIcon::OnMenuSub)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void MyTaskBarIcon::OnMenuRestore(wxCommandEvent& )
 {

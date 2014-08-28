@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin: merge with the MDI version and general cleanup
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 //              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -35,9 +34,9 @@
 
 IMPLEMENT_DYNAMIC_CLASS(DrawingView, wxView)
 
-BEGIN_EVENT_TABLE(DrawingView, wxView)
+wxBEGIN_EVENT_TABLE(DrawingView, wxView)
     EVT_MENU(wxID_CUT, DrawingView::OnCut)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // What to do when a view is created. Creates actual
 // windows for displaying the view.
@@ -53,6 +52,7 @@ bool DrawingView::OnCreate(wxDocument *doc, long flags)
         wxFrame* frame = app.CreateChildFrame(this, true);
         wxASSERT(frame == GetFrame());
         m_canvas = new MyCanvas(this);
+        frame->Show();
     }
     else // single document mode
     {
@@ -64,7 +64,6 @@ bool DrawingView::OnCreate(wxDocument *doc, long flags)
         doc->GetCommandProcessor()->SetEditMenu(app.GetMainWindowEditMenu());
         doc->GetCommandProcessor()->Initialize();
     }
-    GetFrame()->Show();
 
     return true;
 }
@@ -147,11 +146,11 @@ void DrawingView::OnCut(wxCommandEvent& WXUNUSED(event) )
 
 IMPLEMENT_DYNAMIC_CLASS(TextEditView, wxView)
 
-BEGIN_EVENT_TABLE(TextEditView, wxView)
+wxBEGIN_EVENT_TABLE(TextEditView, wxView)
     EVT_MENU(wxID_COPY, TextEditView::OnCopy)
     EVT_MENU(wxID_PASTE, TextEditView::OnPaste)
     EVT_MENU(wxID_SELECTALL, TextEditView::OnSelectAll)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool TextEditView::OnCreate(wxDocument *doc, long flags)
 {
@@ -199,9 +198,9 @@ bool TextEditView::OnClose(bool deleteWindow)
 // MyCanvas implementation
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_MOUSE_EVENTS(MyCanvas::OnMouseEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxView *view, wxWindow *parent)
@@ -336,7 +335,7 @@ void ImageView::OnDraw(wxDC* dc)
     wxImage image = GetDocument()->GetImage();
     if ( image.IsOk() )
     {
-        dc->DrawBitmap(wxBitmap(image), 0, 0);
+        dc->DrawBitmap(wxBitmap(image), 0, 0, true /* use mask */);
     }
 }
 
@@ -362,3 +361,76 @@ bool ImageView::OnClose(bool deleteWindow)
     return true;
 }
 
+// ----------------------------------------------------------------------------
+// ImageDetailsView
+// ----------------------------------------------------------------------------
+
+ImageDetailsView::ImageDetailsView(ImageDetailsDocument *doc)
+                : wxView()
+{
+    SetDocument(doc);
+
+    m_frame = wxGetApp().CreateChildFrame(this, false);
+    m_frame->SetTitle("Image Details");
+
+    wxPanel * const panel = new wxPanel(m_frame);
+    wxFlexGridSizer * const sizer = new wxFlexGridSizer(2, wxSize(5, 5));
+    const wxSizerFlags
+        flags = wxSizerFlags().Align(wxALIGN_CENTRE_VERTICAL).Border();
+
+    sizer->Add(new wxStaticText(panel, wxID_ANY, "Image &file:"), flags);
+    sizer->Add(new wxStaticText(panel, wxID_ANY, doc->GetFilename()), flags);
+
+    sizer->Add(new wxStaticText(panel, wxID_ANY, "Image &type:"), flags);
+    wxString typeStr;
+    switch ( doc->GetType() )
+    {
+        case wxBITMAP_TYPE_PNG:
+            typeStr = "PNG";
+            break;
+
+        case wxBITMAP_TYPE_JPEG:
+            typeStr = "JPEG";
+            break;
+
+        default:
+            typeStr = "Unknown";
+    }
+    sizer->Add(new wxStaticText(panel, wxID_ANY, typeStr), flags);
+
+    sizer->Add(new wxStaticText(panel, wxID_ANY, "Image &size:"), flags);
+    wxSize size = doc->GetSize();
+    sizer->Add(new wxStaticText(panel, wxID_ANY,
+                                wxString::Format("%d*%d", size.x, size.y)),
+               flags);
+
+    sizer->Add(new wxStaticText(panel, wxID_ANY, "Number of unique &colours:"),
+               flags);
+    sizer->Add(new wxStaticText(panel, wxID_ANY,
+                                wxString::Format("%lu", doc->GetNumColours())),
+               flags);
+
+    sizer->Add(new wxStaticText(panel, wxID_ANY, "Uses &alpha:"), flags);
+    sizer->Add(new wxStaticText(panel, wxID_ANY,
+                                doc->HasAlpha() ? "Yes" : "No"), flags);
+
+    panel->SetSizer(sizer);
+    m_frame->SetClientSize(panel->GetBestSize());
+    m_frame->Show(true);
+}
+
+void ImageDetailsView::OnDraw(wxDC * WXUNUSED(dc))
+{
+    // nothing to do here, we use controls to show our information
+}
+
+bool ImageDetailsView::OnClose(bool deleteWindow)
+{
+    if ( wxGetApp().GetMode() != MyApp::Mode_Single && deleteWindow )
+    {
+        delete m_frame;
+        m_frame = NULL;
+    }
+
+    return true;
+}

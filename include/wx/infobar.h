@@ -3,7 +3,6 @@
 // Purpose:     declaration of wxInfoBarBase defining common API of wxInfoBar
 // Author:      Vadim Zeitlin
 // Created:     2009-07-28
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -46,6 +45,11 @@ public:
 
     // remove a button previously added by AddButton()
     virtual void RemoveButton(wxWindowID btnid) = 0;
+
+    // get information about the currently shown buttons
+    virtual size_t GetButtonCount() const = 0;
+    virtual wxWindowID GetButtonId(size_t idx) const = 0;
+    virtual bool HasButtonId(wxWindowID btnid) const = 0;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxInfoBarBase);

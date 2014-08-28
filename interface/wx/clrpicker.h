@@ -2,9 +2,15 @@
 // Name:        clrpicker.h
 // Purpose:     interface of wxColourPickerCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+#define wxCLRP_USE_TEXTCTRL       (wxPB_USE_TEXTCTRL)
+#define wxCLRP_DEFAULT_STYLE      0
+#define wxCLRP_SHOW_LABEL         0x0008
+
+wxEventType wxEVT_COLOURPICKER_CHANGED;
+
 
 /**
     @class wxColourPickerCtrl
@@ -39,13 +45,15 @@
 
     @library{wxcore}
     @category{pickers}
-    @appearance{colourpickerctrl.png}
+    @appearance{colourpickerctrl}
 
     @see wxColourDialog, wxColourPickerEvent
 */
 class wxColourPickerCtrl : public wxPickerBase
 {
 public:
+    wxColourPickerCtrl();
+    
     /**
         Initializes the object and calls Create() with all the parameters.
     */
@@ -122,6 +130,8 @@ public:
 class wxColourPickerEvent : public wxCommandEvent
 {
 public:
+    wxColourPickerEvent();
+
     /**
         The constructor is not normally used by the user code.
     */

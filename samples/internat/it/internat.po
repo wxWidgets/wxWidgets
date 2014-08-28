@@ -5,7 +5,6 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: $Id$\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-08 16:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -47,8 +46,8 @@ msgid "&Test locale availability...\tCtrl-T"
 msgstr "&Verifica la disponibilità del locale...\tCtrl-T"
 
 #: ../internat.cpp:261 ../internat.cpp:292
-msgid "&About..."
-msgstr "&Informazioni su..."
+msgid "&About"
+msgstr "&Informazioni su"
 
 #: ../internat.cpp:263 ../internat.cpp:294
 msgid "E&xit"

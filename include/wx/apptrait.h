@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     19.06.2003
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -76,12 +75,6 @@ public:
     // wxStandardPaths object is normally the same for wxBase and wxGUI
     // except in the case of wxMac and wxCocoa
     virtual wxStandardPaths& GetStandardPaths();
-
-#if wxUSE_INTL
-    // called during wxApp initialization to set the locale to correspond to
-    // the user default (i.e. system locale under Windows, LC_ALL under Unix)
-    virtual void SetLocale();
-#endif // wxUSE_INTL
 
 
     // functions abstracting differences between GUI and console modes
@@ -177,14 +170,10 @@ private:
 // NB:  test for __UNIX__ before __WXMAC__ as under Darwin we want to use the
 //      Unix code (and otherwise __UNIX__ wouldn't be defined)
 // ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port
-#if defined(__WXPALMOS__)
-    #include "wx/palmos/apptbase.h"
-#elif defined(__WIN32__)
+#if defined(__WIN32__)
     #include "wx/msw/apptbase.h"
-#elif defined(__UNIX__) && !defined(__EMX__)
+#elif defined(__UNIX__)
     #include "wx/unix/apptbase.h"
-#elif defined(__OS2__)
-    #include "wx/os2/apptbase.h"
 #else // no platform-specific methods to add to wxAppTraits
     // wxAppTraits must be a class because it was forward declared as class
     class WXDLLIMPEXP_BASE wxAppTraits : public wxAppTraitsBase
@@ -208,19 +197,19 @@ public:
 #endif // !wxUSE_CONSOLE_EVENTLOOP
 
 #if wxUSE_LOG
-    virtual wxLog *CreateLogTarget();
+    virtual wxLog *CreateLogTarget() wxOVERRIDE;
 #endif // wxUSE_LOG
-    virtual wxMessageOutput *CreateMessageOutput();
+    virtual wxMessageOutput *CreateMessageOutput() wxOVERRIDE;
 #if wxUSE_FONTMAP
-    virtual wxFontMapper *CreateFontMapper();
+    virtual wxFontMapper *CreateFontMapper() wxOVERRIDE;
 #endif // wxUSE_FONTMAP
-    virtual wxRendererNative *CreateRenderer();
+    virtual wxRendererNative *CreateRenderer() wxOVERRIDE;
 
-    virtual bool ShowAssertDialog(const wxString& msg);
-    virtual bool HasStderr();
+    virtual bool ShowAssertDialog(const wxString& msg) wxOVERRIDE;
+    virtual bool HasStderr() wxOVERRIDE;
 
     // the GetToolkitVersion for console application is always the same
-    virtual wxPortId GetToolkitVersion(int *verMaj = NULL, int *verMin = NULL) const
+    virtual wxPortId GetToolkitVersion(int *verMaj = NULL, int *verMin = NULL) const wxOVERRIDE
     {
         // no toolkits (wxBase is for console applications without GUI support)
         // NB: zero means "no toolkit", -1 means "not initialized yet"
@@ -230,8 +219,8 @@ public:
         return wxPORT_BASE;
     }
 
-    virtual bool IsUsingUniversalWidgets() const { return false; }
-    virtual wxString GetDesktopEnvironment() const { return wxEmptyString; }
+    virtual bool IsUsingUniversalWidgets() const wxOVERRIDE { return false; }
+    virtual wxString GetDesktopEnvironment() const wxOVERRIDE { return wxEmptyString; }
 };
 
 // ----------------------------------------------------------------------------
@@ -244,18 +233,18 @@ class WXDLLIMPEXP_CORE wxGUIAppTraitsBase : public wxAppTraits
 {
 public:
 #if wxUSE_LOG
-    virtual wxLog *CreateLogTarget();
+    virtual wxLog *CreateLogTarget() wxOVERRIDE;
 #endif // wxUSE_LOG
-    virtual wxMessageOutput *CreateMessageOutput();
+    virtual wxMessageOutput *CreateMessageOutput() wxOVERRIDE;
 #if wxUSE_FONTMAP
-    virtual wxFontMapper *CreateFontMapper();
+    virtual wxFontMapper *CreateFontMapper() wxOVERRIDE;
 #endif // wxUSE_FONTMAP
-    virtual wxRendererNative *CreateRenderer();
+    virtual wxRendererNative *CreateRenderer() wxOVERRIDE;
 
-    virtual bool ShowAssertDialog(const wxString& msg);
-    virtual bool HasStderr();
+    virtual bool ShowAssertDialog(const wxString& msg) wxOVERRIDE;
+    virtual bool HasStderr() wxOVERRIDE;
 
-    virtual bool IsUsingUniversalWidgets() const
+    virtual bool IsUsingUniversalWidgets() const wxOVERRIDE
     {
     #ifdef __WXUNIVERSAL__
         return true;
@@ -264,7 +253,7 @@ public:
     #endif
     }
 
-    virtual wxString GetDesktopEnvironment() const { return wxEmptyString; }
+    virtual wxString GetDesktopEnvironment() const wxOVERRIDE { return wxEmptyString; }
 };
 
 #endif // wxUSE_GUI
@@ -274,12 +263,8 @@ public:
 // ----------------------------------------------------------------------------
 
 // ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port
-#if defined(__WXPALMOS__)
-    #include "wx/palmos/apptrait.h"
-#elif defined(__WIN32__)
+#if defined(__WIN32__)
     #include "wx/msw/apptrait.h"
-#elif defined(__OS2__)
-    #include "wx/os2/apptrait.h"
 #elif defined(__UNIX__)
     #include "wx/unix/apptrait.h"
 #elif defined(__DOS__)

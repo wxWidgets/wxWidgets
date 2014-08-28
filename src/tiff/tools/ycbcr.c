@@ -159,3 +159,10 @@ check(int R, int G, int B)
 	eCodes++;
     eBits += abs(eR) + abs(eG) + abs(eB);
 }
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

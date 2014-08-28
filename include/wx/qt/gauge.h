@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/gauge.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -9,8 +8,7 @@
 #ifndef _WX_QT_GAUGE_H_
 #define _WX_QT_GAUGE_H_
 
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QProgressBar>
+#include <QtWidgets/QProgressBar>
 
 class WXDLLIMPEXP_CORE wxGauge : public wxGaugeBase
 {
@@ -37,10 +35,17 @@ public:
 
     virtual QProgressBar *GetHandle() const;
 
-private:
-    wxQtPointer< QProgressBar > m_qtProgressBar;
+    // set/get the control range
+    virtual void SetRange(int range);
+    virtual int GetRange() const;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge);
+    virtual void SetValue(int pos);
+    virtual int GetValue() const;
+
+private:
+    QProgressBar *m_qtProgressBar;
+
+    wxDECLARE_DYNAMIC_CLASS(wxGauge);
 };
 
 #endif // _WX_QT_GAUGE_H_

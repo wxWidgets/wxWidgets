@@ -2,7 +2,6 @@
 // Name:        file.h
 // Purpose:     interface of wxTempFile, wxFile
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -296,8 +295,11 @@ public:
         Get back a file descriptor from wxFile object - the caller is responsible for
         closing the file if this descriptor is opened.
         IsOpened() will return @false after call to Detach().
+
+        @return The file descriptor (this is new since wxWidgets 3.0.0, in the
+        previous versions this method didn't return anything).
     */
-    void Detach();
+    int Detach();
 
     /**
         Returns @true if the end of the file has been reached.
@@ -371,6 +373,23 @@ public:
         @return The number of bytes read, or the symbol ::wxInvalidOffset.
     */
     ssize_t Read(void* buffer, size_t count);
+
+    /**
+        Reads the entire contents of the file into a string.
+
+        @param str
+            Non-@NULL pointer to a string to read data into.
+        @param conv
+            Conversion object to use in Unicode build; by default supposes
+            that file contents is encoded in UTF-8 but falls back to the
+            current locale encoding (or Latin-1 if it is UTF-8 too) if it is
+            not.
+
+        @return @true if file was read successfully, @false otherwise.
+
+        @since 2.9.5
+    */
+    bool ReadAll(wxString* str, const wxMBConv& conv = wxConvAuto());
 
     /**
         Seeks to the specified position.

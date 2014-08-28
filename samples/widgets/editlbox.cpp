@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing wxEditableListbox
 // Author:      Francesco Montorsi
 // Created:     8/2/2009
-// Id:          $Id$
 // Copyright:   (c) 2009 Francesco Montorsi
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -70,11 +69,11 @@ class EditableListboxWidgetsPage : public WidgetsPage
 public:
     EditableListboxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxControl *GetWidget() const { return m_lbox->GetListCtrl(); }
-    virtual void RecreateWidget() { CreateLbox(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_lbox->GetListCtrl(); }
+    virtual void RecreateWidget() wxOVERRIDE { CreateLbox(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
     // event handlers
@@ -99,7 +98,7 @@ protected:
     wxSizer *m_sizerLbox;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(EditableListboxWidgetsPage)
 };
 
@@ -107,10 +106,10 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(EditableListboxWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(EditableListboxWidgetsPage, WidgetsPage)
     EVT_BUTTON(EditableListboxPage_Reset, EditableListboxWidgetsPage::OnButtonReset)
     EVT_CHECKBOX(wxID_ANY, EditableListboxWidgetsPage::OnCheckBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

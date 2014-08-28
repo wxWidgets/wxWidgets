@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/menuitem.cpp
-// Author:      Peter Most
-// Id:          $Id$
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -12,8 +11,22 @@
 #include "wx/menuitem.h"
 #include "wx/menu.h"
 #include "wx/bitmap.h"
-#include "wx/qt/utils.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
+#include "wx/qt/private/winevent.h"
+
+
+class wxQtAction : public QAction, public wxQtSignalHandler< wxMenuItem >
+{
+
+public:
+    wxQtAction( wxMenu *parent, int id, const wxString &text, const wxString &help,
+        wxItemKind kind, wxMenu *subMenu, wxMenuItem *handler );
+
+private:
+    void onActionTriggered( bool checked );
+};
+
 
 wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu, int id, const wxString& name,
     const wxString& help, wxItemKind kind, wxMenu *subMenu)
@@ -36,7 +49,7 @@ void wxMenuItem::SetItemLabel( const wxString &label )
 {
     wxMenuItemBase::SetItemLabel( label );
 
-    m_qtAction->SetItemLabel( label );
+    m_qtAction->setText( wxQtConvertString( label ));
 }
 
 
@@ -45,7 +58,7 @@ void wxMenuItem::SetCheckable( bool checkable )
 {
     wxMenuItemBase::SetCheckable( checkable );
 
-    m_qtAction->SetCheckable( checkable );
+    m_qtAction->setCheckable( checkable );
 }
 
 
@@ -54,14 +67,14 @@ void wxMenuItem::Enable( bool enable )
 {
     wxMenuItemBase::Enable( enable );
 
-    m_qtAction->Enable( enable );
+    m_qtAction->setEnabled( enable );
 }
 
 
 
 bool wxMenuItem::IsEnabled() const
 {
-    bool isEnabled = m_qtAction->IsEnabled();
+    bool isEnabled = m_qtAction->isEnabled();
 
     // Make sure the enabled stati are in synch:
     wxASSERT( isEnabled == wxMenuItemBase::IsEnabled() );
@@ -75,14 +88,14 @@ void wxMenuItem::Check( bool checked )
 {
     wxMenuItemBase::Check( checked );
 
-    m_qtAction->Check( checked );
+    m_qtAction->setChecked( checked );
 }
 
 
 
 bool wxMenuItem::IsChecked() const
 {
-    bool isChecked = m_qtAction->IsChecked();
+    bool isChecked = m_qtAction->isChecked();
 
     // Make sure the checked stati are in synch:
     wxASSERT( isChecked == wxMenuItemBase::IsChecked() );
@@ -91,14 +104,18 @@ bool wxMenuItem::IsChecked() const
 }
 
 
-void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
+void wxMenuItem::SetBitmap(const wxBitmap& WXUNUSED(bitmap))
 {
-    m_qtAction->SetBitmap( bitmap );
+    wxMISSING_FUNCTION();
 }
 
 const wxBitmap &wxMenuItem::GetBitmap() const
 {
-    return m_qtAction->GetBitmap();
+    wxMISSING_FUNCTION();
+
+    static wxBitmap s_bitmap;
+
+    return s_bitmap;
 }
 
 QAction *wxMenuItem::GetHandle() const
@@ -139,55 +156,11 @@ wxQtAction::wxQtAction( wxMenu *parent, int id, const wxString &text, const wxSt
             break;
     }
 
-    connect( this, SIGNAL( triggered( bool )), this, SLOT( OnActionTriggered( bool )));
+    connect( this, &QAction::triggered, this, &wxQtAction::onActionTriggered );
 }
+ 
 
-void wxQtAction::SetItemLabel( const wxString &label )
-{
-    setText( wxQtConvertString( label ));
-}
-
-void wxQtAction::SetCheckable( bool checkable )
-{
-    setCheckable( checkable );
-}
-
-void wxQtAction::Enable( bool enable )
-{
-    setEnabled( enable );
-}
-
-bool wxQtAction::IsEnabled() const
-{
-    return isEnabled();
-}
-
-void wxQtAction::Check( bool checked )
-{
-    setChecked( checked );
-}
-
-bool wxQtAction::IsChecked() const
-{
-    return isChecked();
-}
-
-void wxQtAction::SetBitmap( const wxBitmap &bitmap )
-{
-    wxMISSING_FUNCTION();
-}
-
-const wxBitmap &wxQtAction::GetBitmap() const
-{
-    wxMISSING_FUNCTION();
-
-    static wxBitmap s_bitmap;
-
-    return s_bitmap;
-}
-
-
-void wxQtAction::OnActionTriggered( bool checked )
+void wxQtAction::onActionTriggered( bool checked )
 {
     wxMenuItem *handler = GetHandler();
     wxMenu *menu = handler->GetMenu();

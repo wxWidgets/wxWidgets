@@ -2,7 +2,6 @@
 // Name:        src/gtk/dcmemory.cpp
 // Purpose:
 // Author:      Robert Roebling
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,10 +9,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/dcmemory.h"
 #include "wx/gtk/dcmemory.h"
 
-#include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
@@ -166,3 +163,8 @@ wxBitmap& wxMemoryDCImpl::GetSelectedBitmap()
     return m_selected;
 }
 
+void* wxMemoryDCImpl::GetHandle() const
+{
+    const wxBitmap& bmp = GetSelectedBitmap();
+    return bmp.GetPixmap();
+}

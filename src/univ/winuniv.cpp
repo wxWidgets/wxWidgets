@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     06.08.00
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -92,16 +91,12 @@ public:
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowMSW)
 #elif defined(__WXGTK__)
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowGTK)
-#elif defined(__WXOSX_OR_COCOA__)
+#elif defined(__WXOSX__)
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowMac)
-#elif defined(__WXMGL__)
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowMGL)
 #elif defined(__WXDFB__)
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowDFB)
 #elif defined(__WXX11__)
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowX11)
-#elif defined(__WXPM__)
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowOS2)
 #endif
 
 BEGIN_EVENT_TABLE(wxWindow, wxWindowNative)
@@ -718,16 +713,6 @@ void wxWindow::OnSize(wxSizeEvent& event)
 #endif
 }
 
-wxSize wxWindow::DoGetBestSize() const
-{
-    return AdjustSize(DoGetBestClientSize());
-}
-
-wxSize wxWindow::DoGetBestClientSize() const
-{
-    return wxWindowNative::DoGetBestSize();
-}
-
 wxSize wxWindow::DoGetBorderSize() const
 {
     return AdjustSize(wxSize(0, 0));
@@ -1334,7 +1319,7 @@ void wxWindow::OnKeyDown(wxKeyEvent& event)
         int command = win->GetAcceleratorTable()->GetCommand(event);
         if ( command != -1 )
         {
-            wxCommandEvent eventCmd(wxEVT_COMMAND_MENU_SELECTED, command);
+            wxCommandEvent eventCmd(wxEVT_MENU, command);
             if ( win->GetEventHandler()->ProcessEvent(eventCmd) )
             {
                 // skip "event.Skip()" below
@@ -1365,7 +1350,7 @@ void wxWindow::OnKeyDown(wxKeyEvent& event)
                 wxWindow* child = win->FindWindow(command);
                 if ( child && wxDynamicCast(child, wxButton) )
                 {
-                    wxCommandEvent eventCmd(wxEVT_COMMAND_BUTTON_CLICKED, command);
+                    wxCommandEvent eventCmd(wxEVT_BUTTON, command);
                     eventCmd.SetEventObject(child);
                     if ( child->GetEventHandler()->ProcessEvent(eventCmd) )
                     {
@@ -1440,7 +1425,7 @@ void wxWindow::OnChar(wxKeyEvent& event)
             wxButton *btn = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
             if ( btn )
             {
-                wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, btn->GetId());
+                wxCommandEvent evt(wxEVT_BUTTON, btn->GetId());
                 evt.SetEventObject(btn);
                 btn->Command(evt);
                 return;

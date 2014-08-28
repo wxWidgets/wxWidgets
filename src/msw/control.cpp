@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -46,8 +45,16 @@
     #include "wx/treectrl.h"
 #endif // wxUSE_TREECTRL
 
+#include "wx/renderer.h"
 #include "wx/msw/private.h"
 #include "wx/msw/uxtheme.h"
+#include "wx/msw/dc.h"          // for wxDCTemp
+#include "wx/msw/ownerdrawnbutton.h"
+
+// Missing from MinGW 4.8 SDK headers.
+#ifndef BS_TYPEMASK
+#define BS_TYPEMASK 0xf
+#endif
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -132,7 +139,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
                        (
                         exstyle,            // extended style
                         classname,          // the kind of control to create
-                        label.wx_str(),     // the window name
+                        label.t_str(),      // the window name
                         style,              // the window style
                         x, y, w, h,         // the window position and size
                         GetHwndOf(GetParent()),         // parent
@@ -163,7 +170,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     // Notice that 0xffff is not a valid Unicode character so the problem
     // doesn't arise in Unicode build.
     if ( !label.empty() && label[0] == -1 )
-        ::SetWindowText(GetHwnd(), label.wx_str());
+        ::SetWindowText(GetHwnd(), label.t_str());
 #endif // !wxUSE_UNICODE
 
     // saving the label in m_labelOrig to return it verbatim
@@ -367,7 +374,35 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
     WXHBRUSH hbr = 0;
     if ( !colBg.IsOk() )
     {
-        if ( wxWindow *win = wxFindWinFromHandle(hWnd) )
+        wxWindow *win = wxFindWinFromHandle( hWnd );
+        if ( !win )
+        {
+            // If this HWND doesn't correspond to a wxWindow, it still might be
+            // one of its children for which we need to set the background
+            // brush, e.g. this is the case for the EDIT control that is part
+            // of wxComboBox but also e.g. of wxSlider label HWNDs which are
+            // logically part of it, but are siblings of the main control at
+            // Windows level.
+            //
+            // So check whether it's a sibling of this window which is part of
+            // the same wx object.
+            if ( ContainsHWND(hWnd) )
+            {
+                win = this;
+            }
+            else // Or maybe a child sub-window of this one.
+            {
+                HWND parent = ::GetParent(hWnd);
+                if ( parent )
+                {
+                    wxWindow *winParent = wxFindWinFromHandle( parent );
+                    if( winParent && winParent->ContainsHWND( hWnd ) )
+                        win = winParent;
+                 }
+            }
+        }
+
+        if ( win )
             hbr = win->MSWGetBgBrush(pDC);
 
         // if the control doesn't have any bg colour, foreground colour will be
@@ -427,6 +462,252 @@ WXHBRUSH wxControl::MSWControlColorDisabled(WXHDC pDC)
                              GetHWND());
 }
 
+wxWindow* wxControl::MSWFindItem(long id, WXHWND hWnd) const
+{
+    // is it us or one of our "internal" children?
+    if ( id == GetId() || (GetSubcontrols().Index(id) != wxNOT_FOUND) )
+        return const_cast<wxControl *>(this);
+
+    return wxControlBase::MSWFindItem(id, hWnd);
+}
+
+// ----------------------------------------------------------------------------
+// Owner drawn buttons support.
+// ----------------------------------------------------------------------------
+
+void
+wxMSWOwnerDrawnButtonBase::MSWMakeOwnerDrawnIfNecessary(const wxColour& colFg)
+{
+    // The only way to change the checkbox foreground colour when using
+    // themes is to owner draw it.
+    if ( wxUxThemeEngine::GetIfActive() )
+        MSWMakeOwnerDrawn(colFg.IsOk());
+}
+
+bool wxMSWOwnerDrawnButtonBase::MSWIsOwnerDrawn() const
+{
+    return
+        (::GetWindowLong(GetHwndOf(m_win), GWL_STYLE) & BS_OWNERDRAW) == BS_OWNERDRAW;
+}
+
+void wxMSWOwnerDrawnButtonBase::MSWMakeOwnerDrawn(bool ownerDrawn)
+{
+    long style = ::GetWindowLong(GetHwndOf(m_win), GWL_STYLE);
+
+    // note that BS_CHECKBOX & BS_OWNERDRAW != 0 so we can't operate on
+    // them as on independent style bits
+    if ( ownerDrawn )
+    {
+        style &= ~BS_TYPEMASK;
+        style |= BS_OWNERDRAW;
+
+        m_win->Bind(wxEVT_ENTER_WINDOW,
+                    &wxMSWOwnerDrawnButtonBase::OnMouseEnterOrLeave, this);
+        m_win->Bind(wxEVT_LEAVE_WINDOW,
+                    &wxMSWOwnerDrawnButtonBase::OnMouseEnterOrLeave, this);
+
+        m_win->Bind(wxEVT_LEFT_DOWN,
+                    &wxMSWOwnerDrawnButtonBase::OnMouseLeft, this);
+        m_win->Bind(wxEVT_LEFT_UP,
+                    &wxMSWOwnerDrawnButtonBase::OnMouseLeft, this);
+
+        m_win->Bind(wxEVT_SET_FOCUS,
+                    &wxMSWOwnerDrawnButtonBase::OnFocus, this);
+
+        m_win->Bind(wxEVT_KILL_FOCUS,
+                    &wxMSWOwnerDrawnButtonBase::OnFocus, this);
+    }
+    else // reset to default colour
+    {
+        style &= ~BS_OWNERDRAW;
+        style |= MSWGetButtonStyle();
+
+        m_win->Unbind(wxEVT_ENTER_WINDOW,
+                      &wxMSWOwnerDrawnButtonBase::OnMouseEnterOrLeave, this);
+        m_win->Unbind(wxEVT_LEAVE_WINDOW,
+                      &wxMSWOwnerDrawnButtonBase::OnMouseEnterOrLeave, this);
+
+        m_win->Unbind(wxEVT_LEFT_DOWN,
+                      &wxMSWOwnerDrawnButtonBase::OnMouseLeft, this);
+        m_win->Unbind(wxEVT_LEFT_UP,
+                      &wxMSWOwnerDrawnButtonBase::OnMouseLeft, this);
+
+        m_win->Unbind(wxEVT_SET_FOCUS,
+                      &wxMSWOwnerDrawnButtonBase::OnFocus, this);
+        m_win->Unbind(wxEVT_KILL_FOCUS,
+                      &wxMSWOwnerDrawnButtonBase::OnFocus, this);
+    }
+
+    ::SetWindowLong(GetHwndOf(m_win), GWL_STYLE, style);
+
+    if ( !ownerDrawn )
+        MSWOnButtonResetOwnerDrawn();
+}
+
+void wxMSWOwnerDrawnButtonBase::OnMouseEnterOrLeave(wxMouseEvent& event)
+{
+    if ( event.GetEventType() == wxEVT_LEAVE_WINDOW )
+        m_isPressed = false;
+
+    m_win->Refresh();
+
+    event.Skip();
+}
+
+void wxMSWOwnerDrawnButtonBase::OnMouseLeft(wxMouseEvent& event)
+{
+    // TODO: we should capture the mouse here to be notified about left up
+    //       event but this interferes with BN_CLICKED generation so if we
+    //       want to do this we'd need to generate them ourselves
+    m_isPressed = event.GetEventType() == wxEVT_LEFT_DOWN;
+    m_win->Refresh();
+
+    event.Skip();
+}
+
+void wxMSWOwnerDrawnButtonBase::OnFocus(wxFocusEvent& event)
+{
+    m_win->Refresh();
+
+    event.Skip();
+}
+
+bool wxMSWOwnerDrawnButtonBase::MSWDrawButton(WXDRAWITEMSTRUCT *item)
+{
+    DRAWITEMSTRUCT *dis = (DRAWITEMSTRUCT *)item;
+
+    if ( !MSWIsOwnerDrawn() || dis->CtlType != ODT_BUTTON )
+        return false;
+
+    // shall we draw a focus rect?
+    const bool isFocused = m_isPressed || m_win->HasFocus();
+
+    int flags = MSWGetButtonCheckedFlag();
+
+    if ( dis->itemState & ODS_SELECTED )
+        flags |= wxCONTROL_SELECTED | wxCONTROL_PRESSED;
+
+    if ( !m_win->IsEnabled() )
+        flags |= wxCONTROL_DISABLED;
+
+    if ( m_isPressed )
+        flags |= wxCONTROL_PRESSED;
+
+    if ( wxFindWindowAtPoint(wxGetMousePosition()) == m_win )
+        flags |= wxCONTROL_CURRENT;
+
+
+    // calculate the rectangles for the button itself and the label
+    HDC hdc = dis->hDC;
+    const RECT& rect = dis->rcItem;
+
+    // calculate the rectangles for the button itself and the label
+    const wxSize bestSize = m_win->GetBestSize();
+    RECT rectButton,
+         rectLabel;
+    rectLabel.top = rect.top + (rect.bottom - rect.top - bestSize.y) / 2;
+    rectLabel.bottom = rectLabel.top + bestSize.y;
+
+    // choose the values consistent with those used for native, non
+    // owner-drawn, buttons
+    static const int MARGIN = 3;
+    int CXMENUCHECK = ::GetSystemMetrics(SM_CXMENUCHECK) + 1;
+
+    // the buttons were even bigger under Windows XP
+    if ( wxGetWinVersion() < wxWinVersion_6 )
+        CXMENUCHECK += 2;
+
+    // The space between the button and the label
+    // is included in the button bitmap.
+    const int buttonSize = wxMin(CXMENUCHECK - MARGIN, m_win->GetSize().y);
+    rectButton.top = rect.top + (rect.bottom - rect.top - buttonSize) / 2;
+    rectButton.bottom = rectButton.top + buttonSize;
+
+    const bool isRightAligned = m_win->HasFlag(wxALIGN_RIGHT);
+    if ( isRightAligned )
+    {
+        rectLabel.right = rect.right - CXMENUCHECK;
+        rectLabel.left = rect.left;
+
+        rectButton.left = rectLabel.right + ( CXMENUCHECK + MARGIN - buttonSize ) / 2;
+        rectButton.right = rectButton.left + buttonSize;
+    }
+    else // normal, left-aligned button
+    {
+        rectButton.left = rect.left + ( CXMENUCHECK - MARGIN - buttonSize ) / 2;
+        rectButton.right = rectButton.left + buttonSize;
+
+        rectLabel.left = rect.left + CXMENUCHECK;
+        rectLabel.right = rect.right;
+    }
+
+    // Erase the background.
+    ::FillRect(hdc, &rect, m_win->MSWGetBgBrush(hdc));
+
+    // draw the button itself
+    wxDCTemp dc(hdc);
+
+    MSWDrawButtonBitmap(dc, wxRectFromRECT(rectButton), flags);
+
+    // draw the text
+    const wxString& label = m_win->GetLabel();
+
+    // first we need to measure it
+    UINT fmt = DT_NOCLIP;
+
+    // drawing underlying doesn't look well with focus rect (and the native
+    // control doesn't do it)
+    if ( isFocused )
+        fmt |= DT_HIDEPREFIX;
+    if ( isRightAligned )
+        fmt |= DT_RIGHT;
+    // TODO: also use DT_HIDEPREFIX if the system is configured so
+
+    // we need to get the label real size first if we have to draw a focus rect
+    // around it
+    if ( isFocused )
+    {
+        RECT oldLabelRect = rectLabel; // needed if right aligned
+
+        if ( !::DrawText(hdc, label.t_str(), label.length(), &rectLabel,
+                         fmt | DT_CALCRECT) )
+        {
+            wxLogLastError(wxT("DrawText(DT_CALCRECT)"));
+        }
+
+        if ( isRightAligned )
+        {
+            // move the label rect to the right
+            const int labelWidth = rectLabel.right - rectLabel.left;
+            rectLabel.right = oldLabelRect.right;
+            rectLabel.left = rectLabel.right - labelWidth;
+        }
+    }
+
+    if ( flags & wxCONTROL_DISABLED )
+    {
+        ::SetTextColor(hdc, ::GetSysColor(COLOR_GRAYTEXT));
+    }
+
+    if ( !::DrawText(hdc, label.t_str(), label.length(), &rectLabel, fmt) )
+    {
+        wxLogLastError(wxT("DrawText()"));
+    }
+
+    // finally draw the focus
+    if ( isFocused )
+    {
+        rectLabel.left--;
+        rectLabel.right++;
+        if ( !::DrawFocusRect(hdc, &rectLabel) )
+        {
+            wxLogLastError(wxT("DrawFocusRect()"));
+        }
+    }
+
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // wxControlWithItems
 // ----------------------------------------------------------------------------
@@ -453,7 +734,7 @@ int wxControlWithItems::MSWInsertOrAppendItem(unsigned pos,
                                               unsigned wm)
 {
     LRESULT n = SendMessage((HWND)MSWGetItemsHWND(), wm, pos,
-                            (LPARAM)item.wx_str());
+                            wxMSW_CONV_LPARAM(item));
     if ( n == CB_ERR || n == CB_ERRSPACE )
     {
         wxLogLastError(wxT("SendMessage(XX_ADD/INSERTSTRING)"));

@@ -3,7 +3,6 @@
 // Purpose:     wxCalendarCtrl control implementation for wxQt
 // Author:      Kolya Kosenko
 // Created:     2010-05-12
-// RCS-ID:      $Id$
 // Copyright:   (C) 2010 Kolya Kosenko
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -18,9 +17,26 @@
 #if wxUSE_CALENDARCTRL
 
 #include "wx/calctrl.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
+#include "wx/qt/private/winevent.h"
 
 #include <QtGui/QTextCharFormat>
+
+
+class wxQtCalendarWidget : public wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >
+{
+
+public:
+    wxQtCalendarWidget( wxWindow *parent, wxCalendarCtrl *handler );
+
+private:
+    void selectionChanged();
+    void activated(const QDate &date);
+
+private:
+    QDate m_date;
+};
 
 
 void wxCalendarCtrl::Init()
@@ -307,19 +323,27 @@ wxQtCalendarWidget::wxQtCalendarWidget( wxWindow *parent, wxCalendarCtrl *handle
     : wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >( parent, handler )
 {
     m_date = selectedDate();
-    connect(this, SIGNAL(selectionChanged()), this, SLOT(OnSelectionChanged()));
-    connect(this, SIGNAL(activated(QDate)),   this, SLOT(OnActivated(QDate)));
+    connect(this, &QCalendarWidget::selectionChanged, this, &wxQtCalendarWidget::selectionChanged);
+    connect(this, &QCalendarWidget::activated, this, &wxQtCalendarWidget::activated);
 }
 
-void wxQtCalendarWidget::OnSelectionChanged()
+void wxQtCalendarWidget::selectionChanged()
 {
-    GetHandler()->GenerateAllChangeEvents(wxQtConvertDate(m_date));
-    m_date = selectedDate();
+    wxCalendarCtrl *win = GetHandler();
+    if ( win )
+    {
+        GetHandler()->GenerateAllChangeEvents(wxQtConvertDate(m_date));
+        m_date = selectedDate();
+    }
 }
 
-void wxQtCalendarWidget::OnActivated(const QDate &WXUNUSED(date))
+void wxQtCalendarWidget::activated(const QDate &WXUNUSED(date))
 {
-    GetHandler()->GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED);
+    wxCalendarCtrl *handler = GetHandler();
+    if ( handler )
+    {
+        handler->GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED);
+    }
 }
 
 #endif // wxUSE_CALENDARCTRL

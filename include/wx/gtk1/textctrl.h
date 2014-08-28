@@ -3,7 +3,6 @@
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -142,11 +141,6 @@ public:
     virtual bool ScrollPages(int pages);
 
     // implementation only from now on
-
-    // wxGTK-specific: called recursively by Enable,
-    // to give widgets an oppprtunity to correct their colours after they
-    // have been changed by Enable
-    virtual void OnEnabled( bool enabled ) ;
 
     // tell the control to ignore next text changed signal
     void IgnoreNextTextUpdate();

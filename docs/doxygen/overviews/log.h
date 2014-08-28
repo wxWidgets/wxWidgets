@@ -2,29 +2,14 @@
 // Name:        log.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
 
-@page overview_log wxLog Classes Overview
+@page overview_log Logging Overview
 
-Classes: wxLog, wxLogStderr, wxLogStream, wxLogTextCtrl, wxLogWindow, wxLogGui, wxLogNull, wxLogBuffer, 
-         wxLogChain, wxLogInterposer, wxLogInterposerTemp, wxStreamToTextRedirector
-
-Table of contents:
-@li @ref overview_log_introduction
-@li @ref overview_log_enable
-@li @ref overview_log_targets
-@li @ref overview_log_mt 
-@li @ref overview_log_customize
-@li @ref overview_log_tracemasks
-@li @ref overview_log_timestamps
-<hr>
-
-
-@section overview_log_introduction Introduction
+@tableofcontents
 
 This is a general overview of logging classes provided by wxWidgets. The word
 logging here has a broad sense, including all of the program output, not only
@@ -76,6 +61,8 @@ of arguments or a variable argument list pointer. Here are all of them:
     this function takes a trace mask as the first argument which allows to
     further restrict the amount of messages generated.
 
+@see @ref group_funcmacro_log "Logging Functions and Macros"
+
 The usage of these functions should be fairly straightforward, however it may
 be asked why not use the other logging facilities, such as C standard stdio
 functions or C++ streams. The short answer is that they're all very good
@@ -112,6 +99,7 @@ classes are. Some of advantages in using wxWidgets log functions are:
     about data file writing error.
 
 
+
 @section overview_log_enable Log Messages Selection
 
 By default, most log messages are enabled. In particular, this means that
@@ -142,23 +130,27 @@ you could give it the value "MyProgram" by default and re-define it as
 "MyProgram/DB" in the module working with the database and "MyProgram/DB/Trans"
 in its part managing the transactions. Then you could use
 wxLog::SetComponentLevel() in the following ways:
-    @code
-        // disable all database error messages, everybody knows databases never
-        // fail anyhow
-        wxLog::SetComponentLevel("MyProgram/DB", wxLOG_FatalError);
 
-        // but enable tracing for the transactions as somehow our changes don't
-        // get committed sometimes
-        wxLog::SetComponentLevel("MyProgram/DB/Trans", wxLOG_Trace);
+@code
+// disable all database error messages, everybody knows databases never
+// fail anyhow
+wxLog::SetComponentLevel("MyProgram/DB", wxLOG_FatalError);
 
-        // also enable tracing messages from wxWidgets dynamic module loading
-        // mechanism
-        wxLog::SetComponentLevel("wx/base/module", wxLOG_Trace);
-    @endcode
+// but enable tracing for the transactions as somehow our changes don't
+// get committed sometimes
+wxLog::SetComponentLevel("MyProgram/DB/Trans", wxLOG_Trace);
+
+// also enable tracing messages from wxWidgets dynamic module loading
+// mechanism
+wxLog::SetComponentLevel("wx/base/module", wxLOG_Trace);
+@endcode
+
 Notice that the log level set explicitly for the transactions code overrides
 the log level of the parent component but that all other database code
 subcomponents inherit its setting by default and so won't generate any log
 messages at all.
+
+
 
 @section overview_log_targets Log Targets
 
@@ -171,8 +163,9 @@ from wxLog. As such, it implements the virtual functions of the base class
 which are called when a message is logged. Only one log target is @e active at
 any moment, this is the one used by @ref group_funcmacro_log "wxLogXXX() functions". 
 The normal usage of a log object (i.e. object of a class derived from wxLog) is 
-to install it as the active target with a call to @e SetActiveTarget() and it will be used
-automatically by all subsequent calls to @ref group_funcmacro_log "wxLogXXX() functions".
+to install it as the active target with a call to @e SetActiveTarget() and it
+will be used automatically by all subsequent calls to
+@ref group_funcmacro_log "wxLogXXX() functions".
 
 To create a new log target class you only need to derive it from wxLog and
 override one or several of wxLog::DoLogRecord(), wxLog::DoLogTextAtLevel() and
@@ -184,7 +177,6 @@ simply want to redirect the log messages somewhere else, without changing their
 formatting. Finally, it is enough to override wxLog::DoLogText() if you only
 want to redirect the log messages and the destination doesn't depend on the
 message log level.
-
 
 There are some predefined classes deriving from wxLog and which might be
 helpful to see how you can create a new log target class and, of course, may
@@ -223,10 +215,13 @@ also be used without any change. There are:
     wxLogMessage("..."); // ok
     @endcode
 
+@see @ref group_class_logging "Logging Classes"
+
 The log targets can also be combined: for example you may wish to redirect the
 messages somewhere else (for example, to a log file) but also process them as
 normally. For this the wxLogChain, wxLogInterposer, and wxLogInterposerTemp can
 be used.
+
 
 
 @section overview_log_mt Logging in Multi-Threaded Applications
@@ -246,6 +241,7 @@ thread will appear in order in which they were logged.
 Also notice that wxLog::EnableLogging() and wxLogNull class which uses it only
 affect the current thread, i.e. logging messages may still be generated by the
 other threads after a call to @c EnableLogging(false).
+
 
 
 @section overview_log_customize Logging Customization
@@ -275,8 +271,15 @@ want to redirect the log output elsewhere, without taking into account the
 level of the message. If you do want to handle messages of different levels
 differently, then you should override wxLog::DoLogTextAtLevel().
 
-Finally, if more control over the output format is needed, then the first
-function must be overridden as it allows to construct custom messages
+Additionally, you can customize the way full log messages are constructed from
+the components (such as time stamp, source file information, logging thread ID
+and so on). This task is performed by wxLogFormatter class so you need to
+derive a custom class from it and override its Format() method to build the log
+messages in desired way. Notice that if you just need to modify (or suppress)
+the time stamp display, overriding FormatTime() is enough.
+
+Finally, if even more control over the output format is needed, then
+DoLogRecord() can be overridden as it allows to construct custom messages
 depending on the log level or even do completely different things depending
 on the message severity (for example, throw away all messages except
 warnings and errors, show warnings on the screen and forward the error
@@ -288,7 +291,7 @@ The @e dialog sample illustrates this approach by defining a custom log target
 customizing the dialog used by wxLogGui for the single messages.
 
 
-@section overview_log_tracemasks Using trace masks
+@section overview_log_tracemasks Using Trace Masks
 
 Notice that the use of log trace masks is hardly necessary any longer in
 current wxWidgets version as the same effect can be achieved by using
@@ -321,25 +324,4 @@ wxLog::AddTraceMask( wxTRACE_OleCalls );
 
 The standard trace masks are given in wxLogTrace() documentation.
 
-
-@section overview_log_timestamps Timestamps
-
-The wxLog::LogRecord() function automatically prepends a time stamp
-to all the messages. The format of the time stamp may be changed: it can be
-any string with % specifications fully described in the documentation of the
-standard @e strftime() function. For example, the default format is
-@c "[%d/%b/%y %H:%M:%S] " which gives something like @c "[17/Sep/98 22:10:16] "
-(without quotes) for the current date. 
-
-Setting an empty string as the time format or calling the shortcut wxLog::DisableTimestamp(), 
-disables timestamping of the messages completely.
-
-@note
-Timestamping is disabled for Visual C++ users in debug builds by
-default because otherwise it would be impossible to directly go to the line
-from which the log message was generated by simply clicking in the debugger
-window on the corresponding error message. If you wish to enable it, please
-use SetTimestamp() explicitly.
-
 */
-

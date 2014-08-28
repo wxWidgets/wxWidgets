@@ -2,9 +2,120 @@
 // Name:        wx/listctrl.h
 // Purpose:     interface of wxListCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+/// style flags
+#define wxLC_VRULES          0x0001
+#define wxLC_HRULES          0x0002
+
+#define wxLC_ICON            0x0004
+#define wxLC_SMALL_ICON      0x0008
+#define wxLC_LIST            0x0010
+#define wxLC_REPORT          0x0020
+
+#define wxLC_ALIGN_TOP       0x0040
+#define wxLC_ALIGN_LEFT      0x0080
+#define wxLC_AUTOARRANGE     0x0100
+#define wxLC_VIRTUAL         0x0200
+#define wxLC_EDIT_LABELS     0x0400
+#define wxLC_NO_HEADER       0x0800
+#define wxLC_NO_SORT_HEADER  0x1000
+#define wxLC_SINGLE_SEL      0x2000
+#define wxLC_SORT_ASCENDING  0x4000
+#define wxLC_SORT_DESCENDING 0x8000
+
+#define wxLC_MASK_TYPE       (wxLC_ICON | wxLC_SMALL_ICON | wxLC_LIST | wxLC_REPORT)
+#define wxLC_MASK_ALIGN      (wxLC_ALIGN_TOP | wxLC_ALIGN_LEFT)
+#define wxLC_MASK_SORT       (wxLC_SORT_ASCENDING | wxLC_SORT_DESCENDING)
+
+
+/// Mask flags to tell app/GUI what fields of wxListItem are valid
+#define wxLIST_MASK_STATE           0x0001
+#define wxLIST_MASK_TEXT            0x0002
+#define wxLIST_MASK_IMAGE           0x0004
+#define wxLIST_MASK_DATA            0x0008
+#define wxLIST_SET_ITEM             0x0010
+#define wxLIST_MASK_WIDTH           0x0020
+#define wxLIST_MASK_FORMAT          0x0040
+
+/// State flags for indicating the state of an item
+#define wxLIST_STATE_DONTCARE       0x0000
+#define wxLIST_STATE_DROPHILITED    0x0001      // MSW only
+#define wxLIST_STATE_FOCUSED        0x0002
+#define wxLIST_STATE_SELECTED       0x0004
+#define wxLIST_STATE_CUT            0x0008      // MSW only
+
+/// Hit test flags, used in HitTest
+#define wxLIST_HITTEST_ABOVE            0x0001  // Above the client area.
+#define wxLIST_HITTEST_BELOW            0x0002  // Below the client area.
+#define wxLIST_HITTEST_NOWHERE          0x0004  // In the client area but below the last item.
+#define wxLIST_HITTEST_ONITEMICON       0x0020  // On the bitmap associated with an item.
+#define wxLIST_HITTEST_ONITEMLABEL      0x0080  // On the label (string) associated with an item.
+#define wxLIST_HITTEST_ONITEMRIGHT      0x0100  // In the area to the right of an item.
+#define wxLIST_HITTEST_ONITEMSTATEICON  0x0200  // On the state icon for a tree view item that is in a user-defined state.
+#define wxLIST_HITTEST_TOLEFT           0x0400  // To the left of the client area.
+#define wxLIST_HITTEST_TORIGHT          0x0800  // To the right of the client area.
+
+#define wxLIST_HITTEST_ONITEM (wxLIST_HITTEST_ONITEMICON | wxLIST_HITTEST_ONITEMLABEL | wxLIST_HITTEST_ONITEMSTATEICON)
+
+/// GetSubItemRect constants
+#define wxLIST_GETSUBITEMRECT_WHOLEITEM -1l
+
+/// Flags for GetNextItem (MSW only except wxLIST_NEXT_ALL)
+enum
+{
+    wxLIST_NEXT_ABOVE,          // Searches for an item above the specified item
+    wxLIST_NEXT_ALL,            // Searches for subsequent item by index
+    wxLIST_NEXT_BELOW,          // Searches for an item below the specified item
+    wxLIST_NEXT_LEFT,           // Searches for an item to the left of the specified item
+    wxLIST_NEXT_RIGHT           // Searches for an item to the right of the specified item
+};
+
+/// Alignment flags for Arrange (MSW only except wxLIST_ALIGN_LEFT)
+enum
+{
+    wxLIST_ALIGN_DEFAULT,
+    wxLIST_ALIGN_LEFT,
+    wxLIST_ALIGN_TOP,
+    wxLIST_ALIGN_SNAP_TO_GRID
+};
+
+/// Column format (MSW only except wxLIST_FORMAT_LEFT)
+enum wxListColumnFormat
+{
+    wxLIST_FORMAT_LEFT,
+    wxLIST_FORMAT_RIGHT,
+    wxLIST_FORMAT_CENTRE,
+    wxLIST_FORMAT_CENTER = wxLIST_FORMAT_CENTRE
+};
+
+/// Autosize values for SetColumnWidth
+enum
+{
+    wxLIST_AUTOSIZE = -1,
+    wxLIST_AUTOSIZE_USEHEADER = -2      // partly supported by generic version
+};
+
+/// Flag values for GetItemRect
+enum
+{
+    wxLIST_RECT_BOUNDS,
+    wxLIST_RECT_ICON,
+    wxLIST_RECT_LABEL
+};
+
+/// Flag values for FindItem (MSW only)
+enum
+{
+    wxLIST_FIND_UP,
+    wxLIST_FIND_DOWN,
+    wxLIST_FIND_LEFT,
+    wxLIST_FIND_RIGHT
+};
+
+
+
 
 /**
     @class wxListCtrl
@@ -86,71 +197,71 @@
     @beginEventEmissionTable{wxListEvent}
     @event{EVT_LIST_BEGIN_DRAG(id, func)}
            Begin dragging with the left mouse button.
-          Processes a @c wxEVT_COMMAND_LIST_BEGIN_DRAG event type.
+          Processes a @c wxEVT_LIST_BEGIN_DRAG event type.
     @event{EVT_LIST_BEGIN_RDRAG(id, func)}
            Begin dragging with the right mouse button.
-           Processes a @c wxEVT_COMMAND_LIST_BEGIN_RDRAG event type.
+           Processes a @c wxEVT_LIST_BEGIN_RDRAG event type.
     @event{EVT_BEGIN_LABEL_EDIT(id, func)}
            Begin editing a label. This can be prevented by calling Veto().
-           Processes a @c wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT event type.
+           Processes a @c wxEVT_LIST_BEGIN_LABEL_EDIT event type.
     @event{EVT_LIST_END_LABEL_EDIT(id, func)}
            Finish editing a label. This can be prevented by calling Veto().
-           Processes a @c wxEVT_COMMAND_LIST_END_LABEL_EDIT event type.
+           Processes a @c wxEVT_LIST_END_LABEL_EDIT event type.
     @event{EVT_LIST_DELETE_ITEM(id, func)}
            An item was deleted.
-           Processes a @c wxEVT_COMMAND_LIST_DELETE_ITEM event type.
+           Processes a @c wxEVT_LIST_DELETE_ITEM event type.
     @event{EVT_LIST_DELETE_ALL_ITEMS(id, func)}
            All items were deleted.
-           Processes a @c wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS event type.
+           Processes a @c wxEVT_LIST_DELETE_ALL_ITEMS event type.
     @event{EVT_LIST_ITEM_SELECTED(id, func)}
            The item has been selected.
-           Processes a @c wxEVT_COMMAND_LIST_ITEM_SELECTED event type.
+           Processes a @c wxEVT_LIST_ITEM_SELECTED event type.
     @event{EVT_LIST_ITEM_DESELECTED(id, func)}
            The item has been deselected.
-           Processes a @c wxEVT_COMMAND_LIST_ITEM_DESELECTED event type.
+           Processes a @c wxEVT_LIST_ITEM_DESELECTED event type.
     @event{EVT_LIST_ITEM_ACTIVATED(id, func)}
            The item has been activated (ENTER or double click).
-           Processes a @c wxEVT_COMMAND_LIST_ITEM_ACTIVATED event type.
+           Processes a @c wxEVT_LIST_ITEM_ACTIVATED event type.
     @event{EVT_LIST_ITEM_FOCUSED(id, func)}
            The currently focused item has changed.
-           Processes a @c wxEVT_COMMAND_LIST_ITEM_FOCUSED event type.
+           Processes a @c wxEVT_LIST_ITEM_FOCUSED event type.
     @event{EVT_LIST_ITEM_MIDDLE_CLICK(id, func)}
            The middle mouse button has been clicked on an item. This is
            only supported by the generic control.
-           Processes a @c wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK event type.
+           Processes a @c wxEVT_LIST_ITEM_MIDDLE_CLICK event type.
     @event{EVT_LIST_ITEM_RIGHT_CLICK(id, func)}
           The right mouse button has been clicked on an item.
-          Processes a @c wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK event type.
+          Processes a @c wxEVT_LIST_ITEM_RIGHT_CLICK event type.
     @event{EVT_LIST_KEY_DOWN(id, func)}
            A key has been pressed.
-           Processes a @c wxEVT_COMMAND_LIST_KEY_DOWN event type.
+           Processes a @c wxEVT_LIST_KEY_DOWN event type.
     @event{EVT_LIST_INSERT_ITEM(id, func)}
            An item has been inserted.
-           Processes a @c wxEVT_COMMAND_LIST_INSERT_ITEM event type.
+           Processes a @c wxEVT_LIST_INSERT_ITEM event type.
     @event{EVT_LIST_COL_CLICK(id, func)}
            A column (m_col) has been left-clicked.
-           Processes a @c wxEVT_COMMAND_LIST_COL_CLICK event type.
+           Processes a @c wxEVT_LIST_COL_CLICK event type.
     @event{EVT_LIST_COL_RIGHT_CLICK(id, func)}
            A column (m_col) has been right-clicked.
-           Processes a @c wxEVT_COMMAND_LIST_COL_RIGHT_CLICK event type.
+           Processes a @c wxEVT_LIST_COL_RIGHT_CLICK event type.
     @event{EVT_LIST_COL_BEGIN_DRAG(id, func)}
            The user started resizing a column - can be vetoed.
-           Processes a @c wxEVT_COMMAND_LIST_COL_BEGIN_DRAG event type.
+           Processes a @c wxEVT_LIST_COL_BEGIN_DRAG event type.
     @event{EVT_LIST_COL_DRAGGING(id, func)}
            The divider between columns is being dragged.
-           Processes a @c wxEVT_COMMAND_LIST_COL_DRAGGING event type.
+           Processes a @c wxEVT_LIST_COL_DRAGGING event type.
     @event{EVT_LIST_COL_END_DRAG(id, func)}
            A column has been resized by the user.
-           Processes a @c wxEVT_COMMAND_LIST_COL_END_DRAG event type.
+           Processes a @c wxEVT_LIST_COL_END_DRAG event type.
     @event{EVT_LIST_CACHE_HINT(id, func)}
            Prepare cache for a virtual list control.
-           Processes a @c wxEVT_COMMAND_LIST_CACHE_HINT event type.
+           Processes a @c wxEVT_LIST_CACHE_HINT event type.
     @endEventTable
 
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{listctrl.png}
+    @appearance{listctrl}
 
     @see @ref overview_listctrl, wxListView, wxListBox, wxTreeCtrl, wxImageList,
          wxListEvent, wxListItem, wxEditableListBox
@@ -198,6 +309,19 @@ public:
     virtual ~wxListCtrl();
 
     /**
+        Adds a new column to the list control in report view mode.
+
+        This is just a convenient wrapper for InsertColumn() which adds the new
+        column after all the existing ones without having to specify its
+        position explicitly.
+
+        @since 2.9.4
+     */
+    long AppendColumn(const wxString& heading,
+                      wxListColumnFormat format = wxLIST_FORMAT_LEFT,
+                      int width = -1);
+
+    /**
         Arranges the items in icon or small icon view.
         This only has effect on Win32. @a flag is one of:
         - wxLIST_ALIGN_DEFAULT: Default alignment.
@@ -220,7 +344,7 @@ public:
     /**
         Deletes all items and all columns.
 
-        @note  This sends an event of type @c wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS
+        @note  This sends an event of type @c wxEVT_LIST_DELETE_ALL_ITEMS
                under all platforms.
     */
     void ClearAll();
@@ -238,10 +362,10 @@ public:
     /**
         Deletes all items in the list control.
 
-        This function does @e not send the @c wxEVT_COMMAND_LIST_DELETE_ITEM
+        This function does @e not send the @c wxEVT_LIST_DELETE_ITEM
         event because deleting many items from the control would be too slow
         then (unlike wxListCtrl::DeleteItem) but it does send the special @c
-        wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS event if the control was not empty.
+        wxEVT_LIST_DELETE_ALL_ITEMS event if the control was not empty.
         If it was already empty, nothing is done and no event is sent.
 
         @return @true if the items were successfully deleted or if the control
@@ -257,7 +381,7 @@ public:
 
     /**
         Deletes the specified item.
-        This function sends the @c wxEVT_COMMAND_LIST_DELETE_ITEM event for the
+        This function sends the @c wxEVT_LIST_DELETE_ITEM event for the
         item being deleted.
 
         @see DeleteAllItems()
@@ -278,6 +402,39 @@ public:
                           wxClassInfo* textControlClass = wxCLASSINFO(wxTextCtrl));
 
     /**
+        Enable alternating row background colours (also called zebra striping).
+
+        This method can only be called for the control in virtual report mode,
+        i.e. having ::wxLC_REPORT and ::wxLC_VIRTUAL styles.
+
+        When enabling alternating colours, the appropriate colour for the even
+        rows is chosen automatically depending on the default foreground and
+        background colours which are used for the odd rows.
+
+        @param enable
+            If @true, enable alternating row background colours, i.e. different
+            colours for the odd and even rows. If @false, disable this feature
+            and use the same background colour for all rows.
+
+        @since 2.9.5
+
+        @see SetAlternateRowColour()
+     */
+    void EnableAlternateRowColours(bool enable = true);
+
+    /**
+        Enable or disable a beep if there is no match for the currently
+        entered text when searching for the item from keyboard.
+
+        The default is to not beep in this case except in wxMSW where the
+        beep is always generated by the native control and cannot be disabled,
+        i.e. calls to this function do nothing there.
+
+        @since 2.9.5
+    */
+    void EnableBellOnNoMatch(bool on = true);
+
+    /**
         Finish editing the label.
 
         This method allows to programmatically end editing a list control item
@@ -295,7 +452,7 @@ public:
         @param cancel If @true, discard the changes made by user, as if @c
             Escape key was pressed. Otherwise, accept the changes as if @c
             Return was pressed.
-        @return @true if item editing wad finished or @false if no item as
+        @return @true if item editing was finished or @false if no item as
             being edited.
      */
     bool EndEditLabel(bool cancel);
@@ -609,6 +766,26 @@ public:
     wxRect GetViewRect() const;
 
     /**
+        Set the alternative row background colour to a specific colour.
+
+        It is recommended to call EnableAlternateRowColours() instead of using
+        these methods as native implementations of this control might support
+        alternating row colours but not setting the exact colour to be used for
+        them.
+
+        As EnableAlternateRowColours(), this method can only be used with
+        controls having ::wxLC_REPORT and ::wxLC_VIRTUAL styles.
+
+        @param colour
+            A valid alternative row background colour to enable alternating
+            rows or invalid colour to disable them and use the same colour for
+            all rows.
+
+        @since 2.9.5
+     */
+    void SetAlternateRowColour(const wxColour& colour);
+
+    /**
         Determines which item (if any) is at the specified point, giving details
         in @a flags. Returns index of the item or @c wxNOT_FOUND if no item is at
         the specified point.
@@ -630,7 +807,7 @@ public:
         If @a ptrSubItem is not @NULL and the wxListCtrl is in the report
         mode the subitem (or column) number will also be provided.
         This feature is only available in version 2.7.0 or higher and is currently only
-        implemented under wxMSW and requires at least comctl32.dll of verion 4.70 on
+        implemented under wxMSW and requires at least comctl32.dll of version 4.70 on
         the host system or the value stored in @a ptrSubItem will be always -1.
         To compile this feature into wxWidgets library you need to have access to
         commctrl.h of version 4.70 that is provided by Microsoft.
@@ -643,16 +820,53 @@ public:
     long HitTest(const wxPoint& point, int& flags, long* ptrSubItem = NULL) const;
 
     /**
-        For report view mode (only), inserts a column. For more details, see SetItem().
-    */
-    long InsertColumn(long col, wxListItem& info);
+        Returns true if the control is currently using ::wxLC_REPORT style.
+     */
+    bool InReportView() const;
 
     /**
-        For report view mode (only), inserts a column. For more details, see SetItem().
+        For report view mode (only), inserts a column.
+
+        For more details, see SetItem(). Also see InsertColumn(long, const
+        wxString&, int, int) overload for a usually more convenient
+        alternative to this method and the description of how the item width
+        is interpreted by this method.
+    */
+    long InsertColumn(long col, const wxListItem& info);
+
+    /**
+        For report view mode (only), inserts a column.
+
+        Insert a new column in the list control in report view mode at the
+        given position specifying its most common attributes.
+
+        Notice that to set the image for the column you need to use
+        Insert(long, const wxListItem&) overload and specify ::wxLIST_MASK_IMAGE
+        in the item mask.
+
+        @param col
+            The index where the column should be inserted. Valid indices are
+            from 0 up to GetColumnCount() inclusive and the latter can be used
+            to append the new column after the last existing one.
+        @param heading
+            The string specifying the column heading.
+        @param format
+            The flags specifying the control heading text alignment.
+        @param width
+            If positive, the width of the column in pixels. Otherwise it can be
+            @c wxLIST_AUTOSIZE to choose the default size for the column or @c
+            wxLIST_AUTOSIZE_USEHEADER to fit the column width to @a heading or
+            to extend to fill all the remaining space for the last column.
+            Notice that in case of @c wxLIST_AUTOSIZE fixed width is used as
+            there are no items in this column to use for determining its best
+            size yet. If you want to fit the column to its contents, use
+            SetColumnWidth() after adding the items with values in this column.
+        @return
+            The index of the inserted column or -1 if adding it failed.
     */
     long InsertColumn(long col, const wxString& heading,
                       int format = wxLIST_FORMAT_LEFT,
-                      int width = -1);
+                      int width = wxLIST_AUTOSIZE);
 
     /**
         Inserts an item, returning the index of the new item if successful, -1 otherwise.
@@ -706,6 +920,11 @@ public:
     */
     long InsertItem(long index, const wxString& label,
                     int imageIndex);
+
+    /**
+        Returns true if the control is currently in virtual report view.
+     */
+    bool IsVirtual() const;
 
     /**
         Redraws the given @e item.
@@ -813,7 +1032,7 @@ public:
 
         @see GetColumnsOrder()
     */
-    bool SetColumnsOrder(const wxArrayInt& orders) const;
+    bool SetColumnsOrder(const wxArrayInt& orders);
 
     /**
         Sets the image list associated with the control.
@@ -889,15 +1108,6 @@ public:
     */
     bool SetItemImage(long item, int image, int selImage = -1);
 
-    /**
-        Sets the unselected and selected images associated with the item.
-        The images are indices into the image list associated with the list control.
-
-        @deprecated
-        This form is deprecated: @a selImage is not used; use the other
-        SetItemImage() overload.
-    */
-    bool SetItemImage(long item, int image, int selImage = -1);
 
     /**
         Sets the position of the item, in icon or small icon view. Windows only.
@@ -916,8 +1126,24 @@ public:
     bool SetItemPtrData(long item, wxUIntPtr data);
 
     /**
-        Sets the item state. For a list of state flags, see SetItem().
-        The @b stateMask indicates which state flags are valid.
+        Sets the item state.
+
+        The @a stateMask is a combination of @c wxLIST_STATE_XXX constants
+        described in wxListItem documentation. For each of the bits specified
+        in @a stateMask, the corresponding state is set or cleared depending on
+        whether @a state argument contains the same bit or not.
+
+        So to select an item you can use
+        @code
+            list->SetItemState(item, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+        @endcode
+        while to deselect it you should use
+        @code
+            list->SetItemState(item, 0, wxLIST_STATE_SELECTED);
+        @endcode
+
+        Consider using wxListView if possible to avoid dealing with this
+        error-prone and confusing method.
     */
     bool SetItemState(long item, long state, long stateMask);
 
@@ -961,8 +1187,8 @@ public:
         second one and positive value if the first one is greater than the second one
         (the same convention as used by @c qsort(3)).
 
-        The parameter @e item1 is the client data associated with the first item (NOT the index).
-        The parameter @e item2 is the client data associated with the second item (NOT the index).
+        The parameter @e item1 is the client data associated with the first item (@b NOT the index).
+        The parameter @e item2 is the client data associated with the second item (@b NOT the index).
         The parameter @e data is the value passed to SortItems() itself.
 
         Notice that the control may only be sorted on client data associated with
@@ -1104,7 +1330,7 @@ protected:
     @endEventTable
 
 
-    @library{wxbase}
+    @library{wxcore}
     @category{events}
 
     @see wxListCtrl
@@ -1141,7 +1367,7 @@ public:
     /**
         The data.
     */
-    long GetData() const;
+    wxUIntPtr GetData() const;
 
     /**
         The image.
@@ -1194,13 +1420,34 @@ public:
 };
 
 
+wxEventType wxEVT_LIST_BEGIN_DRAG;
+wxEventType wxEVT_LIST_BEGIN_RDRAG;
+wxEventType wxEVT_LIST_BEGIN_LABEL_EDIT;
+wxEventType wxEVT_LIST_END_LABEL_EDIT;
+wxEventType wxEVT_LIST_DELETE_ITEM;
+wxEventType wxEVT_LIST_DELETE_ALL_ITEMS;
+wxEventType wxEVT_LIST_ITEM_SELECTED;
+wxEventType wxEVT_LIST_ITEM_DESELECTED;
+wxEventType wxEVT_LIST_KEY_DOWN;
+wxEventType wxEVT_LIST_INSERT_ITEM;
+wxEventType wxEVT_LIST_COL_CLICK;
+wxEventType wxEVT_LIST_ITEM_RIGHT_CLICK;
+wxEventType wxEVT_LIST_ITEM_MIDDLE_CLICK;
+wxEventType wxEVT_LIST_ITEM_ACTIVATED;
+wxEventType wxEVT_LIST_CACHE_HINT;
+wxEventType wxEVT_LIST_COL_RIGHT_CLICK;
+wxEventType wxEVT_LIST_COL_BEGIN_DRAG;
+wxEventType wxEVT_LIST_COL_DRAGGING;
+wxEventType wxEVT_LIST_COL_END_DRAG;
+wxEventType wxEVT_LIST_ITEM_FOCUSED;
+
 
 /**
     @class wxListItemAttr
 
     Represents the attributes (color, font, ...) of a wxListCtrl's wxListItem.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{data}
 
     @see @ref overview_listctrl, wxListCtrl, wxListItem
@@ -1284,13 +1531,52 @@ public:
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{listview.png}
+    @appearance{listctrl}
 
     @see wxListView::SetColumnImage
 */
 class wxListView : public wxListCtrl
 {
 public:
+    /**
+       Default constructor.
+    */
+    wxListView();
+
+    /**
+        Constructor, creating and showing a listview control.
+
+        @param parent
+            Parent window. Must not be @NULL.
+        @param id
+            Window identifier. The value wxID_ANY indicates a default value.
+        @param pos
+            Window position.
+            If ::wxDefaultPosition is specified then a default position is chosen.
+        @param size
+            Window size.
+            If ::wxDefaultSize is specified then the window is sized appropriately.
+        @param style
+            Window style. See wxListCtrl.
+        @param validator
+            Window validator.
+        @param name
+            Window name.
+
+        @see Create(), wxValidator
+    */
+    wxListView(wxWindow* parent, wxWindowID id,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxLC_ICON,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString& name = wxListCtrlNameStr);
+
+    /**
+        Destructor, destroying the listview control.
+    */
+    virtual ~wxListView();
+
     /**
         Resets the column image -- after calling this function, no image will be shown.
 
@@ -1364,23 +1650,13 @@ public:
 };
 
 
-/**
-    Column format (MSW only except wxLIST_FORMAT_LEFT).
-*/
-enum wxListColumnFormat
-{
-    wxLIST_FORMAT_LEFT,
-    wxLIST_FORMAT_RIGHT,
-    wxLIST_FORMAT_CENTRE,
-    wxLIST_FORMAT_CENTER = wxLIST_FORMAT_CENTRE
-};
 
 /**
     @class wxListItem
 
     This class stores information about a wxListCtrl item or column.
 
-    wxListItem is a class which contains informations about:
+    wxListItem is a class which contains information about:
     - Zero based item position; see SetId() and GetId().
     - Zero based column index; see SetColumn() and GetColumn().
     - The label (or header for columns); see SetText() and GetText().
@@ -1412,7 +1688,7 @@ enum wxListColumnFormat
     or SetFont() functions on it passing it the colour/font to use.
     If the colour/font is not specified, the default list control colour/font is used.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{data}
 
     @see wxListCtrl

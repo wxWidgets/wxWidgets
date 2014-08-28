@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:
-// RCS-ID:      $Id$
 // Copyright:   Julian Smart
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
@@ -27,14 +26,14 @@ enum wxBrushStyle
     wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE = wxSTIPPLE_MASK_OPAQUE,
     wxBRUSHSTYLE_STIPPLE_MASK = wxSTIPPLE_MASK,
     wxBRUSHSTYLE_STIPPLE = wxSTIPPLE,
-    wxBRUSHSTYLE_BDIAGONAL_HATCH = wxBDIAGONAL_HATCH,
-    wxBRUSHSTYLE_CROSSDIAG_HATCH = wxCROSSDIAG_HATCH,
-    wxBRUSHSTYLE_FDIAGONAL_HATCH = wxFDIAGONAL_HATCH,
-    wxBRUSHSTYLE_CROSS_HATCH = wxCROSS_HATCH,
-    wxBRUSHSTYLE_HORIZONTAL_HATCH = wxHORIZONTAL_HATCH,
-    wxBRUSHSTYLE_VERTICAL_HATCH = wxVERTICAL_HATCH,
-    wxBRUSHSTYLE_FIRST_HATCH = wxFIRST_HATCH,
-    wxBRUSHSTYLE_LAST_HATCH = wxLAST_HATCH
+    wxBRUSHSTYLE_BDIAGONAL_HATCH = wxHATCHSTYLE_BDIAGONAL,
+    wxBRUSHSTYLE_CROSSDIAG_HATCH = wxHATCHSTYLE_CROSSDIAG,
+    wxBRUSHSTYLE_FDIAGONAL_HATCH = wxHATCHSTYLE_FDIAGONAL,
+    wxBRUSHSTYLE_CROSS_HATCH = wxHATCHSTYLE_CROSS,
+    wxBRUSHSTYLE_HORIZONTAL_HATCH = wxHATCHSTYLE_HORIZONTAL,
+    wxBRUSHSTYLE_VERTICAL_HATCH = wxHATCHSTYLE_VERTICAL,
+    wxBRUSHSTYLE_FIRST_HATCH = wxHATCHSTYLE_FIRST,
+    wxBRUSHSTYLE_LAST_HATCH = wxHATCHSTYLE_LAST
 };
 
 
@@ -70,9 +69,7 @@ public:
     }
 };
 
-#if defined(__WXPALMOS__)
-    #include "wx/palmos/brush.h"
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
     #include "wx/msw/brush.h"
 #elif defined(__WXMOTIF__) || defined(__WXX11__)
     #include "wx/x11/brush.h"
@@ -80,16 +77,10 @@ public:
     #include "wx/gtk/brush.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk1/brush.h"
-#elif defined(__WXMGL__)
-    #include "wx/mgl/brush.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/brush.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/brush.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/brush.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/brush.h"
 #elif defined(__WXQT__)
     #include "wx/qt/brush.h"
 #endif
@@ -100,15 +91,9 @@ public:
     wxBrush *FindOrCreateBrush(const wxColour& colour,
                                wxBrushStyle style = wxBRUSHSTYLE_SOLID);
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("use wxBRUSHSTYLE_XXX constants")
     wxBrush *FindOrCreateBrush(const wxColour& colour, int style)
         { return FindOrCreateBrush(colour, (wxBrushStyle)style); }
-#endif
-
-#if WXWIN_COMPATIBILITY_2_6
-    wxDEPRECATED( void AddBrush(wxBrush*) );
-    wxDEPRECATED( void RemoveBrush(wxBrush*) );
-#endif
 };
 
 extern WXDLLIMPEXP_DATA_CORE(wxBrushList*)   wxTheBrushList;
@@ -119,25 +104,24 @@ extern WXDLLIMPEXP_DATA_CORE(wxBrushList*)   wxTheBrushList;
 //
 // to compile without warnings which it would otherwise provoke from some
 // compilers as it compares elements of different enums
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
 
 // Unfortunately some compilers have ambiguity issues when enum comparisons are
 // overloaded so we have to disable the overloads in this case, see
 // wxCOMPILER_NO_OVERLOAD_ON_ENUM definition in wx/platform.h for more details.
 #ifndef wxCOMPILER_NO_OVERLOAD_ON_ENUM
 
+wxDEPRECATED_MSG("use wxBRUSHSTYLE_XXX constants only")
 inline bool operator==(wxBrushStyle s, wxDeprecatedGUIConstants t)
 {
     return static_cast<int>(s) == static_cast<int>(t);
 }
 
+wxDEPRECATED_MSG("use wxBRUSHSTYLE_XXX constants only")
 inline bool operator!=(wxBrushStyle s, wxDeprecatedGUIConstants t)
 {
-    return !(s == t);
+    return static_cast<int>(s) != static_cast<int>(t);
 }
 
 #endif // wxCOMPILER_NO_OVERLOAD_ON_ENUM
-
-#endif // FUTURE_WXWIN_COMPATIBILITY_3_0
 
 #endif // _WX_BRUSH_H_BASE_

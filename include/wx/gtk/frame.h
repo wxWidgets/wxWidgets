@@ -2,7 +2,6 @@
 // Name:        wx/gtk/frame.h
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -40,18 +39,16 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    virtual ~wxFrame();
-
 #if wxUSE_STATUSBAR
-    void SetStatusBar(wxStatusBar *statbar);
+    void SetStatusBar(wxStatusBar *statbar) wxOVERRIDE;
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_TOOLBAR
-    void SetToolBar(wxToolBar *toolbar);
+    void SetToolBar(wxToolBar *toolbar) wxOVERRIDE;
 #endif // wxUSE_TOOLBAR
 
-    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
-    wxPoint GetClientAreaOrigin() const { return wxPoint(0, 0); }
+    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) wxOVERRIDE;
+    wxPoint GetClientAreaOrigin() const wxOVERRIDE { return wxPoint(0, 0); }
 
 #if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
     // in Hildon environment all frames are always shown maximized
@@ -61,21 +58,20 @@ public:
     // implementation from now on
     // --------------------------
 
-    virtual bool SendIdleEvents(wxIdleEvent& event);
+    virtual bool SendIdleEvents(wxIdleEvent& event) wxOVERRIDE;
 
 protected:
-    // common part of all ctors
-    void Init();
-
     // override wxWindow methods to take into account tool/menu/statusbars
-    virtual void DoGetClientSize( int *width, int *height ) const;
+    virtual void DoGetClientSize( int *width, int *height ) const wxOVERRIDE;
 
 #if wxUSE_MENUS_NATIVE
-    virtual void DetachMenuBar();
-    virtual void AttachMenuBar(wxMenuBar *menubar);
+    virtual void DetachMenuBar() wxOVERRIDE;
+    virtual void AttachMenuBar(wxMenuBar *menubar) wxOVERRIDE;
 #endif // wxUSE_MENUS_NATIVE
 
 private:
+    void Init();
+
     long m_fsSaveFlag;
 
     DECLARE_DYNAMIC_CLASS(wxFrame)

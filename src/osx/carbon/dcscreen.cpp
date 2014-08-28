@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -16,9 +15,6 @@
 
 #include "wx/osx/private.h"
 #include "wx/graphics.h"
-#if wxOSX_USE_COCOA_OR_CARBON
-#include "wx/osx/private/glgrab.h"
-#endif
 
 IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl)
 
@@ -89,7 +85,9 @@ wxBitmap wxScreenDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     if ( subrect )
         srcRect = CGRectOffset( srcRect, -subrect->x, -subrect->y ) ;
 
-    CGImageRef image = grabViaOpenGL(kCGNullDirectDisplay, srcRect);
+    CGImageRef image = NULL;
+    
+    image = CGDisplayCreateImage(kCGDirectMainDisplay);
 
     wxASSERT_MSG(image, wxT("wxScreenDC::GetAsBitmap - unable to get screenshot."));
 

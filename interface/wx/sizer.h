@@ -2,7 +2,6 @@
 // Name:        sizer.h
 // Purpose:     interface of wxStdDialogButtonSizer
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -48,12 +47,6 @@
     However if you create a sizer and do not add it to another sizer or
     window, the library wouldn't be able to delete such an orphan sizer and in
     this, and only this, case it should be deleted explicitly.
-
-    @beginWxPythonOnly
-    If you wish to create a sizer class in wxPython you should
-    derive the class from @c wxPySizer in order to get Python-aware
-    capabilities for the various virtual methods.
-    @endWxPythonOnly
 
     @section wxsizer_flags wxSizer flags
 
@@ -289,7 +282,22 @@ public:
                      int flag = 0,
                      int border = 0,
                      wxObject* userData = NULL);
+    
+    /**
+        Appends a spacer child to the sizer.
 
+        @param width
+            Width of the spacer.
+        @param height
+            Height of the spacer.
+        @param flags
+            A wxSizerFlags object that enables you to specify most of the other
+            parameters more conveniently.
+    */
+    wxSizerItem* Add( int width, int height, const wxSizerFlags& flags);
+
+    wxSizerItem* Add(wxSizerItem* item);
+    
     /**
         This base function adds non-stretchable space to both the horizontal
         and vertical orientation of the sizer.
@@ -318,7 +326,13 @@ public:
 
     /**
         Detaches all children from the sizer.
+
         If @a delete_windows is @true then child windows will also be deleted.
+
+        Notice that child sizers are always deleted, as a general consequence
+        of the principle that sizers own their sizer children, but don't own
+        their window children (because they are already owned by their parent
+        windows).
     */
     virtual void Clear(bool delete_windows = false);
 
@@ -406,6 +420,14 @@ public:
     */
     void FitInside(wxWindow* window);
 
+    /**
+       Inform sizer about the first direction that has been decided (by
+       parent item).  Returns true if it made use of the information (and
+       recalculated min size).
+    */
+    virtual bool InformFirstDirection(int direction, int size, int availableOtherDir);
+
+    
     //@{
     /**
         Returns the list of the items in this sizer.
@@ -422,6 +444,11 @@ public:
     */
     wxWindow* GetContainingWindow() const;
 
+    /**
+       Set the window this sizer is used in.
+    */
+    void SetContainingWindow(wxWindow *window);
+    
     /**
        Returns the number of items in the sizer.
 
@@ -567,7 +594,18 @@ public:
                         int flag = 0,
                         int border = 0,
                         wxObject* userData = NULL);
+    /**
+        Insert a child into the sizer before any existing item at @a index.
 
+        See Add() for the meaning of the other parameters.
+    */
+    wxSizerItem* Insert(size_t index,
+                        int width,
+                        int height,
+                        const wxSizerFlags& flags);
+
+    wxSizerItem* Insert(size_t index, wxSizerItem* item);
+    
     /**
         Inserts non-stretchable space to the sizer.
         More readable way of calling wxSizer::Insert(index, size, size).
@@ -609,7 +647,7 @@ public:
     bool IsShown(size_t index) const;
 
     /**
-        Call this to force layout of the children anew, e.g. after having added a child
+        Call this to force layout of the children anew, e.g.\ after having added a child
         to or removed a child (window, other sizer or space) from the sizer while
         keeping the current dimension.
     */
@@ -656,6 +694,14 @@ public:
                          int border = 0,
                          wxObject* userData = NULL);
 
+    /**
+        Same as Add(), but prepends the items to the beginning of the
+        list of items (windows, subsizers or spaces) owned by this sizer.
+    */
+    wxSizerItem* Prepend(int width, int height, const wxSizerFlags& flags);
+
+    wxSizerItem* Prepend(wxSizerItem* item);
+    
     /**
         Prepends non-stretchable space to the sizer.
         More readable way of calling wxSizer::Prepend(size, size, 0).
@@ -885,6 +931,13 @@ public:
         @see Hide(), IsShown()
     */
     bool Show(size_t index, bool show = true);
+
+
+    /**
+       Show or hide all items managed by the sizer.
+    */
+    virtual void ShowItems(bool show);
+
 };
 
 
@@ -967,6 +1020,9 @@ public:
         outlined above.
     */
     void SetNegativeButton(wxButton* button);
+
+    virtual void RecalcSizes();
+    virtual wxSize CalcMin();
 };
 
 
@@ -990,27 +1046,27 @@ public:
     /**
         Construct a sizer item for tracking a spacer.
     */
-    wxSizerItem(int width, int height, int proportion, int flag,
-                int border, wxObject* userData);
+    wxSizerItem(int width, int height, int proportion=0, int flag=0,
+                int border=0, wxObject* userData=NULL);
 
     //@{
     /**
         Construct a sizer item for tracking a window.
     */
     wxSizerItem(wxWindow* window, const wxSizerFlags& flags);
-    wxSizerItem(wxWindow* window, int proportion, int flag,
-                int border,
-                wxObject* userData);
+    wxSizerItem(wxWindow* window, int proportion=0, int flag=0,
+                int border=0,
+                wxObject* userData=NULL);
     //@}
 
     //@{
     /**
         Construct a sizer item for tracking a subsizer.
     */
-    wxSizerItem(wxSizer* window, const wxSizerFlags& flags);
-    wxSizerItem(wxSizer* sizer, int proportion, int flag,
-                int border,
-                wxObject* userData);
+    wxSizerItem(wxSizer* sizer, const wxSizerFlags& flags);
+    wxSizerItem(wxSizer* sizer, int proportion=0, int flag=0,
+                int border=0,
+                wxObject* userData=NULL);
     //@}
 
     /**
@@ -1039,7 +1095,7 @@ public:
         Old spacer, if any, is deleted.
     */
     void AssignSpacer(const wxSize& size);
-    void AssignSpacer(int w, int h) { AssignSpacer(wxSize(w, h)); }
+    void AssignSpacer(int w, int h);
     //@}
 
     /**
@@ -1224,6 +1280,8 @@ public:
         in memory leaks, use AssignSpacer() which does free it instead.
     */
     void SetSpacer(const wxSize& size);
+
+    void SetUserData(wxObject* userData);
 
     /**
         Set the window to be tracked by this item.
@@ -1581,6 +1639,20 @@ public:
         Note that this method does not trigger relayout.
     */
     void SetNonFlexibleGrowMode(wxFlexSizerGrowMode mode);
+
+    /**
+       Returns a read-only array containing the heights of the rows in the sizer.
+    */
+    const wxArrayInt& GetRowHeights() const;
+
+    /**
+       Returns a read-only array containing the widths of the columns in the sizer.
+    */
+    const wxArrayInt& GetColWidths() const;
+
+    virtual void RecalcSizes();
+    virtual wxSize CalcMin();
+    
 };
 
 
@@ -1703,6 +1775,9 @@ public:
         Sets the vertical gap (in pixels) between the cells in the sizer.
     */
     void SetVGap(int gap);
+
+    virtual wxSize CalcMin();
+    virtual void RecalcSizes();
 };
 
 
@@ -1763,6 +1838,9 @@ public:
         Returns the static box associated with the sizer.
     */
     wxStaticBox* GetStaticBox() const;
+
+    virtual wxSize CalcMin();
+    virtual void RecalcSizes();
 };
 
 
@@ -1821,12 +1899,18 @@ public:
     int GetOrientation() const;
 
     /**
+        Sets the orientation of the box sizer, either wxVERTICAL
+        or wxHORIZONTAL.
+    */
+    void SetOrientation(int orient);
+
+    /**
         Implements the calculation of a box sizer's dimensions and then sets
         the size of its children (calling wxWindow::SetSize if the child is a window).
 
         It is used internally only and must not be called by the user
         (call Layout() if you want to resize). Documented for information.
     */
-    void RecalcSizes();
+    virtual void RecalcSizes();
 };
 

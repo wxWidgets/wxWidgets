@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for wxGauge
 // Author:      Bob Mitchell
 // Created:     2000/03/21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -32,9 +31,6 @@ wxGaugeXmlHandler::wxGaugeXmlHandler()
 {
     XRC_ADD_STYLE(wxGA_HORIZONTAL);
     XRC_ADD_STYLE(wxGA_VERTICAL);
-#if WXWIN_COMPATIBILITY_2_6
-    XRC_ADD_STYLE(wxGA_PROGRESSBAR);
-#endif // WXWIN_COMPATIBILITY_2_6
     XRC_ADD_STYLE(wxGA_SMOOTH);   // windows only
     AddWindowStyles();
 }

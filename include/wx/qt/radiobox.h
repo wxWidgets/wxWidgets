@@ -1,17 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/radiobox.h
-// Author:      Peter Most
-// Id:          $Id$
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_RADIOBOX_H_
 #define _WX_QT_RADIOBOX_H_
 
-#include "wx/qt/pointer_qt.h"
-#include "wx/qt/groupbox_qt.h"
-#include <QtGui/QButtonGroup>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QVBoxLayout>
 
 class WXDLLIMPEXP_CORE wxRadioBox : public wxControl, public wxRadioBoxBase
 {
@@ -64,7 +63,8 @@ public:
 
     using wxWindowBase::Show;
     using wxWindowBase::Enable;
-    
+    using wxRadioBoxBase::GetDefaultBorder;
+
     virtual bool Enable(unsigned int n, bool enable = true);
     virtual bool Show(unsigned int n, bool show = true);
     virtual bool IsItemEnabled(unsigned int n) const;
@@ -81,10 +81,13 @@ public:
 
 private:
     // The 'visual' group box:
-    wxQtPointer< wxQtGroupBox > m_qtGroupBox;
+    QGroupBox *m_qtGroupBox;
 
     // Handles the mutual exclusion of buttons:
-    wxQtPointer< QButtonGroup > m_qtButtonGroup;
+    QButtonGroup *m_qtButtonGroup;
+
+    // Autofit layout for buttons (either vert. or horiz.):
+    QBoxLayout *m_qtBoxLayout;
 
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
 };

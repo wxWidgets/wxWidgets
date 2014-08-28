@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     31.01.01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2001-2009 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -30,7 +29,7 @@
     #include "wx/wx.h"
 #endif
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -67,7 +66,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
     // these are regular event handlers used to highlight the events handling
     // order
@@ -76,10 +75,10 @@ public:
 
     // we override wxConsoleApp::FilterEvent used to highlight the events
     // handling order
-    virtual int FilterEvent(wxEvent& event);
+    virtual int FilterEvent(wxEvent& event) wxOVERRIDE;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a custom button used to highlight the events handling order
@@ -92,7 +91,7 @@ public:
         : wxButton(parent, BUTTON_ID, label)
     {
         // Add a dynamic handler for this button event to button itself
-        Connect(wxEVT_COMMAND_BUTTON_CLICKED,
+        Connect(wxEVT_BUTTON,
                 wxCommandEventHandler(MyEvtTestButton::OnClickDynamicHandler));
     }
 
@@ -113,7 +112,7 @@ private:
         event.Skip();
     }
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 long MyEvtTestButton::BUTTON_ID = wxNewId();
@@ -128,9 +127,7 @@ public:
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-#ifdef wxHAS_EVENT_BIND
     void OnBind(wxCommandEvent& event);
-#endif // wxHAS_EVENT_BIND
     void OnConnect(wxCommandEvent& event);
     void OnDynamic(wxCommandEvent& event);
     void OnPushEventHandler(wxCommandEvent& event);
@@ -183,7 +180,7 @@ private:
 
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a custom event handler
@@ -204,7 +201,7 @@ public:
 private:
     unsigned m_level;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -232,25 +229,23 @@ enum
 
 // The event tables connect the wxWidgets events with the functions (event
 // handlers) which process them.
-BEGIN_EVENT_TABLE(MyApp, wxApp)
+wxBEGIN_EVENT_TABLE(MyApp, wxApp)
     // Add a static handler for button Click event in the app
     EVT_BUTTON(MyEvtTestButton::BUTTON_ID, MyApp::OnClickStaticHandlerApp)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(MyEvtTestButton, wxButton)
+wxBEGIN_EVENT_TABLE(MyEvtTestButton, wxButton)
     // Add a static handler to this button itself for its own event
     EVT_BUTTON(BUTTON_ID, MyEvtTestButton::OnClickStaticHandler)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // This can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Event_Quit,  MyFrame::OnQuit)
     EVT_MENU(Event_About, MyFrame::OnAbout)
 
-#ifdef wxHAS_EVENT_BIND
     EVT_MENU(Event_Bind, MyFrame::OnBind)
-#endif // wxHAS_EVENT_BIND
     EVT_MENU(Event_Connect, MyFrame::OnConnect)
 
     EVT_MENU(Event_Custom, MyFrame::OnFireCustom)
@@ -268,11 +263,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     // Add a static handler in the parent frame for button event
     EVT_BUTTON(MyEvtTestButton::BUTTON_ID, MyFrame::OnClickStaticHandlerFrame)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(MyEvtHandler, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(MyEvtHandler, wxEvtHandler)
     EVT_MENU(Event_Test, MyEvtHandler::OnTest)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
@@ -304,7 +299,7 @@ bool MyApp::OnInit()
     frame->Show(true);
 
     // Add a dynamic handler at the application level for the test button
-    Connect(MyEvtTestButton::BUTTON_ID, wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(MyEvtTestButton::BUTTON_ID, wxEVT_BUTTON,
             wxCommandEventHandler(MyApp::OnClickDynamicHandlerApp));
 
     // success: wxApp::OnRun() will be called which will enter the main message
@@ -316,7 +311,7 @@ bool MyApp::OnInit()
 // This is always the first to handle an event !
 int MyApp::FilterEvent(wxEvent& event)
 {
-    if ( event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED &&
+    if ( event.GetEventType() == wxEVT_BUTTON &&
             event.GetId() == MyEvtTestButton::BUTTON_ID )
     {
         wxLogMessage("Step 0 in \"How Events are Processed\":\n"
@@ -365,15 +360,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
-    menuFile->Append(Event_About, wxT("&About...\tCtrl-A"), wxT("Show about dialog"));
+    menuFile->Append(Event_About, wxT("&About\tCtrl-A"), wxT("Show about dialog"));
     menuFile->AppendSeparator();
     menuFile->Append(Event_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
     wxMenu *menuEvent = new wxMenu;
-#ifdef wxHAS_EVENT_BIND
     menuEvent->AppendCheckItem(Event_Bind, "&Bind\tCtrl-B",
                                "Bind or unbind a dynamic event handler");
-#endif // wxHAS_EVENT_BIND
     menuEvent->AppendCheckItem(Event_Connect, wxT("&Connect\tCtrl-C"),
                      wxT("Connect or disconnect the dynamic event handler"));
     menuEvent->Append(Event_Dynamic, wxT("&Dynamic event\tCtrl-D"),
@@ -424,12 +417,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // event handlers (see class definition);
 
     // Add a dynamic handler for this button event in the parent frame
-    Connect(m_testBtn->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(m_testBtn->GetId(), wxEVT_BUTTON,
             wxCommandEventHandler(MyFrame::OnClickDynamicHandlerFrame));
 
     // Bind a method of this frame (notice "this" argument!) to the button
     // itself
-    m_testBtn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,
+    m_testBtn->Connect(wxEVT_BUTTON,
                        wxCommandEventHandler(MyFrame::OnClickDynamicHandlerButton),
                        NULL,
                        this);
@@ -512,51 +505,47 @@ void MyFrame::OnDynamic(wxCommandEvent& event)
     );
 }
 
-#ifdef wxHAS_EVENT_BIND
-
 void MyFrame::OnBind(wxCommandEvent& event)
 {
     if ( event.IsChecked() )
     {
         // as we bind directly to the button, there is no need to use an id
         // here: the button will only ever get its own events
-        m_btnDynamic->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MyFrame::OnDynamic,
+        m_btnDynamic->Bind(wxEVT_BUTTON, &MyFrame::OnDynamic,
                            this);
 
         // but we do need the id for the menu command as the frame gets all of
         // them
-        Bind(wxEVT_COMMAND_MENU_SELECTED, &MyFrame::OnDynamic, this,
+        Bind(wxEVT_MENU, &MyFrame::OnDynamic, this,
              Event_Dynamic);
     }
     else // disconnect
     {
-        m_btnDynamic->Unbind(wxEVT_COMMAND_BUTTON_CLICKED,
+        m_btnDynamic->Unbind(wxEVT_BUTTON,
                              &MyFrame::OnDynamic, this);
-        Unbind(wxEVT_COMMAND_MENU_SELECTED, &MyFrame::OnDynamic, this,
+        Unbind(wxEVT_MENU, &MyFrame::OnDynamic, this,
                Event_Dynamic);
     }
 
     UpdateDynamicStatus(event.IsChecked());
 }
 
-#endif // wxHAS_EVENT_BIND
-
 void MyFrame::OnConnect(wxCommandEvent& event)
 {
     if ( event.IsChecked() )
     {
-        m_btnDynamic->Connect(wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED,
+        m_btnDynamic->Connect(wxID_ANY, wxEVT_BUTTON,
                               wxCommandEventHandler(MyFrame::OnDynamic),
                               NULL, this);
-        Connect(Event_Dynamic, wxEVT_COMMAND_MENU_SELECTED,
+        Connect(Event_Dynamic, wxEVT_MENU,
                 wxCommandEventHandler(MyFrame::OnDynamic));
     }
     else // disconnect
     {
-        m_btnDynamic->Disconnect(wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED,
+        m_btnDynamic->Disconnect(wxID_ANY, wxEVT_BUTTON,
                                  wxCommandEventHandler(MyFrame::OnDynamic),
                                  NULL, this);
-        Disconnect(Event_Dynamic, wxEVT_COMMAND_MENU_SELECTED,
+        Disconnect(Event_Dynamic, wxEVT_MENU,
                    wxCommandEventHandler(MyFrame::OnDynamic));
     }
 

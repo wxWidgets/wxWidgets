@@ -1,10 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/anybutton.h
 // Purpose:     wxAnyButtonBase class
-// Author:      Vadim Zetlin
+// Author:      Vadim Zeitlin
 // Created:     2000-08-15 (extracted from button.h)
-// RCS-ID:      $Id: anybutton.h 65680 2010-09-30 11:44:45Z VZ $
-// Copyright:   (c) Vadim Zetlin
+// Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -103,7 +102,7 @@ public:
     // Buttons on MSW can look bad if they are not native colours, because
     // then they become owner-drawn and not theme-drawn.  Disable it here
     // in wxAnyButtonBase to make it consistent.
-    virtual bool ShouldInheritColours() const { return false; }
+    virtual bool ShouldInheritColours() const wxOVERRIDE { return false; }
 
     // wxUniv-compatible and deprecated equivalents to SetBitmapXXX()
 #if WXWIN_COMPATIBILITY_2_8
@@ -151,7 +150,7 @@ public:
 
 protected:
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
     virtual wxBitmap DoGetBitmap(State WXUNUSED(which)) const
         { return wxBitmap(); }
@@ -175,9 +174,9 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxAnyButtonBase);
 };
 
-//#if defined(__WXUNIVERSAL__)
-//    #include "wx/univ/anybutton.h"
-#if defined(__WXMSW__)
+#if defined(__WXUNIVERSAL__)
+    #include "wx/univ/anybutton.h"
+#elif defined(__WXMSW__)
     #include "wx/msw/anybutton.h"
 //#elif defined(__WXMOTIF__)
 //    #include "wx/motif/anybutton.h"
@@ -187,14 +186,8 @@ protected:
 //    #include "wx/gtk1/anybutton.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/anybutton.h"
-//#elif defined(__WXCOCOA__)
-//    #include "wx/cocoa/anybutton.h"
-//#elif defined(__WXPM__)
-//    #include "wx/os2/anybutton.h"
-//#elif defined(__WXPALMOS__)
-//    #include "wx/palmos/anybutton.h"
-#else
-    typedef wxAnyButtonBase wxAnyButton;
+#elif defined(__WXQT__)
+    #include "wx/qt/anybutton.h"
 #endif
 
 #endif // wxHAS_ANY_BUTTON

@@ -4,7 +4,6 @@
 // Author:      Ryan Norton
 // Modified by:
 // Created:     2004-10-03
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -28,14 +27,12 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/modalhook.h"
 
 // ============================================================================
 // implementation
 // ============================================================================
 
-
-#include "wx/cocoa/autorelease.h"
-#include "wx/cocoa/string.h"
 
 #if wxOSX_USE_EXPERIMENTAL_FONTDIALOG
 
@@ -146,7 +143,7 @@ int RunMixedFontDialog(wxFontDialog* dialog)
 #endif
     int retval = wxID_CANCEL ;
 
-    wxAutoNSAutoreleasePool pool;
+    wxMacAutoreleasePool pool;
 
     // setting up the ok/cancel buttons
     NSFontPanel* fontPanel = [NSFontPanel sharedFontPanel] ;
@@ -351,6 +348,11 @@ wxFontDialog::wxFontDialog()
 {
 }
 
+wxFontDialog::wxFontDialog(wxWindow *parent)
+{
+    Create(parent);
+}
+
 wxFontDialog::wxFontDialog(wxWindow *parent, const wxFontData&  data)
 {
     Create(parent, data);
@@ -360,10 +362,20 @@ wxFontDialog::~wxFontDialog()
 {
 }
 
+bool wxFontDialog::Create(wxWindow *parent)
+{
+    return Create(parent);
+}
+
 bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
 {
     m_fontData = data;
 
+    return Create(parent);
+}
+
+bool wxFontDialog::Create(wxWindow *parent)
+{
     //autorelease pool - req'd for carbon
     NSAutoreleasePool *thePool;
     thePool = [[NSAutoreleasePool alloc] init];
@@ -387,8 +399,8 @@ bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
             [[NSFontManager sharedFontManager] fontWithFamily:
                                                     wxNSStringWithWxString(thewxfont.GetFaceName())
                                             traits:theMask
-                                            weight:thewxfont.GetWeight() == wxBOLD ? 9 :
-                                                    thewxfont.GetWeight() == wxLIGHT ? 0 : 5
+                                            weight:thewxfont.GetWeight() == wxFONTWEIGHT_BOLD ? 9 :
+                                                    thewxfont.GetWeight() == wxFONTWEIGHT_LIGHT ? 0 : 5
                                             size: (float)(thewxfont.GetPointSize())
             ];
 
@@ -419,6 +431,8 @@ bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
 
 int wxFontDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
     //Start the pool.  Required for carbon interaction
     //(For those curious, the only thing that happens
     //if you don't do this is a bunch of error
@@ -513,8 +527,8 @@ int wxFontDialog::ShowModal()
     m_fontData.m_chosenFont.SetFaceName(wxStringWithNSString([theFont familyName]));
     m_fontData.m_chosenFont.SetPointSize(theFontSize);
     m_fontData.m_chosenFont.SetStyle(theTraits & NSItalicFontMask ? wxFONTSTYLE_ITALIC : 0);
-    m_fontData.m_chosenFont.SetWeight(theFontWeight < 5 ? wxLIGHT :
-                                    theFontWeight >= 9 ? wxBOLD : wxNORMAL);
+    m_fontData.m_chosenFont.SetWeight(theFontWeight < 5 ? wxFONTWEIGHT_LIGHT :
+                                    theFontWeight >= 9 ? wxFONTWEIGHT_BOLD : wxFONTWEIGHT_NORMAL);
 
     //Get the shared color panel along with the chosen color and set the chosen color
     NSColor* theColor = [[theColorPanel color] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];

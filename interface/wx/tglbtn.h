@@ -2,10 +2,11 @@
 // Name:        tglbtn.h
 // Purpose:     interface of wxBitmapToggleButton, wxToggleButton
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
+wxEventType wxEVT_TOGGLEBUTTON;
 
 /**
     @class wxToggleButton
@@ -19,16 +20,16 @@
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TOGGLEBUTTON(id, func)}
-        Handles a toggle button click event.
+        Handles a wxEVT_TOGGLEBUTTON event.
     @endEventTable
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{togglebutton.png}
+    @appearance{togglebutton}
 
     @see wxCheckBox, wxButton, wxBitmapToggleButton
 */
-class wxToggleButton : public wxControl
+class wxToggleButton : public wxAnyButton
 {
 public:
     /**
@@ -119,14 +120,13 @@ public:
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TOGGLEBUTTON(id, func)}
-        Handles a toggle button click event.
+        Handles a wxEVT_TOGGLEBUTTON event.
     @endEventTable
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{bitmaptogglebutton.png}
 */
-class wxBitmapToggleButton : public wxControl
+class wxBitmapToggleButton : public wxToggleButton
 {
 public:
     /**

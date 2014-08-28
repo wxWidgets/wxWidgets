@@ -3,7 +3,6 @@
 // Purpose:     declaration of wxTextWrapper class
 // Author:      Vadim Zeitlin
 // Created:     2009-05-31 (extracted from dlgcmn.cpp via wx/private/stattext.h)
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999, 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -98,10 +97,11 @@ public:
 protected:
     virtual wxWindow *OnCreateLine(const wxString& line)
     {
-        return new wxStaticText(m_win, wxID_ANY, line);
+        return new wxStaticText(m_win, wxID_ANY,
+                                wxControl::EscapeMnemonics(line));
     }
 
-    virtual void OnOutputLine(const wxString& line)
+    virtual void OnOutputLine(const wxString& line) wxOVERRIDE
     {
         if ( !line.empty() )
         {

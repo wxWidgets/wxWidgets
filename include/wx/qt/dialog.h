@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/dialog.h
 // Author:      Peter Most, Javier Torres
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -9,7 +8,8 @@
 #ifndef _WX_QT_DIALOG_H_
 #define _WX_QT_DIALOG_H_
 
-#include <QtGui/QDialog>
+#include "wx/dialog.h"
+#include <QtWidgets/QDialog>
 
 class WXDLLIMPEXP_CORE wxDialog : public wxDialogBase
 {
@@ -38,9 +38,9 @@ public:
     virtual QDialog *GetHandle() const;
 
 private:
-    wxQtPointer< QDialog > m_qtDialog;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxDialog );
+    wxDECLARE_DYNAMIC_CLASS( wxDialog );
 };
+
 
 #endif // _WX_QT_DIALOG_H_

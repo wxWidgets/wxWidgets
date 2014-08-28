@@ -2,7 +2,6 @@
 // Name:        tokenzr.h
 // Purpose:     interface of wxStringTokenizer
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -59,6 +58,9 @@ enum wxStringTokenizerMode
     wxTOKEN_STRTOK
 };
 
+/// Default wxStringTokenizer delimiters are the usual white space characters.
+#define wxDEFAULT_DELIMITERS " \t\r\n"
+
 /**
     @class wxStringTokenizer
 
@@ -106,7 +108,7 @@ public:
         @see SetString()
    */
     wxStringTokenizer(const wxString& str,
-                      const wxString& delims = " \t\r\n",
+                      const wxString& delims = wxDEFAULT_DELIMITERS,
                       wxStringTokenizerMode mode = wxTOKEN_DEFAULT);
 
     /**
@@ -133,7 +135,7 @@ public:
     wxString GetNextToken();
 
     /**
-        Returns the current position (i.e. one index after the last returned
+        Returns the current position (i.e.\ one index after the last returned
         token or 0 if GetNextToken() has never been called) in the original
         string.
     */
@@ -154,8 +156,8 @@ public:
         containing delimiters, and the @a mode specifying how the string
         should be tokenized.
     */
-    void SetString(const wxString& to_tokenize,
-                   const wxString& delims = " \t\r\n",
+    void SetString(const wxString& str,
+                   const wxString& delims = wxDEFAULT_DELIMITERS,
                    wxStringTokenizerMode mode = wxTOKEN_DEFAULT);
 };
 
@@ -172,11 +174,11 @@ public:
 
     @return The array with the parsed tokens.
 
-    @header{wx/string.h}
+    @header{wx/tokenzr.h}
 */
 wxArrayString 
 wxStringTokenize(const wxString& str,
                  const wxString& delims = wxDEFAULT_DELIMITERS,
                  wxStringTokenizerMode mode = wxTOKEN_DEFAULT);
-                 
+
 //@}

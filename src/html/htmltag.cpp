@@ -2,7 +2,6 @@
 // Name:        src/html/htmltag.cpp
 // Purpose:     wxHtmlTag class (represents single tag)
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -277,7 +276,7 @@ void wxHtmlTagsCache::QueryTag(const wxString::const_iterator& at,
 
         case wxHtmlCacheItem::Type_EndingTag:
             wxFAIL_MSG("QueryTag called for ending tag - can't be");
-            // but if it does happen, fall through, better than crashing
+            wxFALLTHROUGH;// but if it does happen, fall through, better than crashing
 
         case wxHtmlCacheItem::Type_NoMatchingEndingTag:
             // If input HTML is invalid and there's no closing tag for this
@@ -464,6 +463,7 @@ wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
         { "width",              "WIDTH"         },
         { "vertical-align",     "VALIGN"        },
         { "background",         "BGCOLOR"       },
+        { "background-color",   "BGCOLOR"       },
     };
 
     wxHtmlStyleParams styleParams(*this);
@@ -509,6 +509,19 @@ wxString wxHtmlTag::GetParam(const wxString& par, bool with_quotes) const
     }
     else
         return m_ParamValues[index];
+}
+
+bool wxHtmlTag::GetParamAsString(const wxString& par, wxString *str) const
+{
+    wxCHECK_MSG( str, false, wxT("NULL output string argument") );
+
+    int index = m_ParamNames.Index(par, false);
+    if (index == wxNOT_FOUND)
+        return false;
+
+    *str = m_ParamValues[index];
+
+    return true;
 }
 
 int wxHtmlTag::ScanParam(const wxString& par,
@@ -583,6 +596,38 @@ bool wxHtmlTag::GetParamAsInt(const wxString& par, int *clr) const
         return false;
 
     *clr = (int)i;
+    return true;
+}
+
+bool
+wxHtmlTag::GetParamAsIntOrPercent(const wxString& par,
+                                  int* value,
+                                  bool& isPercent) const
+{
+    const wxString param = GetParam(par);
+    if ( param.empty() )
+        return false;
+
+    wxString num;
+    if ( param.EndsWith("%", &num) )
+    {
+        isPercent = true;
+    }
+    else
+    {
+        isPercent = false;
+        num = param;
+    }
+
+    long lValue;
+    if ( !num.ToLong(&lValue) )
+        return false;
+
+    if ( lValue > INT_MAX || lValue < INT_MIN )
+        return false;
+
+    *value = static_cast<int>(lValue);
+
     return true;
 }
 

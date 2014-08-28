@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     2007-05-16
-// RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -64,7 +63,7 @@ public:
     {
     }
 
-    virtual wxColour GetColour( int index ) const
+    virtual wxColour GetColour( int index ) const wxOVERRIDE
     {
         switch (index)
         {
@@ -88,15 +87,17 @@ public:
         return wxColour();
     }
 
-    virtual wxString ColourToString( const wxColour& col, int index ) const
+    virtual wxString ColourToString( const wxColour& col,
+                                     int index,
+                                     int argFlags = 0 ) const wxOVERRIDE
     {
         if ( index == (int)(m_choices.GetCount()-1) )
             return wxT("");
 
-        return wxColourProperty::ColourToString(col, index);
+        return wxColourProperty::ColourToString(col, index, argFlags);
     }
 
-    virtual int GetCustomColourIndex() const
+    virtual int GetCustomColourIndex() const wxOVERRIDE
     {
         return m_choices.GetCount()-2;
     }
@@ -514,7 +515,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         wxDateTime testTime = wxDateTime::Now();
         any = testTime;
         prop->SetValue(any);
-        if ( wxANY_AS(prop->GetValue().GetAny(), wxDateTime) != testTime )
+        if ( prop->GetValue().GetAny().As<wxDateTime>() != testTime )
             RT_FAILURE();
 #endif
 
@@ -522,10 +523,10 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         int testInt = 25537983;
         any = testInt;
         prop->SetValue(any);
-        if ( wxANY_AS(prop->GetValue().GetAny(), int) != testInt )
+        if ( prop->GetValue().GetAny().As<int>() != testInt )
             RT_FAILURE();
 #ifdef wxLongLong_t
-        if ( wxANY_AS(prop->GetValue().GetAny(), wxLongLong_t) != testInt )
+        if ( prop->GetValue().GetAny().As<wxLongLong_t>() != testInt )
             RT_FAILURE();
 #endif
 
@@ -533,7 +534,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         wxString testString = "asd934jfyn3";
         any = testString;
         prop->SetValue(any);
-        if ( wxANY_AS(prop->GetValue().GetAny(), wxString) != testString )
+        if ( prop->GetValue().GetAny().As<wxString>() != testString )
             RT_FAILURE();
 
         // Test with a type generated with IMPLEMENT_VARIANT_OBJECT()
@@ -541,7 +542,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         wxColour testCol = *wxCYAN;
         any = testCol;
         prop->SetValue(any);
-        if ( wxANY_AS(prop->GetValue().GetAny(), wxColour) != testCol )
+        if ( prop->GetValue().GetAny().As<wxColour>() != testCol )
             RT_FAILURE();
 
         // Test with a type with custom wxVariantData defined by
@@ -550,7 +551,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         wxPoint testPoint(199, 199);
         any = testPoint;
         prop->SetValue(any);
-        if ( wxANY_AS(prop->GetValue().GetAny(), wxPoint) != testPoint )
+        if ( prop->GetValue().GetAny().As<wxPoint>() != testPoint )
             RT_FAILURE();
     }
 
@@ -890,6 +891,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             RT_FAILURE();
     }
 
+#if WXWIN_COMPATIBILITY_3_0
     {
         RT_START_TEST(DoubleToString)
 
@@ -910,6 +912,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         if ( wxPropertyGrid::DoubleToString(s, -0.000123, 3, true) != "0" )
             RT_FAILURE();
     }
+#endif
 
     {
         wxPropertyGridPage* page1;
@@ -1228,7 +1231,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 wxPGProperty* p = arr1[i];
                 page->HideProperty(p, true);
 
-                wxString s = wxString::Format(wxT("HideProperty(%i, %s)"), i, p->GetLabel().c_str());
+                wxString s = wxString::Format(wxT("HideProperty(%i, %s)"), (int)i, p->GetLabel().c_str());
                 RT_VALIDATE_VIRTUAL_HEIGHT(page, s)
                 if ( _failed_ )
                     break;
@@ -1244,7 +1247,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 wxPGProperty* p = arr2[i];
                 page->HideProperty(p, false);
 
-                wxString s = wxString::Format(wxT("ShowProperty(%i, %s)"), i, p->GetLabel().c_str());
+                wxString s = wxString::Format(wxT("ShowProperty(%i, %s)"), (int)i, p->GetLabel().c_str());
                 RT_VALIDATE_VIRTUAL_HEIGHT(page, s)
                 if ( _failed_ )
                     break;
@@ -1262,7 +1265,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 wxPGProperty* p = arr1[i];
                 page->HideProperty(p, true);
 
-                wxString s = wxString::Format(wxT("HideProperty(%i, %s)"), i, p->GetLabel().c_str());
+                wxString s = wxString::Format(wxT("HideProperty(%i, %s)"), (int)i, p->GetLabel().c_str());
                 RT_VALIDATE_VIRTUAL_HEIGHT(page, s)
                 if ( _failed_ )
                     break;
@@ -1278,7 +1281,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 wxPGProperty* p = arr2[i];
                 page->HideProperty(p, false);
 
-                wxString s = wxString::Format(wxT("ShowProperty(%i, %s)"), i, p->GetLabel().c_str());
+                wxString s = wxString::Format(wxT("ShowProperty(%i, %s)"), (int)i, p->GetLabel().c_str());
                 RT_VALIDATE_VIRTUAL_HEIGHT(page, s)
                 if ( _failed_ )
                     break;
@@ -1297,7 +1300,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 wxPGProperty* p = arr1[i];
                 page->HideProperty(p, true);
 
-                wxString s = wxString::Format(wxT("HideProperty(%i, %s)"), i, p->GetLabel().c_str());
+                wxString s = wxString::Format(wxT("HideProperty(%i, %s)"), (int)i, p->GetLabel().c_str());
                 RT_VALIDATE_VIRTUAL_HEIGHT(page, s)
                 if ( _failed_ )
                     break;
@@ -1313,7 +1316,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 wxPGProperty* p = arr2[i];
                 page->HideProperty(p, false);
 
-                wxString s = wxString::Format(wxT("ShowProperty(%i, %s)"), i, p->GetLabel().c_str());
+                wxString s = wxString::Format(wxT("ShowProperty(%i, %s)"), (int)i, p->GetLabel().c_str());
                 RT_VALIDATE_VIRTUAL_HEIGHT(page, s)
                 if ( _failed_ )
                     break;
@@ -1333,7 +1336,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         // FIXME: Does not display changes.
         for ( i=3; i<12; i+=2 )
         {
-            RT_MSG(wxString::Format(wxT("%i columns"),i));
+            RT_MSG(wxString::Format(wxT("%i columns"),(int)i));
             CreateGrid( -1, -1 );
             pgman = m_pPropGridManager;
             pgman->SetColumnCount(i);

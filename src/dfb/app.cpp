@@ -2,9 +2,7 @@
 // Name:        src/dfb/app.cpp
 // Purpose:     wxApp implementation
 // Author:      Vaclav Slavik
-//              based on MGL implementation
 // Created:     2006-08-16
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 REA Elektronik GmbH
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

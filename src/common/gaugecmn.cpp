@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.02.01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -77,9 +76,6 @@ wxFLAGS_MEMBER(wxHSCROLL)
 
 wxFLAGS_MEMBER(wxGA_HORIZONTAL)
 wxFLAGS_MEMBER(wxGA_VERTICAL)
-#if WXWIN_COMPATIBILITY_2_6
-wxFLAGS_MEMBER(wxGA_PROGRESSBAR)
-#endif // WXWIN_COMPATIBILITY_2_6
 wxFLAGS_MEMBER(wxGA_SMOOTH)
 wxEND_FLAGS( wxGaugeStyle )
 

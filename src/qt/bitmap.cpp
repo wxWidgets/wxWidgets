@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/bitmap.cpp
 // Author:      Peter Most, Javier Torres
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -11,12 +10,13 @@
 
 #include "wx/bitmap.h"
 #include "wx/image.h"
-#include "wx/qt/converter.h"
-#include "wx/qt/utils.h"
+#include "wx/rawbmp.h"
+#include "wx/qt/private/converter.h"
+#include "wx/qt/private/utils.h"
 
 #include <QtGui/QPixmap>
 #include <QtGui/QBitmap>
-#include <QtGui/QLabel>
+#include <QtWidgets/QLabel>
 
 static wxImage ConvertImage( QImage qtImage )
 {
@@ -141,6 +141,12 @@ class wxBitmapRefData: public wxGDIRefData
             m_qtPixmap = new QPixmap(pix);
         }
 
+        virtual ~wxBitmapRefData()
+        {
+            if (m_qtPixmap != NULL)
+                delete m_qtPixmap;
+        }
+
         QPixmap *m_qtPixmap;
         wxMask *m_mask;
 };
@@ -148,6 +154,8 @@ class wxBitmapRefData: public wxGDIRefData
 //-----------------------------------------------------------------------------
 // wxBitmap
 //-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS( wxBitmap, wxObject )
 
 #define M_PIXDATA (*((wxBitmapRefData *)m_refData)->m_qtPixmap)
 
@@ -157,7 +165,6 @@ void wxBitmap::InitStandardHandlers()
 
 wxBitmap::wxBitmap()
 {
-    // m_refData = new wxBitmapRefData();
 }
 
 wxBitmap::wxBitmap(QPixmap pix)
@@ -172,12 +179,13 @@ wxBitmap::wxBitmap(const wxBitmap& bmp)
 
 wxBitmap::wxBitmap(const char bits[], int width, int height, int depth )
 {
-    if (depth == 1) {
+    wxASSERT(depth == 1);
+
+    if (width > 0 && height > 0 && depth == 1)
+    {
         m_refData = new wxBitmapRefData();
-        ((wxBitmapRefData *)m_refData)->m_qtPixmap = new QBitmap(QBitmap::fromData(QSize(width, height), (const uchar*)bits));
-    } else {
-        wxMISSING_IMPLEMENTATION("wxBitmap(bits, width, height, depth constructor) for depth != 1");
-        m_refData = new wxBitmapRefData();
+        ((wxBitmapRefData *)m_refData)->m_qtPixmap =
+            new QBitmap(QBitmap::fromData(QSize(width, height), (const uchar*)bits));
     }
 }
 
@@ -191,9 +199,12 @@ wxBitmap::wxBitmap(const wxSize& sz, int depth )
     Create(sz, depth);
 }
 
-// wxBitmap::wxBitmap(const char* const* bits)
-// {
-// }
+// Create a wxBitmap from xpm data
+wxBitmap::wxBitmap(const char* const* bits)
+{
+    m_refData = new wxBitmapRefData();
+    ((wxBitmapRefData *)m_refData)->m_qtPixmap = new QPixmap( bits );
+}
 
 wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type )
 {
@@ -222,6 +233,10 @@ bool wxBitmap::Create(const wxSize& sz, int depth )
     return Create(sz.GetWidth(), sz.GetHeight(), depth);
 }
 
+bool wxBitmap::Create(int width, int height, const wxDC& WXUNUSED(dc))
+{
+    return Create(width, height);
+}
 
 int wxBitmap::GetHeight() const
 {
@@ -272,7 +287,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
 
 
 bool wxBitmap::SaveFile(const wxString &name, wxBitmapType type,
-              const wxPalette *palette ) const
+              const wxPalette *WXUNUSED(palette) ) const
 {   
     #if wxUSE_IMAGE
     //Try to save using wx
@@ -289,7 +304,37 @@ bool wxBitmap::SaveFile(const wxString &name, wxBitmapType type,
         case wxBITMAP_TYPE_ICO:  type_name = "ico";  break;
         case wxBITMAP_TYPE_JPEG: type_name = "jpeg"; break;
         case wxBITMAP_TYPE_PNG:  type_name = "png";  break;
-        default: break;
+        case wxBITMAP_TYPE_GIF:  type_name = "gif";  break;
+        case wxBITMAP_TYPE_CUR:  type_name = "cur";  break;
+        case wxBITMAP_TYPE_TIFF: type_name = "tif";  break;
+        case wxBITMAP_TYPE_XBM:  type_name = "xbm";  break;
+        case wxBITMAP_TYPE_PCX:  type_name = "pcx";  break;
+        case wxBITMAP_TYPE_BMP_RESOURCE:
+        case wxBITMAP_TYPE_ICO_RESOURCE:
+        case wxBITMAP_TYPE_CUR_RESOURCE:
+        case wxBITMAP_TYPE_XBM_DATA:
+        case wxBITMAP_TYPE_XPM:
+        case wxBITMAP_TYPE_XPM_DATA:
+        case wxBITMAP_TYPE_TIFF_RESOURCE:
+        case wxBITMAP_TYPE_GIF_RESOURCE:
+        case wxBITMAP_TYPE_PNG_RESOURCE:
+        case wxBITMAP_TYPE_JPEG_RESOURCE:
+        case wxBITMAP_TYPE_PNM:
+        case wxBITMAP_TYPE_PNM_RESOURCE:
+        case wxBITMAP_TYPE_PCX_RESOURCE:
+        case wxBITMAP_TYPE_PICT:
+        case wxBITMAP_TYPE_PICT_RESOURCE:
+        case wxBITMAP_TYPE_ICON:
+        case wxBITMAP_TYPE_ICON_RESOURCE:
+        case wxBITMAP_TYPE_ANI:
+        case wxBITMAP_TYPE_IFF:
+        case wxBITMAP_TYPE_TGA:
+        case wxBITMAP_TYPE_MACCURSOR:
+        case wxBITMAP_TYPE_MACCURSOR_RESOURCE:
+        case wxBITMAP_TYPE_MAX:
+        case wxBITMAP_TYPE_ANY:
+        default:
+            break;
     }
     return type_name &&
         M_PIXDATA.save(wxQtConvertString(name), type_name);
@@ -324,7 +369,7 @@ wxPalette *wxBitmap::GetPalette() const
     return 0;
 }
 
-void wxBitmap::SetPalette(const wxPalette& palette)
+void wxBitmap::SetPalette(const wxPalette& WXUNUSED(palette))
 {
     wxMISSING_IMPLEMENTATION( "wxBitmap palettes" );
 }
@@ -334,35 +379,51 @@ void wxBitmap::SetPalette(const wxPalette& palette)
 // copies the contents and mask of the given (colour) icon to the bitmap
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-    return 0;
+    *this = icon;
+    return IsOk();
 }
 
 
 // implementation:
 void wxBitmap::SetHeight(int height)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    M_PIXDATA = QPixmap(GetWidth(), height);
 }
 
 void wxBitmap::SetWidth(int width)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    M_PIXDATA = QPixmap(width, GetHeight());
 }
 
 void wxBitmap::SetDepth(int depth)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    if (depth == 1)
+        M_PIXDATA = QBitmap(GetWidth(), GetHeight());
+    else
+        M_PIXDATA = QPixmap(GetWidth(), GetHeight());
 }
 
 
 void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-    return 0;
+    void* bits = NULL;
+    // allow access if bpp is valid and matches existence of alpha
+    if ( !M_PIXDATA.isNull() )
+    {
+        QImage qimage = M_PIXDATA.toImage();
+        bool hasAlpha = M_PIXDATA.hasAlphaChannel();
+        if ((bpp == 24 && !hasAlpha) || (bpp == 32 && hasAlpha))
+        {
+            data.m_height = qimage.height();
+            data.m_width = qimage.width();
+            data.m_stride = qimage.bytesPerLine();
+            bits = (void*) qimage.bits();
+        }
+    }
+    return bits;
 }
 
-void wxBitmap::UngetRawData(wxPixelDataBase& data)
+void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
@@ -380,6 +441,11 @@ wxGDIRefData *wxBitmap::CreateGDIRefData() const
 wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxBitmapRefData(*(wxBitmapRefData *)data);
+}
+
+bool wxBitmap::HasAlpha() const
+{
+    return M_PIXDATA.hasAlphaChannel();
 }
 
 //-----------------------------------------------------------------------------
@@ -434,7 +500,7 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     return true;
 }
 
-bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
+bool wxMask::Create(const wxBitmap& WXUNUSED(bitmap), int WXUNUSED(paletteIndex))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
     return false;
@@ -451,6 +517,11 @@ bool wxMask::Create(const wxBitmap& bitmap)
 
     m_qtBitmap = new QBitmap(*bitmap.GetHandle());
     return true;
+}
+
+wxBitmap wxMask::GetBitmap() const
+{
+    return wxBitmap(*m_qtBitmap);
 }
 
 QBitmap *wxMask::GetHandle() const

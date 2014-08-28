@@ -2,7 +2,6 @@
 // Name:        panel.h
 // Purpose:     interface of wxPanel
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -11,9 +10,8 @@
 
     A panel is a window on which controls are placed. It is usually placed within
     a frame. Its main feature over its parent class wxWindow is code for handling
-    child windows and TAB traversal. Since wxWidgets 2.9, there is support both
-    for TAB traversal implemented by wxWidgets itself as well as native TAB
-    traversal (such as for GTK 2.0).
+    child windows and TAB traversal, which is implemented natively if possible
+    (e.g. in wxGTK) or by wxWidgets itself otherwise.
 
     @note Tab traversal is implemented through an otherwise undocumented
           intermediate wxControlContainer class from which any class can derive
@@ -31,7 +29,7 @@
         Process a navigation key event.
     @endEventTable
 
-    @library{wxbase}
+    @library{wxcore}
     @category{miscwnd}
 
     @see wxDialog
@@ -123,21 +121,6 @@ public:
         @see wxSysColourChangedEvent
     */
     void OnSysColourChanged(wxSysColourChangedEvent& event);
-
-    /**
-        Set the background bitmap for this panel.
-
-        If @a bmp is a valid bitmap, this bitmap will be tiled over the panel
-        background and show through any of its transparent children. Passing an
-        invalid bitmap reverts to the default background appearance.
-
-        Notice that you must not prevent the base class EVT_ERASE_BACKGROUND
-        handler from running (i.e. not to handle this event yourself) for this
-        to work.
-
-        @since 2.9.2
-    */
-    void SetBackgroundBitmap(const wxBitmap& bmp);
 
     /**
         Overrides wxWindow::SetFocus().

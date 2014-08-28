@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/utils.cpp
 // Author:      Peter Most, Javier Torres
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -12,12 +11,12 @@
 #include "wx/utils.h"
 #include "wx/window.h"
 #include "wx/cursor.h"
-#include "wx/qt/utils.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
 
 #include <QtGui/QCursor>
-#include <QtGui/QApplication>
-#include <QtGui/QDesktopWidget>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
 #include <QtGui/QDesktopServices>
 #include <QtCore/QUrl>
 
@@ -109,14 +108,18 @@ int wxDisplayDepth()
 
 void wxDisplaySize(int *width, int *height)
 {
-    *width = QApplication::desktop()->width();
-    *height = QApplication::desktop()->height();
+    if ( width != NULL )
+        *width = QApplication::desktop()->width();
+    if ( height != NULL )
+        *height = QApplication::desktop()->height();
 }
 
 void wxDisplaySizeMM(int *width, int *height)
 {
-    *width = QApplication::desktop()->widthMM();
-    *height = QApplication::desktop()->heightMM();
+    if ( width != NULL )
+        *width = QApplication::desktop()->widthMM();
+    if ( height != NULL )
+        *height = QApplication::desktop()->heightMM();
 }
 
 void wxBell()
@@ -159,4 +162,11 @@ bool wxColourDisplay()
 bool wxLaunchDefaultApplication(const wxString& path, int WXUNUSED( flags ) )
 {
     return QDesktopServices::openUrl( QUrl::fromLocalFile( wxQtConvertString( path ) ) );
+}
+
+// Generic "Slot" to conect destruction signal for debugging purposes:
+void wxQtHandleDestroyedSignal(QObject *qobj)
+{
+   wxLogDebug( wxT("%s was destroyed by Qt. pointer=%p"),
+               QObject::staticMetaObject.className(), qobj );
 }

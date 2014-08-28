@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -53,7 +52,11 @@ public:
     wxSize GetSize() const { return wxSize(GetWidth(), GetHeight()); }
 
     WXHICON GetHICON() const;
-
+    
+#if wxOSX_USE_COCOA
+    WX_NSImage GetNSImage() const ;
+#endif
+    
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;

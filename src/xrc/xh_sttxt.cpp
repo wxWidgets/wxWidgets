@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for wxStaticText
 // Author:      Bob Mitchell
 // Created:     2000/03/21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Bob Mitchell and Verant Interactive
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -31,6 +30,7 @@ wxStaticTextXmlHandler::wxStaticTextXmlHandler()
     XRC_ADD_STYLE(wxST_NO_AUTORESIZE);
     XRC_ADD_STYLE(wxALIGN_LEFT);
     XRC_ADD_STYLE(wxALIGN_RIGHT);
+    XRC_ADD_STYLE(wxALIGN_CENTER);
     XRC_ADD_STYLE(wxALIGN_CENTRE);
     AddWindowStyles();
 }
@@ -48,7 +48,7 @@ wxObject *wxStaticTextXmlHandler::DoCreateResource()
 
     SetupWindow(text);
 
-    long wrap = GetLong(wxT("wrap"), -1);
+    long wrap = GetDimension(wxT("wrap"), -1);
     if (wrap != -1)
         text->Wrap(wrap);
 

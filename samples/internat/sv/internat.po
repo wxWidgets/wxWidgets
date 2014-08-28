@@ -15,8 +15,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: ../internat.cpp:210
-msgid "&About..."
-msgstr "&Om..."
+msgid "&About"
+msgstr "&Om"
 
 #: ../internat.cpp:212
 msgid "E&xit"

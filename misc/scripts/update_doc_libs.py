@@ -2,7 +2,6 @@
 # Name:       misc/scripts/update_doc_libs.py
 # Purpose:    Automatically insert \Library{} headers in the doc files
 # Created:    2007-07-28
-# RCS-ID:     $Id$
 # Copyright:  (c) 2007 Francesco Montorsi
 # Licence:    wxWindows licence
 ##############################################################################

@@ -2,7 +2,6 @@
 // Name:        hashset.h
 // Purpose:     interface of wxHashSet
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -205,7 +204,8 @@ public:
     /**
         If an element with the given key is present, the functions returns
         an iterator pointing at that element, otherwise an invalid iterator
-        is returned; i.e.
+        is returned.
+        i.e.
         @code
             hashset.find( non_existent_key ) == hashset.end()
         @endcode

@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/control.cpp
-// Author:      Peter Most
-// Id:          $Id$
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2009 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,6 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/control.h"
+#include "wx/qt/private/converter.h"
 
 IMPLEMENT_DYNAMIC_CLASS( wxControl, wxControlBase )
 
@@ -51,7 +51,24 @@ bool wxControl::QtCreateControl( wxWindow *parent, wxWindowID id,
     wxSize bestSize = GetBestSize();
     int width = ( size.GetWidth() == wxDefaultCoord ) ? bestSize.GetWidth() : size.GetWidth();
     int height = ( size.GetHeight() == wxDefaultCoord ) ? bestSize.GetHeight() : size.GetHeight();
+
     DoMoveWindow( pos.x, pos.y, width, height );
 
+    // Let Qt handle the background:
+    SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+    PostCreation(false);
+
     return CreateControl( parent, id, pos, size, style, validator, name );
+}
+
+wxSize wxControl::DoGetBestSize() const
+{
+    wxSize minsize = wxQtConvertSize( GetHandle()->minimumSizeHint() );
+    wxSize size = wxQtConvertSize( GetHandle()->sizeHint() );
+    // best effort to ensure a correct size (note that some qt controls implement just one or both size hints)
+    if (size.GetWidth() < minsize.GetWidth())
+        size.SetWidth(minsize.GetWidth());
+    if (size.GetHeight() < minsize.GetHeight())
+        size.SetHeight(minsize.GetHeight());
+    return size;
 }

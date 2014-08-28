@@ -2,9 +2,14 @@
 // Name:        editlbox.h
 // Purpose:     interface of wxEditableListBox
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+#define wxEL_ALLOW_NEW          0x0100
+#define wxEL_ALLOW_EDIT         0x0200
+#define wxEL_ALLOW_DELETE       0x0400
+#define wxEL_NO_REORDER         0x0800
+#define wxEL_DEFAULT_STYLE      (wxEL_ALLOW_NEW | wxEL_ALLOW_EDIT | wxEL_ALLOW_DELETE)
 
 /**
     @class wxEditableListBox

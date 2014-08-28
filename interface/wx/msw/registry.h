@@ -2,7 +2,6 @@
 // Name:        msw/registry.h
 // Purpose:     interface of wxRegKey
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -288,7 +287,7 @@ public:
     /**
         Returns @true if any subkeys exist.
     */
-    bool HasSubKeys() const;
+    bool HasSubkeys() const;
 
     /**
         Returns @true if the value exists.

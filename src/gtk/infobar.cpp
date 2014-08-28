@@ -3,7 +3,6 @@
 // Purpose:     wxInfoBar implementation for GTK
 // Author:      Vadim Zeitlin
 // Created:     2009-09-27
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -82,8 +81,12 @@ namespace
 
 inline bool UseNative()
 {
+#ifdef __WXGTK3__
+    return true;
+#else
     // native GtkInfoBar widget is only available in GTK+ 2.18 and later
     return gtk_check_version(2, 18, 0) == 0;
+#endif
 }
 
 } // anonymous namespace
@@ -193,7 +196,7 @@ void wxInfoBar::Dismiss()
 
 void wxInfoBar::GTKResponse(int btnid)
 {
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, btnid);
+    wxCommandEvent event(wxEVT_BUTTON, btnid);
     event.SetEventObject(this);
 
     if ( !HandleWindowEvent(event) )
@@ -220,6 +223,25 @@ GtkWidget *wxInfoBar::GTKAddButton(wxWindowID btnid, const wxString& label)
     return button;
 }
 
+size_t wxInfoBar::GetButtonCount() const
+{
+    if ( !UseNative() )
+        return wxInfoBarGeneric::GetButtonCount();
+
+    return m_impl->m_buttons.size();
+}
+
+wxWindowID wxInfoBar::GetButtonId(size_t idx) const
+{
+    if ( !UseNative() )
+        return wxInfoBarGeneric::GetButtonId(idx);
+
+    wxCHECK_MSG( idx < m_impl->m_buttons.size(), wxID_NONE,
+                 "Invalid infobar button position" );
+
+    return m_impl->m_buttons[idx].id;
+}
+
 void wxInfoBar::AddButton(wxWindowID btnid, const wxString& label)
 {
     if ( !UseNative() )
@@ -239,6 +261,24 @@ void wxInfoBar::AddButton(wxWindowID btnid, const wxString& label)
     GtkWidget * const button = GTKAddButton(btnid, label);
     if ( button )
         m_impl->m_buttons.push_back(wxInfoBarGTKImpl::Button(button, btnid));
+}
+
+bool wxInfoBar::HasButtonId(wxWindowID btnid) const
+{
+    if ( !UseNative() )
+        return wxInfoBarGeneric::HasButtonId(btnid);
+
+    // as in the generic version, look for the button starting from the end
+    const wxInfoBarGTKImpl::Buttons& buttons = m_impl->m_buttons;
+    for ( wxInfoBarGTKImpl::Buttons::const_reverse_iterator i = buttons.rbegin();
+          i != buttons.rend();
+          ++i )
+    {
+        if ( i->id == btnid )
+            return true;
+    }
+
+    return false;
 }
 
 void wxInfoBar::RemoveButton(wxWindowID btnid)
@@ -275,7 +315,7 @@ void wxInfoBar::DoApplyWidgetStyle(GtkRcStyle *style)
     wxInfoBarGeneric::DoApplyWidgetStyle(style);
 
     if ( UseNative() )
-        gtk_widget_modify_style(m_impl->m_label, style);
+        GTKApplyStyle(m_impl->m_label, style);
 }
 
 #endif // wxUSE_INFOBAR

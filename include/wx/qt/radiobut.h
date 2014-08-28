@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/radiobut.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -9,8 +8,7 @@
 #ifndef _WX_QT_RADIOBUT_H_
 #define _WX_QT_RADIOBUT_H_
 
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QRadioButton>
+#include <QtWidgets/QRadioButton>
 
 class WXDLLIMPEXP_CORE wxRadioButton : public wxControl
 {
@@ -42,9 +40,9 @@ public:
 protected:
 
 private:
-    wxQtPointer< QRadioButton > m_qtRadioButton;
+    QRadioButton *m_qtRadioButton;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxRadioButton );
+    wxDECLARE_DYNAMIC_CLASS( wxRadioButton );
 };
 
 #endif // _WX_QT_RADIOBUT_H_

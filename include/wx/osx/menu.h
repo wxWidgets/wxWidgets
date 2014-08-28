@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -32,8 +31,6 @@ public:
     wxMenu(long style = 0) : wxMenuBase(style) { Init(); }
 
     virtual ~wxMenu();
-
-    virtual void Attach(wxMenuBarBase *menubar) ;
 
     virtual void Break();
 
@@ -77,13 +74,14 @@ private:
     // common part of all ctors
     void Init();
 
-    // common part of Append/Insert (behaves as Append is pos == (size_t)-1)
+    // common part of Do{Append,Insert}(): behaves as Append if pos == -1
     bool DoInsertOrAppend(wxMenuItem *item, size_t pos = (size_t)-1);
 
-    // terminate the current radio group, if any
-    void EndRadioGroup();
+    // Common part of HandleMenu{Opened,Closed}().
+    void DoHandleMenuOpenedOrClosed(wxEventType evtType);
 
-    // if TRUE, insert a breal before appending the next item
+
+    // if TRUE, insert a break before appending the next item
     bool m_doBreak;
 
     // in this menu rearranging of menu items (esp hiding) is allowed
@@ -91,9 +89,6 @@ private:
 
     // don't trigger native events
     bool m_noEventsMode;
-
-    // the position of the first item in the current radio group or -1
-    int m_startRadioGroup;
 
     wxMenuImpl* m_peer;
 
@@ -127,6 +122,7 @@ public:
     virtual wxMenu *Remove(size_t pos);
 
     virtual void EnableTop( size_t pos, bool flag );
+    virtual bool IsEnabledTop(size_t pos) const;
     virtual void SetMenuLabel( size_t pos, const wxString& label );
     virtual wxString GetMenuLabel( size_t pos ) const;
     virtual bool Enable( bool enable = true );
@@ -150,6 +146,10 @@ public:
     // call this function to update it (m_menuBarFrame should be !NULL)
     void Refresh(bool eraseBackground = true, const wxRect *rect = NULL);
 
+#if wxABI_VERSION >= 30001
+    wxMenu *OSXGetAppleMenu() const { return m_appleMenu; }
+#endif
+
     static void SetAutoWindowMenu( bool enable ) { s_macAutoWindowMenu = enable ; }
     static bool GetAutoWindowMenu() { return s_macAutoWindowMenu ; }
 
@@ -160,6 +160,11 @@ public:
 
 
     static WXHMENU MacGetWindowMenuHMenu() { return s_macWindowMenuHandle ; }
+    
+    virtual void DoGetPosition(int *x, int *y) const;
+    virtual void DoGetSize(int *width, int *height) const;
+    virtual void DoGetClientSize(int *width, int *height) const;
+
 protected:
     // common part of all ctors
     void Init();

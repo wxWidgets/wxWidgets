@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/dcprint.cpp
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -28,11 +27,11 @@ bool wxPrinterDCImpl::CanGetTextExtent() const
     return false;
 }
 
-void wxPrinterDCImpl::DoGetSize(int *width, int *height) const
+void wxPrinterDCImpl::DoGetSize(int *WXUNUSED(width), int *WXUNUSED(height)) const
 {
 }
 
-void wxPrinterDCImpl::DoGetSizeMM(int* width, int* height) const
+void wxPrinterDCImpl::DoGetSizeMM(int* WXUNUSED(width), int* WXUNUSED(height)) const
 {
 }
 
@@ -46,34 +45,34 @@ wxSize wxPrinterDCImpl::GetPPI() const
     return wxSize();
 }
 
-void wxPrinterDCImpl::SetFont(const wxFont& font)
+void wxPrinterDCImpl::SetFont(const wxFont& WXUNUSED(font))
 {
 }
 
-void wxPrinterDCImpl::SetPen(const wxPen& pen)
+void wxPrinterDCImpl::SetPen(const wxPen& WXUNUSED(pen))
 {
 }
 
-void wxPrinterDCImpl::SetBrush(const wxBrush& brush)
+void wxPrinterDCImpl::SetBrush(const wxBrush& WXUNUSED(brush))
 {
 }
 
-void wxPrinterDCImpl::SetBackground(const wxBrush& brush)
+void wxPrinterDCImpl::SetBackground(const wxBrush& WXUNUSED(brush))
 {
 }
 
-void wxPrinterDCImpl::SetBackgroundMode(int mode)
+void wxPrinterDCImpl::SetBackgroundMode(int WXUNUSED(mode))
 {
 }
 
 
 #if wxUSE_PALETTE
-void wxPrinterDCImpl::SetPalette(const wxPalette& palette)
+void wxPrinterDCImpl::SetPalette(const wxPalette& WXUNUSED(palette))
 {
 }
 #endif // wxUSE_PALETTE
 
-void wxPrinterDCImpl::SetLogicalFunction(wxRasterOperationMode function)
+void wxPrinterDCImpl::SetLogicalFunction(wxRasterOperationMode WXUNUSED(function))
 {
 }
 
@@ -87,11 +86,11 @@ wxCoord wxPrinterDCImpl::GetCharWidth() const
     return wxCoord();
 }
 
-void wxPrinterDCImpl::DoGetTextExtent(const wxString& string,
-                             wxCoord *x, wxCoord *y,
-                             wxCoord *descent,
-                             wxCoord *externalLeading,
-                             const wxFont *theFont ) const
+void wxPrinterDCImpl::DoGetTextExtent(const wxString& WXUNUSED(string),
+                             wxCoord *WXUNUSED(x), wxCoord *WXUNUSED(y),
+                             wxCoord *WXUNUSED(descent),
+                             wxCoord *WXUNUSED(externalLeading),
+                             const wxFont *WXUNUSED(theFont) ) const
 {
 }
 
@@ -99,102 +98,102 @@ void wxPrinterDCImpl::Clear()
 {
 }
 
-void wxPrinterDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y,
-                                 wxCoord width, wxCoord height)
+void wxPrinterDCImpl::DoSetClippingRegion(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
+                                 wxCoord WXUNUSED(width), wxCoord WXUNUSED(height))
 {
 }
 
-void wxPrinterDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
+void wxPrinterDCImpl::DoSetDeviceClippingRegion(const wxRegion& WXUNUSED(region))
 {
 }
 
-bool wxPrinterDCImpl::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
-                         wxFloodFillStyle style )
-{
-    return false;
-}
-
-bool wxPrinterDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
+bool wxPrinterDCImpl::DoFloodFill(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), const wxColour& WXUNUSED(col),
+                         wxFloodFillStyle WXUNUSED(style) )
 {
     return false;
 }
 
-void wxPrinterDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
-{
-}
-
-void wxPrinterDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
-{
-}
-
-void wxPrinterDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
-                       wxCoord x2, wxCoord y2,
-                       wxCoord xc, wxCoord yc)
-{
-}
-
-void wxPrinterDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
-                               double sa, double ea)
-{
-}
-
-void wxPrinterDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
-{
-}
-
-void wxPrinterDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
-                                    wxCoord width, wxCoord height,
-                                    double radius)
-{
-}
-
-void wxPrinterDCImpl::DoDrawEllipse(wxCoord x, wxCoord y,
-                           wxCoord width, wxCoord height)
-{
-}
-
-void wxPrinterDCImpl::DoCrossHair(wxCoord x, wxCoord y)
-{
-}
-
-void wxPrinterDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
-{
-}
-
-void wxPrinterDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
-                          bool useMask)
-{
-}
-
-void wxPrinterDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
-{
-}
-
-void wxPrinterDCImpl::DoDrawRotatedText(const wxString& text,
-                               wxCoord x, wxCoord y, double angle)
-{
-}
-
-bool wxPrinterDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
-                    wxCoord width, wxCoord height,
-                    wxDC *source,
-                    wxCoord xsrc, wxCoord ysrc,
-                    wxRasterOperationMode rop,
-                    bool useMask,
-                    wxCoord xsrcMask,
-                    wxCoord ysrcMask)
+bool wxPrinterDCImpl::DoGetPixel(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxColour *WXUNUSED(col)) const
 {
     return false;
 }
 
-void wxPrinterDCImpl::DoDrawLines(int n, wxPoint points[],
-                         wxCoord xoffset, wxCoord yoffset )
+void wxPrinterDCImpl::DoDrawPoint(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
 {
 }
 
-void wxPrinterDCImpl::DoDrawPolygon(int n, wxPoint points[],
-                       wxCoord xoffset, wxCoord yoffset,
-                       wxPolygonFillMode fillStyle )
+void wxPrinterDCImpl::DoDrawLine(wxCoord WXUNUSED(x1), wxCoord WXUNUSED(y1), wxCoord WXUNUSED(x2), wxCoord WXUNUSED(y2))
+{
+}
+
+void wxPrinterDCImpl::DoDrawArc(wxCoord WXUNUSED(x1), wxCoord WXUNUSED(y1),
+                       wxCoord WXUNUSED(x2), wxCoord WXUNUSED(y2),
+                       wxCoord WXUNUSED(xc), wxCoord WXUNUSED(yc))
+{
+}
+
+void wxPrinterDCImpl::DoDrawEllipticArc(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxCoord WXUNUSED(w), wxCoord WXUNUSED(h),
+                               double WXUNUSED(sa), double WXUNUSED(ea))
+{
+}
+
+void wxPrinterDCImpl::DoDrawRectangle(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxCoord WXUNUSED(width), wxCoord WXUNUSED(height))
+{
+}
+
+void wxPrinterDCImpl::DoDrawRoundedRectangle(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
+                                    wxCoord WXUNUSED(width), wxCoord WXUNUSED(height),
+                                    double WXUNUSED(radius))
+{
+}
+
+void wxPrinterDCImpl::DoDrawEllipse(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
+                           wxCoord WXUNUSED(width), wxCoord WXUNUSED(height))
+{
+}
+
+void wxPrinterDCImpl::DoCrossHair(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
+{
+}
+
+void wxPrinterDCImpl::DoDrawIcon(const wxIcon& WXUNUSED(icon), wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
+{
+}
+
+void wxPrinterDCImpl::DoDrawBitmap(const wxBitmap &WXUNUSED(bmp), wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
+                          bool WXUNUSED(useMask))
+{
+}
+
+void wxPrinterDCImpl::DoDrawText(const wxString& WXUNUSED(text), wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
+{
+}
+
+void wxPrinterDCImpl::DoDrawRotatedText(const wxString& WXUNUSED(text),
+                               wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), double WXUNUSED(angle))
+{
+}
+
+bool wxPrinterDCImpl::DoBlit(wxCoord WXUNUSED(xdest), wxCoord WXUNUSED(ydest),
+                    wxCoord WXUNUSED(width), wxCoord WXUNUSED(height),
+                    wxDC *WXUNUSED(source),
+                    wxCoord WXUNUSED(xsrc), wxCoord WXUNUSED(ysrc),
+                    wxRasterOperationMode WXUNUSED(rop),
+                    bool WXUNUSED(useMask),
+                    wxCoord WXUNUSED(xsrcMask),
+                    wxCoord WXUNUSED(ysrcMask))
+{
+    return false;
+}
+
+void wxPrinterDCImpl::DoDrawLines(int WXUNUSED(n), const wxPoint WXUNUSED(points)[],
+                         wxCoord WXUNUSED(xoffset), wxCoord WXUNUSED(yoffset) )
+{
+}
+
+void wxPrinterDCImpl::DoDrawPolygon(int WXUNUSED(n), const wxPoint WXUNUSED(points)[],
+                       wxCoord WXUNUSED(xoffset), wxCoord WXUNUSED(yoffset),
+                       wxPolygonFillMode WXUNUSED(fillStyle) )
 {
 }
 

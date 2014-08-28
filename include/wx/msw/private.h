@@ -6,7 +6,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -73,7 +72,7 @@ WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
 // define things missing from some compilers' headers
 // ---------------------------------------------------------------------------
 
-#if defined(__WXWINCE__) || (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS)
+#if defined(__WXWINCE__)
 #ifndef ZeroMemory
     inline void ZeroMemory(void *buf, size_t len) { memset(buf, 0, len); }
 #endif
@@ -169,9 +168,9 @@ extern LONG APIENTRY _EXPORT
 
 // This one is a macro so that it can be tested with #ifdef, it will be
 // undefined if it cannot be implemented for a given compiler.
-// Vc++, bcc, dmc, ow, mingw, codewarrior (and rsxnt) have _get_osfhandle.
-// Cygwin has get_osfhandle. Others are currently unknown, e.g. Salford,
-// Intel, Visual Age.
+// Vc++, bcc, dmc, ow, mingw akk have _get_osfhandle() and Cygwin has
+// get_osfhandle. Others are currently unknown, e.g. Salford, Intel, Visual
+// Age.
 #if defined(__WXWINCE__)
     #define wxGetOSFHandle(fd) ((HANDLE)fd)
     #define wxOpenOSFHandle(h, flags) ((int)wxPtrToUInt(h))
@@ -179,28 +178,48 @@ extern LONG APIENTRY _EXPORT
     #define wxGetOSFHandle(fd) ((HANDLE)get_osfhandle(fd))
 #elif defined(__VISUALC__) \
    || defined(__BORLANDC__) \
-   || defined(__DMC__) \
-   || defined(__WATCOMC__) \
-   || defined(__MINGW32__) \
-   || (defined(__MWERKS__) && defined(__MSL__))
+   || defined(__MINGW32__)
     #define wxGetOSFHandle(fd) ((HANDLE)_get_osfhandle(fd))
     #define wxOpenOSFHandle(h, flags) (_open_osfhandle(wxPtrToUInt(h), flags))
     #define wx_fdopen _fdopen
 #endif
 
 // close the handle in the class dtor
+template <wxUIntPtr INVALID_VALUE = (wxUIntPtr)INVALID_HANDLE_VALUE>
 class AutoHANDLE
 {
 public:
-    wxEXPLICIT AutoHANDLE(HANDLE handle) : m_handle(handle) { }
+    wxEXPLICIT AutoHANDLE(HANDLE handle = InvalidHandle()) : m_handle(handle) { }
 
-    bool IsOk() const { return m_handle != INVALID_HANDLE_VALUE; }
+    bool IsOk() const { return m_handle != InvalidHandle(); }
     operator HANDLE() const { return m_handle; }
 
-    ~AutoHANDLE() { if ( IsOk() ) ::CloseHandle(m_handle); }
+    ~AutoHANDLE() { if ( IsOk() ) DoClose(); }
+
+    void Close()
+    {
+        wxCHECK_RET(IsOk(), wxT("Handle must be valid"));
+
+        DoClose();
+
+        m_handle = InvalidHandle();
+    }
 
 protected:
-    HANDLE m_handle;
+    // We need this helper function because integer INVALID_VALUE is not
+    // implicitly convertible to HANDLE, which is a pointer.
+    static HANDLE InvalidHandle()
+    {
+        return static_cast<HANDLE>(INVALID_VALUE);
+    }
+
+    void DoClose()
+    {
+        if ( !::CloseHandle(m_handle) )
+            wxLogLastError(wxT("CloseHandle"));
+    }
+
+    WXHANDLE m_handle;
 };
 
 // a template to make initializing Windows styructs less painful: it zeroes all
@@ -217,6 +236,21 @@ struct WinStruct : public T
         this->cbSize = sizeof(T);
     }
 };
+
+
+// Macros for converting wxString to the type expected by API functions.
+//
+// Normally it is enough to just use wxString::t_str() which is implicitly
+// convertible to LPCTSTR, but in some cases an explicit conversion is required.
+//
+// In such cases wxMSW_CONV_LPCTSTR() should be used. But if an API function
+// takes a non-const pointer, wxMSW_CONV_LPTSTR() which casts away the
+// constness (but doesn't make it possible to really modify the returned
+// pointer, of course) should be used. And if a string is passed as LPARAM, use
+// wxMSW_CONV_LPARAM() which does the required ugly reinterpret_cast<> too.
+#define wxMSW_CONV_LPCTSTR(s) static_cast<const wxChar *>((s).t_str())
+#define wxMSW_CONV_LPTSTR(s) const_cast<wxChar *>(wxMSW_CONV_LPCTSTR(s))
+#define wxMSW_CONV_LPARAM(s) reinterpret_cast<LPARAM>(wxMSW_CONV_LPCTSTR(s))
 
 
 #if wxUSE_GUI
@@ -418,8 +452,9 @@ private:
 class WindowHDC
 {
 public:
+    WindowHDC() : m_hwnd(NULL), m_hdc(NULL) { }
     WindowHDC(HWND hwnd) { m_hdc = ::GetDC(m_hwnd = hwnd); }
-   ~WindowHDC() { ::ReleaseDC(m_hwnd, m_hdc); }
+   ~WindowHDC() { if ( m_hwnd && m_hdc ) { ::ReleaseDC(m_hwnd, m_hdc); } }
 
     operator HDC() const { return m_hdc; }
 
@@ -454,7 +489,7 @@ private:
     void DoInit(HGDIOBJ hgdiobj) { m_hgdiobj = ::SelectObject(m_hdc, hgdiobj); }
 
 public:
-    SelectInHDC() : m_hdc(NULL) { }
+    SelectInHDC() : m_hdc(NULL), m_hgdiobj(NULL) { }
     SelectInHDC(HDC hdc, HGDIOBJ hgdiobj) : m_hdc(hdc) { DoInit(hgdiobj); }
 
     void Init(HDC hdc, HGDIOBJ hgdiobj)
@@ -781,7 +816,7 @@ public:
     {
         if ( IsRegistered() )
         {
-            if ( !::UnregisterClass(m_clsname.wx_str(), wxGetInstance()) )
+            if ( !::UnregisterClass(m_clsname.t_str(), wxGetInstance()) )
             {
                 wxLogLastError(wxT("UnregisterClass"));
             }
@@ -885,6 +920,8 @@ inline wxString wxGetFullModuleName()
 //      0x0502      Windows XP SP2, 2003 SP1
 //      0x0600      Windows Vista, 2008
 //      0x0601      Windows 7
+//      0x0602      Windows 8 (currently also returned for 8.1 if program does not have a manifest indicating 8.1 support)
+//      0x0603      Windows 8.1 (currently only returned for 8.1 if program has a manifest indicating 8.1 support)
 //
 // for the other Windows versions 0 is currently returned
 enum wxWinVersion
@@ -912,16 +949,22 @@ enum wxWinVersion
     wxWinVersion_Vista = wxWinVersion_6,
     wxWinVersion_NT6 = wxWinVersion_6,
 
-    wxWinVersion_7 = 0x601
+    wxWinVersion_7 = 0x601,
+
+    wxWinVersion_8 = 0x602,
+    wxWinVersion_8_1 = 0x603
 };
 
 WXDLLIMPEXP_BASE wxWinVersion wxGetWinVersion();
 
-#if wxUSE_GUI
+#if wxUSE_GUI && defined(__WXMSW__)
 
 // cursor stuff
 extern HCURSOR wxGetCurrentBusyCursor();    // from msw/utils.cpp
 extern const wxCursor *wxGetGlobalCursor(); // from msw/cursor.cpp
+
+// GetCursorPos can fail without populating the POINT. This falls back to GetMessagePos.
+WXDLLIMPEXP_CORE void wxGetCursorPosMSW(POINT* pt);
 
 WXDLLIMPEXP_CORE void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font);
 WXDLLIMPEXP_CORE void wxFillLogFont(LOGFONT *logFont, const wxFont *font);
@@ -1051,6 +1094,6 @@ inline void *wxSetWindowUserData(HWND hwnd, void *data)
 
 #endif // __WIN64__/__WIN32__
 
-#endif // wxUSE_GUI
+#endif // wxUSE_GUI && __WXMSW__
 
 #endif // _WX_PRIVATE_H_

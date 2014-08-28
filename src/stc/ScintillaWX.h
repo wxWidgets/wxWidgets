@@ -9,7 +9,6 @@
 // Author:      Robin Dunn
 //
 // Created:     13-Jan-2000
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 by Total Control Software
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,7 +23,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <vector>
+#include <map>
+#include <algorithm>
 
+// These are all Scintilla headers
 #include "Platform.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
@@ -33,12 +36,14 @@
 #include "ScintillaWidget.h"
 #ifdef SCI_LEXER
 #include "SciLexer.h"
-#include "PropSet.h"
+#include "PropSetSimple.h"
+#include "ILexer.h"
+#include "LexerModule.h"
+#include "LexAccessor.h"
 #include "Accessor.h"
-#include "KeyWords.h"
+#include "WordList.h"
 #endif
 #include "ContractionState.h"
-#include "SVector.h"
 #include "CellBuffer.h"
 #include "CallTip.h"
 #include "KeyMap.h"
@@ -50,6 +55,7 @@
 #include "ViewStyle.h"
 #include "CharClassify.h"
 #include "Decoration.h"
+#include "CaseFolder.h"
 #include "Document.h"
 #include "Selection.h"
 #include "PositionCache.h"
@@ -62,6 +68,12 @@
 #endif
 #if wxUSE_DRAG_AND_DROP
 #include "wx/timer.h"
+#endif
+
+// Define this if there is a standard clipboard format for rectangular
+// text selection under the current platform.
+#if defined(__WXMSW__) || defined(__WXGTK__)
+    #define wxHAVE_STC_RECT_FORMAT
 #endif
 
 //----------------------------------------------------------------------
@@ -146,7 +158,9 @@ public:
     void DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl);
     void DoLeftButtonMove(Point pt);
     void DoMiddleButtonUp(Point pt);
-    void DoMouseWheel(int rotation, int delta, int linesPerAction, int ctrlDown, bool isPageScroll);
+    void DoMouseWheel(wxMouseWheelAxis axis, int rotation, int delta,
+                      int linesPerAction, int columnsPerAction,
+                      bool ctrlDown, bool isPageScroll);
     void DoAddChar(int key);
     int  DoKeyDown(const wxKeyEvent& event, bool* consumed);
     void DoTick() { Tick(); }
@@ -166,6 +180,7 @@ public:
 
     // helpers
     void FullPaint();
+    void FullPaintDC(wxDC* dc);
     bool CanPaste();
     bool GetHideSelection() { return hideSelection; }
     void DoScrollToLine(int line);
@@ -184,7 +199,8 @@ private:
     wxDragResult        dragResult;
 #endif
 
-    int                 wheelRotation;
+    int                 wheelVRotation;
+    int                 wheelHRotation;
 
     // For use in creating a system caret
     bool HasCaretSizeChanged();
@@ -195,7 +211,13 @@ private:
     int sysCaretWidth;
     int sysCaretHeight;
 #endif
-   
+
+#ifdef wxHAVE_STC_RECT_FORMAT
+    // The presence of this format on the clipboard indicates that the text is
+    // a rectangular (and not the default linear) selection.
+    wxDataFormat m_clipRectTextFormat;
+#endif
+
     friend class wxSTCCallTip;
 };
 

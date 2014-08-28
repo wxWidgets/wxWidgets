@@ -4,7 +4,6 @@
 // Author:      Guilhem Lavaux
 // Modified by: Vadim Zeitlin to switch to wxSockAddressImpl implementation
 // Created:     26/04/1997
-// RCS-ID:      $Id$
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 //              (c) 2008, 2009 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -139,11 +138,7 @@ public:
     bool Hostname(unsigned long addr);
 
     // make base class methods hidden by our overload visible
-    //
-    // FIXME-VC6: replace this with "using IPAddress::Hostname" (not supported
-    //            by VC6) when support for it is dropped
-    wxString Hostname() const { return wxIPaddress::Hostname(); }
-    bool Hostname(const wxString& name) { return wxIPaddress::Hostname(name); }
+    using wxIPaddress::Hostname;
 
     bool BroadcastAddress();
 

@@ -2,7 +2,6 @@
 // Name:        wx/gtk1/listbox.h
 // Purpose:     wxListBox class declaration
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -11,6 +10,8 @@
 #define __GTKLISTBOXH__
 
 #include "wx/list.h"
+
+typedef struct _GtkList GtkList;
 
 class WXDLLIMPEXP_FWD_BASE wxSortedArrayString;
 

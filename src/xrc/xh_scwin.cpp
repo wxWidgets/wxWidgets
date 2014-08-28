@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for wxScrolledWindow
 // Author:      Vaclav Slavik
 // Created:     2002/10/18
-// RCS-ID:      $Id$
 // Copyright:   (c) 2002 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -33,9 +32,6 @@ wxScrolledWindowXmlHandler::wxScrolledWindowXmlHandler()
     XRC_ADD_STYLE(wxVSCROLL);
 
     // wxPanel styles
-#if WXWIN_COMPATIBILITY_2_6
-    XRC_ADD_STYLE(wxNO_3D);
-#endif // WXWIN_COMPATIBILITY_2_6
     XRC_ADD_STYLE(wxTAB_TRAVERSAL);
     XRC_ADD_STYLE(wxWS_EX_VALIDATE_RECURSIVELY);
 

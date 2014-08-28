@@ -3,7 +3,6 @@
 // Purpose:     wxWindow unit test
 // Author:      Steven Lamerton
 // Created:     2010-07-10
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -96,11 +95,8 @@ void WindowTestCase::tearDown()
 
 void WindowTestCase::ShowHideEvent()
 {
-#if defined(__WXMSW__) || defined (__WXPM__)
-   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_window, wxEVT_SHOW);
+#if defined(__WXMSW__)
+    EventCounter show(m_window, wxEVT_SHOW);
 
     CPPUNIT_ASSERT(m_window->IsShown());
 
@@ -112,19 +108,16 @@ void WindowTestCase::ShowHideEvent()
 
     CPPUNIT_ASSERT(m_window->IsShown());
 
-    CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount());
-#endif
+    CPPUNIT_ASSERT_EQUAL(2, show.GetCount());
+#endif // __WXMSW__
 }
 
 void WindowTestCase::KeyEvent()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_window, wxEVT_KEY_DOWN);
-    EventCounter count1(m_window, wxEVT_KEY_UP);
-    EventCounter count2(m_window, wxEVT_CHAR);
+    EventCounter keydown(m_window, wxEVT_KEY_DOWN);
+    EventCounter keyup(m_window, wxEVT_KEY_UP);
+    EventCounter keychar(m_window, wxEVT_CHAR);
 
     wxUIActionSimulator sim;
 
@@ -134,31 +127,28 @@ void WindowTestCase::KeyEvent()
     sim.Char(WXK_SHIFT);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(5, frame->GetEventCount(wxEVT_KEY_DOWN));
-    CPPUNIT_ASSERT_EQUAL(5, frame->GetEventCount(wxEVT_KEY_UP));
-    CPPUNIT_ASSERT_EQUAL(4, frame->GetEventCount(wxEVT_CHAR));
+    CPPUNIT_ASSERT_EQUAL(5, keydown.GetCount());
+    CPPUNIT_ASSERT_EQUAL(5, keyup.GetCount());
+    CPPUNIT_ASSERT_EQUAL(4, keychar.GetCount());
 #endif
 }
 
 void WindowTestCase::FocusEvent()
 {
 #ifndef __WXOSX__
-   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_window, wxEVT_SET_FOCUS);
-    EventCounter count1(m_window, wxEVT_KILL_FOCUS);
+    EventCounter setfocus(m_window, wxEVT_SET_FOCUS);
+    EventCounter killfocus(m_window, wxEVT_KILL_FOCUS);
 
     m_window->SetFocus();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SET_FOCUS));
+    CPPUNIT_ASSERT_EQUAL(1, setfocus.GetCount());
     CPPUNIT_ASSERT(m_window->HasFocus());
 
     wxButton* button = new wxButton(wxTheApp->GetTopWindow(), wxID_ANY);
 
     button->SetFocus();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_KILL_FOCUS));
+    CPPUNIT_ASSERT_EQUAL(1, killfocus.GetCount());
     CPPUNIT_ASSERT(!m_window->HasFocus());
 #endif
 }

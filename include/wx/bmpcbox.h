@@ -5,7 +5,6 @@
 // Modified by:
 // Created:     Aug-31-2006
 // Copyright:   (c) Jaakko Salli
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -18,6 +17,7 @@
 #if wxUSE_BITMAPCOMBOBOX
 
 #include "wx/bitmap.h"
+#include "wx/dynarray.h"
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxItemContainer;

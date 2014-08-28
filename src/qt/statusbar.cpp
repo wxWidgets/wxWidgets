@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/statusbar.cpp
 // Author:      Peter Most, Javier Torres
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,12 +9,24 @@
 #include "wx/wxprec.h"
 
 #include "wx/statusbr.h"
-#include "wx/qt/utils.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
+#include "wx/qt/private/winevent.h"
 
-wxStatusBar::wxStatusBar()
+
+class wxQtStatusBar : public wxQtEventSignalHandler< QStatusBar, wxStatusBar >
+{
+
+public:
+    wxQtStatusBar( wxWindow *parent, wxStatusBar *handler );
+};
+
+wxQtStatusBar::wxQtStatusBar( wxWindow *parent, wxStatusBar *handler )
+    : wxQtEventSignalHandler< QStatusBar, wxStatusBar >( parent, handler )
 {
 }
+
+//==============================================================================
 
 wxStatusBar::wxStatusBar(wxWindow *parent, wxWindowID winid,
             long style,
@@ -24,27 +35,29 @@ wxStatusBar::wxStatusBar(wxWindow *parent, wxWindowID winid,
     Create( parent, winid, style, name );
 }
 
-void wxStatusBar::Init()
-{
-}
-
-bool wxStatusBar::Create(wxWindow *parent, wxWindowID winid,
-            long style,
-            const wxString& name)
+bool wxStatusBar::Create(wxWindow *parent, wxWindowID WXUNUSED(winid),
+                         long style, const wxString& WXUNUSED(name))
 {
     wxMISSING_IMPLEMENTATION( "wxStatusBar::Create parameters" );
 
     m_qtStatusBar = new wxQtStatusBar( parent, this );
 
+    if(style & wxSTB_SIZEGRIP)
+        m_qtStatusBar->setSizeGripEnabled(true);
+
+    PostCreation();
+
+    SetFieldsCount(1);
+
     return true;
 }
 
-bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
+bool wxStatusBar::GetFieldRect(int WXUNUSED(i), wxRect& WXUNUSED(rect)) const
 {
     return false;
 }
 
-void wxStatusBar::SetMinHeight(int height)
+void wxStatusBar::SetMinHeight(int WXUNUSED(height))
 {
 }
 
@@ -73,6 +86,8 @@ void wxStatusBar::Refresh( bool eraseBackground, const wxRect *rect )
 
 void wxStatusBar::UpdateFields()
 {
+    // is it a good idea to recreate all the panes every update?
+
     while ( !m_qtPanes.isEmpty() )
     {
         //Remove all panes
@@ -104,11 +119,3 @@ QStatusBar *wxStatusBar::GetHandle() const
 {
     return m_qtStatusBar;
 }
-
-//==============================================================================
-
-wxQtStatusBar::wxQtStatusBar( wxWindow *parent, wxStatusBar *handler )
-    : wxQtEventSignalHandler< QStatusBar, wxStatusBar >( parent, handler )
-{
-}
-

@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by: Robert Vazan (sizers)
 // Created:     15.08.99
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -73,7 +72,7 @@ class MyApp : public wxApp
 {
 public:
     // override base class virtuals
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 class MyFrame : public wxFrame
@@ -93,7 +92,7 @@ public:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -149,7 +148,7 @@ public:
         SetSizerAndFit(mainSizer);
     }
 
-    virtual bool TransferDataFromWindow()
+    virtual bool TransferDataFromWindow() wxOVERRIDE
     {
         if ( !m_checkbox->GetValue() )
         {
@@ -239,7 +238,7 @@ public:
 private:
     wxRadioBox *m_radio;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // This shows how to dynamically (i.e. during run-time) arrange the page order.
@@ -316,8 +315,8 @@ public:
     }
 
     // implement wxWizardPage functions
-    virtual wxWizardPage *GetPrev() const { return m_prev; }
-    virtual wxWizardPage *GetNext() const
+    virtual wxWizardPage *GetPrev() const wxOVERRIDE { return m_prev; }
+    virtual wxWizardPage *GetNext() const wxOVERRIDE
     {
         return m_checkbox->GetValue() ? m_next->GetNext() : m_next;
     }
@@ -340,7 +339,7 @@ private:
 // event tables and such
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Wizard_Quit,         MyFrame::OnQuit)
     EVT_MENU(Wizard_About,        MyFrame::OnAbout)
     EVT_MENU(Wizard_RunModal,     MyFrame::OnRunWizard)
@@ -349,12 +348,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_WIZARD_CANCEL(wxID_ANY,   MyFrame::OnWizardCancel)
     EVT_WIZARD_FINISHED(wxID_ANY, MyFrame::OnWizardFinished)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(wxRadioboxPage, wxWizardPageSimple)
+wxBEGIN_EVENT_TABLE(wxRadioboxPage, wxWizardPageSimple)
     EVT_WIZARD_PAGE_CHANGING(wxID_ANY, wxRadioboxPage::OnWizardPageChanging)
     EVT_WIZARD_CANCEL(wxID_ANY, wxRadioboxPage::OnWizardCancel)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
 
@@ -414,8 +413,10 @@ MyWizard::MyWizard(wxFrame *frame, bool useSizer)
     wxValidationPage *page4 = new wxValidationPage(this);
 
     // set the page order using a convenience function - could also use
-    // SetNext/Prev directly as below
-    wxWizardPageSimple::Chain(page3, page4);
+    // SetNext/Prev directly as below, but Chain() is shorter, avoids the risk
+    // of an error and can itself be chained, e.g. you could write
+    // page3.Chain(page4).Chain(page5) and so on.
+    page3->Chain(page4);
 
     // this page is not a wxWizardPageSimple, so we use SetNext/Prev to insert
     // it into the chain of pages
@@ -450,7 +451,7 @@ MyFrame::MyFrame(const wxString& title)
     menuOptions->AppendCheckItem(Wizard_ExpandBitmap, wxT("Si&ze Bitmap To Page"));
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Wizard_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(Wizard_About, wxT("&About\tF1"), wxT("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();

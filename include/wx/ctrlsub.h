@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     22.10.99
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -395,44 +394,57 @@ private:
     wxClientDataType m_clientDataItemsType;
 };
 
-// this macro must (unfortunately) be used in any class deriving from both
-// wxItemContainer and wxControl because otherwise there is ambiguity when
-// calling GetClientXXX() functions -- the compiler can't choose between the
-// two versions
-#define wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST                    \
-    void SetClientData(void *data)                                         \
-        { wxEvtHandler::SetClientData(data); }                             \
-    void *GetClientData() const                                            \
-        { return wxEvtHandler::GetClientData(); }                          \
-    void SetClientObject(wxClientData *data)                               \
-        { wxEvtHandler::SetClientObject(data); }                           \
-    wxClientData *GetClientObject() const                                  \
-        { return wxEvtHandler::GetClientObject(); }                        \
-    void SetClientData(unsigned int n, void* clientData)                   \
-        { wxItemContainer::SetClientData(n, clientData); }                 \
-    void* GetClientData(unsigned int n) const                              \
-        { return wxItemContainer::GetClientData(n); }                      \
-    void SetClientObject(unsigned int n, wxClientData* clientData)         \
-        { wxItemContainer::SetClientObject(n, clientData); }               \
-    wxClientData* GetClientObject(unsigned int n) const                    \
-        { return wxItemContainer::GetClientObject(n); }
+// Inheriting directly from a wxWindow-derived class and wxItemContainer
+// unfortunately introduces an ambiguity for all GetClientXXX() methods as they
+// are inherited twice: the "global" versions from wxWindow and the per-item
+// versions taking the index from wxItemContainer.
+//
+// So we need to explicitly resolve them and this helper template class is
+// provided to do it. To use it, simply inherit from wxWindowWithItems<Window,
+// Container> instead of Window and Container interface directly.
+template <class W, class C>
+class wxWindowWithItems : public W, public C
+{
+public:
+    typedef W BaseWindowClass;
+    typedef C BaseContainerInterface;
 
-class WXDLLIMPEXP_CORE wxControlWithItemsBase : public wxControl,
-                                           public wxItemContainer
+    wxWindowWithItems() { }
+
+    void SetClientData(void *data)
+        { BaseWindowClass::SetClientData(data); }
+    void *GetClientData() const
+        { return BaseWindowClass::GetClientData(); }
+    void SetClientObject(wxClientData *data)
+        { BaseWindowClass::SetClientObject(data); }
+    wxClientData *GetClientObject() const
+        { return BaseWindowClass::GetClientObject(); }
+
+    void SetClientData(unsigned int n, void* clientData)
+        { wxItemContainer::SetClientData(n, clientData); }
+    void* GetClientData(unsigned int n) const
+        { return wxItemContainer::GetClientData(n); }
+    void SetClientObject(unsigned int n, wxClientData* clientData)
+        { wxItemContainer::SetClientObject(n, clientData); }
+    wxClientData* GetClientObject(unsigned int n) const
+        { return wxItemContainer::GetClientObject(n); }
+};
+
+class WXDLLIMPEXP_CORE wxControlWithItemsBase :
+    public wxWindowWithItems<wxControl, wxItemContainer>
 {
 public:
     wxControlWithItemsBase() { }
 
-    // we have to redefine these functions here to avoid ambiguities in classes
-    // deriving from us which would arise otherwise because both base classses
-    // have the methods with the same names - hopefully, a smart compiler can
-    // optimize away these simple inline wrappers so we don't suffer much from
-    // this
-    wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
-
     // usually the controls like list/combo boxes have their own background
     // colour
-    virtual bool ShouldInheritColours() const { return false; }
+    virtual bool ShouldInheritColours() const wxOVERRIDE { return false; }
+
+
+    // Implementation only from now on.
+
+    // Generate an event of the given type for the selection change.
+    void SendSelectionChangedEvent(wxEventType eventType);
 
 protected:
     // fill in the client object or data field of the event as appropriate

@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/uiaction.cpp
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,8 +9,9 @@
 #include "wx/wxprec.h"
 
 #include "wx/qt/defs.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
 #include "wx/uiaction.h"
+#include "wx/qt/private/converter.h"
 
 #include <QtTest/QtTestGui>
 
@@ -97,14 +97,12 @@ bool wxUIActionSimulator::MouseMove(long x, long y)
 
 bool wxUIActionSimulator::DoKey(int keyCode, int modifiers, bool isDown)
 {
+    Qt::KeyboardModifiers qtmodifiers;
     enum Key key;
 
-    switch ( keyCode )
-    {
-        case WXK_PAGEUP:
-            key = Key_PageUp;
-            break;
-    }
+    key = (enum Key) wxQtConvertKeyCode( keyCode, modifiers, qtmodifiers );
+
+    wxCHECK_MSG(key, false, wxT("No current key conversion equivalent in Qt"));
     KeyAction keyAction = isDown ? Press : Release;
     return SimulateKeyboardKey( keyAction, key );
 }

@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/statbox.cpp
-// Author:      Peter Most
-// Id:          $Id$
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,7 +9,19 @@
 #include "wx/wxprec.h"
 
 #include "wx/statbox.h"
-#include "wx/qt/groupbox_qt.h"
+#include "wx/window.h"
+#include "wx/qt/private/converter.h"
+#include "wx/qt/private/winevent.h"
+#include <QtWidgets/QGroupBox>
+
+
+class wxQtGroupBox : public wxQtEventSignalHandler< QGroupBox, wxStaticBox >
+{
+public:
+    wxQtGroupBox( wxWindow *parent, wxStaticBox *handler ):
+        wxQtEventSignalHandler< QGroupBox, wxStaticBox >( parent, handler ){}
+};
+
 
 wxStaticBox::wxStaticBox()
 {
@@ -33,7 +44,8 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
             long style,
             const wxString& name)
 {
-    m_qtGroupBox = new wxQtGroupBox( parent, label );
+    m_qtGroupBox = new wxQtGroupBox( parent, this );
+    m_qtGroupBox->setTitle( wxQtConvertString( label ) );
 
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
@@ -43,3 +55,10 @@ QGroupBox *wxStaticBox::GetHandle() const
     return m_qtGroupBox;
 }
 
+void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
+{
+    wxStaticBoxBase::GetBordersForSizer(borderTop, borderOther);
+
+    // need extra space for the label:
+    *borderTop += GetCharHeight();
+}

@@ -3,7 +3,6 @@
 // Purpose:     wxSearchCtrlBase class
 // Author:      Vince Harron
 // Created:     2006-02-18
-// RCS-ID:      $Id$
 // Copyright:   (c) Vince Harron
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -26,8 +25,12 @@
     // no native version, use the generic one
     #define wxUSE_NATIVE_SEARCH_CONTROL 0
 
-    class WXDLLIMPEXP_CORE wxSearchCtrlBaseBaseClass : public wxControl,
-                                                       public wxTextCtrlIface
+    #include "wx/compositewin.h"
+    #include "wx/containr.h"
+
+    class WXDLLIMPEXP_CORE wxSearchCtrlBaseBaseClass
+        : public wxCompositeWindow< wxNavigationEnabled<wxControl> >,
+          public wxTextCtrlIface
     {
     };
 #endif
@@ -38,8 +41,8 @@
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxSearchCtrlNameStr[];
 
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, wxCommandEvent);
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SEARCHCTRL_CANCEL_BTN, wxCommandEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SEARCHCTRL_SEARCH_BTN, wxCommandEvent);
 
 // ----------------------------------------------------------------------------
 // a search ctrl is a text control with a search button and a cancel button
@@ -67,7 +70,7 @@ public:
 
 private:
     // implement wxTextEntry pure virtual method
-    virtual wxWindow *GetEditableWindow() { return this; }
+    virtual wxWindow *GetEditableWindow() wxOVERRIDE { return this; }
 };
 
 
@@ -85,10 +88,14 @@ private:
 // ----------------------------------------------------------------------------
 
 #define EVT_SEARCHCTRL_CANCEL_BTN(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, id, wxCommandEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_SEARCHCTRL_CANCEL_BTN, id, wxCommandEventHandler(fn))
 
 #define EVT_SEARCHCTRL_SEARCH_BTN(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, id, wxCommandEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_SEARCHCTRL_SEARCH_BTN, id, wxCommandEventHandler(fn))
+
+// old wxEVT_COMMAND_* constants
+#define wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN   wxEVT_SEARCHCTRL_CANCEL_BTN
+#define wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN   wxEVT_SEARCHCTRL_SEARCH_BTN
 
 #endif // wxUSE_SEARCHCTRL
 

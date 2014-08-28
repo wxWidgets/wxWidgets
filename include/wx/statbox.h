@@ -5,7 +5,6 @@
 // Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -17,6 +16,7 @@
 #if wxUSE_STATBOX
 
 #include "wx/control.h"
+#include "wx/containr.h"
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxStaticBoxNameStr[];
 
@@ -24,14 +24,13 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxStaticBoxNameStr[];
 // wxStaticBox: a grouping box with a label
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxStaticBoxBase : public wxControl
+class WXDLLIMPEXP_CORE wxStaticBoxBase : public wxNavigationEnabled<wxControl>
 {
 public:
-    wxStaticBoxBase() { }
+    wxStaticBoxBase();
 
     // overridden base class virtuals
-    virtual bool AcceptsFocus() const { return false; }
-    virtual bool HasTransparentBackground() { return true; }
+    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
 
     // implementation only: this is used by wxStaticBoxSizer to account for the
     // need for extra space taken by the static box
@@ -48,7 +47,7 @@ public:
 
 protected:
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
     wxDECLARE_NO_COPY_CLASS(wxStaticBoxBase);
 };
@@ -65,10 +64,6 @@ protected:
     #include "wx/gtk1/statbox.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/statbox.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/statbox.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/statbox.h"
 #elif defined(__WXQT__)
     #include "wx/qt/statbox.h"
 #endif

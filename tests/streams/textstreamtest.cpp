@@ -3,7 +3,6 @@
 // Purpose:     wxTextXXXStream unit test
 // Author:      Ryan Norton, Vince Harron
 // Created:     2004-08-14
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Ryan Norton, (c) 2006 Vince Harron
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -48,7 +47,7 @@ private:
 
 #if wxUSE_LONGLONG
         CPPUNIT_TEST( TestLongLong );
-        CPPUNIT_TEST( TestLongLong );
+        CPPUNIT_TEST( TestULongLong );
 #endif // wxUSE_LONGLONG
 
 #if wxUSE_UNICODE
@@ -93,7 +92,7 @@ TextStreamTestCase::TextStreamTestCase()
 {
 }
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WINDOWS__)
 #   define NEWLINE "\r\n"
 #   define NEWLINELEN 2
 #elif defined(__WXMAC__) && !defined(__DARWIN__)

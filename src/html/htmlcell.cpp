@@ -2,7 +2,6 @@
 // Name:        src/html/htmlcell.cpp
 // Purpose:     wxHtmlCell - basic element of HTML output
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -108,66 +107,11 @@ void wxHtmlCell::SetScriptMode(wxHtmlScriptMode mode, long previousBase)
     m_Descent += m_ScriptBaseline;
 }
 
-#if WXWIN_COMPATIBILITY_2_6
-
-struct wxHtmlCellOnMouseClickCompatHelper;
-
-static wxHtmlCellOnMouseClickCompatHelper *gs_helperOnMouseClick = NULL;
-
-// helper for routing calls to new ProcessMouseClick() method to deprecated
-// OnMouseClick() method
-struct wxHtmlCellOnMouseClickCompatHelper
-{
-    wxHtmlCellOnMouseClickCompatHelper(wxHtmlWindowInterface *window_,
-                                       const wxPoint& pos_,
-                                       const wxMouseEvent& event_)
-        : window(window_), pos(pos_), event(event_), retval(false)
-    {
-    }
-
-    bool CallOnMouseClick(wxHtmlCell *cell)
-    {
-        wxHtmlCellOnMouseClickCompatHelper *oldHelper = gs_helperOnMouseClick;
-        gs_helperOnMouseClick = this;
-        cell->OnMouseClick
-              (
-                window ? window->GetHTMLWindow() : NULL,
-                pos.x, pos.y,
-                event
-              );
-        gs_helperOnMouseClick = oldHelper;
-        return retval;
-    }
-
-    wxHtmlWindowInterface *window;
-    const wxPoint& pos;
-    const wxMouseEvent& event;
-    bool retval;
-};
-#endif // WXWIN_COMPATIBILITY_2_6
-
 bool wxHtmlCell::ProcessMouseClick(wxHtmlWindowInterface *window,
                                    const wxPoint& pos,
                                    const wxMouseEvent& event)
 {
     wxCHECK_MSG( window, false, wxT("window interface must be provided") );
-
-#if WXWIN_COMPATIBILITY_2_6
-    // NB: this hack puts the body of ProcessMouseClick() into OnMouseClick()
-    //     (for which it has to pass the arguments and return value via a
-    //     helper variable because these two methods have different
-    //     signatures), so that old code overriding OnMouseClick will continue
-    //     to work
-    wxHtmlCellOnMouseClickCompatHelper compat(window, pos, event);
-    return compat.CallOnMouseClick(this);
-}
-
-void wxHtmlCell::OnMouseClick(wxWindow *, int, int, const wxMouseEvent& event)
-{
-    wxCHECK_RET( gs_helperOnMouseClick, wxT("unexpected call to OnMouseClick") );
-    wxHtmlWindowInterface *window = gs_helperOnMouseClick->window;
-    const wxPoint& pos = gs_helperOnMouseClick->pos;
-#endif // WXWIN_COMPATIBILITY_2_6
 
     wxHtmlLinkInfo *lnk = GetLink(pos.x, pos.y);
     bool retval = false;
@@ -182,34 +126,26 @@ void wxHtmlCell::OnMouseClick(wxWindow *, int, int, const wxMouseEvent& event)
         retval = true;
     }
 
-#if WXWIN_COMPATIBILITY_2_6
-    gs_helperOnMouseClick->retval = retval;
-#else
     return retval;
-#endif // WXWIN_COMPATIBILITY_2_6
 }
 
-#if WXWIN_COMPATIBILITY_2_6
-wxCursor wxHtmlCell::GetCursor() const
+wxCursor
+wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface* WXUNUSED(window)) const
 {
+    // This is never called directly, only from GetMouseCursorAt() and we
+    // return an invalid cursor by default to let it delegate to the window.
     return wxNullCursor;
 }
-#endif // WXWIN_COMPATIBILITY_2_6
 
-wxCursor wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface *window) const
+wxCursor
+wxHtmlCell::GetMouseCursorAt(wxHtmlWindowInterface *window,
+                             const wxPoint& relPos) const
 {
-#if WXWIN_COMPATIBILITY_2_6
-    // NB: Older versions of wx used GetCursor() virtual method in place of
-    //     GetMouseCursor(interface). This code ensures that user code that
-    //     overridden GetCursor() continues to work. The trick is that the base
-    //     wxHtmlCell::GetCursor() method simply returns wxNullCursor, so we
-    //     know that GetCursor() was overridden iff it returns valid cursor.
-    wxCursor cur = GetCursor();
-    if (cur.IsOk())
-        return cur;
-#endif // WXWIN_COMPATIBILITY_2_6
+    const wxCursor curCell = GetMouseCursor(window);
+    if ( curCell.IsOk() )
+      return curCell;
 
-    if ( GetLink() )
+    if ( GetLink(relPos.x, relPos.y) )
     {
         return window->GetHTMLCursor(wxHtmlWindowInterface::HTMLCursor_Link);
     }
@@ -220,11 +156,16 @@ wxCursor wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface *window) const
 }
 
 
-bool wxHtmlCell::AdjustPagebreak(int *pagebreak,
-                                 wxArrayInt& WXUNUSED(known_pagebreaks)) const
+bool
+wxHtmlCell::AdjustPagebreak(int *pagebreak,
+                            const wxArrayInt& WXUNUSED(known_pagebreaks),
+                            int pageHeight) const
 {
-    if ((!m_CanLiveOnPagebreak) &&
-                m_PosY < *pagebreak && m_PosY + m_Height > *pagebreak)
+    // Notice that we always break the cells bigger than the page height here
+    // as otherwise we wouldn't be able to break them at all.
+    if ( m_Height <= pageHeight &&
+            (!m_CanLiveOnPagebreak &&
+                m_PosY < *pagebreak && m_PosY + m_Height > *pagebreak) )
     {
         *pagebreak = m_PosY;
         return true;
@@ -476,17 +417,10 @@ void wxHtmlWordCell::SetSelectionPrivPos(const wxDC& dc, wxHtmlSelection *s) con
           this == s->GetToCell() ? s->GetToPos() : wxDefaultPosition,
           p1, p2);
 
-    wxPoint p(0, m_Word.length());
-
     if ( this == s->GetFromCell() )
-        p.x = p1; // selection starts here
+        s->SetFromCharacterPos (p1); // selection starts here
     if ( this == s->GetToCell() )
-        p.y = p2; // selection ends here
-
-    if ( this == s->GetFromCell() )
-        s->SetFromPrivPos(p);
-    if ( this == s->GetToCell() )
-        s->SetToPrivPos(p);
+        s->SetToCharacterPos (p2); // selection ends here
 }
 
 
@@ -498,18 +432,19 @@ static void SwitchSelState(wxDC& dc, wxHtmlRenderingInfo& info,
 
     if ( toSelection )
     {
-        dc.SetBackgroundMode(wxBRUSHSTYLE_SOLID);
+        dc.SetBackgroundMode(wxSOLID);
         dc.SetTextForeground(info.GetStyle().GetSelectedTextColour(fg));
         dc.SetTextBackground(info.GetStyle().GetSelectedTextBgColour(bg));
-        dc.SetBackground(wxBrush(info.GetStyle().GetSelectedTextBgColour(bg),
-                                 wxBRUSHSTYLE_SOLID));
+        dc.SetBackground(info.GetStyle().GetSelectedTextBgColour(bg));
     }
     else
     {
-        dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
+        const int mode = info.GetState().GetBgMode();
+        dc.SetBackgroundMode(mode);
         dc.SetTextForeground(fg);
         dc.SetTextBackground(bg);
-        dc.SetBackground(wxBrush(bg, wxBRUSHSTYLE_SOLID));
+        if ( mode != wxTRANSPARENT )
+            dc.SetBackground(bg);
     }
 }
 
@@ -533,23 +468,18 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
         int w, h;
         int ofs = 0;
 
-        wxPoint priv = (this == s->GetFromCell()) ?
-                           s->GetFromPrivPos() : s->GetToPrivPos();
-
         // NB: this is quite a hack: in order to compute selection boundaries
         //     (in word's characters) we must know current font, which is only
         //     possible inside rendering code. Therefore we update the
         //     information here and store it in wxHtmlSelection so that
         //     ConvertToText can use it later:
-        if ( priv == wxDefaultPosition )
+        if ( !s->AreFromToCharacterPosSet () )
         {
             SetSelectionPrivPos(dc, s);
-            priv = (this == s->GetFromCell()) ?
-                    s->GetFromPrivPos() : s->GetToPrivPos();
         }
 
-        int part1 = priv.x;
-        int part2 = priv.y;
+        int part1 = s->GetFromCell()==this ? s->GetFromCharacterPos() : 0;
+        int part2 = s->GetToCell()==this   ? s->GetToCharacterPos()   : m_Word.Length();
 
         if ( part1 > 0 )
         {
@@ -579,16 +509,7 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
     {
         wxHtmlSelectionState selstate = info.GetState().GetSelectionState();
         // Not changing selection state, draw the word in single mode:
-        if ( selstate != wxHTML_SEL_OUT &&
-             dc.GetBackgroundMode() != wxBRUSHSTYLE_SOLID )
-        {
-            SwitchSelState(dc, info, true);
-        }
-        else if ( selstate == wxHTML_SEL_OUT &&
-                  dc.GetBackgroundMode() == wxBRUSHSTYLE_SOLID )
-        {
-            SwitchSelState(dc, info, false);
-        }
+        SwitchSelState(dc, info, selstate != wxHTML_SEL_OUT);
         dc.DrawText(m_Word, x + m_PosX, y + m_PosY);
         drawSelectionAfterCell = (selstate != wxHTML_SEL_OUT);
     }
@@ -634,9 +555,6 @@ wxString wxHtmlWordCell::ConvertToText(wxHtmlSelection *s) const
 {
     if ( s && (this == s->GetFromCell() || this == s->GetToCell()) )
     {
-        wxPoint priv = this == s->GetFromCell() ? s->GetFromPrivPos()
-                                                : s->GetToPrivPos();
-
         // VZ: we may be called before we had a chance to re-render ourselves
         //     and in this case GetFrom/ToPrivPos() is not set yet -- assume
         //     that this only happens in case of a double/triple click (which
@@ -644,10 +562,10 @@ wxString wxHtmlWordCell::ConvertToText(wxHtmlSelection *s) const
         //     entire contents of the cell in this case
         //
         // TODO: but this really needs to be fixed in some better way later...
-        if ( priv != wxDefaultPosition )
+        if ( s->AreFromToCharacterPosSet() )
         {
-            const int part1 = priv.x;
-            const int part2 = priv.y;
+            const int part1 = s->GetFromCell()==this ? s->GetFromCharacterPos() : 0;
+            const int part2 = s->GetToCell()==this   ? s->GetToCharacterPos()   : m_Word.Length();
             if ( part1 == part2 )
                 return wxEmptyString;
             return GetPartAsText(part1, part2);
@@ -733,7 +651,7 @@ wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCe
     m_AlignVer = wxHTML_ALIGN_BOTTOM;
     m_IndentLeft = m_IndentRight = m_IndentTop = m_IndentBottom = 0;
     m_WidthFloat = 100; m_WidthFloatUnits = wxHTML_UNITS_PERCENT;
-    m_UseBkColour = false;
+    m_BkColour = wxNullColour;
     m_Border = 0;
     m_MinHeight = 0;
     m_MinHeightAlign = wxHTML_ALIGN_TOP;
@@ -789,11 +707,13 @@ int wxHtmlContainerCell::GetIndentUnits(int ind) const
 }
 
 
-bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak,
-                                          wxArrayInt& known_pagebreaks) const
+bool
+wxHtmlContainerCell::AdjustPagebreak(int *pagebreak,
+                                     const wxArrayInt& known_pagebreaks,
+                                     int pageHeight) const
 {
     if (!m_CanLiveOnPagebreak)
-        return wxHtmlCell::AdjustPagebreak(pagebreak, known_pagebreaks);
+        return wxHtmlCell::AdjustPagebreak(pagebreak, known_pagebreaks, pageHeight);
 
     wxHtmlCell *c = GetFirstChild();
     bool rt = false;
@@ -801,7 +721,7 @@ bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak,
 
     while (c)
     {
-        if (c->AdjustPagebreak(&pbrk, known_pagebreaks))
+        if (c->AdjustPagebreak(&pbrk, known_pagebreaks, pageHeight))
             rt = true;
         c = c->GetNext();
     }
@@ -1111,7 +1031,7 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
     int xlocal = x + m_PosX;
     int ylocal = y + m_PosY;
 
-    if (m_UseBkColour)
+    if (m_BkColour.IsOk())
     {
         wxBrush myb = wxBrush(m_BkColour, wxBRUSHSTYLE_SOLID);
 
@@ -1232,10 +1152,7 @@ void wxHtmlContainerCell::DrawInvisible(wxDC& dc, int x, int y,
 
 wxColour wxHtmlContainerCell::GetBackgroundColour()
 {
-    if (m_UseBkColour)
-        return m_BkColour;
-    else
-        return wxNullColour;
+    return m_BkColour;
 }
 
 
@@ -1269,9 +1186,9 @@ void wxHtmlContainerCell::InsertCell(wxHtmlCell *f)
 
 void wxHtmlContainerCell::SetAlign(const wxHtmlTag& tag)
 {
-    if (tag.HasParam(wxT("ALIGN")))
+    wxString alg;
+    if (tag.GetParamAsString(wxT("ALIGN"), &alg))
     {
-        wxString alg = tag.GetParam(wxT("ALIGN"));
         alg.MakeUpper();
         if (alg == wxT("CENTER"))
             SetAlignHor(wxHTML_ALIGN_CENTER);
@@ -1289,19 +1206,16 @@ void wxHtmlContainerCell::SetAlign(const wxHtmlTag& tag)
 
 void wxHtmlContainerCell::SetWidthFloat(const wxHtmlTag& tag, double pixel_scale)
 {
-    if (tag.HasParam(wxT("WIDTH")))
+    int wdi;
+    bool wpercent;
+    if (tag.GetParamAsIntOrPercent(wxT("WIDTH"), &wdi, wpercent))
     {
-        int wdi;
-        wxString wd = tag.GetParam(wxT("WIDTH"));
-
-        if (wd[wd.length()-1] == wxT('%'))
+        if (wpercent)
         {
-            wxSscanf(wd.c_str(), wxT("%i%%"), &wdi);
             SetWidthFloat(wdi, wxHTML_UNITS_PERCENT);
         }
         else
         {
-            wxSscanf(wd.c_str(), wxT("%i"), &wdi);
             SetWidthFloat((int)(pixel_scale * (double)wdi), wxHTML_UNITS_PIXELS);
         }
         m_LastLayout = -1;
@@ -1383,29 +1297,12 @@ bool wxHtmlContainerCell::ProcessMouseClick(wxHtmlWindowInterface *window,
                                             const wxPoint& pos,
                                             const wxMouseEvent& event)
 {
-#if WXWIN_COMPATIBILITY_2_6
-    wxHtmlCellOnMouseClickCompatHelper compat(window, pos, event);
-    return compat.CallOnMouseClick(this);
-}
-
-void wxHtmlContainerCell::OnMouseClick(wxWindow*,
-                                       int, int, const wxMouseEvent& event)
-{
-    wxCHECK_RET( gs_helperOnMouseClick, wxT("unexpected call to OnMouseClick") );
-    wxHtmlWindowInterface *window = gs_helperOnMouseClick->window;
-    const wxPoint& pos = gs_helperOnMouseClick->pos;
-#endif // WXWIN_COMPATIBILITY_2_6
-
     bool retval = false;
     wxHtmlCell *cell = FindCellByPos(pos.x, pos.y);
     if ( cell )
         retval = cell->ProcessMouseClick(window, pos, event);
 
-#if WXWIN_COMPATIBILITY_2_6
-    gs_helperOnMouseClick->retval = retval;
-#else
     return retval;
-#endif // WXWIN_COMPATIBILITY_2_6
 }
 
 
@@ -1560,17 +1457,23 @@ void wxHtmlColourCell::DrawInvisible(wxDC& dc,
     if (m_Flags & wxHTML_CLR_BACKGROUND)
     {
         state.SetBgColour(m_Colour);
-        if (state.GetSelectionState() != wxHTML_SEL_IN)
-        {
-            dc.SetTextBackground(m_Colour);
-            dc.SetBackground(wxBrush(m_Colour, wxBRUSHSTYLE_SOLID));
-        }
-        else
-        {
-            wxColour c = info.GetStyle().GetSelectedTextBgColour(m_Colour);
-            dc.SetTextBackground(c);
-            dc.SetBackground(wxBrush(c, wxBRUSHSTYLE_SOLID));
-        }
+        state.SetBgMode(wxSOLID);
+        const wxColour c = state.GetSelectionState() == wxHTML_SEL_IN
+                         ? info.GetStyle().GetSelectedTextBgColour(m_Colour)
+                         : m_Colour;
+        dc.SetTextBackground(c);
+        dc.SetBackground(c);
+        dc.SetBackgroundMode(wxSOLID);
+    }
+    if (m_Flags & wxHTML_CLR_TRANSPARENT_BACKGROUND)
+    {
+        state.SetBgColour(m_Colour);
+        state.SetBgMode(wxTRANSPARENT);
+        const wxColour c = state.GetSelectionState() == wxHTML_SEL_IN
+                         ? info.GetStyle().GetSelectedTextBgColour(m_Colour)
+                         : m_Colour;
+        dc.SetTextBackground(c);
+        dc.SetBackgroundMode(wxTRANSPARENT);
     }
 }
 

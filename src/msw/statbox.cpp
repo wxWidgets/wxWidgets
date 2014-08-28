@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -33,6 +32,7 @@
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/image.h"
+    #include "wx/sizer.h"
 #endif
 
 #include "wx/notebook.h"
@@ -76,12 +76,15 @@ bool wxStaticBox::Create(wxWindow *parent,
     if ( !MSWCreateControl(wxT("BUTTON"), label, pos, size) )
         return false;
 
-    // Always use LTR layout. Otherwise, the label would be mirrored.
-    SetLayoutDirection(wxLayout_LeftToRight);
-
 #ifndef __WXWINCE__
     if (!wxSystemOptions::IsFalse(wxT("msw.staticbox.optimized-paint")))
+    {
         Connect(wxEVT_PAINT, wxPaintEventHandler(wxStaticBox::OnPaint));
+
+        // Our OnPaint() completely erases our background, so don't do it in
+        // WM_ERASEBKGND too to avoid flicker.
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
+    }
 #endif // !__WXWINCE__
 
     return true;
@@ -98,26 +101,27 @@ WXDWORD wxStaticBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     if ( exstyle )
     {
 #ifndef __WXWINCE__
+        // We may have children inside this static box, so use this style for
+        // TAB navigation to work if we ever use IsDialogMessage() to implement
+        // it (currently we don't because it's too buggy and implement TAB
+        // navigation ourselves, but this could change in the future).
+        *exstyle |= WS_EX_CONTROLPARENT;
+
         if (wxSystemOptions::IsFalse(wxT("msw.staticbox.optimized-paint")))
-            *exstyle = WS_EX_TRANSPARENT;
-        else
+            *exstyle |= WS_EX_TRANSPARENT;
 #endif
-            *exstyle = 0;
     }
 
     styleWin |= BS_GROUPBOX;
-
-    if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
-    {
-        // Make sure label is on the right
-        styleWin |= BS_RIGHT;
-    }
 
     return styleWin;
 }
 
 wxSize wxStaticBox::DoGetBestSize() const
 {
+    wxSize best;
+
+    // Calculate the size needed by the label
     int cx, cy;
     wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
 
@@ -127,8 +131,19 @@ wxSize wxStaticBox::DoGetBestSize() const
     wBox += 3*cx;
     int hBox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
 
-    wxSize best(wBox, hBox);
-    CacheBestSize(best);
+    // If there is a sizer then the base best size is the sizer's minimum
+    if (GetSizer() != NULL)
+    {
+        wxSize cm(GetSizer()->CalcMin());
+        best = ClientToWindowSize(cm);
+        // adjust for a long label if needed
+        best.x = wxMax(best.x, wBox);
+    }
+    // otherwise the best size falls back to the label size
+    else
+    {
+        best = wxSize(wBox, hBox);
+    }
     return best;
 }
 
@@ -253,15 +268,36 @@ void wxStaticBox::MSWGetRegionWithoutSelf(WXHRGN hRgn, int w, int h)
     SubtractRectFromRgn(hrgn, w - border, 0, w, h);
 }
 
+namespace {
+RECT AdjustRectForRtl(wxLayoutDirection dir, RECT const& childRect, RECT const& boxRect) {
+    RECT ret = childRect;
+    if( dir == wxLayout_RightToLeft ) {
+        // The clipping region too is mirrored in RTL layout.
+        // We need to mirror screen coordinates relative to static box window priot to
+        // intersecting with region.
+        ret.right = boxRect.right - childRect.left - boxRect.left;
+        ret.left = boxRect.right - childRect.right - boxRect.left;
+    }
+
+    return ret;
+}
+}
+
 WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
 {
-    RECT rc;
-    ::GetWindowRect(GetHwnd(), &rc);
-    HRGN hrgn = ::CreateRectRgn(rc.left, rc.top, rc.right + 1, rc.bottom + 1);
+    RECT boxRc;
+    ::GetWindowRect(GetHwnd(), &boxRc);
+    HRGN hrgn = ::CreateRectRgn(boxRc.left, boxRc.top, boxRc.right + 1, boxRc.bottom + 1);
     bool foundThis = false;
 
-    // iterate over all child windows (not just wxWindows but all windows)
-    for ( HWND child = ::GetWindow(GetHwndOf(GetParent()), GW_CHILD);
+    // Iterate over all sibling windows as in the old wxWidgets API the
+    // controls appearing inside the static box were created as its siblings
+    // and not children. This is now deprecated but should still work.
+    //
+    // Also notice that we must iterate over all windows, not just all
+    // wxWindows, as there may be composite windows etc.
+    HWND child;
+    for ( child = ::GetWindow(GetHwndOf(GetParent()), GW_CHILD);
           child;
           child = ::GetWindow(child, GW_HWNDNEXT) )
     {
@@ -290,7 +326,9 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
                 continue;
         }
 
+        RECT rc;
         ::GetWindowRect(child, &rc);
+        rc = AdjustRectForRtl(GetLayoutDirection(), rc, boxRc );
         if ( ::RectInRegion(hrgn, &rc) )
         {
             // need to remove WS_CLIPSIBLINGS from all sibling windows
@@ -311,6 +349,25 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
             AutoHRGN hrgnChild(::CreateRectRgnIndirect(&rc));
             ::CombineRgn(hrgn, hrgn, hrgnChild, RGN_DIFF);
         }
+    }
+
+    // Also iterate over all children of the static box, we need to clip them
+    // out as well.
+    for ( child = ::GetWindow(GetHwnd(), GW_CHILD);
+          child;
+          child = ::GetWindow(child, GW_HWNDNEXT) )
+    {
+        if ( !::IsWindowVisible(child) )
+        {
+            // if the window isn't visible then it doesn't need clipped
+            continue;
+        }
+
+        RECT rc;
+        ::GetWindowRect(child, &rc);
+        rc = AdjustRectForRtl(GetLayoutDirection(), rc, boxRc );
+        AutoHRGN hrgnChild(::CreateRectRgnIndirect(&rc));
+        ::CombineRgn(hrgn, hrgn, hrgnChild, RGN_DIFF);
     }
 
     return (WXHRGN)hrgn;
@@ -344,11 +401,12 @@ void wxStaticBox::PaintBackground(wxDC& dc, const RECT& rc)
     ::FillRect(GetHdcOf(*impl), &rc, hbr);
 }
 
-void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
+void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
 {
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
     MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(*impl), 0);
 
+#if wxUSE_UXTHEME
     // when using XP themes, neither setting the text colour nor transparent
     // background mode doesn't change anything: the static box def window proc
     // still draws the label in its own colours, so we need to redraw the text
@@ -358,10 +416,6 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
         // draw over the text in default colour in our colour
         HDC hdc = GetHdcOf(*impl);
         ::SetTextColor(hdc, GetForegroundColour().GetPixel());
-
-        const bool rtl = wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft;
-        if ( rtl )
-            ::SetTextAlign(hdc, TA_RTLREADING | TA_RIGHT);
 
         // Get dimensions of the label
         const wxString label = GetLabel();
@@ -410,18 +464,9 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
         // FIXME: value of x is hardcoded as this is what it is on my system,
         //        no idea if it's true everywhere
         RECT dimensions = {0, 0, 0, y};
-        if ( !rtl )
-        {
-            x = 9;
-            dimensions.left = x;
-            dimensions.right = x + width;
-        }
-        else
-        {
-            x = rc.right - 7;
-            dimensions.left = x - width;
-            dimensions.right = x;
-        }
+        x = 9;
+        dimensions.left = x;
+        dimensions.right = x + width;
 
         // need to adjust the rectangle to cover all the label background
         dimensions.left -= 2;
@@ -457,28 +502,21 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
         }
 
         // now draw the text
-        if ( !rtl )
-        {
-            RECT rc2 = { x, 0, x + width, y };
-            ::DrawText(hdc, label.wx_str(), label.length(), &rc2,
-                       drawTextFlags);
-        }
-        else // RTL
-        {
-            RECT rc2 = { x, 0, x - width, y };
-            ::DrawText(hdc, label.wx_str(), label.length(), &rc2,
-                       drawTextFlags | DT_RTLREADING);
-        }
+        RECT rc2 = { x, 0, x + width, y };
+        ::DrawText(hdc, label.t_str(), label.length(), &rc2,
+                   drawTextFlags);
     }
+#endif // wxUSE_UXTHEME
 }
 
 void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     RECT rc;
     ::GetClientRect(GetHwnd(), &rc);
+    wxPaintDC dc(this);
 
     // draw the entire box in a memory DC
-    wxMemoryDC memdc;
+    wxMemoryDC memdc(&dc);
     wxBitmap bitmap(rc.right, rc.bottom);
     memdc.SelectObject(bitmap);
 
@@ -491,7 +529,6 @@ void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
     // note that it seems to be faster to do 4 small blits here and then paint
     // directly into wxPaintDC than painting background in wxMemoryDC and then
     // blitting everything at once to wxPaintDC, this is why we do it like this
-    wxPaintDC dc(this);
     int borderTop, border;
     GetBordersForSizer(&borderTop, &border);
 

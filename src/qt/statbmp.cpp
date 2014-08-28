@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/statbmp.cpp
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,6 +9,15 @@
 #include "wx/wxprec.h"
 
 #include "wx/statbmp.h"
+#include "wx/qt/private/winevent.h"
+
+class wxQtStaticBmp : public wxQtEventSignalHandler< QLabel, wxStaticBitmap >
+{
+public:
+    wxQtStaticBmp( wxWindow *parent, wxStaticBitmap *handler ):
+        wxQtEventSignalHandler< QLabel, wxStaticBitmap >( parent, handler ){}
+};
+
 
 wxStaticBitmap::wxStaticBitmap()
 {
@@ -34,7 +42,7 @@ bool wxStaticBitmap::Create( wxWindow *parent,
              long style,
              const wxString& name)
 {
-    m_qtLabel = new QLabel( parent->GetHandle() );
+    m_qtLabel = new wxQtStaticBmp( parent, this );
     SetBitmap( label );
 
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
@@ -58,12 +66,18 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 
 wxBitmap wxStaticBitmap::GetBitmap() const
 {
-    return wxBitmap();
+    const QPixmap* pix = m_qtLabel->pixmap();
+    if ( pix != NULL )
+        return wxBitmap( *pix );
+    else
+        return wxBitmap();
 }
 
 wxIcon wxStaticBitmap::GetIcon() const
 {
-    return wxIcon();
+    wxIcon icon;
+    icon.CopyFromBitmap( GetBitmap() );
+    return icon;
 }
 
 QLabel *wxStaticBitmap::GetHandle() const

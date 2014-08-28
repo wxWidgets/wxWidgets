@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Dimitri Schoolwerth
 // Created:     26/10/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998-2002 wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -26,7 +25,7 @@
 #include "wx/utils.h"
 #include "notebook.h"
 
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -222,7 +221,7 @@ wxPanel *CreatePage(wxBookCtrlBase *parent, const wxString&pageName)
 // MyFrame
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     // File menu
     EVT_MENU_RANGE(ID_BOOK_NOTEBOOK, ID_BOOK_MAX, MyFrame::OnType)
     EVT_MENU_RANGE(ID_ORIENT_DEFAULT, ID_ORIENT_MAX, MyFrame::OnOrient)
@@ -239,6 +238,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NEXT_PAGE, MyFrame::OnNextPage)
     EVT_MENU(ID_CHANGE_SELECTION, MyFrame::OnChangeSelection)
     EVT_MENU(ID_SET_SELECTION, MyFrame::OnSetSelection)
+    EVT_MENU(ID_GET_PAGE_SIZE, MyFrame::OnGetPageSize)
+    EVT_MENU(ID_SET_PAGE_SIZE, MyFrame::OnSetPageSize)
 
 #if wxUSE_HELP
     EVT_MENU(ID_CONTEXT_HELP, MyFrame::OnContextHelp)
@@ -271,10 +272,14 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_TOOLBOOK_PAGE_CHANGED(wxID_ANY, MyFrame::OnToolbook)
     EVT_TOOLBOOK_PAGE_CHANGING(wxID_ANY, MyFrame::OnToolbook)
 #endif
+#if wxUSE_AUI
+    EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY, MyFrame::OnAuiNotebook)
+    EVT_AUINOTEBOOK_PAGE_CHANGING(wxID_ANY, MyFrame::OnAuiNotebook)
+#endif
 
     // Update title in idle time
     EVT_IDLE(MyFrame::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
     : wxFrame(NULL, wxID_ANY, wxString(wxT("wxWidgets book controls sample")))
@@ -293,8 +298,10 @@ MyFrame::MyFrame()
     m_type = Type_Treebook;
 #elif wxUSE_TOOLBOOK
     m_type = Type_Toolbook;
+#elif wxUSE_AUI
+    m_type = Type_Aui;
 #else
-    #error "Don't use Notebook sample without any book enabled in wxWidgets build!"
+    m_type = Type_Simplebook;
 #endif
 
     m_orient = ID_ORIENT_DEFAULT;
@@ -324,6 +331,10 @@ MyFrame::MyFrame()
 #if wxUSE_TOOLBOOK
     menuType->AppendRadioItem(ID_BOOK_TOOLBOOK,   wxT("T&oolbook\tCtrl-5"));
 #endif
+#if wxUSE_AUI
+    menuType->AppendRadioItem(ID_BOOK_AUINOTEBOOK,   wxT("&AuiNotebook\tCtrl-6"));
+#endif
+    menuType->AppendRadioItem(ID_BOOK_SIMPLEBOOK, "&Simple book\tCtrl-7");
 
     menuType->Check(ID_BOOK_NOTEBOOK + m_type, true);
 
@@ -360,6 +371,9 @@ MyFrame::MyFrame()
     menuPageOperations->AppendSeparator();
     menuPageOperations->Append(ID_CHANGE_SELECTION, wxT("&Change selection to 0\tCtrl-0"));
     menuPageOperations->Append(ID_SET_SELECTION, wxT("&Set selection to 0\tShift-Ctrl-0"));
+    menuPageOperations->AppendSeparator();
+    menuPageOperations->Append(ID_GET_PAGE_SIZE, "Sho&w page size");
+    menuPageOperations->Append(ID_SET_PAGE_SIZE, "Set &page size");
 
     wxMenu *menuOperations = new wxMenu;
 #if wxUSE_HELP
@@ -469,7 +483,15 @@ MyFrame::~MyFrame()
     #define CASE_TOOLBOOK(x)
 #endif
 
-#define DISPATCH_ON_TYPE(before, nb, lb, cb, tb, toolb, after)                \
+#if wxUSE_AUI
+    #define CASE_AUINOTEBOOK(x) case Type_AuiNotebook: x; break;
+#else
+    #define CASE_AUINOTEBOOK(x)
+#endif
+
+#define CASE_SIMPLEBOOK(x) case Type_Simplebook: x; break;
+
+#define DISPATCH_ON_TYPE(before, nb, lb, cb, tb, toolb, aui, sb, after)       \
     switch ( m_type )                                                         \
     {                                                                         \
         CASE_NOTEBOOK(before nb after)                                        \
@@ -477,19 +499,12 @@ MyFrame::~MyFrame()
         CASE_CHOICEBOOK(before cb after)                                      \
         CASE_TREEBOOK(before tb after)                                        \
         CASE_TOOLBOOK(before toolb after)                                     \
+        CASE_AUINOTEBOOK(before aui after)                                    \
+        CASE_SIMPLEBOOK(before sb after)                                      \
                                                                               \
         default:                                                              \
-            wxFAIL_MSG( wxT("unknown book control type") );                    \
+            wxFAIL_MSG( wxT("unknown book control type") );                   \
     }
-
-int MyFrame::TranslateBookFlag(int nb, int lb, int chb, int tbk, int toolbk) const
-{
-    int flag = 0;
-
-    DISPATCH_ON_TYPE(flag =, nb,  lb,  chb,  tbk, toolbk, + 0);
-
-    return flag;
-}
 
 void MyFrame::RecreateBook()
 {
@@ -541,6 +556,8 @@ void MyFrame::RecreateBook()
                          wxChoicebook,
                          wxTreebook,
                          wxToolbook,
+                         wxAuiNotebook,
+                         wxSimplebook,
                      (m_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, flags));
 
     if ( !m_bookCtrl )
@@ -891,6 +908,33 @@ void MyFrame::OnSetSelection(wxCommandEvent& WXUNUSED(event))
         currBook->SetSelection(0);
 }
 
+void MyFrame::OnGetPageSize(wxCommandEvent& WXUNUSED(event))
+{
+    wxBookCtrlBase* const currBook = GetCurrentBook();
+    if ( !currBook )
+        return;
+
+    const wxSize sizePage = currBook->GetPage(0)->GetSize();
+    const wxSize sizeBook = currBook->GetSize();
+
+    wxLogMessage("Page size is (%d, %d), book size (%d, %d)",
+                 sizePage.x, sizePage.y,
+                 sizeBook.x, sizeBook.y);
+}
+
+void MyFrame::OnSetPageSize(wxCommandEvent& WXUNUSED(event))
+{
+    wxBookCtrlBase* const currBook = GetCurrentBook();
+    if ( !currBook )
+        return;
+
+    const wxSize sizePage(300, 300);
+    currBook->SetPageSize(sizePage);
+
+    wxLogMessage("Page size set to (%d, %d)",
+                 sizePage.x, sizePage.y);
+}
+
 void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
 {
     static int s_nPages = wxNOT_FOUND;
@@ -932,39 +976,46 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
     {
 #if wxUSE_NOTEBOOK
         {
-            wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
-            wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,
+            wxEVT_NOTEBOOK_PAGE_CHANGED,
+            wxEVT_NOTEBOOK_PAGE_CHANGING,
             wxT("wxNotebook")
         },
 #endif // wxUSE_NOTEBOOK
 #if wxUSE_LISTBOOK
         {
-            wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED,
-            wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING,
+            wxEVT_LISTBOOK_PAGE_CHANGED,
+            wxEVT_LISTBOOK_PAGE_CHANGING,
             wxT("wxListbook")
         },
 #endif // wxUSE_LISTBOOK
 #if wxUSE_CHOICEBOOK
         {
-            wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED,
-            wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING,
+            wxEVT_CHOICEBOOK_PAGE_CHANGED,
+            wxEVT_CHOICEBOOK_PAGE_CHANGING,
             wxT("wxChoicebook")
         },
 #endif // wxUSE_CHOICEBOOK
 #if wxUSE_TREEBOOK
         {
-            wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED,
-            wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING,
+            wxEVT_TREEBOOK_PAGE_CHANGED,
+            wxEVT_TREEBOOK_PAGE_CHANGING,
             wxT("wxTreebook")
         },
 #endif // wxUSE_TREEBOOK
 #if wxUSE_TOOLBOOK
         {
-            wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED,
-            wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING,
+            wxEVT_TOOLBOOK_PAGE_CHANGED,
+            wxEVT_TOOLBOOK_PAGE_CHANGING,
             wxT("wxToolbook")
         },
 #endif // wxUSE_TOOLBOOK
+#if wxUSE_AUI
+        {
+            wxEVT_AUINOTEBOOK_PAGE_CHANGED,
+            wxEVT_AUINOTEBOOK_PAGE_CHANGING,
+            wxT("wxAuiNotebook")
+        },
+#endif // wxUSE_AUI
     };
 
 

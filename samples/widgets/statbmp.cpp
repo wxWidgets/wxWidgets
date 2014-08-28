@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing wxStaticBitmap
 // Author:      Marcin Wojdyr
 // Created:     2008-06-19
-// Id:          $Id$
 // Copyright:   (c) 2008 Marcin Wojdyr
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -52,9 +51,9 @@ public:
     StatBmpWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
         : WidgetsPage(book, imaglist, statbmp_xpm) {}
 
-    virtual void CreateContent();
-    virtual wxControl *GetWidget() const { return m_statbmp; }
-    virtual void RecreateWidget();
+    virtual void CreateContent() wxOVERRIDE;
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_statbmp; }
+    virtual void RecreateWidget() wxOVERRIDE;
 
 private:
     void OnFileChange(wxFileDirPickerEvent &WXUNUSED(ev)) { RecreateWidget(); }
@@ -104,9 +103,9 @@ void StatBmpWidgetsPage::CreateContent()
 
     wxInitAllImageHandlers();
 
-    Connect(wxEVT_COMMAND_FILEPICKER_CHANGED,
+    Connect(wxEVT_FILEPICKER_CHANGED,
             wxFileDirPickerEventHandler(StatBmpWidgetsPage::OnFileChange));
-    Connect(wxEVT_COMMAND_RADIOBOX_SELECTED,
+    Connect(wxEVT_RADIOBOX,
             wxCommandEventHandler(StatBmpWidgetsPage::OnRadioChange));
 
     m_statbmp = NULL;

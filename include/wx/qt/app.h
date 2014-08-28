@@ -4,7 +4,6 @@
 // Author:      Peter Most
 // Modified by:
 // Created:     08/08/09
-// RCS-ID:      $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -12,8 +11,7 @@
 #ifndef _WX_QT_APP_H_
 #define _WX_QT_APP_H_
 
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 
 class WXDLLIMPEXP_CORE wxApp : public wxAppBase
 {
@@ -24,7 +22,7 @@ public:
     virtual bool Initialize(int& argc, wxChar **argv);
 
 private:
-    wxQtPointer< QApplication > m_qtApplication;
+    QApplication *m_qtApplication;
     int m_qtArgc;
     char **m_qtArgv;
     

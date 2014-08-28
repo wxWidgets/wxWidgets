@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by: Robert Vazan (sizers)
 // Created:     28.09.99
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -47,13 +46,13 @@ public:
     virtual ~wxWizard();
 
     // implement base class pure virtuals
-    virtual bool RunWizard(wxWizardPage *firstPage);
-    virtual wxWizardPage *GetCurrentPage() const;
-    virtual void SetPageSize(const wxSize& size);
-    virtual wxSize GetPageSize() const;
-    virtual void FitToPage(const wxWizardPage *firstPage);
-    virtual wxSizer *GetPageAreaSizer() const;
-    virtual void SetBorder(int border);
+    virtual bool RunWizard(wxWizardPage *firstPage) wxOVERRIDE;
+    virtual wxWizardPage *GetCurrentPage() const wxOVERRIDE;
+    virtual void SetPageSize(const wxSize& size) wxOVERRIDE;
+    virtual wxSize GetPageSize() const wxOVERRIDE;
+    virtual void FitToPage(const wxWizardPage *firstPage) wxOVERRIDE;
+    virtual wxSizer *GetPageAreaSizer() const wxOVERRIDE;
+    virtual void SetBorder(int border) wxOVERRIDE;
 
     /// set/get bitmap
     const wxBitmap& GetBitmap() const { return m_bitmap; }
@@ -75,7 +74,7 @@ public:
     virtual void DoCreateControls();
 
     // Do the adaptation
-    virtual bool DoLayoutAdaptation();
+    virtual bool DoLayoutAdaptation() wxOVERRIDE;
 
     // Set/get bitmap background colour
     void SetBitmapBackgroundColour(const wxColour& colour) { m_bitmapBackgroundColour = colour; }

@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/toplevel.cpp
 // Author:      Peter Most, Javier Torres
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,14 +9,14 @@
 #include "wx/wxprec.h"
 
 #include "wx/toplevel.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 #include <QtGui/QIcon>
 
-wxTopLevelWindowNative::wxTopLevelWindowNative()
+wxTopLevelWindowQt::wxTopLevelWindowQt()
 {
 }
 
-wxTopLevelWindowNative::wxTopLevelWindowNative(wxWindow *parent,
+wxTopLevelWindowQt::wxTopLevelWindowQt(wxWindow *parent,
            wxWindowID winId,
            const wxString &title,
            const wxPoint &pos,
@@ -28,65 +27,84 @@ wxTopLevelWindowNative::wxTopLevelWindowNative(wxWindow *parent,
     Create( parent, winId, title, pos, size, style, name );
 }
 
-bool wxTopLevelWindowNative::Create( wxWindow *parent, wxWindowID winId,
-    const wxString &title, const wxPoint &pos, const wxSize &size,
+bool wxTopLevelWindowQt::Create( wxWindow *parent, wxWindowID winId,
+    const wxString &title, const wxPoint &pos, const wxSize &sizeOrig,
     long style, const wxString &name )
 {
-    wxSize defaultSize = size;
-    if ( !defaultSize.IsFullySpecified() )
-        defaultSize.SetDefaults( GetDefaultSize() );
+    wxSize size(sizeOrig);
+    if ( !size.IsFullySpecified() )
+        size.SetDefaults( GetDefaultSize() );
 
     wxTopLevelWindows.Append( this );
 
+    if (!CreateBase( parent, winId, pos, size, style, wxDefaultValidator, name ))
+    {
+        wxFAIL_MSG( wxT("wxTopLevelWindowNative creation failed") );
+        return false;
+    }
+
     SetTitle( title );
+    SetWindowStyleFlag( style );
 
-    return CreateBase( parent, winId, pos, size, style, wxDefaultValidator, name );
+    if (pos != wxDefaultPosition)
+        m_qtWindow->move( pos.x, pos.y );
+
+    m_qtWindow->resize( wxQtConvertSize( size ) );
+
+    // Prevent automatic deletion of Qt main window on close
+    // (this should be the default, but left just fo enforce it)
+    GetHandle()->setAttribute(Qt::WA_DeleteOnClose, false);
+
+    // not calling to wxWindow::Create, so do the rest of initialization:
+    if (parent) parent->AddChild( this );
+
+    return true;
 }
 
-void wxTopLevelWindowNative::Maximize(bool maximize) 
+void wxTopLevelWindowQt::Maximize(bool WXUNUSED(maximize)) 
 {
 }
 
-void wxTopLevelWindowNative::Restore()
+void wxTopLevelWindowQt::Restore()
 {
 }
 
-void wxTopLevelWindowNative::Iconize(bool iconize )
+void wxTopLevelWindowQt::Iconize(bool WXUNUSED(iconize) )
 {
 }
 
-bool wxTopLevelWindowNative::IsMaximized() const
-{
-    return false;
-}
-
-bool wxTopLevelWindowNative::IsIconized() const
-{
-    return false;
-}
-
-
-bool wxTopLevelWindowNative::ShowFullScreen(bool show, long style)
-{
-    return false;
-}
-
-bool wxTopLevelWindowNative::IsFullScreen() const
+bool wxTopLevelWindowQt::IsMaximized() const
 {
     return false;
 }
 
-void wxTopLevelWindowNative::SetTitle(const wxString& title)
+bool wxTopLevelWindowQt::IsIconized() const
+{
+    return false;
+}
+
+
+bool wxTopLevelWindowQt::ShowFullScreen(bool WXUNUSED(show), long WXUNUSED(style))
+{
+    return false;
+}
+
+bool wxTopLevelWindowQt::IsFullScreen() const
+{
+    return false;
+}
+
+void wxTopLevelWindowQt::SetTitle(const wxString& title)
 {
     GetHandle()->setWindowTitle( wxQtConvertString( title ));
 }
 
-wxString wxTopLevelWindowNative::GetTitle() const
+wxString wxTopLevelWindowQt::GetTitle() const
 {
     return ( wxQtConvertString( GetHandle()->windowTitle() ));
 }
 
-void wxTopLevelWindowNative::SetIcons( const wxIconBundle& icons )
+void wxTopLevelWindowQt::SetIcons( const wxIconBundle& icons )
 {
     wxTopLevelWindowBase::SetIcons( icons );
     
@@ -98,7 +116,7 @@ void wxTopLevelWindowNative::SetIcons( const wxIconBundle& icons )
     GetHandle()->setWindowIcon( qtIcons );
 }
 
-void wxTopLevelWindowNative::SetWindowStyleFlag( long style )
+void wxTopLevelWindowQt::SetWindowStyleFlag( long style )
 {
     wxWindow::SetWindowStyleFlag( style );
     
@@ -155,12 +173,15 @@ void wxTopLevelWindowNative::SetWindowStyleFlag( long style )
     }
 }
 
-long wxTopLevelWindowNative::GetWindowStyleFlag() const
+long wxTopLevelWindowQt::GetWindowStyleFlag() const
 {
     // Update maximized/minimized state
     long winStyle = wxWindow::GetWindowStyleFlag();
-    switch ( GetHandle()->windowState() )
+
+    if (GetHandle())
     {
+        switch ( GetHandle()->windowState() )
+        {
         case Qt::WindowMaximized:
             winStyle &= ~wxMINIMIZE;
             winStyle |= wxMAXIMIZE;
@@ -172,6 +193,7 @@ long wxTopLevelWindowNative::GetWindowStyleFlag() const
         default:
             winStyle &= ~wxMINIMIZE;
             winStyle &= ~wxMAXIMIZE;
+        }
     }
 
     return winStyle;

@@ -2,9 +2,22 @@
 // Name:        combo.h
 // Purpose:     interface of wxComboCtrl and wxComboPopup
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+//
+// New window styles for wxComboCtrlBase
+//
+enum
+{
+    // Double-clicking a read-only combo triggers call to popup's OnComboPopup.
+    // In wxOwnerDrawnComboBox, for instance, it cycles item.
+    wxCC_SPECIAL_DCLICK             = 0x0100,
+
+    // Dropbutton acts like standard push button.
+    wxCC_STD_BUTTON                 = 0x0200
+};
+
 
 /**
     @class wxComboPopup
@@ -316,7 +329,7 @@ struct wxComboCtrlFeatures
     @style{wxCB_SORT}
            Sorts the entries in the list alphabetically.
     @style{wxTE_PROCESS_ENTER}
-           The control will generate the event @c wxEVT_COMMAND_TEXT_ENTER
+           The control will generate the event @c wxEVT_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
            control or used for navigation between dialog controls). Windows
            only.
@@ -331,22 +344,22 @@ struct wxComboCtrlFeatures
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TEXT(id, func)}
-           Process a @c wxEVT_COMMAND_TEXT_UPDATED event, when the text changes.
+           Process a @c wxEVT_TEXT event, when the text changes.
     @event{EVT_TEXT_ENTER(id, func)}
-           Process a @c wxEVT_COMMAND_TEXT_ENTER event, when RETURN is pressed in
+           Process a @c wxEVT_TEXT_ENTER event, when RETURN is pressed in
            the combo control.
     @event{EVT_COMBOBOX_DROPDOWN(id, func)}
-           Process a @c wxEVT_COMMAND_COMBOBOX_DROPDOWN event, which is generated
+           Process a @c wxEVT_COMBOBOX_DROPDOWN event, which is generated
            when the popup window is shown (drops down).
     @event{EVT_COMBOBOX_CLOSEUP(id, func)}
-           Process a @c wxEVT_COMMAND_COMBOBOX_CLOSEUP event, which is generated
+           Process a @c wxEVT_COMBOBOX_CLOSEUP event, which is generated
            when the popup window of the combo control disappears (closes up).
            You should avoid adding or deleting items in this event.
     @endEventTable
 
-    @library{wxbase}
+    @library{wxcore}
     @category{ctrl}
-    @appearance{comboctrl.png}
+    @appearance{comboctrl}
 
     @see wxComboBox, wxChoice, wxOwnerDrawnComboBox, wxComboPopup,
          wxCommandEvent
@@ -424,7 +437,7 @@ public:
         Dismisses the popup window.
 
         Notice that calling this function will generate a
-        @c wxEVT_COMMAND_COMBOBOX_CLOSEUP event.
+        @c wxEVT_COMBOBOX_CLOSEUP event.
 
         @since 2.9.2
     */
@@ -436,6 +449,35 @@ public:
         the argument.
     */
     void EnablePopupAnimation(bool enable = true);
+
+    
+    /**
+       Returns true if given key combination should toggle the popup.
+    */
+    virtual bool IsKeyPopupToggle(const wxKeyEvent& event) const;
+
+
+    /**
+       Prepare background of combo control or an item in a dropdown list in a
+       way typical on platform. This includes painting the focus/disabled
+       background and setting the clipping region.
+
+       Unless you plan to paint your own focus indicator, you should always
+       call this in your wxComboPopup::PaintComboControl implementation.  In
+       addition, it sets pen and text colour to what looks good and proper
+       against the background.
+
+       flags: wxRendererNative flags:
+              wxCONTROL_ISSUBMENU: is drawing a list item instead of combo control
+              wxCONTROL_SELECTED: list item is selected
+              wxCONTROL_DISABLED: control/item is disabled
+    */
+    virtual void PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const;
+
+    /**
+       Returns true if focus indicator should be drawn in the control.
+    */
+    bool ShouldDrawFocus() const;
 
     /**
         Returns disabled button bitmap that has been set with
@@ -566,7 +608,7 @@ public:
 
         @param generateEvent
             Set this to @true in order to generate
-            @c wxEVT_COMMAND_COMBOBOX_CLOSEUP event.
+            @c wxEVT_COMBOBOX_CLOSEUP event.
 
         @deprecated Use Dismiss() instead.
     */
@@ -609,7 +651,7 @@ public:
         Shows the popup portion of the combo control.
 
         Notice that calling this function will generate a
-        @c wxEVT_COMMAND_COMBOBOX_DROPDOWN event.
+        @c wxEVT_COMBOBOX_DROPDOWN event.
 
         @since 2.9.2
     */
@@ -694,7 +736,7 @@ public:
 
         @since 2.9.1
     */
-    virtual void SetHint(const wxString& hint);
+    virtual bool SetHint(const wxString& hint);
 
     /**
         Sets the insertion point in the text field.
@@ -824,10 +866,10 @@ public:
     virtual void SetValue(const wxString& value);
 
     /**
-        Same as SetValue(), but also sends wxCommandEvent of type
-        @c wxEVT_COMMAND_TEXT_UPDATED if @a withEvent is @true.
-    */
-    void SetValueWithEvent(const wxString& value, bool withEvent = true);
+       Changes value of the control as if user had done it by selecting an
+       item from a combo box drop-down list.
+     */
+    void SetValueByUser(const wxString& value);
 
     /**
         Show the popup.

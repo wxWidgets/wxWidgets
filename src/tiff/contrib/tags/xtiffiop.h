@@ -63,3 +63,10 @@ typedef struct xtiff xtiff;
 #define XTIFF_INITIALIZED 0x80000000
 	
 #endif /* __xtiffiop_h */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

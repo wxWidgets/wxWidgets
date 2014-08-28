@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -48,7 +47,7 @@
 // ----------------------------------------------------------------------------
 
 // the application icon (under Windows and OS/2 it is in resources)
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "emulator.xpm"
 #endif
 
@@ -274,7 +273,7 @@ wxEmulatorFrame::wxEmulatorFrame(const wxString& title,
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Emulator_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(Emulator_About, wxT("&About\tF1"), wxT("Show about dialog"));
 
     menuFile->Append(Emulator_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
@@ -534,7 +533,7 @@ wxBitmapType wxDetermineImageType(const wxString& filename)
     if (ext == wxT("pcx"))
         return wxBITMAP_TYPE_PCX;
     if (ext == wxT("tif") || ext == wxT("tiff"))
-        return wxBITMAP_TYPE_TIF;
+        return wxBITMAP_TYPE_TIFF;
 
     return wxBITMAP_TYPE_INVALID;
 }

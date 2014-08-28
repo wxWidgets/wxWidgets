@@ -4,7 +4,6 @@
 // Author:      Ryan Norton
 // Modified by:
 // Created:     2/13/2005
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -78,7 +77,7 @@ public:
     virtual ~wxHIDJoystick();
 
     bool Create(int nWhich);
-    virtual void BuildCookies(CFArrayRef Array);
+    virtual void BuildCookies(CFArrayRef Array) wxOVERRIDE;
     void MakeCookies(CFArrayRef Array);
     IOHIDElementCookie* GetCookies();
     IOHIDQueueInterface** GetQueue();
@@ -96,7 +95,7 @@ class wxJoystickThread : public wxThread
 {
 public:
     wxJoystickThread(wxHIDJoystick* hid, int joystick);
-    void* Entry();
+    void* Entry() wxOVERRIDE;
     static void HIDCallback(void* target, IOReturn res, void* context, void* sender);
 
 private:
@@ -188,28 +187,36 @@ wxPoint wxJoystick::GetPosition() const
     if (m_thread) pos = m_thread->m_lastposition;
     return pos;
 }
+int wxJoystick::GetPosition(unsigned int axis) const
+{
+    wxCHECK_MSG(axis < (unsigned)GetNumberAxes(), 0, "Invalid joystick axis");
+    if (m_thread)
+        return m_thread->m_axe[axis];
+    return 0;
+
+}
 int wxJoystick::GetZPosition() const
 {
     if (m_thread)
-        return m_thread->m_axe[wxJS_AXIS_Z];
+        return m_thread->m_axe[wxJS_AXIS_Z-wxJS_AXIS_X];
     return 0;
 }
 int wxJoystick::GetRudderPosition() const
 {
     if (m_thread)
-        return m_thread->m_axe[wxJS_AXIS_RUDDER];
+        return m_thread->m_axe[wxJS_AXIS_RUDDER-wxJS_AXIS_X];
     return 0;
 }
 int wxJoystick::GetUPosition() const
 {
     if (m_thread)
-        return m_thread->m_axe[wxJS_AXIS_U];
+        return m_thread->m_axe[wxJS_AXIS_U-wxJS_AXIS_X];
     return 0;
 }
 int wxJoystick::GetVPosition() const
 {
     if (m_thread)
-        return m_thread->m_axe[wxJS_AXIS_V];
+        return m_thread->m_axe[wxJS_AXIS_V-wxJS_AXIS_X];
     return 0;
 }
 
@@ -224,6 +231,14 @@ int wxJoystick::GetButtonState() const
     if (m_thread)
         return m_thread->m_buttons;
     return 0;
+}
+
+bool wxJoystick::GetButtonState(unsigned int id) const
+{
+    if (id > sizeof(int) * 8)
+        return false;
+
+    return (GetButtonState() & (1 << id)) != 0;
 }
 
 //---------------------------------------------------------------------------
@@ -566,7 +581,7 @@ void wxHIDJoystick::BuildCookies(CFArrayRef Array)
 
     //
     // I wasted two hours of my life on this line :(
-    // accidently removed it during some source cleaning...
+    // accidentally removed it during some source cleaning...
     //
     MakeCookies(Array);
 
@@ -782,7 +797,7 @@ void* wxJoystickThread::Entry()
 //
 // This is where the REAL dirty work gets done.
 //
-// 1) Loops through each event the queue has recieved
+// 1) Loops through each event the queue has received
 // 2) First, checks if the thread that is running the loop for
 //    the polling has ended - if so it breaks out
 // 3) Next, it checks if there was an error getting this event from

@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/tooltip.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -30,8 +29,13 @@ public:
     void SetTip(const wxString& tip);
     const wxString& GetTip() const;
 
+    // the window we're associated with
+    void SetWindow(wxWindow *win);
+    wxWindow *GetWindow() const { return m_window; }
+
 private:
     wxString m_text;
+    wxWindow* m_window;         // main window we're associated with
 };
 
 #endif // _WX_QT_TOOLTIP_H_

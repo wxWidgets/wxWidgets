@@ -2,7 +2,6 @@
 // Name:        windowdeletion.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,22 +9,14 @@
 
 @page overview_windowdeletion Window Deletion
 
-Classes: wxCloseEvent, wxWindow
+@tableofcontents
 
 Window deletion can be a confusing subject, so this overview is provided to
 help make it clear when and how you delete windows, or respond to user requests
 to close windows.
 
-@li @ref overview_windowdeletion_sequence
-@li @ref overview_windowdeletion_close
-@li @ref overview_windowdeletion_default
-@li @ref overview_windowdeletion_menuexit
-@li @ref overview_windowdeletion_exitapp
-@li @ref overview_windowdeletion_deletion
-@li @ref overview_windowdeletion_windowkinds
+@see wxCloseEvent, wxWindow
 
-
-<hr>
 
 
 @section overview_windowdeletion_sequence Sequence of Events During Window Deletion
@@ -118,4 +109,3 @@ wish. For consistency, continue to use the wxWindow::Destroy function instead
 of the @c delete operator when deleting these kinds of windows explicitly.
 
 */
-

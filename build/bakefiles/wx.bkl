@@ -1,5 +1,4 @@
 <?xml version="1.0" ?>
-<!-- $Id$ -->
 
 
 <!-- Master bakefile for wxWidgets -->
@@ -40,7 +39,7 @@
     <subproject id="samples">
         <installable>no</installable>
         <dir cond="FORMAT=='autoconf'">samples</dir>
-        <dir cond="FORMAT!='autoconf' and TOOLKIT in ['PM','MSW','MGL','MOTIF']">../../samples</dir>
+        <dir cond="FORMAT!='autoconf'">../../samples</dir>
     </subproject>
 
     <if cond="FORMAT=='autoconf'">
@@ -97,7 +96,7 @@
                 $(INSTALL_DIR) $(DESTDIR)$(BINDIR)
                 $(INSTALL_DIR) $(DESTDIR)$(LIBDIR)/wx/config
                 $(INSTALL_PROGRAM) lib/wx/config/$(TOOLCHAIN_FULLNAME) $(DESTDIR)$(LIBDIR)/wx/config
-                (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx-config &amp;&amp; $(LN_S) $(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
+                (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx-config &amp;&amp; $(LN_S) $(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config || cp -p $(DESTDIR)$(LIBDIR)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
             </command>
         </action>
 
@@ -177,8 +176,8 @@
     </if>
 
 
-    <!-- copy setup.h on DOS/OS2/Windows if the format supports it: -->
-    <if cond="FORMAT!='autoconf' and IS_MSVC_PRJ=='0' and TOOLKIT in ['PM','MSW','MGL','MOTIF']">
+    <!-- copy setup.h on DOS/Windows if the format supports it: -->
+    <if cond="FORMAT!='autoconf' and IS_MSVC_PRJ=='0'">
         <mkdir id="libdir">
             <dir>$(LIBDIRNAME)</dir>
         </mkdir>
@@ -194,8 +193,7 @@
 
         <set var="SETUP_H_SUBDIR">
             <if cond="WXUNIV=='1'">univ</if>
-            <if cond="WXUNIV=='0' and TOOLKIT!='PM'">$(TOOLKIT_LOWERCASE)</if>
-            <if cond="WXUNIV=='0' and TOOLKIT=='PM'">os2</if>
+            <if cond="WXUNIV=='0'">$(TOOLKIT_LOWERCASE)</if>
         </set>
 
         <copy-file-to-file-if-not-exist id="master_setup.h">
@@ -212,7 +210,7 @@
 
 
     <!-- create rcdefs.h on Windows: -->
-    <if cond="FORMAT in ['borland','mingw','msvc','watcom'] and TOOLKIT == 'MSW'">
+    <if cond="FORMAT in ['borland','mingw','msvc','watcom']">
 
         <mkdir id="libdir_setup_wx_msw">
             <depends>libdir_setup_wx</depends>
@@ -265,7 +263,6 @@
         <set var="VARS_DONT_ELIMINATE" append="1">
             ALL_PORTS_BASE_HEADERS ALL_BASE_SOURCES WX_VERSION
         </set>
-        <fragment format="autoconf" file="qtrules.mk"/>
         <fragment format="autoconf" file="make_dist.mk"/>
 
     </if>

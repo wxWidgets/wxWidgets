@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/contrib/pds/tif_pdsdirread.c,v 1.3 2005/12/21 12:23:13 joris Exp $ */
+/* $Header: /cvs/maptools/cvsroot/libtiff/contrib/pds/tif_pdsdirread.c,v 1.4 2010-06-08 18:55:15 bfriesen Exp $ */
 
 /*
  * Copyright (c) 1988-1996 Sam Leffler
@@ -1122,3 +1122,10 @@ ChopUpSingleUncompressedStrip(TIFF* tif)
 	td->td_stripoffset = newoffsets;
 }
 #endif /* STRIPCHOP_SUPPORT */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

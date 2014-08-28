@@ -3,7 +3,6 @@
 // Purpose:     wxFileHistory class
 // Author:      Julian Smart, Vaclav Slavik
 // Created:     2010-05-03
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart, Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -23,6 +22,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxMenu;
 class WXDLLIMPEXP_FWD_BASE wxConfigBase;
+class WXDLLIMPEXP_FWD_BASE wxFileName;
 
 // ----------------------------------------------------------------------------
 // File history management
@@ -60,11 +60,6 @@ public:
     void SetBaseId(wxWindowID baseId) { m_idBase = baseId; }
     wxWindowID GetBaseId() const { return m_idBase; }
 
-#if WXWIN_COMPATIBILITY_2_6
-    // deprecated, use GetCount() instead
-    wxDEPRECATED( size_t GetNoHistoryFiles() const );
-#endif // WXWIN_COMPATIBILITY_2_6
-
 protected:
     // Last n files
     wxArrayString     m_fileHistory;
@@ -79,16 +74,12 @@ private:
     // The ID of the first history menu item (Doesn't have to be wxID_FILE1)
     wxWindowID m_idBase;
 
+    // Normalize a file name to canonical form. We have a special function for
+    // this to ensure the same normalization is used everywhere.
+    static wxString NormalizeFileName(const wxFileName& filename);
+
     wxDECLARE_NO_COPY_CLASS(wxFileHistoryBase);
 };
-
-#if WXWIN_COMPATIBILITY_2_6
-inline size_t wxFileHistoryBase::GetNoHistoryFiles() const
-{
-    return m_fileHistory.GetCount();
-}
-#endif // WXWIN_COMPATIBILITY_2_6
-
 
 #if defined(__WXGTK20__)
     #include "wx/gtk/filehistory.h"

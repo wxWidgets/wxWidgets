@@ -1,16 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/statbox.h
-// Author:      Peter Most
-// Id:          $Id$
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_STATBOX_H_
 #define _WX_QT_STATBOX_H_
 
-#include "wx/qt/pointer_qt.h"
-#include "wx/qt/groupbox_qt.h"
+#include <QtWidgets/QGroupBox>
 
 class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
 {
@@ -31,14 +29,16 @@ public:
                 long style = 0,
                 const wxString& name = wxStaticBoxNameStr);
 
+    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
+
     virtual QGroupBox *GetHandle() const;
 
 protected:
 
 private:
-    wxQtPointer< wxQtGroupBox > m_qtGroupBox;
+    QGroupBox *m_qtGroupBox;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxStaticBox );
+    wxDECLARE_DYNAMIC_CLASS( wxStaticBox );
 };
 
 #endif // _WX_QT_STATBOX_H_

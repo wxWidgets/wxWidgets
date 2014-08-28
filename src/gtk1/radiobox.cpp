@@ -2,7 +2,6 @@
 // Name:        src/gtk1/radiobox.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -53,7 +52,7 @@ static void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioBo
 
     if (!button->active) return;
 
-    wxCommandEvent event( wxEVT_COMMAND_RADIOBOX_SELECTED, rb->GetId() );
+    wxCommandEvent event( wxEVT_RADIOBOX, rb->GetId() );
     event.SetInt( rb->GetSelection() );
     event.SetString( rb->GetStringSelection() );
     event.SetEventObject( rb );

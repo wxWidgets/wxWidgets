@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     2005-01-14
-// RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -306,7 +305,7 @@ public:
         }
     }
 
-    virtual const wxHeaderColumn& GetColumn(unsigned int idx) const
+    virtual const wxHeaderColumn& GetColumn(unsigned int idx) const wxOVERRIDE
     {
         return *m_columns[idx];
     }
@@ -344,9 +343,9 @@ private:
                                   wxPG_SPLITTER_FROM_EVENT);
     }
 
-    virtual bool ProcessEvent( wxEvent& event )
+    virtual bool ProcessEvent( wxEvent& event ) wxOVERRIDE
     {
-        if ( event.IsKindOf(CLASSINFO(wxHeaderCtrlEvent)) )
+        if ( event.IsKindOf(wxCLASSINFO(wxHeaderCtrlEvent)) )
         {
             wxHeaderCtrlEvent& hcEvent =
                 static_cast<wxHeaderCtrlEvent&>(event);
@@ -355,7 +354,7 @@ private:
             int col = hcEvent.GetColumn();
             int evtType = event.GetEventType();
 
-            if ( evtType == wxEVT_COMMAND_HEADER_RESIZING )
+            if ( evtType == wxEVT_HEADER_RESIZING )
             {
                 int colWidth = hcEvent.GetWidth();
 
@@ -367,7 +366,7 @@ private:
 
                 return true;
             }
-            else if ( evtType == wxEVT_COMMAND_HEADER_BEGIN_RESIZE )
+            else if ( evtType == wxEVT_HEADER_BEGIN_RESIZE )
             {
                 // Never allow column resize if layout is static
                 if ( m_manager->HasFlag(wxPG_STATIC_SPLITTER) )
@@ -380,7 +379,7 @@ private:
 
                 return true;
             }
-            else if ( evtType == wxEVT_COMMAND_HEADER_END_RESIZE )
+            else if ( evtType == wxEVT_HEADER_END_RESIZE )
             {
                 pg->SendEvent(wxEVT_PG_COL_END_DRAG,
                               NULL, NULL, 0,
@@ -680,17 +679,17 @@ void wxPropertyGridManager::SetExtraStyle( long exStyle )
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridManager::Freeze()
+void wxPropertyGridManager::DoFreeze()
 {
     m_pPropGrid->Freeze();
-    wxWindow::Freeze();
+    wxWindow::DoFreeze();
 }
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridManager::Thaw()
+void wxPropertyGridManager::DoThaw()
 {
-    wxWindow::Thaw();
+    wxWindow::DoThaw();
     m_pPropGrid->Thaw();
 }
 
@@ -745,12 +744,14 @@ bool wxPropertyGridManager::DoSelectPage( int index )
             return false;
     }
 
+#if wxUSE_TOOLBAR
     wxPropertyGridPage* prevPage;
 
     if ( m_selPage >= 0 )
         prevPage = GetPage(m_selPage);
     else
         prevPage = m_emptyPage;
+#endif
 
     wxPropertyGridPage* nextPage;
 
@@ -1030,7 +1031,7 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
 
             // Connect to toolbar button events.
             Connect(pageObj->m_toolId,
-                    wxEVT_COMMAND_TOOL_CLICKED,
+                    wxEVT_TOOL,
                     wxCommandEventHandler(
                         wxPropertyGridManager::OnToolbarClick));
 
@@ -1513,11 +1514,11 @@ void wxPropertyGridManager::RecreateControls()
                 m_pToolbar->Realize();
 
                 Connect(m_categorizedModeToolId,
-                        wxEVT_COMMAND_TOOL_CLICKED,
+                        wxEVT_TOOL,
                         wxCommandEventHandler(
                             wxPropertyGridManager::OnToolbarClick));
                 Connect(m_alphabeticModeToolId,
-                        wxEVT_COMMAND_TOOL_CLICKED,
+                        wxEVT_TOOL,
                         wxCommandEventHandler(
                             wxPropertyGridManager::OnToolbarClick));
             }
@@ -1821,13 +1822,34 @@ void wxPropertyGridManager::SetSplitterLeft( bool subProps, bool allPages )
         }
 
         if ( highest > 0 )
-            m_pPropGrid->SetSplitterPosition( highest );
+            SetSplitterPosition( highest );
     }
 
 #if wxUSE_HEADERCTRL
     if ( m_showHeader )
         m_pHeaderCtrl->OnColumWidthsChanged();
 #endif
+}
+
+void wxPropertyGridManager::SetPageSplitterLeft(int page, bool subProps)
+{
+    wxASSERT_MSG( (page < (int) GetPageCount()),
+                  wxT("SetPageSplitterLeft() has no effect until pages have been added") );
+
+    if (page < (int) GetPageCount())
+    {
+        wxClientDC dc(this);
+        dc.SetFont(m_pPropGrid->GetFont());
+
+        int maxW = m_pState->GetColumnFitWidth(dc, m_arrPages[page]->m_properties, 0, subProps );
+        maxW += m_pPropGrid->m_marginWidth;
+        SetPageSplitterPosition( page, maxW );
+
+#if wxUSE_HEADERCTRL
+        if ( m_showHeader )
+            m_pHeaderCtrl->OnColumWidthsChanged();
+#endif
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1885,6 +1907,11 @@ void wxPropertyGridManager::OnResize( wxSizeEvent& WXUNUSED(event) )
             }
         }
     }
+
+#if wxUSE_HEADERCTRL
+    if ( m_showHeader )
+        m_pHeaderCtrl->OnColumWidthsChanged();
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1982,7 +2009,7 @@ void wxPropertyGridManager::OnMouseClick( wxMouseEvent &event )
 
 void wxPropertyGridManager::OnMouseUp( wxMouseEvent &event )
 {
-    // No event type check - basicly calling this method should
+    // No event type check - basically calling this method should
     // just stop dragging.
 
     if ( m_dragStatus >= 1 )
@@ -2059,7 +2086,7 @@ public:
         m_it.Init(manager->GetPage(0), flags);
     }
     virtual ~wxPGVIteratorBase_Manager() { }
-    virtual void Next()
+    virtual void Next() wxOVERRIDE
     {
         m_it.Next();
 

@@ -4,7 +4,6 @@
 // Author:      Peter Most, Javier Torres
 // Modified by:
 // Created:     09/08/09
-// RCS-ID:      $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -13,7 +12,7 @@
 #define _WX_QT_ACCEL_H_
 
 #include <QtCore/QList>
-#include <QtGui/QShortcut>
+#include <QtWidgets/QShortcut>
 
 /* wxQt accelerators implementation:
  *
@@ -47,6 +46,9 @@ public:
 
     // Implementation
     QList< QShortcut* > ConvertShortcutTable( QWidget *parent ) const;
+
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
 
 protected:
     // ref counting code

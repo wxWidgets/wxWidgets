@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -26,10 +25,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/math.h"
-#endif
-
-#ifdef __OS2__
-#include <types.h>
 #endif
 
 #ifdef __VMS__

@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing wxGauge
 // Author:      Vadim Zeitlin
 // Created:     27.03.01
-// Id:          $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -76,11 +75,11 @@ public:
     GaugeWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~GaugeWidgetsPage();
 
-    virtual wxControl *GetWidget() const { return m_gauge; }
-    virtual void RecreateWidget() { CreateGauge(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_gauge; }
+    virtual void RecreateWidget() wxOVERRIDE { CreateGauge(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
     // event handlers
@@ -136,7 +135,7 @@ protected:
     wxTimer *m_timer;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(GaugeWidgetsPage)
 };
 
@@ -144,7 +143,7 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(GaugeWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(GaugeWidgetsPage, WidgetsPage)
     EVT_BUTTON(GaugePage_Reset, GaugeWidgetsPage::OnButtonReset)
     EVT_BUTTON(GaugePage_Progress, GaugeWidgetsPage::OnButtonProgress)
     EVT_BUTTON(GaugePage_IndeterminateProgress, GaugeWidgetsPage::OnButtonIndeterminateProgress)
@@ -163,7 +162,7 @@ BEGIN_EVENT_TABLE(GaugeWidgetsPage, WidgetsPage)
 
     EVT_TIMER(GaugePage_Timer, GaugeWidgetsPage::OnProgressTimer)
     EVT_TIMER(GaugePage_IndeterminateTimer, GaugeWidgetsPage::OnIndeterminateProgressTimer)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

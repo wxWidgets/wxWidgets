@@ -3,7 +3,6 @@
 // Purpose:     wxProgressDialog
 // Author:      Rickard Westerlund
 // Created:     2010-07-22
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -170,7 +169,7 @@ BOOL CALLBACK DisplayCloseButton(HWND hwnd, LPARAM lParam)
     {
         sharedData->m_labelCancel = _("Close");
         SendMessage( hwnd, WM_SETTEXT, 0,
-                     (LPARAM) sharedData->m_labelCancel.wx_str() );
+                     wxMSW_CONV_LPARAM(sharedData->m_labelCancel) );
 
         return FALSE;
     }
@@ -212,7 +211,7 @@ void PerformNotificationUpdates(HWND hwnd,
     }
 
     if ( sharedData->m_notifications & wxSPDD_TITLE_CHANGED )
-        ::SetWindowText( hwnd, sharedData->m_title.wx_str() );
+        ::SetWindowText( hwnd, sharedData->m_title.t_str() );
 
     if ( sharedData->m_notifications & wxSPDD_MESSAGE_CHANGED )
     {
@@ -236,16 +235,21 @@ void PerformNotificationUpdates(HWND hwnd,
             body.assign(title, posNL + numNLs, wxString::npos);
             title.erase(posNL);
         }
+        else // A single line
+        {
+            // Don't use title without the body, this doesn't make sense.
+            title.swap(body);
+        }
 
         ::SendMessage( hwnd,
                        TDM_SET_ELEMENT_TEXT,
                        TDE_MAIN_INSTRUCTION,
-                       (LPARAM) title.wx_str() );
+                       wxMSW_CONV_LPARAM(title) );
 
         ::SendMessage( hwnd,
                        TDM_SET_ELEMENT_TEXT,
                        TDE_CONTENT,
-                       (LPARAM) body.wx_str() );
+                       wxMSW_CONV_LPARAM(body) );
     }
 
     if ( sharedData->m_notifications & wxSPDD_EXPINFO_CHANGED )
@@ -257,7 +261,7 @@ void PerformNotificationUpdates(HWND hwnd,
             ::SendMessage( hwnd,
                            TDM_SET_ELEMENT_TEXT,
                            TDE_EXPANDED_INFORMATION,
-                           (LPARAM) expandedInformation.wx_str() );
+                           wxMSW_CONV_LPARAM(expandedInformation) );
         }
     }
 
@@ -302,7 +306,7 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
                                     int maximum,
                                     wxWindow *parent,
                                     int style )
-    : wxGenericProgressDialog(parent, style),
+    : wxGenericProgressDialog(),
       m_taskDialogRunner(NULL),
       m_sharedData(NULL),
       m_message(message),
@@ -311,6 +315,8 @@ wxProgressDialog::wxProgressDialog( const wxString& title,
 #ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
+        SetTopParent(parent);
+        SetPDStyle(style);
         SetMaximum(maximum);
 
         Show();
@@ -516,6 +522,23 @@ void wxProgressDialog::Resume()
         ::BringWindowToTop(hwnd);
     }
 #endif // wxHAS_MSW_TASKDIALOG
+}
+
+WXWidget wxProgressDialog::GetHandle() const 
+{ 
+#ifdef wxHAS_MSW_TASKDIALOG
+    if ( HasNativeTaskDialog() )
+    {
+        HWND hwnd;
+        {
+            wxCriticalSectionLocker locker(m_sharedData->m_cs);
+            m_sharedData->m_state = m_state;
+            hwnd = m_sharedData->m_hwnd;
+        }
+        return hwnd;
+    }
+#endif
+    return wxGenericProgressDialog::GetHandle();
 }
 
 int wxProgressDialog::GetValue() const
@@ -761,6 +784,11 @@ void* wxProgressDialogTaskRunner::Entry()
         wxTdc.caption = m_sharedData.m_title.wx_str();
         wxTdc.message = m_sharedData.m_message.wx_str();
 
+        // MSWCommonTaskDialogInit() will add an IDCANCEL button but we need to
+        // give it the correct label.
+        wxTdc.btnOKLabel = m_sharedData.m_labelCancel;
+        wxTdc.useCustomLabels = true;
+
         wxTdc.MSWCommonTaskDialogInit( tdc );
         tdc.pfCallback = TaskDialogCallbackProc;
         tdc.lpCallbackData = (LONG_PTR) &m_sharedData;
@@ -769,22 +797,15 @@ void* wxProgressDialogTaskRunner::Entry()
         tdc.dwFlags &= ~TDF_EXPAND_FOOTER_AREA; // Expand in content area.
         tdc.dwCommonButtons = 0; // Don't use common buttons.
 
-        wxTdc.useCustomLabels = true;
-
         if ( m_sharedData.m_style & wxPD_CAN_SKIP )
             wxTdc.AddTaskDialogButton( tdc, Id_SkipBtn, 0, _("Skip") );
-
-        // Use a Cancel button when requested or use a Close button when
-        // the dialog does not automatically hide.
-        wxTdc.AddTaskDialogButton( tdc, IDCANCEL, 0,
-                                   m_sharedData.m_labelCancel );
 
         tdc.dwFlags |= TDF_CALLBACK_TIMER | TDF_SHOW_PROGRESS_BAR;
 
         if ( !m_sharedData.m_expandedInformation.empty() )
         {
             tdc.pszExpandedInformation =
-                m_sharedData.m_expandedInformation.wx_str();
+                m_sharedData.m_expandedInformation.t_str();
         }
     }
 

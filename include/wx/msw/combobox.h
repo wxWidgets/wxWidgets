@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -75,6 +74,10 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);
 
+    // See wxComboBoxBase discussion of IsEmpty().
+    bool IsListEmpty() const { return wxItemContainer::IsEmpty(); }
+    bool IsTextEmpty() const { return wxTextEntry::IsEmpty(); }
+
     // resolve ambiguities among virtual functions inherited from both base
     // classes
     virtual void Clear();
@@ -88,6 +91,7 @@ public:
     virtual void SetSelection(long from, long to)
         { wxTextEntry::SetSelection(from, to); }
     virtual int GetSelection() const { return wxChoice::GetSelection(); }
+    virtual bool ContainsHWND(WXHWND hWnd) const;
     virtual void GetSelection(long *from, long *to) const;
 
     virtual bool IsEditable() const;
@@ -126,7 +130,11 @@ protected:
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip(wxToolTip *tip);
 #endif
-    void MSWDoPopupOrDismiss(bool show);
+
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const;
+
+    // Override this one to avoid eating events from our popup listbox.
+    virtual wxWindow *MSWFindItem(long id, WXHWND hWnd) const;
 
     // this is the implementation of GetEditHWND() which can also be used when
     // we don't have the edit control, it simply returns NULL then

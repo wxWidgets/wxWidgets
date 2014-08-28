@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/tooltip.cpp
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,24 +9,24 @@
 #include "wx/wxprec.h"
 
 #include "wx/tooltip.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
 
-/* static */ void wxToolTip::Enable(bool flag)
+/* static */ void wxToolTip::Enable(bool WXUNUSED(flag))
 {
     wxMISSING_FUNCTION();
 }
 
-/* static */ void wxToolTip::SetDelay(long milliseconds)
+/* static */ void wxToolTip::SetDelay(long WXUNUSED(milliseconds))
 {
     wxMISSING_FUNCTION();
 }
 
-/* static */ void wxToolTip::SetAutoPop(long milliseconds)
+/* static */ void wxToolTip::SetAutoPop(long WXUNUSED(milliseconds))
 {
     wxMISSING_FUNCTION();
 }
 
-/* static */ void wxToolTip::SetReshow(long milliseconds)
+/* static */ void wxToolTip::SetReshow(long WXUNUSED(milliseconds))
 {
     wxMISSING_FUNCTION();
 }
@@ -49,3 +48,9 @@ const wxString &wxToolTip::GetTip() const
     return m_text;
 }
 
+
+void wxToolTip::SetWindow(wxWindow *win)
+{
+    m_window = win;
+    wxMISSING_FUNCTION();
+}

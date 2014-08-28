@@ -2,7 +2,6 @@
 // Name:        toplevel.h
 // Purpose:     interface of wxTopLevelWindow
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -33,6 +32,14 @@ enum
                           wxFULLSCREEN_NOSTATUSBAR | wxFULLSCREEN_NOBORDER |
                           wxFULLSCREEN_NOCAPTION
 };
+
+#define wxDEFAULT_FRAME_STYLE (wxSYSTEM_MENU |          \
+                               wxRESIZE_BORDER |        \
+                               wxMINIMIZE_BOX |         \
+                               wxMAXIMIZE_BOX |         \
+                               wxCLOSE_BOX |            \
+                               wxCAPTION |              \
+                               wxCLIP_CHILDREN)
 
 /**
     @class wxTopLevelWindow
@@ -68,7 +75,7 @@ enum
 
     @see wxDialog, wxFrame
 */
-class wxTopLevelWindow : public wxWindow
+class wxTopLevelWindow : public wxNonOwnedWindow
 {
 public:
     /**
@@ -117,7 +124,7 @@ public:
     /**
         A synonym for CentreOnScreen().
     */
-    void CenterOnScreen(int direction);
+    void CenterOnScreen(int direction = wxBOTH);
 
     /**
         Centres the window on screen.
@@ -201,12 +208,12 @@ public:
         @param iconize
             If @true, iconizes the window; if @false, shows and restores it.
 
-        @see IsIconized(), Maximize(), wxIconizeEvent.
+        @see IsIconized(), Restore()(), wxIconizeEvent.
     */
     virtual void Iconize(bool iconize = true);
 
     /**
-        Returns @true if this window is currently active, i.e. if the user is
+        Returns @true if this window is currently active, i.e.\ if the user is
         currently working with it.
     */
     virtual bool IsActive();
@@ -258,9 +265,36 @@ public:
         @param maximize
             If @true, maximizes the window, otherwise it restores it.
 
-        @see Iconize()
+        @see Restore(), Iconize()
     */
     virtual void Maximize(bool maximize = true);
+
+    /**
+        MSW-specific function for accessing the system menu.
+
+        Returns a wxMenu pointer representing the system menu of the window
+        under MSW. The returned wxMenu may be used, if non-@c NULL, to add
+        extra items to the system menu. The usual @c wxEVT_MENU
+        events (that can be processed using @c EVT_MENU event table macro) will
+        then be generated for them. All the other wxMenu methods may be used as
+        well but notice that they won't allow you to access any standard system
+        menu items (e.g. they can't be deleted or modified in any way
+        currently).
+
+        Notice that because of the native system limitations the identifiers of
+        the items added to the system menu must be multiples of 16, otherwise
+        no events will be generated for them.
+
+        The returned pointer must @em not be deleted, it is owned by the window
+        and will be only deleted when the window itself is destroyed.
+
+        This function is not available in the other ports by design, any
+        occurrences of it in the portable code must be guarded by
+        @code #ifdef __WXMSW__ @endcode preprocessor guards.
+
+        @since 2.9.3
+     */
+    wxMenu *MSWGetSystemMenu() const;
 
     /**
         Use a system-dependent way to attract users attention to the window when
@@ -280,6 +314,18 @@ public:
 
     */
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
+
+    /**
+        Restore a previously iconized or maximized window to its normal state.
+
+        In wxGTK this method currently doesn't return the maximized window to
+        its normal state and you must use Maximize() with @false argument
+        explicitly for this. In the other ports, it both unmaximizes the
+        maximized windows and uniconizes the iconized ones.
+
+        @see Iconize(), Maximize()
+     */
+    void Restore();
 
     /**
         Changes the default item for the panel, usually @a win is a button.
@@ -370,15 +416,6 @@ public:
     void SetRightMenu(int id = wxID_ANY,
                       const wxString& label = wxEmptyString,
                       wxMenu* subMenu = NULL);
-
-    /**
-        If the platform supports it, sets the shape of the window to that
-        depicted by @a region. The system will not display or respond to any
-        mouse event for the pixels that lie outside of the region. To reset the
-        window to the normal rectangular shape simply call SetShape() again with
-        an empty wxRegion. Returns @true if the operation is successful.
-    */
-    virtual bool SetShape(const wxRegion& region);
 
     /**
         Allows specification of minimum and maximum window sizes, and window
@@ -478,6 +515,55 @@ public:
     virtual bool OSXIsModified() const;
 
     /**
+        Sets the file name represented by this wxTopLevelWindow.
+
+        Under OS X, this file name is used to set the "proxy icon", which
+        appears in the window title bar near its title, corresponding to this
+        file name. Under other platforms it currently doesn't do anything but
+        it is harmless to call it now and it might be implemented to do
+        something useful in the future so you're encouraged to use it for any
+        window representing a file-based document.
+
+        @since 2.9.4
+    */
+    virtual void SetRepresentedFilename(const wxString& filename);
+
+    /**
+        Show the wxTopLevelWindow, but do not give it keyboard focus. This can be
+        used for pop up or notification windows that should not steal the current
+        focus.
+     */
+    virtual void ShowWithoutActivating();
+
+    /**
+        Adds or removes a full screen button to the right upper corner of a
+        window's title bar under OS X 10.7 and later.
+
+        Currently only available for wxOSX/Cocoa.
+
+        @param enable
+            If @true (default) adds the full screen button in the title bar;
+            if @false the button is removed.
+
+        @return @true if the button was added or removed, @false if running
+        under a pre-OS X 10.7 system or another OS.
+
+        @note Having the button is also required to let ShowFullScreen()
+        make use of the full screen API available since OS X 10.7: a full
+        screen window gets its own space and entering and exiting the mode
+        is animated.
+        If the button is not present the old way of switching to full screen
+        is used.
+
+        @onlyfor{wxosx}
+
+        @see ShowFullScreen()
+
+        @since 3.1.0
+    */
+    virtual bool EnableFullScreenView(bool enable = true);
+
+    /**
         Depending on the value of @a show parameter the window is either shown
         full screen or restored to its normal state. @a style is a bit list
         containing some or all of the following values, which indicate what
@@ -495,7 +581,7 @@ public:
         @note Showing a window full screen also actually @ref wxWindow::Show()
               "Show()"s the window if it isn't shown.
 
-        @see IsFullScreen()
+        @see EnableFullScreenView(), IsFullScreen()
     */
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
 

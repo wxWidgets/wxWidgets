@@ -3,7 +3,6 @@
 // Purpose:     Erase wxWidgets sample
 // Author:      Robert Roebling, Vadim Zeitlin
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling
 //              (c) 2009 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -30,14 +29,16 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/custombgwin.h"
 #include "wx/dcbuffer.h"
+#include "wx/artprov.h"
 
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
 
 // the application icon
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -48,11 +49,11 @@
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 
-class MyCanvas : public wxScrolledWindow
+class MyCanvas : public wxCustomBackgroundWindow<wxScrolledWindow>
 {
 public:
     MyCanvas(wxFrame *parent);
@@ -107,7 +108,7 @@ private:
     bool m_eraseBgInPaint;
 
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyFrame : public wxFrame
@@ -136,7 +137,7 @@ private:
 
     MyCanvas *m_canvas;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class ControlWithTransparency : public wxWindow
@@ -145,13 +146,28 @@ public:
     ControlWithTransparency(wxWindow *parent,
                             const wxPoint& pos,
                             const wxSize& size)
-        : wxWindow(parent, wxID_ANY, pos, size, wxBORDER_NONE)
     {
+        wxString reason;
+        if ( parent->IsTransparentBackgroundSupported(&reason) )
+        {
+            SetBackgroundStyle (wxBG_STYLE_TRANSPARENT);
+            m_message = "This is custom control with transparency";
+        }
+        else
+        {
+            m_message = "Transparency not supported, check tooltip.";
+        }
+
+        Create (parent, wxID_ANY, pos, size, wxBORDER_NONE);
         Connect(wxEVT_PAINT,
                 wxPaintEventHandler(ControlWithTransparency::OnPaint));
-    }
 
-    virtual bool HasTransparentBackground() { return true; }
+        if ( !reason.empty() )
+        {
+            // This can be only done now, after creating the window.
+            SetToolTip(reason);
+        }
+    }
 
 private:
     void OnPaint( wxPaintEvent& WXUNUSED(event) )
@@ -164,8 +180,17 @@ private:
 
         dc.SetTextForeground(*wxBLUE);
         dc.SetBackgroundMode(wxTRANSPARENT);
-        dc.DrawText("This is custom control with transparency", 0, 2);
+        dc.DrawText(m_message, 0, 2);
+
+        // Draw some bitmap/icon to ensure transparent bitmaps are indeed
+        //  transparent on transparent windows
+        wxBitmap bmp(wxArtProvider::GetBitmap(wxART_WARNING, wxART_MENU));
+        wxIcon icon(wxArtProvider::GetIcon(wxART_GOTO_LAST, wxART_MENU));
+        dc.DrawBitmap (bmp, GetSize().x - 1 - bmp.GetWidth(), 2);
+        dc.DrawIcon(icon, GetSize().x - 1 - bmp.GetWidth()-icon.GetWidth(), 2);
     }
+
+    wxString m_message;
 };
 
 // ----------------------------------------------------------------------------
@@ -208,7 +233,7 @@ bool MyApp::OnInit()
 // main frame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Erase_Menu_UseBuffer, MyFrame::OnUseBuffer)
     EVT_MENU(Erase_Menu_UseBgBitmap, MyFrame::OnUseBgBitmap)
     EVT_MENU(Erase_Menu_EraseBgInPaint, MyFrame::OnEraseBgInPaint)
@@ -221,7 +246,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(Erase_Menu_UseBuffer, MyFrame::OnUpdateUIUseBuffer)
     EVT_UPDATE_UI_RANGE(Erase_Menu_BgStyleErase, Erase_Menu_BgStylePaint,
                         MyFrame::OnUpdateUIChangeBgStyle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // frame constructor
 MyFrame::MyFrame()
@@ -248,7 +273,7 @@ MyFrame::MyFrame()
 
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Erase_Menu_About, "&About...\tCtrl-A", "Show about dialog");
+    helpMenu->Append(Erase_Menu_About, "&About\tCtrl-A", "Show about dialog");
 
     wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(menuFile, "&File");
@@ -304,14 +329,15 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 }
 
 
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_PAINT(MyCanvas::OnPaint)
     EVT_ERASE_BACKGROUND(MyCanvas::OnEraseBackground)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyCanvas::MyCanvas(wxFrame *parent)
-        : wxScrolledWindow(parent, wxID_ANY)
 {
+    Create(parent, wxID_ANY);
+
     m_useBuffer = false;
     m_useBgBmp = false;
     m_eraseBgInPaint = false;
@@ -323,11 +349,11 @@ MyCanvas::MyCanvas(wxFrame *parent)
     new wxStaticBitmap( this, wxID_ANY, m_bitmap, wxPoint(80,20) );
 
     new wxStaticText(this, wxID_ANY,
-                     "Left bitmap is a wxStaticBitmap,\n"
-                     "right one drawn directly",
+                     "Right bitmap is a wxStaticBitmap,\n"
+                     "left one drawn directly",
                      wxPoint(150, 20));
 
-    new ControlWithTransparency(this, wxPoint(65, 125), wxSize(300, 22));
+    new ControlWithTransparency(this, wxPoint(65, 125), wxSize(350, 22));
 
     SetFocusIgnoringChildren();
     SetBackgroundColour(*wxCYAN);
@@ -335,10 +361,16 @@ MyCanvas::MyCanvas(wxFrame *parent)
 
 void MyCanvas::DoPaint(wxDC& dc)
 {
+    PrepareDC(dc);
+
     if ( m_eraseBgInPaint )
     {
         dc.SetBackground(*wxLIGHT_GREY);
-        dc.Clear();
+
+        // Erase the entire virtual area, not just the client area.
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(GetBackgroundColour());
+        dc.DrawRectangle(GetVirtualSize());
 
         dc.DrawText("Background erased in OnPaint", 65, 110);
     }
@@ -360,15 +392,11 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if ( m_useBuffer )
     {
         wxAutoBufferedPaintDC dc(this);
-        PrepareDC(dc);
-
         DoPaint(dc);
     }
     else
     {
         wxPaintDC dc(this);
-        PrepareDC(dc);
-
         DoPaint(dc);
     }
 }
@@ -392,12 +420,12 @@ void MyCanvas::OnEraseBackground( wxEraseEvent& event )
     wxDC& dc = *event.GetDC();
     dc.SetPen(*wxGREEN_PEN);
 
-    PrepareDC( dc );
-
     // clear any junk currently displayed
     dc.Clear();
 
-    const wxSize size = GetClientSize();
+    PrepareDC( dc );
+
+    const wxSize size = GetVirtualSize();
     for ( int x = 0; x < size.x; x += 15 )
     {
         dc.DrawLine(x, 0, x, size.y);

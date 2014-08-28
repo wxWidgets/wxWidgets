@@ -5,7 +5,6 @@
 // Modified by:
 // Created:     8/17/99
 // Copyright:   (c) Robert Roebling
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -44,23 +43,12 @@ enum
     wxFD_OPEN              = 0x0001,
     wxFD_SAVE              = 0x0002,
     wxFD_OVERWRITE_PROMPT  = 0x0004,
+    wxFD_NO_FOLLOW         = 0x0008,
     wxFD_FILE_MUST_EXIST   = 0x0010,
     wxFD_MULTIPLE          = 0x0020,
     wxFD_CHANGE_DIR        = 0x0080,
     wxFD_PREVIEW           = 0x0100
 };
-
-#if WXWIN_COMPATIBILITY_2_6
-enum
-{
-    wxOPEN              = wxFD_OPEN,
-    wxSAVE              = wxFD_SAVE,
-    wxOVERWRITE_PROMPT  = wxFD_OVERWRITE_PROMPT,
-    wxFILE_MUST_EXIST   = wxFD_FILE_MUST_EXIST,
-    wxMULTIPLE          = wxFD_MULTIPLE,
-    wxCHANGE_DIR        = wxFD_CHANGE_DIR
-};
-#endif
 
 #define wxFD_DEFAULT_STYLE      wxFD_OPEN
 
@@ -122,6 +110,9 @@ public:
     virtual wxString GetWildcard() const { return m_wildCard; }
     virtual int GetFilterIndex() const { return m_filterIndex; }
 
+    virtual wxString GetCurrentlySelectedFilename() const
+        { return m_currentlySelectedFilename; }
+
     // this function is called with wxFileDialog as parameter and should
     // create the window containing the extra controls we want to show in it
     typedef wxWindow *(*ExtraControlCreatorFunction)(wxWindow*);
@@ -132,14 +123,6 @@ public:
     wxWindow *GetExtraControl() const { return m_extraControl; }
 
     // Utility functions
-
-#if WXWIN_COMPATIBILITY_2_6
-
-    wxDEPRECATED( long GetStyle() const );
-    wxDEPRECATED( void SetStyle(long style) );
-
-#endif  // WXWIN_COMPATIBILITY_2_6
-
 
     // Append first extension to filePath from a ';' separated extensionList
     // if filePath = "path/foo.bar" just return it as is
@@ -155,6 +138,13 @@ protected:
     wxString      m_fileName;
     wxString      m_wildCard;
     int           m_filterIndex;
+
+    // Currently selected, but not yet necessarily accepted by the user, file.
+    // This should be updated whenever the selection in the control changes by
+    // the platform-specific code to provide a useful implementation of
+    // GetCurrentlySelectedFilename().
+    wxString      m_currentlySelectedFilename;
+
     wxWindow*     m_extraControl;
 
     // returns true if control is created (if it already exists returns false)
@@ -228,13 +218,6 @@ wxSaveFileSelector(const wxString& what,
     #include "wx/gtk1/filedlg.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/filedlg.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/filedlg.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/filedlg.h"
-#elif defined(__WXPALMOS__)
-    #define wxHAS_GENERIC_FILEDIALOG
-    #include "wx/generic/filedlgg.h"
 #elif defined(__WXQT__)
     #include "wx/qt/filedlg.h"
 #endif

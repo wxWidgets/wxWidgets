@@ -1,16 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/slider.h
-// Author:      Peter Most
-// Id:          $Id$
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_SLIDER_H_
 #define _WX_QT_SLIDER_H_
 
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QSlider>
+#include <QtWidgets/QSlider>
 
 class WXDLLIMPEXP_CORE wxSlider : public wxSliderBase
 {
@@ -41,6 +39,9 @@ public:
     virtual int GetMin() const;
     virtual int GetMax() const;
 
+    virtual void DoSetTickFreq(int freq);
+    virtual int GetTickFreq() const;
+
     virtual void SetLineSize(int lineSize);
     virtual void SetPageSize(int pageSize);
     virtual int GetLineSize() const;
@@ -52,9 +53,9 @@ public:
     virtual QSlider *GetHandle() const;
 
 private:
-    wxQtPointer< QSlider > m_qtSlider;
+    QSlider *m_qtSlider;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxSlider );
+    wxDECLARE_DYNAMIC_CLASS( wxSlider );
 };
 
 #endif // _WX_QT_SLIDER_H_

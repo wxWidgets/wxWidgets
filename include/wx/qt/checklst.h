@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/checklst.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -29,6 +28,9 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxListBoxNameStr);
 
+
+    virtual ~wxCheckListBox();
+
     bool Create(wxWindow *parent, wxWindowID id,
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxDefaultSize,
@@ -43,12 +45,14 @@ public:
                   long style = 0,
                   const wxValidator& validator = wxDefaultValidator,
                   const wxString& name = wxListBoxNameStr);
-    
+
     virtual bool IsChecked(unsigned int item) const;
     virtual void Check(unsigned int item, bool check = true);
 
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckListBox);
+    virtual void Init(); //common construction
+
+    wxDECLARE_DYNAMIC_CLASS(wxCheckListBox);
 };
 
 #endif // _WX_QT_CHECKLST_H_

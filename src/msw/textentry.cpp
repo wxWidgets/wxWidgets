@@ -3,7 +3,6 @@
 // Purpose:     wxTextEntry implementation for wxMSW
 // Author:      Vadim Zeitlin
 // Created:     2007-09-26
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -34,8 +33,6 @@
 #include "wx/textcompleter.h"
 #include "wx/dynlib.h"
 
-#include <initguid.h>
-
 #include "wx/msw/private.h"
 
 #if wxUSE_UXTHEME
@@ -48,8 +45,7 @@
 // Classes used by auto-completion implementation.
 // ----------------------------------------------------------------------------
 
-// standard VC6 SDK (WINVER == 0x0400) does not know about IAutoComplete
-#if wxUSE_OLE && (WINVER >= 0x0500)
+#if wxUSE_OLE
     #define HAS_AUTOCOMPLETE
 #endif
 
@@ -58,7 +54,7 @@
 #include "wx/msw/ole/oleutils.h"
 #include <shldisp.h>
 
-#if defined(__MINGW32__) || defined (__WATCOMC__) || defined(__CYGWIN__)
+#if defined(__MINGW32__) || defined(__CYGWIN__)
     // needed for IID_IAutoComplete, IID_IAutoComplete2 and ACO_AUTOSUGGEST
     #include <shlguid.h>
 
@@ -74,6 +70,15 @@
 #ifndef SHACF_FILESYS_ONLY
     #define SHACF_FILESYS_ONLY 0x00000010
 #endif
+
+#ifndef SHACF_FILESYS_DIRS
+    #define SHACF_FILESYS_DIRS 0x00000020
+#endif
+
+// This must be the last header included to only affect the DEFINE_GUID()
+// occurrences below but not any GUIDs declared in the standard files included
+// above.
+#include <initguid.h>
 
 namespace
 {
@@ -95,6 +100,10 @@ DEFINE_GUID(wxIID_IAutoCompleteDropDown,
 
 DEFINE_GUID(wxCLSID_AutoComplete,
     0x00bb2763, 0x6a77, 0x11d0, 0xa5, 0x35, 0x00, 0xc0, 0x4f, 0xd7, 0xd0, 0x62);
+
+#ifndef ACDD_VISIBLE
+    #define ACDD_VISIBLE 0x0001
+#endif
 
 // Small helper class which can be used to ensure thread safety even when
 // wxUSE_THREADS==0 (and hence wxCriticalSection does nothing).
@@ -347,7 +356,7 @@ IMPLEMENT_IUNKNOWN_METHODS(wxIEnumString)
 
 // This class gathers the all auto-complete-related stuff we use. It is
 // allocated on demand by wxTextEntry when AutoComplete() is called.
-class wxTextAutoCompleteData wxBIND_OR_CONNECT_HACK_ONLY_BASE_CLASS
+class wxTextAutoCompleteData
 {
 public:
     // The constructor associates us with the given text entry.
@@ -427,6 +436,8 @@ public:
                                        ACO_UPDOWNKEYDROPSLIST);
             pAutoComplete2->Release();
         }
+
+        m_win->Bind(wxEVT_CHAR_HOOK, &wxTextAutoCompleteData::OnCharHook, this);
     }
 
     ~wxTextAutoCompleteData()
@@ -488,14 +499,12 @@ public:
                 // wxEVT_CHAR handler (as we must also let the other handlers
                 // defined at wx level run first).
                 //
-                // Notice that we can't use wxEVT_COMMAND_TEXT_UPDATED here
+                // Notice that we can't use wxEVT_TEXT here
                 // neither as, due to our use of ACO_AUTOAPPEND, we get
                 // EN_CHANGE notifications from the control every time
                 // IAutoComplete auto-appends something to it.
-                wxBIND_OR_CONNECT_HACK(m_win, wxEVT_AFTER_CHAR,
-                                        wxKeyEventHandler,
-                                        wxTextAutoCompleteData::OnAfterChar,
-                                        this);
+                m_win->Bind(wxEVT_AFTER_CHAR,
+                            &wxTextAutoCompleteData::OnAfterChar, this);
             }
 
             UpdateStringsFromCustomCompleter();
@@ -562,6 +571,28 @@ private:
         event.Skip();
     }
 
+    void OnCharHook(wxKeyEvent& event)
+    {
+        // If the autocomplete drop-down list is currently displayed when the
+        // user presses Escape, we need to dismiss it manually from here as
+        // Escape could be eaten by something else (e.g. EVT_CHAR_HOOK in the
+        // dialog that this control is found in) otherwise.
+        if ( event.GetKeyCode() == WXK_ESCAPE )
+        {
+            DWORD dwFlags = 0;
+            if ( SUCCEEDED(m_autoCompleteDropDown->GetDropDownStatus(&dwFlags,
+                                                                     NULL))
+                    && dwFlags == ACDD_VISIBLE )
+            {
+                ::SendMessage(GetHwndOf(m_win), WM_KEYDOWN, WXK_ESCAPE, 0);
+
+                // Do not skip the event in this case, we've already handled it.
+                return;
+            }
+        }
+
+        event.Skip();
+    }
 
     // The text entry we're associated with.
     wxTextEntry * const m_entry;
@@ -621,7 +652,7 @@ wxTextEntry::~wxTextEntry()
 
 void wxTextEntry::WriteText(const wxString& text)
 {
-    ::SendMessage(GetEditHwnd(), EM_REPLACESEL, 0, (LPARAM)text.wx_str());
+    ::SendMessage(GetEditHwnd(), EM_REPLACESEL, 0, wxMSW_CONV_LPARAM(text));
 }
 
 wxString wxTextEntry::DoGetValue() const
@@ -740,7 +771,9 @@ void wxTextEntry::GetSelection(long *from, long *to) const
 
 #ifdef HAS_AUTOCOMPLETE
 
-bool wxTextEntry::DoAutoCompleteFileNames()
+#if wxUSE_DYNLIB_CLASS
+
+bool wxTextEntry::DoAutoCompleteFileNames(int flags)
 {
     typedef HRESULT (WINAPI *SHAutoComplete_t)(HWND, DWORD);
     static SHAutoComplete_t s_pfnSHAutoComplete = (SHAutoComplete_t)-1;
@@ -760,7 +793,18 @@ bool wxTextEntry::DoAutoCompleteFileNames()
     if ( !s_pfnSHAutoComplete )
         return false;
 
-    HRESULT hr = (*s_pfnSHAutoComplete)(GetEditHwnd(), SHACF_FILESYS_ONLY);
+    DWORD dwFlags = 0;
+    if ( flags & wxFILE )
+        dwFlags |= SHACF_FILESYS_ONLY;
+    else if ( flags & wxDIR )
+        dwFlags |= SHACF_FILESYS_DIRS;
+    else
+    {
+        wxFAIL_MSG(wxS("No flags for file name auto completion?"));
+        return false;
+    }
+
+    HRESULT hr = (*s_pfnSHAutoComplete)(GetEditHwnd(), dwFlags);
     if ( FAILED(hr) )
     {
         wxLogApiError(wxT("SHAutoComplete()"), hr);
@@ -775,6 +819,8 @@ bool wxTextEntry::DoAutoCompleteFileNames()
 
     return true;
 }
+
+#endif // wxUSE_DYNLIB_CLASS
 
 wxTextAutoCompleteData *wxTextEntry::GetOrCreateCompleter()
 {
@@ -833,9 +879,9 @@ bool wxTextEntry::DoAutoCompleteCustom(wxTextCompleter *completer)
 
 // We still need to define stubs as we declared these overrides in the header.
 
-bool wxTextEntry::DoAutoCompleteFileNames()
+bool wxTextEntry::DoAutoCompleteFileNames(int flags)
 {
-    return wxTextEntryBase::DoAutoCompleteFileNames();
+    return wxTextEntryBase::DoAutoCompleteFileNames(flags);
 }
 
 bool wxTextEntry::DoAutoCompleteStrings(const wxArrayString& choices)
@@ -895,7 +941,7 @@ void wxTextEntry::SetMaxLength(unsigned long len)
 
 bool wxTextEntry::SetHint(const wxString& hint)
 {
-    if ( wxUxThemeEngine::GetIfActive() )
+    if ( wxGetWinVersion() >= wxWinVersion_Vista && wxUxThemeEngine::GetIfActive() )
     {
         // notice that this message always works with Unicode strings
         //
@@ -937,9 +983,12 @@ bool wxTextEntry::DoSetMargins(const wxPoint& margins)
 
     if ( margins.x != -1 )
     {
-        // left margin
+        // Set both horizontal margins to the given value, we don't distinguish
+        // between left and right margin at wx API level and it seems to be
+        // better to change both of them than only left one.
         ::SendMessage(GetEditHwnd(), EM_SETMARGINS,
-                      EC_LEFTMARGIN, MAKELONG(margins.x, 0));
+                      EC_LEFTMARGIN | EC_RIGHTMARGIN,
+                      MAKELONG(margins.x, margins.x));
     }
 
     if ( margins.y != -1 )

@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by: Marcin Malich
 // Created:     13.11.97
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -23,10 +22,6 @@
 #include "wx/msw/private.h"
 #include "wx/msw/private/dc.h"
 #include "wx/msw/wrapcctl.h"            // for HIMAGELIST
-
-#ifndef DSS_HIDEPREFIX
-#define DSS_HIDEPREFIX  0x0200
-#endif
 
 // ----------------------------------------------------------------------------
 // constants for base class
@@ -90,7 +85,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc,
         int cx = rc.GetWidth() - GetMarginWidth();
         int cy = sizeRect.cy;
 
-        ::DrawState(hdc, NULL, NULL, (LPARAM)text.wx_str(),
+        ::DrawState(hdc, NULL, NULL, wxMSW_CONV_LPARAM(text),
                     text.length(), x, y, cx, cy, flags);
 
     } // reset to default the font, colors and brush

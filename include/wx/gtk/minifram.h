@@ -2,7 +2,6 @@
 // Name:        wx/gtk/minifram.h
 // Purpose:     wxMiniFrame class
 // Author:      Robert Roebling
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -33,6 +32,7 @@ public:
     {
         Create(parent, id, title, pos, size, style, name);
     }
+    ~wxMiniFrame();
 
     bool Create(wxWindow *parent,
             wxWindowID id,
@@ -42,13 +42,13 @@ public:
             long style = wxCAPTION | wxRESIZE_BORDER,
             const wxString& name = wxFrameNameStr);
 
-    virtual void SetTitle( const wxString &title );
+    virtual void SetTitle( const wxString &title ) wxOVERRIDE;
 
 protected:
     virtual void DoSetSizeHints( int minW, int minH,
                                  int maxW, int maxH,
-                                 int incW, int incH );
-    virtual void DoGetClientSize(int* width, int* height) const;
+                                 int incW, int incH ) wxOVERRIDE;
+    virtual void DoGetClientSize(int* width, int* height) const wxOVERRIDE;
 
  // implementation
 public:

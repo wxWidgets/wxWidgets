@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/listctrl.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,12 +9,11 @@
 #define _WX_QT_LISTCTRL_H_
 
 #include "wx/textctrl.h"
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QListWidget>
+#include <QtWidgets/QTreeWidget>
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
-class WXDLLIMPEXP_CORE wxListCtrl: public wxControl
+class WXDLLIMPEXP_CORE wxListCtrl: public wxListCtrlBase
 {
 public:
     wxListCtrl();
@@ -36,6 +34,7 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxListCtrlNameStr);
 
+    virtual ~wxListCtrl();
 
     // Attributes
     ////////////////////////////////////////////////////////////////////////////
@@ -45,10 +44,10 @@ public:
     bool SetBackgroundColour(const wxColour& col);
 
     // Gets information about this column
-    bool GetColumn(int col, wxListItem& item) const;
+    bool GetColumn(int col, wxListItem& info) const;
 
     // Sets information about this column
-    bool SetColumn(int col, const wxListItem& item);
+    bool SetColumn(int col, const wxListItem& info);
 
     // Gets the column width
     int GetColumnWidth(int col) const;
@@ -253,14 +252,6 @@ public:
     // Insert an image/string item
     long InsertItem(long index, const wxString& label, int imageIndex);
 
-    // For list view mode (only), inserts a column.
-    long InsertColumn(long col, const wxListItem& info);
-
-    long InsertColumn(long col,
-                      const wxString& heading,
-                      int format = wxLIST_FORMAT_LEFT,
-                      int width = -1);
-
     // set the number of items in a virtual list control
     void SetItemCount(long count);
 
@@ -285,17 +276,46 @@ public:
     bool SortItems(wxListCtrlCompare fn, wxIntPtr data);
 
 
-#if WXWIN_COMPATIBILITY_2_6
-    // obsolete stuff, for compatibility only -- don't use
-    wxDEPRECATED( int GetItemSpacing(bool isSmall) const);
-#endif // WXWIN_COMPATIBILITY_2_6
+    // these functions are only used for virtual list view controls, i.e. the
+    // ones with wxLC_VIRTUAL style (not currently implemented in wxQT)
 
-    virtual QListWidget *GetHandle() const;
+    // return the text for the given column of the given item
+    virtual wxString OnGetItemText(long item, long column) const;
 
+    // return the icon for the given item. In report view, OnGetItemImage will
+    // only be called for the first column. See OnGetItemColumnImage for
+    // details.
+    virtual int OnGetItemImage(long item) const;
+
+    // return the icon for the given item and column.
+    virtual int OnGetItemColumnImage(long item, long column) const;
+
+    // return the attribute for the given item and column (may return NULL if none)
+    virtual wxListItemAttr *OnGetItemColumnAttr(long item, long WXUNUSED(column)) const
+    {
+        return OnGetItemAttr(item);
+    }
+
+    virtual QTreeWidget *GetHandle() const;
+
+protected:
+    void Init();
+
+    // Implement base class pure virtual methods.
+    long DoInsertColumn(long col, const wxListItem& info);
+
+    QTreeWidgetItem *QtGetItem(int id) const;
+
+    wxImageList *     m_imageListNormal; // The image list for normal icons
+    wxImageList *     m_imageListSmall;  // The image list for small icons
+    wxImageList *     m_imageListState;  // The image list state icons (not implemented yet)
+    bool              m_ownsImageListNormal,
+                      m_ownsImageListSmall,
+                      m_ownsImageListState;
 private:
-    wxQtPointer< QListWidget > m_qtListWidget;
+    QTreeWidget *m_qtTreeWidget;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxListCtrl );
+    wxDECLARE_DYNAMIC_CLASS( wxListCtrl );
 };
 
 #endif

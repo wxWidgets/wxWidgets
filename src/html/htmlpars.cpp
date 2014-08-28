@@ -2,7 +2,6 @@
 // Name:        src/html/htmlpars.cpp
 // Purpose:     wxHtmlParser class (generic parser)
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -890,10 +889,10 @@ class wxMetaTagParser : public wxHtmlParser
 public:
     wxMetaTagParser() { }
 
-    wxObject* GetProduct() { return NULL; }
+    wxObject* GetProduct() wxOVERRIDE { return NULL; }
 
 protected:
-    virtual void AddText(const wxString& WXUNUSED(txt)) {}
+    virtual void AddText(const wxString& WXUNUSED(txt)) wxOVERRIDE {}
 
     wxDECLARE_NO_COPY_CLASS(wxMetaTagParser);
 };
@@ -902,8 +901,8 @@ class wxMetaTagHandler : public wxHtmlTagHandler
 {
 public:
     wxMetaTagHandler(wxString *retval) : wxHtmlTagHandler(), m_retval(retval) {}
-    wxString GetSupportedTags() { return wxT("META,BODY"); }
-    bool HandleTag(const wxHtmlTag& tag);
+    wxString GetSupportedTags() wxOVERRIDE { return wxT("META,BODY"); }
+    bool HandleTag(const wxHtmlTag& tag) wxOVERRIDE;
 
 private:
     wxString *m_retval;
@@ -919,11 +918,13 @@ bool wxMetaTagHandler::HandleTag(const wxHtmlTag& tag)
         return false;
     }
 
-    if (tag.HasParam(wxT("HTTP-EQUIV")) &&
-        tag.GetParam(wxT("HTTP-EQUIV")).IsSameAs(wxT("Content-Type"), false) &&
-        tag.HasParam(wxT("CONTENT")))
+    wxString httpEquiv,
+             content;
+    if (tag.GetParamAsString(wxT("HTTP-EQUIV"), &httpEquiv) &&
+        httpEquiv.IsSameAs(wxT("Content-Type"), false) &&
+        tag.GetParamAsString(wxT("CONTENT"), &content))
     {
-        wxString content = tag.GetParam(wxT("CONTENT")).Lower();
+        content.MakeLower();
         if (content.Left(19) == wxT("text/html; charset="))
         {
             *m_retval = content.Mid(19);
@@ -957,12 +958,14 @@ wxHtmlParser::SkipCommentTag(wxString::const_iterator& start,
 
     wxString::const_iterator p = start;
 
-    // comments begin with "<!--" in HTML 4.0
-    if ( end - start < 4 || *++p != '!' || *++p != '-' || *++p != '-' )
-    {
-        // not a comment at all
-        return false;
-    }
+    // Comments begin with "<!--" in HTML 4.0; anything shorter or not containing
+    // these characters is not a comment and we're not going to skip it.
+    if ( ++p == end || *p != '!' )
+      return false;
+    if ( ++p == end || *p != '-' )
+      return false;
+    if ( ++p == end || *p != '-' )
+      return false;
 
     // skip the start of the comment tag in any case, if we don't find the
     // closing tag we should ignore broken markup

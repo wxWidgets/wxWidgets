@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -136,7 +135,7 @@ void wxPrintPaperDatabase::CreateDatabase()
     WXADDPAPER(wxPAPER_FANFOLD_STD_GERMAN, DMPAPER_FANFOLD_STD_GERMAN, wxTRANSLATE("German Std Fanfold, 8 1/2 x 12 in"), 2159, 3048);
     WXADDPAPER(wxPAPER_FANFOLD_LGL_GERMAN, DMPAPER_FANFOLD_LGL_GERMAN, wxTRANSLATE("German Legal Fanfold, 8 1/2 x 13 in"), 2159, 3302);
 
-    WXADDPAPER(wxPAPER_ISO_B4,             DMPAPER_ISO_B4,             wxTRANSLATE("B4 (ISO) 250 x 353 mm"), 2500, 2530);
+    WXADDPAPER(wxPAPER_ISO_B4,             DMPAPER_ISO_B4,             wxTRANSLATE("B4 (ISO) 250 x 353 mm"), 2500, 3530);
     WXADDPAPER(wxPAPER_JAPANESE_POSTCARD,  DMPAPER_JAPANESE_POSTCARD,  wxTRANSLATE("Japanese Postcard 100 x 148 mm"), 1000, 1480);
     WXADDPAPER(wxPAPER_9X11,               DMPAPER_9X11,               wxTRANSLATE("9 x 11 in"), 2286, 2794);
     WXADDPAPER(wxPAPER_10X11,              DMPAPER_10X11,              wxTRANSLATE("10 x 11 in"), 2540, 2794);
@@ -354,8 +353,8 @@ class WXDLLEXPORT wxPrintPaperModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxPrintPaperModule)
 public:
     wxPrintPaperModule() {}
-    bool OnInit();
-    void OnExit();
+    bool OnInit() wxOVERRIDE;
+    void OnExit() wxOVERRIDE;
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperModule, wxModule)

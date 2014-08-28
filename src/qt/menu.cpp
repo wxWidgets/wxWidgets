@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/menu.cpp
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,8 +9,8 @@
 #include "wx/wxprec.h"
 
 #include "wx/menu.h"
-#include "wx/qt/utils.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
 
 
 static void ApplyStyle( QMenu *qtMenu, long style )
@@ -134,12 +133,14 @@ QMenu *wxMenu::GetHandle() const
 
 wxMenuBar::wxMenuBar()
 {
-    m_qtMenuBar = new QMenuBar();
+    m_qtMenuBar  = new QMenuBar();
+    PostCreation();
 }
 
 wxMenuBar::wxMenuBar( long WXUNUSED( style ))
 {
     m_qtMenuBar = new QMenuBar();
+    PostCreation();
 }
 
 wxMenuBar::wxMenuBar(size_t count, wxMenu *menus[], const wxString titles[], long WXUNUSED( style ))
@@ -148,6 +149,8 @@ wxMenuBar::wxMenuBar(size_t count, wxMenu *menus[], const wxString titles[], lon
 
     for ( size_t i = 0; i < count; ++i )
         Append( menus[ i ], titles[ i ] );
+
+    PostCreation();
 }
 
 
@@ -226,6 +229,20 @@ wxString wxMenuBar::GetMenuLabel(size_t pos) const
     QMenu *qtMenu = qtAction->menu();
 
     return wxQtConvertString( qtMenu->title() );
+}
+
+void wxMenuBar::Attach(wxFrame *frame)
+{
+    // sanity check as setMenuBar takes ownership
+    wxCHECK_RET( m_qtMenuBar, "Menu bar has been previously deleted by Qt");
+    wxMenuBarBase::Attach(frame);
+}
+
+void wxMenuBar::Detach()
+{
+    // the QMenuBar probably was deleted by Qt as setMenuBar takes ownership
+    m_qtMenuBar = NULL;
+    wxMenuBarBase::Detach();
 }
 
 QMenuBar *wxMenuBar::GetHandle() const

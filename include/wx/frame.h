@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     15.11.99
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -39,7 +38,6 @@ class WXDLLIMPEXP_FWD_CORE wxToolBar;
 #define wxFRAME_NO_TASKBAR      0x0002  // No taskbar button (MSW only)
 #define wxFRAME_TOOL_WINDOW     0x0004  // No taskbar button, no system menu
 #define wxFRAME_FLOAT_ON_PARENT 0x0008  // Always above its parent
-#define wxFRAME_SHAPED          0x0010  // Create a window that is able to be shaped
 
 // ----------------------------------------------------------------------------
 // wxFrame is a top-level window with optional menubar, statusbar and toolbar
@@ -73,7 +71,7 @@ public:
 
     // get the origin of the client area (which may be different from (0, 0)
     // if the frame has a toolbar) in client coordinates
-    virtual wxPoint GetClientAreaOrigin() const;
+    virtual wxPoint GetClientAreaOrigin() const wxOVERRIDE;
 
 
     // menu bar functions
@@ -166,10 +164,10 @@ public:
 #endif // wxUSE_MENUS
 
     // do the UI update processing for this window
-    virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
+    virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE) wxOVERRIDE;
 
     // Implement internal behaviour (menu updating on some platforms)
-    virtual void OnInternalIdle();
+    virtual void OnInternalIdle() wxOVERRIDE;
 
 #if wxUSE_MENUS || wxUSE_TOOLBAR
     // show help text for the currently selected menu or toolbar item
@@ -178,7 +176,7 @@ public:
     virtual void DoGiveHelp(const wxString& text, bool show);
 #endif
 
-    virtual bool IsClientAreaChild(const wxWindow *child) const
+    virtual bool IsClientAreaChild(const wxWindow *child) const wxOVERRIDE
     {
         return !IsOneOfBars(child) && wxTopLevelWindow::IsClientAreaChild(child);
     }
@@ -192,7 +190,7 @@ protected:
     void DeleteAllBars();
 
     // test whether this window makes part of the frame
-    virtual bool IsOneOfBars(const wxWindow *win) const;
+    virtual bool IsOneOfBars(const wxWindow *win) const wxOVERRIDE;
 
 #if wxUSE_MENUS
     // override to update menu bar position when the frame size changes
@@ -205,6 +203,10 @@ protected:
     // override to do something special when the menu bar is attached to the
     // frame
     virtual void AttachMenuBar(wxMenuBar *menubar);
+
+    // Return true if we should update the menu item state from idle event
+    // handler or false if we should delay it until the menu is opened.
+    static bool ShouldUpdateMenuFromIdle();
 
     wxMenuBar *m_frameMenuBar;
 #endif // wxUSE_MENUS
@@ -252,9 +254,7 @@ protected:
 #if defined(__WXUNIVERSAL__) // && !defined(__WXMICROWIN__)
     #include "wx/univ/frame.h"
 #else // !__WXUNIVERSAL__
-    #if defined(__WXPALMOS__)
-        #include "wx/palmos/frame.h"
-    #elif defined(__WXMSW__)
+    #if defined(__WXMSW__)
         #include "wx/msw/frame.h"
     #elif defined(__WXGTK20__)
         #include "wx/gtk/frame.h"
@@ -264,10 +264,6 @@ protected:
         #include "wx/motif/frame.h"
     #elif defined(__WXMAC__)
         #include "wx/osx/frame.h"
-    #elif defined(__WXCOCOA__)
-        #include "wx/cocoa/frame.h"
-    #elif defined(__WXPM__)
-        #include "wx/os2/frame.h"
     #elif defined(__WXQT__)
         #include "wx/qt/frame.h"
     #endif

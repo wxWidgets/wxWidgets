@@ -1,4 +1,3 @@
-/* $Id$ */
 
 /*
  * Copyright (c) 1987, 1993
@@ -36,6 +35,7 @@ __RCSID("$NetBSD: strcasecmp.c,v 1.16 2003/08/07 16:43:49 agc Exp $");
 
 #include <ctype.h>
 #include <string.h>
+#include "libport.h"
 
 int
 strcasecmp(const char *s1, const char *s2)

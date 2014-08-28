@@ -49,6 +49,11 @@
     <object class="wxMenu" name="advanced_demos_menu">
         <label>_Advanced</label>
         <help>Advanced techniques with XRC</help>
+         <object class="wxMenuItem" name="aui_demo_tool_or_menuitem">
+            <label>_AUI</label>
+            <bitmap>aui.xpm</bitmap>
+            <help>Advanced User Interface classes and controls</help>
+        </object>
          <object class="wxMenuItem" name="obj_ref_tool_or_menuitem">
             <label>_Object References Example</label>
             <bitmap>objrefdlg.xpm</bitmap>
@@ -74,6 +79,11 @@
             <bitmap>variable.xpm</bitmap>
             <help>Replace variables in the XRC file at runtime</help>
         </object>        
+        <object class="wxMenuItem" name="variants">
+            <label>_Variants</label>
+            <bitmap>variants.xpm</bitmap>
+            <help>Show different controls variants</help>
+        </object>
         <object class="wxMenuItem" name="recursive_load">
             <label>_Recursive Load</label>
             <help>Show how an individual control can be loaded</help>
@@ -84,7 +94,7 @@
 
         <!-- we use wxID_ABOUT name here to get the default menu item stock icon -->
         <object class="wxMenuItem" name="wxID_ABOUT">
-            <label>_About...</label>
+            <label>_About</label>
             <help>About this application</help>
         </object>
     </object>

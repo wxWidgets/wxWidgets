@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 29 April 2011                                                       *
+# Date : 8 January 2014                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -47,7 +47,7 @@ LEX=flex
 .suffixes : .cpp
 
 .cpp.obj :
-	cxx $(CXXFLAGS)$(CXX_DEFINE) $(MMS$TARGET_NAME).cpp
+	cxx /object=$(MMS$TARGET_NAME).obj $(CXX_DEFINE) $(MMS$TARGET_NAME).cpp
 .c.obj :
 	cc $(CFLAGS)$(CC_DEFINE) $(MMS$TARGET_NAME).c
 
@@ -209,8 +209,9 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		clrpickercmn.obj,\
 		filepickercmn.obj,\
 		fontpickercmn.obj,\
-		pickerbase.obj,\
-		listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
+		pickerbase.obj
+
+OBJECTS3=listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
 		selectdispatcher.obj,overlaycmn.obj,windowid.obj,sstream.obj,\
 		wrapsizer.obj,headerctrlcmn.obj,headercolcmn.obj,\
 		rearrangectrl.obj,spinctrlcmn.obj,datetimefmt.obj,xlocale.obj,\
@@ -222,7 +223,9 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		statlinecmn.obj,radiobtncmn.obj,bmpbtncmn.obj,checklstcmn.obj,\
 		statbmpcmn.obj,dirctrlcmn.obj,gridcmn.obj,odcombocmn.obj,\
 		spinbtncmn.obj,scrolbarcmn.obj,colourdata.obj,fontdata.obj,\
-		valnum.obj,numformatter.obj,markupparser.obj,affinematrix2d.obj
+		valnum.obj,numformatter.obj,markupparser.obj,\
+		affinematrix2d.obj,richtooltipcmn.obj,persist.obj,time.obj,\
+		textmeasurecmn.obj,modalhook.obj,threadinfo.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -425,17 +428,21 @@ SOURCES = \
 		statboxcmn.cpp,slidercmn.cpp,statlinecmn.cpp,radiobtncmn.cpp,\
 		bmpbtncmn.cpp,checklstcmn.cpp,statbmpcmn.cpp,dirctrlcmn.cpp,\
 		gridcmn.cpp,odcombocmn.cpp,spinbtncmn.cpp,scrolbarcmn.cpp,\
-		colourdata.cpp,fontdata.cpp affinematrix2d.cpp
+		colourdata.cpp,fontdata.cpp affinematrix2d.cpp\
+		richtooltipcmn.cpp persist.cpp time.cpp textmeasurecmn.cpp \
+		modalhook.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS1)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS2)
+	$(MMS)$(MMSQUALIFIERS) $(OBJECTS3)
 .ifdef __WXMOTIF__
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS_MOTIF)
 	library [--.lib]libwx_motif.olb $(OBJECTS)
 	library [--.lib]libwx_motif.olb $(OBJECTS1)
 	library [--.lib]libwx_motif.olb $(OBJECTS2)
+	library [--.lib]libwx_motif.olb $(OBJECTS3)
 	library [--.lib]libwx_motif.olb $(OBJECTS_MOTIF)
 .else
 .ifdef __WXGTK__
@@ -443,6 +450,7 @@ all : $(SOURCES)
 	library [--.lib]libwx_gtk.olb $(OBJECTS)
 	library [--.lib]libwx_gtk.olb $(OBJECTS1)
 	library [--.lib]libwx_gtk.olb $(OBJECTS2)
+	library [--.lib]libwx_gtk.olb $(OBJECTS3)
 	library [--.lib]libwx_gtk.olb $(OBJECTS_X11)
 .else
 .ifdef __WXGTK2__
@@ -451,6 +459,7 @@ all : $(SOURCES)
 	library [--.lib]libwx_gtk2.olb $(OBJECTS)
 	library [--.lib]libwx_gtk2.olb $(OBJECTS1)
 	library [--.lib]libwx_gtk2.olb $(OBJECTS2)
+	library [--.lib]libwx_gtk2.olb $(OBJECTS3)
 	library [--.lib]libwx_gtk2.olb $(OBJECTS_X11)
 	library [--.lib]libwx_gtk2.olb $(OBJECTS_GTK2)
 .else
@@ -459,6 +468,7 @@ all : $(SOURCES)
 	library [--.lib]libwx_x11_univ.olb $(OBJECTS)
 	library [--.lib]libwx_x11_univ.olb $(OBJECTS1)
 	library [--.lib]libwx_x11_univ.olb $(OBJECTS2)
+	library [--.lib]libwx_x11_univ.olb $(OBJECTS3)
 	library [--.lib]libwx_x11_univ.olb $(OBJECTS_X11)
 .endif
 .endif
@@ -468,6 +478,7 @@ all : $(SOURCES)
 $(OBJECTS) : [--.include.wx]setup.h
 $(OBJECTS1) : [--.include.wx]setup.h
 $(OBJECTS2) : [--.include.wx]setup.h
+$(OBJECTS3) : [--.include.wx]setup.h
 $(OBJECTS_X11) : [--.include.wx]setup.h
 $(OBJECTS_GTK2) : [--.include.wx]setup.h
 $(OBJECTS_MOTIF) : [--.include.wx]setup.h
@@ -541,7 +552,7 @@ hash.obj : hash.cpp
 hashmap.obj : hashmap.cpp
 helpbase.obj : helpbase.cpp
 http.obj : http.cpp
-	cxx$(CXXFLAGS)$(CXX_DEFINE)/warn=disable=(UNSCOMZER)/obj=http.obj \
+	cxx$(CXX_DEFINE)/warn=disable=(UNSCOMZER)/obj=http.obj \
 	http.cpp
 hyperlnkcmn.obj : hyperlnkcmn.cpp
 iconbndl.obj : iconbndl.cpp
@@ -579,6 +590,7 @@ platinfo.obj : platinfo.cpp
 popupcmn.obj : popupcmn.cpp
 prntbase.obj : prntbase.cpp
 process.obj : process.cpp
+	cxx /object=process.obj$(CXX_DEFINE)/warn=disable=(UNSCOMZER) process.cpp
 protocol.obj : protocol.cpp
 quantize.obj : quantize.cpp
 radiocmn.obj : radiocmn.cpp
@@ -655,7 +667,7 @@ srchcmn.obj : srchcmn.cpp
 textentrycmn.obj : textentrycmn.cpp
 filectrlcmn.obj : filectrlcmn.cpp
 cairo.obj : cairo.cpp
-	cxx$(CXXFLAGS)$(CXX_DEFINE)/obj=cairo.obj cairo.cpp
+	cxx$(CXX_DEFINE)/obj=cairo.obj cairo.cpp
 overlaycmn.obj : overlaycmn.cpp
 windowid.obj : windowid.cpp
 calctrlcmn.obj : calctrlcmn.cpp
@@ -701,3 +713,9 @@ valnum.obj : valnum.cpp
 numformatter.obj : numformatter.cpp
 markupparser.obj : markupparser.cpp
 affinematrix2d.obj : affinematrix2d.cpp
+richtooltipcmn.obj : richtooltipcmn.cpp
+persist.obj : persist.cpp
+time.obj : time.cpp
+textmeasurecmn.obj : textmeasurecmn.cpp
+modalhook.obj : modalhook.cpp
+threadinfo.obj : threadinfo.cpp

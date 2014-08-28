@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -38,11 +37,8 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    virtual ~wxFrame();
-
     // implement base class pure virtuals
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
-    virtual void Raise();
 
     // implementation only from now on
     // -------------------------------
@@ -78,8 +74,6 @@ public:
     // event handlers
     bool HandleSize(int x, int y, WXUINT flag);
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
-    bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);
-    bool HandleMenuLoop(const wxEventType& evtType, WXWORD isPopup);
 
     // tooltip management
 #if wxUSE_TOOLTIPS
@@ -107,6 +101,12 @@ public:
     // get the currently active menu: this is the same as the frame menu for
     // normal frames but is overridden by wxMDIParentFrame
     virtual WXHMENU MSWGetActiveMenu() const { return m_hMenu; }
+
+    virtual bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);
+    virtual bool DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu, bool popup);
+
+    // Look up the menu in the menu bar.
+    virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu);
 #endif // wxUSE_MENUS
 
 protected:
@@ -133,9 +133,6 @@ protected:
     // wxMDIChildFrame
     bool MSWDoTranslateMessage(wxFrame *frame, WXMSG *msg);
 
-    // handle WM_INITMENUPOPUP message to generate wxEVT_MENU_OPEN
-    bool HandleInitMenuPopup(WXHMENU hMenu);
-
     virtual bool IsMDIChild() const { return false; }
 
     // get default (wxWidgets) icon for the frame
@@ -154,6 +151,10 @@ protected:
 #if wxUSE_MENUS
     // frame menu, NULL if none
     WXHMENU m_hMenu;
+
+    // The number of currently opened menus: 0 initially, 1 when a top level
+    // menu is opened, 2 when its submenu is opened and so on.
+    int m_menuDepth;
 #endif // wxUSE_MENUS
 
 private:

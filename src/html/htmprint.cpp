@@ -3,7 +3,6 @@
 // Purpose:     html printing classes
 // Author:      Vaclav Slavik
 // Created:     25/09/99
-// RCS-ID:      $Id$
 // Copyright:   (c) Vaclav Slavik, 1999
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -151,7 +150,7 @@ int wxHtmlDCRenderer::Render(int x, int y,
     int pbreak, hght;
 
     pbreak = (int)(from + m_Height);
-    while (m_Cells->AdjustPagebreak(&pbreak, known_pagebreaks)) {}
+    while (m_Cells->AdjustPagebreak(&pbreak, known_pagebreaks, m_Height)) {}
     hght = pbreak - from;
     if(to < hght)
         hght = to;
@@ -534,7 +533,7 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
                       (double)ppiPrinterY / TYPICAL_SCREEN_DPI,
                       (double)ppiPrinterY / (double)ppiScreenY);
 
-    dc->SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
+    dc->SetBackgroundMode(wxTRANSPARENT);
 
     m_Renderer->Render((int) (ppmm_h * m_MarginLeft),
                          (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight), m_PageBreaks,
@@ -831,8 +830,8 @@ class wxHtmlPrintingModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxHtmlPrintingModule)
 public:
     wxHtmlPrintingModule() : wxModule() {}
-    bool OnInit() { return true; }
-    void OnExit() { wxHtmlPrintout::CleanUpStatics(); }
+    bool OnInit() wxOVERRIDE { return true; }
+    void OnExit() wxOVERRIDE { wxHtmlPrintout::CleanUpStatics(); }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlPrintingModule, wxModule)

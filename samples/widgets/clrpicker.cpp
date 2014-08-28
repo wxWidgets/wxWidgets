@@ -4,7 +4,6 @@
 // Purpose:     Shows wxColourPickerCtrl
 // Author:      Francesco Montorsi
 // Created:     20/6/2006
-// Id:          $Id$
 // Copyright:   (c) 2006 Francesco Montorsi
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -66,11 +65,11 @@ public:
     ColourPickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~ColourPickerWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const { return m_clrPicker; }
-    virtual void RecreateWidget() { RecreatePicker(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_clrPicker; }
+    virtual void RecreateWidget() wxOVERRIDE { RecreatePicker(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
 
@@ -103,7 +102,7 @@ protected:
     wxBoxSizer *m_sizer;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(ColourPickerWidgetsPage)
 };
 
@@ -111,13 +110,13 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(ColourPickerWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(ColourPickerWidgetsPage, WidgetsPage)
     EVT_BUTTON(PickerPage_Reset, ColourPickerWidgetsPage::OnButtonReset)
 
     EVT_COLOURPICKER_CHANGED(PickerPage_Colour, ColourPickerWidgetsPage::OnColourChange)
 
     EVT_CHECKBOX(wxID_ANY, ColourPickerWidgetsPage::OnCheckBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
@@ -144,8 +143,8 @@ void ColourPickerWidgetsPage::CreateContent()
     wxSizer *boxleft = new wxBoxSizer(wxVERTICAL);
 
     wxStaticBoxSizer *clrbox = new wxStaticBoxSizer(wxVERTICAL, this, wxT("&ColourPicker style"));
-    m_chkColourTextCtrl = CreateCheckBoxAndAddToSizer(clrbox, wxT("With textctrl"), false);
-    m_chkColourShowLabel = CreateCheckBoxAndAddToSizer(clrbox, wxT("With label"), false);
+    m_chkColourTextCtrl = CreateCheckBoxAndAddToSizer(clrbox, wxT("With textctrl"));
+    m_chkColourShowLabel = CreateCheckBoxAndAddToSizer(clrbox, wxT("With label"));
     boxleft->Add(clrbox, 0, wxALL|wxGROW, 5);
 
     boxleft->Add(new wxButton(this, PickerPage_Reset, wxT("&Reset")),

@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -77,7 +76,7 @@ public:
         m_lineBreak = lineBreak;
     }
 
-    virtual void SetLabel(const wxString& title, wxFontEncoding encoding)
+    virtual void SetLabel(const wxString& title, wxFontEncoding encoding) wxOVERRIDE
     {
         wxCFStringRef text( title , encoding );
 
@@ -88,7 +87,7 @@ public:
     }
 
 #if wxUSE_MARKUP
-    virtual void SetLabelMarkup( const wxString& markup)
+    virtual void SetLabelMarkup( const wxString& markup) wxOVERRIDE
     {
         wxMarkupToAttrString toAttr(GetWXPeer(), markup);
 
@@ -102,7 +101,7 @@ private:
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineBreakMode:m_lineBreak];
         int style = GetWXPeer()->GetWindowStyleFlag();
-        if (style & wxALIGN_CENTER)
+        if (style & wxALIGN_CENTER_HORIZONTAL)
             [paragraphStyle setAlignment: NSCenterTextAlignment];
         else if (style & wxALIGN_RIGHT)
             [paragraphStyle setAlignment: NSRightTextAlignment];

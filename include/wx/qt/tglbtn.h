@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/tglbtn.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,7 +9,6 @@
 #define _WX_QT_TGLBTN_H_
 
 #include "wx/tglbtn.h"
-#include "wx/qt/button_qt.h"
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
 
@@ -43,7 +41,6 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmapToggleButton)
 
-    wxQtPointer< wxQtPushButton > m_qtPushButton;
 };
 
 
@@ -75,7 +72,7 @@ public:
     virtual QPushButton *GetHandle() const;
 
 private:
-    wxQtPointer< wxQtPushButton > m_qtPushButton;
+
 };
 
 #endif // _WX_QT_TGLBTN_H_

@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing wxFileCtrl
 // Author:      Diaa M. Sami
 // Created:     28 Jul 2007
-// Id:          $Id$
 // Copyright:   (c) 2007 Diaa M. Sami
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -71,11 +70,11 @@ public:
     FileCtrlWidgetsPage( WidgetsBookCtrl *book, wxImageList *imaglist );
     virtual ~FileCtrlWidgetsPage() {}
 
-    virtual wxControl *GetWidget() const { return /*m_fileCtrl*/NULL; }
-    virtual void RecreateWidget() { CreateFileCtrl(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_fileCtrl; }
+    virtual void RecreateWidget() wxOVERRIDE { CreateFileCtrl(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
     // event handlers
@@ -114,7 +113,7 @@ protected:
     wxCheckBox *m_fltr[3];
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE( FileCtrlWidgetsPage )
 };
 
@@ -122,7 +121,7 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE( FileCtrlWidgetsPage, WidgetsPage )
+wxBEGIN_EVENT_TABLE( FileCtrlWidgetsPage, WidgetsPage )
     EVT_BUTTON( FileCtrlPage_Reset, FileCtrlWidgetsPage::OnButtonReset )
     EVT_BUTTON( FileCtrlPage_SetDirectory, FileCtrlWidgetsPage::OnButtonSetDirectory )
     EVT_BUTTON( FileCtrlPage_SetPath, FileCtrlWidgetsPage::OnButtonSetPath )
@@ -134,7 +133,7 @@ BEGIN_EVENT_TABLE( FileCtrlWidgetsPage, WidgetsPage )
     EVT_FILECTRL_FOLDERCHANGED( wxID_ANY, FileCtrlWidgetsPage::OnFileCtrl )
     EVT_FILECTRL_SELECTIONCHANGED( wxID_ANY, FileCtrlWidgetsPage::OnFileCtrl )
     EVT_FILECTRL_FILEACTIVATED( wxID_ANY, FileCtrlWidgetsPage::OnFileCtrl )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

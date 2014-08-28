@@ -3,7 +3,6 @@
 // Purpose:     common persistence support classes
 // Author:      Vadim Zeitlin
 // Created:     2009-01-20
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -30,16 +29,34 @@
 
 #include "wx/persist.h"
 
+namespace
+{
+
+wxPersistenceManager* gs_manager = NULL;
+
+} // anonymous namespace
+
 // ============================================================================
 // wxPersistenceManager implementation
 // ============================================================================
 
 /* static */
+void wxPersistenceManager::Set(wxPersistenceManager& manager)
+{
+    gs_manager = &manager;
+}
+
+/* static */
 wxPersistenceManager& wxPersistenceManager::Get()
 {
-    static wxPersistenceManager s_manager;
+    if ( !gs_manager )
+    {
+        static wxPersistenceManager s_manager;
 
-    return s_manager;
+        gs_manager = &s_manager;
+    }
+
+    return *gs_manager;
 }
 
 wxPersistenceManager::~wxPersistenceManager()

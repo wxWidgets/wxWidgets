@@ -4,7 +4,6 @@
 # Purpose:    increments the release version number in all files mentioned in
 #             docs/tech/tn0011.txt
 # Created:    2007-01-07
-# RCS-ID:     $Id$
 # Copyright:  (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
 # Licence:    wxWindows licence
 ##############################################################################
@@ -76,14 +75,18 @@ run_sed configure.in \
     "s/^wx_release_number=$ver_release/wx_release_number=$ver_release_new/" \
     "s/^wx_subrelease_number=.*$/wx_subrelease_number=0/"
 
-for f in *.spec; do
-    run_sed $f "/^%define *ver/s/$ver_for_sed/$ver_string_new/"
-done
-
 run_sed build/osx/wxvers.xcconfig \
     "/DYLIB_.* = /s/$ver_for_sed/$ver_string_new/"
 
-run_sed docs/doxygen/Doxyfile_inc \
+run_sed build/tools/bld_chm_exe.bat \
+    "/^SET WXW_VER=/s/$ver_for_sed/$ver_string_new/"
+
+run_sed docs/readme.txt \
+    "/wxWidgets /s/$ver_for_sed/$ver_string_new/" \
+    "/\//s/$ver_for_sed/$ver_string_new/" \
+    "/naming: while/s/$ver_for_sed/$ver_string_new/" 
+
+run_sed docs/doxygen/Doxyfile \
     "/^PROJECT_NUMBER/s/$ver_for_sed/$ver_string_new/"
 
 run_sed docs/doxygen/latexdocstart.inc \
@@ -101,9 +104,13 @@ run_sed samples/Info.plist \
     "/version/s/$ver_for_sed/$ver_string_new/" \
     "/<string>/s/$ver_for_sed/$ver_string_new/"
 
+run_sed samples/minimal/Info_carbon.plist \
+    "/<string>/s/$ver_for_sed/$ver_string_new/"
+run_sed samples/minimal/Info_cocoa.plist \
+    "/<string>/s/$ver_for_sed/$ver_string_new/"
+
 run_sed samples/docview/Info.plist \
     "/versionon/s/$ver_for_sed/$ver_string_new/" \
     "/<string>/s/$ver_for_sed/$ver_string_new/"
 
-run_set src/wxWindows.xcodeproj/project.pbxproj \
-    "s/DYLIB_CURRENT_VERSION = $ver_for_sed/DYLIB_CURRENT_VERSION = $ver_string_new/"
+msg "Don't forget to change the C:R:A triplet in build/bakefiles/version.bkl now!"

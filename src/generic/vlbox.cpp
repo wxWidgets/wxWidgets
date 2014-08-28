@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     31.05.03
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -249,7 +248,10 @@ bool wxVListBox::DoSetCurrent(int current)
         {
             // it is, indeed, only partly visible, so scroll it into view to
             // make it entirely visible
+            // BUT scrolling down when m_current is first visible makes it
+            // completely hidden, so that is even worse
             while ( (size_t)m_current + 1 == GetVisibleRowsEnd() &&
+                    (size_t)m_current != GetVisibleRowsBegin() &&
                     ScrollToRow(GetVisibleBegin() + 1) ) ;
 
             // but in any case refresh it as even if it was only partly visible
@@ -272,7 +274,7 @@ void wxVListBox::SendSelectedEvent()
     wxASSERT_MSG( m_current != wxNOT_FOUND,
                     wxT("SendSelectedEvent() shouldn't be called") );
 
-    wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, GetId());
+    wxCommandEvent event(wxEVT_LISTBOX, GetId());
     InitEvent(event, m_current);
     (void)GetEventHandler()->ProcessEvent(event);
 }
@@ -717,7 +719,7 @@ void wxVListBox::OnLeftDClick(wxMouseEvent& eventMouse)
         // this event as a left-click instead
         if ( item == m_current )
         {
-            wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, GetId());
+            wxCommandEvent event(wxEVT_LISTBOX_DCLICK, GetId());
             InitEvent(event, item);
             (void)GetEventHandler()->ProcessEvent(event);
         }

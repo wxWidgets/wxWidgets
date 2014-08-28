@@ -5,7 +5,6 @@
 // Author:      Diaa M. Sami
 // Modified by:
 // Created:     Jul-07-2007
-// RCS-ID:      $Id$
 // Copyright:   (c) Diaa M. Sami
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -66,7 +65,7 @@ public:
 void GenerateFilterChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd );
 void GenerateFolderChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd );
 void GenerateSelectionChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd );
-void GenerateFileActivatedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd, const wxString filename = wxEmptyString );
+void GenerateFileActivatedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd, const wxString& filename = wxEmptyString );
 
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #define wxFileCtrl wxGtkFileCtrl
@@ -99,7 +98,7 @@ public:
     }
 
     // no need for the copy constructor as the default one will be fine.
-    virtual wxEvent *Clone() const { return new wxFileCtrlEvent( *this ); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxFileCtrlEvent( *this ); }
 
     void SetFiles( const wxArrayString &files ) { m_files = files; }
     void SetDirectory( const wxString &directory ) { m_directory = directory; }

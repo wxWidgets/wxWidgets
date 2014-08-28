@@ -3,7 +3,6 @@
 // Purpose:     wxColour class implementation for wxQt
 // Author:      Peter Most, Kolya Kosenko
 // Created:     2010-05-12
-// RCS-ID:      $Id$
 // Copyright:   (C) 2010 Kolya Kosenko
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -30,6 +29,8 @@ public:
         { return m_qtColor == color.m_qtColor; }
     bool operator!=(const wxColour& color) const
         { return m_qtColor != color.m_qtColor; }
+
+    int GetPixel() const;
 
     QColor GetHandle() const { return m_qtColor; };
 

@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by: David Bjorkevik
 // Created:     16.05.06
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -19,7 +18,7 @@
 
 #include "wx/tglbtn.h"
 
-wxDEFINE_EVENT( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_TOGGLEBUTTON, wxCommandEvent );
 
 IMPLEMENT_DYNAMIC_CLASS(wxToggleButton, wxButton)
 
@@ -83,7 +82,7 @@ void wxToggleButton::Toggle()
 
 void wxToggleButton::Click()
 {
-    wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, GetId());
+    wxCommandEvent event(wxEVT_TOGGLEBUTTON, GetId());
     InitCommandEvent(event);
     event.SetInt(GetValue());
     Command(event);

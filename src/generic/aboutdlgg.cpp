@@ -3,7 +3,6 @@
 // Purpose:     implements wxGenericAboutBox() function
 // Author:      Vadim Zeitlin
 // Created:     2006-10-08
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -138,7 +137,7 @@ void wxAboutDialogInfo::SetVersion(const wxString& version,
 
 bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* parent)
 {
-    if ( !wxDialog::Create(parent, wxID_ANY, _("About ") + info.GetName(),
+    if ( !wxDialog::Create(parent, wxID_ANY, wxString::Format(_("About %s"), info.GetName()),
                            wxDefaultPosition, wxDefaultSize, wxRESIZE_BORDER|wxDEFAULT_DIALOG_STYLE) )
         return false;
 
@@ -220,6 +219,13 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
 
     CentreOnParent();
 
+#if !wxUSE_MODAL_ABOUT_DIALOG
+    Connect(wxEVT_CLOSE_WINDOW,
+            wxCloseEventHandler(wxGenericAboutDialog::OnCloseWindow));
+    Connect(wxID_OK, wxEVT_BUTTON,
+            wxCommandEventHandler(wxGenericAboutDialog::OnOK));
+#endif // !wxUSE_MODAL_ABOUT_DIALOG
+
     return true;
 }
 
@@ -242,6 +248,7 @@ void wxGenericAboutDialog::AddText(const wxString& text)
         AddControl(new wxStaticText(this, wxID_ANY, text));
 }
 
+#if wxUSE_COLLPANE
 void wxGenericAboutDialog::AddCollapsiblePane(const wxString& title,
                                               const wxString& text)
 {
@@ -264,6 +271,33 @@ void wxGenericAboutDialog::AddCollapsiblePane(const wxString& title,
     // NB: all the wxCollapsiblePanes must be added with a null proportion value
     m_sizerText->Add(pane, wxSizerFlags(0).Expand().Border(wxBOTTOM));
 }
+#endif
+
+#if !wxUSE_MODAL_ABOUT_DIALOG
+
+void wxGenericAboutDialog::OnCloseWindow(wxCloseEvent& event)
+{
+    // safeguards in case the window is still shown using ShowModal
+    if ( !IsModal() )
+        Destroy();
+
+    event.Skip();
+}
+
+void wxGenericAboutDialog::OnOK(wxCommandEvent& event)
+{
+    // safeguards in case the window is still shown using ShowModal
+    if ( !IsModal() )
+    {
+        // By default a modeless dialog would be just hidden, destroy this one
+        // instead.
+        Destroy();
+    }
+    else
+        event.Skip();
+}
+
+#endif // !wxUSE_MODAL_ABOUT_DIALOG
 
 // ----------------------------------------------------------------------------
 // public functions
@@ -271,7 +305,7 @@ void wxGenericAboutDialog::AddCollapsiblePane(const wxString& title,
 
 void wxGenericAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
 {
-#if !defined(__WXGTK__) && !defined(__WXMAC__)
+#if wxUSE_MODAL_ABOUT_DIALOG
     wxGenericAboutDialog dlg(info, parent);
     dlg.ShowModal();
 #else
@@ -282,7 +316,8 @@ void wxGenericAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
 
 // currently wxAboutBox is implemented natively only under these platforms, for
 // the others we provide a generic fallback here
-#if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXGTK26__)
+#if !defined(__WXMSW__) && !defined(__WXMAC__) && \
+        (!defined(__WXGTK20__) || defined(__WXUNIVERSAL__))
 
 void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
 {

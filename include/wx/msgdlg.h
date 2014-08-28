@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -125,8 +124,12 @@ public:
         wxASSERT_MSG( !(style & wxYES) || !(style & wxOK),
                       "wxOK and wxYES/wxNO can't be used together" );
 
-        wxASSERT_MSG( (style & wxYES) || (style & wxOK),
-                      "one of wxOK and wxYES/wxNO must be used" );
+        // It is common to specify just the icon, without wxOK, in the existing
+        // code, especially one written by Windows programmers as MB_OK is 0
+        // and so they're used to omitting wxOK. Don't complain about it but
+        // just add wxOK implicitly for compatibility.
+        if ( !(style & wxYES) && !(style & wxOK) )
+            style |= wxOK;
 
         wxASSERT_MSG( (style & wxID_OK) != wxID_OK,
                       "wxMessageBox: Did you mean wxOK (and not wxID_OK)?" );
@@ -177,10 +180,15 @@ public:
         return true;
     }
 
+    virtual bool SetHelpLabel(const ButtonLabel& help)
+    {
+        DoSetCustomLabel(m_help, help);
+        return true;
+    }
     // test if any custom labels were set
     bool HasCustomLabels() const
     {
-        return !(m_ok.empty() && m_cancel.empty() &&
+        return !(m_ok.empty() && m_cancel.empty() && m_help.empty() &&
                  m_yes.empty() && m_no.empty());
     }
 
@@ -195,10 +203,13 @@ public:
         { return m_ok.empty() ? GetDefaultOKLabel() : m_ok; }
     wxString GetCancelLabel() const
         { return m_cancel.empty() ? GetDefaultCancelLabel() : m_cancel; }
+    wxString GetHelpLabel() const
+        { return m_help.empty() ? GetDefaultHelpLabel() : m_help; }
 
     // based on message dialog style, returns exactly one of: wxICON_NONE,
-    // wxICON_ERROR, wxICON_WARNING, wxICON_QUESTION, wxICON_INFORMATION
-    long GetEffectiveIcon() const
+    // wxICON_ERROR, wxICON_WARNING, wxICON_QUESTION, wxICON_INFORMATION,
+    // wxICON_AUTH_NEEDED
+    virtual long GetEffectiveIcon() const
     {
         if ( m_dialogStyle & wxICON_NONE )
             return wxICON_NONE;
@@ -250,6 +261,7 @@ protected:
     const wxString& GetCustomYesLabel() const { return m_yes; }
     const wxString& GetCustomNoLabel() const { return m_no; }
     const wxString& GetCustomOKLabel() const { return m_ok; }
+    const wxString& GetCustomHelpLabel() const { return m_help; }
     const wxString& GetCustomCancelLabel() const { return m_cancel; }
 
 private:
@@ -259,13 +271,15 @@ private:
     virtual wxString GetDefaultNoLabel() const { return wxGetTranslation("No"); }
     virtual wxString GetDefaultOKLabel() const { return wxGetTranslation("OK"); }
     virtual wxString GetDefaultCancelLabel() const { return wxGetTranslation("Cancel"); }
+    virtual wxString GetDefaultHelpLabel() const { return wxGetTranslation("Help"); }
 
     // labels for the buttons, initially empty meaning that the defaults should
     // be used, use GetYes/No/OK/CancelLabel() to access them
     wxString m_yes,
              m_no,
              m_ok,
-             m_cancel;
+             m_cancel,
+             m_help;
 
     wxDECLARE_NO_COPY_CLASS(wxMessageDialogBase);
 };
@@ -277,10 +291,6 @@ private:
     (defined(__WXGTK__) && !defined(__WXGTK20__))
 
     #define wxMessageDialog wxGenericMessageDialog
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/msgdlg.h"
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/msgdlg.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/msgdlg.h"
 #elif defined(__WXMOTIF__)
@@ -289,8 +299,6 @@ private:
     #include "wx/gtk/msgdlg.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/msgdlg.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/msgdlg.h"
 #elif defined(__WXQT__)
     #include "wx/qt/msgdlg.h"
 #endif

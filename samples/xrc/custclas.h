@@ -2,7 +2,6 @@
 // Name:        custclas.h
 // Purpose:     XML resources sample: A custom class to insert into a XRC file
 // Author:      Robert O'Connor (rob@medicalmnemonics.com), Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert O'Connor and Vaclav Slavik
 // Licence:     wxWindows licence
 //-----------------------------------------------------------------------------
@@ -33,7 +32,7 @@ class MyResizableListCtrl : public wxListCtrl
     // NOTE: Using this REQUIRES a default constructor: that means either: giving a
     // default value for all parameters in your constructor, or else having a dummy
     // MyResizableListCtrl(){} constructor in addition to your regular one.
-    DECLARE_DYNAMIC_CLASS( MyResizableListCtrl )
+    wxDECLARE_DYNAMIC_CLASS( MyResizableListCtrl );
 
 public:
 
@@ -77,7 +76,7 @@ protected:
 private:
 
     // wxWidgets macro, required to be able to use Event tables in the .cpp file.
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
 };
 

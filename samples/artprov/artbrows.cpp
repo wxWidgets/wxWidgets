@@ -4,7 +4,6 @@
 // Author:      Vaclav Slavik
 // Modified by:
 // Created:     2002/04/05
-// RCS-ID:      $Id$
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -124,10 +123,10 @@ static void FillBitmaps(wxImageList *images, wxListCtrl *list,
 
 #include "null.xpm"
 
-BEGIN_EVENT_TABLE(wxArtBrowserDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(wxArtBrowserDialog, wxDialog)
     EVT_LIST_ITEM_SELECTED(wxID_ANY, wxArtBrowserDialog::OnSelectItem)
     EVT_CHOICE(wxID_ANY, wxArtBrowserDialog::OnChooseClient)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
     : wxDialog(parent, wxID_ANY, wxT("Art resources browser"),
@@ -149,7 +148,7 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
 
     m_list = new wxListCtrl(this, wxID_ANY, wxDefaultPosition, wxSize(250, 300),
                             wxLC_REPORT | wxSUNKEN_BORDER);
-    m_list->InsertColumn(0, wxT("wxArtID"));
+    m_list->AppendColumn(wxT("wxArtID"));
     subsizer->Add(m_list, 1, wxEXPAND | wxRIGHT, 10);
 
     wxSizer *subsub = new wxBoxSizer(wxVERTICAL);

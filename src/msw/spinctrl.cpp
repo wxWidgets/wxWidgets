@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     22.07.99
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999-2005 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -119,11 +118,21 @@ LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
         // is clicked with the "?" cursor
         case WM_HELP:
 #endif
-            spin->MSWWindowProc(message, wParam, lParam);
+            {
+                WXLRESULT result;
+                if ( spin->MSWHandleMessage(&result, message, wParam, lParam) )
+                {
+                    // Do not let the message be processed by the window proc
+                    // of the text control if it had been already handled at wx
+                    // level, this is consistent with what happens for normal,
+                    // non-composite controls.
+                    return 0;
+                }
 
-            // The control may have been deleted at this point, so check.
-            if ( !::IsWindow(hwnd) )
-                return 0;
+                // The control may have been deleted at this point, so check.
+                if ( !::IsWindow(hwnd) )
+                    return 0;
+            }
             break;
 
         case WM_GETDLGCODE:
@@ -169,7 +178,7 @@ bool wxSpinCtrl::ProcessTextCommand(WXWORD cmd, WXWORD WXUNUSED(id))
 {
     if ( (cmd == EN_CHANGE) && (!m_blockEvent ))
     {
-        wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
+        wxCommandEvent event(wxEVT_TEXT, GetId());
         event.SetEventObject(this);
         wxString val = wxGetWindowText(m_hwndBuddy);
         event.SetString(val);
@@ -187,7 +196,7 @@ void wxSpinCtrl::OnChar(wxKeyEvent& event)
     {
         case WXK_RETURN:
             {
-                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+                wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
                 InitCommandEvent(event);
                 wxString val = wxGetWindowText(m_hwndBuddy);
                 event.SetString(val);
@@ -254,6 +263,14 @@ void wxSpinCtrl::NormalizeValue()
 // construction
 // ----------------------------------------------------------------------------
 
+void wxSpinCtrl::Init()
+{
+    m_blockEvent = false;
+    m_hwndBuddy = NULL;
+    m_wndProcBuddy = NULL;
+    m_oldValue = INT_MIN;
+}
+
 bool wxSpinCtrl::Create(wxWindow *parent,
                         wxWindowID id,
                         const wxString& value,
@@ -263,13 +280,6 @@ bool wxSpinCtrl::Create(wxWindow *parent,
                         int min, int max, int initial,
                         const wxString& name)
 {
-    m_blockEvent = false;
-
-    // this should be in ctor/init function but I don't want to add one to 2.8
-    // to avoid problems with default ctor which can be inlined in the user
-    // code and so might not get this fix without recompilation
-    m_oldValue = INT_MIN;
-
     // before using DoGetBestSize(), have to set style to let the base class
     // know whether this is a horizontal or vertical control (we're always
     // vertical)
@@ -286,6 +296,10 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     WXDWORD exStyle = 0;
     WXDWORD msStyle = MSWGetStyle(GetWindowStyle(), & exStyle) ;
+
+    // Scroll text automatically if there is not enough space to show all of
+    // it, this is better than not allowing to enter more digits at all.
+    msStyle |= ES_AUTOHSCROLL;
 
     // propagate text alignment style to text ctrl
     if ( style & wxALIGN_RIGHT )
@@ -306,7 +320,9 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     sizeText.x -= sizeBtn.x + MARGIN_BETWEEN;
     if ( sizeText.x <= 0 )
     {
-        wxLogDebug(wxT("not enough space for wxSpinCtrl!"));
+        wxLogDebug(wxS("wxSpinCtrl \"%s\": initial width %d is too small, ")
+                   wxS("at least %d pixels needed."),
+                   name, size.x, sizeBtn.x + MARGIN_BETWEEN + 1);
     }
 
     wxPoint posBtn(pos);
@@ -378,21 +394,24 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // associate the text window with the spin button
     (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)m_hwndBuddy, 0);
 
+    // If the initial text value is actually a number, it overrides the
+    // "initial" argument specified later.
+    long initialFromText;
+    if ( value.ToLong(&initialFromText) )
+        initial = initialFromText;
+
+    // Set the range in the native control: notice that we must do it before
+    // calling SetValue() to use the correct validity checks for the initial
+    // value.
+    SetRange(min, max);
     SetValue(initial);
 
-    // Set the range in the native control
-    SetRange(min, max);
-
+    // Also set the text part of the control if it was specified independently
+    // but don't generate an event for this, it would be unexpected.
+    m_blockEvent = true;
     if ( !value.empty() )
-    {
         SetValue(value);
-        m_oldValue = (int) wxAtol(value);
-    }
-    else
-    {
-        SetValue(wxString::Format(wxT("%d"), initial));
-        m_oldValue = initial;
-    }
+    m_blockEvent = false;
 
     return true;
 }
@@ -404,6 +423,27 @@ wxSpinCtrl::~wxSpinCtrl()
     ::DestroyWindow( GetBuddyHwnd() );
 
     gs_spinForTextCtrl.erase(GetBuddyHwnd());
+}
+
+// ----------------------------------------------------------------------------
+// wxSpinCtrl-specific methods
+// ----------------------------------------------------------------------------
+
+int wxSpinCtrl::GetBase() const
+{
+    return ::SendMessage(GetHwnd(), UDM_GETBASE, 0, 0);
+}
+
+bool wxSpinCtrl::SetBase(int base)
+{
+    if ( !::SendMessage(GetHwnd(), UDM_SETBASE, base, 0) )
+        return false;
+
+    // Whether we need to be able enter "x" or not influences whether we should
+    // use ES_NUMBER for the buddy control.
+    UpdateBuddyStyle();
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -424,16 +464,28 @@ void  wxSpinCtrl::SetValue(int val)
 
     wxSpinButton::SetValue(val);
 
-    // normally setting the value of the spin button is enough as it updates
-    // its buddy control automatically ...
-    if ( wxGetWindowText(m_hwndBuddy).empty() )
+    // Normally setting the value of the spin button is enough as it updates
+    // its buddy control automatically but in a couple of situations it doesn't
+    // do it, for whatever reason, do it explicitly then:
+    const wxString text = wxGetWindowText(m_hwndBuddy);
+
+    // First case is when the text control is empty and the value is 0: the
+    // spin button just leaves it empty in this case, while we want to show 0
+    // in it.
+    if ( text.empty() && !val )
     {
-        // ... but sometimes it doesn't, notably when the value is 0 and the
-        // text control is currently empty, the spin button seems to be happy
-        // to leave it like this, while we really want to always show the
-        // current value in the control, so do it manually
+        ::SetWindowText(GetBuddyHwnd(), wxT("0"));
+    }
+
+    // Another one is when we're using hexadecimal base but the user input
+    // doesn't start with "0x" -- we prefer to show it to avoid ambiguity
+    // between decimal and hexadecimal.
+    if ( GetBase() == 16 &&
+            (text.length() < 3 || text[0] != '0' ||
+                (text[1] != 'x' && text[1] != 'X')) )
+    {
         ::SetWindowText(GetBuddyHwnd(),
-                        wxString::Format(wxT("%d"), val).wx_str());
+                        wxPrivate::wxSpinCtrlFormatAsHex(val, m_max).t_str());
     }
 
     m_oldValue = GetValue();
@@ -443,10 +495,10 @@ void  wxSpinCtrl::SetValue(int val)
 
 int wxSpinCtrl::GetValue() const
 {
-    wxString val = wxGetWindowText(m_hwndBuddy);
+    const wxString val = wxGetWindowText(m_hwndBuddy);
 
     long n;
-    if ( (wxSscanf(val, wxT("%ld"), &n) != 1) )
+    if ( !val.ToLong(&n, GetBase()) )
         n = INT_MIN;
 
     if ( n < m_min )
@@ -475,14 +527,29 @@ void wxSpinCtrl::SetSelection(long from, long to)
 
 void wxSpinCtrl::SetRange(int minVal, int maxVal)
 {
+    // Manually adjust the old value to avoid an event being sent from
+    // NormalizeValue() called from inside the base class SetRange() as we're
+    // not supposed to generate any events from here.
+    if ( m_oldValue < minVal )
+        m_oldValue = minVal;
+    else if ( m_oldValue > maxVal )
+        m_oldValue = maxVal;
+
     wxSpinButton::SetRange(minVal, maxVal);
 
+    UpdateBuddyStyle();
+}
+
+void wxSpinCtrl::UpdateBuddyStyle()
+{
     // this control is used for numeric entry so restrict the input to numeric
     // keys only -- but only if we don't need to be able to enter "-" in it as
-    // otherwise this would become impossible
+    // otherwise this would become impossible and also if we don't use
+    // hexadecimal as entering "x" of the "0x" prefix wouldn't be allowed
+    // neither then
     const DWORD styleOld = ::GetWindowLong(GetBuddyHwnd(), GWL_STYLE);
     DWORD styleNew;
-    if ( minVal < 0 )
+    if ( m_min < 0 || GetBase() != 10 )
         styleNew = styleOld & ~ES_NUMBER;
     else
         styleNew = styleOld | ES_NUMBER;
@@ -592,7 +659,7 @@ void wxSpinCtrl::DoSetToolTip(wxToolTip *tip)
     wxSpinButton::DoSetToolTip(tip);
 
     if ( tip )
-        tip->Add(m_hwndBuddy);
+        tip->AddOtherWindow(m_hwndBuddy);
 }
 
 #endif // wxUSE_TOOLTIPS
@@ -603,7 +670,7 @@ void wxSpinCtrl::DoSetToolTip(wxToolTip *tip)
 
 void wxSpinCtrl::SendSpinUpdate(int value)
 {
-    wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, GetId());
+    wxCommandEvent event(wxEVT_SPINCTRL, GetId());
     event.SetEventObject(this);
     event.SetInt(value);
 
@@ -613,7 +680,7 @@ void wxSpinCtrl::SendSpinUpdate(int value)
 }
 
 bool wxSpinCtrl::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
-                               WXWORD pos, WXHWND control)
+                             WXWORD WXUNUSED(pos), WXHWND control)
 {
     wxCHECK_MSG( control, false, wxT("scrolling what?") );
 
@@ -623,11 +690,13 @@ bool wxSpinCtrl::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
         return false;
     }
 
-    int new_value = (short) pos;
+    // Notice that we can't use "pos" from WM_VSCROLL as it is 16 bit and we
+    // might be using 32 bit range.
+    int new_value = GetValue();
     if (m_oldValue != new_value)
        SendSpinUpdate( new_value );
 
-    return TRUE;
+    return true;
 }
 
 bool wxSpinCtrl::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *result)
@@ -649,41 +718,53 @@ bool wxSpinCtrl::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *re
 
 wxSize wxSpinCtrl::DoGetBestSize() const
 {
+    return DoGetSizeFromTextSize(DEFAULT_ITEM_WIDTH);
+}
+
+wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
+{
     wxSize sizeBtn = wxSpinButton::DoGetBestSize();
-    sizeBtn.x += DEFAULT_ITEM_WIDTH + MARGIN_BETWEEN;
 
     int y;
     wxGetCharSize(GetHWND(), NULL, &y, GetFont());
-    y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(y);
-
     // JACS: we should always use the height calculated
     // from above, because otherwise we'll get a spin control
     // that's too big. So never use the height calculated
     // from wxSpinButton::DoGetBestSize().
 
-    // if ( sizeBtn.y < y )
-    {
-        // make the text tall enough
-        sizeBtn.y = y;
-    }
+    wxSize tsize(xlen + sizeBtn.x + MARGIN_BETWEEN + 3*y/10 + 10,
+                 EDIT_HEIGHT_FROM_CHAR_HEIGHT(y));
 
-    return sizeBtn;
+    // Check if the user requested a non-standard height.
+    if ( ylen > 0 )
+        tsize.IncBy(0, ylen - y);
+
+    return tsize;
 }
 
 void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
 {
     int widthBtn = wxSpinButton::DoGetBestSize().x;
     int widthText = width - widthBtn - MARGIN_BETWEEN;
-    if ( widthText <= 0 )
+    if ( widthText < 0 )
     {
-        wxLogDebug(wxT("not enough space for wxSpinCtrl!"));
+        // This can happen during the initial window layout when it's total
+        // size is too small to accommodate all the controls and usually is not
+        // a problem because the window will be relaid out with enough space
+        // later. Of course, if it isn't and this is our final size, then we
+        // have a real problem but as we don't know if this is going to be the
+        // case or not, just hope for the best -- we used to give a debug
+        // warning here and this was annoying as it could result in dozens of
+        // perfectly harmless warnings.
+        widthText = 0;
     }
 
     // 1) The buddy window
     DoMoveSibling(m_hwndBuddy, x, y, widthText, height);
 
     // 2) The button window
-    x += widthText + MARGIN_BETWEEN;
+    if ( widthText > 0 )
+        x += widthText + MARGIN_BETWEEN;
     wxSpinButton::DoMoveWindow(x, y, widthBtn, height);
 }
 

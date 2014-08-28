@@ -2,6 +2,8 @@
 #define WX_TESTPREC_INCLUDED 1
 
 #include "wx/wxprec.h"
+#include "wx/stopwatch.h"
+#include "wx/evtloop.h"
 #include "wx/cppunit.h"
 
 // Custom test macro that is only defined when wxUIActionSimulator is available
@@ -18,7 +20,7 @@
 #endif
 
 // define wxHAVE_U_ESCAPE if the compiler supports \uxxxx character constants
-#if (defined(__VISUALC__) && (__VISUALC__ >= 1300)) || \
+#if defined(__VISUALC__) || \
     (defined(__GNUC__) && (__GNUC__ >= 3))
     #define wxHAVE_U_ESCAPE
 
@@ -93,6 +95,25 @@ public:
     #define WX_ASSERT_FAILS_WITH_ASSERT(cond)
 #endif
 
+#define WX_ASSERT_EVENT_OCCURS(eventcounter, count) \
+{\
+    wxStopWatch sw; \
+    wxEventLoopBase* loop = wxEventLoopBase::GetActive(); \
+    while(eventcounter.GetCount() < count) \
+    { \
+        if(sw.Time() < 100) \
+            loop->Dispatch(); \
+        else \
+        { \
+            CPPUNIT_FAIL(wxString::Format("timeout reached with %d " \
+                                          "events received, %d expected", \
+                                          eventcounter.GetCount(), count).ToStdString()); \
+            break; \
+        } \
+    } \
+    eventcounter.Clear(); \
+}
+
 // these functions can be used to hook into wxApp event processing and are
 // currently used by the events propagation test
 class WXDLLIMPEXP_FWD_BASE wxEvent;
@@ -105,15 +126,26 @@ extern void SetProcessEventFunc(ProcessEventFunc func);
 
 extern bool IsNetworkAvailable();
 
+extern bool IsAutomaticTest();
+
 // Helper class setting the locale to the given one for its lifetime.
 class LocaleSetter
 {
 public:
-    LocaleSetter(const char *loc) : m_locOld(setlocale(LC_ALL, loc)) { }
-    ~LocaleSetter() { setlocale(LC_ALL, m_locOld); }
+    LocaleSetter(const char *loc)
+        : m_locOld(wxStrdupA(setlocale(LC_ALL, NULL)))
+    {
+        setlocale(LC_ALL, loc);
+    }
+
+    ~LocaleSetter()
+    {
+        setlocale(LC_ALL, m_locOld);
+        free(m_locOld);
+    }
 
 private:
-    const char * const m_locOld;
+    char * const m_locOld;
 
     wxDECLARE_NO_COPY_CLASS(LocaleSetter);
 };

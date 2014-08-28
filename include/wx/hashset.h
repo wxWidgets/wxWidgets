@@ -4,7 +4,6 @@
 // Author:      Mattia Barbon
 // Modified by:
 // Created:     11/08/2003
-// RCS-ID:      $Id$
 // Copyright:   (c) Mattia Barbon
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -46,7 +45,7 @@
 
 // we need to define the class declared by _WX_DECLARE_HASH_SET as a class and
 // not a typedef to allow forward declaring it
-#define _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP )  \
+#define _WX_DECLARE_HASH_SET_IMPL( KEY_T, HASH_T, KEY_EQ_T, PTROP, CLASSNAME, CLASSEXP )  \
 CLASSEXP CLASSNAME                                                            \
     : public WX_HASH_SET_BASE_TEMPLATE< KEY_T, HASH_T, KEY_EQ_T >             \
 {                                                                             \
@@ -69,6 +68,31 @@ public:                                                                       \
     {}                                                                        \
 }
 
+// In some standard library implementations (in particular, the libstdc++ that
+// ships with g++ 4.7), std::unordered_set inherits privately from its hasher
+// and comparator template arguments for purposes of empty base optimization.
+// As a result, in the declaration of a class deriving from std::unordered_set
+// the names of the hasher and comparator classes are interpreted as naming
+// the base class which is inaccessible.
+// The workaround is to prefix the class names with 'struct'; however, don't
+// do this on MSVC because it causes a warning there if the class was
+// declared as a 'class' rather than a 'struct' (and MSVC's std::unordered_set
+// implementation does not suffer from the access problem).
+#ifdef _MSC_VER
+#define WX_MAYBE_PREFIX_WITH_STRUCT(STRUCTNAME) STRUCTNAME
+#else
+#define WX_MAYBE_PREFIX_WITH_STRUCT(STRUCTNAME) struct STRUCTNAME
+#endif
+
+#define _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, PTROP, CLASSNAME, CLASSEXP )   \
+    _WX_DECLARE_HASH_SET_IMPL(                                                \
+        KEY_T,                                                                \
+        WX_MAYBE_PREFIX_WITH_STRUCT(HASH_T),                                  \
+        WX_MAYBE_PREFIX_WITH_STRUCT(KEY_EQ_T),                                \
+        PTROP,                                                                \
+        CLASSNAME,                                                            \
+        CLASSEXP)
+
 #else // no appropriate STL class, use our own implementation
 
 // this is a complex way of defining an easily inlineable identity function...
@@ -89,9 +113,11 @@ public:                                                                      \
     CLASSNAME& operator=(const CLASSNAME&) { return *this; }                 \
 };
 
-#define _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP )\
+#define _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, PTROP, CLASSNAME, CLASSEXP )\
 _WX_DECLARE_HASH_SET_KEY_EX( KEY_T, CLASSNAME##_wxImplementation_KeyEx, CLASSEXP ) \
-_WX_DECLARE_HASHTABLE( KEY_T, KEY_T, HASH_T, CLASSNAME##_wxImplementation_KeyEx, KEY_EQ_T, CLASSNAME##_wxImplementation_HashTable, CLASSEXP, grow_lf70, never_shrink ) \
+_WX_DECLARE_HASHTABLE( KEY_T, KEY_T, HASH_T,                                 \
+    CLASSNAME##_wxImplementation_KeyEx, KEY_EQ_T, PTROP,                     \
+    CLASSNAME##_wxImplementation_HashTable, CLASSEXP, grow_lf70, never_shrink ) \
 CLASSEXP CLASSNAME:public CLASSNAME##_wxImplementation_HashTable             \
 {                                                                            \
 public:                                                                      \
@@ -134,16 +160,26 @@ public:                                                                      \
 
 // these macros are to be used in the user code
 #define WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME) \
-    _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME, class )
+    _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, wxPTROP_NORMAL, CLASSNAME, class )
 
 // and these do exactly the same thing but should be used inside the
 // library
 #define WX_DECLARE_HASH_SET_WITH_DECL( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME, DECL) \
-    _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME, DECL )
+    _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, wxPTROP_NORMAL, CLASSNAME, DECL )
 
 #define WX_DECLARE_EXPORTED_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME) \
     WX_DECLARE_HASH_SET_WITH_DECL( KEY_T, HASH_T, KEY_EQ_T, \
                                    CLASSNAME, class WXDLLIMPEXP_CORE )
+
+// Finally these versions allow to define hash sets of non-objects (including
+// pointers, hence the confusing but wxArray-compatible name) without
+// operator->() which can't be used for them. This is mostly used inside the
+// library itself to avoid warnings when using such hash sets with some less
+// common compilers (notably Sun CC).
+#define WX_DECLARE_HASH_SET_PTR( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME) \
+    _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, wxPTROP_NOP, CLASSNAME, class )
+#define WX_DECLARE_HASH_SET_WITH_DECL_PTR( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME, DECL) \
+    _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, wxPTROP_NOP, CLASSNAME, DECL )
 
 // delete all hash elements
 //

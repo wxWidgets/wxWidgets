@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: VZ at 16/11/98: WX_DECLARE_LIST() and typesafe lists added
 // Created:     29/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -32,6 +31,7 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"
+#include "wx/vector.h"
 
 #if wxUSE_STD_CONTAINERS
     #include "wx/beforestd.h"
@@ -65,8 +65,6 @@ typedef wxObjectListNode wxNode;
 #define WX_DECLARE_LIST_WITH_DECL(elT, liT, decl) \
     WX_DECLARE_LIST_XO(elT*, liT, decl)
 
-#if !defined(__VISUALC__) || __VISUALC__ >= 1300 // == !VC6
-
 template<class T>
 class wxList_SortFunction
 {
@@ -77,42 +75,6 @@ public:
 private:
     wxSortCompareFunction m_f;
 };
-
-#define WX_LIST_SORTFUNCTION( elT, f ) wxList_SortFunction<elT>(f)
-#define WX_LIST_VC6_WORKAROUND(elT, liT, decl)
-
-#else // if defined( __VISUALC__ ) && __VISUALC__ < 1300 // == VC6
-
-#define WX_LIST_SORTFUNCTION( elT, f ) std::greater<elT>( f )
-#define WX_LIST_VC6_WORKAROUND(elT, liT, decl)                                \
-    decl liT;                                                                 \
-                                                                              \
-    /* Workaround for broken VC6 STL incorrectly requires a std::greater<> */ \
-    /* to be passed into std::list::sort() */                                 \
-    template <>                                                               \
-    struct std::greater<elT>                                                  \
-    {                                                                         \
-        private:                                                              \
-            wxSortCompareFunction m_CompFunc;                                 \
-        public:                                                               \
-            greater( wxSortCompareFunction compfunc = NULL )                  \
-                : m_CompFunc( compfunc ) {}                                   \
-            bool operator()(const elT X, const elT Y) const                   \
-                {                                                             \
-                    return m_CompFunc ?                                       \
-                        ( m_CompFunc( wxListCastElementToVoidPtr(X),          \
-                                      wxListCastElementToVoidPtr(Y) ) < 0 ) : \
-                        ( X > Y );                                            \
-                }                                                             \
-    };
-
-// helper for std::greater<elT> above:
-template<typename T>
-inline const void *wxListCastElementToVoidPtr(const T* ptr) { return ptr; }
-inline const void *wxListCastElementToVoidPtr(const wxString& str)
-    { return (const char*)str; }
-
-#endif // VC6/!VC6
 
 /*
     Note 1: the outer helper class _WX_LIST_HELPER_##liT below is a workaround
@@ -148,25 +110,23 @@ inline const void *wxListCastElementToVoidPtr(const wxString& str)
     decl _WX_LIST_HELPER_##liT                                                \
     {                                                                         \
         typedef elT _WX_LIST_ITEM_TYPE_##liT;                                 \
+        typedef std::list<elT> BaseListType;                                  \
     public:                                                                   \
+        static BaseListType EmptyList;                                        \
         static void DeleteFunction( _WX_LIST_ITEM_TYPE_##liT X );             \
     };                                                                        \
                                                                               \
-    WX_LIST_VC6_WORKAROUND(elT, liT, decl)                                    \
-    decl liT : public std::list<elT>                                          \
+    class liT : public std::list<elT>                                          \
     {                                                                         \
     private:                                                                  \
         typedef std::list<elT> BaseListType;                                  \
-        static BaseListType EmptyList;                                        \
                                                                               \
         bool m_destroy;                                                       \
                                                                               \
     public:                                                                   \
-        decl compatibility_iterator                                           \
+        class compatibility_iterator                                           \
         {                                                                     \
         private:                                                              \
-            /* Workaround for broken VC6 nested class name resolution */      \
-            typedef std::list<elT>::iterator iterator;                        \
             friend class liT;                                                 \
                                                                               \
             iterator m_iter;                                                  \
@@ -174,7 +134,7 @@ inline const void *wxListCastElementToVoidPtr(const wxString& str)
                                                                               \
         public:                                                               \
             compatibility_iterator()                                          \
-                : m_iter(EmptyList.end()), m_list( NULL ) {}                  \
+                : m_iter(_WX_LIST_HELPER_##liT::EmptyList.end()), m_list( NULL ) {}                  \
             compatibility_iterator( liT* li, iterator i )                     \
                 : m_iter( i ), m_list( li ) {}                                \
             compatibility_iterator( const liT* li, iterator i )               \
@@ -216,7 +176,7 @@ inline const void *wxListCastElementToVoidPtr(const wxString& str)
             }                                                                 \
             int IndexOf() const                                               \
             {                                                                 \
-                return *this ? std::distance( m_list->begin(), m_iter )       \
+                return *this ? (int)std::distance( m_list->begin(), m_iter )  \
                              : wxNOT_FOUND;                                   \
             }                                                                 \
         };                                                                    \
@@ -317,7 +277,7 @@ inline const void *wxListCastElementToVoidPtr(const wxString& str)
         }                                                                     \
         /* Workaround for broken VC6 std::list::sort() see above */           \
         void Sort( wxSortCompareFunction compfunc )                           \
-            { sort( WX_LIST_SORTFUNCTION( elT, compfunc ) ); }                \
+            { sort( wxList_SortFunction<elT>(compfunc ) ); }                  \
         ~liT() { Clear(); }                                                   \
                                                                               \
         /* It needs access to our EmptyList */                                \
@@ -1198,7 +1158,7 @@ class WXDLLIMPEXP_BASE wxList : public wxObjectList
 {
 public:
 #if defined(wxWARN_COMPAT_LIST_USE) && !wxUSE_STD_CONTAINERS
-    wxList() { };
+    wxList() { }
     wxDEPRECATED( wxList(int key_type) );
 #elif !wxUSE_STD_CONTAINERS
     wxList(int key_type = wxKEY_NONE);
@@ -1214,6 +1174,21 @@ public:
     // compatibility methods
     void Sort(wxSortCompareFunction compfunc) { wxListBase::Sort(compfunc); }
 #endif // !wxUSE_STD_CONTAINERS
+
+    template<typename T>
+    wxVector<T> AsVector() const
+    {
+        wxVector<T> vector(size());
+        size_t i = 0;
+
+        for ( const_iterator it = begin(); it != end(); ++it )
+        {
+            vector[i++] = static_cast<T>(*it);
+        }
+
+        return vector;
+    }
+
 };
 
 #if !wxUSE_STD_CONTAINERS

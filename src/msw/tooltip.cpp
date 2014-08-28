@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     31.01.99
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,6 +30,7 @@
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/app.h"
     #include "wx/control.h"
+    #include "wx/toplevel.h"
 #endif
 
 #include "wx/tokenzr.h"
@@ -300,6 +300,40 @@ WXHWND wxToolTip::GetToolTipCtrl()
 }
 
 /* static */
+void wxToolTip::UpdateVisibility()
+{
+    wxToolInfo ti(NULL, 0, wxRect());
+    ti.uFlags = 0;
+
+    if ( !SendTooltipMessage(ms_hwndTT, TTM_GETCURRENTTOOL, &ti) )
+        return;
+
+    wxWindow* const associatedWindow = wxFindWinFromHandle(ti.hwnd);
+    if ( !associatedWindow )
+        return;
+
+    bool hideTT = false;
+    if ( !associatedWindow->IsShownOnScreen() )
+    {
+        // If the associated window or its parent is hidden, the tooltip
+        // shouldn't remain shown.
+        hideTT = true;
+    }
+    else
+    {
+        // Even if it's not hidden, it could also be iconized.
+        wxTopLevelWindow* const
+            frame = wxDynamicCast(wxGetTopLevelParent(associatedWindow), wxTopLevelWindow);
+
+        if ( frame && frame->IsIconized() )
+            hideTT = true;
+    }
+
+    if ( hideTT )
+        ::ShowWindow(ms_hwndTT, SW_HIDE);
+}
+
+/* static */
 void wxToolTip::RelayEvent(WXMSG *msg)
 {
     (void)SendTooltipMessage(GetToolTipCtrl(), TTM_RELAYEVENT, msg);
@@ -374,17 +408,17 @@ void wxToolTip::Remove()
     DoForAllWindows(&wxToolTip::DoRemove);
 }
 
-void wxToolTip::Add(WXHWND hWnd)
+void wxToolTip::AddOtherWindow(WXHWND hWnd)
 {
     if ( !m_others )
         m_others = new wxToolTipOtherWindows;
 
     m_others->push_back(hWnd);
 
-    DoAddOtherWindow(hWnd);
+    DoAddHWND(hWnd);
 }
 
-void wxToolTip::DoAddOtherWindow(WXHWND hWnd)
+void wxToolTip::DoAddHWND(WXHWND hWnd)
 {
     HWND hwnd = (HWND)hWnd;
 
@@ -397,7 +431,7 @@ void wxToolTip::DoAddOtherWindow(WXHWND hWnd)
     // NMTTDISPINFO struct -- and setting the tooltip here we can have tooltips
     // of any length
     ti.hwnd = hwnd;
-    ti.lpszText = const_cast<wxChar *>(m_text.wx_str());
+    ti.lpszText = wxMSW_CONV_LPTSTR(m_text);
 
     if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) )
     {
@@ -407,6 +441,104 @@ void wxToolTip::DoAddOtherWindow(WXHWND hWnd)
     }
 
 #ifdef TTM_SETMAXTIPWIDTH
+    if ( !AdjustMaxWidth() )
+#endif // TTM_SETMAXTIPWIDTH
+    {
+        // replace the '\n's with spaces because otherwise they appear as
+        // unprintable characters in the tooltip string
+        m_text.Replace(wxT("\n"), wxT(" "));
+        ti.lpszText = wxMSW_CONV_LPTSTR(m_text);
+
+        if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) )
+        {
+            wxLogDebug(wxT("Failed to create the tooltip '%s'"), m_text.c_str());
+        }
+    }
+}
+
+void wxToolTip::SetWindow(wxWindow *win)
+{
+    Remove();
+
+    m_window = win;
+
+    // add the window itself
+    if ( m_window )
+    {
+        DoAddHWND(m_window->GetHWND());
+    }
+#if !defined(__WXUNIVERSAL__)
+    // and all of its subcontrols (e.g. radio buttons in a radiobox) as well
+    wxControl *control = wxDynamicCast(m_window, wxControl);
+    if ( control )
+    {
+        const wxArrayLong& subcontrols = control->GetSubcontrols();
+        size_t count = subcontrols.GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            int id = subcontrols[n];
+            HWND hwnd = GetDlgItem(GetHwndOf(m_window), id);
+            if ( !hwnd )
+            {
+                // maybe it's a child of parent of the control, in fact?
+                // (radiobuttons are subcontrols, i.e. children of the radiobox
+                // for wxWidgets but are its siblings at Windows level)
+                hwnd = GetDlgItem(GetHwndOf(m_window->GetParent()), id);
+            }
+
+            // must have it by now!
+            wxASSERT_MSG( hwnd, wxT("no hwnd for subcontrol?") );
+
+            AddOtherWindow((WXHWND)hwnd);
+        }
+    }
+#endif // !defined(__WXUNIVERSAL__)
+}
+
+void wxToolTip::SetRect(const wxRect& rc)
+{
+    m_rect = rc;
+
+    if ( m_window )
+    {
+        wxToolInfo ti(GetHwndOf(m_window), m_id, m_rect);
+        (void)SendTooltipMessage(GetToolTipCtrl(), TTM_NEWTOOLRECT, &ti);
+    }
+}
+
+void wxToolTip::SetTip(const wxString& tip)
+{
+    m_text = tip;
+
+#ifdef TTM_SETMAXTIPWIDTH
+    if ( !AdjustMaxWidth() )
+#endif // TTM_SETMAXTIPWIDTH
+    {
+        // replace the '\n's with spaces because otherwise they appear as
+        // unprintable characters in the tooltip string
+        m_text.Replace(wxT("\n"), wxT(" "));
+    }
+
+    DoForAllWindows(&wxToolTip::DoSetTip);
+}
+
+void wxToolTip::DoSetTip(WXHWND hWnd)
+{
+    // update the tip text shown by the control
+    wxToolInfo ti((HWND)hWnd, m_id, m_rect);
+
+    // for some reason, changing the tooltip text directly results in
+    // repaint of the controls under it, see #10520 -- but this doesn't
+    // happen if we reset it first
+    ti.lpszText = const_cast<wxChar *>(wxT(""));
+    (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, &ti);
+
+    ti.lpszText = wxMSW_CONV_LPTSTR(m_text);
+    (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, &ti);
+}
+
+bool wxToolTip::AdjustMaxWidth()
+{
     if ( wxApp::GetComCtl32Version() >= 470 )
     {
         // use TTM_SETMAXTIPWIDTH to make tooltip multiline using the
@@ -442,7 +574,7 @@ void wxToolTip::DoAddOtherWindow(WXHWND hWnd)
             const wxString token = tokenizer.GetNextToken();
 
             SIZE sz;
-            if ( !::GetTextExtentPoint32(hdc, token.wx_str(),
+            if ( !::GetTextExtentPoint32(hdc, token.t_str(),
                                          token.length(), &sz) )
             {
                 wxLogLastError(wxT("GetTextExtentPoint32"));
@@ -477,92 +609,11 @@ void wxToolTip::DoAddOtherWindow(WXHWND hWnd)
             SendTooltipMessage(GetToolTipCtrl(), TTM_SETMAXTIPWIDTH,
                                wxUIntToPtr(maxWidth));
         }
+
+        return true;
     }
-    else
-#endif // TTM_SETMAXTIPWIDTH
-    {
-        // replace the '\n's with spaces because otherwise they appear as
-        // unprintable characters in the tooltip string
-        m_text.Replace(wxT("\n"), wxT(" "));
-        ti.lpszText = const_cast<wxChar *>(m_text.wx_str());
 
-        if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) )
-        {
-            wxLogDebug(wxT("Failed to create the tooltip '%s'"), m_text.c_str());
-        }
-    }
-}
-
-void wxToolTip::SetWindow(wxWindow *win)
-{
-    Remove();
-
-    m_window = win;
-
-    // add the window itself
-    if ( m_window )
-    {
-        Add(m_window->GetHWND());
-    }
-#if !defined(__WXUNIVERSAL__)
-    // and all of its subcontrols (e.g. radio buttons in a radiobox) as well
-    wxControl *control = wxDynamicCast(m_window, wxControl);
-    if ( control )
-    {
-        const wxArrayLong& subcontrols = control->GetSubcontrols();
-        size_t count = subcontrols.GetCount();
-        for ( size_t n = 0; n < count; n++ )
-        {
-            int id = subcontrols[n];
-            HWND hwnd = GetDlgItem(GetHwndOf(m_window), id);
-            if ( !hwnd )
-            {
-                // maybe it's a child of parent of the control, in fact?
-                // (radiobuttons are subcontrols, i.e. children of the radiobox
-                // for wxWidgets but are its siblings at Windows level)
-                hwnd = GetDlgItem(GetHwndOf(m_window->GetParent()), id);
-            }
-
-            // must have it by now!
-            wxASSERT_MSG( hwnd, wxT("no hwnd for subcontrol?") );
-
-            Add((WXHWND)hwnd);
-        }
-    }
-#endif // !defined(__WXUNIVERSAL__)
-}
-
-void wxToolTip::SetRect(const wxRect& rc)
-{
-    m_rect = rc;
-
-    if ( m_window )
-    {
-        wxToolInfo ti(GetHwndOf(m_window), m_id, m_rect);
-        (void)SendTooltipMessage(GetToolTipCtrl(), TTM_NEWTOOLRECT, &ti);
-    }
-}
-
-void wxToolTip::SetTip(const wxString& tip)
-{
-    m_text = tip;
-
-    DoForAllWindows(&wxToolTip::DoSetTip);
-}
-
-void wxToolTip::DoSetTip(WXHWND hWnd)
-{
-    // update the tip text shown by the control
-    wxToolInfo ti((HWND)hWnd, m_id, m_rect);
-
-    // for some reason, changing the tooltip text directly results in
-    // repaint of the controls under it, see #10520 -- but this doesn't
-    // happen if we reset it first
-    ti.lpszText = const_cast<wxChar *>(wxT(""));
-    (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, &ti);
-
-    ti.lpszText = const_cast<wxChar *>(m_text.wx_str());
-    (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, &ti);
+    return false;
 }
 
 void wxToolTip::DoForAllWindows(void (wxToolTip::*func)(WXHWND))

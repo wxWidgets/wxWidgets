@@ -4,7 +4,6 @@
 // Author:      ?
 // Modified by:
 // Created:     ?
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -27,7 +26,7 @@
 #include "wx/wxhtml.h"
 #include "wx/statline.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../../sample.xpm"
 #endif
 
@@ -47,7 +46,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -63,7 +62,7 @@ public:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -73,10 +72,10 @@ private:
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
    EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
    EVT_MENU(wxID_EXIT,  MyFrame::OnQuit)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
@@ -156,8 +155,8 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     html = new wxHtmlWindow(&dlg, wxID_ANY, wxDefaultPosition, wxSize(380, 160), wxHW_SCROLLBAR_NEVER);
     html -> SetBorders(0);
     html -> LoadPage(wxT("data/about.htm"));
-    html -> SetSize(html -> GetInternalRepresentation() -> GetWidth(),
-                    html -> GetInternalRepresentation() -> GetHeight());
+    html -> SetInitialSize(wxSize(html -> GetInternalRepresentation() -> GetWidth(),
+                                  html -> GetInternalRepresentation() -> GetHeight()));
 
     topsizer -> Add(html, 1, wxALL, 10);
 

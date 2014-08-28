@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/checklst.cpp
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -38,6 +37,10 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
     Create( parent, id, pos, size, choices, style, validator, name );
 }
 
+wxCheckListBox::~wxCheckListBox()
+{
+    Clear();
+}
 
 bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
               const wxPoint& pos,
@@ -61,13 +64,22 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
     return wxCheckListBoxBase::Create( parent, id, pos, size, choices, style, validator, name );
 }
 
-
-bool wxCheckListBox::IsChecked(unsigned int item) const
+void wxCheckListBox::Init()
 {
-    return false;
+    m_hasCheckBoxes = true;
 }
 
-void wxCheckListBox::Check(unsigned int item, bool check )
+bool wxCheckListBox::IsChecked(unsigned int n) const
 {
+    QListWidgetItem* item = m_qtListWidget->item(n);
+    wxCHECK_MSG(item != NULL, false, wxT("wrong listbox index") );
+    return item->checkState() == Qt::Checked;
+}
+
+void wxCheckListBox::Check(unsigned int n, bool check )
+{
+    QListWidgetItem* item = m_qtListWidget->item(n);
+    wxCHECK_RET(item != NULL, wxT("wrong listbox index") );
+    return item->setCheckState(check ? Qt::Checked : Qt::Unchecked);
 }
 

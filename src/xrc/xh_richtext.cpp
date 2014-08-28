@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for wxRichTextCtrl
 // Author:      Julian Smart
 // Created:     2006-11-08
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -15,10 +14,9 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC && wxUSE_RICHTEXT && wxUSE_RICHTEXT_XML_HANDLER
+#if wxUSE_XRC && wxUSE_RICHTEXT
 
 #include "wx/xrc/xh_richtext.h"
-
 #include "wx/richtext/richtextctrl.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextCtrlXmlHandler, wxXmlResourceHandler)

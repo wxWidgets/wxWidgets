@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,6 +73,9 @@ bool wxListBox::Create(
     DontCreatePeer();
     m_blockEvents = false;
 
+    if ( ! (style & wxNO_BORDER) )
+        style = (style & ~wxBORDER_MASK) | wxSUNKEN_BORDER ;
+
     wxASSERT_MSG( !(style & wxLB_MULTIPLE) || !(style & wxLB_EXTENDED),
                   wxT("only a single listbox selection mode can be specified") );
 
@@ -81,7 +83,7 @@ bool wxListBox::Create(
         return false;
 
     if ( IsSorted() )
-        m_strings.sorted = new wxSortedArrayString;
+        m_strings.sorted = new wxSortedArrayString(wxDictionaryStringSortAscending);
     else
         m_strings.unsorted = new wxArrayString;
 
@@ -130,6 +132,11 @@ void wxListBox::FreeData()
 
 void wxListBox::DoSetFirstItem(int n)
 {
+    // osx actually only has an implementation for ensuring the visibility of a row, it does so  
+    // by scrolling the minimal amount necessary from the current scrolling position.
+    // in order to get the same behaviour I'd have to make sure first that the last line is visible, 
+    // followed by a scrollRowToVisible for the desired line 
+    GetListPeer()->ListScrollTo( GetCount()-1 );
     GetListPeer()->ListScrollTo( n );
 }
 
@@ -385,8 +392,8 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
 
 void wxListBox::HandleLineEvent( unsigned int n, bool doubleClick )
 {
-    wxCommandEvent event( doubleClick ? wxEVT_COMMAND_LISTBOX_DOUBLECLICKED :
-        wxEVT_COMMAND_LISTBOX_SELECTED, GetId() );
+    wxCommandEvent event( doubleClick ? wxEVT_LISTBOX_DCLICK :
+        wxEVT_LISTBOX, GetId() );
     event.SetEventObject( this );
     if ( HasClientObjectData() )
         event.SetClientObject( GetClientObject(n) );

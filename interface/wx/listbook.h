@@ -2,9 +2,19 @@
 // Name:        listbook.h
 // Purpose:     interface of wxListbook
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// wxListbook flags
+#define wxLB_DEFAULT          wxBK_DEFAULT
+#define wxLB_TOP              wxBK_TOP
+#define wxLB_BOTTOM           wxBK_BOTTOM
+#define wxLB_LEFT             wxBK_LEFT
+#define wxLB_RIGHT            wxBK_RIGHT
+#define wxLB_ALIGN_MASK       wxBK_ALIGN_MASK
+
+wxEventType wxEVT_LISTBOOK_PAGE_CHANGED;
+wxEventType wxEVT_LISTBOOK_PAGE_CHANGING;
 
 /**
     @class wxListbook
@@ -37,16 +47,16 @@
     @beginEventEmissionTable{wxBookCtrlEvent}
     @event{EVT_LISTBOOK_PAGE_CHANGED(id, func)}
         The page selection was changed.
-        Processes a @c wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED event.
+        Processes a @c wxEVT_LISTBOOK_PAGE_CHANGED event.
     @event{EVT_LISTBOOK_PAGE_CHANGING(id, func)}
         The page selection is about to be changed.
-        Processes a @c wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING event.
+        Processes a @c wxEVT_LISTBOOK_PAGE_CHANGING event.
         This event can be vetoed.
     @endEventTable
 
     @library{wxcore}
     @category{bookctrl}
-    @appearance{listbook.png}
+    @appearance{listbook}
 
     @see wxBookCtrl, wxNotebook, @ref page_samples_notebook
 */
@@ -66,6 +76,17 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxString& name = wxEmptyString);
+
+    /**
+       Create the list book control that has already been constructed with
+       the default constructor.
+    */
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxEmptyString);
 
     /**
         Returns the wxListView associated with the control.

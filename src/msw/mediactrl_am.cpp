@@ -4,7 +4,6 @@
 // Author:      Ryan Norton <wxprojects@comcast.net>
 // Modified by:
 // Created:     01/29/05
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -50,12 +49,6 @@
     #pragma hdrstop
 #endif
 
-// disable "cast truncates constant value" for VARIANT_BOOL values
-// passed as parameters in VC6
-#ifdef _MSC_VER
-#pragma warning (disable:4310)
-#endif
-
 #if wxUSE_MEDIACTRL && wxUSE_ACTIVEX
 
 #include "wx/mediactrl.h"
@@ -93,11 +86,10 @@
 //  ($Microsoft Visual Studio$/Common/Tools/OLEVIEW.EXE), open
 //  "type libraries", open a specific type library (for quartz for example its
 //  "ActiveMovie control type library (V1.0)"), save it as an .idl, compile the
-//  idl using the midl compiler that comes with visual studio
-//  ($Microsoft Visual Studio$/VC98/bin/midl.exe on VC6) with the /h argument
-//  to make it generate stubs (a .h & .c file), then clean up the generated
-//  interfaces I want with the STDMETHOD wrappers and then put them into
-//  mediactrl.cpp.
+//  idl using the midl compiler that comes with visual studio with the /h
+//  argument to make it generate stubs (a .h & .c file), then clean up the
+//  generated interfaces I want with the STDMETHOD wrappers and then put them
+//  into mediactrl.cpp.
 //
 //  According to the MSDN docs, IMediaPlayer requires Windows 98 SE
 //  or greater.  NetShow is available on Windows 3.1 and I'm guessing
@@ -1540,14 +1532,14 @@ wxString wxAMMediaBackend::GetErrorString(HRESULT hrdsv)
     {
         return wxString::Format(wxT("DirectShow error \"%s\" \n")
                                      wxT("(numeric %X)\n")
-                                     wxT("occured"),
+                                     wxT("occurred"),
                                      szError, (int)hrdsv);
     }
     else
     {
         return wxString::Format(wxT("Unknown error \n")
                                      wxT("(numeric %X)\n")
-                                     wxT("occured"),
+                                     wxT("occurred"),
                                      (int)hrdsv);
     }
 }
@@ -2020,7 +2012,15 @@ wxLongLong wxAMMediaBackend::GetDuration()
 
         case S_OK:
             // outDuration is in seconds, we need milliseconds
-            return static_cast<wxLongLong>(outDuration * 1000);
+#ifdef wxLongLong_t
+            return static_cast<wxLongLong_t>(outDuration * 1000);
+#else
+            // In principle it's possible to have video of duration greater
+            // than ~1193 hours which corresponds LONG_MAX in milliseconds so
+            // cast to wxLongLong first and multiply by 1000 only then to avoid
+            // the overflow (resulting in maximal duration of ~136 years).
+            return wxLongLong(static_cast<long>(outDuration)) * 1000;
+#endif
     }
 }
 

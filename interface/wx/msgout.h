@@ -2,7 +2,6 @@
 // Name:        wx/msgout.h
 // Purpose:     interface of wxMessageOutput and derived classes
 // Author:      Vadim Zeitlin
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -111,6 +110,17 @@ public:
             object and for deleting it if necessary.
      */
     wxMessageOutputStderr(FILE *fp = stderr);
+};
+
+/**
+    Flags used with wxMessageOutputBest.
+
+    See wxMessageOutputBest::wxMessageOutputBest().
+ */
+enum wxMessageOutputFlags
+{
+    wxMSGOUT_PREFER_STDERR = 0, ///< use stderr if available (this is the default)
+    wxMSGOUT_PREFER_MSGBOX = 1  ///< always use message box if available
 };
 
 /**

@@ -2,7 +2,6 @@
 // Name:        encconv.h
 // Purpose:     interface of wxEncodingConverter
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -70,12 +69,23 @@ public:
     bool Convert(const wchar_t* input, char* output) const;
 
     /**
-        Convert input string according to settings passed to Init() in-place,
-        i.e. write the result to the same memory area.
+        Convert input string according to settings passed to Init() in-place.
+
+        With this overload, the conversion result is written to the same memory
+        area from which the input is read.
 
         See the Convert(const char*,char*) const overload for more info.
     */
     bool Convert(char* str) const;
+
+    /**
+        Convert input string according to settings passed to Init() in-place.
+
+        With this overload, the conversion result is written to the same memory
+        area from which the input is read.
+
+        See the Convert(const wchar_t*,wchar_t*) const overload for more info.
+    */
     bool Convert(wchar_t* str) const;
 
     /**
@@ -102,7 +112,6 @@ public:
         Supported platforms:
         @li wxPLATFORM_UNIX
         @li wxPLATFORM_WINDOWS
-        @li wxPLATFORM_OS2
         @li wxPLATFORM_MAC
         @li wxPLATFORM_CURRENT
 

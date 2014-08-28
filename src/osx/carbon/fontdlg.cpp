@@ -4,7 +4,6 @@
 // Author:      Ryan Norton
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -42,6 +41,7 @@
 
 #include "wx/fontdlg.h"
 #include "wx/fontutil.h"
+#include "wx/modalhook.h"
 
 #if wxOSX_USE_EXPERIMENTAL_FONTDIALOG
 
@@ -76,8 +76,7 @@ wxMacCarbonFontPanelHandler(EventHandlerCallRef WXUNUSED(nextHandler),
         case kEventFontSelection :
         {
             bool setup = false ;
-#if wxOSX_USE_CORE_TEXT
-            if (  UMAGetSystemVersion() >= 0x1050 )
+            if ( !setup )
             {
                 CTFontDescriptorRef descr;
                 if ( cEvent.GetParameter<CTFontDescriptorRef>( kEventParamCTFontDescriptor, typeCTFontDescriptorRef, &descr ) == noErr )
@@ -90,7 +89,6 @@ wxMacCarbonFontPanelHandler(EventHandlerCallRef WXUNUSED(nextHandler),
                     setup = true;
                 }
             }
-#endif
 #if wxOSX_USE_ATSU_TEXT
             ATSUFontID fontId = 0 ;
             if ( !setup && (cEvent.GetParameter<ATSUFontID>(kEventParamATSUFontID, &fontId) == noErr) )
@@ -202,6 +200,11 @@ wxFontDialog::wxFontDialog()
 {
 }
 
+wxFontDialog::wxFontDialog(wxWindow *parent)
+{
+    Create(parent);
+}
+
 wxFontDialog::wxFontDialog(wxWindow *parent, const wxFontData&  data)
 {
     Create(parent, data);
@@ -211,14 +214,21 @@ wxFontDialog::~wxFontDialog()
 {
 }
 
-bool wxFontDialog::Create(wxWindow *WXUNUSED(parent), const wxFontData& data)
+bool wxFontDialog::Create(wxWindow *WXUNUSED(parent))
+{
+    return true ;
+}
+
+bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
 {
     m_fontData = data;
-    return true ;
+    return Create(parent) ;
 }
 
 int wxFontDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
 #if wxOSX_USE_CARBON
 
     OSStatus err ;
@@ -228,24 +238,10 @@ int wxFontDialog::ShowModal()
         font = m_fontData.m_initialFont ;
     }
 
-    bool setup = false;
-#if wxOSX_USE_CORE_TEXT
-    if ( UMAGetSystemVersion() >= 0x1050 )
-    {
-        CTFontDescriptorRef descr = (CTFontDescriptorRef) CTFontCopyFontDescriptor( (CTFontRef) font.OSXGetCTFont() );
-        err = SetFontInfoForSelection (kFontSelectionCoreTextType,1, &descr , NULL);
-        CFRelease( descr );
-        setup = true;
-    }
-#endif
-#if wxOSX_USE_ATSU_TEXT
-    if ( !setup )
-    {
-        ATSUStyle style = (ATSUStyle)font.MacGetATSUStyle();
-        err = SetFontInfoForSelection (kFontSelectionATSUIType,1, &style , NULL);
-        setup = true;
-    }
-#endif
+    CTFontDescriptorRef descr = (CTFontDescriptorRef) CTFontCopyFontDescriptor( (CTFontRef) font.OSXGetCTFont() );
+    err = SetFontInfoForSelection (kFontSelectionCoreTextType,1, &descr , NULL);
+    CFRelease( descr );
+
     // just clicking on ENTER will not send us any font setting event, therefore we have to make sure
     // that field is already correct
     m_fontData.m_chosenFont = font ;
@@ -283,8 +279,8 @@ int wxFontDialog::ShowModal()
 // wxFontDialog stub for mac OS's without a native font dialog
 // ---------------------------------------------------------------------------
 
-static const wxChar *FontFamilyIntToString(int family);
-static int FontFamilyStringToInt(const wxChar *family);
+static const wxChar *FontFamilyIntToString(wxFontFamily family);
+static wxFontFamily FontFamilyStringToInt(const wxChar *family);
 
 
 //-----------------------------------------------------------------------------
@@ -402,7 +398,7 @@ void wxFontColourSwatchCtrl::OnMouseEvent(wxMouseEvent& event)
         dialog->Destroy();
         Refresh();
 
-        wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetId());
+        wxCommandEvent event(wxEVT_BUTTON, GetId());
         HandleWindowEvent(event);
     }
 }
@@ -504,7 +500,7 @@ void wxFontDialog::CreateControls()
     itemFlexGridSizer4->Add(itemStaticText5, 0, wxALIGN_RIGHT|wxALIGN_TOP|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer6 = new wxBoxSizer(wxVERTICAL);
-    itemFlexGridSizer4->Add(itemBoxSizer6, 0, wxGROW|wxGROW, 5);
+    itemFlexGridSizer4->Add(itemBoxSizer6, 0, wxGROW, 5);
 
     wxString* m_facenameCtrlStrings = NULL;
     m_facenameCtrl = new wxListBox( itemDialog1, wxID_FONTDIALOG_FACENAME, wxDefaultPosition, wxSize(320, 100), 0, m_facenameCtrlStrings, wxLB_SINGLE );
@@ -612,7 +608,7 @@ void wxFontDialog::CreateControls()
 }
 
 /*!
- * wxEVT_COMMAND_SPINCTRL_UPDATED event handler for wxID_FONTDIALOG_FONTSIZE
+ * wxEVT_SPINCTRL event handler for wxID_FONTDIALOG_FONTSIZE
  */
 
 void wxFontDialog::OnFontdialogFontsizeUpdated( wxSpinEvent& WXUNUSED(event) )
@@ -621,7 +617,7 @@ void wxFontDialog::OnFontdialogFontsizeUpdated( wxSpinEvent& WXUNUSED(event) )
 }
 
 /*!
- * wxEVT_COMMAND_TEXT_UPDATED event handler for wxID_FONTDIALOG_FONTSIZE
+ * wxEVT_TEXT event handler for wxID_FONTDIALOG_FONTSIZE
  */
 
 void wxFontDialog::OnFontdialogFontsizeTextUpdated( wxCommandEvent& WXUNUSED(event) )
@@ -630,7 +626,7 @@ void wxFontDialog::OnFontdialogFontsizeTextUpdated( wxCommandEvent& WXUNUSED(eve
 }
 
 /*!
- * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for wxID_FONTDIALOG_BOLD
+ * wxEVT_CHECKBOX event handler for wxID_FONTDIALOG_BOLD
  */
 
 void wxFontDialog::OnFontdialogBoldClick( wxCommandEvent& WXUNUSED(event) )
@@ -639,7 +635,7 @@ void wxFontDialog::OnFontdialogBoldClick( wxCommandEvent& WXUNUSED(event) )
 }
 
 /*!
- * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for wxID_FONTDIALOG_ITALIC
+ * wxEVT_CHECKBOX event handler for wxID_FONTDIALOG_ITALIC
  */
 
 void wxFontDialog::OnFontdialogItalicClick( wxCommandEvent& WXUNUSED(event) )
@@ -648,7 +644,7 @@ void wxFontDialog::OnFontdialogItalicClick( wxCommandEvent& WXUNUSED(event) )
 }
 
 /*!
- * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for wxID_FONTDIALOG_UNDERLINED
+ * wxEVT_CHECKBOX event handler for wxID_FONTDIALOG_UNDERLINED
  */
 
 void wxFontDialog::OnFontdialogUnderlinedClick( wxCommandEvent& WXUNUSED(event) )
@@ -657,7 +653,7 @@ void wxFontDialog::OnFontdialogUnderlinedClick( wxCommandEvent& WXUNUSED(event) 
 }
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
+ * wxEVT_BUTTON event handler for wxID_OK
  */
 
 void wxFontDialog::OnOkClick( wxCommandEvent& event )
@@ -667,7 +663,7 @@ void wxFontDialog::OnOkClick( wxCommandEvent& event )
 
 
 /*!
- * wxEVT_COMMAND_LISTBOX_SELECTED event handler for wxID_FONTDIALOG_FACENAME
+ * wxEVT_LISTBOX event handler for wxID_FONTDIALOG_FACENAME
  */
 
 void wxFontDialog::OnFontdialogFacenameSelected( wxCommandEvent& WXUNUSED(event) )
@@ -693,9 +689,9 @@ bool wxFontDialog::ShowToolTips()
 
 void wxFontDialog::InitializeFont()
 {
-    int fontFamily = wxSWISS;
-    int fontWeight = wxNORMAL;
-    int fontStyle = wxNORMAL;
+    wxFontFamily fontFamily = wxFONTFAMILY_SWISS;
+    wxFontWeight fontWeight = wxFONTWEIGHT_NORMAL;
+    wxFontStyle fontStyle = wxFONTSTYLE_NORMAL;
     int fontSize = 12;
     bool fontUnderline = false;
     wxString fontName;
@@ -727,8 +723,8 @@ void wxFontDialog::InitializeControls()
     if (m_underlinedCtrl)
         m_underlinedCtrl->SetValue(m_dialogFont.GetUnderlined());
 
-    m_boldCtrl->SetValue(m_dialogFont.GetWeight() == wxBOLD);
-    m_italicCtrl->SetValue(m_dialogFont.GetStyle() == wxITALIC);
+    m_boldCtrl->SetValue(m_dialogFont.GetWeight() == wxFONTWEIGHT_BOLD);
+    m_italicCtrl->SetValue(m_dialogFont.GetStyle() == wxFONTSTYLE_ITALIC);
     m_sizeCtrl->SetValue(m_dialogFont.GetPointSize());
 
     wxString facename = m_dialogFont.GetFaceName();
@@ -759,14 +755,13 @@ void wxFontDialog::ChangeFont()
     int size = m_sizeCtrl->GetValue();
     wxString facename = m_facenameCtrl->GetStringSelection();
 
-    int family = FontFamilyStringToInt(facename);
-    if (family == -1)
-        family = wxDEFAULT;
-    else
+    wxFontFamily family = FontFamilyStringToInt(facename);
+    if (family != wxFONTFAMILY_DEFAULT)
         facename = wxEmptyString;
 
-    m_dialogFont = wxFont(size, family, italic ? wxITALIC : wxNORMAL, bold ? wxBOLD : wxNORMAL,
-        underlined, facename);
+    m_dialogFont = wxFontInfo(size)
+                    .Family(family).FaceName(facename)
+                    .Italic(italic).Bold(bold).Underlined(underlined);
 
     m_fontData.SetChosenFont(m_dialogFont);
 
@@ -793,44 +788,44 @@ void wxFontDialog::OnPanelClose()
 {
 }
 
-const wxChar *FontFamilyIntToString(int family)
+const wxChar *FontFamilyIntToString(wxFontFamily family)
 {
     switch (family)
     {
-        case wxROMAN:
+        case wxFONTFAMILY_ROMAN:
             return _("<Any Roman>");
-        case wxDECORATIVE:
+        case wxFONTFAMILY_DECORATIVE:
             return _("<Any Decorative>");
-        case wxMODERN:
+        case wxFONTFAMILY_MODERN:
             return _("<Any Modern>");
-        case wxSCRIPT:
+        case wxFONTFAMILY_SCRIPT:
             return _("<Any Script>");
-        case wxTELETYPE:
+        case wxFONTFAMILY_TELETYPE:
             return _("<Any Teletype>");
-        case wxSWISS:
+        case wxFONTFAMILY_SWISS:
         default:
             return _("<Any Swiss>");
     }
 }
 
-int FontFamilyStringToInt(const wxChar *family)
+wxFontFamily FontFamilyStringToInt(const wxChar *family)
 {
     if (!family)
-        return wxSWISS;
+        return wxFONTFAMILY_SWISS;
 
     if (wxStrcmp(family, _("<Any Roman>")) == 0)
-        return wxROMAN;
+        return wxFONTFAMILY_ROMAN;
     else if (wxStrcmp(family, _("<Any Decorative>")) == 0)
-        return wxDECORATIVE;
+        return wxFONTFAMILY_DECORATIVE;
     else if (wxStrcmp(family, _("<Any Modern>")) == 0)
-        return wxMODERN;
+        return wxFONTFAMILY_MODERN;
     else if (wxStrcmp(family, _("<Any Script>")) == 0)
-        return wxSCRIPT;
+        return wxFONTFAMILY_SCRIPT;
     else if (wxStrcmp(family, _("<Any Teletype>")) == 0)
-        return wxTELETYPE;
+        return wxFONTFAMILY_TELETYPE;
     else if (wxStrcmp(family, _("<Any Swiss>")) == 0)
-        return wxSWISS;
-    else return -1;
+        return wxFONTFAMILY_SWISS;
+    else return wxFONTFAMILY_DEFAULT;
 }
 
 #endif // !USE_NATIVE_FONT_DIALOG_FOR_MACOSX

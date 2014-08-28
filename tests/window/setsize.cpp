@@ -3,7 +3,6 @@
 // Purpose:     Tests for SetSize() and related wxWindow methods
 // Author:      Vadim Zeitlin
 // Created:     2008-05-25
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -40,10 +39,25 @@ private:
     CPPUNIT_TEST_SUITE( SetSizeTestCase );
         CPPUNIT_TEST( SetSize );
         CPPUNIT_TEST( SetSizeLessThanMinSize );
+        CPPUNIT_TEST( BestSize );
     CPPUNIT_TEST_SUITE_END();
 
     void SetSize();
     void SetSizeLessThanMinSize();
+    void BestSize();
+
+    // Helper class overriding DoGetBestSize() for testing purposes.
+    class MyWindow : public wxWindow
+    {
+    public:
+        MyWindow(wxWindow* parent)
+            : wxWindow(parent, wxID_ANY)
+        {
+        }
+
+    protected:
+        virtual wxSize DoGetBestSize() const { return wxSize(50, 250); }
+    };
 
     wxWindow *m_win;
 
@@ -62,7 +76,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( SetSizeTestCase, "SetSizeTestCase" );
 
 void SetSizeTestCase::setUp()
 {
-    m_win = new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_win = new MyWindow(wxTheApp->GetTopWindow());
 }
 
 void SetSizeTestCase::tearDown()
@@ -91,3 +105,13 @@ void SetSizeTestCase::SetSizeLessThanMinSize()
     CPPUNIT_ASSERT_EQUAL( size, m_win->GetSize() );
 }
 
+void SetSizeTestCase::BestSize()
+{
+    CPPUNIT_ASSERT_EQUAL( wxSize(50, 250), m_win->GetBestSize() );
+
+    m_win->SetMinSize(wxSize(100, 100));
+    CPPUNIT_ASSERT_EQUAL( wxSize(100, 250), m_win->GetBestSize() );
+
+    m_win->SetMaxSize(wxSize(200, 200));
+    CPPUNIT_ASSERT_EQUAL( wxSize(100, 200), m_win->GetBestSize() );
+}

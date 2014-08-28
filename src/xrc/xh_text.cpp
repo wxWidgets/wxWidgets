@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for wxTextCtrl
 // Author:      Aleksandras Gluchovas
 // Created:     2000/03/21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Aleksandras Gluchovas
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -42,9 +41,6 @@ wxTextCtrlXmlHandler::wxTextCtrlXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxTE_CENTRE);
     XRC_ADD_STYLE(wxTE_RIGHT);
     XRC_ADD_STYLE(wxTE_DONTWRAP);
-#if WXWIN_COMPATIBILITY_2_6
-    XRC_ADD_STYLE(wxTE_LINEWRAP);
-#endif // WXWIN_COMPATIBILITY_2_6
     XRC_ADD_STYLE(wxTE_CHARWRAP);
     XRC_ADD_STYLE(wxTE_WORDWRAP);
 
@@ -72,6 +68,10 @@ wxObject *wxTextCtrlXmlHandler::DoCreateResource()
 
     if (HasParam(wxT("maxlength")))
         text->SetMaxLength(GetLong(wxT("maxlength")));
+
+    const wxString hint = GetText(wxS("hint"));
+    if (!hint.empty())
+        text->SetHint(hint);
 
     return text;
 }

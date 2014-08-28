@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -37,15 +36,11 @@
 
 // define this to use XPMs everywhere (by default, BMPs are used under Win)
 // BMPs use less space, but aren't compiled into the executable on other platforms
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     #define USE_XPM_BITMAPS 0
 #else
     #define USE_XPM_BITMAPS 1
 #endif
-
-#if USE_XPM_BITMAPS && defined(__WXMSW__) && !wxUSE_XPM_IN_MSW
-    #error You need to enable XPM support to use XPM bitmaps with toolbar!
-#endif // USE_XPM_BITMAPS
 
 // If this is 1, the sample will test an extra toolbar identical to the
 // main one, but not managed by the frame. This can test subtle differences
@@ -60,7 +55,7 @@
 // resources
 // ----------------------------------------------------------------------------
 
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -91,7 +86,7 @@ enum Positions
 class MyApp : public wxApp
 {
 public:
-    bool OnInit();
+    bool OnInit() wxOVERRIDE;
 };
 
 // Define a new frame
@@ -181,7 +176,7 @@ private:
     // the search tool, initially NULL
     wxToolBarToolBase *m_searchTool;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -214,6 +209,7 @@ enum
     IDM_TOOLBAR_OTHER_1,
     IDM_TOOLBAR_OTHER_2,
     IDM_TOOLBAR_OTHER_3,
+    IDM_TOOLBAR_OTHER_4,
 
     // tools menu items
     IDM_TOOLBAR_ENABLEPRINT,
@@ -236,7 +232,7 @@ enum
 // Notice that wxID_HELP will be processed for the 'About' menu and the toolbar
 // help button.
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_SIZE(MyFrame::OnSize)
 
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
@@ -283,7 +279,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
                         MyFrame::OnUpdateToggleRadioBtn)
     EVT_UPDATE_UI(IDM_TOOLBAR_TOGGLE_HORIZONTAL_TEXT,
                   MyFrame::OnUpdateToggleHorzText)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
@@ -305,7 +301,7 @@ bool MyApp::OnInit()
     // Create the main frame window
     MyFrame* frame = new MyFrame((wxFrame *) NULL, wxID_ANY,
                                  wxT("wxToolBar Sample"),
-                                  wxPoint(100, 100), wxSize(650, 300));
+                                  wxPoint(100, 100), wxSize(650, 350));
 
     frame->Show(true);
 
@@ -508,7 +504,8 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     // the changes
     toolBar->Realize();
 
-    toolBar->SetRows(!(toolBar->IsVertical()) ? m_rows : 10 / m_rows);
+    toolBar->SetRows(toolBar->IsVertical() ? toolBar->GetToolsCount() / m_rows
+                                           : m_rows);
 }
 
 // ----------------------------------------------------------------------------
@@ -743,6 +740,8 @@ void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
         m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_3, wxT("Third"), wxBITMAP(save));
         m_tbar->AddSeparator();
         m_tbar->AddTool(wxID_HELP, wxT("Help"), wxBITMAP(help));
+        m_tbar->AddTool(IDM_TOOLBAR_OTHER_4, wxT("Disabled"), wxBITMAP(cut), wxBITMAP(paste));
+        m_tbar->EnableTool(IDM_TOOLBAR_OTHER_4, false);
 
         m_tbar->Realize();
     }
@@ -762,7 +761,9 @@ void MyFrame::OnToggleToolbarRows(wxCommandEvent& WXUNUSED(event))
     // m_rows may be only 1 or 2
     m_rows = 3 - m_rows;
 
-    GetToolBar()->SetRows(!(GetToolBar()->IsVertical()) ? m_rows : 10 / m_rows);
+    wxToolBar* const toolBar = GetToolBar();
+    toolBar->SetRows(toolBar->IsVertical() ? toolBar->GetToolsCount() / m_rows
+                                           : m_rows);
 
     //RecreateToolbar(); -- this is unneeded
 }
@@ -925,12 +926,12 @@ void MyFrame::OnChangeToolTip(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnToolbarStyle(wxCommandEvent& event)
 {
     long style = GetToolBar()->GetWindowStyle();
-    style &= ~(wxTB_NOICONS | wxTB_TEXT);
+    style &= ~(wxTB_NOICONS | wxTB_HORZ_TEXT);
 
     switch ( event.GetId() )
     {
         case IDM_TOOLBAR_SHOW_TEXT:
-            style |= wxTB_NOICONS | wxTB_TEXT;
+            style |= wxTB_NOICONS | (m_horzText ? wxTB_HORZ_TEXT : wxTB_TEXT);
             break;
 
         case IDM_TOOLBAR_SHOW_ICONS:
@@ -938,7 +939,7 @@ void MyFrame::OnToolbarStyle(wxCommandEvent& event)
             break;
 
         case IDM_TOOLBAR_SHOW_BOTH:
-            style |= wxTB_TEXT;
+            style |= (m_horzText ? wxTB_HORZ_TEXT : wxTB_TEXT);
     }
 
     GetToolBar()->SetWindowStyle(style);

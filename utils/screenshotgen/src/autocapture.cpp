@@ -2,7 +2,6 @@
 // Name:        autocapture.cpp
 // Purpose:     Implement wxCtrlMaskOut class
 // Author:      Utensil Candel (UtensilCandel@@gmail.com)
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -141,7 +140,8 @@ void AutoCaptureMechanism::Save(wxBitmap* screenshot, const wxString& fileName)
     if (!wxDirExists(default_dir))
         wxMkdir(default_dir);
 
-    wxFileName fullFileName(default_dir, fileName + ".png");
+    wxFileName fullFileName(default_dir, "appear-" + fileName +
+        "-" + wxPlatformInfo::Get().GetPortIdShortName() + ".png");
 
     // do not overwrite already existing files with this name
     while (fullFileName.FileExists())

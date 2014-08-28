@@ -2,9 +2,32 @@
 // Name:        notebook.h
 // Purpose:     interface of wxNotebook
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+enum
+{
+    wxNB_HITTEST_NOWHERE = wxBK_HITTEST_NOWHERE,
+    wxNB_HITTEST_ONICON  = wxBK_HITTEST_ONICON,
+    wxNB_HITTEST_ONLABEL = wxBK_HITTEST_ONLABEL,
+    wxNB_HITTEST_ONITEM  = wxBK_HITTEST_ONITEM,
+    wxNB_HITTEST_ONPAGE  = wxBK_HITTEST_ONPAGE
+};
+
+#define wxNB_DEFAULT          wxBK_DEFAULT
+#define wxNB_TOP              wxBK_TOP
+#define wxNB_BOTTOM           wxBK_BOTTOM
+#define wxNB_LEFT             wxBK_LEFT
+#define wxNB_RIGHT            wxBK_RIGHT
+
+#define wxNB_FIXEDWIDTH       0x0100
+#define wxNB_MULTILINE        0x0200
+#define wxNB_NOPAGETHEME      0x0400
+#define wxNB_FLAT             0x0800
+
+wxEventType wxEVT_NOTEBOOK_PAGE_CHANGED;
+wxEventType wxEVT_NOTEBOOK_PAGE_CHANGING;
+
 
 /**
     @class wxNotebook
@@ -45,10 +68,10 @@
     @beginEventEmissionTable{wxBookCtrlEvent}
     @event{EVT_NOTEBOOK_PAGE_CHANGED(id, func)}
         The page selection was changed.
-        Processes a @c wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED event.
+        Processes a @c wxEVT_NOTEBOOK_PAGE_CHANGED event.
     @event{EVT_NOTEBOOK_PAGE_CHANGING(id, func)}
         The page selection is about to be changed.
-        Processes a @c wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING event.
+        Processes a @c wxEVT_NOTEBOOK_PAGE_CHANGING event.
         This event can be vetoed.
     @endEventTable
 
@@ -86,7 +109,7 @@
 
     @library{wxcore}
     @category{bookctrl}
-    @appearance{notebook.png}
+    @appearance{notebook}
 
     @see wxBookCtrl, wxBookCtrlEvent, wxImageList, @ref page_samples_notebook
 */
@@ -166,5 +189,17 @@ public:
         @note The vertical padding cannot be changed in wxGTK.
     */
     virtual void SetPadding(const wxSize& padding);
+
+    // implementations of pure virtuals
+    virtual int GetPageImage(size_t nPage) const;
+    virtual bool SetPageImage(size_t page, int image);
+    virtual wxString GetPageText(size_t nPage) const;
+    virtual bool SetPageText(size_t page, const wxString& text);
+    virtual int GetSelection() const;
+    virtual int SetSelection(size_t page);
+    virtual int ChangeSelection(size_t page);
+    virtual bool InsertPage(size_t index, wxWindow * page, const wxString & text,
+                            bool select = false, int imageId = NO_IMAGE);
+
 };
 

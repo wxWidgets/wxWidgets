@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/taskbar.cpp
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -22,12 +21,12 @@ bool wxTaskBarIconBase::IsAvailable()
 
 IMPLEMENT_DYNAMIC_CLASS( wxTaskBarIcon, wxTaskBarIconBase )
 
-wxTaskBarIcon::wxTaskBarIcon()
+wxTaskBarIcon::wxTaskBarIcon(wxTaskBarIconType WXUNUSED(iconType))
 {
 }
 
-bool wxTaskBarIcon::SetIcon(const wxIcon& icon,
-             const wxString& tooltip)
+bool wxTaskBarIcon::SetIcon(const wxIcon& WXUNUSED(icon),
+             const wxString& WXUNUSED(tooltip))
 {
     return false;
 }
@@ -37,7 +36,7 @@ bool wxTaskBarIcon::RemoveIcon()
     return false;
 }
 
-bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
+bool wxTaskBarIcon::PopupMenu(wxMenu *WXUNUSED(menu))
 {
     return false;
 }

@@ -5,7 +5,6 @@
 // Author:      John Norris, minor changes by Axel Schlueter
 // Modified by:
 // Created:     08.02.01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Johnny C. Norris II
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -14,13 +13,6 @@
 #define _WX_GTK_TOGGLEBUTTON_H_
 
 #include "wx/bitmap.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_FWD_CORE wxToggleButton;
-class WXDLLIMPEXP_FWD_CORE wxToggleBitmapButton;
 
 //-----------------------------------------------------------------------------
 // wxToggleButton
@@ -53,11 +45,11 @@ public:
                 const wxString& name = wxCheckBoxNameStr);
 
     // Get/set the value
-    void SetValue(bool state);
-    bool GetValue() const;
+    void SetValue(bool state) wxOVERRIDE;
+    bool GetValue() const wxOVERRIDE;
 
     // Set the label
-    void SetLabel(const wxString& label);
+    void SetLabel(const wxString& label) wxOVERRIDE;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -66,11 +58,11 @@ protected:
     void GTKDisableEvents();
     void GTKEnableEvents();
 
-    virtual wxSize DoGetBestSize() const;
-    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style) wxOVERRIDE;
 
 #if wxUSE_MARKUP
-    virtual bool DoSetLabelMarkup(const wxString& markup);
+    virtual bool DoSetLabelMarkup(const wxString& markup) wxOVERRIDE;
 #endif // wxUSE_MARKUP
 
 private:
@@ -116,7 +108,7 @@ public:
     wxDEPRECATED_INLINE( void SetLabel(const wxBitmap& bitmap),
        SetBitmapLabel(bitmap); )
     // prevent virtual function hiding
-    virtual void SetLabel(const wxString& label) { wxToggleButton::SetLabel(label); }
+    virtual void SetLabel(const wxString& label) wxOVERRIDE { wxToggleButton::SetLabel(label); }
 
 private:
     typedef wxToggleButtonBase base_type;

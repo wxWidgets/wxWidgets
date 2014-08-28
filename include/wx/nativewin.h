@@ -3,7 +3,6 @@
 // Purpose:     classes allowing to wrap a native window handle
 // Author:      Vadim Zeitlin
 // Created:     2008-03-05
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -39,9 +38,12 @@
     typedef HWND wxNativeContainerWindowId;
     typedef HWND wxNativeContainerWindowHandle;
 #elif defined(__WXGTK__)
-    #include <gdk/gdk.h>
-
-    typedef GdkNativeWindow wxNativeContainerWindowId;
+    // GdkNativeWindow is guint32 under GDK/X11 and gpointer under GDK/WIN32
+    #ifdef __UNIX__
+        typedef unsigned long wxNativeContainerWindowId;
+    #else
+        typedef void *wxNativeContainerWindowId;
+    #endif
     typedef GdkWindow *wxNativeContainerWindowHandle;
 #else
     // no support for using native windows under this platform yet
@@ -90,55 +92,55 @@ public:
 
 
     // provide (trivial) implementation of the base class pure virtuals
-    virtual void SetTitle(const wxString& WXUNUSED(title))
+    virtual void SetTitle(const wxString& WXUNUSED(title)) wxOVERRIDE
     {
         wxFAIL_MSG( "not implemented for native windows" );
     }
 
-    virtual wxString GetTitle() const
+    virtual wxString GetTitle() const wxOVERRIDE
     {
         wxFAIL_MSG( "not implemented for native windows" );
 
         return wxString();
     }
 
-    virtual void Maximize(bool WXUNUSED(maximize) = true)
+    virtual void Maximize(bool WXUNUSED(maximize) = true) wxOVERRIDE
     {
         wxFAIL_MSG( "not implemented for native windows" );
     }
 
-    virtual bool IsMaximized() const
+    virtual bool IsMaximized() const wxOVERRIDE
     {
         wxFAIL_MSG( "not implemented for native windows" );
 
         return false;
     }
 
-    virtual void Iconize(bool WXUNUSED(iconize) = true)
+    virtual void Iconize(bool WXUNUSED(iconize) = true) wxOVERRIDE
     {
         wxFAIL_MSG( "not implemented for native windows" );
     }
 
-    virtual bool IsIconized() const
+    virtual bool IsIconized() const wxOVERRIDE
     {
         // this is called by wxGTK implementation so don't assert
         return false;
     }
 
-    virtual void Restore()
+    virtual void Restore() wxOVERRIDE
     {
         wxFAIL_MSG( "not implemented for native windows" );
     }
 
     virtual bool ShowFullScreen(bool WXUNUSED(show),
-                                long WXUNUSED(style) = wxFULLSCREEN_ALL)
+                                long WXUNUSED(style) = wxFULLSCREEN_ALL) wxOVERRIDE
     {
         wxFAIL_MSG( "not implemented for native windows" );
 
         return false;
     }
 
-    virtual bool IsFullScreen() const
+    virtual bool IsFullScreen() const wxOVERRIDE
     {
         wxFAIL_MSG( "not implemented for native windows" );
 

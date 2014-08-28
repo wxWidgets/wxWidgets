@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2004-10-17
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -142,9 +141,6 @@ public:
     virtual wxString GetTempDir() const;
 
 
-    // ctor for the base class
-    wxStandardPathsBase();
-
     // virtual dtor for the base class
     virtual ~wxStandardPathsBase();
 
@@ -158,6 +154,10 @@ public:
 
 
 protected:
+    // Ctor is protected as this is a base class which should never be created
+    // directly.
+    wxStandardPathsBase();
+
     // append the path component, with a leading path separator if a
     // path separator or dot (.) is not already at the end of dir
     static wxString AppendPathComponent(const wxString& dir, const wxString& component);
@@ -171,21 +171,15 @@ protected:
 };
 
 #if wxUSE_STDPATHS
-    #if defined(__WXMSW__)
+    #if defined(__WINDOWS__)
         #include "wx/msw/stdpaths.h"
         #define wxHAS_NATIVE_STDPATHS
     // We want CoreFoundation paths on both CarbonLib and Darwin (for all ports)
     #elif defined(__WXMAC__) || defined(__DARWIN__)
         #include "wx/osx/core/stdpaths.h"
         #define wxHAS_NATIVE_STDPATHS
-    #elif defined(__OS2__)
-        #include "wx/os2/stdpaths.h"
-        #define wxHAS_NATIVE_STDPATHS
     #elif defined(__UNIX__)
         #include "wx/unix/stdpaths.h"
-        #define wxHAS_NATIVE_STDPATHS
-    #elif defined(__PALMOS__)
-        #include "wx/palmos/stdpaths.h"
         #define wxHAS_NATIVE_STDPATHS
     #endif
 #endif
@@ -212,6 +206,12 @@ public:
     virtual wxString GetUserDataDir() const { return m_prefix; }
     virtual wxString GetPluginsDir() const { return m_prefix; }
     virtual wxString GetDocumentsDir() const { return m_prefix; }
+
+protected:
+    // Ctor is protected because wxStandardPaths::Get() should always be used
+    // to access the global wxStandardPaths object of the correct type instead
+    // of creating one of a possibly wrong type yourself.
+    wxStandardPaths() { }
 
 private:
     wxString m_prefix;

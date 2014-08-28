@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -129,7 +128,7 @@ void wxCheckListBox::DoToggleItem( int n, int x )
         label[1u] = (!::IsChecked(label)) ? checkChar : uncheckChar;
         wxListBox::SetString(n, label);
 
-        wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, GetId());
+        wxCommandEvent event(wxEVT_CHECKLISTBOX, GetId());
         if( HasClientObjectData() )
             event.SetClientObject( GetClientObject(n) );
         else if( HasClientUntypedData() )

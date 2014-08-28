@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/combobox.cpp
-// Author:      Peter Most
-// Id:          $Id$
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2009 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,7 +9,49 @@
 #include "wx/wxprec.h"
 
 #include "wx/combobox.h"
-#include "wx/qt/converter.h"
+#include "wx/window.h"
+#include "wx/qt/private/converter.h"
+#include "wx/qt/private/winevent.h"
+#include <QtWidgets/QComboBox>
+
+class wxQtComboBox : public wxQtEventSignalHandler< QComboBox, wxComboBox >
+{
+public:
+    wxQtComboBox( wxWindow *parent, wxComboBox *handler );
+
+private:
+    void activated(int index);
+    void editTextChanged(const QString &text);
+};
+
+wxQtComboBox::wxQtComboBox( wxWindow *parent, wxComboBox *handler )
+    : wxQtEventSignalHandler< QComboBox, wxComboBox >( parent, handler )
+{
+    setEditable( true );
+    connect(this, static_cast<void (QComboBox::*)(int index)>(&QComboBox::activated),
+            this, &wxQtComboBox::activated);
+    connect(this, &QComboBox::editTextChanged,
+            this, &wxQtComboBox::editTextChanged);
+}
+
+void wxQtComboBox::activated(int WXUNUSED(index))
+{
+    wxComboBox *handler = GetHandler();
+    if ( handler )
+        handler->SendSelectionChangedEvent(wxEVT_COMBOBOX);
+}
+
+void wxQtComboBox::editTextChanged(const QString &text)
+{
+    wxComboBox *handler = GetHandler();
+    if ( handler )
+    {
+        wxCommandEvent event( wxEVT_TEXT, handler->GetId() );
+        event.SetString( wxQtConvertString( text ) );
+        EmitEvent( event );
+    }
+}
+
 
 wxComboBox::wxComboBox()
 {
@@ -67,78 +108,54 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name )
 {
-    m_qtComboBox = new wxQtComboBox( parent, value );
-    m_qtComboBox->AddChoices( n, choices );
+    m_qtComboBox = new wxQtComboBox( parent, this );
+    while ( n-- > 0 )
+        m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
+    m_qtComboBox->setEditText( wxQtConvertString( value ));
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
-void wxComboBox::SetSelection(int n)
+wxString wxComboBox::DoGetValue() const
 {
+    return wxQtConvertString( m_qtComboBox->currentText() );
 }
 
-void wxComboBox::SetSelection(long from, long to)
+void wxComboBox::Popup()
 {
+     GetHandle()->showPopup();
 }
 
-int wxComboBox::GetSelection() const
+void wxComboBox::Dismiss()
 {
-    return 0;
+    GetHandle()->hidePopup();
 }
 
-void wxComboBox::GetSelection(long *from, long *to) const
+void wxComboBox::SetSelection( long from, long to )
 {
+    // SelectAll uses -1 to -1, adjust for qt:
+    if (from == -1 && to == -1)
+    {
+        from = 0;
+        to = GetValue().length();
+    }
+    // use the inner text entry widget (note that can be null if not editable)
+    if ( m_qtComboBox->lineEdit() != NULL )
+        m_qtComboBox->lineEdit()->setSelection(from, to);
 }
 
-wxString wxComboBox::GetStringSelection() const
+void wxComboBox::GetSelection(long* from, long* to) const
 {
-    return wxString();
-}
-
-
-unsigned wxComboBox::GetCount() const
-{
-    return 0;
-}
-
-wxString wxComboBox::GetString(unsigned int n) const
-{
-    return wxString();
-}
-
-void wxComboBox::SetString(unsigned int n, const wxString& s)
-{
-}
-
-
-int wxComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
-                  unsigned int pos,
-                  void **clientData,
-                  wxClientDataType type)
-{
-    return 0;
-}
-
-
-void wxComboBox::DoSetItemClientData(unsigned int n, void *clientData)
-{
-}
-
-void *wxComboBox::DoGetItemClientData(unsigned int n) const
-{
-    return NULL;
-}
-
-
-void wxComboBox::DoClear()
-{
-}
-
-void wxComboBox::DoDeleteOneItem(unsigned int pos)
-{
-}
-
-QComboBox *wxComboBox::GetHandle() const
-{
-    return m_qtComboBox;
+    // use the inner text entry widget (note that can be null if not editable)
+    if ( m_qtComboBox->lineEdit() != NULL )
+    {
+        *from = m_qtComboBox->lineEdit()->selectionStart();
+        if ( *from >= 0 )
+        {
+            *to = *from + m_qtComboBox->lineEdit()->selectedText().length();
+            return;
+        }
+    }
+    // No selection or text control, call base for default behaviour:
+    wxTextEntry::GetSelection(from, to);
 }

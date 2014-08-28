@@ -3,7 +3,6 @@
 // Purpose:     native implementation of wxInfoBar for GTK+ 2.18 and later
 // Author:      Vadim Zeitlin
 // Created:     2009-09-26
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -39,14 +38,18 @@ public:
     // ----------------------------
 
     virtual void ShowMessage(const wxString& msg,
-                             int flags = wxICON_INFORMATION);
+                             int flags = wxICON_INFORMATION) wxOVERRIDE;
 
-    virtual void Dismiss();
+    virtual void Dismiss() wxOVERRIDE;
 
     virtual void AddButton(wxWindowID btnid,
-                           const wxString& label = wxString());
+                           const wxString& label = wxString()) wxOVERRIDE;
 
-    virtual void RemoveButton(wxWindowID btnid);
+    virtual void RemoveButton(wxWindowID btnid) wxOVERRIDE;
+
+    virtual size_t GetButtonCount() const wxOVERRIDE;
+    virtual wxWindowID GetButtonId(size_t idx) const wxOVERRIDE;
+    virtual bool HasButtonId(wxWindowID btnid) const wxOVERRIDE;
 
     // implementation only
     // -------------------
@@ -54,8 +57,7 @@ public:
     void GTKResponse(int btnid);
 
 protected:
-    virtual bool GTKShouldConnectSizeRequest() const { return false; }
-    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style) wxOVERRIDE;
 
 private:
     void Init() { m_impl = NULL; }

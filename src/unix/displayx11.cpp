@@ -4,7 +4,6 @@
 // Author:      Brian Victor, Vadim Zeitlin
 // Modified by:
 // Created:     12/05/02
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,55 +23,35 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_DISPLAY
-
-#include "wx/display.h"
-
 #ifndef WX_PRECOMP
-    #include "wx/dynarray.h"
-    #include "wx/gdicmn.h"
-    #include "wx/string.h"
     #include "wx/utils.h"
     #include "wx/intl.h"
     #include "wx/log.h"
 #endif /* WX_PRECOMP */
 
+#ifdef __WXGTK20__
+    #include <gdk/gdk.h> // GDK_WINDOWING_X11
+#endif
+#if !defined(__WXGTK20__) || defined(GDK_WINDOWING_X11)
+    #include <X11/Xlib.h>
+    #include <X11/Xatom.h>
+#endif
+
+#if wxUSE_DISPLAY
+
+#include "wx/display.h"
 #include "wx/display_impl.h"
 
-#ifdef __WXGTK20__
-    #include <gdk/gdk.h>
-    #include <gdk/gdkx.h>
-
-    // define the struct with the same fields as XineramaScreenInfo (except for
-    // screen number which we don't need) but which we can use without
-    // including Xinerama headers
-    struct ScreenInfo
-    {
-       short x_org;
-       short y_org;
-       short width;
-       short height;
-    };
-#else // use raw Xinerama functions
-    /* These must be included after the wx files.  Otherwise the Data macro in
-     * Xlibint.h conflicts with a function declaration in wx/list.h.  */
-    extern "C"
-    {
-        #include <X11/Xlib.h>
-        #include <X11/Xlibint.h>
+#ifndef __WXGTK20__
 
         #include <X11/extensions/Xinerama.h>
-    }
 
     typedef XineramaScreenInfo ScreenInfo;
-#endif // GTK+/Xinerama
 
 // ----------------------------------------------------------------------------
 // helper class storing information about all screens
 // ----------------------------------------------------------------------------
 
-// the base class provides access to ScreenInfo array, derived class
-// initializes it using either GTK+ or Xinerama functions
 class ScreensInfoBase
 {
 public:
@@ -84,36 +63,6 @@ protected:
     ScreenInfo *m_screens;
     int m_num;
 };
-
-#ifdef __WXGTK20__
-
-class ScreensInfo : public ScreensInfoBase
-{
-public:
-    ScreensInfo()
-    {
-        GdkScreen * const screen = gdk_screen_get_default();
-
-        m_num = gdk_screen_get_n_monitors(screen);
-        m_screens = new ScreenInfo[m_num];
-        for ( int i = 0; i < m_num; i++ )
-        {
-            GdkRectangle rect;
-            gdk_screen_get_monitor_geometry(screen, i, &rect);
-            m_screens[i].x_org = rect.x;
-            m_screens[i].y_org = rect.y;
-            m_screens[i].width = rect.width;
-            m_screens[i].height = rect.height;
-        }
-    }
-
-    ~ScreensInfo()
-    {
-        delete [] m_screens;
-    }
-};
-
-#else // Xinerama
 
 class ScreensInfo : public ScreensInfoBase
 {
@@ -129,8 +78,6 @@ public:
     }
 };
 
-#endif // GTK+/Xinerama
-
 // ----------------------------------------------------------------------------
 // display and display factory classes
 // ----------------------------------------------------------------------------
@@ -144,8 +91,8 @@ public:
     {
     }
 
-    virtual wxRect GetGeometry() const { return m_rect; }
-    virtual wxRect GetClientArea() const
+    virtual wxRect GetGeometry() const wxOVERRIDE { return m_rect; }
+    virtual wxRect GetClientArea() const wxOVERRIDE
     {
         // we intentionally don't cache the result here because the client
         // display area may change (e.g. the user resized or hid a panel) and
@@ -153,11 +100,11 @@ public:
         return IsPrimary() ? wxGetClientDisplayRect() : m_rect;
     }
 
-    virtual wxString GetName() const { return wxString(); }
+    virtual wxString GetName() const wxOVERRIDE { return wxString(); }
 
-    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const;
-    virtual wxVideoMode GetCurrentMode() const;
-    virtual bool ChangeMode(const wxVideoMode& mode);
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
+    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
+    virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;
 
 private:
     wxRect m_rect;
@@ -171,9 +118,9 @@ class wxDisplayFactoryX11 : public wxDisplayFactory
 public:
     wxDisplayFactoryX11() { }
 
-    virtual wxDisplayImpl *CreateDisplay(unsigned n);
-    virtual unsigned GetCount();
-    virtual int GetFromPoint(const wxPoint& pt);
+    virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
+    virtual unsigned GetCount() wxOVERRIDE;
+    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
 
 protected:
     wxDECLARE_NO_COPY_CLASS(wxDisplayFactoryX11);
@@ -212,10 +159,13 @@ wxDisplayImpl *wxDisplayFactoryX11::CreateDisplay(unsigned n)
 
     return n < screens.GetCount() ? new wxDisplayImplX11(n, screens[n]) : NULL;
 }
+#endif // !__WXGTK20__
 
 // ============================================================================
 // wxDisplayImplX11 implementation
 // ============================================================================
+
+#if !defined(__WXGTK20__) || defined(GDK_WINDOWING_X11)
 
 #ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
 
@@ -232,31 +182,27 @@ wxDisplayImpl *wxDisplayFactoryX11::CreateDisplay(unsigned n)
 // Correct res rate from GLFW
 #define wxCRR2(v,dc) (int) (((1000.0f * (float) dc) /*PIXELS PER SECOND */) / ((float) v.htotal * v.vtotal /*PIXELS PER FRAME*/) + 0.5f)
 #define wxCRR(v) wxCRR2(v,v.dotclock)
-#define wxCVM2(v, dc) wxVideoMode(v.hdisplay, v.vdisplay, DefaultDepth((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay())), wxCRR2(v,dc))
-#define wxCVM(v) wxCVM2(v, v.dotclock)
+#define wxCVM2(v, dc, display, nScreen) wxVideoMode(v.hdisplay, v.vdisplay, DefaultDepth(display, nScreen), wxCRR2(v,dc))
+#define wxCVM(v, display, nScreen) wxCVM2(v, v.dotclock, display, nScreen)
 
-wxArrayVideoModes wxDisplayImplX11::GetModes(const wxVideoMode& mode) const
+wxArrayVideoModes wxXF86VidMode_GetModes(const wxVideoMode& mode, Display* display, int nScreen)
 {
-    //Convenience...
-    Display* pDisplay = (Display*) wxGetDisplay(); //default display
-    int nScreen = DefaultScreen(pDisplay); //default screen of (default) display...
-
-    //Some variables..
     XF86VidModeModeInfo** ppXModes; //Enumerated Modes (Don't forget XFree() :))
     int nNumModes; //Number of modes enumerated....
 
     wxArrayVideoModes Modes; //modes to return...
 
-    if (XF86VidModeGetAllModeLines(pDisplay, nScreen, &nNumModes, &ppXModes) == TRUE)
+    if (XF86VidModeGetAllModeLines(display, nScreen, &nNumModes, &ppXModes))
     {
         for (int i = 0; i < nNumModes; ++i)
         {
-            if (mode == wxDefaultVideoMode || //According to display.h All modes valid if dafault mode...
-                mode.Matches(wxCVM((*ppXModes[i]))) ) //...?
+            XF86VidModeModeInfo& info = *ppXModes[i];
+            const wxVideoMode vm = wxCVM(info, display, nScreen);
+            if (vm.Matches(mode))
             {
-                Modes.Add(wxCVM((*ppXModes[i])));
+                Modes.Add(vm);
             }
-            wxClearXVM((*ppXModes[i]));
+            wxClearXVM(info);
         //  XFree(ppXModes[i]); //supposed to free?
         }
         XFree(ppXModes);
@@ -269,22 +215,21 @@ wxArrayVideoModes wxDisplayImplX11::GetModes(const wxVideoMode& mode) const
     return Modes;
 }
 
-wxVideoMode wxDisplayImplX11::GetCurrentMode() const
+wxVideoMode wxXF86VidMode_GetCurrentMode(Display* display, int nScreen)
 {
   XF86VidModeModeLine VM;
   int nDotClock;
-  XF86VidModeGetModeLine((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()),
-                         &nDotClock, &VM);
+  XF86VidModeGetModeLine(display, nScreen, &nDotClock, &VM);
   wxClearXVM(VM);
-  return wxCVM2(VM, nDotClock);
+  return wxCVM2(VM, nDotClock, display, nScreen);
 }
 
-bool wxDisplayImplX11::ChangeMode(const wxVideoMode& mode)
+bool wxXF86VidMode_ChangeMode(const wxVideoMode& mode, Display* display, int nScreen)
 {
     XF86VidModeModeInfo** ppXModes; //Enumerated Modes (Don't forget XFree() :))
     int nNumModes; //Number of modes enumerated....
 
-    if( !XF86VidModeGetAllModeLines((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()), &nNumModes, &ppXModes) )
+    if(!XF86VidModeGetAllModeLines(display, nScreen, &nNumModes, &ppXModes))
     {
         wxLogSysError(_("Failed to change video mode"));
         return false;
@@ -293,8 +238,7 @@ bool wxDisplayImplX11::ChangeMode(const wxVideoMode& mode)
     bool bRet = false;
     if (mode == wxDefaultVideoMode)
     {
-        bRet = XF86VidModeSwitchToMode((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()),
-                     ppXModes[0]) == TRUE;
+        bRet = XF86VidModeSwitchToMode(display, nScreen, ppXModes[0]) != 0;
 
         for (int i = 0; i < nNumModes; ++i)
         {
@@ -312,8 +256,7 @@ bool wxDisplayImplX11::ChangeMode(const wxVideoMode& mode)
                 wxCRR((*ppXModes[i])) == mode.GetRefresh())
             {
                 //switch!
-                bRet = XF86VidModeSwitchToMode((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()),
-                         ppXModes[i]) == TRUE;
+                bRet = XF86VidModeSwitchToMode(display, nScreen, ppXModes[i]) != 0;
             }
             wxClearXVM((*ppXModes[i]));
         //  XFree(ppXModes[i]); //supposed to free?
@@ -325,28 +268,58 @@ bool wxDisplayImplX11::ChangeMode(const wxVideoMode& mode)
     return bRet;
 }
 
+#ifndef __WXGTK20__
+wxArrayVideoModes wxDisplayImplX11::GetModes(const wxVideoMode& modeMatch) const
+{
+    Display* display = static_cast<Display*>(wxGetDisplay());
+    int nScreen = DefaultScreen(display);
+    return wxXF86VidMode_GetModes(modeMatch, display, nScreen);
+}
+
+wxVideoMode wxDisplayImplX11::GetCurrentMode() const
+{
+    Display* display = static_cast<Display*>(wxGetDisplay());
+    int nScreen = DefaultScreen(display);
+    return wxXF86VidMode_GetCurrentMode(display, nScreen);
+}
+
+bool wxDisplayImplX11::ChangeMode(const wxVideoMode& mode)
+{
+    Display* display = static_cast<Display*>(wxGetDisplay());
+    int nScreen = DefaultScreen(display);
+    return wxXF86VidMode_ChangeMode(mode, display, nScreen);
+}
+#endif // !__WXGTK20__
 
 #else // !HAVE_X11_EXTENSIONS_XF86VMODE_H
 
-wxArrayVideoModes wxDisplayImplX11::GetModes(const wxVideoMode& modeMatch) const
+wxArrayVideoModes wxX11_GetModes(const wxDisplayImpl* impl, const wxVideoMode& modeMatch, Display* display)
 {
     int count_return;
-    int* depths = XListDepths((Display*)wxGetDisplay(), 0, &count_return);
+    int* depths = XListDepths(display, 0, &count_return);
     wxArrayVideoModes modes;
     if ( depths )
     {
+        const wxRect rect = impl->GetGeometry();
         for ( int x = 0; x < count_return; ++x )
         {
-            wxVideoMode mode(m_rect.GetWidth(), m_rect.GetHeight(), depths[x]);
+            wxVideoMode mode(rect.width, rect.height, depths[x]);
             if ( mode.Matches(modeMatch) )
             {
-                modes.Add(modeMatch);
+                modes.Add(mode);
             }
         }
 
         XFree(depths);
     }
     return modes;
+}
+
+#ifndef __WXGTK20__
+wxArrayVideoModes wxDisplayImplX11::GetModes(const wxVideoMode& modeMatch) const
+{
+    Display* display = static_cast<Display*>(wxGetDisplay());
+    return wxX11_GetModes(this, modeMatch, display);
 }
 
 wxVideoMode wxDisplayImplX11::GetCurrentMode() const
@@ -360,128 +333,98 @@ bool wxDisplayImplX11::ChangeMode(const wxVideoMode& WXUNUSED(mode))
     // Not implemented
     return false;
 }
-
+#endif // !__WXGTK20__
 #endif // !HAVE_X11_EXTENSIONS_XF86VMODE_H
+#endif // !defined(__WXGTK20__) || defined(GDK_WINDOWING_X11)
 
 // ============================================================================
 // wxDisplay::CreateFactory()
 // ============================================================================
 
+#ifndef __WXGTK20__
 /* static */ wxDisplayFactory *wxDisplay::CreateFactory()
 {
-    // GTK+ screen functions are always available, no need to check for them
-#ifndef __WXGTK20__
     if ( !XineramaIsActive((Display*)wxGetDisplay()) )
         return new wxDisplayFactorySingle;
-#endif
 
     return new wxDisplayFactoryX11;
 }
+#endif
 
 #endif /* wxUSE_DISPLAY */
 
-#include "wx/utils.h"
-
-#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
-
-void wxClientDisplayRect(int *x, int *y, int *width, int *height)
+#if !defined(__WXGTK20__) || defined(GDK_WINDOWING_X11)
+void wxGetWorkAreaX11(Screen* screen, int& x, int& y, int& width, int& height)
 {
-    // TODO: don't hardcode display size
-    if ( x )
-        *x = 0;
-    if ( y )
-        *y = 0;
-    if ( width )
-        *width = 672;
-    if ( height )
-        *height = 396;
+    Display* display = DisplayOfScreen(screen);
+    Atom property = XInternAtom(display, "_NET_WORKAREA", true);
+    if (property)
+    {
+        Atom actual_type;
+        int actual_format;
+        unsigned long nitems;
+        unsigned long bytes_after;
+        unsigned char* data = NULL;
+        Status status = XGetWindowProperty(
+            display, RootWindowOfScreen(screen), property,
+            0, 4, false, XA_CARDINAL,
+            &actual_type, &actual_format, &nitems, &bytes_after, &data);
+        if (status == Success && actual_type == XA_CARDINAL &&
+            actual_format == 32 && nitems == 4)
+        {
+            const long* p = (long*)data;
+            x = p[0];
+            y = p[1];
+            width = p[2];
+            height = p[3];
+        }
+        if (data)
+            XFree(data);
+    }
 }
+#endif // !defined(__WXGTK20__) || defined(GDK_WINDOWING_X11)
 
-#else // !wxUSE_LIBHILDON || !wxUSE_LIBHILDON2
+#ifndef __WXGTK20__
 
-#include "wx/log.h"
-
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-
-// TODO: make this a full-fledged class and move to a public header
-class wxX11Ptr
-{
-public:
-    wxX11Ptr(void *ptr = NULL) : m_ptr(ptr) { }
-    ~wxX11Ptr() { if ( m_ptr ) XFree(m_ptr); }
-
-private:
-    void *m_ptr;
-
-    wxDECLARE_NO_COPY_CLASS(wxX11Ptr);
-};
-
-// NB: this function is implemented using X11 and not GDK calls as it's shared
-//     by wxGTK[12], wxX11 and wxMotif ports
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
     Display * const dpy = wxGetX11Display();
     wxCHECK_RET( dpy, wxT("can't be called before initializing the GUI") );
 
-    const Atom atomWorkArea = XInternAtom(dpy, "_NET_WORKAREA", True);
-    if ( atomWorkArea )
+    wxRect rectClient;
+    wxGetWorkAreaX11(DefaultScreenOfDisplay(dpy),
+        rectClient.x, rectClient.y, rectClient.width, rectClient.height);
+
+    // Although _NET_WORKAREA is supposed to return the client size of the
+    // screen, not all implementations are conforming, apparently, see #14419,
+    // so make sure we return a subset of the primary display.
+    wxRect rectFull;
+#if wxUSE_DISPLAY
+    ScreensInfo screens;
+    const ScreenInfo& info = screens[0];
+    rectFull = wxRect(info.x_org, info.y_org, info.width, info.height);
+#else
+    wxDisplaySize(&rectFull.width, &rectFull.height);
+#endif
+
+    if ( !rectClient.width || !rectClient.height )
     {
-        long *workareas = NULL;
-        unsigned long numItems;
-        unsigned long bytesRemaining;
-        Atom actualType;
-        int format;
-
-        if ( XGetWindowProperty
-             (
-                dpy,
-                XDefaultRootWindow(dpy),
-                atomWorkArea,
-                0,                          // offset of data to retrieve
-                4,                          // number of items to retrieve
-                False,                      // don't delete property
-                XA_CARDINAL,                // type of the items to get
-                &actualType,
-                &format,
-                &numItems,
-                &bytesRemaining,
-                (unsigned char **)&workareas
-             ) == Success && workareas )
-        {
-            wxX11Ptr x11ptr(workareas); // ensure it will be freed
-
-            // check that we retrieved the property of the expected type and
-            // that we did get back 4 longs (32 is the format for long), as
-            // requested
-            if ( actualType != XA_CARDINAL ||
-                    format != 32 ||
-                        numItems != 4 )
-            {
-                wxLogDebug(wxT("XGetWindowProperty(\"_NET_WORKAREA\") failed"));
-                return;
-            }
-
-            if ( x )
-                *x = workareas[0];
-            if ( y )
-                *y = workareas[1];
-            if ( width )
-                *width = workareas[2];
-            if ( height )
-                *height = workareas[3];
-
-            return;
-        }
+        // _NET_WORKAREA not available or didn't work, fall back to the total
+        // display size.
+        rectClient = rectFull;
+    }
+    else
+    {
+        rectClient = rectClient.Intersect(rectFull);
     }
 
-    // if we get here, _NET_WORKAREA is not supported so return the entire
-    // screen size as fall back
-    if (x)
-        *x = 0;
-    if (y)
-        *y = 0;
-    wxDisplaySize(width, height);
+    if ( x )
+        *x = rectClient.x;
+    if ( y )
+        *y = rectClient.y;
+    if ( width )
+        *width = rectClient.width;
+    if ( height )
+        *height = rectClient.height;
 }
-
-#endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
+#endif // !__WXGTK20__

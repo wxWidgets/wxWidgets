@@ -2,7 +2,6 @@
 // Name:        src/gtk/statbox.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -13,10 +12,10 @@
 #if wxUSE_STATBOX
 
 #include "wx/statbox.h"
-#include "wx/gtk/private/win_gtk.h"     // for wxPizza
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/win_gtk.h"
 
 // constants taken from GTK sources
 #define LABEL_PAD 1
@@ -26,6 +25,7 @@
 // "size_allocate" from m_widget
 //-----------------------------------------------------------------------------
 
+#ifndef __WXGTK3__
 extern "C" {
 static void size_allocate(GtkWidget* widget, GtkAllocation* alloc, void*)
 {
@@ -45,6 +45,7 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc, void*)
     }
 }
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // wxStaticBox
@@ -99,11 +100,15 @@ bool wxStaticBox::Create( wxWindow *parent,
 
     gtk_frame_set_label_align(GTK_FRAME(m_widget), xalign, 0.5);
 
+#ifndef __WXGTK3__
     if (gtk_check_version(2, 12, 0))
     {
         // we connect this signal to perform label-clipping as GTK >= 2.12 does
         g_signal_connect(m_widget, "size_allocate", G_CALLBACK(size_allocate), NULL);
     }
+#endif
+
+    m_container.DisableSelfFocus();
 
     return true;
 }
@@ -119,7 +124,7 @@ void wxStaticBox::AddChild( wxWindowBase *child )
         gtk_container_add( GTK_CONTAINER (m_widget), m_wxwindow );
     }
 
-    wxWindow::AddChild( child );
+    wxStaticBoxBase::AddChild(child);
 }
 
 void wxStaticBox::SetLabel( const wxString& label )
@@ -148,16 +153,27 @@ void wxStaticBox::GTKWidgetDoSetMnemonic(GtkWidget* w)
 wxVisualAttributes
 wxStaticBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_frame_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_frame_new(""));
 }
-
 
 void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
 {
-    const int BORDER = 5; // FIXME: hardcoded value
+    GtkAllocation alloc, child_alloc;
+    gtk_widget_get_allocation(m_widget, &alloc);
+    const int w_save = alloc.width;
+    const int h_save = alloc.height;
+    if (alloc.width < 50) alloc.width = 50;
+    if (alloc.height < 50) alloc.height = 50;
+    gtk_widget_set_allocation(m_widget, &alloc);
 
-    *borderTop = GetLabel().empty() ? 2*BORDER : GetCharHeight();
-    *borderOther = BORDER;
+    GTK_FRAME_GET_CLASS(m_widget)->compute_child_allocation(GTK_FRAME(m_widget), &child_alloc);
+
+    alloc.width = w_save;
+    alloc.height = h_save;
+    gtk_widget_set_allocation(m_widget, &alloc);
+
+    *borderTop = child_alloc.y - alloc.y;
+    *borderOther = child_alloc.x - alloc.x;
 }
 
 #endif // wxUSE_STATBOX

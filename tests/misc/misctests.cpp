@@ -3,7 +3,6 @@
 // Purpose:     test miscellaneous stuff
 // Author:      Peter Most, Vadim Zeitlin
 // Created:     2008-07-10
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Peter Most
 //              (c) 2009 Vadim Zeitlin
 ///////////////////////////////////////////////////////////////////////////////
@@ -115,17 +114,21 @@ bool IsNull(void *p)
 
 void MiscTestCase::StaticCast()
 {
+#if wxUSE_TARSTREAM
     wxTarEntry tarEntry;
     CPPUNIT_ASSERT( wxStaticCast(&tarEntry, wxArchiveEntry) );
 
     wxArchiveEntry *entry = &tarEntry;
     CPPUNIT_ASSERT( wxStaticCast(entry, wxTarEntry) );
 
+#if wxUSE_ZIPSTREAM
     wxZipEntry zipEntry;
     entry = &zipEntry;
     CPPUNIT_ASSERT( wxStaticCast(entry, wxZipEntry) );
+    WX_ASSERT_FAILS_WITH_ASSERT( IsNull(wxStaticCast(&zipEntry, wxTarEntry)) );
+#endif // wxUSE_ZIPSTREAM
 
     WX_ASSERT_FAILS_WITH_ASSERT( IsNull(wxStaticCast(entry, wxTarEntry)) );
-    WX_ASSERT_FAILS_WITH_ASSERT( IsNull(wxStaticCast(&zipEntry, wxTarEntry)) );
+#endif // wxUSE_TARSTREAM
 }
 

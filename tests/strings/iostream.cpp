@@ -3,7 +3,6 @@
 // Purpose:     unit test of wxString interaction with std::[io]stream
 // Author:      Vadim Zeitlin
 // Created:     2007-10-09
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

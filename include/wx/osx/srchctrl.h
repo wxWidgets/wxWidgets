@@ -3,7 +3,6 @@
 // Purpose:     mac carbon wxSearchCtrl class
 // Author:      Vince Harron
 // Created:     2006-02-19
-// RCS-ID:      $Id$
 // Copyright:   Vince Harron
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -40,10 +39,12 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxSearchCtrlNameStr);
 
+#if wxUSE_MENUS
     // get/set search button menu
     // --------------------------
     virtual void SetMenu( wxMenu* menu );
     virtual wxMenu* GetMenu();
+#endif  // wxUSE_MENUS
 
     // get/set search options
     // ----------------------
@@ -68,7 +69,9 @@ protected:
 
     void Init();
 
+#if wxUSE_MENUS
     wxMenu *m_menu;
+#endif  // wxUSE_MENUS
 
     wxString m_descriptiveText;
 

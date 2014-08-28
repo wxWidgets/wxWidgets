@@ -2,7 +2,6 @@
 // Name:        statbox.h
 // Purpose:     interface of wxStaticBox
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -44,7 +43,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{staticbox.png}
+    @appearance{staticbox}
 
     @see wxStaticText, wxStaticBoxSizer
 */

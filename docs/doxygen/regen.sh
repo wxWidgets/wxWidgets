@@ -1,6 +1,5 @@
 #!/bin/bash
 #
-# $Id$
 #
 # This bash script regenerates the HTML doxygen version of the
 # wxWidgets manual and adjusts the doxygen log to make it more
@@ -20,34 +19,91 @@ me=$(basename $0)
 path=${0%%/$me}        # path from which the script has been launched
 current=$(pwd)
 cd $path
-export WXWIDGETS=`cd ../.. && pwd`
+if [[ -z "$WXWIDGETS" ]]; then
+    # Notice the use of -P to ensure we get the canonical path even if there
+    # are symlinks in the current path. This is important because Doxygen
+    # strips this string from the paths in the generated files textually and it
+    # wouldn't work if it contained symlinks.
+    WXWIDGETS=`cd ../.. && pwd -P`
+    if [ "$OSTYPE" = "cygwin" ]; then
+        WXWIDGETS=`cygpath -w $WXWIDGETS`
+    fi
+    export WXWIDGETS
+fi
+
+if [ "$DOXYGEN" = "" ]; then
+    DOXYGEN=doxygen
+fi
+
+# Check that doxygen has the correct version as different versions of it are
+# unfortunately not always (in fact, practically never) compatible.
+#
+# Still allow using incompatible version for some quick local testing if really
+# needed and 1.8.2 can't be installed for whatever reason.
+if [[ -z $WX_SKIP_DOXYGEN_VERSION_CHECK ]]; then
+    doxygen_version=`$DOXYGEN --version`
+    doxygen_version_required=1.8.2
+    if [[ $doxygen_version != $doxygen_version_required ]]; then
+        echo "Doxygen version $doxygen_version is not supported."
+        echo "Please use Doxygen $doxygen_version_required or export WX_SKIP_DOXYGEN_VERSION_CHECK."
+        exit 1
+    fi
+fi
 
 # prepare folders for the cp commands below
 mkdir -p out/html       # we need to copy files in this folder below
-mkdir -p out/html/wxmsw out/html/wxgtk out/html/wxmac
+mkdir -p out/html/generic
 
 # These are not automatically copied by Doxygen because they're not
 # used in doxygen documentation, only in our html footer and by our
 # custom aliases
-cp images/powered-by-wxwidgets.png out/html
-cp images/logo_*.png out/html
-cp images/tab_*.gif out/html
-cp images/wxmsw/*png out/html/wxmsw
-cp images/wxmac/*png out/html/wxmac
-cp images/wxgtk/*png out/html/wxgtk
-cp wxwidgets.js out/html
+cp images/generic/*png out/html/generic
 
-# these CSS are not automatically copied by Doxygen because they're
-# included by our custom html header...
-cp wxwidgets.css out/html
-cp wxtabs.css out/html
+# Defaults for settings controlled by this script
+export GENERATE_DOCSET="NO";
+export GENERATE_HTML="NO";
+export GENERATE_HTMLHELP="NO";
+export GENERATE_LATEX="NO";
+export GENERATE_QHP="NO";
+export GENERATE_XML="NO";
+export SEARCHENGINE="NO";
+export SERVER_BASED_SEARCH="NO";
 
-# which configuration should we use?
-if [[ -z "$1" ]]; then
-    cfgfile="Doxyfile_all"
-else
-    cfgfile="Doxyfile_$1"
-fi
+# Which format should we generate during this run?
+case "$1" in
+    all) # All *main* formats, not all formats, here for backwards compat.
+        export GENERATE_HTML="YES";
+        export GENERATE_HTMLHELP="YES";
+        export GENERATE_XML="YES";
+        ;;
+    chm)
+        export GENERATE_HTML="YES";
+        export GENERATE_HTMLHELP="YES";
+        ;;
+    docset)
+        export GENERATE_DOCSET="YES";
+        export GENERATE_HTML="YES";
+        ;;
+    latex)
+        export GENERATE_LATEX="YES";
+        ;;
+    php) # HTML, but with PHP Search Engine
+        export GENERATE_HTML="YES";
+        export SEARCHENGINE="YES";
+        export SERVER_BASED_SEARCH="YES";
+        ;;
+    qch)
+        export GENERATE_HTML="YES";
+        export GENERATE_QHP="YES";
+        ;;
+    xml)
+        export GENERATE_XML="YES";
+        ;;
+    *) # Default to HTML only
+        export GENERATE_HTML="YES";
+        export SEARCHENGINE="YES";
+        ;;
+esac
 
 #
 # NOW RUN DOXYGEN
@@ -56,7 +112,7 @@ fi
 #     otherwise when generating the CHM file with Doxygen, those files are
 #     not included!
 #
-doxygen $cfgfile
+$DOXYGEN Doxyfile
 
 if [[ "$1" = "qch" ]]; then
     # we need to add missing files to the .qhp
@@ -107,34 +163,34 @@ if [[ "$1" = "qch" ]]; then
 fi
 
 if [[ "$1" = "docset" ]]; then
-    DOCSETNAME="org.wxwidgets.doxygen.wx29.docset"
-    ATOM="org.wxwidgets.doxygen.docset.wx29.atom"
+    BASENAME="wxWidgets-3.1"    # was org.wxwidgets.doxygen.docset.wx30
+    DOCSETNAME="$BASENAME.docset"
+    ATOM="$BASENAME.atom"
     ATOMDIR="http://docs.wxwidgets.org/docsets"
-    XAR="org.wxwidgets.doxygen.docset.wx29.xar"
+    XAR="$BASENAME.xar"
     XARDIR="http://docs.wxwidgets.org/docsets"
-    XCODE_INSTALL=`sh xcode-select -print-path`
-    
-    cp wxdocsettabs.css out/html/wxtabs.css
-    cp wxdocsetwidgets.css out/html/wxwidgets.css
-    cp img_downArrow.png out/html
-    cp background_navigation.png out/html
+    XCODE_INSTALL=`xcode-select -print-path`
     
     cd out/html
-    DESTINATIONDIR=`pwd`
+    DESTINATIONDIR=`pwd`/../docset
     
+    mkdir -p $DESTINATIONDIR
     rm -rf $DESTINATIONDIR/$DOCSETNAME
     rm -f $DESTINATIONDIR/$XAR
     
-    make 
+    make DOCSET_NAME=$DESTINATIONDIR/$DOCSETNAME
     
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleVersion 1.3
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleShortVersionString 1.3
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleName "wxWidgets 2.9 Library"
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleName "wxWidgets 3.1"
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFeedURL $ATOMDIR/$ATOM
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFallbackURL http://docs.wxwidgets.org
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetDescription "API reference and conceptual documentation for wxWidgets 2.9"
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info NSHumanReadableCopyright "Copyright 1992-2011 wxWidgets team, Portions 1996 Artificial Intelligence Applications Institute"
-    
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetDescription "API reference and conceptual documentation for wxWidgets 3.0"
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info NSHumanReadableCopyright "Copyright 1992-2014 wxWidgets team, Portions 1996 Artificial Intelligence Applications Institute"
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info isJavaScriptEnabled true
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info dashIndexFilePath index.html
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetPlatformFamily wx
+
     $XCODE_INSTALL/usr/bin/docsetutil package -atom $DESTINATIONDIR/$ATOM -download-url $XARDIR/$XAR -output $DESTINATIONDIR/$XAR $DESTINATIONDIR/$DOCSETNAME
 
     cd ../..
@@ -145,10 +201,8 @@ fi
 # more readable
 currpath=`pwd`/
 interfacepath=`cd ../../interface && pwd`/
-cat doxygen.log | sed -e "s|$currpath||g" -e "s|$interfacepath||g" >temp
-
-# Doxygen warnings are not completely sorted for filename; enforce correct sorting:
-cat temp | sort >doxygen.log
+cat doxygen.log | sed -e "s|$currpath||g" -e "s|$interfacepath||g" > temp
+cat temp > doxygen.log
 rm temp
 
 # return to the original folder from which this script was launched

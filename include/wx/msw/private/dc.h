@@ -3,7 +3,6 @@
 // Purpose:     private wxMSW helpers for working with HDCs
 // Author:      Vadim Zeitlin
 // Created:     2009-06-16 (extracted from src/msw/dc.cpp)
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

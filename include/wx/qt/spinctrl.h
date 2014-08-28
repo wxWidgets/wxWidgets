@@ -1,56 +1,25 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/spinctrl.h
-// Author:      Peter Most
-// Id:          $Id$
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_SPINCTRL_H_
 #define _WX_QT_SPINCTRL_H_
 
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QSpinBox>
-#include <QtGui/QDoubleSpinBox>
-
-// Define a derived helper class to get access to valueFromText:
-
-template < typename Widget >
-class WXDLLIMPEXP_CORE wxQtSpinBoxBase : public Widget
-{
-public:
-    wxQtSpinBoxBase( QWidget *parent )
-        : Widget( parent )
-    { }
-
-    using Widget::valueFromText;
-};
-
-class WXDLLIMPEXP_CORE wxQtSpinBox : public wxQtSpinBoxBase< QSpinBox >
-{
-public:
-    wxQtSpinBox( QWidget *parent )
-        : wxQtSpinBoxBase< QSpinBox >( parent )
-    { }
-};
-
-class WXDLLIMPEXP_CORE wxQtDoubleSpinBox : public wxQtSpinBoxBase< QDoubleSpinBox >
-{
-public:
-    wxQtDoubleSpinBox( QWidget *parent )
-        : wxQtSpinBoxBase< QDoubleSpinBox >( parent )
-    { }
-};
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QDoubleSpinBox>
 
 // Take advantage of the Qt compile time polymorphy and use a template to avoid
 // copy&paste code for the usage of QSpinBox/QDoubleSpinBox.
 
 template < typename T, typename Widget >
-class WXDLLIMPEXP_CORE wxQtSpinCtrlBase : public wxSpinCtrlBase
+class WXDLLIMPEXP_CORE wxSpinCtrlQt : public wxSpinCtrlBase
 {
 public:
-    wxQtSpinCtrlBase();
-    wxQtSpinCtrlBase( wxWindow *parent, wxWindowID id, const wxString& value,
+    wxSpinCtrlQt();
+    wxSpinCtrlQt( wxWindow *parent, wxWindowID id, const wxString& value,
         const wxPoint& pos, const wxSize& size, long style,
         T min, T max, T initial, T inc,
         const wxString& name );
@@ -60,14 +29,14 @@ public:
         T min, T max, T initial, T inc,
         const wxString& name );
 
-    virtual void SetValue(const wxString& value);
+    virtual void SetValue(const wxString&) {}
 
     virtual void SetSnapToTicks(bool snap_to_ticks);
     virtual bool GetSnapToTicks() const;
 
     virtual void SetSelection(long from, long to);
 
-    void SetValue(T val);
+    virtual void SetValue(T val);
     void SetRange(T minVal, T maxVal);
     void SetIncrement(T inc);
 
@@ -79,10 +48,11 @@ public:
     virtual Widget *GetHandle() const;
 
 protected:
-    wxQtPointer< Widget > m_qtSpinBox;
+    Widget *m_qtSpinBox;
+
 };
 
-class WXDLLIMPEXP_CORE wxSpinCtrl : public wxQtSpinCtrlBase< int, wxQtSpinBox >
+class WXDLLIMPEXP_CORE wxSpinCtrl : public wxSpinCtrlQt< int, QSpinBox >
 {
 public:
     wxSpinCtrl();
@@ -103,12 +73,22 @@ public:
                 long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = wxT("wxSpinCtrl"));
+    virtual int GetBase() const wxOVERRIDE { return m_base; }
+    virtual bool SetBase(int base) wxOVERRIDE;
+    virtual void SetValue(const wxString & val);
+    virtual void SetValue(int val) { wxSpinCtrlQt::SetValue(val); }
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY( wxSpinCtrl )
+    // Common part of all ctors.
+    void Init()
+    {
+        m_base = 10;
+    }
+    int m_base;
+    DECLARE_DYNAMIC_CLASS( wxSpinCtrl )
 };
 
-class WXDLLIMPEXP_CORE wxSpinCtrlDouble : public wxQtSpinCtrlBase< double, wxQtDoubleSpinBox >
+class WXDLLIMPEXP_CORE wxSpinCtrlDouble : public wxSpinCtrlQt< double, QDoubleSpinBox >
 {
 public:
     wxSpinCtrlDouble();
@@ -135,8 +115,13 @@ public:
     void SetDigits(unsigned digits);
     unsigned GetDigits() const;
 
+    virtual int GetBase() const wxOVERRIDE { return 10; }
+    virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
+    virtual void SetValue(const wxString & val);
+    virtual void SetValue(double val) { wxSpinCtrlQt::SetValue(val); }
+
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxSpinCtrlDouble );
+    wxDECLARE_DYNAMIC_CLASS( wxSpinCtrlDouble );
 };
 
 #endif // _WX_QT_SPINCTRL_H_

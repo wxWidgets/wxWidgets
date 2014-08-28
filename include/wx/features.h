@@ -5,7 +5,6 @@
 *  Author:      Vadim Zeitlin
 *  Modified by: Ryan Norton (Converted to C)
 *  Created:     18.03.02
-*  RCS-ID:      $Id$
 *  Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwidgets.org>
 *  Licence:     wxWindows licence
 */
@@ -33,7 +32,7 @@
 #endif
 
 /*  taskbar is implemented in the major ports */
-#if defined(__WXMSW__) || defined(__WXCOCOA__) \
+#if defined(__WXMSW__) \
     || defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXX11__) \
     || defined(__WXOSX_MAC__) || defined(__WXQT__)
     #define wxHAS_TASK_BAR_ICON
@@ -89,12 +88,9 @@
         defined(__WXMSW__) || defined(__WXQT__)
 
     /*
-       These compilers can't deal with templates in wx/rawbmp.h:
-        - HP aCC for PA-RISC
-        - Watcom < 1.8
+       HP aCC for PA-RISC can't deal with templates in wx/rawbmp.h.
      */
-    #if !wxONLY_WATCOM_EARLIER_THAN(1, 8) && \
-        !(defined(__HP_aCC) && defined(__hppa))
+    #if !(defined(__HP_aCC) && defined(__hppa))
         #define wxHAS_RAW_BITMAP
     #endif
 #endif
@@ -104,15 +100,12 @@
     #define wxHAVE_RAW_BITMAP
 #endif
 
-/*
-   If this is defined, wxEvtHandler::Bind<>() is available (not all compilers
-   have the required template support for this and in particular under Windows
-   where only g++ and MSVC >= 7 currently support it.
- */
-#if wxCHECK_GCC_VERSION(3, 2) || wxCHECK_VISUALC_VERSION(7)
-    #define wxHAS_EVENT_BIND
-#endif
 
+// Previously this symbol wasn't defined for all compilers as Bind() couldn't
+// be implemented for some of them (notably MSVC 6), but this is not the case
+// any more and Bind() is always implemented when using any currently supported
+// compiler, so this symbol exists purely for compatibility.
+#define wxHAS_EVENT_BIND
 
 #endif /*  _WX_FEATURES_H_ */
 

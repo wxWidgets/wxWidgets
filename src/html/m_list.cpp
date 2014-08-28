@@ -2,7 +2,6 @@
 // Name:        src/html/m_list.cpp
 // Purpose:     wxHtml module for lists
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -39,7 +38,7 @@ class wxHtmlListmarkCell : public wxHtmlCell
     public:
         wxHtmlListmarkCell(wxDC *dc, const wxColour& clr);
         void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-                  wxHtmlRenderingInfo& info);
+                  wxHtmlRenderingInfo& info) wxOVERRIDE;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlListmarkCell);
 };
@@ -91,7 +90,7 @@ class wxHtmlListCell : public wxHtmlContainerCell
         wxHtmlListCell(wxHtmlContainerCell *parent);
         virtual ~wxHtmlListCell();
         void AddRow(wxHtmlContainerCell *mark, wxHtmlContainerCell *cont);
-        virtual void Layout(int w);
+        virtual void Layout(int w) wxOVERRIDE;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlListCell);
 };
@@ -206,7 +205,7 @@ class wxHtmlListcontentCell : public wxHtmlContainerCell
 {
 public:
     wxHtmlListcontentCell(wxHtmlContainerCell *p) : wxHtmlContainerCell(p) {}
-    virtual void Layout(int w) {
+    virtual void Layout(int w) wxOVERRIDE {
         // Reset top indentation, fixes <li><p>
         SetIndent(0, wxHTML_INDENT_TOP);
         wxHtmlContainerCell::Layout(w);

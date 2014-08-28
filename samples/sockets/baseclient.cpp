@@ -4,7 +4,6 @@
 // Author:      Lukasz Michalski
 // Modified by:
 // Created:     27.06.2005
-// RCS-ID:      $Id$
 // Copyright:   (c) 2005 Lukasz Michalski <lmichalski@sf.net>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -53,7 +52,7 @@ public:
     void setFailed() { m_isFailed = true; }
     bool isFailed() const { return m_isFailed; }
 
-    virtual wxEvent* Clone() const
+    virtual wxEvent* Clone() const wxOVERRIDE
     {
         return new WorkerEvent(*this);
     }
@@ -72,7 +71,7 @@ WX_DECLARE_LIST(ThreadWorker, TList);
 WX_DECLARE_LIST(EventWorker, EList);
 
 class Client : public wxApp {
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 public:
     void RemoveEventWorker(EventWorker* p_worker);
 private:
@@ -95,11 +94,11 @@ private:
     wxString m_host;
     long m_stressWorkers;
 
-    virtual bool OnInit();
-    virtual int OnRun();
-    virtual int OnExit();
-    void OnInitCmdLine(wxCmdLineParser& pParser);
-    bool OnCmdLineParsed(wxCmdLineParser& pParser);
+    virtual bool OnInit() wxOVERRIDE;
+    virtual int OnRun() wxOVERRIDE;
+    virtual int OnExit() wxOVERRIDE;
+    void OnInitCmdLine(wxCmdLineParser& pParser) wxOVERRIDE;
+    bool OnCmdLineParsed(wxCmdLineParser& pParser) wxOVERRIDE;
     void OnWorkerEvent(WorkerEvent& pEvent);
     void OnTimerEvent(wxTimerEvent& pEvent);
 
@@ -128,7 +127,7 @@ class ThreadWorker : public wxThread
 {
 public:
     ThreadWorker(const wxString& p_host, char* p_buf, int p_size);
-    virtual ExitCode Entry();
+    virtual ExitCode Entry() wxOVERRIDE;
 private:
     wxString m_host;
     wxSocketClient* m_clientSocket;
@@ -141,7 +140,7 @@ private:
 
 class EventWorker : public wxEvtHandler
 {
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 public:
     EventWorker(const wxString& p_host, char* p_buf, int p_size);
     void Run();
@@ -505,10 +504,10 @@ Client::OnTimerEvent(wxTimerEvent&) {
     dumpStatistics();
 }
 
-BEGIN_EVENT_TABLE(Client,wxEvtHandler)
+wxBEGIN_EVENT_TABLE(Client,wxEvtHandler)
     EVT_WORKER(Client::OnWorkerEvent)
     EVT_TIMER(wxID_ANY,Client::OnTimerEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 
@@ -647,9 +646,9 @@ EventWorker::~EventWorker() {
     delete [] m_inbuf;
 }
 
-BEGIN_EVENT_TABLE(EventWorker,wxEvtHandler)
+wxBEGIN_EVENT_TABLE(EventWorker,wxEvtHandler)
     EVT_SOCKET(wxID_ANY,EventWorker::OnSocketEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 ThreadWorker::ThreadWorker(const wxString& p_host, char* p_buf, int p_size)

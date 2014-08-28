@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/graphics/measuring.cpp
 // Purpose:     Tests for wxGraphicsRenderer::CreateMeasuringContext
-// Author:      Kevin Ollivier
+// Author:      Kevin Ollivier, Vadim Zeitlin (non wxGC parts)
 // Created:     2008-02-12
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Kevin Ollivier <kevino@theolliviers.com>
+//              (c) 2012 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -12,9 +12,6 @@
 // ----------------------------------------------------------------------------
 
 #include "testprec.h"
-
-// wxCairoRenderer::CreateMeasuringContext() is not implement for wxX11
-#if wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -26,56 +23,156 @@
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
-#include "wx/graphics.h"
+// wxCairoRenderer::CreateMeasuringContext() is not implement for wxX11
+#if wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)
+    #include "wx/graphics.h"
+    #define TEST_GC
+#endif
+
+#include "wx/dcclient.h"
+#include "wx/dcps.h"
+#include "wx/metafile.h"
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
 
-class MeasuringContextTestCase : public CppUnit::TestCase
+class MeasuringTextTestCase : public CppUnit::TestCase
 {
 public:
-    MeasuringContextTestCase() { }
-
-    virtual void setUp();
-    virtual void tearDown();
+    MeasuringTextTestCase() { }
 
 private:
-    CPPUNIT_TEST_SUITE( MeasuringContextTestCase );
-        CPPUNIT_TEST( GetTextExtent );
+    CPPUNIT_TEST_SUITE( MeasuringTextTestCase );
+        CPPUNIT_TEST( DCGetTextExtent );
+        CPPUNIT_TEST( LeadingAndDescent );
+        CPPUNIT_TEST( WindowGetTextExtent );
+        CPPUNIT_TEST( GetPartialTextExtent );
+#ifdef TEST_GC
+        CPPUNIT_TEST( GraphicsGetTextExtent );
+#endif // TEST_GC
     CPPUNIT_TEST_SUITE_END();
 
-    void GetTextExtent();
+    void DCGetTextExtent();
+    void LeadingAndDescent();
+    void WindowGetTextExtent();
 
-    wxWindow *m_win;
+    void GetPartialTextExtent();
 
-    DECLARE_NO_COPY_CLASS(MeasuringContextTestCase)
+#ifdef TEST_GC
+    void GraphicsGetTextExtent();
+#endif // TEST_GC
+
+    DECLARE_NO_COPY_CLASS(MeasuringTextTestCase)
 };
 
 // register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( MeasuringContextTestCase );
+CPPUNIT_TEST_SUITE_REGISTRATION( MeasuringTextTestCase );
 
 // also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MeasuringContextTestCase, "MeasuringContextTestCase" );
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MeasuringTextTestCase, "MeasuringTextTestCase" );
 
 // ----------------------------------------------------------------------------
-// test initialization
+// helper for XXXTextExtent() methods
 // ----------------------------------------------------------------------------
 
-void MeasuringContextTestCase::setUp()
+template <typename T>
+struct GetTextExtentTester
 {
-    m_win = wxTheApp->GetTopWindow();
-}
+    // Constructor runs a couple of simple tests for GetTextExtent().
+    GetTextExtentTester(const T& obj)
+    {
+        // Test that getting the height only doesn't crash.
+        int y;
+        obj.GetTextExtent("H", NULL, &y);
 
-void MeasuringContextTestCase::tearDown()
-{
-    m_win = NULL;
-}
+        CPPUNIT_ASSERT( y > 1 );
+
+        wxSize size = obj.GetTextExtent("Hello");
+        CPPUNIT_ASSERT( size.x > 1 );
+        CPPUNIT_ASSERT_EQUAL( y, size.y );
+    }
+};
 
 // ----------------------------------------------------------------------------
 // tests themselves
 // ----------------------------------------------------------------------------
 
-void MeasuringContextTestCase::GetTextExtent()
+void MeasuringTextTestCase::DCGetTextExtent()
+{
+    wxClientDC dc(wxTheApp->GetTopWindow());
+
+    GetTextExtentTester<wxClientDC> testDC(dc);
+
+    int w;
+    dc.GetMultiLineTextExtent("Good\nbye", &w, NULL);
+    const wxSize sz = dc.GetTextExtent("Good");
+    CPPUNIT_ASSERT_EQUAL( sz.x, w );
+
+    CPPUNIT_ASSERT( dc.GetMultiLineTextExtent("Good\nbye").y >= 2*sz.y );
+
+    // Test the functions with some other DC kinds also.
+#if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT
+    wxPostScriptDC psdc;
+    // wxPostScriptDC doesn't have any font set by default but its
+    // GetTextExtent() requires one to be set. This is probably a bug and we
+    // should set the default font in it implicitly but for now just work
+    // around it.
+    psdc.SetFont(*wxNORMAL_FONT);
+    GetTextExtentTester<wxPostScriptDC> testPS(psdc);
+#endif
+
+#if wxUSE_ENH_METAFILE
+    wxEnhMetaFileDC metadc;
+    GetTextExtentTester<wxEnhMetaFileDC> testMF(metadc);
+#endif
+}
+
+void MeasuringTextTestCase::LeadingAndDescent()
+{
+    wxClientDC dc(wxTheApp->GetTopWindow());
+
+    // Retrieving just the descent should work.
+    int descent = -17;
+    dc.GetTextExtent("foo", NULL, NULL, &descent);
+    CPPUNIT_ASSERT( descent != -17 );
+
+    // Same for external leading.
+    int leading = -289;
+    dc.GetTextExtent("foo", NULL, NULL, NULL, &leading);
+    CPPUNIT_ASSERT( leading != -289 );
+
+    // And both should also work for the empty string as they retrieve the
+    // values valid for the entire font and not just this string.
+    int descent2,
+        leading2;
+    dc.GetTextExtent("", NULL, NULL, &descent2, &leading2);
+
+    CPPUNIT_ASSERT_EQUAL( descent, descent2 );
+    CPPUNIT_ASSERT_EQUAL( leading, leading2 );
+}
+
+void MeasuringTextTestCase::WindowGetTextExtent()
+{
+    wxWindow* const win = wxTheApp->GetTopWindow();
+
+    GetTextExtentTester<wxWindow> testWin(*win);
+}
+
+void MeasuringTextTestCase::GetPartialTextExtent()
+{
+    wxClientDC dc(wxTheApp->GetTopWindow());
+
+    wxArrayInt widths;
+    CPPUNIT_ASSERT( dc.GetPartialTextExtents("Hello", widths) );
+    CPPUNIT_ASSERT_EQUAL( 5, widths.size() );
+    CPPUNIT_ASSERT_EQUAL( widths[0], dc.GetTextExtent("H").x );
+    CPPUNIT_ASSERT_EQUAL( widths[4], dc.GetTextExtent("Hello").x );
+}
+
+#ifdef TEST_GC
+
+void MeasuringTextTestCase::GraphicsGetTextExtent()
 {
     wxGraphicsRenderer* renderer = wxGraphicsRenderer::GetDefaultRenderer();
     CPPUNIT_ASSERT(renderer);
@@ -93,4 +190,4 @@ void MeasuringContextTestCase::GetTextExtent()
 
 }
 
-#endif
+#endif // TEST_GC

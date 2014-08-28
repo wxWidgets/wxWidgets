@@ -4,7 +4,6 @@
 // Author:      Vaclav Slavik
 // Modified by:
 // Created:     2003/02/28
-// RCS-ID:      $Id$
 // Copyright:   (c) Vaclav Slavik, 2003
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -30,7 +29,7 @@ public:
     virtual ~wxMessageDialog();
 
     int ShowModal();
-    virtual bool Show( bool WXUNUSED(show) = true ) { return false; };
+    virtual bool Show( bool WXUNUSED(show) = true ) { return false; }
 
 protected:
     // implement some base class methods to do nothing to avoid asserts and

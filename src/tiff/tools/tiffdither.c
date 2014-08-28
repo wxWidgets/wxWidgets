@@ -1,4 +1,3 @@
-/* $Id$ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -32,6 +31,10 @@
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
+#endif
+
+#ifdef NEED_LIBPORT
+# include "libport.h"
 #endif
 
 #include "tiffio.h"
@@ -77,7 +80,8 @@ fsdither(TIFF* in, TIFF* out)
 	 * Get first line
 	 */
 	if (TIFFReadScanline(in, inputline, 0, 0) <= 0)
-		return;
+            goto skip_on_error;
+
 	inptr = inputline;
 	nextptr = nextline;
 	for (j = 0; j < imagewidth; ++j)
@@ -128,6 +132,7 @@ fsdither(TIFF* in, TIFF* out)
 		if (TIFFWriteScanline(out, outline, i-1, 0) < 0)
 			break;
 	}
+  skip_on_error:
 	_TIFFfree(inputline);
 	_TIFFfree(thisline);
 	_TIFFfree(nextline);
@@ -191,7 +196,6 @@ main(int argc, char* argv[])
 	float floatv;
 	char thing[1024];
 	uint32 rowsperstrip = (uint32) -1;
-	int onestrip = 0;
 	uint16 fillorder = 0;
 	int c;
 	extern int optind;
@@ -213,7 +217,6 @@ main(int argc, char* argv[])
 			break;
 		case 'r':		/* rows/strip */
 			rowsperstrip = atoi(optarg);
-			onestrip = 0;
 			break;
 		case 't':
 			threshold = atoi(optarg);
@@ -263,10 +266,7 @@ main(int argc, char* argv[])
 	CopyField(TIFFTAG_XRESOLUTION, floatv);
 	CopyField(TIFFTAG_YRESOLUTION, floatv);
 	CopyField(TIFFTAG_RESOLUTIONUNIT, shortv);
-	if (onestrip)
-		rowsperstrip = imagelength-1;
-	else
-		rowsperstrip = TIFFDefaultStripSize(out, rowsperstrip);
+        rowsperstrip = TIFFDefaultStripSize(out, rowsperstrip);
 	TIFFSetField(out, TIFFTAG_ROWSPERSTRIP, rowsperstrip);
 	switch (compression) {
 	case COMPRESSION_CCITTFAX3:
@@ -323,3 +323,10 @@ usage(void)
 }
 
 /* vim: set ts=8 sts=8 sw=8 noet: */
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

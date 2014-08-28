@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/msgdlg.cpp
 // Author:      Peter Most, Javier Torres
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,9 +9,19 @@
 #include "wx/wxprec.h"
 
 #include "wx/msgdlg.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/winevent.h"
 
-#include <QtGui/qmessagebox.h>
+#include <QtWidgets/qmessagebox.h>
+
+
+class wxQtMessageDialog : public wxQtEventSignalHandler< QMessageBox, wxMessageDialog >
+{
+    
+    public:
+        wxQtMessageDialog( wxWindow *parent, wxMessageDialog *handler );
+};
+
 
 wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
         const wxString& caption, long style, const wxPoint& pos )
@@ -97,6 +106,8 @@ wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
 
     if ( style & wxSTAY_ON_TOP )
         m_qtMessageBox->setWindowModality( Qt::ApplicationModal );
+
+    PostCreation();
 }
 
 int wxMessageDialog::ShowModal()
@@ -124,6 +135,10 @@ int wxMessageDialog::ShowModal()
 QMessageBox *wxMessageDialog::GetHandle() const
 {
     return m_qtMessageBox;
+}
+
+wxMessageDialog::~wxMessageDialog()
+{
 }
 
 //=============================================================================

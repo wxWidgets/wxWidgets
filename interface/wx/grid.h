@@ -2,7 +2,6 @@
 // Name:        grid.h
 // Purpose:     interface of wxGrid and related classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -23,9 +22,11 @@
          wxGridCellFloatRenderer, wxGridCellNumberRenderer,
          wxGridCellStringRenderer
 */
-class wxGridCellRenderer
+class wxGridCellRenderer : public wxClientDataContainer, public wxRefCounter
 {
 public:
+    wxGridCellRenderer();
+
     /**
         This function must be implemented in derived classes to return a copy
         of itself.
@@ -47,9 +48,45 @@ public:
 
     /**
         Get the preferred size of the cell for its contents.
+
+        This method must be overridden in the derived classes to return the
+        minimal fitting size for displaying the content of the given grid cell.
+
+        @see GetBestHeight(), GetBestWidth()
     */
     virtual wxSize GetBestSize(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
                                int row, int col) = 0;
+
+    /**
+        Get the preferred height of the cell at the given width.
+
+        Some renderers may not have a well-defined best size, but only be able
+        to provide the best height at the given width, e.g. this is the case of
+        the standard wxGridCellAutoWrapStringRenderer. In this case, they
+        should override this method, in addition to GetBestSize().
+
+        @see GetBestWidth()
+
+        @since 3.1.0
+    */
+    virtual int GetBestHeight(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
+                              int row, int col, int width);
+
+    /**
+        Get the preferred width of the cell at the given height.
+
+        See GetBestHeight(), this method is symmetric to it.
+
+        @since 3.1.0
+    */
+    virtual int GetBestWidth(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
+                             int row, int col, int height);
+
+protected:
+    /**
+        The destructor is private because only DecRef() can delete us.
+    */
+    virtual ~wxGridCellRenderer();
 };
 
 /**
@@ -179,6 +216,31 @@ public:
 };
 
 /**
+    Specifier used to format the data to string for the numbers handled by
+    wxGridCellFloatRenderer and wxGridCellFloatEditor.
+
+    @since 2.9.3
+*/
+enum wxGridCellFloatFormat
+{
+    /// Decimal floating point (%f).
+    wxGRID_FLOAT_FORMAT_FIXED       = 0x0010,
+
+    /// Scientific notation (mantissa/exponent) using e character (%e).
+    wxGRID_FLOAT_FORMAT_SCIENTIFIC  = 0x0020,
+
+    /// Use the shorter of %e or %f (%g).
+    wxGRID_FLOAT_FORMAT_COMPACT     = 0x0040,
+
+    /// To use in combination with one of the above formats for the upper
+    /// case version (%F/%E/%G)
+    wxGRID_FLOAT_FORMAT_UPPER       = 0x0080,
+
+    /// The format used by default (wxGRID_FLOAT_FORMAT_FIXED).
+    wxGRID_FLOAT_FORMAT_DEFAULT     = wxGRID_FLOAT_FORMAT_FIXED
+};
+
+/**
     @class wxGridCellFloatRenderer
 
     This class may be used to format floating point data in a cell.
@@ -201,8 +263,22 @@ public:
             Minimum number of characters to be shown.
         @param precision
             Number of digits after the decimal dot.
+        @param format
+            The format used to display the string, must be a combination of
+            ::wxGridCellFloatFormat enum elements. This parameter is only
+            available since wxWidgets 2.9.3.
     */
-    wxGridCellFloatRenderer(int width = -1, int precision = -1);
+    wxGridCellFloatRenderer(int width = -1, int precision = -1,
+                            int format = wxGRID_FLOAT_FORMAT_DEFAULT);
+
+    /**
+        Returns the specifier used to format the data to string.
+
+        The returned value is a combination of ::wxGridCellFloatFormat elements.
+
+        @since 2.9.3
+    */
+    int GetFormat() const;
 
     /**
         Returns the precision.
@@ -215,7 +291,18 @@ public:
     int GetWidth() const;
 
     /**
-        Parameters string format is "width[,precision]".
+        Set the format to use for display the number.
+
+        @param format
+            Must be a combination of ::wxGridCellFloatFormat enum elements.
+
+        @since 2.9.3
+    */
+    void SetFormat(int format);
+
+    /**
+        The parameters string format is "width[,precision[,format]]" where
+        @c format should be chosen between f|e|g|E|G (f is used by default)
     */
     virtual void SetParameters(const wxString& params);
 
@@ -293,7 +380,7 @@ public:
          wxGridCellFloatEditor, wxGridCellNumberEditor,
          wxGridCellTextEditor
 */
-class wxGridCellEditor
+class wxGridCellEditor : public wxClientDataContainer, public wxRefCounter
 {
 public:
     /**
@@ -337,10 +424,10 @@ public:
         its string form and possibly saved internally using its real type by
         BeginEdit()). If it isn't, it just returns @false, otherwise it must do
         the following:
-            # Save the new value internally so that ApplyEdit() could apply it.
-            # Fill @a newval (which is never @NULL) with the string
+            - Save the new value internally so that ApplyEdit() could apply it.
+            - Fill @a newval (which is never @NULL) with the string
             representation of the new value.
-            # Return @true
+            - Return @true
 
         Notice that it must @em not modify the grid as the change could still
         be vetoed.
@@ -374,7 +461,7 @@ public:
         Draws the part of the cell not occupied by the control: the base class
         version just fills it with background colour from the attribute.
     */
-    virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr* attr);
+    virtual void PaintBackground(wxDC& dc, const wxRect& rectCell, wxGridCellAttr& attr);
 
     /**
         Reset the value in the control back to its starting value.
@@ -403,6 +490,23 @@ public:
         called to let the editor do something about that first key if desired.
     */
     virtual void StartingKey(wxKeyEvent& event);
+
+    /**
+       Returns the value currently in the editor control.
+     */
+    virtual wxString GetValue() const = 0;
+
+    /**
+       Get the wxControl used by this editor.
+    */
+    wxControl* GetControl() const;
+
+    /**
+       Set the wxControl that will be used by this cell editor for editing the
+       value.
+    */
+    void SetControl(wxControl* control);
+
 
 protected:
 
@@ -562,15 +666,26 @@ class wxGridCellTextEditor : public wxGridCellEditor
 {
 public:
     /**
-        Default constructor.
+        Text cell editor constructor.
+
+        @param maxChars
+            Maximum width of text (this parameter is supported starting since
+            wxWidgets 2.9.5).
     */
-    wxGridCellTextEditor();
+    explicit wxGridCellTextEditor(size_t maxChars = 0);
 
     /**
         The parameters string format is "n" where n is a number representing
         the maximum width.
     */
     virtual void SetParameters(const wxString& params);
+
+    /**
+        Set validator to validate user input.
+
+        @since 2.9.5
+    */
+    virtual void SetValidator(const wxValidator& validator);
 };
 
 /**
@@ -596,11 +711,17 @@ public:
             Minimum number of characters to be shown.
         @param precision
             Number of digits after the decimal dot.
+        @param format
+            The format to use for displaying the number, a combination of
+            ::wxGridCellFloatFormat enum elements. This parameter is only
+            available since wxWidgets 2.9.3.
     */
-    wxGridCellFloatEditor(int width = -1, int precision = -1);
+    wxGridCellFloatEditor(int width = -1, int precision = -1,
+                          int format = wxGRID_FLOAT_FORMAT_DEFAULT);
 
     /**
-        Parameters string format is "width,precision"
+        The parameters string format is "width[,precision[,format]]" where
+        @c format should be chosen between f|e|g|E|G (f is used by default)
     */
     virtual void SetParameters(const wxString& params);
 };
@@ -660,7 +781,7 @@ protected:
     @library{wxadv}
     @category{grid}
 */
-class wxGridCellAttr
+class wxGridCellAttr : public wxClientDataContainer, public wxRefCounter
 {
 public:
     /**
@@ -856,6 +977,13 @@ public:
         Sets the text colour.
     */
     void SetTextColour(const wxColour& colText);
+
+protected:
+
+    /**
+        The destructor is private because only DecRef() can delete us.
+    */
+    virtual ~wxGridCellAttr();
 };
 
 /**
@@ -892,6 +1020,7 @@ public:
                             wxDC& dc,
                             wxRect& rect) const = 0;
 };
+
 /**
     Common base class for row and column headers renderers.
 
@@ -1135,6 +1264,78 @@ public:
     //@}
 };
 
+/**
+    Represents coordinates of a grid cell.
+
+    An object of this class is simply a (row, column) pair.
+ */
+class wxGridCellCoords
+{
+public:
+    /**
+        Default constructor initializes the object to invalid state.
+
+        Initially the row and column are both invalid (-1) and so operator!()
+        for an uninitialized wxGridCellCoords returns false.
+     */
+    wxGridCellCoords();
+
+    /**
+        Constructor taking a row and a column.
+     */
+    wxGridCellCoords(int row, int col);
+
+    /**
+        Return the row of the coordinate.
+     */
+    int GetRow() const;
+
+    /**
+        Set the row of the coordinate.
+     */
+    void SetRow(int n);
+
+    /**
+        Return the column of the coordinate.
+     */
+    int GetCol() const;
+
+    /**
+        Set the column of the coordinate.
+     */
+    void SetCol(int n);
+
+    /**
+        Set the row and column of the coordinate.
+     */
+    void Set(int row, int col);
+
+    /**
+        Assignment operator for coordinate types.
+     */
+    wxGridCellCoords& operator=(const wxGridCellCoords& other);
+
+    /**
+        Equality operator.
+     */
+    bool operator==(const wxGridCellCoords& other) const;
+
+    /**
+        Inequality operator.
+     */
+     bool operator!=(const wxGridCellCoords& other) const;
+
+    /**
+        Checks whether the coordinates are invalid.
+
+        Returns false only if both row and column are -1. Notice that if either
+        row or column (but not both) are -1, this method returns true even if
+        the object is invalid. This is done because objects in such state
+        should actually never exist, i.e. either both coordinates should be -1
+        or none of them should be -1.
+     */
+    bool operator!() const;
+};
 
 /**
     @class wxGridTableBase
@@ -1401,6 +1602,9 @@ public:
     /**
         Delete rows from the table.
 
+        Notice that currently deleting a row intersecting a multi-cell (see
+        SetCellSize()) is not supported and will result in a crash.
+
         @param pos
             The first row to delete.
         @param numRows
@@ -1547,6 +1751,87 @@ public:
     virtual bool CanHaveAttributes();
 };
 
+
+
+enum wxGridTableRequest
+{
+    wxGRIDTABLE_REQUEST_VIEW_GET_VALUES = 2000,
+    wxGRIDTABLE_REQUEST_VIEW_SEND_VALUES,
+    wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
+    wxGRIDTABLE_NOTIFY_ROWS_APPENDED,
+    wxGRIDTABLE_NOTIFY_ROWS_DELETED,
+    wxGRIDTABLE_NOTIFY_COLS_INSERTED,
+    wxGRIDTABLE_NOTIFY_COLS_APPENDED,
+    wxGRIDTABLE_NOTIFY_COLS_DELETED
+};
+
+
+/**
+   @class wxGridTableMessage
+
+   A simple class used to pass messages from the table to the grid.
+
+    @library{wxadv}
+    @category{grid}
+*/
+class wxGridTableMessage
+{
+public:
+    wxGridTableMessage();
+    wxGridTableMessage( wxGridTableBase *table, int id,
+                        int comInt1 = -1,
+                        int comInt2 = -1 );
+
+    void SetTableObject( wxGridTableBase *table );
+    wxGridTableBase * GetTableObject() const;
+    void SetId( int id );
+    int  GetId();
+    void SetCommandInt( int comInt1 );
+    int  GetCommandInt();
+    void SetCommandInt2( int comInt2 );
+    int  GetCommandInt2();
+};
+
+
+
+/**
+   @class wxGridStringTable
+
+   Simplest type of data table for a grid for small tables of strings
+   that are stored in memory
+*/
+class wxGridStringTable : public wxGridTableBase
+{
+public:
+    wxGridStringTable();
+    wxGridStringTable( int numRows, int numCols );
+
+    // these are pure virtual in wxGridTableBase
+    virtual int GetNumberRows();
+    virtual int GetNumberCols();
+    virtual wxString GetValue( int row, int col );
+    virtual void SetValue( int row, int col, const wxString& value );
+
+    // overridden functions from wxGridTableBase
+    void Clear();
+    bool InsertRows( size_t pos = 0, size_t numRows = 1 );
+    bool AppendRows( size_t numRows = 1 );
+    bool DeleteRows( size_t pos = 0, size_t numRows = 1 );
+    bool InsertCols( size_t pos = 0, size_t numCols = 1 );
+    bool AppendCols( size_t numCols = 1 );
+    bool DeleteCols( size_t pos = 0, size_t numCols = 1 );
+
+    void SetRowLabelValue( int row, const wxString& );
+    void SetColLabelValue( int col, const wxString& );
+    wxString GetRowLabelValue( int row );
+    wxString GetColLabelValue( int col );
+};
+
+
+
+
+
+
 /**
     @class wxGridSizesInfo
 
@@ -1609,6 +1894,53 @@ struct wxGridSizesInfo
      */
     wxUnsignedToIntHashMap m_customSizes;
 };
+
+
+
+/**
+    Rendering styles supported by wxGrid::Render() method.
+
+    @since 2.9.4
+ */
+enum wxGridRenderStyle
+{
+    /// Draw grid row header labels.
+    wxGRID_DRAW_ROWS_HEADER = 0x001,
+
+    /// Draw grid column header labels.
+    wxGRID_DRAW_COLS_HEADER = 0x002,
+
+    /// Draw grid cell border lines.
+    wxGRID_DRAW_CELL_LINES = 0x004,
+
+    /**
+        Draw a bounding rectangle around the rendered cell area.
+
+        Useful where row or column headers are not drawn or where there is
+        multi row or column cell clipping and therefore no cell border at
+        the rendered outer boundary.
+    */
+    wxGRID_DRAW_BOX_RECT = 0x008,
+
+    /**
+        Draw the grid cell selection highlight if a selection is present.
+
+        At present the highlight colour drawn depends on whether the grid
+        window loses focus before drawing begins.
+    */
+    wxGRID_DRAW_SELECTION = 0x010,
+
+    /**
+        The default render style.
+
+        Includes all except wxGRID_DRAW_SELECTION.
+     */
+    wxGRID_DRAW_DEFAULT = wxGRID_DRAW_ROWS_HEADER |
+                          wxGRID_DRAW_COLS_HEADER |
+                          wxGRID_DRAW_CELL_LINES |
+                          wxGRID_DRAW_BOX_RECT
+};
+
 
 
 /**
@@ -1720,6 +2052,29 @@ public:
     };
 
     /**
+        Constants defining different support built-in TAB handling behaviours.
+
+        The elements of this enum determine what happens when TAB is pressed
+        when the cursor is in the rightmost column (or Shift-TAB is pressed
+        when the cursor is in the leftmost one).
+
+        @see SetTabBehaviour(), @c wxEVT_GRID_TABBING
+
+        @since 2.9.5
+     */
+    enum TabBehaviour
+    {
+        /// Do nothing, this is default.
+        Tab_Stop,
+
+        /// Move to the beginning of the next (or the end of the previous) row.
+        Tab_Wrap,
+
+        /// Move to the next (or the previous) control after the grid.
+        Tab_Leave
+    };
+
+    /**
         @name Constructors and Initialization
      */
     //@{
@@ -1792,6 +2147,11 @@ public:
     */
     bool SetTable(wxGridTableBase* table, bool takeOwnership = false,
                   wxGridSelectionModes selmode = wxGridSelectCells);
+
+    /**
+       Receive and handle a message from the table.
+    */
+    bool ProcessTableMessage(wxGridTableMessage& msg);
 
     //@}
 
@@ -2136,6 +2496,8 @@ public:
 
         Vertical alignment should be one of @c wxALIGN_TOP, @c wxALIGN_CENTRE
         or @c wxALIGN_BOTTOM.
+
+        @deprecated Please use SetCellAlignment(row, col, horiz, vert) instead.
     */
     void SetCellAlignment(int align, int row, int col);
 
@@ -2155,10 +2517,14 @@ public:
     void SetCellTextColour(int row, int col, const wxColour& colour);
     /**
         Sets the text colour for the given cell.
+
+        @deprecated Please use SetCellTextColour(row, col, colour)
     */
     void SetCellTextColour(const wxColour& val, int row, int col);
     /**
         Sets the text colour for all cells by default.
+
+        @deprecated Please use SetDefaultCellTextColour(colour) instead.
     */
     void SetCellTextColour(const wxColour& colour);
 
@@ -2636,6 +3002,13 @@ public:
     void AutoSizeRows(bool setAsMin = true);
 
     /**
+        Returns @true if the cell value can overflow.
+
+        A cell can overflow if the next cell in the row is empty.
+    */
+    bool GetCellOverflow(int row, int col) const;
+
+    /**
         Returns the current height of the column labels.
     */
     int GetColLabelSize() const;
@@ -2659,6 +3032,11 @@ public:
         Returns @true if the specified column is not currently hidden.
      */
     bool IsColShown(int col) const;
+
+    /**
+        Returns @true if the cells can overflow by default.
+    */
+    bool GetDefaultCellOverflow() const;
 
     /**
         Returns the default height for column labels.
@@ -2706,6 +3084,11 @@ public:
     bool IsRowShown(int row) const;
 
     /**
+        Sets the overflow permission of the cell.
+    */
+    void SetCellOverflow(int row, int col, bool allow);
+
+    /**
         Sets the height of the column labels.
 
         If @a height equals to @c wxGRID_AUTOSIZE then height is calculated
@@ -2748,7 +3131,9 @@ public:
         Hides the specified column.
 
         To show the column later you need to call SetColSize() with non-0
-        width or ShowCol().
+        width or ShowCol() to restore the previous column width.
+
+        If the column is already hidden, this method doesn't do anything.
 
         @param col
             The column index.
@@ -2758,10 +3143,20 @@ public:
     /**
         Shows the previously hidden column by resizing it to non-0 size.
 
+        The column is shown again with the same width that it had before
+        HideCol() call.
+
+        If the column is currently shown, this method doesn't do anything.
+
         @see HideCol(), SetColSize()
      */
     void ShowCol(int col);
 
+
+    /**
+        Sets the default overflow permission of the cells.
+    */
+    void SetDefaultCellOverflow( bool allow );
 
     /**
         Sets the default width for columns in the grid.
@@ -2819,7 +3214,9 @@ public:
         Hides the specified row.
 
         To show the row later you need to call SetRowSize() with non-0
-        width or ShowRow().
+        width or ShowRow() to restore its original height.
+
+        If the row is already hidden, this method doesn't do anything.
 
         @param col
             The row index.
@@ -2827,7 +3224,12 @@ public:
     void HideRow(int col);
 
     /**
-        Shows the previously hidden row by resizing it to non-0 size.
+        Shows the previously hidden row.
+
+        The row is shown again with the same height that it had before
+        HideRow() call.
+
+        If the row is currently shown, this method doesn't do anything.
 
         @see HideRow(), SetRowSize()
      */
@@ -3259,6 +3661,25 @@ public:
         do this.
     */
     void SetGridCursor(const wxGridCellCoords& coords);
+
+    /**
+        Set the grid's behaviour when the user presses the TAB key.
+
+        Pressing the TAB key moves the grid cursor right in the current row, if
+        there is a cell at the right and, similarly, Shift-TAB moves the cursor
+        to the left in the current row if it's not in the first column.
+
+        What happens if the cursor can't be moved because it it's already at
+        the beginning or end of the row can be configured using this function,
+        see wxGrid::TabBehaviour documentation for the detailed description.
+
+        IF none of the standard behaviours is appropriate, you can always
+        handle @c wxEVT_GRID_TABBING event directly to implement a custom
+        TAB-handling logic.
+
+        @since 2.9.5
+    */
+    void SetTabBehaviour(TabBehaviour behaviour);
 
     //@}
 
@@ -3872,6 +4293,39 @@ public:
     void RefreshAttr(int row, int col);
 
     /**
+        Draws part or all of a wxGrid on a wxDC for printing or display.
+
+        Pagination can be accomplished by using sequential Render() calls
+        with appropriate values in wxGridCellCoords topLeft and bottomRight.
+
+        @param dc
+            The wxDC to be drawn on.
+        @param pos
+            The position on the wxDC where rendering should begin. If not
+            specified drawing will begin at the wxDC MaxX() and MaxY().
+        @param size
+            The size of the area on the wxDC that the rendered wxGrid should
+            occupy. If not specified the drawing will be scaled to fit the
+            available dc width or height. The wxGrid's aspect ratio is
+            maintained whether or not size is specified.
+        @param topLeft
+            The top left cell of the block to be drawn. Defaults to ( 0, 0 ).
+        @param bottomRight
+            The bottom right cell of the block to be drawn. Defaults to row and
+            column counts.
+        @param style
+            A combination of values from wxGridRenderStyle.
+
+        @since 2.9.4
+     */
+    void Render( wxDC& dc,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 const wxGridCellCoords& topLeft = wxGridCellCoords( -1, -1 ),
+                 const wxGridCellCoords& bottomRight = wxGridCellCoords( -1, -1 ),
+                 int style = wxGRID_DRAW_DEFAULT );
+
+    /**
         Sets the cell attributes for all cells in the specified column.
 
         For more information about controlling grid cell attributes see the
@@ -3896,6 +4350,11 @@ public:
         cell attributes.
     */
     void SetRowAttr(int row, wxGridCellAttr* attr);
+
+    
+    wxArrayInt CalcRowLabelsExposed( const wxRegion& reg );
+    wxArrayInt CalcColLabelsExposed( const wxRegion& reg );
+    wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg );
 
     //@}
 
@@ -4036,6 +4495,36 @@ public:
 
     //@}
 
+
+    virtual void DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr );
+    
+    virtual void DrawRowLabels( wxDC& dc, const wxArrayInt& rows );
+    virtual void DrawRowLabel( wxDC& dc, int row );
+
+    virtual void DrawColLabels( wxDC& dc, const wxArrayInt& cols );
+    virtual void DrawColLabel( wxDC& dc, int col );
+
+    virtual void DrawCornerLabel(wxDC& dc);
+
+    void DrawTextRectangle( wxDC& dc, const wxString& text, const wxRect& rect,
+                            int horizontalAlignment = wxALIGN_LEFT,
+                            int verticalAlignment = wxALIGN_TOP,
+                            int textOrientation = wxHORIZONTAL ) const;
+
+    void DrawTextRectangle( wxDC& dc, const wxArrayString& lines, const wxRect& rect,
+                            int horizontalAlignment = wxALIGN_LEFT,
+                            int verticalAlignment = wxALIGN_TOP,
+                            int textOrientation = wxHORIZONTAL ) const;
+
+    wxColour GetCellHighlightColour() const;
+    int      GetCellHighlightPenWidth() const;
+    int      GetCellHighlightROPenWidth() const;
+
+    void SetCellHighlightColour( const wxColour& );
+    void SetCellHighlightPenWidth(int width);
+    void SetCellHighlightROPenWidth(int width);   
+
+    
 protected:
     /**
         Returns @true if this grid has support for cell attributes.
@@ -4220,6 +4709,12 @@ public:
         and updates the column to indicate the new sort order and refreshes
         itself.
         This event macro corresponds to @c wxEVT_GRID_COL_SORT event type.
+    @event{EVT_GRID_TABBING(func)}
+        This event is generated when the user presses TAB or Shift-TAB in the
+        grid. It can be used to customize the simple default TAB handling
+        logic, e.g. to go to the next non-empty cell instead of just the next
+        cell. See also wxGrid::SetTabBehaviour(). This event is new since
+        wxWidgets 2.9.5.
     @endEventTable
 
     @library{wxadv}
@@ -4305,6 +4800,13 @@ public:
         type.
     @event{EVT_GRID_COL_SIZE(func)}
         Same as EVT_GRID_CMD_COL_SIZE() but uses `wxID_ANY` id.
+    @event{EVT_GRID_COL_AUTO_SIZE(func)}
+        This event is sent when a column must be resized to its best size, e.g.
+        when the user double clicks the column divider. The default
+        implementation simply resizes the column to fit the column label (but
+        not its contents as this could be too slow for big grids). This macro
+        corresponds to @c wxEVT_GRID_COL_AUTO_SIZE event type and is new since
+        wxWidgets 2.9.5.
     @event{EVT_GRID_ROW_SIZE(func)}
         Same as EVT_GRID_CMD_ROW_SIZE() but uses `wxID_ANY` id.
     @endEventTable
@@ -4506,4 +5008,28 @@ public:
     */
     void SetRow(int row);
 };
+
+
+wxEventType wxEVT_GRID_CELL_LEFT_CLICK;
+wxEventType wxEVT_GRID_CELL_RIGHT_CLICK;
+wxEventType wxEVT_GRID_CELL_LEFT_DCLICK;
+wxEventType wxEVT_GRID_CELL_RIGHT_DCLICK;
+wxEventType wxEVT_GRID_LABEL_LEFT_CLICK;
+wxEventType wxEVT_GRID_LABEL_RIGHT_CLICK;
+wxEventType wxEVT_GRID_LABEL_LEFT_DCLICK;
+wxEventType wxEVT_GRID_LABEL_RIGHT_DCLICK;
+wxEventType wxEVT_GRID_ROW_SIZE;
+wxEventType wxEVT_GRID_COL_SIZE;
+wxEventType wxEVT_GRID_COL_AUTO_SIZE;
+wxEventType wxEVT_GRID_RANGE_SELECT;
+wxEventType wxEVT_GRID_CELL_CHANGING;
+wxEventType wxEVT_GRID_CELL_CHANGED;
+wxEventType wxEVT_GRID_SELECT_CELL;
+wxEventType wxEVT_GRID_EDITOR_SHOWN;
+wxEventType wxEVT_GRID_EDITOR_HIDDEN;
+wxEventType wxEVT_GRID_EDITOR_CREATED;
+wxEventType wxEVT_GRID_CELL_BEGIN_DRAG;
+wxEventType wxEVT_GRID_COL_MOVE;
+wxEventType wxEVT_GRID_COL_SORT;
+wxEventType wxEVT_GRID_TABBING;
 

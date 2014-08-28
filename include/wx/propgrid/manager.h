@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     2005-01-14
-// RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -76,7 +75,7 @@ public:
 
     /** Deletes all properties on page.
     */
-    virtual void Clear();
+    virtual void Clear() wxOVERRIDE;
 
     /**
         Reduces column sizes to minimum possible that contents are still
@@ -148,7 +147,7 @@ public:
     */
     virtual void OnShow();
 
-    virtual void RefreshProperty( wxPGProperty* p );
+    virtual void RefreshProperty( wxPGProperty* p ) wxOVERRIDE;
 
     /** Sets splitter position on page.
         @remarks
@@ -158,13 +157,19 @@ public:
     */
     void SetSplitterPosition( int splitterPos, int col = 0 );
 
+#ifdef WXWIN_COMPATIBILITY_3_0
+    // To avoid ambiguity between functions inherited
+    // from both wxPropertyGridInterface and wxPropertyGridPageState
+    using wxPropertyGridInterface::GetPropertyByLabel;
+#endif // WXWIN_COMPATIBILITY_3_0
+
 protected:
 
     /** Propagate to other pages.
     */
     virtual void DoSetSplitterPosition( int pos,
                                         int splitterColumn = 0,
-                                        int flags = wxPG_SPLITTER_REFRESH );
+                                        int flags = wxPG_SPLITTER_REFRESH ) wxOVERRIDE;
 
     /** Page label (may be referred as name in some parts of documentation).
         Can be set in constructor, or passed in
@@ -269,7 +274,7 @@ public:
 
     /** Deletes all all properties and all pages.
     */
-    virtual void Clear();
+    virtual void Clear() wxOVERRIDE;
 
     /** Deletes all properties on given page.
     */
@@ -330,13 +335,13 @@ public:
     {
         wxASSERT(m_pPropGrid);
         return m_pPropGrid;
-    };
+    }
 
     const wxPropertyGrid* GetGrid() const
     {
         wxASSERT(m_pPropGrid);
         return (const wxPropertyGrid*)m_pPropGrid;
-    };
+    }
 
     /** Returns iterator class instance.
         @remarks
@@ -386,7 +391,7 @@ public:
         which can be useful for forward-iterating through arbitrary property
         containers.
     */
-    virtual wxPGVIterator GetVIterator( int flags ) const;
+    virtual wxPGVIterator GetVIterator( int flags ) const wxOVERRIDE;
 
     /** Returns currently selected page.
     */
@@ -425,7 +430,7 @@ public:
 protected:
     /** Returns wxPropertyGridPageState of given page, current page's for -1.
     */
-    virtual wxPropertyGridPageState* GetPageState( int page ) const;
+    virtual wxPropertyGridPageState* GetPageState( int page ) const wxOVERRIDE;
 
 public:
     /** Returns number of managed pages. */
@@ -485,12 +490,6 @@ public:
     bool IsAnyModified() const;
 
     /**
-        Returns true if updating is frozen (ie Freeze() called but not yet
-        Thaw() ).
-     */
-    bool IsFrozen() const { return m_pPropGrid->m_frozen > 0; }
-
-    /**
         Returns true if any property on given page has been modified by the
         user.
      */
@@ -503,7 +502,7 @@ public:
     virtual bool IsPropertySelected( wxPGPropArg id ) const;
 
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect* rect = (const wxRect*) NULL );
+                          const wxRect* rect = (const wxRect*) NULL ) wxOVERRIDE;
 
     /** Removes a page.
         @return
@@ -574,6 +573,11 @@ public:
     */
     void SetSplitterLeft( bool subProps = false, bool allPages = true );
 
+    /** Moves splitter as left as possible on an individual page, while still allowing all
+        labels to be shown in full.
+    */
+    void SetPageSplitterLeft(int page, bool subProps = false);
+
     /**
         Sets splitter position on individual page.
 
@@ -624,23 +628,23 @@ protected:
     virtual wxPropertyGrid* CreatePropertyGrid() const;
 
 public:
-    virtual void RefreshProperty( wxPGProperty* p );
+    virtual void RefreshProperty( wxPGProperty* p ) wxOVERRIDE;
 
     //
     // Overridden functions - no documentation required.
     //
 
     void SetId( wxWindowID winid );
-
-    virtual void Freeze();
-    virtual void Thaw();
-    virtual void SetExtraStyle ( long exStyle );
-    virtual bool SetFont ( const wxFont& font );
-    virtual void SetWindowStyleFlag ( long style );
-    virtual bool Reparent( wxWindowBase *newParent );
+    virtual void SetExtraStyle ( long exStyle ) wxOVERRIDE;
+    virtual bool SetFont ( const wxFont& font ) wxOVERRIDE;
+    virtual void SetWindowStyleFlag ( long style ) wxOVERRIDE;
+    virtual bool Reparent( wxWindowBase *newParent ) wxOVERRIDE;
 
 protected:
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+
+    virtual void DoFreeze() wxOVERRIDE;
+    virtual void DoThaw() wxOVERRIDE;
 
     //
     // Event handlers
@@ -706,10 +710,10 @@ protected:
 
     bool            m_showHeader;
 
-    virtual wxPGProperty* DoGetPropertyByName( const wxString& name ) const;
+    virtual wxPGProperty* DoGetPropertyByName( const wxString& name ) const wxOVERRIDE;
 
     /** Select and displays a given page. */
-    virtual bool DoSelectPage( int index );
+    virtual bool DoSelectPage( int index ) wxOVERRIDE;
 
     // Sets some members to defaults.
     void Init1();
@@ -721,7 +725,7 @@ protected:
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const;
 #endif*/
 
-    virtual bool ProcessEvent( wxEvent& event );
+    virtual bool ProcessEvent( wxEvent& event ) wxOVERRIDE;
 
     /** Recalculates new positions for components, according to the
         given size.
@@ -741,8 +745,8 @@ protected:
     void SetDescribedProperty( wxPGProperty* p );
 
     // Reimplement these to handle "descboxheight" state item
-    virtual bool SetEditableStateItem( const wxString& name, wxVariant value );
-    virtual wxVariant GetEditableStateItem( const wxString& name ) const;
+    virtual bool SetEditableStateItem( const wxString& name, wxVariant value ) wxOVERRIDE;
+    virtual wxVariant GetEditableStateItem( const wxString& name ) const wxOVERRIDE;
 
 private:
     DECLARE_EVENT_TABLE()

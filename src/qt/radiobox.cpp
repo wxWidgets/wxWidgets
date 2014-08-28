@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/radiobox.cpp
-// Author:      Peter Most
-// Id:          $Id$
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,12 +9,51 @@
 #include "wx/wxprec.h"
 
 #include "wx/radiobox.h"
-#include "wx/qt/utils.h"
-#include "wx/qt/converter.h"
-#include <QtGui/QCheckBox>
-#include <QtGui/QRadioButton>
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
+#include "wx/qt/private/winevent.h"
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QRadioButton>
+
+
+class wxQtRadioBox : public wxQtEventSignalHandler< QGroupBox, wxRadioBox >
+{
+public:
+    wxQtRadioBox( wxWindow *parent, wxRadioBox *handler ):
+        wxQtEventSignalHandler< QGroupBox, wxRadioBox >( parent, handler ){}
+};
+
+
+class wxQtButtonGroup : public wxQtSignalHandler< wxRadioBox >, public QButtonGroup
+{
+public:
+    wxQtButtonGroup( QGroupBox *parent, wxRadioBox *handler ):
+        wxQtSignalHandler< wxRadioBox >(handler ),
+        QButtonGroup(parent)
+    {
+        connect(this,
+                static_cast<void (QButtonGroup::*)(int index)>(&QButtonGroup::buttonClicked),
+                this, &wxQtButtonGroup::buttonClicked);
+    }
+private:
+    void buttonClicked(int index);
+};
+
+void wxQtButtonGroup::buttonClicked(int index) {
+    wxRadioBox *handler = GetHandler();
+    if ( handler )
+    {
+        wxCommandEvent event( wxEVT_RADIOBOX, handler->GetId() );
+        event.SetInt(index);
+        event.SetString(wxQtConvertString(button(index)->text()));
+        EmitEvent( event );
+    }
+}
+
 
 IMPLEMENT_DYNAMIC_CLASS( wxRadioBox, wxControl )
+
 
 wxRadioBox::wxRadioBox()
 {
@@ -64,14 +102,20 @@ bool wxRadioBox::Create(wxWindow *parent,
 {
     return Create( parent, id, title, pos, size, choices.size(), &choices[ 0 ],
         majorDim, style, val, name );
+
 }
 
 
 template < typename Button >
-static void AddChoices( QButtonGroup *qtButtonGroup, int count, const wxString choices[] )
+static void AddChoices( QButtonGroup *qtButtonGroup, QBoxLayout *qtBoxLayout, int count, const wxString choices[] )
 {
+    Button *btn;
     while ( count-- > 0 )
-        qtButtonGroup->addButton( new Button( wxQtConvertString( *choices++ )));
+    {
+        btn = new Button( wxQtConvertString( *choices++ ));
+        qtButtonGroup->addButton( btn );
+        qtBoxLayout->addWidget( btn );
+    }
 }
 
 
@@ -81,23 +125,23 @@ bool wxRadioBox::Create(wxWindow *parent,
             const wxPoint& pos,
             const wxSize& size,
             int n, const wxString choices[],
-            int majorDim,
+            int WXUNUSED(majorDim),
             long style,
             const wxValidator& val,
             const wxString& name)
 {
-    m_qtGroupBox = new wxQtGroupBox( parent, title );
-    m_qtButtonGroup = new QButtonGroup( m_qtGroupBox );
+    m_qtGroupBox = new wxQtRadioBox( parent, this );
+    m_qtGroupBox->setTitle( wxQtConvertString( title ) );
+    m_qtButtonGroup = new wxQtButtonGroup( m_qtGroupBox, this );
 
     if ( style & wxRA_SPECIFY_ROWS )
-        wxMISSING_IMPLEMENTATION( wxSTRINGIZE( wxRA_SPECIFY_ROWS ));
+        m_qtBoxLayout = new QHBoxLayout;
     else if ( style & wxRA_SPECIFY_COLS )
-        wxMISSING_IMPLEMENTATION( wxSTRINGIZE( wxRA_SPECIFY_COLS ));
+        m_qtBoxLayout = new QVBoxLayout;
 
-    if ( style & wxRA_USE_CHECKBOX )
-        AddChoices< QCheckBox >( m_qtButtonGroup, n, choices );
-    else
-        AddChoices< QRadioButton >( m_qtButtonGroup, n, choices );
+    AddChoices< QRadioButton >( m_qtButtonGroup, m_qtBoxLayout, n, choices );
+    m_qtBoxLayout->addStretch(1);
+    m_qtGroupBox->setLayout(m_qtBoxLayout);
 
     return QtCreateControl( parent, id, pos, size, style, val, name );
 }

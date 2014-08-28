@@ -2,7 +2,6 @@
 // Name:        custclass.cpp
 // Purpose:     XML resources sample: A custom class to insert into a XRC file
 // Author:      Robert O'Connor (rob@medicalmnemonics.com), Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert O'Connor and Vaclav Slavik
 // Licence:     wxWindows licence
 //-----------------------------------------------------------------------------
@@ -63,12 +62,12 @@ IMPLEMENT_DYNAMIC_CLASS( MyResizableListCtrl, wxListCtrl )
 // Event table: connect the events to the handler functions to process them
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE( MyResizableListCtrl, wxListCtrl )
+wxBEGIN_EVENT_TABLE( MyResizableListCtrl, wxListCtrl )
     // Something to do when right mouse down
     EVT_RIGHT_DOWN( MyResizableListCtrl::ContextSensitiveMenu )
     // Something to do when resized
     EVT_SIZE( MyResizableListCtrl::OnSize )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 //-----------------------------------------------------------------------------
 // Public methods

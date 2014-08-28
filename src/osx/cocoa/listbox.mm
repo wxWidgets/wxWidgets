@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,8 +25,6 @@
 #endif
 
 #include "wx/osx/private.h"
-
-#include <vector>
 
 // forward decls
 
@@ -107,44 +104,44 @@ public :
     ~wxListWidgetCocoaImpl();
 
     virtual wxListWidgetColumn*     InsertTextColumn( unsigned pos, const wxString& title, bool editable = false,
-                                wxAlignment just = wxALIGN_LEFT , int defaultWidth = -1)  ;
+                                wxAlignment just = wxALIGN_LEFT , int defaultWidth = -1) wxOVERRIDE  ;
     virtual wxListWidgetColumn*     InsertCheckColumn( unsigned pos , const wxString& title, bool editable = false,
-                                wxAlignment just = wxALIGN_LEFT , int defaultWidth =  -1)  ;
+                                wxAlignment just = wxALIGN_LEFT , int defaultWidth =  -1) wxOVERRIDE  ;
 
     // add and remove
 
-    virtual void            ListDelete( unsigned int n ) ;
-    virtual void            ListInsert( unsigned int n ) ;
-    virtual void            ListClear() ;
+    virtual void            ListDelete( unsigned int n ) wxOVERRIDE ;
+    virtual void            ListInsert( unsigned int n ) wxOVERRIDE ;
+    virtual void            ListClear() wxOVERRIDE ;
 
     // selecting
 
-    virtual void            ListDeselectAll();
+    virtual void            ListDeselectAll() wxOVERRIDE;
 
-    virtual void            ListSetSelection( unsigned int n, bool select, bool multi ) ;
-    virtual int             ListGetSelection() const ;
+    virtual void            ListSetSelection( unsigned int n, bool select, bool multi ) wxOVERRIDE ;
+    virtual int             ListGetSelection() const wxOVERRIDE ;
 
-    virtual int             ListGetSelections( wxArrayInt& aSelections ) const ;
+    virtual int             ListGetSelections( wxArrayInt& aSelections ) const wxOVERRIDE ;
 
-    virtual bool            ListIsSelected( unsigned int n ) const ;
+    virtual bool            ListIsSelected( unsigned int n ) const wxOVERRIDE ;
 
     // display
 
-    virtual void            ListScrollTo( unsigned int n ) ;
+    virtual void            ListScrollTo( unsigned int n ) wxOVERRIDE ;
 
     // accessing content
 
-    virtual unsigned int    ListGetCount() const ;
-    virtual int             DoListHitTest( const wxPoint& inpoint ) const;
+    virtual unsigned int    ListGetCount() const wxOVERRIDE ;
+    virtual int             DoListHitTest( const wxPoint& inpoint ) const wxOVERRIDE;
 
     int                     ListGetColumnType( int col )
     {
         return col;
     }
-    virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL ) ;
-    virtual void            UpdateLineToEnd( unsigned int n);
+    virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL ) wxOVERRIDE ;
+    virtual void            UpdateLineToEnd( unsigned int n) wxOVERRIDE;
 
-    virtual void            controlDoubleAction(WXWidget slf, void* _cmd, void *sender);
+    virtual void            controlDoubleAction(WXWidget slf, void* _cmd, void *sender) wxOVERRIDE;
 
     
 protected :
@@ -187,20 +184,20 @@ public :
 
     virtual ~wxNSTableViewCellValue() {}
 
-    virtual void Set( CFStringRef v )
+    virtual void Set( CFStringRef v ) wxOVERRIDE
     {
         value = [[(NSString*)v retain] autorelease];
     }
-    virtual void Set( const wxString& value )
+    virtual void Set( const wxString& value ) wxOVERRIDE
     {
         Set( (CFStringRef) wxCFStringRef( value ) );
     }
-    virtual void Set( int v )
+    virtual void Set( int v ) wxOVERRIDE
     {
         value = [NSNumber numberWithInt:v];
     }
 
-    virtual int GetIntValue() const
+    virtual int GetIntValue() const wxOVERRIDE
     {
         if ( [value isKindOfClass:[NSNumber class]] )
             return [ (NSNumber*) value intValue ];
@@ -208,7 +205,7 @@ public :
         return 0;
     }
 
-    virtual wxString GetStringValue() const
+    virtual wxString GetStringValue() const wxOVERRIDE
     {
         if ( [value isKindOfClass:[NSString class]] )
             return wxCFStringRef::AsString( (NSString*) value );
@@ -303,8 +300,6 @@ protected:
         wxListBox *list = static_cast<wxListBox*> ( impl->GetWXPeer());
         wxCHECK_RET( list != NULL , wxT("Listbox expected"));
         
-        wxCommandEvent event( wxEVT_COMMAND_LISTBOX_SELECTED, list->GetId() );
-        
         if ((row < 0) || (row > (int) list->GetCount()))  // OS X can select an item below the last item
             return;
         
@@ -313,6 +308,24 @@ protected:
     }
     
 } 
+
+- (void)setFont:(NSFont *)aFont
+{
+    NSArray *tableColumns = [self tableColumns];
+    unsigned int columnIndex = [tableColumns count];
+    while (columnIndex--)
+        [[(NSTableColumn *)[tableColumns objectAtIndex:columnIndex] dataCell] setFont:aFont];
+
+    [self setRowHeight:[gNSLayoutManager defaultLineHeightForFont:aFont]+2];
+}
+
+- (void) setControlSize:(NSControlSize) size
+{
+    NSArray *tableColumns = [self tableColumns];
+    unsigned int columnIndex = [tableColumns count];
+    while (columnIndex--)
+        [[(NSTableColumn *)[tableColumns objectAtIndex:columnIndex] dataCell] setControlSize:size];
+}
 
 @end
 
@@ -369,6 +382,11 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertTextColumn( unsigned pos, const
         [col1 setWidth:1000];
     }
     [col1 setResizingMask: NSTableColumnAutoresizingMask];
+    
+    wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
+    if ( list != NULL )
+        [[col1 dataCell] setFont:list->GetFont().OSXGetNSFont()];
+    
     wxCocoaTableColumn* wxcol = new wxCocoaTableColumn( col1, editable );
     [col1 setColumn:wxcol];
 
@@ -388,6 +406,39 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertCheckColumn( unsigned pos , con
     [checkbox setTitle:@""];
     [checkbox setButtonType:NSSwitchButton];
     [col1 setDataCell:checkbox] ;
+    
+    wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
+    if ( list != NULL )
+    {
+        NSControlSize size = NSRegularControlSize;
+        
+        switch ( list->GetWindowVariant() )
+        {
+            case wxWINDOW_VARIANT_NORMAL :
+                size = NSRegularControlSize;
+                break ;
+                
+            case wxWINDOW_VARIANT_SMALL :
+                size = NSSmallControlSize;
+                break ;
+                
+            case wxWINDOW_VARIANT_MINI :
+                size = NSMiniControlSize;
+                break ;
+                
+            case wxWINDOW_VARIANT_LARGE :
+                size = NSRegularControlSize;
+                break ;
+                
+            default:
+                break ;
+        }
+
+        [[col1 dataCell] setControlSize:size];
+        // although there is no text, it may help to get the correct vertical layout
+        [[col1 dataCell] setFont:list->GetFont().OSXGetNSFont()];        
+    }
+
     [checkbox release];
 
     unsigned formerColCount = [m_tableView numberOfColumns];
@@ -555,8 +606,8 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
     wxListWidgetCocoaImpl* c = new wxListWidgetCocoaImpl( wxpeer, scrollview, tableview, ds );
 
     // temporary hook for dnd
-    [tableview registerForDraggedTypes:[NSArray arrayWithObjects:
-        NSStringPboardType, NSFilenamesPboardType, NSTIFFPboardType, NSPICTPboardType, NSPDFPboardType, nil]];
+ //   [tableview registerForDraggedTypes:[NSArray arrayWithObjects:
+ //       NSStringPboardType, NSFilenamesPboardType, (NSString*) kPasteboardTypeFileURLPromise, NSTIFFPboardType, NSPICTPboardType, NSPDFPboardType, nil]];
 
     [ds setImplementation:c];
     return c;

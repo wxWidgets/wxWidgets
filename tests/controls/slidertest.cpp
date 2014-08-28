@@ -3,7 +3,6 @@
 // Purpose:     wxSlider unit test
 // Author:      Steven Lamerton
 // Created:     2010-07-20
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -33,9 +32,11 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( SliderTestCase );
+#ifndef __WXOSX__
         WXUISIM_TEST( PageUpDown );
         WXUISIM_TEST( LineUpDown );
         WXUISIM_TEST( LinePageSize );
+#endif
         CPPUNIT_TEST( Value );
         CPPUNIT_TEST( Range );
         WXUISIM_TEST( Thumb );
@@ -87,11 +88,8 @@ void SliderTestCase::tearDown()
 void SliderTestCase::PageUpDown()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_slider, wxEVT_SCROLL_PAGEUP);
-    EventCounter count1(m_slider, wxEVT_SCROLL_PAGEDOWN);
+    EventCounter pageup(m_slider, wxEVT_SCROLL_PAGEUP);
+    EventCounter pagedown(m_slider, wxEVT_SCROLL_PAGEDOWN);
 
     wxUIActionSimulator sim;
 
@@ -102,19 +100,16 @@ void SliderTestCase::PageUpDown()
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_PAGEUP));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_PAGEDOWN));
+    CPPUNIT_ASSERT_EQUAL(1, pageup.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, pagedown.GetCount());
 #endif
 }
 
 void SliderTestCase::LineUpDown()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_slider, wxEVT_SCROLL_LINEUP);
-    EventCounter count1(m_slider, wxEVT_SCROLL_LINEDOWN);
+    EventCounter lineup(m_slider, wxEVT_SCROLL_LINEUP);
+    EventCounter linedown(m_slider, wxEVT_SCROLL_LINEDOWN);
 
     wxUIActionSimulator sim;
 
@@ -125,8 +120,8 @@ void SliderTestCase::LineUpDown()
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_LINEUP));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_LINEDOWN));
+    CPPUNIT_ASSERT_EQUAL(1, lineup.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, linedown.GetCount());
 #endif
 }
 
@@ -193,33 +188,21 @@ void SliderTestCase::Range()
 void SliderTestCase::Thumb()
 {
 #if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_slider, wxEVT_SCROLL_THUMBTRACK);
-    EventCounter count1(m_slider, wxEVT_SCROLL_THUMBRELEASE);
-    EventCounter count2(m_slider, wxEVT_SCROLL_CHANGED);
+    EventCounter track(m_slider, wxEVT_SCROLL_THUMBTRACK);
+    EventCounter release(m_slider, wxEVT_SCROLL_THUMBRELEASE);
+    EventCounter changed(m_slider, wxEVT_SCROLL_CHANGED);
 
     wxUIActionSimulator sim;
 
     m_slider->SetValue(0);
 
-    sim.MouseMove(m_slider->ClientToScreen(wxPoint(10, 10)));
+    sim.MouseDragDrop(m_slider->ClientToScreen(wxPoint(10, 10)),m_slider->ClientToScreen(wxPoint(50, 10)));
     wxYield();
 
-    sim.MouseDown();
-    wxYield();
-
-    sim.MouseMove(m_slider->ClientToScreen(wxPoint(50, 10)));
-    wxYield();
-
-    sim.MouseUp();
-    wxYield();
-
-    CPPUNIT_ASSERT(frame->GetEventCount(wxEVT_SCROLL_THUMBTRACK) != 0);
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_THUMBRELEASE));
+    CPPUNIT_ASSERT(track.GetCount() != 0);
+    CPPUNIT_ASSERT_EQUAL(1, release.GetCount());
 #ifdef __WXMSW__
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_SCROLL_CHANGED));
+    CPPUNIT_ASSERT_EQUAL(1, changed.GetCount());
 #endif
 #endif
 }

@@ -3,7 +3,6 @@
 // Purpose:     includes all xh_*.h files
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -15,6 +14,7 @@
 // Existing handlers:
 
 #include "wx/xrc/xh_animatctrl.h"
+#include "wx/xrc/xh_bannerwindow.h"
 #include "wx/xrc/xh_bmp.h"
 #include "wx/xrc/xh_bmpbt.h"
 #include "wx/xrc/xh_bmpcbox.h"
@@ -56,6 +56,7 @@
 #include "wx/xrc/xh_radbx.h"
 #include "wx/xrc/xh_scrol.h"
 #include "wx/xrc/xh_scwin.h"
+#include "wx/xrc/xh_simplebook.h"
 #include "wx/xrc/xh_sizer.h"
 #include "wx/xrc/xh_slidr.h"
 #include "wx/xrc/xh_spin.h"
@@ -68,6 +69,7 @@
 #include "wx/xrc/xh_stlin.h"
 #include "wx/xrc/xh_text.h"
 #include "wx/xrc/xh_tglbtn.h"
+#include "wx/xrc/xh_timectrl.h"
 #include "wx/xrc/xh_toolb.h"
 #include "wx/xrc/xh_toolbk.h"
 #include "wx/xrc/xh_tree.h"

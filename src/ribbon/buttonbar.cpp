@@ -4,7 +4,6 @@
 // Author:      Peter Cawley
 // Modified by:
 // Created:     2009-07-01
-// RCS-ID:      $Id$
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -17,6 +16,7 @@
 
 #if wxUSE_RIBBON
 
+#include "wx/ribbon/panel.h"
 #include "wx/ribbon/buttonbar.h"
 #include "wx/ribbon/art.h"
 #include "wx/dcbuffer.h"
@@ -28,8 +28,8 @@
 #include "wx/msw/private.h"
 #endif
 
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBUTTON_CLICKED, wxRibbonButtonBarEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBUTTON_DROPDOWN_CLICKED, wxRibbonButtonBarEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONBUTTONBAR_CLICKED, wxRibbonButtonBarEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, wxRibbonButtonBarEvent);
 
 IMPLEMENT_DYNAMIC_CLASS(wxRibbonButtonBarEvent, wxCommandEvent)
 IMPLEMENT_CLASS(wxRibbonButtonBar, wxRibbonControl)
@@ -95,12 +95,14 @@ public:
                     *size = wxRIBBON_BUTTONBAR_BUTTON_MEDIUM;
                     break;
                 }
+                wxFALLTHROUGH;
             case wxRIBBON_BUTTONBAR_BUTTON_MEDIUM:
                 if(sizes[wxRIBBON_BUTTONBAR_BUTTON_SMALL].is_supported)
                 {
                     *size = wxRIBBON_BUTTONBAR_BUTTON_SMALL;
                     break;
                 }
+                wxFALLTHROUGH;
             case wxRIBBON_BUTTONBAR_BUTTON_SMALL:
             default:
                 return false;
@@ -116,7 +118,7 @@ public:
     wxBitmap bitmap_small;
     wxBitmap bitmap_small_disabled;
     wxRibbonButtonBarButtonSizeInfo sizes[3];
-    wxObject* client_data;
+    wxClientDataContainer client_data;
     int id;
     wxRibbonButtonKind kind;
     long state;
@@ -277,8 +279,22 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddButton(
                 const wxBitmap& bitmap_disabled,
                 const wxBitmap& bitmap_small_disabled,
                 wxRibbonButtonKind kind,
-                const wxString& help_string,
-                wxObject* client_data)
+                const wxString& help_string)
+{
+    return InsertButton(GetButtonCount(), button_id, label, bitmap,
+        bitmap_small, bitmap_disabled,bitmap_small_disabled, kind, help_string);
+}
+
+wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxBitmap& bitmap_small,
+                const wxBitmap& bitmap_disabled,
+                const wxBitmap& bitmap_small_disabled,
+                wxRibbonButtonKind kind,
+                const wxString& help_string)
 {
     wxASSERT(bitmap.IsOk() || bitmap_small.IsOk());
     if(m_buttons.IsEmpty())
@@ -340,7 +356,6 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddButton(
     }
     base->kind = kind;
     base->help_string = help_string;
-    base->client_data = client_data;
     base->state = 0;
 
     wxClientDC temp_dc(this);
@@ -348,10 +363,90 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddButton(
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, temp_dc);
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_LARGE, temp_dc);
 
-    // TODO
-    m_buttons.Add(base);
+    m_buttons.Insert(base, pos);
     m_layouts_valid = false;
     return base;
+}
+
+
+void
+wxRibbonButtonBar::SetItemClientObject(wxRibbonButtonBarButtonBase* item,
+                                       wxClientData* data)
+{
+    wxCHECK_RET( item, "Can't associate client object with an invalid item" );
+
+    item->client_data.SetClientObject(data);
+}
+
+wxClientData*
+wxRibbonButtonBar::GetItemClientObject(const wxRibbonButtonBarButtonBase* item) const
+{
+    wxCHECK_MSG( item, NULL, "Can't get client object for an invalid item" );
+
+    return item->client_data.GetClientObject();
+}
+
+void
+wxRibbonButtonBar::SetItemClientData(wxRibbonButtonBarButtonBase* item,
+                                     void* data)
+{
+    wxCHECK_RET( item, "Can't associate client data with an invalid item" );
+
+    item->client_data.SetClientData(data);
+}
+
+void*
+wxRibbonButtonBar::GetItemClientData(const wxRibbonButtonBarButtonBase* item) const
+{
+    wxCHECK_MSG( item, NULL, "Can't get client data for an invalid item" );
+
+    return item->client_data.GetClientData();
+}
+
+
+wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string,
+                wxRibbonButtonKind kind)
+{
+    return InsertButton(pos, button_id, label, bitmap, wxNullBitmap,
+        wxNullBitmap, wxNullBitmap, kind, help_string);
+}
+
+wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertDropdownButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string)
+{
+    return InsertButton(pos, button_id, label, bitmap, help_string,
+        wxRIBBON_BUTTON_DROPDOWN);
+}
+
+wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertToggleButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string)
+{
+    return InsertButton(pos, button_id, label, bitmap, help_string,
+        wxRIBBON_BUTTON_TOGGLE);
+}
+
+wxRibbonButtonBarButtonBase* wxRibbonButtonBar::InsertHybridButton(
+                size_t pos,
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string)
+{
+    return InsertButton(pos, button_id, label, bitmap, help_string,
+        wxRIBBON_BUTTON_HYBRID);
 }
 
 void wxRibbonButtonBar::FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
@@ -380,6 +475,11 @@ wxBitmap wxRibbonButtonBar::MakeDisabledBitmap(const wxBitmap& original)
 {
     wxImage img(original.ConvertToImage());
     return wxBitmap(img.ConvertToGreyscale());
+}
+
+size_t wxRibbonButtonBar::GetButtonCount() const
+{
+    return m_buttons.GetCount();
 }
 
 bool wxRibbonButtonBar::Realize()
@@ -417,6 +517,11 @@ bool wxRibbonButtonBar::DeleteButton(int button_id)
         {
             m_layouts_valid = false;
             m_buttons.RemoveAt(i);
+            if (m_hovered_button && m_hovered_button->base == button)
+                m_hovered_button = NULL;
+            if (m_active_button  && m_active_button->base  == button)
+                m_active_button = NULL;
+            delete button;
             Realize();
             Refresh();
             return true;
@@ -598,6 +703,42 @@ wxSize wxRibbonButtonBar::DoGetNextLargerSize(wxOrientation direction,
     return result;
 }
 
+void wxRibbonButtonBar::UpdateWindowUI(long flags)
+{
+    wxWindowBase::UpdateWindowUI(flags);
+
+    // don't waste time updating state of tools in a hidden toolbar
+    if ( !IsShown() )
+        return;
+
+    size_t btn_count = m_buttons.size();
+    bool rerealize = false;
+    for ( size_t btn_i = 0; btn_i < btn_count; ++btn_i )
+    {
+        wxRibbonButtonBarButtonBase& btn = *m_buttons.Item(btn_i);
+        int id = btn.id;
+
+        wxUpdateUIEvent event(id);
+        event.SetEventObject(this);
+
+        if ( ProcessWindowEvent(event) )
+        {
+            if ( event.GetSetEnabled() )
+                EnableButton(id, event.GetEnabled());
+            if ( event.GetSetChecked() )
+                ToggleButton(id, event.GetChecked());
+            if ( event.GetSetText() )
+            {
+                btn.label = event.GetText();
+                rerealize = true;
+            }
+        }
+    }
+
+    if ( rerealize )
+        Realize();
+}
+
 void wxRibbonButtonBar::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 {
     // All painting done in main paint handler to minimise flicker
@@ -665,8 +806,19 @@ void wxRibbonButtonBar::CommonInit(long WXUNUSED(style))
     m_hovered_button = NULL;
     m_active_button = NULL;
     m_lock_active_state = false;
+    m_show_tooltips_for_disabled = false;
 
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+}
+
+void wxRibbonButtonBar::SetShowToolTipsForDisabled(bool show)
+{
+    m_show_tooltips_for_disabled = show;
+}
+
+bool wxRibbonButtonBar::GetShowToolTipsForDisabled() const
+{
+    return m_show_tooltips_for_disabled;
 }
 
 wxSize wxRibbonButtonBar::GetMinSize() const
@@ -799,7 +951,7 @@ bool wxRibbonButtonBar::TryCollapseLayout(wxRibbonButtonBarLayout* original,
         // If height isn't preserved (i.e. it is reduced), then the minimum
         // size for the button bar will decrease, preventing the original
         // layout from being used (in some cases).
-        // It may be a good idea to always preverse the height, but for now
+        // It may be a good idea to always preserve the height, but for now
         // it is only done when the first button is involved in a collapse.
         preserve_height = true;
     }
@@ -844,6 +996,7 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
 {
     wxPoint cursor(evt.GetPosition());
     wxRibbonButtonBarButtonInstance* new_hovered = NULL;
+    wxRibbonButtonBarButtonInstance* tooltipButton = NULL;
     long new_hovered_state = 0;
 
     wxRibbonButtonBarLayout* layout = m_layouts.Item(m_current_layout);
@@ -858,22 +1011,41 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
         btn_rect.SetSize(size.size);
         if(btn_rect.Contains(cursor))
         {
-            new_hovered = &instance;
-            new_hovered_state = instance.base->state;
-            new_hovered_state &= ~wxRIBBON_BUTTONBAR_BUTTON_HOVER_MASK;
-            wxPoint offset(cursor);
-            offset -= btn_rect.GetTopLeft();
-            if(size.normal_region.Contains(offset))
+            if((instance.base->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) == 0)
             {
-                new_hovered_state |= wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED;
+                tooltipButton = &instance;
+                new_hovered = &instance;
+                new_hovered_state = instance.base->state;
+                new_hovered_state &= ~wxRIBBON_BUTTONBAR_BUTTON_HOVER_MASK;
+                wxPoint offset(cursor);
+                offset -= btn_rect.GetTopLeft();
+                if(size.normal_region.Contains(offset))
+                {
+                    new_hovered_state |= wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED;
+                }
+                if(size.dropdown_region.Contains(offset))
+                {
+                    new_hovered_state |= wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_HOVERED;
+                }
+                break;
             }
-            if(size.dropdown_region.Contains(offset))
+            else if (m_show_tooltips_for_disabled)
             {
-                new_hovered_state |= wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_HOVERED;
+                tooltipButton = &instance;
             }
-            break;
         }
     }
+
+#if wxUSE_TOOLTIPS
+    if(tooltipButton == NULL && GetToolTip())
+    {
+        UnsetToolTip();
+    }
+    if(tooltipButton)
+    {
+        SetToolTip(tooltipButton->base->help_string);
+    }
+#endif
 
     if(new_hovered != m_hovered_button || (m_hovered_button != NULL &&
         new_hovered_state != m_hovered_button->base->state))
@@ -937,16 +1109,19 @@ void wxRibbonButtonBar::OnMouseDown(wxMouseEvent& evt)
         btn_rect.SetSize(size.size);
         if(btn_rect.Contains(cursor))
         {
-            m_active_button = &instance;
-            cursor -= btn_rect.GetTopLeft();
-            long state = 0;
-            if(size.normal_region.Contains(cursor))
-                state = wxRIBBON_BUTTONBAR_BUTTON_NORMAL_ACTIVE;
-            else if(size.dropdown_region.Contains(cursor))
-                state = wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE;
-            instance.base->state |= state;
-            Refresh(false);
-            break;
+            if((instance.base->state & wxRIBBON_BUTTONBAR_BUTTON_DISABLED) == 0)
+            {
+                m_active_button = &instance;
+                cursor -= btn_rect.GetTopLeft();
+                long state = 0;
+                if(size.normal_region.Contains(cursor))
+                    state = wxRIBBON_BUTTONBAR_BUTTON_NORMAL_ACTIVE;
+                else if(size.dropdown_region.Contains(cursor))
+                    state = wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE;
+                instance.base->state |= state;
+                Refresh(false);
+                break;
+            }
         }
     }
 }
@@ -970,9 +1145,9 @@ void wxRibbonButtonBar::OnMouseUp(wxMouseEvent& evt)
             do
             {
                 if(size.normal_region.Contains(cursor))
-                    event_type = wxEVT_COMMAND_RIBBONBUTTON_CLICKED;
+                    event_type = wxEVT_RIBBONBUTTONBAR_CLICKED;
                 else if(size.dropdown_region.Contains(cursor))
-                    event_type = wxEVT_COMMAND_RIBBONBUTTON_DROPDOWN_CLICKED;
+                    event_type = wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED;
                 else
                     break;
                 wxRibbonButtonBarEvent notification(event_type, id);
@@ -985,9 +1160,12 @@ void wxRibbonButtonBar::OnMouseUp(wxMouseEvent& evt)
                 }
                 notification.SetEventObject(this);
                 notification.SetBar(this);
+                notification.SetButton(m_active_button->base);
                 m_lock_active_state = true;
                 ProcessWindowEvent(notification);
                 m_lock_active_state = false;
+
+                wxStaticCast(m_parent, wxRibbonPanel)->HideIfExpanded();
             } while(false);
             if(m_active_button) // may have been NULLed by event handler
             {
@@ -1024,6 +1202,45 @@ void wxRibbonButtonBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
     if(repaint)
         Refresh(false);
 }
+
+wxRibbonButtonBarButtonBase *wxRibbonButtonBar::GetActiveItem() const
+{
+    return m_active_button == NULL ? NULL : m_active_button->base;
+}
+
+
+wxRibbonButtonBarButtonBase *wxRibbonButtonBar::GetHoveredItem() const
+{
+    return m_hovered_button == NULL ? NULL : m_hovered_button->base;
+}
+
+
+wxRibbonButtonBarButtonBase *wxRibbonButtonBar::GetItem(size_t n) const
+{
+    wxCHECK_MSG(n < m_buttons.GetCount(), NULL, "wxRibbonButtonBar item's index is out of bound");
+    return m_buttons.Item(n);
+}
+
+wxRibbonButtonBarButtonBase *wxRibbonButtonBar::GetItemById(int button_id) const
+{
+    size_t count = m_buttons.GetCount();
+    for ( size_t i = 0; i < count; ++i )
+    {
+        wxRibbonButtonBarButtonBase* button = m_buttons.Item(i);
+        if ( button->id == button_id )
+            return button;
+    }
+
+    return NULL;
+
+}
+
+int wxRibbonButtonBar::GetItemId(wxRibbonButtonBarButtonBase *item) const
+{
+    wxCHECK_MSG(item != NULL, wxNOT_FOUND, "wxRibbonButtonBar item should not be NULL");
+    return item->id;
+}
+
 
 bool wxRibbonButtonBarEvent::PopupMenu(wxMenu* menu)
 {

@@ -3,7 +3,6 @@
 // Purpose:     wxXmlDocument - XML parser & data holder class
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -58,6 +57,8 @@ wxXmlNode::wxXmlNode(wxXmlNode *parent,wxXmlNodeType type,
       m_lineNo(lineNo),
       m_noConversion(false)
 {
+    wxASSERT_MSG ( type != wxXML_ELEMENT_NODE || content.empty(), "element nodes can't have content" );
+
     if (m_parent)
     {
         if (m_parent->m_children)
@@ -77,7 +78,9 @@ wxXmlNode::wxXmlNode(wxXmlNodeType type, const wxString& name,
       m_attrs(NULL), m_parent(NULL),
       m_children(NULL), m_next(NULL),
       m_lineNo(lineNo), m_noConversion(false)
-{}
+{
+    wxASSERT_MSG ( type != wxXML_ELEMENT_NODE || content.empty(), "element nodes can't have content" );
+}
 
 wxXmlNode::wxXmlNode(const wxXmlNode& node)
 {
@@ -87,6 +90,22 @@ wxXmlNode::wxXmlNode(const wxXmlNode& node)
 }
 
 wxXmlNode::~wxXmlNode()
+{
+    DoFree();
+}
+
+wxXmlNode& wxXmlNode::operator=(const wxXmlNode& node)
+{
+    if ( &node != this )
+    {
+        DoFree();
+        DoCopy(node);
+    }
+
+    return *this;
+}
+
+void wxXmlNode::DoFree()
 {
     wxXmlNode *c, *c2;
     for (c = m_children; c; c = c2)
@@ -101,14 +120,6 @@ wxXmlNode::~wxXmlNode()
         p2 = p->GetNext();
         delete p;
     }
-}
-
-wxXmlNode& wxXmlNode::operator=(const wxXmlNode& node)
-{
-    wxDELETE(m_attrs);
-    wxDELETE(m_children);
-    DoCopy(node);
-    return *this;
 }
 
 void wxXmlNode::DoCopy(const wxXmlNode& node)

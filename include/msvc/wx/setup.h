@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2004-12-12
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -46,7 +45,7 @@
 // wxMSVC_VERSION as "XX" or define wxMSVC_VERSION_AUTO to use the appropriate
 // version depending on the compiler used
 #ifdef wxMSVC_VERSION
-    #define wxCOMPILER_PREFIX wxCONCAT2(vc, wxMSVC_VERSION)
+    #define wxCOMPILER_PREFIX wxCONCAT(vc, wxMSVC_VERSION)
 #elif defined(wxMSVC_VERSION_AUTO)
     #if _MSC_VER == 1200
         #define wxCOMPILER_PREFIX vc60
@@ -60,6 +59,10 @@
         #define wxCOMPILER_PREFIX vc90
     #elif _MSC_VER == 1600
         #define wxCOMPILER_PREFIX vc100
+    #elif _MSC_VER == 1700
+        #define wxCOMPILER_PREFIX vc110
+    #elif _MSC_VER == 1800
+        #define wxCOMPILER_PREFIX vc120
     #else
         #error "Unknown MSVC compiler version, please report to wx-dev."
     #endif
@@ -69,28 +72,46 @@
 
 // architecture-specific part: not used (again, for compatibility), for x86
 #if defined(_M_X64)
-    #define wxARCH_SUFFIX _amd64
+    #define wxARCH_SUFFIX _x64
 #elif defined(_M_IA64)
     #define wxARCH_SUFFIX _ia64
 #else // assume _M_IX86
     #define wxARCH_SUFFIX
 #endif
 
+// Ensure the library configuration is defined
+#ifndef wxCFG
+    #define wxCFG
+#endif
+
+// Construct the path for the subdirectory under /lib/ that the included setup.h
+// will be used from
 #ifdef WXUSINGDLL
-    #define wxLIB_SUBDIR wxCONCAT3(wxCOMPILER_PREFIX, wxARCH_SUFFIX, _dll)
+    #define wxLIB_SUBDIR \
+        wxCONCAT4(wxCOMPILER_PREFIX, wxARCH_SUFFIX, _dll, wxCFG)
 #else // !DLL
-    #define wxLIB_SUBDIR wxCONCAT3(wxCOMPILER_PREFIX, wxARCH_SUFFIX, _lib)
+    #define wxLIB_SUBDIR \
+        wxCONCAT4(wxCOMPILER_PREFIX, wxARCH_SUFFIX, _lib, wxCFG)
 #endif // DLL/!DLL
 
+// The user can predefine a different prefix if not using the default MSW port
+// with MSVC.
+#ifndef wxTOOLKIT_PREFIX
+    #if defined(__WXGTK__)
+        #define wxTOOLKIT_PREFIX gtk2
+    #else
+        #define wxTOOLKIT_PREFIX msw
+    #endif
+#endif // wxTOOLKIT_PREFIX
 
 // the real setup.h header file we need is in the build-specific directory,
 // construct the path to it
 #ifdef wxSUFFIX
     #define wxSETUPH_PATH \
-        wxCONCAT5(../../../lib/, wxLIB_SUBDIR, /msw, wxSUFFIX, /wx/setup.h)
+        wxCONCAT6(../../../lib/, wxLIB_SUBDIR, /, wxTOOLKIT_PREFIX, wxSUFFIX, /wx/setup.h)
 #else // suffix is empty
     #define wxSETUPH_PATH \
-        wxCONCAT3(../../../lib/, wxLIB_SUBDIR, /msw/wx/setup.h)
+        wxCONCAT5(../../../lib/, wxLIB_SUBDIR, /, wxTOOLKIT_PREFIX, /wx/setup.h)
 #endif
 
 #define wxSETUPH_PATH_STR wxSTRINGIZE(wxSETUPH_PATH)
@@ -112,10 +133,13 @@
     "wx" name wxSHORT_VERSION_STRING wxSUFFIX_STR subname
 
 #define wxBASE_LIB_NAME(name) wxWX_LIB_NAME("base", "_" name)
-#define wxMSW_LIB_NAME(name) wxWX_LIB_NAME("msw", "_" name)
+#define wxTOOLKIT_LIB_NAME(name) wxWX_LIB_NAME(wxSTRINGIZE(wxTOOLKIT_PREFIX), "_" name)
 
-// this one is for 3rd party libraries: they don't have the version number
+// This one is for 3rd party libraries: they don't have the version number
 // in their names and usually exist in ANSI version only (except for regex)
+//
+// 3rd party libraries are also are not linked in when using DLLs as they're
+// embedded inside our own DLLs and don't need to be linked with the user code.
 #define wx3RD_PARTY_LIB_NAME(name) "wx" name wxSUFFIX_DEBUG
 
 // special version for regex as it does have a Unicode version
@@ -124,68 +148,76 @@
 #pragma comment(lib, wxWX_LIB_NAME("base", ""))
 
 #ifndef wxNO_NET_LIB
+    #ifndef WXUSINGDLL
+        #pragma comment(lib, "wsock32")
+    #endif
     #pragma comment(lib, wxBASE_LIB_NAME("net"))
 #endif
-#ifndef wxNO_XML_LIB
+#if wxUSE_XML && !defined(wxNO_XML_LIB)
     #pragma comment(lib, wxBASE_LIB_NAME("xml"))
+    #if !defined(wxNO_EXPAT_LIB) && !defined(WXUSINGDLL)
+        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("expat"))
+    #endif
 #endif
-#if wxUSE_REGEX && !defined(wxNO_REGEX_LIB)
+#if wxUSE_REGEX && !defined(wxNO_REGEX_LIB) && !defined(WXUSINGDLL)
     #pragma comment(lib, wx3RD_PARTY_LIB_NAME_U("regex"))
+#endif
+#if wxUSE_ZLIB && !defined(wxNO_ZLIB_LIB) && !defined(WXUSINGDLL)
+    #pragma comment(lib, wx3RD_PARTY_LIB_NAME("zlib"))
 #endif
 
 #if wxUSE_GUI
-    #if wxUSE_XML && !defined(wxNO_EXPAT_LIB)
-        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("expat"))
-    #endif
-    #if wxUSE_LIBJPEG && !defined(wxNO_JPEG_LIB)
+    #if wxUSE_LIBJPEG && !defined(wxNO_JPEG_LIB) && !defined(WXUSINGDLL)
         #pragma comment(lib, wx3RD_PARTY_LIB_NAME("jpeg"))
     #endif
-    #if wxUSE_LIBPNG && !defined(wxNO_PNG_LIB)
+    #if wxUSE_LIBPNG && !defined(wxNO_PNG_LIB) && !defined(WXUSINGDLL)
         #pragma comment(lib, wx3RD_PARTY_LIB_NAME("png"))
     #endif
-    #if wxUSE_LIBTIFF && !defined(wxNO_TIFF_LIB)
+    #if wxUSE_LIBTIFF && !defined(wxNO_TIFF_LIB) && !defined(WXUSINGDLL)
         #pragma comment(lib, wx3RD_PARTY_LIB_NAME("tiff"))
     #endif
-    #if wxUSE_ZLIB && !defined(wxNO_ZLIB_LIB)
-        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("zlib"))
-    #endif
 
-    #pragma comment(lib, wxMSW_LIB_NAME("core"))
+    #pragma comment(lib, wxTOOLKIT_LIB_NAME("core"))
 
     #ifndef wxNO_ADV_LIB
-        #pragma comment(lib, wxMSW_LIB_NAME("adv"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("adv"))
     #endif
 
-    #ifndef wxNO_HTML_LIB
-        #pragma comment(lib, wxMSW_LIB_NAME("html"))
+    #if wxUSE_HTML && !defined(wxNO_HTML_LIB)
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("html"))
     #endif
     #if wxUSE_GLCANVAS && !defined(wxNO_GL_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("gl"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("gl"))
     #endif
     #if wxUSE_DEBUGREPORT && !defined(wxNO_QA_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("qa"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("qa"))
     #endif
     #if wxUSE_XRC && !defined(wxNO_XRC_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("xrc"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("xrc"))
     #endif
     #if wxUSE_AUI && !defined(wxNO_AUI_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("aui"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("aui"))
     #endif
     #if wxUSE_PROPGRID && !defined(wxNO_PROPGRID_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("propgrid"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("propgrid"))
     #endif
     #if wxUSE_RIBBON && !defined(wxNO_RIBBON_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("ribbon"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("ribbon"))
     #endif
     #if wxUSE_RICHTEXT && !defined(wxNO_RICHTEXT_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("richtext"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("richtext"))
     #endif
     #if wxUSE_MEDIACTRL && !defined(wxNO_MEDIA_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("media"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("media"))
     #endif
     #if wxUSE_STC && !defined(wxNO_STC_LIB)
-        #pragma comment(lib, wxMSW_LIB_NAME("stc"))
-        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("scintilla"))
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("stc"))
+        #ifndef WXUSINGDLL
+            #pragma comment(lib, wx3RD_PARTY_LIB_NAME("scintilla"))
+        #endif
+    #endif
+    #if wxUSE_WEBVIEW && !defined(wxNO_WEBVIEW_LIB)
+        #pragma comment(lib, wxTOOLKIT_LIB_NAME("webview"))
     #endif
 #endif // wxUSE_GUI
 
@@ -206,8 +238,24 @@
     #pragma comment(lib, "uuid")
     #pragma comment(lib, "rpcrt4")
     #pragma comment(lib, "advapi32")
-    #pragma comment(lib, "wsock32")
     #if wxUSE_URL_NATIVE
         #pragma comment(lib, "wininet")
+    #endif
+
+    #ifdef __WXGTK__
+        #ifdef __WXGTK3__
+            #pragma comment(lib, "libgtk-3.dll.a")
+            #pragma comment(lib, "libgdk-3.dll.a")
+        #else
+            #pragma comment(lib, "gtk-win32-2.0.lib")
+            #pragma comment(lib, "gdk-win32-2.0.lib")
+        #endif
+        #pragma comment(lib, "pangocairo-1.0.lib")
+        #pragma comment(lib, "gdk_pixbuf-2.0.lib")
+        #pragma comment(lib, "cairo.lib")
+        #pragma comment(lib, "pango-1.0.lib")
+        #pragma comment(lib, "gobject-2.0.lib")
+        #pragma comment(lib, "gthread-2.0.lib")
+        #pragma comment(lib, "glib-2.0.lib")
     #endif
 #endif // !WXUSINGDLL

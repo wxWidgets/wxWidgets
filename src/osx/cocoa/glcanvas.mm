@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -39,7 +38,9 @@ WXGLContext WXGLCreateContext( WXGLPixelFormat pixelFormat, WXGLContext shareCon
 {
     WXGLContext context = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext: shareContext];
     if ( !context )
+    {
         wxFAIL_MSG("NSOpenGLContext creation failed");
+    }
     return context ;
 }
 
@@ -87,7 +88,8 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
         NSOpenGLPFAColorSize,(NSOpenGLPixelFormatAttribute)8,
         NSOpenGLPFAAlphaSize,(NSOpenGLPixelFormatAttribute)0,
         NSOpenGLPFADepthSize,(NSOpenGLPixelFormatAttribute)8,
-        (NSOpenGLPixelFormatAttribute)nil
+        NSOpenGLPFAAccelerated, // use hardware accelerated context
+        0
     };
 
     const NSOpenGLPixelFormatAttribute *attribs;
@@ -99,6 +101,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
     {
         unsigned p = 0;
         data[p++] = NSOpenGLPFAMinimumPolicy; // make _SIZE tags behave more like GLX
+        data[p++] = NSOpenGLPFAAccelerated; // use hardware accelerated context
 
         for ( unsigned arg = 0; attribList[arg] !=0 && p < WXSIZEOF(data); )
         {
@@ -210,10 +213,19 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
                     data[p++] = NSOpenGLPFASamples;
                     data[p++] = (NSOpenGLPixelFormatAttribute) attribList[arg++];
                     break;
+
+                case WX_GL_CORE_PROFILE:
+                    data[p++] = NSOpenGLPFAOpenGLProfile;
+                    // request an OpenGL core profile
+                    // will use the highest available OpenGL version
+                    // which will be at least 3.2
+                    data[p++] = NSOpenGLProfileVersion3_2Core;
+
+                    break;
             }
         }
 
-        data[p] = (NSOpenGLPixelFormatAttribute)nil;
+        data[p] = 0;
 
         attribs = data;
     }

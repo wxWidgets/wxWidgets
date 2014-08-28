@@ -3,7 +3,6 @@
 // Purpose:     wxComboBox unit test
 // Author:      Vadim Zeitlin
 // Created:     2007-09-25
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -56,18 +55,33 @@ private:
     }
 
     CPPUNIT_TEST_SUITE( ComboBoxTestCase );
+#ifdef __WXOSX__
+    CPPUNIT_TEST( SetValue );
+    CPPUNIT_TEST( TextChangeEvents );
+    CPPUNIT_TEST( Selection );
+    CPPUNIT_TEST( InsertionPoint );
+    CPPUNIT_TEST( Replace );
+//  TODO on OS X only works interactively
+//   WXUISIM_TEST( Editable );
+    CPPUNIT_TEST( Hint );
+    CPPUNIT_TEST( CopyPaste ); 
+    CPPUNIT_TEST( UndoRedo );
+#else
         wxTEXT_ENTRY_TESTS();
+#endif
         wxITEM_CONTAINER_TESTS();
         CPPUNIT_TEST( Size );
         CPPUNIT_TEST( PopDismiss );
         CPPUNIT_TEST( Sort );
         CPPUNIT_TEST( ReadOnly );
+        CPPUNIT_TEST( IsEmpty );
     CPPUNIT_TEST_SUITE_END();
 
     void Size();
     void PopDismiss();
     void Sort();
     void ReadOnly();
+    void IsEmpty();
 
     wxComboBox *m_combo;
 
@@ -127,23 +141,21 @@ void ComboBoxTestCase::Size()
 void ComboBoxTestCase::PopDismiss()
 {
 #if defined(__WXMSW__) || defined(__WXGTK210__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_combo, wxEVT_COMMAND_COMBOBOX_DROPDOWN);
-    EventCounter count1(m_combo, wxEVT_COMMAND_COMBOBOX_CLOSEUP);
+    EventCounter drop(m_combo, wxEVT_COMBOBOX_DROPDOWN);
+    EventCounter close(m_combo, wxEVT_COMBOBOX_CLOSEUP);
 
     m_combo->Popup();
     m_combo->Dismiss();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_COMBOBOX_DROPDOWN));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_COMBOBOX_CLOSEUP));
+    CPPUNIT_ASSERT_EQUAL(1, drop.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, close.GetCount());
 #endif
 }
 
 void ComboBoxTestCase::Sort()
 {
 #if !defined(__WXOSX__)
+    delete m_combo;
     m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "",
                              wxDefaultPosition, wxDefaultSize, 0, NULL,
                              wxCB_SORT);
@@ -170,11 +182,11 @@ void ComboBoxTestCase::Sort()
 
 void ComboBoxTestCase::ReadOnly()
 {
-#ifndef __WXOSX__
     wxArrayString testitems;
     testitems.Add("item 1");
     testitems.Add("item 2");
 
+    delete m_combo;
     m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "",
                              wxDefaultPosition, wxDefaultSize, testitems,
                              wxCB_READONLY);
@@ -191,6 +203,28 @@ void ComboBoxTestCase::ReadOnly()
     m_combo->SetValue("ITEM 2");
 
     CPPUNIT_ASSERT_EQUAL("item 2", m_combo->GetValue());
+}
+
+void ComboBoxTestCase::IsEmpty()
+{
+    CPPUNIT_ASSERT( m_combo->IsListEmpty() );
+    CPPUNIT_ASSERT( m_combo->IsTextEmpty() );
+
+    m_combo->Append("foo");
+    CPPUNIT_ASSERT( !m_combo->IsListEmpty() );
+    CPPUNIT_ASSERT( m_combo->IsTextEmpty() );
+
+    m_combo->SetValue("bar");
+    CPPUNIT_ASSERT( !m_combo->IsListEmpty() );
+    CPPUNIT_ASSERT( !m_combo->IsTextEmpty() );
+
+    m_combo->Clear();
+    CPPUNIT_ASSERT( m_combo->IsListEmpty() );
+    CPPUNIT_ASSERT( m_combo->IsTextEmpty() );
+
+#ifdef TEST_INVALID_COMBOBOX_ISEMPTY
+    // Compiling this should fail, see failtest target definition in test.bkl.
+    m_combo->IsEmpty();
 #endif
 }
 

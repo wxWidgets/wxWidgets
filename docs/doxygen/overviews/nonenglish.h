@@ -2,7 +2,6 @@
 // Name:        nonenglish.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,16 +9,7 @@
 
 @page overview_nonenglish Writing Non-English Applications
 
-
-@li @ref overview_nonenglish_locales
-@li @ref overview_nonenglish_strings
-@li @ref overview_nonenglish_fontmapping
-@li @ref overview_nonenglish_converting
-@li @ref overview_nonenglish_help
-
-
-<hr>
-
+@tableofcontents
 
 This article describes how to write applications that communicate with the user
 in a language other than English. Unfortunately many languages use different
@@ -37,6 +27,7 @@ Please read the @ref overview_i18n which describes the locales concept.
 
 In the following text, wherever @e iso8859-2 and @e windows-1250 are used, any
 encodings are meant and any encodings may be substituted there.
+
 
 
 @section overview_nonenglish_locales Locales
@@ -110,7 +101,7 @@ wxLocale::GetSystemEncodingName) by the user's operating system.
 By convention, you should only use characters without diacritics (i.e. 7-bit
 ASCII strings) for msgids in the source code and write them in English.
 
-If you port software to wxWindows, you may be confronted with legacy source
+If you port software to wxWidgets, you may be confronted with legacy source
 code containing non-English string literals. Instead of translating the strings
 in the source code to English and putting the original strings into message
 catalog, you may configure wxWidgets to use non-English msgids and translate to
@@ -174,4 +165,3 @@ This additional entry tells the HTML help controller what encoding is used in
 contents and index tables.
 
 */
-

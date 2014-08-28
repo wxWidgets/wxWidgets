@@ -1,53 +1,56 @@
 wxWidgets for Mac OS X installation
 -----------------------------------
 
-wxWidgets can be compiled using Apple's Carbon or Cocoa libraries.
-Carbon is the older library, and Cocoa is the more modern library.
+wxWidgets can be compiled using Apple's Cocoa or Carbon libraries.
+Cocoa is the more modern library, and Carbon is the older deprecated library.
 
-In wxWidgets 2.9.x, Cocoa is the recommended library.  While Carbon is still
+In wxWidgets 3, Cocoa is the recommended library.  While Carbon is still
 supported by Apple, little new work is being done in Carbon.
 
 Most Mac OS X developers should start by downloading and installing Xcode 
 from http://developer.apple.com.  It is a free IDE from Apple that provides
 all of the tools you need for working with wxWidgets.
 
-After Xcode is installed, download either wxWidgets-{version}.tar.gz or 
-wxMac-{version}.tar.gz and then double-click on it to unpack it to create 
-a wxWidgets directory.
+After Xcode is installed, download wxWidgets-{version}.tar.bz2 and then 
+double-click on it to unpack it to create a wxWidgets directory.
 
 Next use Terminal (under Applications, Utilities, Terminal) to access a command 
 prompt.  Use cd to change directories to your wxWidgets directory and execute 
-one of the following sets of commands from the wxWidgets directory
+one of the following sets of commands from the wxWidgets directory.
+
+For Carbon, you'll need to have Xcode 3.x installed (you can also have Xcode 4.x
+installed, but the Carbon build needs 3.x, and the /Developer directory which is
+installed when you install Xcode 3.x.
 
 ---------
 
 # Build the library for Cocoa (wxWidgets 2.9.0 and later)
 mkdir build-cocoa-debug
 cd build-cocoa-debug
-../configure --enable-unicode --enable-debug --disable-shared --with-osx_cocoa
-make;cd ..
+../configure --enable-debug
+make
 # Build the samples and demos
-cd build-cocoa-debug/samples; make;cd ../..
-cd build-cocoa-debug/demos;   make;cd ../..
+cd samples; make;cd ..
+cd demos;   make;cd ..
 
 ---------
 
 # Build the library for Carbon
 mkdir build-carbon-debug
 cd build-carbon-debug
-../configure --enable-unicode --enable-debug --disable-shared
-make;cd ..
+../configure --with-carbon --enable-debug --disable-shared --enable-macosx_arch=i386 --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk  CC=/Developer/usr/bin/gcc-4.2 CXX=/Developer/usr/bin/g++-4.2 LD=/Developer/usr/bin/ld
+make
 # Build the samples and demos
-cd build-carbon-debug/samples;make;cd ../..
-cd build-carbon-debug/demos;  make;cd ../..
+cd samples;make;cd ..
+cd demos;  make;cd ..
 
 ---------
 
 After the compilation completes, use Finder to run the samples and demos
+  Go to build-cocoa-debug/samples to experiment with the Cocoa samples.
+  Go to build-cocoa-debug/demos to experiment with the Cocoa demos.
   Go to build-carbon-debug/samples to experiment with the Carbon samples.
   Go to build-carbon-debug/demos to experiment with the Carbon demos.
-  Go to build-cocoa-debug/samples to experiment with the Cocoa samples.
-  Go to biuld-cocoa-debug/demos to experiment with the Cocoa demos.
 Double-click on the executables which have an icon showing three small squares.
 The source code for the samples is in wxWidgets/samples
 The source code for the demos is in wxWidgets/demos
@@ -81,15 +84,6 @@ it is to make a framework for wxWidgets.  Making frameworks is beyond
 the scope of this document.
 
 Note:
-We recommend you configure a static library instead:
-
-4) ../configure --disable-shared
-
-or activate OpenGL:
-
-4) ../configure --with-opengl
-
-Note:
 It is rarely desirable to install non-Apple software into system directories.
 By configuring the library with --disable-shared and using the full path
 to wx-config with the --in-place option you can avoid installing the library.
@@ -98,8 +92,10 @@ to wx-config with the --in-place option you can avoid installing the library.
 Apple Developer Tools: Xcode
 ----------------------------
 
-You can use the project in src/wxWindows.xcodeproj to build wxWidgets,
-and there is a sample project supplied with the minimal sample.
+You can use the project in build/osx/wxcocoa.xcodeproj to build the Cocoa
+version of wxWidgets (wxOSX/Cocoa) and build/osx/wxcarbon.xcodeproj to
+build the Carbon version of wxWidgets (wxOSX/Carbon). There are also sample
+projects supplied with the minimal sample.
 
 Notice that the command line build above builds not just the library itself but
 also wxrc tool which doesn't have its own Xcode project. If you need this tool,
@@ -116,9 +112,16 @@ The Xcode projects for the wxWidgets library and minimal project are set up
 to create universal binaries.
 
 If using the Apple command line tools, pass --enable-universal_binary when
-configuring wxWidgets. If you use wx-config --libs to link your application,
-he necessary linker flags will be added. When compiling your own files,
-you need to add -arch ppc -arch i386 to your CFLAGS.
+configuring wxWidgets. This will create the libraries for all the supported
+architectures, currently ppc, i386 and x86_64 when using Cocoa (Carbon isn't
+available in 64 bit builds). You may explicitly specify the architectures to
+use as a comma-separated list, e.g. --enable-universal_binary=i386,x86_64.
+
+Notice that if you use wx-config --libs to link your application, the -arch
+flags are not added automatically as it is possible to link e.g. x86_64-only
+program to a "fat" library containing other architectures. If you want to
+build a universal application, you need to add the necessary "-arch xxx" flags
+to your project or makefile separately.
 
 As an alternative to using --enable-universal_binary, you can build for
 each architecture separately and then use the lipo tool to glue the
@@ -128,8 +131,8 @@ binaries together. Assuming building on a PPC system:
 
 2. Then, build for Intel, in a different folder. This time use:
 
-export CFLAGS="-g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386"
-export LDFLAGS="-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk"
+export CFLAGS="-g -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386"
+export LDFLAGS="-syslibroot,/Developer/SDKs/MacOSX10.5.sdk"
 
 ./configure --disable-dependency-tracking --enable-static=yes --enable-shared=no \
   --target=i386-apple-darwin8 --host=powerpc-apple-darwin8 --build=i386-apple-darwin8

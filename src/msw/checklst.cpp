@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     16.11.97
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -61,7 +60,7 @@ namespace
     // space around check mark bitmap in pixels
     static const int CHECKMARK_EXTRA_SPACE = 1;
 
-    // space betwen check bitmap and text label
+    // space between check bitmap and text label
     static const int CHECKMARK_LABEL_SPACE = 2;
 
 } // anonymous namespace

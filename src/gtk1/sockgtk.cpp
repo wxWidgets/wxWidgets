@@ -3,13 +3,18 @@
 // Purpose:     implementation of wxGTK-specific socket event handling
 // Author:      Guilhem Lavaux, Vadim Zeitlin
 // Created:     1999
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999, 2007 wxWidgets dev team
 //              (c) 2009 Vadim Zeitlin
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
+
+#if defined( __VMS ) && defined( __ia64 )
+// Work around for a bug in the C++ compiler on OpenVMS IA64
+# include <time.h>
+#endif
+
 #include "wx/wxprec.h"
 
 #if wxUSE_SOCKETS

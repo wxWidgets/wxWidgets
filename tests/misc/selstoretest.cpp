@@ -3,7 +3,6 @@
 // Purpose:     wxSelectionStore unit test
 // Author:      Vadim Zeitlin
 // Created:     2008-03-31
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin
 ///////////////////////////////////////////////////////////////////////////////
 

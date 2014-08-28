@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     12.09.00
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -199,7 +198,7 @@ bool wxCheckListBox::PerformAction(const wxControlAction& action,
         {
             Check(sel, !IsChecked(sel));
 
-            SendEvent(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, sel);
+            SendEvent(wxEVT_CHECKLISTBOX, sel);
         }
     }
     else

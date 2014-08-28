@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -74,14 +73,6 @@ public:
     // sets/clears the dirty flag
     virtual void MarkDirty();
     virtual void DiscardEdits();
-
-    // set the max number of characters which may be entered
-    // in a single line text control
-    virtual void SetMaxLength(unsigned long len);
-
-    // set the grayed out hint text
-    virtual bool SetHint(const wxString& hint);
-    virtual wxString GetHint() const;
 
     // text control under some platforms supports the text styles: these
     // methods apply the given text style to the given selection or to
@@ -156,7 +147,6 @@ protected:
 
 private :
     wxMenu  *m_privateContextMenu;
-    wxString m_hintString;
 
     DECLARE_EVENT_TABLE()
 };

@@ -6,7 +6,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -18,7 +17,14 @@
     #import <UIKit/UIKit.h>
 #endif
 
+#include <CoreText/CTFont.h>
+#include <CoreText/CTStringAttributes.h>
+#include <CoreText/CTLine.h>
+
+
 #if wxUSE_GUI
+
+typedef CGRect WXRect;
 
 OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
                                CGContextRef    inContext,
@@ -56,7 +62,7 @@ public :
     virtual void        GetPosition( int &x, int &y ) const;
     virtual void        GetSize( int &width, int &height ) const;
     virtual void        SetControlSize( wxWindowVariant variant );
-    virtual float       GetContentScaleFactor() const ;
+    virtual double      GetContentScaleFactor() const ;
     
     virtual void        SetNeedsDisplay( const wxRect* where = NULL );
     virtual bool        GetNeedsDisplay() const;
@@ -163,6 +169,8 @@ public :
 
     virtual bool IsFullScreen() const;
 
+    virtual bool EnableFullScreenView(bool enable);
+    
     virtual bool ShowFullScreen(bool show, long style);
 
     virtual void RequestUserAttention(int flags);

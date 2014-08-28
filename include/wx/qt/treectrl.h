@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/treectrl.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -9,8 +8,7 @@
 #ifndef _WX_QT_TREECTRL_H_
 #define _WX_QT_TREECTRL_H_
 
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QTreeWidget>
+#include <QtWidgets/QTreeWidget>
 
 class WXDLLIMPEXP_CORE wxTreeCtrl : public wxTreeCtrlBase
 {
@@ -135,7 +133,7 @@ protected:
     virtual wxTreeItemId DoTreeHitTest(const wxPoint& point, int& flags) const;
 
 private:
-    wxQtPointer< QTreeWidget > m_qtTreeWidget;
+    QTreeWidget *m_qtTreeWidget;
 
     DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
 };

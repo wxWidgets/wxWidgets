@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -171,6 +170,11 @@ public:
     // EDIT control has one already)
     void OnContextMenu(wxContextMenuEvent& event);
 
+    // Create context menu for RICHEDIT controls. This may be called once during
+    // the control's lifetime or every time the menu is shown, depending on
+    // implementation.
+    virtual wxMenu *MSWCreateContextMenu();
+
     // be sure the caret remains invisible if the user
     // called HideNativeCaret() before
     void OnSetFocus(wxFocusEvent& event);
@@ -185,8 +189,6 @@ protected:
     // common part of all ctors
     void Init();
 
-    virtual bool DoLoadFile(const wxString& file, int fileType);
-
     // creates the control of appropriate class (plain or rich edit) with the
     // styles corresponding to m_windowStyle
     //
@@ -198,18 +200,13 @@ protected:
 
     virtual void DoSetValue(const wxString &value, int flags = 0);
 
+    virtual wxPoint DoPositionToCoords(long pos) const;
+
     // return true if this control has a user-set limit on amount of text (i.e.
     // the limit is due to a previous call to SetMaxLength() and not built in)
     bool HasSpaceLimit(unsigned int *len) const;
 
-    // call this to increase the size limit (will do nothing if the current
-    // limit is big enough)
-    //
-    // returns true if we increased the limit to allow entering more text,
-    // false if we hit the limit set by SetMaxLength() and so didn't change it
-    bool AdjustSpaceLimit();
-
-#if wxUSE_RICHEDIT && (!wxUSE_UNICODE || wxUSE_UNICODE_MSLU)
+#if wxUSE_RICHEDIT && !wxUSE_UNICODE
     // replace the selection or the entire control contents with the given text
     // in the specified encoding
     bool StreamIn(const wxString& value, wxFontEncoding encoding, bool selOnly);
@@ -234,6 +231,7 @@ protected:
     bool SendUpdateEvent();
 
     virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const;
 
 #if wxUSE_RICHEDIT
     // Apply the character-related parts of wxTextAttr to the given selection
@@ -271,6 +269,13 @@ private:
     virtual WXHWND GetEditHWND() const { return m_hWnd; }
 
     void OnKeyDown(wxKeyEvent& event);
+
+    // Used by EN_MAXTEXT handler to increase the size limit (will do nothing
+    // if the current limit is big enough). Should never be called directly.
+    //
+    // Returns true if we increased the limit to allow entering more text,
+    // false if we hit the limit set by SetMaxLength() and so didn't change it.
+    bool AdjustSpaceLimit();
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxTextCtrl)

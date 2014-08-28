@@ -4,7 +4,6 @@
 // Author:      Peter Most, Javier Torres
 // Modified by:
 // Created:     09.08.09
-// RCS-ID:      $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -12,11 +11,11 @@
 #ifndef _WX_QT_TOPLEVEL_H_
 #define _WX_QT_TOPLEVEL_H_
 
-class WXDLLIMPEXP_CORE wxTopLevelWindowNative : public wxTopLevelWindowBase
+class WXDLLIMPEXP_CORE wxTopLevelWindowQt : public wxTopLevelWindowBase
 {
 public:
-    wxTopLevelWindowNative();
-    wxTopLevelWindowNative(wxWindow *parent,
+    wxTopLevelWindowQt();
+    wxTopLevelWindowQt(wxWindow *parent,
                wxWindowID winid,
                const wxString& title,
                const wxPoint& pos = wxDefaultPosition,

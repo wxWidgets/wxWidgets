@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin, Ryan Norton
 // Modified by:
 // Created:     29/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 //              (c) 2004 Ryan Norton <wxprojects@comcast.net>
 // Licence:     wxWindows licence
@@ -42,24 +41,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-// allocating extra space for each string consumes more memory but speeds up
-// the concatenation operations (nLen is the current string's length)
-// NB: EXTRA_ALLOC must be >= 0!
-#define EXTRA_ALLOC       (19 - nLen % 16)
-
-
-// string handling functions used by wxString:
-#if wxUSE_UNICODE_UTF8
-    #define wxStringMemcpy   memcpy
-    #define wxStringMemcmp   memcmp
-    #define wxStringMemchr   memchr
-#else
-    #define wxStringMemcpy   wxTmemcpy
-    #define wxStringMemcmp   wxTmemcmp
-    #define wxStringMemchr   wxTmemchr
-#endif
-
-
 // ---------------------------------------------------------------------------
 // static class variables definition
 // ---------------------------------------------------------------------------
@@ -82,6 +63,22 @@ const wxStringCharType WXDLLIMPEXP_BASE *wxEmptyStringImpl = "";
 const wxChar WXDLLIMPEXP_BASE *wxEmptyString = wxT("");
 
 #else
+
+// allocating extra space for each string consumes more memory but speeds up
+// the concatenation operations (nLen is the current string's length)
+// NB: EXTRA_ALLOC must be >= 0!
+#define EXTRA_ALLOC       (19 - nLen % 16)
+
+// string handling functions used by wxString:
+#if wxUSE_UNICODE_UTF8
+    #define wxStringMemcpy   memcpy
+    #define wxStringMemcmp   memcmp
+    #define wxStringMemchr   memchr
+#else
+    #define wxStringMemcpy   wxTmemcpy
+    #define wxStringMemcmp   wxTmemcmp
+    #define wxStringMemchr   wxTmemchr
+#endif
 
 // for an empty string, GetStringData() will return this address: this
 // structure has the same layout as wxStringData and it's data() method will
@@ -681,7 +678,11 @@ bool wxStringImpl::AssignCopy(size_t nSrcLen,
       // allocation failure handled by caller
       return false;
     }
-    memcpy(m_pchData, pszSrcData, nSrcLen*sizeof(wxStringCharType));
+
+    // use memmove() and not memcpy() here as we might be copying from our own
+    // buffer in case of assignment such as "s = s.c_str()" (see #11294)
+    memmove(m_pchData, pszSrcData, nSrcLen*sizeof(wxStringCharType));
+
     GetStringData()->nDataLength = nSrcLen;
     m_pchData[nSrcLen] = wxT('\0');
   }

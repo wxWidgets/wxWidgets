@@ -1,22 +1,21 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/font.h
-// Author:      Peter Most, Javier Torres
-// RCS-ID:      $Id$
-// Copyright:   (c) Peter Most, Javier Torres
+// Author:      Peter Most, Javier Torres, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_FONT_H_
 #define _WX_QT_FONT_H_
 
-class QFont;
-
 class WXDLLIMPEXP_CORE wxFont : public wxFontBase
 {
 public:
     wxFont();
+    wxFont(const wxFontInfo& info);
     wxFont(const wxString& nativeFontInfoString);
     wxFont(const wxNativeFontInfo& info);
+    wxFont(const QFont& font);
     wxFont(int size,
            wxFontFamily family,
            wxFontStyle style,
@@ -31,7 +30,7 @@ public:
            bool underlined = false,
            const wxString& face = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
+
     wxFont(int size,
            int family,
            int style,
@@ -39,9 +38,8 @@ public:
            bool underlined = false,
            const wxString& face = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-#endif
 
-    bool Create(int size,
+    bool Create(wxSize size,
                 wxFontFamily family,
                 wxFontStyle style,
                 wxFontWeight weight,
@@ -51,7 +49,6 @@ public:
 
     // accessors: get the font characteristics
     virtual int GetPointSize() const;
-    virtual wxFontFamily GetFamily() const;
     virtual wxFontStyle GetStyle() const;
     virtual wxFontWeight GetWeight() const;
     virtual bool GetUnderlined() const;
@@ -63,6 +60,7 @@ public:
     virtual void SetPointSize( int pointSize );
     virtual void SetFamily( wxFontFamily family );
     virtual void SetStyle( wxFontStyle style );
+    virtual bool SetFaceName(const wxString& facename);
     virtual void SetWeight( wxFontWeight weight );
     virtual void SetUnderlined( bool underlined );
     virtual void SetEncoding(wxFontEncoding encoding);

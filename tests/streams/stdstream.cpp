@@ -2,7 +2,6 @@
 // Name:        tests/streams/stdstream.cpp
 // Purpose:     Test wxStdInputStreamBuffer/wxStdOutputStreamBuffer
 // Author:      Jonathan Liu <net147@gmail.com>
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Jonathan Liu
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

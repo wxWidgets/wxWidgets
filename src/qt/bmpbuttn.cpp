@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/bmpbuttn.cpp
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,9 +9,6 @@
 #include "wx/wxprec.h"
 
 #include "wx/bmpbuttn.h"
-
-wxBEGIN_EVENT_TABLE(wxBitmapButton, wxBitmapButtonBase)
-wxEND_EVENT_TABLE()
 
 wxBitmapButton::wxBitmapButton()
 {
@@ -43,7 +39,15 @@ bool wxBitmapButton::Create(wxWindow *parent,
 {
     if ( !wxBitmapButtonBase::Create( parent, id, pos, size, style, validator, name ))
         return false;
+    // Show the initial bitmap and resize accordingly:
+    if ( bitmap.IsOk() )
+    {
+        wxBitmapButtonBase::SetBitmapLabel(bitmap);
 
+        // we need to adjust the size after setting the bitmap as it may be too
+        // big for the default button size
+        SetInitialSize(size);
+    }
     return true;
 }
 

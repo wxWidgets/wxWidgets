@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/app.cpp
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -11,22 +10,26 @@
 
 #include "wx/app.h"
 #include "wx/apptrait.h"
-#include "wx/qt/utils.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
 #include <QtCore/QStringList>
 
 IMPLEMENT_DYNAMIC_CLASS( wxApp, wxAppBase )
 
 wxApp::wxApp()
 {
+    m_qtApplication = NULL;
 }
 
 
 wxApp::~wxApp()
 {
-    delete m_qtApplication;
-
-    delete [] m_qtArgv;
+    // Only delete if the app was actually initialized
+    if ( m_qtApplication != NULL )
+    {
+        m_qtApplication->deleteLater();
+        delete [] m_qtArgv;
+    }
 }
 
 bool wxApp::Initialize( int &argc, wxChar **argv )
@@ -35,7 +38,6 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
         return false;
 
     wxConvCurrent = &wxConvUTF8;
-    wxMISSING_IMPLEMENTATION( "Unicode argc, argv" );
 
     // (See: http://bugreports.qt.nokia.com/browse/QTBUG-7551)
     // Need to store argc, argv. The argc, argv from wxAppBase are
@@ -52,7 +54,7 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
     m_qtArgv[argc] = NULL;
     m_qtArgc = argc;
 
-    m_qtApplication = new QApplication( m_qtArgc, m_qtArgv, QApplication::GuiClient );
+    m_qtApplication = new QApplication( m_qtArgc, m_qtArgv );
 
     // Use the args returned by Qt as it may have deleted (processed) some of them
     // Using QApplication::arguments() forces argument processing
@@ -80,7 +82,6 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
         argc = m_qtApplication->arguments().size();
         argv[argc] = NULL;
     }
-    
 
     return true;
 }

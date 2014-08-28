@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     16.11.97
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -73,7 +72,7 @@ protected:
     // send an "item checked" event
     void SendEvent(unsigned int uiIndex)
     {
-        wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, GetId());
+        wxCommandEvent event(wxEVT_CHECKLISTBOX, GetId());
         event.SetInt(uiIndex);
         event.SetEventObject(this);
         event.SetString(GetString(uiIndex));

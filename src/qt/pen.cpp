@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/pen.cpp
 // Author:      Peter Most, Javier Torres
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -11,7 +10,7 @@
 
 #include "wx/pen.h"
 #include "wx/colour.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
 #include <QtGui/QPen>
 
 static Qt::PenStyle ConvertPenStyle(wxPenStyle style)
@@ -249,7 +248,6 @@ wxPen::wxPen( const wxColour &colour, int width, wxPenStyle style)
     M_PENDATA.setColor(colour.GetHandle());
 }
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
 wxPen::wxPen(const wxColour& col, int width, int style)
 {
     m_refData = new wxPenRefData();
@@ -258,7 +256,6 @@ wxPen::wxPen(const wxColour& col, int width, int style)
     M_PENDATA.setColor(col.GetHandle());
 }
 
-#endif
 
 bool wxPen::operator==(const wxPen& pen) const
 {

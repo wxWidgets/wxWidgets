@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -86,7 +85,6 @@ wxPen::wxPen( const wxColour &colour, int width, wxPenStyle style )
     M_PENDATA->m_colour = colour;
 }
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
 wxPen::wxPen(const wxColour& colour, int width, int style)
 {
     m_refData = new wxPenRefData();
@@ -94,7 +92,6 @@ wxPen::wxPen(const wxColour& colour, int width, int style)
     M_PENDATA->m_style = (wxPenStyle)style;
     M_PENDATA->m_colour = colour;
 }
-#endif
 
 wxPen::~wxPen()
 {

@@ -2,7 +2,6 @@
 // Name:        laywin.h
 // Purpose:     interface of wxLayoutAlgorithm
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -199,7 +198,7 @@ public:
         @param name
             Window name.
     */
-    wxSashLayoutWindow(wxSashLayoutWindow* parent, wxWindowID id,
+    wxSashLayoutWindow(wxWindow* parent, wxWindowID id,
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
                        long style = wxCLIP_CHILDREN | wxSW_3D,
@@ -372,6 +371,8 @@ public:
 };
 
 
+wxEventType wxEVT_QUERY_LAYOUT_INFO;
+
 
 /**
     @class wxCalculateLayoutEvent
@@ -424,4 +425,6 @@ public:
     */
     void SetRect(const wxRect& rect);
 };
+
+wxEventType wxEVT_CALCULATE_LAYOUT;
 

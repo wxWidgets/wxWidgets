@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/listbox.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -9,8 +8,7 @@
 #ifndef _WX_QT_LISTBOX_H_
 #define _WX_QT_LISTBOX_H_
 
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QListWidget>
+#include <QtWidgets/QListWidget>
 
 class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase
 {
@@ -31,6 +29,8 @@ public:
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxListBoxNameStr);
+
+    virtual ~wxListBox();
 
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
@@ -59,6 +59,8 @@ public:
 
     virtual QListWidget *GetHandle() const;
 
+    void QtSendEvent(wxEventType evtType, const QModelIndex &index, bool selected);
+
 protected:
     virtual void DoSetFirstItem(int n);
 
@@ -68,15 +70,24 @@ protected:
                               unsigned int pos,
                               void **clientData,
                               wxClientDataType type);
+    virtual int DoInsertOneItem(const wxString& item, unsigned int pos);
     
     virtual void DoSetItemClientData(unsigned int n, void *clientData);
     virtual void *DoGetItemClientData(unsigned int n) const;
     
     virtual void DoClear();
     virtual void DoDeleteOneItem(unsigned int pos);
-    
+
+    virtual QScrollArea *QtGetScrollBarsContainer() const;
+
+#if wxUSE_CHECKLISTBOX
+    bool       m_hasCheckBoxes;
+#endif // wxUSE_CHECKLISTBOX
+
+    QListWidget *m_qtListWidget;
+
 private:
-    wxQtPointer< QListWidget > m_qtListWidget;
+    virtual void Init(); //common construction
 
     DECLARE_DYNAMIC_CLASS(wxListBox)
 };

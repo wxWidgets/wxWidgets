@@ -3,7 +3,6 @@
 // Purpose:     persistence support for wxTLW
 // Author:      Vadim Zeitlin
 // Created:     2009-01-19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -47,7 +46,7 @@ public:
     {
     }
 
-    virtual void Save() const
+    virtual void Save() const wxOVERRIDE
     {
         const wxTopLevelWindow * const tlw = Get();
 
@@ -70,7 +69,7 @@ public:
         SaveValue(wxPERSIST_TLW_ICONIZED, tlw->IsIconized());
     }
 
-    virtual bool Restore()
+    virtual bool Restore() wxOVERRIDE
     {
         wxTopLevelWindow * const tlw = Get();
 
@@ -118,7 +117,7 @@ public:
         return hasSize;
     }
 
-    virtual wxString GetKind() const { return wxPERSIST_TLW_KIND; }
+    virtual wxString GetKind() const wxOVERRIDE { return wxPERSIST_TLW_KIND; }
 };
 
 inline wxPersistentObject *wxCreatePersistentObject(wxTopLevelWindow *tlw)

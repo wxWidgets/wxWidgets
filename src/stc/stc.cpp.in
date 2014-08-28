@@ -10,7 +10,6 @@
 // Author:      Robin Dunn
 //
 // Created:     13-Jan-2000
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 by Total Control Software
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -47,7 +46,15 @@
 #include "wx/tokenzr.h"
 #include "wx/mstream.h"
 #include "wx/image.h"
-#include "wx/ffile.h"
+#if wxUSE_FFILE
+    #include "wx/ffile.h"
+#elif wxUSE_FILE
+    #include "wx/file.h"
+#endif
+
+#ifdef __WXGTK__
+    #include "wx/dcbuffer.h"
+#endif
 
 #include "ScintillaWX.h"
 
@@ -126,6 +133,9 @@ wxDEFINE_EVENT( wxEVT_STC_INDICATOR_CLICK, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_INDICATOR_RELEASE, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_CANCELLED, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_CHAR_DELETED, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_HOTSPOT_RELEASE_CLICK, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_CLIPBOARD_COPY, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_CLIPBOARD_PASTE, wxStyledTextEvent );
 
 
 
@@ -199,7 +209,6 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
     m_swx = new ScintillaWX(this);
     m_stopWatch.Start();
     m_lastKeyDownConsumed = false;
-    m_lastWheelTimestamp = 0;
     m_vScrollBar = NULL;
     m_hScrollBar = NULL;
 #if wxUSE_UNICODE
@@ -210,7 +219,7 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
     SetInitialSize(size);
 
     // Reduces flicker on GTK+/X11
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     // Make sure it can take the focus
     SetCanFocus(true);
@@ -348,8 +357,8 @@ void wxStyledTextCtrl::StyleSetFont(int styleNum, wxFont& font) {
 #endif
     int            size     = font.GetPointSize();
     wxString       faceName = font.GetFaceName();
-    bool           bold     = font.GetWeight() == wxBOLD;
-    bool           italic   = font.GetStyle() != wxNORMAL;
+    bool           bold     = font.GetWeight() == wxFONTWEIGHT_BOLD;
+    bool           italic   = font.GetStyle() != wxFONTSTYLE_NORMAL;
     bool           under    = font.GetUnderlined();
     wxFontEncoding encoding = font.GetEncoding();
 
@@ -510,63 +519,126 @@ void wxStyledTextCtrl::ScrollToColumn(int column) {
 }
 
 
-#if wxUSE_TEXTCTRL
-bool wxStyledTextCtrl::DoSaveFile(const wxString& filename, int fileType)
+void wxStyledTextCtrl::DoSetValue(const wxString& value, int flags)
 {
-   bool ok = wxTextAreaBase::DoSaveFile(filename, fileType);
-#else
-bool wxStyledTextCtrl::SaveFile(const wxString& filename)
+    if ( flags & SetValue_SelectionOnly )
+        ReplaceSelection(value);
+    else
+        SetText(value);
+
+    // We don't send wxEVT_TEXT anyhow, so ignore the
+    // SetValue_SendEvent bit of the flags
+}
+
+bool
+wxStyledTextCtrl::DoSaveFile(const wxString& filename, int WXUNUSED(fileType))
 {
+#if wxUSE_FFILE || wxUSE_FILE
+
 #if wxUSE_FFILE
-    wxFFile file(filename, wxT("w"));
-    bool ok = file.IsOpened() && file.Write(GetValue(), *wxConvCurrent);
-#else
-    bool ok = false;
-#endif // wxUSE_FFILE
+    // Take care to use "b" to ensure that possibly non-native EOLs in the file
+    // contents are not mangled when saving it.
+    wxFFile file(filename, wxS("wb"));
+#elif wxUSE_FILE
+    wxFile file(filename, wxFile::write);
 #endif
-    if (ok)
+
+    if ( file.IsOpened() && file.Write(GetValue(), *wxConvCurrent) )
     {
         SetSavePoint();
+
+        return true;
     }
-    return ok;
+
+#endif // !wxUSE_FFILE && !wxUSE_FILE
+
+    return false;
 }
 
-#if wxUSE_TEXTCTRL
-bool wxStyledTextCtrl::DoLoadFile(const wxString& filename, int fileType)
+bool
+wxStyledTextCtrl::DoLoadFile(const wxString& filename, int WXUNUSED(fileType))
 {
-   bool ok = wxTextAreaBase::DoLoadFile(filename, fileType);
-#else
-bool wxStyledTextCtrl::LoadFile(const wxString& filename)
-{
+#if wxUSE_FFILE || wxUSE_FILE
+
 #if wxUSE_FFILE
-    wxFFile file(filename);
-    bool ok = file.IsOpened();
-    if (ok)
+    // As above, we want to read the real EOLs from the file, e.g. without
+    // translating them to just LFs under Windows, so that the original CR LF
+    // are preserved when it's written back.
+    wxFFile file(filename, wxS("rb"));
+#else
+    wxFile file(filename);
+#endif
+
+    if ( file.IsOpened() )
     {
         wxString text;
-        ok = file.ReadAll(&text, *wxConvCurrent);
-        if (ok)
+        if ( file.ReadAll(&text, wxConvAuto()) )
         {
+            // Detect the EOL: we use just the first line because there is not
+            // much we can do if the file uses inconsistent EOLs anyhow, we'd
+            // need to ask the user about the one we should really use and we
+            // don't currently provide a way to do it.
+            //
+            // We also only check for Unix and DOS EOLs but not classic Mac
+            // CR-only one as it's obsolete by now.
+            const wxString::size_type posLF = text.find('\n');
+            if ( posLF != wxString::npos )
+            {
+                // Set EOL mode to ensure that the new lines inserted into the
+                // text use the same EOLs as the existing ones.
+                if ( posLF > 0 && text[posLF - 1] == '\r' )
+                    SetEOLMode(wxSTC_EOL_CRLF);
+                else
+                    SetEOLMode(wxSTC_EOL_LF);
+            }
+            //else: Use the default EOL for the current platform.
+
             SetValue(text);
+            EmptyUndoBuffer();
+            SetSavePoint();
+
+            return true;
         }
     }
-#else
-    bool ok = false;
-#endif // wxUSE_FFILE
-#endif
-   if (ok)
-   {
-       EmptyUndoBuffer();
-       SetSavePoint();
-   }
-   return ok;
+#endif // !wxUSE_FFILE && !wxUSE_FILE
+
+   return false;
 }
+
+// If we don't derive from wxTextAreaBase, we need to implement these methods
+// ourselves, otherwise we already inherit them.
+#if !wxUSE_TEXTCTRL
+
+bool wxStyledTextCtrl::SaveFile(const wxString& filename)
+{
+    if ( filename.empty() )
+        return false;
+
+    return DoSaveFile(filename, wxTEXT_TYPE_ANY);
+}
+
+bool wxStyledTextCtrl::LoadFile(const wxString& filename)
+{
+    if ( filename.empty() )
+        return false;
+
+    return DoLoadFile(filename, wxTEXT_TYPE_ANY);
+}
+
+#endif // !wxUSE_TEXTCTRL
 
 #if wxUSE_DRAG_AND_DROP
-wxDragResult wxStyledTextCtrl::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) {
-        return m_swx->DoDragOver(x, y, def);
+wxDragResult wxStyledTextCtrl::DoDragEnter(wxCoord x, wxCoord y, wxDragResult def) {
+    return m_swx->DoDragEnter(x, y, def);
 }
 
+wxDragResult wxStyledTextCtrl::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) {
+    return m_swx->DoDragOver(x, y, def);
+}
+
+void wxStyledTextCtrl::DoDragLeave() {
+    m_swx->DoDragLeave();
+}
 
 bool wxStyledTextCtrl::DoDropText(long x, long y, const wxString& data) {
     return m_swx->DoDropText(x, y, data);
@@ -582,13 +654,18 @@ bool wxStyledTextCtrl::GetUseAntiAliasing() {
     return m_swx->GetUseAntiAliasing();
 }
 
+void wxStyledTextCtrl::AnnotationClearLine(int line) {
+    SendMsg(SCI_ANNOTATIONSETTEXT, line, (sptr_t)NULL);
+}
 
 
 
 
-void wxStyledTextCtrl::AddTextRaw(const char* text)
+void wxStyledTextCtrl::AddTextRaw(const char* text, int length)
 {
-    SendMsg(SCI_ADDTEXT, strlen(text), (sptr_t)text);
+    if (length == -1)
+        length = strlen(text);
+    SendMsg(SCI_ADDTEXT, length, (sptr_t)text);
 }
 
 void wxStyledTextCtrl::InsertTextRaw(int pos, const char* text)
@@ -626,16 +703,10 @@ wxCharBuffer wxStyledTextCtrl::GetLineRaw(int line)
 
 wxCharBuffer wxStyledTextCtrl::GetSelectedTextRaw()
 {
-    long   start;
-    long   end;
+    // Calculate the length needed first.
+    const int len = SendMsg(SCI_GETSELTEXT, 0, (sptr_t)0);
 
-    GetSelection(&start, &end);
-    int   len  = end - start;
-    if (!len) {
-        wxCharBuffer empty;
-        return empty;
-    }
-
+    // And then really get the data.
     wxCharBuffer buf(len);
     SendMsg(SCI_GETSELTEXT, 0, (sptr_t)buf.data());
     return buf;
@@ -676,9 +747,11 @@ wxCharBuffer wxStyledTextCtrl::GetTextRaw()
     return buf;
 }
 
-void wxStyledTextCtrl::AppendTextRaw(const char* text)
+void wxStyledTextCtrl::AppendTextRaw(const char* text, int length)
 {
-    SendMsg(SCI_APPENDTEXT, strlen(text), (sptr_t)text);
+    if (length == -1)
+        length = strlen(text);
+    SendMsg(SCI_APPENDTEXT, length, (sptr_t)text);
 }
 
 
@@ -689,7 +762,11 @@ void wxStyledTextCtrl::AppendTextRaw(const char* text)
 // Event handlers
 
 void wxStyledTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(evt)) {
+#ifdef __WXGTK__
+    wxBufferedPaintDC dc(this);
+#else
     wxPaintDC dc(this);
+#endif
     m_swx->DoPaint(&dc, GetUpdateRegion().GetBox());
 }
 
@@ -764,19 +841,13 @@ void wxStyledTextCtrl::OnContextMenu(wxContextMenuEvent& evt) {
 
 void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt)
 {
-    // prevent having an event queue with wheel events that cannot be processed
-    // reasonably fast (see ticket #9057)
-    if ( m_lastWheelTimestamp <= evt.GetTimestamp() )
-    {
-        m_lastWheelTimestamp = m_stopWatch.Time();
-        m_swx->DoMouseWheel(evt.GetWheelRotation(),
-                            evt.GetWheelDelta(),
-                            evt.GetLinesPerAction(),
-                            evt.ControlDown(),
-                            evt.IsPageScroll());
-        m_lastWheelTimestamp = m_stopWatch.Time() - m_lastWheelTimestamp;
-        m_lastWheelTimestamp += evt.GetTimestamp();
-    }
+    m_swx->DoMouseWheel(evt.GetWheelAxis(),
+                        evt.GetWheelRotation(),
+                        evt.GetWheelDelta(),
+                        evt.GetLinesPerAction(),
+                        evt.GetColumnsPerAction(),
+                        evt.ControlDown(),
+                        evt.IsPageScroll());
 }
 
 
@@ -901,7 +972,7 @@ static void SetEventText(wxStyledTextEvent& evt, const char* text,
                          size_t length) {
     if(!text) return;
 
-    evt.SetText(stc2wx(text, length));
+    evt.SetString(stc2wx(text, length));
 }
 
 
@@ -941,10 +1012,12 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
 
     case SCN_DOUBLECLICK:
         evt.SetEventType(wxEVT_STC_DOUBLECLICK);
+        evt.SetLine(scn.line);
         break;
 
     case SCN_UPDATEUI:
         evt.SetEventType(wxEVT_STC_UPDATEUI);
+        evt.SetUpdated(scn.updated);
         break;
 
     case SCN_MODIFIED:
@@ -956,6 +1029,8 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetLine(scn.line);
         evt.SetFoldLevelNow(scn.foldLevelNow);
         evt.SetFoldLevelPrev(scn.foldLevelPrev);
+        evt.SetToken(scn.token);
+        evt.SetAnnotationLinesAdded(scn.annotationLinesAdded);
         break;
 
     case SCN_MACRORECORD:
@@ -1042,6 +1117,10 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetEventType(wxEVT_STC_AUTOCOMP_CHAR_DELETED);
         break;
 
+    case SCN_HOTSPOTRELEASECLICK:
+        evt.SetEventType(wxEVT_STC_HOTSPOT_RELEASE_CLICK);
+        break;
+
     default:
         return;
     }
@@ -1073,6 +1152,10 @@ wxStyledTextEvent::wxStyledTextEvent(wxEventType commandType, int id)
     m_listType = 0;
     m_x = 0;
     m_y = 0;
+    m_token = 0;
+    m_annotationLinesAdded = 0;
+    m_updated = 0;
+
 #if wxUSE_DRAG_AND_DROP
     m_dragFlags = wxDrag_CopyOnly;
     m_dragResult = wxDragNone;
@@ -1091,7 +1174,6 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
     m_key =           event.m_key;
     m_modifiers =     event.m_modifiers;
     m_modificationType = event.m_modificationType;
-    m_text =          event.m_text;
     m_length =        event.m_length;
     m_linesAdded =    event.m_linesAdded;
     m_line =          event.m_line;
@@ -1108,8 +1190,11 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
     m_x =            event.m_x;
     m_y =            event.m_y;
 
+    m_token =        event.m_token;
+    m_annotationLinesAdded = event.m_annotationLinesAdded;
+    m_updated =      event.m_updated;
+
 #if wxUSE_DRAG_AND_DROP
-    m_dragText =     event.m_dragText;
     m_dragFlags =    event.m_dragFlags;
     m_dragResult =   event.m_dragResult;
 #endif
@@ -1120,7 +1205,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
 {
-    return wxVersionInfo("Scintilla", 2, 3, 0, "Scintilla 2.03");
+    return wxVersionInfo("Scintilla", 3, 3, 9, "Scintilla 3.3.9");
 }
 
 #endif // wxUSE_STC

@@ -2,7 +2,6 @@
 // Name:        treectrl.h
 // Purpose:     interface of wxTreeItemData
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -73,73 +72,73 @@
           Begin dragging with the left mouse button.
           If you want to enable left-dragging you need to intercept this event
           and explicitly call wxTreeEvent::Allow(), as it's vetoed by default.
-          Processes a @c wxEVT_COMMAND_TREE_BEGIN_DRAG event type.
+          Processes a @c wxEVT_TREE_BEGIN_DRAG event type.
     @event{EVT_TREE_BEGIN_RDRAG(id, func)}
           Begin dragging with the right mouse button.
           If you want to enable right-dragging you need to intercept this event
           and explicitly call wxTreeEvent::Allow(), as it's vetoed by default.
-          Processes a @c wxEVT_COMMAND_TREE_BEGIN_RDRAG event type.
+          Processes a @c wxEVT_TREE_BEGIN_RDRAG event type.
     @event{EVT_TREE_END_DRAG(id, func)}
           End dragging with the left or right mouse button.
-          Processes a @c wxEVT_COMMAND_TREE_END_DRAG event type.
+          Processes a @c wxEVT_TREE_END_DRAG event type.
     @event{EVT_TREE_BEGIN_LABEL_EDIT(id, func)}
           Begin editing a label. This can be prevented by calling Veto().
-          Processes a @c wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT event type.
+          Processes a @c wxEVT_TREE_BEGIN_LABEL_EDIT event type.
     @event{EVT_TREE_END_LABEL_EDIT(id, func)}
           Finish editing a label. This can be prevented by calling Veto().
-          Processes a @c wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT event type.
+          Processes a @c wxEVT_TREE_END_LABEL_EDIT event type.
     @event{EVT_TREE_DELETE_ITEM(id, func)}
           An item was deleted.
-          Processes a @c wxEVT_COMMAND_TREE_DELETE_ITEM event type.
+          Processes a @c wxEVT_TREE_DELETE_ITEM event type.
     @event{EVT_TREE_GET_INFO(id, func)}
           Request information from the application.
-          Processes a @c wxEVT_COMMAND_TREE_GET_INFO event type.
+          Processes a @c wxEVT_TREE_GET_INFO event type.
     @event{EVT_TREE_SET_INFO(id, func)}
           Information is being supplied.
-          Processes a @c wxEVT_COMMAND_TREE_SET_INFO event type.
+          Processes a @c wxEVT_TREE_SET_INFO event type.
     @event{EVT_TREE_ITEM_ACTIVATED(id, func)}
           The item has been activated, i.e. chosen by double clicking it with
           mouse or from keyboard.
-          Processes a @c wxEVT_COMMAND_TREE_ITEM_ACTIVATED event type.
+          Processes a @c wxEVT_TREE_ITEM_ACTIVATED event type.
     @event{EVT_TREE_ITEM_COLLAPSED(id, func)}
           The item has been collapsed.
-          Processes a @c wxEVT_COMMAND_TREE_ITEM_COLLAPSED event type.
+          Processes a @c wxEVT_TREE_ITEM_COLLAPSED event type.
     @event{EVT_TREE_ITEM_COLLAPSING(id, func)}
           The item is being collapsed. This can be prevented by calling Veto().
-          Processes a @c wxEVT_COMMAND_TREE_ITEM_COLLAPSING event type.
+          Processes a @c wxEVT_TREE_ITEM_COLLAPSING event type.
     @event{EVT_TREE_ITEM_EXPANDED(id, func)}
           The item has been expanded.
-          Processes a @c wxEVT_COMMAND_TREE_ITEM_EXPANDED event type.
+          Processes a @c wxEVT_TREE_ITEM_EXPANDED event type.
     @event{EVT_TREE_ITEM_EXPANDING(id, func)}
           The item is being expanded. This can be prevented by calling Veto().
-          Processes a @c wxEVT_COMMAND_TREE_ITEM_EXPANDING event type.
+          Processes a @c wxEVT_TREE_ITEM_EXPANDING event type.
     @event{EVT_TREE_ITEM_RIGHT_CLICK(id, func)}
           The user has clicked the item with the right mouse button.
-          Processes a @c wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK event type.
+          Processes a @c wxEVT_TREE_ITEM_RIGHT_CLICK event type.
     @event{EVT_TREE_ITEM_MIDDLE_CLICK(id, func)}
           The user has clicked the item with the middle mouse button. This is
           only supported by the generic control.
-          Processes a @c wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK event type.
+          Processes a @c wxEVT_TREE_ITEM_MIDDLE_CLICK event type.
     @event{EVT_TREE_SEL_CHANGED(id, func)}
           Selection has changed.
-          Processes a @c wxEVT_COMMAND_TREE_SEL_CHANGED event type.
+          Processes a @c wxEVT_TREE_SEL_CHANGED event type.
     @event{EVT_TREE_SEL_CHANGING(id, func)}
           Selection is changing. This can be prevented by calling Veto().
-          Processes a @c wxEVT_COMMAND_TREE_SEL_CHANGING event type.
+          Processes a @c wxEVT_TREE_SEL_CHANGING event type.
     @event{EVT_TREE_KEY_DOWN(id, func)}
           A key has been pressed.
-          Processes a @c wxEVT_COMMAND_TREE_KEY_DOWN event type.
+          Processes a @c wxEVT_TREE_KEY_DOWN event type.
     @event{EVT_TREE_ITEM_GETTOOLTIP(id, func)}
           The opportunity to set the item tooltip is being given to the application
           (call wxTreeEvent::SetToolTip). Windows only.
-          Processes a @c wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP event type.
+          Processes a @c wxEVT_TREE_ITEM_GETTOOLTIP event type.
     @event{EVT_TREE_ITEM_MENU(id, func)}
           The context menu for the selected item has been requested, either by a
           right click or by using the menu key.
-          Processes a @c wxEVT_COMMAND_TREE_ITEM_MENU event type.
+          Processes a @c wxEVT_TREE_ITEM_MENU event type.
     @event{EVT_TREE_STATE_IMAGE_CLICK(id, func)}
-          The state image has been clicked. Windows only.
-          Processes a @c wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK event type.
+          The state image has been clicked.
+          Processes a @c wxEVT_TREE_STATE_IMAGE_CLICK event type.
     @endEventTable
 
 
@@ -158,7 +157,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{treectrl.png}
+    @appearance{treectrl}
 
     @see wxDataViewTreeCtrl, wxTreeEvent, wxTreeItemData, @ref overview_treectrl,
          wxListBox, wxListCtrl, wxImageList
@@ -224,7 +223,7 @@ public:
 
         The @a image and @a selImage parameters are an index within the normal
         image list specifying the image to use for unselected and selected
-        items, respectively. If @a image -1 and @a selImage is -1, the same
+        items, respectively. If @a image > -1 and @a selImage is -1, the same
         image is used for both selected and unselected items.
     */
     wxTreeItemId AppendItem(const wxTreeItemId& parent,
@@ -340,6 +339,18 @@ public:
                                   wxClassInfo* textCtrlClass = wxCLASSINFO(wxTextCtrl));
 
     /**
+        Enable or disable a beep if there is no match for the currently
+        entered text when searching for the item from keyboard.
+
+        The default is to not beep in this case except in wxMSW where the
+        beep is always generated by the native control and cannot be disabled,
+        i.e. calls to this function do nothing there.
+
+        @since 2.9.5
+    */
+    void EnableBellOnNoMatch(bool on = true);
+
+    /**
         Ends label editing. If @a cancelEdit is @true, the edit will be
         cancelled.
 
@@ -382,12 +393,6 @@ public:
         Notice that the rectangle coordinates are logical, not physical ones.
         So, for example, the x coordinate may be negative if the tree has a
         horizontal scrollbar and its position is not 0.
-
-        @beginWxPythonOnly
-        The wxPython version of this method requires only the @a item and @a
-        textOnly parameters. The return value is either a wxRect object or @c
-        None.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method only takes the @a item and
@@ -437,11 +442,6 @@ public:
 
         Returns an invalid tree item (i.e. wxTreeItemId::IsOk() returns @false)
         if there are no further children.
-
-        @beginWxPythonOnly
-        In wxPython the returned wxTreeItemId and the new cookie value are both
-        returned as a tuple containing the two values.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method only takes the @a item parameter, and
@@ -505,12 +505,6 @@ public:
 
         @see wxTreeItemData
 
-        @beginWxPythonOnly
-        wxPython provides the following shortcut method:
-        @li GetPyData(item): Returns the Python Object associated with the
-            wxTreeItemData for the given item Id.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         wxPerl provides the following shortcut method:
         - GetPlData(item): returns the Perl data
@@ -522,6 +516,11 @@ public:
 
     /**
         Returns the font of the item label.
+
+        If the font hadn't been explicitly set for the specified @a item with
+        SetItemFont(), returns an invalid ::wxNullFont font. GetFont() can be
+        used to retrieve the global tree control font used for the items
+        without any specific font.
     */
     virtual wxFont GetItemFont(const wxTreeItemId& item) const;
 
@@ -577,11 +576,6 @@ public:
         GetFirstChild() and GetNextChild() should be the same.
 
         Returns an invalid tree item if there are no further children.
-
-        @beginWxPythonOnly
-        In wxPython the returned wxTreeItemId and the new cookie value are both
-        returned as a tuple containing the two values.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method returns a 2-element list
@@ -657,11 +651,6 @@ public:
 
         Returns the number of selected items.
 
-        @beginWxPythonOnly
-        The wxPython version of this method accepts no parameters and returns a
-        Python list of @ref wxTreeItemId "wxTreeItemId"s.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         In wxPerl this method takes no parameters and returns a list of
         @c Wx::TreeItemId.
@@ -693,10 +682,6 @@ public:
         - @c wxTREE_HITTEST_TOLEFT: To the right of the client area.
         - @c wxTREE_HITTEST_TORIGHT: To the left of the client area.
 
-        @beginWxPythonOnly
-        In wxPython both the wxTreeItemId and the flags are returned as a tuple.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         In wxPerl this method only takes the @a point parameter
         and returns a 2-element list (item, flags).
@@ -722,20 +707,16 @@ public:
 
     /**
         Inserts an item before one identified
-        by its position (@a before). @a before must be less than the number of
-        children.
+        by its position (@a pos). @a pos must be less than or equal to
+        the number of children.
 
         The @a image and @a selImage parameters are an index within the normal
         image list specifying the image to use for unselected and selected
         items, respectively. If @a image -1 and @a selImage is -1, the same
         image is used for both selected and unselected items.
-
-        @beginWxPythonOnly
-        In wxPython, this form of this method is called @c InsertItemBefore().
-        @endWxPythonOnly
     */
     wxTreeItemId InsertItem(const wxTreeItemId& parent,
-                            size_t before,
+                            size_t pos,
                             const wxString& text,
                             int image = -1,
                             int selImage = -1,
@@ -749,7 +730,7 @@ public:
     virtual bool IsBold(const wxTreeItemId& item) const;
 
     /**
-        Returns @true if the control is empty (i.e. has no items, even no root
+        Returns @true if the control is empty (i.e.\ has no items, even no root
         one).
     */
     bool IsEmpty() const;
@@ -818,7 +799,7 @@ public:
         currently selected item if the value of @a select is @false.
 
         Notice that calling this method will generate
-        @c wxEVT_COMMAND_TREE_SEL_CHANGING and @c wxEVT_COMMAND_TREE_SEL_CHANGED
+        @c wxEVT_TREE_SEL_CHANGING and @c wxEVT_TREE_SEL_CHANGED
         events and that the change could be vetoed by the former event handler.
     */
     virtual void SelectItem(const wxTreeItemId& item, bool select = true);
@@ -874,11 +855,6 @@ public:
         any) is @em not freed by this function and so calling this function
         multiple times for the same item will result in memory leaks unless you
         delete the old item data pointer yourself.
-
-        @beginWxPythonOnly
-        - @b SetPyData( @a item, @c obj): Associate the given Python Object with
-            the wxTreeItemData for the given item Id.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         wxPerl provides the following shortcut method:
@@ -1083,7 +1059,7 @@ public:
         The state image has been clicked.
     @endEventTable
 
-    @library{wxbase}
+    @library{wxcore}
     @category{events}
 
     @see wxTreeCtrl
@@ -1146,3 +1122,27 @@ public:
     */
     void SetToolTip(const wxString& tooltip);
 };
+
+
+wxEventType wxEVT_TREE_BEGIN_DRAG;
+wxEventType wxEVT_TREE_BEGIN_RDRAG;
+wxEventType wxEVT_TREE_BEGIN_LABEL_EDIT;
+wxEventType wxEVT_TREE_END_LABEL_EDIT;
+wxEventType wxEVT_TREE_DELETE_ITEM;
+wxEventType wxEVT_TREE_GET_INFO;
+wxEventType wxEVT_TREE_SET_INFO;
+wxEventType wxEVT_TREE_ITEM_EXPANDED;
+wxEventType wxEVT_TREE_ITEM_EXPANDING;
+wxEventType wxEVT_TREE_ITEM_COLLAPSED;
+wxEventType wxEVT_TREE_ITEM_COLLAPSING;
+wxEventType wxEVT_TREE_SEL_CHANGED;
+wxEventType wxEVT_TREE_SEL_CHANGING;
+wxEventType wxEVT_TREE_KEY_DOWN;
+wxEventType wxEVT_TREE_ITEM_ACTIVATED;
+wxEventType wxEVT_TREE_ITEM_RIGHT_CLICK;
+wxEventType wxEVT_TREE_ITEM_MIDDLE_CLICK;
+wxEventType wxEVT_TREE_END_DRAG;
+wxEventType wxEVT_TREE_STATE_IMAGE_CLICK;
+wxEventType wxEVT_TREE_ITEM_GETTOOLTIP;
+wxEventType wxEVT_TREE_ITEM_MENU;
+

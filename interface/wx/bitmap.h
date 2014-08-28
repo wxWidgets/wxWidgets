@@ -2,7 +2,6 @@
 // Name:        bitmap.h
 // Purpose:     interface of wxBitmap* classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -92,6 +91,12 @@ public:
         Loads a bitmap from a file or resource, putting the resulting data into
         @a bitmap.
 
+        @note Under MSW, when loading a bitmap from resources (i.e. using @c
+            wxBITMAP_TYPE_BMP_RESOURCE as @a type), the light grey colour is
+            considered to be transparent, for historical reasons. If you want
+            to handle the light grey pixels normally instead, call
+            SetMask(NULL) after loading the bitmap.
+
         @param bitmap
             The bitmap object which is to be affected by this operation.
         @param name
@@ -165,7 +170,7 @@ public:
     If you need direct access the bitmap data instead going through
     drawing to it using wxMemoryDC you need to use the wxPixelData
     class (either wxNativePixelData for RGB bitmaps or wxAlphaPixelData
-    for bitmaps with an additionaly alpha channel).
+    for bitmaps with an additionally alpha channel).
 
     Note that many wxBitmap functions take a @e type parameter, which is a 
     value of the ::wxBitmapType enumeration.
@@ -173,7 +178,7 @@ public:
     is running and from the wxWidgets configuration.
     If all possible wxWidgets settings are used:
     - wxMSW supports BMP and ICO files, BMP and ICO resources;
-    - wxGTK supports XPM files;
+    - wxGTK supports any file supported by gdk-pixbuf;
     - wxMac supports PICT resources;
     - wxX11 supports XPM files, XPM data, XBM data;
 
@@ -182,6 +187,17 @@ public:
     (see ::wxInitAllImageHandlers() and wxImage::AddHandler).
     Note that all available wxBitmapHandlers for a given wxWidgets port are 
     automatically loaded at startup so you won't need to use wxBitmap::AddHandler.
+
+    More on the difference between wxImage and wxBitmap: wxImage is just a
+    buffer of RGB bytes with an optional buffer for the alpha bytes. It is all
+    generic, platform independent and image file format independent code. It
+    includes generic code for scaling, resizing, clipping, and other manipulations
+    of the image data. OTOH, wxBitmap is intended to be a wrapper of whatever is
+    the native image format that is quickest/easiest to draw to a DC or to be the
+    target of the drawing operations performed on a wxMemoryDC. By splitting the
+    responsibilities between wxImage/wxBitmap like this then it's easier to use
+    generic code shared by all platforms and image types for generic operations and
+    platform specific code where performance or compatibility is needed.
 
     @library{wxcore}
     @category{gdi}
@@ -317,11 +333,6 @@ public:
         The resulting bitmap will use the provided colour depth (or that of the
         current system if depth is ::wxBITMAP_SCREEN_DEPTH) which entails that a
         colour reduction may take place.
-
-        When in 8-bit mode (PseudoColour mode), the GTK port will use a color cube
-        created on program start-up to look up colors. This ensures a very fast conversion,
-        but the image quality won't be perfect (and could be better for photo images using
-        more sophisticated dithering algorithms).
 
         On Windows, if there is a palette present (set with SetPalette), it will be
         used when creating the wxBitmap (most useful in 8-bit display mode).
@@ -574,6 +585,31 @@ public:
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
 
     /**
+        Loads a bitmap from the memory containing image data in PNG format.
+
+        This helper function provides the simplest way to create a wxBitmap
+        from PNG image data. On most platforms, it's simply a wrapper around
+        wxImage loading functions and so requires the PNG image handler to be
+        registered by either calling wxInitAllImageHandlers() which also
+        registers all the other image formats or including the necessary
+        header:
+        @code
+            #include <wx/imagpng.h>
+        @endcode
+        and calling
+        @code
+            wxImage::AddHandler(new wxPNGHandler);
+        @endcode
+        in your application startup code.
+
+        However under OS X this function uses native image loading and so
+        doesn't require wxWidgets PNG support.
+
+        @since 2.9.5
+     */
+    static wxBitmap NewFromPNGData(const void* data, size_t size);
+
+    /**
         Finds the handler with the given name, and removes it.
         The handler is not deleted.
 
@@ -688,7 +724,7 @@ public:
     /**
         Constructs a mask from a bitmap and a palette index that indicates the
         background.
-        Not yet implemented for GTK.
+        Not implemented for GTK.
 
         @param bitmap
             A valid bitmap.
@@ -699,19 +735,11 @@ public:
 
     /**
         Constructs a mask from a monochrome bitmap.
-
-        @beginWxPythonOnly
-        This is the default constructor for wxMask in wxPython.
-        @endWxPythonOnly
     */
     wxMask(const wxBitmap& bitmap);
 
     /**
         Constructs a mask from a bitmap and a colour that indicates the background.
-
-        @beginWxPythonOnly
-        wxPython has an alternate wxMask constructor matching this form called wxMaskColour.
-        @endWxPythonOnly
     */
     wxMask(const wxBitmap& bitmap, const wxColour& colour);
 
@@ -723,7 +751,7 @@ public:
     /**
         Constructs a mask from a bitmap and a palette index that indicates the
         background.
-        Not yet implemented for GTK.
+        Not implemented for GTK.
 
         @param bitmap
             A valid bitmap.
@@ -741,5 +769,13 @@ public:
         Constructs a mask from a bitmap and a colour that indicates the background.
     */
     bool Create(const wxBitmap& bitmap, const wxColour& colour);
+
+    /**
+        Returns the mask as a monochrome bitmap.
+        Currently this method is implemented in wxMSW, wxGTK and wxOSX.
+
+        @since 2.9.5
+    */
+    wxBitmap GetBitmap() const;
 };
 

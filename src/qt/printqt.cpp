@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/printqt.cpp
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -11,21 +10,21 @@
 
 #include "wx/print.h"
 
-wxQtPrinter::wxQtPrinter( wxPrintDialogData *data)
+wxQtPrinter::wxQtPrinter( wxPrintDialogData *WXUNUSED(data))
 {
 }
 
-bool wxQtPrinter::Setup(wxWindow *parent)
-{
-    return false;
-}
-
-bool wxQtPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
+bool wxQtPrinter::Setup(wxWindow *WXUNUSED(parent))
 {
     return false;
 }
 
-wxDC* wxQtPrinter::PrintDialog(wxWindow *parent)
+bool wxQtPrinter::Print(wxWindow *WXUNUSED(parent), wxPrintout *WXUNUSED(printout), bool WXUNUSED(prompt))
+{
+    return false;
+}
+
+wxDC* wxQtPrinter::PrintDialog(wxWindow *WXUNUSED(parent))
 {
     return NULL;
 }
@@ -46,7 +45,7 @@ wxQtPrintPreview::wxQtPrintPreview(wxPrintout *printout,
 {
 }
 
-bool wxQtPrintPreview::Print(bool interactive)
+bool wxQtPrintPreview::Print(bool WXUNUSED(interactive))
 {
     return false;
 }

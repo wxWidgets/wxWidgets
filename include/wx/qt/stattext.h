@@ -1,16 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/stattext.h
-// Author:      Peter Most
-// Id:          $Id$
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_STATTEXT_H_
 #define _WX_QT_STATTEXT_H_
 
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QLabel>
+#include <QtWidgets/QLabel>
 
 class WXDLLIMPEXP_CORE wxStaticText : public wxStaticTextBase
 {
@@ -32,11 +30,13 @@ public:
                 long style = 0,
                 const wxString &name = wxStaticTextNameStr );
 
+    void SetLabel(const wxString& label);
+
     QLabel *GetHandle() const;
 private:
-    wxQtPointer< QLabel > m_qtLabel;
+    QLabel *m_qtLabel;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxStaticText );
+    wxDECLARE_DYNAMIC_CLASS( wxStaticText );
 };
 
 #endif // _WX_QT_STATTEXT_H_

@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     19.02.1998
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -50,7 +49,7 @@ inline bool wxOleInitialize()
     // needs non-default mode.
     if ( hr != RPC_E_CHANGED_MODE && FAILED(hr) )
     {
-        wxLogError(_("Cannot initialize OLE"));
+        wxLogError(wxGetTranslation("Cannot initialize OLE"));
 
         return false;
     }
@@ -82,7 +81,7 @@ inline void ReleaseInterface(IUnknown *pIUnk)
 #define   RELEASE_AND_NULL(p)   if ( (p) != NULL ) { p->Release(); p = NULL; };
 
 // return true if the iid is in the array
-extern bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
+extern WXDLLIMPEXP_CORE bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
 
 // ============================================================================
 // IUnknown implementation helpers
@@ -140,9 +139,10 @@ private:
     wxAutoULong           m_cRef
 
 // macros for declaring supported interfaces
-// NB: you should write ADD_INTERFACE(Foo) and not ADD_INTERFACE(IID_IFoo)!
+// NB: ADD_IID prepends IID_I whereas ADD_RAW_IID does not
 #define BEGIN_IID_TABLE(cname)  const IID *cname::ms_aIids[] = {
 #define ADD_IID(iid)                                             &IID_I##iid,
+#define ADD_RAW_IID(iid)                                         &iid,
 #define END_IID_TABLE                                          }
 
 // implementation is as straightforward as possible
@@ -191,17 +191,17 @@ private:
 // VZ: I don't know it's not done for compilers other than VC++ but I leave it
 //     as is. Please note, though, that tracing OLE interface calls may be
 //     incredibly useful when debugging OLE programs.
-#if defined(__WXDEBUG__) && ( ( defined(__VISUALC__) && (__VISUALC__ >= 1000) ) || defined(__MWERKS__) )
+#if defined(__WXDEBUG__) && defined(__VISUALC__)
 // ----------------------------------------------------------------------------
 // All OLE specific log functions have DebugTrace level (as LogTrace)
 // ----------------------------------------------------------------------------
 
 // tries to translate riid into a symbolic name, if possible
-void wxLogQueryInterface(const wxChar *szInterface, REFIID riid);
+WXDLLIMPEXP_CORE void wxLogQueryInterface(const wxChar *szInterface, REFIID riid);
 
 // these functions print out the new value of reference counter
-void wxLogAddRef (const wxChar *szInterface, ULONG cRef);
-void wxLogRelease(const wxChar *szInterface, ULONG cRef);
+WXDLLIMPEXP_CORE void wxLogAddRef (const wxChar *szInterface, ULONG cRef);
+WXDLLIMPEXP_CORE void wxLogRelease(const wxChar *szInterface, ULONG cRef);
 
 #else   //!__WXDEBUG__
   #define   wxLogQueryInterface(szInterface, riid)
@@ -236,8 +236,105 @@ private:
 // Convert variants
 class WXDLLIMPEXP_FWD_BASE wxVariant;
 
-WXDLLIMPEXP_CORE bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant);
-WXDLLIMPEXP_CORE bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant);
+// wrapper for CURRENCY type used in VARIANT (VARIANT.vt == VT_CY)
+class WXDLLIMPEXP_CORE wxVariantDataCurrency : public wxVariantData
+{
+public:
+    wxVariantDataCurrency() { VarCyFromR8(0.0, &m_value); }
+    wxVariantDataCurrency(CURRENCY value) { m_value = value; }
+
+    CURRENCY GetValue() const { return m_value; }
+    void SetValue(CURRENCY value) { m_value = value; }
+
+    virtual bool Eq(wxVariantData& data) const;
+
+#if wxUSE_STD_IOSTREAM
+    virtual bool Write(wxSTD ostream& str) const;
+#endif
+    virtual bool Write(wxString& str) const;
+
+    wxVariantData* Clone() const { return new wxVariantDataCurrency(m_value); }
+    virtual wxString GetType() const { return wxS("currency"); }
+
+    DECLARE_WXANY_CONVERSION()
+
+private:
+    CURRENCY m_value;
+};
+
+
+// wrapper for SCODE type used in VARIANT (VARIANT.vt == VT_ERROR)
+class WXDLLIMPEXP_CORE wxVariantDataErrorCode : public wxVariantData
+{
+public:
+    wxVariantDataErrorCode(SCODE value = S_OK) { m_value = value; }
+
+    SCODE GetValue() const { return m_value; }
+    void SetValue(SCODE value) { m_value = value; }
+
+    virtual bool Eq(wxVariantData& data) const;
+
+#if wxUSE_STD_IOSTREAM
+    virtual bool Write(wxSTD ostream& str) const;
+#endif
+    virtual bool Write(wxString& str) const;
+
+    wxVariantData* Clone() const { return new wxVariantDataErrorCode(m_value); }
+    virtual wxString GetType() const { return wxS("errorcode"); }
+
+    DECLARE_WXANY_CONVERSION()
+
+private:
+    SCODE m_value;
+};
+
+// wrapper for SAFEARRAY, used for passing multidimensional arrays in wxVariant
+class WXDLLIMPEXP_CORE wxVariantDataSafeArray : public wxVariantData
+{
+public:
+    wxEXPLICIT wxVariantDataSafeArray(SAFEARRAY* value = NULL)
+    {
+        m_value = value;
+    }
+
+    SAFEARRAY* GetValue() const { return m_value; }
+    void SetValue(SAFEARRAY* value) { m_value = value; }
+
+    virtual bool Eq(wxVariantData& data) const;
+
+#if wxUSE_STD_IOSTREAM
+    virtual bool Write(wxSTD ostream& str) const;
+#endif
+    virtual bool Write(wxString& str) const;
+
+    wxVariantData* Clone() const { return new wxVariantDataSafeArray(m_value); }
+    virtual wxString GetType() const { return wxS("safearray"); }
+
+    DECLARE_WXANY_CONVERSION()
+
+private:
+    SAFEARRAY* m_value;
+};
+
+// Used by wxAutomationObject for its wxConvertOleToVariant() calls.
+enum wxOleConvertVariantFlags
+{
+    wxOleConvertVariant_Default = 0,
+
+    // If wxOleConvertVariant_ReturnSafeArrays  flag is set, SAFEARRAYs
+    // contained in OLE VARIANTs will be returned as wxVariants
+    // with wxVariantDataSafeArray type instead of wxVariants
+    // with the list type containing the (flattened) SAFEARRAY's elements.
+    wxOleConvertVariant_ReturnSafeArrays = 1
+};
+
+WXDLLIMPEXP_CORE
+bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant);
+
+WXDLLIMPEXP_CORE
+bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant,
+                           long flags = wxOleConvertVariant_Default);
+
 #endif // wxUSE_VARIANT
 
 // Convert string to Unicode

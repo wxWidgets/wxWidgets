@@ -4,7 +4,6 @@
 // Purpose:     part of the widgets sample showing wxTextCtrl
 // Author:      Vadim Zeitlin
 // Created:     27.03.01
-// Id:          $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -139,12 +138,12 @@ public:
     TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~TextWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const { return m_text; }
-    virtual wxTextEntryBase *GetTextEntry() const { return m_text; }
-    virtual void RecreateWidget() { CreateText(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_text; }
+    virtual wxTextEntryBase *GetTextEntry() const wxOVERRIDE { return m_text; }
+    virtual void RecreateWidget() wxOVERRIDE { CreateText(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
     // create an info text contorl
@@ -171,6 +170,7 @@ protected:
 
     void OnText(wxCommandEvent& event);
     void OnTextEnter(wxCommandEvent& event);
+    void OnTextPasted(wxClipboardTextEvent& event);
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
 
@@ -239,7 +239,7 @@ protected:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(TextWidgetsPage)
 };
 
@@ -297,14 +297,14 @@ protected:
     }
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(TextWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(TextWidgetsPage, WidgetsPage)
     EVT_IDLE(TextWidgetsPage::OnIdle)
 
     EVT_BUTTON(TextPage_Reset, TextWidgetsPage::OnButtonReset)
@@ -326,14 +326,15 @@ BEGIN_EVENT_TABLE(TextWidgetsPage, WidgetsPage)
 
     EVT_TEXT(TextPage_Textctrl, TextWidgetsPage::OnText)
     EVT_TEXT_ENTER(TextPage_Textctrl, TextWidgetsPage::OnTextEnter)
+    EVT_TEXT_PASTE(TextPage_Textctrl, TextWidgetsPage::OnTextPasted)
 
     EVT_CHECKBOX(wxID_ANY, TextWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, TextWidgetsPage::OnCheckOrRadioBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(WidgetsTextCtrl, wxTextCtrl)
+wxBEGIN_EVENT_TABLE(WidgetsTextCtrl, wxTextCtrl)
     EVT_RIGHT_UP(WidgetsTextCtrl::OnRightClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
@@ -918,6 +919,12 @@ void TextWidgetsPage::OnText(wxCommandEvent& WXUNUSED(event))
 void TextWidgetsPage::OnTextEnter(wxCommandEvent& event)
 {
     wxLogMessage(wxT("Text entered: '%s'"), event.GetString().c_str());
+    event.Skip();
+}
+
+void TextWidgetsPage::OnTextPasted(wxClipboardTextEvent& event)
+{
+    wxLogMessage("Text pasted from clipboard.");
     event.Skip();
 }
 

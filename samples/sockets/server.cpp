@@ -3,7 +3,6 @@
 // Purpose:     Server for wxSocket demo
 // Author:      Guillermo Rodriguez Garcia <guille@iies.es>
 // Created:     1999/09/19
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Guillermo Rodriguez Garcia
 //              (c) 2009 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -45,7 +44,7 @@
 // --------------------------------------------------------------------------
 
 // the application icon
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -57,7 +56,7 @@
 class MyApp : public wxApp
 {
 public:
-  virtual bool OnInit();
+  virtual bool OnInit() wxOVERRIDE;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -91,7 +90,7 @@ private:
   int             m_numClients;
 
   // any class wishing to process wxWidgets events must use this macro
-  DECLARE_EVENT_TABLE()
+  wxDECLARE_EVENT_TABLE();
 };
 
 // simple helper class to log start and end of each test
@@ -134,14 +133,14 @@ enum
 // event tables and other macros for wxWidgets
 // --------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(SERVER_QUIT,  MyFrame::OnQuit)
   EVT_MENU(SERVER_ABOUT, MyFrame::OnAbout)
   EVT_MENU(SERVER_UDPTEST, MyFrame::OnUDPTest)
   EVT_MENU(SERVER_WAITFORACCEPT, MyFrame::OnWaitForAccept)
   EVT_SOCKET(SERVER_ID,  MyFrame::OnServerEvent)
   EVT_SOCKET(SOCKET_ID,  MyFrame::OnSocketEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
 
@@ -187,7 +186,7 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
   m_menuFile->Append(SERVER_WAITFORACCEPT, "&Wait for connection\tCtrl-W");
   m_menuFile->Append(SERVER_UDPTEST, "&UDP test\tCtrl-U");
   m_menuFile->AppendSeparator();
-  m_menuFile->Append(SERVER_ABOUT, _("&About...\tCtrl-A"), _("Show about dialog"));
+  m_menuFile->Append(SERVER_ABOUT, _("&About\tCtrl-A"), _("Show about dialog"));
   m_menuFile->AppendSeparator();
   m_menuFile->Append(SERVER_QUIT, _("E&xit\tAlt-X"), _("Quit server"));
 

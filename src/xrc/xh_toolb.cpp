@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for wxToolBar
 // Author:      Vaclav Slavik
 // Created:     2000/08/11
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -25,6 +24,8 @@
     #include "wx/menu.h"
     #include "wx/toolbar.h"
 #endif
+
+#include "wx/xml/xml.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarXmlHandler, wxXmlResourceHandler)
 
@@ -78,6 +79,7 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
 
             kind = wxITEM_CHECK;
         }
+
 #if wxUSE_MENUS
         // check whether we have dropdown tag inside
         wxMenu *menu = NULL; // menu for drop down items
@@ -136,7 +138,24 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
                        );
 
         if ( GetBool(wxT("disabled")) )
-            m_toolbar->EnableTool(GetID(), false);
+            m_toolbar->EnableTool(tool->GetId(), false);
+
+        if ( GetBool(wxS("checked")) )
+        {
+            if ( kind == wxITEM_NORMAL )
+            {
+                ReportParamError
+                (
+                    "checked",
+                    "only <radio> nor <toggle> tools can be checked"
+                );
+            }
+            else
+            {
+                m_toolbar->ToggleTool(tool->GetId(), true);
+            }
+        }
+
 #if wxUSE_MENUS
         if ( menu )
             tool->SetDropdownMenu(menu);
@@ -221,14 +240,14 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
         m_isInside = false;
         m_toolbar = NULL;
 
-        toolbar->Realize();
-
         if (m_parentAsWindow && !GetBool(wxT("dontattachtoframe")))
         {
             wxFrame *parentFrame = wxDynamicCast(m_parent, wxFrame);
             if (parentFrame)
                 parentFrame->SetToolBar(toolbar);
         }
+
+        toolbar->Realize();
 
         return toolbar;
     }

@@ -3,7 +3,6 @@
 // Purpose:     wxCheckListBox unit test
 // Author:      Steven Lamerton
 // Created:     2010-06-30
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -65,11 +64,9 @@ void CheckListBoxTestCase::tearDown()
 
 void CheckListBoxTestCase::Check()
 {
-   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
+    EventCounter toggled(m_check, wxEVT_CHECKLISTBOX);
 
-    EventCounter count(m_check, wxEVT_COMMAND_CHECKLISTBOX_TOGGLED);
-
+    wxArrayInt checkedItems;
     wxArrayString testitems;
     testitems.Add("item 0");
     testitems.Add("item 1");
@@ -83,9 +80,12 @@ void CheckListBoxTestCase::Check()
     m_check->Check(1, false);
 
     //We should not get any events when changing this from code
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(0, toggled.GetCount());
     CPPUNIT_ASSERT_EQUAL(true, m_check->IsChecked(0));
     CPPUNIT_ASSERT_EQUAL(false, m_check->IsChecked(1));
+
+    CPPUNIT_ASSERT_EQUAL(1, m_check->GetCheckedItems(checkedItems));
+    CPPUNIT_ASSERT_EQUAL(0, checkedItems[0]);
 
     //Make sure a double check of an items doesn't deselect it
     m_check->Check(0);

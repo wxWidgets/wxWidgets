@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -202,103 +201,7 @@ int wxEntry(int& argc, wxChar **argv)
 
 #endif // wxUSE_BASE
 
-#if wxUSE_GUI && defined(__WXMSW__)
-
-namespace
-{
-
-#if wxUSE_UNICODE && !defined(__WXWINCE__)
-    #define NEED_UNICODE_CHECK
-#endif
-
-#ifdef NEED_UNICODE_CHECK
-
-// check whether Unicode is available
-bool wxIsUnicodeAvailable()
-{
-    static const wchar_t *ERROR_STRING = L"wxWidgets Fatal Error";
-
-    if ( wxGetOsVersion() != wxOS_WINDOWS_NT )
-    {
-        // we need to be built with MSLU support
-#if !wxUSE_UNICODE_MSLU
-        // note that we can use MessageBoxW() as it's implemented even under
-        // Win9x - OTOH, we can't use wxGetTranslation() because the file APIs
-        // used by wxLocale are not
-        ::MessageBox
-        (
-         NULL,
-         L"This program uses Unicode and requires Windows NT/2000/XP.\n"
-         L"\n"
-         L"Program aborted.",
-         ERROR_STRING,
-         MB_ICONERROR | MB_OK
-        );
-
-        return false;
-#else // wxUSE_UNICODE_MSLU
-        // and the MSLU DLL must also be available
-        HMODULE hmod = ::LoadLibraryA("unicows.dll");
-        if ( !hmod )
-        {
-            ::MessageBox
-            (
-             NULL,
-             L"This program uses Unicode and requires unicows.dll to work "
-             L"under current operating system.\n"
-             L"\n"
-             L"Please install unicows.dll and relaunch the program.",
-             ERROR_STRING,
-             MB_ICONERROR | MB_OK
-            );
-            return false;
-        }
-
-        // this is not really necessary but be tidy
-        ::FreeLibrary(hmod);
-
-        // finally do the last check: has unicows.lib initialized correctly?
-        hmod = ::LoadLibraryW(L"unicows.dll");
-        if ( !hmod )
-        {
-            ::MessageBox
-            (
-             NULL,
-             L"This program uses Unicode but is not using unicows.dll\n"
-             L"correctly and so cannot work under current operating system.\n"
-             L"Please contact the program author for an updated version.\n"
-             L"\n"
-             L"Program aborted.",
-             ERROR_STRING,
-             MB_ICONERROR | MB_OK
-            );
-
-            return false;
-        }
-
-        ::FreeLibrary(hmod);
-#endif // !wxUSE_UNICODE_MSLU
-    }
-
-    return true;
-}
-
-#endif // NEED_UNICODE_CHECK
-
-void wxSetProcessDPIAware()
-{
-#if wxUSE_DYNLIB_CLASS
-    typedef BOOL (WINAPI *SetProcessDPIAware_t)(void);
-    wxDynamicLibrary dllUser32(wxT("user32.dll"));
-    SetProcessDPIAware_t pfnSetProcessDPIAware =
-        (SetProcessDPIAware_t)dllUser32.RawGetSymbol(wxT("SetProcessDPIAware"));
-
-    if ( pfnSetProcessDPIAware )
-        pfnSetProcessDPIAware();
-#endif // wxUSE_DYNLIB_CLASS
-}
-
-} //anonymous namespace
+#if wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // Windows-specific wxEntry
@@ -316,7 +219,7 @@ struct wxMSWCommandLineArguments
         argv = new wxChar *[argc + 1];
         for ( int i = 0; i < argc; i++ )
         {
-            argv[i] = wxStrdup(args[i].wx_str());
+            argv[i] = wxStrdup(args[i].t_str());
         }
 
         // argv[] must be NULL-terminated
@@ -347,18 +250,11 @@ static wxMSWCommandLineArguments wxArgs;
 static bool
 wxMSWEntryCommon(HINSTANCE hInstance, int nCmdShow)
 {
-    // the first thing to do is to check if we're trying to run an Unicode
-    // program under Win9x w/o MSLU emulation layer - if so, abort right now
-    // as it has no chance to work and has all chances to crash
-#ifdef NEED_UNICODE_CHECK
-    if ( !wxIsUnicodeAvailable() )
-        return false;
-#endif // NEED_UNICODE_CHECK
-
-
     // remember the parameters Windows gave us
     wxSetInstance(hInstance);
+#ifdef __WXMSW__
     wxApp::m_nCmdShow = nCmdShow;
+#endif
 
     // parse the command line: we can't use pCmdLine in Unicode build so it is
     // simpler to never use it at all (this also results in a more correct
@@ -399,13 +295,6 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
                         wxCmdLineArgType WXUNUSED(pCmdLine),
                         int nCmdShow)
 {
-    // wxWidgets library doesn't have problems with non-default DPI settings,
-    // so we can mark the app as "DPI aware" for Vista/Win7 (see
-    // http://msdn.microsoft.com/en-us/library/dd464659%28VS.85%29.aspx).
-    // Note that we intentionally do it here and not in wxApp, so that it
-    // doesn't happen if wx code is hosted in another app (e.g. a plugin).
-    wxSetProcessDPIAware();
-
     if ( !wxMSWEntryCommon(hInstance, nCmdShow) )
         return -1;
 
@@ -414,7 +303,7 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
     return wxEntry(wxArgs.argc, wxArgs.argv);
 }
 
-#endif // wxUSE_GUI && __WXMSW__
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // global HINSTANCE

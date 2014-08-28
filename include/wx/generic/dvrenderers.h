@@ -3,7 +3,6 @@
 // Purpose:     All generic wxDataViewCtrl renderer classes
 // Author:      Robert Roebling, Vadim Zeitlin
 // Created:     2009-11-07 (extracted from wx/generic/dataview.h)
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Robert Roebling
 //              (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -26,21 +25,13 @@ public:
 
     // see the explanation of the following WXOnXXX() methods in wx/generic/dvrenderer.h
 
-    virtual bool WXOnActivate(const wxRect& cell,
-                              wxDataViewModel *model,
-                              const wxDataViewItem& item,
-                              unsigned int col)
+    virtual bool WXActivateCell(const wxRect& cell,
+                                wxDataViewModel *model,
+                                const wxDataViewItem& item,
+                                unsigned int col,
+                                const wxMouseEvent *mouseEvent)
     {
-        return Activate(cell, model, item, col);
-    }
-
-    virtual bool WXOnLeftClick(const wxPoint& cursor,
-                               const wxRect& cell,
-                               wxDataViewModel *model,
-                               const wxDataViewItem &item,
-                               unsigned int col)
-    {
-        return LeftClick(cursor, cell, model, item, col);
+        return ActivateCell(cell, model, item, col, mouseEvent);
     }
 
 private:
@@ -59,8 +50,8 @@ public:
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                             int align = wxDVR_DEFAULT_ALIGNMENT );
 
-    bool SetValue( const wxVariant &value );
-    bool GetValue( wxVariant &value ) const;
+    virtual bool SetValue( const wxVariant &value );
+    virtual bool GetValue( wxVariant &value ) const;
 
     virtual bool Render(wxRect cell, wxDC *dc, int state);
     virtual wxSize GetSize() const;
@@ -89,11 +80,11 @@ public:
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                               int align = wxDVR_DEFAULT_ALIGNMENT );
 
-    bool SetValue( const wxVariant &value );
-    bool GetValue( wxVariant &value ) const;
+    virtual bool SetValue( const wxVariant &value );
+    virtual bool GetValue( wxVariant &value ) const;
 
-    bool Render( wxRect cell, wxDC *dc, int state );
-    wxSize GetSize() const;
+    virtual bool Render( wxRect cell, wxDC *dc, int state );
+    virtual wxSize GetSize() const;
 
 private:
     wxIcon m_icon;
@@ -114,18 +105,18 @@ public:
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                               int align = wxDVR_DEFAULT_ALIGNMENT );
 
-    bool SetValue( const wxVariant &value );
-    bool GetValue( wxVariant &value ) const;
+    virtual bool SetValue( const wxVariant &value );
+    virtual bool GetValue( wxVariant &value ) const;
 
-    bool Render( wxRect cell, wxDC *dc, int state );
-    wxSize GetSize() const;
+    virtual bool Render( wxRect cell, wxDC *dc, int state );
+    virtual wxSize GetSize() const;
 
     // Implementation only, don't use nor override
-    virtual bool WXOnLeftClick(const wxPoint& cursor,
-                               const wxRect& cell,
-                               wxDataViewModel *model,
-                               const wxDataViewItem& item,
-                               unsigned int col);
+    virtual bool WXActivateCell(const wxRect& cell,
+                                wxDataViewModel *model,
+                                const wxDataViewItem& item,
+                                unsigned int col,
+                                const wxMouseEvent *mouseEvent);
 private:
     bool    m_toggle;
 
@@ -145,8 +136,8 @@ public:
                                 wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                 int align = wxDVR_DEFAULT_ALIGNMENT );
 
-    bool SetValue( const wxVariant &value );
-    bool GetValue( wxVariant& value ) const;
+    virtual bool SetValue( const wxVariant &value );
+    virtual bool GetValue( wxVariant& value ) const;
 
     virtual bool Render(wxRect cell, wxDC *dc, int state);
     virtual wxSize GetSize() const;
@@ -170,8 +161,8 @@ public:
                                 wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                 int align = wxDVR_DEFAULT_ALIGNMENT );
 
-    bool SetValue( const wxVariant &value );
-    bool GetValue( wxVariant &value ) const;
+    virtual bool SetValue( const wxVariant &value );
+    virtual bool GetValue( wxVariant &value ) const;
 
     virtual bool Render(wxRect cell, wxDC *dc, int state);
     virtual wxSize GetSize() const;
@@ -187,37 +178,6 @@ private:
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewIconTextRenderer)
 };
-
-// ---------------------------------------------------------
-// wxDataViewDateRenderer
-// ---------------------------------------------------------
-
-class WXDLLIMPEXP_ADV wxDataViewDateRenderer: public wxDataViewRenderer
-{
-public:
-    wxDataViewDateRenderer( const wxString &varianttype = wxT("datetime"),
-                            wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
-                            int align = wxDVR_DEFAULT_ALIGNMENT );
-
-    bool SetValue( const wxVariant &value );
-    bool GetValue( wxVariant& value ) const;
-
-    virtual bool Render( wxRect cell, wxDC *dc, int state );
-    virtual wxSize GetSize() const;
-
-    // Implementation only, don't use nor override
-    virtual bool WXOnActivate(const wxRect& cell,
-                              wxDataViewModel *model,
-                              const wxDataViewItem& item,
-                              unsigned int col);
-
-private:
-    wxDateTime    m_date;
-
-protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewDateRenderer)
-};
-
 
 #endif // _WX_GENERIC_DVRENDERERS_H_
 

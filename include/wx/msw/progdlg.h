@@ -3,7 +3,6 @@
 // Purpose:     wxProgressDialog
 // Author:      Rickard Westerlund
 // Created:     2010-07-22
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -46,6 +45,8 @@ public:
 
     // Must provide overload to avoid hiding it (and warnings about it)
     virtual void Update() { wxGenericProgressDialog::Update(); }
+
+    virtual WXWidget GetHandle() const;
 
 private:
     // Performs common routines to Update() and Pulse(). Requires the

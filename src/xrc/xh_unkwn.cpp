@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for unknown widget
 // Author:      Vaclav Slavik
 // Created:     2000/09/09
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -46,8 +45,8 @@ public:
         SetBackgroundColour(wxColour(255, 0, 255));
     }
 
-    virtual void AddChild(wxWindowBase *child);
-    virtual void RemoveChild(wxWindowBase *child);
+    virtual void AddChild(wxWindowBase *child) wxOVERRIDE;
+    virtual void RemoveChild(wxWindowBase *child) wxOVERRIDE;
 
 protected:
     wxString m_controlName;

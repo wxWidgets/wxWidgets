@@ -2,7 +2,6 @@
 // Name:        font.h
 // Purpose:     interface of wxFont
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -36,9 +35,10 @@ enum wxFontFamily
     /// See also wxFont::IsFixedWidth() for an easy way to test for monospace property.
     wxFONTFAMILY_TELETYPE = wxTELETYPE,
 
+    wxFONTFAMILY_MAX,
     /// Invalid font family value, returned by wxFont::GetFamily() when the
     /// font is invalid for example.
-    wxFONTFAMILY_UNKNOWN
+    wxFONTFAMILY_UNKNOWN = wxFONTFAMILY_MAX
 };
 
 /**
@@ -111,8 +111,10 @@ enum wxFontFlag
     wxFONTFLAG_ANTIALIASED      = 1 << 4,
     wxFONTFLAG_NOT_ANTIALIASED  = 1 << 5,
 
-    /// underlined/strikethrough flags (default: no lines)
+    /// Underlined style (not underlined by default).
     wxFONTFLAG_UNDERLINED       = 1 << 6,
+
+    /// Strike-through style (only supported in wxMSW and wxGTK currently).
     wxFONTFLAG_STRIKETHROUGH    = 1 << 7,
 
     /// the mask of all currently used flags
@@ -188,6 +190,8 @@ enum wxFontEncoding
     wxFONTENCODING_CP1255,          //!< WinHebrew
     wxFONTENCODING_CP1256,          //!< WinArabic
     wxFONTENCODING_CP1257,          //!< WinBaltic (same as Latin 7)
+    wxFONTENCODING_CP1258,          //!< WinVietnamese (since 2.9.4)
+    wxFONTENCODING_CP1361,          //!< Johab Korean character set (since 2.9.4)
     wxFONTENCODING_CP12_MAX,
 
     wxFONTENCODING_UTF7,            //!< UTF-7 Unicode encoding
@@ -259,17 +263,161 @@ enum wxFontEncoding
     wxFONTENCODING_GB2312 = wxFONTENCODING_CP936, //!< Simplified Chinese
     wxFONTENCODING_BIG5 = wxFONTENCODING_CP950,   //!< Traditional Chinese
     wxFONTENCODING_SHIFT_JIS = wxFONTENCODING_CP932, //!< Shift JIS
-    wxFONTENCODING_EUC_KR = wxFONTENCODING_CP949 //!< Korean
+    wxFONTENCODING_EUC_KR = wxFONTENCODING_CP949, //!< Korean
+    wxFONTENCODING_JOHAB = wxFONTENCODING_CP1361, //!< Korean Johab (since 2.9.4)
+    wxFONTENCODING_VIETNAMESE = wxFONTENCODING_CP1258 //!< Vietnamese (since 2.9.4)
 };
 
 
+/**
+    @class wxFontInfo
+
+    This class is a helper used for wxFont creation using named parameter
+    idiom: it allows to specify various wxFont attributes using the chained
+    calls to its clearly named methods instead of passing them in the fixed
+    order to wxFont constructors.
+
+    For example, to create an italic font with the given face name and size you
+    could use:
+    @code
+        wxFont font(wxFontInfo(12).FaceName("Helvetica").Italic());
+    @endcode
+
+    Notice that all of the methods of this object return a reference to the
+    object itself, allowing the calls to them to be chained as in the example
+    above.
+
+    All methods taking boolean parameters can be used to turn the specified
+    font attribute on or off and turn it on by default.
+
+    @since 2.9.5
+ */
+class wxFontInfo
+{
+public:
+    /**
+        Default constructor uses the default font size for the current
+        platform.
+     */
+    wxFontInfo();
+
+    /**
+        Constructor setting the font size in points to use.
+
+        @see wxFont::SetPointSize()
+     */
+    explicit wxFontInfo(int pointSize);
+
+    /**
+        Constructor setting the font size in pixels to use.
+
+        @see wxFont::SetPixelSize()
+     */
+    explicit wxFontInfo(const wxSize& pixelSize);
+
+    /**
+        Set the font family.
+
+        The family is a generic portable way of referring to fonts without
+        specifying a precise face name. This parameter must be one of the
+        ::wxFontFamily enumeration values.
+
+        If the FaceName() is used, then it overrides the font family.
+
+        @see wxFont::SetFamily()
+     */
+    wxFontInfo& Family(wxFontFamily family);
+
+    /**
+        Set the font face name to use.
+
+        Face names are not portable, so prefer to use Family() in portable
+        code.
+
+        @see wxFont::SetFaceName()
+     */
+    wxFontInfo& FaceName(const wxString& faceName);
+
+    /**
+        Use a bold version of the font.
+
+        @see ::wxFontWeight, wxFont::SetWeight()
+     */
+    wxFontInfo& Bold(bool bold = true);
+
+    /**
+        Use a lighter version of the font.
+
+        @see ::wxFontWeight, wxFont::SetWeight()
+     */
+    wxFontInfo& Light(bool light = true);
+
+    /**
+        Use an italic version of the font.
+
+        @see ::wxFontStyle, wxFont::SetStyle()
+     */
+    wxFontInfo& Italic(bool italic = true);
+
+    /**
+        Use a slanted version of the font.
+
+        @see ::wxFontStyle, wxFont::SetStyle()
+     */
+    wxFontInfo& Slant(bool slant = true);
+
+    /**
+        Set anti-aliasing flag.
+
+        Force the use of anti-aliasing on or off.
+
+        Currently this is not implemented, i.e. using this method doesn't do
+        anything.
+     */
+    wxFontInfo& AntiAliased(bool antiAliased = true);
+
+    /**
+        Use an underlined version of the font.
+     */
+    wxFontInfo& Underlined(bool underlined = true);
+
+    /**
+        Use a strike-through version of the font.
+
+        Currently this is only implemented in wxMSW and wxGTK.
+     */
+    wxFontInfo& Strikethrough(bool strikethrough = true);
+
+    /**
+        Set the font encoding to use.
+
+        This is mostly unneeded in Unicode builds of wxWidgets.
+
+        @see ::wxFontEncoding, wxFont::SetEncoding()
+     */
+    wxFontInfo& Encoding(wxFontEncoding encoding);
+
+    /**
+        Set all the font attributes at once.
+
+        See ::wxFontFlag for the various flags that can be used.
+     */
+    wxFontInfo& AllFlags(int flags);
+};
 
 /**
     @class wxFont
 
     A font is an object which determines the appearance of text.
+
     Fonts are used for drawing text to a device context, and setting the appearance
-    of a window's text.
+    of a window's text, see wxDC::SetFont() and wxWindow::SetFont().
+
+    The easiest way to create a custom font is to use wxFontInfo object to
+    specify the font attributes and then use wxFont::wxFont(const wxFontInfo&)
+    constructor. Alternatively, you could start with one of the pre-defined
+    fonts or use wxWindow::GetFont() and modify the font, e.g. by increasing
+    its size using MakeLarger() or changing its weight using MakeBold().
 
     This class uses @ref overview_refcount "reference counting and copy-on-write"
     internally so that assignments between two instances of this class are very
@@ -303,7 +451,34 @@ public:
     wxFont(const wxFont& font);
 
     /**
-        Creates a font object with the specified attributes.
+        Creates a font object using the specified font description.
+
+        This is the preferred way to create font objects as using this ctor
+        results in more readable code and it is also extensible, e.g. it could
+        continue to be used if support for more font attributes is added in the
+        future. For example, this constructor provides the only way of creating
+        fonts with strike-through style.
+
+        Example of creating a font using this ctor:
+        @code
+            wxFont font(wxFontInfo(10).Bold().Underlined());
+        @endcode
+
+        @since 2.9.5
+     */
+    wxFont(const wxFontInfo& font);
+
+    /**
+        Creates a font object with the specified attributes and size in points.
+
+        Notice that the use of this constructor is often more verbose and less
+        readable than the use of constructor from wxFontInfo, e.g. the example
+        in that constructor documentation would need to be written as
+        @code
+            wxFont font(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
+                        wxFONTWEIGHT_BOLD, true);
+        @endcode
+        which is longer and less clear.
 
         @param pointSize
             Size in points. See SetPointSize() for more info.
@@ -349,7 +524,11 @@ public:
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
     /**
-        Creates a font object with the specified attributes.
+        Creates a font object with the specified attributes and size in pixels.
+
+        Notice that the use of this constructor is often more verbose and less
+        readable than the use of constructor from wxFontInfo, consider using
+        that constructor instead.
 
         @param pixelSize
             Size in pixels. See SetPixelSize() for more info.
@@ -401,7 +580,12 @@ public:
         If @a fontdesc is invalid the font remains uninitialized, i.e. its IsOk() method
         will return @false.
      */
-    wxFont(const wxString& fontdesc);
+    wxFont(const wxString& nativeInfoString);
+
+    /**
+       Construct font from a native font info structure.
+    */
+    wxFont(const wxNativeFontInfo& nativeInfo);
 
     /**
         Destructor.
@@ -422,6 +606,14 @@ public:
         @name Getters
     */
     //@{
+
+    /**
+       Returns a font with the same face/size as the given one but with normal
+       weight and style and not underlined nor stricken through.
+
+       @since 3.1.0
+    */
+    wxFont GetBaseFont() const;
 
     /**
         Returns the encoding of this font.
@@ -486,6 +678,8 @@ public:
     */
     wxString GetNativeFontInfoUserDesc() const;
 
+    const wxNativeFontInfo *GetNativeFontInfo() const;
+
     /**
         Gets the point size.
 
@@ -517,6 +711,15 @@ public:
         @see SetUnderlined()
     */
     virtual bool GetUnderlined() const;
+
+    /**
+        Returns @true if the font is stricken-through, @false otherwise.
+
+        @see SetStrikethrough()
+
+        @since 2.9.4
+     */
+    virtual bool GetStrikethrough() const;
 
     /**
         Gets the font weight. See ::wxFontWeight for a list of valid weight identifiers.
@@ -605,6 +808,17 @@ public:
     wxFont Underlined() const;
 
     /**
+        Returns stricken-through version of this font.
+
+        Currently stricken-through fonts are only supported in wxMSW and wxGTK.
+
+        @see MakeStrikethrough()
+
+        @since 2.9.4
+     */
+    wxFont Strikethrough() const;
+
+    /**
         Changes this font to be bold.
 
         @see Bold()
@@ -654,6 +868,17 @@ public:
         @since 2.9.2
      */
     wxFont& MakeUnderlined();
+
+    /**
+        Changes this font to be stricken-through.
+
+        Currently stricken-through fonts are only supported in wxMSW and wxGTK.
+
+        @see Strikethrough()
+
+        @since 2.9.4
+    */
+    wxFont& MakeStrikethrough();
 
     /**
         Changes the size of this font.
@@ -754,7 +979,7 @@ public:
 
         @beginTable
         @hdr3col{platform, generic syntax, example}
-        @row3col{wxGTK2, <tt>[FACE-NAME] [bold] [oblique|italic] [POINTSIZE]</tt>, Monospace bold 10}
+        @row3col{wxGTK2, <tt>[underlined] [strikethrough] [FACE-NAME] [bold] [oblique|italic] [POINTSIZE]</tt>, Monospace bold 10}
         @row3col{wxMSW, <tt>[light|bold] [italic] [FACE-NAME] [POINTSIZE] [ENCODING]</tt>, Tahoma 10 WINDOWS-1252}
         @endTable
 
@@ -762,7 +987,9 @@ public:
 
         For more detailed information about the allowed syntaxes you can look at the
         documentation of the native API used for font-rendering
-        (e.g. @c pango_font_description_from_string on GTK).
+        (e.g. @c pango_font_description_from_string under GTK, although notice
+        that it doesn't support the "underlined" and "strikethrough" attributes
+        and so those are handled by wxWidgets itself).
 
         Note that unlike SetNativeFontInfo(), this function doesn't always restore all
         attributes of the wxFont object under all platforms; e.g. on wxMSW the font family
@@ -774,10 +1001,12 @@ public:
     */
     bool SetNativeFontInfoUserDesc(const wxString& info);
 
+    void SetNativeFontInfo(const wxNativeFontInfo& info);
+        
     /**
         Sets the point size.
 
-        The <em>point size</em> is defined as 1/72 of the anglo-Saxon inch
+        The <em>point size</em> is defined as 1/72 of the Anglo-Saxon inch
         (25.4 mm): it is approximately 0.0139 inch or 352.8 um.
 
         @param pointSize
@@ -845,6 +1074,20 @@ public:
     virtual void SetUnderlined(bool underlined);
 
     /**
+        Sets strike-through attribute of the font.
+
+        Currently stricken-through fonts are only supported in wxMSW and wxGTK.
+
+        @param strikethrough
+            @true to add strike-through style, @false to remove it.
+
+        @see GetStrikethrough()
+
+        @since 2.9.4
+    */
+    virtual void SetStrikethrough(bool strikethrough);
+
+    /**
         Sets the font weight.
 
         @param weight
@@ -900,6 +1143,9 @@ public:
         This function takes the same parameters as the relative
         @ref wxFont::wxFont "wxFont constructor" and returns a new font
         object allocated on the heap.
+
+        Their use is discouraged, use wxFont constructor from wxFontInfo
+        instead.
     */
     static wxFont* New(int pointSize, wxFontFamily family, wxFontStyle style,
                        wxFontWeight weight,
@@ -922,6 +1168,11 @@ public:
                        int flags = wxFONTFLAG_DEFAULT,
                        const wxString& faceName = wxEmptyString,
                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+
+    
+    static wxFont *New(const wxNativeFontInfo& nativeInfo);
+    static wxFont *New(const wxString& nativeInfoString);
+
     //@}
 };
 
@@ -936,25 +1187,25 @@ wxFont wxNullFont;
 
     @see wxSystemSettings
 */
-wxFont wxNORMAL_FONT;
+wxFont* wxNORMAL_FONT;
 
 /**
     A font using the @c wxFONTFAMILY_SWISS family and 2 points smaller than
     ::wxNORMAL_FONT.
 */
-wxFont wxSMALL_FONT;
+wxFont* wxSMALL_FONT;
 
 /**
     A font using the @c wxFONTFAMILY_ROMAN family and @c wxFONTSTYLE_ITALIC style and
     of the same size of ::wxNORMAL_FONT.
 */
-wxFont wxITALIC_FONT;
+wxFont* wxITALIC_FONT;
 
 /**
     A font identic to ::wxNORMAL_FONT except for the family used which is
     @c wxFONTFAMILY_SWISS.
 */
-wxFont wxSWISS_FONT;
+wxFont* wxSWISS_FONT;
 
 
 /**
@@ -976,7 +1227,7 @@ wxFont wxSWISS_FONT;
 
     @see wxFont
 */
-class wxFontList : public wxList
+class wxFontList
 {
 public:
     /**

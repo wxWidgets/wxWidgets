@@ -3,7 +3,6 @@
 // Purpose:     wxRichTextCtrl unit test
 // Author:      Steven Lamerton
 // Created:     2010-07-07
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -62,6 +61,7 @@ private:
         CPPUNIT_TEST( Font );
         CPPUNIT_TEST( Delete );
         CPPUNIT_TEST( Url );
+        CPPUNIT_TEST( Table );
     CPPUNIT_TEST_SUITE_END();
 
     void CharacterEvent();
@@ -91,6 +91,7 @@ private:
     void Font();
     void Delete();
     void Url();
+    void Table();
 
     wxRichTextCtrl* m_rich;
 
@@ -106,7 +107,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( RichTextCtrlTestCase, "RichTextCtrlTestCa
 void RichTextCtrlTestCase::setUp()
 {
     m_rich = new wxRichTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                                wxDefaultPosition, wxSize(400, 200));
+                                wxDefaultPosition, wxSize(400, 200), wxWANTS_CHARS);
 }
 
 void RichTextCtrlTestCase::tearDown()
@@ -121,11 +122,8 @@ void RichTextCtrlTestCase::CharacterEvent()
   // There seems to be an event sequence problem on GTK+ that causes the events
   // to be disconnected before they're processed, generating spurious errors.
 #if !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_rich, wxEVT_COMMAND_RICHTEXT_CHARACTER);
-    EventCounter count1(m_rich, wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED);
+    EventCounter character(m_rich, wxEVT_RICHTEXT_CHARACTER);
+    EventCounter content(m_rich, wxEVT_RICHTEXT_CONTENT_INSERTED);
 
     m_rich->SetFocus();
 
@@ -133,16 +131,19 @@ void RichTextCtrlTestCase::CharacterEvent()
     sim.Text("abcdef");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_CHARACTER));
-    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED));
+    CPPUNIT_ASSERT_EQUAL(6, character.GetCount());
+    CPPUNIT_ASSERT_EQUAL(6, content.GetCount());
+
+    character.Clear();
+    content.Clear();
 
     //As these are not characters they shouldn't count
     sim.Char(WXK_RETURN);
     sim.Char(WXK_SHIFT);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_CHARACTER));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED));
+    CPPUNIT_ASSERT_EQUAL(0, character.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, content.GetCount());
 #endif
 #endif
 }
@@ -153,11 +154,8 @@ void RichTextCtrlTestCase::DeleteEvent()
   // There seems to be an event sequence problem on GTK+ that causes the events
   // to be disconnected before they're processed, generating spurious errors.
 #if !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_rich, wxEVT_COMMAND_RICHTEXT_DELETE);
-    EventCounter count1(m_rich, wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED);
+    EventCounter deleteevent(m_rich, wxEVT_RICHTEXT_DELETE);
+    EventCounter contentdelete(m_rich, wxEVT_RICHTEXT_CONTENT_DELETED);
 
     m_rich->SetFocus();
 
@@ -167,9 +165,9 @@ void RichTextCtrlTestCase::DeleteEvent()
     sim.Char(WXK_DELETE);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_DELETE));
+    CPPUNIT_ASSERT_EQUAL(2, deleteevent.GetCount());
     //Only one as the delete doesn't delete anthing
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED));
+    CPPUNIT_ASSERT_EQUAL(1, contentdelete.GetCount());
 #endif
 #endif
 }
@@ -180,10 +178,7 @@ void RichTextCtrlTestCase::ReturnEvent()
   // There seems to be an event sequence problem on GTK+ that causes the events
   // to be disconnected before they're processed, generating spurious errors.
 #if !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_rich, wxEVT_COMMAND_RICHTEXT_RETURN);
+    EventCounter returnevent(m_rich, wxEVT_RICHTEXT_RETURN);
 
     m_rich->SetFocus();
 
@@ -191,44 +186,41 @@ void RichTextCtrlTestCase::ReturnEvent()
     sim.Char(WXK_RETURN);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, returnevent.GetCount());
 #endif
 #endif
 }
 
 void RichTextCtrlTestCase::StyleEvent()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_rich, wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED);
+    EventCounter stylechanged(m_rich, wxEVT_RICHTEXT_STYLE_CHANGED);
 
     m_rich->SetValue("Sometext");
     m_rich->SetStyle(0, 8, wxTextAttr(*wxRED, *wxWHITE));
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED));
+    CPPUNIT_ASSERT_EQUAL(1, stylechanged.GetCount());
 }
 
 void RichTextCtrlTestCase::BufferResetEvent()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_rich, wxEVT_COMMAND_RICHTEXT_BUFFER_RESET);
+    EventCounter reset(m_rich, wxEVT_RICHTEXT_BUFFER_RESET);
 
     m_rich->AppendText("more text!");
     m_rich->SetValue("");
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, reset.GetCount());
 
+    reset.Clear();
     m_rich->AppendText("more text!");
     m_rich->Clear();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, reset.GetCount());
+
+    reset.Clear();
 
     //We expect a buffer reset here as setvalue clears the existing text
     m_rich->SetValue("replace");
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, reset.GetCount());
 }
 
 void RichTextCtrlTestCase::UrlEvent()
@@ -236,10 +228,7 @@ void RichTextCtrlTestCase::UrlEvent()
 #if wxUSE_UIACTIONSIMULATOR
     // Mouse up event not being caught on GTK+
 #if !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_rich, wxEVT_COMMAND_TEXT_URL);
+    EventCounter url(m_rich, wxEVT_TEXT_URL);
 
     m_rich->BeginURL("http://www.wxwidgets.org");
     m_rich->WriteText("http://www.wxwidgets.org");
@@ -252,7 +241,7 @@ void RichTextCtrlTestCase::UrlEvent()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, url.GetCount());
 #endif
 #endif
 }
@@ -261,10 +250,7 @@ void RichTextCtrlTestCase::TextEvent()
 {
 #if wxUSE_UIACTIONSIMULATOR
 #if !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_rich, wxEVT_COMMAND_TEXT_UPDATED);
+    EventCounter updated(m_rich, wxEVT_TEXT);
 
     m_rich->SetFocus();
 
@@ -273,7 +259,7 @@ void RichTextCtrlTestCase::TextEvent()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL("abcdef", m_rich->GetValue());
-    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(6, updated.GetCount());
 #endif
 #endif
 }
@@ -365,7 +351,7 @@ void RichTextCtrlTestCase::CaretPosition()
     m_rich->AddParagraph("This is paragraph one");
     m_rich->AddParagraph("Paragraph two\n has \nlots of\n lines");
 
-    m_rich->MoveCaret(1);
+    m_rich->SetInsertionPoint(2);
 
     CPPUNIT_ASSERT_EQUAL(1, m_rich->GetCaretPosition());
 
@@ -424,10 +410,7 @@ void RichTextCtrlTestCase::Editable()
 {
 #if wxUSE_UIACTIONSIMULATOR
 #if !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_rich, wxEVT_COMMAND_TEXT_UPDATED);
+    EventCounter updated(m_rich, wxEVT_TEXT);
 
     m_rich->SetFocus();
 
@@ -436,14 +419,15 @@ void RichTextCtrlTestCase::Editable()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL("abcdef", m_rich->GetValue());
-    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(6, updated.GetCount());
+    updated.Clear();
 
     m_rich->SetEditable(false);
     sim.Text("gh");
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL("abcdef", m_rich->GetValue());
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(0, updated.GetCount());
 #endif
 #endif
 }
@@ -770,6 +754,138 @@ void RichTextCtrlTestCase::Url()
 
     CPPUNIT_ASSERT(url.HasURL());
     CPPUNIT_ASSERT_EQUAL("http://www.wxwidgets.org", url.GetURL());
+}
+
+    // Helper function for ::Table()
+wxRichTextTable* GetCurrentTableInstance(wxRichTextParagraph* para)
+{
+    wxRichTextTable* table = wxDynamicCast(para->FindObjectAtPosition(0), wxRichTextTable);
+    CPPUNIT_ASSERT(table);
+    return table;
+}
+
+void RichTextCtrlTestCase::Table()
+{
+    m_rich->BeginSuppressUndo();
+    wxRichTextTable* table = m_rich->WriteTable(1, 1);
+    m_rich->EndSuppressUndo();
+    CPPUNIT_ASSERT(table);
+    CPPUNIT_ASSERT(m_rich->CanUndo() == false);
+
+    // Run the tests twice: first for the original table, then for a contained one
+    for (int t = 0; t < 2; ++t)
+    {
+        // Undo() and Redo() switch table instances, so invalidating 'table'
+        // The containing paragraph isn't altered, and so can be used to find the current object
+        wxRichTextParagraph* para = wxDynamicCast(table->GetParent(), wxRichTextParagraph);
+        CPPUNIT_ASSERT(para);
+
+        CPPUNIT_ASSERT(table->GetColumnCount() == 1);
+        CPPUNIT_ASSERT(table->GetRowCount() == 1);
+
+        // Test adding columns and rows
+        for (size_t n = 0; n < 3; ++n)
+        {
+            m_rich->BeginBatchUndo("Add col and row");
+
+            table->AddColumns(0, 1);
+            table->AddRows(0, 1);
+
+            m_rich->EndBatchUndo();
+        }
+        CPPUNIT_ASSERT(table->GetColumnCount() == 4);
+        CPPUNIT_ASSERT(table->GetRowCount() == 4);
+
+        // Test deleting columns and rows
+        for (size_t n = 0; n < 3; ++n)
+        {
+            m_rich->BeginBatchUndo("Delete col and row");
+
+            table->DeleteColumns(table->GetColumnCount() - 1, 1);
+            table->DeleteRows(table->GetRowCount() - 1, 1);
+
+            m_rich->EndBatchUndo();
+        }
+        CPPUNIT_ASSERT(table->GetColumnCount() == 1);
+        CPPUNIT_ASSERT(table->GetRowCount() == 1);
+
+        // Test undo, first of the deletions...
+        CPPUNIT_ASSERT(m_rich->CanUndo());
+        for (size_t n = 0; n < 3; ++n)
+        {
+            m_rich->Undo();
+        }
+        table = GetCurrentTableInstance(para);
+        CPPUNIT_ASSERT(table->GetColumnCount() == 4);
+        CPPUNIT_ASSERT(table->GetRowCount() == 4);
+
+        // ...then the additions
+        for (size_t n = 0; n < 3; ++n)
+        {
+            m_rich->Undo();
+        }
+        table = GetCurrentTableInstance(para);
+        CPPUNIT_ASSERT(table->GetColumnCount() == 1);
+        CPPUNIT_ASSERT(table->GetRowCount() == 1);
+        CPPUNIT_ASSERT(m_rich->CanUndo() == false);
+
+        // Similarly test redo. Additions:
+        CPPUNIT_ASSERT(m_rich->CanRedo());
+        for (size_t n = 0; n < 3; ++n)
+        {
+            m_rich->Redo();
+        }
+        table = GetCurrentTableInstance(para);
+        CPPUNIT_ASSERT(table->GetColumnCount() == 4);
+        CPPUNIT_ASSERT(table->GetRowCount() == 4);
+
+        // Deletions:
+        for (size_t n = 0; n < 3; ++n)
+        {
+            m_rich->Redo();
+        }
+        table = GetCurrentTableInstance(para);
+        CPPUNIT_ASSERT(table->GetColumnCount() == 1);
+        CPPUNIT_ASSERT(table->GetRowCount() == 1);
+        CPPUNIT_ASSERT(m_rich->CanRedo() == false);
+
+        // Now test multiple addition and deletion, and also suppression
+        m_rich->BeginSuppressUndo();
+        table->AddColumns(0, 3);
+        table->AddRows(0, 3);
+        CPPUNIT_ASSERT(table->GetColumnCount() == 4);
+        CPPUNIT_ASSERT(table->GetRowCount() == 4);
+
+        // Only delete 2 of these. This makes it easy to be sure we're dealing with the child table when we loop
+        table->DeleteColumns(0, 2);
+        table->DeleteRows(0, 2);
+        CPPUNIT_ASSERT(table->GetColumnCount() == 2);
+        CPPUNIT_ASSERT(table->GetRowCount() == 2);
+        m_rich->EndSuppressUndo();
+
+        m_rich->GetCommandProcessor()->ClearCommands(); // otherwise the command-history from this loop will cause CPPUNIT_ASSERT failures in the next one
+
+        if (t == 0)
+        {
+            // For round 2, re-run the tests on another table inside the last cell of the first one
+            wxRichTextCell* cell = table->GetCell(table->GetRowCount() - 1, table->GetColumnCount() - 1);
+            CPPUNIT_ASSERT(cell);
+            m_rich->SetFocusObject(cell);
+            m_rich->BeginSuppressUndo();
+            table = m_rich->WriteTable(1, 1);
+            m_rich->EndSuppressUndo();
+            CPPUNIT_ASSERT(table);
+        }
+    }
+
+    // Test ClearTable()
+    table->ClearTable();
+    CPPUNIT_ASSERT_EQUAL(0, table->GetCells().GetCount());
+    CPPUNIT_ASSERT_EQUAL(0, table->GetColumnCount());
+    CPPUNIT_ASSERT_EQUAL(0, table->GetRowCount());
+
+    m_rich->Clear();
+    m_rich->SetFocusObject(NULL);
 }
 
 #endif //wxUSE_RICHTEXT

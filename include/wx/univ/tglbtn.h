@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by: David Bjorkevik
 // Created:     16.05.06
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -44,18 +43,18 @@ public:
 
     virtual ~wxToggleButton();
 
-    virtual bool IsPressed() const { return m_isPressed || m_value; }
+    virtual bool IsPressed() const wxOVERRIDE { return m_isPressed || m_value; }
 
     // wxToggleButton actions
-    virtual void Toggle();
-    virtual void Click();
+    virtual void Toggle() wxOVERRIDE;
+    virtual void Click() wxOVERRIDE;
 
     // Get/set the value
     void SetValue(bool state);
     bool GetValue() const { return m_value; }
 
 protected:
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
     // the current value
     bool m_value;

@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/checkbox.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -9,8 +8,7 @@
 #ifndef _WX_QT_CHECKBOX_H_
 #define _WX_QT_CHECKBOX_H_
 
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QCheckBox>
+#include <QtWidgets/QCheckBox>
 
 class WXDLLIMPEXP_CORE wxCheckBox : public wxCheckBoxBase
 {
@@ -37,11 +35,13 @@ public:
     virtual QCheckBox *GetHandle() const;
 
 protected:
+    virtual void DoSet3StateValue(wxCheckBoxState state);
+    virtual wxCheckBoxState DoGet3StateValue() const;
 
 private:
-    wxQtPointer< QCheckBox > m_qtCheckBox;
+    QCheckBox *m_qtCheckBox;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckBox);
+    wxDECLARE_DYNAMIC_CLASS(wxCheckBox);
 };
 
 #endif // _WX_QT_CHECKBOX_H_

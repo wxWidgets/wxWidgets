@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -14,6 +13,7 @@
 #if wxUSE_PRINTING_ARCHITECTURE
 
 #include "wx/printdlg.h"
+#include "wx/modalhook.h"
 
 #ifndef WX_PRECOMP
     #include "wx/object.h"
@@ -33,10 +33,10 @@ IMPLEMENT_CLASS(wxOSXCocoaPrintData, wxOSXPrintData)
 wxOSXCocoaPrintData::wxOSXCocoaPrintData()
 {
     m_macPrintInfo = [[NSPrintInfo alloc] init];
-    // TODO add 10.4 code
     m_macPageFormat = (PMPageFormat) [m_macPrintInfo PMPageFormat];
     m_macPrintSettings = (PMPrintSettings) [m_macPrintInfo PMPrintSettings];
     m_macPrintSession = (PMPrintSession) [m_macPrintInfo PMPrintSession] ;
+    PMGetPageFormatPaper(m_macPageFormat, &m_macPaper);
 }
 
 wxOSXCocoaPrintData::~wxOSXCocoaPrintData()
@@ -46,14 +46,12 @@ wxOSXCocoaPrintData::~wxOSXCocoaPrintData()
 
 void wxOSXCocoaPrintData::UpdateFromPMState()
 {
-    // TODO add 10.4 code
     [m_macPrintInfo updateFromPMPageFormat];
     [m_macPrintInfo updateFromPMPrintSettings];
 }
 
 void wxOSXCocoaPrintData::UpdateToPMState()
 {
-    // TODO add 10.4 code
     m_macPageFormat = (PMPageFormat) [m_macPrintInfo PMPageFormat];
     m_macPrintSettings = (PMPrintSettings) [m_macPrintInfo PMPrintSettings];
     m_macPrintSession = (PMPrintSession) [m_macPrintInfo PMPrintSession] ;
@@ -61,12 +59,19 @@ void wxOSXCocoaPrintData::UpdateToPMState()
 
 int wxMacPrintDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
     m_printDialogData.GetPrintData().ConvertToNative();
 
     int result = wxID_CANCEL;
 
     NSPrintPanel* panel = [NSPrintPanel printPanel];
     NSPrintInfo* printInfo = ((wxOSXCocoaPrintData*)m_printDialogData.GetPrintData().GetNativeData())->GetNSPrintInfo();
+
+    NSMutableDictionary* dict = [printInfo printSettings];
+    [dict setValue:[NSNumber numberWithInt:m_printDialogData.GetMinPage()] forKey:@"com_apple_print_PrintSettings_PMFirstPage"];
+    [dict setValue:[NSNumber numberWithInt:m_printDialogData.GetMaxPage()] forKey:@"com_apple_print_PrintSettings_PMLastPage"];
+
     if ( (NSInteger)[panel runModalWithPrintInfo:printInfo] == NSOKButton )
     {
         result = wxID_OK;
@@ -79,6 +84,8 @@ int wxMacPrintDialog::ShowModal()
 
 int wxMacPageSetupDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
     m_pageSetupData.GetPrintData().ConvertToNative();
     ((wxOSXCocoaPrintData*)m_pageSetupData.GetPrintData().GetNativeData())->TransferFrom( &m_pageSetupData );
 

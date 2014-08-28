@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     2008-08-24
-// RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -287,18 +286,33 @@ void wxPropertyGridPageState::DoClear()
         m_selection.clear();
     }
 
-    m_regularArray.Empty();
-    if ( m_abcArray )
-        m_abcArray->Empty();
+    // If handling wxPG event then every property item must be
+    // deleted individually (and with deferral).
+    if ( m_pPropGrid && m_pPropGrid->m_processedEvent )
+    {
+        wxPropertyGridIterator it;
+        for ( it = m_pPropGrid->GetIterator(wxPG_ITERATE_ALL);
+              !it.AtEnd();
+              it++ )
+        {
+            DoDelete(*it, true);
+        }
+    }
+    else
+    {
+        m_regularArray.Empty();
+        if ( m_abcArray )
+            m_abcArray->Empty();
 
-    m_dictName.clear();
+        m_dictName.clear();
 
-    m_currentCategory = NULL;
-    m_lastCaptionBottomnest = 1;
-    m_itemsAdded = 0;
+        m_currentCategory = NULL;
+        m_lastCaptionBottomnest = 1;
+        m_itemsAdded = 0;
 
-    m_virtualHeight = 0;
-    m_vhCalcPending = 0;
+        m_virtualHeight = 0;
+        m_vhCalcPending = 0;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -430,15 +444,23 @@ wxPropertyCategory* wxPropertyGridPageState::GetPropertyCategory( const wxPGProp
 // wxPropertyGridPageState GetPropertyXXX methods
 // -----------------------------------------------------------------------
 
-wxPGProperty* wxPropertyGridPageState::GetPropertyByLabel( const wxString& label,
-                                                           wxPGProperty* parent ) const
+#ifdef WXWIN_COMPATIBILITY_3_0
+wxPGProperty* wxPropertyGridPageState::GetPropertyByLabel
+                        ( const wxString& label, wxPGProperty* parent ) const
 {
+    return BaseGetPropertyByLabel(label, parent);
+}
+#endif // WXWIN_COMPATIBILITY_3_0
 
-    size_t i;
+wxPGProperty* wxPropertyGridPageState::BaseGetPropertyByLabel
+                        ( const wxString& label, wxPGProperty* parent ) const
+{
+    if ( !parent )
+    {
+        parent = (wxPGProperty*) &m_regularArray;
+    }
 
-    if ( !parent ) parent = (wxPGProperty*) &m_regularArray;
-
-    for ( i=0; i<parent->GetChildCount(); i++ )
+    for ( size_t i=0; i<parent->GetChildCount(); i++ )
     {
         wxPGProperty* p = parent->Item(i);
         if ( p->m_label == label )
@@ -446,7 +468,7 @@ wxPGProperty* wxPropertyGridPageState::GetPropertyByLabel( const wxString& label
         // Check children recursively.
         if ( p->GetChildCount() )
         {
-            p = GetPropertyByLabel(label,(wxPGProperty*)p);
+            p = BaseGetPropertyByLabel(label, p);
             if ( p )
                 return p;
         }
@@ -803,6 +825,27 @@ int wxPropertyGridPageState::GetColumnFitWidth(wxClientDC& dc,
     return maxW;
 }
 
+int wxPropertyGridPageState::GetColumnFullWidth( wxClientDC &dc, wxPGProperty *p, unsigned int col )
+{
+    if ( p->IsCategory() )
+        return 0;
+
+    const wxPGCell* cell = NULL;
+    wxString text;
+    p->GetDisplayInfo(col, -1, 0, &text, &cell);
+    int w = dc.GetTextExtent(text).x;
+
+    if ( col == 0 )
+        w += (int)p->m_depth * m_pPropGrid->m_subgroup_extramargin;
+
+    // account for the bitmap
+    if ( col == 1 )
+        w += p->GetImageOffset(m_pPropGrid->GetImageRect(p, -1).GetWidth());
+
+    w += (wxPG_XBEFORETEXT*2);
+    return w;
+}
+
 int wxPropertyGridPageState::DoGetSplitterPosition( int splitterColumn ) const
 {
     int n = GetGrid()->m_marginWidth;
@@ -1061,8 +1104,8 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
             //
             // TODO: Adapt this to generic recenter code.
             //
-            float centerX = (float)(pg->m_width/2);
-            float splitterX;
+            double centerX = pg->m_width / 2.0;
+            double splitterX;
 
             if ( m_fSplitterX < 0.0 )
             {
@@ -1073,8 +1116,8 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
                 //float centerX = float(pg->GetSize().x) * 0.5;
 
                 // Recenter?
-                splitterX = m_fSplitterX + (float(widthChange) * 0.5);
-                float deviation = fabs(centerX - splitterX);
+                splitterX = m_fSplitterX + (widthChange * 0.5);
+                double deviation = fabs(centerX - splitterX);
 
                 // If deviating from center, adjust towards it
                 if ( deviation > 20.0 )
@@ -1089,7 +1132,7 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
             {
                 // No width change, just keep sure we keep splitter position intact
                 splitterX = m_fSplitterX;
-                float deviation = fabs(centerX - splitterX);
+                double deviation = fabs(centerX - splitterX);
                 if ( deviation > 50.0 )
                 {
                     splitterX = centerX;
@@ -1474,7 +1517,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
 
     if ( m_pPropGrid->GetState() == this )
     {
-        origFrozen = m_pPropGrid->m_frozen;
+        origFrozen = m_pPropGrid->IsFrozen();
         if ( !origFrozen ) m_pPropGrid->Freeze();
     }
 
@@ -1810,10 +1853,21 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     // Must defer deletion? Yes, if handling a wxPG event.
     if ( pg && pg->m_processedEvent )
     {
+        // Prevent adding duplicates to the lists.
         if ( doDelete )
-            pg->m_deletedProperties.push_back(item);
+        {
+            if ( pg->m_deletedProperties.Index(item) == wxNOT_FOUND )
+            {
+                pg->m_deletedProperties.push_back(item);
+            }
+        }
         else
-            pg->m_removedProperties.push_back(item);
+        {
+            if ( pg->m_removedProperties.Index(item) == wxNOT_FOUND )
+            {
+                pg->m_removedProperties.push_back(item);
+            }
+        }
 
         // Rename the property so it won't remain in the way
         // of the user code.
@@ -1933,9 +1987,40 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
 
     // We can actually delete it now
     if ( doDelete )
+    {
+        // Remove the item from both lists of pending operations.
+        // (Deleted item cannot be also the subject of further removal.)
+        int index = pg->m_deletedProperties.Index(item);
+        if ( index != wxNOT_FOUND )
+        {
+            pg->m_deletedProperties.RemoveAt(index);
+        }
+        wxASSERT_MSG( pg->m_deletedProperties.Index(item) == wxNOT_FOUND,
+                    wxT("Too many occurences of the item"));
+
+        index = pg->m_removedProperties.Index(item);
+        if ( index != wxNOT_FOUND )
+        {
+            pg->m_removedProperties.RemoveAt(index);
+        }
+        wxASSERT_MSG( pg->m_removedProperties.Index(item) == wxNOT_FOUND,
+                    wxT("Too many occurences of the item"));
+
         delete item;
+    }
     else
+    {
+        // Remove the item from the list of pending removals.
+        int index = pg->m_removedProperties.Index(item);
+        if ( index != wxNOT_FOUND )
+        {
+            pg->m_removedProperties.RemoveAt(index);
+        }
+        wxASSERT_MSG( pg->m_removedProperties.Index(item) == wxNOT_FOUND,
+                    wxT("Too many occurences of the item"));
+
         item->OnDetached(this, pg);
+    }
 
     m_itemsAdded = 1; // Not a logical assignment (but required nonetheless).
 

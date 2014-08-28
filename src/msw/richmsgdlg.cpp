@@ -3,7 +3,6 @@
 // Purpose:     wxRichMessageDialog
 // Author:      Rickard Westerlund
 // Created:     2010-07-04
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -18,6 +17,7 @@
 #if wxUSE_RICHMSGDLG
 
 #include "wx/richmsgdlg.h"
+#include "wx/modalhook.h"
 
 #ifndef WX_PRECOMP
     #include "wx/msw/private.h"
@@ -33,6 +33,8 @@
 
 int wxRichMessageDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
 #ifdef wxHAS_MSW_TASKDIALOG
     using namespace wxMSWMessageDialog;
 
@@ -47,14 +49,14 @@ int wxRichMessageDialog::ShowModal()
         // add a checkbox
         if ( !m_checkBoxText.empty() )
         {
-            tdc.pszVerificationText = m_checkBoxText.wx_str();
+            tdc.pszVerificationText = m_checkBoxText.t_str();
             if ( m_checkBoxValue )
                 tdc.dwFlags |= TDF_VERIFICATION_FLAG_CHECKED;
         }
 
         // add collapsible footer
         if ( !m_detailedText.empty() )
-            tdc.pszExpandedInformation = m_detailedText.wx_str();
+            tdc.pszExpandedInformation = m_detailedText.t_str();
 
         TaskDialogIndirect_t taskDialogIndirect = GetTaskDialogIndirectFunc();
         if ( !taskDialogIndirect )
@@ -70,6 +72,16 @@ int wxRichMessageDialog::ShowModal()
             return wxID_CANCEL;
         }
         m_checkBoxValue = checkBoxChecked != FALSE;
+
+        // In case only an "OK" button was specified we actually created a
+        // "Cancel" button (see comment in MSWCommonTaskDialogInit). This
+        // results in msAns being IDCANCEL while we want IDOK (just like
+        // how the native MessageBox function does with only an "OK" button).
+        if ( (msAns == IDCANCEL)
+            && !(GetMessageDialogStyle() & (wxYES_NO|wxCANCEL)) )
+        {
+            msAns = IDOK;
+        }
 
         return MSWTranslateReturnCode( msAns );
     }

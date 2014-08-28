@@ -2,7 +2,6 @@
 // Name:        propgrid.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,42 +9,22 @@
 
 @page overview_propgrid wxPropertyGrid Overview
 
-Key Classes:
-@li wxPGProperty
-@li wxPropertyGrid
-@li wxPropertyGridEvent
-@li wxPropertyGridManager
-@li wxPropertyGridPage
+@tableofcontents
 
-  wxPropertyGrid is a specialized grid for editing properties - in other
-words name = value pairs. List of ready-to-use property classes include
-strings, numbers, flag sets, fonts, colours and many others. It is possible,
-for example, to categorize properties, set up a complete tree-hierarchy,
-add more than two columns, and set arbitrary per-property attributes.
+wxPropertyGrid is a specialized grid for editing properties - in other words
+name = value pairs. List of ready-to-use property classes include strings,
+numbers, flag sets, fonts, colours and many others. It is possible, for
+example, to categorize properties, set up a complete tree-hierarchy, add more
+than two columns, and set arbitrary per-property attributes.
 
-  As this version of wxPropertyGrid has some backward-incompatible changes
-from version 1.4, everybody who need to maintain custom property classes
-should carefully read final section in @ref propgrid_compat.
+As this version of wxPropertyGrid has some backward-incompatible changes from
+version 1.4, everybody who need to maintain custom property classes should
+carefully read final section in @ref propgrid_compat.
 
-@li @ref propgrid_basics
-@li @ref propgrid_categories
-@li @ref propgrid_parentprops
-@li @ref propgrid_enumandflags
-@li @ref propgrid_advprops
-@li @ref propgrid_processingvalues
-@li @ref propgrid_iterating
-@li @ref propgrid_events
-@li @ref propgrid_tooltipandhint
-@li @ref propgrid_validating
-@li @ref propgrid_populating
-@li @ref propgrid_cellrender
-@li @ref propgrid_keyhandling
-@li @ref propgrid_customizing
-@li @ref propgrid_usage2
-@li @ref propgrid_subclassing
-@li @ref propgrid_misc
-@li @ref propgrid_proplist
-@li @ref propgrid_compat
+@see wxPropertyGrid, wxPropertyGridEvent, wxPropertyGridManager,
+     wxPropertyGridPage, wxPGProperty
+
+
 
 @section propgrid_basics Creating and Populating wxPropertyGrid
 
@@ -145,9 +124,9 @@ argument, using which you can refer to properties either by their pointer
 
 @code
     // Add a file selector property.
-    wxPGPropety* prop = pg->Append( new wxFileProperty("FileProperty",
-                                    wxPG_LABEL,
-                                    wxEmptyString) );
+    wxPGProperty* prop = pg->Append( new wxFileProperty("FileProperty",
+                                     wxPG_LABEL,
+                                     wxEmptyString) );
 
     // Valid: Set wild card by name
     pg->SetPropertyAttribute( "FileProperty",
@@ -471,9 +450,9 @@ void MyWindowClass::OnPropertyGridChanged(wxPropertyGridEvent& event)
         return;
 
     // Handle changes in values, as needed
-    if ( property.GetName() == "MyStringProperty" )
+    if ( property->GetName() == "MyStringProperty" )
         OnMyStringPropertyChanged(value.As<wxString>());
-    else if ( property.GetName() == "MyColourProperty" )
+    else if ( property->GetName() == "MyColourProperty" )
         OnMyColourPropertyChanged(value.As<wxColour>());
 }
 
@@ -556,18 +535,6 @@ This example reverse-iterates through all visible items:
 
 @endcode
 
-@beginWxPythonOnly
-PropertyGridInterface has some useful pythonic iterators as attributes.
-@c Properties lets you iterate through all items that are not category
-captions or private children. @c Items lets you iterate through everything
-except private children. Also, there are GetPyIterator() and GetPyVIterator(),
-which return pythonic iterators instead of normal wxPropertyGridIterator.
-
-If you need to use C++ style iterators in wxPython code, note that
-Instead of ++ operator, use Next() method, and instead of
-* operator, use GetProperty() method.
-@endWxPythonOnly
-
 GetIterator() only works with wxPropertyGrid and the individual pages
 of wxPropertyGridManager. In order to iterate through an arbitrary
 property container (such as entire wxPropertyGridManager), you need to use
@@ -578,7 +545,7 @@ iterator is limited to forward iteration.
 
     wxPGVIterator it;
 
-    for ( it = manager->GetVIterator();
+    for ( it = manager->GetVIterator(wxPG_ITERATE_ALL);
           !it.AtEnd();
           it.Next() )
     {

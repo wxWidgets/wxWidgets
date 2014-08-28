@@ -5,7 +5,6 @@
 // Author:      Jeffrey C. Ollie <jeff@ollie.clive.ia.us>, Vadim Zeitlin
 // Modified by:
 // Created:     10.02.99
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -47,7 +46,7 @@
                  "integers, using emulation class instead.\n" \
                  "Please report your compiler version to " \
                  "wx-dev@lists.wxwidgets.org!"
-    #elif !(defined(__WATCOMC__) || defined(__VISAGECPP__))
+    #else
         #pragma warning "Your compiler does not appear to support 64 bit "\
                         "integers, using emulation class instead.\n" \
                         "Please report your compiler version to " \
@@ -411,16 +410,7 @@ public:
     }
 
         // convert to double
-        //
-        // For some completely obscure reasons compiling the cast below with
-        // VC6 in DLL builds only (!) results in "error C2520: conversion from
-        // unsigned __int64 to double not implemented, use signed __int64" so
-        // we must use a different version for that compiler.
-#ifdef __VISUALC6__
-    double ToDouble() const;
-#else
     double ToDouble() const { return wx_truncate_cast(double, m_ll); }
-#endif
 
     // operations
         // addition
@@ -1067,7 +1057,7 @@ inline wxULongLong operator+(unsigned long l, const wxULongLong& ull) { return u
 inline wxLongLong operator-(unsigned long l, const wxULongLong& ull)
 {
     wxULongLong ret = wxULongLong(l) - ull;
-    return wxLongLong((long)ret.GetHi(),ret.GetLo());
+    return wxLongLong((wxInt32)ret.GetHi(),ret.GetLo());
 }
 
 #if wxUSE_LONGLONG_NATIVE && wxUSE_STREAMS
@@ -1086,30 +1076,22 @@ WXDLLIMPEXP_BASE class wxTextInputStream &operator>>(class wxTextInputStream &st
 
 #if wxUSE_LONGLONG_NATIVE
 
-// VC6 is known to not have __int64 specializations of numeric_limits<> in its
-// <limits> anyhow so don't bother including it, especially as it results in
-// tons of warnings because the standard header itself uses obsolete template
-// specialization syntax.
-#ifndef __VISUALC6__
-
 #include <limits>
 
 namespace std
 {
 
-template<> class numeric_limits<wxLongLong>
-    : public numeric_limits<wxLongLong_t>
-{
-};
-
-template<> class numeric_limits<wxULongLong>
-    : public numeric_limits<wxULongLong_t>
-{
-};
+#ifdef __clang__
+  // libstdc++ (used by Clang) uses struct for numeric_limits; unlike gcc, clang
+  // warns about this
+  template<> struct numeric_limits<wxLongLong>  : public numeric_limits<wxLongLong_t> {};
+  template<> struct numeric_limits<wxULongLong> : public numeric_limits<wxULongLong_t> {};
+#else
+  template<> class numeric_limits<wxLongLong>  : public numeric_limits<wxLongLong_t> {};
+  template<> class numeric_limits<wxULongLong> : public numeric_limits<wxULongLong_t> {};
+#endif
 
 } // namespace std
-
-#endif // !VC6
 
 #endif // wxUSE_LONGLONG_NATIVE
 

@@ -1,5 +1,4 @@
 <?xml version="1.0" ?>
-<!-- $Id$ -->
 <makefile>
 
     <include file="../build/bakefiles/config.bkl"/>
@@ -61,6 +60,7 @@
     <subproject id="ownerdrw" template="sub"/>
     <subproject id="popup" template="sub"/>
     <subproject id="power" template="sub"/>
+    <subproject id="preferences" template="sub"/>
     <subproject id="printing" template="sub"/>
     <subproject id="propgrid" template="sub"/>
     <subproject id="regtest" template="sub"/>
@@ -87,6 +87,7 @@
     <subproject id="uiaction" template="sub"/>
     <subproject id="validate" template="sub"/>
     <subproject id="vscroll" template="sub"/>
+    <subproject id="webview" template="sub"/>
     <subproject id="widgets" template="sub"/>
     <subproject id="wizard" template="sub"/>
     <subproject id="wrapsizer" template="sub"/>

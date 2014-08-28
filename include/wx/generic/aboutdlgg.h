@@ -3,7 +3,6 @@
 // Purpose:     generic wxAboutBox() implementation
 // Author:      Vadim Zeitlin
 // Created:     2006-10-07
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -20,6 +19,16 @@
 class WXDLLIMPEXP_FWD_ADV wxAboutDialogInfo;
 class WXDLLIMPEXP_FWD_CORE wxSizer;
 class WXDLLIMPEXP_FWD_CORE wxSizerFlags;
+
+// Under GTK and OS X "About" dialogs are not supposed to be modal, unlike MSW
+// and, presumably, all the other platforms.
+#ifndef wxUSE_MODAL_ABOUT_DIALOG
+    #if defined(__WXGTK__) || defined(__WXMAC__)
+        #define wxUSE_MODAL_ABOUT_DIALOG 0
+    #else
+        #define wxUSE_MODAL_ABOUT_DIALOG 1
+    #endif
+#endif // wxUSE_MODAL_ABOUT_DIALOG not defined
 
 // ----------------------------------------------------------------------------
 // wxGenericAboutDialog: generic "About" dialog implementation
@@ -73,6 +82,12 @@ private:
     // common part of all ctors
     void Init() { m_sizerText = NULL; }
 
+#if !wxUSE_MODAL_ABOUT_DIALOG
+    // An explicit handler for deleting the dialog when it's closed is needed
+    // when we show it non-modally.
+    void OnCloseWindow(wxCloseEvent& event);
+    void OnOK(wxCommandEvent& event);
+#endif // !wxUSE_MODAL_ABOUT_DIALOG
 
     wxSizer *m_sizerText;
 };

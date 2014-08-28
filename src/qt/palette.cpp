@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/palette.cpp
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -15,21 +14,21 @@ wxPalette::wxPalette()
 {
 }
 
-wxPalette::wxPalette(int n, unsigned char *red, unsigned char *green, unsigned char *blue)
+wxPalette::wxPalette(int WXUNUSED(n), unsigned char *WXUNUSED(red), unsigned char *WXUNUSED(green), unsigned char *WXUNUSED(blue))
 {
 }
 
-bool wxPalette::Create(int n, unsigned char *red, unsigned char *green, unsigned char *blue)
-{
-    return false;
-}
-
-bool wxPalette::GetRGB(int pixel, unsigned char *red, unsigned char *green, unsigned char *blue) const
+bool wxPalette::Create(int WXUNUSED(n), unsigned char *WXUNUSED(red), unsigned char *WXUNUSED(green), unsigned char *WXUNUSED(blue))
 {
     return false;
 }
 
-int wxPalette::GetPixel(unsigned char red, unsigned char green, unsigned char blue) const
+bool wxPalette::GetRGB(int WXUNUSED(pixel), unsigned char *WXUNUSED(red), unsigned char *WXUNUSED(green), unsigned char *WXUNUSED(blue)) const
+{
+    return false;
+}
+
+int wxPalette::GetPixel(unsigned char WXUNUSED(red), unsigned char WXUNUSED(green), unsigned char WXUNUSED(blue)) const
 {
     return false;
 }
@@ -40,7 +39,7 @@ wxGDIRefData *wxPalette::CreateGDIRefData() const
     return NULL;
 }
 
-wxGDIRefData *wxPalette::CloneGDIRefData(const wxGDIRefData *data) const
+wxGDIRefData *wxPalette::CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const
 {
     return NULL;
 }

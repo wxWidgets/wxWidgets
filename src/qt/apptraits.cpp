@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/apptraits.cpp
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -14,6 +13,8 @@
 #include "wx/evtloop.h"
 
 #include "wx/qt/timer.h"
+
+#include <QtGlobal>
 
 wxEventLoopBase *wxGUIAppTraits::CreateEventLoop()
 {
@@ -40,14 +41,23 @@ wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 
 wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer, int *minVer) const
 {
-    return wxPortId();
+    if ( majVer )
+        *majVer = QT_VERSION >> 16;
+    if ( minVer )
+        *minVer = (QT_VERSION >> 8) & 0xFF;
+
+    return wxPORT_QT;
 }
 
 //#############################################################################
+
+#if wxUSE_CONSOLE_EVENTLOOP
 
 wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
 {
     return new wxEventLoop();
 }
+
+#endif
 
 //#############################################################################

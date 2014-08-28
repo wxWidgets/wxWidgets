@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/dcmemory.cpp
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -17,6 +16,7 @@ wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner )
 {
     m_qtImage = NULL;
     m_ok = false;
+    m_qtPainter = new QPainter();
 }
 
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap )
@@ -24,10 +24,11 @@ wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap )
 {
     m_qtImage = NULL;
     m_ok = false;
+    m_qtPainter = new QPainter();
     DoSelect( bitmap );
 }
 
-wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc )
+wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *WXUNUSED(dc) )
     : wxQtDCImpl( owner )
 {
     m_qtImage = NULL;
@@ -36,6 +37,7 @@ wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc )
 
 wxMemoryDCImpl::~wxMemoryDCImpl()
 {
+    // Deselect the bitmap, if any (warning: it can be already deleted)
     DoSelect( wxNullBitmap );
 }
 
@@ -43,28 +45,41 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 {
     if ( IsOk() )
     {
-        // Copy image to bitmap
-        m_qtPainter.end();
+        // Finish the painting in the intermediate image device:
+        m_qtPainter->end();
 
-        m_qtPainter.begin( m_pixmap );
-        m_qtPainter.drawImage( QPoint( 0, 0 ), *m_qtImage );
-        m_qtPainter.end();
-
+        if (m_selected.IsOk() && !m_selected.GetHandle()->isNull())
+        {
+            // Copy intermediate image to the bitmap
+            m_qtPainter->begin( m_selected.GetHandle() );
+            m_qtPainter->drawImage( QPoint( 0, 0 ), *m_qtImage );
+            m_qtPainter->end();
+        }
         m_ok = false;
-        m_pixmap = NULL;
     }
 
+    // clean up the intermediate image device:
     if ( m_qtImage )
     {
         delete m_qtImage;
         m_qtImage = NULL;
     }
 
+    m_selected = bitmap;
     if ( bitmap.IsOk() && !bitmap.GetHandle()->isNull() ) {
-        m_pixmap = bitmap.GetHandle();
-
-        m_qtImage = new QImage( m_pixmap->toImage() );
-
-        m_ok = m_qtPainter.begin( m_qtImage );
+        // create the intermediate image for the pixmap:
+        m_qtImage = new QImage( bitmap.GetHandle()->toImage() );
+        // start drawing on the intermediary device:
+        m_ok = m_qtPainter->begin( m_qtImage );
     }
+}
+
+const wxBitmap& wxMemoryDCImpl::GetSelectedBitmap() const
+{
+    return m_selected;
+}
+
+wxBitmap& wxMemoryDCImpl::GetSelectedBitmap()
+{
+    return m_selected;
 }

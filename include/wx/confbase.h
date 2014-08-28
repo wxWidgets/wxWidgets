@@ -5,7 +5,6 @@
 // Author:      Karsten Ballueder & Vadim Zeitlin
 // Modified by:
 // Created:     07.04.98 (adapted from appconf.h)
-// RCS-ID:      $Id$
 // Copyright:   (c) 1997 Karsten Ballueder   Ballueder@usa.net
 //                       Vadim Zeitlin      <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -52,10 +51,8 @@ class WXDLLIMPEXP_FWD_BASE wxArrayString;
 
 // not all compilers can deal with template Read/Write() methods, define this
 // symbol if the template functions are available
-#if (!defined(__VISUALC__) || __VISUALC__ > 1200) && \
-    !defined( __VMS ) && \
-    !(defined(__HP_aCC) && defined(__hppa)) && \
-    !defined (__DMC__)
+#if !defined( __VMS ) && \
+    !(defined(__HP_aCC) && defined(__hppa))
     #define wxHAS_CONFIG_TEMPLATE_RW
 #endif
 
@@ -73,7 +70,7 @@ enum
 // abstract base class wxConfigBase which defines the interface for derived
 // classes
 //
-// wxConfig organizes the items in a tree-like structure (modeled after the
+// wxConfig organizes the items in a tree-like structure (modelled after the
 // Unix/Dos filesystem). There are groups (directories) and keys (files).
 // There is always one current group given by the current path.
 //
@@ -306,8 +303,8 @@ public:
   bool Write(const wxString& key, float value)
     { return DoWriteDouble(key, value); }
 
-  // Causes ambiguities in VC++ 6 and OpenVMS (at least)
-#if ( (!defined(__VISUALC__) || __VISUALC__ > 1200) && !defined( __VMS ) && !defined (__DMC__))
+  // Causes ambiguities in under OpenVMS
+#if !defined( __VMS )
   // for other types, use wxToString()
   template <typename T>
   bool Write(const wxString& key, T const& value)

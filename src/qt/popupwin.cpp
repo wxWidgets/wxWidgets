@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/popupwin.cpp
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -15,7 +14,7 @@ wxPopupWindow::wxPopupWindow()
 {
 }
 
-wxPopupWindow::wxPopupWindow(wxWindow *parent, int flags)
+wxPopupWindow::wxPopupWindow(wxWindow *WXUNUSED(parent), int WXUNUSED(flags))
 {
 }
 

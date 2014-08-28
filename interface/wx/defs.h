@@ -2,7 +2,6 @@
 // Name:        wx/defs.h
 // Purpose:     interface of global functions
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -144,6 +143,355 @@ enum wxBorder
     wxBORDER_MASK   = 0x1f200000
 };
 
+/*  ---------------------------------------------------------------------------- */
+/*  Possible SetSize flags */
+/*  ---------------------------------------------------------------------------- */
+
+/*  Use internally-calculated width if -1 */
+#define wxSIZE_AUTO_WIDTH       0x0001
+/*  Use internally-calculated height if -1 */
+#define wxSIZE_AUTO_HEIGHT      0x0002
+/*  Use internally-calculated width and height if each is -1 */
+#define wxSIZE_AUTO             (wxSIZE_AUTO_WIDTH|wxSIZE_AUTO_HEIGHT)
+/*  Ignore missing (-1) dimensions (use existing). */
+/*  For readability only: test for wxSIZE_AUTO_WIDTH/HEIGHT in code. */
+#define wxSIZE_USE_EXISTING     0x0000
+/*  Allow -1 as a valid position */
+#define wxSIZE_ALLOW_MINUS_ONE  0x0004
+/*  Don't do parent client adjustments (for implementation only) */
+#define wxSIZE_NO_ADJUSTMENTS   0x0008
+/*  Change the window position even if it seems to be already correct */
+#define wxSIZE_FORCE            0x0010
+/*  Emit size event even if size didn't change */
+#define wxSIZE_FORCE_EVENT      0x0020
+
+/*  ---------------------------------------------------------------------------- */
+/*  Window style flags */
+/*  ---------------------------------------------------------------------------- */
+
+/*
+ * Values are chosen so they can be |'ed in a bit list.
+ * Some styles are used across more than one group,
+ * so the values mustn't clash with others in the group.
+ * Otherwise, numbers can be reused across groups.
+ */
+
+/*
+    Summary of the bits used by various styles.
+
+    High word, containing styles which can be used with many windows:
+
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |31|30|29|28|27|26|25|24|23|22|21|20|19|18|17|16|
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  \_ wxFULL_REPAINT_ON_RESIZE
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  \____ wxPOPUP_WINDOW
+      |  |  |  |  |  |  |  |  |  |  |  |  |  \_______ wxWANTS_CHARS
+      |  |  |  |  |  |  |  |  |  |  |  |  \__________ wxTAB_TRAVERSAL
+      |  |  |  |  |  |  |  |  |  |  |  \_____________ wxTRANSPARENT_WINDOW
+      |  |  |  |  |  |  |  |  |  |  \________________ wxBORDER_NONE
+      |  |  |  |  |  |  |  |  |  \___________________ wxCLIP_CHILDREN
+      |  |  |  |  |  |  |  |  \______________________ wxALWAYS_SHOW_SB
+      |  |  |  |  |  |  |  \_________________________ wxBORDER_STATIC
+      |  |  |  |  |  |  \____________________________ wxBORDER_SIMPLE
+      |  |  |  |  |  \_______________________________ wxBORDER_RAISED
+      |  |  |  |  \__________________________________ wxBORDER_SUNKEN
+      |  |  |  \_____________________________________ wxBORDER_{DOUBLE,THEME}
+      |  |  \________________________________________ wxCAPTION/wxCLIP_SIBLINGS
+      |  \___________________________________________ wxHSCROLL
+      \______________________________________________ wxVSCROLL
+
+
+    Low word style bits is class-specific meaning that the same bit can have
+    different meanings for different controls (e.g. 0x10 is wxCB_READONLY
+    meaning that the control can't be modified for wxComboBox but wxLB_SORT
+    meaning that the control should be kept sorted for wxListBox, while
+    wxLB_SORT has a different value -- and this is just fine).
+ */
+
+/*
+ * Window (Frame/dialog/subwindow/panel item) style flags
+ */
+#define wxVSCROLL               0x80000000
+#define wxHSCROLL               0x40000000
+#define wxCAPTION               0x20000000
+
+/*  New styles (border styles are now in their own enum) */
+#define wxDOUBLE_BORDER         wxBORDER_DOUBLE
+#define wxSUNKEN_BORDER         wxBORDER_SUNKEN
+#define wxRAISED_BORDER         wxBORDER_RAISED
+#define wxBORDER                wxBORDER_SIMPLE
+#define wxSIMPLE_BORDER         wxBORDER_SIMPLE
+#define wxSTATIC_BORDER         wxBORDER_STATIC
+#define wxNO_BORDER             wxBORDER_NONE
+
+/*  wxALWAYS_SHOW_SB: instead of hiding the scrollbar when it is not needed, */
+/*  disable it - but still show (see also wxLB_ALWAYS_SB style) */
+/*  */
+/*  NB: as this style is only supported by wxUniversal and wxMSW so far */
+#define wxALWAYS_SHOW_SB        0x00800000
+
+/*  Clip children when painting, which reduces flicker in e.g. frames and */
+/*  splitter windows, but can't be used in a panel where a static box must be */
+/*  'transparent' (panel paints the background for it) */
+#define wxCLIP_CHILDREN         0x00400000
+
+/*  Note we're reusing the wxCAPTION style because we won't need captions */
+/*  for subwindows/controls */
+#define wxCLIP_SIBLINGS         0x20000000
+
+#define wxTRANSPARENT_WINDOW    0x00100000
+
+/*  Add this style to a panel to get tab traversal working outside of dialogs */
+/*  (on by default for wxPanel, wxDialog, wxScrolledWindow) */
+#define wxTAB_TRAVERSAL         0x00080000
+
+/*  Add this style if the control wants to get all keyboard messages (under */
+/*  Windows, it won't normally get the dialog navigation key events) */
+#define wxWANTS_CHARS           0x00040000
+
+/*  Make window retained (Motif only, see src/generic/scrolwing.cpp)
+ *  This is non-zero only under wxMotif, to avoid a clash with wxPOPUP_WINDOW
+ *  on other platforms
+ */
+
+#ifdef __WXMOTIF__
+#define wxRETAINED              0x00020000
+#else
+#define wxRETAINED              0x00000000
+#endif
+#define wxBACKINGSTORE          wxRETAINED
+
+/*  set this flag to create a special popup window: it will be always shown on */
+/*  top of other windows, will capture the mouse and will be dismissed when the */
+/*  mouse is clicked outside of it or if it loses focus in any other way */
+#define wxPOPUP_WINDOW          0x00020000
+
+/*  force a full repaint when the window is resized (instead of repainting just */
+/*  the invalidated area) */
+#define wxFULL_REPAINT_ON_RESIZE 0x00010000
+
+/*  obsolete: now this is the default behaviour */
+/*  */
+/*  don't invalidate the whole window (resulting in a PAINT event) when the */
+/*  window is resized (currently, makes sense for wxMSW only) */
+#define wxNO_FULL_REPAINT_ON_RESIZE 0
+
+/* A mask which can be used to filter (out) all wxWindow-specific styles.
+ */
+#define wxWINDOW_STYLE_MASK     \
+    (wxVSCROLL|wxHSCROLL|wxBORDER_MASK|wxALWAYS_SHOW_SB|wxCLIP_CHILDREN| \
+     wxCLIP_SIBLINGS|wxTRANSPARENT_WINDOW|wxTAB_TRAVERSAL|wxWANTS_CHARS| \
+     wxRETAINED|wxPOPUP_WINDOW|wxFULL_REPAINT_ON_RESIZE)
+
+/*
+ * Extra window style flags (use wxWS_EX prefix to make it clear that they
+ * should be passed to wxWindow::SetExtraStyle(), not SetWindowStyle())
+ */
+
+/*  by default, TransferDataTo/FromWindow() only work on direct children of the */
+/*  window (compatible behaviour), set this flag to make them recursively */
+/*  descend into all subwindows */
+#define wxWS_EX_VALIDATE_RECURSIVELY    0x00000001
+
+/*  wxCommandEvents and the objects of the derived classes are forwarded to the */
+/*  parent window and so on recursively by default. Using this flag for the */
+/*  given window allows to block this propagation at this window, i.e. prevent */
+/*  the events from being propagated further upwards. The dialogs have this */
+/*  flag on by default. */
+#define wxWS_EX_BLOCK_EVENTS            0x00000002
+
+/*  don't use this window as an implicit parent for the other windows: this must */
+/*  be used with transient windows as otherwise there is the risk of creating a */
+/*  dialog/frame with this window as a parent which would lead to a crash if the */
+/*  parent is destroyed before the child */
+#define wxWS_EX_TRANSIENT               0x00000004
+
+/*  don't paint the window background, we'll assume it will */
+/*  be done by a theming engine. This is not yet used but could */
+/*  possibly be made to work in the future, at least on Windows */
+#define wxWS_EX_THEMED_BACKGROUND       0x00000008
+
+/*  this window should always process idle events */
+#define wxWS_EX_PROCESS_IDLE            0x00000010
+
+/*  this window should always process UI update events */
+#define wxWS_EX_PROCESS_UI_UPDATES      0x00000020
+
+/*  Draw the window in a metal theme on Mac */
+#define wxFRAME_EX_METAL                0x00000040
+#define wxDIALOG_EX_METAL               0x00000040
+
+/*  Use this style to add a context-sensitive help to the window (currently for */
+/*  Win32 only and it doesn't work if wxMINIMIZE_BOX or wxMAXIMIZE_BOX are used) */
+#define wxWS_EX_CONTEXTHELP             0x00000080
+
+/* synonyms for wxWS_EX_CONTEXTHELP for compatibility */
+#define wxFRAME_EX_CONTEXTHELP          wxWS_EX_CONTEXTHELP
+#define wxDIALOG_EX_CONTEXTHELP         wxWS_EX_CONTEXTHELP
+
+/*  Create a window which is attachable to another top level window */
+#define wxFRAME_DRAWER          0x0020
+
+/*
+ * MDI parent frame style flags
+ * Can overlap with some of the above.
+ */
+
+#define wxFRAME_NO_WINDOW_MENU  0x0100
+
+/*
+ * wxMenuBar style flags
+ */
+/*  use native docking */
+#define wxMB_DOCKABLE       0x0001
+
+/*
+ * wxMenu style flags
+ */
+#define wxMENU_TEAROFF      0x0001
+
+/*
+ * Apply to all panel items
+ */
+#define wxCOLOURED          0x0800
+#define wxFIXED_LENGTH      0x0400
+
+/*
+ * Styles for wxListBox
+ */
+#define wxLB_SORT           0x0010
+#define wxLB_SINGLE         0x0020
+#define wxLB_MULTIPLE       0x0040
+#define wxLB_EXTENDED       0x0080
+/*  wxLB_OWNERDRAW is Windows-only */
+#define wxLB_NEEDED_SB      0x0000
+#define wxLB_OWNERDRAW      0x0100
+#define wxLB_ALWAYS_SB      0x0200
+#define wxLB_NO_SB          0x0400
+#define wxLB_HSCROLL        wxHSCROLL
+/*  always show an entire number of rows */
+#define wxLB_INT_HEIGHT     0x0800
+
+/*
+ * wxComboBox style flags
+ */
+#define wxCB_SIMPLE         0x0004
+#define wxCB_SORT           0x0008
+#define wxCB_READONLY       0x0010
+#define wxCB_DROPDOWN       0x0020
+
+/*
+ * wxRadioBox style flags
+ */
+/*  should we number the items from left to right or from top to bottom in a 2d */
+/*  radiobox? */
+#define wxRA_LEFTTORIGHT    0x0001
+#define wxRA_TOPTOBOTTOM    0x0002
+
+/*  New, more intuitive names to specify majorDim argument */
+#define wxRA_SPECIFY_COLS   wxHORIZONTAL
+#define wxRA_SPECIFY_ROWS   wxVERTICAL
+
+/*  Old names for compatibility */
+#define wxRA_HORIZONTAL     wxHORIZONTAL
+#define wxRA_VERTICAL       wxVERTICAL
+
+/*
+ * wxRadioButton style flag
+ */
+#define wxRB_GROUP          0x0004
+#define wxRB_SINGLE         0x0008
+
+/*
+ * wxScrollBar flags
+ */
+#define wxSB_HORIZONTAL      wxHORIZONTAL
+#define wxSB_VERTICAL        wxVERTICAL
+
+/*
+ * wxSpinButton flags.
+ * Note that a wxSpinCtrl is sometimes defined as a wxTextCtrl, and so the
+ * flags shouldn't overlap with wxTextCtrl flags that can be used for a single
+ * line controls (currently we reuse wxTE_CHARWRAP and wxTE_RICH2 neither of
+ * which makes sense for them).
+ */
+#define wxSP_HORIZONTAL       wxHORIZONTAL /*  4 */
+#define wxSP_VERTICAL         wxVERTICAL   /*  8 */
+#define wxSP_ARROW_KEYS       0x4000
+#define wxSP_WRAP             0x8000
+
+/*
+ * wxTabCtrl flags
+ */
+#define wxTC_RIGHTJUSTIFY     0x0010
+#define wxTC_FIXEDWIDTH       0x0020
+#define wxTC_TOP              0x0000    /*  default */
+#define wxTC_LEFT             0x0020
+#define wxTC_RIGHT            0x0040
+#define wxTC_BOTTOM           0x0080
+#define wxTC_MULTILINE        0x0200    /* == wxNB_MULTILINE */
+#define wxTC_OWNERDRAW        0x0400
+
+/*
+ * wxStaticBitmap flags
+ */
+#define wxBI_EXPAND           wxEXPAND
+
+/*
+ * wxStaticLine flags
+ */
+#define wxLI_HORIZONTAL         wxHORIZONTAL
+#define wxLI_VERTICAL           wxVERTICAL
+
+
+/*
+ * extended dialog specifiers. these values are stored in a different
+ * flag and thus do not overlap with other style flags. note that these
+ * values do not correspond to the return values of the dialogs (for
+ * those values, look at the wxID_XXX defines).
+ */
+
+/*  wxCENTRE already defined as  0x00000001 */
+#define wxYES                   0x00000002
+#define wxOK                    0x00000004
+#define wxNO                    0x00000008
+#define wxYES_NO                (wxYES | wxNO)
+#define wxCANCEL                0x00000010
+#define wxAPPLY                 0x00000020
+#define wxCLOSE                 0x00000040
+
+#define wxOK_DEFAULT            0x00000000  /* has no effect (default) */
+#define wxYES_DEFAULT           0x00000000  /* has no effect (default) */
+#define wxNO_DEFAULT            0x00000080  /* only valid with wxYES_NO */
+#define wxCANCEL_DEFAULT        0x80000000  /* only valid with wxCANCEL */
+
+#define wxICON_EXCLAMATION      0x00000100
+#define wxICON_HAND             0x00000200
+#define wxICON_WARNING          wxICON_EXCLAMATION
+#define wxICON_ERROR            wxICON_HAND
+#define wxICON_QUESTION         0x00000400
+#define wxICON_INFORMATION      0x00000800
+#define wxICON_STOP             wxICON_HAND
+#define wxICON_ASTERISK         wxICON_INFORMATION
+
+#define wxHELP                  0x00001000
+#define wxFORWARD               0x00002000
+#define wxBACKWARD              0x00004000
+#define wxRESET                 0x00008000
+#define wxMORE                  0x00010000
+#define wxSETUP                 0x00020000
+#define wxICON_NONE             0x00040000
+#define wxICON_AUTH_NEEDED      0x00080000
+
+#define wxICON_MASK \
+    (wxICON_EXCLAMATION|wxICON_HAND|wxICON_QUESTION|wxICON_INFORMATION|wxICON_NONE)
+
+
+/*  symbolic constant used by all Find()-like functions returning positive */
+/*  integer on success as failure indicator */
+#define wxNOT_FOUND       (-1)
 
 /**
     Background styles.
@@ -193,7 +541,19 @@ enum wxBackgroundStyle
         EVT_ERASE_BACKGROUND event will not be generated at all for windows
         with this style.
      */
-    wxBG_STYLE_PAINT
+    wxBG_STYLE_PAINT,
+    
+    /* this style is deprecated and doesn't do anything, don't use */
+    wxBG_STYLE_COLOUR,
+
+    /**
+        Indicates that the window background is not erased, letting the parent
+        window show through.
+
+        Currently this style is only supported in wxOSX and wxGTK with
+        compositing available, see wxWindow::IsTransparentBackgroundSupported().
+     */
+    wxBG_STYLE_TRANSPARENT,
 };
 
 
@@ -202,9 +562,8 @@ enum wxBackgroundStyle
 
     Notice that some, but @em not all, of these IDs are also stock IDs, i.e.
     you can use them for the button or menu items without specifying the label
-    which will be provided by the underlying platform itself. See @ref "the
-    list of stock items" for the subset of standard IDs which are stock IDs as
-    well.
+    which will be provided by the underlying platform itself. See @ref page_stockitems "the
+    list of stock items" for the subset of standard IDs which are stock IDs as well.
 */
 enum wxStandardID
 {
@@ -418,7 +777,7 @@ enum wxItemKind
 
     /**
         Normal tool button with a dropdown arrow next to it. Clicking the
-        dropdown arrow sends a @c wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED event and may
+        dropdown arrow sends a @c wxEVT_TOOL_DROPDOWN event and may
         also display the menu previously associated with the item with
         wxToolBar::SetDropdownMenu(). Currently this type of tools is supported
         under MSW and GTK.
@@ -507,6 +866,33 @@ enum wxKeyCode
      */
     WXK_NONE    =    0,
 
+    WXK_CONTROL_A = 1,
+    WXK_CONTROL_B,
+    WXK_CONTROL_C,
+    WXK_CONTROL_D,
+    WXK_CONTROL_E,
+    WXK_CONTROL_F,
+    WXK_CONTROL_G,
+    WXK_CONTROL_H,
+    WXK_CONTROL_I,
+    WXK_CONTROL_J,
+    WXK_CONTROL_K,
+    WXK_CONTROL_L,
+    WXK_CONTROL_M,
+    WXK_CONTROL_N,
+    WXK_CONTROL_O,
+    WXK_CONTROL_P,
+    WXK_CONTROL_Q,
+    WXK_CONTROL_R,
+    WXK_CONTROL_S,
+    WXK_CONTROL_T,
+    WXK_CONTROL_U,
+    WXK_CONTROL_V,
+    WXK_CONTROL_W,
+    WXK_CONTROL_X,
+    WXK_CONTROL_Y,
+    WXK_CONTROL_Z,
+    
     WXK_BACK    =    8,     //!< Backspace.
     WXK_TAB     =    9,
     WXK_RETURN  =    13,
@@ -530,7 +916,19 @@ enum wxKeyCode
     WXK_CLEAR,
     WXK_SHIFT,
     WXK_ALT,
+    /** Note that under Mac OS X, to improve compatibility with other
+      * systems, 'WXK_CONTROL' represents the 'Command' key. Use this
+      * constant to work with keyboard shortcuts. See 'WXK_RAW_CONTROL'
+      * to get the state of the actual 'Control' key.
+      */
     WXK_CONTROL,
+    /** Under Mac OS X, where the 'Command' key is mapped to 'Control'
+      * to improve compatibility with other systems, WXK_RAW_CONTROL may
+      * be used to obtain the state of the actual 'Control' key
+      * ('WXK_CONTROL' would obtain the status of the 'Command' key).
+      * Under Windows/Linux/Others, this is equivalent to WXK_CONTROL
+      */
+    WXK_RAW_CONTROL,
     WXK_MENU,
     WXK_PAUSE,
     WXK_CAPITAL,
@@ -621,6 +1019,11 @@ enum wxKeyCode
     WXK_WINDOWS_LEFT,
     WXK_WINDOWS_RIGHT,
     WXK_WINDOWS_MENU ,
+    
+    /** This special key code was used to represent the key used for keyboard shortcuts. Under Mac OS X,
+      * this key maps to the 'Command' (aka logo or 'Apple') key, whereas on Linux/Windows/others
+      * this is the Control key, with the new semantic of WXK_CONTROL, WXK_COMMAND is not needed anymore
+      */
     WXK_COMMAND,
 
     /** Hardware-specific buttons */
@@ -653,20 +1056,19 @@ enum wxKeyModifier
 {
     wxMOD_NONE      = 0x0000,
     wxMOD_ALT       = 0x0001,
+    /** Ctlr Key, corresponds to Command key on OS X */
     wxMOD_CONTROL   = 0x0002,
     wxMOD_ALTGR     = wxMOD_ALT | wxMOD_CONTROL,
     wxMOD_SHIFT     = 0x0004,
     wxMOD_META      = 0x0008,
     wxMOD_WIN       = wxMOD_META,
-
-    /**
-        Notice that @c wxMOD_CMD should be used instead of @c wxMOD_CONTROL
-        in portable code to account for the fact that although
-        @c Control modifier exists under Mac OS, it is not used for the same
-        purpose as under Windows or Unix there while the special Mac-specific
-        @c Command modifier is used in exactly the same way.
-    */
-    wxMOD_CMD       = wxMOD_META,
+    
+    /** used to describe the true Ctrl Key under OSX, 
+    identic to @c wxMOD_CONTROL on other platforms */
+    wxMOD_RAW_CONTROL,
+    
+    /** deprecated, identic to @c wxMOD_CONTROL on all platforms */
+    wxMOD_CMD       = wxMOD_CONTROL,
     wxMOD_ALL       = 0xffff
 };
 
@@ -677,127 +1079,123 @@ enum wxKeyModifier
 */
 enum wxPaperSize
 {
-    wxPAPER_NONE,               ///<  Use specific dimensions
-    wxPAPER_LETTER,             ///<  Letter, 8 1/2 by 11 inches
-    wxPAPER_LEGAL,              ///<  Legal, 8 1/2 by 14 inches
-    wxPAPER_A4,                 ///<  A4 Sheet, 210 by 297 millimeters
-    wxPAPER_CSHEET,             ///<  C Sheet, 17 by 22 inches
-    wxPAPER_DSHEET,             ///<  D Sheet, 22 by 34 inches
-    wxPAPER_ESHEET,             ///<  E Sheet, 34 by 44 inches
-    wxPAPER_LETTERSMALL,        ///<  Letter Small, 8 1/2 by 11 inches
-    wxPAPER_TABLOID,            ///<  Tabloid, 11 by 17 inches
-    wxPAPER_LEDGER,             ///<  Ledger, 17 by 11 inches
-    wxPAPER_STATEMENT,          ///<  Statement, 5 1/2 by 8 1/2 inches
-    wxPAPER_EXECUTIVE,          ///<  Executive, 7 1/4 by 10 1/2 inches
-    wxPAPER_A3,                 ///<  A3 sheet, 297 by 420 millimeters
-    wxPAPER_A4SMALL,            ///<  A4 small sheet, 210 by 297 millimeters
-    wxPAPER_A5,                 ///<  A5 sheet, 148 by 210 millimeters
-    wxPAPER_B4,                 ///<  B4 sheet, 250 by 354 millimeters
-    wxPAPER_B5,                 ///<  B5 sheet, 182-by-257-millimeter paper
-    wxPAPER_FOLIO,              ///<  Folio, 8-1/2-by-13-inch paper
-    wxPAPER_QUARTO,             ///<  Quarto, 215-by-275-millimeter paper
+    wxPAPER_10X11,              ///<  10 x 11 in
     wxPAPER_10X14,              ///<  10-by-14-inch sheet
     wxPAPER_11X17,              ///<  11-by-17-inch sheet
-    wxPAPER_NOTE,               ///<  Note, 8 1/2 by 11 inches
-    wxPAPER_ENV_9,              ///<  #9 Envelope, 3 7/8 by 8 7/8 inches
+    wxPAPER_12X11,              ///< 12 x 11 in
+    wxPAPER_15X11,              ///<  15 x 11 in
+    wxPAPER_9X11,               ///<  9 x 11 in
+    wxPAPER_A2,                 ///<  A2 420 x 594 mm
+    wxPAPER_A3,                 ///<  A3 sheet, 297 by 420 millimeters
+    wxPAPER_A3_EXTRA,           ///<  A3 Extra 322 x 445 mm
+    wxPAPER_A3_EXTRA_TRANSVERSE, ///<  A3 Extra Transverse 322 x 445 mm
+    wxPAPER_A3_ROTATED,         ///< A3 Rotated 420 x 297 mm
+    wxPAPER_A3_TRANSVERSE,      ///<  A3 Transverse 297 x 420 mm
+    wxPAPER_A4,                 ///<  A4 Sheet, 210 by 297 millimeters
+    wxPAPER_A4SMALL,            ///<  A4 small sheet, 210 by 297 millimeters
+    wxPAPER_A4_EXTRA,           ///<  A4 Extra 9.27 x 12.69 in
+    wxPAPER_A4_PLUS,            ///<  A4 Plus 210 x 330 mm
+    wxPAPER_A4_ROTATED,         ///< A4 Rotated 297 x 210 mm
+    wxPAPER_A4_TRANSVERSE,      ///<  A4 Transverse 210 x 297 mm
+    wxPAPER_A5,                 ///<  A5 sheet, 148 by 210 millimeters
+    wxPAPER_A5_EXTRA,           ///<  A5 Extra 174 x 235 mm
+    wxPAPER_A5_ROTATED,         ///< A5 Rotated 210 x 148 mm
+    wxPAPER_A5_TRANSVERSE,      ///<  A5 Transverse 148 x 210 mm
+    wxPAPER_A6,                 ///< A6 105 x 148 mm
+    wxPAPER_A6_ROTATED,         ///< A6 Rotated 148 x 105 mm
+    wxPAPER_A_PLUS,             ///<  SuperA/SuperA/A4 227 x 356 mm
+    wxPAPER_B4,                 ///<  B4 sheet, 250 by 354 millimeters
+    wxPAPER_B4_JIS_ROTATED,     ///< B4 (JIS) Rotated 364 x 257 mm
+    wxPAPER_B5,                 ///<  B5 sheet, 182-by-257-millimeter paper
+    wxPAPER_B5_EXTRA,           ///<  B5 (ISO) Extra 201 x 276 mm
+    wxPAPER_B5_JIS_ROTATED,     ///< B5 (JIS) Rotated 257 x 182 mm
+    wxPAPER_B5_TRANSVERSE,      ///<  B5 (JIS) Transverse 182 x 257 mm
+    wxPAPER_B6_JIS,             ///< B6 (JIS) 128 x 182 mm
+    wxPAPER_B6_JIS_ROTATED,     ///< B6 (JIS) Rotated 182 x 128 mm
+    wxPAPER_B_PLUS,             ///<  SuperB/SuperB/A3 305 x 487 mm
+    wxPAPER_CSHEET,             ///<  C Sheet, 17 by 22 inches
+    wxPAPER_DBL_JAPANESE_POSTCARD, ///< Japanese Double Postcard 200 x 148 mm
+    wxPAPER_DBL_JAPANESE_POSTCARD_ROTATED, ///< Double Japanese Postcard Rotated 148 x 200 mm
+    wxPAPER_DSHEET,             ///<  D Sheet, 22 by 34 inches
     wxPAPER_ENV_10,             ///<  #10 Envelope, 4 1/8 by 9 1/2 inches
     wxPAPER_ENV_11,             ///<  #11 Envelope, 4 1/2 by 10 3/8 inches
     wxPAPER_ENV_12,             ///<  #12 Envelope, 4 3/4 by 11 inches
     wxPAPER_ENV_14,             ///<  #14 Envelope, 5 by 11 1/2 inches
-    wxPAPER_ENV_DL,             ///<  DL Envelope, 110 by 220 millimeters
-    wxPAPER_ENV_C5,             ///<  C5 Envelope, 162 by 229 millimeters
-    wxPAPER_ENV_C3,             ///<  C3 Envelope, 324 by 458 millimeters
-    wxPAPER_ENV_C4,             ///<  C4 Envelope, 229 by 324 millimeters
-    wxPAPER_ENV_C6,             ///<  C6 Envelope, 114 by 162 millimeters
-    wxPAPER_ENV_C65,            ///<  C65 Envelope, 114 by 229 millimeters
+    wxPAPER_ENV_9,              ///<  #9 Envelope, 3 7/8 by 8 7/8 inches
     wxPAPER_ENV_B4,             ///<  B4 Envelope, 250 by 353 millimeters
     wxPAPER_ENV_B5,             ///<  B5 Envelope, 176 by 250 millimeters
     wxPAPER_ENV_B6,             ///<  B6 Envelope, 176 by 125 millimeters
+    wxPAPER_ENV_C3,             ///<  C3 Envelope, 324 by 458 millimeters
+    wxPAPER_ENV_C4,             ///<  C4 Envelope, 229 by 324 millimeters
+    wxPAPER_ENV_C5,             ///<  C5 Envelope, 162 by 229 millimeters
+    wxPAPER_ENV_C6,             ///<  C6 Envelope, 114 by 162 millimeters
+    wxPAPER_ENV_C65,            ///<  C65 Envelope, 114 by 229 millimeters
+    wxPAPER_ENV_DL,             ///<  DL Envelope, 110 by 220 millimeters
+    wxPAPER_ENV_INVITE,         ///<  Envelope Invite 220 x 220 mm
     wxPAPER_ENV_ITALY,          ///<  Italy Envelope, 110 by 230 millimeters
     wxPAPER_ENV_MONARCH,        ///<  Monarch Envelope, 3 7/8 by 7 1/2 inches
     wxPAPER_ENV_PERSONAL,       ///<  6 3/4 Envelope, 3 5/8 by 6 1/2 inches
-    wxPAPER_FANFOLD_US,         ///<  US Std Fanfold, 14 7/8 by 11 inches
-    wxPAPER_FANFOLD_STD_GERMAN, ///<  German Std Fanfold, 8 1/2 by 12 inches
+    wxPAPER_ESHEET,             ///<  E Sheet, 34 by 44 inches
+    wxPAPER_EXECUTIVE,          ///<  Executive, 7 1/4 by 10 1/2 inches
     wxPAPER_FANFOLD_LGL_GERMAN, ///<  German Legal Fanfold, 8 1/2 by 13 inches
-
-    // wxMSW Only
-
+    wxPAPER_FANFOLD_STD_GERMAN, ///<  German Std Fanfold, 8 1/2 by 12 inches
+    wxPAPER_FANFOLD_US,         ///<  US Std Fanfold, 14 7/8 by 11 inches
+    wxPAPER_FOLIO,              ///<  Folio, 8-1/2-by-13-inch paper
     wxPAPER_ISO_B4,             ///<  B4 (ISO) 250 x 353 mm
     wxPAPER_JAPANESE_POSTCARD,  ///<  Japanese Postcard 100 x 148 mm
-    wxPAPER_9X11,               ///<  9 x 11 in
-    wxPAPER_10X11,              ///<  10 x 11 in
-    wxPAPER_15X11,              ///<  15 x 11 in
-    wxPAPER_ENV_INVITE,         ///<  Envelope Invite 220 x 220 mm
-    wxPAPER_LETTER_EXTRA,       ///<  Letter Extra 9.5 x 12 in
-    wxPAPER_LEGAL_EXTRA,        ///<  Legal Extra 9.5 x 15 in
-    wxPAPER_TABLOID_EXTRA,      ///<  Tabloid Extra 11.69 x 18 in
-    wxPAPER_A4_EXTRA,           ///<  A4 Extra 9.27 x 12.69 in
-    wxPAPER_LETTER_TRANSVERSE,  ///<  Letter Transverse 8.5 x 11 in
-    wxPAPER_A4_TRANSVERSE,      ///<  A4 Transverse 210 x 297 mm
-    wxPAPER_LETTER_EXTRA_TRANSVERSE, ///<  Letter Extra Transverse 9.5 x 12 in
-    wxPAPER_A_PLUS,             ///<  SuperA/SuperA/A4 227 x 356 mm
-    wxPAPER_B_PLUS,             ///<  SuperB/SuperB/A3 305 x 487 mm
-    wxPAPER_LETTER_PLUS,        ///<  Letter Plus 8.5 x 12.69 in
-    wxPAPER_A4_PLUS,            ///<  A4 Plus 210 x 330 mm
-    wxPAPER_A5_TRANSVERSE,      ///<  A5 Transverse 148 x 210 mm
-    wxPAPER_B5_TRANSVERSE,      ///<  B5 (JIS) Transverse 182 x 257 mm
-    wxPAPER_A3_EXTRA,           ///<  A3 Extra 322 x 445 mm
-    wxPAPER_A5_EXTRA,           ///<  A5 Extra 174 x 235 mm
-    wxPAPER_B5_EXTRA,           ///<  B5 (ISO) Extra 201 x 276 mm
-    wxPAPER_A2,                 ///<  A2 420 x 594 mm
-    wxPAPER_A3_TRANSVERSE,      ///<  A3 Transverse 297 x 420 mm
-    wxPAPER_A3_EXTRA_TRANSVERSE, ///<  A3 Extra Transverse 322 x 445 mm
-
-    wxPAPER_DBL_JAPANESE_POSTCARD, ///< Japanese Double Postcard 200 x 148 mm
-    wxPAPER_A6,                 ///< A6 105 x 148 mm
-    wxPAPER_JENV_KAKU2,         ///< Japanese Envelope Kaku #2
-    wxPAPER_JENV_KAKU3,         ///< Japanese Envelope Kaku #3
-    wxPAPER_JENV_CHOU3,         ///< Japanese Envelope Chou #3
-    wxPAPER_JENV_CHOU4,         ///< Japanese Envelope Chou #4
-    wxPAPER_LETTER_ROTATED,     ///< Letter Rotated 11 x 8 1/2 in
-    wxPAPER_A3_ROTATED,         ///< A3 Rotated 420 x 297 mm
-    wxPAPER_A4_ROTATED,         ///< A4 Rotated 297 x 210 mm
-    wxPAPER_A5_ROTATED,         ///< A5 Rotated 210 x 148 mm
-    wxPAPER_B4_JIS_ROTATED,     ///< B4 (JIS) Rotated 364 x 257 mm
-    wxPAPER_B5_JIS_ROTATED,     ///< B5 (JIS) Rotated 257 x 182 mm
     wxPAPER_JAPANESE_POSTCARD_ROTATED, ///< Japanese Postcard Rotated 148 x 100 mm
-    wxPAPER_DBL_JAPANESE_POSTCARD_ROTATED, ///< Double Japanese Postcard Rotated 148 x 200 mm
-    wxPAPER_A6_ROTATED,         ///< A6 Rotated 148 x 105 mm
-    wxPAPER_JENV_KAKU2_ROTATED, ///< Japanese Envelope Kaku #2 Rotated
-    wxPAPER_JENV_KAKU3_ROTATED, ///< Japanese Envelope Kaku #3 Rotated
+    wxPAPER_JENV_CHOU3,         ///< Japanese Envelope Chou #3
     wxPAPER_JENV_CHOU3_ROTATED, ///< Japanese Envelope Chou #3 Rotated
+    wxPAPER_JENV_CHOU4,         ///< Japanese Envelope Chou #4
     wxPAPER_JENV_CHOU4_ROTATED, ///< Japanese Envelope Chou #4 Rotated
-    wxPAPER_B6_JIS,             ///< B6 (JIS) 128 x 182 mm
-    wxPAPER_B6_JIS_ROTATED,     ///< B6 (JIS) Rotated 182 x 128 mm
-    wxPAPER_12X11,              ///< 12 x 11 in
+    wxPAPER_JENV_KAKU2,         ///< Japanese Envelope Kaku #2
+    wxPAPER_JENV_KAKU2_ROTATED, ///< Japanese Envelope Kaku #2 Rotated
+    wxPAPER_JENV_KAKU3,         ///< Japanese Envelope Kaku #3
+    wxPAPER_JENV_KAKU3_ROTATED, ///< Japanese Envelope Kaku #3 Rotated
     wxPAPER_JENV_YOU4,          ///< Japanese Envelope You #4
     wxPAPER_JENV_YOU4_ROTATED,  ///< Japanese Envelope You #4 Rotated
+    wxPAPER_LEDGER,             ///<  Ledger, 17 by 11 inches
+    wxPAPER_LEGAL,              ///<  Legal, 8 1/2 by 14 inches
+    wxPAPER_LEGAL_EXTRA,        ///<  Legal Extra 9.5 x 15 in
+    wxPAPER_LETTER,             ///<  Letter, 8 1/2 by 11 inches
+    wxPAPER_LETTERSMALL,        ///<  Letter Small, 8 1/2 by 11 inches
+    wxPAPER_LETTER_EXTRA,       ///<  Letter Extra 9.5 x 12 in
+    wxPAPER_LETTER_EXTRA_TRANSVERSE, ///<  Letter Extra Transverse 9.5 x 12 in
+    wxPAPER_LETTER_PLUS,        ///<  Letter Plus 8.5 x 12.69 in
+    wxPAPER_LETTER_ROTATED,     ///< Letter Rotated 11 x 8 1/2 in
+    wxPAPER_LETTER_TRANSVERSE,  ///<  Letter Transverse 8.5 x 11 in
+    wxPAPER_NONE,               ///<  Use specific dimensions
+    wxPAPER_NOTE,               ///<  Note, 8 1/2 by 11 inches
     wxPAPER_P16K,               ///< PRC 16K 146 x 215 mm
+    wxPAPER_P16K_ROTATED,       ///< PRC 16K Rotated
     wxPAPER_P32K,               ///< PRC 32K 97 x 151 mm
     wxPAPER_P32KBIG,            ///< PRC 32K(Big) 97 x 151 mm
-    wxPAPER_PENV_1,             ///< PRC Envelope #1 102 x 165 mm
-    wxPAPER_PENV_2,             ///< PRC Envelope #2 102 x 176 mm
-    wxPAPER_PENV_3,             ///< PRC Envelope #3 125 x 176 mm
-    wxPAPER_PENV_4,             ///< PRC Envelope #4 110 x 208 mm
-    wxPAPER_PENV_5,             ///< PRC Envelope #5 110 x 220 mm
-    wxPAPER_PENV_6,             ///< PRC Envelope #6 120 x 230 mm
-    wxPAPER_PENV_7,             ///< PRC Envelope #7 160 x 230 mm
-    wxPAPER_PENV_8,             ///< PRC Envelope #8 120 x 309 mm
-    wxPAPER_PENV_9,             ///< PRC Envelope #9 229 x 324 mm
-    wxPAPER_PENV_10,            ///< PRC Envelope #10 324 x 458 mm
-    wxPAPER_P16K_ROTATED,       ///< PRC 16K Rotated
-    wxPAPER_P32K_ROTATED,       ///< PRC 32K Rotated
     wxPAPER_P32KBIG_ROTATED,    ///< PRC 32K(Big) Rotated
+    wxPAPER_P32K_ROTATED,       ///< PRC 32K Rotated
+    wxPAPER_PENV_1,             ///< PRC Envelope #1 102 x 165 mm
+    wxPAPER_PENV_10,            ///< PRC Envelope #10 324 x 458 mm
+    wxPAPER_PENV_10_ROTATED,    ///< PRC Envelope #10 Rotated 458 x 324 m
     wxPAPER_PENV_1_ROTATED,     ///< PRC Envelope #1 Rotated 165 x 102 mm
+    wxPAPER_PENV_2,             ///< PRC Envelope #2 102 x 176 mm
     wxPAPER_PENV_2_ROTATED,     ///< PRC Envelope #2 Rotated 176 x 102 mm
+    wxPAPER_PENV_3,             ///< PRC Envelope #3 125 x 176 mm
     wxPAPER_PENV_3_ROTATED,     ///< PRC Envelope #3 Rotated 176 x 125 mm
+    wxPAPER_PENV_4,             ///< PRC Envelope #4 110 x 208 mm
     wxPAPER_PENV_4_ROTATED,     ///< PRC Envelope #4 Rotated 208 x 110 mm
+    wxPAPER_PENV_5,             ///< PRC Envelope #5 110 x 220 mm
     wxPAPER_PENV_5_ROTATED,     ///< PRC Envelope #5 Rotated 220 x 110 mm
+    wxPAPER_PENV_6,             ///< PRC Envelope #6 120 x 230 mm
     wxPAPER_PENV_6_ROTATED,     ///< PRC Envelope #6 Rotated 230 x 120 mm
+    wxPAPER_PENV_7,             ///< PRC Envelope #7 160 x 230 mm
     wxPAPER_PENV_7_ROTATED,     ///< PRC Envelope #7 Rotated 230 x 160 mm
+    wxPAPER_PENV_8,             ///< PRC Envelope #8 120 x 309 mm
     wxPAPER_PENV_8_ROTATED,     ///< PRC Envelope #8 Rotated 309 x 120 mm
+    wxPAPER_PENV_9,             ///< PRC Envelope #9 229 x 324 mm
     wxPAPER_PENV_9_ROTATED,     ///< PRC Envelope #9 Rotated 324 x 229 mm
-    wxPAPER_PENV_10_ROTATED     ///< PRC Envelope #10 Rotated 458 x 324 m
+    wxPAPER_QUARTO,             ///<  Quarto, 215-by-275-millimeter paper
+    wxPAPER_STATEMENT,          ///<  Statement, 5 1/2 by 8 1/2 inches
+    wxPAPER_TABLOID,            ///<  Tabloid, 11 by 17 inches
+    wxPAPER_TABLOID_EXTRA       ///<  Tabloid Extra 11.69 x 18 in
 };
 
 /**
@@ -819,6 +1217,27 @@ enum wxDuplexMode
     wxDUPLEX_HORIZONTAL,
     wxDUPLEX_VERTICAL
 };
+
+/**
+    Predefined print quality constants.
+
+    @see ::wxPrintQuality
+ */
+#define wxPRINT_QUALITY_HIGH    -1
+#define wxPRINT_QUALITY_MEDIUM  -2
+#define wxPRINT_QUALITY_LOW     -3
+#define wxPRINT_QUALITY_DRAFT   -4
+
+/**
+    Specifies the print quality as either a predefined level or explicit
+    resolution.
+
+    The print quality may be one of ::wxPRINT_QUALITY_HIGH,
+    ::wxPRINT_QUALITY_MEDIUM, ::wxPRINT_QUALITY_LOW or ::wxPRINT_QUALITY_DRAFT
+    (which are all negative) or express the desired resolution, in DPI, e.g.
+    600.
+ */
+typedef int wxPrintQuality;
 
 /**
     Print mode (currently PostScript only).
@@ -846,6 +1265,24 @@ enum wxUpdateUI
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
+
+/**
+    Top level window styles common to wxFrame and wxDialog
+*/
+
+#define wxSTAY_ON_TOP           0x8000
+#define wxICONIZE               0x4000
+#define wxMINIMIZE              wxICONIZE
+#define wxMAXIMIZE              0x2000
+#define wxCLOSE_BOX             0x1000
+
+#define wxSYSTEM_MENU           0x0800
+#define wxMINIMIZE_BOX          0x0400
+#define wxMAXIMIZE_BOX          0x0200
+
+#define wxTINY_CAPTION          0x0080  // clashes with wxNO_DEFAULT
+#define wxRESIZE_BORDER         0x0040
+
 
 /**
     C99-like sized MIN/MAX constants for all integer types.
@@ -1130,10 +1567,39 @@ template <typename T> wxDELETE(T*& ptr);
 template <typename T> wxDELETEA(T*& array);
 
 /**
+    Generate deprecation warning with the given message when a function is
+    used.
+
+    This macro can be used to generate a warning indicating that a function is
+    deprecated (i.e. scheduled for removal in the future) and explaining why is
+    it so and/or what should it be replaced with. It applies to the declaration
+    following it, for example:
+    @code
+    wxDEPRECATED_MSG("use safer overload returning wxString instead")
+    void wxGetSomething(char* buf, size_t len);
+
+    wxString wxGetSomething();
+    @endcode
+
+    For compilers other than clang, g++ 4.5 or later and MSVC 8 (MSVS 2005) or
+    later, the message is ignored and a generic deprecation warning is given if
+    possible, i.e. if the compiler is g++ (any supported version) or MSVC 7
+    (MSVS 2003) or later.
+
+    @since 3.0
+
+    @header{wx/defs.h}
+ */
+
+/**
     This macro can be used around a function declaration to generate warnings
     indicating that this function is deprecated (i.e. obsolete and planned to
-    be removed in the future) when it is used. Only Visual C++ 7 and higher and
-    g++ compilers currently support this functionality.
+    be removed in the future) when it is used.
+
+    Notice that this macro itself is deprecated in favour of wxDEPRECATED_MSG()!
+
+    Only Visual C++ 7 and higher and g++ compilers currently support this
+    functionality.
 
     Example of use:
 
@@ -1230,6 +1696,33 @@ template <typename T> wxDELETEA(T*& array);
     @header{wx/defs.h}
 */
 #define wxEXPLICIT
+
+/**
+    @c wxOVERRIDE expands to the C++11 @c override keyword if it's supported by
+    the compiler or nothing otherwise.
+
+    This macro is useful for writing code which may be compiled by both C++11
+    and non-C++11 compilers and still allow the use of @c override for the
+    former.
+
+    Example of using this macro:
+    @code
+        class MyApp : public wxApp {
+        public:
+            virtual bool OnInit() wxOVERRIDE;
+
+            // This would result in an error from a C++11 compiler as the
+            // method doesn't actually override the base class OnExit() due to
+            // a typo in its name.
+            //virtual int OnEzit() wxOVERRIDE;
+        };
+    @endcode
+
+    @header{wx/defs.h}
+
+    @since 3.1.0
+ */
+#define wxOVERRIDE
 
 /**
     GNU C++ compiler gives a warning for any class whose destructor is private

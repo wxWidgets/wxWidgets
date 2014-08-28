@@ -2,7 +2,6 @@
 // Name:        wx/gtk1/pen.h
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -23,9 +22,9 @@
 class WXDLLIMPEXP_FWD_CORE wxPen;
 
 #if defined(__WXGTK127__)
-typedef    gint8 wxGTKDash;
+typedef signed char wxGTKDash;
 #else
-typedef    gchar wxGTKDash;
+typedef char wxGTKDash;
 #endif
 
 //-----------------------------------------------------------------------------
@@ -38,9 +37,6 @@ public:
     wxPen() { }
 
     wxPen( const wxColour &colour, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID );
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED_FUTURE( wxPen(const wxColour& col, int width, int style) );
-#endif
 
     bool operator==(const wxPen& pen) const;
     bool operator!=(const wxPen& pen) const { return !(*this == pen); }
@@ -64,10 +60,12 @@ public:
     wxDash* GetDash() const;
     wxBitmap *GetStipple() const;
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED_FUTURE( void SetStyle(int style) )
-        { SetStyle((wxPenStyle)style); }
-#endif
+
+    wxDEPRECATED_MSG("use wxPENSTYLE_XXX constants")
+    wxPen(const wxColour& col, int width, int style);
+
+    wxDEPRECATED_MSG("use wxPENSTYLE_XXX constants")
+    void SetStyle(int style) { SetStyle((wxPenStyle)style); }
 
 private:
     virtual wxGDIRefData *CreateGDIRefData() const;

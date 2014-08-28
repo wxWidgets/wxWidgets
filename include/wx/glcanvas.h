@@ -5,7 +5,6 @@
 // Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -49,7 +48,10 @@ enum
     WX_GL_MIN_ACCUM_BLUE,  // use blue buffer with most bits (> MIN_ACCUM_BLUE bits)
     WX_GL_MIN_ACCUM_ALPHA, // use alpha buffer with most bits (> MIN_ACCUM_ALPHA bits)
     WX_GL_SAMPLE_BUFFERS,  // 1 for multisampling support (antialiasing)
-    WX_GL_SAMPLES          // 4 for 2x2 antialiasing supersampling on most graphics cards
+    WX_GL_SAMPLES,         // 4 for 2x2 antialiasing supersampling on most graphics cards
+    WX_GL_CORE_PROFILE,    // use an OpenGL core profile
+    WX_GL_MAJOR_VERSION,   // major OpenGL version of the core profile
+    WX_GL_MINOR_VERSION    // minor OpenGL version of the core profile
 };
 
 #define wxGLCanvasName wxT("GLCanvas")
@@ -143,7 +145,7 @@ public:
 
 #ifdef __WXUNIVERSAL__
     // resolve the conflict with wxWindowUniv::SetCurrent()
-    virtual bool SetCurrent(bool doit) { return wxWindow::SetCurrent(doit); };
+    virtual bool SetCurrent(bool doit) { return wxWindow::SetCurrent(doit); }
 #endif
 
 protected:
@@ -195,8 +197,8 @@ public:
     #include "wx/gtk1/glcanvas.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/glcanvas.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/glcanvas.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/glcanvas.h"
 #else
     #error "wxGLCanvas not supported in this wxWidgets port"
 #endif

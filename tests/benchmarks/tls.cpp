@@ -3,7 +3,6 @@
 // Purpose:     String-related benchmarks
 // Author:      Vadim Zeitlin
 // Created:     2008-07-19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -20,10 +19,10 @@
     #include "wx/msw/wrapwin.h"
 #endif
 
-#if wxCHECK_GCC_VERSION(3, 3)
+#ifdef __GNUC__
     #define HAVE_COMPILER_THREAD
     #define wxTHREAD_SPECIFIC __thread
-#elif wxCHECK_VISUALC_VERSION(7)
+#elif defined(__VISUALC__)
     #define HAVE_COMPILER_THREAD
     #define wxTHREAD_SPECIFIC __declspec(thread)
 #endif

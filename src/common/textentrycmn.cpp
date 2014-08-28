@@ -3,7 +3,6 @@
 // Purpose:     wxTextEntryBase implementation
 // Author:      Vadim Zeitlin
 // Created:     2007-09-26
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -38,7 +37,7 @@
 // wxTextEntryHintData
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTextEntryHintData wxBIND_OR_CONNECT_HACK_ONLY_BASE_CLASS
+class WXDLLIMPEXP_CORE wxTextEntryHintData
 {
 public:
     wxTextEntryHintData(wxTextEntryBase *entry, wxWindow *win)
@@ -46,13 +45,9 @@ public:
           m_win(win),
           m_text(m_entry->GetValue())
     {
-        wxBIND_OR_CONNECT_HACK(win, wxEVT_SET_FOCUS, wxFocusEventHandler,
-                                wxTextEntryHintData::OnSetFocus, this);
-        wxBIND_OR_CONNECT_HACK(win, wxEVT_KILL_FOCUS, wxFocusEventHandler,
-                                wxTextEntryHintData::OnKillFocus, this);
-        wxBIND_OR_CONNECT_HACK(win, wxEVT_COMMAND_TEXT_UPDATED,
-                                wxCommandEventHandler,
-                                wxTextEntryHintData::OnTextChanged, this);
+        win->Bind(wxEVT_SET_FOCUS, &wxTextEntryHintData::OnSetFocus, this);
+        win->Bind(wxEVT_KILL_FOCUS, &wxTextEntryHintData::OnKillFocus, this);
+        win->Bind(wxEVT_TEXT, &wxTextEntryHintData::OnTextChanged, this);
     }
 
     // default dtor is ok
@@ -224,12 +219,22 @@ void wxTextEntryBase::AppendText(const wxString& text)
 
 void wxTextEntryBase::DoSetValue(const wxString& value, int flags)
 {
-    EventsSuppressor noeventsIf(this, !(flags & SetValue_SendEvent));
+    if ( value != DoGetValue() )
+    {
+        EventsSuppressor noeventsIf(this, !(flags & SetValue_SendEvent));
 
-    SelectAll();
-    WriteText(value);
+        SelectAll();
+        WriteText(value);
 
-    SetInsertionPoint(0);
+        SetInsertionPoint(0);
+    }
+    else // Same value, no need to do anything.
+    {
+        // Except that we still need to generate the event for consistency with
+        // the normal case when the text does change.
+        if ( flags & SetValue_SendEvent )
+            SendTextUpdatedEvent(GetEditableWindow());
+    }
 }
 
 void wxTextEntryBase::Replace(long from, long to, const wxString& value)
@@ -357,7 +362,7 @@ bool wxTextEntryBase::SendTextUpdatedEvent(wxWindow *win)
 {
     wxCHECK_MSG( win, false, "can't send an event without a window" );
 
-    wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, win->GetId());
+    wxCommandEvent event(wxEVT_TEXT, win->GetId());
 
     // do not do this as it could be very inefficient if the text control
     // contains a lot of text and we're not using ref-counted wxString

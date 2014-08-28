@@ -3,7 +3,6 @@
 // Purpose:     Sample showing integration of Flash ActiveX control
 // Author:      Vadim Zeitlin
 // Created:     2009-01-13
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -39,7 +38,7 @@
 #include "wx/cmdline.h"
 #include "wx/filename.h"
 
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -186,7 +185,7 @@ private:
                *m_funcname,
                *m_funcarg;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(FlashFrame);
 };
 
@@ -194,7 +193,7 @@ private:
 // event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(FlashFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(FlashFrame, wxFrame)
     EVT_MENU(wxID_OPEN,  FlashFrame::OnOpen)
     EVT_MENU(wxID_EXIT,  FlashFrame::OnQuit)
     EVT_MENU(wxID_ABOUT, FlashFrame::OnAbout)
@@ -211,7 +210,7 @@ BEGIN_EVENT_TABLE(FlashFrame, wxFrame)
     EVT_BUTTON(Flash_CallWithArg, FlashFrame::OnCallWithArg)
 
     EVT_ACTIVEX(wxID_ANY, FlashFrame::OnActiveXEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_APP(FlashApp)
 

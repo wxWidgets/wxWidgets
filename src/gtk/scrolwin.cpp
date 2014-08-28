@@ -5,7 +5,6 @@
 // Modified by: Ron Lee
 //              Vadim Zeitlin: removed 90% of duplicated common code
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -31,15 +30,12 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                    int xPos, int yPos,
                                    bool noRefresh)
 {
+    // prevent programmatic position changes from causing scroll events
+    m_win->SetScrollPos(wxHORIZONTAL, xPos);
+    m_win->SetScrollPos(wxVERTICAL, yPos);
+
     base_type::SetScrollbars(
         pixelsPerUnitX, pixelsPerUnitY, noUnitsX, noUnitsY, xPos, yPos, noRefresh);
-
-    gtk_range_set_value(m_win->m_scrollBar[wxWindow::ScrollDir_Horz], m_xScrollPosition);
-    gtk_range_set_value(m_win->m_scrollBar[wxWindow::ScrollDir_Vert], m_yScrollPosition);
-    m_win->m_scrollPos[wxWindow::ScrollDir_Horz] =
-        gtk_range_get_value(m_win->m_scrollBar[wxWindow::ScrollDir_Horz]);
-    m_win->m_scrollPos[wxWindow::ScrollDir_Vert] =
-        gtk_range_get_value(m_win->m_scrollBar[wxWindow::ScrollDir_Vert]);
 }
 
 void wxScrollHelper::DoAdjustScrollbar(GtkRange* range,
@@ -184,6 +180,23 @@ GtkPolicyType GtkPolicyFromWX(wxScrollbarVisibility visibility)
 }
 
 } // anonymous namespace
+
+bool wxScrollHelper::IsScrollbarShown(int orient) const
+{
+    GtkScrolledWindow * const scrolled = GTK_SCROLLED_WINDOW(m_win->m_widget);
+    if ( !scrolled )
+    {
+        // By default, all windows are scrollable.
+        return true;
+    }
+
+    GtkPolicyType hpolicy, vpolicy;
+    gtk_scrolled_window_get_policy(scrolled, &hpolicy, &vpolicy);
+
+    GtkPolicyType policy = orient == wxHORIZONTAL ? hpolicy : vpolicy;
+
+    return policy != GTK_POLICY_NEVER;
+}
 
 void wxScrollHelper::DoShowScrollbars(wxScrollbarVisibility horz,
                                       wxScrollbarVisibility vert)

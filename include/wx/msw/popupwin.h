@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     06.01.01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,6 +25,7 @@ public:
 
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
+    virtual void SetFocus();
     virtual bool Show(bool show = true);
 
     // return the style to be used for the popup windows
@@ -35,9 +35,6 @@ public:
     virtual WXHWND MSWGetParent() const;
 
 protected:
-    // popups handle the position like wxTopLevelWindow, not wxWindow
-    virtual void DoGetPosition(int *x, int *y) const;
-
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxPopupWindow)
 };
 

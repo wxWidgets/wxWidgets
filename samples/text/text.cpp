@@ -3,7 +3,6 @@
 // Purpose:     TextCtrl wxWidgets sample
 // Author:      Robert Roebling
 // Modified by:
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling, Julian Smart, Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -45,7 +44,7 @@
 #include "wx/numdlg.h"
 #include "wx/tokenzr.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -56,7 +55,7 @@
 class MyApp: public wxApp
 {
 public:
-    bool OnInit();
+    bool OnInit() wxOVERRIDE;
 };
 
 // a text ctrl which allows to call different wxTextCtrl functions
@@ -104,7 +103,7 @@ private:
 
     bool m_hasCapture;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyPanel: public wxPanel
@@ -128,6 +127,7 @@ public:
     void DoSelectText();
     void DoMoveToEndOfText();
     void DoMoveToEndOfEntry();
+    void DoGetWindowCoordinates();
 
     // return true if currently text control has any selection
     bool HasSelection() const
@@ -217,6 +217,10 @@ public:
 
     void OnMoveToEndOfText( wxCommandEvent& WXUNUSED(event) )
         { m_panel->DoMoveToEndOfText(); }
+
+    void OnGetWindowCoordinates( wxCommandEvent& WXUNUSED(event) )
+        { m_panel->DoGetWindowCoordinates(); }
+
     void OnMoveToEndOfEntry( wxCommandEvent& WXUNUSED(event) )
         { m_panel->DoMoveToEndOfEntry(); }
 
@@ -348,7 +352,7 @@ private:
 
     MyPanel *m_panel;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 /*
@@ -379,7 +383,7 @@ private:
     wxTextCtrl *m_textCtrl;
     long m_currentPosition;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 //----------------------------------------------------------------------
@@ -415,6 +419,7 @@ enum
     TEXT_ADD_FREEZE,
     TEXT_ADD_LINE,
     TEXT_MOVE_ENDTEXT,
+    TEXT_GET_WINDOW_COORD,
     TEXT_MOVE_ENDENTRY,
     TEXT_SET_EDITABLE,
     TEXT_SET_ENABLED,
@@ -513,6 +518,7 @@ bool MyApp::OnInit()
     menuText->Append(TEXT_LINE_UP, wxT("Scroll text one line up"));
     menuText->Append(TEXT_PAGE_DOWN, wxT("Scroll text one page down"));
     menuText->Append(TEXT_PAGE_UP, wxT("Scroll text one page up"));
+    menuText->Append(TEXT_GET_WINDOW_COORD, wxT("Get window coordinates"));
     menuText->AppendSeparator();
     menuText->Append(TEXT_GET_LINE, wxT("Get the text of a line of the tabbed multiline"));
     menuText->Append(TEXT_GET_LINELENGTH, wxT("Get the length of a line of the tabbed multiline"));
@@ -553,7 +559,7 @@ bool MyApp::OnInit()
 // MyTextCtrl
 //----------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
+wxBEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
     EVT_KEY_DOWN(MyTextCtrl::OnKeyDown)
     EVT_KEY_UP(MyTextCtrl::OnKeyUp)
     EVT_CHAR(MyTextCtrl::OnChar)
@@ -570,7 +576,7 @@ BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
 
     EVT_SET_FOCUS(MyTextCtrl::OnSetFocus)
     EVT_KILL_FOCUS(MyTextCtrl::OnKillFocus)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool MyTextCtrl::ms_logKey = false;
 bool MyTextCtrl::ms_logChar = false;
@@ -733,10 +739,27 @@ static wxString GetMouseEventDesc(const wxMouseEvent& ev)
         dbl = ev.RightDClick();
         up = ev.RightUp();
     }
+    else if ( ev.Aux1Down() || ev.Aux1Up() || ev.Aux1DClick() )
+    {
+        button = wxT("Aux1");
+        dbl = ev.Aux1DClick();
+        up = ev.Aux1Up();
+    }
+    else if ( ev.Aux2Down() || ev.Aux2Up() || ev.Aux2DClick() )
+    {
+        button = wxT("Aux2");
+        dbl = ev.Aux2DClick();
+        up = ev.Aux2Up();
+    }
+    else if ( ev.GetWheelRotation() )
+    {
+        return wxString::Format("Wheel rotation %+d", ev.GetWheelRotation());
+    }
     else
     {
         return wxT("Unknown mouse event");
     }
+    wxASSERT(!(dbl && up));
 
     return wxString::Format(wxT("%s mouse button %s"),
                             button.c_str(),
@@ -780,6 +803,8 @@ void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
             << GetChar( ev.LeftIsDown(), wxT('1') )
             << GetChar( ev.MiddleIsDown(), wxT('2') )
             << GetChar( ev.RightIsDown(), wxT('3') )
+            << GetChar( ev.Aux1IsDown(), wxT('x') )
+            << GetChar( ev.Aux2IsDown(), wxT('X') )
             << GetChar( ev.ControlDown(), wxT('C') )
             << GetChar( ev.AltDown(), wxT('A') )
             << GetChar( ev.ShiftDown(), wxT('S') )
@@ -1048,14 +1073,21 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_password = new MyTextCtrl( this, wxID_ANY, wxT(""),
       wxPoint(10,50), wxSize(140,wxDefaultCoord), wxTE_PASSWORD );
 
-    m_readonly = new MyTextCtrl( this, wxID_ANY, wxT("Read only"),
-      wxPoint(10,90), wxSize(140,wxDefaultCoord), wxTE_READONLY );
-
-    m_limited = new MyTextCtrl(this, wxID_ANY, wxT("Max 8 ch"),
-                              wxPoint(10, 130), wxSize(140, wxDefaultCoord));
+    m_limited = new MyTextCtrl(this, wxID_ANY, "",
+                              wxPoint(10, 90), wxDefaultSize);
+    m_limited->SetHint("Max 8 ch");
     m_limited->SetMaxLength(8);
+    wxSize size2 = m_limited->GetSizeFromTextSize(m_limited->GetTextExtent("WWWWWWWW"));
+    m_limited->SetSizeHints(size2, size2);
 
     // multi line text controls
+
+    wxString string3L("Read only\nMultiline\nFitted size");
+    m_readonly = new MyTextCtrl( this, wxID_ANY, string3L,
+               wxPoint(10, 120), wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY );
+    wxWindowDC dc(m_readonly);
+    size2 = m_readonly->GetSizeFromTextSize(dc.GetMultiLineTextExtent(string3L));
+    m_readonly->SetMinSize(size2);
 
     m_horizontal = new MyTextCtrl( this, wxID_ANY, wxT("Multiline text control with a horizontal scrollbar.\n"),
       wxPoint(10,170), wxSize(140,70), wxTE_MULTILINE | wxHSCROLL);
@@ -1066,23 +1098,23 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
         switch ( (wxChar)wxTheApp->argv[1][0] )
         {
             case '2':
-                m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
-                                             false, wxT(""),
-                                             wxFONTENCODING_ISO8859_2));
+                m_horizontal->SetFont(wxFontInfo(18)
+                                        .Family(wxFONTFAMILY_SWISS)
+                                        .Encoding(wxFONTENCODING_ISO8859_2));
                 m_horizontal->AppendText(wxT("\256lu\273ou\350k\375 k\371\362 zb\354sile \350e\271tina \253\273"));
                 break;
 
             case '1':
-                m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
-                                             false, wxT(""),
-                                             wxFONTENCODING_CP1251));
+                m_horizontal->SetFont(wxFontInfo(18)
+                                        .Family(wxFONTFAMILY_SWISS)
+                                        .Encoding(wxFONTENCODING_CP1251));
                 m_horizontal->AppendText(wxT("\317\360\350\342\345\362!"));
                 break;
 
             case '8':
-                m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
-                                             false, wxT(""),
-                                             wxFONTENCODING_CP1251));
+                m_horizontal->SetFont(wxFontInfo(18)
+                                        .Family(wxFONTFAMILY_SWISS)
+                                        .Encoding(wxFONTENCODING_CP1251));
 #if wxUSE_UNICODE
                 m_horizontal->AppendText(L"\x0412\x0430\x0434\x0438\x043c \x0426");
 #else
@@ -1110,7 +1142,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #endif
 
     m_tab = new MyTextCtrl( this, 100, wxT("Multiline, allow <TAB> processing."),
-      wxPoint(180,90), wxSize(200,70), wxTE_MULTILINE |  wxTE_PROCESS_TAB );
+      wxPoint(180,90), wxDefaultSize, wxTE_MULTILINE |  wxTE_PROCESS_TAB );
     m_tab->SetClientData((void *)wxT("tab"));
 
     m_enter = new MyTextCtrl( this, 100, wxT("Multiline, allow <ENTER> processing."),
@@ -1146,13 +1178,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxBoxSizer *column1 = new wxBoxSizer(wxVERTICAL);
     column1->Add( m_text, 0, wxALL | wxEXPAND, 10 );
     column1->Add( m_password, 0, wxALL | wxEXPAND, 10 );
-    column1->Add( m_readonly, 0, wxALL | wxEXPAND, 10 );
-    column1->Add( m_limited, 0, wxALL | wxEXPAND, 10 );
+    column1->Add( m_readonly, 0, wxALL, 10 );
+    column1->Add( m_limited, 0, wxALL, 10 );
     column1->Add( m_horizontal, 1, wxALL | wxEXPAND, 10 );
 
     wxBoxSizer *column2 = new wxBoxSizer(wxVERTICAL);
     column2->Add( m_multitext, 1, wxALL | wxEXPAND, 10 );
-    column2->Add( m_tab, 1, wxALL | wxEXPAND, 10 );
+    column2->Add( m_tab, 0, wxALL | wxEXPAND, 10 );
     column2->Add( m_enter, 1, wxALL | wxEXPAND, 10 );
 
     wxBoxSizer *row1 = new wxBoxSizer(wxHORIZONTAL);
@@ -1299,6 +1331,18 @@ void MyPanel::DoMoveToEndOfText()
     m_multitext->SetFocus();
 }
 
+void MyPanel::DoGetWindowCoordinates()
+{
+    wxTextCtrl * const text = GetFocusedText();
+
+    const wxPoint pt0 = text->PositionToCoords(0);
+    const wxPoint ptCur = text->PositionToCoords(text->GetInsertionPoint());
+    *m_log << "Current position coordinates: "
+              "(" << ptCur.x << ", "  << ptCur.y << "), "
+              "first position coordinates: "
+              "(" << pt0.x << ", "  << pt0.y << ")\n";
+}
+
 void MyPanel::DoMoveToEndOfEntry()
 {
     m_text->SetInsertionPointEnd();
@@ -1324,7 +1368,7 @@ void MyPanel::DoSelectText()
 // MyFrame
 //----------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_QUIT,   MyFrame::OnQuit)
     EVT_MENU(TEXT_ABOUT,  MyFrame::OnAbout)
     EVT_MENU(TEXT_SAVE,   MyFrame::OnFileSave)
@@ -1361,6 +1405,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_ADD_FREEZE,         MyFrame::OnAddTextFreeze)
     EVT_MENU(TEXT_ADD_LINE,           MyFrame::OnAddTextLine)
     EVT_MENU(TEXT_MOVE_ENDTEXT,       MyFrame::OnMoveToEndOfText)
+    EVT_MENU(TEXT_GET_WINDOW_COORD,   MyFrame::OnGetWindowCoordinates)
     EVT_MENU(TEXT_MOVE_ENDENTRY,      MyFrame::OnMoveToEndOfEntry)
 
     EVT_MENU(TEXT_SET_EDITABLE,       MyFrame::OnSetEditable)
@@ -1378,7 +1423,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_CHANGE,             MyFrame::OnChangeText)
 
     EVT_IDLE(MyFrame::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h)
        : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h) )
@@ -1564,7 +1609,7 @@ enum
     RICHTEXT_TAB_STOPS
 };
 
-BEGIN_EVENT_TABLE(RichTextFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(RichTextFrame, wxFrame)
     EVT_IDLE(RichTextFrame::OnIdle)
     EVT_MENU(RICHTEXT_CLOSE, RichTextFrame::OnClose)
     EVT_MENU(RICHTEXT_LEFT_ALIGN, RichTextFrame::OnLeftAlign)
@@ -1577,7 +1622,7 @@ BEGIN_EVENT_TABLE(RichTextFrame, wxFrame)
     EVT_MENU(RICHTEXT_LEFT_INDENT, RichTextFrame::OnLeftIndent)
     EVT_MENU(RICHTEXT_RIGHT_INDENT, RichTextFrame::OnRightIndent)
     EVT_MENU(RICHTEXT_TAB_STOPS, RichTextFrame::OnTabStops)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 RichTextFrame::RichTextFrame(wxWindow* parent, const wxString& title):
     wxFrame(parent, wxID_ANY, title, wxDefaultPosition, wxSize(300, 400))
@@ -1878,12 +1923,12 @@ void RichTextFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
 
             if (attr.HasFont())
             {
-                if (attr.GetFont().GetWeight() == wxBOLD)
+                if (attr.GetFont().GetWeight() == wxFONTWEIGHT_BOLD)
                     msg += wxT(" BOLD");
-                else if (attr.GetFont().GetWeight() == wxNORMAL)
+                else if (attr.GetFont().GetWeight() == wxFONTWEIGHT_NORMAL)
                     msg += wxT(" NORMAL");
 
-                if (attr.GetFont().GetStyle() == wxITALIC)
+                if (attr.GetFont().GetStyle() == wxFONTSTYLE_ITALIC)
                     msg += wxT(" ITALIC");
 
                 if (attr.GetFont().GetUnderlined())

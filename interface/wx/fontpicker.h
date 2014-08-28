@@ -2,9 +2,18 @@
 // Name:        fontpicker.h
 // Purpose:     interface of wxFontPickerCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+
+#define wxFNTP_FONTDESC_AS_LABEL      0x0008
+#define wxFNTP_USEFONT_FOR_LABEL      0x0010
+#define wxFONTBTN_DEFAULT_STYLE       (wxFNTP_FONTDESC_AS_LABEL | wxFNTP_USEFONT_FOR_LABEL)
+#define wxFNTP_USE_TEXTCTRL           (wxPB_USE_TEXTCTRL)
+#define wxFNTP_DEFAULT_STYLE          (wxFNTP_FONTDESC_AS_LABEL|wxFNTP_USEFONT_FOR_LABEL)
+
+wxEventType wxEVT_FONTPICKER_CHANGED;
+
 
 /**
     @class wxFontPickerCtrl
@@ -42,13 +51,15 @@
 
     @library{wxcore}
     @category{pickers}
-    @appearance{fontpickerctrl.png}
+    @appearance{fontpickerctrl}
 
     @see wxFontDialog, wxFontPickerEvent
 */
 class wxFontPickerCtrl : public wxPickerBase
 {
 public:
+    wxFontPickerCtrl();
+    
     /**
         Initializes the object and calls Create() with
         all the parameters.
@@ -99,6 +110,17 @@ public:
     unsigned int GetMaxPointSize() const;
 
     /**
+        Returns the currently selected colour.
+
+        Note that the colour of the font can only be set by the user under
+        Windows currently, elsewhere this method simply returns the colour
+        previously set by SetSelectedColour() or black if it hadn't been called.
+
+        @since 3.1.0
+    */
+    wxColour GetSelectedColour() const;
+
+    /**
         Returns the currently selected font.
         Note that this function is completely different from wxWindow::GetFont.
     */
@@ -114,6 +136,16 @@ public:
         font size when huge fonts do not make much sense.
     */
     void SetMaxPointSize(unsigned int max);
+
+    /**
+        Sets the font colour.
+
+        The font colour is actually only used under Windows currently, but this
+        function is available under all platforms for consistency.
+
+        @since 3.1.0
+    */
+    void SetSelectedColour(const wxColour& colour);
 
     /**
         Sets the currently selected font.

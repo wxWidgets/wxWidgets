@@ -5,7 +5,6 @@
 // Author:      Mattia Barbon
 // Modified by:
 // Created:     10.02.03
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Mattia Barbon
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -47,7 +46,7 @@ private:
     // common part of all constructors
     void Init()
     {
-        m_evtType = wxEVT_COMMAND_TOGGLEBUTTON_CLICKED;
+        m_evtType = wxEVT_TOGGLEBUTTON;
     }
 };
 

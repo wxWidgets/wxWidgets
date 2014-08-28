@@ -3,7 +3,6 @@
 // Purpose:     wxCalendarCtrl control implementation for wxQt
 // Author:      Kolya Kosenko
 // Created:     2010-05-12
-// RCS-ID:      $Id$
 // Copyright:   (C) 2010 Kolya Kosenko
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -12,12 +11,7 @@
 #define _WX_QT_CALCTRL_H_
 
 #include "wx/calctrl.h"
-#include "wx/qt/converter.h"
-#include "wx/qt/winevent_qt.h"
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QCalendarWidget>
-
-class WXDLLIMPEXP_FWD_ADV wxQtCalendarWidget;
+#include <QtWidgets/QCalendarWidget>
 
 class WXDLLIMPEXP_ADV wxCalendarCtrl : public wxCalendarCtrlBase
 {
@@ -85,7 +79,7 @@ private:
     void Init();
     void UpdateStyle();
 
-    wxQtPointer< wxQtCalendarWidget > m_qtCalendar;
+    QCalendarWidget *m_qtCalendar;
     wxColour m_colHeaderFg,
              m_colHeaderBg,
              m_colHolidayFg,
@@ -95,23 +89,6 @@ private:
 
 
     DECLARE_DYNAMIC_CLASS(wxCalendarCtrl)
-};
-
-
-
-class WXDLLIMPEXP_ADV wxQtCalendarWidget : public wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >
-{
-    Q_OBJECT
-
-public:
-    wxQtCalendarWidget( wxWindow *parent, wxCalendarCtrl *handler );
-
-private Q_SLOTS:
-    void OnSelectionChanged();
-    void OnActivated(const QDate &date);
-
-private:
-    QDate m_date;
 };
 
 #endif // _WX_QT_CALCTRL_H_

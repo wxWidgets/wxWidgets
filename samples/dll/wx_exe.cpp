@@ -3,7 +3,6 @@
 // Purpose:     Sample showing how to use wx from a DLL
 // Author:      Vaclav Slavik
 // Created:     2009-12-03
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -31,8 +30,8 @@
 #include "wx/stattext.h"
 #include "wx/button.h"
 
-#ifndef __WXMSW__
-    #error "This sample is MSW-only"
+#ifndef __WINDOWS__
+    #error "This sample is Windows-only"
 #endif
 
 #ifdef WXUSINGDLL
@@ -52,7 +51,7 @@ public:
 
     void OnRunDLL(wxCommandEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -72,9 +71,9 @@ public:
 // MainFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MainFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MainFrame, wxFrame)
     EVT_BUTTON(ID_RUN_DLL, MainFrame::OnRunDLL)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MainFrame::MainFrame()
     : wxFrame(NULL, wxID_ANY, "Main wx app",

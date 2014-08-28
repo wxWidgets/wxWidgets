@@ -3,7 +3,6 @@
 // Purpose:     implementation of BASE64 encoding/decoding functions
 // Author:      Charles Reimers, Vadim Zeitlin
 // Created:     2007-06-18
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -128,7 +127,7 @@ wxBase64Decode(void *dst_, size_t dstLen,
             case WSP:
                 if ( mode == wxBase64DecodeMode_SkipWS )
                     continue;
-                // fall through
+                wxFALLTHROUGH;
 
             case INV:
                 if ( mode == wxBase64DecodeMode_Relaxed )

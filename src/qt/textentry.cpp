@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/textentry.cpp
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -15,11 +14,11 @@ wxTextEntry::wxTextEntry()
 {
 }
 
-void wxTextEntry::WriteText(const wxString& text)
+void wxTextEntry::WriteText(const wxString& WXUNUSED(text))
 {
 }
 
-void wxTextEntry::Remove(long from, long to)
+void wxTextEntry::Remove(long WXUNUSED(from), long WXUNUSED(to))
 {
 }
 
@@ -53,7 +52,7 @@ bool wxTextEntry::CanRedo() const
     return false;
 }
 
-void wxTextEntry::SetInsertionPoint(long pos)
+void wxTextEntry::SetInsertionPoint(long WXUNUSED(pos))
 {
 }
 
@@ -67,12 +66,21 @@ long wxTextEntry::GetLastPosition() const
     return 0;
 }
 
-void wxTextEntry::SetSelection(long from, long to)
+void wxTextEntry::SetSelection(long WXUNUSED(from), long WXUNUSED(to))
 {
+    wxFAIL_MSG("wxTextEntry::SetSelection should be overriden");
 }
 
 void wxTextEntry::GetSelection(long *from, long *to) const
 {
+    // no unified get selection method in Qt (overriden in textctrl & combobox)
+    // only called if no selection
+    // If the return values from and to are the same, there is no
+    // selection.
+    {
+        *from =
+        *to = GetInsertionPoint();
+    }
 }
 
 bool wxTextEntry::IsEditable() const
@@ -80,13 +88,17 @@ bool wxTextEntry::IsEditable() const
     return false;
 }
 
-void wxTextEntry::SetEditable(bool editable)
+void wxTextEntry::SetEditable(bool WXUNUSED(editable))
 {
 }
 
 wxString wxTextEntry::DoGetValue() const
 {
     return wxString();
+}
+
+void wxTextEntry::DoSetValue(const wxString &WXUNUSED(value), int WXUNUSED(flags))
+{
 }
 
 wxWindow *wxTextEntry::GetEditableWindow()

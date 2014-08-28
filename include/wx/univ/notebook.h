@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     01.02.01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -63,30 +62,30 @@ public:
     // implement wxNotebookBase pure virtuals
     // --------------------------------------
 
-    virtual int SetSelection(size_t nPage) { return DoSetSelection(nPage, SetSelection_SendEvent); }
+    virtual int SetSelection(size_t nPage) wxOVERRIDE { return DoSetSelection(nPage, SetSelection_SendEvent); }
 
     // changes selected page without sending events
-    int ChangeSelection(size_t nPage) { return DoSetSelection(nPage); }
+    int ChangeSelection(size_t nPage) wxOVERRIDE { return DoSetSelection(nPage); }
 
-    virtual bool SetPageText(size_t nPage, const wxString& strText);
-    virtual wxString GetPageText(size_t nPage) const;
+    virtual bool SetPageText(size_t nPage, const wxString& strText) wxOVERRIDE;
+    virtual wxString GetPageText(size_t nPage) const wxOVERRIDE;
 
-    virtual int GetPageImage(size_t nPage) const;
-    virtual bool SetPageImage(size_t nPage, int nImage);
+    virtual int GetPageImage(size_t nPage) const wxOVERRIDE;
+    virtual bool SetPageImage(size_t nPage, int nImage) wxOVERRIDE;
 
-    virtual void SetPageSize(const wxSize& size);
-    virtual void SetPadding(const wxSize& padding);
-    virtual void SetTabSize(const wxSize& sz);
+    virtual void SetPageSize(const wxSize& size) wxOVERRIDE;
+    virtual void SetPadding(const wxSize& padding) wxOVERRIDE;
+    virtual void SetTabSize(const wxSize& sz) wxOVERRIDE;
 
-    virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
+    virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const wxOVERRIDE;
 
-    virtual bool DeleteAllPages();
+    virtual bool DeleteAllPages() wxOVERRIDE;
 
     virtual bool InsertPage(size_t nPage,
                             wxNotebookPage *pPage,
                             const wxString& strText,
                             bool bSelect = false,
-                            int imageId = -1);
+                            int imageId = NO_IMAGE) wxOVERRIDE;
 
     // style tests
     // -----------
@@ -104,17 +103,17 @@ public:
     // hit testing
     // -----------
 
-    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
+    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const wxOVERRIDE;
 
     // input handling
     // --------------
 
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = 0l,
-                               const wxString& strArg = wxEmptyString);
+                               const wxString& strArg = wxEmptyString) wxOVERRIDE;
 
     static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
-    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef)
+    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef) wxOVERRIDE
     {
         return GetStdInputHandler(handlerDef);
     }
@@ -123,20 +122,19 @@ public:
     void RefreshCurrent();
 
 protected:
-    virtual wxNotebookPage *DoRemovePage(size_t nPage);
+    virtual wxNotebookPage *DoRemovePage(size_t nPage) wxOVERRIDE;
 
     // drawing
-    virtual void DoDraw(wxControlRenderer *renderer);
+    virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
     void DoDrawTab(wxDC& dc, const wxRect& rect, size_t n);
 
     // resizing
-    virtual wxSize DoGetBestClientSize() const;
-    virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
     virtual void DoSetSize(int x, int y,
                            int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
 
-    int DoSetSelection(size_t nPage, int flags = 0);
+    int DoSetSelection(size_t nPage, int flags = 0) wxOVERRIDE;
 
     // common part of all ctors
     void Init();
@@ -188,14 +186,14 @@ protected:
 
     // return true if the tab has an associated image
     bool HasImage(int page) const
-        { return m_imageList && m_images[page] != -1; }
+        { return HasImageList() && m_images[page] != -1; }
 
     // get the part of the notebook reserved for the pages (slightly larger
     // than GetPageRect() as we draw a border and leave marginin between)
     wxRect GetPagePart() const;
 
     // get the page rect in our client coords
-    wxRect GetPageRect() const;
+    wxRect GetPageRect() const wxOVERRIDE;
 
     // get our client size from the page size
     wxSize GetSizeForPage(const wxSize& size) const;

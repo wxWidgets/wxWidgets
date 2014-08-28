@@ -1,35 +1,44 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        cursor.h
-// Purpose:
-// Author:      Peter Most
-// Id:          $Id: cursor.h 60648 2009-05-16 10:42:48Z FM $
-// Copyright:   (c) 2009 Peter Most
+// Author:      Sean D'Epagnier
+// Copyright:   (c) Sean D'Epagnier 2014
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_CURSOR_H_
 #define _WX_QT_CURSOR_H_
 
-#include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
+#include "wx/gdiobj.h"
+#include "wx/image.h"
+
 #include <QtGui/QCursor>
 
 class WXDLLIMPEXP_CORE wxCursor : public wxGDIObject
 {
 public:
-    wxCursor();
+    wxCursor() { }
     wxCursor( const wxCursor & );
-    wxCursor(wxStockCursor id)
-        { InitFromStock(id); }
+    wxCursor( const wxImage& image ) { InitFromImage(image); }
+    wxCursor( const wxString& name,
+              wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
+              int hotSpotX = 0, int hotSpotY = 0 );
+    wxCursor(wxStockCursor id) { InitFromStock(id); }
+#if WXWIN_COMPATIBILITY_2_8
+    wxCursor(int id) { InitFromStock((wxStockCursor)id); }
+#endif
+
+    QCursor m_qtCursor;
 
 protected:
-    void InitFromStock( wxStockCursor );
-    
+    void InitFromStock( wxStockCursor cursorId );
+#if wxUSE_IMAGE
+    void InitFromImage( const wxImage & image );
+#endif
+
+protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
-    
-private:
-    QCursor m_qtCursor;
     
     DECLARE_DYNAMIC_CLASS( wxCursor )
 };

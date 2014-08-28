@@ -2,7 +2,6 @@
 // Name:        src/common/imagpng.cpp
 // Purpose:     wxImage PNG handler
 // Author:      Robert Roebling
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -98,14 +97,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
 #ifndef PNGLINKAGEMODE
     #ifdef PNGAPI
         #define PNGLINKAGEMODE PNGAPI
-    #elif defined(__WATCOMC__)
-        // we need an explicit cdecl for Watcom, at least according to
-        //
-        // http://sf.net/tracker/index.php?func=detail&aid=651492&group_id=9863&atid=109863
-        //
-        // more testing is needed for this however, please remove this comment
-        // if you can confirm that my fix works with Watcom 11
-        #define PNGLINKAGEMODE cdecl
     #else
         #define PNGLINKAGEMODE LINKAGEMODE
     #endif
@@ -116,11 +107,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
 //     First, let me describe what's the problem: libpng uses jmp_buf in
 //     its png_struct structure. Unfortunately, this structure is
 //     compiler-specific and may vary in size, so if you use libpng compiled
-//     as DLL with another compiler than the main executable, it may not work
-//     (this is for example the case with wxMGL port and SciTech MGL library
-//     that provides custom runtime-loadable libpng implementation with jmpbuf
-//     disabled altogether). Luckily, it is still possible to use setjmp() &
-//     longjmp() as long as the structure is not part of png_struct.
+//     as DLL with another compiler than the main executable, it may not work.
+//     Luckily, it is still possible to use setjmp() & longjmp() as long as the
+//     structure is not part of png_struct.
 //
 //     Sadly, there's no clean way to attach user-defined data to png_struct.
 //     There is only one customizable place, png_struct.io_ptr, which is meant
@@ -162,7 +151,7 @@ static void PNGLINKAGEMODE wx_PNG_stream_writer( png_structp png_ptr, png_bytep 
 }
 
 static void
-PNGLINKAGEMODE wx_png_warning(png_structp png_ptr, png_const_charp message)
+PNGLINKAGEMODE wx_PNG_warning(png_structp png_ptr, png_const_charp message)
 {
     wxPNGInfoStruct *info = png_ptr ? WX_PNG_INFO(png_ptr) : NULL;
     if ( !info || info->verbose )
@@ -174,9 +163,9 @@ PNGLINKAGEMODE wx_png_warning(png_structp png_ptr, png_const_charp message)
 // from pngerror.c
 // so that the libpng doesn't send anything on stderr
 static void
-PNGLINKAGEMODE wx_png_error(png_structp png_ptr, png_const_charp message)
+PNGLINKAGEMODE wx_PNG_error(png_structp png_ptr, png_const_charp message)
 {
-    wx_png_warning(NULL, message);
+    wx_PNG_warning(NULL, message);
 
     // we're not using libpng built-in jump buffer (see comment before
     // wxPNGInfoStruct above) so we have to return ourselves, otherwise libpng
@@ -390,12 +379,12 @@ void CopyDataFromPNG(wxImage *image,
                         // using the mask at all
                         wxASSERT_MSG( IsOpaque(a), wxT("logic error") );
 
-                        // fall through
+                        wxFALLTHROUGH;
 
                     case Transparency_Alpha:
                         if ( alpha )
                             *alpha++ = a;
-                        // fall through
+                        wxFALLTHROUGH;
 
                     case Transparency_None:
                         *ptrDst++ = g;
@@ -469,12 +458,12 @@ void CopyDataFromPNG(wxImage *image,
                             }
                         }
 
-                        // fall through
+                        wxFALLTHROUGH;
 
                     case Transparency_Alpha:
                         if ( alpha )
                             *alpha++ = a;
-                        // fall through
+                        wxFALLTHROUGH;
 
                     case Transparency_None:
                         *ptrDst++ = r;
@@ -523,8 +512,8 @@ wxPNGHandler::LoadFile(wxImage *image,
                           (
                             PNG_LIBPNG_VER_STRING,
                             NULL,
-                            wx_png_error,
-                            wx_png_warning
+                            wx_PNG_error,
+                            wx_PNG_warning
                           );
     if (!png_ptr)
         goto error;
@@ -569,7 +558,7 @@ wxPNGHandler::LoadFile(wxImage *image,
 
     for (i = 0; i < height; i++)
     {
-        if ((lines[i] = (unsigned char *)malloc( (size_t)(width * (sizeof(unsigned char) * 4)))) == NULL)
+        if ((lines[i] = (unsigned char *)malloc( (size_t)(width * 4))) == NULL)
             goto error;
     }
 
@@ -615,7 +604,7 @@ wxPNGHandler::LoadFile(wxImage *image,
         {
             default:
                 wxLogWarning(_("Unknown PNG resolution unit %d"), unitType);
-                // fall through
+                wxFALLTHROUGH;
 
             case PNG_RESOLUTION_UNKNOWN:
                 image->SetOption(wxIMAGE_OPTION_RESOLUTIONX, resX);
@@ -739,8 +728,8 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
                           (
                             PNG_LIBPNG_VER_STRING,
                             NULL,
-                            wx_png_error,
-                            wx_png_warning
+                            wx_PNG_error,
+                            wx_PNG_warning
                           );
     if (!png_ptr)
     {
@@ -795,15 +784,13 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 #endif
     ;
 
-    png_color_8 mask;
+    png_color_8 mask = { 0, 0, 0, 0, 0 };
 
     if (bHasMask)
     {
         mask.red   = image->GetMaskRed();
         mask.green = image->GetMaskGreen();
         mask.blue  = image->GetMaskBlue();
-        mask.alpha = 0;
-        mask.gray  = 0;
     }
 
     PaletteMap palette;
@@ -1009,7 +996,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
             {
                 default:
                     wxFAIL_MSG( wxT("unknown wxPNG_TYPE_XXX") );
-                    // fall through
+                    wxFALLTHROUGH;
 
                 case wxPNG_TYPE_COLOUR:
                     *pData++ = clr.red;

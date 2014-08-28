@@ -4,7 +4,6 @@
 // Author:      Karsten Ballueder
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Karsten Ballueder
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -35,12 +34,8 @@
 #include <ctype.h>
 #include <sys/stat.h>
 
-#if !defined(__WINDOWS__) && !defined(__OS2__)
+#if !defined(__WINDOWS__)
     #include   <unistd.h>
-#endif
-
-#ifdef __WINDOWS__
-#include "wx/msw/mslu.h"
 #endif
 
 #ifdef __WXMSW__

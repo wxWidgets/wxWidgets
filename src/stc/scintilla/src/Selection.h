@@ -57,10 +57,10 @@ public:
 };
 
 // Ordered range to make drawing simpler
-struct SelectionSegment {	
+struct SelectionSegment {
 	SelectionPosition start;
 	SelectionPosition end;
-	SelectionSegment() {
+	SelectionSegment() : start(), end() {
 	}
 	SelectionSegment(SelectionPosition a, SelectionPosition b) {
 		if (a < b) {
@@ -86,11 +86,11 @@ struct SelectionRange {
 	SelectionPosition caret;
 	SelectionPosition anchor;
 
-	SelectionRange() {
+	SelectionRange() : caret(), anchor() {
 	}
-	SelectionRange(SelectionPosition single) : caret(single), anchor(single) {
+	explicit SelectionRange(SelectionPosition single) : caret(single), anchor(single) {
 	}
-	SelectionRange(int single) : caret(single), anchor(single) {
+	explicit SelectionRange(int single) : caret(single), anchor(single) {
 	}
 	SelectionRange(SelectionPosition caret_, SelectionPosition anchor_) : caret(caret_), anchor(anchor_) {
 	}
@@ -130,12 +130,9 @@ struct SelectionRange {
 	void MinimizeVirtualSpace();
 };
 
-    
-#include "wx/vector.h"
-    
 class Selection {
-	wxVector<SelectionRange> ranges;
-	wxVector<SelectionRange> rangesSaved;
+	std::vector<SelectionRange> ranges;
+	std::vector<SelectionRange> rangesSaved;
 	SelectionRange rangeRectangular;
 	size_t mainRange;
 	bool moveExtends;
@@ -151,7 +148,7 @@ public:
 	int MainAnchor() const;
 	SelectionRange &Rectangular();
 	SelectionSegment Limits() const;
-	// This is for when you want to move the caret in response to a 
+	// This is for when you want to move the caret in response to a
 	// user direction command - for rectangular selections, use the range
 	// that covers all selected text otherwise return the main selection.
 	SelectionSegment LimitsForRectangularElseMain() const;
@@ -169,6 +166,8 @@ public:
 	void TrimSelection(SelectionRange range);
 	void SetSelection(SelectionRange range);
 	void AddSelection(SelectionRange range);
+	void AddSelectionWithoutTrim(SelectionRange range);
+	void DropSelection(size_t r);
 	void TentativeSelection(SelectionRange range);
 	void CommitTentative();
 	int CharacterInSelection(int posCharacter) const;
@@ -178,7 +177,7 @@ public:
 	void RemoveDuplicates();
 	void RotateMain();
 	bool Tentative() const { return tentativeMain; }
-	wxVector<SelectionRange> RangesCopy() const {
+	std::vector<SelectionRange> RangesCopy() const {
 		return ranges;
 	}
 };

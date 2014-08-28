@@ -3,7 +3,6 @@
 // Purpose:     topic overview
 // Author:      Vadim Zeitlin
 // Created:     2008-05-08
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -12,7 +11,12 @@
 @page overview_changes_since28 Changes Since wxWidgets 2.8
 
 This topic describes backwards-incompatible changes in wxWidgets 3.0 compared
-to the last stable release.
+to the last stable release and is very important to read if you are updating
+from the 2.8 or an older version. And even if you hadn't used any previous
+version of wxWidgets and are starting directly with 3.0, it can still be useful
+to have at least a quick look at it just to know that some of the older
+examples and tutorials may not be applicable any more to wxWidgets 3.0.
+
 
 The incompatible changes can be grouped into the following categories:
 
@@ -177,10 +181,14 @@ Finally, a few structure fields, notable @c wxCmdLineEntryDesc::shortName,
   available for the scroll target as function of the main window size, please
   see the documentation of this method for more details.
 
-- Signatures of wxDataViewCustomRenderer::Activate(),
-  wxDataViewCustomRenderer::LeftClick() and
-  wxDataViewCustomRenderer::StartDrag() virtual methods changed.  You will need
-  to change them in your derived renderer class too if you override them.
+- Signature of wxDataViewCustomRenderer::StartDrag() virtual method changed.
+  You will need to change it in your derived renderer class too if you override
+  it.
+
+- wxDataViewCustomRenderer::Activate() and
+  wxDataViewCustomRenderer::LeftClick() were replaced with the new
+  wxDataViewCustomRenderer::ActivateCell() method. You will need to change it
+  in your derived renderer class accordingly.
 
 */
 

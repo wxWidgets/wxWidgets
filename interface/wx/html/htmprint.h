@@ -2,7 +2,6 @@
 // Name:        html/htmprint.h
 // Purpose:     interface of wxHtmlDCRenderer
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -347,6 +346,12 @@ private:
     virtual bool CheckFit(const wxSize& pageArea, const wxSize& docArea) const;
 };
 
+
+enum {
+    wxPAGE_ODD,
+    wxPAGE_EVEN,
+    wxPAGE_ALL
+};
 
 
 /**

@@ -2,7 +2,6 @@
 // Name:        msw/ole/activex.h
 // Purpose:     interface of wxActiveXEvent
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -267,7 +266,7 @@ public:
     };
 
     wxIMPLEMENT_DYNAMIC_CLASS(wxPDFMediaBackend, wxMediaBackend);
-    
+
     // Put this in one of your existing source files and then create a wxMediaCtrl with
     wxMediaCtrl* mymediactrl = new wxMediaCtrl(this, "myfile.pdf", wxID_ANY,
                                             wxDefaultPosition, wxSize(300,300),
@@ -278,7 +277,7 @@ public:
 
     @onlyfor{wxmsw}
 
-    @library{wxbase}
+    @library{wxcore}
     @category{ctrl,ipc}
 
     @see wxActiveXEvent, @ref page_samples_flash
@@ -297,5 +296,18 @@ public:
             Interface of ActiveX control.
     */
     wxActiveXContainer(wxWindow* parent, REFIID iid, IUnknown* pUnk);
+    /**
+        Queries host's site for interface.
+
+        @param iid
+            The iid of the required interface.
+        @param _interface
+            Double pointer to outgoing interface. Supply your own interface if desired.
+        @param desc
+            The description of the outgoing interface.
+        @return bool
+            Return true if interface supplied else return false.
+    */
+    virtual bool QueryClientSiteInterface(REFIID iid, void **_interface, const char *&desc);
 };
 

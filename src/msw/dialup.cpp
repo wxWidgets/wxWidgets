@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     07.07.99
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -40,18 +39,18 @@
 #include "wx/generic/choicdgg.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/hiddenwin.h"
+#include "wx/msw/private/event.h"
 #include "wx/dynlib.h"
 
 wxDEFINE_EVENT( wxEVT_DIALUP_CONNECTED, wxDialUpEvent );
 wxDEFINE_EVENT( wxEVT_DIALUP_DISCONNECTED, wxDialUpEvent );
 
-// Doesn't yet compile under VC++ 4, BC++, Watcom C++,
+// Doesn't yet compile under BC++
 // Wine: no wininet.h
 #if (!defined(__BORLANDC__) || (__BORLANDC__>=0x550)) && \
     (!defined(__GNUWIN32__) || wxCHECK_W32API_VERSION(0, 5)) && \
-    !defined(__GNUWIN32_OLD__) && \
-    !defined(__WINE__) && \
-    (!defined(__VISUALC__) || (__VISUALC__ >= 1020))
+    !defined(__WINE__)
 
 #include <ras.h>
 #include <raserror.h>
@@ -65,10 +64,6 @@ wxDEFINE_EVENT( wxEVT_DIALUP_DISCONNECTED, wxDialUpEvent );
 #ifndef INTERNET_CONNECTION_PROXY
 #define INTERNET_CONNECTION_PROXY 4
 #endif
-
-// implemented in utils.cpp
-extern "C" WXDLLIMPEXP_BASE HWND
-wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 
 static const wxChar *
     wxMSWDIALUP_WNDCLASSNAME = wxT("_wxDialUpManager_Internal_Class");
@@ -143,8 +138,6 @@ struct WXDLLEXPORT wxRasThreadData
     wxRasThreadData()
     {
         hWnd = 0;
-        hEventRas =
-        hEventQuit = 0;
         dialUpManager = NULL;
     }
 
@@ -152,17 +145,11 @@ struct WXDLLEXPORT wxRasThreadData
     {
         if ( hWnd )
             DestroyWindow(hWnd);
-
-        if ( hEventQuit )
-            CloseHandle(hEventQuit);
-
-        if ( hEventRas )
-            CloseHandle(hEventRas);
     }
 
     HWND    hWnd;       // window to send notifications to
-    HANDLE  hEventRas,  // automatic event which RAS signals when status changes
-            hEventQuit; // manual event which we signal when we terminate
+    wxWinAPI::Event hEventRas,  // automatic event which RAS signals when status changes
+                    hEventQuit; // manual event which we signal when we terminate
 
     class WXDLLIMPEXP_FWD_CORE wxDialUpManagerMSW *dialUpManager;  // the owner
 };
@@ -581,12 +568,10 @@ void wxDialUpManagerMSW::CleanUpThreadData()
 {
     if ( m_hThread )
     {
-        if ( !SetEvent(m_data->hEventQuit) )
+        if ( m_data->hEventQuit.Set() )
         {
-            wxLogLastError(wxT("SetEvent(RasThreadQuit)"));
-        }
-        else // sent quit request to the background thread
-        {
+            // sent quit request to the background thread
+
             // the thread still needs m_data so we can't free it here, rather
             // let the thread do it itself
             m_data = NULL;
@@ -833,7 +818,6 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
     // default values for other fields
     rasDialParams.szPhoneNumber[0] = '\0';
     rasDialParams.szCallbackNumber[0] = '\0';
-    rasDialParams.szCallbackNumber[0] = '\0';
 
     rasDialParams.szDomain[0] = '*';
     rasDialParams.szDomain[1] = '\0';
@@ -1073,14 +1057,11 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
     if ( ok )
     {
         // first create an event to wait on
-        m_data->hEventRas = ::CreateEvent
+        if ( !m_data->hEventRas.Create
                             (
-                             NULL,      // security attribute (default)
-                             FALSE,     // manual reset (no, it is automatic)
-                             FALSE,     // initial state (not signaled)
-                             NULL       // name (no)
-                            );
-        if ( !m_data->hEventRas )
+                             wxWinAPI::Event::AutomaticReset,
+                             wxWinAPI::Event::Nonsignaled
+                            ) )
         {
             wxLogLastError(wxT("CreateEvent(RasStatus)"));
 
@@ -1094,14 +1075,11 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
         // here avoids problems with missing the event if wxDialUpManagerMSW
         // is created and destroyed immediately, before wxRasStatusWindowProc
         // starts waiting on the event
-        m_data->hEventQuit = ::CreateEvent
+        if ( !m_data->hEventQuit.Create
                              (
-                                NULL,   // default security
-                                TRUE,   // manual event
-                                FALSE,  // initially non signalled
-                                NULL    // nameless
-                             );
-        if ( !m_data->hEventQuit )
+                                wxWinAPI::Event::ManualReset,
+                                wxWinAPI::Event::Nonsignaled
+                             ) )
         {
             wxLogLastError(wxT("CreateEvent(RasThreadQuit)"));
 
@@ -1154,6 +1132,8 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
             wxLogLastError(wxT("CreateThread(RasStatusThread)"));
 
             CleanUpThreadData();
+
+            ok = false;
         }
     }
 
@@ -1288,7 +1268,7 @@ static DWORD wxRasMonitorThread(wxRasThreadData *data)
     }
 
     // we don't need it any more now and if this thread ran, it is our
-    // responsability to free the data
+    // responsibility to free the data
     delete data;
 
     return 0;

@@ -3,7 +3,6 @@
 // Purpose:     wxButton unit test
 // Author:      Steven Lamerton
 // Created:     2010-06-21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -80,12 +79,9 @@ void ButtonTestCase::tearDown()
 
 void ButtonTestCase::Click()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
     //We use the internal class EventCounter which handles connecting and
     //disconnecting the control to the wxTestableFrame
-    EventCounter count(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
+    EventCounter clicked(m_button, wxEVT_BUTTON);
 
     wxUIActionSimulator sim;
 
@@ -97,15 +93,12 @@ void ButtonTestCase::Click()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL( 1, frame->GetEventCount() );
+    CPPUNIT_ASSERT_EQUAL( 1, clicked.GetCount() );
 }
 
 void ButtonTestCase::Disabled()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
+    EventCounter clicked(m_button, wxEVT_BUTTON);
 
     wxUIActionSimulator sim;
 
@@ -118,7 +111,7 @@ void ButtonTestCase::Disabled()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL( 0, frame->GetEventCount() );
+    CPPUNIT_ASSERT_EQUAL( 0, clicked.GetCount() );
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR

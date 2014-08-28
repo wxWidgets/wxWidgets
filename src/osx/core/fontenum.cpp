@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,79 +30,56 @@
 // wxFontEnumerator
 // ----------------------------------------------------------------------------
 
+#if wxOSX_USE_IPHONE
+extern CFArrayRef CopyAvailableFontFamilyNames();
+#endif
+
 bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
                                           bool fixedWidthOnly)
 {
-    if ( fixedWidthOnly )
-    {
-        wxFAIL_MSG( "enumerating only fixed width fonts not supported" );
-        return false;
-    }
-
-    wxArrayString fontFamilies ;
-
-#if wxOSX_USE_ATSU_TEXT || wxOSX_USE_CORE_TEXT
-
-    //
-    // From Apple's QA 1471 http://developer.apple.com/qa/qa2006/qa1471.html
-    //
-
-    ATSFontFamilyIterator theFontFamilyIterator = NULL;
-    ATSFontFamilyRef theATSFontFamilyRef = 0;
-    OSStatus status = noErr;
-
-    // Create the iterator
-    status = ATSFontFamilyIteratorCreate(kATSFontContextLocal, nil,nil,
-                                         kATSOptionFlagsUnRestrictedScope,
-                                         &theFontFamilyIterator );
+     wxArrayString fontFamilies ;
 
     wxUint32 macEncoding = wxMacGetSystemEncFromFontEnc(encoding) ;
 
-    while (status == noErr)
     {
-        // Get the next font in the iteration.
-        status = ATSFontFamilyIteratorNext( theFontFamilyIterator, &theATSFontFamilyRef );
-        if(status == noErr)
-        {
- #ifndef __LP64__
-            // TODO CS : Find replacement
-            // added CS : avoid showing fonts that won't be displayable
-            FMFontStyle intrinsicStyle = 0 ;
-            FMFont fontInstance ;
-            FMFontFamily fmFamily = FMGetFontFamilyFromATSFontFamilyRef( theATSFontFamilyRef );
-            status = FMGetFontFromFontFamilyInstance( fmFamily , 0 , &fontInstance , &intrinsicStyle);
-            if ( status != noErr )
-            {
-                status = noErr;
-                continue ;
-            }
+        CFArrayRef cfFontFamilies = nil;
+
+#if wxOSX_USE_COCOA_OR_CARBON
+        cfFontFamilies = CTFontManagerCopyAvailableFontFamilyNames();
+#elif wxOSX_USE_IPHONE
+        cfFontFamilies = CopyAvailableFontFamilyNames();
 #endif
-            if ( encoding != wxFONTENCODING_SYSTEM )
+        
+        CFIndex count = CFArrayGetCount(cfFontFamilies);
+        for(CFIndex i = 0; i < count; i++)
+        {
+            CFStringRef fontName = (CFStringRef)CFArrayGetValueAtIndex(cfFontFamilies, i);
+
+            if ( encoding != wxFONTENCODING_SYSTEM || fixedWidthOnly)
             {
-                TextEncoding fontFamiliyEncoding = ATSFontFamilyGetEncoding(theATSFontFamilyRef) ;
-                if ( fontFamiliyEncoding != macEncoding )
-                    continue ;
+                wxCFRef<CTFontRef> font(CTFontCreateWithName(fontName, 12.0, NULL));
+                if ( encoding != wxFONTENCODING_SYSTEM )
+                {
+                    CFStringEncoding fontFamiliyEncoding = CTFontGetStringEncoding(font);
+                    if ( fontFamiliyEncoding != macEncoding )
+                        continue;
+                }
+                
+                if ( fixedWidthOnly )
+                {
+                    CTFontSymbolicTraits traits = CTFontGetSymbolicTraits(font);
+                    if ( (traits & kCTFontMonoSpaceTrait) == 0 )
+                        continue;
+                }
+                
             }
-
-            // TODO: determine fixed widths ...
-
-            CFStringRef theName = NULL;
-            ATSFontFamilyGetName(theATSFontFamilyRef, kATSOptionFlagsDefault, &theName);
-            wxCFStringRef cfName(theName) ;
+            
+            wxCFStringRef cfName(wxCFRetain(fontName)) ;
             fontFamilies.Add(cfName.AsString(wxLocale::GetSystemEncoding()));
         }
-        else if (status == kATSIterationScopeModified) // Make sure the font database hasn't changed.
-        {
-            // reset the iterator
-            status = ATSFontFamilyIteratorReset (kATSFontContextLocal, nil, nil,
-                                                 kATSOptionFlagsUnRestrictedScope,
-                                                 &theFontFamilyIterator);
-            fontFamilies.Clear() ;
-        }
+        
+        CFRelease(cfFontFamilies);
     }
-    ATSFontFamilyIteratorRelease(&theFontFamilyIterator);
-#endif
-
     for ( size_t i = 0 ; i < fontFamilies.Count() ; ++i )
     {
         if ( OnFacename( fontFamilies[i] ) == false )

@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/choice.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -9,8 +8,7 @@
 #ifndef _WX_QT_CHOICE_H_
 #define _WX_QT_CHOICE_H_
 
-#include "wx/qt/pointer_qt.h"
-#include "wx/qt/combobox_qt.h"
+#include <QtWidgets/QComboBox>
 
 class WXDLLIMPEXP_CORE wxChoice : public wxChoiceBase
 {
@@ -49,6 +47,8 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr );
 
+    virtual wxSize DoGetBestSize() const;
+
     virtual unsigned int GetCount() const;
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& s);
@@ -63,6 +63,7 @@ protected:
                               unsigned int pos,
                               void **clientData,
                               wxClientDataType type);
+    virtual int DoInsertOneItem(const wxString& item, unsigned int pos);
     
     virtual void DoSetItemClientData(unsigned int n, void *clientData);
     virtual void *DoGetItemClientData(unsigned int n) const;
@@ -70,9 +71,9 @@ protected:
     virtual void DoClear();
     virtual void DoDeleteOneItem(unsigned int pos);
 
+    QComboBox *m_qtComboBox;
 
 private:
-    wxQtPointer< wxQtComboBox > m_qtComboBox;
 
     DECLARE_DYNAMIC_CLASS(wxChoice)
 };

@@ -2,7 +2,6 @@
 // Name:        wx/gtk1/toolbar.h
 // Purpose:     GTK toolbar
 // Author:      Robert Roebling
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -67,6 +66,9 @@ public:
 protected:
     // common part of all ctors
     void Init();
+
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_DEFAULT; }
 
     // set the GTK toolbar style and orientation
     void GtkSetStyle();

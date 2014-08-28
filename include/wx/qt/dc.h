@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/dc.h
-// Author:      Peter Most
-// Id:          $Id$
-// Copyright:   (c) Peter Most, Javier Torres
+// Author:      Peter Most, Javier Torres, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -98,20 +97,23 @@ public:
                         wxCoord xsrcMask = wxDefaultCoord,
                         wxCoord ysrcMask = wxDefaultCoord);
 
-    virtual void DoDrawLines(int n, wxPoint points[],
+    virtual void DoDrawLines(int n, const wxPoint points[],
                              wxCoord xoffset, wxCoord yoffset );
 
-    virtual void DoDrawPolygon(int n, wxPoint points[],
+    virtual void DoDrawPolygon(int n, const wxPoint points[],
                            wxCoord xoffset, wxCoord yoffset,
                            wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
 
     // Use Qt transformations, as they automatically scale pen widths, text...
     virtual void ComputeScaleAndOrigin();
 
+    void QtPreparePainter();
+
+    virtual void* GetHandle() const { return (void*) m_qtPainter; }
+
 protected:
-    QPainter m_qtPainter;
+    QPainter *m_qtPainter;
     QImage *m_qtImage;
-    void PrepareQPainter( QSize size );
 
     wxRegion *m_clippingRegion;
 private:

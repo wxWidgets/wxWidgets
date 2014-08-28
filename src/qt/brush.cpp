@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/brush.cpp
 // Author:      Peter Most, Javier Torres
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -11,7 +10,7 @@
 
 #include "wx/brush.h"
 #include "wx/colour.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
 #include "wx/bitmap.h"
 
 #include <QtGui/QBrush>
@@ -101,7 +100,6 @@ wxBrush::wxBrush(const wxColour& col, wxBrushStyle style )
     M_STYLEDATA = style;
 }
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
 wxBrush::wxBrush(const wxColour& col, int style)
 {
     m_refData = new wxBrushRefData();
@@ -110,7 +108,6 @@ wxBrush::wxBrush(const wxColour& col, int style)
     M_STYLEDATA = (wxBrushStyle)style;
 }
 
-#endif
 wxBrush::wxBrush(const wxBitmap& stipple)
 {
     m_refData = new wxBrushRefData();

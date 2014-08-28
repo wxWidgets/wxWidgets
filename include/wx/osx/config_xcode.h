@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     29.04.04
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -29,10 +28,12 @@
 #define HAVE_STD_WSTRING 1
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
 #if __GNUC__ > 4 || (  __GNUC__ == 4 && __GNUC_MINOR__ >= 2 )
-#define HAVE_TR1_UNORDERED_MAP 1
-#define HAVE_TR1_UNORDERED_SET 1
-#define HAVE_TR1_TYPE_TRAITS 1
-#define HAVE_GCC_ATOMIC_BUILTINS 1
+  #if !defined(__has_include)
+    #define HAVE_TR1_UNORDERED_MAP 1
+    #define HAVE_TR1_UNORDERED_SET 1
+    #define HAVE_TR1_TYPE_TRAITS 1
+  #endif
+  #define HAVE_GCC_ATOMIC_BUILTINS 1
 #endif
 #endif
 #define HAVE_VISIBILITY 1
@@ -46,11 +47,7 @@
 #define WX_GMTOFF_IN_TM 1
 #define HAVE_PW_GECOS 1
 #define HAVE_DLOPEN 1
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
-/* #undef HAVE_CXA_DEMANGLE */
-#else
 #define HAVE_CXA_DEMANGLE 1
-#endif
 #define HAVE_GETTIMEOFDAY 1
 #define HAVE_FSYNC 1
 #define HAVE_ROUND 1
@@ -109,15 +106,10 @@
 #define HAVE_WCHAR_H 1
 /* better to use the built-in CF conversions, also avoid iconv versioning problems */
 /* #undef HAVE_ICONV */
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
-#define ICONV_CONST const
-#else
 #define ICONV_CONST
-#endif
 #define HAVE_LANGINFO_H 1
 #define HAVE_WCSRTOMBS 1
 #define HAVE_FPUTWS 1
-#define HAVE_STRCASECMP_IN_STRING_H 1
 #define HAVE_WPRINTF 1
 #define HAVE_VSWPRINTF 1
 #define HAVE_VSWSCANF 1
@@ -133,9 +125,9 @@
 #define WXWIN_OS_DESCRIPTION "Darwin 7.9.0 Power Macintosh"
 #define PACKAGE_BUGREPORT "wx-dev@lists.wxwidgets.org"
 #define PACKAGE_NAME "wxWidgets"
-#define PACKAGE_STRING "wxWidgets 2.9.2"
+#define PACKAGE_STRING "wxWidgets 3.1.0"
 #define PACKAGE_TARNAME "wxwidgets"
-#define PACKAGE_VERSION "2.9.2"
+#define PACKAGE_VERSION "3.1.0"
 
 // for regex
 #define WX_NO_REGEX_ADVANCED 1

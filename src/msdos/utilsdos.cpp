@@ -2,7 +2,6 @@
 // Name:        src/msdos/utilsdos.cpp
 // Purpose:     DOS implementations of utility functions
 // Author:      Vaclav Slavik, M.J.Wetherell
-// Id:          $Id$
 // Copyright:   (c) 2001-2002 SciTech Software, Inc. (www.scitechsoft.com)
 //              (c) 2005 M.J.Wetherell
 // Licence:     wxWindows licence
@@ -54,8 +53,6 @@ void wxMilliSleep(unsigned long milliseconds)
 {
 #if HAVE_USLEEP || defined __DJGPP__
     usleep(milliseconds * 1000);
-#elif defined __WATCOMC__
-    delay(milliseconds);
 #else
     clock_t start = clock();
     while ((clock() - start) * 1000 / CLOCKS_PER_SEC < (clock_t)milliseconds)

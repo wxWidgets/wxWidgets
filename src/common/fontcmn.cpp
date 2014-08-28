@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.09.99
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -113,6 +112,8 @@ wxPROPERTY( Weight, wxFontWeight, SetWeight, GetWeight, (wxFontWeight)wxNORMAL, 
            wxT("Helpstring"), wxT("group")) // wxFontWeight
 wxPROPERTY( Underlined, bool, SetUnderlined, GetUnderlined, false, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group"))
+wxPROPERTY( Strikethrough, bool, SetStrikethrough, GetStrikethrough, false, 0, \
+                   wxT("Helpstring"), wxT("group"))
 wxPROPERTY( Face, wxString, SetFaceName, GetFaceName, wxEMPTY_PARAMETER_VALUE, \
            0 /*flags*/, wxT("Helpstring"), wxT("group"))
 wxPROPERTY( Encoding, wxFontEncoding, SetEncoding, GetEncoding, \
@@ -127,33 +128,6 @@ wxEMPTY_HANDLERS_TABLE(wxFont)
 // ============================================================================
 // implementation
 // ============================================================================
-
-// ----------------------------------------------------------------------------
-// helper functions
-// ----------------------------------------------------------------------------
-
-static inline int flags2Style(int flags)
-{
-    return flags & wxFONTFLAG_ITALIC
-                    ? wxFONTSTYLE_ITALIC
-                    : flags & wxFONTFLAG_SLANT
-                        ? wxFONTSTYLE_SLANT
-                        : wxFONTSTYLE_NORMAL;
-}
-
-static inline int flags2Weight(int flags)
-{
-    return flags & wxFONTFLAG_LIGHT
-                    ? wxFONTWEIGHT_LIGHT
-                    : flags & wxFONTFLAG_BOLD
-                        ? wxFONTWEIGHT_BOLD
-                        : wxFONTWEIGHT_NORMAL;
-}
-
-static inline bool flags2Underlined(int flags)
-{
-    return (flags & wxFONTFLAG_UNDERLINED) != 0;
-}
 
 // ----------------------------------------------------------------------------
 // wxFontBase
@@ -209,8 +183,11 @@ wxFont *wxFontBase::New(int pointSize,
                         const wxString& face,
                         wxFontEncoding encoding)
 {
-    return New(pointSize, family, flags2Style(flags), flags2Weight(flags),
-               flags2Underlined(flags), face, encoding);
+    return New(pointSize, family,
+               GetStyleFromFlags(flags),
+               GetWeightFromFlags(flags),
+               GetUnderlinedFromFlags(flags),
+               face, encoding);
 }
 
 /* static */
@@ -220,8 +197,11 @@ wxFont *wxFontBase::New(const wxSize& pixelSize,
                         const wxString& face,
                         wxFontEncoding encoding)
 {
-    return New(pixelSize, family, flags2Style(flags), flags2Weight(flags),
-               flags2Underlined(flags), face, encoding);
+    return New(pixelSize, family,
+               GetStyleFromFlags(flags),
+               GetWeightFromFlags(flags),
+               GetUnderlinedFromFlags(flags),
+               face, encoding);
 }
 
 /* static */
@@ -328,6 +308,7 @@ void wxFontBase::DoSetNativeFontInfo(const wxNativeFontInfo& info)
     SetStyle(info.style);
     SetWeight(info.weight);
     SetUnderlined(info.underlined);
+    SetStrikethrough(info.strikethrough);
     SetFaceName(info.faceName);
     SetEncoding(info.encoding);
 #else
@@ -415,6 +396,7 @@ bool wxFontBase::operator==(const wxFont& font) const
             GetStyle() == font.GetStyle() &&
             GetWeight() == font.GetWeight() &&
             GetUnderlined() == font.GetUnderlined() &&
+            GetStrikethrough() == font.GetStrikethrough() &&
             GetFaceName().IsSameAs(font.GetFaceName(), false) &&
             GetEncoding() == font.GetEncoding()
            );
@@ -528,6 +510,16 @@ wxFont wxFont::Bold() const
     return font;
 }
 
+wxFont wxFont::GetBaseFont() const
+{
+    wxFont font(*this);
+    font.SetStyle(wxFONTSTYLE_NORMAL);
+    font.SetWeight(wxFONTWEIGHT_NORMAL );
+    font.SetUnderlined(false);
+    font.SetStrikethrough(false);
+    return font;
+}
+
 wxFont& wxFont::MakeItalic()
 {
     SetStyle(wxFONTSTYLE_ITALIC);
@@ -552,6 +544,19 @@ wxFont wxFont::Underlined() const
     wxFont font(*this);
     font.MakeUnderlined();
     return font;
+}
+
+wxFont wxFont::Strikethrough() const
+{
+    wxFont font(*this);
+    font.MakeStrikethrough();
+    return font;
+}
+
+wxFont& wxFont::MakeStrikethrough()
+{
+    SetStrikethrough(true);
+    return *this;
 }
 
 wxFont& wxFont::Scale(float x)
@@ -598,19 +603,22 @@ void wxNativeFontInfo::SetFaceName(const wxArrayString& facenames)
 
 // These are the generic forms of FromString()/ToString.
 //
-// convert to/from the string representation: format is
-//      version;pointsize;family;style;weight;underlined;facename;encoding
+// convert to/from the string representation: the general format is
+// "version;the rest..." with currently defined versions being:
+//
+//      0;pointsize;family;style;weight;underlined;facename;encoding
+//      1;pointsize;family;style;weight;underlined;strikethrough;facename;encoding
 
 bool wxNativeFontInfo::FromString(const wxString& s)
 {
     long l;
+    unsigned long version;
 
     wxStringTokenizer tokenizer(s, wxT(";"));
 
     wxString token = tokenizer.GetNextToken();
-    //
-    //  Ignore the version for now
-    //
+    if ( !token.ToULong(&version) || version > 1 )
+        return false;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
@@ -637,6 +645,14 @@ bool wxNativeFontInfo::FromString(const wxString& s)
         return false;
     underlined = l != 0;
 
+    if ( version == 1 )
+    {
+        token = tokenizer.GetNextToken();
+        if ( !token.ToLong(&l) )
+            return false;
+        strikethrough = l != 0;
+    }
+
     faceName = tokenizer.GetNextToken();
 
 #ifndef __WXMAC__
@@ -656,13 +672,14 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
 
-    s.Printf(wxT("%d;%d;%d;%d;%d;%d;%s;%d"),
-             0,                                 // version
+    s.Printf(wxT("%d;%d;%d;%d;%d;%d;%d;%s;%d"),
+             1,                                 // version
              pointSize,
              family,
              (int)style,
              (int)weight,
              underlined,
+             strikethrough,
              faceName.GetData(),
              (int)encoding);
 
@@ -676,6 +693,7 @@ void wxNativeFontInfo::Init()
     style = wxFONTSTYLE_NORMAL;
     weight = wxFONTWEIGHT_NORMAL;
     underlined = false;
+    strikethrough = false;
     faceName.clear();
     encoding = wxFONTENCODING_DEFAULT;
 }
@@ -698,6 +716,11 @@ wxFontWeight wxNativeFontInfo::GetWeight() const
 bool wxNativeFontInfo::GetUnderlined() const
 {
     return underlined;
+}
+
+bool wxNativeFontInfo::GetStrikethrough() const
+{
+    return strikethrough;
 }
 
 wxString wxNativeFontInfo::GetFaceName() const
@@ -735,6 +758,11 @@ void wxNativeFontInfo::SetUnderlined(bool underlined_)
     underlined = underlined_;
 }
 
+void wxNativeFontInfo::SetStrikethrough(bool strikethrough_)
+{
+    strikethrough = strikethrough_;
+}
+
 bool wxNativeFontInfo::SetFaceName(const wxString& facename_)
 {
     faceName = facename_;
@@ -758,7 +786,7 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding_)
 // format there anyhow (but there is a well-defined standard for X11 fonts used
 // by wxGTK and wxMotif)
 
-#if defined(wxNO_NATIVE_FONTINFO) || defined(__WXMSW__) || defined (__WXPM__) || defined(__WXOSX__)
+#if defined(wxNO_NATIVE_FONTINFO) || defined(__WXMSW__) || defined(__WXOSX__)
 
 wxString wxNativeFontInfo::ToUserString() const
 {
@@ -771,11 +799,16 @@ wxString wxNativeFontInfo::ToUserString() const
         desc << _("underlined");
     }
 
+    if ( GetStrikethrough() )
+    {
+        desc << _("strikethrough");
+    }
+
     switch ( GetWeight() )
     {
         default:
             wxFAIL_MSG( wxT("unknown font weight") );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxFONTWEIGHT_NORMAL:
             break;
@@ -793,7 +826,7 @@ wxString wxNativeFontInfo::ToUserString() const
     {
         default:
             wxFAIL_MSG( wxT("unknown font style") );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxFONTSTYLE_NORMAL:
             break;
@@ -818,7 +851,7 @@ wxString wxNativeFontInfo::ToUserString() const
             // that the different words which compose this facename are
             // not different adjectives or other data but rather all parts
             // of the facename
-            desc << wxT(" '") << face << _("'");
+            desc << wxT(" '") << face << wxT("'");
         }
         else
             desc << wxT(' ') << face;
@@ -942,6 +975,10 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
         if ( token == wxT("underlined") || token == _("underlined") )
         {
             SetUnderlined(true);
+        }
+        else if ( token == wxT("strikethrough") || token == _("strikethrough") )
+        {
+            SetStrikethrough(true);
         }
         else if ( token == wxT("light") || token == _("light") )
         {
@@ -1069,7 +1106,7 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
     return true;
 }
 
-#endif // generic or wxMSW or wxOS2
+#endif // generic or wxMSW
 
 
 // wxFont <-> wxString utilities, used by wxConfig

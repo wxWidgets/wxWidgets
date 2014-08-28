@@ -2,7 +2,6 @@
 // Name:        src/common/zipstrm.cpp
 // Purpose:     Streams for Zip files
 // Author:      Mike Wetherell
-// RCS-ID:      $Id$
 // Copyright:   (c) Mike Wetherell
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -240,12 +239,12 @@ public:
     void Open(wxFileOffset len) { Close(); m_len = len; }
     void Close() { m_pos = 0; m_lasterror = wxSTREAM_NO_ERROR; }
 
-    virtual char Peek() { return wxInputStream::Peek(); }
-    virtual wxFileOffset GetLength() const { return m_len; }
+    virtual char Peek() wxOVERRIDE { return wxInputStream::Peek(); }
+    virtual wxFileOffset GetLength() const wxOVERRIDE { return m_len; }
 
 protected:
-    virtual size_t OnSysRead(void *buffer, size_t size);
-    virtual wxFileOffset OnSysTell() const { return m_pos; }
+    virtual size_t OnSysRead(void *buffer, size_t size) wxOVERRIDE;
+    virtual wxFileOffset OnSysTell() const wxOVERRIDE { return m_pos; }
 
 private:
     wxFileOffset m_pos;
@@ -285,15 +284,15 @@ public:
     wxStoredOutputStream(wxOutputStream& stream) :
         wxFilterOutputStream(stream), m_pos(0) { }
 
-    bool Close() {
+    bool Close() wxOVERRIDE {
         m_pos = 0;
         m_lasterror = wxSTREAM_NO_ERROR;
         return true;
     }
 
 protected:
-    virtual size_t OnSysWrite(const void *buffer, size_t size);
-    virtual wxFileOffset OnSysTell() const { return m_pos; }
+    virtual size_t OnSysWrite(const void *buffer, size_t size) wxOVERRIDE;
+    virtual wxFileOffset OnSysTell() const wxOVERRIDE { return m_pos; }
 
 private:
     wxFileOffset m_pos;
@@ -347,11 +346,11 @@ public:
     void Open();
     bool Final();
 
-    wxInputStream& Read(void *buffer, size_t size);
+    wxInputStream& Read(void *buffer, size_t size) wxOVERRIDE;
 
 protected:
-    virtual size_t OnSysRead(void *buffer, size_t size);
-    virtual wxFileOffset OnSysTell() const { return m_pos; }
+    virtual size_t OnSysRead(void *buffer, size_t size) wxOVERRIDE;
+    virtual wxFileOffset OnSysTell() const wxOVERRIDE { return m_pos; }
 
 private:
     wxFileOffset m_pos;
@@ -445,8 +444,8 @@ public:
     wxInputStream& GetTee() const { return *m_tee; }
 
 protected:
-    virtual size_t OnSysRead(void *buffer, size_t size);
-    virtual wxFileOffset OnSysTell() const { return m_pos; }
+    virtual size_t OnSysRead(void *buffer, size_t size) wxOVERRIDE;
+    virtual wxFileOffset OnSysTell() const wxOVERRIDE { return m_pos; }
 
 private:
     wxFileOffset m_pos;
@@ -511,7 +510,7 @@ public:
         wxZlibOutputStream(stream, level, wxZLIB_NO_HEADER) { }
 
     bool Open(wxOutputStream& stream);
-    bool Close() { DoFlush(true); m_pos = wxInvalidOffset; return IsOk(); }
+    bool Close() wxOVERRIDE { DoFlush(true); m_pos = wxInvalidOffset; return IsOk(); }
 };
 
 bool wxZlibOutputStream2::Open(wxOutputStream& stream)
@@ -1326,40 +1325,6 @@ wxZipInputStream::wxZipInputStream(wxInputStream *stream,
     Init();
 }
 
-#if WXWIN_COMPATIBILITY_2_6 && wxUSE_FFILE
-
-// Part of the compatibility constructor, which has been made inline to
-// avoid a problem with it not being exported by mingw 3.2.3
-//
-void wxZipInputStream::Init(const wxString& file)
-{
-    // no error messages
-    wxLogNull nolog;
-    Init();
-    m_allowSeeking = true;
-    wxFFileInputStream *ffile;
-    ffile = static_cast<wxFFileInputStream*>(m_parent_i_stream);
-    wxZipEntryPtr_ entry;
-
-    if (ffile->IsOk()) {
-        do {
-            entry.reset(GetNextEntry());
-        }
-        while (entry.get() != NULL && entry->GetInternalName() != file);
-    }
-
-    if (entry.get() == NULL)
-        m_lasterror = wxSTREAM_READ_ERROR;
-}
-
-wxInputStream* wxZipInputStream::OpenFile(const wxString& archive)
-{
-    wxLogNull nolog;
-    return new wxFFileInputStream(archive);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_6 && wxUSE_FFILE
-
 void wxZipInputStream::Init()
 {
     m_store = new wxStoredInputStream(*m_parent_i_stream);
@@ -1376,9 +1341,6 @@ void wxZipInputStream::Init()
     m_signature = 0;
     m_TotalEntries = 0;
     m_lasterror = m_parent_i_stream->GetLastError();
-#if WXWIN_COMPATIBILITY_2_6
-    m_allowSeeking = false;
-#endif
 }
 
 wxZipInputStream::~wxZipInputStream()
@@ -1892,74 +1854,6 @@ size_t wxZipInputStream::OnSysRead(void *buffer, size_t size)
 
     return count;
 }
-
-#if WXWIN_COMPATIBILITY_2_6
-
-// Borrowed from VS's zip stream (c) 1999 Vaclav Slavik
-//
-wxFileOffset wxZipInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
-{
-    // seeking works when the stream is created with the compatibility
-    // constructor
-    if (!m_allowSeeking)
-        return wxInvalidOffset;
-    if (!IsOpened())
-        if ((AtHeader() && !DoOpen()) || !OpenDecompressor())
-            m_lasterror = wxSTREAM_READ_ERROR;
-    if (!IsOk())
-        return wxInvalidOffset;
-
-    // NB: since ZIP files don't natively support seeking, we have to
-    //     implement a brute force workaround -- reading all the data
-    //     between current and the new position (or between beginning of
-    //     the file and new position...)
-
-    wxFileOffset nextpos;
-    wxFileOffset pos = TellI();
-
-    switch ( mode )
-    {
-        case wxFromCurrent : nextpos = seek + pos; break;
-        case wxFromStart : nextpos = seek; break;
-        case wxFromEnd : nextpos = GetLength() + seek; break;
-        default : nextpos = pos; break; /* just to fool compiler, never happens */
-    }
-
-    wxFileOffset toskip wxDUMMY_INITIALIZE(0);
-    if ( nextpos >= pos )
-    {
-        toskip = nextpos - pos;
-    }
-    else
-    {
-        wxZipEntry current(m_entry);
-        if (!OpenEntry(current))
-        {
-            m_lasterror = wxSTREAM_READ_ERROR;
-            return pos;
-        }
-        toskip = nextpos;
-    }
-
-    if ( toskip > 0 )
-    {
-        const int BUFSIZE = 4096;
-        size_t sz;
-        char buffer[BUFSIZE];
-        while ( toskip > 0 )
-        {
-            sz = wx_truncate_cast(size_t, wxMin(toskip, BUFSIZE));
-            Read(buffer, sz);
-            toskip -= sz;
-        }
-    }
-
-    pos = nextpos;
-    return pos;
-}
-
-#endif // WXWIN_COMPATIBILITY_2_6
-
 
 /////////////////////////////////////////////////////////////////////////////
 // Output stream

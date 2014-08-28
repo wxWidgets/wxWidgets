@@ -4,7 +4,6 @@
 // Author:      Julian Smart, Robert Roebling, Markus Holzhem
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -248,9 +247,6 @@ wxPostScriptDC::wxPostScriptDC(const wxPrintData& printData)
 {
 }
 
-// conversion
-static const double RAD2DEG  = 180.0 / M_PI;
-
 // we don't want to use only 72 dpi from PS print
 static const int DPI = 600;
 static const double PS2DEV = 600.0 / 72.0;
@@ -469,10 +465,10 @@ void wxPostScriptDCImpl::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord 
     {
         alpha1 = (x1 - xc == 0) ?
             (y1 - yc < 0) ? 90.0 : -90.0 :
-                -atan2(double(y1-yc), double(x1-xc)) * RAD2DEG;
+                wxRadToDeg(-atan2(double(y1-yc), double(x1-xc)));
         alpha2 = (x2 - xc == 0) ?
             (y2 - yc < 0) ? 90.0 : -90.0 :
-                -atan2(double(y2-yc), double(x2-xc)) * RAD2DEG;
+                wxRadToDeg(-atan2(double(y2-yc), double(x2-xc)));
     }
     while (alpha1 <= 0)   alpha1 += 360;
     while (alpha2 <= 0)   alpha2 += 360; // adjust angles to be between
@@ -597,7 +593,7 @@ void wxPostScriptDCImpl::DoDrawPoint (wxCoord x, wxCoord y)
     CalcBoundingBox( x, y );
 }
 
-void wxPostScriptDCImpl::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode fillStyle)
+void wxPostScriptDCImpl::DoDrawPolygon (int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode fillStyle)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -667,7 +663,7 @@ void wxPostScriptDCImpl::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset
     }
 }
 
-void wxPostScriptDCImpl::DoDrawPolyPolygon (int n, int count[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode fillStyle)
+void wxPostScriptDCImpl::DoDrawPolyPolygon (int n, const int count[], const wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode fillStyle)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -743,7 +739,7 @@ void wxPostScriptDCImpl::DoDrawPolyPolygon (int n, int count[], wxPoint points[]
     }
 }
 
-void wxPostScriptDCImpl::DoDrawLines (int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
+void wxPostScriptDCImpl::DoDrawLines (int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -1042,8 +1038,8 @@ void wxPostScriptDCImpl::SetFont( const wxFont& font )
 
     m_font = font;
 
-    int Style = m_font.GetStyle();
-    int Weight = m_font.GetWeight();
+    wxFontStyle Style = m_font.GetStyle();
+    wxFontWeight Weight = m_font.GetWeight();
 
     const char *name;
     switch (m_font.GetFamily())
@@ -1051,16 +1047,16 @@ void wxPostScriptDCImpl::SetFont( const wxFont& font )
         case wxTELETYPE:
         case wxMODERN:
         {
-            if (Style == wxITALIC)
+            if (Style == wxFONTSTYLE_ITALIC)
             {
-                if (Weight == wxBOLD)
+                if (Weight == wxFONTWEIGHT_BOLD)
                     name = "/Courier-BoldOblique";
                 else
                     name = "/Courier-Oblique";
             }
             else
             {
-                if (Weight == wxBOLD)
+                if (Weight == wxFONTWEIGHT_BOLD)
                     name = "/Courier-Bold";
                 else
                     name = "/Courier";
@@ -1069,16 +1065,16 @@ void wxPostScriptDCImpl::SetFont( const wxFont& font )
         }
         case wxROMAN:
         {
-            if (Style == wxITALIC)
+            if (Style == wxFONTSTYLE_ITALIC)
             {
-                if (Weight == wxBOLD)
+                if (Weight == wxFONTWEIGHT_BOLD)
                     name = "/Times-BoldItalic";
                 else
                     name = "/Times-Italic";
             }
             else
             {
-                if (Weight == wxBOLD)
+                if (Weight == wxFONTWEIGHT_BOLD)
                     name = "/Times-Bold";
                 else
                     name = "/Times-Roman";
@@ -1093,16 +1089,16 @@ void wxPostScriptDCImpl::SetFont( const wxFont& font )
         case wxSWISS:
         default:
         {
-            if (Style == wxITALIC)
+            if (Style == wxFONTSTYLE_ITALIC)
             {
-                if (Weight == wxBOLD)
+                if (Weight == wxFONTWEIGHT_BOLD)
                     name = "/Helvetica-BoldOblique";
                 else
                     name = "/Helvetica-Oblique";
             }
             else
             {
-                if (Weight == wxBOLD)
+                if (Weight == wxFONTWEIGHT_BOLD)
                     name = "/Helvetica-Bold";
                 else
                     name = "/Helvetica";
@@ -1135,9 +1131,13 @@ void wxPostScriptDCImpl::SetPen( const wxPen& pen )
 
     if (!pen.IsOk()) return;
 
-    int oldStyle = m_pen.GetStyle();
+    int oldStyle = m_pen.IsOk() ? m_pen.GetStyle() : wxPENSTYLE_INVALID;
+    wxPenCap oldCap = m_pen.IsOk() ? m_pen.GetCap() : wxCAP_INVALID;
+    wxPenJoin oldJoin = m_pen.IsOk() ? m_pen.GetJoin() : wxJOIN_INVALID;
 
     m_pen = pen;
+    wxPenCap cap = m_pen.IsOk() ? m_pen.GetCap() : wxCAP_INVALID;
+    wxPenJoin join = m_pen.IsOk() ? m_pen.GetJoin() : wxJOIN_INVALID;
 
     double width;
 
@@ -1199,6 +1199,35 @@ void wxPostScriptDCImpl::SetPen( const wxPen& pen )
     {
         PsPrint( psdash );
         PsPrint( " setdash\n" );
+    }
+
+    if ( cap != wxCAP_INVALID && cap != oldCap )
+    {
+        switch ( cap )
+        {
+            case wxCAP_ROUND:      buffer = "1"; break;
+            case wxCAP_PROJECTING: buffer = "2"; break;
+            case wxCAP_BUTT:       buffer = "0"; break;
+
+            // This case is just to fix compiler warning, this is impossible
+            // due to the test above.
+            case wxCAP_INVALID: break;
+        }
+        buffer << " setlinecap\n";
+        PsPrint( buffer );
+    }
+
+    if ( join != wxJOIN_INVALID && join != oldJoin )
+    {
+        switch ( join )
+        {
+            case wxJOIN_BEVEL: buffer = "2"; break;
+            case wxJOIN_ROUND: buffer = "1"; break;
+            case wxJOIN_MITER: buffer = "0"; break;
+            case wxJOIN_INVALID: break;
+        }
+        buffer << " setlinejoin\n";
+        PsPrint( buffer );
     }
 
     // Line colour
@@ -1627,7 +1656,7 @@ void wxPostScriptDCImpl::ComputeScaleAndOrigin()
 
     wxDCImpl::ComputeScaleAndOrigin();
 
-    // If scale has changed call SetPen to recalulate the line width
+    // If scale has changed call SetPen to recalculate the line width
     // and SetFont to recalculate font size
     if ( wxRealPoint(m_scaleX, m_scaleY) != origScale && m_pen.IsOk() )
     {
@@ -2060,7 +2089,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
     /      dc.StartDoc("Test");
     /      dc.StartPage();
     /      wxCoord w,h;
-    /      dc.SetFont(new wxFont(10, wxROMAN, wxNORMAL, wxNORMAL));
+    /      dc.SetFont(new wxFontInfo(10).Family(wxFONTFAMILY_ROMAN));
     /      dc.GetTextExtent("Hallo",&w,&h);
     /      dc.EndPage();
     /      dc.EndDoc();
@@ -2103,17 +2132,17 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
             case wxMODERN:
             case wxTELETYPE:
             {
-                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = wxT("CourBoO.afm");
-                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = wxT("CourBo.afm");
-                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = wxT("CourO.afm");
+                if ((Style == wxFONTSTYLE_ITALIC) && (Weight == wxFONTWEIGHT_BOLD)) name = wxT("CourBoO.afm");
+                else if ((Style != wxFONTSTYLE_ITALIC) && (Weight == wxFONTWEIGHT_BOLD)) name = wxT("CourBo.afm");
+                else if ((Style == wxFONTSTYLE_ITALIC) && (Weight != wxFONTWEIGHT_BOLD)) name = wxT("CourO.afm");
                 else name = wxT("Cour.afm");
                 break;
             }
             case wxROMAN:
             {
-                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = wxT("TimesBoO.afm");
-                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = wxT("TimesBo.afm");
-                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = wxT("TimesO.afm");
+                if ((Style == wxFONTSTYLE_ITALIC) && (Weight == wxFONTWEIGHT_BOLD)) name = wxT("TimesBoO.afm");
+                else if ((Style != wxFONTSTYLE_ITALIC) && (Weight == wxFONTWEIGHT_BOLD)) name = wxT("TimesBo.afm");
+                else if ((Style == wxFONTSTYLE_ITALIC) && (Weight != wxFONTWEIGHT_BOLD)) name = wxT("TimesO.afm");
                 else name = wxT("TimesRo.afm");
                 break;
             }
@@ -2125,9 +2154,9 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
             case wxSWISS:
             default:
             {
-                if ((Style == wxITALIC) && (Weight == wxBOLD)) name = wxT("HelvBoO.afm");
-                else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = wxT("HelvBo.afm");
-                else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = wxT("HelvO.afm");
+                if ((Style == wxFONTSTYLE_ITALIC) && (Weight == wxFONTWEIGHT_BOLD)) name = wxT("HelvBoO.afm");
+                else if ((Style != wxFONTSTYLE_ITALIC) && (Weight == wxFONTWEIGHT_BOLD)) name = wxT("HelvBo.afm");
+                else if ((Style == wxFONTSTYLE_ITALIC) && (Weight != wxFONTWEIGHT_BOLD)) name = wxT("HelvO.afm");
                 else name = wxT("Helv.afm");
                 break;
             }
@@ -2307,8 +2336,20 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
 
     long sum=0;
     float height=fontSize; /* by default */
-    unsigned char *p;
-    for(p=(unsigned char *)wxMBSTRINGCAST strbuf; *p; p++)
+    unsigned char *p=(unsigned char *)wxMBSTRINGCAST strbuf;
+    if(!p)
+    {
+        // String couldn't be converted which used to SEGV as reported here:
+        // http://bugs.debian.org/702378
+        // http://trac.wxwidgets.org/ticket/15300
+        // Upstream suggests "just return if the conversion failed".
+        if (x) (*x) = 0;
+        if (y) (*y) = 0;
+        if (descent) (*descent) = 0;
+        if (externalLeading) (*externalLeading) = 0;
+        return;
+    }
+    for(; *p; p++)
     {
         if(lastWidths[*p]== INT_MIN)
         {

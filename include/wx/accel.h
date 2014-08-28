@@ -4,7 +4,6 @@
 // Author:      Julian Smart, Robert Roebling, Vadim Zeitlin
 // Modified by:
 // Created:     31.05.01 (extracted from other files)
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -33,11 +32,12 @@ enum wxAcceleratorEntryFlags
     wxACCEL_ALT     = 0x0001,   // hold Alt key down
     wxACCEL_CTRL    = 0x0002,   // hold Ctrl key down
     wxACCEL_SHIFT   = 0x0004,   // hold Shift key down
-#if defined(__WXMAC__) || defined(__WXCOCOA__)
-    wxACCEL_CMD      = 0x0008   // Command key on OS X
+#if defined(__WXMAC__)
+    wxACCEL_RAW_CTRL= 0x0008,   // 
 #else
-    wxACCEL_CMD      = wxACCEL_CTRL
+    wxACCEL_RAW_CTRL= wxACCEL_CTRL,
 #endif
+    wxACCEL_CMD     = wxACCEL_CTRL
 };
 
 // ----------------------------------------------------------------------------
@@ -117,7 +117,12 @@ public:
     // returns a wxString for the this accelerator.
     // this function formats it using the <flags>-<keycode> format
     // where <flags> maybe a hyphen-separated list of "shift|alt|ctrl"
-    wxString ToString() const;
+    wxString ToString() const { return AsPossiblyLocalizedString(true); }
+
+    // same as above but without translating, useful if the string is meant to
+    // be stored in a file or otherwise stored, instead of being shown to the
+    // user
+    wxString ToRawString() const { return AsPossiblyLocalizedString(false); }
 
     // returns true if the given string correctly initialized this object
     // (i.e. if IsOk() returns true after this call)
@@ -125,6 +130,8 @@ public:
 
 
 private:
+    wxString AsPossiblyLocalizedString(bool localized) const;
+
     // common part of Create() and FromString()
     static bool ParseAccel(const wxString& str, int *flags, int *keycode);
 
@@ -157,10 +164,6 @@ private:
     #include "wx/gtk1/accel.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/accel.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/generic/accel.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/accel.h"
 #elif defined(__WXQT__)
     #include "wx/qt/accel.h"
 #endif

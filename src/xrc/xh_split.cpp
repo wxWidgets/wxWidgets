@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for wxSplitterWindow
 // Author:      panga@freemail.hu, Vaclav Slavik
 // Created:     2003/01/26
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 panga@freemail.hu, Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -25,6 +24,8 @@
 
 #include "wx/splitter.h"
 
+#include "wx/xml/xml.h"
+
 IMPLEMENT_DYNAMIC_CLASS(wxSplitterWindowXmlHandler, wxXmlResourceHandler)
 
 wxSplitterWindowXmlHandler::wxSplitterWindowXmlHandler() : wxXmlResourceHandler()
@@ -32,9 +33,6 @@ wxSplitterWindowXmlHandler::wxSplitterWindowXmlHandler() : wxXmlResourceHandler(
     XRC_ADD_STYLE(wxSP_3D);
     XRC_ADD_STYLE(wxSP_3DSASH);
     XRC_ADD_STYLE(wxSP_3DBORDER);
-#if WXWIN_COMPATIBILITY_2_6
-    XRC_ADD_STYLE(wxSP_FULLSASH);
-#endif // WXWIN_COMPATIBILITY_2_6
     XRC_ADD_STYLE(wxSP_BORDER);
     XRC_ADD_STYLE(wxSP_NOBORDER);
     XRC_ADD_STYLE(wxSP_PERMIT_UNSPLIT);
@@ -55,8 +53,8 @@ wxObject *wxSplitterWindowXmlHandler::DoCreateResource()
 
     SetupWindow(splitter);
 
-    long sashpos = GetLong(wxT("sashpos"), 0);
-    long minpanesize = GetLong(wxT("minsize"), -1);
+    long sashpos = GetDimension(wxT("sashpos"), 0);
+    long minpanesize = GetDimension(wxT("minsize"), -1);
     float gravity = GetFloat(wxT("gravity"), 0.0);
     if (minpanesize != -1)
         splitter->SetMinimumPaneSize(minpanesize);

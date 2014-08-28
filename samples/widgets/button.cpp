@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing wxButton
 // Author:      Vadim Zeitlin
 // Created:     10.04.01
-// Id:          $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -92,11 +91,11 @@ public:
     ButtonWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~ButtonWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const { return m_button; }
-    virtual void RecreateWidget() { CreateButton(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_button; }
+    virtual void RecreateWidget() wxOVERRIDE { CreateButton(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
     // event handlers
@@ -170,7 +169,7 @@ protected:
 #endif // wxUSE_COMMANDLINKBUTTON
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(ButtonWidgetsPage)
 };
 
@@ -178,7 +177,7 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(ButtonWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(ButtonWidgetsPage, WidgetsPage)
     EVT_BUTTON(ButtonPage_Button, ButtonWidgetsPage::OnButton)
 
     EVT_BUTTON(ButtonPage_Reset, ButtonWidgetsPage::OnButtonReset)
@@ -187,7 +186,7 @@ BEGIN_EVENT_TABLE(ButtonWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, ButtonWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, ButtonWidgetsPage::OnCheckOrRadioBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
@@ -619,7 +618,7 @@ wxBitmap ButtonWidgetsPage::CreateBitmap(const wxString& label)
     wxBitmap bmp(180, 70); // shouldn't hardcode but it's simpler like this
     wxMemoryDC dc;
     dc.SelectObject(bmp);
-    dc.SetBackground(wxBrush(*wxCYAN));
+    dc.SetBackground(*wxCYAN_BRUSH);
     dc.Clear();
     dc.SetTextForeground(*wxBLACK);
     dc.DrawLabel(wxStripMenuCodes(m_textLabel->GetValue()) + wxT("\n")

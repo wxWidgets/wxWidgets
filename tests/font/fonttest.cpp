@@ -3,7 +3,6 @@
 // Purpose:     wxFont unit test
 // Author:      Francesco Montorsi
 // Created:     16.3.09
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Francesco Montorsi
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,6 +25,8 @@
 
 #include "wx/font.h"
 
+#include "asserthelper.h"
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -37,11 +38,13 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( FontTestCase );
+        CPPUNIT_TEST( Construct );
         CPPUNIT_TEST( GetSet );
         CPPUNIT_TEST( NativeFontInfo );
         CPPUNIT_TEST( NativeFontInfoUserDesc );
     CPPUNIT_TEST_SUITE_END();
 
+    void Construct();
     void GetSet();
     void NativeFontInfo();
     void NativeFontInfoUserDesc();
@@ -91,6 +94,34 @@ wxString DumpFont(const wxFont *font)
              font->GetEncoding());
 
     return s;
+}
+
+void FontTestCase::Construct()
+{
+    // The main purpose of this test is to verify that the font ctors below
+    // compile because it's easy to introduce ambiguities due to the number of
+    // overloaded wxFont ctors.
+
+    CPPUNIT_ASSERT( wxFont(10, wxFONTFAMILY_DEFAULT,
+                               wxFONTSTYLE_NORMAL,
+                               wxFONTWEIGHT_NORMAL).IsOk() );
+
+#if WXWIN_COMPATIBILITY_3_0
+    // Disable the warning about deprecated wxNORMAL as we use it here
+    // intentionally.
+    #ifdef __VISUALC__
+        #pragma warning(push)
+        #pragma warning(disable:4996)
+    #endif
+
+    // Tests relying on the soon-to-be-deprecated ctor taking ints and not
+    // wxFontXXX enum elements.
+    CPPUNIT_ASSERT( wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL).IsOk() );
+
+    #ifdef __VISUALC__
+        #pragma warning(pop)
+    #endif
+#endif // WXWIN_COMPATIBILITY_3_0
 }
 
 void FontTestCase::GetSet()
@@ -182,6 +213,22 @@ void FontTestCase::GetSet()
         CPPUNIT_ASSERT( test.IsOk() );
         CPPUNIT_ASSERT_EQUAL( true, test.GetUnderlined() );
 
+        const wxFont fontBase = test.GetBaseFont();
+        CPPUNIT_ASSERT( fontBase.IsOk() );
+        CPPUNIT_ASSERT( !fontBase.GetUnderlined() );
+        CPPUNIT_ASSERT( !fontBase.GetStrikethrough() );
+        CPPUNIT_ASSERT_EQUAL( wxFONTWEIGHT_NORMAL, fontBase.GetWeight() );
+        CPPUNIT_ASSERT_EQUAL( wxFONTSTYLE_NORMAL, fontBase.GetStyle() );
+
+        // test Get/SetStrikethrough()
+
+        // Strike through support not implemented in wxOSX currently.
+#ifndef __WXOSX__
+        test.SetStrikethrough(true);
+        CPPUNIT_ASSERT( test.IsOk() );
+        CPPUNIT_ASSERT_EQUAL( true, test.GetStrikethrough() );
+#endif // !__WXOSX__
+
 
         // test Get/SetWeight()
 
@@ -223,6 +270,26 @@ void FontTestCase::NativeFontInfo()
 #if !defined(__WXGTK__) && !defined(__WXX11__)
     CPPUNIT_ASSERT( !font.SetNativeFontInfo("bloordyblop") );
 #endif
+
+    // Pango font description doesn't have 'underlined' and 'strikethrough'
+    // attributes, so wxNativeFontInfo implements these itself. Test if these
+    // are properly preserved by wxNativeFontInfo or its string description.
+    font.SetUnderlined(true);
+    font.SetStrikethrough(true);
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(font));
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(*font.GetNativeFontInfo()));
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(font.GetNativeFontInfoDesc()));
+    font.SetUnderlined(false);
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(font));
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(*font.GetNativeFontInfo()));
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(font.GetNativeFontInfoDesc()));
+    font.SetUnderlined(true);
+    font.SetStrikethrough(false);
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(font));
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(*font.GetNativeFontInfo()));
+    CPPUNIT_ASSERT_EQUAL(font, wxFont(font.GetNativeFontInfoDesc()));
+    // note: the GetNativeFontInfoUserDesc() doesn't preserve all attributes
+    // according to docs, so it is not tested.
 }
 
 void FontTestCase::NativeFontInfoUserDesc()

@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/scrolbar.cpp
 // Author:      Peter Most, Javier Torres
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,7 +9,22 @@
 #include "wx/wxprec.h"
 
 #include "wx/scrolbar.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/winevent.h"
+
+
+class wxQtScrollBar : public wxQtEventSignalHandler< QScrollBar, wxScrollBar >
+{
+    
+    public:
+        wxQtScrollBar( wxWindow *parent, wxScrollBar *handler );
+                       
+    private:
+        void actionTriggered( int action );
+        void sliderReleased();
+        void valueChanged( int position );
+};
+
 
 wxScrollBar::wxScrollBar()
 {
@@ -74,9 +88,9 @@ void wxScrollBar::SetThumbPosition(int viewStart)
     m_qtScrollBar->setValue( viewStart );
 }
 
-void wxScrollBar::SetScrollbar(int position, int thumbSize,
+void wxScrollBar::SetScrollbar(int position, int WXUNUSED(thumbSize),
                           int range, int pageSize,
-                          bool refresh)
+                          bool WXUNUSED(refresh))
 {
     wxCHECK_RET( m_qtScrollBar, "Invalid QScrollbar" );
 
@@ -107,12 +121,13 @@ QScrollBar *wxScrollBar::GetHandle() const
 wxQtScrollBar::wxQtScrollBar( wxWindow *parent, wxScrollBar *handler )
     : wxQtEventSignalHandler< QScrollBar, wxScrollBar >( parent, handler )
 {
-    connect( this, SIGNAL( actionTriggered(int) ), this, SLOT( OnActionTriggered(int) ) );
-    connect( this, SIGNAL( sliderReleased() ), this, SLOT( OnSliderReleased() ) );
-    connect( this, SIGNAL( valueChanged(int) ), this, SLOT( OnValueChanged(int) ) );
+    connect( this, &QScrollBar::actionTriggered, this, &wxQtScrollBar::actionTriggered );
+    connect( this, &QScrollBar::sliderReleased, this, &wxQtScrollBar::sliderReleased );
+    connect( this, &QScrollBar::valueChanged, this, &wxQtScrollBar::valueChanged );
 }
 
-void wxQtScrollBar::OnActionTriggered( int action )
+
+void wxQtScrollBar::actionTriggered( int action )
 {
     wxEventType eventType = wxEVT_NULL;
     switch( action )
@@ -143,26 +158,32 @@ void wxQtScrollBar::OnActionTriggered( int action )
     }
     
     wxScrollBar *handler = GetHandler();
-    wxScrollEvent e( eventType, handler->GetId(), sliderPosition(),
-            wxQtConvertOrientation( orientation() ));
-                        
-    EmitEvent( e );
+    if ( handler )
+    {
+        wxScrollEvent e( eventType, handler->GetId(), sliderPosition(),
+                wxQtConvertOrientation( orientation() ));
+        EmitEvent( e );
+    }
 }
 
-void wxQtScrollBar::OnSliderReleased()
+void wxQtScrollBar::sliderReleased()
 {
     wxScrollBar *handler = GetHandler();
-    wxScrollEvent e( wxEVT_SCROLL_THUMBRELEASE, handler->GetId(), sliderPosition(),
-            wxQtConvertOrientation( orientation() ));
-                        
-    EmitEvent( e );
+    if ( handler )
+    {
+        wxScrollEvent e( wxEVT_SCROLL_THUMBRELEASE, handler->GetId(), sliderPosition(),
+                wxQtConvertOrientation( orientation() ));
+        EmitEvent( e );
+    }
 }
 
-void wxQtScrollBar::OnValueChanged( int position )
+void wxQtScrollBar::valueChanged( int position )
 {
     wxScrollBar *handler = GetHandler();
-    wxScrollEvent e( wxEVT_SCROLL_CHANGED, handler->GetId(), position,
-            wxQtConvertOrientation( orientation() ));
-                     
-    EmitEvent( e );
+    if ( handler )
+    {
+        wxScrollEvent e( wxEVT_SCROLL_CHANGED, handler->GetId(), position,
+                wxQtConvertOrientation( orientation() ));
+        EmitEvent( e );
+    }
 }

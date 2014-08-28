@@ -3,7 +3,6 @@
 // Purpose:     scoped smart pointer class
 // Author:      Vadim Zeitlin
 // Created:     2009-02-03
-// RCS-ID:      $Id$
 // Copyright:   (c) Jesse Lovelace and original Boost authors (see below)
 //              (c) 2009 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -26,6 +25,7 @@ public:
     typedef T element_type;
 
     wxEXPLICIT wxScopedArray(T * array = NULL) : m_array(array) { }
+    wxEXPLICIT wxScopedArray(size_t count) : m_array(new T[count]) { }
 
     ~wxScopedArray() { delete [] m_array; }
 
@@ -41,7 +41,7 @@ public:
     {
         if ( array != m_array )
         {
-            delete m_array;
+            delete [] m_array;
             m_array = array;
         }
     }

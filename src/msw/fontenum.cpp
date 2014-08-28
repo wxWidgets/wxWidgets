@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin to add support for font encodings
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -147,12 +146,6 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
     return true;
 }
 
-#if defined(__GNUWIN32__) && !defined(__CYGWIN10__) && !wxCHECK_W32API_VERSION( 1, 1 ) && !wxUSE_NORLANDER_HEADERS
-    #define wxFONTENUMPROC int(*)(ENUMLOGFONTEX *, NEWTEXTMETRICEX*, int, LPARAM)
-#else
-    #define wxFONTENUMPROC FONTENUMPROC
-#endif
-
 void wxFontEnumeratorHelper::DoEnumerate()
 {
 #ifndef __WXMICROWIN__
@@ -160,15 +153,15 @@ void wxFontEnumeratorHelper::DoEnumerate()
 
 #ifdef __WXWINCE__
     ::EnumFontFamilies(hDC,
-                       m_facename.empty() ? NULL : m_facename.wx_str(),
-                       (wxFONTENUMPROC)wxFontEnumeratorProc,
+                       m_facename.empty() ? NULL : wxMSW_CONV_LPCTSTR(m_facename),
+                       (FONTENUMPROC)wxFontEnumeratorProc,
                        (LPARAM)this) ;
 #else // __WIN32__
     LOGFONT lf;
     lf.lfCharSet = (BYTE)m_charset;
     wxStrlcpy(lf.lfFaceName, m_facename.c_str(), WXSIZEOF(lf.lfFaceName));
     lf.lfPitchAndFamily = 0;
-    ::EnumFontFamiliesEx(hDC, &lf, (wxFONTENUMPROC)wxFontEnumeratorProc,
+    ::EnumFontFamiliesEx(hDC, &lf, (FONTENUMPROC)wxFontEnumeratorProc,
                          (LPARAM)this, 0 /* reserved */) ;
 #endif // Win32/CE
 
@@ -187,9 +180,18 @@ bool wxFontEnumeratorHelper::OnFont(const LPLOGFONT lf,
         {
             wxConstCast(this, wxFontEnumeratorHelper)->m_charsets.Add(cs);
 
+#if wxUSE_FONTMAP
             wxFontEncoding enc = wxGetFontEncFromCharSet(cs);
             return m_fontEnum->OnFontEncoding(lf->lfFaceName,
                                               wxFontMapper::GetEncodingName(enc));
+#else // !wxUSE_FONTMAP
+            // Just use some unique and, hopefully, understandable, name.
+            return m_fontEnum->OnFontEncoding
+                               (
+                                lf->lfFaceName,
+                                wxString::Format(wxS("Code page %d"), cs)
+                               );
+#endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
         }
         else
         {

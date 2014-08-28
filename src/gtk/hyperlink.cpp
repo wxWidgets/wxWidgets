@@ -3,7 +3,6 @@
 // Purpose:     Hyperlink control
 // Author:      Francesco Montorsi
 // Created:     14/2/2007
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Francesco Montorsi
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -40,7 +39,11 @@
 static inline bool UseNative()
 {
     // native gtk_link_button widget is only available in GTK+ 2.10 and later
+#ifdef __WXGTK3__
+    return true;
+#else
     return !gtk_check_version(2, 10, 0);
+#endif
 }
 
 // ============================================================================
@@ -82,7 +85,6 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
 
         m_widget = gtk_link_button_new("asdfsaf asdfdsaf asdfdsa");
         g_object_ref(m_widget);
-        gtk_widget_show(m_widget);
 
         // alignment
         float x_alignment = 0.5;
@@ -242,7 +244,7 @@ wxColour wxHyperlinkCtrl::GetHoverColour() const
 
 GdkWindow *wxHyperlinkCtrl::GTKGetWindow(wxArrayGdkWindows& windows) const
 {
-    return UseNative() ? GTK_BUTTON(m_widget)->event_window
+    return UseNative() ? gtk_button_get_event_window(GTK_BUTTON(m_widget))
                        : wxGenericHyperlinkCtrl::GTKGetWindow(windows);
 }
 

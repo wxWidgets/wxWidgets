@@ -3,7 +3,6 @@
 // Purpose:     wxItemContainer unit test
 // Author:      Steven Lamerton
 // Created:     2010-06-29
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -201,6 +200,18 @@ void ItemContainerTestCase::VoidData()
 
     WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData((unsigned)-1, NULL) );
     WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData(12345, NULL) );
+
+    // wxMSW used to hace problems retrieving the client data of -1 from a few
+    // standard controls, especially if the last error was set before doing it,
+    // so test for this specially.
+    const wxUIntPtr minus1 = static_cast<wxUIntPtr>(-1);
+    container->Append("item -1", wxUIntToPtr(minus1));
+
+#ifdef __WINDOWS__
+    ::SetLastError(ERROR_INVALID_DATA);
+#endif
+
+    CPPUNIT_ASSERT_EQUAL( minus1, wxPtrToUInt(container->GetClientData(3)) );
 }
 
 void ItemContainerTestCase::Set()
@@ -244,13 +255,16 @@ void ItemContainerTestCase::SetString()
 
     container->Append(testitems);
 
+    container->SetSelection(0);
     container->SetString(0, "new item 0");
+    CPPUNIT_ASSERT_EQUAL("new item 0", container->GetString(0));
+
+    // Modifying the item shouldn't deselect it.
+    CPPUNIT_ASSERT_EQUAL(0, container->GetSelection());
+
+    // wxOSX doesn't support having empty items in some containers.
 #ifndef __WXOSX__
     container->SetString(2, "");
-#endif
-
-    CPPUNIT_ASSERT_EQUAL("new item 0", container->GetString(0));
-#ifndef __WXOSX__
     CPPUNIT_ASSERT_EQUAL("", container->GetString(2));
 #endif
 }

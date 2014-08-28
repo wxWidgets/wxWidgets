@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/textentry.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -39,6 +38,7 @@ public:
     
 protected:
     virtual wxString DoGetValue() const;
+    virtual void DoSetValue(const wxString& value, int flags=0);
 
     virtual wxWindow *GetEditableWindow();
 

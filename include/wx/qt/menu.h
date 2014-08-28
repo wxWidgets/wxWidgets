@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/menu.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -9,8 +8,8 @@
 #ifndef _WX_QT_MENU_H_
 #define _WX_QT_MENU_H_
 
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
 
 class WXDLLIMPEXP_CORE wxMenu : public wxMenuBase
 {
@@ -26,9 +25,9 @@ protected:
     virtual wxMenuItem *DoRemove(wxMenuItem *item);
 
 private:
-    wxQtPointer< QMenu > m_qtMenu;
+    QMenu *m_qtMenu;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxMenu);
+    wxDECLARE_DYNAMIC_CLASS(wxMenu);
 };
 
 
@@ -51,10 +50,13 @@ public:
 
     virtual QMenuBar *GetHandle() const;
 
-private:
-    wxQtPointer< QMenuBar > m_qtMenuBar;
+    virtual void Attach(wxFrame *frame);
+    virtual void Detach();
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxMenuBar);
+private:
+    QMenuBar *m_qtMenuBar;
+
+    wxDECLARE_DYNAMIC_CLASS(wxMenuBar);
 };
 
 #endif // _WX_QT_MENU_H_

@@ -6,7 +6,6 @@
 //
 // Author:      Robin Dunn
 // Created:     03-Nov-2003
-// RCS-ID:      $Id$
 // Copyright:   (c) Robin Dunn
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -67,6 +66,14 @@ public:
 
     // default copy ctor and assignment operator are okay.
 
+    // Factor constructor creating an invalid wxGBSpan: this is mostly supposed
+    // to be used as return value for functions returning wxGBSpan in case of
+    // errors.
+    static wxGBSpan Invalid()
+    {
+        return wxGBSpan(NULL);
+    }
+
     int GetRowspan() const { return m_rowspan; }
     int GetColspan() const { return m_colspan; }
     void SetRowspan(int rowspan)
@@ -87,6 +94,13 @@ public:
     bool operator!=(const wxGBSpan& o) const { return !(*this == o); }
 
 private:
+    // This private ctor is used by Invalid() only.
+    wxGBSpan(struct InvalidCtorTag*)
+    {
+        m_rowspan =
+        m_colspan = -1;
+    }
+
     void Init()
     {
         m_rowspan =
@@ -115,26 +129,26 @@ public:
     wxGBSizerItem( int width,
                    int height,
                    const wxGBPosition& pos,
-                   const wxGBSpan& span,
-                   int flag,
-                   int border,
-                   wxObject* userData);
+                   const wxGBSpan& span=wxDefaultSpan,
+                   int flag=0,
+                   int border=0,
+                   wxObject* userData=NULL);
 
     // window
     wxGBSizerItem( wxWindow *window,
                    const wxGBPosition& pos,
-                   const wxGBSpan& span,
-                   int flag,
-                   int border,
-                   wxObject* userData );
+                   const wxGBSpan& span=wxDefaultSpan,
+                   int flag=0,
+                   int border=0,
+                   wxObject* userData=NULL );
 
     // subsizer
     wxGBSizerItem( wxSizer *sizer,
                    const wxGBPosition& pos,
-                   const wxGBSpan& span,
-                   int flag,
-                   int border,
-                   wxObject* userData );
+                   const wxGBSpan& span=wxDefaultSpan,
+                   int flag=0,
+                   int border=0,
+                   wxObject* userData=NULL );
 
     // default ctor
     wxGBSizerItem();
@@ -277,8 +291,8 @@ public:
 
 
     // These are what make the sizer do size calculations and layout
-    virtual void RecalcSizes();
-    virtual wxSize CalcMin();
+    virtual void RecalcSizes() wxOVERRIDE;
+    virtual wxSize CalcMin() wxOVERRIDE;
 
 
     // Look at all items and see if any intersect (or would overlap) the given
@@ -303,7 +317,7 @@ public:
     virtual wxSizerItem* Insert( size_t index, wxWindow *window, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
     virtual wxSizerItem* Insert( size_t index, wxSizer *sizer, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
     virtual wxSizerItem* Insert( size_t index, int width, int height, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
-    virtual wxSizerItem* Insert( size_t index, wxSizerItem *item );
+    virtual wxSizerItem* Insert( size_t index, wxSizerItem *item ) wxOVERRIDE;
     virtual wxSizerItem* Prepend( wxWindow *window, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
     virtual wxSizerItem* Prepend( wxSizer *sizer, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
     virtual wxSizerItem* Prepend( int width,  int height,  int proportion = 0,  int flag = 0,  int border = 0,  wxObject* userData = NULL );

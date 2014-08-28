@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     24.12.00
-// RCS-ID:      $Id$
 // Copyright:   (c) 1996-2000 wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -15,6 +14,10 @@
 #include "wx/defs.h"
 
 #if wxUSE_COMBOBOX
+
+// For compatibility with 2.8 include this header to allow using wxTE_XXX
+// styles with wxComboBox without explicitly including it in the user code.
+#include "wx/textctrl.h"
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxComboBoxNameStr[];
 
@@ -30,13 +33,19 @@ class WXDLLIMPEXP_CORE wxComboBoxBase : public wxItemContainer,
 {
 public:
     // override these methods to disambiguate between two base classes versions
-    virtual void Clear()
+    virtual void Clear() wxOVERRIDE
     {
         wxTextEntry::Clear();
         wxItemContainer::Clear();
     }
 
-    bool IsEmpty() const { return wxItemContainer::IsEmpty(); }
+    // IsEmpty() is ambiguous because we inherit it from both wxItemContainer
+    // and wxTextEntry, and even if defined it here to help the compiler with
+    // choosing one of them, it would still be confusing for the human users of
+    // this class. So instead define the clearly named methods below and leave
+    // IsEmpty() ambiguous to trigger a compilation error if it's used.
+    bool IsListEmpty() const { return wxItemContainer::IsEmpty(); }
+    bool IsTextEmpty() const { return wxTextEntry::IsEmpty(); }
 
     // also bring in GetSelection() versions of both base classes in scope
     //
@@ -47,8 +56,8 @@ public:
     virtual int GetSelection() const = 0;
     virtual void GetSelection(long *from, long *to) const = 0;
 
-    virtual void Popup() { wxFAIL_MSG( wxT("Not implemented") ); };
-    virtual void Dismiss() { wxFAIL_MSG( wxT("Not implemented") ); };
+    virtual void Popup() { wxFAIL_MSG( wxT("Not implemented") ); }
+    virtual void Dismiss() { wxFAIL_MSG( wxT("Not implemented") ); }
 
     // may return value different from GetSelection() when the combobox
     // dropdown is shown and the user selected, but not yet accepted, a value
@@ -72,10 +81,6 @@ public:
     #include "wx/gtk1/combobox.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/combobox.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/combobox.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/combobox.h"
 #elif defined(__WXQT__)
     #include "wx/qt/combobox.h"
 #endif

@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -29,7 +28,7 @@ class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase
 
   inline wxToolBar(wxWindow *parent, wxWindowID id,
                    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                   long style = wxNO_BORDER|wxTB_HORIZONTAL,
+                   long style = wxTB_HORIZONTAL,
                    const wxString& name = wxToolBarNameStr)
   {
     Init();
@@ -38,7 +37,7 @@ class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase
   virtual ~wxToolBar();
 
   bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxNO_BORDER|wxTB_HORIZONTAL,
+            long style = wxTB_HORIZONTAL,
             const wxString& name = wxToolBarNameStr);
 
     virtual void SetWindowStyleFlag(long style);
@@ -72,11 +71,27 @@ class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase
 #endif
 
 #if wxOSX_USE_NATIVE_TOOLBAR
+    // make all tools selectable
+    void OSXSetSelectableTools(bool set);
+    void OSXSelectTool(int toolId);
+
     bool MacInstallNativeToolbar(bool usesNative);
     void MacUninstallNativeToolbar();
     bool MacWantsNativeToolbar();
     bool MacTopLevelHasNativeToolbar(bool *ownToolbarInstalled) const;
 #endif
+
+    virtual wxToolBarToolBase *CreateTool(int id,
+                                          const wxString& label,
+                                          const wxBitmap& bmpNormal,
+                                          const wxBitmap& bmpDisabled = wxNullBitmap,
+                                          wxItemKind kind = wxITEM_NORMAL,
+                                          wxObject *clientData = NULL,
+                                          const wxString& shortHelp = wxEmptyString,
+                                          const wxString& longHelp = wxEmptyString);
+    virtual wxToolBarToolBase *CreateTool(wxControl *control,
+                                          const wxString& label);
+
 protected:
     // common part of all ctors
     void Init();
@@ -86,8 +101,11 @@ protected:
     void DoSetSize(int x, int y, int width, int height, int sizeFlags);
 
 #ifndef __WXOSX_IPHONE__
-   virtual void DoGetSize(int *width, int *height) const;
+    virtual void DoGetSize(int *width, int *height) const;
     virtual wxSize DoGetBestSize() const;
+#endif
+#ifdef __WXOSX_COCOA__
+    virtual void DoGetPosition(int*x, int *y) const;
 #endif
     virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
     virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
@@ -95,17 +113,6 @@ protected:
     virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable);
     virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle);
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
-
-    virtual wxToolBarToolBase *CreateTool(int id,
-                                          const wxString& label,
-                                          const wxBitmap& bmpNormal,
-                                          const wxBitmap& bmpDisabled,
-                                          wxItemKind kind,
-                                          wxObject *clientData,
-                                          const wxString& shortHelp,
-                                          const wxString& longHelp);
-    virtual wxToolBarToolBase *CreateTool(wxControl *control,
-                                          const wxString& label);
 
     DECLARE_EVENT_TABLE()
 #if wxOSX_USE_NATIVE_TOOLBAR

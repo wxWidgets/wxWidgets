@@ -4,7 +4,6 @@
 // Author:      Guilhem Lavaux
 // Modified by: Mike Wetherell
 // Created:     11/07/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -32,7 +31,7 @@
 // apparently not the case for all MSW makefiles and so, unless we use
 // configure (which defines __WX_SETUP_H__) or it is explicitly overridden by
 // the user (who can define wxUSE_ZLIB_H_IN_PATH), we hardcode the path here
-#if defined(__WXMSW__) && !defined(__WX_SETUP_H__) && !defined(wxUSE_ZLIB_H_IN_PATH)
+#if defined(__WINDOWS__) && !defined(__WX_SETUP_H__) && !defined(wxUSE_ZLIB_H_IN_PATH)
     #include "../zlib/zlib.h"
 #else
     #include "zlib.h"
@@ -47,10 +46,18 @@ enum {
 
 wxVersionInfo wxGetZlibVersionInfo()
 {
-    return wxVersionInfo("zlib",
-                         ZLIB_VERNUM >> 12,
-                         (ZLIB_VERNUM >> 8) & 0x0F,
-                         (ZLIB_VERNUM & 0xFF) / 0x10);
+    int major,
+        minor,
+        build;
+
+    if ( sscanf(zlibVersion(), "%d.%d.%d", &major, &minor, &build) != 3 )
+    {
+        major =
+        minor =
+        build = 0;
+    }
+
+    return wxVersionInfo("zlib", major, minor, build);
 }
 
 /////////////////////////////////////////////////////////////////////////////

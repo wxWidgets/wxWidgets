@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     2008-08-24
-// RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -557,8 +556,11 @@ public:
 
     wxPropertyCategory* GetPropertyCategory( const wxPGProperty* p ) const;
 
+#ifdef WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("don't refer directly to wxPropertyGridPageState::GetPropertyByLabel")
     wxPGProperty* GetPropertyByLabel( const wxString& name,
                                       wxPGProperty* parent = NULL ) const;
+#endif // WXWIN_COMPATIBILITY_3_0
 
     wxVariant DoGetPropertyValues( const wxString& listname,
                                    wxPGProperty* baseparent,
@@ -584,6 +586,8 @@ public:
                           wxPGProperty* pwc,
                           unsigned int col,
                           bool subProps) const;
+
+    int GetColumnFullWidth(wxClientDC &dc, wxPGProperty *p, unsigned int col);
 
     /**
         Returns information about arbitrary position in the grid.
@@ -688,6 +692,10 @@ protected:
 
     bool PrepareToAddItem( wxPGProperty* property,
                            wxPGProperty* scheduledParent );
+
+    /** Returns property by its label. */
+    wxPGProperty* BaseGetPropertyByLabel( const wxString& label,
+                                      wxPGProperty* parent = NULL ) const;
 
     /** If visible, then this is pointer to wxPropertyGrid.
         This shall *never* be NULL to indicate that this state is not visible.

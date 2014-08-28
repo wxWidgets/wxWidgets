@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/bitmap.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -34,6 +33,7 @@ public:
 
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
     virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
+    virtual bool Create(int width, int height, const wxDC& WXUNUSED(dc));
 
     virtual int GetHeight() const;
     virtual int GetWidth() const;
@@ -67,13 +67,18 @@ public:
 
     void *GetRawData(wxPixelDataBase& data, int bpp);
     void UngetRawData(wxPixelDataBase& data);
-    
+
+    // these functions are internal and shouldn't be used, they risk to
+    // disappear in the future
+    bool HasAlpha() const;
+
     QPixmap *GetHandle() const;
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
+    DECLARE_DYNAMIC_CLASS(wxBitmap)
 };
 
 class WXDLLIMPEXP_CORE wxMask : public wxObject
@@ -101,6 +106,8 @@ public:
     bool Create(const wxBitmap& bitmap, const wxColour& colour);
     bool Create(const wxBitmap& bitmap, int paletteIndex);
     bool Create(const wxBitmap& bitmap);
+
+    wxBitmap GetBitmap() const;
 
     // Implementation
     QBitmap *GetHandle() const;

@@ -2,7 +2,6 @@
 // Name:        msw/ole/automtn.h
 // Purpose:     interface of wxAutomationObject
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -42,6 +41,334 @@ enum wxAutomationInstanceFlags
     wxAutomationInstance_SilentIfNone = 2
 };
 
+/**
+    Flags used for conversions between wxVariant and OLE VARIANT.
+
+    These flags are used by wxAutomationObject for its wxConvertOleToVariant()
+    calls. They can be obtained by wxAutomationObject::GetConvertVariantFlags()
+    and set by wxAutomationObject::SetConvertVariantFlags().
+
+    @since 3.0
+
+    @header{wx/msw/ole/oleutils.h}
+*/
+enum wxOleConvertVariantFlags
+{
+    /**
+        Default value.
+    */
+    wxOleConvertVariant_Default = 0,
+
+    /**
+        If this flag is used, SAFEARRAYs contained in OLE VARIANTs will be
+        returned as wxVariants with wxVariantDataSafeArray type instead of
+        wxVariants with the list type containing the (flattened) SAFEARRAY's
+        elements.
+    */
+    wxOleConvertVariant_ReturnSafeArrays = 1
+};
+
+
+/**
+    @class wxVariantDataCurrency
+
+    This class represents a thin wrapper for Microsoft Windows CURRENCY type.
+
+    It is used for converting between wxVariant and OLE VARIANT
+    with type set to VT_CURRENCY. When wxVariant stores
+    wxVariantDataCurrency, it returns "currency" as its type.
+
+    An example of setting and getting CURRENCY value to and from wxVariant:
+    @code
+    CURRENCY cy;
+    wxVariant variant;
+
+    // set wxVariant to currency type
+    if ( SUCCEEDED(VarCyFromR8(123.45, &cy)) )  // set cy to 123.45
+    {
+        variant.SetData(new wxVariantDataCurrency(cy));
+
+        // or instead of the line above you could write:
+        // wxVariantDataCurrency wxCy;
+        // wxCy.SetValue(cy);
+        // variant.SetData(wxCy.Clone());
+    }
+
+    // get CURRENCY value from wxVariant
+    if ( variant.GetType() == "currency" )
+    {
+        wxVariantDataCurrency*
+            wxCy = wxDynamicCastVariantData(variant.GetData(), wxVariantDataCurrency);
+        cy = wxCy->GetValue();
+    }
+    @endcode
+
+    @onlyfor{wxmsw}
+    @since 2.9.5
+
+    @library{wxcore}
+    @category{data}
+
+    @see wxAutomationObject, wxVariant, wxVariantData, wxVariantDataErrorCode
+
+    @header{wx/msw/ole/oleutils.h}
+*/
+class wxVariantDataCurrency : public wxVariantData
+{
+public:
+    /**
+        Default constructor initializes the object to 0.0.
+    */
+    wxVariantDataCurrency();
+
+    /**
+        Constructor from CURRENCY.
+    */
+    wxVariantDataCurrency(CURRENCY value);
+
+    /**
+        Returns the stored CURRENCY value.
+    */
+    CURRENCY GetValue() const;
+
+    /**
+        Sets the stored value to @a value.
+    */
+    void SetValue(CURRENCY value);
+
+    /**
+        Returns true if @a data is of wxVariantDataCurency type
+        and contains the same CURRENCY value.
+    */
+    virtual bool Eq(wxVariantData& data) const;
+
+    /**
+        Fills the provided string with the textual representation of this
+        object.
+
+        The implementation of this method using @c VarBstrFromCy() Windows API
+        function with LOCALE_USER_DEFAULT.
+    */
+    virtual bool Write(wxString& str) const;
+
+    /**
+        Returns a copy of itself.
+    */
+    wxVariantData* Clone() const;
+
+    /**
+        Returns "currency".
+    */
+    virtual wxString GetType() const;
+
+    /**
+        Converts the value of this object to wxAny.
+    */
+    virtual bool GetAsAny(wxAny* any) const;
+};
+
+
+/**
+    @class wxVariantDataErrorCode
+
+    This class represents a thin wrapper for Microsoft Windows SCODE type
+    (which is the same as HRESULT).
+
+    It is used for converting between a wxVariant and OLE VARIANT with type set
+    to VT_ERROR. When wxVariant stores wxVariantDataErrorCode, it returns
+    "errorcode" as its type. This class can be used for returning error codes
+    of automation calls or exchanging values with other applications: e.g.
+    Microsoft Excel returns VARIANTs with VT_ERROR type for cell values with
+    errors (one of XlCVError constants, displayed as e.g. "#DIV/0!" or "#REF!"
+    there) etc. See wxVariantDataCurrency for an example of how to  exchange
+    values between wxVariant and a native type not directly supported by it.
+
+    @onlyfor{wxmsw}
+    @since 2.9.5
+
+    @library{wxcore}
+    @category{data}
+
+    @see wxAutomationObject, wxVariant, wxVariantData, wxVariantDataCurrency
+
+    @header{wx/msw/ole/oleutils.h}
+*/
+class wxVariantDataErrorCode : public wxVariantData
+{
+public:
+    /**
+        Constructor initializes the object to @a value or S_OK if no value was
+        passed.
+    */
+    wxVariantDataErrorCode(SCODE value = S_OK);
+
+    /**
+        Returns the stored SCODE value.
+    */
+    SCODE GetValue() const;
+
+    /**
+        Set the stored value to @a value.
+    */
+    void SetValue(SCODE value);
+
+    /**
+        Returns true if @a data is of wxVariantDataErrorCode type
+        and contains the same SCODE value.
+    */
+    virtual bool Eq(wxVariantData& data) const;
+
+    /**
+        Fills the provided string with the textual representation of this
+        object.
+
+        The error code is just a number, so it's output as such.
+    */
+    virtual bool Write(wxString& str) const;
+
+    /**
+        Returns a copy of itself.
+    */
+    wxVariantData* Clone() const;
+
+    /**
+        Returns "errorcode".
+    */
+    virtual wxString GetType() const { return wxS("errorcode"); }
+
+    /**
+        Converts the value of this object to wxAny.
+    */
+    virtual bool GetAsAny(wxAny* any) const;
+};
+
+/**
+    @class wxVariantDataSafeArray
+
+    This class represents a thin wrapper for Microsoft Windows SAFEARRAY type.
+
+    It is used for converting between wxVariant and OLE VARIANT
+    with type set to VT_ARRAY, which has more than one dimension.
+    When wxVariant stores wxVariantDataSafeArray, it returns "safearray" as its type.
+
+    wxVariantDataSafeArray does NOT manage the SAFEARRAY it points to.
+    If you want to pass it to a wxAutomationObject as a parameter:
+        -# Assign a SAFEARRAY pointer to it and store it in a wxVariant.
+        -# Call the wxAutomationObject method (CallMethod(), SetProperty() or Invoke())
+        -# wxAutomationObject will destroy the array after the approapriate automation call.
+
+    An example of creating a 2-dimensional SAFEARRAY containing VARIANTs
+    and storing it in a wxVariant
+    @code
+    SAFEARRAYBOUND bounds[2]; // 2 dimensions
+    wxSafeArray<VT_VARIANT> safeArray;
+    unsigned rowCount = 1000;
+    unsigned colCount = 20;
+
+    bounds[0].lLbound = 0; // elements start at 0
+    bounds[0].cElements = rowCount;
+    bounds[1].lLbound = 0; // elements start at 0
+    bounds[1].cElements = colCount;
+
+    if ( !safeArray.Create(bounds, 2) )
+        return false;
+
+    long indices[2];
+
+    for ( unsigned row = 0; row < rowCount; row++ )
+    {
+        indices[0] = row;
+        for ( unsigned col = 0; col < colCount; col++ )
+        {
+            indices[1] = col;
+            if ( !safeArray.SetElement(indices, wxString::Format("R%u C%u", row+1, col+1)) )
+               return false;
+        }
+    }
+    range.PutProperty("Value", wxVariant(new wxVariantDataSafeArray(safeArray.Detach())));
+    @endcode
+
+    If you you received wxVariantDataSafeArray as a result of wxAutomationObject method call:
+    (1) Get the data out of the array.
+    (2) Destroy the array.
+    @code
+    wxVariant result;
+    result = range.GetProperty("Value");
+    if ( result.GetType() == "safearray" )
+    {
+        wxSafeArray<VT_VARIANT> safeArray;
+        wxVariantDataSafeArray* const
+            sa = wxStaticCastVariantData(variant.GetData(), wxVariantDataSafeArray);
+
+        if ( !safeArray.Attach(sa.GetValue() )
+        {
+            if ( !safeArray.HasArray() )
+                SafeArrayDestroy(sa.GetValue()); // we have to dispose the SAFEARRAY ourselves
+            return false;
+        }
+
+        // get the data from the SAFEARRAY using wxSafeArray::GetElement()
+        // SAFEARRAY will be disposed by safeArray's dtor
+    }
+    @endcode
+
+    @onlyfor{wxmsw}
+    @since 2.9.5
+
+    @library{wxcore}
+    @category{data}
+
+    @see wxAutomationObject, wxVariant, wxVariantData, wxVariantDataErrorCode
+
+    @header{wx/msw/ole/oleutils.h}
+*/
+class wxVariantDataSafeArray : public wxVariantData
+{
+public:
+    /**
+        Constructor initializes the object to @a value.
+    */
+    explicit wxVariantDataSafeArray(SAFEARRAY* value = NULL);
+
+    /**
+        Returns the stored array.
+    */
+    SAFEARRAY* GetValue() const;
+
+    /**
+        Set the stored array.
+    */
+    void SetValue(SAFEARRAY* value);
+
+    /**
+        Returns true if @a data is of wxVariantDataSafeArray type
+        and contains the same SAFEARRAY* value.
+    */
+    virtual bool Eq(wxVariantData& data) const;
+
+    /**
+        Fills the provided string with the textual representation of this
+        object.
+
+        Only the address of SAFEARRAY pointer is output.
+    */
+    virtual bool Write(wxString& str) const;
+
+    /**
+        Returns a copy of itself.
+    */
+    wxVariantData* Clone() const;
+
+    /**
+        Returns "safearray".
+    */
+    virtual wxString GetType() const;
+
+    /**
+        Converts the value of this object to wxAny.
+    */
+    virtual bool GetAsAny(wxAny* any) const;
+};
 
 /**
     @class wxAutomationObject
@@ -72,7 +399,7 @@ enum wxAutomationInstanceFlags
     @library{wxcore}
     @category{data}
 
-    @see wxVariant
+    @see wxVariant, wxVariantDataCurrency, wxVariantDataErrorCode, wxVariantDataSafeArray
 */
 class wxAutomationObject : public wxObject
 {
@@ -256,5 +583,53 @@ public:
         You may need to cast from IDispatch* to WXIDISPATCH* when calling this function.
     */
     void SetDispatchPtr(WXIDISPATCH* dispatchPtr);
+
+    /**
+        Returns the locale identifier used in automation calls.
+
+        The default is LOCALE_SYSTEM_DEFAULT but the objects obtained by
+        GetObject() inherit the locale identifier from the one that created
+        them.
+
+        @since 2.9.5
+    */
+    LCID GetLCID() const;
+
+    /**
+        Sets the locale identifier to be used in automation calls performed by
+        this object.
+
+        The default value is LOCALE_SYSTEM_DEFAULT.
+
+        Notice that any automation objects created by this one inherit the same
+        LCID.
+
+        @since 2.9.5
+    */
+    void SetLCID(LCID lcid);
+
+    /**
+        Returns the flags used for conversions between wxVariant and OLE
+        VARIANT, see wxOleConvertVariantFlags.
+
+        The default value is wxOleConvertVariant_Default for compatibility but
+        it can be changed using SetConvertVariantFlags().
+
+        Notice that objects obtained by GetObject() inherit the flags from the
+        one that created them.
+
+        @since 3.0
+    */
+    long GetConvertVariantFlags() const;
+
+    /**
+        Sets the flags used for conversions between wxVariant and OLE VARIANT,
+        see wxOleConvertVariantFlags.
+
+        The default value is wxOleConvertVariant_Default.
+
+        @since 3.0
+    */
+    void SetConvertVariantFlags(long flags);
 };
 

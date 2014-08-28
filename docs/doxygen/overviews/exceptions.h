@@ -2,7 +2,6 @@
 // Name:        exceptions.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,15 +9,7 @@
 
 @page overview_exceptions C++ Exceptions
 
-@li @ref overview_exceptions_introduction
-@li @ref overview_exceptions_strategies
-@li @ref overview_exceptions_tech
-
-
-<hr>
-
-
-@section overview_exceptions_introduction Introduction
+@tableofcontents
 
 wxWidgets had been started long before the exceptions were introduced in C++ so
 it is not very surprising that it is not built around using them as some more
@@ -34,7 +25,8 @@ safe to use the exceptions in the user code and the library tries to help you
 with this.
 
 
-@section overview_exceptions_strategies Strategies for exceptions handling
+
+@section overview_exceptions_strategies Strategies for Exception Handling
 
 There are several choice for using the exceptions in wxWidgets programs. First
 of all, you may not use them at all. As stated above, the library doesn't throw

@@ -1,16 +1,15 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/textctrl.h
-// Author:      Peter Most
-// Id:          $Id$
-// Copyright:   (c) Peter Most
+// Author:      Mariano Reingart, Peter Most
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_TEXTCTRL_H_
 #define _WX_QT_TEXTCTRL_H_
 
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QTextEdit>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QTextEdit>
 
 class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
 {
@@ -50,19 +49,31 @@ public:
     virtual bool PositionToXY(long pos, long *x, long *y) const;
 
     virtual void ShowPosition(long pos);
-    
-    virtual QTextEdit *GetHandle() const;
+
+    virtual void SetInsertionPoint(long pos);
+    virtual long GetInsertionPoint() const;
+    virtual void SetSelection( long from, long to );
+    virtual void GetSelection(long *from, long *to) const;
+
+    virtual wxString DoGetValue() const;
+    virtual void DoSetValue(const wxString &text, int flags = 0);
+    virtual void WriteText(const wxString& text);
+
+    virtual QWidget *GetHandle() const;
 
 protected:
     virtual wxSize DoGetBestSize() const;
 
     virtual bool DoLoadFile(const wxString& file, int fileType);
     virtual bool DoSaveFile(const wxString& file, int fileType);
-    
-private:
-    wxQtPointer< QTextEdit > m_qtTextEdit;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxTextCtrl );
+    virtual QScrollArea *QtGetScrollBarsContainer() const;
+
+private:
+    QLineEdit *m_qtLineEdit;
+    QTextEdit *m_qtTextEdit;
+
+    wxDECLARE_DYNAMIC_CLASS( wxTextCtrl );
 };
 
 #endif // _WX_QT_TEXTCTRL_H_

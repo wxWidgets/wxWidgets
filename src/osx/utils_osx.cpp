@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -35,20 +34,12 @@
 
 // #include "MoreFilesX.h"
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-    #include <AudioToolbox/AudioServices.h>
-#endif
+#include <AudioToolbox/AudioServices.h>
 
 #include "wx/osx/private.h"
 #include "wx/osx/private/timer.h"
 
 #include "wx/evtloop.h"
-
-#if defined(__MWERKS__) && wxUSE_UNICODE
-#if __MWERKS__ < 0x4100
-    #include <wtime.h>
-#endif
-#endif
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
@@ -65,11 +56,36 @@ bool wxColourDisplay()
     return true;
 }
 
+
 #if wxOSX_USE_COCOA_OR_CARBON
+
+#if (MAC_OS_X_VERSION_MAX_ALLOWED >= 1070) && (MAC_OS_X_VERSION_MIN_REQUIRED < 1060)
+// bring back declaration so that we can support deployment targets < 10_6
+CG_EXTERN size_t CGDisplayBitsPerPixel(CGDirectDisplayID display)
+CG_AVAILABLE_BUT_DEPRECATED(__MAC_10_0, __MAC_10_6,
+                            __IPHONE_NA, __IPHONE_NA);
+#endif
+
 // Returns depth of screen
 int wxDisplayDepth()
 {
-    int theDepth = (int) CGDisplayBitsPerPixel(CGMainDisplayID());
+    int theDepth = 0;
+    
+    CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
+    CFStringRef encoding = CGDisplayModeCopyPixelEncoding(currentMode);
+    
+    if(CFStringCompare(encoding, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+        theDepth = 32;
+    else if(CFStringCompare(encoding, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+        theDepth = 16;
+    else if(CFStringCompare(encoding, CFSTR(IO8BitIndexedPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+        theDepth = 8;
+    else
+        theDepth = 32; // some reasonable default
+
+    CFRelease(encoding);
+    CGDisplayModeRelease(currentMode);
+
     return theDepth;
 }
 
@@ -219,9 +235,26 @@ CGColorSpaceRef wxMacGetGenericRGBColorSpace()
 
 CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush )
 {
-    CGColorRef color ;
-    HIThemeBrushCreateCGColor( brush, &color );
-    return color;
+    const int maxcachedbrush = 58+5; // negative indices are for metabrushes, cache down to -5)
+    int brushindex = brush+5;
+    if ( brushindex < 0 || brushindex > maxcachedbrush )
+    {
+        CGColorRef color ;
+        HIThemeBrushCreateCGColor( brush, &color );
+        return color;
+    }
+    else
+    {
+        static bool inited = false;
+        static CGColorRef themecolors[maxcachedbrush+1];
+        if ( !inited )
+        {
+            for ( int i = 0 ; i <= maxcachedbrush ; ++i )
+                HIThemeBrushCreateCGColor( i-5, &themecolors[i] );
+            inited = true;
+        }
+        return CGColorRetain(themecolors[brushindex ]);
+    }
 }
 
 //---------------------------------------------------------------------------

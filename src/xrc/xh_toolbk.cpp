@@ -26,6 +26,8 @@
 #include "wx/toolbook.h"
 #include "wx/imaglist.h"
 
+#include "wx/xml/xml.h"
+
 IMPLEMENT_DYNAMIC_CLASS(wxToolbookXmlHandler, wxXmlResourceHandler)
 
 wxToolbookXmlHandler::wxToolbookXmlHandler()

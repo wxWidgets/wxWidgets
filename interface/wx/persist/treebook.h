@@ -2,7 +2,6 @@
 // Name:        wx/persist/treebook.h
 // Purpose:     interface of wxPersistentTreeBook
 // Author:      Vadim Zeitlin
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -14,7 +13,7 @@
     used by wxTreebook, in addition to saving and restoring the selection as
     implemented by the base wxPersistentBookCtrl class.
  */
-class wxPersistentTreeBook : public wxPersistentBookCtrl
+class wxPersistentTreeBookCtrl : public wxPersistentBookCtrl
 {
 public:
     /**
@@ -23,7 +22,7 @@ public:
         @param book
             The associated tree book control.
      */
-    wxPersistentTreeBook(wxTreebook *book);
+    wxPersistentTreeBookCtrl(wxTreebook *book);
 
     /**
         Save the currently opened branches.

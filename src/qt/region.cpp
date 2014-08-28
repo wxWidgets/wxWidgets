@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/region.cpp
 // Author:      Peter Most, Javier Torres
-// Id:          $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -11,8 +10,8 @@
 
 #include "wx/region.h"
 #include "wx/bitmap.h"
-#include "wx/qt/converter.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/converter.h"
+#include "wx/qt/private/utils.h"
 
 #include <QtGui/QRegion>
 #include <QtGui/QBitmap>
@@ -94,7 +93,7 @@ wxRegion::wxRegion(const wxBitmap& bmp)
         m_refData = new wxRegionRefData( QRect( 0, 0, bmp.GetWidth(), bmp.GetHeight() ) );
 }
 
-wxRegion::wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance)
+wxRegion::wxRegion(const wxBitmap& WXUNUSED(bmp), const wxColour& WXUNUSED(transp), int WXUNUSED(tolerance))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
@@ -112,6 +111,11 @@ void wxRegion::Clear()
 
     AllocExclusive();
     M_REGIONDATA = QRegion();
+}
+
+void wxRegion::QtSetRegion(QRegion region)
+{
+    M_REGIONDATA = region;
 }
 
 wxGDIRefData *wxRegion::CreateGDIRefData() const
@@ -272,7 +276,7 @@ bool wxRegionIterator::HaveRects() const
 {
     wxCHECK_MSG( m_qtRects != NULL, false, "Invalid iterator" );
     
-    return m_pos < (m_qtRects->size() - 1);
+    return m_pos < m_qtRects->size();
 }
 
 wxRegionIterator::operator bool () const

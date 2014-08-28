@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/spinbutt.h
 // Author:      Peter Most
-// Id:          $Id$
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,8 +9,7 @@
 #define _WX_QT_SPINBUTT_H_
 
 #include "wx/spinbutt.h"
-#include "wx/qt/pointer_qt.h"
-#include <QtGui/QSpinBox>
+#include <QtWidgets/QSpinBox>
 
 class WXDLLIMPEXP_CORE wxSpinButton : public wxSpinButtonBase
 {
@@ -37,9 +35,9 @@ public:
     virtual QSpinBox *GetHandle() const;
 
 private:
-    wxQtPointer< QSpinBox > m_qtSpinBox;
+    QSpinBox *m_qtSpinBox;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxSpinButton );
+    wxDECLARE_DYNAMIC_CLASS( wxSpinButton );
 };
 
 #endif // _WX_QT_SPINBUTT_H_

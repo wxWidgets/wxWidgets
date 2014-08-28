@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -27,9 +26,7 @@
 
 #include "wx/msw/private.h"
 
-#if !defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__)
-    #include <mmsystem.h>
-#endif
+#include <mmsystem.h>
 
 // Why doesn't BC++ have joyGetPosEx?
 #if !defined(__WIN32__) || defined(__BORLANDC__)
@@ -641,9 +638,15 @@ bool wxJoystick::HasPOVCTS() const
 
 bool wxJoystick::SetCapture(wxWindow* win, int pollingFreq)
 {
+#ifdef __WXMSW__
     BOOL changed = (pollingFreq == 0);
     MMRESULT res = joySetCapture((HWND) win->GetHWND(), m_joystick, pollingFreq, changed);
     return (res == JOYERR_NOERROR);
+#else
+    wxUnusedVar(win);
+    wxUnusedVar(pollingFreq);
+    return false;
+#endif
 }
 
 bool wxJoystick::ReleaseCapture()

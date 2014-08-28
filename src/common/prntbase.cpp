@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -59,9 +58,6 @@
 #include "wx/osx/printdlg.h"
 #include "wx/osx/private/print.h"
 #include "wx/osx/dcprint.h"
-#elif defined(__WXPM__)
-#include "wx/os2/dcprint.h"
-#include "wx/generic/prntdlgg.h"
 #elif defined(__WXQT__)
 #include "wx/qt/dcprint.h"
 #include "wx/qt/printdlg.h"
@@ -108,8 +104,6 @@ wxPrinterBase *wxNativePrintFactory::CreatePrinter( wxPrintDialogData *data )
     return new wxWindowsPrinter( data );
 #elif defined(__WXMAC__)
     return new wxMacPrinter( data );
-#elif defined(__WXPM__)
-    return new wxOS2Printer( data );
 #elif defined(__WXQT__)
     return new wxQtPrinter( data );
 #else
@@ -124,8 +118,6 @@ wxPrintPreviewBase *wxNativePrintFactory::CreatePrintPreview( wxPrintout *previe
     return new wxWindowsPrintPreview( preview, printout, data );
 #elif defined(__WXMAC__)
     return new wxMacPrintPreview( preview, printout, data );
-#elif defined(__WXPM__)
-    return new wxOS2PrintPreview( preview, printout, data );
 #elif defined(__WXQT__)
     return new wxQtPrintPreview( preview, printout, data );
 #else
@@ -140,8 +132,6 @@ wxPrintPreviewBase *wxNativePrintFactory::CreatePrintPreview( wxPrintout *previe
     return new wxWindowsPrintPreview( preview, printout, data );
 #elif defined(__WXMAC__)
     return new wxMacPrintPreview( preview, printout, data );
-#elif defined(__WXPM__)
-    return new wxOS2PrintPreview( preview, printout, data );
 #elif defined(__WXQT__)
     return new wxQtPrintPreview( preview, printout, data );
 #else
@@ -309,8 +299,8 @@ class wxPrintFactoryModule: public wxModule
 {
 public:
     wxPrintFactoryModule() {}
-    bool OnInit() { return true; }
-    void OnExit() { wxPrintFactory::SetPrintFactory( NULL ); }
+    bool OnInit() wxOVERRIDE { return true; }
+    void OnExit() wxOVERRIDE { wxPrintFactory::SetPrintFactory( NULL ); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxPrintFactoryModule)
@@ -342,21 +332,9 @@ wxPrinterBase::~wxPrinterBase()
 {
 }
 
-wxWindow *wxPrinterBase::CreateAbortWindow(wxWindow *parent, wxPrintout * printout)
+wxPrintAbortDialog *wxPrinterBase::CreateAbortWindow(wxWindow *parent, wxPrintout * printout)
 {
-    wxPrintAbortDialog *dialog = new wxPrintAbortDialog(parent, _("Printing ") , wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
-
-    wxBoxSizer *button_sizer = new wxBoxSizer( wxVERTICAL );
-    button_sizer->Add( new wxStaticText(dialog, wxID_ANY, _("Please wait while printing\n") + printout->GetTitle() ), 0, wxALL, 10 );
-    button_sizer->Add( new wxButton( dialog, wxID_CANCEL, wxT("Cancel") ), 0, wxALL | wxALIGN_CENTER, 10 );
-
-    dialog->SetAutoLayout( true );
-    dialog->SetSizer( button_sizer );
-
-    button_sizer->Fit(dialog);
-    button_sizer->SetSizeHints (dialog) ;
-
-    return dialog;
+    return new wxPrintAbortDialog(parent, printout->GetTitle());
 }
 
 void wxPrinterBase::ReportError(wxWindow *parent, wxPrintout *WXUNUSED(printout), const wxString& message)
@@ -385,7 +363,7 @@ wxPrinter::~wxPrinter()
     delete m_pimpl;
 }
 
-wxWindow *wxPrinter::CreateAbortWindow(wxWindow *parent, wxPrintout *printout)
+wxPrintAbortDialog *wxPrinter::CreateAbortWindow(wxWindow *parent, wxPrintout *printout)
 {
     return m_pimpl->CreateAbortWindow( parent, printout );
 }
@@ -543,11 +521,47 @@ BEGIN_EVENT_TABLE(wxPrintAbortDialog, wxDialog)
     EVT_BUTTON(wxID_CANCEL, wxPrintAbortDialog::OnCancel)
 END_EVENT_TABLE()
 
+wxPrintAbortDialog::wxPrintAbortDialog(wxWindow *parent,
+                                       const wxString& documentTitle,
+                                       const wxPoint& pos,
+                                       const wxSize& size,
+                                       long style,
+                                       const wxString& name)
+    : wxDialog(parent, wxID_ANY, _("Printing"), pos, size, style, name)
+{
+    wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
+    mainSizer->Add(new wxStaticText(this, wxID_ANY, _("Please wait while printing...")),
+                   wxSizerFlags().Expand().DoubleBorder());
+
+    wxFlexGridSizer *gridSizer = new wxFlexGridSizer(2, wxSize(20, 0));
+    gridSizer->Add(new wxStaticText(this, wxID_ANY, _("Document:")));
+    gridSizer->AddGrowableCol(1);
+    gridSizer->Add(new wxStaticText(this, wxID_ANY, documentTitle));
+    gridSizer->Add(new wxStaticText(this, wxID_ANY, _("Progress:")));
+    m_progress = new wxStaticText(this, wxID_ANY, _("Preparing"));
+    m_progress->SetMinSize(wxSize(250, -1));
+    gridSizer->Add(m_progress);
+    mainSizer->Add(gridSizer, wxSizerFlags().Expand().DoubleBorder(wxLEFT | wxRIGHT));
+
+    mainSizer->Add(CreateStdDialogButtonSizer(wxCANCEL),
+                   wxSizerFlags().Expand().DoubleBorder());
+
+    SetSizerAndFit(mainSizer);
+}
+
+void wxPrintAbortDialog::SetProgress(int currentPage, int totalPages,
+                                     int currentCopy, int totalCopies)
+{
+  wxString text;
+  text.Printf(_("Printing page %d of %d"), currentPage, totalPages);
+  if ( totalCopies > 1 )
+      text += wxString::Format(_(" (copy %d of %d)"), currentCopy, totalCopies);
+  m_progress->SetLabel(text);
+}
 void wxPrintAbortDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
+    wxCHECK_RET( wxPrinterBase::sm_abortWindow != NULL, "OnCancel called twice" );
     wxPrinterBase::sm_abortIt = true;
-    wxPrinterBase::sm_abortWindow->Show(false);
-    wxPrinterBase::sm_abortWindow->Close(true);
     wxPrinterBase::sm_abortWindow->Destroy();
     wxPrinterBase::sm_abortWindow = NULL;
 }
@@ -860,6 +874,10 @@ wxPreviewCanvas::wxPreviewCanvas(wxPrintPreviewBase *preview, wxWindow *parent,
                                  const wxPoint& pos, const wxSize& size, long style, const wxString& name):
 wxScrolledWindow(parent, wxID_ANY, pos, size, style | wxFULL_REPAINT_ON_RESIZE, name)
 {
+    // As we rely on getting idle events, do this to ensure that we do receive
+    // them even when using wxIDLE_PROCESS_SPECIFIED global idle mode.
+    SetExtraStyle(wxWS_EX_PROCESS_IDLE);
+
     m_printPreview = preview;
 #ifdef __WXMAC__
     // The app workspace colour is always white, but we should have
@@ -1107,7 +1125,7 @@ public:
 
         Connect(wxEVT_KILL_FOCUS,
                 wxFocusEventHandler(wxPrintPageTextCtrl::OnKillFocus));
-        Connect(wxEVT_COMMAND_TEXT_ENTER,
+        Connect(wxEVT_TEXT_ENTER,
                 wxCommandEventHandler(wxPrintPageTextCtrl::OnTextEnter));
     }
 
@@ -1688,7 +1706,7 @@ void wxPreviewFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
     Destroy();
 }
 
-void wxPreviewFrame::Initialize(wxPreviewFrameModalityKind kind)
+void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
 {
 #if wxUSE_STATUSBAR
     CreateStatusBar();
@@ -1726,6 +1744,13 @@ void wxPreviewFrame::Initialize(wxPreviewFrameModalityKind kind)
             break;
     }
 
+    if ( m_modalityKind != wxPreviewFrame_NonModal )
+    {
+        // Behave like modal dialogs, don't show in taskbar. This implies
+        // removing the minimize box, because minimizing windows without
+        // taskbar entry is confusing.
+        SetWindowStyle((GetWindowStyle() & ~wxMINIMIZE_BOX) | wxFRAME_NO_TASKBAR);
+    }
 
     Layout();
 

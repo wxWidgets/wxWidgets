@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -49,35 +48,31 @@ public :
         m_maximum = 1;
     }
 
-    void SetMaximum(wxInt32 v)
+    void SetMaximum(wxInt32 v) wxOVERRIDE
     {
         m_maximum = (v == 0) ? 1 : v;
     }
 
-    void    SetScrollThumb( wxInt32 value, wxInt32 thumbSize )
+    void    SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) wxOVERRIDE
     {
         double v = ((double) value)/m_maximum;
         double t = ((double) thumbSize)/(m_maximum+thumbSize);
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
-        [(wxNSScroller*) m_osxView setFloatValue:v knobProportion:t];
-#else
         [(wxNSScroller*) m_osxView setDoubleValue:v];
         [(wxNSScroller*) m_osxView setKnobProportion:t];
-#endif
     }
 
-    virtual wxInt32 GetValue() const
+    virtual wxInt32 GetValue() const wxOVERRIDE
     {
         return wxRound([(wxNSScroller*) m_osxView floatValue] * m_maximum);
     }
 
-    virtual wxInt32 GetMaximum() const
+    virtual wxInt32 GetMaximum() const wxOVERRIDE
     {
         return m_maximum;
     }
 
-    virtual void controlAction(WXWidget slf, void* _cmd, void *sender);
-    virtual void mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
+    virtual void controlAction(WXWidget slf, void* _cmd, void *sender) wxOVERRIDE;
+    virtual void mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd) wxOVERRIDE;
 protected:
     wxInt32 m_maximum;
 };

@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2006-01-12
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -20,12 +19,13 @@ class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxCFEventLoop
 public:
     wxGUIEventLoop();
 
+    virtual void WakeUp();
+
 protected:
     virtual int DoDispatchTimeout(unsigned long timeout);
 
-    virtual void DoRun();
-
-    virtual void DoStop();
+    virtual void OSXDoRun();
+    virtual void OSXDoStop();
 
     virtual CFRunLoopRef CFGetCurrentRunLoop() const;
 };

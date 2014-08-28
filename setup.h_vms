@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 27 April 2011                                                      *
+ * Date : 21 January 2013                                                    *
  *                                                                           *
  *****************************************************************************/
 
@@ -77,14 +77,22 @@
 /* #undef __WXLESSTIF__ */
 
 #ifdef __WXGTK__
-/* Define this if your version of GTK+ is greater than 1.2 */
-#define __WXGTK12__ 1
+
+#ifndef VMS_GTK2
+#define GDK_WINDOWING_X11 1
+#endif
 
 /* Define this if your version of GTK+ is greater than 1.2.7 */
 #define __WXGTK127__ 1
 
 /* Define this if your version of GTK+ is greater than 2.0 */
 #ifdef VMS_GTK2
+
+/* Define this if your version of GTK+ is >= 3.0 */
+#if 0
+#define __WXGTK3__ 1
+#endif
+
 #define __WXGTK20__ 1
 
 /* Define this if your version of GTK+ is greater than 2.6 */
@@ -173,14 +181,15 @@ typedef pid_t GPid;
 
 /* --- start common options --- */
 
+#define wxUSE_COMPILER_TLS 1
 
 #ifndef wxUSE_GUI
     #define wxUSE_GUI            1
 #endif
 
-#define WXWIN_COMPATIBILITY_2_6 1
-
 #define WXWIN_COMPATIBILITY_2_8 1
+
+#define WXWIN_COMPATIBILITY_3_0 1
 
 #define wxEVENTS_COMPATIBILITY_2_8 1
 
@@ -234,7 +243,7 @@ typedef pid_t GPid;
 
 #define wxUSE_STL 0
 
-#if defined(__DMC__) || defined(__WATCOMC__) \
+#if defined(__DMC__) \
         || (defined(_MSC_VER) && _MSC_VER < 1200)
     #define wxUSE_STD_DEFAULT  0
 #else
@@ -358,6 +367,20 @@ typedef pid_t GPid;
 
 #define wxUSE_PROPGRID  1
 
+#define wxUSE_WEBVIEW 0
+
+#ifdef __WXMSW__
+#define wxUSE_WEBVIEW_IE 0
+#else
+#define wxUSE_WEBVIEW_IE 0
+#endif
+
+#if defined(__WXGTK__) || defined(__WXOSX__)
+#define wxUSE_WEBVIEW_WEBKIT 0
+#else
+#define wxUSE_WEBVIEW_WEBKIT 0
+#endif
+
 #ifdef _MSC_VER
 #   if _MSC_VER >= 1310
 
@@ -374,7 +397,11 @@ typedef pid_t GPid;
 
 
 
+#ifdef __WXGTK3__
+#   define wxUSE_GRAPHICS_CONTEXT 1
+#else
 #   define wxUSE_GRAPHICS_CONTEXT 0
+#endif
 #endif
 
 #define wxUSE_CONTROLS     1
@@ -387,11 +414,14 @@ typedef pid_t GPid;
 #define wxUSE_POPUPWIN 1
 #endif
 
+#define wxUSE_PREFERENCES_EDITOR 1
+
 #define wxUSE_TIPWINDOW    1
 
 #define wxUSE_STC 1
 
 #define wxUSE_ANIMATIONCTRL 1
+#define wxUSE_BANNERWINDOW  1
 #define wxUSE_BUTTON       1
 #define wxUSE_BMPBUTTON    1
 #define wxUSE_CALENDARCTRL 1
@@ -427,12 +457,14 @@ typedef pid_t GPid;
 #define wxUSE_STATTEXT     1
 #define wxUSE_STATBMP      1
 #define wxUSE_TEXTCTRL     1
+#define wxUSE_TIMEPICKCTRL  1
 #if defined (__WXMOTIF__) || defined( __WXGTK__ )
 #define wxUSE_TOGGLEBTN    1
 #else
 #define wxUSE_TOGGLEBTN    0
 #endif
 #define wxUSE_TREECTRL     1
+#define wxUSE_TREELISTCTRL  1
 
 #define wxUSE_STATUSBAR    1
 
@@ -486,6 +518,12 @@ typedef pid_t GPid;
 #define wxUSE_MENUS         1
 
 #define wxUSE_NOTIFICATION_MESSAGE 1
+
+#if defined (__WXMOTIF__)
+#define wxUSE_RICHTOOLTIP 0
+#else
+#define wxUSE_RICHTOOLTIP 1
+#endif
 
 #define wxUSE_SASH          1
 
@@ -624,12 +662,21 @@ typedef pid_t GPid;
 
 #define wxUSE_PALETTE       1
 
+#if defined( __WXX11__ )
+#define wxUSE_ALL_THEMES    1
+
+#define wxUSE_THEME_GTK     1
+#define wxUSE_THEME_METAL   1
+#define wxUSE_THEME_MONO    1
+#define wxUSE_THEME_WIN32   1
+#else
 #define wxUSE_ALL_THEMES    0
 
 #define wxUSE_THEME_GTK     0
 #define wxUSE_THEME_METAL   0
 #define wxUSE_THEME_MONO    0
 #define wxUSE_THEME_WIN32   0
+#endif
 
 /* --- end common options --- */
 
@@ -654,10 +701,6 @@ typedef pid_t GPid;
 
 /* --- start MSW options --- */
 
-#ifndef wxUSE_UNICODE_MSLU
-    #define wxUSE_UNICODE_MSLU 0
-#endif
-
 #define wxUSE_MFC           0
 
 #define wxUSE_OLE           0
@@ -678,7 +721,7 @@ typedef pid_t GPid;
 
 #define wxUSE_RICHEDIT2 0
 
-#define wxUSE_OWNER_DRAWN 0
+#define wxUSE_OWNER_DRAWN 1
 
 #define wxUSE_TASKBARICON_BALLOONS 0
 
@@ -691,6 +734,7 @@ typedef pid_t GPid;
 
 #define wxUSE_DATEPICKCTRL_GENERIC 0
 
+#define wxUSE_TIMEPICKCTRL_GENERIC 0
 
 #define wxUSE_CRASHREPORT 0
 
@@ -814,17 +858,13 @@ typedef pid_t GPid;
  */
 #define wxUSE_LIBSDL 0
 /*
- * Use GTK print for printing under GTK+ 2.0
+ * Use GTK print for printing under GTK+ 2.10+
  */
 #ifdef VMS_GTK2
 #define wxUSE_GTKPRINT 1
 #else
 #define wxUSE_GTKPRINT 0
 #endif
-/*
- * Use GNOME print for printing under GTK+ 2.0
- */
-#define wxUSE_LIBGNOMEPRINT 0
 /*
  * Use GNOME VFS for MIME types
  */
@@ -841,9 +881,16 @@ typedef pid_t GPid;
 #define wxUSE_DC_TRANSFORM_MATRIX 1
 
 /*
- * Have glibc2
+ * Use libnotify library.
+ * Use libnotify 0.7+ API.
  */
-#define wxHAVE_GLIBC2 0
+#ifdef VMS_GTK2
+#define wxUSE_LIBNOTIFY 1
+#define wxUSE_LIBNOTIFY_0_7 1
+#else
+#define wxUSE_LIBNOTIFY 0
+#define wxUSE_LIBNOTIFY_0_7 0
+#endif
 /*
  * Use libXpm
  */
@@ -1056,6 +1103,10 @@ typedef pid_t GPid;
  * with 'char*' for the 3rd parameter instead of 'const char*' */
 #undef HAVE_BROKEN_VSNPRINTF_DECL
 
+/* Define if you have a _broken_ vsscanf() declaration in the header,
+ * with 'char*' for the 1st parameter instead of 'const char*' */
+#undef HAVE_BROKEN_VSSCANF_DECL
+
 /* Define if you have vsscanf() */
 #define HAVE_VSSCANF 1
 
@@ -1121,6 +1172,9 @@ typedef pid_t GPid;
 
 /* Define if you have the dlerror function.  */
 #define HAVE_DLERROR 1
+
+/* Define if you have the dladdr function.  */
+#undef HAVE_DLADDR
 
 /* Define if you have Posix fnctl() function. */
 #define HAVE_FCNTL 1
@@ -1196,6 +1250,9 @@ typedef pid_t GPid;
 /* Define if you have thr_setconcurrency function */
 #undef HAVE_THR_SETCONCURRENCY
 
+/* Define if you have pthread_setconcurrency function */
+#define HAVE_PTHREAD_SET_CONCURRENCY 1
+
 /* Define if you have the uname function.  */
 #define HAVE_UNAME 1
 
@@ -1261,12 +1318,6 @@ typedef pid_t GPid;
 /* Define this if you have fputws() */
 #define HAVE_FPUTWS 1
 
-/* Define this if you have strcasecmp() function in <string.h> */
-#define HAVE_STRCASECMP_IN_STRING_H 1
-
-/* Define this if you have strcasecmp() function in <strings.h> */
-#undef HAVE_STRCASECMP_IN_STRINGS_H
-
 /* Define this if you have wprintf() and related functions */
 #define HAVE_WPRINTF 1
 
@@ -1294,6 +1345,9 @@ typedef pid_t GPid;
 /* Define if you have Pango xft support */
 #undef HAVE_PANGO_XFT
 
+/* Define if you have abi::__forced_unwind in your <cxxabi.h>. */
+#undef HAVE_ABI_FORCEDUNWIND
+
 /* Define if fdopen is available.  */
 #define HAVE_FDOPEN 1
 
@@ -1305,6 +1359,9 @@ typedef pid_t GPid;
 
 /* Define if getgrgid_r is available. */
 #undef HAVE_GETGRGID_R
+
+/* Define if setpriority() is available. */
+#undef HAVE_SETPRIORITY
 
 /* Define if locale_t is available */
 #undef HAVE_LOCALE_T
@@ -1321,10 +1378,6 @@ typedef pid_t GPid;
  */
 
 #ifdef __WIN32__
-
-/* we need to define wxUSE_XPM_IN_MSW for MSW compilation for compatibil
-      with wx/msw/setup.h */
-#define wxUSE_XPM_IN_MSW wxUSE_XPM
 
 #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<!-- $Id$ -->
 
 <resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.3.0.1">
 
@@ -50,6 +49,68 @@
                                 </object>
                             </object>
 
+                        </object>
+                    </object>
+                </object>
+
+                <object class="choicebookpage">
+                    <label>wxBannerWindow</label>
+                    <object class="wxPanel" name="bannerwindow">
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+
+                            <object class="sizeritem">
+                                <flag>wxEXPAND</flag>
+                                <object class="wxBannerWindow">
+                                    <title>Welcome to banner demo page!</title>
+                                    <message>This is a default wxLEFT banner with some text.\nThe banner on the top uses a bitmap.</message>
+                                </object>
+                            </object>
+
+                            <object class="sizeritem">
+                                <flag>wxEXPAND|wxLEFT|wxRIGHT</flag>
+                                <option>1</option>
+                                <border>15</border>
+                                <object class="wxBoxSizer">
+                                    <orient>wxVERTICAL</orient>
+
+                                    <object class="sizeritem">
+                                        <flag>wxEXPAND</flag>
+                                        <object class="wxBannerWindow">
+                                            <direction>wxTOP</direction>
+                                            <bitmap>wxbanner.gif</bitmap>
+                                            <fg>yellow</fg>
+                                            <!-- Using spaces for indentation is ugly but will do for this simple example. -->
+                                            <title>                                                                                               Tip:</title>
+                                            <message>                                                                                                 You can also use text\n                                                                                                 and bitmap together.</message>
+                                        </object>
+                                    </object>
+
+                                    <object class="spacer">
+                                        <option>1</option>
+                                    </object>
+
+                                    <object class="sizeritem">
+                                        <flag>wxEXPAND</flag>
+                                        <object class="wxBannerWindow">
+                                            <direction>wxBOTTOM</direction>
+                                            <title>A word of advice:</title>
+                                            <message>You probably shouldn't use banners\non all four sides at once.</message>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+
+                            <object class="sizeritem">
+                                <flag>wxEXPAND</flag>
+                                <object class="wxBannerWindow">
+                                    <direction>wxRIGHT</direction>
+                                    <title>Custom Banner</title>
+                                    <message>You can change the gradient colours.</message>
+                                    <gradient-start>#7f7f7f</gradient-start>
+                                    <gradient-end>#ffffff</gradient-end>
+                                </object>
+                            </object>
                         </object>
                     </object>
                 </object>
@@ -355,7 +416,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <object class="wxGauge" name="controls_horizontal_gauge">
                                     <style>wxGA_SMOOTH</style>
                                     <size>100,-1</size>
-                                    <max>100</max>
+                                    <range>100</range>
                                     <value>50</value>
                                 </object>
                             </object>
@@ -372,7 +433,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <object class="wxGauge" name="controls_vertical_gauge">
                                     <style>wxGA_VERTICAL</style>
                                     <size>40,60</size>
-                                    <max>100</max>
+                                    <range>100</range>
                                     <value>40</value>
                                 </object>
                             </object>
@@ -511,14 +572,25 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <object class="wxListCtrl" name="controls_listctrl">
                                     <size>220,160</size>
                                     <style>wxLC_REPORT|wxBORDER_SIMPLE</style>
+                                    <imagelist-small>
+                                        <size>16,16</size>
+                                        <bitmap stock_id="wxART_HELP_BOOK"/>
+                                        <bitmap stock_id="wxART_INFORMATION"/>
+                                        <bitmap stock_id="wxART_GO_UP"/>
+                                        <bitmap stock_id="wxART_PLUS"/>
+                                        <bitmap stock_id="wxART_GO_DOWN"/>
+                                        <bitmap stock_id="wxART_WARNING"/>
+                                    </imagelist-small>
                                     <object class="listcol">
                                         <text>Name</text>
-                                        <width>150</width>
+                                        <width>105</width>
+                                        <image>0</image>
                                     </object>
                                     <object class="listcol">
                                         <text>Weight</text>
                                         <align>wxLIST_FORMAT_RIGHT</align>
-                                        <width>50</width>
+                                        <width>105</width>
+                                        <image>1</image>
                                     </object>
                                     <!-- the items are added from the code -->
                                 </object>
@@ -673,6 +745,51 @@ lay them out using wxSizers, absolute positioning, everything you like!
                     </object>
                 </object>
                 <object class="choicebookpage">
+                    <label>wxRibbonBar</label>
+                    <object class="wxRibbonBar" name="ribbonbar">
+                        <object class="page" name="RibbonPage1">
+                            <label>First</label>
+                            <object class="panel">
+                                <label>Applicative stuff</label>
+                                <object class="wxRibbonButtonBar">
+                                    <object class="button" name="App">
+                                        <bitmap>derivdlg.xpm</bitmap>
+                                        <label>Derived</label>
+                                    </object>
+                                    <object class="button" name="App2">
+                                        <bitmap>basicdlg.xpm</bitmap>
+                                        <label>Basic</label>
+                                    </object>
+                                    <object class="button" name="App3">
+                                        <bitmap>custclas.xpm</bitmap>
+                                        <label>Custom</label>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                        <object class="page" name="RibbonPage2">
+                            <label>Second page</label>
+                            <object class="panel">
+                                <label>Gallery test</label>
+                                <object class="wxRibbonGallery">
+                                    <object class="item">
+                                        <bitmap>derivdlg.xpm</bitmap>
+                                    </object>
+                                    <object class="item">
+                                        <bitmap>basicdlg.xpm</bitmap>
+                                    </object>
+                                    <object class="item">
+                                        <bitmap>custclas.xpm</bitmap>
+                                    </object>
+                                    <object class="item">
+                                        <bitmap>artprov.xpm</bitmap>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="choicebookpage">
                     <label>wxScrollBar</label>
                     <object class="wxPanel" name="scrollbar">
                         <object class="wxFlexGridSizer">
@@ -781,7 +898,8 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <object class="wxSpinCtrl" name="controls_spinctrl">
                                     <size>100,-1</size>
                                     <max>100</max>
-                                    <value>0</value>
+                                    <value>17</value>
+                                    <base>16</base>
                                 </object>
                             </object>
                         </object>
@@ -860,18 +978,63 @@ lay them out using wxSizers, absolute positioning, everything you like!
                 <object class="choicebookpage">
                     <label>wxStaticText</label>
                     <object class="wxPanel" name="statictext">
+                        <font>
+                            <size>12</size>
+                        </font>
                         <object class="wxFlexGridSizer">
-                            <cols>1</cols>
+                            <cols>2</cols>
                             <rows>0</rows>
                             <vgap>0</vgap>
                             <hgap>0</hgap>
-                            <growablecols>0</growablecols>
-                            <growablerows>0</growablerows>
+                            <growablecols>0,1</growablecols>
+                            <growablerows>0,1,2</growablerows>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="wxID_STATIC">
+                                    <label>Default font:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="controls_statictext">
                                     <label>It was a dark and stormy night.</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="wxID_STATIC">
+                                    <label>Default constructed bold font:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="controls_statictext">
+                                    <label>It was a dark and stormy night.</label>
+                                    <font>
+                                      <weight>bold</weight>
+                                    </font>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="wxID_STATIC">
+                                    <label>Inheritance constructed bold font:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="controls_statictext">
+                                    <label>It was a dark and stormy night.</label>
+                                    <font>
+                                      <inherit>1</inherit>
+                                      <weight>bold</weight>
+                                    </font>
                                 </object>
                             </object>
                         </object>
@@ -881,7 +1044,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                     <label>wxTextCtrl</label>
                     <object class="wxPanel" name="textctrl">
                         <object class="wxFlexGridSizer">
-                            <cols>2</cols>
+                            <cols>4</cols>
                             <rows>0</rows>
                             <vgap>0</vgap>
                             <hgap>0</hgap>
@@ -905,6 +1068,21 @@ lay them out using wxSizers, absolute positioning, everything you like!
                             <object class="sizeritem">
                                 <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
+                                <object class="wxStaticText">
+                                    <label>With a _hint:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxTextCtrl">
+                                    <size>180,-1</size>
+                                    <hint>you@some.whe.re</hint>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
                                 <object class="wxStaticText" name="controls_textctrl2_statictext">
                                     <label>Password:</label>
                                 </object>
@@ -921,6 +1099,21 @@ lay them out using wxSizers, absolute positioning, everything you like!
                             <object class="sizeritem">
                                 <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
+                                <object class="wxStaticText" name="controls_textctrl4_statictext">
+                                    <label>Search for:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxSearchCtrl" name="controls_multiline_searchctrl">
+                                    <size>180,-1</size>
+                                    <value>true love</value>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
                                 <object class="wxStaticText" name="controls_textctrl3_statictext">
                                     <label>Multiline:</label>
                                 </object>
@@ -932,21 +1125,6 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                     <size>180,90</size>
                                     <style>wxTE_MULTILINE</style>
                                     <value>"So many pretty widgets" said Pooh, said he. "So many pretty widgets", said Pooh.</value>
-                                </object>
-                            </object>
-                            <object class="sizeritem">
-                                <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>5</border>
-                                <object class="wxStaticText" name="controls_textctrl4_statictext">
-                                    <label>Search for:</label>
-                                </object>
-                            </object>
-                            <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>5</border>
-                                <object class="wxSearchCtrl" name="controls_multiline_searchctrl">
-                                    <size>180,-1</size>
-                                    <value>true love</value>
                                 </object>
                             </object>
                         </object>
@@ -1136,9 +1314,18 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <object class="wxTreebook" name="controls_treebook">
                                     <size>350,280</size>
                                     <style>wxSUNKEN_BORDER</style>
+                                    <imagelist>
+                                        <size>16,16</size>
+                                        <bitmap stock_id="wxART_HELP_BOOK"/>
+                                        <bitmap stock_id="wxART_QUESTION"/>
+                                        <bitmap stock_id="wxART_INFORMATION"/>
+                                        <bitmap stock_id="wxART_GO_HOME"/>
+                                    </imagelist>
                                     <object class="treebookpage">
                                         <label>Page 1</label>
                                         <depth>0</depth>
+                                        <image>0</image>
+                                        <expanded>1</expanded>
                                         <object class="wxButton" name="controls_treebook_button1">
                                             <size>200,180</size>
                                             <label>Button N1</label>
@@ -1147,10 +1334,14 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                     <object class="treebookpage">
                                         <label>Empty Page 2</label>
                                         <depth>1</depth>
+                                        <image>1</image>
+                                        <expanded>1</expanded>
+                                        <object class="wxPanel"/>
                                     </object>
                                     <object class="treebookpage">
                                         <label>Page 3</label>
                                         <depth>2</depth>
+                                        <image>2</image>
                                         <object class="wxButton" name="controls_treebook_button3">
                                             <size>200,180</size>
                                             <label>Button N3</label>
@@ -1159,6 +1350,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                     <object class="treebookpage">
                                         <label>Page 4</label>
                                         <depth>1</depth>
+                                        <image>3</image>
                                         <object class="wxButton" name="controls_treebook_button4">
                                             <size>200,180</size>
                                             <label>Button N4</label>

@@ -2,7 +2,6 @@
 // Name:        wx/html/htmlpars.h
 // Purpose:     wxHtmlParser class (generic parser)
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -28,10 +27,10 @@ class WXDLLIMPEXP_FWD_HTML wxHtmlEntitiesParser;
 class wxHtmlTextPieces;
 class wxHtmlParserState;
 
-WX_DECLARE_HASH_SET_WITH_DECL(wxHtmlTagHandler*,
-                              wxPointerHash, wxPointerEqual,
-                              wxHtmlTagHandlersSet,
-                              class WXDLLIMPEXP_HTML);
+WX_DECLARE_HASH_SET_WITH_DECL_PTR(wxHtmlTagHandler*,
+                                  wxPointerHash, wxPointerEqual,
+                                  wxHtmlTagHandlersSet,
+                                  class WXDLLIMPEXP_HTML);
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL(wxHtmlTagHandler*,
                                      wxHtmlTagHandlersHash,
                                      class WXDLLIMPEXP_HTML);
@@ -227,6 +226,9 @@ public:
     // reentrancy.
     virtual void SetParser(wxHtmlParser *parser)
         { m_Parser = parser; }
+
+    // Get the parser associated with this tag handler.
+    wxHtmlParser* GetParser() const { return m_Parser; }
 
     // Returns list of supported tags. The list is in uppercase and
     // tags are delimited by ','.

@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -39,8 +38,8 @@ class WXDLLIMPEXP_CORE wxStaticBitmap: public wxStaticBitmapBase
 
   virtual void SetBitmap(const wxBitmap& bitmap);
 
-  virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
-  virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
+  virtual void Command(wxCommandEvent& WXUNUSED(event)) {}
+  virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {}
   void         OnPaint( wxPaintEvent &event ) ;
 
   wxBitmap GetBitmap() const { return m_bitmap; }

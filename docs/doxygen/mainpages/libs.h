@@ -2,13 +2,14 @@
 // Name:        libs.h
 // Purpose:     Libraries page of the Doxygen manual
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
 
 @page page_libs Library List
+
+@tableofcontents
 
 wxWidgets can be built either as a single large library (this is called a
 <em>monolithic build</em>) or as several smaller libraries
@@ -18,7 +19,7 @@ wxWidgets library is divided into libraries briefly described below. This
 diagram shows the dependencies between them:
 
 @dot
-digraph Dependancies
+digraph Dependencies
 {
     node [shape = ellipse, fontname = "Courier", fontsize = 10, style = filled];
 
@@ -39,13 +40,14 @@ digraph Dependancies
     wxRichText [fillcolor = green, URL = "\ref page_libs_wxrichtext"];
     wxSTC      [fillcolor = green, URL = "\ref page_libs_wxstc"];
     wxXRC      [fillcolor = green, URL = "\ref page_libs_wxxrc"];
+    wxWebView  [fillcolor = green, URL = "\ref page_libs_wxwebview"];
 
     wxCore -> wxBase;
     wxNet -> wxBase;
     wxXML -> wxBase;
 
     wxAdvanced -> wxCore;
-    wxAUI -> wxAdvanced; wxAUI -> wxHTML; wxAUI -> wxXML;
+    wxAUI -> wxAdvanced; wxAUI -> wxHTML;
     wxGL -> wxCore;
     wxHTML -> wxCore;
     wxMedia -> wxCore;
@@ -55,6 +57,7 @@ digraph Dependancies
     wxRichText -> wxAdvanced; wxRichText -> wxHTML; wxRichText -> wxXML;
     wxSTC -> wxCore;
     wxXRC -> wxAdvanced; wxXRC -> wxHTML; wxXRC -> wxXML;
+    wxWebView -> wxCore;
 }
 @enddot
 
@@ -62,6 +65,34 @@ Please note that arrows indicate the "depends from" relation and that all blue
 libraries depend on the @ref page_libs_wxbase library (i.e. they are non-GUI
 libraries), and all green libraries depend on the @ref page_libs_wxcore library
 (i.e. they are GUI libraries).
+
+
+
+@section page_libs_wxadv wxAdvanced
+
+Advanced or rarely used GUI classes:
+
+@li wxCalendarCtrl
+@li wxGrid classes
+@li wxJoystick
+@li wxLayoutAlgorithm
+@li wxSplashScreen
+@li wxTaskBarIcon
+@li wxSound
+@li wxWizard
+@li wxSashLayoutWindow
+@li wxSashWindow
+@li ...others
+
+Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
+
+
+@section page_libs_wxaui wxAui
+
+This contains the Advanced User Interface docking library.
+
+Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml,
+@ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
 @section page_libs_wxbase wxBase
@@ -82,12 +113,30 @@ applications don't.
 Requires @ref page_libs_wxbase.
 
 
-@section page_libs_wxaui wxAui
+@section page_libs_wxgl wxGL
 
-This contains the Advanced User Interface docking library.
+This library contains wxGLCanvas class for integrating OpenGL library with
+wxWidgets. Unlike all others, this library is @b not part of the monolithic
+library, it is always built as separate library.
 
-Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml,
-@ref page_libs_wxcore, @ref page_libs_wxbase.
+Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
+
+
+@section page_libs_wxhtml wxHTML
+
+Simple HTML renderer and other @ref overview_html are contained in this
+library, as well as wxHtmlHelpController, wxBestHelpController and
+wxHtmlListBox.
+
+Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
+
+
+@section page_libs_wxmedia wxMedia
+
+Miscellaneous classes related to multimedia. Currently this library only
+contains wxMediaCtrl but more classes will be added in the future.
+
+Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
 
 
 @section page_libs_wxnet wxNet
@@ -110,6 +159,15 @@ This contains the wxPropertyGrid control.
 Requires @ref page_libs_wxadv, @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
+@section page_libs_wxqa wxQA
+
+This is the library containing extra classes for quality assurance. Currently
+it only contains wxDebugReport and related classes, but more will be added to
+it in the future.
+
+Requires @ref page_libs_wxxml, @ref page_libs_wxcore, @ref page_libs_wxbase.
+
+
 @section page_libs_wxribbon wxRibbon
 
 This contains the Ribbon User Interface components library.
@@ -125,65 +183,25 @@ Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml,
 @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
+@section page_libs_wxstc wxSTC
+
+STC (Styled Text Control) is a wrapper around Scintilla, a syntax-highlighting
+text editor. See <http://www.scintilla.org/> for more info about Scintilla.
+
+Requires @ref page_libs_wxcore, @ref page_libs_wxbase.
+
+@section page_libs_wxwebview wxWebView
+
+The wxWebView library contains the wxWebView control and its associated classes.
+
+Requires @ref page_libs_wxcore, @ref page_libs_wxbase.
+
+
 @section page_libs_wxxml wxXML
 
 This library contains simple classes for parsing XML documents.
 
 Requires @ref page_libs_wxbase.
-
-
-@section page_libs_wxadv wxAdvanced
-
-Advanced or rarely used GUI classes:
-
-@li wxCalendarCtrl
-@li wxGrid classes
-@li wxJoystick
-@li wxLayoutAlgorithm
-@li wxSplashScreen
-@li wxTaskBarIcon
-@li wxSound
-@li wxWizard
-@li wxSashLayoutWindow
-@li wxSashWindow
-@li ...others
-
-Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
-
-
-@section page_libs_wxmedia wxMedia
-
-Miscellaneous classes related to multimedia. Currently this library only
-contains wxMediaCtrl but more classes will be added in the future.
-
-Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
-
-
-@section page_libs_wxgl wxGL
-
-This library contains wxGLCanvas class for integrating OpenGL library with
-wxWidgets. Unlike all others, this library is @b not part of the monolithic
-library, it is always built as separate library.
-
-Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
-
-
-@section page_libs_wxhtml wxHTML
-
-Simple HTML renderer and other @ref overview_html are contained in this
-library, as well as wxHtmlHelpController, wxBestHelpController and
-wxHtmlListBox.
-
-Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
-
-
-@section page_libs_wxqa wxQA
-
-This is the library containing extra classes for quality assurance. Currently
-it only contains wxDebugReport and related classes, but more will be added to
-it in the future.
-
-Requires @ref page_libs_wxxml, @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
 @section page_libs_wxxrc wxXRC
@@ -194,13 +212,4 @@ files in XRC format.
 Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml,
 @ref page_libs_wxcore, @ref page_libs_wxbase.
 
-
-@section page_libs_wxstc wxSTC
-
-STC (Styled Text Control) is a wrapper around Scintilla, a syntax-highlighting
-text editor. See <http://www.scintilla.org/> for more info about Scintilla.
-
-Requires @ref page_libs_wxcore, @ref page_libs_wxbase.
-
 */
-

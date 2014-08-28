@@ -3,7 +3,6 @@
 // Purpose:     test if loading garbage fails
 // Author:      Francesco Montorsi
 // Created:     2009-01-10
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Francesco Montorsi
 ///////////////////////////////////////////////////////////////////////////////
 

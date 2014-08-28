@@ -7,6 +7,36 @@
 #ifndef _TIFFCONF_
 #define _TIFFCONF_
 
+/* Signed 16-bit type */
+#undef TIFF_INT16_T
+
+/* Signed 32-bit type */
+#undef TIFF_INT32_T
+
+/* Signed 64-bit type */
+#undef TIFF_INT64_T
+
+/* Signed 8-bit type */
+#undef TIFF_INT8_T
+
+/* Unsigned 16-bit type */
+#undef TIFF_UINT16_T
+
+/* Unsigned 32-bit type */
+#undef TIFF_UINT32_T
+
+/* Unsigned 64-bit type */
+#undef TIFF_UINT64_T
+
+/* Unsigned 8-bit type */
+#undef TIFF_UINT8_T
+
+/* Signed size type */
+#undef TIFF_SSIZE_T
+
+/* Pointer difference type */
+#undef TIFF_PTRDIFF_T
+
 /* Define to 1 if the system has the type `int16'. */
 #undef HAVE_INT16
 
@@ -15,12 +45,6 @@
 
 /* Define to 1 if the system has the type `int8'. */
 #undef HAVE_INT8
-
-/* The size of a `int', as computed by sizeof. */
-#undef SIZEOF_INT
-
-/* The size of a `long', as computed by sizeof. */
-#undef SIZEOF_LONG
 
 /* Compatibility stuff. */
 
@@ -40,6 +64,9 @@
 
 /* Support JPEG compression (requires IJG JPEG library) */
 #undef JPEG_SUPPORT
+
+/* Support JBIG compression (requires JBIG-KIT library) */
+#undef JBIG_SUPPORT
 
 /* Support LogLuv high dynamic range encoding */
 #undef LOGLUV_SUPPORT

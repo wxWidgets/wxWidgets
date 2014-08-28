@@ -2,7 +2,6 @@
 // Name:        hashmap.h
 // Purpose:     interface of wxHashMap
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -11,7 +10,7 @@
 
     This is a simple, type-safe, and reasonably efficient hash map class,
     whose interface is a subset of the interface of STL containers.
-    In particular, the interface is modeled after std::map, and the various,
+    In particular, the interface is modelled after std::map, and the various,
     non-standard, std::hash_map (http://www.cppreference.com/wiki/stl/map/start).
 
     Example:

@@ -2,9 +2,20 @@
 // Name:        taskbar.h
 // Purpose:     interface of wxTaskBarIcon
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+   On OSX Cocoa the taskbar icon can be in the doc or in the status area.
+   This enumeration can be used to select which will be instantiated.
+*/
+enum wxTaskBarIconType
+{
+    wxTBI_DOCK,
+    wxTBI_CUSTOM_STATUSITEM,
+    wxTBI_DEFAULT_TYPE
+};
+
 
 
 /**
@@ -25,6 +36,7 @@ public:
     */
     wxTaskBarIconEvent(wxEventType evtType, wxTaskBarIcon *tbIcon);
 };
+
 
 /**
     @class wxTaskBarIcon
@@ -79,9 +91,9 @@ class wxTaskBarIcon : public wxEvtHandler
 {
 public:
     /**
-        Default constructor.
+        Default constructor.  The iconType is only applicable on wxOSX_Cocoa.
     */
-    wxTaskBarIcon();
+    wxTaskBarIcon(wxTaskBarIconType iconType = wxTBI_DEFAULT_TYPE);
 
     /**
         Destroys the wxTaskBarIcon object, removing the icon if not already removed.
@@ -167,3 +179,14 @@ protected:
     virtual wxMenu* CreatePopupMenu();
 };
 
+
+wxEventType wxEVT_TASKBAR_MOVE;
+wxEventType wxEVT_TASKBAR_LEFT_DOWN;
+wxEventType wxEVT_TASKBAR_LEFT_UP;
+wxEventType wxEVT_TASKBAR_RIGHT_DOWN;
+wxEventType wxEVT_TASKBAR_RIGHT_UP;
+wxEventType wxEVT_TASKBAR_LEFT_DCLICK;
+wxEventType wxEVT_TASKBAR_RIGHT_DCLICK;
+wxEventType wxEVT_TASKBAR_CLICK;
+wxEventType wxEVT_TASKBAR_BALLOON_TIMEOUT;
+wxEventType wxEVT_TASKBAR_BALLOON_CLICK;

@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     23.07.99
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -69,7 +68,7 @@ END_EVENT_TABLE()
 
 IMPLEMENT_CLASS(wxNumberEntryDialog, wxDialog)
 
-wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
+bool wxNumberEntryDialog::Create(wxWindow *parent,
                                          const wxString& message,
                                          const wxString& prompt,
                                          const wxString& caption,
@@ -77,10 +76,14 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
                                          long min,
                                          long max,
                                          const wxPoint& pos)
-                   : wxDialog(GetParentForModalDialog(parent, 0),
-                              wxID_ANY, caption,
-                              pos, wxDefaultSize)
 {
+    if ( !wxDialog::Create(GetParentForModalDialog(parent, 0),
+                           wxID_ANY, caption,
+                           pos, wxDefaultSize) )
+    {
+        return false;
+    }
+
     m_value = value;
     m_max = max;
     m_min = min;
@@ -105,7 +108,11 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     // spin ctrl
     wxString valStr;
     valStr.Printf(wxT("%ld"), m_value);
+#if wxUSE_SPINCTRL
     m_spinctrl = new wxSpinCtrl(this, wxID_ANY, valStr, wxDefaultPosition, wxSize( 140, wxDefaultCoord ), wxSP_ARROW_KEYS, (int)m_min, (int)m_max, (int)m_value);
+#else
+    m_spinctrl = new wxTextCtrl(this, wxID_ANY, valStr, wxDefaultPosition, wxSize( 140, wxDefaultCoord ));
+#endif
     inputsizer->Add( m_spinctrl, 1, wxCENTER | wxLEFT | wxRIGHT, 10 );
     // add both
     topsizer->Add( inputsizer, 0, wxEXPAND | wxLEFT|wxRIGHT, 5 );
@@ -129,6 +136,8 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     m_spinctrl->SetFocus();
 
     wxEndBusyCursor();
+
+    return true;
 }
 
 void wxNumberEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event))

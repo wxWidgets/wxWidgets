@@ -2,7 +2,6 @@
 // Name:        tests/streams/largefile.cpp
 // Purpose:     Tests for large file support
 // Author:      Mike Wetherell
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Mike Wetherell
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,7 +34,7 @@
 #include "wx/filename.h"
 #include "wx/wfstream.h"
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     #include "wx/msw/wrapwin.h"
     #ifdef __VISUALC__
         // 'nonstandard extension used : nameless struct/union' occurs inside
@@ -305,7 +304,7 @@ CppUnit::Test *largeFile::suite()
 // are picked up. However this is only possible when sparse files are
 // supported otherwise the tests require too much disk space.
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
 
 #ifndef FILE_SUPPORTS_SPARSE_FILES
 #define FILE_SUPPORTS_SPARSE_FILES 0x00000040
@@ -400,7 +399,7 @@ CppUnit::Test* GetlargeFileSuite()
         return NULL;
 }
 
-#else // __WXMSW__
+#else // __WINDOWS__
 
 bool IsFAT(const wxString& WXUNUSED(path)) { return false; }
 void MakeSparse(const wxString& WXUNUSED(path), int WXUNUSED(fd)) { }
@@ -436,7 +435,7 @@ CppUnit::Test* GetlargeFileSuite()
         return NULL;
 }
 
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(largeFile, "largeFile");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(largeFile, "Streams.largeFile");

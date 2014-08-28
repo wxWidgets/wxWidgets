@@ -3,7 +3,6 @@
 // Purpose:     wxHeaderCtrl unit test
 // Author:      Vadim Zeitlin
 // Created:     2008-11-26
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

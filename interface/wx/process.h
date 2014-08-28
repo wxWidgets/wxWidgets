@@ -2,44 +2,8 @@
 // Name:        process.h
 // Purpose:     interface of wxProcess
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
-/**
-    Signal constants used by wxProcess.
-*/
-enum wxSignal
-{
-    wxSIGNONE = 0,  //!< verify if the process exists under Unix
-    wxSIGHUP,
-    wxSIGINT,
-    wxSIGQUIT,
-    wxSIGILL,
-    wxSIGTRAP,
-    wxSIGABRT,
-    wxSIGEMT,
-    wxSIGFPE,
-    wxSIGKILL,      //!< forcefully kill, dangerous!
-    wxSIGBUS,
-    wxSIGSEGV,
-    wxSIGSYS,
-    wxSIGPIPE,
-    wxSIGALRM,
-    wxSIGTERM       //!< terminate the process gently
-};
-
-/**
-    Return values for wxProcess::Kill.
-*/
-enum wxKillError
-{
-    wxKILL_OK,              //!< no error
-    wxKILL_BAD_SIGNAL,      //!< no such signal
-    wxKILL_ACCESS_DENIED,   //!< permission denied
-    wxKILL_NO_PROCESS,      //!< no such process
-    wxKILL_ERROR            //!< another, unspecified error
-};
 
 
 /**
@@ -131,7 +95,7 @@ public:
 
     /**
         Detaches this event handler from the parent specified in the constructor
-        (see wxEvtHandler::Unlink() for a similar but not identic function).
+        (see wxEvtHandler::Unlink() for a similar but not identical function).
     
         Normally, a wxProcess object is deleted by its parent when it receives the
         notification about the process termination. 
@@ -278,6 +242,20 @@ public:
         The caught output stream is returned by GetInputStream() as a non-seekable stream.
     */
     void Redirect();
+
+    /**
+        Sets the priority of the process, between 0 (lowest) and 100 (highest).
+        It can only be set before the process is created.
+
+        The following symbolic constants can be used in addition to raw
+        values in 0..100 range:
+          - @b wxPRIORITY_MIN: 0
+          - @b wxPRIORITY_DEFAULT: 50
+          - @b wxPRIORITY_MAX: 100
+
+        @since 2.9.5
+    */
+    void SetPriority(unsigned priority);
 };
 
 
@@ -320,4 +298,7 @@ public:
     */
     int GetPid();
 };
+
+
+wxEventType wxEVT_END_PROCESS;
 

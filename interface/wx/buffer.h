@@ -2,7 +2,6 @@
 // Name:        buffer.h
 // Purpose:     interface of wxMemoryBuffer
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -178,7 +177,7 @@ public:
     wxCharTypeBuffer(const wxScopedCharTypeBuffer<T>& src);
 
     /**
-        Assigns @a str to this buffer and takes ownership of it (i.e. the
+        Assigns @a str to this buffer and takes ownership of it (i.e.\ the
         buffer becomes "owned").
      */
     wxCharTypeBuffer& operator=(const CharType *str);
@@ -287,9 +286,9 @@ public:
         Create a new buffer.
 
         @param size
-            size of the new buffer.
+            size of the new buffer, 1KiB by default.
     */
-    wxMemoryBuffer(size_t size = DefBufSize);
+    wxMemoryBuffer(size_t size = 1024);
 
     /**
         Append a single byte to the buffer.
@@ -308,6 +307,17 @@ public:
             Length of data to append.
     */
     void AppendData(const void *data, size_t len);
+
+    /**
+        Clear the buffer contents.
+
+        The buffer won't contain any data after this method is called.
+
+        @see IsEmpty()
+
+        @since 2.9.4
+     */
+    void Clear();
 
     /**
         Ensure that the buffer is big enough and return a pointer to the start
@@ -342,6 +352,15 @@ public:
         up to @a sizeNeeded bytes.
     */
     void* GetWriteBuf(size_t sizeNeeded);
+
+    /**
+        Returns true if the buffer contains no data.
+
+        @see Clear()
+
+        @since 2.9.4
+     */
+    bool IsEmpty() const;
 
     /**
         Ensures the buffer has at least @a size bytes available.

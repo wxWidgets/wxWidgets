@@ -3,7 +3,6 @@
 // Purpose:     wxStatusBar sample
 // Author:      Vadim Zeitlin
 // Created:     04.02.00
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -50,7 +49,7 @@
 #include "wx/numdlg.h"
 #include "wx/fontdlg.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -82,7 +81,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 // A custom status bar which contains controls, icons &c
@@ -126,7 +125,7 @@ private:
 #endif
     wxStaticBitmap *m_statbmp;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -181,7 +180,7 @@ private:
     int m_field;
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Our about dialog ith its status bar
@@ -218,6 +217,7 @@ enum
     StatusBar_SetPaneStyleNormal,
     StatusBar_SetPaneStyleFlat,
     StatusBar_SetPaneStyleRaised,
+    StatusBar_SetPaneStyleSunken,
 
     StatusBar_SetStyleSizeGrip,
     StatusBar_SetStyleEllipsizeStart,
@@ -237,9 +237,9 @@ static const int BITMAP_SIZE_Y = 15;
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 #ifdef USE_MDI_PARENT_FRAME
-BEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
 #else
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif
     EVT_MENU(StatusBar_Quit,  MyFrame::OnQuit)
     EVT_MENU(StatusBar_SetFields, MyFrame::OnSetStatusFields)
@@ -256,6 +256,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(StatusBar_SetPaneStyleNormal, MyFrame::OnSetPaneStyle)
     EVT_MENU(StatusBar_SetPaneStyleFlat, MyFrame::OnSetPaneStyle)
     EVT_MENU(StatusBar_SetPaneStyleRaised, MyFrame::OnSetPaneStyle)
+    EVT_MENU(StatusBar_SetPaneStyleSunken, MyFrame::OnSetPaneStyle)
 
     EVT_MENU(StatusBar_SetStyleSizeGrip, MyFrame::OnSetStyle)
     EVT_MENU(StatusBar_SetStyleEllipsizeStart, MyFrame::OnSetStyle)
@@ -267,13 +268,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
                         MyFrame::OnUpdateForDefaultStatusbar)
     EVT_UPDATE_UI(StatusBar_Toggle, MyFrame::OnUpdateStatusBarToggle)
     EVT_UPDATE_UI_RANGE(StatusBar_SetPaneStyleNormal,
-                        StatusBar_SetPaneStyleRaised,
+                        StatusBar_SetPaneStyleSunken,
                         MyFrame::OnUpdateSetPaneStyle)
     EVT_UPDATE_UI_RANGE(StatusBar_SetStyleSizeGrip, StatusBar_SetStyleShowTips,
                         MyFrame::OnUpdateSetStyle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(MyStatusBar, wxStatusBar)
+wxBEGIN_EVENT_TABLE(MyStatusBar, wxStatusBar)
     EVT_SIZE(MyStatusBar::OnSize)
 #if wxUSE_CHECKBOX
     EVT_CHECKBOX(StatusBar_Checkbox, MyStatusBar::OnToggleClock)
@@ -282,7 +283,7 @@ BEGIN_EVENT_TABLE(MyStatusBar, wxStatusBar)
     EVT_TIMER(wxID_ANY, MyStatusBar::OnTimer)
 #endif
     EVT_IDLE(MyStatusBar::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
@@ -396,6 +397,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
             wxT("&Raised"),
             wxT("Sets the style of the first field to raised look")
         );
+    statbarPaneStyleMenu->AppendCheckItem
+        (
+            StatusBar_SetPaneStyleSunken,
+            wxT("&Sunken"),
+            wxT("Sets the style of the first field to sunken look")
+        );
     statbarMenu->Append(StatusBar_SetPaneStyle, wxT("Field style"),
                         statbarPaneStyleMenu);
 
@@ -412,7 +419,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                         wxT("Toggle status bar format"));
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(StatusBar_About, wxT("&About...\tCtrl-A"),
+    helpMenu->Append(StatusBar_About, wxT("&About\tCtrl-A"),
                      wxT("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...
@@ -722,6 +729,9 @@ void MyFrame::OnUpdateSetPaneStyle(wxUpdateUIEvent& event)
         case StatusBar_SetPaneStyleRaised:
             event.Check(m_statbarPaneStyle == wxSB_RAISED);
             break;
+        case StatusBar_SetPaneStyleSunken:
+            event.Check(m_statbarPaneStyle == wxSB_SUNKEN);
+            break;
     }
 }
 
@@ -737,6 +747,9 @@ void MyFrame::OnSetPaneStyle(wxCommandEvent& event)
             break;
         case StatusBar_SetPaneStyleRaised:
             m_statbarPaneStyle = wxSB_RAISED;
+            break;
+        case StatusBar_SetPaneStyleSunken:
+            m_statbarPaneStyle = wxSB_SUNKEN;
             break;
     }
 
@@ -945,11 +958,6 @@ void MyStatusBar::OnSize(wxSizeEvent& event)
 #if wxUSE_CHECKBOX
     if ( !m_checkbox )
         return;
-#endif
-
-    // TEMPORARY HACK: TODO find a more general solution
-#ifdef wxStatusBarGeneric
-    wxStatusBar::OnSize(event);
 #endif
 
     wxRect rect;

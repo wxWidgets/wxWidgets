@@ -2,7 +2,6 @@
 // Name:        sysopt.h
 // Purpose:     interface of wxSystemOptions
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -125,16 +124,6 @@
         Per default a wxFileDialog with wxFD_OPEN does not show a types-popup on OSX but allows
         the selection of files from any of the supported types. Setting this to 1 shows a wxChoice 
         for selection (if there is more than one supported filetype).
-    @endFlagTable
-
-
-    @section sysopt_mgl MGL
-
-    @beginFlagTable
-    @flag{mgl.aa-threshold}
-        Set this integer option to point size below which fonts are not antialiased. Default: 10.
-    @flag{mgl.screen-refresh}
-        Screen refresh rate in Hz. A reasonable default is used if not specified.
     @endFlagTable
 
 

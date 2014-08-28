@@ -3,7 +3,6 @@
 // Purpose:     wxMenu unit test
 // Author:      wxWidgets team
 // Created:     2010-11-10
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets team
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -22,6 +21,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/menu.h"
+#include "wx/uiaction.h"
+
 #include <stdarg.h>
 
 // ----------------------------------------------------------------------------
@@ -82,18 +83,26 @@ private:
     CPPUNIT_TEST_SUITE( MenuTestCase );
         CPPUNIT_TEST( FindInMenubar );
         CPPUNIT_TEST( FindInMenu );
+        CPPUNIT_TEST( EnableTop );
         CPPUNIT_TEST( Count );
         CPPUNIT_TEST( Labels );
         CPPUNIT_TEST( RadioItems );
+        CPPUNIT_TEST( RemoveAdd );
+        CPPUNIT_TEST( ChangeBitmap );
+        WXUISIM_TEST( Events );
     CPPUNIT_TEST_SUITE_END();
 
     void CreateFrame();
 
     void FindInMenubar();
     void FindInMenu();
+    void EnableTop();
     void Count();
     void Labels();
     void RadioItems();
+    void RemoveAdd();
+    void ChangeBitmap();
+    void Events();
 
     wxFrame* m_frame;
 
@@ -107,6 +116,9 @@ private:
     int m_subsubmenuItemId;
 
     wxArrayString m_menuLabels;
+
+    // The menu containing the item with MenuTestCase_Bar id.
+    wxMenu* m_menuWithBar;
 
     DECLARE_NO_COPY_CLASS(MenuTestCase)
 };
@@ -140,13 +152,18 @@ void MenuTestCase::CreateFrame()
 
     subMenu->AppendSubMenu(subsubMenu, "Subsubmen&u", "Test a subsubmenu");
 
+    // Check GetTitle() returns the correct string _before_ appending to the bar
+    fileMenu->SetTitle("&Foo\tCtrl-F");
+    CPPUNIT_ASSERT_EQUAL( "&Foo\tCtrl-F", fileMenu->GetTitle() );
+
     PopulateMenu(fileMenu, "Filemenu item ", itemcount);
 
     fileMenu->Append(MenuTestCase_Foo, "&Foo\tCtrl-F", "Test item to be found");
 
 
     PopulateMenu(helpMenu, "Helpmenu item ", itemcount);
-    helpMenu->Append(MenuTestCase_Bar, "Bar");
+    helpMenu->Append(MenuTestCase_Bar, "Bar\tF1");
+    m_menuWithBar = helpMenu;
     helpMenu->AppendSubMenu(subMenu, "Sub&menu", "Test a submenu");
 
     // +2 for "Foo" and "Bar", +2 for the 2 submenus
@@ -256,6 +273,16 @@ void MenuTestCase::FindInMenu()
     }
 }
 
+void MenuTestCase::EnableTop()
+{
+    wxMenuBar* const bar = m_frame->GetMenuBar();
+    CPPUNIT_ASSERT( bar->IsEnabledTop(0) );
+    bar->EnableTop( 0, false );
+    CPPUNIT_ASSERT( !bar->IsEnabledTop(0) );
+    bar->EnableTop( 0, true );
+    CPPUNIT_ASSERT( bar->IsEnabledTop(0) );
+}
+
 void MenuTestCase::Count()
 {
     wxMenuBar* bar = m_frame->GetMenuBar();
@@ -358,4 +385,134 @@ void MenuTestCase::RadioItems()
     // Check that the last radio group still works as expected.
     menu->Check(MenuTestCase_First + 4, true);
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 5) );
+}
+
+void MenuTestCase::RemoveAdd()
+{
+    wxMenuBar* bar = m_frame->GetMenuBar();
+
+    wxMenu* menu0 = bar->GetMenu(0);
+    wxMenu* menu1 = bar->GetMenu(1);
+    wxMenuItem* item = new wxMenuItem(menu0, MenuTestCase_Foo + 100, "t&ext\tCtrl-E");
+    menu0->Insert(0, item);
+    CPPUNIT_ASSERT( menu0->FindItemByPosition(0) == item );
+    menu0->Remove(item);
+    CPPUNIT_ASSERT( menu0->FindItemByPosition(0) != item );
+    menu1->Insert(0, item);
+    CPPUNIT_ASSERT( menu1->FindItemByPosition(0) == item );
+    menu1->Remove(item);
+    CPPUNIT_ASSERT( menu1->FindItemByPosition(0) != item );
+    menu0->Insert(0, item);
+    CPPUNIT_ASSERT( menu0->FindItemByPosition(0) == item );
+    menu0->Delete(item);
+}
+
+void MenuTestCase::ChangeBitmap()
+{
+    wxMenu *menu = new wxMenu;
+
+    wxMenuItem *item = new wxMenuItem(menu, wxID_ANY, "Item");
+    menu->Append(item);
+
+    // On Windows Vista (and later) calling SetBitmap, *after* the menu
+    // item has already been added, used to result in a stack overflow:
+    // [Do]SetBitmap can call GetHBitmapForMenu which will call SetBitmap
+    // again etc...
+    item->SetBitmap( wxBitmap(1, 1) );
+
+
+    // Force owner drawn usage by having a bitmap that's wider than the
+    // standard size. This results in rearranging the parent menu which
+    // hasn't always worked properly and lead to a null pointer exception.
+    item->SetBitmap( wxBitmap(512, 1) );
+
+    wxDELETE(menu);
+}
+
+void MenuTestCase::Events()
+{
+#ifdef __WXGTK__
+    // FIXME: For some reason, we sporadically fail to get the event in
+    //        buildbot slave builds even though the test always passes locally.
+    //        There is undoubtedly something wrong here but without being able
+    //        to debug it, I have no idea what is it, so let's just disable
+    //        this test when running under buildbot to let the entire test
+    //        suite pass.
+    if ( IsAutomaticTest() )
+        return;
+#endif // __WXGTK__
+
+#if wxUSE_UIACTIONSIMULATOR
+    class MenuEventHandler : public wxEvtHandler
+    {
+    public:
+        MenuEventHandler(wxWindow* win)
+            : m_win(win)
+        {
+            m_win->Connect(wxEVT_MENU,
+                           wxCommandEventHandler(MenuEventHandler::OnMenu),
+                           NULL,
+                           this);
+
+            m_gotEvent = false;
+            m_event = NULL;
+        }
+
+        virtual ~MenuEventHandler()
+        {
+            m_win->Disconnect(wxEVT_MENU,
+                              wxCommandEventHandler(MenuEventHandler::OnMenu),
+                              NULL,
+                              this);
+
+            delete m_event;
+        }
+
+        const wxCommandEvent& GetEvent()
+        {
+            CPPUNIT_ASSERT( m_gotEvent );
+
+            m_gotEvent = false;
+
+            return *m_event;
+        }
+
+    private:
+        void OnMenu(wxCommandEvent& event)
+        {
+            CPPUNIT_ASSERT( !m_gotEvent );
+
+            delete m_event;
+            m_event = static_cast<wxCommandEvent*>(event.Clone());
+            m_gotEvent = true;
+        }
+
+        wxWindow* const m_win;
+        wxCommandEvent* m_event;
+        bool m_gotEvent;
+    };
+
+    MenuEventHandler handler(m_frame);
+
+    // Invoke the accelerator.
+    m_frame->Show();
+    m_frame->SetFocus();
+    wxYield();
+
+    wxUIActionSimulator sim;
+    sim.KeyDown(WXK_F1);
+    sim.KeyUp(WXK_F1);
+    wxYield();
+
+    const wxCommandEvent& ev = handler.GetEvent();
+    CPPUNIT_ASSERT_EQUAL( static_cast<int>(MenuTestCase_Bar), ev.GetId() );
+
+    wxObject* const src = ev.GetEventObject();
+    CPPUNIT_ASSERT( src );
+
+    CPPUNIT_ASSERT_EQUAL( "wxMenu",
+                          wxString(src->GetClassInfo()->GetClassName()) );
+    CPPUNIT_ASSERT_EQUAL( static_cast<wxObject*>(m_menuWithBar),
+                          src );
+#endif // wxUSE_UIACTIONSIMULATOR
 }

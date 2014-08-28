@@ -4,7 +4,6 @@
 // Author:      Ryan Norton
 // Modified by:
 // Created:     11/11/2003
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -36,7 +35,7 @@
     #include "wx/module.h"
 #endif
 
-#include "wx/osx/core/cfstring.h"
+#include "wx/osx/private.h"
 
 // ============================================================================
 // implementation
@@ -97,7 +96,7 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
         CFRelease(pClass);
     }
 
-    //Now get the maching services
+    //Now get the matching services
     io_iterator_t pIterator;
     if( IOServiceGetMatchingServices(m_pPort,
                         pDictionary, &pIterator) != kIOReturnSuccess )
@@ -261,7 +260,7 @@ size_t wxHIDDevice::GetCount (int nClass, int nType)
         CFRelease(pClass);
     }
 
-    //Now get the maching services
+    //Now get the matching services
     io_iterator_t pIterator;
     if( IOServiceGetMatchingServices(pPort,
                                      pDictionary, &pIterator) != kIOReturnSuccess )
@@ -379,7 +378,7 @@ bool wxHIDDevice::IsActive(int nIndex)
 // ----------------------------------------------------------------------------
 bool wxHIDDevice::HasElement(int nIndex)
 {
-    return (void*) m_pCookies[nIndex] != NULL;
+    return m_pCookies[nIndex] != 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -421,7 +420,7 @@ enum
     WXK_RSHIFT = 400,
     WXK_RALT,
     WXK_RCONTROL,
-    WXK_RMENU
+    WXK_RAW_RCONTROL,
 };
 
 // ----------------------------------------------------------------------------
@@ -601,7 +600,7 @@ void wxHIDKeyboard::DoBuildCookies(CFArrayRef Array)
 
             //Menu keys, Shift, other specials
             case kHIDUsage_KeyboardLeftControl:
-                AddCookie(CFArrayGetValueAtIndex(Array, i),WXK_CONTROL);
+                AddCookie(CFArrayGetValueAtIndex(Array, i),WXK_RAW_CONTROL);
                 break;
             case kHIDUsage_KeyboardLeftShift:
                 AddCookie(CFArrayGetValueAtIndex(Array, i),WXK_SHIFT);
@@ -610,10 +609,10 @@ void wxHIDKeyboard::DoBuildCookies(CFArrayRef Array)
                 AddCookie(CFArrayGetValueAtIndex(Array, i),WXK_ALT);
                 break;
             case kHIDUsage_KeyboardLeftGUI:
-                AddCookie(CFArrayGetValueAtIndex(Array, i),WXK_MENU);
+                AddCookie(CFArrayGetValueAtIndex(Array, i),WXK_CONTROL);
                 break;
             case kHIDUsage_KeyboardRightControl:
-                AddCookie(CFArrayGetValueAtIndex(Array, i),WXK_RCONTROL);
+                AddCookie(CFArrayGetValueAtIndex(Array, i),WXK_RAW_RCONTROL);
                 break;
             case kHIDUsage_KeyboardRightShift:
                 AddCookie(CFArrayGetValueAtIndex(Array, i),WXK_RSHIFT);
@@ -622,7 +621,7 @@ void wxHIDKeyboard::DoBuildCookies(CFArrayRef Array)
                 AddCookie(CFArrayGetValueAtIndex(Array, i),WXK_RALT);
                 break;
             case kHIDUsage_KeyboardRightGUI:
-                AddCookie(CFArrayGetValueAtIndex(Array, i),WXK_RMENU);
+                AddCookie(CFArrayGetValueAtIndex(Array, i),WXK_RCONTROL);
                 break;
 
             //Default
@@ -646,11 +645,11 @@ class wxHIDModule : public wxModule
 
     public:
         static wxArrayPtrVoid sm_keyboards;
-        virtual bool OnInit()
+        virtual bool OnInit() wxOVERRIDE
         {
             return true;
         }
-        virtual void OnExit()
+        virtual void OnExit() wxOVERRIDE
         {
             for(size_t i = 0; i < sm_keyboards.GetCount(); ++i)
                 delete (wxHIDKeyboard*) sm_keyboards[i];
@@ -673,73 +672,8 @@ bool wxGetKeyState (wxKeyCode key)
     wxASSERT_MSG(key != WXK_LBUTTON && key != WXK_RBUTTON && key !=
         WXK_MBUTTON, wxT("can't use wxGetKeyState() for mouse buttons"));
 
-    if (wxHIDModule::sm_keyboards.GetCount() == 0)
-    {
-        int nKeyboards = wxHIDKeyboard::GetCount();
-
-        for(int i = 1; i <= nKeyboards; ++i)
-        {
-            wxHIDKeyboard* keyboard = new wxHIDKeyboard();
-            if(keyboard->Create(i))
-            {
-                wxHIDModule::sm_keyboards.Add(keyboard);
-            }
-            else
-            {
-                delete keyboard;
-                break;
-            }
-        }
-
-        wxASSERT_MSG(wxHIDModule::sm_keyboards.GetCount() != 0,
-                     wxT("No keyboards found!"));
-    }
-
-    for(size_t i = 0; i < wxHIDModule::sm_keyboards.GetCount(); ++i)
-    {
-        wxHIDKeyboard* keyboard = (wxHIDKeyboard*)
-                                wxHIDModule::sm_keyboards[i];
-
-    switch(key)
-    {
-    case WXK_SHIFT:
-            if( keyboard->IsActive(WXK_SHIFT) ||
-                   keyboard->IsActive(WXK_RSHIFT) )
-            {
-                return true;
-            }
-        break;
-    case WXK_ALT:
-            if( keyboard->IsActive(WXK_ALT) ||
-                   keyboard->IsActive(WXK_RALT) )
-            {
-                return true;
-            }
-        break;
-    case WXK_CONTROL:
-            if( keyboard->IsActive(WXK_CONTROL) ||
-                   keyboard->IsActive(WXK_RCONTROL) )
-            {
-                return true;
-            }
-        break;
-    case WXK_MENU:
-            if( keyboard->IsActive(WXK_MENU) ||
-                   keyboard->IsActive(WXK_RMENU) )
-            {
-                return true;
-            }
-        break;
-    default:
-            if( keyboard->IsActive(key) )
-            {
-                return true;
-            }
-        break;
-    }
-    }
-
-    return false; //not down/error
+    CGKeyCode cgcode = wxCharCodeWXToOSX((wxKeyCode)key);
+    return CGEventSourceKeyState(kCGEventSourceStateCombinedSessionState, cgcode);
 }
 
 #endif //__DARWIN__

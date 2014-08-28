@@ -3,7 +3,6 @@
 // Purpose:     wxtreebook unit test
 // Author:      Steven Lamerton
 // Created:     2010-07-02
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -35,10 +34,10 @@ private:
     virtual wxBookCtrlBase *GetBase() const { return m_treebook; }
 
     virtual wxEventType GetChangedEvent() const
-        { return wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED; }
+        { return wxEVT_TREEBOOK_PAGE_CHANGED; }
 
     virtual wxEventType GetChangingEvent() const
-        { return wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING; }
+        { return wxEVT_TREEBOOK_PAGE_CHANGING; }
 
     CPPUNIT_TEST_SUITE( TreebookTestCase );
         wxBOOK_CTRL_BASE_TESTS();

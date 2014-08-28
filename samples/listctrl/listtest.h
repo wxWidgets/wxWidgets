@@ -4,14 +4,13 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // not all ports have support for EVT_CONTEXT_MENU yet, don't define
 // USE_CONTEXT_MENU for those which don't
-#if defined(__WXMOTIF__) || defined(__WXPM__) || defined(__WXX11__) || defined(__WXMGL__)
+#if defined(__WXMOTIF__) || defined(__WXX11__)
     #define USE_CONTEXT_MENU 0
 #else
     #define USE_CONTEXT_MENU 1
@@ -23,7 +22,7 @@ class MyApp: public wxApp
 public:
     MyApp() { }
 
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
 private:
     wxDECLARE_NO_COPY_CLASS(MyApp);
@@ -37,8 +36,7 @@ public:
                const wxPoint& pos,
                const wxSize& size,
                long style)
-        : wxListCtrl(parent, id, pos, size, style),
-          m_attr(*wxBLUE, *wxLIGHT_GREY, wxNullFont)
+        : wxListCtrl(parent, id, pos, size, style)
         {
             m_updated = -1;
 
@@ -84,17 +82,15 @@ private:
     void LogEvent(const wxListEvent& event, const wxChar *eventName);
     void LogColEvent(const wxListEvent& event, const wxChar *eventName);
 
-    virtual wxString OnGetItemText(long item, long column) const;
-    virtual int OnGetItemColumnImage(long item, long column) const;
-    virtual wxListItemAttr *OnGetItemAttr(long item) const;
-
-    wxListItemAttr m_attr;
+    virtual wxString OnGetItemText(long item, long column) const wxOVERRIDE;
+    virtual int OnGetItemColumnImage(long item, long column) const wxOVERRIDE;
+    virtual wxListItemAttr *OnGetItemAttr(long item) const wxOVERRIDE;
 
     long m_updated;
 
 
     wxDECLARE_NO_COPY_CLASS(MyListCtrl);
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new frame type
@@ -135,6 +131,7 @@ protected:
     void OnSort(wxCommandEvent& event);
     void OnSetFgColour(wxCommandEvent& event);
     void OnSetBgColour(wxCommandEvent& event);
+    void OnSetRowLines(wxCommandEvent& event);
     void OnToggleMultiSel(wxCommandEvent& event);
     void OnShowColInfo(wxCommandEvent& event);
     void OnShowSelInfo(wxCommandEvent& event);
@@ -147,6 +144,7 @@ protected:
     void OnThaw(wxCommandEvent& event);
     void OnToggleLines(wxCommandEvent& event);
     void OnToggleHeader(wxCommandEvent& event);
+    void OnToggleBell(wxCommandEvent& event);
 #ifdef __WXOSX__
     void OnToggleMacUseGeneric(wxCommandEvent& event);
 #endif // __WXOSX__
@@ -155,6 +153,7 @@ protected:
     void OnUpdateUIEnableInReport(wxUpdateUIEvent& event);
     void OnUpdateToggleMultiSel(wxUpdateUIEvent& event);
     void OnUpdateToggleHeader(wxUpdateUIEvent& event);
+    void OnUpdateRowLines(wxUpdateUIEvent& event);
 
     wxImageList *m_imageListNormal;
     wxImageList *m_imageListSmall;
@@ -187,7 +186,7 @@ private:
 
 
     wxDECLARE_NO_COPY_CLASS(MyFrame);
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -217,8 +216,10 @@ enum
     LIST_FIND,
     LIST_SET_FG_COL,
     LIST_SET_BG_COL,
+    LIST_ROW_LINES,
     LIST_TOGGLE_MULTI_SEL,
     LIST_TOGGLE_HEADER,
+    LIST_TOGGLE_BELL,
     LIST_TOGGLE_FIRST,
     LIST_SHOW_COL_INFO,
     LIST_SHOW_SEL_INFO,

@@ -1,10 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/richtext/richtextindentspage.h
-// Purpose:
+// Purpose:     Declares the rich text formatting dialog indent page.
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/3/2006 2:28:21 PM
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -141,6 +140,7 @@ public:
     wxTextCtrl* m_spacingBefore;
     wxTextCtrl* m_spacingAfter;
     wxComboBox* m_spacingLine;
+    wxCheckBox* m_pageBreakCtrl;
     wxRichTextCtrl* m_previewCtrl;
     /// Control identifiers
     enum {
@@ -157,6 +157,7 @@ public:
         ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_BEFORE = 10114,
         ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_AFTER = 10116,
         ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_LINE = 10115,
+        ID_RICHTEXTINDENTSSPACINGPAGE_PAGEBREAK = 10106,
         ID_RICHTEXTINDENTSSPACINGPAGE_PREVIEW_CTRL = 10109
     };
 ////@end wxRichTextIndentsSpacingPage member variables

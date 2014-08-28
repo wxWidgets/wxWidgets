@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -25,7 +24,7 @@ class MyApp : public wxApp
 public:
     MyApp() { m_showImages = true; m_showStates = true; m_showButtons = false; }
 
-    bool OnInit();
+    bool OnInit() wxOVERRIDE;
 
     void SetShowImages(bool show) { m_showImages = show; }
     bool ShowImages() const { return m_showImages; }
@@ -46,7 +45,7 @@ public:
     MyTreeItemData(const wxString& desc) : m_desc(desc) { }
 
     void ShowInfo(wxTreeCtrl *tree);
-    const wxChar *GetDesc() const { return m_desc.c_str(); }
+    wxString const& GetDesc() const { return m_desc; }
 
 private:
     wxString m_desc;
@@ -95,6 +94,7 @@ public:
     void OnRMouseUp(wxMouseEvent& event);
     void OnRMouseDClick(wxMouseEvent& event);
 
+    wxTreeItemId GetLastTreeITem() const;
     void GetItemsRecursively(const wxTreeItemId& idParent,
                              wxTreeItemIdValue cookie = 0);
 
@@ -106,7 +106,6 @@ public:
 
     void DoSortChildren(const wxTreeItemId& item, bool reverse = false)
         { m_reverseSort = reverse; wxTreeCtrl::SortChildren(item); }
-    void DoEnsureVisible() { if (m_lastItem.IsOk()) EnsureVisible(m_lastItem); }
 
     void DoToggleIcon(const wxTreeItemId& item);
     void DoToggleState(const wxTreeItemId& item);
@@ -114,8 +113,6 @@ public:
     void ShowMenu(wxTreeItemId id, const wxPoint& pt);
 
     int ImageSize(void) const { return m_imageSize; }
-
-    void SetLastItem(wxTreeItemId id) { m_lastItem = id; }
 
     void SetAlternateImages(bool show) { m_alternateImages = show; }
     bool AlternateImages() const { return m_alternateImages; }
@@ -131,7 +128,7 @@ public:
     }
 
 protected:
-    virtual int OnCompareItems(const wxTreeItemId& i1, const wxTreeItemId& i2);
+    virtual int OnCompareItems(const wxTreeItemId& i1, const wxTreeItemId& i2) wxOVERRIDE;
 
     // is this the test item which we use in several event handlers?
     bool IsTestItem(const wxTreeItemId& item)
@@ -141,6 +138,7 @@ protected:
     }
 
 private:
+    // Find the very last item in the tree.
     void AddItemsRecursively(const wxTreeItemId& idParent,
                              size_t nChildren,
                              size_t depth,
@@ -153,17 +151,16 @@ private:
 
     int          m_imageSize;               // current size of images
     bool         m_reverseSort;             // flag for OnCompareItems
-    wxTreeItemId m_lastItem,                // for OnEnsureVisible()
-                 m_draggedItem;             // item being dragged right now
+    wxTreeItemId m_draggedItem;             // item being dragged right now
     bool         m_alternateImages;
     bool         m_alternateStates;
 
-    // NB: due to an ugly wxMSW hack you _must_ use DECLARE_DYNAMIC_CLASS()
+    // NB: due to an ugly wxMSW hack you _must_ use wxDECLARE_DYNAMIC_CLASS();
     //     if you want your overloaded OnCompareItems() to be called.
     //     OTOH, if you don't want it you may omit the next line - this will
     //     make default (alphabetical) sorting much faster under wxMSW.
-    DECLARE_DYNAMIC_CLASS(MyTreeCtrl)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(MyTreeCtrl);
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new frame type
@@ -222,6 +219,7 @@ public:
     void OnToggleButtons(wxCommandEvent& event);
     void OnToggleImages(wxCommandEvent& event);
     void OnToggleStates(wxCommandEvent& event);
+    void OnToggleBell(wxCommandEvent& event);
     void OnToggleAlternateImages(wxCommandEvent& event);
     void OnToggleAlternateStates(wxCommandEvent& event);
     void OnSetImageSize(wxCommandEvent& event);
@@ -241,6 +239,7 @@ public:
     void OnSortRev(wxCommandEvent& WXUNUSED(event)) { DoSort(true); }
 
     void OnAddItem(wxCommandEvent& event);
+    void OnAddManyItems(wxCommandEvent& event);
     void OnInsertItem(wxCommandEvent& event);
 
     void OnIncIndent(wxCommandEvent& event);
@@ -303,7 +302,7 @@ private:
 
     void DoSetBold(bool bold = true);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // menu and control ids
@@ -339,6 +338,7 @@ enum
     TreeTest_Recreate,
     TreeTest_ToggleImages,
     TreeTest_ToggleStates,
+    TreeTest_ToggleBell,
     TreeTest_ToggleAlternateImages,
     TreeTest_ToggleAlternateStates,
     TreeTest_ToggleButtons,
@@ -348,6 +348,7 @@ enum
     TreeTest_EnsureVisible,
     TreeTest_SetFocus,
     TreeTest_AddItem,
+    TreeTest_AddManyItems,
     TreeTest_InsertItem,
     TreeTest_IncIndent,
     TreeTest_DecIndent,

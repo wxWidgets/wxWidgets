@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     28.06.99
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -43,6 +42,7 @@
 #include "wx/bookctrl.h"
 #include "wx/scrolwin.h"
 #include "wx/textwrapper.h"
+#include "wx/modalhook.h"
 
 #if wxUSE_DISPLAY
 #include "wx/display.h"
@@ -81,14 +81,8 @@ wxFLAGS_MEMBER(wxCLIP_CHILDREN)
 wxFLAGS_MEMBER(wxWS_EX_VALIDATE_RECURSIVELY)
 wxFLAGS_MEMBER(wxSTAY_ON_TOP)
 wxFLAGS_MEMBER(wxCAPTION)
-#if WXWIN_COMPATIBILITY_2_6
-wxFLAGS_MEMBER(wxTHICK_FRAME)
-#endif // WXWIN_COMPATIBILITY_2_6
 wxFLAGS_MEMBER(wxSYSTEM_MENU)
 wxFLAGS_MEMBER(wxRESIZE_BORDER)
-#if WXWIN_COMPATIBILITY_2_6
-wxFLAGS_MEMBER(wxRESIZE_BOX)
-#endif // WXWIN_COMPATIBILITY_2_6
 wxFLAGS_MEMBER(wxCLOSE_BOX)
 wxFLAGS_MEMBER(wxMAXIMIZE_BOX)
 wxFLAGS_MEMBER(wxMINIMIZE_BOX)
@@ -125,7 +119,7 @@ END_EVENT_TABLE()
 wxDialogLayoutAdapter* wxDialogBase::sm_layoutAdapter = NULL;
 bool wxDialogBase::sm_layoutAdaptation = false;
 
-void wxDialogBase::Init()
+wxDialogBase::wxDialogBase()
 {
     m_returnCode = 0;
     m_affirmativeId = wxID_OK;
@@ -166,9 +160,7 @@ wxWindow *wxDialogBase::CheckIfCanBeUsedAsParent(wxWindow *parent) const
         return NULL;
     }
 
-    // FIXME-VC6: this compiler requires an explicit const cast or it fails
-    //            with error C2446
-    if ( const_cast<const wxWindow *>(parent) == this )
+    if ( parent == this )
     {
         // not sure if this can really happen but it doesn't hurt to guard
         // against this clearly invalid situation
@@ -224,13 +216,7 @@ wxSizer *wxDialogBase::CreateTextSizer(const wxString& message,
         widthMax = wxSystemSettings::GetMetric( wxSYS_SCREEN_X ) - 25;
     }
 
-    // '&' is used as accel mnemonic prefix in the wxWidgets controls but in
-    // the static messages created by CreateTextSizer() (used by wxMessageBox,
-    // for example), we don't want this special meaning, so we need to quote it
-    wxString text(message);
-    text.Replace(wxT("&"), wxT("&&"));
-
-    return wrapper.CreateSizer(text, widthMax);
+    return wrapper.CreateSizer(message, widthMax);
 }
 
 #endif // wxUSE_STATTEXT
@@ -382,6 +368,8 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
         SetAffirmativeId(wxID_OK);
     else if (flags & wxYES)
         SetAffirmativeId(wxID_YES);
+    else if (flags & wxCLOSE)
+        SetAffirmativeId(wxID_CLOSE);
 
     sizer->Realize();
 
@@ -428,7 +416,7 @@ bool wxDialogBase::EmulateButtonClickIfPresent(int id)
     if ( !btn || !btn->IsEnabled() || !btn->IsShown() )
         return false;
 
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, id);
+    wxCommandEvent event(wxEVT_BUTTON, id);
     event.SetEventObject(btn);
     btn->GetEventHandler()->ProcessEvent(event);
 
@@ -454,7 +442,7 @@ bool wxDialogBase::SendCloseButtonClickEvent()
             if ( EmulateButtonClickIfPresent(wxID_CANCEL) )
                 return true;
             idCancel = GetAffirmativeId();
-            // fall through
+            wxFALLTHROUGH;
 
         default:
             // translate Esc to button press for the button with given id
@@ -467,14 +455,16 @@ bool wxDialogBase::SendCloseButtonClickEvent()
 
 bool wxDialogBase::IsEscapeKey(const wxKeyEvent& event)
 {
-    // for most platforms, Esc key is used to close the dialogs
-    return event.GetKeyCode() == WXK_ESCAPE &&
-                event.GetModifiers() == wxMOD_NONE;
+    // For most platforms, Esc key is used to close the dialogs.
+    //
+    // Notice that we intentionally don't check for modifiers here, Shift-Esc,
+    // Alt-Esc and so on still close the dialog, typically.
+    return event.GetKeyCode() == WXK_ESCAPE;
 }
 
 void wxDialogBase::OnCharHook(wxKeyEvent& event)
 {
-    if ( event.GetKeyCode() == WXK_ESCAPE )
+    if ( IsEscapeKey(event) )
     {
         if ( SendCloseButtonClickEvent() )
         {
@@ -521,7 +511,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxWindowModalDialogEvent, wxCommandEvent)
 
 void wxDialogBase::ShowWindowModal ()
 {
-    ShowModal();
+    int retval = ShowModal();
+    // wxWindowModalDialogEvent relies on GetReturnCode() returning correct
+    // code. Rather than doing it manually in all ShowModal() overrides for
+    // native dialogs (and getting accidentally broken again), set it here.
+    // The worst that can happen is that it will be set twice to the same
+    // value.
+    SetReturnCode(retval);
     SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
 }
 
@@ -671,7 +667,7 @@ bool wxStandardDialogLayoutAdapter::DoLayoutAdaptation(wxDialog* dialog)
                 wxScrolledWindow* scrolledWindow = wxDynamicCast(page, wxScrolledWindow);
                 if (scrolledWindow)
                     windows.Append(scrolledWindow);
-                else if (!scrolledWindow && page->GetSizer())
+                else if (page->GetSizer())
                 {
                     // Create a scrolled window and reparent
                     scrolledWindow = CreateScrolledWindow(page);
@@ -1005,8 +1001,8 @@ class wxDialogLayoutAdapterModule: public wxModule
     DECLARE_DYNAMIC_CLASS(wxDialogLayoutAdapterModule)
 public:
     wxDialogLayoutAdapterModule() {}
-    virtual void OnExit() { delete wxDialogBase::SetLayoutAdapter(NULL); }
-    virtual bool OnInit() { wxDialogBase::SetLayoutAdapter(new wxStandardDialogLayoutAdapter); return true; }
+    virtual void OnExit() wxOVERRIDE { delete wxDialogBase::SetLayoutAdapter(NULL); }
+    virtual bool OnInit() wxOVERRIDE { wxDialogBase::SetLayoutAdapter(new wxStandardDialogLayoutAdapter); return true; }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxDialogLayoutAdapterModule, wxModule)

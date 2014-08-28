@@ -191,11 +191,7 @@ typedef unsigned int JDIMENSION;
  * or code profilers that require it.
  */
 
-#if defined(__VISAGECPP__)
-#define JPEG_CALLING_CONV _Optlink
-#else /* !Visual Age C++ */
 #define JPEG_CALLING_CONV
-#endif
 
 /* We can't declare a static function as extern "C" as we need to do in C++
  * programs, so suppress static in METHODDEF when using C++.
@@ -221,21 +217,10 @@ typedef unsigned int JDIMENSION;
  * Again, you can customize this if you need special linkage keywords.
  */
 
-#if defined(__VISAGECPP__) /* need this for /common/imagjpeg.obj but not loclly */
-#ifdef HAVE_PROTOTYPES
-#define JMETHOD(type,methodname,arglist)  type (_Optlink *methodname) arglist
-#else
-#define JMETHOD(type,methodname,arglist)  type (_Optlink *methodname) ()
-#endif
-
-#else
-
 #ifdef HAVE_PROTOTYPES
 #define JMETHOD(type,methodname,arglist)  type (*methodname) arglist
 #else
 #define JMETHOD(type,methodname,arglist)  type (*methodname) ()
-#endif
-
 #endif
 
 /* Here is the pseudo-keyword for declaring pointers that must be "far"

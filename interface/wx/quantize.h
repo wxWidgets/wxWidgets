@@ -2,7 +2,6 @@
 // Name:        quantize.h
 // Purpose:     interface of wxQuantize
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
