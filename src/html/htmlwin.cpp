@@ -495,6 +495,10 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
 
     m_Cell = (wxHtmlContainerCell*) m_Parser->Parse(newsrc);
 
+    // The parser doesn't need the DC any more, so ensure it's not left with a
+    // dangling pointer after the DC object goes out of scope.
+    m_Parser->SetDC(NULL);
+
     m_Cell->SetIndent(m_Borders, wxHTML_INDENT_ALL, wxHTML_UNITS_PIXELS);
     m_Cell->SetAlignHor(wxHTML_ALIGN_CENTER);
     CreateLayout();
