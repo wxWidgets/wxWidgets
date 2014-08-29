@@ -1607,11 +1607,8 @@ void wxPGProperty::EnsureCells( unsigned int column )
                 defaultCell = pg->GetCategoryDefaultCell();
         }
 
-        // TODO: Replace with resize() call
-        unsigned int cellCountMax = column+1;
-
-        for ( unsigned int i=m_cells.size(); i<cellCountMax; i++ )
-            m_cells.push_back(defaultCell);
+        // Alloc new default cells.
+        m_cells.resize(column+1, defaultCell);
     }
 }
 
