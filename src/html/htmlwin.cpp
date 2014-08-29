@@ -480,12 +480,12 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
     }
 
     // ...and run the parser on it:
-    wxClientDC *dc = new wxClientDC(this);
-    dc->SetMapMode(wxMM_TEXT);
+    wxClientDC dc(this);
+    dc.SetMapMode(wxMM_TEXT);
     SetBackgroundColour(wxColour(0xFF, 0xFF, 0xFF));
     SetBackgroundImage(wxNullBitmap);
 
-    m_Parser->SetDC(dc);
+    m_Parser->SetDC(&dc);
 
     // notice that it's important to set m_Cell to NULL here before calling
     // Parse() below, even if it will be overwritten by its return value as
@@ -494,7 +494,7 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
     wxDELETE(m_Cell);
 
     m_Cell = (wxHtmlContainerCell*) m_Parser->Parse(newsrc);
-    delete dc;
+
     m_Cell->SetIndent(m_Borders, wxHTML_INDENT_ALL, wxHTML_UNITS_PIXELS);
     m_Cell->SetAlignHor(wxHTML_ALIGN_CENTER);
     CreateLayout();
