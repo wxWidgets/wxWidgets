@@ -103,6 +103,7 @@
     #include <shlobj.h>         // for CLSID_ShellLink
     #include "wx/msw/missing.h"
     #include "wx/msw/ole/oleutils.h"
+    #include "wx/msw/private/comptr.h"
 #endif
 
 #if defined(__WXMAC__)
@@ -1655,7 +1656,7 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
     wxFileName::SplitPath(shortcutPath, & path, & file, & ext);
 
     HRESULT hres;
-    IShellLink* psl;
+    wxCOMPtr<IShellLink> psl;
     bool success = false;
 
     // Assume it's not a shortcut if it doesn't end with lnk
@@ -1671,7 +1672,7 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
 
     if (SUCCEEDED(hres))
     {
-        IPersistFile* ppf;
+        wxCOMPtr<IPersistFile> ppf;
         hres = psl->QueryInterface( IID_IPersistFile, (LPVOID *) &ppf);
         if (SUCCEEDED(hres))
         {
@@ -1681,8 +1682,6 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
                                 MAX_PATH);
 
             hres = ppf->Load(wsz, 0);
-            ppf->Release();
-
             if (SUCCEEDED(hres))
             {
                 wxChar buf[2048];
@@ -1703,8 +1702,6 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
                 }
             }
         }
-
-        psl->Release();
     }
     return success;
 }
