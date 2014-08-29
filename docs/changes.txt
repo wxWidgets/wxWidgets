@@ -612,6 +612,7 @@ wxMSW:
 - Fix order of radial gradient stops (Alexandru Pana).
 - Fix font created using wxFont(wxFontInfo()) ctor.
 - Fix wxFileName::GetShortcutTarget() in console applications.
+- Fix wxFileName::MakeRelativeTo() for shortcut files (gafatoa).
 
 
 3.0.1: (released 2014-06-15)

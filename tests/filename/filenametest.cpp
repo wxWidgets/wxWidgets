@@ -27,6 +27,9 @@
 
 #ifdef __WINDOWS__
     #include "wx/msw/registry.h"
+    #include <shlobj.h>
+    #include "wx/msw/ole/oleutils.h"
+    #include "wx/msw/private/comptr.h"
 #endif // __WINDOWS__
 
 #ifdef __UNIX__
@@ -145,6 +148,9 @@ private:
 #if defined(__UNIX__)
         CPPUNIT_TEST( TestSymlinks );
 #endif // __UNIX__
+#ifdef __WINDOWS__
+        CPPUNIT_TEST( TestShortcuts );
+#endif // __WINDOWS__
     CPPUNIT_TEST_SUITE_END();
 
     void TestConstruction();
@@ -168,6 +174,9 @@ private:
 #if defined(__UNIX__)
     void TestSymlinks();
 #endif // __UNIX__
+#ifdef __WINDOWS__
+    void TestShortcuts();
+#endif // __WINDOWS__
 
     DECLARE_NO_COPY_CLASS(FileNameTestCase)
 };
@@ -996,3 +1005,53 @@ void FileNameTestCase::TestSymlinks()
 }
 
 #endif // __UNIX__
+
+#ifdef __WINDOWS__
+
+namespace
+{
+
+void CreateShortcut(const wxString& pathFile, const wxString& pathLink)
+{
+   wxOleInitializer oleInit;
+
+   HRESULT hr;
+
+   wxCOMPtr<IShellLink> sl;
+   hr = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
+                         IID_IShellLink, (void **)&sl);
+   CPPUNIT_ASSERT( SUCCEEDED(hr) );
+
+   wxCOMPtr<IPersistFile> pf;
+   hr = sl->QueryInterface(IID_IPersistFile, (void **)&pf);
+   CPPUNIT_ASSERT( SUCCEEDED(hr) );
+
+   hr = sl->SetPath(pathFile.wx_str());
+   CPPUNIT_ASSERT( SUCCEEDED(hr) );
+
+   hr = pf->Save(pathLink.wx_str(), TRUE);
+   CPPUNIT_ASSERT( SUCCEEDED(hr) );
+}
+
+} // anonymous namespace
+
+void FileNameTestCase::TestShortcuts()
+{
+   wxFileName fn(wxFileName::CreateTempFileName("filenametest"));
+   CPPUNIT_ASSERT( fn.IsOk() );
+   wxON_BLOCK_EXIT1( wxRemoveFile, fn.GetFullPath() );
+
+   wxFileName fnLink(fn.GetPath(), "sc_" + fn.GetName(), "lnk");
+   CPPUNIT_ASSERT( fnLink.IsOk() );
+   wxON_BLOCK_EXIT1( wxRemoveFile, fnLink.GetFullPath() );
+
+   CreateShortcut(fn.GetFullPath(), fnLink.GetFullPath());
+
+   // MakeRelativeTo() is supposed to change only the path of the file, not its
+   // name.
+   wxFileName fnLinkRel(fnLink);
+   fnLink.MakeRelativeTo(".");
+   CPPUNIT_ASSERT_EQUAL(fnLink.GetFullName(), fnLinkRel.GetFullName());
+}
+
+#endif // __WINDOWS__
