@@ -102,6 +102,7 @@
     #include "wx/msw/private.h"
     #include <shlobj.h>         // for CLSID_ShellLink
     #include "wx/msw/missing.h"
+    #include "wx/msw/ole/oleutils.h"
 #endif
 
 #if defined(__WXMAC__)
@@ -1660,6 +1661,9 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
     // Assume it's not a shortcut if it doesn't end with lnk
     if (ext.CmpNoCase(wxT("lnk"))!=0)
         return false;
+
+    // Ensure OLE is initialized.
+    wxOleInitializer oleInit;
 
     // create a ShellLink object
     hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
