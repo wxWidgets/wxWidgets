@@ -825,6 +825,7 @@ int wxCmdLineParser::Parse(bool showUsage)
     Reset();
 
     // parse everything
+    m_data->m_parameters.clear();
     wxString arg;
     size_t count = m_data->m_arguments.size();
     for ( size_t n = 1; ok && (n < count); n++ )    // 0 is program name
