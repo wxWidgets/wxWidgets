@@ -193,10 +193,10 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
                                   int column, int item, int flags ) const
 {
     const wxPGEditor* editor = NULL;
-    const wxPGCell* cell = NULL;
 
     wxString text;
     bool isUnspecified = property->IsValueUnspecified();
+    int selItem = item;
 
     if ( column == 1 && item == -1 )
     {
@@ -213,15 +213,20 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
             }
             return false;
         }
+        // We need to know the current selection to override default
+        // cell settings (colours, etc.) with custom cell settings
+        // which can be defined separately for any single choice item.
+        selItem = property->GetChoiceSelection();
     }
 
     int imageWidth = 0;
     int preDrawFlags = flags;
     bool res = false;
+    wxPGCell cell;
 
-    property->GetDisplayInfo(column, item, flags, &text, &cell);
+    property->GetDisplayInfo(column, selItem, flags, &text, &cell);
 
-    imageWidth = PreDrawCell( dc, rect, *cell, preDrawFlags );
+    imageWidth = PreDrawCell( dc, rect, cell, preDrawFlags );
 
     if ( column == 1 )
     {
@@ -312,7 +317,7 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
         }
     }
 
-    PostDrawCell(dc, propertyGrid, *cell, preDrawFlags);
+    PostDrawCell(dc, propertyGrid, cell, preDrawFlags);
 
     return res;
 }
@@ -749,32 +754,54 @@ void wxPGProperty::OnValidationFailure( wxVariant& WXUNUSED(pendingValue) )
 {
 }
 
+#ifdef WXWIN_COMPATIBILITY_3_0
 void wxPGProperty::GetDisplayInfo( unsigned int column,
                                    int choiceIndex,
                                    int flags,
                                    wxString* pString,
                                    const wxPGCell** pCell )
 {
+    wxASSERT_MSG(!pCell || !(*pCell),
+          wxT("Cell pointer is a dummy argument and shouldn't be used"));
+    wxUnusedVar(pCell);
+    GetDisplayInfo(column, choiceIndex, flags, pString, (wxPGCell*)NULL);
+}
+#endif // WXWIN_COMPATIBILITY_3_0
+
+void wxPGProperty::GetDisplayInfo( unsigned int column,
+                                   int choiceIndex,
+                                   int flags,
+                                   wxString* pString,
+                                   wxPGCell* pCell )
+{
     wxCHECK_RET( GetGrid(),
                  wxT("Cannot obtain display info for detached property") );
-    const wxPGCell* cell = NULL;
+
+    // Get default cell
+    wxPGCell cell = GetCell(column);
 
     if ( !(flags & wxPGCellRenderer::ChoicePopup) )
     {
         // Not painting list of choice popups, so get text from property
         if ( column != 1 || !IsValueUnspecified() || IsCategory() )
         {
-            cell = &GetCell(column);
+            // Overrride default cell settings with
+            // custom settings defined for choice item.
+            if (column == 1 && !IsValueUnspecified() && choiceIndex != wxNOT_FOUND)
+            {
+                const wxPGChoiceEntry& entry = m_choices[choiceIndex];
+                cell.MergeFrom(entry);
+            }
         }
         else
         {
             // Use special unspecified value cell
-            cell = &GetGrid()->GetUnspecifiedValueAppearance();
+            cell.MergeFrom(GetGrid()->GetUnspecifiedValueAppearance());
         }
 
-        if ( cell->HasText() )
+        if ( cell.HasText() )
         {
-            *pString = cell->GetText();
+            *pString = cell.GetText();
         }
         else
         {
@@ -792,23 +819,24 @@ void wxPGProperty::GetDisplayInfo( unsigned int column,
 
         if ( choiceIndex != wxNOT_FOUND )
         {
+            // Overrride default cell settings with
+            // custom settings defined for choice item.
             const wxPGChoiceEntry& entry = m_choices[choiceIndex];
-            if ( entry.GetBitmap().IsOk() ||
-                 entry.GetFgCol().IsOk() ||
-                 entry.GetBgCol().IsOk() )
-                cell = &entry;
+            cell.MergeFrom(entry);
+
             *pString = m_choices.GetLabel(choiceIndex);
         }
     }
 
-    if ( !cell )
-        cell = &GetCell(column);
-
-    wxASSERT_MSG( cell->GetData(),
+    wxASSERT_MSG( cell.GetData(),
                   wxString::Format("Invalid cell for property %s",
                                    GetName().c_str()) );
 
-    *pCell = cell;
+    // We need to return customized cell object.
+    if (pCell)
+    {
+        *pCell = cell;
+    }
 }
 
 /*
