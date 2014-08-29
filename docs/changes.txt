@@ -611,6 +611,7 @@ wxMSW:
 - Show new style directory selector even for non existent paths (raychow).
 - Fix order of radial gradient stops (Alexandru Pana).
 - Fix font created using wxFont(wxFontInfo()) ctor.
+- Fix wxFileName::GetShortcutTarget() in console applications.
 
 
 3.0.1: (released 2014-06-15)
