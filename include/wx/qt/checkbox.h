@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/checkbox.h
-// Author:      Peter Most
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Sean D'Epagnier, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

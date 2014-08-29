@@ -1,9 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/colour.h
 // Purpose:     wxColour class implementation for wxQt
-// Author:      Peter Most, Kolya Kosenko
-// Created:     2010-05-12
-// Copyright:   (C) 2010 Kolya Kosenko
+// Author:      Peter Most, Kolya Kosenko, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

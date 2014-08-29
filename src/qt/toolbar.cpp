@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/toolbar.cpp
-// Author:      Sean D'Epagnier, Peter Most
-// Copyright:   (c) Sean D'Epagnier 2014
+// Author:      Sean D'Epagnier, Mariano Reingart, Peter Most
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
