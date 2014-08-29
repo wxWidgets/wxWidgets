@@ -41,6 +41,23 @@
     IMPLEMENT_DYNAMIC_CLASS(wxPowerEvent, wxEvent)
 #endif
 
+// Provide stubs for systems without power resource management functions
+#if !defined(__WINDOWS__) && !defined(__APPLE__)
+
+bool
+wxPowerResource::Acquire(wxPowerResourceKind kind,
+                         const wxString& WXUNUSED(reason))
+{
+    return false;
+}
+
+void wxPowerResource::Release(wxPowerResourceKind kind)
+{
+
+}
+
+#endif // !(__WINDOWS__ || __APPLE__)
+
 // provide stubs for the systems not implementing these functions
 #if !defined(__WINDOWS__)
 

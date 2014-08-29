@@ -96,6 +96,49 @@ typedef void (wxEvtHandler::*wxPowerEventFunction)(wxPowerEvent&);
 #endif // support for power events/no support
 
 // ----------------------------------------------------------------------------
+// wxPowerResourceBlocker
+// ----------------------------------------------------------------------------
+
+enum wxPowerResourceKind
+{
+    wxPOWER_RESOURCE_SCREEN,
+    wxPOWER_RESOURCE_SYSTEM
+};
+
+class WXDLLIMPEXP_BASE wxPowerResource
+{
+public:
+    static bool Acquire(wxPowerResourceKind kind,
+                        const wxString& reason = wxString());
+    static void Release(wxPowerResourceKind kind);
+};
+
+class wxPowerResourceBlocker
+{
+public:
+    explicit wxPowerResourceBlocker(wxPowerResourceKind kind,
+                                    const wxString& reason = wxString())
+        : m_kind(kind),
+          m_acquired(wxPowerResource::Acquire(kind, reason))
+    {
+    }
+
+    bool IsInEffect() const { return m_acquired; }
+
+    ~wxPowerResourceBlocker()
+    {
+        if ( m_acquired )
+            wxPowerResource::Release(m_kind);
+    }
+
+private:
+    const wxPowerResourceKind m_kind;
+    const bool m_acquired;
+
+    wxDECLARE_NO_COPY_CLASS(wxPowerResourceBlocker);
+};
+
+// ----------------------------------------------------------------------------
 // power management functions
 // ----------------------------------------------------------------------------
 

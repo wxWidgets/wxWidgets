@@ -21,6 +21,19 @@ enum wxBatteryState
     wxBATTERY_UNKNOWN_STATE
 };
 
+/**
+    Possible power resources that can be locked by wxPowerResourceBlocker.
+
+    @since 3.1.0
+ */
+enum wxPowerResourceKind
+{
+    /// Use to prevent automatic display power off.
+    wxPOWER_RESOURCE_SCREEN,
+
+    /// Use to prevent automatic system suspend.
+    wxPOWER_RESOURCE_SYSTEM
+};
 
 /**
     @class wxPowerEvent
@@ -38,6 +51,11 @@ enum wxBatteryState
 
     @beginEventTable{wxPowerEvent}
     @event{EVT_POWER_SUSPENDING(func)}
+           @warning This event and the possibility to veto suspend was removed
+           from MSW systems starting from Windows Vista. wxPowerResourceBlocker
+           can be used to prevent the system from suspending under both XP and
+           later systems, use it instead of handling this event.
+
            System is about to be suspended, this event can be vetoed to prevent
            suspend from taking place.
     @event{EVT_POWER_SUSPENDED(func)}
@@ -80,4 +98,126 @@ wxEventType wxEVT_POWER_SUSPENDED;
 wxEventType wxEVT_POWER_SUSPEND_CANCEL;
 wxEventType wxEVT_POWER_RESUME;
 
+/**
+    Helper functions for acquiring and releasing the given power resource.
 
+    If an application performs a long running task without user interaction it
+    is often necessary to prevent the system from automatically suspending or
+    powering off the screen and Acquire() method can be used to do this.
+
+    Notice that currently this functionality is only implemented for MSW and
+    OSX and on the latter only ::wxPOWER_RESOURCE_SYSTEM is supported for
+    versions earlier than 10.9.
+
+    If possible, use wxPowerResourceBlocker class to ensure that Release() is
+    called instead of calling it manually.
+
+    @since 3.1.0
+    @library{wxbase}
+    @category{misc}
+
+    @see wxPowerResourceBlocker
+*/
+class wxPowerResource
+{
+public:
+    /**
+       Acquire a power resource for the application.
+
+       If successful, the system will not automatically power of the screen or
+       suspend until Release() is called.
+
+       Every call to Acquire @b must be matched by a corresponding call to
+       Release() or the system will not suspend until the application ends, use
+       wxPowerResourceBlocker to ensure that this happens.
+
+       @param kind Power resource required, either ::wxPOWER_RESOURCE_SCREEN
+        or ::wxPOWER_RESOURCE_SYSTEM.
+       @param reason Optional reason may be specified which might be used on
+           some platforms to inform the user what is preventing power saving.
+           It should usually describe the operation requiring the resource and
+           specifying it is strongly recommended.
+       @return Returns true if the acquisition was successful.
+
+       @see Release()
+    */
+    static bool Acquire(wxPowerResourceKind kind,
+                        const wxString& reason = wxString());
+
+    /**
+        Release a previously acquired power resource.
+
+        Release @b must be called for every Acquire() call made to restore
+        normal power saving behaviour
+
+        @param kind Power resource to be released.
+
+        @see Acquire()
+    */
+    static void Release(wxPowerResourceKind kind);
+};
+
+/**
+    Helper RAII class ensuring that power resources are released.
+
+    A wxPowerResourceBlocker object acquires a power resource in the
+    constructor and releases it in the destructor making it impossible to to
+    forget to release the power resource (which would prevent suspending or
+    screen power off until the application ends).
+
+    Example:
+    @code
+    void MyWindow::DoSomething()
+    {
+        wxPowerResourceBlocker
+            blocker(wxPOWER_RESOURCE_SYSTEM, "Downloading something important");
+
+        if ( !blocker.IsInEffect() )
+        {
+            // If the resource could not be acquired, tell the user that he has
+            // to keep the system alive
+            wxLogMessage("Warning: system may suspend while downloading.");
+        }
+
+        // Run an important download and the system will not suspend while downloading
+        for ( int i = 0; i < download.size(); ++i )
+            download.readByte();
+
+        // wxPOWER_RESOURCE_SYSTEM automatically released here.
+    }
+    @endcode
+
+    @since 3.1.0
+    @library{wxbase}
+    @category{misc}
+
+    @see wxPowerResource
+*/
+class wxPowerResourceBlocker
+{
+public:
+    /**
+       Acquires the power resource.
+
+       Uses the same parameters as wxPowerResource::Acquire().
+    */
+    explicit wxPowerResourceBlocker(wxPowerResourceKind kind,
+                                    const wxString& reason = wxString());
+
+    /**
+        Returns whether the power resource could be acquired.
+
+        This can be used to inform the user that the application will not
+        prevent automatic suspending.
+
+        @see wxPowerResource::Acquire()
+    */
+    bool IsInEffect() const;
+
+    /**
+       Releases the power resource.
+
+       @see wxPowerResource::Release()
+    */
+    ~wxPowerResourceBlocker();
+};

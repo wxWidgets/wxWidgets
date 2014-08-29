@@ -223,6 +223,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="BASE_AND_GUI_OSX_COCOA_SRC" hints="files">
     src/osx/cocoa/utils.mm
+    src/osx/cocoa/power.mm
 </set>
 
 <set var="BASE_AND_GUI_OSX_IPHONE_SRC" hints="files">

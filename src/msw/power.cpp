@@ -27,6 +27,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/power.h"
+#include "wx/atomic.h"
 #include "wx/msw/private.h"
 
 #if !defined(__WINCE_STANDARDSDK__)
@@ -38,6 +39,85 @@
         return GetSystemPowerStatusEx(status, TRUE);
     }
 #endif
+
+// ----------------------------------------------------------------------------
+// wxPowerResource
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+wxAtomicInt g_powerResourceScreenRefCount = 0;
+wxAtomicInt g_powerResourceSystemRefCount = 0;
+
+bool UpdatePowerResourceExecutionState()
+{
+    EXECUTION_STATE executionState = ES_CONTINUOUS;
+    if ( g_powerResourceScreenRefCount > 0 )
+        executionState |= ES_DISPLAY_REQUIRED;
+
+    if ( g_powerResourceSystemRefCount > 0 )
+        executionState |= ES_SYSTEM_REQUIRED;
+
+    if ( ::SetThreadExecutionState(executionState) == NULL )
+    {
+        wxLogLastError(wxT("SetThreadExecutionState()"));
+        return false;
+    }
+
+    return true;
+}
+
+} // anonymous namespace
+
+bool
+wxPowerResource::Acquire(wxPowerResourceKind kind,
+                         const wxString& WXUNUSED(reason))
+{
+    switch ( kind )
+    {
+        case wxPOWER_RESOURCE_SCREEN:
+            wxAtomicInc(g_powerResourceScreenRefCount);
+            break;
+
+        case wxPOWER_RESOURCE_SYSTEM:
+            wxAtomicInc(g_powerResourceSystemRefCount);
+            break;
+    }
+
+    return UpdatePowerResourceExecutionState();
+}
+
+void wxPowerResource::Release(wxPowerResourceKind kind)
+{
+    switch ( kind )
+    {
+        case wxPOWER_RESOURCE_SCREEN:
+            if ( g_powerResourceScreenRefCount > 0 )
+            {
+                wxAtomicDec(g_powerResourceScreenRefCount);
+            }
+            else
+            {
+                wxFAIL_MSG( "Screen power resource was not acquired" );
+            }
+            break;
+
+        case wxPOWER_RESOURCE_SYSTEM:
+            if ( g_powerResourceSystemRefCount > 0 )
+            {
+                wxAtomicDec(g_powerResourceSystemRefCount);
+            }
+            else
+            {
+                wxFAIL_MSG( "System power resource was not acquired" );
+            }
+            break;
+    }
+
+    UpdatePowerResourceExecutionState();
+}
+
 
 // ----------------------------------------------------------------------------
 // helper functions

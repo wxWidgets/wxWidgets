@@ -1768,6 +1768,10 @@
 		A1A7B833061C35B4AABD093C /* preferencesg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F06DEA1AA339ED819B3812 /* preferencesg.cpp */; };
 		A1A7B833061C35B4AABD093D /* preferencesg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F06DEA1AA339ED819B3812 /* preferencesg.cpp */; };
 		A1A7B833061C35B4AABD093E /* preferencesg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F06DEA1AA339ED819B3812 /* preferencesg.cpp */; };
+		A1A7C58E276F6F2B247F0813 /* power.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0714536835B5227019E29D06 /* power.mm */; };
+		A1A7C58E276F6F2B247F0814 /* power.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0714536835B5227019E29D06 /* power.mm */; };
+		A1A7C58E276F6F2B247F0815 /* power.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0714536835B5227019E29D06 /* power.mm */; };
+		A1A7C58E276F6F2B247F0816 /* power.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0714536835B5227019E29D06 /* power.mm */; };
 		A1A7D793B034398B8696EF33 /* utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 789F45D14FF23E248FCFB5FA /* utils.mm */; };
 		A1A7D793B034398B8696EF34 /* utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 789F45D14FF23E248FCFB5FA /* utils.mm */; };
 		A1A7D793B034398B8696EF35 /* utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 789F45D14FF23E248FCFB5FA /* utils.mm */; };
@@ -4201,6 +4205,7 @@
 		777385D10CCC350C90F02824 /* textentry_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textentry_osx.cpp; path = ../../src/osx/textentry_osx.cpp; sourceTree = "<group>"; };
 		77D6E66F72443765A2FBE263 /* aboutdlgg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = aboutdlgg.cpp; path = ../../src/generic/aboutdlgg.cpp; sourceTree = "<group>"; };
 		77F5E7BCD9B2307D8DBCC052 /* font.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = font.cpp; path = ../../src/osx/carbon/font.cpp; sourceTree = "<group>"; };
+		0714536835B5227019E29D06 /* power.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = power.mm; path = ../../src/osx/cocoa/power.mm; sourceTree = "<group>"; };
 		789F45D14FF23E248FCFB5FA /* utils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = utils.mm; path = ../../src/osx/cocoa/utils.mm; sourceTree = "<group>"; };
 		78D7866F95C73A28BB540606 /* LexBash.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexBash.cxx; path = ../../src/stc/scintilla/lexers/LexBash.cxx; sourceTree = "<group>"; };
 		7906BD74118A3B4DAC515BC2 /* odcombo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = odcombo.cpp; path = ../../src/generic/odcombo.cpp; sourceTree = "<group>"; };
@@ -5943,6 +5948,7 @@
 				C9A305CEC03B3085B159B617 /* fs_mem.cpp */,
 				E968913A9A593B258BD8EACB /* msgout.cpp */,
 				4188821BBA833CCAA678B234 /* utilscmn.cpp */,
+				0714536835B5227019E29D06 /* power.mm */,
 				789F45D14FF23E248FCFB5FA /* utils.mm */,
 			);
 			name = base;
@@ -7343,6 +7349,7 @@
 				131B879180AE3FB481F81CC9 /* fs_mem.cpp in Sources */,
 				05814571E7A83F5DBFB6E4C6 /* msgout.cpp in Sources */,
 				80665EEAE8613DF8A93A7986 /* utilscmn.cpp in Sources */,
+				A1A7C58E276F6F2B247F0815 /* power.mm in Sources */,
 				A1A7D793B034398B8696EF35 /* utils.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7375,6 +7382,7 @@
 				131B879180AE3FB481F81CCA /* fs_mem.cpp in Sources */,
 				05814571E7A83F5DBFB6E4C7 /* msgout.cpp in Sources */,
 				80665EEAE8613DF8A93A7987 /* utilscmn.cpp in Sources */,
+				A1A7C58E276F6F2B247F0816 /* power.mm in Sources */,
 				A1A7D793B034398B8696EF36 /* utils.mm in Sources */,
 				F4C0CEADEDC23610BF6983D8 /* artmac.cpp in Sources */,
 				296692A7A3783E3A83D005C8 /* brush.cpp in Sources */,
@@ -8040,6 +8048,7 @@
 				131B879180AE3FB481F81CC8 /* fs_mem.cpp in Sources */,
 				05814571E7A83F5DBFB6E4C5 /* msgout.cpp in Sources */,
 				80665EEAE8613DF8A93A7985 /* utilscmn.cpp in Sources */,
+				A1A7C58E276F6F2B247F0814 /* power.mm in Sources */,
 				A1A7D793B034398B8696EF34 /* utils.mm in Sources */,
 				F4C0CEADEDC23610BF6983D7 /* artmac.cpp in Sources */,
 				296692A7A3783E3A83D005C7 /* brush.cpp in Sources */,
@@ -9225,6 +9234,7 @@
 				131B879180AE3FB481F81CC7 /* fs_mem.cpp in Sources */,
 				05814571E7A83F5DBFB6E4C4 /* msgout.cpp in Sources */,
 				80665EEAE8613DF8A93A7984 /* utilscmn.cpp in Sources */,
+				A1A7C58E276F6F2B247F0813 /* power.mm in Sources */,
 				A1A7D793B034398B8696EF33 /* utils.mm in Sources */,
 				F4C0CEADEDC23610BF6983D6 /* artmac.cpp in Sources */,
 				296692A7A3783E3A83D005C6 /* brush.cpp in Sources */,
