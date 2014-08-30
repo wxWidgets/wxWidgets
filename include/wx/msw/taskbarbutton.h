@@ -20,7 +20,8 @@ namespace {
 class WXDLLIMPEXP_FWD_CORE ITaskbarList3;
 }
 
-class WXDLLIMPEXP_CORE wxTaskBarButtonImpl : public wxTaskBarButton {
+class WXDLLIMPEXP_CORE wxTaskBarButtonImpl : public wxTaskBarButton
+{
 public:
     virtual ~wxTaskBarButtonImpl();
 
