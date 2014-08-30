@@ -11,9 +11,12 @@
 #ifndef _WX_TASKBARBUTTON_H_
 #define _WX_TASKBARBUTTON_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_TASKBARBUTTON
 
-#include "wx/defs.h"
+#include "wx/icon.h"
+#include "wx/string.h"
 
 class WXDLLIMPEXP_FWD_CORE wxTaskBarButton;
 class WXDLLIMPEXP_FWD_CORE wxTaskBarJumpListCategory;
@@ -27,7 +30,7 @@ class WXDLLIMPEXP_FWD_CORE wxTaskBarJumpListImpl;
 /**
     State of the task bar button.
 */
-enum WXDLLIMPEXP_CORE wxTaskBarButtonState
+enum wxTaskBarButtonState
 {
     wxTASKBAR_BUTTON_NO_PROGRESS   = 0,
     wxTASKBAR_BUTTON_INDETERMINATE = 1,
@@ -36,9 +39,12 @@ enum WXDLLIMPEXP_CORE wxTaskBarButtonState
     wxTASKBAR_BUTTON_PAUSED        = 8
 };
 
-class WXDLLIMPEXP_CORE wxThumbBarButton : public wxObject {
+class WXDLLIMPEXP_CORE wxThumbBarButton : public wxObject
+{
 public:
-    wxThumbBarButton() : m_taskBarButtonParent(NULL) { }
+    wxThumbBarButton() : m_taskBarButtonParent(NULL)
+    { }
+
     wxThumbBarButton(int id,
                      const wxIcon& icon,
                      const wxString& tooltip = wxString(),
@@ -47,8 +53,6 @@ public:
                      bool hasBackground = true,
                      bool shown = true,
                      bool interactive = true);
-
-    virtual ~wxThumbBarButton() {}
 
     bool Create(int id,
                 const wxIcon& icon,
@@ -96,7 +100,7 @@ private:
     bool m_interactive;
     wxTaskBarButton *m_taskBarButtonParent;
 
-    DECLARE_DYNAMIC_CLASS(wxThumbBarButton)
+    wxDECLARE_DYNAMIC_CLASS(wxThumbBarButton);
 };
 
 class WXDLLIMPEXP_CORE wxTaskBarButton
@@ -141,9 +145,11 @@ private:
     WXWidget m_parent;
     int m_maxValue;
     wxTaskBarButton* m_taskBarButton;
+
+    wxDECLARE_NO_COPY_CLASS(wxAppProgressIndicator);
 };
 
-enum WXDLLIMPEXP_CORE wxTaskBarJumpListItemType
+enum wxTaskBarJumpListItemType
 {
     wxTASKBAR_JUMP_LIST_SEPARATOR,
     wxTASKBAR_JUMP_LIST_TASK,
@@ -188,6 +194,8 @@ private:
     wxString m_tooltip;
     wxString m_iconPath;
     int      m_iconIndex;
+
+    wxDECLARE_NO_COPY_CLASS(wxTaskBarJumpListItem);
 };
 
 typedef wxVector<wxTaskBarJumpListItem*> wxTaskBarJumpListItems;
@@ -217,6 +225,8 @@ private:
     wxTaskBarJumpList *m_parent;
     wxTaskBarJumpListItems m_items;
     wxString m_title;
+
+    wxDECLARE_NO_COPY_CLASS(wxTaskBarJumpListCategory);
 };
 
 typedef wxVector<wxTaskBarJumpListCategory*> wxTaskBarJumpListCategories;
@@ -240,12 +250,13 @@ public:
     wxTaskBarJumpListCategory* RemoveCustomCategory(const wxString& title);
     void DeleteCustomCategory(const wxString& title);
 
-
 private:
     friend class wxTaskBarJumpListCategory;
 
     void Update();
     wxTaskBarJumpListImpl *m_jumpListImpl;
+
+    wxDECLARE_NO_COPY_CLASS(wxTaskBarJumpList);
 };
 
 #endif // wxUSE_TASKBARBUTTON
