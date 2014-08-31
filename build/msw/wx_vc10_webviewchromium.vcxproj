@@ -91,7 +91,7 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="PropertySheets">
-    <Import Project="wx_vc10_wx_setup.props" />
+    <Import Project="wx_setup.props" />
     <Import Project="wx_vc10_local.props" Condition="Exists('wx_vc10_local.props')" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'" Label="PropertySheets">
