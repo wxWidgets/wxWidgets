@@ -97,8 +97,6 @@ public:
         - Mac: @c ~/Documents/appinfo
 
         @since 2.9.0
-
-        @see GetAppDocumentsDir()
      */
     virtual wxString GetAppDocumentsDir() const;
 
