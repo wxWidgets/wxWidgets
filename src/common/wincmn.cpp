@@ -1017,15 +1017,15 @@ void wxWindowBase::DoSetWindowVariant( wxWindowVariant variant )
             break;
 
         case wxWINDOW_VARIANT_SMALL:
-            size = wxRound(size * 3.0 / 4.0);
+            size = wxRound(size / 1.2);
             break;
 
         case wxWINDOW_VARIANT_MINI:
-            size = wxRound(size * 2.0 / 3.0);
+            size = wxRound(size / (1.2 * 1.2));
             break;
 
         case wxWINDOW_VARIANT_LARGE:
-            size = wxRound(size * 5.0 / 4.0);
+            size = wxRound(size * 1.2);
             break;
 
         default:
