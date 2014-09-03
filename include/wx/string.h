@@ -3921,6 +3921,11 @@ wxDEFINE_ALL_COMPARISONS(const char *, const wxCStrData&, wxCMP_CHAR_CSTRDATA)
 
 #if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
 
+// Don't do this if ToStdWstring() is not available. We could work around it
+// but, presumably, if using std::wstring is undesirable, then so is using
+// std::hash<> anyhow.
+#if wxUSE_STD_STRING
+
 #include <functional>
 
 namespace std
@@ -3934,6 +3939,8 @@ namespace std
         }
     };
 } // namespace std
+
+#endif // wxUSE_STD_STRING
 
 #endif // C++11
 
