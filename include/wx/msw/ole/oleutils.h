@@ -21,6 +21,7 @@
 #include <ole2.h>
 #include "wx/intl.h"
 #include "wx/log.h"
+#include "wx/variant.h"
 
 // ============================================================================
 // General purpose functions and macros
