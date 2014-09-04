@@ -17,9 +17,7 @@
 #include "wx/vector.h"
 #include "wx/taskbarbutton.h"
 
-namespace {
-class WXDLLIMPEXP_FWD_CORE ITaskbarList3;
-}
+class WXDLLIMPEXP_FWD_CORE wxITaskbarList3;
 
 class WXDLLIMPEXP_CORE wxTaskBarButtonImpl : public wxTaskBarButton
 {
@@ -56,7 +54,7 @@ private:
     wxThumbBarButton* GetThumbBarButtonByIndex(size_t index);
 
     WXWidget m_hwnd;
-    ITaskbarList3 *m_taskbarList;
+    wxITaskbarList3 *m_taskbarList;
 
     typedef wxVector<wxThumbBarButton*> wxThumbBarButtons;
     wxThumbBarButtons m_thumbBarButtons;
