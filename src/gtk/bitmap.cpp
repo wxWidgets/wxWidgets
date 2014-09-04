@@ -15,6 +15,7 @@
     #include "wx/icon.h"
     #include "wx/image.h"
     #include "wx/colour.h"
+    #include "wx/cursor.h"
 #endif
 
 #include "wx/rawbmp.h"
