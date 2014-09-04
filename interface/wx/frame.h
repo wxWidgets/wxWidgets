@@ -460,6 +460,8 @@ public:
         This function is not available in the other ports by design, any
         occurrences of it in the portable code must be guarded by
         @code #ifdef __WXMSW__ @endcode preprocessor guards.
+
+        @since 3.1.0
     */
     wxTaskBarButton* MSWGetTaskBarButton();
 
