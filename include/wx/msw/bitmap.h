@@ -97,6 +97,12 @@ public:
         CopyFromIcon(icon, transp);
     }
 
+    // Convert from wxCursor
+    wxEXPLICIT wxBitmap(const wxCursor& cursor)
+    {
+        (void)CopyFromCursor(cursor, wxBitmapTransparency_Auto);
+    }
+
     wxBitmap& operator=(const wxIcon& icon)
     {
         (void)CopyFromIcon(icon);

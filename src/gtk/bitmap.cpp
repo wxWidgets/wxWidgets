@@ -515,6 +515,19 @@ wxBitmap::wxBitmap(GdkPixmap* pixmap)
 }
 #endif
 
+wxBitmap::wxBitmap(const wxCursor& cursor)
+{
+#if GTK_CHECK_VERSION(2,8,0)
+    if (gtk_check_version(2,8,0) == NULL)
+    {
+        GdkPixbuf *pixbuf = gdk_cursor_get_image(cursor.GetCursor());
+        *this = wxBitmap(pixbuf);
+    }
+#else
+    wxUnusedVar(cursor);
+#endif
+}
+
 wxBitmap::~wxBitmap()
 {
 }
