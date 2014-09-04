@@ -45,15 +45,14 @@
 #if !defined(__WINDOWS__) && !defined(__APPLE__)
 
 bool
-wxPowerResource::Acquire(wxPowerResourceKind kind,
+wxPowerResource::Acquire(wxPowerResourceKind WXUNUSED(kind),
                          const wxString& WXUNUSED(reason))
 {
     return false;
 }
 
-void wxPowerResource::Release(wxPowerResourceKind kind)
+void wxPowerResource::Release(wxPowerResourceKind WXUNUSED(kind))
 {
-
 }
 
 #endif // !(__WINDOWS__ || __APPLE__)
