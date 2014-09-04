@@ -110,12 +110,17 @@ public:
         return *this;
     }
 
+#ifdef WXWIN_COMPATIBILITY_3_0
+    // This assignment operator is not portable as it is not implemented in any
+    // other ports.
+    wxDEPRECATED_MSG("Don't assign wxCursor to an existing wxBitmap, create a new wxBitmap from wxCursor instead.")
     wxBitmap& operator=(const wxCursor& cursor)
     {
         (void)CopyFromCursor(cursor);
 
         return *this;
     }
+#endif // WXWIN_COMPATIBILITY_3_0
 
     virtual ~wxBitmap();
 
