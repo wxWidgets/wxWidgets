@@ -33,8 +33,8 @@
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
 #endif
 
+#include "wx/appprog.h"
 #include "wx/msw/private.h"
-#include "wx/taskbarbutton.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -95,7 +95,6 @@ bool wxGauge::Create(wxWindow *parent,
     // in case we need to emulate indeterminate mode...
     m_nDirection = wxRIGHT;
 
-#if wxUSE_TASKBARBUTTON
     m_appProgressIndicator = NULL;
     if ( (style & wxGA_PROGRESS) != 0 )
     {
@@ -106,7 +105,6 @@ bool wxGauge::Create(wxWindow *parent,
                 new wxAppProgressIndicator(topParent, range);
         }
     }
-#endif
 
     SetRange(range);
 
@@ -115,9 +113,7 @@ bool wxGauge::Create(wxWindow *parent,
 
 wxGauge::~wxGauge()
 {
-#if wxUSE_TASKBARBUTTON
     delete m_appProgressIndicator;
-#endif
 }
 
 WXDWORD wxGauge::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -168,10 +164,8 @@ void wxGauge::SetRange(int r)
     ::SendMessage(GetHwnd(), PBM_SETRANGE, 0, MAKELPARAM(0, r));
 #endif // PBM_SETRANGE32/!PBM_SETRANGE32
 
-#if wxUSE_TASKBARBUTTON
     if ( m_appProgressIndicator )
         m_appProgressIndicator->SetRange(m_rangeMax);
-#endif
 }
 
 void wxGauge::SetValue(int pos)
@@ -186,7 +180,6 @@ void wxGauge::SetValue(int pos)
 
         ::SendMessage(GetHwnd(), PBM_SETPOS, pos, 0);
 
-#if wxUSE_TASKBARBUTTON
         if ( m_appProgressIndicator )
         {
             m_appProgressIndicator->SetValue(pos);
@@ -195,7 +188,6 @@ void wxGauge::SetValue(int pos)
                 m_appProgressIndicator->Reset();
             }
         }
-#endif
     }
 }
 
@@ -260,10 +252,8 @@ void wxGauge::Pulse()
         wxGaugeBase::Pulse();
     }
 
-#if wxUSE_TASKBARBUTTON
-        if ( m_appProgressIndicator )
-            m_appProgressIndicator->Pulse();
-#endif
+    if ( m_appProgressIndicator )
+        m_appProgressIndicator->Pulse();
 }
 
 #endif // wxUSE_GAUGE
