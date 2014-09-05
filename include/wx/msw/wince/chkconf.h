@@ -112,7 +112,7 @@
 
 // there is no support for taskbar button
 #undef wxUSE_TASKBARBUTTON
-#define wxUSE_TASKBARBUTTON 1
+#define wxUSE_TASKBARBUTTON 0
 
 // not sure if this is supported by eVC but VC8 SDK lacks the tooltips control
 // related declarations
