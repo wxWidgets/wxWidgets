@@ -449,7 +449,12 @@ bool wxBitmapComboBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
     LPMEASUREITEMSTRUCT lpMeasureItem = (LPMEASUREITEMSTRUCT) item;
     int pos = lpMeasureItem->itemID;
 
-    lpMeasureItem->itemHeight = wxBitmapComboBoxBase::MeasureItem(pos);
+    // Measure item height if item list is not empty,
+    // otherwise leave default system value.
+    if ( pos >= 0 )
+    {
+        lpMeasureItem->itemHeight = wxBitmapComboBoxBase::MeasureItem(pos);
+    }
 
     return TRUE;
 }
