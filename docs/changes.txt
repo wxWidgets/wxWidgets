@@ -77,6 +77,7 @@ All (GUI):
 - Use native renderer for drawing check boxes in wxPropertyGrid (Eran Ifrah).
 - Fix drawing custom colours of wxEnumProperty items in wxPG (Artur Wieczorek).
 - Add wxBitmap ctor from wxCursor.
+- Always disable wxWizard "Back" button on the starting page (pmgrace30).
 
 wxGTK:
 

@@ -124,6 +124,7 @@ protected:
 
     // wizard state
     wxWizardPage *m_page;       // the current page or NULL
+    wxWizardPage *m_firstpage;  // the page RunWizard started on or NULL
     wxBitmap      m_bitmap;     // the default bitmap to show
 
     // wizard controls

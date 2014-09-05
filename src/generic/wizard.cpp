@@ -271,6 +271,7 @@ void wxWizard::Init()
 {
     m_posWizard = wxDefaultPosition;
     m_page = NULL;
+    m_firstpage = NULL;
     m_btnPrev = m_btnNext = NULL;
     m_statbmp = NULL;
     m_sizerBmpAndPage = NULL;
@@ -620,7 +621,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
 
 
     // and update the buttons state
-    m_btnPrev->Enable(HasPrevPage(m_page));
+    m_btnPrev->Enable(m_page != m_firstpage);
 
     const bool hasNext = HasNextPage(m_page);
     const wxString label = hasNext ? _("&Next >") : _("&Finish");
@@ -686,6 +687,8 @@ void wxWizard::DoWizardLayout()
 bool wxWizard::RunWizard(wxWizardPage *firstPage)
 {
     wxCHECK_MSG( firstPage, false, wxT("can't run empty wizard") );
+
+    m_firstpage = firstPage;
 
     // can't return false here because there is no old page
     (void)ShowPage(firstPage, true /* forward */);
