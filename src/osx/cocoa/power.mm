@@ -36,6 +36,7 @@ bool UpdatePowerResourceUsage(wxPowerResourceKind kind, const wxString& reason)
         if( reason.IsEmpty())
             cfreason = wxString("User Activity");
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
         if ( UMAGetSystemVersion() >= 0x1090 )
         {
             // Use NSProcessInfo for 10.9 and newer
@@ -55,7 +56,9 @@ bool UpdatePowerResourceUsage(wxPowerResourceKind kind, const wxString& reason)
                 return true;
             }
         }
-        else if ( !g_pmAssertionID )
+        else
+#endif
+        if ( !g_pmAssertionID )
         {
             // Use power manager API for < 10.9 systems
             IOReturn success = IOPMAssertionCreateWithName
@@ -72,6 +75,7 @@ bool UpdatePowerResourceUsage(wxPowerResourceKind kind, const wxString& reason)
     else if ( g_powerResourceSystemRefCount == 0 )
     {
         // Release power assertion
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
         if ( UMAGetSystemVersion() >= 0x1090 )
         {
             // Use NSProcessInfo for 10.9 and newer
@@ -84,7 +88,9 @@ bool UpdatePowerResourceUsage(wxPowerResourceKind kind, const wxString& reason)
                 return true;
             }
         }
-        else if ( g_pmAssertionID )
+        else
+#endif
+        if ( g_pmAssertionID )
         {
             // Use power manager API for < 10.9 systems
             IOReturn success = IOPMAssertionRelease(g_pmAssertionID);
