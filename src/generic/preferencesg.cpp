@@ -81,6 +81,11 @@ public:
         m_notebook->ChangeSelection(page);
     }
 
+     bool ShouldPreventAppExit() const wxOVERRIDE
+     {
+         return false;
+     }
+
 private:
     wxNotebook *m_notebook;
 };

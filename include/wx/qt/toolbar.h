@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/toolbar.h
-// Author:      Sean D'Epagnier
-// Copyright:   (c) Sean D'Epagnier 2014
+// Author:      Sean D'Epagnier, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

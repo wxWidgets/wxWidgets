@@ -1,10 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/toplevel.h
 // Purpose:     declares wxTopLevelWindowNative class
-// Author:      Peter Most, Javier Torres
-// Modified by:
-// Created:     09.08.09
-// Copyright:   (c) Peter Most, Javier Torres
+// Author:      Peter Most, Javier Torres, Mariano Reingart
+// Copyright:   (c) 2009 wxWidgets dev team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -102,6 +102,8 @@
     #include "wx/msw/private.h"
     #include <shlobj.h>         // for CLSID_ShellLink
     #include "wx/msw/missing.h"
+    #include "wx/msw/ole/oleutils.h"
+    #include "wx/msw/private/comptr.h"
 #endif
 
 #if defined(__WXMAC__)
@@ -1654,12 +1656,15 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
     wxFileName::SplitPath(shortcutPath, & path, & file, & ext);
 
     HRESULT hres;
-    IShellLink* psl;
+    wxCOMPtr<IShellLink> psl;
     bool success = false;
 
     // Assume it's not a shortcut if it doesn't end with lnk
     if (ext.CmpNoCase(wxT("lnk"))!=0)
         return false;
+
+    // Ensure OLE is initialized.
+    wxOleInitializer oleInit;
 
     // create a ShellLink object
     hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
@@ -1667,7 +1672,7 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
 
     if (SUCCEEDED(hres))
     {
-        IPersistFile* ppf;
+        wxCOMPtr<IPersistFile> ppf;
         hres = psl->QueryInterface( IID_IPersistFile, (LPVOID *) &ppf);
         if (SUCCEEDED(hres))
         {
@@ -1677,8 +1682,6 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
                                 MAX_PATH);
 
             hres = ppf->Load(wsz, 0);
-            ppf->Release();
-
             if (SUCCEEDED(hres))
             {
                 wxChar buf[2048];
@@ -1699,8 +1702,6 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
                 }
             }
         }
-
-        psl->Release();
     }
     return success;
 }
@@ -1748,8 +1749,13 @@ bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
 
     // get cwd only once - small time saving
     wxString cwd = wxGetCwd();
-    Normalize(wxPATH_NORM_ALL & ~wxPATH_NORM_CASE, cwd, format);
-    fnBase.Normalize(wxPATH_NORM_ALL & ~wxPATH_NORM_CASE, cwd, format);
+
+    // Normalize the paths but avoid changing the case or turning a shortcut
+    // into a file that it points to.
+    const int normFlags = wxPATH_NORM_ALL &
+                            ~(wxPATH_NORM_CASE | wxPATH_NORM_SHORTCUT);
+    Normalize(normFlags, cwd, format);
+    fnBase.Normalize(normFlags, cwd, format);
 
     bool withCase = IsCaseSensitive(format);
 

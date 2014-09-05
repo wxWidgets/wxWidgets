@@ -221,7 +221,7 @@ typedef pid_t GPid;
 #define wxUSE_WCHAR_T 1
 
 
-#define wxUSE_EXCEPTIONS    0
+#define wxUSE_EXCEPTIONS 1
 
 #define wxUSE_EXTENDED_RTTI 0
 

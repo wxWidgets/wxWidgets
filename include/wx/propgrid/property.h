@@ -2298,11 +2298,20 @@ public:
     wxPGProperty* GetPropertyByName( const wxString& name ) const;
 
     // Returns various display-related information for given column
+#ifdef WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("don't use GetDisplayInfo function with argument of 'const wxPGCell**' type. Use 'wxPGCell*' argument instead")
     void GetDisplayInfo( unsigned int column,
                          int choiceIndex,
                          int flags,
                          wxString* pString,
                          const wxPGCell** pCell );
+#endif //  WXWIN_COMPATIBILITY_3_0
+    // This function can return modfied (customized) cell object.
+    void GetDisplayInfo( unsigned int column,
+                         int choiceIndex,
+                         int flags,
+                         wxString* pString,
+                         wxPGCell* pCell );
 
     static wxString*            sm_wxPG_LABEL;
 

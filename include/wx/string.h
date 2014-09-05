@@ -3915,6 +3915,35 @@ wxDEFINE_ALL_COMPARISONS(const char *, const wxCStrData&, wxCMP_CHAR_CSTRDATA)
 #undef wxCMP_CHAR_CSTRDATA
 #undef wxCMP_WCHAR_CSTRDATA
 
+// ----------------------------------------------------------------------------
+// Implement hashing using C++11 std::hash<>.
+// ----------------------------------------------------------------------------
+
+#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
+
+// Don't do this if ToStdWstring() is not available. We could work around it
+// but, presumably, if using std::wstring is undesirable, then so is using
+// std::hash<> anyhow.
+#if wxUSE_STD_STRING
+
+#include <functional>
+
+namespace std
+{
+    template<>
+    struct hash<wxString>
+    {
+        size_t operator()(const wxString& s) const
+        {
+            return std::hash<std::wstring>()(s.ToStdWstring());
+        }
+    };
+} // namespace std
+
+#endif // wxUSE_STD_STRING
+
+#endif // C++11
+
 // ---------------------------------------------------------------------------
 // Implementation only from here until the end of file
 // ---------------------------------------------------------------------------

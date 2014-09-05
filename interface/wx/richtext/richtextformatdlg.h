@@ -275,5 +275,35 @@ public:
         Updates the display.
     */
     virtual bool UpdateDisplay();
+
+    /**
+        Returns @true if the dialog will restore the last-selected page.
+    */
+    static bool GetRestoreLastPage();
+
+    /**
+        Pass @true if the dialog should restore the last-selected page.
+    */
+    static void SetRestoreLastPage(bool b);
+
+    /**
+        Returns the page identifier of the last page selected (not the control id).
+    */
+    static int GetLastPage();
+
+    /**
+        Sets the page identifier of the last page selected (not the control id).
+    */
+    static void SetLastPage(int lastPage);
+
+    /**
+        Sets the custom colour data for use by the colour dialog.
+    */
+    static void SetColourData(const wxColourData& colourData);
+
+    /**
+        Returns the custom colour data for use by the colour dialog.
+    */
+    static wxColourData GetColourData();
 };
 

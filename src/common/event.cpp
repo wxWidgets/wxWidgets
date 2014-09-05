@@ -1674,9 +1674,9 @@ bool wxEvtHandler::SafelyProcessEvent(wxEvent& event)
             }
         }
     }
-#endif // wxUSE_EXCEPTIONS
 
     return false;
+#endif // wxUSE_EXCEPTIONS
 }
 
 bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)

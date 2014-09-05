@@ -15,6 +15,7 @@ typedef struct _cairo_surface cairo_surface_t;
 #endif
 typedef struct _GdkPixbuf GdkPixbuf;
 class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
+class WXDLLIMPEXP_FWD_CORE wxCursor;
 
 //-----------------------------------------------------------------------------
 // wxMask
@@ -81,6 +82,7 @@ public:
     wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH);
 #endif // wxUSE_IMAGE
     wxBitmap(GdkPixbuf* pixbuf, int depth = 0);
+    wxEXPLICIT wxBitmap(const wxCursor& cursor);
     virtual ~wxBitmap();
 
     bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE;

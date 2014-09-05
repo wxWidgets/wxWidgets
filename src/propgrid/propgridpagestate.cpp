@@ -277,7 +277,7 @@ void wxPropertyGridPageState::InitNonCatMode()
 
 void wxPropertyGridPageState::DoClear()
 {
-    if ( m_pPropGrid && m_pPropGrid->GetState() == this  )
+    if ( m_pPropGrid && m_pPropGrid->GetState() == this )
     {
         m_pPropGrid->ClearSelection(false);
     }
@@ -291,11 +291,15 @@ void wxPropertyGridPageState::DoClear()
     if ( m_pPropGrid && m_pPropGrid->m_processedEvent )
     {
         wxPropertyGridIterator it;
-        for ( it = m_pPropGrid->GetIterator(wxPG_ITERATE_ALL);
+        for ( it = wxPropertyGridIterator(this, wxPG_ITERATE_ALL, wxNullProperty);
               !it.AtEnd();
               it++ )
         {
-            DoDelete(*it, true);
+            wxPGProperty *p = *it;
+            // Do not attempt to explicitly remove sub-properties.
+            // They will be removed in their parent property dtor.
+            if ( !p->GetParent()->HasFlag(wxPG_PROP_AGGREGATE) )
+                DoDelete(p, true);
         }
     }
     else
@@ -794,9 +798,8 @@ int wxPropertyGridPageState::GetColumnFitWidth(wxClientDC& dc,
         wxPGProperty* p = pwc->Item(i);
         if ( !p->IsCategory() )
         {
-            const wxPGCell* cell = NULL;
             wxString text;
-            p->GetDisplayInfo(col, -1, 0, &text, &cell);
+            p->GetDisplayInfo(col, -1, 0, &text, (wxPGCell*)NULL);
             dc.GetTextExtent(text, &w, &h);
             if ( col == 0 )
                 w += ( ((int)p->m_depth-1) * pg->m_subgroup_extramargin );
@@ -830,9 +833,8 @@ int wxPropertyGridPageState::GetColumnFullWidth( wxClientDC &dc, wxPGProperty *p
     if ( p->IsCategory() )
         return 0;
 
-    const wxPGCell* cell = NULL;
     wxString text;
-    p->GetDisplayInfo(col, -1, 0, &text, &cell);
+    p->GetDisplayInfo(col, -1, 0, &text, (wxPGCell*)NULL);
     int w = dc.GetTextExtent(text).x;
 
     if ( col == 0 )

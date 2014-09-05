@@ -1,10 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        app.h
 // Purpose:     wxApp class
-// Author:      Peter Most
-// Modified by:
-// Created:     08/08/09
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2009 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/converter.cpp
-// Author:      Peter Most, Kolya Kosenko
-// Copyright:   (c) Peter Most
-//              (c) 2010 Kolya Kosenko
+// Author:      Peter Most, Kolya Kosenko, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

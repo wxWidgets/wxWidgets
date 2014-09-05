@@ -29,6 +29,8 @@
 
 #include "wx/textctrl.h"
 #include "wx/msgdlg.h"
+#include "wx/menu.h"
+#include "wx/timer.h"
 
 #include "wx/power.h"
 
@@ -47,6 +49,16 @@ public:
         : wxFrame(NULL, wxID_ANY, wxT("wxWidgets Power Management Sample"),
                   wxDefaultPosition, wxSize(500, 200))
     {
+        m_powerResourceBlocker = NULL;
+
+        wxMenu *fileMenu = new wxMenu;
+        fileMenu->Append(wxID_NEW, "Start long running task\tCtrl-S");
+        fileMenu->Append(wxID_ABORT, "Stop long running task");
+
+        wxMenuBar* menuBar = new wxMenuBar();
+        menuBar->Append(fileMenu, wxT("&Task"));
+        SetMenuBar(menuBar);
+
         wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, wxT(""),
                                           wxDefaultPosition, wxDefaultSize,
                                           wxTE_MULTILINE | wxTE_READONLY);
@@ -58,11 +70,20 @@ public:
 
         UpdatePowerSettings(wxPOWER_UNKNOWN, wxBATTERY_UNKNOWN_STATE);
 
+        StopLongTask();
+        Bind(wxEVT_COMMAND_MENU_SELECTED,
+             &MyFrame::OnStartTaskClicked, this, wxID_NEW);
+        Bind(wxEVT_COMMAND_MENU_SELECTED,
+             &MyFrame::OnStopTaskClicked, this, wxID_ABORT);
+        m_taskTimer.Bind(wxEVT_TIMER, &MyFrame::OnTaskTimer, this);
+
         Show();
     }
 
     virtual ~MyFrame()
     {
+        delete m_powerResourceBlocker;
+
         delete wxLog::SetActiveTarget(m_logOld);
     }
 
@@ -162,10 +183,67 @@ private:
                         batteryStr.c_str()));
     }
 
+    void OnStartTaskClicked( wxCommandEvent& WXUNUSED(event) )
+    {
+        wxLogMessage("Starting long running task "
+                     "(screen should keep powered on while running)...");
+        StartLongTask();
+    }
+
+    void OnStopTaskClicked(wxCommandEvent& WXUNUSED(event))
+    {
+        StopLongTask();
+        wxLogMessage("Stopped long running task");
+    }
+
+    void OnTaskTimer(wxTimerEvent& WXUNUSED(event))
+    {
+        ++m_taskProgress;
+
+        if ( m_taskProgress == 100 )
+        {
+            StopLongTask();
+            wxLogMessage("Long running task finished");
+        }
+        else
+        {
+            wxLogMessage("Long running task at %d%%...", m_taskProgress);
+        }
+    }
+
+    void StartLongTask()
+    {
+        m_taskProgress = 0;
+        m_taskTimer.Start(12000);
+        GetMenuBar()->Enable(wxID_NEW, false);
+        GetMenuBar()->Enable(wxID_ABORT, true);
+
+        m_powerResourceBlocker
+            = new wxPowerResourceBlocker(wxPOWER_RESOURCE_SYSTEM);
+
+        if ( !m_powerResourceBlocker->IsInEffect() )
+        {
+            wxLogMessage("Power resource could not be acquired, "
+                         "user input is required to prevent system standby");
+        }
+    }
+
+    void StopLongTask()
+    {
+        GetMenuBar()->Enable(wxID_NEW, true);
+        GetMenuBar()->Enable(wxID_ABORT, false);
+        m_taskTimer.Stop();
+
+        wxDELETE(m_powerResourceBlocker);
+    }
+
     wxPowerType m_powerType;
     wxBatteryState m_batteryState;
 
     wxLog *m_logOld;
+    wxTimer m_taskTimer;
+    wxPowerResourceBlocker *m_powerResourceBlocker;
+    int m_taskProgress;
 
     wxDECLARE_EVENT_TABLE();
 };

@@ -499,11 +499,24 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,
     int w = icon.GetWidth(),
         h = icon.GetHeight();
 
-    refData->m_width = w;
-    refData->m_height = h;
-    refData->m_depth = wxDisplayDepth();
-
-    refData->m_hBitmap = (WXHBITMAP)iconInfo.hbmColor;
+    if ( iconInfo.hbmColor )
+    {
+        refData->m_width = w;
+        refData->m_height = h;
+        refData->m_depth = wxDisplayDepth();
+        refData->m_hBitmap = (WXHBITMAP)iconInfo.hbmColor;
+    }
+    else // we only have monochrome icon/cursor
+    {
+        // Then we need to create our own empty bitmap, which will be modified
+        // by the mask below.
+        wxDIB dib(w, h, wxDisplayDepth());
+        if ( dib.IsOk() )
+        {
+            memset(dib.GetData(), 0, wxDIB::GetLineSize(w, dib.GetDepth())*h);
+            refData->AssignDIB(dib);
+        }
+    }
 
     switch ( transp )
     {

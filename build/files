@@ -165,6 +165,7 @@ BASE_AND_GUI_OSX_CARBON_SRC =
 
 BASE_AND_GUI_OSX_COCOA_SRC =
     src/osx/cocoa/utils.mm
+    src/osx/cocoa/power.mm
 
 BASE_AND_GUI_OSX_IPHONE_SRC =
     src/osx/iphone/utils.mm

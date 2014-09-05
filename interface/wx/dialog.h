@@ -495,6 +495,11 @@ public:
         @a id is wxID_NONE meaning that @c ESC presses should be ignored. If
         any other value is given, it is interpreted as the id of the button to
         map the escape key to.
+
+        @note This method should be used for custom modal dialog implemented in
+        wxWidgets itself, native dialogs such as wxMessageDialog or
+        wxFileDialog, handle @c ESC presses in their own way which cannot be
+        customized.
     */
     void SetEscapeId(int id);
 

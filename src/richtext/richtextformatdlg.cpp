@@ -92,6 +92,7 @@ END_EVENT_TABLE()
 IMPLEMENT_HELP_PROVISION(wxRichTextFormattingDialog)
 
 wxRichTextFormattingDialogFactory* wxRichTextFormattingDialog::ms_FormattingDialogFactory = NULL;
+wxColourData wxRichTextFormattingDialog::sm_colourData;
 
 void wxRichTextFormattingDialog::Init()
 {
@@ -762,7 +763,11 @@ void wxRichTextColourSwatchCtrl::OnMouseEvent(wxMouseEvent& event)
         while (parent != NULL && !wxDynamicCast(parent, wxDialog) && !wxDynamicCast(parent, wxFrame))
             parent = parent->GetParent();
 
+        wxRichTextFormattingDialog* dlg = wxDynamicCast(parent, wxRichTextFormattingDialog);
         wxColourData data;
+        if (dlg)
+            data = dlg->GetColourData();
+
         data.SetChooseFull(true);
         data.SetColour(m_colour);
 #if wxUSE_COLOURDLG
@@ -774,6 +779,8 @@ void wxRichTextColourSwatchCtrl::OnMouseEvent(wxMouseEvent& event)
         if (dialog->ShowModal() == wxID_OK)
         {
             wxColourData retData = dialog->GetColourData();
+            if (dlg)
+                dlg->SetColourData(retData);
             m_colour = retData.GetColour();
             SetBackgroundColour(m_colour);
         }

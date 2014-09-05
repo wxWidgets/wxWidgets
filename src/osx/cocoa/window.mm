@@ -567,6 +567,9 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
             break;
     }
 
+    // Remember value of g_lastButton for later click count adjustment
+    UInt32 prevLastButton = g_lastButton;
+
     // a control click is interpreted as a right click
     bool thisButtonIsFakeRight = false ;
     if ( button == 0 && (modifiers & NSControlKeyMask) )
@@ -574,10 +577,6 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
         button = 1 ;
         thisButtonIsFakeRight = true ;
     }
-
-    // otherwise we report double clicks by connecting a left click with a ctrl-left click
-    if ( clickCount > 1 && button != g_lastButton )
-        clickCount = 1 ;
 
     // we must make sure that our synthetic 'right' button corresponds in
     // mouse down, moved and mouse up, and does not deliver a right down and left up
@@ -599,6 +598,22 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
     else if ( g_lastButton == 1 && g_lastButtonWasFakeRight )
         button = g_lastButton ;
 
+    // Adjust click count when clicking with different buttons,
+    // otherwise we report double clicks by connecting a left click with a ctrl-left click
+    switch (eventType)
+    {
+        case NSLeftMouseDown :
+        case NSRightMouseDown :
+        case NSOtherMouseDown :
+        case NSLeftMouseUp :
+        case NSRightMouseUp :
+        case NSOtherMouseUp :
+            clickCount = [nsEvent clickCount];
+            if ( clickCount > 1 && button != prevLastButton )
+                clickCount = 1 ;
+        break;
+    }
+
     // Adjust the chord mask to remove the primary button and add the
     // secondary button.  It is possible that the secondary button is
     // already pressed, e.g. on a mouse connected to a laptop, but this
@@ -619,7 +634,6 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
         case NSLeftMouseDown :
         case NSRightMouseDown :
         case NSOtherMouseDown :
-            clickCount = [nsEvent clickCount];
             switch ( button )
             {
                 case 0 :
@@ -642,7 +656,6 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
         case NSLeftMouseUp :
         case NSRightMouseUp :
         case NSOtherMouseUp :
-            clickCount = [nsEvent clickCount];
             switch ( button )
             {
                 case 0 :
