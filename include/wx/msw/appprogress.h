@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/msw/appprog.h
+// Name:        wx/msw/appprogress.h
 // Purpose:     wxAppProgressIndicator interface.
 // Author:      Chaobin Zhang <zhchbin@gmail.com>
 // Created:     2014-09-05

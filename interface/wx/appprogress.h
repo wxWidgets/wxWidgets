@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        taskbarbutton.h
+// Name:        interface/wx/appprogress.h
 // Purpose:     interface of wxAppProgressIndicator
 // Author:      wxWidgets team
 // Licence:     wxWindows licence
@@ -27,11 +27,17 @@ public:
         @param parent
             The parent window of wxAppProgressIndicator. Note that the
             window should has taskbar button showing. If parent is NULL,
-            the progress will reflect on the taskbar buttons of all the 
+            the progress will reflect on the taskbar buttons of all the
             top level windows.
         @param maxValue
+            Integer range (maximum value) of the progress indicator.
     */
     wxAppProgressIndicator(wxWindow* parent = NULL, int maxValue = 100);
+
+    /**
+        Destructor, stops displaying progress and returns the indicator to its
+        normal state.
+    */
     virtual ~wxAppProgressIndicator();
 
     /**

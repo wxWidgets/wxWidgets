@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/appprog.h
+// Name:        wx/appprogress.h
 // Purpose:     wxAppProgressIndicator interface.
 // Author:      Chaobin Zhang <zhchbin@gmail.com>
 // Created:     2014-09-05
@@ -11,11 +11,6 @@
 #define _WX_APPPROG_H_
 
 #include "wx/defs.h"
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 class WXDLLIMPEXP_CORE wxAppProgressIndicatorBase
 {
@@ -32,7 +27,7 @@ private:
 };
 
 #if defined(__WXMSW__)
-    #include "wx/msw/appprog.h"
+    #include "wx/msw/appprogress.h"
 #endif
 
 #endif  // _WX_APPPROG_H_

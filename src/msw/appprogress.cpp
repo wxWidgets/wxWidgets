@@ -17,7 +17,7 @@
     #include "wx/toplevel.h"
 #endif
 
-#include "wx/appprog.h"
+#include "wx/appprogress.h"
 #include "wx/msw/taskbarbutton.h"
 
 // ----------------------------------------------------------------------------
