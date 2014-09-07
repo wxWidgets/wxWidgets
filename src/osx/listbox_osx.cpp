@@ -191,6 +191,9 @@ void wxListBox::DoSetSelection(int n, bool select)
     m_blockEvents = false;
 
     UpdateOldSelections();
+
+    if (select)
+        EnsureVisible(n);
 }
 
 bool wxListBox::IsSelected(int n) const
