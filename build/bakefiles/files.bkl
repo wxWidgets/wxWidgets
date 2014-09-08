@@ -1920,6 +1920,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/utilswin.cpp
     src/msw/uxtheme.cpp
     src/msw/window.cpp
+    src/msw/graphicsd2d.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
     wx/msw/nonownedwnd.h
