@@ -795,6 +795,17 @@ public:
     static wxGraphicsRenderer* GetDefaultRenderer();
 
     static wxGraphicsRenderer* GetCairoRenderer();
+
+#ifdef __WXMSW__
+#if wxUSE_GRAPHICS_GDIPLUS
+    static wxGraphicsRenderer* GetGDIPlusRenderer();
+#endif
+
+#if wxUSE_GRAPHICS_DIRECT2D
+    static wxGraphicsRenderer* GetDirect2DRenderer();
+#endif
+#endif
+
     // Context
 
     virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) = 0;

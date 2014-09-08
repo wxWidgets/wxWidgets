@@ -731,6 +731,23 @@
 // Enable the new wxGraphicsPath and wxGraphicsContext classes for an advanced
 // 2D drawing API.  (Still somewhat experimental)
 //
+// Recommended setting: 1 if supported by the compilation environment
+//
+// notice that we can't use wxCHECK_VISUALC_VERSION() here as this file is
+// included from wx/platform.h before wxCHECK_VISUALC_VERSION() is defined
+#ifdef _MSC_VER
+#   define wxUSE_GRAPHICS_CONTEXT 1
+#else
+    // Disable support for other Windows compilers, enable it if your compiler
+    // comes with new enough SDK or you installed the headers manually.
+    //
+    // Notice that this will be set by configure under non-Windows platforms
+    // anyhow so the value there is not important.
+#   define wxUSE_GRAPHICS_CONTEXT 0
+#endif
+
+// Enable wxGraphicsContext implementation using the GDI+ API.
+//
 // Please note that on Windows gdiplus.dll is loaded dynamically which means
 // that nothing special needs to be done as long as you don't use
 // wxGraphicsContext at all or only use it on XP and later systems but you
@@ -743,18 +760,44 @@
 // yourself. If you do, change the setting below manually.
 //
 // Recommended setting: 1 if supported by the compilation environment
-
+//
 // notice that we can't use wxCHECK_VISUALC_VERSION() here as this file is
 // included from wx/platform.h before wxCHECK_VISUALC_VERSION() is defined
 #ifdef _MSC_VER
-#   define wxUSE_GRAPHICS_CONTEXT 1
+#   define wxUSE_GRAPHICS_GDIPLUS 1
 #else
     // Disable support for other Windows compilers, enable it if your compiler
     // comes with new enough SDK or you installed the headers manually.
     //
     // Notice that this will be set by configure under non-Windows platforms
     // anyhow so the value there is not important.
-#   define wxUSE_GRAPHICS_CONTEXT 0
+#   define wxUSE_GRAPHICS_GDIPLUS 0
+#endif
+
+// Enable wxGraphicsContext implementation using the Direct2D API.
+//
+// The Direct2D API requires Windows 7 or Windows Vista with Service 
+// Pack 2 (SP2) and Platform Update for Windows Vista and later.
+// 
+// Default is 1 when available
+//
+// Recommended setting: 1 if supported by the Windows platform.
+//
+// notice that we can't use wxCHECK_VISUALC_VERSION() here as this file is
+// included from wx/platform.h before wxCHECK_VISUALC_VERSION() is defined
+#ifdef _MSC_VER
+#   if _MSC_VER >= 1500
+#       define wxUSE_GRAPHICS_DIRECT2D 1
+#   else
+#       define wxUSE_GRAPHICS_DIRECT2D 0
+#   endif
+#else
+    // Disable support for other Windows compilers, enable it if your compiler
+    // comes with new enough SDK or you installed the headers manually.
+    //
+    // Notice that this will be set by configure under non-Windows platforms
+    // anyhow so the value there is not important.
+#   define wxUSE_GRAPHICS_DIRECT2D 0
 #endif
 
 // Enable wxGraphicsContext implementation using Cairo library.
