@@ -1528,6 +1528,7 @@ MSW_LOWLEVEL_SRC =
     src/msw/gdiobj.cpp
     src/msw/gdiplus.cpp
     src/msw/graphics.cpp
+    src/msw/graphicsd2d.cpp
     src/msw/icon.cpp
     src/msw/imaglist.cpp
     src/msw/minifram.cpp
