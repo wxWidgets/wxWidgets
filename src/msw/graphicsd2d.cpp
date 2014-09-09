@@ -1039,8 +1039,8 @@ private :
 
 wxD2DPathData::wxD2DPathData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFactory) : 
     wxGraphicsPathData(renderer), m_direct2dfactory(d2dFactory),
-    m_figureOpened(false), m_geometryWritable(false),
-    m_transformMatrix(D2D1::Matrix3x2F::Identity())
+    m_transformMatrix(D2D1::Matrix3x2F::Identity()),
+    m_figureOpened(false), m_geometryWritable(false)
 {
     m_direct2dfactory->CreatePathGeometry(&m_pathGeometry);
 }
