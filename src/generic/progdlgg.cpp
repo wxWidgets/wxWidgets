@@ -206,6 +206,7 @@ bool wxGenericProgressDialog::Create( const wxString& title,
     int gauge_style = wxGA_HORIZONTAL;
     if ( style & wxPD_SMOOTH )
         gauge_style |= wxGA_SMOOTH;
+    gauge_style |= wxGA_PROGRESS;
 
 #ifdef __WXMSW__
     maximum /= m_factor;

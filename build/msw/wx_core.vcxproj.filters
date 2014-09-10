@@ -558,6 +558,9 @@
     <ClCompile Include="..\..\src\msw\app.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\appprogress.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\artmsw.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
@@ -835,6 +838,9 @@
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\statusbar.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\taskbarbutton.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\textctrl.cpp">
@@ -1345,6 +1351,9 @@
     <ClInclude Include="..\..\include\wx\msw\app.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\appprogress.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\bitmap.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
@@ -1612,6 +1621,9 @@
     <ClInclude Include="..\..\include\wx\msw\statusbar.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\taskbarbutton.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\textctrl.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
@@ -1641,6 +1653,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\window.h">
       <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\appprogress.h">
+      <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\nativewin.h">
       <Filter>Common Headers</Filter>
@@ -1790,6 +1805,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\statusbr.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\taskbarbutton.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\tbarbase.h">

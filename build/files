@@ -757,6 +757,7 @@ GUI_CMN_HDR =
     wx/statbox.h
     wx/stattext.h
     wx/statusbr.h
+    wx/taskbarbutton.h
     wx/testing.h
     wx/textcompleter.h
     wx/textctrl.h
@@ -1625,6 +1626,7 @@ MSW_SRC =
     src/msw/statusbar.cpp
     src/msw/statline.cpp
     src/msw/stattext.cpp
+    src/msw/taskbarbutton.cpp
     src/msw/toolbar.cpp
     src/msw/textctrl.cpp
     src/msw/textentry.cpp
@@ -1716,6 +1718,7 @@ MSW_HDR =
     wx/msw/statusbar.h
     wx/msw/statline.h
     wx/msw/stattext.h
+    wx/msw/taskbarbutton.h
     wx/msw/toolbar.h
     wx/msw/textctrl.h
     wx/msw/textentry.h

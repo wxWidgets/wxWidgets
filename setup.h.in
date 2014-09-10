@@ -658,6 +658,8 @@
 
 #define wxUSE_TASKBARICON_BALLOONS 0
 
+#define wxUSE_TASKBARBUTTON 0
+
 #define wxUSE_UXTHEME           0
 
 #define wxUSE_INKEDIT  0

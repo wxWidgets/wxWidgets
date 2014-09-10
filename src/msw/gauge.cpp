@@ -33,6 +33,7 @@
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
 #endif
 
+#include "wx/appprogress.h"
 #include "wx/msw/private.h"
 
 // ----------------------------------------------------------------------------
@@ -91,12 +92,28 @@ bool wxGauge::Create(wxWindow *parent,
     if ( !MSWCreateControl(PROGRESS_CLASS, wxEmptyString, pos, size) )
         return false;
 
-    SetRange(range);
-
     // in case we need to emulate indeterminate mode...
     m_nDirection = wxRIGHT;
 
+    m_appProgressIndicator = NULL;
+    if ( (style & wxGA_PROGRESS) != 0 )
+    {
+        wxWindow* topParent = wxGetTopLevelParent(this);
+        if ( topParent != NULL )
+        {
+            m_appProgressIndicator =
+                new wxAppProgressIndicator(topParent, range);
+        }
+    }
+
+    SetRange(range);
+
     return true;
+}
+
+wxGauge::~wxGauge()
+{
+    delete m_appProgressIndicator;
 }
 
 WXDWORD wxGauge::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -146,6 +163,9 @@ void wxGauge::SetRange(int r)
     // fall back to PBM_SETRANGE (limited to 16 bits)
     ::SendMessage(GetHwnd(), PBM_SETRANGE, 0, MAKELPARAM(0, r));
 #endif // PBM_SETRANGE32/!PBM_SETRANGE32
+
+    if ( m_appProgressIndicator )
+        m_appProgressIndicator->SetRange(m_rangeMax);
 }
 
 void wxGauge::SetValue(int pos)
@@ -159,6 +179,15 @@ void wxGauge::SetValue(int pos)
         m_gaugePos = pos;
 
         ::SendMessage(GetHwnd(), PBM_SETPOS, pos, 0);
+
+        if ( m_appProgressIndicator )
+        {
+            m_appProgressIndicator->SetValue(pos);
+            if ( pos == 0 )
+            {
+                m_appProgressIndicator->Reset();
+            }
+        }
     }
 }
 
@@ -222,6 +251,9 @@ void wxGauge::Pulse()
         // emulate indeterminate mode
         wxGaugeBase::Pulse();
     }
+
+    if ( m_appProgressIndicator )
+        m_appProgressIndicator->Pulse();
 }
 
 #endif // wxUSE_GAUGE
