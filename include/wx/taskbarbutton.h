@@ -55,7 +55,7 @@ public:
 
     // Operations:
     virtual void SetProgressValue(int value) = 0;
-    virtual void Show() = 0;
+    virtual void Show(bool show = true) = 0;
     virtual void Hide() = 0;
     virtual void SetThumbnailTooltip(const wxString& tooltip) = 0;
     virtual void SetProgressState(wxTaskBarButtonState state) = 0;

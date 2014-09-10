@@ -22,7 +22,7 @@ public:
     virtual ~wxTaskBarButtonImpl();
 
     virtual void SetProgressValue(int value) wxOVERRIDE;
-    virtual void Show() wxOVERRIDE;
+    virtual void Show(bool show = true) wxOVERRIDE;
     virtual void Hide() wxOVERRIDE;
     virtual void SetThumbnailTooltip(const wxString& tooltip) wxOVERRIDE;
     virtual void SetProgressState(wxTaskBarButtonState state) wxOVERRIDE;
