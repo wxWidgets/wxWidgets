@@ -26,7 +26,8 @@ public:
     virtual void Hide() wxOVERRIDE;
     virtual void SetThumbnailTooltip(const wxString& tooltip) wxOVERRIDE;
     virtual void SetProgressState(wxTaskBarButtonState state) wxOVERRIDE;
-    virtual void SetOverlayIcon(const wxIcon& icon) wxOVERRIDE;
+    virtual void SetOverlayIcon(const wxIcon& icon,
+        const wxString& description = wxString()) wxOVERRIDE;
     virtual void SetThumbnailClip(const wxRect& rect) wxOVERRIDE;
     virtual bool AddThumbBarButton(wxThumbBarButton *button) wxOVERRIDE;
     virtual void ShowThumbnailToolbar() wxOVERRIDE;

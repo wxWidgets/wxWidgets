@@ -96,9 +96,12 @@ void wxTaskBarButtonImpl::SetProgressState(wxTaskBarButtonState state)
     m_taskbarList->SetProgressState(m_hwnd, static_cast<TBPFLAG>(state));
 }
 
-void wxTaskBarButtonImpl::SetOverlayIcon(const wxIcon& icon)
+void wxTaskBarButtonImpl::SetOverlayIcon(const wxIcon& icon,
+                                         const wxString& description)
 {
-    m_taskbarList->SetOverlayIcon(m_hwnd, GetHiconOf(icon), NULL);
+    m_taskbarList->SetOverlayIcon(m_hwnd,
+                                  GetHiconOf(icon),
+                                  description.wc_str());
 }
 
 void wxTaskBarButtonImpl::SetThumbnailClip(const wxRect& rect)
