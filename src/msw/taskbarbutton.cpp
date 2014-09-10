@@ -146,7 +146,7 @@ DEFINE_PROPERTYKEY(PKEY_AppUserModel_IsDestListSeparator,
 DEFINE_PROPERTYKEY(PKEY_Link_Arguments,
     0x436f2667, 0x14e2, 0x4feb, 0xb3, 0x0a, 0x14, 0x6c, 0x53, 0xb5, 0xb6, 0x74, 100);
 
-class ITaskbarList : public IUnknown
+class wxITaskbarList : public IUnknown
 {
 public:
     virtual HRESULT wxSTDCALL HrInit() = 0;
@@ -156,31 +156,13 @@ public:
     virtual HRESULT wxSTDCALL SetActiveAlt(HWND) = 0;
 };
 
-class ITaskbarList2 : public ITaskbarList
+class wxITaskbarList2 : public wxITaskbarList
 {
 public:
     virtual HRESULT wxSTDCALL MarkFullscreenWindow(HWND, BOOL) = 0;
 };
 
-class ITaskbarList3 : public ITaskbarList2
-{
-public:
-    virtual HRESULT wxSTDCALL SetProgressValue(HWND, ULONGLONG, ULONGLONG) = 0;
-    virtual HRESULT wxSTDCALL SetProgressState(HWND, TBPFLAG) = 0;
-    virtual HRESULT wxSTDCALL RegisterTab(HWND, HWND) = 0;
-    virtual HRESULT wxSTDCALL UnregisterTab(HWND) = 0;
-    virtual HRESULT wxSTDCALL SetTabOrder(HWND, HWND) = 0;
-    virtual HRESULT wxSTDCALL SetTabActive(HWND, HWND, DWORD) = 0;
-    virtual HRESULT wxSTDCALL ThumbBarAddButtons(HWND, UINT, LPTHUMBBUTTON) = 0;
-    virtual
-        HRESULT wxSTDCALL ThumbBarUpdateButtons(HWND, UINT, LPTHUMBBUTTON) = 0;
-    virtual HRESULT wxSTDCALL ThumbBarSetImageList(HWND, HIMAGELIST) = 0;
-    virtual HRESULT wxSTDCALL SetOverlayIcon(HWND, HICON, LPCWSTR) = 0;
-    virtual HRESULT wxSTDCALL SetThumbnailTooltip(HWND, LPCWSTR pszTip) = 0;
-    virtual HRESULT wxSTDCALL SetThumbnailClip(HWND, RECT *) = 0;
-};
-
-class IShellLinkA : public IUnknown
+class wxIShellLinkA : public IUnknown
 {
 public:
     virtual HRESULT wxSTDCALL GetPath(LPSTR, int, WIN32_FIND_DATAA*, DWORD) = 0;
@@ -203,7 +185,7 @@ public:
     virtual HRESULT wxSTDCALL SetPath(LPCSTR) = 0;
 };
 
-class IShellLinkW : public IUnknown
+class wxIShellLinkW : public IUnknown
 {
 public:
     virtual HRESULT wxSTDCALL GetPath(LPWSTR, int, WIN32_FIND_DATAW*, DWORD) = 0;
@@ -227,12 +209,12 @@ public:
 };
 
 #ifdef wxUSE_UNICODE
-#define IShellLink      ::IShellLinkW
+#define IShellLink      wxIShellLinkW
 
 DEFINE_GUID(wxIID_IShellLink,
     0x000214F9, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 #else
-#define IShellLink      ::IShellLinkA
+#define IShellLink      wxIShellLinkA
 
 DEFINE_GUID(wxIID_IShellLink,
     0x000214EE, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
@@ -545,6 +527,24 @@ IObjectCollection* CreateObjectCollection()
 }
 
 } // namespace
+
+class wxITaskbarList3 : public wxITaskbarList2
+{
+public:
+    virtual HRESULT wxSTDCALL SetProgressValue(HWND, ULONGLONG, ULONGLONG) = 0;
+    virtual HRESULT wxSTDCALL SetProgressState(HWND, TBPFLAG) = 0;
+    virtual HRESULT wxSTDCALL RegisterTab(HWND, HWND) = 0;
+    virtual HRESULT wxSTDCALL UnregisterTab(HWND) = 0;
+    virtual HRESULT wxSTDCALL SetTabOrder(HWND, HWND) = 0;
+    virtual HRESULT wxSTDCALL SetTabActive(HWND, HWND, DWORD) = 0;
+    virtual HRESULT wxSTDCALL ThumbBarAddButtons(HWND, UINT, LPTHUMBBUTTON) = 0;
+    virtual
+        HRESULT wxSTDCALL ThumbBarUpdateButtons(HWND, UINT, LPTHUMBBUTTON) = 0;
+    virtual HRESULT wxSTDCALL ThumbBarSetImageList(HWND, ::HIMAGELIST) = 0;
+    virtual HRESULT wxSTDCALL SetOverlayIcon(HWND, HICON, LPCWSTR) = 0;
+    virtual HRESULT wxSTDCALL SetThumbnailTooltip(HWND, LPCWSTR pszTip) = 0;
+    virtual HRESULT wxSTDCALL SetThumbnailClip(HWND, RECT *) = 0;
+};
 
 // ----------------------------------------------------------------------------
 // wxTaskBarJumpListImpl: definition of class for internal taskbar jump list
