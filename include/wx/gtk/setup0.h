@@ -1565,6 +1565,15 @@
 // Recommended setting: 1, set to 0 for a tiny library size reduction
 #define wxUSE_TASKBARICON_BALLOONS 1
 
+// Set this to 1 to enable following functionality added in Windows 7: thumbnail
+// representations, thumbnail toolbars, notification and status overlays,
+// progress indicators and jump lists.
+//
+// Default is 1.
+//
+// Recommended setting: 1, set to 0 for a tiny library size reduction
+#define wxUSE_TASKBARBUTTON 1
+
 // Set to 1 to compile MS Windows XP theme engine support
 #define wxUSE_UXTHEME           1
 
