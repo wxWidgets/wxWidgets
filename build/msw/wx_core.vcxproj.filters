@@ -558,6 +558,9 @@
     <ClCompile Include="..\..\src\msw\app.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\appprog.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\artmsw.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
@@ -1348,6 +1351,9 @@
     <ClInclude Include="..\..\include\wx\msw\app.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\appprog.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\bitmap.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
@@ -1647,6 +1653,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\window.h">
       <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\appprog.h">
+      <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\nativewin.h">
       <Filter>Common Headers</Filter>

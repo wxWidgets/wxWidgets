@@ -603,6 +603,7 @@
     <ClCompile Include="..\..\src\msw\ole\activex.cpp" />
     <ClCompile Include="..\..\src\msw\anybutton.cpp" />
     <ClCompile Include="..\..\src\msw\app.cpp" />
+    <ClCompile Include="..\..\src\msw\appprog.cpp" />
     <ClCompile Include="..\..\src\msw\artmsw.cpp" />
     <ClCompile Include="..\..\src\msw\ole\automtn.cpp" />
     <ClCompile Include="..\..\src\msw\bitmap.cpp" />
@@ -1003,7 +1004,6 @@
     <ClCompile Include="..\..\src\generic\vlbox.cpp" />
     <ClCompile Include="..\..\src\generic\vscroll.cpp" />
     <ClCompile Include="..\..\src\xrc\xmlreshandler.cpp" />
-    <ClCompile Include="..\..\src\msw\taskbarbutton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -1025,6 +1025,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </CustomBuild>
     <ClInclude Include="..\..\include\wx\msw\accel.h" />
+    <ClInclude Include="..\..\include\wx\msw\appprog.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\access.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\activex.h" />
     <ClInclude Include="..\..\include\wx\msw\anybutton.h" />
@@ -1176,6 +1177,7 @@
     <ClInclude Include="..\..\include\wx\anidecod.h" />
     <ClInclude Include="..\..\include\wx\animdecod.h" />
     <ClInclude Include="..\..\include\wx\anybutton.h" />
+    <ClInclude Include="..\..\include\wx\appprog.h" />
     <ClInclude Include="..\..\include\wx\artprov.h" />
     <ClInclude Include="..\..\include\wx\bitmap.h" />
     <ClInclude Include="..\..\include\wx\bmpbuttn.h" />
@@ -1343,7 +1345,6 @@
     <ClInclude Include="..\..\include\wx\toolbook.h" />
     <ClInclude Include="..\..\include\wx\tooltip.h" />
     <ClInclude Include="..\..\include\wx\persist\toplevel.h" />
-    <ClInclude Include="..\..\include\wx\taskbarbutton.h" />
     <ClInclude Include="..\..\include\wx\toplevel.h" />
     <ClInclude Include="..\..\include\wx\treebase.h" />
     <ClInclude Include="..\..\include\wx\persist\treebook.h" />
