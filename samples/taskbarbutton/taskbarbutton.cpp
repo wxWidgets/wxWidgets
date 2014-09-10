@@ -139,26 +139,42 @@ bool MyApp::OnInit()
 {
     if ( !wxApp::OnInit() )
         return false;
-    wxJumpList jump;
-    wxJumpListItems tasks;
-    wxJumpListItem item1(wxJUMP_LIST_TASK,
-                         wxT("Task 1"),
-                         wxStandardPaths::Get().GetExecutablePath(),
-                         wxEmptyString,
-                         wxT("Test Task"),
-                         wxStandardPaths::Get().GetExecutablePath(),
-                         0);
-    wxJumpListItem item2(wxJUMP_LIST_TASK,
-                         wxT("Task 2"),
-                         wxStandardPaths::Get().GetExecutablePath(),
-                         wxEmptyString,
-                         wxT("Test Task"),
-                         wxStandardPaths::Get().GetExecutablePath(),
-                         0);
-    tasks.push_back(item1);
-    tasks.push_back(wxJumpListItem(wxJUMP_LIST_SEPARATOR));
-    tasks.push_back(item2);
-    jump.SetTasks(tasks);
+    wxJumpList jumpList;
+    wxJumpListItem *item1 = new wxJumpListItem(
+        wxJUMP_LIST_TASK,
+        wxT("Task 1"),
+        wxStandardPaths::Get().GetExecutablePath(),
+        wxEmptyString,
+        wxT("Test Task"),
+        wxStandardPaths::Get().GetExecutablePath(),
+        0);
+    wxJumpListItem *item2 = new wxJumpListItem(
+        wxJUMP_LIST_TASK,
+        wxT("Task 2"),
+        wxStandardPaths::Get().GetExecutablePath(),
+        wxEmptyString,
+        wxT("Test Task"),
+        wxStandardPaths::Get().GetExecutablePath(),
+        0);
+    jumpList.GetTasks()->Append(item1);
+    jumpList.GetTasks()->Append(new wxJumpListItem(wxJUMP_LIST_SEPARATOR));
+    jumpList.GetTasks()->Append(item2);
+    jumpList.ShowRecentCategory();
+    jumpList.ShowFrequentCategory();
+    jumpList.Update();
+
+    const wxJumpListCategory* category = jumpList.GetFrequentCategory();
+    const wxJumpListItems& frequentItems = category->GetItems();
+    for ( size_t i = 0; i < frequentItems.size(); ++i )
+    {
+        wxLogMessage(frequentItems[i]->GetFilePath());
+    }
+    category = jumpList.GetRecentCategory();
+    const wxJumpListItems& recentItems = category->GetItems();
+    for ( size_t i = 0; i < recentItems.size(); ++i )
+    {
+        wxLogMessage(recentItems[i]->GetFilePath());
+    }
 
     MyFrame *frame = new MyFrame("wxTaskBarButton App");
     frame->Show(true);

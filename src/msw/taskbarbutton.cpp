@@ -56,6 +56,14 @@ DEFINE_GUID(wxIID_IObjectArray,
     0x92ca9dcd, 0x5622, 0x4bba, 0xa8, 0x05, 0x5e, 0x9f, 0x54, 0x1b, 0xd8, 0xc9);
 DEFINE_GUID(wxIID_IObjectCollection,
     0x5632b1a4, 0xe38a, 0x400a, 0x92, 0x8a, 0xd4, 0xcd, 0x63, 0x23, 0x02, 0x95);
+DEFINE_GUID(wxIID_IApplicationDocumentLists,
+    0x3c594f9f, 0x9f30, 0x47a1, 0x97, 0x9a, 0xc9, 0xe8, 0x3d, 0x3d, 0x0a, 0x06);
+DEFINE_GUID(wxCLSID_ApplicationDocumentLists,
+    0x86bec222, 0x30f2, 0x47e0, 0x9f, 0x25, 0x60, 0xd1, 0x1c, 0xd7, 0x5c, 0x28);
+DEFINE_GUID(wxIID_IUnknown,
+    0x00000000, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
+DEFINE_GUID(wxIID_IShellItem,
+    0x43826d1e, 0xe718, 0x42ee, 0xbc, 0x55, 0xa1, 0xe2, 0x61, 0xc3, 0x7b, 0xfe);
 
 typedef IUnknown *HIMAGELIST;
 
@@ -117,6 +125,8 @@ DEFINE_PROPERTYKEY(PKEY_Title,
     0xf29f85e0, 0x4ff9, 0x1068, 0xab, 0x91, 0x08, 0x00, 0x2b, 0x27, 0xb3, 0xd9, 2);
 DEFINE_PROPERTYKEY(PKEY_AppUserModel_IsDestListSeparator,
     0x9f4c2855, 0x9f79, 0x4b39, 0xa8, 0xd0, 0xe1, 0xd4, 0x2d, 0xe1, 0xd5, 0xf3, 6);
+DEFINE_PROPERTYKEY(PKEY_Link_Arguments,
+    0x436f2667, 0x14e2, 0x4feb, 0xb3, 0x0a, 0x14, 0x6c, 0x53, 0xb5, 0xb6, 0x74, 100);
 
 class ITaskbarList : public IUnknown
 {
@@ -208,6 +218,41 @@ DEFINE_GUID(wxIID_IShellLink,
     0x000214EE, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 #endif
 
+
+typedef enum _SIGDN
+{
+    SIGDN_NORMALDISPLAY               = 0,
+    SIGDN_PARENTRELATIVEPARSING       = (int)0x80018001,
+    SIGDN_DESKTOPABSOLUTEPARSING      = (int)0x80028000,
+    SIGDN_PARENTRELATIVEEDITING       = (int)0x80031001,
+    SIGDN_DESKTOPABSOLUTEEDITING      = (int)0x8004c000,
+    SIGDN_FILESYSPATH                 = (int)0x80058000,
+    SIGDN_URL                         = (int)0x80068000,
+    SIGDN_PARENTRELATIVEFORADDRESSBAR = (int)0x8007c001,
+    SIGDN_PARENTRELATIVE              = (int)0x80080001
+} SIGDN;
+
+enum _SICHINTF
+{
+    SICHINT_DISPLAY                       = 0,
+    SICHINT_ALLFIELDS                     = (int)0x80000000,
+    SICHINT_CANONICAL                     = 0x10000000,
+    SICHINT_TEST_FILESYSPATH_IF_NOT_EQUAL = 0x20000000
+};
+
+typedef DWORD SICHINTF;
+typedef ULONG SFGAOF;
+
+class IShellItem : public IUnknown
+{
+public:
+    virtual HRESULT wxSTDCALL BindToHandler(IBindCtx*, REFGUID, REFIID, void **) = 0;
+    virtual HRESULT wxSTDCALL GetParent(IShellItem **) = 0;
+    virtual HRESULT wxSTDCALL GetDisplayName(SIGDN, LPWSTR*) = 0;
+    virtual HRESULT wxSTDCALL GetAttributes(SFGAOF, SFGAOF*) = 0;
+    virtual HRESULT wxSTDCALL Compare(IShellItem *, SICHINTF, int *) = 0;
+};
+
 class IObjectArray : public IUnknown
 {
 public:
@@ -236,8 +281,8 @@ public:
 
 typedef enum KNOWNDESTCATEGORY
 {
-    KDC_FREQUENT	= 1,
-	KDC_RECENT	= ( KDC_FREQUENT + 1 )
+    KDC_FREQUENT    = 1,
+    KDC_RECENT  = ( KDC_FREQUENT + 1 )
 } KNOWNDESTCATEGORY;
 
 class ICustomDestinationList : public IUnknown
@@ -252,6 +297,19 @@ public:
     virtual HRESULT wxSTDCALL GetRemovedDestinations(REFIID, void**) = 0;
     virtual HRESULT wxSTDCALL DeleteList(LPCWSTR) = 0;
     virtual HRESULT wxSTDCALL AbortList() = 0;
+};
+
+typedef enum APPDOCLISTTYPE
+{
+    ADLT_RECENT   = 0,
+    ADLT_FREQUENT = ( ADLT_RECENT + 1 )
+} APPDOCLISTTYPE;
+
+class IApplicationDocumentLists : public IUnknown
+{
+public:
+    virtual HRESULT wxSTDCALL SetAppID(LPCWSTR) = 0;
+    virtual HRESULT wxSTDCALL GetList(APPDOCLISTTYPE, UINT, REFIID, void**) = 0;
 };
 
 inline HRESULT InitPropVariantFromBoolean(BOOL fVal, PROPVARIANT *ppropvar)
@@ -359,6 +417,61 @@ bool AddShellLink(IObjectCollection *collection, const wxJumpListItem& item)
 
     shellLink->Release();
     return SUCCEEDED(hr);
+}
+
+wxJumpListItem* GetItemFromIShellLink(IShellLink* link)
+{
+    if ( !link )
+        return NULL;
+
+    wxJumpListItem *item = new wxJumpListItem(wxJUMP_LIST_DESTIONATION);
+
+    IPropertyStore *linkProps;
+    HRESULT hr = link->QueryInterface
+                 (
+                     wxIID_IPropertyStore,
+                     reinterpret_cast<void **>(&linkProps)
+                 );
+    if ( FAILED(hr) )
+    {
+        wxLogApiError("IShellLink::QueryInterface", hr);
+        return NULL;
+    }
+
+    PROPVARIANT var;
+    linkProps->GetValue(PKEY_Link_Arguments, &var);
+    item->SetArguments(wxString(var.pwszVal));
+    PropVariantClear(&var);
+    linkProps->Release();
+
+    const int bufferSize = 2048;
+    wchar_t buffer[bufferSize];
+
+    link->GetDescription(buffer, INFOTIPSIZE);
+    item->SetTooltip(wxString(buffer));
+
+    int dummyIndex;
+    link->GetIconLocation(buffer, bufferSize - 1, &dummyIndex);
+    item->SetIconPath(wxString(buffer));
+
+    link->GetPath(buffer, bufferSize - 1, NULL, NULL);
+    item->SetFilePath(wxString(buffer));
+
+    return item;
+}
+
+wxJumpListItem* GetItemFromIShellItem(IShellItem *shellItem)
+{
+    if ( !shellItem )
+        return NULL;
+
+    wxJumpListItem *item = new wxJumpListItem(wxJUMP_LIST_DESTIONATION);
+
+    wchar_t *name;
+    shellItem->GetDisplayName(SIGDN_FILESYSPATH, &name);
+    item->SetFilePath(wxString(name));
+    CoTaskMemFree(name);
+    return item;
 }
 
 } // namespace
@@ -828,6 +941,83 @@ void wxJumpListItem::SetIconIndex(int iconIndex)
     m_iconIndex = iconIndex;
 }
 
+wxJumpListCategory::wxJumpListCategory(const wxString& title)
+    : m_title(title)
+{
+}
+
+wxJumpListCategory::~wxJumpListCategory()
+{
+    for (wxJumpListItems::iterator it = m_items.begin();
+         it != m_items.end();
+         ++it)
+    {
+        delete *it;
+    }
+}
+
+wxJumpListItem* wxJumpListCategory::Append(wxJumpListItem *item)
+{
+    m_items.push_back(item);
+    return item;
+}
+
+void wxJumpListCategory::Delete(wxJumpListItem *item)
+{
+    item = Remove(item);
+    if ( item )
+        delete item;
+}
+
+wxJumpListItem* wxJumpListCategory::Remove(wxJumpListItem *item)
+{
+    for (wxJumpListItems::iterator it = m_items.begin();
+         it != m_items.end();
+         ++it)
+    {
+        if ( *it == item )
+        {
+            m_items.erase(it);
+            return item;
+        }
+    }
+
+    return NULL;
+}
+
+wxJumpListItem* wxJumpListCategory::FindItemByPosition(size_t pos) const
+{
+    wxASSERT_MSG(pos < m_items.size(), "invalid pos.");
+    return m_items[pos];
+}
+
+wxJumpListItem* wxJumpListCategory::Insert(size_t pos, wxJumpListItem *item)
+{
+    wxASSERT_MSG(pos <= m_items.size(), "invalid pos.");
+    m_items.insert(m_items.begin() + pos, item);
+    return item;
+}
+
+wxJumpListItem* wxJumpListCategory::Prepend(wxJumpListItem *item)
+{
+    return Insert(0, item);
+}
+
+void wxJumpListCategory::SetTitle(const wxString& title)
+{
+    m_title = title;
+}
+
+const wxString& wxJumpListCategory::GetTitle() const
+{
+    return m_title;
+}
+
+const wxJumpListItems& wxJumpListCategory::GetItems() const
+{
+    return m_items;
+}
+
 wxJumpList::wxJumpList() : m_destinationList(NULL)
 {
 
@@ -852,14 +1042,89 @@ wxJumpList::~wxJumpList()
         m_destinationList->Release();
 }
 
-void wxJumpList::SetTasks(const wxJumpListItems& tasks)
+void wxJumpList::Update()
 {
-    m_tasks = tasks;
     if ( !BeginUpdate() )
         return;
 
     AddTasksToDestinationList();
+    if ( m_recent_visible )
+        m_destinationList->AppendKnownCategory(KDC_RECENT);
+    if ( m_frequent_visible )
+        m_destinationList->AppendKnownCategory(KDC_FREQUENT);
     CommitUpdate();
+}
+
+wxJumpListCategory* wxJumpList::GetTasks()
+{
+    if ( m_tasks.get() == NULL )
+        m_tasks.reset(new wxJumpListCategory(wxT("Tasks")));
+
+    return m_tasks.get();
+}
+
+void wxJumpList::ShowRecentCategory(bool shown)
+{
+    m_recent_visible = shown;
+}
+
+void wxJumpList::HideRecentCategory()
+{
+    ShowRecentCategory(false);
+}
+
+void wxJumpList::ShowFrequentCategory(bool shown)
+{
+    m_frequent_visible = shown;
+}
+
+void wxJumpList::HideFrequentCategory()
+{
+    ShowFrequentCategory(false);
+}
+
+const wxJumpListCategory* wxJumpList::GetFrequentCategory()
+{
+    wxString title = wxT("Frequent");
+    if ( m_frequent.get() == NULL )
+        m_frequent.reset(new wxJumpListCategory(title));
+    LoadKnownCategory(title);
+    return m_frequent.get();
+}
+
+const wxJumpListCategory* wxJumpList::GetRecentCategory()
+{
+    wxString title = wxT("Recent");
+    if ( m_recent.get() == NULL )
+        m_recent.reset(new wxJumpListCategory(title));
+    LoadKnownCategory(title);
+    return m_recent.get();
+}
+
+const wxVector<wxJumpListCategory*>& wxJumpList::GetCustomCategories()
+{
+    return m_customCategories;
+}
+
+void wxJumpList::AddCategory(wxJumpListCategory *catalog)
+{
+    m_customCategories.push_back(catalog);
+}
+
+wxJumpListCategory* wxJumpList::RemoveCategory(const wxString& title)
+{
+    for ( wxVector<wxJumpListCategory*>::iterator it = m_customCategories.begin();
+          it != m_customCategories.end();
+          ++it )
+    {
+        if ( (*it)->GetTitle() == title )
+        {
+            m_customCategories.erase(it);
+            return *it;
+        }
+    }
+
+    return NULL;
 }
 
 bool wxJumpList::BeginUpdate()
@@ -869,8 +1134,8 @@ bool wxJumpList::BeginUpdate()
 
     unsigned int max_count = 0;
     HRESULT hr = m_destinationList->BeginList(&max_count,
-                                              wxIID_IObjectArray,
-                                              reinterpret_cast<void**>(&(m_objectArray)));
+        wxIID_IObjectArray, reinterpret_cast<void**>(&(m_objectArray)));
+
     return SUCCEEDED(hr);
 }
 
@@ -903,16 +1168,98 @@ void wxJumpList::AddTasksToDestinationList()
 
     hr = collection->QueryInterface(wxIID_IObjectArray,
                                     reinterpret_cast<void**>(&(objectArray)));
-    for ( wxJumpListItems::const_iterator iter = m_tasks.begin();
-          iter != m_tasks.end();
-          ++iter )
+
+    const wxJumpListItems& tasks = m_tasks->GetItems();
+    for ( wxJumpListItems::const_iterator it = tasks.begin();
+          it != tasks.end();
+          ++it )
     {
-        AddShellLink(collection, *iter);
+        AddShellLink(collection, *(*it));
     }
     m_destinationList->AddUserTasks(objectArray);
 
     objectArray->Release();
     collection->Release();
+}
+
+void wxJumpList::LoadKnownCategory(const wxString& title)
+{
+    IApplicationDocumentLists *docList = 0;
+    HRESULT hr = CoCreateInstance
+                 (
+                    wxCLSID_ApplicationDocumentLists,
+                    NULL,
+                    CLSCTX_INPROC_SERVER,
+                    wxIID_IApplicationDocumentLists,
+                    reinterpret_cast<void **>(&docList)
+                 );
+    if ( FAILED(hr) )
+    {
+        wxLogApiError("CoCreateInstance(wxCLSID_ApplicationDocumentLists)", hr);
+        return;
+    }
+
+    IObjectArray *array = NULL;
+    wxASSERT_MSG(title == "Recent" || title == "Frequent", "Invalid title.");
+    hr = docList->GetList
+                 (
+                     title == "Recent" ? ADLT_RECENT : ADLT_FREQUENT,
+                     NULL,
+                     wxIID_IObjectArray,
+                     reinterpret_cast<void **>(&array)
+                 );
+    if ( FAILED(hr) )
+    {
+        wxLogApiError("IApplicationDocumentLists::GetList", hr);
+        return;
+    }
+
+    UINT count = 0;
+    array->GetCount(&count);
+    for (UINT i = 0; i < count; ++i)
+    {
+        IUnknown *collectionItem = NULL;
+        hr = array->GetAt(i, wxIID_IUnknown,
+                          reinterpret_cast<void **>(&collectionItem));
+        if ( FAILED(hr) )
+        {
+            wxLogApiError("IObjectArray::GetAt", hr);
+            continue;
+        }
+
+        IShellLink *shellLink = NULL;
+        IShellItem *shellItem = NULL;
+        wxJumpListItem* item = NULL;
+
+        if ( SUCCEEDED(collectionItem->QueryInterface(
+                 wxIID_IShellLink, reinterpret_cast<void**>(&shellLink))) )
+        {
+            item = GetItemFromIShellLink(shellLink);
+            shellLink->Release();
+        }
+        else if ( SUCCEEDED(collectionItem->QueryInterface(
+                      wxIID_IShellItem, reinterpret_cast<void**>(&shellItem))) )
+        {
+            item = GetItemFromIShellItem(shellItem);
+            shellItem->Release();
+        }
+        else
+        {
+            wxLogError("Can not query interfaces: IShellLink or IShellItem.");
+        }
+
+        if ( item )
+        {
+            if ( title == wxT("Frequent") )
+                m_frequent->Append(item);
+            else
+                m_recent->Append(item);
+        }
+        collectionItem->Release();
+    }
+
+    array->Release();
+    docList->Release();
 }
 
 #endif // wxUSE_TASKBARBUTTON
