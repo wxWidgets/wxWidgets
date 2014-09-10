@@ -64,6 +64,18 @@
 #endif
 
 // ----------------------------------------------------------------------------
+// globals
+// ----------------------------------------------------------------------------
+
+#if wxUSE_MENUS || wxUSE_MENUS_NATIVE
+    extern wxMenu *wxCurrentPopupMenu;
+#endif // wxUSE_MENUS || wxUSE_MENUS_NATIVE
+
+#if wxUSE_TASKBARBUTTON
+static WXUINT gs_msgTaskbarButtonCreated = 0;
+#endif
+
+// ----------------------------------------------------------------------------
 // stubs for missing functions under MicroWindows
 // ----------------------------------------------------------------------------
 
@@ -415,6 +427,12 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
             }
             break;
     }
+#if wxUSE_TASKBARBUTTON
+    if ( message == gs_msgTaskbarButtonCreated )
+    {
+        processed = true;
+    }
+#endif
 
     if ( !processed )
         rc = wxTopLevelWindowBase::MSWWindowProc(message, wParam, lParam);
@@ -630,6 +648,10 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     SetRightMenu(); // to nothing for initialization
+#endif
+#if wxUSE_TASKBARBUTTON
+    gs_msgTaskbarButtonCreated =
+        ::RegisterWindowMessage(wxT("TaskbarButtonCreated"));
 #endif
 
     return ret;
