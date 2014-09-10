@@ -3025,11 +3025,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/richtooltip.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
+    src/msw/taskbarbutton.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
     wx/msw/notifmsg.h
     wx/msw/sound.h
     wx/msw/taskbar.h
+    wx/msw/taskbarbutton.h
 </set>
 
 <!-- not used with wxUniv -->
