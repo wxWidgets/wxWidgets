@@ -357,6 +357,12 @@ private:
           method.
  */
 #ifdef HAVE_VARIADIC_MACROS
+
+// See wx/cpp.h for the explanations of this hack.
+#if defined(__GNUC__) && __GNUC__ == 3
+    #pragma GCC system_header
+#endif /* gcc-3.x */
+
 #define wxTEST_DIALOG(codeToRun, ...)                                          \
     {                                                                          \
         wxTEST_DIALOG_HOOK_CLASS wx_hook;                                      \

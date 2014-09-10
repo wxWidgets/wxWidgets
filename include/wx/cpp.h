@@ -128,6 +128,21 @@
 
 
 #ifdef HAVE_VARIADIC_MACROS
+
+/*
+   This is a hack to make it possible to use variadic macros with g++ 3.x even
+   when using -pedantic[-errors] option: without this, it would complain that
+
+       "anonymous variadic macros were introduced in C99"
+
+   and the option disabling this warning (-Wno-variadic-macros) is only
+   available in gcc 4.0 and later, so until then this hack is the only thing we
+   can do.
+ */
+#if defined(__GNUC__) && __GNUC__ == 3
+    #pragma GCC system_header
+#endif /* gcc-3.x */
+
 /*
    wxCALL_FOR_EACH(what, ...) calls the macro from its first argument, what(pos, x),
    for every remaining argument 'x', with 'pos' being its 1-based index in
