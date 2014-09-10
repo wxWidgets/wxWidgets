@@ -139,6 +139,7 @@ bool MyApp::OnInit()
 {
     if ( !wxApp::OnInit() )
         return false;
+
     wxTaskBarJumpList jumpList;
     wxTaskBarJumpListItem *item1 = new wxTaskBarJumpListItem(
         wxTASKBAR_JUMP_LIST_TASK,
@@ -165,16 +166,16 @@ bool MyApp::OnInit()
 
     wxTaskBarJumpListItem* item3 = new wxTaskBarJumpListItem(
         wxTASKBAR_JUMP_LIST_DESTIONATION,
-        wxT("Custom Item - Help"),
+        wxT("Help"),
         wxStandardPaths::Get().GetExecutablePath(),
         wxT("--help"),
-        wxT("Test Custom Category."),
+        wxT("wxTaskBarButton help."),
         wxStandardPaths::Get().GetExecutablePath(),
         0);
     wxTaskBarJumpListCategory* customCategory =
         new wxTaskBarJumpListCategory(wxT("Custom"));
     customCategory->Append(item3);
-    jumpList.AddCategory(customCategory);
+    jumpList.AddCustomCategory(customCategory);
 
     jumpList.Update();
 

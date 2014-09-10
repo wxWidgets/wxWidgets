@@ -224,9 +224,10 @@ public:
     const wxTaskBarJumpListCategory& GetRecentCategory() const;
     const wxTaskBarJumpListCategories& GetCustomCategories() const;
 
-    void AddCategory(wxTaskBarJumpListCategory* category);
-    wxTaskBarJumpListCategory* RemoveCategory(const wxString& title);
-    void DeleteCategory(const wxString& title);
+    void AddCustomCategory(wxTaskBarJumpListCategory* category);
+    wxTaskBarJumpListCategory* RemoveCustomCategory(const wxString& title);
+    void DeleteCustomCategory(const wxString& title);
+
     void Update();
 
 private:
