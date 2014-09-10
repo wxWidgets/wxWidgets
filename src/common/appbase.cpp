@@ -281,6 +281,10 @@ void wxAppConsoleBase::OnLaunched()
 
 int wxAppConsoleBase::OnExit()
 {
+    // Delete all pending objects first, they might use wxConfig to save their
+    // state during their destruction.
+    DeletePendingObjects();
+
 #if wxUSE_CONFIG
     // delete the config object if any (don't use Get() here, but Set()
     // because Get() could create a new config object)
