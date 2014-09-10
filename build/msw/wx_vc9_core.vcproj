@@ -1539,6 +1539,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\graphicsd2d.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\headerctrl.cpp"
 				>
 			</File>

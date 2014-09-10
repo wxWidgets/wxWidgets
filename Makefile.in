@@ -5305,6 +5305,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_utilswin.o \
 	monodll_uxtheme.o \
 	monodll_msw_window.o \
+	monodll_graphicsd2d.o \
 	monodll_helpchm.o \
 	monodll_helpwin.o \
 	monodll_automtn.o \
@@ -5454,7 +5455,8 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_utilsgui.o \
 	monodll_utilswin.o \
 	monodll_uxtheme.o \
-	monodll_msw_window.o
+	monodll_msw_window.o \
+	monodll_graphicsd2d.o
 @COND_TOOLKIT_WINCE@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_generic_caret.o \
@@ -6256,6 +6258,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_utilswin.o \
 	monodll_uxtheme.o \
 	monodll_msw_window.o \
+	monodll_graphicsd2d.o \
 	monodll_helpchm.o \
 	monodll_helpwin.o \
 	monodll_automtn.o \
@@ -6405,7 +6408,8 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_utilsgui.o \
 	monodll_utilswin.o \
 	monodll_uxtheme.o \
-	monodll_msw_window.o
+	monodll_msw_window.o \
+	monodll_graphicsd2d.o
 @COND_TOOLKIT_WINCE@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1)
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_generic_caret.o \
@@ -7653,6 +7657,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_utilswin.o \
 	monolib_uxtheme.o \
 	monolib_msw_window.o \
+	monolib_graphicsd2d.o \
 	monolib_helpchm.o \
 	monolib_helpwin.o \
 	monolib_automtn.o \
@@ -7802,7 +7807,8 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_utilsgui.o \
 	monolib_utilswin.o \
 	monolib_uxtheme.o \
-	monolib_msw_window.o
+	monolib_msw_window.o \
+	monolib_graphicsd2d.o
 @COND_TOOLKIT_WINCE@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2)
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_generic_caret.o \
@@ -8604,6 +8610,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_utilswin.o \
 	monolib_uxtheme.o \
 	monolib_msw_window.o \
+	monolib_graphicsd2d.o \
 	monolib_helpchm.o \
 	monolib_helpwin.o \
 	monolib_automtn.o \
@@ -8753,7 +8760,8 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_utilsgui.o \
 	monolib_utilswin.o \
 	monolib_uxtheme.o \
-	monolib_msw_window.o
+	monolib_msw_window.o \
+	monolib_graphicsd2d.o
 @COND_TOOLKIT_WINCE@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3)
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_generic_caret.o \
@@ -10158,6 +10166,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_utilswin.o \
 	coredll_uxtheme.o \
 	coredll_msw_window.o \
+	coredll_graphicsd2d.o \
 	coredll_helpchm.o \
 	coredll_helpwin.o \
 	coredll_automtn.o \
@@ -10307,7 +10316,8 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_utilsgui.o \
 	coredll_utilswin.o \
 	coredll_uxtheme.o \
-	coredll_msw_window.o
+	coredll_msw_window.o \
+	coredll_graphicsd2d.o
 @COND_TOOLKIT_WINCE@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4)
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_generic_caret.o \
@@ -11109,6 +11119,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_utilswin.o \
 	coredll_uxtheme.o \
 	coredll_msw_window.o \
+	coredll_graphicsd2d.o \
 	coredll_helpchm.o \
 	coredll_helpwin.o \
 	coredll_automtn.o \
@@ -11258,7 +11269,8 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_utilsgui.o \
 	coredll_utilswin.o \
 	coredll_uxtheme.o \
-	coredll_msw_window.o
+	coredll_msw_window.o \
+	coredll_graphicsd2d.o
 @COND_TOOLKIT_WINCE@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5)
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_generic_caret.o \
@@ -11927,6 +11939,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_utilswin.o \
 	corelib_uxtheme.o \
 	corelib_msw_window.o \
+	corelib_graphicsd2d.o \
 	corelib_helpchm.o \
 	corelib_helpwin.o \
 	corelib_automtn.o \
@@ -12076,7 +12089,8 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_utilsgui.o \
 	corelib_utilswin.o \
 	corelib_uxtheme.o \
-	corelib_msw_window.o
+	corelib_msw_window.o \
+	corelib_graphicsd2d.o
 @COND_TOOLKIT_WINCE@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6)
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_generic_caret.o \
@@ -12878,6 +12892,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_utilswin.o \
 	corelib_uxtheme.o \
 	corelib_msw_window.o \
+	corelib_graphicsd2d.o \
 	corelib_helpchm.o \
 	corelib_helpwin.o \
 	corelib_automtn.o \
@@ -13027,7 +13042,8 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_utilsgui.o \
 	corelib_utilswin.o \
 	corelib_uxtheme.o \
-	corelib_msw_window.o
+	corelib_msw_window.o \
+	corelib_graphicsd2d.o
 @COND_TOOLKIT_WINCE@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7)
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_generic_caret.o \
@@ -20085,6 +20101,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_msw_window.o: $(srcdir)/src/msw/window.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/window.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_graphicsd2d.o: $(srcdir)/src/msw/graphicsd2d.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/graphicsd2d.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_graphicsd2d.o: $(srcdir)/src/msw/graphicsd2d.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/graphicsd2d.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_helpchm.o: $(srcdir)/src/msw/helpchm.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/helpchm.cpp
 
@@ -25949,6 +25971,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_msw_window.o: $(srcdir)/src/msw/window.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/window.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_graphicsd2d.o: $(srcdir)/src/msw/graphicsd2d.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/graphicsd2d.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_graphicsd2d.o: $(srcdir)/src/msw/graphicsd2d.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/graphicsd2d.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_helpchm.o: $(srcdir)/src/msw/helpchm.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/helpchm.cpp
@@ -31935,6 +31963,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@coredll_msw_window.o: $(srcdir)/src/msw/window.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/window.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_graphicsd2d.o: $(srcdir)/src/msw/graphicsd2d.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/graphicsd2d.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@coredll_graphicsd2d.o: $(srcdir)/src/msw/graphicsd2d.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/graphicsd2d.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_helpchm.o: $(srcdir)/src/msw/helpchm.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/helpchm.cpp
 
@@ -36311,6 +36345,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@corelib_msw_window.o: $(srcdir)/src/msw/window.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/window.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_graphicsd2d.o: $(srcdir)/src/msw/graphicsd2d.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/graphicsd2d.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@corelib_graphicsd2d.o: $(srcdir)/src/msw/graphicsd2d.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/graphicsd2d.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_helpchm.o: $(srcdir)/src/msw/helpchm.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/helpchm.cpp
