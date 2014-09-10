@@ -19,6 +19,8 @@
 // wxTaskBarButton: define wxTaskBarButton interface.
 // ----------------------------------------------------------------------------
 
+class WXDLLIMPEXP_FWD_CORE wxTaskBarButton;
+
 /**
     State of the task bar button.
 */
@@ -33,7 +35,7 @@ enum WXDLLIMPEXP_CORE wxTaskBarButtonState
 
 class WXDLLIMPEXP_CORE wxThumbBarButton : public wxObject {
 public:
-    wxThumbBarButton() { }
+    wxThumbBarButton() : m_taskBarButtonParent(NULL) { }
     wxThumbBarButton(int id,
                      const wxIcon& icon,
                      const wxString& tooltip = wxString(),
@@ -56,13 +58,32 @@ public:
     int GetID() const { return m_id; }
     const wxIcon& GetIcon() const { return m_icon; }
     const wxString& GetTooltip() const { return m_tooltip; }
+
     bool IsEnable() const { return m_enable; }
+    void Enable(bool enable = true);
+    void Disable() { Enable(false); }
+
     bool IsDismissOnClick() const { return m_dismissOnClick; }
+    void EnableDismissOnClick(bool enable = true);
+    void DisableDimissOnClick() { EnableDismissOnClick(false); }
+
     bool HasBackground() const { return m_hasBackground; }
+    void SetHasBackground(bool has = true);
+
     bool IsShown() const { return m_shown; }
+    void Show(bool shown = true);
+    void Hide() { Show(false); }
+
     bool IsInteractive() const { return m_interactive; }
+    void EnableInteractive(bool interactive = true);
+    void DisableInteractive() { EnableInteractive(false); }
+
+    void SetParent(wxTaskBarButton *parent) { m_taskBarButtonParent = parent; }
+    wxTaskBarButton* GetParent() const { return m_taskBarButtonParent; }
 
 private:
+    bool UpdateParentTaskBarButton();
+
     int m_id;
     wxIcon m_icon;
     wxString m_tooltip;
@@ -71,6 +92,7 @@ private:
     bool m_hasBackground;
     bool m_shown;
     bool m_interactive;
+    wxTaskBarButton *m_taskBarButtonParent;
 
     DECLARE_DYNAMIC_CLASS(wxThumbBarButton)
 };

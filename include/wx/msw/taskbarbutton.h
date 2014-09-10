@@ -41,6 +41,8 @@ public:
 
 private:
     friend class wxFrame;
+    friend class wxThumbBarButton;
+
     wxTaskBarButtonImpl(WXWidget parent);
 
     bool InitOrUpdateThumbBarButtons();
