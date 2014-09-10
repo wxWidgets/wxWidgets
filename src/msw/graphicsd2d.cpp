@@ -1555,7 +1555,7 @@ protected:
             wxWICImagingFactory()->CreateBitmap(
                 w, h, 
                 GUID_WICPixelFormat32bppPBGRA,
-                WICBitmapCreateCacheOption::WICBitmapCacheOnLoad,
+                WICBitmapCacheOnLoad,
                 &resultBitmap);
 
             BYTE* colorBuffer = new BYTE[4 * w * h];
