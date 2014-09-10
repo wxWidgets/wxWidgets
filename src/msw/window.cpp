@@ -4926,11 +4926,15 @@ bool wxWindowMSW::HandlePaint()
 
     bool processed = HandleWindowEvent(event);
 
-    if ( processed && !wxDidCreatePaintDC )
+    if ( wxDidCreatePaintDC && !processed )
     {
-        // do call MSWDefWindowProc() to validate the update region to avoid
-        // the problems mentioned above
-        processed = false;
+        // Event handler did paint something as wxPaintDC object was created
+        // but then it must have skipped the event to indicate that default
+        // handling should still take place, so call MSWDefWindowProc() right
+        // now. It's important to do it before EndPaint() call below as that
+        // would validate the window and MSWDefWindowProc(WM_PAINT) wouldn't do
+        // anything if called after it.
+        OnPaint(event);
     }
 
     // note that we must generate NC event after the normal one as otherwise
@@ -4946,7 +4950,14 @@ bool wxWindowMSW::HandlePaint()
 
     wxPaintDCImpl::EndPaint((wxWindow *)this);
 
-    return processed;
+    // It doesn't matter whether the event was actually processed or not here,
+    // what matters is whether we already painted, and hence validated, the
+    // window or not. If we did, either the event was processed or we called
+    // OnPaint() above, so we should return true. If we did not, even the event
+    // was processed, we must still call MSWDefWindowProc() to ensure that the
+    // window is validated, i.e. to avoid the problem described in the comment
+    // before wxDidCreatePaintDC definition above.
+    return wxDidCreatePaintDC;
 }
 
 // Can be called from an application's OnPaint handler
