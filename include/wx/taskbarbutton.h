@@ -212,7 +212,7 @@ typedef wxVector<wxTaskBarJumpListCategory*> wxTaskBarJumpListCategories;
 class WXDLLIMPEXP_CORE wxTaskBarJumpList
 {
 public:
-    wxTaskBarJumpList();
+    wxTaskBarJumpList(const wxString& appID = wxEmptyString);
     virtual ~wxTaskBarJumpList();
     void ShowRecentCategory(bool shown = true);
     void HideRecentCategory();

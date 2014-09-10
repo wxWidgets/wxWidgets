@@ -1077,8 +1077,8 @@ const wxTaskBarJumpListItems& wxTaskBarJumpListCategory::GetItems() const
 // ----------------------------------------------------------------------------
 // wxTaskBarJumpList Implementation.
 // ----------------------------------------------------------------------------
-wxTaskBarJumpList::wxTaskBarJumpList()
-    : m_jumpListImpl(new wxTaskBarJumpListImpl())
+wxTaskBarJumpList::wxTaskBarJumpList(const wxString& appID)
+    : m_jumpListImpl(new wxTaskBarJumpListImpl(appID))
 {
 }
 
@@ -1152,7 +1152,9 @@ void wxTaskBarJumpList::Update()
 // ----------------------------------------------------------------------------
 // wxTaskBarJumpListImpl Implementation.
 // ----------------------------------------------------------------------------
-wxTaskBarJumpListImpl::wxTaskBarJumpListImpl() : m_destinationList(NULL)
+wxTaskBarJumpListImpl::wxTaskBarJumpListImpl(const wxString& appID)
+    : m_appID(appID),
+      m_destinationList(NULL)
 {
     HRESULT hr = CoCreateInstance
                  (
@@ -1289,6 +1291,8 @@ bool wxTaskBarJumpListImpl::BeginUpdate()
     unsigned int max_count = 0;
     HRESULT hr = m_destinationList->BeginList(&max_count,
         wxIID_IObjectArray, reinterpret_cast<void**>(&(m_objectArray)));
+    if ( !m_appID.empty() )
+        m_destinationList->SetAppID(m_appID.wc_str());
 
     return SUCCEEDED(hr);
 }
@@ -1364,6 +1368,8 @@ void wxTaskBarJumpListImpl::LoadKnownCategory(const wxString& title)
         wxLogApiError("CoCreateInstance(wxCLSID_ApplicationDocumentLists)", hr);
         return;
     }
+    if ( !m_appID.empty() )
+        docList->SetAppID(m_appID.wc_str());
 
     IObjectArray *array = NULL;
     wxASSERT_MSG( title == "Recent" || title == "Frequent", "Invalid title." );

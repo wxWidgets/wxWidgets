@@ -69,7 +69,7 @@ private:
 class WXDLLIMPEXP_CORE wxTaskBarJumpListImpl
 {
 public:
-    wxTaskBarJumpListImpl();
+    wxTaskBarJumpListImpl(const wxString& appID = wxEmptyString);
     virtual ~wxTaskBarJumpListImpl();
     void ShowRecentCategory(bool shown = true);
     void HideRecentCategory();
@@ -102,6 +102,9 @@ private:
     wxTaskBarJumpListCategories m_customCategories;
     bool m_recent_visible;
     bool m_frequent_visible;
+
+    // Application User Model ID.
+    wxString m_appID;
 };
 
 #endif // wxUSE_TASKBARBUTTON
