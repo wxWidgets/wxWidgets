@@ -7,6 +7,7 @@
 
 /**
     State of the taskbar button.
+    @since 3.1.0
 */
 enum wxTaskBarButtonState
 {
@@ -29,6 +30,7 @@ enum wxTaskBarButtonState
     @onlyfor{wxmsw}
 
     @see wxTaskBarButton
+    @since 3.1.0
 */
 class WXDLLIMPEXP_CORE wxThumbBarButton {
 public:
@@ -187,6 +189,7 @@ public:
     @onlyfor{wxmsw}
 
     @see wxFrame::MSWGetTaskBarButton()
+    @since 3.1.0
 */
 class WXDLLIMPEXP_CORE wxTaskBarButton
 {
@@ -339,6 +342,7 @@ public:
     @onlyfor{wxmsw}
 
     @see wxTaskBarButton
+    @since 3.1.0
 */
 class WXDLLIMPEXP_CORE wxAppProgressIndicator
 {
@@ -376,6 +380,8 @@ public:
 
 /**
     Type of jump list item.
+
+    @since 3.1.0
 */
 enum wxTaskBarJumpListItemType
 {
@@ -398,6 +404,7 @@ enum wxTaskBarJumpListItemType
     @category{misc}
 
     @onlyfor{wxmsw}
+    @since 3.1.0
 */
 class WXDLLIMPEXP_CORE wxTaskBarJumpListItem
 {
@@ -521,6 +528,8 @@ public:
 
 /**
     A vector of wxTaskBarJumpListItem pointers.
+
+    @since 3.1.0
 */
 typedef wxVector<wxTaskBarJumpListItem*> wxTaskBarJumpListItems;
 
@@ -537,6 +546,8 @@ typedef wxVector<wxTaskBarJumpListItem*> wxTaskBarJumpListItems;
     @onlyfor{wxmsw}
 
     @see wxTaskBarJumpList, wxTaskBarJumpListItem
+
+    @since 3.1.0
 */
 class WXDLLIMPEXP_CORE wxTaskBarJumpListCategory
 {
@@ -644,6 +655,7 @@ typedef wxVector<wxTaskBarJumpListCategory*> wxTaskBarJumpListCategories;
     @onlyfor{wxmsw}
 
     @see wxTaskBarJumpListCategory, wxTaskBarJumpListItem
+    @since 3.1.0
 */
 class WXDLLIMPEXP_CORE wxTaskBarJumpList
 {

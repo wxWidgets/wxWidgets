@@ -99,11 +99,7 @@ bool wxGauge::Create(wxWindow *parent,
     m_appProgressIndicator = NULL;
     if ( (style & wxGA_PROGRESS) != 0 )
     {
-        wxWindow* topParent = GetParent();
-        while (topParent != NULL && topParent->GetParent() != NULL)
-        {
-            topParent = topParent->GetParent();
-        }
+        wxWindow* topParent = wxGetTopLevelParent(this);
         if ( topParent != NULL )
         {
             m_appProgressIndicator =
@@ -117,16 +113,12 @@ bool wxGauge::Create(wxWindow *parent,
     return true;
 }
 
-#if wxUSE_TASKBARBUTTON
 wxGauge::~wxGauge()
 {
-    if ( m_appProgressIndicator )
-    {
-        delete m_appProgressIndicator;
-        m_appProgressIndicator = NULL;
-    }
-}
+#if wxUSE_TASKBARBUTTON
+    delete m_appProgressIndicator;
 #endif
+}
 
 WXDWORD wxGauge::MSWGetStyle(long style, WXDWORD *exstyle) const
 {

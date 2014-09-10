@@ -37,9 +37,7 @@ public:
         (void)Create(parent, id, range, pos, size, style, validator, name);
     }
 
-#if wxUSE_TASKBARBUTTON
     virtual ~wxGauge();
-#endif
 
     bool Create(wxWindow *parent,
                 wxWindowID id,

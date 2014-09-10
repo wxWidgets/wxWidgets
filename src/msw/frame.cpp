@@ -182,13 +182,12 @@ bool wxFrame::Create(wxWindow *parent,
     return true;
 }
 
-#if wxUSE_TASKBARBUTTON
 wxFrame::~wxFrame()
 {
-    if ( m_taskBarButton )
-        delete m_taskBarButton;
-}
+#if wxUSE_TASKBARBUTTON
+    delete m_taskBarButton;
 #endif
+}
 
 // ----------------------------------------------------------------------------
 // wxFrame client size calculations

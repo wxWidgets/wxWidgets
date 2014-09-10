@@ -13,14 +13,13 @@
 #define wxGA_HORIZONTAL      wxHORIZONTAL
 #define wxGA_VERTICAL        wxVERTICAL
 
+// Available since Windows 7 only. With this style, the value of guage will
+// reflect on the taskbar button.
+#define wxGA_PROGRESS        0x0010
 // Win32 only, is default (and only) on some other platforms
 #define wxGA_SMOOTH          0x0020
 // QT only, display current completed percentage (text default format "%p%")
 #define wxGA_TEXT            0x0040
-
-// Available since Windows 7 only. With this style, the value of guage will
-// reflect on the taskbar button.
-#define wxGA_PROGRESS        0x0010
 
 /**
     @class wxGauge
@@ -52,6 +51,10 @@
     @style{wxGA_TEXT}
            Display current completed percentage: text default format "%p%"
            (only supported in wxQt, may be not available on all platforms).
+           @since 3.1.0
+    @style{wxGA_PROGRESS}
+           Reflect the value of guage on the taskbar button, available since
+           Windows 7 only.
            @since 3.1.0
     @endStyleTable
 

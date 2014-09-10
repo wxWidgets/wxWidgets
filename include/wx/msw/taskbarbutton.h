@@ -10,9 +10,10 @@
 #ifndef  _WX_MSW_TASKBARBUTTON_H_
 #define  _WX_MSW_TASKBARBUTTON_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_TASKBARBUTTON
 
-#include "wx/defs.h"
 #include "wx/vector.h"
 #include "wx/taskbarbutton.h"
 
@@ -62,6 +63,8 @@ private:
 
     int m_progressRange;
     bool m_hasInitThumbnailToolbar;
+
+    wxDECLARE_NO_COPY_CLASS(wxTaskBarButtonImpl);
 };
 
 #endif // wxUSE_TASKBARBUTTON
