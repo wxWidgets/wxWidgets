@@ -435,7 +435,7 @@ wxTaskBarJumpListItem* GetItemFromIShellLink(IShellLink* link)
         return NULL;
 
     wxTaskBarJumpListItem* item =
-        new wxTaskBarJumpListItem(wxTASKBAR_JUMP_LIST_DESTIONATION);
+        new wxTaskBarJumpListItem(NULL, wxTASKBAR_JUMP_LIST_DESTIONATION);
 
     IPropertyStore *linkProps;
     HRESULT hr = link->QueryInterface
@@ -477,7 +477,7 @@ wxTaskBarJumpListItem* GetItemFromIShellItem(IShellItem *shellItem)
         return NULL;
 
     wxTaskBarJumpListItem *item =
-        new wxTaskBarJumpListItem(wxTASKBAR_JUMP_LIST_DESTIONATION);
+        new wxTaskBarJumpListItem(NULL, wxTASKBAR_JUMP_LIST_DESTIONATION);
 
     wchar_t *name;
     shellItem->GetDisplayName(SIGDN_FILESYSPATH, &name);
@@ -902,14 +902,16 @@ void wxAppProgressIndicator::Init()
 // ----------------------------------------------------------------------------
 // wxTaskBarJumpListItem Implementation.
 // ----------------------------------------------------------------------------
-wxTaskBarJumpListItem::wxTaskBarJumpListItem(wxTaskBarJumpListItemType type,
+wxTaskBarJumpListItem::wxTaskBarJumpListItem(wxTaskBarJumpListCategory *parent,
+                                             wxTaskBarJumpListItemType type,
                                              const wxString& title,
                                              const wxString& filePath,
                                              const wxString& arguments,
                                              const wxString& tooltip,
                                              const wxString& iconPath,
                                              int iconIndex)
-    : m_type(type),
+    : m_parentCategory(parent),
+      m_type(type),
       m_title(title),
       m_filePath(filePath),
       m_arguments(arguments),
@@ -927,6 +929,8 @@ wxTaskBarJumpListItemType wxTaskBarJumpListItem::GetType() const
 void wxTaskBarJumpListItem::SetType(wxTaskBarJumpListItemType type)
 {
     m_type = type;
+    if ( m_parentCategory )
+        m_parentCategory->Update();
 }
 
 const wxString& wxTaskBarJumpListItem::GetTitle() const
@@ -937,6 +941,8 @@ const wxString& wxTaskBarJumpListItem::GetTitle() const
 void wxTaskBarJumpListItem::SetTitle(const wxString& title)
 {
     m_title = title;
+    if ( m_parentCategory )
+        m_parentCategory->Update();
 }
 
 const wxString& wxTaskBarJumpListItem::GetFilePath() const
@@ -947,6 +953,8 @@ const wxString& wxTaskBarJumpListItem::GetFilePath() const
 void wxTaskBarJumpListItem::SetFilePath(const wxString& filePath)
 {
     m_filePath = filePath;
+    if ( m_parentCategory )
+        m_parentCategory->Update();
 }
 
 const wxString& wxTaskBarJumpListItem::GetArguments() const
@@ -957,6 +965,8 @@ const wxString& wxTaskBarJumpListItem::GetArguments() const
 void wxTaskBarJumpListItem::SetArguments(const wxString& arguments)
 {
     m_arguments = arguments;
+    if ( m_parentCategory )
+        m_parentCategory->Update();
 }
 
 const wxString& wxTaskBarJumpListItem::GetTooltip() const
@@ -967,6 +977,8 @@ const wxString& wxTaskBarJumpListItem::GetTooltip() const
 void wxTaskBarJumpListItem::SetTooltip(const wxString& tooltip)
 {
     m_tooltip = tooltip;
+    if ( m_parentCategory )
+        m_parentCategory->Update();
 }
 
 const wxString& wxTaskBarJumpListItem::GetIconPath() const
@@ -977,6 +989,8 @@ const wxString& wxTaskBarJumpListItem::GetIconPath() const
 void wxTaskBarJumpListItem::SetIconPath(const wxString& iconPath)
 {
     m_iconPath = iconPath;
+    if ( m_parentCategory )
+        m_parentCategory->Update();
 }
 
 int wxTaskBarJumpListItem::GetIconIndex() const
@@ -987,13 +1001,27 @@ int wxTaskBarJumpListItem::GetIconIndex() const
 void wxTaskBarJumpListItem::SetIconIndex(int iconIndex)
 {
     m_iconIndex = iconIndex;
+    if ( m_parentCategory )
+        m_parentCategory->Update();
+}
+
+wxTaskBarJumpListCategory* wxTaskBarJumpListItem::GetCategory() const
+{
+    return m_parentCategory;
+}
+
+void wxTaskBarJumpListItem::SetCategory(wxTaskBarJumpListCategory *category)
+{
+    m_parentCategory = category;
 }
 
 // ----------------------------------------------------------------------------
 // wxTaskBarJumpListCategory Implementation.
 // ----------------------------------------------------------------------------
-wxTaskBarJumpListCategory::wxTaskBarJumpListCategory(const wxString& title)
-    : m_title(title)
+wxTaskBarJumpListCategory::wxTaskBarJumpListCategory(wxTaskBarJumpList *parent,
+                                                     const wxString& title)
+    : m_parent(parent),
+      m_title(title)
 {
 }
 
@@ -1011,12 +1039,18 @@ wxTaskBarJumpListItem*
 wxTaskBarJumpListCategory::Append(wxTaskBarJumpListItem *item)
 {
     m_items.push_back(item);
+    item->SetCategory(this);
+    Update();
+
     return item;
 }
 
 void wxTaskBarJumpListCategory::Delete(wxTaskBarJumpListItem *item)
 {
     item = Remove(item);
+    item->SetCategory(NULL);
+    Update();
+
     if ( item )
         delete item;
 }
@@ -1031,6 +1065,8 @@ wxTaskBarJumpListCategory::Remove(wxTaskBarJumpListItem *item)
         if ( *it == item )
         {
             m_items.erase(it);
+            item->SetCategory(NULL);
+            Update();
             return item;
         }
     }
@@ -1050,6 +1086,9 @@ wxTaskBarJumpListCategory::Insert(size_t pos, wxTaskBarJumpListItem *item)
 {
     wxASSERT_MSG( pos <= m_items.size(), "invalid pos." );
     m_items.insert(m_items.begin() + pos, item);
+    item->SetCategory(this);
+    Update();
+
     return item;
 }
 
@@ -1062,6 +1101,7 @@ wxTaskBarJumpListCategory::Prepend(wxTaskBarJumpListItem *item)
 void wxTaskBarJumpListCategory::SetTitle(const wxString& title)
 {
     m_title = title;
+    Update();
 }
 
 const wxString& wxTaskBarJumpListCategory::GetTitle() const
@@ -1074,11 +1114,17 @@ const wxTaskBarJumpListItems& wxTaskBarJumpListCategory::GetItems() const
     return m_items;
 }
 
+void wxTaskBarJumpListCategory::Update()
+{
+    if ( m_parent )
+        m_parent->Update();
+}
+
 // ----------------------------------------------------------------------------
 // wxTaskBarJumpList Implementation.
 // ----------------------------------------------------------------------------
 wxTaskBarJumpList::wxTaskBarJumpList(const wxString& appID)
-    : m_jumpListImpl(new wxTaskBarJumpListImpl(appID))
+    : m_jumpListImpl(new wxTaskBarJumpListImpl(this, appID))
 {
 }
 
@@ -1152,8 +1198,10 @@ void wxTaskBarJumpList::Update()
 // ----------------------------------------------------------------------------
 // wxTaskBarJumpListImpl Implementation.
 // ----------------------------------------------------------------------------
-wxTaskBarJumpListImpl::wxTaskBarJumpListImpl(const wxString& appID)
-    : m_appID(appID),
+wxTaskBarJumpListImpl::wxTaskBarJumpListImpl(wxTaskBarJumpList *jumpList,
+                                             const wxString& appID)
+    : m_jumpList(jumpList),
+      m_appID(appID),
       m_destinationList(NULL)
 {
     HRESULT hr = CoCreateInstance
@@ -1201,7 +1249,7 @@ void wxTaskBarJumpListImpl::Update()
 wxTaskBarJumpListCategory& wxTaskBarJumpListImpl::GetTasks()
 {
     if ( m_tasks.get() == NULL )
-        m_tasks.reset(new wxTaskBarJumpListCategory(wxT("Tasks")));
+        m_tasks.reset(new wxTaskBarJumpListCategory(m_jumpList, wxT("Tasks")));
 
     return *(m_tasks.get());
 }
@@ -1230,7 +1278,7 @@ const wxTaskBarJumpListCategory& wxTaskBarJumpListImpl::GetFrequentCategory()
 {
     wxString title = wxT("Frequent");
     if ( m_frequent.get() == NULL )
-        m_frequent.reset(new wxTaskBarJumpListCategory(title));
+        m_frequent.reset(new wxTaskBarJumpListCategory(m_jumpList, title));
     LoadKnownCategory(title);
 
     return *m_frequent.get();
@@ -1240,7 +1288,7 @@ const wxTaskBarJumpListCategory& wxTaskBarJumpListImpl::GetRecentCategory()
 {
     wxString title = wxT("Recent");
     if ( m_recent.get() == NULL )
-        m_recent.reset(new wxTaskBarJumpListCategory(title));
+        m_recent.reset(new wxTaskBarJumpListCategory(m_jumpList, title));
     LoadKnownCategory(title);
 
     return *m_recent.get();

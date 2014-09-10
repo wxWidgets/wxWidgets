@@ -20,6 +20,8 @@
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_FWD_CORE wxTaskBarButton;
+class WXDLLIMPEXP_FWD_CORE wxTaskBarJumpListCategory;
+class WXDLLIMPEXP_FWD_CORE wxTaskBarJumpList;
 class WXDLLIMPEXP_FWD_CORE wxTaskBarJumpListImpl;
 
 /**
@@ -151,13 +153,14 @@ enum WXDLLIMPEXP_CORE wxTaskBarJumpListItemType
 class WXDLLIMPEXP_CORE wxTaskBarJumpListItem
 {
 public:
-    wxTaskBarJumpListItem(wxTaskBarJumpListItemType type,
-                          const wxString& title = wxEmptyString,
-                          const wxString& filePath = wxEmptyString,
-                          const wxString& arguments = wxEmptyString,
-                          const wxString& tooltip = wxEmptyString,
-                          const wxString& iconPath = wxEmptyString,
-                          int iconIndex = 0);
+    wxTaskBarJumpListItem(wxTaskBarJumpListCategory *parentCategory = NULL,
+        wxTaskBarJumpListItemType type = wxTASKBAR_JUMP_LIST_SEPARATOR,
+        const wxString& title = wxEmptyString,
+        const wxString& filePath = wxEmptyString,
+        const wxString& arguments = wxEmptyString,
+        const wxString& tooltip = wxEmptyString,
+        const wxString& iconPath = wxEmptyString,
+        int iconIndex = 0);
 
     wxTaskBarJumpListItemType GetType() const;
     void SetType(wxTaskBarJumpListItemType type);
@@ -173,8 +176,11 @@ public:
     void SetIconPath(const wxString& iconPath);
     int GetIconIndex() const;
     void SetIconIndex(int iconIndex);
+    wxTaskBarJumpListCategory* GetCategory() const;
+    void SetCategory(wxTaskBarJumpListCategory *category);
 
 private:
+    wxTaskBarJumpListCategory *m_parentCategory;
     wxTaskBarJumpListItemType m_type;
     wxString m_title;
     wxString m_filePath;
@@ -189,7 +195,8 @@ typedef wxVector<wxTaskBarJumpListItem*> wxTaskBarJumpListItems;
 class WXDLLIMPEXP_CORE wxTaskBarJumpListCategory
 {
 public:
-    wxTaskBarJumpListCategory(const wxString& title = wxEmptyString);
+    wxTaskBarJumpListCategory(wxTaskBarJumpList *parent = NULL,
+                              const wxString& title = wxEmptyString);
     virtual ~wxTaskBarJumpListCategory();
 
     wxTaskBarJumpListItem* Append(wxTaskBarJumpListItem *item);
@@ -203,6 +210,11 @@ public:
     const wxTaskBarJumpListItems& GetItems() const;
 
 private:
+    friend class wxTaskBarJumpListItem;
+
+    void Update();
+
+    wxTaskBarJumpList *m_parent;
     wxTaskBarJumpListItems m_items;
     wxString m_title;
 };
@@ -228,9 +240,11 @@ public:
     wxTaskBarJumpListCategory* RemoveCustomCategory(const wxString& title);
     void DeleteCustomCategory(const wxString& title);
 
-    void Update();
 
 private:
+    friend class wxTaskBarJumpListCategory;
+
+    void Update();
     wxTaskBarJumpListImpl *m_jumpListImpl;
 };
 

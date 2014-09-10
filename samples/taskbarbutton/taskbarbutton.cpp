@@ -142,6 +142,7 @@ bool MyApp::OnInit()
 
     wxTaskBarJumpList jumpList;
     wxTaskBarJumpListItem *item1 = new wxTaskBarJumpListItem(
+        NULL,
         wxTASKBAR_JUMP_LIST_TASK,
         wxT("Task 1"),
         wxStandardPaths::Get().GetExecutablePath(),
@@ -150,6 +151,7 @@ bool MyApp::OnInit()
         wxStandardPaths::Get().GetExecutablePath(),
         0);
     wxTaskBarJumpListItem *item2 = new wxTaskBarJumpListItem(
+        NULL,
         wxTASKBAR_JUMP_LIST_TASK,
         wxT("Task 2"),
         wxStandardPaths::Get().GetExecutablePath(),
@@ -159,12 +161,15 @@ bool MyApp::OnInit()
         0);
     jumpList.GetTasks().Append(item1);
     jumpList.GetTasks().Append(
-        new wxTaskBarJumpListItem(wxTASKBAR_JUMP_LIST_SEPARATOR));
+        new wxTaskBarJumpListItem(NULL, wxTASKBAR_JUMP_LIST_SEPARATOR));
     jumpList.GetTasks().Append(item2);
     jumpList.ShowRecentCategory();
     jumpList.ShowFrequentCategory();
 
+    wxTaskBarJumpListCategory* customCategory =
+        new wxTaskBarJumpListCategory(&jumpList, wxT("Custom"));
     wxTaskBarJumpListItem* item3 = new wxTaskBarJumpListItem(
+        customCategory,
         wxTASKBAR_JUMP_LIST_DESTIONATION,
         wxT("Help"),
         wxStandardPaths::Get().GetExecutablePath(),
@@ -172,12 +177,8 @@ bool MyApp::OnInit()
         wxT("wxTaskBarButton help."),
         wxStandardPaths::Get().GetExecutablePath(),
         0);
-    wxTaskBarJumpListCategory* customCategory =
-        new wxTaskBarJumpListCategory(wxT("Custom"));
     customCategory->Append(item3);
     jumpList.AddCustomCategory(customCategory);
-
-    jumpList.Update();
 
     const wxTaskBarJumpListCategory& frequentCategory =
         jumpList.GetFrequentCategory();
