@@ -33,7 +33,7 @@ class WXDLLIMPEXP_ADV wxThumbBarButton {
 public:
     wxThumbBarButton(int id,
                      const wxIcon& icon,
-                     const wxString& tooltip = wxEmptyString);
+                     const wxString& tooltip = wxString());
 
     virtual ~wxThumbBarButton() {}
 
@@ -59,7 +59,8 @@ public:
     virtual void Hide() = 0;
     virtual void SetThumbnailTooltip(const wxString& tooltip) = 0;
     virtual void SetProgressState(wxTaskBarButtonState state) = 0;
-    virtual void SetOverlayIcon(const wxIcon& icon) = 0;
+    virtual void SetOverlayIcon(const wxIcon& icon,
+                                const wxString& description = wxString()) = 0;
     virtual void SetThumbnailClip(const wxRect& rect) = 0;
 
     /**
