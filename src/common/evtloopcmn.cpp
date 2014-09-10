@@ -34,7 +34,7 @@ wxEventLoopBase::wxEventLoopBase()
 {
     m_isInsideRun = false;
     m_shouldExit = false;
-    m_isInsideYield = false;
+    m_yieldLevel = 0;
     m_eventsToProcessInsideYield = wxEVT_CATEGORY_ALL;
 }
 
@@ -100,15 +100,8 @@ bool wxEventLoopBase::ProcessIdle()
 
 bool wxEventLoopBase::Yield(bool onlyIfNeeded)
 {
-    if ( m_isInsideYield )
-    {
-        if ( !onlyIfNeeded )
-        {
-            wxFAIL_MSG( wxT("wxYield called recursively" ) );
-        }
-
+    if ( onlyIfNeeded && IsYielding() )
         return false;
-    }
 
     return YieldFor(wxEVT_CATEGORY_ALL);
 }
@@ -124,10 +117,14 @@ bool wxEventLoopBase::YieldFor(long eventsToProcess)
 #endif // wxUSE_THREADS
 
     // set the flag and don't forget to reset it before returning
-    m_isInsideYield = true;
-    m_eventsToProcessInsideYield = eventsToProcess;
+    const int yieldLevelOld = m_yieldLevel;
+    const long eventsToProcessOld = m_eventsToProcessInsideYield;
 
-    wxON_BLOCK_EXIT_SET(m_isInsideYield, false);
+    m_yieldLevel++;
+    wxON_BLOCK_EXIT_SET(m_yieldLevel, yieldLevelOld);
+
+    m_eventsToProcessInsideYield = eventsToProcess;
+    wxON_BLOCK_EXIT_SET(m_eventsToProcessInsideYield, eventsToProcessOld);
 
 #if wxUSE_LOG
     // disable log flushing from here because a call to wxYield() shouldn't

@@ -44,6 +44,7 @@ All:
 - Allow specifying custom comparator for wxSortedArrayString (Catalin Raceanu).
 - Add wxDateTime::GetWeekBasedYear().
 - Specialize std::hash<> for wxString when using C++11.
+- Allow recursive calls to wxYield().
 
 Unix:
 

@@ -145,8 +145,8 @@ public:
 
     // process all currently pending events right now
     //
-    // it is an error to call Yield() recursively unless the value of
-    // onlyIfNeeded is true
+    // if onlyIfNeeded is true, returns false without doing anything else if
+    // we're already inside Yield()
     //
     // WARNING: this function is dangerous as it can lead to unexpected
     //          reentrancies (i.e. when called from an event handler it
@@ -162,7 +162,7 @@ public:
 
     // returns true if the main thread is inside a Yield() call
     virtual bool IsYielding() const
-        { return m_isInsideYield; }
+        { return m_yieldLevel != 0; }
 
     // returns true if events of the given event category should be immediately
     // processed inside a wxApp::Yield() call or rather should be queued for
@@ -214,8 +214,10 @@ protected:
     // should we exit the loop?
     bool m_shouldExit;
 
-    // YieldFor() helpers:
-    bool m_isInsideYield;
+    // incremented each time on entering Yield() and decremented on leaving it
+    int m_yieldLevel;
+
+    // the argument of the last call to YieldFor()
     long m_eventsToProcessInsideYield;
 
 private:
