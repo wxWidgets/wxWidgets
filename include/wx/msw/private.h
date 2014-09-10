@@ -1013,6 +1013,58 @@ inline long wxSetWindowExStyle(const wxWindowMSW *win, long style)
     return ::SetWindowLong(GetHwndOf(win), GWL_EXSTYLE, style);
 }
 
+// Update layout direction flag for an EDIT control.
+//
+// Returns true if anything changed or false if the direction flag was already
+// set to the desired direction (which can't be wxLayout_Default).
+inline bool wxUpdateEditLayoutDirection(WXHWND hWnd, wxLayoutDirection dir)
+{
+    wxCHECK_MSG( hWnd, false,
+                 wxS("Can't set layout direction for invalid window") );
+
+    static const LONG_PTR
+        EDIT_RTL_EX_FLAGS = WS_EX_RIGHT | WS_EX_RTLREADING | WS_EX_LEFTSCROLLBAR;
+
+    const LONG_PTR styleOld = ::GetWindowLongPtr(hWnd, GWL_EXSTYLE);
+
+    LONG_PTR styleNew = styleOld;
+    switch ( dir )
+    {
+        case wxLayout_LeftToRight:
+            styleNew &= ~EDIT_RTL_EX_FLAGS;
+            break;
+
+        case wxLayout_RightToLeft:
+            styleNew |= EDIT_RTL_EX_FLAGS;
+            break;
+
+        case wxLayout_Default:
+            wxFAIL_MSG(wxS("Invalid layout direction"));
+    }
+
+    if ( styleNew == styleOld )
+        return false;
+
+    ::SetWindowLongPtr(hWnd, GWL_EXSTYLE, styleNew);
+
+    return true;
+}
+
+// Companion of the above function checking if an EDIT control uses RTL.
+inline wxLayoutDirection wxGetEditLayoutDirection(WXHWND hWnd)
+{
+    wxCHECK_MSG( hWnd, wxLayout_Default, wxS("invalid window") );
+
+    // While we set 3 style bits above, we're only really interested in one of
+    // them here. In particularly, don't check for WS_EX_RIGHT as it can be set
+    // for a right-aligned control even if it doesn't use RTL. And while we
+    // could test WS_EX_LEFTSCROLLBAR, this doesn't really seem useful.
+    const LONG_PTR style = ::GetWindowLongPtr(hWnd, GWL_EXSTYLE);
+
+    return style & WS_EX_RTLREADING ? wxLayout_RightToLeft
+                                    : wxLayout_LeftToRight;
+}
+
 // ----------------------------------------------------------------------------
 // functions mapping HWND to wxWindow
 // ----------------------------------------------------------------------------

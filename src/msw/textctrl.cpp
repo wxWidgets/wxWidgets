@@ -1793,6 +1793,41 @@ void wxTextCtrl::SetMaxLength(unsigned long len)
     }
 }
 
+#ifndef __WXWINCE__
+
+// ----------------------------------------------------------------------------
+// RTL support
+// ----------------------------------------------------------------------------
+
+void wxTextCtrl::SetLayoutDirection(wxLayoutDirection dir)
+{
+    // We only need to handle this specifically for plain EDIT controls, rich
+    // edit ones behave like any other window.
+    if ( IsRich() )
+    {
+        wxTextCtrlBase::SetLayoutDirection(dir);
+    }
+    else
+    {
+        if ( wxUpdateEditLayoutDirection(GetHwnd(), dir) )
+        {
+            // Update text layout by forcing the control to redo it, a simple
+            // Refresh() is not enough.
+            SendSizeEvent();
+            Refresh();
+        }
+    }
+}
+
+wxLayoutDirection wxTextCtrl::GetLayoutDirection() const
+{
+    // Just as above, we need to handle plain EDIT controls specially.
+    return IsRich() ? wxTextCtrlBase::GetLayoutDirection()
+                    : wxGetEditLayoutDirection(GetHwnd());
+}
+
+#endif // !__WXWINCE__
+
 // ----------------------------------------------------------------------------
 // Undo/redo
 // ----------------------------------------------------------------------------

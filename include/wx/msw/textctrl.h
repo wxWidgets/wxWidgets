@@ -101,6 +101,11 @@ public:
         return wxTextCtrlBase::HitTest(pt, col, row);
     }
 
+#ifndef __WXWINCE__
+    virtual void SetLayoutDirection(wxLayoutDirection dir) wxOVERRIDE;
+    virtual wxLayoutDirection GetLayoutDirection() const wxOVERRIDE;
+#endif // !__WXWINCE__
+
     // Caret handling (Windows only)
     bool ShowNativeCaret(bool show = true);
     bool HideNativeCaret() { return ShowNativeCaret(false); }
