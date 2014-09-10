@@ -75,8 +75,7 @@ public:
     void Hide() { Show(false); }
 
     bool IsInteractive() const { return m_interactive; }
-    void EnableInteractive(bool interactive = true);
-    void DisableInteractive() { EnableInteractive(false); }
+    void SetInteractive(bool interactive = true);
 
     void SetParent(wxTaskBarButton *parent) { m_taskBarButtonParent = parent; }
     wxTaskBarButton* GetParent() const { return m_taskBarButtonParent; }

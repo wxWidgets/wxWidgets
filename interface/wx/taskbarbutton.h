@@ -94,24 +94,49 @@ public:
     const wxIcon& GetIcon() const;
 
     /**
-        Return the tooltip.
+        Returns the tooltip.
     */
     const wxString& GetTooltip() const;
 
     /**
-        Return @true if the button is enabled, @false if it has been disabled.
+        Returns @true if the button is enabled, @false if it has been disabled.
     */
     bool IsEnable() const;
 
     /**
-        Return @true if the button will dismiss on click.
+        Enables or disables the thumbnail toolbar button.
+    */
+    void Enable(bool enable = true);
+
+    /**
+        Equivalent to calling wxThumbBarButton::Enable(false).
+    */
+    void Disable();
+
+    /**
+        Returns @true if the button will dismiss on click.
     */
     bool IsDismissOnClick() const;
 
     /**
-        Return @true if the button has button border.
+        Whether the window thumbnail is dismissed after a button click.
+    */
+    void EnableDismissOnClick(bool enable = true);
+
+    /**
+        Equivalent to calling wxThumbBarButton::DisableDimissOnClick(false).
+    */
+    void DisableDimissOnClick();
+
+    /**
+        Returns @true if the button has button border.
     */
     bool HasBackground() const;
+
+    /**
+        Set the property that whether the button has background.
+    */
+    void SetHasBackground(bool has = true);
 
     /**
         Returns @true if the button is shown, @false if it has been hidden.
@@ -119,9 +144,27 @@ public:
     bool IsShown() const;
 
     /**
-        Return @true if the button is interactive.
+        Show or hide the thumbnail toolbar button.
+    */
+    void Show(bool shown = true);
+
+    /**
+        Hide the thumbnail toolbar button. Equivalent to calling wxThumbBarButton::Show(false).
+    */
+    void Hide();
+
+    /**
+        Returns @true if the button is interactive.
     */
     bool IsInteractive() const;
+
+    /**
+        Set the property which holds whether the button is interactive.
+
+        A non-interactive thumbnail toolbar button does not react to user
+        interaction, but is still visually enabled.
+    */
+    void SetInteractive(bool interactive = true);
 };
 
 /**
