@@ -910,45 +910,42 @@ wxThumbBarButton* wxTaskBarButtonImpl::GetThumbBarButtonByIndex(size_t index)
 // ----------------------------------------------------------------------------
 // wxAppProgressIndicator Implementation.
 // ----------------------------------------------------------------------------
-wxAppProgressIndicator::wxAppProgressIndicator(wxTopLevelWindow *parent,
-                                               int maxValue)
+wxAppProgressIndicator::wxAppProgressIndicator(WXWidget parent, int maxValue)
     : m_parent(parent),
       m_maxValue(maxValue)
 {
+    m_taskBarButton = new wxTaskBarButtonImpl(m_parent);
+    Reset();
+    SetRange(m_maxValue);
 }
 
 wxAppProgressIndicator::~wxAppProgressIndicator()
 {
     m_taskBarButton->SetProgressState(wxTASKBAR_BUTTON_NO_PROGRESS);
+    delete m_taskBarButton;
 }
 
-bool wxAppProgressIndicator::Update(int value)
+void wxAppProgressIndicator::SetValue(int value)
 {
     wxASSERT_MSG( value <= m_maxValue, wxT("invalid progress value") );
-    Init();
 
     m_taskBarButton->SetProgressValue(value);
-    return true;
 }
 
-bool wxAppProgressIndicator::Pulse()
+void wxAppProgressIndicator::SetRange(int range)
 {
-    Init();
+    m_maxValue = range;
+    m_taskBarButton->SetProgressRange(range);
+}
+
+void wxAppProgressIndicator::Pulse()
+{
     m_taskBarButton->PulseProgress();
-    return true;
 }
 
-void wxAppProgressIndicator::Init()
+void wxAppProgressIndicator::Reset()
 {
-    if ( m_taskBarButton.get() == NULL )
-    {
-        // Sleep 100 milliseconds to wait for creation of taskbar button.
-        // TODO(zhchbin): Do not use sleep since it will block the UI thread.
-        // Currently it is used to make sure the API works correctlly.
-        wxMilliSleep(100);
-        m_taskBarButton.reset(new wxTaskBarButtonImpl(m_parent->GetHandle()));
-        m_taskBarButton->SetProgressRange(m_maxValue);
-    }
+    m_taskBarButton->SetProgressState(wxTASKBAR_BUTTON_NO_PROGRESS);
 }
 
 // ----------------------------------------------------------------------------
