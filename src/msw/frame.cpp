@@ -144,8 +144,13 @@ bool wxFrame::Create(wxWindow *parent,
 
 #if wxUSE_TASKBARBUTTON
     m_taskBarButton = NULL;
-    gs_msgTaskbarButtonCreated =
-        ::RegisterWindowMessage(wxT("TaskbarButtonCreated"));
+    static bool s_registered = false;
+    if ( !s_registered )
+    {
+        gs_msgTaskbarButtonCreated =
+            ::RegisterWindowMessage(wxT("TaskbarButtonCreated"));
+        s_registered = true;
+    }
 #endif
 
     return true;
