@@ -741,17 +741,10 @@ void wxHtmlContainerCell::Layout(int w)
 
     // VS: Any attempt to layout with negative or zero width leads to hell,
     // but we can't ignore such attempts completely, since it sometimes
-    // happen (e.g. when trying how small a table can be). The best thing we
-    // can do is to set the width of child cells to zero
+    // happen (e.g. when trying how small a table can be), so use at least one
+    // pixel width, this will at least give us the correct height sometimes.
     if (w < 1)
-    {
-       m_Width = 0;
-       for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
-            cell->Layout(0);
-            // this does two things: it recursively calls this code on all
-            // child contrainers and resets children's position to (0,0)
-       return;
-    }
+        w = 1;
 
     wxHtmlCell *nextCell;
     long xpos = 0, ypos = m_IndentTop;
