@@ -21,7 +21,9 @@ class wxTaskBarButtonImpl : public wxTaskBarButton {
 public:
     virtual ~wxTaskBarButtonImpl();
 
+    virtual void SetProgressRange(int range) wxOVERRIDE;
     virtual void SetProgressValue(int value) wxOVERRIDE;
+    virtual void PulseProgress() wxOVERRIDE;
     virtual void Show(bool show = true) wxOVERRIDE;
     virtual void Hide() wxOVERRIDE;
     virtual void SetThumbnailTooltip(const wxString& tooltip) wxOVERRIDE;
@@ -42,6 +44,8 @@ private:
 
     typedef wxVector<wxThumbBarButton*> wxThumbBarButtons;
     wxThumbBarButtons m_thumbBarButtons;
+
+    int m_progressRange;
 
     bool m_hasShownThumbnailToolbar;
 };

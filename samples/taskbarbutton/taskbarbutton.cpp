@@ -262,6 +262,13 @@ wxEND_EVENT_TABLE()
 
 void MyFrame::OnSetProgressValue(wxScrollEvent& WXUNUSED(event))
 {
+    static bool s_hasRangeSet = false;
+    if ( !s_hasRangeSet )
+    {
+      MSWGetTaskBarButton()->SetProgressRange(100);
+      s_hasRangeSet = true;
+    }
+
     MSWGetTaskBarButton()->SetProgressValue(m_slider->GetValue());
 }
 
