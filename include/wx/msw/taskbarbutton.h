@@ -44,7 +44,7 @@ private:
     wxTaskBarButtonImpl(WXWidget parent);
 
     bool InitOrUpdateThumbBarButtons();
-    int GetThumbBarButtonID(size_t index);
+    wxThumbBarButton* GetThumbBarButtonByIndex(size_t index);
 
     WXWidget m_hwnd;
     ITaskbarList3 *m_taskbarList;
