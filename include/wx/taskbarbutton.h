@@ -162,6 +162,22 @@ private:
     int      m_iconIndex;
 };
 
+class WXDLLIMPEXP_CORE wxAppProgressIndicator
+{
+public:
+    wxAppProgressIndicator(wxTopLevelWindow *parent, int maxValue);
+    virtual ~wxAppProgressIndicator() { }
+    bool Update(int value);
+    bool Pulse();
+
+private:
+    void Init();
+
+    wxTopLevelWindow *m_parent;
+    int m_maxValue;
+    wxScopedPtr<wxTaskBarButton> m_taskBarButton;
+};
+
 typedef wxVector<wxJumpListItem> wxJumpListItems;
 
 class WXDLLIMPEXP_CORE wxJumpList

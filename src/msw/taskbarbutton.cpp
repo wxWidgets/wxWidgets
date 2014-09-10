@@ -605,6 +605,40 @@ wxThumbBarButton* wxTaskBarButtonImpl::GetThumbBarButtonByIndex(size_t index)
     return m_thumbBarButtons[index];
 }
 
+wxAppProgressIndicator::wxAppProgressIndicator(wxTopLevelWindow *parent, int maxValue)
+    : m_parent(parent), m_maxValue(maxValue)
+{
+}
+
+bool wxAppProgressIndicator::Update(int value)
+{
+    wxASSERT_MSG( value <= m_maxValue, wxT("invalid progress value") );
+    Init();
+
+    m_taskBarButton->SetProgressValue(value);
+    return true;
+}
+
+bool wxAppProgressIndicator::Pulse()
+{
+    Init();
+    m_taskBarButton->PulseProgress();
+    return true;
+}
+
+void wxAppProgressIndicator::Init()
+{
+    if ( m_taskBarButton.get() == NULL )
+    {
+        // Sleep 100 milliseconds to wait for creation of taskbar button.
+        // TODO(zhchbin): Do not use sleep since it will block the UI thread.
+        // Currently it is used to make sure the API works correctlly.
+        wxMilliSleep(100);
+        m_taskBarButton.reset(new wxTaskBarButtonImpl(m_parent->GetHandle()));
+        m_taskBarButton->SetProgressRange(m_maxValue);
+    }
+}
+
 wxJumpListItem::wxJumpListItem(const wxString& title,
                                const wxString& filePath,
                                const wxString& arguments,

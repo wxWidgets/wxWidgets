@@ -14,11 +14,12 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/progdlg.h"
+    #include "wx/stdpaths.h"
     #include "wx/wx.h"
 #endif
 
 #include "wx/taskbarbutton.h"
-#include "wx/stdpaths.h"
 
 enum
 {
@@ -32,6 +33,8 @@ enum
     RestoreThumbnailClipBtn,
     AddThumbBarButtonBtn,
     RemoveThumbBarButtonBtn,
+    ShowProgressDialogBtn,
+    PulseProgressDialogBtn,
 };
 
 enum
@@ -118,6 +121,8 @@ private:
     void OnAddThubmBarButton(wxCommandEvent& WXUNUSED(event));
     void OnRemoveThubmBarButton(wxCommandEvent& WXUNUSED(event));
     void OnThumbnailToolbarBtnClicked(wxCommandEvent& event);
+    void OnShowProgressDialog(wxCommandEvent& WXUNUSED(event));
+    void OnPulseProgressDialog(wxCommandEvent& WXUNUSED(event));
 
     wxSlider *m_slider;
     wxRadioBox *m_visibilityRadioBox;
@@ -235,6 +240,16 @@ MyFrame::MyFrame(const wxString& title)
     ttbSizer->Add(addThumbBarButtonBtn, 1, wxEXPAND | wxALL, 2);
     ttbSizer->Add(showThumbnailToolbarBtn, 1, wxEXPAND | wxALL, 2);
 
+    // wxAppProgressIndicator section.
+    wxStaticBoxSizer *indicatorSizer =
+        new wxStaticBoxSizer(wxVERTICAL, panel, wxT("wxAppProgressIndicator"));
+    wxButton *showProgressDialogBtn =
+        new wxButton(panel, ShowProgressDialogBtn, wxT("Show Progress dialog"));
+    wxButton *pulseProgressDialigBtn =
+        new wxButton(panel, PulseProgressDialogBtn, wxT("Pulse Progress dialog"));
+    indicatorSizer->Add(showProgressDialogBtn, 1, wxEXPAND | wxALL, 2);
+    indicatorSizer->Add(pulseProgressDialigBtn, 1, wxEXPAND | wxALL, 2);
+
     gs->Add(spvSizer, 0, wxEXPAND);
     gs->Add(m_visibilityRadioBox, 0, wxEXPAND);
     gs->Add(sttSizer, 0, wxEXPAND);
@@ -242,6 +257,7 @@ MyFrame::MyFrame(const wxString& title)
     gs->Add(soiSizer, 0, wxEXPAND);
     gs->Add(stcSizer, 0, wxEXPAND);
     gs->Add(ttbSizer, 0, wxEXPAND);
+    gs->Add(indicatorSizer, 0, wxEXPAND);
 
     wxStaticText *text = new wxStaticText(
         panel, wxID_ANY, wxT("Welcome to wxTaskBarButton sample"));
@@ -266,6 +282,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(RestoreThumbnailClipBtn, MyFrame::OnSetOrRestoreThumbnailClip)
     EVT_BUTTON(AddThumbBarButtonBtn, MyFrame::OnAddThubmBarButton)
     EVT_BUTTON(RemoveThumbBarButtonBtn, MyFrame::OnRemoveThubmBarButton)
+    EVT_BUTTON(ShowProgressDialogBtn, MyFrame::OnShowProgressDialog)
+    EVT_BUTTON(PulseProgressDialogBtn, MyFrame::OnPulseProgressDialog)
     EVT_BUTTON(ThumbnailToolbarBtn_0, MyFrame::OnThumbnailToolbarBtnClicked)
     EVT_BUTTON(ThumbnailToolbarBtn_1, MyFrame::OnThumbnailToolbarBtnClicked)
     EVT_BUTTON(ThumbnailToolbarBtn_2, MyFrame::OnThumbnailToolbarBtnClicked)
@@ -382,4 +400,44 @@ void MyFrame::OnRemoveThubmBarButton(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnThumbnailToolbarBtnClicked(wxCommandEvent& event)
 {
     wxLogMessage("Thumbnail Toolbar Button %d is clicked.", event.GetId());
+}
+
+void MyFrame::OnShowProgressDialog(wxCommandEvent& WXUNUSED(event))
+{
+    const int PROGRESS_COUNT = 100;
+    wxProgressDialog dlg(
+                           "Progress in progress",
+                           "Please wait, starting...",
+                           PROGRESS_COUNT,
+                           NULL,
+                           wxPD_AUTO_HIDE
+                        );
+    wxAppProgressIndicator indicator(&dlg, PROGRESS_COUNT);
+    for ( int i = 0; i <= PROGRESS_COUNT; i++ )
+    {
+        if ( !dlg.Update(i) )
+            break;
+        indicator.Update(i);
+        wxMilliSleep(50);
+    }
+}
+
+void MyFrame::OnPulseProgressDialog(wxCommandEvent& WXUNUSED(event))
+{
+    const int PROGRESS_COUNT = 100;
+    wxProgressDialog dlg(
+                           "Progress in progress",
+                           "Please wait, starting...",
+                           PROGRESS_COUNT,
+                           NULL,
+                           wxPD_AUTO_HIDE
+                        );
+    wxAppProgressIndicator indicator(&dlg, PROGRESS_COUNT);
+    for ( int i = 0; i <= PROGRESS_COUNT; i++ )
+    {
+        if ( !dlg.Pulse() )
+            break;
+        indicator.Pulse();
+        wxMilliSleep(50);
+    }
 }
