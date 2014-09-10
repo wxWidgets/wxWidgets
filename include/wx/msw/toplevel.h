@@ -11,6 +11,8 @@
 #ifndef _WX_MSW_TOPLEVEL_H_
 #define _WX_MSW_TOPLEVEL_H_
 
+class WXDLLIMPEXP_FWD_ADV wxTaskBarButton;
+
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowMSW
 // ----------------------------------------------------------------------------
@@ -120,6 +122,31 @@ public:
 
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const { return false; }
+
+#if wxUSE_MENUS && !defined(__WXUNIVERSAL__)
+    bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);
+
+    // handle WM_EXITMENULOOP message for Win95 only
+    bool HandleExitMenuLoop(WXWORD isPopup);
+
+    // handle WM_(UN)INITMENUPOPUP message to generate wxEVT_MENU_OPEN/CLOSE
+    bool HandleMenuPopup(wxEventType evtType, WXHMENU hMenu);
+
+    // Command part of HandleMenuPopup() and HandleExitMenuLoop().
+    bool DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu, bool popup);
+
+    // Find the menu corresponding to the given handle.
+    virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu);
+#endif // wxUSE_MENUS && !__WXUNIVERSAL__
+
+#if wxUSE_TASKBARBUTTON
+    // Return the taskbar button of the window.
+    //
+    // The pointer returned by this method belongs to the window and will be
+    // deleted when the window itself is, do not delete it yourself. May return
+    // NULL if the initialization of taskbar button failed.
+    wxTaskBarButton* MSWGetTaskBarButton();
+#endif // wxUSE_TASKBARBUTTON
 
 protected:
     // common part of all ctors
@@ -234,6 +261,14 @@ private:
     // The system menu: initially NULL but can be set (once) by
     // MSWGetSystemMenu(). Owned by this window.
     wxMenu *m_menuSystem;
+
+    // The number of currently opened menus: 0 initially, 1 when a top level
+    // menu is opened, 2 when its submenu is opened and so on.
+    int m_menuDepth;
+
+#if wxUSE_TASKBARBUTTON
+    wxTaskBarButton *m_taskBarButton;
+#endif
 
     DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxTopLevelWindowMSW);
