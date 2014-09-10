@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        taskbarbutton.cpp
-// Purpose:     wxTaskbarButton sample
+// Purpose:     wxTaskBarButton sample
 // Author:      Chaobin Zhang <zhchbin@gmail.com>
 // Created:     2014-04-30
 // Copyright:   (c) 2014 wxWidgets development team
@@ -29,6 +29,19 @@ enum
     ClearOverlayIconBtn,
     SetThumbnailClipBtn,
     RestoreThumbnailClipBtn,
+    AddThumbBarButtonBtn,
+    ShowThumbnailToolbarBtn,
+};
+
+enum
+{
+    ThumbnailToolbarBtn_0 = wxID_HIGHEST + 100,
+    ThumbnailToolbarBtn_1,
+    ThumbnailToolbarBtn_2,
+    ThumbnailToolbarBtn_3,
+    ThumbnailToolbarBtn_4,
+    ThumbnailToolbarBtn_5,
+    ThumbnailToolbarBtn_6
 };
 
 namespace {
@@ -100,6 +113,9 @@ private:
     void OnSetOverlayIcon(wxCommandEvent& WXUNUSED(event));
     void OnClearOverlayIcon(wxCommandEvent& WXUNUSED(event));
     void OnSetOrRestoreThumbnailClip(wxCommandEvent& event);
+    void OnAddThubmBarButton(wxCommandEvent& WXUNUSED(event));
+    void OnShowThumbnailToolbar(wxCommandEvent& WXUNUSED(event));
+    void OnThumbnailToolbarBtnClicked(wxCommandEvent& event);
 
     wxSlider *m_slider;
     wxRadioBox *m_visibilityRadioBox;
@@ -114,7 +130,7 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    MyFrame *frame = new MyFrame("wxTaskbarButton App");
+    MyFrame *frame = new MyFrame("wxTaskBarButton App");
     frame->Show(true);
 
     return true;
@@ -193,15 +209,27 @@ MyFrame::MyFrame(const wxString& title)
     stcSizer->Add(setThumbnailClipBtn, 1, wxEXPAND | wxALL, 2);
     stcSizer->Add(restoreThumbnailClipBtn, 1, wxEXPAND | wxALL, 2);
 
+    // Thumbnail Toolbar Buttons section.
+    wxStaticBoxSizer *ttbSizer =
+        new wxStaticBoxSizer(wxVERTICAL, panel, wxT("ThumbBar Buttons"));
+    wxButton *addThumbBarButtonBtn =
+        new wxButton(panel, AddThumbBarButtonBtn, wxT("Add ThumbBar Button"));
+    wxButton *showThumbnailToolbarBtn =
+        new wxButton(panel, ShowThumbnailToolbarBtn,
+                     wxT("Show Thumbnail Toolbar"));
+    ttbSizer->Add(addThumbBarButtonBtn, 1, wxEXPAND | wxALL, 2);
+    ttbSizer->Add(showThumbnailToolbarBtn, 1, wxEXPAND | wxALL, 2);
+
     gs->Add(spvSizer, 0, wxEXPAND);
     gs->Add(m_visibilityRadioBox, 0, wxEXPAND);
     gs->Add(sttSizer, 0, wxEXPAND);
     gs->Add(spsSizer, 0, wxEXPAND);
     gs->Add(soiSizer, 0, wxEXPAND);
     gs->Add(stcSizer, 0, wxEXPAND);
+    gs->Add(ttbSizer, 0, wxEXPAND);
 
     wxStaticText *text = new wxStaticText(
-        panel, wxID_ANY, wxT("Welcome to wxTaskbarButton sample"));
+        panel, wxID_ANY, wxT("Welcome to wxTaskBarButton sample"));
     mainSizer->Add(text, 0, wxALIGN_CENTRE_HORIZONTAL);
     mainSizer->Add(gs);
 
@@ -221,6 +249,15 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(ClearOverlayIconBtn, MyFrame::OnClearOverlayIcon)
     EVT_BUTTON(SetThumbnailClipBtn, MyFrame::OnSetOrRestoreThumbnailClip)
     EVT_BUTTON(RestoreThumbnailClipBtn, MyFrame::OnSetOrRestoreThumbnailClip)
+    EVT_BUTTON(AddThumbBarButtonBtn, MyFrame::OnAddThubmBarButton)
+    EVT_BUTTON(ShowThumbnailToolbarBtn, MyFrame::OnShowThumbnailToolbar)
+    EVT_BUTTON(ThumbnailToolbarBtn_0, MyFrame::OnThumbnailToolbarBtnClicked)
+    EVT_BUTTON(ThumbnailToolbarBtn_1, MyFrame::OnThumbnailToolbarBtnClicked)
+    EVT_BUTTON(ThumbnailToolbarBtn_2, MyFrame::OnThumbnailToolbarBtnClicked)
+    EVT_BUTTON(ThumbnailToolbarBtn_3, MyFrame::OnThumbnailToolbarBtnClicked)
+    EVT_BUTTON(ThumbnailToolbarBtn_4, MyFrame::OnThumbnailToolbarBtnClicked)
+    EVT_BUTTON(ThumbnailToolbarBtn_5, MyFrame::OnThumbnailToolbarBtnClicked)
+    EVT_BUTTON(ThumbnailToolbarBtn_6, MyFrame::OnThumbnailToolbarBtnClicked)
 wxEND_EVENT_TABLE()
 
 void MyFrame::OnSetProgressValue(wxScrollEvent& WXUNUSED(event))
@@ -295,4 +332,26 @@ void MyFrame::OnSetOrRestoreThumbnailClip(wxCommandEvent& event)
     }
 
     MSWGetTaskBarButton()->SetThumbnailClip(rect);
+}
+
+void MyFrame::OnAddThubmBarButton(wxCommandEvent& WXUNUSED(event))
+{
+    static int thumbBarButtonCounter = 0;
+    if ( thumbBarButtonCounter >= 7 )
+        return;
+
+    wxThumbBarButton *btn = new wxThumbBarButton(
+        thumbBarButtonCounter + ThumbnailToolbarBtn_0 , CreateRandomIcon());
+    MSWGetTaskBarButton()->AddThumbBarButton(btn);
+    ++thumbBarButtonCounter;
+}
+
+void MyFrame::OnShowThumbnailToolbar(wxCommandEvent& WXUNUSED(event))
+{
+    MSWGetTaskBarButton()->ShowThumbnailToolbar();
+}
+
+void MyFrame::OnThumbnailToolbarBtnClicked(wxCommandEvent& event)
+{
+    wxLogMessage("Thumbnail Toolbar Button %d is clicked.", event.GetId());
 }

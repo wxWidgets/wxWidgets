@@ -64,6 +64,10 @@
     extern wxMenu *wxCurrentPopupMenu;
 #endif // wxUSE_MENUS || wxUSE_MENUS_NATIVE
 
+#if wxUSE_TASKBARBUTTON
+    #define wxTHBN_CLICKED 0x1800
+#endif  // wxUSE_TASKBARBUTTON
+
 // ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
@@ -861,6 +865,13 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
         }
     }
 #endif // wxUSE_MENUS
+
+#if wxUSE_TASKBARBUTTON
+    if ( cmd == wxTHBN_CLICKED && MSWGetTaskBarButton() )
+    {
+        return wxTopLevelWindowMSW::HandleTHBNClickedCommand(id);
+    }
+#endif // wxUSE_TASKBARBUTTON
 
     return wxFrameBase::HandleCommand(id, cmd, control);;
 }

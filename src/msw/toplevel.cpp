@@ -688,6 +688,10 @@ wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
             ::BringWindowToTop(GetHwndOf(parent));
         }
     }
+#if wxUSE_TASKBARBUTTON
+    if ( m_taskBarButton )
+        delete m_taskBarButton;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1576,6 +1580,13 @@ wxMenu* wxTopLevelWindowMSW::MSWFindMenuFromHMENU(WXHMENU WXUNUSED(hMenu))
 wxTaskBarButton* wxTopLevelWindowMSW::MSWGetTaskBarButton()
 {
     return m_taskBarButton;
+}
+
+bool wxTopLevelWindowMSW::HandleTHBNClickedCommand(WXWORD id)
+{
+    wxCommandEvent event(wxEVT_BUTTON, id);
+    event.SetEventObject(this);
+    return ProcessEvent(event);
 }
 #endif // wxUSE_TASKBARBUTTON
 

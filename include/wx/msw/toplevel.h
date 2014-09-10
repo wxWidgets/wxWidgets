@@ -146,6 +146,8 @@ public:
     // deleted when the window itself is, do not delete it yourself. May return
     // NULL if the initialization of taskbar button failed.
     wxTaskBarButton* MSWGetTaskBarButton();
+
+    bool HandleTHBNClickedCommand(WXWORD id);
 #endif // wxUSE_TASKBARBUTTON
 
 protected:

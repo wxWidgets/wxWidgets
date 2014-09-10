@@ -13,6 +13,7 @@
 #if wxUSE_TASKBARBUTTON
 
 #include "wx/defs.h"
+#include "wx/vector.h"
 
 struct ITaskbarList3;
 
@@ -27,6 +28,8 @@ public:
     virtual void SetProgressState(wxTaskBarButtonState state) wxOVERRIDE;
     virtual void SetOverlayIcon(const wxIcon& icon) wxOVERRIDE;
     virtual void SetThumbnailClip(const wxRect& rect) wxOVERRIDE;
+    virtual bool AddThumbBarButton(wxThumbBarButton *button) wxOVERRIDE;
+    virtual void ShowThumbnailToolbar() wxOVERRIDE;
 
 private:
     friend class wxTopLevelWindowMSW;
@@ -34,6 +37,11 @@ private:
 
     WXWidget m_hwnd;
     ITaskbarList3 *m_taskbarList;
+
+    typedef wxVector<wxThumbBarButton*> wxThumbBarButtons;
+    wxThumbBarButtons m_thumbBarButtons;
+
+    bool m_hasShownThumbnailToolbar;
 };
 
 #endif // wxUSE_TASKBARBUTTON
