@@ -111,6 +111,11 @@ void wxTaskBarButtonImpl::SetThumbnailClip(const wxRect& rect)
     m_taskbarList->SetThumbnailClip(m_hwnd, rect.IsEmpty() ? NULL : &rc);
 }
 
+void wxTaskBarButtonImpl::SetThumbnailContents(const wxWindow* child)
+{
+    SetThumbnailClip(child->GetRect());
+}
+
 bool wxTaskBarButtonImpl::AddThumbBarButton(wxThumbBarButton *button)
 {
     wxCHECK( button != NULL, wxT("Can't add invalid wxThumbBarButton.") );
