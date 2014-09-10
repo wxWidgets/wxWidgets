@@ -31,8 +31,9 @@ enum WXDLLIMPEXP_CORE wxTaskBarButtonState
     wxTASKBAR_BUTTON_PAUSED        = 8
 };
 
-class WXDLLIMPEXP_CORE wxThumbBarButton {
+class WXDLLIMPEXP_CORE wxThumbBarButton : public wxObject {
 public:
+    wxThumbBarButton() { }
     wxThumbBarButton(int id,
                      const wxIcon& icon,
                      const wxString& tooltip = wxString(),
@@ -44,6 +45,14 @@ public:
 
     virtual ~wxThumbBarButton() {}
 
+    bool Create(int id,
+                const wxIcon& icon,
+                const wxString& tooltip = wxString(),
+                bool enable = true,
+                bool dismissOnClick = false,
+                bool hasBackground = true,
+                bool shown = true,
+                bool interactive = true);
     int GetID() const { return m_id; }
     const wxIcon& GetIcon() const { return m_icon; }
     const wxString& GetTooltip() const { return m_tooltip; }
@@ -62,6 +71,8 @@ private:
     bool m_hasBackground;
     bool m_shown;
     bool m_interactive;
+
+    DECLARE_DYNAMIC_CLASS(wxThumbBarButton)
 };
 
 class WXDLLIMPEXP_CORE wxTaskBarButton
