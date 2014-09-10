@@ -634,6 +634,16 @@
 
 /* --- start MSW options --- */
 
+
+#define wxUSE_GRAPHICS_GDIPLUS 0
+
+#if defined(_MSC_VER) && _MSC_VER >= 1600
+    #define wxUSE_GRAPHICS_DIRECT2D 0
+#else
+    #define wxUSE_GRAPHICS_DIRECT2D 0
+#endif
+
+
 #define wxUSE_MFC           0
 
 #define wxUSE_OLE           0

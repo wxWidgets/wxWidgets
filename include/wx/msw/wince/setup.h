@@ -728,19 +728,14 @@
 #define wxUSE_WEBVIEW_WEBKIT 0
 #endif
 
-// Enable the new wxGraphicsPath and wxGraphicsContext classes for an advanced
-// 2D drawing API.  (Still somewhat experimental)
-//
-// Please note that on Windows gdiplus.dll is loaded dynamically which means
-// that nothing special needs to be done as long as you don't use
-// wxGraphicsContext at all or only use it on XP and later systems but you
-// still do need to distribute it yourself for an application using
-// wxGraphicsContext to be runnable on pre-XP systems.
+// Enable wxGraphicsContext and related classes for a modern 2D drawing API.
 //
 // Default is 1 except if you're using a non-Microsoft compiler under Windows
-// as only MSVC7+ is known to ship with gdiplus.h. For other compilers (e.g.
-// mingw32) you may need to install the headers (and just the headers)
-// yourself. If you do, change the setting below manually.
+// as only MSVC is known to ship with at least gdiplus.h which is required to
+// compile GDI+-based implementation of wxGraphicsContext (MSVC10 and later
+// versions also include d2d1.h required for Direct2D-based implementation).
+// For other compilers (e.g. mingw32) you may need to install the headers (and
+// just the headers) yourself. If you do, change the setting below manually.
 //
 // Recommended setting: 1 if supported by the compilation environment
 

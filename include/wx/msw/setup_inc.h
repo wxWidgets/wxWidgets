@@ -8,6 +8,35 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
+// Graphics backends choices for Windows
+// ----------------------------------------------------------------------------
+
+// The options here are only taken into account if wxUSE_GRAPHICS_CONTEXT is 1.
+
+// Enable support for GDI+-based implementation of wxGraphicsContext.
+//
+// Default is 1.
+//
+// Recommended setting: 1 if you need to support XP, as Direct2D is not
+// available there.
+#define wxUSE_GRAPHICS_GDIPLUS 1
+
+// Enable support for Direct2D-based implementation of wxGraphicsContext.
+//
+// Default is 1 for compilers which support it, i.e. VC10+ currently. If you
+// use an earlier MSVC version or another compiler and installed the necessary
+// SDK components manually, you need to change this setting.
+//
+// Recommended setting: 1 for faster and better quality graphics under Windows
+// 7 and later systems (if wxUSE_GRAPHICS_GDIPLUS is also enabled, earlier
+// systems will fall back on using GDI+).
+#if defined(_MSC_VER) && _MSC_VER >= 1600
+    #define wxUSE_GRAPHICS_DIRECT2D 1
+#else
+    #define wxUSE_GRAPHICS_DIRECT2D 0
+#endif
+
+// ----------------------------------------------------------------------------
 // Windows-only settings
 // ----------------------------------------------------------------------------
 
