@@ -86,14 +86,6 @@
 #   endif
 #endif /* wxUSE_TASKBARICON_BALLOONS */
 
-#ifndef wxUSE_TASKBARBUTTON
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_TASKBARBUTTON must be defined."
-#   else
-#       define wxUSE_TASKBARBUTTON 0
-#   endif
-#endif /* wxUSE_TASKBARBUTTON */
-
 #ifndef wxUSE_UXTHEME
 #    ifdef wxABORT_ON_CONFIG_ERROR
 #        error "wxUSE_UXTHEME must be defined."

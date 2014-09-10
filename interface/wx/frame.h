@@ -445,23 +445,6 @@ public:
     */
     virtual void SetToolBar(wxToolBar* toolBar);
 
-    /**
-        MSW-specific function for accessing the taskbar button under Windows 7 or later.
-
-        Returns a wxTaskBarButton pointer representing the taskbar button of the
-        window under Windows 7 or later. The returned wxTaskBarButton may be
-        used, if non-@c NULL, to access the functionality including thumbnail
-        representations, thumbnail toolbars, notification and status overlays,
-        and progress indicators.
-
-        The returned pointer must @em not be deleted, it is owned by the frame
-        and will be only deleted when the frame itself is destroyed.
-
-        This function is not available in the other ports by design, any
-        occurrences of it in the portable code must be guarded by
-        @code #ifdef __WXMSW__ @endcode preprocessor guards.
-    */
-    wxTaskBarButton* MSWGetTaskBarButton();
 
     void PushStatusText(const wxString &text, int number = 0);
     void PopStatusText(int number = 0);
