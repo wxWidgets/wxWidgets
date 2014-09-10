@@ -84,8 +84,8 @@ public:
     virtual void SetThumbnailContents(const wxWindow *child) = 0;
     virtual bool InsertThumbBarButton(size_t pos, wxThumbBarButton *button) = 0;
     virtual bool AppendThumbBarButton(wxThumbBarButton *button) = 0;
-    virtual bool RemoveThumbBarButton(wxThumbBarButton *button) = 0;
-    virtual bool RemoveThumbBarButton(int id) = 0;
+    virtual wxThumbBarButton* RemoveThumbBarButton(wxThumbBarButton *button) = 0;
+    virtual wxThumbBarButton* RemoveThumbBarButton(int id) = 0;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxTaskBarButton);
