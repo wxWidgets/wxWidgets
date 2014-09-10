@@ -1097,7 +1097,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/access.h
     wx/anidecod.h
     wx/animdecod.h
-    wx/appprog.h
+    wx/appprogress.h
     wx/artprov.h
     wx/bitmap.h
     wx/bookctrl.h
@@ -1955,7 +1955,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/accel.cpp
     src/msw/anybutton.cpp
     src/msw/artmsw.cpp
-    src/msw/appprog.cpp
+    src/msw/appprogress.cpp
     src/msw/bmpbuttn.cpp
     src/msw/button.cpp
     src/msw/checkbox.cpp

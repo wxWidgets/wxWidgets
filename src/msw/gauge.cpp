@@ -33,7 +33,7 @@
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
 #endif
 
-#include "wx/appprog.h"
+#include "wx/appprogress.h"
 #include "wx/msw/private.h"
 
 // ----------------------------------------------------------------------------

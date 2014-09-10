@@ -603,7 +603,7 @@
     <ClCompile Include="..\..\src\msw\ole\activex.cpp" />
     <ClCompile Include="..\..\src\msw\anybutton.cpp" />
     <ClCompile Include="..\..\src\msw\app.cpp" />
-    <ClCompile Include="..\..\src\msw\appprog.cpp" />
+    <ClCompile Include="..\..\src\msw\appprogress.cpp" />
     <ClCompile Include="..\..\src\msw\artmsw.cpp" />
     <ClCompile Include="..\..\src\msw\ole\automtn.cpp" />
     <ClCompile Include="..\..\src\msw\bitmap.cpp" />
@@ -1025,7 +1025,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </CustomBuild>
     <ClInclude Include="..\..\include\wx\msw\accel.h" />
-    <ClInclude Include="..\..\include\wx\msw\appprog.h" />
+    <ClInclude Include="..\..\include\wx\msw\appprogress.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\access.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\activex.h" />
     <ClInclude Include="..\..\include\wx\msw\anybutton.h" />
@@ -1177,7 +1177,7 @@
     <ClInclude Include="..\..\include\wx\anidecod.h" />
     <ClInclude Include="..\..\include\wx\animdecod.h" />
     <ClInclude Include="..\..\include\wx\anybutton.h" />
-    <ClInclude Include="..\..\include\wx\appprog.h" />
+    <ClInclude Include="..\..\include\wx\appprogress.h" />
     <ClInclude Include="..\..\include\wx\artprov.h" />
     <ClInclude Include="..\..\include\wx\bitmap.h" />
     <ClInclude Include="..\..\include\wx\bmpbuttn.h" />
