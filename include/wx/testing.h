@@ -117,11 +117,11 @@ protected:
 
 // wxExpectModal<T> specializations for common dialogs:
 
-template<>
-class wxExpectModal<wxMessageDialog> : public wxExpectModalBase<wxMessageDialog>
+template<class T>
+class wxExpectDismissableModal : public wxExpectModalBase<T>
 {
 public:
-    wxExpectModal(int id)
+    explicit wxExpectDismissableModal(int id)
     {
         switch ( id )
         {
@@ -147,12 +147,32 @@ public:
     }
 
 protected:
-    virtual int OnInvoked(wxMessageDialog *WXUNUSED(dlg)) const
+    virtual int OnInvoked(T *WXUNUSED(dlg)) const
     {
         return m_id;
     }
 
     int m_id;
+};
+
+template<>
+class wxExpectModal<wxMessageDialog>
+    : public wxExpectDismissableModal<wxMessageDialog>
+{
+public:
+    explicit wxExpectModal(int id)
+        : wxExpectDismissableModal<wxMessageDialog>(id)
+    {
+    }
+};
+
+class wxExpectAny : public wxExpectDismissableModal<wxDialog>
+{
+public:
+    explicit wxExpectAny(int id)
+        : wxExpectDismissableModal<wxDialog>(id)
+    {
+    }
 };
 
 #if wxUSE_FILEDLG
