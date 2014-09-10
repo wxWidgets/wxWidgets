@@ -21,6 +21,8 @@ public:
     virtual ~wxTaskBarButtonImpl();
 
     virtual void SetProgressValue(int value) wxOVERRIDE;
+    virtual void ShowInTaskbar() wxOVERRIDE;
+    virtual void HideInTaskbar() wxOVERRIDE;
 
 private:
     friend class wxTopLevelWindowMSW;
