@@ -262,11 +262,15 @@ wxString wxAssocQueryString(ASSOCSTR assoc,
                     &dwSize             // And its size
                  );
 
-    // Do not use FAILED() here as S_FALSE can be returned but is still an
-    // error in this context.
+    // Do not use SUCCEEDED() here as S_FALSE could, in principle, be returned
+    // but would still be an error in this context.
     if ( hr != S_OK )
     {
-        wxLogApiError("AssocQueryString", hr);
+        // The only really expected error here is that no association is
+        // defined, anything else is not expected.
+        if ( hr != HRESULT_FROM_WIN32(ERROR_NO_ASSOCIATION) )
+            wxLogApiError("AssocQueryString", hr);
+
         return wxString();
     }
 
