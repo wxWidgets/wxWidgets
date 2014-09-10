@@ -351,11 +351,11 @@ public:
         Constructs the wxAppProgressIndicator.
 
         @param parent
-            The parent window handle of wxAppProgressIndicator. Note that the
+            The parent window of wxAppProgressIndicator. Note that the
             window should has taskbar button showing.
         @param maxValue
     */
-    wxAppProgressIndicator(WXWidget parent, int maxValue);
+    wxAppProgressIndicator(wxWindow* parent, int maxValue);
     virtual ~wxAppProgressIndicator();
 
     /**
