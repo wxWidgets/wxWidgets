@@ -145,6 +145,30 @@ public:
     bool Char(int keycode, int modifiers = wxMOD_NONE);
 
     /**
+        Simulate selection of an item with the given text.
+
+        This method selects an item in the currently focused wxChoice,
+        wxComboBox, wxListBox and similar controls. It does it by simulating
+        keyboard events, so the behaviour should be the same as if the item
+        was really selected by the user.
+
+        Notice that the implementation of this method uses wxYield() and so
+        events can be dispatched from it.
+
+        @param text
+            The text of the item to select.
+
+        @return
+            @true if the item @a text was successfully selected or @false if
+            the currently focused window is not one of the controls allowing
+            item selection or if the item with the given text was not found in
+            it.
+
+        @since 3.1.0
+     */
+    bool Select(const wxString& text);
+
+    /**
         Emulate typing in the keys representing the given string.
 
         Currently only the ASCII letters, digits and characters for the definition

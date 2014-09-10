@@ -16,6 +16,15 @@
 
 #include "wx/uiaction.h"
 
+#include "wx/ctrlsub.h"
+
+#ifdef wxNO_RTTI
+    #include "wx/choice.h"
+    #include "wx/combobox.h"
+    #include "wx/listbox.h"
+#endif // wxNO_RTTI
+
+
 bool wxUIActionSimulator::MouseClick(int button)
 {
     MouseDown(button);
@@ -143,6 +152,66 @@ bool wxUIActionSimulator::Text(const char *s)
     }
 
     return true;
+}
+
+bool wxUIActionSimulator::Select(const wxString& text)
+{
+    wxWindow* const focus = wxWindow::FindFocus();
+    if ( !focus )
+        return false;
+
+    // We can only select something in controls inheriting from
+    // wxItemContainer, so check that we have it.
+#ifdef wxNO_RTTI
+    wxItemContainer* container = NULL;
+
+    if ( wxComboBox* combo = wxDynamicCast(focus, wxComboBox) )
+        container = combo;
+    else if ( wxChoice* choice = wxDynamicCast(focus, wxChoice) )
+        container = choice;
+    else if ( wxListBox* listbox = wxDynamicCast(focus, wxListBox) )
+        container = listbox;
+#else // !wxNO_RTTI
+    wxItemContainer* const container = dynamic_cast<wxItemContainer*>(focus);
+#endif // wxNO_RTTI/!wxNO_RTTI
+
+    if ( !container )
+        return false;
+
+    // We prefer to exactly emulate what a (keyboard) user would do, so prefer
+    // to emulate selecting the first item of the control if possible (this
+    // works with wxChoice, wxListBox and wxComboBox with wxCB_READONLY style
+    // under MSW).
+    if ( container->GetSelection() != 0 )
+    {
+        Char(WXK_HOME);
+        wxYield();
+
+        // But if this didn't work, set the selection programmatically.
+        if ( container->GetSelection() != 0 )
+            container->SetSelection(0);
+    }
+
+    // And then go down in the control until we reach the item we want.
+    for ( ;; )
+    {
+        if ( container->GetStringSelection() == text )
+            return true;
+
+        // We could test if the selection becomes equal to its maximal value
+        // (i.e. GetCount() - 1), but if, for some reason, pressing WXK_DOWN
+        // doesn't move it, this would still result in an infinite loop, so
+        // check that the selection changed for additional safety.
+        const int current = container->GetSelection();
+
+        Char(WXK_DOWN);
+        wxYield();
+
+        if ( container->GetSelection() == current )
+            break;
+    }
+
+    return false;
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR

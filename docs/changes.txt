@@ -79,6 +79,7 @@ All (GUI):
 - Fix drawing custom colours of wxEnumProperty items in wxPG (Artur Wieczorek).
 - Add wxBitmap ctor from wxCursor.
 - Always disable wxWizard "Back" button on the starting page (pmgrace30).
+- Add wxUIActionSimulator::Select().
 
 wxGTK:
 

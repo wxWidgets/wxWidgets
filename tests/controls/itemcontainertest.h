@@ -39,7 +39,8 @@ protected:
         CPPUNIT_TEST( VoidData ); \
         CPPUNIT_TEST( Set ); \
         CPPUNIT_TEST( SetSelection ); \
-        CPPUNIT_TEST( SetString )
+        CPPUNIT_TEST( SetString ); \
+        WXUISIM_TEST( SimSelect );
 
     void Append();
     void Insert();
@@ -51,6 +52,7 @@ protected:
     void Set();
     void SetSelection();
     void SetString();
+    void SimSelect();
 
 private:
     wxDECLARE_NO_COPY_CLASS(ItemContainerTestCase);
