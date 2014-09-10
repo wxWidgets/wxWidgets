@@ -16,6 +16,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
+    #include "wx/toplevel.h"
 #endif
 
 #if wxUSE_TASKBARBUTTON
@@ -23,11 +24,14 @@
 #include "wx/msw/private.h"
 #include "wx/taskbarbutton.h"
 
-#include <Propvarutil.h>
-#include <propsys.h>
-#include <propkey.h>
-#include <Objectarray.h>
+#include <shlwapi.h>
 #include <initguid.h>
+
+WINOLEAPI PropVariantClear(PROPVARIANT* pvar);
+
+#ifndef PropVariantInit
+#define PropVariantInit(pvar) memset ( (pvar), 0, sizeof(PROPVARIANT) )
+#endif
 
 namespace {
 
@@ -46,6 +50,12 @@ DEFINE_GUID(wxIID_ICustomDestinationList,
     0x6332debf, 0x87b5, 0x4670, 0x90, 0xc0, 0x5e, 0x57, 0xb4, 0x08, 0xa4, 0x9e);
 DEFINE_GUID(wxIID_ITaskbarList3,
     0xea1afb91, 0x9e28, 0x4b86, 0x90, 0xe9, 0x9e, 0x9f, 0x8a, 0x5e, 0xef, 0xaf);
+DEFINE_GUID(wxIID_IPropertyStore,
+    0x886d8eeb, 0x8cf2, 0x4446, 0x8d, 0x02, 0xcd, 0xba, 0x1d, 0xbd, 0xcf, 0x99);
+DEFINE_GUID(wxIID_IObjectArray,
+    0x92ca9dcd, 0x5622, 0x4bba, 0xa8, 0x05, 0x5e, 0x9f, 0x54, 0x1b, 0xd8, 0xc9);
+DEFINE_GUID(wxIID_IObjectCollection,
+    0x5632b1a4, 0xe38a, 0x400a, 0x92, 0x8a, 0xd4, 0xcd, 0x63, 0x23, 0x02, 0x95);
 
 typedef IUnknown *HIMAGELIST;
 
@@ -88,10 +98,30 @@ typedef enum TBPFLAG
     TBPF_PAUSED = 0x8
 } TBPFLAG;
 
+typedef struct _tagpropertykey
+{
+    GUID fmtid;
+    DWORD pid;
+} PROPERTYKEY;
+
+#define REFPROPERTYKEY const PROPERTYKEY &
+
+typedef struct tagPROPVARIANT PROPVARIANT;
+#define REFPROPVARIANT const PROPVARIANT &
+
+#define DEFINE_PROPERTYKEY(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8, pid) \
+    const PROPERTYKEY name  = \
+    { { l, w1, w2, { b1, b2, b3, b4, b5, b6, b7, b8 } }, pid }
+
+DEFINE_PROPERTYKEY(PKEY_Title,
+    0xf29f85e0, 0x4ff9, 0x1068, 0xab, 0x91, 0x08, 0x00, 0x2b, 0x27, 0xb3, 0xd9, 2);
+DEFINE_PROPERTYKEY(PKEY_AppUserModel_IsDestListSeparator,
+    0x9f4c2855, 0x9f79, 0x4b39, 0xa8, 0xd0, 0xe1, 0xd4, 0x2d, 0xe1, 0xd5, 0xf3, 6);
+
 class ITaskbarList : public IUnknown
 {
 public:
-    virtual HRESULT wxSTDCALL HrInit( ) = 0;
+    virtual HRESULT wxSTDCALL HrInit() = 0;
     virtual HRESULT wxSTDCALL AddTab(HWND) = 0;
     virtual HRESULT wxSTDCALL DeleteTab(HWND) = 0;
     virtual HRESULT wxSTDCALL ActivateTab(HWND) = 0;
@@ -126,8 +156,8 @@ class IShellLinkA : public IUnknown
 {
 public:
     virtual HRESULT wxSTDCALL GetPath(LPSTR, int, WIN32_FIND_DATAA*, DWORD) = 0;
-    virtual HRESULT wxSTDCALL GetIDList(PIDLIST_ABSOLUTE*) = 0;
-    virtual HRESULT wxSTDCALL SetIDList(PCIDLIST_ABSOLUTE) = 0;
+    virtual HRESULT wxSTDCALL GetIDList(LPITEMIDLIST *ppidl) = 0;
+    virtual HRESULT wxSTDCALL SetIDList(LPCITEMIDLIST pidl) = 0;
     virtual HRESULT wxSTDCALL GetDescription(LPSTR, int) = 0;
     virtual HRESULT wxSTDCALL SetDescription(LPCSTR) = 0;
     virtual HRESULT wxSTDCALL GetWorkingDirectory(LPSTR, int) = 0;
@@ -149,8 +179,8 @@ class IShellLinkW : public IUnknown
 {
 public:
     virtual HRESULT wxSTDCALL GetPath(LPWSTR, int, WIN32_FIND_DATAW*, DWORD) = 0;
-    virtual HRESULT wxSTDCALL GetIDList(PIDLIST_ABSOLUTE*) = 0;
-    virtual HRESULT wxSTDCALL SetIDList(PCIDLIST_ABSOLUTE) = 0;
+    virtual HRESULT wxSTDCALL GetIDList(LPITEMIDLIST *ppidl) = 0;
+    virtual HRESULT wxSTDCALL SetIDList(LPCITEMIDLIST pidl) = 0;
     virtual HRESULT wxSTDCALL GetDescription(LPWSTR, int) = 0;
     virtual HRESULT wxSTDCALL SetDescription(LPCWSTR) = 0;
     virtual HRESULT wxSTDCALL GetWorkingDirectory(LPWSTR, int) = 0;
@@ -178,6 +208,32 @@ DEFINE_GUID(wxIID_IShellLink,
     0x000214EE, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 #endif
 
+class IObjectArray : public IUnknown
+{
+public:
+    virtual HRESULT wxSTDCALL GetCount(UINT*) = 0;
+    virtual HRESULT wxSTDCALL GetAt(UINT, REFIID, void **) = 0;
+};
+
+class IObjectCollection : public IObjectArray
+{
+public:
+    virtual HRESULT wxSTDCALL AddObject(IUnknown *) = 0;
+    virtual HRESULT wxSTDCALL AddFromArray(IObjectArray *) = 0;
+    virtual HRESULT wxSTDCALL RemoveObjectAt(UINT) = 0;
+    virtual HRESULT wxSTDCALL Clear() = 0;
+};
+
+class IPropertyStore : public IUnknown
+{
+public:
+    virtual HRESULT wxSTDCALL GetCount(DWORD *) = 0;
+    virtual HRESULT wxSTDCALL GetAt(DWORD, PROPERTYKEY *) = 0;
+    virtual HRESULT wxSTDCALL GetValue(REFPROPERTYKEY, PROPVARIANT *) = 0;
+    virtual HRESULT wxSTDCALL SetValue(REFPROPERTYKEY, REFPROPVARIANT) = 0;
+    virtual HRESULT wxSTDCALL Commit() = 0;
+};
+
 typedef enum KNOWNDESTCATEGORY
 {
     KDC_FREQUENT	= 1,
@@ -197,6 +253,24 @@ public:
     virtual HRESULT wxSTDCALL DeleteList(LPCWSTR) = 0;
     virtual HRESULT wxSTDCALL AbortList() = 0;
 };
+
+inline HRESULT InitPropVariantFromBoolean(BOOL fVal, PROPVARIANT *ppropvar)
+{
+    ppropvar->vt = VT_BOOL;
+    ppropvar->boolVal = fVal ? VARIANT_TRUE : VARIANT_FALSE;
+    return S_OK;
+}
+
+inline HRESULT InitPropVariantFromString(PCWSTR psz, PROPVARIANT *ppropvar)
+{
+    ppropvar->vt = VT_LPWSTR;
+    HRESULT hr = SHStrDupW(psz, &ppropvar->pwszVal);
+    if (FAILED(hr))
+    {
+        PropVariantInit(ppropvar);
+    }
+    return hr;
+}
 
 THUMBBUTTONFLAGS GetNativeThumbButtonFlags(const wxThumbBarButton& button)
 {
@@ -247,7 +321,7 @@ bool AddShellLink(IObjectCollection *collection, const wxJumpListItem& item)
             shellLink->SetDescription(item.GetTooltip().wc_str());
     }
 
-    hr = shellLink->QueryInterface(IID_IPropertyStore,
+    hr = shellLink->QueryInterface(wxIID_IPropertyStore,
                                    reinterpret_cast<void**>(&(propertyStore)));
     if ( FAILED(hr) )
     {
@@ -790,7 +864,7 @@ bool wxJumpList::BeginUpdate()
 
     unsigned int max_count = 0;
     HRESULT hr = m_destinationList->BeginList(&max_count,
-                                              IID_IObjectArray,
+                                              wxIID_IObjectArray,
                                               reinterpret_cast<void**>(&(m_objectArray)));
     return SUCCEEDED(hr);
 }
@@ -812,7 +886,7 @@ void wxJumpList::AddTasksToDestinationList()
              wxCLSID_EnumerableObjectCollection,
              NULL,
              CLSCTX_INPROC,
-             IID_IObjectCollection,
+             wxIID_IObjectCollection,
              reinterpret_cast<void**>(&(collection))
          );
     if ( FAILED(hr) )
@@ -822,7 +896,7 @@ void wxJumpList::AddTasksToDestinationList()
         return;
     }
 
-    hr = collection->QueryInterface(IID_IObjectArray,
+    hr = collection->QueryInterface(wxIID_IObjectArray,
                                     reinterpret_cast<void**>(&(objectArray)));
     for ( wxJumpListItems::const_iterator iter = m_tasks.begin();
           iter != m_tasks.end();

@@ -20,9 +20,9 @@
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_FWD_CORE wxTaskBarButton;
-struct WXDLLIMPEXP_FWD_CORE IObjectArray;
 
 namespace {
+class WXDLLIMPEXP_FWD_CORE IObjectArray;
 class WXDLLIMPEXP_FWD_CORE ICustomDestinationList;
 }
 
