@@ -32,12 +32,18 @@ public:
         const wxString& description = wxString()) wxOVERRIDE;
     virtual void SetThumbnailClip(const wxRect& rect) wxOVERRIDE;
     virtual void SetThumbnailContents(const wxWindow *child) wxOVERRIDE;
-    virtual bool AddThumbBarButton(wxThumbBarButton *button) wxOVERRIDE;
-    virtual void ShowThumbnailToolbar() wxOVERRIDE;
+    virtual bool InsertThumbBarButton(size_t pos,
+                                      wxThumbBarButton *button) wxOVERRIDE;
+    virtual bool AppendThumbBarButton(wxThumbBarButton *button) wxOVERRIDE;
+    virtual bool RemoveThumbBarButton(wxThumbBarButton *button) wxOVERRIDE;
+    virtual bool RemoveThumbBarButton(int id) wxOVERRIDE;
 
 private:
     friend class wxFrame;
     wxTaskBarButtonImpl(WXWidget parent);
+
+    bool InitOrUpdateThumbBarButtons();
+    int GetThumbBarButtonID(size_t index);
 
     WXWidget m_hwnd;
     ITaskbarList3 *m_taskbarList;
@@ -46,8 +52,7 @@ private:
     wxThumbBarButtons m_thumbBarButtons;
 
     int m_progressRange;
-
-    bool m_hasShownThumbnailToolbar;
+    bool m_hasInitThumbnailToolbar;
 };
 
 #endif // wxUSE_TASKBARBUTTON

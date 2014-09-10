@@ -13,6 +13,8 @@
 
 #if wxUSE_TASKBARBUTTON
 
+#include "wx/defs.h"
+
 // ----------------------------------------------------------------------------
 // wxTaskBarButton: define wxTaskBarButton interface.
 // ----------------------------------------------------------------------------
@@ -33,18 +35,33 @@ class WXDLLIMPEXP_ADV wxThumbBarButton {
 public:
     wxThumbBarButton(int id,
                      const wxIcon& icon,
-                     const wxString& tooltip = wxString());
+                     const wxString& tooltip = wxString(),
+                     bool enable = true,
+                     bool dismissOnClick = false,
+                     bool hasBackground = true,
+                     bool shown = true,
+                     bool interactive = true);
 
     virtual ~wxThumbBarButton() {}
 
     int GetID() const { return m_id; }
     const wxIcon& GetIcon() const { return m_icon; }
     const wxString& GetTooltip() const { return m_tooltip; }
+    bool IsEnable() const { return m_enable; }
+    bool IsDismissOnClick() const { return m_dismissOnClick; }
+    bool HasBackground() const { return m_hasBackground; }
+    bool IsShown() const { return m_shown; }
+    bool IsInteractive() const { return m_interactive; }
 
 private:
     int m_id;
     wxIcon m_icon;
     wxString m_tooltip;
+    bool m_enable;
+    bool m_dismissOnClick;
+    bool m_hasBackground;
+    bool m_shown;
+    bool m_interactive;
 };
 
 class WXDLLIMPEXP_ADV wxTaskBarButton
@@ -65,16 +82,10 @@ public:
                                 const wxString& description = wxString()) = 0;
     virtual void SetThumbnailClip(const wxRect& rect) = 0;
     virtual void SetThumbnailContents(const wxWindow *child) = 0;
-
-    /**
-        Adds a thumbnail toolbar button to the thumbnail image of a window in
-        the taskbar button flyout. Note that a wxTaskbarButton can only have no
-        more than seven wxThumbBarButtons, and ShowThumbnailToolbar should be
-        called to show them, then these buttons cannot be added or removed until
-        the window is re-created.
-    */
-    virtual bool AddThumbBarButton(wxThumbBarButton *button) = 0;
-    virtual void ShowThumbnailToolbar() = 0;
+    virtual bool InsertThumbBarButton(size_t pos, wxThumbBarButton *button) = 0;
+    virtual bool AppendThumbBarButton(wxThumbBarButton *button) = 0;
+    virtual bool RemoveThumbBarButton(wxThumbBarButton *button) = 0;
+    virtual bool RemoveThumbBarButton(int id) = 0;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxTaskBarButton);
