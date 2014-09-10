@@ -131,23 +131,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxTaskBarButton);
 };
 
-class WXDLLIMPEXP_CORE wxAppProgressIndicator
-{
-public:
-    wxAppProgressIndicator(wxWindow* parent = NULL, int maxValue = 100);
-    virtual ~wxAppProgressIndicator();
-    void SetValue(int value);
-    void SetRange(int range);
-    void Pulse();
-    void Reset();
-
-private:
-    int m_maxValue;
-    wxTaskBarButton* m_taskBarButton;
-
-    wxDECLARE_NO_COPY_CLASS(wxAppProgressIndicator);
-};
-
 enum wxTaskBarJumpListItemType
 {
     wxTASKBAR_JUMP_LIST_SEPARATOR,

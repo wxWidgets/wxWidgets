@@ -15,9 +15,7 @@
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxGaugeNameStr[];
 
-#if wxUSE_TASKBARBUTTON
 class WXDLLIMPEXP_FWD_CORE wxAppProgressIndicator;
-#endif
 
 // Group box
 class WXDLLIMPEXP_CORE wxGauge : public wxGaugeBase
@@ -75,9 +73,7 @@ private:
     void SetIndeterminateMode();
     void SetDeterminateMode();
 
-#if wxUSE_TASKBARBUTTON
     wxAppProgressIndicator* m_appProgressIndicator;
-#endif
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge)
 };

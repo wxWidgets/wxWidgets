@@ -1097,6 +1097,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/access.h
     wx/anidecod.h
     wx/animdecod.h
+    wx/appprog.h
     wx/artprov.h
     wx/bitmap.h
     wx/bookctrl.h
@@ -1186,6 +1187,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/splitter.h
     wx/srchctrl.h
     wx/statline.h
+    wx/taskbarbutton.h
     wx/tbarbase.h
     wx/tglbtn.h
     wx/tipwin.h
@@ -1204,7 +1206,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xpmdecod.h
     wx/xpmhand.h
     wx/xrc/xmlreshandler.h
-    wx/taskbarbutton.h
 </set>
 
 <!-- ====================================================================== -->
@@ -1954,6 +1955,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/accel.cpp
     src/msw/anybutton.cpp
     src/msw/artmsw.cpp
+    src/msw/appprog.cpp
     src/msw/bmpbuttn.cpp
     src/msw/button.cpp
     src/msw/checkbox.cpp
@@ -1997,12 +1999,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/statusbar.cpp
     src/msw/statline.cpp
     src/msw/stattext.cpp
+    src/msw/taskbarbutton.cpp
     src/msw/toolbar.cpp
     src/msw/textctrl.cpp
     src/msw/textentry.cpp
     src/msw/tglbtn.cpp
     src/msw/treectrl.cpp
-    src/msw/taskbarbutton.cpp
 </set>
 <set var="MSW_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -2090,6 +2092,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/statusbar.h
     wx/msw/statline.h
     wx/msw/stattext.h
+    wx/msw/taskbarbutton.h
     wx/msw/toolbar.h
     wx/msw/textctrl.h
     wx/msw/textentry.h
@@ -2098,7 +2101,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/toplevel.h
     wx/msw/treectrl.h
     wx/msw/window.h
-    wx/msw/taskbarbutton.h
 </set>
 <set var="MSW_RSC" hints="files">
     <!-- Resources must be installed together with headers: -->

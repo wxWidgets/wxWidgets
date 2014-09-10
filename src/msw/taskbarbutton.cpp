@@ -939,46 +939,6 @@ wxThumbBarButton* wxTaskBarButtonImpl::GetThumbBarButtonByIndex(size_t index)
 }
 
 // ----------------------------------------------------------------------------
-// wxAppProgressIndicator Implementation.
-// ----------------------------------------------------------------------------
-wxAppProgressIndicator::wxAppProgressIndicator(wxWindow* parent, int maxValue)
-    : m_maxValue(maxValue),
-      m_taskBarButton(new wxTaskBarButtonImpl(parent))
-{
-    Reset();
-    SetRange(m_maxValue);
-}
-
-wxAppProgressIndicator::~wxAppProgressIndicator()
-{
-    m_taskBarButton->SetProgressState(wxTASKBAR_BUTTON_NO_PROGRESS);
-    delete m_taskBarButton;
-}
-
-void wxAppProgressIndicator::SetValue(int value)
-{
-    wxASSERT_MSG( value <= m_maxValue, wxT("invalid progress value") );
-
-    m_taskBarButton->SetProgressValue(value);
-}
-
-void wxAppProgressIndicator::SetRange(int range)
-{
-    m_maxValue = range;
-    m_taskBarButton->SetProgressRange(range);
-}
-
-void wxAppProgressIndicator::Pulse()
-{
-    m_taskBarButton->PulseProgress();
-}
-
-void wxAppProgressIndicator::Reset()
-{
-    m_taskBarButton->SetProgressState(wxTASKBAR_BUTTON_NO_PROGRESS);
-}
-
-// ----------------------------------------------------------------------------
 // wxTaskBarJumpListItem Implementation.
 // ----------------------------------------------------------------------------
 wxTaskBarJumpListItem::wxTaskBarJumpListItem(wxTaskBarJumpListCategory *parent,
