@@ -202,7 +202,7 @@ public:
     virtual void SetProgressRange(int range);
 
     /**
-        Update the determinate progress indicator.
+        Update the progress indicator, setting the progress to the new value .
 
         @param value Must be in the range from 0 to the argument to the last
         SetProgressRange() call. When it is equal to the range, the progress
@@ -211,7 +211,7 @@ public:
     virtual void SetProgressValue(int value);
 
     /**
-        Updates indeterminate progress indicator.
+        Makes the progress indicator run in indeterminate mode.
 
         The first call to this method starts showing the indeterminate progress
         indicator if it hadn't been shown yet.
@@ -326,4 +326,299 @@ public:
             button.
     */
     virtual wxThumbBarButton* RemoveThumbBarButton(int id);
+};
+
+/**
+    @class wxAppProgressIndicator
+        A helper class that can be used to update the progress bar in the
+        taskbar button.
+
+    @library{wxcore}
+    @category{misc}
+
+    @onlyfor{wxmsw}
+
+    @see wxTaskBarButton
+*/
+class WXDLLIMPEXP_CORE wxAppProgressIndicator
+{
+public:
+    /**
+        Constructs the wxAppProgressIndicator.
+
+        @param parent
+            The parent window of wxAppProgressIndicator.
+        @param maxValue
+    */
+    wxAppProgressIndicator(wxTopLevelWindow *parent, int maxValue);
+    virtual ~wxAppProgressIndicator();
+
+    /**
+        Updates the progress in taskbar button of parent window.
+
+        @param value
+            The new value of the progress meter. It should be less than or equal
+            to the maximum value given to the constructor.
+     */
+    bool Update(int value);
+
+    /**
+        Like Update() but makes the progress bar run in indeterminate mode.
+    */
+    bool Pulse();
+};
+
+/**
+    Type of jump list item.
+*/
+enum WXDLLIMPEXP_CORE wxTaskBarJumpListItemType
+{
+    /* A separator, Only tasks category supports separators. */
+    wxTASKBAR_JUMP_LIST_SEPARATOR,
+
+    /* A task, represents a link to application. */
+    wxTASKBAR_JUMP_LIST_TASK,
+
+    /* Item acts as a link to a file that the application can open. */
+    wxTASKBAR_JUMP_LIST_DESTIONATION
+};
+
+/**
+    @class wxTaskBarJumpListItem
+
+    A wxTaskBarJumpListItem represents an item in a jump list category.
+
+    @library{wxcore}
+    @category{misc}
+
+    @onlyfor{wxmsw}
+*/
+class WXDLLIMPEXP_CORE wxTaskBarJumpListItem
+{
+public:
+    /**
+        Constructs a jump list item.
+
+        @param type
+            The type for this item.
+        @param title
+            The title of this item.
+        @param filePath
+            The filePath of this item, the meaning of which depends on the type
+            of this item: If the item type is wxTASKBAR_JUMP_LIST_DESTIONATION,
+            filePath is the path to a file that can be opened by an application.
+            If the item type is wxTASKBAR_JUMP_LIST_TASK, filePath is the path
+            to an executable that is executed when this item is clicked by the
+            user.
+        @param arguments
+            The command-line arguments of this item.
+        @param tooltip
+            The description tooltip of this item.
+        @param iconPath
+            The path to the file containing the icon.
+        @param iconIndex
+            The index of the icon, which is specified by iconPath.
+    */
+    wxTaskBarJumpListItem(wxTaskBarJumpListItemType type,
+                   const wxString& title = wxEmptyString,
+                   const wxString& filePath = wxEmptyString,
+                   const wxString& arguments = wxEmptyString,
+                   const wxString& tooltip = wxEmptyString,
+                   const wxString& iconPath = wxEmptyString,
+                   int iconIndex = 0);
+
+    /**
+        Returns the type of this item.
+    */
+    wxTaskBarJumpListItemType GetType() const;
+
+    /**
+        Sets the type of this item.
+    */
+    void SetType(wxTaskBarJumpListItemType type);
+
+    /**
+        Returns the title of this item.
+    */
+    const wxString& GetTitle() const;
+
+    /**
+        Sets the title of this item.
+    */
+    void SetTitle(const wxString& title);
+
+    /**
+        Returns the file path of this item.
+    */
+    const wxString& GetFilePath() const;
+
+    /**
+        Sets the file path of this item.
+    */
+    void SetFilePath(const wxString& filePath);
+
+    /**
+        Returns the command-line arguments of this item.
+    */
+    const wxString& GetArguments() const;
+
+    /**
+        Sets the command-line arguments of this item.
+    */
+    void SetArguments(const wxString& arguments);
+
+    /**
+        Returns the description tooltip of this item.
+    */
+    const wxString& GetTooltip() const;
+
+    /**
+        Sets the description tooltip of this item.
+    */
+    void SetTooltip(const wxString& tooltip);
+
+    /**
+        Returns the icon path of this item.
+    */
+    const wxString& GetIconPath() const;
+
+    /**
+        Sets the icon path of this item.
+    */
+    void SetIconPath(const wxString& iconPath);
+
+    /**
+        Returns the icon index of icon in this item.
+    */
+    int GetIconIndex() const;
+
+    /**
+        Sets the icon index of icon in this item.
+    */
+    void SetIconIndex(int iconIndex);
+};
+
+/**
+    A vector of wxTaskBarJumpListItem pointers.
+*/
+typedef wxVector<wxTaskBarJumpListItem*> wxTaskBarJumpListItems;
+
+/**
+    @class wxTaskBarJumpListCategory
+
+    This class represents a category of jump list in the taskbar button. There
+    are four kinds of categories in Windows: Recent, Frequent, Tasks and
+    custom.
+
+    @library{wxcore}
+    @category{misc}
+
+    @onlyfor{wxmsw}
+
+    @see wxTaskBarJumpList, wxTaskBarJumpListItem
+*/
+class WXDLLIMPEXP_CORE wxTaskBarJumpListCategory
+{
+public:
+    /**
+        Constructs the jump list category.
+
+        @param title
+            The title of the category.
+    */
+    wxTaskBarJumpListCategory(const wxString& title = wxEmptyString);
+    virtual ~wxTaskBarJumpListCategory();
+
+    /**
+        Append a jump list item.
+
+        @param item
+            The jump list item to be appended. It will be owned by the 
+            wxTaskBarJumpListCategory object after this function is called, so
+            do not delete it yourself.
+
+        @see Insert(), Prepend()
+    */
+    wxTaskBarJumpListItem* Append(wxTaskBarJumpListItem *item);
+
+    /**
+        Delete the jump list item from the category.
+
+        @param item
+            The jump list item to be deleted.
+
+        @see Remove()
+    */
+    void Delete(wxTaskBarJumpListItem *item);
+
+    /**
+        Removes the jump list item from the category but doesn't delete the
+        associated C++ object.
+
+        @param item
+            The jump list item to be removed.
+    */
+    wxTaskBarJumpListItem* Remove(wxTaskBarJumpListItem *item);
+
+    /**
+        Returns the wxTaskBarJumpListItem given a position in the category.
+    */
+    wxTaskBarJumpListItem* FindItemByPosition(size_t pos) const;
+
+    /**
+        Inserts the given item before the position pos.
+
+        @see Append(), Prepend()
+    */
+    wxTaskBarJumpListItem* Insert(size_t pos, wxTaskBarJumpListItem *item);
+
+    /**
+        Inserts the given item at position 0, i.e. before all the other existing
+        items.
+
+        @see Append(), Insert();
+    */
+    wxTaskBarJumpListItem* Prepend(wxTaskBarJumpListItem *item);
+
+    /**
+        Set the title of the category.
+    */
+    void SetTitle(const wxString& title);
+
+    /**
+        Get the title of the category.
+    */
+    const wxString& GetTitle() const;
+
+    /**
+        Get the jump list items of the category.
+    */
+    const wxTaskBarJumpListItems& GetItems() const;
+};
+
+/**
+    A vector of wxTaskBarJumpListCategory pointers.
+*/
+typedef wxVector<wxTaskBarJumpListCategory*> wxTaskBarJumpListCategories;
+
+class WXDLLIMPEXP_CORE wxTaskBarJumpList
+{
+public:
+    wxTaskBarJumpList(const wxString& appID = wxEmptyString);
+    virtual ~wxTaskBarJumpList();
+    void ShowRecentCategory(bool shown = true);
+    void HideRecentCategory();
+    void ShowFrequentCategory(bool shown = true);
+    void HideFrequentCategory();
+
+    wxTaskBarJumpListCategory& GetTasks() const;
+    const wxTaskBarJumpListCategory& GetFrequentCategory() const;
+    const wxTaskBarJumpListCategory& GetRecentCategory() const;
+    const wxTaskBarJumpListCategories& GetCustomCategories() const;
+
+    void AddCustomCategory(wxTaskBarJumpListCategory* category);
+    wxTaskBarJumpListCategory* RemoveCustomCategory(const wxString& title);
+    void DeleteCustomCategory(const wxString& title);
+
+    void Update();
 };
