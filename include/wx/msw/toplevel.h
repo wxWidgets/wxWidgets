@@ -11,8 +11,6 @@
 #ifndef _WX_MSW_TOPLEVEL_H_
 #define _WX_MSW_TOPLEVEL_H_
 
-class WXDLLIMPEXP_FWD_ADV wxTaskBarButton;
-
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowMSW
 // ----------------------------------------------------------------------------
@@ -139,17 +137,6 @@ public:
     virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu);
 #endif // wxUSE_MENUS && !__WXUNIVERSAL__
 
-#if wxUSE_TASKBARBUTTON
-    // Return the taskbar button of the window.
-    //
-    // The pointer returned by this method belongs to the window and will be
-    // deleted when the window itself is, do not delete it yourself. May return
-    // NULL if the initialization of taskbar button failed.
-    wxTaskBarButton* MSWGetTaskBarButton();
-
-    bool HandleTHBNClickedCommand(WXWORD id);
-#endif // wxUSE_TASKBARBUTTON
-
 protected:
     // common part of all ctors
     void Init();
@@ -267,10 +254,6 @@ private:
     // The number of currently opened menus: 0 initially, 1 when a top level
     // menu is opened, 2 when its submenu is opened and so on.
     int m_menuDepth;
-
-#if wxUSE_TASKBARBUTTON
-    wxTaskBarButton *m_taskBarButton;
-#endif
 
     DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxTopLevelWindowMSW);
