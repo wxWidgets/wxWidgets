@@ -31,7 +31,7 @@ public:
     virtual void SetOverlayIcon(const wxIcon& icon,
         const wxString& description = wxString()) wxOVERRIDE;
     virtual void SetThumbnailClip(const wxRect& rect) wxOVERRIDE;
-    virtual void SetThumbnailContents(const wxWindow* child) wxOVERRIDE;
+    virtual void SetThumbnailContents(const wxWindow *child) wxOVERRIDE;
     virtual bool AddThumbBarButton(wxThumbBarButton *button) wxOVERRIDE;
     virtual void ShowThumbnailToolbar() wxOVERRIDE;
 

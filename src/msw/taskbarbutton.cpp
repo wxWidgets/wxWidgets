@@ -126,7 +126,7 @@ void wxTaskBarButtonImpl::SetThumbnailClip(const wxRect& rect)
     m_taskbarList->SetThumbnailClip(m_hwnd, rect.IsEmpty() ? NULL : &rc);
 }
 
-void wxTaskBarButtonImpl::SetThumbnailContents(const wxWindow* child)
+void wxTaskBarButtonImpl::SetThumbnailContents(const wxWindow *child)
 {
     SetThumbnailClip(child->GetRect());
 }
