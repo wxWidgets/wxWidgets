@@ -716,6 +716,9 @@
 				RelativePath="..\..\src\msw\app.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\msw\appprogress.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\msw\artmsw.cpp">
 			</File>
 			<File
@@ -987,6 +990,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\msw\statusbar.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\msw\taskbarbutton.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\msw\textctrl.cpp">
@@ -1575,6 +1581,9 @@
 				RelativePath="..\..\include\wx\msw\taskbar.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\taskbarbutton.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\textctrl.h">
 			</File>
 			<File
@@ -1873,6 +1882,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\anybutton.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\appprogress.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\ribbon\art.h">
@@ -2560,6 +2572,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\taskbar.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\taskbarbutton.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\tbarbase.h">
