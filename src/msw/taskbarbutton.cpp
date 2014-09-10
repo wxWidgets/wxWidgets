@@ -194,7 +194,7 @@ bool wxTaskBarButtonImpl::InsertThumbBarButton(size_t pos,
     return InitOrUpdateThumbBarButtons();
 }
 
-bool wxTaskBarButtonImpl::RemoveThumbBarButton(wxThumbBarButton *button)
+wxThumbBarButton* wxTaskBarButtonImpl::RemoveThumbBarButton(wxThumbBarButton *button)
 {
     for ( wxThumbBarButtons::iterator iter = m_thumbBarButtons.begin();
           iter != m_thumbBarButtons.end();
@@ -203,14 +203,15 @@ bool wxTaskBarButtonImpl::RemoveThumbBarButton(wxThumbBarButton *button)
         if ( button == *iter )
         {
             m_thumbBarButtons.erase(iter);
-            return InitOrUpdateThumbBarButtons();
+            InitOrUpdateThumbBarButtons();
+            return *iter;
         }
     }
 
-    return false;
+    return NULL;
 }
 
-bool wxTaskBarButtonImpl::RemoveThumbBarButton(int id)
+wxThumbBarButton* wxTaskBarButtonImpl::RemoveThumbBarButton(int id)
 {
     for ( wxThumbBarButtons::iterator iter = m_thumbBarButtons.begin();
           iter != m_thumbBarButtons.end();
@@ -219,11 +220,12 @@ bool wxTaskBarButtonImpl::RemoveThumbBarButton(int id)
         if ( id == (*iter)->GetID() )
         {
             m_thumbBarButtons.erase(iter);
-            return InitOrUpdateThumbBarButtons();
+            InitOrUpdateThumbBarButtons();
+            return *iter;
         }
     }
 
-    return false;
+    return NULL;
 }
 
 bool wxTaskBarButtonImpl::InitOrUpdateThumbBarButtons()
