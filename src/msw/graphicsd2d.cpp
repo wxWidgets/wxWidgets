@@ -1160,7 +1160,6 @@ void wxD2DPathData::AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2, wx
 // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
 void wxD2DPathData::AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise)
 {
-    static wxDouble PI = std::atan(1) * 4;
     wxPoint2DDouble center = wxPoint2DDouble(x, y);
     wxPoint2DDouble start = wxPoint2DDouble(std::cos(startAngle) * r, std::sin(startAngle) * r);
     wxPoint2DDouble end = wxPoint2DDouble(std::cos(endAngle) * r, std::sin(endAngle) * r);
