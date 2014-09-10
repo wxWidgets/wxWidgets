@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/msw/taskbarbutton.cpp
-// Purpose:     Implements wxTaskbarButtonImpl class for manipulating buttons on
+// Purpose:     Implements wxTaskBarButtonImpl class for manipulating buttons on
 //              the Windows taskbar.
 // Author:      Chaobin Zhang <zhchbin@gmail.com>
 // Created:     2014-06-01
@@ -22,7 +22,8 @@
 
 #include <Shobjidl.h>
 
-wxTaskBarButtonImpl::wxTaskBarButtonImpl(WXWidget parent) : m_hwnd(parent)
+wxTaskBarButtonImpl::wxTaskBarButtonImpl(WXWidget parent)
+    : m_hwnd(parent), m_taskbarList(NULL)
 {
     HRESULT hr = CoCreateInstance
                  (
@@ -58,6 +59,16 @@ void wxTaskBarButtonImpl::SetProgressValue(int value)
                  wxT("Invalid value, must be in the range of [0, 100].") );
 
     m_taskbarList->SetProgressValue(m_hwnd, value, 100);
+}
+
+void wxTaskBarButtonImpl::ShowInTaskbar()
+{
+    m_taskbarList->AddTab(m_hwnd);
+}
+
+void wxTaskBarButtonImpl::HideInTaskbar()
+{
+    m_taskbarList->DeleteTab(m_hwnd);
 }
 
 #endif // wxUSE_TASKBARBUTTON

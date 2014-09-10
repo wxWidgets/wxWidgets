@@ -22,6 +22,7 @@
 enum
 {
     ProgressValueSlider = wxID_HIGHEST,
+    VisibilityRadio,
 };
 
 class MyApp : public wxApp
@@ -39,8 +40,10 @@ private:
     wxDECLARE_EVENT_TABLE();
 
     void OnSetProgressValue(wxScrollEvent& WXUNUSED(event));
+    void OnVisibilityChange(wxCommandEvent& WXUNUSED(event));
 
     wxSlider *m_slider;
+    wxRadioBox *m_visibilityRadioBox;
 };
 
 IMPLEMENT_APP(MyApp)
@@ -74,7 +77,19 @@ MyFrame::MyFrame(const wxString& title)
     m_slider->SetTickFreq(10);
     spvSizer->Add(m_slider);
 
+    // Show/Hide in Taskbar section.
+    const wxString labels[] =
+    {
+        "&Show in Taskbar",
+        "&Hide in Taskbar"
+    };
+    m_visibilityRadioBox = new wxRadioBox(panel, VisibilityRadio, "Visibility:",
+                                          wxDefaultPosition, wxDefaultSize,
+                                          WXSIZEOF(labels), labels,
+                                          1, wxRA_SPECIFY_ROWS);
+
     gs->Add(spvSizer, 0, wxEXPAND);
+    gs->Add(m_visibilityRadioBox, 0, wxEXPAND);
 
     wxStaticText *text = new wxStaticText(
         panel, wxID_ANY, wxT("Welcome to wxTaskbarButton sample"));
@@ -90,9 +105,18 @@ MyFrame::MyFrame(const wxString& title)
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_COMMAND_SCROLL_CHANGED(ProgressValueSlider, MyFrame::OnSetProgressValue)
+    EVT_RADIOBOX(VisibilityRadio, MyFrame::OnVisibilityChange)
 wxEND_EVENT_TABLE()
 
 void MyFrame::OnSetProgressValue(wxScrollEvent& WXUNUSED(event))
 {
     MSWGetTaskBarButton()->SetProgressValue(m_slider->GetValue());
+}
+
+void MyFrame::OnVisibilityChange(wxCommandEvent& WXUNUSED(event))
+{
+    if ( m_visibilityRadioBox->GetSelection() == 0 )
+        MSWGetTaskBarButton()->ShowInTaskbar();
+    else
+        MSWGetTaskBarButton()->HideInTaskbar();
 }
