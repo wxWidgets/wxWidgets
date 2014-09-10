@@ -696,8 +696,8 @@ bool wxThumbBarButton::UpdateParentTaskBarButton()
 // ----------------------------------------------------------------------------
 // wxTaskBarButtonImpl Implementation.
 // ----------------------------------------------------------------------------
-wxTaskBarButtonImpl::wxTaskBarButtonImpl(WXWidget parent)
-    : m_hwnd(parent),
+wxTaskBarButtonImpl::wxTaskBarButtonImpl(wxWindow* parent)
+    : m_hwnd(parent->GetHandle()),
       m_taskbarList(NULL),
       m_progressRange(0),
       m_hasInitThumbnailToolbar(false)
@@ -941,11 +941,10 @@ wxThumbBarButton* wxTaskBarButtonImpl::GetThumbBarButtonByIndex(size_t index)
 // ----------------------------------------------------------------------------
 // wxAppProgressIndicator Implementation.
 // ----------------------------------------------------------------------------
-wxAppProgressIndicator::wxAppProgressIndicator(WXWidget parent, int maxValue)
-    : m_parent(parent),
-      m_maxValue(maxValue)
+wxAppProgressIndicator::wxAppProgressIndicator(wxWindow* parent, int maxValue)
+    : m_maxValue(maxValue),
+      m_taskBarButton(new wxTaskBarButtonImpl(parent))
 {
-    m_taskBarButton = new wxTaskBarButtonImpl(m_parent);
     Reset();
     SetRange(m_maxValue);
 }

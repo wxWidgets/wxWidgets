@@ -134,7 +134,7 @@ private:
 class WXDLLIMPEXP_CORE wxAppProgressIndicator
 {
 public:
-    wxAppProgressIndicator(WXWidget parent, int maxValue);
+    wxAppProgressIndicator(wxWindow* parent = NULL, int maxValue = 100);
     virtual ~wxAppProgressIndicator();
     void SetValue(int value);
     void SetRange(int range);
@@ -142,7 +142,6 @@ public:
     void Reset();
 
 private:
-    WXWidget m_parent;
     int m_maxValue;
     wxTaskBarButton* m_taskBarButton;
 

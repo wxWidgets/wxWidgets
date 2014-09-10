@@ -22,7 +22,7 @@ class WXDLLIMPEXP_FWD_CORE wxITaskbarList3;
 class WXDLLIMPEXP_CORE wxTaskBarButtonImpl : public wxTaskBarButton
 {
 public:
-    wxTaskBarButtonImpl(WXWidget parent);
+    wxTaskBarButtonImpl(wxWindow* parent);
     virtual ~wxTaskBarButtonImpl();
 
     virtual void SetProgressRange(int range) wxOVERRIDE;
@@ -47,7 +47,7 @@ public:
     bool InitOrUpdateThumbBarButtons();
 
 private:
-    WXWidget m_hwnd;
+    WXHWND m_hwnd;
     wxITaskbarList3 *m_taskbarList;
 
     typedef wxVector<wxThumbBarButton*> wxThumbBarButtons;

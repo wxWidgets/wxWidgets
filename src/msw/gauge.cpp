@@ -103,7 +103,7 @@ bool wxGauge::Create(wxWindow *parent,
         if ( topParent != NULL )
         {
             m_appProgressIndicator =
-                new wxAppProgressIndicator(topParent->GetHandle(), range);
+                new wxAppProgressIndicator(topParent, range);
         }
     }
 #endif
