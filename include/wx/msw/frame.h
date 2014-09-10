@@ -12,7 +12,7 @@
 #define _WX_FRAME_H_
 
 #if wxUSE_TASKBARBUTTON
-class WXDLLIMPEXP_FWD_ADV wxTaskBarButton;
+class WXDLLIMPEXP_FWD_CORE wxTaskBarButton;
 #endif
 
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
@@ -40,6 +40,9 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
+#if wxUSE_TASKBARBUTTON
+    virtual ~wxFrame();
+#endif
 
     // implement base class pure virtuals
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
@@ -179,7 +182,7 @@ private:
     bool m_wasMinimized;
 
 #if wxUSE_TASKBARBUTTON
-    wxTaskBarButton *m_taskBarButton;
+    wxTaskBarButton* m_taskBarButton;
 #endif
 
     DECLARE_EVENT_TABLE()

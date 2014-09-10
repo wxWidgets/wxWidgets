@@ -22,7 +22,7 @@
 #if wxUSE_TASKBARBUTTON
 
 #include "wx/msw/private.h"
-#include "wx/taskbarbutton.h"
+#include "wx/msw/taskbarbutton.h"
 
 #include <shlwapi.h>
 #include <initguid.h>
@@ -209,14 +209,16 @@ public:
 };
 
 #ifdef wxUSE_UNICODE
-#define IShellLink      IShellLinkW
+#define IShellLink      ::IShellLinkW
+
 DEFINE_GUID(wxIID_IShellLink,
     0x000214F9, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 #else
-#define IShellLink      IShellLinkA
+#define IShellLink      ::IShellLinkA
+
 DEFINE_GUID(wxIID_IShellLink,
     0x000214EE, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
-#endif
+#endif  // wxUSE_UNICODE
 
 
 typedef enum _SIGDN
