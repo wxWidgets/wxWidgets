@@ -93,6 +93,8 @@ public:
     int HitTest(const wxPoint& pt) const { return DoHitTestList(pt); }
     int HitTest(wxCoord x, wxCoord y) const { return DoHitTestList(wxPoint(x, y)); }
 
+    virtual void EnsureVisible(int n);
+
     // ownerdrawn wxListBox and wxCheckListBox support
 #if wxUSE_OWNER_DRAWN
     // override base class virtuals

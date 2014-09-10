@@ -102,6 +102,7 @@ wxMSW:
 - Add wxThread::MSWGetHandle() (troelsk).
 - Allow using sizers for laying out wxMDIClientWindow (Artur Wieczorek).
 - Fix updating wxSlider background when its parent background changes.
+- Implement wxListBox::EnsureVisible() (RIVDSL).
 
 wxOSX/Cocoa:
 

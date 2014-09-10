@@ -221,6 +221,38 @@ void wxListBox::MSWOnItemsChanged()
 // implementation of wxListBoxBase methods
 // ----------------------------------------------------------------------------
 
+void wxListBox::EnsureVisible(int n)
+{
+    wxCHECK_RET( IsValid(n),
+                 wxT("invalid index in wxListBox::EnsureVisible") );
+
+    // when item is before the first visible item, make the item the first visible item
+    const int firstItem = SendMessage(GetHwnd(), LB_GETTOPINDEX, 0, 0);
+    if ( n <= firstItem )
+    {
+        DoSetFirstItem(n);
+        return;
+    }
+
+    // retrieve item height in order to compute last visible item and scroll amount
+    const int itemHeight = SendMessage(GetHwnd(), LB_GETITEMHEIGHT, 0, 0);
+    if ( itemHeight == LB_ERR || itemHeight == 0)
+        return;
+
+    // compute the amount of fully visible items
+    int countVisible = GetClientSize().y / itemHeight;
+    if ( !countVisible )
+        countVisible = 1;
+
+    // when item is before the last fully visible item, it is already visible
+    const int lastItem = firstItem + countVisible - 1;
+    if ( n <= lastItem )
+        return;
+
+    // make the item the last visible item by setting the first visible item accordingly
+    DoSetFirstItem(n - countVisible + 1);
+}
+
 void wxListBox::DoSetFirstItem(int N)
 {
     wxCHECK_RET( IsValid(N),
