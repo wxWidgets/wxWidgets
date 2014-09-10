@@ -32,7 +32,7 @@ public:
     virtual void ShowThumbnailToolbar() wxOVERRIDE;
 
 private:
-    friend class wxTopLevelWindowMSW;
+    friend class wxFrame;
     wxTaskBarButtonImpl(WXWidget parent);
 
     WXWidget m_hwnd;

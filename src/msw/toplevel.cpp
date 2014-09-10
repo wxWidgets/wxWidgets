@@ -55,10 +55,6 @@
 
 #include "wx/display.h"
 
-#if wxUSE_TASKBARBUTTON
-#include "wx/taskbarbutton.h"
-#endif
-
 #ifndef ICON_BIG
     #define ICON_BIG 1
 #endif
@@ -75,9 +71,6 @@
     extern wxMenu *wxCurrentPopupMenu;
 #endif // wxUSE_MENUS || wxUSE_MENUS_NATIVE
 
-#if wxUSE_TASKBARBUTTON
-static WXUINT gs_msgTaskbarButtonCreated = 0;
-#endif
 
 // ----------------------------------------------------------------------------
 // stubs for missing functions under MicroWindows
@@ -431,13 +424,6 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
             }
             break;
     }
-#if wxUSE_TASKBARBUTTON
-    if ( message == gs_msgTaskbarButtonCreated )
-    {
-        m_taskBarButton = new wxTaskBarButtonImpl(GetHandle());
-        processed = true;
-    }
-#endif
 
     if ( !processed )
         rc = wxTopLevelWindowBase::MSWWindowProc(message, wParam, lParam);
@@ -655,12 +641,6 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     SetRightMenu(); // to nothing for initialization
 #endif
 
-#if wxUSE_TASKBARBUTTON
-    m_taskBarButton = NULL;
-    gs_msgTaskbarButtonCreated =
-        ::RegisterWindowMessage(wxT("TaskbarButtonCreated"));
-#endif
-
     return ret;
 }
 
@@ -688,10 +668,6 @@ wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
             ::BringWindowToTop(GetHwndOf(parent));
         }
     }
-#if wxUSE_TASKBARBUTTON
-    if ( m_taskBarButton )
-        delete m_taskBarButton;
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1576,19 +1552,6 @@ wxMenu* wxTopLevelWindowMSW::MSWFindMenuFromHMENU(WXHMENU WXUNUSED(hMenu))
 
 #endif // wxUSE_MENUS && !__WXUNIVERSAL__
 
-#if wxUSE_TASKBARBUTTON
-wxTaskBarButton* wxTopLevelWindowMSW::MSWGetTaskBarButton()
-{
-    return m_taskBarButton;
-}
-
-bool wxTopLevelWindowMSW::HandleTHBNClickedCommand(WXWORD id)
-{
-    wxCommandEvent event(wxEVT_BUTTON, id);
-    event.SetEventObject(this);
-    return ProcessEvent(event);
-}
-#endif // wxUSE_TASKBARBUTTON
 
 
 // the DialogProc for all wxWidgets dialogs
