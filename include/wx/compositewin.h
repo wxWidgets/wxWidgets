@@ -94,6 +94,13 @@ public:
         return true;
     }
 
+    virtual void SetLayoutDirection(wxLayoutDirection dir)
+    {
+        BaseWindowClass::SetLayoutDirection(dir);
+
+        SetForAllParts(&wxWindowBase::SetLayoutDirection, dir);
+    }
+
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip(wxToolTip *tip)
     {
