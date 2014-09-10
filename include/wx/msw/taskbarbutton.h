@@ -17,7 +17,10 @@
 #include "wx/taskbarbutton.h"
 
 namespace {
-class ITaskbarList3;
+class WXDLLIMPEXP_FWD_CORE ITaskbarList3;
+class WXDLLIMPEXP_FWD_CORE IObjectArray;
+class WXDLLIMPEXP_FWD_CORE ICustomDestinationList;
+class WXDLLIMPEXP_FWD_CORE IApplicationDocumentLists;
 }
 
 class WXDLLIMPEXP_CORE wxTaskBarButtonImpl : public wxTaskBarButton {
@@ -61,6 +64,44 @@ private:
 
     int m_progressRange;
     bool m_hasInitThumbnailToolbar;
+};
+
+class WXDLLIMPEXP_CORE wxJumpListImpl
+{
+public:
+    wxJumpListImpl();
+    virtual ~wxJumpListImpl();
+    void ShowRecentCategory(bool shown = true);
+    void HideRecentCategory();
+    void ShowFrequentCategory(bool shown = true);
+    void HideFrequentCategory();
+
+    wxJumpListCategory* GetTasks();
+    const wxJumpListCategory* GetFrequentCategory();
+    const wxJumpListCategory* GetRecentCategory();
+    const wxJumpListCategories& GetCustomCategories();
+
+    void AddCategory(wxJumpListCategory* category);
+    wxJumpListCategory* RemoveCategory(const wxString& title);
+    void DeleteCategory(const wxString& title);
+    void Update();
+
+private:
+    bool BeginUpdate();
+    bool CommitUpdate();
+    void AddTasksToDestinationList();
+    void AddCustomCategoriesToDestionationList();
+    void LoadKnownCategory(const wxString& title);
+
+    ICustomDestinationList    *m_destinationList;
+    IObjectArray              *m_objectArray;
+
+    wxScopedPtr<wxJumpListCategory> m_tasks;
+    wxScopedPtr<wxJumpListCategory> m_frequent;
+    wxScopedPtr<wxJumpListCategory> m_recent;
+    wxJumpListCategories m_customCategories;
+    bool m_recent_visible;
+    bool m_frequent_visible;
 };
 
 #endif // wxUSE_TASKBARBUTTON
