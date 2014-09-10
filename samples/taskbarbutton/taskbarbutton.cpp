@@ -86,7 +86,8 @@ wxIcon CreateRandomIcon()
 
     wxIcon icon;
     icon.CopyFromBitmap(CreateBitmap(*(colours[counter]), 16, 16));
-    counter = (++counter) % WXSIZEOF(colours);
+    counter += 1;
+    counter = counter % WXSIZEOF(colours);
     return icon;
 }
 

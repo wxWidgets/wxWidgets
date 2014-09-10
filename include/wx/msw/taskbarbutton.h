@@ -17,7 +17,7 @@
 
 struct ITaskbarList3;
 
-class WXDLLIMPEXP_ADV wxTaskBarButtonImpl : public wxTaskBarButton {
+class WXDLLIMPEXP_CORE wxTaskBarButtonImpl : public wxTaskBarButton {
 public:
     virtual ~wxTaskBarButtonImpl();
 
