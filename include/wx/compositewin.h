@@ -178,20 +178,8 @@ private:
             event.Skip();
     }
 
-    template <class T>
-    void SetForAllParts(bool (wxWindowBase::*func)(const T&), const T& arg)
-    {
-        DoSetForAllParts<const T&>(func, arg);
-    }
-
-    template <class T>
-    void SetForAllParts(bool (wxWindowBase::*func)(T*), T* arg)
-    {
-        DoSetForAllParts<T*>(func, arg);
-    }
-
-    template <class T>
-    void DoSetForAllParts(bool (wxWindowBase::*func)(T), T arg)
+    template <class T, class TArg, class R>
+    void SetForAllParts(R (wxWindowBase::*func)(TArg), T arg)
     {
         // Simply call the setters for all parts of this composite window.
         const wxWindowList parts = GetCompositeWindowParts();
