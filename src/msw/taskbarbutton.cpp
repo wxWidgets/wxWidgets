@@ -253,10 +253,27 @@ void wxTaskBarButtonImpl::SetThumbnailContents(const wxWindow *child)
 bool wxTaskBarButtonImpl::AppendThumbBarButton(wxThumbBarButton *button)
 {
     wxASSERT_MSG( m_thumbBarButtons.size() < MAX_BUTTON_COUNT,
-                  "Number of thumb buttons is limited to 7" );
+                  "Number of ThumbBarButtons and separators is limited to 7" );
 
     button->SetParent(this);
     m_thumbBarButtons.push_back(button);
+    return InitOrUpdateThumbBarButtons();
+}
+
+bool wxTaskBarButtonImpl::AppendSeparatorInThumbBar()
+{
+    wxASSERT_MSG( m_thumbBarButtons.size() < MAX_BUTTON_COUNT,
+                  "Number of ThumbBarButtons and separators is limited to 7" );
+
+    // Append a disable ThumbBarButton without background can simulate the
+    // behavior of appending a separator.
+    wxThumbBarButton *separator = new wxThumbBarButton(wxID_ANY,
+                                                       wxNullIcon,
+                                                       wxEmptyString,
+                                                       false,
+                                                       false,
+                                                       false);
+    m_thumbBarButtons.push_back(separator);
     return InitOrUpdateThumbBarButtons();
 }
 
@@ -264,7 +281,7 @@ bool wxTaskBarButtonImpl::InsertThumbBarButton(size_t pos,
                                                wxThumbBarButton *button)
 {
     wxASSERT_MSG( m_thumbBarButtons.size() < MAX_BUTTON_COUNT,
-                  "Number of thumb buttons is limited to 7" );
+                  "Number of ThumbBarButtons and separators is limited to 7" );
     wxASSERT_MSG( pos <= m_thumbBarButtons.size(),
                   "Invalid index when inserting the button" );
 

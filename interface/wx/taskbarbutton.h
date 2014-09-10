@@ -279,20 +279,29 @@ public:
         Inserts the given button before the position pos to the taskbar
         thumbnail toolbar.
 
-        @note The number of buttons is limited to 7.
+        @note The number of buttons and separators is limited to 7.
 
-        @see AppendThumbBarButton()
+        @see AppendThumbBarButton(), AppendSeparatorInThumbBar()
     */
     virtual bool InsertThumbBarButton(size_t pos, wxThumbBarButton *button);
 
     /**
-        Adds a button to the taskbar thumbnail toolbar.
+        Appends a button to the taskbar thumbnail toolbar.
 
-        @note The number of buttons is limited to 7.
+        @note The number of buttons and separators is limited to 7.
 
-        @see InsertThumbBarButton()
+        @see InsertThumbBarButton(), AppendSeparatorInThumbBar()
     */
     virtual bool AppendThumbBarButton(wxThumbBarButton *button);
+
+    /**
+        Appends a separator to the taskbar thumbnail toolbar.
+
+        @note The number of buttons and separators is limited to 7.
+
+        @see AppendThumbBarButton(), InsertThumbBarButton()
+    */
+    virtual bool AppendSeparatorInThumbBar();
 
     /**
         Removes the thumbnail toolbar button from the taskbar button but doesn't
