@@ -14,6 +14,10 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/icon.h"
+#endif
+
 #if wxUSE_TASKBARBUTTON
 
 #include "wx/msw/wrapshl.h"
@@ -22,10 +26,44 @@
 
 #include <Shobjidl.h>
 
+namespace {
+
+// The maximum number of thumbnail toolbar buttons allowed on windows is 7.
+static const int LIMITED_BUTTON_SIZE = 7;
+
+THUMBBUTTONFLAGS GetNativeThumbButtonFlags(const wxThumbBarButton& button)
+{
+    WXUINT flags = 0;
+    flags |= (button.IsEnable() ? THBF_ENABLED : THBF_DISABLED);
+    if ( button.IsDismissOnClick() )
+        flags |= THBF_DISMISSONCLICK;
+    if ( !button.HasBackground() )
+        flags |= THBF_NOBACKGROUND;
+    if ( !button.IsShown() )
+        flags |= THBF_HIDDEN;
+    if ( !button.IsInteractive() )
+        flags |= THBF_NONINTERACTIVE;
+    return static_cast<THUMBBUTTONFLAGS>(flags);
+}
+
+} // namespace
+
 wxThumbBarButton::wxThumbBarButton(int id,
                                    const wxIcon& icon,
-                                   const wxString& tooltip)
-    : m_id(id), m_icon(icon), m_tooltip(tooltip)
+                                   const wxString& tooltip,
+                                   bool enable,
+                                   bool dismissOnClick,
+                                   bool hasBackground,
+                                   bool shown,
+                                   bool interactive)
+    : m_id(id),
+      m_icon(icon),
+      m_tooltip(tooltip),
+      m_enable(enable),
+      m_dismissOnClick(dismissOnClick),
+      m_hasBackground(hasBackground),
+      m_shown(shown),
+      m_interactive(interactive)
 {
 }
 
@@ -33,7 +71,7 @@ wxTaskBarButtonImpl::wxTaskBarButtonImpl(WXWidget parent)
     : m_hwnd(parent),
       m_taskbarList(NULL),
       m_progressRange(0),
-      m_hasShownThumbnailToolbar(false)
+      m_hasInitThumbnailToolbar(false)
 {
     HRESULT hr = CoCreateInstance
                  (
@@ -52,7 +90,7 @@ wxTaskBarButtonImpl::wxTaskBarButtonImpl(WXWidget parent)
     hr = m_taskbarList->HrInit();
     if ( FAILED(hr) )
     {
-        wxLogApiError(wxT("ITaskbarButtonList3::Init"), hr);
+        wxLogApiError(wxT("ITaskbarList3::Init"), hr);
         return;
     }
 }
@@ -131,28 +169,74 @@ void wxTaskBarButtonImpl::SetThumbnailContents(const wxWindow *child)
     SetThumbnailClip(child->GetRect());
 }
 
-bool wxTaskBarButtonImpl::AddThumbBarButton(wxThumbBarButton *button)
+bool wxTaskBarButtonImpl::AppendThumbBarButton(wxThumbBarButton *button)
 {
-    wxCHECK( button != NULL, wxT("Can't add invalid wxThumbBarButton.") );
-    if (m_thumbBarButtons.size() >= 7)
+    if ( m_thumbBarButtons.size() >= LIMITED_BUTTON_SIZE )
         return false;
 
     m_thumbBarButtons.push_back(button);
-    return true;
+    return InitOrUpdateThumbBarButtons();
 }
 
-void wxTaskBarButtonImpl::ShowThumbnailToolbar()
+bool wxTaskBarButtonImpl::InsertThumbBarButton(size_t pos,
+                                               wxThumbBarButton *button)
 {
-    if ( m_hasShownThumbnailToolbar || m_thumbBarButtons.empty() )
-        return;
+    if ( m_thumbBarButtons.size() >= LIMITED_BUTTON_SIZE ||
+         m_thumbBarButtons.size() < pos )
+        return false;
 
-    THUMBBUTTON buttons[7];
+    m_thumbBarButtons.insert(m_thumbBarButtons.begin() + pos, button);
+    return InitOrUpdateThumbBarButtons();
+}
+
+bool wxTaskBarButtonImpl::RemoveThumbBarButton(wxThumbBarButton *button)
+{
+    wxThumbBarButtons::iterator it;
+    for ( it = m_thumbBarButtons.begin(); it != m_thumbBarButtons.end(); ++it )
+    {
+        if ( button == *it )
+        {
+            m_thumbBarButtons.erase(it);
+            return InitOrUpdateThumbBarButtons();
+        }
+    }
+
+    return false;
+}
+
+bool wxTaskBarButtonImpl::RemoveThumbBarButton(int id)
+{
+    wxThumbBarButtons::iterator it;
+    for ( it = m_thumbBarButtons.begin(); it != m_thumbBarButtons.end(); ++it )
+    {
+        if ( id == (*it)->GetID() )
+        {
+            m_thumbBarButtons.erase(it);
+            return InitOrUpdateThumbBarButtons();
+        }
+    }
+
+    return false;
+}
+
+bool wxTaskBarButtonImpl::InitOrUpdateThumbBarButtons()
+{
+    THUMBBUTTON buttons[LIMITED_BUTTON_SIZE];
     size_t i;
+    HRESULT hr;
+
+    for ( i = 0; i < LIMITED_BUTTON_SIZE; ++i )
+    {
+        memset(&buttons[i], 0, sizeof buttons[i]);
+        buttons[i].iId = i;
+        buttons[i].dwFlags = THBF_HIDDEN;
+        buttons[i].dwMask  = THB_FLAGS;
+    }
+
     for ( i = 0; i < m_thumbBarButtons.size(); ++i )
     {
-        buttons[i].iId = m_thumbBarButtons[i]->GetID();
         buttons[i].hIcon = GetHiconOf(m_thumbBarButtons[i]->GetIcon());
-        buttons[i].dwFlags = THBF_ENABLED;
+        buttons[i].dwFlags = GetNativeThumbButtonFlags(*m_thumbBarButtons[i]);
         buttons[i].dwMask = THB_ICON | THB_FLAGS;
         wxString tooltip = m_thumbBarButtons[i]->GetTooltip();
         if ( tooltip.empty() )
@@ -166,10 +250,37 @@ void wxTaskBarButtonImpl::ShowThumbnailToolbar()
         buttons[i].dwMask |= THB_TOOLTIP;
     }
 
-    m_taskbarList->ThumbBarAddButtons(m_hwnd,
-                                      m_thumbBarButtons.size(),
-                                      buttons);
-    m_hasShownThumbnailToolbar = true;
+    if ( !m_hasInitThumbnailToolbar )
+    {
+        hr = m_taskbarList->ThumbBarAddButtons(m_hwnd,
+                                               LIMITED_BUTTON_SIZE,
+                                               buttons);
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(wxT("ITaskbarList3::ThumbBarAddButtons"), hr);
+        }
+        m_hasInitThumbnailToolbar = true;
+    }
+    else
+    {
+        hr = m_taskbarList->ThumbBarUpdateButtons(m_hwnd,
+                                                  LIMITED_BUTTON_SIZE,
+                                                  buttons);
+        if ( FAILED(hr) )
+        {
+            wxLogApiError(wxT("ITaskbarList3::ThumbBarUpdateButtons"), hr);
+        }
+    }
+
+    return SUCCEEDED(hr);
+}
+
+int wxTaskBarButtonImpl::GetThumbBarButtonID(size_t index)
+{
+    if ( index >= m_thumbBarButtons.size() )
+        return -1;
+
+    return m_thumbBarButtons[index]->GetID();
 }
 
 #endif // wxUSE_TASKBARBUTTON
