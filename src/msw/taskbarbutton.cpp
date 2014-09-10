@@ -21,11 +21,19 @@
 
 #if wxUSE_TASKBARBUTTON
 
+#ifdef _MSC_VER
+    #pragma comment( lib, "shlwapi" )
+#endif
+
 #include "wx/msw/private.h"
 #include "wx/msw/taskbarbutton.h"
 
 #include <shlwapi.h>
 #include <initguid.h>
+
+#if wxUSE_DYNLIB_CLASS
+    #include "wx/dynlib.h"
+#endif // wxUSE_DYNLIB_CLASS
 
 // ----------------------------------------------------------------------------
 // Redefine the interfaces: ITaskbarList3, IObjectCollection,
@@ -332,9 +340,32 @@ inline HRESULT InitPropVariantFromBoolean(BOOL fVal, PROPVARIANT *ppropvar)
 
 inline HRESULT InitPropVariantFromString(PCWSTR psz, PROPVARIANT *ppropvar)
 {
+    HRESULT hr = E_FAIL;
     ppropvar->vt = VT_LPWSTR;
-    HRESULT hr = SHStrDupW(psz, &ppropvar->pwszVal);
-    if (FAILED(hr))
+
+#if wxUSE_DYNLIB_CLASS
+    typedef HRESULT (WINAPI *SHStrDupW_t)(LPCTSTR, LPTSTR*);
+    static SHStrDupW_t s_pfnSHStrDupW = NULL;
+    if ( !s_pfnSHStrDupW )
+    {
+        wxDynamicLibrary dll(wxT("shlwapi.dll"));
+        if ( dll.IsLoaded() )
+        {
+            s_pfnSHStrDupW = (SHStrDupW_t)dll.GetSymbol(wxT("SHStrDupW"));
+        }
+    }
+
+    if ( s_pfnSHStrDupW )
+    {
+        hr = s_pfnSHStrDupW(psz, &ppropvar->pwszVal);
+    }
+#elif defined (_MSC_VER)
+    hr = SHStrDupW(psz, &ppropvar->pwszVal);
+#else
+    wxUnusedVar(psz);
+#endif
+
+    if ( FAILED(hr) )
     {
         PropVariantInit(ppropvar);
     }
