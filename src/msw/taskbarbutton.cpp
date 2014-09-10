@@ -61,14 +61,36 @@ void wxTaskBarButtonImpl::SetProgressValue(int value)
     m_taskbarList->SetProgressValue(m_hwnd, value, 100);
 }
 
-void wxTaskBarButtonImpl::ShowInTaskbar()
+void wxTaskBarButtonImpl::Show()
 {
     m_taskbarList->AddTab(m_hwnd);
 }
 
-void wxTaskBarButtonImpl::HideInTaskbar()
+void wxTaskBarButtonImpl::Hide()
 {
     m_taskbarList->DeleteTab(m_hwnd);
+}
+
+void wxTaskBarButtonImpl::SetThumbnailTooltip(const wxString& tooltip)
+{
+    m_taskbarList->SetThumbnailTooltip(m_hwnd, tooltip.wc_str());
+}
+
+void wxTaskBarButtonImpl::SetProgressState(wxTaskBarButtonState state)
+{
+    m_taskbarList->SetProgressState(m_hwnd, static_cast<TBPFLAG>(state));
+}
+
+void wxTaskBarButtonImpl::SetOverlayIcon(const wxIcon& icon)
+{
+    m_taskbarList->SetOverlayIcon(m_hwnd, GetHiconOf(icon), NULL);
+}
+
+void wxTaskBarButtonImpl::SetThumbnailClip(const wxRect& rect)
+{
+    RECT rc;
+    wxCopyRectToRECT(rect, rc);
+    m_taskbarList->SetThumbnailClip(m_hwnd, rect.IsEmpty() ? NULL : &rc);
 }
 
 #endif // wxUSE_TASKBARBUTTON
