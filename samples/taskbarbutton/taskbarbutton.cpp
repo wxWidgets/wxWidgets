@@ -161,6 +161,19 @@ bool MyApp::OnInit()
     jumpList.GetTasks()->Append(item2);
     jumpList.ShowRecentCategory();
     jumpList.ShowFrequentCategory();
+
+    wxJumpListItem* item3 = new wxJumpListItem(
+        wxJUMP_LIST_DESTIONATION,
+        wxT("Custom Item - Help"),
+        wxStandardPaths::Get().GetExecutablePath(),
+        wxT("--help"),
+        wxT("Test Custom Category."),
+        wxStandardPaths::Get().GetExecutablePath(),
+        0);
+    wxJumpListCategory* customCategory = new wxJumpListCategory(wxT("Custom"));
+    customCategory->Append(item3);
+    jumpList.AddCategory(customCategory);
+
     jumpList.Update();
 
     const wxJumpListCategory* category = jumpList.GetFrequentCategory();
