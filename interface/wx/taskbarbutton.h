@@ -8,7 +8,7 @@
 /**
     State of the taskbar button.
 */
-enum WXDLLIMPEXP_CORE wxTaskBarButtonState
+enum wxTaskBarButtonState
 {
     wxTASKBAR_BUTTON_NO_PROGRESS   = 0,
     wxTASKBAR_BUTTON_INDETERMINATE = 1,
@@ -330,8 +330,8 @@ public:
 
 /**
     @class wxAppProgressIndicator
-        A helper class that can be used to update the progress bar in the
-        taskbar button.
+
+    A helper class that can be used to update the progress bar in the taskbar button.
 
     @library{wxcore}
     @category{misc}
@@ -371,15 +371,15 @@ public:
 /**
     Type of jump list item.
 */
-enum WXDLLIMPEXP_CORE wxTaskBarJumpListItemType
+enum wxTaskBarJumpListItemType
 {
-    /* A separator, Only tasks category supports separators. */
+    /** A separator, Only tasks category supports separators. */
     wxTASKBAR_JUMP_LIST_SEPARATOR,
 
-    /* A task, represents a link to application. */
+    /** A task, represents a link to application. */
     wxTASKBAR_JUMP_LIST_TASK,
 
-    /* Item acts as a link to a file that the application can open. */
+    /** Item acts as a link to a file that the application can open. */
     wxTASKBAR_JUMP_LIST_DESTIONATION
 };
 
