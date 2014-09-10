@@ -198,14 +198,14 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     if( FPIsFontPanelVisible())
         FPShowHideFontPanel() ;
 #else
+    // we must pick the selection before closing, otherwise a native textcontrol interferes
+    NSFont* theFont = [fontPanel panelConvertFont:[NSFont userFontOfSize:0]];
     [fontPanel close];
 #endif
 
     if ( [accessoryView closedWithOk])
     {
 #if wxOSX_USE_COCOA
-        NSFont* theFont = [fontPanel panelConvertFont:[NSFont userFontOfSize:0]];
-
         fontdata.m_chosenFont = wxFont( theFont );
 
         //Get the shared color panel along with the chosen color and set the chosen color
