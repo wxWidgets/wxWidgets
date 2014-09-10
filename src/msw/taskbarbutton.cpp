@@ -516,6 +516,54 @@ IObjectCollection* CreateObjectCollection()
 } // namespace
 
 // ----------------------------------------------------------------------------
+// wxTaskBarJumpListImpl: definition of class for internal taskbar jump list
+// implementation.
+// ----------------------------------------------------------------------------
+class wxTaskBarJumpListImpl
+{
+public:
+    wxTaskBarJumpListImpl(wxTaskBarJumpList *jumpList = NULL,
+                          const wxString& appID = wxEmptyString);
+    virtual ~wxTaskBarJumpListImpl();
+    void ShowRecentCategory(bool shown = true);
+    void HideRecentCategory();
+    void ShowFrequentCategory(bool shown = true);
+    void HideFrequentCategory();
+
+    wxTaskBarJumpListCategory& GetTasks();
+    const wxTaskBarJumpListCategory& GetFrequentCategory();
+    const wxTaskBarJumpListCategory& GetRecentCategory();
+    const wxTaskBarJumpListCategories& GetCustomCategories() const;
+
+    void AddCustomCategory(wxTaskBarJumpListCategory* category);
+    wxTaskBarJumpListCategory* RemoveCustomCategory(const wxString& title);
+    void DeleteCustomCategory(const wxString& title);
+    void Update();
+
+private:
+    bool BeginUpdate();
+    bool CommitUpdate();
+    void AddTasksToDestinationList();
+    void AddCustomCategoriesToDestionationList();
+    void LoadKnownCategory(const wxString& title);
+
+    wxTaskBarJumpList *m_jumpList;
+
+    ICustomDestinationList    *m_destinationList;
+    IObjectArray              *m_objectArray;
+
+    wxScopedPtr<wxTaskBarJumpListCategory> m_tasks;
+    wxScopedPtr<wxTaskBarJumpListCategory> m_frequent;
+    wxScopedPtr<wxTaskBarJumpListCategory> m_recent;
+    wxTaskBarJumpListCategories m_customCategories;
+    bool m_recent_visible;
+    bool m_frequent_visible;
+
+    // Application User Model ID.
+    wxString m_appID;
+};
+
+// ----------------------------------------------------------------------------
 // wxThumbBarButton Implementation.
 // ----------------------------------------------------------------------------
 IMPLEMENT_DYNAMIC_CLASS(wxThumbBarButton, wxObject)
