@@ -20,7 +20,7 @@
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_FWD_CORE wxTaskBarButton;
-class WXDLLIMPEXP_FWD_CORE wxJumpListImpl;
+class WXDLLIMPEXP_FWD_CORE wxTaskBarJumpListImpl;
 
 /**
     State of the task bar button.
@@ -141,26 +141,26 @@ private:
     wxScopedPtr<wxTaskBarButton> m_taskBarButton;
 };
 
-enum WXDLLIMPEXP_CORE wxJumpListItemType
+enum WXDLLIMPEXP_CORE wxTaskBarJumpListItemType
 {
-    wxJUMP_LIST_SEPARATOR,
-    wxJUMP_LIST_TASK,
-    wxJUMP_LIST_DESTIONATION
+    wxTASKBAR_JUMP_LIST_SEPARATOR,
+    wxTASKBAR_JUMP_LIST_TASK,
+    wxTASKBAR_JUMP_LIST_DESTIONATION
 };
 
-class WXDLLIMPEXP_CORE wxJumpListItem
+class WXDLLIMPEXP_CORE wxTaskBarJumpListItem
 {
 public:
-    wxJumpListItem(wxJumpListItemType type,
-                   const wxString& title = wxEmptyString,
-                   const wxString& filePath = wxEmptyString,
-                   const wxString& arguments = wxEmptyString,
-                   const wxString& tooltip = wxEmptyString,
-                   const wxString& iconPath = wxEmptyString,
-                   int iconIndex = 0);
+    wxTaskBarJumpListItem(wxTaskBarJumpListItemType type,
+                          const wxString& title = wxEmptyString,
+                          const wxString& filePath = wxEmptyString,
+                          const wxString& arguments = wxEmptyString,
+                          const wxString& tooltip = wxEmptyString,
+                          const wxString& iconPath = wxEmptyString,
+                          int iconIndex = 0);
 
-    wxJumpListItemType GetType() const;
-    void SetType(wxJumpListItemType type);
+    wxTaskBarJumpListItemType GetType() const;
+    void SetType(wxTaskBarJumpListItemType type);
     const wxString& GetTitle() const;
     void SetTitle(const wxString& title);
     const wxString& GetFilePath() const;
@@ -175,7 +175,7 @@ public:
     void SetIconIndex(int iconIndex);
 
 private:
-    wxJumpListItemType m_type;
+    wxTaskBarJumpListItemType m_type;
     wxString m_title;
     wxString m_filePath;
     wxString m_arguments;
@@ -184,53 +184,53 @@ private:
     int      m_iconIndex;
 };
 
-typedef wxVector<wxJumpListItem*> wxJumpListItems;
+typedef wxVector<wxTaskBarJumpListItem*> wxTaskBarJumpListItems;
 
-class WXDLLIMPEXP_CORE wxJumpListCategory
+class WXDLLIMPEXP_CORE wxTaskBarJumpListCategory
 {
 public:
-    wxJumpListCategory(const wxString& title = wxEmptyString);
-    virtual ~wxJumpListCategory();
+    wxTaskBarJumpListCategory(const wxString& title = wxEmptyString);
+    virtual ~wxTaskBarJumpListCategory();
 
-    wxJumpListItem* Append(wxJumpListItem *item);
-    void Delete(wxJumpListItem *item);
-    wxJumpListItem* Remove(wxJumpListItem *item);
-    wxJumpListItem* FindItemByPosition (size_t pos) const;
-    wxJumpListItem* Insert(size_t pos, wxJumpListItem *item);
-    wxJumpListItem* Prepend(wxJumpListItem *item);
+    wxTaskBarJumpListItem* Append(wxTaskBarJumpListItem *item);
+    void Delete(wxTaskBarJumpListItem *item);
+    wxTaskBarJumpListItem* Remove(wxTaskBarJumpListItem *item);
+    wxTaskBarJumpListItem* FindItemByPosition(size_t pos) const;
+    wxTaskBarJumpListItem* Insert(size_t pos, wxTaskBarJumpListItem *item);
+    wxTaskBarJumpListItem* Prepend(wxTaskBarJumpListItem *item);
     void SetTitle(const wxString& title);
     const wxString& GetTitle() const;
-    const wxJumpListItems& GetItems() const;
+    const wxTaskBarJumpListItems& GetItems() const;
 
 private:
-    wxJumpListItems m_items;
+    wxTaskBarJumpListItems m_items;
     wxString m_title;
 };
 
-typedef wxVector<wxJumpListCategory*> wxJumpListCategories;
+typedef wxVector<wxTaskBarJumpListCategory*> wxTaskBarJumpListCategories;
 
-class WXDLLIMPEXP_CORE wxJumpList
+class WXDLLIMPEXP_CORE wxTaskBarJumpList
 {
 public:
-    wxJumpList();
-    virtual ~wxJumpList();
+    wxTaskBarJumpList();
+    virtual ~wxTaskBarJumpList();
     void ShowRecentCategory(bool shown = true);
     void HideRecentCategory();
     void ShowFrequentCategory(bool shown = true);
     void HideFrequentCategory();
 
-    wxJumpListCategory* GetTasks();
-    const wxJumpListCategory* GetFrequentCategory();
-    const wxJumpListCategory* GetRecentCategory();
-    const wxJumpListCategories& GetCustomCategories();
+    wxTaskBarJumpListCategory& GetTasks() const;
+    const wxTaskBarJumpListCategory& GetFrequentCategory() const;
+    const wxTaskBarJumpListCategory& GetRecentCategory() const;
+    const wxTaskBarJumpListCategories& GetCustomCategories() const;
 
-    void AddCategory(wxJumpListCategory* category);
-    wxJumpListCategory* RemoveCategory(const wxString& title);
+    void AddCategory(wxTaskBarJumpListCategory* category);
+    wxTaskBarJumpListCategory* RemoveCategory(const wxString& title);
     void DeleteCategory(const wxString& title);
     void Update();
 
 private:
-    wxJumpListImpl *m_jumpListImpl;
+    wxTaskBarJumpListImpl *m_jumpListImpl;
 };
 
 #endif // wxUSE_TASKBARBUTTON

@@ -66,23 +66,23 @@ private:
     bool m_hasInitThumbnailToolbar;
 };
 
-class WXDLLIMPEXP_CORE wxJumpListImpl
+class WXDLLIMPEXP_CORE wxTaskBarJumpListImpl
 {
 public:
-    wxJumpListImpl();
-    virtual ~wxJumpListImpl();
+    wxTaskBarJumpListImpl();
+    virtual ~wxTaskBarJumpListImpl();
     void ShowRecentCategory(bool shown = true);
     void HideRecentCategory();
     void ShowFrequentCategory(bool shown = true);
     void HideFrequentCategory();
 
-    wxJumpListCategory* GetTasks();
-    const wxJumpListCategory* GetFrequentCategory();
-    const wxJumpListCategory* GetRecentCategory();
-    const wxJumpListCategories& GetCustomCategories();
+    wxTaskBarJumpListCategory& GetTasks();
+    const wxTaskBarJumpListCategory& GetFrequentCategory();
+    const wxTaskBarJumpListCategory& GetRecentCategory();
+    const wxTaskBarJumpListCategories& GetCustomCategories() const;
 
-    void AddCategory(wxJumpListCategory* category);
-    wxJumpListCategory* RemoveCategory(const wxString& title);
+    void AddCategory(wxTaskBarJumpListCategory* category);
+    wxTaskBarJumpListCategory* RemoveCategory(const wxString& title);
     void DeleteCategory(const wxString& title);
     void Update();
 
@@ -96,10 +96,10 @@ private:
     ICustomDestinationList    *m_destinationList;
     IObjectArray              *m_objectArray;
 
-    wxScopedPtr<wxJumpListCategory> m_tasks;
-    wxScopedPtr<wxJumpListCategory> m_frequent;
-    wxScopedPtr<wxJumpListCategory> m_recent;
-    wxJumpListCategories m_customCategories;
+    wxScopedPtr<wxTaskBarJumpListCategory> m_tasks;
+    wxScopedPtr<wxTaskBarJumpListCategory> m_frequent;
+    wxScopedPtr<wxTaskBarJumpListCategory> m_recent;
+    wxTaskBarJumpListCategories m_customCategories;
     bool m_recent_visible;
     bool m_frequent_visible;
 };

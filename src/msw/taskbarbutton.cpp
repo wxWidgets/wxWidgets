@@ -352,7 +352,8 @@ THUMBBUTTONFLAGS GetNativeThumbButtonFlags(const wxThumbBarButton& button)
     return static_cast<THUMBBUTTONFLAGS>(flags);
 }
 
-bool AddShellLink(IObjectCollection *collection, const wxJumpListItem& item)
+bool AddShellLink(IObjectCollection *collection,
+                  const wxTaskBarJumpListItem& item)
 {
     IShellLink* shellLink = NULL;
     IPropertyStore* propertyStore = NULL;
@@ -371,8 +372,8 @@ bool AddShellLink(IObjectCollection *collection, const wxJumpListItem& item)
         return false;
     }
 
-    if ( item.GetType() == wxJUMP_LIST_TASK ||
-         item.GetType() == wxJUMP_LIST_DESTIONATION )
+    if ( item.GetType() == wxTASKBAR_JUMP_LIST_TASK ||
+         item.GetType() == wxTASKBAR_JUMP_LIST_DESTIONATION )
     {
         if ( !item.GetFilePath().IsEmpty() )
             shellLink->SetPath(item.GetFilePath().wc_str());
@@ -397,8 +398,8 @@ bool AddShellLink(IObjectCollection *collection, const wxJumpListItem& item)
     }
 
     PROPVARIANT pv;
-    if ( item.GetType() == wxJUMP_LIST_TASK ||
-         item.GetType() == wxJUMP_LIST_DESTIONATION )
+    if ( item.GetType() == wxTASKBAR_JUMP_LIST_TASK ||
+         item.GetType() == wxTASKBAR_JUMP_LIST_DESTIONATION )
     {
         hr = InitPropVariantFromString(item.GetTitle().wc_str(), &pv);
         if ( SUCCEEDED(hr) )
@@ -406,7 +407,7 @@ bool AddShellLink(IObjectCollection *collection, const wxJumpListItem& item)
             hr = propertyStore->SetValue(PKEY_Title, pv);
         }
     }
-    else if ( item.GetType() == wxJUMP_LIST_SEPARATOR )
+    else if ( item.GetType() == wxTASKBAR_JUMP_LIST_SEPARATOR )
     {
         hr = InitPropVariantFromBoolean(TRUE, &pv);
         if ( SUCCEEDED(hr) )
@@ -428,12 +429,13 @@ bool AddShellLink(IObjectCollection *collection, const wxJumpListItem& item)
     return SUCCEEDED(hr);
 }
 
-wxJumpListItem* GetItemFromIShellLink(IShellLink* link)
+wxTaskBarJumpListItem* GetItemFromIShellLink(IShellLink* link)
 {
     if ( !link )
         return NULL;
 
-    wxJumpListItem *item = new wxJumpListItem(wxJUMP_LIST_DESTIONATION);
+    wxTaskBarJumpListItem* item =
+        new wxTaskBarJumpListItem(wxTASKBAR_JUMP_LIST_DESTIONATION);
 
     IPropertyStore *linkProps;
     HRESULT hr = link->QueryInterface
@@ -469,12 +471,13 @@ wxJumpListItem* GetItemFromIShellLink(IShellLink* link)
     return item;
 }
 
-wxJumpListItem* GetItemFromIShellItem(IShellItem *shellItem)
+wxTaskBarJumpListItem* GetItemFromIShellItem(IShellItem *shellItem)
 {
     if ( !shellItem )
         return NULL;
 
-    wxJumpListItem *item = new wxJumpListItem(wxJUMP_LIST_DESTIONATION);
+    wxTaskBarJumpListItem *item =
+        new wxTaskBarJumpListItem(wxTASKBAR_JUMP_LIST_DESTIONATION);
 
     wchar_t *name;
     shellItem->GetDisplayName(SIGDN_FILESYSPATH, &name);
@@ -855,8 +858,10 @@ wxThumbBarButton* wxTaskBarButtonImpl::GetThumbBarButtonByIndex(size_t index)
 // ----------------------------------------------------------------------------
 // wxAppProgressIndicator Implementation.
 // ----------------------------------------------------------------------------
-wxAppProgressIndicator::wxAppProgressIndicator(wxTopLevelWindow *parent, int maxValue)
-    : m_parent(parent), m_maxValue(maxValue)
+wxAppProgressIndicator::wxAppProgressIndicator(wxTopLevelWindow *parent,
+                                               int maxValue)
+    : m_parent(parent),
+      m_maxValue(maxValue)
 {
 }
 
@@ -895,15 +900,15 @@ void wxAppProgressIndicator::Init()
 }
 
 // ----------------------------------------------------------------------------
-// wxJumpListItem Implementation.
+// wxTaskBarJumpListItem Implementation.
 // ----------------------------------------------------------------------------
-wxJumpListItem::wxJumpListItem(wxJumpListItemType type,
-                               const wxString& title,
-                               const wxString& filePath,
-                               const wxString& arguments,
-                               const wxString& tooltip,
-                               const wxString& iconPath,
-                               int iconIndex)
+wxTaskBarJumpListItem::wxTaskBarJumpListItem(wxTaskBarJumpListItemType type,
+                                             const wxString& title,
+                                             const wxString& filePath,
+                                             const wxString& arguments,
+                                             const wxString& tooltip,
+                                             const wxString& iconPath,
+                                             int iconIndex)
     : m_type(type),
       m_title(title),
       m_filePath(filePath),
@@ -915,110 +920,112 @@ wxJumpListItem::wxJumpListItem(wxJumpListItemType type,
 }
 
 
-wxJumpListItemType wxJumpListItem::GetType() const
+wxTaskBarJumpListItemType wxTaskBarJumpListItem::GetType() const
 {
     return m_type;
 }
 
-void wxJumpListItem::SetType(wxJumpListItemType type)
+void wxTaskBarJumpListItem::SetType(wxTaskBarJumpListItemType type)
 {
     m_type = type;
 }
 
-const wxString& wxJumpListItem::GetTitle() const
+const wxString& wxTaskBarJumpListItem::GetTitle() const
 {
     return m_title;
 }
 
-void wxJumpListItem::SetTitle(const wxString& title)
+void wxTaskBarJumpListItem::SetTitle(const wxString& title)
 {
     m_title = title;
 }
 
-const wxString& wxJumpListItem::GetFilePath() const
+const wxString& wxTaskBarJumpListItem::GetFilePath() const
 {
     return m_filePath;
 }
 
-void wxJumpListItem::SetFilePath(const wxString& filePath)
+void wxTaskBarJumpListItem::SetFilePath(const wxString& filePath)
 {
     m_filePath = filePath;
 }
 
-const wxString& wxJumpListItem::GetArguments() const
+const wxString& wxTaskBarJumpListItem::GetArguments() const
 {
     return m_arguments;
 }
 
-void wxJumpListItem::SetArguments(const wxString& arguments)
+void wxTaskBarJumpListItem::SetArguments(const wxString& arguments)
 {
     m_arguments = arguments;
 }
 
-const wxString& wxJumpListItem::GetTooltip() const
+const wxString& wxTaskBarJumpListItem::GetTooltip() const
 {
     return m_tooltip;
 }
 
-void wxJumpListItem::SetTooltip(const wxString& tooltip)
+void wxTaskBarJumpListItem::SetTooltip(const wxString& tooltip)
 {
     m_tooltip = tooltip;
 }
 
-const wxString& wxJumpListItem::GetIconPath() const
+const wxString& wxTaskBarJumpListItem::GetIconPath() const
 {
     return m_iconPath;
 }
 
-void wxJumpListItem::SetIconPath(const wxString& iconPath)
+void wxTaskBarJumpListItem::SetIconPath(const wxString& iconPath)
 {
     m_iconPath = iconPath;
 }
 
-int wxJumpListItem::GetIconIndex() const
+int wxTaskBarJumpListItem::GetIconIndex() const
 {
     return m_iconIndex;
 }
 
-void wxJumpListItem::SetIconIndex(int iconIndex)
+void wxTaskBarJumpListItem::SetIconIndex(int iconIndex)
 {
     m_iconIndex = iconIndex;
 }
 
 // ----------------------------------------------------------------------------
-// wxJumpListCategory Implementation.
+// wxTaskBarJumpListCategory Implementation.
 // ----------------------------------------------------------------------------
-wxJumpListCategory::wxJumpListCategory(const wxString& title)
+wxTaskBarJumpListCategory::wxTaskBarJumpListCategory(const wxString& title)
     : m_title(title)
 {
 }
 
-wxJumpListCategory::~wxJumpListCategory()
+wxTaskBarJumpListCategory::~wxTaskBarJumpListCategory()
 {
-    for (wxJumpListItems::iterator it = m_items.begin();
-         it != m_items.end();
-         ++it)
+    for ( wxTaskBarJumpListItems::iterator it = m_items.begin();
+          it != m_items.end();
+          ++it )
     {
         delete *it;
     }
 }
 
-wxJumpListItem* wxJumpListCategory::Append(wxJumpListItem *item)
+wxTaskBarJumpListItem*
+wxTaskBarJumpListCategory::Append(wxTaskBarJumpListItem *item)
 {
     m_items.push_back(item);
     return item;
 }
 
-void wxJumpListCategory::Delete(wxJumpListItem *item)
+void wxTaskBarJumpListCategory::Delete(wxTaskBarJumpListItem *item)
 {
     item = Remove(item);
     if ( item )
         delete item;
 }
 
-wxJumpListItem* wxJumpListCategory::Remove(wxJumpListItem *item)
+wxTaskBarJumpListItem*
+wxTaskBarJumpListCategory::Remove(wxTaskBarJumpListItem *item)
 {
-    for (wxJumpListItems::iterator it = m_items.begin();
+    for (wxTaskBarJumpListItems::iterator it = m_items.begin();
          it != m_items.end();
          ++it)
     {
@@ -1032,115 +1039,121 @@ wxJumpListItem* wxJumpListCategory::Remove(wxJumpListItem *item)
     return NULL;
 }
 
-wxJumpListItem* wxJumpListCategory::FindItemByPosition(size_t pos) const
+wxTaskBarJumpListItem*
+wxTaskBarJumpListCategory::FindItemByPosition(size_t pos) const
 {
     wxASSERT_MSG( pos < m_items.size(), "invalid pos." );
     return m_items[pos];
 }
 
-wxJumpListItem* wxJumpListCategory::Insert(size_t pos, wxJumpListItem *item)
+wxTaskBarJumpListItem*
+wxTaskBarJumpListCategory::Insert(size_t pos, wxTaskBarJumpListItem *item)
 {
     wxASSERT_MSG( pos <= m_items.size(), "invalid pos." );
     m_items.insert(m_items.begin() + pos, item);
     return item;
 }
 
-wxJumpListItem* wxJumpListCategory::Prepend(wxJumpListItem *item)
+wxTaskBarJumpListItem*
+wxTaskBarJumpListCategory::Prepend(wxTaskBarJumpListItem *item)
 {
     return Insert(0, item);
 }
 
-void wxJumpListCategory::SetTitle(const wxString& title)
+void wxTaskBarJumpListCategory::SetTitle(const wxString& title)
 {
     m_title = title;
 }
 
-const wxString& wxJumpListCategory::GetTitle() const
+const wxString& wxTaskBarJumpListCategory::GetTitle() const
 {
     return m_title;
 }
 
-const wxJumpListItems& wxJumpListCategory::GetItems() const
+const wxTaskBarJumpListItems& wxTaskBarJumpListCategory::GetItems() const
 {
     return m_items;
 }
 
 // ----------------------------------------------------------------------------
-// wxJumpList Implementation.
+// wxTaskBarJumpList Implementation.
 // ----------------------------------------------------------------------------
-wxJumpList::wxJumpList() : m_jumpListImpl(new wxJumpListImpl())
+wxTaskBarJumpList::wxTaskBarJumpList()
+    : m_jumpListImpl(new wxTaskBarJumpListImpl())
 {
 }
 
-wxJumpList::~wxJumpList()
+wxTaskBarJumpList::~wxTaskBarJumpList()
 {
     delete m_jumpListImpl;
 }
 
-wxJumpListCategory* wxJumpList::GetTasks()
+wxTaskBarJumpListCategory& wxTaskBarJumpList::GetTasks() const
 {
     return m_jumpListImpl->GetTasks();
 }
 
-void wxJumpList::ShowRecentCategory(bool shown)
+void wxTaskBarJumpList::ShowRecentCategory(bool shown)
 {
     m_jumpListImpl->ShowRecentCategory(shown);
 }
 
-void wxJumpList::HideRecentCategory()
+void wxTaskBarJumpList::HideRecentCategory()
 {
     m_jumpListImpl->HideRecentCategory();
 }
 
-void wxJumpList::ShowFrequentCategory(bool shown)
+void wxTaskBarJumpList::ShowFrequentCategory(bool shown)
 {
     m_jumpListImpl->ShowFrequentCategory(shown);
 }
 
-void wxJumpList::HideFrequentCategory()
+void wxTaskBarJumpList::HideFrequentCategory()
 {
     m_jumpListImpl->HideFrequentCategory();
 }
 
-const wxJumpListCategory* wxJumpList::GetFrequentCategory()
+const wxTaskBarJumpListCategory& wxTaskBarJumpList::GetFrequentCategory() const
 {
     return m_jumpListImpl->GetFrequentCategory();
 }
 
-const wxJumpListCategory* wxJumpList::GetRecentCategory()
+const wxTaskBarJumpListCategory& wxTaskBarJumpList::GetRecentCategory() const
 {
     return m_jumpListImpl->GetRecentCategory();
 }
 
-const wxJumpListCategories& wxJumpList::GetCustomCategories()
+const wxTaskBarJumpListCategories&
+wxTaskBarJumpList::GetCustomCategories() const
 {
     return m_jumpListImpl->GetCustomCategories();
 }
 
-void wxJumpList::AddCategory(wxJumpListCategory* category)
+void wxTaskBarJumpList::AddCategory(wxTaskBarJumpListCategory* category)
 {
     m_jumpListImpl->AddCategory(category);
 }
 
-wxJumpListCategory* wxJumpList::RemoveCategory(const wxString& title)
+wxTaskBarJumpListCategory* wxTaskBarJumpList::RemoveCategory(
+    const wxString& title)
 {
     return m_jumpListImpl->RemoveCategory(title);
 }
 
-void wxJumpList::DeleteCategory(const wxString& title)
+void wxTaskBarJumpList::DeleteCategory(const wxString& title)
 {
     m_jumpListImpl->DeleteCategory(title);
 }
 
-void wxJumpList::Update()
+void wxTaskBarJumpList::Update()
 {
     m_jumpListImpl->Update();
 }
 
 // ----------------------------------------------------------------------------
-// wxJumpListImpl Implementation.
+// wxTaskBarJumpListImpl Implementation.
 // ----------------------------------------------------------------------------
-wxJumpListImpl::wxJumpListImpl() : m_destinationList(NULL)
+wxTaskBarJumpListImpl::wxTaskBarJumpListImpl() : m_destinationList(NULL)
 {
     HRESULT hr = CoCreateInstance
                  (
@@ -1157,12 +1170,12 @@ wxJumpListImpl::wxJumpListImpl() : m_destinationList(NULL)
     }
 }
 
-wxJumpListImpl::~wxJumpListImpl()
+wxTaskBarJumpListImpl::~wxTaskBarJumpListImpl()
 {
     if ( m_destinationList )
         m_destinationList->Release();
 
-    for ( wxJumpListCategories::iterator it = m_customCategories.begin();
+    for ( wxTaskBarJumpListCategories::iterator it = m_customCategories.begin();
           it != m_customCategories.end();
           ++it )
     {
@@ -1170,7 +1183,7 @@ wxJumpListImpl::~wxJumpListImpl()
     }
 }
 
-void wxJumpListImpl::Update()
+void wxTaskBarJumpListImpl::Update()
 {
     if ( !BeginUpdate() )
         return;
@@ -1184,65 +1197,69 @@ void wxJumpListImpl::Update()
     CommitUpdate();
 }
 
-wxJumpListCategory* wxJumpListImpl::GetTasks()
+wxTaskBarJumpListCategory& wxTaskBarJumpListImpl::GetTasks()
 {
     if ( m_tasks.get() == NULL )
-        m_tasks.reset(new wxJumpListCategory(wxT("Tasks")));
+        m_tasks.reset(new wxTaskBarJumpListCategory(wxT("Tasks")));
 
-    return m_tasks.get();
+    return *(m_tasks.get());
 }
 
-void wxJumpListImpl::ShowRecentCategory(bool shown)
+void wxTaskBarJumpListImpl::ShowRecentCategory(bool shown)
 {
     m_recent_visible = shown;
 }
 
-void wxJumpListImpl::HideRecentCategory()
+void wxTaskBarJumpListImpl::HideRecentCategory()
 {
     ShowRecentCategory(false);
 }
 
-void wxJumpListImpl::ShowFrequentCategory(bool shown)
+void wxTaskBarJumpListImpl::ShowFrequentCategory(bool shown)
 {
     m_frequent_visible = shown;
 }
 
-void wxJumpListImpl::HideFrequentCategory()
+void wxTaskBarJumpListImpl::HideFrequentCategory()
 {
     ShowFrequentCategory(false);
 }
 
-const wxJumpListCategory* wxJumpListImpl::GetFrequentCategory()
+const wxTaskBarJumpListCategory& wxTaskBarJumpListImpl::GetFrequentCategory()
 {
     wxString title = wxT("Frequent");
     if ( m_frequent.get() == NULL )
-        m_frequent.reset(new wxJumpListCategory(title));
+        m_frequent.reset(new wxTaskBarJumpListCategory(title));
     LoadKnownCategory(title);
-    return m_frequent.get();
+
+    return *m_frequent.get();
 }
 
-const wxJumpListCategory* wxJumpListImpl::GetRecentCategory()
+const wxTaskBarJumpListCategory& wxTaskBarJumpListImpl::GetRecentCategory()
 {
     wxString title = wxT("Recent");
     if ( m_recent.get() == NULL )
-        m_recent.reset(new wxJumpListCategory(title));
+        m_recent.reset(new wxTaskBarJumpListCategory(title));
     LoadKnownCategory(title);
-    return m_recent.get();
+
+    return *m_recent.get();
 }
 
-const wxJumpListCategories& wxJumpListImpl::GetCustomCategories()
+const wxTaskBarJumpListCategories&
+wxTaskBarJumpListImpl::GetCustomCategories() const
 {
     return m_customCategories;
 }
 
-void wxJumpListImpl::AddCategory(wxJumpListCategory *category)
+void wxTaskBarJumpListImpl::AddCategory(wxTaskBarJumpListCategory *category)
 {
     m_customCategories.push_back(category);
 }
 
-wxJumpListCategory* wxJumpListImpl::RemoveCategory(const wxString& title)
+wxTaskBarJumpListCategory*
+wxTaskBarJumpListImpl::RemoveCategory(const wxString& title)
 {
-    for ( wxJumpListCategories::iterator it = m_customCategories.begin();
+    for ( wxTaskBarJumpListCategories::iterator it = m_customCategories.begin();
           it != m_customCategories.end();
           ++it )
     {
@@ -1256,14 +1273,14 @@ wxJumpListCategory* wxJumpListImpl::RemoveCategory(const wxString& title)
     return NULL;
 }
 
-void wxJumpListImpl::DeleteCategory(const wxString& title)
+void wxTaskBarJumpListImpl::DeleteCategory(const wxString& title)
 {
-    wxJumpListCategory* category = RemoveCategory(title);
+    wxTaskBarJumpListCategory* category = RemoveCategory(title);
     if ( category )
         delete category;
 }
 
-bool wxJumpListImpl::BeginUpdate()
+bool wxTaskBarJumpListImpl::BeginUpdate()
 {
     if ( m_destinationList == NULL )
         return false;
@@ -1275,13 +1292,13 @@ bool wxJumpListImpl::BeginUpdate()
     return SUCCEEDED(hr);
 }
 
-bool wxJumpListImpl::CommitUpdate()
+bool wxTaskBarJumpListImpl::CommitUpdate()
 {
     m_objectArray->Release();
     return SUCCEEDED(m_destinationList->CommitList());
 }
 
-void wxJumpListImpl::AddTasksToDestinationList()
+void wxTaskBarJumpListImpl::AddTasksToDestinationList()
 {
     if ( !m_tasks.get() )
         return;
@@ -1290,13 +1307,13 @@ void wxJumpListImpl::AddTasksToDestinationList()
     if ( !collection )
         return;
 
-    const wxJumpListItems& tasks = m_tasks->GetItems();
-    for ( wxJumpListItems::const_iterator it = tasks.begin();
+    const wxTaskBarJumpListItems& tasks = m_tasks->GetItems();
+    for ( wxTaskBarJumpListItems::const_iterator it = tasks.begin();
           it != tasks.end();
           ++it )
     {
-        wxASSERT_MSG( ((*it)->GetType() == wxJUMP_LIST_TASK ||
-                      (*it)->GetType() == wxJUMP_LIST_SEPARATOR),
+        wxASSERT_MSG( ((*it)->GetType() == wxTASKBAR_JUMP_LIST_TASK ||
+                       (*it)->GetType() == wxTASKBAR_JUMP_LIST_SEPARATOR),
                       "Invalid task Item." );
         AddShellLink(collection, *(*it));
     }
@@ -1304,32 +1321,33 @@ void wxJumpListImpl::AddTasksToDestinationList()
     collection->Release();
 }
 
-void wxJumpListImpl::AddCustomCategoriesToDestionationList()
+void wxTaskBarJumpListImpl::AddCustomCategoriesToDestionationList()
 {
-    for ( wxJumpListCategories::iterator iter = m_customCategories.begin();
-          iter != m_customCategories.end();
-          ++iter )
+    for ( wxTaskBarJumpListCategories::iterator it = m_customCategories.begin();
+          it != m_customCategories.end();
+          ++it )
     {
         IObjectCollection* collection = CreateObjectCollection();
         if ( !collection )
             continue;
 
-        const wxJumpListItems& tasks = (*iter)->GetItems();
-        for ( wxJumpListItems::const_iterator it = tasks.begin();
-              it != tasks.end();
-              ++it )
+        const wxTaskBarJumpListItems& tasks = (*it)->GetItems();
+        for ( wxTaskBarJumpListItems::const_iterator iter = tasks.begin();
+              iter != tasks.end();
+              ++iter )
         {
-            wxASSERT_MSG( (*it)->GetType() == wxJUMP_LIST_DESTIONATION,
-                          "Invalid category item." );
-            AddShellLink(collection, *(*it));
+            wxASSERT_MSG(
+                (*iter)->GetType() == wxTASKBAR_JUMP_LIST_DESTIONATION,
+                "Invalid category item." );
+            AddShellLink(collection, *(*iter));
         }
-        m_destinationList->AppendCategory((*iter)->GetTitle().wc_str(),
+        m_destinationList->AppendCategory((*it)->GetTitle().wc_str(),
                                           collection);
         collection->Release();
     }
 }
 
-void wxJumpListImpl::LoadKnownCategory(const wxString& title)
+void wxTaskBarJumpListImpl::LoadKnownCategory(const wxString& title)
 {
     IApplicationDocumentLists *docList = 0;
     HRESULT hr = CoCreateInstance
@@ -1376,7 +1394,7 @@ void wxJumpListImpl::LoadKnownCategory(const wxString& title)
 
         IShellLink *shellLink = NULL;
         IShellItem *shellItem = NULL;
-        wxJumpListItem* item = NULL;
+        wxTaskBarJumpListItem* item = NULL;
 
         if ( SUCCEEDED(collectionItem->QueryInterface(
                  wxIID_IShellLink, reinterpret_cast<void**>(&shellLink))) )
