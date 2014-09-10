@@ -76,14 +76,17 @@ void wxTaskBarButtonImpl::SetProgressValue(int value)
     m_taskbarList->SetProgressValue(m_hwnd, value, 100);
 }
 
-void wxTaskBarButtonImpl::Show()
+void wxTaskBarButtonImpl::Show(bool show)
 {
-    m_taskbarList->AddTab(m_hwnd);
+    if ( show )
+        m_taskbarList->AddTab(m_hwnd);
+    else
+        m_taskbarList->DeleteTab(m_hwnd);
 }
 
 void wxTaskBarButtonImpl::Hide()
 {
-    m_taskbarList->DeleteTab(m_hwnd);
+    Show(false);
 }
 
 void wxTaskBarButtonImpl::SetThumbnailTooltip(const wxString& tooltip)
