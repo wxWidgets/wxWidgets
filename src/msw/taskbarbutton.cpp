@@ -122,7 +122,6 @@ public:
     virtual HRESULT wxSTDCALL SetThumbnailClip(HWND, RECT *) = 0;
 };
 
-
 class IShellLinkA : public IUnknown
 {
 public:
@@ -214,7 +213,7 @@ THUMBBUTTONFLAGS GetNativeThumbButtonFlags(const wxThumbBarButton& button)
     return static_cast<THUMBBUTTONFLAGS>(flags);
 }
 
-IShellLink* CreateShellLink(const wxJumpListItem& item)
+bool AddShellLink(IObjectCollection *collection, const wxJumpListItem& item)
 {
     IShellLink* shellLink = NULL;
     IPropertyStore* propertyStore = NULL;
@@ -230,39 +229,62 @@ IShellLink* CreateShellLink(const wxJumpListItem& item)
     if ( FAILED(hr) )
     {
         wxLogApiError("CoCreateInstance(wxCLSID_ShellLink)", hr);
-        return shellLink;
+        return false;
     }
 
-    if ( !item.GetFilePath().IsEmpty() )
-        shellLink->SetPath(item.GetFilePath().wc_str());
-    if ( !item.GetArguments().IsEmpty() )
-        shellLink->SetArguments(item.GetArguments().wc_str());
-    if ( !item.GetIconPath().IsEmpty() )
+    if ( item.GetType() == wxJUMP_LIST_TASK )
     {
-        shellLink->SetIconLocation(item.GetIconPath().wc_str(),
-                                    item.GetIconIndex());
+        if ( !item.GetFilePath().IsEmpty() )
+            shellLink->SetPath(item.GetFilePath().wc_str());
+        if ( !item.GetArguments().IsEmpty() )
+            shellLink->SetArguments(item.GetArguments().wc_str());
+        if ( !item.GetIconPath().IsEmpty() )
+        {
+            shellLink->SetIconLocation(item.GetIconPath().wc_str(),
+                                        item.GetIconIndex());
+        }
+        if ( !item.GetTooltip().IsEmpty() )
+            shellLink->SetDescription(item.GetTooltip().wc_str());
     }
-    if ( !item.GetTooltip().IsEmpty() )
-        shellLink->SetDescription(item.GetTooltip().wc_str());
 
     hr = shellLink->QueryInterface(IID_IPropertyStore,
-                                    reinterpret_cast<void**>(&(propertyStore)));
-    if ( SUCCEEDED(hr ))
+                                   reinterpret_cast<void**>(&(propertyStore)));
+    if ( FAILED(hr) )
     {
-        PROPVARIANT pv;
+        wxLogApiError("IShellLink(QueryInterface)", hr);
+        shellLink->Release();
+        return false;
+    }
+
+    PROPVARIANT pv;
+    if ( item.GetType() == wxJUMP_LIST_TASK )
+    {
         hr = InitPropVariantFromString(item.GetTitle().wc_str(), &pv);
         if ( SUCCEEDED(hr) )
         {
             hr = propertyStore->SetValue(PKEY_Title, pv);
         }
-
-        //Save the changes we made to the property store
-        propertyStore->Commit();
-        propertyStore->Release();
-        PropVariantClear(&pv);
+    }
+    else if ( item.GetType() == wxJUMP_LIST_SEPARATOR )
+    {
+        hr = InitPropVariantFromBoolean(TRUE, &pv);
+        if ( SUCCEEDED(hr) )
+        {
+            hr = propertyStore->SetValue(PKEY_AppUserModel_IsDestListSeparator,
+                                         pv);
+        }
     }
 
-    return shellLink;
+    // Save the changes we made to the property store.
+    propertyStore->Commit();
+    propertyStore->Release();
+    PropVariantClear(&pv);
+
+    // Add this IShellLink object to the given collection.
+    hr = collection->AddObject(shellLink);
+
+    shellLink->Release();
+    return SUCCEEDED(hr);
 }
 
 } // namespace
@@ -639,19 +661,32 @@ void wxAppProgressIndicator::Init()
     }
 }
 
-wxJumpListItem::wxJumpListItem(const wxString& title,
+wxJumpListItem::wxJumpListItem(wxJumpListItemType type,
+                               const wxString& title,
                                const wxString& filePath,
                                const wxString& arguments,
                                const wxString& tooltip,
                                const wxString& iconPath,
                                int iconIndex)
-    : m_title(title),
+    : m_type(type),
+      m_title(title),
       m_filePath(filePath),
       m_arguments(arguments),
       m_tooltip(tooltip),
       m_iconPath(iconPath),
       m_iconIndex(iconIndex)
 {
+}
+
+
+wxJumpListItemType wxJumpListItem::GetType() const
+{
+    return m_type;
+}
+
+void wxJumpListItem::SetType(wxJumpListItemType type)
+{
+    m_type = type;
 }
 
 const wxString& wxJumpListItem::GetTitle() const
@@ -793,7 +828,7 @@ void wxJumpList::AddTasksToDestinationList()
           iter != m_tasks.end();
           ++iter )
     {
-        collection->AddObject(CreateShellLink(*iter));
+        AddShellLink(collection, *iter);
     }
     m_destinationList->AddUserTasks(objectArray);
 

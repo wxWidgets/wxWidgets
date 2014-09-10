@@ -141,13 +141,23 @@ bool MyApp::OnInit()
         return false;
     wxJumpList jump;
     wxJumpListItems tasks;
-    wxJumpListItem item(wxT("Task 1"),
-                        wxStandardPaths::Get().GetExecutablePath(),
-                        wxEmptyString,
-                        wxT("Test Task"),
-                        wxStandardPaths::Get().GetExecutablePath(),
-                        0);
-    tasks.push_back(item);
+    wxJumpListItem item1(wxJUMP_LIST_TASK,
+                         wxT("Task 1"),
+                         wxStandardPaths::Get().GetExecutablePath(),
+                         wxEmptyString,
+                         wxT("Test Task"),
+                         wxStandardPaths::Get().GetExecutablePath(),
+                         0);
+    wxJumpListItem item2(wxJUMP_LIST_TASK,
+                         wxT("Task 2"),
+                         wxStandardPaths::Get().GetExecutablePath(),
+                         wxEmptyString,
+                         wxT("Test Task"),
+                         wxStandardPaths::Get().GetExecutablePath(),
+                         0);
+    tasks.push_back(item1);
+    tasks.push_back(wxJumpListItem(wxJUMP_LIST_SEPARATOR));
+    tasks.push_back(item2);
     jump.SetTasks(tasks);
 
     MyFrame *frame = new MyFrame("wxTaskBarButton App");
