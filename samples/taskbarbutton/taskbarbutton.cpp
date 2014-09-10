@@ -23,7 +23,61 @@ enum
 {
     ProgressValueSlider = wxID_HIGHEST,
     VisibilityRadio,
+    ThumbnailTooltipSetBtn,
+    ProgressStateChoice,
+    SetOverlayIconBtn,
+    ClearOverlayIconBtn,
+    SetThumbnailClipBtn,
+    RestoreThumbnailClipBtn,
 };
+
+namespace {
+
+wxBitmap CreateBitmap(const wxColour& colour, int w, int h)
+{
+    wxMemoryDC dc;
+    wxBitmap bmp(w, h);
+    dc.SelectObject(bmp);
+
+    // Draw transparent background
+    wxColour magic(255, 0, 255);
+    wxBrush magicBrush(magic);
+    dc.SetBrush(magicBrush);
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.DrawRectangle(0, 0, w, h);
+
+    // Draw image content
+    dc.SetBrush(wxBrush(colour));
+    dc.DrawCircle(h / 2, h / 2 + 1, h / 2);
+    dc.SelectObject(wxNullBitmap);
+
+    // Finalize transparency with a mask
+    wxMask *mask = new wxMask(bmp, magic);
+    bmp.SetMask(mask);
+    return bmp;
+}
+
+wxIcon CreateRandomIcon()
+{
+    static int counter = 0;
+    static const wxColour* colours[] =
+    {
+        wxBLACK,
+        wxWHITE,
+        wxRED,
+        wxBLUE,
+        wxGREEN,
+        wxCYAN,
+        wxLIGHT_GREY
+    };
+
+    wxIcon icon;
+    icon.CopyFromBitmap(CreateBitmap(*(colours[counter]), 16, 16));
+    counter = (++counter) % WXSIZEOF(colours);
+    return icon;
+}
+
+}  // namespace
 
 class MyApp : public wxApp
 {
@@ -41,9 +95,16 @@ private:
 
     void OnSetProgressValue(wxScrollEvent& WXUNUSED(event));
     void OnVisibilityChange(wxCommandEvent& WXUNUSED(event));
+    void OnSetThumbnailTooltipBtn(wxCommandEvent& WXUNUSED(event));
+    void OnChoice(wxCommandEvent& event);
+    void OnSetOverlayIcon(wxCommandEvent& WXUNUSED(event));
+    void OnClearOverlayIcon(wxCommandEvent& WXUNUSED(event));
+    void OnSetOrRestoreThumbnailClip(wxCommandEvent& event);
 
     wxSlider *m_slider;
     wxRadioBox *m_visibilityRadioBox;
+    wxTextCtrl *m_textCtrl;
+    wxChoice *m_stateChoice;
 };
 
 IMPLEMENT_APP(MyApp)
@@ -87,9 +148,57 @@ MyFrame::MyFrame(const wxString& title)
                                           wxDefaultPosition, wxDefaultSize,
                                           WXSIZEOF(labels), labels,
                                           1, wxRA_SPECIFY_ROWS);
+   // SetThumbnailTooltip section.
+    wxStaticBoxSizer *sttSizer =
+        new wxStaticBoxSizer(wxVERTICAL, panel, wxT("SetThumbnailTooltip"));
+    m_textCtrl = new wxTextCtrl(panel, wxID_ANY);
+    wxButton *btn = new wxButton(panel, ThumbnailTooltipSetBtn, wxT("Set"));
+    sttSizer->Add(m_textCtrl, 1, wxEXPAND | wxALL, 2);
+    sttSizer->Add(btn, 1, wxEXPAND | wxALL, 2);
+
+    // SetProgressState section.
+    wxStaticBoxSizer *spsSizer =
+        new wxStaticBoxSizer(wxVERTICAL, panel, wxT("SetProgressState"));
+    const wxString choices[] =
+    {
+        "wxNoProgress",
+        "wxIndeterminate",
+        "wxNormal",
+        "wxError",
+        "wxPaused"
+    };
+    m_stateChoice = new wxChoice(panel, ProgressStateChoice,
+                                 wxDefaultPosition, wxDefaultSize,
+                                 WXSIZEOF(choices), choices);
+    spsSizer->Add(m_stateChoice, 0, wxALL | wxGROW, 5);
+
+    // SetOverlayIcon section.
+    wxStaticBoxSizer *soiSizer =
+        new wxStaticBoxSizer(wxVERTICAL, panel, wxT("SetOverlayIcon"));
+    wxButton *setOverlayIconBtn =
+        new wxButton(panel, SetOverlayIconBtn, wxT("Set Overlay Icon"));
+    wxButton *clearOverlayIconBtn =
+        new wxButton(panel, ClearOverlayIconBtn, wxT("Clear Overlay Icon"));
+    soiSizer->Add(setOverlayIconBtn, 1, wxEXPAND | wxALL, 2);
+    soiSizer->Add(clearOverlayIconBtn, 1, wxEXPAND | wxALL, 2);
+
+    // SetThumbnailClip section.
+    wxStaticBoxSizer *stcSizer =
+        new wxStaticBoxSizer(wxVERTICAL, panel, wxT("SetThumbnailClip"));
+    wxButton *setThumbnailClipBtn =
+        new wxButton(panel, SetThumbnailClipBtn, wxT("Set Thumbnail Clip"));
+    wxButton *restoreThumbnailClipBtn =
+        new wxButton(panel, RestoreThumbnailClipBtn,
+                     wxT("Restore Thumbnail Clip"));
+    stcSizer->Add(setThumbnailClipBtn, 1, wxEXPAND | wxALL, 2);
+    stcSizer->Add(restoreThumbnailClipBtn, 1, wxEXPAND | wxALL, 2);
 
     gs->Add(spvSizer, 0, wxEXPAND);
     gs->Add(m_visibilityRadioBox, 0, wxEXPAND);
+    gs->Add(sttSizer, 0, wxEXPAND);
+    gs->Add(spsSizer, 0, wxEXPAND);
+    gs->Add(soiSizer, 0, wxEXPAND);
+    gs->Add(stcSizer, 0, wxEXPAND);
 
     wxStaticText *text = new wxStaticText(
         panel, wxID_ANY, wxT("Welcome to wxTaskbarButton sample"));
@@ -106,6 +215,12 @@ MyFrame::MyFrame(const wxString& title)
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_COMMAND_SCROLL_CHANGED(ProgressValueSlider, MyFrame::OnSetProgressValue)
     EVT_RADIOBOX(VisibilityRadio, MyFrame::OnVisibilityChange)
+    EVT_BUTTON(ThumbnailTooltipSetBtn, MyFrame::OnSetThumbnailTooltipBtn)
+    EVT_CHOICE(ProgressStateChoice, MyFrame::OnChoice)
+    EVT_BUTTON(SetOverlayIconBtn, MyFrame::OnSetOverlayIcon)
+    EVT_BUTTON(ClearOverlayIconBtn, MyFrame::OnClearOverlayIcon)
+    EVT_BUTTON(SetThumbnailClipBtn, MyFrame::OnSetOrRestoreThumbnailClip)
+    EVT_BUTTON(RestoreThumbnailClipBtn, MyFrame::OnSetOrRestoreThumbnailClip)
 wxEND_EVENT_TABLE()
 
 void MyFrame::OnSetProgressValue(wxScrollEvent& WXUNUSED(event))
@@ -116,7 +231,68 @@ void MyFrame::OnSetProgressValue(wxScrollEvent& WXUNUSED(event))
 void MyFrame::OnVisibilityChange(wxCommandEvent& WXUNUSED(event))
 {
     if ( m_visibilityRadioBox->GetSelection() == 0 )
-        MSWGetTaskBarButton()->ShowInTaskbar();
+        MSWGetTaskBarButton()->Show();
     else
-        MSWGetTaskBarButton()->HideInTaskbar();
+        MSWGetTaskBarButton()->Hide();
+}
+
+void MyFrame::OnSetThumbnailTooltipBtn(wxCommandEvent& WXUNUSED(event))
+{
+    MSWGetTaskBarButton()->SetThumbnailTooltip(m_textCtrl->GetLineText(0));
+}
+
+void MyFrame::OnChoice(wxCommandEvent& event)
+{
+    int sel = event.GetSelection();
+    wxTaskBarButtonState state;
+    switch(sel)
+    {
+        case 0:
+            state = wxTASKBAR_BUTTON_NO_PROGRESS;
+            break;
+        case 1:
+            state = wxTASKBAR_BUTTON_INDETERMINATE;
+            break;
+        case 2:
+            state = wxTASKBAR_BUTTON_NORMAL;
+            break;
+        case 3:
+            state = wxTASKBAR_BUTTON_ERROR;
+            break;
+        case 4:
+            state = wxTASKBAR_BUTTON_PAUSED;
+            break;
+        default:
+            state = wxTASKBAR_BUTTON_NO_PROGRESS;
+            break;
+    }
+
+    MSWGetTaskBarButton()->SetProgressState(state);
+}
+
+void MyFrame::OnSetOverlayIcon(wxCommandEvent& WXUNUSED(event))
+{
+    MSWGetTaskBarButton()->SetOverlayIcon(CreateRandomIcon());
+}
+
+void MyFrame::OnClearOverlayIcon(wxCommandEvent& WXUNUSED(event))
+{
+    MSWGetTaskBarButton()->SetOverlayIcon(wxNullIcon);
+}
+
+void MyFrame::OnSetOrRestoreThumbnailClip(wxCommandEvent& event)
+{
+    wxRect rect;
+    if ( event.GetId() == SetThumbnailClipBtn )
+    {
+        static const int CLIP_LENGTH = 100;
+        int height, width;
+        GetClientSize(&width, &height);
+        rect.SetX((width - CLIP_LENGTH) / 2);
+        rect.SetY((height - CLIP_LENGTH) / 2);
+        rect.SetHeight(CLIP_LENGTH);
+        rect.SetWidth(CLIP_LENGTH);
+    }
+
+    MSWGetTaskBarButton()->SetThumbnailClip(rect);
 }

@@ -21,8 +21,12 @@ public:
     virtual ~wxTaskBarButtonImpl();
 
     virtual void SetProgressValue(int value) wxOVERRIDE;
-    virtual void ShowInTaskbar() wxOVERRIDE;
-    virtual void HideInTaskbar() wxOVERRIDE;
+    virtual void Show() wxOVERRIDE;
+    virtual void Hide() wxOVERRIDE;
+    virtual void SetThumbnailTooltip(const wxString& tooltip) wxOVERRIDE;
+    virtual void SetProgressState(wxTaskBarButtonState state) wxOVERRIDE;
+    virtual void SetOverlayIcon(const wxIcon& icon) wxOVERRIDE;
+    virtual void SetThumbnailClip(const wxRect& rect) wxOVERRIDE;
 
 private:
     friend class wxTopLevelWindowMSW;
