@@ -2189,13 +2189,13 @@ public:
     // The default implementation works for all render targets, but the D2D 1.0
     // render target holders shouldn't need to override it, since none of the
     // 1.0 render targets offer a better version of this method.
-    virtual void DrawBitmap(ID2D1Image* image, D2D1_POINT_2F offset,
+    virtual void DrawBitmap(ID2D1Bitmap* bitmap, D2D1_POINT_2F offset,
         D2D1_RECT_F imageRectangle, wxInterpolationQuality interpolationQuality,
         wxCompositionMode WXUNUSED(compositionMode))
     {
         D2D1_RECT_F destinationRectangle = D2D1::RectF(offset.x, offset.y, offset.x + imageRectangle.right, offset.y + imageRectangle.bottom);
         m_nativeResource->DrawBitmap(
-            (ID2D1Bitmap*)image, 
+            bitmap,
             destinationRectangle, 
             1.0f, 
             wxD2DConvertBitmapInterpolationMode(interpolationQuality),
