@@ -1204,6 +1204,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xpmdecod.h
     wx/xpmhand.h
     wx/xrc/xmlreshandler.h
+    wx/taskbarbutton.h
 </set>
 
 <!-- ====================================================================== -->
@@ -2001,6 +2002,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/textentry.cpp
     src/msw/tglbtn.cpp
     src/msw/treectrl.cpp
+    src/msw/taskbarbutton.cpp
 </set>
 <set var="MSW_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -2096,6 +2098,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/toplevel.h
     wx/msw/treectrl.h
     wx/msw/window.h
+    wx/msw/taskbarbutton.h
 </set>
 <set var="MSW_RSC" hints="files">
     <!-- Resources must be installed together with headers: -->
@@ -3025,13 +3028,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/richtooltip.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
-    src/msw/taskbarbutton.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
     wx/msw/notifmsg.h
     wx/msw/sound.h
     wx/msw/taskbar.h
-    wx/msw/taskbarbutton.h
 </set>
 
 <!-- not used with wxUniv -->

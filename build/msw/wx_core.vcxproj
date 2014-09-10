@@ -1002,6 +1002,7 @@
     <ClCompile Include="..\..\src\generic\vlbox.cpp" />
     <ClCompile Include="..\..\src\generic\vscroll.cpp" />
     <ClCompile Include="..\..\src\xrc\xmlreshandler.cpp" />
+    <ClCompile Include="..\..\src\msw\taskbarbutton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -1122,6 +1123,7 @@
     <ClInclude Include="..\..\include\wx\msw\statline.h" />
     <ClInclude Include="..\..\include\wx\msw\stattext.h" />
     <ClInclude Include="..\..\include\wx\msw\statusbar.h" />
+    <ClInclude Include="..\..\include\wx\msw\taskbarbutton.h" />
     <ClInclude Include="..\..\include\wx\msw\textctrl.h" />
     <ClInclude Include="..\..\include\wx\msw\textentry.h" />
     <ClInclude Include="..\..\include\wx\msw\tglbtn.h" />
@@ -1327,6 +1329,7 @@
     <ClInclude Include="..\..\include\wx\statline.h" />
     <ClInclude Include="..\..\include\wx\stattext.h" />
     <ClInclude Include="..\..\include\wx\statusbr.h" />
+    <ClInclude Include="..\..\include\wx\taskbarbutton.h" />
     <ClInclude Include="..\..\include\wx\tbarbase.h" />
     <ClInclude Include="..\..\include\wx\textcompleter.h" />
     <ClInclude Include="..\..\include\wx\textctrl.h" />
