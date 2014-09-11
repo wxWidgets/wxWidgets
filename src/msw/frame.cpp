@@ -156,21 +156,15 @@ bool wxFrame::Create(wxWindow *parent,
 #if wxUSE_DYNLIB_CLASS
         typedef BOOL (WINAPI *ChangeWindowMessageFilter_t)(UINT message,
                                                            DWORD dwFlag);
-        static ChangeWindowMessageFilter_t s_pfnChangeWindowMessageFilter = NULL;
-        if ( !s_pfnChangeWindowMessageFilter )
+        wxDynamicLibrary dllUser32(wxT("user32.dll"));
+
+        ChangeWindowMessageFilter_t pfnChangeWindowMessageFilter = NULL;
+        wxDL_INIT_FUNC(pfn, ChangeWindowMessageFilter, dllUser32);
+        if ( pfnChangeWindowMessageFilter )
         {
-            wxDynamicLibrary dllUser32(wxT("user32.dll"));
-            if ( dllUser32.IsLoaded() )
-            {
-                s_pfnChangeWindowMessageFilter = (ChangeWindowMessageFilter_t)
-                    dllUser32.GetSymbol(wxT("ChangeWindowMessageFilter"));
-                if ( s_pfnChangeWindowMessageFilter )
-                {
-                    s_pfnChangeWindowMessageFilter(wxMsgTaskbarButtonCreated,
-                                                   wxMSGFLT_ADD);
-                    s_pfnChangeWindowMessageFilter(WM_COMMAND, wxMSGFLT_ADD);
-                }
-            }
+            pfnChangeWindowMessageFilter(wxMsgTaskbarButtonCreated,
+                                           wxMSGFLT_ADD);
+            pfnChangeWindowMessageFilter(WM_COMMAND, wxMSGFLT_ADD);
         }
 #else
         ChangeWindowMessageFilter(wxMsgTaskbarButtonCreated, wxMSGFLT_ADD);
