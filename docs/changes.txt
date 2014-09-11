@@ -109,3 +109,4 @@ wxOSX/Cocoa:
 
 - Add support for wxEVT_COMBOBOX_DROPDOWN and wxEVT_COMBOBOX_CLOSEUP
   events (Igor Korot).
+- Implement strike-through support in wxFont (Igor Korot).

@@ -834,12 +834,15 @@ public:
     wxColour GetColour() const { return m_colour ; }
 
     bool GetUnderlined() const { return m_underlined ; }
+    bool GetStrikethrough() const { return m_strikethrough; }
+
 #if wxOSX_USE_IPHONE
     UIFont* GetUIFont() const { return m_uiFont; }
 #endif
 private :
     wxColour m_colour;
-    bool m_underlined;
+    bool m_underlined,
+         m_strikethrough;
 #if wxOSX_USE_ATSU_TEXT
     ATSUStyle m_macATSUIStyle;
 #endif
@@ -853,6 +856,7 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
 {
     m_colour = col;
     m_underlined = font.GetUnderlined();
+    m_strikethrough = font.GetStrikethrough();
 
     m_ctFont.reset( wxMacCreateCTFont( font ) );
 #if wxOSX_USE_IPHONE
@@ -2309,6 +2313,16 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
 
         CGPoint points[] = { {0.0, -2.0},  {width, -2.0} };
         
+        CGContextSetStrokeColorWithColor(m_cgContext, col);
+        CGContextSetShouldAntialias(m_cgContext, false);
+        CGContextSetLineWidth(m_cgContext, 1.0);
+        CGContextStrokeLineSegments(m_cgContext, points, 2);
+    }
+    if ( fref->GetStrikethrough() )
+    {
+        CGFloat width = CTLineGetTypographicBounds(line, NULL, NULL, NULL);
+        CGFloat height = CTFontGetSize( font );
+        CGPoint points[] = { {0.0, height / 2},  {width, height / 2} };
         CGContextSetStrokeColorWithColor(m_cgContext, col);
         CGContextSetShouldAntialias(m_cgContext, false);
         CGContextSetLineWidth(m_cgContext, 1.0);

@@ -103,6 +103,15 @@ public:
 
     wxFontWeight GetWeight() const { return m_info.GetWeight(); }
 
+    void SetStrikethrough( bool s )
+    {
+        if ( m_info.m_strikethrough != s )
+        {
+            m_info.SetStrikethrough( s );
+            Free();
+        }
+    }
+
     void SetUnderlined( bool u )
     {
         if ( m_info.m_underlined != u )
@@ -113,6 +122,7 @@ public:
     }
 
     bool GetUnderlined() const { return m_info.GetUnderlined(); }
+    bool GetStrikethrough() const { return m_info.GetStrikethrough(); }
 
     void SetFaceName( const wxString& facename )
     {
@@ -719,6 +729,13 @@ void wxFont::SetUnderlined(bool underlined)
     M_FONTDATA->SetUnderlined( underlined );
 }
 
+void wxFont::SetStrikethrough(bool strikethrough)
+{
+     AllocExclusive();
+
+     M_FONTDATA->SetStrikethrough( strikethrough );
+}
+
 // ----------------------------------------------------------------------------
 // accessors
 // ----------------------------------------------------------------------------
@@ -781,6 +798,13 @@ bool wxFont::GetUnderlined() const
     wxCHECK_MSG( M_FONTDATA != NULL , false, wxT("invalid font") );
 
     return M_FONTDATA->GetUnderlined();
+}
+
+bool wxFont::GetStrikethrough() const
+{
+    wxCHECK_MSG( M_FONTDATA != NULL, false, wxT("invalid font") );
+
+    return M_FONTDATA->GetStrikethrough();
 }
 
 wxString wxFont::GetFaceName() const
@@ -1248,7 +1272,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
 
 bool wxNativeFontInfo::GetStrikethrough() const
 {
-    return false;
+    return m_strikethrough;
 }
 
 
@@ -1317,8 +1341,9 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding_)
     // not reflected in native descriptors
 }
 
-void wxNativeFontInfo::SetStrikethrough(bool WXUNUSED(strikethrough))
+void wxNativeFontInfo::SetStrikethrough(bool strikethrough)
 {
+    m_strikethrough = strikethrough;
 }
 
 void wxNativeFontInfo::UpdateNamesMap(const wxString& familyName, CTFontDescriptorRef descr)
