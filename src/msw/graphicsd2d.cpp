@@ -128,12 +128,10 @@ public:
 private:
     static bool LoadLibraries()
     {
-        m_dllDirect2d.Load(wxT("d2d1.dll"), wxDL_VERBATIM | wxDL_QUIET);
-        m_dllDirectWrite.Load(wxT("dwrite.dll"), wxDL_VERBATIM | wxDL_QUIET);
+        if ( !m_dllDirect2d.Load(wxT("d2d1.dll"), wxDL_VERBATIM | wxDL_QUIET) )
+            return false;
 
-        bool hasDirect2dSupport = m_dllDirect2d.IsLoaded() && m_dllDirectWrite.IsLoaded();
-
-        if (!hasDirect2dSupport)
+        if ( !m_dllDirectWrite.Load(wxT("dwrite.dll"), wxDL_VERBATIM | wxDL_QUIET) )
             return false;
 
         #define wxLOAD_FUNC(dll, name)                    \
