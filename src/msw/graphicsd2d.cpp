@@ -2089,8 +2089,8 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFact
     wxCOMPtr<IDWriteGdiInterop> gdiInterop;
     hr = wxDWriteFactory()->GetGdiInterop(&gdiInterop);
 
-    LOGFONT logfont;
-    GetObject(font.GetHFONT(), sizeof(logfont), &logfont);
+    LOGFONTW logfont;
+    GetObjectW(font.GetHFONT(), sizeof(logfont), &logfont);
 
     // Ensure the LOGFONT object contains the correct font face name
     if (logfont.lfFaceName[0] == '\0')
