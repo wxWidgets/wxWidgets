@@ -2268,7 +2268,8 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     if (hasFamily)
     {
         wxString family = GetParamValue(wxT("family"));
-             if (family == wxT("decorative")) ifamily = wxDECORATIVE;
+        if (family == wxT("default")) ifamily = wxFONTFAMILY_DEFAULT;
+        else if (family == wxT("decorative")) ifamily = wxDECORATIVE;
         else if (family == wxT("roman")) ifamily = wxROMAN;
         else if (family == wxT("script")) ifamily = wxSCRIPT;
         else if (family == wxT("swiss")) ifamily = wxSWISS;

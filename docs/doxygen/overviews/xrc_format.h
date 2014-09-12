@@ -401,8 +401,8 @@ and can be one of the following "sub-properties":
 @row3col{weight, enum,
     One of "normal", "bold" or "light" (default: normal).}
 @row3col{family, enum,
-    One of "roman", "script", "decorative", "swiss", "modern" or "teletype"
-    (default: roman).}
+    One of "default", "roman", "script", "decorative", "swiss", "modern" or "teletype"
+    (default: default).}
 @row3col{underlined, @ref overview_xrcformat_type_bool,
     Whether the font should be underlined (default: 0).}
 @row3col{face, ,
