@@ -700,14 +700,14 @@ public:
     virtual void PositionTextCtrl( int textCtrlXAdjust,
                                    int WXUNUSED(textCtrlYAdjust) ) wxOVERRIDE
     {
-        wxPropertyGrid* pg = GetGrid();
     #ifdef wxPG_TEXTCTRLXADJUST
         textCtrlXAdjust = wxPG_TEXTCTRLXADJUST -
                           (wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1) - 1,
     #endif
         wxOwnerDrawnComboBox::PositionTextCtrl(
             textCtrlXAdjust,
-            pg->GetSpacingY() + 2
+            0 // Under MSW vertical position is already properly adjusted.
+              // Note: This parameter is not used by other ports.
         );
     }
 
