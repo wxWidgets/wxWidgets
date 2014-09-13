@@ -140,6 +140,9 @@
 class wxWebViewChromium : public wxWebView
 {
 public:
+    /**
+        wxWebViewChromium constructor, arguments as per wxWebView::New.
+    */
     wxWebViewChromium(wxWindow* parent,
                       wxWindowID id,
                       const wxString& url = wxWebViewDefaultURLStr,
@@ -148,85 +151,16 @@ public:
                       long style = 0,
                       const wxString& name = wxWebViewNameStr);
 
-    void OnSize(wxSizeEvent &event);
-
-    void SetPageSource(const wxString& pageSource);
-
-    void SetPageText(const wxString& pageText);
-
-    bool Create(wxWindow* parent,
-                wxWindowID id,
-                const wxString& url = wxWebViewDefaultURLStr,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = 0,
-                const wxString& name = wxWebViewNameStr);
-
-    virtual void LoadURL(const wxString& url);
-    virtual void LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item);
-    virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetBackwardHistory();
-    virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetForwardHistory();
-
-    virtual bool CanGoForward() const;
-    virtual bool CanGoBack() const;
-    virtual void GoBack();
-    virtual void GoForward();
-    virtual void ClearHistory();
-    virtual void EnableHistory(bool enable = true);
-    virtual void Stop();
-    virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT);
-
-    virtual wxString GetPageSource() const;
-    virtual wxString GetPageText() const;
-
-    virtual bool IsBusy() const;
-    virtual wxString GetCurrentURL() const;
-    virtual wxString GetCurrentTitle() const;
-
-    virtual void SetZoomType(wxWebViewZoomType type);
-    virtual wxWebViewZoomType GetZoomType() const;
-    virtual bool CanSetZoomType(wxWebViewZoomType type) const;
-
-    virtual void Print();
-
-    virtual wxWebViewZoom GetZoom() const;
-    virtual void SetZoom(wxWebViewZoom zoom);
-
-    virtual void* GetNativeBackend() const;
-
-    virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT) { return wxNOT_FOUND; }
-
-    //Clipboard functions
-    virtual bool CanCut() const { return true; }
-    virtual bool CanCopy() const { return true; }
-    virtual bool CanPaste() const { return true; }
-    virtual void Cut();
-    virtual void Copy();
-    virtual void Paste();
-
-    //Undo / redo functionality
-    virtual bool CanUndo() const { return true; }
-    virtual bool CanRedo() const { return true; }
-    virtual void Undo();
-    virtual void Redo();
-
-    //Editing functions
-    virtual void SetEditable(bool enable = true);
-    virtual bool IsEditable() const { return false; }
-
-    //Selection
-    virtual void SelectAll();
-    virtual bool HasSelection() const { return false; }
-    virtual void DeleteSelection();
-    virtual wxString GetSelectedText() const { return ""; }
-    virtual wxString GetSelectedSource() const { return ""; }
-    virtual void ClearSelection();
-
-    virtual void RunScript(const wxString& javascript);
-
-    //Virtual Filesystem Support
-    virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler);
-
+    /**
+        Creation function for two-step creation.
+    */
+    virtual bool Create(wxWindow* parent,
+                        wxWindowID id,
+                        const wxString& url = wxWebViewDefaultURLStr,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = 0,
+                        const wxString& name = wxWebViewNameStr);
     /**
         StartUp function for Windows platform.
 
