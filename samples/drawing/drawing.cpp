@@ -1550,28 +1550,31 @@ void MyCanvas::Draw(wxDC& pdc)
 #endif
         ;
 
-    wxGraphicsContext* context;
-    if ( wxPaintDC *paintdc = wxDynamicCast(&pdc, wxPaintDC) )
+    if ( m_useContext )
     {
-        context = renderer->CreateContext(*paintdc);
-    }
-    else if ( wxMemoryDC *memdc = wxDynamicCast(&pdc, wxMemoryDC) )
-    {
-        context = renderer->CreateContext(*memdc);
-    }
+        wxGraphicsContext* context;
+        if ( wxPaintDC *paintdc = wxDynamicCast(&pdc, wxPaintDC) )
+        {
+            context = renderer->CreateContext(*paintdc);
+        }
+        else if ( wxMemoryDC *memdc = wxDynamicCast(&pdc, wxMemoryDC) )
+        {
+            context = renderer->CreateContext(*memdc);
+        }
 #if wxUSE_METAFILE && defined(wxMETAFILE_IS_ENH)
-    else if ( wxMetafileDC *metadc = wxDynamicCast(&pdc, wxMetafileDC) )
-    {
-        context = renderer->CreateContext(*metadc);
-    }
+        else if ( wxMetafileDC *metadc = wxDynamicCast(&pdc, wxMetafileDC) )
+        {
+            context = renderer->CreateContext(*metadc);
+        }
 #endif
-    else
-    {
-        wxFAIL_MSG( "Unknown wxDC kind" );
-        return;
-    }
+        else
+        {
+            wxFAIL_MSG( "Unknown wxDC kind" );
+            return;
+        }
 
-    gdc.SetGraphicsContext(context);
+        gdc.SetGraphicsContext(context);
+    }
 
     wxDC &dc = m_useContext ? (wxDC&) gdc : (wxDC&) pdc ;
 #else
