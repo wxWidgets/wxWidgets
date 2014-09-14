@@ -35,11 +35,15 @@ public:
 private:
     CPPUNIT_TEST_SUITE( MiscTestCase );
         CPPUNIT_TEST( Assert );
+#ifdef HAVE_VARIADIC_MACROS
+        CPPUNIT_TEST( CallForEach );
+#endif // HAVE_VARIADIC_MACROS
         CPPUNIT_TEST( Delete );
         CPPUNIT_TEST( StaticCast );
     CPPUNIT_TEST_SUITE_END();
 
     void Assert();
+    void CallForEach();
     void Delete();
     void StaticCast();
 
@@ -74,6 +78,20 @@ void MiscTestCase::Assert()
     AssertIfOdd(17);
     wxSetAssertHandler(oldHandler);
 }
+
+#ifdef HAVE_VARIADIC_MACROS
+void MiscTestCase::CallForEach()
+{
+    #define MY_MACRO(pos, str) s += str;
+
+    wxString s;
+    wxCALL_FOR_EACH(MY_MACRO, "foo", "bar", "baz");
+
+    CPPUNIT_ASSERT_EQUAL( "foobarbaz", s );
+
+    #undef MY_MACRO
+}
+#endif // HAVE_VARIADIC_MACROS
 
 void MiscTestCase::Delete()
 {

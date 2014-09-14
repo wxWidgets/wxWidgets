@@ -164,14 +164,23 @@
 #define wxCALL_FOR_EACH_ARG_N(_1, _2, _3, _4, _5, _6, _7, _8, N, ...) N
 #define wxCALL_FOR_EACH_RSEQ_N() 8, 7, 6, 5, 4, 3, 2, 1, 0
 
+#define wxCALL_FOR_EACH_1_(args)   wxCALL_FOR_EACH_1 args
+#define wxCALL_FOR_EACH_2_(args)   wxCALL_FOR_EACH_2 args
+#define wxCALL_FOR_EACH_3_(args)   wxCALL_FOR_EACH_3 args
+#define wxCALL_FOR_EACH_4_(args)   wxCALL_FOR_EACH_4 args
+#define wxCALL_FOR_EACH_5_(args)   wxCALL_FOR_EACH_5 args
+#define wxCALL_FOR_EACH_6_(args)   wxCALL_FOR_EACH_6 args
+#define wxCALL_FOR_EACH_7_(args)   wxCALL_FOR_EACH_7 args
+#define wxCALL_FOR_EACH_8_(args)   wxCALL_FOR_EACH_8 args
+
 #define wxCALL_FOR_EACH_1(what, x)        what(1, x)
-#define wxCALL_FOR_EACH_2(what, x, ...)   what(2, x)  wxCALL_FOR_EACH_1(what,  __VA_ARGS__)
-#define wxCALL_FOR_EACH_3(what, x, ...)   what(3, x)  wxCALL_FOR_EACH_2(what,  __VA_ARGS__)
-#define wxCALL_FOR_EACH_4(what, x, ...)   what(4, x)  wxCALL_FOR_EACH_3(what,  __VA_ARGS__)
-#define wxCALL_FOR_EACH_5(what, x, ...)   what(5, x)  wxCALL_FOR_EACH_4(what,  __VA_ARGS__)
-#define wxCALL_FOR_EACH_6(what, x, ...)   what(6, x)  wxCALL_FOR_EACH_5(what,  __VA_ARGS__)
-#define wxCALL_FOR_EACH_7(what, x, ...)   what(7, x)  wxCALL_FOR_EACH_6(what,  __VA_ARGS__)
-#define wxCALL_FOR_EACH_8(what, x, ...)   what(8, x)  wxCALL_FOR_EACH_7(what,  __VA_ARGS__)
+#define wxCALL_FOR_EACH_2(what, x, ...)   what(2, x)  wxCALL_FOR_EACH_1_((what, __VA_ARGS__))
+#define wxCALL_FOR_EACH_3(what, x, ...)   what(3, x)  wxCALL_FOR_EACH_2_((what, __VA_ARGS__))
+#define wxCALL_FOR_EACH_4(what, x, ...)   what(4, x)  wxCALL_FOR_EACH_3_((what, __VA_ARGS__))
+#define wxCALL_FOR_EACH_5(what, x, ...)   what(5, x)  wxCALL_FOR_EACH_4_((what, __VA_ARGS__))
+#define wxCALL_FOR_EACH_6(what, x, ...)   what(6, x)  wxCALL_FOR_EACH_5_((what, __VA_ARGS__))
+#define wxCALL_FOR_EACH_7(what, x, ...)   what(7, x)  wxCALL_FOR_EACH_6_((what, __VA_ARGS__))
+#define wxCALL_FOR_EACH_8(what, x, ...)   what(8, x)  wxCALL_FOR_EACH_7_((what, __VA_ARGS__))
 
 #define wxCALL_FOR_EACH_(N, args) \
     wxCONCAT(wxCALL_FOR_EACH_, N) args
