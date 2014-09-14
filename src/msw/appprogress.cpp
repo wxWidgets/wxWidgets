@@ -62,6 +62,11 @@ wxAppProgressIndicator::~wxAppProgressIndicator()
 #endif  // wxUSE_TASKBARBUTTON
 }
 
+bool wxAppProgressIndicator::IsAvailable() const
+{
+    return !m_taskBarButtons.empty();
+}
+
 void wxAppProgressIndicator::SetValue(int value)
 {
     wxASSERT_MSG( value <= m_maxValue, wxT("invalid progress value") );

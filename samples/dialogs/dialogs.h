@@ -430,6 +430,7 @@ public:
 #if wxUSE_PROGRESSDLG
     void ShowProgress(wxCommandEvent& event);
 #endif // wxUSE_PROGRESSDLG
+    void ShowAppProgress(wxCommandEvent& event);
 
 #if wxUSE_ABOUTDLG
     void ShowSimpleAboutDialog(wxCommandEvent& event);
@@ -570,6 +571,7 @@ enum
     DIALOGS_ONTOP,
     DIALOGS_MODELESS_BTN,
     DIALOGS_PROGRESS,
+    DIALOGS_APP_PROGRESS,
     DIALOGS_ABOUTDLG_SIMPLE,
     DIALOGS_ABOUTDLG_FANCY,
     DIALOGS_ABOUTDLG_FULL,

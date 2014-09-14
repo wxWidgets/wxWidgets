@@ -21,6 +21,8 @@ public:
     wxAppProgressIndicator(wxWindow* parent = NULL, int maxValue = 100);
     virtual ~wxAppProgressIndicator();
 
+    virtual bool IsAvailable() const wxOVERRIDE;
+
     virtual void SetValue(int value) wxOVERRIDE;
     virtual void SetRange(int range) wxOVERRIDE;
     virtual void Pulse() wxOVERRIDE;

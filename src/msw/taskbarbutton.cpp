@@ -696,32 +696,46 @@ bool wxThumbBarButton::UpdateParentTaskBarButton()
 // ----------------------------------------------------------------------------
 // wxTaskBarButtonImpl Implementation.
 // ----------------------------------------------------------------------------
-wxTaskBarButtonImpl::wxTaskBarButtonImpl(wxWindow* parent)
-    : m_hwnd(parent->GetHandle()),
-      m_taskbarList(NULL),
-      m_progressRange(0),
-      m_hasInitThumbnailToolbar(false)
+
+/* static */
+wxTaskBarButton* wxTaskBarButton::New(wxWindow* parent)
 {
+    wxITaskbarList3* taskbarList = NULL;
+
     HRESULT hr = CoCreateInstance
                  (
                     wxCLSID_TaskbarList,
                     NULL,
                     CLSCTX_INPROC_SERVER,
                     wxIID_ITaskbarList3,
-                    reinterpret_cast<void **>(&m_taskbarList)
+                    reinterpret_cast<void **>(&taskbarList)
                  );
     if ( FAILED(hr) )
     {
-        wxLogApiError(wxT("CoCreateInstance(wxCLSID_TaskbarList)"), hr);
-        return;
+        // Don't log this error, it may be normal when running under XP.
+        return NULL;
     }
 
-    hr = m_taskbarList->HrInit();
+    hr = taskbarList->HrInit();
     if ( FAILED(hr) )
     {
+        // This is however unexpected.
         wxLogApiError(wxT("ITaskbarList3::Init"), hr);
-        return;
+
+        taskbarList->Release();
+        return NULL;
     }
+
+    return new wxTaskBarButtonImpl(taskbarList, parent);
+}
+
+wxTaskBarButtonImpl::wxTaskBarButtonImpl(wxITaskbarList3* taskbarList,
+                                         wxWindow* parent)
+    : m_hwnd(parent->GetHandle()),
+      m_taskbarList(taskbarList),
+      m_progressRange(0),
+      m_hasInitThumbnailToolbar(false)
+{
 }
 
 wxTaskBarButtonImpl::~wxTaskBarButtonImpl()

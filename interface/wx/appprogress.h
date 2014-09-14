@@ -41,6 +41,17 @@ public:
     virtual ~wxAppProgressIndicator();
 
     /**
+        Check if the application progress display is available.
+
+        Currently this only returns @true when using wxMSW and running under
+        Vista or later system, which provide task bar button API.
+
+        If this method returns @false, no other methods of this class do
+        anything, but they may still be called without any ill effects.
+     */
+    bool IsAvailable() const;
+
+    /**
         Set the progress value in taskbar button of parent window.
 
         @param value

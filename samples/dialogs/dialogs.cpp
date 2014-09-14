@@ -60,6 +60,8 @@
     #include "wx/progdlg.h"
 #endif // wxUSE_PROGRESSDLG
 
+#include "wx/appprogress.h"
+
 #if wxUSE_ABOUTDLG
     #include "wx/aboutdlg.h"
 
@@ -219,6 +221,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #if wxUSE_PROGRESSDLG
     EVT_MENU(DIALOGS_PROGRESS,                      MyFrame::ShowProgress)
 #endif // wxUSE_PROGRESSDLG
+
+    EVT_MENU(DIALOGS_APP_PROGRESS,                  MyFrame::ShowAppProgress)
 
 #if wxUSE_ABOUTDLG
     EVT_MENU(DIALOGS_ABOUTDLG_SIMPLE,               MyFrame::ShowSimpleAboutDialog)
@@ -465,6 +469,8 @@ bool MyApp::OnInit()
     #if wxUSE_PROGRESSDLG
         info_menu->Append(DIALOGS_PROGRESS, wxT("Pro&gress dialog\tCtrl-G"));
     #endif // wxUSE_PROGRESSDLG
+
+        info_menu->Append(DIALOGS_APP_PROGRESS, wxT("&App progress\tShift-Ctrl-G"));
 
     #if wxUSE_BUSYINFO
        info_menu->Append(DIALOGS_BUSYINFO, wxT("&Busy info dialog\tCtrl-B"));
@@ -2267,6 +2273,29 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 }
 
 #endif // wxUSE_PROGRESSDLG
+
+void MyFrame::ShowAppProgress( wxCommandEvent& WXUNUSED(event) )
+{
+    wxAppProgressIndicator progress(this);
+    if ( !progress.IsAvailable() )
+    {
+        wxLogStatus("Progress indicator not available under this platform.");
+        return;
+    }
+
+    wxLogStatus("Using application progress indicator...");
+
+    const int range = 10;
+    progress.SetRange(range);
+    for ( int i = 0; i < range; i++ )
+    {
+        progress.SetValue(i);
+
+        wxMilliSleep(500);
+    }
+
+    wxLogStatus("Progress finished");
+}
 
 #if wxUSE_ABOUTDLG
 
