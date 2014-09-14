@@ -39,8 +39,6 @@
 #include "wx/filename.h"
 #include "wx/metafile.h"
 
-#define TEST_CAIRO_EVERYWHERE 0
-
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
@@ -1789,26 +1787,27 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // set the frame icon
     SetIcon(wxICON(sample));
 
+    wxMenu *menuScreen = new wxMenu;
+    menuScreen->Append(File_ShowDefault, wxT("&Default screen\tF1"));
+    menuScreen->Append(File_ShowText, wxT("&Text screen\tF2"));
+    menuScreen->Append(File_ShowLines, wxT("&Lines screen\tF3"));
+    menuScreen->Append(File_ShowBrushes, wxT("&Brushes screen\tF4"));
+    menuScreen->Append(File_ShowPolygons, wxT("&Polygons screen\tF5"));
+    menuScreen->Append(File_ShowMask, wxT("&Mask screen\tF6"));
+    menuScreen->Append(File_ShowMaskStretch, wxT("1/&2 scaled mask\tShift-F6"));
+    menuScreen->Append(File_ShowOps, wxT("&Raster operations screen\tF7"));
+    menuScreen->Append(File_ShowRegions, wxT("Re&gions screen\tF8"));
+    menuScreen->Append(File_ShowCircles, wxT("&Circles screen\tF9"));
+#if wxUSE_GRAPHICS_CONTEXT
+    menuScreen->Append(File_ShowAlpha, wxT("&Alpha screen\tF10"));
+#endif
+    menuScreen->Append(File_ShowSplines, wxT("Spl&ines screen\tF11"));
+    menuScreen->Append(File_ShowGradients, wxT("&Gradients screen\tF12"));
+#if wxUSE_GRAPHICS_CONTEXT
+    menuScreen->Append(File_ShowGraphics, wxT("&Graphics screen"));
+#endif
+
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(File_ShowDefault, wxT("&Default screen\tF1"));
-    menuFile->Append(File_ShowText, wxT("&Text screen\tF2"));
-    menuFile->Append(File_ShowLines, wxT("&Lines screen\tF3"));
-    menuFile->Append(File_ShowBrushes, wxT("&Brushes screen\tF4"));
-    menuFile->Append(File_ShowPolygons, wxT("&Polygons screen\tF5"));
-    menuFile->Append(File_ShowMask, wxT("&Mask screen\tF6"));
-    menuFile->Append(File_ShowMaskStretch, wxT("1/&2 scaled mask\tShift-F6"));
-    menuFile->Append(File_ShowOps, wxT("&Raster operations screen\tF7"));
-    menuFile->Append(File_ShowRegions, wxT("Re&gions screen\tF8"));
-    menuFile->Append(File_ShowCircles, wxT("&Circles screen\tF9"));
-#if wxUSE_GRAPHICS_CONTEXT
-    menuFile->Append(File_ShowAlpha, wxT("&Alpha screen\tF10"));
-#endif
-    menuFile->Append(File_ShowSplines, wxT("Spl&ines screen\tF11"));
-    menuFile->Append(File_ShowGradients, wxT("&Gradients screen\tF12"));
-#if wxUSE_GRAPHICS_CONTEXT
-     menuFile->Append(File_ShowGraphics, wxT("&Graphics screen"));
-#endif
-    menuFile->AppendSeparator();
     menuFile->AppendCheckItem(File_Clip, wxT("&Clip\tCtrl-C"), wxT("Clip/unclip drawing"));
 #if wxUSE_GRAPHICS_CONTEXT
     menuFile->AppendCheckItem(File_GraphicContext, wxT("&Use GraphicContext\tCtrl-Y"), wxT("Use GraphicContext"));
@@ -1863,7 +1862,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, wxT("&File"));
+    menuBar->Append(menuFile, wxT("&Drawing"));
+    menuBar->Append(menuScreen, wxT("Scree&n"));
     menuBar->Append(menuMapMode, wxT("&Mode"));
     menuBar->Append(menuUserScale, wxT("&Scale"));
     menuBar->Append(menuAxis, wxT("&Axis"));
