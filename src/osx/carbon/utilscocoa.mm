@@ -130,6 +130,7 @@ void wxFont::SetNativeInfoFromNSFont(WX_NSFont theFont, wxNativeFontInfo* info)
         wxFontStyle fontstyle = wxFONTSTYLE_NORMAL;
         wxFontWeight fontweight = wxFONTWEIGHT_NORMAL;
         bool underlined = false;
+        bool strikethrough = false;
 
         int size = (int) ([theFont pointSize]+0.5);
  
@@ -143,7 +144,7 @@ void wxFont::SetNativeInfoFromNSFont(WX_NSFont theFont, wxNativeFontInfo* info)
         if ( theTraits & NSItalicFontMask )
             fontstyle = wxFONTSTYLE_ITALIC ;
 
-        info->Init(size,fontFamily,fontstyle,fontweight,underlined,
+        info->Init(size,fontFamily,fontstyle,fontweight,underlined, strikethrough,
                    wxCFStringRef::AsString([theFont familyName]), wxFONTENCODING_DEFAULT);
 
     }
