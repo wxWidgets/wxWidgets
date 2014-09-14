@@ -2575,7 +2575,7 @@ public:
 protected:
     void DoAcquireResource()
     {
-        ID2D1DCRenderTarget* renderTarget;
+        wxCOMPtr<ID2D1DCRenderTarget> renderTarget;
         D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties = D2D1::RenderTargetProperties(
             D2D1_RENDER_TARGET_TYPE_DEFAULT,
             D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED));
