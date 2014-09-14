@@ -114,6 +114,10 @@ void wxFrame::Init()
 #endif
 
     m_wasMinimized = false;
+
+#if wxUSE_TASKBARBUTTON
+    m_taskBarButton = NULL;
+#endif
 }
 
 bool wxFrame::Create(wxWindow *parent,
@@ -143,7 +147,6 @@ bool wxFrame::Create(wxWindow *parent,
 #endif // wxUSE_ACCEL && __POCKETPC__
 
 #if wxUSE_TASKBARBUTTON
-    m_taskBarButton = NULL;
     static bool s_taskbarButtonCreatedMsgRegistered = false;
     if ( !s_taskbarButtonCreatedMsgRegistered )
     {
