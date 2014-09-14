@@ -991,7 +991,7 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
 #if wxUSE_TASKBARBUTTON
     if ( message == wxMsgTaskbarButtonCreated )
     {
-        m_taskBarButton = new wxTaskBarButtonImpl(this);
+        m_taskBarButton = wxTaskBarButton::New(this);
         processed = true;
     }
 #endif

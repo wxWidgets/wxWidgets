@@ -33,12 +33,16 @@ wxAppProgressIndicator::wxAppProgressIndicator(wxWindow* parent, int maxValue)
               it != wxTopLevelWindows.end();
               ++it )
         {
-            m_taskBarButtons.push_back(new wxTaskBarButtonImpl(*it));
+            wxTaskBarButton* const button = wxTaskBarButton::New(*it);
+            if ( button )
+                m_taskBarButtons.push_back(button);
         }
     }
     else
     {
-        m_taskBarButtons.push_back(new wxTaskBarButtonImpl(parent));
+        wxTaskBarButton* const button = wxTaskBarButton::New(parent);
+        if ( button )
+            m_taskBarButtons.push_back(button);
     }
 
     Reset();

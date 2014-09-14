@@ -106,7 +106,10 @@ private:
 class WXDLLIMPEXP_CORE wxTaskBarButton
 {
 public:
-    wxTaskBarButton() { }
+    // Factory function, may return NULL if task bar buttons are not supported
+    // by the current system.
+    static wxTaskBarButton* New(wxWindow* parent);
+
     virtual ~wxTaskBarButton() { }
 
     // Operations:
@@ -126,6 +129,9 @@ public:
     virtual bool AppendSeparatorInThumbBar() = 0;
     virtual wxThumbBarButton* RemoveThumbBarButton(wxThumbBarButton *button) = 0;
     virtual wxThumbBarButton* RemoveThumbBarButton(int id) = 0;
+
+protected:
+    wxTaskBarButton() { }
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxTaskBarButton);
