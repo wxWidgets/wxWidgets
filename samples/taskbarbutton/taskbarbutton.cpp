@@ -193,6 +193,12 @@ bool MyApp::OnInit()
     }
 
     MyFrame *frame = new MyFrame("wxTaskBarButton App");
+    if ( !frame->MSWGetTaskBarButton() )
+    {
+        wxLogError("Task bar button API is not available on this system, sorry.");
+        return false;
+    }
+
     frame->Show(true);
 
     return true;
