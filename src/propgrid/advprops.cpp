@@ -1047,15 +1047,13 @@ wxVariant wxSystemColourProperty::DoTranslateVal( wxColourPropertyValue& v ) con
 
 int wxSystemColourProperty::ColToInd( const wxColour& colour ) const
 {
-    size_t i;
-    size_t i_max = m_choices.GetCount();
-
-    if ( !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
-        i_max -= 1;
-
-    for ( i=0; i<i_max; i++ )
+    const unsigned int i_max = m_choices.GetCount();
+    for ( unsigned int i=0; i<i_max; i++ )
     {
-        int ind = m_choices[i].GetValue();
+        const int ind = m_choices[i].GetValue();
+        // Skip custom colour
+        if (ind == wxPG_COLOUR_CUSTOM)
+            continue;
 
         if ( colour == GetColour(ind) )
         {
@@ -1215,7 +1213,7 @@ wxSize wxSystemColourProperty::OnMeasureImage( int ) const
 
 int wxSystemColourProperty::GetCustomColourIndex() const
 {
-    return m_choices.GetCount() - 1;
+    return m_choices.Index(wxPG_COLOUR_CUSTOM);
 }
 
 
@@ -1265,9 +1263,9 @@ bool wxSystemColourProperty::QueryColourFromUser( wxVariant& variant ) const
 bool wxSystemColourProperty::IntToValue( wxVariant& variant, int number, int argFlags ) const
 {
     int index = number;
-    int type = m_choices.GetValue(index);
+    const int type = m_choices.GetValue(index);
 
-    if ( m_choices.GetLabel(index) == _("Custom") )
+    if ( type == wxPG_COLOUR_CUSTOM )
     {
          if ( !(argFlags & wxPG_PROPERTY_SPECIFIC) )
             return QueryColourFromUser(variant);
@@ -1404,15 +1402,21 @@ void wxSystemColourProperty::OnCustomPaint( wxDC& dc, const wxRect& rect,
 
 bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& text, int argFlags ) const
 {
-    wxString custColName(m_choices.GetLabel(GetCustomColourIndex()));
+    const int custIndex = GetCustomColourIndex();
+    wxString custColName;
+    if (custIndex != wxNOT_FOUND)
+        custColName = m_choices.GetLabel(custIndex);
+
     wxString colStr(text);
     colStr.Trim(true);
     colStr.Trim(false);
 
+    const bool isCustomColour = (colStr == custColName);
+
     wxColour customColour;
     bool conversionSuccess = false;
 
-    if ( colStr != custColName )
+    if ( !isCustomColour )
     {
         if ( colStr.Find(wxS("(")) == 0 )
         {
@@ -1444,7 +1448,7 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
 
     if ( !conversionSuccess && m_choices.GetCount() &&
          !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) &&
-         colStr == custColName )
+         isCustomColour )
     {
         if ( !(argFlags & wxPG_EDITABLE_VALUE ))
         {
@@ -1520,7 +1524,7 @@ bool wxSystemColourProperty::DoSetAttribute( const wxString& name, wxVariant& va
         if ( ival && (m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
         {
             // Show custom choice
-            m_choices.Insert(_("Custom"), GetCustomColourIndex(), wxPG_COLOUR_CUSTOM);
+            m_choices.Add(_("Custom"), wxPG_COLOUR_CUSTOM);
             m_flags &= ~(wxPG_PROP_HIDE_CUSTOM_COLOUR);
         }
         else if ( !ival && !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
@@ -1562,6 +1566,28 @@ static const char* const gs_cp_es_normcolour_labels[] = {
     NULL
 };
 
+static const long gs_cp_es_normcolour_values[] = {
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    wxPG_COLOUR_CUSTOM
+};
+
 static const unsigned long gs_cp_es_normcolour_colours[] = {
     wxPG_COLOUR(0,0,0),
     wxPG_COLOUR(128,0,0),
@@ -1593,23 +1619,27 @@ wxColourProperty::wxColourProperty( const wxString& label,
                       const wxString& name,
                       const wxColour& value )
     : wxSystemColourProperty(label, name, gs_cp_es_normcolour_labels,
-                             NULL,
+                             gs_cp_es_normcolour_values,
                              &gs_wxColourProperty_choicesCache, value )
 {
     wxASSERT_MSG( wxTheColourDatabase, wxT("No colour database") );
     if ( wxTheColourDatabase )
     {
-        // Extend colour database with custom PG colours.
+        // Extend colour database with PG-specific colours.
         const char* const* colourLabels = gs_cp_es_normcolour_labels;
         for ( int i = 0; *colourLabels; colourLabels++, i++ )
         {
-            wxColour clr = wxTheColourDatabase->Find(*colourLabels);
-            // Use standard wx colour value if its label was found,
-            // otherwise register custom PG colour.
-            if ( !clr.IsOk() )
+            // Don't take into account user-defined custom colour.
+            if (gs_cp_es_normcolour_values[i] != wxPG_COLOUR_CUSTOM)
             {
-                clr.Set(gs_cp_es_normcolour_colours[i]);
-                wxTheColourDatabase->AddColour(*colourLabels, clr);
+                wxColour clr = wxTheColourDatabase->Find(*colourLabels);
+                // Use standard wx colour value if its label was found,
+                // otherwise register custom PG colour.
+                if ( !clr.IsOk() )
+                {
+                    clr.Set(gs_cp_es_normcolour_colours[i]);
+                    wxTheColourDatabase->AddColour(*colourLabels, clr);
+                }
             }
         }
     }
