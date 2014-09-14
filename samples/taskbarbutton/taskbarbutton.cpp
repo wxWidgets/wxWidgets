@@ -303,7 +303,7 @@ MyFrame::MyFrame(const wxString& title)
 }
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_COMMAND_SCROLL_CHANGED(ProgressValueSlider, MyFrame::OnSetProgressValue)
+    EVT_COMMAND_SCROLL(ProgressValueSlider, MyFrame::OnSetProgressValue)
     EVT_RADIOBOX(VisibilityRadio, MyFrame::OnVisibilityChange)
     EVT_BUTTON(ThumbnailTooltipSetBtn, MyFrame::OnSetThumbnailTooltipBtn)
     EVT_CHOICE(ProgressStateChoice, MyFrame::OnChoice)
