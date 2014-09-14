@@ -2002,15 +2002,7 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetGDIPlusRenderer()
 
 wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
 {
-    wxGraphicsRenderer* renderer;
-
-#if wxUSE_GRAPHICS_DIRECT2D
-    renderer = wxGraphicsRenderer::GetDirect2DRenderer();
-    if (renderer == NULL)
-#endif
-        renderer = wxGraphicsRenderer::GetGDIPlusRenderer();
-
-    return renderer;
+    return wxGraphicsRenderer::GetGDIPlusRenderer();
 }
 
 bool wxGDIPlusRenderer::EnsureIsLoaded()
