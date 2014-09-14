@@ -3457,19 +3457,19 @@ private :
 
 IMPLEMENT_DYNAMIC_CLASS(wxD2DRenderer,wxGraphicsRenderer)
 
-static wxD2DRenderer* gs_D2DRenderer = NULL;
+static wxScopedPtr<wxD2DRenderer> gs_D2DRenderer;
 
 wxGraphicsRenderer* wxGraphicsRenderer::GetDirect2DRenderer()
 {
     if (!wxDirect2D::Initialize())
         return NULL;
 
-    if (gs_D2DRenderer == NULL)
+    if (!gs_D2DRenderer)
     {
-        gs_D2DRenderer = new wxD2DRenderer();
+        gs_D2DRenderer.reset(new wxD2DRenderer());
     }
 
-    return gs_D2DRenderer;
+    return gs_D2DRenderer.get();
 }
 
 wxD2DRenderer::wxD2DRenderer()
