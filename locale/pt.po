@@ -5036,10 +5036,10 @@ msgid ""
 "Would you like to select a font to be used for this encoding\n"
 "(otherwise the text in this encoding will not be shown correctly)?"
 msgstr ""
-"Não foi encontrada uma fonte para mostrar texto na codificação '%s',\n"
-"Deseja Selecionar uma fonte para ser usada nesta codificação\n"
-"(caso contrário o texto nesta codificação não será correctamente "
-"apresentado)?"
+"Não foi encontrado nenhum tipo de letra para mostrar o texto na codificação '%s',\n"
+"Deseja selecionar um tipo de letra para ser usado nesta codificação\n"
+"(caso contrário o texto nesta codificação não será apresentado "
+"correctamente)?"
 
 #: ../src/generic/animateg.cpp:142
 msgid "No handler found for animation type."
@@ -5062,15 +5062,15 @@ msgstr "Não existe um manuseador de imagem para o tipo %s definido."
 
 #: ../src/html/helpwnd.cpp:871
 msgid "No matching page found yet"
-msgstr "Não foi encontrado até ao momento uma página coincidente"
+msgstr "Ainda não foi encontrada uma página correspondente"
 
 #: ../src/osx/carbon/dataview.cpp:1676 ../src/osx/carbon/dataview.cpp:1786
 msgid "No renderer or invalid renderer type specified for custom data column."
-msgstr ""
+msgstr "Nenhum renderizador ou tipo de renderizador inválido para a coluna de dados personalizada. "
 
 #: ../src/osx/carbon/dataview.cpp:1424
 msgid "No renderer specified for column."
-msgstr ""
+msgstr "Nenhum renderizador para a coluna."
 
 #: ../src/unix/sound.cpp:81
 msgid "No sound"
@@ -5082,7 +5082,7 @@ msgstr "Sem cor usada na imagem a ser mascarada."
 
 #: ../src/common/image.cpp:3236
 msgid "No unused colour in image."
-msgstr "Sem cor usada na imagem."
+msgstr "Nenhuma cor na imagem por utilizar."
 
 #: ../src/generic/helpext.cpp:306
 #, c-format
@@ -5094,7 +5094,7 @@ msgstr "Não foram encontrados mapeamentos válidos no ficheiro \"%s\"."
 #: ../src/richtext/richtextsizepage.cpp:252
 #, fuzzy
 msgid "None"
-msgstr "(Nenhum)"
+msgstr "Nenhum"
 
 #: ../src/common/fmapbase.cpp:157
 msgid "Nordic (ISO-8859-10)"
@@ -5115,12 +5115,12 @@ msgstr "Fonte normal:"
 #: ../src/propgrid/props.cpp:887
 #, fuzzy, c-format
 msgid "Not %s"
-msgstr "Sobre "
+msgstr "Não %s"
 
 #: ../include/wx/filename.h:586 ../include/wx/filename.h:591
 #, fuzzy
 msgid "Not available"
-msgstr "Nenhuma funcionalidade XBM disponível!"
+msgstr "Não disponível!"
 
 #: ../src/richtext/richtextfontpage.cpp:340
 msgid "Not underlined"
@@ -5133,12 +5133,12 @@ msgstr "Nota, 8 1/2 x 11 pol."
 #: ../src/generic/notifmsgg.cpp:104
 #, fuzzy
 msgid "Notice"
-msgstr "&Notas:"
+msgstr "&Nota:"
 
 #: ../src/osx/carbon/dataview.cpp:902
 #, fuzzy
 msgid "Number of columns could not be determined."
-msgstr "Não foi possível carregar o ficheiro."
+msgstr "Não foi possível determinar o número de colunas."
 
 #: ../src/richtext/richtextliststylepage.cpp:487
 #: ../src/richtext/richtextbulletspage.cpp:292
@@ -5150,7 +5150,7 @@ msgstr "Contorno numerado"
 #: ../src/msw/msgdlg.cpp:799 ../src/msw/dialog.cpp:120
 #: ../src/gtk1/fontdlg.cpp:138
 msgid "OK"
-msgstr "OK"
+msgstr "CONFIRMAR"
 
 #: ../src/msw/ole/automtn.cpp:681
 #, c-format
@@ -5160,7 +5160,7 @@ msgstr ""
 #: ../include/wx/richtext/richtextimagedlg.h:39
 #, fuzzy
 msgid "Object Properties"
-msgstr "&Propriedades"
+msgstr "&Propriedades do Objeto"
 
 #: ../src/msw/ole/automtn.cpp:649
 msgid "Object implementation does not support named arguments."
@@ -5168,7 +5168,7 @@ msgstr ""
 
 #: ../src/common/xtixml.cpp:264
 msgid "Objects must have an id attribute"
-msgstr "Os Objectos devem ter um atributo id"
+msgstr "Os objetos devem ter um atributo de id."
 
 #: ../src/common/docview.cpp:1755 ../src/common/docview.cpp:1797
 msgid "Open File"
@@ -5186,7 +5186,7 @@ msgstr "Abrir ficheiro \"%s\""
 #: ../src/common/stockitem.cpp:179
 #, fuzzy
 msgid "Open..."
-msgstr "&Abrir..."
+msgstr "&Abrir ..."
 
 #: ../src/osx/carbon/glcanvas.cpp:48
 #, c-format
@@ -5201,7 +5201,7 @@ msgstr "Operação não permitida."
 #: ../src/common/cmdline.cpp:735
 #, fuzzy, c-format
 msgid "Option '%s' can't be negated"
-msgstr "Não foi possível criar o directório '%s'"
+msgstr "A opção '%s'não pode ser nagada"
 
 #: ../src/common/cmdline.cpp:899
 #, c-format
@@ -5229,7 +5229,7 @@ msgstr ""
 #: ../src/richtext/richtextborderspage.cpp:533
 #, fuzzy
 msgid "Outline"
-msgstr "&Lista de nível:"
+msgstr "&Contorno"
 
 #: ../src/richtext/richtextborderspage.cpp:550
 msgid "Outset"
@@ -6222,7 +6222,7 @@ msgstr "Dados de som estão num formato não suportado."
 #: ../src/unix/sound.cpp:477
 #, c-format
 msgid "Sound file '%s' is in unsupported format."
-msgstr "Ficheiro de som '%s' está num formato não suportado."
+msgstr "O ficheiro de som '%s' está num formato não suportado."
 
 #: ../src/richtext/richtextliststylepage.cpp:467
 msgid "Spacing"
@@ -6235,7 +6235,7 @@ msgstr "Corretor Ortográfico"
 #: ../src/richtext/richtextliststylepage.cpp:490
 #: ../src/richtext/richtextbulletspage.cpp:295
 msgid "Standard"
-msgstr "Standard"
+msgstr "Padrão"
 
 #: ../src/common/paper.cpp:105
 msgid "Statement, 5 1/2 x 8 1/2 in"
@@ -6245,7 +6245,7 @@ msgstr "Statement, 5 1/2 x 8 1/2 pol."
 #: ../src/richtext/richtextsizepage.cpp:523
 #, fuzzy
 msgid "Static"
-msgstr "Estado:"
+msgstr "Estático"
 
 #: ../src/generic/prntdlgg.cpp:204
 msgid "Status:"
@@ -6263,7 +6263,7 @@ msgstr "Rasurado"
 #: ../src/common/colourcmn.cpp:45
 #, c-format
 msgid "String To Colour : Incorrect colour specification : %s"
-msgstr "Cadeia de Caracteres para Cor :Especificação de cor incorrecta : %s"
+msgstr "Cadeia de Carateres para a Cor : Especificação de cor incorreta : %s"
 
 #: ../src/richtext/richtextformatdlg.cpp:318 ../src/propgrid/advprops.cpp:647
 msgid "Style"
@@ -6280,12 +6280,12 @@ msgstr "Estilo:"
 #: ../src/richtext/richtextfontpage.cpp:312
 #, fuzzy
 msgid "Subscrip&t"
-msgstr "Script"
+msgstr "Subscri&to"
 
 #: ../src/richtext/richtextfontpage.cpp:305
 #, fuzzy
 msgid "Supe&rscript"
-msgstr "Script"
+msgstr "Ex&poente"
 
 #: ../src/common/paper.cpp:151
 msgid "SuperA/SuperA/A4 227 x 356 mm"
