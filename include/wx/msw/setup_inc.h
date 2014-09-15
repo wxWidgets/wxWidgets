@@ -19,7 +19,7 @@
 //
 // Recommended setting: 1 if you need to support XP, as Direct2D is not
 // available there.
-#define wxUSE_GRAPHICS_GDIPLUS 1
+#define wxUSE_GRAPHICS_GDIPLUS wxUSE_GRAPHICS_CONTEXT
 
 // Enable support for Direct2D-based implementation of wxGraphicsContext.
 //
@@ -31,7 +31,7 @@
 // 7 and later systems (if wxUSE_GRAPHICS_GDIPLUS is also enabled, earlier
 // systems will fall back on using GDI+).
 #if defined(_MSC_VER) && _MSC_VER >= 1600
-    #define wxUSE_GRAPHICS_DIRECT2D 1
+    #define wxUSE_GRAPHICS_DIRECT2D wxUSE_GRAPHICS_CONTEXT
 #else
     #define wxUSE_GRAPHICS_DIRECT2D 0
 #endif
