@@ -46,6 +46,8 @@ wxMenuImpl::~wxMenuImpl()
 // the (popup) menu title has this special menuid
 static const int idMenuTitle = -3;
 
+wxScopedPtr<wxMenu> gs_emptyMenuBar;
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -73,7 +75,18 @@ void wxMenu::Init()
 
 wxMenu::~wxMenu()
 {
-    delete m_peer;
+#if wxOSX_USE_CARBON
+    // when destroying the empty menu bar from the static scoped ptr
+    // the peer destructor removes an association from an already deleted
+    // hashmap leading to crashes. The guard avoids this, accepting some leaks...
+    static bool finalmenubar = false;
+    
+    if ( this == gs_emptyMenuBar.get() )
+        finalmenubar = true;
+    
+    if ( !finalmenubar )
+#endif
+        delete m_peer;
 }
 
 WXHMENU wxMenu::GetHMenu() const
@@ -584,8 +597,6 @@ wxMenuBar* wxMenuBar::s_macCommonMenuBar = NULL ;
 bool     wxMenuBar::s_macAutoWindowMenu = true ;
 WXHMENU  wxMenuBar::s_macWindowMenuHandle = NULL ;
 
-
-wxScopedPtr<wxMenu> gs_emptyMenuBar;
 
 const int firstMenuPos = 1; // to account for the 0th application menu on mac
 
