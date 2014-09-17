@@ -59,12 +59,27 @@ distribution.
 
 @section page_port_wxosx wxOSX
 
+@subsection page_port_wxosx_cocoa wxOSX/Cocoa
+
+wxOSX/Cocoa is the currently recommended port of wxWidgets for the Macintosh OS
+platform. It requires OS X 10.7 or later and, unlike wxOSX/Carbon, fully
+supports 64 bit builds.
+
+This is the default port when building wxOSX, but in order to select it
+explicitly you can use
+
+@verbatim configure --with-osx_cocoa @endverbatim
+
+For further information, please see the files in @c docs/osx in the
+distribution.
+
+
 @subsection page_port_wxosx_carbon wxOSX/Carbon
 
-wxOSX/Carbon is a port of wxWidgets for the Macintosh OS platform. Currently
+wxOSX/Carbon is an older port of wxWidgets for the Macintosh OS platform. Currently
 OS X 10.5 or higher are supported. wxOSX/Carbon can be compiled both using
 Apple's command line developer tools as well as Apple's Xcode IDE. wxOSX/Carbon
-supports both the Intel and PowerPC architectures and can be used to produce
+supports Intel and PowerPC architectures and can be used to produce
 "universal binaries" in order create application which can run both
 architecture. Unfortunately, wxOSX/Carbon does not support any 64-bit
 architecture since Apple decided not to port its Carbon API entirely to 64-bit.
@@ -73,31 +88,13 @@ architecture since Apple decided not to port its Carbon API entirely to 64-bit.
 removed entirely in a future OS version. It's recommended you look into
 switching your app over to wxOSX/Cocoa as soon as possible.
 
-For further information, please see the files in @c docs/osx in the
-distribution.
+To build wxWidgets using wxOSX/Carbon you need to do
 
-
-
-@subsection page_port_wxosx_cocoa wxOSX/Cocoa
-
-wxOSX/Cocoa is another port of wxWidgets for the Macintosh OS platform.
-Currently OS X 10.5 or higher are supported.  In contrast to wxOSX/Carbon,
-it uses the Cocoa API  in place of Carbon. Much work has gone into this port
-and many  controls are functional, but the port has not reached the maturity of
-the wxOSX/Carbon port yet. It is possible to use wxOSX/Cocoa on 64-bit
-architectures.
-
-In order to configure wxWidgets to compile wxOSX/Cocoa you will need to type:
-
-@verbatim configure --with-osx_cocoa @endverbatim
+@verbatim configure --with-osx_carbon @endverbatim
 
 For further information, please see the files in @c docs/osx in the
 distribution.
 
-@note There was a previous effort towards a Cocoa port called  wxCocoa, which
-was implemented totally with Cocoa API unlike the OSX/Cocoa port which uses OS
-X C APIs to share code, and while it is no longer being actively  developed,
-docs for it are available in @c docs/cocoa in the distribution.
 
 
 
