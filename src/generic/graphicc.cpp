@@ -1327,6 +1327,10 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, cairo_surfac
 {
     m_surface = bitmap;
     m_pattern = cairo_pattern_create_for_surface(m_surface);
+
+    m_width = cairo_image_surface_get_width(m_surface);
+    m_height = cairo_image_surface_get_height(m_surface);
+    m_buffer = NULL;
 }
 
 wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitmap& bmp ) : wxGraphicsBitmapData( renderer )
