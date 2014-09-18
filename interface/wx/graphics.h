@@ -1067,6 +1067,9 @@ public:
         @a bitmap meaning is platform-dependent. Currently it's a GDI+ @c
         Bitmap pointer under MSW, @c CGImage pointer under OS X or a @c
         cairo_surface_t pointer when using Cairo under any platform.
+
+        Notice that this method takes ownership of @a bitmap, i.e. it will be
+        destroyed when the returned wxGraphicsBitmap is.
      */
     virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap ) = 0;
 
