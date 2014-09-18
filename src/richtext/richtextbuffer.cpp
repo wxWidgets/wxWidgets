@@ -12501,11 +12501,26 @@ bool wxRichTextImage::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
     wxRichTextAttr attr(GetAttributes());
     AdjustAttributes(attr, context);
 
-    DrawBoxAttributes(dc, GetBuffer(), attr, wxRect(rect.GetPosition(), GetCachedSize()));
+    wxPoint position = rect.GetPosition();
+
+    if (attr.GetTextBoxAttr().HasVerticalAlignment() &&
+        (attr.GetTextBoxAttr().GetVerticalAlignment() > wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_TOP))
+    {
+        int leftOverSpace = rect.height - GetCachedSize().y;
+        if (leftOverSpace > 0)
+        {
+            if (attr.GetTextBoxAttr().GetVerticalAlignment() == wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_CENTRE)
+                position.y += (leftOverSpace/2);
+            else if (attr.GetTextBoxAttr().GetVerticalAlignment() == wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_BOTTOM)
+                position.y += leftOverSpace;
+        }
+    }
+
+    DrawBoxAttributes(dc, GetBuffer(), attr, wxRect(position, GetCachedSize()));
 
     wxSize imageSize(m_imageCache.GetWidth(), m_imageCache.GetHeight());
     wxRect marginRect, borderRect, contentRect, paddingRect, outlineRect;
-    marginRect = rect; // outer rectangle, will calculate contentRect
+    marginRect = wxRect(position, GetCachedSize()); // outer rectangle, will calculate contentRect
     GetBoxRects(dc, GetBuffer(), attr, marginRect, borderRect, contentRect, paddingRect, outlineRect);
 
     if (m_imageCache.IsOk())
