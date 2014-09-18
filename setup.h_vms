@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 21 January 2013                                                    *
+ * Date : 18 September 2014                                                  *
  *                                                                           *
  *****************************************************************************/
 
@@ -701,6 +701,14 @@ typedef pid_t GPid;
 
 /* --- start MSW options --- */
 
+#define wxUSE_GRAPHICS_GDIPLUS wxUSE_GRAPHICS_CONTEXT
+
+#if defined(_MSC_VER) && _MSC_VER >= 1600
+    #define wxUSE_GRAPHICS_DIRECT2D wxUSE_GRAPHICS_CONTEXT
+#else
+    #define wxUSE_GRAPHICS_DIRECT2D 0
+#endif
+
 #define wxUSE_MFC           0
 
 #define wxUSE_OLE           0
@@ -725,12 +733,13 @@ typedef pid_t GPid;
 
 #define wxUSE_TASKBARICON_BALLOONS 0
 
+#define wxUSE_TASKBARBUTTON 0
+
 #define wxUSE_UXTHEME           0
 
 #define wxUSE_INKEDIT  0
 
 #define wxUSE_INICONF 0
-
 
 #define wxUSE_DATEPICKCTRL_GENERIC 0
 
