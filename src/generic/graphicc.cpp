@@ -1330,6 +1330,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, cairo_surfac
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1,11,0)
     if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 11, 0) )
+    {
         m_width = cairo_image_surface_get_width(m_surface);
         m_height = cairo_image_surface_get_height(m_surface);
     }
