@@ -261,10 +261,8 @@ protected:
                 (
                     wxString::Format
                     (
-                        "A %s dialog with title \"%s\" was shown unexpectedly,"
-                        " expected %s.",
-                        dlg->GetClassInfo()->GetClassName(),
-                        dlg->GetTitle(),
+                        "%s was shown unexpectedly, expected %s.",
+                        DescribeUnexpectedDialog(dlg),
                         expect->GetDescription()
                     )
                 );
@@ -277,15 +275,30 @@ protected:
         (
             wxString::Format
             (
-                "A dialog (%s with title \"%s\") was shown unexpectedly.",
-                dlg->GetClassInfo()->GetClassName(),
-                dlg->GetTitle()
+                "%s was shown unexpectedly.",
+                DescribeUnexpectedDialog(dlg)
             )
         );
         return wxID_NONE;
     }
 
 protected:
+    // This method may be overridden to provide a better description of
+    // (unexpected) dialogs, e.g. add knowledge of custom dialogs used by the
+    // program here.
+    virtual wxString DescribeUnexpectedDialog(wxDialog* dlg) const
+    {
+        return wxString::Format
+               (
+                    "A %s with title \"%s\"",
+                    dlg->GetClassInfo()->GetClassName(),
+                    dlg->GetTitle()
+               );
+    }
+
+    // This method may be overridden to change the way test failures are
+    // handled. By default they result in an assertion failure which, of
+    // course, can itself be customized.
     virtual void ReportFailure(const wxString& msg)
     {
         wxFAIL_MSG( msg );
