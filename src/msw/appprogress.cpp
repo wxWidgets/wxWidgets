@@ -13,6 +13,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_TASKBARBUTTON
+
 #ifndef WX_PRECOMP
     #include "wx/toplevel.h"
 #endif
@@ -26,7 +28,6 @@
 wxAppProgressIndicator::wxAppProgressIndicator(wxWindow* parent, int maxValue)
     : m_maxValue(maxValue)
 {
-#if wxUSE_TASKBARBUTTON
     if ( parent == NULL )
     {
         for ( wxWindowList::const_iterator it = wxTopLevelWindows.begin();
@@ -47,19 +48,16 @@ wxAppProgressIndicator::wxAppProgressIndicator(wxWindow* parent, int maxValue)
 
     Reset();
     SetRange(m_maxValue);
-#endif  // wxUSE_TASKBARBUTTON
 }
 
 wxAppProgressIndicator::~wxAppProgressIndicator()
 {
-#if wxUSE_TASKBARBUTTON
     Reset();
 
     for ( size_t i = 0; i < m_taskBarButtons.size(); ++i )
     {
         delete m_taskBarButtons[i];
     }
-#endif  // wxUSE_TASKBARBUTTON
 }
 
 bool wxAppProgressIndicator::IsAvailable() const
@@ -71,41 +69,36 @@ void wxAppProgressIndicator::SetValue(int value)
 {
     wxASSERT_MSG( value <= m_maxValue, wxT("invalid progress value") );
 
-#if wxUSE_TASKBARBUTTON
     for ( size_t i = 0; i < m_taskBarButtons.size(); ++i )
     {
         m_taskBarButtons[i]->SetProgressValue(value);
     }
-#endif  // wxUSE_TASKBARBUTTON
 }
 
 void wxAppProgressIndicator::SetRange(int range)
 {
     m_maxValue = range;
-#if wxUSE_TASKBARBUTTON
+
     for ( size_t i = 0; i < m_taskBarButtons.size(); ++i )
     {
         m_taskBarButtons[i]->SetProgressRange(range);
     }
-#endif  // wxUSE_TASKBARBUTTON
 }
 
 void wxAppProgressIndicator::Pulse()
 {
-#if wxUSE_TASKBARBUTTON
     for ( size_t i = 0; i < m_taskBarButtons.size(); ++i )
     {
         m_taskBarButtons[i]->PulseProgress();
     }
-#endif  // wxUSE_TASKBARBUTTON
 }
 
 void wxAppProgressIndicator::Reset()
 {
-#if wxUSE_TASKBARBUTTON
     for ( size_t i = 0; i < m_taskBarButtons.size(); ++i )
     {
         m_taskBarButtons[i]->SetProgressState(wxTASKBAR_BUTTON_NO_PROGRESS);
     }
-#endif // wxUSE_TASKBARBUTTON
 }
+
+#endif // wxUSE_TASKBARBUTTON

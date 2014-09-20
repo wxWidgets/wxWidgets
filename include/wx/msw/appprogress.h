@@ -31,9 +31,7 @@ public:
 private:
     int m_maxValue;
 
-#if wxUSE_TASKBARBUTTON
     wxVector<wxTaskBarButton*> m_taskBarButtons;
-#endif  // wxUSE_TASKBARBUTTON
 
     wxDECLARE_NO_COPY_CLASS(wxAppProgressIndicator);
 };

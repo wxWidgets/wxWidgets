@@ -29,7 +29,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxAppProgressIndicatorBase);
 };
 
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) && wxUSE_TASKBARBUTTON
     #include "wx/msw/appprogress.h"
 #else
     class wxAppProgressIndicator : public wxAppProgressIndicatorBase
