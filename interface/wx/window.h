@@ -3259,7 +3259,19 @@ public:
     */
     //@{
 
+    /**
+        Return where the given point lies, exactly.
+
+        This method is used to test whether the point lies inside the client
+        window area or on one of its scrollbars.
+
+        The point coordinates are specified in client window coordinates.
+     */
     wxHitTest HitTest(wxCoord x, wxCoord y) const;
+
+    /**
+        @overload
+     */
     wxHitTest HitTest(const wxPoint& pt) const;
 
     /**
