@@ -1242,15 +1242,15 @@ wxString wxString::Mid(size_t nFirst, size_t nCount) const
     }
 
     // out-of-bounds requests return sensible things
-    if ( nFirst + nCount > nLen )
-    {
-        nCount = nLen - nFirst;
-    }
-
     if ( nFirst > nLen )
     {
         // AllocCopy() will return empty string
         return wxEmptyString;
+    }
+
+    if ( nCount > nLen - nFirst )
+    {
+        nCount = nLen - nFirst;
     }
 
     wxString dest(*this, nFirst, nCount);
