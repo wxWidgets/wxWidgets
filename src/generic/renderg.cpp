@@ -34,8 +34,9 @@
     #include "wx/control.h"
 #endif //WX_PRECOMP
 
-#include "wx/splitter.h"
 #include "wx/dcmirror.h"
+#include "wx/math.h"
+#include "wx/splitter.h"
 
 #ifdef __WXMAC__
     #include "wx/osx/private.h"
@@ -802,7 +803,7 @@ void wxRendererGeneric::DrawGauge(wxWindow* win, wxDC& dc, const wxRect& rect, i
     // Calculate the progress bar size.
     wxRect progRect(rect);
     progRect.Deflate(2);
-    progRect.SetWidth(progRect.GetWidth() * ((double)value / max));
+    progRect.width = wxMulDivInt32(progRect.width, value, max);
 
     dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
     dc.SetPen(*wxTRANSPARENT_PEN);
