@@ -288,6 +288,17 @@ protected:
     // program here.
     virtual wxString DescribeUnexpectedDialog(wxDialog* dlg) const
     {
+        // Message boxes are handled specially here just because they are so
+        // ubiquitous.
+        if ( wxMessageDialog *msgdlg = dynamic_cast<wxMessageDialog*>(dlg) )
+        {
+            return wxString::Format
+                   (
+                        "A message box \"%s\"",
+                        msgdlg->GetMessage()
+                   );
+        }
+
         return wxString::Format
                (
                     "A %s with title \"%s\"",
