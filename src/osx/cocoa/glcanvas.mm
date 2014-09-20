@@ -98,14 +98,13 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
     // available.
     const NSOpenGLPixelFormatAttribute
         attrsAccel[] = { NSOpenGLPFAAccelerated, 0 };
-    WXGLPixelFormat testFormat = [NSOpenGLPixelFormat alloc];
-    if ( [testFormat initWithAttributes: attrsAccel] )
+    if ( WXGLPixelFormat testFormat = [[NSOpenGLPixelFormat alloc]
+                                       initWithAttributes: attrsAccel] )
     {
         // Hardware acceleration is available, use it.
         data[p++] = NSOpenGLPFAAccelerated;
+        [testFormat release];
     }
-
-    [testFormat release];
 
     const NSOpenGLPixelFormatAttribute *attribs;
     if ( !attribList )
