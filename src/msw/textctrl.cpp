@@ -156,7 +156,7 @@ class wxTextCtrlOleCallback : public IRichEditOleCallback
 {
 public:
     wxTextCtrlOleCallback(wxTextCtrl *text) : m_textCtrl(text), m_menu(NULL) {}
-    ~wxTextCtrlOleCallback() { DeleteContextMenuObject(); }
+    virtual ~wxTextCtrlOleCallback() { DeleteContextMenuObject(); }
 
     STDMETHODIMP ContextSensitiveHelp(BOOL WXUNUSED(enterMode)) { return E_NOTIMPL; }
     STDMETHODIMP DeleteObject(LPOLEOBJECT WXUNUSED(oleobj)) { return E_NOTIMPL; }
