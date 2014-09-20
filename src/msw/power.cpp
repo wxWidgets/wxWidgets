@@ -59,7 +59,7 @@ bool UpdatePowerResourceExecutionState()
     if ( g_powerResourceSystemRefCount > 0 )
         executionState |= ES_SYSTEM_REQUIRED;
 
-    if ( ::SetThreadExecutionState(executionState) == NULL )
+    if ( ::SetThreadExecutionState(executionState) == 0 )
     {
         wxLogLastError(wxT("SetThreadExecutionState()"));
         return false;
