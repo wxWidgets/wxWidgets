@@ -1228,11 +1228,11 @@ WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(ComboBox,
 void wxPGComboBoxEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl ) const
 {
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
+    const int index = property->GetChoiceSelection();
     wxString s = property->GetValueAsString(wxPG_EDITABLE_VALUE);
+    cb->SetSelection(index);
     property->GetGrid()->SetupTextCtrlValue(s);
     cb->SetValue(s);
-
-    // TODO: If string matches any selection, then select that.
 }
 
 
