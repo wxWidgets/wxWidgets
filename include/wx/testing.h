@@ -261,8 +261,10 @@ protected:
                 (
                     wxString::Format
                     (
-                        "A %s dialog was shown unexpectedly, expected %s.",
+                        "A %s dialog with title \"%s\" was shown unexpectedly,"
+                        " expected %s.",
                         dlg->GetClassInfo()->GetClassName(),
+                        dlg->GetTitle(),
                         expect->GetDescription()
                     )
                 );
@@ -275,8 +277,9 @@ protected:
         (
             wxString::Format
             (
-                "A dialog (%s) was shown unexpectedly.",
-                dlg->GetClassInfo()->GetClassName()
+                "A dialog (%s with title \"%s\") was shown unexpectedly.",
+                dlg->GetClassInfo()->GetClassName(),
+                dlg->GetTitle()
             )
         );
         return wxID_NONE;
