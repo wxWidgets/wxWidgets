@@ -232,24 +232,11 @@ BOOL WINAPI wxD2D1InvertMatrix(
     return wxDirect2D::D2D1InvertMatrix(matrix);
 }
 
-static bool gs_isComInitialized = false;
-
-void wxEnsureCOMLibraryInitialized()
-{
-    if (!gs_isComInitialized)
-    {
-        CoInitializeEx(NULL, COINIT_MULTITHREADED);
-        gs_isComInitialized = true;
-    }
-}
-
 static IWICImagingFactory* gs_WICImagingFactory = NULL;
 
 IWICImagingFactory* wxWICImagingFactory()
 {
     if (gs_WICImagingFactory == NULL) {
-        wxEnsureCOMLibraryInitialized();
-
         HRESULT hr = CoCreateInstance(
             CLSID_WICImagingFactory,
             NULL,
@@ -3474,7 +3461,6 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetDirect2DRenderer()
 
 wxD2DRenderer::wxD2DRenderer()
 {
-    wxEnsureCOMLibraryInitialized();
 
     HRESULT result;
     result = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &m_direct2dFactory);
