@@ -111,6 +111,8 @@ public:
     // recognize buddy window as part of this control at wx level
     virtual bool ContainsHWND(WXHWND hWnd) const { return hWnd == m_hwndBuddy; }
 
+    virtual void SetLayoutDirection(wxLayoutDirection dir) wxOVERRIDE;
+
 protected:
     virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
@@ -136,7 +138,6 @@ protected:
 
     // called to ensure that the value is in the correct range
     virtual void NormalizeValue();
-
 
     // the value of the control before the latest change (which might not have
     // changed anything in fact -- this is why we need this field)

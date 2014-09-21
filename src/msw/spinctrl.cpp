@@ -521,6 +521,20 @@ void wxSpinCtrl::SetSelection(long from, long to)
     ::SendMessage(GetBuddyHwnd(), EM_SETSEL, (WPARAM)from, (LPARAM)to);
 }
 
+void wxSpinCtrl::SetLayoutDirection(wxLayoutDirection dir)
+{
+#ifndef __WXWINCE__
+    // Buddy text field is plain EDIT control so we need to set its layout
+    // direction in a specific way.
+    wxUpdateEditLayoutDirection(GetBuddyHwnd(), dir);
+#endif // !__WXWINCE__
+
+    wxSpinButton::SetLayoutDirection(dir);
+
+    // Reposition the child windows according to the new layout.
+    SetSize(-1, -1, -1, -1, wxSIZE_AUTO | wxSIZE_FORCE);
+}
+
 // ----------------------------------------------------------------------------
 // wxSpinButton methods
 // ----------------------------------------------------------------------------
@@ -759,13 +773,30 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
         widthText = 0;
     }
 
-    // 1) The buddy window
-    DoMoveSibling(m_hwndBuddy, x, y, widthText, height);
+    // Because both subcontrols are positioned relatively
+    // to the parent which can have different layout direction
+    // then our control, we need to mirror their positions manually.
+    if ( GetParent()->GetLayoutDirection() == GetLayoutDirection() )
+    {
+        // Logical positions: x(Text) < x(Button)
+        // 1) The buddy window
+        DoMoveSibling(m_hwndBuddy, x, y, widthText, height);
 
-    // 2) The button window
-    if ( widthText > 0 )
-        x += widthText + MARGIN_BETWEEN;
-    wxSpinButton::DoMoveWindow(x, y, widthBtn, height);
+        // 2) The button window
+        if ( widthText > 0 )
+            x += widthText + MARGIN_BETWEEN;
+        wxSpinButton::DoMoveWindow(x, y, widthBtn, height);
+    }
+    else
+    {
+        // Logical positions: x(Button) < x(Text)
+        // 1) The button window
+        wxSpinButton::DoMoveWindow(x, y, widthBtn, height);
+
+        // 2) The buddy window
+        x += widthBtn + MARGIN_BETWEEN;
+        DoMoveSibling(m_hwndBuddy, x, y, widthText, height);
+    }
 }
 
 // get total size of the control
@@ -797,13 +828,27 @@ void wxSpinCtrl::DoGetClientSize(int *x, int *y) const
 
 void wxSpinCtrl::DoGetPosition(int *x, int *y) const
 {
+    // Because both subcontrols are mirrored manually
+    // (for layout direction purposes, see note)
+    // and leftmost control can be either spin or buddy text
+    // we need to get positions for both controls
+    // and return this with lower horizonal value.
+    // Note:
+    // Logical positions in manual mirroring:
+    // our layout == parent layout  =>  x(Text) < x(Button)
+    // our layout != parent layout  =>  x(Button) < x(Text)
+
     // hack: pretend that our HWND is the text control just for a moment
+    int xBuddy;
     WXHWND hWnd = GetHWND();
     wxConstCast(this, wxSpinCtrl)->m_hWnd = m_hwndBuddy;
+    wxSpinButton::DoGetPosition(&xBuddy, y);
 
-    wxSpinButton::DoGetPosition(x, y);
-
+    int xText;
     wxConstCast(this, wxSpinCtrl)->m_hWnd = hWnd;
+    wxSpinButton::DoGetPosition(&xText, y);
+
+    *x = wxMin(xBuddy, xText);
 }
 
 #endif // wxUSE_SPINCTRL
