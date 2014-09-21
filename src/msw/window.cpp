@@ -1135,31 +1135,8 @@ void wxWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
 #ifdef __WXWINCE__
     wxUnusedVar(dir);
 #else
-    wxCHECK_RET( GetHwnd(),
-                 wxT("layout direction must be set after window creation") );
-
-    LONG styleOld = wxGetWindowExStyle(this);
-
-    LONG styleNew = styleOld;
-    switch ( dir )
+    if ( wxUpdateLayoutDirection(GetHwnd(), dir) )
     {
-        case wxLayout_LeftToRight:
-            styleNew &= ~WS_EX_LAYOUTRTL;
-            break;
-
-        case wxLayout_RightToLeft:
-            styleNew |= WS_EX_LAYOUTRTL;
-            break;
-
-        default:
-            wxFAIL_MSG(wxT("unsupported layout direction"));
-            break;
-    }
-
-    if ( styleNew != styleOld )
-    {
-        wxSetWindowExStyle(this, styleNew);
-
         // Update layout: whether we have children or are drawing something, we
         // need to redo it with the new layout.
         SendSizeEvent();

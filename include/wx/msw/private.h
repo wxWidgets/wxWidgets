@@ -1013,17 +1013,16 @@ inline long wxSetWindowExStyle(const wxWindowMSW *win, long style)
     return ::SetWindowLong(GetHwndOf(win), GWL_EXSTYLE, style);
 }
 
-// Update layout direction flag for an EDIT control.
-//
-// Returns true if anything changed or false if the direction flag was already
-// set to the desired direction (which can't be wxLayout_Default).
-inline bool wxUpdateEditLayoutDirection(WXHWND hWnd, wxLayoutDirection dir)
+// Common helper of wxUpdate{,Edit}LayoutDirection() below: sets or clears the
+// given flag(s) depending on wxLayoutDirection and returns true if the flags
+// really changed.
+inline bool
+wxUpdateExStyleForLayoutDirection(WXHWND hWnd,
+                                  wxLayoutDirection dir,
+                                  LONG_PTR flagsForRTL)
 {
     wxCHECK_MSG( hWnd, false,
                  wxS("Can't set layout direction for invalid window") );
-
-    static const LONG_PTR
-        EDIT_RTL_EX_FLAGS = WS_EX_RIGHT | WS_EX_RTLREADING | WS_EX_LEFTSCROLLBAR;
 
     const LONG_PTR styleOld = ::GetWindowLongPtr(hWnd, GWL_EXSTYLE);
 
@@ -1031,11 +1030,11 @@ inline bool wxUpdateEditLayoutDirection(WXHWND hWnd, wxLayoutDirection dir)
     switch ( dir )
     {
         case wxLayout_LeftToRight:
-            styleNew &= ~EDIT_RTL_EX_FLAGS;
+            styleNew &= ~flagsForRTL;
             break;
 
         case wxLayout_RightToLeft:
-            styleNew |= EDIT_RTL_EX_FLAGS;
+            styleNew |= flagsForRTL;
             break;
 
         case wxLayout_Default:
@@ -1048,6 +1047,28 @@ inline bool wxUpdateEditLayoutDirection(WXHWND hWnd, wxLayoutDirection dir)
     ::SetWindowLongPtr(hWnd, GWL_EXSTYLE, styleNew);
 
     return true;
+}
+
+// Update layout direction flag for a generic window.
+//
+// See below for the special version that must be used with EDIT controls.
+//
+// Returns true if the layout direction did change.
+inline bool wxUpdateLayoutDirection(WXHWND hWnd, wxLayoutDirection dir)
+{
+    return wxUpdateExStyleForLayoutDirection(hWnd, dir, WS_EX_LAYOUTRTL);
+}
+
+// Update layout direction flag for an EDIT control.
+//
+// Returns true if anything changed or false if the direction flag was already
+// set to the desired direction (which can't be wxLayout_Default).
+inline bool wxUpdateEditLayoutDirection(WXHWND hWnd, wxLayoutDirection dir)
+{
+    return wxUpdateExStyleForLayoutDirection(hWnd, dir,
+                                             WS_EX_RIGHT |
+                                             WS_EX_RTLREADING |
+                                             WS_EX_LEFTSCROLLBAR);
 }
 
 // Companion of the above function checking if an EDIT control uses RTL.
