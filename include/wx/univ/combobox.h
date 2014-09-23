@@ -124,7 +124,6 @@ public:
     // override these methods to disambiguate between two base classes versions
     virtual void Clear() wxOVERRIDE
     {
-        wxComboCtrl::Clear();
         wxItemContainer::Clear();
     }
 
