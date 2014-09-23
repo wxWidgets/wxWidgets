@@ -146,6 +146,11 @@ void wxButton::Click()
 // misc
 // ----------------------------------------------------------------------------
 
+wxBitmap wxButton::DoGetBitmap(State WXUNUSED(which)) const
+{
+    return m_bitmap;
+}
+
 void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 {
     // we support only one bitmap right now, although this wouldn't be

@@ -98,6 +98,7 @@ public:
 
 protected:
     virtual void DoSetBitmap(const wxBitmap& bitmap, State which) wxOVERRIDE;
+    virtual wxBitmap DoGetBitmap(State which) const wxOVERRIDE;
     virtual void DoSetBitmapMargins(wxCoord x, wxCoord y) wxOVERRIDE;
 
     // common part of all ctors
