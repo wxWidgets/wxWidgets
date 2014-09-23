@@ -57,12 +57,13 @@ static Atom XA_TEXT_URI;
 static Atom XA_TEXT_PLAIN;
 static Atom XA_TEXT;
 
-static void initX11Clipboard()
+static void InitX11Clipboard()
 {
-    Display* xdisplay = wxGlobalDisplay();
     static bool isInitialised = false;
     if ( !isInitialised )
     {
+        Display* xdisplay = wxGlobalDisplay();
+
         // Get the clipboard atom
         XA_CLIPBOARD = XInternAtom(xdisplay, "CLIPBOARD", True);
         // Get UTF-8 string atom
@@ -141,6 +142,9 @@ bool wxClipboard::Open()
 
     m_open = true;
 
+    // initialize some atoms
+    InitX11Clipboard();
+
     return true;
 }
 
@@ -169,34 +173,26 @@ bool wxClipboard::AddData( wxDataObject *data )
 
     m_data = data;
 
-    /* get formats from wxDataObjects */
-    wxDataFormat *array = new wxDataFormat[ m_data->GetFormatCount() ];
-    m_data->GetAllFormats( array );
-
     wxTextDataObject* textdata = (wxTextDataObject*)data;
-    Window selectionOwner;
+
     Display* xdisplay = wxGlobalDisplay();
-    int xscreen = DefaultScreen( xdisplay );
-    Window window = RootWindow( xdisplay, xscreen);//wxTheApp->GetTopWindow();
-
-    initX11Clipboard();
-
-    const size_t size = textdata->GetTextLength();
-    char* text = (char*)malloc(size);
-    strncpy(text, textdata->GetText().mb_str().data(), size);
+    int xscreen = DefaultScreen(xdisplay);
+    Window window = RootWindow(xdisplay, xscreen);
 
     // Send the data to "clipboard".
     // "clipboard" means root window property
-    XChangeProperty(xdisplay, window, XA_CLIPBOARD, XA_CLIPBOARD, 8, PropModeReplace, (const unsigned char*)text, size);
+    XChangeProperty(xdisplay, window, XA_CLIPBOARD, XA_CLIPBOARD, 8, PropModeReplace,
+                    (const unsigned char*)textdata->GetText().mb_str().data(),
+                    textdata->GetTextLength());
+
+    Window selectionOwner;
 
     // Set this window as the owner of the CLIPBOARD atom
     XSetSelectionOwner(xdisplay, XA_CLIPBOARD, window, CurrentTime);
 
-    XFlush(xdisplay);
-
     // Check if we accuired ownershop or not
     selectionOwner = XGetSelectionOwner(xdisplay, XA_CLIPBOARD);
-    delete text;
+
     // Got ownership
     if ( selectionOwner == window )
     {
@@ -206,15 +202,6 @@ bool wxClipboard::AddData( wxDataObject *data )
     {
         return false;
     }
-
-
-#if wxUSE_THREADS
-    /* disable GUI threads */
-#endif
-
-#if wxUSE_THREADS
-    /* re-enable GUI threads */
-#endif
 
 #endif
 }
@@ -236,26 +223,23 @@ bool wxClipboard::IsSupported( const wxDataFormat& format )
     // TODO: this implementation only support copy/paste text for now.
     // remove the code that paste from gtk1 port.
 
-    return true;
+    return format == wxDF_UNICODETEXT;
 }
 
 bool wxClipboard::GetData( wxDataObject& data )
 {
+    // prepare and find the root window,
+    // the copied data stored in the root window as window property
+    Display* xdisplay = wxGlobalDisplay();
+    int xscreen = DefaultScreen(xdisplay);
+    Window window = RootWindow(xdisplay, xscreen);
+
     // the window that hold the copied data.
     // this window just indicate whether there has data copied
     Window selectionOwner;
 
-    // prepare and find the root window,
-    // the copied data stored in the root window as window property
-    Display* xdisplay = wxGlobalDisplay();
-    int xscreen = DefaultScreen( xdisplay );
-    Window window = RootWindow( xdisplay, xscreen);
-
-    // initialize some atoms
-    initX11Clipboard();
-
     // Get the owner of the clipboard selection
-    selectionOwner = XGetSelectionOwner( xdisplay, XA_CLIPBOARD);
+    selectionOwner = XGetSelectionOwner(xdisplay, XA_CLIPBOARD);
 
     // some variables that used to get the data in window property
     char *text = NULL;
@@ -269,9 +253,8 @@ bool wxClipboard::GetData( wxDataObject& data )
     {
         XConvertSelection( xdisplay, XA_CLIPBOARD, XA_UTF8_STRING,
                 XA_CLIPBOARD, window, CurrentTime);
-        XFlush( xdisplay );
 
-        XGetWindowProperty( xdisplay, window, XA_CLIPBOARD, 0, 0, False, AnyPropertyType, &type,
+        XGetWindowProperty(xdisplay, window, XA_CLIPBOARD, 0, 0, False, AnyPropertyType, &type,
                 &format, &len, &bytesLeft, &textdata);
 
         if ( textdata )
