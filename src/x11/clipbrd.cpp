@@ -519,11 +519,11 @@ bool wxClipboard::AddData( wxDataObject *data )
     Window window = RootWindow(xdisplay, xscreen);
 
     size_t size = m_data->GetDataSize(wxDF_UNICODETEXT);
-    unsigned char* buf = (unsigned char*)malloc(size);
-    m_data->GetDataHere(wxDF_UNICODETEXT, buf);
+    wxCharTypeBuffer<unsigned char> buf(size);
+    m_data->GetDataHere(wxDF_UNICODETEXT, buf.data());
 
     XChangeProperty(xdisplay, window, XA_CLIPBOARD, XA_STRING, 8, PropModeReplace,
-                    buf, size);
+                    buf.data(), size);
 
     delete buf;
 
