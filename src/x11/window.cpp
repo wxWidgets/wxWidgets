@@ -68,11 +68,6 @@
 
 static wxWindowX11* g_captureWindow = NULL;
 static GC g_eraseGC;
-// the window that has keyboard focus:
-static wxWindow* gs_focusedWindow = NULL;
-// the window that is about to be focused after currently focused
-// one looses focus:
-static wxWindow* gs_toBeFocusedWindow = NULL;
 
 // ----------------------------------------------------------------------------
 // macros
@@ -396,11 +391,13 @@ void wxWindowX11::SetFocus()
     if (!AcceptsFocus())
         return;
 
-    if ( DoFindFocus() == (wxWindow*)this )
+    wxWindow* focusedWindow = DoFindFocus();
+
+    if ( focusedWindow == (wxWindow*)this )
         return; // nothing to do, focused already
 
-    if ( DoFindFocus() )
-        DoFindFocus()->KillFocus();
+    if ( focusedWindow )
+        focusedWindow->KillFocus();
 
 #if 0
     if (GetName() == "scrollBar")
