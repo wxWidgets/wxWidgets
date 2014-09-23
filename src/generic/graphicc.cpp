@@ -1748,9 +1748,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
     if ( cr )
         Init(cairo_reference(cr));
-#endif
-
-#ifdef __WXMAC__
+#elif defined(__WXMAC__)
     CGContextRef cgcontext = (CGContextRef)dc.GetWindow()->MacGetCGContextRef();
     cairo_surface_t* surface = cairo_quartz_surface_create_for_cg_context(cgcontext, width, height);
     Init( cairo_create( surface ) );
