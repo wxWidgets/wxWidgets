@@ -1019,12 +1019,12 @@ bool wxStdSliderInputHandler::HandleKey(wxInputConsumer *consumer,
                 action = wxACTION_SLIDER_START;
                 break;
 
-            case WXK_RIGHT:
+            case WXK_LEFT:
             case WXK_UP:
                 action = wxACTION_SLIDER_LINE_UP;
                 break;
 
-            case WXK_LEFT:
+            case WXK_RIGHT:
             case WXK_DOWN:
                 action = wxACTION_SLIDER_LINE_DOWN;
                 break;
