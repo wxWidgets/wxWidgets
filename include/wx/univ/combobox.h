@@ -163,8 +163,6 @@ public:
     virtual void SetClientDataType(wxClientDataType clientDataItemsType) wxOVERRIDE;
 
 protected:
-    virtual wxString DoGetValue() const wxOVERRIDE;
-
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,
                               unsigned int pos,
                               void **clientData, wxClientDataType type) wxOVERRIDE;
