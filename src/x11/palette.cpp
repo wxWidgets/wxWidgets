@@ -83,6 +83,9 @@ wxPaletteRefData::~wxPaletteRefData()
     for (node = m_palettes.GetFirst(); node; node = next) {
         wxXPalette *c = (wxXPalette *)node->GetData();
         unsigned long *pix_array = c->m_pix_array;
+        unsigned char *col_red = c->m_red;
+        unsigned char *col_green = c->m_green;
+        unsigned char *col_blue = c->m_blue;
         Colormap cmap = (Colormap) c->m_cmap;
         bool destroyable = c->m_destroyable;
         int pix_array_n = c->m_pix_array_n;
@@ -101,6 +104,9 @@ wxPaletteRefData::~wxPaletteRefData()
             }
 #endif
             delete [] pix_array;
+            delete [] col_red;
+            delete [] col_green;
+            delete [] col_blue;
         }
 
         if (destroyable)
