@@ -1304,6 +1304,9 @@ void wxTextCtrl::AppendText(const wxString& text)
 
 void wxTextCtrl::SetInsertionPoint(wxTextPos pos)
 {
+    if ( pos == -1 )
+        pos = GetLastPosition();
+
     wxCHECK_RET( pos >= 0 && pos <= GetLastPosition(),
                  wxT("insertion point position out of range") );
 
