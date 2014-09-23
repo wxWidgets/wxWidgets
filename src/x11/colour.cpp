@@ -172,7 +172,8 @@ wxGDIRefData *wxColour::CloneGDIRefData(const wxGDIRefData *data) const
 void wxColour::InitRGBA(unsigned char red, unsigned char green, unsigned char blue,
                         unsigned char WXUNUSED(alpha))
 {
-    AllocExclusive();
+    UnRef();
+    m_refData = new wxColourRefData();
 
 #if wxUSE_NANOX
     M_COLDATA->m_color.red = ((unsigned short)red) ;
