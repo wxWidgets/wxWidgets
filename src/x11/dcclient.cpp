@@ -1660,8 +1660,8 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 #endif
 }
 
-void wxWindowDCImpl::DoDrawRotatedText(const wxString& WXUNUSED(text),
-                                   wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
+void wxWindowDCImpl::DoDrawRotatedText(const wxString& text,
+                                   wxCoord x, wxCoord y,
                                    double angle)
 {
     // use cairo to draw rotated text

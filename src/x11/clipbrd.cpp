@@ -258,7 +258,6 @@ void GetClipboardData(Display* disp, Window win, wxDataObject &data, wxDataForma
     unsigned char *clipbrdData = NULL;
 
     // some variables that used to get the data in window property
-    char *text = NULL;
     unsigned long len;
 
     switch ( dfFormat )
@@ -269,22 +268,27 @@ void GetClipboardData(Display* disp, Window win, wxDataObject &data, wxDataForma
         }
         case wxDF_BITMAP:
         {
-            Atom atomArray[] = {XA_IMAGE_BMP, XA_IMAGE_JPG, XA_IMAGE_TIFF, XA_IMAGE_PNG};
+            wxVector<Atom> atomVector;
+            atomVector.push_back(XA_IMAGE_BMP);
+            atomVector.push_back(XA_IMAGE_JPG);
+            atomVector.push_back(XA_IMAGE_TIFF);
+            atomVector.push_back(XA_IMAGE_PNG);
+
             int i;
             // check the four atoms in clipboard, try to find whether there has data
             // stored in one of these atom.
-            for ( i = 0; i <= 4; i++ )
+            for ( i = 0; i < atomVector.size(); i++ )
             {
 
-                clipbrdData  = GetClipboardDataByFormat(disp, win, XA_CLIPBOARD, atomArray[i], &len);
+                clipbrdData  = GetClipboardDataByFormat(disp, win, XA_CLIPBOARD, 
+                                                        atomVector.at(i), &len);
                 if ( clipbrdData != NULL )
                     break;
             }
             // if we got any data, copy it.
             if ( clipbrdData )
             {
-                text = strdup((char*) clipbrdData);
-                data.SetData(dfFormat, len, text);
+                data.SetData(dfFormat, len, (char*)clipbrdData);
             }
             break;
         }
@@ -294,8 +298,7 @@ void GetClipboardData(Display* disp, Window win, wxDataObject &data, wxDataForma
             // if we got any data, copy it.
             if ( clipbrdData  )
             {
-                text = strdup((char*) clipbrdData );
-                data.SetData(dfFormat, len, text);
+                data.SetData(dfFormat, len, (char*)clipbrdData);
             }
         }
     }
@@ -343,13 +346,17 @@ extern "C" void wxClipboardHandleSelectionRequest(XEvent event)
     // get formats count in the wxDataObject
     // for each data format, search it in x11 selection
     // and store it to wxDataObject
-    wxDataObject* m_data = wxTheClipboard->m_data;
-    size_t count = m_data->GetFormatCount(wxDataObject::Get);
+    wxDataObject* data = wxTheClipboard->m_data;
+    size_t count = data->GetFormatCount();
     wxDataFormatScopedArray dfarr(count);
-    m_data->GetAllFormats(dfarr.get(), wxDataObject::Get);
+    data->GetAllFormats(dfarr.get());
 
     // retrieve the data with specific image Atom.
-    Atom atomArray[] = {XA_IMAGE_BMP, XA_IMAGE_JPG, XA_IMAGE_TIFF, XA_IMAGE_PNG};
+    wxVector<Atom> atomVector;
+    atomVector.push_back(XA_IMAGE_BMP);
+    atomVector.push_back(XA_IMAGE_JPG);
+    atomVector.push_back(XA_IMAGE_TIFF);
+    atomVector.push_back(XA_IMAGE_PNG);
 
 #if wxUSE_UNICODE
     wxDataFormat dfFormat = wxDF_UNICODETEXT;
@@ -358,9 +365,9 @@ extern "C" void wxClipboardHandleSelectionRequest(XEvent event)
 #endif
 
     int i;
-    for ( i = 0; i <= 4; i++ )
+    for ( i = 0; i <= atomVector.size(); i++ )
     {
-        if ( target == atomArray[i] )
+        if ( target == atomVector.at(i) )
         {
             dfFormat = wxDF_BITMAP;
             break;
@@ -391,13 +398,11 @@ extern "C" void wxClipboardHandleSelectionRequest(XEvent event)
     // TODO, when finish the event process issue, improve the check.
     else if ( target == XA_UTF8_STRING )
     {
-        unsigned char* buf = NULL;
-        size_t size = 0;
-        size = m_data->GetDataSize(dfFormat);
-        buf = (unsigned char*)malloc(size);
-        m_data->GetDataHere(dfFormat, buf);
-	    XChangeProperty(disp, requestor, XA_CLIPBOARD, target, 8, PropModeReplace, 
-						buf, size);
+        size_t size = data->GetDataSize(dfFormat);
+        wxCharTypeBuffer<unsigned char> buf(size);
+        data->GetDataHere(dfFormat, buf.data());
+        XChangeProperty(disp, requestor, XA_CLIPBOARD, target, 8, PropModeReplace, 
+                        buf.data(), size);
         delete buf;
     }
     else
@@ -519,7 +524,9 @@ bool wxClipboard::AddData( wxDataObject *data )
     m_data->GetDataHere(wxDF_UNICODETEXT, buf);
 
     XChangeProperty(xdisplay, window, XA_CLIPBOARD, XA_STRING, 8, PropModeReplace,
-                        buf, size);
+                    buf, size);
+
+    delete buf;
 
     XSetSelectionOwner(xdisplay, XA_CLIPBOARD, window, CurrentTime);
     XFlush(xdisplay);
@@ -552,9 +559,9 @@ bool wxClipboard::GetData( wxDataObject& data )
     // get formats count in the wxDataObject
     // for each data format, search it in x11 selection
     // and store it to wxDataObject
-    size_t count = data.GetFormatCount(wxDataObject::Get);
+    size_t count = data.GetFormatCount();
     wxDataFormatScopedArray dfarr(count);
-    data.GetAllFormats(dfarr.get(), wxDataObject::Get);
+    data.GetAllFormats(dfarr.get());
 
     // prepare and find the root window,
     // the copied data stored in the root window as window property
