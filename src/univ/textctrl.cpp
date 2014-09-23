@@ -974,7 +974,7 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
     // set selection range for GetSelection and GetInsertionPoint call
     // if give a range but the text length that give doesn't equal the range
     // it mean clear the text in the range and set the text after `from` 
-    if ( (to - from) != (int)text.Len() )
+    if ( (to - from) != (wxTextPos)text.Len() )
     {
         m_selStart = from;
         m_selEnd = from + text.Len();
@@ -1353,8 +1353,8 @@ void wxTextCtrl::SetInsertionPointEnd()
 
 wxTextPos wxTextCtrl::GetInsertionPoint() const
 {
-    //if has selection, the insert point should be the lower number of selection,
-    //else should be current cursor position
+    // if has selection, the insert point should be the lower number of selection,
+    // else should be current cursor position
     long from;
     if ( HasSelection() )
         GetSelection(&from, NULL);
@@ -4718,8 +4718,6 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         // as the text changed...
         m_isModified = true;
     }
-
-
 
     return true;
 }
