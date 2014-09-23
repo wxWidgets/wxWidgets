@@ -328,12 +328,18 @@ void wxWindowDCImpl::SetUpDC()
         Window xroot = RootWindow( (Display*) m_display, xscreen );
 
         hatch_bitmap    = hatches;
-        hatch_bitmap[0] = XCreateBitmapFromData( (Display*) m_display, xroot, bdiag_bits, bdiag_width, bdiag_height );
-        hatch_bitmap[1] = XCreateBitmapFromData( (Display*) m_display, xroot, cdiag_bits, cdiag_width, cdiag_height );
-        hatch_bitmap[2] = XCreateBitmapFromData( (Display*) m_display, xroot, fdiag_bits, fdiag_width, fdiag_height );
-        hatch_bitmap[3] = XCreateBitmapFromData( (Display*) m_display, xroot, cross_bits, cross_width, cross_height );
-        hatch_bitmap[4] = XCreateBitmapFromData( (Display*) m_display, xroot, horiz_bits, horiz_width, horiz_height );
-        hatch_bitmap[5] = XCreateBitmapFromData( (Display*) m_display, xroot, verti_bits, verti_width, verti_height );
+        hatch_bitmap[0] = XCreateBitmapFromData( (Display*) m_display, xroot,
+            reinterpret_cast<const char*>(bdiag_bits), bdiag_width, bdiag_height );
+        hatch_bitmap[1] = XCreateBitmapFromData( (Display*) m_display, xroot,
+            reinterpret_cast<const char*>(cdiag_bits), cdiag_width, cdiag_height );
+        hatch_bitmap[2] = XCreateBitmapFromData( (Display*) m_display, xroot,
+            reinterpret_cast<const char*>(fdiag_bits), fdiag_width, fdiag_height );
+        hatch_bitmap[3] = XCreateBitmapFromData( (Display*) m_display, xroot,
+            reinterpret_cast<const char*>(cross_bits), cross_width, cross_height );
+        hatch_bitmap[4] = XCreateBitmapFromData( (Display*) m_display, xroot,
+            reinterpret_cast<const char*>(horiz_bits), horiz_width, horiz_height );
+        hatch_bitmap[5] = XCreateBitmapFromData( (Display*) m_display, xroot,
+            reinterpret_cast<const char*>(verti_bits), verti_width, verti_height );
     }
 }
 
