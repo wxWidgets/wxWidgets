@@ -941,6 +941,9 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
 {
     wxTextCoord colStart, colEnd,
                 lineStart, lineEnd;
+    // as convention, if `to` equal -1, it means go to the last position
+    if ( to == -1)
+        to = GetLastPosition();
 
     if ( (from > to) ||
          !PositionToXY(from, &colStart, &lineStart) ||
