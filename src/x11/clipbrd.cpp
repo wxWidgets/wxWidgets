@@ -403,7 +403,6 @@ extern "C" void wxClipboardHandleSelectionRequest(XEvent event)
         data->GetDataHere(dfFormat, buf.data());
         XChangeProperty(disp, requestor, XA_CLIPBOARD, target, 8, PropModeReplace, 
                         buf.data(), size);
-        delete buf;
     }
     else
     {
