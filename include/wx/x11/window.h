@@ -177,6 +177,7 @@ protected:
         int incW, int incH);
     virtual void DoCaptureMouse();
     virtual void DoReleaseMouse();
+    virtual void KillFocus();
 
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );

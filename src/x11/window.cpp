@@ -66,8 +66,13 @@
 // global variables for this module
 // ----------------------------------------------------------------------------
 
-static wxWindow* g_captureWindow = NULL;
+static wxWindowX11* g_captureWindow = NULL;
 static GC g_eraseGC;
+// the window that has keyboard focus:
+static wxWindow* gs_focusedWindow = NULL;
+// the window that is about to be focused after currently focused
+// one looses focus:
+static wxWindow* gs_toBeFocusedWindow = NULL;
 
 // ----------------------------------------------------------------------------
 // macros
@@ -351,6 +356,9 @@ wxWindowX11::~wxWindowX11()
     if (g_captureWindow == this)
         g_captureWindow = NULL;
 
+    if ( gs_focusedWindow == this )
+        KillFocus();
+
     DestroyChildren();
 
     if (m_clientWindow != m_mainWindow)
@@ -388,6 +396,20 @@ void wxWindowX11::SetFocus()
     if (!AcceptsFocus())
         return;
 
+    if ( gs_focusedWindow == (wxWindow*)this )
+        return; // nothing to do, focused already
+
+    wxWindow *oldFocusedWindow = (wxWindow*)xwindow;
+
+    if ( gs_focusedWindow )
+    {
+        gs_toBeFocusedWindow = (wxWindow*)this;
+        gs_focusedWindow->KillFocus();
+        gs_toBeFocusedWindow = NULL;
+    }
+
+    gs_focusedWindow = (wxWindow*)this;
+
 #if 0
     if (GetName() == "scrollBar")
     {
@@ -410,6 +432,34 @@ void wxWindowX11::SetFocus()
     {
         m_needsInputFocus = true;
     }
+
+    // notify the parent keeping track of focus for the kbd navigation
+    // purposes that we got it
+    wxChildFocusEvent eventFocus((wxWindow*)this);
+    HandleWindowEvent(eventFocus);
+
+    wxFocusEvent event(wxEVT_SET_FOCUS, GetId());
+    event.SetEventObject(this);
+    event.SetWindow((wxWindow*)oldFocusedWindow);
+    HandleWindowEvent(event);
+
+}
+
+// Kill focus
+void wxWindowX11::KillFocus()
+{
+    wxCHECK_RET( gs_focusedWindow == this,
+                 "killing focus on window that doesn't have it" );
+
+    gs_focusedWindow = NULL;
+
+    if ( m_isBeingDeleted )
+        return; // don't send any events from dtor
+
+    wxFocusEvent event(wxEVT_KILL_FOCUS, GetId());
+    event.SetEventObject(this);
+    event.SetWindow(gs_toBeFocusedWindow);
+    HandleWindowEvent(event);
 }
 
 // Get the window with the focus
