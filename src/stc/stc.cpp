@@ -4903,7 +4903,9 @@ void wxStyledTextCtrl::OnSize(wxSizeEvent& WXUNUSED(evt)) {
     if (m_swx) {
         wxSize sz = GetClientSize();
         m_swx->DoSize(sz.x, sz.y);
+#if defined(__WXX11__)
         PositionScrollbars();
+#endif
     }
 }
 
