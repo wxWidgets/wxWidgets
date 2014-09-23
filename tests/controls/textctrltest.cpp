@@ -497,10 +497,9 @@ void TextCtrlTestCase::Lines()
 
     // Verify that wrapped lines count as 2 lines.
     //
-    // This currently doesn't work neither in wxGTK nor wxOSX/Cocoa, see
+    // This currently doesn't work neither in wxGTK, wxUniv, or wxOSX/Cocoa, see
     // #12366, where GetNumberOfLines() always returns the number of logical,
     // not physical, lines.
-    // Update 5,23, 2014, same situation in wxUniv.
     m_text->AppendText("\n" + wxString(50, '1') + ' ' + wxString(50, '2'));
 #if defined(__WXGTK__) || defined(__WXOSX_COCOA__) || defined(__WXUNIVERSAL__)
     CPPUNIT_ASSERT_EQUAL(6, m_text->GetNumberOfLines());
