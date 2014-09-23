@@ -127,6 +127,7 @@ void wxListBox::Init()
     m_showScrollbarX =
     m_updateScrollbarY =
     m_showScrollbarY = false;
+    m_inputHandlerType = wxINP_HANDLER_LISTBOX;
 }
 
 wxListBox::wxListBox(wxWindow *parent,
@@ -198,7 +199,7 @@ bool wxListBox::Create(wxWindow *parent,
 
     SetInitialSize(size);
 
-    CreateInputHandler(wxINP_HANDLER_LISTBOX);
+    CreateInputHandler(m_inputHandlerType);
 
     return true;
 }
