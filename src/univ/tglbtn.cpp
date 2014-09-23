@@ -20,6 +20,7 @@
 #include "wx/univ/renderer.h"
 #include "wx/univ/colschem.h"
 #include "wx/univ/theme.h"
+#include "wx/stockitem.h"
 
 wxDEFINE_EVENT( wxEVT_TOGGLEBUTTON, wxCommandEvent );
 
