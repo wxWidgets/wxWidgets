@@ -239,7 +239,7 @@ bool wxScrollThumb::HandleMouseMove(const wxMouseEvent& event) const
 {
     if ( HasCapture() )
     {
-        if ( (m_captureData->m_shaftPart == Shaft_Thumb) && event.Moving() )
+        if ( (m_captureData->m_shaftPart == Shaft_Thumb) && event.Dragging() )
         {
             // make the thumb follow the mouse by keeping the same offset
             // between the mouse position and the top/left of the thumb

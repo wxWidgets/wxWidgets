@@ -804,11 +804,6 @@ bool wxSlider::PerformAction(const wxControlAction& action,
                 action == wxACTION_SLIDER_THUMB_MOVE )
     {
         scrollEvent = wxEVT_SCROLL_THUMBTRACK;
-
-        // we shouldn't generate a command event about this change but we still
-        // should update our value and the slider appearance
-        valueChanged = false;
-        m_value =
         value = (int)numArg;
         Refresh();
     }
