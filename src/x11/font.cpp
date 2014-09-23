@@ -882,18 +882,18 @@ void wxFont::DoSetNativeFontInfo( const wxNativeFontInfo& info )
 // for pango layout, such as "strikethrough" and "underline".
 bool wxFont::SetPangoAttrs(PangoLayout* layout) const
 {
-    if (!IsOk() || !(GetUnderlined() || GetStrikethrough()))
+    if ( !IsOk() || !(GetUnderlined() || GetStrikethrough()) )
         return false;
 
     PangoAttrList* attrs = pango_attr_list_new();
     PangoAttribute* a;
 
-    if (GetUnderlined())
+    if ( GetUnderlined() )
     {
         a = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
         pango_attr_list_insert(attrs, a);
     }
-    if (GetStrikethrough())
+    if ( GetStrikethrough() )
     {
         a = pango_attr_strikethrough_new(true);
         pango_attr_list_insert(attrs, a);
