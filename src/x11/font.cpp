@@ -224,6 +224,7 @@ void wxFontRefData::Init(int pointSize,
     m_nativeFontInfo.SetFaceName(m_faceName);
     m_nativeFontInfo.SetWeight((wxFontWeight)m_weight);
     m_nativeFontInfo.SetStyle((wxFontStyle)m_style);
+    m_nativeFontInfo.SetUnderlined(underlined);
 #endif // wxUSE_UNICODE
 
     SetPointSize(pointSize);
@@ -279,24 +280,6 @@ void wxFontRefData::InitFromNative()
             break;
     }
 
-    if (m_faceName == wxT("monospace"))
-    {
-        m_family = wxFONTFAMILY_TELETYPE;
-    }
-    else if (m_faceName == wxT("sans"))
-    {
-        m_family = wxFONTFAMILY_SWISS;
-    }
-    else
-    {
-        m_family = wxFONTFAMILY_UNKNOWN;
-    }
-
-    // Pango description are never underlined (?)
-    m_underlined = false;
-
-    // Cannot we choose that
-    m_encoding = wxFONTENCODING_SYSTEM;
 #else // X11
     // get the font parameters from the XLFD
     // -------------------------------------
@@ -509,14 +492,13 @@ void wxFontRefData::SetWeight(wxFontWeight weight)
 
 void wxFontRefData::SetUnderlined(bool underlined)
 {
-    m_underlined = underlined;
-
+    m_nativeFontInfo.SetUnderlined(underlined);
     // the XLFD doesn't have "underlined" field anyhow
 }
 
 void wxFontRefData::SetStrikethrough(bool strikethrough)
 {
-    m_strikethrough = strikethrough;
+    m_nativeFontInfo.SetStrikethrough(strikethrough);
 }
 
 bool wxFontRefData::SetFaceName(const wxString& facename)
@@ -536,6 +518,8 @@ void wxFontRefData::SetNativeFontInfo(const wxNativeFontInfo& info)
     ClearX11Fonts();
 
     m_nativeFontInfo = info;
+
+    m_family = info.GetFamily();
 
     // set all the other font parameters from the native font info
     InitFromNative();
@@ -579,7 +563,7 @@ bool wxFont::Create(int pointSize,
     return true;
 }
 
-bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
+bool wxFont::Create(const wxString& fontname, wxFontEncoding WXUNUSED(enc))
 {
     if( !fontname )
     {
@@ -650,6 +634,8 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
 
     tn.GetNextToken();                           // avg width
 
+// Note: font encoding is not used in unicode
+#if !wxUSE_UNICODE
     // deal with font encoding
     M_FONTDATA->m_encoding = enc;
     if ( M_FONTDATA->m_encoding == wxFONTENCODING_SYSTEM )
@@ -683,6 +669,8 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
         else
             return false;
     }
+#endif
+
     return true;
 }
 
@@ -727,14 +715,14 @@ int wxFont::GetPointSize() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
 
-    return M_FONTDATA->m_pointSize;
+    return M_FONTDATA->m_nativeFontInfo.GetPointSize();
 }
 
 wxString wxFont::GetFaceName() const
 {
     wxCHECK_MSG( IsOk(), wxEmptyString, wxT("invalid font") );
 
-    return M_FONTDATA->m_faceName;
+    return M_FONTDATA->m_nativeFontInfo.GetFaceName();
 }
 
 wxFontFamily wxFont::DoGetFamily() const
@@ -760,21 +748,27 @@ bool wxFont::GetUnderlined() const
 {
     wxCHECK_MSG( IsOk(), false, wxT("invalid font") );
 
-    return M_FONTDATA->m_underlined;
+    return M_FONTDATA->m_nativeFontInfo.GetUnderlined();
 }
 
 bool wxFont::GetStrikethrough() const
 {
     wxCHECK_MSG( IsOk(), false, wxT("invalid font") );
 
-    return M_FONTDATA->m_strikethrough;
+    return M_FONTDATA->m_nativeFontInfo.GetStrikethrough();
 }
 
 wxFontEncoding wxFont::GetEncoding() const
 {
     wxCHECK_MSG( IsOk(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
 
+#if wxUSE_UNICODE
+    // unicode didn't use font encoding
+    return wxFONTENCODING_DEFAULT;
+#else
     return M_FONTDATA->m_encoding;
+#endif
+
 }
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
