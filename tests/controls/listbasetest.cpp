@@ -415,6 +415,7 @@ void ListBaseTestCase::EditLabel()
     wxUIActionSimulator sim;
 
     list->EditLabel(0);
+    wxYield();
 
     sim.Text("sometext");
     wxYield();

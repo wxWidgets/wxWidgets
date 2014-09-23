@@ -1612,7 +1612,11 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
 
             KeySym keySym;
             (void) XLookupString ((XKeyEvent *) xevent, buf, 20, &keySym, NULL);
-            int id = wxCharCodeXToWX (keySym);
+#if wxUSE_UNICODE
+            int id = wxUnicodeCharXToWX(keySym);
+#else
+            int id = wxCharCodeXToWX(keySym);
+#endif
             // id may be WXK_xxx code - these are outside ASCII range, so we
             // can't just use toupper() on id.
             // Only change this if we want the raw key that was pressed,
@@ -1627,7 +1631,11 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
             wxevent.m_altDown = XKeyEventAltIsDown(xevent);
             wxevent.m_metaDown = XKeyEventMetaIsDown(xevent);
             wxevent.SetEventObject(win);
+#if wxUSE_UNICODE
+            wxevent.m_uniChar = id;
+#endif
             wxevent.m_keyCode = id;
+
             wxevent.SetTimestamp(XKeyEventGetTime(xevent));
 
             wxevent.m_x = XKeyEventGetX(xevent);
