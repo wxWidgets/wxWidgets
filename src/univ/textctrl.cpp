@@ -747,6 +747,9 @@ bool wxTextCtrl::Create(wxWindow *parent,
     SetInitialSize(size);
 
     m_isEditable = !(style & wxTE_READONLY);
+    m_textLength = value.Length();
+    // if m_maxLength is zero means there is no restriction of max length
+    m_maxLength = 0;
 
     CreateCaret();
     InitInsertionPoint();
@@ -2534,6 +2537,11 @@ void wxTextCtrl::OnSize(wxSizeEvent& event)
     }
 
     event.Skip();
+}
+
+void wxTextCtrl::SetMaxLength(unsigned long len)
+{
+    m_maxLength = len;
 }
 
 wxCoord wxTextCtrl::GetTotalWidth() const
@@ -4533,8 +4541,30 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     {
         if ( IsEditable() && !strArg.empty() )
         {
-            // inserting text can be undone
-            command = new wxTextCtrlInsertCommand(strArg);
+            if ( IsSingleLine() )
+            {
+                // it is ugly, but we don't want calculate text length every time
+                // in multiline text ctrl.
+                m_textLength += strArg.Length();
+
+                if ( m_maxLength > 0 && m_textLength > m_maxLength )
+                {
+                    wxCommandEvent event(wxEVT_TEXT_MAXLEN, m_windowId);
+                    InitCommandEvent(event);
+                    GetEventHandler()->ProcessEvent(event);
+                    // if m_textLength bigger than m_maxLength. it means not allow
+                    // to insert new chars.
+                }
+                else
+                {
+                    // inserting text can be undone, same as below
+                    command = new wxTextCtrlInsertCommand(strArg);
+                }
+            }
+            else
+            {
+                command = new wxTextCtrlInsertCommand(strArg);
+            }
         }
     }
     else if ( (action == wxACTION_TEXT_PAGE_UP) ||
@@ -4714,7 +4744,7 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         // execute and remember it to be able to undo it later
         m_cmdProcessor->Submit(command);
     }
-    else if ( IsEditable() )
+    else if ( IsEditable() && ( m_maxLength > 0 && m_textLength <= m_maxLength) )
     {
         wxCommandEvent event(wxEVT_TEXT, GetId());
         InitCommandEvent(event);

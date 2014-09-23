@@ -223,6 +223,7 @@ void TextCtrlTestCase::MaxLength()
     EventCounter maxlen(m_text, wxEVT_TEXT_MAXLEN);
 
     m_text->SetFocus();
+    wxYield();
     m_text->SetMaxLength(10);
 
     wxUIActionSimulator sim;

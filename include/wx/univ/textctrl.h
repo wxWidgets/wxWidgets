@@ -110,6 +110,7 @@ public:
     virtual bool IsModified() const wxOVERRIDE;
     virtual bool IsEditable() const wxOVERRIDE;
 
+    virtual void SetMaxLength(unsigned long len) wxOVERRIDE;
     // If the return values from and to are the same, there is no selection.
     virtual void GetSelection(wxTextPos* from, wxTextPos* to) const wxOVERRIDE;
 
@@ -488,6 +489,11 @@ private:
 
     // last position (only used by GetLastPosition())
     wxTextPos m_posLast;
+
+    // max text line length
+    long m_maxLength;
+    // current text line length
+    long m_textLength;
 
     // selection
     wxTextPos m_selAnchor,
