@@ -508,8 +508,11 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
         }
         case SelectionRequest:
         {
-            //A request to paste has occured.
+            // A request to paste has occured.
             wxClipboardHandleSelectionRequest(*event);
+            // The event handle doesn't care the clipboard
+            // how to response requestor, so just return true.
+            return true;
         }
 #if 0
         case DestroyNotify:
