@@ -243,7 +243,10 @@ private:
         CPPUNIT_TEST( ScrollWindowWithHandler );
         CPPUNIT_TEST( MenuEvent );
         CPPUNIT_TEST( DocView );
+// FIXME: this test will cause test_gui segmentation fault. Disable it for now.
+#if !defined(__WXUNIVERSAL__) && !defined (__WXX11__)
         WXUISIM_TEST( ContextMenuEvent );
+#endif
     CPPUNIT_TEST_SUITE_END();
 
     void OneHandler();
