@@ -142,8 +142,10 @@ wxScrollThumb::wxScrollThumb(wxControlWithThumb *control)
 
 wxScrollThumb::~wxScrollThumb()
 {
-    // it should have been destroyed
-    wxASSERT_MSG( !m_captureData, wxT("memory leak in wxScrollThumb") );
+    // make sure the mouse capture data will be released
+    // when destroy the thumb.
+    delete m_captureData;
+    wxConstCast(this, wxScrollThumb)->m_captureData = NULL;
 }
 
 // ----------------------------------------------------------------------------
@@ -218,6 +220,10 @@ bool wxScrollThumb::HandleMouse(const wxMouseEvent& event) const
             m_control->OnThumbDragEnd(GetThumbPos(event));
         }
 
+        // release the mouse and free capture data
+        delete m_captureData;
+        wxConstCast(this, wxScrollThumb)->m_captureData = NULL;
+
         m_control->SetShaftPartState(shaftPart, wxCONTROL_PRESSED, false);
     }
     else // another mouse button released
@@ -225,10 +231,6 @@ bool wxScrollThumb::HandleMouse(const wxMouseEvent& event) const
         // we don't process this
         return false;
     }
-
-    // release the mouse and free capture data
-    delete m_captureData;
-    wxConstCast(this, wxScrollThumb)->m_captureData = NULL;
 
     return true;
 }
