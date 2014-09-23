@@ -21,9 +21,7 @@
 #include "wx/univ/colschem.h"
 #include "wx/univ/theme.h"
 
-#if defined(__WXMSW__)
 #include "wx/stockitem.h"
-#endif
 
 wxDEFINE_EVENT( wxEVT_TOGGLEBUTTON, wxCommandEvent );
 
