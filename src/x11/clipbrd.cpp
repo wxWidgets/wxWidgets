@@ -263,10 +263,9 @@ void GetClipboardData(Display* disp, Window win, wxDataObject &data, wxDataForma
             atomVector.push_back(XA_IMAGE_TIFF);
             atomVector.push_back(XA_IMAGE_PNG);
 
-            int i;
             // check the four atoms in clipboard, try to find whether there has data
             // stored in one of these atom.
-            for ( i = 0; i < atomVector.size(); i++ )
+            for ( unsigned i = 0; i < atomVector.size(); i++ )
             {
 
                 clipbrdData  = GetClipboardDataByFormat(disp, win, XA_CLIPBOARD, 
@@ -353,8 +352,7 @@ extern "C" void wxClipboardHandleSelectionRequest(XEvent event)
     wxDataFormat dfFormat = wxDF_TEXT;
 #endif
 
-    int i;
-    for ( i = 0; i <= atomVector.size(); i++ )
+    for ( unsigned i = 0; i <= atomVector.size(); i++ )
     {
         if ( target == atomVector.at(i) )
         {
