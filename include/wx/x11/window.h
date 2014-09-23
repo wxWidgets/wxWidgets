@@ -48,8 +48,9 @@ public:
     virtual void Raise();
     virtual void Lower();
 
-    virtual void SetLabel(const wxString& label);
-    virtual wxString GetLabel() const;
+    // SetLabel(), which does nothing in wxWindow
+    virtual void SetLabel(const wxString& label) wxOVERRIDE { m_Label = label; }
+    virtual wxString GetLabel() const wxOVERRIDE            { return m_Label; }
 
     virtual bool Show( bool show = true );
     virtual bool Enable( bool enable = true );
@@ -186,6 +187,8 @@ protected:
 private:
     // common part of all ctors
     void Init();
+
+    wxString m_Label;
 
     DECLARE_DYNAMIC_CLASS(wxWindowX11)
     wxDECLARE_NO_COPY_CLASS(wxWindowX11);

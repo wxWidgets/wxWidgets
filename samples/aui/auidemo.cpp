@@ -934,7 +934,6 @@ MyFrame::MyFrame(wxWindow* parent,
                   Name(wxT("test11")).Caption(wxT("Fixed Pane")).
                   Bottom().Layer(1).Position(2).Fixed());
 
-
     m_mgr.AddPane(new SettingsPanel(this,this), wxAuiPaneInfo().
                   Name(wxT("settings")).Caption(wxT("Dock Manager Settings")).
                   Dockable(false).Float().Hide());

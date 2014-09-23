@@ -527,17 +527,6 @@ void wxWindowX11::Lower()
         XLowerWindow( wxGlobalDisplay(), (Window) m_mainWindow );
 }
 
-void wxWindowX11::SetLabel(const wxString& WXUNUSED(label))
-{
-    // TODO
-}
-
-wxString wxWindowX11::GetLabel() const
-{
-    // TODO
-    return wxEmptyString;
-}
-
 void wxWindowX11::DoCaptureMouse()
 {
     if ((g_captureWindow != NULL) && (g_captureWindow != this))
