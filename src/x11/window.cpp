@@ -68,6 +68,9 @@
 
 static wxWindowX11* g_captureWindow = NULL;
 static GC g_eraseGC;
+// the window that is about to be focused after curretnly focused
+// one looses focus:
+static wxWindow* gs_toBeFocusedWindow = NULL;
 
 // ----------------------------------------------------------------------------
 // macros
@@ -397,7 +400,11 @@ void wxWindowX11::SetFocus()
         return; // nothing to do, focused already
 
     if ( focusedWindow )
+    {
+        gs_toBeFocusedWindow = (wxWindow*)this;
         focusedWindow->KillFocus();
+        gs_toBeFocusedWindow = NULL;
+    }
 
 #if 0
     if (GetName() == "scrollBar")
@@ -445,6 +452,7 @@ void wxWindowX11::KillFocus()
 
     wxFocusEvent event(wxEVT_KILL_FOCUS, GetId());
     event.SetEventObject(this);
+    event.SetWindow(gs_toBeFocusedWindow);
     HandleWindowEvent(event);
 }
 
