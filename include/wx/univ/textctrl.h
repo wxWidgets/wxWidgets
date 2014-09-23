@@ -491,9 +491,7 @@ private:
     wxTextPos m_posLast;
 
     // max text line length
-    long m_maxLength;
-    // current text line length
-    long m_textLength;
+    unsigned long m_maxLength;
 
     // selection
     wxTextPos m_selAnchor,

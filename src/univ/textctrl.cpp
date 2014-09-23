@@ -651,6 +651,9 @@ void wxTextCtrl::Init()
     m_curCol =
     m_curRow = 0;
 
+    // if m_maxLength is zero means there is no restriction of max length
+    m_maxLength = 0;
+
     m_heightLine =
     m_widthAvg = -1;
 
@@ -747,9 +750,6 @@ bool wxTextCtrl::Create(wxWindow *parent,
     SetInitialSize(size);
 
     m_isEditable = !(style & wxTE_READONLY);
-    m_textLength = value.Length();
-    // if m_maxLength is zero means there is no restriction of max length
-    m_maxLength = 0;
 
     CreateCaret();
     InitInsertionPoint();
@@ -1280,6 +1280,10 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
 
 void wxTextCtrl::Remove(wxTextPos from, wxTextPos to)
 {
+    // treat -1 as the last position
+    if ( to == -1 )
+        to = GetLastPosition();
+
     // Replace() only works with correctly ordered arguments, so exchange them
     // if necessary
     OrderPositions(from, to);
@@ -2541,6 +2545,18 @@ void wxTextCtrl::OnSize(wxSizeEvent& event)
 
 void wxTextCtrl::SetMaxLength(unsigned long len)
 {
+    // if the existing value in the text control is too long,
+    // then it is clipped to the newly imposed limit.
+    if ( m_value.Length() > len )
+    {
+        // block the wxEVT_TEXT event temporaryly
+        // otherwise Remove will generate a wxEVT_TEXT event
+        // that not what we want
+        ForwardEnableTextChangedEvents(false);
+        Remove(len, -1);
+        ForwardEnableTextChangedEvents(true);
+    }
+
     m_maxLength = len;
 }
 
@@ -4541,31 +4557,23 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     {
         if ( IsEditable() && !strArg.empty() )
         {
-            if ( IsSingleLine() )
-            {
-                // it is ugly, but we don't want calculate text length every time
-                // in multiline text ctrl.
-                m_textLength += strArg.Length();
+            wxString acceptString = strArg;
 
-                if ( m_maxLength > 0 && m_textLength > m_maxLength )
-                {
-                    wxCommandEvent event(wxEVT_TEXT_MAXLEN, m_windowId);
-                    InitCommandEvent(event);
-                    GetEventHandler()->ProcessEvent(event);
-                    // if m_textLength bigger than m_maxLength. it means not allow
-                    // to insert new chars.
-                }
-                else
-                {
-                    // inserting text can be undone, same as below
-                    command = new wxTextCtrlInsertCommand(strArg);
-                }
-            }
-            else
+            unsigned long acceptableLength = m_maxLength - m_value.Length();
+
+            if ( m_maxLength > 0 && (strArg.Length() > acceptableLength) )
             {
-                command = new wxTextCtrlInsertCommand(strArg);
+                wxCommandEvent event(wxEVT_TEXT_MAXLEN, m_windowId);
+                InitCommandEvent(event);
+                GetEventHandler()->ProcessEvent(event);
+                acceptString = strArg.Left(acceptableLength);
             }
+
+        if ( acceptString.Length() > 0 )
+            // inserting text can be undone
+            command = new wxTextCtrlInsertCommand(acceptString);
         }
+
     }
     else if ( (action == wxACTION_TEXT_PAGE_UP) ||
               (action == wxACTION_TEXT_PAGE_DOWN) )
@@ -4737,20 +4745,11 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         }
     }
 
-    // Submit call will insert text eventually, so if has command, 
-    // then no need to process wxEVT_TEXT event again.
+    // Submit call will insert text and generate wxEVT_TEXT event.
     if ( command )
     {
         // execute and remember it to be able to undo it later
         m_cmdProcessor->Submit(command);
-    }
-    else if ( IsEditable() && ( m_maxLength > 0 && m_textLength <= m_maxLength) )
-    {
-        wxCommandEvent event(wxEVT_TEXT, GetId());
-        InitCommandEvent(event);
-        GetEventHandler()->ProcessEvent(event);
-
-        // as the text changed...
         m_isModified = true;
     }
 
