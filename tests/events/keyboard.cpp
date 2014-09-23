@@ -204,15 +204,12 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( KeyboardEventTestCase );
-// FIXME: this test will cause test_gui segmentation fault. Disable it for now.
-#if !defined(__WXUNIVERSAL__) && !defined (__WXX11__)
         CPPUNIT_TEST( NormalLetter );
         CPPUNIT_TEST( NormalSpecial );
         CPPUNIT_TEST( CtrlLetter );
         CPPUNIT_TEST( CtrlSpecial );
         CPPUNIT_TEST( ShiftLetter );
         CPPUNIT_TEST( ShiftSpecial );
-#endif
     CPPUNIT_TEST_SUITE_END();
 
     void NormalLetter();

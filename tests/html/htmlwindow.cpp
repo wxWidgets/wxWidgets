@@ -43,11 +43,8 @@ private:
         CPPUNIT_TEST( SelectionToText );
         CPPUNIT_TEST( Title );
 #if wxUSE_UIACTIONSIMULATOR
-// FIXME: this test will cause test_gui segmentation fault. Disable it for now.
-#if !defined(__WXUNIVERSAL__) && !defined (__WXX11__)
         WXUISIM_TEST( CellClick );
         WXUISIM_TEST( LinkClick );
-#endif
 #endif // wxUSE_UIACTIONSIMULATOR
         CPPUNIT_TEST( AppendToPage );
     CPPUNIT_TEST_SUITE_END();

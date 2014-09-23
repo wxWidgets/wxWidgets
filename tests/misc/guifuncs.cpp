@@ -45,11 +45,8 @@ private:
         CPPUNIT_TEST( DisplaySize );
         CPPUNIT_TEST( URLDataObject );
         CPPUNIT_TEST( ParseFileDialogFilter );
-// FIXME: this test will cause test_gui segmentation fault. Disable it for now.
-#if !defined(__WXUNIVERSAL__) && !defined (__WXX11__)
         CPPUNIT_TEST( ClientToScreen );
         CPPUNIT_TEST( FindWindowAtPoint );
-#endif
     CPPUNIT_TEST_SUITE_END();
 
     void DisplaySize();
