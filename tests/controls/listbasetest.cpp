@@ -263,6 +263,7 @@ void ListBaseTestCase::KeyDown()
     wxUIActionSimulator sim;
 
     list->SetFocus();
+    wxYield();
     sim.Text("aAbB");
     wxYield();
 
