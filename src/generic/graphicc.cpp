@@ -1451,6 +1451,25 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
 
     InitSurface(bufferFormat, stride);
 #endif // wxHAS_RAW_BITMAP
+
+#if defined(__WXX11__)
+    // In include/feature.h, wxHAS_RAW_BITMAP defined for
+    // __WXGTK20__, __WXMAC__, __WXDFB__ and __WXMSW__. Without WXX11.
+    // This is because the bitmap in x11 is plain data.
+    // no need to convert it.
+    // The code in this block will only work for X11
+    cairo_format_t bufferFormat = bmp.GetDepth() == 32
+                                        ? CAIRO_FORMAT_ARGB32
+                                        : CAIRO_FORMAT_RGB24;
+
+    int stride = InitBuffer(bmp.GetWidth(), bmp.GetHeight(), bufferFormat);
+
+    wxBitmap bmpSource = bmp;  // we need a non-const instance
+
+    m_buffer = (unsigned char*)bmp.GetBitmap();
+
+    InitSurface(bufferFormat, stride);
+#endif
 }
 
 #if wxUSE_IMAGE
