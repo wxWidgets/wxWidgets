@@ -162,6 +162,7 @@ void TestEvent(int line, const wxKeyEvent& ev, const KeyDesc& desc)
                                   desc.m_keycode,
                                   ev.GetKeyCode() );
 
+#if !defined(__WXX11__)
 #if wxUSE_UNICODE
     if ( desc.m_keycode < WXK_START )
     {
@@ -178,6 +179,7 @@ void TestEvent(int line, const wxKeyEvent& ev, const KeyDesc& desc)
                                       (int)ev.GetUnicodeKey() );
     }
 #endif // wxUSE_UNICODE
+#endif
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "wrong modifiers in " + msg,
                                   desc.m_mods,
@@ -229,6 +231,7 @@ wxREGISTER_UNIT_TEST(KeyboardEvent);
 void KeyboardEventTestCase::setUp()
 {
     m_win = new KeyboardTestWindow(wxTheApp->GetTopWindow());
+    wxYield();
     m_win->SetFocus();
     wxYield(); // needed to show the new window
 
