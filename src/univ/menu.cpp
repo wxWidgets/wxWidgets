@@ -1756,6 +1756,8 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     if ( !wxMenuBarBase::Insert(pos, menu, title) )
         return false;
 
+    menu->SetTitle( title );
+
     wxMenuInfo *info = new wxMenuInfo(title);
     m_menuInfos.Insert(info, pos);
 
