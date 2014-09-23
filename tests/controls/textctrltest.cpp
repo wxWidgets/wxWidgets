@@ -203,7 +203,7 @@ void TextCtrlTestCase::ReadOnly()
     // SetEditable() is supposed to override wxTE_READONLY
     m_text->SetEditable(true);
     
-#if defined(__WXOSX_COCOA__) || defined(__WXUNIVERSAL__)
+#if defined(__WXOSX__) || defined(__WXUNIVERSAL__)
     // a ready only text field might not have been focusable at all
     m_text->SetFocus();
 #endif
