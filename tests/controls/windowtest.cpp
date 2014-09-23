@@ -122,6 +122,7 @@ void WindowTestCase::KeyEvent()
     wxUIActionSimulator sim;
 
     m_window->SetFocus();
+    wxYield();
 
     sim.Text("text");
     sim.Char(WXK_SHIFT);
