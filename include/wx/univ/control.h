@@ -66,7 +66,7 @@ public:
     virtual void SetLabel(const wxString& label) wxOVERRIDE;
 
     // return the current label
-    virtual wxString GetLabel() const wxOVERRIDE { return m_label; }
+    virtual wxString GetLabel() const wxOVERRIDE { return wxControlBase::GetLabel(); }
 
     // wxUniversal-specific methods
 
