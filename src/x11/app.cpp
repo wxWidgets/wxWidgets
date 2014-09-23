@@ -38,6 +38,7 @@
     #include "wx/thread.h"
 #endif
 
+#include "wx/clipbrd.h"
 #include "wx/x11/private.h"
 
 #include <string.h>
@@ -58,6 +59,11 @@ static wxSize g_initialSize = wxDefaultSize;
 // generates itself.
 static wxWindow *g_nextFocus = NULL;
 static wxWindow *g_prevFocus = NULL;
+
+//------------------------------------------------------------------------
+// X11 clipboard event handling
+//------------------------------------------------------------------------
+extern "C" void wxClipboardHandleSelectionRequest(XEvent event);
 
 //------------------------------------------------------------------------
 //   X11 error handling
@@ -499,6 +505,11 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 }
             }
             return false;
+        }
+        case SelectionRequest:
+        {
+            //A request to paste has occured.
+            wxClipboardHandleSelectionRequest(*event);
         }
 #if 0
         case DestroyNotify:
