@@ -2487,8 +2487,13 @@ void wxComboCtrlBase::DoShowPopup( const wxRect& rect, int WXUNUSED(flags) )
         // wxPopupWindow implemenation on this platform is classified as
         // perfect, then we should be able to safely set focus to the popup
         // control.
+        // In wxUniv/x11 port, popup window neither generic top-level nor
+        // perfect native window. So shouldn't be set focus to the popup control
+        // same in the OnPopupDismiss function.
+#if !defined(__WXX11__)
         if ( IsPopupWinTypePerfect(m_popupWinType) )
             m_popup->SetFocus();
+#endif
     }
     else if ( IsPopupWindowState(Hidden) )
     {
@@ -2512,7 +2517,10 @@ void wxComboCtrlBase::OnPopupDismiss(bool generateEvent)
     // OnPopupDismisses.
     m_popupWinState = Hidden;
 
-    //SetFocus();
+#if !defined(__WXX11__)
+    SetFocus();
+#endif
+
     m_winPopup->Disable();
 
     // Inform popup control itself
@@ -2553,7 +2561,9 @@ void wxComboCtrlBase::OnPopupDismiss(bool generateEvent)
     // refresh control (necessary even if m_text)
     Refresh();
 
+#if !defined(__WXX11__)
     SetFocus();
+#endif
 
     if ( generateEvent )
     {
