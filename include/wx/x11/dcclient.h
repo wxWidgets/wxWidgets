@@ -108,6 +108,8 @@ public:
 
     virtual void ComputeScaleAndOrigin();
 
+    virtual void* GetCairoContext() const wxOVERRIDE;
+
 protected:
     // implementation
     // --------------

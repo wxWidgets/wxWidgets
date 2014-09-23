@@ -28,6 +28,8 @@
 #include "wx/x11/dcclient.h"
 #include "wx/x11/dcmemory.h"
 
+#include "cairo-xlib.h"
+
 #if wxUSE_UNICODE
 #include "glib.h"
 #include "pango/pangoxft.h"
@@ -341,6 +343,17 @@ void wxWindowDCImpl::SetUpDC()
         hatch_bitmap[5] = XCreateBitmapFromData( (Display*) m_display, xroot,
             reinterpret_cast<const char*>(verti_bits), verti_width, verti_height );
     }
+}
+
+void* wxWindowDCImpl::GetCairoContext() const
+{
+    int width, height;
+    DoGetSize(&width, &height);
+    cairo_surface_t *surface;
+    surface = cairo_xlib_surface_create((Display*) m_display, (Drawable) m_x11window,
+                    DefaultVisual((Display*) m_display, 0), width, height);
+    cairo_t *cr = cairo_create(surface);
+    return cr;
 }
 
 void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
