@@ -163,17 +163,6 @@ Atom  g_clipboardAtom   = 0;
 Atom  g_targetsAtom     = 0;
 #endif
 
-// avoid warnings about unused static variable (notice that we still use it
-// even in release build if the compiler doesn't support variadic macros)
-#if defined(__WXDEBUG__) || !defined(HAVE_VARIADIC_MACROS)
-
-// the trace mask we use with wxLogTrace() - call
-// wxLog::AddTraceMask(TRACE_CLIPBOARD) to enable the trace messages from here
-// (there will be a *lot* of them!)
-static const wxChar *TRACE_CLIPBOARD = wxT("clipboard");
-
-#endif // __WXDEBUG__
-
 // Atom for handle different format
 // these atom not defined in Xatom.h
 static Atom XA_CLIPBOARD;
