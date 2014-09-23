@@ -123,6 +123,7 @@ void SpinCtrlDoubleTestCase::Wrap()
     wxUIActionSimulator sim;
 
     m_spin->SetFocus();
+    wxYield();
 
     sim.Char(WXK_DOWN);
 
@@ -203,6 +204,7 @@ void SpinCtrlDoubleTestCase::Increment()
     wxUIActionSimulator sim;
 
     m_spin->SetFocus();
+    wxYield();
 
     sim.Char(WXK_UP);
 
