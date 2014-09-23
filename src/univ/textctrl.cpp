@@ -971,8 +971,14 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
     int selStartOld = m_selStart,
         selEndOld = m_selEnd;
 
-    m_selStart =
-    m_selEnd = -1;
+    // set selection range for GetSelection and GetInsertionPoint call
+    // if give a range but the text length that give doesn't equal the range
+    // it mean clear the text in the range and set the text after `from` 
+    if ( (to - from) != (int)text.Len() )
+    {
+        m_selStart = from;
+        m_selEnd = from + text.Len();
+    }
 
     if ( IsSingleLine() )
     {
@@ -1347,7 +1353,14 @@ void wxTextCtrl::SetInsertionPointEnd()
 
 wxTextPos wxTextCtrl::GetInsertionPoint() const
 {
-    return m_curPos;
+    //if has selection, the insert point should be the lower number of selection,
+    //else should be current cursor position
+    long from;
+    if ( HasSelection() )
+        GetSelection(&from, NULL);
+    else 
+        from = m_curPos;
+    return from;
 }
 
 wxTextPos wxTextCtrl::GetLastPosition() const
@@ -4419,9 +4432,6 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
                                long numArg,
                                const wxString& strArg)
 {
-    // has the text changed as result of this action?
-    bool textChanged = false;
-
     // the remembered cursor abscissa for multiline text controls is usually
     // reset after each user action but for ones which do use it (UP and DOWN
     // for example) we shouldn't do it - as indicated by this flag
@@ -4520,8 +4530,6 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         {
             // inserting text can be undone
             command = new wxTextCtrlInsertCommand(strArg);
-
-            textChanged = true;
         }
     }
     else if ( (action == wxACTION_TEXT_PAGE_UP) ||
@@ -4694,23 +4702,15 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         }
     }
 
+    // Submit call will insert text eventually, so if has command, 
+    // then no need to process wxEVT_TEXT event again.
     if ( command )
     {
         // execute and remember it to be able to undo it later
         m_cmdProcessor->Submit(command);
-
-        // undoable commands always change text
-        textChanged = true;
     }
-    else // no undoable command
+    else if ( IsEditable() )
     {
-        // m_cmdProcessor->StopCompressing()
-    }
-
-    if ( textChanged )
-    {
-        wxASSERT_MSG( IsEditable(), wxT("non editable control changed?") );
-
         wxCommandEvent event(wxEVT_TEXT, GetId());
         InitCommandEvent(event);
         GetEventHandler()->ProcessEvent(event);
@@ -4718,6 +4718,8 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         // as the text changed...
         m_isModified = true;
     }
+
+
 
     return true;
 }
