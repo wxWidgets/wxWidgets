@@ -1476,8 +1476,6 @@ bool wxStdListboxInputHandler::HandleMouse(wxInputConsumer *consumer,
         {
             winCapture->ReleaseMouse();
             m_btnCapture = 0;
-
-            action = m_actionMouse;
         }
         //else: the mouse wasn't presed over the listbox, only released here
     }
