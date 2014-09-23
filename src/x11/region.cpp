@@ -289,8 +289,7 @@ bool wxRegion::DoGetBox( wxCoord &x, wxCoord &y, wxCoord &w, wxCoord &h ) const
 
 bool wxRegion::DoOffset( wxCoord x, wxCoord y )
 {
-    if (!m_refData)
-        return false;
+    wxCHECK_MSG( m_refData, false, wxS("invalid region") );
 
     AllocExclusive();
 
