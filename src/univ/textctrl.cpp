@@ -4557,21 +4557,20 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     {
         if ( IsEditable() && !strArg.empty() )
         {
-            wxString acceptString = strArg;
+            bool isTextClipped = m_maxLength && (m_value.length() + strArg.length() > m_maxLength);
+            const wxString& acceptedString = isTextClipped ? strArg.Left(m_maxLength - m_value.length())
+                                                        : strArg;
 
-            unsigned long acceptableLength = m_maxLength - m_value.Length();
-
-            if ( m_maxLength > 0 && (strArg.Length() > acceptableLength) )
+            if ( isTextClipped ) // text was clipped so emit wxEVT_TEXT_MAXLEN
             {
                 wxCommandEvent event(wxEVT_TEXT_MAXLEN, m_windowId);
                 InitCommandEvent(event);
                 GetEventHandler()->ProcessEvent(event);
-                acceptString = strArg.Left(acceptableLength);
             }
 
-        if ( acceptString.Length() > 0 )
-            // inserting text can be undone
-            command = new wxTextCtrlInsertCommand(acceptString);
+            if ( !acceptedString.empty() )
+                // inserting text can be undone
+                command = new wxTextCtrlInsertCommand(acceptedString);
         }
 
     }
