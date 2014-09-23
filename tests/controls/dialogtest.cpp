@@ -29,8 +29,9 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( ModalDialogsTestCase );
-// FIXME: this test will cause test_gui segmentation fault. Disable it for now.
-#if !defined(__WXUNIVERSAL__) && !defined (__WXX11__)
+// wxInfoBar has bug under x11. It will cause the dialog crash
+// Disable it for now.
+#if !defined (__WXX11__)
         CPPUNIT_TEST( MessageDialog );
 #endif
         CPPUNIT_TEST( FileDialog );

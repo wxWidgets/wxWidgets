@@ -68,8 +68,9 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( ExecTestCase );
-// FIXME: this test will cause test_gui segmentation fault. Disable it for now.
-#if !defined(__WXUNIVERSAL__) && !defined (__WXX11__)
+// wxX11 didn't implement some required features. Disable these tests
+// for now.
+#if !defined (__WXX11__)
         CPPUNIT_TEST( TestShell );
         CPPUNIT_TEST( TestExecute );
         CPPUNIT_TEST( TestProcess );

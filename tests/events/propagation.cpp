@@ -241,7 +241,11 @@ private:
         CPPUNIT_TEST( ForwardEvent );
         CPPUNIT_TEST( ScrollWindowWithoutHandler );
         CPPUNIT_TEST( ScrollWindowWithHandler );
-        //CPPUNIT_TEST( MenuEvent );
+// for unknown reason, this test will cause the tests segmentation failed
+// under x11, disable it for now.
+#if !defined (__WXX11__)
+        CPPUNIT_TEST( MenuEvent );
+#endif
         CPPUNIT_TEST( DocView );
         WXUISIM_TEST( ContextMenuEvent );
     CPPUNIT_TEST_SUITE_END();
