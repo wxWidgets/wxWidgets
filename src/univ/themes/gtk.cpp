@@ -201,9 +201,9 @@ public:
 #endif // wxUSE_SCROLLBAR
 
     virtual wxSize GetCheckBitmapSize() const
-        { return wxSize(10, 10); }
+        { return wxSize(14, 14); }
     virtual wxSize GetRadioBitmapSize() const
-        { return wxSize(11, 11); }
+        { return wxSize(14, 14); }
     virtual wxCoord GetCheckItemMargin() const
         { return 2; }
 
