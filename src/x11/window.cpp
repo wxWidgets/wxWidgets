@@ -356,7 +356,7 @@ wxWindowX11::~wxWindowX11()
     if (g_captureWindow == this)
         g_captureWindow = NULL;
 
-    if ( gs_focusedWindow == this )
+    if ( DoFindFocus() == this )
         KillFocus();
 
     DestroyChildren();
@@ -396,19 +396,11 @@ void wxWindowX11::SetFocus()
     if (!AcceptsFocus())
         return;
 
-    if ( gs_focusedWindow == (wxWindow*)this )
+    if ( DoFindFocus() == (wxWindow*)this )
         return; // nothing to do, focused already
 
-    wxWindow *oldFocusedWindow = (wxWindow*)xwindow;
-
-    if ( gs_focusedWindow )
-    {
-        gs_toBeFocusedWindow = (wxWindow*)this;
-        gs_focusedWindow->KillFocus();
-        gs_toBeFocusedWindow = NULL;
-    }
-
-    gs_focusedWindow = (wxWindow*)this;
+    if ( DoFindFocus() )
+        DoFindFocus()->KillFocus();
 
 #if 0
     if (GetName() == "scrollBar")
@@ -440,7 +432,7 @@ void wxWindowX11::SetFocus()
 
     wxFocusEvent event(wxEVT_SET_FOCUS, GetId());
     event.SetEventObject(this);
-    event.SetWindow((wxWindow*)oldFocusedWindow);
+    event.SetWindow((wxWindow*)xwindow);
     HandleWindowEvent(event);
 
 }
@@ -448,17 +440,14 @@ void wxWindowX11::SetFocus()
 // Kill focus
 void wxWindowX11::KillFocus()
 {
-    wxCHECK_RET( gs_focusedWindow == this,
+    wxCHECK_RET( DoFindFocus() == this,
                  "killing focus on window that doesn't have it" );
-
-    gs_focusedWindow = NULL;
 
     if ( m_isBeingDeleted )
         return; // don't send any events from dtor
 
     wxFocusEvent event(wxEVT_KILL_FOCUS, GetId());
     event.SetEventObject(this);
-    event.SetWindow(gs_toBeFocusedWindow);
     HandleWindowEvent(event);
 }
 
