@@ -1113,6 +1113,34 @@ void wxListBox::Activate(int item)
 }
 
 // ----------------------------------------------------------------------------
+// hittest
+// ----------------------------------------------------------------------------
+
+int wxListBox::DoListHitTest(const wxPoint& point) const
+{
+    if ( !GetClientRect().Contains(point) )
+        return wxNOT_FOUND;
+
+    int y, index;
+
+    CalcUnscrolledPosition(0, point.y, NULL, &y);
+    index = y / GetLineHeight();
+
+    if ( index < 0 )
+    {
+        // mouse is above the first item
+        index = 0;
+    }
+    else if ( (unsigned int)index >= GetCount() )
+    {
+        // mouse is below the last item
+        index= GetCount() - 1;
+    }
+
+    return index;
+}
+
+// ----------------------------------------------------------------------------
 // input handling
 // ----------------------------------------------------------------------------
 

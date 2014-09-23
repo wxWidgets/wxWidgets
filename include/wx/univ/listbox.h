@@ -116,6 +116,8 @@ protected:
                               void **clientData,
                               wxClientDataType type) wxOVERRIDE;
 
+    virtual int DoListHitTest(const wxPoint& point) const wxOVERRIDE;
+
     // universal wxComboBox implementation internally uses wxListBox
     friend class WXDLLIMPEXP_FWD_CORE wxComboBox;
 
