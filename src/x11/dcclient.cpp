@@ -1660,6 +1660,13 @@ void wxWindowDCImpl::DoGetTextExtent( const wxString &string, wxCoord *width, wx
     {
         if (width) (*width) = 0;
         if (height) (*height) = 0;
+
+        //empty string should also make sure the descent and leading is zero.
+        if (descent)
+        {
+            (*descent) = 0;
+        }
+        if (externalLeading) (*externalLeading) = 0;
         return;
     }
 
