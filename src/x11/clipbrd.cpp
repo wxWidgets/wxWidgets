@@ -498,9 +498,6 @@ bool wxClipboard::AddData( wxDataObject *data )
 
     wxCHECK_MSG( data, false, wxT("data is invalid") );
 
-    /* we can only store one wxDataObject */
-    Clear();
-
     // in x11, the "copied data" hold by the program itself.
     // so here just use m_data to hold the "copied data"
     // use wxApp->ProcessXEvent to check whether there has
@@ -524,8 +521,6 @@ bool wxClipboard::AddData( wxDataObject *data )
 
     XChangeProperty(xdisplay, window, XA_CLIPBOARD, XA_STRING, 8, PropModeReplace,
                     buf.data(), size);
-
-    delete buf;
 
     XSetSelectionOwner(xdisplay, XA_CLIPBOARD, window, CurrentTime);
     XFlush(xdisplay);
