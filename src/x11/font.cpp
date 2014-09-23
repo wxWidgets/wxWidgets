@@ -182,8 +182,8 @@ void wxFontRefData::Init(int pointSize,
     m_faceName = faceName;
 
     // we accept both wxDEFAULT and wxNORMAL here - should we?
-    m_style = style == wxDEFAULT ? wxFONTSTYLE_NORMAL : style;
-    m_weight = weight == wxDEFAULT ? wxFONTWEIGHT_NORMAL : weight;
+    m_style = static_cast<int>(style) == wxDEFAULT ? wxFONTSTYLE_NORMAL : style;
+    m_weight = static_cast<int>(weight) == wxDEFAULT ? wxFONTWEIGHT_NORMAL : weight;
 
     m_underlined = underlined;
     m_strikethrough = strikethrough;

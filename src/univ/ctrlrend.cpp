@@ -438,7 +438,7 @@ void wxControlRenderer::DrawCheckItems(const wxCheckListBox *lbox,
 void wxControlRenderer::DrawProgressBar(const wxGauge *gauge)
 {
     // draw background
-    m_dc.SetBrush(wxBrush(m_window->GetBackgroundColour(), wxSOLID));
+    m_dc.SetBrush(m_window->GetBackgroundColour());
     m_dc.SetPen(*wxTRANSPARENT_PEN);
     m_dc.DrawRectangle(m_rect);
 
@@ -458,7 +458,7 @@ void wxControlRenderer::DrawProgressBar(const wxGauge *gauge)
 
     wxColour col = m_window->UseFgCol() ? m_window->GetForegroundColour()
                                         : wxTHEME_COLOUR(GAUGE);
-    m_dc.SetBrush(wxBrush(col, wxSOLID));
+    m_dc.SetBrush(col);
 
     if ( gauge->IsSmooth() )
     {
