@@ -563,13 +563,12 @@ bool wxFont::Create(int pointSize,
     return true;
 }
 
-bool wxFont::Create(const wxString& fontname,
-#if wxUSE_UNICODE
-                    wxFontEncoding WXUNUSED(enc))
-#else
-                    wxFontEncoding enc)
-#endif
+bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
 {
+#if wxUSE_UNICODE
+    wxUnusedVar(enc);
+#endif
+
     if( !fontname )
     {
         *this = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT);
