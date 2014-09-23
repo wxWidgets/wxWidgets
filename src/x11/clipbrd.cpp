@@ -231,7 +231,7 @@ unsigned char *GetClipboardDataByFormat(Display* disp, Window win, Atom clipbrdT
 
         result = XGetWindowProperty(disp, win, clipbrdType, 0, read_bytes, False, AnyPropertyType,
                                 &type, &format, length, &bytes_after, &clipbrddata);
-	    read_bytes *= 2;
+        read_bytes *= 2;
     } while ( bytes_after != 0 );
 
     // if we got any data, copy it.
@@ -268,7 +268,7 @@ void GetClipboardData(Display* disp, Window win, wxDataObject &data, wxDataForma
             for ( unsigned i = 0; i < atomVector.size(); i++ )
             {
 
-                clipbrdData  = GetClipboardDataByFormat(disp, win, XA_CLIPBOARD, 
+                clipbrdData  = GetClipboardDataByFormat(disp, win, XA_CLIPBOARD,
                                                         atomVector.at(i), &len);
                 if ( clipbrdData != NULL )
                     break;
@@ -378,8 +378,8 @@ extern "C" void wxClipboardHandleSelectionRequest(XEvent event)
             XA_STRING,
         };
 
-        XChangeProperty(disp, requestor, property, XA_ATOM, 32, PropModeReplace, 
-						(unsigned char *)possibleTargets, 2);
+        XChangeProperty(disp, requestor, property, XA_ATOM, 32, PropModeReplace,
+                        (unsigned char *)possibleTargets, 2);
     }
     // the requested target is in possibleTargets
     // TODO, when finish the event process issue, improve the check.
@@ -388,7 +388,7 @@ extern "C" void wxClipboardHandleSelectionRequest(XEvent event)
         size_t size = data->GetDataSize(dfFormat);
         wxCharTypeBuffer<unsigned char> buf(size);
         data->GetDataHere(dfFormat, buf.data());
-        XChangeProperty(disp, requestor, XA_CLIPBOARD, target, 8, PropModeReplace, 
+        XChangeProperty(disp, requestor, XA_CLIPBOARD, target, 8, PropModeReplace,
                         buf.data(), size);
     }
     else
