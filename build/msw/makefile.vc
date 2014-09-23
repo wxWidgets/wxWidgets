@@ -2119,7 +2119,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_generic_statusbr.obj \
 	$(OBJS)\monodll_prntdlgg.obj \
 	$(OBJS)\monodll_msw_accel.obj \
-	$(OBJS)\monodll_anybutton.obj \
+	$(OBJS)\monodll_msw_anybutton.obj \
 	$(OBJS)\monodll_artmsw.obj \
 	$(OBJS)\monodll_appprogress.obj \
 	$(OBJS)\monodll_msw_bmpbuttn.obj \
@@ -2410,6 +2410,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_generic_listctrl.obj \
 	$(OBJS)\monodll_mdig.obj \
 	$(OBJS)\monodll_prntdlgg.obj \
+	$(OBJS)\monodll_univ_anybutton.obj \
 	$(OBJS)\monodll_univ_bmpbuttn.obj \
 	$(OBJS)\monodll_univ_button.obj \
 	$(OBJS)\monodll_univ_checkbox.obj \
@@ -2937,7 +2938,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_generic_statusbr.obj \
 	$(OBJS)\monolib_prntdlgg.obj \
 	$(OBJS)\monolib_msw_accel.obj \
-	$(OBJS)\monolib_anybutton.obj \
+	$(OBJS)\monolib_msw_anybutton.obj \
 	$(OBJS)\monolib_artmsw.obj \
 	$(OBJS)\monolib_appprogress.obj \
 	$(OBJS)\monolib_msw_bmpbuttn.obj \
@@ -3228,6 +3229,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_generic_listctrl.obj \
 	$(OBJS)\monolib_mdig.obj \
 	$(OBJS)\monolib_prntdlgg.obj \
+	$(OBJS)\monolib_univ_anybutton.obj \
 	$(OBJS)\monolib_univ_bmpbuttn.obj \
 	$(OBJS)\monolib_univ_button.obj \
 	$(OBJS)\monolib_univ_checkbox.obj \
@@ -3691,7 +3693,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_generic_statusbr.obj \
 	$(OBJS)\coredll_prntdlgg.obj \
 	$(OBJS)\coredll_msw_accel.obj \
-	$(OBJS)\coredll_anybutton.obj \
+	$(OBJS)\coredll_msw_anybutton.obj \
 	$(OBJS)\coredll_artmsw.obj \
 	$(OBJS)\coredll_appprogress.obj \
 	$(OBJS)\coredll_msw_bmpbuttn.obj \
@@ -3982,6 +3984,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_generic_listctrl.obj \
 	$(OBJS)\coredll_mdig.obj \
 	$(OBJS)\coredll_prntdlgg.obj \
+	$(OBJS)\coredll_univ_anybutton.obj \
 	$(OBJS)\coredll_univ_bmpbuttn.obj \
 	$(OBJS)\coredll_univ_button.obj \
 	$(OBJS)\coredll_univ_checkbox.obj \
@@ -4261,7 +4264,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_generic_statusbr.obj \
 	$(OBJS)\corelib_prntdlgg.obj \
 	$(OBJS)\corelib_msw_accel.obj \
-	$(OBJS)\corelib_anybutton.obj \
+	$(OBJS)\corelib_msw_anybutton.obj \
 	$(OBJS)\corelib_artmsw.obj \
 	$(OBJS)\corelib_appprogress.obj \
 	$(OBJS)\corelib_msw_bmpbuttn.obj \
@@ -4552,6 +4555,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_generic_listctrl.obj \
 	$(OBJS)\corelib_mdig.obj \
 	$(OBJS)\corelib_prntdlgg.obj \
+	$(OBJS)\corelib_univ_anybutton.obj \
 	$(OBJS)\corelib_univ_bmpbuttn.obj \
 	$(OBJS)\corelib_univ_button.obj \
 	$(OBJS)\corelib_univ_checkbox.obj \
@@ -7339,7 +7343,7 @@ $(OBJS)\monodll_generic_statusbr.obj: ..\..\src\generic\statusbr.cpp
 $(OBJS)\monodll_msw_accel.obj: ..\..\src\msw\accel.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\accel.cpp
 
-$(OBJS)\monodll_anybutton.obj: ..\..\src\msw\anybutton.cpp
+$(OBJS)\monodll_msw_anybutton.obj: ..\..\src\msw\anybutton.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\anybutton.cpp
 
 $(OBJS)\monodll_artmsw.obj: ..\..\src\msw\artmsw.cpp
@@ -7524,6 +7528,9 @@ $(OBJS)\monodll_generic_listctrl.obj: ..\..\src\generic\listctrl.cpp
 
 $(OBJS)\monodll_mdig.obj: ..\..\src\generic\mdig.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\mdig.cpp
+
+$(OBJS)\monodll_univ_anybutton.obj: ..\..\src\univ\anybutton.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\anybutton.cpp
 
 $(OBJS)\monodll_univ_bmpbuttn.obj: ..\..\src\univ\bmpbuttn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\bmpbuttn.cpp
@@ -9821,7 +9828,7 @@ $(OBJS)\monolib_generic_statusbr.obj: ..\..\src\generic\statusbr.cpp
 $(OBJS)\monolib_msw_accel.obj: ..\..\src\msw\accel.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\accel.cpp
 
-$(OBJS)\monolib_anybutton.obj: ..\..\src\msw\anybutton.cpp
+$(OBJS)\monolib_msw_anybutton.obj: ..\..\src\msw\anybutton.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\anybutton.cpp
 
 $(OBJS)\monolib_artmsw.obj: ..\..\src\msw\artmsw.cpp
@@ -10006,6 +10013,9 @@ $(OBJS)\monolib_generic_listctrl.obj: ..\..\src\generic\listctrl.cpp
 
 $(OBJS)\monolib_mdig.obj: ..\..\src\generic\mdig.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\mdig.cpp
+
+$(OBJS)\monolib_univ_anybutton.obj: ..\..\src\univ\anybutton.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\anybutton.cpp
 
 $(OBJS)\monolib_univ_bmpbuttn.obj: ..\..\src\univ\bmpbuttn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\bmpbuttn.cpp
@@ -12711,7 +12721,7 @@ $(OBJS)\coredll_generic_statusbr.obj: ..\..\src\generic\statusbr.cpp
 $(OBJS)\coredll_msw_accel.obj: ..\..\src\msw\accel.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\accel.cpp
 
-$(OBJS)\coredll_anybutton.obj: ..\..\src\msw\anybutton.cpp
+$(OBJS)\coredll_msw_anybutton.obj: ..\..\src\msw\anybutton.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\anybutton.cpp
 
 $(OBJS)\coredll_artmsw.obj: ..\..\src\msw\artmsw.cpp
@@ -12896,6 +12906,9 @@ $(OBJS)\coredll_generic_listctrl.obj: ..\..\src\generic\listctrl.cpp
 
 $(OBJS)\coredll_mdig.obj: ..\..\src\generic\mdig.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\mdig.cpp
+
+$(OBJS)\coredll_univ_anybutton.obj: ..\..\src\univ\anybutton.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\anybutton.cpp
 
 $(OBJS)\coredll_univ_bmpbuttn.obj: ..\..\src\univ\bmpbuttn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\bmpbuttn.cpp
@@ -14169,7 +14182,7 @@ $(OBJS)\corelib_generic_statusbr.obj: ..\..\src\generic\statusbr.cpp
 $(OBJS)\corelib_msw_accel.obj: ..\..\src\msw\accel.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\accel.cpp
 
-$(OBJS)\corelib_anybutton.obj: ..\..\src\msw\anybutton.cpp
+$(OBJS)\corelib_msw_anybutton.obj: ..\..\src\msw\anybutton.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\anybutton.cpp
 
 $(OBJS)\corelib_artmsw.obj: ..\..\src\msw\artmsw.cpp
@@ -14354,6 +14367,9 @@ $(OBJS)\corelib_generic_listctrl.obj: ..\..\src\generic\listctrl.cpp
 
 $(OBJS)\corelib_mdig.obj: ..\..\src\generic\mdig.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\mdig.cpp
+
+$(OBJS)\corelib_univ_anybutton.obj: ..\..\src\univ\anybutton.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\anybutton.cpp
 
 $(OBJS)\corelib_univ_bmpbuttn.obj: ..\..\src\univ\bmpbuttn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\bmpbuttn.cpp

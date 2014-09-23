@@ -4887,6 +4887,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_generic_listctrl.o \
 	monodll_mdig.o \
 	monodll_prntdlgg.o \
+	monodll_univ_anybutton.o \
 	monodll_univ_bmpbuttn.o \
 	monodll_univ_button.o \
 	monodll_univ_checkbox.o \
@@ -7243,6 +7244,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_generic_listctrl.o \
 	monolib_mdig.o \
 	monolib_prntdlgg.o \
+	monolib_univ_anybutton.o \
 	monolib_univ_bmpbuttn.o \
 	monolib_univ_button.o \
 	monolib_univ_checkbox.o \
@@ -9756,6 +9758,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_generic_listctrl.o \
 	coredll_mdig.o \
 	coredll_prntdlgg.o \
+	coredll_univ_anybutton.o \
 	coredll_univ_bmpbuttn.o \
 	coredll_univ_button.o \
 	coredll_univ_checkbox.o \
@@ -11533,6 +11536,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_generic_listctrl.o \
 	corelib_mdig.o \
 	corelib_prntdlgg.o \
+	corelib_univ_anybutton.o \
 	corelib_univ_bmpbuttn.o \
 	corelib_univ_button.o \
 	corelib_univ_checkbox.o \
@@ -18489,6 +18493,9 @@ monodll_cocoa_utilsexc.o: $(srcdir)/src/cocoa/utilsexc.mm $(MONODLL_ODEP)
 monodll_src_cocoa_window.o: $(srcdir)/src/cocoa/window.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/cocoa/window.mm
 
+monodll_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
+
 monodll_univ_bmpbuttn.o: $(srcdir)/src/univ/bmpbuttn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/univ/bmpbuttn.cpp
 
@@ -24371,6 +24378,9 @@ monolib_cocoa_utilsexc.o: $(srcdir)/src/cocoa/utilsexc.mm $(MONOLIB_ODEP)
 
 monolib_src_cocoa_window.o: $(srcdir)/src/cocoa/window.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/cocoa/window.mm
+
+monolib_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
 
 monolib_univ_bmpbuttn.o: $(srcdir)/src/univ/bmpbuttn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/univ/bmpbuttn.cpp
@@ -30933,6 +30943,9 @@ coredll_utilsexc.o: $(srcdir)/src/cocoa/utilsexc.mm $(COREDLL_ODEP)
 coredll_src_cocoa_window.o: $(srcdir)/src/cocoa/window.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/cocoa/window.mm
 
+coredll_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
+
 coredll_univ_bmpbuttn.o: $(srcdir)/src/univ/bmpbuttn.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/bmpbuttn.cpp
 
@@ -35327,6 +35340,9 @@ corelib_utilsexc.o: $(srcdir)/src/cocoa/utilsexc.mm $(CORELIB_ODEP)
 
 corelib_src_cocoa_window.o: $(srcdir)/src/cocoa/window.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/cocoa/window.mm
+
+corelib_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
 
 corelib_univ_bmpbuttn.o: $(srcdir)/src/univ/bmpbuttn.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/bmpbuttn.cpp

@@ -2409,6 +2409,7 @@ UNIV_SRC =
     src/generic/listctrl.cpp
     src/generic/mdig.cpp
     src/generic/prntdlgg.cpp
+    src/univ/anybutton.cpp
     src/univ/bmpbuttn.cpp
     src/univ/button.cpp
     src/univ/checkbox.cpp

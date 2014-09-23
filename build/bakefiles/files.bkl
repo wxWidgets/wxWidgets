@@ -2833,6 +2833,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/listctrl.cpp
     src/generic/mdig.cpp
     src/generic/prntdlgg.cpp
+    src/univ/anybutton.cpp
     src/univ/bmpbuttn.cpp
     src/univ/button.cpp
     src/univ/checkbox.cpp
