@@ -209,6 +209,12 @@ bool wxSlider::ChangeValueTo(int value)
     // value!
     wxCHECK_MSG( IsInRange(value), false, wxT("invalid slider value") );
 
+    // and also generate a command event for compatibility
+    wxCommandEvent cmdevent( wxEVT_SLIDER, GetId() );
+    cmdevent.SetInt( value );
+    cmdevent.SetEventObject( this );
+    GetEventHandler()->ProcessEvent(cmdevent);
+
     m_value = value;
 
     Refresh();
