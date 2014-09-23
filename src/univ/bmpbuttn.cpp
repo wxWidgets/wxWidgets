@@ -94,6 +94,7 @@ bool wxBitmapButton::ChangeBitmap(const wxBitmap& bmp)
         return false;
 
     m_bitmap = bitmap;
+    SetInitialSize(bitmap.GetSize());
 
     return true;
 }
