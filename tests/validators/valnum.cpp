@@ -70,10 +70,7 @@ void NumValidatorTestCase::setUp()
 
 void NumValidatorTestCase::tearDown()
 {
-// FIXME: this test will cause test_gui segmentation fault. Disable it for now.
-#if !defined(__WXUNIVERSAL__) && !defined (__WXX11__)
     wxTheApp->GetTopWindow()->DestroyChildren();
-#endif
 }
 
 void NumValidatorTestCase::TransferInt()
