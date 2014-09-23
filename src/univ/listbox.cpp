@@ -420,12 +420,10 @@ void wxListBox::DoSetSelection(int n, bool select)
     {
         if ( n == wxNOT_FOUND )
         {
-            if ( !HasMultipleSelection() )
-            {
-                // selecting wxNOT_FOUND is documented to deselect all items
-                DeselectAll();
-                return;
-            }
+            // if is wxNOT_FOUND, just deselect all like other posts
+            // selecting wxNOT_FOUND is documented to deselect all items
+            DeselectAll();
+            return;
         }
         else if ( m_selections.Index(n) == wxNOT_FOUND )
         {
