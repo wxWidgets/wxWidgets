@@ -384,12 +384,30 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             if (win->HandleWindowEvent( keyEvent ))
                 return true;
 
-            keyEvent.SetEventType(wxEVT_CHAR);
             // Do the translation again, retaining the ASCII
             // code.
-            if (wxTranslateKeyEvent(keyEvent, win, window, event, true) &&
-                win->HandleWindowEvent( keyEvent ))
-                return true;
+            if ( wxTranslateKeyEvent(keyEvent, win, window, event, true) )
+            {
+                switch ( keyEvent.m_keyCode )
+                {
+                    // for modifiers, don't send wxEVT_CHAR event.
+                    // the definition of Modifiers, plese see the doc of
+                    // wxKeyModifier. we only take care of wxMOD_ALT, wxMOD_CONTROL
+                    // wxMOD_SHIFT under X11 platform. Other modifiers is handled
+                    // by window manager.
+                    case WXK_CONTROL:
+                    case WXK_SHIFT:
+                    case WXK_ALT:
+                        break;
+                    default:
+                    {
+                        // process wxEVT_CHAR here
+                        keyEvent.SetEventType(wxEVT_CHAR);
+                        if ( win->HandleWindowEvent( keyEvent ) )
+                            return true;
+                    }
+                }
+            }
 
             if ( (keyEvent.m_keyCode == WXK_TAB) &&
                  win->GetParent() && (win->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
@@ -413,6 +431,23 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 
             wxKeyEvent keyEvent(wxEVT_KEY_UP);
             wxTranslateKeyEvent(keyEvent, win, window, event);
+
+            // if recieve the modifiers key up. set the corresponding
+            // keyboardState to false.
+            switch ( keyEvent.m_keyCode )
+            {
+                case WXK_CONTROL:
+                    keyEvent.SetControlDown(false);
+                    break;
+                case WXK_SHIFT:
+                    keyEvent.SetShiftDown(false);
+                    break;
+                case WXK_ALT:
+                    keyEvent.SetAltDown(false);
+                    break;
+                default:
+                    break;
+            }
 
             return win->HandleWindowEvent( keyEvent );
         }
