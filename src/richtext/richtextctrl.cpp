@@ -1413,7 +1413,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                     GetId());
                 cmdEvent1.SetEventObject(this);
                 cmdEvent1.SetFlags(flags);
-#if wxUSE_UNICODE && !__WXX11__
+#if wxUSE_UNICODE
                 cmdEvent1.SetCharacter(event.GetUnicodeKey());
 #else
                 cmdEvent1.SetCharacter((wxChar) keycode);
@@ -1430,7 +1430,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                     GetId());
                 cmdEvent.SetEventObject(this);
                 cmdEvent.SetFlags(flags);
-#if wxUSE_UNICODE && !__WXX11__
+#if wxUSE_UNICODE
                 cmdEvent.SetCharacter(event.GetUnicodeKey());
 #else
                 cmdEvent.SetCharacter((wxChar) keycode);
@@ -1473,7 +1473,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                 long newPos = m_caretPosition;
                 DeleteSelectedContent(& newPos);
 
-#if wxUSE_UNICODE && !__WXX11__
+#if wxUSE_UNICODE
                 wxString str = event.GetUnicodeKey();
 #else
                 wxString str = (wxChar) event.GetKeyCode();
