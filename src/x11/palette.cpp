@@ -125,6 +125,18 @@ wxPalette::~wxPalette()
 {
 }
 
+int wxPalette::GetColoursCount() const
+{
+    if (m_refData)
+    {
+        wxList::compatibility_iterator node = M_PALETTEDATA->m_palettes.GetFirst();
+        wxXPalette* p = (wxXPalette*) node->GetData();
+        return p->m_pix_array_n;
+    }
+
+    return 0;
+}
+
 bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
 {
     UnRef();
@@ -139,12 +151,20 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
     Display* display = (Display*) wxGetDisplay();
 
     unsigned long *pix_array;
+    unsigned char *col_red;
+    unsigned char *col_green;
+    unsigned char *col_blue;
+
+    pix_array = new unsigned long[n];
+    col_red = new unsigned char[n];
+    col_green = new unsigned char[n];
+    col_blue = new unsigned char[n];
+
     Colormap cmap;
     int pix_array_n;
 
     cmap = (Colormap) wxTheApp->GetMainColormap(display);
 
-    pix_array = new unsigned long[n];
     if (!pix_array)
         return false;
 
@@ -155,12 +175,21 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
         xcol.green = (unsigned short)green[i] << 8;
         xcol.blue = (unsigned short)blue[i] << 8;
         pix_array[i] = (XAllocColor(display, cmap, &xcol) == 0) ? 0 : xcol.pixel;
+
+        // store the RGB value(0-255) to palette directly, 
+        // no need to calculate the color again in GetRGB()
+        col_red[i] = red[i];
+        col_green[i] = green[i];
+        col_blue[i] = blue[i];
     }
 
     wxXPalette *c = new wxXPalette;
 
     c->m_pix_array_n = pix_array_n;
     c->m_pix_array = pix_array;
+    c->m_red = col_red;
+    c->m_green = col_green;
+    c->m_blue = col_blue;
     c->m_cmap = (WXColormap) cmap;
     c->m_display = (WXDisplay*) display;
     c->m_destroyable = false;
@@ -193,7 +222,16 @@ int wxPalette::GetPixel(unsigned char WXUNUSED(red),
     return wxNOT_FOUND;
 }
 
-bool wxPalette::GetRGB(int index, unsigned char *WXUNUSED(red), unsigned char *WXUNUSED(green), unsigned char *WXUNUSED(blue)) const
+// In all wx ports, when declare GetRGB, the first parameter is "int pixel"
+// the docs said the function is used to "Returns RGB values for a given
+// palette index." And in GetRGB implementation, all port named the first
+// parameter to " int index". I don't it is whether intended, but "index"
+// is more meanning for, and to be consistent with other ports, I renamed
+// the first parameter from pixel to index.
+bool wxPalette::GetRGB(int index,
+                       unsigned char *red,
+                       unsigned char *green,
+                       unsigned char *blue) const
 {
     if ( !m_refData )
         return false;
@@ -201,8 +239,14 @@ bool wxPalette::GetRGB(int index, unsigned char *WXUNUSED(red), unsigned char *W
     if (index < 0 || index > 255)
         return false;
 
-    // TODO
-    return false;
+    wxList::compatibility_iterator node = M_PALETTEDATA->m_palettes.GetFirst();
+    wxXPalette* p = (wxXPalette*) node->GetData();
+
+    if (red) *red = p->m_red[index];
+    if (green) *green = p->m_green[index];
+    if (blue) *blue = p->m_blue[index];
+
+    return true;
 }
 
 WXColormap wxPalette::GetXColormap(WXDisplay* display) const
