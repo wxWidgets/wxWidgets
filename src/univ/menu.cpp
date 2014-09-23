@@ -1127,6 +1127,8 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
             // for now it has just one element
             item->SetAsRadioGroupStart();
             item->SetRadioGroupEnd(m_startRadioGroup);
+            wxMenuBase::DoAppend(item);
+            item->Check(true);
         }
         else // extend the current radio group
         {
@@ -1142,15 +1144,14 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
             {
                 wxFAIL_MSG( wxT("where is the radio group start item?") );
             }
+            wxMenuBase::DoAppend(item);
         }
     }
     else // not a radio item
     {
         EndRadioGroup();
+        wxMenuBase::DoAppend(item);
     }
-
-    if ( !wxMenuBase::DoAppend(item) )
-        return NULL;
 
     OnItemAdded(item);
 
