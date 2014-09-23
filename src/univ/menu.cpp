@@ -1160,6 +1160,8 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
 
 wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 {
+    bool result = false;
+
     if ( item->GetKind() == wxITEM_RADIO )
     {
         unsigned int start, end;
@@ -1173,7 +1175,7 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
             // set this element as the first of radio group
             item->SetAsRadioGroupStart();
             item->SetRadioGroupEnd(m_startRadioGroup);
-            wxMenuBase::DoInsert(pos, item);
+            result = wxMenuBase::DoInsert(pos, item);
             item->Check(true);
         }
         else // extend the current radio group
@@ -1210,11 +1212,14 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
                     wxFAIL_MSG( wxT("where is the radio group start item?") );
                 }
             }
-            wxMenuBase::DoInsert(pos, item);
+            result = wxMenuBase::DoInsert(pos, item);
         }
     }
     else
-        wxMenuBase::DoInsert(pos, item);
+        result = wxMenuBase::DoInsert(pos, item);
+
+    if ( !result )
+        return NULL;
 
     OnItemAdded(item);
 
