@@ -1328,13 +1328,8 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, cairo_surfac
     m_surface = bitmap;
     m_pattern = cairo_pattern_create_for_surface(m_surface);
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1,11,0)
-    if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 11, 0) )
-    {
-        m_width = cairo_image_surface_get_width(m_surface);
-        m_height = cairo_image_surface_get_height(m_surface);
-    }
-#endif
+    m_width = cairo_image_surface_get_width(m_surface);
+    m_height = cairo_image_surface_get_height(m_surface);
     m_buffer = NULL;
 }
 
