@@ -1010,10 +1010,10 @@ void wxGTKRenderer::DrawRadioButtonBitmap(wxDC& dc,
 	// draw the normal border
 	dc.DrawCircle(xRight/2,yBottom/2,yMid);
 
-    wxColor col1, col2;
-    col1 = wxSCHEME_COLOUR(m_scheme, SHADOW_DARK);
-    col2 = wxSCHEME_COLOUR(m_scheme, SHADOW_IN);
-    dc.SetBrush(flags & wxCONTROL_CHECKED ? col1 : col2);
+    wxColor checkedCol, uncheckedCol;
+    checkedCol = wxSCHEME_COLOUR(m_scheme, SHADOW_DARK);
+    uncheckedCol = wxSCHEME_COLOUR(m_scheme, SHADOW_HIGHLIGHT);
+    dc.SetBrush(flags & wxCONTROL_CHECKED ? checkedCol : uncheckedCol);
 
     // inner dot
     dc.DrawCircle(xRight/2,yBottom/2,yMid/2);
@@ -1021,23 +1021,23 @@ void wxGTKRenderer::DrawRadioButtonBitmap(wxDC& dc,
     bool drawIt = true;
 
     if ( flags & wxCONTROL_PRESSED )
-        dc.SetBrush(wxColor(128, 138, 135));
+        dc.SetBrush(wxSCHEME_COLOUR(m_scheme, CONTROL_PRESSED));
     else // unchecked and unpressed
         drawIt = false;
 
     if ( drawIt )
-        dc.DrawCircle(xRight/2,yBottom/2,yMid/2);
+        dc.DrawCircle(xRight/2, yBottom/2, yMid/2);
 
     if ( flags & wxCONTROL_PRESSED )
     {
-        dc.SetBrush(wxColor(128, 138, 135));
+        dc.SetBrush(wxSCHEME_COLOUR(m_scheme, CONTROL_PRESSED));
         drawIt = true;
     }
     else // checked and unpressed
         drawIt = false;
 
     if ( drawIt )
-        dc.DrawCircle(xRight/2,yBottom/2,yMid/2);
+        dc.DrawCircle(xRight/2, yBottom/2, yMid/2);
 }
 
 void wxGTKRenderer::DrawUpZag(wxDC& dc,
