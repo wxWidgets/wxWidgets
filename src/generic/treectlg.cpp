@@ -3243,14 +3243,12 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
             break;
 
         case WXK_RIGHT:
-            // this works the same as the down arrow except that we
-            // also expand the item if it wasn't expanded yet
+            // right arrow just expand the item will be fine
             if (m_current != GetRootItem().m_pItem || !HasFlag(wxTR_HIDE_ROOT))
                 Expand(m_current);
             //else: don't try to expand hidden root item (which can be the
             //      current one when the tree is empty)
-
-            wxFALLTHROUGH;
+            break;
 
         case WXK_DOWN:
             {
