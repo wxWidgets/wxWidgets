@@ -67,12 +67,14 @@ public:
 
     wxFont(const wxNativeFontInfo& info);
 
-    // FIXME: I added the ! to make it compile;
-    // is this right? - JACS
-#if !wxUSE_UNICODE
+    wxFont(const wxString &nativeInfoString)
+    {
+        Create(nativeInfoString);
+    }
+
     bool Create(const wxString& fontname,
         wxFontEncoding fontenc = wxFONTENCODING_DEFAULT);
-#endif
+
     // DELETEME: no longer seems to be implemented.
     // bool Create(const wxNativeFontInfo& fontinfo);
 

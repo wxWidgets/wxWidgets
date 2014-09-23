@@ -565,8 +565,6 @@ bool wxFont::Create(int pointSize,
     return true;
 }
 
-#if !wxUSE_UNICODE
-
 bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
 {
     if( !fontname )
@@ -577,7 +575,11 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
 
     m_refData = new wxFontRefData();
 
-    M_FONTDATA->m_nativeFontInfo.SetXFontName(fontname);  // X font name
+#if wxUSE_UNICODE // X font name
+    M_FONTDATA->m_nativeFontInfo.FromString( fontname );
+#else
+    M_FONTDATA->m_nativeFontInfo.SetXFontName(fontname);
+#endif
 
     wxString tmp;
 
@@ -669,7 +671,6 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
     }
     return true;
 }
-#endif // !wxUSE_UNICODE
 
 wxFont::~wxFont()
 {
