@@ -1664,7 +1664,23 @@ void wxWindowDCImpl::DoDrawRotatedText(const wxString& WXUNUSED(text),
                                    wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
                                    double angle)
 {
-    wxFAIL_MSG( "not implemented" );
+    // use cairo to draw rotated text
+    cairo_surface_t *surface;
+    surface = cairo_xlib_surface_create((Display*) m_display, (Drawable) m_x11window,
+                    DefaultVisual((Display*) m_display, 0), x, y);
+    cairo_t *cr = cairo_create(surface);
+
+    cairo_save(cr);
+    cairo_move_to (cr, x, y);
+
+    // cairo use radians, but wxWidgets use degree
+    // so convert degrees to radians first.
+    // and wxWidgets is counter clock, so plus minus.
+    cairo_rotate(cr, -angle * (M_PI / 180));
+
+    cairo_show_text (cr, text);
+    cairo_restore(cr);
+    cairo_destroy(cr);
 }
 
 void wxWindowDCImpl::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *height,
