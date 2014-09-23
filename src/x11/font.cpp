@@ -563,7 +563,12 @@ bool wxFont::Create(int pointSize,
     return true;
 }
 
-bool wxFont::Create(const wxString& fontname, wxFontEncoding WXUNUSED(enc))
+bool wxFont::Create(const wxString& fontname,
+#if wxUSE_UNICODE
+                    wxFontEncoding WXUNUSED(enc))
+#else
+                    wxFontEncoding enc)
+#endif
 {
     if( !fontname )
     {
