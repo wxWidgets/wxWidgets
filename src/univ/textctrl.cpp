@@ -4926,7 +4926,14 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxInputConsumer *consumer,
     {
         consumer->PerformAction(action, -1, str);
 
-        return true;
+        // the key down of WXK_UP/DOWN and WXK_PAGEUP/DOWN
+        // must generate a wxEVT_TEXT event. For the controls
+        // that use wxTextCtrl, such as wxSpinCtrl
+        if ( (action != wxACTION_TEXT_UP) &
+             (action != wxACTION_TEXT_DOWN) &
+             (action != wxACTION_TEXT_PAGE_DOWN) &
+             (action != wxACTION_TEXT_PAGE_UP) )
+            return true;
     }
 
     return wxStdInputHandler::HandleKey(consumer, event, pressed);
