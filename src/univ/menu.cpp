@@ -1127,7 +1127,10 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
             // for now it has just one element
             item->SetAsRadioGroupStart();
             item->SetRadioGroupEnd(m_startRadioGroup);
-            wxMenuBase::DoAppend(item);
+
+            if ( !wxMenuBase::DoAppend(item) )
+                return NULL;
+
             item->Check(true);
         }
         else // extend the current radio group
@@ -1144,13 +1147,17 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
             {
                 wxFAIL_MSG( wxT("where is the radio group start item?") );
             }
-            wxMenuBase::DoAppend(item);
+
+            if ( !wxMenuBase::DoAppend(item) )
+                return NULL;
         }
     }
     else // not a radio item
     {
         EndRadioGroup();
-        wxMenuBase::DoAppend(item);
+
+        if ( !wxMenuBase::DoAppend(item) )
+            return NULL;
     }
 
     OnItemAdded(item);
@@ -1160,8 +1167,6 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
 
 wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 {
-    bool result = false;
-
     if ( item->GetKind() == wxITEM_RADIO )
     {
         unsigned int start, end;
@@ -1175,7 +1180,10 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
             // set this element as the first of radio group
             item->SetAsRadioGroupStart();
             item->SetRadioGroupEnd(m_startRadioGroup);
-            result = wxMenuBase::DoInsert(pos, item);
+
+            if ( !wxMenuBase::DoInsert(pos, item) )
+                return NULL;
+
             item->Check(true);
         }
         else // extend the current radio group
@@ -1212,14 +1220,16 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
                     wxFAIL_MSG( wxT("where is the radio group start item?") );
                 }
             }
-            result = wxMenuBase::DoInsert(pos, item);
+
+            if ( !wxMenuBase::DoInsert(pos, item) )
+                return NULL;
         }
     }
     else
-        result = wxMenuBase::DoInsert(pos, item);
-
-    if ( !result )
-        return NULL;
+    {
+        if ( !wxMenuBase::DoInsert(pos, item) )
+            return NULL;
+    }
 
     OnItemAdded(item);
 
