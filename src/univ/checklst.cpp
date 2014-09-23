@@ -157,6 +157,7 @@ void wxCheckListBox::OnItemInserted(unsigned int pos)
 
 void wxCheckListBox::DoClear()
 {
+    wxListBox::DoClear();
     m_checks.Empty();
 }
 
