@@ -52,6 +52,8 @@ public:
     void SetAsRadioGroupStart();
     void SetRadioGroupStart(int start);
     void SetRadioGroupEnd(int end);
+    int GetRadioGroupStart();
+    int GetRadioGroupEnd();
 
     // wxUniv-specific methods for implementation only starting from here
 
