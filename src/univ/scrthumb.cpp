@@ -218,10 +218,6 @@ bool wxScrollThumb::HandleMouse(const wxMouseEvent& event) const
             m_control->OnThumbDragEnd(GetThumbPos(event));
         }
 
-        // release the mouse and free capture data
-        delete m_captureData;
-        wxConstCast(this, wxScrollThumb)->m_captureData = NULL;
-
         m_control->SetShaftPartState(shaftPart, wxCONTROL_PRESSED, false);
     }
     else // another mouse button released
@@ -229,6 +225,10 @@ bool wxScrollThumb::HandleMouse(const wxMouseEvent& event) const
         // we don't process this
         return false;
     }
+
+    // release the mouse and free capture data
+    delete m_captureData;
+    wxConstCast(this, wxScrollThumb)->m_captureData = NULL;
 
     return true;
 }
