@@ -1323,7 +1323,7 @@ void wxCairoBitmapData::InitSurface(cairo_format_t format, int stride)
 }
 
 wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, cairo_surface_t* bitmap ) :
-    wxGraphicsBitmapData( renderer ), m_buffer(NULL)
+    wxGraphicsBitmapData(renderer)
 {
     m_surface = bitmap;
     m_pattern = cairo_pattern_create_for_surface(m_surface);
@@ -1333,8 +1333,12 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, cairo_surfac
     m_buffer = NULL;
 }
 
-wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitmap& bmp ) : wxGraphicsBitmapData( renderer ), m_buffer(NULL), m_surface(NULL), m_pattern(NULL)
+wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitmap& bmp )
+    : wxGraphicsBitmapData(renderer)
 {
+    m_surface = NULL;
+    m_pattern = NULL;
+    m_buffer = NULL;
     wxCHECK_RET( bmp.IsOk(), wxT("Invalid bitmap in wxCairoContext::DrawBitmap"));
 
 #ifdef wxHAS_RAW_BITMAP
