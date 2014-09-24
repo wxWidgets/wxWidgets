@@ -2111,11 +2111,11 @@ wxSize wxWindowMSW::DoGetBorderSize() const
             break;
 
         case wxBORDER_SUNKEN:
+        case wxBORDER_THEME:
             border = 2;
             break;
 
         case wxBORDER_RAISED:
-        case wxBORDER_DOUBLE:
             border = 3;
             break;
 
