@@ -1965,10 +1965,12 @@ bool wxRichTextCtrl::IsPositionVisible(long pos) const
 
     wxRect rect = GetScaledRect(line->GetRect());
     wxSize clientSize = GetClientSize();
-    clientSize.y -= (int) (0.5 + GetBuffer().GetBottomMargin() * GetScale());
 
-    return (rect.GetTop() >= (startY + (int) (0.5 + GetBuffer().GetTopMargin() * GetScale()))) &&
-           (rect.GetBottom() <= (startY + clientSize.y));
+    int topMargin = (int) (0.5 + GetBuffer().GetTopMargin() * GetScale());
+    int bottomMargin = (int) (0.5 + GetBuffer().GetBottomMargin() * GetScale());
+
+    return (rect.GetTop() >= (startY + topMargin)) &&
+           (rect.GetBottom() <= (startY + clientSize.y - bottomMargin));
 }
 
 void wxRichTextCtrl::SetCaretPosition(long position, bool showAtLineStart)
@@ -3012,7 +3014,14 @@ bool wxRichTextCtrl::RecreateBuffer(const wxSize& size)
         return false;
 
     if (!m_bufferBitmap.IsOk() || m_bufferBitmap.GetWidth() < sz.x || m_bufferBitmap.GetHeight() < sz.y)
+        // As per http://trac.wxwidgets.org/ticket/14403, prevent very inefficient fix to alpha bits of
+        // destination by making the backing bitmap 24-bit. Note that using 24-bit depth breaks painting of
+        // scrolled areas on wxWidgets 2.8.
+#if defined(__WXMSW__) && wxCHECK_VERSION(3,0,0)
+        m_bufferBitmap = wxBitmap(sz.x, sz.y, 24);
+#else
         m_bufferBitmap = wxBitmap(sz.x, sz.y);
+#endif
     return m_bufferBitmap.IsOk();
 }
 #endif
@@ -4215,7 +4224,9 @@ wxRichTextLine* wxRichTextCtrl::GetVisibleLineForCaretPosition(long caretPositio
         if (caretPosition == lineRange.GetStart()-1 &&
             (para->GetRange().GetStart() != lineRange.GetStart()))
         {
-            if (!m_caretAtLineStart)
+            // Only test for caret start/end position if we're looking at the current caret position,
+            // otherwise m_caretAtLineStart is meaningless
+            if (!m_caretAtLineStart && (caretPosition == m_caretPosition))
                 line = GetFocusObject()->GetLineAtPosition(caretPosition-1, true);
         }
     }
