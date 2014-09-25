@@ -315,6 +315,16 @@ private:
 
 - (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar;
 
+@end
+
+
+@interface wxNSToolbar : NSToolbar
+{
+    wxNSToolbarDelegate* toolbarDelegate;
+}
+
+- (id)initWithIdentifier:(NSString *)identifier;
+- (void) dealloc;
 
 @end
 
@@ -419,6 +429,28 @@ private:
         return item;
     }
     return nil;
+}
+
+@end
+
+
+@implementation wxNSToolbar
+
+- (id)initWithIdentifier:(NSString *)identifier
+{
+    self = [super initWithIdentifier:identifier];
+    if (self)
+    {
+        toolbarDelegate = [[wxNSToolbarDelegate alloc] init];
+        [self setDelegate:toolbarDelegate];
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    [toolbarDelegate release];
+    [super dealloc];
 }
 
 @end
@@ -645,20 +677,14 @@ bool wxToolBar::Create(
 
     if (parent->IsKindOf(CLASSINFO(wxFrame)) && wxSystemOptions::GetOptionInt(wxT("mac.toolbar.no-native")) != 1)
     {
-        static wxNSToolbarDelegate* controller = nil;
-
-        if ( controller == nil )
-            controller = [[wxNSToolbarDelegate alloc] init];
         wxString identifier = wxString::Format( wxT("%p"), this );
         wxCFStringRef cfidentifier(identifier);
-        NSToolbar* tb =  [[NSToolbar alloc] initWithIdentifier:cfidentifier.AsNSString()];
+        NSToolbar* tb =  [[wxNSToolbar alloc] initWithIdentifier:cfidentifier.AsNSString()];
 
         m_macToolbar = tb ;
 
         if (m_macToolbar != NULL)
         {
-            [tb setDelegate:controller];
-
             NSToolbarDisplayMode mode = NSToolbarDisplayModeDefault;
             NSToolbarSizeMode displaySize = NSToolbarSizeModeSmall;
 
