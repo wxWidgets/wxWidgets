@@ -537,9 +537,9 @@ void wxToolBarTool::UpdateImages()
         wxMemoryDC dc;
 
         dc.SelectObject( m_alternateBitmap );
-        dc.SetPen( wxPen(*wxBLACK) );
-        dc.SetBrush( wxBrush( *wxLIGHT_GREY ));
-        dc.DrawRoundedRectangle( 0, 0, w, h, 2 );
+        dc.SetPen(*wxGREY_PEN);
+        dc.SetBrush(*wxGREY_BRUSH);
+        dc.DrawRoundedRectangle( 0, 0, w, h, 3 );
         dc.DrawBitmap( m_bmpNormal, 0, 0, true );
         dc.SelectObject( wxNullBitmap );
 
