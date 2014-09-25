@@ -470,7 +470,7 @@ public:
         if ( m_vhCalcPending )
         {
             RecalculateVirtualHeight();
-            m_vhCalcPending = 0;
+            m_vhCalcPending = false;
         }
     }
 
@@ -653,7 +653,7 @@ public:
     */
     void VirtualHeightChanged()
     {
-        m_vhCalcPending = 1;
+        m_vhCalcPending = true;
     }
 
     /** Base append. */
@@ -737,6 +737,7 @@ protected:
     /** Indicates total virtual height of visible properties. */
     unsigned int                m_virtualHeight;
 
+#ifdef WXWIN_COMPATIBILITY_3_0
     /** 1 if m_lastCaption is also the bottommost caption. */
     unsigned char               m_lastCaptionBottomnest;
 
@@ -750,6 +751,21 @@ protected:
     unsigned char               m_anyModified;
 
     unsigned char               m_vhCalcPending;
+#else
+    /** True if m_lastCaption is also the bottommost caption. */
+    bool                        m_lastCaptionBottomnest;
+
+    /** True: items appended/inserted, so stuff needs to be done before drawing;
+        If m_virtualHeight == 0, then calcylatey's must be done.
+        Otherwise just sort.
+    */
+    bool                        m_itemsAdded;
+
+    /** True if any value is modified. */
+    bool                        m_anyModified;
+
+    bool                        m_vhCalcPending;
+#endif // WXWIN_COMPATIBILITY_3_0
 
     /** True if splitter has been pre-set by the application. */
     bool                        m_isSplitterPreSet;

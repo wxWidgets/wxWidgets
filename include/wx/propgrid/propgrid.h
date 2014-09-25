@@ -1062,7 +1062,12 @@ public:
     wxPropertyGridHitTestResult HitTest( const wxPoint& pt ) const;
 
     /** Returns true if any property has been modified by the user. */
-    bool IsAnyModified() const { return (m_pState->m_anyModified>0); }
+    bool IsAnyModified() const
+#ifdef WXWIN_COMPATIBILITY_3_0
+         { return m_pState->m_anyModified != (unsigned char)false; }
+#else
+         { return m_pState->m_anyModified; }
+#endif
 
     /**
         It is recommended that you call this function any time your code causes

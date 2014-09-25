@@ -608,7 +608,7 @@ void wxPropertyGrid::SetWindowStyleFlag( long style )
             if ( !IsFrozen() )
                 PrepareAfterItemsAdded();
             else
-                m_pState->m_itemsAdded = 1;
+                m_pState->m_itemsAdded = true;
         }
     #if wxPG_SUPPORT_TOOLTIPS
         if ( !(old_style & wxPG_TOOLTIPS) && (style & wxPG_TOOLTIPS) )
@@ -1547,7 +1547,7 @@ void wxPropertyGrid::PrepareAfterItemsAdded()
 {
     if ( !m_pState || !m_pState->m_itemsAdded ) return;
 
-    m_pState->m_itemsAdded = 0;
+    m_pState->m_itemsAdded = false;
 
     if ( m_windowStyle & wxPG_AUTO_SORT )
         Sort(wxPG_SORT_TOP_LEVEL_ONLY);
@@ -2683,12 +2683,12 @@ bool wxPropertyGrid::EnableCategories( bool enable )
     {
         if ( m_windowStyle & wxPG_AUTO_SORT )
         {
-            m_pState->m_itemsAdded = 1; // force
+            m_pState->m_itemsAdded = true; // force
             PrepareAfterItemsAdded();
         }
     }
     else
-        m_pState->m_itemsAdded = 1;
+        m_pState->m_itemsAdded = true;
 
     // No need for RecalculateVirtualSize() here - it is already called in
     // wxPropertyGridPageState method above.
@@ -2764,7 +2764,7 @@ void wxPropertyGrid::SwitchState( wxPropertyGridPageState* pNewState )
         Refresh();
     }
     else
-        m_pState->m_itemsAdded = 1;
+        m_pState->m_itemsAdded = true;
 }
 
 // -----------------------------------------------------------------------
@@ -3325,7 +3325,7 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
 
     wxPGProperty* selected = GetSelection();
 
-    m_pState->m_anyModified = 1;
+    m_pState->m_anyModified = true;
 
     // Maybe need to update control
     wxASSERT( m_chgInfo_changedProperty != NULL );

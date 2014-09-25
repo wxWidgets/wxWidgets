@@ -209,10 +209,10 @@ wxPropertyGridPageState::wxPropertyGridPageState()
     m_currentCategory = NULL;
     m_width = 0;
     m_virtualHeight = 0;
-    m_lastCaptionBottomnest = 1;
-    m_itemsAdded = 0;
-    m_anyModified = 0;
-    m_vhCalcPending = 0;
+    m_lastCaptionBottomnest = true;
+    m_itemsAdded = false;
+    m_anyModified = false;
+    m_vhCalcPending = false;
     m_colWidths.push_back( wxPG_DEFAULT_SPLITTERX );
     m_colWidths.push_back( wxPG_DEFAULT_SPLITTERX );
     m_fSplitterX = wxPG_DEFAULT_SPLITTERX;
@@ -311,11 +311,11 @@ void wxPropertyGridPageState::DoClear()
         m_dictName.clear();
 
         m_currentCategory = NULL;
-        m_lastCaptionBottomnest = 1;
-        m_itemsAdded = 0;
+        m_lastCaptionBottomnest = true;
+        m_itemsAdded = false;
 
         m_virtualHeight = 0;
-        m_vhCalcPending = 0;
+        m_vhCalcPending = false;
     }
 }
 
@@ -746,7 +746,7 @@ bool wxPropertyGridPageState::PrepareAfterItemsAdded()
 
     wxPropertyGrid* pg = GetGrid();
 
-    m_itemsAdded = 0;
+    m_itemsAdded = false;
 
     if ( pg->HasFlag(wxPG_AUTO_SORT) )
         DoSort(wxPG_SORT_TOP_LEVEL_ONLY);
@@ -1823,7 +1823,7 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
         // This is a category caption item.
 
         // Last caption is not the bottom one (this info required by append)
-        m_lastCaptionBottomnest = 0;
+        m_lastCaptionBottomnest = false;
     }
 
     // Only add name to hashmap if parent is root or category
@@ -1835,7 +1835,7 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
 
     property->UpdateParentValues();
 
-    m_itemsAdded = 1;
+    m_itemsAdded = true;
 
     return property;
 }
@@ -2024,7 +2024,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
         item->OnDetached(this, pg);
     }
 
-    m_itemsAdded = 1; // Not a logical assignment (but required nonetheless).
+    m_itemsAdded = true; // Not a logical assignment (but required nonetheless).
 
     VirtualHeightChanged();
 }
