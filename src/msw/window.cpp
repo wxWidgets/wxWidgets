@@ -3498,8 +3498,11 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 // compatibility requirements on wx-3.0 make it simpler to just forward
                 // the messages to the wxTLW.
                 wxWindow *tlw = wxGetTopLevelParent(this);
-                if ( tlw && tlw != this )
-                    processed = tlw->MSWWindowProc(message, wParam, lParam);
+                if (tlw && tlw != this)
+                {
+                    rc.result = tlw->MSWWindowProc(message, wParam, lParam);
+                    processed = rc.result == 0;
+                }
             }
             break;
 #endif // !__WXMICROWIN__
