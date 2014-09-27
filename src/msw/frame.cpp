@@ -991,7 +991,13 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
 #if wxUSE_TASKBARBUTTON
     if ( message == wxMsgTaskbarButtonCreated )
     {
-        m_taskBarButton = wxTaskBarButton::New(this);
+        if ( !m_taskBarButton )
+            m_taskBarButton = wxTaskBarButton::New(this);
+        //else: If we get this message again, it may mean that our old taskbar
+        //      button can't be used any more and needs to be recreated. We
+        //      need to check whether this is really the case and sent a
+        //      special event to allow the user code to react to this.
+
         processed = true;
     }
 #endif
