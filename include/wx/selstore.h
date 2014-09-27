@@ -94,7 +94,7 @@ public:
     typedef size_t IterationState;
 
     // constant representing absence of selection and hence end of iteration
-    static const unsigned NO_SELECTION = static_cast<unsigned>(-1);
+    static const unsigned NO_SELECTION;
 
     // get the first selected item in index order, return NO_SELECTION if none
     unsigned GetFirstSelectedItem(IterationState& cookie) const;
