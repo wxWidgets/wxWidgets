@@ -46,6 +46,7 @@ private:
         CPPUNIT_TEST( SetItemCount );
         CPPUNIT_TEST( Clear );
         CPPUNIT_TEST( Iterate );
+        CPPUNIT_TEST( ItemsAddDelete );
     CPPUNIT_TEST_SUITE_END();
 
     void SelectItem();
@@ -53,6 +54,7 @@ private:
     void SetItemCount();
     void Clear();
     void Iterate();
+    void ItemsAddDelete();
 
     // NB: must be even
     static const unsigned NUM_ITEMS;
@@ -153,4 +155,35 @@ void SelStoreTestCase::Iterate()
     m_store->SelectRange(0, NUM_ITEMS - 1);
     m_store->SelectItem(0, false);
     CPPUNIT_ASSERT_EQUAL(1, m_store->GetFirstSelectedItem(cookie));
+}
+
+void SelStoreTestCase::ItemsAddDelete()
+{
+    m_store->SelectItem(0);
+    m_store->SelectItem(NUM_ITEMS/2);
+    m_store->SelectItem(NUM_ITEMS - 1);
+
+    m_store->OnItemsInserted(NUM_ITEMS/2 + 1, 1);
+    CPPUNIT_ASSERT(m_store->IsSelected(0));
+    CPPUNIT_ASSERT(m_store->IsSelected(NUM_ITEMS/2));
+    CPPUNIT_ASSERT(m_store->IsSelected(NUM_ITEMS));
+    CPPUNIT_ASSERT_EQUAL(3, m_store->GetSelectedCount());
+
+    CPPUNIT_ASSERT(m_store->OnItemsDeleted(NUM_ITEMS/2 - 1, 2));
+    CPPUNIT_ASSERT(m_store->IsSelected(0));
+    CPPUNIT_ASSERT(m_store->IsSelected(NUM_ITEMS - 2));
+    CPPUNIT_ASSERT_EQUAL(2, m_store->GetSelectedCount());
+
+    m_store->OnItemsInserted(0, 2);
+    CPPUNIT_ASSERT(m_store->IsSelected(2));
+    CPPUNIT_ASSERT(m_store->IsSelected(NUM_ITEMS));
+    CPPUNIT_ASSERT_EQUAL(2, m_store->GetSelectedCount());
+
+    m_store->OnItemDelete(0);
+
+    m_store->SelectRange(0, NUM_ITEMS - 1);
+    CPPUNIT_ASSERT(m_store->OnItemsDeleted(0, NUM_ITEMS/2));
+    CPPUNIT_ASSERT_EQUAL(NUM_ITEMS/2, m_store->GetSelectedCount());
+    CPPUNIT_ASSERT(m_store->IsSelected(0));
+    CPPUNIT_ASSERT(m_store->IsSelected(NUM_ITEMS/2));
 }

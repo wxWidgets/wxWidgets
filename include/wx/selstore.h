@@ -47,11 +47,15 @@ public:
     // special case of SetItemCount(0)
     void Clear() { m_itemsSel.Clear(); m_count = 0; m_defaultState = false; }
 
-    // must be called when a new item is inserted/added
-    void OnItemAdd(unsigned WXUNUSED(item)) { wxFAIL_MSG( wxT("TODO") ); }
+    // must be called when new items are inserted/added
+    void OnItemsInserted(unsigned item, unsigned numItems);
 
-    // must be called when an item is deleted
+    // must be called when an items is deleted
     void OnItemDelete(unsigned item);
+
+    // more efficient version for notifying the selection about deleting
+    // several items at once, return true if any of them were selected
+    bool OnItemsDeleted(unsigned item, unsigned numItems);
 
     // select one item, use SelectRange() insted if possible!
     //
