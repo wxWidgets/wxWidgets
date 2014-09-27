@@ -46,6 +46,7 @@
 #include "wx/imaglist.h"
 #include "wx/headerctrl.h"
 #include "wx/dnd.h"
+#include "wx/selstore.h"
 #include "wx/stopwatch.h"
 #include "wx/weakref.h"
 
@@ -772,9 +773,8 @@ public:
     unsigned int GetLastVisibleRow();
     unsigned int GetRowCount() const;
 
-    const wxDataViewSelection& GetSelections() const { return m_selection; }
-    void SetSelections( const wxDataViewSelection & sel )
-        { m_selection = sel; UpdateDisplay(); }
+    const wxSelectionStore& GetSelections() const { return m_selection; }
+    void ClearSelection() { m_selection.SelectRange(0, GetRowCount() - 1, false); }
     void Select( const wxArrayInt& aSelections );
     void SelectAllRows( bool on );
     void SelectRow( unsigned int row, bool on );
@@ -844,6 +844,13 @@ public:
     void FinishEditing();
 
 private:
+    void InvalidateCount() { m_count = -1; }
+    void UpdateCount(int count)
+    {
+        m_count = count;
+        m_selection.SetItemCount(count);
+    }
+
     int RecalculateCount() const;
 
     // Return false only if the event was vetoed by its handler.
@@ -864,7 +871,7 @@ private:
 
     wxDataViewColumn           *m_currentCol;
     unsigned int                m_currentRow;
-    wxDataViewSelection         m_selection;
+    wxSelectionStore            m_selection;
 
     wxDataViewRenameTimer      *m_renameTimer;
     bool                        m_lastOnSame;
@@ -1469,13 +1476,6 @@ void wxDataViewRenameTimer::Notify()
 static void BuildTreeHelper( const wxDataViewModel * model,  const wxDataViewItem & item,
                              wxDataViewTreeNode * node);
 
-int LINKAGEMODE wxDataViewSelectionCmp( unsigned int row1, unsigned int row2 )
-{
-    if (row1 > row2) return 1;
-    if (row1 == row2) return 0;
-    return -1;
-}
-
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewMainWindow, wxWindow)
 
 BEGIN_EVENT_TABLE(wxDataViewMainWindow,wxWindow)
@@ -1489,9 +1489,7 @@ END_EVENT_TABLE()
 
 wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID id,
     const wxPoint &pos, const wxSize &size, const wxString &name ) :
-    wxWindow( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name ),
-    m_selection( wxDataViewSelectionCmp )
-
+    wxWindow( parent, id, pos, size, wxWANTS_CHARS|wxBORDER_NONE, name )
 {
     SetOwner( parent );
 
@@ -1950,7 +1948,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     // redraw the background for the items which are selected/current
     for (unsigned int item = item_start; item < item_last; item++)
     {
-        bool selected = m_selection.Index( item ) != wxNOT_FOUND;
+        bool selected = m_selection.IsSelected(item);
 
         if (selected || item == m_currentRow)
         {
@@ -2104,7 +2102,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             cell->PrepareForItem(model, dataitem, col->GetModelColumn());
 
             // draw the background
-            bool selected = m_selection.Index( item ) != wxNOT_FOUND;
+            bool selected = m_selection.IsSelected(item);
             if ( !selected )
                 DrawCellBackground( cell, dc, cell_rect );
 
@@ -2306,7 +2304,7 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
     {
         wxDataViewVirtualListModel *list_model =
             (wxDataViewVirtualListModel*) GetModel();
-        m_count = list_model->GetCount();
+        UpdateCount(list_model->GetCount());
     }
     else
     {
@@ -2371,7 +2369,7 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         parentNode->ChangeSubTreeCount(+1);
         parentNode->InsertChild(itemNode, nodePos);
 
-        m_count = -1;
+        InvalidateCount();
     }
 
     GetOwner()->InvalidateColBestWidths();
@@ -2387,27 +2385,9 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     {
         wxDataViewVirtualListModel *list_model =
             (wxDataViewVirtualListModel*) GetModel();
-        m_count = list_model->GetCount();
+        UpdateCount(list_model->GetCount());
 
-        if ( !m_selection.empty() )
-        {
-            const int row = GetRowByItem(item);
-
-            int rowIndexInSelection = wxNOT_FOUND;
-
-            const size_t selCount = m_selection.size();
-            for ( size_t i = 0; i < selCount; i++ )
-            {
-                if ( m_selection[i] == (unsigned)row )
-                    rowIndexInSelection = i;
-                else if ( m_selection[i] > (unsigned)row )
-                    m_selection[i]--;
-            }
-
-            if ( rowIndexInSelection != wxNOT_FOUND )
-                m_selection.RemoveAt(rowIndexInSelection);
-        }
-
+        m_selection.OnItemDelete(GetRowByItem(item));
     }
     else // general case
     {
@@ -2460,7 +2440,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
         parentNode->ChangeSubTreeCount(-itemsDeleted);
 
         // Make the row number invalid and get a new valid one when user call GetRowCount
-        m_count = -1;
+        InvalidateCount();
 
         // If this was the last child to be removed, it's possible the parent
         // node became a leaf. Let's ask the model about it.
@@ -2478,7 +2458,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
         }
 
         // Update selection by removing 'item' and its entire children tree from the selection.
-        if ( !m_selection.empty() )
+        if ( !m_selection.IsEmpty() )
         {
             // we can't call GetRowByItem() on 'item', as it's already deleted, so compute it from
             // the parent ('parentNode') and position in its list of children
@@ -2498,20 +2478,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
                           1;
             }
 
-            wxDataViewSelection newsel(wxDataViewSelectionCmp);
-
-            const size_t numSelections = m_selection.size();
-            for ( size_t i = 0; i < numSelections; ++i )
-            {
-                const int s = m_selection[i];
-                if ( s < itemRow )
-                    newsel.push_back(s);
-                else if ( s >= itemRow + itemsDeleted )
-                    newsel.push_back(s - itemsDeleted);
-                // else: deleted item, remove from selection
-            }
-
-            m_selection = newsel;
+            m_selection.OnItemsDeleted(itemRow, itemsDeleted);
         }
     }
 
@@ -2731,7 +2698,7 @@ unsigned int wxDataViewMainWindow::GetRowCount() const
     {
         wxDataViewMainWindow* const
             self = const_cast<wxDataViewMainWindow*>(this);
-        self->m_count = RecalculateCount();
+        self->UpdateCount(RecalculateCount());
         self->UpdateDisplay();
     }
     return m_count;
@@ -2751,56 +2718,38 @@ void wxDataViewMainWindow::SelectAllRows( bool on )
 
     if (on)
     {
-        m_selection.Clear();
-        for (unsigned int i = 0; i < GetRowCount(); i++)
-            m_selection.Add( i );
+        m_selection.SelectRange(0, GetRowCount() - 1);
         Refresh();
     }
-    else
+    else if (!m_selection.IsEmpty())
     {
-        unsigned int first_visible = GetFirstVisibleRow();
-        unsigned int last_visible = GetLastVisibleRow();
-        unsigned int i;
-        for (i = 0; i < m_selection.GetCount(); i++)
+        for (unsigned i = GetFirstVisibleRow(); i <= GetLastVisibleRow(); i++)
         {
-            unsigned int row = m_selection[i];
-            if ((row >= first_visible) && (row <= last_visible))
-                RefreshRow( row );
+            if (m_selection.IsSelected(i))
+                RefreshRow(i);
         }
-        m_selection.Clear();
+        ClearSelection();
     }
 }
 
 void wxDataViewMainWindow::SelectRow( unsigned int row, bool on )
 {
-    if (m_selection.Index( row ) == wxNOT_FOUND)
-    {
-        if (on)
-        {
-            m_selection.Add( row );
-            RefreshRow( row );
-        }
-    }
-    else
-    {
-        if (!on)
-        {
-            m_selection.Remove( row );
-            RefreshRow( row );
-        }
-    }
+    if ( m_selection.SelectItem(row, on) )
+        RefreshRow(row);
 }
 
 void wxDataViewMainWindow::SelectRows( unsigned int from, unsigned int to )
 {
-    for (unsigned int i = from; i <= to; i++)
+    wxArrayInt changed;
+    if ( m_selection.SelectRange(from, to, true, &changed) )
     {
-        if (m_selection.Index( i ) == wxNOT_FOUND)
-        {
-            m_selection.Add( i );
-        }
+        for (unsigned i = 0; i < changed.size(); i++)
+            RefreshRow(changed[i]);
     }
-    RefreshRows( from, to );
+    else // Selection of too many rows has changed.
+    {
+        RefreshRows( from, to );
+    }
 }
 
 void wxDataViewMainWindow::Select( const wxArrayInt& aSelections )
@@ -2809,23 +2758,20 @@ void wxDataViewMainWindow::Select( const wxArrayInt& aSelections )
     {
         int n = aSelections[i];
 
-        m_selection.Add( n );
-        RefreshRow( n );
+        if ( m_selection.SelectItem(n) )
+            RefreshRow( n );
     }
 }
 
 void wxDataViewMainWindow::ReverseRowSelection( unsigned int row )
 {
-    if (m_selection.Index( row ) == wxNOT_FOUND)
-        m_selection.Add( row );
-    else
-        m_selection.Remove( row );
+    m_selection.SelectItem(row, !m_selection.IsSelected(row));
     RefreshRow( row );
 }
 
 bool wxDataViewMainWindow::IsRowSelected( unsigned int row )
 {
-    return (m_selection.Index( row ) != wxNOT_FOUND);
+    return m_selection.IsSelected(row);
 }
 
 void wxDataViewMainWindow::SendSelectionChangedEvent( const wxDataViewItem& item)
@@ -3197,23 +3143,16 @@ void wxDataViewMainWindow::Expand( unsigned int row )
             ::BuildTreeHelper(GetModel(), node->GetItem(), node);
         }
 
-        // By expanding the node all row indices that are currently in the selection list
-        // and are greater than our node have become invalid. So we have to correct that now.
-        const unsigned rowAdjustment = node->GetSubTreeCount();
-        for(unsigned i=0; i<m_selection.size(); ++i)
-        {
-            const unsigned testRow = m_selection[i];
-            // all rows above us are not affected, so skip them
-            if(testRow <= row)
-                continue;
+        const unsigned countNewRows = node->GetSubTreeCount();
 
-            m_selection[i] += rowAdjustment;
-        }
+        // Shift all stored indices after this row by the number of newly added
+        // rows.
+        m_selection.OnItemsInserted(row + 1, countNewRows);
+        if ( m_currentRow > row )
+            ChangeCurrentRow(m_currentRow + countNewRows);
 
-        if(m_currentRow > row)
-            ChangeCurrentRow(m_currentRow + rowAdjustment);
-
-        m_count = -1;
+        if ( m_count != -1 )
+            m_count += countNewRows;
         UpdateDisplay();
         // Send the expanded event
         SendExpanderEvent(wxEVT_DATAVIEW_ITEM_EXPANDED,node->GetItem());
@@ -3240,55 +3179,28 @@ void wxDataViewMainWindow::Collapse(unsigned int row)
                 return;
             }
 
-            // Find out if there are selected items below the current node.
-            bool selectCollapsingRow = false;
-            const unsigned rowAdjustment = node->GetSubTreeCount();
-            unsigned maxRowToBeTested = row + rowAdjustment;
-            for(unsigned i=0; i<m_selection.size(); ++i)
+            const unsigned countDeletedRows = node->GetSubTreeCount();
+
+            if ( m_selection.OnItemsDeleted(row + 1, countDeletedRows) )
             {
-                const unsigned testRow = m_selection[i];
-                if(testRow > row && testRow <= maxRowToBeTested)
-                {
-                    selectCollapsingRow = true;
-                    // get out as soon as we have found a node that is selected
-                    break;
-                }
+                SendSelectionChangedEvent(GetItemByRow(row));
             }
 
             node->ToggleOpen();
 
-            // If the node to be closed has selected items the user won't see those any longer.
-            // We select the collapsing node in this case.
-            if(selectCollapsingRow)
+            // Adjust the current row if necessary.
+            if ( m_currentRow > row )
             {
-                SelectAllRows(false);
-                ChangeCurrentRow(row);
-                SelectRow(row, true);
-                SendSelectionChangedEvent(GetItemByRow(row));
-            }
-            else
-            {
-                // if there were no selected items below our node we still need to "fix" the
-                // selection list to adjust for the changing of the row indices.
-                // We actually do the opposite of what we are doing in Expand().
-                for(unsigned i=0; i<m_selection.size(); ++i)
-                {
-                    const unsigned testRow = m_selection[i];
-                    // all rows above us are not affected, so skip them
-                    if(testRow <= row)
-                        continue;
-
-                    m_selection[i] -= rowAdjustment;
-                }
-
-                // if the "current row" is being collapsed away we change it to the current row ;-)
-                if(m_currentRow > row && m_currentRow <= maxRowToBeTested)
+                // If the current row was among the collapsed items, make the
+                // parent itself current.
+                if ( m_currentRow <= row + countDeletedRows )
                     ChangeCurrentRow(row);
-                else if(m_currentRow > row)
-                    ChangeCurrentRow(m_currentRow - rowAdjustment);
+                else // Otherwise just update the index.
+                    ChangeCurrentRow(m_currentRow - countDeletedRows);
             }
 
-            m_count = -1;
+            if ( m_count != -1 )
+                m_count -= countDeletedRows;
             UpdateDisplay();
             SendExpanderEvent(wxEVT_DATAVIEW_ITEM_COLLAPSED,node->GetItem());
         }
@@ -3564,7 +3476,7 @@ void wxDataViewMainWindow::BuildTree(wxDataViewModel * model)
 
     if (GetModel()->IsVirtualListModel())
     {
-        m_count = -1;
+        InvalidateCount();
         return;
     }
 
@@ -3574,7 +3486,7 @@ void wxDataViewMainWindow::BuildTree(wxDataViewModel * model)
     wxDataViewItem item;
     SortPrepare();
     BuildTreeHelper( model, item, m_root);
-    m_count = -1;
+    InvalidateCount();
 }
 
 void wxDataViewMainWindow::DestroyTree()
@@ -3789,16 +3701,21 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             }
             else
             {
-                if( !m_selection.empty() )
+                if ( !m_selection.IsEmpty() )
                 {
                     // Mimic Windows 7 behavior: edit the item that has focus
                     // if it is selected and the first selected item if focus
                     // is out of selection.
-                    int sel;
-                    if ( m_selection.Index(m_currentRow) != wxNOT_FOUND )
+                    unsigned sel;
+                    if ( m_selection.IsSelected(m_currentRow) )
+                    {
                         sel = m_currentRow;
-                    else
-                        sel = m_selection[0];
+                    }
+                    else // Focused item is not selected.
+                    {
+                        wxSelectionStore::IterationState cookie;
+                        sel = m_selection.GetFirstSelectedItem(cookie);
+                    }
 
 
                     const wxDataViewItem item = GetItemByRow(sel);
@@ -3887,7 +3804,12 @@ void wxDataViewMainWindow::OnVerticalNavigation(const wxKeyEvent& event, int del
 
         SelectRows(oldCurrent, newCurrent);
         if (oldCurrent!=newCurrent)
-            SendSelectionChangedEvent(GetItemByRow(m_selection[0]));
+        {
+            wxSelectionStore::IterationState cookie;
+            const unsigned firstSel = m_selection.GetFirstSelectedItem(cookie);
+            if ( firstSel != wxSelectionStore::NO_SELECTION )
+                SendSelectionChangedEvent(GetItemByRow(firstSel));
+        }
     }
     else // !shift
     {
@@ -4211,7 +4133,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         // not middle) button clears the existing selection.
         if (m_owner && (event.LeftDown() || event.RightDown()))
         {
-            if (!GetSelections().empty())
+            if (!m_selection.IsEmpty())
             {
                 m_owner->UnselectAll();
                 SendSelectionChangedEvent(wxDataViewItem());
@@ -4437,7 +4359,11 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                 }
 
                 SelectRows(lineFrom, lineTo);
-                SendSelectionChangedEvent(GetItemByRow(m_selection[0]) );
+
+                wxSelectionStore::IterationState cookie;
+                const unsigned firstSel = m_selection.GetFirstSelectedItem(cookie);
+                if ( firstSel != wxSelectionStore::NO_SELECTION )
+                    SendSelectionChangedEvent(GetItemByRow(firstSel) );
             }
             else // !ctrl, !shift
             {
@@ -5247,18 +5173,20 @@ wxDataViewColumn *wxDataViewCtrl::GetCurrentColumn() const
 
 int wxDataViewCtrl::GetSelectedItemsCount() const
 {
-    return m_clientArea->GetSelections().size();
+    return m_clientArea->GetSelections().GetSelectedCount();
 }
 
 int wxDataViewCtrl::GetSelections( wxDataViewItemArray & sel ) const
 {
     sel.Empty();
-    const wxDataViewSelection& selections = m_clientArea->GetSelections();
+    const wxSelectionStore& selections = m_clientArea->GetSelections();
 
-    const size_t len = selections.size();
-    for ( size_t i = 0; i < len; i++ )
+    wxSelectionStore::IterationState cookie;
+    for ( unsigned row = selections.GetFirstSelectedItem(cookie);
+          row != wxSelectionStore::NO_SELECTION;
+          row = selections.GetNextSelectedItem(cookie) )
     {
-        wxDataViewItem item = m_clientArea->GetItemByRow(selections[i]);
+        wxDataViewItem item = m_clientArea->GetItemByRow(row);
         if ( item.IsOk() )
         {
             sel.Add(item);
@@ -5274,12 +5202,11 @@ int wxDataViewCtrl::GetSelections( wxDataViewItemArray & sel ) const
 
 void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
 {
-    wxDataViewSelection selection(wxDataViewSelectionCmp);
+    m_clientArea->ClearSelection();
 
     wxDataViewItem last_parent;
 
-    int len = sel.GetCount();
-    for( int i = 0; i < len; i ++ )
+    for ( size_t i = 0; i < sel.size(); i++ )
     {
         wxDataViewItem item = sel[i];
         wxDataViewItem parent = GetModel()->GetParent( item );
@@ -5292,10 +5219,8 @@ void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
         last_parent = parent;
         int row = m_clientArea->GetRowByItem( item );
         if( row >= 0 )
-            selection.Add( static_cast<unsigned int>(row) );
+            m_clientArea->SelectRow(static_cast<unsigned int>(row), true);
     }
-
-    m_clientArea->SetSelections( selection );
 }
 
 void wxDataViewCtrl::Select( const wxDataViewItem & item )
