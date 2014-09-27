@@ -229,3 +229,42 @@ void wxSelectionStore::SetItemCount(unsigned count)
     // remember the new number of items
     m_count = count;
 }
+
+// ----------------------------------------------------------------------------
+// Iteration
+// ----------------------------------------------------------------------------
+
+unsigned wxSelectionStore::GetFirstSelectedItem(IterationState& cookie) const
+{
+    cookie = 0;
+
+    return GetNextSelectedItem(cookie);
+}
+
+unsigned wxSelectionStore::GetNextSelectedItem(IterationState& cookie) const
+{
+    if ( m_defaultState )
+    {
+        // We have no choice but to iterate over all items in this case. It
+        // shouldn't be that bad in practice because (almost) all items are
+        // supposed to be selected if m_defaultState == true anyhow.
+        for ( unsigned item = cookie; ; item++ )
+        {
+            if ( item >= m_count )
+                return NO_SELECTION;
+
+            if ( IsSelected(item) )
+            {
+                cookie = item + 1;
+                return item;
+            }
+        }
+    }
+    else // Simple case when we directly have the selected items.
+    {
+        if ( cookie >= m_itemsSel.size() )
+            return NO_SELECTION;
+
+        return m_itemsSel[cookie++];
+    }
+}

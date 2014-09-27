@@ -78,6 +78,19 @@ public:
                               : m_itemsSel.GetCount();
     }
 
+    // type of a "cookie" used to preserve the iteration state, this is an
+    // opaque type, don't rely on its current representation
+    typedef size_t IterationState;
+
+    // constant representing absence of selection and hence end of iteration
+    static const unsigned NO_SELECTION = static_cast<unsigned>(-1);
+
+    // get the first selected item in index order, return NO_SELECTION if none
+    unsigned GetFirstSelectedItem(IterationState& cookie) const;
+
+    // get the next selected item, return NO_SELECTION if no more
+    unsigned GetNextSelectedItem(IterationState& cookie) const;
+
 private:
     // (re)init
     void Init() { m_count = 0; m_defaultState = false; }

@@ -45,12 +45,14 @@ private:
         CPPUNIT_TEST( SelectRange );
         CPPUNIT_TEST( SetItemCount );
         CPPUNIT_TEST( Clear );
+        CPPUNIT_TEST( Iterate );
     CPPUNIT_TEST_SUITE_END();
 
     void SelectItem();
     void SelectRange();
     void SetItemCount();
     void Clear();
+    void Iterate();
 
     // NB: must be even
     static const unsigned NUM_ITEMS;
@@ -131,3 +133,19 @@ void SelStoreTestCase::Clear()
     CPPUNIT_ASSERT_EQUAL( 0u, m_store->GetSelectedCount() );
 }
 
+void SelStoreTestCase::Iterate()
+{
+    m_store->SelectRange(NUM_ITEMS/2 - 1, NUM_ITEMS/2 + 1);
+
+    wxSelectionStore::IterationState cookie;
+    CPPUNIT_ASSERT_EQUAL(NUM_ITEMS/2 - 1, m_store->GetFirstSelectedItem(cookie));
+    CPPUNIT_ASSERT_EQUAL(NUM_ITEMS/2, m_store->GetNextSelectedItem(cookie));
+    CPPUNIT_ASSERT_EQUAL(NUM_ITEMS/2 + 1, m_store->GetNextSelectedItem(cookie));
+
+    CPPUNIT_ASSERT_EQUAL(wxSelectionStore::NO_SELECTION, m_store->GetNextSelectedItem(cookie));
+
+
+    m_store->SelectRange(0, NUM_ITEMS - 1);
+    m_store->SelectItem(0, false);
+    CPPUNIT_ASSERT_EQUAL(1, m_store->GetFirstSelectedItem(cookie));
+}
