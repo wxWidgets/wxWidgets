@@ -2437,9 +2437,6 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         {
             // reset the selection and bail out
             HighlightAll(false);
-
-            if ( event.LeftUp() )
-                event.Skip();
         }
 
         return;
@@ -2515,8 +2512,6 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         }
 
         m_lineSelectSingleOnUp = (size_t)-1;
-
-        event.Skip();
     }
     else
     {
