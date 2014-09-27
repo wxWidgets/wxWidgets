@@ -778,7 +778,7 @@ public:
     void Select( const wxArrayInt& aSelections );
     void SelectAllRows( bool on );
     void SelectRow( unsigned int row, bool on );
-    void SelectRows( unsigned int from, unsigned int to, bool on );
+    void SelectRows( unsigned int from, unsigned int to );
     void ReverseRowSelection( unsigned int row );
     bool IsRowSelected( unsigned int row );
     void SendSelectionChangedEvent( const wxDataViewItem& item);
@@ -2791,27 +2791,13 @@ void wxDataViewMainWindow::SelectRow( unsigned int row, bool on )
     }
 }
 
-void wxDataViewMainWindow::SelectRows( unsigned int from, unsigned int to, bool on )
+void wxDataViewMainWindow::SelectRows( unsigned int from, unsigned int to )
 {
-    if (from > to)
-    {
-        unsigned int tmp = from;
-        from = to;
-        to = tmp;
-    }
-
-    unsigned int i;
-    for (i = from; i <= to; i++)
+    for (unsigned int i = from; i <= to; i++)
     {
         if (m_selection.Index( i ) == wxNOT_FOUND)
         {
-            if (on)
-                m_selection.Add( i );
-        }
-        else
-        {
-            if (!on)
-                m_selection.Remove( i );
+            m_selection.Add( i );
         }
     }
     RefreshRows( from, to );
@@ -3899,7 +3885,7 @@ void wxDataViewMainWindow::OnVerticalNavigation(const wxKeyEvent& event, int del
             oldCurrent = m_currentRow;
         }
 
-        SelectRows( oldCurrent, newCurrent, true );
+        SelectRows(oldCurrent, newCurrent);
         if (oldCurrent!=newCurrent)
             SendSelectionChangedEvent(GetItemByRow(m_selection[0]));
     }
@@ -4450,7 +4436,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                     lineFrom = m_currentRow;
                 }
 
-                SelectRows(lineFrom, lineTo, true);
+                SelectRows(lineFrom, lineTo);
                 SendSelectionChangedEvent(GetItemByRow(m_selection[0]) );
             }
             else // !ctrl, !shift
