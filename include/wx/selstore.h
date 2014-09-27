@@ -71,6 +71,13 @@ public:
     // return true if the given item is selected
     bool IsSelected(unsigned item) const;
 
+    // return true if no items are currently selected
+    bool IsEmpty() const
+    {
+        return m_defaultState ? m_itemsSel.size() == m_count
+                              : m_itemsSel.empty();
+    }
+
     // return the total number of selected items
     unsigned GetSelectedCount() const
     {

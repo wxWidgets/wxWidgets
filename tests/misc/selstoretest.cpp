@@ -125,11 +125,16 @@ void SelStoreTestCase::SetItemCount()
 
 void SelStoreTestCase::Clear()
 {
+    CPPUNIT_ASSERT(m_store->IsEmpty());
     CPPUNIT_ASSERT_EQUAL( 0u, m_store->GetSelectedCount() );
 
     m_store->SelectItem(0);
+
+    CPPUNIT_ASSERT(!m_store->IsEmpty());
+
     m_store->Clear();
 
+    CPPUNIT_ASSERT(m_store->IsEmpty());
     CPPUNIT_ASSERT_EQUAL( 0u, m_store->GetSelectedCount() );
 }
 
