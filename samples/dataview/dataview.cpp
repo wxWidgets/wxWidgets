@@ -578,7 +578,8 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             // column 2 of the view control:
 
             wxDataViewSpinRenderer *sr =
-                new wxDataViewSpinRenderer( 0, 2010, wxDATAVIEW_CELL_EDITABLE, wxALIGN_RIGHT );
+                new wxDataViewSpinRenderer( 0, 2010, wxDATAVIEW_CELL_EDITABLE,
+                                            wxALIGN_RIGHT | wxALIGN_CENTRE_VERTICAL);
             wxDataViewColumn *column2 =
                 new wxDataViewColumn( "year", sr, 2, 60, wxALIGN_LEFT,
                                       wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE );
@@ -591,7 +592,8 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             choices.Add( "bad" );
             choices.Add( "lousy" );
             wxDataViewChoiceRenderer *c =
-                new wxDataViewChoiceRenderer( choices, wxDATAVIEW_CELL_EDITABLE, wxALIGN_RIGHT );
+                new wxDataViewChoiceRenderer( choices, wxDATAVIEW_CELL_EDITABLE,
+                                              wxALIGN_RIGHT | wxALIGN_CENTRE_VERTICAL);
             wxDataViewColumn *column3 =
                 new wxDataViewColumn( "rating", c, 3, 100, wxALIGN_LEFT,
                                       wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
