@@ -99,7 +99,7 @@ NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 dnl the list of all available toolkits
 dnl
 dnl update NUM_TOOLKITS calculation below when adding a new toolkit here!
-ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA OSX_IPHONE MGL MICROWIN MOTIF MSW PM X11 DFB QT"
+ALL_TOOLKITS="GTK OSX_CARBON OSX_COCOA OSX_IPHONE MICROWIN MOTIF MSW X11 DFB QT"
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
