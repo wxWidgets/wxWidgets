@@ -182,12 +182,6 @@ public:
     void SetImageList(wxImageList *imageList, int which);
     void AssignImageList(wxImageList *imageList, int which);
 
-    // are we in report mode?
-    bool InReportView() const;
-
-    // are we in virtual report mode?
-    bool IsVirtual() const;
-
     // refresh items selectively (only useful for virtual list controls)
     void RefreshItem(long item);
     void RefreshItems(long itemFrom, long itemTo);

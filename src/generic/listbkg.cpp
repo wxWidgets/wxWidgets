@@ -142,6 +142,10 @@ long wxListbook::GetListCtrlFlags() const
         {
             flags |= wxLC_LIST;
         }
+        
+#ifdef __WXQT__
+        flags |= wxLC_NO_HEADER;
+#endif
     }
 
     // Use single selection in any case.

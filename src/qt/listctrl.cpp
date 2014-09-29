@@ -129,6 +129,11 @@ bool wxListCtrl::Create(wxWindow *parent,
 {
     m_qtTreeWidget = new wxQtTreeWidget( parent, this );
 
+    if (style & wxLC_NO_HEADER)
+        m_qtTreeWidget->setHeaderHidden(true);
+
+    m_qtTreeWidget->setRootIsDecorated(false);
+
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
@@ -311,7 +316,7 @@ bool wxListCtrl::SetItem(wxListItem& info)
         {
             if (info.m_image >= 0)
             {
-                wxImageList *imglst = GetImageList(wxIMAGE_LIST_SMALL);
+                wxImageList *imglst = GetImageList(wxIMAGE_LIST_NORMAL);
                 wxCHECK_MSG(imglst, false, "invalid listctrl imagelist");
                 const wxBitmap* bitmap = imglst->GetBitmapPtr(info.m_image);
                 if (bitmap != NULL)
@@ -647,16 +652,6 @@ void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
         m_ownsImageListSmall = true;
     else if ( which == wxIMAGE_LIST_STATE )
         m_ownsImageListState = true;
-}
-
-bool wxListCtrl::InReportView() const
-{
-    return true;
-}
-
-bool wxListCtrl::IsVirtual() const
-{
-    return false;
 }
 
 void wxListCtrl::RefreshItem(long WXUNUSED(item))
