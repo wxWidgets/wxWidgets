@@ -3296,7 +3296,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         TOOLKIT=QT
         GUIDIST=QT_DIST
         TOOLKIT_DIR="qt"
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXQT__"
         TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test --cflags` -DQT_WIDGETS_LIB"
         GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test --libs`"
         if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
