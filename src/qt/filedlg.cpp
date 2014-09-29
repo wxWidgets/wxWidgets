@@ -47,8 +47,18 @@ public:
     {
         QStringList wildCards = wxQtConvertString(wildCard).split("|");
         QStringList filters;
-        for (int i=0; i<wildCards.size(); i+=2)
-            filters += wildCards.at(i);
+        for (int i=0; i<wildCards.size()-1; i+=2)
+        {
+            // discard everything after first (
+            QString name = wildCards.at(i);
+            name = name.left(name.indexOf("("));
+
+            // replace filter ; separator with qt style space
+            QString filter = wildCards.at(i+1);
+            filter.replace(";", " ");
+
+            filters += name + " (" + filter + ")";
+        }
 
         setNameFilters(filters);
     }
@@ -230,6 +240,7 @@ wxString wxDirDialog::GetPath() const
     QStringList selectedfiles = GetHandle()->selectedFiles();
     if (selectedfiles.size() > 0)
         return wxQtConvertString(selectedfiles.first());
+
     return "";
 }
 
