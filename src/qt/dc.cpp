@@ -741,7 +741,11 @@ void wxQtDCImpl::DoDrawLines(int n, const wxPoint points[],
         }
 
         m_qtPainter->translate(xoffset, yoffset);
+
+        QBrush savebrush = m_qtPainter->brush();
+        m_qtPainter->setBrush(Qt::NoBrush);
         m_qtPainter->drawPath(path);
+        m_qtPainter->setBrush(savebrush);
 
         // Reset transform
         ComputeScaleAndOrigin();
