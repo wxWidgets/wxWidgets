@@ -182,6 +182,8 @@ public:
     wxString      m_faceName;
     wxFontEncoding m_encoding;
 public :
+#elif defined(__WXQT__)
+    QFont m_qtFont;
 #else // other platforms
     //
     //  This is a generic implementation that should work on all ports
