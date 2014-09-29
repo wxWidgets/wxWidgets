@@ -207,6 +207,8 @@ class wxPenRefData: public wxGDIRefData
         {
             m_qtPen.setCapStyle(Qt::RoundCap);
             m_qtPen.setJoinStyle(Qt::RoundJoin);
+            m_dashes = NULL;
+            m_dashesSize = 0;
         }
         
         wxPenRefData()
@@ -307,8 +309,10 @@ void wxPen::SetDashes(int nb_dashes, const wxDash *dash)
     ((wxPenRefData *)m_refData)->m_dashesSize = nb_dashes;
     
     QVector<qreal> dashes;
-    for (int i = 0; i < nb_dashes; i++) {
-        dashes << dash[i];
+    if (dash)
+    {
+        for (int i = 0; i < nb_dashes; i++)
+            dashes << dash[i];
     }
     
     M_PENDATA.setDashPattern(dashes);
