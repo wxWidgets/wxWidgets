@@ -210,7 +210,6 @@ private:
     bool m_processingShortcut;
 #endif // wxUSE_ACCEL
 
-    wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxWindowQt );
 };
 
