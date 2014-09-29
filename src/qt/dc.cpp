@@ -498,8 +498,17 @@ void wxQtDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
     y += penWidth / 2;
     w -= penWidth;
     h -= penWidth;
-    
-    m_qtPainter->drawPie( x, y, w, h, (int)( sa * 16 ), (int)( ( ea - sa ) * 16 ) );
+
+    double spanAngle = sa - ea;
+    if (spanAngle < -180)
+        spanAngle += 360;
+    if (spanAngle > 180)
+        spanAngle -= 360;
+
+    if ( spanAngle == 0 )
+        m_qtPainter->drawEllipse( x, y, w, h );
+    else
+        m_qtPainter->drawPie( x, y, w, h, (int)( sa * 16 ), (int)( ( ea - sa ) * 16 ) );
 }
 
 void wxQtDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
