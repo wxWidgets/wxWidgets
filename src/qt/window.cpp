@@ -1110,6 +1110,12 @@ bool wxWindowQt::QtHandleWheelEvent ( QWidget *WXUNUSED( handler ), QWheelEvent 
 
 bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *event )
 {
+    // qt sends keyup and keydown events for autorepeat, but this is not
+    // normal for wx which only sends repeated keydown events
+    // discard repeated keyup events
+    if(event->isAutoRepeat() && event->type() == QEvent::KeyRelease)
+        return true;
+
 #if wxUSE_ACCEL
     if ( m_processingShortcut )
     {
