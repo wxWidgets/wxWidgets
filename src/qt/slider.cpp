@@ -67,7 +67,11 @@ bool wxSlider::Create(wxWindow *parent,
 {
     m_qtSlider = new wxQtSlider( parent, this );
     m_qtSlider->setOrientation( wxQtConvertOrientation( style, wxSL_HORIZONTAL ) );
+
+    m_qtSlider->blockSignals(true);
     SetRange( minValue, maxValue );
+    m_qtSlider->blockSignals(false);
+
     // draw ticks marks (default bellow if horizontal, right if vertical):
     if ( style & wxSL_VERTICAL )
     {
@@ -89,12 +93,16 @@ int wxSlider::GetValue() const
 
 void wxSlider::SetValue(int value)
 {
+    m_qtSlider->blockSignals(true);
     m_qtSlider->setValue( value );
+    m_qtSlider->blockSignals(false);
 }
 
 void wxSlider::SetRange(int minValue, int maxValue)
 {
+    m_qtSlider->blockSignals(true);
     m_qtSlider->setRange( minValue, maxValue );
+    m_qtSlider->blockSignals(false);
 }
 
 int wxSlider::GetMin() const
