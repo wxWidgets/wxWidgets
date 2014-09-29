@@ -82,14 +82,14 @@ bool wxQtDCImpl::CanGetTextExtent() const
 
 void wxQtDCImpl::DoGetSize(int *width, int *height) const
 {
-    *width  = m_qtPainter->device()->width();
-    *height = m_qtPainter->device()->height();
+    if (width)  *width  = m_qtPainter->device()->width();
+    if (height) *height = m_qtPainter->device()->height();
 }
 
 void wxQtDCImpl::DoGetSizeMM(int* width, int* height) const
 {
-    *width  = m_qtPainter->device()->widthMM();
-    *height = m_qtPainter->device()->heightMM();
+    if (width)  *width  = m_qtPainter->device()->widthMM();
+    if (height) *height = m_qtPainter->device()->heightMM();
 }
 
 int wxQtDCImpl::GetDepth() const
