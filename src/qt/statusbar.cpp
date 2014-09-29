@@ -52,13 +52,18 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID WXUNUSED(winid),
     return true;
 }
 
-bool wxStatusBar::GetFieldRect(int WXUNUSED(i), wxRect& WXUNUSED(rect)) const
+bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
 {
-    return false;
+    wxCHECK_MSG( (i >= 0) && ((size_t)i < m_panes.GetCount()), false,
+                 "invalid statusbar field index" );
+
+    rect = wxQtConvertRect(m_qtPanes[i]->geometry());
+    return true;
 }
 
-void wxStatusBar::SetMinHeight(int WXUNUSED(height))
+void wxStatusBar::SetMinHeight(int height)
 {
+    m_qtStatusBar->setMinimumHeight(height);
 }
 
 int wxStatusBar::GetBorderX() const
