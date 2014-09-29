@@ -429,7 +429,9 @@ bool wxNotebook::InsertPage( size_t position,
     pageData->m_imageIndex = imageId;
 
     pageData->m_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
+#ifndef __WXGTK3__
     gtk_container_set_border_width(GTK_CONTAINER(pageData->m_box), 2);
+#endif
 
     pageData->m_image = NULL;
     if (imageId != -1)
