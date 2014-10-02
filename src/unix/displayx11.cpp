@@ -82,7 +82,7 @@ public:
 // display and display factory classes
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDisplayImplX11 : public wxDisplayImpl
+class wxDisplayImplX11 : public wxDisplayImpl
 {
 public:
     wxDisplayImplX11(unsigned n, const ScreenInfo& info)
