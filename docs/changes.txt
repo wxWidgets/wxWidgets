@@ -610,6 +610,7 @@ wxMSW:
 - Fix drawing on wxDC when using right-to-left layout (Artur Wieczorek).
 - Fix wxGrid appearance and behaviour in RTL (Artur Wieczorek).
 - Fix creating wxBitmap from monochrome wxIcon or wxCursor (Artur Wieczorek).
+- Fix handling of bitmaps with alpha in wxImageList (Artur Wieczorek).
 - Add paragraph spacing attributes support to wxTextCtrl (dannchr).
 - Show new style directory selector even for non existent paths (raychow).
 - Fix order of radial gradient stops (Alexandru Pana).
