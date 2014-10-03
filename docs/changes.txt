@@ -593,6 +593,7 @@ All (GUI):
 - Return correct value from wxCommandEvent::GetString() for programmatically
   generated wxEVT_TEXT events from wxComboBox.
 - Accept "default" as font family value in XRC (pieleric).
+- Send events when toggling wxPropertyGrid nodes from keyboard (Armel Asselin).
 
 wxGTK:
 

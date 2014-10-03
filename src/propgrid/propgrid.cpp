@@ -5675,12 +5675,12 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
         {
             if ( action == wxPG_ACTION_COLLAPSE_PROPERTY || secondAction == wxPG_ACTION_COLLAPSE_PROPERTY )
             {
-                if ( (m_windowStyle & wxPG_HIDE_MARGIN) || Collapse(p) )
+                if ( (m_windowStyle & wxPG_HIDE_MARGIN) || DoCollapse(p, true) )
                     wasHandled = true;
             }
             else if ( action == wxPG_ACTION_EXPAND_PROPERTY || secondAction == wxPG_ACTION_EXPAND_PROPERTY )
             {
-                if ( (m_windowStyle & wxPG_HIDE_MARGIN) || Expand(p) )
+                if ( (m_windowStyle & wxPG_HIDE_MARGIN) || DoExpand(p, true) )
                     wasHandled = true;
             }
         }
