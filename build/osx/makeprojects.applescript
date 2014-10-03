@@ -216,7 +216,7 @@ end makeProject
 
 init()
 set theProject to {projectName:"", conditions:{}, bklfiles:{Â
-	"../bakefiles/files.bkl", "../bakefiles/regex.bkl", "../bakefiles/tiff.bkl", "../bakefiles/png.bkl", "../bakefiles/jpeg.bkl", "../bakefiles/scintilla.bkl", "../bakefiles/expat.bkl"}, nodes:{Â
+	"../bakefiles/files.bkl", "../bakefiles/zlib.bkl", "../bakefiles/regex.bkl", "../bakefiles/tiff.bkl", "../bakefiles/png.bkl", "../bakefiles/jpeg.bkl", "../bakefiles/scintilla.bkl", "../bakefiles/expat.bkl"}, nodes:{Â
 	{label:"base", entries:{"$(BASE_SRC)"}}, Â
 	{label:"base", entries:{"$(BASE_AND_GUI_SRC)"}}, Â
 	{label:"core", entries:{"$(CORE_SRC)"}}, Â
@@ -233,6 +233,7 @@ set theProject to {projectName:"", conditions:{}, bklfiles:{Â
 	{label:"propgrid", entries:{"$(PROPGRID_SRC)"}}, Â
 	{label:"richtext", entries:{"$(RICHTEXT_SRC)"}}, Â
 	{label:"stc", entries:{"$(STC_SRC)"}}, Â
+	{label:"libzlib", entries:{"$(wxzlib)"}}, Â
 	{label:"libtiff", entries:{"$(wxtiff)"}}, Â
 	{label:"libjpeg", entries:{"$(wxjpeg)"}}, Â
 	{label:"libpng", entries:{"$(wxpng)"}}, Â

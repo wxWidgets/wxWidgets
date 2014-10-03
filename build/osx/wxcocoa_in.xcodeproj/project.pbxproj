@@ -191,10 +191,7 @@
 					WXUSINGDLL,
 				);
 				INSTALL_PATH = "@executable_path/../Frameworks/";
-				OTHER_LDFLAGS = (
-					"$(OTHER_LDFLAGS)",
-					"-lz",
-				);
+				OTHER_LDFLAGS = "$(OTHER_LDFLAGS)";
 			};
 			name = Debug;
 		};
@@ -208,10 +205,7 @@
 					WXUSINGDLL,
 				);
 				INSTALL_PATH = "@executable_path/../Frameworks/";
-				OTHER_LDFLAGS = (
-					"$(OTHER_LDFLAGS)",
-					"-lz",
-				);
+				OTHER_LDFLAGS = "$(OTHER_LDFLAGS)";
 			};
 			name = Release;
 		};
