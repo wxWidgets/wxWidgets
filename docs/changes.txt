@@ -619,6 +619,7 @@ wxMSW:
 - Fix wxFileName::MakeRelativeTo() for shortcut files (gafatoa).
 - Fix height of initially empty wxBitmapComboBox (Artur Wieczorek).
 - Fix setting label of submenu items (Artur Wieczorek).
+- Fix using Esc as accelerator in the menus.
 
 
 3.0.1: (released 2014-06-15)
