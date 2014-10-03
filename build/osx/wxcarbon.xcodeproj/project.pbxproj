@@ -1051,6 +1051,8 @@
 		A3586433C4B1398FB1C361D7 /* m_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 548906E4E72935E48CE4AF87 /* m_image.cpp */; };
 		A36B5107860E32659194073F /* LexPython.cxx in Sources */ = {isa = PBXBuildFile; fileRef = CC2713393AB132AA8E337AE1 /* LexPython.cxx */; };
 		A36B5107860E326591940740 /* LexPython.cxx in Sources */ = {isa = PBXBuildFile; fileRef = CC2713393AB132AA8E337AE1 /* LexPython.cxx */; };
+		A39B0D7EB43137F7BA50A35C /* xh_simplebook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 97C4E26489B034B6AE723D8D /* xh_simplebook.cpp */; };
+		A39B0D7EB43137F7BA50A35D /* xh_simplebook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 97C4E26489B034B6AE723D8D /* xh_simplebook.cpp */; };
 		A3A898DA3114311EB7F02227 /* sckstrm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D784A32C094730FEAA391A9B /* sckstrm.cpp */; };
 		A3A898DA3114311EB7F02228 /* sckstrm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D784A32C094730FEAA391A9B /* sckstrm.cpp */; };
 		A3C4D47A84E8362295867525 /* LexPOV.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8EECA8EB93BF3C7A9CC827AD /* LexPOV.cxx */; };
@@ -2148,6 +2150,7 @@
 		972BC9B2B0D438EFB12BCE1E /* rearrangectrl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = rearrangectrl.cpp; path = ../../src/common/rearrangectrl.cpp; sourceTree = "<group>"; };
 		975E3B6A269434F0A069987D /* Catalogue.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Catalogue.cxx; path = ../../src/stc/scintilla/src/Catalogue.cxx; sourceTree = "<group>"; };
 		9794A709E3C036D79860CEC9 /* LexCoffeeScript.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexCoffeeScript.cxx; path = ../../src/stc/scintilla/lexers/LexCoffeeScript.cxx; sourceTree = "<group>"; };
+		97C4E26489B034B6AE723D8D /* xh_simplebook.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_simplebook.cpp; path = ../../src/xrc/xh_simplebook.cpp; sourceTree = "<group>"; };
 		97FFB03FF6793506B246BAC6 /* platinfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = platinfo.cpp; path = ../../src/common/platinfo.cpp; sourceTree = "<group>"; };
 		9860CD56245B3E7FBD0E7846 /* checklst_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = checklst_osx.cpp; path = ../../src/osx/checklst_osx.cpp; sourceTree = "<group>"; };
 		9979CCEEC4C73A6489EF1A21 /* anybutton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = anybutton.cpp; path = ../../src/osx/carbon/anybutton.cpp; sourceTree = "<group>"; };
@@ -2789,6 +2792,7 @@
 				66411D54BAD338498AC59401 /* xh_scrol.cpp */,
 				E97AE22E9F043AB6846B3BE7 /* xh_scwin.cpp */,
 				8E7ADC9F00803853B1004529 /* xh_htmllbox.cpp */,
+				97C4E26489B034B6AE723D8D /* xh_simplebook.cpp */,
 				6E855AB3AB08325980871AB4 /* xh_sizer.cpp */,
 				38E0F60AE1F83633A0CC18FC /* xh_slidr.cpp */,
 				950D51915EF83B57B5E8306F /* xh_spin.cpp */,
@@ -4592,6 +4596,7 @@
 				FDE14459359334DE9FB03ED6 /* xh_scrol.cpp in Sources */,
 				87092C0C817D343DAB77E23F /* xh_scwin.cpp in Sources */,
 				00E2F82590B33BDCA1F6D0C5 /* xh_htmllbox.cpp in Sources */,
+				A39B0D7EB43137F7BA50A35D /* xh_simplebook.cpp in Sources */,
 				E1A20811148F31D289AF98B0 /* xh_sizer.cpp in Sources */,
 				5F6B4F226B473AACB7AC8DF6 /* xh_slidr.cpp in Sources */,
 				C32EF2EC1A103BC3A6254322 /* xh_spin.cpp in Sources */,
@@ -5430,6 +5435,7 @@
 				FDE14459359334DE9FB03ED5 /* xh_scrol.cpp in Sources */,
 				87092C0C817D343DAB77E23E /* xh_scwin.cpp in Sources */,
 				00E2F82590B33BDCA1F6D0C4 /* xh_htmllbox.cpp in Sources */,
+				A39B0D7EB43137F7BA50A35C /* xh_simplebook.cpp in Sources */,
 				E1A20811148F31D289AF98AF /* xh_sizer.cpp in Sources */,
 				5F6B4F226B473AACB7AC8DF5 /* xh_slidr.cpp in Sources */,
 				C32EF2EC1A103BC3A6254321 /* xh_spin.cpp in Sources */,
