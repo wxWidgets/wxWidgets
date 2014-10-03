@@ -597,6 +597,7 @@ All (GUI):
 wxGTK:
 
 - Fix mouse handling in wxNotebook containing wxListCtrl (Charlie Fenton).
+- Fix layout of wxSearchCtrl to not truncate text in it.
 
 wxMSW:
 
