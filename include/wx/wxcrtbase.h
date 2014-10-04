@@ -637,6 +637,14 @@ WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,
     #undef HAVE_WCSRTOMBS
 #endif
 
+#ifdef wxNEED_WX_MBSTOWCS
+    WXDLLIMPEXP_BASE size_t wxMbstowcs(wchar_t *, const char *, size_t);
+    WXDLLIMPEXP_BASE size_t wxWcstombs(char *, const wchar_t *, size_t);
+#else
+    #define wxMbstowcs mbstowcs
+    #define wxWcstombs wcstombs
+#endif
+
 
 
 /* -------------------------------------------------------------------------
