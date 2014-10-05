@@ -39,43 +39,49 @@ Changes in this release
 -----------------------
 
 This is a bug fix release with no significant new features compared to
-3.0.0 and compatible with it at both the API and the ABI level (i.e.
-all applications linked against 3.0.0 DLLs or shared libraries will
-continue to work when using 3.0.1 libraries).
+the previous 3.0.x releases and compatible with them at both the API
+and the ABI level (i.e. all applications linked against earlier 3.0.x
+DLLs or shared libraries will continue to work when using 3.0.2
+libraries).
 
-There were more than a hundred bug fixes, please see docs/changes.txt
-for more details. The most important user-visible changes are:
-
-* In all ports:
- - wxHTML displays tables much faster now.
- - Double clicking wxGrid columns doesn't make them too small any more.
- - Fix bugs when dragging columns in wxGrid with hidden columns.
- - Loading ICO files with PNG data is now supported.
+Some of the changes:
 
 * In wxGTK:
- - Mouse wheel scrolling in wxListCtrl works again.
- - wxStaticBoxSizer contents is not truncated any more.
- - AUI panels may now be re-docked after floating them.
+ - Fix wxSearchCtrl layout.
+ - Fix mouse handling in wxListCtrl and wxTreeCtrl inside wxNotebook.
+ - Avoid some GTK+ warnings.
 
 * In wxMSW:
- - wxBitmapComboBox works again and doesn't just remain blank.
- - Checkboxes in wxDataViewCtrl work again too now.
- - wxCheckListBox appears correctly when using large fonts.
+ - Cygwin 1.7 and MinGW 4.8 build fixes.
+ - Fix parallel build in MSVS 2010+ solutions.
+ - Add x64 configurations to MSVS 2005/2008 projects too.
+ - Fix using Esc as accelerator in the menus.
+ - Fix wxRadioBox, wxSlider, wxToggleButton with non-default colours.
+ - RTL support fixes for wxDC and wxGrid.
 
 * In wxOSX:
- - Cancelling choice selection in wxDataViewCtrl doesn't crash any more.
- - ShowModal() doesn't use quite as much CPU now.
+ - Avoid compilation warnings when using 10.10 SDK.
+ - Enhancements to retina support.
 
-There are also many other bug fixes, including many improvements to
-alpha transparency handling in different places (mostly in wxMSW, but
-also in wxGTK) and resource/memory leak fixes in all ports.
+Despite of the focus on bug fixes, a few new features have
+nevertheless made it into this release as well:
 
-Finally, this release includes Visual Studio 2012 and 2013 projects for
-building wxWidgets, in addition to the project files for the previous
-versions already provided in 3.0.0 release.
+ - Add support for "%V", "%G" and "%g" to wxDateTime::Format().
+ - Added an XRC handler for wxSimplebook.
+ - Allow to specify the "variant" window property in XRC.
+ - Add wxGenericListCtrl::EndEditLabel().
 
-Please make sure to read the section "Incompatible changes since 2.8"
-in docs/changes.txt if you are upgrading from wxWidgets 2.8 or earlier.
+Other changes in this release are described in the file
+docs/changes.txt available online at
+
+    https://sourceforge.net/projects/wxwindows/files/3.0.2/changes.txt
+
+This file also contains information about the changes in 3.0 compared
+to earlier versions of wxWidgets, please read it, and especially its
+"INCOMPATIBLE CHANGES" section, if you are upgrading from wxWidgets
+2.8 or earlier. And for even more details, please see
+
+    http://docs.wxwidgets.org/3.0.0/overview_changes_since28.html
 
 
 Platforms supported
@@ -209,4 +215,4 @@ If you are looking for support, you can get it from
 
 Have fun!
 
-The wxWidgets Team, July 2014
+The wxWidgets Team, October 2014
