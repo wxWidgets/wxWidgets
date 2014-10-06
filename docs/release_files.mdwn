@@ -30,11 +30,11 @@ Check Sums
 
 To verify your download please use the following sha1sums:
 
-    2e756283fdce20b1981295d112ee81ab62ff5f57  wxWidgets-3.0.2.7z
-    1f69b4aa101fe3d7b4cd8aea855f073270161489  wxWidgets-3.0.2.tar.bz2
-    e1df8ecda7fe0629528a3d72702e78a7ec6c901c  wxWidgets-3.0.2.zip
-    bf8f59a4e7797e65c9b4f58814f1a104dd8dc5b4  wxWidgets-3.0.2-docs-html.tar.bz2
-    515cd4d019707d629f9f23c54e010396409d3fe9  wxWidgets-3.0.2-docs-html.zip
+    63f27e948d6b4780e3a37acafb69e2f32b83ee1c  wxWidgets-3.0.2.7z
+    705b0aff5ed323c63f49eb2dbe33691c80eb3945  wxWidgets-3.0.2.tar.bz2
+    bcaec272bca881897e70b8c88e50e9135acc587f  wxWidgets-3.0.2.zip
+    9db3068925a7c928062e3db59ab1aca5b0e654a9  wxWidgets-3.0.2-docs-html.tar.bz2
+    a58c1625679d78ec20cea4542dc1382b6a7a01e8  wxWidgets-3.0.2-docs-html.zip
     591e706da0d2358ff392adaff706c9df2bd42a10  wxWidgets-3.0.2-docs-chm.zip
-    11f22c91e0e5e7754fd72312dfe9c523df3121ed  wxWidgets-3.0.2_headers.7z
+    7670804d478a5b7008f5d7a82c30f0c6bfd358bf  wxWidgets-3.0.2_headers.7z
     ceac35caeab6a0d3bdc6715b23dde82812ed8f7f  wxMSW-3.0.2-Setup.exe
