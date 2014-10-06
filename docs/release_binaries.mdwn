@@ -1,7 +1,7 @@
-wxWidgets 3.0.1 Binaries
+wxWidgets 3.0.2 Binaries
 ========================
 
-This directory contains binary files for wxWidgets 3.0.1 release.
+This directory contains binary files for wxWidgets 3.0.2 release.
 
 * Microsoft Visual C++ compiler versions 9.0, 10.0, 11.0 and 12.0
   corresponding to marketing product names of Microsoft Visual Studio
@@ -14,9 +14,9 @@ For Developers
 --------------
 
 For developing applications with wxWidgets you need to download the
-compiler-independent wxWidgets-3.0.1_Headers.7z file (found in the
-parent directory) and one of wxMSW-3.0.1-vcXXX_Dev.7z or
-wxMSW-3.0.1_gccXXX_Dev.7z files depending on your compiler, its
+compiler-independent wxWidgets-3.0.2_Headers.7z file (found in the
+parent directory) and one of wxMSW-3.0.2-vcXXX_Dev.7z or
+wxMSW-3.0.2_gccXXX_Dev.7z files depending on your compiler, its
 version and the target architecture (x86 if not specified or x64).
 
 Unpack both files into the same directory so that "include" and "lib"
@@ -30,15 +30,15 @@ symbols.
 For End Users
 -------------
 
-End users may download one of wxMSW-3.0.1_vcXXX_ReleaseDLL.7z or
-wxMSW-3.0.1_gccXXX_ReleaseDLL.7z files to get just the DLLs
+End users may download one of wxMSW-3.0.2_vcXXX_ReleaseDLL.7z or
+wxMSW-3.0.2_gccXXX_ReleaseDLL.7z files to get just the DLLs
 required for running the applications using wxWidgets.
 
 
 For Debugging
 -------------
 
-* Microsoft Visual C++ users: Files wxMSW-3.0.1_vcXXX_ReleasePDB.7z
+* Microsoft Visual C++ users: Files wxMSW-3.0.2_vcXXX_ReleasePDB.7z
   contain the debug symbols for the release build of the DLLs. Download
   them if you want to debug your own applications in release build or
   if you want to get meaningful information from mini-dumps retrieved
@@ -51,10 +51,8 @@ For Debugging
 Feedback
 --------
 
-This is our first attempt to provide binaries for a major wxWidgets
-release and we are very interested in your feedback. Please let us
-know if these files are useful to you and how could they be made more
-so and, of course, if you run into any problems with them. Looking
+Please let us know if these files are useful to you and how could they be made
+more so and, of course, if you run into any problems with them. Looking
 forward to hearing from you on [wx-users mailing list](http://groups.google.com/group/wx-users).
 
 
@@ -63,46 +61,46 @@ Check Sums
 
 To verify your download please use the following sha1sums:
 
-    18ece8798f037c86d3330b2e909a4022a0321100 wxMSW-3.0.1_gcc471TDM_Dev.7z
-    167bf2bfcc072165318e42a7c84ae58099c2d4a8 wxMSW-3.0.1_gcc471TDM_ReleaseDLL.7z
-    26dce50acdd349d60088e60d2bad3e283c4ddaa7 wxMSW-3.0.1_gcc471TDM_x64_Dev.7z
-    04dbd607b0ab17c34c61975270f768b43dd65977 wxMSW-3.0.1_gcc471TDM_x64_ReleaseDLL.7z
-    bfc8ac6e01e977a93281029d376e9bc998d2ccf2 wxMSW-3.0.1_gcc481TDM_Dev.7z
-    504e0897553706cb3934745ba89da2d153cfa945 wxMSW-3.0.1_gcc481TDM_ReleaseDLL.7z
-    f0801e9433e707290cd31f2e9476df0d4279a45d wxMSW-3.0.1_gcc481TDM_x64_Dev.7z
-    c81090181a0863aca6af91bba602db1f4304f7dd wxMSW-3.0.1_gcc481TDM_x64_ReleaseDLL.7z
-    0811a37e86311888dc7b2328e9f834e2587816e1 wxMSW-3.0.1_vc90_Dev.7z
-    04f0239e0b2f6fcde12235b539c80638d567a168 wxMSW-3.0.1_vc90_ReleaseDLL.7z
-    5ae62332d01ddd99874f7dc76085c84f1558f676 wxMSW-3.0.1_vc90_ReleasePDB.7z
-    42285a7da0a250fa475d36a579cf7bff56c5d153 wxMSW-3.0.1_vc90_x64_Dev.7z
-    74738de7729236027e836bd71e05c5a2c0c8604f wxMSW-3.0.1_vc90_x64_ReleaseDLL.7z
-    38cc78dff12ac1deb0f524cf49fca3f4b9c8f538 wxMSW-3.0.1_vc90_x64_ReleaseDLL.msi
-    e737f2542294f4952c398b23c543675610a02deb wxMSW-3.0.1_vc90_x64_ReleasePDB.7z
-    e184bd3f92164bff1f82ea2b1eda152c5df74656 wxMSW-3.0.1_vc90_x86_ReleaseDLL.msi
-    7060348454cc48284b1d5abeeda6c31b45d85eda wxMSW-3.0.1_vc100_Dev.7z
-    c91fdf9499ffbc49cb5bd7241aac30f42c1f1399 wxMSW-3.0.1_vc100_ReleaseDLL.7z
-    74e8a2eb81cca4eb189130206a6d91aa2759f0a9 wxMSW-3.0.1_vc100_ReleasePDB.7z
-    4773be9e2b8deb007c06289bc0ac4969d2dec386 wxMSW-3.0.1_vc100_x64_Dev.7z
-    76dc2d55698669f5de19bc149675961ab1115886 wxMSW-3.0.1_vc100_x64_ReleaseDLL.7z
-    efa6846cd9ad76109c20077d623d602e18a04997 wxMSW-3.0.1_vc100_x64_ReleaseDLL.msi
-    77d886d0ef36cd32a4308abb75748ca567dd9251 wxMSW-3.0.1_vc100_x64_ReleasePDB.7z
-    cacd6023817935d1c47c3ffc3fd7e1f758c85279 wxMSW-3.0.1_vc100_x86_ReleaseDLL.msi
-    ea82f65254080a7a5680a0f9283e300a675ea68d wxMSW-3.0.1_vc110_Dev.7z
-    9e2dcd558fc2bd64b90c7f4c76744ea3255b3c60 wxMSW-3.0.1_vc110_ReleaseDLL.7z
-    1cff890303e9663f7243fe145d12a8fed60c5495 wxMSW-3.0.1_vc110_ReleasePDB.7z
-    3c0c53350310d9fec37dbbd3cd35bdfb81d2a2dc wxMSW-3.0.1_vc110_x64_Dev.7z
-    de7d2f7580d080088e3f64c66d26cba931a6f4e9 wxMSW-3.0.1_vc110_x64_ReleaseDLL.7z
-    4d7a49e3d67f6559ac8bfbbbecaba16653eee163 wxMSW-3.0.1_vc110_x64_ReleaseDLL.msi
-    3670ac5cf20ea76e93fa6de8a91af5a6fe7a8de5 wxMSW-3.0.1_vc110_x64_ReleasePDB.7z
-    2613d7c676ef35b4e08e32c6bf34f13083ac6e5b wxMSW-3.0.1_vc110_x86_ReleaseDLL.msi
-    7ecd00f81661ef0d3cf19958afe14f3b3dec0618 wxMSW-3.0.1_vc120_Dev.7z
-    888c2c1eabfda5d248e14d8b56165468825558d5 wxMSW-3.0.1_vc120_ReleaseDLL.7z
-    760567170bf5373da42b239f9774b91920ffec95 wxMSW-3.0.1_vc120_ReleasePDB.7z
-    97968a620d203d4f1b4f521b91ea9ec7ad3ca50f wxMSW-3.0.1_vc120_x64_Dev.7z
-    0ba6d750feee3e4e3fbe79414b501aea6766ff60 wxMSW-3.0.1_vc120_x64_ReleaseDLL.7z
-    693974bbec1d1b41c020332e17e60527eed76f7f wxMSW-3.0.1_vc120_x64_ReleaseDLL.msi
-    ad095523e1f0a13a354ec1d1512308c5b56d55b8 wxMSW-3.0.1_vc120_x64_ReleasePDB.7z
-    5aaee8c78fb03c13dcd05656f7c46f4ec02ab625 wxMSW-3.0.1_vc120_x86_ReleaseDLL.msi
+    d4de907d5cbbc6feabec3ae06b7cb875f2f552f6  wxMSW-3.0.2_gcc471TDM_Dev.7z
+    55ff0cd21df57ad6d25895964c13e421f86c0781  wxMSW-3.0.2_gcc471TDM_ReleaseDLL.7z
+    5856429ba46f29689e95a86b97a741ed42ebad98  wxMSW-3.0.2_gcc471TDM_x64_Dev.7z
+    6c4289652aa06b1ff2e28e72250c3ecd61b36acd  wxMSW-3.0.2_gcc471TDM_x64_ReleaseDLL.7z
+    e9e09cfe9c64c528a4e5b825f1d4eb93d41da490  wxMSW-3.0.2_gcc481TDM_Dev.7z
+    1f5e03d3e07812270fdd15f7ea47ccd43cb41f01  wxMSW-3.0.2_gcc481TDM_ReleaseDLL.7z
+    ff2a74d4298f58f7a1f9412ee632c8c695ca7efe  wxMSW-3.0.2_gcc481TDM_x64_Dev.7z
+    713860af5d001e3affdfae4003c3479fcceae72d  wxMSW-3.0.2_gcc481TDM_x64_ReleaseDLL.7z
+    c675da612bc702c66cc985ac02262a0529df34b0  wxMSW-3.0.2_vc90_Dev.7z
+    2ee0d4c15bf4453ad5f3c3656a5a76bb489ed267  wxMSW-3.0.2_vc90_ReleaseDLL.7z
+    1006789fdff272058803c28ec77aff328dab2de2  wxMSW-3.0.2_vc90_ReleasePDB.7z
+    1c815bafd9e8506549800354e44b22af60631941  wxMSW-3.0.2_vc90_x64_Dev.7z
+    2830484c43193e72f994adc3601438fde354fb4c  wxMSW-3.0.2_vc90_x64_ReleaseDLL.7z
+    9a1e87141345c818f58e523766c5e42ab9ecfb02  wxMSW-3.0.2_vc90_x64_ReleaseDLL.msi
+    1c9094ab4fa93875477ceb99d72db2a904c48136  wxMSW-3.0.2_vc90_x64_ReleasePDB.7z
+    5d1c2ad76c85bba32cc6329446bc70632af245ae  wxMSW-3.0.2_vc90_x86_ReleaseDLL.msi
+    d51026d681916f86cd34885cccc4408e8b0b3962  wxMSW-3.0.2_vc100_Dev.7z
+    f1fd09ab3ced110afd0ecaa191117533981928ed  wxMSW-3.0.2_vc100_ReleaseDLL.7z
+    da515bdf35a2aa8972614865ab4687da4727fae7  wxMSW-3.0.2_vc100_ReleasePDB.7z
+    deec659658076e46e794d73b2b4f4cf812a27278  wxMSW-3.0.2_vc100_x64_Dev.7z
+    7c9c0a710112f993655a0b51a9dc63206897d553  wxMSW-3.0.2_vc100_x64_ReleaseDLL.7z
+    ea22edf6983a282513571ee2901ed18035aadf80  wxMSW-3.0.2_vc100_x64_ReleaseDLL.msi
+    1f2eeecdf2355f89c70fa94c364afd3267b1f51f  wxMSW-3.0.2_vc100_x64_ReleasePDB.7z
+    00b47fc629868d3634e13eefc4adc08d6e822853  wxMSW-3.0.2_vc100_x86_ReleaseDLL.msi
+    33e9e9216b1c0fafc44fd681520a746465eb30d6  wxMSW-3.0.2_vc110_Dev.7z
+    e38f4f7c00ba58bf90afa53474ca0fdafa8ea791  wxMSW-3.0.2_vc110_ReleaseDLL.7z
+    d5ce2cf60829b4fda83439975ff4f7d857dda92d  wxMSW-3.0.2_vc110_ReleasePDB.7z
+    46e5a66a65db34107a089d1aef326c25cafbe7af  wxMSW-3.0.2_vc110_x64_Dev.7z
+    fff956c21826e5268b1533fc0b4fad6016963be0  wxMSW-3.0.2_vc110_x64_ReleaseDLL.7z
+    2c3b6f6e63a40027bca9601d7668999dec596013  wxMSW-3.0.2_vc110_x64_ReleaseDLL.msi
+    8a0c6e9bd844e204e26955573049fb17ce704d60  wxMSW-3.0.2_vc110_x64_ReleasePDB.7z
+    98ac8e4163d972610267fa8e070adb9b5b4e1f13  wxMSW-3.0.2_vc110_x86_ReleaseDLL.msi
+    87bee27e5b15852cb81862bb5245c751a70ee9ac  wxMSW-3.0.2_vc120_Dev.7z
+    f1cc74b0a558af80ceac350a5777a4a54d226315  wxMSW-3.0.2_vc120_ReleaseDLL.7z
+    cb4e92c6bbd4a25b7d92f8490dd85482e1d32c7d  wxMSW-3.0.2_vc120_ReleasePDB.7z
+    f7c8dad92deed936faecc8b59e13a6ac1c4fd4e4  wxMSW-3.0.2_vc120_x64_Dev.7z
+    77f2ac56edf5739ed7af261698069776cfef86d5  wxMSW-3.0.2_vc120_x64_ReleaseDLL.7z
+    4a33022c59f484d4da6979581e0ba409c804764f  wxMSW-3.0.2_vc120_x64_ReleaseDLL.msi
+    51e047f1576a61d5b5e019b6579b12ab4bdfb941  wxMSW-3.0.2_vc120_x64_ReleasePDB.7z
+    a31f3af0de6dd331dd0984ebaeef643f3f856aba  wxMSW-3.0.2_vc120_x86_ReleaseDLL.msi
 
 
 Credit
