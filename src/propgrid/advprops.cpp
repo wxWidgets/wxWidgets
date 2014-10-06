@@ -62,6 +62,7 @@
 #endif
 
 #include "wx/odcombo.h"
+#include "wx/numformatter.h"
 
 // -----------------------------------------------------------------------
 
@@ -361,7 +362,14 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
                 // Min/Max check
                 wxFloatProperty::DoValidation(property, v_d, NULL, mode);
 
-                wxPropertyGrid::DoubleToString(s, v_d, 6, true, NULL);
+                int precision = -1;
+                wxVariant v = property->GetAttribute(wxPG_FLOAT_PRECISION);
+                if ( !v.IsNull() )
+                {
+                    precision = v.GetInteger();
+                }
+
+                s = wxNumberFormatter::ToString(v_d, precision, wxNumberFormatter::Style_NoTrailingZeroes);
             }
             else
             {

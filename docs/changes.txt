@@ -577,6 +577,10 @@ Major new features in this release
 3.0.3: (released 2015-??-??)
 ----------------------------
 
+All (GUI):
+
+- Fix several floating point rounding bugs in wxPropertyGrid (Artur Wieczorek).
+
 
 3.0.2: (released 2014-10-06)
 ----------------------------
