@@ -1,4 +1,4 @@
-                wxWidgets 3.0.2 Release Notes
+                wxWidgets 3.0.3 Release Notes
                 =============================
 
 Welcome to the latest stable release of wxWidgets, a free and open
@@ -18,17 +18,17 @@ You can learn more about wxWidgets at
 
 and read its documentation online at
 
-        http://docs.wxwidgets.org/3.0.2/
+        http://docs.wxwidgets.org/3.0.3/
 
 
 wxWidgets sources and binaries for the selected platforms are
 available for download from
 
-        https://sourceforge.net/projects/wxwindows/files/3.0.2/
+        https://sourceforge.net/projects/wxwindows/files/3.0.3/
 
 or
 
-        ftp://ftp.wxwidgets.org/pub/3.0.2/
+        ftp://ftp.wxwidgets.org/pub/3.0.3/
 
 Please see the "Files" section below for the description of various
 files available at these locations.
@@ -74,7 +74,7 @@ nevertheless made it into this release as well:
 Other changes in this release are described in the file
 docs/changes.txt available online at
 
-    https://sourceforge.net/projects/wxwindows/files/3.0.2/changes.txt
+    https://sourceforge.net/projects/wxwindows/files/3.0.3/changes.txt
 
 This file also contains information about the changes in 3.0 compared
 to earlier versions of wxWidgets, please read it, and especially its
