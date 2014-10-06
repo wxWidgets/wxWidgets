@@ -38,6 +38,11 @@ if [ ! -r "$EOL_FILE" ]; then
     exit 1
 fi
 
+if ! git diff --quiet; then
+    echo "Working copy has modifications, commit or stash them." >&2
+    exit 2
+fi
+
 set -e
 set -x
 
