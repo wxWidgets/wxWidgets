@@ -400,6 +400,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_ellipsization.obj &
 	$(OBJS)\test_gui_measuring.obj &
 	$(OBJS)\test_gui_affinematrix.obj &
+	$(OBJS)\test_gui_boundingbox.obj &
 	$(OBJS)\test_gui_config.obj &
 	$(OBJS)\test_gui_bitmapcomboboxtest.obj &
 	$(OBJS)\test_gui_bitmaptogglebuttontest.obj &
@@ -827,6 +828,9 @@ $(OBJS)\test_gui_measuring.obj :  .AUTODEPEND .\graphics\measuring.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_affinematrix.obj :  .AUTODEPEND .\graphics\affinematrix.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_boundingbox.obj :  .AUTODEPEND .\graphics\boundingbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_config.obj :  .AUTODEPEND .\config\config.cpp

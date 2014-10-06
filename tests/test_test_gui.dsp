@@ -163,6 +163,10 @@ SOURCE=.\controls\bookctrlbasetest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\graphics\boundingbox.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\sizers\boxsizer.cpp
 # End Source File
 # Begin Source File
