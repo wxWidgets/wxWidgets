@@ -147,6 +147,14 @@ void NumFormatterTestCase::DoubleToString()
                          wxNumberFormatter::ToString(123456789., 1));
     CPPUNIT_ASSERT_EQUAL("123,456,789.012",
                          wxNumberFormatter::ToString(123456789.012, 3));
+    CPPUNIT_ASSERT_EQUAL("12,345",
+                         wxNumberFormatter::ToString(12345.012, -1));
+    CPPUNIT_ASSERT_EQUAL("-123.1230",
+                         wxNumberFormatter::ToString(-123.123, 4, wxNumberFormatter::Style_None));
+    CPPUNIT_ASSERT_EQUAL("0.0",
+                         wxNumberFormatter::ToString(0.02, 1, wxNumberFormatter::Style_None));
+    CPPUNIT_ASSERT_EQUAL("-0.0",
+                         wxNumberFormatter::ToString(-0.02, 1, wxNumberFormatter::Style_None));
 }
 
 void NumFormatterTestCase::NoTrailingZeroes()
@@ -193,6 +201,36 @@ void NumFormatterTestCase::NoTrailingZeroes()
     (
         "123.456",
         wxNumberFormatter::ToString(123.456, 9, wxNumberFormatter::Style_NoTrailingZeroes)
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "123.12",
+        wxNumberFormatter::ToString(123.123, 2, wxNumberFormatter::Style_NoTrailingZeroes)
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "123",
+        wxNumberFormatter::ToString(123.123, 0, wxNumberFormatter::Style_NoTrailingZeroes)
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "0",
+        wxNumberFormatter::ToString(-0.000123, 3, wxNumberFormatter::Style_NoTrailingZeroes)
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "123",
+        wxNumberFormatter::ToString(123., -1, wxNumberFormatter::Style_NoTrailingZeroes)
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "1e-120",
+        wxNumberFormatter::ToString(1e-120, -1, wxNumberFormatter::Style_NoTrailingZeroes)
     );
 }
 
