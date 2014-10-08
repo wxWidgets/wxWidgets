@@ -1416,7 +1416,10 @@ wxString wxRichTextCompositeObject::GetTextForRange(const wxRichTextRange& range
         wxRichTextRange childRange = range;
         if (!child->GetRange().IsOutside(range))
         {
-            childRange.LimitTo(child->GetRange());
+            if (child->IsTopLevel())
+                childRange = child->GetOwnRange();
+            else
+                childRange.LimitTo(child->GetRange());
 
             wxString childText = child->GetTextForRange(childRange);
 
@@ -3111,7 +3114,10 @@ wxString wxRichTextParagraphLayoutBox::GetTextForRange(const wxRichTextRange& ra
         if (!child->GetRange().IsOutside(range))
         {
             wxRichTextRange childRange = range;
-            childRange.LimitTo(child->GetRange());
+            if (child->IsTopLevel())
+                childRange = child->GetOwnRange();
+            else
+                childRange.LimitTo(child->GetRange());
 
             wxString childText = child->GetTextForRange(childRange);
 
@@ -3641,6 +3647,7 @@ bool wxRichTextParagraphLayoutBox::HasCharacterAttributes(const wxRichTextRange&
                     {
                         foundCount ++;
                         wxRichTextAttr textAttr = para->GetCombinedAttributes(child->GetAttributes());
+                        textAttr.SetFlags(textAttr.GetFlags() & ~wxTEXT_ATTR_PARAGRAPH);
 
                         if (textAttr.EqPartial(style, false /* strong test - attributes must be valid in both objects */))
                             matchingCount ++;
