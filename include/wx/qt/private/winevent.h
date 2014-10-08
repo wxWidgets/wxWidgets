@@ -62,7 +62,7 @@ public:
 
     void HandleDestroyedSignal()
     {
-        wxQtHandleDestroyedSignal(this);
+//        wxQtHandleDestroyedSignal(this);
     }
 
     virtual Handler *GetHandler() const
