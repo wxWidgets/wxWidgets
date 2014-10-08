@@ -2639,7 +2639,10 @@ bool wxRichTextCtrl::PageDown(int noPages, int flags)
     if (line)
     {
         wxSize clientSize = GetClientSize();
-        int newY = line->GetAbsolutePosition().y + noPages*clientSize.y;
+        int topMargin = GetBuffer().GetTopMargin();
+        int bottomMargin = GetBuffer().GetBottomMargin();
+        int height = int( 0.5 + ((clientSize.y - topMargin - bottomMargin) / GetScale()));
+        int newY = line->GetAbsolutePosition().y + noPages*height;
 
         wxRichTextLine* newLine = GetFocusObject()->GetLineAtYPosition(newY);
         if (newLine)

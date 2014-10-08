@@ -1537,7 +1537,10 @@ wxString wxRichTextCompositeObject::GetTextForRange(const wxRichTextRange& range
         wxRichTextRange childRange = range;
         if (!child->GetRange().IsOutside(range))
         {
-            childRange.LimitTo(child->GetRange());
+            if (child->IsTopLevel())
+                childRange = child->GetOwnRange();
+            else
+                childRange.LimitTo(child->GetRange());
 
             wxString childText = child->GetTextForRange(childRange);
 
@@ -3277,7 +3280,10 @@ wxString wxRichTextParagraphLayoutBox::GetTextForRange(const wxRichTextRange& ra
         if (!child->GetRange().IsOutside(range))
         {
             wxRichTextRange childRange = range;
-            childRange.LimitTo(child->GetRange());
+            if (child->IsTopLevel())
+                childRange = child->GetOwnRange();
+            else
+                childRange.LimitTo(child->GetRange());
 
             wxString childText = child->GetTextForRange(childRange);
 
@@ -3807,6 +3813,7 @@ bool wxRichTextParagraphLayoutBox::HasCharacterAttributes(const wxRichTextRange&
                     {
                         foundCount ++;
                         wxRichTextAttr textAttr = para->GetCombinedAttributes(child->GetAttributes());
+                        textAttr.SetFlags(textAttr.GetFlags() & ~wxTEXT_ATTR_PARAGRAPH);
 
                         if (textAttr.EqPartial(style, false /* strong test - attributes must be valid in both objects */))
                             matchingCount ++;
@@ -3849,6 +3856,12 @@ bool wxRichTextParagraphLayoutBox::HasParagraphAttributes(const wxRichTextRange&
                 wxRichTextAttr textAttr = GetAttributes();
                 // Apply the paragraph style
                 wxRichTextApplyStyle(textAttr, para->GetAttributes());
+
+                // These flags can mess up EqPartial because they don't represent existence of the attributes,
+                // only the attributes.
+                int flags = wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE|wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER|wxTEXT_ATTR_PAGE_BREAK;
+                int theseFlags = (textAttr.GetFlags() & ~flags) | (textAttr.GetFlags() & flags & style.GetFlags());
+                textAttr.SetFlags(theseFlags);
 
                 foundCount ++;
                 if (textAttr.EqPartial(style, false /* strong test */))
@@ -9201,7 +9214,7 @@ bool wxRichTextBox::EditProperties(wxWindow* parent, wxRichTextBuffer* buffer)
     wxRichTextObjectPropertiesDialog boxDlg(this, wxGetTopLevelParent(parent), wxID_ANY, _("Box Properties"));
     boxDlg.SetAttributes(GetAttributes());
 
-    if (boxDlg.ShowModal() == wxID_OK)
+    if (boxDlg.ShowModal() == wxID_OK && buffer->GetRichTextCtrl()->IsEditable())
     {
         // By passing wxRICHTEXT_SETSTYLE_RESET, indeterminate attributes set by the user will be set as
         // indeterminate in the object.
@@ -9477,10 +9490,11 @@ bool wxRichTextFieldTypeStandard::Draw(wxRichTextField* obj, wxDC& dc, wxRichTex
             int w, h, maxDescent;
             dc.SetFont(m_font);
             dc.GetTextExtent(m_label, & w, &h, & maxDescent);
+            dc.SetBackgroundMode(wxTRANSPARENT);
             dc.SetTextForeground(textColour);
 
             int x = clientArea.x + (clientArea.width - w)/2;
-            int y = clientArea.y + (clientArea.height - (h - maxDescent))/2;
+            int y = clientArea.y + (clientArea.height - h)/2;
             dc.DrawText(m_label, x, y);
         }
     }
@@ -9794,7 +9808,7 @@ bool wxRichTextCell::EditProperties(wxWindow* parent, wxRichTextBuffer* buffer)
     wxRichTextSizePage::ShowPositionControls(true);
     wxRichTextSizePage::ShowFloatingControls(true);
 
-    if (ok)
+    if (ok && buffer->GetRichTextCtrl()->IsEditable())
     {
         wxRichTextAttr newAttr = cellDlg.GetAttributes();
         if (!(newAttr == attr))
@@ -12635,7 +12649,7 @@ bool wxRichTextImage::EditProperties(wxWindow* parent, wxRichTextBuffer* buffer)
     wxRichTextObjectPropertiesDialog imageDlg(this, wxGetTopLevelParent(parent), wxID_ANY, _("Picture Properties"));
     imageDlg.SetAttributes(GetAttributes());
 
-    if (imageDlg.ShowModal() == wxID_OK)
+    if (imageDlg.ShowModal() == wxID_OK && buffer->GetRichTextCtrl()->IsEditable())
     {
         // By passing wxRICHTEXT_SETSTYLE_RESET, indeterminate attributes set by the user will be set as
         // indeterminate in the object.
