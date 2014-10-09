@@ -719,6 +719,26 @@ void wxWindowQt::SetWindowStyleFlag( long style )
 //        qtFrame->setFrameStyle( QFrame::StyledPanel );
 //        qtFrame->setFrameShadow( QFrame::Plain );
 //    }
+
+    Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
+
+    if ( HasFlag( wxFRAME_NO_TASKBAR ) )
+    {
+//        qtFlags &= ~Qt::WindowType_Mask;
+        if ( (style & wxSIMPLE_BORDER) || (style & wxNO_BORDER) ) {
+            qtFlags = Qt::ToolTip | Qt::FramelessWindowHint;
+        }
+        else
+            qtFlags |= Qt::Dialog;
+    }
+    else
+    if ( ( (style & wxSIMPLE_BORDER) || (style & wxNO_BORDER) )
+         != qtFlags.testFlag( Qt::FramelessWindowHint ) )
+    {
+        qtFlags ^= Qt::FramelessWindowHint;
+    }
+
+    GetHandle()->setWindowFlags( qtFlags );
 }
 
 void wxWindowQt::SetExtraStyle( long exStyle )

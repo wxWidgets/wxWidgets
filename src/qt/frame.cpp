@@ -127,26 +127,10 @@ void wxFrame::SetWindowStyleFlag( long style )
 
     Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
 
-    wxCHECK_RET( !HasFlag( wxFRAME_FLOAT_ON_PARENT ) && !HasFlag( wxTINY_CAPTION ) ,
-                 "wxFRAME_FLOAT_ON_PARENT, wxTINY_CAPTION not supported. Use wxFRAME_TOOL_WINDOW instead." );
-    wxCHECK_RET( !HasFlag( wxFRAME_TOOL_WINDOW ) || HasFlag( wxFRAME_NO_TASKBAR ) ,
-                 "wxFRAME_TOOL_WINDOW without wxFRAME_NO_TASKBAR not supported." );
-
     if ( HasFlag( wxFRAME_TOOL_WINDOW ) )
     {
         qtFlags &= ~Qt::WindowType_Mask;
         qtFlags |= Qt::Tool;
-    }
-    else if ( HasFlag( wxFRAME_NO_TASKBAR ) )
-    {
-        qtFlags &= ~Qt::WindowType_Mask;
-        qtFlags |= Qt::Dialog;
-    }
-    
-    if ( ( (style & wxSIMPLE_BORDER) || (style & wxNO_BORDER) )
-         != qtFlags.testFlag( Qt::FramelessWindowHint ) )
-    {
-        qtFlags ^= Qt::FramelessWindowHint;
     }
 
     GetHandle()->setWindowFlags( qtFlags );
