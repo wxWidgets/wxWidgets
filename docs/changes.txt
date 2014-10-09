@@ -581,6 +581,10 @@ All (GUI):
 
 - Fix several floating point rounding bugs in wxPropertyGrid (Artur Wieczorek).
 
+wxMSW:
+
+- Fix best height of wxSlider with labels but without ticks (Artur Wieczorek).
+
 
 3.0.2: (released 2014-10-06)
 ----------------------------
