@@ -316,7 +316,7 @@ bool wxListCtrl::SetItem(wxListItem& info)
         {
             if (info.m_image >= 0)
             {
-                wxImageList *imglst = GetImageList(wxIMAGE_LIST_NORMAL);
+                wxImageList *imglst = GetImageList(InReportView() ? wxIMAGE_LIST_SMALL : wxIMAGE_LIST_NORMAL);
                 wxCHECK_MSG(imglst, false, "invalid listctrl imagelist");
                 const wxBitmap* bitmap = imglst->GetBitmapPtr(info.m_image);
                 if (bitmap != NULL)
