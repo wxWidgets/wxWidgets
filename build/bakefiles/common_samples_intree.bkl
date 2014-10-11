@@ -29,6 +29,10 @@
             <res-include>$(RCDEFDIR)</res-include>
             <res-include>$(TOP_SRCDIR)include</res-include>
         </if>
+        <if cond="FORMAT=='borland'">
+            <!-- path to windows.h for this compiler -->
+            <res-include>$(DOLLAR)(BCCDIR)\include\windows\sdk</res-include>
+        </if>
 
         <win32-res>$(WXTOPDIR)samples/sample.rc</win32-res>
 

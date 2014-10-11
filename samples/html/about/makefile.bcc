@@ -240,7 +240,7 @@ data_files:
 	for %f in (about.htm logo.png) do if not exist $(OBJS)\data\%f copy .\data\%f $(OBJS)\data
 
 $(OBJS)\about_sample.res: .\..\..\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i$(SETUPHDIR) -i.\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) -i. $(__DLLFLAG_p_1) -i.\..\..\..\samples -dNOPCH .\..\..\..\samples\sample.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i$(SETUPHDIR) -i.\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) -i. $(__DLLFLAG_p_1) -i.\..\..\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH .\..\..\..\samples\sample.rc
 
 $(OBJS)\about_about.obj: .\about.cpp
 	$(CXX) -q -c -P -o$@ $(ABOUT_CXXFLAGS) .\about.cpp

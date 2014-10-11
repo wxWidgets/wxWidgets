@@ -235,5 +235,5 @@ $(OBJS)\toolbar_toolbar.obj: .\toolbar.cpp
 	$(CXX) -q -c -P -o$@ $(TOOLBAR_CXXFLAGS) .\toolbar.cpp
 
 $(OBJS)\toolbar_toolbar.res: .\toolbar.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i$(SETUPHDIR) -i.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) -i. $(__DLLFLAG_p_1) -i.\..\..\samples -dNOPCH .\toolbar.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i$(SETUPHDIR) -i.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) -i. $(__DLLFLAG_p_1) -i.\..\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH .\toolbar.rc
 

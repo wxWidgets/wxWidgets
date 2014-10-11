@@ -311,7 +311,7 @@ $(OBJS)\bench_printfbench.obj: .\printfbench.cpp
 	$(CXX) -q -c -P -o$@ $(BENCH_CXXFLAGS) .\printfbench.cpp
 
 $(OBJS)\bench_gui_sample.res: .\..\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__NDEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) -i$(SETUPHDIR) -i.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_3_p) -i. $(__DLLFLAG_p_3) -i.\..\..\samples -dNOPCH .\..\..\samples\sample.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__NDEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) -i$(SETUPHDIR) -i.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_3_p) -i. $(__DLLFLAG_p_3) -i.\..\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH .\..\..\samples\sample.rc
 
 $(OBJS)\bench_gui_bench.obj: .\bench.cpp
 	$(CXX) -q -c -P -o$@ $(BENCH_GUI_CXXFLAGS) .\bench.cpp

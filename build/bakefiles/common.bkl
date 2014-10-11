@@ -698,6 +698,10 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
             <res-include>$(TOP_SRCDIR)include</res-include>
             <postlink-command>$(DYLIB_RPATH_POSTLINK)</postlink-command>
         </if>
+        <if cond="FORMAT=='borland'">
+            <!-- path to windows.h for this compiler -->
+            <res-include>$(DOLLAR)(BCCDIR)\include\windows\sdk</res-include>
+        </if>
         <win32-res>$(WXTOPDIR)src/msw/version.rc</win32-res>
     </template>
 

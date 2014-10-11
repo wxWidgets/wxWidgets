@@ -807,7 +807,7 @@ $(OBJS)\test_drawingplugin_pluginsample.obj: .\drawing\pluginsample.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_DRAWINGPLUGIN_CXXFLAGS) .\drawing\pluginsample.cpp
 
 $(OBJS)\test_gui_sample.res: .\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_7) $(__DEBUG_DEFINE_p_7) $(__NDEBUG_DEFINE_p_7) $(__EXCEPTIONS_DEFINE_p_7) $(__RTTI_DEFINE_p_7) $(__THREAD_DEFINE_p_7) $(__UNICODE_DEFINE_p_7) -i$(SETUPHDIR) -i.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_7_p) -i. $(__DLLFLAG_p_7) -i.\..\samples -dNOPCH .\..\samples\sample.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_7) $(__DEBUG_DEFINE_p_7) $(__NDEBUG_DEFINE_p_7) $(__EXCEPTIONS_DEFINE_p_7) $(__RTTI_DEFINE_p_7) $(__THREAD_DEFINE_p_7) $(__UNICODE_DEFINE_p_7) -i$(SETUPHDIR) -i.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_7_p) -i. $(__DLLFLAG_p_7) -i.\..\samples -i$(BCCDIR)\include\windows\sdk -dNOPCH .\..\samples\sample.rc
 
 $(OBJS)\test_gui_dummy.obj: .\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) -H .\dummy.cpp
