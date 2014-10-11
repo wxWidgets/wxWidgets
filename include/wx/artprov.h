@@ -111,6 +111,8 @@ typedef wxString wxArtID;
 #define wxART_FIND                 wxART_MAKE_ART_ID(wxART_FIND)
 #define wxART_FIND_AND_REPLACE     wxART_MAKE_ART_ID(wxART_FIND_AND_REPLACE)
 
+#define wxART_FULL_SCREEN          wxART_MAKE_ART_ID(wxART_FULL_SCREEN)
+
 
 // ----------------------------------------------------------------------------
 // wxArtProvider class

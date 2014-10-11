@@ -88,6 +88,8 @@ wxArtID wxART_QUIT;
 wxArtID wxART_FIND;                 
 wxArtID wxART_FIND_AND_REPLACE;     
 
+wxArtID wxART_FULL_SCREEN;
+
 
 /**
     @class wxArtProvider
@@ -188,6 +190,7 @@ wxArtID wxART_FIND_AND_REPLACE;
      @li @c wxART_QUIT
      @li @c wxART_FIND
      @li @c wxART_FIND_AND_REPLACE
+     @li @c wxART_FULL_SCREEN (since 3.1.0)
      @li @c wxART_HARDDISK
      @li @c wxART_FLOPPY
      @li @c wxART_CDROM

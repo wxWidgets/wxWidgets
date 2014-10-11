@@ -45,6 +45,7 @@ All:
 - Add wxDateTime::GetWeekBasedYear().
 - Specialize std::hash<> for wxString when using C++11.
 - Allow recursive calls to wxYield().
+- Add wxART_FULL_SCREEN standard bitmap (Igor Korot).
 
 Unix:
 
