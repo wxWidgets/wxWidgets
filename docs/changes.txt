@@ -583,6 +583,7 @@ All (GUI):
 
 wxMSW:
 
+- Fix compilation with C++Builder XE compiler (Nichka).
 - Fix best height of wxSlider with labels but without ticks (Artur Wieczorek).
 
 
