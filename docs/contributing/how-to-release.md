@@ -15,14 +15,17 @@ Update the date in the manual (docs/doxygen/mainpages/manual.h).
 
 Update the release announcement post in docs/publicity/announce.txt.
 
+Tag the release:
+
+    svn cp https://svn.wxwidgets.org/svn/wx/wxWidgets/trunk@123456 \
+        https://svn.wxwidgets.org/svn/wx/wxWidgets/tags/WX_x_y_z -m 'Tag x.y.z release.'
+
 
 Creating release files
 ----------------------
 
 The currently used release scripts need to be used from git-svn checkout and
-rely on Git to avoid problems with using non-clean trees and such. If you don't
-use Git you may use the alternative archive creation scripts in the next
-section.
+rely on Git to avoid problems with using non-clean trees and such.
 
 Follow these steps assuming the current working directory is the root of git
 working copy and you want to prepare distribution for the version x.y.z:
@@ -75,9 +78,7 @@ The following files need to be uploaded:
     wxWidgets-docs-chm-x.y.z.zip
     wxWidgets-docs-html-x.y.z.tar.bz2
     wxWidgets-docs-html-x.y.z.zip
-
-The file wxWidgets-x.y.z_Headers.7z should be uploaded to binaries
-subdirectory as it's only useful when using pre-built binaries.
+    wxWidgets-x.y.z_Headers.7z
 
 You will need to use the web interface to mark the latest uploaded files as
 being "default downloads" for the appropriate platforms (.zip or .exe for MSW,
@@ -108,6 +109,9 @@ Create http://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it if not done yet).
 Announcement
 ------------
 
+Update http://www.wxwidgets.org, usually a news item is enough but something
+more can be called for for major releases.
+
 Post docs/publicity/announce.txt at least to wx-announce@googlegroups.com and
 to wx-users for the important releases.
 
@@ -116,9 +120,6 @@ Submit a link to http://www.reddit.com/r/programming
 Submit to http://isocpp.org/blog/suggest
 
 For major releases, submit the announcement to http://slashdot.org/submission
-
-Update www.wxwidgets.org, usually a news item is enough but something more can
-be called for for major releases.
 
 Modify the links at downloads/index.html to point to the new release. Also
 update the release date on this page.
@@ -138,8 +139,13 @@ Trac: mark the milestone corresponding to the release as completed and add a
 new version for it to allow reporting bugs against it and create the next
 milestone (ask Vadim or Robin to do it or to get admin password).
 
+Update the roadmap at http://trac.wxwidgets.org/wiki/Roadmap to at least
+mention the new release there.
+
 Run misc/scripts/inc_release to increment micro version, i.e. replace x.y.z
-with x.y.z+1 (minor or major versions updates require manual intervention).
+with x.y.z+1 (minor or major versions updates require manual intervention)
+and rerun both `bakefile_gen` and `autoconf` afterwards to update the version
+in the generated files too.
 
 Update the definition of the stable and release branches in
 build/buildbot/config/include/defs.xml after a minor version change.
