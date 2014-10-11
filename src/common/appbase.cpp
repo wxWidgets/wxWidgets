@@ -335,9 +335,9 @@ wxAppTraits *wxAppConsoleBase::GetTraitsIfExists()
 wxAppTraits& wxAppConsoleBase::GetValidTraits()
 {
     static wxConsoleAppTraits s_traitsConsole;
-    wxAppTraits* const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    wxAppTraits* const traits = (wxTheApp ? wxTheApp->GetTraits() : NULL);
 
-    return traits ? *traits : s_traitsConsole;
+    return *(traits ? traits : &s_traitsConsole);
 }
 
 // ----------------------------------------------------------------------------
