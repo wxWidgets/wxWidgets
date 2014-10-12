@@ -78,6 +78,9 @@ private:
     // this to ensure the same normalization is used everywhere.
     static wxString NormalizeFileName(const wxFileName& filename);
 
+    // Remove any existing entries from the associated menus.
+    void RemoveExistingHistory();
+
     wxDECLARE_NO_COPY_CLASS(wxFileHistoryBase);
 };
 

@@ -215,6 +215,8 @@ void wxFileHistoryBase::RemoveMenu(wxMenu *menu)
 #if wxUSE_CONFIG
 void wxFileHistoryBase::Load(const wxConfigBase& config)
 {
+    RemoveExistingHistory();
+
     m_fileHistory.Clear();
 
     wxString buf;
@@ -272,6 +274,33 @@ void wxFileHistoryBase::AddFilesToMenu(wxMenu* menu)
     for ( size_t i = 0; i < m_fileHistory.GetCount(); i++ )
     {
         menu->Append(m_idBase + i, GetMRUEntryLabel(i, m_fileHistory[i]));
+    }
+}
+
+void wxFileHistoryBase::RemoveExistingHistory()
+{
+    size_t count = m_fileHistory.GetCount();
+    if ( !count )
+        return;
+
+    for ( wxList::compatibility_iterator node = m_fileMenus.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxMenu * const menu = static_cast<wxMenu *>(node->GetData());
+
+        // Notice that we remove count+1 items from the menu as we also remove
+        // the separator preceding them.
+        for ( size_t n = 0; n <= count; n++ )
+        {
+            const wxMenuItemList::compatibility_iterator
+                nodeLast = menu->GetMenuItems().GetLast();
+            if ( nodeLast )
+            {
+                wxMenuItem * const lastMenuItem = nodeLast->GetData();
+                menu->Delete(lastMenuItem);
+            }
+        }
     }
 }
 
