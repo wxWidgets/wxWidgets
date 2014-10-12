@@ -46,7 +46,18 @@ this environment variable is used in the examples below.
 
 NB: If you checked your sources from version control repository and
     didn't obtain them from a release file, you also need to copy
-    include/wx/msw/setup0.h to include/wx/msw/setup.h.
+    include/wx/msw/setup0.h to include/wx/msw/setup.h and to remember
+    to update the latter whenever the former changes, otherwise you
+    will get compilation errors if any new symbols are added to
+    setup0.h file in the repository.
+
+    If you have no intention of modifying setup.h, you may avoid this
+    problem by creating a symbolic link to setup0.h instead of making
+    a copy of it using mklink, from an admin command prompt:
+
+        cd include/wx/msw/
+        mklink setup.h setup0.h
+
 
 
 Building wxWidgets
@@ -112,25 +123,33 @@ currently. If you want to build Win64 libraries with the previous
 compiler versions, the simplest solution is to use the makefiles as
 described above.
 
-Special note for VC11 and VC12 projects: it is possible to customize the build
-by creating wx_vcN_local.props (N=11 or 12) file in build\msw directory which
-is used, if it exists, by the projects. The settings in this file override the
-default values for the properties such as wxCfg (corresponding to the CFG
-makefile variable described below) or wxVendor (corresponding to VENDOR). For
-example, you could set wxCompilerPrefix to "vc120" in your local properties
-file:
 
-    <?xml version="1.0" encoding="utf-8"?>
-    <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-      <PropertyGroup Label="UserMacros">
-        <wxCompilerPrefix>vc120</wxCompilerPrefix>
-      </PropertyGroup>
-    </Project>
+Special notes for Visual Studio 2010+:
 
-to use "vc120" prefix for the build directories used by VC12 and so to allow
-its build files to coexist with the files produced by the other MSVC versions.
-Notice that by using a separate local props file you ensure that your changes
-won't be lost when updating to a future wxWidgets version.
+For Visual Studio 2010+ solutions it is possible to customize the build by
+creating a wx_local.props file in the build\msw directory which is used, if it
+exists, by the projects. The settings in that file override the default values
+for the properties such as wxCfg (corresponding to the CFG makefile variable
+described below) or wxVendor (corresponding to VENDOR). The typical way to
+make the file is to copy wx_setup.props to wx_local.props and then edit local.
+
+For example, if you are building wxWidgets libraries using multiple versions
+of Visual Studio you could change wxCompilerPrefix to include the toolset:
+
+-    <wxCompilerPrefix>vc</wxCompilerPrefix>
++    <wxCompilerPrefix>vc$(PlatformToolsetVersion)</wxCompilerPrefix>
+
+Following that example if you are using Visual Studio 2013 and open
+wx_vc12.sln it will build using the "vc120" prefix for the build directories
+so to allow its build files to coexist with the files produced by the other
+MSVC versions.
+
+Keep in mind that by using a separate local props file you ensure that your
+changes won't be lost when updating to a future wxWidgets version. But if
+wx_setup.props is updated in some later commit your wx_local.props is not
+updated with it. For example the version information in wx_setup.props could
+change and the information in your wx_local.props would be outdated. It is
+your responsibility to monitor for such situations.
 
 
 Cygwin/MinGW Compilation
