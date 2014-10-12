@@ -36,6 +36,7 @@ private:
     CPPUNIT_TEST_SUITE( VarArgTestCase );
         CPPUNIT_TEST( StringPrintf );
         CPPUNIT_TEST( CharPrintf );
+        CPPUNIT_TEST( SizetPrintf );
 #if wxUSE_STD_STRING
         CPPUNIT_TEST( StdString );
 #endif
@@ -49,6 +50,7 @@ private:
 
     void StringPrintf();
     void CharPrintf();
+    void SizetPrintf();
 #if wxUSE_STD_STRING
     void StdString();
 #endif
@@ -136,6 +138,24 @@ void VarArgTestCase::CharPrintf()
     unsigned char u = 240;
     s.Printf("value is %i (int)", u);
     CPPUNIT_ASSERT_EQUAL( "value is 240 (int)", s );
+}
+
+void VarArgTestCase::SizetPrintf()
+{
+    size_t  i =  1;
+    ssize_t j = -2;
+
+    CPPUNIT_ASSERT_EQUAL
+        (
+            "size_t=1 ssize_t=-2",
+            wxString::Format("size_t=%zu ssize_t=%zd", i, j)
+        );
+
+    CPPUNIT_ASSERT_EQUAL
+        (
+            "size_t=0xA0",
+            wxString::Format("size_t=0x%zX", static_cast<size_t>(160))
+        );
 }
 
 #if wxUSE_STD_STRING

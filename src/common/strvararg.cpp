@@ -198,6 +198,17 @@ public:
 
                 switch ( *format )
                 {
+#ifdef __VISUALC__
+                    case 'z':
+                        // Used for size_t printing (e.g. %zu) and is in C99,
+                        // but is not portable, MSVC uses 'I' with the same
+                        // meaning.
+                        ChangeFmtChar('I');
+                        format++;
+                        size = Size_Default;
+                        break;
+#endif // __VISUALC__
+
                     case 'h':
                         size = Size_Short;
                         format++;
@@ -339,6 +350,18 @@ private:
         }
 
         *(m_fmtLast++) = ch;
+    }
+
+    // change a character
+    void ChangeFmtChar(CharType ch)
+    {
+        if ( m_fmtOrig )
+        {
+            // so far we haven't translated anything yet
+            CopyAllBefore();
+        }
+
+        *m_fmtLast = ch;
     }
 
     void CopyAllBefore()
