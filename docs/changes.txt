@@ -86,6 +86,7 @@ All (GUI):
 wxGTK:
 
 - Support building wxGTK3 under Windows (Kolya Kosenko).
+- Fix vertical cell alignment in wxDataViewCtrl.
 
 wxMSW:
 
