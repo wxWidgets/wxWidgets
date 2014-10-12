@@ -45,6 +45,7 @@
 #include "wx/sysopt.h"
 #include "wx/tokenzr.h"
 #include "wx/thread.h"
+#include "wx/stdpaths.h"
 
 #if wxUSE_EXCEPTIONS
     // Do we have a C++ compiler with enough C++11 support for
@@ -206,6 +207,16 @@ wxString wxAppConsoleBase::GetAppName() const
             // the application name is, by default, the name of its executable file
             wxFileName::SplitPath(argv[0], NULL, &name, NULL);
         }
+#if wxUSE_STDPATHS
+        else // fall back to the executable file name, if we can determine it
+        {
+            const wxString pathExe = wxStandardPaths::Get().GetExecutablePath();
+            if ( !pathExe.empty() )
+            {
+                wxFileName::SplitPath(pathExe, NULL, &name, NULL);
+            }
+        }
+#endif // wxUSE_STDPATHS
     }
     return name;
 }
