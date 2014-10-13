@@ -304,6 +304,23 @@ void wxPropertyGridPageState::DoClear()
     }
     else
     {
+        // Properties which will be deleted immediately
+        // should be removed from the lists of pending deletions.
+        for (unsigned int i = 0; i < m_regularArray.GetChildCount(); i++)
+        {
+            wxPGProperty* p = m_regularArray.Item(i);
+            int index = m_pPropGrid->m_deletedProperties.Index(p);
+            if (index != wxNOT_FOUND)
+            {
+                m_pPropGrid->m_deletedProperties.RemoveAt(index);
+            }
+            index = m_pPropGrid->m_removedProperties.Index(p);
+            if (index != wxNOT_FOUND)
+            {
+                m_pPropGrid->m_removedProperties.RemoveAt(index);
+            }
+        }
+
         m_regularArray.Empty();
         if ( m_abcArray )
             m_abcArray->Empty();
