@@ -315,6 +315,10 @@ public:
     virtual void Select(int n);
     virtual int GetSelection() const wxOVERRIDE;
 
+    // See wxComboBoxBase discussion of IsEmpty().
+    bool IsListEmpty() const { return wxItemContainer::IsEmpty(); }
+    bool IsTextEmpty() const { return wxTextEntry::IsEmpty(); }
+
     // Override these just to maintain consistency with virtual methods
     // between classes.
     virtual void Clear() wxOVERRIDE;

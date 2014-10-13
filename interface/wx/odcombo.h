@@ -200,6 +200,39 @@ public:
     //@}
 
     /**
+        IsEmpty() is not available in this class.
+
+        This method is documented here only to notice that it can't be used
+        with this class because of the ambiguity between the methods with the
+        same name inherited from wxItemContainer and wxTextEntry base classes.
+
+        Because of this, any attempt to call it results in a compilation error
+        and you should use either IsListEmpty() or IsTextEmpty() depending on
+        what exactly do you want to test.
+     */
+    bool IsEmpty() const;
+
+    /**
+        Returns true if the list of combobox choices is empty.
+
+        Use this method instead of (not available in this class) IsEmpty() to
+        test if the list of items is empty.
+
+        @since 3.1.0
+     */
+    bool IsListEmpty() const;
+
+    /**
+        Returns true if the text of the combobox is empty.
+
+        Use this method instead of (not available in this class) IsEmpty() to
+        test if the text currently entered into the combobox is empty.
+
+        @since 3.1.0
+     */
+    bool IsTextEmpty() const;
+
+    /**
         Returns index to the widest item in the list.
     */
     virtual int GetWidestItem();
