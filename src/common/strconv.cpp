@@ -232,12 +232,6 @@ wxMBConv::ToWChar(wchar_t *dst, size_t dstLen,
         if ( !srcEnd )
             dstWritten++;
 
-        if ( !lenChunk )
-        {
-            // nothing left in the input string, conversion succeeded
-            break;
-        }
-
         if ( dst )
         {
             if ( dstWritten > dstLen )

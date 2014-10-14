@@ -291,6 +291,10 @@ void UnicodeTestCase::ConversionWithNULs()
 
     CPPUNIT_ASSERT( memcmp(theLocalBuffer.data(), L"The\0String", 11 * sizeof(wchar_t)) == 0 );
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
+
+    const char *null4buff = "\0\0\0\0";
+    wxString null4str(null4buff, 4);
+    CPPUNIT_ASSERT_EQUAL( 4, null4str.length() );
 }
 
 void UnicodeTestCase::ConversionUTF7()
