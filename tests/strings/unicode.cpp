@@ -395,10 +395,14 @@ void UnicodeTestCase::ConversionUTF16()
     conv.cMB2WC("\x01\0\0B\0C" /* A macron BC */, 6, &len);
     CPPUNIT_ASSERT_EQUAL( 3, len );
 
+    // When using UTF-16 internally (i.e. MSW), we don't have any surrogate
+    // support, so the length of the string below is 2, not 1.
+#if SIZEOF_WCHAR_T == 4
     // Another one: verify that the length of the resulting string is computed
     // correctly when there is a surrogate in the input.
     wxMBConvUTF16BE().cMB2WC("\xd8\x03\xdc\x01\0" /* OLD TURKIC LETTER YENISEI A */, wxNO_LEN, &len);
     CPPUNIT_ASSERT_EQUAL( 1, len );
+#endif // UTF-32 internal representation
 }
 
 void UnicodeTestCase::ConversionUTF32()
