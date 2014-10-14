@@ -82,6 +82,9 @@ public:
     bool HasAlpha() const { return m_hasAlpha; }
     void UseAlpha( bool useAlpha );
 
+    bool IsTemplate() const { return m_isTemplate; }
+    void SetTemplate(bool is) { m_isTemplate = is; }
+
 public:
 #if wxUSE_PALETTE
     wxPalette     m_bitmapPalette;
@@ -122,6 +125,7 @@ public:
     int           m_rawAccessCount;
     bool          m_ok;
     mutable CGImageRef    m_cgImageRef;
+    bool          m_isTemplate;
 
 #ifndef __WXOSX_IPHONE__
     IconRef       m_iconRef;
@@ -236,6 +240,7 @@ void wxBitmapRefData::Init()
     m_ok = false ;
     m_bitmapMask = NULL ;
     m_cgImageRef = NULL ;
+    m_isTemplate = false;
 
 #ifndef __WXOSX_IPHONE__
     m_iconRef = NULL ;
@@ -1074,7 +1079,11 @@ wxBitmap::wxBitmap(WX_NSImage image)
 
 bool wxBitmap::Create(WX_NSImage image)
 {
-    return Create(wxOSXCreateBitmapContextFromNSImage(image));
+    bool isTemplate;
+    if (!Create(wxOSXCreateBitmapContextFromNSImage(image, &isTemplate)))
+        return false;
+    M_BITMAPDATA->SetTemplate(isTemplate);
+    return true;
 }
 
 wxBitmap::wxBitmap(CGContextRef bitmapcontext)
@@ -1094,7 +1103,7 @@ bool wxBitmap::Create(CGContextRef bitmapcontext)
 WX_NSImage wxBitmap::GetNSImage() const
 {
     wxCFRef< CGImageRef > cgimage(CreateCGImage());
-    return wxOSXGetNSImageFromCGImage( cgimage, GetScaleFactor() );
+    return wxOSXGetNSImageFromCGImage( cgimage, GetScaleFactor(), M_BITMAPDATA->IsTemplate() );
 }
 
 #endif
