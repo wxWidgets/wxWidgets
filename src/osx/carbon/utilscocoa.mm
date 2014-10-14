@@ -418,7 +418,7 @@ wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &WXUNUSED(
 }
 
 //  From "Cocoa Drawing Guide:Working with Images"
-WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image, double scaleFactor )
+WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image, double scaleFactor, bool isTemplate )
 {
     NSRect      imageRect    = NSMakeRect(0.0, 0.0, 0.0, 0.0);
 
@@ -435,6 +435,8 @@ WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image, double scaleFactor )
     CGContextDrawImage( imageContext, *(CGRect*)&imageRect, image );
     [newImage unlockFocus];
 
+    [newImage setTemplate:isTemplate];
+
     /*
         // Create a bitmap rep from the image...
         NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
@@ -447,7 +449,7 @@ WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image, double scaleFactor )
     return( newImage );
 }
 
-CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromNSImage( WX_NSImage nsimage)
+CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromNSImage( WX_NSImage nsimage, bool *isTemplate)
 {
     // based on http://www.mail-archive.com/cocoa-dev@lists.apple.com/msg18065.html
     
@@ -469,6 +471,9 @@ CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromNSImage( WX_NSImage ns
         NSRectFill(NSMakeRect(0.0, 0.0, imageSize.width, imageSize.height));
         [nsimage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
         [NSGraphicsContext setCurrentContext:previousContext];
+
+        if (isTemplate)
+            *isTemplate = [nsimage isTemplate];
     }
     return hbitmap;
 }
