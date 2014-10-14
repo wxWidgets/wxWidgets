@@ -221,7 +221,7 @@ bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
     m_spin_value = m_spinButton->GetValue();
 
     // the string value overrides the numeric one (for backwards compatibility
-    // reasons and also because it is simpler to satisfy the string value which
+    // reasons and also because it is simpler to specify the string value which
     // comes much sooner in the list of arguments and leave the initial
     // parameter unspecified)
     if ( !value.empty() )
