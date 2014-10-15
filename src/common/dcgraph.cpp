@@ -644,13 +644,12 @@ void wxGCDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
     m_graphicContext->PushState();
     m_graphicContext->Translate(dx, dy);
     m_graphicContext->Scale(factor, 1.0);
-    wxGraphicsPath path;
+    wxGraphicsPath path = m_graphicContext->CreatePath();
 
     // since these angles (ea,sa) are measured counter-clockwise, we invert them to
     // get clockwise angles
     if ( m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT )
     {
-        path = m_graphicContext->CreatePath();
         path.MoveToPoint( 0, 0 );
         path.AddArc( 0, 0, h/2.0, wxDegToRad(-sa), wxDegToRad(-ea), sa > ea );
         path.AddLineToPoint( 0, 0 );
@@ -662,7 +661,6 @@ void wxGCDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
     }
     else
     {
-        path = m_graphicContext->CreatePath();
         path.AddArc( 0, 0, h/2.0, wxDegToRad(-sa), wxDegToRad(-ea), sa > ea );
         m_graphicContext->DrawPath( path );
     }
