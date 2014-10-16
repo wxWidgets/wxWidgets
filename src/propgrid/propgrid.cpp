@@ -5783,6 +5783,11 @@ void wxPropertyGrid::OnChildKeyDown( wxKeyEvent &event )
 
 void wxPropertyGrid::OnIdle( wxIdleEvent& WXUNUSED(event) )
 {
+    // Skip fake idle events generated e.g. by calling
+    // wxYield from within event handler.
+    if ( m_processedEvent )
+        return;
+
     //
     // Check if the focus is in this control or one of its children
     wxWindow* newFocused = wxWindow::FindFocus();
