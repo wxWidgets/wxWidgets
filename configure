@@ -922,6 +922,7 @@ DEBUG_FLAG
 DEBUG_INFO
 UNICODE
 WITH_PLUGIN_SDL
+EXTRALIBS_WEBVIEW
 EXTRALIBS_STC
 EXTRALIBS_SDL
 EXTRALIBS_OPENGL
@@ -36764,7 +36765,7 @@ $as_echo "yes" >&6; }
 
                                 USE_WEBVIEW_WEBKIT=1
                                 CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
-                                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $WEBKIT_LIBS"
+                                EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
 
 fi
         elif test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
@@ -37746,6 +37747,7 @@ if test $wxUSE_OFFICIAL_BUILD = "yes" ; then
 else
     OFFICIAL_BUILD=0
 fi
+
 
 
 

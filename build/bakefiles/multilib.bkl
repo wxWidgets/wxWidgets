@@ -183,6 +183,7 @@
         <sources>$(WEBVIEW_SRC)</sources>
         <library>coredll</library>
         <library>basedll</library>
+        <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
         <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
     </dll>
 
