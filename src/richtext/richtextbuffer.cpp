@@ -11580,6 +11580,10 @@ void wxRichTextAction::CalculateRefreshOptimizations(wxArrayInt& optimizationLin
     if (!container)
         return;
 
+    // No point in doing optimizations if we're not going to use them
+    if (m_ctrl && m_ctrl->IsFrozen())
+        return;
+
     // NOTE: we're assuming that the buffer is laid out correctly at this point.
     // If we had several actions, which only invalidate and leave layout until the
     // paint handler is called, then this might not be true. So we may need to switch
