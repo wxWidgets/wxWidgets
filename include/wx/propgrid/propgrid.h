@@ -1896,6 +1896,11 @@ protected:
     wxArrayPGProperty   m_deletedProperties;
     wxArrayPGProperty   m_removedProperties;
 
+#if !WXWIN_COMPATIBILITY_3_0
+    /** List of editors and their event handlers to be deleted in idle event handler. */
+    wxArrayPGObject     m_deletedEditorObjects;
+#endif
+
     /** List of key codes that will not be handed over to editor controls. */
     // FIXME: Make this a hash set once there is template-based wxHashSet.
     wxVector<int>       m_dedicatedKeys;
@@ -2227,6 +2232,8 @@ protected:
     void SetFocusOnCanvas();
 
     bool DoHideProperty( wxPGProperty* p, bool hide, int flags );
+
+    void DeletePendingObjects();
 
 private:
 

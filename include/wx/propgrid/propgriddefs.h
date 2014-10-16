@@ -315,6 +315,10 @@ WX_DECLARE_HASH_MAP_WITH_DECL(wxInt32,
                               wxPGHashMapI2I,
                               class WXDLLIMPEXP_PROPGRID);
 
+WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(wxObject*, wxArrayPGObject,
+                                  wxBaseArrayPtrVoid,
+                                  class WXDLLIMPEXP_PROPGRID);
+
 // Utility to find if specific item is in a vector. Returns index to
 // the item, or wxNOT_FOUND if not present.
 template<typename CONTAINER, typename T>
