@@ -1875,17 +1875,17 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
         // Prevent adding duplicates to the lists.
         if ( doDelete )
         {
-            if ( pg->m_deletedProperties.Index(item) == wxNOT_FOUND )
-            {
-                pg->m_deletedProperties.push_back(item);
-            }
+            if ( pg->m_deletedProperties.Index(item) != wxNOT_FOUND )
+                return;
+
+            pg->m_deletedProperties.push_back(item);
         }
         else
         {
-            if ( pg->m_removedProperties.Index(item) == wxNOT_FOUND )
-            {
-                pg->m_removedProperties.push_back(item);
-            }
+            if ( pg->m_removedProperties.Index(item) != wxNOT_FOUND )
+                return;
+
+            pg->m_removedProperties.push_back(item);
         }
 
         // Rename the property so it won't remain in the way
