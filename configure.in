@@ -6992,7 +6992,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
                               [
                                 USE_WEBVIEW_WEBKIT=1
                                 CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
-                                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $WEBKIT_LIBS"
+                                EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
                               ],
                               [
                                 AC_MSG_WARN([webkitgtk not found.])
@@ -7738,6 +7738,7 @@ AC_SUBST(EXTRALIBS_GUI)
 AC_SUBST(EXTRALIBS_OPENGL)
 AC_SUBST(EXTRALIBS_SDL)
 AC_SUBST(EXTRALIBS_STC)
+AC_SUBST(EXTRALIBS_WEBVIEW)
 AC_SUBST(WITH_PLUGIN_SDL)
 AC_SUBST(UNICODE)
 AC_SUBST(DEBUG_INFO)
