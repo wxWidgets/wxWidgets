@@ -539,8 +539,26 @@ wxPropertyGrid::~wxPropertyGrid()
                       wxS("Close(false).)") );
     }
 
-    // Delete pending editor controls
-    DeletePendingObjects();
+    if ( m_processedEvent )
+    {
+        // We are inside event handler and we cannot delete
+        // editor objects immediatelly. They have to be deleted
+        // later on in the global idle handler.
+#if !WXWIN_COMPATIBILITY_3_0
+        while ( !m_deletedEditorObjects.empty() )
+        {
+            wxObject* obj = m_deletedEditorObjects.back();
+            m_deletedEditorObjects.pop_back();
+
+            wxPendingDelete.Append(obj);
+        }
+#endif
+    }
+    else
+    {
+        // Delete pending editor controls
+        DeletePendingObjects();
+    }
 
     if ( m_doubleBuffer )
         delete m_doubleBuffer;
