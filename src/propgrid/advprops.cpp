@@ -69,7 +69,7 @@
 #if defined(__WXMSW__)
     #define wxPG_CAN_DRAW_CURSOR           1
 #elif defined(__WXGTK__)
-    #define wxPG_CAN_DRAW_CURSOR           0
+    #define wxPG_CAN_DRAW_CURSOR           1
 #elif defined(__WXMAC__)
     #define wxPG_CAN_DRAW_CURSOR           0
 #else
@@ -1816,7 +1816,15 @@ void wxCursorProperty::OnCustomPaint( wxDC& dc,
 
                 wxCursor cursor( cursorIndex );
 
-            #ifdef __WXMSW__
+            #if defined(__WXGTK__)
+                wxBitmap bmp(cursor);
+                if ( bmp.IsOk() )
+                {
+                    dc.DrawBitmap(bmp, rect.GetTopLeft());
+                }
+            #elif defined(__WXMSW__)
+                // We have to use native API because monochrome bitmaps
+                // are not fully supported under MSW.
                 HDC hDc = (HDC)((const wxMSWDCImpl *)dc.GetImpl())->GetHDC();
                 ::DrawIconEx( hDc,
                               rect.x,
