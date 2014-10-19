@@ -102,10 +102,7 @@ int wxMSWEventLoopBase::GetNextMessageTimeout(WXMSG *msg, unsigned long timeout)
     // MsgWaitForMultipleObjects() won't notice any input which was already
     // examined (e.g. using PeekMessage()) but not yet removed from the queue
     // so we need to remove any immediately messages manually
-    //
-    // NB: using MsgWaitForMultipleObjectsEx() could simplify the code here but
-    //     it is not available in very old Windows versions
-    if ( !::PeekMessage(msg, 0, 0, 0, PM_REMOVE) )
+    while ( !::PeekMessage(msg, 0, 0, 0, PM_REMOVE) )
     {
         DWORD rc = ::MsgWaitForMultipleObjects
                      (
@@ -131,17 +128,12 @@ int wxMSWEventLoopBase::GetNextMessageTimeout(WXMSG *msg, unsigned long timeout)
                 // return to the event loop, so pretend there was WM_NULL in
                 // the queue.
                 wxZeroMemory(*msg);
-                break;
+                return TRUE;
 
             case WAIT_OBJECT_0 + 1:
-                // Some message is supposed to be available.
-                if ( !::PeekMessage(msg, 0, 0, 0, PM_REMOVE) )
-                {
-                    // somehow it may happen that MsgWaitForMultipleObjects()
-                    // returns true but there are no messages -- just treat it
-                    // the same as timeout then
-                    return -1;
-                }
+                // Some message is supposed to be available, but spurious
+                // wake ups are also possible, so just return to the loop:
+                // either we'll get the message or start waiting again.
                 break;
         }
     }
