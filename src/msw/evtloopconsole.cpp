@@ -25,7 +25,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
-    #include "wx/msw/wrapwin.h"
+    #include "wx/msw/private.h"
 #endif //WX_PRECOMP
 
 #include "wx/evtloop.h"
