@@ -1908,21 +1908,6 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
     iconInfo.hbmMask = hbmpMask;
     iconInfo.hbmColor = GetHbitmapOf(bmp);
 
-    // black out the transparent area to preserve background colour, because
-    // Windows blits the original bitmap using SRCINVERT (XOR) after applying
-    // the mask to the dest rect.
-    {
-        MemoryHDC dcSrc, dcDst;
-        SelectInHDC selectMask(dcSrc, (HBITMAP)mask->GetMaskBitmap()),
-                    selectBitmap(dcDst, iconInfo.hbmColor);
-
-        if ( !::BitBlt(dcDst, 0, 0, bmp.GetWidth(), bmp.GetHeight(),
-                       dcSrc, 0, 0, SRCAND) )
-        {
-            wxLogLastError(wxT("BitBlt"));
-        }
-    }
-
     HICON hicon = ::CreateIconIndirect(&iconInfo);
 
     if ( !bmp.GetMask() && !bmp.HasAlpha() )
