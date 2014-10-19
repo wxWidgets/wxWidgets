@@ -88,7 +88,6 @@
     <subproject id="validate" template="sub"/>
     <subproject id="vscroll" template="sub"/>
     <subproject id="webview" template="sub"/>
-    <subproject id="webview_chromium" template="sub"/>
     <subproject id="widgets" template="sub"/>
     <subproject id="wizard" template="sub"/>
     <subproject id="wrapsizer" template="sub"/>
@@ -106,5 +105,13 @@
         <subproject id="mfc" template="optsub"/>
     </if>
     <subproject id="memcheck" template="optsub"/>
+
+   <!--
+       Chromium does not build with older versions of Visual Studio so don't
+       build the sample either.
+     -->
+    <if cond="FORMAT[:3] != 'msv'">
+        <subproject id="webview_chromium" template="optsub"/>
+    </if>
 
 </makefile>
