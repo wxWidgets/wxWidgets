@@ -250,11 +250,6 @@ void wxGUIEventLoop::OnNextIteration()
 #endif // wxUSE_THREADS
 }
 
-void wxGUIEventLoop::WakeUp()
-{
-    ::PostMessage(NULL, WM_NULL, 0, 0);
-}
-
 
 // ----------------------------------------------------------------------------
 // Yield to incoming messages
