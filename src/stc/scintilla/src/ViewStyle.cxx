@@ -310,9 +310,9 @@ void ViewStyle::Refresh(Surface &surface, int tabInChars) {
 		styles[i].extraFontFlag = extraFontFlag;
 	}
 
-	CreateFont(styles[STYLE_DEFAULT]);
+	CreateAndAddFont(styles[STYLE_DEFAULT]);
 	for (unsigned int j=0; j<styles.size(); j++) {
-		CreateFont(styles[j]);
+		CreateAndAddFont(styles[j]);
 	}
 
 	for (FontMap::iterator it = fonts.begin(); it != fonts.end(); ++it) {
@@ -450,6 +450,9 @@ bool ViewStyle::SetWrapState(int wrapState_) {
 	case SC_WRAP_CHAR:
 		wrapStateWanted = eWrapChar;
 		break;
+	case SC_WRAP_WHITESPACE:
+		wrapStateWanted = eWrapWhitespace;
+		break;
 	default:
 		wrapStateWanted = eWrapNone;
 		break;
@@ -495,7 +498,7 @@ void ViewStyle::AllocStyles(size_t sizeNew) {
 	}
 }
 
-void ViewStyle::CreateFont(const FontSpecification &fs) {
+void ViewStyle::CreateAndAddFont(const FontSpecification &fs) {
 	if (fs.fontName) {
 		FontMap::iterator it = fonts.find(fs);
 		if (it == fonts.end()) {

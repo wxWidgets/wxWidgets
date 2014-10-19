@@ -68,7 +68,7 @@ All (GUI):
 - Optimized wxRTC insertion and deletion when floating objects are present.
 - Added on-demand image loading option to wxRTC.
 - Add wxFont::GetBaseFont() (Melroy Tellis).
-- Update included Scintilla to version 3.3.9 (Christian Walther).
+- Update included Scintilla to version 3.4.1 (Christian Walther, Heyoupeng).
 - Add wxStyledTextCtrl copy/paste text events (Christian Walther).
 - Improve RTL support in wxStyledTextCtrl (Zane U. Ji).
 - Add support for loading old V1 BMP files to wxImage (Artur Wieczorek).

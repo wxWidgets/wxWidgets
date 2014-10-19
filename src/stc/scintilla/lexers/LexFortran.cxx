@@ -316,22 +316,17 @@ static void FoldFortranDoc(unsigned int startPos, int length, int initStyle,
 		isPrevLine = false;
 	}
 	char chNext = styler[startPos];
-	char chNextNonBlank;
 	int styleNext = styler.StyleAt(startPos);
 	int style = initStyle;
 	int levelDeltaNext = 0;
 	/***************************************/
 	int lastStart = 0;
 	char prevWord[32] = "";
-	char Label[6] = "";
-	// Variables for do label folding.
-	static int doLabels[100];
-	static int posLabel=-1;
 	/***************************************/
 	for (unsigned int i = startPos; i < endPos; i++) {
 		char ch = chNext;
 		chNext = styler.SafeGetCharAt(i + 1);
-		chNextNonBlank = chNext;
+		char chNextNonBlank = chNext;
 		bool nextEOL = false;
 		if (IsALineEnd(chNextNonBlank)) {
 			nextEOL = true;
@@ -427,7 +422,8 @@ static void FoldFortranDoc(unsigned int startPos, int length, int initStyle,
 						}
 					}
 				} else {
-					levelDeltaNext += classifyFoldPointFortran(s, prevWord, chNextNonBlank);
+					int wordLevelDelta = classifyFoldPointFortran(s, prevWord, chNextNonBlank);
+					levelDeltaNext += wordLevelDelta;
 					if (((strcmp(s, "else") == 0) && (nextEOL || chNextNonBlank == '!')) ||
 						(strcmp(prevWord, "else") == 0 && strcmp(s, "where") == 0) || strcmp(s, "elsewhere") == 0) {
 						if (!isPrevLine) {
@@ -453,39 +449,17 @@ static void FoldFortranDoc(unsigned int startPos, int length, int initStyle,
 						levelDeltaNext -= 2;
 					}
 
-					// Store the do Labels into array
+					// There are multiple forms of "do" loop. The older form with a label "do 100 i=1,10" would require matching
+					// labels to ensure the folding level does not decrease too far when labels are used for other purposes.
+					// Since this is difficult, do-label constructs are not folded.
 					if (strcmp(s, "do") == 0 && IsADigit(chNextNonBlank)) {
-						unsigned int k = 0;
-						for (i=j; (i<j+5 && i<endPos); i++) {
-							ch = styler.SafeGetCharAt(i);
-							if (IsADigit(ch))
-								Label[k++] = ch;
-							else
-								break;
+						// Remove delta for do-label
+						levelDeltaNext -= wordLevelDelta;
 						}
-						Label[k] = '\0';
-						posLabel ++;
-						doLabels[posLabel] = atoi(Label);
 					}
-				}
 				strcpy(prevWord, s);
 			}
-		} else if (style == SCE_F_LABEL) {
-			if(IsADigit(ch) && !IsADigit(chNext)) {
-				for(j = 0; ( j < 5 ) && ( j < i-lastStart+1 ); j++) {
-					ch = styler.SafeGetCharAt(lastStart + j);
-					if (IsADigit(ch) && styler.StyleAt(lastStart+j) == SCE_F_LABEL)
-						Label[j] = ch;
-					else
-						break;
 				}
-				Label[j] = '\0';
-				while (doLabels[posLabel] == atoi(Label) && posLabel > -1) {
-					levelCurrent--;
-					posLabel--;
-				}
-			}
-		}
 		if (atEOL) {
 			int lev = levelCurrent;
 			if (visibleChars == 0 && foldCompact)

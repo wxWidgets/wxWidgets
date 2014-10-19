@@ -88,6 +88,10 @@ Timer::Timer() :
 Idler::Idler() :
 		state(false), idlerID(0) {}
 
+static int RoundXYPosition(XYPOSITION xyPos) {
+	return int(xyPos+0.5);
+}
+
 static inline bool IsControlCharacter(int ch) {
 	// iscntrl returns true for lots of chars > 127 which are displayable
 	return ch >= 0 && ch < ' ';
@@ -269,6 +273,8 @@ void Editor::SetRepresentations() {
 			char c1[3] = { '\xc2',  static_cast<char>(0x80+j), 0 };
 			reprs.SetRepresentation(c1, repsC1[j]);
 		}
+		reprs.SetRepresentation("\xe2\x80\xa8", "LS");
+		reprs.SetRepresentation("\xe2\x80\xa9", "PS");
 	}
 
 	// UTF-8 invalid bytes
@@ -382,6 +388,10 @@ PRectangle Editor::GetClientRectangle() {
 	return wMain.GetClientPosition();
 }
 
+PRectangle Editor::GetClientDrawingRectangle() {
+	return GetClientRectangle();
+}
+
 PRectangle Editor::GetTextRectangle() {
 	PRectangle rc = GetClientRectangle();
 	rc.left += vs.textStart;
@@ -477,36 +487,17 @@ Point Editor::LocationFromPosition(SelectionPosition pos) {
 	RefreshStyleData();
 	if (pos.Position() == INVALID_POSITION)
 		return pt;
-	int line = pdoc->LineFromPosition(pos.Position());
-	int lineVisible = cs.DisplayFromDoc(line);
+	const int line = pdoc->LineFromPosition(pos.Position());
+	const int lineVisible = cs.DisplayFromDoc(line);
 	//Platform::DebugPrintf("line=%d\n", line);
 	AutoSurface surface(this);
 	AutoLineLayout ll(llc, RetrieveLineLayout(line));
 	if (surface && ll) {
-		// -1 because of adding in for visible lines in following loop.
-		pt.y = (lineVisible - topLine - 1) * vs.lineHeight;
-		pt.x = 0;
-		unsigned int posLineStart = pdoc->LineStart(line);
+		const int posLineStart = pdoc->LineStart(line);
 		LayoutLine(line, surface, vs, ll, wrapWidth);
-		int posInLine = pos.Position() - posLineStart;
-		// In case of very long line put x at arbitrary large position
-		if (posInLine > ll->maxLineLength) {
-			pt.x = ll->positions[ll->maxLineLength] - ll->positions[ll->LineStart(ll->lines)];
-		}
-
-		for (int subLine = 0; subLine < ll->lines; subLine++) {
-			if ((posInLine >= ll->LineStart(subLine)) && (posInLine <= ll->LineStart(subLine + 1))) {
-				pt.x = ll->positions[posInLine] - ll->positions[ll->LineStart(subLine)];
-				if (ll->wrapIndent != 0) {
-					int lineStart = ll->LineStart(subLine);
-					if (lineStart != 0)	// Wrapped
-						pt.x += ll->wrapIndent;
-				}
-			}
-			if (posInLine >= ll->LineStart(subLine)) {
-				pt.y += vs.lineHeight;
-			}
-		}
+		const int posInLine = pos.Position() - posLineStart;
+		pt = ll->PointFromPosition(posInLine, vs.lineHeight);
+		pt.y += (lineVisible - topLine) * vs.lineHeight;
 		pt.x += vs.textStart - xOffset;
 	}
 	pt.x += pos.VirtualSpace() * vs.styles[ll->EndLineStyle()].spaceWidth;
@@ -558,58 +549,44 @@ SelectionPosition Editor::SPositionFromLocation(Point pt, bool canReturnInvalid,
 	int visibleLine = floor(pt.y / vs.lineHeight);
 	if (!canReturnInvalid && (visibleLine < 0))
 		visibleLine = 0;
-	int lineDoc = cs.DocFromDisplay(visibleLine);
+	const int lineDoc = cs.DocFromDisplay(visibleLine);
 	if (canReturnInvalid && (lineDoc < 0))
 		return SelectionPosition(INVALID_POSITION);
 	if (lineDoc >= pdoc->LinesTotal())
 		return SelectionPosition(canReturnInvalid ? INVALID_POSITION : pdoc->Length());
-	unsigned int posLineStart = pdoc->LineStart(lineDoc);
-	SelectionPosition retVal(canReturnInvalid ? INVALID_POSITION : static_cast<int>(posLineStart));
+	const int posLineStart = pdoc->LineStart(lineDoc);
 	AutoSurface surface(this);
 	AutoLineLayout ll(llc, RetrieveLineLayout(lineDoc));
 	if (surface && ll) {
 		LayoutLine(lineDoc, surface, vs, ll, wrapWidth);
-		int lineStartSet = cs.DisplayFromDoc(lineDoc);
-		int subLine = visibleLine - lineStartSet;
+		const int lineStartSet = cs.DisplayFromDoc(lineDoc);
+		const int subLine = visibleLine - lineStartSet;
 		if (subLine < ll->lines) {
-			int lineStart = ll->LineStart(subLine);
-			int lineEnd = ll->LineLastVisible(subLine);
-			XYPOSITION subLineStart = ll->positions[lineStart];
-
-			if (ll->wrapIndent != 0) {
-				if (lineStart != 0)	// Wrapped
+			const Range rangeSubLine = ll->SubLineRange(subLine);
+			const XYPOSITION subLineStart = ll->positions[rangeSubLine.start];
+			if (subLine > 0)	// Wrapped
 					pt.x -= ll->wrapIndent;
-			}
-			int i = ll->FindBefore(pt.x + subLineStart, lineStart, lineEnd);
-			while (i < lineEnd) {
-				if (charPosition) {
-					if ((pt.x + subLineStart) < (ll->positions[i + 1])) {
-						return SelectionPosition(pdoc->MovePositionOutsideChar(i + posLineStart, 1));
-					}
-				} else {
-					if ((pt.x + subLineStart) < ((ll->positions[i] + ll->positions[i + 1]) / 2)) {
-						return SelectionPosition(pdoc->MovePositionOutsideChar(i + posLineStart, 1));
-					}
-				}
-				i++;
+			const int positionInLine = ll->FindPositionFromX(pt.x + subLineStart, rangeSubLine, charPosition);
+			if (positionInLine < rangeSubLine.end) {
+				return SelectionPosition(pdoc->MovePositionOutsideChar(positionInLine + posLineStart, 1));
 			}
 			if (virtualSpace) {
 				const XYPOSITION spaceWidth = vs.styles[ll->EndLineStyle()].spaceWidth;
-				int spaceOffset = (pt.x + subLineStart - ll->positions[lineEnd] + spaceWidth / 2) /
+				const int spaceOffset = (pt.x + subLineStart - ll->positions[rangeSubLine.end] + spaceWidth / 2) /
 					spaceWidth;
-				return SelectionPosition(lineEnd + posLineStart, spaceOffset);
+				return SelectionPosition(rangeSubLine.end + posLineStart, spaceOffset);
 			} else if (canReturnInvalid) {
-				if (pt.x < (ll->positions[lineEnd] - subLineStart)) {
-					return SelectionPosition(pdoc->MovePositionOutsideChar(lineEnd + posLineStart, 1));
+				if (pt.x < (ll->positions[rangeSubLine.end] - subLineStart)) {
+					return SelectionPosition(pdoc->MovePositionOutsideChar(rangeSubLine.end + posLineStart, 1));
 				}
 			} else {
-				return SelectionPosition(lineEnd + posLineStart);
+				return SelectionPosition(rangeSubLine.end + posLineStart);
 			}
 		}
 		if (!canReturnInvalid)
 			return SelectionPosition(ll->numCharsInLine + posLineStart);
 	}
-	return retVal;
+	return SelectionPosition(canReturnInvalid ? INVALID_POSITION : posLineStart);
 }
 
 int Editor::PositionFromLocation(Point pt, bool canReturnInvalid, bool charPosition) {
@@ -619,6 +596,7 @@ int Editor::PositionFromLocation(Point pt, bool canReturnInvalid, bool charPosit
 /**
  * Find the document position corresponding to an x coordinate on a particular document line.
  * Ensure is between whole characters when document is in multi-byte or UTF-8 mode.
+ * This method is used for rectangular selections and does not work on wrapped lines.
  */
 SelectionPosition Editor::SPositionFromLineX(int lineDoc, int x) {
 	RefreshStyleData();
@@ -627,33 +605,20 @@ SelectionPosition Editor::SPositionFromLineX(int lineDoc, int x) {
 	//Platform::DebugPrintf("Position of (%d,%d) line = %d top=%d\n", pt.x, pt.y, line, topLine);
 	AutoSurface surface(this);
 	AutoLineLayout ll(llc, RetrieveLineLayout(lineDoc));
-	int retVal = 0;
 	if (surface && ll) {
-		unsigned int posLineStart = pdoc->LineStart(lineDoc);
+		const int posLineStart = pdoc->LineStart(lineDoc);
 		LayoutLine(lineDoc, surface, vs, ll, wrapWidth);
-		int subLine = 0;
-		int lineStart = ll->LineStart(subLine);
-		int lineEnd = ll->LineLastVisible(subLine);
-		XYPOSITION subLineStart = ll->positions[lineStart];
-		XYPOSITION newX = x;
-
-		if (ll->wrapIndent != 0) {
-			if (lineStart != 0)	// Wrapped
-				newX -= ll->wrapIndent;
-		}
-		int i = ll->FindBefore(newX + subLineStart, lineStart, lineEnd);
-		while (i < lineEnd) {
-			if ((newX + subLineStart) < ((ll->positions[i] + ll->positions[i + 1]) / 2)) {
-				retVal = pdoc->MovePositionOutsideChar(i + posLineStart, 1);
-				return SelectionPosition(retVal);
-			}
-			i++;
+		const Range rangeSubLine = ll->SubLineRange(0);
+		const XYPOSITION subLineStart = ll->positions[rangeSubLine.start];
+		const int positionInLine = ll->FindPositionFromX(x + subLineStart, rangeSubLine, false);
+		if (positionInLine < rangeSubLine.end) {
+			return SelectionPosition(pdoc->MovePositionOutsideChar(positionInLine + posLineStart, 1));
 		}
 		const XYPOSITION spaceWidth = vs.styles[ll->EndLineStyle()].spaceWidth;
-		int spaceOffset = (newX + subLineStart - ll->positions[lineEnd] + spaceWidth / 2) / spaceWidth;
-		return SelectionPosition(lineEnd + posLineStart, spaceOffset);
+		const int spaceOffset = (x + subLineStart - ll->positions[rangeSubLine.end] + spaceWidth / 2) / spaceWidth;
+		return SelectionPosition(rangeSubLine.end + posLineStart, spaceOffset);
 	}
-	return SelectionPosition(retVal);
+	return SelectionPosition(0);
 }
 
 int Editor::PositionFromLineX(int lineDoc, int x) {
@@ -690,6 +655,10 @@ void Editor::RedrawRect(PRectangle rc) {
 	}
 }
 
+void Editor::DiscardOverdraw() {
+	// Overridden on platforms that may draw outside visible area.
+}
+
 void Editor::Redraw() {
 	//Platform::DebugPrintf("Redraw all\n");
 	PRectangle rcClient = GetClientRectangle();
@@ -700,7 +669,10 @@ void Editor::Redraw() {
 }
 
 void Editor::RedrawSelMargin(int line, bool allAfter) {
-	if (!AbandonPaint()) {
+	bool abandonDraw = false;
+	if (!wMargin.GetID())	// Margin in main window so may need to abandon and retry
+		abandonDraw = AbandonPaint();
+	if (!abandonDraw) {
 		if (vs.maskInLine) {
 			Redraw();
 		} else {
@@ -1279,7 +1251,7 @@ slop | strict | jumps | even | Caret can go to the margin                 | When
   1  |   1    |   1   |   1  | No, kept out of UZ                         | moved to put caret at 3UZ of the margin
 */
 
-Editor::XYScrollPosition Editor::XYScrollToMakeVisible(const SelectionRange range, const XYScrollOptions options) {
+Editor::XYScrollPosition Editor::XYScrollToMakeVisible(const SelectionRange &range, const XYScrollOptions options) {
 	PRectangle rcClient = GetTextRectangle();
 	Point pt = LocationFromPosition(range.caret);
 	Point ptAnchor = LocationFromPosition(range.anchor);
@@ -2400,7 +2372,7 @@ void Editor::LayoutLine(int line, Surface *surface, ViewStyle &vstyle, LineLayou
 						        - posLineStart;
 						p = pdoc->MovePositionOutsideChar(p + 1 + posLineStart, 1) - posLineStart;
 						continue;
-					} else if (ll->styles[p] != ll->styles[p - 1]) {
+					} else if ((vstyle.wrapState == eWrapWord) && (ll->styles[p] != ll->styles[p - 1])) {
 						lastGoodBreak = p;
 					} else if (IsSpaceOrTab(ll->chars[p - 1]) && !IsSpaceOrTab(ll->chars[p])) {
 						lastGoodBreak = p;
@@ -2585,14 +2557,20 @@ void Editor::DrawEOL(Surface *surface, ViewStyle &vsDraw, PRectangle rcLine, Lin
 			char hexits[4];
 			const char *ctrlChar;
 			unsigned char chEOL = ll->chars[eolPos];
+			int styleMain = ll->styles[eolPos];
+			ColourDesired textBack = TextBackground(vsDraw, overrideBackground, background, eolInSelection, false, styleMain, eolPos, ll);
 			if (UTF8IsAscii(chEOL)) {
 				ctrlChar = ControlCharacterString(chEOL);
 			} else {
+				Representation *repr = reprs.RepresentationFromCharacter(ll->chars + eolPos, ll->numCharsInLine - eolPos);
+				if (repr) {
+					ctrlChar = repr->stringRep.c_str();
+					eolPos = ll->numCharsInLine;
+				} else {
 				sprintf(hexits, "x%2X", chEOL);
 				ctrlChar = hexits;
 			}
-			int styleMain = ll->styles[eolPos];
-			ColourDesired textBack = TextBackground(vsDraw, overrideBackground, background, eolInSelection, false, styleMain, eolPos, ll);
+			}
 			ColourDesired textFore = vsDraw.styles[styleMain].fore;
 			if (eolInSelection && vsDraw.selColours.fore.isSet) {
 				textFore = (eolInSelection == 1) ? vsDraw.selColours.fore : vsDraw.selAdditionalForeground;
@@ -3462,7 +3440,7 @@ void Editor::DrawCarets(Surface *surface, ViewStyle &vsDraw, int lineDoc, int xS
 				bool caretAtEOL = false;
 				bool drawBlockCaret = false;
 				XYPOSITION widthOverstrikeCaret;
-				int caretWidthOffset = 0;
+				XYPOSITION caretWidthOffset = 0;
 				PRectangle rcCaret = rcLine;
 
 				if (posCaret.Position() == pdoc->Length()) {   // At end of document
@@ -3478,11 +3456,11 @@ void Editor::DrawCarets(Surface *surface, ViewStyle &vsDraw, int lineDoc, int xS
 					widthOverstrikeCaret = 3;
 
 				if (xposCaret > 0)
-					caretWidthOffset = 1;	// Move back so overlaps both character cells.
+					caretWidthOffset = 0.51f;	// Move back so overlaps both character cells.
 				xposCaret += xStart;
 				if (posDrag.IsValid()) {
 					/* Dragging text, use a line caret */
-					rcCaret.left = xposCaret - caretWidthOffset;
+					rcCaret.left = RoundXYPosition(xposCaret - caretWidthOffset);
 					rcCaret.right = rcCaret.left + vsDraw.caretWidth;
 				} else if (inOverstrike && drawOverstrikeCaret) {
 					/* Overstrike (insert mode), use a modified bar caret */
@@ -3500,7 +3478,7 @@ void Editor::DrawCarets(Surface *surface, ViewStyle &vsDraw, int lineDoc, int xS
 					}
 				} else {
 					/* Line caret */
-					rcCaret.left = xposCaret - caretWidthOffset;
+					rcCaret.left = RoundXYPosition(xposCaret - caretWidthOffset);
 					rcCaret.right = rcCaret.left + vsDraw.caretWidth;
 				}
 				ColourDesired caretColour = mainCaret ? vsDraw.caretcolour : vsDraw.additionalCaretColour;
@@ -5135,6 +5113,7 @@ void Editor::NewLine() {
 	// Remove non-main ranges
 	InvalidateSelection(sel.RangeMain(), true);
 	sel.SetSelection(sel.RangeMain());
+	sel.RangeMain().ClearVirtualSpace();
 
 	// Clear main range and insert line end
 	bool needGroupUndo = !sel.Empty();
@@ -6820,7 +6799,7 @@ int Editor::PositionAfterArea(PRectangle rcArea) const {
 	// The start of the document line after the display line after the area
 	// This often means that the line after a modification is restyled which helps
 	// detect multiline comment additions and heals single line comments
-	int lineAfter = topLine + (rcArea.bottom - 1) / vs.lineHeight + 1;
+	int lineAfter = TopLineOfMain() + (rcArea.bottom - 1) / vs.lineHeight + 1;
 	if (lineAfter < cs.LinesDisplayed())
 		return pdoc->LineStart(cs.DocFromDisplay(lineAfter) + 1);
 	else
@@ -6830,7 +6809,7 @@ int Editor::PositionAfterArea(PRectangle rcArea) const {
 // Style to a position within the view. If this causes a change at end of last line then
 // affects later lines so style all the viewed text.
 void Editor::StyleToPositionInView(Position pos) {
-	int endWindow = (vs.marginInside) ? (PositionAfterArea(GetClientRectangle())) : (pdoc->Length());
+	int endWindow = PositionAfterArea(GetClientDrawingRectangle());
 	if (pos > endWindow)
 		pos = endWindow;
 	int styleAtEnd = pdoc->StyleAt(pos-1);
@@ -6838,6 +6817,9 @@ void Editor::StyleToPositionInView(Position pos) {
 	if ((endWindow > pos) && (styleAtEnd != pdoc->StyleAt(pos-1))) {
 		// Style at end of line changed so is multi-line change like starting a comment
 		// so require rest of window to be styled.
+		DiscardOverdraw();	// Prepared bitmaps may be invalid
+		// DiscardOverdraw may have truncated client drawing area so recalculate endWindow
+		endWindow = PositionAfterArea(GetClientDrawingRectangle());
 		pdoc->EnsureStyledTo(endWindow);
 	}
 }

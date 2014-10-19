@@ -370,9 +370,9 @@ void LineAnnotation::InsertLine(int line) {
 }
 
 void LineAnnotation::RemoveLine(int line) {
-	if (annotations.Length() && (line < annotations.Length())) {
-		delete []annotations[line];
-		annotations.Delete(line);
+	if (annotations.Length() && (line > 0) && (line <= annotations.Length())) {
+		delete []annotations[line-1];
+		annotations.Delete(line-1);
 	}
 }
 

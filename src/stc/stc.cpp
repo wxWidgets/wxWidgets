@@ -820,7 +820,7 @@ int wxStyledTextCtrl::StyleGetCase(int style) const
     return SendMsg(SCI_STYLEGETCASE, style, 0);
 }
 
-// Get the character set of the font in a style.
+// Get the character get of the font in a style.
 int wxStyledTextCtrl::StyleGetCharacterSet(int style) const
 {
     return SendMsg(SCI_STYLEGETCHARACTERSET, style, 0);
@@ -2237,7 +2237,7 @@ void wxStyledTextCtrl::AppendText(const wxString& text) {
                     SendMsg(SCI_APPENDTEXT, wx2stclen(text, buf), (sptr_t)(const char*)buf);
 }
 
-// Is drawing done in two phases with backgrounds drawn before foregrounds?
+// Is drawing done in two phases with backgrounds drawn before faoregrounds?
 bool wxStyledTextCtrl::GetTwoPhaseDraw() const
 {
     return SendMsg(SCI_GETTWOPHASEDRAW, 0, 0) != 0;
@@ -4123,13 +4123,31 @@ void wxStyledTextCtrl::SetCaretLineVisibleAlways(bool alwaysVisible)
     SendMsg(SCI_SETCARETLINEVISIBLEALWAYS, alwaysVisible, 0);
 }
 
+// Set the line end types that the application wants to use. May not be used if incompatible with lexer or encoding.
+void wxStyledTextCtrl::SetLineEndTypesAllowed(int lineEndBitSet)
+{
+    SendMsg(SCI_SETLINEENDTYPESALLOWED, lineEndBitSet, 0);
+}
+
+// Get the line end types currently allowed.
+int wxStyledTextCtrl::GetLineEndTypesAllowed() const
+{
+    return SendMsg(SCI_GETLINEENDTYPESALLOWED, 0, 0);
+}
+
+// Get the line end types currently recognised. May be a subset of the allowed types due to lexer limitation.
+int wxStyledTextCtrl::GetLineEndTypesActive() const
+{
+    return SendMsg(SCI_GETLINEENDTYPESACTIVE, 0, 0);
+}
+
 // Set the way a character is drawn.
 void wxStyledTextCtrl::SetRepresentation(const wxString& encodedCharacter, const wxString& representation)
 {
     SendMsg(SCI_SETREPRESENTATION, (sptr_t)(const char*)wx2stc(encodedCharacter), (sptr_t)(const char*)wx2stc(representation));
 }
 
-// Get the way a character is drawn.
+// Set the way a character is drawn.
 wxString wxStyledTextCtrl::GetRepresentation(const wxString& encodedCharacter) const {
          int msg = SCI_GETREPRESENTATION;
          int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(encodedCharacter), (sptr_t)NULL);
@@ -4288,24 +4306,6 @@ wxString wxStyledTextCtrl::DescribeKeyWordSets() const {
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);
-}
-
-// Set the line end types that the application wants to use. May not be used if incompatible with lexer or encoding.
-void wxStyledTextCtrl::SetLineEndTypesAllowed(int lineEndBitSet)
-{
-    SendMsg(SCI_SETLINEENDTYPESALLOWED, lineEndBitSet, 0);
-}
-
-// Get the line end types currently allowed.
-int wxStyledTextCtrl::GetLineEndTypesAllowed() const
-{
-    return SendMsg(SCI_GETLINEENDTYPESALLOWED, 0, 0);
-}
-
-// Get the line end types currently recognised. May be a subset of the allowed types due to lexer limitation.
-int wxStyledTextCtrl::GetLineEndTypesActive() const
-{
-    return SendMsg(SCI_GETLINEENDTYPESACTIVE, 0, 0);
 }
 
 // Bit set of LineEndType enumertion for which line ends beyond the standard
@@ -4903,9 +4903,6 @@ void wxStyledTextCtrl::OnSize(wxSizeEvent& WXUNUSED(evt)) {
     if (m_swx) {
         wxSize sz = GetClientSize();
         m_swx->DoSize(sz.x, sz.y);
-#if defined(__WXX11__)
-        PositionScrollbars();
-#endif
     }
 }
 
@@ -5320,7 +5317,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
 {
-    return wxVersionInfo("Scintilla", 3, 3, 9, "Scintilla 3.3.9");
+    return wxVersionInfo("Scintilla", 3, 4, 1, "Scintilla 3.4.1");
 }
 
 #endif // wxUSE_STC
