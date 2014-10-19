@@ -3091,13 +3091,45 @@ void wxWindowGTK::DoClientToScreen( int *x, int *y ) const
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
-    if (gtk_widget_get_window(m_widget) == NULL) return;
+    if (!m_useCachedClientSize && !IsTopLevel() && m_parent)
+    {
+        m_parent->DoClientToScreen(x, y);
+        int xx, yy;
+        DoGetPosition(&xx, &yy);
+        if (m_wxwindow)
+        {
+            GtkBorder border;
+            WX_PIZZA(m_wxwindow)->get_border(border);
+            xx += border.left;
+            yy += border.top;
+        }
+        if (y) *y += yy;
+        if (x)
+        {
+            if (GetLayoutDirection() != wxLayout_RightToLeft)
+                *x += xx;
+            else
+            {
+                int w;
+                // undo RTL conversion done by parent
+                m_parent->DoGetClientSize(&w, NULL);
+                *x = w - *x;
+
+                DoGetClientSize(&w, NULL);
+                *x += xx;
+                *x = w - *x;
+            }
+        }
+        return;
+    }
 
     GdkWindow *source = NULL;
     if (m_wxwindow)
         source = gtk_widget_get_window(m_wxwindow);
     else
         source = gtk_widget_get_window(m_widget);
+
+    wxCHECK_RET(source, "ClientToScreen failed on unrealized window");
 
     int org_x = 0;
     int org_y = 0;
@@ -3130,13 +3162,45 @@ void wxWindowGTK::DoScreenToClient( int *x, int *y ) const
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
-    if (!gtk_widget_get_realized(m_widget)) return;
+    if (!m_useCachedClientSize && !IsTopLevel() && m_parent)
+    {
+        m_parent->DoScreenToClient(x, y);
+        int xx, yy;
+        DoGetPosition(&xx, &yy);
+        if (m_wxwindow)
+        {
+            GtkBorder border;
+            WX_PIZZA(m_wxwindow)->get_border(border);
+            xx += border.left;
+            yy += border.top;
+        }
+        if (y) *y -= yy;
+        if (x)
+        {
+            if (GetLayoutDirection() != wxLayout_RightToLeft)
+                *x -= xx;
+            else
+            {
+                int w;
+                // undo RTL conversion done by parent
+                m_parent->DoGetClientSize(&w, NULL);
+                *x = w - *x;
+
+                DoGetClientSize(&w, NULL);
+                *x -= xx;
+                *x = w - *x;
+            }
+        }
+        return;
+    }
 
     GdkWindow *source = NULL;
     if (m_wxwindow)
         source = gtk_widget_get_window(m_wxwindow);
     else
         source = gtk_widget_get_window(m_widget);
+
+    wxCHECK_RET(source, "ScreenToClient failed on unrealized window");
 
     int org_x = 0;
     int org_y = 0;
