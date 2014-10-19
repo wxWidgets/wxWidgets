@@ -92,7 +92,7 @@ public:
         : m_message(message),
           m_caption(caption)
     {
-        m_parent = parent;
+        m_parent = GetParentForModalDialog(parent, style);
         SetMessageDialogStyle(style);
     }
 
