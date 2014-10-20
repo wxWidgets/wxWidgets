@@ -508,14 +508,34 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,
     }
     else // we only have monochrome icon/cursor
     {
-        // Then we need to create our own empty bitmap, which will be modified
-        // by the mask below.
-        wxDIB dib(w, h, wxDisplayDepth());
-        if ( dib.IsOk() )
+        // For monochrome icons/cursor bitmap mask is of height 2*h
+        // and contains both AND and XOR masks.
+        // AND mask: 0 <= y <= h-1
+        // XOR mask: h <= y <= 2*h-1
+        // First we need to extract and store XOR mask from this bitmap.
+        // AND mask will be extracted later at creation of inverted mask.
+        HBITMAP hbmp = ::CreateBitmap(w, h, 1, wxDisplayDepth(), NULL);
+        if ( !hbmp )
         {
-            memset(dib.GetData(), 0, wxDIB::GetLineSize(w, dib.GetDepth())*h);
-            refData->AssignDIB(dib);
+            wxLogLastError(wxT("wxBitmap::CopyFromIconOrCursor - CreateBitmap"));
         }
+        else
+        {
+            MemoryHDC dcSrc;
+            MemoryHDC dcDst;
+            SelectInHDC selSrc(dcSrc, iconInfo.hbmMask);
+            SelectInHDC selDst(dcDst, hbmp);
+            if ( !::BitBlt((HDC)dcDst, 0, 0, w, h,
+                           (HDC)dcSrc, 0, h,
+                           SRCCOPY) )
+            {
+                wxLogLastError(wxT("wxBitmap::CopyFromIconOrCursor - BitBlt"));
+            }
+        }
+        refData->m_width = w;
+        refData->m_height = h;
+        refData->m_depth = wxDisplayDepth();
+        refData->m_hBitmap = hbmp;
     }
 
     switch ( transp )
@@ -1887,21 +1907,6 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
     AutoHBITMAP hbmpMask(wxInvertMask((HBITMAP)mask->GetMaskBitmap()));
     iconInfo.hbmMask = hbmpMask;
     iconInfo.hbmColor = GetHbitmapOf(bmp);
-
-    // black out the transparent area to preserve background colour, because
-    // Windows blits the original bitmap using SRCINVERT (XOR) after applying
-    // the mask to the dest rect.
-    {
-        MemoryHDC dcSrc, dcDst;
-        SelectInHDC selectMask(dcSrc, (HBITMAP)mask->GetMaskBitmap()),
-                    selectBitmap(dcDst, iconInfo.hbmColor);
-
-        if ( !::BitBlt(dcDst, 0, 0, bmp.GetWidth(), bmp.GetHeight(),
-                       dcSrc, 0, 0, SRCAND) )
-        {
-            wxLogLastError(wxT("BitBlt"));
-        }
-    }
 
     HICON hicon = ::CreateIconIndirect(&iconInfo);
 

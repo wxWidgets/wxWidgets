@@ -30,7 +30,6 @@ public:
 	~XPM();
 	void Init(const char *textForm);
 	void Init(const char *const *linesForm);
-	void Clear();
 	/// Decompose image into runs and use FillRectangle for each run
 	void Draw(Surface *surface, PRectangle &rc);
 	int GetHeight() const { return height; }

@@ -255,6 +255,8 @@ public:
     // (because they have been validated by a size-allocate) and should
     // be used to report client size
     bool m_useCachedClientSize;
+    // Whether the GtkAllocation and GdkWindow positions are known to be correct
+    bool m_isGtkPositionValid;
 
     // see the docs in src/gtk/window.cpp
     GtkWidget           *m_widget;          // mostly the widget seen by the rest of GTK

@@ -129,6 +129,7 @@ public:
     virtual bool AppendSeparatorInThumbBar() = 0;
     virtual wxThumbBarButton* RemoveThumbBarButton(wxThumbBarButton *button) = 0;
     virtual wxThumbBarButton* RemoveThumbBarButton(int id) = 0;
+    virtual void Realize() = 0;
 
 protected:
     wxTaskBarButton() { }

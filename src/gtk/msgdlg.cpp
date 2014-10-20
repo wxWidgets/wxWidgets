@@ -48,7 +48,7 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  const wxPoint& WXUNUSED(pos))
                : wxMessageDialogBase
                  (
-                    GetParentForModalDialog(parent, style),
+                    parent,
                     message,
                     caption,
                     style

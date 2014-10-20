@@ -44,18 +44,25 @@ public:
     virtual wxThumbBarButton* RemoveThumbBarButton(int id) wxOVERRIDE;
     wxThumbBarButton* GetThumbBarButtonByIndex(size_t index);
     bool InitOrUpdateThumbBarButtons();
+    virtual void Realize() wxOVERRIDE;
 
 private:
     // This ctor is only used by wxTaskBarButton::New()
     wxTaskBarButtonImpl(wxITaskbarList3* taskbarList, wxWindow* parent);
 
-    WXHWND m_hwnd;
+    wxWindow* m_parent;
     wxITaskbarList3 *m_taskbarList;
 
     typedef wxVector<wxThumbBarButton*> wxThumbBarButtons;
     wxThumbBarButtons m_thumbBarButtons;
 
     int m_progressRange;
+    int m_progressValue;
+    wxTaskBarButtonState m_progressState;
+    wxString m_thumbnailTooltip;
+    wxIcon m_overlayIcon;
+    wxString m_overlayIconDescription;
+    wxRect m_thumbnailClipRect;
     bool m_hasInitThumbnailToolbar;
 
     friend wxTaskBarButton* wxTaskBarButton::New(wxWindow*);

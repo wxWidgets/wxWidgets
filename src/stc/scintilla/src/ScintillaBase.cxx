@@ -417,15 +417,15 @@ void ScintillaBase::CallTipShow(Point pt, const char *defn) {
 	// space
 	PRectangle rcClient = GetClientRectangle();
 	int offset = vs.lineHeight + rc.Height();
-	// adjust so it displays below the text.
-	if (rc.top < rcClient.top) {
-		rc.top += offset;
-		rc.bottom += offset;
-	}
 	// adjust so it displays above the text.
 	if (rc.bottom > rcClient.bottom) {
 		rc.top -= offset;
 		rc.bottom -= offset;
+	}
+	// adjust so it displays below the text.
+	if (rc.top < rcClient.top) {
+		rc.top += offset;
+		rc.bottom += offset;
 	}
 	// Now display the window.
 	CreateCallTipWindow(rc);

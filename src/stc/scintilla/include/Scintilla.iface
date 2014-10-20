@@ -468,7 +468,7 @@ get bool StyleGetUnderline=2488(int style,)
 # Get is a style mixed case, or to force upper or lower case.
 get int StyleGetCase=2489(int style,)
 
-# Get the character set of the font in a style.
+# Get the character get of the font in a style.
 get int StyleGetCharacterSet=2490(int style,)
 
 # Get is a style visible or not.
@@ -1189,6 +1189,7 @@ enu Wrap=SC_WRAP_
 val SC_WRAP_NONE=0
 val SC_WRAP_WORD=1
 val SC_WRAP_CHAR=2
+val SC_WRAP_WHITESPACE=3
 
 # Sets whether text is word wrapped.
 set void SetWrapMode=2268(int mode,)
@@ -1286,7 +1287,7 @@ get bool GetVScrollBar=2281(,)
 # Append a string to the end of the document without changing the selection.
 fun void AppendText=2282(int length, string text)
 
-# Is drawing done in two phases with backgrounds drawn before foregrounds?
+# Is drawing done in two phases with backgrounds drawn before faoregrounds?
 get bool GetTwoPhaseDraw=2283(,)
 
 # In twoPhaseDraw mode, drawing is performed in two phases, first the background
@@ -2343,10 +2344,26 @@ get bool GetCaretLineVisibleAlways=2654(,)
 # Sets the caret line to always visible.
 set void SetCaretLineVisibleAlways=2655(bool alwaysVisible,)
 
+# Line end types which may be used in addition to LF, CR, and CRLF
+# SC_LINE_END_TYPE_UNICODE includes U+2028 Line Separator,
+# U+2029 Paragraph Separator, and U+0085 Next Line
+enu LineEndType=SC_LINE_END_TYPE_
+val SC_LINE_END_TYPE_DEFAULT=0
+val SC_LINE_END_TYPE_UNICODE=1
+
+# Set the line end types that the application wants to use. May not be used if incompatible with lexer or encoding.
+set void SetLineEndTypesAllowed=2656(int lineEndBitSet,)
+
+# Get the line end types currently allowed.
+get int GetLineEndTypesAllowed=2657(,)
+
+# Get the line end types currently recognised. May be a subset of the allowed types due to lexer limitation.
+get int GetLineEndTypesActive=2658(,)
+
 # Set the way a character is drawn.
 set void SetRepresentation=2665(string encodedCharacter, string representation)
 
-# Get the way a character is drawn.
+# Set the way a character is drawn.
 get int GetRepresentation=2666(string encodedCharacter, stringresult representation)
 
 # Remove a character representation.
@@ -2419,6 +2436,38 @@ fun int DescribeProperty=4016(string name, stringresult description)
 
 # Retrieve a '\n' separated list of descriptions of the keyword sets understood by the current lexer.
 fun int DescribeKeyWordSets=4017(, stringresult descriptions)
+
+# Bit set of LineEndType enumertion for which line ends beyond the standard
+# LF, CR, and CRLF are supported by the lexer.
+get int GetLineEndTypesSupported=4018(,)
+
+# Allocate a set of sub styles for a particular base style, returning start of range
+fun int AllocateSubStyles=4020(int styleBase, int numberStyles)
+
+# The starting style number for the sub styles associated with a base style
+get int GetSubStylesStart=4021(int styleBase,)
+
+# The number of sub styles associated with a base style
+get int GetSubStylesLength=4022(int styleBase,)
+
+# For a sub style, return the base style, else return the argument.
+get int GetStyleFromSubStyle=4027(int subStyle,)
+
+# For a secondary style, return the primary style, else return the argument.
+get int GetPrimaryStyleFromStyle=4028(int style,)
+
+# Free allocated sub styles
+fun void FreeSubStyles=4023(,)
+
+# Set the identifiers that are shown in a particular style
+set void SetIdentifiers=4024(int style, string identifiers)
+
+# Where styles are duplicated by a feature such as active/inactive code
+# return the distance between the two types.
+get int DistanceToSecondaryStyles=4025(,)
+
+# Get the set of base styles that can be extended with sub styles
+get int GetSubStyleBases=4026(, stringresult styles)
 
 # Notifications
 # Type of modification and the action which caused the modification.
@@ -2609,6 +2658,7 @@ val SCLEX_STTXT=109
 val SCLEX_KVIRC=110
 val SCLEX_RUST=111
 val SCLEX_DMAP=112
+val SCLEX_AS=113
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -3198,8 +3248,9 @@ val SCE_SCRIPTOL_IDENTIFIER=12
 val SCE_SCRIPTOL_TRIPLE=13
 val SCE_SCRIPTOL_CLASSNAME=14
 val SCE_SCRIPTOL_PREPROCESSOR=15
-# Lexical states for SCLEX_ASM
+# Lexical states for SCLEX_ASM, SCLEX_AS
 lex Asm=SCLEX_ASM SCE_ASM_
+lex As=SCLEX_AS SCE_ASM_
 val SCE_ASM_DEFAULT=0
 val SCE_ASM_COMMENT=1
 val SCE_ASM_NUMBER=2
@@ -4421,55 +4472,9 @@ evt void HotSpotReleaseClick=2027(int modifiers, int position)
 evt void FocusIn=2028(void)
 evt void FocusOut=2029(void)
 
+# There are no provisional features currently
+
 cat Provisional
-
-# Line end types which may be used in addition to LF, CR, and CRLF
-# SC_LINE_END_TYPE_UNICODE includes U+2028 Line Separator,
-# U+2029 Paragraph Separator, and U+0085 Next Line
-enu LineEndType=SC_LINE_END_TYPE_
-val SC_LINE_END_TYPE_DEFAULT=0
-val SC_LINE_END_TYPE_UNICODE=1
-
-# Set the line end types that the application wants to use. May not be used if incompatible with lexer or encoding.
-set void SetLineEndTypesAllowed=2656(int lineEndBitSet,)
-
-# Get the line end types currently allowed.
-get int GetLineEndTypesAllowed=2657(,)
-
-# Get the line end types currently recognised. May be a subset of the allowed types due to lexer limitation.
-get int GetLineEndTypesActive=2658(,)
-
-# Bit set of LineEndType enumertion for which line ends beyond the standard
-# LF, CR, and CRLF are supported by the lexer.
-get int GetLineEndTypesSupported=4018(,)
-
-# Allocate a set of sub styles for a particular base style, returning start of range
-fun int AllocateSubStyles=4020(int styleBase, int numberStyles)
-
-# The starting style number for the sub styles associated with a base style
-get int GetSubStylesStart=4021(int styleBase,)
-
-# The number of sub styles associated with a base style
-get int GetSubStylesLength=4022(int styleBase,)
-
-# For a sub style, return the base style, else return the argument.
-get int GetStyleFromSubStyle=4027(int subStyle,)
-
-# For a secondary style, return the primary style, else return the argument.
-get int GetPrimaryStyleFromStyle=4028(int style,)
-
-# Free allocated sub styles
-fun void FreeSubStyles=4023(,)
-
-# Set the identifiers that are shown in a particular style
-set void SetIdentifiers=4024(int style, string identifiers)
-
-# Where styles are duplicated by a feature such as active/inactive code
-# return the distance between the two types.
-get int DistanceToSecondaryStyles=4025(,)
-
-# Get the set of base styles that can be extended with sub styles
-get int GetSubStyleBases=4026(, stringresult styles)
 
 cat Deprecated
 

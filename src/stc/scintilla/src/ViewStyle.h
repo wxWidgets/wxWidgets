@@ -56,7 +56,7 @@ enum WhiteSpaceVisibility {wsInvisible=0, wsVisibleAlways=1, wsVisibleAfterInden
 
 typedef std::map<FontSpecification, FontRealised *> FontMap;
 
-enum WrapMode { eWrapNone, eWrapWord, eWrapChar };
+enum WrapMode { eWrapNone, eWrapWord, eWrapChar, eWrapWhitespace };
 
 class ColourOptional : public ColourDesired {
 public:
@@ -178,7 +178,7 @@ public:
 
 private:
 	void AllocStyles(size_t sizeNew);
-	void CreateFont(const FontSpecification &fs);
+	void CreateAndAddFont(const FontSpecification &fs);
 	FontRealised *Find(const FontSpecification &fs);
 	void FindMaxAscentDescent();
 	// Private so can only be copied through copy constructor which ensures font names initialised correctly

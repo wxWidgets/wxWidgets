@@ -731,9 +731,11 @@ wxTaskBarButton* wxTaskBarButton::New(wxWindow* parent)
 
 wxTaskBarButtonImpl::wxTaskBarButtonImpl(wxITaskbarList3* taskbarList,
                                          wxWindow* parent)
-    : m_hwnd(parent->GetHandle()),
+    : m_parent(parent),
       m_taskbarList(taskbarList),
       m_progressRange(0),
+      m_progressValue(0),
+      m_progressState(wxTASKBAR_BUTTON_NO_PROGRESS),
       m_hasInitThumbnailToolbar(false)
 {
 }
@@ -752,6 +754,23 @@ wxTaskBarButtonImpl::~wxTaskBarButtonImpl()
     m_thumbBarButtons.clear();
 }
 
+void wxTaskBarButtonImpl::Realize()
+{
+    // (Re-)apply all settings: this is needed if settings were made before the
+    // create message was sent, taskbar icon is hidden and shown again or
+    // explorer is restarted
+    SetProgressRange(m_progressRange);
+    SetProgressState(m_progressState);
+    if ( m_progressValue > 0 )
+        SetProgressValue(m_progressValue);
+    SetThumbnailTooltip(m_thumbnailTooltip);
+    SetOverlayIcon(m_overlayIcon, m_overlayIconDescription);
+    if ( !m_thumbnailClipRect.IsEmpty() )
+        SetThumbnailClip(m_thumbnailClipRect);
+    m_hasInitThumbnailToolbar = false;
+    InitOrUpdateThumbBarButtons();
+}
+
 void wxTaskBarButtonImpl::SetProgressRange(int range)
 {
     m_progressRange = range;
@@ -761,7 +780,8 @@ void wxTaskBarButtonImpl::SetProgressRange(int range)
 
 void wxTaskBarButtonImpl::SetProgressValue(int value)
 {
-    m_taskbarList->SetProgressValue(m_hwnd, value, m_progressRange);
+    m_progressValue = value;
+    m_taskbarList->SetProgressValue(m_parent->GetHWND(), value, m_progressRange);
 }
 
 void wxTaskBarButtonImpl::PulseProgress()
@@ -772,9 +792,9 @@ void wxTaskBarButtonImpl::PulseProgress()
 void wxTaskBarButtonImpl::Show(bool show)
 {
     if ( show )
-        m_taskbarList->AddTab(m_hwnd);
+        m_taskbarList->AddTab(m_parent->GetHWND());
     else
-        m_taskbarList->DeleteTab(m_hwnd);
+        m_taskbarList->DeleteTab(m_parent->GetHWND());
 }
 
 void wxTaskBarButtonImpl::Hide()
@@ -784,27 +804,32 @@ void wxTaskBarButtonImpl::Hide()
 
 void wxTaskBarButtonImpl::SetThumbnailTooltip(const wxString& tooltip)
 {
-    m_taskbarList->SetThumbnailTooltip(m_hwnd, tooltip.wc_str());
+    m_thumbnailTooltip = tooltip;
+    m_taskbarList->SetThumbnailTooltip(m_parent->GetHWND(), tooltip.wc_str());
 }
 
 void wxTaskBarButtonImpl::SetProgressState(wxTaskBarButtonState state)
 {
-    m_taskbarList->SetProgressState(m_hwnd, static_cast<TBPFLAG>(state));
+    m_progressState = state;
+    m_taskbarList->SetProgressState(m_parent->GetHWND(), static_cast<TBPFLAG>(state));
 }
 
 void wxTaskBarButtonImpl::SetOverlayIcon(const wxIcon& icon,
                                          const wxString& description)
 {
-    m_taskbarList->SetOverlayIcon(m_hwnd,
+    m_overlayIcon = icon;
+    m_overlayIconDescription = description;
+    m_taskbarList->SetOverlayIcon(m_parent->GetHWND(),
                                   GetHiconOf(icon),
                                   description.wc_str());
 }
 
 void wxTaskBarButtonImpl::SetThumbnailClip(const wxRect& rect)
 {
+    m_thumbnailClipRect = rect;
     RECT rc;
     wxCopyRectToRECT(rect, rc);
-    m_taskbarList->SetThumbnailClip(m_hwnd, rect.IsEmpty() ? NULL : &rc);
+    m_taskbarList->SetThumbnailClip(m_parent->GetHWND(), rect.IsEmpty() ? NULL : &rc);
 }
 
 void wxTaskBarButtonImpl::SetThumbnailContents(const wxWindow *child)
@@ -921,7 +946,7 @@ bool wxTaskBarButtonImpl::InitOrUpdateThumbBarButtons()
 
     if ( !m_hasInitThumbnailToolbar )
     {
-        hr = m_taskbarList->ThumbBarAddButtons(m_hwnd,
+        hr = m_taskbarList->ThumbBarAddButtons(m_parent->GetHWND(),
                                                MAX_BUTTON_COUNT,
                                                buttons);
         if ( FAILED(hr) )
@@ -932,7 +957,7 @@ bool wxTaskBarButtonImpl::InitOrUpdateThumbBarButtons()
     }
     else
     {
-        hr = m_taskbarList->ThumbBarUpdateButtons(m_hwnd,
+        hr = m_taskbarList->ThumbBarUpdateButtons(m_parent->GetHWND(),
                                                   MAX_BUTTON_COUNT,
                                                   buttons);
         if ( FAILED(hr) )

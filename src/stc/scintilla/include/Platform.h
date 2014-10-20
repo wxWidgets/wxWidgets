@@ -444,6 +444,16 @@ public:
 	static DynamicLibrary *Load(const char *modulePath);
 };
 
+#if defined(__clang__)
+# if __has_feature(attribute_analyzer_noreturn)
+#  define CLANG_ANALYZER_NORETURN __attribute__((analyzer_noreturn))
+# else
+#  define CLANG_ANALYZER_NORETURN
+# endif
+#else
+# define CLANG_ANALYZER_NORETURN
+#endif
+
 /**
  * Platform class used to retrieve system wide parameters such as double click speed
  * and chrome colour. Not a creatable object, more of a module with several functions.
@@ -488,7 +498,7 @@ public:
 	}
 	static void DebugPrintf(const char *format, ...);
 	static bool ShowAssertionPopUps(bool assertionPopUps_);
-	static void Assert(const char *c, const char *file, int line);
+	static void Assert(const char *c, const char *file, int line) CLANG_ANALYZER_NORETURN;
 	static int Clamp(int val, int minVal, int maxVal);
 };
 
