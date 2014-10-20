@@ -328,6 +328,8 @@ void wxFrameBase::UpdateWindowUI(long flags)
 
 void wxFrameBase::OnMenuHighlight(wxMenuEvent& event)
 {
+    event.Skip();
+
 #if wxUSE_STATUSBAR
     (void)ShowMenuHelp(event.GetMenuId());
 #endif // wxUSE_STATUSBAR
@@ -335,6 +337,8 @@ void wxFrameBase::OnMenuHighlight(wxMenuEvent& event)
 
 void wxFrameBase::OnMenuOpen(wxMenuEvent& event)
 {
+    event.Skip();
+
     if ( !ShouldUpdateMenuFromIdle() )
     {
         // as we didn't update the menus from idle time, do it now
@@ -342,8 +346,10 @@ void wxFrameBase::OnMenuOpen(wxMenuEvent& event)
     }
 }
 
-void wxFrameBase::OnMenuClose(wxMenuEvent& WXUNUSED(event))
+void wxFrameBase::OnMenuClose(wxMenuEvent& event)
 {
+    event.Skip();
+
     DoGiveHelp(wxEmptyString, false);
 }
 
