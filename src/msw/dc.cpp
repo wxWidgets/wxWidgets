@@ -1430,16 +1430,11 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
                 ::RealizePalette(hdcMem);
             }
 #endif // wxUSE_PALETTE
-            // Apply mask and source bitmap to the destination bitmap
-            // (note that we have inverted mask).
-            // AND mask orig.:   0            1
-            // AND mask inv.:    1            0
-            // dest. bitmap:     0 XOR src    dst XOR src
-            //                   =src         (src=0 => dst unchanged)
+
             ok = ::MaskBlt(cdc, x, y, width, height,
                             hdcMem, 0, 0,
                             hbmpMask, 0, 0,
-                            MAKEROP4(SRCCOPY, SRCINVERT)) != 0;
+                            MAKEROP4(SRCCOPY, DSTCOPY)) != 0;
 
 #if wxUSE_PALETTE
             if (oldPal)
