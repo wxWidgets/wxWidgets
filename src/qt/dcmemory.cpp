@@ -71,6 +71,10 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
         m_qtImage = new QImage( bitmap.GetHandle()->toImage() );
         // start drawing on the intermediary device:
         m_ok = m_qtPainter->begin( m_qtImage );
+
+        SetPen(m_pen);
+        SetBrush(m_brush);
+        SetFont(m_font);
     }
 }
 
