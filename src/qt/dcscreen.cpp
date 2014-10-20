@@ -11,7 +11,8 @@
 #include "wx/dcscreen.h"
 #include "wx/qt/dcscreen.h"
 
-#include <QtWidgets>
+#include <QtWidgets/QDesktopWidget>
+#include <QtGui/QScreen>
 #include <QPixmap>
 
 IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl)
