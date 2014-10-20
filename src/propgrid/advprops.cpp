@@ -1810,37 +1810,18 @@ void wxCursorProperty::OnCustomPaint( wxDC& dc,
             wxStockCursor cursorIndex =
                 (wxStockCursor) gs_cp_es_syscursors_values[paintdata.m_choiceItem];
 
+            if ( cursorIndex == wxCURSOR_NONE )
+                cursorIndex = wxCURSOR_ARROW;
+
+            wxCursor cursor( cursorIndex );
+
+#if defined(__WXMSW__) || defined(__WXGTK__)
+            wxBitmap bmp(cursor);
+            if ( bmp.IsOk() )
             {
-                if ( cursorIndex == wxCURSOR_NONE )
-                    cursorIndex = wxCURSOR_ARROW;
-
-                wxCursor cursor( cursorIndex );
-
-            #if defined(__WXGTK__)
-                wxBitmap bmp(cursor);
-                if ( bmp.IsOk() )
-                {
-                    dc.DrawBitmap(bmp, rect.GetTopLeft());
-                }
-            #elif defined(__WXMSW__)
-                // We have to use native API because monochrome bitmaps
-                // are not fully supported under MSW.
-                HDC hDc = (HDC)((const wxMSWDCImpl *)dc.GetImpl())->GetHDC();
-                ::DrawIconEx( hDc,
-                              rect.x,
-                              rect.y,
-                              (HICON)cursor.GetHandle(),
-                              0,
-                              0,
-                              0,
-                              NULL,
-            #if !defined(__WXWINCE__)
-                              DI_COMPAT | DI_DEFAULTSIZE |
-            #endif
-                              DI_NORMAL
-                            );
-            #endif
+                dc.DrawBitmap(bmp, rect.GetTopLeft(), true);
             }
+#endif
         }
     }
 }
