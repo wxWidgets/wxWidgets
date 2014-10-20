@@ -163,10 +163,3 @@ bool wxLaunchDefaultApplication(const wxString& path, int WXUNUSED( flags ) )
 {
     return QDesktopServices::openUrl( QUrl::fromLocalFile( wxQtConvertString( path ) ) );
 }
-
-// Generic "Slot" to conect destruction signal for debugging purposes:
-void wxQtHandleDestroyedSignal(QObject *qobj)
-{
-   wxLogDebug( wxT("%s was destroyed by Qt. pointer=%p"),
-               QObject::staticMetaObject.className(), qobj );
-}
