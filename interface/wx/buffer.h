@@ -92,6 +92,20 @@ public:
      */
     ~wxScopedCharTypeBuffer();
 
+    /**
+        Returns the internal pointer and resets the buffer.
+
+        It's the caller responsibility to deallocate the returned pointer using
+        @c free() function.
+
+        Notice that this method is dangerous because it can only be called on a
+        non-shared owning buffer. Calling it on any other kind of buffer object
+        will result in a crash after the pointer is freed, so avoid using it
+        unless absolutely necessary and you are absolutely certain that the
+        buffer is not shared.
+     */
+    CharType* release() const;
+
     /// Resets the buffer to NULL, freeing the data if necessary.
     void reset();
 
