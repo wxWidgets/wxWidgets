@@ -38,12 +38,7 @@ private:
 wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
            : wxFrame(parent, wxID_ANY, wxString(),
                      wxDefaultPosition, wxDefaultSize,
-#if defined(__WXX11__)
-                     wxRESIZE_BORDER
-#else
-                     wxSIMPLE_BORDER
-#endif
-                     | wxFRAME_TOOL_WINDOW | wxSTAY_ON_TOP)
+                     wxSIMPLE_BORDER | wxFRAME_TOOL_WINDOW | wxSTAY_ON_TOP)
 {
     wxPanel *panel = new wxPanel( this );
 #ifdef __WXGTK__
