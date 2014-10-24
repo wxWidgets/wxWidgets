@@ -56,6 +56,7 @@ Unix:
 All (GUI):
 
 - Allow requesting modern (3.x+) OpenGL version in wxGLCanvas (Fabio Arnold).
+- Allow customizing window shown by wxBusyInfo.
 - XRC handler for wxAuiToolBar added (Kinaou Hervé, David Hart).
 - Add wxFD_NO_FOLLOW style for wxFileDialog (Luca Bacci).
 - Add support for embedding bitmaps in generated SVG in wxSVGFileDC (iwbnwif).
