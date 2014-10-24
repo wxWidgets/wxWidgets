@@ -52,8 +52,10 @@ wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
 
     // make the frame of at least the standard size (400*80) but big enough
     // for the text we show
-    wxSize sizeText = text->GetBestSize();
-    SetClientSize(wxMax(sizeText.x, 340) + 60, wxMax(sizeText.y, 40) + 40);
+    wxSize size = text->GetBestSize();
+    size.IncBy(ConvertDialogToPixels(wxPoint(10, 10)));
+    size.IncTo(wxSize(400, 80));
+    SetClientSize(size);
 
     // need to size the panel correctly first so that text->Centre() works
     panel->SetSize(GetClientSize());
