@@ -1442,13 +1442,18 @@ void MDISetMenu(wxWindow *win, HMENU hmenuFrame, HMENU hmenuWindow)
 {
     if ( hmenuFrame || hmenuWindow )
     {
+        // Under XP, the last error seems to be not reset by this function, so
+        // ensure we don't report spurious errors below when setting the menu
+        // initially.
+        ::SetLastError(ERROR_SUCCESS);
+
         if ( !::SendMessage(GetWinHwnd(win),
                             WM_MDISETMENU,
                             (WPARAM)hmenuFrame,
                             (LPARAM)hmenuWindow) )
         {
-            DWORD err = ::GetLastError();
-            if ( err )
+            const DWORD err = ::GetLastError();
+            if ( err != ERROR_SUCCESS )
             {
                 wxLogApiError(wxT("SendMessage(WM_MDISETMENU)"), err);
             }
