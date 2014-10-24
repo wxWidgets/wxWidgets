@@ -70,12 +70,7 @@ void wxGenericStaticText::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxPaintDC dc(this);
 
     wxRect rect = GetClientRect();
-    if ( IsEnabled() )
-    {
-        dc.SetTextForeground(
-                       wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
-    }
-    else // paint disabled text
+    if ( !IsEnabled() )
     {
         // draw shadow of the text
         dc.SetTextForeground(
