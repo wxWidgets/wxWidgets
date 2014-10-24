@@ -14,6 +14,10 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 
+#if wxUSE_STD_CONTAINERS_COMPATIBLY
+    #include <vector>
+#endif
+
 // these functions are only used in STL build now but we define them in any
 // case for compatibility with the existing code outside of the library which
 // could be using them
@@ -473,6 +477,16 @@ public:
     {
         m_data.ptr = strings;
     }
+
+#if wxUSE_STD_CONTAINERS_COMPATIBLY
+    // construct an adapter from a vector of strings (of any type)
+    template <class T>
+    wxArrayStringsAdapter(const std::vector<T>& strings)
+        : m_type(wxSTRING_POINTER), m_size(strings.size())
+    {
+        m_data.ptr = &strings[0];
+    }
+#endif // wxUSE_STD_CONTAINERS_COMPATIBLY
 
     // construct an adapter from a single wxString
     wxArrayStringsAdapter(const wxString& s)

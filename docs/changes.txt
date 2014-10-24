@@ -32,6 +32,7 @@ Changes in behaviour which may result in build errors
 
 All:
 
+- Allow calling wxItemContainer::Add() and similar with std::vector<> argument.
 - Add "%z" support to printf()-like functions like wxString::Format() (RIVDSL).
 - Add wxPowerResourceBlocker (Tobias Taschner).
 - Add wxApp::StoreCurrentException() and RethrowStoredException() and implement

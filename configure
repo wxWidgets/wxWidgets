@@ -1125,6 +1125,7 @@ enable_mem_tracing
 enable_shared
 enable_stl
 enable_std_containers
+enable_std_containers_compat
 enable_std_iostreams
 enable_std_string
 enable_std_string_conv_in_wxstring
@@ -2055,6 +2056,7 @@ Optional Features:
   --disable-shared        create static library instead of shared
   --enable-stl            use standard C++ classes for everything
   --enable-std_containers use standard C++ container classes
+  --enable-std_containers_compat     use standard C++ container classes when it can be done compatible
   --enable-std_iostreams  use standard C++ stream classes
   --enable-std_string     use standard C++ string classes
  --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString
@@ -4076,6 +4078,7 @@ esac
 DEFAULT_wxUSE_ALL_FEATURES=yes
 
 DEFAULT_wxUSE_STD_CONTAINERS=no
+DEFAULT_wxUSE_STD_CONTAINERS_COMPATIBLY=$DEFAULT_STD_FLAG
 DEFAULT_wxUSE_STD_IOSTREAM=$DEFAULT_STD_FLAG
 DEFAULT_wxUSE_STD_STRING=$DEFAULT_STD_FLAG
 
@@ -6018,6 +6021,7 @@ $as_echo "$result" >&6; }
 
 if test "$wxUSE_STL" = "yes"; then
     DEFAULT_wxUSE_STD_CONTAINERS=yes
+    DEFAULT_wxUSE_STD_CONTAINERS_COMPATIBLY=yes
     DEFAULT_wxUSE_STD_IOSTREAM=yes
     DEFAULT_wxUSE_STD_STRING=yes
 fi
@@ -6060,6 +6064,50 @@ fi
             fi
           else
             result=$wxUSE_STD_CONTAINERS
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
+$as_echo "$result" >&6; }
+
+
+          enablestring=
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-std_containers_compat" >&5
+$as_echo_n "checking for --${enablestring:-enable}-std_containers_compat... " >&6; }
+          # Check whether --enable-std_containers_compat was given.
+if test "${enable_std_containers_compat+set}" = set; then :
+  enableval=$enable_std_containers_compat;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_std_containers_compat='wxUSE_STD_CONTAINERS_COMPATIBLY=yes'
+                          else
+                            wx_cv_use_std_containers_compat='wxUSE_STD_CONTAINERS_COMPATIBLY=no'
+                          fi
+
+else
+
+                          wx_cv_use_std_containers_compat='wxUSE_STD_CONTAINERS_COMPATIBLY=${'DEFAULT_wxUSE_STD_CONTAINERS_COMPATIBLY":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_std_containers_compat"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_STD_CONTAINERS_COMPATIBLY = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_STD_CONTAINERS_COMPATIBLY
           fi
 
           { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
@@ -34496,6 +34544,11 @@ fi
 
 if test "$wxUSE_STD_CONTAINERS" = "yes"; then
   $as_echo "#define wxUSE_STD_CONTAINERS 1" >>confdefs.h
+
+fi
+
+if test "$wxUSE_STD_CONTAINERS_COMPATIBLY" = "yes"; then
+  $as_echo "#define wxUSE_STD_CONTAINERS_COMPATIBLY 1" >>confdefs.h
 
 fi
 

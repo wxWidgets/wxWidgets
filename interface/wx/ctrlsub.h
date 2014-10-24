@@ -256,6 +256,21 @@ public:
     /**
         Appends several items at once into the control.
 
+        This is the same as the overload taking wxArrayString, except that it
+        works with the standard vector container.
+
+        The template argument @c T can be any type convertible to wxString,
+        including wxString itself but also @c std::string, @c char* or @c
+        wchar_t*.
+
+        @since 3.1.0
+     */
+    template <typename T>
+    int Append(const std::vector<T>& items);
+
+    /**
+        Appends several items at once into the control.
+
         Notice that calling this method is usually much faster than appending
         them one by one if you need to add a lot of items.
 
@@ -523,6 +538,21 @@ public:
     /**
         Inserts several items at once into the control.
 
+        This is the same as the overload taking wxArrayString, except that it
+        works with the standard vector container.
+
+        The template argument @c T can be any type convertible to wxString,
+        including wxString itself but also @c std::string, @c char* or @c
+        wchar_t*.
+
+        @since 3.1.0
+     */
+    template <typename T>
+    int Insert(const std::vector<T>& items);
+
+    /**
+        Inserts several items at once into the control.
+
         Notice that calling this method is usually much faster than inserting
         them one by one if you need to insert a lot of items.
 
@@ -632,6 +662,21 @@ public:
             Array of strings to insert.
     */
     void Set(const wxArrayString& items);
+
+    /**
+        Replaces the current control contents with the given items.
+
+        This is the same as the overload taking wxArrayString, except that it
+        works with the standard vector container.
+
+        The template argument @c T can be any type convertible to wxString,
+        including wxString itself but also @c std::string, @c char* or @c
+        wchar_t*.
+
+        @since 3.1.0
+     */
+    template <typename T>
+    void Set(const std::vector<T>& items);
 
     /**
         Replaces the current control contents with the given items.

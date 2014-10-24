@@ -216,6 +216,10 @@ public:
                wxClientData **clientData)
         { return AppendItems(wxArrayStringsAdapter(n, items), clientData); }
 
+    template <class T>
+    int Append(const std::vector<T>& items)
+        { return AppendItems(items); }
+
     // only for RTTI needs (separate name)
     void AppendString(const wxString& item)
         { Append(item); }
@@ -255,6 +259,9 @@ public:
                wxClientData **clientData)
         { return InsertItems(wxArrayStringsAdapter(n, items), pos, clientData); }
 
+    template <class T>
+    int Insert(const std::vector<T>& items, unsigned int pos)
+        { return InsertItems(items, pos); }
 
     // replacing items
     // ---------------
@@ -271,6 +278,10 @@ public:
         { Clear(); Append(n, items, clientData); }
     void Set(unsigned int n, const wxString *items, wxClientData **clientData)
         { Clear(); Append(n, items, clientData); }
+
+    template <class T>
+    void Set(const std::vector<T>& items)
+        { Clear(); Append(items); }
 
     // deleting items
     // --------------
