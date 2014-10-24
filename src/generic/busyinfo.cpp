@@ -16,7 +16,7 @@
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
-    #include "wx/m_InfoFrame.h"
+    #include "wx/busyinfo.h"
     #include "wx/stattext.h"
     #include "wx/panel.h"
     #include "wx/sizer.h"
