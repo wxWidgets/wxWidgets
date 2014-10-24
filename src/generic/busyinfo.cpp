@@ -36,7 +36,7 @@ private:
 
 
 wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
-           : wxFrame(parent, wxID_ANY, wxT("Busy"),
+           : wxFrame(parent, wxID_ANY, wxString(),
                      wxDefaultPosition, wxDefaultSize,
 #if defined(__WXX11__)
                      wxRESIZE_BORDER
