@@ -186,31 +186,20 @@ void wxStaticText::SetLabel(const wxString& label)
 #endif // SS_ENDELLIPSIS
         DoSetLabel(GetEllipsizedLabel());
 
-    // adjust the size of the window to fit to the label unless autoresizing is
-    // disabled
-    if ( !HasFlag(wxST_NO_AUTORESIZE) &&
-         !IsEllipsized() )  // if ellipsize is ON, then we don't want to get resized!
+    if ( !IsEllipsized() )  // if ellipsize is ON, then we don't want to get resized!
     {
-        InvalidateBestSize();
-        DoSetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, wxDefaultCoord,
-                  wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
+        AutoResizeIfNecessary();
     }
 }
 
 bool wxStaticText::SetFont(const wxFont& font)
 {
-    bool ret = wxControl::SetFont(font);
+    if ( !wxControl::SetFont(font) )
+        return false;
 
-    // adjust the size of the window to fit to the label unless autoresizing is
-    // disabled
-    if ( !HasFlag(wxST_NO_AUTORESIZE) )
-    {
-        InvalidateBestSize();
-        DoSetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, wxDefaultCoord,
-                  wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
-    }
+    AutoResizeIfNecessary();
 
-    return ret;
+    return true;
 }
 
 // for wxST_ELLIPSIZE_* support:

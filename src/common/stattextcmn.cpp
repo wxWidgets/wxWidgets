@@ -194,6 +194,18 @@ void wxStaticTextBase::Wrap(int width)
     wrapper.WrapLabel(this, width);
 }
 
+void wxStaticTextBase::AutoResizeIfNecessary()
+{
+    // adjust the size of the window to fit to the label unless autoresizing is
+    // disabled
+    if ( !HasFlag(wxST_NO_AUTORESIZE) )
+    {
+        InvalidateBestSize();
+        DoSetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, wxDefaultCoord,
+                  wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
+    }
+}
+
 // ----------------------------------------------------------------------------
 // wxStaticTextBase - generic implementation for wxST_ELLIPSIZE_* support
 // ----------------------------------------------------------------------------

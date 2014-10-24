@@ -78,6 +78,10 @@ protected:      // functions required for wxST_ELLIPSIZE_* support
     // but may contain the mnemonic characters.
     virtual void DoSetLabel(const wxString& WXUNUSED(str)) { }
 
+    // Update the current size to match the best size unless wxST_NO_AUTORESIZE
+    // style is explicitly used.
+    void AutoResizeIfNecessary();
+
 private:
     wxDECLARE_NO_COPY_CLASS(wxStaticTextBase);
 };
