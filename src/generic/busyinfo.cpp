@@ -19,6 +19,7 @@
     #include "wx/busyinfo.h"
     #include "wx/stattext.h"
     #include "wx/panel.h"
+    #include "wx/frame.h"
     #include "wx/sizer.h"
     #include "wx/statbmp.h"
     #include "wx/utils.h"

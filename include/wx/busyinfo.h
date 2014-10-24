@@ -13,6 +13,11 @@
 
 #if wxUSE_BUSYINFO
 
+#include "wx/colour.h"
+#include "wx/icon.h"
+
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+
 // This class is used to pass all the various parameters to wxBusyInfo ctor.
 // According to the usual naming conventions (see wxAboutDialogInfo,
 // wxFontInfo, ...) it would be called wxBusyInfoInfo, but this would have been
