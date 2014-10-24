@@ -48,21 +48,23 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
 
     wxBoxSizer* const sizer = new wxBoxSizer(wxVERTICAL);
 
-    const wxSizerFlags sizerFlags = wxSizerFlags().DoubleBorder().Centre();
-
     if ( flags.m_icon.IsOk() )
     {
-        sizer->Add(new wxStaticBitmap(panel, wxID_ANY, flags.m_icon), sizerFlags);
+        sizer->Add(new wxStaticBitmap(panel, wxID_ANY, flags.m_icon),
+                   wxSizerFlags().DoubleBorder().Centre());
     }
 
     wxControl* title;
     if ( !flags.m_title.empty() )
     {
-        title = new wxStaticTextWithMarkupSupport(panel, wxID_ANY, wxString());
+        title = new wxStaticTextWithMarkupSupport(panel, wxID_ANY, wxString(),
+                                                  wxDefaultPosition,
+                                                  wxDefaultSize,
+                                                  wxALIGN_CENTRE);
         title->SetFont(title->GetFont().Scaled(2));
         title->SetLabelMarkup(flags.m_title);
 
-        sizer->Add(title, sizerFlags);
+        sizer->Add(title, wxSizerFlags().DoubleBorder().Expand());
     }
     else
     {
@@ -76,7 +78,10 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
 #if wxUSE_MARKUP
     if ( !flags.m_text.empty() )
     {
-        text = new wxStaticTextWithMarkupSupport(panel, wxID_ANY, wxString());
+        text = new wxStaticTextWithMarkupSupport(panel, wxID_ANY, wxString(),
+                                                 wxDefaultPosition,
+                                                 wxDefaultSize,
+                                                 wxALIGN_CENTRE);
         text->SetLabelMarkup(flags.m_text);
     }
     else
@@ -86,7 +91,7 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
         text->SetLabelText(flags.m_label);
     }
 
-    sizer->Add(text, sizerFlags);
+    sizer->Add(text, wxSizerFlags().DoubleBorder().Centre());
 
     sizer->AddStretchSpacer();
 
