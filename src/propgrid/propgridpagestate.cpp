@@ -290,16 +290,10 @@ void wxPropertyGridPageState::DoClear()
     // deleted individually (and with deferral).
     if ( m_pPropGrid && m_pPropGrid->m_processedEvent )
     {
-        wxPropertyGridIterator it;
-        for ( it = wxPropertyGridIterator(this, wxPG_ITERATE_ALL, wxNullProperty);
-              !it.AtEnd();
-              it++ )
+        for (unsigned int i = 0; i < m_regularArray.GetChildCount(); i++)
         {
-            wxPGProperty *p = *it;
-            // Do not attempt to explicitly remove sub-properties.
-            // They will be removed in their parent property dtor.
-            if ( !p->GetParent()->HasFlag(wxPG_PROP_AGGREGATE) )
-                DoDelete(p, true);
+            wxPGProperty* p = m_regularArray.Item(i);
+            DoDelete(p, true);
         }
     }
     else
