@@ -161,8 +161,8 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     [fontPanel setFloatingPanel:NO] ;
     [[fontPanel standardWindowButton:NSWindowCloseButton] setEnabled:NO] ;
 
-    wxMacFontPanelAccView* accessoryView = (wxMacFontPanelAccView*) [fontPanel accessoryView] ;
-    if ( accessoryView == nil)
+    wxMacFontPanelAccView* accessoryView = nil;
+    if ( [fontPanel accessoryView] == nil || [[fontPanel accessoryView] class] != [wxMacFontPanelAccView class] )
     {
         NSRect rectBox = NSMakeRect( 0 , 0 , 192 , 40 );
         accessoryView = [[wxMacFontPanelAccView alloc] initWithFrame:rectBox];
@@ -170,6 +170,10 @@ int RunMixedFontDialog(wxFontDialog* dialog)
         [accessoryView release];
 
         [fontPanel setDefaultButtonCell:[[accessoryView okButton] cell]] ;
+    }
+    else
+    {
+        accessoryView = (wxMacFontPanelAccView*)[fontPanel accessoryView];
     }
 
     [accessoryView resetFlags];
