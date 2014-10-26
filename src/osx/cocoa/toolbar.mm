@@ -568,9 +568,12 @@ void wxToolBarTool::UpdateImages()
         m_alternateBitmap = wxBitmap( w, h );
         wxMemoryDC dc;
 
-        dc.SelectObject( m_alternateBitmap );
-        dc.SetPen(*wxGREY_PEN);
-        dc.SetBrush(*wxGREY_BRUSH);
+        dc.SelectObject(m_alternateBitmap);
+        // This color corresponds to OS X Yosemite's rendering of selected toolbar items
+        // See also http://trac.wxwidgets.org/ticket/16645
+        wxColour grey(0xB9, 0xB9, 0xB9);
+        dc.SetPen(grey);
+        dc.SetBrush(grey);
         dc.DrawRoundedRectangle( 0, 0, w, h, 3 );
         dc.DrawBitmap( m_bmpNormal, 0, 0, true );
         dc.SelectObject( wxNullBitmap );
