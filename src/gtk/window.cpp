@@ -4838,7 +4838,7 @@ void wxWindowGTK::DoReleaseMouse()
 
 void wxWindowGTK::GTKReleaseMouseAndNotify()
 {
-    DoReleaseMouse();
+    ReleaseMouse();
     wxMouseCaptureLostEvent evt(GetId());
     evt.SetEventObject( this );
     HandleWindowEvent( evt );
