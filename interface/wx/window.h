@@ -480,8 +480,10 @@ public:
     wxWindowList& GetChildren();
 
     /**
-        @overload
-    */
+        Returns a const reference to the list of the window's children.
+
+        @copydetails GetChildren()
+     */
     const wxWindowList& GetChildren() const;
 
     /**
