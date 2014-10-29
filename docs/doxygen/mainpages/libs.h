@@ -41,6 +41,7 @@ digraph Dependencies
     wxSTC      [fillcolor = green, URL = "\ref page_libs_wxstc"];
     wxXRC      [fillcolor = green, URL = "\ref page_libs_wxxrc"];
     wxWebView  [fillcolor = green, URL = "\ref page_libs_wxwebview"];
+    wxWebViewChromium  [fillcolor = green, URL = "\ref page_libs_wxwebview_chromium"];
 
     wxCore -> wxBase;
     wxNet -> wxBase;
@@ -58,6 +59,7 @@ digraph Dependencies
     wxSTC -> wxCore;
     wxXRC -> wxAdvanced; wxXRC -> wxHTML; wxXRC -> wxXML;
     wxWebView -> wxCore;
+    wxWebViewChromium -> wxWebView;
 }
 @enddot
 
@@ -196,6 +198,11 @@ The wxWebView library contains the wxWebView control and its associated classes.
 
 Requires @ref page_libs_wxcore, @ref page_libs_wxbase.
 
+@section page_libs_wxwebview_chromium wxWebViewChromium
+
+The wxWebViewChromium library contains the wxWebViewChromium backend.
+
+Requires @ref page_libs_wxwebview.
 
 @section page_libs_wxxml wxXML
 

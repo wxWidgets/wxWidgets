@@ -8,90 +8,74 @@
 /**
     @class wxWebViewChromium
 
-    wxWebViewChromium is a Chromium backend base on Chromium Embedded Framework(CEF3),
-    which uses the same rendering engine with Google Chrome Browser. The current
-    CEF3 required version is 3.1750.1738. This backend is available for
-    MSW/Linux/Mac OS X port. Custom schemes and virtual file systems are also supported.
+    wxWebViewChromium is a Chromium backend for wxWebView based on the
+    Chromium Embedded Framework(CEF3). The current CEF3 required version is
+    3.1750.1738. This backend is available for Windows, Linux and OS X only.
 
-    @section differences API Differences
+    @section requirements CEF3 Requirements
 
-    wxWebViewChromium aims to support the full wxWebView API, but there are some features 
-    unsupported by CEF3 API, see the following differences.
-
-    - GetSelectedSource/GetSelectedText: return ""
-    - HasSelection: Not supported by CEF3, return false
-    - IsEditable: Not supported by CEF3, return false
-    - CanUndo/CanRedo/CanCut/CanCopy/CanPaste: Not supported by CEF3, return true
-    - Find: return -1
-
-    @section requirements Requirements
-
-    Chromium Embedded Framework: 3.1750.1738.
-
-    On Windows platform, you will need to change the vistual stdio building
-    properties of `libcef_dll_wrapper` to consistent with wxWidgets, see following steps:
+    If you are compiling your own copy of CEF3 then your compile flags must
+    match those you are using to compile wxWidgets. Specifically on Windows
+    it is likely you will need to adjust the following properties in the CEF3
+    provided build files:
 
     - C/C++ - General - Treat Warngings as Error - No
     - C/C++ - Code Generation - Runtime Library - Multithreaded [Debug] DLL
     - C/C++ - Code Generation - Enable C++ Exceptions - Yes
     - C/C++ - Language - Enable Run-Time Type Information - Yes
 
-    On Linux platform, some dependency libraries are required to install, including build-essential,
-    libgtk2.0-dev, libgtkglext1-dev and libnss3-dev.
+    @section instructions Build Instructions
 
-    1. Download cef3 binary and extract it to wxWidgets src directory.(<wx_root>/src/cef is default directory)
-    2. Build libcef_dll_wrapper static library.
+    __General__
 
-    @section instructions Builing Instructions
-    
-    wxWebViewChromium backend feature is shipped in an extra `libwebview_chromium` which depends on `libwebview`.
+    The wxWebViewChromium backend is built into a seperate webview_chromium
+    library which depends on the webview library.
 
-    __Windows Platform__
-    
-    wxWidgets provides Visual Stdio 2010/2012/2013 project file to build wxWebViewChromium.
-    
-    1. Set `wxUSE_WEBVIEW_CHROMIUM` to 1 in `wx_root/include/wx/msw/setup0.h` to enable wxWebViewChromium feature.
-    2. Open `build/msw/wc_vc10.sln` project file in Visual Stdio 2010, and build `wxWidgets` library.
-    3. Open `samples/webview_chromium/webview_chromium_vc10.vcxproj` file in Visual Stdio 2010, and build it.
-    4. Copy CEF3 related resources(libcef.dll, libffmpegsumo.so, locales/\*, cef.apk, devtools_resources.pak) to webview_chromium binary directory.
-    
-    __Linux Platform__
-    
-    wxWebviewChromium feature is disabled defaultly in makefile build, you should enable it through `enable-webviewchromium` option.
-    
-    1. Regenerate the building files by running `bakefile_gen -f autoconf` command under `build/bakefiles` directory.
-    2. Run `./autogen.sh` under `<wxWidgets_src>`.
-    3. Run `./configure --enable-webviewchromium` and `make` commands.
-    4. Copy CEF3 related resources as above step5 in windows Platform.
+    Once you have a copy of CEF3, either from compiling it yourself or using
+    prebuild binaries you should copy it into `wx_root/src/cef`. To run the
+    webview_chromium sample you need to copy the CEF3 resources into the
+    sample directory.
+
+    When builing wxWidgets you need to enusre wxWebViewChromium is enabled,
+    either by passing --enable-webviewchromium for autoconf based builds or
+    setting wxUSE_WEBVIEW_CHROMIUM equal to one in setup.h for Visual Studio
+    based builds.
 
     __Mac OS X Platform__
 
-    Require OS X 10.8 or above. Support makefile builds the same as Linux platfrom mentioned above.
+    OS X 10.8 or above is required.
 
-    Due to the application bundle structure on OS X, wxWebviewChromium is a little complicated than Windows/Linux platforms.
-    We need an extra `helper` application for executing separate other chromim processes(renderer, plugin, etc), so they
-    have separated app bundles and Info.plist.
-    
-    For application using webviewChromium, below are details steps, you can retrieve it in `webview_chromium.bkl`
-    (samples/webview_chromium/webview_chromium.bkl) files:
-    
-    1. Build webviewchromium library.
-       - Use system tool `install_name_tool -change` to correct `Chromium Embedded Framework.framework/Chromium Embedded Framework` location.
+    Due to the application bundle structure on OS X, wxWebviewChromium is a
+    little complicated than on Windows/Linux platforms. An extra helper
+    application for executing separate Chromium  processes(renderer, plugin,
+    etc) is required.
+
+    For applications using wxWebviewChromium below are details steps to make
+    is worked, based off the webview_chromium sample bakefile.
+
+    1. Build the webview_chromium library.
+       - Use system tool `install_name_tool -change` to correct `Chromium
+         Embedded Framework.framework/Chromium Embedded Framework` location.
     2. Compiled/link/package the `helper` app:
        - Require `process_helper_mac.cpp`
-       - Reuqire link frameworks: Chromium Embedded Framework.framework, AppKit.frameworks.
+       - Reuqire link frameworks: Chromium Embedded Framework.framework,
+         AppKit.frameworks.
        - Reuqire app bundle configuration: Info.plist
-       - Use system tool `install_name_tool -change` to correct `Chromium Embedded Framework.framework/Chromium Embedded Framework` location.
+       - Use system tool `install_name_tool -change` to correct `Chromium
+         Embedded Framework.framework/Chromium Embedded Framework` location.
     3. Compiled/link/package the `webviewchromium` app:
        - Require `webview.cpp`
-       - Reuqire link frameworks: Chromium Embedded Framework.framework, AppKit.frameworks.
+       - Reuqire link frameworks: Chromium Embedded Framework.framework,
+         AppKit.frameworks.
        - Reuqire app bundle configuration: Info.plist
-       - Use system tool `install_name_tool -change` to correct `Chromium Embedded Framework.framework/Chromium Embedded Framework` location.
-    4. Create a `Contents/Frameworks` directory in `webviewchromium.app` bundle and copy `helper.app`, `webviewchromium.dylib`, 'webview.dylib'
-       and `Chromium Embedded Framework` in it.
-    5. Use `samples/webview_chromium/mac/tools/make_more_helper.sh` to make sub-process helper app bundles based on `helper` app.
-    
-    
+       - Use system tool `install_name_tool -change` to correct `Chromium
+         Embedded Framework.framework/Chromium Embedded Framework` location.
+    4. Create a `Contents/Frameworks` directory in `webviewchromium.app` bundle
+       and copy `helper.app`, `webviewchromium.dylib`, 'webview.dylib'
+       and `Chromium Embedded Framework` into it.
+    5. Use `samples/webview_chromium/mac/tools/make_more_helper.sh` to make
+       sub-process helper app bundles based on `helper` app.
+
     Below is the wxWebviewChromium sample app bundle directory structure:
 
         webview_chromium.app
@@ -134,7 +118,21 @@
             |-- PkgInfo
             `-- Resources
                 `-- wxmac.icns                                  <= resources.
-            
+
+    @section differences API Differences
+
+    wxWebViewChromium aims to support the full wxWebView API, but there are
+    some features which are currently unsupported by the CEF3 API, these are:
+
+    - GetSelectedSource/GetSelectedText: returns ""
+    - HasSelection: returns false
+    - IsEditable: returns false
+    - CanUndo/CanRedo/CanCut/CanCopy/CanPaste: returns true
+    - Find: returns -1
+
+    @since 3.1.0
+    @library{wxwebview_chromium}
+    @category{webview}
 
 **/
 class wxWebViewChromium : public wxWebView
