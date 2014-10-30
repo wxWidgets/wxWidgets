@@ -49,13 +49,16 @@
            Creates smooth progress bar with one pixel wide update step (not
            supported by all platforms).
     @style{wxGA_TEXT}
-           Display current completed percentage: text default format "%p%"
-           (only supported in wxQt, may be not available on all platforms).
+           Display the current value in percents in the gauge itself. This
+           style is only supported in wxQt and ignored under the other
+           platforms.
            @since 3.1.0
+
     @style{wxGA_PROGRESS}
-           Reflect the value of guage on the taskbar button, available since
-           Windows 7 only.
+           Reflect the value of gauge in the application taskbar button under
+           Windows 7 and later, ignored under the other platforms.
            @since 3.1.0
+
     @endStyleTable
 
     @library{wxcore}
