@@ -697,6 +697,13 @@ protected:
     wxPGProperty* BaseGetPropertyByLabel( const wxString& label,
                                       wxPGProperty* parent = NULL ) const;
 
+    /** Unselect sub-properties */
+    void DoRemoveChildrenFromSelection(wxPGProperty* p, bool recursive,
+                                       int selFlags);
+
+    /** Mark sub-properties as being deleted */
+    void DoMarkChildrenAsDeleted(wxPGProperty* p, bool recursive);
+
     /** If visible, then this is pointer to wxPropertyGrid.
         This shall *never* be NULL to indicate that this state is not visible.
     */

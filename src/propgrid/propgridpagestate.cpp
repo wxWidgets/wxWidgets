@@ -1853,15 +1853,89 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
 
 // -----------------------------------------------------------------------
 
+void wxPropertyGridPageState::DoRemoveChildrenFromSelection(wxPGProperty* p,
+                                                            bool recursive,
+                                                            int selFlags)
+{
+    wxPropertyGrid* pg = GetGrid();
+
+    for( unsigned int i = 0; i < p->GetChildCount(); i++ )
+    {
+        wxPGProperty* child = p->Item(i);
+        if ( DoIsPropertySelected(child) )
+        {
+            if ( pg && pg->GetState() == this )
+            {
+                pg->DoRemoveFromSelection(child, selFlags);
+            }
+            else
+            {
+                DoRemoveFromSelection(child);
+            }
+        }
+
+        if ( recursive )
+        {
+            DoRemoveChildrenFromSelection(child, recursive, selFlags);
+        }
+    }
+}
+
+void wxPropertyGridPageState::DoMarkChildrenAsDeleted(wxPGProperty* p,
+                                                      bool recursive)
+{
+    for( unsigned int i = 0; i < p->GetChildCount(); i++ )
+    {
+        wxPGProperty* child = p->Item(i);
+
+        child->SetFlag(wxPG_PROP_BEING_DELETED);
+
+        if ( recursive )
+        {
+            DoMarkChildrenAsDeleted(child, recursive);
+        }
+    }
+}
+
 void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
 {
     wxCHECK_RET( item->GetParent(),
-        wxT("this property was already deleted") );
+        wxT("wxPropertyGrid: This property was already deleted.") );
 
     wxCHECK_RET( item != &m_regularArray && item != m_abcArray,
         wxT("wxPropertyGrid: Do not attempt to remove the root item.") );
 
+    wxPGProperty* parent = item->GetParent();
+
+    wxCHECK_RET( !parent->HasFlag(wxPG_PROP_AGGREGATE),
+        wxT("wxPropertyGrid: Do not attempt to remove sub-properties.") );
+
+    wxASSERT( item->GetParentState() == this );
+
     wxPropertyGrid* pg = GetGrid();
+
+    if ( DoIsPropertySelected(item) )
+    {
+        if ( pg && pg->GetState() == this )
+        {
+            pg->DoRemoveFromSelection(item,
+                wxPG_SEL_DELETING|wxPG_SEL_NOVALIDATE);
+        }
+        else
+        {
+            DoRemoveFromSelection(item);
+        }
+    }
+
+    if ( item->IsChildSelected(true) )
+    {
+        DoRemoveChildrenFromSelection(item, true,
+                wxPG_SEL_DELETING|wxPG_SEL_NOVALIDATE);
+    }
+
+    // Prevent property and its children from being re-selected
+    item->SetFlag(wxPG_PROP_BEING_DELETED);
+    DoMarkChildrenAsDeleted(item, true);
 
     // Must defer deletion? Yes, if handling a wxPG event.
     if ( pg && pg->m_processedEvent )
@@ -1899,27 +1973,6 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     unsigned int indinparent = item->GetIndexInParent();
 
     wxPGProperty* pwc = (wxPGProperty*)item;
-    wxPGProperty* parent = item->GetParent();
-
-    wxCHECK_RET( !parent->HasFlag(wxPG_PROP_AGGREGATE),
-        wxT("wxPropertyGrid: Do not attempt to remove sub-properties.") );
-
-    wxASSERT( item->GetParentState() == this );
-
-    if ( DoIsPropertySelected(item) )
-    {
-        if ( pg && pg->GetState() == this )
-        {
-            pg->DoRemoveFromSelection(item,
-                wxPG_SEL_DELETING|wxPG_SEL_NOVALIDATE);
-        }
-        else
-        {
-            DoRemoveFromSelection(item);
-        }
-    }
-
-    item->SetFlag(wxPG_PROP_BEING_DELETED);
 
     // Delete children
     if ( item->GetChildCount() && !item->HasFlag(wxPG_PROP_AGGREGATE) )
