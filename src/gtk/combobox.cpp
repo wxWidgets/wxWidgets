@@ -295,6 +295,12 @@ wxComboBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 #endif
 }
 
+void wxComboBox::Clear()
+{
+    wxTextEntry::Clear();
+    wxItemContainer::Clear();
+}
+
 void wxComboBox::SetValue(const wxString& value)
 {
     if ( HasFlag(wxCB_READONLY) )

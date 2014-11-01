@@ -94,11 +94,7 @@ public:
     virtual void Popup();
     virtual void Dismiss();
 
-    virtual void Clear() wxOVERRIDE
-    {
-        wxTextEntry::Clear();
-        wxItemContainer::Clear();
-    }
+    virtual void Clear() wxOVERRIDE;
 
     // See wxComboBoxBase discussion of IsEmpty().
     bool IsListEmpty() const { return wxItemContainer::IsEmpty(); }
