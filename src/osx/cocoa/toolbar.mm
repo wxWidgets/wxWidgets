@@ -563,9 +563,10 @@ void wxToolBarTool::UpdateImages()
 
     if ( CanBeToggled() )
     {
-        int w = m_bmpNormal.GetWidth();
-        int h = m_bmpNormal.GetHeight();
-        m_alternateBitmap = wxBitmap( w, h );
+        int w = m_bmpNormal.GetScaledWidth();
+        int h = m_bmpNormal.GetScaledHeight();
+        m_alternateBitmap = wxBitmap();
+        m_alternateBitmap.CreateScaled(w, h, -1, m_bmpNormal.GetScaleFactor());
         wxMemoryDC dc;
 
         dc.SelectObject(m_alternateBitmap);
