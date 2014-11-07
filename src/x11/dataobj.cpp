@@ -378,10 +378,12 @@ void wxBitmapDataObject::DoConvertToPng()
 // wxTextDataObject
 // ----------------------------------------------------------------------------
 
+#if defined(wxNEEDS_UTF8_FOR_TEXT_DATAOBJ) || defined(wxNEEDS_UTF16_FOR_TEXT_DATAOBJ)
 void
 wxTextDataObject::GetAllFormats(wxDataFormat *formats,
                                 wxDataObjectBase::Direction WXUNUSED(dir)) const
 {
     *formats++ = GetPreferredFormat();
 }
+#endif
 #endif // wxUSE_DATAOBJ
