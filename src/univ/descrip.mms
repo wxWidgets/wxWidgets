@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 4 November 2010                                                     *
+# Date : 6 November 2014                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -20,7 +20,7 @@ CC_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
 .c.obj :
 	cc $(CFLAGS)$(CC_DEFINE) $(MMS$TARGET_NAME).c
 
-OBJECTS = \
+OBJECTS = anybutton.obj,\
 		bmpbuttn.obj,\
 		button.obj,\
 		checkbox.obj,\
@@ -61,7 +61,7 @@ OBJECTS = \
 		scrthumb.obj,\
 		win32.obj
 
-SOURCES =\
+SOURCES =anybutton.cpp\
 		bmpbuttn.cpp \
 		button.cpp \
 		checkbox.cpp \
@@ -108,6 +108,7 @@ all : $(SOURCES)
 
 $(OBJECTS) : [--.include.wx]setup.h
 
+anybutton.obj : anybutton.cpp
 bmpbuttn.obj : bmpbuttn.cpp
 button.obj : button.cpp
 checkbox.obj : checkbox.cpp
