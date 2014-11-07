@@ -28,7 +28,7 @@ public:
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxTB_HORIZONTAL,
+                long style = wxTB_DEFAULT_STYLE,
                 const wxString& name = wxToolBarNameStr)
     {
         Create(parent, id, pos, size, style, name);
@@ -38,7 +38,7 @@ public:
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxTB_HORIZONTAL,
+                long style = wxTB_DEFAULT_STYLE,
                 const wxString& name = wxToolBarNameStr);
 
     // override/implement base class virtuals
@@ -87,7 +87,7 @@ public:
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxTB_HORIZONTAL,
+                long style = wxTB_DEFAULT_STYLE,
                 const wxString& name = wxToolBarNameStr,
                 wxMenuBar* menuBar = NULL)
     {
@@ -100,7 +100,7 @@ public:
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxTB_HORIZONTAL,
+                long style = wxTB_DEFAULT_STYLE,
                 const wxString& name = wxToolBarNameStr,
                 wxMenuBar* menuBar = NULL);
 

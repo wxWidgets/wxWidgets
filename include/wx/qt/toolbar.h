@@ -21,7 +21,7 @@ public:
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
-              long style = wxNO_BORDER | wxTB_HORIZONTAL,
+              long style = wxTB_DEFAULT_STYLE | wxNO_BORDER,
               const wxString& name = wxToolBarNameStr)
     {
         Init();
@@ -36,7 +36,7 @@ public:
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxNO_BORDER | wxTB_HORIZONTAL,
+                long style = wxTB_DEFAULT_STYLE | wxNO_BORDER,
                 const wxString& name = wxToolBarNameStr);
 
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
