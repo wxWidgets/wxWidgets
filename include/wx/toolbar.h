@@ -61,7 +61,7 @@ enum
     // lay out toolbar at the right edge of the window
     wxTB_RIGHT        = 0x4000,
 
-    wxTB_DEFAULT_STYLE = wxTB_HORIZONTAL | wxTB_FLAT
+    wxTB_DEFAULT_STYLE = wxTB_HORIZONTAL
 };
 
 #if wxUSE_TOOLBAR

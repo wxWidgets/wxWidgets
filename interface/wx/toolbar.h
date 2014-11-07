@@ -59,7 +59,7 @@ enum
     wxTB_RIGHT,
 
     /** flags that are closest to the native look*/
-    wxTB_DEFAULT_STYLE = wxTB_HORIZONTAL | wxTB_FLAT
+    wxTB_DEFAULT_STYLE = wxTB_HORIZONTAL
 };
 
 
