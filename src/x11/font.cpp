@@ -762,6 +762,13 @@ bool wxFont::GetStrikethrough() const
     return M_FONTDATA->m_nativeFontInfo.GetStrikethrough();
 }
 
+#if defined( __WXX11__ ) && !defined( wxUSE_PANGO )
+bool wxNativeFontInfo::GetStrikethrough() const
+{
+   return false;
+}
+#endif
+
 wxFontEncoding wxFont::GetEncoding() const
 {
     wxCHECK_MSG( IsOk(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
