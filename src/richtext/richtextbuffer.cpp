@@ -5496,7 +5496,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
 
 /// Apply paragraph styles, such as centering, to wrapped lines
 /// TODO: take into account box attributes, possibly
-void wxRichTextParagraph::ApplyParagraphStyle(wxRichTextLine* line, const wxRichTextAttr& attr, const wxRect& rect, wxDC& dc)
+void wxRichTextParagraph::ApplyParagraphStyle(wxRichTextLine* line, const wxRichTextAttr& attr, const wxRect& rect, wxDC& WXUNUSED(dc))
 {
     if (!attr.HasAlignment())
         return;
@@ -5508,14 +5508,12 @@ void wxRichTextParagraph::ApplyParagraphStyle(wxRichTextLine* line, const wxRich
     // centering, right-justification
     if (attr.HasAlignment() && attr.GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
     {
-        int rightIndent = ConvertTenthsMMToPixels(dc, attr.GetRightIndent());
-        pos.x = (rect.GetWidth() - rightIndent - size.x)/2 + pos.x;
+        pos.x = (rect.GetWidth() - size.x)/2 + pos.x;
         line->SetPosition(pos);
     }
     else if (attr.HasAlignment() && attr.GetAlignment() == wxTEXT_ALIGNMENT_RIGHT)
     {
-        int rightIndent = ConvertTenthsMMToPixels(dc, attr.GetRightIndent());
-        pos.x = pos.x + rect.GetWidth() - size.x - rightIndent;
+        pos.x = pos.x + rect.GetWidth() - size.x;
         line->SetPosition(pos);
     }
 
@@ -6492,7 +6490,11 @@ wxRichTextAttr wxRichTextParagraph::GetCombinedAttributes(const wxRichTextAttr& 
             // want to unnecessarily overwrite the background when we're drawing text
             // because this may erase the guideline (which appears just under the text
             // if there's no padding).
-            attr.SetFlags(attr.GetFlags() & ~wxTEXT_ATTR_BACKGROUND_COLOUR);
+            if (attr.HasBackgroundColour())
+            {
+                attr.SetBackgroundColour(wxColour());
+                attr.SetFlags(attr.GetFlags() & ~wxTEXT_ATTR_BACKGROUND_COLOUR);
+            }
         }
         wxRichTextApplyStyle(attr, GetAttributes());
     }
@@ -6512,7 +6514,14 @@ wxRichTextAttr wxRichTextParagraph::GetCombinedAttributes(bool includingBoxAttr)
     {
         attr = buf->GetBasicStyle();
         if (!includingBoxAttr)
+        {
             attr.GetTextBoxAttr().Reset();
+            if (attr.HasBackgroundColour())
+            {
+                attr.SetBackgroundColour(wxColour());
+                attr.SetFlags(attr.GetFlags() & ~wxTEXT_ATTR_BACKGROUND_COLOUR);
+            }
+        }
         wxRichTextApplyStyle(attr, GetAttributes());
     }
     else
