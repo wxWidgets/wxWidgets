@@ -1063,7 +1063,7 @@ public:
 
     /** Returns true if any property has been modified by the user. */
     bool IsAnyModified() const
-#ifdef WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
          { return m_pState->m_anyModified != (unsigned char)false; }
 #else
          { return m_pState->m_anyModified; }
@@ -1929,8 +1929,11 @@ protected:
 
     unsigned char       m_vspacing;
 
+#if WXWIN_COMPATIBILITY_3_0
+    // Unused variable.
     // Used to track when Alt/Ctrl+Key was consumed.
     unsigned char       m_keyComboConsumed;
+#endif
 
     /** 1 if in DoPropertyChanged() */
     bool                m_inDoPropertyChanged;
