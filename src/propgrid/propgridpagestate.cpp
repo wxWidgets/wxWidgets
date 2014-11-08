@@ -1526,7 +1526,7 @@ wxVariant wxPropertyGridPageState::DoGetPropertyValues( const wxString& listname
 
 void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wxPGProperty* defaultCategory )
 {
-    unsigned char origFrozen = 1;
+    bool origFrozen = true;
 
     if ( m_pPropGrid->GetState() == this )
     {
