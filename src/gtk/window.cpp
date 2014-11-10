@@ -4878,9 +4878,12 @@ void wxWindowGTK::SetScrollbar(int orient,
     GtkAdjustment* adj = gtk_range_get_adjustment(sb);
     const bool wasVisible = gtk_adjustment_get_upper(adj) > gtk_adjustment_get_page_size(adj);
 
+    g_object_freeze_notify(G_OBJECT(adj));
     gtk_range_set_increments(sb, 1, thumbVisible);
     gtk_adjustment_set_page_size(adj, thumbVisible);
     gtk_range_set_range(sb, 0, range);
+    g_object_thaw_notify(G_OBJECT(adj));
+
     gtk_range_set_value(sb, pos);
     m_scrollPos[dir] = gtk_range_get_value(sb);
 
