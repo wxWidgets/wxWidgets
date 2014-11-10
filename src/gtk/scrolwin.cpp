@@ -71,9 +71,11 @@ void wxScrollHelper::DoAdjustScrollbar(GtkRange* range,
     GtkAdjustment* adj = gtk_range_get_adjustment(range);
     const bool wasVisible = gtk_adjustment_get_upper(adj) > gtk_adjustment_get_page_size(adj);
 
+    g_object_freeze_notify(G_OBJECT(adj));
     gtk_range_set_increments(range, 1, page_size);
     gtk_adjustment_set_page_size(adj, page_size);
     gtk_range_set_range(range, 0, upper);
+    g_object_thaw_notify(G_OBJECT(adj));
 
     const bool isVisible = gtk_adjustment_get_upper(adj) > gtk_adjustment_get_page_size(adj);
     if (isVisible != wasVisible)
