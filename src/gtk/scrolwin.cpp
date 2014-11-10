@@ -81,6 +81,14 @@ void wxScrollHelper::AdjustScrollbars()
 {
     int vw, vh;
     m_targetWindow->GetVirtualSize(&vw, &vh);
+#ifdef __WXGTK3__
+    if (m_targetWindow != m_win)
+    {
+        // setting wxPizza preferred size keeps GtkScrolledWindow from causing
+        // an infinite sizing loop
+        gtk_widget_set_size_request(m_win->m_wxwindow, vw, vh);
+    }
+#endif
 
     int w, h;
     const wxSize availSize = GetSizeAvailableForScrollTarget(
