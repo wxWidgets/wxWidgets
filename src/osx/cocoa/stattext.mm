@@ -32,6 +32,7 @@
 
 @interface wxNSStaticTextView : NSTextField
 {
+    NSColor *m_textColor;
 }
 @end
 
@@ -47,6 +48,12 @@
     }
 }
 
+- (void)dealloc
+{
+    [m_textColor release];
+    [super dealloc];
+}
+
 - (void) setEnabled:(BOOL) flag 
 { 
     [super setEnabled: flag]; 
@@ -57,10 +64,13 @@
         // http://www.cocoabuilder.com/archive/message/cocoa/2006/7/21/168028 
         if (flag)
         { 
-            [self setTextColor: [NSColor controlTextColor]]; 
+            if (m_textColor)
+                [self setTextColor: m_textColor];
         }
         else 
         { 
+            [m_textColor release];
+            m_textColor = [[self textColor] retain];
             [self setTextColor: [NSColor secondarySelectedControlColor]]; 
         } 
     } 
