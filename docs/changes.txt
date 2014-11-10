@@ -581,6 +581,11 @@ All (GUI):
 
 - Fix several floating point rounding bugs in wxPropertyGrid (Artur Wieczorek).
 
+wxGTK:
+
+- Fix infinite sizing loop with GTK3 when using wxScrolled with a non-default
+  target window.
+
 wxMSW:
 
 - Fix compilation with C++Builder XE compiler (Nichka).
