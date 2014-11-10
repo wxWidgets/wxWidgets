@@ -68,9 +68,16 @@ void wxScrollHelper::DoAdjustScrollbar(GtkRange* range,
         *linesPerPage = 0;
     }
 
+    GtkAdjustment* adj = gtk_range_get_adjustment(range);
+    const bool wasVisible = gtk_adjustment_get_upper(adj) > gtk_adjustment_get_page_size(adj);
+
     gtk_range_set_increments(range, 1, page_size);
-    gtk_adjustment_set_page_size(gtk_range_get_adjustment(range), page_size);
+    gtk_adjustment_set_page_size(adj, page_size);
     gtk_range_set_range(range, 0, upper);
+
+    const bool isVisible = gtk_adjustment_get_upper(adj) > gtk_adjustment_get_page_size(adj);
+    if (isVisible != wasVisible)
+        m_win->m_useCachedClientSize = false;
 
     // ensure that the scroll position is always in valid range
     if (*pos > *lines)
