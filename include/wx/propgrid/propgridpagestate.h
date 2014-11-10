@@ -704,6 +704,16 @@ protected:
     /** Mark sub-properties as being deleted */
     void DoMarkChildrenAsDeleted(wxPGProperty* p, bool recursive);
 
+    /** Rename the property
+        so it won't remain in the way of the user code.
+     */
+    void DoInvalidatePropertyName(wxPGProperty* p);
+
+    /** Rename sub-properties
+        so it won't remain in the way of the user code.
+     */
+    void DoInvalidateChildrenNames(wxPGProperty* p, bool recursive);
+
     /** If visible, then this is pointer to wxPropertyGrid.
         This shall *never* be NULL to indicate that this state is not visible.
     */

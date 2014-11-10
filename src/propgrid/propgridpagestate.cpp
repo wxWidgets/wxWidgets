@@ -1897,6 +1897,35 @@ void wxPropertyGridPageState::DoMarkChildrenAsDeleted(wxPGProperty* p,
     }
 }
 
+void wxPropertyGridPageState::DoInvalidatePropertyName(wxPGProperty* p)
+{
+    // Let's trust that no sane property uses prefix like
+    // this. It would be anyway fairly inconvenient (in
+    // current code) to check whether a new name is used
+    // by another property with parent (due to the child
+    // name notation).
+    wxString newName = wxT("_&/_%$") + p->GetBaseName();
+    DoSetPropertyName(p, newName);
+}
+
+void wxPropertyGridPageState::DoInvalidateChildrenNames(wxPGProperty* p,
+                                                        bool recursive)
+{
+    if (p->IsCategory())
+    {
+        for( unsigned int i = 0; i < p->GetChildCount(); i++ )
+        {
+            wxPGProperty* child = p->Item(i);
+            DoInvalidatePropertyName(child);
+
+            if ( recursive )
+            {
+                DoInvalidateChildrenNames(child, recursive);
+            }
+        }
+    }
+}
+
 void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
 {
     wxCHECK_RET( item->GetParent(),
@@ -1953,16 +1982,10 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
             pg->m_removedProperties.push_back(item);
         }
 
-        // Rename the property so it won't remain in the way
+        // Rename the property and its children so it won't remain in the way
         // of the user code.
-
-        // Let's trust that no sane property uses prefix like
-        // this. It would be anyway fairly inconvenient (in
-        // current code) to check whether a new name is used
-        // by another property with parent (due to the child
-        // name notation).
-        wxString newName = wxS("_&/_%$") + item->GetBaseName();
-        DoSetPropertyName(item, newName);
+        DoInvalidatePropertyName(item);
+        DoInvalidateChildrenNames(item, true);
 
         return;
     }
