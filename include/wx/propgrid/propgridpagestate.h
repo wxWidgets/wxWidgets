@@ -714,6 +714,10 @@ protected:
      */
     void DoInvalidateChildrenNames(wxPGProperty* p, bool recursive);
 
+    /** Check if property contains given sub-category */
+    bool IsChildCategory(wxPGProperty* p,
+                         wxPropertyCategory* cat, bool recursive);
+
     /** If visible, then this is pointer to wxPropertyGrid.
         This shall *never* be NULL to indicate that this state is not visible.
     */
