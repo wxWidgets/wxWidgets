@@ -11,7 +11,6 @@
 #ifndef _WX_CURSOR_H_
 #define _WX_CURSOR_H_
 
-#include "wx/gdicmn.h"
 #include "wx/colour.h"
 
 class WXDLLIMPEXP_FWD_CORE wxImage;

@@ -10,8 +10,6 @@
 #ifndef _WX_DFB_CURSOR_H_
 #define _WX_DFB_CURSOR_H_
 
-#include "wx/gdicmn.h"
-
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 
 //-----------------------------------------------------------------------------

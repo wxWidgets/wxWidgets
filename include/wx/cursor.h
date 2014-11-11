@@ -11,9 +11,8 @@
 #ifndef _WX_CURSOR_H_BASE_
 #define _WX_CURSOR_H_BASE_
 
-#include "wx/defs.h"
-
 #include "wx/gdiobj.h"
+#include "wx/gdicmn.h"
 
 // Under most ports, wxCursor derives directly from wxGDIObject, but in wxMSW
 // there is an intermediate wxGDIImage class.

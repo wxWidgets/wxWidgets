@@ -8,7 +8,6 @@
 #ifndef _WX_QT_CURSOR_H_
 #define _WX_QT_CURSOR_H_
 
-#include "wx/gdicmn.h"
 #include "wx/image.h"
 
 #include <QtGui/QCursor>
