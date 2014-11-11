@@ -646,22 +646,27 @@ void wxGCDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
     m_graphicContext->Scale(factor, 1.0);
     wxGraphicsPath path = m_graphicContext->CreatePath();
 
+    // If end angle equals start angle we want draw a full ellipse.
+    if (ea == sa)
+    {
+        ea += 360.0;
+    }
     // since these angles (ea,sa) are measured counter-clockwise, we invert them to
     // get clockwise angles
     if ( m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT )
     {
         path.MoveToPoint( 0, 0 );
-        path.AddArc( 0, 0, h/2.0, wxDegToRad(-sa), wxDegToRad(-ea), sa > ea );
+        path.AddArc( 0, 0, h/2.0, wxDegToRad(-sa), wxDegToRad(-ea), false );
         path.AddLineToPoint( 0, 0 );
         m_graphicContext->FillPath( path );
 
         path = m_graphicContext->CreatePath();
-        path.AddArc( 0, 0, h/2.0, wxDegToRad(-sa), wxDegToRad(-ea), sa > ea );
+        path.AddArc( 0, 0, h/2.0, wxDegToRad(-sa), wxDegToRad(-ea), false );
         m_graphicContext->StrokePath( path );
     }
     else
     {
-        path.AddArc( 0, 0, h/2.0, wxDegToRad(-sa), wxDegToRad(-ea), sa > ea );
+        path.AddArc( 0, 0, h/2.0, wxDegToRad(-sa), wxDegToRad(-ea), false );
         m_graphicContext->DrawPath( path );
     }
 

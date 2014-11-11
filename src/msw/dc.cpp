@@ -1290,17 +1290,6 @@ void wxMSWDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,doub
     rx2 += (int)(100.0 * abs(w) * cos(ea));
     ry2 -= (int)(100.0 * abs(h) * m_signY * sin(ea));
 
-    // Swap start and end positions if the end angle is less than the start angle.
-    if (ea < sa) {
-        int temp;
-        temp = rx2;
-        rx2 = rx1;
-        rx1 = temp;
-        temp = ry2;
-        ry2 = ry1;
-        ry1 = temp;
-    }
-
     // draw pie with NULL_PEN first and then outline otherwise a line is
     // drawn from the start and end points to the centre
     HPEN hpenOld = (HPEN) ::SelectObject(GetHdc(), (HPEN) ::GetStockObject(NULL_PEN));
