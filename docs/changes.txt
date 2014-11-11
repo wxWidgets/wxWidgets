@@ -580,6 +580,8 @@ Major new features in this release
 All (GUI):
 
 - Fix several floating point rounding bugs in wxPropertyGrid (Artur Wieczorek).
+- Restore support for wxFD_OVERWRITE_PROMPT and wxFD_FILE_MUST_EXIST in
+  wxGenericFileDialog which was accidentally lost some time ago (Carl Godkin).
 
 wxGTK:
 
