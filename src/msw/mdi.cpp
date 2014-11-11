@@ -447,6 +447,20 @@ wxMenuItem *wxMDIParentFrame::FindItemInMenuBar(int menuId) const
     return item;
 }
 
+wxMenu* wxMDIParentFrame::MSWFindMenuFromHMENU(WXHMENU hMenu)
+{
+    wxMenu* menu = GetActiveChild()
+                        ? GetActiveChild()->MSWFindMenuFromHMENU(hMenu)
+                        : NULL;
+    if ( !menu )
+        menu = wxFrame::MSWFindMenuFromHMENU(hMenu);
+
+    if ( !menu && m_windowMenu && GetHmenuOf(m_windowMenu) == hMenu )
+        menu = m_windowMenu;
+
+    return menu;
+}
+
 WXHMENU wxMDIParentFrame::MSWGetActiveMenu() const
 {
     wxMDIChildFrame * const child  = GetActiveChild();

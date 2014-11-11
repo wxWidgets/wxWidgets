@@ -103,9 +103,10 @@ public:
     virtual bool MSWTranslateMessage(WXMSG* msg);
 
 #if wxUSE_MENUS
-    // override wxFrameBase function to also look in the active child menu bar
-    // and the "Window" menu
+    // override the menu-relayed methods to also look in the active child menu
+    // bar and the "Window" menu
     virtual wxMenuItem *FindItemInMenuBar(int menuId) const;
+    virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu);
 #endif // wxUSE_MENUS
 
 protected:

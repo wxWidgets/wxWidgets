@@ -114,6 +114,7 @@ wxMSW:
 - Fix updating wxSlider background when its parent background changes.
 - Implement wxListBox::EnsureVisible() (RIVDSL).
 - Drastically improve efficiency of selecting all items in wxDataViewCtrl.
+- Fix wxMenuEvent::GetMenu() for wxEVT_MENU_{OPEN,CLOSE} in MDI frames.
 
 wxOSX/Cocoa:
 
