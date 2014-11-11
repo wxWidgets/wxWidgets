@@ -970,7 +970,38 @@ bool wxRegKey::QueryValue(const wxString& szValue, wxMemoryBuffer& buffer) const
   return false;
 }
 
+bool wxRegKey::QueryValue(const wxString& szValue, wxArrayString &names,
+                          wxArrayString &values) const
+{
+    // Make sure value is a multistring.
+    wxASSERT_MSG(GetValueType (szValue) == Type_Multi_String,
+                 wxT("Type mismatch in wxRegKey::QueryValue()."));
 
+    wxMemoryBuffer buf;
+    if ( !QueryValue (szValue, buf) )
+        return false;
+
+    wxChar * const data = static_cast<wxChar *>(buf.GetData());
+
+    // Parse the list of NUL-separated strings of the form "name=value".
+    size_t begin = 0;
+    for ( size_t i = 0; i < buf.GetDataLen() - 1; i++ )
+    {
+        if ( data[i] == 0 )
+        {
+            if ( i > begin )
+            {
+                wxString value;
+                names.Add(wxString(&data[begin]).BeforeFirst('=', &value));
+                values.Add(value);
+            }
+
+            begin = i + 1;
+        }
+    }
+
+    return true;
+}
 
 bool wxRegKey::QueryValue(const wxString& szValue,
                           wxString& strValue,

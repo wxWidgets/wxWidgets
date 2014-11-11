@@ -116,6 +116,7 @@ wxMSW:
 - Implement wxListBox::EnsureVisible() (RIVDSL).
 - Drastically improve efficiency of selecting all items in wxDataViewCtrl.
 - Fix wxMenuEvent::GetMenu() for wxEVT_MENU_{OPEN,CLOSE} in MDI frames.
+- Added support for reading multi string values to wxRegKey (Carl Godkin).
 
 wxOSX/Cocoa:
 
