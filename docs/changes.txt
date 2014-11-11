@@ -591,6 +591,7 @@ wxMSW:
 - Fix compilation with C++Builder XE compiler (Nichka).
 - Fix best height of wxSlider with labels but without ticks (Artur Wieczorek).
 - Fix initial text value of wxSpinCtrlDouble (Laurent Poujoulat).
+- Fix best size calculation for bitmaps with buttons (Artur Wieczorek).
 
 
 3.0.2: (released 2014-10-06)
