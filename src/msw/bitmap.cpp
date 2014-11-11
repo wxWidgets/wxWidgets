@@ -488,13 +488,9 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,
     // it may be either HICON or HCURSOR
     HICON hicon = (HICON)icon.GetHandle();
 
-    ICONINFO iconInfo;
-    if ( !::GetIconInfo(hicon, &iconInfo) )
-    {
-        wxLogLastError(wxT("GetIconInfo"));
-
+    AutoIconInfo iconInfo;
+    if ( !iconInfo.GetFrom(hicon) )
         return false;
-    }
 
     wxBitmapRefData *refData = new wxBitmapRefData;
     m_refData = refData;
@@ -508,6 +504,10 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,
         refData->m_height = h;
         refData->m_depth = wxDisplayDepth();
         refData->m_hBitmap = (WXHBITMAP)iconInfo.hbmColor;
+
+        // Reset this field to prevent it from being destroyed by AutoIconInfo,
+        // we took ownership of it.
+        iconInfo.hbmColor = 0;
     }
     else // we only have monochrome icon/cursor
     {
@@ -568,7 +568,7 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,
             // alpha, so check for this.
             {
                 HBITMAP hdib = 0;
-                if ( CheckAlpha(iconInfo.hbmColor, &hdib) )
+                if ( CheckAlpha(refData->m_hBitmap, &hdib) )
                     refData->Set32bppHDIB(hdib);
             }
             break;
@@ -585,9 +585,6 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,
         // wxWin convention
         refData->SetMask(wxInvertMask(iconInfo.hbmMask, w, h));
     }
-
-    // delete the old one now as we don't need it any more
-    ::DeleteObject(iconInfo.hbmMask);
 
     return true;
 #else // __WXMICROWIN__ || __WXWINCE__

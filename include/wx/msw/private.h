@@ -613,6 +613,33 @@ public:
     operator HRGN() const { return (HRGN)GetObject(); }
 };
 
+// Class automatically freeing ICONINFO struct fields after retrieving it using
+// GetIconInfo().
+class AutoIconInfo : public ICONINFO
+{
+public:
+    AutoIconInfo() { wxZeroMemory(*this); }
+
+    bool GetFrom(HICON hIcon)
+    {
+        if ( !::GetIconInfo(hIcon, this) )
+        {
+            wxLogLastError(wxT("GetIconInfo"));
+            return false;
+        }
+
+        return true;
+    }
+
+    ~AutoIconInfo()
+    {
+        if ( hbmColor )
+            ::DeleteObject(hbmColor);
+        if ( hbmMask )
+            ::DeleteObject(hbmMask);
+    }
+};
+
 // class sets the specified clipping region during its life time
 class HDCClipper
 {

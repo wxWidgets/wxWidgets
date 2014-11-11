@@ -1736,9 +1736,8 @@ void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxD
     // the built-in conversion fails when there is alpha in the HICON (eg XP style icons), we can only
     // find out by looking at the bitmap data whether there really was alpha in it
     HICON hIcon = (HICON)icon.GetHICON();
-    ICONINFO iconInfo ;
-    // IconInfo creates the bitmaps for color and mask, we must dispose of them after use
-    if (!GetIconInfo(hIcon,&iconInfo))
+    AutoIconInfo iconInfo ;
+    if (!iconInfo.GetFrom(hIcon))
         return;
 
     Bitmap interim(iconInfo.hbmColor,NULL);
@@ -1788,8 +1787,6 @@ void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxD
     m_context->DrawImage(image,(REAL) x,(REAL) y,(REAL) w,(REAL) h) ;
 
     delete image ;
-    DeleteObject(iconInfo.hbmColor);
-    DeleteObject(iconInfo.hbmMask);
 }
 
 void wxGDIPlusContext::DoDrawText(const wxString& str,

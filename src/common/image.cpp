@@ -2375,15 +2375,17 @@ static wxImage LoadImageFromResource(const wxString &name, wxBitmapType type)
         }
         else
         {
-            ICONINFO info;
-            if ( !::GetIconInfo(hIcon, &info) )
-            {
-                wxLogLastError(wxT("GetIconInfo"));
+            AutoIconInfo info;
+            if ( !info.GetFrom(hIcon) )
                 return wxImage();
-            }
 
             hBitmap.Init(info.hbmColor);
             hMask.Init(info.hbmMask);
+
+            // Reset the fields to prevent them from being destroyed, we took
+            // ownership of them.
+            info.hbmColor =
+            info.hbmMask = 0;
         }
     }
     else if ( type == wxBITMAP_TYPE_CUR_RESOURCE )
