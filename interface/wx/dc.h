@@ -356,12 +356,14 @@ public:
         @a width and @a height specify the width and height of the rectangle
         that contains the ellipse.
 
-        @a start and @a end specify the start and end of the arc relative to
+        @a start and @a end specify the end points of the arc relative to
         the three-o'clock position from the center of the rectangle. Angles are
         specified in degrees with 0 degree angle corresponding to the positive
-        horizontal axis (3 o'clock) direction. Positive values mean
-        counter-clockwise motion. If @a start is equal to @e end, a complete
-        ellipse will be drawn.
+        horizontal axis (3 o'clock) direction.
+
+        Independently of whether @a start is greater than or less than @a end,
+        the arc is drawn in the counter-clockwise direction. Also, if @a start
+        is equal to @e end, a complete ellipse is drawn.
 
         Notice that unlike DrawArc(), this function does not draw the lines to
         the arc ends, even when using non-transparent brush.

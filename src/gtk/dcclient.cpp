@@ -663,6 +663,16 @@ void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxC
     {
         wxCoord start = wxCoord(sa * 64.0);
         wxCoord end = wxCoord((ea-sa) * 64.0);
+        // We want to draw always in the counter-clokwise direction.
+        if (end < 0)
+        {
+            end = end % (360*64) + 360*64;
+        }
+        // If end angle equals start engle we want to draw a full ellipse.
+        if (end == 0)
+        {
+            end = 360*64;
+        }
 
         if ( m_brush.IsNonTransparent() )
         {

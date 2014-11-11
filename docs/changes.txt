@@ -593,6 +593,7 @@ All (GUI):
 
 - Improve stock items consistency and aesthetics (dhowland).
 - Implement wxTextCtrl::HitTest() for single line controls.
+- Make results of wxDC::DrawEllipticArc() consistent across all platforms.
 
 wxMSW:
 
