@@ -290,6 +290,7 @@ PangoContext* wxGetPangoContext()
         {
             context = gdk_pango_context_get_for_screen(screen);
         }
+#ifdef PANGO_VERSION_CHECK
 #if PANGO_VERSION_CHECK(1,22,0)
         else // No default screen.
         {
@@ -304,6 +305,7 @@ PangoContext* wxGetPangoContext()
             //else: pango_font_map_create_context() not available
         }
 #endif // Pango 1.22+
+#endif // PANGO_VERSION_CHECK
     }
 
     return context;
