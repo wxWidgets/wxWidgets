@@ -9,12 +9,11 @@
 #define _WX_QT_CURSOR_H_
 
 #include "wx/gdicmn.h"
-#include "wx/gdiobj.h"
 #include "wx/image.h"
 
 #include <QtGui/QCursor>
 
-class WXDLLIMPEXP_CORE wxCursor : public wxGDIObject
+class WXDLLIMPEXP_CORE wxCursor : public wxCursorBase
 {
 public:
     wxCursor() { }

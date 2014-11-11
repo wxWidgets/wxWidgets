@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/cursor.h
 // Purpose:     wxCursor base header
-// Author:      Julian Smart
-// Modified by:
+// Author:      Julian Smart, Vadim Zeitlin
 // Created:
 // Copyright:   (c) Julian Smart
+//              (c) 2014 Vadim Zeitlin (wxCursorBase)
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -13,12 +13,22 @@
 
 #include "wx/defs.h"
 
-/*
-    wxCursor classes should have the following public API:
+#include "wx/gdiobj.h"
 
-class WXDLLIMPEXP_CORE wxCursor : public wxGDIObject
+// Under most ports, wxCursor derives directly from wxGDIObject, but in wxMSW
+// there is an intermediate wxGDIImage class.
+#ifdef __WXMSW__
+    #include "wx/msw/gdiimage.h"
+#else
+    typedef wxGDIObject wxGDIImage;
+#endif
+
+class WXDLLIMPEXP_CORE wxCursorBase : public wxGDIImage
 {
 public:
+/*
+    wxCursor classes should provide the following ctors:
+
     wxCursor();
     wxCursor(const wxImage& image);
     wxCursor(const wxString& name,
@@ -28,10 +38,8 @@ public:
 #if WXWIN_COMPATIBILITY_2_8
     wxCursor(int id) { InitFromStock((wxStockCursor)id); }
 #endif
-    virtual ~wxCursor();
-};
-
 */
+};
 
 #if defined(__WXMSW__)
     #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_CUR_RESOURCE
