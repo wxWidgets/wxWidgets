@@ -52,7 +52,7 @@ of arguments or a variable argument list pointer. Here are all of them:
     defined) and expands to nothing in release mode (otherwise).
     Note that under Windows, you must either run the program under debugger or
     use a 3rd party program such as DebugView
-    (http://www.microsoft.com/technet/sysinternals/Miscellaneous/DebugView.mspx)
+    (http://technet.microsoft.com/en-us/sysinternals/bb896647.aspx)
     to actually see the debug output.
 @li wxLogTrace() as wxLogDebug() only does something in debug build. The reason for
     making it a separate function from it is that usually there are a lot of
