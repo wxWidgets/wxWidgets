@@ -275,6 +275,18 @@ wxCursor::wxCursor(const wxString& filename,
     }
 }
 
+wxPoint wxCursor::GetHotSpot() const
+{
+    if ( !GetGDIImageData() )
+        return wxDefaultPosition;
+
+    AutoIconInfo ii;
+    if ( !ii.GetFrom((HICON)GetGDIImageData()->m_hCursor) )
+        return wxDefaultPosition;
+
+    return wxPoint(ii.xHotspot, ii.yHotspot);
+}
+
 namespace
 {
 

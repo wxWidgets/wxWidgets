@@ -215,6 +215,19 @@ public:
     virtual bool IsOk() const;
 
     /**
+        Returns the coordinates of the cursor hot spot.
+
+        The hot spot is the point at which the mouse is actually considered to
+        be when this cursor is used.
+
+        This method is currently only implemented in wxMSW and wxGTK2+ and
+        simply returns ::wxDefaultPosition in the other ports.
+
+        @since 3.1.0
+     */
+    wxPoint GetHotSpot() const;
+
+    /**
         Assignment operator, using @ref overview_refcount "reference counting".
     */
     wxCursor& operator =(const wxCursor& cursor);

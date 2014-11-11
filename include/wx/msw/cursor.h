@@ -27,6 +27,9 @@ public:
 #if WXWIN_COMPATIBILITY_2_8
     wxCursor(int id) { InitFromStock((wxStockCursor)id); }
 #endif
+
+    virtual wxPoint GetHotSpot() const wxOVERRIDE;
+
     virtual ~wxCursor();
 
     // implementation only

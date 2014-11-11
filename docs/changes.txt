@@ -60,6 +60,7 @@ All (GUI):
 - Allow customizing window shown by wxBusyInfo.
 - Make results of wxDC::DrawEllipticArc() consistent across all platforms.
 - XRC handler for wxAuiToolBar added (Kinaou Hervé, David Hart).
+- Add wxCursor::GetHotSpot().
 - Add wxFD_NO_FOLLOW style for wxFileDialog (Luca Bacci).
 - Add support for embedding bitmaps in generated SVG in wxSVGFileDC (iwbnwif).
 - Add support for sorting wxDataViewCtrl by multiple columns (Trigve).

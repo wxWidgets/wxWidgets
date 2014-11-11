@@ -39,6 +39,8 @@ public:
     wxCursor(int id) { InitFromStock((wxStockCursor)id); }
 #endif
 */
+
+    virtual wxPoint GetHotSpot() const { return wxDefaultPosition; }
 };
 
 #if defined(__WXMSW__)

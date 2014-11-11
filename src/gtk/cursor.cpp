@@ -170,6 +170,35 @@ wxCursor::~wxCursor()
 {
 }
 
+wxPoint wxCursor::GetHotSpot() const
+{
+#if GTK_CHECK_VERSION(2,8,0)
+    if (GetCursor())
+    {
+        if (gtk_check_version(2,8,0) == NULL)
+        {
+            GdkPixbuf *pixbuf = gdk_cursor_get_image(GetCursor());
+            if (pixbuf)
+            {
+		wxPoint hotSpot = wxDefaultPosition;
+                const gchar* opt_xhot = gdk_pixbuf_get_option(pixbuf, "x_hot");
+                const gchar* opt_yhot = gdk_pixbuf_get_option(pixbuf, "y_hot");
+                if (opt_xhot && opt_yhot)
+                {
+		    const int xhot = atoi(opt_xhot);
+		    const int yhot = atoi(opt_yhot);
+		    hotSpot = wxPoint(xhot, yhot);
+                }
+                g_object_unref(pixbuf);
+                return hotSpot;
+            }
+        }
+    }
+#endif
+
+    return wxDefaultPosition;
+}
+
 void wxCursor::InitFromStock( wxStockCursor cursorId )
 {
     m_refData = new wxCursorRefData();

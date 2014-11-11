@@ -36,6 +36,9 @@ public:
               int hotSpotX = -1, int hotSpotY = -1,
               const char maskBits[] = NULL,
               const wxColour* fg = NULL, const wxColour* bg = NULL);
+
+    virtual wxPoint GetHotSpot() const wxOVERRIDE;
+
     virtual ~wxCursor();
 
     // implementation
