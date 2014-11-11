@@ -594,6 +594,7 @@ wxMSW:
 - Fix best height of wxSlider with labels but without ticks (Artur Wieczorek).
 - Fix initial text value of wxSpinCtrlDouble (Laurent Poujoulat).
 - Fix best size calculation for bitmaps with buttons (Artur Wieczorek).
+- Fix size of the icon returned from wxFSVolume::GetIcon() (troelsk).
 
 
 3.0.2: (released 2014-10-06)
