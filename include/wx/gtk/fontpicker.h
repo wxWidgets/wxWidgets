@@ -52,7 +52,7 @@ protected:
 public:     // used by the GTK callback only
 
     void SetNativeFontInfo(const char *gtkdescription)
-        { m_selectedFont.SetNativeFontInfo(wxString::FromAscii(gtkdescription)); }
+        { m_selectedFont.SetNativeFontInfo(wxString::FromUTF8(gtkdescription)); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxFontButton)

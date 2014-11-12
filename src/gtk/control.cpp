@@ -301,8 +301,10 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
         if (!font_name)
             attr.font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
         else
-            attr.font = wxFont(wxString::FromAscii(font_name));
-        g_free (font_name);
+        {
+            attr.font = wxFont(wxString::FromUTF8(font_name));
+            g_free(font_name);
+        }
     }
 
     if (tlw)
