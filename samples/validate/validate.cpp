@@ -258,12 +258,12 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
 
     // Now set a wxTextValidator with an explicit list of characters NOT allowed:
-    wxTextValidator textVal(wxFILTER_EMPTY|wxFILTER_EXCLUDE_LIST, &g_data.m_string2);
+    wxTextValidator textVal(wxFILTER_EMPTY|wxFILTER_EXCLUDE_CHAR_LIST, &g_data.m_string2);
     textVal.SetCharExcludes("bcwyz");
     wxTextCtrl* txt2 =
              new wxTextCtrl(this, VALIDATE_TEXT2, wxEmptyString,
                             wxDefaultPosition, wxDefaultSize, 0, textVal);
-    txt2->SetToolTip("uses wxTextValidator with wxFILTER_EMPTY|wxFILTER_EXCLUDE_LIST (to exclude 'bcwyz')");
+    txt2->SetToolTip("uses wxTextValidator with wxFILTER_EMPTY|wxFILTER_EXCLUDE_CHAR_LIST to exclude 'bcwyz'");
     flexgridsizer->Add(txt2, 1, wxGROW);
 
     flexgridsizer->Add(new wxListBox((wxWindow*)this, VALIDATE_LIST,
