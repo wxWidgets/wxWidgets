@@ -58,9 +58,7 @@ protected:
 
 
 public:     // used by the GTK callback only
-
-    void SetNativeFontInfo(const char *gtkdescription)
-        { m_selectedFont.SetNativeFontInfo(wxString::FromAscii(gtkdescription)); }
+    void SetNativeFontInfo(const char* gtkdescription);
 
 private:
     // Common part of both ctors.

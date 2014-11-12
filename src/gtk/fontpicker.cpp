@@ -106,4 +106,8 @@ void wxFontButton::UpdateFont()
     gtk_font_button_set_font_name(GTK_FONT_BUTTON(m_widget), wxGTK_CONV(fontname));
 }
 
+void wxFontButton::SetNativeFontInfo(const char* gtkdescription)
+{
+    m_selectedFont.SetNativeFontInfo(wxString::FromUTF8(gtkdescription));
+}
 #endif // wxUSE_FONTPICKERCTRL
