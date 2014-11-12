@@ -55,7 +55,9 @@
 }
 
 - (void) setEnabled:(BOOL) flag 
-{ 
+{
+    bool wasEnabled = [self isEnabled];
+
     [super setEnabled: flag]; 
     
     if (![self drawsBackground]) { 
@@ -68,9 +70,12 @@
                 [self setTextColor: m_textColor];
         }
         else 
-        { 
-            [m_textColor release];
-            m_textColor = [[self textColor] retain];
+        {
+            if (wasEnabled)
+            {
+                [m_textColor release];
+                m_textColor = [[self textColor] retain];
+            }
             [self setTextColor: [NSColor secondarySelectedControlColor]]; 
         } 
     } 
