@@ -4840,10 +4840,16 @@ void wxWindowGTK::DoReleaseMouse()
 
 void wxWindowGTK::GTKReleaseMouseAndNotify()
 {
-    ReleaseMouse();
-    wxMouseCaptureLostEvent evt(GetId());
-    evt.SetEventObject( this );
-    HandleWindowEvent( evt );
+    GdkDisplay* display = gtk_widget_get_display(m_widget);
+#ifdef __WXGTK3__
+    GdkDeviceManager* manager = gdk_display_get_device_manager(display);
+    GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
+    gdk_device_ungrab(device, unsigned(GDK_CURRENT_TIME));
+#else
+    gdk_display_pointer_ungrab(display, unsigned(GDK_CURRENT_TIME));
+#endif
+    g_captureWindow = NULL;
+    NotifyCaptureLost();
 }
 
 /* static */

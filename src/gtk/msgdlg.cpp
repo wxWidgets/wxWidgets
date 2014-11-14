@@ -277,18 +277,16 @@ int wxMessageDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
-    // break the mouse capture as it would interfere with modal dialog (see
-    // wxDialog::ShowModal)
-    wxWindow * const win = wxWindow::GetCapture();
-    if ( win )
-        win->GTKReleaseMouseAndNotify();
-
     if ( !m_widget )
     {
         GTKCreateMsgDialog();
         wxCHECK_MSG( m_widget, wxID_CANCEL,
                      wxT("failed to create GtkMessageDialog") );
     }
+
+    // break the mouse capture as it would interfere with modal dialog (see
+    // wxDialog::ShowModal)
+    GTKReleaseMouseAndNotify();
 
     // This should be necessary, but otherwise the
     // parent TLW will disappear..
