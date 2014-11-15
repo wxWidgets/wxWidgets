@@ -88,6 +88,7 @@ All (GUI):
 - Always disable wxWizard "Back" button on the starting page (pmgrace30).
 - Add wxUIActionSimulator::Select().
 - Add wxOwnerDrawnComboBox::Is{List,Text}Empty() methods.
+- Fix creating/removing mode buttons in wxPG manager (Artur Wieczorek).
 
 wxGTK:
 

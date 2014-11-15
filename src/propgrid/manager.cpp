@@ -672,7 +672,7 @@ void wxPropertyGridManager::SetExtraStyle( long exStyle )
     wxWindow::SetExtraStyle( exStyle );
     m_pPropGrid->SetExtraStyle( exStyle & 0xFFFFF000 );
 #if wxUSE_TOOLBAR
-    if ( (exStyle & wxPG_EX_NO_FLAT_TOOLBAR) && m_pToolbar )
+    if ( (exStyle & (wxPG_EX_NO_FLAT_TOOLBAR|wxPG_EX_MODE_BUTTONS)) && m_pToolbar )
         RecreateControls();
 #endif
 }
@@ -1450,7 +1450,6 @@ void wxPropertyGridManager::RefreshProperty( wxPGProperty* p )
 
 void wxPropertyGridManager::RecreateControls()
 {
-
     bool was_shown = IsShown();
     if ( was_shown )
         Show ( false );
@@ -1458,6 +1457,8 @@ void wxPropertyGridManager::RecreateControls()
 #if wxUSE_TOOLBAR
     if ( m_windowStyle & wxPG_TOOLBAR )
     {
+        bool tbModified = false;
+
         // Has toolbar.
         if ( !m_pToolbar )
         {
@@ -1489,45 +1490,90 @@ void wxPropertyGridManager::RecreateControls()
         #endif
 
             m_pToolbar->SetCursor ( *wxSTANDARD_CURSOR );
+            tbModified = true;
+            m_categorizedModeToolId = -1;
+            m_alphabeticModeToolId = -1;
+        }
 
-            if ( (GetExtraStyle()&wxPG_EX_MODE_BUTTONS) )
+        if ( (GetExtraStyle()&wxPG_EX_MODE_BUTTONS) )
+        {
+            // Add buttons if they don't already exist.
+            if (m_categorizedModeToolId == -1)
             {
-                wxString desc1(_("Categorized Mode"));
-                wxString desc2(_("Alphabetic Mode"));
-
-                wxToolBarToolBase* tool;
-
-                tool = m_pToolbar->AddTool(wxID_ANY,
-                                           desc1,
-                                           wxBitmap(gs_xpm_catmode),
-                                           desc1,
-                                           wxITEM_RADIO);
+                wxString desc(_("Categorized Mode"));
+                wxToolBarToolBase* tool = m_pToolbar->InsertTool(0,
+                                            wxID_ANY,
+                                            desc,
+                                            wxBitmap(gs_xpm_catmode),
+                                            wxNullBitmap,
+                                            wxITEM_RADIO,
+                                            desc);
                 m_categorizedModeToolId = tool->GetId();
-
-                tool = m_pToolbar->AddTool(wxID_ANY,
-                                           desc2,
-                                           wxBitmap(gs_xpm_noncatmode),
-                                           desc2,
-                                           wxITEM_RADIO);
-                m_alphabeticModeToolId = tool->GetId();
-
-                m_pToolbar->Realize();
+                tbModified = true;
 
                 Connect(m_categorizedModeToolId,
                         wxEVT_TOOL,
                         wxCommandEventHandler(
-                            wxPropertyGridManager::OnToolbarClick));
+                        wxPropertyGridManager::OnToolbarClick));
+            }
+
+            if (m_alphabeticModeToolId == -1)
+            {
+                wxString desc(_("Alphabetic Mode"));
+                wxToolBarToolBase* tool = m_pToolbar->InsertTool(1,
+                                            wxID_ANY,
+                                            desc,
+                                            wxBitmap(gs_xpm_noncatmode),
+                                            wxNullBitmap,
+                                            wxITEM_RADIO,
+                                            desc);
+                m_alphabeticModeToolId = tool->GetId();
+                tbModified = true;
+
                 Connect(m_alphabeticModeToolId,
                         wxEVT_TOOL,
                         wxCommandEventHandler(
-                            wxPropertyGridManager::OnToolbarClick));
-            }
-            else
-            {
-                m_categorizedModeToolId = -1;
-                m_alphabeticModeToolId = -1;
+                        wxPropertyGridManager::OnToolbarClick));
             }
 
+            // Both buttons should exist here.
+            wxASSERT( m_categorizedModeToolId != -1 && m_alphabeticModeToolId != -1);
+        }
+        else
+        {
+            // Remove buttons if they exist.
+            if (m_categorizedModeToolId != -1)
+            {
+                Disconnect(m_categorizedModeToolId,
+                           wxEVT_TOOL,
+                           wxCommandEventHandler(
+                           wxPropertyGridManager::OnToolbarClick));
+
+                m_pToolbar->DeleteTool(m_categorizedModeToolId);
+                m_categorizedModeToolId = -1;
+                tbModified = true;
+            }
+
+            if (m_alphabeticModeToolId != -1)
+            {
+                Disconnect(m_alphabeticModeToolId,
+                            wxEVT_TOOL,
+                            wxCommandEventHandler(
+                            wxPropertyGridManager::OnToolbarClick));
+
+                m_pToolbar->DeleteTool(m_alphabeticModeToolId);
+                m_alphabeticModeToolId = -1;
+                tbModified = true;
+            }
+
+            // No button should exist here.
+            wxASSERT( m_categorizedModeToolId == -1 && m_alphabeticModeToolId == -1);
+        }
+
+        // Rebuild toolbar if any changes were applied.
+        if (tbModified)
+        {
+            m_pToolbar->Realize();
         }
 
         if ( (GetExtraStyle() & wxPG_EX_MODE_BUTTONS) )
@@ -1551,7 +1597,6 @@ void wxPropertyGridManager::RecreateControls()
             m_pToolbar->ToggleTool(toggle_but_on_ind, true);
             m_pToolbar->ToggleTool(toggle_but_off_ind, false);
         }
-
     }
     else
     {
