@@ -187,6 +187,7 @@ public:
     // This is called when capture is taken from the window. It will
     // fire off capture lost events.
     void GTKReleaseMouseAndNotify();
+    static void GTKHandleCaptureLost();
 
     GdkWindow* GTKGetDrawingWindow() const;
 
