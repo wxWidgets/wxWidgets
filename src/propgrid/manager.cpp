@@ -461,10 +461,7 @@ bool wxPropertyGridManager::Create( wxWindow *parent,
                                 name );
     Init2(style);
 
-    // FIXME: this changes call ordering so wxPropertyGrid is created
-    // immediately, before SetExtraStyle has a chance to be called. However,
-    // without it, we may get assertions if size is wxDefaultSize.
-    //SetInitialSize(size);
+    SetInitialSize(size);
 
     return res;
 }
