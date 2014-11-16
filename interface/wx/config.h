@@ -211,17 +211,17 @@ enum
     while ( bCont ) {
         aNames.Add(str);
 
-        bCont = GetConfig()->GetNextEntry(str, dummy);
+        bCont = config->GetNextEntry(str, dummy);
     }
 
     // ... we have all entry names in aNames...
 
     // now all groups...
-    bCont = GetConfig()->GetFirstGroup(str, dummy);
+    bCont = config->GetFirstGroup(str, dummy);
     while ( bCont ) {
         aNames.Add(str);
 
-        bCont = GetConfig()->GetNextGroup(str, dummy);
+        bCont = config->GetNextGroup(str, dummy);
     }
 
     // ... we have all group (and entry) names in aNames...
