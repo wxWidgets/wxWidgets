@@ -877,26 +877,40 @@ void wxPropertyGridPageState::PropagateColSizeDec( int column,
                                                    int decrease,
                                                    int dir )
 {
-    int origWidth = m_colWidths[column];
-    m_colWidths[column] -= decrease;
-    int min = GetColumnMinWidth(column);
-    int more = 0;
-    if ( m_colWidths[column] < min )
+    wxASSERT( decrease >= 0 );
+    wxASSERT( dir == 1 || dir == -1 );
+
+    int col = column;
+    while(decrease > 0 && col >= 0 && col < (int)m_colWidths.size())
     {
-        more = decrease - (origWidth - min);
-        m_colWidths[column] = min;
+        const int origWidth = m_colWidths[col];
+        const int min = GetColumnMinWidth(col);
+        m_colWidths[col] -= decrease;
+        if ( m_colWidths[col] < min )
+        {
+            m_colWidths[col] = min;
+        }
+        decrease -= (origWidth - m_colWidths[col]);
+        col += dir;
+    }
+    // As a last resort, if change of width was not fully absorbed
+    // on the requested side we try to do this on the other side.
+    col = column;
+    dir *= -1;
+    while(decrease > 0 && col >= 0 && col < (int)m_colWidths.size())
+    {
+        const int origWidth = m_colWidths[col];
+        const int min = GetColumnMinWidth(col);
+        m_colWidths[col] -= decrease;
+        if ( m_colWidths[col] < min )
+        {
+            m_colWidths[col] = min;
+        }
+        decrease -= (origWidth - m_colWidths[col]);
+        col += dir;
     }
 
-    //
-    // FIXME: Causes erratic splitter changing, so as a workaround
-    //        disabled if two or less columns.
-
-    if ( m_colWidths.size() <= 2 )
-        return;
-
-    column += dir;
-    if ( more && column < (int)m_colWidths.size() && column >= 0 )
-        PropagateColSizeDec( column, more, dir );
+    wxASSERT( decrease == 0 );
 }
 
 void wxPropertyGridPageState::DoSetSplitterPosition( int newXPos,
@@ -919,7 +933,7 @@ void wxPropertyGridPageState::DoSetSplitterPosition( int newXPos,
             m_colWidths[splitterColumn] += adjust;
             PropagateColSizeDec( otherColumn, adjust, 1 );
         }
-        else
+        else if ( adjust < 0 )
         {
             otherColumn = splitterColumn + 1;
             if ( otherColumn == (int)m_colWidths.size() )
@@ -932,6 +946,8 @@ void wxPropertyGridPageState::DoSetSplitterPosition( int newXPos,
     {
         m_colWidths[splitterColumn] += adjust;
     }
+    // Actual adjustment can be different from demanded.
+    newXPos = DoGetSplitterPosition(splitterColumn);
 
     if ( splitterColumn == 0 )
         m_fSplitterX = (double) newXPos;
