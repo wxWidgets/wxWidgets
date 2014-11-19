@@ -849,28 +849,31 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
             }
 
 #ifdef GDK_WINDOWING_X11
-            // we want to always get the same key code when the same key is
-            // pressed regardless of the state of the modifiers, i.e. on a
-            // standard US keyboard pressing '5' or '%' ('5' key with
-            // Shift) should result in the same key code in OnKeyDown():
-            // '5' (although OnChar() will get either '5' or '%').
-            //
-            // to do it we first translate keysym to keycode (== scan code)
-            // and then back but always using the lower register
-            Display *dpy = (Display *)wxGetDisplay();
-            KeyCode keycode = XKeysymToKeycode(dpy, keysym);
+            if (GDK_IS_X11_DISPLAY(gdk_window_get_display(gdk_event->window)))
+            {
+                // we want to always get the same key code when the same key is
+                // pressed regardless of the state of the modifiers, i.e. on a
+                // standard US keyboard pressing '5' or '%' ('5' key with
+                // Shift) should result in the same key code in OnKeyDown():
+                // '5' (although OnChar() will get either '5' or '%').
+                //
+                // to do it we first translate keysym to keycode (== scan code)
+                // and then back but always using the lower register
+                Display *dpy = (Display *)wxGetDisplay();
+                KeyCode keycode = XKeysymToKeycode(dpy, keysym);
 
-            wxLogTrace(TRACE_KEYS, wxT("\t-> keycode %d"), keycode);
+                wxLogTrace(TRACE_KEYS, wxT("\t-> keycode %d"), keycode);
 
 #ifdef HAVE_X11_XKBLIB_H
-            KeySym keysymNormalized = XkbKeycodeToKeysym(dpy, keycode, 0, 0);
+                KeySym keysymNormalized = XkbKeycodeToKeysym(dpy, keycode, 0, 0);
 #else
-            KeySym keysymNormalized = XKeycodeToKeysym(dpy, keycode, 0);
+                KeySym keysymNormalized = XKeycodeToKeysym(dpy, keycode, 0);
 #endif
 
-            // use the normalized, i.e. lower register, keysym if we've
-            // got one
-            key_code = keysymNormalized ? keysymNormalized : keysym;
+                // use the normalized, i.e. lower register, keysym if we've
+                // got one
+                key_code = keysymNormalized ? keysymNormalized : keysym;
+            }
 #else
             key_code = keysym;
 #endif
