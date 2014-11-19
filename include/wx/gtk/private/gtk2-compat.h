@@ -517,5 +517,9 @@ static inline void wx_gtk_widget_get_preferred_size(GtkWidget* widget, GtkRequis
 }
 #define gtk_widget_get_preferred_size wx_gtk_widget_get_preferred_size
 
+// There is no equivalent in GTK+ 2, but it's not needed there anyhow as X11
+// backend can only work with X11 displays in that version.
+#define GDK_IS_X11_DISPLAY(dpy) (TRUE)
+
 #endif // !__WXGTK3__
 #endif // _WX_GTK_PRIVATE_COMPAT_H_
