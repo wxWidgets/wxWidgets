@@ -954,6 +954,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
         deferShow = m_deferShowAllowed &&
             gs_requestFrameExtentsStatus != RFE_STATUS_BROKEN &&
             !gtk_widget_get_realized(m_widget) &&
+            GDK_IS_X11_DISPLAY(gtk_widget_get_display(m_widget)) &&
             g_signal_handler_find(m_widget,
                 GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
                 g_signal_lookup("property_notify_event", GTK_TYPE_WIDGET),
