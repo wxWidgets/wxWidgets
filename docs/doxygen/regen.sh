@@ -38,11 +38,10 @@ fi
 # Check that doxygen has the correct version as different versions of it are
 # unfortunately not always (in fact, practically never) compatible.
 #
-# Still allow using incompatible version for some quick local testing if really
-# needed and 1.8.2 can't be installed for whatever reason.
+# Still allow using incompatible version if explicitly requested.
 if [[ -z $WX_SKIP_DOXYGEN_VERSION_CHECK ]]; then
     doxygen_version=`$DOXYGEN --version`
-    doxygen_version_required=1.8.2
+    doxygen_version_required=1.8.8
     if [[ $doxygen_version != $doxygen_version_required ]]; then
         echo "Doxygen version $doxygen_version is not supported."
         echo "Please use Doxygen $doxygen_version_required or export WX_SKIP_DOXYGEN_VERSION_CHECK."
