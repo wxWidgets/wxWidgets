@@ -852,10 +852,19 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
 
     m_fsIsShowing = show;
 
+    wxX11FullScreenMethod method = wxX11_FS_WMSPEC;
+    Display* xdpy = NULL;
+    Window xroot = None;
+
 #ifdef GDK_WINDOWING_X11
-    Display* xdpy = GDK_DISPLAY_XDISPLAY(gtk_widget_get_display(m_widget));
-    Window xroot = GDK_WINDOW_XID(gtk_widget_get_root_window(m_widget));
-    wxX11FullScreenMethod method = wxGetFullScreenMethodX11(xdpy, (WXWindow)xroot);
+    GdkDisplay *display = gtk_widget_get_display(m_widget);
+
+    if (GDK_IS_X11_DISPLAY(display))
+    {
+        xdpy = GDK_DISPLAY_XDISPLAY(display);
+        xroot = GDK_WINDOW_XID(gtk_widget_get_root_window(m_widget));
+        method = wxGetFullScreenMethodX11(xdpy, (WXWindow)xroot);
+    }
 
     // NB: gtk_window_fullscreen() uses freedesktop.org's WMspec extensions
     //     to switch to fullscreen, which is not always available. We must
@@ -870,7 +879,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
             gtk_window_unfullscreen( GTK_WINDOW( m_widget ) );
     }
 #ifdef GDK_WINDOWING_X11
-    else
+    else if (xdpy != NULL)
     {
         GdkWindow* window = gtk_widget_get_window(m_widget);
         Window xid = GDK_WINDOW_XID(window);
