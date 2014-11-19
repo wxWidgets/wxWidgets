@@ -852,12 +852,11 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
 
     m_fsIsShowing = show;
 
-    wxX11FullScreenMethod method = wxX11_FS_WMSPEC;
-    Display* xdpy = NULL;
-    Window xroot = None;
-
 #ifdef GDK_WINDOWING_X11
     GdkDisplay *display = gtk_widget_get_display(m_widget);
+    Display* xdpy = NULL;
+    Window xroot = None;
+    wxX11FullScreenMethod method = wxX11_FS_WMSPEC;
 
     if (GDK_IS_X11_DISPLAY(display))
     {
