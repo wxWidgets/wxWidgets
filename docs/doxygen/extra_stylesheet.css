@@ -27,7 +27,8 @@ div.contents, div.searchresults {
 }
 
 #projectnumber {
-    font: 120% Tahoma, Arial, sans-serif;
+    font-size: 120%;
+    font-family: Tahoma, Arial, sans-serif;
     text-align: right;
     padding: 0.5em 1em;
 }
@@ -97,6 +98,14 @@ img.logo {
 div.logo {
     float: right;
     margin: 20px;
+}
+
+table.directory {
+    line-height: 1.5;
+}
+
+.icon {
+    line-height: 1.25;
 }
 
 div.appearance {
