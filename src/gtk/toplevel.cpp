@@ -452,8 +452,12 @@ gtk_frame_window_state_callback( GtkWidget* WXUNUSED(widget),
 bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom)
 {
 #ifdef GDK_WINDOWING_X11
-    static GdkAtom property = gdk_atom_intern("_NET_FRAME_EXTENTS", false);
     GdkDisplay* display = gdk_window_get_display(window);
+
+    if (!GDK_IS_X11_DISPLAY(display))
+        return false;
+
+    static GdkAtom property = gdk_atom_intern("_NET_FRAME_EXTENTS", false);
     Atom xproperty = gdk_x11_atom_to_xatom_for_display(display, property);
     Atom type;
     int format;
