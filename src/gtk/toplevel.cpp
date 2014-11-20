@@ -456,8 +456,12 @@ gtk_frame_window_state_callback( GtkWidget* WXUNUSED(widget),
 bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom)
 {
 #ifdef GDK_WINDOWING_X11
-    static GdkAtom property = gdk_atom_intern("_NET_FRAME_EXTENTS", false);
     GdkDisplay* display = gdk_window_get_display(window);
+
+    if (!GDK_IS_X11_DISPLAY(display))
+        return false;
+
+    static GdkAtom property = gdk_atom_intern("_NET_FRAME_EXTENTS", false);
     Atom xproperty = gdk_x11_atom_to_xatom_for_display(display, property);
     Atom type;
     int format;
@@ -853,9 +857,17 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
     m_fsIsShowing = show;
 
 #ifdef GDK_WINDOWING_X11
-    Display* xdpy = GDK_DISPLAY_XDISPLAY(gtk_widget_get_display(m_widget));
-    Window xroot = GDK_WINDOW_XID(gtk_widget_get_root_window(m_widget));
-    wxX11FullScreenMethod method = wxGetFullScreenMethodX11(xdpy, (WXWindow)xroot);
+    GdkDisplay *display = gtk_widget_get_display(m_widget);
+    Display* xdpy = NULL;
+    Window xroot = None;
+    wxX11FullScreenMethod method = wxX11_FS_WMSPEC;
+
+    if (GDK_IS_X11_DISPLAY(display))
+    {
+        xdpy = GDK_DISPLAY_XDISPLAY(display);
+        xroot = GDK_WINDOW_XID(gtk_widget_get_root_window(m_widget));
+        method = wxGetFullScreenMethodX11(xdpy, (WXWindow)xroot);
+    }
 
     // NB: gtk_window_fullscreen() uses freedesktop.org's WMspec extensions
     //     to switch to fullscreen, which is not always available. We must
@@ -870,7 +882,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
             gtk_window_unfullscreen( GTK_WINDOW( m_widget ) );
     }
 #ifdef GDK_WINDOWING_X11
-    else
+    else if (xdpy != NULL)
     {
         GdkWindow* window = gtk_widget_get_window(m_widget);
         Window xid = GDK_WINDOW_XID(window);
@@ -958,6 +970,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
         deferShow = m_deferShowAllowed &&
             gs_requestFrameExtentsStatus != RFE_STATUS_BROKEN &&
             !gtk_widget_get_realized(m_widget) &&
+            GDK_IS_X11_DISPLAY(gtk_widget_get_display(m_widget)) &&
             g_signal_handler_find(m_widget,
                 GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
                 g_signal_lookup("property_notify_event", GTK_TYPE_WIDGET),
