@@ -381,7 +381,7 @@ void MyListModel::DeleteItems( const wxDataViewItemArray &items )
     {
         // none of the selected items were in the range of the items
         // which we store... for simplicity, don't allow removing them
-        wxLogError( "Cannot remove rows with an index greater than %d", m_textColValues.GetCount() );
+        wxLogError( "Cannot remove rows with an index greater than %u", unsigned(m_textColValues.GetCount()) );
         return;
     }
 
