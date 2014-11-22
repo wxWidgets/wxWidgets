@@ -4636,9 +4636,6 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
     if (!wxDataViewCtrlBase::AssociateModel( model ))
         return false;
 
-    bool fixed = (((GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT) == 0) || (model->IsVirtualListModel()));
-    gtk_tree_view_set_fixed_height_mode( GTK_TREE_VIEW(m_treeview), fixed );
-
     if ( model )
         m_internal = new wxDataViewCtrlInternal( this, model );
 
