@@ -843,9 +843,13 @@ int wxCmdLineParser::Parse(bool showUsage)
             continue;
         }
 #ifdef __WXOSX__
-        if ( arg == wxT("-ApplePersistenceIgnoreState") )
+        if ( arg == wxS("-ApplePersistenceIgnoreState") ||
+             arg == wxS("-AppleTextDirection") ||
+             arg == wxS("-AppleLocale") ||
+             arg == wxS("-AppleLanguages") )
         {
             maybeOption = false;
+            n++;
             
             continue;
         }
