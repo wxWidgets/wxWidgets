@@ -758,7 +758,7 @@ protected:
     /** Indicates total virtual height of visible properties. */
     unsigned int                m_virtualHeight;
 
-#ifdef WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
     /** 1 if m_lastCaption is also the bottommost caption. */
     unsigned char               m_lastCaptionBottomnest;
 
