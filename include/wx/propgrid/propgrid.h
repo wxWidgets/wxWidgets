@@ -1931,7 +1931,11 @@ protected:
     unsigned char       m_mouseSide;
 
     /** True when editor control is focused. */
+#if WXWIN_COMPATIBILITY_3_0
     unsigned char       m_editorFocused;
+#else
+    bool                m_editorFocused;
+#endif
 
     /** 1 if m_latsCaption is also the bottommost caption. */
     //unsigned char       m_lastCaptionBottomnest;
