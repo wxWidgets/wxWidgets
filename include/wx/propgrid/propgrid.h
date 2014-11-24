@@ -1967,8 +1967,11 @@ protected:
     /** Internal flags - see wxPG_FL_XXX constants. */
     wxUint32            m_iFlags;
 
+#if WXWIN_COMPATIBILITY_3_0
+    // Unused variable.
     /** When drawing next time, clear this many item slots at the end. */
     int                 m_clearThisMany;
+#endif
 
     // Mouse is hovering over this column (index)
     unsigned int        m_colHover;
