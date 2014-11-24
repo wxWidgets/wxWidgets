@@ -18,6 +18,7 @@
 #include "wx/dynarray.h"
 #include "wx/vector.h"
 #include "wx/hashmap.h"
+#include "wx/hashset.h"
 #include "wx/variant.h"
 #include "wx/any.h"
 #include "wx/longlong.h"
@@ -313,6 +314,12 @@ WX_DECLARE_HASH_MAP_WITH_DECL(wxInt32,
                               wxIntegerHash,
                               wxIntegerEqual,
                               wxPGHashMapI2I,
+                              class WXDLLIMPEXP_PROPGRID);
+
+WX_DECLARE_HASH_SET_WITH_DECL(int,
+                              wxIntegerHash,
+                              wxIntegerEqual,
+                              wxPGHashSetInt,
                               class WXDLLIMPEXP_PROPGRID);
 
 WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(wxObject*, wxArrayPGObject,

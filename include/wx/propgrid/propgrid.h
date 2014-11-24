@@ -791,7 +791,12 @@ public:
     */
     void DedicateKey( int keycode )
     {
+#if WXWIN_COMPATIBILITY_3_0
+        // Deprecated: use a hash set instead.
         m_dedicatedKeys.push_back(keycode);
+#else
+        m_dedicatedKeys.insert(keycode);
+#endif
     }
 
     /**
@@ -1902,8 +1907,12 @@ protected:
 #endif
 
     /** List of key codes that will not be handed over to editor controls. */
-    // FIXME: Make this a hash set once there is template-based wxHashSet.
+#if WXWIN_COMPATIBILITY_3_0
+    // Deprecated: use a hash set instead.
     wxVector<int>       m_dedicatedKeys;
+#else
+    wxPGHashSetInt      m_dedicatedKeys;
+#endif
 
     //
     // Temporary values
