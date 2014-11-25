@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-21 14:54+0100\n"
+"POT-Creation-Date: 2014-11-25 19:43+0100\n"
 "PO-Revision-Date: 2013-11-04 10:21+0200\n"
 "Last-Translator: F Wolff <friedel@translate.org.za>\n"
 "Language-Team: translate-discuss-af@lists.sourceforge.net\n"
@@ -47,11 +47,11 @@ msgstr " (fout %ld: %s)"
 msgid " (in module \"%s\")"
 msgstr " (in module \"%s\")"
 
-#: ../src/common/docview.cpp:1624
+#: ../src/common/docview.cpp:1631
 msgid " - "
 msgstr " - "
 
-#: ../src/richtext/richtextprint.cpp:588 ../src/html/htmprint.cpp:704
+#: ../src/html/htmprint.cpp:704 ../src/richtext/richtextprint.cpp:588
 msgid " Preview"
 msgstr " Voorskou"
 
@@ -105,9 +105,9 @@ msgstr ""
 msgid "%d of %lu"
 msgstr "%d van %lu"
 
-#: ../src/html/helpwnd.cpp:1681 ../src/html/helpwnd.cpp:1719
-#, c-format
-msgid "%i of %i"
+#: ../src/html/helpwnd.cpp:1681
+#, fuzzy, c-format
+msgid "%i of %u"
 msgstr "%i van %i"
 
 #: ../src/generic/filectrlg.cpp:315
@@ -122,7 +122,7 @@ msgstr[1] "%ld grepe"
 msgid "%lu of %lu"
 msgstr "%lu van %lu"
 
-#: ../src/common/cmdline.cpp:1050
+#: ../src/common/cmdline.cpp:1062
 #, c-format
 msgid "%s (or %s)"
 msgstr "%s (of %s)"
@@ -137,7 +137,7 @@ msgstr "%s-fout"
 msgid "%s Information"
 msgstr "%s-inligting"
 
-#: ../src/generic/preferencesg.cpp:110
+#: ../src/generic/preferencesg.cpp:115
 #, c-format
 msgid "%s Preferences"
 msgstr "%s-voorkeure"
@@ -156,6 +156,11 @@ msgstr ""
 #, c-format
 msgid "%s files (%s)|%s"
 msgstr "%s lêers (%s)|%s"
+
+#: ../src/html/helpwnd.cpp:1719
+#, fuzzy, c-format
+msgid "%u of %u"
+msgstr "%lu van %lu"
 
 #: ../src/common/stockitem.cpp:139 ../src/html/helpfrm.cpp:142
 #: ../src/html/helpfrm.cpp:144
@@ -228,8 +233,8 @@ msgstr "&Onderkant:"
 msgid "&Box"
 msgstr "&Boks"
 
-#: ../src/richtext/richtextliststylepage.cpp:210
 #: ../src/richtext/richtextbulletspage.cpp:159
+#: ../src/richtext/richtextliststylepage.cpp:210
 msgid "&Bullet style:"
 msgstr "&Koeëltjiestyl:"
 
@@ -237,9 +242,9 @@ msgstr "&Koeëltjiestyl:"
 msgid "&CD-Rom"
 msgstr "&CD-ROM"
 
-#: ../src/generic/wizard.cpp:432 ../src/generic/fontdlgg.cpp:470
-#: ../src/generic/fontdlgg.cpp:489 ../src/osx/carbon/fontdlg.cpp:572
-#: ../src/common/stockitem.cpp:145
+#: ../src/common/stockitem.cpp:145 ../src/generic/fontdlgg.cpp:470
+#: ../src/generic/fontdlgg.cpp:489 ../src/generic/wizard.cpp:432
+#: ../src/osx/carbon/fontdlg.cpp:572
 msgid "&Cancel"
 msgstr "&Kanselleer"
 
@@ -259,9 +264,9 @@ msgstr "&Karakterkode:"
 msgid "&Clear"
 msgstr "&Maak skoon"
 
-#: ../src/generic/logg.cpp:522 ../src/common/stockitem.cpp:148
-#: ../src/common/prntbase.cpp:1570 ../src/univ/themes/win32.cpp:3756
-#: ../src/html/helpfrm.cpp:139
+#: ../src/common/prntbase.cpp:1570 ../src/common/stockitem.cpp:148
+#: ../src/generic/logg.cpp:522 ../src/html/helpfrm.cpp:139
+#: ../src/univ/themes/win32.cpp:3756
 msgid "&Close"
 msgstr "Maak &toe"
 
@@ -277,8 +282,8 @@ msgstr "&Kleur:"
 msgid "&Convert"
 msgstr "S&kakel om"
 
-#: ../src/richtext/richtextctrl.cpp:332 ../src/osx/textctrl_osx.cpp:583
-#: ../src/common/stockitem.cpp:150 ../src/msw/textctrl.cpp:2335
+#: ../src/common/stockitem.cpp:150 ../src/msw/textctrl.cpp:2457
+#: ../src/osx/textctrl_osx.cpp:583 ../src/richtext/richtextctrl.cpp:332
 msgid "&Copy"
 msgstr "&Kopieer"
 
@@ -294,9 +299,9 @@ msgstr "&Pasmaak..."
 msgid "&Debug report preview:"
 msgstr ""
 
+#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2459
+#: ../src/osx/textctrl_osx.cpp:585 ../src/richtext/richtextctrl.cpp:334
 #: ../src/richtext/richtexttabspage.cpp:142
-#: ../src/richtext/richtextctrl.cpp:334 ../src/osx/textctrl_osx.cpp:585
-#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2337
 msgid "&Delete"
 msgstr "&Skrap"
 
@@ -388,9 +393,10 @@ msgstr "&Hardeskyf"
 msgid "&Height:"
 msgstr "&Hoogte:"
 
-#: ../src/generic/wizard.cpp:435 ../src/richtext/richtextstyledlg.cpp:303
-#: ../src/richtext/richtextsymboldlg.cpp:479 ../src/osx/menu_osx.cpp:776
-#: ../src/common/stockitem.cpp:163 ../src/html/helpfrm.cpp:147
+#: ../src/common/stockitem.cpp:163 ../src/generic/wizard.cpp:435
+#: ../src/html/helpfrm.cpp:147 ../src/osx/menu_osx.cpp:788
+#: ../src/richtext/richtextstyledlg.cpp:303
+#: ../src/richtext/richtextsymboldlg.cpp:479
 msgid "&Help"
 msgstr "&Hulp"
 
@@ -442,9 +448,9 @@ msgstr "&Laaste"
 msgid "&Left"
 msgstr "&Links"
 
-#: ../src/richtext/richtextindentspage.cpp:195
 #: ../src/richtext/richtextborderspage.cpp:241
 #: ../src/richtext/richtextborderspage.cpp:410
+#: ../src/richtext/richtextindentspage.cpp:195
 #: ../src/richtext/richtextliststylepage.cpp:381
 #: ../src/richtext/richtextmarginspage.cpp:187
 #: ../src/richtext/richtextmarginspage.cpp:301
@@ -473,7 +479,7 @@ msgstr "&Skuif die objek na:"
 msgid "&Network"
 msgstr "&Netwerk"
 
-#: ../src/richtext/richtexttabspage.cpp:136 ../src/common/stockitem.cpp:176
+#: ../src/common/stockitem.cpp:176 ../src/richtext/richtexttabspage.cpp:136
 msgid "&New"
 msgstr "&Nuwe"
 
@@ -498,7 +504,7 @@ msgstr "&Volgende wenk"
 msgid "&Next style:"
 msgstr "&Volgende styl:"
 
-#: ../src/common/stockitem.cpp:177 ../src/msw/msgdlg.cpp:476
+#: ../src/common/stockitem.cpp:177 ../src/msw/msgdlg.cpp:463
 msgid "&No"
 msgstr "&Nee"
 
@@ -510,12 +516,12 @@ msgstr "&Notas:"
 msgid "&Number:"
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:475 ../src/generic/fontdlgg.cpp:482
-#: ../src/osx/carbon/fontdlg.cpp:578 ../src/common/stockitem.cpp:178
+#: ../src/common/stockitem.cpp:178 ../src/generic/fontdlgg.cpp:475
+#: ../src/generic/fontdlgg.cpp:482 ../src/osx/carbon/fontdlg.cpp:578
 msgid "&OK"
 msgstr "G&oed"
 
-#: ../src/generic/dbgrptg.cpp:342 ../src/common/stockitem.cpp:179
+#: ../src/common/stockitem.cpp:179 ../src/generic/dbgrptg.cpp:342
 #: ../src/html/helpfrm.cpp:137
 msgid "&Open..."
 msgstr "&Open..."
@@ -528,8 +534,8 @@ msgstr ""
 msgid "&Page Break"
 msgstr "&Bladsybreuk"
 
-#: ../src/richtext/richtextctrl.cpp:333 ../src/osx/textctrl_osx.cpp:584
-#: ../src/common/stockitem.cpp:180 ../src/msw/textctrl.cpp:2336
+#: ../src/common/stockitem.cpp:180 ../src/msw/textctrl.cpp:2458
+#: ../src/osx/textctrl_osx.cpp:584 ../src/richtext/richtextctrl.cpp:333
 msgid "&Paste"
 msgstr "&Plak"
 
@@ -566,8 +572,8 @@ msgstr "Vorige &paragraaf"
 msgid "&Print..."
 msgstr "&Druk..."
 
-#: ../src/richtext/richtextctrl.cpp:338 ../src/richtext/richtextctrl.cpp:5054
-#: ../src/common/stockitem.cpp:184
+#: ../src/common/stockitem.cpp:184 ../src/richtext/richtextctrl.cpp:338
+#: ../src/richtext/richtextctrl.cpp:5065
 msgid "&Properties"
 msgstr "&Eienskappe"
 
@@ -575,9 +581,9 @@ msgstr "&Eienskappe"
 msgid "&Quit"
 msgstr "&Sluit af"
 
-#: ../src/richtext/richtextctrl.cpp:329 ../src/osx/textctrl_osx.cpp:580
-#: ../src/common/stockitem.cpp:185 ../src/common/cmdproc.cpp:293
-#: ../src/common/cmdproc.cpp:300 ../src/msw/textctrl.cpp:2332
+#: ../src/common/cmdproc.cpp:293 ../src/common/cmdproc.cpp:300
+#: ../src/common/stockitem.cpp:185 ../src/msw/textctrl.cpp:2454
+#: ../src/osx/textctrl_osx.cpp:580 ../src/richtext/richtextctrl.cpp:329
 msgid "&Redo"
 msgstr "He&rdoen"
 
@@ -606,9 +612,9 @@ msgstr "He&rstel"
 msgid "&Right"
 msgstr "&Regs"
 
-#: ../src/richtext/richtextindentspage.cpp:213
 #: ../src/richtext/richtextborderspage.cpp:275
 #: ../src/richtext/richtextborderspage.cpp:444
+#: ../src/richtext/richtextindentspage.cpp:213
 #: ../src/richtext/richtextliststylepage.cpp:399
 #: ../src/richtext/richtextmarginspage.cpp:212
 #: ../src/richtext/richtextmarginspage.cpp:326
@@ -658,7 +664,7 @@ msgstr "&Speltoets"
 msgid "&Stop"
 msgstr "&Stop"
 
-#: ../src/richtext/richtextfontpage.cpp:284 ../src/common/stockitem.cpp:199
+#: ../src/common/stockitem.cpp:199 ../src/richtext/richtextfontpage.cpp:284
 msgid "&Strikethrough"
 msgstr "&Deurhaal"
 
@@ -674,8 +680,8 @@ msgstr "&Style:"
 msgid "&Subset:"
 msgstr "&Substel:"
 
-#: ../src/richtext/richtextliststylepage.cpp:268
 #: ../src/richtext/richtextbulletspage.cpp:222
+#: ../src/richtext/richtextliststylepage.cpp:268
 msgid "&Symbol:"
 msgstr "&Simbool:"
 
@@ -701,7 +707,7 @@ msgstr "Bokan&t"
 msgid "&Top:"
 msgstr "Bokan&t:"
 
-#: ../src/generic/fontdlgg.cpp:444 ../src/common/stockitem.cpp:202
+#: ../src/common/stockitem.cpp:202 ../src/generic/fontdlgg.cpp:444
 msgid "&Underline"
 msgstr "&Onderstreep"
 
@@ -709,9 +715,9 @@ msgstr "&Onderstreep"
 msgid "&Underlining:"
 msgstr "&Onderstreep:"
 
-#: ../src/richtext/richtextctrl.cpp:328 ../src/osx/textctrl_osx.cpp:579
-#: ../src/common/stockitem.cpp:203 ../src/common/cmdproc.cpp:271
-#: ../src/msw/textctrl.cpp:2331
+#: ../src/common/cmdproc.cpp:271 ../src/common/stockitem.cpp:203
+#: ../src/msw/textctrl.cpp:2453 ../src/osx/textctrl_osx.cpp:579
+#: ../src/richtext/richtextctrl.cpp:328
 msgid "&Undo"
 msgstr "&Ontdoen"
 
@@ -751,7 +757,7 @@ msgstr "&Wydte:"
 msgid "&Window"
 msgstr "&Venster"
 
-#: ../src/common/stockitem.cpp:206 ../src/msw/msgdlg.cpp:476
+#: ../src/common/stockitem.cpp:206 ../src/msw/msgdlg.cpp:463
 msgid "&Yes"
 msgstr "&Ja"
 
@@ -766,12 +772,12 @@ msgstr "'%s' het ekstra '..', geïgnoreer."
 msgid "'%s' is invalid"
 msgstr "'%s' is ongeldig"
 
-#: ../src/common/cmdline.cpp:948 ../src/common/cmdline.cpp:966
+#: ../src/common/cmdline.cpp:960 ../src/common/cmdline.cpp:978
 #, c-format
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr "'%s' is nie 'n geldige numeriese waarde vir opsie '%s' nie."
 
-#: ../src/common/translation.cpp:1086
+#: ../src/common/translation.cpp:1099
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' is nie 'n geldige boodskapkatalogus."
@@ -806,8 +812,8 @@ msgstr "'%s' mag alleen alfa-numerieke tekens bevat."
 msgid "'%s' should only contain digits."
 msgstr "'%s' mag slegs ASCII-tekens bevat."
 
-#: ../src/richtext/richtextliststylepage.cpp:229
 #: ../src/richtext/richtextbulletspage.cpp:179
+#: ../src/richtext/richtextliststylepage.cpp:229
 msgid "(*)"
 msgstr "(*)"
 
@@ -815,8 +821,8 @@ msgstr "(*)"
 msgid "(Help)"
 msgstr "(Help)"
 
-#: ../src/richtext/richtextliststylepage.cpp:481
 #: ../src/richtext/richtextbulletspage.cpp:286
+#: ../src/richtext/richtextliststylepage.cpp:481
 msgid "(None)"
 msgstr "(Geen)"
 
@@ -829,42 +835,42 @@ msgstr "(Normale teks)"
 msgid "(bookmarks)"
 msgstr "(gunstelinge)"
 
+#: ../src/richtext/richtextfontpage.cpp:331
+#: ../src/richtext/richtextfontpage.cpp:335
+#: ../src/richtext/richtextfontpage.cpp:339
+#: ../src/richtext/richtextformatdlg.cpp:870
 #: ../src/richtext/richtextindentspage.cpp:274
 #: ../src/richtext/richtextindentspage.cpp:286
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:326
-#: ../src/richtext/richtextformatdlg.cpp:867
-#: ../src/richtext/richtextfontpage.cpp:331
-#: ../src/richtext/richtextfontpage.cpp:335
-#: ../src/richtext/richtextfontpage.cpp:339
 #: ../src/richtext/richtextliststylepage.cpp:448
 #: ../src/richtext/richtextliststylepage.cpp:460
 #: ../src/richtext/richtextliststylepage.cpp:461
 msgid "(none)"
 msgstr "(geen)"
 
-#: ../src/richtext/richtextliststylepage.cpp:492
 #: ../src/richtext/richtextbulletspage.cpp:297
+#: ../src/richtext/richtextliststylepage.cpp:492
 msgid "*"
 msgstr "*"
 
-#: ../src/richtext/richtextliststylepage.cpp:236
 #: ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/richtext/richtextliststylepage.cpp:236
 msgid "*)"
 msgstr "*)"
 
-#: ../src/richtext/richtextliststylepage.cpp:495
 #: ../src/richtext/richtextbulletspage.cpp:300
+#: ../src/richtext/richtextliststylepage.cpp:495
 msgid "+"
 msgstr "+"
 
-#: ../src/msw/utils.cpp:1336
+#: ../src/msw/utils.cpp:1354
 msgid ", 64-bit edition"
 msgstr ", 64-bisweergawe"
 
-#: ../src/richtext/richtextliststylepage.cpp:493
 #: ../src/richtext/richtextbulletspage.cpp:298
+#: ../src/richtext/richtextliststylepage.cpp:493
 msgid "-"
 msgstr "-"
 
@@ -1034,8 +1040,8 @@ msgstr "<b>Vetdruk.</b> "
 msgid "<i>Italic face.</i> "
 msgstr "<i>Kursief.</i> "
 
-#: ../src/richtext/richtextliststylepage.cpp:494
 #: ../src/richtext/richtextbulletspage.cpp:299
+#: ../src/richtext/richtextliststylepage.cpp:494
 msgid ">"
 msgstr ">"
 
@@ -1051,10 +1057,10 @@ msgstr ""
 msgid "A non empty collection must consist of 'element' nodes"
 msgstr "'n Nie-leë versameling moet bestaan uit 'element'-nodes"
 
-#: ../src/richtext/richtextliststylepage.cpp:304
-#: ../src/richtext/richtextliststylepage.cpp:306
 #: ../src/richtext/richtextbulletspage.cpp:257
 #: ../src/richtext/richtextbulletspage.cpp:259
+#: ../src/richtext/richtextliststylepage.cpp:304
+#: ../src/richtext/richtextliststylepage.cpp:306
 msgid "A standard bullet name."
 msgstr ""
 
@@ -1142,16 +1148,12 @@ msgstr "A6 105 x 148 mm"
 msgid "A6 Rotated 148 x 105 mm"
 msgstr "A6 geroteer 148 x 105 mm"
 
-#: ../src/generic/fontdlgg.cpp:83 ../src/richtext/richtextformatdlg.cpp:527
-#: ../src/osx/carbon/fontdlg.cpp:323
+#: ../src/generic/fontdlgg.cpp:83 ../src/osx/carbon/fontdlg.cpp:323
+#: ../src/richtext/richtextformatdlg.cpp:527
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEÊÉFGabcdeêéfg12345"
 
-#: ../src/common/accelcmn.cpp:76
-msgid "ADD"
-msgstr ""
-
-#: ../src/richtext/richtextsymboldlg.cpp:458 ../src/common/ftp.cpp:405
+#: ../src/common/ftp.cpp:405 ../src/richtext/richtextsymboldlg.cpp:458
 msgid "ASCII"
 msgstr "ASCII"
 
@@ -1159,13 +1161,13 @@ msgstr "ASCII"
 msgid "About"
 msgstr "Aangaande"
 
-#: ../src/generic/aboutdlgg.cpp:140 ../src/osx/menu_osx.cpp:603
-#: ../src/msw/aboutdlg.cpp:64
+#: ../src/generic/aboutdlgg.cpp:140 ../src/msw/aboutdlg.cpp:64
+#: ../src/osx/menu_osx.cpp:615
 #, c-format
 msgid "About %s"
 msgstr "Aangaande %s"
 
-#: ../src/osx/menu_osx.cpp:605
+#: ../src/osx/menu_osx.cpp:617
 #, fuzzy
 msgid "About..."
 msgstr "Aangaande"
@@ -1178,15 +1180,16 @@ msgstr "Absoluut"
 msgid "Actual Size"
 msgstr "Werklike grootte"
 
-#: ../src/common/stockitem.cpp:140
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:79 ../src/common/stockitem.cpp:140
 msgid "Add"
 msgstr "Voeg by"
 
-#: ../src/richtext/richtextbuffer.cpp:11056
+#: ../src/richtext/richtextbuffer.cpp:11078
 msgid "Add Column"
 msgstr "Voeg kolom by"
 
-#: ../src/richtext/richtextbuffer.cpp:10993
+#: ../src/richtext/richtextbuffer.cpp:11015
 msgid "Add Row"
 msgstr "Voeg ry by"
 
@@ -1243,16 +1246,16 @@ msgstr "Belyning"
 msgid "All"
 msgstr "Almal"
 
-#: ../src/generic/filectrlg.cpp:1205 ../src/common/fldlgcmn.cpp:107
+#: ../src/common/fldlgcmn.cpp:107 ../src/generic/filectrlg.cpp:1205
 #, c-format
 msgid "All files (%s)|%s"
 msgstr "Alle lêers (%s)|%s"
 
-#: ../include/wx/defs.h:2933
+#: ../include/wx/defs.h:2942
 msgid "All files (*)|*"
 msgstr "Alle lêers (*)|*"
 
-#: ../include/wx/defs.h:2930
+#: ../include/wx/defs.h:2939
 msgid "All files (*.*)|*.*"
 msgstr "Alle lêers (*.*)|*.*"
 
@@ -1273,7 +1276,7 @@ msgstr ""
 msgid "Already dialling ISP."
 msgstr "Reeds besig om ISP te bel."
 
-#: ../src/common/accelcmn.cpp:320 ../src/univ/themes/win32.cpp:3756
+#: ../src/common/accelcmn.cpp:321 ../src/univ/themes/win32.cpp:3756
 msgid "Alt+"
 msgstr "Alt+"
 
@@ -1291,7 +1294,7 @@ msgstr "Beeldlêer is nie van die tipe %d."
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Voeg log by lêer '%s' (kies [Nee] om te oorskryf)?"
 
-#: ../src/osx/menu_osx.cpp:623 ../src/osx/menu_osx.cpp:631
+#: ../src/osx/menu_osx.cpp:635 ../src/osx/menu_osx.cpp:643
 msgid "Application"
 msgstr "Toepassing"
 
@@ -1299,8 +1302,8 @@ msgstr "Toepassing"
 msgid "Apply"
 msgstr "Pas toe"
 
-#: ../src/richtext/richtextliststylepage.cpp:482
 #: ../src/richtext/richtextbulletspage.cpp:287
+#: ../src/richtext/richtextliststylepage.cpp:482
 msgid "Arabic"
 msgstr "Arabies (gewone syfers)"
 
@@ -1308,7 +1311,7 @@ msgstr "Arabies (gewone syfers)"
 msgid "Arabic (ISO-8859-6)"
 msgstr "Arabies (ISO-8859-6)"
 
-#: ../src/msw/ole/automtn.cpp:675
+#: ../src/msw/ole/automtn.cpp:678
 #, fuzzy, c-format
 msgid "Argument %u not found."
 msgstr "katalogus-lêer vir domein '%s' nie gevind nie."
@@ -1325,9 +1328,9 @@ msgstr "Stygend"
 msgid "Attributes"
 msgstr "Eienskappe"
 
-#: ../src/richtext/richtextliststylepage.cpp:294
 #: ../src/richtext/richtextbulletspage.cpp:245
 #: ../src/richtext/richtextbulletspage.cpp:247
+#: ../src/richtext/richtextliststylepage.cpp:294
 msgid "Available fonts."
 msgstr "Beskikbare lettertipes."
 
@@ -1380,40 +1383,37 @@ msgstr ""
 msgid "B6 Envelope, 176 x 125 mm"
 msgstr "B6 Koevert, 176 x 125 mm"
 
-#: ../src/common/accelcmn.cpp:49
-msgid "BACK"
-msgstr ""
-
-#: ../src/common/imagbmp.cpp:523 ../src/common/imagbmp.cpp:553
-#: ../src/common/imagbmp.cpp:568
+#: ../src/common/imagbmp.cpp:524 ../src/common/imagbmp.cpp:554
+#: ../src/common/imagbmp.cpp:569
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: kon geen geheue toeken nie."
 
-#: ../src/common/imagbmp.cpp:97
+#: ../src/common/imagbmp.cpp:98
 msgid "BMP: Couldn't save invalid image."
 msgstr "BMP: kon nie ongeldige beeld stoor nie"
 
-#: ../src/common/imagbmp.cpp:338
+#: ../src/common/imagbmp.cpp:339
 msgid "BMP: Couldn't write RGB color map."
 msgstr "BMP: Kon nie RGB-kleurkaart skryf nie."
 
-#: ../src/common/imagbmp.cpp:473
+#: ../src/common/imagbmp.cpp:474
 msgid "BMP: Couldn't write data."
 msgstr "BMP: kon nie data skryf nie"
 
-#: ../src/common/imagbmp.cpp:239
+#: ../src/common/imagbmp.cpp:240
 msgid "BMP: Couldn't write the file (Bitmap) header."
 msgstr "BMP: kon nie die lêerkopreëls (Bitmap) skryf nie"
 
-#: ../src/common/imagbmp.cpp:262
+#: ../src/common/imagbmp.cpp:263
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: Kon nie die lêerkopreëls (BitmapInfo) skryf nie."
 
-#: ../src/common/imagbmp.cpp:133
+#: ../src/common/imagbmp.cpp:134
 msgid "BMP: wxImage doesn't have own wxPalette."
 msgstr "BMP: wxImage het nie 'n eie wxPalette nie."
 
-#: ../src/common/stockitem.cpp:142
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:50 ../src/common/stockitem.cpp:142
 msgid "Back"
 msgstr "Terug"
 
@@ -1430,6 +1430,12 @@ msgstr "Agtergrond&kleur:"
 msgid "Background colour"
 msgstr "Agtergrondkleur"
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:50
+#, fuzzy
+msgid "Backspace"
+msgstr "Terug"
+
 #: ../src/common/fmapbase.cpp:160
 msgid "Baltic (ISO-8859-13)"
 msgstr "Balties (ISO-8859-13)"
@@ -1442,8 +1448,8 @@ msgstr "Balties (oud) (ISO-8859-4)"
 msgid "Before a paragraph:"
 msgstr "Voor 'n paragraaf:"
 
-#: ../src/richtext/richtextliststylepage.cpp:489
 #: ../src/richtext/richtextbulletspage.cpp:294
+#: ../src/richtext/richtextliststylepage.cpp:489
 msgid "Bitmap"
 msgstr ""
 
@@ -1451,8 +1457,8 @@ msgstr ""
 msgid "Bitmap renderer cannot render value; value type: "
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:333 ../src/richtext/richtextfontpage.cpp:337
-#: ../src/osx/carbon/fontdlg.cpp:524 ../src/common/stockitem.cpp:143
+#: ../src/common/stockitem.cpp:143 ../src/generic/fontdlgg.cpp:333
+#: ../src/osx/carbon/fontdlg.cpp:524 ../src/richtext/richtextfontpage.cpp:337
 msgid "Bold"
 msgstr "Vet"
 
@@ -1467,7 +1473,7 @@ msgstr "Modern"
 msgid "Borders"
 msgstr "Modern"
 
-#: ../src/richtext/richtextsizepage.cpp:288 ../src/common/stockitem.cpp:144
+#: ../src/common/stockitem.cpp:144 ../src/richtext/richtextsizepage.cpp:288
 msgid "Bottom"
 msgstr "Onder"
 
@@ -1475,7 +1481,7 @@ msgstr "Onder"
 msgid "Bottom margin (mm):"
 msgstr "Onderste kantlyn (mm):"
 
-#: ../src/richtext/richtextbuffer.cpp:9026
+#: ../src/richtext/richtextbuffer.cpp:9048
 msgid "Box Properties"
 msgstr "Boks-eienskappe"
 
@@ -1487,8 +1493,8 @@ msgstr "Boksstyle"
 msgid "Browse"
 msgstr ""
 
-#: ../src/richtext/richtextliststylepage.cpp:245
 #: ../src/richtext/richtextbulletspage.cpp:195
+#: ../src/richtext/richtextliststylepage.cpp:245
 msgid "Bullet &Alignment:"
 msgstr "Koeëltjie&belyning:"
 
@@ -1532,14 +1538,6 @@ msgstr "C6 Koevert, 114 x 162 mm"
 msgid "C65 Envelope, 114 x 229 mm"
 msgstr "C65 Koevert, 114 x 229 mm"
 
-#: ../src/common/accelcmn.cpp:66
-msgid "CANCEL"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:70
-msgid "CAPITAL"
-msgstr ""
-
 #: ../src/common/stockitem.cpp:146
 msgid "CD-Rom"
 msgstr "CD-ROM"
@@ -1547,14 +1545,6 @@ msgstr "CD-ROM"
 #: ../src/html/chm.cpp:815 ../src/html/chm.cpp:874
 msgid "CHM handler currently supports only local files!"
 msgstr "CHM-hanteerder ondersteun tans slegs plaaslike lêers!"
-
-#: ../src/common/accelcmn.cpp:67
-msgid "CLEAR"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:111
-msgid "COMMAND"
-msgstr ""
 
 #: ../src/richtext/richtextfontpage.cpp:291
 msgid "Ca&pitals"
@@ -1587,7 +1577,7 @@ msgstr "Kan registersleutel '%s' nie skep nie"
 msgid "Can't create thread"
 msgstr "Kan uitvoerdraad nie skep nie"
 
-#: ../src/msw/window.cpp:3787
+#: ../src/msw/window.cpp:3804
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "Kan venster van klas '%s' nie skep nie"
@@ -1622,7 +1612,7 @@ msgstr "Kan waarden van sleutel '%s' nie opsom nie"
 msgid "Can't export value of unsupported type %d."
 msgstr "Kan geen waardes van nie-ondersteunde tipe %d kopieer nie."
 
-#: ../src/common/ffile.cpp:236
+#: ../src/common/ffile.cpp:252
 #, c-format
 msgid "Can't find current position in file '%s'"
 msgstr "Kan nie huidige posisie in lêer '%s' vind nie"
@@ -1640,7 +1630,7 @@ msgstr "Kan nie zlib-afblaasstroom inisialiseer nie."
 msgid "Can't initialize zlib inflate stream."
 msgstr "Kan nie zlib-opblaasstroom inisialiseer nie."
 
-#: ../src/msw/fswatcher.cpp:456
+#: ../src/msw/fswatcher.cpp:476
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
 msgstr "Kan nie veranderinge moniteer aan niebestaande gids \"%s\" nie."
@@ -1700,10 +1690,12 @@ msgstr "Process %d kon nie doodgemaak word nie"
 msgid "Can't write to deflate stream: %s"
 msgstr "Kan nie skryf na afblaasstroom nie: %s"
 
-#: ../include/wx/msgdlg.h:274 ../src/generic/dirdlgg.cpp:107
-#: ../src/richtext/richtextstyledlg.cpp:300 ../src/common/stockitem.cpp:145
-#: ../src/msw/msgdlg.cpp:489 ../src/msw/progdlg.cpp:673
+#. TRANSLATORS: Name of keyboard key
+#: ../include/wx/msgdlg.h:279 ../src/common/accelcmn.cpp:69
+#: ../src/common/stockitem.cpp:145 ../src/generic/dirdlgg.cpp:107
 #: ../src/gtk1/fontdlg.cpp:144 ../src/motif/msgdlg.cpp:196
+#: ../src/msw/msgdlg.cpp:476 ../src/msw/progdlg.cpp:673
+#: ../src/richtext/richtextstyledlg.cpp:300
 msgid "Cancel"
 msgstr "Kanselleer"
 
@@ -1734,7 +1726,7 @@ msgstr "Kan geen aktiewe inbelverbinding vind nie: %s"
 msgid "Cannot find the location of address book file"
 msgstr "Kan stoorplek van adresboeklêer nie vind nie"
 
-#: ../src/msw/ole/automtn.cpp:565
+#: ../src/msw/ole/automtn.cpp:568
 #, fuzzy, c-format
 msgid "Cannot get an active instance of \"%s\""
 msgstr "Kan geen actiewe inbelverbinding vind nie: %s"
@@ -1757,7 +1749,7 @@ msgstr "Kan die amptelike masjiennaam nie vasstel nie."
 msgid "Cannot hang up - no active dialup connection."
 msgstr "Kan nie neersit nie - geen aktiewe inbelverbinding"
 
-#: ../include/wx/msw/ole/oleutils.h:52
+#: ../include/wx/msw/ole/oleutils.h:53
 msgid "Cannot initialize OLE"
 msgstr "Kan OLE nie inisialiseer nie"
 
@@ -1766,7 +1758,7 @@ msgstr "Kan OLE nie inisialiseer nie"
 msgid "Cannot initialize sockets"
 msgstr "Kan OLE nie inisialiseer nie"
 
-#: ../src/msw/volume.cpp:620
+#: ../src/msw/volume.cpp:619
 #, c-format
 msgid "Cannot load icon from '%s'."
 msgstr "Kan ikoon nie laai van '%s'."
@@ -1838,7 +1830,7 @@ msgstr "Kan nie die uitvoerdraadskeduleringsbeleid verkry nie."
 msgid "Cannot set locale to language \"%s\"."
 msgstr "Kan nie landinstelling na taal \"%s\" stel nie."
 
-#: ../src/unix/threadpsx.cpp:831 ../src/msw/thread.cpp:569
+#: ../src/msw/thread.cpp:569 ../src/unix/threadpsx.cpp:831
 msgid "Cannot start thread: error writing TLS."
 msgstr "Kan uitvoerdraad nie laat begin nie: fout met skryf van TLS."
 
@@ -1856,6 +1848,12 @@ msgstr "Kan uitvoerdraad %x nie opskort nie"
 msgid "Cannot wait for thread termination"
 msgstr "Kan nie wag vir uitvoerdraad-beëindiging nie"
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:73
+#, fuzzy
+msgid "Capital"
+msgstr "Hoof&letters"
+
 #: ../src/html/helpwnd.cpp:546
 msgid "Case sensitive"
 msgstr "Kassensitief"
@@ -1864,7 +1862,7 @@ msgstr "Kassensitief"
 msgid "Categorized Mode"
 msgstr "Gekategoriseerde modus"
 
-#: ../src/richtext/richtextbuffer.cpp:9598
+#: ../src/richtext/richtextbuffer.cpp:9620
 msgid "Cell Properties"
 msgstr "Seleienskappe"
 
@@ -1885,8 +1883,8 @@ msgstr "Gesentreer"
 msgid "Central European (ISO-8859-2)"
 msgstr "Sentraal-Europees (ISO-8859-2)"
 
-#: ../src/richtext/richtextliststylepage.cpp:250
 #: ../src/richtext/richtextbulletspage.cpp:200
+#: ../src/richtext/richtextliststylepage.cpp:250
 msgid "Centre"
 msgstr "Gesentreer"
 
@@ -1901,25 +1899,25 @@ msgstr "Sentreer teks."
 msgid "Centred"
 msgstr "Gesentreer"
 
-#: ../src/richtext/richtextliststylepage.cpp:280
 #: ../src/richtext/richtextbulletspage.cpp:232
+#: ../src/richtext/richtextliststylepage.cpp:280
 msgid "Ch&oose..."
 msgstr "&Kies..."
 
-#: ../src/richtext/richtextbuffer.cpp:4107
+#: ../src/richtext/richtextbuffer.cpp:4115
 msgid "Change List Style"
 msgstr "Verander lysstyl"
 
-#: ../src/richtext/richtextbuffer.cpp:3458
+#: ../src/richtext/richtextbuffer.cpp:3465
 msgid "Change Object Style"
 msgstr "Verander objekstyl"
 
-#: ../src/richtext/richtextbuffer.cpp:3724
-#: ../src/richtext/richtextbuffer.cpp:7853
+#: ../src/richtext/richtextbuffer.cpp:3732
+#: ../src/richtext/richtextbuffer.cpp:7870
 msgid "Change Properties"
 msgstr "Verander eienskappe"
 
-#: ../src/richtext/richtextbuffer.cpp:3275
+#: ../src/richtext/richtextbuffer.cpp:3282
 msgid "Change Style"
 msgstr "Verander styl"
 
@@ -1932,17 +1930,17 @@ msgstr ""
 msgid "Character styles"
 msgstr "Karakterstyle"
 
-#: ../src/richtext/richtextliststylepage.cpp:224
-#: ../src/richtext/richtextliststylepage.cpp:226
 #: ../src/richtext/richtextbulletspage.cpp:174
 #: ../src/richtext/richtextbulletspage.cpp:176
+#: ../src/richtext/richtextliststylepage.cpp:224
+#: ../src/richtext/richtextliststylepage.cpp:226
 msgid "Check to add a period after the bullet."
 msgstr "Merk om 'n punt na die koeëltjie te sit."
 
-#: ../src/richtext/richtextliststylepage.cpp:238
-#: ../src/richtext/richtextliststylepage.cpp:240
 #: ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextbulletspage.cpp:190
+#: ../src/richtext/richtextliststylepage.cpp:238
+#: ../src/richtext/richtextliststylepage.cpp:240
 msgid "Check to add a right parenthesis."
 msgstr "Merk om 'n hakie regs by te sit."
 
@@ -1953,10 +1951,10 @@ msgstr "Merk om 'n hakie regs by te sit."
 msgid "Check to edit all borders simultaneously."
 msgstr ""
 
-#: ../src/richtext/richtextliststylepage.cpp:231
-#: ../src/richtext/richtextliststylepage.cpp:233
 #: ../src/richtext/richtextbulletspage.cpp:181
 #: ../src/richtext/richtextbulletspage.cpp:183
+#: ../src/richtext/richtextliststylepage.cpp:231
+#: ../src/richtext/richtextliststylepage.cpp:233
 msgid "Check to enclose the bullet in parentheses."
 msgstr "Merk om die koeëltjie in hakies te sit."
 
@@ -2006,15 +2004,15 @@ msgstr "Merk om die teks as boskrif te wys."
 msgid "Choose ISP to dial"
 msgstr "Kies ISP om te bel"
 
-#: ../src/propgrid/props.cpp:1653
+#: ../src/propgrid/props.cpp:1778
 msgid "Choose a directory:"
 msgstr "Kies 'n gids:"
 
-#: ../src/propgrid/props.cpp:1712
+#: ../src/propgrid/props.cpp:1837
 msgid "Choose a file"
 msgstr "Kies 'n lêer"
 
-#: ../src/generic/colrdlgg.cpp:144 ../src/gtk/colordlg.cpp:63
+#: ../src/generic/colrdlgg.cpp:144 ../src/gtk/colordlg.cpp:69
 #, fuzzy
 msgid "Choose colour"
 msgstr "Kies lettertipe"
@@ -2033,11 +2031,12 @@ msgstr ""
 msgid "Cl&ose"
 msgstr "Maak &toe"
 
-#: ../src/msw/ole/automtn.cpp:687
+#: ../src/msw/ole/automtn.cpp:690
 msgid "Class not registered."
 msgstr "Klas nie geregistreer nie."
 
-#: ../src/common/stockitem.cpp:147
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:70 ../src/common/stockitem.cpp:147
 msgid "Clear"
 msgstr "Maak skoon"
 
@@ -2050,10 +2049,10 @@ msgstr "Maak boekstawing skoon"
 msgid "Click to apply the selected style."
 msgstr "Klik om die gekose styl toe te pas."
 
-#: ../src/richtext/richtextliststylepage.cpp:281
-#: ../src/richtext/richtextliststylepage.cpp:283
 #: ../src/richtext/richtextbulletspage.cpp:233
 #: ../src/richtext/richtextbulletspage.cpp:235
+#: ../src/richtext/richtextliststylepage.cpp:281
+#: ../src/richtext/richtextliststylepage.cpp:283
 msgid "Click to browse for a symbol."
 msgstr "Klik om te soek vir 'n simbool."
 
@@ -2148,11 +2147,11 @@ msgstr "Klik om die gekose styl te redigeer."
 msgid "Click to rename the selected style."
 msgstr "Klik om die gekose styl te hernoem."
 
-#: ../src/generic/dbgrptg.cpp:97 ../src/generic/progdlgg.cpp:804
-#: ../src/generic/progdlgg.cpp:809 ../src/richtext/richtextstyledlg.cpp:277
-#: ../src/richtext/richtextsymboldlg.cpp:476 ../src/common/stockitem.cpp:148
-#: ../src/msw/progdlg.cpp:170 ../src/msw/progdlg.cpp:679
-#: ../src/html/helpdlg.cpp:90
+#: ../src/common/stockitem.cpp:148 ../src/generic/dbgrptg.cpp:97
+#: ../src/generic/progdlgg.cpp:804 ../src/generic/progdlgg.cpp:809
+#: ../src/html/helpdlg.cpp:90 ../src/msw/progdlg.cpp:170
+#: ../src/msw/progdlg.cpp:679 ../src/richtext/richtextstyledlg.cpp:277
+#: ../src/richtext/richtextsymboldlg.cpp:476
 msgid "Close"
 msgstr "Maak toe"
 
@@ -2172,7 +2171,7 @@ msgstr "Maak hierdie venster toe"
 msgid "Color"
 msgstr "Kleur"
 
-#: ../src/richtext/richtextformatdlg.cpp:761
+#: ../src/richtext/richtextformatdlg.cpp:764
 msgid "Colour"
 msgstr "Kleur"
 
@@ -2207,6 +2206,11 @@ msgstr ""
 msgid "Column width could not be set."
 msgstr ""
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:112
+msgid "Command"
+msgstr ""
+
 #: ../src/common/init.cpp:188
 #, c-format
 msgid ""
@@ -2219,7 +2223,7 @@ msgstr ""
 msgid "Common dialog failed with error code %0lx."
 msgstr "Algemene dialoog het misluk met foutkode %0lx."
 
-#: ../src/gtk/window.cpp:4357
+#: ../src/gtk/window.cpp:4503
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2229,7 +2233,7 @@ msgstr ""
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
 msgstr "Saamgeperste HTML-hulplêer (*.chm)|*.chm|"
 
-#: ../src/generic/dirctrlg.cpp:544
+#: ../src/generic/dirctrlg.cpp:541
 msgid "Computer"
 msgstr "Rekenaar"
 
@@ -2238,7 +2242,7 @@ msgstr "Rekenaar"
 msgid "Config entry name cannot start with '%c'."
 msgstr "Naam van konfigurasie-inskrywing mag nie begin met '%c' nie."
 
-#: ../src/gtk/filedlg.cpp:59
+#: ../src/generic/filedlgg.cpp:365 ../src/gtk/filedlg.cpp:59
 msgid "Confirm"
 msgstr "Bevestig"
 
@@ -2246,7 +2250,7 @@ msgstr "Bevestig"
 msgid "Confirm registry update"
 msgstr "Bevestig registerbywerking"
 
-#: ../src/html/htmlwin.cpp:547
+#: ../src/html/htmlwin.cpp:551
 msgid "Connecting..."
 msgstr "Koppel tans..."
 
@@ -2254,7 +2258,7 @@ msgstr "Koppel tans..."
 msgid "Contents"
 msgstr "Inhoud"
 
-#: ../src/common/strconv.cpp:2271
+#: ../src/common/strconv.cpp:2265
 #, c-format
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "Omskakeling na karakterstel '%s' werk nie."
@@ -2263,7 +2267,7 @@ msgstr "Omskakeling na karakterstel '%s' werk nie."
 msgid "Convert"
 msgstr "Skakel om"
 
-#: ../src/html/htmlwin.cpp:1060
+#: ../src/html/htmlwin.cpp:1064
 #, c-format
 msgid "Copied to clipboard:\"%s\""
 msgstr "Gekopieer na knipbord:\"%s\""
@@ -2394,8 +2398,8 @@ msgstr "Kon nie begin met drukwerk nie."
 msgid "Could not start document preview."
 msgstr "Kon drukvoorskou nie begin nie."
 
-#: ../src/generic/printps.cpp:178 ../src/msw/printwin.cpp:210
-#: ../src/gtk/print.cpp:1077
+#: ../src/generic/printps.cpp:178 ../src/gtk/print.cpp:1103
+#: ../src/msw/printwin.cpp:210
 msgid "Could not start printing."
 msgstr "Kon nie begin met drukwerk nie."
 
@@ -2407,9 +2411,9 @@ msgstr "Kon data nie na venster oordra nie"
 msgid "Couldn't acquire a mutex lock"
 msgstr "Kon nie 'n wedersydse slot bekom nie"
 
+#: ../src/msw/dragimag.cpp:193 ../src/msw/dragimag.cpp:232
 #: ../src/msw/imaglist.cpp:189 ../src/msw/imaglist.cpp:226
-#: ../src/msw/imaglist.cpp:238 ../src/msw/dragimag.cpp:193
-#: ../src/msw/dragimag.cpp:232
+#: ../src/msw/imaglist.cpp:238
 msgid "Couldn't add an image to the image list."
 msgstr "Kon geen beeld by die lys voeg nie."
 
@@ -2422,7 +2426,7 @@ msgstr "Kon nie 'n tydhouer skep nie"
 msgid "Couldn't create the overlay window"
 msgstr "Kon nie 'n tydhouer skep nie"
 
-#: ../src/common/translation.cpp:2015
+#: ../src/common/translation.cpp:2028
 #, fuzzy
 msgid "Couldn't enumerate translations"
 msgstr "Kon uitvoerdraad nie beëindig nie"
@@ -2431,10 +2435,6 @@ msgstr "Kon uitvoerdraad nie beëindig nie"
 #, c-format
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Kon nie simbool %s vind in 'n dinamiese biblioteek nie"
-
-#: ../src/gtk/print.cpp:2010
-msgid "Couldn't get hatch style from wxBrush."
-msgstr ""
 
 #: ../src/msw/thread.cpp:945
 msgid "Couldn't get the current thread pointer"
@@ -2459,7 +2459,7 @@ msgstr "Kon PNG-beeld nie laai nie: lêer is korrup of geheue is onvoldoende."
 msgid "Couldn't load sound data from '%s'."
 msgstr "Kon nie klankdata vanaf '%s' laai nie."
 
-#: ../src/msw/dirdlg.cpp:441
+#: ../src/msw/dirdlg.cpp:455
 msgid "Couldn't obtain folder name"
 msgstr "Kon nie gidsnaam kry nie"
 
@@ -2500,16 +2500,16 @@ msgstr "Create-parameter nie gevind in die verklaarde RTTI parameters nie"
 msgid "Create directory"
 msgstr "Maak gids"
 
-#: ../src/generic/filedlgg.cpp:228 ../src/generic/dirdlgg.cpp:131
+#: ../src/generic/dirdlgg.cpp:131 ../src/generic/filedlgg.cpp:228
 msgid "Create new directory"
 msgstr "Maak nuwe gids"
 
-#: ../src/common/accelcmn.cpp:322
+#: ../src/common/accelcmn.cpp:323
 msgid "Ctrl+"
 msgstr "Ctrl+"
 
-#: ../src/richtext/richtextctrl.cpp:331 ../src/osx/textctrl_osx.cpp:582
-#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2334
+#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2456
+#: ../src/osx/textctrl_osx.cpp:582 ../src/richtext/richtextctrl.cpp:331
 msgid "Cu&t"
 msgstr "Kn&ip"
 
@@ -2517,7 +2517,12 @@ msgstr "Kn&ip"
 msgid "Current directory:"
 msgstr "Huidige gids:"
 
-#: ../src/gtk/print.cpp:759
+#: ../src/propgrid/advprops.cpp:1272
+#, fuzzy
+msgid "Custom"
+msgstr "Pasgemaakte grootte"
+
+#: ../src/gtk/print.cpp:218
 msgid "Custom size"
 msgstr "Pasgemaakte grootte"
 
@@ -2545,49 +2550,29 @@ msgstr "D, 22 x34 duim"
 msgid "DDE poke request failed"
 msgstr "DDE 'poke'-versoek het misluk"
 
-#: ../src/common/accelcmn.cpp:79
-msgid "DECIMAL"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:47
-msgid "DEL"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:48
-msgid "DELETE"
-msgstr ""
-
-#: ../src/common/imagbmp.cpp:1096
+#: ../src/common/imagbmp.cpp:1097
 msgid "DIB Header: Encoding doesn't match bitdepth."
 msgstr "DIB Opskrif: Kodering kom nie ooreen met bis-diepte nie."
 
-#: ../src/common/imagbmp.cpp:1044
+#: ../src/common/imagbmp.cpp:1045
 msgid "DIB Header: Image height > 32767 pixels for file."
 msgstr "DIB Opskrif: Beeldhoogte > 32767 pixels in lêer."
 
-#: ../src/common/imagbmp.cpp:1036
+#: ../src/common/imagbmp.cpp:1037
 msgid "DIB Header: Image width > 32767 pixels for file."
 msgstr "DIB Opskrif: Beeldbreedte > 32767 pixels in lêer."
 
-#: ../src/common/imagbmp.cpp:1064
+#: ../src/common/imagbmp.cpp:1065
 msgid "DIB Header: Unknown bitdepth in file."
 msgstr "DIB Opskrif: Onbekende bisdiepte in lêer."
 
-#: ../src/common/imagbmp.cpp:1078
+#: ../src/common/imagbmp.cpp:1079
 msgid "DIB Header: Unknown encoding in file."
 msgstr "DIB Opskrif: Onbekende kodering in lêer."
-
-#: ../src/common/accelcmn.cpp:80
-msgid "DIVIDE"
-msgstr ""
 
 #: ../src/common/paper.cpp:122
 msgid "DL Envelope, 110 x 220 mm"
 msgstr "Koevert DL, 110 x 220 mm"
-
-#: ../src/common/accelcmn.cpp:59
-msgid "DOWN"
-msgstr ""
 
 #: ../src/richtext/richtextborderspage.cpp:567
 msgid "Dashed"
@@ -2615,6 +2600,11 @@ msgstr "Gids '%s' kon nie geskep word nie"
 msgid "Debug report generation has failed."
 msgstr ""
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:82
+msgid "Decimal"
+msgstr ""
+
 #: ../src/generic/fontdlgg.cpp:323
 msgid "Decorative"
 msgstr "Dekoratief"
@@ -2631,8 +2621,15 @@ msgstr "Versteklettertipe"
 msgid "Default printer"
 msgstr "Verstekdrukker"
 
-#: ../src/richtext/richtextbuffer.cpp:7945 ../src/common/stockitem.cpp:152
-#: ../src/stc/stc_i18n.cpp:20
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:49
+#, fuzzy
+msgid "Del"
+msgstr "Skrap"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:48 ../src/common/stockitem.cpp:152
+#: ../src/richtext/richtextbuffer.cpp:7962 ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "Skrap"
 
@@ -2640,11 +2637,11 @@ msgstr "Skrap"
 msgid "Delete A&ll"
 msgstr "Skrap &almal"
 
-#: ../src/richtext/richtextbuffer.cpp:10942
+#: ../src/richtext/richtextbuffer.cpp:10964
 msgid "Delete Column"
 msgstr "Skrap kolom"
 
-#: ../src/richtext/richtextbuffer.cpp:10892
+#: ../src/richtext/richtextbuffer.cpp:10914
 msgid "Delete Row"
 msgstr "Skrap ry"
 
@@ -2652,7 +2649,7 @@ msgstr "Skrap ry"
 msgid "Delete Style"
 msgstr "Skrap styl"
 
-#: ../src/richtext/richtextctrl.cpp:1300 ../src/richtext/richtextctrl.cpp:1538
+#: ../src/richtext/richtextctrl.cpp:1305 ../src/richtext/richtextctrl.cpp:1544
 msgid "Delete Text"
 msgstr "Skrap teks"
 
@@ -2683,7 +2680,7 @@ msgstr ""
 msgid "Descending"
 msgstr "Dalend"
 
-#: ../src/generic/dirctrlg.cpp:626
+#: ../src/generic/dirctrlg.cpp:623
 msgid "Desktop"
 msgstr "Werkarea"
 
@@ -2753,6 +2750,11 @@ msgstr "Wys opsies-dialoog"
 msgid "Displays help as you browse the books on the left."
 msgstr ""
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:83
+msgid "Divide"
+msgstr ""
+
 #: ../src/msw/mimetype.cpp:737
 msgid ""
 "Do you want to overwrite the command used to %s files with extension \"%s"
@@ -2790,7 +2792,7 @@ msgstr "Dokumentasieskrywers"
 msgid "Don't Save"
 msgstr "Moenie stoor nie"
 
-#: ../src/msw/frame.cpp:122 ../src/html/htmlwin.cpp:614
+#: ../src/html/htmlwin.cpp:618 ../src/msw/frame.cpp:122
 msgid "Done"
 msgstr "Klaar"
 
@@ -2815,7 +2817,9 @@ msgstr "Dubbele Japannese poskaart, geroteer 148 x 200 mm"
 msgid "Doubly used id : %d"
 msgstr "Dubbelgebruikte id: %d"
 
-#: ../src/generic/fdrepdlg.cpp:152 ../src/common/stockitem.cpp:153
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:62 ../src/common/stockitem.cpp:153
+#: ../src/generic/fdrepdlg.cpp:152
 msgid "Down"
 msgstr "Af"
 
@@ -2827,30 +2831,10 @@ msgstr "Sleep"
 msgid "E sheet, 34 x 44 in"
 msgstr "E, 34 x 44 duim"
 
-#: ../src/common/accelcmn.cpp:61
-msgid "END"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:52
-msgid "ENTER"
-msgstr ""
-
 #: ../src/unix/fswatcher_inotify.cpp:548
 #, fuzzy
 msgid "EOF while reading from inotify descriptor"
 msgstr "kan nie lees van lêeretiket %d"
-
-#: ../src/common/accelcmn.cpp:64
-msgid "ESC"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:65
-msgid "ESCAPE"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:73
-msgid "EXECUTE"
-msgstr ""
 
 #: ../src/common/stockitem.cpp:154
 msgid "Edit"
@@ -2903,6 +2887,17 @@ msgstr "Aktiveer vertikale belyning."
 msgid "Enables a background colour."
 msgstr "Aktiveer 'n agtergrondkleur."
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:64
+msgid "End"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:53
+#, fuzzy
+msgid "Enter"
+msgstr "Drukker"
+
 #: ../src/richtext/richtextstyledlg.cpp:934
 msgid "Enter a box style name"
 msgstr "Tik 'n naam vir die boksstyl"
@@ -2945,12 +2940,13 @@ msgstr ""
 "Uitbreiding van omgewingsveranderlikes het misluk: ontbrekende '%c' op "
 "posisie %d in '%s'."
 
-#: ../src/generic/dirctrlg.cpp:670 ../src/generic/dirctrlg.cpp:688
-#: ../src/generic/dirctrlg.cpp:699 ../src/generic/dirdlgg.cpp:352
+#: ../src/generic/dirctrlg.cpp:667 ../src/generic/dirctrlg.cpp:685
+#: ../src/generic/dirctrlg.cpp:696 ../src/generic/dirdlgg.cpp:352
 #: ../src/generic/filectrlg.cpp:677 ../src/generic/filectrlg.cpp:791
 #: ../src/generic/filectrlg.cpp:805 ../src/generic/filectrlg.cpp:821
 #: ../src/generic/filectrlg.cpp:1381 ../src/generic/filectrlg.cpp:1412
-#: ../src/gtk/filedlg.cpp:73 ../src/gtk1/fontdlg.cpp:74
+#: ../src/generic/filedlgg.cpp:373 ../src/gtk/filedlg.cpp:73
+#: ../src/gtk1/fontdlg.cpp:74
 msgid "Error"
 msgstr "Fout"
 
@@ -2968,12 +2964,12 @@ msgstr "Fout tydens skepping van gids"
 msgid "Error creating directory"
 msgstr "Fout tydens skep van gids"
 
-#: ../src/common/imagbmp.cpp:1107
+#: ../src/common/imagbmp.cpp:1108
 #, fuzzy
 msgid "Error in reading image DIB."
 msgstr "Fout tydens lees van DIB-beeld."
 
-#: ../src/propgrid/propgrid.cpp:6565
+#: ../src/propgrid/propgrid.cpp:6566
 #, c-format
 msgid "Error in resource: %s"
 msgstr ""
@@ -2987,13 +2983,24 @@ msgstr "Fout met lees van konfigurasie-opsies."
 msgid "Error saving user configuration data."
 msgstr "Fout met lees van konfigurasie-opsies."
 
-#: ../src/gtk/print.cpp:671
+#: ../src/gtk/print.cpp:691
 msgid "Error while printing: "
 msgstr "Fout tydens drukwerk: "
 
 #: ../src/common/log.cpp:223
 msgid "Error: "
 msgstr "Fout: "
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:67
+msgid "Esc"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:68
+#, fuzzy
+msgid "Escape"
+msgstr "Dwars"
 
 #: ../src/common/fmapbase.cpp:150
 msgid "Esperanto (ISO-8859-3)"
@@ -3008,11 +3015,12 @@ msgstr "Geskatte tyd:"
 msgid "Executable files (*.exe)|*.exe|"
 msgstr "Alle lêers (*.*)|*.*"
 
-#: ../src/common/stockitem.cpp:155
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:76 ../src/common/stockitem.cpp:155
 msgid "Execute"
 msgstr ""
 
-#: ../src/msw/utilsexc.cpp:887
+#: ../src/msw/utilsexc.cpp:911
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr "Uitvoering van opdrag '%s' het misluk"
@@ -3041,11 +3049,11 @@ msgstr "Extended Unix Codepage vir Japannees (EUC-JP)"
 msgid "Extraction of '%s' into '%s' failed."
 msgstr "Uitpak van '%s' binne-in '%s' het misluk."
 
-#: ../src/common/accelcmn.cpp:238 ../src/common/accelcmn.cpp:333
+#: ../src/common/accelcmn.cpp:239 ../src/common/accelcmn.cpp:334
 msgid "F"
 msgstr "F"
 
-#: ../src/propgrid/advprops.cpp:640
+#: ../src/propgrid/advprops.cpp:648
 #, fuzzy
 msgid "Face Name"
 msgstr "Nuwe gids"
@@ -3069,7 +3077,7 @@ msgstr "Kon nie %luKb geheue toeken vir bitmap-data nie."
 msgid "Failed to allocate colour for OpenGL"
 msgstr "Wyser kon nie geskep word nie."
 
-#: ../src/unix/displayx11.cpp:292
+#: ../src/unix/displayx11.cpp:285
 msgid "Failed to change video mode"
 msgstr "Videomodus kon nie verander word nie"
 
@@ -3083,7 +3091,7 @@ msgstr ""
 msgid "Failed to clean up debug report directory \"%s\""
 msgstr "Die gids %s/.gnome kon nie geskep word nie."
 
-#: ../src/common/filename.cpp:211
+#: ../src/common/filename.cpp:212
 msgid "Failed to close file handle"
 msgstr "Toemaak van lêer het misluk."
 
@@ -3147,15 +3155,15 @@ msgstr "Skepping van DDE-string het misluk"
 msgid "Failed to create MDI parent frame."
 msgstr "Skepping van MDI-hoofvenster het misluk."
 
-#: ../src/common/filename.cpp:1086
+#: ../src/common/filename.cpp:1087
 msgid "Failed to create a temporary file name"
 msgstr "'n Tydelyke lêernaam kon nie geskep word nie"
 
-#: ../src/msw/utilsexc.cpp:234
+#: ../src/msw/utilsexc.cpp:243
 msgid "Failed to create an anonymous pipe"
 msgstr "'n Anonieme pyp kon nie geskep word nie"
 
-#: ../src/msw/ole/automtn.cpp:525
+#: ../src/msw/ole/automtn.cpp:528
 #, fuzzy, c-format
 msgid "Failed to create an instance of \"%s\""
 msgstr "Die gids %s/.gnome kon nie geskep word nie."
@@ -3214,7 +3222,7 @@ msgstr "Weergee van HTML-document in %s-kodering het misluk"
 msgid "Failed to empty the clipboard."
 msgstr "Skoonmaak van knipbord het misluk."
 
-#: ../src/unix/displayx11.cpp:266
+#: ../src/unix/displayx11.cpp:263
 msgid "Failed to enumerate video modes"
 msgstr "Videomodusse kon nie gelys word nie"
 
@@ -3236,7 +3244,7 @@ msgstr "Uitvoering van '%s' het misluk\n"
 msgid "Failed to execute curl, please install it in PATH."
 msgstr "Kon nie curl laat loop nie. Installeer dit asb. in PATH."
 
-#: ../src/msw/ole/automtn.cpp:508
+#: ../src/msw/ole/automtn.cpp:511
 #, fuzzy, c-format
 msgid "Failed to find CLSID of \"%s\""
 msgstr "Opening van '%s' vir %s het misluk"
@@ -3251,12 +3259,12 @@ msgstr "'%s' kon nie in reëlmatige uitdrukking '%s' gevind word nie"
 msgid "Failed to get ISP names: %s"
 msgstr "ISP name %s kon nie verkry word nie"
 
-#: ../src/msw/ole/automtn.cpp:577
+#: ../src/msw/ole/automtn.cpp:580
 #, fuzzy, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
 msgstr "Die gids %s/.gnome kon nie geskep word nie."
 
-#: ../src/msw/clipbrd.cpp:747
+#: ../src/msw/clipbrd.cpp:745
 msgid "Failed to get data from the clipboard"
 msgstr "Data kon nie vanaf die knipbord verkry word nie"
 
@@ -3371,7 +3379,7 @@ msgstr "Sluiting van die slotlêer '%s' het misluk"
 msgid "Failed to modify descriptor %d in epoll descriptor %d"
 msgstr ""
 
-#: ../src/common/filename.cpp:2687
+#: ../src/common/filename.cpp:2696
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "Verandering van lêertye van '%s' het misluk"
@@ -3380,12 +3388,12 @@ msgstr "Verandering van lêertye van '%s' het misluk"
 msgid "Failed to monitor I/O channels"
 msgstr ""
 
-#: ../src/common/filename.cpp:194
+#: ../src/common/filename.cpp:195
 #, fuzzy, c-format
 msgid "Failed to open '%s' for reading"
 msgstr "Opening van '%s' vir %s het misluk"
 
-#: ../src/common/filename.cpp:199
+#: ../src/common/filename.cpp:200
 #, fuzzy, c-format
 msgid "Failed to open '%s' for writing"
 msgstr "Opening van '%s' vir %s het misluk"
@@ -3410,7 +3418,7 @@ msgstr "Opening van gids \"%s\" vir monitering het misluk."
 msgid "Failed to open display \"%s\"."
 msgstr "Opening van '%s' vir %s het misluk"
 
-#: ../src/common/filename.cpp:1121
+#: ../src/common/filename.cpp:1122
 msgid "Failed to open temporary file."
 msgstr "Opening van tydelyk lêer het misluk."
 
@@ -3418,17 +3426,17 @@ msgstr "Opening van tydelyk lêer het misluk."
 msgid "Failed to open the clipboard."
 msgstr "Open van knipbord het misluk."
 
-#: ../src/common/translation.cpp:1170
+#: ../src/common/translation.cpp:1183
 #, fuzzy, c-format
 msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "Kan nie meervoudvorme ontleed nie: `%s'"
 
-#: ../src/unix/mediactrl.cpp:1268
+#: ../src/unix/mediactrl.cpp:1266
 #, c-format
 msgid "Failed to prepare playing \"%s\"."
 msgstr "Voorbereiding vir speel van \"%s\" het misluk."
 
-#: ../src/msw/clipbrd.cpp:647
+#: ../src/msw/clipbrd.cpp:645
 msgid "Failed to put data on the clipboard"
 msgstr "Stoor van data op knipbord het misluk"
 
@@ -3460,7 +3468,7 @@ msgstr "Inlees van PID vanuit slotlêer het misluk."
 msgid "Failed to redirect child process input/output"
 msgstr "Herleiding van toevoer/afvoer van subproses het misluk"
 
-#: ../src/msw/utilsexc.cpp:696
+#: ../src/msw/utilsexc.cpp:720
 msgid "Failed to redirect the child process IO"
 msgstr "Herleiding van toevoer/afvoer van subproses het misluk"
 
@@ -3506,11 +3514,11 @@ msgstr ""
 msgid "Failed to rename the registry key '%s' to '%s'."
 msgstr "Hernoeming van registersleutel '%s' na '%s' het misluk"
 
-#: ../src/msw/clipbrd.cpp:497
+#: ../src/msw/clipbrd.cpp:495
 msgid "Failed to retrieve data from the clipboard."
 msgstr "Onttrekking van data uit knipbord het misluk."
 
-#: ../src/common/filename.cpp:2783
+#: ../src/common/filename.cpp:2792
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr "Verkryging van lêertye vir '%s' het misluk"
@@ -3519,7 +3527,7 @@ msgstr "Verkryging van lêertye vir '%s' het misluk"
 msgid "Failed to retrieve text of RAS error message"
 msgstr "Verkryging van teks van inbel-foutmelding het misluk"
 
-#: ../src/msw/clipbrd.cpp:784
+#: ../src/msw/clipbrd.cpp:782
 msgid "Failed to retrieve the supported clipboard formats"
 msgstr "Verkryging van ondersteunde knipbord-formate het misluk"
 
@@ -3542,7 +3550,7 @@ msgstr "DDE-advieskennisgewing kon nie gestuur word nie"
 msgid "Failed to set FTP transfer mode to %s."
 msgstr "Kon nie FTP-oordragmodus na %s stel nie."
 
-#: ../src/msw/clipbrd.cpp:373
+#: ../src/msw/clipbrd.cpp:371
 msgid "Failed to set clipboard data."
 msgstr "Opstelling van knipborddata het misluk."
 
@@ -3556,7 +3564,7 @@ msgstr "Onmoontlik om magtigings vir lêer '%s' op te stel"
 msgid "Failed to set process priority"
 msgstr "Opstelling van prioriteit van thread %d het misluk."
 
-#: ../src/common/file.cpp:576
+#: ../src/common/file.cpp:587
 msgid "Failed to set temporary file permissions"
 msgstr "Opstelling van magtigings van tydelyke lêer het misluk"
 
@@ -3604,7 +3612,7 @@ msgstr "Beëindiging van advies-lus met die DDE-server het misluk"
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "Verbreking van inbelverbinding het misluk: %s"
 
-#: ../src/common/filename.cpp:2702
+#: ../src/common/filename.cpp:2711
 #, c-format
 msgid "Failed to touch the file '%s'"
 msgstr "Aanraking van lêer '%s' het misluk"
@@ -3640,11 +3648,11 @@ msgstr ""
 msgid "Failed to write to lock file '%s'"
 msgstr "Skryfbewerking na slotlêer '%s' het misluk"
 
-#: ../src/propgrid/propgrid.cpp:172
+#: ../src/propgrid/propgrid.cpp:173
 msgid "False"
 msgstr "Vals"
 
-#: ../src/propgrid/advprops.cpp:658
+#: ../src/propgrid/advprops.cpp:666
 msgid "Family"
 msgstr "Familie"
 
@@ -3662,7 +3670,7 @@ msgstr "Opening van \"%s\" vir leeswerk het misluk."
 msgid "File \"%s\" could not be opened for writing."
 msgstr "Opening van \"%s\" vir skryfwerk het misluk."
 
-#: ../src/gtk/filedlg.cpp:56
+#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:56
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "Lêer '%s' bestaan al. Moet dit oorskryf word?"
@@ -3686,7 +3694,7 @@ msgstr "Lêer '%s' kon nie verwyd word nie"
 msgid "File '%s' couldn't be renamed '%s'"
 msgstr "Gids '%s' kon nie geskep word nie"
 
-#: ../src/richtext/richtextctrl.cpp:2774 ../src/common/textcmn.cpp:935
+#: ../src/common/textcmn.cpp:935 ../src/richtext/richtextctrl.cpp:2783
 msgid "File couldn't be loaded."
 msgstr "Lêer kon nie gelaai word nie."
 
@@ -3695,11 +3703,11 @@ msgstr "Lêer kon nie gelaai word nie."
 msgid "File dialog failed with error code %0lx."
 msgstr "Lêerdialoog het misluk met foutkode %0lx."
 
-#: ../src/common/docview.cpp:1771
+#: ../src/common/docview.cpp:1778
 msgid "File error"
 msgstr "Lêerfout"
 
-#: ../src/generic/dirctrlg.cpp:688 ../src/generic/filectrlg.cpp:805
+#: ../src/generic/dirctrlg.cpp:685 ../src/generic/filectrlg.cpp:805
 msgid "File name exists already."
 msgstr "Lêernaam bestaan al."
 
@@ -3753,8 +3761,8 @@ msgstr "&Kopieer "
 msgid "Folio, 8 1/2 x 13 in"
 msgstr "Folio, 8 1/2 x 13 duim"
 
-#: ../src/richtext/richtextformatdlg.cpp:325 ../src/osx/carbon/fontdlg.cpp:457
-#: ../src/common/stockitem.cpp:194
+#: ../src/common/stockitem.cpp:194 ../src/osx/carbon/fontdlg.cpp:457
+#: ../src/richtext/richtextformatdlg.cpp:325
 msgid "Font"
 msgstr "Lettertipe"
 
@@ -3823,7 +3831,7 @@ msgstr "GIF: onvoldoende geheue."
 msgid "GIF: unknown error!!!"
 msgstr "GIF: onbekende fout!"
 
-#: ../src/gtk/window.cpp:4339
+#: ../src/gtk/window.cpp:4485
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -3875,7 +3883,7 @@ msgstr "Gaan vorentoe"
 msgid "Go one level up in document hierarchy"
 msgstr "Gaan een vlak hoër in dokument-hiërargie"
 
-#: ../src/generic/filedlgg.cpp:223 ../src/generic/dirdlgg.cpp:136
+#: ../src/generic/dirdlgg.cpp:136 ../src/generic/filedlgg.cpp:223
 msgid "Go to home directory"
 msgstr "Gaan na tuisgids"
 
@@ -3899,19 +3907,11 @@ msgstr ""
 msgid "Gzip not supported by this version of zlib"
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:75
-msgid "HELP"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:60
-msgid "HOME"
-msgstr ""
-
 #: ../src/html/helpwnd.cpp:1552
 msgid "HTML Help Project (*.hhp)|*.hhp|"
 msgstr "HTML-hulpprojek (*.hhp)|*.hhp|"
 
-#: ../src/html/htmlwin.cpp:662
+#: ../src/html/htmlwin.cpp:666
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "HTML-anker %s bestaan nie."
@@ -3928,9 +3928,10 @@ msgstr "Hardeskyf"
 msgid "Hebrew (ISO-8859-8)"
 msgstr "Hebreeus (ISO-8859-8)"
 
-#: ../include/wx/msgdlg.h:275 ../src/osx/button_osx.cpp:39
+#. TRANSLATORS: Name of keyboard key
+#: ../include/wx/msgdlg.h:280 ../src/common/accelcmn.cpp:78
 #: ../src/common/stockitem.cpp:163 ../src/html/helpdlg.cpp:66
-#: ../src/html/helpfrm.cpp:116
+#: ../src/html/helpfrm.cpp:116 ../src/osx/button_osx.cpp:39
 msgid "Help"
 msgstr "Hulp"
 
@@ -3969,12 +3970,12 @@ msgstr "Hulplêer \"%s\" nie gevind nie."
 msgid "Help: %s"
 msgstr "Hulp: %s"
 
-#: ../src/osx/menu_osx.cpp:623
+#: ../src/osx/menu_osx.cpp:635
 #, c-format
 msgid "Hide %s"
 msgstr "Versteek %s"
 
-#: ../src/osx/menu_osx.cpp:625
+#: ../src/osx/menu_osx.cpp:637
 msgid "Hide Others"
 msgstr "Versteek ander"
 
@@ -3982,11 +3983,13 @@ msgstr "Versteek ander"
 msgid "Hide this notification message."
 msgstr "Versteek dié kennisgewing."
 
-#: ../src/generic/dirdlgg.cpp:98 ../src/common/stockitem.cpp:164
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:63 ../src/common/stockitem.cpp:164
+#: ../src/generic/dirdlgg.cpp:98
 msgid "Home"
 msgstr "Tuis"
 
-#: ../src/generic/dirctrlg.cpp:624
+#: ../src/generic/dirctrlg.cpp:621
 msgid "Home directory"
 msgstr "Tuisgids"
 
@@ -3995,26 +3998,26 @@ msgstr "Tuisgids"
 msgid "How the object will float relative to the text."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1122
+#: ../src/common/imagbmp.cpp:1123
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: Fout by inlees van masker DIB."
 
-#: ../src/common/imagbmp.cpp:1237 ../src/common/imagbmp.cpp:1298
-#: ../src/common/imagbmp.cpp:1309 ../src/common/imagbmp.cpp:1322
-#: ../src/common/imagbmp.cpp:1367 ../src/common/imagbmp.cpp:1379
-#: ../src/common/imagbmp.cpp:1390
+#: ../src/common/imagbmp.cpp:1238 ../src/common/imagbmp.cpp:1299
+#: ../src/common/imagbmp.cpp:1310 ../src/common/imagbmp.cpp:1323
+#: ../src/common/imagbmp.cpp:1368 ../src/common/imagbmp.cpp:1380
+#: ../src/common/imagbmp.cpp:1391
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: Fout tydens wegskryf van die beeld!"
 
-#: ../src/common/imagbmp.cpp:1202
+#: ../src/common/imagbmp.cpp:1203
 msgid "ICO: Image too tall for an icon."
 msgstr "ICO: Beeld is te hoog vir 'n ikoon."
 
-#: ../src/common/imagbmp.cpp:1210
+#: ../src/common/imagbmp.cpp:1211
 msgid "ICO: Image too wide for an icon."
 msgstr "ICO: Beeld is te breed vir 'n ikoon."
 
-#: ../src/common/imagbmp.cpp:1470
+#: ../src/common/imagbmp.cpp:1475
 msgid "ICO: Invalid icon index."
 msgstr "ICO: Ongeldige ikoonindeks."
 
@@ -4033,14 +4036,6 @@ msgstr "IFF: onvoldoende geheue."
 #: ../src/common/imagiff.cpp:749
 msgid "IFF: unknown error!!!"
 msgstr "IFF: onbekende fout!!!"
-
-#: ../src/common/accelcmn.cpp:50
-msgid "INS"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:51
-msgid "INSERT"
-msgstr ""
 
 #: ../src/common/fmapbase.cpp:197
 msgid "ISO-2022-JP"
@@ -4089,7 +4084,7 @@ msgstr "Ongeldige aantal parameters vir ConstructObject-metode"
 msgid "Illegal Parameter Count for Create Method"
 msgstr "Ongeldige aantal parameters vir Createt-metode"
 
-#: ../src/generic/dirctrlg.cpp:670 ../src/generic/filectrlg.cpp:791
+#: ../src/generic/dirctrlg.cpp:667 ../src/generic/filectrlg.cpp:791
 msgid "Illegal directory name."
 msgstr "Ongeldige gidsnaam."
 
@@ -4111,7 +4106,7 @@ msgstr "Beeldlêer is nie van die tipe %d."
 msgid "Image is not of type %s."
 msgstr "Beeldlêer is nie van die tipe %d."
 
-#: ../src/msw/textctrl.cpp:413
+#: ../src/msw/textctrl.cpp:501
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
@@ -4143,7 +4138,7 @@ msgstr "Onmoontlik om magtigings vir lêer '%s' op te stel"
 msgid "Incorrect GIF frame size (%u, %d) for the frame #%u"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:638
+#: ../src/msw/ole/automtn.cpp:641
 msgid "Incorrect number of arguments."
 msgstr "Verkeerde aantal argumente."
 
@@ -4171,27 +4166,34 @@ msgstr "Inligting"
 msgid "Initialization failed in post init, aborting."
 msgstr ""
 
-#: ../src/richtext/richtextsymboldlg.cpp:472
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:52
+#, fuzzy
+msgid "Ins"
+msgstr "Indeks"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:51 ../src/richtext/richtextsymboldlg.cpp:472
 msgid "Insert"
 msgstr "Voeg in"
 
-#: ../src/richtext/richtextbuffer.cpp:7791
+#: ../src/richtext/richtextbuffer.cpp:7808
 msgid "Insert Field"
 msgstr "Voeg veld in"
 
-#: ../src/richtext/richtextbuffer.cpp:7702
-#: ../src/richtext/richtextbuffer.cpp:8655
+#: ../src/richtext/richtextbuffer.cpp:7719
+#: ../src/richtext/richtextbuffer.cpp:8677
 msgid "Insert Image"
 msgstr "Voeg beeld in"
 
-#: ../src/richtext/richtextbuffer.cpp:7749
+#: ../src/richtext/richtextbuffer.cpp:7766
 msgid "Insert Object"
 msgstr "Voeg objek in"
 
-#: ../src/richtext/richtextctrl.cpp:1241 ../src/richtext/richtextctrl.cpp:1448
-#: ../src/richtext/richtextbuffer.cpp:7544
-#: ../src/richtext/richtextbuffer.cpp:7574
-#: ../src/richtext/richtextbuffer.cpp:7618
+#: ../src/richtext/richtextbuffer.cpp:7561
+#: ../src/richtext/richtextbuffer.cpp:7591
+#: ../src/richtext/richtextbuffer.cpp:7635
+#: ../src/richtext/richtextctrl.cpp:1246 ../src/richtext/richtextctrl.cpp:1454
 msgid "Insert Text"
 msgstr "Voeg teks in"
 
@@ -4238,7 +4240,7 @@ msgstr ""
 msgid "Invalid lock file '%s'."
 msgstr "Ongeldig slotlêer '%s'."
 
-#: ../src/common/translation.cpp:1111
+#: ../src/common/translation.cpp:1124
 #, fuzzy
 msgid "Invalid message catalog."
 msgstr "'%s' is nie 'n geldige boodskapkatalogus."
@@ -4261,8 +4263,8 @@ msgstr "Ongeldige reëlmatige uitdrukking '%s': %s"
 msgid "Invalid value %ld for a boolean key \"%s\" in config file."
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:329 ../src/richtext/richtextfontpage.cpp:333
-#: ../src/osx/carbon/fontdlg.cpp:531 ../src/common/stockitem.cpp:168
+#: ../src/common/stockitem.cpp:168 ../src/generic/fontdlgg.cpp:329
+#: ../src/osx/carbon/fontdlg.cpp:531 ../src/richtext/richtextfontpage.cpp:333
 msgid "Italic"
 msgstr "Kursief"
 
@@ -4353,109 +4355,136 @@ msgstr "KOI8-R"
 msgid "KOI8-U"
 msgstr "KOI8-U"
 
-#: ../src/common/accelcmn.cpp:254 ../src/common/accelcmn.cpp:336
+#: ../src/common/accelcmn.cpp:255 ../src/common/accelcmn.cpp:337
 msgid "KP_"
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:103
-msgid "KP_ADD"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:98
-msgid "KP_BEGIN"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:106
-msgid "KP_DECIMAL"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:100
-msgid "KP_DELETE"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:107
-msgid "KP_DIVIDE"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:92
-msgid "KP_DOWN"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:97
-msgid "KP_END"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:87
-msgid "KP_ENTER"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:101
-msgid "KP_EQUAL"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:88
-msgid "KP_HOME"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:99
-msgid "KP_INSERT"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:89
-msgid "KP_LEFT"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:102
-msgid "KP_MULTIPLY"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:95
-msgid "KP_NEXT"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:96
-msgid "KP_PAGEDOWN"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:94
-msgid "KP_PAGEUP"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:93
-msgid "KP_PRIOR"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:91
-msgid "KP_RIGHT"
-msgstr ""
-
+#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:104
-msgid "KP_SEPARATOR"
+msgid "KP_Add"
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:85
-msgid "KP_SPACE"
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:99
+msgid "KP_Begin"
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:105
-msgid "KP_SUBTRACT"
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:107
+msgid "KP_Decimal"
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:86
-msgid "KP_TAB"
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:101
+#, fuzzy
+msgid "KP_Delete"
+msgstr "Skrap"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:108
+msgid "KP_Divide"
 msgstr ""
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:93
+#, fuzzy
+msgid "KP_Down"
+msgstr "Af"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:98
+msgid "KP_End"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:88
+#, fuzzy
+msgid "KP_Enter"
+msgstr "Drukker"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:102
+msgid "KP_Equal"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:89
+#, fuzzy
+msgid "KP_Home"
+msgstr "Tuis"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:100
+#, fuzzy
+msgid "KP_Insert"
+msgstr "Voeg in"
+
+#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:90
-msgid "KP_UP"
+#, fuzzy
+msgid "KP_Left"
+msgstr "Links"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:103
+msgid "KP_Multiply"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:97
+#, fuzzy
+msgid "KP_Next"
+msgstr "Volgende"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:95
+msgid "KP_PageDown"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:94
+msgid "KP_PageUp"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:96
+msgid "KP_Prior"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:92
+#, fuzzy
+msgid "KP_Right"
+msgstr "Regs"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:105
+msgid "KP_Separator"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:86
+msgid "KP_Space"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:106
+msgid "KP_Subtract"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:87
+msgid "KP_Tab"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:91
+msgid "KP_Up"
 msgstr ""
 
 #: ../src/richtext/richtextindentspage.cpp:270
 msgid "L&ine spacing:"
 msgstr "&Lynspasiëring:"
-
-#: ../src/common/accelcmn.cpp:56
-msgid "LEFT"
-msgstr ""
 
 #: ../src/generic/prntdlgg.cpp:613 ../src/generic/prntdlgg.cpp:868
 msgid "Landscape"
@@ -4480,12 +4509,13 @@ msgstr[1] ""
 msgid "Ledger, 17 x 11 in"
 msgstr "VSA Ledger, 17 x 11 duim"
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:59 ../src/richtext/richtextbulletspage.cpp:199
+#: ../src/richtext/richtextbulletspage.cpp:202
+#: ../src/richtext/richtextbulletspage.cpp:203
 #: ../src/richtext/richtextliststylepage.cpp:249
 #: ../src/richtext/richtextliststylepage.cpp:252
 #: ../src/richtext/richtextliststylepage.cpp:253
-#: ../src/richtext/richtextbulletspage.cpp:199
-#: ../src/richtext/richtextbulletspage.cpp:202
-#: ../src/richtext/richtextbulletspage.cpp:203
 #: ../src/richtext/richtextsizepage.cpp:249
 msgid "Left"
 msgstr "Links"
@@ -4587,7 +4617,7 @@ msgstr "Wenke is nie beskikbaar nie, jammer!"
 msgid "Load %s file"
 msgstr "Laai %s-lêer"
 
-#: ../src/html/htmlwin.cpp:578
+#: ../src/html/htmlwin.cpp:582
 msgid "Loading : "
 msgstr "Laai tans: "
 
@@ -4606,23 +4636,19 @@ msgstr ""
 msgid "Log saved to the file '%s'."
 msgstr "Boekstawing geskryf na lêer '%s'."
 
-#: ../src/richtext/richtextliststylepage.cpp:484
 #: ../src/richtext/richtextbulletspage.cpp:289
+#: ../src/richtext/richtextliststylepage.cpp:484
 msgid "Lower case letters"
 msgstr "Kleinletters"
 
-#: ../src/richtext/richtextliststylepage.cpp:486
 #: ../src/richtext/richtextbulletspage.cpp:291
+#: ../src/richtext/richtextliststylepage.cpp:486
 msgid "Lower case roman numerals"
 msgstr "Klein romeinse syfers"
 
 #: ../src/gtk/mdi.cpp:422 ../src/gtk1/mdi.cpp:431
 msgid "MDI child"
 msgstr "MDI-subvenster"
-
-#: ../src/common/accelcmn.cpp:68
-msgid "MENU"
-msgstr ""
 
 #: ../src/msw/helpchm.cpp:56
 msgid ""
@@ -4796,7 +4822,7 @@ msgstr "MacTurkish"
 msgid "MacVietnamese"
 msgstr "MacVietnamese"
 
-#: ../src/propgrid/advprops.cpp:2013
+#: ../src/propgrid/advprops.cpp:2038
 msgid "Make a selection:"
 msgstr "Maak 'n keuse:"
 
@@ -4818,7 +4844,7 @@ msgstr "agtste"
 msgid "Max width:"
 msgstr "Maksimum wydte:"
 
-#: ../src/unix/mediactrl.cpp:1006
+#: ../src/unix/mediactrl.cpp:1004
 #, c-format
 msgid "Media playback error: %s"
 msgstr ""
@@ -4828,7 +4854,8 @@ msgstr ""
 msgid "Memory VFS already contains file '%s'!"
 msgstr "VFS in geheue bevat reeds die lêer '%s'!"
 
-#: ../src/msw/frame.cpp:347
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:71 ../src/msw/frame.cpp:354
 msgid "Menu"
 msgstr "Kieslys"
 
@@ -4840,7 +4867,7 @@ msgstr "Boodskap"
 msgid "Metal theme"
 msgstr "Metaaltema"
 
-#: ../src/msw/ole/automtn.cpp:655
+#: ../src/msw/ole/automtn.cpp:658
 msgid "Method or property not found."
 msgstr ""
 
@@ -4856,7 +4883,7 @@ msgstr "Minimum hoogte:"
 msgid "Min width:"
 msgstr "Minimum wydte:"
 
-#: ../src/msw/ole/automtn.cpp:671
+#: ../src/msw/ole/automtn.cpp:674
 msgid "Missing a required parameter."
 msgstr ""
 
@@ -4901,14 +4928,10 @@ msgstr "Skuif die objek na die volgende paragraaf."
 msgid "Moves the object to the previous paragraph."
 msgstr "Skuif die objek na die vorige paragraaf."
 
-#: ../src/richtext/richtextbuffer.cpp:9596
+#: ../src/richtext/richtextbuffer.cpp:9618
 #, fuzzy
 msgid "Multiple Cell Properties"
 msgstr "Veelvuldige sel-eienskappe"
-
-#: ../src/common/accelcmn.cpp:81
-msgid "NUM_LOCK"
-msgstr ""
 
 #: ../src/generic/filectrlg.cpp:459
 msgid "Name"
@@ -4972,7 +4995,7 @@ msgstr "Volgende"
 msgid "Next page"
 msgstr "Volgende bladsy"
 
-#: ../include/wx/msgdlg.h:272 ../src/common/stockitem.cpp:177
+#: ../include/wx/msgdlg.h:277 ../src/common/stockitem.cpp:177
 #: ../src/motif/msgdlg.cpp:196
 msgid "No"
 msgstr "Nee"
@@ -5103,7 +5126,7 @@ msgstr "Normaal en<br><u>onderstreep</u>. "
 msgid "Normal font:"
 msgstr "Normale lettertipe:"
 
-#: ../src/propgrid/props.cpp:897
+#: ../src/propgrid/props.cpp:1017
 #, c-format
 msgid "Not %s"
 msgstr "Nie %s nie"
@@ -5124,24 +5147,144 @@ msgstr "Nota, 8 1/2 x 11 duim"
 msgid "Notice"
 msgstr "Kennisgewing"
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:103
+msgid "Num *"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:104
+msgid "Num +"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:105
+msgid "Num ,"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:106
+msgid "Num -"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:107
+msgid "Num ."
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:108
+msgid "Num /"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:102
+msgid "Num ="
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:99
+msgid "Num Begin"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:101
+#, fuzzy
+msgid "Num Delete"
+msgstr "Skrap"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:93
+#, fuzzy
+msgid "Num Down"
+msgstr "Af"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:98
+msgid "Num End"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:88
+msgid "Num Enter"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:89
+#, fuzzy
+msgid "Num Home"
+msgstr "Tuis"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:100
+#, fuzzy
+msgid "Num Insert"
+msgstr "Voeg in"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:84
+msgid "Num Lock"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:95
+msgid "Num Page Down"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:94
+msgid "Num Page Up"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:92
+#, fuzzy
+msgid "Num Right"
+msgstr "Regs"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:86
+msgid "Num Space"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:87
+msgid "Num Tab"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:91
+msgid "Num Up"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:90
+msgid "Num left"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:84
+msgid "Num_lock"
+msgstr ""
+
 #: ../src/osx/carbon/dataview.cpp:900
 #, fuzzy
 msgid "Number of columns could not be determined."
 msgstr "Lêer kon nie gelaai word nie."
 
-#: ../src/richtext/richtextliststylepage.cpp:487
 #: ../src/richtext/richtextbulletspage.cpp:292
+#: ../src/richtext/richtextliststylepage.cpp:487
 msgid "Numbered outline"
 msgstr ""
 
-#: ../include/wx/msgdlg.h:273 ../src/richtext/richtextstyledlg.cpp:297
-#: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:489
-#: ../src/msw/msgdlg.cpp:795 ../src/msw/dialog.cpp:120
-#: ../src/gtk1/fontdlg.cpp:138
+#: ../include/wx/msgdlg.h:278 ../src/common/stockitem.cpp:178
+#: ../src/gtk1/fontdlg.cpp:138 ../src/msw/dialog.cpp:120
+#: ../src/msw/msgdlg.cpp:476 ../src/msw/msgdlg.cpp:782
+#: ../src/richtext/richtextstyledlg.cpp:297
 msgid "OK"
 msgstr "Goed"
 
-#: ../src/msw/ole/automtn.cpp:695
+#: ../src/msw/ole/automtn.cpp:698
 #, c-format
 msgid "OLE Automation error in %s: %s"
 msgstr "OLE-outomasiefout in %s: %s"
@@ -5150,7 +5293,7 @@ msgstr "OLE-outomasiefout in %s: %s"
 msgid "Object Properties"
 msgstr "Objek-eienskappe"
 
-#: ../src/msw/ole/automtn.cpp:663
+#: ../src/msw/ole/automtn.cpp:666
 msgid "Object implementation does not support named arguments."
 msgstr ""
 
@@ -5158,7 +5301,7 @@ msgstr ""
 msgid "Objects must have an id attribute"
 msgstr "Objekte moet elkeen 'n id-attribuut hê"
 
-#: ../src/common/docview.cpp:1755 ../src/common/docview.cpp:1797
+#: ../src/common/docview.cpp:1762 ../src/common/docview.cpp:1804
 msgid "Open File"
 msgstr "Open Lêer"
 
@@ -5180,22 +5323,22 @@ msgstr "Open..."
 msgid "OpenGL function \"%s\" failed: %s (error %d)"
 msgstr "OpenGL-funksie \"%s\" het misluk: %s (fout %d)"
 
-#: ../src/generic/dirctrlg.cpp:699 ../src/generic/dirdlgg.cpp:352
+#: ../src/generic/dirctrlg.cpp:696 ../src/generic/dirdlgg.cpp:352
 #: ../src/generic/filectrlg.cpp:677 ../src/generic/filectrlg.cpp:821
 msgid "Operation not permitted."
 msgstr "Bewerking nie toelaatbaar."
 
-#: ../src/common/cmdline.cpp:735
+#: ../src/common/cmdline.cpp:747
 #, fuzzy, c-format
 msgid "Option '%s' can't be negated"
 msgstr "Gids '%s' kon nie geskep word nie"
 
-#: ../src/common/cmdline.cpp:899
+#: ../src/common/cmdline.cpp:911
 #, c-format
 msgid "Option '%s' requires a value."
 msgstr "Opsie '%s' vereis 'n waarde."
 
-#: ../src/common/cmdline.cpp:982
+#: ../src/common/cmdline.cpp:994
 #, c-format
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "Opsie '%s': '%s' kan nie na 'n datum omgeskakel word nie."
@@ -5221,20 +5364,8 @@ msgstr ""
 msgid "Outset"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:659
+#: ../src/msw/ole/automtn.cpp:662
 msgid "Overflow while coercing argument values."
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:84
-msgid "PAGEDOWN"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:83
-msgid "PAGEUP"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:69
-msgid "PAUSE"
 msgstr ""
 
 #: ../src/common/imagpcx.cpp:457 ../src/common/imagpcx.cpp:480
@@ -5260,14 +5391,6 @@ msgstr "PCX: onbekende fout!"
 #: ../src/common/imagpcx.cpp:458
 msgid "PCX: version number too low"
 msgstr "PCX: weergawenommer te laag"
-
-#: ../src/common/accelcmn.cpp:55
-msgid "PGDN"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:54
-msgid "PGUP"
-msgstr ""
 
 #: ../src/common/imagpnm.cpp:91
 msgid "PNM: Couldn't allocate memory."
@@ -5406,10 +5529,6 @@ msgstr "C4 Koevert, 229 x 324 mm"
 msgid "PRC Envelope #9 Rotated 324 x 229 mm"
 msgstr "C5 Koevert, 162 x 229 mm"
 
-#: ../src/common/accelcmn.cpp:72
-msgid "PRINT"
-msgstr ""
-
 #: ../src/richtext/richtextmarginspage.cpp:286
 #, fuzzy
 msgid "Padding"
@@ -5425,13 +5544,37 @@ msgstr "Bladsy %d"
 msgid "Page %d of %d"
 msgstr "Bladsy %d van %d"
 
-#: ../src/gtk/print.cpp:774
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:56
+#, fuzzy
+msgid "Page Down"
+msgstr "Bladsy %d"
+
+#: ../src/gtk/print.cpp:795
 msgid "Page Setup"
 msgstr "Bladsy-opstelling"
 
-#: ../src/generic/prntdlgg.cpp:828 ../src/common/prntbase.cpp:467
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:55
+#, fuzzy
+msgid "Page Up"
+msgstr "Bladsy %d"
+
+#: ../src/common/prntbase.cpp:467 ../src/generic/prntdlgg.cpp:828
 msgid "Page setup"
 msgstr "Bladsy-opstelling"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:56
+#, fuzzy
+msgid "PageDown"
+msgstr "Af"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:55
+#, fuzzy
+msgid "PageUp"
+msgstr "Bladsye"
 
 #: ../src/generic/prntdlgg.cpp:216
 msgid "Pages"
@@ -5456,7 +5599,7 @@ msgstr "'n Reedsgeregistreerde objek word aangestuur vir SetObject"
 msgid "Passing an unknown object to GetObject"
 msgstr "'n Onbekende objek word aangestuur vir GetObject"
 
-#: ../src/richtext/richtextctrl.cpp:3206 ../src/common/stockitem.cpp:180
+#: ../src/common/stockitem.cpp:180 ../src/richtext/richtextctrl.cpp:3215
 #: ../src/stc/stc_i18n.cpp:19
 msgid "Paste"
 msgstr "Plak"
@@ -5465,8 +5608,13 @@ msgstr "Plak"
 msgid "Paste selection"
 msgstr "Plak seleksie"
 
-#: ../src/richtext/richtextliststylepage.cpp:222
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:72
+msgid "Pause"
+msgstr ""
+
 #: ../src/richtext/richtextbulletspage.cpp:172
+#: ../src/richtext/richtextliststylepage.cpp:222
 msgid "Peri&od"
 msgstr "P&unt"
 
@@ -5474,7 +5622,17 @@ msgstr "P&unt"
 msgid "Permissions"
 msgstr "Magtigings"
 
-#: ../src/richtext/richtextbuffer.cpp:12271
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:58
+msgid "PgDn"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:57
+msgid "PgUp"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:12308
 msgid "Picture Properties"
 msgstr "Prent-eienskappe"
 
@@ -5486,7 +5644,7 @@ msgstr "Opstel van pyp het misluk"
 msgid "Please choose a valid font."
 msgstr "Kies asb. 'n geldige lettertipe."
 
-#: ../src/gtk/filedlg.cpp:72
+#: ../src/generic/filedlgg.cpp:373 ../src/gtk/filedlg.cpp:72
 msgid "Please choose an existing file."
 msgstr "Kies asb. 'n bestaande lêer."
 
@@ -5517,7 +5675,7 @@ msgstr ""
 msgid "Please wait while printing..."
 msgstr "Wag asb. tydens drukwerk..."
 
-#: ../src/propgrid/advprops.cpp:631
+#: ../src/propgrid/advprops.cpp:639
 #, fuzzy
 msgid "Point Size"
 msgstr "Lettertipe-grootte:"
@@ -5555,7 +5713,7 @@ msgstr "PostScript-lêer"
 msgid "Preferences"
 msgstr "Voorkeure"
 
-#: ../src/osx/menu_osx.cpp:614
+#: ../src/osx/menu_osx.cpp:626
 msgid "Preferences..."
 msgstr "Voorkeure..."
 
@@ -5563,8 +5721,8 @@ msgstr "Voorkeure..."
 msgid "Preparing"
 msgstr "Berei tans voor"
 
-#: ../src/generic/fontdlgg.cpp:455 ../src/osx/carbon/fontdlg.cpp:560
-#: ../src/html/helpwnd.cpp:1235
+#: ../src/generic/fontdlgg.cpp:455 ../src/html/helpwnd.cpp:1235
+#: ../src/osx/carbon/fontdlg.cpp:560
 msgid "Preview:"
 msgstr "Drukvoorskou:"
 
@@ -5572,13 +5730,15 @@ msgstr "Drukvoorskou:"
 msgid "Previous page"
 msgstr "Vorige bladsy"
 
-#: ../src/generic/prntdlgg.cpp:143 ../src/generic/prntdlgg.cpp:157
-#: ../src/common/prntbase.cpp:409 ../src/common/prntbase.cpp:1511
-#: ../src/gtk/print.cpp:584 ../src/gtk/print.cpp:597
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:75 ../src/common/prntbase.cpp:409
+#: ../src/common/prntbase.cpp:1511 ../src/generic/prntdlgg.cpp:143
+#: ../src/generic/prntdlgg.cpp:157 ../src/gtk/print.cpp:605
+#: ../src/gtk/print.cpp:618
 msgid "Print"
 msgstr "Druk"
 
-#: ../include/wx/prntbase.h:395 ../src/common/docview.cpp:1250
+#: ../include/wx/prntbase.h:395 ../src/common/docview.cpp:1257
 msgid "Print Preview"
 msgstr "Drukvoorskou"
 
@@ -5603,7 +5763,7 @@ msgstr "Druk in kleur"
 msgid "Print previe&w..."
 msgstr "&Drukvoorskou..."
 
-#: ../src/common/docview.cpp:1244
+#: ../src/common/docview.cpp:1251
 #, fuzzy
 msgid "Print preview creation failed."
 msgstr "Opstel van pyp het misluk"
@@ -5680,8 +5840,8 @@ msgstr "Druk tans bladsy %d..."
 msgid "Printing..."
 msgstr "Druk tans..."
 
-#: ../include/wx/richtext/richtextprint.h:109 ../include/wx/prntbase.h:263
-#: ../src/common/docview.cpp:2114
+#: ../include/wx/prntbase.h:263 ../include/wx/richtext/richtextprint.h:109
+#: ../src/common/docview.cpp:2121
 #, fuzzy
 msgid "Printout"
 msgstr "Druk"
@@ -5708,7 +5868,7 @@ msgstr "Eienskappe"
 msgid "Property"
 msgstr "Eienskap"
 
-#: ../src/propgrid/propgrid.cpp:3146 ../src/propgrid/propgrid.cpp:3278
+#: ../src/propgrid/propgrid.cpp:3147 ../src/propgrid/propgrid.cpp:3279
 #, fuzzy
 msgid "Property Error"
 msgstr "Drukwerkfout"
@@ -5725,7 +5885,7 @@ msgstr "Vraag"
 msgid "Quit"
 msgstr "Sluit af"
 
-#: ../src/osx/menu_osx.cpp:631
+#: ../src/osx/menu_osx.cpp:643
 #, c-format
 msgid "Quit %s"
 msgstr "Sluit %s af"
@@ -5734,15 +5894,7 @@ msgstr "Sluit %s af"
 msgid "Quit this program"
 msgstr "Sluit die program af"
 
-#: ../src/common/accelcmn.cpp:53
-msgid "RETURN"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:57
-msgid "RIGHT"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:327
+#: ../src/common/accelcmn.cpp:328
 msgid "RawCtrl+"
 msgstr "RawCtrl+"
 
@@ -5814,7 +5966,7 @@ msgstr "Oorblywende tyd:"
 msgid "Remove"
 msgstr "Verwyder"
 
-#: ../src/richtext/richtextctrl.cpp:1516
+#: ../src/richtext/richtextctrl.cpp:1522
 msgid "Remove Bullet"
 msgstr "Verwyder koeëltjie"
 
@@ -5833,7 +5985,7 @@ msgstr ""
 msgid "Rendering failed."
 msgstr "Opstel van tydhouer het misluk"
 
-#: ../src/richtext/richtextbuffer.cpp:4280
+#: ../src/richtext/richtextbuffer.cpp:4288
 msgid "Renumber List"
 msgstr "Hernommeer lys"
 
@@ -5841,7 +5993,7 @@ msgstr "Hernommeer lys"
 msgid "Rep&lace"
 msgstr "&Vervang"
 
-#: ../src/richtext/richtextctrl.cpp:3366 ../src/common/stockitem.cpp:188
+#: ../src/common/stockitem.cpp:188 ../src/richtext/richtextctrl.cpp:3375
 msgid "Replace"
 msgstr "Vervang"
 
@@ -5861,10 +6013,15 @@ msgstr "Vervang met:"
 msgid "Required information entry is empty."
 msgstr ""
 
-#: ../src/common/translation.cpp:1966
+#: ../src/common/translation.cpp:1979
 #, fuzzy, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "'%s' is nie 'n geldige boodskapkatalogus."
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:54
+msgid "Return"
+msgstr ""
 
 #: ../src/common/stockitem.cpp:189
 #, fuzzy
@@ -5875,8 +6032,9 @@ msgstr "Keer terug na gestoorde weergawe"
 msgid "Ridge"
 msgstr "Rif"
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:60 ../src/richtext/richtextbulletspage.cpp:201
 #: ../src/richtext/richtextliststylepage.cpp:251
-#: ../src/richtext/richtextbulletspage.cpp:201
 #: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
 msgstr "Regs"
@@ -5896,40 +6054,16 @@ msgstr "Belyn teks regs."
 msgid "Roman"
 msgstr "Roman"
 
-#: ../src/richtext/richtextliststylepage.cpp:299
 #: ../src/richtext/richtextbulletspage.cpp:252
+#: ../src/richtext/richtextliststylepage.cpp:299
 msgid "S&tandard bullet name:"
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:82
-msgid "SCROLL_LOCK"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:71
-msgid "SELECT"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:77
-msgid "SEPARATOR"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:74
-msgid "SNAPSHOT"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:62
-msgid "SPACE"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:257 ../src/common/accelcmn.cpp:339
+#: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:340
 msgid "SPECIAL"
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:78
-msgid "SUBTRACT"
-msgstr ""
-
-#: ../src/common/stockitem.cpp:190 ../src/common/sizer.cpp:2702
+#: ../src/common/sizer.cpp:2702 ../src/common/stockitem.cpp:190
 msgid "Save"
 msgstr "Stoor"
 
@@ -5966,7 +6100,17 @@ msgstr "Stoor boekstawing-inhoud na lêer"
 msgid "Script"
 msgstr "Skrif-letter"
 
-#: ../src/generic/srchctlg.cpp:67 ../src/html/helpwnd.cpp:548
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:85
+msgid "Scroll Lock"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:85
+msgid "Scroll_lock"
+msgstr ""
+
+#: ../src/generic/srchctlg.cpp:56 ../src/html/helpwnd.cpp:548
 #: ../src/html/helpwnd.cpp:563
 msgid "Search"
 msgstr "Soek"
@@ -5995,22 +6139,28 @@ msgstr "Soek in alle boeke"
 msgid "Searching..."
 msgstr "Soek tans..."
 
-#: ../src/generic/dirctrlg.cpp:546
+#: ../src/generic/dirctrlg.cpp:543
 msgid "Sections"
 msgstr "Seksies"
 
-#: ../src/common/ffile.cpp:220
+#: ../src/common/ffile.cpp:236
 #, c-format
 msgid "Seek error on file '%s'"
 msgstr "Soekfout by lêer '%s'"
 
-#: ../src/common/ffile.cpp:210
+#: ../src/common/ffile.cpp:226
 #, c-format
 msgid "Seek error on file '%s' (large files not supported by stdio)"
 msgstr ""
 
-#: ../src/richtext/richtextctrl.cpp:336 ../src/osx/textctrl_osx.cpp:587
-#: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2339
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:74
+#, fuzzy
+msgid "Select"
+msgstr "Seleksie"
+
+#: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2461
+#: ../src/osx/textctrl_osx.cpp:587 ../src/richtext/richtextctrl.cpp:336
 msgid "Select &All"
 msgstr "Kies &alles"
 
@@ -6018,11 +6168,11 @@ msgstr "Kies &alles"
 msgid "Select All"
 msgstr "Kies alles"
 
-#: ../src/common/docview.cpp:1877
+#: ../src/common/docview.cpp:1884
 msgid "Select a document template"
 msgstr "Kies 'n dokumentsjabloon"
 
-#: ../src/common/docview.cpp:1951
+#: ../src/common/docview.cpp:1958
 msgid "Select a document view"
 msgstr "Kies 'n dokumentweergawe"
 
@@ -6050,16 +6200,21 @@ msgstr "Seleksie"
 msgid "Selects the list level to edit."
 msgstr "Kies watter lysvlak om te redigeer."
 
-#: ../src/common/cmdline.cpp:918
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:80
+msgid "Separator"
+msgstr ""
+
+#: ../src/common/cmdline.cpp:930
 #, c-format
 msgid "Separator expected after the option '%s'."
 msgstr "Skeidingsteken is verwag na die opsie '%s'."
 
-#: ../src/osx/menu_osx.cpp:618
+#: ../src/osx/menu_osx.cpp:630
 msgid "Services"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:10818
+#: ../src/richtext/richtextbuffer.cpp:10840
 #, fuzzy
 msgid "Set Cell Style"
 msgstr "Verwyder item"
@@ -6068,7 +6223,7 @@ msgstr "Verwyder item"
 msgid "SetProperty called w/o valid setter"
 msgstr "SetProperty is geroep sonder geldige 'set'-metode"
 
-#: ../src/common/filename.cpp:2638
+#: ../src/common/filename.cpp:2647
 msgid "Setting directory access times is not supported under this OS version"
 msgstr ""
 
@@ -6081,7 +6236,7 @@ msgid "Several active dialup connections found, choosing one randomly."
 msgstr ""
 "Meer as een aktiewe inbelverbindings gevind, willekeurige keuse is gemaak."
 
-#: ../src/common/accelcmn.cpp:324
+#: ../src/common/accelcmn.cpp:325
 msgid "Shift+"
 msgstr "Shift+"
 
@@ -6093,7 +6248,7 @@ msgstr "Wys &verborge gidse"
 msgid "Show &hidden files"
 msgstr "Wys &verborge lêers"
 
-#: ../src/osx/menu_osx.cpp:626
+#: ../src/osx/menu_osx.cpp:638
 msgid "Show All"
 msgstr "Wys almal"
 
@@ -6122,10 +6277,10 @@ msgstr "Wys/verberg navigasiepaneel"
 msgid "Shows a Unicode subset."
 msgstr "Wys 'n Unicode-substel."
 
-#: ../src/richtext/richtextliststylepage.cpp:472
-#: ../src/richtext/richtextliststylepage.cpp:474
 #: ../src/richtext/richtextbulletspage.cpp:276
 #: ../src/richtext/richtextbulletspage.cpp:278
+#: ../src/richtext/richtextliststylepage.cpp:472
+#: ../src/richtext/richtextliststylepage.cpp:474
 msgid "Shows a preview of the bullet settings."
 msgstr ""
 
@@ -6178,11 +6333,16 @@ msgstr "Skuins"
 msgid "Small C&apitals"
 msgstr "&Klein hoofletters"
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:77
+msgid "Snapshot"
+msgstr ""
+
 #: ../src/richtext/richtextborderspage.cpp:565
 msgid "Solid"
 msgstr "Solied"
 
-#: ../src/common/docview.cpp:1773
+#: ../src/common/docview.cpp:1780
 msgid "Sorry, could not open this file."
 msgstr "Jammer, hierdie lêer kon nie oopgemaak word nie."
 
@@ -6198,7 +6358,7 @@ msgstr "Jammer, onvoldoende geheue vir drukvoorskou."
 msgid "Sorry, that name is taken. Please choose another."
 msgstr "Jammer, daardie naam is gevat. Kies gerus 'n ander een."
 
-#: ../src/common/docview.cpp:1796
+#: ../src/common/docview.cpp:1803
 msgid "Sorry, the format for this file is unknown."
 msgstr "Jammer, die lêer het 'n onbekende formaat."
 
@@ -6211,6 +6371,12 @@ msgstr "Klankdata se formaat word nie ondersteun nie."
 msgid "Sound file '%s' is in unsupported format."
 msgstr "Klanklêer '%s' se formaat word nie ondersteun nie."
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:65
+#, fuzzy
+msgid "Space"
+msgstr "Spasiëring"
+
 #: ../src/richtext/richtextliststylepage.cpp:467
 msgid "Spacing"
 msgstr "Spasiëring"
@@ -6219,8 +6385,8 @@ msgstr "Spasiëring"
 msgid "Spell Check"
 msgstr "Speltoets"
 
-#: ../src/richtext/richtextliststylepage.cpp:490
 #: ../src/richtext/richtextbulletspage.cpp:295
+#: ../src/richtext/richtextliststylepage.cpp:490
 msgid "Standard"
 msgstr "Standaard"
 
@@ -6250,7 +6416,7 @@ msgstr "Deurhaal"
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr "String-na-kleur : Verkeerde kleurspesifikasie : %s"
 
-#: ../src/richtext/richtextformatdlg.cpp:319 ../src/propgrid/advprops.cpp:647
+#: ../src/propgrid/advprops.cpp:655 ../src/richtext/richtextformatdlg.cpp:319
 #, fuzzy
 msgid "Style"
 msgstr "Styl"
@@ -6266,6 +6432,11 @@ msgstr "Styl:"
 #: ../src/richtext/richtextfontpage.cpp:312
 msgid "Subscrip&t"
 msgstr "Onde&rskrif"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:81
+msgid "Subtract"
+msgstr ""
 
 #: ../src/richtext/richtextfontpage.cpp:305
 msgid "Supe&rscript"
@@ -6283,13 +6454,13 @@ msgstr "SuperB/SuperB/A3 305 x 487 mm"
 msgid "Swiss"
 msgstr "Switsers"
 
-#: ../src/richtext/richtextliststylepage.cpp:488
 #: ../src/richtext/richtextbulletspage.cpp:293
+#: ../src/richtext/richtextliststylepage.cpp:488
 msgid "Symbol"
 msgstr "Simbool"
 
-#: ../src/richtext/richtextliststylepage.cpp:288
 #: ../src/richtext/richtextbulletspage.cpp:240
+#: ../src/richtext/richtextliststylepage.cpp:288
 #, fuzzy
 msgid "Symbol &font:"
 msgstr "Normale lettertipe:"
@@ -6297,10 +6468,6 @@ msgstr "Normale lettertipe:"
 #: ../include/wx/richtext/richtextsymboldlg.h:47
 msgid "Symbols"
 msgstr "Simbole"
-
-#: ../src/common/accelcmn.cpp:63
-msgid "TAB"
-msgstr ""
 
 #: ../src/common/imagtiff.cpp:372 ../src/common/imagtiff.cpp:385
 #: ../src/common/imagtiff.cpp:744
@@ -6327,7 +6494,13 @@ msgstr "TIFF: fout by skryf van beeld."
 msgid "TIFF: Image size is abnormally big."
 msgstr "TIFF: beeldgrootte is abnormaal groot."
 
-#: ../src/richtext/richtextbuffer.cpp:11099
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:66
+#, fuzzy
+msgid "Tab"
+msgstr "&Tabel"
+
+#: ../src/richtext/richtextbuffer.cpp:11121
 msgid "Table Properties"
 msgstr "Tabel-eienskappe"
 
@@ -6347,7 +6520,7 @@ msgstr ""
 msgid "Teletype"
 msgstr "Nie-proporsioneel (Teletype)"
 
-#: ../src/common/docview.cpp:1878
+#: ../src/common/docview.cpp:1885
 msgid "Templates"
 msgstr "Sjablone"
 
@@ -6367,10 +6540,10 @@ msgstr "Die FTP-bediener ondersteun nie passiewe modus nie."
 msgid "The FTP server doesn't support the PORT command."
 msgstr "Die FTP-bediener ondersteun nie die PORT-opdrag nie."
 
-#: ../src/richtext/richtextliststylepage.cpp:215
-#: ../src/richtext/richtextliststylepage.cpp:217
 #: ../src/richtext/richtextbulletspage.cpp:164
 #: ../src/richtext/richtextbulletspage.cpp:166
+#: ../src/richtext/richtextliststylepage.cpp:215
+#: ../src/richtext/richtextliststylepage.cpp:217
 msgid "The available bullet styles."
 msgstr "Die beskikbare koeëltjiestyle."
 
@@ -6424,14 +6597,14 @@ msgstr "fontgrootte"
 msgid "The bottom position."
 msgstr "fontgrootte"
 
-#: ../src/richtext/richtextliststylepage.cpp:254
-#: ../src/richtext/richtextliststylepage.cpp:256
-#: ../src/richtext/richtextliststylepage.cpp:275
-#: ../src/richtext/richtextliststylepage.cpp:277
 #: ../src/richtext/richtextbulletspage.cpp:204
 #: ../src/richtext/richtextbulletspage.cpp:206
 #: ../src/richtext/richtextbulletspage.cpp:227
 #: ../src/richtext/richtextbulletspage.cpp:229
+#: ../src/richtext/richtextliststylepage.cpp:254
+#: ../src/richtext/richtextliststylepage.cpp:256
+#: ../src/richtext/richtextliststylepage.cpp:275
+#: ../src/richtext/richtextliststylepage.cpp:277
 msgid "The bullet character."
 msgstr "Die koeëltjiekarakter."
 
@@ -6483,7 +6656,7 @@ msgstr ""
 "\n"
 "Wil u nogtans voortgaan om te druk?"
 
-#: ../src/common/docview.cpp:1184
+#: ../src/common/docview.cpp:1191
 #, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -6539,7 +6712,7 @@ msgstr "Die lettertipestyl."
 msgid "The font weight."
 msgstr "Die lettertipegewig."
 
-#: ../src/common/docview.cpp:1465
+#: ../src/common/docview.cpp:1472
 #, fuzzy, c-format
 msgid "The format of file '%s' couldn't be determined."
 msgstr "Gids '%s' kon nie geskep word nie"
@@ -6583,7 +6756,7 @@ msgstr "Die lynspasiëring."
 msgid "The list item number."
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:667
+#: ../src/msw/ole/automtn.cpp:670
 msgid "The locale ID is unknown."
 msgstr ""
 
@@ -6636,10 +6809,6 @@ msgstr[1] "Die vorige boodskap het %lu keer herhaal."
 msgid "The previous message repeated once."
 msgstr "Die vorige boodskap het een keer herhaal."
 
-#: ../src/gtk/print.cpp:931 ../src/gtk/print.cpp:1114
-msgid "The print dialog returned an error."
-msgstr "Die drukkerdialoog het met 'n fout geëindig."
-
 #: ../src/richtext/richtextsymboldlg.cpp:462
 #: ../src/richtext/richtextsymboldlg.cpp:464
 msgid "The range to show."
@@ -6652,7 +6821,7 @@ msgid ""
 "please uncheck them and they will be removed from the report.\n"
 msgstr ""
 
-#: ../src/common/cmdline.cpp:1083
+#: ../src/common/cmdline.cpp:1095
 #, c-format
 msgid "The required parameter '%s' was not specified."
 msgstr "Die vereiste parameter '%s' is nie gespesifiseer nie."
@@ -6712,7 +6881,7 @@ msgstr "Die styl waarop hierdie styl gebaseer is."
 msgid "The style preview."
 msgstr "Die stylvoorskou."
 
-#: ../src/msw/ole/automtn.cpp:683
+#: ../src/msw/ole/automtn.cpp:686
 msgid "The system cannot find the file specified."
 msgstr "Die stelsel kan nie die gespesifiseerde lêer kry nie."
 
@@ -6725,7 +6894,7 @@ msgstr "Die oortjieposisie."
 msgid "The tab positions."
 msgstr "Die oortjieposisies."
 
-#: ../src/richtext/richtextctrl.cpp:2791
+#: ../src/richtext/richtextctrl.cpp:2800
 msgid "The text couldn't be saved."
 msgstr "Die teks kon nie gestoor word nie."
 
@@ -6749,7 +6918,7 @@ msgstr "fontgrootte"
 msgid "The top position."
 msgstr "fontgrootte"
 
-#: ../src/common/cmdline.cpp:1061
+#: ../src/common/cmdline.cpp:1073
 #, c-format
 msgid "The value for the option '%s' must be specified."
 msgstr "Die waarde voor die opsie '%s' moet gespesifiseer word."
@@ -6763,15 +6932,11 @@ msgstr ""
 "Die weergawe van die inbelprogrammatuur (RAS) op hierdie masjien is te oud "
 "(die volgende benodigde funksie ontbreek: %s)."
 
-#: ../src/gtk/print.cpp:959
-msgid "The wxGtkPrinterDC cannot be used."
-msgstr "Die wxGtkPrinterDC kan nie gebruik word nie."
-
 #: ../src/osx/carbon/dataview.cpp:1338
 msgid "There is no column or renderer for the specified column index."
 msgstr ""
 
-#: ../src/richtext/richtextprint.cpp:614 ../src/html/htmprint.cpp:735
+#: ../src/html/htmprint.cpp:735 ../src/richtext/richtextprint.cpp:614
 msgid ""
 "There was a problem during page setup: you may need to set a default printer."
 msgstr ""
@@ -6795,7 +6960,7 @@ msgstr "PCX: dit is nie 'n PCX-lêer nie."
 msgid "This platform does not support background transparency."
 msgstr ""
 
-#: ../src/gtk/window.cpp:4368
+#: ../src/gtk/window.cpp:4514
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -6868,7 +7033,7 @@ msgstr "Aan:"
 msgid "Toggle renderer cannot render value; value type: "
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8087
+#: ../src/richtext/richtextbuffer.cpp:8104
 msgid "Too many EndStyle calls!"
 msgstr "Te veel EndStyle-roepe!"
 
@@ -6876,8 +7041,8 @@ msgstr "Te veel EndStyle-roepe!"
 msgid "Too many colours in PNG, the image may be slightly blurred."
 msgstr "Te veel kleure in PNG, die beeld kan effens dof wees."
 
-#: ../src/richtext/richtextsizepage.cpp:286
-#: ../src/richtext/richtextsizepage.cpp:290 ../src/common/stockitem.cpp:200
+#: ../src/common/stockitem.cpp:200 ../src/richtext/richtextsizepage.cpp:286
+#: ../src/richtext/richtextsizepage.cpp:290
 msgid "Top"
 msgstr "Bokant"
 
@@ -6893,7 +7058,7 @@ msgstr "Vertalings deur "
 msgid "Translators"
 msgstr "Vertalers"
 
-#: ../src/propgrid/propgrid.cpp:173
+#: ../src/propgrid/propgrid.cpp:174
 msgid "True"
 msgstr "Waar"
 
@@ -6922,13 +7087,13 @@ msgstr ""
 msgid "Type a size in points."
 msgstr "Tik 'n grootte in punte."
 
-#: ../src/msw/ole/automtn.cpp:679
+#: ../src/msw/ole/automtn.cpp:682
 #, c-format
 msgid "Type mismatch in argument %u."
 msgstr ""
 
-#: ../src/common/xtixml.cpp:356 ../src/common/xtixml.cpp:509
-#: ../src/common/xtistrm.cpp:322
+#: ../src/common/xtistrm.cpp:322 ../src/common/xtixml.cpp:356
+#: ../src/common/xtixml.cpp:509
 msgid "Type must have enum - long conversion"
 msgstr "Tipe moet 'n enum - long omskakeling bevat"
 
@@ -6937,10 +7102,6 @@ msgstr "Tipe moet 'n enum - long omskakeling bevat"
 msgid ""
 "Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT "
 "\"%s\"."
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:58
-msgid "UP"
 msgstr ""
 
 #: ../src/common/paper.cpp:134
@@ -6983,7 +7144,7 @@ msgstr "Kan nie die pad '%s' toemaak nie"
 msgid "Unable to close the handle for '%s'"
 msgstr "Toemaak van lêer het misluk."
 
-#: ../include/wx/msw/private/fswatcher.h:245
+#: ../include/wx/msw/private/fswatcher.h:273
 #, fuzzy
 msgid "Unable to create I/O completion port"
 msgstr "Wyser kon nie geskep word nie."
@@ -7003,7 +7164,7 @@ msgstr "Skepping van DDE-string het misluk"
 msgid "Unable to create kqueue instance"
 msgstr "Skepping van DDE-string het misluk"
 
-#: ../include/wx/msw/private/fswatcher.h:234
+#: ../include/wx/msw/private/fswatcher.h:262
 msgid "Unable to dequeue completion packet"
 msgstr ""
 
@@ -7028,7 +7189,7 @@ msgstr "Inisialisering van Hildon-program het misluk"
 msgid "Unable to open path '%s'"
 msgstr "Kan nie die pad '%s' open nie"
 
-#: ../src/html/htmlwin.cpp:564
+#: ../src/html/htmlwin.cpp:568
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "Kan gevraagde HTML-dokument nie oopmaak nie: %s"
@@ -7037,7 +7198,7 @@ msgstr "Kan gevraagde HTML-dokument nie oopmaak nie: %s"
 msgid "Unable to play sound asynchronously."
 msgstr "Klank kan nie asinkronies gespeel word nie."
 
-#: ../include/wx/msw/private/fswatcher.h:212
+#: ../include/wx/msw/private/fswatcher.h:213
 msgid "Unable to post completion status"
 msgstr ""
 
@@ -7072,8 +7233,8 @@ msgstr "Ontskrap"
 msgid "Underline"
 msgstr "Onderstreep"
 
-#: ../src/richtext/richtextfontpage.cpp:341 ../src/osx/carbon/fontdlg.cpp:540
-#: ../src/propgrid/advprops.cpp:655
+#: ../src/osx/carbon/fontdlg.cpp:540 ../src/propgrid/advprops.cpp:663
+#: ../src/richtext/richtextfontpage.cpp:341
 msgid "Underlined"
 msgstr "Onderstreep"
 
@@ -7085,7 +7246,7 @@ msgstr "Ontdoen"
 msgid "Undo last action"
 msgstr "Ontdoen laaste aksie"
 
-#: ../src/common/cmdline.cpp:864
+#: ../src/common/cmdline.cpp:876
 #, c-format
 msgid "Unexpected characters following option '%s'."
 msgstr "Onverwagte karakters wat volg op opsie '%s'."
@@ -7095,7 +7256,7 @@ msgstr "Onverwagte karakters wat volg op opsie '%s'."
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
 msgstr ""
 
-#: ../src/common/cmdline.cpp:1024
+#: ../src/common/cmdline.cpp:1036
 #, c-format
 msgid "Unexpected parameter '%s'"
 msgstr "Onverwagte parameter '%s'"
@@ -7329,12 +7490,12 @@ msgstr ""
 msgid "Unknown encoding (%d)"
 msgstr "Onbekende kodering (%d)"
 
-#: ../src/msw/ole/automtn.cpp:691
+#: ../src/msw/ole/automtn.cpp:694
 #, c-format
 msgid "Unknown error %08x"
 msgstr "Onbekende fout %08x"
 
-#: ../src/msw/ole/automtn.cpp:650
+#: ../src/msw/ole/automtn.cpp:653
 #, fuzzy
 msgid "Unknown exception"
 msgstr "Onbekende opsie '%s'"
@@ -7344,16 +7505,16 @@ msgstr "Onbekende opsie '%s'"
 msgid "Unknown image data format."
 msgstr "fout in dataformaat."
 
-#: ../src/common/cmdline.cpp:749
+#: ../src/common/cmdline.cpp:761
 #, c-format
 msgid "Unknown long option '%s'"
 msgstr "Onbekende lang opsie '%s'"
 
-#: ../src/msw/ole/automtn.cpp:634
+#: ../src/msw/ole/automtn.cpp:637
 msgid "Unknown name or named argument."
 msgstr ""
 
-#: ../src/common/cmdline.cpp:764 ../src/common/cmdline.cpp:786
+#: ../src/common/cmdline.cpp:776 ../src/common/cmdline.cpp:798
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "Onbekende opsie '%s'"
@@ -7368,11 +7529,11 @@ msgstr "On-afgeslote '{' in mime-tipe %s inskrywing."
 msgid "Unnamed command"
 msgstr "Naamlose bevel"
 
-#: ../src/propgrid/propgrid.cpp:398
+#: ../src/propgrid/propgrid.cpp:399
 msgid "Unspecified"
 msgstr "Nie gespesifiseer nie"
 
-#: ../src/msw/clipbrd.cpp:271 ../src/msw/clipbrd.cpp:439
+#: ../src/msw/clipbrd.cpp:271 ../src/msw/clipbrd.cpp:437
 msgid "Unsupported clipboard format."
 msgstr "Nie-ondersteunde knipbord-formaat."
 
@@ -7381,21 +7542,23 @@ msgstr "Nie-ondersteunde knipbord-formaat."
 msgid "Unsupported theme '%s'."
 msgstr "Nie-ondersteunde tema '%s'."
 
-#: ../src/generic/fdrepdlg.cpp:152 ../src/common/stockitem.cpp:205
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:61 ../src/common/stockitem.cpp:205
+#: ../src/generic/fdrepdlg.cpp:152
 msgid "Up"
 msgstr "Op"
 
-#: ../src/richtext/richtextliststylepage.cpp:483
 #: ../src/richtext/richtextbulletspage.cpp:288
+#: ../src/richtext/richtextliststylepage.cpp:483
 msgid "Upper case letters"
 msgstr "Hoofletters"
 
-#: ../src/richtext/richtextliststylepage.cpp:485
 #: ../src/richtext/richtextbulletspage.cpp:290
+#: ../src/richtext/richtextliststylepage.cpp:485
 msgid "Upper case roman numerals"
 msgstr "Groot romeinse syfers"
 
-#: ../src/common/cmdline.cpp:1155
+#: ../src/common/cmdline.cpp:1167
 #, c-format
 msgid "Usage: %s"
 msgstr "Gebruik: %s"
@@ -7419,17 +7582,18 @@ msgstr "Geldigheidskonflik"
 msgid "Value"
 msgstr "Waarde"
 
-#: ../src/propgrid/props.cpp:384
+#: ../src/propgrid/props.cpp:387 ../src/propgrid/props.cpp:496
 #, c-format
 msgid "Value must be %s or higher."
 msgstr "Waarde moet %s of meer wees."
 
-#: ../src/propgrid/props.cpp:411
+#: ../src/propgrid/props.cpp:414 ../src/propgrid/props.cpp:523
 #, c-format
 msgid "Value must be %s or less."
 msgstr "Waarde moet %s of minder wees."
 
-#: ../src/propgrid/props.cpp:388 ../src/propgrid/props.cpp:415
+#: ../src/propgrid/props.cpp:391 ../src/propgrid/props.cpp:418
+#: ../src/propgrid/props.cpp:500 ../src/propgrid/props.cpp:527
 #, c-format
 msgid "Value must be between %s and %s."
 msgstr "Waarde moet tussen %s en %s wees."
@@ -7451,21 +7615,9 @@ msgstr "Wys lêers in detail-aansig"
 msgid "View files as a list view"
 msgstr "Wys lêers in lys-aansig"
 
-#: ../src/common/docview.cpp:1952
+#: ../src/common/docview.cpp:1959
 msgid "Views"
 msgstr "Aansigte"
-
-#: ../src/common/accelcmn.cpp:108
-msgid "WINDOWS_LEFT"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:110
-msgid "WINDOWS_MENU"
-msgstr ""
-
-#: ../src/common/accelcmn.cpp:109
-msgid "WINDOWS_RIGHT"
-msgstr ""
 
 #: ../src/unix/epolldispatcher.cpp:213
 #, fuzzy, c-format
@@ -7476,7 +7628,7 @@ msgstr "Kon nie wag vir beëindiging van subproses nie"
 msgid "Warning: "
 msgstr "Waarskuwing: "
 
-#: ../src/propgrid/advprops.cpp:651
+#: ../src/propgrid/advprops.cpp:659
 msgid "Weight"
 msgstr "Gewig"
 
@@ -7504,45 +7656,45 @@ msgstr "Slegs heelwoorde"
 msgid "Win32 theme"
 msgstr "Win32-tema"
 
-#: ../src/msw/utils.cpp:1220
+#: ../src/msw/utils.cpp:1238
 msgid "Win32s on Windows 3.1"
 msgstr "Win32s op Windows 3.1"
 
-#: ../src/msw/utils.cpp:1270
+#: ../src/msw/utils.cpp:1288
 msgid "Windows 2000"
 msgstr "Windows 2000"
 
-#: ../src/msw/utils.cpp:1302
+#: ../src/msw/utils.cpp:1320
 msgid "Windows 7"
 msgstr "Windows 7"
 
-#: ../src/msw/utils.cpp:1308
+#: ../src/msw/utils.cpp:1326
 #, fuzzy
 msgid "Windows 8"
 msgstr "Windows 98"
 
-#: ../src/msw/utils.cpp:1314
+#: ../src/msw/utils.cpp:1332
 #, fuzzy
 msgid "Windows 8.1"
 msgstr "Windows 98"
 
-#: ../src/msw/utils.cpp:1234
+#: ../src/msw/utils.cpp:1252
 msgid "Windows 95"
 msgstr "Windows 95"
 
-#: ../src/msw/utils.cpp:1230
+#: ../src/msw/utils.cpp:1248
 msgid "Windows 95 OSR2"
 msgstr "Windows 95 OSR2"
 
-#: ../src/msw/utils.cpp:1245
+#: ../src/msw/utils.cpp:1263
 msgid "Windows 98"
 msgstr "Windows 98"
 
-#: ../src/msw/utils.cpp:1241
+#: ../src/msw/utils.cpp:1259
 msgid "Windows 98 SE"
 msgstr "Windows 98 SE"
 
-#: ../src/msw/utils.cpp:1252
+#: ../src/msw/utils.cpp:1270
 #, c-format
 msgid "Windows 9x (%d.%d)"
 msgstr "Windows 9x (%d.%d)"
@@ -7555,7 +7707,7 @@ msgstr "Windows Arabies (CP 1256)"
 msgid "Windows Baltic (CP 1257)"
 msgstr "Windows Balties (CP 1257)"
 
-#: ../src/msw/utils.cpp:1214
+#: ../src/msw/utils.cpp:1232
 #, c-format
 msgid "Windows CE (%d.%d)"
 msgstr "Windows CE (%d.%d)"
@@ -7597,33 +7749,33 @@ msgstr "Windows Johab (CP 1361)"
 msgid "Windows Korean (CP 949)"
 msgstr "Windows Koreaans (CP 949)"
 
-#: ../src/msw/utils.cpp:1249
+#: ../src/msw/utils.cpp:1267
 msgid "Windows ME"
 msgstr "Windows ME"
 
-#: ../src/msw/utils.cpp:1322
+#: ../src/msw/utils.cpp:1340
 #, c-format
 msgid "Windows NT %lu.%lu"
 msgstr "Windows NT %lu.%lu"
 
-#: ../src/msw/utils.cpp:1279
+#: ../src/msw/utils.cpp:1297
 msgid "Windows Server 2003"
 msgstr "Windows Server 2003"
 
-#: ../src/msw/utils.cpp:1295
+#: ../src/msw/utils.cpp:1313
 msgid "Windows Server 2008"
 msgstr "Windows Server 2008"
 
-#: ../src/msw/utils.cpp:1301
+#: ../src/msw/utils.cpp:1319
 msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2008 R2"
 
-#: ../src/msw/utils.cpp:1307
+#: ../src/msw/utils.cpp:1325
 #, fuzzy
 msgid "Windows Server 2012"
 msgstr "Windows Server 2003"
 
-#: ../src/msw/utils.cpp:1313
+#: ../src/msw/utils.cpp:1331
 #, fuzzy
 msgid "Windows Server 2012 R2"
 msgstr "Windows Server 2008 R2"
@@ -7640,7 +7792,7 @@ msgstr "Windows Turks (CP 1254)"
 msgid "Windows Vietnamese (CP 1258)"
 msgstr "Windows Viëtnamees (CP 1258)"
 
-#: ../src/msw/utils.cpp:1296
+#: ../src/msw/utils.cpp:1314
 msgid "Windows Vista"
 msgstr "Windows Vista"
 
@@ -7648,7 +7800,7 @@ msgstr "Windows Vista"
 msgid "Windows Western European (CP 1252)"
 msgstr "Windows Wes Europees (CP 1252)"
 
-#: ../src/msw/utils.cpp:1285
+#: ../src/msw/utils.cpp:1303
 msgid "Windows XP"
 msgstr "Windows XP"
 
@@ -7659,6 +7811,24 @@ msgstr "Windows/DOS OEM (CP 437)"
 #: ../src/common/fmapbase.cpp:165
 msgid "Windows/DOS OEM Cyrillic (CP 866)"
 msgstr "Windows/DOS OEM Cyrillies (CP 866)"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:109
+#, fuzzy
+msgid "Windows_Left"
+msgstr "Windows 7"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:111
+#, fuzzy
+msgid "Windows_Menu"
+msgstr "Windows ME"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:110
+#, fuzzy
+msgid "Windows_Right"
+msgstr "Windows Vista"
 
 #: ../src/common/ffile.cpp:148
 #, c-format
@@ -7697,7 +7867,7 @@ msgstr ""
 msgid "XPM: truncated image data at line %d!"
 msgstr ""
 
-#: ../include/wx/msgdlg.h:271 ../src/common/stockitem.cpp:206
+#: ../include/wx/msgdlg.h:276 ../src/common/stockitem.cpp:206
 #: ../src/motif/msgdlg.cpp:196
 msgid "Yes"
 msgstr "Ja"
@@ -7707,7 +7877,7 @@ msgstr "Ja"
 msgid "You cannot Clear an overlay that is not inited"
 msgstr "Jy kan nie 'n nuwe gids by hierdie seksie voeg nie."
 
-#: ../src/osx/carbon/overlay.cpp:107 ../src/dfb/overlay.cpp:61
+#: ../src/dfb/overlay.cpp:61 ../src/osx/carbon/overlay.cpp:107
 msgid "You cannot Init an overlay twice"
 msgstr ""
 
@@ -7715,7 +7885,7 @@ msgstr ""
 msgid "You cannot add a new directory to this section."
 msgstr "Jy kan nie 'n nuwe gids by hierdie seksie voeg nie."
 
-#: ../src/propgrid/propgrid.cpp:3260
+#: ../src/propgrid/propgrid.cpp:3261
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr ""
 
@@ -7727,11 +7897,11 @@ msgstr "Zoem &in"
 msgid "Zoom &Out"
 msgstr "Zoem &uit"
 
-#: ../src/common/stockitem.cpp:209 ../src/common/prntbase.cpp:1564
+#: ../src/common/prntbase.cpp:1564 ../src/common/stockitem.cpp:209
 msgid "Zoom In"
 msgstr "Zoem in"
 
-#: ../src/common/stockitem.cpp:210 ../src/common/prntbase.cpp:1550
+#: ../src/common/prntbase.cpp:1550 ../src/common/stockitem.cpp:210
 msgid "Zoom Out"
 msgstr "Zoem uit"
 
@@ -7806,7 +7976,7 @@ msgstr ""
 msgid "a transaction failed."
 msgstr "'n transaksie het misluk."
 
-#: ../src/common/accelcmn.cpp:184
+#: ../src/common/accelcmn.cpp:185
 msgid "alt"
 msgstr "alt"
 
@@ -7872,7 +8042,7 @@ msgstr "vet"
 msgid "buffer is too small for Windows directory."
 msgstr ""
 
-#: ../src/msw/utils.cpp:1328
+#: ../src/msw/utils.cpp:1346
 #, c-format
 msgid "build %lu"
 msgstr ""
@@ -7887,7 +8057,7 @@ msgstr "kan lêer '%s' nie toemaak nie"
 msgid "can't close file descriptor %d"
 msgstr "kan lêeretiket %d nie toemaak nie"
 
-#: ../src/common/file.cpp:604
+#: ../src/common/file.cpp:615
 #, c-format
 msgid "can't commit changes to file '%s'"
 msgstr "kan verandering nie deurvoer na lêer '%s' nie"
@@ -7902,7 +8072,7 @@ msgstr "kan lêer '%s' nie maak nie"
 msgid "can't delete user configuration file '%s'"
 msgstr "kan lêer met gebruikersopstelling '%s' nie uitvee nie"
 
-#: ../src/common/file.cpp:511
+#: ../src/common/file.cpp:522
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr "kan nie bepaal of lêereinde bereik is vir lêeretiket %d nie"
@@ -7917,7 +8087,7 @@ msgstr "uitvoer van '%s' het misluk"
 msgid "can't find central directory in zip"
 msgstr "Kan nie huidige posisie in lêer '%s' vind nie"
 
-#: ../src/common/file.cpp:481
+#: ../src/common/file.cpp:492
 #, c-format
 msgid "can't find length of file on file descriptor %d"
 msgstr "kan lêerlengte nie vind vir lêeretiket %d nie"
@@ -7926,12 +8096,12 @@ msgstr "kan lêerlengte nie vind vir lêeretiket %d nie"
 msgid "can't find user's HOME, using current directory."
 msgstr "kan gebruiker se tuisgids nie vind nie, gebruik dus huidige gids."
 
-#: ../src/common/file.cpp:382
+#: ../src/common/file.cpp:393
 #, c-format
 msgid "can't flush file descriptor %d"
 msgstr "kan lêeretiket %d nie leegmaak nie"
 
-#: ../src/common/file.cpp:438 ../src/msw/wince/filefnwce.cpp:204
+#: ../src/common/file.cpp:449 ../src/msw/wince/filefnwce.cpp:204
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr "kan nie soekposisie verkry by lêeretiket %d nie"
@@ -7940,7 +8110,7 @@ msgstr "kan nie soekposisie verkry by lêeretiket %d nie"
 msgid "can't load any font, aborting"
 msgstr "kan geen lettertipe laai nie, besig om te laat vaar"
 
-#: ../src/common/file.cpp:264 ../src/common/ffile.cpp:63
+#: ../src/common/ffile.cpp:63 ../src/common/file.cpp:264
 #, c-format
 msgid "can't open file '%s'"
 msgstr "kan lêer '%s' nie oopmaak nie"
@@ -7974,17 +8144,17 @@ msgstr "Kan nie zlib-opblaasstroom inisialiseer nie."
 msgid "can't read from file descriptor %d"
 msgstr "kan nie lees van lêeretiket %d"
 
-#: ../src/common/file.cpp:599
+#: ../src/common/file.cpp:610
 #, c-format
 msgid "can't remove file '%s'"
 msgstr "kan lêer '%s' nie verwyder nie"
 
-#: ../src/common/file.cpp:616
+#: ../src/common/file.cpp:627
 #, c-format
 msgid "can't remove temporary file '%s'"
 msgstr "kan tydelike lêer '%s' nie verwyder nie"
 
-#: ../src/common/file.cpp:424 ../src/msw/wince/filefnwce.cpp:190
+#: ../src/common/file.cpp:435 ../src/msw/wince/filefnwce.cpp:190
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "kan nie 'n soekbewerking doen op lêeretiket %d nie"
@@ -8048,11 +8218,11 @@ msgstr "inpakfout"
 msgid "conversion to 8-bit encoding failed"
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:182
+#: ../src/common/accelcmn.cpp:183
 msgid "ctrl"
 msgstr "ctrl"
 
-#: ../src/common/cmdline.cpp:1323
+#: ../src/common/cmdline.cpp:1335
 msgid "date"
 msgstr "datum"
 
@@ -8060,11 +8230,11 @@ msgstr "datum"
 msgid "decompression error"
 msgstr "uitpakfout"
 
-#: ../src/richtext/richtextstyles.cpp:780 ../src/common/fmapbase.cpp:820
+#: ../src/common/fmapbase.cpp:820 ../src/richtext/richtextstyles.cpp:780
 msgid "default"
 msgstr "standaard"
 
-#: ../src/common/cmdline.cpp:1319
+#: ../src/common/cmdline.cpp:1331
 msgid "double"
 msgstr ""
 
@@ -8072,15 +8242,15 @@ msgstr ""
 msgid "dump of the process state (binary)"
 msgstr ""
 
-#: ../src/common/datetimefmt.cpp:1936
+#: ../src/common/datetimefmt.cpp:1991
 msgid "eighteenth"
 msgstr "agtiende"
 
-#: ../src/common/datetimefmt.cpp:1926
+#: ../src/common/datetimefmt.cpp:1981
 msgid "eighth"
 msgstr "agtste"
 
-#: ../src/common/datetimefmt.cpp:1929
+#: ../src/common/datetimefmt.cpp:1984
 msgid "eleventh"
 msgstr "elfde"
 
@@ -8116,16 +8286,16 @@ msgstr ""
 msgid "error writing zip entry '%s': bad crc or length"
 msgstr ""
 
-#: ../src/common/ffile.cpp:170
+#: ../src/common/ffile.cpp:186
 #, c-format
 msgid "failed to flush the file '%s'"
 msgstr "leegmaak van lêer '%s' het misluk"
 
-#: ../src/common/datetimefmt.cpp:1933
+#: ../src/common/datetimefmt.cpp:1988
 msgid "fifteenth"
 msgstr "vyftiende"
 
-#: ../src/common/datetimefmt.cpp:1923
+#: ../src/common/datetimefmt.cpp:1978
 msgid "fifth"
 msgstr "vyfde"
 
@@ -8154,11 +8324,11 @@ msgstr "lêer '%s', reël %d: waarde vir onveranderbare sleutel '%s' geïgnoreer
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "lêer '%s': onverwagte teken %c in reël %d."
 
-#: ../src/richtext/richtextbuffer.cpp:8462
+#: ../src/richtext/richtextbuffer.cpp:8479
 msgid "files"
 msgstr "lêers"
 
-#: ../src/common/datetimefmt.cpp:1919
+#: ../src/common/datetimefmt.cpp:1974
 msgid "first"
 msgstr "eerste"
 
@@ -8166,11 +8336,11 @@ msgstr "eerste"
 msgid "font size"
 msgstr "lettergrootte"
 
-#: ../src/common/datetimefmt.cpp:1932
+#: ../src/common/datetimefmt.cpp:1987
 msgid "fourteenth"
 msgstr "veertiende"
 
-#: ../src/common/datetimefmt.cpp:1922
+#: ../src/common/datetimefmt.cpp:1977
 msgid "fourth"
 msgstr "vierde"
 
@@ -8178,8 +8348,8 @@ msgstr "vierde"
 msgid "generate verbose log messages"
 msgstr "genereer uitgebreide boekstaafboodskappe"
 
-#: ../src/richtext/richtextbuffer.cpp:12541
-#: ../src/richtext/richtextbuffer.cpp:12651
+#: ../src/richtext/richtextbuffer.cpp:12578
+#: ../src/richtext/richtextbuffer.cpp:12688
 msgid "image"
 msgstr "beeld"
 
@@ -8220,15 +8390,15 @@ msgstr "lig"
 msgid "locale '%s' cannot be set."
 msgstr "landinstelling '%s' kan nie opgestel word nie."
 
-#: ../src/common/datetimefmt.cpp:2092
+#: ../src/common/datetimefmt.cpp:2147
 msgid "midnight"
 msgstr "middernag"
 
-#: ../src/common/datetimefmt.cpp:1937
+#: ../src/common/datetimefmt.cpp:1992
 msgid "nineteenth"
 msgstr "negentiende"
 
-#: ../src/common/datetimefmt.cpp:1927
+#: ../src/common/datetimefmt.cpp:1982
 msgid "ninth"
 msgstr "negende"
 
@@ -8249,7 +8419,7 @@ msgstr "Geen lettertipes in %s gevind nie. Gebruik ingeboude een."
 msgid "noname"
 msgstr "naamloos"
 
-#: ../src/common/datetimefmt.cpp:2091
+#: ../src/common/datetimefmt.cpp:2146
 msgid "noon"
 msgstr "middag"
 
@@ -8257,11 +8427,7 @@ msgstr "middag"
 msgid "normal"
 msgstr "normaal"
 
-#: ../src/gtk/print.cpp:1218 ../src/gtk/print.cpp:1323
-msgid "not implemented"
-msgstr "nie geïmplementeer nie"
-
-#: ../src/common/cmdline.cpp:1315
+#: ../src/common/cmdline.cpp:1327
 msgid "num"
 msgstr "num"
 
@@ -8277,8 +8443,6 @@ msgstr "te min geheue"
 msgid "process context description"
 msgstr ""
 
-#: ../src/richtext/richtextfontpage.cpp:186
-#: ../src/richtext/richtextfontpage.cpp:189
 #: ../src/richtext/richtextborderspage.cpp:253
 #: ../src/richtext/richtextborderspage.cpp:287
 #: ../src/richtext/richtextborderspage.cpp:321
@@ -8287,10 +8451,11 @@ msgstr ""
 #: ../src/richtext/richtextborderspage.cpp:456
 #: ../src/richtext/richtextborderspage.cpp:490
 #: ../src/richtext/richtextborderspage.cpp:524
+#: ../src/richtext/richtextfontpage.cpp:186
+#: ../src/richtext/richtextfontpage.cpp:189
 msgid "pt"
 msgstr "pt"
 
-#: ../src/richtext/richtextfontpage.cpp:187
 #: ../src/richtext/richtextborderspage.cpp:251
 #: ../src/richtext/richtextborderspage.cpp:254
 #: ../src/richtext/richtextborderspage.cpp:255
@@ -8315,6 +8480,7 @@ msgstr "pt"
 #: ../src/richtext/richtextborderspage.cpp:522
 #: ../src/richtext/richtextborderspage.cpp:525
 #: ../src/richtext/richtextborderspage.cpp:526
+#: ../src/richtext/richtextfontpage.cpp:187
 #: ../src/richtext/richtextmarginspage.cpp:201
 #: ../src/richtext/richtextmarginspage.cpp:203
 #: ../src/richtext/richtextmarginspage.cpp:204
@@ -8372,7 +8538,7 @@ msgstr "pt"
 msgid "px"
 msgstr "px"
 
-#: ../src/common/accelcmn.cpp:188
+#: ../src/common/accelcmn.cpp:189
 #, fuzzy
 msgid "rawctrl"
 msgstr "ctrl"
@@ -8395,7 +8561,7 @@ msgstr ""
 msgid "reentrancy problem."
 msgstr "probleem met hertoetreding."
 
-#: ../src/common/datetimefmt.cpp:1920
+#: ../src/common/datetimefmt.cpp:1975
 msgid "second"
 msgstr "tweede"
 
@@ -8403,15 +8569,15 @@ msgstr "tweede"
 msgid "seek error"
 msgstr "soekfout"
 
-#: ../src/common/datetimefmt.cpp:1935
+#: ../src/common/datetimefmt.cpp:1990
 msgid "seventeenth"
 msgstr "sewentiende"
 
-#: ../src/common/datetimefmt.cpp:1925
+#: ../src/common/datetimefmt.cpp:1980
 msgid "seventh"
 msgstr "sewende"
 
-#: ../src/common/accelcmn.cpp:186
+#: ../src/common/accelcmn.cpp:187
 msgid "shift"
 msgstr "shift"
 
@@ -8419,11 +8585,11 @@ msgstr "shift"
 msgid "show this help message"
 msgstr "Wys hierdie hulpboodskap"
 
-#: ../src/common/datetimefmt.cpp:1934
+#: ../src/common/datetimefmt.cpp:1989
 msgid "sixteenth"
 msgstr "sestiende"
 
-#: ../src/common/datetimefmt.cpp:1924
+#: ../src/common/datetimefmt.cpp:1979
 msgid "sixth"
 msgstr "sesde"
 
@@ -8435,23 +8601,23 @@ msgstr "Kies die vertoonskerm modus (bv. 640x480-16) om te gebruik"
 msgid "specify the theme to use"
 msgstr "Kies die tema om te gebruik"
 
-#: ../src/richtext/richtextbuffer.cpp:8983
+#: ../src/richtext/richtextbuffer.cpp:9005
 msgid "standard/circle"
 msgstr "standaard/sirkel"
 
-#: ../src/richtext/richtextbuffer.cpp:8984
+#: ../src/richtext/richtextbuffer.cpp:9006
 msgid "standard/circle-outline"
 msgstr "standaard/sirkelbuitelyn"
 
-#: ../src/richtext/richtextbuffer.cpp:8986
+#: ../src/richtext/richtextbuffer.cpp:9008
 msgid "standard/diamond"
 msgstr "standaard/diamant"
 
-#: ../src/richtext/richtextbuffer.cpp:8985
+#: ../src/richtext/richtextbuffer.cpp:9007
 msgid "standard/square"
 msgstr "standaard/vierkant"
 
-#: ../src/richtext/richtextbuffer.cpp:8987
+#: ../src/richtext/richtextbuffer.cpp:9009
 msgid "standard/triangle"
 msgstr "standaard/driehoek"
 
@@ -8459,7 +8625,7 @@ msgstr "standaard/driehoek"
 msgid "stored file length not in Zip header"
 msgstr ""
 
-#: ../src/common/cmdline.cpp:1311
+#: ../src/common/cmdline.cpp:1323
 msgid "str"
 msgstr "str"
 
@@ -8472,7 +8638,7 @@ msgstr "deurhaal"
 msgid "tar entry not open"
 msgstr ""
 
-#: ../src/common/datetimefmt.cpp:1928
+#: ../src/common/datetimefmt.cpp:1983
 msgid "tenth"
 msgstr "tiende"
 
@@ -8480,19 +8646,19 @@ msgstr "tiende"
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
 msgstr "die antwoord op die transaksie het die DDE_FBUSY-bit na 1 gestel."
 
-#: ../src/common/datetimefmt.cpp:1921
+#: ../src/common/datetimefmt.cpp:1976
 msgid "third"
 msgstr "derde"
 
-#: ../src/common/datetimefmt.cpp:1931
+#: ../src/common/datetimefmt.cpp:1986
 msgid "thirteenth"
 msgstr "dertiende"
 
-#: ../src/common/datetimefmt.cpp:1725
+#: ../src/common/datetimefmt.cpp:1780
 msgid "today"
 msgstr "vandag"
 
-#: ../src/common/datetimefmt.cpp:1727
+#: ../src/common/datetimefmt.cpp:1782
 msgid "tomorrow"
 msgstr "môre"
 
@@ -8507,11 +8673,11 @@ msgstr ""
 "Petri Jooste\n"
 "Friedel Wolff"
 
-#: ../src/common/datetimefmt.cpp:1930
+#: ../src/common/datetimefmt.cpp:1985
 msgid "twelfth"
 msgstr "twaalfde"
 
-#: ../src/common/datetimefmt.cpp:1938
+#: ../src/common/datetimefmt.cpp:1993
 msgid "twentieth"
 msgstr "twintigste"
 
@@ -8528,8 +8694,8 @@ msgstr "onverwagte \" op posisie %d in '%s'."
 msgid "unexpected end of file"
 msgstr ""
 
-#: ../src/generic/progdlgg.cpp:399 ../src/common/tarstrm.cpp:371
-#: ../src/common/tarstrm.cpp:394 ../src/common/tarstrm.cpp:425
+#: ../src/common/tarstrm.cpp:371 ../src/common/tarstrm.cpp:394
+#: ../src/common/tarstrm.cpp:425 ../src/generic/progdlgg.cpp:399
 msgid "unknown"
 msgstr "onbekend"
 
@@ -8560,7 +8726,7 @@ msgstr "onbekend-%d"
 msgid "unnamed"
 msgstr "naamloos"
 
-#: ../src/common/docview.cpp:1606
+#: ../src/common/docview.cpp:1613
 #, c-format
 msgid "unnamed%d"
 msgstr "naamloos%d"
@@ -8569,7 +8735,7 @@ msgstr "naamloos%d"
 msgid "unsupported Zip compression method"
 msgstr ""
 
-#: ../src/common/translation.cpp:1883
+#: ../src/common/translation.cpp:1896
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "katalogus '%s' van '%s' word gebruik."
@@ -8581,10 +8747,6 @@ msgstr "skryffout"
 #: ../src/common/time.cpp:318
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay het misluk."
-
-#: ../src/gtk/print.cpp:987
-msgid "wxPrintout::GetPageInfo gives a null maxPage."
-msgstr "wxPrintout::GetPageInfo gee 'n maxPage van null."
 
 #: ../src/osx/carbon/dataview.cpp:1301
 msgid "wxWidget control pointer is not a data view pointer"
@@ -8608,7 +8770,7 @@ msgstr "wxWidgets kon vertoonskerm nie oopmaak nie. Gaan dus uit."
 msgid "xxxx"
 msgstr ""
 
-#: ../src/common/datetimefmt.cpp:1726
+#: ../src/common/datetimefmt.cpp:1781
 msgid "yesterday"
 msgstr "gister"
 
@@ -8617,10 +8779,22 @@ msgstr "gister"
 msgid "zlib error %d"
 msgstr "zlib fout %d"
 
-#: ../src/richtext/richtextliststylepage.cpp:496
 #: ../src/richtext/richtextbulletspage.cpp:301
+#: ../src/richtext/richtextliststylepage.cpp:496
 msgid "~"
 msgstr "~"
+
+#~ msgid "The print dialog returned an error."
+#~ msgstr "Die drukkerdialoog het met 'n fout geëindig."
+
+#~ msgid "The wxGtkPrinterDC cannot be used."
+#~ msgstr "Die wxGtkPrinterDC kan nie gebruik word nie."
+
+#~ msgid "not implemented"
+#~ msgstr "nie geïmplementeer nie"
+
+#~ msgid "wxPrintout::GetPageInfo gives a null maxPage."
+#~ msgstr "wxPrintout::GetPageInfo gee 'n maxPage van null."
 
 #~ msgid "percent"
 #~ msgstr "persent"

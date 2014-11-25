@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-21 14:54+0100\n"
+"POT-Creation-Date: 2014-11-25 19:43+0100\n"
 "PO-Revision-Date: 2012-12-30 00:14+0100\n"
 "Last-Translator: filmsi\n"
 "Language-Team: Martin Srebotnjak <miles@filmsi.net>\n"
@@ -51,12 +51,12 @@ msgid " (in module \"%s\")"
 msgstr " (v modulu \"%s\")"
 
 # common/docview.cpp:1206
-#: ../src/common/docview.cpp:1624
+#: ../src/common/docview.cpp:1631
 msgid " - "
 msgstr " - "
 
 # html/htmprint.cpp:490
-#: ../src/richtext/richtextprint.cpp:588 ../src/html/htmprint.cpp:704
+#: ../src/html/htmprint.cpp:704 ../src/richtext/richtextprint.cpp:588
 msgid " Preview"
 msgstr "Predogled"
 
@@ -121,9 +121,9 @@ msgstr "%d od %lu"
 # html/helpfrm.cpp:719
 # html/helpfrm.cpp:1277
 # html/helpfrm.cpp:1304
-#: ../src/html/helpwnd.cpp:1681 ../src/html/helpwnd.cpp:1719
-#, c-format
-msgid "%i of %i"
+#: ../src/html/helpwnd.cpp:1681
+#, fuzzy, c-format
+msgid "%i of %u"
 msgstr "%i od %i"
 
 # generic/filedlgg.cpp:328
@@ -146,7 +146,7 @@ msgid "%lu of %lu"
 msgstr "%lu od %lu"
 
 # common/cmdline.cpp:735
-#: ../src/common/cmdline.cpp:1050
+#: ../src/common/cmdline.cpp:1062
 #, c-format
 msgid "%s (or %s)"
 msgstr "%s (ali %s)"
@@ -163,7 +163,7 @@ msgstr "Napaka %s"
 msgid "%s Information"
 msgstr "Informacija %s"
 
-#: ../src/generic/preferencesg.cpp:110
+#: ../src/generic/preferencesg.cpp:115
 #, fuzzy, c-format
 msgid "%s Preferences"
 msgstr "Možnosti"
@@ -184,6 +184,15 @@ msgstr "%s ne ustreza glavi tar za vnos '%s'"
 #, c-format
 msgid "%s files (%s)|%s"
 msgstr "datoteke %s (%s)|%s"
+
+# html/helpfrm.cpp:718
+# html/helpfrm.cpp:719
+# html/helpfrm.cpp:1277
+# html/helpfrm.cpp:1304
+#: ../src/html/helpwnd.cpp:1719
+#, fuzzy, c-format
+msgid "%u of %u"
+msgstr "%lu od %lu"
 
 #: ../src/common/stockitem.cpp:139 ../src/html/helpfrm.cpp:142
 #: ../src/html/helpfrm.cpp:144
@@ -263,8 +272,8 @@ msgstr "&Dno:"
 msgid "&Box"
 msgstr "&Krepko"
 
-#: ../src/richtext/richtextliststylepage.cpp:210
 #: ../src/richtext/richtextbulletspage.cpp:159
+#: ../src/richtext/richtextliststylepage.cpp:210
 msgid "&Bullet style:"
 msgstr "Slog &oznak:"
 
@@ -283,9 +292,9 @@ msgstr "&CD-pogon"
 # generic/proplist.cpp:523
 # generic/wizard.cpp:192
 # html/helpfrm.cpp:910
-#: ../src/generic/wizard.cpp:432 ../src/generic/fontdlgg.cpp:470
-#: ../src/generic/fontdlgg.cpp:489 ../src/osx/carbon/fontdlg.cpp:572
-#: ../src/common/stockitem.cpp:145
+#: ../src/common/stockitem.cpp:145 ../src/generic/fontdlgg.cpp:470
+#: ../src/generic/fontdlgg.cpp:489 ../src/generic/wizard.cpp:432
+#: ../src/osx/carbon/fontdlg.cpp:572
 msgid "&Cancel"
 msgstr "&Prekliči"
 
@@ -320,9 +329,9 @@ msgstr "&Počisti"
 
 # generic/logg.cpp:477
 # generic/tipdlg.cpp:170
-#: ../src/generic/logg.cpp:522 ../src/common/stockitem.cpp:148
-#: ../src/common/prntbase.cpp:1570 ../src/univ/themes/win32.cpp:3756
-#: ../src/html/helpfrm.cpp:139
+#: ../src/common/prntbase.cpp:1570 ../src/common/stockitem.cpp:148
+#: ../src/generic/logg.cpp:522 ../src/html/helpfrm.cpp:139
+#: ../src/univ/themes/win32.cpp:3756
 msgid "&Close"
 msgstr "&Zapri"
 
@@ -341,8 +350,8 @@ msgstr "&Barva:"
 msgid "&Convert"
 msgstr "&Pretvori"
 
-#: ../src/richtext/richtextctrl.cpp:332 ../src/osx/textctrl_osx.cpp:583
-#: ../src/common/stockitem.cpp:150 ../src/msw/textctrl.cpp:2335
+#: ../src/common/stockitem.cpp:150 ../src/msw/textctrl.cpp:2457
+#: ../src/osx/textctrl_osx.cpp:583 ../src/richtext/richtextctrl.cpp:332
 msgid "&Copy"
 msgstr "&Kopiraj"
 
@@ -359,9 +368,9 @@ msgstr "Prila&godi ..."
 msgid "&Debug report preview:"
 msgstr "&Predogled poročila o razhroščevanju:"
 
+#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2459
+#: ../src/osx/textctrl_osx.cpp:585 ../src/richtext/richtextctrl.cpp:334
 #: ../src/richtext/richtexttabspage.cpp:142
-#: ../src/richtext/richtextctrl.cpp:334 ../src/osx/textctrl_osx.cpp:585
-#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2337
 msgid "&Delete"
 msgstr "&Izbriši"
 
@@ -466,9 +475,10 @@ msgstr "&Višina:"
 # generic/proplist.cpp:528
 # html/helpfrm.cpp:208
 # msw/mdi.cpp:1283
-#: ../src/generic/wizard.cpp:435 ../src/richtext/richtextstyledlg.cpp:303
-#: ../src/richtext/richtextsymboldlg.cpp:479 ../src/osx/menu_osx.cpp:776
-#: ../src/common/stockitem.cpp:163 ../src/html/helpfrm.cpp:147
+#: ../src/common/stockitem.cpp:163 ../src/generic/wizard.cpp:435
+#: ../src/html/helpfrm.cpp:147 ../src/osx/menu_osx.cpp:788
+#: ../src/richtext/richtextstyledlg.cpp:303
+#: ../src/richtext/richtextsymboldlg.cpp:479
 msgid "&Help"
 msgstr "&Pomoč"
 
@@ -526,9 +536,9 @@ msgstr "&Zadnji"
 msgid "&Left"
 msgstr "&Levo"
 
-#: ../src/richtext/richtextindentspage.cpp:195
 #: ../src/richtext/richtextborderspage.cpp:241
 #: ../src/richtext/richtextborderspage.cpp:410
+#: ../src/richtext/richtextindentspage.cpp:195
 #: ../src/richtext/richtextliststylepage.cpp:381
 #: ../src/richtext/richtextmarginspage.cpp:187
 #: ../src/richtext/richtextmarginspage.cpp:301
@@ -560,7 +570,7 @@ msgid "&Network"
 msgstr "&Omrežje"
 
 # msw/mdi.cpp:188
-#: ../src/richtext/richtexttabspage.cpp:136 ../src/common/stockitem.cpp:176
+#: ../src/common/stockitem.cpp:176 ../src/richtext/richtexttabspage.cpp:136
 msgid "&New"
 msgstr "&Nov"
 
@@ -593,7 +603,7 @@ msgstr "&Naslednji slog:"
 
 # common/dlgcmn.cpp:111
 # common/dlgcmn.cpp:121
-#: ../src/common/stockitem.cpp:177 ../src/msw/msgdlg.cpp:476
+#: ../src/common/stockitem.cpp:177 ../src/msw/msgdlg.cpp:463
 msgid "&No"
 msgstr "&Ne"
 
@@ -614,14 +624,14 @@ msgstr "&Številka:"
 # generic/prntdlgg.cpp:467
 # generic/proplist.cpp:511
 # html/helpfrm.cpp:909
-#: ../src/generic/fontdlgg.cpp:475 ../src/generic/fontdlgg.cpp:482
-#: ../src/osx/carbon/fontdlg.cpp:578 ../src/common/stockitem.cpp:178
+#: ../src/common/stockitem.cpp:178 ../src/generic/fontdlgg.cpp:475
+#: ../src/generic/fontdlgg.cpp:482 ../src/osx/carbon/fontdlg.cpp:578
 msgid "&OK"
 msgstr "&V redu"
 
 # generic/logg.cpp:473
 # generic/logg.cpp:774
-#: ../src/generic/dbgrptg.cpp:342 ../src/common/stockitem.cpp:179
+#: ../src/common/stockitem.cpp:179 ../src/generic/dbgrptg.cpp:342
 #: ../src/html/helpfrm.cpp:137
 msgid "&Open..."
 msgstr "&Odpri ..."
@@ -635,8 +645,8 @@ msgid "&Page Break"
 msgstr "&Prelom strani"
 
 # common/cmdline.cpp:912
-#: ../src/richtext/richtextctrl.cpp:333 ../src/osx/textctrl_osx.cpp:584
-#: ../src/common/stockitem.cpp:180 ../src/msw/textctrl.cpp:2336
+#: ../src/common/stockitem.cpp:180 ../src/msw/textctrl.cpp:2458
+#: ../src/osx/textctrl_osx.cpp:584 ../src/richtext/richtextctrl.cpp:333
 msgid "&Paste"
 msgstr "&Prilepi"
 
@@ -679,8 +689,8 @@ msgid "&Print..."
 msgstr "&Natisni ..."
 
 # html/helpfrm.cpp:512
-#: ../src/richtext/richtextctrl.cpp:338 ../src/richtext/richtextctrl.cpp:5054
-#: ../src/common/stockitem.cpp:184
+#: ../src/common/stockitem.cpp:184 ../src/richtext/richtextctrl.cpp:338
+#: ../src/richtext/richtextctrl.cpp:5065
 msgid "&Properties"
 msgstr "&Lastnosti"
 
@@ -690,9 +700,9 @@ msgstr "&Izhod"
 
 # common/docview.cpp:1945
 # common/docview.cpp:1956
-#: ../src/richtext/richtextctrl.cpp:329 ../src/osx/textctrl_osx.cpp:580
-#: ../src/common/stockitem.cpp:185 ../src/common/cmdproc.cpp:293
-#: ../src/common/cmdproc.cpp:300 ../src/msw/textctrl.cpp:2332
+#: ../src/common/cmdproc.cpp:293 ../src/common/cmdproc.cpp:300
+#: ../src/common/stockitem.cpp:185 ../src/msw/textctrl.cpp:2454
+#: ../src/osx/textctrl_osx.cpp:580 ../src/richtext/richtextctrl.cpp:329
 msgid "&Redo"
 msgstr "&Ponovi"
 
@@ -727,9 +737,9 @@ msgid "&Right"
 msgstr "&Desno"
 
 # generic/fontdlgg.cpp:216
-#: ../src/richtext/richtextindentspage.cpp:213
 #: ../src/richtext/richtextborderspage.cpp:275
 #: ../src/richtext/richtextborderspage.cpp:444
+#: ../src/richtext/richtextindentspage.cpp:213
 #: ../src/richtext/richtextliststylepage.cpp:399
 #: ../src/richtext/richtextmarginspage.cpp:212
 #: ../src/richtext/richtextmarginspage.cpp:326
@@ -786,7 +796,7 @@ msgstr "&Preverjanje črkovanja"
 msgid "&Stop"
 msgstr "&Ustavi"
 
-#: ../src/richtext/richtextfontpage.cpp:284 ../src/common/stockitem.cpp:199
+#: ../src/common/stockitem.cpp:199 ../src/richtext/richtextfontpage.cpp:284
 msgid "&Strikethrough"
 msgstr "Pre&črtano"
 
@@ -802,8 +812,8 @@ msgstr "&Slogi:"
 msgid "&Subset:"
 msgstr "&Podmnožica:"
 
-#: ../src/richtext/richtextliststylepage.cpp:268
 #: ../src/richtext/richtextbulletspage.cpp:222
+#: ../src/richtext/richtextliststylepage.cpp:268
 msgid "&Symbol:"
 msgstr "&Simbol:"
 
@@ -833,7 +843,7 @@ msgid "&Top:"
 msgstr "&Vrh:"
 
 # generic/fontdlgg.cpp:242
-#: ../src/generic/fontdlgg.cpp:444 ../src/common/stockitem.cpp:202
+#: ../src/common/stockitem.cpp:202 ../src/generic/fontdlgg.cpp:444
 msgid "&Underline"
 msgstr "&Podčrtaj"
 
@@ -843,9 +853,9 @@ msgid "&Underlining:"
 msgstr "&Podčrtovanje:"
 
 # common/docview.cpp:1951
-#: ../src/richtext/richtextctrl.cpp:328 ../src/osx/textctrl_osx.cpp:579
-#: ../src/common/stockitem.cpp:203 ../src/common/cmdproc.cpp:271
-#: ../src/msw/textctrl.cpp:2331
+#: ../src/common/cmdproc.cpp:271 ../src/common/stockitem.cpp:203
+#: ../src/msw/textctrl.cpp:2453 ../src/osx/textctrl_osx.cpp:579
+#: ../src/richtext/richtextctrl.cpp:328
 msgid "&Undo"
 msgstr "&Razveljavi"
 
@@ -895,7 +905,7 @@ msgstr "&Okno"
 
 # common/dlgcmn.cpp:109
 # common/dlgcmn.cpp:116
-#: ../src/common/stockitem.cpp:206 ../src/msw/msgdlg.cpp:476
+#: ../src/common/stockitem.cpp:206 ../src/msw/msgdlg.cpp:463
 msgid "&Yes"
 msgstr "&Da"
 
@@ -914,13 +924,13 @@ msgid "'%s' is invalid"
 msgstr "'%s' je neveljaven"
 
 # common/cmdline.cpp:657
-#: ../src/common/cmdline.cpp:948 ../src/common/cmdline.cpp:966
+#: ../src/common/cmdline.cpp:960 ../src/common/cmdline.cpp:978
 #, c-format
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr "'%s' ni pravilna numerična vrednost za možnost '%s'."
 
 # common/intl.cpp:412
-#: ../src/common/translation.cpp:1086
+#: ../src/common/translation.cpp:1099
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' ni veljaven katalog sporočil."
@@ -960,8 +970,8 @@ msgstr "'%s' sme vsebovati samo črkovne ali številčne znake."
 msgid "'%s' should only contain digits."
 msgstr "'%s' sme vsebovati samo števke."
 
-#: ../src/richtext/richtextliststylepage.cpp:229
 #: ../src/richtext/richtextbulletspage.cpp:179
+#: ../src/richtext/richtextliststylepage.cpp:229
 msgid "(*)"
 msgstr "(*)"
 
@@ -970,8 +980,8 @@ msgstr "(*)"
 msgid "(Help)"
 msgstr "(Pomoč)"
 
-#: ../src/richtext/richtextliststylepage.cpp:481
 #: ../src/richtext/richtextbulletspage.cpp:286
+#: ../src/richtext/richtextliststylepage.cpp:481
 msgid "(None)"
 msgstr "(brez)"
 
@@ -989,42 +999,42 @@ msgid "(bookmarks)"
 msgstr "(zaznamki)"
 
 # html/helpdata.cpp:644
+#: ../src/richtext/richtextfontpage.cpp:331
+#: ../src/richtext/richtextfontpage.cpp:335
+#: ../src/richtext/richtextfontpage.cpp:339
+#: ../src/richtext/richtextformatdlg.cpp:870
 #: ../src/richtext/richtextindentspage.cpp:274
 #: ../src/richtext/richtextindentspage.cpp:286
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:326
-#: ../src/richtext/richtextformatdlg.cpp:867
-#: ../src/richtext/richtextfontpage.cpp:331
-#: ../src/richtext/richtextfontpage.cpp:335
-#: ../src/richtext/richtextfontpage.cpp:339
 #: ../src/richtext/richtextliststylepage.cpp:448
 #: ../src/richtext/richtextliststylepage.cpp:460
 #: ../src/richtext/richtextliststylepage.cpp:461
 msgid "(none)"
 msgstr "(brez)"
 
-#: ../src/richtext/richtextliststylepage.cpp:492
 #: ../src/richtext/richtextbulletspage.cpp:297
+#: ../src/richtext/richtextliststylepage.cpp:492
 msgid "*"
 msgstr "*"
 
-#: ../src/richtext/richtextliststylepage.cpp:236
 #: ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/richtext/richtextliststylepage.cpp:236
 msgid "*)"
 msgstr "*)"
 
-#: ../src/richtext/richtextliststylepage.cpp:495
 #: ../src/richtext/richtextbulletspage.cpp:300
+#: ../src/richtext/richtextliststylepage.cpp:495
 msgid "+"
 msgstr "+"
 
-#: ../src/msw/utils.cpp:1336
+#: ../src/msw/utils.cpp:1354
 msgid ", 64-bit edition"
 msgstr ", 64-bitna izdaja"
 
-#: ../src/richtext/richtextliststylepage.cpp:493
 #: ../src/richtext/richtextbulletspage.cpp:298
+#: ../src/richtext/richtextliststylepage.cpp:493
 msgid "-"
 msgstr "-"
 
@@ -1201,8 +1211,8 @@ msgstr "<b>Kepka pisava.</b> "
 msgid "<i>Italic face.</i> "
 msgstr "<i>Ležeča pisava.</i> "
 
-#: ../src/richtext/richtextliststylepage.cpp:494
 #: ../src/richtext/richtextbulletspage.cpp:299
+#: ../src/richtext/richtextliststylepage.cpp:494
 msgid ">"
 msgstr ">"
 
@@ -1218,10 +1228,10 @@ msgstr "Poročilo o razhroščevanju je bilo ustvarjeno. Nahaja se v"
 msgid "A non empty collection must consist of 'element' nodes"
 msgstr "Neprazno zbirko morajo tvoriti vozli 'elementov'"
 
-#: ../src/richtext/richtextliststylepage.cpp:304
-#: ../src/richtext/richtextliststylepage.cpp:306
 #: ../src/richtext/richtextbulletspage.cpp:257
 #: ../src/richtext/richtextbulletspage.cpp:259
+#: ../src/richtext/richtextliststylepage.cpp:304
+#: ../src/richtext/richtextliststylepage.cpp:306
 msgid "A standard bullet name."
 msgstr "Standardno ime oznake."
 
@@ -1320,16 +1330,12 @@ msgid "A6 Rotated 148 x 105 mm"
 msgstr "A6 rotirano, 148 x 105 mm"
 
 # generic/fontdlgg.cpp:325
-#: ../src/generic/fontdlgg.cpp:83 ../src/richtext/richtextformatdlg.cpp:527
-#: ../src/osx/carbon/fontdlg.cpp:323
+#: ../src/generic/fontdlgg.cpp:83 ../src/osx/carbon/fontdlg.cpp:323
+#: ../src/richtext/richtextformatdlg.cpp:527
 msgid "ABCDEFGabcdefg12345"
 msgstr "Ščinkavec želi 12345 češenj."
 
-#: ../src/common/accelcmn.cpp:76
-msgid "ADD"
-msgstr "DODAJ"
-
-#: ../src/richtext/richtextsymboldlg.cpp:458 ../src/common/ftp.cpp:405
+#: ../src/common/ftp.cpp:405 ../src/richtext/richtextsymboldlg.cpp:458
 msgid "ASCII"
 msgstr "ASCII"
 
@@ -1337,13 +1343,13 @@ msgstr "ASCII"
 msgid "About"
 msgstr "O programu"
 
-#: ../src/generic/aboutdlgg.cpp:140 ../src/osx/menu_osx.cpp:603
-#: ../src/msw/aboutdlg.cpp:64
+#: ../src/generic/aboutdlgg.cpp:140 ../src/msw/aboutdlg.cpp:64
+#: ../src/osx/menu_osx.cpp:615
 #, c-format
 msgid "About %s"
 msgstr "O programu %s ..."
 
-#: ../src/osx/menu_osx.cpp:605
+#: ../src/osx/menu_osx.cpp:617
 #, fuzzy
 msgid "About..."
 msgstr "O programu"
@@ -1356,15 +1362,16 @@ msgstr "Absolutno"
 msgid "Actual Size"
 msgstr "Dejanska velikost"
 
-#: ../src/common/stockitem.cpp:140
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:79 ../src/common/stockitem.cpp:140
 msgid "Add"
 msgstr "Dodaj"
 
-#: ../src/richtext/richtextbuffer.cpp:11056
+#: ../src/richtext/richtextbuffer.cpp:11078
 msgid "Add Column"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:10993
+#: ../src/richtext/richtextbuffer.cpp:11015
 msgid "Add Row"
 msgstr ""
 
@@ -1427,18 +1434,18 @@ msgid "All"
 msgstr "Vse"
 
 # generic/filedlgg.cpp:825
-#: ../src/generic/filectrlg.cpp:1205 ../src/common/fldlgcmn.cpp:107
+#: ../src/common/fldlgcmn.cpp:107 ../src/generic/filectrlg.cpp:1205
 #, c-format
 msgid "All files (%s)|%s"
 msgstr "Vse datoteke (%s)|%s"
 
 # generic/filedlgg.cpp:825
-#: ../include/wx/defs.h:2933
+#: ../include/wx/defs.h:2942
 msgid "All files (*)|*"
 msgstr "Vse datoteke (*)|*"
 
 # generic/filedlgg.cpp:825
-#: ../include/wx/defs.h:2930
+#: ../include/wx/defs.h:2939
 msgid "All files (*.*)|*.*"
 msgstr "Vse datoteke (*.*)|*.*"
 
@@ -1458,7 +1465,7 @@ msgstr "V SetObjectClassInfo je bil podan že registriran predmet."
 msgid "Already dialling ISP."
 msgstr "Klicanje ponudnika spletnih storitev je v teku."
 
-#: ../src/common/accelcmn.cpp:320 ../src/univ/themes/win32.cpp:3756
+#: ../src/common/accelcmn.cpp:321 ../src/univ/themes/win32.cpp:3756
 msgid "Alt+"
 msgstr "Dvigalka+"
 
@@ -1480,7 +1487,7 @@ msgstr ""
 "datoteke)?"
 
 # generic/dirdlgg.cpp:191
-#: ../src/osx/menu_osx.cpp:623 ../src/osx/menu_osx.cpp:631
+#: ../src/osx/menu_osx.cpp:635 ../src/osx/menu_osx.cpp:643
 msgid "Application"
 msgstr "Program"
 
@@ -1488,8 +1495,8 @@ msgstr "Program"
 msgid "Apply"
 msgstr "Uporabi"
 
-#: ../src/richtext/richtextliststylepage.cpp:482
 #: ../src/richtext/richtextbulletspage.cpp:287
+#: ../src/richtext/richtextliststylepage.cpp:482
 msgid "Arabic"
 msgstr "arabsko"
 
@@ -1498,7 +1505,7 @@ msgid "Arabic (ISO-8859-6)"
 msgstr "arabsko (ISO-8859-6)"
 
 # common/intl.cpp:374
-#: ../src/msw/ole/automtn.cpp:675
+#: ../src/msw/ole/automtn.cpp:678
 #, c-format
 msgid "Argument %u not found."
 msgstr "Argumenta %u ni mogoče najti."
@@ -1516,9 +1523,9 @@ msgstr "Naraščajoče"
 msgid "Attributes"
 msgstr "Atributi"
 
-#: ../src/richtext/richtextliststylepage.cpp:294
 #: ../src/richtext/richtextbulletspage.cpp:245
 #: ../src/richtext/richtextbulletspage.cpp:247
+#: ../src/richtext/richtextliststylepage.cpp:294
 msgid "Available fonts."
 msgstr "Pisave na voljo."
 
@@ -1574,48 +1581,45 @@ msgstr "B6 (JIS) rotirano, 182 x 128 mm"
 msgid "B6 Envelope, 176 x 125 mm"
 msgstr "kuverta B6, 176 x 125 mm"
 
-#: ../src/common/accelcmn.cpp:49
-msgid "BACK"
-msgstr "VRAČALKA"
-
 # common/imagbmp.cpp:266
 # common/imagbmp.cpp:278
-#: ../src/common/imagbmp.cpp:523 ../src/common/imagbmp.cpp:553
-#: ../src/common/imagbmp.cpp:568
+#: ../src/common/imagbmp.cpp:524 ../src/common/imagbmp.cpp:554
+#: ../src/common/imagbmp.cpp:569
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: pomnilnika ni mogoče alocirati."
 
 # common/imagbmp.cpp:62
-#: ../src/common/imagbmp.cpp:97
+#: ../src/common/imagbmp.cpp:98
 msgid "BMP: Couldn't save invalid image."
 msgstr "BMP: nepravilne slike ni mogoče shraniti."
 
 # common/imagbmp.cpp:154
-#: ../src/common/imagbmp.cpp:338
+#: ../src/common/imagbmp.cpp:339
 msgid "BMP: Couldn't write RGB color map."
 msgstr "BMP: barvnega zemljevida RGB ni mogoče shraniti."
 
 # common/imagbmp.cpp:154
-#: ../src/common/imagbmp.cpp:473
+#: ../src/common/imagbmp.cpp:474
 msgid "BMP: Couldn't write data."
 msgstr "BMP: podatkov ni mogoče zapisati"
 
 # common/imagbmp.cpp:131
-#: ../src/common/imagbmp.cpp:239
+#: ../src/common/imagbmp.cpp:240
 msgid "BMP: Couldn't write the file (Bitmap) header."
 msgstr "BMP: datotečne glave (Bitmap) ni mogoče zapisati."
 
 # common/imagbmp.cpp:131
-#: ../src/common/imagbmp.cpp:262
+#: ../src/common/imagbmp.cpp:263
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: datotečne glave (BitmapInfo) ni mogoče zapisati."
 
-#: ../src/common/imagbmp.cpp:133
+#: ../src/common/imagbmp.cpp:134
 msgid "BMP: wxImage doesn't have own wxPalette."
 msgstr "BMP: wxImage nima lastne wxPalette."
 
 # generic/helpwxht.cpp:157
-#: ../src/common/stockitem.cpp:142
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:50 ../src/common/stockitem.cpp:142
 msgid "Back"
 msgstr "Nazaj"
 
@@ -1632,6 +1636,13 @@ msgstr "&Barva ozadja:"
 msgid "Background colour"
 msgstr "Barva ozadja"
 
+# generic/helpwxht.cpp:157
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:50
+#, fuzzy
+msgid "Backspace"
+msgstr "Nazaj"
+
 #: ../src/common/fmapbase.cpp:160
 msgid "Baltic (ISO-8859-13)"
 msgstr "baltsko (ISO-8859-13)"
@@ -1644,8 +1655,8 @@ msgstr "baltsko (staro) (ISO-8859-4)"
 msgid "Before a paragraph:"
 msgstr "Pred odstavkom:"
 
-#: ../src/richtext/richtextliststylepage.cpp:489
 #: ../src/richtext/richtextbulletspage.cpp:294
+#: ../src/richtext/richtextliststylepage.cpp:489
 msgid "Bitmap"
 msgstr "Bitna slika"
 
@@ -1654,8 +1665,8 @@ msgid "Bitmap renderer cannot render value; value type: "
 msgstr "Upodobitelj bitnih slik ne more upodobiti vrednosti; vrsta vrednosti: "
 
 # generic/fontdlgg.cpp:217
-#: ../src/generic/fontdlgg.cpp:333 ../src/richtext/richtextfontpage.cpp:337
-#: ../src/osx/carbon/fontdlg.cpp:524 ../src/common/stockitem.cpp:143
+#: ../src/common/stockitem.cpp:143 ../src/generic/fontdlgg.cpp:333
+#: ../src/osx/carbon/fontdlg.cpp:524 ../src/richtext/richtextfontpage.cpp:337
 msgid "Bold"
 msgstr "Krepko"
 
@@ -1670,7 +1681,7 @@ msgstr "Obroba"
 msgid "Borders"
 msgstr "Obrobe"
 
-#: ../src/richtext/richtextsizepage.cpp:288 ../src/common/stockitem.cpp:144
+#: ../src/common/stockitem.cpp:144 ../src/richtext/richtextsizepage.cpp:288
 #, fuzzy
 msgid "Bottom"
 msgstr "Dno"
@@ -1681,7 +1692,7 @@ msgid "Bottom margin (mm):"
 msgstr "Spodnji rob (mm):"
 
 # html/helpfrm.cpp:512
-#: ../src/richtext/richtextbuffer.cpp:9026
+#: ../src/richtext/richtextbuffer.cpp:9048
 #, fuzzy
 msgid "Box Properties"
 msgstr "Lastnosti polja"
@@ -1695,8 +1706,8 @@ msgstr "Slogi polja"
 msgid "Browse"
 msgstr "Prebrskaj"
 
-#: ../src/richtext/richtextliststylepage.cpp:245
 #: ../src/richtext/richtextbulletspage.cpp:195
+#: ../src/richtext/richtextliststylepage.cpp:245
 msgid "Bullet &Alignment:"
 msgstr "Po&ravnava oznak:"
 
@@ -1742,14 +1753,6 @@ msgstr "kuverta C6, 114 x 162 mm"
 msgid "C65 Envelope, 114 x 229 mm"
 msgstr "kuverta C65, 114 x 229 mm"
 
-#: ../src/common/accelcmn.cpp:66
-msgid "CANCEL"
-msgstr "PREKLIČI"
-
-#: ../src/common/accelcmn.cpp:70
-msgid "CAPITAL"
-msgstr "VELIKEČRKE"
-
 #: ../src/common/stockitem.cpp:146
 msgid "CD-Rom"
 msgstr "CD-pogon"
@@ -1757,14 +1760,6 @@ msgstr "CD-pogon"
 #: ../src/html/chm.cpp:815 ../src/html/chm.cpp:874
 msgid "CHM handler currently supports only local files!"
 msgstr "Upravljalec CHM trenutno podpira le lokalne datoteke!"
-
-#: ../src/common/accelcmn.cpp:67
-msgid "CLEAR"
-msgstr "POČISTI"
-
-#: ../src/common/accelcmn.cpp:111
-msgid "COMMAND"
-msgstr "UKAZ"
 
 #: ../src/richtext/richtextfontpage.cpp:291
 msgid "Ca&pitals"
@@ -1819,7 +1814,7 @@ msgstr "Niti ni mogoče ustvariti."
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # common/file.cpp:200
-#: ../src/msw/window.cpp:3787
+#: ../src/msw/window.cpp:3804
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "Okna ali razreda %s ni mogoče ustvariti."
@@ -1877,7 +1872,7 @@ msgstr "Vrednosti nepodprtega tipa %d ni mogoče izvoziti."
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # common/ffile.cpp:234
-#: ../src/common/ffile.cpp:236
+#: ../src/common/ffile.cpp:252
 #, c-format
 msgid "Can't find current position in file '%s'"
 msgstr "Trenutne pozicije v datoteki '%s' ni mogoče najti."
@@ -1898,7 +1893,7 @@ msgstr "Ni mogoče inicializirati upadalnega toka zlib."
 msgid "Can't initialize zlib inflate stream."
 msgstr "Ni mogoče inicializirati napihovalnega toka zlib."
 
-#: ../src/msw/fswatcher.cpp:456
+#: ../src/msw/fswatcher.cpp:476
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
 msgstr ""
@@ -1993,10 +1988,12 @@ msgstr "Pisanje v upadalni tok ni možno: %s"
 # generic/proplist.cpp:523
 # generic/wizard.cpp:192
 # html/helpfrm.cpp:910
-#: ../include/wx/msgdlg.h:274 ../src/generic/dirdlgg.cpp:107
-#: ../src/richtext/richtextstyledlg.cpp:300 ../src/common/stockitem.cpp:145
-#: ../src/msw/msgdlg.cpp:489 ../src/msw/progdlg.cpp:673
+#. TRANSLATORS: Name of keyboard key
+#: ../include/wx/msgdlg.h:279 ../src/common/accelcmn.cpp:69
+#: ../src/common/stockitem.cpp:145 ../src/generic/dirdlgg.cpp:107
 #: ../src/gtk1/fontdlg.cpp:144 ../src/motif/msgdlg.cpp:196
+#: ../src/msw/msgdlg.cpp:476 ../src/msw/progdlg.cpp:673
+#: ../src/richtext/richtextstyledlg.cpp:300
 msgid "Cancel"
 msgstr "Prekliči"
 
@@ -2041,7 +2038,7 @@ msgid "Cannot find the location of address book file"
 msgstr "Ni možno najti mesta datoteke adresarja"
 
 # msw/dialup.cpp:518
-#: ../src/msw/ole/automtn.cpp:565
+#: ../src/msw/ole/automtn.cpp:568
 #, fuzzy, c-format
 msgid "Cannot get an active instance of \"%s\""
 msgstr "Aktivne klicne povezave ni mogoče najti: %s"
@@ -2065,7 +2062,7 @@ msgid "Cannot hang up - no active dialup connection."
 msgstr "Povezave ni mogoče prekiniti - ni aktivne klicne povezave."
 
 # msw/app.cpp:252
-#: ../include/wx/msw/ole/oleutils.h:52
+#: ../include/wx/msw/ole/oleutils.h:53
 msgid "Cannot initialize OLE"
 msgstr "Inicializacija OLE ni možna"
 
@@ -2077,7 +2074,7 @@ msgstr "Inicializacija OLE ni možna"
 
 # common/filefn.cpp:1287
 # msw/dir.cpp:294
-#: ../src/msw/volume.cpp:620
+#: ../src/msw/volume.cpp:619
 #, c-format
 msgid "Cannot load icon from '%s'."
 msgstr "Nalaganje ikone z '%s' ni možno."
@@ -2166,7 +2163,7 @@ msgid "Cannot set locale to language \"%s\"."
 msgstr "Jezika programa ni mogoče nastaviti na \"%s\"."
 
 # msw/thread.cpp:433
-#: ../src/unix/threadpsx.cpp:831 ../src/msw/thread.cpp:569
+#: ../src/msw/thread.cpp:569 ../src/unix/threadpsx.cpp:831
 msgid "Cannot start thread: error writing TLS."
 msgstr "Niti ni mogoče začeti: napaka pri pisanju TLS."
 
@@ -2186,6 +2183,12 @@ msgstr "Niti %x ni mogoče začasno ustaviti."
 msgid "Cannot wait for thread termination"
 msgstr "Ustavitve niti ni mogoče pričakati."
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:73
+#, fuzzy
+msgid "Capital"
+msgstr "Ve&like začetnice"
+
 # html/helpfrm.cpp:398
 #: ../src/html/helpwnd.cpp:546
 msgid "Case sensitive"
@@ -2196,7 +2199,7 @@ msgid "Categorized Mode"
 msgstr ""
 
 # html/helpfrm.cpp:512
-#: ../src/richtext/richtextbuffer.cpp:9598
+#: ../src/richtext/richtextbuffer.cpp:9620
 msgid "Cell Properties"
 msgstr "Lastnosti celice"
 
@@ -2220,8 +2223,8 @@ msgid "Central European (ISO-8859-2)"
 msgstr "srednjeevropsko (ISO-8859-2)"
 
 # generic/dirdlgg.cpp:217
-#: ../src/richtext/richtextliststylepage.cpp:250
 #: ../src/richtext/richtextbulletspage.cpp:200
+#: ../src/richtext/richtextliststylepage.cpp:250
 msgid "Centre"
 msgstr "Sredinsko"
 
@@ -2242,26 +2245,26 @@ msgstr "Sredinsko poravnaj besedilo."
 msgid "Centred"
 msgstr "Sredinsko"
 
-#: ../src/richtext/richtextliststylepage.cpp:280
 #: ../src/richtext/richtextbulletspage.cpp:232
+#: ../src/richtext/richtextliststylepage.cpp:280
 msgid "Ch&oose..."
 msgstr "&Izberi ..."
 
-#: ../src/richtext/richtextbuffer.cpp:4107
+#: ../src/richtext/richtextbuffer.cpp:4115
 msgid "Change List Style"
 msgstr "Spremeni slog seznama"
 
-#: ../src/richtext/richtextbuffer.cpp:3458
+#: ../src/richtext/richtextbuffer.cpp:3465
 msgid "Change Object Style"
 msgstr "Spremeni slog predmeta"
 
 # html/helpfrm.cpp:512
-#: ../src/richtext/richtextbuffer.cpp:3724
-#: ../src/richtext/richtextbuffer.cpp:7853
+#: ../src/richtext/richtextbuffer.cpp:3732
+#: ../src/richtext/richtextbuffer.cpp:7870
 msgid "Change Properties"
 msgstr "Spremeni lastnosti"
 
-#: ../src/richtext/richtextbuffer.cpp:3275
+#: ../src/richtext/richtextbuffer.cpp:3282
 msgid "Change Style"
 msgstr "Spremeni slog"
 
@@ -2274,17 +2277,17 @@ msgstr "Spremembe ne bodo shranjene v izogib prepisu obstoječe datoteke \"%s\""
 msgid "Character styles"
 msgstr "Slogi znakov"
 
-#: ../src/richtext/richtextliststylepage.cpp:224
-#: ../src/richtext/richtextliststylepage.cpp:226
 #: ../src/richtext/richtextbulletspage.cpp:174
 #: ../src/richtext/richtextbulletspage.cpp:176
+#: ../src/richtext/richtextliststylepage.cpp:224
+#: ../src/richtext/richtextliststylepage.cpp:226
 msgid "Check to add a period after the bullet."
 msgstr "Označite polje za dodajanje pike po oznaki."
 
-#: ../src/richtext/richtextliststylepage.cpp:238
-#: ../src/richtext/richtextliststylepage.cpp:240
 #: ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextbulletspage.cpp:190
+#: ../src/richtext/richtextliststylepage.cpp:238
+#: ../src/richtext/richtextliststylepage.cpp:240
 msgid "Check to add a right parenthesis."
 msgstr "Označite polje za dodajanje zaklepaja."
 
@@ -2295,10 +2298,10 @@ msgstr "Označite polje za dodajanje zaklepaja."
 msgid "Check to edit all borders simultaneously."
 msgstr ""
 
-#: ../src/richtext/richtextliststylepage.cpp:231
-#: ../src/richtext/richtextliststylepage.cpp:233
 #: ../src/richtext/richtextbulletspage.cpp:181
 #: ../src/richtext/richtextbulletspage.cpp:183
+#: ../src/richtext/richtextliststylepage.cpp:231
+#: ../src/richtext/richtextliststylepage.cpp:233
 msgid "Check to enclose the bullet in parentheses."
 msgstr "Označite polje za umestitev oznake med oklepaj in zaklepaj."
 
@@ -2351,15 +2354,15 @@ msgid "Choose ISP to dial"
 msgstr "Izberite ponudnika spletnih storitev, ki ga želite poklicati."
 
 # generic/dirdlgg.cpp:572
-#: ../src/propgrid/props.cpp:1653
+#: ../src/propgrid/props.cpp:1778
 msgid "Choose a directory:"
 msgstr "Izberite mapo:"
 
-#: ../src/propgrid/props.cpp:1712
+#: ../src/propgrid/props.cpp:1837
 msgid "Choose a file"
 msgstr "Izberite datoteko"
 
-#: ../src/generic/colrdlgg.cpp:144 ../src/gtk/colordlg.cpp:63
+#: ../src/generic/colrdlgg.cpp:144 ../src/gtk/colordlg.cpp:69
 msgid "Choose colour"
 msgstr "Izberite barvo"
 
@@ -2385,12 +2388,13 @@ msgstr "&Zapri "
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # msw/thread.cpp:519
-#: ../src/msw/ole/automtn.cpp:687
+#: ../src/msw/ole/automtn.cpp:690
 msgid "Class not registered."
 msgstr "Razred ni registriran."
 
 # generic/logg.cpp:475
-#: ../src/common/stockitem.cpp:147
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:70 ../src/common/stockitem.cpp:147
 msgid "Clear"
 msgstr "Počisti"
 
@@ -2404,10 +2408,10 @@ msgstr "Izprazni vsebino dnevnika"
 msgid "Click to apply the selected style."
 msgstr "Kliknite za uveljavitev izbranega sloga."
 
-#: ../src/richtext/richtextliststylepage.cpp:281
-#: ../src/richtext/richtextliststylepage.cpp:283
 #: ../src/richtext/richtextbulletspage.cpp:233
 #: ../src/richtext/richtextbulletspage.cpp:235
+#: ../src/richtext/richtextliststylepage.cpp:281
+#: ../src/richtext/richtextliststylepage.cpp:283
 msgid "Click to browse for a symbol."
 msgstr "Kliknite za iskanje posebnega znaka."
 
@@ -2507,11 +2511,11 @@ msgstr "Kliknite za preimenovanje izbranega sloga."
 # common/prntbase.cpp:359
 # generic/progdlgg.cpp:307
 # generic/proplist.cpp:518
-#: ../src/generic/dbgrptg.cpp:97 ../src/generic/progdlgg.cpp:804
-#: ../src/generic/progdlgg.cpp:809 ../src/richtext/richtextstyledlg.cpp:277
-#: ../src/richtext/richtextsymboldlg.cpp:476 ../src/common/stockitem.cpp:148
-#: ../src/msw/progdlg.cpp:170 ../src/msw/progdlg.cpp:679
-#: ../src/html/helpdlg.cpp:90
+#: ../src/common/stockitem.cpp:148 ../src/generic/dbgrptg.cpp:97
+#: ../src/generic/progdlgg.cpp:804 ../src/generic/progdlgg.cpp:809
+#: ../src/html/helpdlg.cpp:90 ../src/msw/progdlg.cpp:170
+#: ../src/msw/progdlg.cpp:679 ../src/richtext/richtextstyledlg.cpp:277
+#: ../src/richtext/richtextsymboldlg.cpp:476
 msgid "Close"
 msgstr "Zapri "
 
@@ -2535,7 +2539,7 @@ msgstr "Zapri to okno"
 msgid "Color"
 msgstr "Barva"
 
-#: ../src/richtext/richtextformatdlg.cpp:761
+#: ../src/richtext/richtextformatdlg.cpp:764
 msgid "Colour"
 msgstr "Barva"
 
@@ -2570,6 +2574,11 @@ msgstr "Širine stolpca ni mogoče ugotoviti"
 msgid "Column width could not be set."
 msgstr "Širine stolpca ni mogoče nastaviti."
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:112
+msgid "Command"
+msgstr ""
+
 #: ../src/common/init.cpp:188
 #, c-format
 msgid ""
@@ -2583,7 +2592,7 @@ msgstr ""
 msgid "Common dialog failed with error code %0lx."
 msgstr "Pogovorno okno izbirnika barv ni uspelo, z napako %0lx."
 
-#: ../src/gtk/window.cpp:4357
+#: ../src/gtk/window.cpp:4503
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2594,7 +2603,7 @@ msgid "Compressed HTML Help file (*.chm)|*.chm|"
 msgstr "datoteka stisnjene pomoči HTML (*.chm)|*.chm|"
 
 # generic/dirdlgg.cpp:210
-#: ../src/generic/dirctrlg.cpp:544
+#: ../src/generic/dirctrlg.cpp:541
 msgid "Computer"
 msgstr "Računalnik"
 
@@ -2605,7 +2614,7 @@ msgid "Config entry name cannot start with '%c'."
 msgstr "Vstopno konfiguracijsko ime se ne more začeti s '%c'."
 
 # generic/filedlgg.cpp:1077
-#: ../src/gtk/filedlg.cpp:59
+#: ../src/generic/filedlgg.cpp:365 ../src/gtk/filedlg.cpp:59
 msgid "Confirm"
 msgstr "Potrdi"
 
@@ -2614,7 +2623,7 @@ msgid "Confirm registry update"
 msgstr "Potrdite osvežitev registra"
 
 # html/htmlwin.cpp:166
-#: ../src/html/htmlwin.cpp:547
+#: ../src/html/htmlwin.cpp:551
 msgid "Connecting..."
 msgstr "Povezovanje poteka ..."
 
@@ -2625,7 +2634,7 @@ msgstr "Povezovanje poteka ..."
 msgid "Contents"
 msgstr "Vsebina"
 
-#: ../src/common/strconv.cpp:2271
+#: ../src/common/strconv.cpp:2265
 #, c-format
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "Pretvorba v nabor znakov '%s' ne deluje."
@@ -2638,7 +2647,7 @@ msgid "Convert"
 msgstr "Pretvori"
 
 # generic/dirdlgg.cpp:550
-#: ../src/html/htmlwin.cpp:1060
+#: ../src/html/htmlwin.cpp:1064
 #, c-format
 msgid "Copied to clipboard:\"%s\""
 msgstr "Kopirano v odložišče:\"%s\""
@@ -2800,8 +2809,8 @@ msgstr "Predogleda dokumenta ni mogoče začeti."
 
 # generic/printps.cpp:209
 # msw/printwin.cpp:252
-#: ../src/generic/printps.cpp:178 ../src/msw/printwin.cpp:210
-#: ../src/gtk/print.cpp:1077
+#: ../src/generic/printps.cpp:178 ../src/gtk/print.cpp:1103
+#: ../src/msw/printwin.cpp:210
 msgid "Could not start printing."
 msgstr "Tiskanja ni mogoče pognati."
 
@@ -2821,9 +2830,9 @@ msgstr "Zaklopa mutexa ne morem pridobiti."
 # msw/imaglist.cpp:152
 # msw/imaglist.cpp:174
 # msw/imaglist.cpp:187
+#: ../src/msw/dragimag.cpp:193 ../src/msw/dragimag.cpp:232
 #: ../src/msw/imaglist.cpp:189 ../src/msw/imaglist.cpp:226
-#: ../src/msw/imaglist.cpp:238 ../src/msw/dragimag.cpp:193
-#: ../src/msw/dragimag.cpp:232
+#: ../src/msw/imaglist.cpp:238
 msgid "Couldn't add an image to the image list."
 msgstr "Na seznam slik ni mogoče dodati slike."
 
@@ -2838,7 +2847,7 @@ msgid "Couldn't create the overlay window"
 msgstr "Prekrivnega okna ni mogoče ustvariti."
 
 # msw/thread.cpp:958
-#: ../src/common/translation.cpp:2015
+#: ../src/common/translation.cpp:2028
 msgid "Couldn't enumerate translations"
 msgstr "Prevodov ni mogoče oštevilčiti."
 
@@ -2847,10 +2856,6 @@ msgstr "Prevodov ni mogoče oštevilčiti."
 #, c-format
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Simbola '%s' v dinamični knjižnici ni mogoče najti."
-
-#: ../src/gtk/print.cpp:2010
-msgid "Couldn't get hatch style from wxBrush."
-msgstr "Iz wxBrush ni mogoče dobiti sloga šrafiranja."
 
 # msw/thread.cpp:578
 #: ../src/msw/thread.cpp:945
@@ -2883,7 +2888,7 @@ msgid "Couldn't load sound data from '%s'."
 msgstr "Zvočnih podatkov iz '%s' ni mogoče naložiti."
 
 # msw/timer.cpp:96
-#: ../src/msw/dirdlg.cpp:441
+#: ../src/msw/dirdlg.cpp:455
 msgid "Couldn't obtain folder name"
 msgstr "Imena mape ni mogoče pridobiti"
 
@@ -2934,17 +2939,17 @@ msgid "Create directory"
 msgstr "Ustvari mapo"
 
 # generic/filedlgg.cpp:883
-#: ../src/generic/filedlgg.cpp:228 ../src/generic/dirdlgg.cpp:131
+#: ../src/generic/dirdlgg.cpp:131 ../src/generic/filedlgg.cpp:228
 msgid "Create new directory"
 msgstr "Ustvari novo mapo"
 
 # common/utilscmn.cpp:464
-#: ../src/common/accelcmn.cpp:322
+#: ../src/common/accelcmn.cpp:323
 msgid "Ctrl+"
 msgstr "Krmilka-"
 
-#: ../src/richtext/richtextctrl.cpp:331 ../src/osx/textctrl_osx.cpp:582
-#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2334
+#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2456
+#: ../src/osx/textctrl_osx.cpp:582 ../src/richtext/richtextctrl.cpp:331
 msgid "Cu&t"
 msgstr "&Izreži"
 
@@ -2954,7 +2959,13 @@ msgid "Current directory:"
 msgstr "Trenutna mapa:"
 
 # html/helpfrm.cpp:899
-#: ../src/gtk/print.cpp:759
+#: ../src/propgrid/advprops.cpp:1272
+#, fuzzy
+msgid "Custom"
+msgstr "Velikost po meri"
+
+# html/helpfrm.cpp:899
+#: ../src/gtk/print.cpp:218
 msgid "Custom size"
 msgstr "Velikost po meri"
 
@@ -2986,55 +2997,34 @@ msgstr "D, 22 x 34 pal."
 msgid "DDE poke request failed"
 msgstr "Zahteva za poke DDE ni uspela."
 
-#: ../src/common/accelcmn.cpp:79
-msgid "DECIMAL"
-msgstr "DECIMALNO"
-
-#: ../src/common/accelcmn.cpp:47
-msgid "DEL"
-msgstr "BRI"
-
-#: ../src/common/accelcmn.cpp:48
-msgid "DELETE"
-msgstr "BRISALKA"
-
 # common/imagbmp.cpp:257
-#: ../src/common/imagbmp.cpp:1096
+#: ../src/common/imagbmp.cpp:1097
 msgid "DIB Header: Encoding doesn't match bitdepth."
 msgstr "Glava DIB: kodiranje se ne ujema z bitno globino."
 
 # common/imagbmp.cpp:220
-#: ../src/common/imagbmp.cpp:1044
+#: ../src/common/imagbmp.cpp:1045
 msgid "DIB Header: Image height > 32767 pixels for file."
 msgstr "Glava DIB: višina slike > 32767 pikslov za datoteko."
 
 # common/imagbmp.cpp:214
-#: ../src/common/imagbmp.cpp:1036
+#: ../src/common/imagbmp.cpp:1037
 msgid "DIB Header: Image width > 32767 pixels for file."
 msgstr "Glava DIB: širina slike > 32767 pikslov za datoteko."
 
 # common/imagbmp.cpp:234
-#: ../src/common/imagbmp.cpp:1064
+#: ../src/common/imagbmp.cpp:1065
 msgid "DIB Header: Unknown bitdepth in file."
 msgstr "Glava DIB: neznana bitna globina v datoteki."
 
 # common/imagbmp.cpp:243
-#: ../src/common/imagbmp.cpp:1078
+#: ../src/common/imagbmp.cpp:1079
 msgid "DIB Header: Unknown encoding in file."
 msgstr "Glava DIB: neznano kodiranje v datoteki."
-
-# generic/filedlgg.cpp:356
-#: ../src/common/accelcmn.cpp:80
-msgid "DIVIDE"
-msgstr "DELI"
 
 #: ../src/common/paper.cpp:122
 msgid "DL Envelope, 110 x 220 mm"
 msgstr "kuverta DL, 110 x 220 mm"
-
-#: ../src/common/accelcmn.cpp:59
-msgid "DOWN"
-msgstr "NAVZDOL"
 
 #: ../src/richtext/richtextborderspage.cpp:567
 #, fuzzy
@@ -3063,6 +3053,11 @@ msgstr "Poročila o razhroščevanju ni mogoče ustvariti."
 msgid "Debug report generation has failed."
 msgstr "Tvorba poročila o razhroščevanju ni uspela."
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:82
+msgid "Decimal"
+msgstr ""
+
 # generic/fontdlgg.cpp:207
 #: ../src/generic/fontdlgg.cpp:323
 msgid "Decorative"
@@ -3080,8 +3075,15 @@ msgstr "Privzeta pisava"
 msgid "Default printer"
 msgstr "Privzeti tiskalnik"
 
-#: ../src/richtext/richtextbuffer.cpp:7945 ../src/common/stockitem.cpp:152
-#: ../src/stc/stc_i18n.cpp:20
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:49
+#, fuzzy
+msgid "Del"
+msgstr "Izbriši"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:48 ../src/common/stockitem.cpp:152
+#: ../src/richtext/richtextbuffer.cpp:7962 ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "Izbriši"
 
@@ -3092,12 +3094,12 @@ msgid "Delete A&ll"
 msgstr "Izbriši &vse"
 
 # generic/dirdlgg.cpp:191
-#: ../src/richtext/richtextbuffer.cpp:10942
+#: ../src/richtext/richtextbuffer.cpp:10964
 #, fuzzy
 msgid "Delete Column"
 msgstr "Izbriši izbor"
 
-#: ../src/richtext/richtextbuffer.cpp:10892
+#: ../src/richtext/richtextbuffer.cpp:10914
 #, fuzzy
 msgid "Delete Row"
 msgstr "Izbriši"
@@ -3106,7 +3108,7 @@ msgstr "Izbriši"
 msgid "Delete Style"
 msgstr "Izbriši slog"
 
-#: ../src/richtext/richtextctrl.cpp:1300 ../src/richtext/richtextctrl.cpp:1538
+#: ../src/richtext/richtextctrl.cpp:1305 ../src/richtext/richtextctrl.cpp:1544
 msgid "Delete Text"
 msgstr "Izbriši besedilo"
 
@@ -3143,7 +3145,7 @@ msgstr "Odvisnost \"%s\" od modula \"%s\" ne obstaja."
 msgid "Descending"
 msgstr "Padajoče"
 
-#: ../src/generic/dirctrlg.cpp:626
+#: ../src/generic/dirctrlg.cpp:623
 msgid "Desktop"
 msgstr "Namizje"
 
@@ -3224,6 +3226,11 @@ msgstr "Pokaži pogovorno okno z možnostmi"
 msgid "Displays help as you browse the books on the left."
 msgstr "Prikaže pomoč med brskanjem po knjigah na levi."
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:83
+msgid "Divide"
+msgstr ""
+
 #: ../src/msw/mimetype.cpp:737
 msgid ""
 "Do you want to overwrite the command used to %s files with extension \"%s"
@@ -3262,7 +3269,7 @@ msgid "Don't Save"
 msgstr "Ne shrani"
 
 # html/htmlwin.cpp:216
-#: ../src/msw/frame.cpp:122 ../src/html/htmlwin.cpp:614
+#: ../src/html/htmlwin.cpp:618 ../src/msw/frame.cpp:122
 msgid "Done"
 msgstr "Končano"
 
@@ -3292,7 +3299,9 @@ msgid "Doubly used id : %d"
 msgstr "Dvojno uporabljen id: %d"
 
 # html/htmlwin.cpp:216
-#: ../src/generic/fdrepdlg.cpp:152 ../src/common/stockitem.cpp:153
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:62 ../src/common/stockitem.cpp:153
+#: ../src/generic/fdrepdlg.cpp:152
 msgid "Down"
 msgstr "Dol"
 
@@ -3305,31 +3314,11 @@ msgstr "Povleci"
 msgid "E sheet, 34 x 44 in"
 msgstr "E, 34 x 44 pal."
 
-#: ../src/common/accelcmn.cpp:61
-msgid "END"
-msgstr "KONEC"
-
-#: ../src/common/accelcmn.cpp:52
-msgid "ENTER"
-msgstr "VNAŠALKA"
-
 # common/file.cpp:285
 #: ../src/unix/fswatcher_inotify.cpp:548
 #, fuzzy
 msgid "EOF while reading from inotify descriptor"
 msgstr "ni mogoče brati iz deskriptorja %d"
-
-#: ../src/common/accelcmn.cpp:64
-msgid "ESC"
-msgstr "UBEŽNICA"
-
-#: ../src/common/accelcmn.cpp:65
-msgid "ESCAPE"
-msgstr "UBEŽNICA"
-
-#: ../src/common/accelcmn.cpp:73
-msgid "EXECUTE"
-msgstr "IZVRŠEVALKA"
 
 #: ../src/common/stockitem.cpp:154
 msgid "Edit"
@@ -3385,6 +3374,19 @@ msgstr "Omogoči navpično poravnavo."
 #: ../src/richtext/richtextbackgroundpage.cpp:135
 msgid "Enables a background colour."
 msgstr "Omogoči barvo ozadja."
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:64
+msgid "End"
+msgstr ""
+
+# generic/prntdlgg.cpp:113
+# generic/prntdlgg.cpp:127
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:53
+#, fuzzy
+msgid "Enter"
+msgstr "Tiskalnik"
 
 #: ../src/richtext/richtextstyledlg.cpp:934
 #, fuzzy
@@ -3442,12 +3444,13 @@ msgstr ""
 # generic/filedlgg.cpp:1043
 # generic/filedlgg.cpp:1092
 # generic/helpxlp.cpp:241
-#: ../src/generic/dirctrlg.cpp:670 ../src/generic/dirctrlg.cpp:688
-#: ../src/generic/dirctrlg.cpp:699 ../src/generic/dirdlgg.cpp:352
+#: ../src/generic/dirctrlg.cpp:667 ../src/generic/dirctrlg.cpp:685
+#: ../src/generic/dirctrlg.cpp:696 ../src/generic/dirdlgg.cpp:352
 #: ../src/generic/filectrlg.cpp:677 ../src/generic/filectrlg.cpp:791
 #: ../src/generic/filectrlg.cpp:805 ../src/generic/filectrlg.cpp:821
 #: ../src/generic/filectrlg.cpp:1381 ../src/generic/filectrlg.cpp:1412
-#: ../src/gtk/filedlg.cpp:73 ../src/gtk1/fontdlg.cpp:74
+#: ../src/generic/filedlgg.cpp:373 ../src/gtk/filedlg.cpp:73
+#: ../src/gtk1/fontdlg.cpp:74
 msgid "Error"
 msgstr "Napaka"
 
@@ -3467,11 +3470,11 @@ msgstr "Napaka pri zapiranju deskriptorja epoll"
 msgid "Error creating directory"
 msgstr "Napaka pri ustvarjanju mape"
 
-#: ../src/common/imagbmp.cpp:1107
+#: ../src/common/imagbmp.cpp:1108
 msgid "Error in reading image DIB."
 msgstr "Error in reading image DIB."
 
-#: ../src/propgrid/propgrid.cpp:6565
+#: ../src/propgrid/propgrid.cpp:6566
 #, c-format
 msgid "Error in resource: %s"
 msgstr "Napaka v viru: %s"
@@ -3486,7 +3489,7 @@ msgstr "Napaka pri branju konfiguracijskih možnosti."
 msgid "Error saving user configuration data."
 msgstr "Napaka pri shranjevanju podatkov nastavitev uporabnika."
 
-#: ../src/gtk/print.cpp:671
+#: ../src/gtk/print.cpp:691
 msgid "Error while printing: "
 msgstr "Napaka pri tiskanju: "
 
@@ -3494,6 +3497,20 @@ msgstr "Napaka pri tiskanju: "
 #: ../src/common/log.cpp:223
 msgid "Error: "
 msgstr "Napaka:"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:67
+msgid "Esc"
+msgstr ""
+
+# generic/dcpsg.cpp:2262
+# generic/prntdlgg.cpp:441
+# generic/prntdlgg.cpp:637
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:68
+#, fuzzy
+msgid "Escape"
+msgstr "Ležeče"
 
 #: ../src/common/fmapbase.cpp:150
 msgid "Esperanto (ISO-8859-3)"
@@ -3507,12 +3524,13 @@ msgstr ""
 msgid "Executable files (*.exe)|*.exe|"
 msgstr "Izvršljive datoteke (*.exe)|*.exe|"
 
-#: ../src/common/stockitem.cpp:155
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:76 ../src/common/stockitem.cpp:155
 msgid "Execute"
 msgstr ""
 
 # msw/utilsexc.cpp:585
-#: ../src/msw/utilsexc.cpp:887
+#: ../src/msw/utilsexc.cpp:911
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr "Izvajanje ukaza '%s' ni uspelo."
@@ -3542,12 +3560,12 @@ msgstr "razširjena kodna stran Unix za Japonščino (EUC-JP)"
 msgid "Extraction of '%s' into '%s' failed."
 msgstr "Iztis '%s' v '%s' ni uspel."
 
-#: ../src/common/accelcmn.cpp:238 ../src/common/accelcmn.cpp:333
+#: ../src/common/accelcmn.cpp:239 ../src/common/accelcmn.cpp:334
 msgid "F"
 msgstr "F"
 
 # generic/filedlgg.cpp:610
-#: ../src/propgrid/advprops.cpp:640
+#: ../src/propgrid/advprops.cpp:648
 #, fuzzy
 msgid "Face Name"
 msgstr "NovoIme"
@@ -3574,7 +3592,7 @@ msgid "Failed to allocate colour for OpenGL"
 msgstr "Barve za OpenGL ni mogoče dodeliti."
 
 # common/ffile.cpp:182
-#: ../src/unix/displayx11.cpp:292
+#: ../src/unix/displayx11.cpp:285
 msgid "Failed to change video mode"
 msgstr "Sprememba video načina ni uspela."
 
@@ -3595,7 +3613,7 @@ msgid "Failed to clean up debug report directory \"%s\""
 msgstr "Mape poročila o razhroščevanju \"%s\" ni mogoče počistiti."
 
 # common/ffile.cpp:182
-#: ../src/common/filename.cpp:211
+#: ../src/common/filename.cpp:212
 msgid "Failed to close file handle"
 msgstr "Neuspešno zapiranje datotečne ročice."
 
@@ -3672,12 +3690,12 @@ msgid "Failed to create MDI parent frame."
 msgstr "Ustvarjanje starševskega okvira MDI ni uspelo."
 
 # generic/dirdlgg.cpp:550
-#: ../src/common/filename.cpp:1086
+#: ../src/common/filename.cpp:1087
 msgid "Failed to create a temporary file name"
 msgstr "Začasnega imena datoteke ni mogoče ustvariti."
 
 # generic/dirdlgg.cpp:550
-#: ../src/msw/utilsexc.cpp:234
+#: ../src/msw/utilsexc.cpp:243
 msgid "Failed to create an anonymous pipe"
 msgstr "Brezimne cevi ni mogoče ustvariti."
 
@@ -3686,7 +3704,7 @@ msgstr "Brezimne cevi ni mogoče ustvariti."
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # msw/registry.cpp:399
-#: ../src/msw/ole/automtn.cpp:525
+#: ../src/msw/ole/automtn.cpp:528
 #, fuzzy, c-format
 msgid "Failed to create an instance of \"%s\""
 msgstr "Mape \"%s\" ni mogoče ustvariti."
@@ -3767,7 +3785,7 @@ msgstr "Izpraznitev odložišča ni uspela."
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # msw/registry.cpp:399
-#: ../src/unix/displayx11.cpp:266
+#: ../src/unix/displayx11.cpp:263
 msgid "Failed to enumerate video modes"
 msgstr "Preštevanje video-načinov ni uspelo."
 
@@ -3793,7 +3811,7 @@ msgid "Failed to execute curl, please install it in PATH."
 msgstr "curl ni bilo mogoče izvesti, prosimo, namestite ga v poti PATH."
 
 # generic/dirdlgg.cpp:550
-#: ../src/msw/ole/automtn.cpp:508
+#: ../src/msw/ole/automtn.cpp:511
 #, fuzzy, c-format
 msgid "Failed to find CLSID of \"%s\""
 msgstr "Zaslona \"%s\" ni mogoče odpreti."
@@ -3814,13 +3832,13 @@ msgstr "Neuspešno pridobivanje imen ISP: %s"
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # msw/registry.cpp:399
-#: ../src/msw/ole/automtn.cpp:577
+#: ../src/msw/ole/automtn.cpp:580
 #, fuzzy, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
 msgstr "Mape \"%s\" ni mogoče ustvariti."
 
 # msw/clipbrd.cpp:623
-#: ../src/msw/clipbrd.cpp:747
+#: ../src/msw/clipbrd.cpp:745
 msgid "Failed to get data from the clipboard"
 msgstr "Podatkov z odložišča ni mogoče pridobiti."
 
@@ -3952,7 +3970,7 @@ msgid "Failed to modify descriptor %d in epoll descriptor %d"
 msgstr "Deskriptorja %d v deskriptorju epoll %d ni mogoče spremeniti"
 
 # common/ffile.cpp:182
-#: ../src/common/filename.cpp:2687
+#: ../src/common/filename.cpp:2696
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "Sprememba datotečnih časov za '%s' ni uspela."
@@ -3962,13 +3980,13 @@ msgid "Failed to monitor I/O channels"
 msgstr "V/I kanalov ni bilo mogoče nadzirati"
 
 # generic/dirdlgg.cpp:550
-#: ../src/common/filename.cpp:194
+#: ../src/common/filename.cpp:195
 #, c-format
 msgid "Failed to open '%s' for reading"
 msgstr "'%s' ni mogoče odpreti za branje"
 
 # generic/dirdlgg.cpp:550
-#: ../src/common/filename.cpp:199
+#: ../src/common/filename.cpp:200
 #, c-format
 msgid "Failed to open '%s' for writing"
 msgstr "'%s' ni mogoče odpreti za pisanje"
@@ -4003,7 +4021,7 @@ msgstr "Zaslona \"%s\" ni mogoče odpreti."
 #
 # common/file.cpp:580
 # common/file.cpp:583
-#: ../src/common/filename.cpp:1121
+#: ../src/common/filename.cpp:1122
 msgid "Failed to open temporary file."
 msgstr "Začasne datoteke ni mogoče odpreti."
 
@@ -4013,19 +4031,19 @@ msgid "Failed to open the clipboard."
 msgstr "Odložišča ni mogoče odpreti."
 
 # html/helpdata.cpp:353
-#: ../src/common/translation.cpp:1170
+#: ../src/common/translation.cpp:1183
 #, fuzzy, c-format
 msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "Množinskih oblik ni mogoče razčleniti: '%s'"
 
 # generic/dirdlgg.cpp:550
-#: ../src/unix/mediactrl.cpp:1268
+#: ../src/unix/mediactrl.cpp:1266
 #, fuzzy, c-format
 msgid "Failed to prepare playing \"%s\"."
 msgstr "Zaslona \"%s\" ni mogoče odpreti."
 
 # msw/clipbrd.cpp:539
-#: ../src/msw/clipbrd.cpp:647
+#: ../src/msw/clipbrd.cpp:645
 msgid "Failed to put data on the clipboard"
 msgstr "Podatkov ni mogoče postaviti na odložišče."
 
@@ -4057,7 +4075,7 @@ msgid "Failed to redirect child process input/output"
 msgstr "Preusmeritev vhoda/izhoda podrejenega procesa ni uspela."
 
 # generic/dirdlgg.cpp:550
-#: ../src/msw/utilsexc.cpp:696
+#: ../src/msw/utilsexc.cpp:720
 msgid "Failed to redirect the child process IO"
 msgstr "Preusmeritev otroških procesov IO ni uspela."
 
@@ -4127,12 +4145,12 @@ msgid "Failed to rename the registry key '%s' to '%s'."
 msgstr "Preimenovanje ključa registra '%s' v '%s' ni uspelo."
 
 # msw/clipbrd.cpp:428
-#: ../src/msw/clipbrd.cpp:497
+#: ../src/msw/clipbrd.cpp:495
 msgid "Failed to retrieve data from the clipboard."
 msgstr "Podatkov iz odložišča ni mogoče pridobiti."
 
 # generic/dirdlgg.cpp:550
-#: ../src/common/filename.cpp:2783
+#: ../src/common/filename.cpp:2792
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr "Neuspešno pridobivanje datotečnih časov za '%s'"
@@ -4143,7 +4161,7 @@ msgid "Failed to retrieve text of RAS error message"
 msgstr "Besedila sporočila o napaki RAS ni mogoče pridobiti."
 
 # msw/clipbrd.cpp:652
-#: ../src/msw/clipbrd.cpp:784
+#: ../src/msw/clipbrd.cpp:782
 msgid "Failed to retrieve the supported clipboard formats"
 msgstr "Podprte oblike zapisa odložišča ni mogoče pridobiti."
 
@@ -4171,7 +4189,7 @@ msgid "Failed to set FTP transfer mode to %s."
 msgstr "Prenosnega načina FTP ni mogoče nastaviti na %s."
 
 # msw/clipbrd.cpp:300
-#: ../src/msw/clipbrd.cpp:373
+#: ../src/msw/clipbrd.cpp:371
 msgid "Failed to set clipboard data."
 msgstr "Neuspešno določanje podatkov za odložišče."
 
@@ -4188,7 +4206,7 @@ msgid "Failed to set process priority"
 msgstr "Prioritete niti %d ni bilo mogoče nastaviti."
 
 # common/ffile.cpp:182
-#: ../src/common/file.cpp:576
+#: ../src/common/file.cpp:587
 msgid "Failed to set temporary file permissions"
 msgstr "Neuspešno nastavljanje pravic za trenutno datoteko"
 
@@ -4244,7 +4262,7 @@ msgid "Failed to terminate the dialup connection: %s"
 msgstr "Prekinitev klicne povezave ni uspela: %s"
 
 # common/ffile.cpp:182
-#: ../src/common/filename.cpp:2702
+#: ../src/common/filename.cpp:2711
 #, c-format
 msgid "Failed to touch the file '%s'"
 msgstr "Datoteke '%s' se ni mogoče dotakniti."
@@ -4284,13 +4302,13 @@ msgid "Failed to write to lock file '%s'"
 msgstr "V datoteko zaklopa '%s' ni mogoče pisati."
 
 # generic/filedlgg.cpp:534
-#: ../src/propgrid/propgrid.cpp:172
+#: ../src/propgrid/propgrid.cpp:173
 #, fuzzy
 msgid "False"
 msgstr "Neresnično"
 
 # html/helpfrm.cpp:899
-#: ../src/propgrid/advprops.cpp:658
+#: ../src/propgrid/advprops.cpp:666
 msgid "Family"
 msgstr "Družina"
 
@@ -4312,7 +4330,7 @@ msgid "File \"%s\" could not be opened for writing."
 msgstr "Datoteke \"%s\" ni mogoče odpreti za pisanje."
 
 # generic/filedlgg.cpp:1074
-#: ../src/gtk/filedlg.cpp:56
+#: ../src/generic/filedlgg.cpp:362 ../src/gtk/filedlg.cpp:56
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "Datoteka %s že obstaja, jo resnično želite prepisati?"
@@ -4340,7 +4358,7 @@ msgid "File '%s' couldn't be renamed '%s'"
 msgstr "Datoteke '%s' ni mogoče preimenovati v '%s'."
 
 # common/textcmn.cpp:94
-#: ../src/richtext/richtextctrl.cpp:2774 ../src/common/textcmn.cpp:935
+#: ../src/common/textcmn.cpp:935 ../src/richtext/richtextctrl.cpp:2783
 msgid "File couldn't be loaded."
 msgstr "Datoteke ni mogoče naložiti."
 
@@ -4352,13 +4370,13 @@ msgstr "Pogovorno okno izbirnika datotek je spodletelo, napaka %0lx."
 # common/docview.cpp:296
 # common/docview.cpp:332
 # common/docview.cpp:1388
-#: ../src/common/docview.cpp:1771
+#: ../src/common/docview.cpp:1778
 msgid "File error"
 msgstr "Datotečna napaka"
 
 # generic/dirdlgg.cpp:286
 # generic/filedlgg.cpp:731
-#: ../src/generic/dirctrlg.cpp:688 ../src/generic/filectrlg.cpp:805
+#: ../src/generic/dirctrlg.cpp:685 ../src/generic/filectrlg.cpp:805
 msgid "File name exists already."
 msgstr "Ime datoteke že obstaja."
 
@@ -4419,8 +4437,8 @@ msgstr "Disketa"
 msgid "Folio, 8 1/2 x 13 in"
 msgstr "Folio, 8 1/2 x 13 pal."
 
-#: ../src/richtext/richtextformatdlg.cpp:325 ../src/osx/carbon/fontdlg.cpp:457
-#: ../src/common/stockitem.cpp:194
+#: ../src/common/stockitem.cpp:194 ../src/osx/carbon/fontdlg.cpp:457
+#: ../src/richtext/richtextformatdlg.cpp:325
 msgid "Font"
 msgstr "Pisava"
 
@@ -4497,7 +4515,7 @@ msgstr "GIF: premalo spomina."
 msgid "GIF: unknown error!!!"
 msgstr "GIF: neznana napaka!!!"
 
-#: ../src/gtk/window.cpp:4339
+#: ../src/gtk/window.cpp:4485
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -4552,7 +4570,7 @@ msgid "Go one level up in document hierarchy"
 msgstr "Pojdi nivo višje v hierarhiji dokumenta"
 
 # generic/filedlgg.cpp:875
-#: ../src/generic/filedlgg.cpp:223 ../src/generic/dirdlgg.cpp:136
+#: ../src/generic/dirdlgg.cpp:136 ../src/generic/filedlgg.cpp:223
 msgid "Go to home directory"
 msgstr "Pojdi v domačo mapo"
 
@@ -4577,20 +4595,12 @@ msgstr ""
 msgid "Gzip not supported by this version of zlib"
 msgstr "Ta različica zlib ne podpira Gzip"
 
-#: ../src/common/accelcmn.cpp:75
-msgid "HELP"
-msgstr "POMOČ"
-
-#: ../src/common/accelcmn.cpp:60
-msgid "HOME"
-msgstr "HOME"
-
 #: ../src/html/helpwnd.cpp:1552
 msgid "HTML Help Project (*.hhp)|*.hhp|"
 msgstr "projekt pomoči HTML (*.hhp)|*.hhp|"
 
 # html/htmlwin.cpp:251
-#: ../src/html/htmlwin.cpp:662
+#: ../src/html/htmlwin.cpp:666
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "HTML sidro %s ne obstaja"
@@ -4611,9 +4621,10 @@ msgstr "hebrejsko (ISO-8859-8)"
 # generic/proplist.cpp:528
 # html/helpfrm.cpp:208
 # msw/mdi.cpp:1283
-#: ../include/wx/msgdlg.h:275 ../src/osx/button_osx.cpp:39
+#. TRANSLATORS: Name of keyboard key
+#: ../include/wx/msgdlg.h:280 ../src/common/accelcmn.cpp:78
 #: ../src/common/stockitem.cpp:163 ../src/html/helpdlg.cpp:66
-#: ../src/html/helpfrm.cpp:116
+#: ../src/html/helpfrm.cpp:116 ../src/osx/button_osx.cpp:39
 msgid "Help"
 msgstr "Pomoč"
 
@@ -4663,12 +4674,12 @@ msgstr "Pomoč: %s"
 
 # generic/helpwxht.cpp:251
 # html/helpctrl.cpp:38
-#: ../src/osx/menu_osx.cpp:623
+#: ../src/osx/menu_osx.cpp:635
 #, c-format
 msgid "Hide %s"
 msgstr "Skrij %s"
 
-#: ../src/osx/menu_osx.cpp:625
+#: ../src/osx/menu_osx.cpp:637
 msgid "Hide Others"
 msgstr "Skrij druge"
 
@@ -4677,12 +4688,14 @@ msgid "Hide this notification message."
 msgstr "Skrij to obvestilo."
 
 # generic/dirdlgg.cpp:212
-#: ../src/generic/dirdlgg.cpp:98 ../src/common/stockitem.cpp:164
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:63 ../src/common/stockitem.cpp:164
+#: ../src/generic/dirdlgg.cpp:98
 msgid "Home"
 msgstr "Domov"
 
 # generic/dirdlgg.cpp:536
-#: ../src/generic/dirctrlg.cpp:624
+#: ../src/generic/dirctrlg.cpp:621
 msgid "Home directory"
 msgstr "Domača mapa"
 
@@ -4692,26 +4705,26 @@ msgstr "Domača mapa"
 msgid "How the object will float relative to the text."
 msgstr "Kako bo plaval predmet glede na besedilo."
 
-#: ../src/common/imagbmp.cpp:1122
+#: ../src/common/imagbmp.cpp:1123
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: napaka pri branju maske DIB."
 
-#: ../src/common/imagbmp.cpp:1237 ../src/common/imagbmp.cpp:1298
-#: ../src/common/imagbmp.cpp:1309 ../src/common/imagbmp.cpp:1322
-#: ../src/common/imagbmp.cpp:1367 ../src/common/imagbmp.cpp:1379
-#: ../src/common/imagbmp.cpp:1390
+#: ../src/common/imagbmp.cpp:1238 ../src/common/imagbmp.cpp:1299
+#: ../src/common/imagbmp.cpp:1310 ../src/common/imagbmp.cpp:1323
+#: ../src/common/imagbmp.cpp:1368 ../src/common/imagbmp.cpp:1380
+#: ../src/common/imagbmp.cpp:1391
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: napaka pri pisanju v datoteko slike!"
 
-#: ../src/common/imagbmp.cpp:1202
+#: ../src/common/imagbmp.cpp:1203
 msgid "ICO: Image too tall for an icon."
 msgstr "ICO: slika je previsoka za ikono."
 
-#: ../src/common/imagbmp.cpp:1210
+#: ../src/common/imagbmp.cpp:1211
 msgid "ICO: Image too wide for an icon."
 msgstr "ICO: slika je preširoka za ikono."
 
-#: ../src/common/imagbmp.cpp:1470
+#: ../src/common/imagbmp.cpp:1475
 msgid "ICO: Invalid icon index."
 msgstr "ICO: neveljaven indeks ikone."
 
@@ -4731,14 +4744,6 @@ msgstr "IFF: premalo spomina."
 #: ../src/common/imagiff.cpp:749
 msgid "IFF: unknown error!!!"
 msgstr "IFF: neznana napaka!!!"
-
-#: ../src/common/accelcmn.cpp:50
-msgid "INS"
-msgstr "VST"
-
-#: ../src/common/accelcmn.cpp:51
-msgid "INSERT"
-msgstr "VSTAVI"
 
 #: ../src/common/fmapbase.cpp:197
 msgid "ISO-2022-JP"
@@ -4796,7 +4801,7 @@ msgstr "Neveljavno število parametrov za metodo ustvarjanja"
 
 # generic/dirdlgg.cpp:268
 # generic/filedlgg.cpp:717
-#: ../src/generic/dirctrlg.cpp:670 ../src/generic/filectrlg.cpp:791
+#: ../src/generic/dirctrlg.cpp:667 ../src/generic/filectrlg.cpp:791
 msgid "Illegal directory name."
 msgstr "Neveljavno ime mape."
 
@@ -4820,7 +4825,7 @@ msgid "Image is not of type %s."
 msgstr "Slika ni vrste %s."
 
 # msw/textctrl.cpp:219
-#: ../src/msw/textctrl.cpp:413
+#: ../src/msw/textctrl.cpp:501
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
@@ -4854,7 +4859,7 @@ msgstr "Pravic za datoteko '%s' ni mogoče nastaviti."
 msgid "Incorrect GIF frame size (%u, %d) for the frame #%u"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:638
+#: ../src/msw/ole/automtn.cpp:641
 msgid "Incorrect number of arguments."
 msgstr "Nepravilno število argumentov."
 
@@ -4885,27 +4890,35 @@ msgid "Initialization failed in post init, aborting."
 msgstr "Inicializacija ni uspela v po-inicializaciji, sledi prekinitev."
 
 # html/helpfrm.cpp:372
-#: ../src/richtext/richtextsymboldlg.cpp:472
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:52
+#, fuzzy
+msgid "Ins"
+msgstr "Vdelano"
+
+# html/helpfrm.cpp:372
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:51 ../src/richtext/richtextsymboldlg.cpp:472
 msgid "Insert"
 msgstr "Vstavi"
 
-#: ../src/richtext/richtextbuffer.cpp:7791
+#: ../src/richtext/richtextbuffer.cpp:7808
 msgid "Insert Field"
 msgstr "Vstavi polje"
 
-#: ../src/richtext/richtextbuffer.cpp:7702
-#: ../src/richtext/richtextbuffer.cpp:8655
+#: ../src/richtext/richtextbuffer.cpp:7719
+#: ../src/richtext/richtextbuffer.cpp:8677
 msgid "Insert Image"
 msgstr "Vstavi sliko"
 
-#: ../src/richtext/richtextbuffer.cpp:7749
+#: ../src/richtext/richtextbuffer.cpp:7766
 msgid "Insert Object"
 msgstr "Vstavi predmet"
 
-#: ../src/richtext/richtextctrl.cpp:1241 ../src/richtext/richtextctrl.cpp:1448
-#: ../src/richtext/richtextbuffer.cpp:7544
-#: ../src/richtext/richtextbuffer.cpp:7574
-#: ../src/richtext/richtextbuffer.cpp:7618
+#: ../src/richtext/richtextbuffer.cpp:7561
+#: ../src/richtext/richtextbuffer.cpp:7591
+#: ../src/richtext/richtextbuffer.cpp:7635
+#: ../src/richtext/richtextctrl.cpp:1246 ../src/richtext/richtextctrl.cpp:1454
 msgid "Insert Text"
 msgstr "Vstavi besedilo"
 
@@ -4958,7 +4971,7 @@ msgid "Invalid lock file '%s'."
 msgstr "Datoteka '%s' ni veljavna datoteka zaklopa."
 
 # common/intl.cpp:412
-#: ../src/common/translation.cpp:1111
+#: ../src/common/translation.cpp:1124
 msgid "Invalid message catalog."
 msgstr "Neveljaven katalog sporočil."
 
@@ -4981,8 +4994,8 @@ msgid "Invalid value %ld for a boolean key \"%s\" in config file."
 msgstr ""
 
 # generic/fontdlgg.cpp:213
-#: ../src/generic/fontdlgg.cpp:329 ../src/richtext/richtextfontpage.cpp:333
-#: ../src/osx/carbon/fontdlg.cpp:531 ../src/common/stockitem.cpp:168
+#: ../src/common/stockitem.cpp:168 ../src/generic/fontdlgg.cpp:329
+#: ../src/osx/carbon/fontdlg.cpp:531 ../src/richtext/richtextfontpage.cpp:333
 msgid "Italic"
 msgstr "Kurzivno"
 
@@ -5075,109 +5088,147 @@ msgstr "KOI8-R"
 msgid "KOI8-U"
 msgstr "KOI8-U"
 
-#: ../src/common/accelcmn.cpp:254 ../src/common/accelcmn.cpp:336
+#: ../src/common/accelcmn.cpp:255 ../src/common/accelcmn.cpp:337
 msgid "KP_"
 msgstr "KP_"
 
-#: ../src/common/accelcmn.cpp:103
-msgid "KP_ADD"
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:104
+#, fuzzy
+msgid "KP_Add"
 msgstr "KP_DODAJ"
 
-#: ../src/common/accelcmn.cpp:98
-msgid "KP_BEGIN"
-msgstr "KP_ZAČNI"
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:99
+msgid "KP_Begin"
+msgstr ""
 
-#: ../src/common/accelcmn.cpp:106
-msgid "KP_DECIMAL"
-msgstr "KP_DECIMALNO"
-
-#: ../src/common/accelcmn.cpp:100
-msgid "KP_DELETE"
-msgstr "KP_DELETE"
-
+#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:107
-msgid "KP_DIVIDE"
-msgstr "KP_DELJENO"
+msgid "KP_Decimal"
+msgstr ""
 
-#: ../src/common/accelcmn.cpp:92
-msgid "KP_DOWN"
-msgstr "KP_DOL"
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:101
+#, fuzzy
+msgid "KP_Delete"
+msgstr "Izbriši"
 
-#: ../src/common/accelcmn.cpp:97
-msgid "KP_END"
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:108
+msgid "KP_Divide"
+msgstr ""
+
+# html/htmlwin.cpp:216
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:93
+#, fuzzy
+msgid "KP_Down"
+msgstr "Dol"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:98
+#, fuzzy
+msgid "KP_End"
 msgstr "KP_KONEC"
 
-#: ../src/common/accelcmn.cpp:87
-msgid "KP_ENTER"
-msgstr "KP_VNAŠALKA"
-
-#: ../src/common/accelcmn.cpp:101
-msgid "KP_EQUAL"
-msgstr "KP_JEENAKO"
-
+# generic/prntdlgg.cpp:113
+# generic/prntdlgg.cpp:127
+#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:88
-msgid "KP_HOME"
-msgstr "KP_HOME"
+#, fuzzy
+msgid "KP_Enter"
+msgstr "Tiskalnik"
 
-#: ../src/common/accelcmn.cpp:99
-msgid "KP_INSERT"
-msgstr "KP_INSERT"
-
-#: ../src/common/accelcmn.cpp:89
-msgid "KP_LEFT"
-msgstr "KP_LEVO"
-
+#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
-msgid "KP_MULTIPLY"
-msgstr "KP_KRAT"
+msgid "KP_Equal"
+msgstr ""
 
+# generic/dirdlgg.cpp:212
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:89
+#, fuzzy
+msgid "KP_Home"
+msgstr "Domov"
+
+# html/helpfrm.cpp:372
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:100
+#, fuzzy
+msgid "KP_Insert"
+msgstr "Vstavi"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:90
+#, fuzzy
+msgid "KP_Left"
+msgstr "Levo"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:103
+msgid "KP_Multiply"
+msgstr ""
+
+# msw/mdi.cpp:188
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:97
+#, fuzzy
+msgid "KP_Next"
+msgstr "Naslednji"
+
+#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
-msgid "KP_NEXT"
-msgstr "KP_NASLEDNJI"
+msgid "KP_PageDown"
+msgstr ""
 
-#: ../src/common/accelcmn.cpp:96
-msgid "KP_PAGEDOWN"
-msgstr "KP_NASLEDNJASTRAN"
-
+#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:94
-msgid "KP_PAGEUP"
-msgstr "KP_PREJŠNJASTRAN"
+msgid "KP_PageUp"
+msgstr ""
 
-#: ../src/common/accelcmn.cpp:93
-msgid "KP_PRIOR"
-msgstr "KP_PREJŠNJI"
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:96
+msgid "KP_Prior"
+msgstr ""
 
-#: ../src/common/accelcmn.cpp:91
-msgid "KP_RIGHT"
-msgstr "KP_DESNO"
+# generic/fontdlgg.cpp:216
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:92
+#, fuzzy
+msgid "KP_Right"
+msgstr "Desno"
 
-#: ../src/common/accelcmn.cpp:104
-msgid "KP_SEPARATOR"
-msgstr "KP_LOČILO"
-
-#: ../src/common/accelcmn.cpp:85
-msgid "KP_SPACE"
-msgstr "KP_PRESLEDNICA"
-
+#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
-msgid "KP_SUBTRACT"
-msgstr "KP_MINUS"
+msgid "KP_Separator"
+msgstr ""
 
+#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:86
-msgid "KP_TAB"
+msgid "KP_Space"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:106
+msgid "KP_Subtract"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:87
+#, fuzzy
+msgid "KP_Tab"
 msgstr "KP_TABULATORKA"
 
-#: ../src/common/accelcmn.cpp:90
-msgid "KP_UP"
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:91
+#, fuzzy
+msgid "KP_Up"
 msgstr "KP_GOR"
 
 #: ../src/richtext/richtextindentspage.cpp:270
 msgid "L&ine spacing:"
 msgstr "&Razmik med vrsticami:"
-
-#: ../src/common/accelcmn.cpp:56
-msgid "LEFT"
-msgstr "LEVO"
 
 # generic/dcpsg.cpp:2262
 # generic/prntdlgg.cpp:441
@@ -5209,12 +5260,13 @@ msgstr[3] ""
 msgid "Ledger, 17 x 11 in"
 msgstr "Ledger, 17 x 11 in"
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:59 ../src/richtext/richtextbulletspage.cpp:199
+#: ../src/richtext/richtextbulletspage.cpp:202
+#: ../src/richtext/richtextbulletspage.cpp:203
 #: ../src/richtext/richtextliststylepage.cpp:249
 #: ../src/richtext/richtextliststylepage.cpp:252
 #: ../src/richtext/richtextliststylepage.cpp:253
-#: ../src/richtext/richtextbulletspage.cpp:199
-#: ../src/richtext/richtextbulletspage.cpp:202
-#: ../src/richtext/richtextbulletspage.cpp:203
 #: ../src/richtext/richtextsizepage.cpp:249
 msgid "Left"
 msgstr "Levo"
@@ -5321,7 +5373,7 @@ msgid "Load %s file"
 msgstr "Naloži datoteko %s"
 
 # html/htmlwin.cpp:187
-#: ../src/html/htmlwin.cpp:578
+#: ../src/html/htmlwin.cpp:582
 msgid "Loading : "
 msgstr "Nalaganje: "
 
@@ -5345,23 +5397,19 @@ msgstr "Zaklenjena datoteka '%s' ima nepravilna dovoljenja."
 msgid "Log saved to the file '%s'."
 msgstr "Dnevnik je bil shranjen v datoteko '%s'"
 
-#: ../src/richtext/richtextliststylepage.cpp:484
 #: ../src/richtext/richtextbulletspage.cpp:289
+#: ../src/richtext/richtextliststylepage.cpp:484
 msgid "Lower case letters"
 msgstr "Male črke"
 
-#: ../src/richtext/richtextliststylepage.cpp:486
 #: ../src/richtext/richtextbulletspage.cpp:291
+#: ../src/richtext/richtextliststylepage.cpp:486
 msgid "Lower case roman numerals"
 msgstr "Majhne rimske številke"
 
 #: ../src/gtk/mdi.cpp:422 ../src/gtk1/mdi.cpp:431
 msgid "MDI child"
 msgstr "Otrok MDI"
-
-#: ../src/common/accelcmn.cpp:68
-msgid "MENU"
-msgstr "MENI"
 
 #: ../src/msw/helpchm.cpp:56
 msgid ""
@@ -5546,7 +5594,7 @@ msgid "MacVietnamese"
 msgstr "Mac, vietnamski"
 
 # generic/dirdlgg.cpp:191
-#: ../src/propgrid/advprops.cpp:2013
+#: ../src/propgrid/advprops.cpp:2038
 msgid "Make a selection:"
 msgstr "Opravite izbor:"
 
@@ -5568,7 +5616,7 @@ msgstr "Najv. višina:"
 msgid "Max width:"
 msgstr "Najv. širina:"
 
-#: ../src/unix/mediactrl.cpp:1006
+#: ../src/unix/mediactrl.cpp:1004
 #, c-format
 msgid "Media playback error: %s"
 msgstr "Napaka pri predvajanju datoteke: %s"
@@ -5579,7 +5627,8 @@ msgstr "Napaka pri predvajanju datoteke: %s"
 msgid "Memory VFS already contains file '%s'!"
 msgstr "Spominski VFS že vsebuje datoteko '%s'"
 
-#: ../src/msw/frame.cpp:347
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:71 ../src/msw/frame.cpp:354
 msgid "Menu"
 msgstr "Meni"
 
@@ -5591,7 +5640,7 @@ msgstr "Sporočilo"
 msgid "Metal theme"
 msgstr "Metalna tema"
 
-#: ../src/msw/ole/automtn.cpp:655
+#: ../src/msw/ole/automtn.cpp:658
 msgid "Method or property not found."
 msgstr "Metode ali lastnosti ni mogoče najti."
 
@@ -5607,7 +5656,7 @@ msgstr "Najm. širina:"
 msgid "Min width:"
 msgstr "Najm. širina:"
 
-#: ../src/msw/ole/automtn.cpp:671
+#: ../src/msw/ole/automtn.cpp:674
 msgid "Missing a required parameter."
 msgstr "Zahtevani parameter manjka."
 
@@ -5651,13 +5700,9 @@ msgstr "Premakne predmet v naslednji odstavek."
 msgid "Moves the object to the previous paragraph."
 msgstr "Premakne predmet v prejšnji odstavek."
 
-#: ../src/richtext/richtextbuffer.cpp:9596
+#: ../src/richtext/richtextbuffer.cpp:9618
 msgid "Multiple Cell Properties"
 msgstr "Lastnosti več vrstic"
-
-#: ../src/common/accelcmn.cpp:81
-msgid "NUM_LOCK"
-msgstr "NUM_LOCK"
 
 # generic/filedlgg.cpp:533
 #: ../src/generic/filectrlg.cpp:459
@@ -5730,7 +5775,7 @@ msgstr "Naslednja stran"
 
 # common/dlgcmn.cpp:111
 # common/dlgcmn.cpp:121
-#: ../include/wx/msgdlg.h:272 ../src/common/stockitem.cpp:177
+#: ../include/wx/msgdlg.h:277 ../src/common/stockitem.cpp:177
 #: ../src/motif/msgdlg.cpp:196
 msgid "No"
 msgstr "Ne"
@@ -5879,7 +5924,7 @@ msgstr "Običajna pisava<br>in <u>podčrtana</u>. "
 msgid "Normal font:"
 msgstr "Običajna pisava:"
 
-#: ../src/propgrid/props.cpp:897
+#: ../src/propgrid/props.cpp:1017
 #, c-format
 msgid "Not %s"
 msgstr "Ni %s"
@@ -5902,12 +5947,136 @@ msgstr "Note, 8 1/2 x 11 pal."
 msgid "Notice"
 msgstr "Obvestilo"
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:103
+msgid "Num *"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:104
+msgid "Num +"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:105
+msgid "Num ,"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:106
+msgid "Num -"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:107
+msgid "Num ."
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:108
+msgid "Num /"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:102
+msgid "Num ="
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:99
+msgid "Num Begin"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:101
+#, fuzzy
+msgid "Num Delete"
+msgstr "Izbriši"
+
+# html/htmlwin.cpp:216
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:93
+#, fuzzy
+msgid "Num Down"
+msgstr "Dol"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:98
+msgid "Num End"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:88
+msgid "Num Enter"
+msgstr ""
+
+# generic/dirdlgg.cpp:212
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:89
+#, fuzzy
+msgid "Num Home"
+msgstr "Domov"
+
+# html/helpfrm.cpp:372
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:100
+#, fuzzy
+msgid "Num Insert"
+msgstr "Vstavi"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:84
+msgid "Num Lock"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:95
+msgid "Num Page Down"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:94
+msgid "Num Page Up"
+msgstr ""
+
+# generic/fontdlgg.cpp:216
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:92
+#, fuzzy
+msgid "Num Right"
+msgstr "Desno"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:86
+msgid "Num Space"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:87
+msgid "Num Tab"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:91
+msgid "Num Up"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:90
+msgid "Num left"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:84
+msgid "Num_lock"
+msgstr ""
+
 #: ../src/osx/carbon/dataview.cpp:900
 msgid "Number of columns could not be determined."
 msgstr "Števila stolpcev ni mogoče ugotoviti."
 
-#: ../src/richtext/richtextliststylepage.cpp:487
 #: ../src/richtext/richtextbulletspage.cpp:292
+#: ../src/richtext/richtextliststylepage.cpp:487
 msgid "Numbered outline"
 msgstr "Oštevilčen oris"
 
@@ -5920,14 +6089,14 @@ msgstr "Oštevilčen oris"
 # generic/prntdlgg.cpp:467
 # generic/proplist.cpp:511
 # html/helpfrm.cpp:909
-#: ../include/wx/msgdlg.h:273 ../src/richtext/richtextstyledlg.cpp:297
-#: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:489
-#: ../src/msw/msgdlg.cpp:795 ../src/msw/dialog.cpp:120
-#: ../src/gtk1/fontdlg.cpp:138
+#: ../include/wx/msgdlg.h:278 ../src/common/stockitem.cpp:178
+#: ../src/gtk1/fontdlg.cpp:138 ../src/msw/dialog.cpp:120
+#: ../src/msw/msgdlg.cpp:476 ../src/msw/msgdlg.cpp:782
+#: ../src/richtext/richtextstyledlg.cpp:297
 msgid "OK"
 msgstr "V redu"
 
-#: ../src/msw/ole/automtn.cpp:695
+#: ../src/msw/ole/automtn.cpp:698
 #, c-format
 msgid "OLE Automation error in %s: %s"
 msgstr ""
@@ -5937,7 +6106,7 @@ msgstr ""
 msgid "Object Properties"
 msgstr "Lastnosti predmeta"
 
-#: ../src/msw/ole/automtn.cpp:663
+#: ../src/msw/ole/automtn.cpp:666
 msgid "Object implementation does not support named arguments."
 msgstr ""
 
@@ -5945,7 +6114,7 @@ msgstr ""
 msgid "Objects must have an id attribute"
 msgstr "Objekti morajo imeti atribut id"
 
-#: ../src/common/docview.cpp:1755 ../src/common/docview.cpp:1797
+#: ../src/common/docview.cpp:1762 ../src/common/docview.cpp:1804
 msgid "Open File"
 msgstr "Odpri datoteko"
 
@@ -5975,25 +6144,25 @@ msgstr "Funkcija OpenGL \"%s\" ni uspela: %s (napaka %d)"
 # generic/dirdlgg.cpp:605
 # generic/filedlgg.cpp:625
 # generic/filedlgg.cpp:744
-#: ../src/generic/dirctrlg.cpp:699 ../src/generic/dirdlgg.cpp:352
+#: ../src/generic/dirctrlg.cpp:696 ../src/generic/dirdlgg.cpp:352
 #: ../src/generic/filectrlg.cpp:677 ../src/generic/filectrlg.cpp:821
 msgid "Operation not permitted."
 msgstr "Operacija ni dovoljena."
 
 # common/filefn.cpp:1086
-#: ../src/common/cmdline.cpp:735
+#: ../src/common/cmdline.cpp:747
 #, c-format
 msgid "Option '%s' can't be negated"
 msgstr "Možnosti '%s' ni mogoče negirati."
 
 # common/cmdline.cpp:610
-#: ../src/common/cmdline.cpp:899
+#: ../src/common/cmdline.cpp:911
 #, c-format
 msgid "Option '%s' requires a value."
 msgstr "Možnost '%s' zahteva vrednost."
 
 # common/cmdline.cpp:671
-#: ../src/common/cmdline.cpp:982
+#: ../src/common/cmdline.cpp:994
 #, c-format
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "Možnosti '%s':'%s' ni mogoče pretvoriti v datum."
@@ -6022,21 +6191,9 @@ msgstr "Oris"
 msgid "Outset"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:659
+#: ../src/msw/ole/automtn.cpp:662
 msgid "Overflow while coercing argument values."
 msgstr ""
-
-#: ../src/common/accelcmn.cpp:84
-msgid "PAGEDOWN"
-msgstr "NASLEDNJASTRAN"
-
-#: ../src/common/accelcmn.cpp:83
-msgid "PAGEUP"
-msgstr "PREJŠNJASTRAN"
-
-#: ../src/common/accelcmn.cpp:69
-msgid "PAUSE"
-msgstr "PREMOR"
 
 # common/imagpcx.cpp:448
 # common/imagpcx.cpp:471
@@ -6069,14 +6226,6 @@ msgstr "PCX: neznana napaka!"
 #: ../src/common/imagpcx.cpp:458
 msgid "PCX: version number too low"
 msgstr "PCX: številka različice prenizka"
-
-#: ../src/common/accelcmn.cpp:55
-msgid "PGDN"
-msgstr "PGDN"
-
-#: ../src/common/accelcmn.cpp:54
-msgid "PGUP"
-msgstr "PGUP"
 
 # common/imagpnm.cpp:96
 #: ../src/common/imagpnm.cpp:91
@@ -6198,10 +6347,6 @@ msgstr "kuverta PRC #9, 229 x 324 mm"
 msgid "PRC Envelope #9 Rotated 324 x 229 mm"
 msgstr "kuverta PRC #9 rotirano, 324 x 229 mm"
 
-#: ../src/common/accelcmn.cpp:72
-msgid "PRINT"
-msgstr "NATISNI"
-
 #: ../src/richtext/richtextmarginspage.cpp:286
 msgid "Padding"
 msgstr ""
@@ -6218,15 +6363,43 @@ msgstr "Stran %d"
 msgid "Page %d of %d"
 msgstr "Stran %d od %d"
 
+# common/prntbase.cpp:731
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:56
+#, fuzzy
+msgid "Page Down"
+msgstr "Stran %d"
+
 # generic/prntdlgg.cpp:604
-#: ../src/gtk/print.cpp:774
+#: ../src/gtk/print.cpp:795
 msgid "Page Setup"
 msgstr "Nastavitev strani"
 
+# common/prntbase.cpp:731
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:55
+#, fuzzy
+msgid "Page Up"
+msgstr "Stran %d"
+
 # generic/prntdlgg.cpp:604
-#: ../src/generic/prntdlgg.cpp:828 ../src/common/prntbase.cpp:467
+#: ../src/common/prntbase.cpp:467 ../src/generic/prntdlgg.cpp:828
 msgid "Page setup"
 msgstr "Nastavitev strani"
+
+# html/htmlwin.cpp:216
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:56
+#, fuzzy
+msgid "PageDown"
+msgstr "Dol"
+
+# generic/prntdlgg.cpp:164
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:55
+#, fuzzy
+msgid "PageUp"
+msgstr "Strani"
 
 # generic/prntdlgg.cpp:164
 #: ../src/generic/prntdlgg.cpp:216
@@ -6255,7 +6428,7 @@ msgid "Passing an unknown object to GetObject"
 msgstr "Podajanje neznanega predmeta k GetObject"
 
 # common/cmdline.cpp:912
-#: ../src/richtext/richtextctrl.cpp:3206 ../src/common/stockitem.cpp:180
+#: ../src/common/stockitem.cpp:180 ../src/richtext/richtextctrl.cpp:3215
 #: ../src/stc/stc_i18n.cpp:19
 msgid "Paste"
 msgstr "Prilepi"
@@ -6265,8 +6438,13 @@ msgstr "Prilepi"
 msgid "Paste selection"
 msgstr "Prilepi izbor"
 
-#: ../src/richtext/richtextliststylepage.cpp:222
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:72
+msgid "Pause"
+msgstr ""
+
 #: ../src/richtext/richtextbulletspage.cpp:172
+#: ../src/richtext/richtextliststylepage.cpp:222
 msgid "Peri&od"
 msgstr "Pi&ka"
 
@@ -6275,8 +6453,18 @@ msgstr "Pi&ka"
 msgid "Permissions"
 msgstr "Dovoljenja"
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:58
+msgid "PgDn"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:57
+msgid "PgUp"
+msgstr ""
+
 # html/helpfrm.cpp:512
-#: ../src/richtext/richtextbuffer.cpp:12271
+#: ../src/richtext/richtextbuffer.cpp:12308
 msgid "Picture Properties"
 msgstr "Lastnosti slike"
 
@@ -6290,7 +6478,7 @@ msgid "Please choose a valid font."
 msgstr "Prosimo, izberite veljavno pisavo."
 
 # generic/filedlgg.cpp:1092
-#: ../src/gtk/filedlg.cpp:72
+#: ../src/generic/filedlgg.cpp:373 ../src/gtk/filedlg.cpp:72
 msgid "Please choose an existing file."
 msgstr "Prosimo, izberite obstoječo datoteko."
 
@@ -6325,7 +6513,7 @@ msgid "Please wait while printing..."
 msgstr "Prosimo, počakajte, dokler poteka tiskanje ..."
 
 # html/helpfrm.cpp:899
-#: ../src/propgrid/advprops.cpp:631
+#: ../src/propgrid/advprops.cpp:639
 msgid "Point Size"
 msgstr "Velikost točke"
 
@@ -6367,7 +6555,7 @@ msgstr "PostScript datoteka"
 msgid "Preferences"
 msgstr "Možnosti"
 
-#: ../src/osx/menu_osx.cpp:614
+#: ../src/osx/menu_osx.cpp:626
 msgid "Preferences..."
 msgstr "Možnosti ..."
 
@@ -6376,8 +6564,8 @@ msgid "Preparing"
 msgstr "Priprava"
 
 # html/helpfrm.cpp:903
-#: ../src/generic/fontdlgg.cpp:455 ../src/osx/carbon/fontdlg.cpp:560
-#: ../src/html/helpwnd.cpp:1235
+#: ../src/generic/fontdlgg.cpp:455 ../src/html/helpwnd.cpp:1235
+#: ../src/osx/carbon/fontdlg.cpp:560
 msgid "Preview:"
 msgstr "Predogled:"
 
@@ -6388,14 +6576,16 @@ msgstr "Prejšnja stran"
 
 # generic/prntdlgg.cpp:113
 # generic/prntdlgg.cpp:127
-#: ../src/generic/prntdlgg.cpp:143 ../src/generic/prntdlgg.cpp:157
-#: ../src/common/prntbase.cpp:409 ../src/common/prntbase.cpp:1511
-#: ../src/gtk/print.cpp:584 ../src/gtk/print.cpp:597
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:75 ../src/common/prntbase.cpp:409
+#: ../src/common/prntbase.cpp:1511 ../src/generic/prntdlgg.cpp:143
+#: ../src/generic/prntdlgg.cpp:157 ../src/gtk/print.cpp:605
+#: ../src/gtk/print.cpp:618
 msgid "Print"
 msgstr "Tiskanje"
 
 # common/docview.cpp:897
-#: ../include/wx/prntbase.h:395 ../src/common/docview.cpp:1250
+#: ../include/wx/prntbase.h:395 ../src/common/docview.cpp:1257
 msgid "Print Preview"
 msgstr "Predogled tiskanja"
 
@@ -6427,7 +6617,7 @@ msgstr "Bravno tiskanje"
 msgid "Print previe&w..."
 msgstr "Predogle&d tiskanja ..."
 
-#: ../src/common/docview.cpp:1244
+#: ../src/common/docview.cpp:1251
 msgid "Print preview creation failed."
 msgstr "Tvorba predogleda tiskanja ni uspela."
 
@@ -6525,8 +6715,8 @@ msgstr "Tiskanje ..."
 
 # generic/prntdlgg.cpp:113
 # generic/prntdlgg.cpp:127
-#: ../include/wx/richtext/richtextprint.h:109 ../include/wx/prntbase.h:263
-#: ../src/common/docview.cpp:2114
+#: ../include/wx/prntbase.h:263 ../include/wx/richtext/richtextprint.h:109
+#: ../src/common/docview.cpp:2121
 #, fuzzy
 msgid "Printout"
 msgstr "Tiskanje"
@@ -6558,7 +6748,7 @@ msgid "Property"
 msgstr "Lastnost"
 
 # common/prntbase.cpp:120
-#: ../src/propgrid/propgrid.cpp:3146 ../src/propgrid/propgrid.cpp:3278
+#: ../src/propgrid/propgrid.cpp:3147 ../src/propgrid/propgrid.cpp:3279
 msgid "Property Error"
 msgstr "Napaka lastnosti"
 
@@ -6576,7 +6766,7 @@ msgstr "Vprašanje"
 msgid "Quit"
 msgstr "Izhod"
 
-#: ../src/osx/menu_osx.cpp:631
+#: ../src/osx/menu_osx.cpp:643
 #, c-format
 msgid "Quit %s"
 msgstr "Izhod iz %s"
@@ -6586,16 +6776,8 @@ msgstr "Izhod iz %s"
 msgid "Quit this program"
 msgstr "Zapri ta program"
 
-#: ../src/common/accelcmn.cpp:53
-msgid "RETURN"
-msgstr "RETURN"
-
-#: ../src/common/accelcmn.cpp:57
-msgid "RIGHT"
-msgstr "DESNO"
-
 # common/utilscmn.cpp:464
-#: ../src/common/accelcmn.cpp:327
+#: ../src/common/accelcmn.cpp:328
 #, fuzzy
 msgid "RawCtrl+"
 msgstr "Krmilka-"
@@ -6678,7 +6860,7 @@ msgstr ""
 msgid "Remove"
 msgstr "Odstrani"
 
-#: ../src/richtext/richtextctrl.cpp:1516
+#: ../src/richtext/richtextctrl.cpp:1522
 msgid "Remove Bullet"
 msgstr "Odstrani oznako"
 
@@ -6698,7 +6880,7 @@ msgstr ""
 msgid "Rendering failed."
 msgstr "Upodabljanje ni uspelo."
 
-#: ../src/richtext/richtextbuffer.cpp:4280
+#: ../src/richtext/richtextbuffer.cpp:4288
 msgid "Renumber List"
 msgstr "Ponovno oštevilči seznam"
 
@@ -6711,7 +6893,7 @@ msgstr "Ponovno oštevilči seznam"
 msgid "Rep&lace"
 msgstr "&Zamenjaj"
 
-#: ../src/richtext/richtextctrl.cpp:3366 ../src/common/stockitem.cpp:188
+#: ../src/common/stockitem.cpp:188 ../src/richtext/richtextctrl.cpp:3375
 msgid "Replace"
 msgstr "Zamenjaj"
 
@@ -6742,10 +6924,15 @@ msgid "Required information entry is empty."
 msgstr ""
 
 # common/intl.cpp:412
-#: ../src/common/translation.cpp:1966
+#: ../src/common/translation.cpp:1979
 #, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "Vir '%s' ni veljaven katalog sporočil."
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:54
+msgid "Return"
+msgstr ""
 
 #: ../src/common/stockitem.cpp:189
 msgid "Revert to Saved"
@@ -6758,8 +6945,9 @@ msgid "Ridge"
 msgstr "Desno"
 
 # generic/fontdlgg.cpp:216
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:60 ../src/richtext/richtextbulletspage.cpp:201
 #: ../src/richtext/richtextliststylepage.cpp:251
-#: ../src/richtext/richtextbulletspage.cpp:201
 #: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
 msgstr "Desno"
@@ -6781,42 +6969,18 @@ msgstr "Desno poravnaj besedilo."
 msgid "Roman"
 msgstr "serifna"
 
-#: ../src/richtext/richtextliststylepage.cpp:299
 #: ../src/richtext/richtextbulletspage.cpp:252
+#: ../src/richtext/richtextliststylepage.cpp:299
 msgid "S&tandard bullet name:"
 msgstr "&Navadno ime oznake:"
 
-#: ../src/common/accelcmn.cpp:82
-msgid "SCROLL_LOCK"
-msgstr "SCROLL_LOCK"
-
-#: ../src/common/accelcmn.cpp:71
-msgid "SELECT"
-msgstr "IZBERI"
-
-#: ../src/common/accelcmn.cpp:77
-msgid "SEPARATOR"
-msgstr "LOČILO"
-
-#: ../src/common/accelcmn.cpp:74
-msgid "SNAPSHOT"
-msgstr "SNAPSHOT"
-
-#: ../src/common/accelcmn.cpp:62
-msgid "SPACE"
-msgstr "PRESLEDNICA"
-
-#: ../src/common/accelcmn.cpp:257 ../src/common/accelcmn.cpp:339
+#: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:340
 msgid "SPECIAL"
 msgstr "POSEBNO"
 
-#: ../src/common/accelcmn.cpp:78
-msgid "SUBTRACT"
-msgstr "MINUS"
-
 # generic/logg.cpp:473
 # generic/logg.cpp:774
-#: ../src/common/stockitem.cpp:190 ../src/common/sizer.cpp:2702
+#: ../src/common/sizer.cpp:2702 ../src/common/stockitem.cpp:190
 msgid "Save"
 msgstr "Shrani"
 
@@ -6862,10 +7026,20 @@ msgstr "Shrani vsebino dnevnika v datoteko"
 msgid "Script"
 msgstr "Skript"
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:85
+msgid "Scroll Lock"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:85
+msgid "Scroll_lock"
+msgstr ""
+
 # generic/helpwxht.cpp:161
 # html/helpfrm.cpp:414
 # html/helpfrm.cpp:434
-#: ../src/generic/srchctlg.cpp:67 ../src/html/helpwnd.cpp:548
+#: ../src/generic/srchctlg.cpp:56 ../src/html/helpwnd.cpp:548
 #: ../src/html/helpwnd.cpp:563
 msgid "Search"
 msgstr "Iskanje"
@@ -6902,25 +7076,32 @@ msgid "Searching..."
 msgstr "Iskanje v teku ..."
 
 # generic/dirdlgg.cpp:191
-#: ../src/generic/dirctrlg.cpp:546
+#: ../src/generic/dirctrlg.cpp:543
 msgid "Sections"
 msgstr "Razdelki"
 
 # common/ffile.cpp:221
-#: ../src/common/ffile.cpp:220
+#: ../src/common/ffile.cpp:236
 #, c-format
 msgid "Seek error on file '%s'"
 msgstr "Napaka pri iskanju v datoteki '%s'"
 
-#: ../src/common/ffile.cpp:210
+#: ../src/common/ffile.cpp:226
 #, c-format
 msgid "Seek error on file '%s' (large files not supported by stdio)"
 msgstr "Najdi napako na datoteki '%s' (velike datoteke niso podprte v stdio)"
 
+# generic/dirdlgg.cpp:191
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:74
+#, fuzzy
+msgid "Select"
+msgstr "Izbira"
+
 # common/docview.cpp:1371
 # common/docview.cpp:1422
-#: ../src/richtext/richtextctrl.cpp:336 ../src/osx/textctrl_osx.cpp:587
-#: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2339
+#: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2461
+#: ../src/osx/textctrl_osx.cpp:587 ../src/richtext/richtextctrl.cpp:336
 msgid "Select &All"
 msgstr "Izberi &vse"
 
@@ -6931,12 +7112,12 @@ msgid "Select All"
 msgstr "Izberi vse"
 
 # common/docview.cpp:1469
-#: ../src/common/docview.cpp:1877
+#: ../src/common/docview.cpp:1884
 msgid "Select a document template"
 msgstr "Izberi predlogo dokumenta"
 
 # common/docview.cpp:1494
-#: ../src/common/docview.cpp:1951
+#: ../src/common/docview.cpp:1958
 msgid "Select a document view"
 msgstr "Izberi pogled dokumenta"
 
@@ -6965,17 +7146,22 @@ msgstr "Izbira"
 msgid "Selects the list level to edit."
 msgstr "Izbere raven seznama za urejanje."
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:80
+msgid "Separator"
+msgstr ""
+
 # common/cmdline.cpp:627
-#: ../src/common/cmdline.cpp:918
+#: ../src/common/cmdline.cpp:930
 #, c-format
 msgid "Separator expected after the option '%s'."
 msgstr "Po možnosti '%s' je pričakovano ločilo."
 
-#: ../src/osx/menu_osx.cpp:618
+#: ../src/osx/menu_osx.cpp:630
 msgid "Services"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:10818
+#: ../src/richtext/richtextbuffer.cpp:10840
 msgid "Set Cell Style"
 msgstr "Določite slog celice"
 
@@ -6983,7 +7169,7 @@ msgstr "Določite slog celice"
 msgid "SetProperty called w/o valid setter"
 msgstr ""
 
-#: ../src/common/filename.cpp:2638
+#: ../src/common/filename.cpp:2647
 msgid "Setting directory access times is not supported under this OS version"
 msgstr ""
 
@@ -6999,7 +7185,7 @@ msgstr ""
 "Najdenih je več aktivnih klicnih povezav, izbrana bo naključna med njimi."
 
 # common/utilscmn.cpp:468
-#: ../src/common/accelcmn.cpp:324
+#: ../src/common/accelcmn.cpp:325
 msgid "Shift+"
 msgstr "Dvigalka-"
 
@@ -7014,7 +7200,7 @@ msgid "Show &hidden files"
 msgstr "Pokaži skrite &datoteke"
 
 # html/helpfrm.cpp:331
-#: ../src/osx/menu_osx.cpp:626
+#: ../src/osx/menu_osx.cpp:638
 msgid "Show All"
 msgstr "Pokaži vse"
 
@@ -7047,10 +7233,10 @@ msgstr "Pokaži/skrij navigacijski pano"
 msgid "Shows a Unicode subset."
 msgstr "Pokaže podmnožico Unicode."
 
-#: ../src/richtext/richtextliststylepage.cpp:472
-#: ../src/richtext/richtextliststylepage.cpp:474
 #: ../src/richtext/richtextbulletspage.cpp:276
 #: ../src/richtext/richtextbulletspage.cpp:278
+#: ../src/richtext/richtextliststylepage.cpp:472
+#: ../src/richtext/richtextliststylepage.cpp:474
 msgid "Shows a preview of the bullet settings."
 msgstr "Pokaže predogled nastavitev oznak."
 
@@ -7107,6 +7293,11 @@ msgstr "Levo kurzivno"
 msgid "Small C&apitals"
 msgstr "Ve&like začetnice"
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:77
+msgid "Snapshot"
+msgstr ""
+
 # generic/fontdlgg.cpp:217
 #: ../src/richtext/richtextborderspage.cpp:565
 #, fuzzy
@@ -7116,7 +7307,7 @@ msgstr "Zapolnjeno"
 # common/docview.cpp:342
 # common/docview.cpp:354
 # common/docview.cpp:1390
-#: ../src/common/docview.cpp:1773
+#: ../src/common/docview.cpp:1780
 msgid "Sorry, could not open this file."
 msgstr "Oprostite, te datoteke ni moč odpreti."
 
@@ -7136,7 +7327,7 @@ msgstr "Ime je že zasedeno. Izberite drugo."
 # common/docview.cpp:342
 # common/docview.cpp:354
 # common/docview.cpp:1390
-#: ../src/common/docview.cpp:1796
+#: ../src/common/docview.cpp:1803
 msgid "Sorry, the format for this file is unknown."
 msgstr "Oprostite, ta zapis datoteke je neznan."
 
@@ -7150,6 +7341,13 @@ msgid "Sound file '%s' is in unsupported format."
 msgstr "Zvočna datoteka '%s' je v nepodprtem zapisu."
 
 # html/helpfrm.cpp:628
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:65
+#, fuzzy
+msgid "Space"
+msgstr "Razmik"
+
+# html/helpfrm.cpp:628
 #: ../src/richtext/richtextliststylepage.cpp:467
 msgid "Spacing"
 msgstr "Razmik"
@@ -7158,8 +7356,8 @@ msgstr "Razmik"
 msgid "Spell Check"
 msgstr "Preveri črkovanje"
 
-#: ../src/richtext/richtextliststylepage.cpp:490
 #: ../src/richtext/richtextbulletspage.cpp:295
+#: ../src/richtext/richtextliststylepage.cpp:490
 msgid "Standard"
 msgstr "Navadno"
 
@@ -7193,7 +7391,7 @@ msgstr "Prečrtano"
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr "Niz v barvo: nepravilna specifikacija barve: %s"
 
-#: ../src/richtext/richtextformatdlg.cpp:319 ../src/propgrid/advprops.cpp:647
+#: ../src/propgrid/advprops.cpp:655 ../src/richtext/richtextformatdlg.cpp:319
 msgid "Style"
 msgstr "Slog"
 
@@ -7209,6 +7407,11 @@ msgstr "Slog:"
 #: ../src/richtext/richtextfontpage.cpp:312
 msgid "Subscrip&t"
 msgstr "Po&dpisano"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:81
+msgid "Subtract"
+msgstr ""
 
 # generic/fontdlgg.cpp:209
 #: ../src/richtext/richtextfontpage.cpp:305
@@ -7228,14 +7431,14 @@ msgstr "SuperB/SuperB/A3, 305 x 487 mm"
 msgid "Swiss"
 msgstr "neserifna"
 
-#: ../src/richtext/richtextliststylepage.cpp:488
 #: ../src/richtext/richtextbulletspage.cpp:293
+#: ../src/richtext/richtextliststylepage.cpp:488
 msgid "Symbol"
 msgstr "Simbol"
 
 # html/helpfrm.cpp:881
-#: ../src/richtext/richtextliststylepage.cpp:288
 #: ../src/richtext/richtextbulletspage.cpp:240
+#: ../src/richtext/richtextliststylepage.cpp:288
 msgid "Symbol &font:"
 msgstr "P&isava posebnih znakov:"
 
@@ -7243,10 +7446,6 @@ msgstr "P&isava posebnih znakov:"
 #, fuzzy
 msgid "Symbols"
 msgstr "Simbol"
-
-#: ../src/common/accelcmn.cpp:63
-msgid "TAB"
-msgstr "TAB"
 
 # common/imagtiff.cpp:192
 # common/imagtiff.cpp:203
@@ -7280,8 +7479,14 @@ msgstr "TIFF: napaka pri zapisovanju slike."
 msgid "TIFF: Image size is abnormally big."
 msgstr "TIFF: slika je nenaravno velika."
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:66
+#, fuzzy
+msgid "Tab"
+msgstr "Tabulatorji"
+
 # html/helpfrm.cpp:512
-#: ../src/richtext/richtextbuffer.cpp:11099
+#: ../src/richtext/richtextbuffer.cpp:11121
 msgid "Table Properties"
 msgstr "Lastnosti tabele"
 
@@ -7303,7 +7508,7 @@ msgid "Teletype"
 msgstr "strojna"
 
 # common/docview.cpp:1469
-#: ../src/common/docview.cpp:1878
+#: ../src/common/docview.cpp:1885
 msgid "Templates"
 msgstr "Šablone"
 
@@ -7323,10 +7528,10 @@ msgstr "Strežnik FTP ne podpira pasivnega načina."
 msgid "The FTP server doesn't support the PORT command."
 msgstr "Strežnik FTP ne podpira ukaza PORT."
 
-#: ../src/richtext/richtextliststylepage.cpp:215
-#: ../src/richtext/richtextliststylepage.cpp:217
 #: ../src/richtext/richtextbulletspage.cpp:164
 #: ../src/richtext/richtextbulletspage.cpp:166
+#: ../src/richtext/richtextliststylepage.cpp:215
+#: ../src/richtext/richtextliststylepage.cpp:217
 msgid "The available bullet styles."
 msgstr "Slogi oznak, ki so na voljo."
 
@@ -7381,14 +7586,14 @@ msgstr "Velikost pisave."
 msgid "The bottom position."
 msgstr "Spodnji položaj."
 
-#: ../src/richtext/richtextliststylepage.cpp:254
-#: ../src/richtext/richtextliststylepage.cpp:256
-#: ../src/richtext/richtextliststylepage.cpp:275
-#: ../src/richtext/richtextliststylepage.cpp:277
 #: ../src/richtext/richtextbulletspage.cpp:204
 #: ../src/richtext/richtextbulletspage.cpp:206
 #: ../src/richtext/richtextbulletspage.cpp:227
 #: ../src/richtext/richtextbulletspage.cpp:229
+#: ../src/richtext/richtextliststylepage.cpp:254
+#: ../src/richtext/richtextliststylepage.cpp:256
+#: ../src/richtext/richtextliststylepage.cpp:275
+#: ../src/richtext/richtextliststylepage.cpp:277
 msgid "The bullet character."
 msgstr "Znak za oznake."
 
@@ -7440,7 +7645,7 @@ msgid ""
 msgstr ""
 
 # common/docview.cpp:1676
-#: ../src/common/docview.cpp:1184
+#: ../src/common/docview.cpp:1191
 #, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -7499,7 +7704,7 @@ msgstr "Slog pisave."
 msgid "The font weight."
 msgstr "Odebeljenost pisave."
 
-#: ../src/common/docview.cpp:1465
+#: ../src/common/docview.cpp:1472
 #, c-format
 msgid "The format of file '%s' couldn't be determined."
 msgstr "Vrste datoteke '%s' ni mogoče ugotoviti."
@@ -7544,7 +7749,7 @@ msgstr "Razmik med vrsticami."
 msgid "The list item number."
 msgstr "Številka elementa seznama."
 
-#: ../src/msw/ole/automtn.cpp:667
+#: ../src/msw/ole/automtn.cpp:670
 #, fuzzy
 msgid "The locale ID is unknown."
 msgstr "ID krajevnih nastavitev ni znan."
@@ -7597,10 +7802,6 @@ msgstr[3] "Prejšnje sporočilo ponovljeno %lu-krat."
 msgid "The previous message repeated once."
 msgstr "Prejšnje sporočilo ponovljeno enkrat."
 
-#: ../src/gtk/print.cpp:931 ../src/gtk/print.cpp:1114
-msgid "The print dialog returned an error."
-msgstr "Pogovorno okno za tiskanje je vrnilo napako."
-
 #: ../src/richtext/richtextsymboldlg.cpp:462
 #: ../src/richtext/richtextsymboldlg.cpp:464
 msgid "The range to show."
@@ -7617,7 +7818,7 @@ msgstr ""
 "jih, prosimo, odznačite in odstranjene bodo iz poročila.\n"
 
 # common/cmdline.cpp:761
-#: ../src/common/cmdline.cpp:1083
+#: ../src/common/cmdline.cpp:1095
 #, c-format
 msgid "The required parameter '%s' was not specified."
 msgstr "Zahtevani parameter '%s' ni bil podan."
@@ -7676,7 +7877,7 @@ msgstr "Slog, na katerem temelji ta slog."
 msgid "The style preview."
 msgstr "Predogled sloga."
 
-#: ../src/msw/ole/automtn.cpp:683
+#: ../src/msw/ole/automtn.cpp:686
 msgid "The system cannot find the file specified."
 msgstr "Sistem ne more najti navedene datoteke."
 
@@ -7692,7 +7893,7 @@ msgid "The tab positions."
 msgstr "Položaji tabulatorjev."
 
 # common/textcmn.cpp:121
-#: ../src/richtext/richtextctrl.cpp:2791
+#: ../src/richtext/richtextctrl.cpp:2800
 msgid "The text couldn't be saved."
 msgstr "Besedila ni mogoče shraniti."
 
@@ -7718,7 +7919,7 @@ msgid "The top position."
 msgstr "Vrhnji položaj."
 
 # common/cmdline.cpp:740
-#: ../src/common/cmdline.cpp:1061
+#: ../src/common/cmdline.cpp:1073
 #, c-format
 msgid "The value for the option '%s' must be specified."
 msgstr "Vrednost opcije '%s' mora biti podana."
@@ -7733,15 +7934,11 @@ msgstr ""
 "je zastarela, prosimo, nadgradite jo (manjka naslednja zahtevana funkcija: "
 "%s)."
 
-#: ../src/gtk/print.cpp:959
-msgid "The wxGtkPrinterDC cannot be used."
-msgstr "wxGtkPrinterDC ni mogoče uporabiti."
-
 #: ../src/osx/carbon/dataview.cpp:1338
 msgid "There is no column or renderer for the specified column index."
 msgstr "Za navedeno kazalo stolpca ni stolpca ali upodobitelja."
 
-#: ../src/richtext/richtextprint.cpp:614 ../src/html/htmprint.cpp:735
+#: ../src/html/htmprint.cpp:735 ../src/richtext/richtextprint.cpp:614
 msgid ""
 "There was a problem during page setup: you may need to set a default printer."
 msgstr ""
@@ -7764,7 +7961,7 @@ msgstr "To ni %s."
 msgid "This platform does not support background transparency."
 msgstr "Ta platforma ne podpira prosojnosti ozadja."
 
-#: ../src/gtk/window.cpp:4368
+#: ../src/gtk/window.cpp:4514
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -7845,7 +8042,7 @@ msgstr "Za:"
 msgid "Toggle renderer cannot render value; value type: "
 msgstr "Upodobitelj preklopa ne more upodobiti vrednosti; vrsta vrednosti: "
 
-#: ../src/richtext/richtextbuffer.cpp:8087
+#: ../src/richtext/richtextbuffer.cpp:8104
 msgid "Too many EndStyle calls!"
 msgstr "Preveč klicev EndStyle!"
 
@@ -7854,8 +8051,8 @@ msgid "Too many colours in PNG, the image may be slightly blurred."
 msgstr "V PNG je preveč barv, slika bo morda malce neostra."
 
 # generic/prntdlgg.cpp:191
-#: ../src/richtext/richtextsizepage.cpp:286
-#: ../src/richtext/richtextsizepage.cpp:290 ../src/common/stockitem.cpp:200
+#: ../src/common/stockitem.cpp:200 ../src/richtext/richtextsizepage.cpp:286
+#: ../src/richtext/richtextsizepage.cpp:290
 #, fuzzy
 msgid "Top"
 msgstr "Vrh"
@@ -7873,7 +8070,7 @@ msgstr "Prevajalci"
 msgid "Translators"
 msgstr "Prevajalci"
 
-#: ../src/propgrid/propgrid.cpp:173
+#: ../src/propgrid/propgrid.cpp:174
 #, fuzzy
 msgid "True"
 msgstr "Resnično"
@@ -7903,13 +8100,13 @@ msgstr "Vpišite ime pisave."
 msgid "Type a size in points."
 msgstr "Vnesite velikost v točkah."
 
-#: ../src/msw/ole/automtn.cpp:679
+#: ../src/msw/ole/automtn.cpp:682
 #, c-format
 msgid "Type mismatch in argument %u."
 msgstr ""
 
-#: ../src/common/xtixml.cpp:356 ../src/common/xtixml.cpp:509
-#: ../src/common/xtistrm.cpp:322
+#: ../src/common/xtistrm.cpp:322 ../src/common/xtixml.cpp:356
+#: ../src/common/xtixml.cpp:509
 msgid "Type must have enum - long conversion"
 msgstr "Tip mora imeti pretvorbo enum - long"
 
@@ -7919,10 +8116,6 @@ msgid ""
 "Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT "
 "\"%s\"."
 msgstr ""
-
-#: ../src/common/accelcmn.cpp:58
-msgid "UP"
-msgstr "GOR"
 
 #: ../src/common/paper.cpp:134
 msgid "US Std Fanfold, 14 7/8 x 11 in"
@@ -7970,7 +8163,7 @@ msgstr "Datotečne ročice za '%s' ni mogoče zapreti."
 
 # common/imagbmp.cpp:266
 # common/imagbmp.cpp:278
-#: ../include/wx/msw/private/fswatcher.h:245
+#: ../include/wx/msw/private/fswatcher.h:273
 #, fuzzy
 msgid "Unable to create I/O completion port"
 msgstr "Deskriptorja epoll ni mogoče ustvariti"
@@ -7993,7 +8186,7 @@ msgstr "Niza DDE ni mogoče ustvariti."
 msgid "Unable to create kqueue instance"
 msgstr "Niza DDE ni mogoče ustvariti."
 
-#: ../include/wx/msw/private/fswatcher.h:234
+#: ../include/wx/msw/private/fswatcher.h:262
 msgid "Unable to dequeue completion packet"
 msgstr ""
 
@@ -8021,7 +8214,7 @@ msgid "Unable to open path '%s'"
 msgstr "Poti '%s' ni mogoče odpreti."
 
 # html/htmlwin.cpp:175
-#: ../src/html/htmlwin.cpp:564
+#: ../src/html/htmlwin.cpp:568
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "Zahtevanega HTML dokumenta ni mogoče odpreti: %s"
@@ -8030,7 +8223,7 @@ msgstr "Zahtevanega HTML dokumenta ni mogoče odpreti: %s"
 msgid "Unable to play sound asynchronously."
 msgstr "Zvoka ni bilo mogoče predvajati nesinhrono."
 
-#: ../include/wx/msw/private/fswatcher.h:212
+#: ../include/wx/msw/private/fswatcher.h:213
 msgid "Unable to post completion status"
 msgstr ""
 
@@ -8069,8 +8262,8 @@ msgid "Underline"
 msgstr "Podčrtaj"
 
 # generic/fontdlgg.cpp:242
-#: ../src/richtext/richtextfontpage.cpp:341 ../src/osx/carbon/fontdlg.cpp:540
-#: ../src/propgrid/advprops.cpp:655
+#: ../src/osx/carbon/fontdlg.cpp:540 ../src/propgrid/advprops.cpp:663
+#: ../src/richtext/richtextfontpage.cpp:341
 msgid "Underlined"
 msgstr "Podčrtano"
 
@@ -8084,7 +8277,7 @@ msgid "Undo last action"
 msgstr "Razveljavi zadnje dejanje"
 
 # common/cmdline.cpp:712
-#: ../src/common/cmdline.cpp:864
+#: ../src/common/cmdline.cpp:876
 #, c-format
 msgid "Unexpected characters following option '%s'."
 msgstr "Parametru '%s' sledijo nepričakovani znaki."
@@ -8095,7 +8288,7 @@ msgid "Unexpected event for \"%s\": no matching watch descriptor."
 msgstr ""
 
 # common/cmdline.cpp:712
-#: ../src/common/cmdline.cpp:1024
+#: ../src/common/cmdline.cpp:1036
 #, c-format
 msgid "Unexpected parameter '%s'"
 msgstr "Nepričakovan parameter '%s'"
@@ -8333,13 +8526,13 @@ msgid "Unknown encoding (%d)"
 msgstr "nepoznano kodiranje (%d)"
 
 # msw/dde.cpp:1030
-#: ../src/msw/ole/automtn.cpp:691
+#: ../src/msw/ole/automtn.cpp:694
 #, c-format
 msgid "Unknown error %08x"
 msgstr "Neznana napaka %08x"
 
 # common/cmdline.cpp:518
-#: ../src/msw/ole/automtn.cpp:650
+#: ../src/msw/ole/automtn.cpp:653
 msgid "Unknown exception"
 msgstr "Nepoznana izjema"
 
@@ -8348,17 +8541,17 @@ msgid "Unknown image data format."
 msgstr "Neznana vrsta slikovnih podatkov."
 
 # common/cmdline.cpp:496
-#: ../src/common/cmdline.cpp:749
+#: ../src/common/cmdline.cpp:761
 #, c-format
 msgid "Unknown long option '%s'"
 msgstr "Nepoznana dolga opcija '%s'"
 
-#: ../src/msw/ole/automtn.cpp:634
+#: ../src/msw/ole/automtn.cpp:637
 msgid "Unknown name or named argument."
 msgstr "Neznano ime ali imenovani argument."
 
 # common/cmdline.cpp:518
-#: ../src/common/cmdline.cpp:764 ../src/common/cmdline.cpp:786
+#: ../src/common/cmdline.cpp:776 ../src/common/cmdline.cpp:798
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "Nepoznana opcija '%s'"
@@ -8377,13 +8570,13 @@ msgstr "Neujemajoči '{' v vnosu za vsto mime %s."
 msgid "Unnamed command"
 msgstr "Neimenovan ukaz"
 
-#: ../src/propgrid/propgrid.cpp:398
+#: ../src/propgrid/propgrid.cpp:399
 msgid "Unspecified"
 msgstr "Nedoločeno"
 
 # msw/clipbrd.cpp:268
 # msw/clipbrd.cpp:369
-#: ../src/msw/clipbrd.cpp:271 ../src/msw/clipbrd.cpp:439
+#: ../src/msw/clipbrd.cpp:271 ../src/msw/clipbrd.cpp:437
 msgid "Unsupported clipboard format."
 msgstr "Nepodprta oblika zapisa za odložišče."
 
@@ -8392,22 +8585,24 @@ msgstr "Nepodprta oblika zapisa za odložišče."
 msgid "Unsupported theme '%s'."
 msgstr "Nepodprta tema '%s'."
 
-#: ../src/generic/fdrepdlg.cpp:152 ../src/common/stockitem.cpp:205
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:61 ../src/common/stockitem.cpp:205
+#: ../src/generic/fdrepdlg.cpp:152
 msgid "Up"
 msgstr "Navzgor"
 
-#: ../src/richtext/richtextliststylepage.cpp:483
 #: ../src/richtext/richtextbulletspage.cpp:288
+#: ../src/richtext/richtextliststylepage.cpp:483
 msgid "Upper case letters"
 msgstr "Velike začetnice"
 
-#: ../src/richtext/richtextliststylepage.cpp:485
 #: ../src/richtext/richtextbulletspage.cpp:290
+#: ../src/richtext/richtextliststylepage.cpp:485
 msgid "Upper case roman numerals"
 msgstr "Velike rimske številke"
 
 # common/cmdline.cpp:797
-#: ../src/common/cmdline.cpp:1155
+#: ../src/common/cmdline.cpp:1167
 #, c-format
 msgid "Usage: %s"
 msgstr "Uporaba: %s"
@@ -8432,17 +8627,18 @@ msgstr "Konflikt pri preverjanju"
 msgid "Value"
 msgstr "Vrednost"
 
-#: ../src/propgrid/props.cpp:384
+#: ../src/propgrid/props.cpp:387 ../src/propgrid/props.cpp:496
 #, c-format
 msgid "Value must be %s or higher."
 msgstr "Vrednost mora biti enaka %s ali višja."
 
-#: ../src/propgrid/props.cpp:411
+#: ../src/propgrid/props.cpp:414 ../src/propgrid/props.cpp:523
 #, c-format
 msgid "Value must be %s or less."
 msgstr "Vrednost mora biti enaka %s ali manjša."
 
-#: ../src/propgrid/props.cpp:388 ../src/propgrid/props.cpp:415
+#: ../src/propgrid/props.cpp:391 ../src/propgrid/props.cpp:418
+#: ../src/propgrid/props.cpp:500 ../src/propgrid/props.cpp:527
 #, c-format
 msgid "Value must be between %s and %s."
 msgstr "Vnesite številko strani med %s in %s."
@@ -8469,21 +8665,9 @@ msgid "View files as a list view"
 msgstr "Prikaži datoteke kot seznam"
 
 # common/docview.cpp:1494
-#: ../src/common/docview.cpp:1952
+#: ../src/common/docview.cpp:1959
 msgid "Views"
 msgstr "Pogledi"
-
-#: ../src/common/accelcmn.cpp:108
-msgid "WINDOWS_LEFT"
-msgstr "WINDOWS_LEVO"
-
-#: ../src/common/accelcmn.cpp:110
-msgid "WINDOWS_MENU"
-msgstr "WINDOWS_MENI"
-
-#: ../src/common/accelcmn.cpp:109
-msgid "WINDOWS_RIGHT"
-msgstr "WINDOWS_DESNO"
 
 #: ../src/unix/epolldispatcher.cpp:213
 #, c-format
@@ -8496,7 +8680,7 @@ msgid "Warning: "
 msgstr "Opozorilo:"
 
 # generic/fontdlgg.cpp:216
-#: ../src/propgrid/advprops.cpp:651
+#: ../src/propgrid/advprops.cpp:659
 msgid "Weight"
 msgstr "Debelina"
 
@@ -8527,54 +8711,54 @@ msgid "Win32 theme"
 msgstr "Tema Win32"
 
 # msw/utils.cpp:545
-#: ../src/msw/utils.cpp:1220
+#: ../src/msw/utils.cpp:1238
 msgid "Win32s on Windows 3.1"
 msgstr "Win32s na Windows 3.1"
 
 # msw/utils.cpp:549
-#: ../src/msw/utils.cpp:1270
+#: ../src/msw/utils.cpp:1288
 msgid "Windows 2000"
 msgstr "Windows 2000"
 
 # msw/utils.cpp:549
-#: ../src/msw/utils.cpp:1302
+#: ../src/msw/utils.cpp:1320
 msgid "Windows 7"
 msgstr "Windows 7"
 
 # msw/utils.cpp:549
-#: ../src/msw/utils.cpp:1308
+#: ../src/msw/utils.cpp:1326
 #, fuzzy
 msgid "Windows 8"
 msgstr "Windows 98"
 
 # msw/utils.cpp:549
-#: ../src/msw/utils.cpp:1314
+#: ../src/msw/utils.cpp:1332
 #, fuzzy
 msgid "Windows 8.1"
 msgstr "Windows 98"
 
 # msw/utils.cpp:549
-#: ../src/msw/utils.cpp:1234
+#: ../src/msw/utils.cpp:1252
 msgid "Windows 95"
 msgstr "Windows 95"
 
 # msw/utils.cpp:549
-#: ../src/msw/utils.cpp:1230
+#: ../src/msw/utils.cpp:1248
 msgid "Windows 95 OSR2"
 msgstr "Windows 95 OSR2"
 
 # msw/utils.cpp:549
-#: ../src/msw/utils.cpp:1245
+#: ../src/msw/utils.cpp:1263
 msgid "Windows 98"
 msgstr "Windows 98"
 
 # msw/utils.cpp:549
-#: ../src/msw/utils.cpp:1241
+#: ../src/msw/utils.cpp:1259
 msgid "Windows 98 SE"
 msgstr "Windows 98 SE"
 
 # msw/utils.cpp:549
-#: ../src/msw/utils.cpp:1252
+#: ../src/msw/utils.cpp:1270
 #, c-format
 msgid "Windows 9x (%d.%d)"
 msgstr "Windows 9x (%d.%d)"
@@ -8588,7 +8772,7 @@ msgid "Windows Baltic (CP 1257)"
 msgstr "Windows - baltsko (CP 1257)"
 
 # msw/utils.cpp:549
-#: ../src/msw/utils.cpp:1214
+#: ../src/msw/utils.cpp:1232
 #, c-format
 msgid "Windows CE (%d.%d)"
 msgstr "Windows CE (%d.%d)"
@@ -8634,33 +8818,33 @@ msgid "Windows Korean (CP 949)"
 msgstr "Windows - korejsko (CP 949)"
 
 # msw/utils.cpp:549
-#: ../src/msw/utils.cpp:1249
+#: ../src/msw/utils.cpp:1267
 msgid "Windows ME"
 msgstr "Windows ME"
 
-#: ../src/msw/utils.cpp:1322
+#: ../src/msw/utils.cpp:1340
 #, c-format
 msgid "Windows NT %lu.%lu"
 msgstr "Windows NT %lu.%lu"
 
-#: ../src/msw/utils.cpp:1279
+#: ../src/msw/utils.cpp:1297
 msgid "Windows Server 2003"
 msgstr "Windows Server 2003"
 
-#: ../src/msw/utils.cpp:1295
+#: ../src/msw/utils.cpp:1313
 msgid "Windows Server 2008"
 msgstr "Windows Server 2008"
 
-#: ../src/msw/utils.cpp:1301
+#: ../src/msw/utils.cpp:1319
 msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2008 R2"
 
-#: ../src/msw/utils.cpp:1307
+#: ../src/msw/utils.cpp:1325
 #, fuzzy
 msgid "Windows Server 2012"
 msgstr "Windows Server 2003"
 
-#: ../src/msw/utils.cpp:1313
+#: ../src/msw/utils.cpp:1331
 #, fuzzy
 msgid "Windows Server 2012 R2"
 msgstr "Windows Server 2008 R2"
@@ -8678,7 +8862,7 @@ msgid "Windows Vietnamese (CP 1258)"
 msgstr "Windows - vietnamsko (CP 1258)"
 
 # msw/utils.cpp:549
-#: ../src/msw/utils.cpp:1296
+#: ../src/msw/utils.cpp:1314
 msgid "Windows Vista"
 msgstr "Windows Vista"
 
@@ -8687,7 +8871,7 @@ msgid "Windows Western European (CP 1252)"
 msgstr "Windows - zahodnoevropsko (CP 1252)"
 
 # msw/utils.cpp:549
-#: ../src/msw/utils.cpp:1285
+#: ../src/msw/utils.cpp:1303
 msgid "Windows XP"
 msgstr "Windows XP"
 
@@ -8698,6 +8882,27 @@ msgstr "Windows/DOS OEM (CP 437)"
 #: ../src/common/fmapbase.cpp:165
 msgid "Windows/DOS OEM Cyrillic (CP 866)"
 msgstr "Windows/DOS OEM - cirilično (CP 866)"
+
+# msw/utils.cpp:549
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:109
+#, fuzzy
+msgid "Windows_Left"
+msgstr "Windows 7"
+
+# msw/utils.cpp:549
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:111
+#, fuzzy
+msgid "Windows_Menu"
+msgstr "Windows ME"
+
+# msw/utils.cpp:549
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:110
+#, fuzzy
+msgid "Windows_Right"
+msgstr "Windows Vista"
 
 # common/ffile.cpp:168
 #: ../src/common/ffile.cpp:148
@@ -8739,7 +8944,7 @@ msgstr "XPM: nedokončani podatki slike v vrstici %d!"
 
 # common/dlgcmn.cpp:109
 # common/dlgcmn.cpp:116
-#: ../include/wx/msgdlg.h:271 ../src/common/stockitem.cpp:206
+#: ../include/wx/msgdlg.h:276 ../src/common/stockitem.cpp:206
 #: ../src/motif/msgdlg.cpp:196
 msgid "Yes"
 msgstr "Da"
@@ -8749,7 +8954,7 @@ msgstr "Da"
 msgid "You cannot Clear an overlay that is not inited"
 msgstr "Ne morete počistiti prekrivanja, ki ni inicializirano"
 
-#: ../src/osx/carbon/overlay.cpp:107 ../src/dfb/overlay.cpp:61
+#: ../src/dfb/overlay.cpp:61 ../src/osx/carbon/overlay.cpp:107
 msgid "You cannot Init an overlay twice"
 msgstr "Init zaslona ni možen dvakrat"
 
@@ -8758,7 +8963,7 @@ msgstr "Init zaslona ni možen dvakrat"
 msgid "You cannot add a new directory to this section."
 msgstr "Ne morete dodati nove mape v ta del."
 
-#: ../src/propgrid/propgrid.cpp:3260
+#: ../src/propgrid/propgrid.cpp:3261
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr ""
 "Vnesli ste neveljavno vrednost. Pritisnite ubežnico za preklic urejanja."
@@ -8771,11 +8976,11 @@ msgstr "Pove&čaj"
 msgid "Zoom &Out"
 msgstr "Po&manjšaj"
 
-#: ../src/common/stockitem.cpp:209 ../src/common/prntbase.cpp:1564
+#: ../src/common/prntbase.cpp:1564 ../src/common/stockitem.cpp:209
 msgid "Zoom In"
 msgstr "Povečaj"
 
-#: ../src/common/stockitem.cpp:210 ../src/common/prntbase.cpp:1550
+#: ../src/common/prntbase.cpp:1550 ../src/common/stockitem.cpp:210
 msgid "Zoom Out"
 msgstr "Pomanjšaj"
 
@@ -8861,7 +9066,7 @@ msgid "a transaction failed."
 msgstr "transakcija ni uspela"
 
 # common/utilscmn.cpp:466
-#: ../src/common/accelcmn.cpp:184
+#: ../src/common/accelcmn.cpp:185
 msgid "alt"
 msgstr "ALT"
 
@@ -8934,7 +9139,7 @@ msgstr "krepko"
 msgid "buffer is too small for Windows directory."
 msgstr "medpomnilnik je za mapo Windows premajhen"
 
-#: ../src/msw/utils.cpp:1328
+#: ../src/msw/utils.cpp:1346
 #, c-format
 msgid "build %lu"
 msgstr "gradnja %lu"
@@ -8957,7 +9162,7 @@ msgstr "ni mogoče zapreti datotečnega deskriptorja %d"
 #
 # common/file.cpp:557
 # common/file.cpp:567
-#: ../src/common/file.cpp:604
+#: ../src/common/file.cpp:615
 #, c-format
 msgid "can't commit changes to file '%s'"
 msgstr "ni mogoče uveljaviti sprememb datoteke '%s'"
@@ -8983,7 +9188,7 @@ msgid "can't delete user configuration file '%s'"
 msgstr "ni mogoče uzbrisati uporabniške datoteke '%s'"
 
 # common/file.cpp:438
-#: ../src/common/file.cpp:511
+#: ../src/common/file.cpp:522
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr ""
@@ -9005,7 +9210,7 @@ msgid "can't find central directory in zip"
 msgstr "ni mogoče najti osrednje mape v datoteki zip"
 
 # common/file.cpp:404
-#: ../src/common/file.cpp:481
+#: ../src/common/file.cpp:492
 #, c-format
 msgid "can't find length of file on file descriptor %d"
 msgstr "ni mogoče najti dolžine datoteke na datotečnem deskriptorju %d"
@@ -9016,13 +9221,13 @@ msgid "can't find user's HOME, using current directory."
 msgstr "uporabnikove mape HOME ni mogoče najti, v uporabi je trenutna mapa."
 
 # common/file.cpp:319
-#: ../src/common/file.cpp:382
+#: ../src/common/file.cpp:393
 #, c-format
 msgid "can't flush file descriptor %d"
 msgstr "ni mogoče izprazniti deskriptorja %d"
 
 # common/file.cpp:373
-#: ../src/common/file.cpp:438 ../src/msw/wince/filefnwce.cpp:204
+#: ../src/common/file.cpp:449 ../src/msw/wince/filefnwce.cpp:204
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr "ni mogoče najti iskalne pozicije v datotečnem deskriptorju %d"
@@ -9034,7 +9239,7 @@ msgstr "ni mogoče naložiti katere koli posave, prekinjam"
 
 # common/ffile.cpp:85
 # common/file.cpp:243
-#: ../src/common/file.cpp:264 ../src/common/ffile.cpp:63
+#: ../src/common/ffile.cpp:63 ../src/common/file.cpp:264
 #, c-format
 msgid "can't open file '%s'"
 msgstr "ni mogoče odpreti datoteke '%s'"
@@ -9078,7 +9283,7 @@ msgstr "ni mogoče brati iz deskriptorja %d"
 #
 # common/file.cpp:552
 # common/file.cpp:562
-#: ../src/common/file.cpp:599
+#: ../src/common/file.cpp:610
 #, c-format
 msgid "can't remove file '%s'"
 msgstr "ni mogoče odstraniti datoteke '%s'"
@@ -9089,13 +9294,13 @@ msgstr "ni mogoče odstraniti datoteke '%s'"
 #
 # common/file.cpp:580
 # common/file.cpp:583
-#: ../src/common/file.cpp:616
+#: ../src/common/file.cpp:627
 #, c-format
 msgid "can't remove temporary file '%s'"
 msgstr "ni mogoče odstraniti začasne datoteke '%s'"
 
 # common/file.cpp:359
-#: ../src/common/file.cpp:424 ../src/msw/wince/filefnwce.cpp:190
+#: ../src/common/file.cpp:435 ../src/msw/wince/filefnwce.cpp:190
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "ni mogoče iskati na datotečnem deskriptorju %d"
@@ -9167,12 +9372,12 @@ msgid "conversion to 8-bit encoding failed"
 msgstr "pretvorba v 8-bitno kodiranje ni uspela"
 
 # common/utilscmn.cpp:464
-#: ../src/common/accelcmn.cpp:182
+#: ../src/common/accelcmn.cpp:183
 msgid "ctrl"
 msgstr "KRMILKA"
 
 # common/cmdline.cpp:912
-#: ../src/common/cmdline.cpp:1323
+#: ../src/common/cmdline.cpp:1335
 msgid "date"
 msgstr "datum"
 
@@ -9180,11 +9385,11 @@ msgstr "datum"
 msgid "decompression error"
 msgstr "napaka pri razširjanju"
 
-#: ../src/richtext/richtextstyles.cpp:780 ../src/common/fmapbase.cpp:820
+#: ../src/common/fmapbase.cpp:820 ../src/richtext/richtextstyles.cpp:780
 msgid "default"
 msgstr "privzeto"
 
-#: ../src/common/cmdline.cpp:1319
+#: ../src/common/cmdline.cpp:1331
 msgid "double"
 msgstr "dvojno"
 
@@ -9192,16 +9397,16 @@ msgstr "dvojno"
 msgid "dump of the process state (binary)"
 msgstr "izmet stanja procesa (binarni)"
 
-#: ../src/common/datetimefmt.cpp:1936
+#: ../src/common/datetimefmt.cpp:1991
 msgid "eighteenth"
 msgstr "osemnajsti"
 
 # generic/fontdlgg.cpp:216
-#: ../src/common/datetimefmt.cpp:1926
+#: ../src/common/datetimefmt.cpp:1981
 msgid "eighth"
 msgstr "osmi"
 
-#: ../src/common/datetimefmt.cpp:1929
+#: ../src/common/datetimefmt.cpp:1984
 msgid "eleventh"
 msgstr "enajsti"
 
@@ -9243,16 +9448,16 @@ msgid "error writing zip entry '%s': bad crc or length"
 msgstr "napaka pri pisanju vnosa zip '%s': slab crc ali dolžina"
 
 # common/ffile.cpp:182
-#: ../src/common/ffile.cpp:170
+#: ../src/common/ffile.cpp:186
 #, c-format
 msgid "failed to flush the file '%s'"
 msgstr "ne morem izprazniti datoteke '%s'"
 
-#: ../src/common/datetimefmt.cpp:1933
+#: ../src/common/datetimefmt.cpp:1988
 msgid "fifteenth"
 msgstr "petnajsti"
 
-#: ../src/common/datetimefmt.cpp:1923
+#: ../src/common/datetimefmt.cpp:1978
 msgid "fifth"
 msgstr "peti"
 
@@ -9287,11 +9492,11 @@ msgid "file '%s': unexpected character %c at line %d."
 msgstr "datoteka '%s': nepričakovan znak %c v vrstici %d"
 
 # generic/filedlgg.cpp:534
-#: ../src/richtext/richtextbuffer.cpp:8462
+#: ../src/richtext/richtextbuffer.cpp:8479
 msgid "files"
 msgstr "datotek"
 
-#: ../src/common/datetimefmt.cpp:1919
+#: ../src/common/datetimefmt.cpp:1974
 msgid "first"
 msgstr "prvi"
 
@@ -9300,11 +9505,11 @@ msgstr "prvi"
 msgid "font size"
 msgstr "velikost pisave"
 
-#: ../src/common/datetimefmt.cpp:1932
+#: ../src/common/datetimefmt.cpp:1987
 msgid "fourteenth"
 msgstr "štirinajsti"
 
-#: ../src/common/datetimefmt.cpp:1922
+#: ../src/common/datetimefmt.cpp:1977
 msgid "fourth"
 msgstr "četrti"
 
@@ -9312,8 +9517,8 @@ msgstr "četrti"
 msgid "generate verbose log messages"
 msgstr "ustvari obširna dnevniška sporočila"
 
-#: ../src/richtext/richtextbuffer.cpp:12541
-#: ../src/richtext/richtextbuffer.cpp:12651
+#: ../src/richtext/richtextbuffer.cpp:12578
+#: ../src/richtext/richtextbuffer.cpp:12688
 msgid "image"
 msgstr "slika"
 
@@ -9360,17 +9565,17 @@ msgid "locale '%s' cannot be set."
 msgstr "ne morem nastaviti locale '%s'."
 
 # generic/fontdlgg.cpp:216
-#: ../src/common/datetimefmt.cpp:2092
+#: ../src/common/datetimefmt.cpp:2147
 msgid "midnight"
 msgstr "opolnoči"
 
-#: ../src/common/datetimefmt.cpp:1937
+#: ../src/common/datetimefmt.cpp:1992
 msgid "nineteenth"
 msgstr "devetnajsti"
 
 # generic/prntdlgg.cpp:113
 # generic/prntdlgg.cpp:127
-#: ../src/common/datetimefmt.cpp:1927
+#: ../src/common/datetimefmt.cpp:1982
 msgid "ninth"
 msgstr "deveti"
 
@@ -9395,7 +9600,7 @@ msgid "noname"
 msgstr "neimanovana"
 
 # html/helpdata.cpp:644
-#: ../src/common/datetimefmt.cpp:2091
+#: ../src/common/datetimefmt.cpp:2146
 msgid "noon"
 msgstr "opoldne"
 
@@ -9406,12 +9611,8 @@ msgstr "opoldne"
 msgid "normal"
 msgstr "Običajno"
 
-#: ../src/gtk/print.cpp:1218 ../src/gtk/print.cpp:1323
-msgid "not implemented"
-msgstr "ni implementirano"
-
 # common/cmdline.cpp:911
-#: ../src/common/cmdline.cpp:1315
+#: ../src/common/cmdline.cpp:1327
 msgid "num"
 msgstr "št"
 
@@ -9427,8 +9628,6 @@ msgstr "premalo spomina"
 msgid "process context description"
 msgstr "opis konteksta procesa"
 
-#: ../src/richtext/richtextfontpage.cpp:186
-#: ../src/richtext/richtextfontpage.cpp:189
 #: ../src/richtext/richtextborderspage.cpp:253
 #: ../src/richtext/richtextborderspage.cpp:287
 #: ../src/richtext/richtextborderspage.cpp:321
@@ -9437,11 +9636,12 @@ msgstr "opis konteksta procesa"
 #: ../src/richtext/richtextborderspage.cpp:456
 #: ../src/richtext/richtextborderspage.cpp:490
 #: ../src/richtext/richtextborderspage.cpp:524
+#: ../src/richtext/richtextfontpage.cpp:186
+#: ../src/richtext/richtextfontpage.cpp:189
 #, fuzzy
 msgid "pt"
 msgstr "slik. točka"
 
-#: ../src/richtext/richtextfontpage.cpp:187
 #: ../src/richtext/richtextborderspage.cpp:251
 #: ../src/richtext/richtextborderspage.cpp:254
 #: ../src/richtext/richtextborderspage.cpp:255
@@ -9466,6 +9666,7 @@ msgstr "slik. točka"
 #: ../src/richtext/richtextborderspage.cpp:522
 #: ../src/richtext/richtextborderspage.cpp:525
 #: ../src/richtext/richtextborderspage.cpp:526
+#: ../src/richtext/richtextfontpage.cpp:187
 #: ../src/richtext/richtextmarginspage.cpp:201
 #: ../src/richtext/richtextmarginspage.cpp:203
 #: ../src/richtext/richtextmarginspage.cpp:204
@@ -9525,7 +9726,7 @@ msgid "px"
 msgstr "px"
 
 # common/utilscmn.cpp:464
-#: ../src/common/accelcmn.cpp:188
+#: ../src/common/accelcmn.cpp:189
 #, fuzzy
 msgid "rawctrl"
 msgstr "KRMILKA"
@@ -9552,7 +9753,7 @@ msgstr "branje toka zip (vnos %s): napačna dolžina"
 msgid "reentrancy problem."
 msgstr "napaka ponovnega vstopa."
 
-#: ../src/common/datetimefmt.cpp:1920
+#: ../src/common/datetimefmt.cpp:1975
 msgid "second"
 msgstr "drugi"
 
@@ -9563,16 +9764,16 @@ msgstr "drugi"
 msgid "seek error"
 msgstr "napaka pri iskanju"
 
-#: ../src/common/datetimefmt.cpp:1935
+#: ../src/common/datetimefmt.cpp:1990
 msgid "seventeenth"
 msgstr "sedemnajsti"
 
-#: ../src/common/datetimefmt.cpp:1925
+#: ../src/common/datetimefmt.cpp:1980
 msgid "seventh"
 msgstr "sedmi"
 
 # common/utilscmn.cpp:468
-#: ../src/common/accelcmn.cpp:186
+#: ../src/common/accelcmn.cpp:187
 msgid "shift"
 msgstr "DVIGALKA"
 
@@ -9580,11 +9781,11 @@ msgstr "DVIGALKA"
 msgid "show this help message"
 msgstr "pokaži to sporočilo pomoči"
 
-#: ../src/common/datetimefmt.cpp:1934
+#: ../src/common/datetimefmt.cpp:1989
 msgid "sixteenth"
 msgstr "šestnajsti"
 
-#: ../src/common/datetimefmt.cpp:1924
+#: ../src/common/datetimefmt.cpp:1979
 msgid "sixth"
 msgstr "šesti"
 
@@ -9596,27 +9797,27 @@ msgstr "določite zaslonski način (npr. 640x480-16)"
 msgid "specify the theme to use"
 msgstr "določi temo za uporabo"
 
-#: ../src/richtext/richtextbuffer.cpp:8983
+#: ../src/richtext/richtextbuffer.cpp:9005
 #, fuzzy
 msgid "standard/circle"
 msgstr "Navadno/krog"
 
-#: ../src/richtext/richtextbuffer.cpp:8984
+#: ../src/richtext/richtextbuffer.cpp:9006
 #, fuzzy
 msgid "standard/circle-outline"
 msgstr "Navadno/oris-kroga"
 
-#: ../src/richtext/richtextbuffer.cpp:8986
+#: ../src/richtext/richtextbuffer.cpp:9008
 #, fuzzy
 msgid "standard/diamond"
 msgstr "Navadno/karo"
 
-#: ../src/richtext/richtextbuffer.cpp:8985
+#: ../src/richtext/richtextbuffer.cpp:9007
 #, fuzzy
 msgid "standard/square"
 msgstr "Navadno/kvadrat"
 
-#: ../src/richtext/richtextbuffer.cpp:8987
+#: ../src/richtext/richtextbuffer.cpp:9009
 #, fuzzy
 msgid "standard/triangle"
 msgstr "Navadno/trikotnik"
@@ -9626,7 +9827,7 @@ msgid "stored file length not in Zip header"
 msgstr "dolžine shranjene datoteke ni v glavi Zip"
 
 # common/cmdline.cpp:910
-#: ../src/common/cmdline.cpp:1311
+#: ../src/common/cmdline.cpp:1323
 msgid "str"
 msgstr "str"
 
@@ -9643,7 +9844,7 @@ msgstr "vnos tar ni odprt"
 # generic/helpwxht.cpp:159
 # html/helpfrm.cpp:303
 # html/helpfrm.cpp:312
-#: ../src/common/datetimefmt.cpp:1928
+#: ../src/common/datetimefmt.cpp:1983
 msgid "tenth"
 msgstr "deseti"
 
@@ -9652,19 +9853,19 @@ msgstr "deseti"
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
 msgstr "odziv na transakcijo je povzročil, da je nastavljen bit DDE_FBUSY."
 
-#: ../src/common/datetimefmt.cpp:1921
+#: ../src/common/datetimefmt.cpp:1976
 msgid "third"
 msgstr "tretji"
 
-#: ../src/common/datetimefmt.cpp:1931
+#: ../src/common/datetimefmt.cpp:1986
 msgid "thirteenth"
 msgstr "trinajsti"
 
-#: ../src/common/datetimefmt.cpp:1725
+#: ../src/common/datetimefmt.cpp:1780
 msgid "today"
 msgstr "danes"
 
-#: ../src/common/datetimefmt.cpp:1727
+#: ../src/common/datetimefmt.cpp:1782
 msgid "tomorrow"
 msgstr "jutri"
 
@@ -9677,11 +9878,11 @@ msgstr "leva poševnica na koncu v '%s' prezrta"
 msgid "translator-credits"
 msgstr "Zasluge prevajalcev"
 
-#: ../src/common/datetimefmt.cpp:1930
+#: ../src/common/datetimefmt.cpp:1985
 msgid "twelfth"
 msgstr "dvanajsti"
 
-#: ../src/common/datetimefmt.cpp:1938
+#: ../src/common/datetimefmt.cpp:1993
 msgid "twentieth"
 msgstr "dvajseti"
 
@@ -9701,8 +9902,8 @@ msgid "unexpected end of file"
 msgstr "nepričakovan konec datoteke"
 
 # generic/progdlgg.cpp:241
-#: ../src/generic/progdlgg.cpp:399 ../src/common/tarstrm.cpp:371
-#: ../src/common/tarstrm.cpp:394 ../src/common/tarstrm.cpp:425
+#: ../src/common/tarstrm.cpp:371 ../src/common/tarstrm.cpp:394
+#: ../src/common/tarstrm.cpp:425 ../src/generic/progdlgg.cpp:399
 msgid "unknown"
 msgstr "nepoznan"
 
@@ -9740,7 +9941,7 @@ msgid "unnamed"
 msgstr "neimenovana"
 
 # common/docview.cpp:1188
-#: ../src/common/docview.cpp:1606
+#: ../src/common/docview.cpp:1613
 #, c-format
 msgid "unnamed%d"
 msgstr "neimenovana%d"
@@ -9750,7 +9951,7 @@ msgid "unsupported Zip compression method"
 msgstr "nepodprta metoda stiskanja Zip"
 
 # common/intl.cpp:379
-#: ../src/common/translation.cpp:1883
+#: ../src/common/translation.cpp:1896
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "uporabljam katalog '%s' iz '%s'"
@@ -9766,10 +9967,6 @@ msgstr "napaka pri pisanju"
 #: ../src/common/time.cpp:318
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay ni uspela."
-
-#: ../src/gtk/print.cpp:987
-msgid "wxPrintout::GetPageInfo gives a null maxPage."
-msgstr "wxPrintout::GetPageInfo vrne ničelno vrednost maxPage."
 
 #: ../src/osx/carbon/dataview.cpp:1301
 msgid "wxWidget control pointer is not a data view pointer"
@@ -9795,7 +9992,7 @@ msgstr "wxWidgets ne more odpreti zaslona. Izhod."
 msgid "xxxx"
 msgstr "xxxx"
 
-#: ../src/common/datetimefmt.cpp:1726
+#: ../src/common/datetimefmt.cpp:1781
 msgid "yesterday"
 msgstr "včeraj"
 
@@ -9805,10 +10002,209 @@ msgstr "včeraj"
 msgid "zlib error %d"
 msgstr "napaka zlib %d"
 
-#: ../src/richtext/richtextliststylepage.cpp:496
 #: ../src/richtext/richtextbulletspage.cpp:301
+#: ../src/richtext/richtextliststylepage.cpp:496
 msgid "~"
 msgstr "~"
+
+#~ msgid "ADD"
+#~ msgstr "DODAJ"
+
+#~ msgid "BACK"
+#~ msgstr "VRAČALKA"
+
+#~ msgid "CANCEL"
+#~ msgstr "PREKLIČI"
+
+#~ msgid "CAPITAL"
+#~ msgstr "VELIKEČRKE"
+
+#~ msgid "CLEAR"
+#~ msgstr "POČISTI"
+
+#~ msgid "COMMAND"
+#~ msgstr "UKAZ"
+
+#~ msgid "Couldn't get hatch style from wxBrush."
+#~ msgstr "Iz wxBrush ni mogoče dobiti sloga šrafiranja."
+
+#~ msgid "DECIMAL"
+#~ msgstr "DECIMALNO"
+
+#~ msgid "DEL"
+#~ msgstr "BRI"
+
+#~ msgid "DELETE"
+#~ msgstr "BRISALKA"
+
+# generic/filedlgg.cpp:356
+#~ msgid "DIVIDE"
+#~ msgstr "DELI"
+
+#~ msgid "DOWN"
+#~ msgstr "NAVZDOL"
+
+#~ msgid "END"
+#~ msgstr "KONEC"
+
+#~ msgid "ENTER"
+#~ msgstr "VNAŠALKA"
+
+#~ msgid "ESC"
+#~ msgstr "UBEŽNICA"
+
+#~ msgid "ESCAPE"
+#~ msgstr "UBEŽNICA"
+
+#~ msgid "EXECUTE"
+#~ msgstr "IZVRŠEVALKA"
+
+#~ msgid "HELP"
+#~ msgstr "POMOČ"
+
+#~ msgid "HOME"
+#~ msgstr "HOME"
+
+#~ msgid "INS"
+#~ msgstr "VST"
+
+#~ msgid "INSERT"
+#~ msgstr "VSTAVI"
+
+#~ msgid "KP_BEGIN"
+#~ msgstr "KP_ZAČNI"
+
+#~ msgid "KP_DECIMAL"
+#~ msgstr "KP_DECIMALNO"
+
+#~ msgid "KP_DELETE"
+#~ msgstr "KP_DELETE"
+
+#~ msgid "KP_DIVIDE"
+#~ msgstr "KP_DELJENO"
+
+#~ msgid "KP_DOWN"
+#~ msgstr "KP_DOL"
+
+#~ msgid "KP_ENTER"
+#~ msgstr "KP_VNAŠALKA"
+
+#~ msgid "KP_EQUAL"
+#~ msgstr "KP_JEENAKO"
+
+#~ msgid "KP_HOME"
+#~ msgstr "KP_HOME"
+
+#~ msgid "KP_INSERT"
+#~ msgstr "KP_INSERT"
+
+#~ msgid "KP_LEFT"
+#~ msgstr "KP_LEVO"
+
+#~ msgid "KP_MULTIPLY"
+#~ msgstr "KP_KRAT"
+
+#~ msgid "KP_NEXT"
+#~ msgstr "KP_NASLEDNJI"
+
+#~ msgid "KP_PAGEDOWN"
+#~ msgstr "KP_NASLEDNJASTRAN"
+
+#~ msgid "KP_PAGEUP"
+#~ msgstr "KP_PREJŠNJASTRAN"
+
+#~ msgid "KP_PRIOR"
+#~ msgstr "KP_PREJŠNJI"
+
+#~ msgid "KP_RIGHT"
+#~ msgstr "KP_DESNO"
+
+#~ msgid "KP_SEPARATOR"
+#~ msgstr "KP_LOČILO"
+
+#~ msgid "KP_SPACE"
+#~ msgstr "KP_PRESLEDNICA"
+
+#~ msgid "KP_SUBTRACT"
+#~ msgstr "KP_MINUS"
+
+#~ msgid "LEFT"
+#~ msgstr "LEVO"
+
+#~ msgid "MENU"
+#~ msgstr "MENI"
+
+#~ msgid "NUM_LOCK"
+#~ msgstr "NUM_LOCK"
+
+#~ msgid "PAGEDOWN"
+#~ msgstr "NASLEDNJASTRAN"
+
+#~ msgid "PAGEUP"
+#~ msgstr "PREJŠNJASTRAN"
+
+#~ msgid "PAUSE"
+#~ msgstr "PREMOR"
+
+#~ msgid "PGDN"
+#~ msgstr "PGDN"
+
+#~ msgid "PGUP"
+#~ msgstr "PGUP"
+
+#~ msgid "PRINT"
+#~ msgstr "NATISNI"
+
+#~ msgid "RETURN"
+#~ msgstr "RETURN"
+
+#~ msgid "RIGHT"
+#~ msgstr "DESNO"
+
+#~ msgid "SCROLL_LOCK"
+#~ msgstr "SCROLL_LOCK"
+
+#~ msgid "SELECT"
+#~ msgstr "IZBERI"
+
+#~ msgid "SEPARATOR"
+#~ msgstr "LOČILO"
+
+#~ msgid "SNAPSHOT"
+#~ msgstr "SNAPSHOT"
+
+#~ msgid "SPACE"
+#~ msgstr "PRESLEDNICA"
+
+#~ msgid "SUBTRACT"
+#~ msgstr "MINUS"
+
+#~ msgid "TAB"
+#~ msgstr "TAB"
+
+#~ msgid "The print dialog returned an error."
+#~ msgstr "Pogovorno okno za tiskanje je vrnilo napako."
+
+#~ msgid "The wxGtkPrinterDC cannot be used."
+#~ msgstr "wxGtkPrinterDC ni mogoče uporabiti."
+
+#~ msgid "UP"
+#~ msgstr "GOR"
+
+#~ msgid "WINDOWS_LEFT"
+#~ msgstr "WINDOWS_LEVO"
+
+#~ msgid "WINDOWS_MENU"
+#~ msgstr "WINDOWS_MENI"
+
+#~ msgid "WINDOWS_RIGHT"
+#~ msgstr "WINDOWS_DESNO"
+
+#~ msgid "not implemented"
+#~ msgstr "ni implementirano"
+
+#~ msgid "wxPrintout::GetPageInfo gives a null maxPage."
+#~ msgstr "wxPrintout::GetPageInfo vrne ničelno vrednost maxPage."
 
 #, fuzzy
 #~ msgid "Event queue overflowed"
