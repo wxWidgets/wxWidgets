@@ -613,7 +613,8 @@ wxNonOwnedWindowCocoaImpl::~wxNonOwnedWindowCocoaImpl()
         if ([m_macWindow parentWindow] != 0)
             [[m_macWindow parentWindow] removeChildWindow: m_macWindow];
 
-        [m_macWindow release];
+        [m_macWindow setReleasedWhenClosed:YES];
+        [m_macWindow close];
     }
 }
 
