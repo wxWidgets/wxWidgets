@@ -79,9 +79,6 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
             int id = GetID();
             wxString label = GetText(wxT("label"));
             wxString accel = GetText(wxT("accel"), false);
-            wxString fullLabel = label;
-            if (!accel.empty())
-                fullLabel << wxT("\t") << accel;
 
             wxItemKind kind = wxITEM_NORMAL;
             if (GetBool(wxT("radio")))
@@ -100,8 +97,16 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
                 kind = wxITEM_CHECK;
             }
 
-            wxMenuItem *mitem = new wxMenuItem(p_menu, id, fullLabel,
+            wxMenuItem *mitem = new wxMenuItem(p_menu, id, label,
                                                GetText(wxT("help")), kind);
+            if (!accel.empty())
+            {
+                wxAcceleratorEntry *entry = new wxAcceleratorEntry();
+                if (entry->FromString(accel))
+                    mitem->SetAccel(entry);
+                else
+                    delete entry;
+            }
 
 #if !defined(__WXMSW__) || wxUSE_OWNER_DRAWN
             if (HasParam(wxT("bitmap")))
