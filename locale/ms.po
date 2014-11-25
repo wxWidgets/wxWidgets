@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-21 17:22+0100\n"
+"POT-Creation-Date: 2014-11-25 19:58+0100\n"
 "PO-Revision-Date: 2006-11-06 10:48+0800\n"
 "Last-Translator: Mahrazi Mohd Kamal <mahrazi@gmail.com>\n"
 "Language-Team: ms_MY <ms@li.org>\n"
@@ -35,7 +35,7 @@ msgstr " "
 msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr "              Terima kasih dan segala kesulitan amat dikesali!\n"
 
-#: ../src/common/prntbase.cpp:546
+#: ../src/common/prntbase.cpp:558
 #, fuzzy, c-format
 msgid " (copy %d of %d)"
 msgstr "Laman %d of %d"
@@ -45,7 +45,7 @@ msgstr "Laman %d of %d"
 msgid " (error %ld: %s)"
 msgstr " (ralat %ld: %s)"
 
-#: ../src/common/imagtiff.cpp:75
+#: ../src/common/imagtiff.cpp:72
 #, fuzzy, c-format
 msgid " (in module \"%s\")"
 msgstr "modul tiff: %s"
@@ -54,19 +54,19 @@ msgstr "modul tiff: %s"
 msgid " - "
 msgstr " - "
 
-#: ../src/richtext/richtextprint.cpp:588 ../src/html/htmprint.cpp:704
+#: ../src/html/htmprint.cpp:704 ../src/richtext/richtextprint.cpp:588
 msgid " Preview"
 msgstr " Pralihat"
 
-#: ../src/common/fontcmn.cpp:811
+#: ../src/common/fontcmn.cpp:821
 msgid " bold"
 msgstr "tebal"
 
-#: ../src/common/fontcmn.cpp:827
+#: ../src/common/fontcmn.cpp:837
 msgid " italic"
 msgstr "italik"
 
-#: ../src/common/fontcmn.cpp:807
+#: ../src/common/fontcmn.cpp:817
 msgid " light"
 msgstr "cerah"
 
@@ -104,14 +104,14 @@ msgstr "Sampul #9, 3 7/8 x 8 7/8 in"
 msgid "%"
 msgstr "%s B"
 
-#: ../src/html/helpwnd.cpp:1045
+#: ../src/html/helpwnd.cpp:1031
 #, fuzzy, c-format
 msgid "%d of %lu"
 msgstr "%i of %i"
 
-#: ../src/html/helpwnd.cpp:1692 ../src/html/helpwnd.cpp:1730
-#, c-format
-msgid "%i of %i"
+#: ../src/html/helpwnd.cpp:1678
+#, fuzzy, c-format
+msgid "%i of %u"
 msgstr "%i of %i"
 
 #: ../src/generic/filectrlg.cpp:315
@@ -121,32 +121,32 @@ msgid_plural "%ld bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/html/helpwnd.cpp:1047
+#: ../src/html/helpwnd.cpp:1033
 #, fuzzy, c-format
 msgid "%lu of %lu"
 msgstr "%i of %i"
 
-#: ../src/common/cmdline.cpp:1215
+#: ../src/common/cmdline.cpp:1221
 #, c-format
 msgid "%s (or %s)"
 msgstr "%s (or %s)"
 
-#: ../src/generic/logg.cpp:230
+#: ../src/generic/logg.cpp:228
 #, c-format
 msgid "%s Error"
 msgstr "%s Ralat"
 
-#: ../src/generic/logg.cpp:242
+#: ../src/generic/logg.cpp:240
 #, c-format
 msgid "%s Information"
 msgstr "%s Maklumat"
 
-#: ../src/generic/preferencesg.cpp:110
+#: ../src/generic/preferencesg.cpp:115
 #, fuzzy, c-format
 msgid "%s Preferences"
 msgstr "Keutamaan"
 
-#: ../src/generic/logg.cpp:234
+#: ../src/generic/logg.cpp:232
 #, c-format
 msgid "%s Warning"
 msgstr "%s Amaran"
@@ -160,6 +160,11 @@ msgstr "%s tidak dapat muat kepala tar untuk masukan '%s'"
 #, c-format
 msgid "%s files (%s)|%s"
 msgstr "fail %s (%s)|%s"
+
+#: ../src/html/helpwnd.cpp:1716
+#, fuzzy, c-format
+msgid "%u of %u"
+msgstr "%i of %i"
 
 #: ../src/common/stockitem.cpp:139 ../src/html/helpfrm.cpp:142
 #: ../src/html/helpfrm.cpp:144
@@ -188,7 +193,7 @@ msgstr "Ter&ap"
 msgid "&Apply Style"
 msgstr "Ter&ap Gaya"
 
-#: ../src/msw/mdi.cpp:175
+#: ../src/msw/mdi.cpp:176
 msgid "&Arrange Icons"
 msgstr "Susun Ikon"
 
@@ -231,13 +236,13 @@ msgstr ""
 msgid "&Bottom:"
 msgstr ""
 
-#: ../include/wx/richtext/richtextbuffer.h:3641
+#: ../include/wx/richtext/richtextbuffer.h:3667
 #, fuzzy
 msgid "&Box"
 msgstr "Te&bal"
 
-#: ../src/richtext/richtextliststylepage.cpp:210
 #: ../src/richtext/richtextbulletspage.cpp:146
+#: ../src/richtext/richtextliststylepage.cpp:210
 msgid "&Bullet style:"
 msgstr "Gaya peluru:"
 
@@ -245,17 +250,17 @@ msgstr "Gaya peluru:"
 msgid "&CD-Rom"
 msgstr ""
 
-#: ../src/generic/wizard.cpp:432 ../src/generic/fontdlgg.cpp:470
-#: ../src/generic/fontdlgg.cpp:489 ../src/osx/carbon/fontdlg.cpp:572
-#: ../src/common/stockitem.cpp:145
+#: ../src/common/stockitem.cpp:145 ../src/generic/fontdlgg.cpp:470
+#: ../src/generic/fontdlgg.cpp:489 ../src/generic/wizard.cpp:433
+#: ../src/osx/carbon/fontdlg.cpp:572
 msgid "&Cancel"
 msgstr "&Batal"
 
-#: ../src/msw/mdi.cpp:171
+#: ../src/msw/mdi.cpp:172
 msgid "&Cascade"
 msgstr "Bertindih"
 
-#: ../include/wx/richtext/richtextbuffer.h:5717
+#: ../include/wx/richtext/richtextbuffer.h:5761
 #, fuzzy
 msgid "&Cell"
 msgstr "&Batal"
@@ -268,9 +273,9 @@ msgstr "Kod aksara:"
 msgid "&Clear"
 msgstr "Kosongkan"
 
-#: ../src/generic/logg.cpp:522 ../src/common/stockitem.cpp:148
-#: ../src/common/prntbase.cpp:1570 ../src/univ/themes/win32.cpp:3756
-#: ../src/html/helpfrm.cpp:139
+#: ../src/common/prntbase.cpp:1584 ../src/common/stockitem.cpp:148
+#: ../src/generic/logg.cpp:520 ../src/html/helpfrm.cpp:139
+#: ../src/univ/themes/win32.cpp:3756
 msgid "&Close"
 msgstr "&Tutup"
 
@@ -288,8 +293,8 @@ msgstr "Warna:"
 msgid "&Convert"
 msgstr "Kandungan"
 
-#: ../src/richtext/richtextctrl.cpp:332 ../src/osx/textctrl_osx.cpp:583
-#: ../src/common/stockitem.cpp:150 ../src/msw/textctrl.cpp:2335
+#: ../src/common/stockitem.cpp:150 ../src/msw/textctrl.cpp:2446
+#: ../src/osx/textctrl_osx.cpp:583 ../src/richtext/richtextctrl.cpp:333
 msgid "&Copy"
 msgstr "&Salin"
 
@@ -298,7 +303,7 @@ msgstr "&Salin"
 msgid "&Copy URL"
 msgstr "&Salin"
 
-#: ../src/common/headerctrlcmn.cpp:328
+#: ../src/common/headerctrlcmn.cpp:306
 #, fuzzy
 msgid "&Customize..."
 msgstr "Saiz Fon"
@@ -307,9 +312,9 @@ msgstr "Saiz Fon"
 msgid "&Debug report preview:"
 msgstr "Pralihat laporan nyahpijat:"
 
+#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2448
+#: ../src/osx/textctrl_osx.cpp:585 ../src/richtext/richtextctrl.cpp:335
 #: ../src/richtext/richtexttabspage.cpp:138
-#: ../src/richtext/richtextctrl.cpp:334 ../src/osx/textctrl_osx.cpp:585
-#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2337
 msgid "&Delete"
 msgstr "Pa&dam"
 
@@ -321,7 +326,7 @@ msgstr "Pa&dam Gaya..."
 msgid "&Descending"
 msgstr ""
 
-#: ../src/generic/logg.cpp:688
+#: ../src/generic/logg.cpp:686
 msgid "&Details"
 msgstr "&Terperinci"
 
@@ -349,7 +354,7 @@ msgstr "&Fail"
 msgid "&Find"
 msgstr "Ca&ri"
 
-#: ../src/generic/wizard.cpp:626
+#: ../src/generic/wizard.cpp:627
 msgid "&Finish"
 msgstr "&Tamat"
 
@@ -403,9 +408,10 @@ msgstr ""
 msgid "&Height:"
 msgstr "Berat:"
 
-#: ../src/generic/wizard.cpp:435 ../src/richtext/richtextstyledlg.cpp:303
-#: ../src/richtext/richtextsymboldlg.cpp:479 ../src/osx/menu_osx.cpp:776
-#: ../src/common/stockitem.cpp:163 ../src/html/helpfrm.cpp:147
+#: ../src/common/stockitem.cpp:163 ../src/generic/wizard.cpp:436
+#: ../src/html/helpfrm.cpp:147 ../src/osx/menu_osx.cpp:788
+#: ../src/richtext/richtextstyledlg.cpp:303
+#: ../src/richtext/richtextsymboldlg.cpp:479
 msgid "&Help"
 msgstr "&Bantuan"
 
@@ -460,9 +466,9 @@ msgstr "&Tepek"
 msgid "&Left"
 msgstr "&Kiri"
 
-#: ../src/richtext/richtextindentspage.cpp:195
 #: ../src/richtext/richtextborderspage.cpp:245
 #: ../src/richtext/richtextborderspage.cpp:414
+#: ../src/richtext/richtextindentspage.cpp:195
 #: ../src/richtext/richtextliststylepage.cpp:381
 #: ../src/richtext/richtextmarginspage.cpp:186
 #: ../src/richtext/richtextmarginspage.cpp:300
@@ -475,7 +481,7 @@ msgstr "&Kiri:"
 msgid "&List level:"
 msgstr "Paras senarai:"
 
-#: ../src/generic/logg.cpp:523
+#: ../src/generic/logg.cpp:521
 msgid "&Log"
 msgstr "&Log"
 
@@ -492,16 +498,16 @@ msgstr ""
 msgid "&Network"
 msgstr "&Baru"
 
-#: ../src/richtext/richtexttabspage.cpp:132 ../src/common/stockitem.cpp:176
+#: ../src/common/stockitem.cpp:176 ../src/richtext/richtexttabspage.cpp:132
 msgid "&New"
 msgstr "&Baru"
 
 #: ../src/aui/tabmdi.cpp:111 ../src/generic/mdig.cpp:100
-#: ../src/msw/mdi.cpp:176
+#: ../src/msw/mdi.cpp:177
 msgid "&Next"
 msgstr "Seterus&nya"
 
-#: ../src/generic/wizard.cpp:431 ../src/generic/wizard.cpp:626
+#: ../src/generic/wizard.cpp:432 ../src/generic/wizard.cpp:627
 msgid "&Next >"
 msgstr "Seterus&nya >"
 
@@ -510,7 +516,7 @@ msgstr "Seterus&nya >"
 msgid "&Next Paragraph"
 msgstr "Selepas satu perenggan:"
 
-#: ../src/generic/tipdlg.cpp:271
+#: ../src/generic/tipdlg.cpp:256
 msgid "&Next Tip"
 msgstr "Kias Seterusnya"
 
@@ -518,7 +524,7 @@ msgstr "Kias Seterusnya"
 msgid "&Next style:"
 msgstr "Gaya berikutnya:"
 
-#: ../src/common/stockitem.cpp:177 ../src/msw/msgdlg.cpp:476
+#: ../src/common/stockitem.cpp:177 ../src/msw/msgdlg.cpp:463
 msgid "&No"
 msgstr "T&idak"
 
@@ -530,12 +536,12 @@ msgstr "&Nota:"
 msgid "&Number:"
 msgstr "&Nombor:"
 
-#: ../src/generic/fontdlgg.cpp:475 ../src/generic/fontdlgg.cpp:482
-#: ../src/osx/carbon/fontdlg.cpp:578 ../src/common/stockitem.cpp:178
+#: ../src/common/stockitem.cpp:178 ../src/generic/fontdlgg.cpp:475
+#: ../src/generic/fontdlgg.cpp:482 ../src/osx/carbon/fontdlg.cpp:578
 msgid "&OK"
 msgstr "&OK"
 
-#: ../src/generic/dbgrptg.cpp:342 ../src/common/stockitem.cpp:179
+#: ../src/common/stockitem.cpp:179 ../src/generic/dbgrptg.cpp:342
 #: ../src/html/helpfrm.cpp:137
 msgid "&Open..."
 msgstr "&Buka..."
@@ -549,12 +555,12 @@ msgstr "Paras senarai:"
 msgid "&Page Break"
 msgstr ""
 
-#: ../src/richtext/richtextctrl.cpp:333 ../src/osx/textctrl_osx.cpp:584
-#: ../src/common/stockitem.cpp:180 ../src/msw/textctrl.cpp:2336
+#: ../src/common/stockitem.cpp:180 ../src/msw/textctrl.cpp:2447
+#: ../src/osx/textctrl_osx.cpp:584 ../src/richtext/richtextctrl.cpp:334
 msgid "&Paste"
 msgstr "&Tepek"
 
-#: ../include/wx/richtext/richtextbuffer.h:4783
+#: ../include/wx/richtext/richtextbuffer.h:4811
 msgid "&Picture"
 msgstr ""
 
@@ -576,7 +582,7 @@ msgid "&Preferences"
 msgstr "Keutamaan"
 
 #: ../src/aui/tabmdi.cpp:112 ../src/generic/mdig.cpp:101
-#: ../src/msw/mdi.cpp:177
+#: ../src/msw/mdi.cpp:178
 msgid "&Previous"
 msgstr "&Sebelum"
 
@@ -589,8 +595,8 @@ msgstr "Laman sebelum:"
 msgid "&Print..."
 msgstr "Ce&tak..."
 
-#: ../src/richtext/richtextctrl.cpp:338 ../src/richtext/richtextctrl.cpp:5090
-#: ../src/common/stockitem.cpp:184
+#: ../src/common/stockitem.cpp:184 ../src/richtext/richtextctrl.cpp:339
+#: ../src/richtext/richtextctrl.cpp:5461
 msgid "&Properties"
 msgstr "&Ciri-ciri"
 
@@ -598,9 +604,9 @@ msgstr "&Ciri-ciri"
 msgid "&Quit"
 msgstr "&Keluar"
 
-#: ../src/richtext/richtextctrl.cpp:329 ../src/osx/textctrl_osx.cpp:580
-#: ../src/common/stockitem.cpp:185 ../src/common/cmdproc.cpp:293
-#: ../src/common/cmdproc.cpp:300 ../src/msw/textctrl.cpp:2332
+#: ../src/common/cmdproc.cpp:293 ../src/common/cmdproc.cpp:300
+#: ../src/common/stockitem.cpp:185 ../src/msw/textctrl.cpp:2443
+#: ../src/osx/textctrl_osx.cpp:580 ../src/richtext/richtextctrl.cpp:330
 msgid "&Redo"
 msgstr "&Ulangcara"
 
@@ -629,9 +635,9 @@ msgstr "&Pulih"
 msgid "&Right"
 msgstr "K&anan"
 
-#: ../src/richtext/richtextindentspage.cpp:213
 #: ../src/richtext/richtextborderspage.cpp:279
 #: ../src/richtext/richtextborderspage.cpp:448
+#: ../src/richtext/richtextindentspage.cpp:213
 #: ../src/richtext/richtextliststylepage.cpp:399
 #: ../src/richtext/richtextmarginspage.cpp:211
 #: ../src/richtext/richtextmarginspage.cpp:325
@@ -654,7 +660,7 @@ msgstr "Simpan Sebagai"
 msgid "&See details"
 msgstr "&Terperinci"
 
-#: ../src/generic/tipdlg.cpp:265
+#: ../src/generic/tipdlg.cpp:250
 msgid "&Show tips at startup"
 msgstr "Papar pe&tua pada permulaan"
 
@@ -666,7 +672,7 @@ msgstr "&Saiz"
 msgid "&Size:"
 msgstr "Saiz:"
 
-#: ../src/generic/progdlgg.cpp:282
+#: ../src/generic/progdlgg.cpp:283
 #, fuzzy
 msgid "&Skip"
 msgstr "Langkau"
@@ -684,7 +690,7 @@ msgstr ""
 msgid "&Stop"
 msgstr "&Henti"
 
-#: ../src/richtext/richtextfontpage.cpp:275 ../src/common/stockitem.cpp:199
+#: ../src/common/stockitem.cpp:199 ../src/richtext/richtextfontpage.cpp:275
 msgid "&Strikethrough"
 msgstr ""
 
@@ -700,8 +706,8 @@ msgstr "Gaya:"
 msgid "&Subset:"
 msgstr "&Subset:"
 
-#: ../src/richtext/richtextliststylepage.cpp:268
 #: ../src/richtext/richtextbulletspage.cpp:209
+#: ../src/richtext/richtextliststylepage.cpp:268
 msgid "&Symbol:"
 msgstr "Simbol:"
 
@@ -710,7 +716,7 @@ msgstr "Simbol:"
 msgid "&Synchronize values"
 msgstr ""
 
-#: ../include/wx/richtext/richtextbuffer.h:5823
+#: ../include/wx/richtext/richtextbuffer.h:5870
 #, fuzzy
 msgid "&Table"
 msgstr "Tab"
@@ -730,7 +736,7 @@ msgstr "&Salin"
 msgid "&Top:"
 msgstr "Ke:"
 
-#: ../src/generic/fontdlgg.cpp:444 ../src/common/stockitem.cpp:202
+#: ../src/common/stockitem.cpp:202 ../src/generic/fontdlgg.cpp:444
 msgid "&Underline"
 msgstr "Garis bawah"
 
@@ -738,9 +744,9 @@ msgstr "Garis bawah"
 msgid "&Underlining:"
 msgstr "Garis bawah:"
 
-#: ../src/richtext/richtextctrl.cpp:328 ../src/osx/textctrl_osx.cpp:579
-#: ../src/common/stockitem.cpp:203 ../src/common/cmdproc.cpp:271
-#: ../src/msw/textctrl.cpp:2331
+#: ../src/common/cmdproc.cpp:271 ../src/common/stockitem.cpp:203
+#: ../src/msw/textctrl.cpp:2442 ../src/osx/textctrl_osx.cpp:579
+#: ../src/richtext/richtextctrl.cpp:329
 msgid "&Undo"
 msgstr "&Nyahcara"
 
@@ -779,11 +785,11 @@ msgstr "Berat:"
 #: ../src/aui/tabmdi.cpp:311 ../src/aui/tabmdi.cpp:327
 #: ../src/aui/tabmdi.cpp:329 ../src/generic/mdig.cpp:294
 #: ../src/generic/mdig.cpp:310 ../src/generic/mdig.cpp:314
-#: ../src/msw/mdi.cpp:77
+#: ../src/msw/mdi.cpp:78
 msgid "&Window"
 msgstr "&Tetingkap"
 
-#: ../src/common/stockitem.cpp:206 ../src/msw/msgdlg.cpp:476
+#: ../src/common/stockitem.cpp:206 ../src/msw/msgdlg.cpp:463
 msgid "&Yes"
 msgstr "&Ya"
 
@@ -802,12 +808,12 @@ msgstr "'%s' sepatutnya mengandungi aksara abjab sahaja."
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' ada lebihan '..', diabaikan."
 
-#: ../src/common/cmdline.cpp:1107 ../src/common/cmdline.cpp:1125
+#: ../src/common/cmdline.cpp:1113 ../src/common/cmdline.cpp:1131
 #, c-format
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr "'%s' bukanlah nilai nombor yang betul untul pilihan '%s'."
 
-#: ../src/common/translation.cpp:1087
+#: ../src/common/translation.cpp:1100
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' bukanlah mesej katalog yang sah."
@@ -822,7 +828,7 @@ msgstr "'%s' bukanlah mesej katalog yang sah."
 msgid "'%s' is one of the invalid strings"
 msgstr "'%s' tidak sah"
 
-#: ../src/common/textbuf.cpp:239
+#: ../src/common/textbuf.cpp:237
 #, c-format
 msgid "'%s' is probably a binary buffer."
 msgstr "'%s' kemungkinan adalah penimbal binari."
@@ -852,17 +858,17 @@ msgstr "'%s' hanya patut mengandungi aksara abjab atau nombor."
 msgid "'%s' should only contain digits."
 msgstr "'%s' sepatutnya mengandungi aksara ASCII sahaja."
 
-#: ../src/richtext/richtextliststylepage.cpp:229
 #: ../src/richtext/richtextbulletspage.cpp:166
+#: ../src/richtext/richtextliststylepage.cpp:229
 msgid "(*)"
 msgstr "(*)"
 
-#: ../src/html/helpwnd.cpp:977
+#: ../src/html/helpwnd.cpp:963
 msgid "(Help)"
 msgstr "(Bantuan)"
 
-#: ../src/richtext/richtextliststylepage.cpp:481
 #: ../src/richtext/richtextbulletspage.cpp:273
+#: ../src/richtext/richtextliststylepage.cpp:481
 msgid "(None)"
 msgstr "(Tiada)"
 
@@ -870,47 +876,47 @@ msgstr "(Tiada)"
 msgid "(Normal text)"
 msgstr "(Teks Normal)"
 
-#: ../src/html/helpwnd.cpp:427 ../src/html/helpwnd.cpp:1120
-#: ../src/html/helpwnd.cpp:1756
+#: ../src/html/helpwnd.cpp:419 ../src/html/helpwnd.cpp:1106
+#: ../src/html/helpwnd.cpp:1742
 msgid "(bookmarks)"
 msgstr "(tanda laman)"
 
+#: ../src/richtext/richtextfontpage.cpp:347
+#: ../src/richtext/richtextfontpage.cpp:351
+#: ../src/richtext/richtextfontpage.cpp:355
+#: ../src/richtext/richtextformatdlg.cpp:887
 #: ../src/richtext/richtextindentspage.cpp:274
 #: ../src/richtext/richtextindentspage.cpp:286
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:326
-#: ../src/richtext/richtextformatdlg.cpp:887
-#: ../src/richtext/richtextfontpage.cpp:347
-#: ../src/richtext/richtextfontpage.cpp:351
-#: ../src/richtext/richtextfontpage.cpp:355
 #: ../src/richtext/richtextliststylepage.cpp:448
 #: ../src/richtext/richtextliststylepage.cpp:460
 #: ../src/richtext/richtextliststylepage.cpp:461
 msgid "(none)"
 msgstr "(tiada)"
 
-#: ../src/richtext/richtextliststylepage.cpp:492
 #: ../src/richtext/richtextbulletspage.cpp:284
+#: ../src/richtext/richtextliststylepage.cpp:492
 msgid "*"
 msgstr "*"
 
-#: ../src/richtext/richtextliststylepage.cpp:236
 #: ../src/richtext/richtextbulletspage.cpp:173
+#: ../src/richtext/richtextliststylepage.cpp:236
 msgid "*)"
 msgstr "*)"
 
-#: ../src/richtext/richtextliststylepage.cpp:495
 #: ../src/richtext/richtextbulletspage.cpp:287
+#: ../src/richtext/richtextliststylepage.cpp:495
 msgid "+"
 msgstr "+"
 
-#: ../src/msw/utils.cpp:1336
+#: ../src/msw/utils.cpp:1227
 msgid ", 64-bit edition"
 msgstr ""
 
-#: ../src/richtext/richtextliststylepage.cpp:493
 #: ../src/richtext/richtextbulletspage.cpp:285
+#: ../src/richtext/richtextliststylepage.cpp:493
 msgid "-"
 msgstr "-"
 
@@ -1017,7 +1023,7 @@ msgstr ": set aksara tidak diketahui"
 msgid ": unknown encoding"
 msgstr ":pengenkodan tidak diketahui"
 
-#: ../src/generic/wizard.cpp:437
+#: ../src/generic/wizard.cpp:438
 msgid "< &Back"
 msgstr "< &Undur"
 
@@ -1067,24 +1073,24 @@ msgstr "<DRIVE>"
 msgid "<LINK>"
 msgstr "<LINK>"
 
-#: ../src/html/helpwnd.cpp:1280
+#: ../src/html/helpwnd.cpp:1266
 msgid "<b><i>Bold italic face.</i></b><br>"
 msgstr "<b><i>Rupa tebal italik.</i></b><br>"
 
-#: ../src/html/helpwnd.cpp:1284
+#: ../src/html/helpwnd.cpp:1270
 msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
 msgstr "<b><i>tebal italik <u>garis bawah</u></i></b><br>"
 
-#: ../src/html/helpwnd.cpp:1279
+#: ../src/html/helpwnd.cpp:1265
 msgid "<b>Bold face.</b> "
 msgstr "<b>Rupa tebal.</b> "
 
-#: ../src/html/helpwnd.cpp:1278
+#: ../src/html/helpwnd.cpp:1264
 msgid "<i>Italic face.</i> "
 msgstr "<i>Rupa italik.</i> "
 
-#: ../src/richtext/richtextliststylepage.cpp:494
 #: ../src/richtext/richtextbulletspage.cpp:286
+#: ../src/richtext/richtextliststylepage.cpp:494
 msgid ">"
 msgstr ">"
 
@@ -1101,10 +1107,10 @@ msgstr "Laporan nyahpijat telah dijana dalam direktori\n"
 msgid "A non empty collection must consist of 'element' nodes"
 msgstr "Pengumpulan bukan kosong mesti terdiri daripada nod 'elemen'"
 
-#: ../src/richtext/richtextliststylepage.cpp:304
-#: ../src/richtext/richtextliststylepage.cpp:306
 #: ../src/richtext/richtextbulletspage.cpp:244
 #: ../src/richtext/richtextbulletspage.cpp:246
+#: ../src/richtext/richtextliststylepage.cpp:304
+#: ../src/richtext/richtextliststylepage.cpp:306
 msgid "A standard bullet name."
 msgstr "Nama peluru piawai"
 
@@ -1190,16 +1196,12 @@ msgstr "A6 105 x 148 mm"
 msgid "A6 Rotated 148 x 105 mm"
 msgstr "A6 Diputar 148 x 105 mm"
 
-#: ../src/generic/fontdlgg.cpp:83 ../src/richtext/richtextformatdlg.cpp:547
-#: ../src/osx/carbon/fontdlg.cpp:323
+#: ../src/generic/fontdlgg.cpp:83 ../src/osx/carbon/fontdlg.cpp:323
+#: ../src/richtext/richtextformatdlg.cpp:539
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
-#: ../src/common/accelcmn.cpp:76
-msgid "ADD"
-msgstr "ADD"
-
-#: ../src/richtext/richtextsymboldlg.cpp:458 ../src/common/ftp.cpp:405
+#: ../src/common/ftp.cpp:405 ../src/richtext/richtextsymboldlg.cpp:458
 msgid "ASCII"
 msgstr "ASCII"
 
@@ -1208,13 +1210,13 @@ msgstr "ASCII"
 msgid "About"
 msgstr "Perih&al"
 
-#: ../src/generic/aboutdlgg.cpp:140 ../src/osx/menu_osx.cpp:603
-#: ../src/msw/aboutdlg.cpp:64
+#: ../src/generic/aboutdlgg.cpp:140 ../src/msw/aboutdlg.cpp:64
+#: ../src/osx/menu_osx.cpp:615
 #, fuzzy, c-format
 msgid "About %s"
 msgstr "Perihal"
 
-#: ../src/osx/menu_osx.cpp:605
+#: ../src/osx/menu_osx.cpp:617
 #, fuzzy
 msgid "About..."
 msgstr "Perih&al"
@@ -1223,36 +1225,46 @@ msgstr "Perih&al"
 msgid "Absolute"
 msgstr ""
 
+#: ../src/propgrid/advprops.cpp:845
+#, fuzzy
+msgid "ActiveBorder"
+msgstr "Moden"
+
+#: ../src/propgrid/advprops.cpp:846
+msgid "ActiveCaption"
+msgstr ""
+
 #: ../src/common/stockitem.cpp:207
 #, fuzzy
 msgid "Actual Size"
 msgstr "Saiz Seben&ar"
 
-#: ../src/common/stockitem.cpp:140
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:79 ../src/common/stockitem.cpp:140
 msgid "Add"
 msgstr "Tambah"
 
-#: ../src/richtext/richtextbuffer.cpp:11219
+#: ../src/richtext/richtextbuffer.cpp:11293
 msgid "Add Column"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:11156
+#: ../src/richtext/richtextbuffer.cpp:11230
 msgid "Add Row"
 msgstr ""
 
-#: ../src/html/helpwnd.cpp:440
+#: ../src/html/helpwnd.cpp:432
 msgid "Add current page to bookmarks"
 msgstr "Tambah laman semasa ke tanda laman"
 
-#: ../src/generic/colrdlgg.cpp:283
+#: ../src/generic/colrdlgg.cpp:272
 msgid "Add to custom colours"
 msgstr "Tambah kepada warna adat"
 
-#: ../include/wx/xtiprop.h:259
+#: ../include/wx/xtiprop.h:255
 msgid "AddToPropertyCollection called on a generic accessor"
 msgstr "AddToPropertyCollection dipanggil pada generic accessor"
 
-#: ../include/wx/xtiprop.h:197
+#: ../include/wx/xtiprop.h:193
 msgid "AddToPropertyCollection called w/o valid adder"
 msgstr "AddToPropertyCollection dipanggill tanpa penambah sah"
 
@@ -1269,7 +1281,7 @@ msgstr ""
 msgid "Adding flavor utxt failed"
 msgstr ""
 
-#: ../src/common/preferencescmn.cpp:41
+#: ../src/common/preferencescmn.cpp:43
 msgid "Advanced"
 msgstr ""
 
@@ -1294,24 +1306,24 @@ msgstr "J&ajaran"
 msgid "All"
 msgstr "Semua"
 
-#: ../src/generic/filectrlg.cpp:1205 ../src/common/fldlgcmn.cpp:107
+#: ../src/common/fldlgcmn.cpp:107 ../src/generic/filectrlg.cpp:1205
 #, c-format
 msgid "All files (%s)|%s"
 msgstr "Semua fail (%s)|%s"
 
-#: ../include/wx/defs.h:2908
+#: ../include/wx/defs.h:2890
 msgid "All files (*)|*"
 msgstr "Semua fail (*)|*"
 
-#: ../include/wx/defs.h:2905
+#: ../include/wx/defs.h:2887
 msgid "All files (*.*)|*.*"
 msgstr "Semua fail (*.*)|*.*"
 
-#: ../src/richtext/richtextstyles.cpp:1057
+#: ../src/richtext/richtextstyles.cpp:1061
 msgid "All styles"
 msgstr "Semua gaya"
 
-#: ../src/propgrid/manager.cpp:1496
+#: ../src/propgrid/manager.cpp:1520
 msgid "Alphabetic Mode"
 msgstr ""
 
@@ -1323,7 +1335,7 @@ msgstr "Objek Sedia Daftar dilepaskan ke SetObjectClassInfo"
 msgid "Already dialling ISP."
 msgstr "Sudah mendail ISP"
 
-#: ../src/common/accelcmn.cpp:320 ../src/univ/themes/win32.cpp:3756
+#: ../src/common/accelcmn.cpp:321 ../src/univ/themes/win32.cpp:3756
 #, fuzzy
 msgid "Alt+"
 msgstr "Alt-"
@@ -1343,12 +1355,16 @@ msgstr "*** Dan termasuk fail berikut:\n"
 msgid "Animation file is not of type %ld."
 msgstr "Fail animasi bukan berjenis %ld."
 
-#: ../src/generic/logg.cpp:1034
+#: ../src/propgrid/advprops.cpp:844
+msgid "AppWorkspace"
+msgstr ""
+
+#: ../src/generic/logg.cpp:1032
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Tokok fail log '%s' (memilih [Tidak] akan menindihnya)?"
 
-#: ../src/osx/menu_osx.cpp:623 ../src/osx/menu_osx.cpp:631
+#: ../src/osx/menu_osx.cpp:635 ../src/osx/menu_osx.cpp:643
 #, fuzzy
 msgid "Application"
 msgstr "Pemilihan"
@@ -1358,8 +1374,12 @@ msgstr "Pemilihan"
 msgid "Apply"
 msgstr "Ter&ap"
 
-#: ../src/richtext/richtextliststylepage.cpp:482
+#: ../src/propgrid/advprops.cpp:1559
+msgid "Aqua"
+msgstr ""
+
 #: ../src/richtext/richtextbulletspage.cpp:274
+#: ../src/richtext/richtextliststylepage.cpp:482
 msgid "Arabic"
 msgstr "Arab"
 
@@ -1367,10 +1387,15 @@ msgstr "Arab"
 msgid "Arabic (ISO-8859-6)"
 msgstr "Arabik (ISO-8859-6)"
 
-#: ../src/msw/ole/automtn.cpp:675
+#: ../src/msw/ole/automtn.cpp:678
 #, fuzzy, c-format
 msgid "Argument %u not found."
 msgstr "Fail bantuan \"%s\" tidak ditemui."
+
+#: ../src/propgrid/advprops.cpp:1703
+#, fuzzy
+msgid "Arrow"
+msgstr "esok"
 
 #: ../src/generic/aboutdlgg.cpp:184
 msgid "Artists"
@@ -1385,9 +1410,9 @@ msgstr "membaca"
 msgid "Attributes"
 msgstr "Atribut"
 
-#: ../src/richtext/richtextliststylepage.cpp:294
 #: ../src/richtext/richtextbulletspage.cpp:232
 #: ../src/richtext/richtextbulletspage.cpp:234
+#: ../src/richtext/richtextliststylepage.cpp:294
 msgid "Available fonts."
 msgstr "Fon yang ada."
 
@@ -1439,46 +1464,43 @@ msgstr "B6 (JIS) Diputar 182 x 128 mm"
 msgid "B6 Envelope, 176 x 125 mm"
 msgstr "Sampul B6, 176 x 125 mm"
 
-#: ../src/common/accelcmn.cpp:49
-msgid "BACK"
-msgstr "BACK"
-
-#: ../src/common/imagbmp.cpp:524 ../src/common/imagbmp.cpp:554
-#: ../src/common/imagbmp.cpp:569
+#: ../src/common/imagbmp.cpp:530 ../src/common/imagbmp.cpp:560
+#: ../src/common/imagbmp.cpp:575
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: Gagal sediakan memori."
 
-#: ../src/common/imagbmp.cpp:98
+#: ../src/common/imagbmp.cpp:99
 msgid "BMP: Couldn't save invalid image."
 msgstr "BMP: Tidak sapat menyimpan imej yang tidak sah."
 
-#: ../src/common/imagbmp.cpp:339
+#: ../src/common/imagbmp.cpp:355
 msgid "BMP: Couldn't write RGB color map."
 msgstr "BMP: Gagal menulis peta warna RGB."
 
-#: ../src/common/imagbmp.cpp:474
+#: ../src/common/imagbmp.cpp:489
 msgid "BMP: Couldn't write data."
 msgstr "BMP: Gagal menulis data."
 
-#: ../src/common/imagbmp.cpp:240
+#: ../src/common/imagbmp.cpp:245
 msgid "BMP: Couldn't write the file (Bitmap) header."
 msgstr "BMP: Gagal menulis kepala fail (Bitmap)."
 
-#: ../src/common/imagbmp.cpp:263
+#: ../src/common/imagbmp.cpp:268
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: Gagal menulis fail kepala (BitmapInfo)."
 
-#: ../src/common/imagbmp.cpp:134
+#: ../src/common/imagbmp.cpp:139
 msgid "BMP: wxImage doesn't have own wxPalette."
 msgstr "BMP: wxImage tidak mempunyai wxPalette."
 
-#: ../src/common/stockitem.cpp:142
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:50 ../src/common/stockitem.cpp:142
 #, fuzzy
 msgid "Back"
 msgstr "Kem&bali"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:119
-#: ../src/richtext/richtextformatdlg.cpp:395
+#: ../src/richtext/richtextformatdlg.cpp:391
 #, fuzzy
 msgid "Background"
 msgstr "Warna latar"
@@ -1492,6 +1514,12 @@ msgstr "Warna latar"
 msgid "Background colour"
 msgstr "Warna latar"
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:50
+#, fuzzy
+msgid "Backspace"
+msgstr "Kem&bali"
+
 #: ../src/common/fmapbase.cpp:160
 msgid "Baltic (ISO-8859-13)"
 msgstr "Baltik (ISO-8859-13)"
@@ -1504,8 +1532,8 @@ msgstr "Baltik (lama) (ISO-8859-4)"
 msgid "Before a paragraph:"
 msgstr "Sebelum perenggan:"
 
-#: ../src/richtext/richtextliststylepage.cpp:489
 #: ../src/richtext/richtextbulletspage.cpp:281
+#: ../src/richtext/richtextliststylepage.cpp:489
 msgid "Bitmap"
 msgstr "Peta bit"
 
@@ -1513,8 +1541,20 @@ msgstr "Peta bit"
 msgid "Bitmap renderer cannot render value; value type: "
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:333 ../src/richtext/richtextfontpage.cpp:353
-#: ../src/osx/carbon/fontdlg.cpp:524 ../src/common/stockitem.cpp:143
+#: ../src/propgrid/advprops.cpp:1544
+msgid "Black"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:1705
+msgid "Blank"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:1553
+msgid "Blue"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:143 ../src/generic/fontdlgg.cpp:333
+#: ../src/osx/carbon/fontdlg.cpp:524 ../src/richtext/richtextfontpage.cpp:353
 msgid "Bold"
 msgstr "Tebal"
 
@@ -1524,12 +1564,12 @@ msgstr "Tebal"
 msgid "Border"
 msgstr "Moden"
 
-#: ../src/richtext/richtextformatdlg.cpp:389
+#: ../src/richtext/richtextformatdlg.cpp:385
 #, fuzzy
 msgid "Borders"
 msgstr "Moden"
 
-#: ../src/richtext/richtextsizepage.cpp:288 ../src/common/stockitem.cpp:144
+#: ../src/common/stockitem.cpp:144 ../src/richtext/richtextsizepage.cpp:288
 msgid "Bottom"
 msgstr ""
 
@@ -1537,22 +1577,26 @@ msgstr ""
 msgid "Bottom margin (mm):"
 msgstr "Jidar bawah (mm):"
 
-#: ../src/richtext/richtextbuffer.cpp:9176
+#: ../src/richtext/richtextbuffer.cpp:9223
 #, fuzzy
 msgid "Box Properties"
 msgstr "&Ciri-ciri"
 
-#: ../src/richtext/richtextstyles.cpp:1061
+#: ../src/richtext/richtextstyles.cpp:1065
 #, fuzzy
 msgid "Box styles"
 msgstr "Semua gaya"
+
+#: ../src/propgrid/advprops.cpp:1552
+msgid "Brown"
+msgstr ""
 
 #: ../src/common/filepickercmn.cpp:43 ../src/common/filepickercmn.cpp:44
 msgid "Browse"
 msgstr ""
 
-#: ../src/richtext/richtextliststylepage.cpp:245
 #: ../src/richtext/richtextbulletspage.cpp:182
+#: ../src/richtext/richtextliststylepage.cpp:245
 msgid "Bullet &Alignment:"
 msgstr "J&ajaran Peluru:"
 
@@ -1560,15 +1604,36 @@ msgstr "J&ajaran Peluru:"
 msgid "Bullet style"
 msgstr "Gaya peluru"
 
-#: ../src/richtext/richtextformatdlg.cpp:363
+#: ../src/richtext/richtextformatdlg.cpp:361
 msgid "Bullets"
 msgstr "Peluru"
+
+#: ../src/propgrid/advprops.cpp:1706
+#, fuzzy
+msgid "Bullseye"
+msgstr "Gaya peluru"
+
+#: ../src/propgrid/advprops.cpp:847
+msgid "ButtonFace"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:848
+msgid "ButtonHighlight"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:849
+msgid "ButtonShadow"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:850
+msgid "ButtonText"
+msgstr ""
 
 #: ../src/common/paper.cpp:99
 msgid "C sheet, 17 x 22 in"
 msgstr "Helai D, 22 x 34 in"
 
-#: ../src/generic/logg.cpp:520
+#: ../src/generic/logg.cpp:518
 msgid "C&lear"
 msgstr "Bersi&hkan"
 
@@ -1596,14 +1661,6 @@ msgstr "Sampul C6, 114 x 162 mm"
 msgid "C65 Envelope, 114 x 229 mm"
 msgstr "Sampul C65, 114 x 229 mm"
 
-#: ../src/common/accelcmn.cpp:66
-msgid "CANCEL"
-msgstr "CANCEL"
-
-#: ../src/common/accelcmn.cpp:70
-msgid "CAPITAL"
-msgstr "CAPITAL"
-
 #: ../src/common/stockitem.cpp:146
 msgid "CD-Rom"
 msgstr ""
@@ -1611,14 +1668,6 @@ msgstr ""
 #: ../src/html/chm.cpp:815 ../src/html/chm.cpp:874
 msgid "CHM handler currently supports only local files!"
 msgstr "Pengemudi CHM kini hanya menyokong fail lokal!"
-
-#: ../src/common/accelcmn.cpp:67
-msgid "CLEAR"
-msgstr "CLEAR"
-
-#: ../src/common/accelcmn.cpp:111
-msgid "COMMAND"
-msgstr "COMMAND"
 
 #: ../src/richtext/richtextfontpage.cpp:282
 msgid "Ca&pitals"
@@ -1628,70 +1677,70 @@ msgstr ""
 msgid "Can't &Undo "
 msgstr "Tidak Nyahcara "
 
-#: ../src/common/image.cpp:2686
+#: ../src/common/image.cpp:2688
 msgid "Can't automatically determine the image format for non-seekable input."
 msgstr ""
 
-#: ../src/msw/registry.cpp:505
+#: ../src/msw/registry.cpp:498
 #, c-format
 msgid "Can't close registry key '%s'"
 msgstr "Gagal tutup kunci registri '%s'"
 
-#: ../src/msw/registry.cpp:583
+#: ../src/msw/registry.cpp:576
 #, c-format
 msgid "Can't copy values of unsupported type %d."
 msgstr "Gagal salin nilainya tidak menyokong jenis %d."
 
-#: ../src/msw/registry.cpp:486
+#: ../src/msw/registry.cpp:479
 #, c-format
 msgid "Can't create registry key '%s'"
 msgstr "Gagal mencipta kunci registri '%s'"
 
-#: ../src/msw/thread.cpp:696 ../src/os2/thread.cpp:494
+#: ../src/msw/thread.cpp:671
 msgid "Can't create thread"
 msgstr "Gagal mencipta benang"
 
-#: ../src/msw/window.cpp:3787
+#: ../src/msw/window.cpp:3851
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "Gagal mencipta tetingkap kelas %s"
 
-#: ../src/msw/registry.cpp:776
+#: ../src/msw/registry.cpp:769
 #, c-format
 msgid "Can't delete key '%s'"
 msgstr "Gagal padam kunci '%s'"
 
-#: ../src/msw/iniconf.cpp:458 ../src/os2/iniconf.cpp:471
+#: ../src/msw/iniconf.cpp:458
 #, c-format
 msgid "Can't delete the INI file '%s'"
 msgstr "Gagal memadam fail INI '%s'"
 
-#: ../src/msw/registry.cpp:804
+#: ../src/msw/registry.cpp:797
 #, c-format
 msgid "Can't delete value '%s' from key '%s'"
 msgstr "Gagal memadam nilai '%s' daripada kunci '%s'"
 
-#: ../src/msw/registry.cpp:1161
+#: ../src/msw/registry.cpp:1185
 #, c-format
 msgid "Can't enumerate subkeys of key '%s'"
 msgstr "Gagal menghitung subkunci untuk kunci '%s'"
 
-#: ../src/msw/registry.cpp:1116
+#: ../src/msw/registry.cpp:1140
 #, c-format
 msgid "Can't enumerate values of key '%s'"
 msgstr "Gagal menghitung nilai untuk kunci '%s'"
 
-#: ../src/msw/registry.cpp:1379
+#: ../src/msw/registry.cpp:1403
 #, c-format
 msgid "Can't export value of unsupported type %d."
 msgstr "Gagal eksport nilai yang tidak menyokong jenis %d"
 
-#: ../src/common/ffile.cpp:236
+#: ../src/common/ffile.cpp:254
 #, c-format
 msgid "Can't find current position in file '%s'"
 msgstr "Gagal mencari posisi semasa dalam fail '%s'"
 
-#: ../src/msw/registry.cpp:416
+#: ../src/msw/registry.cpp:409
 #, c-format
 msgid "Can't get info about registry key '%s'"
 msgstr "Gagal mendapatkan maklumat perihal kunci registri '%s'"
@@ -1704,12 +1753,12 @@ msgstr "Gagal memulakan strim zlib kempis."
 msgid "Can't initialize zlib inflate stream."
 msgstr "Gagal memulakan strim zlib kembong."
 
-#: ../src/msw/fswatcher.cpp:456
+#: ../src/msw/fswatcher.cpp:476
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
 msgstr ""
 
-#: ../src/msw/registry.cpp:452
+#: ../src/msw/registry.cpp:445
 #, c-format
 msgid "Can't open registry key '%s'"
 msgstr "Gagal membuka kunci regisri '%s'"
@@ -1723,37 +1772,37 @@ msgstr "Gagal membaca daripada strim kembong: %s"
 msgid "Can't read inflate stream: unexpected EOF in underlying stream."
 msgstr "Gagal membaca strim kembung: EOF tidak dijangka dalam dasar strim."
 
-#: ../src/msw/registry.cpp:1048
+#: ../src/msw/registry.cpp:1072
 #, c-format
 msgid "Can't read value of '%s'"
 msgstr "Gagal baca nilai '%s'"
 
-#: ../src/msw/registry.cpp:877 ../src/msw/registry.cpp:909
-#: ../src/msw/registry.cpp:971
+#: ../src/msw/registry.cpp:870 ../src/msw/registry.cpp:902
+#: ../src/msw/registry.cpp:964
 #, c-format
 msgid "Can't read value of key '%s'"
 msgstr "Gagal baca nilai kunci '%s'"
 
-#: ../src/common/image.cpp:2483
+#: ../src/common/image.cpp:2485
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
 msgstr "Gagal menyimpan fail imej '%s': sambungan tidak diketahui."
 
-#: ../src/generic/logg.cpp:579 ../src/generic/logg.cpp:996
+#: ../src/generic/logg.cpp:577 ../src/generic/logg.cpp:994
 msgid "Can't save log contents to file."
 msgstr "Gagal menyimpan kandungan log kepada fail."
 
-#: ../src/msw/thread.cpp:652 ../src/os2/thread.cpp:477
+#: ../src/msw/thread.cpp:635
 msgid "Can't set thread priority"
 msgstr "Gagal tetapkan keutamaan benang."
 
-#: ../src/msw/registry.cpp:895 ../src/msw/registry.cpp:939
-#: ../src/msw/registry.cpp:1065
+#: ../src/msw/registry.cpp:888 ../src/msw/registry.cpp:932
+#: ../src/msw/registry.cpp:1089
 #, c-format
 msgid "Can't set value of '%s'"
 msgstr "Gagal tetapkan nilai '%s'"
 
-#: ../src/unix/utilsunx.cpp:357
+#: ../src/unix/utilsunx.cpp:347
 #, fuzzy
 msgid "Can't write to child process's stdin"
 msgstr "Gagal membunuh proses %d"
@@ -1763,22 +1812,20 @@ msgstr "Gagal membunuh proses %d"
 msgid "Can't write to deflate stream: %s"
 msgstr "Gagal menulis kepada strim kempis: %s"
 
-#: ../include/wx/msgdlg.h:274 ../src/generic/dirdlgg.cpp:107
-#: ../src/richtext/richtextstyledlg.cpp:300 ../src/common/stockitem.cpp:145
-#: ../src/msw/msgdlg.cpp:489 ../src/msw/progdlg.cpp:673
+#. TRANSLATORS: Name of keyboard key
+#: ../include/wx/msgdlg.h:279 ../src/common/accelcmn.cpp:69
+#: ../src/common/stockitem.cpp:145 ../src/generic/dirdlgg.cpp:107
 #: ../src/gtk1/fontdlg.cpp:144 ../src/motif/msgdlg.cpp:196
+#: ../src/msw/msgdlg.cpp:476 ../src/msw/progdlg.cpp:673
+#: ../src/richtext/richtextstyledlg.cpp:300
 msgid "Cancel"
 msgstr "Batal"
-
-#: ../src/os2/thread.cpp:116
-msgid "Cannot create mutex."
-msgstr "Gagal mencipta mutex."
 
 #: ../src/osx/carbon/dataview.cpp:893
 msgid "Cannot create new column's ID. Probably max. number of columns reached."
 msgstr ""
 
-#: ../src/common/filefn.cpp:1328
+#: ../src/common/filefn.cpp:1280
 #, c-format
 msgid "Cannot enumerate files '%s'"
 msgstr "Gagal menghitung fail '%s'"
@@ -1788,16 +1835,16 @@ msgstr "Gagal menghitung fail '%s'"
 msgid "Cannot enumerate files in directory '%s'"
 msgstr "Gagal menghitung fail dalam direktori '%s'"
 
-#: ../src/msw/dialup.cpp:542
+#: ../src/msw/dialup.cpp:533
 #, c-format
 msgid "Cannot find active dialup connection: %s"
 msgstr "Gagal menemui sambungan mendial aktif: %s"
 
-#: ../src/msw/dialup.cpp:848
+#: ../src/msw/dialup.cpp:837
 msgid "Cannot find the location of address book file"
 msgstr "Gagal menemui lokasi fail buku alamat"
 
-#: ../src/msw/ole/automtn.cpp:565
+#: ../src/msw/ole/automtn.cpp:568
 #, fuzzy, c-format
 msgid "Cannot get an active instance of \"%s\""
 msgstr "Gagal menemui sambungan mendial aktif: %s"
@@ -1807,28 +1854,28 @@ msgstr "Gagal menemui sambungan mendial aktif: %s"
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Gagal mendapatkan keutamaan banjaran untuk penjadualan polisi %d."
 
-#: ../src/unix/utilsunx.cpp:998
+#: ../src/unix/utilsunx.cpp:978
 msgid "Cannot get the hostname"
 msgstr "Gagal mendapatkan namahos"
 
-#: ../src/unix/utilsunx.cpp:1034
+#: ../src/unix/utilsunx.cpp:1014
 msgid "Cannot get the official hostname"
 msgstr "Gagal mendapatkan namahos rasmi"
 
-#: ../src/msw/dialup.cpp:949
+#: ../src/msw/dialup.cpp:938
 msgid "Cannot hang up - no active dialup connection."
 msgstr "Gagal menggantung - tiada sambungan mendial aktif."
 
-#: ../include/wx/msw/ole/oleutils.h:52
+#: ../include/wx/msw/ole/oleutils.h:53
 msgid "Cannot initialize OLE"
 msgstr "Gagal mulakan OLE"
 
-#: ../src/common/socket.cpp:852
+#: ../src/common/socket.cpp:853
 #, fuzzy
 msgid "Cannot initialize sockets"
 msgstr "Gagal mulakan OLE"
 
-#: ../src/msw/volume.cpp:620
+#: ../src/msw/volume.cpp:619
 #, c-format
 msgid "Cannot load icon from '%s'."
 msgstr "Gagal memuat ikon dari '%s'."
@@ -1838,7 +1885,7 @@ msgstr "Gagal memuat ikon dari '%s'."
 msgid "Cannot load resources from '%s'."
 msgstr "Gagal memuat sumber dari fail '%s'."
 
-#: ../src/xrc/xmlres.cpp:746
+#: ../src/xrc/xmlres.cpp:743
 #, c-format
 msgid "Cannot load resources from file '%s'."
 msgstr "Gagal memuat sumber dari fail '%s'."
@@ -1858,7 +1905,7 @@ msgstr "Gagal buka buku bantuan HTML: %s"
 msgid "Cannot open contents file: %s"
 msgstr "Gagal buka kandungan fial: %s"
 
-#: ../src/generic/dcpsg.cpp:1751
+#: ../src/generic/dcpsg.cpp:1748
 msgid "Cannot open file for PostScript printing!"
 msgstr "Gagal buka fail untuk cetak PostScript!"
 
@@ -1867,12 +1914,12 @@ msgstr "Gagal buka fail untuk cetak PostScript!"
 msgid "Cannot open index file: %s"
 msgstr "Gagal buka fail indeks: %s"
 
-#: ../src/xrc/xmlres.cpp:728
+#: ../src/xrc/xmlres.cpp:725
 #, fuzzy, c-format
 msgid "Cannot open resources file '%s'."
 msgstr "Gagal memuat sumber dari fail '%s'."
 
-#: ../src/html/helpwnd.cpp:1548
+#: ../src/html/helpwnd.cpp:1534
 msgid "Cannot print empty page."
 msgstr "Gagal cipta laman kosong."
 
@@ -1881,12 +1928,7 @@ msgstr "Gagal cipta laman kosong."
 msgid "Cannot read typename from '%s'!"
 msgstr "Gagal baca nama jenis dari '%s'!"
 
-#: ../src/os2/thread.cpp:527
-#, c-format
-msgid "Cannot resume thread %lu"
-msgstr "Gagal menyambung benang %lu"
-
-#: ../src/msw/thread.cpp:918
+#: ../src/msw/thread.cpp:893
 #, fuzzy, c-format
 msgid "Cannot resume thread %lx"
 msgstr "Gagal menyambung benang %x"
@@ -1895,38 +1937,43 @@ msgstr "Gagal menyambung benang %x"
 msgid "Cannot retrieve thread scheduling policy."
 msgstr "Gagal mendapatkan benang penjadualan polisi."
 
-#: ../src/common/intl.cpp:542
+#: ../src/common/intl.cpp:534
 #, c-format
 msgid "Cannot set locale to language \"%s\"."
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:831 ../src/msw/thread.cpp:569
+#: ../src/msw/thread.cpp:552 ../src/unix/threadpsx.cpp:831
 msgid "Cannot start thread: error writing TLS."
 msgstr "Gagal memulakan benang: ralat menulis TLS."
 
-#: ../src/os2/thread.cpp:513
-#, c-format
-msgid "Cannot suspend thread %lu"
-msgstr "Gagal menggantung benang %lu"
-
-#: ../src/msw/thread.cpp:902
+#: ../src/msw/thread.cpp:877
 #, fuzzy, c-format
 msgid "Cannot suspend thread %lx"
 msgstr "Gagal menggantung benang %x"
 
-#: ../src/msw/thread.cpp:825
+#: ../src/msw/thread.cpp:800
 msgid "Cannot wait for thread termination"
 msgstr "Tidak dapat menunggu benang ditamatkan"
 
-#: ../src/html/helpwnd.cpp:547
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:73
+#, fuzzy
+msgid "Capital"
+msgstr "italik"
+
+#: ../src/propgrid/advprops.cpp:851
+msgid "CaptionText"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:533
 msgid "Case sensitive"
 msgstr "Sensitif kes"
 
-#: ../src/propgrid/manager.cpp:1495
+#: ../src/propgrid/manager.cpp:1501
 msgid "Categorized Mode"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:9748
+#: ../src/richtext/richtextbuffer.cpp:9805
 #, fuzzy
 msgid "Cell Properties"
 msgstr "&Ciri-ciri"
@@ -1948,8 +1995,8 @@ msgstr "Ketengah"
 msgid "Central European (ISO-8859-2)"
 msgstr "Eropah Tengah (ISO-8859-2)"
 
-#: ../src/richtext/richtextliststylepage.cpp:250
 #: ../src/richtext/richtextbulletspage.cpp:187
+#: ../src/richtext/richtextliststylepage.cpp:250
 msgid "Centre"
 msgstr "Tengah"
 
@@ -1965,50 +2012,55 @@ msgstr "Teks Tengah."
 msgid "Centred"
 msgstr "Ke&tengah"
 
-#: ../src/richtext/richtextliststylepage.cpp:280
 #: ../src/richtext/richtextbulletspage.cpp:219
+#: ../src/richtext/richtextliststylepage.cpp:280
 msgid "Ch&oose..."
 msgstr "Pilih..."
 
-#: ../src/richtext/richtextbuffer.cpp:4242
+#: ../src/richtext/richtextbuffer.cpp:4276
 msgid "Change List Style"
 msgstr "Ubah Gaya Senarai"
 
-#: ../src/richtext/richtextbuffer.cpp:3604
+#: ../src/richtext/richtextbuffer.cpp:3631
 #, fuzzy
 msgid "Change Object Style"
 msgstr "Ubah Gaya Senarai"
 
-#: ../src/richtext/richtextbuffer.cpp:3870
-#: ../src/richtext/richtextbuffer.cpp:8003
+#: ../src/richtext/richtextbuffer.cpp:3904
+#: ../src/richtext/richtextbuffer.cpp:8045
 #, fuzzy
 msgid "Change Properties"
 msgstr "&Ciri-ciri"
 
-#: ../src/richtext/richtextbuffer.cpp:3421
+#: ../src/richtext/richtextbuffer.cpp:3448
 msgid "Change Style"
 msgstr "Ubah Gaya"
 
-#: ../src/common/fileconf.cpp:372
+#: ../src/common/fileconf.cpp:364
 #, c-format
 msgid "Changes won't be saved to avoid overwriting the existing file \"%s\""
 msgstr ""
 
-#: ../src/richtext/richtextstyles.cpp:1059
+#: ../src/propgrid/advprops.cpp:1707
+#, fuzzy
+msgid "Character"
+msgstr "Kod aksara:"
+
+#: ../src/richtext/richtextstyles.cpp:1063
 msgid "Character styles"
 msgstr "Gaya Aksara"
 
-#: ../src/richtext/richtextliststylepage.cpp:224
-#: ../src/richtext/richtextliststylepage.cpp:226
 #: ../src/richtext/richtextbulletspage.cpp:161
 #: ../src/richtext/richtextbulletspage.cpp:163
+#: ../src/richtext/richtextliststylepage.cpp:224
+#: ../src/richtext/richtextliststylepage.cpp:226
 msgid "Check to add a period after the bullet."
 msgstr "Tanda untuk menambah noktah selepas peluru."
 
-#: ../src/richtext/richtextliststylepage.cpp:238
-#: ../src/richtext/richtextliststylepage.cpp:240
 #: ../src/richtext/richtextbulletspage.cpp:175
 #: ../src/richtext/richtextbulletspage.cpp:177
+#: ../src/richtext/richtextliststylepage.cpp:238
+#: ../src/richtext/richtextliststylepage.cpp:240
 msgid "Check to add a right parenthesis."
 msgstr "Tanda untuk menambah tanda kurungan yang betul."
 
@@ -2019,10 +2071,10 @@ msgstr "Tanda untuk menambah tanda kurungan yang betul."
 msgid "Check to edit all borders simultaneously."
 msgstr ""
 
-#: ../src/richtext/richtextliststylepage.cpp:231
-#: ../src/richtext/richtextliststylepage.cpp:233
 #: ../src/richtext/richtextbulletspage.cpp:168
 #: ../src/richtext/richtextbulletspage.cpp:170
+#: ../src/richtext/richtextliststylepage.cpp:231
+#: ../src/richtext/richtextliststylepage.cpp:233
 msgid "Check to enclose the bullet in parentheses."
 msgstr "Tanda untuk menyertakan peluru dalam kurungan."
 
@@ -2084,21 +2136,21 @@ msgstr "Tanda untuk menyertakan peluru dalam kurungan."
 msgid "Check to suppress hyphenation."
 msgstr ""
 
-#: ../src/msw/dialup.cpp:784
+#: ../src/msw/dialup.cpp:773
 msgid "Choose ISP to dial"
 msgstr "Pilih ISP untuk dail"
 
-#: ../src/propgrid/props.cpp:1654
+#: ../src/propgrid/props.cpp:1783
 #, fuzzy
 msgid "Choose a directory:"
 msgstr "Cipta direktori"
 
-#: ../src/propgrid/props.cpp:1713
+#: ../src/propgrid/props.cpp:1842
 #, fuzzy
 msgid "Choose a file"
 msgstr "Pilih fon"
 
-#: ../src/generic/colrdlgg.cpp:144 ../src/gtk/colordlg.cpp:63
+#: ../src/generic/colrdlgg.cpp:144 ../src/gtk/colordlg.cpp:69
 msgid "Choose colour"
 msgstr "Pilih warna"
 
@@ -2116,17 +2168,18 @@ msgstr "Kebergantungan edaran dikesan melibatkan modul \"%s\"."
 msgid "Cl&ose"
 msgstr "Tutup"
 
-#: ../src/msw/ole/automtn.cpp:687
+#: ../src/msw/ole/automtn.cpp:690
 #, fuzzy
 msgid "Class not registered."
 msgstr "Gagal mencipta benang"
 
-#: ../src/common/stockitem.cpp:147
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:70 ../src/common/stockitem.cpp:147
 #, fuzzy
 msgid "Clear"
 msgstr "Kosongkan"
 
-#: ../src/generic/logg.cpp:520
+#: ../src/generic/logg.cpp:518
 msgid "Clear the log contents"
 msgstr "Lapangkan kandungan log"
 
@@ -2135,10 +2188,10 @@ msgstr "Lapangkan kandungan log"
 msgid "Click to apply the selected style."
 msgstr "Tanda untuk terapkan gaya pilihan."
 
-#: ../src/richtext/richtextliststylepage.cpp:281
-#: ../src/richtext/richtextliststylepage.cpp:283
 #: ../src/richtext/richtextbulletspage.cpp:220
 #: ../src/richtext/richtextbulletspage.cpp:222
+#: ../src/richtext/richtextliststylepage.cpp:281
+#: ../src/richtext/richtextliststylepage.cpp:283
 msgid "Click to browse for a symbol."
 msgstr "Klik untuk melungsur simbol."
 
@@ -2235,11 +2288,11 @@ msgstr "Klik untuk edit fon terpilih."
 msgid "Click to rename the selected style."
 msgstr "Klik untuk menamakan fon terpilih."
 
-#: ../src/generic/dbgrptg.cpp:97 ../src/generic/progdlgg.cpp:804
-#: ../src/generic/progdlgg.cpp:809 ../src/richtext/richtextstyledlg.cpp:277
-#: ../src/richtext/richtextsymboldlg.cpp:476 ../src/common/stockitem.cpp:148
-#: ../src/msw/progdlg.cpp:170 ../src/msw/progdlg.cpp:679
-#: ../src/html/helpdlg.cpp:90
+#: ../src/common/stockitem.cpp:148 ../src/generic/dbgrptg.cpp:97
+#: ../src/generic/progdlgg.cpp:805 ../src/generic/progdlgg.cpp:810
+#: ../src/html/helpdlg.cpp:90 ../src/msw/progdlg.cpp:170
+#: ../src/msw/progdlg.cpp:679 ../src/richtext/richtextstyledlg.cpp:277
+#: ../src/richtext/richtextsymboldlg.cpp:476
 msgid "Close"
 msgstr "Tutup"
 
@@ -2251,7 +2304,7 @@ msgstr "Tutup &Semua"
 msgid "Close current document"
 msgstr "Tutup dokumen semasa"
 
-#: ../src/generic/logg.cpp:522
+#: ../src/generic/logg.cpp:520
 msgid "Close this window"
 msgstr "Tutup tetingkap ini"
 
@@ -2260,7 +2313,7 @@ msgstr "Tutup tetingkap ini"
 msgid "Color"
 msgstr "Warna:"
 
-#: ../src/richtext/richtextformatdlg.cpp:781
+#: ../src/richtext/richtextformatdlg.cpp:779
 #, fuzzy
 msgid "Colour"
 msgstr "Warna:"
@@ -2296,6 +2349,11 @@ msgstr ""
 msgid "Column width could not be set."
 msgstr ""
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:112
+msgid "Command"
+msgstr ""
+
 #: ../src/common/init.cpp:188
 #, c-format
 msgid ""
@@ -2308,42 +2366,50 @@ msgstr ""
 msgid "Common dialog failed with error code %0lx."
 msgstr "Perlaksanaan arahan '%s' gagal dengan ralat: %ul"
 
-#: ../src/gtk/window.cpp:4345
+#: ../src/gtk/window.cpp:4551
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
 msgstr ""
 
-#: ../src/html/helpwnd.cpp:1565
+#: ../src/html/helpwnd.cpp:1551
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
 msgstr "Fail Bantuan HTML Termampat (*.chm)|*.chm|"
 
-#: ../src/generic/dirctrlg.cpp:544
+#: ../src/generic/dirctrlg.cpp:465
 msgid "Computer"
 msgstr "Komputer"
 
-#: ../src/common/fileconf.cpp:965
+#: ../src/common/fileconf.cpp:957
 #, c-format
 msgid "Config entry name cannot start with '%c'."
 msgstr "Nama masukan konfig tidak boleh dimulakan dengan '%c'."
 
-#: ../src/gtk/filedlg.cpp:59
+#: ../src/generic/filedlgg.cpp:357 ../src/gtk/filedlg.cpp:59
 msgid "Confirm"
 msgstr "Sah"
 
-#: ../src/msw/mimetype.cpp:715
+#: ../src/msw/mimetype.cpp:732
 msgid "Confirm registry update"
 msgstr "Pasti kemaskini registri"
 
-#: ../src/html/htmlwin.cpp:557
+#: ../src/html/htmlwin.cpp:561
 msgid "Connecting..."
 msgstr "Menghubungkan..."
 
-#: ../src/html/helpwnd.cpp:483
+#: ../src/html/helpwnd.cpp:475
 msgid "Contents"
 msgstr "Kandungan"
 
-#: ../src/common/strconv.cpp:2271
+#: ../src/propgrid/advprops.cpp:852
+msgid "ControlDark"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:853
+msgid "ControlLight"
+msgstr ""
+
+#: ../src/common/strconv.cpp:2259
 #, c-format
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "Penukaran kepada set aksara '%s' tidak berfungsi."
@@ -2353,7 +2419,7 @@ msgstr "Penukaran kepada set aksara '%s' tidak berfungsi."
 msgid "Convert"
 msgstr "Kandungan"
 
-#: ../src/html/htmlwin.cpp:1070
+#: ../src/html/htmlwin.cpp:1074
 #, c-format
 msgid "Copied to clipboard:\"%s\""
 msgstr "Salin ke papan klip:\"%s\""
@@ -2370,6 +2436,10 @@ msgstr "&Salin"
 #: ../src/common/stockitem.cpp:258
 msgid "Copy selection"
 msgstr "Salin pilihan"
+
+#: ../src/msw/glcanvas.cpp:183 ../src/unix/glx11.cpp:136
+msgid "Core OpenGL profile is not supported by the OpenGL driver."
+msgstr ""
 
 #: ../src/richtext/richtextborderspage.cpp:569
 #: ../src/richtext/richtextborderspage.cpp:604
@@ -2460,7 +2530,7 @@ msgstr "Gagal mulakan mencetak."
 msgid "Could not set column width."
 msgstr "Gagal mulakan pralihat dokumen."
 
-#: ../src/common/filefn.cpp:1554
+#: ../src/common/filefn.cpp:1468
 #, fuzzy
 msgid "Could not set current working directory"
 msgstr "Gagal mendapatkan direktori kerja"
@@ -2490,12 +2560,12 @@ msgstr "Gagal mulakan mencetak."
 msgid "Could not set property flags."
 msgstr "Gagal mulakan mencetak."
 
-#: ../src/common/prntbase.cpp:1985
+#: ../src/common/prntbase.cpp:1999
 msgid "Could not start document preview."
 msgstr "Gagal mulakan pralihat dokumen."
 
-#: ../src/generic/printps.cpp:178 ../src/msw/printwin.cpp:210
-#: ../src/gtk/print.cpp:1077
+#: ../src/generic/printps.cpp:178 ../src/gtk/print.cpp:1103
+#: ../src/msw/printwin.cpp:210
 msgid "Could not start printing."
 msgstr "Gagal mulakan mencetak."
 
@@ -2503,17 +2573,13 @@ msgstr "Gagal mulakan mencetak."
 msgid "Could not transfer data to window"
 msgstr "Gagal hantar data ke tetingkap"
 
-#: ../src/os2/thread.cpp:160
-msgid "Couldn't acquire a mutex lock"
-msgstr "Gagal mendapatkan kunci mutex"
-
+#: ../src/msw/dragimag.cpp:193 ../src/msw/dragimag.cpp:232
 #: ../src/msw/imaglist.cpp:189 ../src/msw/imaglist.cpp:226
-#: ../src/msw/imaglist.cpp:238 ../src/msw/dragimag.cpp:193
-#: ../src/msw/dragimag.cpp:232
+#: ../src/msw/imaglist.cpp:238
 msgid "Couldn't add an image to the image list."
 msgstr "Gagal tambah imej kepada senarai imej."
 
-#: ../src/msw/timer.cpp:134 ../src/os2/timer.cpp:113
+#: ../src/msw/timer.cpp:134
 msgid "Couldn't create a timer"
 msgstr "Gagal cipta pemasa"
 
@@ -2521,21 +2587,17 @@ msgstr "Gagal cipta pemasa"
 msgid "Couldn't create the overlay window"
 msgstr "Gagal mencipta tetingkap lapisan"
 
-#: ../src/common/translation.cpp:2015
+#: ../src/common/translation.cpp:2028
 #, fuzzy
 msgid "Couldn't enumerate translations"
 msgstr "Gagal menamatkan benang"
 
-#: ../src/common/dynlib.cpp:152
+#: ../src/common/dynlib.cpp:120
 #, c-format
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Gagal menemui simbol '%s' dalam pustaka dinamik"
 
-#: ../src/gtk/print.cpp:2010
-msgid "Couldn't get hatch style from wxBrush."
-msgstr ""
-
-#: ../src/msw/thread.cpp:945
+#: ../src/msw/thread.cpp:920
 msgid "Couldn't get the current thread pointer"
 msgstr "Gagal dapatkan penunjuk benang semasa"
 
@@ -2548,7 +2610,7 @@ msgstr "Gagal memulakan konteks pada tetingkap lapisan"
 msgid "Couldn't initialize GIF hash table."
 msgstr "Gagal memulakan strim zlib kempis."
 
-#: ../src/common/imagpng.cpp:657
+#: ../src/common/imagpng.cpp:649
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
 msgstr "Gagal memuat imej PNG - fail telah rosak atau tidak cukup memori."
 
@@ -2557,7 +2619,7 @@ msgstr "Gagal memuat imej PNG - fail telah rosak atau tidak cukup memori."
 msgid "Couldn't load sound data from '%s'."
 msgstr "Gagal memuat data bunyi dari '%s'."
 
-#: ../src/msw/dirdlg.cpp:441
+#: ../src/msw/dirdlg.cpp:455
 #, fuzzy
 msgid "Couldn't obtain folder name"
 msgstr "Gagal cipta pemasa"
@@ -2567,26 +2629,22 @@ msgstr "Gagal cipta pemasa"
 msgid "Couldn't open audio: %s"
 msgstr "Gagal membuka audio: %s"
 
-#: ../src/msw/ole/dataobj.cpp:377
+#: ../src/msw/ole/dataobj.cpp:372
 #, c-format
 msgid "Couldn't register clipboard format '%s'."
 msgstr "Gagal daftar format klipbod '%s'."
 
-#: ../src/os2/thread.cpp:177
-msgid "Couldn't release a mutex"
-msgstr "Gagal lepaskan mutex"
-
-#: ../src/msw/listctrl.cpp:756
+#: ../src/msw/listctrl.cpp:760
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "Gagal menyelamatkan maklumat perihal senarai item kawalan %d."
 
-#: ../src/common/imagpng.cpp:746 ../src/common/imagpng.cpp:757
-#: ../src/common/imagpng.cpp:767
+#: ../src/common/imagpng.cpp:738 ../src/common/imagpng.cpp:749
+#: ../src/common/imagpng.cpp:759
 msgid "Couldn't save PNG image."
 msgstr "Gagal simpan imej PNG."
 
-#: ../src/msw/thread.cpp:715
+#: ../src/msw/thread.cpp:690
 msgid "Couldn't terminate thread"
 msgstr "Gagal menamatkan benang"
 
@@ -2599,17 +2657,21 @@ msgstr "Parameter Cipta tidak dijumpai dalam parameter RRTI yang dinyatakan"
 msgid "Create directory"
 msgstr "Cipta direktori"
 
-#: ../src/generic/filedlgg.cpp:228 ../src/generic/dirdlgg.cpp:131
+#: ../src/generic/dirdlgg.cpp:131 ../src/generic/filedlgg.cpp:220
 msgid "Create new directory"
 msgstr "Cipta direktori baru"
 
-#: ../src/common/accelcmn.cpp:322
+#: ../src/propgrid/advprops.cpp:1708
+msgid "Cross"
+msgstr ""
+
+#: ../src/common/accelcmn.cpp:323
 #, fuzzy
 msgid "Ctrl+"
 msgstr "Ctrl-"
 
-#: ../src/richtext/richtextctrl.cpp:331 ../src/osx/textctrl_osx.cpp:582
-#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2334
+#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2445
+#: ../src/osx/textctrl_osx.cpp:582 ../src/richtext/richtextctrl.cpp:332
 msgid "Cu&t"
 msgstr "&Potong"
 
@@ -2617,7 +2679,13 @@ msgstr "&Potong"
 msgid "Current directory:"
 msgstr "Direktori semasa:"
 
-#: ../src/gtk/print.cpp:759
+#: ../src/propgrid/advprops.cpp:868 ../src/propgrid/advprops.cpp:1524
+#: ../src/propgrid/advprops.cpp:1562
+#, fuzzy
+msgid "Custom"
+msgstr "Saiz Fon"
+
+#: ../src/gtk/print.cpp:218
 #, fuzzy
 msgid "Custom size"
 msgstr "Saiz Fon"
@@ -2648,49 +2716,29 @@ msgstr "Helai D, 22 x 34 in"
 msgid "DDE poke request failed"
 msgstr "Permintaan poke DDE gagal"
 
-#: ../src/common/accelcmn.cpp:79
-msgid "DECIMAL"
-msgstr "DECIMAL"
-
-#: ../src/common/accelcmn.cpp:47
-msgid "DEL"
-msgstr "DEL"
-
-#: ../src/common/accelcmn.cpp:48
-msgid "DELETE"
-msgstr "DELETE"
-
-#: ../src/common/imagbmp.cpp:1090
+#: ../src/common/imagbmp.cpp:1168
 msgid "DIB Header: Encoding doesn't match bitdepth."
 msgstr "Kepala DIB: pengenkod tidak sepadan kedalaman bit."
 
-#: ../src/common/imagbmp.cpp:1038
+#: ../src/common/imagbmp.cpp:1073
 msgid "DIB Header: Image height > 32767 pixels for file."
 msgstr "Kepala DIB: Tinggi imej > 32767 piksel untuk fail."
 
-#: ../src/common/imagbmp.cpp:1030
+#: ../src/common/imagbmp.cpp:1065
 msgid "DIB Header: Image width > 32767 pixels for file."
 msgstr "Kepala DIB: Lebar imej > 32767 piksel untuk fail."
 
-#: ../src/common/imagbmp.cpp:1058
+#: ../src/common/imagbmp.cpp:1093
 msgid "DIB Header: Unknown bitdepth in file."
 msgstr "Kepala DIB: kedalaman bit fail tidak diketahui."
 
-#: ../src/common/imagbmp.cpp:1072
+#: ../src/common/imagbmp.cpp:1148
 msgid "DIB Header: Unknown encoding in file."
 msgstr "Kepala DIB: mengenkod fail tidak diketahui."
-
-#: ../src/common/accelcmn.cpp:80
-msgid "DIVIDE"
-msgstr "DIVIDE"
 
 #: ../src/common/paper.cpp:122
 msgid "DL Envelope, 110 x 220 mm"
 msgstr "Sampul DL, 110 x 220 mm"
-
-#: ../src/common/accelcmn.cpp:59
-msgid "DOWN"
-msgstr "DOWN"
 
 #: ../src/richtext/richtextborderspage.cpp:616
 msgid "Dashed"
@@ -2717,9 +2765,19 @@ msgstr "Gagal mencipta laporan nyahpijat."
 msgid "Debug report generation has failed."
 msgstr "Gagal menjana laporan nyahpijat"
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:82
+msgid "Decimal"
+msgstr ""
+
 #: ../src/generic/fontdlgg.cpp:323
 msgid "Decorative"
 msgstr "Dekoratif"
+
+#: ../src/propgrid/advprops.cpp:1702
+#, fuzzy
+msgid "Default"
+msgstr "lalai"
 
 #: ../src/common/fmapbase.cpp:796
 msgid "Default encoding"
@@ -2734,8 +2792,15 @@ msgstr "Pencetak default"
 msgid "Default printer"
 msgstr "Pencetak default"
 
-#: ../src/richtext/richtextbuffer.cpp:8095 ../src/common/stockitem.cpp:152
-#: ../src/stc/stc_i18n.cpp:20
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:49
+#, fuzzy
+msgid "Del"
+msgstr "Padam"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:48 ../src/common/stockitem.cpp:152
+#: ../src/richtext/richtextbuffer.cpp:8137 ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "Padam"
 
@@ -2743,12 +2808,12 @@ msgstr "Padam"
 msgid "Delete A&ll"
 msgstr "P&adam Semua"
 
-#: ../src/richtext/richtextbuffer.cpp:11105
+#: ../src/richtext/richtextbuffer.cpp:11179
 #, fuzzy
 msgid "Delete Column"
 msgstr "Padam pilihan"
 
-#: ../src/richtext/richtextbuffer.cpp:11055
+#: ../src/richtext/richtextbuffer.cpp:11129
 #, fuzzy
 msgid "Delete Row"
 msgstr "Padam"
@@ -2757,7 +2822,7 @@ msgstr "Padam"
 msgid "Delete Style"
 msgstr "Padam Gaya"
 
-#: ../src/richtext/richtextctrl.cpp:1306 ../src/richtext/richtextctrl.cpp:1544
+#: ../src/richtext/richtextctrl.cpp:1322 ../src/richtext/richtextctrl.cpp:1561
 msgid "Delete Text"
 msgstr "Padam Teks"
 
@@ -2789,7 +2854,7 @@ msgstr "Kebergantungan modul \"%s\" daripada \"%s\" tidak wujud."
 msgid "Descending"
 msgstr "Pengenkodan default"
 
-#: ../src/generic/dirctrlg.cpp:626
+#: ../src/generic/dirctrlg.cpp:547 ../src/propgrid/advprops.cpp:854
 msgid "Desktop"
 msgstr "Desktop"
 
@@ -2802,7 +2867,7 @@ msgstr "Dibangunkan oleh"
 msgid "Developers"
 msgstr "Dibangunkan oleh"
 
-#: ../src/msw/dialup.cpp:393
+#: ../src/msw/dialup.cpp:384
 msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
@@ -2823,12 +2888,12 @@ msgstr "Ralat DiretFB %d berlaku."
 msgid "Directories"
 msgstr "Direktori"
 
-#: ../src/common/filefn.cpp:1243
+#: ../src/common/filefn.cpp:1198
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "Direktori '%s' gagal dicipta"
 
-#: ../src/common/filefn.cpp:1263
+#: ../src/common/filefn.cpp:1216
 #, fuzzy, c-format
 msgid "Directory '%s' couldn't be deleted"
 msgstr "Direktori '%s' gagal dicipta"
@@ -2845,7 +2910,7 @@ msgstr "Direktori tidak wujud."
 msgid "Discard changes and reload the last saved version?"
 msgstr ""
 
-#: ../src/html/helpwnd.cpp:513
+#: ../src/html/helpwnd.cpp:502
 msgid ""
 "Display all index items that contain given substring. Search is case "
 "insensitive."
@@ -2853,15 +2918,20 @@ msgstr ""
 "Papar semua indeks item yang subrentetannya diberi. Carian adalah sensitif "
 "kes."
 
-#: ../src/html/helpwnd.cpp:693
+#: ../src/html/helpwnd.cpp:679
 msgid "Display options dialog"
 msgstr "Papar dialog pilihan"
 
-#: ../src/html/helpwnd.cpp:327
+#: ../src/html/helpwnd.cpp:322
 msgid "Displays help as you browse the books on the left."
 msgstr "Papar bantuan sebaik sahaja anda melayari kiri buku."
 
-#: ../src/msw/mimetype.cpp:708
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:83
+msgid "Divide"
+msgstr ""
+
+#: ../src/msw/mimetype.cpp:725
 msgid ""
 "Do you want to overwrite the command used to %s files with extension \"%s"
 "\" ?\n"
@@ -2882,7 +2952,7 @@ msgstr ""
 msgid "Do you want to save changes to %s?"
 msgstr "Adakah anda ingin menyimpan perubahan kepada dokumen \"%s\"?"
 
-#: ../src/common/prntbase.cpp:525
+#: ../src/common/prntbase.cpp:537
 #, fuzzy
 msgid "Document:"
 msgstr "Dokumentasi oleh"
@@ -2896,15 +2966,15 @@ msgstr "Dokumentasi oleh"
 msgid "Documentation writers"
 msgstr "Dokumentasi oleh"
 
-#: ../src/common/sizer.cpp:2684
+#: ../src/common/sizer.cpp:2688
 msgid "Don't Save"
 msgstr "Jangan Simpan"
 
-#: ../src/msw/frame.cpp:122 ../src/html/htmlwin.cpp:624
+#: ../src/html/htmlwin.cpp:628 ../src/msw/frame.cpp:137
 msgid "Done"
 msgstr "&Selesai"
 
-#: ../src/generic/progdlgg.cpp:481 ../src/msw/progdlg.cpp:407
+#: ../src/generic/progdlgg.cpp:482 ../src/msw/progdlg.cpp:407
 msgid "Done."
 msgstr "Selesai."
 
@@ -2927,11 +2997,13 @@ msgstr "Poskad Jepun Berganda Dua Diputar 148 x 200 mm"
 msgid "Doubly used id : %d"
 msgstr "Dua ID diguna : %d"
 
-#: ../src/generic/fdrepdlg.cpp:152 ../src/common/stockitem.cpp:153
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:62 ../src/common/stockitem.cpp:153
+#: ../src/generic/fdrepdlg.cpp:152
 msgid "Down"
 msgstr "Turun"
 
-#: ../src/richtext/richtextctrl.cpp:848
+#: ../src/richtext/richtextctrl.cpp:859
 msgid "Drag"
 msgstr ""
 
@@ -2939,30 +3011,10 @@ msgstr ""
 msgid "E sheet, 34 x 44 in"
 msgstr "Helai E, 34 x 44 in"
 
-#: ../src/common/accelcmn.cpp:61
-msgid "END"
-msgstr "END"
-
-#: ../src/common/accelcmn.cpp:52
-msgid "ENTER"
-msgstr "ENTER"
-
 #: ../src/unix/fswatcher_inotify.cpp:548
 #, fuzzy
 msgid "EOF while reading from inotify descriptor"
 msgstr "gagal membaca dari penghurai fail %d"
-
-#: ../src/common/accelcmn.cpp:64
-msgid "ESC"
-msgstr "ESC"
-
-#: ../src/common/accelcmn.cpp:65
-msgid "ESCAPE"
-msgstr "ESCAPE"
-
-#: ../src/common/accelcmn.cpp:73
-msgid "EXECUTE"
-msgstr "EXECUTE"
 
 #: ../src/common/stockitem.cpp:154
 #, fuzzy
@@ -3019,6 +3071,17 @@ msgstr "Gagal mulakan mencetak."
 msgid "Enables a background colour."
 msgstr "Warna latar"
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:64
+msgid "End"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:53
+#, fuzzy
+msgid "Enter"
+msgstr "Pencetak"
+
 #: ../src/richtext/richtextstyledlg.cpp:934
 #, fuzzy
 msgid "Enter a box style name"
@@ -3046,7 +3109,7 @@ msgstr "Masukkan nama perenggan gaya"
 msgid "Enter command to open file \"%s\":"
 msgstr "Masukkan arahan untuk membuka fail \"%s\":"
 
-#: ../src/generic/helpext.cpp:463
+#: ../src/generic/helpext.cpp:459
 msgid "Entries found"
 msgstr "Masukan ditemui"
 
@@ -3062,12 +3125,13 @@ msgstr ""
 "Perluasan pembolehubah persekitaran gagal: hilang '%c' pada posisi %u dalam "
 "'%s'."
 
-#: ../src/generic/dirctrlg.cpp:670 ../src/generic/dirctrlg.cpp:688
-#: ../src/generic/dirctrlg.cpp:699 ../src/generic/dirdlgg.cpp:352
+#: ../src/generic/dirctrlg.cpp:591 ../src/generic/dirctrlg.cpp:609
+#: ../src/generic/dirctrlg.cpp:620 ../src/generic/dirdlgg.cpp:352
 #: ../src/generic/filectrlg.cpp:677 ../src/generic/filectrlg.cpp:791
 #: ../src/generic/filectrlg.cpp:805 ../src/generic/filectrlg.cpp:821
 #: ../src/generic/filectrlg.cpp:1381 ../src/generic/filectrlg.cpp:1412
-#: ../src/gtk/filedlg.cpp:73 ../src/gtk1/fontdlg.cpp:74
+#: ../src/generic/filedlgg.cpp:365 ../src/gtk/filedlg.cpp:73
+#: ../src/gtk1/fontdlg.cpp:74
 msgid "Error"
 msgstr "Ralat"
 
@@ -3085,24 +3149,24 @@ msgstr "Ralat mencipta direktori"
 msgid "Error creating directory"
 msgstr "Ralat mencipta direktori"
 
-#: ../src/common/imagbmp.cpp:1101
+#: ../src/common/imagbmp.cpp:1180
 msgid "Error in reading image DIB."
 msgstr "Ralat membaca DIB imej."
 
-#: ../src/propgrid/propgrid.cpp:6550
+#: ../src/propgrid/propgrid.cpp:6652
 #, c-format
 msgid "Error in resource: %s"
 msgstr ""
 
-#: ../src/common/fileconf.cpp:453
+#: ../src/common/fileconf.cpp:445
 msgid "Error reading config options."
 msgstr "Ralat membaca pilihan konfig."
 
-#: ../src/common/fileconf.cpp:1064
+#: ../src/common/fileconf.cpp:1056
 msgid "Error saving user configuration data."
 msgstr "Ralat menulis fail konfigurasi pengguna."
 
-#: ../src/gtk/print.cpp:671
+#: ../src/gtk/print.cpp:691
 #, fuzzy
 msgid "Error while printing: "
 msgstr "Ralat ketika menunggu semafor"
@@ -3110,6 +3174,17 @@ msgstr "Ralat ketika menunggu semafor"
 #: ../src/common/log.cpp:223
 msgid "Error: "
 msgstr "Ralat: "
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:67
+msgid "Esc"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:68
+#, fuzzy
+msgid "Escape"
+msgstr "Lanskap"
 
 #: ../src/common/fmapbase.cpp:150
 msgid "Esperanto (ISO-8859-3)"
@@ -3125,25 +3200,21 @@ msgstr "Masa anggaran : "
 msgid "Executable files (*.exe)|*.exe|"
 msgstr "Fail boleh laksana (*.exe)|*.exe|Semua fail (*.*)|*.*||"
 
-#: ../src/common/stockitem.cpp:155
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:76 ../src/common/stockitem.cpp:155
 msgid "Execute"
 msgstr ""
 
-#: ../src/msw/utilsexc.cpp:887
+#: ../src/msw/utilsexc.cpp:897
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr "Perlaksanaan arahan '%s' gagal"
-
-#: ../src/os2/utilsexc.cpp:163
-#, c-format
-msgid "Execution of command '%s' failed with error: %ul"
-msgstr "Perlaksanaan arahan '%s' gagal dengan ralat: %ul"
 
 #: ../src/common/paper.cpp:106
 msgid "Executive, 7 1/4 x 10 1/2 in"
 msgstr "Eksekutif, 7 1/4 x 10 1/2 in"
 
-#: ../src/msw/registry.cpp:1230
+#: ../src/msw/registry.cpp:1254
 #, c-format
 msgid ""
 "Exporting registry key: file \"%s\" already exists and won't be overwritten."
@@ -3159,11 +3230,11 @@ msgstr "Extended Unix Codepage for Japanese (EUC-JP)"
 msgid "Extraction of '%s' into '%s' failed."
 msgstr "Pengekstrakan '%s' kepada '%s' gagal."
 
-#: ../src/common/accelcmn.cpp:238 ../src/common/accelcmn.cpp:333
+#: ../src/common/accelcmn.cpp:239 ../src/common/accelcmn.cpp:334
 msgid "F"
 msgstr "F"
 
-#: ../src/propgrid/advprops.cpp:641
+#: ../src/propgrid/advprops.cpp:648
 #, fuzzy
 msgid "Face Name"
 msgstr "NamaBaru"
@@ -3187,11 +3258,11 @@ msgstr "Gagal menyediakan %luKb memori untuk data peta bit."
 msgid "Failed to allocate colour for OpenGL"
 msgstr "Gagal mencipta kursor."
 
-#: ../src/unix/displayx11.cpp:292
+#: ../src/unix/displayx11.cpp:234
 msgid "Failed to change video mode"
 msgstr "Klik menukar mod video"
 
-#: ../src/common/image.cpp:3139
+#: ../src/common/image.cpp:3141
 #, fuzzy, c-format
 msgid "Failed to check format of image file \"%s\"."
 msgstr "Gagal menyimpan peta bit kepada fail \"%s\"."
@@ -3201,7 +3272,7 @@ msgstr "Gagal menyimpan peta bit kepada fail \"%s\"."
 msgid "Failed to clean up debug report directory \"%s\""
 msgstr "Gagal membersihkan direktori laporan nyahpijat \"%s\""
 
-#: ../src/common/filename.cpp:211
+#: ../src/common/filename.cpp:196
 msgid "Failed to close file handle"
 msgstr "Gagal tutup pengemudi fail"
 
@@ -3219,11 +3290,11 @@ msgstr "Gagal menutup klipbod."
 msgid "Failed to close the display \"%s\""
 msgstr "Gagal menutup paparan \"%s\""
 
-#: ../src/msw/dialup.cpp:818
+#: ../src/msw/dialup.cpp:807
 msgid "Failed to connect: missing username/password."
 msgstr "Sila menyambung: hilang nama pengguna/kata laluan."
 
-#: ../src/msw/dialup.cpp:764
+#: ../src/msw/dialup.cpp:753
 msgid "Failed to connect: no ISP to dial."
 msgstr "Gagal menyambung: tiada ISP untuk dail."
 
@@ -3232,27 +3303,27 @@ msgstr "Gagal menyambung: tiada ISP untuk dail."
 msgid "Failed to convert file \"%s\" to Unicode."
 msgstr "Gagal menukar kadungan failkepada Unikod."
 
-#: ../src/generic/logg.cpp:976
+#: ../src/generic/logg.cpp:974
 #, fuzzy
 msgid "Failed to copy dialog contents to the clipboard."
 msgstr "Gagal membuka klipbod."
 
-#: ../src/msw/registry.cpp:691
+#: ../src/msw/registry.cpp:684
 #, c-format
 msgid "Failed to copy registry value '%s'"
 msgstr "Gagal salin nilai registri '%s'"
 
-#: ../src/msw/registry.cpp:700
+#: ../src/msw/registry.cpp:693
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
 msgstr "Gagal salin kandunugan kunci registri '%s' ke '%s'."
 
-#: ../src/common/filefn.cpp:1051
+#: ../src/common/filefn.cpp:1021
 #, c-format
 msgid "Failed to copy the file '%s' to '%s'"
 msgstr "Gagal salin fail '%s' ke '%s'."
 
-#: ../src/msw/registry.cpp:678
+#: ../src/msw/registry.cpp:671
 #, c-format
 msgid "Failed to copy the registry subkey '%s' to '%s'."
 msgstr "Gagal salin subkunci registri '%s' ke '%s'."
@@ -3261,19 +3332,19 @@ msgstr "Gagal salin subkunci registri '%s' ke '%s'."
 msgid "Failed to create DDE string"
 msgstr "Gagal cipta rentetan DDE"
 
-#: ../src/msw/mdi.cpp:594
+#: ../src/msw/mdi.cpp:614
 msgid "Failed to create MDI parent frame."
 msgstr "Gagal cipta bingkai MDI induk."
 
-#: ../src/common/filename.cpp:1086
+#: ../src/common/filename.cpp:1043
 msgid "Failed to create a temporary file name"
 msgstr "Gagal mencipta nama fail sementara"
 
-#: ../src/msw/utilsexc.cpp:234
+#: ../src/msw/utilsexc.cpp:230
 msgid "Failed to create an anonymous pipe"
 msgstr "Gagal mencipta saliran tanpanama"
 
-#: ../src/msw/ole/automtn.cpp:525
+#: ../src/msw/ole/automtn.cpp:528
 #, fuzzy, c-format
 msgid "Failed to create an instance of \"%s\""
 msgstr "Gagal mencipta direktori \"%s\""
@@ -3306,12 +3377,12 @@ msgstr ""
 msgid "Failed to create epoll descriptor"
 msgstr "Gagal mencipta kursor."
 
-#: ../src/msw/mimetype.cpp:200
+#: ../src/msw/mimetype.cpp:207
 #, c-format
 msgid "Failed to create registry entry for '%s' files."
 msgstr "Gagal mencipta kunci registri  untuk fail '%s'."
 
-#: ../src/msw/fdrepdlg.cpp:442
+#: ../src/msw/fdrepdlg.cpp:409
 #, c-format
 msgid "Failed to create the standard find/replace dialog (error code %d)"
 msgstr "Gagal mencipta dialog cari/ganti piawai (kod ralat %d)"
@@ -3330,7 +3401,7 @@ msgstr "Gagal papar dokumen HTML dalam pengkodan %s"
 msgid "Failed to empty the clipboard."
 msgstr "Gagal melapangkan klipbod."
 
-#: ../src/unix/displayx11.cpp:266
+#: ../src/unix/displayx11.cpp:212
 msgid "Failed to enumerate video modes"
 msgstr "Gagal menghitung mod video"
 
@@ -3338,12 +3409,12 @@ msgstr "Gagal menghitung mod video"
 msgid "Failed to establish an advise loop with DDE server"
 msgstr "Gagal dirikan gelung yang dipertimbangkan dengan pelayan DDE"
 
-#: ../src/msw/dialup.cpp:650 ../src/msw/dialup.cpp:884
+#: ../src/msw/dialup.cpp:639 ../src/msw/dialup.cpp:873
 #, c-format
 msgid "Failed to establish dialup connection: %s"
 msgstr "Gagal mengukuhkan sambuungan mendial: %s"
 
-#: ../src/unix/utilsunx.cpp:617
+#: ../src/unix/utilsunx.cpp:607
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Gagal melaksanakan '%s'\n"
@@ -3352,39 +3423,39 @@ msgstr "Gagal melaksanakan '%s'\n"
 msgid "Failed to execute curl, please install it in PATH."
 msgstr "Gagal melaksanakan curl. sila pasangkannya dalam PATH."
 
-#: ../src/msw/ole/automtn.cpp:508
+#: ../src/msw/ole/automtn.cpp:511
 #, fuzzy, c-format
 msgid "Failed to find CLSID of \"%s\""
 msgstr "Gagal membuka papara \"%s\"."
 
-#: ../src/common/regex.cpp:434 ../src/common/regex.cpp:482
+#: ../src/common/regex.cpp:431 ../src/common/regex.cpp:479
 #, c-format
 msgid "Failed to find match for regular expression: %s"
 msgstr "Gagal menemui padanan ungkapan nalar: %s"
 
-#: ../src/msw/dialup.cpp:716
+#: ../src/msw/dialup.cpp:705
 #, c-format
 msgid "Failed to get ISP names: %s"
 msgstr "Gagal mendapatkan nama ISP: %s"
 
-#: ../src/msw/ole/automtn.cpp:577
+#: ../src/msw/ole/automtn.cpp:580
 #, fuzzy, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
 msgstr "Gagal mencipta direktori \"%s\""
 
-#: ../src/msw/clipbrd.cpp:747
+#: ../src/msw/clipbrd.cpp:745
 msgid "Failed to get data from the clipboard"
 msgstr "Gagal memdapatkan data dari klipbod."
 
-#: ../src/common/time.cpp:249
+#: ../src/common/time.cpp:242
 msgid "Failed to get the local system time"
 msgstr "Gagal mendapatkan masa sistem lokal"
 
-#: ../src/common/filefn.cpp:1445
+#: ../src/common/filefn.cpp:1369
 msgid "Failed to get the working directory"
 msgstr "Gagal mendapatkan direktori kerja"
 
-#: ../src/univ/theme.cpp:113
+#: ../src/univ/theme.cpp:114
 msgid "Failed to initialize GUI: no built-in themes found."
 msgstr "Gagal memulakan GUI: tiada tema bina-dalam ditemui."
 
@@ -3392,11 +3463,11 @@ msgstr "Gagal memulakan GUI: tiada tema bina-dalam ditemui."
 msgid "Failed to initialize MS HTML Help."
 msgstr "Gagal memulakan Bantuan MS HTML."
 
-#: ../src/msw/glcanvas.cpp:892
+#: ../src/msw/glcanvas.cpp:1021
 msgid "Failed to initialize OpenGL"
 msgstr "Gagal memulakan OpenGL"
 
-#: ../src/msw/dialup.cpp:879
+#: ../src/msw/dialup.cpp:868
 #, fuzzy, c-format
 msgid "Failed to initiate dialup connection: %s"
 msgstr "Gagal menamatkan sambungan mendial: %s"
@@ -3423,7 +3494,7 @@ msgstr ""
 "Gagal mengikat benang, kemungkinan memori bocor dikesan - sila mulakan "
 "program"
 
-#: ../src/msw/utils.cpp:745
+#: ../src/msw/utils.cpp:679
 #, c-format
 msgid "Failed to kill process %d"
 msgstr "Gagal membunuh proses %d"
@@ -3448,7 +3519,7 @@ msgstr "Gagal memuat imej %d dari fail '%s'."
 msgid "Failed to load image %d from stream."
 msgstr "Gagal memuat imej %d dari fail '%s'."
 
-#: ../src/common/image.cpp:2450 ../src/common/image.cpp:2469
+#: ../src/common/image.cpp:2452 ../src/common/image.cpp:2471
 #, fuzzy, c-format
 msgid "Failed to load image from file \"%s\"."
 msgstr "Gagal memuat imej %d dari fail '%s'."
@@ -3462,17 +3533,22 @@ msgstr "Gagal memuat metafail dari fail \"%s\"."
 msgid "Failed to load mpr.dll."
 msgstr "Gagal memuat mpr.dll."
 
-#: ../src/msw/utils.cpp:1120
+#: ../src/msw/utils.cpp:993
 #, fuzzy, c-format
 msgid "Failed to load resource \"%s\"."
 msgstr "Gagal memuat metafail dari fail \"%s\"."
 
-#: ../src/common/dynlib.cpp:100
+#: ../src/common/dynlib.cpp:92
 #, c-format
 msgid "Failed to load shared library '%s'"
 msgstr "Gagal memuat pustaka kongsi '%s'"
 
-#: ../src/msw/utils.cpp:1127
+#: ../src/osx/core/sound.cpp:118
+#, fuzzy, c-format
+msgid "Failed to load sound from \"%s\" (error %d)."
+msgstr "Gagal memuat metafail dari fail \"%s\"."
+
+#: ../src/msw/utils.cpp:1000
 #, fuzzy, c-format
 msgid "Failed to lock resource \"%s\"."
 msgstr "Gagal mengunci fail kunci '%s'"
@@ -3487,7 +3563,7 @@ msgstr "Gagal mengunci fail kunci '%s'"
 msgid "Failed to modify descriptor %d in epoll descriptor %d"
 msgstr ""
 
-#: ../src/common/filename.cpp:2687
+#: ../src/common/filename.cpp:2648
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "Gagal mengubahsuai masa fail untuk '%s'"
@@ -3496,12 +3572,12 @@ msgstr "Gagal mengubahsuai masa fail untuk '%s'"
 msgid "Failed to monitor I/O channels"
 msgstr ""
 
-#: ../src/common/filename.cpp:194
+#: ../src/common/filename.cpp:179
 #, fuzzy, c-format
 msgid "Failed to open '%s' for reading"
 msgstr "Gagal buka '%s' untuk %s"
 
-#: ../src/common/filename.cpp:199
+#: ../src/common/filename.cpp:184
 #, fuzzy, c-format
 msgid "Failed to open '%s' for writing"
 msgstr "Gagal buka '%s' untuk %s"
@@ -3511,7 +3587,7 @@ msgstr "Gagal buka '%s' untuk %s"
 msgid "Failed to open CHM archive '%s'."
 msgstr "Gagal membuka arkib sementara '%s'."
 
-#: ../src/common/utilscmn.cpp:1142
+#: ../src/common/utilscmn.cpp:1180
 #, fuzzy, c-format
 msgid "Failed to open URL \"%s\" in default browser."
 msgstr "Gagal buka '%s' untuk %s"
@@ -3526,7 +3602,7 @@ msgstr "Gagal buka '%s' untuk %s"
 msgid "Failed to open display \"%s\"."
 msgstr "Gagal membuka papara \"%s\"."
 
-#: ../src/common/filename.cpp:1121
+#: ../src/common/filename.cpp:1078
 msgid "Failed to open temporary file."
 msgstr "Gagal membuka fail sementara."
 
@@ -3534,17 +3610,17 @@ msgstr "Gagal membuka fail sementara."
 msgid "Failed to open the clipboard."
 msgstr "Gagal membuka klipbod."
 
-#: ../src/common/translation.cpp:1171
+#: ../src/common/translation.cpp:1184
 #, fuzzy, c-format
 msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "Gagal hurai Bentuk-Majmuk:'%s'"
 
-#: ../src/unix/mediactrl.cpp:1268
+#: ../src/unix/mediactrl.cpp:1266
 #, fuzzy, c-format
 msgid "Failed to prepare playing \"%s\"."
 msgstr "Gagal membuka papara \"%s\"."
 
-#: ../src/msw/clipbrd.cpp:647
+#: ../src/msw/clipbrd.cpp:645
 msgid "Failed to put data on the clipboard"
 msgstr "Gagal letak data pada klipbod"
 
@@ -3552,7 +3628,7 @@ msgstr "Gagal letak data pada klipbod"
 msgid "Failed to read PID from lock file."
 msgstr "Gagal membaca PID daripada fail kunci."
 
-#: ../src/common/fileconf.cpp:464
+#: ../src/common/fileconf.cpp:456
 #, fuzzy
 msgid "Failed to read config options."
 msgstr "Ralat membaca pilihan konfig."
@@ -3572,11 +3648,11 @@ msgstr "Gagal membaca PID daripada fail kunci."
 msgid "Failed to read from wake-up pipe"
 msgstr "Gagal membaca PID daripada fail kunci."
 
-#: ../src/unix/utilsunx.cpp:685
+#: ../src/unix/utilsunx.cpp:675
 msgid "Failed to redirect child process input/output"
 msgstr "Gagal mengalihkan  input/output proses anak"
 
-#: ../src/msw/utilsexc.cpp:696
+#: ../src/msw/utilsexc.cpp:706
 msgid "Failed to redirect the child process IO"
 msgstr "Gagal mengalihkan IO proses anak"
 
@@ -3605,12 +3681,12 @@ msgstr "Gagal buang fail kunci '%s'"
 msgid "Failed to remove stale lock file '%s'."
 msgstr "Gagal buang fail laporan basi '%s'."
 
-#: ../src/msw/registry.cpp:528
+#: ../src/msw/registry.cpp:521
 #, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
 msgstr "Gagal menamakan nilai registri '%s' kepada '%s'."
 
-#: ../src/common/filefn.cpp:1161
+#: ../src/common/filefn.cpp:1124
 #, c-format
 msgid ""
 "Failed to rename the file '%s' to '%s' because the destination file already "
@@ -3619,25 +3695,25 @@ msgstr ""
 "Gagal menamakan semula fail '%s' kepada '%s' disebabkan fail destinasi telah "
 "wujud."
 
-#: ../src/msw/registry.cpp:633
+#: ../src/msw/registry.cpp:626
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
 msgstr "Gagal menamakan kunci registri '%s' kepada '%s'."
 
-#: ../src/msw/clipbrd.cpp:497
+#: ../src/msw/clipbrd.cpp:495
 msgid "Failed to retrieve data from the clipboard."
 msgstr "Gagal mendapatkan data dari klipbod."
 
-#: ../src/common/filename.cpp:2783
+#: ../src/common/filename.cpp:2744
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr "Gagal mendapatkan masa fail untuk '%s'"
 
-#: ../src/msw/dialup.cpp:487
+#: ../src/msw/dialup.cpp:478
 msgid "Failed to retrieve text of RAS error message"
 msgstr "Gagal mendapatkan teks mesej ralat RAS"
 
-#: ../src/msw/clipbrd.cpp:784
+#: ../src/msw/clipbrd.cpp:782
 msgid "Failed to retrieve the supported clipboard formats"
 msgstr "Gagal mendapatkan format klipbod disokong"
 
@@ -3660,7 +3736,7 @@ msgstr "Gagal hantar pemberitahuan nasihat DDE"
 msgid "Failed to set FTP transfer mode to %s."
 msgstr "Gagal menetapkan mod penhantaran FTP kepada %s."
 
-#: ../src/msw/clipbrd.cpp:373
+#: ../src/msw/clipbrd.cpp:371
 msgid "Failed to set clipboard data."
 msgstr "Gagal tetapkan data klipbod."
 
@@ -3669,12 +3745,12 @@ msgstr "Gagal tetapkan data klipbod."
 msgid "Failed to set permissions on lock file '%s'"
 msgstr "Gagal menetapkan keizinan pada fail kunci '%s'"
 
-#: ../src/unix/utilsunx.cpp:674
+#: ../src/unix/utilsunx.cpp:664
 #, fuzzy
 msgid "Failed to set process priority"
 msgstr "Gagal tetapkan keutamaan benang %d."
 
-#: ../src/common/file.cpp:576
+#: ../src/common/file.cpp:581
 msgid "Failed to set temporary file permissions"
 msgstr "PGagal tetapkan keizinan fail sementara."
 
@@ -3687,12 +3763,12 @@ msgstr "Gagal menetapkan teks dalam kawalan teks."
 msgid "Failed to set thread concurrency level to %lu"
 msgstr "Gagal tetapkan keutamaan benang %d."
 
-#: ../src/unix/threadpsx.cpp:1382 ../src/unix/threadpsx.cpp:1392
+#: ../src/unix/threadpsx.cpp:1424
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "Gagal tetapkan keutamaan benang %d."
 
-#: ../src/unix/utilsunx.cpp:801
+#: ../src/unix/utilsunx.cpp:781
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr ""
 
@@ -3709,7 +3785,7 @@ msgstr ""
 msgid "Failed to switch wake up pipe to non-blocking mode"
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:1574
+#: ../src/unix/threadpsx.cpp:1605
 msgid "Failed to terminate a thread."
 msgstr "Gagal menghentikan benang."
 
@@ -3717,12 +3793,12 @@ msgstr "Gagal menghentikan benang."
 msgid "Failed to terminate the advise loop with DDE server"
 msgstr "Gagal menamatkan gelung yang dipertimbangkan dengan pelayan DDE"
 
-#: ../src/msw/dialup.cpp:959
+#: ../src/msw/dialup.cpp:948
 #, c-format
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "Gagal menamatkan sambungan mendial: %s"
 
-#: ../src/common/filename.cpp:2702
+#: ../src/common/filename.cpp:2663
 #, c-format
 msgid "Failed to touch the file '%s'"
 msgstr "Gagal sentuh fail '%s'"
@@ -3742,7 +3818,7 @@ msgstr "Gagal nyahdaftar pelayan DDE '%s'"
 msgid "Failed to unregister descriptor %d from epoll descriptor %d"
 msgstr "Gagal mendapatkan data dari klipbod."
 
-#: ../src/common/fileconf.cpp:1037
+#: ../src/common/fileconf.cpp:1029
 msgid "Failed to update user configuration file."
 msgstr "Gagal naiktaraf fail konfigurasi pengguna."
 
@@ -3756,12 +3832,12 @@ msgstr "Gagal muatnaik laporan nyahpijat (kod ralat %d)."
 msgid "Failed to write to lock file '%s'"
 msgstr "Gagal menulis fail kunci '%s'"
 
-#: ../src/propgrid/propgrid.cpp:172
+#: ../src/propgrid/propgrid.cpp:188
 #, fuzzy
 msgid "False"
 msgstr "Fail"
 
-#: ../src/propgrid/advprops.cpp:659
+#: ../src/propgrid/advprops.cpp:666
 #, fuzzy
 msgid "Family"
 msgstr "Keluarga &fon:"
@@ -3780,31 +3856,22 @@ msgstr "Gagal buka '%s' untuk %s"
 msgid "File \"%s\" could not be opened for writing."
 msgstr "Gagal buka '%s' untuk %s"
 
-#: ../src/gtk/filedlg.cpp:56
+#: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:56
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "Fail '%s' sedia wujud, anda pasti untuk menindihnya?"
 
-#: ../src/os2/filedlg.cpp:310
-#, c-format
-msgid ""
-"File '%s' already exists.\n"
-"Do you want to replace it?"
-msgstr ""
-"Fail '%s' sedia wujud.\n"
-"Anda pasti untuk gantinya?"
-
-#: ../src/common/filefn.cpp:1199
+#: ../src/common/filefn.cpp:1160
 #, fuzzy, c-format
 msgid "File '%s' couldn't be removed"
 msgstr "Direktori '%s' gagal dicipta"
 
-#: ../src/common/filefn.cpp:1180
+#: ../src/common/filefn.cpp:1143
 #, fuzzy, c-format
 msgid "File '%s' couldn't be renamed '%s'"
 msgstr "Direktori '%s' gagal dicipta"
 
-#: ../src/richtext/richtextctrl.cpp:2810 ../src/common/textcmn.cpp:935
+#: ../src/common/textcmn.cpp:953 ../src/richtext/richtextctrl.cpp:3056
 msgid "File couldn't be loaded."
 msgstr "Fail gagal dimuatkan."
 
@@ -3817,7 +3884,7 @@ msgstr "Perlaksanaan arahan '%s' gagal dengan ralat: %ul"
 msgid "File error"
 msgstr "Ralat fail"
 
-#: ../src/generic/dirctrlg.cpp:688 ../src/generic/filectrlg.cpp:805
+#: ../src/generic/dirctrlg.cpp:609 ../src/generic/filectrlg.cpp:805
 msgid "File name exists already."
 msgstr "Nama fail sedia wujud."
 
@@ -3825,7 +3892,7 @@ msgstr "Nama fail sedia wujud."
 msgid "Files"
 msgstr "Fail"
 
-#: ../src/common/filefn.cpp:1746
+#: ../src/common/filefn.cpp:1660
 #, c-format
 msgid "Files (%s)"
 msgstr "Fail (%s)"
@@ -3834,7 +3901,7 @@ msgstr "Fail (%s)"
 msgid "Filter"
 msgstr "Tapis"
 
-#: ../src/common/stockitem.cpp:158 ../src/html/helpwnd.cpp:501
+#: ../src/common/stockitem.cpp:158 ../src/html/helpwnd.cpp:490
 msgid "Find"
 msgstr "Cari"
 
@@ -3843,7 +3910,7 @@ msgstr "Cari"
 msgid "First"
 msgstr "pertama"
 
-#: ../src/common/prntbase.cpp:1518
+#: ../src/common/prntbase.cpp:1532
 #, fuzzy
 msgid "First page"
 msgstr "Laman berikut"
@@ -3853,11 +3920,11 @@ msgstr "Laman berikut"
 msgid "Fixed"
 msgstr "Fon tetap:"
 
-#: ../src/html/helpwnd.cpp:1220
+#: ../src/html/helpwnd.cpp:1206
 msgid "Fixed font:"
 msgstr "Fon tetap:"
 
-#: ../src/html/helpwnd.cpp:1283
+#: ../src/html/helpwnd.cpp:1269
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
 msgstr "Rupa saiz tetap.<br><b>gelap</b><i>italik</i> "
 
@@ -3875,8 +3942,8 @@ msgstr "&Salin"
 msgid "Folio, 8 1/2 x 13 in"
 msgstr "Folio, 8 1/2 x 13 in"
 
-#: ../src/richtext/richtextformatdlg.cpp:345 ../src/osx/carbon/fontdlg.cpp:457
-#: ../src/common/stockitem.cpp:194
+#: ../src/common/stockitem.cpp:194 ../src/osx/carbon/fontdlg.cpp:457
+#: ../src/richtext/richtextformatdlg.cpp:343
 msgid "Font"
 msgstr "Fon"
 
@@ -3884,7 +3951,7 @@ msgstr "Fon"
 msgid "Font &weight:"
 msgstr "Berat fon:"
 
-#: ../src/html/helpwnd.cpp:1221
+#: ../src/html/helpwnd.cpp:1207
 msgid "Font size:"
 msgstr "Saiz fon:"
 
@@ -3901,7 +3968,7 @@ msgstr "Fon:"
 msgid "Fonts index file %s disappeared while loading fonts."
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:651
+#: ../src/unix/utilsunx.cpp:641
 msgid "Fork failed"
 msgstr "Cabang gagal"
 
@@ -3914,7 +3981,7 @@ msgstr "Maju"
 msgid "Forward hrefs are not supported"
 msgstr "href yang dimaju tidak disokong"
 
-#: ../src/html/helpwnd.cpp:889
+#: ../src/html/helpwnd.cpp:875
 #, c-format
 msgid "Found %i matches"
 msgstr "%i padanan ditemui"
@@ -3922,6 +3989,10 @@ msgstr "%i padanan ditemui"
 #: ../src/generic/prntdlgg.cpp:238
 msgid "From:"
 msgstr "Dari:"
+
+#: ../src/propgrid/advprops.cpp:1554
+msgid "Fuchsia"
+msgstr ""
 
 #: ../src/common/imaggif.cpp:160
 msgid "GIF: Invalid gif index."
@@ -3943,7 +4014,7 @@ msgstr "GIF: memori tidak mencukupi."
 msgid "GIF: unknown error!!!"
 msgstr "GIF: ralat tidak diketahui!!!"
 
-#: ../src/gtk/window.cpp:4327
+#: ../src/gtk/window.cpp:4533
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -3953,11 +4024,11 @@ msgstr ""
 msgid "GTK+ theme"
 msgstr "Tema GTK+"
 
-#: ../src/common/preferencescmn.cpp:39
+#: ../src/common/preferencescmn.cpp:40
 msgid "General"
 msgstr ""
 
-#: ../src/common/prntbase.cpp:243
+#: ../src/common/prntbase.cpp:253
 msgid "Generic PostScript"
 msgstr "PostScript Umum"
 
@@ -3969,35 +4040,35 @@ msgstr "Fanfold Legal Jerman, 8 1/2 x 13 in"
 msgid "German Std Fanfold, 8 1/2 x 12 in"
 msgstr "Fanfold Piawai Jerman, 8 1/2 x 12 in"
 
-#: ../include/wx/xtiprop.h:188
+#: ../include/wx/xtiprop.h:184
 msgid "GetProperty called w/o valid getter"
 msgstr "GetProperty dipanggill tanpa getter sah"
 
-#: ../include/wx/xtiprop.h:266
+#: ../include/wx/xtiprop.h:262
 msgid "GetPropertyCollection called on a generic accessor"
 msgstr "GetPropertyCollection dipanggil pada accessor umum"
 
-#: ../include/wx/xtiprop.h:206
+#: ../include/wx/xtiprop.h:202
 msgid "GetPropertyCollection called w/o valid collection getter"
 msgstr "GetPropertyCollection dipangil tanpa getter koleksi"
 
-#: ../src/html/helpwnd.cpp:674
+#: ../src/html/helpwnd.cpp:660
 msgid "Go back"
 msgstr "Kem&bali"
 
-#: ../src/html/helpwnd.cpp:675
+#: ../src/html/helpwnd.cpp:661
 msgid "Go forward"
 msgstr "&Maju"
 
-#: ../src/html/helpwnd.cpp:677
+#: ../src/html/helpwnd.cpp:663
 msgid "Go one level up in document hierarchy"
 msgstr "Pergi satu aras ke atas dalam hirarki dokumen"
 
-#: ../src/generic/filedlgg.cpp:223 ../src/generic/dirdlgg.cpp:136
+#: ../src/generic/dirdlgg.cpp:136 ../src/generic/filedlgg.cpp:215
 msgid "Go to home directory"
 msgstr "Pergi ke direktori rumah"
 
-#: ../src/generic/filedlgg.cpp:219
+#: ../src/generic/filedlgg.cpp:211
 msgid "Go to parent directory"
 msgstr "Pergi ke direntori induk"
 
@@ -4005,9 +4076,21 @@ msgstr "Pergi ke direntori induk"
 msgid "Graphics art by "
 msgstr "Seni grafik oleh"
 
+#: ../src/propgrid/advprops.cpp:1549
+msgid "Gray"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:855
+msgid "GrayText"
+msgstr ""
+
 #: ../src/common/fmapbase.cpp:154
 msgid "Greek (ISO-8859-7)"
 msgstr "Greek (ISO-8859-7)"
+
+#: ../src/propgrid/advprops.cpp:1550
+msgid "Green"
+msgstr ""
 
 #: ../src/richtext/richtextborderspage.cpp:618
 msgid "Groove"
@@ -4017,26 +4100,22 @@ msgstr ""
 msgid "Gzip not supported by this version of zlib"
 msgstr "Gzip tidak disokong oleh versi zlib ini"
 
-#: ../src/common/accelcmn.cpp:75
-msgid "HELP"
-msgstr "HELP"
-
-#: ../src/common/accelcmn.cpp:60
-msgid "HOME"
-msgstr "HOME"
-
-#: ../src/html/helpwnd.cpp:1563
+#: ../src/html/helpwnd.cpp:1549
 msgid "HTML Help Project (*.hhp)|*.hhp|"
 msgstr "Projek Bantuan HTML (*.hhp)|*.hhp|"
 
-#: ../src/html/htmlwin.cpp:672
+#: ../src/html/htmlwin.cpp:676
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "Sauh HTML %s tidak wujud."
 
-#: ../src/html/helpwnd.cpp:1561
+#: ../src/html/helpwnd.cpp:1547
 msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
 msgstr "Fail HTML (*.html;*.htm)|*.html;*.htm|"
+
+#: ../src/propgrid/advprops.cpp:1709
+msgid "Hand"
+msgstr ""
 
 #: ../src/common/stockitem.cpp:162
 msgid "Harddisk"
@@ -4046,38 +4125,39 @@ msgstr ""
 msgid "Hebrew (ISO-8859-8)"
 msgstr "Hebrew (ISO-8859-8)"
 
-#: ../include/wx/msgdlg.h:275 ../src/osx/button_osx.cpp:39
+#. TRANSLATORS: Name of keyboard key
+#: ../include/wx/msgdlg.h:280 ../src/common/accelcmn.cpp:78
 #: ../src/common/stockitem.cpp:163 ../src/html/helpdlg.cpp:66
-#: ../src/html/helpfrm.cpp:116
+#: ../src/html/helpfrm.cpp:116 ../src/osx/button_osx.cpp:39
 msgid "Help"
 msgstr "Bantuan"
 
-#: ../src/html/helpwnd.cpp:1214
+#: ../src/html/helpwnd.cpp:1200
 msgid "Help Browser Options"
 msgstr "Pilihan Pelungsur Bantuan"
 
-#: ../src/generic/helpext.cpp:458 ../src/generic/helpext.cpp:459
+#: ../src/generic/helpext.cpp:454 ../src/generic/helpext.cpp:455
 msgid "Help Index"
 msgstr "Indeks Bantuan"
 
-#: ../src/html/helpwnd.cpp:1545
+#: ../src/html/helpwnd.cpp:1531
 msgid "Help Printing"
 msgstr "Mencetak Bantuan"
 
-#: ../src/html/helpwnd.cpp:815
+#: ../src/html/helpwnd.cpp:801
 msgid "Help Topics"
 msgstr "Topik Bantuan"
 
-#: ../src/html/helpwnd.cpp:1562
+#: ../src/html/helpwnd.cpp:1548
 msgid "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|"
 msgstr "Buku Bantuan (*.htb)|*.htb|Buku Bantuan (*.zip)|*.zip|"
 
-#: ../src/generic/helpext.cpp:271
+#: ../src/generic/helpext.cpp:267
 #, c-format
 msgid "Help directory \"%s\" not found."
 msgstr "Direktori bantuan \"%s\" tidak ditemui."
 
-#: ../src/generic/helpext.cpp:279
+#: ../src/generic/helpext.cpp:275
 #, c-format
 msgid "Help file \"%s\" not found."
 msgstr "Fail bantuan \"%s\" tidak ditemui."
@@ -4087,12 +4167,12 @@ msgstr "Fail bantuan \"%s\" tidak ditemui."
 msgid "Help: %s"
 msgstr "Bantuan: %s"
 
-#: ../src/osx/menu_osx.cpp:623
+#: ../src/osx/menu_osx.cpp:635
 #, fuzzy, c-format
 msgid "Hide %s"
 msgstr "Bantuan: %s"
 
-#: ../src/osx/menu_osx.cpp:625
+#: ../src/osx/menu_osx.cpp:637
 msgid "Hide Others"
 msgstr ""
 
@@ -4100,11 +4180,23 @@ msgstr ""
 msgid "Hide this notification message."
 msgstr ""
 
-#: ../src/generic/dirdlgg.cpp:98 ../src/common/stockitem.cpp:164
+#: ../src/propgrid/advprops.cpp:856
+#, fuzzy
+msgid "Highlight"
+msgstr "ringan"
+
+#: ../src/propgrid/advprops.cpp:857
+#, fuzzy
+msgid "HighlightText"
+msgstr "Jajar-kanan teks."
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:63 ../src/common/stockitem.cpp:164
+#: ../src/generic/dirdlgg.cpp:98
 msgid "Home"
 msgstr "Rumah"
 
-#: ../src/generic/dirctrlg.cpp:624
+#: ../src/generic/dirctrlg.cpp:545
 msgid "Home directory"
 msgstr "Direktori rumah"
 
@@ -4113,52 +4205,49 @@ msgstr "Direktori rumah"
 msgid "How the object will float relative to the text."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1116
+#: ../src/propgrid/advprops.cpp:1710
+msgid "I-Beam"
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:1195
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: Ralat baca DIB topeng."
 
-#: ../src/common/imagbmp.cpp:1231 ../src/common/imagbmp.cpp:1292
-#: ../src/common/imagbmp.cpp:1303 ../src/common/imagbmp.cpp:1316
-#: ../src/common/imagbmp.cpp:1361 ../src/common/imagbmp.cpp:1373
-#: ../src/common/imagbmp.cpp:1384
+#: ../src/common/imagbmp.cpp:1313 ../src/common/imagbmp.cpp:1413
+#: ../src/common/imagbmp.cpp:1428 ../src/common/imagbmp.cpp:1439
+#: ../src/common/imagbmp.cpp:1453 ../src/common/imagbmp.cpp:1501
+#: ../src/common/imagbmp.cpp:1516 ../src/common/imagbmp.cpp:1530
+#: ../src/common/imagbmp.cpp:1541
 msgid "ICO: Error writing the image file!"
 msgstr "Ralat menulis fail imej!"
 
-#: ../src/common/imagbmp.cpp:1196
+#: ../src/common/imagbmp.cpp:1278
 msgid "ICO: Image too tall for an icon."
 msgstr "ICO: Imej terlalu tinggi untuk ikon."
 
-#: ../src/common/imagbmp.cpp:1204
+#: ../src/common/imagbmp.cpp:1286
 msgid "ICO: Image too wide for an icon."
 msgstr "ICO: Imej terlalu lebar untuk ikon."
 
-#: ../src/common/imagbmp.cpp:1464
+#: ../src/common/imagbmp.cpp:1626
 msgid "ICO: Invalid icon index."
 msgstr "ICO: Indeks ikon tidak sah."
 
-#: ../src/common/imagiff.cpp:759
+#: ../src/common/imagiff.cpp:758
 msgid "IFF: data stream seems to be truncated."
 msgstr "IFF: strim data dilihat seperti dipotong."
 
-#: ../src/common/imagiff.cpp:743
+#: ../src/common/imagiff.cpp:742
 msgid "IFF: error in IFF image format."
 msgstr "IFF: ralat pada format imej IFF."
 
-#: ../src/common/imagiff.cpp:746
+#: ../src/common/imagiff.cpp:745
 msgid "IFF: not enough memory."
 msgstr "IFF: tidak cukup memori."
 
-#: ../src/common/imagiff.cpp:749
+#: ../src/common/imagiff.cpp:748
 msgid "IFF: unknown error!!!"
 msgstr "IFF: ralat tidak diketahui!!!"
-
-#: ../src/common/accelcmn.cpp:50
-msgid "INS"
-msgstr "INS"
-
-#: ../src/common/accelcmn.cpp:51
-msgid "INSERT"
-msgstr "INSERT"
 
 #: ../src/common/fmapbase.cpp:197
 msgid "ISO-2022-JP"
@@ -4194,7 +4283,7 @@ msgstr ""
 "tetapi diingatkan bahawa ini akan membelakangi kemajuan program, jika boleh\n"
 "sila teruskan dengan menjana laporan.\n"
 
-#: ../src/msw/registry.cpp:1395
+#: ../src/msw/registry.cpp:1419
 #, c-format
 msgid "Ignoring value \"%s\" of the key \"%s\"."
 msgstr "Abaikan nilai \"%s\" kunci \"%s\"."
@@ -4211,7 +4300,7 @@ msgstr "Kiraan Parameter tidak sah untuk Metod ConstructObject"
 msgid "Illegal Parameter Count for Create Method"
 msgstr "Kiraan Parameter tidak sah untuk Method Create"
 
-#: ../src/generic/dirctrlg.cpp:670 ../src/generic/filectrlg.cpp:791
+#: ../src/generic/dirctrlg.cpp:591 ../src/generic/filectrlg.cpp:791
 msgid "Illegal directory name."
 msgstr "Nama direktori tidak sah."
 
@@ -4223,17 +4312,17 @@ msgstr "spesifikasi fail tidak sah."
 msgid "Image and mask have different sizes."
 msgstr "Imej san topeng memiliki saiz berbeza."
 
-#: ../src/common/image.cpp:2609
+#: ../src/common/image.cpp:2611
 #, fuzzy, c-format
 msgid "Image file is not of type %d."
 msgstr "Fail imej bukan berjenis %ld."
 
-#: ../src/common/image.cpp:2739
+#: ../src/common/image.cpp:2741
 #, fuzzy, c-format
 msgid "Image is not of type %s."
 msgstr "Fail imej bukan berjenis %s."
 
-#: ../src/msw/textctrl.cpp:413
+#: ../src/msw/textctrl.cpp:488
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
@@ -4241,31 +4330,44 @@ msgstr ""
 "Mustahil untuk mencipta kawalan edit rich, sebaliknya gunakan kawalan mudah "
 "teks. Sila pasang semula riched32.dll"
 
-#: ../src/unix/utilsunx.cpp:307
+#: ../src/unix/utilsunx.cpp:297
 msgid "Impossible to get child process input"
 msgstr "Mustahil untuk mendapatkan input proses anak"
 
-#: ../src/common/filefn.cpp:1067
+#: ../src/common/filefn.cpp:1034
 #, c-format
 msgid "Impossible to get permissions for file '%s'"
 msgstr "Mustahil mendapatkan keizinan untuk fail '%s'"
 
-#: ../src/common/filefn.cpp:1081
+#: ../src/common/filefn.cpp:1048
 #, c-format
 msgid "Impossible to overwrite the file '%s'"
 msgstr "Mustahil untuk menindih fail '%s'"
 
-#: ../src/common/filefn.cpp:1135
+#: ../src/common/filefn.cpp:1099
 #, c-format
 msgid "Impossible to set permissions for the file '%s'"
 msgstr "Mustahil untuk menetapkan keizinan fail '%s'"
+
+#: ../src/propgrid/advprops.cpp:858
+#, fuzzy
+msgid "InactiveBorder"
+msgstr "Moden"
+
+#: ../src/propgrid/advprops.cpp:859
+msgid "InactiveCaption"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:860
+msgid "InactiveCaptionText"
+msgstr ""
 
 #: ../src/common/gifdecod.cpp:792
 #, c-format
 msgid "Incorrect GIF frame size (%u, %d) for the frame #%u"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:638
+#: ../src/msw/ole/automtn.cpp:641
 msgid "Incorrect number of arguments."
 msgstr ""
 
@@ -4273,11 +4375,11 @@ msgstr ""
 msgid "Indent"
 msgstr "Jarak"
 
-#: ../src/richtext/richtextformatdlg.cpp:351
+#: ../src/richtext/richtextformatdlg.cpp:349
 msgid "Indents && Spacing"
 msgstr "Takuk  && Ruang"
 
-#: ../src/common/stockitem.cpp:166 ../src/html/helpwnd.cpp:526
+#: ../src/common/stockitem.cpp:166 ../src/html/helpwnd.cpp:515
 msgid "Index"
 msgstr "Indeks"
 
@@ -4293,29 +4395,36 @@ msgstr ""
 msgid "Initialization failed in post init, aborting."
 msgstr "Permulaan gagal pada mula pos, gugurkan."
 
-#: ../src/richtext/richtextsymboldlg.cpp:472
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:52
+#, fuzzy
+msgid "Ins"
+msgstr "Selit"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:51 ../src/richtext/richtextsymboldlg.cpp:472
 msgid "Insert"
 msgstr "Selit"
 
-#: ../src/richtext/richtextbuffer.cpp:7941
+#: ../src/richtext/richtextbuffer.cpp:7983
 #, fuzzy
 msgid "Insert Field"
 msgstr "Selit Teks"
 
-#: ../src/richtext/richtextbuffer.cpp:7852
-#: ../src/richtext/richtextbuffer.cpp:8805
+#: ../src/richtext/richtextbuffer.cpp:7894
+#: ../src/richtext/richtextbuffer.cpp:8852
 msgid "Insert Image"
 msgstr "Selit Imej"
 
-#: ../src/richtext/richtextbuffer.cpp:7899
+#: ../src/richtext/richtextbuffer.cpp:7941
 #, fuzzy
 msgid "Insert Object"
 msgstr "Selit Teks"
 
-#: ../src/richtext/richtextctrl.cpp:1247 ../src/richtext/richtextctrl.cpp:1454
-#: ../src/richtext/richtextbuffer.cpp:7694
-#: ../src/richtext/richtextbuffer.cpp:7724
+#: ../src/richtext/richtextbuffer.cpp:7738
 #: ../src/richtext/richtextbuffer.cpp:7768
+#: ../src/richtext/richtextbuffer.cpp:7810
+#: ../src/richtext/richtextctrl.cpp:1263 ../src/richtext/richtextctrl.cpp:1471
 msgid "Insert Text"
 msgstr "Selit Teks"
 
@@ -4330,12 +4439,12 @@ msgstr "Ruangan sebelum perenggan."
 msgid "Inset"
 msgstr "Selit"
 
-#: ../src/gtk/app.cpp:429
+#: ../src/gtk/app.cpp:413
 #, c-format
 msgid "Invalid GTK+ command line option, use \"%s --help\""
 msgstr ""
 
-#: ../src/common/imagtiff.cpp:314
+#: ../src/common/imagtiff.cpp:311
 msgid "Invalid TIFF image index."
 msgstr "Indeks imej TIFF tidak sah."
 
@@ -4343,12 +4452,12 @@ msgstr "Indeks imej TIFF tidak sah."
 msgid "Invalid data view item"
 msgstr ""
 
-#: ../src/common/appcmn.cpp:266
+#: ../src/common/appcmn.cpp:273
 #, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "Spesifikasi mod paparan '%s' tidak sah."
 
-#: ../src/x11/app.cpp:121
+#: ../src/x11/app.cpp:127
 #, c-format
 msgid "Invalid geometry specification '%s'"
 msgstr "Spesifikasi geometri tidak sah '%s'"
@@ -4363,7 +4472,7 @@ msgstr ""
 msgid "Invalid lock file '%s'."
 msgstr "Fail kunci '%s' tidak sah."
 
-#: ../src/common/translation.cpp:1112
+#: ../src/common/translation.cpp:1125
 #, fuzzy
 msgid "Invalid message catalog."
 msgstr "'%s' bukanlah mesej katalog yang sah."
@@ -4376,7 +4485,7 @@ msgstr "Tidak sah atau Null Object ID dilepaskan kepada GetObjectClassInfo"
 msgid "Invalid or Null Object ID passed to HasObjectClassInfo"
 msgstr "Tidak sah atau Null Object ID dilepaskan kepada HasObjectClassInfo"
 
-#: ../src/common/regex.cpp:313
+#: ../src/common/regex.cpp:310
 #, c-format
 msgid "Invalid regular expression '%s': %s"
 msgstr "Ungkapan nalar '%s' tidak sah: %s"
@@ -4386,8 +4495,8 @@ msgstr "Ungkapan nalar '%s' tidak sah: %s"
 msgid "Invalid value %ld for a boolean key \"%s\" in config file."
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:329 ../src/richtext/richtextfontpage.cpp:349
-#: ../src/osx/carbon/fontdlg.cpp:531 ../src/common/stockitem.cpp:168
+#: ../src/common/stockitem.cpp:168 ../src/generic/fontdlgg.cpp:329
+#: ../src/osx/carbon/fontdlg.cpp:531 ../src/richtext/richtextfontpage.cpp:349
 msgid "Italic"
 msgstr "Italik"
 
@@ -4478,110 +4587,141 @@ msgstr "KOI8-R"
 msgid "KOI8-U"
 msgstr "KOI8-U"
 
-#: ../src/common/accelcmn.cpp:254 ../src/common/accelcmn.cpp:336
+#: ../src/common/accelcmn.cpp:255 ../src/common/accelcmn.cpp:337
 msgid "KP_"
 msgstr "KP_"
 
-#: ../src/common/accelcmn.cpp:103
-msgid "KP_ADD"
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:104
+#, fuzzy
+msgid "KP_Add"
 msgstr "KP_ADD"
 
-#: ../src/common/accelcmn.cpp:98
-msgid "KP_BEGIN"
-msgstr "KP_BEGIN"
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:99
+msgid "KP_Begin"
+msgstr ""
 
-#: ../src/common/accelcmn.cpp:106
-msgid "KP_DECIMAL"
-msgstr "KP_DECIMAL"
-
-#: ../src/common/accelcmn.cpp:100
-msgid "KP_DELETE"
-msgstr "KP_DELETE"
-
+#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:107
-msgid "KP_DIVIDE"
-msgstr "KP_DIVIDE"
+msgid "KP_Decimal"
+msgstr ""
 
-#: ../src/common/accelcmn.cpp:92
-msgid "KP_DOWN"
-msgstr "KP_DOWN"
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:101
+#, fuzzy
+msgid "KP_Delete"
+msgstr "Padam"
 
-#: ../src/common/accelcmn.cpp:97
-msgid "KP_END"
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:108
+msgid "KP_Divide"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:93
+#, fuzzy
+msgid "KP_Down"
+msgstr "Turun"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:98
+#, fuzzy
+msgid "KP_End"
 msgstr "KP_END"
 
-#: ../src/common/accelcmn.cpp:87
-msgid "KP_ENTER"
-msgstr "KP_ENTER"
-
-#: ../src/common/accelcmn.cpp:101
-msgid "KP_EQUAL"
-msgstr "KP_EQUAL"
-
+#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:88
-msgid "KP_HOME"
-msgstr "KP_HOME"
+#, fuzzy
+msgid "KP_Enter"
+msgstr "Pencetak"
 
-#: ../src/common/accelcmn.cpp:99
-msgid "KP_INSERT"
-msgstr "KP_INSERT"
-
-#: ../src/common/accelcmn.cpp:89
-msgid "KP_LEFT"
-msgstr "KP_LEFT"
-
+#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
-msgid "KP_MULTIPLY"
-msgstr "KP_MULTIPLY"
+msgid "KP_Equal"
+msgstr ""
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:89
+#, fuzzy
+msgid "KP_Home"
+msgstr "Rumah"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:100
+#, fuzzy
+msgid "KP_Insert"
+msgstr "Selit"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:90
+#, fuzzy
+msgid "KP_Left"
+msgstr "Kiri"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:103
+msgid "KP_Multiply"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:97
+#, fuzzy
+msgid "KP_Next"
+msgstr "Maju"
+
+#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
-msgid "KP_NEXT"
-msgstr "KP_NEXT"
+msgid "KP_PageDown"
+msgstr ""
 
-#: ../src/common/accelcmn.cpp:96
-msgid "KP_PAGEDOWN"
-msgstr "KP_PAGEDOWN"
-
+#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:94
-msgid "KP_PAGEUP"
-msgstr "KP_PAGEUP"
+msgid "KP_PageUp"
+msgstr ""
 
-#: ../src/common/accelcmn.cpp:93
-msgid "KP_PRIOR"
-msgstr "KP_PRIOR"
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:96
+msgid "KP_Prior"
+msgstr ""
 
-#: ../src/common/accelcmn.cpp:91
-msgid "KP_RIGHT"
-msgstr "KP_RIGHT"
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:92
+#, fuzzy
+msgid "KP_Right"
+msgstr "Kanan"
 
-#: ../src/common/accelcmn.cpp:104
-msgid "KP_SEPARATOR"
-msgstr "KP_SEPARATOR"
-
-#: ../src/common/accelcmn.cpp:85
-msgid "KP_SPACE"
-msgstr "KP_SPACE"
-
+#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
-msgid "KP_SUBTRACT"
-msgstr "KP_SUBTRACT"
+msgid "KP_Separator"
+msgstr ""
 
+#. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:86
-msgid "KP_TAB"
+msgid "KP_Space"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:106
+msgid "KP_Subtract"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:87
+#, fuzzy
+msgid "KP_Tab"
 msgstr "KP_TAB"
 
-#: ../src/common/accelcmn.cpp:90
-msgid "KP_UP"
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:91
+#, fuzzy
+msgid "KP_Up"
 msgstr "KP_UP"
 
 #: ../src/richtext/richtextindentspage.cpp:270
 #, fuzzy
 msgid "L&ine spacing:"
 msgstr "Ruang baris:"
-
-#: ../src/common/accelcmn.cpp:56
-msgid "LEFT"
-msgstr "LEFT"
 
 #: ../src/generic/prntdlgg.cpp:613 ../src/generic/prntdlgg.cpp:868
 msgid "Landscape"
@@ -4592,7 +4732,7 @@ msgstr "Lanskap"
 msgid "Last"
 msgstr "Tampal"
 
-#: ../src/common/prntbase.cpp:1542
+#: ../src/common/prntbase.cpp:1556
 #, fuzzy
 msgid "Last page"
 msgstr "Laman berikut"
@@ -4608,12 +4748,13 @@ msgstr[1] ""
 msgid "Ledger, 17 x 11 in"
 msgstr "Ledger, 17 x 11 in"
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:59 ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/richtext/richtextbulletspage.cpp:189
+#: ../src/richtext/richtextbulletspage.cpp:190
 #: ../src/richtext/richtextliststylepage.cpp:249
 #: ../src/richtext/richtextliststylepage.cpp:252
 #: ../src/richtext/richtextliststylepage.cpp:253
-#: ../src/richtext/richtextbulletspage.cpp:186
-#: ../src/richtext/richtextbulletspage.cpp:189
-#: ../src/richtext/richtextbulletspage.cpp:190
 #: ../src/richtext/richtextsizepage.cpp:249
 msgid "Left"
 msgstr "Kiri"
@@ -4622,6 +4763,10 @@ msgstr "Kiri"
 #: ../src/richtext/richtextliststylepage.cpp:390
 msgid "Left (&first line):"
 msgstr "Kiri (baris pertama):"
+
+#: ../src/propgrid/advprops.cpp:1711
+msgid "Left Button"
+msgstr ""
 
 #: ../src/generic/prntdlgg.cpp:880
 msgid "Left margin (mm):"
@@ -4678,7 +4823,11 @@ msgstr ""
 msgid "Light"
 msgstr "Cerah"
 
-#: ../src/generic/helpext.cpp:298
+#: ../src/propgrid/advprops.cpp:1558
+msgid "Lime"
+msgstr ""
+
+#: ../src/generic/helpext.cpp:294
 #, c-format
 msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
 msgstr "Baris %lu fail peta \"%s\" terdapat sintaks tidak sah, dilangkau."
@@ -4691,11 +4840,11 @@ msgstr "Ruang baris:"
 msgid "Link contained '//', converted to absolute link."
 msgstr "Pautan mengandungi '//', tukar kepada pautan sebenar."
 
-#: ../src/richtext/richtextformatdlg.cpp:370
+#: ../src/richtext/richtextformatdlg.cpp:367
 msgid "List Style"
 msgstr "Gaya Senarai"
 
-#: ../src/richtext/richtextstyles.cpp:1060
+#: ../src/richtext/richtextstyles.cpp:1064
 msgid "List styles"
 msgstr "Gaya senarai"
 
@@ -4709,12 +4858,12 @@ msgstr "Senaraikan saiz fon dalam titik."
 msgid "Lists the available fonts."
 msgstr "Senarai fon yang ada."
 
-#: ../src/common/fldlgcmn.cpp:330
+#: ../src/common/fldlgcmn.cpp:340
 #, c-format
 msgid "Load %s file"
 msgstr "Memuatkan fail %s"
 
-#: ../src/html/htmlwin.cpp:588
+#: ../src/html/htmlwin.cpp:592
 msgid "Loading : "
 msgstr "Memuatkan: "
 
@@ -4728,28 +4877,24 @@ msgstr "Pemilik fail kunci '%s' yang salah."
 msgid "Lock file '%s' has incorrect permissions."
 msgstr "Keizinan fail kunci '%s' yang salah."
 
-#: ../src/generic/logg.cpp:582
+#: ../src/generic/logg.cpp:580
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "Log disimpan ke fail '%s'."
 
-#: ../src/richtext/richtextliststylepage.cpp:484
 #: ../src/richtext/richtextbulletspage.cpp:276
+#: ../src/richtext/richtextliststylepage.cpp:484
 msgid "Lower case letters"
 msgstr "Aksara Huruf Kecil"
 
-#: ../src/richtext/richtextliststylepage.cpp:486
 #: ../src/richtext/richtextbulletspage.cpp:278
+#: ../src/richtext/richtextliststylepage.cpp:486
 msgid "Lower case roman numerals"
 msgstr "Angka roman huruf kecil"
 
 #: ../src/gtk/mdi.cpp:422 ../src/gtk1/mdi.cpp:431
 msgid "MDI child"
 msgstr "Anak MDI"
-
-#: ../src/common/accelcmn.cpp:68
-msgid "MENU"
-msgstr "MENU"
 
 #: ../src/msw/helpchm.cpp:56
 msgid ""
@@ -4929,14 +5074,22 @@ msgstr ""
 msgid "MacVietnamese"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:2012
+#: ../src/propgrid/advprops.cpp:1712
+msgid "Magnifier"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:2093
 #, fuzzy
 msgid "Make a selection:"
 msgstr "Tampal pilihan"
 
-#: ../src/richtext/richtextformatdlg.cpp:383
+#: ../src/richtext/richtextformatdlg.cpp:379
 #: ../src/richtext/richtextmarginspage.cpp:171
 msgid "Margins"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:1545
+msgid "Maroon"
 msgstr ""
 
 #: ../src/generic/fdrepdlg.cpp:147
@@ -4953,7 +5106,7 @@ msgstr "Berat:"
 msgid "Max width:"
 msgstr "Ganti dengan:"
 
-#: ../src/unix/mediactrl.cpp:1006
+#: ../src/unix/mediactrl.cpp:1004
 #, c-format
 msgid "Media playback error: %s"
 msgstr ""
@@ -4963,7 +5116,9 @@ msgstr ""
 msgid "Memory VFS already contains file '%s'!"
 msgstr "Memori VFS sedia mengandungi fail '%s'!"
 
-#: ../src/msw/frame.cpp:347
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:71 ../src/msw/frame.cpp:399
+#: ../src/propgrid/advprops.cpp:861
 msgid "Menu"
 msgstr "Menu"
 
@@ -4976,13 +5131,17 @@ msgstr "%s mesej"
 msgid "Metal theme"
 msgstr "Tema Metal"
 
-#: ../src/msw/ole/automtn.cpp:655
+#: ../src/msw/ole/automtn.cpp:658
 msgid "Method or property not found."
 msgstr ""
 
 #: ../src/univ/themes/win32.cpp:3752
 msgid "Mi&nimize"
 msgstr "Mi&nimum"
+
+#: ../src/propgrid/advprops.cpp:1713
+msgid "Middle Button"
+msgstr ""
 
 #: ../src/richtext/richtextsizepage.cpp:409
 #, fuzzy
@@ -4993,7 +5152,7 @@ msgstr "Berat fon:"
 msgid "Min width:"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:671
+#: ../src/msw/ole/automtn.cpp:674
 msgid "Missing a required parameter."
 msgstr ""
 
@@ -5038,17 +5197,17 @@ msgstr "Gaya lalai untuk perenggan berikut."
 msgid "Moves the object to the previous paragraph."
 msgstr "Undur ke laman HTML terdahulu"
 
-#: ../src/richtext/richtextbuffer.cpp:9746
+#: ../src/richtext/richtextbuffer.cpp:9803
 msgid "Multiple Cell Properties"
 msgstr ""
-
-#: ../src/common/accelcmn.cpp:81
-msgid "NUM_LOCK"
-msgstr "NUM_LOCK"
 
 #: ../src/generic/filectrlg.cpp:459
 msgid "Name"
 msgstr "Nama"
+
+#: ../src/propgrid/advprops.cpp:1546
+msgid "Navy"
+msgstr ""
 
 #: ../src/common/stockitem.cpp:175
 msgid "Network"
@@ -5102,18 +5261,22 @@ msgstr "Item Baru"
 msgid "NewName"
 msgstr "NamaBaru"
 
-#: ../src/generic/tipdlg.cpp:300
+#: ../src/generic/tipdlg.cpp:285
 msgid "Next"
 msgstr "Maju"
 
-#: ../src/common/prntbase.cpp:1537 ../src/html/helpwnd.cpp:679
+#: ../src/common/prntbase.cpp:1551 ../src/html/helpwnd.cpp:665
 msgid "Next page"
 msgstr "Laman berikut"
 
-#: ../include/wx/msgdlg.h:272 ../src/common/stockitem.cpp:177
+#: ../include/wx/msgdlg.h:277 ../src/common/stockitem.cpp:177
 #: ../src/motif/msgdlg.cpp:196
 msgid "No"
 msgstr "Tidak"
+
+#: ../src/propgrid/advprops.cpp:1714
+msgid "No Entry"
+msgstr ""
 
 #: ../src/generic/animateg.cpp:150
 #, c-format
@@ -5137,11 +5300,11 @@ msgstr ""
 msgid "No column for the specified column position existing."
 msgstr ""
 
-#: ../src/common/utilscmn.cpp:1056
+#: ../src/common/utilscmn.cpp:1094
 msgid "No default application configured for HTML files."
 msgstr ""
 
-#: ../src/generic/helpext.cpp:449
+#: ../src/generic/helpext.cpp:445
 msgid "No entries found."
 msgstr "Tiada masukan ditemui."
 
@@ -5173,22 +5336,22 @@ msgstr ""
 msgid "No handler found for animation type."
 msgstr "Tiada pengemudi ditemui untuk jenis animasi."
 
-#: ../src/common/image.cpp:2591
+#: ../src/common/image.cpp:2593
 msgid "No handler found for image type."
 msgstr "Tiada pengemudi ditemui untuk jenis imej."
 
-#: ../src/common/image.cpp:2599 ../src/common/image.cpp:2710
-#: ../src/common/image.cpp:2763
+#: ../src/common/image.cpp:2601 ../src/common/image.cpp:2712
+#: ../src/common/image.cpp:2765
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr "Tiada pengemudi imej untuk jenis %d ditetapkan."
 
-#: ../src/common/image.cpp:2733 ../src/common/image.cpp:2777
+#: ../src/common/image.cpp:2735 ../src/common/image.cpp:2779
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "Tiada pengemudi imej untuk jenis %s ditetapkan."
 
-#: ../src/html/helpwnd.cpp:872
+#: ../src/html/helpwnd.cpp:858
 msgid "No matching page found yet"
 msgstr "Tiada padanan laman ditemui"
 
@@ -5208,11 +5371,11 @@ msgstr "Tiada bunyi"
 msgid "No unused colour in image being masked."
 msgstr "Tiada warna yang tidak digunakan dalam imej ditopengkan."
 
-#: ../src/common/image.cpp:3236
+#: ../src/common/image.cpp:3238
 msgid "No unused colour in image."
 msgstr "Tiada warna yang tidak digunakan dalam imej."
 
-#: ../src/generic/helpext.cpp:306
+#: ../src/generic/helpext.cpp:302
 #, c-format
 msgid "No valid mappings found in the file \"%s\"."
 msgstr "Tiada pemetaan sah ditemui dalam fail \"%s\"."
@@ -5232,15 +5395,15 @@ msgstr "Nordic (ISO-8859-10)"
 msgid "Normal"
 msgstr "Normal"
 
-#: ../src/html/helpwnd.cpp:1277
+#: ../src/html/helpwnd.cpp:1263
 msgid "Normal face<br>and <u>underlined</u>. "
 msgstr "Rupa normal<br>dan <u>garis-bawah</u>. "
 
-#: ../src/html/helpwnd.cpp:1219
+#: ../src/html/helpwnd.cpp:1205
 msgid "Normal font:"
 msgstr "Fon normal:"
 
-#: ../src/propgrid/props.cpp:898
+#: ../src/propgrid/props.cpp:1017
 #, fuzzy, c-format
 msgid "Not %s"
 msgstr "Perihal"
@@ -5263,24 +5426,144 @@ msgstr "Nota, 8 1/2 x 11 in"
 msgid "Notice"
 msgstr "&Nota:"
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:103
+msgid "Num *"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:104
+msgid "Num +"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:105
+msgid "Num ,"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:106
+msgid "Num -"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:107
+msgid "Num ."
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:108
+msgid "Num /"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:102
+msgid "Num ="
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:99
+msgid "Num Begin"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:101
+#, fuzzy
+msgid "Num Delete"
+msgstr "Padam"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:93
+#, fuzzy
+msgid "Num Down"
+msgstr "Turun"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:98
+msgid "Num End"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:88
+msgid "Num Enter"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:89
+#, fuzzy
+msgid "Num Home"
+msgstr "Rumah"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:100
+#, fuzzy
+msgid "Num Insert"
+msgstr "Selit"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:84
+msgid "Num Lock"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:95
+msgid "Num Page Down"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:94
+msgid "Num Page Up"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:92
+#, fuzzy
+msgid "Num Right"
+msgstr "Kanan"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:86
+msgid "Num Space"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:87
+msgid "Num Tab"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:91
+msgid "Num Up"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:90
+msgid "Num left"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:84
+msgid "Num_lock"
+msgstr ""
+
 #: ../src/osx/carbon/dataview.cpp:900
 #, fuzzy
 msgid "Number of columns could not be determined."
 msgstr "Fail gagal dimuatkan."
 
-#: ../src/richtext/richtextliststylepage.cpp:487
 #: ../src/richtext/richtextbulletspage.cpp:279
+#: ../src/richtext/richtextliststylepage.cpp:487
 msgid "Numbered outline"
 msgstr "Menomborkan panduan"
 
-#: ../include/wx/msgdlg.h:273 ../src/richtext/richtextstyledlg.cpp:297
-#: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:489
-#: ../src/msw/msgdlg.cpp:795 ../src/msw/dialog.cpp:120
-#: ../src/gtk1/fontdlg.cpp:138
+#: ../include/wx/msgdlg.h:278 ../src/common/stockitem.cpp:178
+#: ../src/gtk1/fontdlg.cpp:138 ../src/msw/dialog.cpp:120
+#: ../src/msw/msgdlg.cpp:476 ../src/msw/msgdlg.cpp:782
+#: ../src/richtext/richtextstyledlg.cpp:297
 msgid "OK"
 msgstr "OK"
 
-#: ../src/msw/ole/automtn.cpp:695
+#: ../src/msw/ole/automtn.cpp:698
 #, c-format
 msgid "OLE Automation error in %s: %s"
 msgstr ""
@@ -5290,7 +5573,7 @@ msgstr ""
 msgid "Object Properties"
 msgstr "&Ciri-ciri"
 
-#: ../src/msw/ole/automtn.cpp:663
+#: ../src/msw/ole/automtn.cpp:666
 msgid "Object implementation does not support named arguments."
 msgstr ""
 
@@ -5298,11 +5581,15 @@ msgstr ""
 msgid "Objects must have an id attribute"
 msgstr "Objek perlu ada atribut id"
 
+#: ../src/propgrid/advprops.cpp:1551
+msgid "Olive"
+msgstr ""
+
 #: ../src/common/docview.cpp:1762 ../src/common/docview.cpp:1804
 msgid "Open File"
 msgstr "Buka Fail"
 
-#: ../src/html/helpwnd.cpp:685 ../src/html/helpwnd.cpp:1568
+#: ../src/html/helpwnd.cpp:671 ../src/html/helpwnd.cpp:1554
 msgid "Open HTML document"
 msgstr "Buka dokumen HTML"
 
@@ -5321,22 +5608,22 @@ msgstr "&Buka..."
 msgid "OpenGL function \"%s\" failed: %s (error %d)"
 msgstr ""
 
-#: ../src/generic/dirctrlg.cpp:699 ../src/generic/dirdlgg.cpp:352
+#: ../src/generic/dirctrlg.cpp:620 ../src/generic/dirdlgg.cpp:352
 #: ../src/generic/filectrlg.cpp:677 ../src/generic/filectrlg.cpp:821
 msgid "Operation not permitted."
 msgstr "Operasi tidak diizinkan."
 
-#: ../src/common/cmdline.cpp:894
+#: ../src/common/cmdline.cpp:900
 #, fuzzy, c-format
 msgid "Option '%s' can't be negated"
 msgstr "Direktori '%s' gagal dicipta"
 
-#: ../src/common/cmdline.cpp:1058
+#: ../src/common/cmdline.cpp:1064
 #, c-format
 msgid "Option '%s' requires a value."
 msgstr "Pilihan '%s' perlukan nilai."
 
-#: ../src/common/cmdline.cpp:1141
+#: ../src/common/cmdline.cpp:1147
 #, c-format
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "Pilihan '%s': '%s' gagal ditukar kepada tarikh."
@@ -5344,6 +5631,10 @@ msgstr "Pilihan '%s': '%s' gagal ditukar kepada tarikh."
 #: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:618
 msgid "Options"
 msgstr "Pilihan"
+
+#: ../src/propgrid/advprops.cpp:1556
+msgid "Orange"
+msgstr ""
 
 #: ../src/generic/prntdlgg.cpp:615 ../src/generic/prntdlgg.cpp:869
 msgid "Orientation"
@@ -5363,21 +5654,9 @@ msgstr "Paras senarai:"
 msgid "Outset"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:659
+#: ../src/msw/ole/automtn.cpp:662
 msgid "Overflow while coercing argument values."
 msgstr ""
-
-#: ../src/common/accelcmn.cpp:84
-msgid "PAGEDOWN"
-msgstr "PAGEDOWN"
-
-#: ../src/common/accelcmn.cpp:83
-msgid "PAGEUP"
-msgstr "PAGEUP"
-
-#: ../src/common/accelcmn.cpp:69
-msgid "PAUSE"
-msgstr "PAUSE"
 
 #: ../src/common/imagpcx.cpp:457 ../src/common/imagpcx.cpp:480
 msgid "PCX: couldn't allocate memory"
@@ -5402,14 +5681,6 @@ msgstr "PCX: ralat tidak diketahui !!!"
 #: ../src/common/imagpcx.cpp:458
 msgid "PCX: version number too low"
 msgstr "PCX: nombor versi terlalu rendah"
-
-#: ../src/common/accelcmn.cpp:55
-msgid "PGDN"
-msgstr "PGDN"
-
-#: ../src/common/accelcmn.cpp:54
-msgid "PGUP"
-msgstr "PGUP"
 
 #: ../src/common/imagpnm.cpp:91
 msgid "PNM: Couldn't allocate memory."
@@ -5528,36 +5799,60 @@ msgstr "Sampul PRC #9 229 x 324 mm"
 msgid "PRC Envelope #9 Rotated 324 x 229 mm"
 msgstr "Sampul PRC #9 Diputar 324 x 229 mm"
 
-#: ../src/common/accelcmn.cpp:72
-msgid "PRINT"
-msgstr "PRINT"
-
 #: ../src/richtext/richtextmarginspage.cpp:285
 #, fuzzy
 msgid "Padding"
 msgstr "membaca"
 
-#: ../src/common/prntbase.cpp:2044
+#: ../src/common/prntbase.cpp:2058
 #, c-format
 msgid "Page %d"
 msgstr "Laman %d"
 
-#: ../src/common/prntbase.cpp:2042
+#: ../src/common/prntbase.cpp:2056
 #, c-format
 msgid "Page %d of %d"
 msgstr "Laman %d of %d"
 
-#: ../src/gtk/print.cpp:774
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:56
+#, fuzzy
+msgid "Page Down"
+msgstr "Laman %d"
+
+#: ../src/gtk/print.cpp:795
 msgid "Page Setup"
 msgstr "Tetapan Halaman"
 
-#: ../src/generic/prntdlgg.cpp:828 ../src/common/prntbase.cpp:467
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:55
+#, fuzzy
+msgid "Page Up"
+msgstr "Laman %d"
+
+#: ../src/common/prntbase.cpp:479 ../src/generic/prntdlgg.cpp:828
 msgid "Page setup"
 msgstr "Tetapan halaman"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:56
+#, fuzzy
+msgid "PageDown"
+msgstr "Turun"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:55
+#, fuzzy
+msgid "PageUp"
+msgstr "Laman"
 
 #: ../src/generic/prntdlgg.cpp:216
 msgid "Pages"
 msgstr "Laman"
+
+#: ../src/propgrid/advprops.cpp:1715
+msgid "Paint Brush"
+msgstr ""
 
 #: ../src/generic/prntdlgg.cpp:602 ../src/generic/prntdlgg.cpp:801
 #: ../src/generic/prntdlgg.cpp:842 ../src/generic/prntdlgg.cpp:855
@@ -5565,7 +5860,7 @@ msgstr "Laman"
 msgid "Paper size"
 msgstr "Saiz &kertas:"
 
-#: ../src/richtext/richtextstyles.cpp:1058
+#: ../src/richtext/richtextstyles.cpp:1062
 msgid "Paragraph styles"
 msgstr "Gaya perenggan"
 
@@ -5578,7 +5873,7 @@ msgstr "Passing a already registered object to SetObject"
 msgid "Passing an unknown object to GetObject"
 msgstr "Melepaskan objek tidak diketahui kepada GetObject"
 
-#: ../src/richtext/richtextctrl.cpp:3242 ../src/common/stockitem.cpp:180
+#: ../src/common/stockitem.cpp:180 ../src/richtext/richtextctrl.cpp:3488
 #: ../src/stc/stc_i18n.cpp:19
 msgid "Paste"
 msgstr "Tampal"
@@ -5587,8 +5882,17 @@ msgstr "Tampal"
 msgid "Paste selection"
 msgstr "Tampal pilihan"
 
-#: ../src/richtext/richtextliststylepage.cpp:222
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:72
+msgid "Pause"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:1716
+msgid "Pencil"
+msgstr ""
+
 #: ../src/richtext/richtextbulletspage.cpp:159
+#: ../src/richtext/richtextliststylepage.cpp:222
 msgid "Peri&od"
 msgstr "N&oktah"
 
@@ -5596,7 +5900,17 @@ msgstr "N&oktah"
 msgid "Permissions"
 msgstr "Keizinan"
 
-#: ../src/richtext/richtextbuffer.cpp:12512
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:58
+msgid "PgDn"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:57
+msgid "PgUp"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:12662
 #, fuzzy
 msgid "Picture Properties"
 msgstr "&Ciri-ciri"
@@ -5609,15 +5923,15 @@ msgstr "Gagal mencipta paip"
 msgid "Please choose a valid font."
 msgstr "Sila pilih fon yang sah."
 
-#: ../src/gtk/filedlg.cpp:72
+#: ../src/generic/filedlgg.cpp:365 ../src/gtk/filedlg.cpp:72
 msgid "Please choose an existing file."
 msgstr "Sila pilih fail yang sedia ada."
 
-#: ../src/html/helpwnd.cpp:814
+#: ../src/html/helpwnd.cpp:800
 msgid "Please choose the page to display:"
 msgstr "Sila pilih laman yang ingin dipaparkan:"
 
-#: ../src/msw/dialup.cpp:785
+#: ../src/msw/dialup.cpp:774
 msgid "Please choose which ISP do you want to connect to"
 msgstr "Sila pilih ISP yang mana anda ingin sambung kepadanya"
 
@@ -5636,12 +5950,22 @@ msgstr ""
 msgid "Please select the columns to show and define their order:"
 msgstr ""
 
-#: ../src/common/prntbase.cpp:521
+#: ../src/common/prntbase.cpp:533
 #, fuzzy
 msgid "Please wait while printing..."
 msgstr "Sila tunggu semasa mencetak\n"
 
-#: ../src/propgrid/advprops.cpp:632
+#: ../src/propgrid/advprops.cpp:1717
+#, fuzzy
+msgid "Point Left"
+msgstr "Saiz titik:"
+
+#: ../src/propgrid/advprops.cpp:1718
+#, fuzzy
+msgid "Point Right"
+msgstr "Jajar Kanan"
+
+#: ../src/propgrid/advprops.cpp:639
 #, fuzzy
 msgid "Point Size"
 msgstr "Saiz titik:"
@@ -5681,36 +6005,38 @@ msgstr "Fail PostScript"
 msgid "Preferences"
 msgstr "Keutamaan"
 
-#: ../src/osx/menu_osx.cpp:614
+#: ../src/osx/menu_osx.cpp:626
 #, fuzzy
 msgid "Preferences..."
 msgstr "Keutamaan"
 
-#: ../src/common/prntbase.cpp:529
+#: ../src/common/prntbase.cpp:541
 msgid "Preparing"
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:455 ../src/osx/carbon/fontdlg.cpp:560
-#: ../src/html/helpwnd.cpp:1236
+#: ../src/generic/fontdlgg.cpp:455 ../src/html/helpwnd.cpp:1222
+#: ../src/osx/carbon/fontdlg.cpp:560
 msgid "Preview:"
 msgstr "Pralihat:"
 
-#: ../src/common/prntbase.cpp:1523 ../src/html/helpwnd.cpp:678
+#: ../src/common/prntbase.cpp:1537 ../src/html/helpwnd.cpp:664
 msgid "Previous page"
 msgstr "Laman sebelum:"
 
-#: ../src/generic/prntdlgg.cpp:143 ../src/generic/prntdlgg.cpp:157
-#: ../src/common/prntbase.cpp:409 ../src/common/prntbase.cpp:1511
-#: ../src/gtk/print.cpp:584 ../src/gtk/print.cpp:597
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:75 ../src/common/prntbase.cpp:421
+#: ../src/common/prntbase.cpp:1525 ../src/generic/prntdlgg.cpp:143
+#: ../src/generic/prntdlgg.cpp:157 ../src/gtk/print.cpp:605
+#: ../src/gtk/print.cpp:618
 msgid "Print"
 msgstr "Cetak"
 
-#: ../include/wx/prntbase.h:395 ../src/common/docview.cpp:1257
+#: ../include/wx/prntbase.h:399 ../src/common/docview.cpp:1257
 msgid "Print Preview"
 msgstr "Pralihat Cetak"
 
-#: ../src/common/prntbase.cpp:1985 ../src/common/prntbase.cpp:2027
-#: ../src/common/prntbase.cpp:2035
+#: ../src/common/prntbase.cpp:1999 ../src/common/prntbase.cpp:2041
+#: ../src/common/prntbase.cpp:2049
 msgid "Print Preview Failure"
 msgstr "Gagal Pralihat Cetakan"
 
@@ -5745,7 +6071,7 @@ msgstr "Pralihat cetak"
 msgid "Print spooling"
 msgstr "Gelendong cetak"
 
-#: ../src/html/helpwnd.cpp:689
+#: ../src/html/helpwnd.cpp:675
 msgid "Print this page"
 msgstr "Cetak laman ini"
 
@@ -5782,21 +6108,21 @@ msgstr "Pencetak..."
 msgid "Printer:"
 msgstr "Pencetak:"
 
-#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:518
+#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:530
 #: ../src/html/htmprint.cpp:277
 #, fuzzy
 msgid "Printing"
 msgstr "Mencetak "
 
-#: ../src/common/prntbase.cpp:586
+#: ../src/common/prntbase.cpp:596
 msgid "Printing "
 msgstr "Mencetak "
 
-#: ../src/common/prntbase.cpp:330
+#: ../src/common/prntbase.cpp:342
 msgid "Printing Error"
 msgstr "Ralat mencetak"
 
-#: ../src/common/prntbase.cpp:544
+#: ../src/common/prntbase.cpp:556
 #, fuzzy, c-format
 msgid "Printing page %d of %d"
 msgstr "Mencetak laman %d..."
@@ -5810,7 +6136,7 @@ msgstr "Mencetak laman %d..."
 msgid "Printing..."
 msgstr "Mencetak..."
 
-#: ../include/wx/richtext/richtextprint.h:109 ../include/wx/prntbase.h:263
+#: ../include/wx/prntbase.h:267 ../include/wx/richtext/richtextprint.h:109
 #: ../src/common/docview.cpp:2121
 #, fuzzy
 msgid "Printout"
@@ -5827,7 +6153,7 @@ msgstr ""
 msgid "Progress renderer cannot render value type; value type: "
 msgstr ""
 
-#: ../src/common/prntbase.cpp:528
+#: ../src/common/prntbase.cpp:540
 msgid "Progress:"
 msgstr ""
 
@@ -5841,17 +6167,26 @@ msgstr "&Ciri-ciri"
 msgid "Property"
 msgstr "&Ciri-ciri"
 
-#: ../src/propgrid/propgrid.cpp:3131 ../src/propgrid/propgrid.cpp:3263
+#: ../src/propgrid/propgrid.cpp:3182 ../src/propgrid/propgrid.cpp:3314
 #, fuzzy
 msgid "Property Error"
 msgstr "Ralat mencetak"
+
+#: ../src/propgrid/advprops.cpp:1547
+msgid "Purple"
+msgstr ""
 
 #: ../src/common/paper.cpp:113
 msgid "Quarto, 215 x 275 mm"
 msgstr "Quarto, 215 x 275 mm"
 
-#: ../src/generic/logg.cpp:1036
+#: ../src/generic/logg.cpp:1034
 msgid "Question"
+msgstr "Soalan"
+
+#: ../src/propgrid/advprops.cpp:1719
+#, fuzzy
+msgid "Question Arrow"
 msgstr "Soalan"
 
 #: ../src/common/stockitem.cpp:156
@@ -5859,7 +6194,7 @@ msgstr "Soalan"
 msgid "Quit"
 msgstr "&Keluar"
 
-#: ../src/osx/menu_osx.cpp:631
+#: ../src/osx/menu_osx.cpp:643
 #, fuzzy, c-format
 msgid "Quit %s"
 msgstr "&Keluar"
@@ -5868,27 +6203,24 @@ msgstr "&Keluar"
 msgid "Quit this program"
 msgstr "Keluar program ini"
 
-#: ../src/common/accelcmn.cpp:53
-msgid "RETURN"
-msgstr "RETURN"
-
-#: ../src/common/accelcmn.cpp:57
-msgid "RIGHT"
-msgstr "RIGHT"
-
-#: ../src/common/accelcmn.cpp:327
+#: ../src/common/accelcmn.cpp:328
 #, fuzzy
 msgid "RawCtrl+"
 msgstr "Ctrl-"
 
-#: ../src/common/ffile.cpp:113 ../src/common/ffile.cpp:134
+#: ../src/common/ffile.cpp:109 ../src/common/ffile.cpp:133
 #, c-format
 msgid "Read error on file '%s'"
 msgstr "Ralat baca pada fail '%s'"
 
-#: ../src/common/prntbase.cpp:257
+#: ../src/common/prntbase.cpp:267
 msgid "Ready"
 msgstr "Sedia"
+
+#: ../src/propgrid/advprops.cpp:1555
+#, fuzzy
+msgid "Red"
+msgstr "&Ulangcara"
 
 #: ../src/common/stockitem.cpp:185 ../src/stc/stc_i18n.cpp:16
 #, fuzzy
@@ -5903,17 +6235,17 @@ msgstr "Ulang tindakan akhir"
 msgid "Refresh"
 msgstr "Segarkan"
 
-#: ../src/msw/registry.cpp:625
+#: ../src/msw/registry.cpp:618
 #, c-format
 msgid "Registry key '%s' already exists."
 msgstr "Kunci registri '%s' sedia wujud."
 
-#: ../src/msw/registry.cpp:594
+#: ../src/msw/registry.cpp:587
 #, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
 msgstr "Kunci registri '%s' tidak wujud, Gagal menamakannya."
 
-#: ../src/msw/registry.cpp:726
+#: ../src/msw/registry.cpp:719
 #, c-format
 msgid ""
 "Registry key '%s' is needed for normal system operation,\n"
@@ -5924,7 +6256,7 @@ msgstr ""
 "memadamnya akan menjadikan sistem anda dalam keadaan tidak berguna:\n"
 "operasi digugurkan."
 
-#: ../src/msw/registry.cpp:520
+#: ../src/msw/registry.cpp:513
 #, c-format
 msgid "Registry value '%s' already exists."
 msgstr "Nilai registri '%s' sedia wujud."
@@ -5939,7 +6271,7 @@ msgstr "Biasa"
 msgid "Relative"
 msgstr "Dekoratif"
 
-#: ../src/generic/helpext.cpp:462
+#: ../src/generic/helpext.cpp:458
 msgid "Relevant entries:"
 msgstr "Masukan berkaitan:"
 
@@ -5952,12 +6284,12 @@ msgstr "Masa yang tinggal :"
 msgid "Remove"
 msgstr "Buang"
 
-#: ../src/richtext/richtextctrl.cpp:1522
+#: ../src/richtext/richtextctrl.cpp:1539
 #, fuzzy
 msgid "Remove Bullet"
 msgstr "Buang"
 
-#: ../src/html/helpwnd.cpp:441
+#: ../src/html/helpwnd.cpp:433
 msgid "Remove current page from bookmarks"
 msgstr "Buang laman semasa dari tanda laman"
 
@@ -5973,7 +6305,7 @@ msgstr ""
 msgid "Rendering failed."
 msgstr "Penciptaan pemasa gagal."
 
-#: ../src/richtext/richtextbuffer.cpp:4415
+#: ../src/richtext/richtextbuffer.cpp:4449
 msgid "Renumber List"
 msgstr "Menomborkan Semula Senarai"
 
@@ -5981,7 +6313,7 @@ msgstr "Menomborkan Semula Senarai"
 msgid "Rep&lace"
 msgstr "Ganti"
 
-#: ../src/richtext/richtextctrl.cpp:3402 ../src/common/stockitem.cpp:188
+#: ../src/common/stockitem.cpp:188 ../src/richtext/richtextctrl.cpp:3648
 msgid "Replace"
 msgstr "Ganti"
 
@@ -6001,10 +6333,15 @@ msgstr "Ganti dengan:"
 msgid "Required information entry is empty."
 msgstr ""
 
-#: ../src/common/translation.cpp:1966
+#: ../src/common/translation.cpp:1979
 #, fuzzy, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "'%s' bukanlah mesej katalog yang sah."
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:54
+msgid "Return"
+msgstr ""
 
 #: ../src/common/stockitem.cpp:189
 msgid "Revert to Saved"
@@ -6019,11 +6356,21 @@ msgstr "Kanan"
 msgid "Rig&ht-to-left"
 msgstr ""
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:60 ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextliststylepage.cpp:251
-#: ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
 msgstr "Kanan"
+
+#: ../src/propgrid/advprops.cpp:1704
+#, fuzzy
+msgid "Right Arrow"
+msgstr "Kanan"
+
+#: ../src/propgrid/advprops.cpp:1720
+msgid "Right Button"
+msgstr ""
 
 #: ../src/generic/prntdlgg.cpp:892
 msgid "Right margin (mm):"
@@ -6040,49 +6387,25 @@ msgstr "Jajar-kanan teks."
 msgid "Roman"
 msgstr "Roman"
 
-#: ../src/richtext/richtextliststylepage.cpp:299
 #: ../src/richtext/richtextbulletspage.cpp:239
+#: ../src/richtext/richtextliststylepage.cpp:299
 msgid "S&tandard bullet name:"
 msgstr "Nama peluru piawai:"
 
-#: ../src/common/accelcmn.cpp:82
-msgid "SCROLL_LOCK"
-msgstr "SCROLL_LOCK"
-
-#: ../src/common/accelcmn.cpp:71
-msgid "SELECT"
-msgstr "SELECT"
-
-#: ../src/common/accelcmn.cpp:77
-msgid "SEPARATOR"
-msgstr "SEPARATOR"
-
-#: ../src/common/accelcmn.cpp:74
-msgid "SNAPSHOT"
-msgstr "SNAPSHOT"
-
-#: ../src/common/accelcmn.cpp:62
-msgid "SPACE"
-msgstr "SPACE"
-
-#: ../src/common/accelcmn.cpp:257 ../src/common/accelcmn.cpp:339
+#: ../src/common/accelcmn.cpp:258 ../src/common/accelcmn.cpp:340
 msgid "SPECIAL"
 msgstr "SPECIAL"
 
-#: ../src/common/accelcmn.cpp:78
-msgid "SUBTRACT"
-msgstr "SUBTRACT"
-
-#: ../src/common/stockitem.cpp:190 ../src/common/sizer.cpp:2682
+#: ../src/common/sizer.cpp:2686 ../src/common/stockitem.cpp:190
 msgid "Save"
 msgstr "Simpan"
 
-#: ../src/common/fldlgcmn.cpp:332
+#: ../src/common/fldlgcmn.cpp:342
 #, c-format
 msgid "Save %s file"
 msgstr "Simpan fail %s"
 
-#: ../src/generic/logg.cpp:518
+#: ../src/generic/logg.cpp:516
 msgid "Save &As..."
 msgstr "Simp&an Sebagai..."
 
@@ -6103,7 +6426,7 @@ msgstr "Simpan dokumen semasa"
 msgid "Save current document with a different filename"
 msgstr "Simpan dokumen semasa dengan nama fail berbeza"
 
-#: ../src/generic/logg.cpp:518
+#: ../src/generic/logg.cpp:516
 msgid "Save log contents to file"
 msgstr "Simpan kandungan log kepada fail."
 
@@ -6111,12 +6434,26 @@ msgstr "Simpan kandungan log kepada fail."
 msgid "Script"
 msgstr "Skrip"
 
-#: ../src/generic/srchctlg.cpp:67 ../src/html/helpwnd.cpp:549
-#: ../src/html/helpwnd.cpp:564
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:85
+msgid "Scroll Lock"
+msgstr ""
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:85
+msgid "Scroll_lock"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:862
+msgid "Scrollbar"
+msgstr ""
+
+#: ../src/generic/srchctlg.cpp:56 ../src/html/helpwnd.cpp:535
+#: ../src/html/helpwnd.cpp:550
 msgid "Search"
 msgstr "Cari"
 
-#: ../src/html/helpwnd.cpp:551
+#: ../src/html/helpwnd.cpp:537
 #, fuzzy
 msgid ""
 "Search contents of help book(s) for all occurrences of the text you typed "
@@ -6133,30 +6470,36 @@ msgstr "Carian hala"
 msgid "Search for:"
 msgstr "Cari:"
 
-#: ../src/html/helpwnd.cpp:1066
+#: ../src/html/helpwnd.cpp:1052
 msgid "Search in all books"
 msgstr "Carian dalam semua buku"
 
-#: ../src/html/helpwnd.cpp:871
+#: ../src/html/helpwnd.cpp:857
 msgid "Searching..."
 msgstr "Mencari..."
 
-#: ../src/generic/dirctrlg.cpp:546
+#: ../src/generic/dirctrlg.cpp:467
 msgid "Sections"
 msgstr "Seksyen"
 
-#: ../src/common/ffile.cpp:220
+#: ../src/common/ffile.cpp:238
 #, c-format
 msgid "Seek error on file '%s'"
 msgstr "Cari ralat pada fail '%s'"
 
-#: ../src/common/ffile.cpp:210
+#: ../src/common/ffile.cpp:228
 #, c-format
 msgid "Seek error on file '%s' (large files not supported by stdio)"
 msgstr "Mencari ralat pada fail '%s' (fail besar tidak disokong oleh stdio)"
 
-#: ../src/richtext/richtextctrl.cpp:336 ../src/osx/textctrl_osx.cpp:587
-#: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2339
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:74
+#, fuzzy
+msgid "Select"
+msgstr "Pemilihan"
+
+#: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2450
+#: ../src/osx/textctrl_osx.cpp:587 ../src/richtext/richtextctrl.cpp:337
 msgid "Select &All"
 msgstr "Pilih &Semua"
 
@@ -6197,25 +6540,30 @@ msgstr "Pemilihan"
 msgid "Selects the list level to edit."
 msgstr "Pilih paras senarai untuk edit."
 
-#: ../src/common/cmdline.cpp:1077
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:80
+msgid "Separator"
+msgstr ""
+
+#: ../src/common/cmdline.cpp:1083
 #, c-format
 msgid "Separator expected after the option '%s'."
 msgstr "Pembahagi dijangka selepas pilihan '%s'."
 
-#: ../src/osx/menu_osx.cpp:618
+#: ../src/osx/menu_osx.cpp:630
 msgid "Services"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:10981
+#: ../src/richtext/richtextbuffer.cpp:11055
 #, fuzzy
 msgid "Set Cell Style"
 msgstr "Padam Gaya"
 
-#: ../include/wx/xtiprop.h:179
+#: ../include/wx/xtiprop.h:175
 msgid "SetProperty called w/o valid setter"
 msgstr "SetProperty dipanggil tanpa setter sah"
 
-#: ../src/common/filename.cpp:2638
+#: ../src/common/filename.cpp:2599
 msgid "Setting directory access times is not supported under this OS version"
 msgstr ""
 
@@ -6223,11 +6571,11 @@ msgstr ""
 msgid "Setup..."
 msgstr "Tetapan..."
 
-#: ../src/msw/dialup.cpp:563
+#: ../src/msw/dialup.cpp:554
 msgid "Several active dialup connections found, choosing one randomly."
 msgstr "Beberapa sambungan mendial aktif ditemui, pilih satu secara rawak."
 
-#: ../src/common/accelcmn.cpp:324
+#: ../src/common/accelcmn.cpp:325
 #, fuzzy
 msgid "Shift+"
 msgstr "Shift-"
@@ -6240,7 +6588,7 @@ msgstr "Tunjuk direktori tersembunyi"
 msgid "Show &hidden files"
 msgstr "Tunjuk fail tersembunyi"
 
-#: ../src/osx/menu_osx.cpp:626
+#: ../src/osx/menu_osx.cpp:638
 #, fuzzy
 msgid "Show All"
 msgstr "Papar Semua"
@@ -6249,11 +6597,11 @@ msgstr "Papar Semua"
 msgid "Show about dialog"
 msgstr "Tunjuk dialog perihal"
 
-#: ../src/html/helpwnd.cpp:503
+#: ../src/html/helpwnd.cpp:492
 msgid "Show all"
 msgstr "Papar Semua"
 
-#: ../src/html/helpwnd.cpp:514
+#: ../src/html/helpwnd.cpp:503
 msgid "Show all items in index"
 msgstr "Tunjuk semua item indeks"
 
@@ -6261,7 +6609,7 @@ msgstr "Tunjuk semua item indeks"
 msgid "Show hidden directories"
 msgstr "Papar direktori tersembunyi"
 
-#: ../src/html/helpwnd.cpp:672
+#: ../src/html/helpwnd.cpp:658
 msgid "Show/hide navigation panel"
 msgstr "Tunjuk/sorok panel navigasi"
 
@@ -6270,10 +6618,10 @@ msgstr "Tunjuk/sorok panel navigasi"
 msgid "Shows a Unicode subset."
 msgstr "Tunjuk subset Unikod."
 
-#: ../src/richtext/richtextliststylepage.cpp:472
-#: ../src/richtext/richtextliststylepage.cpp:474
 #: ../src/richtext/richtextbulletspage.cpp:263
 #: ../src/richtext/richtextbulletspage.cpp:265
+#: ../src/richtext/richtextliststylepage.cpp:472
+#: ../src/richtext/richtextliststylepage.cpp:474
 msgid "Shows a preview of the bullet settings."
 msgstr "Tunjuk pralihat tetapan peluru."
 
@@ -6295,6 +6643,10 @@ msgstr "Tunjuk pralihat tetapan perenggan."
 msgid "Shows the font preview."
 msgstr "Tunjuk pralihat fon."
 
+#: ../src/propgrid/advprops.cpp:1557
+msgid "Silver"
+msgstr ""
+
 #: ../src/univ/themes/mono.cpp:516
 msgid "Simple monochrome theme"
 msgstr "Tema monokrom mudah"
@@ -6304,7 +6656,7 @@ msgstr "Tema monokrom mudah"
 msgid "Single"
 msgstr "Tunggal"
 
-#: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:377
+#: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:373
 #: ../src/richtext/richtextsizepage.cpp:299
 msgid "Size"
 msgstr "Saiz"
@@ -6313,7 +6665,27 @@ msgstr "Saiz"
 msgid "Size:"
 msgstr "Saiz:"
 
-#: ../src/generic/progdlgg.cpp:262 ../src/generic/progdlgg.cpp:773
+#: ../src/propgrid/advprops.cpp:1725
+msgid "Sizing"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:1722
+msgid "Sizing N-S"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:1721
+msgid "Sizing NE-SW"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:1723
+msgid "Sizing NW-SE"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:1724
+msgid "Sizing W-E"
+msgstr ""
+
+#: ../src/generic/progdlgg.cpp:263 ../src/generic/progdlgg.cpp:774
 #: ../src/msw/progdlg.cpp:801
 msgid "Skip"
 msgstr "Langkau"
@@ -6326,6 +6698,11 @@ msgstr "Condong"
 msgid "Small C&apitals"
 msgstr ""
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:77
+msgid "Snapshot"
+msgstr ""
+
 #: ../src/richtext/richtextborderspage.cpp:614
 #, fuzzy
 msgid "Solid"
@@ -6335,7 +6712,7 @@ msgstr "Tebal"
 msgid "Sorry, could not open this file."
 msgstr "Maaf, Gagal membuka fail."
 
-#: ../src/common/prntbase.cpp:2027 ../src/common/prntbase.cpp:2035
+#: ../src/common/prntbase.cpp:2041 ../src/common/prntbase.cpp:2049
 msgid "Sorry, not enough memory to create a preview."
 msgstr "Maaf, tidak cukup memori untuk mencipta pralihat."
 
@@ -6360,6 +6737,12 @@ msgstr "Data bunyi dalam format yang tidak disokong."
 msgid "Sound file '%s' is in unsupported format."
 msgstr "Fail bunyi '%s' dalam format yang tidak disokong."
 
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:65
+#, fuzzy
+msgid "Space"
+msgstr "Ruang"
+
 #: ../src/richtext/richtextliststylepage.cpp:467
 msgid "Spacing"
 msgstr "Ruang"
@@ -6368,8 +6751,12 @@ msgstr "Ruang"
 msgid "Spell Check"
 msgstr ""
 
-#: ../src/richtext/richtextliststylepage.cpp:490
+#: ../src/propgrid/advprops.cpp:1726
+msgid "Spraycan"
+msgstr ""
+
 #: ../src/richtext/richtextbulletspage.cpp:282
+#: ../src/richtext/richtextliststylepage.cpp:490
 msgid "Standard"
 msgstr "Piawai"
 
@@ -6401,7 +6788,7 @@ msgstr ""
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr "Rentetan Kepada Warna : Spesifikasi warna salah : %s"
 
-#: ../src/richtext/richtextformatdlg.cpp:339 ../src/propgrid/advprops.cpp:648
+#: ../src/propgrid/advprops.cpp:655 ../src/richtext/richtextformatdlg.cpp:337
 msgid "Style"
 msgstr "Gaya"
 
@@ -6417,6 +6804,11 @@ msgstr "Gaya:"
 #, fuzzy
 msgid "Subscrip&t"
 msgstr "Skrip"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:81
+msgid "Subtract"
+msgstr ""
 
 #: ../src/richtext/richtextfontpage.cpp:296
 #, fuzzy
@@ -6439,13 +6831,13 @@ msgstr ""
 msgid "Swiss"
 msgstr "Swiss"
 
-#: ../src/richtext/richtextliststylepage.cpp:488
 #: ../src/richtext/richtextbulletspage.cpp:280
+#: ../src/richtext/richtextliststylepage.cpp:488
 msgid "Symbol"
 msgstr "Simbol"
 
-#: ../src/richtext/richtextliststylepage.cpp:288
 #: ../src/richtext/richtextbulletspage.cpp:227
+#: ../src/richtext/richtextliststylepage.cpp:288
 msgid "Symbol &font:"
 msgstr "Fon simbol:"
 
@@ -6453,36 +6845,38 @@ msgstr "Fon simbol:"
 msgid "Symbols"
 msgstr "Simbol"
 
-#: ../src/common/accelcmn.cpp:63
-msgid "TAB"
-msgstr "TAB"
-
-#: ../src/common/imagtiff.cpp:372 ../src/common/imagtiff.cpp:385
-#: ../src/common/imagtiff.cpp:744
+#: ../src/common/imagtiff.cpp:369 ../src/common/imagtiff.cpp:382
+#: ../src/common/imagtiff.cpp:741
 msgid "TIFF: Couldn't allocate memory."
 msgstr "TIFF: Gagal menempatkan memori"
 
-#: ../src/common/imagtiff.cpp:304
+#: ../src/common/imagtiff.cpp:301
 msgid "TIFF: Error loading image."
 msgstr "TIFF: Ralat memuat imej."
 
-#: ../src/common/imagtiff.cpp:471
+#: ../src/common/imagtiff.cpp:468
 msgid "TIFF: Error reading image."
 msgstr "TIFF: Ralat membaca imej."
 
-#: ../src/common/imagtiff.cpp:611
+#: ../src/common/imagtiff.cpp:608
 msgid "TIFF: Error saving image."
 msgstr "TIFF: Ralat menyimpan imej."
 
-#: ../src/common/imagtiff.cpp:849
+#: ../src/common/imagtiff.cpp:846
 msgid "TIFF: Error writing image."
 msgstr "TIFF: Ralat menulis imej."
 
-#: ../src/common/imagtiff.cpp:358
+#: ../src/common/imagtiff.cpp:355
 msgid "TIFF: Image size is abnormally big."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:11262
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:66
+#, fuzzy
+msgid "Tab"
+msgstr "Tab"
+
+#: ../src/richtext/richtextbuffer.cpp:11336
 #, fuzzy
 msgid "Table Properties"
 msgstr "&Ciri-ciri"
@@ -6495,9 +6889,13 @@ msgstr "Tabloid Ekstra 11.69 x 18 in"
 msgid "Tabloid, 11 x 17 in"
 msgstr "Tabloid, 11 x 17 in"
 
-#: ../src/richtext/richtextformatdlg.cpp:357
+#: ../src/richtext/richtextformatdlg.cpp:355
 msgid "Tabs"
 msgstr "Tab"
+
+#: ../src/propgrid/advprops.cpp:1548
+msgid "Teal"
+msgstr ""
 
 #: ../src/generic/fontdlgg.cpp:327
 msgid "Teletype"
@@ -6523,10 +6921,10 @@ msgstr "Pelayan FTP tidak menyokong mod pasif."
 msgid "The FTP server doesn't support the PORT command."
 msgstr "Pelayan FTP tidak menyokong arahan PORT."
 
-#: ../src/richtext/richtextliststylepage.cpp:215
-#: ../src/richtext/richtextliststylepage.cpp:217
 #: ../src/richtext/richtextbulletspage.cpp:151
 #: ../src/richtext/richtextbulletspage.cpp:153
+#: ../src/richtext/richtextliststylepage.cpp:215
+#: ../src/richtext/richtextliststylepage.cpp:217
 msgid "The available bullet styles."
 msgstr "Gaya peluru yang ada."
 
@@ -6581,14 +6979,14 @@ msgstr "Saiz titik fon."
 msgid "The bottom position."
 msgstr "Posisi tab."
 
-#: ../src/richtext/richtextliststylepage.cpp:254
-#: ../src/richtext/richtextliststylepage.cpp:256
-#: ../src/richtext/richtextliststylepage.cpp:275
-#: ../src/richtext/richtextliststylepage.cpp:277
 #: ../src/richtext/richtextbulletspage.cpp:191
 #: ../src/richtext/richtextbulletspage.cpp:193
 #: ../src/richtext/richtextbulletspage.cpp:214
 #: ../src/richtext/richtextbulletspage.cpp:216
+#: ../src/richtext/richtextliststylepage.cpp:254
+#: ../src/richtext/richtextliststylepage.cpp:256
+#: ../src/richtext/richtextliststylepage.cpp:275
+#: ../src/richtext/richtextliststylepage.cpp:277
 msgid "The bullet character."
 msgstr "Aksara peluru."
 
@@ -6608,7 +7006,7 @@ msgstr ""
 "set aksara lain untuk digantikan atau pilih\n"
 "[Batal] jika tidak boleh diganti"
 
-#: ../src/msw/ole/dataobj.cpp:394
+#: ../src/msw/ole/dataobj.cpp:389
 #, c-format
 msgid "The clipboard format '%d' doesn't exist."
 msgstr "Format klipbod '%d' tidak wujud."
@@ -6652,7 +7050,7 @@ msgstr ""
 msgid "The first line indent."
 msgstr "Takuk baris pertama."
 
-#: ../src/gtk/utilsgtk.cpp:427
+#: ../src/gtk/utilsgtk.cpp:432
 msgid "The following standard GTK+ options are also supported:\n"
 msgstr ""
 
@@ -6736,7 +7134,7 @@ msgstr "Ruang baris."
 msgid "The list item number."
 msgstr "Nombor senarai item."
 
-#: ../src/msw/ole/automtn.cpp:667
+#: ../src/msw/ole/automtn.cpp:670
 msgid "The locale ID is unknown."
 msgstr ""
 
@@ -6793,10 +7191,6 @@ msgstr[1] ""
 msgid "The previous message repeated once."
 msgstr ""
 
-#: ../src/gtk/print.cpp:931 ../src/gtk/print.cpp:1114
-msgid "The print dialog returned an error."
-msgstr ""
-
 #: ../src/richtext/richtextsymboldlg.cpp:462
 #: ../src/richtext/richtextsymboldlg.cpp:464
 msgid "The range to show."
@@ -6812,7 +7206,7 @@ msgstr ""
 "maklumat peribadi,\n"
 "sila buang tandanya dan akan dibuang daripada laporan.\n"
 
-#: ../src/common/cmdline.cpp:1248
+#: ../src/common/cmdline.cpp:1254
 #, c-format
 msgid "The required parameter '%s' was not specified."
 msgstr "Parameter yang diperlukan '%s' tidak ditentukan."
@@ -6872,7 +7266,7 @@ msgstr "Gaya yang pada gaya ini diasaskan."
 msgid "The style preview."
 msgstr "Pralihat gaya."
 
-#: ../src/msw/ole/automtn.cpp:683
+#: ../src/msw/ole/automtn.cpp:686
 msgid "The system cannot find the file specified."
 msgstr ""
 
@@ -6885,7 +7279,7 @@ msgstr "Posisi tab."
 msgid "The tab positions."
 msgstr "Posisi tab."
 
-#: ../src/richtext/richtextctrl.cpp:2827
+#: ../src/richtext/richtextctrl.cpp:3073
 msgid "The text couldn't be saved."
 msgstr "Teks gagal disimpan."
 
@@ -6909,7 +7303,7 @@ msgstr "Saiz titik fon."
 msgid "The top position."
 msgstr "Posisi tab."
 
-#: ../src/common/cmdline.cpp:1226
+#: ../src/common/cmdline.cpp:1232
 #, c-format
 msgid "The value for the option '%s' must be specified."
 msgstr "Nilai pilihan '%s' mesti ditentukan."
@@ -6919,7 +7313,7 @@ msgstr "Nilai pilihan '%s' mesti ditentukan."
 msgid "The value of the corner radius."
 msgstr ""
 
-#: ../src/msw/dialup.cpp:452
+#: ../src/msw/dialup.cpp:443
 #, fuzzy, c-format
 msgid ""
 "The version of remote access service (RAS) installed on this machine is too "
@@ -6928,15 +7322,11 @@ msgstr ""
 "Versi servis capaian jauh (RAS) dipasang pada mesin ini terlalu lama, sila "
 "naiktaraf (fungsi diperlukan berikut telah hilang: %s)."
 
-#: ../src/gtk/print.cpp:959
-msgid "The wxGtkPrinterDC cannot be used."
-msgstr ""
-
 #: ../src/osx/carbon/dataview.cpp:1338
 msgid "There is no column or renderer for the specified column index."
 msgstr ""
 
-#: ../src/richtext/richtextprint.cpp:614 ../src/html/htmprint.cpp:735
+#: ../src/html/htmprint.cpp:735 ../src/richtext/richtextprint.cpp:614
 msgid ""
 "There was a problem during page setup: you may need to set a default printer."
 msgstr ""
@@ -6949,7 +7339,7 @@ msgid ""
 "when it is printed."
 msgstr ""
 
-#: ../src/common/image.cpp:2716
+#: ../src/common/image.cpp:2718
 #, fuzzy, c-format
 msgid "This is not a %s."
 msgstr "PCX: ini bukahlah fail PCX."
@@ -6958,7 +7348,7 @@ msgstr "PCX: ini bukahlah fail PCX."
 msgid "This platform does not support background transparency."
 msgstr ""
 
-#: ../src/gtk/window.cpp:4356
+#: ../src/gtk/window.cpp:4562
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -6973,18 +7363,18 @@ msgstr ""
 "Sistem ini tidak menyokong kawalan pegambil tarikh, sila naiktaraf versi "
 "comctl32.dll sistem anda."
 
-#: ../src/msw/thread.cpp:1295
+#: ../src/msw/thread.cpp:1249
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
 msgstr ""
 "Gagal memulakan modul benang: Gagal simpan data dalam penyimpan benang lokal"
 
-#: ../src/unix/threadpsx.cpp:1763
+#: ../src/unix/threadpsx.cpp:1794
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr "Modul benang gagal dimulakan: gagal cipta kunci benang"
 
-#: ../src/msw/thread.cpp:1283
+#: ../src/msw/thread.cpp:1237
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
@@ -6996,21 +7386,17 @@ msgstr ""
 msgid "Thread priority setting is ignored."
 msgstr "Tetapan keutamaan benang diabaikan."
 
-#: ../src/msw/mdi.cpp:172
+#: ../src/msw/mdi.cpp:173
 msgid "Tile &Horizontally"
 msgstr "Jubin Me&lintang"
 
-#: ../src/msw/mdi.cpp:173
+#: ../src/msw/mdi.cpp:174
 msgid "Tile &Vertically"
 msgstr "Jubin Me&negak"
 
 #: ../src/common/ftp.cpp:202
 msgid "Timeout while waiting for FTP server to connect, try passive mode."
 msgstr "Masa tamat ketika menunggu sambuungan pelayan FTP, cuba mod pasif."
-
-#: ../src/os2/timer.cpp:99
-msgid "Timer creation failed."
-msgstr "Penciptaan pemasa gagal."
 
 #: ../src/generic/tipdlg.cpp:215
 msgid "Tip of the Day"
@@ -7028,16 +7414,24 @@ msgstr "Ke:"
 msgid "Toggle renderer cannot render value; value type: "
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8237
+#: ../src/richtext/richtextbuffer.cpp:8279
 msgid "Too many EndStyle calls!"
 msgstr "Terlalu banyak panggilan EndStyle!"
 
-#: ../src/common/imagpng.cpp:286
+#: ../src/common/imagpng.cpp:278
 msgid "Too many colours in PNG, the image may be slightly blurred."
 msgstr "Terlalu banyak warna dalam PNG, berkemungkinan imej sedikit kabur."
 
-#: ../src/richtext/richtextsizepage.cpp:286
-#: ../src/richtext/richtextsizepage.cpp:290 ../src/common/stockitem.cpp:200
+#: ../src/propgrid/advprops.cpp:863
+msgid "Tooltip"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:864
+msgid "TooltipText"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:200 ../src/richtext/richtextsizepage.cpp:286
+#: ../src/richtext/richtextsizepage.cpp:290
 #, fuzzy
 msgid "Top"
 msgstr "Ke:"
@@ -7055,7 +7449,7 @@ msgstr "Diterjemah oleh"
 msgid "Translators"
 msgstr "Diterjemah oleh"
 
-#: ../src/propgrid/propgrid.cpp:173
+#: ../src/propgrid/propgrid.cpp:189
 msgid "True"
 msgstr ""
 
@@ -7084,26 +7478,22 @@ msgstr "Jenis nama fon."
 msgid "Type a size in points."
 msgstr "Jenis saiz dalam titik."
 
-#: ../src/msw/ole/automtn.cpp:679
+#: ../src/msw/ole/automtn.cpp:682
 #, c-format
 msgid "Type mismatch in argument %u."
 msgstr ""
 
-#: ../src/common/xtixml.cpp:356 ../src/common/xtixml.cpp:509
-#: ../src/common/xtistrm.cpp:322
+#: ../src/common/xtistrm.cpp:322 ../src/common/xtixml.cpp:356
+#: ../src/common/xtixml.cpp:509
 msgid "Type must have enum - long conversion"
 msgstr "Jenis mestilah pertukaran hitung - panjang"
 
-#: ../src/propgrid/propgridiface.cpp:382
+#: ../src/propgrid/propgridiface.cpp:400
 #, c-format
 msgid ""
 "Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT "
 "\"%s\"."
 msgstr ""
-
-#: ../src/common/accelcmn.cpp:58
-msgid "UP"
-msgstr "UP"
 
 #: ../src/common/paper.cpp:134
 msgid "US Std Fanfold, 14 7/8 x 11 in"
@@ -7145,7 +7535,7 @@ msgstr "Gagal menutup fail kunci '%s'"
 msgid "Unable to close the handle for '%s'"
 msgstr "Gagal tutup pengemudi fail"
 
-#: ../include/wx/msw/private/fswatcher.h:245
+#: ../include/wx/msw/private/fswatcher.h:273
 #, fuzzy
 msgid "Unable to create I/O completion port"
 msgstr "Gagal cipta TextEncodingConverter"
@@ -7165,7 +7555,7 @@ msgstr "Gagal cipta TextEncodingConverter"
 msgid "Unable to create kqueue instance"
 msgstr "Gagal cipta TextEncodingConverter"
 
-#: ../include/wx/msw/private/fswatcher.h:234
+#: ../include/wx/msw/private/fswatcher.h:262
 msgid "Unable to dequeue completion packet"
 msgstr ""
 
@@ -7177,11 +7567,11 @@ msgstr ""
 msgid "Unable to handle native drag&drop data"
 msgstr ""
 
-#: ../src/gtk/app.cpp:439
+#: ../src/gtk/app.cpp:423
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
 msgstr ""
 
-#: ../src/gtk/app.cpp:276
+#: ../src/gtk/app.cpp:260
 #, fuzzy
 msgid "Unable to initialize Hildon program"
 msgstr "Gagal memulakan OpenGL"
@@ -7191,7 +7581,7 @@ msgstr "Gagal memulakan OpenGL"
 msgid "Unable to open path '%s'"
 msgstr "Gagal membuka arkib sementara '%s'."
 
-#: ../src/html/htmlwin.cpp:574
+#: ../src/html/htmlwin.cpp:578
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "Gagal membuka dokumen HTML yang diminta: %s"
@@ -7200,7 +7590,7 @@ msgstr "Gagal membuka dokumen HTML yang diminta: %s"
 msgid "Unable to play sound asynchronously."
 msgstr "Gagal mainkan bunyi secara tak segerak."
 
-#: ../include/wx/msw/private/fswatcher.h:212
+#: ../include/wx/msw/private/fswatcher.h:213
 msgid "Unable to post completion status"
 msgstr ""
 
@@ -7235,8 +7625,8 @@ msgstr "Nyahpadam"
 msgid "Underline"
 msgstr "Garis bawah"
 
-#: ../src/richtext/richtextfontpage.cpp:357 ../src/osx/carbon/fontdlg.cpp:540
-#: ../src/propgrid/advprops.cpp:656
+#: ../src/osx/carbon/fontdlg.cpp:540 ../src/propgrid/advprops.cpp:663
+#: ../src/richtext/richtextfontpage.cpp:357
 msgid "Underlined"
 msgstr "Digaris bawahkan"
 
@@ -7249,7 +7639,7 @@ msgstr "&Nyahcara"
 msgid "Undo last action"
 msgstr "Batalkan tindakan akhir"
 
-#: ../src/common/cmdline.cpp:1023
+#: ../src/common/cmdline.cpp:1029
 #, c-format
 msgid "Unexpected characters following option '%s'."
 msgstr "Aksara mengikut pilihan '%s' tidak dijangka."
@@ -7259,7 +7649,7 @@ msgstr "Aksara mengikut pilihan '%s' tidak dijangka."
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
 msgstr ""
 
-#: ../src/common/cmdline.cpp:1189
+#: ../src/common/cmdline.cpp:1195
 #, c-format
 msgid "Unexpected parameter '%s'"
 msgstr "Parameter tidak dijangka '%s'"
@@ -7461,7 +7851,7 @@ msgstr ""
 msgid "Units for the top position."
 msgstr "Gagal menunggu penamatan benang."
 
-#: ../src/generic/progdlgg.cpp:382 ../src/generic/progdlgg.cpp:655
+#: ../src/generic/progdlgg.cpp:383 ../src/generic/progdlgg.cpp:656
 msgid "Unknown"
 msgstr "Tidak Diketahui"
 
@@ -7474,7 +7864,7 @@ msgstr "Ralat DDE %08x tidak diketahui"
 msgid "Unknown Object passed to GetObjectClassInfo"
 msgstr "Objek Tidak Diketahui dilepaskan ke SetObjectClassInfo"
 
-#: ../src/common/imagpng.cpp:614
+#: ../src/common/imagpng.cpp:606
 #, fuzzy, c-format
 msgid "Unknown PNG resolution unit %d"
 msgstr "Pilihan '%s' tidak diketahui"
@@ -7484,7 +7874,7 @@ msgstr "Pilihan '%s' tidak diketahui"
 msgid "Unknown Property %s"
 msgstr "Milik Tidak Diketahui %s"
 
-#: ../src/common/imagtiff.cpp:532
+#: ../src/common/imagtiff.cpp:529
 #, c-format
 msgid "Unknown TIFF resolution unit %d ignored"
 msgstr ""
@@ -7503,36 +7893,36 @@ msgstr "Ralat pustaka dinamik tidak diketahui"
 msgid "Unknown encoding (%d)"
 msgstr "Pengenkodan (%d) tidak diketahui"
 
-#: ../src/msw/ole/automtn.cpp:691
+#: ../src/msw/ole/automtn.cpp:694
 #, fuzzy, c-format
 msgid "Unknown error %08x"
 msgstr "Ralat DDE %08x tidak diketahui"
 
-#: ../src/msw/ole/automtn.cpp:650
+#: ../src/msw/ole/automtn.cpp:653
 #, fuzzy
 msgid "Unknown exception"
 msgstr "Pilihan '%s' tidak diketahui"
 
-#: ../src/common/image.cpp:2701
+#: ../src/common/image.cpp:2703
 #, fuzzy
 msgid "Unknown image data format."
 msgstr "ralat dalam format data"
 
-#: ../src/common/cmdline.cpp:908
+#: ../src/common/cmdline.cpp:914
 #, c-format
 msgid "Unknown long option '%s'"
 msgstr "Pilihan panjang '%s' tidak diketahui"
 
-#: ../src/msw/ole/automtn.cpp:634
+#: ../src/msw/ole/automtn.cpp:637
 msgid "Unknown name or named argument."
 msgstr ""
 
-#: ../src/common/cmdline.cpp:923 ../src/common/cmdline.cpp:945
+#: ../src/common/cmdline.cpp:929 ../src/common/cmdline.cpp:951
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "Pilihan '%s' tidak diketahui"
 
-#: ../src/common/mimecmn.cpp:230
+#: ../src/common/mimecmn.cpp:227
 #, c-format
 msgid "Unmatched '{' in an entry for mime type %s."
 msgstr "'{' tidak sepadan dalam masukan mime types %s."
@@ -7542,35 +7932,37 @@ msgstr "'{' tidak sepadan dalam masukan mime types %s."
 msgid "Unnamed command"
 msgstr "Arahan tidak bernama"
 
-#: ../src/propgrid/propgrid.cpp:397
+#: ../src/propgrid/propgrid.cpp:411
 #, fuzzy
 msgid "Unspecified"
 msgstr "Ditentu"
 
-#: ../src/msw/clipbrd.cpp:271 ../src/msw/clipbrd.cpp:439
+#: ../src/msw/clipbrd.cpp:271 ../src/msw/clipbrd.cpp:437
 msgid "Unsupported clipboard format."
 msgstr "Format klipbod tidak disokong."
 
-#: ../src/common/appcmn.cpp:249
+#: ../src/common/appcmn.cpp:256
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "Tema tidak disokong '%s'."
 
-#: ../src/generic/fdrepdlg.cpp:152 ../src/common/stockitem.cpp:205
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:61 ../src/common/stockitem.cpp:205
+#: ../src/generic/fdrepdlg.cpp:152
 msgid "Up"
 msgstr "Naik"
 
-#: ../src/richtext/richtextliststylepage.cpp:483
 #: ../src/richtext/richtextbulletspage.cpp:275
+#: ../src/richtext/richtextliststylepage.cpp:483
 msgid "Upper case letters"
 msgstr "Huruf besar"
 
-#: ../src/richtext/richtextliststylepage.cpp:485
 #: ../src/richtext/richtextbulletspage.cpp:277
+#: ../src/richtext/richtextliststylepage.cpp:485
 msgid "Upper case roman numerals"
 msgstr "Nombor roman huruf besar"
 
-#: ../src/common/cmdline.cpp:1320
+#: ../src/common/cmdline.cpp:1326
 #, c-format
 msgid "Usage: %s"
 msgstr "Penggunaan: %s"
@@ -7594,17 +7986,18 @@ msgstr "Konflik pengesahan"
 msgid "Value"
 msgstr ""
 
-#: ../src/propgrid/props.cpp:385
+#: ../src/propgrid/props.cpp:385 ../src/propgrid/props.cpp:494
 #, c-format
 msgid "Value must be %s or higher."
 msgstr ""
 
-#: ../src/propgrid/props.cpp:412
+#: ../src/propgrid/props.cpp:412 ../src/propgrid/props.cpp:521
 #, c-format
 msgid "Value must be %s or less."
 msgstr ""
 
 #: ../src/propgrid/props.cpp:389 ../src/propgrid/props.cpp:416
+#: ../src/propgrid/props.cpp:498 ../src/propgrid/props.cpp:525
 #, fuzzy, c-format
 msgid "Value must be between %s and %s."
 msgstr "Masukkan nombor laman antara %d dan %d:"
@@ -7620,11 +8013,11 @@ msgstr "Versi"
 msgid "Vertical alignment."
 msgstr "Gagal mulakan mencetak."
 
-#: ../src/generic/filedlgg.cpp:216
+#: ../src/generic/filedlgg.cpp:208
 msgid "View files as a detailed view"
 msgstr "Lihat fail sebagai lihat perincian"
 
-#: ../src/generic/filedlgg.cpp:214
+#: ../src/generic/filedlgg.cpp:206
 msgid "View files as a list view"
 msgstr "Lihat fail sebagai senarai lihat"
 
@@ -7632,17 +8025,13 @@ msgstr "Lihat fail sebagai senarai lihat"
 msgid "Views"
 msgstr "Pandangan"
 
-#: ../src/common/accelcmn.cpp:108
-msgid "WINDOWS_LEFT"
-msgstr "WINDOWS_LEFT"
+#: ../src/propgrid/advprops.cpp:1727
+msgid "Wait"
+msgstr ""
 
-#: ../src/common/accelcmn.cpp:110
-msgid "WINDOWS_MENU"
-msgstr "WINDOWS_MENU"
-
-#: ../src/common/accelcmn.cpp:109
-msgid "WINDOWS_RIGHT"
-msgstr "WINDOWS_RIGHT"
+#: ../src/propgrid/advprops.cpp:1729
+msgid "Wait Arrow"
+msgstr ""
 
 #: ../src/unix/epolldispatcher.cpp:213
 #, fuzzy, c-format
@@ -7653,7 +8042,11 @@ msgstr "Gagal menunggu penamatan subproses"
 msgid "Warning: "
 msgstr "Amaran:"
 
-#: ../src/propgrid/advprops.cpp:652
+#: ../src/propgrid/advprops.cpp:1728
+msgid "Watch"
+msgstr ""
+
+#: ../src/propgrid/advprops.cpp:659
 #, fuzzy
 msgid "Weight"
 msgstr "Berat:"
@@ -7670,11 +8063,15 @@ msgstr "Eropah Barat dengan Euro (ISO-8859-15)"
 msgid "Whether the font is underlined."
 msgstr "Sama ada fon bergaris-bawah."
 
+#: ../src/propgrid/advprops.cpp:1561
+msgid "White"
+msgstr ""
+
 #: ../src/generic/fdrepdlg.cpp:144
 msgid "Whole word"
 msgstr "Seluruh perkataan"
 
-#: ../src/html/helpwnd.cpp:548
+#: ../src/html/helpwnd.cpp:534
 msgid "Whole words only"
 msgstr "Seluruh perkataan sahaja"
 
@@ -7682,47 +8079,62 @@ msgstr "Seluruh perkataan sahaja"
 msgid "Win32 theme"
 msgstr "Tema Win32"
 
-#: ../src/msw/utils.cpp:1220
+#: ../src/msw/utils.cpp:1111
 msgid "Win32s on Windows 3.1"
 msgstr "Win32s pada Windows 3.1"
 
-#: ../src/msw/utils.cpp:1270
+#: ../src/propgrid/advprops.cpp:865
+#, fuzzy
+msgid "Window"
+msgstr "&Tetingkap"
+
+#: ../src/propgrid/advprops.cpp:866
+#, fuzzy
+msgid "WindowFrame"
+msgstr "&Tetingkap"
+
+#: ../src/propgrid/advprops.cpp:867
+#, fuzzy
+msgid "WindowText"
+msgstr "&Tetingkap"
+
+#: ../src/msw/utils.cpp:1161
 #, fuzzy
 msgid "Windows 2000"
 msgstr "Windows 95"
 
-#: ../src/msw/utils.cpp:1302
+#: ../src/msw/utils.cpp:1193
 #, fuzzy
 msgid "Windows 7"
 msgstr "Windows 95"
 
-#: ../src/msw/utils.cpp:1308
+#: ../src/msw/utils.cpp:1199
 #, fuzzy
 msgid "Windows 8"
 msgstr "Windows 98"
 
-#: ../src/msw/utils.cpp:1314
+#: ../src/msw/utils.cpp:1205
 #, fuzzy
 msgid "Windows 8.1"
 msgstr "Windows 98"
 
-#: ../src/msw/utils.cpp:1234
+#: ../src/msw/utils.cpp:1125
 msgid "Windows 95"
 msgstr "Windows 95"
 
-#: ../src/msw/utils.cpp:1230
+#: ../src/msw/utils.cpp:1121
 msgid "Windows 95 OSR2"
 msgstr "Windows 95 OSR2"
 
-#: ../src/msw/utils.cpp:1245
+#: ../src/msw/utils.cpp:1136
 msgid "Windows 98"
 msgstr "Windows 98"
 
-#: ../src/msw/utils.cpp:1241
+#: ../src/msw/utils.cpp:1132
 msgid "Windows 98 SE"
 msgstr "Windows 98 SE"
 
-#: ../src/msw/utils.cpp:1252
+#: ../src/msw/utils.cpp:1143
 #, c-format
 msgid "Windows 9x (%d.%d)"
 msgstr "Windows 9x (%d.%d)"
@@ -7735,7 +8147,7 @@ msgstr "Windows Arab (CP 1256)"
 msgid "Windows Baltic (CP 1257)"
 msgstr "Windows Baltik (CP 1257)"
 
-#: ../src/msw/utils.cpp:1214
+#: ../src/msw/utils.cpp:1105
 #, c-format
 msgid "Windows CE (%d.%d)"
 msgstr "Windows CE (%d.%d)"
@@ -7780,36 +8192,36 @@ msgstr "Windows Arab (CP 1256)"
 msgid "Windows Korean (CP 949)"
 msgstr "Windows Korea (CP 949)"
 
-#: ../src/msw/utils.cpp:1249
+#: ../src/msw/utils.cpp:1140
 msgid "Windows ME"
 msgstr "Windows ME"
 
-#: ../src/msw/utils.cpp:1322
+#: ../src/msw/utils.cpp:1213
 #, fuzzy, c-format
 msgid "Windows NT %lu.%lu"
 msgstr "Windows NT %lu.%lu (build %lu"
 
-#: ../src/msw/utils.cpp:1279
+#: ../src/msw/utils.cpp:1170
 #, fuzzy
 msgid "Windows Server 2003"
 msgstr "Windows Server 2003 (build %lu"
 
-#: ../src/msw/utils.cpp:1295
+#: ../src/msw/utils.cpp:1186
 #, fuzzy
 msgid "Windows Server 2008"
 msgstr "Windows Server 2003 (build %lu"
 
-#: ../src/msw/utils.cpp:1301
+#: ../src/msw/utils.cpp:1192
 #, fuzzy
 msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2003 (build %lu"
 
-#: ../src/msw/utils.cpp:1307
+#: ../src/msw/utils.cpp:1198
 #, fuzzy
 msgid "Windows Server 2012"
 msgstr "Windows Server 2003 (build %lu"
 
-#: ../src/msw/utils.cpp:1313
+#: ../src/msw/utils.cpp:1204
 #, fuzzy
 msgid "Windows Server 2012 R2"
 msgstr "Windows Server 2003 (build %lu"
@@ -7827,7 +8239,7 @@ msgstr "Windows Turki (CP 1254)"
 msgid "Windows Vietnamese (CP 1258)"
 msgstr "Windows Greek (CP 1253)"
 
-#: ../src/msw/utils.cpp:1296
+#: ../src/msw/utils.cpp:1187
 #, fuzzy
 msgid "Windows Vista"
 msgstr "Windows 95"
@@ -7836,7 +8248,7 @@ msgstr "Windows 95"
 msgid "Windows Western European (CP 1252)"
 msgstr "Windows Eropah Barat (CP 1252)"
 
-#: ../src/msw/utils.cpp:1285
+#: ../src/msw/utils.cpp:1176
 #, fuzzy
 msgid "Windows XP"
 msgstr "Windows 95"
@@ -7850,7 +8262,25 @@ msgstr "Windows/DOS OEM (CP 437)"
 msgid "Windows/DOS OEM Cyrillic (CP 866)"
 msgstr "Windows Cyrillic (CP 1251)"
 
-#: ../src/common/ffile.cpp:148
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:109
+#, fuzzy
+msgid "Windows_Left"
+msgstr "Windows 95"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:111
+#, fuzzy
+msgid "Windows_Menu"
+msgstr "Windows ME"
+
+#. TRANSLATORS: Name of keyboard key
+#: ../src/common/accelcmn.cpp:110
+#, fuzzy
+msgid "Windows_Right"
+msgstr "Windows 95"
+
+#: ../src/common/ffile.cpp:150
 #, c-format
 msgid "Write error on file '%s'"
 msgstr "Ralat tulis fail '%s'"
@@ -7888,7 +8318,11 @@ msgstr "XPM: format kepala tidak betul!"
 msgid "XPM: truncated image data at line %d!"
 msgstr "XPM: data imej dicantas pada baris %d!"
 
-#: ../include/wx/msgdlg.h:271 ../src/common/stockitem.cpp:206
+#: ../src/propgrid/advprops.cpp:1560
+msgid "Yellow"
+msgstr ""
+
+#: ../include/wx/msgdlg.h:276 ../src/common/stockitem.cpp:206
 #: ../src/motif/msgdlg.cpp:196
 msgid "Yes"
 msgstr "Ya"
@@ -7897,7 +8331,7 @@ msgstr "Ya"
 msgid "You cannot Clear an overlay that is not inited"
 msgstr "Anda tidak boleh Kosongkan lapisan yang tidak dimulakan"
 
-#: ../src/osx/carbon/overlay.cpp:107 ../src/dfb/overlay.cpp:61
+#: ../src/dfb/overlay.cpp:61 ../src/osx/carbon/overlay.cpp:107
 msgid "You cannot Init an overlay twice"
 msgstr "Anda tidak boleh Init lapisan dua kali"
 
@@ -7905,7 +8339,7 @@ msgstr "Anda tidak boleh Init lapisan dua kali"
 msgid "You cannot add a new directory to this section."
 msgstr "Anda tidak boleh menambah direktori baru pada seksyen ini."
 
-#: ../src/propgrid/propgrid.cpp:3245
+#: ../src/propgrid/propgrid.cpp:3296
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr ""
 
@@ -7917,12 +8351,12 @@ msgstr "Zum Masuk"
 msgid "Zoom &Out"
 msgstr "Zum Keluar"
 
-#: ../src/common/stockitem.cpp:209 ../src/common/prntbase.cpp:1564
+#: ../src/common/prntbase.cpp:1578 ../src/common/stockitem.cpp:209
 #, fuzzy
 msgid "Zoom In"
 msgstr "Zum Masuk"
 
-#: ../src/common/stockitem.cpp:210 ../src/common/prntbase.cpp:1550
+#: ../src/common/prntbase.cpp:1564 ../src/common/stockitem.cpp:210
 #, fuzzy
 msgid "Zoom Out"
 msgstr "Zum Keluar"
@@ -7998,7 +8432,7 @@ msgstr ""
 msgid "a transaction failed."
 msgstr "transaksi gagal."
 
-#: ../src/common/accelcmn.cpp:184
+#: ../src/common/accelcmn.cpp:185
 msgid "alt"
 msgstr "alt"
 
@@ -8036,7 +8470,7 @@ msgstr ""
 msgid "assuming this is a multi-part zip concatenated"
 msgstr "mengandaikan yang ini adalah cantuman banyak-bahagian zip"
 
-#: ../src/common/fileconf.cpp:1882
+#: ../src/common/fileconf.cpp:1874
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
 msgstr "Cubaan mengubah kunci tidak boleh disenyapkan '%s' diabaikan."
@@ -8057,50 +8491,46 @@ msgstr "offset fail zip kepada masukan rosak"
 msgid "binary"
 msgstr "binari"
 
-#: ../src/common/fontcmn.cpp:978
+#: ../src/common/fontcmn.cpp:988
 msgid "bold"
 msgstr "bold"
 
-#: ../src/os2/iniconf.cpp:463
-msgid "buffer is too small for Windows directory."
-msgstr "penimbal terlalu kecil untuk direktori Windows."
-
-#: ../src/msw/utils.cpp:1328
+#: ../src/msw/utils.cpp:1219
 #, fuzzy, c-format
 msgid "build %lu"
 msgstr "Windows XP (build %lu"
 
-#: ../src/common/ffile.cpp:79
+#: ../src/common/ffile.cpp:75
 #, c-format
 msgid "can't close file '%s'"
 msgstr "gagal menutup dail '%s'"
 
-#: ../src/common/file.cpp:278
+#: ../src/common/file.cpp:267
 #, c-format
 msgid "can't close file descriptor %d"
 msgstr "gagal tutup penghurai fail %d"
 
-#: ../src/common/file.cpp:604
+#: ../src/common/file.cpp:608
 #, c-format
 msgid "can't commit changes to file '%s'"
 msgstr "Gagal lakukan perubahan kepada fail '%s'"
 
-#: ../src/common/file.cpp:212
+#: ../src/common/file.cpp:200
 #, c-format
 msgid "can't create file '%s'"
 msgstr "gagal mencipta fail '%s'"
 
-#: ../src/common/fileconf.cpp:1176
+#: ../src/common/fileconf.cpp:1168
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "gagal memadam fail konfigurasi pengguna '%s'"
 
-#: ../src/common/file.cpp:511
+#: ../src/common/file.cpp:517
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr "Gagal ditentukan jika EOF dicapai pada penghurai %d"
 
-#: ../src/msdos/utilsdos.cpp:310 ../src/msdos/utilsdos.cpp:475
+#: ../src/msdos/utilsdos.cpp:308 ../src/msdos/utilsdos.cpp:473
 #, c-format
 msgid "can't execute '%s'"
 msgstr "gagal laksanakan '%s'"
@@ -8109,21 +8539,21 @@ msgstr "gagal laksanakan '%s'"
 msgid "can't find central directory in zip"
 msgstr "gagal menemui direktori pusat salam zip"
 
-#: ../src/common/file.cpp:481
+#: ../src/common/file.cpp:487
 #, c-format
 msgid "can't find length of file on file descriptor %d"
 msgstr "gagal menemui panjang fail pada penghurai fail %d"
 
-#: ../src/msw/utils.cpp:373
+#: ../src/msw/utils.cpp:369
 msgid "can't find user's HOME, using current directory."
 msgstr "Gagal mencari RUMAH pengguna, gunakan direktori semasa."
 
-#: ../src/common/file.cpp:382
+#: ../src/common/file.cpp:388
 #, c-format
 msgid "can't flush file descriptor %d"
 msgstr "gagal mengeluarkan penghurai fail %d"
 
-#: ../src/common/file.cpp:438 ../src/msw/wince/filefnwce.cpp:204
+#: ../src/common/file.cpp:444 ../src/msw/wince/filefnwce.cpp:204
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr "Gagal menemui posisi pada fail penghurai %d"
@@ -8132,22 +8562,22 @@ msgstr "Gagal menemui posisi pada fail penghurai %d"
 msgid "can't load any font, aborting"
 msgstr "gagal memuat sebarang fon, menggugurkan"
 
-#: ../src/common/file.cpp:264 ../src/common/ffile.cpp:63
+#: ../src/common/ffile.cpp:59 ../src/common/file.cpp:253
 #, c-format
 msgid "can't open file '%s'"
 msgstr "gagal membuka fail '%s'"
 
-#: ../src/common/fileconf.cpp:351
+#: ../src/common/fileconf.cpp:343
 #, c-format
 msgid "can't open global configuration file '%s'."
 msgstr "gagal membuka fail konfigurasi global '%s'."
 
-#: ../src/common/fileconf.cpp:367
+#: ../src/common/fileconf.cpp:359
 #, c-format
 msgid "can't open user configuration file '%s'."
 msgstr "gagal membuka fail konfigurasi pengguna '%s'."
 
-#: ../src/common/fileconf.cpp:1017
+#: ../src/common/fileconf.cpp:1009
 msgid "can't open user configuration file."
 msgstr "gagal membuka fail konfigurasi pengguna."
 
@@ -8159,22 +8589,22 @@ msgstr "Gagal memulakan semula strim zlib kempis"
 msgid "can't re-initialize zlib inflate stream"
 msgstr "Gagal memulakan semula strim zlib kembong"
 
-#: ../src/common/file.cpp:334
+#: ../src/common/file.cpp:326
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "gagal membaca dari penghurai fail %d"
 
-#: ../src/common/file.cpp:599
+#: ../src/common/file.cpp:603
 #, c-format
 msgid "can't remove file '%s'"
 msgstr "gagal membuang fail '%s'"
 
-#: ../src/common/file.cpp:616
+#: ../src/common/file.cpp:620
 #, c-format
 msgid "can't remove temporary file '%s'"
 msgstr "gagal membuang fail sementara '%s'"
 
-#: ../src/common/file.cpp:424 ../src/msw/wince/filefnwce.cpp:190
+#: ../src/common/file.cpp:430 ../src/msw/wince/filefnwce.cpp:190
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "gagal menemui penghurai fail %d"
@@ -8184,12 +8614,12 @@ msgstr "gagal menemui penghurai fail %d"
 msgid "can't write buffer '%s' to disk."
 msgstr "gagal menulis penimbal '%s' kepada cakera."
 
-#: ../src/common/file.cpp:350
+#: ../src/common/file.cpp:345
 #, c-format
 msgid "can't write to file descriptor %d"
 msgstr "gagal menulis kepada penghurai %d"
 
-#: ../src/common/fileconf.cpp:1031
+#: ../src/common/fileconf.cpp:1023
 msgid "can't write user configuration file."
 msgstr "gagal menulis fail konfigurasi pengguna."
 
@@ -8235,15 +8665,15 @@ msgstr ""
 msgid "compression error"
 msgstr "ralat mampatan"
 
-#: ../src/common/regex.cpp:239
+#: ../src/common/regex.cpp:236
 msgid "conversion to 8-bit encoding failed"
 msgstr "penukaran kepada pengenkod 8-bit gagal"
 
-#: ../src/common/accelcmn.cpp:182
+#: ../src/common/accelcmn.cpp:183
 msgid "ctrl"
 msgstr "ctrl"
 
-#: ../src/common/cmdline.cpp:1488
+#: ../src/common/cmdline.cpp:1494
 msgid "date"
 msgstr "tarikh"
 
@@ -8251,11 +8681,11 @@ msgstr "tarikh"
 msgid "decompression error"
 msgstr "ralat nyahmampat"
 
-#: ../src/richtext/richtextstyles.cpp:780 ../src/common/fmapbase.cpp:820
+#: ../src/common/fmapbase.cpp:820 ../src/richtext/richtextstyles.cpp:780
 msgid "default"
 msgstr "lalai"
 
-#: ../src/common/cmdline.cpp:1484
+#: ../src/common/cmdline.cpp:1490
 msgid "double"
 msgstr ""
 
@@ -8263,19 +8693,19 @@ msgstr ""
 msgid "dump of the process state (binary)"
 msgstr "buang keadaan prosess (binari)"
 
-#: ../src/common/datetimefmt.cpp:1936
+#: ../src/common/datetimefmt.cpp:1964
 msgid "eighteenth"
 msgstr "kelapan belas"
 
-#: ../src/common/datetimefmt.cpp:1926
+#: ../src/common/datetimefmt.cpp:1954
 msgid "eighth"
 msgstr "kelapan"
 
-#: ../src/common/datetimefmt.cpp:1929
+#: ../src/common/datetimefmt.cpp:1957
 msgid "eleventh"
 msgstr "kesebelas"
 
-#: ../src/common/fileconf.cpp:1868
+#: ../src/common/fileconf.cpp:1860
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
 msgstr "masukan '%s' dipaparkan lebih dari sekali dalam kumpulan '%s'"
@@ -8284,7 +8714,7 @@ msgstr "masukan '%s' dipaparkan lebih dari sekali dalam kumpulan '%s'"
 msgid "error in data format"
 msgstr "ralat dalam format data"
 
-#: ../src/msdos/utilsdos.cpp:413
+#: ../src/msdos/utilsdos.cpp:411
 #, c-format
 msgid "error opening '%s'"
 msgstr "ralat membuka '%s'"
@@ -8306,70 +8736,70 @@ msgstr "ralat membaca kepala lokal zip"
 msgid "error writing zip entry '%s': bad crc or length"
 msgstr "gagal menulis masukan zip '%s': crc atau panjang rosak"
 
-#: ../src/common/ffile.cpp:170
+#: ../src/common/ffile.cpp:188
 #, c-format
 msgid "failed to flush the file '%s'"
 msgstr "gagal menyegarkan fail '%s'"
 
-#: ../src/common/datetimefmt.cpp:1933
+#: ../src/common/datetimefmt.cpp:1961
 msgid "fifteenth"
 msgstr "kelima belas"
 
-#: ../src/common/datetimefmt.cpp:1923
+#: ../src/common/datetimefmt.cpp:1951
 msgid "fifth"
 msgstr "kelima"
 
-#: ../src/common/fileconf.cpp:610
+#: ../src/common/fileconf.cpp:602
 #, c-format
 msgid "file '%s', line %d: '%s' ignored after group header."
 msgstr "fail '%s', baris %d: '%s' diabaikan selepas kepala kumpulan."
 
-#: ../src/common/fileconf.cpp:639
+#: ../src/common/fileconf.cpp:631
 #, c-format
 msgid "file '%s', line %d: '=' expected."
 msgstr "fail '%s', baris %d: '=' dijangka."
 
-#: ../src/common/fileconf.cpp:662
+#: ../src/common/fileconf.cpp:654
 #, c-format
 msgid "file '%s', line %d: key '%s' was first found at line %d."
 msgstr "fail '%s', baris %d: kunci '%s' pertama kali sitemui pada baris %d."
 
-#: ../src/common/fileconf.cpp:652
+#: ../src/common/fileconf.cpp:644
 #, c-format
 msgid "file '%s', line %d: value for immutable key '%s' ignored."
 msgstr "fail '%s', baris %d: nilai untuk nilai tetap '%s' diabaikan."
 
-#: ../src/common/fileconf.cpp:574
+#: ../src/common/fileconf.cpp:566
 #, c-format
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "fail '%s': aksara %c tidak dijangka pada baris %d."
 
-#: ../src/richtext/richtextbuffer.cpp:8612
+#: ../src/richtext/richtextbuffer.cpp:8654
 msgid "files"
 msgstr "fail"
 
-#: ../src/common/datetimefmt.cpp:1919
+#: ../src/common/datetimefmt.cpp:1947
 msgid "first"
 msgstr "pertama"
 
-#: ../src/html/helpwnd.cpp:1266
+#: ../src/html/helpwnd.cpp:1252
 msgid "font size"
 msgstr "Saiz Fon"
 
-#: ../src/common/datetimefmt.cpp:1932
+#: ../src/common/datetimefmt.cpp:1960
 msgid "fourteenth"
 msgstr "keempat belas"
 
-#: ../src/common/datetimefmt.cpp:1922
+#: ../src/common/datetimefmt.cpp:1950
 msgid "fourth"
 msgstr "keempat"
 
-#: ../src/common/appbase.cpp:699
+#: ../src/common/appbase.cpp:783
 msgid "generate verbose log messages"
 msgstr "menjana mesej log meleret"
 
-#: ../src/richtext/richtextbuffer.cpp:12782
-#: ../src/richtext/richtextbuffer.cpp:12892
+#: ../src/richtext/richtextbuffer.cpp:12932
+#: ../src/richtext/richtextbuffer.cpp:13042
 msgid "image"
 msgstr "imej"
 
@@ -8389,7 +8819,7 @@ msgstr "saiz diberi tidak betul untuk masukan tar"
 msgid "invalid data in extended tar header"
 msgstr "data tidak sah dalam kepala tar diperpanjang"
 
-#: ../src/generic/logg.cpp:1050
+#: ../src/generic/logg.cpp:1048
 msgid "invalid message box return value"
 msgstr "nilai kembali kotak mesej tidak sah"
 
@@ -8397,28 +8827,28 @@ msgstr "nilai kembali kotak mesej tidak sah"
 msgid "invalid zip file"
 msgstr "fail zip tidak sah"
 
-#: ../src/common/fontcmn.cpp:983
+#: ../src/common/fontcmn.cpp:993
 msgid "italic"
 msgstr "italik"
 
-#: ../src/common/fontcmn.cpp:973
+#: ../src/common/fontcmn.cpp:983
 msgid "light"
 msgstr "ringan"
 
-#: ../src/common/intl.cpp:293
+#: ../src/common/intl.cpp:287
 #, c-format
 msgid "locale '%s' cannot be set."
 msgstr "locale '%s' Gagal ditetapkan."
 
-#: ../src/common/datetimefmt.cpp:2092
+#: ../src/common/datetimefmt.cpp:2120
 msgid "midnight"
 msgstr "tengah malam"
 
-#: ../src/common/datetimefmt.cpp:1937
+#: ../src/common/datetimefmt.cpp:1965
 msgid "nineteenth"
 msgstr "kesembilan belas"
 
-#: ../src/common/datetimefmt.cpp:1927
+#: ../src/common/datetimefmt.cpp:1955
 msgid "ninth"
 msgstr "kesembilan"
 
@@ -8439,7 +8869,7 @@ msgstr ""
 msgid "noname"
 msgstr "tiada nama"
 
-#: ../src/common/datetimefmt.cpp:2091
+#: ../src/common/datetimefmt.cpp:2119
 msgid "noon"
 msgstr "tengahari"
 
@@ -8448,11 +8878,7 @@ msgstr "tengahari"
 msgid "normal"
 msgstr "Normal"
 
-#: ../src/gtk/print.cpp:1218 ../src/gtk/print.cpp:1323
-msgid "not implemented"
-msgstr ""
-
-#: ../src/common/cmdline.cpp:1480
+#: ../src/common/cmdline.cpp:1486
 msgid "num"
 msgstr "nom"
 
@@ -8468,8 +8894,6 @@ msgstr "luar lingkungan memori"
 msgid "process context description"
 msgstr "huraian proses konteks"
 
-#: ../src/richtext/richtextfontpage.cpp:177
-#: ../src/richtext/richtextfontpage.cpp:180
 #: ../src/richtext/richtextborderspage.cpp:257
 #: ../src/richtext/richtextborderspage.cpp:291
 #: ../src/richtext/richtextborderspage.cpp:325
@@ -8479,10 +8903,11 @@ msgstr "huraian proses konteks"
 #: ../src/richtext/richtextborderspage.cpp:494
 #: ../src/richtext/richtextborderspage.cpp:528
 #: ../src/richtext/richtextborderspage.cpp:596
+#: ../src/richtext/richtextfontpage.cpp:177
+#: ../src/richtext/richtextfontpage.cpp:180
 msgid "pt"
 msgstr ""
 
-#: ../src/richtext/richtextfontpage.cpp:178
 #: ../src/richtext/richtextborderspage.cpp:255
 #: ../src/richtext/richtextborderspage.cpp:258
 #: ../src/richtext/richtextborderspage.cpp:259
@@ -8510,6 +8935,7 @@ msgstr ""
 #: ../src/richtext/richtextborderspage.cpp:594
 #: ../src/richtext/richtextborderspage.cpp:597
 #: ../src/richtext/richtextborderspage.cpp:598
+#: ../src/richtext/richtextfontpage.cpp:178
 #: ../src/richtext/richtextmarginspage.cpp:200
 #: ../src/richtext/richtextmarginspage.cpp:202
 #: ../src/richtext/richtextmarginspage.cpp:203
@@ -8567,7 +8993,7 @@ msgstr ""
 msgid "px"
 msgstr ""
 
-#: ../src/common/accelcmn.cpp:188
+#: ../src/common/accelcmn.cpp:189
 #, fuzzy
 msgid "rawctrl"
 msgstr "ctrl"
@@ -8590,7 +9016,7 @@ msgstr "membaca strim zip (masukan %s): panjang buruk"
 msgid "reentrancy problem."
 msgstr "masalah kemassukan"
 
-#: ../src/common/datetimefmt.cpp:1920
+#: ../src/common/datetimefmt.cpp:1948
 msgid "second"
 msgstr "kedua"
 
@@ -8598,57 +9024,57 @@ msgstr "kedua"
 msgid "seek error"
 msgstr "ralat mencari"
 
-#: ../src/common/datetimefmt.cpp:1935
+#: ../src/common/datetimefmt.cpp:1963
 msgid "seventeenth"
 msgstr "ketujuh belas"
 
-#: ../src/common/datetimefmt.cpp:1925
+#: ../src/common/datetimefmt.cpp:1953
 msgid "seventh"
 msgstr "ketujuh"
 
-#: ../src/common/accelcmn.cpp:186
+#: ../src/common/accelcmn.cpp:187
 msgid "shift"
 msgstr "shif"
 
-#: ../src/common/appbase.cpp:689
+#: ../src/common/appbase.cpp:773
 msgid "show this help message"
 msgstr "tunjukkan mesej bantuan ini"
 
-#: ../src/common/datetimefmt.cpp:1934
+#: ../src/common/datetimefmt.cpp:1962
 msgid "sixteenth"
 msgstr "keenam belas"
 
-#: ../src/common/datetimefmt.cpp:1924
+#: ../src/common/datetimefmt.cpp:1952
 msgid "sixth"
 msgstr "keenam"
 
-#: ../src/common/appcmn.cpp:227
+#: ../src/common/appcmn.cpp:234
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr "tentukan mod paparan untuk diguna (cth. 640x480-16)"
 
-#: ../src/common/appcmn.cpp:213
+#: ../src/common/appcmn.cpp:220
 msgid "specify the theme to use"
 msgstr "pastikan tema untuk diguna"
 
-#: ../src/richtext/richtextbuffer.cpp:9133
+#: ../src/richtext/richtextbuffer.cpp:9180
 #, fuzzy
 msgid "standard/circle"
 msgstr "Piawai"
 
-#: ../src/richtext/richtextbuffer.cpp:9134
+#: ../src/richtext/richtextbuffer.cpp:9181
 msgid "standard/circle-outline"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:9136
+#: ../src/richtext/richtextbuffer.cpp:9183
 msgid "standard/diamond"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:9135
+#: ../src/richtext/richtextbuffer.cpp:9182
 #, fuzzy
 msgid "standard/square"
 msgstr "Piawai"
 
-#: ../src/richtext/richtextbuffer.cpp:9137
+#: ../src/richtext/richtextbuffer.cpp:9184
 msgid "standard/triangle"
 msgstr ""
 
@@ -8656,11 +9082,11 @@ msgstr ""
 msgid "stored file length not in Zip header"
 msgstr "panjang fail disimpan tidak dalam kepala Zip"
 
-#: ../src/common/cmdline.cpp:1476
+#: ../src/common/cmdline.cpp:1482
 msgid "str"
 msgstr "str"
 
-#: ../src/common/fontcmn.cpp:794 ../src/common/fontcmn.cpp:969
+#: ../src/common/fontcmn.cpp:804 ../src/common/fontcmn.cpp:979
 msgid "strikethrough"
 msgstr ""
 
@@ -8669,7 +9095,7 @@ msgstr ""
 msgid "tar entry not open"
 msgstr "masukan tar tidak dibuka"
 
-#: ../src/common/datetimefmt.cpp:1928
+#: ../src/common/datetimefmt.cpp:1956
 msgid "tenth"
 msgstr "kesepuluh"
 
@@ -8677,23 +9103,23 @@ msgstr "kesepuluh"
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
 msgstr "tindak balas kepada transaksi menyebabkan bit DDE_FBUSY ditetapkan."
 
-#: ../src/common/datetimefmt.cpp:1921
+#: ../src/common/datetimefmt.cpp:1949
 msgid "third"
 msgstr "ketiga"
 
-#: ../src/common/datetimefmt.cpp:1931
+#: ../src/common/datetimefmt.cpp:1959
 msgid "thirteenth"
 msgstr "ketiga belas"
 
-#: ../src/common/datetimefmt.cpp:1725
+#: ../src/common/datetimefmt.cpp:1753
 msgid "today"
 msgstr "hari ini"
 
-#: ../src/common/datetimefmt.cpp:1727
+#: ../src/common/datetimefmt.cpp:1755
 msgid "tomorrow"
 msgstr "esok"
 
-#: ../src/common/fileconf.cpp:1979
+#: ../src/common/fileconf.cpp:1971
 #, c-format
 msgid "trailing backslash ignored in '%s'"
 msgstr ""
@@ -8702,19 +9128,19 @@ msgstr ""
 msgid "translator-credits"
 msgstr "Mahrazi Mohd Kamal <mahrazi@gmail.com>, 2006."
 
-#: ../src/common/datetimefmt.cpp:1930
+#: ../src/common/datetimefmt.cpp:1958
 msgid "twelfth"
 msgstr "kedua belas"
 
-#: ../src/common/datetimefmt.cpp:1938
+#: ../src/common/datetimefmt.cpp:1966
 msgid "twentieth"
 msgstr "keduua puluh"
 
-#: ../src/common/fontcmn.cpp:789 ../src/common/fontcmn.cpp:965
+#: ../src/common/fontcmn.cpp:799 ../src/common/fontcmn.cpp:975
 msgid "underlined"
 msgstr "digaris bawahkan"
 
-#: ../src/common/fileconf.cpp:2014
+#: ../src/common/fileconf.cpp:2006
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
 msgstr "\" tidak dijangka pada posisi %d dalam '%s'."
@@ -8723,8 +9149,8 @@ msgstr "\" tidak dijangka pada posisi %d dalam '%s'."
 msgid "unexpected end of file"
 msgstr "akhir fail tidak dijangka"
 
-#: ../src/generic/progdlgg.cpp:399 ../src/common/tarstrm.cpp:371
-#: ../src/common/tarstrm.cpp:394 ../src/common/tarstrm.cpp:425
+#: ../src/common/tarstrm.cpp:371 ../src/common/tarstrm.cpp:394
+#: ../src/common/tarstrm.cpp:425 ../src/generic/progdlgg.cpp:400
 msgid "unknown"
 msgstr "tidak diketahui"
 
@@ -8733,11 +9159,11 @@ msgstr "tidak diketahui"
 msgid "unknown class %s"
 msgstr "kelas %s tidak diketahui"
 
-#: ../src/common/regex.cpp:261 ../src/html/chm.cpp:351
+#: ../src/common/regex.cpp:258 ../src/html/chm.cpp:351
 msgid "unknown error"
 msgstr "ralat tidak diketahui"
 
-#: ../src/msw/dialup.cpp:490
+#: ../src/msw/dialup.cpp:481
 #, c-format
 msgid "unknown error (error code %08x)."
 msgstr "ralat tidak diketahui (kod ralat %08x)."
@@ -8764,7 +9190,7 @@ msgstr "tanpanama%d"
 msgid "unsupported Zip compression method"
 msgstr "Mesej mampatan Zip tidak disokong"
 
-#: ../src/common/translation.cpp:1883
+#: ../src/common/translation.cpp:1896
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "guna katalog '%s' dari '%s'."
@@ -8773,13 +9199,9 @@ msgstr "guna katalog '%s' dari '%s'."
 msgid "write error"
 msgstr "ralat tulis"
 
-#: ../src/common/time.cpp:318
+#: ../src/common/time.cpp:311
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay gagal."
-
-#: ../src/gtk/print.cpp:987
-msgid "wxPrintout::GetPageInfo gives a null maxPage."
-msgstr ""
 
 #: ../src/osx/carbon/dataview.cpp:1301
 msgid "wxWidget control pointer is not a data view pointer"
@@ -8795,7 +9217,7 @@ msgstr "Gagal mulakan paparan."
 msgid "wxWidgets could not open display for '%s': exiting."
 msgstr "wxWidgets Gagal membuka paparan '%s': keluar."
 
-#: ../src/x11/app.cpp:164
+#: ../src/x11/app.cpp:170
 msgid "wxWidgets could not open display. Exiting."
 msgstr "wxWidgets Gagal membuka paparan. Keluar."
 
@@ -8803,7 +9225,7 @@ msgstr "wxWidgets Gagal membuka paparan. Keluar."
 msgid "xxxx"
 msgstr "xxxx"
 
-#: ../src/common/datetimefmt.cpp:1726
+#: ../src/common/datetimefmt.cpp:1754
 msgid "yesterday"
 msgstr "semalam"
 
@@ -8812,10 +9234,224 @@ msgstr "semalam"
 msgid "zlib error %d"
 msgstr "Ralat zlib %d"
 
-#: ../src/richtext/richtextliststylepage.cpp:496
 #: ../src/richtext/richtextbulletspage.cpp:288
+#: ../src/richtext/richtextliststylepage.cpp:496
 msgid "~"
 msgstr "~"
+
+#~ msgid "ADD"
+#~ msgstr "ADD"
+
+#~ msgid "BACK"
+#~ msgstr "BACK"
+
+#~ msgid "CANCEL"
+#~ msgstr "CANCEL"
+
+#~ msgid "CAPITAL"
+#~ msgstr "CAPITAL"
+
+#~ msgid "CLEAR"
+#~ msgstr "CLEAR"
+
+#~ msgid "COMMAND"
+#~ msgstr "COMMAND"
+
+#~ msgid "Cannot create mutex."
+#~ msgstr "Gagal mencipta mutex."
+
+#~ msgid "Cannot resume thread %lu"
+#~ msgstr "Gagal menyambung benang %lu"
+
+#~ msgid "Cannot suspend thread %lu"
+#~ msgstr "Gagal menggantung benang %lu"
+
+#~ msgid "Couldn't acquire a mutex lock"
+#~ msgstr "Gagal mendapatkan kunci mutex"
+
+#~ msgid "Couldn't release a mutex"
+#~ msgstr "Gagal lepaskan mutex"
+
+#~ msgid "DECIMAL"
+#~ msgstr "DECIMAL"
+
+#~ msgid "DEL"
+#~ msgstr "DEL"
+
+#~ msgid "DELETE"
+#~ msgstr "DELETE"
+
+#~ msgid "DIVIDE"
+#~ msgstr "DIVIDE"
+
+#~ msgid "DOWN"
+#~ msgstr "DOWN"
+
+#~ msgid "END"
+#~ msgstr "END"
+
+#~ msgid "ENTER"
+#~ msgstr "ENTER"
+
+#~ msgid "ESC"
+#~ msgstr "ESC"
+
+#~ msgid "ESCAPE"
+#~ msgstr "ESCAPE"
+
+#~ msgid "EXECUTE"
+#~ msgstr "EXECUTE"
+
+#~ msgid "Execution of command '%s' failed with error: %ul"
+#~ msgstr "Perlaksanaan arahan '%s' gagal dengan ralat: %ul"
+
+#~ msgid ""
+#~ "File '%s' already exists.\n"
+#~ "Do you want to replace it?"
+#~ msgstr ""
+#~ "Fail '%s' sedia wujud.\n"
+#~ "Anda pasti untuk gantinya?"
+
+#~ msgid "HELP"
+#~ msgstr "HELP"
+
+#~ msgid "HOME"
+#~ msgstr "HOME"
+
+#~ msgid "INS"
+#~ msgstr "INS"
+
+#~ msgid "INSERT"
+#~ msgstr "INSERT"
+
+#~ msgid "KP_BEGIN"
+#~ msgstr "KP_BEGIN"
+
+#~ msgid "KP_DECIMAL"
+#~ msgstr "KP_DECIMAL"
+
+#~ msgid "KP_DELETE"
+#~ msgstr "KP_DELETE"
+
+#~ msgid "KP_DIVIDE"
+#~ msgstr "KP_DIVIDE"
+
+#~ msgid "KP_DOWN"
+#~ msgstr "KP_DOWN"
+
+#~ msgid "KP_ENTER"
+#~ msgstr "KP_ENTER"
+
+#~ msgid "KP_EQUAL"
+#~ msgstr "KP_EQUAL"
+
+#~ msgid "KP_HOME"
+#~ msgstr "KP_HOME"
+
+#~ msgid "KP_INSERT"
+#~ msgstr "KP_INSERT"
+
+#~ msgid "KP_LEFT"
+#~ msgstr "KP_LEFT"
+
+#~ msgid "KP_MULTIPLY"
+#~ msgstr "KP_MULTIPLY"
+
+#~ msgid "KP_NEXT"
+#~ msgstr "KP_NEXT"
+
+#~ msgid "KP_PAGEDOWN"
+#~ msgstr "KP_PAGEDOWN"
+
+#~ msgid "KP_PAGEUP"
+#~ msgstr "KP_PAGEUP"
+
+#~ msgid "KP_PRIOR"
+#~ msgstr "KP_PRIOR"
+
+#~ msgid "KP_RIGHT"
+#~ msgstr "KP_RIGHT"
+
+#~ msgid "KP_SEPARATOR"
+#~ msgstr "KP_SEPARATOR"
+
+#~ msgid "KP_SPACE"
+#~ msgstr "KP_SPACE"
+
+#~ msgid "KP_SUBTRACT"
+#~ msgstr "KP_SUBTRACT"
+
+#~ msgid "LEFT"
+#~ msgstr "LEFT"
+
+#~ msgid "MENU"
+#~ msgstr "MENU"
+
+#~ msgid "NUM_LOCK"
+#~ msgstr "NUM_LOCK"
+
+#~ msgid "PAGEDOWN"
+#~ msgstr "PAGEDOWN"
+
+#~ msgid "PAGEUP"
+#~ msgstr "PAGEUP"
+
+#~ msgid "PAUSE"
+#~ msgstr "PAUSE"
+
+#~ msgid "PGDN"
+#~ msgstr "PGDN"
+
+#~ msgid "PGUP"
+#~ msgstr "PGUP"
+
+#~ msgid "PRINT"
+#~ msgstr "PRINT"
+
+#~ msgid "RETURN"
+#~ msgstr "RETURN"
+
+#~ msgid "RIGHT"
+#~ msgstr "RIGHT"
+
+#~ msgid "SCROLL_LOCK"
+#~ msgstr "SCROLL_LOCK"
+
+#~ msgid "SELECT"
+#~ msgstr "SELECT"
+
+#~ msgid "SEPARATOR"
+#~ msgstr "SEPARATOR"
+
+#~ msgid "SNAPSHOT"
+#~ msgstr "SNAPSHOT"
+
+#~ msgid "SPACE"
+#~ msgstr "SPACE"
+
+#~ msgid "SUBTRACT"
+#~ msgstr "SUBTRACT"
+
+#~ msgid "TAB"
+#~ msgstr "TAB"
+
+#~ msgid "Timer creation failed."
+#~ msgstr "Penciptaan pemasa gagal."
+
+#~ msgid "UP"
+#~ msgstr "UP"
+
+#~ msgid "WINDOWS_LEFT"
+#~ msgstr "WINDOWS_LEFT"
+
+#~ msgid "WINDOWS_MENU"
+#~ msgstr "WINDOWS_MENU"
+
+#~ msgid "WINDOWS_RIGHT"
+#~ msgstr "WINDOWS_RIGHT"
+
+#~ msgid "buffer is too small for Windows directory."
+#~ msgstr "penimbal terlalu kecil untuk direktori Windows."
 
 #~ msgid "Print preview"
 #~ msgstr "Pralihat cetak"
