@@ -201,6 +201,7 @@ def main(scriptName, args):
         "jobs"          : (defJobs, "Number of jobs to run at one time in make. Default: %s" % defJobs),
         "install"       : (False, "Install the toolkit to the installdir directory, or the default dir."),
         "installdir"    : ("", "Directory where built wxWidgets will be installed"),
+        "gtk3"          : (False, "On Linux build for gtk3 (default gtk2)"),
         "mac_distdir"   : (None, "If set on Mac, will create an installer package in the specified dir."),
         "mac_universal_binary" 
                         : ("", "Comma separated list of architectures to include in the Mac universal binary"),
@@ -263,6 +264,9 @@ def main(scriptName, args):
             
         if options.osx_cocoa:
             configure_opts.append("--with-osx_cocoa")
+            
+        if options.gtk3:
+            configure_opts.append("--with-gtk=3")
 
         wxpy_configure_opts = [
                             "--with-opengl",
