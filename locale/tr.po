@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Kaya Zeren <translator@zeron.net>, 2013
+# Kaya Zeren <kayazeren@gmail.com>, 2013-2014
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.0\n"
+"Project-Id-Version: wxWidgets (unofficial)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-25 19:58+0100\n"
-"PO-Revision-Date: 2014-04-04 18:13+0200\n"
-"Last-Translator: Hakki Dogusan <hakki@dogusan.net>\n"
+"PO-Revision-Date: 2014-11-26 21:27+0200\n"
+"Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/"
 "wxwidgets_unofficial/language/tr_TR/)\n"
 "Language: tr_TR\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -111,9 +111,9 @@ msgid "%d of %lu"
 msgstr "%d / %lu"
 
 #: ../src/html/helpwnd.cpp:1678
-#, fuzzy, c-format
+#, c-format
 msgid "%i of %u"
-msgstr "%i / %i"
+msgstr "%i / %u"
 
 #: ../src/generic/filectrlg.cpp:315
 #, c-format
@@ -162,9 +162,9 @@ msgid "%s files (%s)|%s"
 msgstr "%s dosya (%s)|%s"
 
 #: ../src/html/helpwnd.cpp:1716
-#, fuzzy, c-format
+#, c-format
 msgid "%u of %u"
-msgstr "%lu / %lu"
+msgstr "%u / %u"
 
 #: ../src/common/stockitem.cpp:139 ../src/html/helpfrm.cpp:142
 #: ../src/html/helpfrm.cpp:144
@@ -690,7 +690,7 @@ msgstr "&Simge:"
 #: ../src/richtext/richtextborderspage.cpp:383
 #: ../src/richtext/richtextborderspage.cpp:552
 msgid "&Synchronize values"
-msgstr "Değerleri eşleştir"
+msgstr "&Değerleri eşleştirin"
 
 #: ../include/wx/richtext/richtextbuffer.h:5870
 msgid "&Table"
@@ -766,12 +766,12 @@ msgstr "&Evet"
 #: ../src/common/valtext.cpp:256
 #, c-format
 msgid "'%s' contains illegal characters"
-msgstr "'%s' geçersiz karakterler içeriyor"
+msgstr "'%s' içinde geçersiz karakterler var"
 
 #: ../src/common/valtext.cpp:254
 #, c-format
 msgid "'%s' doesn't consist only of valid characters"
-msgstr "'%s' geçersiz karakterler içeriyor"
+msgstr "'%s' yalnız geçerli karakterleri içermiyor"
 
 #: ../src/common/config.cpp:523 ../src/msw/regconf.cpp:258
 #, c-format
@@ -791,12 +791,12 @@ msgstr "'%s' geçerli bir ileti kataloğu değil."
 #: ../src/common/valtext.cpp:165
 #, c-format
 msgid "'%s' is not one of the valid strings"
-msgstr "'%s' geçerli dizgelerden biri değil"
+msgstr "'%s' geçerli bir dizge değil"
 
 #: ../src/common/valtext.cpp:167
 #, c-format
 msgid "'%s' is one of the invalid strings"
-msgstr "'%s' geçersiz dizgelerden biridir"
+msgstr "'%s' geçersiz bir dizge"
 
 #: ../src/common/textbuf.cpp:237
 #, c-format
@@ -1182,13 +1182,12 @@ msgid "Absolute"
 msgstr "Mutlak"
 
 #: ../src/propgrid/advprops.cpp:845
-#, fuzzy
 msgid "ActiveBorder"
-msgstr "Kenarlık"
+msgstr "EtkinKenarlık"
 
 #: ../src/propgrid/advprops.cpp:846
 msgid "ActiveCaption"
-msgstr ""
+msgstr "EtkinBaşlık"
 
 #: ../src/common/stockitem.cpp:207
 msgid "Actual Size"
@@ -1296,7 +1295,7 @@ msgstr "Alt+"
 #: ../src/richtext/richtextborderspage.cpp:580
 #: ../src/richtext/richtextborderspage.cpp:582
 msgid "An optional corner radius for adding rounded corners."
-msgstr "Yuvarlak köşeler için opsiyonel köşe çapı."
+msgstr "Yuvarlak köşeler eklemek için isteğe bağlı köşe yarıçapı."
 
 #: ../src/common/debugrpt.cpp:581
 msgid "And includes the following files:\n"
@@ -1309,7 +1308,7 @@ msgstr "Canlandırma dosyası %ld tipinde değil."
 
 #: ../src/propgrid/advprops.cpp:844
 msgid "AppWorkspace"
-msgstr ""
+msgstr "UygulamaAlanı"
 
 #: ../src/generic/logg.cpp:1032
 #, c-format
@@ -1326,7 +1325,7 @@ msgstr "Uygulayın"
 
 #: ../src/propgrid/advprops.cpp:1559
 msgid "Aqua"
-msgstr ""
+msgstr "Deniz Mavisi"
 
 #: ../src/richtext/richtextbulletspage.cpp:274
 #: ../src/richtext/richtextliststylepage.cpp:482
@@ -1343,9 +1342,8 @@ msgid "Argument %u not found."
 msgstr "%u argümanı bulunamadı."
 
 #: ../src/propgrid/advprops.cpp:1703
-#, fuzzy
 msgid "Arrow"
-msgstr "yarın"
+msgstr "Ok"
 
 #: ../src/generic/aboutdlgg.cpp:184
 msgid "Artists"
@@ -1462,9 +1460,8 @@ msgstr "Artalan rengi"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:50
-#, fuzzy
 msgid "Backspace"
-msgstr "Geri"
+msgstr "Geri silme"
 
 #: ../src/common/fmapbase.cpp:160
 msgid "Baltic (ISO-8859-13)"
@@ -1489,15 +1486,15 @@ msgstr "Bitmap görüntüleyici değeri işleyemiyor; değer tipi:"
 
 #: ../src/propgrid/advprops.cpp:1544
 msgid "Black"
-msgstr ""
+msgstr "Siyah"
 
 #: ../src/propgrid/advprops.cpp:1705
 msgid "Blank"
-msgstr ""
+msgstr "Boş"
 
 #: ../src/propgrid/advprops.cpp:1553
 msgid "Blue"
-msgstr ""
+msgstr "Mavi"
 
 #: ../src/common/stockitem.cpp:143 ../src/generic/fontdlgg.cpp:333
 #: ../src/osx/carbon/fontdlg.cpp:524 ../src/richtext/richtextfontpage.cpp:353
@@ -1530,9 +1527,8 @@ msgid "Box styles"
 msgstr "Kutu stilleri"
 
 #: ../src/propgrid/advprops.cpp:1552
-#, fuzzy
 msgid "Brown"
-msgstr "Gözatın"
+msgstr "Kahverengi"
 
 #: ../src/common/filepickercmn.cpp:43 ../src/common/filepickercmn.cpp:44
 msgid "Browse"
@@ -1552,25 +1548,24 @@ msgid "Bullets"
 msgstr "Madde imleri"
 
 #: ../src/propgrid/advprops.cpp:1706
-#, fuzzy
 msgid "Bullseye"
-msgstr "Madde imi stili"
+msgstr "Öküz gözü"
 
 #: ../src/propgrid/advprops.cpp:847
 msgid "ButtonFace"
-msgstr ""
+msgstr "DüğmeÖnyüzü"
 
 #: ../src/propgrid/advprops.cpp:848
 msgid "ButtonHighlight"
-msgstr ""
+msgstr "DüğmeVurgusu"
 
 #: ../src/propgrid/advprops.cpp:849
 msgid "ButtonShadow"
-msgstr ""
+msgstr "DüğmeGölgesi"
 
 #: ../src/propgrid/advprops.cpp:850
 msgid "ButtonText"
-msgstr ""
+msgstr "DüğmeMetni"
 
 #: ../src/common/paper.cpp:99
 msgid "C sheet, 17 x 22 in"
@@ -1899,13 +1894,12 @@ msgstr "İş parçacığının sonlanması beklenemiyor"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:73
-#, fuzzy
 msgid "Capital"
-msgstr "&Büyük harfler"
+msgstr "Büyük"
 
 #: ../src/propgrid/advprops.cpp:851
 msgid "CaptionText"
-msgstr ""
+msgstr "BaşlıkMetni"
 
 #: ../src/html/helpwnd.cpp:533
 msgid "Case sensitive"
@@ -1982,9 +1976,8 @@ msgstr ""
 "kaydedilmeyecek."
 
 #: ../src/propgrid/advprops.cpp:1707
-#, fuzzy
 msgid "Character"
-msgstr "&Karakter kodu:"
+msgstr "Karakter"
 
 #: ../src/richtext/richtextstyles.cpp:1063
 msgid "Character styles"
@@ -2009,7 +2002,7 @@ msgstr "Sağa bir parantez eklemek için işaretleyin."
 #: ../src/richtext/richtextborderspage.cpp:554
 #: ../src/richtext/richtextborderspage.cpp:556
 msgid "Check to edit all borders simultaneously."
-msgstr "Tüm kenarlıkları aynı anda düzenlemek için tıklayın."
+msgstr "Tüm kenarlıklara aynı anda uygulanması için işaretleyin."
 
 #: ../src/richtext/richtextbulletspage.cpp:168
 #: ../src/richtext/richtextbulletspage.cpp:170
@@ -2021,7 +2014,7 @@ msgstr "Madde imini parantez içine almak için işaretleyin."
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
 msgid "Check to indicate right-to-left text layout."
-msgstr "Sağdan-sola yazı düzeni için tıklayın."
+msgstr "Sağdan sola yazı için işaretleyin."
 
 #: ../src/osx/carbon/fontdlg.cpp:526 ../src/osx/carbon/fontdlg.cpp:528
 msgid "Check to make the font bold."
@@ -2068,7 +2061,7 @@ msgstr "Metni üst yazıya dönüştürmek için işaretleyin."
 #: ../src/richtext/richtextfontpage.cpp:322
 #: ../src/richtext/richtextfontpage.cpp:324
 msgid "Check to suppress hyphenation."
-msgstr "Sözcük kesmeyi durdurmak için tıklayın."
+msgstr "Hecelemeyi engellemek için işaretleyin."
 
 #: ../src/msw/dialup.cpp:773
 msgid "Choose ISP to dial"
@@ -2276,7 +2269,7 @@ msgstr "Sütun genişliği ayarlanamadı."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:112
 msgid "Command"
-msgstr ""
+msgstr "Komut"
 
 #: ../src/common/init.cpp:188
 #, c-format
@@ -2329,11 +2322,11 @@ msgstr "İçerik"
 
 #: ../src/propgrid/advprops.cpp:852
 msgid "ControlDark"
-msgstr ""
+msgstr "DenetimKoyu"
 
 #: ../src/propgrid/advprops.cpp:853
 msgid "ControlLight"
-msgstr ""
+msgstr "DenetimAçık"
 
 #: ../src/common/strconv.cpp:2259
 #, c-format
@@ -2363,7 +2356,7 @@ msgstr "Seçimi kopyalayın"
 
 #: ../src/msw/glcanvas.cpp:183 ../src/unix/glx11.cpp:136
 msgid "Core OpenGL profile is not supported by the OpenGL driver."
-msgstr ""
+msgstr "Çekirdek OpenGL profili OpenGL sürücüsü tarafından desteklenmiyor."
 
 #: ../src/richtext/richtextborderspage.cpp:569
 #: ../src/richtext/richtextborderspage.cpp:604
@@ -2372,7 +2365,7 @@ msgstr "Köşe"
 
 #: ../src/richtext/richtextborderspage.cpp:578
 msgid "Corner &radius:"
-msgstr "Köşe çapı:"
+msgstr "Köşe ça&pı:"
 
 #: ../src/html/chm.cpp:718
 #, c-format
@@ -2567,7 +2560,7 @@ msgstr "Yeni klasör oluşturun"
 
 #: ../src/propgrid/advprops.cpp:1708
 msgid "Cross"
-msgstr ""
+msgstr "Çarpı"
 
 #: ../src/common/accelcmn.cpp:323
 msgid "Ctrl+"
@@ -2584,9 +2577,8 @@ msgstr "Geçerli klasör:"
 
 #: ../src/propgrid/advprops.cpp:868 ../src/propgrid/advprops.cpp:1524
 #: ../src/propgrid/advprops.cpp:1562
-#, fuzzy
 msgid "Custom"
-msgstr "Özel boyut"
+msgstr "İsteğe göre uyarlanmış"
 
 #: ../src/gtk/print.cpp:218
 msgid "Custom size"
@@ -2668,16 +2660,15 @@ msgstr "Hata ayıklama raporu oluşturulamadı."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:82
 msgid "Decimal"
-msgstr ""
+msgstr "Ondalık"
 
 #: ../src/generic/fontdlgg.cpp:323
 msgid "Decorative"
 msgstr "Süslü"
 
 #: ../src/propgrid/advprops.cpp:1702
-#, fuzzy
 msgid "Default"
-msgstr "varsayılan"
+msgstr "Varsayılan"
 
 #: ../src/common/fmapbase.cpp:796
 msgid "Default encoding"
@@ -2693,9 +2684,8 @@ msgstr "Varsayılan yazıcı"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:49
-#, fuzzy
 msgid "Del"
-msgstr "Silin"
+msgstr "Silme"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:48 ../src/common/stockitem.cpp:152
@@ -2824,7 +2814,7 @@ msgstr "Soldaki kitapları gezilirken yardım görüntülenir."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:83
 msgid "Divide"
-msgstr ""
+msgstr "Bölü"
 
 #: ../src/msw/mimetype.cpp:725
 msgid ""
@@ -2958,13 +2948,12 @@ msgstr "Bir artalan rengini etkinleştirir."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:64
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:53
-#, fuzzy
 msgid "Enter"
-msgstr "Yazıcı"
+msgstr "Enter"
 
 #: ../src/richtext/richtextstyledlg.cpp:934
 msgid "Enter a box style name"
@@ -3055,13 +3044,12 @@ msgstr "Hata:"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:67
 msgid "Esc"
-msgstr ""
+msgstr "Esc"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:68
-#, fuzzy
 msgid "Escape"
-msgstr "Yatay"
+msgstr "Escape"
 
 #: ../src/common/fmapbase.cpp:150
 msgid "Esperanto (ISO-8859-3)"
@@ -3412,9 +3400,9 @@ msgid "Failed to load shared library '%s'"
 msgstr "'%s' paylaşılmış kitaplığı yüklenemedi"
 
 #: ../src/osx/core/sound.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load sound from \"%s\" (error %d)."
-msgstr "\"%s\" kaynağı yüklenemedi."
+msgstr "\"%s\" üzerinden ses yüklenemedi (hata %d)."
 
 #: ../src/msw/utils.cpp:1000
 #, c-format
@@ -3848,7 +3836,7 @@ msgstr "Kaynak:"
 
 #: ../src/propgrid/advprops.cpp:1554
 msgid "Fuchsia"
-msgstr ""
+msgstr "Fuşya"
 
 #: ../src/common/imaggif.cpp:160
 msgid "GIF: Invalid gif index."
@@ -3938,20 +3926,19 @@ msgstr "Grafikleri hazırlayan"
 
 #: ../src/propgrid/advprops.cpp:1549
 msgid "Gray"
-msgstr ""
+msgstr "Gri"
 
 #: ../src/propgrid/advprops.cpp:855
 msgid "GrayText"
-msgstr ""
+msgstr "GriMetin"
 
 #: ../src/common/fmapbase.cpp:154
 msgid "Greek (ISO-8859-7)"
 msgstr "Yunanca (ISO-8859-7)"
 
 #: ../src/propgrid/advprops.cpp:1550
-#, fuzzy
 msgid "Green"
-msgstr "MacYunanca"
+msgstr "Yeşil"
 
 #: ../src/richtext/richtextborderspage.cpp:618
 msgid "Groove"
@@ -3976,7 +3963,7 @@ msgstr "HTML dosyaları (*.html;*.htm)|*.html;*.htm|"
 
 #: ../src/propgrid/advprops.cpp:1709
 msgid "Hand"
-msgstr ""
+msgstr "El"
 
 #: ../src/common/stockitem.cpp:162
 msgid "Harddisk"
@@ -4042,14 +4029,12 @@ msgid "Hide this notification message."
 msgstr "Bu uyarı iletisini gizleyin."
 
 #: ../src/propgrid/advprops.cpp:856
-#, fuzzy
 msgid "Highlight"
-msgstr "açık"
+msgstr "Vurgu"
 
 #: ../src/propgrid/advprops.cpp:857
-#, fuzzy
 msgid "HighlightText"
-msgstr "Metin sağa yaslanır."
+msgstr "VurguMetni"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:63 ../src/common/stockitem.cpp:164
@@ -4068,7 +4053,7 @@ msgstr "Nesnenin metne göre nasıl yüzeceği."
 
 #: ../src/propgrid/advprops.cpp:1710
 msgid "I-Beam"
-msgstr ""
+msgstr "I-Işını"
 
 #: ../src/common/imagbmp.cpp:1195
 msgid "ICO: Error in reading mask DIB."
@@ -4211,17 +4196,16 @@ msgid "Impossible to set permissions for the file '%s'"
 msgstr "'%s' dosyasının izinleri değiştirilemiyor"
 
 #: ../src/propgrid/advprops.cpp:858
-#, fuzzy
 msgid "InactiveBorder"
-msgstr "Kenarlık"
+msgstr "DevredışıKenarlık"
 
 #: ../src/propgrid/advprops.cpp:859
 msgid "InactiveCaption"
-msgstr ""
+msgstr "DevredışıBaşlık"
 
 #: ../src/propgrid/advprops.cpp:860
 msgid "InactiveCaptionText"
-msgstr ""
+msgstr "DevredışıBaşlıkMetni"
 
 #: ../src/common/gifdecod.cpp:792
 #, c-format
@@ -4258,9 +4242,8 @@ msgstr "Hazırlığın ardından başlatılamadı, vazgeçiliyor."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:52
-#, fuzzy
 msgid "Ins"
-msgstr "Gömme"
+msgstr "Ins"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:51 ../src/richtext/richtextsymboldlg.cpp:472
@@ -4349,7 +4332,7 @@ msgstr "Kurallı ifade geçersiz '%s': %s"
 #: ../src/common/config.cpp:226
 #, c-format
 msgid "Invalid value %ld for a boolean key \"%s\" in config file."
-msgstr "Ayar dosyasındaki %ld değeri \"%s\" ikili anahtarı için geçersiz."
+msgstr "Ayar dosyasındaki %ld değeri \"%s\" ikili anahtarı geçersiz."
 
 #: ../src/common/stockitem.cpp:168 ../src/generic/fontdlgg.cpp:329
 #: ../src/osx/carbon/fontdlg.cpp:531 ../src/richtext/richtextfontpage.cpp:349
@@ -4449,130 +4432,118 @@ msgstr "KP_"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgid "KP_Add"
-msgstr "KP_ADD"
+msgstr "TT_Ekleme"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:99
 msgid "KP_Begin"
-msgstr ""
+msgstr "TT_Başlangıç"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:107
 msgid "KP_Decimal"
-msgstr ""
+msgstr "TT_Ondalık"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgid "KP_Delete"
-msgstr "Silin"
+msgstr "TT_Delete"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:108
 msgid "KP_Divide"
-msgstr ""
+msgstr "TT_Bölü"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgid "KP_Down"
-msgstr "Aşağı"
+msgstr "TT_Aşağı"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgid "KP_End"
-msgstr "KP_END"
+msgstr "TT_End"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgid "KP_Enter"
-msgstr "Yazıcı"
+msgstr "TT_Enter"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
 msgid "KP_Equal"
-msgstr ""
+msgstr "TT_Eşit"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgid "KP_Home"
-msgstr "Açılış"
+msgstr "TT_Home"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgid "KP_Insert"
-msgstr "Ekleyin"
+msgstr "TT_Insert"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgid "KP_Left"
-msgstr "Sol"
+msgstr "TT_Sol"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:103
 msgid "KP_Multiply"
-msgstr ""
+msgstr "TT_Çarpı"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:97
-#, fuzzy
 msgid "KP_Next"
-msgstr "Sonraki"
+msgstr "TT_Next"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
 msgid "KP_PageDown"
-msgstr ""
+msgstr "TT_PageDown"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:94
 msgid "KP_PageUp"
-msgstr ""
+msgstr "TT_PageUp"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:96
 msgid "KP_Prior"
-msgstr ""
+msgstr "TT_Önceki"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgid "KP_Right"
-msgstr "Sağ"
+msgstr "TT_Sağ"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
 msgid "KP_Separator"
-msgstr ""
+msgstr "TT_Ayıraç"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:86
 msgid "KP_Space"
-msgstr ""
+msgstr "TT_Boşluk"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:106
 msgid "KP_Subtract"
-msgstr ""
+msgstr "TT_Eksi"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
-#, fuzzy
 msgid "KP_Tab"
-msgstr "KP_TAB"
+msgstr "TT_Sekme"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:91
-#, fuzzy
 msgid "KP_Up"
-msgstr "KP_UP"
+msgstr "TT_Yukarı"
 
 #: ../src/richtext/richtextindentspage.cpp:270
 msgid "L&ine spacing:"
@@ -4618,7 +4589,7 @@ msgstr "Sol (i&lk satır):"
 
 #: ../src/propgrid/advprops.cpp:1711
 msgid "Left Button"
-msgstr ""
+msgstr "Sol Düğme"
 
 #: ../src/generic/prntdlgg.cpp:880
 msgid "Left margin (mm):"
@@ -4677,12 +4648,13 @@ msgstr "Açık"
 
 #: ../src/propgrid/advprops.cpp:1558
 msgid "Lime"
-msgstr ""
+msgstr "Limon"
 
 #: ../src/generic/helpext.cpp:294
 #, c-format
 msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
-msgstr "%lu. satır \"%s\" eşleştirme dosyasında sözdizimi hatası var, atlandı."
+msgstr ""
+"%lu satırında \"%s\" eşleştirme dosyası içinde sözdizimi hatası var, atlandı."
 
 #: ../src/richtext/richtextliststylepage.cpp:444
 msgid "Line spacing:"
@@ -4922,7 +4894,7 @@ msgstr "MacVietnamca"
 
 #: ../src/propgrid/advprops.cpp:1712
 msgid "Magnifier"
-msgstr ""
+msgstr "Büyüteç"
 
 #: ../src/propgrid/advprops.cpp:2093
 msgid "Make a selection:"
@@ -4935,7 +4907,7 @@ msgstr "Kenar Boşlukları"
 
 #: ../src/propgrid/advprops.cpp:1545
 msgid "Maroon"
-msgstr ""
+msgstr "Kestane"
 
 #: ../src/generic/fdrepdlg.cpp:147
 msgid "Match case"
@@ -4983,7 +4955,7 @@ msgstr "Simge &durumuna küçültün"
 
 #: ../src/propgrid/advprops.cpp:1713
 msgid "Middle Button"
-msgstr ""
+msgstr "Orta Düğme"
 
 #: ../src/richtext/richtextsizepage.cpp:409
 msgid "Min height:"
@@ -5046,7 +5018,7 @@ msgstr "Ad"
 
 #: ../src/propgrid/advprops.cpp:1546
 msgid "Navy"
-msgstr ""
+msgstr "Lacivert"
 
 #: ../src/common/stockitem.cpp:175
 msgid "Network"
@@ -5113,7 +5085,7 @@ msgstr "Hayır"
 
 #: ../src/propgrid/advprops.cpp:1714
 msgid "No Entry"
-msgstr ""
+msgstr "Kayıt Yok"
 
 #: ../src/generic/animateg.cpp:150
 #, c-format
@@ -5263,122 +5235,117 @@ msgstr "Bildirim"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:103
 msgid "Num *"
-msgstr ""
+msgstr "Num *"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:104
 msgid "Num +"
-msgstr ""
+msgstr "Num +"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
 msgid "Num ,"
-msgstr ""
+msgstr "Num ,"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:106
 msgid "Num -"
-msgstr ""
+msgstr "Num -"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:107
 msgid "Num ."
-msgstr ""
+msgstr "Num ."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:108
 msgid "Num /"
-msgstr ""
+msgstr "Num /"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
 msgid "Num ="
-msgstr ""
+msgstr "Num ="
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:99
 msgid "Num Begin"
-msgstr ""
+msgstr "Num Başlangıç"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgid "Num Delete"
-msgstr "Silin"
+msgstr "Num Delete"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgid "Num Down"
-msgstr "Aşağı"
+msgstr "Num Aşağı"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:98
 msgid "Num End"
-msgstr ""
+msgstr "Num Son"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:88
 msgid "Num Enter"
-msgstr ""
+msgstr "Num Enter"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgid "Num Home"
-msgstr "Açılış"
+msgstr "Num Home"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgid "Num Insert"
-msgstr "Ekleyin"
+msgstr "Num Insert"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:84
 msgid "Num Lock"
-msgstr ""
+msgstr "Num Lock"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
 msgid "Num Page Down"
-msgstr ""
+msgstr "Num Page Down"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:94
 msgid "Num Page Up"
-msgstr ""
+msgstr "Num Page Up"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgid "Num Right"
-msgstr "Sağ"
+msgstr "Num Sağ"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:86
 msgid "Num Space"
-msgstr ""
+msgstr "Num Boşluk"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
 msgid "Num Tab"
-msgstr ""
+msgstr "Num Sekme"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:91
 msgid "Num Up"
-msgstr ""
+msgstr "Num Yukarı"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:90
 msgid "Num left"
-msgstr ""
+msgstr "Num sol"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:84
 msgid "Num_lock"
-msgstr ""
+msgstr "Num_lock"
 
 #: ../src/osx/carbon/dataview.cpp:900
 msgid "Number of columns could not be determined."
@@ -5415,7 +5382,7 @@ msgstr "Nesnelerin bir kod özniteliği olmalıdır"
 
 #: ../src/propgrid/advprops.cpp:1551
 msgid "Olive"
-msgstr ""
+msgstr "Zeytin"
 
 #: ../src/common/docview.cpp:1762 ../src/common/docview.cpp:1804
 msgid "Open File"
@@ -5465,7 +5432,7 @@ msgstr "Ayarlar"
 
 #: ../src/propgrid/advprops.cpp:1556
 msgid "Orange"
-msgstr ""
+msgstr "Turuncu"
 
 #: ../src/generic/prntdlgg.cpp:615 ../src/generic/prntdlgg.cpp:869
 msgid "Orientation"
@@ -5645,9 +5612,8 @@ msgstr "Sayfa %d / %d"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:56
-#, fuzzy
 msgid "Page Down"
-msgstr "Sayfa %d"
+msgstr "Page Down"
 
 #: ../src/gtk/print.cpp:795
 msgid "Page Setup"
@@ -5655,9 +5621,8 @@ msgstr "Sayfa Düzeni"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgid "Page Up"
-msgstr "Sayfa %d"
+msgstr "Page Up"
 
 #: ../src/common/prntbase.cpp:479 ../src/generic/prntdlgg.cpp:828
 msgid "Page setup"
@@ -5665,15 +5630,13 @@ msgstr "Sayfa düzeni"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:56
-#, fuzzy
 msgid "PageDown"
-msgstr "Aşağı"
+msgstr "PageDown"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgid "PageUp"
-msgstr "Sayfalar"
+msgstr "PageUp"
 
 #: ../src/generic/prntdlgg.cpp:216
 msgid "Pages"
@@ -5681,7 +5644,7 @@ msgstr "Sayfalar"
 
 #: ../src/propgrid/advprops.cpp:1715
 msgid "Paint Brush"
-msgstr ""
+msgstr "Boya Fırçası"
 
 #: ../src/generic/prntdlgg.cpp:602 ../src/generic/prntdlgg.cpp:801
 #: ../src/generic/prntdlgg.cpp:842 ../src/generic/prntdlgg.cpp:855
@@ -5713,11 +5676,11 @@ msgstr "Seçimi yapıştırın"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:72
 msgid "Pause"
-msgstr ""
+msgstr "Duraklat"
 
 #: ../src/propgrid/advprops.cpp:1716
 msgid "Pencil"
-msgstr ""
+msgstr "Kalem"
 
 #: ../src/richtext/richtextbulletspage.cpp:159
 #: ../src/richtext/richtextliststylepage.cpp:222
@@ -5731,12 +5694,12 @@ msgstr "İzinler"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:58
 msgid "PgDn"
-msgstr ""
+msgstr "PgDn"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:57
 msgid "PgUp"
-msgstr ""
+msgstr "PgUp"
 
 #: ../src/richtext/richtextbuffer.cpp:12662
 msgid "Picture Properties"
@@ -5782,14 +5745,12 @@ msgid "Please wait while printing..."
 msgstr "Yazdırılıyor, lütfen bekleyin..."
 
 #: ../src/propgrid/advprops.cpp:1717
-#, fuzzy
 msgid "Point Left"
-msgstr "Punto Boyutu"
+msgstr "Sola Ok"
 
 #: ../src/propgrid/advprops.cpp:1718
-#, fuzzy
 msgid "Point Right"
-msgstr "Sağa Yaslansın"
+msgstr "Sağa Ok"
 
 #: ../src/propgrid/advprops.cpp:639
 msgid "Point Size"
@@ -5987,7 +5948,7 @@ msgstr "Özellik Hatası"
 
 #: ../src/propgrid/advprops.cpp:1547
 msgid "Purple"
-msgstr ""
+msgstr "Mor"
 
 #: ../src/common/paper.cpp:113
 msgid "Quarto, 215 x 275 mm"
@@ -5998,9 +5959,8 @@ msgid "Question"
 msgstr "Soru"
 
 #: ../src/propgrid/advprops.cpp:1719
-#, fuzzy
 msgid "Question Arrow"
-msgstr "Soru"
+msgstr "Soru Oku"
 
 #: ../src/common/stockitem.cpp:156
 msgid "Quit"
@@ -6029,9 +5989,8 @@ msgid "Ready"
 msgstr "Hazır"
 
 #: ../src/propgrid/advprops.cpp:1555
-#, fuzzy
 msgid "Red"
-msgstr "Yineleyin"
+msgstr "Kırmızı"
 
 #: ../src/common/stockitem.cpp:185 ../src/stc/stc_i18n.cpp:16
 msgid "Redo"
@@ -6145,7 +6104,7 @@ msgstr "'%s' kaynağı geçerli bir ileti kataloğu değil."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:54
 msgid "Return"
-msgstr ""
+msgstr "Return"
 
 #: ../src/common/stockitem.cpp:189
 msgid "Revert to Saved"
@@ -6157,7 +6116,7 @@ msgstr "Sırt"
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
-msgstr "Sağdan-sola"
+msgstr "Sağ&dan sola"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:60 ../src/richtext/richtextbulletspage.cpp:188
@@ -6167,13 +6126,12 @@ msgid "Right"
 msgstr "Sağ"
 
 #: ../src/propgrid/advprops.cpp:1704
-#, fuzzy
 msgid "Right Arrow"
-msgstr "Sağ"
+msgstr "Sağ Ok"
 
 #: ../src/propgrid/advprops.cpp:1720
 msgid "Right Button"
-msgstr ""
+msgstr "Sağ Düğme"
 
 #: ../src/generic/prntdlgg.cpp:892
 msgid "Right margin (mm):"
@@ -6239,16 +6197,16 @@ msgstr "Betik"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:85
 msgid "Scroll Lock"
-msgstr ""
+msgstr "Scroll Lock"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:85
 msgid "Scroll_lock"
-msgstr ""
+msgstr "Scroll_lock"
 
 #: ../src/propgrid/advprops.cpp:862
 msgid "Scrollbar"
-msgstr ""
+msgstr "Kaydırma çubuğu"
 
 #: ../src/generic/srchctlg.cpp:56 ../src/html/helpwnd.cpp:535
 #: ../src/html/helpwnd.cpp:550
@@ -6295,9 +6253,8 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:74
-#, fuzzy
 msgid "Select"
-msgstr "Seçim"
+msgstr "Seçin"
 
 #: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2450
 #: ../src/osx/textctrl_osx.cpp:587 ../src/richtext/richtextctrl.cpp:337
@@ -6343,7 +6300,7 @@ msgstr "Düzenlenecek liste düzeyini seçer."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:80
 msgid "Separator"
-msgstr ""
+msgstr "Ayıraç"
 
 #: ../src/common/cmdline.cpp:1083
 #, c-format
@@ -6443,7 +6400,7 @@ msgstr "Yazı tipinin önizlemesi görüntülenir."
 
 #: ../src/propgrid/advprops.cpp:1557
 msgid "Silver"
-msgstr ""
+msgstr "Gümüş"
 
 #: ../src/univ/themes/mono.cpp:516
 msgid "Simple monochrome theme"
@@ -6465,23 +6422,23 @@ msgstr "Boyut:"
 
 #: ../src/propgrid/advprops.cpp:1725
 msgid "Sizing"
-msgstr ""
+msgstr "Boyutlandırma"
 
 #: ../src/propgrid/advprops.cpp:1722
 msgid "Sizing N-S"
-msgstr ""
+msgstr "Boyutlandırma K-G"
 
 #: ../src/propgrid/advprops.cpp:1721
 msgid "Sizing NE-SW"
-msgstr ""
+msgstr "Boyutlandırma KD-GB"
 
 #: ../src/propgrid/advprops.cpp:1723
 msgid "Sizing NW-SE"
-msgstr ""
+msgstr "Boyutlandırma KB-GD"
 
 #: ../src/propgrid/advprops.cpp:1724
 msgid "Sizing W-E"
-msgstr ""
+msgstr "Boyutlandırma B-D"
 
 #: ../src/generic/progdlgg.cpp:263 ../src/generic/progdlgg.cpp:774
 #: ../src/msw/progdlg.cpp:801
@@ -6499,7 +6456,7 @@ msgstr "Küçük H&arfler"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:77
 msgid "Snapshot"
-msgstr ""
+msgstr "Ekran görüntüsü"
 
 #: ../src/richtext/richtextborderspage.cpp:614
 msgid "Solid"
@@ -6536,9 +6493,8 @@ msgstr "'%s' ses dosyası desteklenmeyen bir biçimde."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:65
-#, fuzzy
 msgid "Space"
-msgstr "Aralık"
+msgstr "Boşluk"
 
 #: ../src/richtext/richtextliststylepage.cpp:467
 msgid "Spacing"
@@ -6550,7 +6506,7 @@ msgstr "Yazım Denetimi"
 
 #: ../src/propgrid/advprops.cpp:1726
 msgid "Spraycan"
-msgstr ""
+msgstr "Sprey"
 
 #: ../src/richtext/richtextbulletspage.cpp:282
 #: ../src/richtext/richtextliststylepage.cpp:490
@@ -6602,7 +6558,7 @@ msgstr "Al&tyazı"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:81
 msgid "Subtract"
-msgstr ""
+msgstr "Eksi"
 
 #: ../src/richtext/richtextfontpage.cpp:296
 msgid "Supe&rscript"
@@ -6618,7 +6574,7 @@ msgstr "SuperB/SuperB/A3 305 x 487 mm"
 
 #: ../src/richtext/richtextfontpage.cpp:320
 msgid "Suppress hyphe&nation"
-msgstr "Sözcük kesmeyi durdur"
+msgstr "Heceleme e&ngellensin"
 
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Swiss"
@@ -6665,9 +6621,8 @@ msgstr "TIFF: Görsel boyutu anormal büyük."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:66
-#, fuzzy
 msgid "Tab"
-msgstr "Sekmeler"
+msgstr "Sekme"
 
 #: ../src/richtext/richtextbuffer.cpp:11336
 msgid "Table Properties"
@@ -6687,7 +6642,7 @@ msgstr "Sekmeler"
 
 #: ../src/propgrid/advprops.cpp:1548
 msgid "Teal"
-msgstr ""
+msgstr "Yeşilimsi mavi"
 
 #: ../src/generic/fontdlgg.cpp:327
 msgid "Teletype"
@@ -6747,7 +6702,7 @@ msgstr "Artalan rengi."
 #: ../src/richtext/richtextborderspage.cpp:540
 #: ../src/richtext/richtextborderspage.cpp:542
 msgid "The border line style."
-msgstr "Kenarlık stili."
+msgstr "Kenarlık çizgisi stili."
 
 #: ../src/richtext/richtextmarginspage.cpp:267
 #: ../src/richtext/richtextmarginspage.cpp:269
@@ -7083,7 +7038,7 @@ msgstr "'%s' seçeneği için değer belirtilmelidir."
 #: ../src/richtext/richtextborderspage.cpp:588
 #: ../src/richtext/richtextborderspage.cpp:590
 msgid "The value of the corner radius."
-msgstr "Köşe çap değeri."
+msgstr "Köşe yarıçapı değeri."
 
 #: ../src/msw/dialup.cpp:443
 #, c-format
@@ -7195,11 +7150,11 @@ msgstr "PNG içinde çok fazla renk var, görüntü biraz bulanıklaşabilir."
 
 #: ../src/propgrid/advprops.cpp:863
 msgid "Tooltip"
-msgstr ""
+msgstr "İpucu"
 
 #: ../src/propgrid/advprops.cpp:864
 msgid "TooltipText"
-msgstr ""
+msgstr "İpucuMetni"
 
 #: ../src/common/stockitem.cpp:200 ../src/richtext/richtextsizepage.cpp:286
 #: ../src/richtext/richtextsizepage.cpp:290
@@ -7492,7 +7447,7 @@ msgstr "Alt konumun birimleri."
 #: ../src/richtext/richtextborderspage.cpp:599
 #: ../src/richtext/richtextborderspage.cpp:601
 msgid "Units for the corner radius."
-msgstr "Köşe çap birimleri."
+msgstr "Köşe yarıçapı birimi."
 
 #: ../src/richtext/richtextborderspage.cpp:260
 #: ../src/richtext/richtextborderspage.cpp:262
@@ -7769,11 +7724,11 @@ msgstr "Görünümler"
 
 #: ../src/propgrid/advprops.cpp:1727
 msgid "Wait"
-msgstr ""
+msgstr "Bekleme"
 
 #: ../src/propgrid/advprops.cpp:1729
 msgid "Wait Arrow"
-msgstr ""
+msgstr "Bekleme Oku"
 
 #: ../src/unix/epolldispatcher.cpp:213
 #, c-format
@@ -7786,7 +7741,7 @@ msgstr "Uyarı:"
 
 #: ../src/propgrid/advprops.cpp:1728
 msgid "Watch"
-msgstr ""
+msgstr "İzleme"
 
 #: ../src/propgrid/advprops.cpp:659
 msgid "Weight"
@@ -7806,7 +7761,7 @@ msgstr "Yazı tipinin altıçizili olup olmadığı."
 
 #: ../src/propgrid/advprops.cpp:1561
 msgid "White"
-msgstr ""
+msgstr "Beyaz"
 
 #: ../src/generic/fdrepdlg.cpp:144
 msgid "Whole word"
@@ -7825,19 +7780,16 @@ msgid "Win32s on Windows 3.1"
 msgstr "Windows 3.1 üstünde Win32s"
 
 #: ../src/propgrid/advprops.cpp:865
-#, fuzzy
 msgid "Window"
-msgstr "&Pencere"
+msgstr "Pencere"
 
 #: ../src/propgrid/advprops.cpp:866
-#, fuzzy
 msgid "WindowFrame"
-msgstr "&Pencere"
+msgstr "PencereÇerçevesi"
 
 #: ../src/propgrid/advprops.cpp:867
-#, fuzzy
 msgid "WindowText"
-msgstr "&Pencere"
+msgstr "PencereMetni"
 
 #: ../src/msw/utils.cpp:1161
 msgid "Windows 2000"
@@ -7988,21 +7940,18 @@ msgstr "Windows/DOS OEM Kiril (CP 866)"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:109
-#, fuzzy
 msgid "Windows_Left"
-msgstr "Windows 7"
+msgstr "Pencere_Sol"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:111
-#, fuzzy
 msgid "Windows_Menu"
-msgstr "Windows ME"
+msgstr "Pencere_Menü"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:110
-#, fuzzy
 msgid "Windows_Right"
-msgstr "Windows Vista"
+msgstr "Pencere_Sağ"
 
 #: ../src/common/ffile.cpp:150
 #, c-format
@@ -8012,7 +7961,7 @@ msgstr "'%s' dosyasına yazma hatası"
 #: ../src/xml/xml.cpp:844
 #, c-format
 msgid "XML parsing error: '%s' at line %d"
-msgstr "'%s' XML işleme hatası: Satır %d"
+msgstr "XML işleme hatası: '%s' %d satırında "
 
 #: ../src/common/xpmdecod.cpp:796
 msgid "XPM: Malformed pixel data!"
@@ -8030,7 +7979,7 @@ msgstr "XPM: hatalı üstbilgi biçimi!"
 #: ../src/common/xpmdecod.cpp:716 ../src/common/xpmdecod.cpp:725
 #, c-format
 msgid "XPM: malformed colour definition '%s' at line %d!"
-msgstr "XPM: '%s' bozuk renk tanımı, satır %d!"
+msgstr "XPM: '%s' bozuk renk tanımı %d satırında!"
 
 #: ../src/common/xpmdecod.cpp:755
 msgid "XPM: no colors left to use for mask!"
@@ -8043,7 +7992,7 @@ msgstr "XPM: %d satırında budanmış görüntü verisi!"
 
 #: ../src/propgrid/advprops.cpp:1560
 msgid "Yellow"
-msgstr ""
+msgstr "Sarı"
 
 #: ../include/wx/msgdlg.h:276 ../src/common/stockitem.cpp:206
 #: ../src/motif/msgdlg.cpp:196
@@ -8955,238 +8904,3 @@ msgstr "zlib hatası %d"
 #: ../src/richtext/richtextliststylepage.cpp:496
 msgid "~"
 msgstr "~"
-
-#~ msgid "ADD"
-#~ msgstr "ADD"
-
-#~ msgid "BACK"
-#~ msgstr "BACK"
-
-#~ msgid "CANCEL"
-#~ msgstr "CANCEL"
-
-#~ msgid "CAPITAL"
-#~ msgstr "CAPITAL"
-
-#~ msgid "CLEAR"
-#~ msgstr "CLEAR"
-
-#~ msgid "COMMAND"
-#~ msgstr "COMMAND"
-
-#~ msgid "Cannot create mutex."
-#~ msgstr "Muteks oluşturulamadı."
-
-#~ msgid "Cannot resume thread %lu"
-#~ msgstr "%lu iş parçacığı sürdürülemiyor"
-
-#~ msgid "Cannot suspend thread %lu"
-#~ msgstr "%lu iş parçacığı beklemeye alınamadı"
-
-#~ msgid "Couldn't acquire a mutex lock"
-#~ msgstr "Mutex kilidi alınamadı."
-
-#~ msgid "Couldn't get hatch style from wxBrush."
-#~ msgstr "wxBrush tarama stili alınamadı."
-
-#~ msgid "Couldn't release a mutex"
-#~ msgstr "Muteks bırakılamadı."
-
-#~ msgid "DECIMAL"
-#~ msgstr "DECIMAL"
-
-#~ msgid "DEL"
-#~ msgstr "DEL"
-
-#~ msgid "DELETE"
-#~ msgstr "DELETE"
-
-#~ msgid "DIVIDE"
-#~ msgstr "DIVIDE"
-
-#~ msgid "DOWN"
-#~ msgstr "DOWN"
-
-#~ msgid "END"
-#~ msgstr "SON"
-
-#~ msgid "ENTER"
-#~ msgstr "ENTER"
-
-#~ msgid "ESC"
-#~ msgstr "ESC"
-
-#~ msgid "ESCAPE"
-#~ msgstr "ESCAPE"
-
-#~ msgid "EXECUTE"
-#~ msgstr "EXECUTE"
-
-#~ msgid "Execution of command '%s' failed with error: %ul"
-#~ msgstr "'%s' komutu yürütülemedi; hata: %ul"
-
-#~ msgid ""
-#~ "File '%s' already exists.\n"
-#~ "Do you want to replace it?"
-#~ msgstr ""
-#~ "'%s' dosyası zaten var.\n"
-#~ "Üstüne yazılsın mı?"
-
-#~ msgid "HELP"
-#~ msgstr "HELP"
-
-#~ msgid "HOME"
-#~ msgstr "HOME"
-
-#~ msgid "INS"
-#~ msgstr "INS"
-
-#~ msgid "INSERT"
-#~ msgstr "INSERT"
-
-#~ msgid "KP_BEGIN"
-#~ msgstr "KP_BEGIN"
-
-#~ msgid "KP_DECIMAL"
-#~ msgstr "KP_DECIMAL"
-
-#~ msgid "KP_DELETE"
-#~ msgstr "KP_DELETE"
-
-#~ msgid "KP_DIVIDE"
-#~ msgstr "KP_DIVIDE"
-
-#~ msgid "KP_DOWN"
-#~ msgstr "KP_DOWN"
-
-#~ msgid "KP_ENTER"
-#~ msgstr "KP_ENTER"
-
-#~ msgid "KP_EQUAL"
-#~ msgstr "KP_EQUAL"
-
-#~ msgid "KP_HOME"
-#~ msgstr "KP_HOME"
-
-#~ msgid "KP_INSERT"
-#~ msgstr "KP_INSERT"
-
-#~ msgid "KP_LEFT"
-#~ msgstr "KP_LEFT"
-
-#~ msgid "KP_MULTIPLY"
-#~ msgstr "KP_MULTIPLY"
-
-#~ msgid "KP_NEXT"
-#~ msgstr "KP_NEXT"
-
-#~ msgid "KP_PAGEDOWN"
-#~ msgstr "KP_PAGEDOWN"
-
-#~ msgid "KP_PAGEUP"
-#~ msgstr "KP_PAGEUP"
-
-#~ msgid "KP_PRIOR"
-#~ msgstr "KP_PRIOR"
-
-#~ msgid "KP_RIGHT"
-#~ msgstr "KP_RIGHT"
-
-#~ msgid "KP_SEPARATOR"
-#~ msgstr "KP_SEPARATOR"
-
-#~ msgid "KP_SPACE"
-#~ msgstr "KP_SPACE"
-
-#~ msgid "KP_SUBTRACT"
-#~ msgstr "KP_SUBTRACT"
-
-#~ msgid "LEFT"
-#~ msgstr "LEFT"
-
-#~ msgid "MENU"
-#~ msgstr "MENU"
-
-#~ msgid "NUM_LOCK"
-#~ msgstr "NUM_LOCK"
-
-#~ msgid "PAGEDOWN"
-#~ msgstr "PAGEDOWN"
-
-#~ msgid "PAGEUP"
-#~ msgstr "PAGEUP"
-
-#~ msgid "PAUSE"
-#~ msgstr "PAUSE"
-
-#~ msgid "PGDN"
-#~ msgstr "PGDN"
-
-#~ msgid "PGUP"
-#~ msgstr "PGUP"
-
-#~ msgid "PRINT"
-#~ msgstr "PRINT"
-
-#~ msgid "RETURN"
-#~ msgstr "RETURN"
-
-#~ msgid "RIGHT"
-#~ msgstr "RIGHT"
-
-#~ msgid "SCROLL_LOCK"
-#~ msgstr "SCROLL_LOCK"
-
-#~ msgid "SELECT"
-#~ msgstr "SELECT"
-
-#~ msgid "SEPARATOR"
-#~ msgstr "SEPARATOR"
-
-#~ msgid "SNAPSHOT"
-#~ msgstr "SNAPSHOT"
-
-#~ msgid "SPACE"
-#~ msgstr "SPACE"
-
-#~ msgid "SUBTRACT"
-#~ msgstr "SUBTRACT"
-
-#~ msgid "TAB"
-#~ msgstr "TAB"
-
-#~ msgid "The print dialog returned an error."
-#~ msgstr "Yazdırma penceresi bir hata verdi."
-
-#~ msgid "The wxGtkPrinterDC cannot be used."
-#~ msgstr "wxGtkPrinterDC kullanılamıyor."
-
-#~ msgid "Timer creation failed."
-#~ msgstr "Zamanlayıcı oluşturulamadı"
-
-#~ msgid "UP"
-#~ msgstr "UP"
-
-#~ msgid "WINDOWS_LEFT"
-#~ msgstr "WINDOWS_LEFT"
-
-#~ msgid "WINDOWS_MENU"
-#~ msgstr "WINDOWS_MENU"
-
-#~ msgid "WINDOWS_RIGHT"
-#~ msgstr "WINDOWS_RIGHT"
-
-#~ msgid "buffer is too small for Windows directory."
-#~ msgstr "arabellek Windows klasörü için çok küçük."
-
-#~ msgid "not implemented"
-#~ msgstr "eklenmedi"
-
-#~ msgid "wxPrintout::GetPageInfo gives a null maxPage."
-#~ msgstr "wxPrintout::GetPageInfo boş bir maxPage değeri veriyor."
-
-#~ msgid "Event queue overflowed"
-#~ msgstr "Olay kuyruğu taştı"
-
-#~ msgid "percent"
-#~ msgstr "yüzde"
