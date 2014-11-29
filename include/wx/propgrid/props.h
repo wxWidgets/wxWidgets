@@ -361,6 +361,7 @@ public:
     virtual bool IntToValue( wxVariant& variant,
                              int number, int argFlags = 0 ) const;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
+    virtual wxVariant DoGetAttribute( const wxString& name ) const;
 };
 
 // -----------------------------------------------------------------------

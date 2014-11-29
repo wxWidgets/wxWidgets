@@ -1092,6 +1092,23 @@ bool wxBoolProperty::DoSetAttribute( const wxString& name, wxVariant& value )
     return false;
 }
 
+wxVariant wxBoolProperty::DoGetAttribute( const wxString& name ) const
+{
+    wxVariant value;
+#if wxPG_INCLUDE_CHECKBOX
+    if ( name == wxPG_BOOL_USE_CHECKBOX )
+    {
+        value = (bool)((m_flags & wxPG_PROP_USE_CHECKBOX) != 0);
+    }
+    else
+#endif
+    if ( name == wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING )
+    {
+        value = (bool)((m_flags & wxPG_PROP_USE_DCC) != 0);
+    }
+    return value;
+}
+
 // -----------------------------------------------------------------------
 // wxEnumProperty
 // -----------------------------------------------------------------------
