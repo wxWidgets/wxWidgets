@@ -1999,11 +1999,13 @@ int wxPGProperty::GetChoiceSelection() const
 
 void wxPGProperty::SetChoiceSelection( int newValue )
 {
+    wxCHECK_RET( m_choices.IsOk(), wxT("invalid choiceinfo") );
+    wxCHECK_RET( newValue >= 0 && newValue < (int)m_choices.GetCount(),
+                 wxT("New index is out of range") );
+
     // Changes value of a property with choices, but only
     // works if the value type is long or string.
     wxString valueType = GetValue().GetType();
-
-    wxCHECK_RET( m_choices.IsOk(), wxT("invalid choiceinfo") );
 
     if ( valueType == wxPG_VARIANT_TYPE_STRING )
     {
