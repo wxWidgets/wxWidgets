@@ -1426,7 +1426,14 @@ static void DrawSimpleCheckBox( wxWindow* win, wxDC& dc, const wxRect& rect,
 
     if ( state & wxSCB_STATE_BOLD )
     {
+        // wxCONTROL_CHECKED and wxCONTROL_PRESSED flags
+        // are equivalent for wxOSX so we have to use
+        // other flag to indicate "selected state".
+#ifdef __WXOSX__
+        cbFlags |= wxCONTROL_FOCUSED;
+#else
         cbFlags |= wxCONTROL_PRESSED;
+#endif
     }
 
     wxRendererNative::Get().DrawCheckBox(win, dc, r, cbFlags);
