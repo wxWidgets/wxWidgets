@@ -1719,6 +1719,7 @@ bool wxPropertyGridManager::EnsureVisible( wxPGPropArg id )
 
 // -----------------------------------------------------------------------
 
+#if wxUSE_TOOLBAR
 void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
 {
     int id = event.GetId();
@@ -1788,6 +1789,7 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
         }
     }
 }
+#endif
 
 // -----------------------------------------------------------------------
 
