@@ -562,7 +562,7 @@ wxPropertyGrid::~wxPropertyGrid()
     if ( m_processedEvent )
     {
         // We are inside event handler and we cannot delete
-        // editor objects immediatelly. They have to be deleted
+        // editor objects immediately. They have to be deleted
         // later on in the global idle handler.
 #if WXWIN_COMPATIBILITY_3_0
         // Emulate member variable.
@@ -777,7 +777,7 @@ bool wxPropertyGrid::DoSelectAndEdit( wxPGProperty* prop,
     //     ever changed to any other than m_colSelBack.
     //
     // We use this workaround to prevent visible flicker when editing
-    // a cell. Atleast on wxMSW, there is a difficult to find
+    // a cell. At least on wxMSW, there is a difficult to find
     // (and perhaps prevent) redraw somewhere between making property
     // selected and enabling label editing.
     //
@@ -4297,7 +4297,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                     SetupChildEventHandling(m_wndEditor2);
 
                     // If no primary editor, focus to button to allow
-                    // it to interprete ENTER etc.
+                    // it to interpret ENTER etc.
                     // NOTE: Due to problems focusing away from it, this
                     //       has been disabled.
                     /*
@@ -4679,7 +4679,7 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
         if ( m_pState->m_itemsAdded )
             PrepareAfterItemsAdded();
         else
-            // Without this, virtual size (atleast under wxGTK) will be skewed
+            // Without this, virtual size (at least under wxGTK) will be skewed
             RecalculateVirtualSize();
 
         Refresh();

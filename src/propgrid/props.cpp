@@ -269,7 +269,7 @@ bool wxIntProperty::StringToValue( wxVariant& variant, const wxString& text, int
     // the return value.
     if ( text.IsNumber() )
     {
-        // Remove leading zeroes, so that the number is not interpreted as octal
+        // Remove leading zeros, so that the number is not interpreted as octal
         wxString::const_iterator i = text.begin();
         wxString::const_iterator iMax = text.end() - 1;  // Let's allow one, last zero though
 
@@ -818,7 +818,7 @@ const wxString& wxPropertyGrid::DoubleToString(wxString& target,
 
     if ( removeZeroes && precision != 0 && !target.empty() )
     {
-        // Remove excess zeroes (do not remove this code just yet,
+        // Remove excess zeros (do not remove this code just yet,
         // since sprintf can't do the same consistently across platforms).
         wxString::const_iterator i = target.end() - 1;
         size_t new_len = target.length() - 1;
@@ -1670,7 +1670,7 @@ bool wxFlagsProperty::StringToValue( wxVariant& variant, const wxString& text, i
 
     long newFlags = 0;
 
-    // semicolons are no longer valid delimeters
+    // semicolons are no longer valid delimiters
     WX_PG_TOKENIZER1_BEGIN(text,wxS(','))
 
         if ( !token.empty() )
@@ -2679,7 +2679,7 @@ wxString wxArrayStringProperty::ValueToString( wxVariant& WXUNUSED(value),
     return s;
 }
 
-// Converts wxArrayString to a string separated by delimeters and spaces.
+// Converts wxArrayString to a string separated by delimiters and spaces.
 // preDelim is useful for "str1" "str2" style. Set flags to 1 to do slash
 // conversion.
 void
