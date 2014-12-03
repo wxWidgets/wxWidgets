@@ -1752,13 +1752,11 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
         // Page Switching.
 
         int index = -1;
-        size_t i;
-        wxPropertyGridPage* pdc;
 
         // Find page with given id.
-        for ( i=0; i<GetPageCount(); i++ )
+        for ( size_t i = 0; i < GetPageCount(); i++ )
         {
-            pdc = m_arrPages[i];
+            wxPropertyGridPage* pdc = m_arrPages[i];
             if ( pdc->m_toolId == id )
             {
                 index = i;
@@ -1768,14 +1766,25 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
 
         wxASSERT( index >= 0 );
 
-        if ( DoSelectPage( index ) )
+        if ( DoSelectPage(index) )
         {
             // Event dispatching must be last.
-            m_pPropGrid->SendEvent(  wxEVT_PG_PAGE_CHANGED, NULL );
+            m_pPropGrid->SendEvent( wxEVT_PG_PAGE_CHANGED, NULL );
         }
         else
         {
-            // TODO: Depress the old button on toolbar.
+            // Restore button state on toolbar.
+            wxToolBar* tb = wxDynamicCast(event.GetEventObject(), wxToolBar);
+            wxASSERT( tb );
+
+            // Release the current button.
+            tb->ToggleTool(id, false);
+            // Depress the old button.
+            if ( m_selPage >= 0 )
+            {
+                wxPropertyGridPage* prevPage = m_arrPages[m_selPage];
+                tb->ToggleTool(prevPage->m_toolId, true);
+            }
         }
     }
 }
