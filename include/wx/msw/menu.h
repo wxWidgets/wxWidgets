@@ -102,6 +102,9 @@ public:
     wxAcceleratorTable *CreateAccelTable() const;
 #endif // wxUSE_ACCEL
 
+    // get the menu with given handle (recursively)
+    wxMenu* MSWGetMenu(WXHMENU hMenu);
+
 #if wxUSE_OWNER_DRAWN
 
     int GetMaxAccelWidth()
@@ -115,9 +118,6 @@ public:
     {
         m_maxAccelWidth = -1;
     }
-
-    // get the menu with given handle (recursively)
-    wxMenu* MSWGetMenu(WXHMENU hMenu);
 
 private:
     void CalculateMaxAccelWidth();

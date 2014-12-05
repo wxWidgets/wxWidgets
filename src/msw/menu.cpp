@@ -989,7 +989,6 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
 }
 
 // get the menu with given handle (recursively)
-#if wxUSE_OWNER_DRAWN
 wxMenu* wxMenu::MSWGetMenu(WXHMENU hMenu)
 {
     // check self
@@ -1012,7 +1011,6 @@ wxMenu* wxMenu::MSWGetMenu(WXHMENU hMenu)
     // unknown hMenu
     return NULL;
 }
-#endif // wxUSE_OWNER_DRAWN
 
 // ---------------------------------------------------------------------------
 // Menu Bar
@@ -1639,7 +1637,6 @@ wxMenu* wxMenuBar::MSWGetMenu(WXHMENU hMenu)
     if ( hMenu == GetHMenu() )
         return NULL;
 
-#if wxUSE_OWNER_DRAWN
     // query all menus
     for ( size_t n = 0 ; n < GetMenuCount(); ++n )
     {
@@ -1647,7 +1644,6 @@ wxMenu* wxMenuBar::MSWGetMenu(WXHMENU hMenu)
         if ( menu )
             return menu;
     }
-#endif
 
     // unknown hMenu
     return NULL;
