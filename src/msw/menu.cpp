@@ -1629,6 +1629,18 @@ void wxMenuBar::Detach()
     wxMenuBarBase::Detach();
 }
 
+int wxMenuBar::MSWGetTopMenuPos(WXHMENU hMenu) const
+{
+    for ( size_t n = 0 ; n < GetMenuCount(); ++n )
+    {
+        wxMenu* menu = GetMenu(n)->MSWGetMenu(hMenu);
+        if ( menu )
+            return n;
+    }
+
+    return wxNOT_FOUND;
+}
+
 wxMenu* wxMenuBar::MSWGetMenu(WXHMENU hMenu) const
 {
     // If we're called with the handle of the menu bar itself, we can return

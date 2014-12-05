@@ -985,6 +985,22 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
             }
             break;
 
+        case WM_INITMENUPOPUP:
+        case WM_UNINITMENUPOPUP:
+            // We get these messages from the menu bar even if the menu is
+            // disabled, which is unexpected, so ignore them in this case.
+            if ( wxMenuBar* mbar = GetMenuBar() )
+            {
+                const int pos = mbar->MSWGetTopMenuPos((WXHMENU)wParam);
+                if ( pos != wxNOT_FOUND && !mbar->IsEnabledTop(pos) )
+                {
+                    // This event comes from a disabled top level menu, don't
+                    // handle it.
+                    return MSWDefWindowProc(message, wParam, lParam);
+                }
+            }
+            break;
+
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
         case WM_QUERYDRAGICON:
             {
