@@ -288,6 +288,23 @@ static RECT wxGetTBItemRect(HWND hwnd, int index, int id = wxID_NONE)
     return r;
 }
 
+inline bool MSWShouldBeChecked(const wxToolBarToolBase *tool)
+{
+    // Apparently, "checked" state image overrides the "disabled" image
+    // so we need to enforce our custom "disabled" image (if there is any)
+    // to be drawn for checked and disabled button tool.
+    // Note: We believe this erroneous overriding is fixed in MSW 8.
+    if ( wxGetWinVersion() <= wxWinVersion_7 &&
+            tool->GetKind() == wxITEM_CHECK &&
+                tool->GetDisabledBitmap().IsOk() &&
+                    !tool->IsEnabled() )
+    {
+        return false;
+    }
+
+    return tool->IsToggled();
+}
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -976,7 +993,7 @@ bool wxToolBar::Realize()
 
                 if ( tool->IsEnabled() )
                     button.fsState |= TBSTATE_ENABLED;
-                if ( tool->IsToggled() )
+                if ( MSWShouldBeChecked(tool) )
                     button.fsState |= TBSTATE_CHECKED;
 
                 switch ( tool->GetKind() )
@@ -1346,7 +1363,7 @@ bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id_)
         state |= TBSTATE_ENABLED;
     else
         state &= ~TBSTATE_ENABLED;
-    if (tool->IsToggled())
+    if ( MSWShouldBeChecked(tool) )
         state |= TBSTATE_CHECKED;
     else
         state &= ~TBSTATE_CHECKED;
@@ -1359,7 +1376,8 @@ bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id_)
         // revert back
         tool->Toggle(!toggled);
 
-        ::SendMessage(GetHwnd(), TB_CHECKBUTTON, id, MAKELONG(!toggled, 0));
+        ::SendMessage(GetHwnd(), TB_CHECKBUTTON, id,
+                      MAKELONG(MSWShouldBeChecked(tool), 0));
     }
 
     return true;
@@ -1574,12 +1592,19 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
 {
     ::SendMessage(GetHwnd(), TB_ENABLEBUTTON,
                   (WPARAM)tool->GetId(), (LPARAM)MAKELONG(enable, 0));
+
+    // Adjust displayed checked state -- it could have changed if the tool is
+    // disabled and has a custom "disabled state" bitmap.
+    DoToggleTool(tool, tool->IsToggled());
 }
 
 void wxToolBar::DoToggleTool(wxToolBarToolBase *tool, bool toggle)
 {
+    wxASSERT_MSG( tool->IsToggled() == toggle, wxT("Inconsistent tool state") );
+
     ::SendMessage(GetHwnd(), TB_CHECKBUTTON,
-                  (WPARAM)tool->GetId(), (LPARAM)MAKELONG(toggle, 0));
+                  (WPARAM)tool->GetId(),
+                  (LPARAM)MAKELONG(MSWShouldBeChecked(tool), 0));
 }
 
 void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(toggle))
