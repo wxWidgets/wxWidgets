@@ -261,7 +261,6 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
 #if wxUSE_TIMER
         wxGenericTimerImpl::NotifyTimers();
 #endif
-        ProcessIdle();
 
         wxEventLoopBase::DoYieldFor(eventsToProcess);
     }

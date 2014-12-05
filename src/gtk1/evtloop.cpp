@@ -160,14 +160,6 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
     while (gtk_events_pending())
         gtk_main_iteration();
 
-    // It's necessary to call ProcessIdle() to update the frames sizes which
-    // might have been changed (it also will update other things set from
-    // OnUpdateUI() which is a nice (and desired) side effect). But we
-    // call ProcessIdle() only once since this is not meant for longish
-    // background jobs (controlled by wxIdleEvent::RequestMore() and the
-    // return value of Processidle().
-    ProcessIdle();
-
     wxEventLoopBase::DoYieldFor(eventsToProcess);
 }
 

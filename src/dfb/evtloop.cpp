@@ -213,10 +213,5 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
     // handle timers, sockets etc.
     OnNextIteration();
 
-    // it's necessary to call ProcessIdle() to update the frames sizes which
-    // might have been changed (it also will update other things set from
-    // OnUpdateUI() which is a nice (and desired) side effect)
-    while ( ProcessIdle() ) {}
-
     wxEventLoopBase::DoYieldFor(eventsToProcess);
 }

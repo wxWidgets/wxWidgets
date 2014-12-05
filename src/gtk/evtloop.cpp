@@ -385,20 +385,6 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
 
     wxEventLoopBase::DoYieldFor(eventsToProcess);
 
-    if (eventsToProcess != wxEVT_CATEGORY_CLIPBOARD)
-    {
-        // It's necessary to call ProcessIdle() to update the frames sizes which
-        // might have been changed (it also will update other things set from
-        // OnUpdateUI() which is a nice (and desired) side effect). But we
-        // call ProcessIdle() only once since this is not meant for longish
-        // background jobs (controlled by wxIdleEvent::RequestMore() and the
-        // return value of Processidle().
-        ProcessIdle();
-    }
-    //else: if we are inside ~wxClipboardSync() and we call ProcessIdle() and
-    //      the user app contains an UI update handler which calls wxClipboard::IsSupported,
-    //      then we fall into a never-ending loop...
-
     // put all unprocessed GDK events back in the queue
     GdkDisplay* disp = gdk_window_get_display(wxGetTopLevelGDK());
     for (size_t i=0; i<m_arrGdkEvents.GetCount(); i++)

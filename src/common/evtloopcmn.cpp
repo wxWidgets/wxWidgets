@@ -153,14 +153,24 @@ bool wxEventLoopBase::YieldFor(long eventsToProcess)
 void wxEventLoopBase::DoYieldFor(long eventsToProcess)
 {
     // Normally yielding dispatches not only the pending native events, but
-    // also the events pending in wxWidgets itself.
+    // also the events pending in wxWidgets itself and idle events.
     //
     // Notice however that we must not do it if we're asked to process only the
     // events of specific kind, as pending events could be of any kind at all
     // (ideal would be to have a filtering version of ProcessPendingEvents()
-    // too but we don't have this right now).
-    if ( eventsToProcess == wxEVT_CATEGORY_ALL && wxTheApp )
-        wxTheApp->ProcessPendingEvents();
+    // too but we don't have this right now) and idle events are typically
+    // unexpected when yielding for the specific event kinds only.
+    if ( eventsToProcess == wxEVT_CATEGORY_ALL )
+    {
+        if ( wxTheApp )
+            wxTheApp->ProcessPendingEvents();
+
+        // We call it just once, even if it returns true, because we don't want
+        // to get stuck inside wxYield() forever if the application does some
+        // constant background processing in its idle handler, we do need to
+        // get back to the main loop soon.
+        ProcessIdle();
+    }
 }
 
 #if wxUSE_EVENTLOOP_SOURCE
