@@ -430,7 +430,7 @@ wxFont wxMessageDialog::GetMessageFont()
 
 int wxMessageDialog::ShowMessageBox()
 {
-    if ( !wxTheApp->GetTopWindow() )
+    if ( wxTheApp && !wxTheApp->GetTopWindow() )
     {
         // when the message box is shown from wxApp::OnInit() (i.e. before the
         // message loop is entered), this must be done or the next message box
