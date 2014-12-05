@@ -63,6 +63,14 @@ protected:
         wxLogMessage(m_frame, "%s %s in %s", what, action, m_label);
     }
 
+    void LogMenuHighlight(wxMenuEvent& event)
+    {
+        event.Skip();
+
+        wxLogMessage(m_frame, "Item %d selected in %s",
+                     event.GetMenuId(), m_label);
+    }
+
     const wxString m_label;
     wxFrame* const m_frame;
 
@@ -90,6 +98,7 @@ private:
     void OnCloseAll(wxCommandEvent& event);
 
     void OnMenuOpen(wxMenuEvent& event) { LogMenuOpenClose(event, "opened"); }
+    void OnMenuHighlight(wxMenuEvent& event) { LogMenuHighlight(event); }
     void OnMenuClose(wxMenuEvent& event) { LogMenuOpenClose(event, "closed"); }
 
     void OnClose(wxCloseEvent& event);
@@ -120,6 +129,7 @@ private:
     void OnSize(wxSizeEvent& event);
     void OnMove(wxMoveEvent& event);
     void OnMenuOpen(wxMenuEvent& event) { LogMenuOpenClose(event, "opened"); }
+    void OnMenuHighlight(wxMenuEvent& event) { LogMenuHighlight(event); }
     void OnMenuClose(wxMenuEvent& event) { LogMenuOpenClose(event, "closed"); }
     void OnCloseWindow(wxCloseEvent& event);
 

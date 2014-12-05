@@ -71,6 +71,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
     EVT_MENU(wxID_CLOSE_ALL, MyFrame::OnCloseAll)
 
     EVT_MENU_OPEN(MyFrame::OnMenuOpen)
+    EVT_MENU_HIGHLIGHT(wxID_ABOUT, MyFrame::OnMenuHighlight)
+    EVT_MENU_HIGHLIGHT(MDI_REFRESH, MyFrame::OnMenuHighlight)
     EVT_MENU_CLOSE(MyFrame::OnMenuClose)
 
     EVT_CLOSE(MyFrame::OnClose)
@@ -95,6 +97,8 @@ wxBEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
     EVT_MOVE(MyChild::OnMove)
 
     EVT_MENU_OPEN(MyChild::OnMenuOpen)
+    EVT_MENU_HIGHLIGHT(wxID_ABOUT, MyChild::OnMenuHighlight)
+    EVT_MENU_HIGHLIGHT(MDI_REFRESH, MyChild::OnMenuHighlight)
     EVT_MENU_CLOSE(MyChild::OnMenuClose)
 
     EVT_CLOSE(MyChild::OnCloseWindow)
