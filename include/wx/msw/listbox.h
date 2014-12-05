@@ -26,7 +26,7 @@
   WX_DEFINE_EXPORTED_ARRAY_PTR(wxOwnerDrawn *, wxListBoxItemsArray);
 #endif // wxUSE_OWNER_DRAWN
 
-// forward decl for GetSelections()
+// forward declaration for GetSelections()
 class WXDLLIMPEXP_FWD_BASE wxArrayInt;
 
 // ----------------------------------------------------------------------------
@@ -130,7 +130,7 @@ public:
     WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
     // under XP when using "transition effect for menus and tooltips" if we
-    // return true for WM_PRINTCLIENT here then it causes noticable slowdown
+    // return true for WM_PRINTCLIENT here then it causes noticeable slowdown
     virtual bool MSWShouldPropagatePrintChild()
     {
         return false;

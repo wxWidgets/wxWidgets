@@ -35,7 +35,7 @@ public:
     GetRGB(int pixel,
            unsigned char *red, unsigned char *green, unsigned char *blue) const;
 
-    // implemetation
+    // implementation
     WXHPALETTE GetHPALETTE() const;
     void SetHPALETTE(WXHPALETTE pal);
 

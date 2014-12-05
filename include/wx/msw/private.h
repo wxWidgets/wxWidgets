@@ -222,7 +222,7 @@ protected:
     WXHANDLE m_handle;
 };
 
-// a template to make initializing Windows styructs less painful: it zeroes all
+// a template to make initializing Windows structs less painful: it zeros all
 // the struct fields and also sets cbSize member to the correct value (and so
 // can be only used with structures which have this member...)
 template <class T>
@@ -344,7 +344,7 @@ extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w = 0, int h = 0);
 // mask is created using light grey as the transparent colour.
 extern HICON wxBitmapToHICON(const wxBitmap& bmp);
 
-// Same requirments as above apply and the bitmap must also have the correct
+// Same requirements as above apply and the bitmap must also have the correct
 // size.
 extern
 HCURSOR wxBitmapToHCURSOR(const wxBitmap& bmp, int hotSpotX, int hotSpotY);
@@ -861,7 +861,7 @@ private:
 
 // ---------------------------------------------------------------------------
 // macros to make casting between WXFOO and FOO a bit easier: the GetFoo()
-// returns Foo cast to the Windows type for oruselves, while GetFooOf() takes
+// returns Foo cast to the Windows type for ourselves, while GetFooOf() takes
 // an argument which should be a pointer or reference to the object of the
 // corresponding class (this depends on the macro)
 // ---------------------------------------------------------------------------
