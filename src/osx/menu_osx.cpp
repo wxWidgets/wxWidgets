@@ -555,22 +555,7 @@ void wxMenu::HandleMenuClosed()
 
 bool wxMenu::DoHandleMenuEvent(wxEvent& wxevent)
 {
-    wxevent.SetEventObject(this);
-    wxEvtHandler* handler = GetEventHandler();
-    if (handler && handler->ProcessEvent(wxevent))
-    {
-        return true;
-    }
-    else
-    {
-        wxWindow *win = GetWindow();
-        if (win)
-        {
-            if ( win->HandleWindowEvent(wxevent) )
-                return true;
-        }
-    }
-    return false;
+    return ProcessMenuEvent(this, wxevent, GetWindow());
 }
 
 // Menu Bar

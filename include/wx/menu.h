@@ -309,6 +309,13 @@ public:
     // the checked parameter may have boolean value or -1 for uncheckable items
     bool SendEvent(int itemid, int checked = -1);
 
+    // called to dispatch a wxMenuEvent to the right recipients, menu pointer
+    // can be NULL if we failed to find the associated menu (this happens at
+    // least in wxMSW for the events from the system menus)
+    static
+    bool ProcessMenuEvent(wxMenu* menu, wxMenuEvent& event, wxWindow* win);
+
+
     // compatibility: these functions are deprecated, use the new ones instead
     // -----------------------------------------------------------------------
 
@@ -390,8 +397,8 @@ protected:
 
 
 private:
-    // Helper of SendEvent(): sends the event to its intended recipients,
-    // returns true if it was processed.
+    // Common part of SendEvent() and ProcessMenuEvent(): sends the event to
+    // its intended recipients, returns true if it was processed.
     static bool DoProcessEvent(wxMenuBase* menu, wxEvent& event, wxWindow* win);
 
     wxDECLARE_NO_COPY_CLASS(wxMenuBase);

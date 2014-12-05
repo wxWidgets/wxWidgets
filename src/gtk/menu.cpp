@@ -74,16 +74,7 @@ static void DoCommonMenuCallbackCode(wxMenu *menu, wxMenuEvent& event)
     if ( !IsMenuEventAllowed(menu) )
         return;
 
-    event.SetEventObject( menu );
-
-    wxEvtHandler* handler = menu->GetEventHandler();
-    if (handler && handler->SafelyProcessEvent(event))
-        return;
-
-    wxWindow *win = menu->GetWindow();
-    wxCHECK_RET( win, "event for a menu without associated window?" );
-
-    win->HandleWindowEvent( event );
+    wxMenu::ProcessMenuEvent(menu, event, menu->GetWindow());
 }
 
 // Return the top level menu containing this menu (possibly this menu itself).

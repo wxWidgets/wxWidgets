@@ -2269,9 +2269,7 @@ wxWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
         item = wxID_NONE;
 
     wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item);
-    event.SetEventObject(this);
-
-    if ( HandleWindowEvent(event) )
+    if ( wxMenu::ProcessMenuEvent(MSWFindMenuFromHMENU(hMenu), event, this) )
         return true;
 
     // by default, i.e. if the event wasn't handled above, clear the status bar
@@ -2291,9 +2289,8 @@ bool
 wxWindowMSW::DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu)
 {
     wxMenuEvent event(evtType, menu && !menu->IsAttached() ? wxID_ANY : 0, menu);
-    event.SetEventObject(menu);
 
-    return HandleWindowEvent(event);
+    return wxMenu::ProcessMenuEvent(menu, event, this);
 }
 
 bool wxWindowMSW::HandleMenuPopup(wxEventType evtType, WXHMENU hMenu)

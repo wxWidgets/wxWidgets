@@ -93,6 +93,7 @@ All (GUI):
 - Add wxUIActionSimulator::Select().
 - Add wxOwnerDrawnComboBox::Is{List,Text}Empty() methods.
 - Fix creating/removing mode buttons in wxPG manager (Artur Wieczorek).
+- Harmonize wxMenuEvent handling between all major ports.
 
 wxGTK:
 

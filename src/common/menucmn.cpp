@@ -651,33 +651,62 @@ bool wxMenuBase::DoProcessEvent(wxMenuBase* menu, wxEvent& event, wxWindow* win)
 {
     event.SetEventObject(menu);
 
-    wxMenuBar* const mb = menu->GetMenuBar();
-
-    // Try the menu's event handler first
-    wxEvtHandler *handler = menu->GetEventHandler();
-    if ( handler )
+    if ( menu )
     {
-        // Indicate to the event processing code that we're going to pass this
-        // event to another handler if it's not processed here to prevent it
-        // from passing the event to wxTheApp: this will be done below if we do
-        // have the associated window.
-        if ( win || mb )
-            event.SetWillBeProcessedAgain();
+        wxMenuBar* const mb = menu->GetMenuBar();
 
-        if ( handler->SafelyProcessEvent(event) )
-            return true;
+        // Try the menu's event handler first
+        wxEvtHandler *handler = menu->GetEventHandler();
+        if ( handler )
+        {
+            // Indicate to the event processing code that we're going to pass
+            // this event to another handler if it's not processed here to
+            // prevent it from passing the event to wxTheApp: this will be done
+            // below if we do have the associated window.
+            if ( win || mb )
+                event.SetWillBeProcessedAgain();
+
+            if ( handler->SafelyProcessEvent(event) )
+                return true;
+        }
+
+        // If this menu is part of the menu bar, try the event there. this
+        if ( mb )
+        {
+            if ( mb->HandleWindowEvent(event) )
+                return true;
+
+            // If this already propagated it upwards to the window containing
+            // the menu bar, we don't have to handle it in this window again
+            // below.
+            if ( event.ShouldPropagate() )
+                return false;
+        }
     }
-
-    // If this menu is part of the menu bar, process the event there: this will
-    // also propagate it upwards to the window containing the menu bar.
-    if ( mb )
-        return mb->HandleWindowEvent(event);
 
     // Try the window the menu was popped up from.
     if ( win )
         return win->HandleWindowEvent(event);
 
     // Not processed.
+    return false;
+}
+
+/* static */
+bool
+wxMenuBase::ProcessMenuEvent(wxMenu* menu, wxMenuEvent& event, wxWindow* win)
+{
+    // Try to process the event in the usual places first.
+    if ( DoProcessEvent(menu, event, win) )
+        return true;
+
+    // But the menu events should also reach the TLW parent if they were not
+    // processed before so, as it's not a command event and hence doesn't
+    // bubble up by default, send it there explicitly if not done yet.
+    wxWindow* const tlw = wxGetTopLevelParent(win);
+    if ( tlw != win && tlw->HandleWindowEvent(event) )
+        return true;
+
     return false;
 }
 
