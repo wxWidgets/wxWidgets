@@ -547,19 +547,6 @@ int wxMessageDialog::ShowMessageBox()
     else
         msStyle |= MB_TASKMODAL;
 
-    // per MSDN documentation for MessageBox() we can prefix the message with 2
-    // right-to-left mark characters to tell the function to use RTL layout
-    // (unfortunately this only works in Unicode builds)
-    wxString message = GetFullMessage();
-#if wxUSE_UNICODE
-    if ( wxApp::MSWGetDefaultLayout(m_parent) == wxLayout_RightToLeft )
-    {
-        // NB: not all compilers support \u escapes
-        static const wchar_t wchRLM = 0x200f;
-        message.Prepend(wxString(wchRLM, 2));
-    }
-#endif // wxUSE_UNICODE
-
 #if wxUSE_MSGBOX_HOOK
     // install the hook in any case as we don't know in advance if the message
     // box is not going to be too big (requiring the replacement of the static
@@ -571,7 +558,13 @@ int wxMessageDialog::ShowMessageBox()
 #endif // wxUSE_MSGBOX_HOOK
 
     // do show the dialog
-    int msAns = MessageBox(hWnd, message.t_str(), m_caption.t_str(), msStyle);
+    const int msAns = MessageBox
+                      (
+                        hWnd,
+                        GetFullMessage().t_str(),
+                        m_caption.t_str(),
+                        msStyle
+                      );
 
     return MSWTranslateReturnCode(msAns);
 }
