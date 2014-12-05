@@ -422,6 +422,21 @@ public:
                             wxLocaleCategory cat = wxLOCALE_CAT_DEFAULT);
 
     /**
+        Get the values of a locale datum in the OS locale.
+
+        This function is similar to GetInfo() and, in fact, identical to it
+        under non-MSW systems. Under MSW it differs from it when no locale had
+        been explicitly set: GetInfo() returns the values corresponding to the
+        "C" locale used by the standard library functions, while this method
+        returns the values used by the OS which, in Windows case, correspond to
+        the user settings in the control panel.
+
+        @since 3.1.0
+     */
+    static wxString GetOSInfo(wxLocaleInfo index,
+                              wxLocaleCategory cat = wxLOCALE_CAT_DEFAULT);
+
+    /**
         Initializes the wxLocale instance.
 
         The call of this function has several global side effects which you should

@@ -1420,59 +1420,11 @@ LCTYPE GetLCTYPEFormatFromLocalInfo(wxLocaleInfo index)
     return 0;
 }
 
-} // anonymous namespace
-
-/* static */
-wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
+wxString
+GetInfoFromLCID(LCID lcid,
+                wxLocaleInfo index,
+                wxLocaleCategory cat = wxLOCALE_CAT_DEFAULT)
 {
-    const wxLanguageInfo * const
-        info = wxGetLocale() ? GetLanguageInfo(wxGetLocale()->GetLanguage())
-                             : NULL;
-    if ( !info )
-    {
-        // wxSetLocale() hadn't been called yet of failed, hence CRT must be
-        // using "C" locale -- but check it to detect bugs that would happen if
-        // this were not the case.
-        wxASSERT_MSG( strcmp(setlocale(LC_ALL, NULL), "C") == 0,
-                      wxS("You probably called setlocale() directly instead ")
-                      wxS("of using wxLocale and now there is a ")
-                      wxS("mismatch between C/C++ and Windows locale.\n")
-                      wxS("Things are going to break, please only change ")
-                      wxS("locale by creating wxLocale objects to avoid this!") );
-
-
-        // Return the hard coded values for C locale. This is really the right
-        // thing to do as there is no LCID we can use in the code below in this
-        // case, even LOCALE_INVARIANT is not quite the same as C locale (the
-        // only difference is that it uses %Y instead of %y in the date format
-        // but this difference is significant enough).
-        switch ( index )
-        {
-            case wxLOCALE_THOUSANDS_SEP:
-                return wxString();
-
-            case wxLOCALE_DECIMAL_POINT:
-                return ".";
-
-            case wxLOCALE_SHORT_DATE_FMT:
-                return "%m/%d/%y";
-
-            case wxLOCALE_LONG_DATE_FMT:
-                return "%A, %B %d, %Y";
-
-            case wxLOCALE_TIME_FMT:
-                return "%H:%M:%S";
-
-            case wxLOCALE_DATE_TIME_FMT:
-                return "%m/%d/%y %H:%M:%S";
-
-            default:
-                wxFAIL_MSG( "unknown wxLocaleInfo" );
-        }
-    }
-
-    const wxUint32 lcid = info->GetLCID();
-
     wxString str;
 
     wxChar buf[256];
@@ -1529,11 +1481,13 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
             // ("%#c" uses long date but we have no way to specify the
             // alternate representation here)
             {
-                const wxString datefmt = GetInfo(wxLOCALE_SHORT_DATE_FMT);
+                const wxString
+                    datefmt = GetInfoFromLCID(lcid, wxLOCALE_SHORT_DATE_FMT);
                 if ( datefmt.empty() )
                     break;
 
-                const wxString timefmt = GetInfo(wxLOCALE_TIME_FMT);
+                const wxString
+                    timefmt = GetInfoFromLCID(lcid, wxLOCALE_TIME_FMT);
                 if ( timefmt.empty() )
                     break;
 
@@ -1546,6 +1500,66 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
     }
 
     return str;
+}
+
+} // anonymous namespace
+
+/* static */
+wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
+{
+    const wxLanguageInfo * const
+        info = wxGetLocale() ? GetLanguageInfo(wxGetLocale()->GetLanguage())
+                             : NULL;
+    if ( !info )
+    {
+        // wxSetLocale() hadn't been called yet of failed, hence CRT must be
+        // using "C" locale -- but check it to detect bugs that would happen if
+        // this were not the case.
+        wxASSERT_MSG( strcmp(setlocale(LC_ALL, NULL), "C") == 0,
+                      wxS("You probably called setlocale() directly instead ")
+                      wxS("of using wxLocale and now there is a ")
+                      wxS("mismatch between C/C++ and Windows locale.\n")
+                      wxS("Things are going to break, please only change ")
+                      wxS("locale by creating wxLocale objects to avoid this!") );
+
+
+        // Return the hard coded values for C locale. This is really the right
+        // thing to do as there is no LCID we can use in the code below in this
+        // case, even LOCALE_INVARIANT is not quite the same as C locale (the
+        // only difference is that it uses %Y instead of %y in the date format
+        // but this difference is significant enough).
+        switch ( index )
+        {
+            case wxLOCALE_THOUSANDS_SEP:
+                return wxString();
+
+            case wxLOCALE_DECIMAL_POINT:
+                return ".";
+
+            case wxLOCALE_SHORT_DATE_FMT:
+                return "%m/%d/%y";
+
+            case wxLOCALE_LONG_DATE_FMT:
+                return "%A, %B %d, %Y";
+
+            case wxLOCALE_TIME_FMT:
+                return "%H:%M:%S";
+
+            case wxLOCALE_DATE_TIME_FMT:
+                return "%m/%d/%y %H:%M:%S";
+
+            default:
+                wxFAIL_MSG( "unknown wxLocaleInfo" );
+        }
+    }
+
+    return GetInfoFromLCID(info->GetLCID(), index, cat);
+}
+
+/* static */
+wxString wxLocale::GetOSInfo(wxLocaleInfo index, wxLocaleCategory cat)
+{
+    return GetInfoFromLCID(::GetThreadLocale(), index, cat);
 }
 
 #elif defined(__WXOSX__)
@@ -1761,6 +1775,16 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
 }
 
 #endif // platform
+
+#ifndef __WINDOWS__
+
+/* static */
+wxString wxLocale::GetOSInfo(wxLocaleInfo index, wxLocaleCategory cat)
+{
+    return GetInfo(index, cat);
+}
+
+#endif // !__WINDOWS__
 
 // ----------------------------------------------------------------------------
 // global functions and variables
