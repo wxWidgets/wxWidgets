@@ -74,6 +74,17 @@ public:
     // in the previous GetRegisteredClassName() calls
     static bool IsRegisteredClassName(const wxString& name);
 
+    // Return the layout direction to use for a window by default.
+    //
+    // If the parent is specified, use the same layout direction as it uses.
+    // Otherwise use the default global layout, either from wxTheApp, if it
+    // exists, or Windows itself.
+    //
+    // Notice that this normally should not be used for the child windows as
+    // they already inherit, just dialogs such as wxMessageDialog may want to
+    // use it.
+    static wxLayoutDirection MSWGetDefaultLayout(wxWindow* parent = NULL);
+
 protected:
     int    m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
 

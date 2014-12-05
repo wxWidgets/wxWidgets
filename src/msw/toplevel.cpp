@@ -518,7 +518,7 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
     const wxSize sz = IsAlwaysMaximized() ? wxDefaultSize : size;
 
 #ifndef __WXWINCE__
-    if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+    if ( wxApp::MSWGetDefaultLayout(m_parent) == wxLayout_RightToLeft )
         exflags |= WS_EX_LAYOUTRTL;
 #endif
 
@@ -585,7 +585,7 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         dlgTemplate->style |= WS_POPUP;
 
 #ifndef __WXWINCE__
-        if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+        if ( wxApp::MSWGetDefaultLayout(m_parent) == wxLayout_RightToLeft )
         {
             dlgTemplate->dwExtendedStyle |= WS_EX_LAYOUTRTL;
         }
@@ -870,7 +870,7 @@ void wxTopLevelWindowMSW::Restore()
 void wxTopLevelWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
 {
     if ( dir == wxLayout_Default )
-        dir = wxTheApp->GetLayoutDirection();
+        dir = wxApp::MSWGetDefaultLayout(m_parent);
 
     if ( dir != wxLayout_Default )
         wxTopLevelWindowBase::SetLayoutDirection(dir);

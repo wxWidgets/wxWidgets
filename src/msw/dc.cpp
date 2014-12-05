@@ -2913,7 +2913,7 @@ void wxMSWDCImpl::SetLayoutDirection(wxLayoutDirection dir)
 {
     if ( dir == wxLayout_Default )
     {
-        dir = wxTheApp->GetLayoutDirection();
+        dir = wxApp::MSWGetDefaultLayout(GetWindow());
         if ( dir == wxLayout_Default )
             return;
     }

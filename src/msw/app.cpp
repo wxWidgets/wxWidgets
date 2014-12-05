@@ -1008,4 +1008,35 @@ terminate the program,\r\n\
     }
 }
 
+// ----------------------------------------------------------------------------
+// Layout direction
+// ----------------------------------------------------------------------------
+
+/* static */
+wxLayoutDirection wxApp::MSWGetDefaultLayout(wxWindow* parent)
+{
+    wxLayoutDirection dir = wxLayout_Default;
+
+    if ( parent )
+        dir = parent->GetLayoutDirection();
+
+    if ( dir == wxLayout_Default )
+    {
+        if ( wxTheApp )
+            dir = wxTheApp->GetLayoutDirection();
+    }
+
+    if ( dir == wxLayout_Default )
+    {
+        DWORD dwLayout;
+        if ( ::GetProcessDefaultLayout(&dwLayout) )
+        {
+            dir = dwLayout == LAYOUT_RTL ? wxLayout_RightToLeft
+                                         : wxLayout_LeftToRight;
+        }
+    }
+
+    return dir;
+}
+
 #endif // wxUSE_EXCEPTIONS

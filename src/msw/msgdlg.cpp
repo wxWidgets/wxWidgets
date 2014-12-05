@@ -538,7 +538,7 @@ int wxMessageDialog::ShowMessageBox()
         msStyle |= MB_TOPMOST;
 
 #ifndef __WXWINCE__
-    if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+    if ( wxApp::MSWGetDefaultLayout(m_parent) == wxLayout_RightToLeft )
         msStyle |= MB_RTLREADING | MB_RIGHT;
 #endif
 
@@ -552,7 +552,7 @@ int wxMessageDialog::ShowMessageBox()
     // (unfortunately this only works in Unicode builds)
     wxString message = GetFullMessage();
 #if wxUSE_UNICODE
-    if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+    if ( wxApp::MSWGetDefaultLayout(m_parent) == wxLayout_RightToLeft )
     {
         // NB: not all compilers support \u escapes
         static const wchar_t wchRLM = 0x200f;
@@ -702,7 +702,7 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
     // use the top level window as parent if none specified
     tdc.hwndParent = parent ? GetHwndOf(parent) : NULL;
 
-    if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+    if ( wxApp::MSWGetDefaultLayout(parent) == wxLayout_RightToLeft )
         tdc.dwFlags |= TDF_RTL_LAYOUT;
 
     // If we have both the main and extended messages, just use them as
