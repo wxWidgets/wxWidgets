@@ -542,7 +542,7 @@ public:
     bool HandleMenuPopup(wxEventType evtType, WXHMENU hMenu);
 
     // Command part of HandleMenuPopup() and HandleExitMenuLoop().
-    virtual bool DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu, bool popup);
+    virtual bool DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu);
 
     // Find the menu corresponding to the given handle.
     virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu);

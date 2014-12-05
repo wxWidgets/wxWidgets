@@ -491,10 +491,10 @@ bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
     return wxWindow::HandleMenuSelect(nItem, flags, hMenu);
 }
 
-bool wxFrame::DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu, bool popup)
+bool wxFrame::DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu)
 {
     // Update the menu depth when dealing with the top level menus.
-    if ( !popup )
+    if ( !menu || menu->IsAttached() )
     {
         if ( evtType == wxEVT_MENU_OPEN )
         {
@@ -512,12 +512,18 @@ bool wxFrame::DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu, bool p
         }
     }
 
-    return wxWindow::DoSendMenuOpenCloseEvent(evtType, menu, popup);
+    return wxWindow::DoSendMenuOpenCloseEvent(evtType, menu);
 }
 
 wxMenu* wxFrame::MSWFindMenuFromHMENU(WXHMENU hMenu)
 {
-    return GetMenuBar() ? GetMenuBar()->MSWGetMenu(hMenu) : NULL;
+    if ( wxMenuBar* mbar = GetMenuBar() )
+    {
+        if ( wxMenu* menu = mbar->MSWGetMenu(hMenu) )
+            return menu;
+    }
+
+    return wxFrameBase::MSWFindMenuFromHMENU(hMenu);
 }
 #endif // wxUSE_MENUS && !defined(__WXUNIVERSAL__)
 

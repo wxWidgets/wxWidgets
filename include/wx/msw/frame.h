@@ -108,7 +108,7 @@ public:
     virtual WXHMENU MSWGetActiveMenu() const { return m_hMenu; }
 
     virtual bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);
-    virtual bool DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu, bool popup);
+    virtual bool DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu);
 
     // Look up the menu in the menu bar.
     virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu);
