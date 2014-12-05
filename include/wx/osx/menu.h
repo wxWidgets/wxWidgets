@@ -65,7 +65,6 @@ protected:
     // that are expected in the app menu
     void DoRearrange() ;
 
-    bool DoHandleMenuEvent( wxEvent& evt );
     virtual wxMenuItem* DoAppend(wxMenuItem *item);
     virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item);
     virtual wxMenuItem* DoRemove(wxMenuItem *item);
