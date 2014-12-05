@@ -1629,8 +1629,7 @@ void wxMenuBar::Detach()
     wxMenuBarBase::Detach();
 }
 
-// get the menu with given handle (recursively)
-wxMenu* wxMenuBar::MSWGetMenu(WXHMENU hMenu)
+wxMenu* wxMenuBar::MSWGetMenu(WXHMENU hMenu) const
 {
     // If we're called with the handle of the menu bar itself, we can return
     // immediately as it certainly can't be the handle of one of our menus.

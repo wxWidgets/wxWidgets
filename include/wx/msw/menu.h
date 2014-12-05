@@ -235,8 +235,8 @@ public:
     void Refresh( bool eraseBackground,
                           const wxRect *rect = (const wxRect *) NULL ) { wxWindow::Refresh(eraseBackground, rect); }
 
-    // get the menu with given handle (recursively)
-    wxMenu* MSWGetMenu(WXHMENU hMenu);
+    // Get a top level or sub menu with given handle (recursively).
+    wxMenu* MSWGetMenu(WXHMENU hMenu) const;
 
 protected:
     // common part of all ctors
