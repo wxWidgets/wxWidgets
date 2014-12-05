@@ -229,11 +229,7 @@ void wxMimeTypesManagerImpl::LoadXDGAppsFilesFromDir(const wxString& dirname)
         cont = dir.GetNext(&filename);
     }
 
-#if 0
-    // RR: I'm not sure this makes any sense. On my system we'll just
-    //     scan the YAST2 and other useless directories
-
-    // Look recursively into subdirs
+    // Recurse into subdirs, which on KDE may hold most of the .desktop files
     cont = dir.GetFirst(&filename, wxEmptyString, wxDIR_DIRS);
     while (cont)
     {
@@ -242,7 +238,6 @@ void wxMimeTypesManagerImpl::LoadXDGAppsFilesFromDir(const wxString& dirname)
         LoadXDGAppsFilesFromDir( p.GetPath() );
         cont = dir.GetNext(&filename);
     }
-#endif
 }
 
 
