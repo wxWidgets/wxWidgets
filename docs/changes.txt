@@ -596,6 +596,7 @@ wxMSW:
 - Fix initial text value of wxSpinCtrlDouble (Laurent Poujoulat).
 - Fix best size calculation for bitmaps with buttons (Artur Wieczorek).
 - Fix size of the icon returned from wxFSVolume::GetIcon() (troelsk).
+- Fix autosize after expanding/collapsing items in wxDataViewCtrl (ciglesias).
 
 
 3.0.2: (released 2014-10-06)
