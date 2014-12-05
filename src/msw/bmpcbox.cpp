@@ -409,7 +409,7 @@ bool wxBitmapComboBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 
     // Draw default for item -1, which means 'focus rect only'
     if ( pos == -1 )
-        return FALSE;
+        return false;
 
     int flags = 0;
     if ( lpDrawItem->itemState & ODS_COMBOBOXEDIT )
