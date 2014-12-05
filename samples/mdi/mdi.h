@@ -56,12 +56,11 @@ protected:
 
         wxMenu* const menu = event.GetMenu();
         if ( menu )
-            what.Printf("Menu with title \"%s\"", menu->GetTitle());
+            what.Printf("Menu \"%s\"", menu->GetTitle());
         else
             what = "Unknown menu";
 
-        wxLogMessage(m_frame, "%s was %s in the %s frame",
-                     what, action, m_label);
+        wxLogMessage(m_frame, "%s %s in %s", what, action, m_label);
     }
 
     const wxString m_label;
