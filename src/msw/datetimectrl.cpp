@@ -133,9 +133,7 @@ wxSize wxDateTimePickerCtrl::DoGetBestSize() const
     if ( MSWAllowsNone() )
         x += 3*GetCharWidth();
 
-    wxSize best(x, EDIT_HEIGHT_FROM_CHAR_HEIGHT(y));
-    CacheBestSize(best);
-    return best;
+    return wxSize(x, EDIT_HEIGHT_FROM_CHAR_HEIGHT(y));
 }
 
 bool
