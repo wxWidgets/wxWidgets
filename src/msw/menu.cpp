@@ -1634,8 +1634,10 @@ void wxMenuBar::Detach()
 // get the menu with given handle (recursively)
 wxMenu* wxMenuBar::MSWGetMenu(WXHMENU hMenu)
 {
-    wxCHECK_MSG( GetHMenu() != hMenu, NULL,
-                 wxT("wxMenuBar::MSWGetMenu(): menu handle is wxMenuBar, not wxMenu") );
+    // If we're called with the handle of the menu bar itself, we can return
+    // immediately as it certainly can't be the handle of one of our menus.
+    if ( hMenu == GetHMenu() )
+        return NULL;
 
 #if wxUSE_OWNER_DRAWN
     // query all menus
