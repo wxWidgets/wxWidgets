@@ -715,6 +715,7 @@ wxMSW:
 - Fix using Esc as accelerator in the menus.
 - Fix wrong initial status bar height in some cases (Artur Wieczorek).
 - Correct wxGetOsDescription() for Windows 10 (Tobias Taschner).
+- Fix appearance of checked disabled wxToolBar tools with custom images.
 
 
 3.0.1: (released 2014-06-15)
