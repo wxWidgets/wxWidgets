@@ -278,6 +278,26 @@ public:
                                      const wxString& name = wxToolBarNameStr);
 
     /**
+        Method used to show help string of the selected menu toolbar item.
+
+        This method is called by the default @c wxEVT_MENU_HIGHLIGHT event
+        handler and also by wxToolBar to show the optional help string
+        associated with the selected menu or toolbar item. It can be overridden
+        if the default behaviour of showing this string in the frame status bar
+        is not appropriate.
+
+        @param text The help string to show, may be empty. The default
+            implementation simply shows this string in the frame status bar
+            (after remembering its previous text to restore it later).
+        @param show Whether the help should be shown or hidden. The default
+            implementation restores the previously saved status bar text when
+            it is @false.
+
+        @see SetStatusBarPane()
+     */
+    virtual void DoGiveHelp(const wxString& text, bool show);
+
+    /**
         Returns the origin of the frame client area (in client coordinates).
         It may be different from (0, 0) if the frame has a toolbar.
     */
