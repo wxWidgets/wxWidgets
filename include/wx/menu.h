@@ -388,6 +388,12 @@ protected:
 
     static bool      ms_locked;
 
+
+private:
+    // Helper of SendEvent(): sends the event to its intended recipients,
+    // returns true if it was processed.
+    static bool DoProcessEvent(wxMenuBase* menu, wxEvent& event, wxWindow* win);
+
     wxDECLARE_NO_COPY_CLASS(wxMenuBase);
 };
 

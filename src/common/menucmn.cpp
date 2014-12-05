@@ -641,14 +641,20 @@ void wxMenuBase::UpdateUI(wxEvtHandler* source)
 bool wxMenuBase::SendEvent(int itemid, int checked)
 {
     wxCommandEvent event(wxEVT_MENU, itemid);
-    event.SetEventObject(this);
     event.SetInt(checked);
 
-    wxWindow* const win = GetWindow();
-    wxMenuBar* const mb = GetMenuBar();
+    return DoProcessEvent(this, event, GetWindow());
+}
+
+/* static */
+bool wxMenuBase::DoProcessEvent(wxMenuBase* menu, wxEvent& event, wxWindow* win)
+{
+    event.SetEventObject(menu);
+
+    wxMenuBar* const mb = menu->GetMenuBar();
 
     // Try the menu's event handler first
-    wxEvtHandler *handler = GetEventHandler();
+    wxEvtHandler *handler = menu->GetEventHandler();
     if ( handler )
     {
         // Indicate to the event processing code that we're going to pass this
