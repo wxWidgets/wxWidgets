@@ -3153,6 +3153,11 @@ void wxDataViewMainWindow::Expand( unsigned int row )
 
         if ( m_count != -1 )
             m_count += countNewRows;
+
+        // Expanding this item means the previously cached column widths could
+        // have become invalid as new items are now visible.
+        GetOwner()->InvalidateColBestWidths();
+
         UpdateDisplay();
         // Send the expanded event
         SendExpanderEvent(wxEVT_DATAVIEW_ITEM_EXPANDED,node->GetItem());
@@ -3201,6 +3206,9 @@ void wxDataViewMainWindow::Collapse(unsigned int row)
 
             if ( m_count != -1 )
                 m_count -= countDeletedRows;
+
+            GetOwner()->InvalidateColBestWidths();
+
             UpdateDisplay();
             SendExpanderEvent(wxEVT_DATAVIEW_ITEM_COLLAPSED,node->GetItem());
         }
@@ -5331,20 +5339,14 @@ void wxDataViewCtrl::Expand( const wxDataViewItem & item )
 
     int row = m_clientArea->GetRowByItem( item );
     if (row != -1)
-    {
         m_clientArea->Expand(row);
-        InvalidateColBestWidths();
-    }
 }
 
 void wxDataViewCtrl::Collapse( const wxDataViewItem & item )
 {
     int row = m_clientArea->GetRowByItem( item );
     if (row != -1)
-    {
         m_clientArea->Collapse(row);
-        InvalidateColBestWidths();
-    }
 }
 
 bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
