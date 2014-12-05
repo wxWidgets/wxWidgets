@@ -423,17 +423,6 @@ wxEvent& wxEvent::operator=(const wxEvent& src)
 // wxCommandEvent
 // ----------------------------------------------------------------------------
 
-wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
-              : wxEvent(theId, commandType)
-{
-    m_clientData = NULL;
-    m_clientObject = NULL;
-    m_isCommandEvent = true;
-
-    // the command events are propagated upwards by default
-    m_propagationLevel = wxEVENT_PROPAGATE_MAX;
-}
-
 wxString wxCommandEvent::GetString() const
 {
     // This is part of the hack retrieving the event string from the control
