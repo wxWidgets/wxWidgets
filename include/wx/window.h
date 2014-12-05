@@ -1312,7 +1312,7 @@ public:
 
 #if wxUSE_TOOLTIPS
         // the easiest way to set a tooltip for a window is to use this method
-    void SetToolTip( const wxString &tip );
+    void SetToolTip( const wxString &tip ) { DoSetToolTipText(tip); }
         // attach a tooltip to the window, pointer can be NULL to remove
         // existing tooltip
     void SetToolTip( wxToolTip *tip ) { DoSetToolTip(tip); }
@@ -1787,6 +1787,7 @@ protected:
     virtual void DoCentre(int dir);
 
 #if wxUSE_TOOLTIPS
+    virtual void DoSetToolTipText( const wxString &tip );
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
 

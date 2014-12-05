@@ -83,9 +83,6 @@ public:
     // forward these functions to all subcontrols
     virtual bool Enable(bool enable = true);
     virtual bool Show(bool show = true);
-#if wxUSE_TOOLTIPS
-    virtual void DoSetToolTip(wxToolTip *tip);
-#endif // wxUSE_TOOLTIPS
 
     virtual bool SetBackgroundColour(const wxColour& colour);
 

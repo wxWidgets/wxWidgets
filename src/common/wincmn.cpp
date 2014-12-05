@@ -2282,7 +2282,7 @@ wxString wxWindowBase::GetToolTipText() const
     return m_tooltip ? m_tooltip->GetTip() : wxString();
 }
 
-void wxWindowBase::SetToolTip( const wxString &tip )
+void wxWindowBase::DoSetToolTipText( const wxString &tip )
 {
     // don't create the new tooltip if we already have one
     if ( m_tooltip )

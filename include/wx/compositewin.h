@@ -113,6 +113,16 @@ public:
     }
 
 #if wxUSE_TOOLTIPS
+    virtual void DoSetToolTipText(const wxString &tip)
+    {
+        BaseWindowClass::DoSetToolTipText(tip);
+
+        // Use a variable to disambiguate between SetToolTip() overloads.
+        void (wxWindowBase::*func)(const wxString&) = &wxWindowBase::SetToolTip;
+
+        SetForAllParts(func, tip);
+    }
+
     virtual void DoSetToolTip(wxToolTip *tip)
     {
         BaseWindowClass::DoSetToolTip(tip);
