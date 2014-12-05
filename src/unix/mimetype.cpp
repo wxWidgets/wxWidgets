@@ -830,6 +830,7 @@ wxFileType * wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ex
 
     InitIfNeeded();
 
+    wxFileType* fileTypeFallback = NULL;
     size_t count = m_aExtensions.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
@@ -844,12 +845,32 @@ wxFileType * wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ex
                 wxFileType *fileType = new wxFileType;
                 fileType->m_impl->Init(this, n);
 
-                return fileType;
+                // See if this one has a known open-command. If not, keep
+                // looking for another one that does, as a file that can't be
+                // opened is not very useful, but store this one as a fallback.
+                wxString type, desc, open;
+                fileType->GetMimeType(&type);
+                fileType->GetDescription(&desc);
+                wxFileType::MessageParameters params("filename."+ext, type);
+                if ( fileType->GetOpenCommand(&open, params) )
+                {
+                    delete fileTypeFallback;
+                    return fileType;
+                }
+                else
+                {
+                    // Override the previous fallback, if any, with the new
+                    // one: we consider that later entries have priority.
+                    delete fileTypeFallback;
+                    fileTypeFallback = fileType;
+                }
             }
         }
     }
 
-    return NULL;
+    // If we couldn't find a filetype with a known open-command, return any
+    // without one
+    return fileTypeFallback;
 }
 
 wxFileType * wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
