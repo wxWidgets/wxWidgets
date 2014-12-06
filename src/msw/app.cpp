@@ -1008,6 +1008,8 @@ terminate the program,\r\n\
     }
 }
 
+#endif // wxUSE_EXCEPTIONS
+
 // ----------------------------------------------------------------------------
 // Layout direction
 // ----------------------------------------------------------------------------
@@ -1038,5 +1040,3 @@ wxLayoutDirection wxApp::MSWGetDefaultLayout(wxWindow* parent)
 
     return dir;
 }
-
-#endif // wxUSE_EXCEPTIONS
