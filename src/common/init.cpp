@@ -523,10 +523,11 @@ int wxEntry(int& argc, char **argv)
 
 bool wxInitialize()
 {
-    return wxInitialize(0, (wxChar**)NULL);
+    int argc = 0;
+    return wxInitialize(argc, (wxChar**)NULL);
 }
 
-bool wxInitialize(int argc, wxChar **argv)
+bool wxInitialize(int& argc, wxChar **argv)
 {
     wxCRIT_SECT_LOCKER(lockInit, gs_initData.csInit);
 
@@ -540,7 +541,7 @@ bool wxInitialize(int argc, wxChar **argv)
 }
 
 #if wxUSE_UNICODE
-bool wxInitialize(int argc, char **argv)
+bool wxInitialize(int& argc, char **argv)
 {
     wxCRIT_SECT_LOCKER(lockInit, gs_initData.csInit);
 
