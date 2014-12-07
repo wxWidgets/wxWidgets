@@ -105,6 +105,7 @@ wxMSW:
 
 - Improve wxMimeTypesManager open command detection (Eric Jensen).
 - Make wxFILTER_INCLUDE_LIST in wxTextValidator actually usable.
+- Fix appearance of toggled wxToggleButtons with bitmap (tm).
 - Fix setting menu item bitmaps after appending them (Artur Wieczorek).
 - Fix setting label of submenu items (Artur Wieczorek).
 - Fix handling of selected images in wxBitmapButton (Artur Wieczorek).
