@@ -584,13 +584,7 @@ void wxPropertyGridManager::Init2( int style )
     // Connect to property grid onselect event.
     // NB: Even if wxID_ANY is used, this doesn't connect properly in wxPython
     //     (see wxPropertyGridManager::ProcessEvent).
-    Connect(m_pPropGrid->GetId(),
-     wxEVT_PG_SELECTED,
-     wxPropertyGridEventHandler(wxPropertyGridManager::OnPropertyGridSelect));
-
-    Connect(m_pPropGrid->GetId(),
-            wxEVT_PG_COL_DRAGGING,
-            wxPropertyGridEventHandler(wxPropertyGridManager::OnPGColDrag));
+    ReconnectEventHandlers(wxID_NONE, m_pPropGrid->GetId());
 
     // Optional initial controls.
     m_width = -12345;
@@ -630,7 +624,8 @@ void wxPropertyGridManager::SetId( wxWindowID winid )
 {
     wxWindow::SetId(winid);
 
-    // TODO: Reconnect propgrid event handler(s).
+    // Reconnect propgrid event handlers.
+    ReconnectEventHandlers(m_pPropGrid->GetId(), winid);
 
     m_pPropGrid->SetId(winid);
 }
@@ -1903,6 +1898,27 @@ void wxPropertyGridManager::SetPageSplitterLeft(int page, bool subProps)
         if ( m_showHeader )
             m_pHeaderCtrl->OnColumWidthsChanged();
 #endif
+    }
+}
+
+void wxPropertyGridManager::ReconnectEventHandlers(wxWindowID oldId, wxWindowID newId)
+{
+    wxASSERT( oldId != newId );
+
+    if (oldId != wxID_NONE)
+    {
+        Disconnect(oldId, wxEVT_PG_SELECTED,
+          wxPropertyGridEventHandler(wxPropertyGridManager::OnPropertyGridSelect));
+        Disconnect(oldId, wxEVT_PG_COL_DRAGGING,
+          wxPropertyGridEventHandler(wxPropertyGridManager::OnPGColDrag));
+    }
+
+    if (newId != wxID_NONE)
+    {
+        Connect(newId, wxEVT_PG_SELECTED,
+          wxPropertyGridEventHandler(wxPropertyGridManager::OnPropertyGridSelect));
+        Connect(newId, wxEVT_PG_COL_DRAGGING,
+          wxPropertyGridEventHandler(wxPropertyGridManager::OnPGColDrag));
     }
 }
 

@@ -750,6 +750,8 @@ protected:
     virtual bool SetEditableStateItem( const wxString& name, wxVariant value ) wxOVERRIDE;
     virtual wxVariant GetEditableStateItem( const wxString& name ) const wxOVERRIDE;
 
+    // Reconnect propgrid event handlers.
+    void ReconnectEventHandlers(wxWindowID oldId, wxWindowID newId);
 private:
     DECLARE_EVENT_TABLE()
 };
