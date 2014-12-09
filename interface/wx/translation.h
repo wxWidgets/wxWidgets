@@ -508,22 +508,26 @@ public:
 
 /**
     This function returns the translation of @a string in the current
-    @c locale(). If the string is not found in any of the loaded message
-    catalogs (see @ref overview_i18n), the original string is returned. In
-    debug build, an error message is logged -- this should help to find the
-    strings which were not yet translated.  If @a domain is specified then only
-    that domain/catalog is searched for a matching string.  As this function is
-    used very often, an alternative (and also common in Unix world) syntax is
-    provided: the _() macro is defined to do the same thing as
-    wxGetTranslation().
+    @c locale().
+
+    If the string is not found in any of the loaded message catalogs (see @ref
+    overview_i18n), the original string is returned. If you enable logging of
+    trace messages with "i18n" mask (using wxLog::AddTraceMask()) and debug
+    logging is enabled (see @ref overview_debugging), a message is also logged
+    in this case -- which helps to find the strings which were not yet
+    translated.
+
+    If @a domain is specified then only that domain/catalog is searched for a
+    matching string.  As this function is used very often, an alternative (and
+    also common in Unix world) syntax is provided: the _() macro is defined to
+    do the same thing as wxGetTranslation().
 
     This function is thread-safe.
 
-    @note This function is not suitable for literal strings in Unicode builds
-          since the literal strings must be enclosed in wxT() macro which makes
-          them unrecognised by @c xgettext, and so they are not extracted to
-          the message catalog. Instead, use the _() and wxPLURAL() macro for
-          all literal strings.
+    @note This function is not suitable for literal strings using wxT() macro
+          since this macro is not recognised by @c xgettext, and so such
+          strings are not extracted to the message catalog. Instead, use the
+          _() and wxPLURAL() macro for all literal strings.
 
     @see wxGetTranslation(const wxString&, const wxString&, unsigned, const wxString&)
 
