@@ -25,12 +25,13 @@ inclusion into future versions of the library!
 The wxWidgets approach to i18n closely follows the GNU gettext package.
 wxWidgets uses the message catalogs which are binary compatible with gettext
 catalogs and this allows to use all of the programs in this package to work
-with them. But note that no additional libraries are needed during run-time,
-however, so you have only the message catalogs to distribute and nothing else.
+with them as well as using any of the tools working with message catalogs in
+this format such as <a href="http://poedit.net/">Poedit</a>.
 
-During program development you will need the gettext package for working with
-message catalogs. @b Warning: gettext versions @< 0.10 are known to be buggy,
-so you should find a later version of it!
+Because of this, you will need to use the gettext package to work with the
+translations during the program development. However no additional libraries
+are needed during run-time, so you have only the message catalogs to distribute
+and nothing else.
 
 There are two kinds of message catalogs: source catalogs which are text files
 with extension .po and binary catalogs which are created from the source ones
@@ -53,7 +54,7 @@ Translating your application involves several steps:
     language(s). It involves editing the .po file.
 @li Compiling the .po file into .mo file to be used by the program.
 @li Installing the .mo files with your application in the appropriate location
-    for the target system (@see overview_i18n_mofiles).
+    for the target system (see @ref overview_i18n_mofiles).
 @li Setting the appropriate locale in your program to use the strings for the
     given language: see wxLocale.
 
