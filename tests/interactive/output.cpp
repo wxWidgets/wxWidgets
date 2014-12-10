@@ -139,7 +139,7 @@ void InteractiveOutputTestCase::TestMimeEnum()
 
     size_t count = wxTheMimeTypesManager->EnumAllFileTypes(mimetypes);
 
-    wxPrintf(wxT("*** All %u known filetypes: ***\n"), count);
+    wxPrintf(wxT("*** All %lu known filetypes: ***\n"), static_cast<unsigned long>(count));
 
     wxArrayString exts;
     wxString desc;
