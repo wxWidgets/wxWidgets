@@ -1,8 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/calctrl.cpp
 // Purpose:     wxCalendarCtrl control implementation for wxQt
-// Author:      Kolya Kosenko, Javier Torres, Mariano Reingart
-// Copyright:   (c) 2010 wxWidgets dev team
+// Author:      Kolya Kosenko
+// Created:     2010-05-12
+// Copyright:   (c) 2010 Kolya Kosenko
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

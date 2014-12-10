@@ -2,6 +2,7 @@
 // Name:        src/qt/converter.cpp
 // Author:      Peter Most, Kolya Kosenko, Mariano Reingart
 // Copyright:   (c) 2010 wxWidgets dev team
+//              (c) 2010 Kolya Kosenko
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
