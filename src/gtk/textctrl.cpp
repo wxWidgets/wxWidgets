@@ -1100,6 +1100,11 @@ void wxTextCtrl::WriteText( const wxString &text )
     // we're changing the text programmatically
     DontMarkDirtyOnNextChange();
 
+    // avoid generating wxEVT_CHAR when called from wxEVT_CHAR handler
+    GdkEventKey* const imKeyEvent_save = m_imKeyEvent;
+    m_imKeyEvent = NULL;
+    wxON_BLOCK_EXIT_SET(m_imKeyEvent, imKeyEvent_save);
+
     if ( !IsMultiLine() )
     {
         wxTextEntry::WriteText(text);
