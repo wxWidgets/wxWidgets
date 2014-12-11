@@ -1051,15 +1051,7 @@ wxMBConvStrictUTF8::ToWChar(wchar_t *dst, size_t dstLen,
             // length:
             static const unsigned char leadValueMask[] = { 0x7F, 0x1F, 0x0F, 0x07 };
 
-            // mask and value of lead byte's most significant bits, by length:
-            static const unsigned char leadMarkerMask[] = { 0x80, 0xE0, 0xF0, 0xF8 };
-            static const unsigned char leadMarkerVal[] = { 0x00, 0xC0, 0xE0, 0xF0 };
-
             len--; // it's more convenient to work with 0-based length here
-
-            // extract the lead byte's value bits:
-            if ( (c & leadMarkerMask[len]) != leadMarkerVal[len] )
-                break;
 
             code = c & leadValueMask[len];
 
