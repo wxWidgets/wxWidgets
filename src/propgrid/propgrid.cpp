@@ -1852,7 +1852,7 @@ void wxPropertyGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
     }
     wxASSERT( dcPtr );
     PrepareDC(*dcPtr);
-    // Unused area will be cleared when drawing then items
+    // Unused area will be cleared when drawing the items
 /*
     dcPtr->SetBackground(m_colEmptySpace);
     dcPtr->Clear();
