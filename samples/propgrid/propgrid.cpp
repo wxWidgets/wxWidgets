@@ -1914,10 +1914,7 @@ void FormMain::CreateGrid( int style, int extraStyle )
                                   // event handling will obviously be broken.
                                   PGID, /*wxID_ANY*/
                                   wxDefaultPosition,
-                                  wxSize(100, 100), // FIXME: wxDefaultSize gives assertion in propgrid.
-                                                    // But calling SetInitialSize in manager changes the code
-                                                    // order to the grid gets created immediately, before SetExtraStyle
-                                                    // is called.
+                                  wxDefaultSize,
                                   style );
 
     m_propGrid = pgman->GetGrid();
