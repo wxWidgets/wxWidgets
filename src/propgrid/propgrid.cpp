@@ -1838,8 +1838,25 @@ wxPGProperty* wxPropertyGrid::DoGetItemAtY( int y ) const
 
 void wxPropertyGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
-    wxPaintDC dc(this);
-    PrepareDC(dc);
+    wxDC* dcPtr = NULL;
+    if ( !(GetExtraStyle() & wxPG_EX_NATIVE_DOUBLE_BUFFERING) )
+    {
+        if ( m_doubleBuffer )
+        {
+            dcPtr = new wxBufferedPaintDC(this, *m_doubleBuffer);
+        }
+    }
+    if ( !dcPtr )
+    {
+        dcPtr = new wxPaintDC(this);
+    }
+    wxASSERT( dcPtr );
+    PrepareDC(*dcPtr);
+    // Unused area will be cleared when drawing then items
+/*
+    dcPtr->SetBackground(m_colEmptySpace);
+    dcPtr->Clear();
+*/
 
     // Don't paint after destruction has begun
     if ( !HasInternalFlag(wxPG_FL_INITIALIZED) )
@@ -1864,7 +1881,10 @@ void wxPropertyGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
     r.height = GetClientSize().y;
 
     // Repaint this rectangle
-    DrawItems( dc, r.y, r.y + r.height, &r );
+    DrawItems(*dcPtr, r.y, r.y + r.height, &r);
+
+    // This blits the buffer (if used) to the window DC.
+    delete dcPtr;
 
     // We assume that the size set when grid is shown
     // is what is desired.
@@ -1976,73 +1996,32 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
     vx *= wxPG_PIXELS_PER_UNIT;
     vy *= wxPG_PIXELS_PER_UNIT;
 
-    // itemRect is in virtual grid space
-    wxRect drawRect(itemsRect->x - vx,
-                    itemsRect->y - vy,
-                    itemsRect->width,
-                    itemsRect->height);
-
     // items added check
     if ( m_pState->m_itemsAdded ) PrepareAfterItemsAdded();
 
-    int paintFinishY = 0;
-
     if ( m_pState->m_properties->GetChildCount() > 0 )
     {
-        wxDC* dcPtr = &dc;
-        bool isBuffered = false;
+        // paintFinishY and drawBottomY are in buffer/physical space
+        int paintFinishY = DoDrawItems(dc, itemsRect);
+        int drawBottomY = itemsRect->y + itemsRect->height - vy;
 
-        wxMemoryDC* bufferDC = NULL;
-
-        if ( !(GetExtraStyle() & wxPG_EX_NATIVE_DOUBLE_BUFFERING) )
+        // Clear area beyond last painted property
+        if ( paintFinishY < drawBottomY )
         {
-            if ( !m_doubleBuffer )
-            {
-                paintFinishY = itemsRect->y;
-                dcPtr = NULL;
-            }
-            else
-            {
-                bufferDC = new wxMemoryDC();
-                // Use the same layout direction as the window DC uses
-                // to ensure that the text is rendered correctly.
-                bufferDC->SetLayoutDirection(dc.GetLayoutDirection());
-
-                // If nothing was changed, then just copy from double-buffer
-                bufferDC->SelectObject( *m_doubleBuffer );
-                dcPtr = bufferDC;
-
-                isBuffered = true;
-            }
-        }
-
-        if ( dcPtr )
-        {
-            // paintFinishY and drawBottomY are in buffer/physical space
-            paintFinishY = DoDrawItems( *dcPtr, itemsRect, isBuffered );
-            int drawBottomY = itemsRect->y + itemsRect->height - vy;
-
-            // Clear area beyond last painted property
-            if ( paintFinishY < drawBottomY )
-            {
-                dcPtr->SetPen(m_colEmptySpace);
-                dcPtr->SetBrush(m_colEmptySpace);
-                dcPtr->DrawRectangle(0, paintFinishY,
-                                     m_width,
-                                     drawBottomY );
-            }
-        }
-
-        if ( bufferDC )
-        {
-            dc.Blit( drawRect.x, drawRect.y, drawRect.width,
-                     drawRect.height,
-                     bufferDC, 0, 0, wxCOPY );
-            delete bufferDC;
+            dc.SetPen(m_colEmptySpace);
+            dc.SetBrush(m_colEmptySpace);
+            dc.DrawRectangle(0, paintFinishY,
+                                    m_width,
+                                    drawBottomY );
         }
     }
     else
     {
+        // itemRect is in virtual grid space
+        wxRect drawRect(itemsRect->x - vx,
+                        itemsRect->y - vy,
+                        itemsRect->width,
+                        itemsRect->height);
         // Just clear the area
         dc.SetPen(m_colEmptySpace);
         dc.SetBrush(m_colEmptySpace);
@@ -2052,9 +2031,14 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
 
 // -----------------------------------------------------------------------
 
-int wxPropertyGrid::DoDrawItems( wxDC& dc,
+#if WXWIN_COMPATIBILITY_3_0
+int wxPropertyGrid::DoDrawItemsBase( wxDC& dc,
                                  const wxRect* itemsRect,
                                  bool isBuffered ) const
+#else
+int wxPropertyGrid::DoDrawItems( wxDC& dc,
+                                 const wxRect* itemsRect ) const
+#endif
 {
     const wxPGProperty* firstItem;
     const wxPGProperty* lastItem;
@@ -2095,45 +2079,37 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                  "invalid y values" );
 
     /*
-    wxLogDebug("  -> DoDrawItems ( \"%s\" -> \"%s\"
-               "height=%i (ch=%i), itemsRect = 0x%lX )",
+    wxLogDebug(" -> DoDrawItems(\"%s\" -> \"%s\""
+               " %i -> %i height=%i (ch=%i), itemsRect = 0x%lX %i,%i %ix%i)",
         firstItem->GetLabel().c_str(),
         lastItem->GetLabel().c_str(),
+        firstItemTopY, lastItemBottomY,
         (int)(lastItemBottomY - firstItemTopY),
         (int)m_height,
-        (unsigned long)&itemsRect );
+        (unsigned long)&itemsRect,
+        itemsRect->x, itemsRect->y, itemsRect->width, itemsRect->height );
     */
-
-    wxRect r;
 
     long windowStyle = m_windowStyle;
 
+#if WXWIN_COMPATIBILITY_3_0
     int xRelMod = 0;
 
-    //
-    // For now, do some manual calculation for double buffering
-    // - buffer's y = 0, so align itemsRect and coordinates to that
-    //
-    // TODO: In future use wxAutoBufferedPaintDC (for example)
-    //
-    int yRelMod = 0;
-
-    wxRect cr2;
-
+    // Buffer's y = 0, so align itemsRect and coordinates to that
     if ( isBuffered )
     {
         xRelMod = itemsRect->x;
-        yRelMod = itemsRect->y;
-
-        //
         // itemsRect conversion
-        cr2 = *itemsRect;
-        cr2.x -= xRelMod;
-        cr2.y -= yRelMod;
-        itemsRect = &cr2;
-        firstItemTopY -= yRelMod;
-        lastItemBottomY -= yRelMod;
+        firstItemTopY -= itemsRect->y;
+        lastItemBottomY -= itemsRect->y;
     }
+#else
+    // Buffer's y = 0, so align itemsRect and coordinates to that
+    int xRelMod = itemsRect->x;
+    // itemsRect conversion
+    firstItemTopY -= itemsRect->y;
+    lastItemBottomY -= itemsRect->y;
+#endif
 
     int x = m_marginWidth - xRelMod;
 

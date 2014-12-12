@@ -2138,9 +2138,28 @@ protected:
     */
     void CorrectEditorWidgetPosY();
 
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("use two-argument function DoDrawItems(dc,rect)")
     int DoDrawItems( wxDC& dc,
                      const wxRect* itemsRect,
+                     bool isBuffered ) const
+    {
+        return DoDrawItemsBase(dc, itemsRect, isBuffered);
+    }
+
+    int DoDrawItems( wxDC& dc,
+                     const wxRect* itemsRect ) const
+    {
+        return DoDrawItemsBase(dc, itemsRect, true);
+    }
+
+    int DoDrawItemsBase( wxDC& dc,
+                     const wxRect* itemsRect,
                      bool isBuffered ) const;
+#else
+    int DoDrawItems( wxDC& dc,
+                     const wxRect* itemsRect ) const;
+#endif
 
     /** Draws an expand/collapse (ie. +/-) button.
     */
