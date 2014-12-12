@@ -1533,8 +1533,6 @@ private:
     }
     void OnLeftClickActivate( wxCommandEvent& evt );
 
-    static wxBitmap* ms_doubleBuffer;
-
     DECLARE_EVENT_TABLE()
 };
 
@@ -1551,10 +1549,7 @@ END_EVENT_TABLE()
 
 wxSimpleCheckBox::~wxSimpleCheckBox()
 {
-    wxDELETE(ms_doubleBuffer);
 }
-
-wxBitmap* wxSimpleCheckBox::ms_doubleBuffer = NULL;
 
 void wxSimpleCheckBox::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
