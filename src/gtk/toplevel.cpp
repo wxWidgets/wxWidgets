@@ -1383,14 +1383,12 @@ void wxTopLevelWindowGTK::SetTitle( const wxString &title )
 
 void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
     base_type::SetIcons(icons);
 
     // Setting icons before window is realized can cause a GTK assertion if
     // another TLW is realized before this one, and it has this one as it's
     // transient parent. The life demo exibits this problem.
-    if (gtk_widget_get_realized(m_widget))
+    if (m_widget && gtk_widget_get_realized(m_widget))
     {
         GList* list = NULL;
         for (size_t i = icons.GetIconCount(); i--;)
