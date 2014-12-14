@@ -174,7 +174,7 @@ user.
 
 Class wxPageSetupDialog puts up the standard page setup dialog, which allows
 you to specify the orientation, paper size, and related settings. You provide
-it with a wxPageSetupDialogData object at intialization, which is used to
+it with a wxPageSetupDialogData object at initialization, which is used to
 populate the dialog; when the dialog is dismissed, this object contains the
 settings chosen by the user, including orientation and/or page margins.
 
