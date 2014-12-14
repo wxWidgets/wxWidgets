@@ -32,7 +32,7 @@ public:
     wxApp();
     virtual ~wxApp();
 
-    /* override for altering the way wxGTK intializes the GUI
+    /* override for altering the way wxGTK initializes the GUI
      * (palette/visual/colorcube). under wxMSW, OnInitGui() does nothing by
      * default. when overriding this method, the code in it is likely to be
      * platform dependent, otherwise use OnInit(). */
