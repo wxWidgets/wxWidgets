@@ -11,7 +11,7 @@
 #define _EDIT_H_
 
 //----------------------------------------------------------------------------
-// informations
+// information
 //----------------------------------------------------------------------------
 
 
@@ -124,7 +124,7 @@ private:
     // file
     wxString m_filename;
 
-    // lanugage properties
+    // language properties
     LanguageInfo const* m_language;
 
     // margin variables
