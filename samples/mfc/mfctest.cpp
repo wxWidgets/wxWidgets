@@ -24,14 +24,9 @@
 
 #define START_WITH_MFC_WINDOW 0
 
+// NOTES:
 //
-// IMPORTANT NOTES:
-//
-// (1) You may need to set wxUSE_MFC to 1 in include/wx/msw/setup.h but
-//     normally this shouldn't be needed any longer, i.e. it works without
-//     it for me (VZ)
-//
-// (2) You should link with MFC DLL, not static libraries: or, to use static
+//  *  You should link with MFC DLL, not static libraries: or, to use static
 //     run-time libraries, use this command for both building wxWidgets and
 //     the sample:
 //
@@ -40,7 +35,7 @@
 //     Unless the run-time library settings match for wxWidgets and MFC, you
 //     will get link errors for symbols such as __mbctype, __argc, and __argv
 //
-// (3) If you see bogus memory leaks within the MSVC IDE on exit, in this
+//  *  If you see bogus memory leaks within the MSVC IDE on exit, in this
 //     sample or in your own project, you must be using __WXDEBUG__ +
 //     WXUSINGDLL + _AFXDLL
 //     Unfortunately this confuses the MSVC/MFC leak detector. To do away with

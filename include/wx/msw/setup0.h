@@ -1513,14 +1513,6 @@
 // Windows-only settings
 // ----------------------------------------------------------------------------
 
-// Set this to 1 if you want to use wxWidgets and MFC in the same program. This
-// will override some other settings (see below)
-//
-// Default is 0.
-//
-// Recommended setting: 0 unless you really have to use MFC
-#define wxUSE_MFC           0
-
 // Set this to 1 for generic OLE support: this is required for drag-and-drop,
 // clipboard, OLE Automation. Only set it to 0 if your compiler is very old and
 // can't compile/doesn't have the OLE headers.

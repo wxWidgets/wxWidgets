@@ -711,8 +711,6 @@ typedef pid_t GPid;
     #define wxUSE_GRAPHICS_DIRECT2D 0
 #endif
 
-#define wxUSE_MFC           0
-
 #define wxUSE_OLE           0
 
 #define wxUSE_OLE_AUTOMATION 0

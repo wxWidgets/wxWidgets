@@ -646,8 +646,6 @@
 #endif
 
 
-#define wxUSE_MFC           0
-
 #define wxUSE_OLE           0
 
 #define wxUSE_OLE_AUTOMATION 0

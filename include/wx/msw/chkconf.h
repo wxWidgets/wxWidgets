@@ -164,21 +164,6 @@
 
 #endif /* __GNUWIN32__ */
 
-/* wxUSE_MFC is not defined when using configure as it doesn't make sense for
-   gcc or mingw32 anyhow */
-#ifndef wxUSE_MFC
-    #define wxUSE_MFC 0
-#endif /* !defined(wxUSE_MFC) */
-
-/* MFC duplicates these operators */
-#if wxUSE_MFC
-#   undef  wxUSE_GLOBAL_MEMORY_OPERATORS
-#   define wxUSE_GLOBAL_MEMORY_OPERATORS   0
-
-#   undef  wxUSE_DEBUG_NEW_ALWAYS
-#   define wxUSE_DEBUG_NEW_ALWAYS          0
-#endif /* wxUSE_MFC */
-
 #if !wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
 #   undef wxUSE_CHECKLISTBOX
 #   define wxUSE_CHECKLISTBOX 0
