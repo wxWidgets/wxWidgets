@@ -228,7 +228,7 @@ public:
         }
     }
 
-    void ToBeDeleted() { m_toBeDeleted = true; }
+    void ToBeDeleted(bool toBeDeleted = true) { m_toBeDeleted = toBeDeleted; }
     bool IsToBeDeleted() const { return m_toBeDeleted; }
 
 private:
@@ -570,8 +570,13 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
 // ----------------------------------------------------------------------------
 
 bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
-                             wxToolBarToolBase * WXUNUSED(tool))
+                             wxToolBarToolBase *tool)
 {
+    // We might be inserting back a tool previously removed from the toolbar,
+    // make sure to reset its "to be deleted" flag to ensure that we do take it
+    // into account during our layout even in this case.
+    static_cast<wxToolBarTool*>(tool)->ToBeDeleted(false);
+
     // nothing special to do here - we really create the toolbar buttons in
     // Realize() later
     InvalidateBestSize();
