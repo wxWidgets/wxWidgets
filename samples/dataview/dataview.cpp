@@ -561,7 +561,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             m_ctrl[0]->AppendColumn( column0 );
 #if 0
             // Call this and sorting is enabled
-            // immediatly upon start up.
+            // immediately upon start up.
             column0->SetAsSortKey();
 #endif
 

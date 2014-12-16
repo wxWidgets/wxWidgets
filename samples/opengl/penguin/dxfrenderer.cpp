@@ -547,7 +547,7 @@ bool DXFRenderer::ParseEntities(wxInputStream& stream)
 }
 
 // parse and load a DXF file
-// currently pretty limited, but knows enought do handle 3DFACEs and LINEs
+// currently pretty limited, but knows enough to handle 3DFACEs and LINEs
 bool DXFRenderer::Load(wxInputStream& stream)
 {
     Clear();
