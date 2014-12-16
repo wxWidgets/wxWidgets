@@ -597,6 +597,7 @@ wxMSW:
 - Fix best size calculation for bitmaps with buttons (Artur Wieczorek).
 - Fix size of the icon returned from wxFSVolume::GetIcon() (troelsk).
 - Fix autosize after expanding/collapsing items in wxDataViewCtrl (ciglesias).
+- Fix inserting tools removed from wxToolBar back into it (sbrowne).
 
 
 3.0.2: (released 2014-10-06)
