@@ -777,10 +777,21 @@ void wxRendererGeneric::DrawRadioBitmap(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(
     wxFAIL_MSG("UNIMPLEMENTED: wxRendererGeneric::DrawRadioBitmap");
 }
 
-void wxRendererGeneric::DrawTextCtrl(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc),
-                           const wxRect& WXUNUSED(rect), int WXUNUSED(flags))
+void wxRendererGeneric::DrawTextCtrl(wxWindow* WXUNUSED(win),
+                                     wxDC& dc,
+                                     const wxRect& rect,
+                                     int WXUNUSED(flags))
 {
-    wxFAIL_MSG("UNIMPLEMENTED: wxRendererGeneric::DrawTextCtrl");
+    wxColour fill;
+    wxColour bdr;
+    {
+        fill = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+        bdr = *wxBLACK;
+    }
+
+    dc.SetPen(bdr);
+    dc.SetBrush(fill);
+    dc.DrawRectangle(rect);
 }
 
 #ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
@@ -800,7 +811,12 @@ void wxRendererGeneric::DrawTitleBarBitmap(wxWindow * WXUNUSED(win),
 
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
-void wxRendererGeneric::DrawGauge(wxWindow* win, wxDC& dc, const wxRect& rect, int value, int max, int WXUNUSED(flags))
+void wxRendererGeneric::DrawGauge(wxWindow* win,
+                                  wxDC& dc,
+                                  const wxRect& rect,
+                                  int value,
+                                  int max,
+                                  int WXUNUSED(flags))
 {
     // Use same background as text controls.
     DrawTextCtrl(win, dc, rect);

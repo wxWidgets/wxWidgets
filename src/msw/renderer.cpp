@@ -153,11 +153,6 @@ public:
                                          wxDC& dc,
                                          const wxRect& rect,
                                          int flags = 0) = 0;
-
-    virtual void DrawTextCtrl(wxWindow* win,
-                               wxDC& dc,
-                               const wxRect& rect,
-                               int flags = 0) = 0;
 };
 
 // ----------------------------------------------------------------------------
@@ -189,11 +184,6 @@ public:
                                 const wxRect& rect,
                                 int flags = 0);
 
-    virtual void DrawTextCtrl(wxWindow* win,
-                              wxDC& dc,
-                              const wxRect& rect,
-                              int flags = 0);
-
     virtual void DrawRadioBitmap(wxWindow* win,
                                  wxDC& dc,
                                  const wxRect& rect,
@@ -207,13 +197,6 @@ public:
                                     const wxRect& rect,
                                     wxTitleBarButton button,
                                     int flags = 0);
-
-    virtual void DrawGauge(wxWindow* win,
-                           wxDC& dc,
-                           const wxRect& rect,
-                           int value,
-                           int max,
-                           int flags = 0);
 
     virtual wxSize GetCheckBoxSize(wxWindow *win);
 
@@ -595,44 +578,6 @@ int wxRendererMSW::GetHeaderButtonHeight(wxWindow * WXUNUSED(win))
 int wxRendererMSW::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
 {
     return 10;
-}
-
-// Uses the theme to draw the border and fill for something like a wxTextCtrl
-void wxRendererMSW::DrawTextCtrl(wxWindow* WXUNUSED(win),
-                                 wxDC& dc,
-                                 const wxRect& rect,
-                                 int WXUNUSED(flags))
-{
-    wxColour fill;
-    wxColour bdr;
-    {
-        fill = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-        bdr = *wxBLACK;
-    }
-
-    dc.SetPen(bdr);
-    dc.SetBrush(fill);
-    dc.DrawRectangle(rect);
-}
-
-void wxRendererMSW::DrawGauge(wxWindow* win,
-                              wxDC& dc,
-                              const wxRect& rect,
-                              int value,
-                              int max,
-                              int WXUNUSED(flags))
-{
-    // Use text ctrl back as background
-    DrawTextCtrl(win, dc, rect);
-
-    // Calc progress bar size
-    wxRect progRect(rect);
-    progRect.Deflate(2);
-    progRect.width = wxMulDivInt32(progRect.width, value, max);
-
-    dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-    dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.DrawRectangle(progRect);
 }
 
 // ============================================================================
