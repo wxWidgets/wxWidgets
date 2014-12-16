@@ -2634,6 +2634,8 @@ enum wxMouseWheelAxis
         Process a @c wxEVT_MOUSEWHEEL event.
     @event{EVT_MOUSE_EVENTS(func)}
         Process all mouse events.
+    @event{EVT_MAGNIFY(func)}
+        Process a @c wxEVT_MAGNIFY event (new since wxWidgets 3.1.0).
     @endEventTable
 
     @library{wxcore}
@@ -2667,6 +2669,7 @@ public:
          @li @c wxEVT_AUX2_DCLICK
          @li @c wxEVT_MOTION
          @li @c wxEVT_MOUSEWHEEL
+         @li @c wxEVT_MAGNIFY
     */
     wxMouseEvent(wxEventType mouseEventType = wxEVT_NULL);
 
@@ -2793,6 +2796,21 @@ public:
     wxPoint GetLogicalPosition(const wxDC& dc) const;
 
     /**
+        For magnify (pinch to zoom) events: returns the change in magnification.
+
+        A value of 0 means no change, a positive value means we should enlarge
+        (or zoom in), a negative value means we should shrink (or zoom out).
+
+        This method is only valid to call for @c wxEVT_MAGNIFY events which are
+        currently only generated under OS X.
+
+        @see Magnify()
+
+        @since 3.1.0
+    */
+    float GetMagnification() const;
+
+    /**
         Get wheel delta, normally 120.
 
         This is the threshold for action to be taken, and one such action
@@ -2857,6 +2875,17 @@ public:
         Returns @true if the left mouse button changed to up.
     */
     bool LeftUp() const;
+
+    /**
+        Returns @true if the event is a magnify (i.e.\ pinch to zoom) event.
+
+        Such events are currently generated only under OS X.
+
+        @see GetMagnification()
+
+        @since 3.1.0
+    */
+    bool Magnify() const;
 
     /**
         Returns @true if the Meta key was down at the time of the event.

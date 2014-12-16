@@ -208,6 +208,7 @@ wxDEFINE_EVENT( wxEVT_AUX1_DCLICK, wxMouseEvent );
 wxDEFINE_EVENT( wxEVT_AUX2_DOWN, wxMouseEvent );
 wxDEFINE_EVENT( wxEVT_AUX2_UP, wxMouseEvent );
 wxDEFINE_EVENT( wxEVT_AUX2_DCLICK, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_MAGNIFY, wxMouseEvent );
 
 // Character input event type
 wxDEFINE_EVENT( wxEVT_CHAR, wxKeyEvent );
@@ -565,6 +566,7 @@ wxMouseEvent::wxMouseEvent(wxEventType commandType)
     m_wheelDelta = 0;
     m_linesPerAction = 0;
     m_columnsPerAction = 0;
+    m_magnification = 0.0f;
 }
 
 void wxMouseEvent::Assign(const wxMouseEvent& event)
@@ -589,6 +591,8 @@ void wxMouseEvent::Assign(const wxMouseEvent& event)
     m_linesPerAction = event.m_linesPerAction;
     m_columnsPerAction = event.m_columnsPerAction;
     m_wheelAxis = event.m_wheelAxis;
+    
+    m_magnification = event.m_magnification;
 }
 
 // return true if was a button dclick event

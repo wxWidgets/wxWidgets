@@ -62,6 +62,7 @@ All (GUI):
 
 - Allow requesting modern (3.x+) OpenGL version in wxGLCanvas (Fabio Arnold).
 - Allow customizing window shown by wxBusyInfo.
+- Add wxEVT_MAGNIFY mouse event (Joost Nieuwenhuijse).
 - Make results of wxDC::DrawEllipticArc() consistent across all platforms.
 - XRC handler for wxAuiToolBar added (Kinaou Hervé, David Hart).
 - Add wxCursor::GetHotSpot().
