@@ -957,7 +957,7 @@ void wxTopLevelWindowGTK::Refresh( bool WXUNUSED(eraseBackground), const wxRect 
 
 bool wxTopLevelWindowGTK::Show( bool show )
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
+    wxCHECK_MSG(m_widget, false, "invalid frame");
 
 #ifdef GDK_WINDOWING_X11
     bool deferShow = show && !m_isShown && m_deferShow;
@@ -1190,7 +1190,7 @@ void wxTopLevelWindowGTK::DoSetClientSize(int width, int height)
 
 void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const
 {
-    wxASSERT_MSG(m_widget, wxT("invalid frame"));
+    wxCHECK_RET(m_widget, "invalid frame");
 
     if ( IsIconized() )
     {
@@ -1371,7 +1371,7 @@ void wxTopLevelWindowGTK::OnInternalIdle()
 
 void wxTopLevelWindowGTK::SetTitle( const wxString &title )
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
+    wxCHECK_RET(m_widget, "invalid frame");
 
     if ( title == m_title )
         return;
