@@ -962,6 +962,183 @@ public:
 };
 
 /**
+    @class wxTextAttrShadow
+    A class representing a shadow.
+
+    @library{wxrichtext}
+    @category{richtext}
+
+    @see wxRichTextAttr, wxRichTextCtrl
+*/
+
+class WXDLLIMPEXP_RICHTEXT wxTextAttrShadow
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxTextAttrShadow() { Reset(); }
+
+    /**
+        Equality operator.
+    */
+    bool operator==(const wxTextAttrShadow& shadow) const;
+
+    /**
+        Resets the shadow.
+    */
+    void Reset();
+
+    /**
+        Partial equality test. If @a weakTest is @true, attributes of this object do not
+        have to be present if those attributes of @a border are present. If @a weakTest is
+        @false, the function will fail if an attribute is present in @a border but not
+        in this object.
+    */
+    bool EqPartial(const wxTextAttrShadow& shadow, bool weakTest = true) const;
+
+    /**
+        Applies the border to this object, but not if the same as @a compareWith.
+
+    */
+    bool Apply(const wxTextAttrShadow& shadow, const wxTextAttrShadow* compareWith = NULL);
+
+    /**
+        Removes the specified attributes from this object.
+    */
+    bool RemoveStyle(const wxTextAttrShadow& attr);
+
+    /**
+        Collects the attributes that are common to a range of content, building up a note of
+        which attributes are absent in some objects and which clash in some objects.
+    */
+    void CollectCommonAttributes(const wxTextAttrShadow& attr, wxTextAttrShadow& clashingAttr, wxTextAttrShadow& absentAttr);
+
+    /**
+        Sets the shadow colour.
+    */
+    void SetColour(unsigned long colour) { m_shadowColour = colour; m_flags |= wxTEXT_BOX_ATTR_BORDER_COLOUR; }
+
+    /**
+        Sets the shadow colour.
+    */
+    void SetColour(const wxColour& colour) { m_shadowColour = colour.GetRGB(); m_flags |= wxTEXT_BOX_ATTR_BORDER_COLOUR; }
+
+    /**
+        Gets the colour as a long.
+    */
+    unsigned long GetColourLong() const { return m_shadowColour; }
+
+    /**
+        Gets the colour.
+    */
+    wxColour GetColour() const { return wxColour(m_shadowColour); }
+
+    /**
+        True if the shadow has a valid colour.
+    */
+    bool HasColour() const { return (m_flags & wxTEXT_BOX_ATTR_BORDER_COLOUR) != 0; }
+
+    /**
+        Gets the shadow horizontal offset.
+    */
+    wxTextAttrDimension& GetOffsetX() { return m_offsetX; }
+    const wxTextAttrDimension& GetOffsetX() const { return m_offsetX; }
+
+    /**
+        Sets the shadow horizontal offset.
+    */
+    void SetOffsetX(const wxTextAttrDimension& offset) { m_offsetX = offset; }
+
+    /**
+        Gets the shadow vertical offset.
+    */
+    wxTextAttrDimension& GetOffsetY() { return m_offsetY; }
+    const wxTextAttrDimension& GetOffsetY() const { return m_offsetY; }
+
+    /**
+        Sets the shadow vertical offset.
+    */
+    void SetOffsetY(const wxTextAttrDimension& offset) { m_offsetY = offset; }
+
+    /**
+        Gets the shadow spread size.
+    */
+    wxTextAttrDimension& GetSpread() { return m_spread; }
+    const wxTextAttrDimension& GetSpread() const { return m_spread; }
+
+    /**
+        Sets the shadow spread size.
+    */
+    void SetSpread(const wxTextAttrDimension& spread) { m_spread = spread; }
+
+    /**
+        Gets the shadow blur distance.
+    */
+    wxTextAttrDimension& GetBlurDistance() { return m_blurDistance; }
+    const wxTextAttrDimension& GetBlurDistance() const { return m_blurDistance; }
+
+    /**
+        Sets the shadow blur distance.
+    */
+    void SetBlurDistance(const wxTextAttrDimension& blur) { m_blurDistance = blur; }
+
+    /**
+        Gets the shadow opacity.
+    */
+    wxTextAttrDimension& GetOpacity() { return m_opacity; }
+    const wxTextAttrDimension& GetOpacity() const { return m_opacity; }
+
+    /**
+        Returns @true if the dimension is valid.
+    */
+    bool IsValid() const { return (m_flags & wxTEXT_ATTR_VALUE_VALID) != 0; }
+
+    /**
+        Sets the valid flag.
+    */
+    void SetValid(bool b) { m_flags &= ~wxTEXT_ATTR_VALUE_VALID_MASK; m_flags |= (b ? wxTEXT_ATTR_VALUE_VALID : 0); }
+
+    /**
+        Returns the border flags.
+    */
+    int GetFlags() const { return m_flags; }
+
+    /**
+        Sets the border flags.
+    */
+    void SetFlags(int flags) { m_flags = flags; }
+
+    /**
+        Adds a border flag.
+    */
+    void AddFlag(int flag) { m_flags |= flag; }
+
+    /**
+        Removes a border flag.
+    */
+    void RemoveFlag(int flag) { m_flags &= ~flag; }
+
+    /**
+        Sets the shadow opacity.
+    */
+    void SetOpacity(const wxTextAttrDimension& opacity) { m_opacity = opacity; }
+
+    /**
+        True if the shadow has no attributes set.
+    */
+    bool IsDefault() const { return !HasColour() && !m_offsetX.IsValid() && !m_offsetY.IsValid() && !m_spread.IsValid() && !m_blurDistance.IsValid() && !m_opacity.IsValid(); }
+
+    int                         m_flags;
+    unsigned long               m_shadowColour;
+    wxTextAttrDimension         m_offsetX;
+    wxTextAttrDimension         m_offsetY;
+    wxTextAttrDimension         m_spread;
+    wxTextAttrDimension         m_blurDistance;
+    wxTextAttrDimension         m_opacity;
+};
+
+/**
     @class wxTextBoxAttr
     A class representing the box attributes of a rich text object.
 
@@ -1370,6 +1547,12 @@ public:
     */
     bool HasBoxStyleName() const { return HasFlag(wxTEXT_BOX_ATTR_BOX_STYLE_NAME); }
 
+    /**
+        Returns the box shadow attributes.
+    */
+    wxTextAttrShadow& GetShadow() { return m_shadow; }
+    const wxTextAttrShadow& GetShadow() const { return m_shadow; }
+
 public:
 
     int                             m_flags;
@@ -1392,6 +1575,7 @@ public:
     wxTextBoxAttrWhitespaceMode     m_whitespaceMode;
     wxTextAttrDimension             m_cornerRadius;
     wxString                        m_boxStyleName;
+    wxTextAttrShadow                m_shadow;
 };
 
 /**

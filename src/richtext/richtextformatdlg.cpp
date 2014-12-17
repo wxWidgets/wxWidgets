@@ -614,7 +614,8 @@ void wxRichTextFormattingDialog::SetDimensionValue(wxTextAttrDimension& dim, wxT
         if (checkBox)
             checkBox->SetValue(false);
         valueCtrl->SetValue(wxT("0"));
-        unitsCtrl->SetSelection(0);
+        if (unitsCtrl)
+            unitsCtrl->SetSelection(0);
     }
     else
     {
@@ -656,12 +657,17 @@ void wxRichTextFormattingDialog::SetDimensionValue(wxTextAttrDimension& dim, wxT
                 unitsIdx = 0;
         }
 
-        unitsCtrl->SetSelection(unitsIdx);
+        if (unitsCtrl)
+            unitsCtrl->SetSelection(unitsIdx);
     }
 }
 
 void wxRichTextFormattingDialog::GetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl, wxCheckBox* checkBox, wxArrayInt* units)
 {
+    int unitsSel = 0;
+    if (unitsCtrl)
+        unitsSel = unitsCtrl->GetSelection();
+
     if (checkBox && !checkBox->GetValue())
     {
         dim.Reset();
@@ -670,18 +676,18 @@ void wxRichTextFormattingDialog::GetDimensionValue(wxTextAttrDimension& dim, wxT
     {
         if (units)
         {
-            int unit = (*units)[unitsCtrl->GetSelection()];
+            int unit = (*units)[unitsSel];
             dim.SetUnits((wxTextAttrUnits) unit);
         }
         else
         {
-            if (unitsCtrl->GetSelection() == 0)
+            if (unitsSel == 0)
                 dim.SetUnits(wxTEXT_ATTR_UNITS_PIXELS);
-            else if (unitsCtrl->GetSelection() == 1)
+            else if (unitsSel == 1)
                 dim.SetUnits(wxTEXT_ATTR_UNITS_TENTHS_MM);
-            else if (unitsCtrl->GetSelection() == 2)
+            else if (unitsSel == 2)
                 dim.SetUnits(wxTEXT_ATTR_UNITS_PERCENTAGE);
-            else if (unitsCtrl->GetSelection() == 3)
+            else if (unitsSel == 3)
                 dim.SetUnits(wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT);
         }
 
@@ -703,6 +709,7 @@ bool wxRichTextFormattingDialog::ConvertFromString(const wxString& str, int& ret
         float value = 0.0;
         wxSscanf(str.c_str(), wxT("%f"), &value);
         // Convert from cm
+        // Do this in two steps, since using one step causes strange rounding error for VS 2010 at least.
         float v = (value * 100.0);
         ret = (int) (v);
         return true;

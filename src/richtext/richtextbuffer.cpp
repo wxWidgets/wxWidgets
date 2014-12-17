@@ -696,6 +696,75 @@ bool wxRichTextObject::DrawBoxAttributes(wxDC& dc, wxRichTextBuffer* buffer, con
 
     GetBoxRects(dc, buffer, attr, marginRect, borderRect, contentRect, paddingRect, outlineRect);
 
+    if (attr.GetTextBoxAttr().GetShadow().IsValid())
+    {
+        wxTextAttrDimensionConverter converter(dc, buffer ? buffer->GetScale() : 1.0);
+        wxColour shadowColour;
+        if (attr.GetTextBoxAttr().GetShadow().HasColour())
+            shadowColour = attr.GetTextBoxAttr().GetShadow().GetColour();
+        else
+            shadowColour = *wxLIGHT_GREY;
+        if (attr.GetTextBoxAttr().GetShadow().GetOpacity().IsValid())
+        {
+            // Let's pretend our background is always white. Calculate a colour value
+            // from this and the opacity.
+            double p = attr.GetTextBoxAttr().GetShadow().GetOpacity().GetValue() / 100.0;
+            shadowColour.Set((1.0 - p)*255 + p*shadowColour.Red(), (1.0 - p)*255 + p*shadowColour.Green(), (1.0 - p)*255 + p*shadowColour.Blue());
+        }
+        wxRect shadowRect = borderRect;
+        if (attr.GetTextBoxAttr().GetShadow().GetOffsetX().IsValid())
+        {
+            int pxX = converter.GetPixels(attr.GetTextBoxAttr().GetShadow().GetOffsetX());
+            shadowRect.x += pxX;
+        }
+        if (attr.GetTextBoxAttr().GetShadow().GetOffsetY().IsValid())
+        {
+            int pxY = converter.GetPixels(attr.GetTextBoxAttr().GetShadow().GetOffsetY());
+            shadowRect.y += pxY;
+        }
+        if (attr.GetTextBoxAttr().GetShadow().GetSpread().IsValid())
+        {
+            int pxSpread = converter.GetPixels(attr.GetTextBoxAttr().GetShadow().GetSpread());
+            shadowRect.x -= pxSpread;
+            shadowRect.y -= pxSpread;
+            shadowRect.width += 2*pxSpread;
+            shadowRect.height += 2*pxSpread;
+        }
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(wxBrush(shadowColour));
+        if (attr.GetTextBoxAttr().HasCornerRadius() && attr.GetTextBoxAttr().GetCornerRadius().GetValue() > 0)
+        {
+            wxTextAttrDimensionConverter converter(dc, buffer ? buffer->GetScale() : 1.0);
+            int cornerRadius = converter.GetPixels(attr.GetTextBoxAttr().GetCornerRadius());
+            if (cornerRadius > 0)
+            {
+                dc.DrawRoundedRectangle(shadowRect, cornerRadius);
+            }
+            else
+                dc.DrawRectangle(shadowRect);
+        }
+        else
+            dc.DrawRectangle(shadowRect);
+
+        // If there's no box colour, draw over the shadow in the nearest available colour
+        if (!attr.HasBackgroundColour())
+        {
+            wxColour bgColour;
+            if (obj)
+            {
+                wxRichTextCompositeObject* composite = obj->GetParentContainer();
+                if (composite && composite->GetAttributes().HasBackgroundColour())
+                    bgColour = composite->GetAttributes().GetBackgroundColour();
+            }
+            if (!bgColour.IsOk() && buffer)
+                bgColour = buffer->GetAttributes().GetBackgroundColour();
+            if (!bgColour.IsOk())
+                bgColour = *wxWHITE;
+            dc.SetBrush(wxBrush(bgColour));
+            dc.DrawRectangle(borderRect);
+        }
+    }
+
     // Margin is transparent. Draw background from margin.
     if (attr.HasBackgroundColour() || (flags & wxRICHTEXT_DRAW_SELECTED))
     {
@@ -13426,6 +13495,7 @@ void wxTextBoxAttr::Reset()
     m_border.Reset();
     m_outline.Reset();
     m_cornerRadius.Reset();
+    m_shadow.Reset();
 }
 
 // Equality test
@@ -13451,7 +13521,8 @@ bool wxTextBoxAttr::operator== (const wxTextBoxAttr& attr) const
         m_border == attr.m_border &&
         m_outline == attr.m_outline &&
 
-        m_boxStyleName == attr.m_boxStyleName
+        m_boxStyleName == attr.m_boxStyleName &&
+        m_shadow == attr.m_shadow
         );
 }
 
@@ -13465,6 +13536,7 @@ bool wxTextBoxAttr::EqPartial(const wxTextBoxAttr& attr, bool weakTest) const
              (!HasVerticalAlignment() && attr.HasVerticalAlignment()) ||
              (!HasWhitespaceMode() && attr.HasWhitespaceMode()) ||
              (!HasCornerRadius() && attr.HasCornerRadius()) ||
+             (!m_shadow.IsValid() && attr.m_shadow.IsValid()) ||
              (!HasBoxStyleName() && attr.HasBoxStyleName())))
     {
         return false;
@@ -13522,6 +13594,11 @@ bool wxTextBoxAttr::EqPartial(const wxTextBoxAttr& attr, bool weakTest) const
     // Outline
 
     if (!GetOutline().EqPartial(attr.GetOutline(), weakTest))
+        return false;
+
+    // Shadow
+
+    if (!GetShadow().EqPartial(attr.GetShadow(), weakTest))
         return false;
 
     return true;
@@ -13584,6 +13661,8 @@ bool wxTextBoxAttr::Apply(const wxTextBoxAttr& attr, const wxTextBoxAttr* compar
     m_border.Apply(attr.m_border, compareWith ? (& compareWith->m_border) : (const wxTextAttrBorders*) NULL);
     m_outline.Apply(attr.m_outline, compareWith ? (& compareWith->m_outline) : (const wxTextAttrBorders*) NULL);
 
+    m_shadow.Apply(attr.m_shadow, compareWith ? (& compareWith->m_shadow) : (const wxTextAttrShadow*) NULL);
+
     return true;
 }
 
@@ -13624,6 +13703,8 @@ bool wxTextBoxAttr::RemoveStyle(const wxTextBoxAttr& attr)
 
     m_border.RemoveStyle(attr.m_border);
     m_outline.RemoveStyle(attr.m_outline);
+
+    m_shadow.RemoveStyle(attr.m_shadow);
 
     return true;
 }
@@ -13776,6 +13857,8 @@ void wxTextBoxAttr::CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBox
 
     m_border.CollectCommonAttributes(attr.m_border, clashingAttr.m_border, absentAttr.m_border);
     m_outline.CollectCommonAttributes(attr.m_outline, clashingAttr.m_outline, absentAttr.m_outline);
+
+    m_shadow.CollectCommonAttributes(attr.m_shadow, clashingAttr.m_shadow, absentAttr.m_shadow);
 }
 
 bool wxTextBoxAttr::IsDefault() const
@@ -13786,7 +13869,8 @@ bool wxTextBoxAttr::IsDefault() const
         !m_maxSize.GetWidth().IsValid() && !m_maxSize.GetHeight().IsValid() &&
         !m_position.GetLeft().IsValid() && !m_position.GetRight().IsValid() && !m_position.GetTop().IsValid() && !m_position.GetBottom().IsValid() &&
         !m_padding.GetLeft().IsValid() && !m_padding.GetRight().IsValid() && !m_padding.GetTop().IsValid() && !m_padding.GetBottom().IsValid() &&
-        !m_margins.GetLeft().IsValid() && !m_margins.GetRight().IsValid() && !m_margins.GetTop().IsValid() && !m_margins.GetBottom().IsValid();
+        !m_margins.GetLeft().IsValid() && !m_margins.GetRight().IsValid() && !m_margins.GetTop().IsValid() && !m_margins.GetBottom().IsValid() &&
+        m_shadow.IsDefault();
 }
 
 // wxRichTextAttr
@@ -15404,6 +15488,128 @@ void wxRichTextBuffer::CleanUpFieldTypes()
     }
 
     sm_fieldTypes.clear();
+}
+
+// Shadow
+
+bool wxTextAttrShadow::operator==(const wxTextAttrShadow& shadow) const
+{
+    return (m_flags == shadow.m_flags &&
+            m_shadowColour == shadow.m_shadowColour &&
+            m_offsetX == shadow.m_offsetX &&
+            m_offsetY == shadow.m_offsetY &&
+            m_spread == shadow.m_spread &&
+            m_blurDistance == shadow.m_blurDistance &&
+            m_opacity == shadow.m_opacity);
+}
+
+void wxTextAttrShadow::Reset()
+{
+    m_flags = 0;
+    m_shadowColour = 0;
+    m_offsetX.Reset();
+    m_offsetY.Reset();
+    m_spread.Reset();
+    m_blurDistance.Reset();
+    m_opacity.Reset();
+}
+
+bool wxTextAttrShadow::EqPartial(const wxTextAttrShadow& shadow, bool weakTest) const
+{
+    if (!weakTest &&
+        ((!m_offsetX.IsValid() && shadow.m_offsetX.IsValid()) ||
+         (!m_offsetY.IsValid() && shadow.m_offsetY.IsValid()) ||
+         (!m_spread.IsValid() && shadow.m_spread.IsValid()) ||
+         (!m_blurDistance.IsValid() && shadow.m_blurDistance.IsValid()) ||
+         (!m_opacity.IsValid() && shadow.m_opacity.IsValid()) ||
+         (!HasColour() && shadow.HasColour())
+         ))
+    {
+        return false;
+    }
+
+    if (m_offsetX.IsValid() && shadow.m_offsetX.IsValid() && !(m_offsetX == shadow.m_offsetX))
+        return false;
+
+    if (m_offsetY.IsValid() && shadow.m_offsetY.IsValid() && !(m_offsetY == shadow.m_offsetY))
+        return false;
+
+    if (m_spread.IsValid() && shadow.m_spread.IsValid() && !(m_spread == shadow.m_spread))
+        return false;
+
+    if (m_blurDistance.IsValid() && shadow.m_blurDistance.IsValid() && !(m_blurDistance == shadow.m_blurDistance))
+        return false;
+
+    if (m_opacity.IsValid() && shadow.m_opacity.IsValid() && !(m_opacity == shadow.m_opacity))
+        return false;
+
+    if (HasColour() && shadow.HasColour() && m_shadowColour != shadow.m_shadowColour)
+        return false;
+
+    return true;
+}
+
+bool wxTextAttrShadow::Apply(const wxTextAttrShadow& shadow, const wxTextAttrShadow* compareWith)
+{
+    m_offsetX.Apply(shadow.m_offsetX, compareWith ? (& compareWith->m_offsetX) : NULL);
+    m_offsetY.Apply(shadow.m_offsetY, compareWith ? (& compareWith->m_offsetY) : NULL);
+    m_spread.Apply(shadow.m_spread, compareWith ? (& compareWith->m_spread) : NULL);
+    m_blurDistance.Apply(shadow.m_blurDistance, compareWith ? (& compareWith->m_blurDistance) : NULL);
+    m_opacity.Apply(shadow.m_opacity, compareWith ? (& compareWith->m_opacity) : NULL);
+
+    if (shadow.HasColour() && !(compareWith && (shadow.m_shadowColour == compareWith->m_shadowColour)))
+        SetColour(shadow.m_shadowColour);
+
+    if (!IsDefault())
+        SetValid(true);
+
+    return true;
+}
+
+bool wxTextAttrShadow::RemoveStyle(const wxTextAttrShadow& attr)
+{
+    if (attr.GetOffsetX().IsValid() && GetOffsetX().IsValid())
+        GetOffsetX().Reset();
+    if (attr.GetOffsetY().IsValid() && GetOffsetY().IsValid())
+        GetOffsetY().Reset();
+    if (attr.GetSpread().IsValid() && GetSpread().IsValid())
+        GetSpread().Reset();
+    if (attr.GetBlurDistance().IsValid() && GetBlurDistance().IsValid())
+        GetBlurDistance().Reset();
+    if (attr.GetOpacity().IsValid() && GetOpacity().IsValid())
+        GetOpacity().Reset();
+    if (attr.HasColour() && HasColour())
+        RemoveFlag(wxTEXT_BOX_ATTR_BORDER_COLOUR);
+    
+    return true;
+}
+
+void wxTextAttrShadow::CollectCommonAttributes(const wxTextAttrShadow& attr, wxTextAttrShadow& clashingAttr, wxTextAttrShadow& absentAttr)
+{
+    GetOffsetX().CollectCommonAttributes(attr.GetOffsetX(), clashingAttr.GetOffsetX(), absentAttr.GetOffsetX());
+    GetOffsetY().CollectCommonAttributes(attr.GetOffsetY(), clashingAttr.GetOffsetY(), absentAttr.GetOffsetY());
+    GetSpread().CollectCommonAttributes(attr.GetSpread(), clashingAttr.GetSpread(), absentAttr.GetSpread());
+    GetBlurDistance().CollectCommonAttributes(attr.GetBlurDistance(), clashingAttr.GetBlurDistance(), absentAttr.GetBlurDistance());
+    GetOpacity().CollectCommonAttributes(attr.GetOpacity(), clashingAttr.GetOpacity(), absentAttr.GetOpacity());
+
+    if (attr.HasColour())
+    {
+        if (!clashingAttr.HasColour() && !absentAttr.HasColour())
+        {
+            if (HasColour())
+            {
+                if (GetColour() != attr.GetColour())
+                {
+                    clashingAttr.AddFlag(wxTEXT_BOX_ATTR_BORDER_COLOUR);
+                    RemoveFlag(wxTEXT_BOX_ATTR_BORDER_COLOUR);
+                }
+            }
+            else
+                SetColour(attr.GetColourLong());
+        }
+    }
+    else
+        absentAttr.AddFlag(wxTEXT_BOX_ATTR_BORDER_COLOUR);
 }
 
 #endif
