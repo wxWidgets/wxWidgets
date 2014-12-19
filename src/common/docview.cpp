@@ -1001,13 +1001,17 @@ bool wxDocManager::CloseDocument(wxDocument* doc, bool force)
     if ( !doc->Close() && !force )
         return false;
 
+    // To really force the document to close, we must ensure that it isn't
+    // modified, otherwise it would ask the user about whether it should be
+    // destroyed (again, it had been already done by Close() above) and might
+    // not destroy it at all, while we must do it here.
+    doc->Modify(false);
+
     // Implicitly deletes the document when
     // the last view is deleted
     doc->DeleteAllViews();
 
-    // Check we're really deleted
-    if (m_docs.Member(doc))
-        delete doc;
+    wxASSERT(!m_docs.Member(doc));
 
     return true;
 }
