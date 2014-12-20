@@ -1331,6 +1331,12 @@ wxString wxGetOsDescription()
                                     ? _("Windows Server 2012 R2")
                                     : _("Windows 8.1");
                             break;
+
+                        case 4:
+                            str = wxIsWindowsServer() == 1
+                                    ? _("Windows Server 10")
+                                    : _("Windows 10");
+                            break;
                     }
                     break;
             }
@@ -1490,8 +1496,9 @@ wxWinVersion wxGetWinVersion()
                             return wxWinVersion_8;
 
                         case 3:
+                        case 4:
                             // For now, map to wxWinVersion_8. In case program
-                            // does not have a manifest indicating 8.1
+                            // does not have a manifest indicating 8.1 or 10
                             // support, Windows already performs this mapping
                             // for us.
                             return wxWinVersion_8;
