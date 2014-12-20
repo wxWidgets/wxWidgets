@@ -1905,9 +1905,16 @@ class wxDataViewTextRenderer : public wxDataViewRenderer
 {
 public:
     /**
+        Returns the wxVariant type used with this renderer.
+
+        @since 3.1.0
+     */
+    static wxString GetDefaultType();
+
+    /**
         The ctor.
     */
-    wxDataViewTextRenderer(const wxString& varianttype = "string",
+    wxDataViewTextRenderer(const wxString& varianttype = GetDefaultType(),
                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                            int align = wxDVR_DEFAULT_ALIGNMENT );
 };
@@ -1931,9 +1938,16 @@ class wxDataViewIconTextRenderer : public wxDataViewRenderer
 {
 public:
     /**
+        Returns the wxVariant type used with this renderer.
+
+        @since 3.1.0
+     */
+    static wxString GetDefaultType();
+
+    /**
         The ctor.
     */
-    wxDataViewIconTextRenderer(const wxString& varianttype = "wxDataViewIconText",
+    wxDataViewIconTextRenderer(const wxString& varianttype = GetDefaultType(),
                                wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                int align = wxDVR_DEFAULT_ALIGNMENT );
 };
@@ -1952,10 +1966,17 @@ class wxDataViewProgressRenderer : public wxDataViewRenderer
 {
 public:
     /**
+        Returns the wxVariant type used with this renderer.
+
+        @since 3.1.0
+     */
+    static wxString GetDefaultType();
+
+    /**
         The ctor.
     */
     wxDataViewProgressRenderer(const wxString& label = wxEmptyString,
-                               const wxString& varianttype = "long",
+                               const wxString& varianttype = GetDefaultType(),
                                wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                int align = wxDVR_DEFAULT_ALIGNMENT );
 };
@@ -1998,9 +2019,16 @@ class wxDataViewToggleRenderer : public wxDataViewRenderer
 {
 public:
     /**
+        Returns the wxVariant type used with this renderer.
+
+        @since 3.1.0
+     */
+    static wxString GetDefaultType();
+
+    /**
         The ctor.
     */
-    wxDataViewToggleRenderer(const wxString& varianttype = "bool",
+    wxDataViewToggleRenderer(const wxString& varianttype = GetDefaultType(),
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                              int align = wxDVR_DEFAULT_ALIGNMENT);
 };
@@ -2076,9 +2104,16 @@ class wxDataViewDateRenderer : public wxDataViewRenderer
 {
 public:
     /**
+        Returns the wxVariant type used with this renderer.
+
+        @since 3.1.0
+     */
+    static wxString GetDefaultType();
+
+    /**
         The ctor.
     */
-    wxDataViewDateRenderer(const wxString& varianttype = "datetime",
+    wxDataViewDateRenderer(const wxString& varianttype = GetDefaultType(),
                            wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
                            int align = wxDVR_DEFAULT_ALIGNMENT);
 };
@@ -2108,9 +2143,16 @@ class wxDataViewCustomRenderer : public wxDataViewRenderer
 {
 public:
     /**
+        Returns the wxVariant type used with this renderer.
+
+        @since 3.1.0
+     */
+    static wxString GetDefaultType();
+
+    /**
         Constructor.
     */
-    wxDataViewCustomRenderer(const wxString& varianttype = "string",
+    wxDataViewCustomRenderer(const wxString& varianttype = GetDefaultType(),
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                              int align = wxDVR_DEFAULT_ALIGNMENT);
 
@@ -2311,9 +2353,16 @@ class wxDataViewBitmapRenderer : public wxDataViewRenderer
 {
 public:
     /**
+        Returns the wxVariant type used with this renderer.
+
+        @since 3.1.0
+     */
+    static wxString GetDefaultType();
+
+    /**
         The ctor.
     */
-    wxDataViewBitmapRenderer(const wxString& varianttype = "wxBitmap",
+    wxDataViewBitmapRenderer(const wxString& varianttype = GetDefaultType(),
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                              int align = wxDVR_DEFAULT_ALIGNMENT);
 };

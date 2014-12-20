@@ -25,7 +25,9 @@
 class WXDLLIMPEXP_ADV wxDataViewTextRenderer: public wxDataViewRenderer
 {
 public:
-    wxDataViewTextRenderer( const wxString &varianttype = "string",
+    static wxString GetDefaultType() { return wxS("string"); }
+
+    wxDataViewTextRenderer( const wxString &varianttype = GetDefaultType(),
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                             int align = wxDVR_DEFAULT_ALIGNMENT );
 
@@ -68,7 +70,9 @@ protected:
 class WXDLLIMPEXP_ADV wxDataViewBitmapRenderer: public wxDataViewRenderer
 {
 public:
-    wxDataViewBitmapRenderer( const wxString &varianttype = "wxBitmap",
+    static wxString GetDefaultType() { return wxS("wxBitmap"); }
+
+    wxDataViewBitmapRenderer( const wxString &varianttype = GetDefaultType(),
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                               int align = wxDVR_DEFAULT_ALIGNMENT );
 
@@ -86,7 +90,9 @@ protected:
 class WXDLLIMPEXP_ADV wxDataViewToggleRenderer: public wxDataViewRenderer
 {
 public:
-    wxDataViewToggleRenderer( const wxString &varianttype = "bool",
+    static wxString GetDefaultType() { return wxS("bool"); }
+
+    wxDataViewToggleRenderer( const wxString &varianttype = GetDefaultType(),
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                               int align = wxDVR_DEFAULT_ALIGNMENT );
 
@@ -104,7 +110,9 @@ protected:
 class WXDLLIMPEXP_ADV wxDataViewCustomRenderer: public wxDataViewCustomRendererBase
 {
 public:
-    wxDataViewCustomRenderer( const wxString &varianttype = "string",
+    static wxString GetDefaultType() { return wxS("string"); }
+
+    wxDataViewCustomRenderer( const wxString &varianttype = GetDefaultType(),
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                               int align = wxDVR_DEFAULT_ALIGNMENT,
                               bool no_init = false );
@@ -166,8 +174,10 @@ private:
 class WXDLLIMPEXP_ADV wxDataViewProgressRenderer: public wxDataViewCustomRenderer
 {
 public:
+    static wxString GetDefaultType() { return wxS("long"); }
+
     wxDataViewProgressRenderer( const wxString &label = wxEmptyString,
-                                const wxString &varianttype = "long",
+                                const wxString &varianttype = GetDefaultType(),
                                 wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                 int align = wxDVR_DEFAULT_ALIGNMENT );
     virtual ~wxDataViewProgressRenderer();
@@ -201,7 +211,9 @@ protected:
 class WXDLLIMPEXP_ADV wxDataViewIconTextRenderer: public wxDataViewTextRenderer
 {
 public:
-    wxDataViewIconTextRenderer( const wxString &varianttype = "wxDataViewIconText",
+    static wxString GetDefaultType() { return wxS("wxDataViewIconText"); }
+
+    wxDataViewIconTextRenderer( const wxString &varianttype = GetDefaultType(),
                                 wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                 int align = wxDVR_DEFAULT_ALIGNMENT );
     virtual ~wxDataViewIconTextRenderer();
