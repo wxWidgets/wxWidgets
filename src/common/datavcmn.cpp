@@ -1162,9 +1162,27 @@ CreateColumnWithRenderer(const LabelType& label,
                          wxAlignment align,
                          int flags)
 {
+    // For compatibility reason, handle wxALIGN_NOT as wxDVR_DEFAULT_ALIGNMENT
+    // when creating the renderer here because a lot of existing code,
+    // including our own dataview sample, uses wxALIGN_NOT just because it's
+    // the default value of the alignment argument in AppendXXXColumn()
+    // methods, but this doesn't mean that it actually wants to top-align the
+    // column text.
+    //
+    // This does make it impossible to create top-aligned text using these
+    // functions, but it can always be done by creating the renderer with the
+    // desired alignment explicitly and should be so rarely needed in practice
+    // (without speaking that vertical alignment is completely unsupported in
+    // native OS X version), that it's preferable to do the right thing by
+    // default here rather than account for it.
     return new wxDataViewColumn(
                     label,
-                    RendererFactory<Renderer>::New(mode, align),
+                    RendererFactory<Renderer>::New(
+                        mode,
+                        align & wxALIGN_BOTTOM
+                            ? align
+                            : align | wxALIGN_CENTRE_VERTICAL
+                    ),
                     model_column,
                     width,
                     align,
