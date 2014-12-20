@@ -327,7 +327,7 @@ static int my_sort( int *v1, int *v2 )
    return *v1-*v2;
 }
 
-#define INITIAL_NUMBER_OF_ITEMS 10000000
+#define INITIAL_NUMBER_OF_ITEMS 10000
 
 MyListModel::MyListModel() :
         wxDataViewVirtualListModel( INITIAL_NUMBER_OF_ITEMS )
