@@ -2911,12 +2911,17 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     wxVariant value;
     wx_model->GetValue( value, item, cell->GetOwner()->GetModelColumn() );
 
-    if (value.GetType() != cell->GetVariantType())
+    // It is always possible to leave a cell empty, don't warn about type
+    // mismatch in this case.
+    if (!value.IsNull())
     {
-        wxLogDebug("Wrong type returned from the model: "
-                   "%s required but actual type is %s",
-                   cell->GetVariantType(),
-                   value.GetType());
+        if (value.GetType() != cell->GetVariantType())
+        {
+            wxLogDebug("Wrong type returned from the model: "
+                       "%s required but actual type is %s",
+                       cell->GetVariantType(),
+                       value.GetType());
+        }
     }
 
     cell->SetValue( value );
