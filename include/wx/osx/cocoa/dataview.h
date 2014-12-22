@@ -314,11 +314,9 @@ private:
     -(void)             removeFromBuffer:(wxPointerObject*)item;
 
     // buffered children handling
-    -(void)             appendChild:(wxPointerObject*)item;
     -(void)             clearChildren;
     -(wxPointerObject*) getChild:(NSUInteger)index;
     -(NSUInteger)       getChildCount;
-    -(void)             removeChild:(NSUInteger)index;
 
     // buffer handling
     -(void) clearBuffers;

@@ -1039,11 +1039,6 @@ outlineView:(NSOutlineView*)outlineView
 //
 // children handling
 //
--(void) appendChild:(wxPointerObject*)item
-{
-    [children addObject:item];
-}
-
 -(void) clearChildren
 {
     [children removeAllObjects];
@@ -1057,11 +1052,6 @@ outlineView:(NSOutlineView*)outlineView
 -(NSUInteger) getChildCount
 {
     return [children count];
-}
-
--(void) removeChild:(NSUInteger)index
-{
-    [children removeObjectAtIndex:index];
 }
 
 //
