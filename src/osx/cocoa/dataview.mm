@@ -3299,16 +3299,20 @@ void wxDataViewColumn::SetWidth(int width)
 {
     m_width = width;
 
+    if ( !GetOwner() )
+    {
+        // can't set the real width yet
+        return;
+    }
+
     switch ( width )
     {
         case wxCOL_WIDTH_AUTOSIZE:
-            if ( GetOwner() )
             {
                 wxCocoaDataViewControl *peer = static_cast<wxCocoaDataViewControl*>(GetOwner()->GetPeer());
                 peer->FitColumnWidthToContent(GetOwner()->GetColumnPosition(this));
                 break;
             }
-            // fall through if not yet settable
 
         case wxCOL_WIDTH_DEFAULT:
             width = wxDVC_DEFAULT_WIDTH;
