@@ -1766,9 +1766,27 @@ outlineView:(NSOutlineView*)outlineView
         return;
 
     wxDataViewRenderer * const renderer = dvCol->GetRenderer();
+    wxDataViewRendererNativeData * const data = renderer->GetNativeData();
 
+    // let the renderer know about what it's going to render next
+    data->SetColumnPtr(tableColumn);
+    data->SetItem(item);
+    data->SetItemCell(cell);
+
+    // set the state (enabled/disabled) of the item: this must be done first as
+    // even if we return below because the cell is empty, it still needs to be
+    // disabled if it's not supposed to be enabled
+    renderer->OSXApplyEnabled(model->IsEnabled(dvItem, colIdx));
+
+    // check if we have anything to render
     wxVariant value;
     model->GetValue(value, dvItem, colIdx);
+    if ( value.IsNull() )
+    {
+        // for consistency with the generic implementation, just handle missing
+        // values as blank
+        return;
+    }
 
     if ( value.GetType() != renderer->GetVariantType() )
     {
@@ -1781,22 +1799,12 @@ outlineView:(NSOutlineView*)outlineView
         return;
     }
 
-    wxDataViewRendererNativeData * const data = renderer->GetNativeData();
-
-    // let the renderer know about what it's going to render next
-    data->SetColumnPtr(tableColumn);
-    data->SetItem(item);
-    data->SetItemCell(cell);
-
     // use the attributes: notice that we need to do this whether we have them
     // or not as even if this cell doesn't have any attributes, the previous
     // one might have had some and then we need to reset them back to default
     wxDataViewItemAttr attr;
     model->GetAttr(dvItem, colIdx, attr);
     renderer->OSXApplyAttr(attr);
-
-    // set the state (enabled/disabled) of the item
-    renderer->OSXApplyEnabled(model->IsEnabled(dvItem, colIdx));
 
     // and finally do draw it
     renderer->MacRender();
