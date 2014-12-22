@@ -2913,7 +2913,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 
     if (value.GetType() != cell->GetVariantType())
     {
-        wxLogError("Wrong type returned from the model: "
+        wxLogDebug("Wrong type returned from the model: "
                    "%s required but actual type is %s",
                    cell->GetVariantType(),
                    value.GetType());
