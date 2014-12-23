@@ -696,13 +696,7 @@ void wxVListBox::OnLeftDown(wxMouseEvent& event)
         if ( event.ShiftDown() )
            flags |= ItemClick_Shift;
 
-        // under Mac Apple-click is used in the same way as Ctrl-click
-        // elsewhere
-#ifdef __WXMAC__
-        if ( event.MetaDown() )
-#else
         if ( event.ControlDown() )
-#endif
             flags |= ItemClick_Ctrl;
 
         DoHandleItemClick(item, flags);
