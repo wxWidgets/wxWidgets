@@ -1144,7 +1144,7 @@ void FormMain::PopulateWithStandardItems ()
 
     pg->Append( new wxLongStringProperty(wxT("Information"),wxPG_LABEL,
         wxT("Editing properties will have immediate effect on this window, ")
-        wxT("and vice versa (atleast in most cases, that is).")
+        wxT("and vice versa (at least in most cases, that is).")
         ) );
     pg->SetPropertyHelpString( wxT("Information"),
                                wxT("This property is read-only.") );
@@ -2100,7 +2100,7 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
         wxT("Switches between category-specific cell colours and default scheme (actually done using SetPropertyTextColour and SetPropertyBackgroundColour).") );
     menuTry->AppendSeparator();
     menuTry->AppendCheckItem(ID_STATICLAYOUT, wxT("Static Layout"),
-        wxT("Switches between user-modifiedable and static layouts.") );
+        wxT("Switches between user-modifiable and static layouts.") );
     menuTry->Append(ID_SETCOLUMNS, wxT("Set Number of Columns") );
     menuTry->AppendSeparator();
     menuTry->Append(ID_TESTXRC, wxT("Display XRC sample") );
@@ -2432,7 +2432,7 @@ void FormMain::OnExtendedKeyNav( wxCommandEvent& WXUNUSED(event) )
                                WXK_RETURN);
     propGrid->DedicateKey(WXK_RETURN);
 
-    // Up and Down keys are alredy associated with navigation,
+    // Up and Down keys are already associated with navigation,
     // but we must also prevent them from being eaten by
     // editor controls.
     propGrid->DedicateKey(WXK_UP);

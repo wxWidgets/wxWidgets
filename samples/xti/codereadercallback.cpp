@@ -65,7 +65,7 @@ struct wxObjectCodeReaderCallback::wxObjectCodeReaderCallbackInternal
 
         if ( m_objectNames.find(objectID) == m_objectNames.end() )
         {
-            wxLogError( _("Passing an unkown object to GetObject") );
+            wxLogError( _("Passing an unknown object to GetObject") );
             return wxEmptyString;
         }
         return wxString( m_objectNames[objectID].c_str() );

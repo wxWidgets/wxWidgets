@@ -378,7 +378,7 @@ RegFrame::RegFrame(wxFrame *parent, const wxChar *title, int x, int y, int w, in
     wxMenu *pMenuFile = new wxMenu;
     pMenuFile->Append(Menu_Test, wxT("Te&st"), wxT("Test key creation"));
     pMenuFile->AppendSeparator();
-    pMenuFile->Append(Menu_About, wxT("&About"), wxT("Show an extraordinarly beautiful dialog"));
+    pMenuFile->Append(Menu_About, wxT("&About"), wxT("Show an extraordinarily beautiful dialog"));
     pMenuFile->AppendSeparator();
     pMenuFile->Append(Menu_Quit,  wxT("E&xit"), wxT("Quit this program"));
 
@@ -629,7 +629,7 @@ RegTreeCtrl::RegTreeCtrl(wxWindow *parent, wxWindowID id)
     : wxTreeCtrl(parent, id, wxDefaultPosition, wxDefaultSize,
         wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS | wxSUNKEN_BORDER)
 {
-    // init members
+    // initialize members
     m_draggedItem = NULL;
     m_restoreStatus = false;
     m_viewMode = wxRegKey::WOW64ViewMode_Default;

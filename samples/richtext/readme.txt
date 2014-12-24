@@ -64,7 +64,7 @@ API
 ===
 
 It's basically the wxTextCtrl with some additions. There is a new
-wxTextAttrEx class deriving from wxTextAttr, to accomodate new
+wxTextAttrEx class deriving from wxTextAttr, to accommodate new
 style attributes. This could be merged with wxTextAttr. There
 is also a wxRichTextAttr which is similar to wxTextAttrEx but
 doesn't store the font as a wxFont: this allows much more
