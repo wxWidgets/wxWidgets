@@ -26,8 +26,6 @@ public:
     
     virtual QMessageBox *GetHandle() const;
 
-private:
-    QMessageBox *m_qtMessageBox;
 };
 
 #endif // _WX_QT_MSGDLG_H_
