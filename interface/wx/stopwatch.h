@@ -21,7 +21,7 @@
         ... stopwatch is stopped now ...
         sw.Resume();
         CallLongRunningFunction();
-        wxLogMessage("And calling it twice took $ldms in all", sw.Time());
+        wxLogMessage("And calling it twice took %ldms in all", sw.Time());
     @endcode
 
     Since wxWidgets 2.9.3 this class uses @c QueryPerformanceCounter()
