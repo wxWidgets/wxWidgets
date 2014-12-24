@@ -506,6 +506,8 @@ public:
 
 
     /**
+        Show all pending output and clear the buffer.
+        
         Some of wxLog implementations, most notably the standard wxLogGui class,
         buffer the messages (for example, to avoid showing the user a zillion of modal
         message boxes one after another -- which would be really annoying).
