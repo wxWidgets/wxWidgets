@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-25 19:58+0100\n"
-"PO-Revision-Date: 2013-08-28 22:49+0100\n"
+"PO-Revision-Date: 2014-12-16 22:36+0100\n"
 "Last-Translator: Zbyněk Schwarz <zbynek.schwarz@gmail.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "Language: cs_CZ\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Bookmarks: 1524,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -97,9 +97,8 @@ msgstr "Obálka č. 9, 3 7/8 x 8 7/8 palce"
 #: ../src/richtext/richtextsizepage.cpp:591
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:661
-#, fuzzy
 msgid "%"
-msgstr "%s"
+msgstr "%"
 
 #: ../src/html/helpwnd.cpp:1031
 #, c-format
@@ -107,9 +106,9 @@ msgid "%d of %lu"
 msgstr "%d z %lu"
 
 #: ../src/html/helpwnd.cpp:1678
-#, fuzzy, c-format
+#, c-format
 msgid "%i of %u"
-msgstr "%i z %i"
+msgstr "%i z %u"
 
 #: ../src/generic/filectrlg.cpp:315
 #, c-format
@@ -160,9 +159,9 @@ msgid "%s files (%s)|%s"
 msgstr "Soubory %s (%s)|%s"
 
 #: ../src/html/helpwnd.cpp:1716
-#, fuzzy, c-format
+#, c-format
 msgid "%u of %u"
-msgstr "%lu z %lu"
+msgstr "%u z %u"
 
 #: ../src/common/stockitem.cpp:139 ../src/html/helpfrm.cpp:142
 #: ../src/html/helpfrm.cpp:144
@@ -688,7 +687,7 @@ msgstr "&Symbol:"
 #: ../src/richtext/richtextborderspage.cpp:383
 #: ../src/richtext/richtextborderspage.cpp:552
 msgid "&Synchronize values"
-msgstr ""
+msgstr "&Synchronizovat hodnoty"
 
 #: ../include/wx/richtext/richtextbuffer.h:5870
 msgid "&Table"
@@ -762,14 +761,14 @@ msgid "&Yes"
 msgstr "&Ano"
 
 #: ../src/common/valtext.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains illegal characters"
-msgstr "'%s' musí obsahovat pouze písmena."
+msgstr "'%s' obsahuje neplatné znaky"
 
 #: ../src/common/valtext.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' doesn't consist only of valid characters"
-msgstr "'%s' musí obsahovat pouze písmena."
+msgstr "'%s' neobsahuje pouze platné znaky"
 
 #: ../src/common/config.cpp:523 ../src/msw/regconf.cpp:258
 #, c-format
@@ -787,14 +786,14 @@ msgid "'%s' is not a valid message catalog."
 msgstr "'%s' není katalogem zpráv."
 
 #: ../src/common/valtext.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not one of the valid strings"
-msgstr "'%s' není katalogem zpráv."
+msgstr "'%s' není jeden z platných řetězců"
 
 #: ../src/common/valtext.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is one of the invalid strings"
-msgstr "'%s' je neplatný"
+msgstr "'%s' je jeden z neplatných řetězců"
 
 #: ../src/common/textbuf.cpp:237
 #, c-format
@@ -1172,22 +1171,20 @@ msgid "About %s"
 msgstr "O aplikaci %s"
 
 #: ../src/osx/menu_osx.cpp:617
-#, fuzzy
 msgid "About..."
-msgstr "O"
+msgstr "O aplikaci..."
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
 msgstr "Absolutní"
 
 #: ../src/propgrid/advprops.cpp:845
-#, fuzzy
 msgid "ActiveBorder"
-msgstr "Okraj"
+msgstr "Aktivní okraj"
 
 #: ../src/propgrid/advprops.cpp:846
 msgid "ActiveCaption"
-msgstr ""
+msgstr "Aktivní nadpis"
 
 #: ../src/common/stockitem.cpp:207
 msgid "Actual Size"
@@ -1199,12 +1196,10 @@ msgid "Add"
 msgstr "Přidat"
 
 #: ../src/richtext/richtextbuffer.cpp:11293
-#, fuzzy
 msgid "Add Column"
 msgstr "Přidat sloupec"
 
 #: ../src/richtext/richtextbuffer.cpp:11230
-#, fuzzy
 msgid "Add Row"
 msgstr "Přidat řádek"
 
@@ -1297,7 +1292,7 @@ msgstr "Alt+"
 #: ../src/richtext/richtextborderspage.cpp:580
 #: ../src/richtext/richtextborderspage.cpp:582
 msgid "An optional corner radius for adding rounded corners."
-msgstr ""
+msgstr "Nepovinný poloměr zaoblení pro přidání zaoblených rohů."
 
 #: ../src/common/debugrpt.cpp:581
 msgid "And includes the following files:\n"
@@ -1310,7 +1305,7 @@ msgstr "Soubor animace není typu %ld."
 
 #: ../src/propgrid/advprops.cpp:844
 msgid "AppWorkspace"
-msgstr ""
+msgstr "Prostor aplikace"
 
 #: ../src/generic/logg.cpp:1032
 #, c-format
@@ -1327,7 +1322,7 @@ msgstr "Použít"
 
 #: ../src/propgrid/advprops.cpp:1559
 msgid "Aqua"
-msgstr ""
+msgstr "Akvamarinová"
 
 #: ../src/richtext/richtextbulletspage.cpp:274
 #: ../src/richtext/richtextliststylepage.cpp:482
@@ -1344,9 +1339,8 @@ msgid "Argument %u not found."
 msgstr "Argument %u nenalezen."
 
 #: ../src/propgrid/advprops.cpp:1703
-#, fuzzy
 msgid "Arrow"
-msgstr "zítra"
+msgstr "Šipka"
 
 #: ../src/generic/aboutdlgg.cpp:184
 msgid "Artists"
@@ -1463,9 +1457,8 @@ msgstr "Barva pozadí"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:50
-#, fuzzy
 msgid "Backspace"
-msgstr "Zpět"
+msgstr "Backspace"
 
 #: ../src/common/fmapbase.cpp:160
 msgid "Baltic (ISO-8859-13)"
@@ -1490,15 +1483,15 @@ msgstr "Vykreslovač bitmap nemůže vykreslit hodnotu; typ hodnoty: "
 
 #: ../src/propgrid/advprops.cpp:1544
 msgid "Black"
-msgstr ""
+msgstr "Černá"
 
 #: ../src/propgrid/advprops.cpp:1705
 msgid "Blank"
-msgstr ""
+msgstr "Prázdné"
 
 #: ../src/propgrid/advprops.cpp:1553
 msgid "Blue"
-msgstr ""
+msgstr "Modrá"
 
 #: ../src/common/stockitem.cpp:143 ../src/generic/fontdlgg.cpp:333
 #: ../src/osx/carbon/fontdlg.cpp:524 ../src/richtext/richtextfontpage.cpp:353
@@ -1531,9 +1524,8 @@ msgid "Box styles"
 msgstr "Styly rámečku"
 
 #: ../src/propgrid/advprops.cpp:1552
-#, fuzzy
 msgid "Brown"
-msgstr "Procházet"
+msgstr "Hnědá"
 
 #: ../src/common/filepickercmn.cpp:43 ../src/common/filepickercmn.cpp:44
 msgid "Browse"
@@ -1553,25 +1545,24 @@ msgid "Bullets"
 msgstr "Odrážky"
 
 #: ../src/propgrid/advprops.cpp:1706
-#, fuzzy
 msgid "Bullseye"
-msgstr "Styl odrážek"
+msgstr "Střed terče"
 
 #: ../src/propgrid/advprops.cpp:847
 msgid "ButtonFace"
-msgstr ""
+msgstr "Plocha tlačítka"
 
 #: ../src/propgrid/advprops.cpp:848
 msgid "ButtonHighlight"
-msgstr ""
+msgstr "Zvýraznění tlačítka"
 
 #: ../src/propgrid/advprops.cpp:849
 msgid "ButtonShadow"
-msgstr ""
+msgstr "Stín tlačítka"
 
 #: ../src/propgrid/advprops.cpp:850
 msgid "ButtonText"
-msgstr ""
+msgstr "Text tlačítka"
 
 #: ../src/common/paper.cpp:99
 msgid "C sheet, 17 x 22 in"
@@ -1902,13 +1893,12 @@ msgstr "Nelze počkat na ukončení vlákna"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:73
-#, fuzzy
 msgid "Capital"
-msgstr "Ka&pitálky"
+msgstr "Kapitálky"
 
 #: ../src/propgrid/advprops.cpp:851
 msgid "CaptionText"
-msgstr ""
+msgstr "Text nadpisu"
 
 #: ../src/html/helpwnd.cpp:533
 msgid "Case sensitive"
@@ -1983,9 +1973,8 @@ msgid "Changes won't be saved to avoid overwriting the existing file \"%s\""
 msgstr "Změny nebudou uloženy, aby se zabránilo přepsání souboru \"%s\""
 
 #: ../src/propgrid/advprops.cpp:1707
-#, fuzzy
 msgid "Character"
-msgstr "Kód &znaku:"
+msgstr "Karet"
 
 #: ../src/richtext/richtextstyles.cpp:1063
 msgid "Character styles"
@@ -2010,7 +1999,7 @@ msgstr "Zaškrtněte pro přidání pravé závorky."
 #: ../src/richtext/richtextborderspage.cpp:554
 #: ../src/richtext/richtextborderspage.cpp:556
 msgid "Check to edit all borders simultaneously."
-msgstr ""
+msgstr "Zaškrtněte pro úpravu všech okrajů současně."
 
 #: ../src/richtext/richtextbulletspage.cpp:168
 #: ../src/richtext/richtextbulletspage.cpp:170
@@ -2021,9 +2010,8 @@ msgstr "Zaškrtněte pro uzavření odrážek do závorek."
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
-#, fuzzy
 msgid "Check to indicate right-to-left text layout."
-msgstr "Klikněte pro změnu barvy písma"
+msgstr "Zaškrtněte pro označení rozvržení textu jako zprava doleva."
 
 #: ../src/osx/carbon/fontdlg.cpp:526 ../src/osx/carbon/fontdlg.cpp:528
 msgid "Check to make the font bold."
@@ -2070,7 +2058,7 @@ msgstr "Zaškrtněte pro zobrazení textu v horním indexu."
 #: ../src/richtext/richtextfontpage.cpp:322
 #: ../src/richtext/richtextfontpage.cpp:324
 msgid "Check to suppress hyphenation."
-msgstr ""
+msgstr "Zaškrtněte pro potlačení dělení slov."
 
 #: ../src/msw/dialup.cpp:773
 msgid "Choose ISP to dial"
@@ -2278,7 +2266,7 @@ msgstr "Nelze nastavit šířku sloupce."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:112
 msgid "Command"
-msgstr ""
+msgstr "Command"
 
 #: ../src/common/init.cpp:188
 #, c-format
@@ -2330,11 +2318,11 @@ msgstr "Obsah"
 
 #: ../src/propgrid/advprops.cpp:852
 msgid "ControlDark"
-msgstr ""
+msgstr "Barva stínu"
 
 #: ../src/propgrid/advprops.cpp:853
 msgid "ControlLight"
-msgstr ""
+msgstr "Barva světla"
 
 #: ../src/common/strconv.cpp:2259
 #, c-format
@@ -2364,16 +2352,16 @@ msgstr "Kopírovat výběr"
 
 #: ../src/msw/glcanvas.cpp:183 ../src/unix/glx11.cpp:136
 msgid "Core OpenGL profile is not supported by the OpenGL driver."
-msgstr ""
+msgstr "Hlavní profil OpenGL není podporován ovladačem."
 
 #: ../src/richtext/richtextborderspage.cpp:569
 #: ../src/richtext/richtextborderspage.cpp:604
 msgid "Corner"
-msgstr ""
+msgstr "Roh"
 
 #: ../src/richtext/richtextborderspage.cpp:578
 msgid "Corner &radius:"
-msgstr ""
+msgstr "&Zaoblení rohu:"
 
 #: ../src/html/chm.cpp:718
 #, c-format
@@ -2569,7 +2557,7 @@ msgstr "Vytvořit nový adresář"
 
 #: ../src/propgrid/advprops.cpp:1708
 msgid "Cross"
-msgstr ""
+msgstr "Křížek"
 
 #: ../src/common/accelcmn.cpp:323
 msgid "Ctrl+"
@@ -2586,9 +2574,8 @@ msgstr "Aktuální adresář:"
 
 #: ../src/propgrid/advprops.cpp:868 ../src/propgrid/advprops.cpp:1524
 #: ../src/propgrid/advprops.cpp:1562
-#, fuzzy
 msgid "Custom"
-msgstr "Vlastní velikost"
+msgstr "Vlastní"
 
 #: ../src/gtk/print.cpp:218
 msgid "Custom size"
@@ -2670,16 +2657,15 @@ msgstr "Vytváření protokolu ladění selhalo."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:82
 msgid "Decimal"
-msgstr ""
+msgstr "Desetinná čárka"
 
 #: ../src/generic/fontdlgg.cpp:323
 msgid "Decorative"
 msgstr "Ozdobné"
 
 #: ../src/propgrid/advprops.cpp:1702
-#, fuzzy
 msgid "Default"
-msgstr "výchozí"
+msgstr "Výchozí"
 
 #: ../src/common/fmapbase.cpp:796
 msgid "Default encoding"
@@ -2695,27 +2681,24 @@ msgstr "Výchozí tiskárna"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:49
-#, fuzzy
 msgid "Del"
-msgstr "Smazat"
+msgstr "Del"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:48 ../src/common/stockitem.cpp:152
 #: ../src/richtext/richtextbuffer.cpp:8137 ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
-msgstr "Smazat"
+msgstr "Delete"
 
 #: ../src/richtext/richtexttabspage.cpp:144
 msgid "Delete A&ll"
 msgstr "Smazat &vše"
 
 #: ../src/richtext/richtextbuffer.cpp:11179
-#, fuzzy
 msgid "Delete Column"
 msgstr "Smazat sloupec"
 
 #: ../src/richtext/richtextbuffer.cpp:11129
-#, fuzzy
 msgid "Delete Row"
 msgstr "Smazat řádek"
 
@@ -2828,7 +2811,7 @@ msgstr "Při procházení knih zobrazí vlevo nápovědu."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:83
 msgid "Divide"
-msgstr ""
+msgstr "Lomítko"
 
 #: ../src/msw/mimetype.cpp:725
 msgid ""
@@ -2961,13 +2944,12 @@ msgstr "Povolit barvu pozadí."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:64
 msgid "End"
-msgstr ""
+msgstr "Konec"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:53
-#, fuzzy
 msgid "Enter"
-msgstr "Tiskárna"
+msgstr "Enter"
 
 #: ../src/richtext/richtextstyledlg.cpp:934
 msgid "Enter a box style name"
@@ -3059,13 +3041,12 @@ msgstr "Chyba: "
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:67
 msgid "Esc"
-msgstr ""
+msgstr "Esc"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:68
-#, fuzzy
 msgid "Escape"
-msgstr "Na šířku"
+msgstr "Escape"
 
 #: ../src/common/fmapbase.cpp:150
 msgid "Esperanto (ISO-8859-3)"
@@ -3416,9 +3397,9 @@ msgid "Failed to load shared library '%s'"
 msgstr "Nelze načíst sdílenou knihovnu '%s'"
 
 #: ../src/osx/core/sound.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load sound from \"%s\" (error %d)."
-msgstr "Nelze načíst zdroj \"%s\"."
+msgstr "Nelze načíst zvuk z \"%s\" (chyba %d)."
 
 #: ../src/msw/utils.cpp:1000
 #, c-format
@@ -3851,7 +3832,7 @@ msgstr "Od:"
 
 #: ../src/propgrid/advprops.cpp:1554
 msgid "Fuchsia"
-msgstr ""
+msgstr "Fuchsiová"
 
 #: ../src/common/imaggif.cpp:160
 msgid "GIF: Invalid gif index."
@@ -3878,7 +3859,7 @@ msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
 msgstr ""
-"GTK+ insltaovaný na tomot stroji je příliš starý pro podporu skládání "
+"GTK+ instalovaný na tomto stroji je příliš starý pro podporu skládání "
 "obrazovky, nainstalujte prosím GTK+ 2.12 nebo novější."
 
 #: ../src/univ/themes/gtk.cpp:525
@@ -3939,20 +3920,19 @@ msgstr "Grafika "
 
 #: ../src/propgrid/advprops.cpp:1549
 msgid "Gray"
-msgstr ""
+msgstr "Šedá"
 
 #: ../src/propgrid/advprops.cpp:855
 msgid "GrayText"
-msgstr ""
+msgstr "Neaktivní text"
 
 #: ../src/common/fmapbase.cpp:154
 msgid "Greek (ISO-8859-7)"
 msgstr "Řecky (ISO-8859-7)"
 
 #: ../src/propgrid/advprops.cpp:1550
-#, fuzzy
 msgid "Green"
-msgstr "MacŘečtina"
+msgstr "Zelená"
 
 #: ../src/richtext/richtextborderspage.cpp:618
 msgid "Groove"
@@ -3977,7 +3957,7 @@ msgstr "Soubory HTML (*.html;*.htm)|*.html;*.htm|"
 
 #: ../src/propgrid/advprops.cpp:1709
 msgid "Hand"
-msgstr ""
+msgstr "Ruka"
 
 #: ../src/common/stockitem.cpp:162
 msgid "Harddisk"
@@ -4043,20 +4023,18 @@ msgid "Hide this notification message."
 msgstr "Skrýt tuto oznamovací zprávu."
 
 #: ../src/propgrid/advprops.cpp:856
-#, fuzzy
 msgid "Highlight"
-msgstr "tenké"
+msgstr "Zvýraznění"
 
 #: ../src/propgrid/advprops.cpp:857
-#, fuzzy
 msgid "HighlightText"
-msgstr "Zarovnat text doprava."
+msgstr "Zvýraznění textu"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:63 ../src/common/stockitem.cpp:164
 #: ../src/generic/dirdlgg.cpp:98
 msgid "Home"
-msgstr "Domů"
+msgstr "Home"
 
 #: ../src/generic/dirctrlg.cpp:545
 msgid "Home directory"
@@ -4069,7 +4047,7 @@ msgstr "Jak bude text obtékat vzhledem k objektu."
 
 #: ../src/propgrid/advprops.cpp:1710
 msgid "I-Beam"
-msgstr ""
+msgstr "Výběr textu"
 
 #: ../src/common/imagbmp.cpp:1195
 msgid "ICO: Error in reading mask DIB."
@@ -4213,17 +4191,16 @@ msgid "Impossible to set permissions for the file '%s'"
 msgstr "Nelze nastavit přístupová práva souboru '%s'"
 
 #: ../src/propgrid/advprops.cpp:858
-#, fuzzy
 msgid "InactiveBorder"
-msgstr "Okraj"
+msgstr "Neaktivní okraj"
 
 #: ../src/propgrid/advprops.cpp:859
 msgid "InactiveCaption"
-msgstr ""
+msgstr "Neaktivní nadpis"
 
 #: ../src/propgrid/advprops.cpp:860
 msgid "InactiveCaptionText"
-msgstr ""
+msgstr "Text neaktivního nadpisu"
 
 #: ../src/common/gifdecod.cpp:792
 #, c-format
@@ -4260,14 +4237,13 @@ msgstr "Zavedení selhala v post init, ukončuji."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:52
-#, fuzzy
 msgid "Ins"
-msgstr "Ďolík"
+msgstr "Ins"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:51 ../src/richtext/richtextsymboldlg.cpp:472
 msgid "Insert"
-msgstr "Vložit"
+msgstr "Insert"
 
 #: ../src/richtext/richtextbuffer.cpp:7983
 msgid "Insert Field"
@@ -4451,130 +4427,118 @@ msgstr "NK_"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgid "KP_Add"
-msgstr "NK_PLUS"
+msgstr "NK_Plus"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:99
 msgid "KP_Begin"
-msgstr ""
+msgstr "NK_Begin"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:107
 msgid "KP_Decimal"
-msgstr ""
+msgstr "NK_Desetinná čárka"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgid "KP_Delete"
-msgstr "Smazat"
+msgstr "NK_Delete"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:108
 msgid "KP_Divide"
-msgstr ""
+msgstr "NK_Lomítko"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgid "KP_Down"
-msgstr "Dolů"
+msgstr "NK_Dolů"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgid "KP_End"
-msgstr "NK_END"
+msgstr "NK_End"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgid "KP_Enter"
-msgstr "Tiskárna"
+msgstr "NK_Enter"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
 msgid "KP_Equal"
-msgstr ""
+msgstr "NK_Rovná se"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgid "KP_Home"
-msgstr "Domů"
+msgstr "NK_Home"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgid "KP_Insert"
-msgstr "Vložit"
+msgstr "NK_Insert"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgid "KP_Left"
-msgstr "Doleva"
+msgstr "NK_Doleva"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:103
 msgid "KP_Multiply"
-msgstr ""
+msgstr "NK_Krát"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:97
-#, fuzzy
 msgid "KP_Next"
-msgstr "Další"
+msgstr "NK_Další"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
 msgid "KP_PageDown"
-msgstr ""
+msgstr "NK_PageDown"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:94
 msgid "KP_PageUp"
-msgstr ""
+msgstr "NK_PageUp"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:96
 msgid "KP_Prior"
-msgstr ""
+msgstr "NK_Předchozí"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgid "KP_Right"
-msgstr "Doprava"
+msgstr "NK_Doprava"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
 msgid "KP_Separator"
-msgstr ""
+msgstr "NK_Oddělovač"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:86
 msgid "KP_Space"
-msgstr ""
+msgstr "NK_Mezerník"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:106
 msgid "KP_Subtract"
-msgstr ""
+msgstr "NK_Mínus"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
-#, fuzzy
 msgid "KP_Tab"
-msgstr "NK_TAB"
+msgstr "NK_Tabulátor"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:91
-#, fuzzy
 msgid "KP_Up"
-msgstr "NK_NAHORU"
+msgstr "NK_Nahoru"
 
 #: ../src/richtext/richtextindentspage.cpp:270
 msgid "L&ine spacing:"
@@ -4622,7 +4586,7 @@ msgstr "Zleva (&první řádek):"
 
 #: ../src/propgrid/advprops.cpp:1711
 msgid "Left Button"
-msgstr ""
+msgstr "Levé tlačítko"
 
 #: ../src/generic/prntdlgg.cpp:880
 msgid "Left margin (mm):"
@@ -4681,7 +4645,7 @@ msgstr "Tenké"
 
 #: ../src/propgrid/advprops.cpp:1558
 msgid "Lime"
-msgstr ""
+msgstr "Limetková"
 
 #: ../src/generic/helpext.cpp:294
 #, c-format
@@ -4926,7 +4890,7 @@ msgstr "MacVietnamština"
 
 #: ../src/propgrid/advprops.cpp:1712
 msgid "Magnifier"
-msgstr ""
+msgstr "Lupa"
 
 #: ../src/propgrid/advprops.cpp:2093
 msgid "Make a selection:"
@@ -4939,7 +4903,7 @@ msgstr "Okraje"
 
 #: ../src/propgrid/advprops.cpp:1545
 msgid "Maroon"
-msgstr ""
+msgstr "Kaštanová"
 
 #: ../src/generic/fdrepdlg.cpp:147
 msgid "Match case"
@@ -4987,7 +4951,7 @@ msgstr "Mi&nimalizovat"
 
 #: ../src/propgrid/advprops.cpp:1713
 msgid "Middle Button"
-msgstr ""
+msgstr "Prostřední tlačítko"
 
 #: ../src/richtext/richtextsizepage.cpp:409
 msgid "Min height:"
@@ -5050,7 +5014,7 @@ msgstr "Jméno"
 
 #: ../src/propgrid/advprops.cpp:1546
 msgid "Navy"
-msgstr ""
+msgstr "Tmavě modrá"
 
 #: ../src/common/stockitem.cpp:175
 msgid "Network"
@@ -5117,7 +5081,7 @@ msgstr "Ne"
 
 #: ../src/propgrid/advprops.cpp:1714
 msgid "No Entry"
-msgstr ""
+msgstr "Není k dispozici"
 
 #: ../src/generic/animateg.cpp:150
 #, c-format
@@ -5267,122 +5231,117 @@ msgstr "Oznámení"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:103
 msgid "Num *"
-msgstr ""
+msgstr "* na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:104
 msgid "Num +"
-msgstr ""
+msgstr "+ na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
 msgid "Num ,"
-msgstr ""
+msgstr ", na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:106
 msgid "Num -"
-msgstr ""
+msgstr "- na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:107
 msgid "Num ."
-msgstr ""
+msgstr ". na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:108
 msgid "Num /"
-msgstr ""
+msgstr "/ na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
 msgid "Num ="
-msgstr ""
+msgstr "= na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:99
 msgid "Num Begin"
-msgstr ""
+msgstr "Begin na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgid "Num Delete"
-msgstr "Smazat"
+msgstr "Delete na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgid "Num Down"
-msgstr "Dolů"
+msgstr "Dolů na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:98
 msgid "Num End"
-msgstr ""
+msgstr "End na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:88
 msgid "Num Enter"
-msgstr ""
+msgstr "Enter na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgid "Num Home"
-msgstr "Domů"
+msgstr "Home na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgid "Num Insert"
-msgstr "Vložit"
+msgstr "Insert na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:84
 msgid "Num Lock"
-msgstr ""
+msgstr "Num Lock"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
 msgid "Num Page Down"
-msgstr ""
+msgstr "Page Down na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:94
 msgid "Num Page Up"
-msgstr ""
+msgstr "Page Up na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgid "Num Right"
-msgstr "Doprava"
+msgstr "Doprava na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:86
 msgid "Num Space"
-msgstr ""
+msgstr "Mezerník na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
 msgid "Num Tab"
-msgstr ""
+msgstr "Tabulátor na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:91
 msgid "Num Up"
-msgstr ""
+msgstr "Nahoru na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:90
 msgid "Num left"
-msgstr ""
+msgstr "Doleva na numerické klávesnici"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:84
 msgid "Num_lock"
-msgstr ""
+msgstr "Num_lock"
 
 #: ../src/osx/carbon/dataview.cpp:900
 msgid "Number of columns could not be determined."
@@ -5419,7 +5378,7 @@ msgstr "Objekt musí mít atribut id"
 
 #: ../src/propgrid/advprops.cpp:1551
 msgid "Olive"
-msgstr ""
+msgstr "Olivová"
 
 #: ../src/common/docview.cpp:1762 ../src/common/docview.cpp:1804
 msgid "Open File"
@@ -5469,7 +5428,7 @@ msgstr "Nastavení"
 
 #: ../src/propgrid/advprops.cpp:1556
 msgid "Orange"
-msgstr ""
+msgstr "Oranžová"
 
 #: ../src/generic/prntdlgg.cpp:615 ../src/generic/prntdlgg.cpp:869
 msgid "Orientation"
@@ -5649,9 +5608,8 @@ msgstr "Strana %d z %d"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:56
-#, fuzzy
 msgid "Page Down"
-msgstr "Strana %d"
+msgstr "Page Down"
 
 #: ../src/gtk/print.cpp:795
 msgid "Page Setup"
@@ -5659,9 +5617,8 @@ msgstr "Nastavení stránky"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgid "Page Up"
-msgstr "Strana %d"
+msgstr "Page Up"
 
 #: ../src/common/prntbase.cpp:479 ../src/generic/prntdlgg.cpp:828
 msgid "Page setup"
@@ -5669,15 +5626,13 @@ msgstr "Nastavení stránky"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:56
-#, fuzzy
 msgid "PageDown"
-msgstr "Dolů"
+msgstr "PageDown"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgid "PageUp"
-msgstr "Strany"
+msgstr "PageUp"
 
 #: ../src/generic/prntdlgg.cpp:216
 msgid "Pages"
@@ -5685,7 +5640,7 @@ msgstr "Strany"
 
 #: ../src/propgrid/advprops.cpp:1715
 msgid "Paint Brush"
-msgstr ""
+msgstr "Štětec"
 
 #: ../src/generic/prntdlgg.cpp:602 ../src/generic/prntdlgg.cpp:801
 #: ../src/generic/prntdlgg.cpp:842 ../src/generic/prntdlgg.cpp:855
@@ -5717,11 +5672,11 @@ msgstr "Vložit výběr"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:72
 msgid "Pause"
-msgstr ""
+msgstr "Pauza"
 
 #: ../src/propgrid/advprops.cpp:1716
 msgid "Pencil"
-msgstr ""
+msgstr "Tužka"
 
 #: ../src/richtext/richtextbulletspage.cpp:159
 #: ../src/richtext/richtextliststylepage.cpp:222
@@ -5735,12 +5690,12 @@ msgstr "Práva"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:58
 msgid "PgDn"
-msgstr ""
+msgstr "PgDn"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:57
 msgid "PgUp"
-msgstr ""
+msgstr "PgUp"
 
 #: ../src/richtext/richtextbuffer.cpp:12662
 msgid "Picture Properties"
@@ -5786,14 +5741,12 @@ msgid "Please wait while printing..."
 msgstr "Prosím vyčkejte až skončí tisk..."
 
 #: ../src/propgrid/advprops.cpp:1717
-#, fuzzy
 msgid "Point Left"
-msgstr "Velikost bodu"
+msgstr "Ukazatel doleva"
 
 #: ../src/propgrid/advprops.cpp:1718
-#, fuzzy
 msgid "Point Right"
-msgstr "Zarovnat vpravo"
+msgstr "Ukazatel doprava"
 
 #: ../src/propgrid/advprops.cpp:639
 msgid "Point Size"
@@ -5991,7 +5944,7 @@ msgstr "Chyba vlastnosti"
 
 #: ../src/propgrid/advprops.cpp:1547
 msgid "Purple"
-msgstr ""
+msgstr "Nachová"
 
 #: ../src/common/paper.cpp:113
 msgid "Quarto, 215 x 275 mm"
@@ -6002,9 +5955,8 @@ msgid "Question"
 msgstr "Otázka"
 
 #: ../src/propgrid/advprops.cpp:1719
-#, fuzzy
 msgid "Question Arrow"
-msgstr "Otázka"
+msgstr "Výběr nápovědy"
 
 #: ../src/common/stockitem.cpp:156
 msgid "Quit"
@@ -6033,9 +5985,8 @@ msgid "Ready"
 msgstr "&Hotovo"
 
 #: ../src/propgrid/advprops.cpp:1555
-#, fuzzy
 msgid "Red"
-msgstr "&Zopakovat"
+msgstr "Červená"
 
 #: ../src/common/stockitem.cpp:185 ../src/stc/stc_i18n.cpp:16
 msgid "Redo"
@@ -6149,7 +6100,7 @@ msgstr "Zdroj '%s' není platný katalog zpráv."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:54
 msgid "Return"
-msgstr ""
+msgstr "Return"
 
 #: ../src/common/stockitem.cpp:189
 msgid "Revert to Saved"
@@ -6161,7 +6112,7 @@ msgstr "Val"
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
-msgstr ""
+msgstr "&Zprava doleva"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:60 ../src/richtext/richtextbulletspage.cpp:188
@@ -6171,13 +6122,12 @@ msgid "Right"
 msgstr "Doprava"
 
 #: ../src/propgrid/advprops.cpp:1704
-#, fuzzy
 msgid "Right Arrow"
-msgstr "Doprava"
+msgstr "Šipka doprava"
 
 #: ../src/propgrid/advprops.cpp:1720
 msgid "Right Button"
-msgstr ""
+msgstr "Pravé tlačítko"
 
 #: ../src/generic/prntdlgg.cpp:892
 msgid "Right margin (mm):"
@@ -6243,16 +6193,16 @@ msgstr "Psací"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:85
 msgid "Scroll Lock"
-msgstr ""
+msgstr "Scroll Lock"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:85
 msgid "Scroll_lock"
-msgstr ""
+msgstr "Scroll_lock"
 
 #: ../src/propgrid/advprops.cpp:862
 msgid "Scrollbar"
-msgstr ""
+msgstr "Posuvník"
 
 #: ../src/generic/srchctlg.cpp:56 ../src/html/helpwnd.cpp:535
 #: ../src/html/helpwnd.cpp:550
@@ -6299,9 +6249,8 @@ msgstr "Chyba hledání v souboru '%s' (stdio nepodporuje velké soubory)"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:74
-#, fuzzy
 msgid "Select"
-msgstr "Výběr"
+msgstr "Vybrat"
 
 #: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2450
 #: ../src/osx/textctrl_osx.cpp:587 ../src/richtext/richtextctrl.cpp:337
@@ -6347,7 +6296,7 @@ msgstr "Vyberte úroveň seznamu k úpravě."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:80
 msgid "Separator"
-msgstr ""
+msgstr "Oddělovač"
 
 #: ../src/common/cmdline.cpp:1083
 #, c-format
@@ -6356,7 +6305,7 @@ msgstr "Za volbou '%s' se očekává oddělovač."
 
 #: ../src/osx/menu_osx.cpp:630
 msgid "Services"
-msgstr ""
+msgstr "Služby"
 
 #: ../src/richtext/richtextbuffer.cpp:11055
 msgid "Set Cell Style"
@@ -6447,7 +6396,7 @@ msgstr "Zobrazí náhled písma."
 
 #: ../src/propgrid/advprops.cpp:1557
 msgid "Silver"
-msgstr ""
+msgstr "Stříbrná"
 
 #: ../src/univ/themes/mono.cpp:516
 msgid "Simple monochrome theme"
@@ -6469,23 +6418,23 @@ msgstr "Velikost:"
 
 #: ../src/propgrid/advprops.cpp:1725
 msgid "Sizing"
-msgstr ""
+msgstr "Změna velikosti"
 
 #: ../src/propgrid/advprops.cpp:1722
 msgid "Sizing N-S"
-msgstr ""
+msgstr "Změna výšky"
 
 #: ../src/propgrid/advprops.cpp:1721
 msgid "Sizing NE-SW"
-msgstr ""
+msgstr "Diagonální změna velikosti 2"
 
 #: ../src/propgrid/advprops.cpp:1723
 msgid "Sizing NW-SE"
-msgstr ""
+msgstr "Diagonální změna velikosti 1"
 
 #: ../src/propgrid/advprops.cpp:1724
 msgid "Sizing W-E"
-msgstr ""
+msgstr "Změna šířky"
 
 #: ../src/generic/progdlgg.cpp:263 ../src/generic/progdlgg.cpp:774
 #: ../src/msw/progdlg.cpp:801
@@ -6503,7 +6452,7 @@ msgstr "Malé k&apitálky"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:77
 msgid "Snapshot"
-msgstr ""
+msgstr "Snapshot"
 
 #: ../src/richtext/richtextborderspage.cpp:614
 msgid "Solid"
@@ -6540,9 +6489,8 @@ msgstr "Zvukový soubor '%s' je v nepodporovaném formátu."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:65
-#, fuzzy
 msgid "Space"
-msgstr "Řádkování"
+msgstr "Mezerník"
 
 #: ../src/richtext/richtextliststylepage.cpp:467
 msgid "Spacing"
@@ -6554,7 +6502,7 @@ msgstr "Kontrola pravopisu"
 
 #: ../src/propgrid/advprops.cpp:1726
 msgid "Spraycan"
-msgstr ""
+msgstr "Sprej"
 
 #: ../src/richtext/richtextbulletspage.cpp:282
 #: ../src/richtext/richtextliststylepage.cpp:490
@@ -6606,7 +6554,7 @@ msgstr "Dolní inde&x"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:81
 msgid "Subtract"
-msgstr ""
+msgstr "Mínus"
 
 #: ../src/richtext/richtextfontpage.cpp:296
 msgid "Supe&rscript"
@@ -6622,7 +6570,7 @@ msgstr "SuperB/SuperB/A3, 305 x 487 mm"
 
 #: ../src/richtext/richtextfontpage.cpp:320
 msgid "Suppress hyphe&nation"
-msgstr ""
+msgstr "Potlačit &dělení slov"
 
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Swiss"
@@ -6669,9 +6617,8 @@ msgstr "TIFF: Rozměr obrázku je abnormálně velký."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:66
-#, fuzzy
 msgid "Tab"
-msgstr "Panely"
+msgstr "Tabulátor"
 
 #: ../src/richtext/richtextbuffer.cpp:11336
 msgid "Table Properties"
@@ -6691,7 +6638,7 @@ msgstr "Panely"
 
 #: ../src/propgrid/advprops.cpp:1548
 msgid "Teal"
-msgstr ""
+msgstr "Modrozelená"
 
 #: ../src/generic/fontdlgg.cpp:327
 msgid "Teletype"
@@ -6750,9 +6697,8 @@ msgstr "Barva pozadí."
 #: ../src/richtext/richtextborderspage.cpp:508
 #: ../src/richtext/richtextborderspage.cpp:540
 #: ../src/richtext/richtextborderspage.cpp:542
-#, fuzzy
 msgid "The border line style."
-msgstr "Styl písma"
+msgstr "Styl ohraničení."
 
 #: ../src/richtext/richtextmarginspage.cpp:267
 #: ../src/richtext/richtextmarginspage.cpp:269
@@ -7091,7 +7037,7 @@ msgstr "Musíte zadat hodnotu volby '%s'."
 #: ../src/richtext/richtextborderspage.cpp:588
 #: ../src/richtext/richtextborderspage.cpp:590
 msgid "The value of the corner radius."
-msgstr ""
+msgstr "Hodnota zaoblení rohu."
 
 #: ../src/msw/dialup.cpp:443
 #, c-format
@@ -7205,11 +7151,11 @@ msgstr "V PNG je příliš mnoho barev, obrázek může být mírně rozmazaný.
 
 #: ../src/propgrid/advprops.cpp:863
 msgid "Tooltip"
-msgstr ""
+msgstr "Popisek"
 
 #: ../src/propgrid/advprops.cpp:864
 msgid "TooltipText"
-msgstr ""
+msgstr "Text popisku"
 
 #: ../src/common/stockitem.cpp:200 ../src/richtext/richtextsizepage.cpp:286
 #: ../src/richtext/richtextsizepage.cpp:290
@@ -7501,9 +7447,8 @@ msgstr "Jednotky pro dolní pozici."
 
 #: ../src/richtext/richtextborderspage.cpp:599
 #: ../src/richtext/richtextborderspage.cpp:601
-#, fuzzy
 msgid "Units for the corner radius."
-msgstr "Jednotky pro vnitřní okraj nahoře."
+msgstr "Jednotky pro zaoblení rohu."
 
 #: ../src/richtext/richtextborderspage.cpp:260
 #: ../src/richtext/richtextborderspage.cpp:262
@@ -7780,11 +7725,11 @@ msgstr "Pohledy"
 
 #: ../src/propgrid/advprops.cpp:1727
 msgid "Wait"
-msgstr ""
+msgstr "Zaneprázdněn"
 
 #: ../src/propgrid/advprops.cpp:1729
 msgid "Wait Arrow"
-msgstr ""
+msgstr "Práce na pozadí"
 
 #: ../src/unix/epolldispatcher.cpp:213
 #, c-format
@@ -7797,7 +7742,7 @@ msgstr "Varování: "
 
 #: ../src/propgrid/advprops.cpp:1728
 msgid "Watch"
-msgstr ""
+msgstr "Hodinky"
 
 #: ../src/propgrid/advprops.cpp:659
 msgid "Weight"
@@ -7817,7 +7762,7 @@ msgstr "Zdali má být písmo podtržené"
 
 #: ../src/propgrid/advprops.cpp:1561
 msgid "White"
-msgstr ""
+msgstr "Bílá"
 
 #: ../src/generic/fdrepdlg.cpp:144
 msgid "Whole word"
@@ -7836,19 +7781,16 @@ msgid "Win32s on Windows 3.1"
 msgstr "Win32s na Windows 3.1"
 
 #: ../src/propgrid/advprops.cpp:865
-#, fuzzy
 msgid "Window"
-msgstr "&Okno"
+msgstr "Okno"
 
 #: ../src/propgrid/advprops.cpp:866
-#, fuzzy
 msgid "WindowFrame"
-msgstr "&Okno"
+msgstr "Rám okna"
 
 #: ../src/propgrid/advprops.cpp:867
-#, fuzzy
 msgid "WindowText"
-msgstr "&Okno"
+msgstr "Text okna"
 
 #: ../src/msw/utils.cpp:1161
 msgid "Windows 2000"
@@ -7859,14 +7801,12 @@ msgid "Windows 7"
 msgstr "Windows 7"
 
 #: ../src/msw/utils.cpp:1199
-#, fuzzy
 msgid "Windows 8"
-msgstr "Windows 98"
+msgstr "Windows 8"
 
 #: ../src/msw/utils.cpp:1205
-#, fuzzy
 msgid "Windows 8.1"
-msgstr "Windows 98"
+msgstr "Windows 8.1"
 
 #: ../src/msw/utils.cpp:1125
 msgid "Windows 95"
@@ -7960,14 +7900,12 @@ msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2008 R2"
 
 #: ../src/msw/utils.cpp:1198
-#, fuzzy
 msgid "Windows Server 2012"
-msgstr "Windows Server 2003"
+msgstr "Windows Server 2012"
 
 #: ../src/msw/utils.cpp:1204
-#, fuzzy
 msgid "Windows Server 2012 R2"
-msgstr "Windows Server 2008 R2"
+msgstr "Windows Server 2012 R2"
 
 #: ../src/common/fmapbase.cpp:166
 msgid "Windows Thai (CP 874)"
@@ -8003,21 +7941,18 @@ msgstr "Windows/DOS OEM Cyrilické (CP 866)"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:109
-#, fuzzy
 msgid "Windows_Left"
-msgstr "Windows 7"
+msgstr "Klávesa Windows vlevo"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:111
-#, fuzzy
 msgid "Windows_Menu"
-msgstr "Windows ME"
+msgstr "Klávesa Menu"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:110
-#, fuzzy
 msgid "Windows_Right"
-msgstr "Windows Vista"
+msgstr "Klávesa Windows vpravo"
 
 #: ../src/common/ffile.cpp:150
 #, c-format
@@ -8058,7 +7993,7 @@ msgstr "XPM: ořezaná data obrázku na řádku %d!"
 
 #: ../src/propgrid/advprops.cpp:1560
 msgid "Yellow"
-msgstr ""
+msgstr "Žlutá"
 
 #: ../include/wx/msgdlg.h:276 ../src/common/stockitem.cpp:206
 #: ../src/motif/msgdlg.cpp:196
