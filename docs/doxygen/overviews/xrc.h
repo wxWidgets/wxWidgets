@@ -48,16 +48,16 @@ text editor, for all but the smallest files it is advisable to use a
 specialised tool. Examples of these include:
 
 @e Non-free:
-@li wxDesigner <http://www.wxdesigner-software.de/>, a commercial dialog
-    designer/RAD tool.
 @li DialogBlocks <http://www.anthemion.co.uk/dialogblocks/>, a commercial
     dialog editor.
 
 @e Free:
 @li XRCed <http://xrced.sf.net/>, a wxPython-based dialog editor that you
     can find in the wxPython/tools subdirectory of the wxWidgets SVN archive.
-@li wxFormBuilder <http://wxformbuilder.org/>, a C++-based dialog editor that
+@li wxFormBuilder <http://wxformbuilder.org/>, a C++-based form designer that
     can output C++, XRC or python.
+@li wxCrafter (free version) <http://www.codelite.org/wxcrafter/>, a C++-based form designer that
+    can output C++ or XRC.
 
 There's a more complete list at <http://www.wxwidgets.org/wiki/index.php/Tools>
 
