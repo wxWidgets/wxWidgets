@@ -92,7 +92,7 @@ public:
         @a wildcard is '*'. Note that the '*' wildcard is not allowed in
         @a mimeType itself.
 
-        The comparison don by this function is case insensitive so it is not
+        The comparison done by this function is case insensitive so it is not
         necessary to convert the strings to the same case before calling it.
     */
     static bool IsOfType(const wxString& mimeType, const wxString& wildcard);
