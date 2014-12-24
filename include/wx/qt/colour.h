@@ -20,10 +20,10 @@ public:
 
     virtual bool IsOk() const { return m_qtColor.isValid(); }
 
-    virtual ChannelType Red()   const { return m_qtColor.red();   }
-    virtual ChannelType Green() const { return m_qtColor.green(); }
-    virtual ChannelType Blue()  const { return m_qtColor.blue();  }
-    virtual ChannelType Alpha() const { return m_qtColor.alpha(); }
+    unsigned char Red() const { return m_qtColor.red();   }
+    unsigned char Green() const { return m_qtColor.green(); }
+    unsigned char Blue()  const { return m_qtColor.blue();  }
+    unsigned char Alpha() const { return m_qtColor.alpha(); }
 
     bool operator==(const wxColour& color) const
         { return m_qtColor == color.m_qtColor; }
