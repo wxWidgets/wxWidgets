@@ -422,7 +422,7 @@ public:
 
     /**
         This function is called by wxWidgets keyboard navigation code when the user
-        gives the focus to this window from keyboard (e.g. using @c TAB key).
+        gives the focus to this window from keyboard (e.g.\ using @c TAB key).
 
         By default this method simply calls SetFocus() but
         can be overridden to do something in addition to this in the derived classes.

@@ -123,7 +123,7 @@ protected:
 
     /**
         This method must be implemented in the derived class and should return
-        the body (i.e. without @c html nor @c body tags) of the HTML fragment
+        the body (i.e.\ without @c html nor @c body tags) of the HTML fragment
         for the given item.
 
         Note that this function should always return a text fragment for the @a n item

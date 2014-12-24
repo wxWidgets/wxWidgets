@@ -250,7 +250,7 @@ public:
 
     /**
         Returns the text associated with the menu item, such as it was passed to the
-        wxMenuItem constructor, i.e. with any accelerator characters it may contain.
+        wxMenuItem constructor, i.e.\ with any accelerator characters it may contain.
 
         @deprecated This function is deprecated in favour of GetItemLabel().
 
