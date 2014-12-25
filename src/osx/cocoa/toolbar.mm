@@ -114,7 +114,8 @@ public:
         {
             if ( !IsControl() )
             {
-                [m_controlHandle retain];
+                [m_controlHandle removeFromSuperview];
+                [m_controlHandle release];
             }
             else
             {
