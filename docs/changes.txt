@@ -633,6 +633,7 @@ wxOSX:
 
 - Compilation fix for wxWebView under 10.10.
 - Fix conversion of wxBitmap to wxImage in 64 bit builds.
+- Fix length of text in wxTextDataObject.
 - Fix using wxHTTP and wxFTP from worker thread.
 - Fix wxFileDialog::GetFilterIndex() for file open dialogs (phsilva).
 - Fix custom paper support (tijsv).
