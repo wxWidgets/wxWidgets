@@ -42,6 +42,7 @@ BEGIN_EVENT_TABLE(wxRibbonButtonBar, wxRibbonControl)
     EVT_PAINT(wxRibbonButtonBar::OnPaint)
     EVT_SIZE(wxRibbonButtonBar::OnSize)
     EVT_LEFT_DOWN(wxRibbonButtonBar::OnMouseDown)
+    EVT_LEFT_DCLICK(wxRibbonButtonBar::OnMouseDown)
     EVT_LEFT_UP(wxRibbonButtonBar::OnMouseUp)
 END_EVENT_TABLE()
 
