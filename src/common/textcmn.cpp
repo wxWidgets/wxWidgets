@@ -1178,14 +1178,6 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
 // Other miscellaneous stuff
 // ----------------------------------------------------------------------------
 
-bool wxTextCtrlBase::SetHint(const wxString& hint)
-{
-    wxCHECK_MSG( IsSingleLine(), false,
-                 wxS("Hints can only be set for single line text controls") );
-
-    return wxTextEntry::SetHint(hint);
-}
-
 // do the window-specific processing after processing the update event
 void wxTextCtrlBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 {

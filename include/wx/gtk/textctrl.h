@@ -159,6 +159,7 @@ protected:
     virtual bool UseGTKStyleBase() const wxOVERRIDE { return true; }
 
     virtual void DoSetValue(const wxString &value, int flags = 0) wxOVERRIDE;
+    virtual wxString DoGetValue() const wxOVERRIDE;
 
     // Override this to use either GtkEntry or GtkTextView IME depending on the
     // kind of control we are.

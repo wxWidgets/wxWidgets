@@ -521,7 +521,7 @@ bool wxTextEntry::SetHint(const wxString& hint)
 {
 #if GTK_CHECK_VERSION(3,2,0)
     GtkEntry *entry = GetEntry();
-    if (entry && gtk_check_version(3,2,0) == NULL)
+    if (entry && GTK_IS_ENTRY(entry) && gtk_check_version(3,2,0) == NULL)
     {
         gtk_entry_set_placeholder_text(entry, wxGTK_CONV(hint));
         return true;

@@ -986,6 +986,11 @@ wxString wxTextCtrl::GetValue() const
 {
     wxCHECK_MSG( m_text != NULL, wxEmptyString, wxT("invalid text ctrl") );
 
+    return wxTextEntry::GetValue();
+}
+
+wxString wxTextCtrl::DoGetValue() const
+{
     if ( IsMultiLine() )
     {
         GtkTextIter start;
@@ -998,7 +1003,7 @@ wxString wxTextCtrl::GetValue() const
     }
     else // single line
     {
-        return wxTextEntry::GetValue();
+        return wxTextEntry::DoGetValue();
     }
 }
 

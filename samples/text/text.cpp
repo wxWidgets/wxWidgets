@@ -1091,6 +1091,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_horizontal = new MyTextCtrl( this, wxID_ANY, wxT("Multiline text control with a horizontal scrollbar.\n"),
       wxPoint(10,170), wxSize(140,70), wxTE_MULTILINE | wxHSCROLL);
+    m_horizontal->SetHint("Enter multiline text here");
 
     // a little hack to use the command line argument for encoding testing
     if ( wxTheApp->argc == 2 )

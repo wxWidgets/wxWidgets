@@ -473,9 +473,9 @@ public:
             focus and wxEVT_TEXT events, you must call wxEvent::Skip() on them
             so that the generic implementation works correctly.
 
-        @remarks Hints can only be used for single line text controls,
-            native multi-line text controls don't support hints under any
-            platform and hence wxWidgets doesn't provide them neither.
+        @remarks Hints can be used for single line text controls under all
+            platforms, but only MSW and GTK+ 2 support them for multi-line text
+            controls, they are ignored for them under the other platforms.
 
         @since 2.9.0
      */
