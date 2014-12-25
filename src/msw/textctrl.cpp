@@ -2669,7 +2669,7 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         //     but using it doesn't seem to hurt neither so leaving it for now
 
         cf.dwMask |= CFM_FACE | CFM_SIZE | CFM_CHARSET |
-                     CFM_ITALIC | CFM_BOLD | CFM_UNDERLINE;
+                     CFM_ITALIC | CFM_BOLD | CFM_UNDERLINE | CFM_STRIKEOUT;
 
         // fill in data from LOGFONT but recalculate lfHeight because we need
         // the real height in twips and not the negative number which
@@ -2702,8 +2702,10 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         {
             cf.dwEffects |= CFE_UNDERLINE;
         }
-
-        // strikeout fonts are not supported by wxWidgets
+        if ( lf.lfStrikeOut )
+        {
+            cf.dwEffects |= CFE_STRIKEOUT;
+        }
     }
 
     if ( style.HasTextColour() )
