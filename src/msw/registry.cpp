@@ -995,12 +995,27 @@ bool wxRegKey::QueryValue(const wxString& szValue,
             }
             else
             {
-                m_dwLastError = RegQueryValueEx((HKEY) m_hKey,
-                                                RegValueStr(szValue),
-                                                RESERVED,
-                                                &dwType,
-                                                (RegString)(wxChar*)wxStringBuffer(strValue, dwSize),
-                                                &dwSize);
+                // extra scope for wxStringBufferLength
+                {
+                    // We need length in characters, not bytes.
+                    DWORD chars = dwSize / sizeof(wxChar);
+
+                    wxStringBufferLength strBuf(strValue, chars);
+                    m_dwLastError = RegQueryValueEx((HKEY) m_hKey,
+                                                    RegValueStr(szValue),
+                                                    RESERVED,
+                                                    &dwType,
+                                                    (RegString)(wxChar*)strBuf,
+                                                    &dwSize);
+
+                    // The returned string may or not be NUL-terminated,
+                    // exclude the trailing NUL if it's there (which is
+                    // typically the case but is not guaranteed to always be).
+                    if ( strBuf[chars - 1] == '\0' )
+                        chars--;
+
+                    strBuf.SetLength(chars);
+                }
 
                 // expand the var expansions in the string unless disabled
 #ifndef __WXWINCE__
