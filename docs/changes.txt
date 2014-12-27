@@ -616,6 +616,7 @@ wxMSW:
 - Fix best height of wxSlider with labels but without ticks (Artur Wieczorek).
 - Fix initial text value of wxSpinCtrlDouble (Laurent Poujoulat).
 - Fix best size calculation for bitmaps with buttons (Artur Wieczorek).
+- Fix flicker when resizing windows with status bar (Artur Wieczorek).
 - Fix size of the icon returned from wxFSVolume::GetIcon() (troelsk).
 - Fix autosize after expanding/collapsing items in wxDataViewCtrl (ciglesias).
 - Fix inserting tools removed from wxToolBar back into it (sbrowne).
