@@ -563,11 +563,12 @@ void wxMenuItem::Enable(bool enable)
     if ( m_isEnabled == enable )
         return;
 
-    if ( m_parentMenu )
+    const int itemPos = MSGetMenuItemPos();
+    if ( itemPos != -1 )
     {
         long rc = EnableMenuItem(GetHMenuOf(m_parentMenu),
-                                 GetMSWId(),
-                                 MF_BYCOMMAND |
+                                 itemPos,
+                                 MF_BYPOSITION |
                                  (enable ? MF_ENABLED : MF_GRAYED));
 
         if ( rc == -1 )
