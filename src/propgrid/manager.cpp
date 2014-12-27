@@ -1903,7 +1903,8 @@ void wxPropertyGridManager::SetPageSplitterLeft(int page, bool subProps)
 
 void wxPropertyGridManager::ReconnectEventHandlers(wxWindowID oldId, wxWindowID newId)
 {
-    wxASSERT( oldId != newId );
+    wxCHECK_RET( oldId != newId,
+                 wxT("Attempting to reconnect event handlers to the same window"));
 
     if (oldId != wxID_NONE)
     {
