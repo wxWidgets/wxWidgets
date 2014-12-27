@@ -356,18 +356,6 @@ public:
     bool QueryValue(const wxString& szValue, wxMemoryBuffer& buf) const;
 
     /**
-        Retrieves a multiple string value.
-
-        The @a szValue must exist and have @c REG_MULTI_SZ type. The names and
-        the values of the pairs present in it are returned in the @a names and
-        @a value arrays, which will have the same (possible 0) size.
-
-        @since 3.1.0
-     */
-    bool QueryValue(const wxString& szValue,
-                    wxArrayString& names,
-                    wxArrayString& values) const;
-    /**
         Renames the key. Returns @true if successful.
     */
     bool Rename(const wxString& szNewName);

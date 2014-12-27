@@ -205,10 +205,6 @@ public:
   bool  SetValue(const wxString& szValue, const wxMemoryBuffer& buf);
     // return the binary value
   bool  QueryValue(const wxString& szValue, wxMemoryBuffer& buf) const;
-    // return multiple strings
-  bool  QueryValue(const wxString& szValue,
-                   wxArrayString& names,
-                   wxArrayString& values) const;
 
   // query existence of a key/value
     // return true if value exists
