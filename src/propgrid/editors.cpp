@@ -406,14 +406,12 @@ bool wxPGTextCtrlEditor::OnTextCtrlEvent( wxPropertyGrid* propGrid,
     }
     else if ( event.GetEventType() == wxEVT_TEXT )
     {
-        //
-        // Pass this event outside wxPropertyGrid so that,
-        // if necessary, program can tell when user is editing
-        // a textctrl.
-        // FIXME: Is it safe to change event id in the middle of event
-        //        processing (seems to work, but...)?
-        event.Skip();
-        event.SetId(propGrid->GetId());
+        // Pass this event (with PG id) outside wxPropertyGrid
+        // with so that, if necessary, program can tell when user
+        // is editing a textctrl.
+        wxEvent *evt = event.Clone();
+        evt->SetId(propGrid->GetId());
+        propGrid->GetEventHandler()->QueueEvent(evt);
 
         propGrid->EditorsValueWasModified();
     }
