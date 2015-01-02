@@ -1860,7 +1860,10 @@ void wxPropertyGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
     // Don't paint after destruction has begun
     if ( !HasInternalFlag(wxPG_FL_INITIALIZED) )
+    {
+        delete dcPtr;
         return;
+    }
 
     // Find out where the window is scrolled to
     int vx,vy;                     // Top left corner of client
