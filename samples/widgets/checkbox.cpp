@@ -252,7 +252,7 @@ void CheckBoxWidgetsPage::CreateCheckbox()
 
     delete m_checkbox;
 
-    int flags = ms_defaultFlags;
+    int flags = GetAttrs().m_defaultFlags;
     if ( m_chkRight->IsChecked() )
         flags |= wxALIGN_RIGHT;
 

@@ -297,7 +297,7 @@ void ChoiceWidgetsPage::Reset()
 
 void ChoiceWidgetsPage::CreateChoice()
 {
-    int flags = ms_defaultFlags;
+    int flags = GetAttrs().m_defaultFlags;
 
     if ( m_chkSort->GetValue() )
         flags |= wxCB_SORT;

@@ -283,7 +283,7 @@ void GaugeWidgetsPage::Reset()
 
 void GaugeWidgetsPage::CreateGauge()
 {
-    int flags = ms_defaultFlags;
+    int flags = GetAttrs().m_defaultFlags;
 
     if ( m_chkVert->GetValue() )
         flags |= wxGA_VERTICAL;

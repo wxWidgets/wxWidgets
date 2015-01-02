@@ -495,7 +495,7 @@ void ODComboboxWidgetsPage::Reset()
 
 void ODComboboxWidgetsPage::CreateCombo()
 {
-    int flags = ms_defaultFlags;
+    int flags = GetAttrs().m_defaultFlags;
 
     if ( m_chkSort->GetValue() )
         flags |= wxCB_SORT;

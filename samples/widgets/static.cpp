@@ -395,8 +395,8 @@ void StaticWidgetsPage::CreateStatic()
     }
 
     int flagsBox = 0,
-        flagsText = ms_defaultFlags,
-        flagsDummyText = ms_defaultFlags;
+        flagsText = GetAttrs().m_defaultFlags,
+        flagsDummyText = GetAttrs().m_defaultFlags;
 
     if ( !m_chkAutoResize->GetValue() )
     {

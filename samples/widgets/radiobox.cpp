@@ -370,7 +370,7 @@ void RadioWidgetsPage::CreateRadio()
     int flags = m_chkSpecifyRows->GetValue() ? wxRA_SPECIFY_ROWS
                                              : wxRA_SPECIFY_COLS;
 
-    flags |= ms_defaultFlags;
+    flags |= GetAttrs().m_defaultFlags;
 
 #ifdef wxRA_LEFTTORIGHT
     switch ( m_radioDir->GetSelection() )

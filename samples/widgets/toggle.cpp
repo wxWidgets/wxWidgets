@@ -370,7 +370,7 @@ void ToggleWidgetsPage::CreateToggle()
         label = m_textLabel->GetValue();
     }
 
-    int flags = ms_defaultFlags;
+    int flags = GetAttrs().m_defaultFlags;
 #ifdef wxHAS_BITMAPTOGGLEBUTTON
     switch ( m_radioHAlign->GetSelection() )
     {

@@ -378,7 +378,7 @@ void ListboxWidgetsPage::Reset()
 
 void ListboxWidgetsPage::CreateLbox()
 {
-    int flags = ms_defaultFlags;
+    int flags = GetAttrs().m_defaultFlags;
     switch ( m_radioSelMode->GetSelection() )
     {
         default:

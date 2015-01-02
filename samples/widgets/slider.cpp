@@ -383,7 +383,7 @@ void SliderWidgetsPage::Reset()
 
 void SliderWidgetsPage::CreateSlider()
 {
-    int flags = ms_defaultFlags;
+    int flags = GetAttrs().m_defaultFlags;
 
     if ( m_chkInverse->GetValue() )
     {

@@ -89,6 +89,36 @@ typedef wxVector<wxControl *> Widgets;
 // WidgetsPage: a book page demonstrating some widget
 // ----------------------------------------------------------------------------
 
+// struct to store common widget attributes
+struct WidgetAttributes
+{
+    WidgetAttributes()
+    {
+#if wxUSE_TOOLTIPS
+        m_tooltip = "This is a tooltip";
+#endif // wxUSE_TOOLTIPS
+        m_enabled = true;
+        m_dir = wxLayout_LeftToRight;
+        m_cursor = *wxSTANDARD_CURSOR;
+        m_defaultFlags = wxBORDER_DEFAULT;
+    }
+
+#if wxUSE_TOOLTIPS
+   wxString m_tooltip;
+#endif // wxUSE_TOOLTIPS
+#if wxUSE_FONTDLG
+    wxFont m_font;
+#endif // wxUSE_FONTDLG
+    wxColour m_colFg;
+    wxColour m_colBg;
+    wxColour m_colPageBg;
+    bool m_enabled;
+    wxLayoutDirection m_dir;
+    wxCursor m_cursor;
+    // the default flags, currently only contains border flags
+    int m_defaultFlags;
+};
+
 class WidgetsPage : public wxPanel
 {
 public:
@@ -119,8 +149,11 @@ public:
     // this is currently used only to take into account the border flags
     virtual void RecreateWidget() = 0;
 
-    // the default flags for the widget, currently only contains border flags
-    static int ms_defaultFlags;
+    // apply current atrributes to the widget(s)
+    void SetUpWidget();
+
+    // the default attributes for the widget
+    static WidgetAttributes& GetAttrs();
 
 protected:
     // several helper functions for page creation

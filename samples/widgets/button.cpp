@@ -408,7 +408,7 @@ void ButtonWidgetsPage::CreateButton()
         label = m_textLabel->GetValue();
     }
 
-    int flags = ms_defaultFlags;
+    int flags = GetAttrs().m_defaultFlags;
     switch ( m_radioHAlign->GetSelection() )
     {
         case ButtonHAlign_Left:

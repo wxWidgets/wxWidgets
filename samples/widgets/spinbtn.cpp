@@ -347,7 +347,7 @@ void SpinBtnWidgetsPage::Reset()
 
 void SpinBtnWidgetsPage::CreateSpin()
 {
-    int flags = ms_defaultFlags;
+    int flags = GetAttrs().m_defaultFlags;
 
     bool isVert = m_chkVert->GetValue();
     if ( isVert )

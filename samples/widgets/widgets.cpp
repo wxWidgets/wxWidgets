@@ -210,13 +210,6 @@ private:
     // the book containing the test pages
     WidgetsBookCtrl *m_book;
 
-#if wxUSE_MENUS
-    // last chosen fg/bg colours and font
-    wxColour m_colFg,
-             m_colBg;
-    wxFont   m_font;
-#endif // wxUSE_MENUS
-
     // any class wishing to process wxWidgets events must use this macro
     wxDECLARE_EVENT_TABLE();
 };
@@ -736,6 +729,8 @@ void WidgetsFrame::OnPageChanged(WidgetsBookCtrlEvent& event)
         }
         page->SetSize(size);
     }
+    // re-apply the attributes to the widget(s)
+    page->SetUpWidget();
 
     event.Skip();
 }
@@ -755,31 +750,21 @@ void WidgetsFrame::OnGoToPage(wxCommandEvent& event)
 
 void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
 {
-    static wxString s_tip = wxT("This is a tooltip");
-
     wxTextEntryDialog dialog
                       (
                         this,
                         wxT("Tooltip text (may use \\n, leave empty to remove): "),
                         wxT("Widgets sample"),
-                        s_tip
+                        WidgetsPage::GetAttrs().m_tooltip
                       );
 
     if ( dialog.ShowModal() != wxID_OK )
         return;
 
-    s_tip = dialog.GetValue();
-    s_tip.Replace(wxT("\\n"), wxT("\n"));
+    WidgetsPage::GetAttrs().m_tooltip = dialog.GetValue();
+    WidgetsPage::GetAttrs().m_tooltip.Replace(wxT("\\n"), wxT("\n"));
 
-    WidgetsPage *page = CurrentPage();
-
-    const Widgets widgets = page->GetWidgets();
-    for ( Widgets::const_iterator it = widgets.begin();
-          it != widgets.end();
-          ++it )
-    {
-        (*it)->SetToolTip(s_tip);
-    }
+    CurrentPage()->SetUpWidget();
 }
 
 #endif // wxUSE_TOOLTIPS
@@ -809,46 +794,32 @@ void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
     // allow for debugging the default colour the first time this is called
     WidgetsPage *page = CurrentPage();
 
-    if (!m_colFg.IsOk())
-        m_colFg = page->GetForegroundColour();
+    if (!WidgetsPage::GetAttrs().m_colFg.IsOk())
+        WidgetsPage::GetAttrs().m_colFg = page->GetForegroundColour();
 
-    wxColour col = GetColourFromUser(this, m_colFg);
+    wxColour col = GetColourFromUser(this, WidgetsPage::GetAttrs().m_colFg);
     if ( !col.IsOk() )
         return;
 
-    m_colFg = col;
+    WidgetsPage::GetAttrs().m_colFg = col;
 
-    const Widgets widgets = page->GetWidgets();
-    for ( Widgets::const_iterator it = widgets.begin();
-          it != widgets.end();
-          ++it )
-    {
-        (*it)->SetForegroundColour(m_colFg);
-        (*it)->Refresh();
-    }
+    page->SetUpWidget();
 }
 
 void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 {
     WidgetsPage *page = CurrentPage();
 
-    if ( !m_colBg.IsOk() )
-        m_colBg = page->GetBackgroundColour();
+    if ( !WidgetsPage::GetAttrs().m_colBg.IsOk() )
+        WidgetsPage::GetAttrs().m_colBg = page->GetBackgroundColour();
 
-    wxColour col = GetColourFromUser(this, m_colBg);
+    wxColour col = GetColourFromUser(this, WidgetsPage::GetAttrs().m_colBg);
     if ( !col.IsOk() )
         return;
 
-    m_colBg = col;
+    WidgetsPage::GetAttrs().m_colBg = col;
 
-    const Widgets widgets = page->GetWidgets();
-    for ( Widgets::const_iterator it = widgets.begin();
-          it != widgets.end();
-          ++it )
-    {
-        (*it)->SetBackgroundColour(m_colBg);
-        (*it)->Refresh();
-    }
+    page->SetUpWidget();
 }
 
 void WidgetsFrame::OnSetPageBg(wxCommandEvent& WXUNUSED(event))
@@ -857,8 +828,9 @@ void WidgetsFrame::OnSetPageBg(wxCommandEvent& WXUNUSED(event))
     if ( !col.IsOk() )
         return;
 
-    CurrentPage()->SetBackgroundColour(col);
-    CurrentPage()->Refresh();
+    WidgetsPage::GetAttrs().m_colPageBg = col;
+
+    CurrentPage()->SetUpWidget();
 }
 
 void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
@@ -866,24 +838,16 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_FONTDLG
     WidgetsPage *page = CurrentPage();
 
-    if (!m_font.IsOk())
-        m_font = page->GetFont();
+    if (!WidgetsPage::GetAttrs().m_font.IsOk())
+        WidgetsPage::GetAttrs().m_font = page->GetFont();
 
-    wxFont font = wxGetFontFromUser(this, m_font);
+    wxFont font = wxGetFontFromUser(this, WidgetsPage::GetAttrs().m_font);
     if ( !font.IsOk() )
         return;
 
-    m_font = font;
+    WidgetsPage::GetAttrs().m_font = font;
 
-    const Widgets widgets = page->GetWidgets();
-    for ( Widgets::const_iterator it = widgets.begin();
-          it != widgets.end();
-          ++it )
-    {
-        (*it)->SetFont(m_font);
-        (*it)->Refresh();
-    }
-
+    page->SetUpWidget();
     // The best size of the widget could have changed after changing its font,
     // so re-layout to show it correctly.
     page->Layout();
@@ -894,13 +858,9 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
 
 void WidgetsFrame::OnEnable(wxCommandEvent& event)
 {
-    const Widgets widgets = CurrentPage()->GetWidgets();
-    for ( Widgets::const_iterator it = widgets.begin();
-          it != widgets.end();
-          ++it )
-    {
-        (*it)->Enable(event.IsChecked());
-    }
+    WidgetsPage::GetAttrs().m_enabled = event.IsChecked();
+
+    CurrentPage()->SetUpWidget();
 }
 
 void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
@@ -922,27 +882,22 @@ void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
         case Widgets_BorderDefault: border = wxBORDER_DEFAULT; break;
     }
 
-    WidgetsPage::ms_defaultFlags &= ~wxBORDER_MASK;
-    WidgetsPage::ms_defaultFlags |= border;
+    WidgetsPage::GetAttrs().m_defaultFlags &= ~wxBORDER_MASK;
+    WidgetsPage::GetAttrs().m_defaultFlags |= border;
 
     WidgetsPage *page = CurrentPage();
 
     page->RecreateWidget();
+    // re-apply the attributes to the widget(s)
+    page->SetUpWidget();
 }
 
 void WidgetsFrame::OnToggleLayoutDirection(wxCommandEvent& event)
 {
-    wxLayoutDirection dir = event.IsChecked() ? wxLayout_RightToLeft
-                                              : wxLayout_LeftToRight;
+    WidgetsPage::GetAttrs().m_dir = event.IsChecked() ? wxLayout_RightToLeft
+                                       : wxLayout_LeftToRight;
 
-    const Widgets widgets = CurrentPage()->GetWidgets();
-    for ( Widgets::const_iterator it = widgets.begin();
-          it != widgets.end();
-          ++it )
-    {
-        (*it)->SetLayoutDirection(dir);
-        (*it)->Refresh();
-    }
+    CurrentPage()->SetUpWidget();
 }
 
 void WidgetsFrame::OnToggleGlobalBusyCursor(wxCommandEvent& event)
@@ -955,16 +910,10 @@ void WidgetsFrame::OnToggleGlobalBusyCursor(wxCommandEvent& event)
 
 void WidgetsFrame::OnToggleBusyCursor(wxCommandEvent& event)
 {
-    wxCursor cursor(*(event.IsChecked() ? wxHOURGLASS_CURSOR
-                                        : wxSTANDARD_CURSOR));
+    WidgetsPage::GetAttrs().m_cursor = *(event.IsChecked() ? wxHOURGLASS_CURSOR
+                                                          : wxSTANDARD_CURSOR);
 
-    const Widgets widgets = CurrentPage()->GetWidgets();
-    for ( Widgets::const_iterator it = widgets.begin();
-          it != widgets.end();
-          ++it )
-    {
-        (*it)->SetCursor(cursor);
-    }
+    CurrentPage()->SetUpWidget();
 }
 
 void WidgetsFrame::OnDisableAutoComplete(wxCommandEvent& WXUNUSED(event))
@@ -1230,7 +1179,6 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label, int cate
 // WidgetsPage
 // ----------------------------------------------------------------------------
 
-int WidgetsPage::ms_defaultFlags = wxBORDER_DEFAULT;
 WidgetsPageInfo *WidgetsPage::ms_widgetPages = NULL;
 
 WidgetsPage::WidgetsPage(WidgetsBookCtrl *book,
@@ -1248,6 +1196,59 @@ WidgetsPage::WidgetsPage(WidgetsBookCtrl *book,
     wxUnusedVar(imaglist);
     wxUnusedVar(icon);
 #endif
+}
+
+/* static */
+WidgetAttributes& WidgetsPage::GetAttrs()
+{
+    static WidgetAttributes s_attrs;
+
+    return s_attrs;
+}
+
+void WidgetsPage::SetUpWidget()
+{
+    const Widgets widgets = GetWidgets();
+
+    for ( Widgets::const_iterator it = widgets.begin();
+            it != widgets.end();
+            ++it )
+    {
+#if wxUSE_TOOLTIPS
+        (*it)->SetToolTip(GetAttrs().m_tooltip);
+#endif // wxUSE_TOOLTIPS
+#if wxUSE_FONTDLG
+        if ( GetAttrs().m_font.IsOk() )
+        {
+            (*it)->SetFont(GetAttrs().m_font);
+        }
+#endif // wxUSE_FONTDLG
+        if ( GetAttrs().m_colFg.IsOk() )
+        {
+            (*it)->SetForegroundColour(GetAttrs().m_colFg);
+        }
+
+        if ( GetAttrs().m_colBg.IsOk() )
+        {
+            (*it)->SetBackgroundColour(GetAttrs().m_colBg);
+        }
+
+        (*it)->SetLayoutDirection(GetAttrs().m_dir);
+        (*it)->Enable(GetAttrs().m_enabled);
+
+        if ( GetAttrs().m_cursor.IsOk() )
+        {
+            (*it)->SetCursor(GetAttrs().m_cursor);
+        }
+
+        (*it)->Refresh();
+    }
+
+    if ( GetAttrs().m_colPageBg.IsOk() )
+    {
+        SetBackgroundColour(GetAttrs().m_colPageBg);
+        Refresh();
+    }
 }
 
 wxSizer *WidgetsPage::CreateSizerWithText(wxControl *control,

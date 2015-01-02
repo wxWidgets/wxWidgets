@@ -349,7 +349,7 @@ void BookWidgetsPage::RecreateBook()
     if(!m_radioOrient)
         return;
 
-    int flags = ms_defaultFlags;
+    int flags = GetAttrs().m_defaultFlags;
 
     switch ( m_radioOrient->GetSelection() )
     {
