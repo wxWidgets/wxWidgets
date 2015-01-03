@@ -779,6 +779,7 @@ GUI_CMN_HDR =
     wx/access.h
     wx/anidecod.h
     wx/animdecod.h
+    wx/appprogress.h
     wx/artprov.h
     wx/bitmap.h
     wx/bookctrl.h
@@ -1582,6 +1583,7 @@ MSW_SRC =
     src/generic/prntdlgg.cpp
     src/msw/accel.cpp
     src/msw/anybutton.cpp
+    src/msw/appprogress.cpp
     src/msw/artmsw.cpp
     src/msw/bmpbuttn.cpp
     src/msw/button.cpp
@@ -1640,6 +1642,7 @@ MSW_HDR =
     wx/msw/accel.h
     wx/msw/anybutton.h
     wx/msw/app.h
+    wx/msw/appprogress.h
     wx/msw/bitmap.h
     wx/msw/bmpbuttn.h
     wx/msw/brush.h

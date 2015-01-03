@@ -2014,6 +2014,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/accel.h
     wx/msw/anybutton.h
     wx/msw/app.h
+    wx/msw/appprogress.h
     wx/msw/bitmap.h
     wx/msw/bmpbuttn.h
     wx/msw/brush.h

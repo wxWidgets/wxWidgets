@@ -1628,6 +1628,9 @@
 			<File
 				RelativePath="..\..\include\wx\msw\window.h">
 			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\appprogress.h">
+			</File>
 		</Filter>
 		<Filter
 			Name="Generic Headers"
