@@ -1376,16 +1376,9 @@ void wxTopLevelWindowMSW::DoSaveLastFocus()
         return;
 
     // remember the last focused child if it is our child
-    m_winLastFocused = FindFocus();
+    wxWindow* const winFocus = FindFocus();
 
-    if ( m_winLastFocused )
-    {
-        // and don't remember it if it's a child from some other frame
-        if ( wxGetTopLevelParent(m_winLastFocused) != this )
-        {
-            m_winLastFocused = NULL;
-        }
-    }
+    m_winLastFocused = IsDescendant(winFocus) ? winFocus : NULL;
 }
 
 void wxTopLevelWindowMSW::DoRestoreLastFocus()
@@ -1413,12 +1406,15 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
             return;
         }
 
-        // restore focus to the child which was last focused unless we already
-        // have it
+        // restore focus to the child which was last focused unless one of our
+        // children already has it (the frame having focus on itself does not
+        // count, if only because this would be always the case for an MDI
+        // child frame as the MDI parent sets focus to it before it's
+        // activated)
         wxLogTrace(wxT("focus"), wxT("wxTLW %p activated."), m_hWnd);
 
-        wxWindow *winFocus = FindFocus();
-        if ( !winFocus || wxGetTopLevelParent(winFocus) != this )
+        wxWindow* const winFocus = FindFocus();
+        if ( winFocus == this || !IsDescendant(winFocus) )
             DoRestoreLastFocus();
     }
     else // deactivating
