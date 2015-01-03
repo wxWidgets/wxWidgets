@@ -694,6 +694,12 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
         {
             panel = oPanel;
             result = wxID_OK;
+
+            if (m_filterChoice)
+            {
+                m_filterIndex = m_filterChoice->GetSelection();
+            }
+
             NSArray* filenames = [oPanel filenames];
             for ( size_t i = 0 ; i < [filenames count] ; ++ i )
             {
