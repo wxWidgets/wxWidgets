@@ -1954,8 +1954,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/prntdlgg.cpp
     src/msw/accel.cpp
     src/msw/anybutton.cpp
-    src/msw/artmsw.cpp
     src/msw/appprogress.cpp
+    src/msw/artmsw.cpp
     src/msw/bmpbuttn.cpp
     src/msw/button.cpp
     src/msw/checkbox.cpp
