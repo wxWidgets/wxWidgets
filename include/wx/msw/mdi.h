@@ -91,6 +91,7 @@ public:
     // Responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
+    void OnActivate(wxActivateEvent& event);
     void OnSize(wxSizeEvent& event);
     void OnIconized(wxIconizeEvent& event);
 
@@ -144,6 +145,10 @@ private:
 
     // return the number of child frames we currently have (maybe 0)
     int GetChildFramesCount() const;
+
+    // if true, indicates whether the event wasn't really processed even though
+    // it was "handled", see OnActivate() and HandleActivate()
+    bool m_activationNotHandled;
 
 
     friend class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;

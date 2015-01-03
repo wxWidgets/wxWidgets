@@ -127,6 +127,7 @@ wxMSW:
 - Fix updating wxSpinCtrlDouble tooltip text (Laurent Poujoulat).
 - Fix appearance of checked disabled wxToolBar tools with custom images.
 - Fix reading of not NUL-terminated strings using wxRegKey (Steffen Olszewski).
+- Fix unexpected change in MDI children order after showing a file dialog.
 
 wxOSX/Cocoa:
 

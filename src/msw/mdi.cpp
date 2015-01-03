@@ -121,6 +121,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
 
 BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
+    EVT_ACTIVATE(wxMDIParentFrame::OnActivate)
     EVT_SIZE(wxMDIParentFrame::OnSize)
     EVT_ICONIZE(wxMDIParentFrame::OnIconized)
     EVT_SYS_COLOUR_CHANGED(wxMDIParentFrame::OnSysColourChanged)
@@ -152,6 +153,8 @@ void wxMDIParentFrame::Init()
   // the default menu doesn't have any accelerators (even if we have it)
   m_accelWindowMenu = NULL;
 #endif // wxUSE_MENUS && wxUSE_ACCEL
+
+  m_activationNotHandled = false;
 }
 
 bool wxMDIParentFrame::Create(wxWindow *parent,
@@ -626,14 +629,44 @@ WXLRESULT wxMDIParentFrame::MSWWindowProc(WXUINT message,
     return rc;
 }
 
+void wxMDIParentFrame::OnActivate(wxActivateEvent& WXUNUSED(event))
+{
+    // The base class version saves the current focus when we are being
+    // deactivated and restores it when the window is activated again, but this
+    // is not necessary here as DefWindowProc() for MDI parent frame already
+    // takes care of re-activating the MDI child that had been active the last
+    // time, and MDI children remember their own last focused child already,
+    // being subclasses of wxTLW.
+    //
+    // Moreover, in addition to being unnecessary, this can be actively harmful
+    // if we somehow don't have the focus any more at the moment of activation
+    // loss as happens when showing a standard file dialog under Windows 7, see
+    // #16635: in this case the base class just gives the focus to its first
+    // child, meaning that we can switch to a different MDI child, which is
+    // worse than losing focus inside the current child.
+    //
+    // So we don't let the base class have this event to prevent this from
+    // happening. But the event is not really processed, so we set a flag here
+    // which is used in HandleActivate() below to check if the event was really
+    // processed (and not skipped) in the user code or just reached this dummy
+    // handler.
+    m_activationNotHandled = true;
+}
+
 bool wxMDIParentFrame::HandleActivate(int state, bool minimized, WXHWND activate)
 {
     bool processed = false;
 
+    // Set the flag before testing it to ensure the only way for it to be true
+    // is to be set in our OnActivate() -- and not just remain set from the
+    // last time.
+    m_activationNotHandled = false;
+
     if ( wxWindow::HandleActivate(state, minimized, activate) )
     {
-        // already processed
-        processed = true;
+        // already processed, unless we artificially marked the event as
+        // handled in our own handler without really processing it
+        processed = !m_activationNotHandled;
     }
 
     // If this window is an MDI parent, we must also send an OnActivate message
