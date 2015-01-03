@@ -1050,10 +1050,7 @@ public:
               const wxArrayInt& values = wxArrayInt() )
     {
         Free();
-        if ( &values )
-            Add(labels,values);
-        else
-            Add(labels);
+        Add(labels,values);
     }
 
     // Creates exclusive copy of current choices
