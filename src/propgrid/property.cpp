@@ -2935,17 +2935,10 @@ void wxPGChoices::Add( const wxChar* const* labels, const ValArrItem* values )
 {
     AllocExclusive();
 
-    unsigned int itemcount = 0;
-    const wxChar* const* p = &labels[0];
-    while ( *p ) { p++; itemcount++; }
-
-    unsigned int i;
-    for ( i = 0; i < itemcount; i++ )
+    for ( unsigned int i = 0; *labels; labels++, i++ )
     {
-        int value = i;
-        if ( values )
-            value = values[i];
-        wxPGChoiceEntry entry(labels[i], value);
+        const int value = values ? values[i] : i;
+        wxPGChoiceEntry entry(*labels, value);
         m_data->Insert( i, entry );
     }
 }
@@ -2956,14 +2949,14 @@ void wxPGChoices::Add( const wxArrayString& arr, const wxArrayInt& arrint )
 {
     AllocExclusive();
 
-    unsigned int i;
-    unsigned int itemcount = arr.size();
+    const unsigned int itemcount = arr.size();
+    const unsigned int valcount = arrint.size();
+    wxASSERT_MSG( valcount >= itemcount || valcount == 0,
+                  wxT("Insufficient number of values in the array") );
 
-    for ( i = 0; i < itemcount; i++ )
+    for ( unsigned int i = 0; i < itemcount; i++ )
     {
-        int value = i;
-        if ( &arrint && arrint.size() )
-            value = arrint[i];
+        const int value = (i < valcount) ? arrint[i] : i;
         wxPGChoiceEntry entry(arr[i], value);
         m_data->Insert( i, entry );
     }
