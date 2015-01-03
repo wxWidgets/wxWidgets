@@ -519,6 +519,7 @@
     <ClInclude Include="..\..\include\wx\richtext\richtextuicustomization.h" />
     <ClInclude Include="..\..\include\wx\richtext\richtextxml.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_richtext.h" />
+    <ClInclude Include="..\..\include\wx\richtext\richtexttabspage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
