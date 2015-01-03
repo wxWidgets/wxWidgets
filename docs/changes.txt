@@ -601,6 +601,10 @@ wxMSW:
 - Fix inserting tools removed from wxToolBar back into it (sbrowne).
 - Fix disabling submenu items in the menus (Artur Wieczorek).
 
+wxOSX:
+
+- Fix wxFileDialog::GetFilterIndex() for file open dialogs (phsilva).
+
 
 3.0.2: (released 2014-10-06)
 ----------------------------
