@@ -28,6 +28,9 @@ public:
     wxBitmap(const char* const* bits);
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM);
     wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH);
+    
+    // Convert from wxIcon
+    wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
 
     static void InitStandardHandlers();
 
