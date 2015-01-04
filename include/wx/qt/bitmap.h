@@ -11,6 +11,7 @@
 class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 
 class WXDLLIMPEXP_FWD_CORE wxImage;
+class WXDLLIMPEXP_FWD_CORE wxCursor;
 class QImage;
 
 class QPixmap;
@@ -29,8 +30,9 @@ public:
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM);
     wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH);
     
-    // Convert from wxIcon
+    // Convert from wxIcon / wxCursor
     wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
+    wxEXPLICIT wxBitmap(const wxCursor& cursor);
 
     static void InitStandardHandlers();
 
