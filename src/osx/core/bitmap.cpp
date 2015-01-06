@@ -1418,13 +1418,12 @@ wxImage wxBitmap::ConvertToImage() const
     for (int yy = 0; yy < height; yy++ , sourcestart += M_BITMAPDATA->GetBytesPerRow() , mask += maskBytesPerRow )
     {
         unsigned char * maskp = mask ;
-        unsigned char * source = sourcestart;
+        const wxUint32 * source = (wxUint32*)sourcestart;
         unsigned char a, r, g, b;
-        long color;
 
         for (int xx = 0; xx < width; xx++)
         {
-            color = *((long*) source) ;
+            const wxUint32 color = *source++;
 #ifdef WORDS_BIGENDIAN
             a = ((color&0xFF000000) >> 24) ;
             r = ((color&0x00FF0000) >> 16) ;
@@ -1466,7 +1465,6 @@ wxImage wxBitmap::ConvertToImage() const
             data[index + 2] = b ;
 
             index += 3;
-            source += 4 ;
         }
     }
 
