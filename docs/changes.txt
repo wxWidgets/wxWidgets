@@ -603,6 +603,7 @@ wxMSW:
 
 wxOSX:
 
+- Fix conversion of wxBitmap to wxImage in 64 bit builds.
 - Fix wxFileDialog::GetFilterIndex() for file open dialogs (phsilva).
 
 
