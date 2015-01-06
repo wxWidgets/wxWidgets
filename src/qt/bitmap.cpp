@@ -219,6 +219,14 @@ wxBitmap::wxBitmap(const wxImage& image, int depth )
     m_refData = new wxBitmapRefData(QPixmap::fromImage(ConvertImage(image), flags));
 }
 
+wxBitmap::wxBitmap(const wxCursor& cursor)
+{
+    // note that pixmap could be invalid if is not a pixmap cursor
+    // also, a wxCursor::GetHandle method could be implemented instead of 
+    // accessing the member variable directly  
+    QPixmap pix = cursor.m_qtCursor.pixmap();
+    m_refData = new wxBitmapRefData(pix);
+}
 
 bool wxBitmap::Create(int width, int height, int depth )
 {
