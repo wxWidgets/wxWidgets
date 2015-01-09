@@ -22,7 +22,6 @@
     #include "wx/log.h"
     #include "wx/window.h"
     #include "wx/panel.h"
-    #include "wx/sizer.h"
 #endif
 
 
@@ -39,7 +38,8 @@ public:
         // from the XRC if anything.
         : wxPanel(parent, id, pos, size, style | wxTAB_TRAVERSAL | wxNO_BORDER,
                   controlName + wxT("_container")),
-          m_controlName(controlName), m_controlAdded(false)
+          m_controlName(controlName),
+          m_control(NULL)
     {
         m_bg = GetBackgroundColour();
         SetBackgroundColour(wxColour(255, 0, 255));
@@ -48,33 +48,77 @@ public:
     virtual void AddChild(wxWindowBase *child) wxOVERRIDE;
     virtual void RemoveChild(wxWindowBase *child) wxOVERRIDE;
 
+
+    // Ensure that setting the min or max size both for this window itself (as
+    // happens when the XRC contains the corresponding elements) or for the
+    // control contained in it works as expected, i.e. the larger/smaller of
+    // the sizes is used to satisfy both windows invariants.
+
+    virtual wxSize GetMinSize() const wxOVERRIDE
+    {
+        wxSize size = wxPanel::GetMinSize();
+        if ( m_control )
+            size.IncTo(m_control->GetMinSize());
+
+        return size;
+    }
+
+    virtual wxSize GetMaxSize() const wxOVERRIDE
+    {
+        wxSize size = wxPanel::GetMaxSize();
+        if ( m_control )
+            size.DecToIfSpecified(m_control->GetMaxSize());
+
+        return size;
+    }
+
 protected:
+    virtual wxSize DoGetBestClientSize() const wxOVERRIDE
+    {
+        // We don't have any natural best size when we're empty, so just return
+        // the minimal valid size in this case.
+        return m_control ? m_control->GetBestSize() : wxSize(1, 1);
+    }
+
+private:
+    void OnSize(wxSizeEvent& event)
+    {
+        if ( m_control )
+            m_control->SetSize(wxRect(event.GetSize()));
+    }
+
     wxString m_controlName;
-    bool m_controlAdded;
+    wxWindowBase *m_control;
     wxColour m_bg;
+
+    wxDECLARE_EVENT_TABLE();
 };
+
+wxBEGIN_EVENT_TABLE(wxUnknownControlContainer, wxPanel)
+    EVT_SIZE(wxUnknownControlContainer::OnSize)
+wxEND_EVENT_TABLE()
 
 void wxUnknownControlContainer::AddChild(wxWindowBase *child)
 {
-    wxASSERT_MSG( !m_controlAdded, wxT("Couldn't add two unknown controls to the same container!") );
+    wxASSERT_MSG( !m_control, wxT("Couldn't add two unknown controls to the same container!") );
 
     wxPanel::AddChild(child);
 
     SetBackgroundColour(m_bg);
     child->SetName(m_controlName);
     child->SetId(wxXmlResource::GetXRCID(m_controlName));
-    m_controlAdded = true;
+    m_control = child;
 
-    wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
-    sizer->Add((wxWindow*)child, 1, wxEXPAND);
-    SetSizerAndFit(sizer);
+    InvalidateBestSize();
+    child->SetSize(wxRect(GetClientSize()));
 }
 
 void wxUnknownControlContainer::RemoveChild(wxWindowBase *child)
 {
     wxPanel::RemoveChild(child);
-    m_controlAdded = false;
-    GetSizer()->Detach((wxWindow*)child);
+    m_control = NULL;
+
+    InvalidateBestSize();
 }
 
 
