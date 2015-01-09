@@ -371,10 +371,9 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
                 //      using the bitwise AND operator.
                 unsigned id = wParam & 0xfff0;
 
-                // Preserve the focus when minimizing/restoring the window: we
-                // need to do it manually as DefWindowProc() doesn't appear to
-                // do this for us for some reason (perhaps because we don't use
-                // WM_NEXTDLGCTL for setting focus?). Moreover, our code in
+                // Preserve the focus when minimizing/restoring the window:
+                // surprisingly, DefWindowProc() doesn't do it automatically
+                // and so we need to it ourselves. Moreover, our code in
                 // OnActivate() doesn't work in this case as we receive the
                 // deactivation event too late when the window is being
                 // minimized and the focus is already NULL by then. Similarly,
