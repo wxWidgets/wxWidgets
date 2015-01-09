@@ -669,14 +669,12 @@ bool wxMDIParentFrame::HandleActivate(int state, bool minimized, WXHWND activate
         processed = !m_activationNotHandled;
     }
 
-    // If this window is an MDI parent, we must also send an OnActivate message
-    // to the current child.
-    if ( GetActiveChild() &&
-         ((state == WA_ACTIVE) || (state == WA_CLICKACTIVE)) )
+    // Also generate the (de)activation event for the current child, if any, to
+    // allow updating its state and, in particular, remembering or restoring
+    // its last focused window.
+    if ( GetActiveChild() )
     {
-        wxActivateEvent event(wxEVT_ACTIVATE, true, GetActiveChild()->GetId());
-        event.SetEventObject( GetActiveChild() );
-        if ( GetActiveChild()->HandleWindowEvent(event) )
+        if ( GetActiveChild()->HandleActivate(state, minimized, activate) )
             processed = true;
     }
 
