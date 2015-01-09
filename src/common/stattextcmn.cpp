@@ -200,7 +200,6 @@ void wxStaticTextBase::AutoResizeIfNecessary()
     // disabled
     if ( !HasFlag(wxST_NO_AUTORESIZE) )
     {
-        InvalidateBestSize();
         DoSetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, wxDefaultCoord,
                   wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
     }

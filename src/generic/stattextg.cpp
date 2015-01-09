@@ -101,6 +101,9 @@ void wxGenericStaticText::SetLabel(const wxString& label)
 {
     wxControl::SetLabel(label);
     DoSetLabel(GetEllipsizedLabel());
+
+    InvalidateBestSize();
+
     if ( !IsEllipsized() )
         AutoResizeIfNecessary();
 

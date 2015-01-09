@@ -49,7 +49,6 @@ bool wxStaticText::Create(wxWindow *parent,
 
     // as we didn't pass the correct label to MSWCreateControl(), it didn't set
     // the initial size correctly -- do it now
-    InvalidateBestSize();
     SetInitialSize(size);
 
     // NOTE: if the label contains ampersand characters which are interpreted as
@@ -185,6 +184,8 @@ void wxStaticText::SetLabel(const wxString& label)
     else
 #endif // SS_ENDELLIPSIS
         DoSetLabel(GetEllipsizedLabel());
+
+    InvalidateBestSize();
 
     if ( !IsEllipsized() )  // if ellipsize is ON, then we don't want to get resized!
     {
