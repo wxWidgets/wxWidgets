@@ -4464,6 +4464,13 @@ void wxDataViewMainWindow::OnSetFocus( wxFocusEvent &event )
 {
     m_hasFocus = true;
 
+    // Make the control usable from keyboard once it gets focus by ensuring
+    // that it has a current row, if at all possible.
+    if ( !HasCurrentRow() && !IsEmpty() )
+    {
+        ChangeCurrentRow(0);
+    }
+
     if (HasCurrentRow())
         Refresh();
 
