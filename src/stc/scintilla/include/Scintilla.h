@@ -728,6 +728,10 @@ inline int isascii(int c) { return !(c & ~0x7F); }
 #define SC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE 1
 #define SCI_AUTOCSETCASEINSENSITIVEBEHAVIOUR 2634
 #define SCI_AUTOCGETCASEINSENSITIVEBEHAVIOUR 2635
+#define SC_MULTIAUTOC_ONCE 0
+#define SC_MULTIAUTOC_EACH 1
+#define SCI_AUTOCSETMULTI 2636
+#define SCI_AUTOCGETMULTI 2637
 #define SC_ORDER_PRESORTED 0
 #define SC_ORDER_PERFORMSORT 1
 #define SC_ORDER_CUSTOM 2
@@ -1028,7 +1032,7 @@ inline int isascii(int c) { return !(c & ~0x7F); }
  * CHARRANGE, TEXTRANGE, FINDTEXTEX, FORMATRANGE, and NMHDR structs.
  * So older code that treats Scintilla as a RichEdit will work. */
 
-#ifdef SCI_NAMESPACE
+#if defined(__cplusplus) && defined(SCI_NAMESPACE)
 namespace Scintilla {
 #endif
 
@@ -1120,7 +1124,7 @@ struct SCNotification {
 	int updated;	/* SCN_UPDATEUI */
 };
 
-#ifdef SCI_NAMESPACE
+#if defined(__cplusplus) && defined(SCI_NAMESPACE)
 }
 #endif
 

@@ -3291,6 +3291,18 @@ int wxStyledTextCtrl::AutoCompGetCaseInsensitiveBehaviour() const
     return SendMsg(SCI_AUTOCGETCASEINSENSITIVEBEHAVIOUR, 0, 0);
 }
 
+// Change the effect of autocompleting when there are multiple selections.
+void wxStyledTextCtrl::AutoCompSetMulti(int multi)
+{
+    SendMsg(SCI_AUTOCSETMULTI, multi, 0);
+}
+
+// Retrieve the effect of autocompleting when there are multiple selections..
+int wxStyledTextCtrl::AutoCompGetMulti() const
+{
+    return SendMsg(SCI_AUTOCGETMULTI, 0, 0);
+}
+
 // Set the way autocompletion lists are ordered.
 void wxStyledTextCtrl::AutoCompSetOrder(int order)
 {
@@ -5323,7 +5335,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
 {
-    return wxVersionInfo("Scintilla", 3, 4, 3, "Scintilla 3.4.3");
+    return wxVersionInfo("Scintilla", 3, 4, 4, "Scintilla 3.4.4");
 }
 
 #endif // wxUSE_STC

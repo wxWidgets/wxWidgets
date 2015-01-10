@@ -576,8 +576,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 	WordList &keywords5 = *keywordlists[4];
 	WordList &keywords6 = *keywordlists[5]; // SGML (DTD) keywords
 
-	// Lexer for HTML requires more lexical states (8 bits worth) than most lexers
-	styler.StartAt(startPos, static_cast<unsigned char>(STYLE_MAX));
+	styler.StartAt(startPos);
 	char prevWord[200];
 	prevWord[0] = '\0';
 	char phpStringDelimiter[200]; // PHP is not limited in length, we are
@@ -609,7 +608,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 		if (startPos == 0)
 			state = SCE_H_DEFAULT;
 	}
-	styler.StartAt(startPos, static_cast<unsigned char>(STYLE_MAX));
+	styler.StartAt(startPos);
 
 	int lineCurrent = styler.GetLine(startPos);
 	int lineState;
@@ -2180,6 +2179,6 @@ static const char * const phpscriptWordListDesc[] = {
 	0,
 };
 
-LexerModule lmHTML(SCLEX_HTML, ColouriseHTMLDoc, "hypertext", 0, htmlWordListDesc, 8);
-LexerModule lmXML(SCLEX_XML, ColouriseXMLDoc, "xml", 0, htmlWordListDesc, 8);
-LexerModule lmPHPSCRIPT(SCLEX_PHPSCRIPT, ColourisePHPScriptDoc, "phpscript", 0, phpscriptWordListDesc, 8);
+LexerModule lmHTML(SCLEX_HTML, ColouriseHTMLDoc, "hypertext", 0, htmlWordListDesc);
+LexerModule lmXML(SCLEX_XML, ColouriseXMLDoc, "xml", 0, htmlWordListDesc);
+LexerModule lmPHPSCRIPT(SCLEX_PHPSCRIPT, ColourisePHPScriptDoc, "phpscript", 0, phpscriptWordListDesc);

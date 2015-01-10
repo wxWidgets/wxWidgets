@@ -406,6 +406,8 @@ methodOverrideMap = {
     'AutoCGetMaxHeight'     : ('AutoCompGetMaxHeight', 0, 0, 0),
     'AutoCSetCaseInsensitiveBehaviour'     : ('AutoCompSetCaseInsensitiveBehaviour', 0, 0, 0),
     'AutoCGetCaseInsensitiveBehaviour'     : ('AutoCompGetCaseInsensitiveBehaviour', 0, 0, 0),
+    'AutoCSetMulti'         : ('AutoCompSetMulti', 0, 0, 0),
+    'AutoCGetMulti'         : ('AutoCompGetMulti', 0, 0, 0),
     'AutoCSetOrder'         : ('AutoCompSetOrder', 0, 0, 0),
     'AutoCGetOrder'         : ('AutoCompGetOrder', 0, 0, 0),
 

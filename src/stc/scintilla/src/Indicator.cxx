@@ -11,8 +11,8 @@
 #include "Platform.h"
 
 #include "Scintilla.h"
-#include "XPM.h"
 #include "Indicator.h"
+#include "XPM.h"
 
 #ifdef SCI_NAMESPACE
 using namespace Scintilla;
@@ -23,7 +23,7 @@ static PRectangle PixelGridAlign(const PRectangle &rc) {
 	return PRectangle::FromInts(int(rc.left + 0.5), int(rc.top), int(rc.right + 0.5), int(rc.bottom));
 }
 
-void Indicator::Draw(Surface *surface, const PRectangle &rc, const PRectangle &rcLine) {
+void Indicator::Draw(Surface *surface, const PRectangle &rc, const PRectangle &rcLine) const {
 	surface->PenColour(fore);
 	int ymid = static_cast<int>(rc.bottom + rc.top) / 2;
 	if (style == INDIC_SQUIGGLE) {

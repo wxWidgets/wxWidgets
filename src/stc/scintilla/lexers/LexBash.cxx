@@ -767,6 +767,7 @@ static void FoldBashDoc(unsigned int startPos, int length, int, WordList *[],
 	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
 	unsigned int endPos = startPos + length;
 	int visibleChars = 0;
+	int skipHereCh = 0;
 	int lineCurrent = styler.GetLine(startPos);
 	int levelPrev = styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
 	int levelCurrent = levelPrev;
@@ -798,7 +799,15 @@ static void FoldBashDoc(unsigned int startPos, int length, int, WordList *[],
 		// Here Document folding
 		if (style == SCE_SH_HERE_DELIM) {
 			if (ch == '<' && chNext == '<') {
-				levelCurrent++;
+				if (styler.SafeGetCharAt(i + 2) == '<') {
+					skipHereCh = 1;
+				} else {
+					if (skipHereCh == 0) {
+						levelCurrent++;
+					} else {
+						skipHereCh = 0;
+					}
+				}
 			}
 		} else if (style == SCE_SH_HERE_Q && styler.StyleAt(i+1) == SCE_SH_DEFAULT) {
 			levelCurrent--;

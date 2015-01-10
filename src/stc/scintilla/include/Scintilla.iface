@@ -1884,6 +1884,16 @@ set void AutoCSetCaseInsensitiveBehaviour=2634(int behaviour,)
 # Get auto-completion case insensitive behaviour.
 get int AutoCGetCaseInsensitiveBehaviour=2635(,)
 
+enu MultiAutoComplete=SC_MULTIAUTOC_
+val SC_MULTIAUTOC_ONCE=0
+val SC_MULTIAUTOC_EACH=1
+
+# Change the effect of autocompleting when there are multiple selections.
+set void AutoCSetMulti=2636(int multi,)
+
+# Retrieve the effect of autocompleting when there are multiple selections..
+get int AutoCGetMulti=2637(,)
+
 enu Ordering=SC_ORDER_
 val SC_ORDER_PRESORTED=0
 val SC_ORDER_PERFORMSORT=1

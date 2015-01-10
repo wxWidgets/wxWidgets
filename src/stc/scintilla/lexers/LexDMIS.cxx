@@ -13,14 +13,14 @@
 #include <cctype>
 
 #include "ILexer.h"
-#include "SciLexer.h"
 #include "Scintilla.h"
+#include "SciLexer.h"
 
-#include "LexerModule.h"
+#include "WordList.h"
 #include "LexAccessor.h"
 #include "StyleContext.h"
 #include "CharacterSet.h"
-#include "WordList.h"
+#include "LexerModule.h"
 
 #ifdef SCI_NAMESPACE
 using namespace Scintilla;

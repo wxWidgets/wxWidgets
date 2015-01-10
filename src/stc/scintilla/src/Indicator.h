@@ -23,7 +23,7 @@ public:
 	int outlineAlpha;
 	Indicator() : style(INDIC_PLAIN), under(false), fore(ColourDesired(0,0,0)), fillAlpha(30), outlineAlpha(50) {
 	}
-	void Draw(Surface *surface, const PRectangle &rc, const PRectangle &rcLine);
+	void Draw(Surface *surface, const PRectangle &rc, const PRectangle &rcLine) const;
 };
 
 #ifdef SCI_NAMESPACE

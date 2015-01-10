@@ -21,6 +21,7 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#include "PropSetSimple.h"
 #include "WordList.h"
 #include "LexAccessor.h"
 #include "Accessor.h"
@@ -28,7 +29,6 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 #include "OptionSet.h"
-#include "PropSetSimple.h"
 
 #ifdef SCI_NAMESPACE
 using namespace Scintilla;

@@ -17,6 +17,7 @@
 
 #include "Platform.h"
 
+#include "ILexer.h"
 #include "Scintilla.h"
 
 #include "SplitVector.h"
@@ -32,7 +33,6 @@
 #include "ViewStyle.h"
 #include "CharClassify.h"
 #include "Decoration.h"
-#include "ILexer.h"
 #include "CaseFolder.h"
 #include "Document.h"
 #include "UniConversion.h"
@@ -54,16 +54,12 @@ LineLayout::LineLayout(int maxLineLength_) :
 	validity(llInvalid),
 	xHighlightGuide(0),
 	highlightColumn(0),
-	psel(NULL),
 	containsCaret(false),
 	edgeColumn(0),
 	chars(0),
 	styles(0),
-	styleBitsSet(0),
-	indicators(0),
 	positions(0),
-	hsStart(0),
-	hsEnd(0),
+	hotspot(0,0),
 	widthLine(wrapWidthInfinite),
 	lines(1),
 	wrapIndent(0) {
@@ -81,7 +77,6 @@ void LineLayout::Resize(int maxLineLength_) {
 		Free();
 		chars = new char[maxLineLength_ + 1];
 		styles = new unsigned char[maxLineLength_ + 1];
-		indicators = new char[maxLineLength_ + 1];
 		// Extra position allocated as sometimes the Windows
 		// GetTextExtentExPoint API writes an extra element.
 		positions = new XYPOSITION[maxLineLength_ + 1 + 1];
@@ -94,8 +89,6 @@ void LineLayout::Free() {
 	chars = 0;
 	delete []styles;
 	styles = 0;
-	delete []indicators;
-	indicators = 0;
 	delete []positions;
 	positions = 0;
 	delete []lineStarts;
@@ -153,7 +146,7 @@ void LineLayout::SetLineStart(int line, int start) {
 	lineStarts[line] = start;
 }
 
-void LineLayout::SetBracesHighlight(Range rangeLine, Position braces[],
+void LineLayout::SetBracesHighlight(Range rangeLine, const Position braces[],
                                     char bracesMatchStyle, int xHighlight, bool ignoreStyle) {
 	if (!ignoreStyle && rangeLine.ContainsCharacter(braces[0])) {
 		int braceOffset = braces[0] - rangeLine.start;
@@ -175,7 +168,7 @@ void LineLayout::SetBracesHighlight(Range rangeLine, Position braces[],
 	}
 }
 
-void LineLayout::RestoreBracesHighlight(Range rangeLine, Position braces[], bool ignoreStyle) {
+void LineLayout::RestoreBracesHighlight(Range rangeLine, const Position braces[], bool ignoreStyle) {
 	if (!ignoreStyle && rangeLine.ContainsCharacter(braces[0])) {
 		int braceOffset = braces[0] - rangeLine.start;
 		if (braceOffset < numCharsInLine) {
@@ -410,11 +403,11 @@ void SpecialRepresentations::ClearRepresentation(const char *charBytes) {
 	}
 }
 
-Representation *SpecialRepresentations::RepresentationFromCharacter(const char *charBytes, size_t len) {
+const Representation *SpecialRepresentations::RepresentationFromCharacter(const char *charBytes, size_t len) const {
 	PLATFORM_ASSERT(len <= 4);
 	if (!startByteHasReprs[static_cast<unsigned char>(charBytes[0])])
 		return 0;
-	MapRepresentation::iterator it = mapReprs.find(KeyFromString(charBytes, len));
+	MapRepresentation::const_iterator it = mapReprs.find(KeyFromString(charBytes, len));
 	if (it != mapReprs.end()) {
 		return &(it->second);
 	}
@@ -445,8 +438,8 @@ void BreakFinder::Insert(int val) {
 	}
 }
 
-BreakFinder::BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posLineStart_,
-	int xStart, bool breakForSelection, Document *pdoc_, SpecialRepresentations *preprs_) :
+BreakFinder::BreakFinder(const LineLayout *ll_, const Selection *psel, int lineStart_, int lineEnd_, int posLineStart_,
+	int xStart, bool breakForSelection, const Document *pdoc_, const SpecialRepresentations *preprs_) :
 	ll(ll_),
 	lineStart(lineStart_),
 	lineEnd(lineEnd_),
@@ -472,8 +465,8 @@ BreakFinder::BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posL
 		SelectionPosition posStart(posLineStart);
 		SelectionPosition posEnd(posLineStart + lineEnd);
 		SelectionSegment segmentLine(posStart, posEnd);
-		for (size_t r=0; r<ll->psel->Count(); r++) {
-			SelectionSegment portion = ll->psel->Range(r).Intersect(segmentLine);
+		for (size_t r=0; r<psel->Count(); r++) {
+			SelectionSegment portion = psel->Range(r).Intersect(segmentLine);
 			if (!(portion.start == portion.end)) {
 				if (portion.start.IsValid())
 					Insert(portion.start.Position() - posLineStart);
@@ -500,7 +493,7 @@ TextSegment BreakFinder::Next() {
 				charWidth = UTF8DrawBytes(reinterpret_cast<unsigned char *>(ll->chars) + nextBreak, lineEnd - nextBreak);
 			else if (encodingFamily == efDBCS)
 				charWidth = pdoc->IsDBCSLeadByte(ll->chars[nextBreak]) ? 2 : 1;
-			Representation *repr = preprs->RepresentationFromCharacter(ll->chars + nextBreak, charWidth);
+			const Representation *repr = preprs->RepresentationFromCharacter(ll->chars + nextBreak, charWidth);
 			if (((nextBreak > 0) && (ll->styles[nextBreak] != ll->styles[nextBreak - 1])) ||
 					repr ||
 					(nextBreak == saeNext)) {
@@ -565,7 +558,7 @@ void PositionCacheEntry::Set(unsigned int styleNumber_, const char *s_,
 		for (unsigned int i=0; i<len; i++) {
 			positions[i] = positions_[i];
 		}
-		memcpy(reinterpret_cast<char *>(positions + len), s_, len);
+		memcpy(reinterpret_cast<char *>(reinterpret_cast<void *>(positions + len)), s_, len);
 	}
 }
 
@@ -584,7 +577,7 @@ void PositionCacheEntry::Clear() {
 bool PositionCacheEntry::Retrieve(unsigned int styleNumber_, const char *s_,
 	unsigned int len_, XYPOSITION *positions_) const {
 	if ((styleNumber == styleNumber_) && (len == len_) &&
-		(memcmp(reinterpret_cast<char *>(positions + len), s_, len)== 0)) {
+		(memcmp(reinterpret_cast<char *>(reinterpret_cast<void *>(positions + len)), s_, len)== 0)) {
 		for (unsigned int i=0; i<len; i++) {
 			positions_[i] = positions[i];
 		}
@@ -642,7 +635,7 @@ void PositionCache::SetSize(size_t size_) {
 	pces.resize(size_);
 }
 
-void PositionCache::MeasureWidths(Surface *surface, ViewStyle &vstyle, unsigned int styleNumber,
+void PositionCache::MeasureWidths(Surface *surface, const ViewStyle &vstyle, unsigned int styleNumber,
 	const char *s, unsigned int len, XYPOSITION *positions, Document *pdoc) {
 
 	allClear = false;
@@ -672,7 +665,8 @@ void PositionCache::MeasureWidths(Surface *surface, ViewStyle &vstyle, unsigned 
 		XYPOSITION xStartSegment = 0;
 		while (startSegment < len) {
 			unsigned int lenSegment = pdoc->SafeSegment(s + startSegment, len - startSegment, BreakFinder::lengthEachSubdivision);
-			surface->MeasureWidths(vstyle.styles[styleNumber].font, s + startSegment, lenSegment, positions + startSegment);
+			FontAlias fontStyle = vstyle.styles[styleNumber].font;
+			surface->MeasureWidths(fontStyle, s + startSegment, lenSegment, positions + startSegment);
 			for (unsigned int inSeg = 0; inSeg < lenSegment; inSeg++) {
 				positions[startSegment + inSeg] += xStartSegment;
 			}
@@ -680,7 +674,8 @@ void PositionCache::MeasureWidths(Surface *surface, ViewStyle &vstyle, unsigned 
 			startSegment += lenSegment;
 		}
 	} else {
-		surface->MeasureWidths(vstyle.styles[styleNumber].font, s, len, positions);
+		FontAlias fontStyle = vstyle.styles[styleNumber].font;
+		surface->MeasureWidths(fontStyle, s, len, positions);
 	}
 	if (probe < pces.size()) {
 		// Store into cache

@@ -358,7 +358,7 @@ static const char * const tclWordListDesc[] = {
             "TK Keywords",
             "iTCL Keywords",
             "tkCommands",
-            "expand"
+            "expand",
             "user1",
             "user2",
             "user3",

@@ -180,8 +180,8 @@ public:
 
 	/// Setting styles for positions outside the range of the buffer is safe and has no effect.
 	/// @return true if the style of a character is changed.
-	bool SetStyleAt(int position, char styleValue, char mask='\377');
-	bool SetStyleFor(int position, int length, char styleValue, char mask);
+	bool SetStyleAt(int position, char styleValue);
+	bool SetStyleFor(int position, int length, char styleValue);
 
 	const char *DeleteChars(int position, int deleteLength, bool &startSequence);
 

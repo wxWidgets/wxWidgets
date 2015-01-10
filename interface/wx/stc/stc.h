@@ -266,6 +266,8 @@
 #define wxSTC_SEL_THIN 3
 #define wxSTC_CASEINSENSITIVEBEHAVIOUR_RESPECTCASE 0
 #define wxSTC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE 1
+#define wxSTC_MULTIAUTOC_ONCE 0
+#define wxSTC_MULTIAUTOC_EACH 1
 #define wxSTC_ORDER_PRESORTED 0
 #define wxSTC_ORDER_PERFORMSORT 1
 #define wxSTC_ORDER_CUSTOM 2
@@ -5094,6 +5096,16 @@ public:
         Get auto-completion case insensitive behaviour.
     */
     int AutoCompGetCaseInsensitiveBehaviour() const;
+
+    /**
+        Change the effect of autocompleting when there are multiple selections.
+    */
+    void AutoCompSetMulti(int multi);
+
+    /**
+        Retrieve the effect of autocompleting when there are multiple selections..
+    */
+    int AutoCompGetMulti() const;
 
     /**
         Set the way autocompletion lists are ordered.

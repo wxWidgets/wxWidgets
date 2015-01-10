@@ -46,6 +46,7 @@ protected:
 
 	int listType;			///< 0 is an autocomplete list
 	int maxListWidth;		/// Maximum width of list, in average character widths
+	int multiAutoCMode; /// Mode for autocompleting when multiple selections are present
 
 #ifdef SCI_LEXER
 	LexState *DocumentLexState();

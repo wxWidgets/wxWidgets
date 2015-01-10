@@ -66,7 +66,7 @@ public:
 	void SetXPM(const char *textForm);
 	void SetXPM(const char *const *linesForm);
 	void SetRGBAImage(Point sizeRGBAImage, float scale, const unsigned char *pixelsRGBAImage);
-	void Draw(Surface *surface, PRectangle &rc, Font &fontForCharacter, typeOfFold tFold, int marginStyle);
+	void Draw(Surface *surface, PRectangle &rc, Font &fontForCharacter, typeOfFold tFold, int marginStyle) const;
 };
 
 #ifdef SCI_NAMESPACE
