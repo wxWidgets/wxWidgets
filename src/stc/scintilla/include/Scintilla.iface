@@ -98,6 +98,9 @@ fun void AddStyledText=2002(int length, cells c)
 # Insert string at a position.
 fun void InsertText=2003(position pos, string text)
 
+# Change the text that is being inserted in response to SC_MOD_INSERTCHECK
+fun void ChangeInsertion=2672(int length, string text)
+
 # Delete all text in the document.
 fun void ClearAll=2004(,)
 
@@ -1151,6 +1154,7 @@ val SC_FOLDFLAG_LINEBEFORE_CONTRACTED=0x0004
 val SC_FOLDFLAG_LINEAFTER_EXPANDED=0x0008
 val SC_FOLDFLAG_LINEAFTER_CONTRACTED=0x0010
 val SC_FOLDFLAG_LEVELNUMBERS=0x0040
+val SC_FOLDFLAG_LINESTATE=0x0080
 
 # Set some style options for folding.
 set void SetFoldFlags=2233(int flags,)
@@ -2494,7 +2498,8 @@ val SC_MOD_CHANGEMARGIN=0x10000
 val SC_MOD_CHANGEANNOTATION=0x20000
 val SC_MOD_CONTAINER=0x40000
 val SC_MOD_LEXERSTATE=0x80000
-val SC_MODEVENTMASKALL=0xFFFFF
+val SC_MOD_INSERTCHECK=0x100000
+val SC_MODEVENTMASKALL=0x1FFFFF
 
 enu Update=SC_UPDATE_
 val SC_UPDATE_CONTENT=0x1
@@ -2659,6 +2664,7 @@ val SCLEX_KVIRC=110
 val SCLEX_RUST=111
 val SCLEX_DMAP=112
 val SCLEX_AS=113
+val SCLEX_DMIS=114
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -2711,6 +2717,8 @@ val SCE_C_HASHQUOTEDSTRING=22
 val SCE_C_PREPROCESSORCOMMENT=23
 val SCE_C_PREPROCESSORCOMMENTDOC=24
 val SCE_C_USERLITERAL=25
+val SCE_C_TASKMARKER=26
+val SCE_C_ESCAPESEQUENCE=27
 # Lexical states for SCLEX_D
 lex D=SCLEX_D SCE_D_
 val SCE_D_DEFAULT=0
@@ -4438,6 +4446,18 @@ val SCE_DMAP_IDENTIFIER=7
 val SCE_DMAP_WORD=8
 val SCE_DMAP_WORD2=9
 val SCE_DMAP_WORD3=10
+# Lexical states for SCLEX_DMIS
+lex DMIS=SCLEX_DMIS SCE_DMIS_
+val SCE_DMIS_DEFAULT=0
+val SCE_DMIS_COMMENT=1
+val SCE_DMIS_STRING=2
+val SCE_DMIS_NUMBER=3
+val SCE_DMIS_KEYWORD=4
+val SCE_DMIS_MAJORWORD=5
+val SCE_DMIS_MINORWORD=6
+val SCE_DMIS_UNSUPPORTED_MAJOR=7
+val SCE_DMIS_UNSUPPORTED_MINOR=8
+val SCE_DMIS_LABEL=9
 
 # Events
 

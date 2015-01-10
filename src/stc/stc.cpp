@@ -282,6 +282,12 @@ void wxStyledTextCtrl::InsertText(int pos, const wxString& text)
     SendMsg(SCI_INSERTTEXT, pos, (sptr_t)(const char*)wx2stc(text));
 }
 
+// Change the text that is being inserted in response to SC_MOD_INSERTCHECK
+void wxStyledTextCtrl::ChangeInsertion(int length, const wxString& text)
+{
+    SendMsg(SCI_CHANGEINSERTION, length, (sptr_t)(const char*)wx2stc(text));
+}
+
 // Delete all text in the document.
 void wxStyledTextCtrl::ClearAll()
 {
@@ -5317,7 +5323,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
 {
-    return wxVersionInfo("Scintilla", 3, 4, 1, "Scintilla 3.4.1");
+    return wxVersionInfo("Scintilla", 3, 4, 2, "Scintilla 3.4.2");
 }
 
 #endif // wxUSE_STC

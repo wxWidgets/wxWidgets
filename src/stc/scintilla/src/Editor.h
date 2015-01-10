@@ -47,7 +47,7 @@ public:
 
 /**
  * When platform has a way to generate an event before painting,
- * accumulate needed styling range and other work items in
+ * accumulate needed styling range and other work items in 
  * WorkNeeded to avoid unnecessary work inside paint handler
  */
 class WorkNeeded {
@@ -356,12 +356,12 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int LineFromLocation(Point pt) const;
 	void SetTopLine(int topLineNew);
 
-	bool AbandonPaint();
+	virtual bool AbandonPaint();
 	virtual void RedrawRect(PRectangle rc);
 	virtual void DiscardOverdraw();
 	virtual void Redraw();
 	void RedrawSelMargin(int line=-1, bool allAfter=false);
-	PRectangle RectangleFromRange(int start, int end);
+	PRectangle RectangleFromRange(Range r);
 	void InvalidateRange(int start, int end);
 
 	bool UserVirtualSpace() const {
@@ -420,6 +420,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void ScrollRange(SelectionRange range);
 	void ShowCaretAtCurrentPosition();
 	void DropCaret();
+	void CaretSetPeriod(int period);
 	void InvalidateCaret();
 	virtual void UpdateSystemCaret();
 
@@ -472,8 +473,10 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int InsertSpace(int position, unsigned int spaces);
 	void AddChar(char ch);
 	virtual void AddCharUTF(char *s, unsigned int len, bool treatAsDBCS=false);
-	void InsertPaste(SelectionPosition selStart, const char *text, int len);
-	void ClearSelection(bool retainMultipleSelections=false);
+	void InsertPaste(const char *text, int len);
+	enum PasteShape { pasteStream=0, pasteRectangular = 1, pasteLine = 2 };
+	void InsertPasteShape(const char *text, int len, PasteShape shape);
+	void ClearSelection(bool retainMultipleSelections = false);
 	void ClearAll();
 	void ClearDocumentStyle();
 	void Cut();

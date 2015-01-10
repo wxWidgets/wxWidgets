@@ -75,12 +75,12 @@ void FontRealised::Realise(Surface &surface, int zoomLevel, int technology, cons
 	if (sizeZoomed <= 2 * SC_FONT_SIZE_MULTIPLIER)	// Hangs if sizeZoomed <= 1
 		sizeZoomed = 2 * SC_FONT_SIZE_MULTIPLIER;
 
-	float deviceHeight = surface.DeviceHeightFont(sizeZoomed);
+	float deviceHeight = static_cast<float>(surface.DeviceHeightFont(sizeZoomed));
 	FontParameters fp(fs.fontName, deviceHeight / SC_FONT_SIZE_MULTIPLIER, fs.weight, fs.italic, fs.extraFontFlag, technology, fs.characterSet);
 	font.Create(fp);
 
-	ascent = surface.Ascent(font);
-	descent = surface.Descent(font);
+	ascent = static_cast<unsigned int>(surface.Ascent(font));
+	descent = static_cast<unsigned int>(surface.Descent(font));
 	aveCharWidth = surface.AverageCharWidth(font);
 	spaceWidth = surface.WidthChar(font, ' ');
 }
@@ -347,7 +347,7 @@ void ViewStyle::Refresh(Surface &surface, int tabInChars) {
 
 	controlCharWidth = 0.0;
 	if (controlCharSymbol >= 32) {
-		controlCharWidth = surface.WidthChar(styles[STYLE_CONTROLCHAR].font, controlCharSymbol);
+		controlCharWidth = surface.WidthChar(styles[STYLE_CONTROLCHAR].font, static_cast<char>(controlCharSymbol));
 	}
 
 	fixedColumnWidth = marginInside ? leftMarginWidth : 0;

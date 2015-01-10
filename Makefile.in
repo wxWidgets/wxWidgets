@@ -249,6 +249,7 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexCSS.o \
 	wxscintilla_LexD.o \
 	wxscintilla_LexDMAP.o \
+	wxscintilla_LexDMIS.o \
 	wxscintilla_LexECL.o \
 	wxscintilla_LexEiffel.o \
 	wxscintilla_LexErlang.o \
@@ -17097,6 +17098,9 @@ wxscintilla_LexD.o: $(srcdir)/src/stc/scintilla/lexers/LexD.cxx
 
 wxscintilla_LexDMAP.o: $(srcdir)/src/stc/scintilla/lexers/LexDMAP.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexDMAP.cxx
+
+wxscintilla_LexDMIS.o: $(srcdir)/src/stc/scintilla/lexers/LexDMIS.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexDMIS.cxx
 
 wxscintilla_LexECL.o: $(srcdir)/src/stc/scintilla/lexers/LexECL.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexECL.cxx

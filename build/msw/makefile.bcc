@@ -230,6 +230,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexCSS.obj \
 	$(OBJS)\wxscintilla_LexD.obj \
 	$(OBJS)\wxscintilla_LexDMAP.obj \
+	$(OBJS)\wxscintilla_LexDMIS.obj \
 	$(OBJS)\wxscintilla_LexECL.obj \
 	$(OBJS)\wxscintilla_LexEiffel.obj \
 	$(OBJS)\wxscintilla_LexErlang.obj \
@@ -5979,6 +5980,9 @@ $(OBJS)\wxscintilla_LexD.obj: ..\..\src\stc\scintilla\lexers\LexD.cxx
 
 $(OBJS)\wxscintilla_LexDMAP.obj: ..\..\src\stc\scintilla\lexers\LexDMAP.cxx
 	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexDMAP.cxx
+
+$(OBJS)\wxscintilla_LexDMIS.obj: ..\..\src\stc\scintilla\lexers\LexDMIS.cxx
+	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexDMIS.cxx
 
 $(OBJS)\wxscintilla_LexECL.obj: ..\..\src\stc\scintilla\lexers\LexECL.cxx
 	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexECL.cxx

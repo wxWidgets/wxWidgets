@@ -82,6 +82,7 @@
             src/stc/scintilla/lexers/LexCSS.cxx
             src/stc/scintilla/lexers/LexD.cxx
             src/stc/scintilla/lexers/LexDMAP.cxx
+            src/stc/scintilla/lexers/LexDMIS.cxx
             src/stc/scintilla/lexers/LexECL.cxx
             src/stc/scintilla/lexers/LexEiffel.cxx
             src/stc/scintilla/lexers/LexErlang.cxx

@@ -98,6 +98,7 @@ Document::Document() {
 	enteredModification = 0;
 	enteredStyling = 0;
 	enteredReadOnlyCount = 0;
+	insertionSet = false;
 	tabInChars = 8;
 	indentInChars = 0;
 	actualIndentInChars = 8;
@@ -919,37 +920,56 @@ bool Document::DeleteChars(int pos, int len) {
 /**
  * Insert a string with a length.
  */
-bool Document::InsertString(int position, const char *s, int insertLength) {
+int Document::InsertString(int position, const char *s, int insertLength) {
 	if (insertLength <= 0) {
-		return false;
+		return 0;
 	}
-	CheckReadOnly();
+	CheckReadOnly();	// Application may change read only state here
+	if (cb.IsReadOnly()) {
+		return 0;
+	}
 	if (enteredModification != 0) {
-		return false;
-	} else {
-		enteredModification++;
-		if (!cb.IsReadOnly()) {
-			NotifyModified(
-			    DocModification(
-			        SC_MOD_BEFOREINSERT | SC_PERFORMED_USER,
-			        position, insertLength,
-			        0, s));
-			int prevLinesTotal = LinesTotal();
-			bool startSavePoint = cb.IsSavePoint();
-			bool startSequence = false;
-			const char *text = cb.InsertString(position, s, insertLength, startSequence);
-			if (startSavePoint && cb.IsCollectingUndo())
-				NotifySavePoint(!startSavePoint);
-			ModifiedAt(position);
-			NotifyModified(
-			    DocModification(
-			        SC_MOD_INSERTTEXT | SC_PERFORMED_USER | (startSequence?SC_STARTACTION:0),
-			        position, insertLength,
-			        LinesTotal() - prevLinesTotal, text));
-		}
-		enteredModification--;
+		return 0;
 	}
-	return !cb.IsReadOnly();
+	enteredModification++;
+	insertionSet = false;
+	insertion.clear();
+	NotifyModified(
+		DocModification(
+			SC_MOD_INSERTCHECK,
+			position, insertLength,
+			0, s));
+	if (insertionSet) {
+		s = insertion.c_str();
+		insertLength = static_cast<int>(insertion.length());
+	}
+	NotifyModified(
+		DocModification(
+			SC_MOD_BEFOREINSERT | SC_PERFORMED_USER,
+			position, insertLength,
+			0, s));
+	int prevLinesTotal = LinesTotal();
+	bool startSavePoint = cb.IsSavePoint();
+	bool startSequence = false;
+	const char *text = cb.InsertString(position, s, insertLength, startSequence);
+	if (startSavePoint && cb.IsCollectingUndo())
+		NotifySavePoint(!startSavePoint);
+	ModifiedAt(position);
+	NotifyModified(
+		DocModification(
+			SC_MOD_INSERTTEXT | SC_PERFORMED_USER | (startSequence?SC_STARTACTION:0),
+			position, insertLength,
+			LinesTotal() - prevLinesTotal, text));
+	if (insertionSet) {	// Free memory as could be large
+		std::string().swap(insertion);
+	}
+	enteredModification--;
+	return insertLength;
+}
+
+void Document::ChangeInsertion(const char *s, int length) {
+	insertionSet = true;
+	insertion.assign(s, length);
 }
 
 int SCI_METHOD Document::AddData(char *data, int length) {
@@ -1113,22 +1133,6 @@ int Document::Redo() {
 	return newPos;
 }
 
-/**
- * Insert a single character.
- */
-bool Document::InsertChar(int pos, char ch) {
-	char chs[1];
-	chs[0] = ch;
-	return InsertString(pos, chs, 1);
-}
-
-/**
- * Insert a null terminated string.
- */
-bool Document::InsertCString(int position, const char *s) {
-	return InsertString(position, s, static_cast<int>(s ? strlen(s) : 0));
-}
-
 void Document::DelChar(int pos) {
 	DeleteChars(pos, LenChar(pos));
 }
@@ -1183,7 +1187,7 @@ int SCI_METHOD Document::GetLineIndentation(int line) {
 	return indent;
 }
 
-void Document::SetLineIndentation(int line, int indent) {
+int Document::SetLineIndentation(int line, int indent) {
 	int indentOfLine = GetLineIndentation(line);
 	if (indent < 0)
 		indent = 0;
@@ -1193,7 +1197,10 @@ void Document::SetLineIndentation(int line, int indent) {
 		int indentPos = GetLineIndentPosition(line);
 		UndoGroup ug(this);
 		DeleteChars(thisLineStart, indentPos - thisLineStart);
-		InsertCString(thisLineStart, linebuf.c_str());
+		return thisLineStart + InsertString(thisLineStart, linebuf.c_str(), 
+			static_cast<int>(linebuf.length()));
+	} else {
+		return GetLineIndentPosition(line);
 	}
 }
 
@@ -1325,21 +1332,21 @@ void Document::ConvertLineEnds(int eolModeSet) {
 			} else {
 				// CR
 				if (eolModeSet == SC_EOL_CRLF) {
-					InsertString(pos + 1, "\n", 1); // Insert LF
-					pos++;
+					pos += InsertString(pos + 1, "\n", 1); // Insert LF
 				} else if (eolModeSet == SC_EOL_LF) {
-					InsertString(pos, "\n", 1); // Insert LF
-					DeleteChars(pos + 1, 1); // Delete CR
+					pos += InsertString(pos, "\n", 1); // Insert LF
+					DeleteChars(pos, 1); // Delete CR
+					pos--;
 				}
 			}
 		} else if (cb.CharAt(pos) == '\n') {
 			// LF
 			if (eolModeSet == SC_EOL_CRLF) {
-				InsertString(pos, "\r", 1); // Insert CR
-				pos++;
+				pos += InsertString(pos, "\r", 1); // Insert CR
 			} else if (eolModeSet == SC_EOL_CR) {
-				InsertString(pos, "\r", 1); // Insert CR
-				DeleteChars(pos + 1, 1); // Delete LF
+				pos += InsertString(pos, "\r", 1); // Insert CR
+				DeleteChars(pos, 1); // Delete LF
+				pos--;
 			}
 		}
 	}

@@ -39,6 +39,7 @@ public:
 	int LinesInDoc() const;
 	int LinesDisplayed() const;
 	int DisplayFromDoc(int lineDoc) const;
+	int DisplayLastFromDoc(int lineDoc) const;
 	int DocFromDisplay(int lineDisplay) const;
 
 	void InsertLine(int lineDoc);

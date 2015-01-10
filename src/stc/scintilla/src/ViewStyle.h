@@ -63,7 +63,7 @@ public:
 	bool isSet;
 	ColourOptional(ColourDesired colour_=ColourDesired(0,0,0), bool isSet_=false) : ColourDesired(colour_), isSet(isSet_) {
 	}
-	ColourOptional(uptr_t wParam, sptr_t lParam) : ColourDesired(lParam), isSet(wParam != 0) {
+	ColourOptional(uptr_t wParam, sptr_t lParam) : ColourDesired(static_cast<long>(lParam)), isSet(wParam != 0) {
 	}
 };
 

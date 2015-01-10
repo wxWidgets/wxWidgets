@@ -76,6 +76,10 @@ int ContractionState::DisplayFromDoc(int lineDoc) const {
 	}
 }
 
+int ContractionState::DisplayLastFromDoc(int lineDoc) const {
+	return DisplayFromDoc(lineDoc) + GetHeight(lineDoc) - 1;
+}
+
 int ContractionState::DocFromDisplay(int lineDisplay) const {
 	if (OneToOne()) {
 		return lineDisplay;

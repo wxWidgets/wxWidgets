@@ -157,6 +157,7 @@ public:
 	void SetMain(size_t r);
 	SelectionRange &Range(size_t r);
 	SelectionRange &RangeMain();
+	SelectionPosition Start() const;
 	bool MoveExtends() const;
 	void SetMoveExtends(bool moveExtends_);
 	bool Empty() const;

@@ -207,11 +207,6 @@
 #include "CharClassify.h"
 #include "RESearch.h"
 
-// Shut up annoying Visual C++ warnings:
-#ifdef _MSC_VER
-#pragma warning(disable: 4514)
-#endif
-
 #ifdef SCI_NAMESPACE
 using namespace Scintilla;
 #endif
@@ -789,7 +784,7 @@ int RESearch::Execute(CharacterIndexer &ci, int lp, int endp) {
 		c = *(ap+1);
 		while ((lp < endp) && (static_cast<unsigned char>(ci.CharAt(lp)) != c))
 			lp++;
-		if (lp >= endp)	/* if EOS, fail, else fall thru. */
+		if (lp >= endp)	/* if EOS, fail, else fall through. */
 			return 0;
 	default:			/* regular matching all the way. */
 		while (lp < endp) {
@@ -819,7 +814,7 @@ int RESearch::Execute(CharacterIndexer &ci, int lp, int endp) {
  *
  *  special case optimizations: (nfa[n], nfa[n+1])
  *      CLO ANY
- *          We KNOW .* will match everything upto the
+ *          We KNOW .* will match everything up to the
  *          end of line. Thus, directly go to the end of
  *          line, without recursive PMatch calls. As in
  *          the other closure cases, the remaining pattern

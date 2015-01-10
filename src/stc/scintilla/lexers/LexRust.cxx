@@ -292,7 +292,7 @@ static void ScanNumber(Accessor& styler, int& pos) {
 				error = true;
 			}
 		}
-
+		
 		c = styler.SafeGetCharAt(pos, '\0');
 		if (c == 'f') {
 			error |= base != 10;
@@ -600,7 +600,7 @@ static void ResumeRawString(Accessor &styler, int& pos, int max, int num_hashes)
 		} else if (pos >= max) {
 			styler.ColourTo(pos - 1, SCE_RUST_STRINGR);
 			break;
-		} else {
+		} else {		
 			pos++;
 		}
 	}

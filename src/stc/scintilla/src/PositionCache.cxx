@@ -232,7 +232,7 @@ Point LineLayout::PointFromPosition(int posInLine, int lineHeight) const {
 	for (int subLine = 0; subLine < lines; subLine++) {
 		const Range rangeSubLine = SubLineRange(subLine);
 		if (posInLine >= rangeSubLine.start) {
-			pt.y = subLine*lineHeight;
+			pt.y = static_cast<XYPOSITION>(subLine*lineHeight);
 			if (posInLine <= rangeSubLine.end) {
 				pt.x = positions[posInLine] - positions[rangeSubLine.start];
 				if (rangeSubLine.start != 0)	// Wrapped lines may be indented
@@ -462,7 +462,7 @@ BreakFinder::BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posL
 	// Search for first visible break
 	// First find the first visible character
 	if (xStart > 0.0f)
-		nextBreak = ll->FindBefore(xStart, lineStart, lineEnd);
+		nextBreak = ll->FindBefore(static_cast<XYPOSITION>(xStart), lineStart, lineEnd);
 	// Now back to a style break
 	while ((nextBreak > lineStart) && (ll->styles[nextBreak] == ll->styles[nextBreak - 1])) {
 		nextBreak--;
@@ -563,7 +563,7 @@ void PositionCacheEntry::Set(unsigned int styleNumber_, const char *s_,
 	if (s_ && positions_) {
 		positions = new XYPOSITION[len + (len / 4) + 1];
 		for (unsigned int i=0; i<len; i++) {
-			positions[i] = static_cast<XYPOSITION>(positions_[i]);
+			positions[i] = positions_[i];
 		}
 		memcpy(reinterpret_cast<char *>(positions + len), s_, len);
 	}
@@ -594,7 +594,7 @@ bool PositionCacheEntry::Retrieve(unsigned int styleNumber_, const char *s_,
 	}
 }
 
-int PositionCacheEntry::Hash(unsigned int styleNumber_, const char *s, unsigned int len_) {
+unsigned int PositionCacheEntry::Hash(unsigned int styleNumber_, const char *s, unsigned int len_) {
 	unsigned int ret = s[0] << 7;
 	for (unsigned int i=0; i<len_; i++) {
 		ret *= 1000003;
@@ -646,18 +646,18 @@ void PositionCache::MeasureWidths(Surface *surface, ViewStyle &vstyle, unsigned 
 	const char *s, unsigned int len, XYPOSITION *positions, Document *pdoc) {
 
 	allClear = false;
-	int probe = -1;
+	size_t probe = pces.size();	// Out of bounds
 	if ((!pces.empty()) && (len < 30)) {
 		// Only store short strings in the cache so it doesn't churn with
 		// long comments with only a single comment.
 
 		// Two way associative: try two probe positions.
-		int hashValue = PositionCacheEntry::Hash(styleNumber, s, len);
-		probe = static_cast<int>(hashValue % pces.size());
+		unsigned int hashValue = PositionCacheEntry::Hash(styleNumber, s, len);
+		probe = hashValue % pces.size();
 		if (pces[probe].Retrieve(styleNumber, s, len, positions)) {
 			return;
 		}
-		int probe2 = static_cast<int>((hashValue * 37) % pces.size());
+		unsigned int probe2 = (hashValue * 37) % pces.size();
 		if (pces[probe2].Retrieve(styleNumber, s, len, positions)) {
 			return;
 		}
@@ -682,7 +682,8 @@ void PositionCache::MeasureWidths(Surface *surface, ViewStyle &vstyle, unsigned 
 	} else {
 		surface->MeasureWidths(vstyle.styles[styleNumber].font, s, len, positions);
 	}
-	if (probe >= 0) {
+	if (probe < pces.size()) {
+		// Store into cache
 		clock++;
 		if (clock > 60000) {
 			// Since there are only 16 bits for the clock, wrap it round and

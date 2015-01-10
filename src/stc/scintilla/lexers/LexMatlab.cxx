@@ -64,7 +64,7 @@ static void ColouriseMatlabOctaveDoc(
 
 	styler.StartAt(startPos);
 
-	// boolean for when the ' is allowed to be transpose vs the start/end
+	// boolean for when the ' is allowed to be transpose vs the start/end 
 	// of a string
 	bool transpose = false;
 
@@ -82,14 +82,14 @@ static void ColouriseMatlabOctaveDoc(
 
 	for (; sc.More(); sc.Forward(), column++) {
 
-		if(sc.atLineStart) {
-			// set the line state to the current commentDepth
+               	if(sc.atLineStart) {
+			// set the line state to the current commentDepth 
 			curLine = styler.GetLine(sc.currentPos);
                         styler.SetLineState(curLine, commentDepth);
 
 			// reset the column to 0, nonSpace to -1 (not set)
 			column = 0;
-			nonSpaceColumn = -1;
+			nonSpaceColumn = -1; 
 		}
 
 		// save the column position of first non space character in a line
@@ -108,7 +108,7 @@ static void ColouriseMatlabOctaveDoc(
 					sc.ForwardSetState(SCE_MATLAB_DEFAULT);
 					transpose = true;
                                 } else if(sc.ch == '.' && sc.chNext == '.') {
-                                        // we werent an operator, but a '...'
+                                        // we werent an operator, but a '...' 
                                         sc.ChangeState(SCE_MATLAB_COMMENT);
                                         transpose = false;
 				} else {
@@ -161,8 +161,8 @@ static void ColouriseMatlabOctaveDoc(
 		} else if (sc.state == SCE_MATLAB_COMMENT) {
 			// end or start of a nested a block comment?
 			if( IsCommentChar(sc.ch) && sc.chNext == '}' && nonSpaceColumn == column) {
-				if(commentDepth > 0) commentDepth --;
-
+                           	if(commentDepth > 0) commentDepth --;
+ 
 				curLine = styler.GetLine(sc.currentPos);
 				styler.SetLineState(curLine, commentDepth);
 				sc.Forward();
@@ -174,7 +174,7 @@ static void ColouriseMatlabOctaveDoc(
                         }
                         else if( IsCommentChar(sc.ch) && sc.chNext == '{' && nonSpaceColumn == column)
                         {
-				commentDepth ++;
+ 				commentDepth ++;
 
 				curLine = styler.GetLine(sc.currentPos);
 				styler.SetLineState(curLine, commentDepth);

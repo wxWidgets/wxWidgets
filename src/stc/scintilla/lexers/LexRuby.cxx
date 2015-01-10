@@ -731,7 +731,7 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
 
     // If anyone runs into this problem, I recommend raising this
     // value slightly higher to replacing the fixed array with a linked
-    // list.  Keep in mind this code will be called everytime the lexer
+    // list.  Keep in mind this code will be called every time the lexer
     // is invoked.
 
 #define INNER_STRINGS_MAX_COUNT 5

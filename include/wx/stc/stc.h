@@ -235,6 +235,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_FOLDFLAG_LINEAFTER_EXPANDED 0x0008
 #define wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED 0x0010
 #define wxSTC_FOLDFLAG_LEVELNUMBERS 0x0040
+#define wxSTC_FOLDFLAG_LINESTATE 0x0080
 #define wxSTC_TIME_FOREVER 10000000
 #define wxSTC_WRAP_NONE 0
 #define wxSTC_WRAP_WORD 1
@@ -369,7 +370,8 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_MOD_CHANGEANNOTATION 0x20000
 #define wxSTC_MOD_CONTAINER 0x40000
 #define wxSTC_MOD_LEXERSTATE 0x80000
-#define wxSTC_MODEVENTMASKALL 0xFFFFF
+#define wxSTC_MOD_INSERTCHECK 0x100000
+#define wxSTC_MODEVENTMASKALL 0x1FFFFF
 #define wxSTC_UPDATE_CONTENT 0x1
 #define wxSTC_UPDATE_SELECTION 0x2
 #define wxSTC_UPDATE_V_SCROLL 0x4
@@ -518,6 +520,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_LEX_RUST 111
 #define wxSTC_LEX_DMAP 112
 #define wxSTC_LEX_AS 113
+#define wxSTC_LEX_DMIS 114
 
 /// When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 /// value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -568,6 +571,8 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_C_PREPROCESSORCOMMENT 23
 #define wxSTC_C_PREPROCESSORCOMMENTDOC 24
 #define wxSTC_C_USERLITERAL 25
+#define wxSTC_C_TASKMARKER 26
+#define wxSTC_C_ESCAPESEQUENCE 27
 
 /// Lexical states for SCLEX_D
 #define wxSTC_D_DEFAULT 0
@@ -2301,6 +2306,18 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_DMAP_WORD2 9
 #define wxSTC_DMAP_WORD3 10
 
+/// Lexical states for SCLEX_DMIS
+#define wxSTC_DMIS_DEFAULT 0
+#define wxSTC_DMIS_COMMENT 1
+#define wxSTC_DMIS_STRING 2
+#define wxSTC_DMIS_NUMBER 3
+#define wxSTC_DMIS_KEYWORD 4
+#define wxSTC_DMIS_MAJORWORD 5
+#define wxSTC_DMIS_MINORWORD 6
+#define wxSTC_DMIS_UNSUPPORTED_MAJOR 7
+#define wxSTC_DMIS_UNSUPPORTED_MINOR 8
+#define wxSTC_DMIS_LABEL 9
+
 //}}}
 //----------------------------------------------------------------------
 
@@ -2665,6 +2682,9 @@ public:
 
     // Insert string at a position.
     void InsertText(int pos, const wxString& text);
+
+    // Change the text that is being inserted in response to SC_MOD_INSERTCHECK
+    void ChangeInsertion(int length, const wxString& text);
 
     // Delete all text in the document.
     void ClearAll();

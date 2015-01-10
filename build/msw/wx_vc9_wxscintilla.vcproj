@@ -847,6 +847,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexDMIS.cxx"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexECL.cxx"
 				>
 			</File>
