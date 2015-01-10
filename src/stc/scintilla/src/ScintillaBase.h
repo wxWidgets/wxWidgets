@@ -38,6 +38,8 @@ protected:
 		idcmdSelectAll=16
 	};
 
+	enum { maxLenInputIME = 200 };
+
 	bool displayPopupMenu;
 	Menu popup;
 	AutoComplete ac;
@@ -60,7 +62,7 @@ protected:
 	virtual void Initialise() = 0;
 	virtual void Finalise();
 
-	virtual void AddCharUTF(char *s, unsigned int len, bool treatAsDBCS=false);
+	virtual void AddCharUTF(const char *s, unsigned int len, bool treatAsDBCS=false);
 	void Command(int cmdId);
 	virtual void CancelModes();
 	virtual int KeyCommand(unsigned int iMessage);

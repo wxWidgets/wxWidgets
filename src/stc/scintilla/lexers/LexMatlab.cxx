@@ -12,6 +12,9 @@
  **   - added ... displayed as a comment
  **   - removed unused IsAWord functions
  **   - added some comments
+ **
+ ** Changes by John Donoghue 2014/08/01
+ **   - fix allowed transpose ' after {} operator
  **/
 // Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
@@ -218,7 +221,7 @@ static void ColouriseMatlabOctaveDoc(
 			} else if (isalpha(sc.ch)) {
 				sc.SetState(SCE_MATLAB_KEYWORD);
 			} else if (isoperator(static_cast<char>(sc.ch)) || sc.ch == '@' || sc.ch == '\\') {
-				if (sc.ch == ')' || sc.ch == ']') {
+				if (sc.ch == ')' || sc.ch == ']' || sc.ch == '}') {
 					transpose = true;
 				} else {
 					transpose = false;

@@ -203,6 +203,7 @@
 #include <stdlib.h>
 
 #include <string>
+#include <algorithm>
 
 #include "CharClassify.h"
 #include "RESearch.h"
@@ -251,20 +252,16 @@ const char bitarr[] = { 1, 2, 4, 8, 16, 32, 64, '\200' };
 RESearch::RESearch(CharClassify *charClassTable) {
 	failure = 0;
 	charClass = charClassTable;
-	Init();
+	sta = NOP;                  /* status of lastpat */
+	bol = 0;
+	std::fill(bittab, bittab + BITBLK, 0);
+	std::fill(tagstk, tagstk + MAXTAG, 0);
+	std::fill(nfa, nfa + MAXNFA, 0);
+	Clear();
 }
 
 RESearch::~RESearch() {
 	Clear();
-}
-
-void RESearch::Init() {
-	sta = NOP;                  /* status of lastpat */
-	bol = 0;
-	for (int i = 0; i < MAXTAG; i++)
-		pat[i].clear();
-	for (int j = 0; j < BITBLK; j++)
-		bittab[j] = 0;
 }
 
 void RESearch::Clear() {
@@ -279,10 +276,9 @@ void RESearch::GrabMatches(CharacterIndexer &ci) {
 	for (unsigned int i = 0; i < MAXTAG; i++) {
 		if ((bopat[i] != NOTFOUND) && (eopat[i] != NOTFOUND)) {
 			unsigned int len = eopat[i] - bopat[i];
-			pat[i] = std::string(len+1, '\0');
+			pat[i].resize(len);
 			for (unsigned int j = 0; j < len; j++)
 				pat[i][j] = ci.CharAt(bopat[i] + j);
-			pat[i][len] = '\0';
 		}
 	}
 }

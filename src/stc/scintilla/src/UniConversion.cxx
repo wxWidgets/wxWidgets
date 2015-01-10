@@ -20,6 +20,7 @@ namespace Scintilla {
 enum { SURROGATE_LEAD_FIRST = 0xD800 };
 enum { SURROGATE_TRAIL_FIRST = 0xDC00 };
 enum { SURROGATE_TRAIL_LAST = 0xDFFF };
+enum { SUPPLEMENTAL_PLANE_FIRST = 0x10000 };
 
 unsigned int UTF8Length(const wchar_t *uptr, unsigned int tlen) {
 	unsigned int len = 0;
@@ -136,6 +137,51 @@ unsigned int UTF16FromUTF8(const char *s, unsigned int len, wchar_t *tbuf, unsig
 		ui++;
 	}
 	return ui;
+}
+
+unsigned int UTF32FromUTF8(const char *s, unsigned int len, unsigned int *tbuf, unsigned int tlen) {
+	unsigned int ui=0;
+	const unsigned char *us = reinterpret_cast<const unsigned char *>(s);
+	unsigned int i=0;
+	while ((i<len) && (ui<tlen)) {
+		unsigned char ch = us[i++];
+		wchar_t value = 0;
+		if (ch < 0x80) {
+			value = ch;
+		} else if (((len-i) >= 1) && (ch < 0x80 + 0x40 + 0x20)) {
+			value = (ch & 0x1F) << 6;
+			ch = us[i++];
+			value += ch & 0x7F;
+		} else if (((len-i) >= 2) && (ch < 0x80 + 0x40 + 0x20 + 0x10)) {
+			value = (ch & 0xF) << 12;
+			ch = us[i++];
+			value += (ch & 0x7F) << 6;
+			ch = us[i++];
+			value += ch & 0x7F;
+		} else if ((len-i) >= 3) {
+			value = (ch & 0x7) << 18;
+			ch = us[i++];
+			value += (ch & 0x3F) << 12;
+			ch = us[i++];
+			value += (ch & 0x3F) << 6;
+			ch = us[i++];
+			value += ch & 0x3F;
+		}
+		tbuf[ui] = value;
+		ui++;
+	}
+	return ui;
+}
+
+unsigned int UTF16FromUTF32Character(unsigned int val, wchar_t *tbuf) {
+	if (val < SUPPLEMENTAL_PLANE_FIRST) {
+		tbuf[0] = static_cast<wchar_t>(val);
+		return 1;
+	} else {
+		tbuf[0] = static_cast<wchar_t>(((val - SUPPLEMENTAL_PLANE_FIRST) >> 10) + SURROGATE_LEAD_FIRST);
+		tbuf[1] = static_cast<wchar_t>((val & 0x3ff) + SURROGATE_TRAIL_FIRST);
+		return 2;
+	}
 }
 
 int UTF8BytesOfLead[256];

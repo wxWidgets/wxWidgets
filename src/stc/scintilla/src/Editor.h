@@ -14,17 +14,6 @@ namespace Scintilla {
 
 /**
  */
-class Caret {
-public:
-	bool active;
-	bool on;
-	int period;
-
-	Caret();
-};
-
-/**
- */
 class Timer {
 public:
 	bool ticking;
@@ -160,16 +149,9 @@ struct WrapPending {
 	}
 };
 
-struct PrintParameters {
-	int magnification;
-	int colourMode;
-	WrapMode wrapState;
-	PrintParameters();
-};
-
 /**
  */
-class Editor : public DocWatcher {
+class Editor : public EditModel, public DocWatcher {
 	// Private so Editor objects can not be copied
 	Editor(const Editor &);
 	Editor &operator=(const Editor &);
@@ -189,32 +171,17 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	Point sizeRGBAImage;
 	float scaleRGBAImage;
 
-	PrintParameters printParameters;
+	MarginView marginView;
+	EditView view;
 
 	int cursorMode;
 
-	// Highlight current folding block
-	HighlightDelimiter highlightDelimiter;
-
 	bool hasFocus;
-	bool hideSelection;
-	bool inOverstrike;
-	bool drawOverstrikeCaret;
 	bool mouseDownCaptures;
 
-	/** In bufferedDraw mode, graphics operations are drawn to a pixmap and then copied to
-	 * the screen. This avoids flashing but is about 30% slower. */
-	bool bufferedDraw;
-	/** In twoPhaseDraw mode, drawing is performed in two phases, first the background
-	* and then the foreground. This avoids chopping off characters that overlap the next run. */
-	bool twoPhaseDraw;
-
-	int xOffset;		///< Horizontal scrolled amount in pixels
 	int xCaretMargin;	///< Ensure this many pixels visible on both sides of caret
 	bool horizontalScrollBarVisible;
 	int scrollWidth;
-	bool trackLineWidth;
-	int lineWidthMaxSeen;
 	bool verticalScrollBarVisible;
 	bool endAtLastLine;
 	int caretSticky;
@@ -223,25 +190,11 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	bool multipleSelection;
 	bool additionalSelectionTyping;
 	int multiPasteMode;
-	bool additionalCaretsBlink;
-	bool additionalCaretsVisible;
 
 	int virtualSpaceOptions;
 
-	Surface *pixmapLine;
-	Surface *pixmapSelMargin;
-	Surface *pixmapSelPattern;
-	Surface *pixmapSelPatternOffset1;
-	Surface *pixmapIndentGuide;
-	Surface *pixmapIndentGuideHighlight;
-
-	LineLayoutCache llc;
-	PositionCache posCache;
-	SpecialRepresentations reprs;
-
 	KeyMap kmap;
 
-	Caret caret;
 	Timer timer;
 	Timer autoScrollTimer;
 	enum { autoScrollDelay = 200 };
@@ -250,6 +203,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	Point lastClick;
 	unsigned int lastClickTime;
+	Point doubleClickCloseThreshold;
 	int dwellDelay;
 	int ticksToDwell;
 	bool dwelling;
@@ -257,7 +211,6 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	Point ptMouseLast;
 	enum { ddNone, ddInitial, ddDragging } inDragDrop;
 	bool dropWentOutside;
-	SelectionPosition posDrag;
 	SelectionPosition posDrop;
 	int hotSpotClickPos;
 	int lastXChosen;
@@ -274,9 +227,6 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int lengthForEncode;
 
 	int needUpdateUI;
-	Position braces[2];
-	int bracesMatchStyle;
-	int highlightGuideColumn;
 
 	enum { notPainting, painting, paintAbandoned } paintState;
 	bool paintAbandonedByStyling;
@@ -288,8 +238,6 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int modEventMask;
 
 	SelectionText drag;
-	Selection sel;
-	bool primarySelection;
 
 	int caretXPolicy;
 	int caretXSlop;	///< Ensure this many pixels visible on both sides of caret
@@ -304,20 +252,12 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	bool recordingMacro;
 
-	int foldFlags;
 	int foldAutomatic;
-	ContractionState cs;
-
-	// Hotspot support
-	Range hotspot;
 
 	// Wrapping support
-	int wrapWidth;
 	WrapPending wrapPending;
 
 	bool convertPastes;
-
-	Document *pdoc;
 
 	Editor();
 	virtual ~Editor();
@@ -333,23 +273,23 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	// The top left visible point in main window coordinates. Will be 0,0 except for
 	// scroll views where it will be equivalent to the current scroll position.
-	virtual Point GetVisibleOriginInMain();
-	Point DocumentPointFromView(Point ptView);  // Convert a point from view space to document
+	virtual Point GetVisibleOriginInMain() const;
+	Point DocumentPointFromView(Point ptView) const;  // Convert a point from view space to document
 	int TopLineOfMain() const;   // Return the line at Main's y coordinate 0
-	virtual PRectangle GetClientRectangle();
+	virtual PRectangle GetClientRectangle() const;
 	virtual PRectangle GetClientDrawingRectangle();
-	PRectangle GetTextRectangle();
+	PRectangle GetTextRectangle() const;
 
-	int LinesOnScreen();
-	int LinesToScroll();
-	int MaxScrollPos();
+	virtual int LinesOnScreen() const;
+	int LinesToScroll() const;
+	int MaxScrollPos() const;
 	SelectionPosition ClampPositionIntoDocument(SelectionPosition sp) const;
 	Point LocationFromPosition(SelectionPosition pos);
 	Point LocationFromPosition(int pos);
 	int XFromPosition(int pos);
 	int XFromPosition(SelectionPosition sp);
 	SelectionPosition SPositionFromLocation(Point pt, bool canReturnInvalid=false, bool charPosition=false, bool virtualSpace=true);
-	int PositionFromLocation(Point pt, bool canReturnInvalid=false, bool charPosition=false);
+	int PositionFromLocation(Point pt, bool canReturnInvalid = false, bool charPosition = false);
 	SelectionPosition SPositionFromLineX(int lineDoc, int x);
 	int PositionFromLineX(int line, int x);
 	int LineFromLocation(Point pt) const;
@@ -360,7 +300,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	virtual void DiscardOverdraw();
 	virtual void Redraw();
 	void RedrawSelMargin(int line=-1, bool allAfter=false);
-	PRectangle RectangleFromRange(Range r);
+	PRectangle RectangleFromRange(Range r, int overlap);
 	void InvalidateRange(int start, int end);
 
 	bool UserVirtualSpace() const {
@@ -383,8 +323,8 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	bool SelectionContainsProtected();
 	int MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd=true) const;
 	SelectionPosition MovePositionOutsideChar(SelectionPosition pos, int moveDir, bool checkLineEnd=true) const;
-	int MovePositionTo(SelectionPosition newPos, Selection::selTypes sel=Selection::noSel, bool ensureVisible=true);
-	int MovePositionTo(int newPos, Selection::selTypes sel=Selection::noSel, bool ensureVisible=true);
+	int MovePositionTo(SelectionPosition newPos, Selection::selTypes selt=Selection::noSel, bool ensureVisible=true);
+	int MovePositionTo(int newPos, Selection::selTypes selt=Selection::noSel, bool ensureVisible=true);
 	SelectionPosition MovePositionSoVisible(SelectionPosition pos, int moveDir);
 	SelectionPosition MovePositionSoVisible(int pos, int moveDir);
 	Point PointMainCaret();
@@ -431,30 +371,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void LinesJoin();
 	void LinesSplit(int pixelWidth);
 
-	int SubstituteMarkerIfEmpty(int markerCheck, int markerDefault) const;
 	void PaintSelMargin(Surface *surface, PRectangle &rc);
-	LineLayout *RetrieveLineLayout(int lineNumber);
-	void LayoutLine(int line, Surface *surface, const ViewStyle &vstyle, LineLayout *ll,
-		int width=LineLayout::wrapWidthInfinite);
-	ColourDesired SelectionBackground(const ViewStyle &vsDraw, bool main) const;
-	ColourDesired TextBackground(const ViewStyle &vsDraw, ColourOptional background, int inSelection, bool inHotspot, int styleMain, int i, LineLayout *ll) const;
-	void DrawIndentGuide(Surface *surface, int lineVisible, int lineHeight, int start, PRectangle rcSegment, bool highlight);
-	static void DrawWrapMarker(Surface *surface, PRectangle rcPlace, bool isEndMarker, ColourDesired wrapColour);
-	void DrawEOL(Surface *surface, const ViewStyle &vsDraw, PRectangle rcLine, LineLayout *ll,
-		int line, int lineEnd, int xStart, int subLine, XYACCUMULATOR subLineStart,
-		ColourOptional background);
-	static void DrawIndicator(int indicNum, int startPos, int endPos, Surface *surface, const ViewStyle &vsDraw,
-		int xStart, PRectangle rcLine, LineLayout *ll, int subLine);
-	void DrawIndicators(Surface *surface, const ViewStyle &vsDraw, int line, int xStart,
-		PRectangle rcLine, LineLayout *ll, int subLine, int lineEnd, bool under);
-	void DrawAnnotation(Surface *surface, const ViewStyle &vsDraw, int line, int xStart,
-        PRectangle rcLine, LineLayout *ll, int subLine);
-	void DrawLine(Surface *surface, const ViewStyle &vsDraw, int line, int lineVisible, int xStart,
-		PRectangle rcLine, LineLayout *ll, int subLine);
-	void DrawBlockCaret(Surface *surface, const ViewStyle &vsDraw, LineLayout *ll, int subLine,
-		int xStart, int offset, int posCaret, PRectangle rcCaret, ColourDesired caretColour) const;
-	void DrawCarets(Surface *surface, const ViewStyle &vsDraw, int line, int xStart,
-		PRectangle rcLine, LineLayout *ll, int subLine);
 	void RefreshPixMaps(Surface *surfaceWindow);
 	void Paint(Surface *surfaceWindow, PRectangle rcArea);
 	long FormatRange(bool draw, Sci_RangeToFormat *pfr);
@@ -470,7 +387,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void FilterSelections();
 	int InsertSpace(int position, unsigned int spaces);
 	void AddChar(char ch);
-	virtual void AddCharUTF(char *s, unsigned int len, bool treatAsDBCS=false);
+	virtual void AddCharUTF(const char *s, unsigned int len, bool treatAsDBCS=false);
 	void InsertPaste(const char *text, int len);
 	enum PasteShape { pasteStream=0, pasteRectangular = 1, pasteLine = 2 };
 	void InsertPasteShape(const char *text, int len, PasteShape shape);
@@ -487,7 +404,6 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void SelectAll();
 	void Undo();
 	void Redo();
-	void DelChar();
 	void DelCharBack(bool allowLineStartDeletion);
 	virtual void ClaimSelection() = 0;
 
@@ -530,7 +446,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void NotifyMacroRecord(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
 
 	void ContainerNeedsUpdate(int flags);
-	void PageMove(int direction, Selection::selTypes sel=Selection::noSel, bool stuttered = false);
+	void PageMove(int direction, Selection::selTypes selt=Selection::noSel, bool stuttered = false);
 	enum { cmSame, cmUpper, cmLower };
 	virtual std::string CaseMapString(const std::string &s, int caseMapping);
 	void ChangeCaseOfSelection(int caseMapping);
@@ -538,8 +454,8 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void Duplicate(bool forLine);
 	virtual void CancelModes();
 	void NewLine();
-	void CursorUpOrDown(int direction, Selection::selTypes sel=Selection::noSel);
-	void ParaUpOrDown(int direction, Selection::selTypes sel=Selection::noSel);
+	void CursorUpOrDown(int direction, Selection::selTypes selt=Selection::noSel);
+	void ParaUpOrDown(int direction, Selection::selTypes selt=Selection::noSel);
 	int StartEndDisplayLine(int pos, bool start);
 	virtual int KeyCommand(unsigned int iMessage);
 	virtual int KeyDefault(int /* key */, int /*modifiers*/);
@@ -569,7 +485,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	/** PositionInSelection returns true if position in selection. */
 	bool PositionInSelection(int pos);
 	bool PointInSelection(Point pt);
-	bool PointInSelMargin(Point pt);
+	bool PointInSelMargin(Point pt) const;
 	Window::Cursor GetMarginCursor(Point pt) const;
 	void TrimAndSetSelection(int currentPos_, int anchor_);
 	void LineSelection(int lineCurrentPos_, int lineAnchorPos_, bool wholeLine);
@@ -584,7 +500,13 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	void Tick();
 	bool Idle();
-	virtual void SetTicking(bool on) = 0;
+	virtual void SetTicking(bool on);
+	enum TickReason { tickCaret, tickScroll, tickWiden, tickDwell, tickPlatform };
+	virtual void TickFor(TickReason reason);
+	virtual bool FineTickerAvailable();
+	virtual bool FineTickerRunning(TickReason reason);
+	virtual void FineTickerStart(TickReason reason, int millis, int tolerance);
+	virtual void FineTickerCancel(TickReason reason);
 	virtual bool SetIdle(bool) { return false; }
 	virtual void SetMouseCapture(bool on) = 0;
 	virtual bool HaveMouseCapture() = 0;

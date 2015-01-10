@@ -72,23 +72,28 @@ static void DrawMinus(Surface *surface, int centreX, int centreY, int armSize, C
 }
 
 void LineMarker::Draw(Surface *surface, PRectangle &rcWhole, Font &fontForCharacter, typeOfFold tFold, int marginStyle) const {
-	ColourDesired head = back;
-	ColourDesired body = back;
-	ColourDesired tail = back;
+	if (customDraw != NULL) {
+		customDraw(surface, rcWhole, fontForCharacter, tFold, marginStyle, this);
+		return;
+	}
+
+	ColourDesired colourHead = back;
+	ColourDesired colourBody = back;
+	ColourDesired colourTail = back;
 
 	switch (tFold) {
 	case LineMarker::head :
 	case LineMarker::headWithTail :
-		head = backSelected;
-		tail = backSelected;
+		colourHead = backSelected;
+		colourTail = backSelected;
 		break;
 	case LineMarker::body :
-		head = backSelected;
-		body = backSelected;
+		colourHead = backSelected;
+		colourBody = backSelected;
 		break;
 	case LineMarker::tail :
-		body = backSelected;
-		tail = backSelected;
+		colourBody = backSelected;
+		colourTail = backSelected;
 		break;
 	default :
 		// LineMarker::undefined
@@ -192,69 +197,69 @@ void LineMarker::Draw(Surface *surface, PRectangle &rcWhole, Font &fontForCharac
 		// An invisible marker so don't draw anything
 
 	} else if (markType == SC_MARK_VLINE) {
-		surface->PenColour(body);
+		surface->PenColour(colourBody);
 		surface->MoveTo(centreX, static_cast<int>(rcWhole.top));
 		surface->LineTo(centreX, static_cast<int>(rcWhole.bottom));
 
 	} else if (markType == SC_MARK_LCORNER) {
-		surface->PenColour(tail);
+		surface->PenColour(colourTail);
 		surface->MoveTo(centreX, static_cast<int>(rcWhole.top));
 		surface->LineTo(centreX, centreY);
 		surface->LineTo(static_cast<int>(rc.right) - 1, centreY);
 
 	} else if (markType == SC_MARK_TCORNER) {
-		surface->PenColour(tail);
+		surface->PenColour(colourTail);
 		surface->MoveTo(centreX, centreY);
 		surface->LineTo(static_cast<int>(rc.right) - 1, centreY);
 
-		surface->PenColour(body);
+		surface->PenColour(colourBody);
 		surface->MoveTo(centreX, static_cast<int>(rcWhole.top));
 		surface->LineTo(centreX, centreY + 1);
 
-		surface->PenColour(head);
+		surface->PenColour(colourHead);
 		surface->LineTo(centreX, static_cast<int>(rcWhole.bottom));
 
 	} else if (markType == SC_MARK_LCORNERCURVE) {
-		surface->PenColour(tail);
+		surface->PenColour(colourTail);
 		surface->MoveTo(centreX, static_cast<int>(rcWhole.top));
 		surface->LineTo(centreX, centreY-3);
 		surface->LineTo(centreX+3, centreY);
 		surface->LineTo(static_cast<int>(rc.right) - 1, centreY);
 
 	} else if (markType == SC_MARK_TCORNERCURVE) {
-		surface->PenColour(tail);
+		surface->PenColour(colourTail);
 		surface->MoveTo(centreX, centreY-3);
 		surface->LineTo(centreX+3, centreY);
 		surface->LineTo(static_cast<int>(rc.right) - 1, centreY);
 
-		surface->PenColour(body);
+		surface->PenColour(colourBody);
 		surface->MoveTo(centreX, static_cast<int>(rcWhole.top));
 		surface->LineTo(centreX, centreY-2);
 
-		surface->PenColour(head);
+		surface->PenColour(colourHead);
 		surface->LineTo(centreX, static_cast<int>(rcWhole.bottom));
 
 	} else if (markType == SC_MARK_BOXPLUS) {
-		DrawBox(surface, centreX, centreY, blobSize, fore, head);
-		DrawPlus(surface, centreX, centreY, blobSize, tail);
+		DrawBox(surface, centreX, centreY, blobSize, fore, colourHead);
+		DrawPlus(surface, centreX, centreY, blobSize, colourTail);
 
 	} else if (markType == SC_MARK_BOXPLUSCONNECTED) {
 		if (tFold == LineMarker::headWithTail)
-			surface->PenColour(tail);
+			surface->PenColour(colourTail);
 		else
-			surface->PenColour(body);
+			surface->PenColour(colourBody);
 		surface->MoveTo(centreX, centreY + blobSize);
 		surface->LineTo(centreX, static_cast<int>(rcWhole.bottom));
 
-		surface->PenColour(body);
+		surface->PenColour(colourBody);
 		surface->MoveTo(centreX, static_cast<int>(rcWhole.top));
 		surface->LineTo(centreX, centreY - blobSize);
 
-		DrawBox(surface, centreX, centreY, blobSize, fore, head);
-		DrawPlus(surface, centreX, centreY, blobSize, tail);
+		DrawBox(surface, centreX, centreY, blobSize, fore, colourHead);
+		DrawPlus(surface, centreX, centreY, blobSize, colourTail);
 
 		if (tFold == LineMarker::body) {
-			surface->PenColour(tail);
+			surface->PenColour(colourTail);
 			surface->MoveTo(centreX + 1, centreY + blobSize);
 			surface->LineTo(centreX + blobSize + 1, centreY + blobSize);
 
@@ -265,27 +270,27 @@ void LineMarker::Draw(Surface *surface, PRectangle &rcWhole, Font &fontForCharac
 			surface->LineTo(centreX + blobSize + 1, centreY - blobSize);
 		}
 	} else if (markType == SC_MARK_BOXMINUS) {
-		DrawBox(surface, centreX, centreY, blobSize, fore, head);
-		DrawMinus(surface, centreX, centreY, blobSize, tail);
+		DrawBox(surface, centreX, centreY, blobSize, fore, colourHead);
+		DrawMinus(surface, centreX, centreY, blobSize, colourTail);
 
-		surface->PenColour(head);
+		surface->PenColour(colourHead);
 		surface->MoveTo(centreX, centreY + blobSize);
 		surface->LineTo(centreX, static_cast<int>(rcWhole.bottom));
 
 	} else if (markType == SC_MARK_BOXMINUSCONNECTED) {
-		DrawBox(surface, centreX, centreY, blobSize, fore, head);
-		DrawMinus(surface, centreX, centreY, blobSize, tail);
+		DrawBox(surface, centreX, centreY, blobSize, fore, colourHead);
+		DrawMinus(surface, centreX, centreY, blobSize, colourTail);
 
-		surface->PenColour(head);
+		surface->PenColour(colourHead);
 		surface->MoveTo(centreX, centreY + blobSize);
 		surface->LineTo(centreX, static_cast<int>(rcWhole.bottom));
 
-		surface->PenColour(body);
+		surface->PenColour(colourBody);
 		surface->MoveTo(centreX, static_cast<int>(rcWhole.top));
 		surface->LineTo(centreX, centreY - blobSize);
 
 		if (tFold == LineMarker::body) {
-			surface->PenColour(tail);
+			surface->PenColour(colourTail);
 			surface->MoveTo(centreX + 1, centreY + blobSize);
 			surface->LineTo(centreX + blobSize + 1, centreY + blobSize);
 
@@ -296,43 +301,43 @@ void LineMarker::Draw(Surface *surface, PRectangle &rcWhole, Font &fontForCharac
 			surface->LineTo(centreX + blobSize + 1, centreY - blobSize);
 		}
 	} else if (markType == SC_MARK_CIRCLEPLUS) {
-		DrawCircle(surface, centreX, centreY, blobSize, fore, head);
-		DrawPlus(surface, centreX, centreY, blobSize, tail);
+		DrawCircle(surface, centreX, centreY, blobSize, fore, colourHead);
+		DrawPlus(surface, centreX, centreY, blobSize, colourTail);
 
 	} else if (markType == SC_MARK_CIRCLEPLUSCONNECTED) {
 		if (tFold == LineMarker::headWithTail)
-			surface->PenColour(tail);
+			surface->PenColour(colourTail);
 		else
-			surface->PenColour(body);
+			surface->PenColour(colourBody);
 		surface->MoveTo(centreX, centreY + blobSize);
 		surface->LineTo(centreX, static_cast<int>(rcWhole.bottom));
 
-		surface->PenColour(body);
+		surface->PenColour(colourBody);
 		surface->MoveTo(centreX, static_cast<int>(rcWhole.top));
 		surface->LineTo(centreX, centreY - blobSize);
 
-		DrawCircle(surface, centreX, centreY, blobSize, fore, head);
-		DrawPlus(surface, centreX, centreY, blobSize, tail);
+		DrawCircle(surface, centreX, centreY, blobSize, fore, colourHead);
+		DrawPlus(surface, centreX, centreY, blobSize, colourTail);
 
 	} else if (markType == SC_MARK_CIRCLEMINUS) {
-		surface->PenColour(head);
+		surface->PenColour(colourHead);
 		surface->MoveTo(centreX, centreY + blobSize);
 		surface->LineTo(centreX, static_cast<int>(rcWhole.bottom));
 
-		DrawCircle(surface, centreX, centreY, blobSize, fore, head);
-		DrawMinus(surface, centreX, centreY, blobSize, tail);
+		DrawCircle(surface, centreX, centreY, blobSize, fore, colourHead);
+		DrawMinus(surface, centreX, centreY, blobSize, colourTail);
 
 	} else if (markType == SC_MARK_CIRCLEMINUSCONNECTED) {
-		surface->PenColour(head);
+		surface->PenColour(colourHead);
 		surface->MoveTo(centreX, centreY + blobSize);
 		surface->LineTo(centreX, static_cast<int>(rcWhole.bottom));
 
-		surface->PenColour(body);
+		surface->PenColour(colourBody);
 		surface->MoveTo(centreX, static_cast<int>(rcWhole.top));
 		surface->LineTo(centreX, centreY - blobSize);
 
-		DrawCircle(surface, centreX, centreY, blobSize, fore, head);
-		DrawMinus(surface, centreX, centreY, blobSize, tail);
+		DrawCircle(surface, centreX, centreY, blobSize, fore, colourHead);
+		DrawMinus(surface, centreX, centreY, blobSize, colourTail);
 
 	} else if (markType >= SC_MARK_CHARACTER) {
 		char character[1];

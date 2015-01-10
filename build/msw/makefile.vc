@@ -228,6 +228,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexBaan.obj \
 	$(OBJS)\wxscintilla_LexBash.obj \
 	$(OBJS)\wxscintilla_LexBasic.obj \
+	$(OBJS)\wxscintilla_LexBibTeX.obj \
 	$(OBJS)\wxscintilla_LexBullant.obj \
 	$(OBJS)\wxscintilla_LexCaml.obj \
 	$(OBJS)\wxscintilla_LexCLW.obj \
@@ -287,6 +288,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexPython.obj \
 	$(OBJS)\wxscintilla_LexR.obj \
 	$(OBJS)\wxscintilla_LexRebol.obj \
+	$(OBJS)\wxscintilla_LexRegistry.obj \
 	$(OBJS)\wxscintilla_LexRuby.obj \
 	$(OBJS)\wxscintilla_LexRust.obj \
 	$(OBJS)\wxscintilla_LexScriptol.obj \
@@ -329,11 +331,14 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_ContractionState.obj \
 	$(OBJS)\wxscintilla_Decoration.obj \
 	$(OBJS)\wxscintilla_Document.obj \
+	$(OBJS)\wxscintilla_EditModel.obj \
+	$(OBJS)\wxscintilla_EditView.obj \
 	$(OBJS)\wxscintilla_Editor.obj \
 	$(OBJS)\wxscintilla_ExternalLexer.obj \
 	$(OBJS)\wxscintilla_Indicator.obj \
 	$(OBJS)\wxscintilla_KeyMap.obj \
 	$(OBJS)\wxscintilla_LineMarker.obj \
+	$(OBJS)\wxscintilla_MarginView.obj \
 	$(OBJS)\wxscintilla_PerLine.obj \
 	$(OBJS)\wxscintilla_PositionCache.obj \
 	$(OBJS)\wxscintilla_RESearch.obj \
@@ -6634,6 +6639,9 @@ $(OBJS)\wxscintilla_LexBash.obj: ..\..\src\stc\scintilla\lexers\LexBash.cxx
 $(OBJS)\wxscintilla_LexBasic.obj: ..\..\src\stc\scintilla\lexers\LexBasic.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexBasic.cxx
 
+$(OBJS)\wxscintilla_LexBibTeX.obj: ..\..\src\stc\scintilla\lexers\LexBibTeX.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexBibTeX.cxx
+
 $(OBJS)\wxscintilla_LexBullant.obj: ..\..\src\stc\scintilla\lexers\LexBullant.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexBullant.cxx
 
@@ -6811,6 +6819,9 @@ $(OBJS)\wxscintilla_LexR.obj: ..\..\src\stc\scintilla\lexers\LexR.cxx
 $(OBJS)\wxscintilla_LexRebol.obj: ..\..\src\stc\scintilla\lexers\LexRebol.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexRebol.cxx
 
+$(OBJS)\wxscintilla_LexRegistry.obj: ..\..\src\stc\scintilla\lexers\LexRegistry.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexRegistry.cxx
+
 $(OBJS)\wxscintilla_LexRuby.obj: ..\..\src\stc\scintilla\lexers\LexRuby.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexRuby.cxx
 
@@ -6937,6 +6948,12 @@ $(OBJS)\wxscintilla_Decoration.obj: ..\..\src\stc\scintilla\src\Decoration.cxx
 $(OBJS)\wxscintilla_Document.obj: ..\..\src\stc\scintilla\src\Document.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\Document.cxx
 
+$(OBJS)\wxscintilla_EditModel.obj: ..\..\src\stc\scintilla\src\EditModel.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\EditModel.cxx
+
+$(OBJS)\wxscintilla_EditView.obj: ..\..\src\stc\scintilla\src\EditView.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\EditView.cxx
+
 $(OBJS)\wxscintilla_Editor.obj: ..\..\src\stc\scintilla\src\Editor.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\Editor.cxx
 
@@ -6951,6 +6968,9 @@ $(OBJS)\wxscintilla_KeyMap.obj: ..\..\src\stc\scintilla\src\KeyMap.cxx
 
 $(OBJS)\wxscintilla_LineMarker.obj: ..\..\src\stc\scintilla\src\LineMarker.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LineMarker.cxx
+
+$(OBJS)\wxscintilla_MarginView.obj: ..\..\src\stc\scintilla\src\MarginView.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\MarginView.cxx
 
 $(OBJS)\wxscintilla_PerLine.obj: ..\..\src\stc\scintilla\src\PerLine.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\PerLine.cxx

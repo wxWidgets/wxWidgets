@@ -144,6 +144,7 @@ UndoHistory::UndoHistory() {
 	currentAction = 0;
 	undoSequenceDepth = 0;
 	savePoint = 0;
+	tentativePoint = -1;
 
 	actions[currentAction].Create(startAction);
 }
@@ -194,7 +195,7 @@ const char *UndoHistory::AppendAction(actionType at, int position, const char *d
 			// Visual Studio 2013 Code Analysis wrongly believes actions can be NULL at its next reference
 			__analysis_assume(actions);
 #endif
-			if (currentAction == savePoint) {
+			if ((currentAction == savePoint) || (currentAction == tentativePoint)) {
 				currentAction++;
 			} else if (!actions[currentAction].mayCoalesce) {
 				// Not allowed to coalesce if this set
@@ -282,6 +283,7 @@ void UndoHistory::DeleteUndoHistory() {
 	currentAction = 0;
 	actions[currentAction].Create(startAction);
 	savePoint = 0;
+	tentativePoint = -1;
 }
 
 void UndoHistory::SetSavePoint() {
@@ -290,6 +292,26 @@ void UndoHistory::SetSavePoint() {
 
 bool UndoHistory::IsSavePoint() const {
 	return savePoint == currentAction;
+}
+
+void UndoHistory::TentativeStart() {
+	tentativePoint = currentAction;
+}
+
+void UndoHistory::TentativeCommit() {
+	tentativePoint = -1;
+	// Truncate undo history
+	maxAction = currentAction;
+}
+
+int UndoHistory::TentativeSteps() {
+	// Drop any trailing startAction
+	if (actions[currentAction].at == startAction && currentAction > 0)
+		currentAction--;
+	if (tentativePoint >= 0)
+		return currentAction - tentativePoint;
+	else
+		return -1;
 }
 
 bool UndoHistory::CanUndo() const {
@@ -356,7 +378,7 @@ char CellBuffer::CharAt(int position) const {
 }
 
 void CellBuffer::GetCharRange(char *buffer, int position, int lengthRetrieve) const {
-	if (lengthRetrieve < 0)
+	if (lengthRetrieve <= 0)
 		return;
 	if (position < 0)
 		return;
@@ -503,6 +525,22 @@ void CellBuffer::SetSavePoint() {
 
 bool CellBuffer::IsSavePoint() const {
 	return uh.IsSavePoint();
+}
+
+void CellBuffer::TentativeStart() {
+	uh.TentativeStart();
+}
+
+void CellBuffer::TentativeCommit() {
+	uh.TentativeCommit();
+}
+
+int CellBuffer::TentativeSteps() {
+	return uh.TentativeSteps();
+}
+
+bool CellBuffer::TentativeActive() const {
+	return uh.TentativeActive();
 }
 
 // Without undo

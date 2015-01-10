@@ -1205,7 +1205,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
 {
-    return wxVersionInfo("Scintilla", 3, 4, 4, "Scintilla 3.4.4");
+    return wxVersionInfo("Scintilla", 3, 5, 2, "Scintilla 3.5.2");
 }
 
 #endif // wxUSE_STC

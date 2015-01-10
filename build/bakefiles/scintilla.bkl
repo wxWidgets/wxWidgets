@@ -69,6 +69,7 @@
             src/stc/scintilla/lexers/LexBaan.cxx
             src/stc/scintilla/lexers/LexBash.cxx
             src/stc/scintilla/lexers/LexBasic.cxx
+            src/stc/scintilla/lexers/LexBibTeX.cxx
             src/stc/scintilla/lexers/LexBullant.cxx
             src/stc/scintilla/lexers/LexCaml.cxx
             src/stc/scintilla/lexers/LexCLW.cxx
@@ -128,6 +129,7 @@
             src/stc/scintilla/lexers/LexPython.cxx
             src/stc/scintilla/lexers/LexR.cxx
             src/stc/scintilla/lexers/LexRebol.cxx
+            src/stc/scintilla/lexers/LexRegistry.cxx
             src/stc/scintilla/lexers/LexRuby.cxx
             src/stc/scintilla/lexers/LexRust.cxx
             src/stc/scintilla/lexers/LexScriptol.cxx
@@ -170,11 +172,14 @@
             src/stc/scintilla/src/ContractionState.cxx
             src/stc/scintilla/src/Decoration.cxx
             src/stc/scintilla/src/Document.cxx
+            src/stc/scintilla/src/EditModel.cxx
+            src/stc/scintilla/src/EditView.cxx
             src/stc/scintilla/src/Editor.cxx
             src/stc/scintilla/src/ExternalLexer.cxx
             src/stc/scintilla/src/Indicator.cxx
             src/stc/scintilla/src/KeyMap.cxx
             src/stc/scintilla/src/LineMarker.cxx
+            src/stc/scintilla/src/MarginView.cxx
             src/stc/scintilla/src/PerLine.cxx
             src/stc/scintilla/src/PositionCache.cxx
             src/stc/scintilla/src/RESearch.cxx

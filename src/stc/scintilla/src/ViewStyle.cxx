@@ -192,18 +192,13 @@ void ViewStyle::Init(size_t stylesSize_) {
 	// There are no image markers by default, so no need for calling CalcLargestMarkerHeight()
 	largestMarkerHeight = 0;
 
-	indicators[0].style = INDIC_SQUIGGLE;
-	indicators[0].under = false;
-	indicators[0].fore = ColourDesired(0, 0x7f, 0);
-	indicators[1].style = INDIC_TT;
-	indicators[1].under = false;
-	indicators[1].fore = ColourDesired(0, 0, 0xff);
-	indicators[2].style = INDIC_PLAIN;
-	indicators[2].under = false;
-	indicators[2].fore = ColourDesired(0xff, 0, 0);
+	indicators[0] = Indicator(INDIC_SQUIGGLE, ColourDesired(0, 0x7f, 0));
+	indicators[1] = Indicator(INDIC_TT, ColourDesired(0, 0, 0xff));
+	indicators[2] = Indicator(INDIC_PLAIN, ColourDesired(0xff, 0, 0));
 
 	technology = SC_TECHNOLOGY_DEFAULT;
 	lineHeight = 1;
+	lineOverlap = 0;
 	maxAscent = 1;
 	maxDescent = 1;
 	aveCharWidth = 8;
@@ -329,6 +324,11 @@ void ViewStyle::Refresh(Surface &surface, int tabInChars) {
 	maxAscent += extraAscent;
 	maxDescent += extraDescent;
 	lineHeight = maxAscent + maxDescent;
+	lineOverlap = lineHeight / 10;
+	if (lineOverlap < 2)
+		lineOverlap = 2;
+	if (lineOverlap > lineHeight)
+		lineOverlap = lineHeight;
 
 	someStylesProtected = false;
 	someStylesForceCase = false;
@@ -470,6 +470,14 @@ ColourOptional ViewStyle::Background(int marksOfLine, bool caretActive, bool lin
 	return background;
 }
 
+bool ViewStyle::SelectionBackgroundDrawn() const {
+	return selColours.back.isSet &&
+		((selAlpha == SC_ALPHA_NOALPHA) || (selAdditionalAlpha == SC_ALPHA_NOALPHA));
+}
+
+bool ViewStyle::WhitespaceBackgroundDrawn() const {
+	return (viewWhitespace != wsInvisible) && (whitespaceColours.back.isSet);
+}
 
 ColourDesired ViewStyle::WrapColour() const {
 	if (whitespaceColours.fore.isSet)

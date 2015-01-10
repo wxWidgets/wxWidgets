@@ -529,6 +529,24 @@ int wxStyledTextCtrl::GetTabWidth() const
     return SendMsg(SCI_GETTABWIDTH, 0, 0);
 }
 
+// Clear explicit tabstops on a line.
+void wxStyledTextCtrl::ClearTabStops(int line)
+{
+    SendMsg(SCI_CLEARTABSTOPS, line, 0);
+}
+
+// Add an explicit tab stop for a line.
+void wxStyledTextCtrl::AddTabStop(int line, int x)
+{
+    SendMsg(SCI_ADDTABSTOP, line, x);
+}
+
+// Find the next explicit tab stop position on a line after a position.
+int wxStyledTextCtrl::GetNextTabStop(int line, int x)
+{
+    return SendMsg(SCI_GETNEXTTABSTOP, line, x);
+}
+
 // Set the code page used to interpret the bytes of the document as characters.
 void wxStyledTextCtrl::SetCodePage(int codePage) {
 #if wxUSE_UNICODE
@@ -539,6 +557,18 @@ void wxStyledTextCtrl::SetCodePage(int codePage) {
                  wxT("wxSTC_CP_UTF8 may not be used when wxUSE_UNICODE is off."));
 #endif
     SendMsg(SCI_SETCODEPAGE, codePage);
+}
+
+// Is the IME displayed in a winow or inline?
+int wxStyledTextCtrl::GetIMEInteraction() const
+{
+    return SendMsg(SCI_GETIMEINTERACTION, 0, 0);
+}
+
+// Choose to display the the IME in a winow or inline.
+void wxStyledTextCtrl::SetIMEInteraction(int imeInteraction)
+{
+    SendMsg(SCI_SETIMEINTERACTION, imeInteraction, 0);
 }
 
 // Set the symbol used for a particular marker number,
@@ -2243,7 +2273,7 @@ void wxStyledTextCtrl::AppendText(const wxString& text) {
                     SendMsg(SCI_APPENDTEXT, wx2stclen(text, buf), (sptr_t)(const char*)buf);
 }
 
-// Is drawing done in two phases with backgrounds drawn before faoregrounds?
+// Is drawing done in two phases with backgrounds drawn before foregrounds?
 bool wxStyledTextCtrl::GetTwoPhaseDraw() const
 {
     return SendMsg(SCI_GETTWOPHASEDRAW, 0, 0) != 0;
@@ -2254,6 +2284,21 @@ bool wxStyledTextCtrl::GetTwoPhaseDraw() const
 void wxStyledTextCtrl::SetTwoPhaseDraw(bool twoPhase)
 {
     SendMsg(SCI_SETTWOPHASEDRAW, twoPhase, 0);
+}
+
+// How many phases is drawing done in?
+int wxStyledTextCtrl::GetPhasesDraw() const
+{
+    return SendMsg(SCI_GETPHASESDRAW, 0, 0);
+}
+
+// In one phase draw, text is drawn in a series of rectangular blocks with no overlap.
+// In two phase draw, text is drawn in a series of lines allowing runs to overlap horizontally.
+// In multiple phase draw, each element is drawn over the whole drawing area, allowing text
+// to overlap from one line to the next.
+void wxStyledTextCtrl::SetPhasesDraw(int phases)
+{
+    SendMsg(SCI_SETPHASESDRAW, phases, 0);
 }
 
 // Scroll so that a display line is at the top of the display.
@@ -5335,7 +5380,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
 {
-    return wxVersionInfo("Scintilla", 3, 4, 4, "Scintilla 3.4.4");
+    return wxVersionInfo("Scintilla", 3, 5, 2, "Scintilla 3.5.2");
 }
 
 #endif // wxUSE_STC

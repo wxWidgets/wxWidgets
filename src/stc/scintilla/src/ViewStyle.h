@@ -85,6 +85,7 @@ public:
 	Indicator indicators[INDIC_MAX + 1];
 	int technology;
 	int lineHeight;
+	int lineOverlap;
 	unsigned int maxAscent;
 	unsigned int maxDescent;
 	XYPOSITION aveCharWidth;
@@ -170,7 +171,10 @@ public:
 	bool ValidStyle(size_t styleIndex) const;
 	void CalcLargestMarkerHeight();
 	ColourOptional Background(int marksOfLine, bool caretActive, bool lineContainsCaret) const;
+	bool SelectionBackgroundDrawn() const;
+	bool WhitespaceBackgroundDrawn() const;
 	ColourDesired WrapColour() const;
+
 	bool SetWrapState(int wrapState_);
 	bool SetWrapVisualFlags(int wrapVisualFlags_);
 	bool SetWrapVisualFlagsLocation(int wrapVisualFlagsLocation_);

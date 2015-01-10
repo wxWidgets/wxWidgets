@@ -882,6 +882,31 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
 					preferRE = false;
                 } else if (isSafeWordcharOrHigh(chNext)) {
 					state = SCE_RB_SYMBOL;
+                } else if ((chNext == '@' || chNext == '$') &&
+                            isSafeWordcharOrHigh(chNext2)) {
+                    // instance and global variable followed by an identifier
+                    advance_char(i, ch, chNext, chNext2);
+                    state = SCE_RB_SYMBOL;
+                } else if (((chNext == '@' && chNext2 == '@')  ||
+                            (chNext == '$' && chNext2 == '-')) &&
+                           isSafeWordcharOrHigh(styler.SafeGetCharAt(i+3))) {
+                    // class variables and special global variable "$-IDENTCHAR"
+                    state = SCE_RB_SYMBOL;
+                    // $-IDENTCHAR doesn't continue past the IDENTCHAR
+                    if (chNext == '$') {
+                        styler.ColourTo(i+3, SCE_RB_SYMBOL);
+                        state = SCE_RB_DEFAULT;
+                    }
+                    i += 3;
+                    ch = styler.SafeGetCharAt(i);
+                    chNext = styler.SafeGetCharAt(i+1);
+                } else if (chNext == '$' && strchr("_~*$?!@/\\;,.=:<>\"&`'+", chNext2)) {
+                    // single-character special global variables
+                    i += 2;
+                    ch = chNext2;
+                    chNext = styler.SafeGetCharAt(i+1);
+                    styler.ColourTo(i, SCE_RB_SYMBOL);
+                    state = SCE_RB_DEFAULT;
                 } else if (strchr("[*!~+-*/%=<>&^|", chNext)) {
                     // Do the operator analysis in-line, looking ahead
                     // Based on the table in pickaxe 2nd ed., page 339
@@ -1260,7 +1285,16 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
         } else if (state == SCE_RB_CLASS_VAR
                    || state == SCE_RB_INSTANCE_VAR
                    || state == SCE_RB_SYMBOL) {
-            if (!isSafeWordcharOrHigh(ch)) {
+            if (state == SCE_RB_SYMBOL &&
+                 // FIDs suffices '?' and '!'
+                (((ch == '!' || ch == '?') && chNext != '=') ||
+                 // identifier suffix '='
+                 (ch == '=' && (chNext != '~' && chNext != '>' &&
+                               (chNext != '=' || chNext2 == '>'))))) {
+                styler.ColourTo(i, state);
+                state = SCE_RB_DEFAULT;
+                preferRE = false;
+            } else if (!isSafeWordcharOrHigh(ch)) {
                 styler.ColourTo(i - 1, state);
                 redo_char(i, ch, chNext, chNext2, state); // pass by ref
                 preferRE = false;

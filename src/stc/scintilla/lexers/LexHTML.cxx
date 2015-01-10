@@ -822,18 +822,26 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 		// handle start of Mako comment line
 		if (isMako && ch == '#' && chNext == '#') {
 			makoComment = 1;
+			state = SCE_HP_COMMENTLINE;
 		}
 
 		// handle end of Mako comment line
 		else if (isMako && makoComment && (ch == '\r' || ch == '\n')) {
 			makoComment = 0;
-			styler.ColourTo(i, SCE_HP_COMMENTLINE);
-			state = SCE_HP_DEFAULT;
+			styler.ColourTo(i, StateToPrint);
+			if (scriptLanguage == eScriptPython) {
+				state = SCE_HP_DEFAULT;
+			} else {
+				state = SCE_H_DEFAULT;
+			}
 		}
 
 		// Allow falling through to mako handling code if newline is going to end a block
 		if (((ch == '\r' && chNext != '\n') || (ch == '\n')) &&
 			(!isMako || (0 != strcmp(makoBlockType, "%")))) {
+		}
+		// Ignore everything in mako comment until the line ends
+		else if (isMako && makoComment) {
 		}
 
 		// generic end of script processing

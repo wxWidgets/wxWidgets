@@ -115,6 +115,7 @@ struct SelectionRange {
 		anchor.SetVirtualSpace(0);
 		caret.SetVirtualSpace(0);
 	}
+	void MoveForInsertDelete(bool insertion, int startChange, int length);
 	bool Contains(int pos) const;
 	bool Contains(SelectionPosition sp) const;
 	bool ContainsCharacter(int posCharacter) const;
