@@ -26,6 +26,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <stdexcept>
 
 // These are all Scintilla headers
 #include "Platform.h"
@@ -59,6 +60,9 @@
 #include "Document.h"
 #include "Selection.h"
 #include "PositionCache.h"
+#include "EditModel.h"
+#include "MarginView.h"
+#include "EditView.h"
 #include "Editor.h"
 #include "PropSetSimple.h"
 #include "ScintillaBase.h"
@@ -182,7 +186,7 @@ public:
     void FullPaint();
     void FullPaintDC(wxDC* dc);
     bool CanPaste();
-    bool GetHideSelection() { return hideSelection; }
+    bool GetHideSelection() { return view.hideSelection; }
     void DoScrollToLine(int line);
     void DoScrollToColumn(int column);
     void ClipChildren(wxDC& dc, PRectangle rect);
