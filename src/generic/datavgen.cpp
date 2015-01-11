@@ -2385,7 +2385,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     {
         wxDataViewVirtualListModel *list_model =
             (wxDataViewVirtualListModel*) GetModel();
-        UpdateCount(list_model->GetCount());
+        m_count = list_model->GetCount();
 
         m_selection.OnItemDelete(GetRowByItem(item));
     }
