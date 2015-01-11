@@ -2304,7 +2304,9 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
     {
         wxDataViewVirtualListModel *list_model =
             (wxDataViewVirtualListModel*) GetModel();
-        UpdateCount(list_model->GetCount());
+        m_count = list_model->GetCount();
+
+        m_selection.OnItemsInserted(GetRowByItem(item), 1);
     }
     else
     {
