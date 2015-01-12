@@ -2151,11 +2151,13 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
         #else
             // This is the old, deprecated method of scaling the image
             wxBitmap* bmpNew = new wxBitmap(maxSz.x,maxSz.y,bmp.GetDepth());
-            wxMemoryDC dc;
-            dc.SelectObject(*bmpNew);
-            double scaleY = (double)maxSz.y / (double)imSz.y;
-            dc.SetUserScale(scaleY, scaleY);
-            dc.DrawBitmap(bmp, 0, 0);
+            bmpNew->UseAlpha(bmp.HasAlpha());
+            {
+                wxMemoryDC dc(*bmpNew);
+                double scaleY = (double)maxSz.y / (double)imSz.y;
+                dc.SetUserScale(scaleY, scaleY);
+                dc.DrawBitmap(bmp, 0, 0);
+            }
         #endif
 
             m_valueBitmap = bmpNew;
