@@ -796,17 +796,17 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     if ( (flags & wxODCB_PAINTING_CONTROL) )
         paintdata.m_choiceItem = -1;
 
-    if ( pDc )
-        pDc->SetBrush(*wxWHITE_BRUSH);
+    wxCHECK_RET( pDc, wxT("Invalid DC") );
 
-    wxPGCellRenderer* renderer = NULL;
-    const wxPGChoiceEntry* cell = NULL;
+    wxDC& dc = *pDc;
+    dc.SetBrush(*wxWHITE_BRUSH);
 
     if ( rect.x >= 0 )
     {
         //
         // DrawItem call
-        wxDC& dc = *pDc;
+        wxPGCellRenderer* renderer = NULL;
+        const wxPGChoiceEntry* cell = NULL;
 
         wxPoint pt(rect.x + wxPG_CONTROL_MARGIN - wxPG_CHOICEXADJUST - 1,
                    rect.y + 1);
@@ -927,7 +927,6 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     {
         //
         // MeasureItem call
-        wxDC& dc = *pDc;
 
         p->OnCustomPaint( dc, rect, paintdata );
         rect.height = paintdata.m_drawnHeight + 2;
