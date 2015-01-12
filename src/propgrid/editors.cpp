@@ -756,8 +756,6 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     if ( item < 0 )
         return;
 
-    wxSize cis;
-
     const wxBitmap* itemBitmap = NULL;
 
     if ( item >= 0 && choices.IsOk() && choices.Item(item).GetBitmap().IsOk() && comValIndex == -1 )
@@ -765,10 +763,11 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 
     //
     // Decide what custom image size to use
-    if ( itemBitmap )
+    // (Use item-specific bitmap only if not drawn in the control field.)
+    wxSize cis;
+    if ( itemBitmap && !(flags & wxODCB_PAINTING_CONTROL) )
     {
-        cis.x = itemBitmap->GetWidth();
-        cis.y = itemBitmap->GetHeight();
+        cis = itemBitmap->GetSize();
     }
     else
     {
@@ -850,8 +849,9 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         if ( p->m_valueBitmap && item != pCb->GetSelection() )
             useCustomPaintProcedure = false;
         // If current choice had a bitmap set by the application, then
-        // use it instead of any custom paint procedure.
-        else if ( itemBitmap )
+        // use it instead of any custom paint procedure
+        // (only if not drawn in the control field).
+        else if ( itemBitmap && !(flags & wxODCB_PAINTING_CONTROL) )
             useCustomPaintProcedure = false;
 
         if ( useCustomPaintProcedure )
