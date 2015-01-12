@@ -2147,7 +2147,7 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
             img.Rescale(wxRound(bmp.GetWidth()*scaleY),
                         wxRound(bmp.GetHeight()*scaleY),
                         wxIMAGE_QUALITY_HIGH);
-            wxBitmap* bmpNew = new wxBitmap(img, 32);
+            wxBitmap* bmpNew = new wxBitmap(img);
         #else
             // This is the old, deprecated method of scaling the image
             wxBitmap* bmpNew = new wxBitmap(maxSz.x,maxSz.y,bmp.GetDepth());
