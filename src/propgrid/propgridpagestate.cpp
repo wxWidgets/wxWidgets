@@ -459,7 +459,7 @@ wxPropertyCategory* wxPropertyGridPageState::GetPropertyCategory( const wxPGProp
 // wxPropertyGridPageState GetPropertyXXX methods
 // -----------------------------------------------------------------------
 
-#ifdef WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
 wxPGProperty* wxPropertyGridPageState::GetPropertyByLabel
                         ( const wxString& label, wxPGProperty* parent ) const
 {

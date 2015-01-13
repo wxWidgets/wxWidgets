@@ -157,7 +157,7 @@ public:
     */
     void SetSplitterPosition( int splitterPos, int col = 0 );
 
-#ifdef WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
     // To avoid ambiguity between functions inherited
     // from both wxPropertyGridInterface and wxPropertyGridPageState
     using wxPropertyGridInterface::GetPropertyByLabel;

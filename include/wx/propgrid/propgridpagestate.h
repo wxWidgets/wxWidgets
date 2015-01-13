@@ -556,7 +556,7 @@ public:
 
     wxPropertyCategory* GetPropertyCategory( const wxPGProperty* p ) const;
 
-#ifdef WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
     wxDEPRECATED_MSG("don't refer directly to wxPropertyGridPageState::GetPropertyByLabel")
     wxPGProperty* GetPropertyByLabel( const wxString& name,
                                       wxPGProperty* parent = NULL ) const;

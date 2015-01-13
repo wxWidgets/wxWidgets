@@ -754,7 +754,7 @@ void wxPGProperty::OnValidationFailure( wxVariant& WXUNUSED(pendingValue) )
 {
 }
 
-#ifdef WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
 void wxPGProperty::GetDisplayInfo( unsigned int column,
                                    int choiceIndex,
                                    int flags,
