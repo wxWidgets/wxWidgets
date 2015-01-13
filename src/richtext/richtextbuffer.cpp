@@ -4830,16 +4830,6 @@ bool wxRichTextParagraph::Draw(wxDC& dc, wxRichTextDrawingContext& context, cons
 
             wxRichTextAttr bulletAttr(attr);
 
-            // Combine with the font of the first piece of content, if one is specified
-            if (GetChildren().GetCount() > 0)
-            {
-                wxRichTextObject* firstObj = (wxRichTextObject*) GetChildren().GetFirst()->GetData();
-                if (!firstObj->IsFloatable() && firstObj->GetAttributes().HasFont())
-                {
-                    wxRichTextApplyStyle(bulletAttr, firstObj->GetAttributes());
-                }
-            }
-
             // Get line height from first line, if any
             wxRichTextLine* line = m_cachedLines.GetFirst() ? (wxRichTextLine* ) m_cachedLines.GetFirst()->GetData() : NULL;
 
