@@ -48,7 +48,7 @@ public:
     virtual ~wxTipProvider() { }
 
 
-#ifdef WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
     wxDEPRECATED_MSG("this method does nothing, simply don't call it")
     wxString PreprocessTip(const wxString& tip) { return tip; }
 #endif
