@@ -606,7 +606,7 @@ enum wxSocketEventFlags
     flag should not be enabled if WriteMsg() is going to be used (it will be
     ignored), if you use it then thread safety may be at risk. Note that
     wxSOCKET_NOWAIT_WRITE impacts only Write operations and does not impact
-    Write operations, allowing Read and Write operations to be set differently.
+    Read operations, allowing Read and Write operations to be set differently.
 
     If @b wxSOCKET_WAITALL is specified, IO calls won't return until ALL
     the data has been read or written (or until an error occurs), blocking if
