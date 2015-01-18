@@ -11,6 +11,3 @@ control.
 After doing this, please proceed with the build as with any official
 release, i.e. follow the instructions in the install.txt file in
 docs/gtk, docs/msw and so on.
-
-
-for test commit
