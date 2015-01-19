@@ -64,6 +64,20 @@ void wxQtDCImpl::QtPreparePainter( )
         m_qtPainter->setPen( wxPen().GetHandle() );
         m_qtPainter->setBrush( wxBrush().GetHandle() );
         m_qtPainter->setFont( wxFont().GetHandle() );
+
+        if (m_clipping)
+        {
+            wxRegionIterator ri(*m_clippingRegion);
+            bool append = false;
+            while (ri.HaveRects())
+            {
+                wxRect r = ri.GetRect();
+                m_qtPainter->setClipRect( r.x, r.y, r.width, r.height,
+                                          append ? Qt::IntersectClip : Qt::ReplaceClip );
+                append = true;
+                ri++;
+            }
+        }
     }
     else
     {
@@ -347,9 +361,12 @@ void wxQtDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y,
     }
     else
     {
-        // Set QPainter clipping (intersection if not the first one)
-        m_qtPainter->setClipRect( x, y, width, height,
-                                 m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
+        if (m_qtPainter->isActive())
+        {
+            // Set QPainter clipping (intersection if not the first one)
+            m_qtPainter->setClipRect( x, y, width, height,
+                                      m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
+        }
 
         // Set internal state for getters
         /* Note: Qt states that QPainter::clipRegion() may be slow, so we
@@ -414,7 +431,9 @@ void wxQtDCImpl::DestroyClippingRegion()
 {
     ResetClipping();
     m_clippingRegion->Clear();
-    m_qtPainter->setClipping( false );
+
+    if (m_qtPainter->isActive())
+        m_qtPainter->setClipping( false );
 }
 
 bool wxQtDCImpl::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
