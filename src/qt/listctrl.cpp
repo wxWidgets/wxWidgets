@@ -783,12 +783,14 @@ long wxListCtrl::HitTest(const wxPoint& point, int &flags, long* ptrSubItem) con
     if ( index.isValid() )
     {
         flags = wxLIST_HITTEST_ONITEM;
-        *ptrSubItem = index.column();
+        if (ptrSubItem)
+            *ptrSubItem = index.column();
     }
     else
     {
         flags = wxLIST_HITTEST_NOWHERE;
-        *ptrSubItem = 0;
+        if (ptrSubItem)
+            *ptrSubItem = 0;
     }
     return index.row();
 }
