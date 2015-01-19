@@ -2026,7 +2026,7 @@ wxRect wxWin32Renderer::GetSliderShaftRect(const wxRect& rectOrig,
     if (orient == wxHORIZONTAL)
     {
         rect.x += SLIDER_MARGIN;
-        if (left & right)
+        if (left && right)
         {
             rect.y += wxMax ((rect.height - 2*BORDER_THICKNESS) / 2, sizeThumb.y/2);
         }
@@ -2044,7 +2044,7 @@ wxRect wxWin32Renderer::GetSliderShaftRect(const wxRect& rectOrig,
     else // == wxVERTICAL
     {
         rect.y += SLIDER_MARGIN;
-        if (left & right)
+        if (left && right)
         {
             rect.x += wxMax ((rect.width - 2*BORDER_THICKNESS) / 2, sizeThumb.x/2);
         }
@@ -2286,21 +2286,21 @@ void wxWin32Renderer::DrawSliderTicks(wxDC& dc,
     {
         wxCoord x = x1 + (len*n) / range;
 
-        if (left & (y1 > y3))
+        if (left && (y1 > y3))
         {
             DrawLine(dc, x, y1, x, y3, orient == wxVERTICAL);
         }
-        if (right & (y4 > y2))
+        if (right && (y4 > y2))
         {
             DrawLine(dc, x, y2, x, y4, orient == wxVERTICAL);
         }
     }
     // always draw the line at the end position
-    if (left & (y1 > y3))
+    if (left && (y1 > y3))
     {
         DrawLine(dc, x2, y1, x2, y3, orient == wxVERTICAL);
     }
-    if (right & (y4 > y2))
+    if (right && (y4 > y2))
     {
         DrawLine(dc, x2, y2, x2, y4, orient == wxVERTICAL);
     }
