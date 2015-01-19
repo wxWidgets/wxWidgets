@@ -4889,16 +4889,6 @@ public:
     virtual bool LoadAndScaleImageCache(wxImage& image, const wxSize& sz, bool delayLoading, bool& changed);
 
     /**
-        Gets the original image size.
-    */
-    wxSize GetOriginalImageSize() const { return m_originalImageSize; }
-
-    /**
-        Sets the original image size.
-    */
-    void SetOriginalImageSize(const wxSize& sz) { m_originalImageSize = sz; }
-
-    /**
         Gets the image state.
     */
     int GetImageState() const { return m_imageState; }
