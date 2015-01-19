@@ -113,6 +113,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
 // gethostbyname_r() and that it uses the similar conventions to it (see
 // comment in configure)
 #define HAVE_GETHOSTBYADDR HAVE_GETHOSTBYNAME
+
+#ifdef __ANDROID__
+    #ifndef HAVE_GETHOSTBYNAME
+    #define HAVE_GETHOSTBYNAME
+    #endif
+#else // these functions are missing on android (see netdb.h)
 #ifdef HAVE_FUNC_GETHOSTBYNAME_R_3
     #define HAVE_FUNC_GETHOSTBYADDR_R_3
 #endif
@@ -122,7 +128,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
 #ifdef HAVE_FUNC_GETHOSTBYNAME_R_6
     #define HAVE_FUNC_GETHOSTBYADDR_R_6
 #endif
-
+#endif
 // the _r functions need the extra buffer parameter but unfortunately its type
 // differs between different systems and for the systems which use opaque
 // structs for it (at least AIX and OpenBSD) it must be zero-filled before
