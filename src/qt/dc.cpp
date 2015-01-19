@@ -733,8 +733,6 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                     wxCoord WXUNUSED(xsrcMask),
                     wxCoord WXUNUSED(ysrcMask) )
 {
-    wxMISSING_IMPLEMENTATION( "wxDC::DoBlit Mask src" );
-
     wxQtDCImpl *implSource = (wxQtDCImpl*)source->GetImpl();
     
     QImage *qtSource = implSource->m_qtImage;
