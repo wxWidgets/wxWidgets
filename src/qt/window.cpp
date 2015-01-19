@@ -607,8 +607,8 @@ void wxWindowQt::QtOnScrollBarEvent( wxScrollEvent& event )
 
     if ( windowEventType != 0 )
     {
-        wxScrollWinEvent event( windowEventType, event.GetPosition(), event.GetOrientation() );
-        ProcessWindowEvent( event );
+        wxScrollWinEvent e( windowEventType, event.GetPosition(), event.GetOrientation() );
+        ProcessWindowEvent( e );
     }
 }
 
