@@ -1526,10 +1526,7 @@ public:
     */
     bool AreChildrenComponents() const
     {
-        if ( m_flags & (wxPG_PROP_COMPOSED_VALUE|wxPG_PROP_AGGREGATE) )
-            return true;
-
-        return false;
+        return (m_flags & (wxPG_PROP_COMPOSED_VALUE|wxPG_PROP_AGGREGATE)) != 0;
     }
 
     /**
@@ -1725,6 +1722,7 @@ public:
         return m_value.IsNull();
     }
 
+#if WXWIN_COMPATIBILITY_3_0
     /**
         Returns non-zero if property has given flag set.
 
@@ -1734,6 +1732,17 @@ public:
     {
         return ( m_flags & flag );
     }
+#else
+    /**
+        Returns true if property has given flag set.
+
+        @see propgrid_propflags
+    */
+    bool HasFlag(wxPGPropertyFlags flag) const
+    {
+        return (m_flags & flag) != 0;
+    }
+#endif
 
     /** Returns comma-delimited string of property attributes.
     */
@@ -1802,7 +1811,7 @@ public:
     /**
         Returns true if this property is actually a wxPropertyCategory.
     */
-    bool IsCategory() const { return HasFlag(wxPG_PROP_CATEGORY)?true:false; }
+    bool IsCategory() const { return (m_flags & wxPG_PROP_CATEGORY) != 0; }
 
     /** Returns true if this property is actually a wxRootProperty.
     */
@@ -1849,7 +1858,7 @@ public:
     */
     bool UsesAutoUnspecified() const
     {
-        return HasFlag(wxPG_PROP_AUTO_UNSPECIFIED)?true:false;
+        return (m_flags & wxPG_PROP_AUTO_UNSPECIFIED) != 0;
     }
 
     wxBitmap* GetValueImage() const
