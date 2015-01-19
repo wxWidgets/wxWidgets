@@ -1054,10 +1054,12 @@ wxString wxPGProperty::GetValueAsString( int argFlags ) const
     }
 }
 
+#if wxPG_COMPATIBILITY_1_4
 wxString wxPGProperty::GetValueString( int argFlags ) const
 {
     return GetValueAsString(argFlags);
 }
+#endif
 
 bool wxPGProperty::IntToValue( wxVariant& variant, int number, int WXUNUSED(argFlags) ) const
 {
