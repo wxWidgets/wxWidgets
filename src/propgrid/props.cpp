@@ -1200,29 +1200,27 @@ wxEnumProperty::~wxEnumProperty ()
 {
 }
 
-int wxEnumProperty::ms_nextIndex = -2;
-
 void wxEnumProperty::OnSetValue()
 {
     wxString variantType = m_value.GetType();
 
+    int index = -2;
     if ( variantType == wxPG_VARIANT_TYPE_LONG )
     {
-        ValueFromInt_( m_value, m_value.GetLong(), wxPG_FULL_VALUE );
+        ValueFromInt_(m_value, &index, m_value.GetLong(), wxPG_FULL_VALUE);
     }
     else if ( variantType == wxPG_VARIANT_TYPE_STRING )
     {
-        ValueFromString_( m_value, m_value.GetString(), 0 );
+        ValueFromString_(m_value, &index, m_value.GetString(), 0);
     }
     else
     {
         wxFAIL;
     }
 
-    if ( ms_nextIndex != -2 )
+    if (index != -2)
     {
-        m_index = ms_nextIndex;
-        ms_nextIndex = -2;
+        m_index = index;
     }
 }
 
@@ -1233,7 +1231,7 @@ bool wxEnumProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& WXUNUS
     // To reduce code size, use conversion here as well
     if ( value.GetType() == wxPG_VARIANT_TYPE_STRING &&
          !wxDynamicCastThis(wxEditEnumProperty) )
-        return ValueFromString_( value, value.GetString(), wxPG_PROPERTY_SPECIFIC );
+        return ValueFromString_(value, NULL, value.GetString(), wxPG_PROPERTY_SPECIFIC);
 
     return true;
 }
@@ -1253,15 +1251,15 @@ wxString wxEnumProperty::ValueToString( wxVariant& value,
 
 bool wxEnumProperty::StringToValue( wxVariant& variant, const wxString& text, int argFlags ) const
 {
-    return ValueFromString_( variant, text, argFlags );
+    return ValueFromString_(variant, NULL, text, argFlags);
 }
 
 bool wxEnumProperty::IntToValue( wxVariant& variant, int intVal, int argFlags ) const
 {
-    return ValueFromInt_( variant, intVal, argFlags );
+    return ValueFromInt_(variant, NULL, intVal, argFlags);
 }
 
-bool wxEnumProperty::ValueFromString_( wxVariant& value, const wxString& text, int argFlags ) const
+bool wxEnumProperty::ValueFromString_(wxVariant& value, int* pIndex, const wxString& text, int WXUNUSED(argFlags)) const
 {
     int useIndex = -1;
     long useValue = 0;
@@ -1311,20 +1309,24 @@ bool wxEnumProperty::ValueFromString_( wxVariant& value, const wxString& text, i
 
     if ( setAsNextIndex != -2 )
     {
-        // If wxPG_PROPERTY_SPECIFIC is set, then this is done for
-        // validation purposes only, and index must not be changed
-        if ( !(argFlags & wxPG_PROPERTY_SPECIFIC) )
-            ms_nextIndex = setAsNextIndex;
+        if (pIndex)
+        {
+            *pIndex = setAsNextIndex;
+        }
 
         if ( isEdit || setAsNextIndex != -1 )
             return true;
         else
             return false;
     }
+    if (pIndex)
+    {
+        *pIndex = useIndex;
+    }
     return false;
 }
 
-bool wxEnumProperty::ValueFromInt_( wxVariant& variant, int intVal, int argFlags ) const
+bool wxEnumProperty::ValueFromInt_( wxVariant& variant, int* pIndex, int intVal, int argFlags ) const
 {
     // If wxPG_FULL_VALUE is *not* in argFlags, then intVal is index from combo box.
     //
@@ -1344,32 +1346,32 @@ bool wxEnumProperty::ValueFromInt_( wxVariant& variant, int intVal, int argFlags
 
     if ( setAsNextIndex != -2 )
     {
-        // If wxPG_PROPERTY_SPECIFIC is set, then this is done for
-        // validation or fetching a data purposes only, and index must not be changed.
-        if ( !(argFlags & wxPG_PROPERTY_SPECIFIC) )
-            ms_nextIndex = setAsNextIndex;
-
         if ( !(argFlags & wxPG_FULL_VALUE) )
             intVal = m_choices.GetValue(intVal);
 
         variant = (long)intVal;
 
+        if (pIndex)
+        {
+            *pIndex = setAsNextIndex;
+        }
         return true;
     }
 
+    if (pIndex)
+    {
+        *pIndex = intVal;
+    }
     return false;
 }
 
 void
 wxEnumProperty::OnValidationFailure( wxVariant& WXUNUSED(pendingValue) )
 {
-    // Revert index
-    ResetNextIndex();
 }
 
 void wxEnumProperty::SetIndex( int index )
 {
-    ms_nextIndex = -2;
     m_index = index;
 }
 
@@ -1377,9 +1379,6 @@ int wxEnumProperty::GetIndex() const
 {
     if ( m_value.IsNull() )
         return -1;
-
-    if ( ms_nextIndex != -2 )
-        return ms_nextIndex;
 
     return m_index;
 }

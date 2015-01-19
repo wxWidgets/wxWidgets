@@ -454,20 +454,34 @@ protected:
     int GetIndex() const;
     void SetIndex( int index );
 
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("use ValueFromString_(wxVariant&, int*, const wxString&, int) function instead")
     bool ValueFromString_( wxVariant& value,
                            const wxString& text,
-                           int argFlags ) const;
-    bool ValueFromInt_( wxVariant& value, int intVal, int argFlags ) const;
-
-    static void ResetNextIndex() { ms_nextIndex = -2; }
+                           int argFlags ) const
+    {
+        return ValueFromString_(value, NULL, text, argFlags);
+    }
+    wxDEPRECATED_MSG("use ValueFromInt_(wxVariant&, int*, int, int) function instead")
+    bool ValueFromInt_( wxVariant& value, int intVal, int argFlags ) const
+    {
+        return ValueFromInt_(value, NULL, intVal, argFlags);
+    }
+    wxDEPRECATED_MSG("don't use ResetNextIndex() function")
+    static void ResetNextIndex() { }
+#endif
+    // Converts text to value and returns corresponding index in the collection
+    bool ValueFromString_(wxVariant& value,
+                          int* pIndex,
+                          const wxString& text,
+                          int argFlags) const;
+    // Converts number to value and returns corresponding index in the collection
+    bool ValueFromInt_(wxVariant& value, int* pIndex, int intVal, int argFlags) const;
 
 private:
     // This is private so that classes are guaranteed to use GetIndex
     // for up-to-date index value.
     int                     m_index;
-
-    // Relies on ValidateValue being called always before OnSetValue
-    static int              ms_nextIndex;
 };
 
 // -----------------------------------------------------------------------

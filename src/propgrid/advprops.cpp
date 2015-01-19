@@ -1454,13 +1454,11 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
         {
             // This really should not occur...
             // wxASSERT(false);
-            ResetNextIndex();
             return false;
         }
 
         if ( !QueryColourFromUser(value) )
         {
-            ResetNextIndex();
             if ( !(argFlags & wxPG_PROPERTY_SPECIFIC) )
                 return false;
             // If query for value comes from the event handler
@@ -1477,12 +1475,11 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
         if ( !conversionSuccess )
         {
             // Try predefined colour first
-            bool res = wxEnumProperty::StringToValue(value,
-                                                     colStr,
-                                                     argFlags);
-            if ( res && GetIndex() >= 0 )
+            int index;
+            bool res = ValueFromString_(value, &index, colStr, argFlags);
+            if ( res && index >= 0 )
             {
-                val.m_type = GetIndex();
+                val.m_type = index;
                 if ( val.m_type < m_choices.GetCount() )
                     val.m_type = m_choices[val.m_type].GetValue();
 
@@ -1501,7 +1498,6 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
 
         if ( !done )
         {
-            ResetNextIndex();
             return false;
         }
 
