@@ -101,11 +101,9 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
                                                GetText(wxT("help")), kind);
             if (!accel.empty())
             {
-                wxAcceleratorEntry *entry = new wxAcceleratorEntry();
-                if (entry->FromString(accel))
-                    mitem->SetAccel(entry);
-                else
-                    delete entry;
+                wxAcceleratorEntry entry;
+                if (entry.FromString(accel))
+                    mitem->SetAccel(&entry);
             }
 
 #if !defined(__WXMSW__) || wxUSE_OWNER_DRAWN
