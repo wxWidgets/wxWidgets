@@ -1204,7 +1204,7 @@ void wxEnumProperty::OnSetValue()
 {
     wxString variantType = m_value.GetType();
 
-    int index = -2;
+    int index = -1;
     if ( variantType == wxPG_VARIANT_TYPE_LONG )
     {
         ValueFromInt_(m_value, &index, m_value.GetLong(), wxPG_FULL_VALUE);
@@ -1215,13 +1215,11 @@ void wxEnumProperty::OnSetValue()
     }
     else
     {
-        wxFAIL;
+        wxFAIL_MSG( wxT("Unexpected value type") );
+        return;
     }
 
-    if (index != -2)
-    {
-        m_index = index;
-    }
+    m_index = index;
 }
 
 bool wxEnumProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& WXUNUSED(validationInfo) ) const
@@ -1229,8 +1227,7 @@ bool wxEnumProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& WXUNUS
     // Make sure string value is in the list,
     // unless property has string as preferred value type
     // To reduce code size, use conversion here as well
-    if ( value.GetType() == wxPG_VARIANT_TYPE_STRING &&
-         !wxDynamicCastThis(wxEditEnumProperty) )
+    if ( value.GetType() == wxPG_VARIANT_TYPE_STRING )
         return ValueFromString_(value, NULL, value.GetString(), wxPG_PROPERTY_SPECIFIC);
 
     return true;
@@ -1275,58 +1272,26 @@ bool wxEnumProperty::ValueFromString_(wxVariant& value, int* pIndex, const wxStr
         }
     }
 
-    bool asText = false;
-
-    bool isEdit = this->IsKindOf(wxCLASSINFO(wxEditEnumProperty));
-
-    // If text not any of the choices, store as text instead
-    // (but only if we are wxEditEnumProperty)
-    if ( useIndex == -1 && isEdit )
-    {
-        asText = true;
-    }
-
-    int setAsNextIndex = -2;
-
-    if ( asText )
-    {
-        setAsNextIndex = -1;
-        value = text;
-    }
-    else if ( useIndex != GetIndex() )
-    {
-        if ( useIndex != -1 )
-        {
-            setAsNextIndex = useIndex;
-            value = (long)useValue;
-        }
-        else
-        {
-            setAsNextIndex = -1;
-            value = wxPGVariant_MinusOne;
-        }
-    }
-
-    if ( setAsNextIndex != -2 )
-    {
-        if (pIndex)
-        {
-            *pIndex = setAsNextIndex;
-        }
-
-        if ( isEdit || setAsNextIndex != -1 )
-            return true;
-        else
-            return false;
-    }
     if (pIndex)
     {
         *pIndex = useIndex;
     }
+
+    if ( useIndex != GetIndex() )
+    {
+        if ( useIndex != -1 )
+        {
+            value = (long)useValue;
+            return true;
+        }
+
+        value.MakeNull();
+    }
+
     return false;
 }
 
-bool wxEnumProperty::ValueFromInt_( wxVariant& variant, int* pIndex, int intVal, int argFlags ) const
+bool wxEnumProperty::ValueFromInt_(wxVariant& value, int* pIndex, int intVal, int argFlags) const
 {
     // If wxPG_FULL_VALUE is *not* in argFlags, then intVal is index from combo box.
     //
@@ -1349,7 +1314,7 @@ bool wxEnumProperty::ValueFromInt_( wxVariant& variant, int* pIndex, int intVal,
         if ( !(argFlags & wxPG_FULL_VALUE) )
             intVal = m_choices.GetValue(intVal);
 
-        variant = (long)intVal;
+        value = (long)intVal;
 
         if (pIndex)
         {
@@ -1420,6 +1385,55 @@ wxEditEnumProperty::wxEditEnumProperty( const wxString& label, const wxString& n
 
 wxEditEnumProperty::~wxEditEnumProperty()
 {
+}
+
+void wxEditEnumProperty::OnSetValue()
+{
+    wxString variantType = m_value.GetType();
+
+    int index = -1;
+    if ( variantType == wxPG_VARIANT_TYPE_LONG )
+    {
+        ValueFromInt_(m_value, &index, m_value.GetLong(), wxPG_FULL_VALUE);
+    }
+    else if ( variantType == wxPG_VARIANT_TYPE_STRING )
+    {
+        wxString val = m_value.GetString();
+        ValueFromString_(m_value, &index, val, 0);
+        // If text is not any of the choices, store as plain text instead.
+        if (index == -1)
+        {
+            m_value = val;
+        }
+    }
+    else
+    {
+        wxFAIL_MSG( wxT("Unexpected value type") );
+        return;
+    }
+
+    SetIndex(index);
+}
+
+bool wxEditEnumProperty::StringToValue(wxVariant& variant,
+                                       const wxString& text, int argFlags) const
+{
+    int index;
+    bool res = ValueFromString_(variant, &index, text, argFlags);
+    // If text is not any of the choices, store as plain text instead.
+    if (index == -1)
+    {
+        variant = text;
+        res = true;
+    }
+    return res;
+}
+
+bool wxEditEnumProperty::ValidateValue(
+                          wxVariant& WXUNUSED(value),
+                          wxPGValidationInfo& WXUNUSED(validationInfo)) const
+{
+    return true;
 }
 
 // -----------------------------------------------------------------------

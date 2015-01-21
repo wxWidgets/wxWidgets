@@ -524,6 +524,13 @@ public:
 
     virtual ~wxEditEnumProperty();
 
+    void OnSetValue() wxOVERRIDE;
+    bool StringToValue(wxVariant& variant,
+                       const wxString& text,
+                       int argFlags = 0) const wxOVERRIDE;
+    bool ValidateValue(wxVariant& value,
+                       wxPGValidationInfo& validationInfo) const wxOVERRIDE;
+
 protected:
 };
 
