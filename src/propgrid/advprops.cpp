@@ -258,7 +258,7 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
     wxSpinButton* wnd2;
 
 #if IS_MOTION_SPIN_SUPPORTED
-    if ( property->GetAttributeAsLong(wxT("MotionSpin"), 0) )
+    if ( property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_MOTION, 0) )
     {
         wnd2 = new wxPGSpinButton();
     }
@@ -319,7 +319,7 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
     if ( evtType == wxEVT_SCROLL_LINEUP || evtType == wxEVT_SCROLL_LINEDOWN )
     {
     #if IS_MOTION_SPIN_SUPPORTED
-        if ( property->GetAttributeAsLong(wxT("MotionSpin"), 0) )
+        if ( property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_MOTION, 0) )
         {
             wxPGSpinButton* spinButton =
                 (wxPGSpinButton*) propgrid->GetEditorControlSecondary();

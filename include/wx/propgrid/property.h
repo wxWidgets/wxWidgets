@@ -681,6 +681,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 */
 #define wxPG_DATE_PICKER_STYLE              wxS("PickerStyle")
 
+#if wxUSE_SPINBTN
 /** SpinCtrl editor, int or double. How much number changes when button is
     pressed (or up/down on keyboard).
 */
@@ -689,6 +690,12 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 /** SpinCtrl editor, bool. If true, value wraps at Min/Max.
 */
 #define wxPG_ATTR_SPINCTRL_WRAP             wxS("Wrap")
+
+/** SpinCtrl editor, bool. If true, moving mouse when one of the spin
+    buttons is depressed rapidly changing "spin" value.
+*/
+#define wxPG_ATTR_SPINCTRL_MOTION           wxS("MotionSpin")
+#endif  // wxUSE_SPINBTN
 
 /**
     wxMultiChoiceProperty, int.
