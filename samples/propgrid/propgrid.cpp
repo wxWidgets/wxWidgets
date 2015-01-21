@@ -3177,8 +3177,8 @@ void SetMinSize(wxPropertyGrid *grid)
     grid->SetMinSize(size);
 
     int proportions[3];
-    proportions[0] = static_cast<int>(floor((double)width[0]/size.x*100.0+0.5));
-    proportions[1] = static_cast<int>(floor((double)width[1]/size.x*100.0+0.5));
+    proportions[0] = wxRound((double)width[0]/size.x*100.0);
+    proportions[1] = wxRound((double)width[1]/size.x*100.0);
     proportions[2]= wxMax(100 - proportions[0] - proportions[1], 0);
     grid->SetColumnProportion(0, proportions[0]);
     grid->SetColumnProportion(1, proportions[1]);
