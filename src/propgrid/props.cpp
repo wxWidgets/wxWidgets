@@ -357,14 +357,14 @@ bool NumericValidation( const wxPGProperty* property,
     bool minOk = false;
     bool maxOk = false;
 
-    variant = property->GetAttribute(wxPGGlobalVars->m_strMin);
+    variant = property->GetAttribute(wxPG_ATTR_MIN);
     if ( !variant.IsNull() )
     {
         variant.Convert(&min);
         minOk = true;
     }
 
-    variant = property->GetAttribute(wxPGGlobalVars->m_strMax);
+    variant = property->GetAttribute(wxPG_ATTR_MAX);
     if ( !variant.IsNull() )
     {
         variant.Convert(&max);
@@ -443,14 +443,14 @@ bool NumericValidation( const wxPGProperty* property,
     bool minOk = false;
     bool maxOk = false;
 
-    variant = property->GetAttribute(wxPGGlobalVars->m_strMin);
+    variant = property->GetAttribute(wxPG_ATTR_MIN);
     if ( !variant.IsNull() )
     {
         variant.Convert(&min);
         minOk = true;
     }
 
-    variant = property->GetAttribute(wxPGGlobalVars->m_strMax);
+    variant = property->GetAttribute(wxPG_ATTR_MAX);
     if ( !variant.IsNull() )
     {
         variant.Convert(&max);

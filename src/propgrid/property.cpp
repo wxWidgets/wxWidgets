@@ -264,7 +264,7 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
             // Add units string?
             if ( propertyGrid->GetColumnCount() <= 2 )
             {
-                wxString unitsString = property->GetAttribute(wxPGGlobalVars->m_strUnits, wxEmptyString);
+                wxString unitsString = property->GetAttribute(wxPG_ATTR_UNITS, wxEmptyString);
                 if ( !unitsString.empty() )
                     text = wxString::Format(wxS("%s %s"), text.c_str(), unitsString.c_str() );
             }
@@ -810,7 +810,7 @@ void wxPGProperty::GetDisplayInfo( unsigned int column,
             else if ( column == 1 )
                 *pString = GetDisplayedString();
             else if ( column == 2 )
-                *pString = GetAttribute(wxPGGlobalVars->m_strUnits, wxEmptyString);
+                *pString = GetAttribute(wxPG_ATTR_UNITS, wxEmptyString);
         }
     }
     else
@@ -857,7 +857,7 @@ wxString wxPGProperty::GetColumnText( unsigned int col, int choiceIndex ) const
             else if ( col == 1 )
                 return GetDisplayedString();
             else if ( col == 2 )
-                return GetAttribute(wxPGGlobalVars->m_strUnits, wxEmptyString);
+                return GetAttribute(wxPG_ATTR_UNITS, wxEmptyString);
         }
     }
     else

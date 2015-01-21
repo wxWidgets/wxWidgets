@@ -2297,12 +2297,12 @@ inline unsigned int wxPropertyGridPageState::GetActualVirtualHeight() const
 
 inline wxString wxPGProperty::GetHintText() const
 {
-    wxVariant vHintText = GetAttribute(wxPGGlobalVars->m_strHint);
+    wxVariant vHintText = GetAttribute(wxPG_ATTR_HINT);
 
 #if wxPG_COMPATIBILITY_1_4
     // Try the old, deprecated "InlineHelp"
     if ( vHintText.IsNull() )
-        vHintText = GetAttribute(wxPGGlobalVars->m_strInlineHelp);
+        vHintText = GetAttribute(wxPG_ATTR_INLINE_HELP);
 #endif
 
     if ( !vHintText.IsNull() )
