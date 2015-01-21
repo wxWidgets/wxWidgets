@@ -1188,9 +1188,9 @@ void FormMain::PopulateWithExamples ()
     pg->SetPropertyEditor( wxT("SpinCtrl"), wxPGEditor_SpinCtrl );
     pg->SetPropertyAttribute( wxT("SpinCtrl"), wxPG_ATTR_MIN, (long)-10 );  // Use constants instead of string
     pg->SetPropertyAttribute( wxT("SpinCtrl"), wxPG_ATTR_MAX, (long)16384 );   // for reduced binary size.
-    pg->SetPropertyAttribute( wxT("SpinCtrl"), wxT("Step"), (long)2 );
-    pg->SetPropertyAttribute( wxT("SpinCtrl"), wxT("MotionSpin"), true );
-    //pg->SetPropertyAttribute( wxT("SpinCtrl"), wxT("Wrap"), true );
+    pg->SetPropertyAttribute( wxT("SpinCtrl"), wxPG_ATTR_SPINCTRL_STEP, (long)2 );
+    pg->SetPropertyAttribute( wxT("SpinCtrl"), wxPG_ATTR_SPINCTRL_MOTION, true );
+    //pg->SetPropertyAttribute( wxT("SpinCtrl"), wxPG_ATTR_SPINCTRL_WRAP, true );
 
     pg->SetPropertyHelpString( wxT("SpinCtrl"),
         wxT("This is regular wxIntProperty, which editor has been ")
@@ -1215,7 +1215,7 @@ void FormMain::PopulateWithExamples ()
     prop = pg->Append( new wxFloatProperty("FloatProperty",
                                            wxPG_LABEL,
                                            1234500.23) );
-    prop->SetAttribute("Min", -100.12);
+    prop->SetAttribute(wxPG_ATTR_MIN, -100.12);
 
     // A string property that can be edited in a separate editor dialog.
     pg->Append( new wxLongStringProperty( wxT("LongStringProperty"), wxT("LongStringProp"),
@@ -1264,7 +1264,7 @@ void FormMain::PopulateWithExamples ()
     pid = pg->Append( new wxColourProperty("ColourPropertyWithAlpha",
                                            wxPG_LABEL,
                                            wxColour(15, 200, 95, 128)) );
-    pg->SetPropertyAttribute("ColourPropertyWithAlpha", "HasAlpha", true);
+    pg->SetPropertyAttribute("ColourPropertyWithAlpha", wxPG_COLOUR_HAS_ALPHA, true);
     pg->SetPropertyHelpString("ColourPropertyWithAlpha",
         "Attribute \"HasAlpha\" is set to true for this property.");
 
@@ -1325,7 +1325,7 @@ void FormMain::PopulateWithExamples ()
         soc, 240 ) );
 
     // Test Hint attribute in EnumProperty
-    pg->GetProperty("EnumProperty 3")->SetAttribute("Hint", "Dummy Hint");
+    pg->GetProperty("EnumProperty 3")->SetAttribute(wxPG_ATTR_HINT, "Dummy Hint");
 
     pg->SetPropertyHelpString("EnumProperty 3",
         "This property uses \"Hint\" attribute.");
@@ -1372,7 +1372,7 @@ void FormMain::PopulateWithExamples ()
     autoCompleteStrings.Add("Yet another choice");
     autoCompleteStrings.Add("Yet another choice, bear with me");
     pg->SetPropertyAttribute( "StringProperty AutoComplete",
-                              "AutoComplete",
+                              wxPG_ATTR_AUTOCOMPLETE,
                               autoCompleteStrings );
 
     pg->SetPropertyHelpString( "StringProperty AutoComplete",
@@ -1418,7 +1418,7 @@ void FormMain::PopulateWithExamples ()
 
     pg->Append( new wxMultiChoiceProperty( wxT("MultiChoiceProperty"), wxPG_LABEL,
                                            tchoices, tchoicesValues ) );
-    pg->SetPropertyAttribute( wxT("MultiChoiceProperty"), wxT("UserStringMode"), true );
+    pg->SetPropertyAttribute( wxT("MultiChoiceProperty"), wxPG_ATTR_MULTICHOICE_USERSTRINGMODE, true );
 
     pg->Append( new wxSizeProperty( wxT("SizeProperty"), wxT("Size"), GetSize() ) );
     pg->Append( new wxPointProperty( wxT("PointProperty"), wxT("Position"), GetPosition() ) );
@@ -1442,7 +1442,7 @@ void FormMain::PopulateWithExamples ()
                                        "Choice not in the list") );
 
     // Test Hint attribute in EditEnumProperty
-    pg->GetProperty("EditEnumProperty")->SetAttribute("Hint", "Dummy Hint");
+    pg->GetProperty("EditEnumProperty")->SetAttribute(wxPG_ATTR_HINT, "Dummy Hint");
 
     //wxString v_;
     //wxTextValidator validator1(wxFILTER_NUMERIC,&v_);
@@ -3199,7 +3199,7 @@ struct PropertyGridPopup : wxPopupWindow
         m_grid->SetColumnCount(3);
 
         wxPGProperty *prop=m_grid->Append(new wxStringProperty("test_name", wxPG_LABEL, "test_value"));
-        m_grid->SetPropertyAttribute(prop, wxT("Units"), "type");
+        m_grid->SetPropertyAttribute(prop, wxPG_ATTR_UNITS, "type");
         wxPGProperty *prop1 = m_grid->AppendIn(prop, new wxStringProperty("sub_name1", wxPG_LABEL, "sub_value1"));
 
         m_grid->AppendIn(prop1, new wxSystemColourProperty(wxT("Cell Colour"),wxPG_LABEL, m_grid->GetGrid()->GetCellBackgroundColour()));
