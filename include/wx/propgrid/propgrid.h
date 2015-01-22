@@ -76,13 +76,23 @@ public:
 
     wxPGChoices         m_boolChoices;
 
+    // Some shared variants
+#if WXWIN_COMPATIBILITY_3_0
     wxVariant           m_vEmptyString;
     wxVariant           m_vZero;
     wxVariant           m_vMinusOne;
     wxVariant           m_vTrue;
     wxVariant           m_vFalse;
+#else
+    const wxVariant     m_vEmptyString;
+    const wxVariant     m_vZero;
+    const wxVariant     m_vMinusOne;
+    const wxVariant     m_vTrue;
+    const wxVariant     m_vFalse;
+#endif // WXWIN_COMPATIBILITY_3_0
 
     // Cached constant strings
+#if WXWIN_COMPATIBILITY_3_0
     wxPGCachedString    m_strstring;
     wxPGCachedString    m_strlong;
     wxPGCachedString    m_strbool;
@@ -93,6 +103,19 @@ public:
     wxPGCachedString    m_strMax;
     wxPGCachedString    m_strUnits;
     wxPGCachedString    m_strHint;
+#else
+    const wxString      m_strstring;
+    const wxString      m_strlong;
+    const wxString      m_strbool;
+    const wxString      m_strlist;
+
+    const wxString      m_strDefaultValue;
+    const wxString      m_strMin;
+    const wxString      m_strMax;
+    const wxString      m_strUnits;
+    const wxString      m_strHint;
+#endif // WXWIN_COMPATIBILITY_3_0
+
 #if wxPG_COMPATIBILITY_1_4
     wxPGCachedString    m_strInlineHelp;
 #endif

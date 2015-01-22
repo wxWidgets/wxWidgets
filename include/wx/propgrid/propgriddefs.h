@@ -279,8 +279,9 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
                                 wxPGProperty* p2);
 
 
-
+#if WXWIN_COMPATIBILITY_3_0
 typedef wxString wxPGCachedString;
+#endif
 
 /** @}
 */

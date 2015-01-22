@@ -182,6 +182,25 @@ wxPGGlobalVarsClass* wxPGGlobalVars = NULL;
 
 
 wxPGGlobalVarsClass::wxPGGlobalVarsClass()
+    // Prepare some shared variants
+    : m_vEmptyString(wxString())
+    , m_vZero((long)0)
+    , m_vMinusOne((long)-1)
+    , m_vTrue(true)
+    , m_vFalse(false)
+    // Prepare cached string constants
+    , m_strstring(wxS("string"))
+    , m_strlong(wxS("long"))
+    , m_strbool(wxS("bool"))
+    , m_strlist(wxS("list"))
+    , m_strDefaultValue(wxS("DefaultValue"))
+    , m_strMin(wxS("Min"))
+    , m_strMax(wxS("Max"))
+    , m_strUnits(wxS("Units"))
+    , m_strHint(wxS("Hint"))
+#if wxPG_COMPATIBILITY_1_4
+    , m_strInlineHelp(wxS("InlineHelp"))
+#endif
 {
     wxPGProperty::sm_wxPG_LABEL = new wxString(wxPG_LABEL_STRING);
 
@@ -197,29 +216,6 @@ wxPGGlobalVarsClass::wxPGGlobalVarsClass()
     m_offline = 0;
 
     m_extraStyle = 0;
-
-    wxVariant v;
-
-    // Prepare some shared variants
-    m_vEmptyString = wxString();
-    m_vZero = (long) 0;
-    m_vMinusOne = (long) -1;
-    m_vTrue = true;
-    m_vFalse = false;
-
-    // Prepare cached string constants
-    m_strstring = wxS("string");
-    m_strlong = wxS("long");
-    m_strbool = wxS("bool");
-    m_strlist = wxS("list");
-    m_strDefaultValue = wxS("DefaultValue");
-    m_strMin = wxS("Min");
-    m_strMax = wxS("Max");
-    m_strUnits = wxS("Units");
-    m_strHint = wxS("Hint");
-#if wxPG_COMPATIBILITY_1_4
-    m_strInlineHelp = wxS("InlineHelp");
-#endif
 
     m_warnings = 0;
 }
