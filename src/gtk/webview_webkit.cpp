@@ -1051,7 +1051,6 @@ long wxWebViewWebKit::Find(const wxString& text, int flags)
         ClearSelection();
         return wxNOT_FOUND;
     }
-    wxLogMessage(wxString::Format("Returning %d", m_findPosition));
     return newSearch ? m_findCount : m_findPosition;
 }
 
