@@ -89,18 +89,26 @@ protected:
 };
 
 
-// This must be specialized for each type. The specialization MUST be derived
-// from wxExpectModalBase<T>.
-template<class T> class wxExpectModal {};
+// This template is specialized for some of the standard dialog classes and can
+// also be specialized outside of the library for the custom dialogs.
+//
+// All specializations must derive from wxExpectModalBase<T>.
+template<class T> class wxExpectModal;
 
 
 /**
-    Base class for wxExpectModal<T> specializations.
+    Base class for the expectation of a dialog of the given type T.
 
-    Every such specialization must be derived from wxExpectModalBase; there's
-    no other use for this class than to serve as wxExpectModal<T>'s base class.
+    Test code can derive ad hoc classes from this class directly and implement
+    its OnInvoked() to perform the necessary actions or derive wxExpectModal<T>
+    and implement it once if the implementation of OnInvoked() is always the
+    same, i.e. depends just on the type T.
 
-    T must be a class derived from wxDialog and E is the derived class type.
+    T must be a class derived from wxDialog and E is the derived class type,
+    i.e. this is an example of using CRTP. The default value of E is fine in
+    case you're using this class as a base for your wxExpectModal<>
+    specialization anyhow but also if you don't use neither Optional() nor
+    Describe() methods, as the derived class type is only needed for them.
  */
 template<class T, class E = wxExpectModal<T> >
 class wxExpectModalBase : public wxModalExpectation
@@ -108,6 +116,23 @@ class wxExpectModalBase : public wxModalExpectation
 public:
     typedef T DialogType;
     typedef E ExpectationType;
+
+
+    // A note about these "modifier" methods: they return copies of this object
+    // and not a reference to the object itself (after modifying it) because
+    // this object is likely to be temporary and will be destroyed soon, while
+    // the new temporary created by these objects is bound to a const reference
+    // inside WX_TEST_IMPL_ADD_EXPECTATION() macro ensuring that its lifetime
+    // is prolonged until we can check if the expectations were met.
+    //
+    // This is also the reason these methods must be in this class and use
+    // CRTP: a copy of this object can't be created in the base class, which is
+    // abstract, and the copy must have the same type as the derived object to
+    // avoid slicing.
+    //
+    // Make sure you understand this comment in its entirety before considering
+    // modifying this code.
+
 
     /**
         Returns a copy of the expectation where the expected dialog is marked
