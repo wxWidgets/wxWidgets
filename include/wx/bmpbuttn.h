@@ -66,7 +66,7 @@ public:
     }
 
     // Special creation function for a standard "Close" bitmap. It allows to
-    // simply create a close button with the image appropriate for the common
+    // simply create a close button with the image appropriate for the current
     // platform.
     static wxBitmapButton* NewCloseButton(wxWindow* parent, wxWindowID winid);
 
