@@ -141,6 +141,27 @@ typedef void (*wxAssertHandler_t)(const wxString& file,
 #define wxASSERT_MSG( condition, message )
 
 /**
+    Assert macro pretending to assert at the specified location.
+
+    This macro is the same as wxASSERT_MSG(), but the assert message will use
+    the specified source file, line number and function name instead of the
+    values corresponding to the current location as done by wxASSERT_MSG() by
+    default.
+
+    It is mostly useful for asserting inside functions called from macros, as
+    by passing the usual @c __FILE__, @c __LINE__ and @c __FUNCTION__ values to
+    a function, it's possible to pretend that the assert happens at the
+    location of the macro in the source code (which can be useful) instead of
+    inside the function itself (which is never useful as these values are
+    always the same for the given assertion).
+
+    @since 3.1.0
+
+    @header{wx/debug.h}
+ */
+#define wxASSERT_MSG_AT( condition, message, file, line, func )
+
+/**
     Checks that the condition is @true, returns with the given return value if
     not (stops execution in debug mode). This check is done even in release mode.
 
@@ -311,6 +332,18 @@ void wxDisableAsserts();
     @header{wx/debug.h}
 */
 #define wxFAIL_MSG( message )
+
+/**
+    Assert failure macro pretending to assert at the specified location.
+
+    This is a cross between wxASSERT_MSG_AT() and wxFAIL_MSG(), see their
+    documentation for more details.
+
+    @since 3.1.0
+
+    @header{wx/debug.h}
+ */
+#define wxFAIL_MSG_AT( message, file, line, func )
 
 /**
     Returns @true if the program is running under debugger, @false otherwise.

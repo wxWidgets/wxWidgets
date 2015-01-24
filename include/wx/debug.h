@@ -282,16 +282,20 @@ extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
     // reasons (if we changed its return type, we'd need to change wxApp::
     // OnAssertFailure() too which would break user code overriding it), hence
     // the need for the ugly global flag.
-    #define wxASSERT_MSG(cond, msg)                                           \
+    #define wxASSERT_MSG_AT(cond, msg, file, line, func)                      \
         wxSTATEMENT_MACRO_BEGIN                                               \
             if ( wxTheAssertHandler && !(cond) &&                             \
-                    (wxOnAssert(__FILE__, __LINE__, __WXFUNCTION__,           \
-                                #cond, msg), wxTrapInAssert) )                \
+                    (wxOnAssert(file, line, func, #cond, msg),                \
+                     wxTrapInAssert) )                                        \
             {                                                                 \
                 wxTrapInAssert = false;                                       \
                 wxTrap();                                                     \
             }                                                                 \
         wxSTATEMENT_MACRO_END
+
+    // A version asserting at the current location.
+    #define wxASSERT_MSG(cond, msg) \
+        wxASSERT_MSG_AT(cond, msg, __FILE__, __LINE__, __WXFUNCTION__)
 
     // a version without any additional message, don't use unless condition
     // itself is fully self-explanatory
@@ -299,16 +303,22 @@ extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
 
     // wxFAIL is a special form of assert: it always triggers (and so is
     // usually used in normally unreachable code)
-    #define wxFAIL_COND_MSG(cond, msg)                                        \
+    #define wxFAIL_COND_MSG_AT(cond, msg, file, line, func)                   \
         wxSTATEMENT_MACRO_BEGIN                                               \
             if ( wxTheAssertHandler &&                                        \
-                    (wxOnAssert(__FILE__, __LINE__, __WXFUNCTION__,           \
-                                cond, msg), wxTrapInAssert) )                \
+                    (wxOnAssert(file, line, func, #cond, msg),                \
+                     wxTrapInAssert) )                                        \
             {                                                                 \
                 wxTrapInAssert = false;                                       \
                 wxTrap();                                                     \
             }                                                                 \
         wxSTATEMENT_MACRO_END
+
+    #define wxFAIL_MSG_AT(msg, file, line, func) \
+        wxFAIL_COND_MSG_AT("Assert failure", msg, file, line, func)
+
+    #define wxFAIL_COND_MSG(cond, msg) \
+        wxFAIL_COND_MSG_AT(cond, msg, __FILE__, __LINE__, __WXFUNCTION__)
 
     #define wxFAIL_MSG(msg) wxFAIL_COND_MSG("Assert failure", msg)
     #define wxFAIL wxFAIL_MSG((const char*)NULL)

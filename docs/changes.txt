@@ -53,6 +53,7 @@ All:
 - Allow recursive calls to wxYield().
 - Add wxART_FULL_SCREEN standard bitmap (Igor Korot).
 - Fix wxStringTokenizer copy ctor and assignment operator.
+- Added wxASSERT_MSG_AT() and wxFAIL_MSG_AT() macros.
 
 Unix:
 
