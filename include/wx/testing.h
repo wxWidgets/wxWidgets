@@ -289,7 +289,7 @@ public:
             (
                 wxString::Format
                 (
-                    "Expected %s dialog was not shown.",
+                    "Expected %s was not shown.",
                     expect->GetDescription()
                 )
             );
