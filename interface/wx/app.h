@@ -1089,7 +1089,11 @@ int wxEntry(int& argc, wxChar** argv);
              }
              @endcode
 
+    @onlyfor{wxmsw}
+
     @header{wx/app.h}
+
+    @see wxMSWDisableSettingHighDPIAware()
 */
 int wxEntry(HINSTANCE hInstance,
             HINSTANCE hPrevInstance = NULL,

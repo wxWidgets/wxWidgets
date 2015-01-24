@@ -107,5 +107,22 @@ bool wxInitialize(int argc = 0, wxChar **argv = NULL);
 */
 void wxUninitialize();
 
+/**
+    Prevents wxWidgets from setting HighDPI awareness mode.
+
+    wxEntry calls SetDPIProcessAware() early during initialization on Windows.
+    To prevent this (e.g. because wx is embedded in native code and disabling
+    DPI awareness in the manifest is not an option), call this function
+    *before* wxEntry() is called.
+
+    @onlyfor{wxmsw}
+
+    @header{wx/init.h}
+
+    @since 3.0.3, but only available in 3.0.x, not 3.1+ which doesn't make
+           the SetDPIProcessAware() call anymore.
+*/
+void wxMSWDisableSettingHighDPIAware();
+
 //@}
 
