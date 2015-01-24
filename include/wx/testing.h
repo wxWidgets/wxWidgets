@@ -205,7 +205,14 @@ protected:
 class wxTestingModalHook : public wxModalDialogHook
 {
 public:
-    wxTestingModalHook()
+    // This object is created with the location of the macro containing it by
+    // wxTEST_DIALOG macro, otherwise it falls back to the location of this
+    // line itself, which is not very useful, so normally you should provide
+    // your own values.
+    wxTestingModalHook(const char* file = NULL,
+                       int line = 0,
+                       const char* func = NULL)
+        : m_file(file), m_line(line), m_func(func)
     {
         Register();
     }
@@ -312,10 +319,17 @@ protected:
     // course, can itself be customized.
     virtual void ReportFailure(const wxString& msg)
     {
-        wxFAIL_MSG( msg );
+        wxFAIL_MSG_AT( msg,
+                       m_file ? m_file : __FILE__,
+                       m_line ? m_line : __LINE__,
+                       m_func ? m_func : __WXFUNCTION__ );
     }
 
 private:
+    const char* const m_file;
+    const int m_line;
+    const char* const m_func;
+
     std::queue<const wxModalExpectation*> m_expectations;
 
     wxDECLARE_NO_COPY_CLASS(wxTestingModalHook);
@@ -392,7 +406,7 @@ private:
 
 #define wxTEST_DIALOG(codeToRun, ...)                                          \
     {                                                                          \
-        wxTEST_DIALOG_HOOK_CLASS wx_hook;                                      \
+        wxTEST_DIALOG_HOOK_CLASS wx_hook(__FILE__, __LINE__, __WXFUNCTION__);  \
         wxCALL_FOR_EACH(WX_TEST_IMPL_ADD_EXPECTATION, __VA_ARGS__)             \
         codeToRun;                                                             \
         wx_hook.CheckUnmetExpectations();                                      \
