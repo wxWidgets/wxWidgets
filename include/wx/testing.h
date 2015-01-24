@@ -338,7 +338,9 @@ private:
 
 // Redefining this value makes it possible to customize the hook class,
 // including e.g. its error reporting.
-#define wxTEST_DIALOG_HOOK_CLASS wxTestingModalHook
+#ifndef wxTEST_DIALOG_HOOK_CLASS
+    #define wxTEST_DIALOG_HOOK_CLASS wxTestingModalHook
+#endif
 
 #define WX_TEST_IMPL_ADD_EXPECTATION(pos, expect)                              \
     const wxModalExpectation& wx_exp##pos = expect;                            \
