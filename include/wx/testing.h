@@ -189,6 +189,35 @@ public:
         : wxExpectDismissableModal<wxMessageDialog>(id)
     {
     }
+
+protected:
+    virtual wxString GetDefaultDescription() const
+    {
+        // It can be useful to show which buttons the expected message box was
+        // supposed to have, in case there could have been several of them.
+        wxString details;
+        switch ( m_id )
+        {
+            case wxID_YES:
+            case wxID_NO:
+                details = "wxYES_NO style";
+                break;
+
+            case wxID_CANCEL:
+                details = "wxCANCEL style";
+                break;
+
+            case wxID_OK:
+                details = "wxOK style";
+                break;
+
+            default:
+                details.Printf("a button with ID=%d", m_id);
+                break;
+        }
+
+        return "wxMessageDialog with " + details;
+    }
 };
 
 class wxExpectAny : public wxExpectDismissableModal<wxDialog>
