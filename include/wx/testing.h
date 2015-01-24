@@ -44,13 +44,23 @@ public:
     wxModalExpectation() : m_isOptional(false) {}
     virtual ~wxModalExpectation() {}
 
+    wxString GetDescription() const
+    {
+        return m_description.empty() ? GetDefaultDescription() : m_description;
+    }
+
     bool IsOptional() const { return m_isOptional; }
 
     virtual int Invoke(wxDialog *dlg) const = 0;
 
-    virtual wxString GetDescription() const = 0;
-
 protected:
+    // Override to return the default description of the expected dialog used
+    // if no specific description for this particular expectation is given.
+    virtual wxString GetDefaultDescription() const = 0;
+
+    // User-provided description of the dialog, may be empty.
+    wxString m_description;
+
     // Is this dialog optional, i.e. not required to be shown?
     bool m_isOptional;
 };
@@ -67,14 +77,14 @@ template<class T> class wxExpectModal {};
     Every such specialization must be derived from wxExpectModalBase; there's
     no other use for this class than to serve as wxExpectModal<T>'s base class.
 
-    T must be a class derived from wxDialog.
+    T must be a class derived from wxDialog and E is the derived class type.
  */
-template<class T>
+template<class T, class E = wxExpectModal<T> >
 class wxExpectModalBase : public wxModalExpectation
 {
 public:
     typedef T DialogType;
-    typedef wxExpectModal<DialogType> ExpectationType;
+    typedef E ExpectationType;
 
     /**
         Returns a copy of the expectation where the expected dialog is marked
@@ -90,6 +100,20 @@ public:
         return e;
     }
 
+    /**
+        Sets a description shown in the error message if the expectation fails.
+
+        Using this method with unique descriptions for the different dialogs is
+        recommended to make it easier to find out which one of the expected
+        dialogs exactly was not shown.
+     */
+    ExpectationType Describe(const wxString& description) const
+    {
+        ExpectationType e(*static_cast<const ExpectationType*>(this));
+        e.m_description = description;
+        return e;
+    }
+
 protected:
     virtual int Invoke(wxDialog *dlg) const
     {
@@ -101,7 +125,7 @@ protected:
     }
 
     /// Returns description of the expected dialog (by default, its class).
-    virtual wxString GetDescription() const
+    virtual wxString GetDefaultDescription() const
     {
         return wxCLASSINFO(T)->GetClassName();
     }
@@ -118,7 +142,8 @@ protected:
 // wxExpectModal<T> specializations for common dialogs:
 
 template<class T>
-class wxExpectDismissableModal : public wxExpectModalBase<T>
+class wxExpectDismissableModal
+    : public wxExpectModalBase<T, wxExpectDismissableModal<T> >
 {
 public:
     explicit wxExpectDismissableModal(int id)
