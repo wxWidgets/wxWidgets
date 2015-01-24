@@ -258,9 +258,16 @@ extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
     // trap function itself which is not very useful.
     #ifdef __VISUALC__
         #define wxTrap() __debugbreak()
-    #else
+    #elif defined(__GNUC__)
+        #if defined(__i386) || defined(__x86_64)
+            #define wxTrap() asm volatile ("int $3")
+        #endif
+    #endif
+
+    #ifndef wxTrap
+        // For all the other cases, use a generic function.
         extern WXDLLIMPEXP_BASE void wxTrap();
-    #endif // Win VisualC
+    #endif
 
     // Global flag used to indicate that assert macros should call wxTrap(): it
     // is set by the default assert handler if the user answers yes to the
