@@ -76,6 +76,7 @@ if (!$only_bkl) {
             propgrid => [qw(PROPGRID)],
             qa       => [qw(QA)],
             ribbon   => [qw(RIBBON)],
+            richtext => [qw(RICHTEXT)],
             stc      => [qw(STC)],
             webview  => [qw(WEBVIEW_CMN WEBVIEW_MSW)],
             xml      => [qw(XML)],
