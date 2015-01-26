@@ -136,7 +136,7 @@ wxSize wxDateTimePickerCtrl::DoGetBestSize() const
         // representation of the current value because the control must accommodate
         // any date and while the widths of all digits are usually about the same,
         // the width of the month string varies a lot, so try to account for it
-        s += wxT("WW");
+        s += wxS("W");
 
         size = dc.GetTextExtent(s);
 
