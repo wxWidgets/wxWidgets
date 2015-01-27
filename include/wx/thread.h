@@ -560,7 +560,8 @@ public:
         // Sets the priority to "prio" which must be in 0..100 range (see
         // also wxPRIORITY_XXX constants).
         //
-        // NB: the priority can only be set before the thread is created
+        // NB: under MSW the priority can only be set after the thread is
+        //     created (but possibly before it is launched)
     void SetPriority(unsigned int prio);
 
         // Get the current priority.

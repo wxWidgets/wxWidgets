@@ -1258,6 +1258,11 @@ public:
           - @c wxPRIORITY_MIN: 0
           - @c wxPRIORITY_DEFAULT: 50
           - @c wxPRIORITY_MAX: 100
+
+        Notice that in the MSW implementation the thread priority can currently
+        be only set after creating the thread with CreateThread(). But under
+        all platforms this method can be called either before launching the
+        thread using Run() or after doing it.
     */
     void SetPriority(unsigned int priority);
 
