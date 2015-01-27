@@ -3612,8 +3612,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             {
                 DWORD pos = GetMessagePos();
                 POINT point;
-                point.x = LOWORD(pos);
-                point.y = HIWORD(pos);
+                point.x = GET_X_LPARAM(pos);
+                point.y = GET_Y_LPARAM(pos);
                 ::MapWindowPoints(HWND_DESKTOP, GetHwnd(), &point, 1);
                 int htFlags = 0;
                 wxTreeItemId item = HitTest(wxPoint(point.x, point.y), htFlags);
