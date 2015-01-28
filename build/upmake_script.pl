@@ -15,14 +15,14 @@ use Makefile::Update::VCProj;
 
 my $verbose = 0;
 my $quiet = 0;
-my ($only_bkl, $only_msbuild, $only_project, $only_version);
+my ($only_bkl, $only_msvs, $only_project, $only_version);
 
 GetOptions(
         'verbose|v'      => \$verbose,
         'quiet|q'        => \$quiet,
         'only-bkl'       => \$only_bkl,
-        'only-project=s' => sub { $only_msbuild = 1; $only_project = $_[1] },
-        'only-version=i' => sub { $only_msbuild = 1; $only_version = $_[1] },
+        'only-project=s' => sub { $only_msvs = 1; $only_project = $_[1] },
+        'only-version=i' => sub { $only_msvs = 1; $only_version = $_[1] },
     ) or die <<EOF
 Usage: $0 [--verbose] [--quiet] [--only-bkl] [--only-project=<name>] [--only-version=<ver>]
 
@@ -37,7 +37,7 @@ selecting the MSBuild projects.
 EOF
 ;
 
-if ($only_bkl && $only_msbuild) {
+if ($only_bkl && $only_msvs) {
     die qq{Options --only-bkl and --only-project or --only-version can't be used together.\n}
 }
 
@@ -51,7 +51,7 @@ sub call_upmake
 open my $files, '<', "$Bin/files";
 my $vars = read_files_list($files);
 
-if (!$only_msbuild) {
+if (!$only_msvs) {
     if (call_upmake("$Bin/bakefiles/files.bkl", \&update_bakefile_0, $vars)) {
         print qq{Don't forget to run "bakefile_gen -b wx.bkl".} if $verbose;
     }
