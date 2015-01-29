@@ -34091,12 +34091,18 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBNOTIFY_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
+
+                            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
 $as_echo "$as_me: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&2;}
+                            wxUSE_LIBNOTIFY="no"
+
 
 elif test $pkg_failed = untried; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
+
+                            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
 $as_echo "$as_me: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&2;}
+                            wxUSE_LIBNOTIFY="no"
+
 
 else
 	LIBNOTIFY_CFLAGS=$pkg_cv_LIBNOTIFY_CFLAGS
@@ -34168,12 +34174,18 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBNOTIFY_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
+
+                            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
 $as_echo "$as_me: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&2;}
+                            wxUSE_LIBNOTIFY="no"
+
 
 elif test $pkg_failed = untried; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
+
+                            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&5
 $as_echo "$as_me: WARNING: libnotify not found, wxNotificationMessage will use generic implementation." >&2;}
+                            wxUSE_LIBNOTIFY="no"
+
 
 else
 	LIBNOTIFY_CFLAGS=$pkg_cv_LIBNOTIFY_CFLAGS

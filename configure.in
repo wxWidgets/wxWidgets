@@ -5477,7 +5477,10 @@ if test "$WXGTK2" = 1; then
                 [
                     PKG_CHECK_MODULES(LIBNOTIFY, [libnotify >= 0.4],
                         [HAVE_LIBNOTIFY=1],
-                        [AC_MSG_WARN([libnotify not found, wxNotificationMessage will use generic implementation.])]
+                        [
+                            AC_MSG_WARN([libnotify not found, wxNotificationMessage will use generic implementation.])
+                            wxUSE_LIBNOTIFY="no"
+                        ]
                     )
                 ]
             )
