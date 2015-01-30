@@ -316,9 +316,12 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
 
     wxString format = formatp;
 #ifdef __WXOSX__
-    format.Replace("%c",wxLocale::GetInfo(wxLOCALE_DATE_TIME_FMT));
-    format.Replace("%x",wxLocale::GetInfo(wxLOCALE_SHORT_DATE_FMT));
-    format.Replace("%X",wxLocale::GetInfo(wxLOCALE_TIME_FMT));
+    if ( format.Contains("%c") )
+        format.Replace("%c", wxLocale::GetInfo(wxLOCALE_DATE_TIME_FMT));
+    if ( format.Contains("%x") )
+        format.Replace("%x", wxLocale::GetInfo(wxLOCALE_SHORT_DATE_FMT));
+    if ( format.Contains("%X") )
+        format.Replace("%X", wxLocale::GetInfo(wxLOCALE_TIME_FMT));
 #endif
     // we have to use our own implementation if the date is out of range of
     // strftime()
