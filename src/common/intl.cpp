@@ -1251,6 +1251,8 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
                             fmtWX += "%A";
                             break;
                         case 5: // EEEEE
+                        case 6: // EEEEEE
+                            // no "narrow form" in strftime(), use abbrev.
                             fmtWX += "%a";
                             break;
 
@@ -1274,6 +1276,11 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
 
                         case 4:
                             fmtWX += "%B";
+                            break;
+
+                        case 5:
+                            // no "narrow form" in strftime(), use abbrev.
+                            fmtWX += "%b";
                             break;
 
                         default:
