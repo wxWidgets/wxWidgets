@@ -711,21 +711,9 @@ void wxPropertyGridPageState::DoSortChildren( wxPGProperty* p,
         return;
 
     if ( GetGrid()->GetSortFunction() )
-        p->m_children.Sort( wxPG_SortFunc_ByFunction );
+        p->SortChildren(wxPG_SortFunc_ByFunction);
     else
-        p->m_children.Sort( wxPG_SortFunc_ByLabel );
-
-#if 0
-    //
-    // For wxVector w/ wxUSE_STL=1, you would use code like this instead:
-    //
-    if ( GetGrid()->GetSortFunction() )
-        std::sort(p->m_children.begin(), p->m_children.end(),
-                  wxPG_SortFunc_ByFunction);
-    else
-        std::sort(p->m_children.begin(), p->m_children.end(),
-                  wxPG_SortFunc_ByLabel);
-#endif
+        p->SortChildren(wxPG_SortFunc_ByLabel);
 
     // Fix indices
     p->FixIndicesOfChildren();
@@ -2075,8 +2063,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
         }
 
         // categorized mode - categorized array
-        wxArrayPGProperty& parentsChildren = parent->m_children;
-        parentsChildren.erase( parentsChildren.begin() + indinparent );
+        parent->RemoveChild(indinparent);
         item->m_parent->FixIndicesOfChildren();
     }
     else
@@ -2102,14 +2089,13 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
                 }
             }
         }
-        cat_parent->m_children.erase(cat_parent->m_children.begin()+cat_index);
+        cat_parent->RemoveChild(cat_index);
 
         // non-categorized mode - non-categorized array
         if ( !item->IsCategory() )
         {
             wxASSERT( item->m_parent == m_abcArray );
-            wxArrayPGProperty& parentsChildren = item->m_parent->m_children;
-            parentsChildren.erase(parentsChildren.begin() + indinparent);
+            item->m_parent->RemoveChild(indinparent);
             item->m_parent->FixIndicesOfChildren(indinparent);
         }
     }

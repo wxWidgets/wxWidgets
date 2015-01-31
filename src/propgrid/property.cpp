@@ -2359,6 +2359,21 @@ void wxPGProperty::RemoveChild( wxPGProperty* p )
     }
 }
 
+void wxPGProperty::RemoveChild(unsigned int index)
+{
+    m_children.erase(m_children.begin()+index);
+}
+
+void wxPGProperty::SortChildren(int (*fCmp)(wxPGProperty**, wxPGProperty**))
+{
+    m_children.Sort(fCmp);
+
+#if 0
+    // For wxVector w/ wxUSE_STL=1, you would use code like this instead:
+    std::sort(m_children.begin(), m_children.end(), fCmp);
+#endif
+}
+
 void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
 {
     wxASSERT( GetChildCount() );
