@@ -478,7 +478,7 @@ wxPGProperty* wxPropertyGridPageState::BaseGetPropertyByLabel
     for ( size_t i=0; i<parent->GetChildCount(); i++ )
     {
         wxPGProperty* p = parent->Item(i);
-        if ( p->m_label == label )
+        if ( p->GetLabel() == label )
             return p;
         // Check children recursively.
         if ( p->GetChildCount() )
@@ -813,7 +813,7 @@ int wxPropertyGridPageState::GetColumnFitWidth(wxClientDC& dc,
             p->GetDisplayInfo(col, -1, 0, &text, (wxPGCell*)NULL);
             dc.GetTextExtent(text, &w, &h);
             if ( col == 0 )
-                w += ( ((int)p->m_depth-1) * pg->m_subgroup_extramargin );
+                w += ( (p->GetDepth()-1) * pg->m_subgroup_extramargin );
 
             // account for the bitmap
             if ( col == 1 )
@@ -849,7 +849,7 @@ int wxPropertyGridPageState::GetColumnFullWidth( wxClientDC &dc, wxPGProperty *p
     int w = dc.GetTextExtent(text).x;
 
     if ( col == 0 )
-        w += (int)p->m_depth * m_pPropGrid->m_subgroup_extramargin;
+        w += p->GetDepth() * m_pPropGrid->m_subgroup_extramargin;
 
     // account for the bitmap
     if ( col == 1 )
@@ -1507,9 +1507,9 @@ wxVariant wxPropertyGridPageState::DoGetPropertyValues( const wxString& listname
                 }
                 else
                 {
-                    v.Append( DoGetPropertyValues(p->m_name,p,flags|wxPG_KEEP_STRUCTURE) );
+                    v.Append( DoGetPropertyValues(p->GetBaseName(),p,flags|wxPG_KEEP_STRUCTURE) );
                 }
-                if ( (flags & wxPG_INC_ATTRIBUTES) && p->m_attributes.GetCount() )
+                if ( (flags & wxPG_INC_ATTRIBUTES) && p->GetAttributes().GetCount() )
                     v.Append( p->GetAttributesAsList() );
             }
         }
@@ -1528,7 +1528,7 @@ wxVariant wxPropertyGridPageState::DoGetPropertyValues( const wxString& listname
                     wxVariant variant = p->GetValue();
                     variant.SetName( p->GetName() );
                     v.Append( variant );
-                    if ( (flags & wxPG_INC_ATTRIBUTES) && p->m_attributes.GetCount() )
+                    if ( (flags & wxPG_INC_ATTRIBUTES) && p->GetAttributes().GetCount() )
                         v.Append( p->GetAttributesAsList() );
                 }
             }
@@ -1854,9 +1854,9 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
     }
 
     // Only add name to hashmap if parent is root or category
-    if ( !property->m_name.empty() &&
+    if ( !property->GetBaseName().empty() &&
         (parentIsCategory || parentIsRoot) )
-        m_dictName[property->m_name] = (void*) property;
+        m_dictName[property->GetBaseName()] = (void*) property;
 
     VirtualHeightChanged();
 

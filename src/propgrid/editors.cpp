@@ -845,8 +845,8 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         }
 
         // If not drawing a selected popup item, then give property's
-        // m_valueBitmap a chance.
-        if ( p->m_valueBitmap && item != pCb->GetSelection() )
+        // value image a chance.
+        if ( p->GetValueImage() && item != pCb->GetSelection() )
             useCustomPaintProcedure = false;
         // If current choice had a bitmap set by the application, then
         // use it instead of any custom paint procedure
@@ -2073,7 +2073,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrlAndButton( const wxPoint& pos,
     if ( !property->IsValueUnspecified() )
         text = property->GetValueAsString(property->HasFlag(wxPG_PROP_READONLY)?0:wxPG_EDITABLE_VALUE);
 
-    return GenerateEditorTextCtrl(pos,sz,text,but,property->m_maxLen);
+    return GenerateEditorTextCtrl(pos,sz,text,but,property->GetMaxLength());
 }
 
 // -----------------------------------------------------------------------

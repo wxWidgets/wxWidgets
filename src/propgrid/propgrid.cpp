@@ -2205,7 +2205,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         // Use basic depth if in non-categoric mode and parent is base array.
         if ( !(windowStyle & wxPG_HIDE_CATEGORIES) || p->GetParent() != m_pState->m_properties )
         {
-            textMarginHere += ((unsigned int)((p->m_depth-1)*m_subgroup_extramargin));
+            textMarginHere += ((p->GetDepth()-1)*m_subgroup_extramargin);
         }
 
         // Paint margin area
@@ -2332,7 +2332,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         bool fontChanged = false;
 
         // Expander button rectangle
-        wxRect butRect( ((p->m_depth - 1) * m_subgroup_extramargin) - xRelMod,
+        wxRect butRect( ((p->GetDepth() - 1) * m_subgroup_extramargin) - xRelMod,
                         y,
                         m_marginWidth,
                         lh );
@@ -3747,7 +3747,7 @@ wxRect wxPropertyGrid::GetEditorWidgetRect( wxPGProperty* p, int column ) const
     }
     else if ( column == 0 )
     {
-        splitterX += (p->m_depth - 1) * m_subgroup_extramargin;
+        splitterX += (p->GetDepth() - 1) * m_subgroup_extramargin;
     }
 
     return wxRect
@@ -3780,7 +3780,7 @@ wxSize wxPropertyGrid::GetImageSize( wxPGProperty* p, int item ) const
 
     wxSize cis = p->OnMeasureImage(item);
 
-    int choiceCount = p->m_choices.GetCount();
+    int choiceCount = p->GetChoices().GetCount();
     int comVals = p->GetDisplayedCommonValueCount();
     if ( item >= choiceCount && comVals > 0 )
     {
@@ -4017,8 +4017,8 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
     /*
     if (p)
     {
-        wxLogDebug(wxT("SelectProperty( %s (%s[%i]) )"),p->m_label.c_str(),
-            p->m_parent->m_label.c_str(),p->GetIndexInParent());
+        wxLogDebug(wxT("SelectProperty( %s (%s[%i]) )"),p->GetLabel().c_str(),
+            p->m_parent->GetLabel().c_str(),p->GetIndexInParent());
     }
     else
     {
@@ -4781,7 +4781,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                 // This is category.
                 wxPropertyCategory* pwc = (wxPropertyCategory*)p;
 
-                int textX = m_marginWidth + ((unsigned int)((pwc->m_depth-1)*m_subgroup_extramargin));
+                int textX = m_marginWidth + ((pwc->GetDepth()-1)*m_subgroup_extramargin);
 
                 // Expand, collapse, activate etc. if click on text or left of splitter.
                 if ( x >= textX
@@ -5081,7 +5081,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
 
                         if ( m_mouseSide == 1 )
                         {
-                            tipString = m_propHover->m_label;
+                            tipString = m_propHover->GetLabel();
                             space = splitterX-m_marginWidth-3;
                         }
                         else if ( m_mouseSide == 2 )
