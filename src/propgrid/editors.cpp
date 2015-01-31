@@ -322,7 +322,7 @@ wxPGWindowList wxPGTextCtrlEditor::CreateControls( wxPropertyGrid* propGrid,
 
     //
     // If has children, and limited editing is specified, then don't create.
-    if ( (property->GetFlags() & wxPG_PROP_NOEDITOR) &&
+    if ( property->HasFlag(wxPG_PROP_NOEDITOR) &&
          property->GetChildCount() )
         return NULL;
 
@@ -333,7 +333,7 @@ wxPGWindowList wxPGTextCtrlEditor::CreateControls( wxPropertyGrid* propGrid,
     text = property->GetValueAsString(argFlags);
 
     int flags = 0;
-    if ( (property->GetFlags() & wxPG_PROP_PASSWORD) &&
+    if ( property->HasFlag(wxPG_PROP_PASSWORD) &&
          wxDynamicCast(property, wxStringProperty) )
         flags |= wxTE_PASSWORD;
 
@@ -352,7 +352,7 @@ void wxPGTextCtrlEditor::DrawValue( wxDC& dc, wxPGProperty* property, const wxRe
 
         // Code below should no longer be needed, as the obfuscation
         // is now done in GetValueAsString.
-        /*if ( (property->GetFlags() & wxPG_PROP_PASSWORD) &&
+        /*if ( property->HasFlag(wxPG_PROP_PASSWORD) &&
              property->IsKindOf(WX_PG_CLASSINFO(wxStringProperty)) )
         {
             size_t a = drawStr.length();
@@ -1008,7 +1008,7 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
 
     int odcbFlags = extraStyle | wxBORDER_NONE | wxTE_PROCESS_ENTER;
 
-    if ( (property->GetFlags() & wxPG_PROP_USE_DCC) &&
+    if ( property->HasFlag(wxPG_PROP_USE_DCC) &&
          wxDynamicCast(property, wxBoolProperty) )
         odcbFlags |= wxODCB_DCLICK_CYCLES;
 
@@ -1370,7 +1370,7 @@ wxPGWindowList wxPGTextCtrlAndButtonEditor::CreateControls( wxPropertyGrid* prop
 {
     wxWindow* wnd2;
     wxWindow* wnd = propGrid->GenerateEditorTextCtrlAndButton( pos, sz, &wnd2,
-        property->GetFlags() & wxPG_PROP_NOEDITOR, property);
+        property->HasFlag(wxPG_PROP_NOEDITOR), property);
 
     return wxPGWindowList(wnd, wnd2);
 }

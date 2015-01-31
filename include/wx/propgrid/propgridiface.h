@@ -728,7 +728,7 @@ public:
     bool IsPropertyEnabled( wxPGPropArg id ) const
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-        return (!(p->GetFlags() & wxPG_PROP_DISABLED))?true:false;
+        return !p->HasFlag(wxPG_PROP_DISABLED);
     }
 
     /**
@@ -745,7 +745,11 @@ public:
     bool IsPropertyModified( wxPGPropArg id ) const
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-        return ( (p->GetFlags() & wxPG_PROP_MODIFIED) ? true : false );
+#if WXWIN_COMPATIBILITY_3_0
+        return p->HasFlag(wxPG_PROP_MODIFIED)?true:false;
+#else
+        return p->HasFlag(wxPG_PROP_MODIFIED);
+#endif
     }
 
     /**
@@ -764,7 +768,7 @@ public:
     bool IsPropertyShown( wxPGPropArg id ) const
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-        return (!(p->GetFlags() & wxPG_PROP_HIDDEN))?true:false;
+        return !p->HasFlag(wxPG_PROP_HIDDEN);
     }
 
     /** Returns true if property value is set to unspecified.

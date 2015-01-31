@@ -2365,7 +2365,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
             if ( butRect.x > 0 )
                 butRect.x += IN_CELL_EXPANDER_BUTTON_X_ADJUST;
 
-            if ( p->m_flags & wxPG_PROP_MODIFIED &&
+            if ( p->HasFlag(wxPG_PROP_MODIFIED) &&
                  (windowStyle & wxPG_BOLD_MODIFIED) )
             {
                 dc.SetFont(m_captionFont);
@@ -3376,9 +3376,9 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
     wxWindow* editor = GetEditorControl();
 
     // Set as Modified (not if dragging just began)
-    if ( !(p->m_flags & wxPG_PROP_MODIFIED) )
+    if ( !p->HasFlag(wxPG_PROP_MODIFIED) )
     {
-        p->m_flags |= wxPG_PROP_MODIFIED;
+        p->SetFlag(wxPG_PROP_MODIFIED);
         if ( p == selected && (m_windowStyle & wxPG_BOLD_MODIFIED) )
         {
             if ( editor )
@@ -3394,7 +3394,7 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
 
     while ( prevPwc != topPaintedProperty )
     {
-        pwc->m_flags |= wxPG_PROP_MODIFIED;
+        pwc->SetFlag(wxPG_PROP_MODIFIED);
 
         if ( pwc == selected && (m_windowStyle & wxPG_BOLD_MODIFIED) )
         {
@@ -4155,7 +4155,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
             //
             // Only create editor for non-disabled non-caption
-            if ( !p->IsCategory() && !(p->m_flags & wxPG_PROP_DISABLED) )
+            if ( !p->IsCategory() && !p->HasFlag(wxPG_PROP_DISABLED) )
             {
             // do this for non-caption items
 
@@ -4163,7 +4163,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                 // Do we need to paint the custom image, if any?
                 m_iFlags &= ~(wxPG_FL_CUR_USES_CUSTOM_IMAGE);
-                if ( (p->m_flags & wxPG_PROP_CUSTOMIMAGE) &&
+                if ( p->HasFlag(wxPG_PROP_CUSTOMIMAGE) &&
                      !p->GetEditorClass()->CanContainCustomImage()
                    )
                     m_iFlags |= wxPG_FL_CUR_USES_CUSTOM_IMAGE;
@@ -4218,7 +4218,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                     // If it has modified status, use bold font
                     // (must be done before capturing m_ctrlXAdjust)
-                    if ( (p->m_flags & wxPG_PROP_MODIFIED) &&
+                    if ( p->HasFlag(wxPG_PROP_MODIFIED) &&
                          (m_windowStyle & wxPG_BOLD_MODIFIED) )
                         SetCurControlBoldFont();
 
@@ -5089,7 +5089,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                             tipString = m_propHover->GetDisplayedString();
 
                             space = m_width - splitterX;
-                            if ( m_propHover->m_flags & wxPG_PROP_CUSTOMIMAGE )
+                            if ( m_propHover->HasFlag(wxPG_PROP_CUSTOMIMAGE) )
                                 space -= wxPG_CUSTOM_IMAGE_WIDTH +
                                          wxCC_CUSTOM_IMAGE_MARGIN1 +
                                          wxCC_CUSTOM_IMAGE_MARGIN2;
