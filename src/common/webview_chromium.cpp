@@ -139,8 +139,10 @@ wxWebViewChromium::~wxWebViewChromium()
     CefRefPtr<CefBrowser> browser = m_clientHandler->GetBrowser();
     if ( browser.get() )
     {
+#if CHROME_VERSION_BUILD < 1916
         // Let the browser window know we are about to destroy it.
         browser->GetHost()->ParentWindowWillClose();
+#endif
     }
 }
 
