@@ -535,8 +535,7 @@ WebFrame::WebFrame(const wxString& url) :
     Connect(wxID_ANY, wxEVT_TIMER, wxTimerEventHandler(WebFrame::OnTimer), NULL, this);
 
     m_timer = new wxTimer(this);
-    // Running each 100 milliseconds.
-    m_timer->Start(100);
+    m_timer->Start(25);
 }
 
 WebFrame::~WebFrame()
