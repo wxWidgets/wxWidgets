@@ -2102,7 +2102,8 @@ void wxGridWindow::OnFocus(wxFocusEvent& event)
                                             m_owner->GetGridCursorCol());
         const wxRect cursor =
             m_owner->BlockToDeviceRect(cursorCoords, cursorCoords);
-        Refresh(true, &cursor);
+        if (cursor != wxGridNoCellRect)
+            Refresh(true, &cursor);
     }
 
     if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
