@@ -9,7 +9,7 @@
     @class wxWebViewChromium
 
     wxWebViewChromium is a Chromium backend for wxWebView based on the
-    Chromium Embedded Framework(CEF3). The current CEF3 required version is
+    Chromium Embedded Framework (CEF3). The current CEF3 required version is
     3.1750.1738. This backend is available for Windows, Linux and OS X only.
 
     @section requirements CEF3 Requirements
@@ -19,10 +19,12 @@
     it is likely you will need to adjust the following properties in the CEF3
     provided build files:
 
-    - C/C++ - General - Treat Warngings as Error - No
     - C/C++ - Code Generation - Runtime Library - Multithreaded [Debug] DLL
     - C/C++ - Code Generation - Enable C++ Exceptions - Yes
     - C/C++ - Language - Enable Run-Time Type Information - Yes
+
+    The following release branches of CEF have been tested: 1650, 1750, 1916,
+    2062 and 2171.
 
     @section instructions Build Instructions
 
@@ -34,11 +36,15 @@
     Once you have a copy of CEF3, either from compiling it yourself or using
     prebuild binaries you should copy it into `wx_root/src/cef`. To run the
     webview_chromium sample you need to copy the CEF3 resources into the
-    sample directory.
+    sample directory. The following files need to be copied:
+
+    - The shared objects in the wx_root/src/cef/Debug or
+      wx_root/src/cef/Release folder, depending on your build type.
+    - The contents of the wx_root/src/cef/Resources folder.
 
     When builing wxWidgets you need to enusre wxWebViewChromium is enabled,
     either by passing --enable-webviewchromium for autoconf based builds or
-    setting wxUSE_WEBVIEW_CHROMIUM equal to one in setup.h for Visual Studio
+    setting wxUSE_WEBVIEW_CHROMIUM equal to 1 in setup.h for Visual Studio
     based builds.
 
     __Mac OS X Platform__
