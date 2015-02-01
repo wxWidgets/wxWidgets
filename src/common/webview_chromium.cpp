@@ -25,7 +25,6 @@
 #include "include/cef_app.h"
 #include "include/cef_browser.h"
 #include "include/cef_string_visitor.h"
-#include "include/cef_version.h"
 
 #ifdef __VISUALC__
 #pragma warning(pop)
@@ -735,7 +734,11 @@ bool SchemeHandler::ProcessRequest(CefRefPtr<CefRequest> request,
 {
     bool handled = false;
 
-    AutoLock lock_scope( this );
+#if CHROME_VERSION_BUILD >= 2062
+    base::AutoLock lock_scope(m_lock);
+#else
+    AutoLock lock_scope(this);
+#endif
 
     std::string url = request->GetURL();
     wxFSFile* file = m_handler->GetFile( url );
@@ -782,7 +785,11 @@ bool SchemeHandler::ReadResponse(void* data_out,
     bool has_data = false;
     bytes_read = 0;
 
-    AutoLock lock_scope( this );
+#if CHROME_VERSION_BUILD >= 2062
+    base::AutoLock lock_scope(m_lock);
+#else
+    AutoLock lock_scope(this);
+#endif
 
     if ( m_offset < m_data.length() )
     {
