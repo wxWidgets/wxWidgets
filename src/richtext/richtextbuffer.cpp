@@ -3583,7 +3583,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                 // we only want the paragraphs to hold this character style, then we _don't_ want to
                 // apply the character style. So we need to be able to choose.
 
-                if (!parasOnly && (characterStyle|charactersOnly) && range.GetStart() != newPara->GetRange().GetEnd())
+                if (!parasOnly && (characterStyle || charactersOnly) && range.GetStart() != newPara->GetRange().GetEnd())
                 {
                     wxRichTextRange childRange(range);
                     childRange.LimitTo(newPara->GetRange());
