@@ -536,7 +536,7 @@ wxBitmap::~wxBitmap()
 bool wxBitmap::Create( int width, int height, int depth )
 {
     UnRef();
-    wxCHECK_MSG(width >= 0 && height >= 0, false, "invalid bitmap size");
+    wxCHECK_MSG(width > 0 && height > 0, false, "invalid bitmap size");
     m_refData = new wxBitmapRefData(width, height, depth);
     return true;
 }

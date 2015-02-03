@@ -21,6 +21,9 @@ Changes in behaviour not resulting in compilation errors
   other ports, but this can be unexpected for the applications not expecting
   their idle handlers to be called from inside wxYield().
 
+- Creating wxBitmap with 0 width or height now always fails in all ports
+  (it used to succeed in wxMSW).
+
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
 

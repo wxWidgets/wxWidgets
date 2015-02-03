@@ -291,9 +291,16 @@ public:
         the current colour setting.
 
         A depth of 32 including an alpha channel is supported under MSW, Mac and GTK+.
+
+        @param width
+            The width of the bitmap in pixels, must be strictly positive.
+        @param height
+            The height of the bitmap in pixels, must be strictly positive.
+        @param depth
+            The number of bits used to represent each bitmap pixel.
     */
     wxBitmap(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
-    
+
     /**
         @overload
     */
@@ -413,11 +420,18 @@ public:
     /**
         Creates a fresh bitmap.
         If the final argument is omitted, the display depth of the screen is used.
-        
+
+        @param width
+            The width of the bitmap in pixels, must be strictly positive.
+        @param height
+            The height of the bitmap in pixels, must be strictly positive.
+        @param depth
+            The number of bits used to represent each bitmap pixel.
+
         @return @true if the creation was successful.
     */
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
-    
+
     /**
         @overload
     */

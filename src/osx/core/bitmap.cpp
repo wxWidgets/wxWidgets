@@ -1191,6 +1191,8 @@ bool wxBitmap::Create(int w, int h, int d)
 {
     UnRef();
 
+    wxCHECK_MSG(w > 0 && h > 0, false, "invalid bitmap size");
+
     if ( d < 0 )
         d = wxDisplayDepth() ;
 
