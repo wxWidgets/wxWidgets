@@ -817,7 +817,7 @@ CodePair keySymTab[] = {
     {0x0025, 0x0025},    // percent
     {0x0026, 0x0026},    // ampersand
     {0x0027, 0x0027},    // apostrophe
-    {0x0027, 0x0027},    // quoteright	/* deprecated */
+    {0x0027, 0x0027},    // quoteright /* deprecated */
     {0x0028, 0x0028},    // parenleft
     {0x0029, 0x0029},    // parenright
     {0x002a, 0x002a},    // asterisk
@@ -875,7 +875,7 @@ CodePair keySymTab[] = {
     {0x005e, 0x005e},    // asciicircum
     {0x005f, 0x005f},    // underscore
     {0x0060, 0x0060},    // grave
-    {0x0060, 0x0060},    // quoteleft	/* deprecated */
+    {0x0060, 0x0060},    // quoteleft /* deprecated */
     {0x0061, 0x0061},    // a
     {0x0062, 0x0062},    // b
     {0x0063, 0x0063},    // c
@@ -917,7 +917,7 @@ CodePair keySymTab[] = {
     {0x00a8, 0x00a8},    // diaeresis
     {0x00a9, 0x00a9},    // copyright
     {0x00aa, 0x00aa},    // ordfeminine
-    {0x00ab, 0x00ab},    // guillemotleft	/* left angle quotation mark */
+    {0x00ab, 0x00ab},    // guillemotleft /* left angle quotation mark */
     {0x00ac, 0x00ac},    // notsign
     {0x00ad, 0x00ad},    // hyphen
     {0x00ae, 0x00ae},    // registered
@@ -933,7 +933,7 @@ CodePair keySymTab[] = {
     {0x00b8, 0x00b8},    // cedilla
     {0x00b9, 0x00b9},    // onesuperior
     {0x00ba, 0x00ba},    // masculine
-    {0x00bb, 0x00bb},    // guillemotright	/* right angle quotation mark */
+    {0x00bb, 0x00bb},    // guillemotright /* right angle quotation mark */
     {0x00bc, 0x00bc},    // onequarter
     {0x00bd, 0x00bd},    // onehalf
     {0x00be, 0x00be},    // threequarters
@@ -955,7 +955,7 @@ CodePair keySymTab[] = {
     {0x00ce, 0x00ce},    // Icircumflex
     {0x00cf, 0x00cf},    // Idiaeresis
     {0x00d0, 0x00d0},    // ETH
-    {0x00d0, 0x00d0},    // Eth	/* deprecated */
+    {0x00d0, 0x00d0},    // Eth /* deprecated */
     {0x00d1, 0x00d1},    // Ntilde
     {0x00d2, 0x00d2},    // Ograve
     {0x00d3, 0x00d3},    // Oacute
@@ -970,7 +970,7 @@ CodePair keySymTab[] = {
     {0x00dc, 0x00dc},    // Udiaeresis
     {0x00dd, 0x00dd},    // Yacute
     {0x00de, 0x00de},    // THORN
-    {0x00de, 0x00de},    // Thorn	/* deprecated */
+    {0x00de, 0x00de},    // Thorn /* deprecated */
     {0x00df, 0x00df},    // ssharp
     {0x00e0, 0x00e0},    // agrave
     {0x00e1, 0x00e1},    // aacute
@@ -1928,12 +1928,12 @@ CodePair keySymTab[] = {
     {0xfefb, 0x0000},    // Pointer_DfltBtnNext
     {0xfefc, 0x0000},    // Pointer_DfltBtnPrev
     {0xfefd, 0x0000},    // Pointer_Drag5
-    {0xff08, 0x0008},    // BackSpace	/* back space, back char */
+    {0xff08, 0x0008},    // BackSpace /* back space, back char */
     {0xff09, 0x0009},    // Tab
-    {0xff0a, 0x000a},    // Linefeed	/* Linefeed, LF */
+    {0xff0a, 0x000a},    // Linefeed /* Linefeed, LF */
     {0xff0b, 0x000b},    // Clear
-    {0xff0d, 0x000d},    // Return	/* Return, enter */
-    {0xff13, 0x0013},    // Pause	/* Pause, hold */
+    {0xff0d, 0x000d},    // Return /* Return, enter */
+    {0xff13, 0x0013},    // Pause /* Pause, hold */
     {0xff14, 0x0014},    // Scroll_Lock
     {0xff15, 0x0015},    // Sys_Req
     {0xff1b, 0x001b},    // Escape
@@ -1991,9 +1991,9 @@ CodePair keySymTab[] = {
     {0xff6b, 0x0000},    // Break
     {0xff7e, 0x0000},    // Mode_switch
     {0xff7f, 0x0000},    // Num_Lock
-    {0xff80, 0x0020},    // KP_Space	/* space */
+    {0xff80, 0x0020},    // KP_Space /* space */
     {0xff89, 0x0009},    // KP_Tab
-    {0xff8d, 0x000d},    // KP_Enter	/* enter */
+    {0xff8d, 0x000d},    // KP_Enter /* enter */
     {0xff91, 0x0000},    // KP_F1
     {0xff92, 0x0000},    // KP_F2
     {0xff93, 0x0000},    // KP_F3
@@ -2011,7 +2011,7 @@ CodePair keySymTab[] = {
     {0xff9f, 0x0000},    // KP_Delete
     {0xffaa, 0x002a},    // KP_Multiply
     {0xffab, 0x002b},    // KP_Add
-    {0xffac, 0x002c},    // KP_Separator	/* separator, often comma */
+    {0xffac, 0x002c},    // KP_Separator /* separator, often comma */
     {0xffad, 0x002d},    // KP_Subtract
     {0xffae, 0x002e},    // KP_Decimal
     {0xffaf, 0x002f},    // KP_Divide
@@ -2025,7 +2025,7 @@ CodePair keySymTab[] = {
     {0xffb7, 0x0037},    // KP_7
     {0xffb8, 0x0038},    // KP_8
     {0xffb9, 0x0039},    // KP_9
-    {0xffbd, 0x003d},    // KP_Equal	/* equals */
+    {0xffbd, 0x003d},    // KP_Equal /* equals */
     {0xffbe, 0x0000},    // F1
     {0xffbf, 0x0000},    // F2
     {0xffc0, 0x0000},    // F3
@@ -2507,19 +2507,19 @@ int wxUnicodeCharXToWX(WXKeySym keySym)
 
     /* also check for directly encoded 24-bit UCS characters */
     if ( (keySym & 0xff000000) == 0x01000000 )
-	    return keySym & 0x00ffffff;
+        return keySym & 0x00ffffff;
 
     /* binary search in table */
     while ( max >= min ) {
-	    mid = (min + max) / 2;
-	    if ( keySymTab[mid].keySym < keySym )
-	        min = mid + 1;
-	    else if ( keySymTab[mid].keySym > keySym )
-	        max = mid - 1;
-	    else {
-	        /* found it */
-	        return keySymTab[mid].uniChar;
-	    }
+        mid = (min + max) / 2;
+        if ( keySymTab[mid].keySym < keySym )
+            min = mid + 1;
+        else if ( keySymTab[mid].keySym > keySym )
+            max = mid - 1;
+        else {
+            /* found it */
+            return keySymTab[mid].uniChar;
+        }
     }
 
     // no matching keycode value found
