@@ -1696,7 +1696,8 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
     DoToggleTool(tool, tool->IsToggled());
 }
 
-void wxToolBar::DoToggleTool(wxToolBarToolBase *tool, bool toggle)
+void wxToolBar::DoToggleTool(wxToolBarToolBase *tool,
+                             bool WXUNUSED_UNLESS_DEBUG(toggle))
 {
     wxASSERT_MSG( tool->IsToggled() == toggle, wxT("Inconsistent tool state") );
 
