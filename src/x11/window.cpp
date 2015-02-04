@@ -178,9 +178,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     bool need_two_windows = false;
 #endif
 
-#if wxUSE_NANOX
-    long xattributes = 0;
-#else
+#if !wxUSE_NANOX
     XSetWindowAttributes xattributes;
     long xattributes_mask = 0;
 
