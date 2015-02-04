@@ -2790,8 +2790,7 @@ void wxPGProperty::SubPropsChanged( int oldSelInd )
 // wxPGRootProperty
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxPGRootProperty, wxPGProperty,
-                               none, none, TextCtrl)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxPGRootProperty, wxPGProperty, TextCtrl)
 
 wxPGRootProperty::wxPGRootProperty( const wxString& name )
     : wxPGProperty()
@@ -2812,8 +2811,7 @@ wxPGRootProperty::~wxPGRootProperty()
 // wxPropertyCategory
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxPropertyCategory, wxPGProperty,
-                               none, none, TextCtrl)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxPropertyCategory, wxPGProperty, TextCtrl)
 
 void wxPropertyCategory::Init()
 {

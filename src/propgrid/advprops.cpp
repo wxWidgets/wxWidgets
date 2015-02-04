@@ -611,8 +611,7 @@ static const long gs_fp_es_weight_values[] = {
 // Class body is in advprops.h
 
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxFontProperty,wxPGProperty,
-                               wxFont,const wxFont&,TextCtrlAndButton)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxFontProperty,wxPGProperty,TextCtrlAndButton)
 
 
 wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
@@ -903,8 +902,7 @@ IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(wxColourPropertyValue, WXDLLIMPEXP_
 
 // Class body is in advprops.h
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxSystemColourProperty,wxEnumProperty,
-                               wxColourPropertyValue,const wxColourPropertyValue&,Choice)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxSystemColourProperty,wxEnumProperty,Choice)
 
 
 void wxSystemColourProperty::Init( int type, const wxColour& colour )
@@ -1603,8 +1601,8 @@ static const unsigned long gs_cp_es_normcolour_colours[] = {
     wxPG_COLOUR(0,0,0)
 };
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxColourProperty, wxSystemColourProperty,
-                               wxColour, const wxColour&, TextCtrlAndButton)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxColourProperty, wxSystemColourProperty,
+                              TextCtrlAndButton)
 
 static wxPGChoices gs_wxColourProperty_choicesCache;
 
@@ -1960,8 +1958,8 @@ void wxImageFileProperty::OnCustomPaint( wxDC& dc,
 
 #include "wx/choicdlg.h"
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxMultiChoiceProperty,wxPGProperty,
-                               wxArrayInt,const wxArrayInt&,TextCtrlAndButton)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxMultiChoiceProperty,wxPGProperty,
+                              TextCtrlAndButton)
 
 wxMultiChoiceProperty::wxMultiChoiceProperty( const wxString& label,
                                               const wxString& name,
@@ -2172,11 +2170,8 @@ bool wxMultiChoiceProperty::StringToValue( wxVariant& variant, const wxString& t
     #define dtCtrl      TextCtrl
 #endif
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxDateProperty,
-                               wxPGProperty,
-                               wxDateTime,
-                               const wxDateTime&,
-                               dtCtrl)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxDateProperty,wxPGProperty,
+                              dtCtrl)
 
 
 wxString wxDateProperty::ms_defaultDateFormat;

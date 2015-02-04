@@ -60,8 +60,7 @@
 // wxStringProperty
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxStringProperty,wxPGProperty,
-                               wxString,const wxString&,TextCtrl)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxStringProperty,wxPGProperty,TextCtrl)
 
 wxStringProperty::wxStringProperty( const wxString& label,
                                     const wxString& name,
@@ -221,8 +220,7 @@ bool wxNumericPropertyValidator::Validate(wxWindow* parent)
 // wxIntProperty
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxIntProperty,wxPGProperty,
-                               long,long,TextCtrl)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxIntProperty,wxPGProperty,TextCtrl)
 
 wxIntProperty::wxIntProperty( const wxString& label, const wxString& name,
     long value ) : wxPGProperty(label,name)
@@ -609,8 +607,7 @@ static const char* const gs_uintTemplates64[wxPG_UINT_TEMPLATE_MAX] = {
     "%" wxLongLongFmtSpec "o"
 };
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxUIntProperty,wxPGProperty,
-                               long,unsigned long,TextCtrl)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxUIntProperty,wxPGProperty,TextCtrl)
 
 void wxUIntProperty::Init()
 {
@@ -773,8 +770,7 @@ bool wxUIntProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 // wxFloatProperty
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxFloatProperty,wxPGProperty,
-                               double,double,TextCtrl)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxFloatProperty,wxPGProperty,TextCtrl)
 
 wxFloatProperty::wxFloatProperty( const wxString& label,
                                             const wxString& name,
@@ -1113,8 +1109,7 @@ wxVariant wxBoolProperty::DoGetAttribute( const wxString& name ) const
 // wxEnumProperty
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxEnumProperty, wxPGProperty,
-                               long, const long*, Choice)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxEnumProperty,wxPGProperty,Choice)
 
 wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name, const wxChar* const* labels,
     const long* values, int value ) : wxPGProperty(label,name)
@@ -1352,8 +1347,7 @@ int wxEnumProperty::GetIndex() const
 // wxEditEnumProperty
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxEditEnumProperty, wxPGProperty,
-                               wxString, const wxString&, ComboBox)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxEditEnumProperty, wxPGProperty, ComboBox)
 
 wxEditEnumProperty::wxEditEnumProperty( const wxString& label, const wxString& name, const wxChar* const* labels,
     const long* values, const wxString& value )
@@ -1440,8 +1434,7 @@ bool wxEditEnumProperty::ValidateValue(
 // wxFlagsProperty
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxFlagsProperty, wxPGProperty,
-                               long, long, TextCtrl)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxFlagsProperty, wxPGProperty, TextCtrl)
 
 void wxFlagsProperty::Init()
 {
@@ -1893,8 +1886,7 @@ bool wxPGFileDialogAdapter::DoShowDialog( wxPropertyGrid* propGrid, wxPGProperty
 // wxFileProperty
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxFileProperty,wxPGProperty,
-                               wxString,const wxString&,TextCtrlAndButton)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxFileProperty,wxPGProperty,TextCtrlAndButton)
 
 wxFileProperty::wxFileProperty( const wxString& label, const wxString& name,
     const wxString& value ) : wxPGProperty(label,name)
@@ -2132,8 +2124,7 @@ bool wxPGLongStringDialogAdapter::DoShowDialog( wxPropertyGrid* propGrid, wxPGPr
 // wxLongStringProperty
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxLongStringProperty,wxPGProperty,
-                               wxString,const wxString&,TextCtrlAndButton)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxLongStringProperty,wxPGProperty,TextCtrlAndButton)
 
 wxLongStringProperty::wxLongStringProperty( const wxString& label, const wxString& name,
     const wxString& value ) : wxPGProperty(label,name)
@@ -2631,11 +2622,9 @@ wxPGArrayStringEditorDialog::OnCustomNewAction(wxString* resString)
 // wxArrayStringProperty
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxArrayStringProperty,  // Property name
-                               wxPGProperty,  // Property we inherit from
-                               wxArrayString,  // Value type name
-                               const wxArrayString&,  // Value type, as given in constructor
-                               TextCtrlAndButton)  // Initial editor
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxArrayStringProperty,  // Property name
+                              wxPGProperty,  // Property we inherit from
+                              TextCtrlAndButton)  // Initial editor
 
 wxArrayStringProperty::wxArrayStringProperty( const wxString& label,
                                                         const wxString& name,

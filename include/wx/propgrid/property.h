@@ -2541,11 +2541,17 @@ private:
 
 // Implements sans constructor function. Also, first arg is class name, not
 // property name.
-#define WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(PROPNAME,T,EDITOR) \
+#define wxPG_IMPLEMENT_PROPERTY_CLASS_PLAIN(PROPNAME, EDITOR) \
 const wxPGEditor* PROPNAME::DoGetEditorClass() const \
 { \
     return wxPGEditor_##EDITOR; \
 }
+
+#if WXWIN_COMPATIBILITY_3_0
+// This macro is deprecated. Use wxPG_IMPLEMENT_PROPERTY_CLASS_PLAIN instead.
+#define WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(PROPNAME,T,EDITOR) \
+wxPG_IMPLEMENT_PROPERTY_CLASS_PLAIN(PROPNAME, EDITOR)
+#endif // WXWIN_COMPATIBILITY_3_0
 
 // -----------------------------------------------------------------------
 

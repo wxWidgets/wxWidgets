@@ -34,9 +34,16 @@ class wxPGArrayEditorDialog;
 // Property class implementation helper macros.
 //
 
+#define wxPG_IMPLEMENT_PROPERTY_CLASS(NAME, UPCLASS, EDITOR) \
+wxIMPLEMENT_DYNAMIC_CLASS(NAME, UPCLASS) \
+wxPG_IMPLEMENT_PROPERTY_CLASS_PLAIN(NAME, EDITOR)
+
+#if WXWIN_COMPATIBILITY_3_0
+// This macro is deprecated. Use wxPG_IMPLEMENT_PROPERTY_CLASS instead.
 #define WX_PG_IMPLEMENT_PROPERTY_CLASS(NAME, UPCLASS, T, T_AS_ARG, EDITOR) \
 IMPLEMENT_DYNAMIC_CLASS(NAME, UPCLASS) \
 WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(NAME, T, EDITOR)
+#endif // WXWIN_COMPATIBILITY_3_0
 
 // -----------------------------------------------------------------------
 
@@ -849,8 +856,7 @@ WX_PG_DECLARE_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(PROPNAM, class)
 #define WX_PG_IMPLEMENT_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(PROPNAME, \
                                                             DELIMCHAR, \
                                                             CUSTBUTTXT) \
-WX_PG_IMPLEMENT_PROPERTY_CLASS(PROPNAME, wxArrayStringProperty, \
-                               wxArrayString, const wxArrayString&, \
+wxPG_IMPLEMENT_PROPERTY_CLASS(PROPNAME, wxArrayStringProperty, \
                                TextCtrlAndButton) \
 PROPNAME::PROPNAME( const wxString& label, \
                     const wxString& name, \
