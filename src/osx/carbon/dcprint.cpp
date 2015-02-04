@@ -45,7 +45,7 @@ public :
 
     // returns 0 in case of no Error, otherwise platform specific error codes
     virtual wxUint32 GetStatus() const = 0 ;
-    bool IsOk() { return GetStatus() == 0 ; }
+    bool IsOk() const { return GetStatus() == 0 ; }
 
     static wxNativePrinterDC* Create(wxPrintData* data) ;
 } ;
