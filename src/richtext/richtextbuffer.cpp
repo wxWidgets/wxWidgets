@@ -8795,11 +8795,11 @@ bool wxRichTextBuffer::SaveFile(wxOutputStream& stream, wxRichTextFileType type)
 bool wxRichTextBuffer::CopyToClipboard(const wxRichTextRange& range)
 {
     bool success = false;
+#if wxUSE_CLIPBOARD && wxUSE_DATAOBJ
+
     wxRichTextParagraphLayoutBox* container = this;
     if (GetRichTextCtrl())
         container = GetRichTextCtrl()->GetFocusObject();
-
-#if wxUSE_CLIPBOARD && wxUSE_DATAOBJ
 
     if (!wxTheClipboard->IsOpened() && wxTheClipboard->Open())
     {
