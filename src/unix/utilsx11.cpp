@@ -311,7 +311,7 @@ static bool wxQueryWMspecSupport(Display *display, Window rootWnd, Atom feature)
                        _NET_SUPPORTING_WM_CHECK, 0, LONG_MAX,
                        False, XA_WINDOW, &type, &format, &nwins,
                        &after, (unsigned char **)&wins);
-    if ( type != XA_WINDOW || nwins <= 0 || wins[0] == None )
+    if ( type != XA_WINDOW || nwins == 0 || wins[0] == None )
        return false;
     XFree(wins);
 
