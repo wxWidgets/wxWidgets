@@ -101,7 +101,7 @@ void wxFontDataProperty::OnSetValue()
         }
         else
         {
-            wxFAIL_MSG(wxT("Value to wxFontDataProperty must be eithe wxFontData or wxFont"));
+            wxFAIL_MSG(wxT("Value to wxFontDataProperty must be either wxFontData or wxFont"));
         }
     }
     else
