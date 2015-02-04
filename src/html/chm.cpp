@@ -51,13 +51,13 @@ public:
     const wxArrayString *GetFileNames()
     {
         return m_fileNames;
-    };
+    }
 
-    /// get the name of the archive representated by this class
-    const wxString GetArchiveName()
+    /// get the name of the archive represented by this class
+    const wxString GetArchiveName() const
     {
         return m_chmFileName;
-    };
+    }
 
     /// Find a file in the archive
     const wxString Find(const wxString& pattern,
