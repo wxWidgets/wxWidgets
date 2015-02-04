@@ -68,7 +68,7 @@
 
 static wxWindowX11* g_captureWindow = NULL;
 static GC g_eraseGC;
-// the window that is about to be focused after curretnly focused
+// the window that is about to be focused after currently focused
 // one looses focus:
 static wxWindow* gs_toBeFocusedWindow = NULL;
 
@@ -359,7 +359,7 @@ wxWindowX11::~wxWindowX11()
 
     if (m_clientWindow != m_mainWindow)
     {
-        // Destroy the cleint window
+        // Destroy the client window
         Window xwindow = (Window) m_clientWindow;
         wxDeleteClientWindowFromTable( xwindow );
         XDestroyWindow( wxGlobalDisplay(), xwindow );
