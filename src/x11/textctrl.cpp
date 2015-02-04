@@ -1790,7 +1790,6 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
     int size_x = 0;
     int size_y = 0;
     GetClientSize( &size_x, &size_y );
-    size_x /= m_charWidth;
     size_y /= m_lineHeight;
     size_y--;
 
