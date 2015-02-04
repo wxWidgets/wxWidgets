@@ -207,8 +207,7 @@ private:
 
 WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ(wxVector3f)
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxVectorProperty,wxPGProperty,
-                               wxVector3f,const wxVector3f&,TextCtrl)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxVectorProperty,wxPGProperty,TextCtrl)
 
 
 wxVectorProperty::wxVectorProperty( const wxString& label,
@@ -259,8 +258,7 @@ wxVariant wxVectorProperty::ChildChanged( wxVariant& thisValue,
 
 WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ(wxTriangle)
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxTriangleProperty,wxPGProperty,
-                               wxTriangle,const wxTriangle&,TextCtrl)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxTriangleProperty,wxPGProperty,TextCtrl)
 
 
 wxTriangleProperty::wxTriangleProperty( const wxString& label,

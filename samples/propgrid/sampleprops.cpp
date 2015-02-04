@@ -50,8 +50,7 @@ bool operator == (const wxFontData&, const wxFontData&)
 
 IMPLEMENT_VARIANT_OBJECT_SHALLOWCMP(wxFontData)
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxFontDataProperty,wxFontProperty,
-                               wxFontData,const wxFontData&,TextCtrlAndButton)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxFontDataProperty,wxFontProperty,TextCtrlAndButton)
 
 wxFontDataProperty::wxFontDataProperty( const wxString& label, const wxString& name,
    const wxFontData& value ) : wxFontProperty(label,name,value.GetInitialFont())
@@ -196,8 +195,7 @@ wxVariant wxFontDataProperty::ChildChanged( wxVariant& thisValue,
 // wxSizeProperty
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxSizeProperty,wxPGProperty,
-                               wxSize,const wxSize&,TextCtrl)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxSizeProperty,wxPGProperty,TextCtrl)
 
 wxSizeProperty::wxSizeProperty( const wxString& label, const wxString& name,
     const wxSize& value) : wxPGProperty(label,name)
@@ -237,8 +235,7 @@ wxVariant wxSizeProperty::ChildChanged( wxVariant& thisValue,
 // wxPointProperty
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxPointProperty,wxPGProperty,
-                               wxPoint,const wxPoint&,TextCtrl)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxPointProperty,wxPGProperty,TextCtrl)
 
 wxPointProperty::wxPointProperty( const wxString& label, const wxString& name,
     const wxPoint& value) : wxPGProperty(label,name)
@@ -489,11 +486,9 @@ bool operator == (const wxArrayDouble& a, const wxArrayDouble& b)
 
 WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ(wxArrayDouble)
 
-WX_PG_IMPLEMENT_PROPERTY_CLASS(wxArrayDoubleProperty,
-                               wxPGProperty,
-                               wxArrayDouble,
-                               const wxArrayDouble&,
-                               TextCtrlAndButton)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxArrayDoubleProperty,
+                              wxPGProperty,
+                              TextCtrlAndButton)
 
 
 wxArrayDoubleProperty::wxArrayDoubleProperty (const wxString& label,
