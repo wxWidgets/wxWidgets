@@ -276,7 +276,13 @@ wxDocManager *wxDocument::GetDocumentManager() const
     if ( m_documentParent )
         return m_documentParent->GetDocumentManager();
 
-    return m_documentTemplate ? m_documentTemplate->GetDocumentManager() : NULL;
+    if ( m_documentTemplate )
+        return m_documentTemplate->GetDocumentManager();
+
+    // Fall back on the global manager if the document doesn't have a template,
+    // code elsewhere, notably in DeleteAllViews(), relies on the document
+    // always being managed by some manager.
+    return wxDocManager::GetDocumentManager();
 }
 
 bool wxDocument::OnNewDocument()
