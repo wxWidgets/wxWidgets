@@ -919,6 +919,16 @@ protected:
     virtual void DoSetPopupControl(wxComboPopup* popup);
 
     /**
+        Flags for DoShowPopup() and AnimateShow().
+    */
+    enum
+    {
+        ShowBelow       = 0x0000, //!< Show popup below the control.
+        ShowAbove       = 0x0001, //!< Show popup above the control.
+        CanDeferShow    = 0x0002  //!< Can only return true from AnimateShow() if this is set.
+    };
+
+    /**
         This member function is not normally called in application code.
         Instead, it must be called in a derived class to make sure popup is
         properly shown after a popup animation has finished (but only if
@@ -927,15 +937,8 @@ protected:
         @param rect
             Position to show the popup window at, in screen coordinates.
         @param flags
-            Combination of any of the following:
-            @beginTable
-            @row2col{wxComboCtrl::ShowAbove,
-                     Popup is shown above the control instead of below.}
-            @row2col{wxComboCtrl::CanDeferShow,
-                     Showing the popup can be deferred to happen sometime after
-                     ShowPopup() has finished. In this case, AnimateShow() must
-                     return false.}
-            @endTable
+            Combination of any of the following: wxComboCtrl::ShowAbove,
+            and wxComboCtrl::CanDeferShow.
     */
     virtual void DoShowPopup(const wxRect& rect, int flags);
 };
