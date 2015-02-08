@@ -2,7 +2,7 @@
 ##############################################################################
 # Name:       misc/scripts/inc_release
 # Purpose:    increments the release version number in all files mentioned in
-#             docs/tech/tn0011.txt
+#             docs/contributing/about-version-numbers.md
 # Created:    2007-01-07
 # Copyright:  (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
 # Licence:    wxWindows licence
@@ -88,9 +88,6 @@ run_sed docs/readme.txt \
 
 run_sed docs/doxygen/Doxyfile \
     "/^PROJECT_NUMBER/s/$ver_for_sed/$ver_string_new/"
-
-run_sed docs/doxygen/latexdocstart.inc \
-    "/\\large Version/s/$ver_for_sed/$ver_string_new/"
 
 run_sed include/wx/version.h \
     "s/^\(#define wxRELEASE_NUMBER *\) $ver_release$/\1 $ver_release_new/" \

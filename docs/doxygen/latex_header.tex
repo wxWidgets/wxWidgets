@@ -1,4 +1,4 @@
-\batchmode
+% Latex header for doxygen 1.8.8
 \documentclass[twoside]{book}
 
 % Packages required by doxygen
@@ -72,8 +72,8 @@
 \fancyhead[RO]{\fancyplain{}{\bfseries\thepage}}
 \fancyfoot[LE]{\fancyplain{}{}}
 \fancyfoot[CE]{\fancyplain{}{}}
-\fancyfoot[RE]{\fancyplain{}{\bfseries\scriptsize Generated on $date for wxWidgets by Doxygen }}
-\fancyfoot[LO]{\fancyplain{}{\bfseries\scriptsize Generated on $date for wxWidgets by Doxygen }}
+\fancyfoot[RE]{\fancyplain{}{\bfseries\scriptsize Generated on \today }}
+\fancyfoot[LO]{\fancyplain{}{\bfseries\scriptsize Generated on \today }}
 \fancyfoot[CO]{\fancyplain{}{}}
 \fancyfoot[RO]{\fancyplain{}{}}
 \renewcommand{\footrulewidth}{0.4pt}
@@ -118,12 +118,13 @@
 
 \begin{document}
 
+% Titlepage & ToC
 \hypersetup{pageanchor=false,
              bookmarks=true,
              bookmarksnumbered=true,
              pdfencoding=unicode
             }
-
+\pagenumbering{roman}
 \begin{titlepage}
 \begin{center}
 \vspace*{3cm}
@@ -133,16 +134,15 @@
 \end{center}
 \end{figure}
 \vspace*{2cm}
-{\huge Version $projectnumber}\\
+{\huge $projectnumber Reference Manual}\\
 \vspace*{1cm}
 {\large \today}\\
 \end{center}
 \end{titlepage}
-
-\pagenumbering{roman}
 \clearemptydoublepage
 \tableofcontents
 \clearemptydoublepage
 \pagenumbering{arabic}
-
 \hypersetup{pageanchor=true}
+
+%--- Begin generated contents ---
