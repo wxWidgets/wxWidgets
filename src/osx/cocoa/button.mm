@@ -173,6 +173,11 @@ void wxButtonCocoaImpl::GetLayoutInset(int &left , int &top , int &right, int &b
                 break;
         }
     }
+    else if ( [GetNSButton() bezelStyle] == NSSmallSquareBezelStyle )
+    {
+        left = right = 0;
+        top = bottom = 1;
+    }
 }
 
 void wxButtonCocoaImpl::SetAcceleratorFromLabel(const wxString& label)
