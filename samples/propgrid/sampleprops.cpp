@@ -409,10 +409,7 @@ void wxArrayDoubleEditorDialog::ArrayRemoveAt( int index )
 
 void wxArrayDoubleEditorDialog::ArraySwap( size_t first, size_t second )
 {
-    double a = m_array[first];
-    double b = m_array[second];
-    m_array[first] = b;
-    m_array[second] = a;
+    wxSwap(m_array[first], m_array[second]);
 }
 
 //
