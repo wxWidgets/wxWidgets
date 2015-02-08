@@ -595,8 +595,6 @@ bool wxArrayDoubleProperty::OnEvent( wxPropertyGrid* propgrid,
 
 bool wxArrayDoubleProperty::StringToValue( wxVariant& variant, const wxString& text, int ) const
 {
-    double tval;
-    wxString tstr;
     // Add values to a temporary array so that in case
     // of error we can opt not to use them.
     wxArrayDouble new_array;
@@ -609,26 +607,23 @@ bool wxArrayDoubleProperty::StringToValue( wxVariant& variant, const wxString& t
 
         if ( !token.empty() )
         {
-
+            double tval;
             // If token was invalid, exit the loop now
             if ( !token.ToDouble(&tval) )
             {
-                tstr.Printf ( _("\"%s\" is not a floating-point number."), token.c_str() );
+                wxLogDebug( _("\"%s\" is not a floating-point number."), token.c_str() );
                 ok = false;
                 break;
             }
-            // TODO: Put validator code here
 
             new_array.Add(tval);
-
         }
 
     WX_PG_TOKENIZER1_END()
 
-    // When invalid token found, show error message and don't change anything
+    // When invalid token found don't change anything
     if ( !ok )
     {
-        //ShowError( tstr );
         return false;
     }
 
@@ -652,3 +647,24 @@ bool wxArrayDoubleProperty::DoSetAttribute( const wxString& name, wxVariant& val
     return false;
 }
 
+wxValidator* wxArrayDoubleProperty::DoGetValidator() const
+{
+#if wxUSE_VALIDATORS
+    WX_PG_DOGETVALIDATOR_ENTRY()
+
+    wxTextValidator* validator = new wxTextValidator(wxFILTER_INCLUDE_CHAR_LIST);
+
+    // Accept characters for numeric elements
+    wxNumericPropertyValidator numValidator(wxNumericPropertyValidator::NumericType::Float);
+    wxArrayString incChars(numValidator.GetIncludes());
+    // Accept also a delimiter and space character
+    incChars.Add(m_delimiter);
+    incChars.Add(" ");
+
+    validator->SetIncludes(incChars);
+
+    WX_PG_DOGETVALIDATOR_EXIT(validator)
+#else
+    return NULL;
+#endif
+}

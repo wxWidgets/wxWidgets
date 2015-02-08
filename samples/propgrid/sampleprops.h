@@ -126,6 +126,8 @@ public:
     // Generates cache for displayed text
     virtual void GenerateValueAsString ( wxString& target, int prec, bool removeZeroes ) const;
 
+    wxValidator* DoGetValidator() const wxOVERRIDE;
+
 protected:
     wxString        m_display; // Stores cache for displayed text
     int             m_precision; // Used when formatting displayed string.
