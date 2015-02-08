@@ -739,7 +739,7 @@ void FormMain::OnPropertyGridSelect( wxPropertyGridEvent& event )
     wxPGProperty* property = event.GetProperty();
     if ( property )
     {
-        m_itemEnable->Enable( TRUE );
+        m_itemEnable->Enable( true );
         if ( property->IsEnabled() )
             m_itemEnable->SetItemLabel( wxT("Disable") );
         else
@@ -747,7 +747,7 @@ void FormMain::OnPropertyGridSelect( wxPropertyGridEvent& event )
     }
     else
     {
-        m_itemEnable->Enable( FALSE );
+        m_itemEnable->Enable( false );
     }
 
 #if wxUSE_STATUSBAR
@@ -2029,7 +2029,7 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     menuTools1->AppendSeparator();
     m_itemEnable = menuTools1->Append(ID_ENABLE, wxT("Enable"),
         wxT("Toggles item's enabled state.") );
-    m_itemEnable->Enable( FALSE );
+    m_itemEnable->Enable( false );
     menuTools1->Append(ID_HIDE, "Hide", "Hides a property" );
     menuTools1->Append(ID_SETREADONLY, "Set as Read-Only",
                        "Set property as read-only" );
@@ -2974,7 +2974,7 @@ void FormMain::OnMisc ( wxCommandEvent& event )
         wxVariant list;
         list.NullList();
         list.Append( wxVariant((long)1234,wxT("VariantLong")) );
-        list.Append( wxVariant((bool)TRUE,wxT("VariantBool")) );
+        list.Append( wxVariant(true,wxT("VariantBool")) );
         list.Append( wxVariant(wxT("Test Text"),wxT("VariantString")) );
         m_pPropGridManager->GetGrid()->SetPropertyValues(list);
     }

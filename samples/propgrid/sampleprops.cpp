@@ -42,7 +42,7 @@
 // Dummy comparison required by value type implementation.
 bool operator == (const wxFontData&, const wxFontData&)
 {
-    return FALSE;
+    return false;
 }
 
 // Custom version of wxFontProperty that also holds colour in the value.
@@ -299,9 +299,9 @@ bool wxDirsProperty::OnCustomStringEdit( wxWindow* parent, wxString& value )
     if ( dlg.ShowModal() == wxID_OK )
     {
         value = dlg.GetPath();
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -384,22 +384,22 @@ bool wxArrayDoubleEditorDialog::ArrayInsert( const wxString& str, int index )
 {
     double d;
     if ( !str.ToDouble(&d) )
-        return FALSE;
+        return false;
 
     if (index<0)
         m_array.Add(d);
     else
         m_array.Insert(d,index);
-    return TRUE;
+    return true;
 }
 
 bool wxArrayDoubleEditorDialog::ArraySet( size_t index, const wxString& str )
 {
     double d;
     if ( !str.ToDouble(&d) )
-        return FALSE;
+        return false;
     m_array[index] = d;
-    return TRUE;
+    return true;
 }
 
 void wxArrayDoubleEditorDialog::ArrayRemoveAt( int index )
@@ -468,7 +468,7 @@ bool wxArrayDoubleEditorDialog::Create(wxWindow *parent,
 bool operator == (const wxArrayDouble& a, const wxArrayDouble& b)
 {
     if ( a.GetCount() != b.GetCount() )
-        return FALSE;
+        return false;
 
     size_t i;
 
@@ -478,10 +478,10 @@ bool operator == (const wxArrayDouble& a, const wxArrayDouble& b)
         if ( fabs(a[i] - b[i]) > 0.0000000001 )
         {
             //wxLogDebug(wxT("%f != %f"),a[i],b[i]);
-            return FALSE;
+            return false;
         }
     }
-    return TRUE;
+    return true;
 }
 
 WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ(wxArrayDouble)
