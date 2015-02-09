@@ -3094,7 +3094,12 @@ void wxWindowGTK::DoClientToScreen( int *x, int *y ) const
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
-    if (!m_useCachedClientSize && !IsTopLevel() && m_parent)
+    GtkWidget* widget = m_widget;
+    if (m_wxwindow)
+        widget = m_wxwindow;
+    GdkWindow* source = gtk_widget_get_window(widget);
+
+    if ((!m_useCachedClientSize || source == NULL) && !IsTopLevel() && m_parent)
     {
         m_parent->DoClientToScreen(x, y);
         int xx, yy;
@@ -3125,12 +3130,6 @@ void wxWindowGTK::DoClientToScreen( int *x, int *y ) const
         }
         return;
     }
-
-    GdkWindow *source = NULL;
-    if (m_wxwindow)
-        source = gtk_widget_get_window(m_wxwindow);
-    else
-        source = gtk_widget_get_window(m_widget);
 
     wxCHECK_RET(source, "ClientToScreen failed on unrealized window");
 
@@ -3165,7 +3164,12 @@ void wxWindowGTK::DoScreenToClient( int *x, int *y ) const
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
-    if (!m_useCachedClientSize && !IsTopLevel() && m_parent)
+    GtkWidget* widget = m_widget;
+    if (m_wxwindow)
+        widget = m_wxwindow;
+    GdkWindow* source = gtk_widget_get_window(widget);
+
+    if ((!m_useCachedClientSize || source == NULL) && !IsTopLevel() && m_parent)
     {
         m_parent->DoScreenToClient(x, y);
         int xx, yy;
@@ -3196,12 +3200,6 @@ void wxWindowGTK::DoScreenToClient( int *x, int *y ) const
         }
         return;
     }
-
-    GdkWindow *source = NULL;
-    if (m_wxwindow)
-        source = gtk_widget_get_window(m_wxwindow);
-    else
-        source = gtk_widget_get_window(m_widget);
 
     wxCHECK_RET(source, "ScreenToClient failed on unrealized window");
 
