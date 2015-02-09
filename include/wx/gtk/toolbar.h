@@ -69,6 +69,8 @@ public:
     // implementation from now on
     // --------------------------
 
+    GtkToolbar* GTKGetToolbar() const { return m_toolbar; }
+
 protected:
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_DEFAULT; }
