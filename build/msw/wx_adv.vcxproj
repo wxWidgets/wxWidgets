@@ -505,6 +505,7 @@
     <ClCompile Include="..\..\src\generic\tipdlg.cpp" />
     <ClCompile Include="..\..\src\generic\treelist.cpp" />
     <ClCompile Include="..\..\src\generic\wizard.cpp" />
+    <ClCompile Include="..\..\src\common\addremovectrl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -596,6 +597,7 @@
     <ClInclude Include="..\..\include\wx\tipdlg.h" />
     <ClInclude Include="..\..\include\wx\treelist.h" />
     <ClInclude Include="..\..\include\wx\wizard.h" />
+    <ClInclude Include="..\..\include\wx\addremovectrl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

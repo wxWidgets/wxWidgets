@@ -437,6 +437,8 @@
 
 #define wxUSE_REARRANGECTRL 0
 
+#define wxUSE_ADDREMOVECTRL 0
+
 
 #define wxUSE_ACCEL 0
 

@@ -2971,6 +2971,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/tipdlg.cpp
     src/generic/treelist.cpp
     src/generic/wizard.cpp
+    src/common/addremovectrl.cpp
 </set>
 
 <set var="ADVANCED_CMN_HDR" hints="files">
@@ -3023,6 +3024,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/tipdlg.h
     wx/treelist.h
     wx/wizard.h
+    wx/addremovectrl.h
 </set>
 
 <set var="ADVANCED_MSW_SRC" hints="files">

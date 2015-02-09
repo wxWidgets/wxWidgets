@@ -24,6 +24,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\common\addremovectrl.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\common\animatecmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
@@ -53,48 +56,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\common\taskbarcmn.cpp">
       <Filter>Common Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\aboutdlg.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\bmpcbox.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\calctrl.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\commandlinkbutton.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\datecontrols.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\datectrl.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\datetimectrl.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\hyperlink.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\joystick.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\notifmsg.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\richtooltip.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\sound.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\taskbar.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\timectrl.cpp">
-      <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\aboutdlgg.cpp">
       <Filter>Generic Sources</Filter>
@@ -174,6 +135,48 @@
     <ClCompile Include="..\..\src\generic\wizard.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\aboutdlg.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\bmpcbox.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\calctrl.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\commandlinkbutton.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\datecontrols.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\datectrl.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\datetimectrl.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\hyperlink.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\joystick.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\notifmsg.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\richtooltip.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\sound.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\taskbar.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\timectrl.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -181,38 +184,47 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\wx\msw\bmpcbox.h">
-      <Filter>MSW Headers</Filter>
+    <ClInclude Include="..\..\include\wx\aboutdlg.h">
+      <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\calctrl.h">
-      <Filter>MSW Headers</Filter>
+    <ClInclude Include="..\..\include\wx\addremovectrl.h">
+      <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\commandlinkbutton.h">
-      <Filter>MSW Headers</Filter>
+    <ClInclude Include="..\..\include\wx\animate.h">
+      <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\datectrl.h">
-      <Filter>MSW Headers</Filter>
+    <ClInclude Include="..\..\include\wx\bannerwindow.h">
+      <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\datetimectrl.h">
-      <Filter>MSW Headers</Filter>
+    <ClInclude Include="..\..\include\wx\bmpcbox.h">
+      <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\hyperlink.h">
-      <Filter>MSW Headers</Filter>
+    <ClInclude Include="..\..\include\wx\calctrl.h">
+      <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\joystick.h">
-      <Filter>MSW Headers</Filter>
+    <ClInclude Include="..\..\include\wx\commandlinkbutton.h">
+      <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\notifmsg.h">
-      <Filter>MSW Headers</Filter>
+    <ClInclude Include="..\..\include\wx\dataview.h">
+      <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\sound.h">
-      <Filter>MSW Headers</Filter>
+    <ClInclude Include="..\..\include\wx\datectrl.h">
+      <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\taskbar.h">
-      <Filter>MSW Headers</Filter>
+    <ClInclude Include="..\..\include\wx\dateevt.h">
+      <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\timectrl.h">
-      <Filter>MSW Headers</Filter>
+    <ClInclude Include="..\..\include\wx\datetimectrl.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\dcbuffer.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\dvrenderers.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\editlbox.h">
+      <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\aboutdlgg.h">
       <Filter>Generic Headers</Filter>
@@ -277,45 +289,6 @@
     <ClInclude Include="..\..\include\wx\generic\wizard.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\aboutdlg.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\animate.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\bannerwindow.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\bmpcbox.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\calctrl.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\commandlinkbutton.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\dataview.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\datectrl.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\dateevt.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\datetimectrl.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\dcbuffer.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\dvrenderers.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\editlbox.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\wx\grid.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -327,6 +300,39 @@
     </ClInclude>
     <ClInclude Include="..\..\include\wx\laywin.h">
       <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\bmpcbox.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\calctrl.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\commandlinkbutton.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\datectrl.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\datetimectrl.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\hyperlink.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\joystick.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\notifmsg.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\sound.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\taskbar.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\timectrl.h">
+      <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\notifmsg.h">
       <Filter>Common Headers</Filter>

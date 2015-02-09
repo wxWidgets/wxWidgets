@@ -3195,6 +3195,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/accel.h \
 	wx/msw/anybutton.h \
 	wx/msw/app.h \
+	wx/msw/appprogress.h \
 	wx/msw/bitmap.h \
 	wx/msw/bmpbuttn.h \
 	wx/msw/brush.h \
@@ -3639,6 +3640,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/accel.h \
 	wx/msw/anybutton.h \
 	wx/msw/app.h \
+	wx/msw/appprogress.h \
 	wx/msw/bitmap.h \
 	wx/msw/bmpbuttn.h \
 	wx/msw/brush.h \
@@ -3893,6 +3895,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/tipdlg.h \
 	wx/treelist.h \
 	wx/wizard.h \
+	wx/addremovectrl.h \
 	$(ADVANCED_PLATFORM_HDR) \
 	$(ADVANCED_PLATFORM_NATIVE_HDR)
 @COND_WXUNIV_0@ADVANCED_HDR = $(COND_WXUNIV_0_ADVANCED_HDR)
@@ -3946,6 +3949,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/tipdlg.h \
 	wx/treelist.h \
 	wx/wizard.h \
+	wx/addremovectrl.h \
 	$(ADVANCED_PLATFORM_HDR) \
 	wx/generic/animate.h
 @COND_WXUNIV_1@ADVANCED_HDR = $(COND_WXUNIV_1_ADVANCED_HDR)
@@ -5828,8 +5832,8 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_prntdlgg.o \
 	monodll_msw_accel.o \
 	monodll_msw_anybutton.o \
-	monodll_artmsw.o \
 	monodll_appprogress.o \
+	monodll_artmsw.o \
 	monodll_msw_bmpbuttn.o \
 	monodll_msw_button.o \
 	monodll_msw_checkbox.o \
@@ -5986,8 +5990,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_prntdlgg.o \
 	monodll_msw_accel.o \
 	monodll_msw_anybutton.o \
-	monodll_artmsw.o \
 	monodll_appprogress.o \
+	monodll_artmsw.o \
 	monodll_msw_bmpbuttn.o \
 	monodll_msw_button.o \
 	monodll_msw_checkbox.o \
@@ -6495,6 +6499,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_tipdlg.o \
 	monodll_treelist.o \
 	monodll_wizard.o \
+	monodll_addremovectrl.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS)
@@ -6532,6 +6537,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_tipdlg.o \
 	monodll_treelist.o \
 	monodll_wizard.o \
+	monodll_addremovectrl.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_1) \
 	$(__ADVANCED_UNIV_SRC_OBJECTS)
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS)
@@ -8185,8 +8191,8 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_prntdlgg.o \
 	monolib_msw_accel.o \
 	monolib_msw_anybutton.o \
-	monolib_artmsw.o \
 	monolib_appprogress.o \
+	monolib_artmsw.o \
 	monolib_msw_bmpbuttn.o \
 	monolib_msw_button.o \
 	monolib_msw_checkbox.o \
@@ -8343,8 +8349,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_prntdlgg.o \
 	monolib_msw_accel.o \
 	monolib_msw_anybutton.o \
-	monolib_artmsw.o \
 	monolib_appprogress.o \
+	monolib_artmsw.o \
 	monolib_msw_bmpbuttn.o \
 	monolib_msw_button.o \
 	monolib_msw_checkbox.o \
@@ -8852,6 +8858,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_tipdlg.o \
 	monolib_treelist.o \
 	monolib_wizard.o \
+	monolib_addremovectrl.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_2) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_1 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1)
@@ -8889,6 +8896,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_tipdlg.o \
 	monolib_treelist.o \
 	monolib_wizard.o \
+	monolib_addremovectrl.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_3) \
 	$(__ADVANCED_UNIV_SRC_OBJECTS_1)
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_1 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1)
@@ -10699,8 +10707,8 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_prntdlgg.o \
 	coredll_msw_accel.o \
 	coredll_msw_anybutton.o \
-	coredll_artmsw.o \
 	coredll_appprogress.o \
+	coredll_artmsw.o \
 	coredll_msw_bmpbuttn.o \
 	coredll_msw_button.o \
 	coredll_msw_checkbox.o \
@@ -10857,8 +10865,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_prntdlgg.o \
 	coredll_msw_accel.o \
 	coredll_msw_anybutton.o \
-	coredll_artmsw.o \
 	coredll_appprogress.o \
+	coredll_artmsw.o \
 	coredll_msw_bmpbuttn.o \
 	coredll_msw_button.o \
 	coredll_msw_checkbox.o \
@@ -12477,8 +12485,8 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_prntdlgg.o \
 	corelib_msw_accel.o \
 	corelib_msw_anybutton.o \
-	corelib_artmsw.o \
 	corelib_appprogress.o \
+	corelib_artmsw.o \
 	corelib_msw_bmpbuttn.o \
 	corelib_msw_button.o \
 	corelib_msw_checkbox.o \
@@ -12635,8 +12643,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_prntdlgg.o \
 	corelib_msw_accel.o \
 	corelib_msw_anybutton.o \
-	corelib_artmsw.o \
 	corelib_appprogress.o \
+	corelib_artmsw.o \
 	corelib_msw_bmpbuttn.o \
 	corelib_msw_button.o \
 	corelib_msw_checkbox.o \
@@ -13213,6 +13221,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_tipdlg.o \
 	advdll_treelist.o \
 	advdll_wizard.o \
+	advdll_addremovectrl.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_4) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_2 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2)
@@ -13250,6 +13259,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_tipdlg.o \
 	advdll_treelist.o \
 	advdll_wizard.o \
+	advdll_addremovectrl.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_5) \
 	$(__ADVANCED_UNIV_SRC_OBJECTS_2)
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_2 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2)
@@ -13546,6 +13556,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_tipdlg.o \
 	advlib_treelist.o \
 	advlib_wizard.o \
+	advlib_addremovectrl.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_6) \
 	$(__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_3 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3)
@@ -13583,6 +13594,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_tipdlg.o \
 	advlib_treelist.o \
 	advlib_wizard.o \
+	advlib_addremovectrl.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_7) \
 	$(__ADVANCED_UNIV_SRC_OBJECTS_3)
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_3 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3)
@@ -21362,17 +21374,17 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_msw_anybutton.o: $(srcdir)/src/msw/anybutton.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/anybutton.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/appprogress.cpp
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/appprogress.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_bmpbuttn.o: $(srcdir)/src/msw/bmpbuttn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/bmpbuttn.cpp
@@ -22759,6 +22771,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/wizard.cpp
+
+@COND_USE_GUI_1@monodll_addremovectrl.o: $(srcdir)/src/common/addremovectrl.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/addremovectrl.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
@@ -27248,17 +27263,17 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_msw_anybutton.o: $(srcdir)/src/msw/anybutton.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/anybutton.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/appprogress.cpp
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/appprogress.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_bmpbuttn.o: $(srcdir)/src/msw/bmpbuttn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/bmpbuttn.cpp
@@ -28645,6 +28660,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/wizard.cpp
+
+@COND_USE_GUI_1@monolib_addremovectrl.o: $(srcdir)/src/common/addremovectrl.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/addremovectrl.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
@@ -33248,17 +33266,17 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_msw_anybutton.o: $(srcdir)/src/msw/anybutton.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/anybutton.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/appprogress.cpp
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/appprogress.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_msw_bmpbuttn.o: $(srcdir)/src/msw/bmpbuttn.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/bmpbuttn.cpp
@@ -37646,17 +37664,17 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_msw_anybutton.o: $(srcdir)/src/msw/anybutton.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/anybutton.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/appprogress.cpp
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/appprogress.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/artmsw.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_msw_bmpbuttn.o: $(srcdir)/src/msw/bmpbuttn.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/bmpbuttn.cpp
@@ -39050,6 +39068,9 @@ advdll_treelist.o: $(srcdir)/src/generic/treelist.cpp $(ADVDLL_ODEP)
 advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/wizard.cpp
 
+advdll_addremovectrl.o: $(srcdir)/src/common/addremovectrl.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/addremovectrl.cpp
+
 @COND_TOOLKIT_MSW@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
@@ -39544,6 +39565,9 @@ advlib_treelist.o: $(srcdir)/src/generic/treelist.cpp $(ADVLIB_ODEP)
 
 advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/wizard.cpp
+
+advlib_addremovectrl.o: $(srcdir)/src/common/addremovectrl.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/addremovectrl.cpp
 
 @COND_TOOLKIT_MSW@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp

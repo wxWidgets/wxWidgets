@@ -2512,6 +2512,7 @@ UNIV_HDR =
 # wxAdvanced
 
 ADVANCED_CMN_SRC =
+    src/common/addremovectrl.cpp
     src/common/animatecmn.cpp
     src/common/bmpcboxcmn.cpp
     src/common/calctrlcmn.cpp
@@ -2548,6 +2549,7 @@ ADVANCED_CMN_SRC =
 
 ADVANCED_CMN_HDR =
     wx/aboutdlg.h
+    wx/addremovectrl.h
     wx/animate.h
     wx/bannerwindow.h
     wx/bmpcbox.h

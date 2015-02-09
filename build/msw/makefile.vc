@@ -2120,8 +2120,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_prntdlgg.obj \
 	$(OBJS)\monodll_msw_accel.obj \
 	$(OBJS)\monodll_msw_anybutton.obj \
-	$(OBJS)\monodll_artmsw.obj \
 	$(OBJS)\monodll_appprogress.obj \
+	$(OBJS)\monodll_artmsw.obj \
 	$(OBJS)\monodll_msw_bmpbuttn.obj \
 	$(OBJS)\monodll_msw_button.obj \
 	$(OBJS)\monodll_msw_checkbox.obj \
@@ -2651,6 +2651,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_tipdlg.obj \
 	$(OBJS)\monodll_treelist.obj \
 	$(OBJS)\monodll_wizard.obj \
+	$(OBJS)\monodll_addremovectrl.obj \
 	$(OBJS)\monodll_taskbarcmn.obj \
 	$(OBJS)\monodll_aboutdlg.obj \
 	$(OBJS)\monodll_notifmsg.obj \
@@ -2703,6 +2704,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_tipdlg.obj \
 	$(OBJS)\monodll_treelist.obj \
 	$(OBJS)\monodll_wizard.obj \
+	$(OBJS)\monodll_addremovectrl.obj \
 	$(OBJS)\monodll_taskbarcmn.obj \
 	$(OBJS)\monodll_aboutdlg.obj \
 	$(OBJS)\monodll_notifmsg.obj \
@@ -2939,8 +2941,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_prntdlgg.obj \
 	$(OBJS)\monolib_msw_accel.obj \
 	$(OBJS)\monolib_msw_anybutton.obj \
-	$(OBJS)\monolib_artmsw.obj \
 	$(OBJS)\monolib_appprogress.obj \
+	$(OBJS)\monolib_artmsw.obj \
 	$(OBJS)\monolib_msw_bmpbuttn.obj \
 	$(OBJS)\monolib_msw_button.obj \
 	$(OBJS)\monolib_msw_checkbox.obj \
@@ -3470,6 +3472,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_tipdlg.obj \
 	$(OBJS)\monolib_treelist.obj \
 	$(OBJS)\monolib_wizard.obj \
+	$(OBJS)\monolib_addremovectrl.obj \
 	$(OBJS)\monolib_taskbarcmn.obj \
 	$(OBJS)\monolib_aboutdlg.obj \
 	$(OBJS)\monolib_notifmsg.obj \
@@ -3522,6 +3525,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_tipdlg.obj \
 	$(OBJS)\monolib_treelist.obj \
 	$(OBJS)\monolib_wizard.obj \
+	$(OBJS)\monolib_addremovectrl.obj \
 	$(OBJS)\monolib_taskbarcmn.obj \
 	$(OBJS)\monolib_aboutdlg.obj \
 	$(OBJS)\monolib_notifmsg.obj \
@@ -3694,8 +3698,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_prntdlgg.obj \
 	$(OBJS)\coredll_msw_accel.obj \
 	$(OBJS)\coredll_msw_anybutton.obj \
-	$(OBJS)\coredll_artmsw.obj \
 	$(OBJS)\coredll_appprogress.obj \
+	$(OBJS)\coredll_artmsw.obj \
 	$(OBJS)\coredll_msw_bmpbuttn.obj \
 	$(OBJS)\coredll_msw_button.obj \
 	$(OBJS)\coredll_msw_checkbox.obj \
@@ -4265,8 +4269,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_prntdlgg.obj \
 	$(OBJS)\corelib_msw_accel.obj \
 	$(OBJS)\corelib_msw_anybutton.obj \
-	$(OBJS)\corelib_artmsw.obj \
 	$(OBJS)\corelib_appprogress.obj \
+	$(OBJS)\corelib_artmsw.obj \
 	$(OBJS)\corelib_msw_bmpbuttn.obj \
 	$(OBJS)\corelib_msw_button.obj \
 	$(OBJS)\corelib_msw_checkbox.obj \
@@ -4824,6 +4828,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_tipdlg.obj \
 	$(OBJS)\advdll_treelist.obj \
 	$(OBJS)\advdll_wizard.obj \
+	$(OBJS)\advdll_addremovectrl.obj \
 	$(OBJS)\advdll_taskbarcmn.obj \
 	$(OBJS)\advdll_aboutdlg.obj \
 	$(OBJS)\advdll_notifmsg.obj \
@@ -4876,6 +4881,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_tipdlg.obj \
 	$(OBJS)\advdll_treelist.obj \
 	$(OBJS)\advdll_wizard.obj \
+	$(OBJS)\advdll_addremovectrl.obj \
 	$(OBJS)\advdll_taskbarcmn.obj \
 	$(OBJS)\advdll_aboutdlg.obj \
 	$(OBJS)\advdll_notifmsg.obj \
@@ -4930,6 +4936,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_tipdlg.obj \
 	$(OBJS)\advlib_treelist.obj \
 	$(OBJS)\advlib_wizard.obj \
+	$(OBJS)\advlib_addremovectrl.obj \
 	$(OBJS)\advlib_taskbarcmn.obj \
 	$(OBJS)\advlib_aboutdlg.obj \
 	$(OBJS)\advlib_notifmsg.obj \
@@ -4982,6 +4989,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_tipdlg.obj \
 	$(OBJS)\advlib_treelist.obj \
 	$(OBJS)\advlib_wizard.obj \
+	$(OBJS)\advlib_addremovectrl.obj \
 	$(OBJS)\advlib_taskbarcmn.obj \
 	$(OBJS)\advlib_aboutdlg.obj \
 	$(OBJS)\advlib_notifmsg.obj \
@@ -5829,7 +5837,7 @@ $(LIBDIRNAME)\wxscintilla$(WXDEBUGFLAG).lib: $(WXSCINTILLA_OBJECTS)
 !if "$(MONOLITHIC)" == "1" && "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\monodll_dummy.obj  $(MONODLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(OBJS)\monodll_version.res $(__wxscintilla_library_link_DEP)
 	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_108)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(MONODLL_OBJECTS) $(MONODLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib     $(__wxscintilla) /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+	$(MONODLL_OBJECTS) $(MONODLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib      $(__wxscintilla) /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 <<
 !endif
 
@@ -5958,7 +5966,7 @@ wxhtml: $(____wxhtml_namedll_DEP) $(____wxhtml_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_WEBVIEW)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\webviewdll_dummy.obj  $(WEBVIEWDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(OBJS)\webviewdll_version.res $(__coredll___depname) $(__basedll___depname)
 	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_325)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(WEBVIEWDLL_OBJECTS) $(WEBVIEWDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview.lib
+	$(WEBVIEWDLL_OBJECTS) $(WEBVIEWDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib  /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview.lib
 <<
 !endif
 
@@ -7346,11 +7354,11 @@ $(OBJS)\monodll_msw_accel.obj: ..\..\src\msw\accel.cpp
 $(OBJS)\monodll_msw_anybutton.obj: ..\..\src\msw\anybutton.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\anybutton.cpp
 
-$(OBJS)\monodll_artmsw.obj: ..\..\src\msw\artmsw.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\artmsw.cpp
-
 $(OBJS)\monodll_appprogress.obj: ..\..\src\msw\appprogress.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\appprogress.cpp
+
+$(OBJS)\monodll_artmsw.obj: ..\..\src\msw\artmsw.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\artmsw.cpp
 
 $(OBJS)\monodll_msw_bmpbuttn.obj: ..\..\src\msw\bmpbuttn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\bmpbuttn.cpp
@@ -9405,6 +9413,11 @@ $(OBJS)\monodll_wizard.obj: ..\..\src\generic\wizard.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_addremovectrl.obj: ..\..\src\common\addremovectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\addremovectrl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\taskbarcmn.cpp
 !endif
@@ -9831,11 +9844,11 @@ $(OBJS)\monolib_msw_accel.obj: ..\..\src\msw\accel.cpp
 $(OBJS)\monolib_msw_anybutton.obj: ..\..\src\msw\anybutton.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\anybutton.cpp
 
-$(OBJS)\monolib_artmsw.obj: ..\..\src\msw\artmsw.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\artmsw.cpp
-
 $(OBJS)\monolib_appprogress.obj: ..\..\src\msw\appprogress.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\appprogress.cpp
+
+$(OBJS)\monolib_artmsw.obj: ..\..\src\msw\artmsw.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\artmsw.cpp
 
 $(OBJS)\monolib_msw_bmpbuttn.obj: ..\..\src\msw\bmpbuttn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\bmpbuttn.cpp
@@ -11890,6 +11903,11 @@ $(OBJS)\monolib_wizard.obj: ..\..\src\generic\wizard.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_addremovectrl.obj: ..\..\src\common\addremovectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\addremovectrl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\taskbarcmn.cpp
 !endif
@@ -12724,11 +12742,11 @@ $(OBJS)\coredll_msw_accel.obj: ..\..\src\msw\accel.cpp
 $(OBJS)\coredll_msw_anybutton.obj: ..\..\src\msw\anybutton.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\anybutton.cpp
 
-$(OBJS)\coredll_artmsw.obj: ..\..\src\msw\artmsw.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\artmsw.cpp
-
 $(OBJS)\coredll_appprogress.obj: ..\..\src\msw\appprogress.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\appprogress.cpp
+
+$(OBJS)\coredll_artmsw.obj: ..\..\src\msw\artmsw.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\artmsw.cpp
 
 $(OBJS)\coredll_msw_bmpbuttn.obj: ..\..\src\msw\bmpbuttn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\bmpbuttn.cpp
@@ -14185,11 +14203,11 @@ $(OBJS)\corelib_msw_accel.obj: ..\..\src\msw\accel.cpp
 $(OBJS)\corelib_msw_anybutton.obj: ..\..\src\msw\anybutton.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\anybutton.cpp
 
-$(OBJS)\corelib_artmsw.obj: ..\..\src\msw\artmsw.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\artmsw.cpp
-
 $(OBJS)\corelib_appprogress.obj: ..\..\src\msw\appprogress.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\appprogress.cpp
+
+$(OBJS)\corelib_artmsw.obj: ..\..\src\msw\artmsw.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\artmsw.cpp
 
 $(OBJS)\corelib_msw_bmpbuttn.obj: ..\..\src\msw\bmpbuttn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\bmpbuttn.cpp
@@ -15745,6 +15763,9 @@ $(OBJS)\advdll_treelist.obj: ..\..\src\generic\treelist.cpp
 $(OBJS)\advdll_wizard.obj: ..\..\src\generic\wizard.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\wizard.cpp
 
+$(OBJS)\advdll_addremovectrl.obj: ..\..\src\common\addremovectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\common\addremovectrl.cpp
+
 $(OBJS)\advdll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\common\taskbarcmn.cpp
 
@@ -15894,6 +15915,9 @@ $(OBJS)\advlib_treelist.obj: ..\..\src\generic\treelist.cpp
 
 $(OBJS)\advlib_wizard.obj: ..\..\src\generic\wizard.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\wizard.cpp
+
+$(OBJS)\advlib_addremovectrl.obj: ..\..\src\common\addremovectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\common\addremovectrl.cpp
 
 $(OBJS)\advlib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\common\taskbarcmn.cpp

@@ -1242,6 +1242,7 @@ enable_dnd
 enable_controls
 enable_markup
 enable_accel
+enable_addremovectrl
 enable_animatectrl
 enable_bannerwindow
 enable_artstd
@@ -2173,6 +2174,7 @@ Optional Features:
   --disable-controls      disable compilation of all standard controls
   --enable-markup         support wxControl::SetLabelMarkup
   --enable-accel          use accelerators
+  --enable-addremovectrl  use wxAddRemoveCtrl
   --enable-animatectrl    use wxAnimationCtrl class
   --enable-bannerwindow   use wxBannerWindow class
   --enable-artstd         use standard XPM icons in wxArtProvider
@@ -11237,6 +11239,50 @@ fi
             fi
           else
             result=$wxUSE_ACCEL
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
+$as_echo "$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-addremovectrl" >&5
+$as_echo_n "checking for --${enablestring:-enable}-addremovectrl... " >&6; }
+          # Check whether --enable-addremovectrl was given.
+if test "${enable_addremovectrl+set}" = set; then :
+  enableval=$enable_addremovectrl;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_addremovectrl='wxUSE_ADDREMOVECTRL=yes'
+                          else
+                            wx_cv_use_addremovectrl='wxUSE_ADDREMOVECTRL=no'
+                          fi
+
+else
+
+                          wx_cv_use_addremovectrl='wxUSE_ADDREMOVECTRL=${'DEFAULT_wxUSE_ADDREMOVECTRL":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_addremovectrl"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_ADDREMOVECTRL = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_ADDREMOVECTRL
           fi
 
           { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
@@ -35702,6 +35748,11 @@ if test "$wxUSE_ACCEL" = "yes"; then
   $as_echo "#define wxUSE_ACCEL 1" >>confdefs.h
 
   USES_CONTROLS=1
+fi
+
+if test "$wxUSE_ADDREMOVECTRL" = "yes"; then
+  $as_echo "#define wxUSE_ADDREMOVECTRL 1" >>confdefs.h
+
 fi
 
 if test "$wxUSE_ANIMATIONCTRL" = "yes"; then

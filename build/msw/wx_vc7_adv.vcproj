@@ -330,6 +330,9 @@
 			<File
 				RelativePath="..\..\src\common\taskbarcmn.cpp">
 			</File>
+			<File
+				RelativePath="..\..\src\common\addremovectrl.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="MSW Sources"
@@ -750,6 +753,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\wizard.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\addremovectrl.h">
 			</File>
 		</Filter>
 	</Files>

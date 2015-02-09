@@ -994,6 +994,16 @@
 // wxHeaderCtrl)
 #define wxUSE_REARRANGECTRL 1
 
+// wxAddRemoveCtrl is a composite control containing a control showing some
+// items (e.g. wxListBox, wxListCtrl, wxTreeCtrl, wxDataViewCtrl, ...) and "+"/
+// "-" buttons allowing to add and remove items to/from the control.
+//
+// Default is 1.
+//
+// Recommended setting: 1 but can be safely set to 0 if you don't need it (not
+// used by the library itself).
+#define wxUSE_ADDREMOVECTRL 1
+
 // ----------------------------------------------------------------------------
 // Miscellaneous GUI stuff
 // ----------------------------------------------------------------------------

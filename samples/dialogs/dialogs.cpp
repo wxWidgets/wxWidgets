@@ -47,6 +47,7 @@
 #endif // wxUSE_CHOICEDLG
 
 #include "wx/rearrangectrl.h"
+#include "wx/addremovectrl.h"
 
 #if wxUSE_STARTUP_TIPS
     #include "wx/tipdlg.h"
@@ -172,6 +173,10 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #if wxUSE_REARRANGECTRL
     EVT_MENU(DIALOGS_REARRANGE,                     MyFrame::Rearrange)
 #endif // wxUSE_REARRANGECTRL
+
+#if wxUSE_ADDREMOVECTRL
+    EVT_MENU(DIALOGS_ADDREMOVE,                     MyFrame::AddRemove)
+#endif // wxUSE_ADDREMOVECTRL
 
 #if wxUSE_FILEDLG
     EVT_MENU(DIALOGS_FILE_OPEN,                     MyFrame::FileOpen)
@@ -385,6 +390,10 @@ bool MyApp::OnInit()
     #if wxUSE_REARRANGECTRL
         choices_menu->Append(DIALOGS_REARRANGE,  wxT("&Rearrange dialog\tCtrl-R"));
     #endif // wxUSE_REARRANGECTRL
+
+    #if wxUSE_ADDREMOVECTRL
+        choices_menu->Append(DIALOGS_ADDREMOVE, "&Add/remove items control\tCtrl-A");
+    #endif // wxUSE_ADDREMOVECTRL
 
     #if USE_COLOURDLG_GENERIC || USE_FONTDLG_GENERIC
         choices_menu->AppendSeparator();
@@ -1332,6 +1341,91 @@ void MyFrame::Rearrange(wxCommandEvent& WXUNUSED(event))
     wxLogMessage("The columns order now is:%s", columns);
 }
 #endif // wxUSE_REARRANGECTRL
+
+#if wxUSE_ADDREMOVECTRL
+
+void MyFrame::AddRemove(wxCommandEvent& WXUNUSED(event))
+{
+    wxDialog dlg(this, wxID_ANY, "wxAddRemoveCtrl test",
+                 wxDefaultPosition, wxDefaultSize,
+                 wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
+
+    wxAddRemoveCtrl* const ctrl = new wxAddRemoveCtrl(&dlg);
+    ctrl->SetInitialSize(wxSize(-1, 12*GetCharHeight()));
+
+    const wxString items[] =
+    {
+        "some", "items", "for", "testing", "wxAddRemoveCtrl",
+    };
+    wxListBox* const lbox = new wxListBox(ctrl, wxID_ANY,
+                                          wxDefaultPosition, wxDefaultSize,
+                                          WXSIZEOF(items), items);
+
+    // Test adaptor class connecting wxAddRemoveCtrl with wxListBox we use
+    // inside it.
+    class ListBoxAdaptor : public wxAddRemoveAdaptor
+    {
+    public:
+        wxEXPLICIT ListBoxAdaptor(wxListBox* lbox)
+            : m_lbox(lbox)
+        {
+        }
+
+        wxWindow* GetItemsCtrl() const wxOVERRIDE
+        {
+            return m_lbox;
+        }
+
+        bool CanAdd() const wxOVERRIDE
+        {
+            // Restrict the maximal number of items to 10 just for testing.
+            return m_lbox->GetCount() <= 10;
+        }
+
+        bool CanRemove() const wxOVERRIDE
+        {
+            // We must have a selected item in order to be able to delete it.
+            return m_lbox->GetSelection() != wxNOT_FOUND;
+        }
+
+        void OnAdd() wxOVERRIDE
+        {
+            // A real program would use a wxDataViewCtrl or wxListCtrl and
+            // allow editing the newly edited item in place, here we just use a
+            // hardcoded item value instead.
+            static int s_item = 0;
+            m_lbox->Append(wxString::Format("new item #%d", ++s_item));
+        }
+
+        void OnRemove() wxOVERRIDE
+        {
+            // Notice that we don't need to check if we have a valid selection,
+            // we can be only called if CanRemove(), which already checks for
+            // this, had returned true.
+            const unsigned pos = m_lbox->GetSelection();
+
+            m_lbox->Delete(pos);
+            m_lbox->SetSelection(pos == m_lbox->GetCount() ? pos - 1 : pos);
+        }
+
+    private:
+        wxListBox* const m_lbox;
+    };
+
+    ctrl->SetAdaptor(new ListBoxAdaptor(lbox));
+
+    ctrl->SetButtonsToolTips("Add up to 10 items", "Remove current item");
+
+    wxSizer* const sizerTop = new wxBoxSizer(wxVERTICAL);
+    sizerTop->Add(ctrl, wxSizerFlags(1).Expand().Border());
+    sizerTop->Add(dlg.CreateStdDialogButtonSizer(wxOK | wxCANCEL),
+                  wxSizerFlags().Expand().Border());
+    dlg.SetSizerAndFit(sizerTop);
+
+    dlg.ShowModal();
+}
+
+#endif // wxUSE_ADDREMOVECTRL
 
 #if wxUSE_FILEDLG
 

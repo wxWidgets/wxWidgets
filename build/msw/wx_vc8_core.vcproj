@@ -4400,6 +4400,10 @@
 				RelativePath="..\..\include\wx\xpmhand.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\include\wx\addremovectrl.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"

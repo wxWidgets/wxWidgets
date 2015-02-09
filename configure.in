@@ -885,6 +885,7 @@ WX_ARG_FEATURE(markup,      [  --enable-markup         support wxControl::SetLab
 
 dnl please keep the settings below in alphabetical order
 WX_ARG_FEATURE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
+WX_ARG_FEATURE(addremovectrl, [  --enable-addremovectrl  use wxAddRemoveCtrl], wxUSE_ADDREMOVECTRL)
 WX_ARG_FEATURE(animatectrl, [  --enable-animatectrl    use wxAnimationCtrl class], wxUSE_ANIMATIONCTRL)
 WX_ARG_FEATURE(bannerwindow,[  --enable-bannerwindow   use wxBannerWindow class], wxUSE_BANNERWINDOW)
 WX_ARG_FEATURE(artstd,      [  --enable-artstd         use standard XPM icons in wxArtProvider], wxUSE_ARTPROVIDER_STD)
@@ -6424,6 +6425,10 @@ fi
 if test "$wxUSE_ACCEL" = "yes"; then
   AC_DEFINE(wxUSE_ACCEL)
   USES_CONTROLS=1
+fi
+
+if test "$wxUSE_ADDREMOVECTRL" = "yes"; then
+  AC_DEFINE(wxUSE_ADDREMOVECTRL)
 fi
 
 if test "$wxUSE_ANIMATIONCTRL" = "yes"; then
