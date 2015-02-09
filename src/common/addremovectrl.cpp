@@ -40,7 +40,7 @@
 // ----------------------------------------------------------------------------
 
 extern
-WXDLLIMPEXP_DATA_CORE(const char) wxAddRemoveCtrlNameStr[] = "wxAddRemoveCtrl";
+WXDLLIMPEXP_DATA_ADV(const char) wxAddRemoveCtrlNameStr[] = "wxAddRemoveCtrl";
 
 bool
 wxAddRemoveCtrl::Create(wxWindow* parent,
