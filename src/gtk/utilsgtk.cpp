@@ -323,7 +323,13 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
         switch (result)
         {
             case GTK_ASSERT_DIALOG_STOP:
-                wxTrap();
+                // Don't call wxTrap() directly from here to avoid having the
+                // functions between the occurrence of the assert in the code
+                // and this function in the call stack. Instead, just set a
+                // flag so that inline expansion of the assert macro we are
+                // called from calls wxTrap() itself, like this the debugger
+                // would break exactly at the assert position.
+                wxTrapInAssert = true;
                 break;
             case GTK_ASSERT_DIALOG_CONTINUE:
                 // nothing to do
