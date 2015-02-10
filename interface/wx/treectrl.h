@@ -1095,8 +1095,8 @@ public:
     const wxString& GetLabel() const;
 
     /**
-        Returns the old item index (valid for @c EVT_TREE_ITEM_CHANGING and
-        @c EVT_TREE_ITEM_CHANGED events).
+        Returns the old item index (valid for @c EVT_TREE_SEL_CHANGING and
+        @c EVT_TREE_SEL_CHANGED events).
     */
     wxTreeItemId GetOldItem() const;
 
