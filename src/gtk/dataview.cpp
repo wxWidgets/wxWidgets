@@ -135,9 +135,11 @@ public:
 
 // Implementation note: it could be expected that setting the selection
 // function in this class ctor and resetting it back to the old value in its
-// dtor would work. However currently gtk_tree_selection_get_select_function()
-// can't be passed NULL (see https://bugzilla.gnome.org/show_bug.cgi?id=626276)
-// so we can't do this. Instead, we always use the selection function (which
+// dtor would work, However in GTK+2 gtk_tree_selection_get_select_function()
+// can't be passed NULL (see https://bugzilla.gnome.org/show_bug.cgi?id=626276
+// which was only fixed in 2.90.5-304-g316b9da) so we can't do this.
+//
+// Instead, we always use the selection function (which
 // imposes extra overhead, albeit minimal one, on all selection operations) and
 // just set/reset the flag telling it whether it should allow or forbid the
 // selection.
@@ -168,7 +170,15 @@ public:
 
         ms_instance = this;
 
-        CheckCurrentSelectionFunc(NULL);
+        if ( ms_firstTime )
+        {
+            ms_firstTime = false;
+            CheckCurrentSelectionFunc(NULL);
+        }
+        else
+        {
+            CheckCurrentSelectionFunc(wxdataview_selection_func);
+        }
 
         // Pass some non-NULL pointer as "data" for the callback, it doesn't
         // matter what it is as long as it's non-NULL.
@@ -215,6 +225,7 @@ private:
     }
 
     static wxGtkTreeSelectionLock *ms_instance;
+    static bool ms_firstTime;
 
     GtkTreeSelection * const m_selection;
 
@@ -222,6 +233,7 @@ private:
 };
 
 wxGtkTreeSelectionLock *wxGtkTreeSelectionLock::ms_instance = NULL;
+bool wxGtkTreeSelectionLock::ms_firstTime = true;
 
 //-----------------------------------------------------------------------------
 // wxDataViewCtrlInternal
