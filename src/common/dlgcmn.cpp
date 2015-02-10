@@ -561,7 +561,13 @@ void wxDialogBase::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
     closing.Append(this);
 
-    if ( !SendCloseButtonClickEvent() )
+    // When a previously hidden (necessarily modeless) dialog is being closed,
+    // we must not perform the usual validation and data transfer steps as they
+    // had been already done when it was hidden and doing it again now would be
+    // unexpected and could result in e.g. the dialog asking for confirmation
+    // before discarding the changes being shown again, which doesn't make
+    // sense as the dialog is not being closed in response to any user action.
+    if ( !IsShown() || !SendCloseButtonClickEvent() )
     {
         // If the handler didn't close the dialog (e.g. because there is no
         // button with matching id) we still want to close it when the user
