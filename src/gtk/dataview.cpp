@@ -1855,6 +1855,13 @@ void wxDataViewRenderer::GtkInitHandlers()
 
 void wxDataViewRenderer::SetMode( wxDataViewCellMode mode )
 {
+    m_mode = mode;
+
+    GtkSetMode(mode);
+}
+
+void wxDataViewRenderer::GtkSetMode( wxDataViewCellMode mode )
+{
     GtkCellRendererMode gtkMode;
     switch (mode)
     {
@@ -1875,9 +1882,6 @@ void wxDataViewRenderer::SetMode( wxDataViewCellMode mode )
             return;
     }
 
-    m_mode = mode;
-    
-    // This value is most often ignored in GtkTreeView
     GValue gvalue = G_VALUE_INIT;
     g_value_init( &gvalue, gtk_cell_renderer_mode_get_type() );
     g_value_set_enum( &gvalue, gtkMode );
@@ -1887,33 +1891,7 @@ void wxDataViewRenderer::SetMode( wxDataViewCellMode mode )
 
 wxDataViewCellMode wxDataViewRenderer::GetMode() const
 {
-    wxDataViewCellMode ret;
-
-    GValue gvalue;
-    g_object_get( G_OBJECT(m_renderer), "mode", &gvalue, NULL);
-
-    switch (g_value_get_enum(&gvalue))
-    {
-        default:
-            wxFAIL_MSG( "unknown GtkCellRendererMode value" );
-            // fall through (we have to return something)
-
-        case GTK_CELL_RENDERER_MODE_INERT:
-            ret = wxDATAVIEW_CELL_INERT;
-            break;
-
-        case GTK_CELL_RENDERER_MODE_ACTIVATABLE:
-            ret = wxDATAVIEW_CELL_ACTIVATABLE;
-            break;
-
-        case GTK_CELL_RENDERER_MODE_EDITABLE:
-            ret = wxDATAVIEW_CELL_EDITABLE;
-            break;
-    }
-
-    g_value_unset( &gvalue );
-
-    return ret;
+    return m_mode;
 }
 
 void wxDataViewRenderer::GtkApplyAlignment(GtkCellRenderer *renderer)
@@ -2937,11 +2915,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     g_value_unset( &gvalue );
 
     // b) this actually disables the control/renderer
-    if (enabled)
-        cell->SetMode( cell->GtkGetMode() );
-    else
-        cell->SetMode( wxDATAVIEW_CELL_INERT );
-        
+    cell->GtkSetMode(enabled ? cell->GetMode() : wxDATAVIEW_CELL_INERT);
 
     // deal with attributes: if the renderer doesn't support them at all, we
     // don't even need to query the model for them
