@@ -425,6 +425,14 @@
 #   endif
 #endif /* !defined(wxUSE_ACCESSIBILITY) */
 
+#ifndef wxUSE_ADDREMOVECTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_ADDREMOVECTRL must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_ADDREMOVECTRL 0
+#   endif
+#endif /* !defined(wxUSE_ADDREMOVECTRL) */
+
 #ifndef wxUSE_ANIMATIONCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_ANIMATIONCTRL must be defined, please read comment near the top of this file."
