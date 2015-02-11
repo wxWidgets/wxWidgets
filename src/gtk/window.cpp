@@ -3172,7 +3172,7 @@ void wxWindowGTK::DoClientToScreen( int *x, int *y ) const
             {
                 int w;
                 // undo RTL conversion done by parent
-                m_parent->DoGetClientSize(&w, NULL);
+                static_cast<wxWindowGTK*>(m_parent)->DoGetClientSize(&w, NULL);
                 *x = w - *x;
 
                 DoGetClientSize(&w, NULL);
@@ -3242,7 +3242,7 @@ void wxWindowGTK::DoScreenToClient( int *x, int *y ) const
             {
                 int w;
                 // undo RTL conversion done by parent
-                m_parent->DoGetClientSize(&w, NULL);
+                static_cast<wxWindowGTK*>(m_parent)->DoGetClientSize(&w, NULL);
                 *x = w - *x;
 
                 DoGetClientSize(&w, NULL);
