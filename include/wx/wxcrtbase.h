@@ -647,8 +647,19 @@ WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,
 #if defined(__WXQT__) && defined(__ANDROID__)
     #define wxNEED_WX_MBSTOWCS
     #undef HAVE_WCSRTOMBS
+    // TODO: use Qt built-in required functionality
 #endif
 
+#if defined(wxNEED_WX_MBSTOWCS) && defined(__ANDROID__)
+    #warning "Custom mb/wchar conv. only works for ASCII, see Android NDK notes"
+    WXDLLIMPEXP_BASE size_t android_mbstowcs(wchar_t *, const char *, size_t);
+    WXDLLIMPEXP_BASE size_t android_wcstombs(char *, const wchar_t *, size_t);
+    #define wxMbstowcs android_mbstowcs
+    #define wxWcstombs android_wcstombs
+#else
+    #define wxMbstowcs mbstowcs
+    #define wxWcstombs wcstombs
+#endif
 
 
 /* -------------------------------------------------------------------------

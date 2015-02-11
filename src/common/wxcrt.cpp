@@ -89,7 +89,7 @@ WXDLLIMPEXP_BASE size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 #ifdef HAVE_WCSRTOMBS
     return mbsrtowcs(buf, &psz, n, &mbstate);
 #else
-    return mbstowcs(buf, psz, n);
+    return wxMbstowcs(buf, psz, n);
 #endif
   }
 
@@ -102,7 +102,7 @@ WXDLLIMPEXP_BASE size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 #ifdef HAVE_WCSRTOMBS
   return mbsrtowcs(NULL, &psz, 0, &mbstate);
 #else
-  return mbstowcs(NULL, psz, 0);
+  return wxMbstowcs(NULL, psz, 0);
 #endif
 }
 
@@ -122,14 +122,14 @@ WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 #ifdef HAVE_WCSRTOMBS
     return wcsrtombs(buf, &pwz, n, &mbstate);
 #else
-    return wcstombs(buf, pwz, n);
+    return wxWcstombs(buf, pwz, n);
 #endif
   }
 
 #ifdef HAVE_WCSRTOMBS
   return wcsrtombs(NULL, &pwz, 0, &mbstate);
 #else
-  return wcstombs(NULL, pwz, 0);
+  return wxWcstombs(NULL, pwz, 0);
 #endif
 }
 
@@ -1277,6 +1277,7 @@ int wxVsscanf(const wxCStrData& str, const wchar_t *format, va_list ap)
 // convert a byte at a time
 
 #ifdef __ANDROID__
+
 #define ANDROID_WCSTO_START \
     int len = wcslen(nptr) + 1; \
     char dst[len]; \
@@ -1313,4 +1314,53 @@ double android_wcstod(const wchar_t *nptr, wchar_t **endptr)
     double d = strtod(dst, &dstendp);
     ANDROID_WCSTO_END
 }
-#endif
+
+#ifdef wxNEED_WX_MBSTOWCS
+
+WXDLLEXPORT size_t android_mbstowcs(wchar_t * out, const char * in, size_t outlen)
+{
+    if (!out)
+    {
+        size_t outsize = 0;
+        while(*in++)
+            outsize++;
+        return outsize;
+    }
+
+    const char* origin = in;
+
+    while (outlen-- && *in)
+    {
+        *out++ = (wchar_t) *in++;
+    }
+
+    *out = '\0';
+
+    return in - origin;
+}
+
+WXDLLEXPORT size_t android_wcstombs(char * out, const wchar_t * in, size_t outlen)
+{
+    if (!out)
+    {
+        size_t outsize = 0;
+        while(*in++)
+            outsize++;
+        return outsize;
+    }
+
+    const wchar_t* origin = in;
+
+    while (outlen-- && *in)
+    {
+        *out++ = (char) *in++;
+    }
+
+    *out = '\0';
+
+    return in - origin;
+}
+
+#endif // wxNEED_WX_MBSTOWCS
+
+#endif // __ANDROID__
