@@ -197,9 +197,21 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 #define wxCRT_StrtodA    strtod
 #define wxCRT_StrtolA    strtol
 #define wxCRT_StrtoulA   strtoul
+
+#ifdef __ANDROID__ // these functions are broken on android
+
+extern double android_wcstod(const wchar_t *nptr, wchar_t **endptr);
+extern long android_wcstol(const wchar_t *nptr, wchar_t **endptr, int base);
+extern unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int base);
+
+#define wxCRT_StrtodW    android_wcstod
+#define wxCRT_StrtolW    android_wcstol
+#define wxCRT_StrtoulW   android_wcstoul
+#else
 #define wxCRT_StrtodW    wcstod
 #define wxCRT_StrtolW    wcstol
 #define wxCRT_StrtoulW   wcstoul
+#endif
 
 #ifdef __VISUALC__
     #define wxCRT_StrtollA   _strtoi64

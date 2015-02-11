@@ -1268,3 +1268,49 @@ int wxVsscanf(const wxCStrData& str, const char *format, va_list ap)
 int wxVsscanf(const wxCStrData& str, const wchar_t *format, va_list ap)
     { return wxCRT_VsscanfW(str.AsWCharBuf(), format, ap); }
 #endif // HAVE_NO_VSSCANF
+
+// ============================================================================
+// ANDROID specific private implementations (due stubs/missing support in NDK)
+// ============================================================================
+
+// On android, most wchar_t functions are broken, so instead we must
+// convert a byte at a time
+
+#ifdef __ANDROID__
+#define ANDROID_WCSTO_START \
+    int len = wcslen(nptr) + 1; \
+    char dst[len]; \
+    for(int i=0; i<len; i++) \
+        dst[i] = wctob(nptr[i]); \
+    char *dstendp;
+
+#define ANDROID_WCSTO_END \
+    if(endptr) { \
+        if(dstendp) \
+            *endptr = (wchar_t*)(nptr + (dstendp - dst) * sizeof(wchar_t)); \
+        else \
+            *endptr = NULL; \
+    } \
+    return d;
+
+long android_wcstol(const wchar_t *nptr, wchar_t **endptr, int base)
+{
+    ANDROID_WCSTO_START
+    long d = strtol(dst, &dstendp, base);
+    ANDROID_WCSTO_END
+}
+
+unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int base)
+{
+    ANDROID_WCSTO_START
+    unsigned long d = strtoul(dst, &dstendp, base);
+    ANDROID_WCSTO_END
+}
+
+double android_wcstod(const wchar_t *nptr, wchar_t **endptr)
+{
+    ANDROID_WCSTO_START
+    double d = strtod(dst, &dstendp);
+    ANDROID_WCSTO_END
+}
+#endif
