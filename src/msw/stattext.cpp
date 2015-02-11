@@ -75,18 +75,14 @@ WXDWORD wxStaticText::MSWGetStyle(long style, WXDWORD *exstyle) const
         msStyle |= SS_LEFT;
 
 #ifdef SS_ENDELLIPSIS
-    // this style is necessary to receive mouse events
-    // Win NT and later have the SS_ENDELLIPSIS style which is useful to us:
-    if (wxGetOsVersion() == wxOS_WINDOWS_NT)
-    {
-        // for now, add the SS_ENDELLIPSIS style if wxST_ELLIPSIZE_END is given;
-        // we may need to remove it later in ::SetLabel() if the given label
-        // has newlines
-        if ( style & wxST_ELLIPSIZE_END )
-            msStyle |= SS_ENDELLIPSIS;
-    }
+    // for now, add the SS_ENDELLIPSIS style if wxST_ELLIPSIZE_END is given;
+    // we may need to remove it later in ::SetLabel() if the given label
+    // has newlines
+    if ( style & wxST_ELLIPSIZE_END )
+        msStyle |= SS_ENDELLIPSIS;
 #endif // SS_ENDELLIPSIS
 
+    // this style is necessary to receive mouse events
     msStyle |= SS_NOTIFY;
 
     return msStyle;
@@ -153,8 +149,7 @@ void wxStaticText::SetLabel(const wxString& label)
 {
 #ifdef SS_ENDELLIPSIS
     long styleReal = ::GetWindowLong(GetHwnd(), GWL_STYLE);
-    if ( HasFlag(wxST_ELLIPSIZE_END) &&
-          wxGetOsVersion() == wxOS_WINDOWS_NT )
+    if ( HasFlag(wxST_ELLIPSIZE_END) )
     {
         // adding SS_ENDELLIPSIS or SS_ENDELLIPSIS "disables" the correct
         // newline handling in static texts: the newlines in the labels are
