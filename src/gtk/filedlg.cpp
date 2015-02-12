@@ -15,6 +15,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
     #include "wx/msgdlg.h"
 #endif
 
@@ -81,7 +82,11 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
     {
         // Use chdir to not care about filename encodings
         wxGtkString folder(g_path_get_dirname(filename));
-        chdir(folder);
+        if ( chdir(folder) != 0 )
+        {
+            wxLogSysError(_("Changing current directory to \"%s\" failed"),
+                          wxString::FromUTF8(folder));
+        }
     }
 
     wxCommandEvent event(wxEVT_BUTTON, wxID_OK);
