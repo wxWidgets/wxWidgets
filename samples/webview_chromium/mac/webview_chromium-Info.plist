@@ -34,7 +34,7 @@
 	<key>CFBundleVersion</key>
 	<string>3.1.0</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright 2005-2014 wxWidgets</string>
+	<string>Copyright 2005-2015 wxWidgets</string>
 	<key>NSPrincipalClass</key>
 	<string>wxNSApplication</string>
 </dict>
