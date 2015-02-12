@@ -3,7 +3,7 @@
 // Purpose:     webview_chromium launch helper
 // Author:      Haojian Wu <hokein.wu@gmail.com>
 // Created:     2014-06-22
-// Copyright:   (c) 2014 wxWidgets development team
+// Copyright:   (c) 2014 - 2015 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
