@@ -37,11 +37,13 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewChromium, wxWebView);
 class wxStringVisitor : public CefStringVisitor
 {
 public:
-    enum StringType {
+    enum StringType
+    {
       PAGE_SOURCE,
       PAGE_TEXT,
     };
-    wxStringVisitor(wxWebViewChromium* webview, StringType type) : m_type(type), m_webview(webview) {}
+    wxStringVisitor(wxWebViewChromium* webview, StringType type) :
+        m_type(type), m_webview(webview) {}
     void Visit(const CefString& string)
     {
         switch(m_type)
@@ -68,14 +70,6 @@ bool wxWebViewChromium::Create(wxWindow* parent,
            long style,
            const wxString& name)
 {
-#ifdef __WXMSW__
-    if ( !wxControl::Create(parent, id, pos, size, style,
-                           wxDefaultValidator, name) )
-    {
-        return false;
-    }
-#endif
-
 #ifdef __WXGTK__
     style |= wxHSCROLL | wxVSCROLL;
     if ( !PreCreation( parent, pos, size ) ||
@@ -84,10 +78,12 @@ bool wxWebViewChromium::Create(wxWindow* parent,
         wxFAIL_MSG( wxT("wxWebViewChromium creation failed") );
         return false;
     }
-#endif
-
-#ifdef __WXOSX__
-    wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name);
+#else
+    if ( !wxControl::Create(parent, id, pos, size, style,
+                           wxDefaultValidator, name) )
+    {
+        return false;
+    }
 #endif
 
     m_historyLoadingFromList = false;
@@ -449,7 +445,7 @@ bool wxWebViewChromium::StartUp(int &code, const wxString &path,
     CefMainArgs args(argc, argv);
 #endif
     // If there is no subprocess then we need to execute on this process
-    if ( path == "" )
+    if ( path.empty() )
     {
 #if CHROME_VERSION_BUILD >= 1750
         code = CefExecuteProcess(args, NULL, NULL);
@@ -469,9 +465,6 @@ bool wxWebViewChromium::StartUp(int &code, const wxString &path,
     settings.log_severity = LOGSEVERITY_INFO;
     CefString(&settings.log_file).FromASCII("./debug.log");
 #endif
-    // We use a multithreaded message loop so we don't have to integrate
-    // with the wx message loop
-    //settings.multi_threaded_message_loop = true;
     CefString(&settings.browser_subprocess_path) = path.ToStdString();
 
 #if CHROME_VERSION_BUILD >= 1750
