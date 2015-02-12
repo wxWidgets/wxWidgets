@@ -18,6 +18,10 @@
 
 #if wxUSE_FILEPICKERCTRL
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/filepicker.h"
 #include "wx/tooltip.h"
 

@@ -15,6 +15,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/log.h"
     #include "wx/msgdlg.h"
 #endif
 
