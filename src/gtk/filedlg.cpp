@@ -81,7 +81,10 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
     {
         // Use chdir to not care about filename encodings
         wxGtkString folder(g_path_get_dirname(filename));
-        chdir(folder);
+        if ( chdir(folder) != 0 )
+        {
+            wxLogSysError(_("Changing current directory to \"%s\" failed"));
+        }
     }
 
     wxCommandEvent event(wxEVT_BUTTON, wxID_OK);
