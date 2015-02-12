@@ -30,11 +30,11 @@
 
     __General__
 
-    The wxWebViewChromium backend is built into a seperate webview_chromium
+    The wxWebViewChromium backend is built into a separate webview_chromium
     library which depends on the webview library.
 
     Once you have a copy of CEF3, either from compiling it yourself or using
-    prebuild binaries you should copy it into `wx_root/src/cef`. To run the
+    prebuilt binaries you should copy it into `wx_root/src/cef`. To run the
     webview_chromium sample you need to copy the CEF3 resources into the
     sample directory. The following files need to be copied:
 
@@ -42,7 +42,7 @@
       wx_root/src/cef/Release folder, depending on your build type.
     - The contents of the wx_root/src/cef/Resources folder.
 
-    When builing wxWidgets you need to enusre wxWebViewChromium is enabled,
+    When building wxWidgets you need to ensure wxWebViewChromium is enabled,
     either by passing --enable-webviewchromium for autoconf based builds or
     setting wxUSE_WEBVIEW_CHROMIUM equal to 1 in setup.h for Visual Studio
     based builds.
@@ -73,7 +73,7 @@
        - Require `webview.cpp`
        - Reuqire link frameworks: Chromium Embedded Framework.framework,
          AppKit.frameworks.
-       - Reuqire app bundle configuration: Info.plist
+       - Require app bundle configuration: Info.plist
        - Use system tool `install_name_tool -change` to correct `Chromium
          Embedded Framework.framework/Chromium Embedded Framework` location.
     4. Create a `Contents/Frameworks` directory in `webviewchromium.app` bundle
@@ -182,7 +182,7 @@ public:
     /** 
         Shutdown CEF
 
-        The function should be callde before client application exits.
+        The function should be called before client application exits.
         
         Since there is a bug of CEF3, the behavior is different between
         Mac OS X with Linux/Windows platforms.  On Mac OS X, it should
@@ -192,12 +192,12 @@ public:
     static void Shutdown();
 
     /**
-        Run CEF3 messageloop once.
+        Run the CEF3 message loop once.
 
-        The client app using wxWebviewChromium should integrate CEF messageloop in
-        its own messageloop to give CEF3 a chance to run.
+        The client app using wxWebviewChromium should integrate the CEF message
+        loop in its own message loop to give CEF3 a chance to run.
 
-        Developer can integrate the messageloop through the following two ways:
+        Developers can integrate the message loop through the following two ways:
         1. Implement wxApp::ProcessIdle
            @code
                class WebApp
