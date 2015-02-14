@@ -1616,9 +1616,13 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
 
 static void SendSetCursorEvent(wxWindowGTK* win, int x, int y)
 {
-    wxSetCursorEvent event(x, y);
+    wxPoint posClient(x, y);
+    const wxPoint posScreen = win->ClientToScreen(posClient);
+
     wxWindowGTK* w = win;
-    do {
+    for ( ;; )
+    {
+        wxSetCursorEvent event(posClient.x, posClient.y);
         if (w->GTKProcessEvent(event))
         {
             win->GTKUpdateCursor(false, false, &event.GetCursor());
@@ -1628,8 +1632,12 @@ static void SendSetCursorEvent(wxWindowGTK* win, int x, int y)
         // this is how wxMSW works...
         if (w->GetCursor().IsOk())
             break;
+
         w = w->GetParent();
-    } while (w);
+        if ( !w )
+            break;
+        posClient = w->ScreenToClient(posScreen);
+    }
     if (win->m_needCursorReset)
         win->GTKUpdateCursor();
 }
