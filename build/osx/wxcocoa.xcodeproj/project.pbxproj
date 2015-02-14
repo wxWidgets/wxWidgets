@@ -2545,6 +2545,9 @@
 		EC3A1C620D323B5590AABF02 /* module.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DB43FAB1E563B02ACEFF647 /* module.cpp */; };
 		EC3A1C620D323B5590AABF03 /* module.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DB43FAB1E563B02ACEFF647 /* module.cpp */; };
 		EC3A1C620D323B5590AABF04 /* module.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DB43FAB1E563B02ACEFF647 /* module.cpp */; };
+		EC3D181D65F33E09A675FFF2 /* addremovectrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 964578C24B9F390AAD08576E /* addremovectrl.cpp */; };
+		EC3D181D65F33E09A675FFF3 /* addremovectrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 964578C24B9F390AAD08576E /* addremovectrl.cpp */; };
+		EC3D181D65F33E09A675FFF4 /* addremovectrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 964578C24B9F390AAD08576E /* addremovectrl.cpp */; };
 		EC43AFB3670A3D459D9B388D /* LexMPT.cxx in Sources */ = {isa = PBXBuildFile; fileRef = FE3B47058A723243A285594D /* LexMPT.cxx */; };
 		EC43AFB3670A3D459D9B388E /* LexMPT.cxx in Sources */ = {isa = PBXBuildFile; fileRef = FE3B47058A723243A285594D /* LexMPT.cxx */; };
 		EC43AFB3670A3D459D9B388F /* LexMPT.cxx in Sources */ = {isa = PBXBuildFile; fileRef = FE3B47058A723243A285594D /* LexMPT.cxx */; };
@@ -4308,6 +4311,7 @@
 		95B4EDF38F8A3E5EBAFF560F /* trees.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = trees.c; path = ../../src/zlib/trees.c; sourceTree = "<group>"; };
 		95DEEF60B1E9358A8CCCC67E /* datavcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = datavcmn.cpp; path = ../../src/common/datavcmn.cpp; sourceTree = "<group>"; };
 		95E2B80B2D7033808504DA8D /* utilsexc_cf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = utilsexc_cf.cpp; path = ../../src/osx/core/utilsexc_cf.cpp; sourceTree = "<group>"; };
+		964578C24B9F390AAD08576E /* addremovectrl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = addremovectrl.cpp; path = ../../src/common/addremovectrl.cpp; sourceTree = "<group>"; };
 		9660AE8FEB7B3EDB857B9238 /* lboxcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lboxcmn.cpp; path = ../../src/common/lboxcmn.cpp; sourceTree = "<group>"; };
 		966AA1B230CA3EFCB1260D80 /* libwx_baseu_net.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libwx_baseu_net.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		967EF76827CB3CDE87E1E733 /* propgridpagestate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = propgridpagestate.cpp; path = ../../src/propgrid/propgridpagestate.cpp; sourceTree = "<group>"; };
@@ -5524,6 +5528,7 @@
 				B56A9BF7AE1E3F11A5848297 /* tipdlg.cpp */,
 				5190E3E110443FD29F2474FC /* treelist.cpp */,
 				8F08F70E1EF239999A4D2AC4 /* wizard.cpp */,
+				964578C24B9F390AAD08576E /* addremovectrl.cpp */,
 				4692909E4B823F71822B13F8 /* taskbarcmn.cpp */,
 				580AFC66F3003582B43043B1 /* animateg.cpp */,
 				D049F49C75043592B7E318B3 /* datetimectrl_osx.cpp */,
@@ -8385,6 +8390,7 @@
 				77BC918AF05C30E8A0BD27F9 /* tipdlg.cpp in Sources */,
 				060E095718B03EF98C75479A /* treelist.cpp in Sources */,
 				82FA4AA043213728AC266701 /* wizard.cpp in Sources */,
+				EC3D181D65F33E09A675FFF3 /* addremovectrl.cpp in Sources */,
 				D00AF125FCB63A7A8F9B87DF /* taskbarcmn.cpp in Sources */,
 				46F341B46F80376B962759F6 /* animateg.cpp in Sources */,
 				219304C9DDA33E9AADB515DD /* datetimectrl_osx.cpp in Sources */,
@@ -9571,6 +9577,7 @@
 				77BC918AF05C30E8A0BD27F8 /* tipdlg.cpp in Sources */,
 				060E095718B03EF98C754799 /* treelist.cpp in Sources */,
 				82FA4AA043213728AC266700 /* wizard.cpp in Sources */,
+				EC3D181D65F33E09A675FFF2 /* addremovectrl.cpp in Sources */,
 				D00AF125FCB63A7A8F9B87DE /* taskbarcmn.cpp in Sources */,
 				46F341B46F80376B962759F5 /* animateg.cpp in Sources */,
 				219304C9DDA33E9AADB515DC /* datetimectrl_osx.cpp in Sources */,
