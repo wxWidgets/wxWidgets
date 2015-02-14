@@ -1552,9 +1552,13 @@ static const wxCursor* gs_overrideCursor;
 
 static void SendSetCursorEvent(wxWindowGTK* win, int x, int y)
 {
-    wxSetCursorEvent event(x, y);
+    wxPoint posClient(x, y);
+    const wxPoint posScreen = win->ClientToScreen(posClient);
+
     wxWindowGTK* w = win;
-    do {
+    for ( ;; )
+    {
+        wxSetCursorEvent event(posClient.x, posClient.y);
         if (w->GTKProcessEvent(event))
         {
             gs_overrideCursor = &event.GetCursor();
@@ -1566,8 +1570,12 @@ static void SendSetCursorEvent(wxWindowGTK* win, int x, int y)
         // this is how wxMSW works...
         if (w->GetCursor().IsOk())
             break;
+
         w = w->GetParent();
-    } while (w);
+        if ( !w )
+            break;
+        posClient = w->ScreenToClient(posScreen);
+    }
     if (gs_needCursorResetMap[win])
         win->GTKUpdateCursor();
 }

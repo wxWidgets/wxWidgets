@@ -589,6 +589,7 @@ wxGTK:
 - Fix infinite sizing loop with GTK3 when using wxScrolled with a non-default
   target window.
 - Fix crashes in wxGTK3 when running with non-X11 backend (Marco Trevisan).
+- Fix coordinates of wxSetCursorEvent propagated to parent windows.
 
 wxMSW:
 
