@@ -179,7 +179,7 @@ public:
             parameter to select the appropriate background colour for the
             notification.
      */
-    void ShowMessage(const wxString& msg, int flags = wxICON_NONE);
+    void ShowMessage(const wxString& msg, int flags = wxICON_INFORMATION);
 
     /**
         @name Generic version customization methods.
