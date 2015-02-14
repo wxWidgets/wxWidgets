@@ -8239,7 +8239,22 @@ echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       expat              ${wxUSE_EXPAT}"
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
 echo "                                       sdl                ${wxUSE_LIBSDL}"
-echo "                                       webview_chromium   ${wxUSE_WEBVIEW_CHROMIUM}"
+echo $ECHO_N "                                       webview            ${wxUSE_WEBVIEW}$ECHO_C"
+if test "$wxUSE_WEBVIEW" = "yes"; then
+    echo $ECHO_N " (with backends:$ECHO_C"
+    if test "$wxUSE_WEBVIEW_WEBKIT" = "yes"; then
+        echo $ECHO_N " WebKit$ECHO_C"
+    fi
+    if test "$wxUSE_WEBVIEW_IE" = "yes"; then
+        echo $ECHO_N " IE$ECHO_C"
+    fi
+    if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+        echo $ECHO_N " Chromium$ECHO_C"
+    fi
+    echo ")"
+else
+    echo
+fi
 echo ""
 
 dnl vi: set et sts=4 sw=4 com=\:dnl:
