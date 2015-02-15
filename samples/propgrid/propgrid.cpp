@@ -1763,9 +1763,12 @@ wxBEGIN_EVENT_TABLE(wxMyPropertyGridPage, wxPropertyGridPage)
 wxEND_EVENT_TABLE()
 
 
-void wxMyPropertyGridPage::OnPropertySelect( wxPropertyGridEvent& WXUNUSED(event) )
+void wxMyPropertyGridPage::OnPropertySelect( wxPropertyGridEvent& event )
 {
-    wxLogDebug(wxT("wxMyPropertyGridPage::OnPropertySelect()"));
+    wxPGProperty* p = event.GetProperty();
+    wxLogDebug(wxT("wxMyPropertyGridPage::OnPropertySelect('%s' is %s"),
+               p->GetName().c_str(),
+               IsPropertySelected(p)? wxT("selected"): wxT("unselected"));
 }
 
 void wxMyPropertyGridPage::OnPropertyChange( wxPropertyGridEvent& event )
