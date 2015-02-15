@@ -1807,9 +1807,11 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxDataViewModel *model = GetModel();
     wxAutoBufferedPaintDC dc( this );
 
+    const wxSize size = GetClientSize();
+
     dc.SetBrush(GetOwner()->GetBackgroundColour());
     dc.SetPen( *wxTRANSPARENT_PEN );
-    dc.DrawRectangle(GetClientSize());
+    dc.DrawRectangle(size);
 
     if ( IsEmpty() )
     {
@@ -1895,13 +1897,16 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.SetBrush(wxBrush(altRowColour));
 
+        // We only need to draw the visible part, so limit the rectangle to it.
+        const int xRect = m_owner->CalcUnscrolledPosition(wxPoint(0, 0)).x;
+        const int widthRect = size.x;
         for (unsigned int item = item_start; item < item_last; item++)
         {
             if ( item % 2 )
             {
-                dc.DrawRectangle(x_start,
+                dc.DrawRectangle(xRect,
                                  GetLineStart(item),
-                                 GetClientSize().GetWidth(),
+                                 widthRect,
                                  GetLineHeight(item));
             }
         }
