@@ -4376,8 +4376,10 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
     }
 
     // call wx event handler (here so that it also occurs on deselection)
+    // In case of deselection previously selected property
+    // is passed to the event object.
     if ( !(flags & wxPG_SEL_DONT_SEND_EVENT) )
-        SendEvent( wxEVT_PG_SELECTED, p, NULL );
+        SendEvent( wxEVT_PG_SELECTED, p? p: prevFirstSel, NULL );
 
     return true;
 }
