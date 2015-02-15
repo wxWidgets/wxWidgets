@@ -136,7 +136,7 @@ if (!$only_bkl) {
             # It is possible that we don't have any headers of some kind at all.
             if (exists $vars->{"${var}_HDR"}) {
                 # Our files lists don't use the full path for the headers, the
-                # common "include/" prefix is ommitted, add it back here.
+                # common "include/" prefix is omitted, add it back here.
                 push @headers, "${top_srcdir}include/$_" for @{$vars->{"${var}_HDR"}};
             }
         }
