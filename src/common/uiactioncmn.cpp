@@ -89,51 +89,6 @@ void wxUIActionSimulator::SimulateModifiers(int modifiers, bool isDown)
 
 bool wxUIActionSimulator::Char(int keycode, int modifiers)
 {
-    switch(keycode)
-    {
-    case '0':
-        keycode = '0';
-        break;
-    case '1':
-        keycode = '1';
-        break;
-    case '2':
-        keycode = '2';
-        break;
-    case '3':
-        keycode = '3';
-        break;
-    case '4':
-        keycode = '4';
-        break;
-    case '5':
-        keycode = '5';
-        break;
-    case '6':
-        keycode = '6';
-        break;
-    case '7':
-        keycode = '7';
-        break;
-    case '8':
-        keycode = '8';
-        break;
-    case '9':
-        keycode = '9';
-        break;
-    case '+':
-        keycode = '+';
-        break;
-    case '-':
-        keycode = '-';
-        break;
-    case '.':
-        keycode = '.';
-        break;
-    default:
-        break;
-    };
-
     Key(keycode, modifiers, true);
     Key(keycode, modifiers, false);
 
