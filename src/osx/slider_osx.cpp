@@ -475,7 +475,7 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
     }
 
     // yet another hack since this is a composite control
-    // when wxSlider has it's size hardcoded, we're not allowed to
+    // when wxSlider has its size hardcoded, we're not allowed to
     // change the size. But when the control has labels, we DO need
     
     // to resize the internal Mac control to accommodate the text labels.

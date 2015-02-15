@@ -76,7 +76,7 @@ There are other GUI solutions out there for Python.
 
 Tkinter is the de facto standard GUI for Python. It is available on nearly
 every platform that Python and Tcl/TK are. Why Tcl/Tk? Well because Tkinter is
-just a wrapper around Tcl's GUI toolkit, Tk. This has it's upsides and it's
+just a wrapper around Tcl's GUI toolkit, Tk. This has its upsides and its
 downsides...
 
 The upside is that Tk is a pretty versatile toolkit. It can be made to do a lot

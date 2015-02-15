@@ -3014,7 +3014,7 @@ public:
         This function returns @true if this window, or one of its parent
         windows, is scheduled for destruction and can be useful to avoid
         manipulating it as it's usually useless to do something with a window
-        which is on the point of disappearing anyhow.
+        which is at the point of disappearing anyhow.
      */
     bool IsBeingDeleted() const;
 

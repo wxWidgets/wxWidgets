@@ -320,7 +320,7 @@ size_t wxStoredOutputStream::OnSysWrite(const void *buffer, size_t size)
 // non-seekable stream.
 //
 // In this case there's no option but to decompress the stream to find
-// it's length, but we can still write the raw compressed data to avoid the
+// its length, but we can still write the raw compressed data to avoid the
 // compression overhead (which is the greater one).
 //
 // Usage is like this:
@@ -1119,7 +1119,7 @@ size_t wxZipEntry::WriteCentral(wxOutputStream& stream, wxMBConv& conv) const
 // Info-zip prefixes this record with a signature, but pkzip doesn't. So if
 // the 1st value is the signature then it is probably an info-zip record,
 // though there is a small chance that it is in fact a pkzip record which
-// happens to have the signature as it's CRC.
+// happens to have the signature as its CRC.
 //
 size_t wxZipEntry::ReadDescriptor(wxInputStream& stream)
 {

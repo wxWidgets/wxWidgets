@@ -105,7 +105,7 @@ public:
     // and changing the split mode.
     // Does nothing and returns false if the window is already split.
     // A sashPosition of 0 means choose a default sash position,
-    // negative sashPosition specifies the size of right/lower pane as it's
+    // negative sashPosition specifies the size of right/lower pane as its
     // absolute value rather than the size of left/upper pane.
     virtual bool SplitVertically(wxWindow *window1,
                                  wxWindow *window2,

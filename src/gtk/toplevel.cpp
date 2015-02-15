@@ -1386,7 +1386,7 @@ void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
     base_type::SetIcons(icons);
 
     // Setting icons before window is realized can cause a GTK assertion if
-    // another TLW is realized before this one, and it has this one as it's
+    // another TLW is realized before this one, and it has this one as its
     // transient parent. The life demo exibits this problem.
     if (m_widget && gtk_widget_get_realized(m_widget))
     {

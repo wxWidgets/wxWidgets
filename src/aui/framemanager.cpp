@@ -2276,8 +2276,8 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
         dock.min_size = dock_min_size;
 
 
-        // if the pane's current size is less than it's
-        // minimum, increase the dock's size to it's minimum
+        // if the pane's current size is less than its
+        // minimum, increase the dock's size to its minimum
         if (dock.size < dock.min_size)
             dock.size = dock.min_size;
 
@@ -2587,7 +2587,7 @@ void wxAuiManager::Update()
             }
             else
             {
-                // frame already exists, make sure it's position
+                // frame already exists, make sure its position
                 // and size reflect the information in wxAuiPaneInfo
                 if ((p.frame->GetPosition() != p.floating_pos) || (p.frame->GetSize() != p.floating_size))
                 {
@@ -3757,7 +3757,7 @@ void wxAuiManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
         DoDrop(m_docks, m_panes, pane, client_pt, action_offset);
     }
 
-    // if the pane is still floating, update it's floating
+    // if the pane is still floating, update its floating
     // position (that we store)
     if (pane.IsFloating())
     {
@@ -4370,7 +4370,7 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
         // check against the pane's minimum size, if specified. please note
         // that this is not enough to ensure that the minimum size will
         // not be violated, because the whole frame might later be shrunk,
-        // causing the size of the pane to violate it's minimum size
+        // causing the size of the pane to violate its minimum size
         if (pane.min_size.IsFullySpecified())
         {
             min_size = 0;
@@ -4742,7 +4742,7 @@ void wxAuiManager::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
 
 void wxAuiManager::OnChildFocus(wxChildFocusEvent& event)
 {
-    // when a child pane has it's focus set, we should change the
+    // when a child pane has its focus set, we should change the
     // pane's active state to reflect this. (this is only true if
     // active panes are allowed by the owner)
     if (GetFlags() & wxAUI_MGR_ALLOW_ACTIVE_PANE)

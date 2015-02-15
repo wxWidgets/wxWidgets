@@ -2484,7 +2484,7 @@ void wxComboCtrlBase::DoShowPopup( const wxRect& rect, int WXUNUSED(flags) )
         m_popupWinState = Visible;
 
         // If popup window was a generic top-level window, or the
-        // wxPopupWindow implemenation on this platform is classified as
+        // wxPopupWindow implementation on this platform is classified as
         // perfect, then we should be able to safely set focus to the popup
         // control.
         // In x11 backend, popup window neither generic top-level nor
