@@ -603,6 +603,7 @@ wxMSW:
 - Fix inserting tools removed from wxToolBar back into it (sbrowne).
 - Fix disabling submenu items in the menus (Artur Wieczorek).
 - Fix wxEVT_TREE_STATE_IMAGE_CLICK generation (Antal).
+- Fix wxDV_ROW_LINES in horizontally scrolled wxDataViewCtrl.
 
 wxOSX:
 
