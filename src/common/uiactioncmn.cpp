@@ -95,12 +95,52 @@ bool wxUIActionSimulator::Char(int keycode, int modifiers)
     return true;
 }
 
+// Helper function checking if a key must be entered with Shift pressed. If it
+// must, returns true and modifies the key to contain the unshifted version.
+//
+// This currently works only for the standard US keyboard layout which is
+// definitely not ideal, but better than nothing...
+static bool MapUnshifted(char& ch)
+{
+    const char* const unshifted =
+        "`1234567890-=\\"
+        "[]"
+        ";'"
+        ",./"
+        ;
+
+    const char* const shifted =
+        "~!@#$%^&*()_+|"
+        "{}"
+        ":\""
+        "<>?"
+        ;
+
+    wxCOMPILE_TIME_ASSERT( sizeof(unshifted) == sizeof(shifted),
+                           ShiftedUnshiftedKeysMismatch );
+
+    const char* const p = strchr(shifted, ch);
+    if ( !p )
+        return false;
+
+    ch = *(unshifted + (p - shifted));
+
+    return true;
+}
+
 bool wxUIActionSimulator::Text(const char *s)
 {
     while ( *s != '\0' )
     {
-        const char ch = *s++;
-        if ( !Char(ch, isupper(ch) ? wxMOD_SHIFT : 0) )
+        char ch = *s++;
+
+        // Map the keys that must be entered with Shift modifier to their
+        // unshifted counterparts.
+        int modifiers = 0;
+        if ( isupper(ch) || MapUnshifted(ch) )
+            modifiers |= wxMOD_SHIFT;
+
+        if ( !Char(ch, modifiers) )
             return false;
     }
 

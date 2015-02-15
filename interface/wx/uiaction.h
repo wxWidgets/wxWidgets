@@ -171,9 +171,9 @@ public:
     /**
         Emulate typing in the keys representing the given string.
 
-        Currently only the ASCII letters, digits and characters for the definition
-        of numbers (i.e. characters @c a-z @c A-Z @c 0-9 @c + @c - @c . @c , @c 'space')
-        are supported.
+        Currently only the ASCII letters are universally supported. Digits and
+        punctuation characters can be used with the standard QWERTY (US)
+        keyboard layout but may not work with other layouts.
 
         @param text
             The string to type.
