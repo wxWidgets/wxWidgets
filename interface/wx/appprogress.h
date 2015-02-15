@@ -8,12 +8,13 @@
 /**
     @class wxAppProgressIndicator
 
-    A helper class that can be used to update the progress bar in the taskbar button.
+    A helper class that can be used to update the progress bar in the taskbar
+    button on Windows and the dock icon on OS X.
 
     @library{wxcore}
     @category{misc}
 
-    @onlyfor{wxmsw}
+    @onlyfor{wxmsw,wxosx}
 
     @see wxTaskBarButton
     @since 3.1.0
@@ -43,8 +44,9 @@ public:
     /**
         Check if the application progress display is available.
 
-        Currently this only returns @true when using wxMSW and running under
-        Vista or later system, which provide task bar button API.
+        Currently this only returns @true when using wxMSW and running
+        under Windows 7 or later systems (which provide task bar button
+        API) or when using wxOSX.
 
         If this method returns @false, no other methods of this class do
         anything, but they may still be called without any ill effects.

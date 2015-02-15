@@ -15,8 +15,6 @@
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxGaugeNameStr[];
 
-class WXDLLIMPEXP_FWD_CORE wxAppProgressIndicator;
-
 // Group box
 class WXDLLIMPEXP_CORE wxGauge : public wxGaugeBase
 {
@@ -72,8 +70,6 @@ private:
     // switch to/from indeterminate mode
     void SetIndeterminateMode();
     void SetDeterminateMode();
-
-    wxAppProgressIndicator* m_appProgressIndicator;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge)
 };

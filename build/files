@@ -2131,6 +2131,7 @@ OSX_CARBON_HDR =
 OSX_COCOA_SRC =
     $(OSX_CARBON_COCOA_SRC)
     src/osx/cocoa/anybutton.mm
+    src/osx/cocoa/appprogress.mm
     src/osx/cocoa/button.mm
     src/osx/cocoa/checkbox.mm
     src/osx/cocoa/choice.mm

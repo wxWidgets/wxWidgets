@@ -5832,7 +5832,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_prntdlgg.o \
 	monodll_msw_accel.o \
 	monodll_msw_anybutton.o \
-	monodll_appprogress.o \
+	monodll_msw_appprogress.o \
 	monodll_artmsw.o \
 	monodll_msw_bmpbuttn.o \
 	monodll_msw_button.o \
@@ -5927,6 +5927,7 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS =  \
 COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS) \
 	monodll_cocoa_anybutton.o \
+	monodll_cocoa_appprogress.o \
 	monodll_osx_cocoa_button.o \
 	monodll_osx_cocoa_checkbox.o \
 	monodll_osx_cocoa_choice.o \
@@ -5990,7 +5991,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_prntdlgg.o \
 	monodll_msw_accel.o \
 	monodll_msw_anybutton.o \
-	monodll_appprogress.o \
+	monodll_msw_appprogress.o \
 	monodll_artmsw.o \
 	monodll_msw_bmpbuttn.o \
 	monodll_msw_button.o \
@@ -8191,7 +8192,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_prntdlgg.o \
 	monolib_msw_accel.o \
 	monolib_msw_anybutton.o \
-	monolib_appprogress.o \
+	monolib_msw_appprogress.o \
 	monolib_artmsw.o \
 	monolib_msw_bmpbuttn.o \
 	monolib_msw_button.o \
@@ -8286,6 +8287,7 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_1 =  \
 COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_12) \
 	monolib_cocoa_anybutton.o \
+	monolib_cocoa_appprogress.o \
 	monolib_osx_cocoa_button.o \
 	monolib_osx_cocoa_checkbox.o \
 	monolib_osx_cocoa_choice.o \
@@ -8349,7 +8351,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_prntdlgg.o \
 	monolib_msw_accel.o \
 	monolib_msw_anybutton.o \
-	monolib_appprogress.o \
+	monolib_msw_appprogress.o \
 	monolib_artmsw.o \
 	monolib_msw_bmpbuttn.o \
 	monolib_msw_button.o \
@@ -10707,7 +10709,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_prntdlgg.o \
 	coredll_msw_accel.o \
 	coredll_msw_anybutton.o \
-	coredll_appprogress.o \
+	coredll_msw_appprogress.o \
 	coredll_artmsw.o \
 	coredll_msw_bmpbuttn.o \
 	coredll_msw_button.o \
@@ -10802,6 +10804,7 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_2 =  \
 COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_14) \
 	coredll_cocoa_anybutton.o \
+	coredll_cocoa_appprogress.o \
 	coredll_osx_cocoa_button.o \
 	coredll_osx_cocoa_checkbox.o \
 	coredll_osx_cocoa_choice.o \
@@ -10865,7 +10868,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_prntdlgg.o \
 	coredll_msw_accel.o \
 	coredll_msw_anybutton.o \
-	coredll_appprogress.o \
+	coredll_msw_appprogress.o \
 	coredll_artmsw.o \
 	coredll_msw_bmpbuttn.o \
 	coredll_msw_button.o \
@@ -12485,7 +12488,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_prntdlgg.o \
 	corelib_msw_accel.o \
 	corelib_msw_anybutton.o \
-	corelib_appprogress.o \
+	corelib_msw_appprogress.o \
 	corelib_artmsw.o \
 	corelib_msw_bmpbuttn.o \
 	corelib_msw_button.o \
@@ -12580,6 +12583,7 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_3 =  \
 COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_1_0) \
 	corelib_cocoa_anybutton.o \
+	corelib_cocoa_appprogress.o \
 	corelib_osx_cocoa_button.o \
 	corelib_osx_cocoa_checkbox.o \
 	corelib_osx_cocoa_choice.o \
@@ -12643,7 +12647,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_prntdlgg.o \
 	corelib_msw_accel.o \
 	corelib_msw_anybutton.o \
-	corelib_appprogress.o \
+	corelib_msw_appprogress.o \
 	corelib_artmsw.o \
 	corelib_msw_bmpbuttn.o \
 	corelib_msw_button.o \
@@ -18140,6 +18144,9 @@ monodll_carbon_window.o: $(srcdir)/src/osx/carbon/window.cpp $(MONODLL_ODEP)
 monodll_cocoa_anybutton.o: $(srcdir)/src/osx/cocoa/anybutton.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/anybutton.mm
 
+monodll_cocoa_appprogress.o: $(srcdir)/src/osx/cocoa/appprogress.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/appprogress.mm
+
 monodll_osx_cocoa_button.o: $(srcdir)/src/osx/cocoa/button.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/button.mm
 
@@ -21374,10 +21381,10 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_msw_anybutton.o: $(srcdir)/src/msw/anybutton.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/anybutton.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/appprogress.cpp
 
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_msw_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/appprogress.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(MONODLL_ODEP)
@@ -24028,6 +24035,9 @@ monolib_carbon_window.o: $(srcdir)/src/osx/carbon/window.cpp $(MONOLIB_ODEP)
 
 monolib_cocoa_anybutton.o: $(srcdir)/src/osx/cocoa/anybutton.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/anybutton.mm
+
+monolib_cocoa_appprogress.o: $(srcdir)/src/osx/cocoa/appprogress.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/appprogress.mm
 
 monolib_osx_cocoa_button.o: $(srcdir)/src/osx/cocoa/button.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/button.mm
@@ -27263,10 +27273,10 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_msw_anybutton.o: $(srcdir)/src/msw/anybutton.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/anybutton.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/appprogress.cpp
 
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_msw_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/appprogress.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(MONOLIB_ODEP)
@@ -30596,6 +30606,9 @@ coredll_carbon_window.o: $(srcdir)/src/osx/carbon/window.cpp $(COREDLL_ODEP)
 coredll_cocoa_anybutton.o: $(srcdir)/src/osx/cocoa/anybutton.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/anybutton.mm
 
+coredll_cocoa_appprogress.o: $(srcdir)/src/osx/cocoa/appprogress.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/appprogress.mm
+
 coredll_osx_cocoa_button.o: $(srcdir)/src/osx/cocoa/button.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/button.mm
 
@@ -33266,10 +33279,10 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_msw_anybutton.o: $(srcdir)/src/msw/anybutton.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/anybutton.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_msw_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/appprogress.cpp
 
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_msw_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/appprogress.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(COREDLL_ODEP)
@@ -34993,6 +35006,9 @@ corelib_carbon_window.o: $(srcdir)/src/osx/carbon/window.cpp $(CORELIB_ODEP)
 
 corelib_cocoa_anybutton.o: $(srcdir)/src/osx/cocoa/anybutton.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/anybutton.mm
+
+corelib_cocoa_appprogress.o: $(srcdir)/src/osx/cocoa/appprogress.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/appprogress.mm
 
 corelib_osx_cocoa_button.o: $(srcdir)/src/osx/cocoa/button.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/button.mm
@@ -37664,10 +37680,10 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_msw_anybutton.o: $(srcdir)/src/msw/anybutton.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/anybutton.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_msw_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/appprogress.cpp
 
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_msw_appprogress.o: $(srcdir)/src/msw/appprogress.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/appprogress.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_artmsw.o: $(srcdir)/src/msw/artmsw.cpp $(CORELIB_ODEP)

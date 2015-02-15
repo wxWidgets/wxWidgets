@@ -56,7 +56,8 @@
 
     @style{wxGA_PROGRESS}
            Reflect the value of gauge in the application taskbar button under
-           Windows 7 and later, ignored under the other platforms.
+           Windows 7 and later and the dock icon under OS X, ignored under
+           the other platforms.
            @since 3.1.0
 
     @endStyleTable

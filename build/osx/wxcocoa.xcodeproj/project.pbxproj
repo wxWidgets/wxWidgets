@@ -2220,6 +2220,9 @@
 		CE2C937117FE3AB599DD30B9 /* sound_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9B2316B32653DA0939A372D /* sound_osx.cpp */; };
 		CE2C937117FE3AB599DD30BA /* sound_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9B2316B32653DA0939A372D /* sound_osx.cpp */; };
 		CE2C937117FE3AB599DD30BB /* sound_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9B2316B32653DA0939A372D /* sound_osx.cpp */; };
+		CE32C5250F2834D4B81BE898 /* appprogress.mm in Sources */ = {isa = PBXBuildFile; fileRef = BD91A34971FB3D0299B894A5 /* appprogress.mm */; };
+		CE32C5250F2834D4B81BE899 /* appprogress.mm in Sources */ = {isa = PBXBuildFile; fileRef = BD91A34971FB3D0299B894A5 /* appprogress.mm */; };
+		CE32C5250F2834D4B81BE89A /* appprogress.mm in Sources */ = {isa = PBXBuildFile; fileRef = BD91A34971FB3D0299B894A5 /* appprogress.mm */; };
 		CEBAAB0C77983358A601BFFE /* jdmaster.c in Sources */ = {isa = PBXBuildFile; fileRef = ED19EF377E653F71B1876259 /* jdmaster.c */; };
 		CEBAAB0C77983358A601BFFF /* jdmaster.c in Sources */ = {isa = PBXBuildFile; fileRef = ED19EF377E653F71B1876259 /* jdmaster.c */; };
 		CEBAAB0C77983358A601C000 /* jdmaster.c in Sources */ = {isa = PBXBuildFile; fileRef = ED19EF377E653F71B1876259 /* jdmaster.c */; };
@@ -4468,6 +4471,7 @@
 		BD169D8019A13A11BDB26214 /* xh_dirpicker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_dirpicker.cpp; path = ../../src/xrc/xh_dirpicker.cpp; sourceTree = "<group>"; };
 		BD709DEB71623974B9836D69 /* dockart.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dockart.cpp; path = ../../src/aui/dockart.cpp; sourceTree = "<group>"; };
 		BD88495AF72531A28D2201D0 /* tif_tile.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_tile.c; path = ../../src/tiff/libtiff/tif_tile.c; sourceTree = "<group>"; };
+		BD91A34971FB3D0299B894A5 /* appprogress.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = appprogress.mm; path = ../../src/osx/cocoa/appprogress.mm; sourceTree = "<group>"; };
 		BDE76674C0F5391BAD2AFA2F /* dialog_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dialog_osx.cpp; path = ../../src/osx/dialog_osx.cpp; sourceTree = "<group>"; };
 		BE22393DB53C3D259DFCEE64 /* libwxjpeg.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libwxjpeg.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE4B0CE56BA23002A5C8AEFF /* toolbar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = toolbar.cpp; path = ../../src/ribbon/toolbar.cpp; sourceTree = "<group>"; };
@@ -5292,6 +5296,7 @@
 				071FEABEA61E3B559A47A7DB /* statusbr.cpp */,
 				E9B31409EC6532FC83B0B957 /* textmeasure.cpp */,
 				F4020D790AE7363CB29F1C2F /* anybutton.mm */,
+				BD91A34971FB3D0299B894A5 /* appprogress.mm */,
 				C06FED83BF933DF98C2466AE /* button.mm */,
 				81708CFA21A03013ACB8DDD7 /* checkbox.mm */,
 				9F838F853CB03CF7932C08C3 /* choice.mm */,
@@ -7482,6 +7487,7 @@
 				A1AF8FF873D6383996995ED1 /* statusbr.cpp in Sources */,
 				2E059BFE8E3B3D9299D5596B /* textmeasure.cpp in Sources */,
 				65AD3B31319C35F1AC9EC627 /* anybutton.mm in Sources */,
+				CE32C5250F2834D4B81BE89A /* appprogress.mm in Sources */,
 				14D6D5F8F5ED3C71936DD2B1 /* button.mm in Sources */,
 				67A0583ADD8C35B8B9BA3D14 /* checkbox.mm in Sources */,
 				603DF49D176737D383CE4F03 /* choice.mm in Sources */,
@@ -8148,6 +8154,7 @@
 				A1AF8FF873D6383996995ED0 /* statusbr.cpp in Sources */,
 				2E059BFE8E3B3D9299D5596A /* textmeasure.cpp in Sources */,
 				65AD3B31319C35F1AC9EC626 /* anybutton.mm in Sources */,
+				CE32C5250F2834D4B81BE899 /* appprogress.mm in Sources */,
 				14D6D5F8F5ED3C71936DD2B0 /* button.mm in Sources */,
 				67A0583ADD8C35B8B9BA3D13 /* checkbox.mm in Sources */,
 				603DF49D176737D383CE4F02 /* choice.mm in Sources */,
@@ -9335,6 +9342,7 @@
 				A1AF8FF873D6383996995ECF /* statusbr.cpp in Sources */,
 				2E059BFE8E3B3D9299D55969 /* textmeasure.cpp in Sources */,
 				65AD3B31319C35F1AC9EC625 /* anybutton.mm in Sources */,
+				CE32C5250F2834D4B81BE898 /* appprogress.mm in Sources */,
 				14D6D5F8F5ED3C71936DD2AF /* button.mm in Sources */,
 				67A0583ADD8C35B8B9BA3D12 /* checkbox.mm in Sources */,
 				603DF49D176737D383CE4F01 /* choice.mm in Sources */,

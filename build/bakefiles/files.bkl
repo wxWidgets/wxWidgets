@@ -2527,6 +2527,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="OSX_COCOA_SRC" hints="files">
     $(OSX_CARBON_COCOA_SRC)
     src/osx/cocoa/anybutton.mm
+    src/osx/cocoa/appprogress.mm
     src/osx/cocoa/button.mm
     src/osx/cocoa/checkbox.mm
     src/osx/cocoa/choice.mm

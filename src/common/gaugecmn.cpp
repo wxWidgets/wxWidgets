@@ -29,6 +29,7 @@
 #if wxUSE_GAUGE
 
 #include "wx/gauge.h"
+#include "wx/appprogress.h"
 
 const char wxGaugeNameStr[] = "gauge";
 
@@ -39,6 +40,7 @@ const char wxGaugeNameStr[] = "gauge";
 wxGaugeBase::~wxGaugeBase()
 {
     // this destructor is required for Darwin
+    delete m_appProgressIndicator;
 }
 
 // ----------------------------------------------------------------------------
@@ -123,6 +125,17 @@ bool wxGaugeBase::Create(wxWindow *parent,
 #if wxUSE_VALIDATORS
     SetValidator(validator);
 #endif // wxUSE_VALIDATORS
+
+    m_appProgressIndicator = NULL;
+    if ( (style & wxGA_PROGRESS) != 0 )
+    {
+        wxWindow* topParent = wxGetTopLevelParent(this);
+        if ( topParent != NULL )
+        {
+            m_appProgressIndicator =
+                new wxAppProgressIndicator(topParent, range);
+        }
+    }
 
     SetRange(range);
     SetValue(0);
