@@ -6988,7 +6988,9 @@ if test "$wxUSE_RICHTEXT" = "yes"; then
 fi
 
 if test "$wxUSE_WEBVIEW" = "yes"; then
-    USE_WEBVIEW_WEBKIT=0
+    dnl Work through the backends and see if any are available, if not then
+    dnl disable wxWebView and print a warning.
+    FOUND_WEBVIEW_BACKEND=0
     if test "$wxUSE_WEBVIEW_WEBKIT" = "yes"; then
         if test "$wxUSE_GTK" = 1; then
             webkitgtk=webkit-1.0
@@ -6998,12 +7000,14 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
             PKG_CHECK_MODULES([WEBKIT],
                               [$webkitgtk >= 1.3.1],
                               [
-                                USE_WEBVIEW_WEBKIT=1
+                                FOUND_WEBVIEW_BACKEND=1
+                                AC_DEFINE(wxUSE_WEBVIEW_WEBKIT)
                                 CPPFLAGS="$CPPFLAGS $WEBKIT_CFLAGS"
                                 EXTRALIBS_WEBVIEW="$WEBKIT_LIBS"
                               ],
                               [
-                                AC_MSG_WARN([webkitgtk not found.])
+                                wxUSE_WEBVIEW_WEBKIT="no"
+                                AC_MSG_WARN([WebKitGTK+ not found])
                               ])
         elif test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
             dnl Under Mac we always have the libraries but check for the
@@ -7012,10 +7016,12 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
             CPPFLAGS="-x objective-c++ $CPPFLAGS"
             AC_CHECK_HEADER([WebKit/HIWebView.h],
                             [
-                                USE_WEBVIEW_WEBKIT=1
+                                FOUND_WEBVIEW_BACKEND=1
+                                AC_DEFINE(wxUSE_WEBVIEW_WEBKIT)
                                 WEBKIT_LINK="-framework WebKit"
                             ],
                             [
+                                wxUSE_WEBVIEW_WEBKIT="no"
                                 AC_MSG_WARN([WebKit headers not found])
                             ],
                             [
@@ -7025,36 +7031,39 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
             CPPFLAGS="$old_CPPFLAGS"
         fi
     fi
-
-    wxUSE_WEBVIEW="no"
-    if test "$wxUSE_GTK" = 1 -o "$wxUSE_MAC" = 1; then
-        if test "$USE_WEBVIEW_WEBKIT" = 1; then
-            wxUSE_WEBVIEW="yes"
-            AC_DEFINE(wxUSE_WEBVIEW_WEBKIT)
-        else
-            AC_MSG_WARN([WebKit not available, disabling wxWebView])
-        fi
-    elif test "$wxUSE_MSW" = 1; then
-        if test "$wxUSE_WEBVIEW_IE" = "yes"; then
-            dnl TODO: Check for the required headers/libraries under Windows
-            dnl       too and do the right thing automatically there too.
-            wxUSE_WEBVIEW="yes"
-            AC_DEFINE(wxUSE_WEBVIEW_IE)
-        fi
+    if test "$wxUSE_MSW" = 1 -a "$wxUSE_WEBVIEW_IE" = "yes"; then
+        dnl TODO: Check for the required headers/libraries under Windows
+        dnl       too and do the right thing automatically there too.
+        FOUND_WEBVIEW_BACKEND=1
+        AC_DEFINE(wxUSE_WEBVIEW_IE)
+    else
+        wxUSE_WEBVIEW_IE="no"
     fi
-fi
-
-if test "$wxUSE_WEBVIEW" = "yes"; then
-    USE_WEBVIEW=1
-    AC_DEFINE(wxUSE_WEBVIEW)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
     if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
-        USE_WEBVIEW_CHROMIUM=1
-        AC_DEFINE(wxUSE_WEBVIEW_CHROMIUM)
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview_chromium"
+        dnl Search for the Chromium headers in src/cef
+        old_CPPFLAGS="$CPPFLAGS"
+        CPPFLAGS="-I$srcdir/src/cef $CPPFLAGS"
+        AC_CHECK_HEADER([include/cef_version.h],
+                        [
+                            FOUND_WEBVIEW_BACKEND=1
+                            AC_DEFINE(wxUSE_WEBVIEW_CHROMIUM)
+                            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview_chromium"
+                        ],
+                        [
+                            wxUSE_WEBVIEW_CHROMIUM="no"
+                            AC_MSG_WARN([Chromium headers not found])
+                        ],
+                        [])
+        CPPFLAGS="$old_CPPFLAGS"
     fi
-else
-    USE_WEBVIEW=0
+    if test "$FOUND_WEBVIEW_BACKEND" = 1; then
+        wxUSE_WEBVIEW="yes"
+        AC_DEFINE(wxUSE_WEBVIEW)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
+    else
+        wxUSE_WEBVIEW="no"
+        AC_MSG_WARN([No wxWebView backends found, disabling wxWebView])
+    fi
 fi
 
 dnl ---------------------------------------------------------------------------
