@@ -108,6 +108,10 @@ void MyApp::OnInitCmdLine(wxCmdLineParser& parser)
                      "run in SDI mode: multiple documents, multiple windows");
     parser.AddSwitch("", CmdLineOption::SINGLE,
                      "run in single document mode");
+
+    parser.AddParam("document-file",
+                    wxCMD_LINE_VAL_STRING,
+                    wxCMD_LINE_PARAM_MULTIPLE | wxCMD_LINE_PARAM_OPTIONAL);
 }
 
 bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
@@ -140,7 +144,17 @@ bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
         return false;
     }
 
+    // save any files given on the command line: we'll open them in OnInit()
+    // later, after creating the frame
+    for ( size_t i = 0; i != parser.GetParamCount(); ++i )
+        m_filesFromCmdLine.push_back(parser.GetParam(i));
+
     return wxApp::OnCmdLineParsed(parser);
+}
+
+void MyApp::MacNewFile()
+{
+    wxDocManager::GetDocumentManager()->CreateNewDocument();
 }
 
 bool MyApp::OnInit()
@@ -229,7 +243,6 @@ bool MyApp::OnInit()
     {
         m_canvas = new MyCanvas(NULL, frame);
         m_menuEdit = CreateDrawingEditMenu();
-        docManager->CreateNewDocument();
     }
 
     CreateMenuBarForFrame(frame, menuFile, m_menuEdit);
@@ -237,6 +250,16 @@ bool MyApp::OnInit()
     frame->SetIcon(wxICON(doc));
     frame->Centre();
     frame->Show();
+
+    if ( m_filesFromCmdLine.empty() )
+    {
+        docManager->CreateNewDocument();
+    }
+    else // we have files to open on command line
+    {
+        for ( size_t i = 0; i != m_filesFromCmdLine.size(); ++i )
+            docManager->CreateDocument(m_filesFromCmdLine[i], wxDOC_SILENT);
+    }
 
     return true;
 }

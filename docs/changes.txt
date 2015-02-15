@@ -101,6 +101,7 @@ All (GUI):
 - Fix creating/removing mode buttons in wxPG manager (Artur Wieczorek).
 - Harmonize wxMenuEvent handling between all major ports.
 - Fix wxPGChoices copy ctor (Snoits).
+- Show how to handle files on command line in docview sample (Neil Mayhew).
 
 wxGTK:
 
