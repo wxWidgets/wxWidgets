@@ -652,7 +652,7 @@ wxValidator* wxArrayDoubleProperty::DoGetValidator() const
     wxTextValidator* validator = new wxTextValidator(wxFILTER_INCLUDE_CHAR_LIST);
 
     // Accept characters for numeric elements
-    wxNumericPropertyValidator numValidator(wxNumericPropertyValidator::NumericType::Float);
+    wxNumericPropertyValidator numValidator(wxNumericPropertyValidator::Float);
     wxArrayString incChars(numValidator.GetIncludes());
     // Accept also a delimiter and space character
     incChars.Add(m_delimiter);
