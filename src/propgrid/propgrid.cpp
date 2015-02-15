@@ -1072,8 +1072,20 @@ void wxPropertyGrid::DoEndLabelEdit( bool commit, int selFlags )
 
     if ( commit )
     {
+        const int labelColIdx = m_selColumn;
+
         if ( !(selFlags & wxPG_SEL_DONT_SEND_EVENT) )
         {
+            // Don't send wxEVT_PG_LABEL_EDIT_ENDING event recursively
+            // for the same property and the same label.
+            if ( m_processedEvent &&
+                 m_processedEvent->GetEventType() == wxEVT_PG_LABEL_EDIT_ENDING &&
+                 m_processedEvent->GetProperty() == prop &&
+                 m_processedEvent->GetColumn() == m_selColumn)
+            {
+                return;
+            }
+
             // wxPG_SEL_NOVALIDATE is passed correctly in selFlags
             if ( SendEvent( wxEVT_PG_LABEL_EDIT_ENDING,
                             prop, NULL, selFlags,
@@ -1083,16 +1095,16 @@ void wxPropertyGrid::DoEndLabelEdit( bool commit, int selFlags )
 
         wxString text = m_labelEditor->GetValue();
         wxPGCell* cell = NULL;
-        if ( prop->HasCell(m_selColumn) )
+        if ( prop->HasCell(labelColIdx) )
         {
-            cell = &prop->GetCell(m_selColumn);
+            cell = &prop->GetCell(labelColIdx);
         }
         else
         {
-            if ( m_selColumn == 0 )
+            if ( labelColIdx == 0 )
                 prop->SetLabel(text);
             else
-                cell = &prop->GetOrCreateCell(m_selColumn);
+                cell = &prop->GetOrCreateCell(labelColIdx);
         }
 
         if ( cell )
