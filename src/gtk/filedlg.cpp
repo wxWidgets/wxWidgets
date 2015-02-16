@@ -84,7 +84,8 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
         wxGtkString folder(g_path_get_dirname(filename));
         if ( chdir(folder) != 0 )
         {
-            wxLogSysError(_("Changing current directory to \"%s\" failed"));
+            wxLogSysError(_("Changing current directory to \"%s\" failed"),
+                          wxString::FromUTF8(folder));
         }
     }
 
