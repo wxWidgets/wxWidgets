@@ -267,11 +267,21 @@ public:
                            const wxPoint& pos = wxDefaultPosition,
                            const wxSize& size = wxDefaultSize,
                            long style = 0);
+    wxRichTextStyleListBox();
 
     /**
         Destructor.
     */
     virtual ~wxRichTextStyleListBox();
+
+    /**
+        Creates the window.
+    */
+    bool Create(wxWindow* parent,
+                wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0);
 
     /**
         Applies the @e ith style to the associated rich text control.
@@ -384,11 +394,21 @@ public:
                              const wxPoint& pos = wxDefaultPosition,
                              const wxSize& size = wxDefaultSize,
                              long style = 0);
+    wxRichTextStyleComboCtrl();
 
     /**
         Destructor.
     */
     virtual ~wxRichTextStyleComboCtrl();
+
+    /**
+        Creates the windows.
+    */
+    bool Create(wxWindow* parent,
+                wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0);
 
     /**
         Returns the wxRichTextCtrl associated with this control.
