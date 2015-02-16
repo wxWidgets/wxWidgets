@@ -3341,15 +3341,15 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
 
     m_pState->m_anyModified = 1;
 
-    // If property's value is being changed, assume it is valid
-    OnValidationFailureReset(selected);
-
     // Maybe need to update control
     wxASSERT( m_chgInfo_changedProperty != NULL );
 
     // These values were calculated in PerformValidation()
     wxPGProperty* changedProperty = m_chgInfo_changedProperty;
     wxVariant value = m_chgInfo_pendingValue;
+
+    // If property's value is being changed, assume it is valid
+    OnValidationFailureReset(selected);
 
     wxPGProperty* topPaintedProperty = changedProperty;
 
