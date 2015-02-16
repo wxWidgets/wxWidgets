@@ -1971,6 +1971,9 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
             else
             {
                 bufferDC = new wxMemoryDC();
+                // Use the same layout direction as the window DC uses
+                // to ensure that the text is rendered correctly.
+                bufferDC->SetLayoutDirection(dc.GetLayoutDirection());
 
                 // If nothing was changed, then just copy from double-buffer
                 bufferDC->SelectObject( *m_doubleBuffer );
