@@ -588,6 +588,7 @@ All (GUI):
   wxGenericFileDialog which was accidentally lost some time ago (Carl Godkin).
 - Fix handling of fast consecutive clicks in wxRibbonBar (atobi).
 - Fix updating nested window scrollbars in some cases (sbrowne).
+- Fix wxPGChoices copy ctor (Snoits).
 
 wxGTK:
 

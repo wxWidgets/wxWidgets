@@ -847,6 +847,10 @@ public:
             m_data = a.m_data;
             m_data->IncRef();
         }
+        else
+        {
+            Init();
+        }
     }
 
     /**
