@@ -608,7 +608,6 @@ bool wxArrayDoubleProperty::StringToValue( wxVariant& variant, const wxString& t
             // If token was invalid, exit the loop now
             if ( !token.ToDouble(&tval) )
             {
-                wxLogDebug( _("\"%s\" is not a floating-point number."), token.c_str() );
                 ok = false;
                 break;
             }
@@ -618,10 +617,12 @@ bool wxArrayDoubleProperty::StringToValue( wxVariant& variant, const wxString& t
 
     WX_PG_TOKENIZER1_END()
 
-    // When invalid token found don't change anything
+    // When invalid token found signal the error
+    // by returning pending value of non-wxArrayDouble type.
     if ( !ok )
     {
-        return false;
+        variant = (long)0;
+        return true;
     }
 
     if ( !(wxArrayDoubleRefFromVariant(m_value) == new_array) )
@@ -664,4 +665,16 @@ wxValidator* wxArrayDoubleProperty::DoGetValidator() const
 #else
     return NULL;
 #endif
+}
+
+bool wxArrayDoubleProperty::ValidateValue(wxVariant& value,
+                                 wxPGValidationInfo& validationInfo) const
+{
+    if (!value.IsType("wxArrayDouble"))
+    {
+        validationInfo.SetFailureMessage(_("At least one element is not a valid floating-point number."));
+        return false;
+    }
+
+    return true;
 }

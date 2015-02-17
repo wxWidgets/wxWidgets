@@ -127,6 +127,8 @@ public:
     virtual void GenerateValueAsString ( wxString& target, int prec, bool removeZeroes ) const;
 
     wxValidator* DoGetValidator() const wxOVERRIDE;
+    bool ValidateValue(wxVariant& value,
+                       wxPGValidationInfo& validationInfo) const wxOVERRIDE;
 
 protected:
     wxString        m_display; // Stores cache for displayed text
