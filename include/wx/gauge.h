@@ -51,7 +51,9 @@ class WXDLLIMPEXP_FWD_CORE wxAppProgressIndicator;
 class WXDLLIMPEXP_CORE wxGaugeBase : public wxControl
 {
 public:
-    wxGaugeBase() { m_rangeMax = m_gaugePos = 0; }
+    wxGaugeBase() : m_rangeMax(0), m_gaugePos(0),
+        m_appProgressIndicator(NULL) { }
+
     virtual ~wxGaugeBase();
 
     bool Create(wxWindow *parent,
