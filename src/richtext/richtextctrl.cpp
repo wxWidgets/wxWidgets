@@ -3026,7 +3026,9 @@ wxRichTextLine* wxRichTextCtrl::GetVisibleLineForCaretPosition(long caretPositio
         if (caretPosition == lineRange.GetStart()-1 &&
             (para->GetRange().GetStart() != lineRange.GetStart()))
         {
-            if (!m_caretAtLineStart)
+            // Only test for caret start/end position if we're looking at the current caret position,
+            // otherwise m_caretAtLineStart is meaningless
+            if (!m_caretAtLineStart && (caretPosition == m_caretPosition))
                 line = GetBuffer().GetLineAtPosition(caretPosition-1, true);
         }
     }

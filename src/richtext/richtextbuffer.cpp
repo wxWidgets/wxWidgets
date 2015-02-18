@@ -4077,7 +4077,7 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
     wxTextAttrEx attr = GetCombinedAttributes();
 
     // Draw the bullet, if any
-    if ((attr.GetBulletStyle() == wxTEXT_ATTR_BULLET_STYLE_NONE) == 0 && (attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_CONTINUATION) == 0)
+    if ((attr.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE) && (attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_CONTINUATION) == 0)
     {
         if (attr.GetLeftSubIndent() != 0)
         {
