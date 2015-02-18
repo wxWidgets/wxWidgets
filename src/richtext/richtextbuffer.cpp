@@ -9119,15 +9119,7 @@ bool wxRichTextStdRenderer::DrawStandardBullet(wxRichTextParagraph* paragraph, w
         wxCheckSetBrush(dc, *wxBLACK_BRUSH);
     }
 
-    wxFont font;
-    if (bulletAttr.HasFont())
-    {
-        font = paragraph->GetBuffer()->GetFontTable().FindFont(bulletAttr);
-    }
-    else
-        font = (*wxNORMAL_FONT);
-
-    wxCheckSetFont(dc, font);
+    SetFontForBullet(*(paragraph->GetBuffer()), dc, bulletAttr);
 
     int charHeight = dc.GetCharHeight();
 
@@ -9190,26 +9182,11 @@ bool wxRichTextStdRenderer::DrawTextBullet(wxRichTextParagraph* paragraph, wxDC&
 {
     if (!text.empty())
     {
-        wxFont font;
-        if ((attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_SYMBOL) && !attr.GetBulletFont().IsEmpty() && attr.HasFont())
-        {
-            wxRichTextAttr fontAttr;
-            if (attr.HasFontPixelSize())
-                fontAttr.SetFontPixelSize(attr.GetFontSize());
-            else
-                fontAttr.SetFontPointSize(attr.GetFontSize());
-            fontAttr.SetFontStyle(attr.GetFontStyle());
-            fontAttr.SetFontWeight(attr.GetFontWeight());
-            fontAttr.SetFontUnderlined(attr.GetFontUnderlined());
-            fontAttr.SetFontFaceName(attr.GetBulletFont());
-            font = paragraph->GetBuffer()->GetFontTable().FindFont(fontAttr);
-        }
-        else if (attr.HasFont())
-            font = paragraph->GetBuffer()->GetFontTable().FindFont(attr);
-        else
-            font = (*wxNORMAL_FONT);
+        SetFontForBullet(*(paragraph->GetBuffer()), dc, attr);
 
-        wxCheckSetFont(dc, font);
+        wxString text1(text);
+        if (attr.HasTextEffects() && (attr.GetTextEffects() & (wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS)))
+            text1.MakeUpper();
 
         if (attr.GetTextColour().IsOk())
             dc.SetTextForeground(attr.GetTextColour());
@@ -9218,7 +9195,7 @@ bool wxRichTextStdRenderer::DrawTextBullet(wxRichTextParagraph* paragraph, wxDC&
 
         int charHeight = dc.GetCharHeight();
         wxCoord tw, th;
-        dc.GetTextExtent(text, & tw, & th);
+        dc.GetTextExtent(text1, & tw, & th);
 
         int x = rect.x;
 
@@ -9233,12 +9210,72 @@ bool wxRichTextStdRenderer::DrawTextBullet(wxRichTextParagraph* paragraph, wxDC&
         else if (attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE)
             x = x + (rect.width)/2 - tw/2;
 
-        dc.DrawText(text, x, y);
+        dc.DrawText(text1, x, y);
 
         return true;
     }
     else
         return false;
+}
+
+void wxRichTextStdRenderer::SetFontForBullet(wxRichTextBuffer& buffer, wxDC& dc, const wxRichTextAttr& attr)
+{
+    wxFont font;
+    if ((attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_SYMBOL) && !attr.GetBulletFont().IsEmpty() && attr.HasFont())
+    {
+        wxRichTextAttr fontAttr;
+        if (attr.HasFontPixelSize())
+            fontAttr.SetFontPixelSize(attr.GetFontSize());
+        else
+            fontAttr.SetFontPointSize(attr.GetFontSize());
+        fontAttr.SetFontStyle(attr.GetFontStyle());
+        fontAttr.SetFontWeight(attr.GetFontWeight());
+        fontAttr.SetFontUnderlined(attr.GetFontUnderlined());
+        fontAttr.SetFontFaceName(attr.GetBulletFont());
+        font = buffer.GetFontTable().FindFont(fontAttr);
+    }
+    else if (attr.HasFont())
+        font = buffer.GetFontTable().FindFont(attr);
+    else
+        font = (*wxNORMAL_FONT);
+
+    if (font.IsOk())
+    {
+        if ( attr.HasTextEffects() && ( (attr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT)
+            || (attr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUBSCRIPT) ) )
+        {
+            wxFont textFont = font;
+            if (textFont.IsUsingSizeInPixels())
+            {
+                double size = static_cast<double>(textFont.GetPixelSize().y) / wxSCRIPT_MUL_FACTOR;
+                textFont.SetPixelSize(wxSize(0, static_cast<int>(size)));
+            }
+            else
+            {
+                double size = static_cast<double>(textFont.GetPointSize()) / wxSCRIPT_MUL_FACTOR;
+                textFont.SetPointSize(static_cast<int>(size));
+            }
+            wxCheckSetFont(dc, textFont);
+        }
+        else if (attr.HasTextEffects() && (attr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SMALL_CAPITALS))
+        {
+            wxFont textFont = font;
+            if (textFont.IsUsingSizeInPixels())
+            {
+                textFont.SetPixelSize(wxSize(0, (int) (textFont.GetPixelSize().y*0.75)));
+            }
+            else
+            {
+                textFont.SetPointSize((int) (textFont.GetPointSize()*0.75));
+            }
+
+            wxCheckSetFont(dc, textFont);
+        }
+        else
+        {
+            wxCheckSetFont(dc, font);
+        }
+    }
 }
 
 bool wxRichTextStdRenderer::DrawBitmapBullet(wxRichTextParagraph* WXUNUSED(paragraph), wxDC& WXUNUSED(dc), const wxRichTextAttr& WXUNUSED(attr), const wxRect& WXUNUSED(rect))
@@ -9251,15 +9288,7 @@ bool wxRichTextStdRenderer::DrawBitmapBullet(wxRichTextParagraph* WXUNUSED(parag
 // Measure the bullet.
 bool wxRichTextStdRenderer::MeasureBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& attr, wxSize& sz)
 {
-    wxFont font;
-    if (attr.HasFont())
-    {
-        font = paragraph->GetBuffer()->GetFontTable().FindFont(attr);
-    }
-    else
-        font = (*wxNORMAL_FONT);
-
-    wxCheckSetFont(dc, font);
+    SetFontForBullet(*(paragraph->GetBuffer()), dc, attr);
 
     if (attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_STANDARD)
     {
@@ -9269,7 +9298,11 @@ bool wxRichTextStdRenderer::MeasureBullet(wxRichTextParagraph* paragraph, wxDC& 
     else if (attr.HasBulletText())
     {
         wxCoord w, h, maxDescent;
-        dc.GetTextExtent(attr.GetBulletText(), & w, &h, & maxDescent);
+        wxString text(attr.GetBulletText());
+        if (attr.HasTextEffects() && (attr.GetTextEffects() & (wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS)))
+            text.MakeUpper();
+
+        dc.GetTextExtent(text, &w, &h, & maxDescent);
         sz.x = w;
         sz.y = h;
     }

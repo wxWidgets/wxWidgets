@@ -7005,6 +7005,9 @@ public:
 
     // Measure the bullet.
     virtual bool MeasureBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& attr, wxSize& sz);
+
+    // Set a font which may depend on text effects.
+    static void SetFontForBullet(wxRichTextBuffer& buffer, wxDC& dc, const wxRichTextAttr& attr);
 };
 
 /*!
