@@ -1379,6 +1379,9 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pgman = m_pPropGridManager;
     }
 
+    // Restore original grid size
+    FinalizeFramePosition();
+
     RT_START_TEST(none)
 
     bool retVal;
