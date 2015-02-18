@@ -1059,7 +1059,6 @@ public:
     virtual wxRichTextLine* GetLineForVisibleLineNumber(long lineNumber) const;
 
     /// Get the leaf object in a paragraph at this position.
-    /// Given a line number, get the corresponding wxRichTextLine object.
     virtual wxRichTextObject* GetLeafObjectAtPosition(long position) const;
 
     /// Get the paragraph by number
