@@ -4821,9 +4821,8 @@ bool wxRichTextParagraph::Draw(wxDC& dc, wxRichTextDrawingContext& context, cons
     DrawBoxAttributes(dc, GetBuffer(), attr, paraRect, 0);
 
     // Draw the bullet, if any
-    if ((attr.GetBulletStyle() == wxTEXT_ATTR_BULLET_STYLE_NONE) == 0 && (attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_CONTINUATION) == 0)
+    if ((attr.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE) && (attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_CONTINUATION) == 0)
     {
-        if (attr.GetLeftSubIndent() != 0)
         {
             int spaceBeforePara = ConvertTenthsMMToPixels(dc, attr.GetParagraphSpacingBefore());
             int leftIndent = ConvertTenthsMMToPixels(dc, attr.GetLeftIndent());
@@ -5019,6 +5018,22 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
         }
     }
 
+    // Make space for a bullet with no subindent.
+    if ((leftIndent == 0) && (attr.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE))
+    {
+        wxSize bulletSize;
+        if (wxRichTextBuffer::GetRenderer() && wxRichTextBuffer::GetRenderer()->MeasureBullet(this, dc, attr, bulletSize))
+        {
+            wxFont font(buffer->GetFontTable().FindFont(attr));
+            if (font.IsOk())
+            {
+                wxCheckSetFont(dc, font);
+                wxCoord spaceW = 0, spaceH = 0, maxDescent = 0;
+                dc.GetTextExtent(wxT(" "), & spaceW, & spaceH, & maxDescent);
+                leftSubIndent = bulletSize.x + spaceW;
+            }
+        }
+    }
     // Start position for each line relative to the paragraph
     int startPositionFirstLine = leftIndent;
     int startPositionSubsequentLines = leftIndent + leftSubIndent;
@@ -9231,6 +9246,49 @@ bool wxRichTextStdRenderer::DrawBitmapBullet(wxRichTextParagraph* WXUNUSED(parag
     // Currently unimplemented. The intention is to store bitmaps by name in a media store associated
     // with the buffer. The store will allow retrieval from memory, disk or other means.
     return false;
+}
+
+// Measure the bullet.
+bool wxRichTextStdRenderer::MeasureBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& attr, wxSize& sz)
+{
+    wxFont font;
+    if (attr.HasFont())
+    {
+        font = paragraph->GetBuffer()->GetFontTable().FindFont(attr);
+    }
+    else
+        font = (*wxNORMAL_FONT);
+
+    wxCheckSetFont(dc, font);
+
+    if (attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_STANDARD)
+    {
+        sz.x = (int) (((float) dc.GetCharHeight()) * wxRichTextBuffer::GetBulletProportion());
+        sz.y = sz.y;
+    }
+    else if (attr.HasBulletText())
+    {
+        wxCoord w, h, maxDescent;
+        dc.GetTextExtent(attr.GetBulletText(), & w, &h, & maxDescent);
+        sz.x = w;
+        sz.y = h;
+    }
+    else if (attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_BITMAP)
+    {
+        // A guess, at present.
+        sz.x = 10;
+        sz.y = 10;
+    }
+    else
+    {
+        // Need to guess a size for a number bullet.
+        wxCoord w, h, maxDescent;
+        dc.GetTextExtent(wxT("8888."), & w, &h, & maxDescent);
+        sz.x = w;
+        sz.y = h;
+    }
+
+    return true;
 }
 
 /// Enumerate the standard bullet names currently supported

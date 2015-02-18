@@ -6749,6 +6749,11 @@ public:
         Enumerate the standard bullet names currently supported. This function should be overridden.
     */
     virtual bool EnumerateStandardBulletNames(wxArrayString& bulletNames) = 0;
+
+    /**
+        Measure the bullet.
+    */
+    virtual bool MeasureBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& attr, wxSize& sz) = 0;
 };
 
 /**
@@ -6781,6 +6786,9 @@ public:
 
     // Enumerate the standard bullet names currently supported
     virtual bool EnumerateStandardBulletNames(wxArrayString& bulletNames);
+
+    // Measure the bullet.
+    virtual bool MeasureBullet(wxRichTextParagraph* paragraph, wxDC& dc, const wxRichTextAttr& attr, wxSize& sz);
 };
 
 /*!
