@@ -17,15 +17,11 @@ Update the release announcement post in docs/publicity/announce.txt.
 
 Tag the release:
 
-    svn cp https://svn.wxwidgets.org/svn/wx/wxWidgets/trunk@123456 \
-        https://svn.wxwidgets.org/svn/wx/wxWidgets/tags/WX_x_y_z -m 'Tag x.y.z release.'
+    git tag WX_x_y_z -m 'Tag x.y.z release.'
 
 
 Creating release files
 ----------------------
-
-The currently used release scripts need to be used from git-svn checkout and
-rely on Git to avoid problems with using non-clean trees and such.
 
 Follow these steps assuming the current working directory is the root of git
 working copy and you want to prepare distribution for the version x.y.z:

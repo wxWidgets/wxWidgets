@@ -5,9 +5,9 @@ To add a new sample "foo" under directory "samples/foo" you need to do
 the following: (note that all this applies also to demos: just replace
 samples/ with demos/ where needed).
 
-1. Create the directory samples/foo locally and "svn add" it.
+1. Create the directory samples/foo.
 
-2. "svn add" the sample sources (usually based on minimal.cpp) as well.
+2. "git add" the sample sources (usually based on minimal.cpp) as well.
 
    Note that unless your sample requires something special you shouldn't
    add foo.rc, foo.ico, ... any more, please just reuse the generic sample.*

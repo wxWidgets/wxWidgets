@@ -4,7 +4,7 @@
 # include/wx/intl.h and src/common/intl.cpp using information from langtabl.txt
 #
 # Warning: error detection and reporting here is rudimentary, check if the
-# files were updated correctly with "svn diff" before committing them!
+# files were updated correctly with "git diff" before committing them!
 
 import os
 import string

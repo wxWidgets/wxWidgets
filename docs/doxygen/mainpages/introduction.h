@@ -114,8 +114,7 @@ configurations but at least 1GB and possibly more is required.
 The download links can be found at http://www.wxwidgets.org. The primary
 download location is https://sourceforge.net/downloads/wxwindows/ and there is
 also an FTP mirror at ftp://ftp.wxwidgets.org/pub/. Additionally, the latest
-version can always be retrieved from our version control system using either
-Subversion (http://svn.wxwidgets.org/svn/wx/wxWidgets/) or Git
+version can always be retrieved from our version control system using Git
 (https://github.com/wxWidgets/wxWidgets).
 
 wxWidgets documentation that you are reading is also available online at

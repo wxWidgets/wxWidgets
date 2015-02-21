@@ -1535,7 +1535,7 @@ wxSize wxScrolledT_Helper::FilterBestSize(const wxWindow *win,
         //     the window into sizer as expandable so that it can use all space
         //     available to it.
         //
-        //     See also http://svn.wxwidgets.org/viewvc/wx?view=rev&revision=45864
+        //     See also https://github.com/wxWidgets/wxWidgets/commit/7e0f7539
 
         wxSize minSize = win->GetMinSize();
 

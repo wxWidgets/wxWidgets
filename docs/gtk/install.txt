@@ -246,8 +246,8 @@ are enabled by default.
 
 Normally, you won't have to choose a toolkit, because when
 you download wxGTK, it will default to --with-gtk etc. But
-if you use all of our SVN repository you have to choose a
-toolkit. You must do this by running configure with either of:
+if you use the git repository you have to choose a toolkit.
+You must do this by running configure with either of:
 
     --with-gtk=2            Use the GTK+ 2.0. Default.
     --with-gtk=3            Use the GTK+ 3.

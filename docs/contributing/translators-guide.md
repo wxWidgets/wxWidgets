@@ -28,8 +28,8 @@ First of all, here is what you will need:
       fine, but you'd have to use some kind of "for /s" loop with the
       command.com/cmd.exe.
 
-3. (at least read) access to the subversion is not necessary strictly speaking, but
-   will make things a lot easier for you and others.
+3. Access to the git repository is not necessary strictly speaking, but will
+   make things a lot easier for you and others.
 
 
 Now a brief overview of the process of translations (please refer to GNU

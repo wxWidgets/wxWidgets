@@ -52,14 +52,13 @@ specialised tool. Examples of these include:
     dialog editor.
 
 @e Free:
-@li XRCed <http://xrced.sf.net/>, a wxPython-based dialog editor that you
-    can find in the wxPython/tools subdirectory of the wxWidgets SVN archive.
+@li XRCed <http://xrced.sourceforge.net/>, a wxPython-based dialog editor.
 @li wxFormBuilder <http://wxformbuilder.org/>, a C++-based form designer that
     can output C++, XRC or python.
-@li wxCrafter (free version) <http://www.codelite.org/wxcrafter/>, a C++-based form designer that
-    can output C++ or XRC.
+@li wxCrafter (free version) <http://www.codelite.org/wxcrafter/>, a C++-based
+    form designer that can output C++ or XRC.
 
-There's a more complete list at <http://www.wxwidgets.org/wiki/index.php/Tools>
+There's a more complete list at <https://wiki.wxwidgets.org/Tools>
 
 This small demonstration XRC file contains a simple dialog:
 @code

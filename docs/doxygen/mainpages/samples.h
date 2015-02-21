@@ -46,7 +46,7 @@ subdirectory of the library distribution. When a @c foobar sample is mentioned
 below, its sources can be found in @c samples/foobar directory of your
 wxWidgets tree. If you installed wxWidgets from a binary package, you might not
 have this directory. In this case, you may view the samples online at
-http://svn.wxwidgets.org/viewvc/wx/wxWidgets/trunk/samples/ but you need to
+https://github.com/wxWidgets/wxWidgets/tree/master/samples/ but you need to
 download the source distribution in order to be able to build them (highly
 recommended).
 
