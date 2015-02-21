@@ -1,8 +1,8 @@
 ------------------------------------------------------------------------
-                How to build the sources from SVN
+                How to build the sources from git
 ------------------------------------------------------------------------
 
-Before building from svn sources under Windows, you need to copy the
+Before building from git sources under Windows, you need to copy the
 file include/wx/msw/setup0.h to include/wx/msw/setup.h. This is
 necessary in order to allow having local modifications to the latter
 file without showing it as modified, as it is not under version
