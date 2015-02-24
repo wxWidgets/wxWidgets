@@ -289,7 +289,7 @@ public:
     void GetPropertiesWithFlag( wxArrayPGProperty* targetArr,
                                 wxPGProperty::FlagType flags,
                                 bool inverse = false,
-                                int iterFlags = (wxPG_ITERATE_PROPERTIES|wxPG_ITERATE_HIDDEN|wxPG_ITERATE_CATEGORIES) ) const;
+                                int iterFlags = wxPG_ITERATE_PROPERTIES|wxPG_ITERATE_HIDDEN|wxPG_ITERATE_CATEGORIES ) const;
 
     /**
         Returns value of given attribute. If none found, returns wxNullVariant.
