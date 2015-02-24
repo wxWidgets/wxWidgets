@@ -1950,7 +1950,7 @@ public:
         this only since GTK 2.12 with a compositing manager enabled, call
         IsTransparentBackgroundSupported() to check whether this is the case.
 
-        Also, on order for @c SetBackgroundStyle(wxBG_STYLE_TRANSPARENT) to
+        Also, in order for @c SetBackgroundStyle(wxBG_STYLE_TRANSPARENT) to
         work, it must be called before Create(). If you're using your own
         wxWindow-derived class you should write your code in the following way:
         @code
