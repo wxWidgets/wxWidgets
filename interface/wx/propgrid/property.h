@@ -1118,7 +1118,7 @@ public:
 
         @see AddPrivateChild()
     */
-    wxDEPRECATED( void AddChild( wxPGProperty* prop ) );
+    void AddChild( wxPGProperty* prop );
 
     /**
         Adds a private child property. If you use this instead of
@@ -1397,7 +1397,7 @@ public:
 
         @see GetValueAsString()
     */
-    wxDEPRECATED( wxString GetValueString( int argFlags = 0 ) const );
+    wxString GetValueString( int argFlags = 0 ) const;
 
     /**
         Returns value type used by this property.
