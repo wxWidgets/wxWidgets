@@ -331,7 +331,7 @@ wxPG_VFB_DEFAULT                    = wxPG_VFB_MARK_CELL |
 #define wxPGVFBFlags unsigned char
 
 /**
-    wxPGValidationInfo
+    @class wxPGValidationInfo
 
     Used to convey validation information to and from functions that
     actually perform validation. Mostly used in custom property classes.
