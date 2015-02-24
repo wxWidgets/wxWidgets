@@ -100,8 +100,7 @@ struct wxPGPaintData
 */
 #define wxPG_FLOAT_PRECISION                wxS("Precision")
 
-/** The text will be echoed as asterisks (wxTE_PASSWORD will be passed
-    to textctrl etc.).
+/** The text will be echoed as asterisks (wxTE_PASSWORD will be passed to textctrl etc).
 */
 #define wxPG_STRING_PASSWORD                wxS("Password")
 
@@ -146,6 +145,8 @@ struct wxPGPaintData
 
 /** Specific to wxFileProperty and derivatives, long, default is 0.
     Sets a specific wxFileDialog style for the file dialog, e.g. ::wxFD_SAVE.
+
+    @since 2.9.4
 */
 #define wxPG_FILE_DIALOG_STYLE              wxS("DialogStyle")
 
@@ -215,35 +216,29 @@ enum wxPGPropertyFlags
 {
 
 /** Indicates bold font.
-    @hideinitializer
 */
 wxPG_PROP_MODIFIED                  = 0x0001,
 
 /** Disables ('greyed' text and editor does not activate) property.
-    @hideinitializer
 */
 wxPG_PROP_DISABLED                  = 0x0002,
 
 /** Hider button will hide this property.
-    @hideinitializer
 */
 wxPG_PROP_HIDDEN                    = 0x0004,
 
 /** This property has custom paint image just in front of its value.
     If property only draws custom images into a popup list, then this
     flag should not be set.
-    @hideinitializer
 */
 wxPG_PROP_CUSTOMIMAGE               = 0x0008,
 
 /** Do not create text based editor for this property (but button-triggered
     dialog and choice are ok).
-    @hideinitializer
 */
 wxPG_PROP_NOEDITOR                  = 0x0010,
 
 /** Property is collapsed, ie. it's children are hidden.
-    @hideinitializer
 */
 wxPG_PROP_COLLAPSED                 = 0x0020,
 
@@ -254,26 +249,22 @@ wxPG_PROP_COLLAPSED                 = 0x0020,
     If property is not selected, then indicates that the actual property
     value has failed validation (NB: this behaviour is not currently supported,
     but may be used in the future).
-    @hideinitializer
 */
 wxPG_PROP_INVALID_VALUE             = 0x0040,
 
 /** Switched via SetWasModified(). Temporary flag - only used when
     setting/changing property value.
-    @hideinitializer
 */
 wxPG_PROP_WAS_MODIFIED              = 0x0200,
 
 /**
     If set, then child properties (if any) are private, and should be
     "invisible" to the application.
-    @hideinitializer
 */
 wxPG_PROP_AGGREGATE                 = 0x0400,
 
 /** If set, then child properties (if any) are copies and should not
     be deleted in dtor.
-    @hideinitializer
 */
 wxPG_PROP_CHILDREN_ARE_COPIES       = 0x0800,
 
@@ -281,7 +272,6 @@ wxPG_PROP_CHILDREN_ARE_COPIES       = 0x0800,
     Classifies this item as a non-category.
 
     Used for faster item type identification.
-    @hideinitializer
 */
 wxPG_PROP_PROPERTY                  = 0x1000,
 
@@ -289,20 +279,17 @@ wxPG_PROP_PROPERTY                  = 0x1000,
     Classifies this item as a category.
 
     Used for faster item type identification.
-    @hideinitializer
 */
 wxPG_PROP_CATEGORY                  = 0x2000,
 
 /** Classifies this item as a property that has children, but is not aggregate
-    (i.e. children are not private).
-    @hideinitializer
+    (ie children are not private).
 */
 wxPG_PROP_MISC_PARENT               = 0x4000,
 
 /** Property is read-only. Editor is still created for wxTextCtrl-based
     property editors. For others, editor is not usually created because
     they do implement wxTE_READONLY style or equivalent.
-    @hideinitializer
 */
 wxPG_PROP_READONLY                  = 0x8000,
 
@@ -313,14 +300,12 @@ wxPG_PROP_READONLY                  = 0x8000,
 /** Property's value is composed from values of child properties.
     @remarks
     This flag cannot be used with property iterators.
-    @hideinitializer
 */
 wxPG_PROP_COMPOSED_VALUE            = 0x00010000,
 
 /** Common value of property is selectable in editor.
     @remarks
     This flag cannot be used with property iterators.
-    @hideinitializer
 */
 wxPG_PROP_USES_COMMON_VALUE         = 0x00020000,
 
@@ -333,22 +318,18 @@ wxPG_PROP_USES_COMMON_VALUE         = 0x00020000,
     This flag cannot be used with property iterators.
 
     @see wxPGProperty::SetAutoUnspecified()
-    @hideinitializer
 */
 wxPG_PROP_AUTO_UNSPECIFIED          = 0x00040000,
 
-/** Indicates the bit usable by derived properties.
-    @hideinitializer
+/** Indicates the bit useable by derived properties.
 */
 wxPG_PROP_CLASS_SPECIFIC_1          = 0x00080000,
 
-/** Indicates the bit usable by derived properties.
-    @hideinitializer
+/** Indicates the bit useable by derived properties.
 */
 wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000,
 
 /** Indicates that the property is being deleted and should be ignored.
-    @hideinitializer
 */
 wxPG_PROP_BEING_DELETED             = 0x00200000
 
@@ -427,15 +408,11 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     @subsection wxStringProperty
 
-    Simple string property.
-
-    Supported special attributes:
-    - @c wxPG_STRING_PASSWORD: Set to @true in order to echo value as asterisks and
-    to use @c wxTE_PASSWORD on the editor (wxTextCtrl).
-    - @c wxPG_ATTR_AUTOCOMPLETE: Set to @true to enable auto-completion
+    Simple string property. wxPG_STRING_PASSWORD attribute may be used
+    to echo value as asterisks and use wxTE_PASSWORD for wxTextCtrl.
+    wxPG_ATTR_AUTOCOMPLETE attribute may be used to enable auto-completion
     (use a wxArrayString value), and is also supported by any property that
     happens to use a wxTextCtrl-based editor.
-    @see @ref propgrid_property_attributes
 
     @remarks wxStringProperty has a special trait: if it has value of
             "<composed>", and also has child properties, then its displayed
@@ -445,8 +422,9 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     @subsection wxIntProperty
 
     Like wxStringProperty, but converts text to a signed long integer.
-    wxIntProperty seamlessly supports 64-bit integers (i.e. wxLongLong) on overlfow.
+    wxIntProperty seamlessly supports 64-bit integers (ie. wxLongLong).
     To safely convert variant to integer, use code like this:
+
     @code
         wxLongLong ll;
         ll << property->GetValue();
@@ -455,61 +433,21 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
         wxLongLong ll = propertyGrid->GetPropertyValueAsLong(property);
     @endcode
 
-    Getting 64-bit value:
-    @code
-        wxLongLong_t value = pg->GetPropertyValueAsLongLong();
-
-        // or
-
-        wxLongLong value;
-        wxVariant variant = property->GetValue();
-        if ( variant.IsType(wxPG_VARIANT_TYPE_LONGLONG) )
-            value = variant.GetLongLong();
-        else
-            value = variant.GetLong();
-    @endcode
-
-    Setting 64-bit value:
-    @code
-        pg->SetPropertyValue(longLongVal);
-
-        // or
-
-        property->SetValue(WXVARIANT(longLongVal));
-    @endcode
-
-    Supported special attributes:
-    - @c wxPG_ATTR_MIN, @c wxPG_ATTR_MAX to specify acceptable value range.
-
     @subsection wxUIntProperty
 
     Like wxIntProperty, but displays value as unsigned int. To set
-    the prefix used globally, manipulate @c wxPG_UINT_PREFIX string attribute.
-    To set the globally used base, manipulate @c wxPG_UINT_BASE int
+    the prefix used globally, manipulate wxPG_UINT_PREFIX string attribute.
+    To set the globally used base, manipulate wxPG_UINT_BASE int
     attribute. Regardless of current prefix, understands (hex) values starting
-    with both "0x" and "$" (apart from edit mode).
+    with both "0x" and "$".
     Like wxIntProperty, wxUIntProperty seamlessly supports 64-bit unsigned
-    integers (i.e. wxULongLong). Same wxVariant safety rules apply.
-
-    Supported special attributes:
-    - @c wxPG_ATTR_MIN, @c wxPG_ATTR_MAX: Specifies acceptable value range.
-    - @c wxPG_UINT_BASE: Defines base. Valid constants are @c wxPG_BASE_OCT,
-    @c wxPG_BASE_DEC, @c wxPG_BASE_HEX and @c wxPG_BASE_HEXL (lowercase characters).
-    Arbitrary bases are <b>not</b> supported.
-    - @c wxPG_UINT_PREFIX: Defines displayed prefix. Possible values are
-    @c wxPG_PREFIX_NONE, @c wxPG_PREFIX_0x and @c wxPG_PREFIX_DOLLAR_SIGN.
-    Only @c wxPG_PREFIX_NONE works with decimal and octal numbers.
-    @see @ref propgrid_property_attributes
-
-    @remarks
-    For example how to use seamless 64-bit integer support, see wxIntProperty
-    documentation (just use wxULongLong instead of wxLongLong).
+    integers (ie. wxULongLong). Same wxVariant safety rules apply.
 
     @subsection wxFloatProperty
 
     Like wxStringProperty, but converts text to a double-precision floating point.
     Default float-to-text precision is 6 decimals, but this can be changed
-    by modifying @c wxPG_FLOAT_PRECISION attribute.
+    by modifying wxPG_FLOAT_PRECISION attribute.
 
     Note that when displaying the value, sign is omitted if the resulting
     textual representation is effectively zero (for example, -0.0001 with
@@ -517,25 +455,11 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     what C standard library does, but should result in better end-user
     experience in almost all cases.
 
-    Supported special attributes:
-    - @c wxPG_ATTR_MIN, @c wxPG_ATTR_MAX: Specifies acceptable value range.
-    - @c wxPG_FLOAT_PRECISION: Sets the (max) precision used when floating point
-    value is rendered as text. The default -1 means shortest floating-point
-    6-digit representation.
-    @see @ref propgrid_property_attributes
-
     @subsection wxBoolProperty
 
     Represents a boolean value. wxChoice is used as editor control, by the
-    default. @c wxPG_BOOL_USE_CHECKBOX attribute can be set to @true in order to
+    default. wxPG_BOOL_USE_CHECKBOX attribute can be set to true in order to
     use check box instead.
-
-    Supported special attributes:
-    - @c wxPG_BOOL_USE_CHECKBOX: If set to @true uses check box editor instead
-    of combo box.
-    - @c wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING: If set to @true cycles combo box
-    instead showing the list.
-    @see @ref propgrid_property_attributes
 
     @subsection wxLongStringProperty
 
@@ -577,27 +501,15 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     @subsection wxDirProperty
 
     Like wxLongStringProperty, but the button triggers dir selector instead.
-
-    Supported special attributes:
-    - @c wxPG_DIR_DIALOG_MESSAGE: Sets specific message in the dir selector.
-    @see @ref propgrid_property_attributes
+    Supported properties (all with string value): wxPG_DIR_DIALOG_MESSAGE.
 
     @subsection wxFileProperty
 
     Like wxLongStringProperty, but the button triggers file selector instead.
     Default wildcard is "All files..." but this can be changed by setting
-    @c wxPG_FILE_WILDCARD attribute.
-
-    Supported special attributes:
-    - @c wxPG_FILE_WILDCARD: Sets wildcard (see wxFileDialog for format details), "All
-    files..." is default.
-    - @c wxPG_FILE_SHOW_FULL_PATH: Default @true. When @false, only the file name is shown
-    (i.e. drive and directory are hidden).
-    - @c wxPG_FILE_SHOW_RELATIVE_PATH: If set, then the filename is shown relative to the
-    given path string.
-    - @c wxPG_FILE_INITIAL_PATH: Sets the initial path of where to look for files.
-    - @c wxPG_FILE_DIALOG_TITLE: Sets a specific title for the dir dialog.
-    @see @ref propgrid_property_attributes
+    wxPG_FILE_WILDCARD attribute (see wxFileDialog for format details).
+    Attribute wxPG_FILE_SHOW_FULL_PATH can be set to @false in order to show
+    only the filename, not the entire path.
 
     @subsection wxEnumProperty
 
@@ -619,35 +531,22 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     @subsection wxArrayStringProperty
 
-    Property that manages a list of strings. Allows editing of a list
-    of strings in wxTextCtrl and in a separate dialog.
-
-    Supported special attributes:
-    - @c wxPG_ARRAY_DELIMITER: Sets string delimiter character.
-    Default is comma (',').
-    @see @ref propgrid_property_attributes
+    Allows editing of a list of strings in wxTextCtrl and in a separate
+    dialog. Supports "Delimiter" attribute, which defaults to comma (',').
 
     @subsection wxDateProperty
 
-    Property representing wxDateTime. Default editor is DatePickerCtrl,
-    although TextCtrl should work as well.
-
-    Supported special attributes:
-    - @c wxPG_DATE_FORMAT: Determines displayed date format (with wxDateTime::Format).
-    Default is recommended as it is locale-dependent.
-    - @c wxPG_DATE_PICKER_STYLE: Determines window style used with wxDatePickerCtrl.
-       Default is @c wxDP_DEFAULT | @c wxDP_SHOWCENTURY. Using @c wxDP_ALLOWNONE
-       enables additional support for unspecified property value.
-    @see @ref propgrid_property_attributes
+    wxDateTime property. Default editor is DatePickerCtrl, although TextCtrl
+    should work as well. wxPG_DATE_FORMAT attribute can be used to change
+    string wxDateTime::Format uses (although default is recommended as it is
+    locale-dependent), and wxPG_DATE_PICKER_STYLE allows changing window
+    style given to DatePickerCtrl (default is wxDP_DEFAULT|wxDP_SHOWCENTURY).
+    Using wxDP_ALLOWNONE will enable better unspecified value support.
 
     @subsection wxEditEnumProperty
 
     Represents a string that can be freely edited or selected from list of choices -
     custom combobox control is used to edit the value.
-
-    @remarks
-    Uses int value, similar to wxEnumProperty, unless text entered by user is
-    is not in choices (in which case string value is used).
 
     @subsection wxMultiChoiceProperty
 
@@ -655,18 +554,10 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     property is pretty much built around concept of wxMultiChoiceDialog.
     It uses wxArrayString value.
 
-    Supported special attributes:
-    - @c wxPG_ATTR_MULTICHOICE_USERSTRINGMODE: If > 0, allows user to manually
-    enter strings that are not in the list of choices. If this value is 1,
-    user strings are preferably placed in front of valid choices. If value
-    is 2, then those strings will placed behind valid choices.
-    @see @ref propgrid_property_attributes
-
     @subsection wxImageFileProperty
 
-    Property representing image file(name). Like wxFileProperty,
-    but has thumbnail of the image in front of the filename
-    and autogenerates wildcard from available image handlers.
+    Like wxFileProperty, but has thumbnail of the image in front of
+    the filename and autogenerates wildcard from available image handlers.
 
     @subsection wxColourProperty
 
@@ -676,10 +567,8 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     There are various sub-classing opportunities with this class. See
     below in wxSystemColourProperty section for details.
 
-    Supported special attributes:
-    - @c wxPG_COLOUR_HAS_ALPHA: If set to @true allows user to edit the alpha
-    colour component.
-    @see @ref propgrid_property_attributes
+    Setting "HasAlpha" attribute to @true for this property allows user to
+    edit the alpha colour component.
 
     @subsection wxFontProperty
 
@@ -710,7 +599,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
         };
     @endcode
 
-    In wxSystemColourProperty, and its derived class wxColourProperty, there
+    in wxSystemColourProperty, and its derived class wxColourProperty, there
     are various sub-classing features. To set a basic list of colour
     names, call wxPGProperty::SetChoices().
 
@@ -864,7 +753,7 @@ public:
         This virtual function is called after m_value has been set.
 
         @remarks
-        - If m_value was set to Null variant (i.e. unspecified value), OnSetValue()
+        - If m_value was set to Null variant (ie. unspecified value), OnSetValue()
           will not be called.
         - m_value may be of any variant type. Typically properties internally support only
           one variant type, and as such OnSetValue() provides a good opportunity to convert
@@ -998,7 +887,7 @@ public:
         @remarks
         - Default behaviour is to return wxSize(0,0), which means no image.
         - Default image width or height is indicated with dimension -1.
-        - You can also return wxPG_DEFAULT_IMAGE_SIZE which equals wxDefaultSize.
+        - You can also return wxPG_DEFAULT_IMAGE_SIZE which equals wxSize(-1, -1).
     */
     virtual wxSize OnMeasureImage( int item = -1 ) const;
 
@@ -1221,7 +1110,7 @@ public:
         Returns instance of a new wxPGEditorDialogAdapter instance, which is
         used when user presses the (optional) button next to the editor control;
 
-        Default implementation returns @NULL (i.e. no action is generated when
+        Default implementation returns @NULL (ie. no action is generated when
         button is pressed).
     */
     virtual wxPGEditorDialogAdapter* GetEditorDialog() const;
@@ -1251,6 +1140,15 @@ public:
     int AddChoice( const wxString& label, int value = wxPG_INVALID_VALUE );
 
     /**
+        Adds a private child property.
+
+        @deprecated Use AddPrivateChild() instead.
+
+        @see AddPrivateChild()
+    */
+    void AddChild( wxPGProperty* prop );
+
+    /**
         Adds a private child property. If you use this instead of
         wxPropertyGridInterface::Insert() or
         wxPropertyGridInterface::AppendIn(), then property's parental
@@ -1266,7 +1164,7 @@ public:
     void AdaptListToValue( wxVariant& list, wxVariant* value ) const;
 
     /**
-        Use this member function to add independent (i.e. regular) children to
+        Use this member function to add independent (ie. regular) children to
         a property.
 
         @return Appended childProperty.
@@ -1379,9 +1277,7 @@ public:
     */
     const wxPGEditor* GetColumnEditor( int column ) const;
 
-    /** Returns property's base name (ie. parent's name is not added
-        in any case).
-    */
+    /** Returns property's base name (ie. parent's name is not added in any case) */
     const wxString& GetBaseName() const;
 
     /**
@@ -1430,7 +1326,7 @@ public:
     */
     void* GetClientData() const;
 
-    /** Gets managed client object of a property.
+    /** Sets managed client object of a property.
     */
     wxClientData *GetClientObject() const;
 
@@ -1465,7 +1361,7 @@ public:
     const wxPGEditor* GetEditorClass() const;
 
     /**
-        Returns property's hint text (shown in empty value cell).
+        Returns property flags.
     */
     inline wxString GetHintText() const;
 
@@ -1559,6 +1455,14 @@ public:
     */
     virtual wxString GetValueAsString( int argFlags = 0 ) const;
 
+    /** Synonymous to GetValueAsString().
+
+        @deprecated Use GetValueAsString() instead.
+
+        @see GetValueAsString()
+    */
+    wxString GetValueString( int argFlags = 0 ) const;
+
     /**
         Returns value type used by this property.
     */
@@ -1619,7 +1523,7 @@ public:
     int Index( const wxPGProperty* p ) const;
 
     /**
-        Use this member function to add independent (i.e. regular) children to
+        Use this member function to add independent (ie. regular) children to
         a property.
 
         @return Inserted childProperty.
@@ -1673,7 +1577,6 @@ public:
 
     /**
         Returns @true if candidateParent is some parent of this property.
-        Use, for example, to detect if item is inside collapsed section.
     */
     bool IsSomeParent( wxPGProperty* candidateParent ) const;
 
@@ -1756,10 +1659,6 @@ public:
             Default is wxPG_RECURSE which causes colour to be set recursively.
             Omit this flag to only set colour for the property in question
             and not any of its children.
-
-        @remarks
-        Unlike wxPropertyGridInterface::SetPropertyBackgroundColour(),
-        this does not automatically update the display.
     */
     void SetBackgroundColour( const wxColour& colour,
                               int flags = wxPG_RECURSE );
@@ -1805,7 +1704,7 @@ public:
     */
     void SetClientData( void* clientData );
 
-    /** Sets client object of a property.
+    /** Returns client object of a property.
     */
     void SetClientObject(wxClientData* clientObject);
 
@@ -1849,11 +1748,8 @@ public:
     /**
         Sets property's label.
 
-        @remarks
-        - Properties under same parent may have same labels. However,
-        property names must still remain unique.
-        - Unlike wxPropertyGridInterface::SetPropertyLabel(),
-        this does not automatically update the display.
+        @remarks Properties under same parent may have same labels. However,
+                property names must still remain unique.
     */
     void SetLabel( const wxString& label );
 
@@ -1895,10 +1791,6 @@ public:
             Default is wxPG_RECURSE which causes colour to be set recursively.
             Omit this flag to only set colour for the property in question
             and not any of its children.
-
-        @remarks
-        Unlike wxPropertyGridInterface::SetPropertyTextColour(),
-        this does not automatically update the display.
     */
     void SetTextColour( const wxColour& colour,
                         int flags = wxPG_RECURSE );
@@ -1959,22 +1851,19 @@ public:
     void SetValueInEvent( wxVariant value ) const;
 
     /**
-        Sets property's value to unspecified (i.e. Null variant).
+        Sets property's value to unspecified (ie. Null variant).
     */
     void SetValueToUnspecified();
 
     /**
         Call with @false in OnSetValue() to cancel value changes after all
-        (i.e. cancel @true returned by StringToValue() or IntToValue()).
+        (ie. cancel @true returned by StringToValue() or IntToValue()).
     */
     void SetWasModified( bool set = true );
 
     /**
         Updates composed values of parent non-category properties, recursively.
         Returns topmost property updated.
-
-        @remarks
-        Must not call SetValue() (as can be called in it).
     */
     wxPGProperty* UpdateParentValues();
 
@@ -2401,80 +2290,38 @@ public:
     */
     wxPGChoices( const wxPGChoices& a );
 
-    /**
-        Constructor.
-
-        @param labels
-            Labels for choices.
-
-        @param values
-            Values for choices. If @NULL, indexes are used.
-    */
+    /** Constructor. */
     wxPGChoices( const wxChar** labels, const long* values = NULL );
 
-    /**
-        Constructor.
-
-        @param labels
-            Labels for choices.
-
-        @param values
-            Values for choices. If empty, indexes are used.
-    */
+    /** Constructor. */
     wxPGChoices( const wxArrayString& labels, const wxArrayInt& values = wxArrayInt() );
 
-    /**
-        Simple interface constructor.
-    */
+    /** Constructor. */
     wxPGChoices( wxPGChoicesData* data );
 
-    /**
-        Destructor.
-    */
+    /** Destructor. */
     ~wxPGChoices();
 
     /**
         Adds to current. If did not have own copies, creates them now. If was empty,
         identical to set except that creates copies.
-
-        @param labels
-            Labels for added choices.
-
-        @param values
-            Values for added choices. If empty, relevant entry indexes are used.
     */
     void Add( const wxChar** labels, const ValArrItem* values = NULL );
 
-    /**
-        Adds to current. Version that works with wxArrayString and wxArrayInt.
-    */
+    /** Version that works with wxArrayString and wxArrayInt. */
     void Add( const wxArrayString& arr, const wxArrayInt& arrint );
 
-    /**
-        Adds a single choice item.
-
-        @param label
-            Label for added choice.
-
-        @param value
-            Value for added choice. If unspecified, index is used.
-    */
+    /** Adds single item. */
     wxPGChoiceEntry& Add( const wxString& label, int value = wxPG_INVALID_VALUE );
 
-    /**
-        Adds a single item, with bitmap.
-    */
+    /** Adds a single item, with bitmap. */
     wxPGChoiceEntry& Add( const wxString& label, const wxBitmap& bitmap,
                           int value = wxPG_INVALID_VALUE );
 
-    /**
-        Adds a single item with full entry information.
-    */
+    /** Adds a single item with full entry information. */
     wxPGChoiceEntry& Add( const wxPGChoiceEntry& entry );
 
-    /**
-        Adds a single item, sorted.
-    */
+    /** Adds single item, sorted. */
     wxPGChoiceEntry& AddAsSorted( const wxString& label, int value = wxPG_INVALID_VALUE );
 
     /**
@@ -2516,7 +2363,7 @@ public:
     unsigned int GetCount() const;
 
     /**
-        Returns value of item.
+        Returns value of item;
     */
     int GetValue( unsigned int ind ) const;
 
@@ -2544,7 +2391,7 @@ public:
     int Index( int val ) const;
 
     /**
-        Inserts a single item.
+        Inserts single item.
     */
     wxPGChoiceEntry& Insert( const wxString& label, int index, int value = wxPG_INVALID_VALUE );
 
