@@ -10,6 +10,152 @@
 
 
 /**
+   @class wxPGPaintData
+
+   Contains information relayed to property's OnCustomPaint.
+*/
+struct wxPGPaintData
+{
+    /** wxPropertyGrid. */
+    const wxPropertyGrid*   m_parent;
+
+    /**
+        Normally -1, otherwise index to drop-down list item that has to be
+        drawn.
+     */
+    int                     m_choiceItem;
+
+    /** Set to drawn width in OnCustomPaint (optional). */
+    int                     m_drawnWidth;
+
+    /**
+        In a measure item call, set this to the height of item at m_choiceItem
+        index.
+     */
+    int                     m_drawnHeight;
+};
+
+
+// space between vertical sides of a custom image
+#define wxPG_CUSTOM_IMAGE_SPACINGY      1
+
+// space between caption and selection rectangle,
+#define wxPG_CAPRECTXMARGIN             2
+
+// horizontally and vertically
+#define wxPG_CAPRECTYMARGIN             1
+
+
+/**
+   @class wxPGCellRenderer
+
+   Base class for wxPropertyGrid cell renderers.
+*/
+class  wxPGCellRenderer : public wxObjectRefData
+{
+public:
+
+    wxPGCellRenderer()
+        : wxObjectRefData() { }
+    virtual ~wxPGCellRenderer() { }
+
+    // Render flags
+    enum
+    {
+        // We are painting selected item
+        Selected        = 0x00010000,
+
+        // We are painting item in choice popup
+        ChoicePopup     = 0x00020000,
+
+        // We are rendering wxOwnerDrawnComboBox control
+        // (or other owner drawn control, but that is only
+        // officially supported one ATM).
+        Control         = 0x00040000,
+
+        // We are painting a disable property
+        Disabled        = 0x00080000,
+
+        // We are painting selected, disabled, or similar
+        // item that dictates fore- and background colours,
+        // overriding any cell values.
+        DontUseCellFgCol    = 0x00100000,
+        DontUseCellBgCol    = 0x00200000,
+        DontUseCellColours  = DontUseCellFgCol |
+                              DontUseCellBgCol
+    };
+
+    /**
+        Returns @true if rendered something in the foreground (text or
+        bitmap.
+    */
+    virtual bool Render( wxDC& dc,
+                         const wxRect& rect,
+                         const wxPropertyGrid* propertyGrid,
+                         wxPGProperty* property,
+                         int column,
+                         int item,
+                         int flags ) const = 0;
+
+    /** Returns size of the image in front of the editable area.
+        @remarks
+        If property is NULL, then this call is for a custom value. In that case
+        the item is index to wxPropertyGrid's custom values.
+    */
+    virtual wxSize GetImageSize( const wxPGProperty* property,
+                                 int column,
+                                 int item ) const;
+
+    /** Paints property category selection rectangle.
+    */
+    virtual void DrawCaptionSelectionRect( wxDC& dc,
+                                           int x, int y,
+                                           int w, int h ) const;
+
+    /** Utility to draw vertically centered text.
+    */
+    void DrawText( wxDC& dc,
+                   const wxRect& rect,
+                   int imageWidth,
+                   const wxString& text ) const;
+
+    /**
+        Utility to draw editor's value, or vertically aligned text if editor is
+        NULL.
+    */
+    void DrawEditorValue( wxDC& dc, const wxRect& rect,
+                          int xOffset, const wxString& text,
+                          wxPGProperty* property,
+                          const wxPGEditor* editor ) const;
+
+    /** Utility to render cell bitmap and set text colour plus bg brush
+        colour.
+
+        @return Returns image width, which, for instance, can be passed to
+                DrawText.
+    */
+    int PreDrawCell( wxDC& dc,
+                     const wxRect& rect,
+                     const wxPGCell& cell,
+                     int flags ) const;
+
+    /**
+        Utility to be called after drawing is done, to revert whatever
+        changes PreDrawCell() did.
+
+        @param flags
+            Same as those passed to PreDrawCell().
+    */
+    void PostDrawCell( wxDC& dc,
+                       const wxPropertyGrid* propGrid,
+                       const wxPGCell& cell,
+                       int flags ) const;
+};
+
+
+
+
+/**
     @section propgrid_property_attributes wxPropertyGrid Property Attribute Identifiers
 
     wxPGProperty::SetAttribute() and wxPropertyGridInterface::SetPropertyAttribute()
