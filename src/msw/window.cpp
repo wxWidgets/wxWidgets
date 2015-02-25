@@ -3283,7 +3283,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
 #if wxUSE_HOTKEY
         case WM_HOTKEY:
-            processed = HandleHotKey((WORD)wParam, lParam);
+            processed = HandleHotKey(wParam, lParam);
             break;
 #endif // wxUSE_HOTKEY
 
