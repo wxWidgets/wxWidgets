@@ -580,6 +580,7 @@ Major new features in this release
 Unix:
 
 - Fix wxIPaddress::Hostname() failing if /etc/hosts contained very long names.
+- Fix wxDateTime::ParseRfc822Date() for some TZ/DST combinations.
 
 All (GUI):
 
