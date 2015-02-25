@@ -969,7 +969,14 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
 
     // the spec was correct, construct the date from the values we found
     Set(day, mon, year, hour, min, sec);
-    MakeFromTimezone(TimeZone::Make(offset*SEC_PER_MIN));
+
+    // As always, dealing with the time zone is the most interesting part: we
+    // can't just use MakeFromTimeZone() here because it wouldn't handle the
+    // DST correctly because the TZ specified in the string is DST-invariant
+    // and so we have to manually shift to the UTC first and then convert to
+    // the local TZ.
+    *this -= wxTimeSpan::Minutes(offset);
+    MakeFromUTC();
 
     if ( end )
         *end = p;
