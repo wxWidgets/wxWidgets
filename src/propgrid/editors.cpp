@@ -522,6 +522,9 @@ public:
     wxPGDoubleClickProcessor( wxOwnerDrawnComboBox* combo, wxPGProperty* property )
         : wxEvtHandler()
     {
+        wxASSERT_MSG( wxDynamicCast(property, wxBoolProperty),
+           wxT("Double-click processor should be used only with wxBoolProperty") );
+
         m_timeLastMouseUp = 0;
         m_combo = combo;
         m_property = property;
@@ -536,7 +539,6 @@ protected:
         int evtType = event.GetEventType();
 
         if ( m_property->HasFlag(wxPG_PROP_USE_DCC) &&
-             wxDynamicCast(m_property, wxBoolProperty) &&
              !m_combo->IsPopupShown() )
         {
             // Just check that it is in the text area
@@ -640,10 +642,14 @@ public:
                                             name ) )
             return false;
 
-        m_dclickProcessor = new
-            wxPGDoubleClickProcessor( this, GetGrid()->GetSelection() );
-
-        PushEventHandler(m_dclickProcessor);
+        // Enabling double-click processor makes sense
+        // only for wxBoolProperty.
+        wxPGProperty* selProp = GetGrid()->GetSelection();
+        if (wxDynamicCast(selProp, wxBoolProperty))
+        {
+            m_dclickProcessor = new wxPGDoubleClickProcessor(this, selProp);
+            PushEventHandler(m_dclickProcessor);
+        }
 
         return true;
     }
