@@ -113,8 +113,6 @@ public:
             Initial size for control(s).
 
         @remarks
-        - Primary control shall use id wxPG_SUBID1, and secondary (button)
-          control shall use wxPG_SUBID2.
         - Unlike in previous version of wxPropertyGrid, it is no longer
           necessary to call wxEvtHandler::Connect() for interesting editor
           events. Instead, all events from control are now automatically
