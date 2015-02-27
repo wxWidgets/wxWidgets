@@ -2123,7 +2123,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
             pg->m_deletedProperties.RemoveAt(index);
         }
         wxASSERT_MSG( pg->m_deletedProperties.Index(item) == wxNOT_FOUND,
-                    wxT("Too many occurences of the item"));
+                    wxT("Too many occurrences of the item"));
 
         index = pg->m_removedProperties.Index(item);
         if ( index != wxNOT_FOUND )
@@ -2131,7 +2131,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
             pg->m_removedProperties.RemoveAt(index);
         }
         wxASSERT_MSG( pg->m_removedProperties.Index(item) == wxNOT_FOUND,
-                    wxT("Too many occurences of the item"));
+                    wxT("Too many occurrences of the item"));
 
         delete item;
     }
@@ -2144,7 +2144,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
             pg->m_removedProperties.RemoveAt(index);
         }
         wxASSERT_MSG( pg->m_removedProperties.Index(item) == wxNOT_FOUND,
-                    wxT("Too many occurences of the item"));
+                    wxT("Too many occurrences of the item"));
 
         item->OnDetached(this, pg);
     }
