@@ -975,7 +975,8 @@ wxColourPropertyValue wxSystemColourProperty::GetVal( const wxVariant* pVariant 
     if ( pVariant->IsNull() )
         return wxColourPropertyValue(wxPG_COLOUR_UNSPECIFIED, wxColour());
 
-    if ( pVariant->GetType() == wxS("wxColourPropertyValue") )
+    const wxString valType(pVariant->GetType());
+    if ( valType == wxS("wxColourPropertyValue") )
     {
         wxColourPropertyValue v;
         v << *pVariant;
@@ -985,16 +986,16 @@ wxColourPropertyValue wxSystemColourProperty::GetVal( const wxVariant* pVariant 
     wxColour col;
     bool variantProcessed = true;
 
-    if ( pVariant->GetType() == wxS("wxColour*") )
+    if ( valType == wxS("wxColour*") )
     {
         wxColour* pCol = wxStaticCast(pVariant->GetWxObjectPtr(), wxColour);
         col = *pCol;
     }
-    else if ( pVariant->GetType() == wxS("wxColour") )
+    else if ( valType == wxS("wxColour") )
     {
         col << *pVariant;
     }
-    else if ( pVariant->GetType() == wxArrayInt_VariantType )
+    else if ( valType == wxArrayInt_VariantType )
     {
         // This code is mostly needed for wxPython bindings, which
         // may offer tuple of integers as colour value.

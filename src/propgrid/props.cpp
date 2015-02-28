@@ -239,11 +239,12 @@ wxIntProperty::~wxIntProperty() { }
 wxString wxIntProperty::ValueToString( wxVariant& value,
                                        int WXUNUSED(argFlags) ) const
 {
-    if ( value.GetType() == wxPG_VARIANT_TYPE_LONG )
+    const wxString valType(value.GetType());
+    if ( valType == wxPG_VARIANT_TYPE_LONG )
     {
         return wxString::Format(wxS("%li"),value.GetLong());
     }
-    else if ( value.GetType() == wxPG_VARIANT_TYPE_LONGLONG )
+    else if ( valType == wxPG_VARIANT_TYPE_LONGLONG )
     {
         wxLongLong ll = value.GetLongLong();
         return ll.ToString();
@@ -283,7 +284,7 @@ bool wxIntProperty::StringToValue( wxVariant& variant, const wxString& text, int
 
         wxString useText = text.substr(firstNonZeroPos, text.length() - firstNonZeroPos);
 
-        wxString variantType = variant.GetType();
+        const wxString variantType(variant.GetType());
         bool isPrevLong = variantType == wxPG_VARIANT_TYPE_LONG;
 
         wxLongLong_t value64 = 0;
@@ -652,7 +653,7 @@ wxString wxUIntProperty::ValueToString( wxVariant& value,
 
 bool wxUIntProperty::StringToValue( wxVariant& variant, const wxString& text, int WXUNUSED(argFlags) ) const
 {
-    wxString variantType = variant.GetType();
+    const wxString variantType(variant.GetType());
     bool isPrevLong = variantType == wxPG_VARIANT_TYPE_LONG;
 
     if ( text.empty() )
@@ -1197,14 +1198,14 @@ wxEnumProperty::~wxEnumProperty ()
 
 void wxEnumProperty::OnSetValue()
 {
-    wxString variantType = m_value.GetType();
+    const wxString valType(m_value.GetType());
 
     int index = -1;
-    if ( variantType == wxPG_VARIANT_TYPE_LONG )
+    if ( valType == wxPG_VARIANT_TYPE_LONG )
     {
         ValueFromInt_(m_value, &index, m_value.GetLong(), wxPG_FULL_VALUE);
     }
-    else if ( variantType == wxPG_VARIANT_TYPE_STRING )
+    else if ( valType == wxPG_VARIANT_TYPE_STRING )
     {
         ValueFromString_(m_value, &index, m_value.GetString(), 0);
     }
@@ -1383,14 +1384,14 @@ wxEditEnumProperty::~wxEditEnumProperty()
 
 void wxEditEnumProperty::OnSetValue()
 {
-    wxString variantType = m_value.GetType();
+    const wxString valType(m_value.GetType());
 
     int index = -1;
-    if ( variantType == wxPG_VARIANT_TYPE_LONG )
+    if ( valType == wxPG_VARIANT_TYPE_LONG )
     {
         ValueFromInt_(m_value, &index, m_value.GetLong(), wxPG_FULL_VALUE);
     }
-    else if ( variantType == wxPG_VARIANT_TYPE_STRING )
+    else if ( valType == wxPG_VARIANT_TYPE_STRING )
     {
         wxString val = m_value.GetString();
         ValueFromString_(m_value, &index, val, 0);
