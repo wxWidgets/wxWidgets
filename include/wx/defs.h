@@ -2007,13 +2007,13 @@ enum wxBorder
 #define wxNO_DEFAULT            0x00000080  /* only valid with wxYES_NO */
 #define wxCANCEL_DEFAULT        0x80000000  /* only valid with wxCANCEL */
 
-#define wxICON_EXCLAMATION      0x00000100
-#define wxICON_HAND             0x00000200
-#define wxICON_WARNING          wxICON_EXCLAMATION
-#define wxICON_ERROR            wxICON_HAND
+#define wxICON_WARNING          0x00000100
+#define wxICON_ERROR            0x00000200
 #define wxICON_QUESTION         0x00000400
 #define wxICON_INFORMATION      0x00000800
-#define wxICON_STOP             wxICON_HAND
+#define wxICON_EXCLAMATION      wxICON_WARNING
+#define wxICON_HAND             wxICON_ERROR
+#define wxICON_STOP             wxICON_ERROR
 #define wxICON_ASTERISK         wxICON_INFORMATION
 
 #define wxHELP                  0x00001000
