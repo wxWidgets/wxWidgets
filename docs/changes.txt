@@ -109,6 +109,7 @@ wxGTK:
 - Support building wxGTK3 under Windows (Kolya Kosenko).
 - Fix vertical cell alignment in wxDataViewCtrl.
 - Fix clearing of wxComboBox with wxCB_READONLY (Chuddah).
+- Fix GTK+ warnings for wxFileDialog with wxFD_MULTIPLE style.
 
 wxMSW:
 
