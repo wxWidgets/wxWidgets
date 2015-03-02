@@ -597,6 +597,7 @@ wxGTK:
   target window.
 - Fix crashes in wxGTK3 when running with non-X11 backend (Marco Trevisan).
 - Fix coordinates of wxSetCursorEvent propagated to parent windows.
+- Fix GTK+ warnings when refreshing wxListCtrl items (Scott Talbert).
 
 wxMSW:
 
