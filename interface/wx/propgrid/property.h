@@ -153,6 +153,44 @@ public:
 };
 
 
+/**
+    @class wxPGDefaultRenderer
+
+    Default cell renderer, that can handles the common
+    scenarios.
+*/
+class wxPGDefaultRenderer : public wxPGCellRenderer
+{
+public:
+    virtual bool Render( wxDC& dc,
+                         const wxRect& rect,
+                         const wxPropertyGrid* propertyGrid,
+                         wxPGProperty* property,
+                         int column,
+                         int item,
+                         int flags ) const;
+
+    virtual wxSize GetImageSize( const wxPGProperty* property,
+                                 int column,
+                                 int item ) const;
+};
+
+
+class wxPGCellData : public wxObjectRefData
+{
+public:
+    wxPGCellData();
+
+    void SetText( const wxString& text );
+    void SetBitmap( const wxBitmap& bitmap );
+    void SetFgCol( const wxColour& col );
+    void SetBgCol( const wxColour& col );
+    void SetFont( const wxFont& font );
+
+protected:
+    virtual ~wxPGCellData() { }
+};
+
 
 
 /**
@@ -1962,6 +2000,52 @@ public:
 
     wxPGCell& operator=( const wxPGCell& other );
 };
+
+
+
+/**
+    @class wxPGChoiceEntry
+    Data of a single wxPGChoices choice.
+*/
+class wxPGChoiceEntry : public wxPGCell
+{
+public:
+    wxPGChoiceEntry();
+    wxPGChoiceEntry(const wxPGChoiceEntry& other);
+    wxPGChoiceEntry( const wxString& label,
+                     int value = wxPG_INVALID_VALUE );
+
+    virtual ~wxPGChoiceEntry();
+
+    void SetValue( int value );
+    int GetValue() const;
+
+    wxPGChoiceEntry& operator=( const wxPGChoiceEntry& other );
+};
+
+
+class wxPGChoicesData : public wxObjectRefData
+{
+public:
+    // Constructor sets m_refCount to 1.
+    wxPGChoicesData();
+
+    void CopyDataFrom( wxPGChoicesData* data );
+
+    wxPGChoiceEntry& Insert( int index, const wxPGChoiceEntry& item );
+
+    // Delete all entries
+    void Clear();
+
+    unsigned int GetCount() const;
+
+    const wxPGChoiceEntry& Item( unsigned int i ) const;
+    wxPGChoiceEntry& Item( unsigned int i );
+};
+
+#define wxPGChoicesEmptyData    ((wxPGChoicesData*)NULL)
+
+
 
 
 /**
