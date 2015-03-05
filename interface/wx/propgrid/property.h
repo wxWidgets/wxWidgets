@@ -192,6 +192,97 @@ protected:
 };
 
 
+/**
+    @class wxPGCell
+
+    Base class for wxPropertyGrid cell information.
+
+    @library{wxpropgrid}
+    @category{propgrid}
+*/
+class wxPGCell : public wxObject
+{
+public:
+    wxPGCell();
+    wxPGCell(const wxPGCell& other);
+    wxPGCell( const wxString& text,
+              const wxBitmap& bitmap = wxNullBitmap,
+              const wxColour& fgCol = wxNullColour,
+              const wxColour& bgCol = wxNullColour );
+
+    virtual ~wxPGCell();
+
+    const wxPGCellData* GetData() const;
+
+    /**
+        Returns @true if this cell has custom text stored within.
+    */
+    bool HasText() const;
+
+    /**
+        Merges valid data from srcCell into this.
+    */
+    void MergeFrom( const wxPGCell& srcCell );
+
+    void SetText( const wxString& text );
+    void SetBitmap( const wxBitmap& bitmap );
+    void SetFgCol( const wxColour& col );
+
+    /**
+        Sets font of the cell.
+
+        @remarks Because wxPropertyGrid does not support rows of
+                 different height, it makes little sense to change
+                 size of the font. Therefore it is recommended
+                 to use return value of wxPropertyGrid::GetFont()
+                 or wxPropertyGrid::GetCaptionFont() as a basis
+                 for the font that, after modifications, is passed
+                 to this member function.
+    */
+    void SetFont( const wxFont& font );
+
+    void SetBgCol( const wxColour& col );
+
+    const wxString& GetText() const;
+    const wxBitmap& GetBitmap() const;
+    const wxColour& GetFgCol() const;
+
+    /**
+        Returns font of the cell. If no specific font is set for this
+        cell, then the font will be invalid.
+    */
+    const wxFont& GetFont() const;
+
+    const wxColour& GetBgCol() const;
+
+    wxPGCell& operator=( const wxPGCell& other );
+};
+
+
+
+/**
+    @class wxPGAttributeStorage
+
+    wxPGAttributeStorage is somewhat optimized storage for
+    key=variant pairs (ie. a map).
+*/
+class wxPGAttributeStorage
+{
+public:
+    wxPGAttributeStorage();
+    ~wxPGAttributeStorage();
+
+    void Set( const wxString& name, const wxVariant& value );
+    unsigned int GetCount() const;
+    wxVariant FindValue( const wxString& name ) const;
+    
+    typedef wxPGHashMapS2P::const_iterator const_iterator;
+    const_iterator StartIteration() const;
+    bool GetNext( const_iterator& it, wxVariant& variant ) const;
+};
+
+
+
 
 /**
     @section propgrid_property_attributes wxPropertyGrid Property Attribute Identifiers
@@ -1383,6 +1474,15 @@ public:
     void Enable( bool enable = true );
 
     /**
+        Call to enable or disable usage of common value (integer value that can
+        be selected for properties instead of their normal values) for this
+        property.
+
+        Common values are disabled by the default for all properties.
+    */
+    void EnableCommonValue( bool enable = true );
+
+    /**
         Composes text from values of child properties.
     */
     wxString GenerateComposedValue() const;
@@ -1409,6 +1509,12 @@ public:
     */
     wxVariant GetAttributesAsList() const;
 
+    /**
+       Return atributes storage map.
+     */
+    const wxPGAttributeStorage& GetAttributes() const;
+
+    
     /**
         Returns editor used for given column. @NULL for no editor.
     */
@@ -1672,6 +1778,12 @@ public:
     bool IsRoot() const;
 
     /**
+       Returns true if this is a sub-property.
+    */
+    bool IsSubProperty() const;
+
+
+    /**
         Returns @true if candidateParent is some parent of this property.
     */
     bool IsSomeParent( wxPGProperty* candidateParent ) const;
@@ -1720,6 +1832,9 @@ public:
     */
     void SetAttribute( const wxString& name, wxVariant value );
 
+    
+    void SetAttributes( const wxPGAttributeStorage& attributes );
+    
     /**
         Set if user can change the property's value to unspecified by
         modifying the value of the editor control (usually by clearing
@@ -1929,76 +2044,41 @@ public:
     */
     bool UsesAutoUnspecified() const;
 
+
+    /**
+       Helper for language bindings.
+    */
+    void SetValuePlain( wxVariant value );
+    void*  m_clientData;
+
+
 protected:
     /** Deletes all child properties. */
     void Empty();
 };
 
 
+
 /**
-    @class wxPGCell
-
-    Base class for wxPropertyGrid cell information.
-
-    @library{wxpropgrid}
-    @category{propgrid}
+   @class wxPropertyCategory
+    @ingroup classes
+    Category (caption) property.
 */
-class wxPGCell : public wxObject
+class wxPropertyCategory : public wxPGProperty
 {
 public:
-    wxPGCell();
-    wxPGCell(const wxPGCell& other);
-    wxPGCell( const wxString& text,
-              const wxBitmap& bitmap = wxNullBitmap,
-              const wxColour& fgCol = wxNullColour,
-              const wxColour& bgCol = wxNullColour );
 
-    virtual ~wxPGCell();
+    /** Default constructor is only used in special cases. */
+    wxPropertyCategory();
 
-    const wxPGCellData* GetData() const;
+    wxPropertyCategory( const wxString& label,
+                        const wxString& name = wxPG_LABEL );
+    ~wxPropertyCategory();
 
-    /**
-        Returns @true if this cell has custom text stored within.
-    */
-    bool HasText() const;
+    int GetTextExtent( const wxWindow* wnd, const wxFont& font ) const;
 
-    /**
-        Merges valid data from srcCell into this.
-    */
-    void MergeFrom( const wxPGCell& srcCell );
-
-    void SetText( const wxString& text );
-    void SetBitmap( const wxBitmap& bitmap );
-    void SetFgCol( const wxColour& col );
-
-    /**
-        Sets font of the cell.
-
-        @remarks Because wxPropertyGrid does not support rows of
-                 different height, it makes little sense to change
-                 size of the font. Therefore it is recommended
-                 to use return value of wxPropertyGrid::GetFont()
-                 or wxPropertyGrid::GetCaptionFont() as a basis
-                 for the font that, after modifications, is passed
-                 to this member function.
-    */
-    void SetFont( const wxFont& font );
-
-    void SetBgCol( const wxColour& col );
-
-    const wxString& GetText() const;
-    const wxBitmap& GetBitmap() const;
-    const wxColour& GetFgCol() const;
-
-    /**
-        Returns font of the cell. If no specific font is set for this
-        cell, then the font will be invalid.
-    */
-    const wxFont& GetFont() const;
-
-    const wxColour& GetBgCol() const;
-
-    wxPGCell& operator=( const wxPGCell& other );
+    virtual wxString ValueToString( wxVariant& value, int argFlags ) const;
+    virtual wxString GetValueAsString( int argFlags = 0 ) const;
 };
 
 
