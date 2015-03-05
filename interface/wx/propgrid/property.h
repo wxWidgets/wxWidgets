@@ -2480,6 +2480,9 @@ public:
 
     const wxPGChoiceEntry& Item( unsigned int i ) const;
     wxPGChoiceEntry& Item( unsigned int i );
+
+protected:
+    virtual ~wxPGChoicesData();
 };
 
 #define wxPGChoicesEmptyData    ((wxPGChoicesData*)NULL)

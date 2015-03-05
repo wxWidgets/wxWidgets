@@ -677,6 +677,7 @@ public:
 private:
     wxVector<wxPGChoiceEntry>   m_items;
 
+protected:
     virtual ~wxPGChoicesData();
 };
 
