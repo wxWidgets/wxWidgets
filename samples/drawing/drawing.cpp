@@ -102,6 +102,7 @@ public:
     // set or remove the clipping region
     void Clip(bool clip) { m_clip = clip; Refresh(); }
 #if wxUSE_GRAPHICS_CONTEXT
+    bool HasRenderer() const { return m_renderer != NULL; }
     void UseGraphicRenderer(wxGraphicsRenderer* renderer)
         { m_renderer = renderer; Refresh(); }
 #endif
@@ -2022,7 +2023,19 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnShow(wxCommandEvent& event)
 {
-    m_canvas->ToShow(event.GetId());
+    const int show = event.GetId();
+
+#if wxUSE_GRAPHICS_CONTEXT
+    // Make sure we do use a graphics context when selecting one of the screens
+    // requiring it.
+    if ( show == File_ShowAlpha || show == File_ShowGraphics )
+    {
+        if ( !m_canvas->HasRenderer() )
+            m_canvas->UseGraphicRenderer(wxGraphicsRenderer::GetDefaultRenderer());
+    }
+#endif // wxUSE_GRAPHICS_CONTEXT
+
+    m_canvas->ToShow(show);
 }
 
 void MyFrame::OnOption(wxCommandEvent& event)
