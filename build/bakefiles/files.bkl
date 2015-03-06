@@ -2932,6 +2932,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/univ/toolbar.h
     wx/univ/toplevel.h
     wx/univ/window.h
+    wx/generic/activityindicator.h
 </set>
 
 <!-- ====================================================================== -->
@@ -3026,6 +3027,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/treelist.h
     wx/wizard.h
     wx/addremovectrl.h
+    wx/activityindicator.h
 </set>
 
 <set var="ADVANCED_MSW_SRC" hints="files">
@@ -3053,6 +3055,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/datetimectrl.cpp
     src/msw/hyperlink.cpp
     src/msw/timectrl.cpp
+    src/generic/activityindicator.cpp
 </set>
 <set var="ADVANCED_MSW_NATIVE_HDR" hints="files">
     wx/generic/animate.h
@@ -3063,6 +3066,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/datetimectrl.h
     wx/msw/hyperlink.h
     wx/msw/timectrl.h
+    wx/generic/activityindicator.h
 </set>
 
 <!-- not built on WindowsCE: -->
@@ -3084,6 +3088,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/sound.cpp
     src/osx/carbon/taskbar.cpp
     src/osx/core/hidjoystick.cpp
+    src/generic/activityindicator.cpp
 </set>
 
 <set var="ADVANCED_OSX_CARBON_HDR" hints="files">
@@ -3097,6 +3102,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/carbon/drawer.h
     wx/osx/carbon/dataview.h
     wx/osx/core/joystick.h
+    wx/generic/activityindicator.h
 </set>
 
 <set var="ADVANCED_OSX_COCOA_SRC" hints="files">
@@ -3114,6 +3120,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/datetimectrl.mm
     src/osx/cocoa/taskbar.mm
     src/osx/core/hidjoystick.cpp
+    src/osx/cocoa/activityindicator.mm
 </set>
 
 <set var="ADVANCED_OSX_COCOA_HDR" hints="files">
@@ -3129,6 +3136,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/timectrl.h
     wx/osx/core/joystick.h
     wx/osx/cocoa/dataview.h
+    wx/osx/cocoa/activityindicator.h
 </set>
 
 <set var="ADVANCED_OSX_IPHONE_SRC" hints="files">
@@ -3170,10 +3178,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_MOTIF_SRC" hints="files">
     src/generic/animateg.cpp
+    src/generic/activityindicator.cpp
 </set>
 
 <set var="ADVANCED_MOTIF_HDR" hints="files">
     wx/generic/animate.h
+    wx/generic/animateanimate.h
 </set>
 
 <set var="ADVANCED_GTK_WIN32_SRC" hints="files">
@@ -3205,11 +3215,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     $(ADVANCED_GTK_SRC)
     src/gtk/eggtrayicon.c
     src/gtk/hildon/notifmsg.cpp
+    src/generic/activityindicator.cpp
 </set>
 <set var="ADVANCED_GTK_HDR" hints="files">
     $(ADVANCED_GTK_PLATFORM_HDR)
     wx/gtk/notifmsg.h
     wx/gtk/taskbar.h
+    wx/generic/activityindicator.h
 </set>
 <set var="ADVANCED_GTK2_HDR" hints="files">
     $(ADVANCED_GTK_HDR)
@@ -3223,6 +3235,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/calctrl.cpp
     src/gtk/dataview.cpp
     src/gtk/hyperlink.cpp
+    src/gtk/activityindicator.cpp
 </set>
 <set var="ADVANCED_GTK_NATIVE_HDR" hints="files">
     wx/gtk/animate.h
@@ -3232,15 +3245,18 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/dvrenderer.h
     wx/gtk/dvrenderers.h
     wx/gtk/hyperlink.h
+    wx/gtk/activityindicator.h
 </set>
 
 <set var="ADVANCED_GTK1_SRC" hints="files">
     src/generic/animateg.cpp
     src/gtk1/eggtrayicon.c
     src/gtk1/taskbar.cpp
+    src/generic/activityindicator.cpp
 </set>
 <set var="ADVANCED_GTK1_HDR" hints="files">
     wx/generic/animate.h
+    wx/generic/activityindicator.h
 </set>
 
 <set var="ADVANCED_UNIV_SRC" hints="files">

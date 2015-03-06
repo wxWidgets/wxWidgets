@@ -1039,6 +1039,10 @@
 				RelativePath="..\..\src\generic\wizard.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\src\generic\activityindicator.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Setup Headers"
@@ -1386,6 +1390,10 @@
 				RelativePath="..\..\include\wx\generic\wizard.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\include\wx\generic\activityindicator.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Common Headers"
@@ -1509,6 +1517,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\addremovectrl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\activityindicator.h"
 				>
 			</File>
 		</Filter>

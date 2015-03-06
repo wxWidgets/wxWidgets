@@ -2898,6 +2898,10 @@
 				RelativePath="..\..\include\wx\generic\wizard.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\include\wx\generic\activityindicator.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="wxHTML Headers"
@@ -4402,6 +4406,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\addremovectrl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\activityindicator.h"
 				>
 			</File>
 		</Filter>

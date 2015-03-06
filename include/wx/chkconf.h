@@ -433,6 +433,14 @@
 #   endif
 #endif /* !defined(wxUSE_ADDREMOVECTRL) */
 
+#ifndef wxUSE_ACTIVITYINDICATOR
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_ACTIVITYINDICATOR must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_ACTIVITYINDICATOR 0
+#   endif
+#endif /* !defined(wxUSE_ACTIVITYINDICATOR) */
+
 #ifndef wxUSE_ANIMATIONCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_ANIMATIONCTRL must be defined, please read comment near the top of this file."

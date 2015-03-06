@@ -93,6 +93,7 @@ Related Overviews: @ref overview_cmndlg
 Typically, these are small windows which provide interaction with the user.
 Controls that are not static can have wxValidator associated with them.
 
+@li wxActivityIndicator: A small animated control indicating program activity
 @li wxAnimationCtrl: A control to display an animation
 @li wxControl: The base class for controls
 @li wxBitmapButton: Push button control, displaying a bitmap

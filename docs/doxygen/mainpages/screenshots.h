@@ -51,6 +51,7 @@ or directory, font or colour, ...) directly from the window containing them:
 These controls are considered to be less common and are defined in
 @ref page_libs_wxadv "adv" library:
 
+@appearance_brief{wxActivityIndicator,activityindicator}
 @appearance_brief{wxAnimationCtrl,animationctrl}
 @genericAppearance_brief{wxBannerWindow,bannerwindow}
 @appearance_brief{wxBitmapComboBox,bitmapcombobox}

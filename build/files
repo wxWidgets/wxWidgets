@@ -2453,6 +2453,7 @@ UNIV_SRC =
 UNIV_HDR =
     $(UNIV_PLATFORM_HDR)
     wx/generic/accel.h
+    wx/generic/activityindicator.h
     wx/generic/animate.h
     wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
@@ -2550,6 +2551,7 @@ ADVANCED_CMN_SRC =
 
 ADVANCED_CMN_HDR =
     wx/aboutdlg.h
+    wx/activityindicator.h
     wx/addremovectrl.h
     wx/animate.h
     wx/bannerwindow.h
@@ -2614,6 +2616,7 @@ ADVANCED_MSW_HDR =
 
 # not used with wxUniv
 ADVANCED_MSW_NATIVE_SRC =
+    src/generic/activityindicator.cpp
     src/generic/animateg.cpp
     src/msw/bmpcbox.cpp
     src/msw/calctrl.cpp
@@ -2624,6 +2627,7 @@ ADVANCED_MSW_NATIVE_SRC =
     src/msw/hyperlink.cpp
     src/msw/timectrl.cpp
 ADVANCED_MSW_NATIVE_HDR =
+    wx/generic/activityindicator.h
     wx/generic/animate.h
     wx/msw/bmpcbox.h
     wx/msw/commandlinkbutton.h
@@ -2641,6 +2645,7 @@ ADVANCED_MSW_DESKTOP_HDR =
 
 ADVANCED_OSX_CARBON_SRC =
     src/common/taskbarcmn.cpp
+    src/generic/activityindicator.cpp
     src/generic/animateg.cpp
     src/osx/carbon/aboutdlg.cpp
     src/osx/carbon/drawer.cpp
@@ -2652,6 +2657,7 @@ ADVANCED_OSX_CARBON_SRC =
     src/osx/core/hidjoystick.cpp
 
 ADVANCED_OSX_CARBON_HDR =
+    wx/generic/activityindicator.h
     wx/generic/animate.h
     wx/osx/dataview.h
     wx/osx/dvrenderer.h
@@ -2666,6 +2672,7 @@ ADVANCED_OSX_CARBON_HDR =
 ADVANCED_OSX_COCOA_SRC =
     src/common/taskbarcmn.cpp
     src/generic/animateg.cpp
+    src/osx/cocoa/activityindicator.mm
     src/osx/datetimectrl_osx.cpp
     src/osx/datectrl_osx.cpp
     src/osx/sound_osx.cpp
@@ -2691,6 +2698,7 @@ ADVANCED_OSX_COCOA_HDR =
     wx/osx/taskbarosx.h
     wx/osx/timectrl.h
     wx/osx/core/joystick.h
+    wx/osx/cocoa/activityindicator.h
     wx/osx/cocoa/dataview.h
 
 ADVANCED_OSX_IPHONE_SRC =
@@ -2724,9 +2732,11 @@ ADVANCED_UNIX_HDR =
     wx/unix/taskbarx11.h
 
 ADVANCED_MOTIF_SRC =
+    src/generic/activityindicator.cpp
     src/generic/animateg.cpp
 
 ADVANCED_MOTIF_HDR =
+    wx/generic/animateanimate.h
     wx/generic/animate.h
 
 ADVANCED_GTK_WIN32_SRC =
@@ -2743,10 +2753,12 @@ ADVANCED_GTK_SRC =
     src/gtk/taskbar.cpp
 ADVANCED_GTK2_SRC =
     $(ADVANCED_GTK_SRC)
+    src/generic/activityindicator.cpp
     src/gtk/eggtrayicon.c
     src/gtk/hildon/notifmsg.cpp
 ADVANCED_GTK_HDR =
     $(ADVANCED_GTK_PLATFORM_HDR)
+    wx/generic/activityindicator.h
     wx/gtk/notifmsg.h
     wx/gtk/taskbar.h
 ADVANCED_GTK2_HDR =
@@ -2755,12 +2767,14 @@ ADVANCED_GTK2_HDR =
 
 ADVANCED_GTK_NATIVE_SRC =
     src/gtk/aboutdlg.cpp
+    src/gtk/activityindicator.cpp
     src/gtk/animate.cpp
     src/gtk/bmpcbox.cpp
     src/gtk/calctrl.cpp
     src/gtk/dataview.cpp
     src/gtk/hyperlink.cpp
 ADVANCED_GTK_NATIVE_HDR =
+    wx/gtk/activityindicator.h
     wx/gtk/animate.h
     wx/gtk/bmpcbox.h
     wx/gtk/calctrl.h
@@ -2770,10 +2784,12 @@ ADVANCED_GTK_NATIVE_HDR =
     wx/gtk/hyperlink.h
 
 ADVANCED_GTK1_SRC =
+    src/generic/activityindicator.cpp
     src/generic/animateg.cpp
     src/gtk1/eggtrayicon.c
     src/gtk1/taskbar.cpp
 ADVANCED_GTK1_HDR =
+    wx/generic/activityindicator.h
     wx/generic/animate.h
 
 
