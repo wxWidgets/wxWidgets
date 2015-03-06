@@ -2785,6 +2785,7 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         esac
 
         if test "$WXGTK3" = 1; then
+            AC_DEFINE(__WXGTK220__)
             AC_DEFINE(__WXGTK218__)
             AC_DEFINE(__WXGTK210__)
         elif test "$WXGTK2" = 1; then
@@ -2793,47 +2794,66 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
             LIBS="$LIBS $wx_cv_libs_gtk"
 
-            dnl test if we have at least GTK+ 2.18:
-            AC_MSG_CHECKING([if GTK+ is version >= 2.18])
-            AC_TRY_COMPILE([
-                            #include <gtk/gtk.h>
-                           ],
-                           [
-                            #if !GTK_CHECK_VERSION(2,18,0)
-                            Not GTK+ 2.18
-                            #endif
-                           ],
-                           [
-                            AC_DEFINE(__WXGTK218__)
-                            AC_DEFINE(__WXGTK210__)
-                            AC_MSG_RESULT([yes])
-                            ac_wxgtk218=1
-                           ],
-                           [
-                            AC_MSG_RESULT([no])
-                            ac_wxgtk218=0
-                           ])
+            dnl We need to define __WXGTK2xx__ symbols for a few specific
+            dnl versions in order to be able to test for them (and hence for
+            dnl the availability of the controls which appeared only in these
+            dnl versions) from our public headers, without having to include
+            dnl gtk/gtk.h from them.
 
-            if test "$ac_wxgtk218" = 0; then
-                dnl test if we have at least GTK+ 2.10:
-                AC_MSG_CHECKING([if GTK+ is version >= 2.10])
+            AC_CACHE_CHECK([if GTK+ is version >= 2.20], wx_cv_gtk220, [
                 AC_TRY_COMPILE([
                                 #include <gtk/gtk.h>
                                ],
                                [
-                                #if !GTK_CHECK_VERSION(2,10,0)
-                                Not GTK+ 2.10
+                                #if !GTK_CHECK_VERSION(2,20,0)
+                                Not GTK+ 2.20
                                 #endif
                                ],
-                               [
-                                AC_DEFINE(__WXGTK210__)
-                                AC_MSG_RESULT([yes])
-                                ac_wxgtk210=1
-                               ],
-                               [
-                                AC_MSG_RESULT([no])
-                                ac_wxgtk210=0
-                               ])
+                               wx_cv_gtk220=yes,
+                               wx_cv_gtk220=no
+                               )
+            ])
+
+            if test "$wx_cv_gtk220" = "yes"; then
+                AC_DEFINE(__WXGTK220__)
+                wx_cv_gtk218=yes
+            else
+                AC_CACHE_CHECK([if GTK+ is version >= 2.18], wx_cv_gtk218, [
+                    AC_TRY_COMPILE([
+                                    #include <gtk/gtk.h>
+                                   ],
+                                   [
+                                    #if !GTK_CHECK_VERSION(2,18,0)
+                                    Not GTK+ 2.18
+                                    #endif
+                                   ],
+                                   wx_cv_gtk218=yes,
+                                   wx_cv_gtk218=no
+                                   )
+                ])
+            fi
+
+            if test "$wx_cv_gtk218" = "yes"; then
+                AC_DEFINE(__WXGTK218__)
+                wx_cv_gtk210=yes
+            else
+                AC_CACHE_CHECK([if GTK+ is version >= 2.10], wx_cv_gtk210, [
+                    AC_TRY_COMPILE([
+                                    #include <gtk/gtk.h>
+                                   ],
+                                   [
+                                    #if !GTK_CHECK_VERSION(2,10,0)
+                                    Not GTK+ 2.10
+                                    #endif
+                                   ],
+                                   wx_cv_gtk210=yes,
+                                   wx_cv_gtk210=no
+                                   )
+                ])
+            fi
+
+            if test "$wx_cv_gtk210" = "yes"; then
+                AC_DEFINE(__WXGTK210__)
             fi
 
             CFLAGS="$save_CFLAGS"

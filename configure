@@ -24315,6 +24315,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         esac
 
         if test "$WXGTK3" = 1; then
+            $as_echo "#define __WXGTK220__ 1" >>confdefs.h
+
             $as_echo "#define __WXGTK218__ 1" >>confdefs.h
 
             $as_echo "#define __WXGTK210__ 1" >>confdefs.h
@@ -24325,47 +24327,13 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
             LIBS="$LIBS $wx_cv_libs_gtk"
 
-                        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if GTK+ is version >= 2.18" >&5
-$as_echo_n "checking if GTK+ is version >= 2.18... " >&6; }
-            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
 
-                            #include <gtk/gtk.h>
-
-int
-main ()
-{
-
-                            #if !GTK_CHECK_VERSION(2,18,0)
-                            Not GTK+ 2.18
-                            #endif
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-                            $as_echo "#define __WXGTK218__ 1" >>confdefs.h
-
-                            $as_echo "#define __WXGTK210__ 1" >>confdefs.h
-
-                            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-                            ac_wxgtk218=1
-
+            { $as_echo "$as_me:${as_lineno-$LINENO}: checking if GTK+ is version >= 2.20" >&5
+$as_echo_n "checking if GTK+ is version >= 2.20... " >&6; }
+if ${wx_cv_gtk220+:} false; then :
+  $as_echo_n "(cached) " >&6
 else
 
-                            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-                            ac_wxgtk218=0
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-            if test "$ac_wxgtk218" = 0; then
-                                { $as_echo "$as_me:${as_lineno-$LINENO}: checking if GTK+ is version >= 2.10" >&5
-$as_echo_n "checking if GTK+ is version >= 2.10... " >&6; }
                 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -24375,8 +24343,8 @@ int
 main ()
 {
 
-                                #if !GTK_CHECK_VERSION(2,10,0)
-                                Not GTK+ 2.10
+                                #if !GTK_CHECK_VERSION(2,20,0)
+                                Not GTK+ 2.20
                                 #endif
 
   ;
@@ -24384,21 +24352,102 @@ main ()
 }
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-
-                                $as_echo "#define __WXGTK210__ 1" >>confdefs.h
-
-                                { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-                                ac_wxgtk210=1
-
+  wx_cv_gtk220=yes
 else
-
-                                { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-                                ac_wxgtk210=0
+  wx_cv_gtk220=no
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_gtk220" >&5
+$as_echo "$wx_cv_gtk220" >&6; }
+
+            if test "$wx_cv_gtk220" = "yes"; then
+                $as_echo "#define __WXGTK220__ 1" >>confdefs.h
+
+                wx_cv_gtk218=yes
+            else
+                { $as_echo "$as_me:${as_lineno-$LINENO}: checking if GTK+ is version >= 2.18" >&5
+$as_echo_n "checking if GTK+ is version >= 2.18... " >&6; }
+if ${wx_cv_gtk218+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+                    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+                                    #include <gtk/gtk.h>
+
+int
+main ()
+{
+
+                                    #if !GTK_CHECK_VERSION(2,18,0)
+                                    Not GTK+ 2.18
+                                    #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  wx_cv_gtk218=yes
+else
+  wx_cv_gtk218=no
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_gtk218" >&5
+$as_echo "$wx_cv_gtk218" >&6; }
+            fi
+
+            if test "$wx_cv_gtk218" = "yes"; then
+                $as_echo "#define __WXGTK218__ 1" >>confdefs.h
+
+                wx_cv_gtk210=yes
+            else
+                { $as_echo "$as_me:${as_lineno-$LINENO}: checking if GTK+ is version >= 2.10" >&5
+$as_echo_n "checking if GTK+ is version >= 2.10... " >&6; }
+if ${wx_cv_gtk210+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+                    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+                                    #include <gtk/gtk.h>
+
+int
+main ()
+{
+
+                                    #if !GTK_CHECK_VERSION(2,10,0)
+                                    Not GTK+ 2.10
+                                    #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  wx_cv_gtk210=yes
+else
+  wx_cv_gtk210=no
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_gtk210" >&5
+$as_echo "$wx_cv_gtk210" >&6; }
+            fi
+
+            if test "$wx_cv_gtk210" = "yes"; then
+                $as_echo "#define __WXGTK210__ 1" >>confdefs.h
+
             fi
 
             CFLAGS="$save_CFLAGS"
