@@ -59,9 +59,6 @@
 /* Define this if your version of GTK+ is greater than 2.0 */
 #undef __WXGTK20__
 
-/* Define this if your version of GTK+ is greater than 2.6 */
-#undef __WXGTK26__
-
 /* Define this if your version of GTK+ is greater than 2.10 */
 #undef __WXGTK210__
 
