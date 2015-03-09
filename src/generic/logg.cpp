@@ -51,6 +51,7 @@
 #include "wx/collpane.h"
 #include "wx/arrstr.h"
 #include "wx/msgout.h"
+#include "wx/scopeguard.h"
 
 #ifdef  __WXMSW__
     // for OutputDebugString()
@@ -309,6 +310,10 @@ void wxLogGui::Flush()
     // showing right now: nested modal dialogs make for really bad UI!
     Suspend();
 
+    // and ensure that we allow showing the log again afterwards, even if an
+    // exception is thrown
+    wxON_BLOCK_EXIT0(wxLog::Resume);
+
     if ( nMsgCount == 1 )
     {
         // make a copy before calling Clear()
@@ -331,9 +336,6 @@ void wxLogGui::Flush()
 
         DoShowMultipleLogMessages(messages, severities, times, title, style);
     }
-
-    // allow flushing the logs again
-    Resume();
 }
 
 // log all kinds of messages
