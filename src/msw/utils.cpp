@@ -795,6 +795,28 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
     return 0;
 }
 
+// This is used by wxProcess::Activate().
+extern
+bool wxMSWActivatePID(long pid)
+{
+    wxFindByPidParams params;
+    params.pid = (DWORD)pid;
+
+    if ( ::EnumWindows(wxEnumFindByPidProc, (LPARAM)&params) != 0 )
+    {
+        // No windows corresponding to this PID were found.
+        return false;
+    }
+
+    if ( !::BringWindowToTop(params.hwnd) )
+    {
+        wxLogLastError(wxS("BringWindowToTop"));
+        return false;
+    }
+
+    return true;
+}
+
 // By John Skiff
 int wxKillAllChildren(long pid, wxSignal sig, wxKillError *krc)
 {

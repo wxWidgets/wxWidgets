@@ -77,6 +77,12 @@ public:
     // before the process it started terminates
     void Detach();
 
+    // Activates a GUI process by bringing its (main) window to the front.
+    //
+    // Currently only implemented in wxMSW, simply returns false under the
+    // other platforms.
+    bool Activate() const;
+
 #if wxUSE_STREAMS
     // Pipe handling
     wxInputStream *GetInputStream() const { return m_inputStream; }

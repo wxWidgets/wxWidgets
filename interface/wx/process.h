@@ -81,6 +81,20 @@ public:
     virtual ~wxProcess();
 
     /**
+        Activates a GUI process by bringing up its main window to the front.
+
+        This is a convenient method which tries to bring this process to the
+        users attention.
+
+        Currently this is implemented in wxMSW only and simply returns @false
+        under the other platforms. Notice that this function can also return
+        @false under MSW if, for example, the process doesn't have any windows.
+
+        @since 3.1.0
+     */
+    bool Activate() const;
+
+    /**
         Closes the output stream (the one connected to the stdin of the child
         process).
 

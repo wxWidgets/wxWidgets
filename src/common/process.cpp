@@ -176,6 +176,18 @@ bool wxProcess::Exists(int pid)
     }
 }
 
+bool wxProcess::Activate() const
+{
+#ifdef __WINDOWS__
+    // This function is defined in src/msw/utils.cpp.
+    extern bool wxMSWActivatePID(long pid);
+
+    return wxMSWActivatePID(m_pid);
+#else
+    return false;
+#endif
+}
+
 void wxProcess::SetPriority(unsigned priority)
 {
     wxCHECK_RET( priority <= wxPRIORITY_MAX,
