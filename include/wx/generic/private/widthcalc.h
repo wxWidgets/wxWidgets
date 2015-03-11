@@ -11,7 +11,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_DATAVIEWCTRL
+#if wxUSE_DATAVIEWCTRL || wxUSE_LISTCTRL
 
 #include "wx/timer.h"
 
@@ -117,6 +117,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxMaxWidthCalculatorBase);
 };
 
-#endif // wxUSE_DATAVIEWCTRL
+#endif // wxUSE_DATAVIEWCTRL || wxUSE_LISTCTRL
 
 #endif // _WX_GENERIC_PRIVATE_WIDTHCALC_H_

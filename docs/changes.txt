@@ -72,6 +72,7 @@ All (GUI):
 - Add wxProcess::Activate().
 - Make results of wxDC::DrawEllipticArc() consistent across all platforms.
 - XRC handler for wxAuiToolBar added (Kinaou Hervé, David Hart).
+- Improve wxLIST_AUTOSIZE_XXX support in generic wxListCtrl (Kinaou Hervé).
 - Add wxCursor::GetHotSpot().
 - Add wxFD_NO_FOLLOW style for wxFileDialog (Luca Bacci).
 - Add support for embedding bitmaps in generated SVG in wxSVGFileDC (iwbnwif).
