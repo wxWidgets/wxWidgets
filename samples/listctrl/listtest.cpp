@@ -519,11 +519,11 @@ void MyFrame::InitWithReportItems()
     itemCol.SetImage(-1);
     m_listCtrl->InsertColumn(0, itemCol);
 
-    itemCol.SetText(wxT("Column 2"));
+    itemCol.SetText(wxT("Column 2 (auto size excluding header)"));
     itemCol.SetAlign(wxLIST_FORMAT_CENTRE);
     m_listCtrl->InsertColumn(1, itemCol);
 
-    itemCol.SetText(wxT("Column 3"));
+    itemCol.SetText(wxT("Column 3 (auto size including header)"));
     itemCol.SetAlign(wxLIST_FORMAT_RIGHT);
     m_listCtrl->InsertColumn(2, itemCol);
 
@@ -558,10 +558,6 @@ void MyFrame::InitWithReportItems()
 
     m_listCtrl->SetTextColour(*wxBLUE);
 
-    m_listCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
-    m_listCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
-    m_listCtrl->SetColumnWidth( 2, wxLIST_AUTOSIZE );
-
     // Set images in columns
     m_listCtrl->SetItemColumnImage(1, 1, 0);
 
@@ -573,6 +569,10 @@ void MyFrame::InitWithReportItems()
 
     // test SetItemFont too
     m_listCtrl->SetItemFont(0, *wxITALIC_FONT);
+
+    m_listCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
+    m_listCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
+    m_listCtrl->SetColumnWidth( 2, wxLIST_AUTOSIZE_USEHEADER );
 }
 
 void MyFrame::InitWithIconItems(bool withText, bool sameIcon)
@@ -671,11 +671,11 @@ void MyFrame::InitWithVirtualItems()
     }
     else
     {
-        m_listCtrl->AppendColumn(wxT("First Column"));
-        m_listCtrl->AppendColumn(wxT("Second Column"));
-        m_listCtrl->SetColumnWidth(0, 150);
-        m_listCtrl->SetColumnWidth(1, 150);
+        m_listCtrl->AppendColumn(wxT("First Column (size auto)"));
+        m_listCtrl->AppendColumn(wxT("Second Column (150px)"));
         m_listCtrl->SetItemCount(1000000);
+        m_listCtrl->SetColumnWidth(0, wxLIST_AUTOSIZE_USEHEADER);
+        m_listCtrl->SetColumnWidth(1, 150);
     }
 }
 
