@@ -877,6 +877,15 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
     return NO;
 }
 
+- (NSView *)hitTest:(NSPoint)aPoint;
+{
+    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( viewimpl && viewimpl->GetWXPeer() && !viewimpl->GetWXPeer()->IsEnabled() )
+        return nil;
+
+    return [super hitTest:aPoint];
+}
+
 @end // wxNSView
 
 // We need to adopt NSTextInputClient protocol in order to interpretKeyEvents: to work.
@@ -1381,6 +1390,9 @@ bool wxWidgetCocoaImpl::SetupCursor(WX_NSEvent event)
 
 void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
+    if ( !m_wxPeer->IsEnabled() )
+        return;
+
     if ( [event type] == NSKeyDown )
     {
         // there are key equivalents that are not command-combos and therefore not handled by cocoa automatically, 
@@ -2593,6 +2605,9 @@ void wxWidgetCocoaImpl::Enable( bool enable )
 
     if ( [targetView respondsToSelector:@selector(setEnabled:) ] )
         [targetView setEnabled:enable];
+
+    if ( !enable && HasFocus() )
+        m_wxPeer->Navigate();
 }
 
 void wxWidgetCocoaImpl::PulseGauge()
