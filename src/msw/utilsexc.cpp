@@ -694,9 +694,6 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
 #if wxUSE_STREAMS && !defined(__WXWINCE__)
     wxPipe pipeIn, pipeOut, pipeErr;
 
-    // we'll save here the copy of pipeIn[Write]
-    HANDLE hpipeStdinWrite = INVALID_HANDLE_VALUE;
-
     // open the pipes to which child process IO will be redirected if needed
     if ( handler && handler->IsRedirected() )
     {
@@ -728,27 +725,16 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
         si.hStdOutput = pipeOut[wxPipe::Write];
         si.hStdError = pipeErr[wxPipe::Write];
 
-        // we must duplicate the handle to the write side of stdin pipe to make
-        // it non inheritable: indeed, we must close the writing end of pipeIn
-        // before launching the child process as otherwise this handle will be
-        // inherited by the child which will never close it and so the pipe
-        // will never be closed and the child will be left stuck in ReadFile()
-        HANDLE pipeInWrite = pipeIn.Detach(wxPipe::Write);
-        if ( !::DuplicateHandle
-                (
-                    ::GetCurrentProcess(),
-                    pipeInWrite,
-                    ::GetCurrentProcess(),
-                    &hpipeStdinWrite,
-                    0,                      // desired access: unused here
-                    FALSE,                  // not inherited
-                    DUPLICATE_SAME_ACCESS   // same access as for src handle
-                ) )
-        {
-            wxLogLastError(wxT("DuplicateHandle"));
-        }
-
-        ::CloseHandle(pipeInWrite);
+        // We must set the handle to the side of the pipes that we won't use in
+        // the child to be non-inheritable. We must do this before launching
+        // the child process as otherwise these handles will be inherited by
+        // the child which will never close them and so the pipe will not
+        // return ERROR_BROKEN_PIPE if the parent or child exits unexpectedly
+        // causing the remaining process to potentially become deadlocked in
+        // ReadFile().
+        if ( !::SetHandleInformation(pipeIn[wxPipe::Write],
+                                     HANDLE_FLAG_INHERIT, 0) )
+            wxLogLastError(wxT("SetHandleInformation(pipeIn)"));
     }
 #endif // wxUSE_STREAMS
 
@@ -889,6 +875,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
         // close the other handles too
         if ( redirect )
         {
+            ::CloseHandle(pipeIn.Detach(wxPipe::Write));
             ::CloseHandle(pipeOut.Detach(wxPipe::Read));
             ::CloseHandle(pipeErr.Detach(wxPipe::Read));
         }
@@ -913,7 +900,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
         wxPipeInputStream *
             errStream = new wxPipeInputStream(pipeErr.Detach(wxPipe::Read));
         wxPipeOutputStream *
-            inStream = new wxPipeOutputStream(hpipeStdinWrite);
+            inStream = new wxPipeOutputStream(pipeIn.Detach(wxPipe::Write));
 
         handler->SetPipeStreams(outStream, inStream, errStream);
 
