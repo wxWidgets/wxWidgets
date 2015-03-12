@@ -725,16 +725,24 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
         si.hStdOutput = pipeOut[wxPipe::Write];
         si.hStdError = pipeErr[wxPipe::Write];
 
-        // We must set the handle to the side of the pipes that we won't use in
-        // the child to be non-inheritable. We must do this before launching
+        // We must set the handles to those sides of std* pipes that we won't
+        // in the child to be non-inheritable. We must do this before launching
         // the child process as otherwise these handles will be inherited by
         // the child which will never close them and so the pipe will not
         // return ERROR_BROKEN_PIPE if the parent or child exits unexpectedly
         // causing the remaining process to potentially become deadlocked in
-        // ReadFile().
+        // ReadFile() or WriteFile().
         if ( !::SetHandleInformation(pipeIn[wxPipe::Write],
                                      HANDLE_FLAG_INHERIT, 0) )
             wxLogLastError(wxT("SetHandleInformation(pipeIn)"));
+
+        if ( !::SetHandleInformation(pipeOut[wxPipe::Read],
+                                     HANDLE_FLAG_INHERIT, 0) )
+            wxLogLastError(wxT("SetHandleInformation(pipeOut)"));
+
+        if ( !::SetHandleInformation(pipeErr[wxPipe::Read],
+                                     HANDLE_FLAG_INHERIT, 0) )
+            wxLogLastError(wxT("SetHandleInformation(pipeErr)"));
     }
 #endif // wxUSE_STREAMS
 
