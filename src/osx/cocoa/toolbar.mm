@@ -597,12 +597,10 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
         else
             [m_toolbarItem setImage:m_bmpNormal.GetNSImage()];
     }
-    else
 #endif
-    {
-        if ( IsButton() )
-            [(NSButton*)m_controlHandle setState:(toggle ? NSOnState : NSOffState)];
-    }
+
+    if ( IsButton() )
+        [(NSButton*)m_controlHandle setState:(toggle ? NSOnState : NSOffState)];
 }
 
 wxToolBarTool::wxToolBarTool(
