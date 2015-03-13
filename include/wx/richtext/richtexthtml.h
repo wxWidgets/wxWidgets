@@ -69,6 +69,7 @@ public:
     /// HTML font size. E.g. 8, 10, 13, 17, 22, 29, 100
     void SetFontSizeMapping(const wxArrayInt& fontSizeMapping) { m_fontSizeMapping = fontSizeMapping; }
     wxArrayInt GetFontSizeMapping() const { return m_fontSizeMapping; }
+	bool OutputTable(wxRichTextBuffer* buffer, wxRichTextTable& table1, wxTextOutputStream& outstr);
 
 protected:
 
