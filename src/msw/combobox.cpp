@@ -716,17 +716,20 @@ void wxComboBox::SetLayoutDirection(wxLayoutDirection dir)
     // extended style flags), so its layout direction should be set using the
     // same extended flag as for ordinary window but reset simply with
     // alignment flags.
-    if ( dir == wxLayout_RightToLeft )
+    if ( !HasFlag(wxCB_READONLY) )
     {
-        wxUpdateLayoutDirection(GetEditHWND(), dir);
-    }
-    else
-    {
-        LONG_PTR style = ::GetWindowLongPtr(GetEditHWND(), GWL_STYLE);
-        if ( !(style & ES_CENTER) )
+        if ( dir == wxLayout_RightToLeft )
         {
-            style &= ~ES_RIGHT;
-            ::SetWindowLongPtr(GetEditHWND(), GWL_STYLE, style);
+            wxUpdateLayoutDirection(GetEditHWND(), dir);
+        }
+        else
+        {
+            LONG_PTR style = ::GetWindowLongPtr(GetEditHWND(), GWL_STYLE);
+            if ( !(style & ES_CENTER) )
+            {
+                style &= ~ES_RIGHT;
+                ::SetWindowLongPtr(GetEditHWND(), GWL_STYLE, style);
+            }
         }
     }
 
