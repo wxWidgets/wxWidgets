@@ -458,13 +458,17 @@ private:
     {
         if (newSize > m_size)
         {
-            void *dataOld = m_data;
-            m_data = realloc(m_data, newSize + wxMemoryBufferData::DefBufSize);
-            if ( !m_data )
+            void* const data = realloc(m_data, newSize + wxMemoryBufferData::DefBufSize);
+            if ( !data )
             {
-                free(dataOld);
+                // It's better to crash immediately dereferencing a null
+                // pointer in the function calling us than overflowing the
+                // buffer which couldn't be made big enough.
+                free(release());
+                return;
             }
 
+            m_data = data;
             m_size = newSize + wxMemoryBufferData::DefBufSize;
         }
     }
