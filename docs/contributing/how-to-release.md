@@ -26,17 +26,13 @@ Creating release files
 Follow these steps assuming the current working directory is the root of git
 working copy and you want to prepare distribution for the version x.y.z:
 
-1. Run `./build/tools/svn-find-native-eols.pl > ../eol-native` (if you have
-   an existing svn checkout, pass it to the script to make it run much faster,
-   but take care to have up to date sources in the working tree).
-
-2. Run `./build/tools/git-make-release x.y.z` to create source archives
+1. Run `./build/tools/git-make-release.sh x.y.z` to create source archives
    ../wxWidgets-x.y.z.{7z,tar.bz2,zip} and wxWidgets_x.y.z_Headers.zip.
 
-3. Run `./build/tools/make-html-docs x.y.z` to create HTML documentation
+2. Run `./build/tools/make-html-docs.sh x.y.z` to create HTML documentation
    archives ../wxWidgets-x.y.z.{tar.bz2,zip}
 
-4. This step must be done under Windows as it relies on having hhc.exe, the
+3. This step must be done under Windows as it relies on having hhc.exe, the
    Html Help compiler, in PATH: run the following commands
 
     ```
@@ -46,7 +42,7 @@ working copy and you want to prepare distribution for the version x.y.z:
     zip ..\..\..\wxWidgets-x.y.z-docs-chm.zip wx.chm
     ```
 
-5. This step also must be done under Windows as it uses Inno Setup to produce
+4. This step also must be done under Windows as it uses Inno Setup to produce
    the .exe file and it also requires the CHM file built above:
 
     ```
