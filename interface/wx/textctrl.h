@@ -945,7 +945,7 @@ public:
     @style{wxTE_PROCESS_ENTER}
            The control will generate the event @c wxEVT_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
-           control or used for navigation between dialog controls).
+           control or used to activate the default button of the dialog, if any).
     @style{wxTE_PROCESS_TAB}
            The control will receive @c wxEVT_CHAR events for TAB pressed -
            normally, TAB is used for passing to the next control in a dialog
