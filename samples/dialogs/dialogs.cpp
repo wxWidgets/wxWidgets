@@ -1436,11 +1436,21 @@ public:
     MyExtraPanel(wxWindow *parent);
     wxString GetInfo() const
     {
-        return wxString::Format("checkbox value = %d", (int) m_cb->GetValue());
+        return wxString::Format("checkbox=%d, text=\"%s\"", m_checked, m_str);
     }
 
 private:
-    void OnCheckBox(wxCommandEvent& event) { m_btn->Enable(event.IsChecked()); }
+    void OnCheckBox(wxCommandEvent& event)
+    {
+        m_checked = event.IsChecked();
+        m_btn->Enable(m_checked);
+    }
+
+    void OnText(wxCommandEvent& event)
+    {
+        m_str = event.GetString();
+    }
+
     void OnUpdateLabelUI(wxUpdateUIEvent& event)
     {
         wxFileDialog* const dialog = wxStaticCast(GetParent(), wxFileDialog);
@@ -1459,13 +1469,19 @@ private:
         event.SetText(msg + " selected");
     }
 
+    wxString m_str;
+    bool m_checked;
+
     wxButton *m_btn;
     wxCheckBox *m_cb;
     wxStaticText *m_label;
+    wxTextCtrl *m_text;
 };
 
 MyExtraPanel::MyExtraPanel(wxWindow *parent)
-            : wxPanel(parent)
+            : wxPanel(parent),
+              m_str("extra text"),
+              m_checked(false)
 {
     m_btn = new wxButton(this, -1, wxT("Custom Button"));
     m_btn->Enable(false);
@@ -1477,11 +1493,19 @@ MyExtraPanel::MyExtraPanel(wxWindow *parent)
                      wxUpdateUIEventHandler(MyExtraPanel::OnUpdateLabelUI),
                      NULL, this);
 
+    m_text = new wxTextCtrl(this, -1, m_str,
+                            wxDefaultPosition, wxSize(40*GetCharWidth(), -1));
+    m_text->Bind(wxEVT_TEXT, &MyExtraPanel::OnText, this);
+
     wxBoxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
+    sizerTop->Add(new wxStaticText(this, wxID_ANY, "Just some extra text:"),
+                  wxSizerFlags().Centre().Border());
+    sizerTop->Add(m_text, wxSizerFlags(1).Centre().Border());
+    sizerTop->AddSpacer(10);
     sizerTop->Add(m_cb, wxSizerFlags().Centre().Border());
-    sizerTop->AddStretchSpacer();
+    sizerTop->AddSpacer(5);
     sizerTop->Add(m_btn, wxSizerFlags().Centre().Border());
-    sizerTop->AddStretchSpacer();
+    sizerTop->AddSpacer(5);
     sizerTop->Add(m_label, wxSizerFlags().Centre().Border());
 
     SetSizerAndFit(sizerTop);
