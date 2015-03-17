@@ -12,12 +12,11 @@
 
 # Documentation used with Windows installer:
 
-\BuildGit.txt         text=auto
-\docs\changes.txt     text=auto
-\docs\licence.txt     text=auto
-\docs\readme.txt      text=auto
-\docs\msw\install.txt text=auto
-\docs\msw\install.txt text=auto
+/BuildGit.txt         text=auto
+/docs/changes.txt     text=auto
+/docs/licence.txt     text=auto
+/docs/readme.txt      text=auto
+/docs/msw/*.txt       text=auto
 
 # Unix-specific files that require LF:
 
@@ -28,6 +27,7 @@ configure.in eol=lf
 Makefile.am  eol=lf
 Makefile.in  eol=lf
 
-/config.guess eol=lf
-/config.sub   eol=lf
-/configure    eol=lf
+config.guess eol=lf
+config.sub   eol=lf
+configure    eol=lf
+configure.in eol=lf
