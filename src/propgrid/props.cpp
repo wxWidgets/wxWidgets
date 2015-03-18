@@ -2394,6 +2394,10 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
         wxCommandEventHandler(wxPGArrayEditorDialog::OnDownClick),
         NULL, this);
 
+    lc->Connect(lc->GetId(), wxEVT_LIST_BEGIN_LABEL_EDIT,
+        wxListEventHandler(wxPGArrayEditorDialog::OnBeginLabelEdit),
+        NULL, this);
+
     lc->Connect(lc->GetId(), wxEVT_LIST_END_LABEL_EDIT,
         wxListEventHandler(wxPGArrayEditorDialog::OnEndLabelEdit),
         NULL, this);
@@ -2462,8 +2466,6 @@ void wxPGArrayEditorDialog::OnAddClick(wxCommandEvent& event)
     }
     else
     {
-        m_itemPendingAtIndex = newItemIndex;
-
         event.Skip();
     }
 }
@@ -2549,6 +2551,18 @@ void wxPGArrayEditorDialog::OnEndLabelEdit(wxListEvent& event)
     }
 
     event.Skip();
+}
+
+void wxPGArrayEditorDialog::OnBeginLabelEdit(wxListEvent& evt)
+{
+    wxListCtrl* lc = m_elb->GetListCtrl();
+    const int lastStringIndex = lc->GetItemCount() - 1;
+    const int curItemIndex = evt.GetIndex();
+    // If current index is >= then last available index
+    // then we have a new pending element.
+    m_itemPendingAtIndex  = curItemIndex < lastStringIndex? -1: curItemIndex;
+
+    evt.Skip();
 }
 
 #endif // wxUSE_EDITABLELISTBOX
