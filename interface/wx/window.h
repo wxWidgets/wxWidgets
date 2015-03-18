@@ -1126,10 +1126,18 @@ public:
        Returns the magnification of the backing store of this window, eg 2.0
        for a window on a retina screen.
 
+       This method can be used to adjust hard coded pixel values to the values
+       appropriate for the current screen resolution. E.g. instead of using
+       32px icons, which would look tiny on the high resolution (also known as
+       HiDPI or retina) displays, you should use
+       @code
+       wxRound(32*GetContentScaleFactor())
+       @endcode instead.
+
        @since 2.9.5
     */
-    virtual double GetContentScaleFactor() const;
-    
+    double GetContentScaleFactor() const;
+
     /**
         Returns the size of the left/right and top/bottom borders of this window in x
         and y components of the result respectively.

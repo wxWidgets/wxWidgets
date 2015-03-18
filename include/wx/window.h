@@ -533,9 +533,8 @@ public:
 
     // returns the magnification of the content of this window
     // eg 2.0 for a window on a retina screen
-    virtual double GetContentScaleFactor() const
-    { return 1.0; }
-    
+    virtual double GetContentScaleFactor() const;
+
     // return the size of the left/right and top/bottom borders in x and y
     // components of the result respectively
     virtual wxSize GetWindowBorderSize() const;
