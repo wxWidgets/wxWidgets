@@ -3469,6 +3469,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="XRC_SRC" hints="files">
+    src/xrc/xh_activityindicator.cpp
     src/xrc/xh_animatctrl.cpp
     src/xrc/xh_bannerwindow.cpp
     src/xrc/xh_bmp.cpp
@@ -3537,6 +3538,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xmlrsall.cpp
 </set>
 <set var="XRC_HDR" hints="files">
+    wx/xrc/xh_activityindicator.h
     wx/xrc/xh_all.h
     wx/xrc/xh_animatctrl.h
     wx/xrc/xh_bannerwindow.h

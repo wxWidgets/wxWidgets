@@ -541,6 +541,14 @@ control-specific properties are listed. If the control can have child objects,
 it is documented there too; unless said otherwise, XRC elements for these
 controls cannot have children.
 
+@subsubsection xrc_activityindicator wxActivityIndicator
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{running, @ref overview_xrcformat_type_bool,
+    If true, start the activity indicator after creating it (default: false).}
+@endTable
+
 @subsubsection xrc_wxanimationctrl wxAnimationCtrl
 
 @beginTable

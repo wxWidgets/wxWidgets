@@ -2126,6 +2126,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\appprogress.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\ole\automtn.h"
 				>
 			</File>
@@ -2673,10 +2677,6 @@
 				RelativePath="..\..\include\wx\msw\window.h"
 				>
 			</File>
-			<File
-				RelativePath="..\..\include\wx\msw\appprogress.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Generic Headers"
@@ -2688,6 +2688,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\accel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\generic\activityindicator.h"
 				>
 			</File>
 			<File
@@ -2898,10 +2902,6 @@
 				RelativePath="..\..\include\wx\generic\wizard.h"
 				>
 			</File>
-			<File
-				RelativePath="..\..\include\wx\generic\activityindicator.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="wxHTML Headers"
@@ -2990,6 +2990,14 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\access.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\activityindicator.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\addremovectrl.h"
 				>
 			</File>
 			<File
@@ -4117,6 +4125,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_activityindicator.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_all.h"
 				>
 			</File>
@@ -4402,14 +4414,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\xpmhand.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\addremovectrl.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\activityindicator.h"
 				>
 			</File>
 		</Filter>

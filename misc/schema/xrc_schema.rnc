@@ -152,6 +152,7 @@ builtinToplevelClasses =
 
 builtinWindowClasses =
     ( unknown
+    | wxActivityIndicator
     | wxAnimationCtrl
     | wxAuiNotebook
     | wxAuiToolBar
@@ -242,6 +243,7 @@ builtinClassesNames =
 
     | "unknown"
 
+    | "wxActivityIndicator"
     | "wxAnimationCtrl"
     | "wxAuiNotebook"
     | "wxAuiToolBar"
@@ -503,6 +505,15 @@ wxBitmap_or_wxIcon =
         attribute class { "wxBitmap" | "wxIcon" } &
         stdObjectNodeAttributes &
         t_bitmap
+    }
+
+
+wxActivityIndicator =
+    element object {
+        attribute class { "wxActivityIndicator" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element running {_, t_bool }*
     }
 
 

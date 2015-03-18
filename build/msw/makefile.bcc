@@ -1183,6 +1183,7 @@ XRCDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	-DWXMAKINGDLL_XRC -Hu -H=$(OBJS)\wxprec_xrcdll.csm $(CPPFLAGS) $(CXXFLAGS)
 XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_dummy.obj \
+	$(OBJS)\xrcdll_xh_activityindicator.obj \
 	$(OBJS)\xrcdll_xh_animatctrl.obj \
 	$(OBJS)\xrcdll_xh_bannerwindow.obj \
 	$(OBJS)\xrcdll_xh_bmp.obj \
@@ -1259,6 +1260,7 @@ XRCLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	-H=$(OBJS)\wxprec_xrclib.csm $(CPPFLAGS) $(CXXFLAGS)
 XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_dummy.obj \
+	$(OBJS)\xrclib_xh_activityindicator.obj \
 	$(OBJS)\xrclib_xh_animatctrl.obj \
 	$(OBJS)\xrclib_xh_bannerwindow.obj \
 	$(OBJS)\xrclib_xh_bmp.obj \
@@ -1646,6 +1648,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_webviewfshandler.obj \
 	$(OBJS)\monodll_debugrpt.obj \
 	$(OBJS)\monodll_dbgrptg.obj \
+	$(OBJS)\monodll_xh_activityindicator.obj \
 	$(OBJS)\monodll_xh_animatctrl.obj \
 	$(OBJS)\monodll_xh_bannerwindow.obj \
 	$(OBJS)\monodll_xh_bmp.obj \
@@ -2367,7 +2370,8 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datectrl.obj \
 	$(OBJS)\monodll_datetimectrl.obj \
 	$(OBJS)\monodll_hyperlink.obj \
-	$(OBJS)\monodll_timectrl.obj
+	$(OBJS)\monodll_timectrl.obj \
+	$(OBJS)\monodll_activityindicator.obj
 !endif
 !if "$(WXUNIV)" == "1"
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
@@ -2461,6 +2465,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_webviewfshandler.obj \
 	$(OBJS)\monolib_debugrpt.obj \
 	$(OBJS)\monolib_dbgrptg.obj \
+	$(OBJS)\monolib_xh_activityindicator.obj \
 	$(OBJS)\monolib_xh_animatctrl.obj \
 	$(OBJS)\monolib_xh_bannerwindow.obj \
 	$(OBJS)\monolib_xh_bmp.obj \
@@ -3182,7 +3187,8 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datectrl.obj \
 	$(OBJS)\monolib_datetimectrl.obj \
 	$(OBJS)\monolib_hyperlink.obj \
-	$(OBJS)\monolib_timectrl.obj
+	$(OBJS)\monolib_timectrl.obj \
+	$(OBJS)\monolib_activityindicator.obj
 !endif
 !if "$(WXUNIV)" == "1"
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
@@ -4448,7 +4454,8 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_datectrl.obj \
 	$(OBJS)\advdll_datetimectrl.obj \
 	$(OBJS)\advdll_hyperlink.obj \
-	$(OBJS)\advdll_timectrl.obj
+	$(OBJS)\advdll_timectrl.obj \
+	$(OBJS)\advdll_activityindicator.obj
 !endif
 !if "$(WXUNIV)" == "1"
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
@@ -4550,7 +4557,8 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_datectrl.obj \
 	$(OBJS)\advlib_datetimectrl.obj \
 	$(OBJS)\advlib_hyperlink.obj \
-	$(OBJS)\advlib_timectrl.obj
+	$(OBJS)\advlib_timectrl.obj \
+	$(OBJS)\advlib_activityindicator.obj
 !endif
 !if "$(WXUNIV)" == "1"
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
@@ -6992,6 +7000,9 @@ $(OBJS)\monodll_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
 $(OBJS)\monodll_timectrl.obj: ..\..\src\msw\timectrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\timectrl.cpp
 
+$(OBJS)\monodll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
+
 $(OBJS)\monodll_mediactrlcmn.obj: ..\..\src\common\mediactrlcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\mediactrlcmn.cpp
 
@@ -7099,6 +7110,9 @@ $(OBJS)\monodll_debugrpt.obj: ..\..\src\common\debugrpt.cpp
 
 $(OBJS)\monodll_dbgrptg.obj: ..\..\src\generic\dbgrptg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\dbgrptg.cpp
+
+$(OBJS)\monodll_xh_activityindicator.obj: ..\..\src\xrc\xh_activityindicator.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\xrc\xh_activityindicator.cpp
 
 $(OBJS)\monodll_xh_animatctrl.obj: ..\..\src\xrc\xh_animatctrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\xrc\xh_animatctrl.cpp
@@ -9482,6 +9496,9 @@ $(OBJS)\monolib_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
 $(OBJS)\monolib_timectrl.obj: ..\..\src\msw\timectrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\timectrl.cpp
 
+$(OBJS)\monolib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
+
 $(OBJS)\monolib_mediactrlcmn.obj: ..\..\src\common\mediactrlcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\mediactrlcmn.cpp
 
@@ -9589,6 +9606,9 @@ $(OBJS)\monolib_debugrpt.obj: ..\..\src\common\debugrpt.cpp
 
 $(OBJS)\monolib_dbgrptg.obj: ..\..\src\generic\dbgrptg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\dbgrptg.cpp
+
+$(OBJS)\monolib_xh_activityindicator.obj: ..\..\src\xrc\xh_activityindicator.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\xrc\xh_activityindicator.cpp
 
 $(OBJS)\monolib_xh_animatctrl.obj: ..\..\src\xrc\xh_animatctrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\xrc\xh_animatctrl.cpp
@@ -14972,6 +14992,9 @@ $(OBJS)\advdll_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
 $(OBJS)\advdll_timectrl.obj: ..\..\src\msw\timectrl.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\timectrl.cpp
 
+$(OBJS)\advdll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
+	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
+
 $(OBJS)\advdll_animatecmn.obj: ..\..\src\common\animatecmn.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) ..\..\src\common\animatecmn.cpp
 
@@ -15124,6 +15147,9 @@ $(OBJS)\advlib_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
 
 $(OBJS)\advlib_timectrl.obj: ..\..\src\msw\timectrl.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\timectrl.cpp
+
+$(OBJS)\advlib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
+	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
 
 $(OBJS)\advlib_animatecmn.obj: ..\..\src\common\animatecmn.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) ..\..\src\common\animatecmn.cpp
@@ -15530,6 +15556,9 @@ $(OBJS)\xrcdll_dummy.obj: ..\..\src\common\dummy.cpp
 $(OBJS)\xrcdll_version.res: ..\..\src\msw\version.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG) -i$(BCCDIR)\include\windows\sdk  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_XRC ..\..\src\msw\version.rc
 
+$(OBJS)\xrcdll_xh_activityindicator.obj: ..\..\src\xrc\xh_activityindicator.cpp
+	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) ..\..\src\xrc\xh_activityindicator.cpp
+
 $(OBJS)\xrcdll_xh_animatctrl.obj: ..\..\src\xrc\xh_animatctrl.cpp
 	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) ..\..\src\xrc\xh_animatctrl.cpp
 
@@ -15730,6 +15759,9 @@ $(OBJS)\xrcdll_xmlrsall.obj: ..\..\src\xrc\xmlrsall.cpp
 
 $(OBJS)\xrclib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) -H ..\..\src\common\dummy.cpp
+
+$(OBJS)\xrclib_xh_activityindicator.obj: ..\..\src\xrc\xh_activityindicator.cpp
+	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) ..\..\src\xrc\xh_activityindicator.cpp
 
 $(OBJS)\xrclib_xh_animatctrl.obj: ..\..\src\xrc\xh_animatctrl.cpp
 	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) ..\..\src\xrc\xh_animatctrl.cpp

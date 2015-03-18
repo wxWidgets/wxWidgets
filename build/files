@@ -2910,6 +2910,7 @@ WEBVIEW_CMN_HDR =
 # wxXRC
 
 XRC_SRC =
+    src/xrc/xh_activityindicator.cpp
     src/xrc/xh_animatctrl.cpp
     src/xrc/xh_bannerwindow.cpp
     src/xrc/xh_bmp.cpp
@@ -2977,6 +2978,7 @@ XRC_SRC =
     src/xrc/xmladv.cpp
     src/xrc/xmlrsall.cpp
 XRC_HDR =
+    wx/xrc/xh_activityindicator.h
     wx/xrc/xh_all.h
     wx/xrc/xh_animatctrl.h
     wx/xrc/xh_bannerwindow.h

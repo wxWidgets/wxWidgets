@@ -13,6 +13,7 @@
 
 // Existing handlers:
 
+#include "wx/xrc/xh_activityindicator.h"
 #include "wx/xrc/xh_animatctrl.h"
 #include "wx/xrc/xh_bannerwindow.h"
 #include "wx/xrc/xh_bmp.h"

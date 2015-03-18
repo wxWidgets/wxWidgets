@@ -1724,6 +1724,7 @@ XRCDLL_CXXFLAGS = $(__xrcdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(CPPFLAGS) $(CXXFLAGS)
 XRCDLL_OBJECTS =  \
 	$(__xrcdll___win32rc) \
+	xrcdll_xh_activityindicator.o \
 	xrcdll_xh_animatctrl.o \
 	xrcdll_xh_bannerwindow.o \
 	xrcdll_xh_bmp.o \
@@ -1797,6 +1798,7 @@ XRCLIB_CXXFLAGS = $(__xrclib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_REGEX_p) \
 	$(__INC_EXPAT_p) $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 XRCLIB_OBJECTS =  \
+	xrclib_xh_activityindicator.o \
 	xrclib_xh_animatctrl.o \
 	xrclib_xh_bannerwindow.o \
 	xrclib_xh_bmp.o \
@@ -4298,6 +4300,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/glcanvas.h \
 	$(OPENGL_HDR_PLATFORM) \
 	wx/debugrpt.h \
+	wx/xrc/xh_activityindicator.h \
 	wx/xrc/xh_all.h \
 	wx/xrc/xh_animatctrl.h \
 	wx/xrc/xh_bannerwindow.h \
@@ -4611,6 +4614,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_webviewfshandler.o \
 	monodll_debugrpt.o \
 	monodll_dbgrptg.o \
+	monodll_xh_activityindicator.o \
 	monodll_xh_animatctrl.o \
 	monodll_xh_bannerwindow.o \
 	monodll_xh_bmp.o \
@@ -6985,6 +6989,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_webviewfshandler.o \
 	monolib_debugrpt.o \
 	monolib_dbgrptg.o \
+	monolib_xh_activityindicator.o \
 	monolib_xh_animatctrl.o \
 	monolib_xh_bannerwindow.o \
 	monolib_xh_bmp.o \
@@ -18821,6 +18826,9 @@ monodll_debugrpt.o: $(srcdir)/src/common/debugrpt.cpp $(MONODLL_ODEP)
 monodll_dbgrptg.o: $(srcdir)/src/generic/dbgrptg.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/dbgrptg.cpp
 
+monodll_xh_activityindicator.o: $(srcdir)/src/xrc/xh_activityindicator.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_activityindicator.cpp
+
 monodll_xh_animatctrl.o: $(srcdir)/src/xrc/xh_animatctrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_animatctrl.cpp
 
@@ -24739,6 +24747,9 @@ monolib_debugrpt.o: $(srcdir)/src/common/debugrpt.cpp $(MONOLIB_ODEP)
 
 monolib_dbgrptg.o: $(srcdir)/src/generic/dbgrptg.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/dbgrptg.cpp
+
+monolib_xh_activityindicator.o: $(srcdir)/src/xrc/xh_activityindicator.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_activityindicator.cpp
 
 monolib_xh_animatctrl.o: $(srcdir)/src/xrc/xh_animatctrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_animatctrl.cpp
@@ -40493,6 +40504,9 @@ xmllib_xtixml.o: $(srcdir)/src/common/xtixml.cpp $(XMLLIB_ODEP)
 xrcdll_version_rc.o: $(srcdir)/src/msw/version.rc $(XRCDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)  --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_XRC
 
+xrcdll_xh_activityindicator.o: $(srcdir)/src/xrc/xh_activityindicator.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_activityindicator.cpp
+
 xrcdll_xh_animatctrl.o: $(srcdir)/src/xrc/xh_animatctrl.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_animatctrl.cpp
 
@@ -40690,6 +40704,9 @@ xrcdll_xmladv.o: $(srcdir)/src/xrc/xmladv.cpp $(XRCDLL_ODEP)
 
 xrcdll_xmlrsall.o: $(srcdir)/src/xrc/xmlrsall.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xmlrsall.cpp
+
+xrclib_xh_activityindicator.o: $(srcdir)/src/xrc/xh_activityindicator.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_activityindicator.cpp
 
 xrclib_xh_animatctrl.o: $(srcdir)/src/xrc/xh_animatctrl.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_animatctrl.cpp

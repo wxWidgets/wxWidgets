@@ -742,6 +742,10 @@
 			UniqueIdentifier="{A6A5C30D-BDB6-5050-906D-10A96065136C}"
 			>
 			<File
+				RelativePath="..\..\src\common\addremovectrl.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\animatecmn.cpp"
 				>
 			</File>
@@ -845,10 +849,6 @@
 				RelativePath="..\..\src\common\taskbarcmn.cpp"
 				>
 			</File>
-			<File
-				RelativePath="..\..\src\common\addremovectrl.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="MSW Sources"
@@ -937,6 +937,10 @@
 			>
 			<File
 				RelativePath="..\..\src\generic\aboutdlgg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\generic\activityindicator.cpp"
 				>
 			</File>
 			<File
@@ -1037,10 +1041,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\wizard.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\generic\activityindicator.cpp"
 				>
 			</File>
 		</Filter>
@@ -1311,6 +1311,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\generic\activityindicator.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\generic\animate.h"
 				>
 			</File>
@@ -1390,10 +1394,6 @@
 				RelativePath="..\..\include\wx\generic\wizard.h"
 				>
 			</File>
-			<File
-				RelativePath="..\..\include\wx\generic\activityindicator.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Common Headers"
@@ -1401,6 +1401,14 @@
 			>
 			<File
 				RelativePath="..\..\include\wx\aboutdlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\activityindicator.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\addremovectrl.h"
 				>
 			</File>
 			<File
@@ -1513,14 +1521,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\wizard.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\addremovectrl.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\activityindicator.h"
 				>
 			</File>
 		</Filter>
