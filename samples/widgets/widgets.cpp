@@ -87,6 +87,11 @@ enum
     Widgets_BorderDouble,
     Widgets_BorderDefault,
 
+    Widgets_VariantNormal,
+    Widgets_VariantSmall,
+    Widgets_VariantMini,
+    Widgets_VariantLarge,
+
     Widgets_LayoutDirection,
 
     Widgets_GlobalBusyCursor,
@@ -168,6 +173,7 @@ protected:
     void OnSetFont(wxCommandEvent& event);
     void OnEnable(wxCommandEvent& event);
     void OnSetBorder(wxCommandEvent& event);
+    void OnSetVariant(wxCommandEvent& event);
 
     void OnToggleLayoutDirection(wxCommandEvent& event);
 
@@ -295,6 +301,9 @@ wxBEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
     EVT_MENU_RANGE(Widgets_BorderNone, Widgets_BorderDefault,
                    WidgetsFrame::OnSetBorder)
 
+    EVT_MENU_RANGE(Widgets_VariantNormal, Widgets_VariantLarge,
+                   WidgetsFrame::OnSetVariant)
+
     EVT_MENU(Widgets_LayoutDirection,   WidgetsFrame::OnToggleLayoutDirection)
 
     EVT_MENU(Widgets_GlobalBusyCursor,  WidgetsFrame::OnToggleGlobalBusyCursor)
@@ -398,6 +407,13 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     menuBorders->AppendRadioItem(Widgets_BorderSunken, wxT("S&unken\tCtrl-Shift-5"));
     menuWidget->AppendSubMenu(menuBorders, wxT("Set &border"));
 
+    wxMenu* const menuVariants = new wxMenu;
+    menuVariants->AppendRadioItem(Widgets_VariantMini, "&Mini\tCtrl-Shift-6");
+    menuVariants->AppendRadioItem(Widgets_VariantSmall, "&Small\tCtrl-Shift-7");
+    menuVariants->AppendRadioItem(Widgets_VariantNormal, "&Normal\tCtrl-Shift-8");
+    menuVariants->AppendRadioItem(Widgets_VariantLarge, "&Large\tCtrl-Shift-9");
+    menuWidget->AppendSubMenu(menuVariants, "Set &variant");
+
     menuWidget->AppendSeparator();
     menuWidget->AppendCheckItem(Widgets_LayoutDirection,
                                 "Toggle &layout direction\tCtrl-L");
@@ -431,6 +447,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     SetMenuBar(mbar);
 
     mbar->Check(Widgets_Enable, true);
+    mbar->Check(Widgets_VariantNormal, true);
 #endif // wxUSE_MENUS
 
     // create controls
@@ -892,6 +909,28 @@ void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
     page->SetUpWidget();
 }
 
+void WidgetsFrame::OnSetVariant(wxCommandEvent& event)
+{
+    wxWindowVariant v;
+    switch ( event.GetId() )
+    {
+        case Widgets_VariantSmall:  v = wxWINDOW_VARIANT_SMALL; break;
+        case Widgets_VariantMini:   v = wxWINDOW_VARIANT_MINI; break;
+        case Widgets_VariantLarge:  v = wxWINDOW_VARIANT_LARGE; break;
+
+        default:
+            wxFAIL_MSG( "unknown window variant" );
+            wxFALLTHROUGH;
+
+        case Widgets_VariantNormal: v = wxWINDOW_VARIANT_NORMAL; break;
+    }
+
+    WidgetsPage::GetAttrs().m_variant = v;
+
+    CurrentPage()->SetUpWidget();
+    CurrentPage()->Layout();
+}
+
 void WidgetsFrame::OnToggleLayoutDirection(wxCommandEvent& event)
 {
     WidgetsPage::GetAttrs().m_dir = event.IsChecked() ? wxLayout_RightToLeft
@@ -1240,6 +1279,8 @@ void WidgetsPage::SetUpWidget()
         {
             (*it)->SetCursor(GetAttrs().m_cursor);
         }
+
+        (*it)->SetWindowVariant(GetAttrs().m_variant);
 
         (*it)->Refresh();
     }
