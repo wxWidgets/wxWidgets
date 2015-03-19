@@ -9,13 +9,12 @@
         </sources>
         <headers></headers>
         <wx-lib>webview</wx-lib>
-        <wx-lib>stc</wx-lib>       
+        <wx-lib>stc</wx-lib>
         <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
         <win32-res>../sample.rc</win32-res>
-		
-		<if cond="OUT_OF_TREE_MAKEFILES=='0'">
+        <if cond="OUT_OF_TREE_MAKEFILES=='0'">
             <sys-lib>$(LIB_SCINTILLA)</sys-lib>
         </if>
     </exe>
