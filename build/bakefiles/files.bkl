@@ -3448,6 +3448,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     $(WEBVIEW_CMN_HDR)
 </set>
 
+<set var="WEBVIEWCHROMIUM_SRC" hints="files">
+    src/common/webview_chromium.cpp
+</set>
+<set var="WEBVIEWCHROMIUM_HDR" hints="files">
+    wx/webview.h
+    wx/webview_chromium.h
+</set>
+
 <!-- ====================================================================== -->
 <!--                                wxXRC                                   -->
 <!-- ====================================================================== -->

@@ -88,6 +88,7 @@
  NOTE: as a reference here is a list of all wxWidgets libraries satisfying
        the dependency constraints mentioned in <wx-lib> description:
 
+        <wx-lib>webview_chromium</wx-lib>
         <wx-lib>webview</wx-lib>
         <wx-lib>richtext</wx-lib>
         <wx-lib>aui</wx-lib>
@@ -124,7 +125,7 @@
                          tag definitions.
     -->
     <set var="WX_LIB_LIST">
-        base core net xml xrc html adv media gl qa aui ribbon propgrid richtext stc webview
+        base core net xml xrc html adv media gl qa aui ribbon propgrid richtext stc webview webview_chromium
     </set>
 
     <!-- if you define this variable to 0 before including wx presets, the

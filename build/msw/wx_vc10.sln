@@ -60,6 +60,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "webview", "wx_webview.vcxpr
 		{6744DAD8-9C70-574A-BFF2-9F8DDDB24A75} = {6744DAD8-9C70-574A-BFF2-9F8DDDB24A75}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "webviewchromium", "wx_webviewchromium.vcxproj", "{BA6DA15A-B722-4296-9E8A-3900B933E57D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6744DAD8-9C70-574A-BFF2-9F8DDDB24A75} = {6744DAD8-9C70-574A-BFF2-9F8DDDB24A75}
+	EndProjectSection
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qa", "wx_qa.vcxproj", "{E21129E0-7C08-5936-9D8C-0D60B5319BA7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3E6DCA27-5FA3-53EC-BBD6-2D42294B7AE6} = {3E6DCA27-5FA3-53EC-BBD6-2D42294B7AE6}

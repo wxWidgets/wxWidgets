@@ -106,4 +106,12 @@
     </if>
     <subproject id="memcheck" template="optsub"/>
 
+   <!--
+       Chromium does not build with older versions of Visual Studio so don't
+       build the sample either.
+     -->
+    <if cond="FORMAT[:3] != 'msv'">
+        <subproject id="webview_chromium" template="optsub"/>
+    </if>
+
 </makefile>

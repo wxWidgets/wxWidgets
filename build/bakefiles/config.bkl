@@ -234,6 +234,11 @@ Default is to use debug CRT if and only if BUILD==debug.
         </description>
     </option>
 
+    <option name="USE_WEBVIEW_CHROMIUM">
+        <values>0,1</values>
+        <default-value>0</default-value>
+    </option>
+
     <option name="USE_MEDIA">
         <values>0,1</values>
         <default-value>1</default-value>
@@ -541,6 +546,7 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         <set var="USE_STC">1</set>
         <set var="USE_HTML">1</set>
         <set var="USE_WEBVIEW">1</set>
+        <set var="USE_WEBVIEW_CHROMIUM">0</set>
         <set var="USE_MEDIA">1</set>
         <set var="USE_XRC">1</set>
         <set var="USE_OPENGL">1</set>
@@ -582,5 +588,59 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
             <set var="USE_EXCEPTIONS">0</set>
         </if>
     </if>
+
+    <!--Specify CEF root directory here-->
+    <set var="CEF_INCLUDE_DIR">
+        $(TOP_SRCDIR)/src/cef
+    </set>
+
+    <!--specify libcef library directory-->
+    <set var="LIBCEF_PATH">
+        $(CEF_INCLUDE_DIR)/Release/
+    </set>
+
+    <!--specify libcef_dll_wrapper library directory-->
+    <set var="LIBCEF_WRAPPER_PATH">
+        <if cond="PLATFORM_WIN32=='1'">
+            $(CEF_INCLUDE_DIR)/out/Release/lib/
+        </if>
+        <if cond="PLATFORM_MACOSX=='1'">
+            $(CEF_INCLUDE_DIR)/xcodebuild/Debug/
+        </if>
+        <if cond="PLATFORM_UNIX=='1'">
+            $(CEF_INCLUDE_DIR)/out/Release/obj.target/
+        </if>
+    </set>
+
+    <set var="LIBCEF_NAME">
+        <if cond="PLATFORM_WIN32=='1'">
+            libcef
+        </if>
+        <if cond="PLATFORM_MACOSX=='1'">
+            <!--Unlike Windows/Linux platfomrs, CEF3 won't provide libcef.so library on OS X. -->
+            <!--Instead, a Framework with related resources is provided. -->
+        </if>
+        <if cond="PLATFORM_UNIX=='1'">
+            cef
+        </if>
+    </set>
+
+    <set var="LIBCEF_DLL_WRAPPER_NAME">
+        <if cond="PLATFORM_WIN32=='1'">
+            libcef_dll_wrapper
+        </if>
+        <if cond="PLATFORM_MACOSX=='1'">
+            cef_dll_wrapper
+        </if>
+        <if cond="PLATFORM_UNIX=='1'">
+            cef_dll_wrapper
+        </if>
+    </set>
+
+    <set var="LIBCEF_FRAMEWORK">
+        <if cond="PLATFORM_MACOSX=='1'">
+            -F$(TOP_SRCDIR)src/cef/Release/ -framework Chromium\ Embedded\ Framework
+        </if>
+    </set>
 
 </makefile>

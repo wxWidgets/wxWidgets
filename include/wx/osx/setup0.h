@@ -720,6 +720,13 @@
 // Recommended setting: 1
 #define wxUSE_WEBVIEW 1
 
+// Use the Chromium Embedded Framework wxWebview backend
+//
+// Default is 0
+//
+// Recommended setting: 0
+#define wxUSE_WEBVIEW_CHROMIUM 0
+
 // Use the IE wxWebView backend
 //
 // Default is 1 on MSW
