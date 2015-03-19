@@ -601,6 +601,7 @@ wxGTK:
 
 wxMSW:
 
+- Fix regression in wxDC drawing with bottom-to-top y axis (Artur Wieczorek).
 - Fix compilation with C++Builder XE compiler (Nichka).
 - Fix best height of wxSlider with labels but without ticks (Artur Wieczorek).
 - Fix initial text value of wxSpinCtrlDouble (Laurent Poujoulat).

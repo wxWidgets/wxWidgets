@@ -2007,7 +2007,7 @@ void wxMSWDCImpl::RealizeScaleAndOrigin()
     // Becaue only devExtX/logExtX ratio and devExtY/logExtY ratio are counted
     // we can reduce the fractions to avoid large absolute numbers
     // and possible arithmetic overflows.
-    unsigned int gcd = CalcGCD(abs(devExtX), abs(logExtX));
+    int gcd = CalcGCD(abs(devExtX), abs(logExtX));
     devExtX /= gcd;
     logExtX /= gcd;
     gcd = CalcGCD(abs(devExtY), abs(logExtY));
