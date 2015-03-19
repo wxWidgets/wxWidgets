@@ -65,6 +65,7 @@ Unix:
 All (GUI):
 
 - Allow requesting modern (3.x+) OpenGL version in wxGLCanvas (Fabio Arnold).
+- Add wxWindow::FromDIP() for simpler high DPI support.
 - Allow customizing window shown by wxBusyInfo.
 - Add wxAddRemoveCtrl.
 - Add wxAppProgressIndicator for MSW (Chaobin Zhang) and OS X (Tobias Taschner).

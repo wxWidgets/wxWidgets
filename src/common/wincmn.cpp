@@ -27,6 +27,7 @@
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/math.h"
     #include "wx/frame.h"
     #include "wx/window.h"
     #include "wx/control.h"
@@ -2860,8 +2861,19 @@ void wxWindowBase::OnInternalIdle()
 }
 
 // ----------------------------------------------------------------------------
-// dialog units translations
+// DPI-independent pixels and dialog units translations
 // ----------------------------------------------------------------------------
+
+#ifndef wxHAVE_DPI_INDEPENDENT_PIXELS
+
+wxSize wxWindowBase::FromDIP(const wxSize& sz) const
+{
+    const double scale = GetContentScaleFactor();
+
+    return wxSize(wxRound(scale*sz.x), wxRound(scale*sz.y));
+}
+
+#endif // !wxHAVE_DPI_INDEPENDENT_PIXELS
 
 // Windows' computes dialog units using average character width over upper-
 // and lower-case ASCII alphabet and not using the average character width

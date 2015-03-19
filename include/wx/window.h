@@ -950,8 +950,18 @@ public:
 #endif // wxUSE_HOTKEY
 
 
-    // dialog units translations
-    // -------------------------
+    // translation between different units
+    // -----------------------------------
+
+        // DPI-independent pixels, or DIPs, are pixel values for the standard
+        // 96 DPI display, they are scaled to take the current resolution into
+        // account (i.e. by the factor returned by GetContentScaleFactor()) if
+        // necessary for the current platform.
+
+    wxSize FromDIP(const wxSize& sz) const;
+
+
+        // Dialog units are based on the size of the current font.
 
     wxPoint ConvertPixelsToDialog( const wxPoint& pt ) const;
     wxPoint ConvertDialogToPixels( const wxPoint& pt ) const;
@@ -1891,6 +1901,9 @@ inline void wxWindowBase::SetInitialBestSize(const wxSize& size)
         #define wxWindowGTK wxWindow
     #endif // wxUniv
     #include "wx/gtk/window.h"
+    #ifdef __WXGTK3__
+        #define wxHAVE_DPI_INDEPENDENT_PIXELS
+    #endif
 #elif defined(__WXGTK__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowGTK
@@ -1915,6 +1928,7 @@ inline void wxWindowBase::SetInitialBestSize(const wxSize& size)
         #define wxWindowMac wxWindow
     #endif // wxUniv
     #include "wx/osx/window.h"
+    #define wxHAVE_DPI_INDEPENDENT_PIXELS
 #elif defined(__WXQT__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowQt
@@ -1943,6 +1957,13 @@ inline wxWindow *wxWindowBase::GetGrandParent() const
 {
     return m_parent ? m_parent->GetParent() : NULL;
 }
+
+#ifdef wxHAVE_DPI_INDEPENDENT_PIXELS
+
+// FromDIP() becomes trivial in this case, so make it inline to avoid overhead.
+inline wxSize wxWindowBase::FromDIP(const wxSize& sz) const { return sz; }
+
+#endif // wxHAVE_DPI_INDEPENDENT_PIXELS
 
 // ----------------------------------------------------------------------------
 // global functions

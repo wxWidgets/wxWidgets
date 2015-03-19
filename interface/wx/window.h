@@ -919,6 +919,35 @@ public:
     virtual void FitInside();
 
     /**
+        Convert DPI-independent pixel values to the value in pixels appropriate
+        for the current toolkit.
+
+        A DPI-independent pixel is just a pixel at the standard 96 DPI
+        resolution. To keep the same physical size at higher resolution, the
+        physical pixel value must be scaled by GetContentScaleFactor() but this
+        scaling may be already done by the underlying toolkit (GTK+, Cocoa,
+        ...) automatically. This method performs the conversion only if it is
+        not already done by the lower level toolkit and so by using it with
+        pixel values you can guarantee that the physical size of the
+        corresponding elements will remain the same in all resolutions under
+        all platforms. For example, instead of creating a bitmap of the hard
+        coded size of 32 pixels you should use
+        @code
+            wxBitmap bmp(FromDIP(32, 32));
+        @endcode
+        to avoid using tiny bitmaps on high DPI screens.
+
+        Notice that this function is only needed when using hard coded pixel
+        values. It is not necessary if the sizes are already based on the
+        DPI-independent units such as dialog units or if you are relying on the
+        controls automatic best size determination and using sizers to lay out
+        them.
+
+        @since 3.1.0
+     */
+    wxSize FromDIP(const wxSize& sz) const;
+
+    /**
         This functions returns the best acceptable minimal size for the window.
 
         For example, for a static control, it will be the minimal size such that the
@@ -1126,13 +1155,14 @@ public:
        Returns the magnification of the backing store of this window, eg 2.0
        for a window on a retina screen.
 
-       This method can be used to adjust hard coded pixel values to the values
-       appropriate for the current screen resolution. E.g. instead of using
-       32px icons, which would look tiny on the high resolution (also known as
-       HiDPI or retina) displays, you should use
-       @code
-       wxRound(32*GetContentScaleFactor())
-       @endcode instead.
+       This factor should be used to determine the size of bitmaps and similar
+       "content-containing" windows appropriate for the current resolution.
+       E.g. the program may load a 32px bitmap if the content scale factor is
+       1.0 or 64px version of the same bitmap if it is 2.0 or bigger.
+
+       Notice that this method should @e not be used for window sizes, as they
+       are already scaled by this factor by the underlying toolkit under some
+       platforms. Use FromDIP() for anything window-related instead.
 
        @since 2.9.5
     */
