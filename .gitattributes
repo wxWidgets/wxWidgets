@@ -4,6 +4,7 @@
 *.bcc       eol=crlf
 *.dsw       eol=crlf
 *.gcc       eol=crlf
+*.props     eol=crlf
 *.rc        eol=crlf
 *.sln       eol=crlf
 *.vc        eol=crlf
