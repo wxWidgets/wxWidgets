@@ -40,7 +40,9 @@ public:
     virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
 
+#ifdef __WXMAC__
     virtual void MacNewFile() wxOVERRIDE;
+#endif // __WXMAC__
 
     // our specific methods
     Mode GetMode() const { return m_mode; }
