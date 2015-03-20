@@ -24,11 +24,12 @@
 
 #if wxUSE_ACTIVITYINDICATOR && !defined(__WXGTK3__)
 
+#include "wx/activityindicator.h"
+
 #ifndef WX_PRECOMP
+    #include "wx/dcclient.h"
     #include "wx/timer.h"
 #endif // WX_PRECOMP
-
-#include "wx/activityindicator.h"
 
 #include "wx/graphics.h"
 #include "wx/scopedptr.h"
