@@ -46,6 +46,7 @@
 /build/msw/*c*_mswhdll
 /build/msw/*c*_mswuhdll
 /build/msw/*.vcproj.*.user
+/build/msw/*.vcxproj.user
 /build/msw/vc*_mswud
 /build/msw/wx_vc8arm_*.vcproj
 /build/msw/wx_vc8arm.sln
@@ -56,6 +57,7 @@
 /build/msw/ipch
 /build/msw/wx_vc12.opensdf
 /build/msw/wx_vc12.sdf
+/build/msw/*.suo
 
 # /build/wince/
 /build/wince/vc_msw
