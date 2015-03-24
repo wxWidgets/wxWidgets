@@ -2247,15 +2247,6 @@
 #   endif
 #endif /* wxUSE_PREFERENCES_EDITOR */
 
-#if wxUSE_ACTIVITYINDICATOR && !wxUSE_GRAPHICS_CONTEXT
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_ACTIVITYINDICATOR requires wxGraphicsContext"
-#   else
-#       undef wxUSE_ACTIVITYINDICATOR
-#       define wxUSE_ACTIVITYINDICATOR 0
-#   endif
-#endif /* wxUSE_ACTIVITYINDICATOR */
-
 #endif /* wxUSE_GUI */
 
 #endif /* _WX_CHKCONF_H_ */

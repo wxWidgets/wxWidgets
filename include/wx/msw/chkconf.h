@@ -223,6 +223,16 @@
 #   endif /* wxUSE_ACTIVEX */
 #endif /* __WINE__ */
 
+/*
+    Currently wxUSE_GRAPHICS_CONTEXT is only enabled with MSVC by default, so
+    only check for wxUSE_ACTIVITYINDICATOR dependency on it if it can be
+    enabled, otherwise turn the latter off to allow the library to compile.
+ */
+#if !wxUSE_GRAPHICS_CONTEXT && !defined(_MSC_VER)
+#   undef wxUSE_ACTIVITYINDICATOR
+#   define wxUSE_ACTIVITYINDICATOR 0
+#endif /* !wxUSE_ACTIVITYINDICATOR && !_MSC_VER */
+
 
 /* check settings consistency for MSW-specific ones */
 #if wxUSE_CRASHREPORT && !wxUSE_ON_FATAL_EXCEPTION
@@ -355,6 +365,15 @@
 #       endif
 #   endif
 #endif /* !wxUSE_ACTIVEX */
+
+#if wxUSE_ACTIVITYINDICATOR && !wxUSE_GRAPHICS_CONTEXT
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_ACTIVITYINDICATOR requires wxGraphicsContext"
+#   else
+#       undef wxUSE_ACTIVITYINDICATOR
+#       define wxUSE_ACTIVITYINDICATOR 0
+#   endif
+#endif /* wxUSE_ACTIVITYINDICATOR */
 
 #if !wxUSE_THREADS
 #   if wxUSE_FSWATCHER
