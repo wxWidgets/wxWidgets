@@ -123,6 +123,7 @@ wxGTK:
 
 wxMSW:
 
+- Make default wxSizer border DPI-aware.
 - Improve wxMimeTypesManager open command detection (Eric Jensen).
 - Make wxFILTER_INCLUDE_LIST in wxTextValidator actually usable.
 - Fix appearance of toggled wxToggleButtons with bitmap (tm).

@@ -85,6 +85,34 @@ WX_DEFINE_EXPORTED_LIST( wxSizerItemList )
 */
 
 // ----------------------------------------------------------------------------
+// wxSizerFlags
+// ----------------------------------------------------------------------------
+
+#ifdef wxNEEDS_BORDER_IN_PX
+
+int wxSizerFlags::ms_defaultBorderInPx = 0;
+
+/* static */
+int wxSizerFlags::DoGetDefaultBorderInPx()
+{
+    // Hard code 5px as it's the minimal border size between two controls, see
+    // the table at the bottom of
+    // https://msdn.microsoft.com/en-us/library/windows/desktop/dn742486.aspx
+    //
+    // Of course, ideal would be to use the appropriate sizes for the borders
+    // between related and unrelated controls, as explained at the above URL,
+    // but we don't have a way to specify this in our API currently.
+    //
+    // We also have to use the DPI for the primary monitor here as we don't
+    // have any associated window, so this is wrong on systems using multiple
+    // monitors with different resolutions too -- but, again, without changes
+    // in the API, there is nothing we can do about this.
+    return wxWindow::FromDIP(5, NULL);
+}
+
+#endif // wxNEEDS_BORDER_IN_PX
+
+// ----------------------------------------------------------------------------
 // wxSizerItem
 // ----------------------------------------------------------------------------
 
