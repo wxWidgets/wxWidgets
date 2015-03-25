@@ -114,7 +114,17 @@ static const int SIZER_FLAGS_MASK =
 
 #endif // wxDEBUG_LEVEL
 
-#define ASSERT_VALID_SIZER_FLAGS(f)  wxASSERT_VALID_FLAGS(f, SIZER_FLAGS_MASK)
+#define ASSERT_INCOMPATIBLE_NOT_USED_IMPL(f, f1, n1, f2, n2) \
+    wxASSERT_MSG(((f) & (f1 | f2)) != (f1 | f2), \
+                 n1 " and " n2 " can't be used together")
+
+#define ASSERT_INCOMPATIBLE_NOT_USED(f, f1, f2) \
+    ASSERT_INCOMPATIBLE_NOT_USED_IMPL(f, f1, #f1, f2, #f2)
+
+#define ASSERT_VALID_SIZER_FLAGS(f) \
+    wxASSERT_VALID_FLAGS(f, SIZER_FLAGS_MASK); \
+    ASSERT_INCOMPATIBLE_NOT_USED(f, wxALIGN_CENTRE_HORIZONTAL, wxALIGN_RIGHT); \
+    ASSERT_INCOMPATIBLE_NOT_USED(f, wxALIGN_CENTRE_VERTICAL, wxALIGN_BOTTOM)
 
 
 void wxSizerItem::Init(const wxSizerFlags& flags)
