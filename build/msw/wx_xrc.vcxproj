@@ -522,6 +522,7 @@
     <ClCompile Include="..\..\src\xrc\xmladv.cpp" />
     <ClCompile Include="..\..\src\xrc\xmlres.cpp" />
     <ClCompile Include="..\..\src\xrc\xmlrsall.cpp" />
+    <ClCompile Include="..\..\src\xrc\xh_activityindicator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -617,6 +618,7 @@
     <ClInclude Include="..\..\include\wx\xrc\xh_unkwn.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_wizrd.h" />
     <ClInclude Include="..\..\include\wx\xrc\xmlres.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xh_activityindicator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

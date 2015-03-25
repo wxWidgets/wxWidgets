@@ -25,6 +25,9 @@
     <ClCompile Include="..\..\src\common\dummy.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\xrc\xh_activityindicator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\xrc\xh_animatctrl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -230,6 +233,9 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\wx\xrc\xh_activityindicator.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\xrc\xh_all.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
