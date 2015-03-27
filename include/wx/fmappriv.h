@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FMAPPRIV_H_
-#define _WX_FMAPPRIV_H_
+#ifndef WX_FMAPPRIV_H_
+#define WX_FMAPPRIV_H_
 
 // ----------------------------------------------------------------------------
 // constants

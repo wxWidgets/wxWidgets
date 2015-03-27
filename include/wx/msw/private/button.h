@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_PRIVATE_BUTTON_H_
-#define _WX_MSW_PRIVATE_BUTTON_H_
+#ifndef WX_MSW_PRIVATE_BUTTON_H_
+#define WX_MSW_PRIVATE_BUTTON_H_
 
 // define some standard button constants which may be missing in the headers
 #ifndef BS_PUSHLIKE

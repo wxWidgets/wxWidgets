@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKDCH__
-#define __GTKDCH__
+#ifndef WX_GTKDC_H_
+#define WX_GTKDC_H_
 
 #include "wx/dc.h"
 

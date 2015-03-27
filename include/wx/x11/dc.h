@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DC_H_
-#define _WX_DC_H_
+#ifndef WX_DC_H_
+#define WX_DC_H_
 
 #include "wx/pen.h"
 #include "wx/brush.h"

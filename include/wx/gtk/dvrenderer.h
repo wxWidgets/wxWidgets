@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_DVRENDERER_H_
-#define _WX_GTK_DVRENDERER_H_
+#ifndef WX_GTK_DVRENDERER_H_
+#define WX_GTK_DVRENDERER_H_
 
 typedef struct _GtkCellRendererText GtkCellRendererText;
 typedef struct _GtkTreeViewColumn GtkTreeViewColumn;

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DFB_CURSOR_H_
-#define _WX_DFB_CURSOR_H_
+#ifndef WX_DFB_CURSOR_H_
+#define WX_DFB_CURSOR_H_
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 

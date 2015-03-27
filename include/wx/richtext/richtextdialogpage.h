@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_RICHTEXTDIALOGPAGE_H_
-#define _WX_RICHTEXTDIALOGPAGE_H_
+#ifndef WX_RICHTEXTDIALOGPAGE_H_
+#define WX_RICHTEXTDIALOGPAGE_H_
 
 #if wxUSE_RICHTEXT
 

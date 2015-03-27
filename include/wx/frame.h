@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FRAME_H_BASE_
-#define _WX_FRAME_H_BASE_
+#ifndef WX_FRAME_H_BASE_
+#define WX_FRAME_H_BASE_
 
 // ----------------------------------------------------------------------------
 // headers

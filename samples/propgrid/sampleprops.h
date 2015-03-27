@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SAMPLES_PROPGRID_SAMPLEPROPS_H_
-#define _WX_SAMPLES_PROPGRID_SAMPLEPROPS_H_
+#ifndef WX_SAMPLES_PROPGRID_SAMPLEPROPS_H_
+#define WX_SAMPLES_PROPGRID_SAMPLEPROPS_H_
 
 #include "wx/fontdata.h"
 

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DFB_PRIVATE_H_
-#define _WX_DFB_PRIVATE_H_
+#ifndef WX_DFB_PRIVATE_H_
+#define WX_DFB_PRIVATE_H_
 
 #include "wx/intl.h"
 #include "wx/log.h"

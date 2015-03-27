@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CMNDATA_H_BASE_
-#define _WX_CMNDATA_H_BASE_
+#ifndef WX_CMNDATA_H_BASE_
+#define WX_CMNDATA_H_BASE_
 
 #include "wx/defs.h"
 

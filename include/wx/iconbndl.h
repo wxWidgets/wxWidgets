@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_ICONBNDL_H_
-#define _WX_ICONBNDL_H_
+#ifndef WX_ICONBNDL_H_
+#define WX_ICONBNDL_H_
 
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"      // for wxSize

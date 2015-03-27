@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIV_SCRTIMER_H
-#define _WX_UNIV_SCRTIMER_H
+#ifndef WX_UNIV_SCRTIMER_H
+#define WX_UNIV_SCRTIMER_H
 
 // NB: this class is implemented in scrolbar.cpp
 

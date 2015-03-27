@@ -7,8 +7,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __GTKBITMAPH__
-#define __GTKBITMAPH__
+#ifndef WX_GTKBITMAP_H_
+#define WX_GTKBITMAP_H_
 
 #include "wx/defs.h"
 #include "wx/object.h"

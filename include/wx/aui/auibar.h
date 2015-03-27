@@ -8,8 +8,8 @@
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_AUIBAR_H_
-#define _WX_AUIBAR_H_
+#ifndef WX_AUIBAR_H_
+#define WX_AUIBAR_H_
 
 #include "wx/defs.h"
 

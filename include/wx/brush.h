@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_BRUSH_H_BASE_
-#define _WX_BRUSH_H_BASE_
+#ifndef WX_BRUSH_H_BASE_
+#define WX_BRUSH_H_BASE_
 
 #include "wx/defs.h"
 #include "wx/object.h"

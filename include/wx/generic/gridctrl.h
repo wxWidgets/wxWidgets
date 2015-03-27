@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_GRIDCTRL_H_
-#define _WX_GENERIC_GRIDCTRL_H_
+#ifndef WX_GENERIC_GRIDCTRL_H_
+#define WX_GENERIC_GRIDCTRL_H_
 
 #include "wx/grid.h"
 

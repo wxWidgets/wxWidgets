@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __MSGDLG_H__
-#define __MSGDLG_H__
+#ifndef WX_GTKMSGDLG_H_
+#define WX_GTKMSGDLG_H_
 
 #include "wx/defs.h"
 #include "wx/dialog.h"

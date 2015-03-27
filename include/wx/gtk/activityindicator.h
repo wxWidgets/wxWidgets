@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_ACTIVITYINDICATOR_H_
-#define _WX_GTK_ACTIVITYINDICATOR_H_
+#ifndef WX_GTK_ACTIVITYINDICATOR_H_
+#define WX_GTK_ACTIVITYINDICATOR_H_
 
 // With GTK+ 3 we can always be certain that this control is available, so use
 // the normal base class. With GTK+ 2 however, we may determine during run-time

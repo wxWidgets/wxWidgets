@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_VALGENH__
-#define _WX_VALGENH__
+#ifndef WX_VALGEN_H_
+#define WX_VALGEN_H_
 
 #include "wx/validate.h"
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_COMBOCONTROL_H_BASE_
-#define _WX_COMBOCONTROL_H_BASE_
+#ifndef WX_COMBOCONTROL_H_BASE_
+#define WX_COMBOCONTROL_H_BASE_
 
 
 /*

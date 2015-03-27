@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DCSCREEN_H_
-#define _WX_DCSCREEN_H_
+#ifndef WX_DCSCREEN_H_
+#define WX_DCSCREEN_H_
 
 #include "wx/dcclient.h"
 #include "wx/osx/dcclient.h"

@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKCURSORH__
-#define __GTKCURSORH__
+#ifndef WX_GTKCURSOR_H_
+#define WX_GTKCURSOR_H_
 
 #include "wx/gdicmn.h"
 

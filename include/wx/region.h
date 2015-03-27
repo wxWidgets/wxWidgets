@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_REGION_H_BASE_
-#define _WX_REGION_H_BASE_
+#ifndef WX_REGION_H_BASE_
+#define WX_REGION_H_BASE_
 
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"

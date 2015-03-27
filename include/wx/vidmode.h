@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_VMODE_H_
-#define _WX_VMODE_H_
+#ifndef WX_VMODE_H_
+#define WX_VMODE_H_
 
 // ----------------------------------------------------------------------------
 // wxVideoMode: a simple struct containing video mode parameters for a display

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_MASKG_H_
-#define _WX_GENERIC_MASKG_H_
+#ifndef WX_GENERIC_MASKG_H_
+#define WX_GENERIC_MASKG_H_
 
 // ----------------------------------------------------------------------------
 // generic wxMask implementation

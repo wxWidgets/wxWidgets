@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MOUSESTATE_H_
-#define _WX_MOUSESTATE_H_
+#ifndef WX_MOUSESTATE_H_
+#define WX_MOUSESTATE_H_
 
 #include "wx/gdicmn.h"      // for wxPoint
 #include "wx/kbdstate.h"

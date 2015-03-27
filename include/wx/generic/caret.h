@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CARET_H_
-#define _WX_CARET_H_
+#ifndef WX_CARET_H_
+#define WX_CARET_H_
 
 #include "wx/timer.h"
 #include "wx/dc.h"

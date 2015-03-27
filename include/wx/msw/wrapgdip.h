@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_WRAPGDIP_H_
-#define _WX_MSW_WRAPGDIP_H_
+#ifndef WX_MSW_WRAPGDIP_H_
+#define WX_MSW_WRAPGDIP_H_
 
 #include "wx/msw/wrapwin.h"
 

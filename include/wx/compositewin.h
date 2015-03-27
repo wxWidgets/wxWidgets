@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_COMPOSITEWIN_H_
-#define _WX_COMPOSITEWIN_H_
+#ifndef WX_COMPOSITEWIN_H_
+#define WX_COMPOSITEWIN_H_
 
 #include "wx/window.h"
 #include "wx/containr.h"

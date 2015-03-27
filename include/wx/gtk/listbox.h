@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_LISTBOX_H_
-#define _WX_GTK_LISTBOX_H_
+#ifndef WX_GTK_LISTBOX_H_
+#define WX_GTK_LISTBOX_H_
 
 struct _wxTreeEntry;
 struct _GtkTreeIter;

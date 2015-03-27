@@ -11,8 +11,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef _WX_METAFIILE_H_
-#define _WX_METAFIILE_H_
+#ifndef WX_METAFIILE_H_
+#define WX_METAFIILE_H_
 
 #include "wx/dc.h"
 #include "wx/gdiobj.h"

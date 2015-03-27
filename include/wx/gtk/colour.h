@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_COLOUR_H_
-#define _WX_GTK_COLOUR_H_
+#ifndef WX_GTK_COLOUR_H_
+#define WX_GTK_COLOUR_H_
 
 #ifdef __WXGTK3__
 typedef struct _GdkRGBA GdkRGBA;

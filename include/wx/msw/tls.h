@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_TLS_H_
-#define _WX_MSW_TLS_H_
+#ifndef WX_MSW_TLS_H_
+#define WX_MSW_TLS_H_
 
 #include "wx/msw/wrapwin.h"
 #include "wx/thread.h"

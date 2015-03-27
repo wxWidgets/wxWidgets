@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_STATBMP_H_
-#define _WX_STATBMP_H_
+#ifndef WX_STATBMP_H_
+#define WX_STATBMP_H_
 
 #include "wx/control.h"
 #include "wx/icon.h"

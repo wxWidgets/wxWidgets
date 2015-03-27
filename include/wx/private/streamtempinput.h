@@ -10,8 +10,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRIVATE_STREAMTEMPINPUT_H
-#define _WX_PRIVATE_STREAMTEMPINPUT_H
+#ifndef WX_PRIVATE_STREAMTEMPINPUT_H
+#define WX_PRIVATE_STREAMTEMPINPUT_H
 
 #include "wx/private/pipestream.h"
 

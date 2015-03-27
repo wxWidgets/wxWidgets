@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DVRENDERERS_H_
-#define _WX_DVRENDERERS_H_
+#ifndef WX_DVRENDERERS_H_
+#define WX_DVRENDERERS_H_
 
 /*
     Note about the structure of various headers: they're organized in a more

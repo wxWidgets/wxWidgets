@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DIRDLG_H_
-#define _WX_DIRDLG_H_
+#ifndef WX_DIRDLG_H_
+#define WX_DIRDLG_H_
 
 class WXDLLIMPEXP_CORE wxDirDialog : public wxDirDialogBase
 {

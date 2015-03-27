@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_DEBUGHLPH_H_
-#define _WX_MSW_DEBUGHLPH_H_
+#ifndef WX_MSW_DEBUGHLPH_H_
+#define WX_MSW_DEBUGHLPH_H_
 
 #include "wx/dynlib.h"
 

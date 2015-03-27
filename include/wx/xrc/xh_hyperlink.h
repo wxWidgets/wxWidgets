@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_XH_HYPERLINKH__
-#define _WX_XH_HYPERLINKH__
+#ifndef WX_XH_HYPERLINK_H_
+#define WX_XH_HYPERLINK_H_
 
 #include "wx/xrc/xmlres.h"
 

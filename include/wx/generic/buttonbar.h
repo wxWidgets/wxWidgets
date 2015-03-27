@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_BUTTONBAR_H_
-#define _WX_BUTTONBAR_H_
+#ifndef WX_BUTTONBAR_H_
+#define WX_BUTTONBAR_H_
 
 #include "wx/bmpbuttn.h"
 #include "wx/toolbar.h"

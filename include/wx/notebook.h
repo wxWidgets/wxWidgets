@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_NOTEBOOK_H_BASE_
-#define _WX_NOTEBOOK_H_BASE_
+#ifndef WX_NOTEBOOK_H_BASE_
+#define WX_NOTEBOOK_H_BASE_
 
 // ----------------------------------------------------------------------------
 // headers

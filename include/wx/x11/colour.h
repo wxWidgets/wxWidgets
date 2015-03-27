@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_COLOUR_H_
-#define _WX_COLOUR_H_
+#ifndef WX_COLOUR_H_
+#define WX_COLOUR_H_
 
 #include "wx/defs.h"
 #include "wx/object.h"

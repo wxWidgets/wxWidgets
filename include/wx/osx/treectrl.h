@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TREECTRL_H_
-#define _WX_TREECTRL_H_
+#ifndef WX_TREECTRL_H_
+#define WX_TREECTRL_H_
 
 #include "wx/control.h"
 #include "wx/event.h"

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKCHECKLISTH__
-#define __GTKCHECKLISTH__
+#ifndef WX_GTKCHECKLIST_H_
+#define WX_GTKCHECKLIST_H_
 
 // ----------------------------------------------------------------------------
 // macros

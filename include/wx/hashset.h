@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_HASHSET_H_
-#define _WX_HASHSET_H_
+#ifndef WX_HASHSET_H_
+#define WX_HASHSET_H_
 
 #include "wx/hashmap.h"
 

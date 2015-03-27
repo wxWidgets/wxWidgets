@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKTEXTCTRLH__
-#define __GTKTEXTCTRLH__
+#ifndef WX_GTKTEXTCTRL_H_
+#define WX_GTKTEXTCTRL_H_
 
 //-----------------------------------------------------------------------------
 // wxTextCtrl

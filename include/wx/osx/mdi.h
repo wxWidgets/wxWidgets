@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_OSX_CARBON_MDI_H_
-#define _WX_OSX_CARBON_MDI_H_
+#ifndef WX_OSX_CARBON_MDI_H_
+#define WX_OSX_CARBON_MDI_H_
 
 class WXDLLIMPEXP_CORE wxMDIParentFrame : public wxMDIParentFrameBase
 {

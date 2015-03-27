@@ -8,8 +8,8 @@
  * Licence:     wxWindows licence
  */
 
-#ifndef _WX_OSX_IPHONE_CHKCONF_H_
-#define _WX_OSX_IPHONE_CHKCONF_H_
+#ifndef WX_OSX_IPHONE_CHKCONF_H_
+#define WX_OSX_IPHONE_CHKCONF_H_
 
 /*
  * text rendering system

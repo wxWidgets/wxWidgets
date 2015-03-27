@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK1_PRIVATE_TIMER_H_
-#define _WX_GTK1_PRIVATE_TIMER_H_
+#ifndef WX_GTK1_PRIVATE_TIMER_H_
+#define WX_GTK1_PRIVATE_TIMER_H_
 
 #include "wx/private/timer.h"
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_AUI_H_
-#define _WX_AUI_H_
+#ifndef WX_AUI_H_
+#define WX_AUI_H_
 
 #include "wx/aui/framemanager.h"
 #include "wx/aui/dockart.h"

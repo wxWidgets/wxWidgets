@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTKCHECKLIST_H_
-#define _WX_GTKCHECKLIST_H_
+#ifndef WX_GTKCHECKLIST_H_
+#define WX_GTKCHECKLIST_H_
 
 //-----------------------------------------------------------------------------
 // wxCheckListBox

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_X11_DATAFORM_H
-#define _WX_X11_DATAFORM_H
+#ifndef WX_X11_DATAFORM_H
+#define WX_X11_DATAFORM_H
 
 class WXDLLIMPEXP_CORE wxDataFormat
 {

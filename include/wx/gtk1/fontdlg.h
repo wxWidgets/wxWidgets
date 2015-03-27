@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTK_FONTDLGH__
-#define __GTK_FONTDLGH__
+#ifndef WX_GTK_FONTDLG_H_
+#define WX_GTK_FONTDLG_H_
 
 //-----------------------------------------------------------------------------
 // wxFontDialog

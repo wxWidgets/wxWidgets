@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_HELPVIEW_H_
-#define _WX_HELPVIEW_H_
+#ifndef WX_HELPVIEW_H_
+#define WX_HELPVIEW_H_
 
 #define hvVERSION 1.04
 

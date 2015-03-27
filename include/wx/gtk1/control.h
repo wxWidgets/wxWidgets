@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKCONTROLH__
-#define __GTKCONTROLH__
+#ifndef WX_GTKCONTROL_H_
+#define WX_GTKCONTROL_H_
 
 #include "wx/defs.h"
 #include "wx/object.h"

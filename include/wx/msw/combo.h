@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_COMBOCONTROL_H_
-#define _WX_COMBOCONTROL_H_
+#ifndef WX_COMBOCONTROL_H_
+#define WX_COMBOCONTROL_H_
 
 // NB: Definition of _WX_COMBOCONTROL_H_ is used in wx/generic/combo.h to
 //     determine whether there is native wxComboCtrl, so make sure you

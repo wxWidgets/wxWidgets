@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_REARRANGECTRL_H_
-#define _WX_REARRANGECTRL_H_
+#ifndef WX_REARRANGECTRL_H_
+#define WX_REARRANGECTRL_H_
 
 #include "wx/checklst.h"
 

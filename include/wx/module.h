@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MODULE_H_
-#define _WX_MODULE_H_
+#ifndef WX_MODULE_H_
+#define WX_MODULE_H_
 
 #include "wx/object.h"
 #include "wx/list.h"

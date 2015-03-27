@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DRAGIMGG_H_
-#define _WX_DRAGIMGG_H_
+#ifndef WX_DRAGIMGG_H_
+#define WX_DRAGIMGG_H_
 
 #include "wx/bitmap.h"
 #include "wx/icon.h"

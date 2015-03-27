@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CUSTOMBGWIN_H_
-#define _WX_CUSTOMBGWIN_H_
+#ifndef WX_CUSTOMBGWIN_H_
+#define WX_CUSTOMBGWIN_H_
 
 #include "wx/defs.h"
 

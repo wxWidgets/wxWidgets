@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_STATUSBAR_H_
-#define _WX_MSW_STATUSBAR_H_
+#ifndef WX_MSW_STATUSBAR_H_
+#define WX_MSW_STATUSBAR_H_
 
 #if wxUSE_NATIVE_STATUSBAR
 

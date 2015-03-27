@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_VALTEXT_H_
-#define _WX_VALTEXT_H_
+#ifndef WX_VALTEXT_H_
+#define WX_VALTEXT_H_
 
 #include "wx/defs.h"
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FONT_H_BASE_
-#define _WX_FONT_H_BASE_
+#ifndef WX_FONT_H_BASE_
+#define WX_FONT_H_BASE_
 
 // ----------------------------------------------------------------------------
 // headers

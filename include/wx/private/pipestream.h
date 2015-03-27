@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRIVATE_PIPESTREAM_H_
-#define _WX_PRIVATE_PIPESTREAM_H_
+#ifndef WX_PRIVATE_PIPESTREAM_H_
+#define WX_PRIVATE_PIPESTREAM_H_
 
 #include "wx/platform.h"
 

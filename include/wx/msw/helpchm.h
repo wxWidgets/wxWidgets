@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_HELPCHM_H_
-#define _WX_MSW_HELPCHM_H_
+#ifndef WX_MSW_HELPCHM_H_
+#define WX_MSW_HELPCHM_H_
 
 #if wxUSE_MS_HTML_HELP
 

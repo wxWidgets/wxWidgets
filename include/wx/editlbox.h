@@ -7,8 +7,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __WX_EDITLBOX_H__
-#define __WX_EDITLBOX_H__
+#ifndef WX_EDITLBOX_H_
+#define WX_EDITLBOX_H_
 
 #include "wx/defs.h"
 

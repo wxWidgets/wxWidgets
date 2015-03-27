@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_HTMLTAG_H_
-#define _WX_HTMLTAG_H_
+#ifndef WX_HTMLTAG_H_
+#define WX_HTMLTAG_H_
 
 #include "wx/defs.h"
 

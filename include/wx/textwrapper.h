@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TEXTWRAPPER_H_
-#define _WX_TEXTWRAPPER_H_
+#ifndef WX_TEXTWRAPPER_H_
+#define WX_TEXTWRAPPER_H_
 
 #include "wx/window.h"
 

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PREFERENCES_H_
-#define _WX_PREFERENCES_H_
+#ifndef WX_PREFERENCES_H_
+#define WX_PREFERENCES_H_
 
 #include "wx/defs.h"
 

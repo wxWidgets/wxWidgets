@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_LINK_H_
-#define _WX_LINK_H_
+#ifndef WX_LINK_H_
+#define WX_LINK_H_
 
 // This must be part of the module you want to force:
 #define wxFORCE_LINK_THIS_MODULE(module_name)                         \

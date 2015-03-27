@@ -12,8 +12,8 @@
 // included by user code. The functions declared here are implemented in
 // msw/fontutil.cpp for Windows, unix/fontutil.cpp for GTK/Motif &c.
 
-#ifndef _WX_FONTUTIL_H_
-#define _WX_FONTUTIL_H_
+#ifndef WX_FONTUTIL_H_
+#define WX_FONTUTIL_H_
 
 // ----------------------------------------------------------------------------
 // headers

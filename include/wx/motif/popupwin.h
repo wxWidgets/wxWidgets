@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MOTIF_POPUPWIN_H_
-#define _WX_MOTIF_POPUPWIN_H_
+#ifndef WX_MOTIF_POPUPWIN_H_
+#define WX_MOTIF_POPUPWIN_H_
 
 // ----------------------------------------------------------------------------
 // wxPopupWindow

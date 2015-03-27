@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_COMMANDLINKBUTTON_H_
-#define _WX_MSW_COMMANDLINKBUTTON_H_
+#ifndef WX_MSW_COMMANDLINKBUTTON_H_
+#define WX_MSW_COMMANDLINKBUTTON_H_
 
 // ----------------------------------------------------------------------------
 // Command link button for wxMSW

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSGOUT_H_
-#define _WX_MSGOUT_H_
+#ifndef WX_MSGOUT_H_
+#define WX_MSGOUT_H_
 
 // ----------------------------------------------------------------------------
 // headers

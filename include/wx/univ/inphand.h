@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIV_INPHAND_H_
-#define _WX_UNIV_INPHAND_H_
+#ifndef WX_UNIV_INPHAND_H_
+#define WX_UNIV_INPHAND_H_
 
 #include "wx/univ/inpcons.h"         // for wxControlAction(s)
 

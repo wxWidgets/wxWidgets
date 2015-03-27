@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TOGGLEBUTTON_H_
-#define _WX_TOGGLEBUTTON_H_
+#ifndef WX_TOGGLEBUTTON_H_
+#define WX_TOGGLEBUTTON_H_
 
 class WXDLLIMPEXP_CORE wxToggleButton : public wxToggleButtonBase
 {

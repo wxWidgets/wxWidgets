@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_LISTBOX_H_BASE_
-#define _WX_LISTBOX_H_BASE_
+#ifndef WX_LISTBOX_H_BASE_
+#define WX_LISTBOX_H_BASE_
 
 // ----------------------------------------------------------------------------
 // headers

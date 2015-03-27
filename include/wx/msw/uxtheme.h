@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UXTHEME_H_
-#define _WX_UXTHEME_H_
+#ifndef WX_UXTHEME_H_
+#define WX_UXTHEME_H_
 
 #include "wx/defs.h"
 

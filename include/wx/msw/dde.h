@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DDE_H_
-#define _WX_DDE_H_
+#ifndef WX_DDE_H_
+#define WX_DDE_H_
 
 #include "wx/ipcbase.h"
 

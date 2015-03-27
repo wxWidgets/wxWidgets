@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WXCRTVARARG_H_
-#define _WX_WXCRTVARARG_H_
+#ifndef WX_WXCRTVARARG_H_
+#define WX_WXCRTVARARG_H_
 
 // NB: User code should include wx/crt.h instead of including this
 //     header directly.

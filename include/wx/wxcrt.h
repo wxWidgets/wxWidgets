@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WXCRT_H_
-#define _WX_WXCRT_H_
+#ifndef WX_WXCRT_H_
+#define WX_WXCRT_H_
 
 #include "wx/wxcrtbase.h"
 #include "wx/string.h"

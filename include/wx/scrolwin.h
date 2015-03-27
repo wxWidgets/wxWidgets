@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SCROLWIN_H_BASE_
-#define _WX_SCROLWIN_H_BASE_
+#ifndef WX_SCROLWIN_H_BASE_
+#define WX_SCROLWIN_H_BASE_
 
 #include "wx/panel.h"
 

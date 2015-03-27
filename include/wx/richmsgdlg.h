@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_RICHMSGDLG_H_BASE_
-#define _WX_RICHMSGDLG_H_BASE_
+#ifndef WX_RICHMSGDLG_H_BASE_
+#define WX_RICHMSGDLG_H_BASE_
 
 #include "wx/defs.h"
 

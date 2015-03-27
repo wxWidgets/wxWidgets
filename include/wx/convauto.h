@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CONVAUTO_H_
-#define _WX_CONVAUTO_H_
+#ifndef WX_CONVAUTO_H_
+#define WX_CONVAUTO_H_
 
 #include "wx/strconv.h"
 #include "wx/fontenc.h"

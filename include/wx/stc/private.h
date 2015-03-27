@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_STC_PRIVATE_H_
-#define _WX_STC_PRIVATE_H_
+#ifndef WX_STC_PRIVATE_H_
+#define WX_STC_PRIVATE_H_
 
 #include "wx/defs.h"
 #include "wx/string.h"

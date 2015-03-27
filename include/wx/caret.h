@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CARET_H_BASE_
-#define _WX_CARET_H_BASE_
+#ifndef WX_CARET_H_BASE_
+#define WX_CARET_H_BASE_
 
 #include "wx/defs.h"
 

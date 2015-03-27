@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_IMAGTIFF_H_
-#define _WX_IMAGTIFF_H_
+#ifndef WX_IMAGTIFF_H_
+#define WX_IMAGTIFF_H_
 
 #include "wx/defs.h"
 

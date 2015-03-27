@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIX_EXECUTE_H
-#define _WX_UNIX_EXECUTE_H
+#ifndef WX_UNIX_EXECUTE_H
+#define WX_UNIX_EXECUTE_H
 
 #include "wx/app.h"
 #include "wx/hashmap.h"

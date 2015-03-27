@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TESTS_TEMPFILE_H_
-#define _WX_TESTS_TEMPFILE_H_
+#ifndef WX_TESTS_TEMPFILE_H_
+#define WX_TESTS_TEMPFILE_H_
 
 #include "wx/filefn.h"
 #include "wx/filename.h"

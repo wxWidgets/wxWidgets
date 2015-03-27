@@ -10,8 +10,8 @@
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
-#ifndef _WX_PLATFORM_H_
-#define _WX_PLATFORM_H_
+#ifndef WX_PLATFORM_H_
+#define WX_PLATFORM_H_
 
 #ifdef __WXMAC_XCODE__
 #    include <unistd.h>

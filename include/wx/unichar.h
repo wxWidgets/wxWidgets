@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNICHAR_H_
-#define _WX_UNICHAR_H_
+#ifndef WX_UNICHAR_H_
+#define WX_UNICHAR_H_
 
 #include "wx/defs.h"
 #include "wx/chartype.h"

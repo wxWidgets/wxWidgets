@@ -9,8 +9,8 @@
 /////////////////////////////////////////////////////////////////////////////
 */
 
-#ifndef _WX_MICROWIN_H_
-#define _WX_MICROWIN_H_
+#ifndef WX_MICROWIN_H_
+#define WX_MICROWIN_H_
 
 /* Implemented by microwin.cpp */
 

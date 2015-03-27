@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_HASH_H__
-#define _WX_HASH_H__
+#ifndef WX_HASH_H_
+#define WX_HASH_H_
 
 #include "wx/defs.h"
 #include "wx/string.h"

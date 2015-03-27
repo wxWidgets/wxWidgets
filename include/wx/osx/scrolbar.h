@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SCROLBAR_H_
-#define _WX_SCROLBAR_H_
+#ifndef WX_SCROLBAR_H_
+#define WX_SCROLBAR_H_
 
 // Scrollbar item
 class WXDLLIMPEXP_CORE wxScrollBar : public wxScrollBarBase

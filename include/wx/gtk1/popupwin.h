@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKPOPUPWINH__
-#define __GTKPOPUPWINH__
+#ifndef WX_GTKPOPUPWIN_H_
+#define WX_GTKPOPUPWIN_H_
 
 #include "wx/defs.h"
 #include "wx/panel.h"

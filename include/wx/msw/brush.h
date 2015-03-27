@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_BRUSH_H_
-#define _WX_BRUSH_H_
+#ifndef WX_BRUSH_H_
+#define WX_BRUSH_H_
 
 class WXDLLIMPEXP_FWD_CORE wxBrush;
 class WXDLLIMPEXP_FWD_CORE wxColour;

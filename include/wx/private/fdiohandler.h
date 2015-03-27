@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRIVATE_FDIOHANDLER_H_
-#define _WX_PRIVATE_FDIOHANDLER_H_
+#ifndef WX_PRIVATE_FDIOHANDLER_H_
+#define WX_PRIVATE_FDIOHANDLER_H_
 
 // ----------------------------------------------------------------------------
 // wxFDIOHandler: interface used to process events on file descriptors

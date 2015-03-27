@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_CONTROL_H_
-#define _WX_GTK_CONTROL_H_
+#ifndef WX_GTK_CONTROL_H_
+#define WX_GTK_CONTROL_H_
 
 typedef struct _GtkLabel GtkLabel;
 typedef struct _GtkFrame GtkFrame;

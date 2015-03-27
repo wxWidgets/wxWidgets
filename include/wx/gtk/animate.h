@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTKANIMATEH__
-#define _WX_GTKANIMATEH__
+#ifndef WX_GTKANIMATE_H_
+#define WX_GTKANIMATE_H_
 
 typedef struct _GdkPixbufAnimation GdkPixbufAnimation;
 typedef struct _GdkPixbufAnimationIter GdkPixbufAnimationIter;

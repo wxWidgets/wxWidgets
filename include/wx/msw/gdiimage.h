@@ -12,8 +12,8 @@
 // NB: this is a private header, it is not intended to be directly included by
 //     user code (but may be included from other, public, wxWin headers
 
-#ifndef _WX_MSW_GDIIMAGE_H_
-#define _WX_MSW_GDIIMAGE_H_
+#ifndef WX_MSW_GDIIMAGE_H_
+#define WX_MSW_GDIIMAGE_H_
 
 #include "wx/gdiobj.h"          // base class
 #include "wx/gdicmn.h"          // wxBITMAP_TYPE_INVALID

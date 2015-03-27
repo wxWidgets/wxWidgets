@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_HTMPRINT_H_
-#define _WX_HTMPRINT_H_
+#ifndef WX_HTMPRINT_H_
+#define WX_HTMPRINT_H_
 
 #include "wx/defs.h"
 

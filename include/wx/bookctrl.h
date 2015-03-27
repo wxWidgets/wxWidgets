@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_BOOKCTRL_H_
-#define _WX_BOOKCTRL_H_
+#ifndef WX_BOOKCTRL_H_
+#define WX_BOOKCTRL_H_
 
 // ----------------------------------------------------------------------------
 // headers

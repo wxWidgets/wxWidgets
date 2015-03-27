@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CLIPBRD_H_BASE_
-#define _WX_CLIPBRD_H_BASE_
+#ifndef WX_CLIPBRD_H_BASE_
+#define WX_CLIPBRD_H_BASE_
 
 #include "wx/defs.h"
 

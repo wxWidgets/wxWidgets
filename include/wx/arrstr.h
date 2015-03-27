@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_ARRSTR_H
-#define _WX_ARRSTR_H
+#ifndef WX_ARRSTR_H
+#define WX_ARRSTR_H
 
 #include "wx/defs.h"
 #include "wx/string.h"

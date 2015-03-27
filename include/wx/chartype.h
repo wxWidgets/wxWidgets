@@ -10,8 +10,8 @@
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
-#ifndef _WX_WXCHARTYPE_H_
-#define _WX_WXCHARTYPE_H_
+#ifndef WX_WXCHARTYPE_H_
+#define WX_WXCHARTYPE_H_
 
 /* defs.h indirectly includes this file, so don't include it here */
 #include "wx/platform.h"

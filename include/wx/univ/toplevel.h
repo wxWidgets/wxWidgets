@@ -7,8 +7,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __WX_UNIV_TOPLEVEL_H__
-#define __WX_UNIV_TOPLEVEL_H__
+#ifndef WX_UNIV_TOPLEVEL_H_
+#define WX_UNIV_TOPLEVEL_H_
 
 #include "wx/univ/inpcons.h"
 #include "wx/univ/inphand.h"

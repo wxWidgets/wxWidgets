@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////// */
 
-#ifndef _WX_GTK_PIZZA_H_
-#define _WX_GTK_PIZZA_H_
+#ifndef WX_GTK_PIZZA_H_
+#define WX_GTK_PIZZA_H_
 
 #define WX_PIZZA(obj) G_TYPE_CHECK_INSTANCE_CAST(obj, wxPizza::type(), wxPizza)
 #define WX_IS_PIZZA(obj) G_TYPE_CHECK_INSTANCE_TYPE(obj, wxPizza::type())

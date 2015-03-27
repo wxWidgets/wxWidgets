@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DFB_POPUPWIN_H_
-#define _WX_DFB_POPUPWIN_H_
+#ifndef WX_DFB_POPUPWIN_H_
+#define WX_DFB_POPUPWIN_H_
 
 // ----------------------------------------------------------------------------
 // wxPopupWindow

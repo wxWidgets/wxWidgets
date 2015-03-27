@@ -5,8 +5,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSDOS_APPTRAIT_H_
-#define _WX_MSDOS_APPTRAIT_H_
+#ifndef WX_MSDOS_APPTRAIT_H_
+#define WX_MSDOS_APPTRAIT_H_
 
 class wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {

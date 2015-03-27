@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_QT_TOPLEVEL_H_
-#define _WX_QT_TOPLEVEL_H_
+#ifndef WX_QT_TOPLEVEL_H_
+#define WX_QT_TOPLEVEL_H_
 
 class WXDLLIMPEXP_CORE wxTopLevelWindowQt : public wxTopLevelWindowBase
 {

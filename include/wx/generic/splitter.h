@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_SPLITTER_H_
-#define _WX_GENERIC_SPLITTER_H_
+#ifndef WX_GENERIC_SPLITTER_H_
+#define WX_GENERIC_SPLITTER_H_
 
 #include "wx/window.h"                      // base class declaration
 #include "wx/containr.h"                    // wxControlContainer

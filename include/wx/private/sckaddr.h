@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRIVATE_SOCKADDR_H_
-#define _WX_PRIVATE_SOCKADDR_H_
+#ifndef WX_PRIVATE_SOCKADDR_H_
+#define WX_PRIVATE_SOCKADDR_H_
 
 #ifdef __WINDOWS__
     #include "wx/msw/wrapwin.h"

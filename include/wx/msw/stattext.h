@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_STATTEXT_H_
-#define _WX_STATTEXT_H_
+#ifndef WX_STATTEXT_H_
+#define WX_STATTEXT_H_
 
 class WXDLLIMPEXP_CORE wxStaticText : public wxStaticTextBase
 {

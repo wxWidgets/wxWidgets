@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MOTIF_MENU_H_
-#define _WX_MOTIF_MENU_H_
+#ifndef WX_MOTIF_MENU_H_
+#define WX_MOTIF_MENU_H_
 
 #include "wx/colour.h"
 #include "wx/font.h"

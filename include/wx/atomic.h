@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_ATOMIC_H_
-#define _WX_ATOMIC_H_
+#ifndef WX_ATOMIC_H_
+#define WX_ATOMIC_H_
 
 // ----------------------------------------------------------------------------
 // headers

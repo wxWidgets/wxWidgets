@@ -10,8 +10,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WXGBSIZER_H__
-#define __WXGBSIZER_H__
+#ifndef WX_GBSIZER_H_
+#define WX_GBSIZER_H_
 
 #include "wx/sizer.h"
 

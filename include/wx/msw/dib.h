@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_DIB_H_
-#define _WX_MSW_DIB_H_
+#ifndef WX_MSW_DIB_H_
+#define WX_MSW_DIB_H_
 
 class WXDLLIMPEXP_FWD_CORE wxPalette;
 

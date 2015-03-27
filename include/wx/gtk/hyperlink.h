@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTKHYPERLINKCTRL_H_
-#define _WX_GTKHYPERLINKCTRL_H_
+#ifndef WX_GTKHYPERLINKCTRL_H_
+#define WX_GTKHYPERLINKCTRL_H_
 
 #include "wx/generic/hyperlink.h"
 

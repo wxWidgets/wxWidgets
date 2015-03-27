@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIX_PRIVATE_H_
-#define _WX_UNIX_PRIVATE_H_
+#ifndef WX_UNIX_PRIVATE_H_
+#define WX_UNIX_PRIVATE_H_
 
 // this file is currently empty as its original contents was moved to
 // include/wx/private/fd.h but let's keep it for now in case we need it for

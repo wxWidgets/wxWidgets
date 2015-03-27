@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIX_UTILSX11_H_
-#define _WX_UNIX_UTILSX11_H_
+#ifndef WX_UNIX_UTILSX11_H_
+#define WX_UNIX_UTILSX11_H_
 
 #include "wx/defs.h"
 #include "wx/gdicmn.h"

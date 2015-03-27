@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRIVATE_PREFERENCES_H_
-#define _WX_PRIVATE_PREFERENCES_H_
+#ifndef WX_PRIVATE_PREFERENCES_H_
+#define WX_PRIVATE_PREFERENCES_H_
 
 #include "wx/preferences.h"
 

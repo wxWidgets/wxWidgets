@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKDIRDLGH__
-#define __GTKDIRDLGH__
+#ifndef WX_GTKDIRDLG_H_
+#define WX_GTKDIRDLG_H_
 
 //-------------------------------------------------------------------------
 // wxDirDialog

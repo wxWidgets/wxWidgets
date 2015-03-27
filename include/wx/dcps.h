@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DCPS_H_BASE_
-#define _WX_DCPS_H_BASE_
+#ifndef WX_DCPS_H_BASE_
+#define WX_DCPS_H_BASE_
 
 #include "wx/generic/dcpsg.h"
 

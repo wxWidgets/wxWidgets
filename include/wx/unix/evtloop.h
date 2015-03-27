@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIX_EVTLOOP_H_
-#define _WX_UNIX_EVTLOOP_H_
+#ifndef WX_UNIX_EVTLOOP_H_
+#define WX_UNIX_EVTLOOP_H_
 
 #if wxUSE_CONSOLE_EVENTLOOP
 

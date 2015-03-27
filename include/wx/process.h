@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PROCESSH__
-#define _WX_PROCESSH__
+#ifndef WX_PROCESS_H_
+#define WX_PROCESS_H_
 
 #include "wx/event.h"
 

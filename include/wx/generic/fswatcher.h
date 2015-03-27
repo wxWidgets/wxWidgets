@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FSWATCHER_GENERIC_H_
-#define _WX_FSWATCHER_GENERIC_H_
+#ifndef WX_FSWATCHER_GENERIC_H_
+#define WX_FSWATCHER_GENERIC_H_
 
 #include "wx/defs.h"
 

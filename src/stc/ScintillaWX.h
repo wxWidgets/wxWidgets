@@ -13,8 +13,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ScintillaWX_h__
-#define __ScintillaWX_h__
+#ifndef ScintillaWX_h_
+#define ScintillaWX_h_
 #include "wx/defs.h"
 
 //----------------------------------------------------------------------

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIX_PRIVATE_PIPESTREAM_H_
-#define _WX_UNIX_PRIVATE_PIPESTREAM_H_
+#ifndef WX_UNIX_PRIVATE_PIPESTREAM_H_
+#define WX_UNIX_PRIVATE_PIPESTREAM_H_
 
 #include "wx/wfstream.h"
 

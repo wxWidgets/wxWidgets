@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WINDOWPTR_H_
-#define _WX_WINDOWPTR_H_
+#ifndef WX_WINDOWPTR_H_
+#define WX_WINDOWPTR_H_
 
 #include "wx/sharedptr.h"
 

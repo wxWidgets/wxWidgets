@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_COLLAPSABLE_PANEL_H_GTK_
-#define _WX_COLLAPSABLE_PANEL_H_GTK_
+#ifndef WX_COLLAPSABLE_PANEL_H_GTK_
+#define WX_COLLAPSABLE_PANEL_H_GTK_
 
 // ----------------------------------------------------------------------------
 // wxCollapsiblePane

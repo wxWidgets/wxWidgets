@@ -16,7 +16,7 @@
 #if defined(__VISUALC__) || defined(__BORLANDC__)
     // If user did not request NOCPH and we're not building using configure
     // then assume user wants precompiled headers.
-    #if !defined(NOPCH) && !defined(__WX_SETUP_H__)
+    #if !defined(NOPCH) && !defined(WX_SETUP_H_)
         #define WX_PRECOMP
     #endif
 #endif

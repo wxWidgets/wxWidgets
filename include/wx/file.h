@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FILEH__
-#define _WX_FILEH__
+#ifndef WX_FILE_H_
+#define WX_FILE_H_
 
 #include  "wx/defs.h"
 

@@ -8,8 +8,8 @@
 // Licence:
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_QUANTIZE_H_
-#define _WX_QUANTIZE_H_
+#ifndef WX_QUANTIZE_H_
+#define WX_QUANTIZE_H_
 
 #include "wx/object.h"
 

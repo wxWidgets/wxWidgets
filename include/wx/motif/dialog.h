@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DIALOG_H_
-#define _WX_DIALOG_H_
+#ifndef WX_DIALOG_H_
+#define WX_DIALOG_H_
 
 class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 

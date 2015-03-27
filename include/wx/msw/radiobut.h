@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_RADIOBUT_H_
-#define _WX_RADIOBUT_H_
+#ifndef WX_RADIOBUT_H_
+#define WX_RADIOBUT_H_
 
 #include "wx/msw/ownerdrawnbutton.h"
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WX_PROTO_FILE_H__
-#define __WX_PROTO_FILE_H__
+#ifndef WX_PROTO_FILE_H_
+#define WX_PROTO_FILE_H_
 
 #include "wx/defs.h"
 

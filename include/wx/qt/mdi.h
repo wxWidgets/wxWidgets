@@ -5,8 +5,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_QT_MDI_H_
-#define _WX_QT_MDI_H_
+#ifndef WX_QT_MDI_H_
+#define WX_QT_MDI_H_
 
 class WXDLLIMPEXP_CORE wxMDIParentFrame : public wxMDIParentFrameBase
 {

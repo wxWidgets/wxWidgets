@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SPINBUTT_H_BASE_
-#define _WX_SPINBUTT_H_BASE_
+#ifndef WX_SPINBUTT_H_BASE_
+#define WX_SPINBUTT_H_BASE_
 
 // ----------------------------------------------------------------------------
 // headers

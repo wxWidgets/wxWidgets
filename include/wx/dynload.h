@@ -9,8 +9,8 @@
 // Licence:      wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DYNAMICLOADER_H__
-#define _WX_DYNAMICLOADER_H__
+#ifndef WX_DYNAMICLOADER_H_
+#define WX_DYNAMICLOADER_H_
 
 // ----------------------------------------------------------------------------
 // headers

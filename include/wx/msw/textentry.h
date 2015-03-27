@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_TEXTENTRY_H_
-#define _WX_MSW_TEXTENTRY_H_
+#ifndef WX_MSW_TEXTENTRY_H_
+#define WX_MSW_TEXTENTRY_H_
 
 class wxTextAutoCompleteData; // private class used only by wxTextEntry itself
 

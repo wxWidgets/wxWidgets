@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_RECGUARD_H_
-#define _WX_RECGUARD_H_
+#ifndef WX_RECGUARD_H_
+#define WX_RECGUARD_H_
 
 #include "wx/defs.h"
 

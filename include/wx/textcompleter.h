@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TEXTCOMPLETER_H_
-#define _WX_TEXTCOMPLETER_H_
+#ifndef WX_TEXTCOMPLETER_H_
+#define WX_TEXTCOMPLETER_H_
 
 // ----------------------------------------------------------------------------
 // wxTextCompleter: used by wxTextEnter::AutoComplete()

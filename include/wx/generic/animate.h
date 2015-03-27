@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_ANIMATEH__
-#define _WX_GENERIC_ANIMATEH__
+#ifndef WX_GENERIC_ANIMATE_H_
+#define WX_GENERIC_ANIMATE_H_
 
 #include "wx/bitmap.h"
 

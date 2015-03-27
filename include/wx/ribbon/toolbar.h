@@ -7,8 +7,8 @@
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef _WX_RIBBON_TOOLBAR_H_
-#define _WX_RIBBON_TOOLBAR_H_
+#ifndef WX_RIBBON_TOOLBAR_H_
+#define WX_RIBBON_TOOLBAR_H_
 
 #include "wx/defs.h"
 

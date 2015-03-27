@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TIMECTRL_H_
-#define _WX_TIMECTRL_H_
+#ifndef WX_TIMECTRL_H_
+#define WX_TIMECTRL_H_
 
 #include "wx/defs.h"
 

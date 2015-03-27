@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTKNOTEBOOK_H_
-#define _WX_GTKNOTEBOOK_H_
+#ifndef WX_GTKNOTEBOOK_H_
+#define WX_GTKNOTEBOOK_H_
 
 //-----------------------------------------------------------------------------
 // internal class

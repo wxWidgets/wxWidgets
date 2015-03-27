@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MAC_NONOWNEDWND_H_
-#define _WX_MAC_NONOWNEDWND_H_
+#ifndef WX_MAC_NONOWNEDWND_H_
+#define WX_MAC_NONOWNEDWND_H_
 
 #include "wx/window.h"
 

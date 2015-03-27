@@ -8,8 +8,8 @@
 //              (c) 2003 Stefan Csomor
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_XTI2H__
-#define _WX_XTI2H__
+#ifndef WX_XTI2_H_
+#define WX_XTI2_H_
 
 // ----------------------------------------------------------------------------
 // second part of xti headers, is included from object.h

@@ -8,8 +8,8 @@
  * Licence:     wxWindows licence
  */
 
-#ifndef _WX_OSX_COCOA_CHKCONF_H_
-#define _WX_OSX_COCOA_CHKCONF_H_
+#ifndef WX_OSX_COCOA_CHKCONF_H_
+#define WX_OSX_COCOA_CHKCONF_H_
 
 /* Many wchar functions (and also strnlen(), for some reason) are only
    available since 10.7 so don't use them if we want to build the applications

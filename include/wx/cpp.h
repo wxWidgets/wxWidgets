@@ -9,8 +9,8 @@
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
-#ifndef _WX_CPP_H_
-#define _WX_CPP_H_
+#ifndef WX_CPP_H_
+#define WX_CPP_H_
 
 #include "wx/compiler.h"    /* wxCHECK_XXX_VERSION() macros */
 

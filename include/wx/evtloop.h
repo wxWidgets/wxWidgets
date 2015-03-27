@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_EVTLOOP_H_
-#define _WX_EVTLOOP_H_
+#ifndef WX_EVTLOOP_H_
+#define WX_EVTLOOP_H_
 
 #include "wx/event.h"
 #include "wx/utils.h"

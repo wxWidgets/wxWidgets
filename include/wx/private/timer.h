@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TIMERIMPL_H_BASE_
-#define _WX_TIMERIMPL_H_BASE_
+#ifndef WX_TIMERIMPL_H_BASE_
+#define WX_TIMERIMPL_H_BASE_
 
 #include "wx/defs.h"
 #include "wx/event.h"

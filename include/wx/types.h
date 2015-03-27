@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TYPESH__
-#define _WX_TYPESH__
+#ifndef WX_TYPES_H_
+#define WX_TYPES_H_
 
 // Types of objects
 #define wxTYPE_ANY             0

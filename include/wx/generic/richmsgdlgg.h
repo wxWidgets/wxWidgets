@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_RICHMSGDLGG_H_
-#define _WX_GENERIC_RICHMSGDLGG_H_
+#ifndef WX_GENERIC_RICHMSGDLGG_H_
+#define WX_GENERIC_RICHMSGDLGG_H_
 
 class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 class WXDLLIMPEXP_FWD_CORE wxCollapsiblePane;

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRIVATE_FD_H_
-#define _WX_PRIVATE_FD_H_
+#ifndef WX_PRIVATE_FD_H_
+#define WX_PRIVATE_FD_H_
 
 // standard Linux headers produce many warnings when used with icc so define
 // our own replacements for FD_XXX macros

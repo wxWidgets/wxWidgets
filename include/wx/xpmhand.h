@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_XPMHAND_H_BASE_
-#define _WX_XPMHAND_H_BASE_
+#ifndef WX_XPMHAND_H_BASE_
+#define WX_XPMHAND_H_BASE_
 
 // Only wxMSW currently defines a separate XPM handler, since
 // mostly Windows apps won't need XPMs.

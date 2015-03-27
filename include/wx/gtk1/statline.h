@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKSTATICLINEH__
-#define __GTKSTATICLINEH__
+#ifndef WX_GTKSTATICLINE_H_
+#define WX_GTKSTATICLINE_H_
 
 #include "wx/defs.h"
 

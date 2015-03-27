@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_QT_UTILS_H_
-#define _WX_QT_UTILS_H_
+#ifndef WX_QT_UTILS_H_
+#define WX_QT_UTILS_H_
 
 #include "wx/mousestate.h"
 #include <QtCore/Qt>

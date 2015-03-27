@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FONTENC_H_
-#define _WX_FONTENC_H_
+#ifndef WX_FONTENC_H_
+#define WX_FONTENC_H_
 
 // font encodings
 enum wxFontEncoding

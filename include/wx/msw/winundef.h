@@ -11,8 +11,8 @@
 /* THIS SHOULD NOT BE USED since you might include it once e.g. in window.h,
  * then again _AFTER_ you've included windows.h, in which case it won't work
  * a 2nd time -- JACS
-#ifndef _WX_WINUNDEF_H_
-#define _WX_WINUNDEF_H_
+#ifndef WX_WINUNDEF_H_
+#define WX_WINUNDEF_H_
  */
 
 // ----------------------------------------------------------------------------

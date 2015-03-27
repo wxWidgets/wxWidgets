@@ -11,8 +11,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DRAWERWINDOW_H_
-#define _WX_DRAWERWINDOW_H_
+#ifndef WX_DRAWERWINDOW_H_
+#define WX_DRAWERWINDOW_H_
 
 #include "wx/toplevel.h"
 

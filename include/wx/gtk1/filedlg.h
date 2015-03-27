@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKFILEDLGH__
-#define __GTKFILEDLGH__
+#ifndef WX_GTKFILEDLG_H_
+#define WX_GTKFILEDLG_H_
 
 #include "wx/generic/filedlgg.h"
 

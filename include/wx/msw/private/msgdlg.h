@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_PRIVATE_MSGDLG_H_
-#define _WX_MSW_PRIVATE_MSGDLG_H_
+#ifndef WX_MSW_PRIVATE_MSGDLG_H_
+#define WX_MSW_PRIVATE_MSGDLG_H_
 
 #include "wx/msw/wrapcctl.h"
 #include "wx/scopedarray.h"

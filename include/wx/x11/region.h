@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_REGION_H_
-#define _WX_REGION_H_
+#ifndef WX_REGION_H_
+#define WX_REGION_H_
 
 #include "wx/list.h"
 

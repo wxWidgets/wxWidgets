@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_RICHTEXTBUFFER_H_
-#define _WX_RICHTEXTBUFFER_H_
+#ifndef WX_RICHTEXTBUFFER_H_
+#define WX_RICHTEXTBUFFER_H_
 
 /*
 

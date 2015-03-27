@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SNGLINST_H_
-#define _WX_SNGLINST_H_
+#ifndef WX_SNGLINST_H_
+#define WX_SNGLINST_H_
 
 #if wxUSE_SNGLINST_CHECKER
 

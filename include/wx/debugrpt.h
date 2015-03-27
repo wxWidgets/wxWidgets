@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DEBUGRPT_H_
-#define _WX_DEBUGRPT_H_
+#ifndef WX_DEBUGRPT_H_
+#define WX_DEBUGRPT_H_
 
 #include "wx/defs.h"
 

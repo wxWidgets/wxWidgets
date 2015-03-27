@@ -33,8 +33,8 @@
             wxEventLoop.
  */
 
-#ifndef _WX_PRIVATE_SOCKET_H_
-#define _WX_PRIVATE_SOCKET_H_
+#ifndef WX_PRIVATE_SOCKET_H_
+#define WX_PRIVATE_SOCKET_H_
 
 #include "wx/defs.h"
 

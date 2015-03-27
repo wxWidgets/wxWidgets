@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TESTS_BENCHMARKS_BENCH_H_
-#define _WX_TESTS_BENCHMARKS_BENCH_H_
+#ifndef WX_TESTS_BENCHMARKS_BENCH_H_
+#define WX_TESTS_BENCHMARKS_BENCH_H_
 
 #include "wx/cpp.h"
 #include "wx/crt.h"

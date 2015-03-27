@@ -11,8 +11,8 @@
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
-#ifndef _WX_WXCRTBASE_H_
-#define _WX_WXCRTBASE_H_
+#ifndef WX_WXCRTBASE_H_
+#define WX_WXCRTBASE_H_
 
 /* -------------------------------------------------------------------------
                         headers and missing declarations

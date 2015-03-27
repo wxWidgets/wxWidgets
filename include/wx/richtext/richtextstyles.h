@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_RICHTEXTSTYLES_H_
-#define _WX_RICHTEXTSTYLES_H_
+#ifndef WX_RICHTEXTSTYLES_H_
+#define WX_RICHTEXTSTYLES_H_
 
 /*!
  * Includes

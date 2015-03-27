@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DISPLAY_IMPL_H_BASE_
-#define _WX_DISPLAY_IMPL_H_BASE_
+#ifndef WX_DISPLAY_IMPL_H_BASE_
+#define WX_DISPLAY_IMPL_H_BASE_
 
 #include "wx/gdicmn.h"      // for wxRect
 

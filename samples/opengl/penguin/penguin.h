@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PENGUIN_H_
-#define _WX_PENGUIN_H_
+#ifndef WX_PENGUIN_H_
+#define WX_PENGUIN_H_
 
 
 #include "wx/defs.h"
@@ -103,4 +103,4 @@ private:
     wxDECLARE_EVENT_TABLE();
 };
 
-#endif // #ifndef _WX_PENGUIN_H_
+#endif // #ifndef WX_PENGUIN_H_

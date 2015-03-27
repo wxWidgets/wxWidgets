@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WINDOW_H_
-#define _WX_WINDOW_H_
+#ifndef WX_WINDOW_H_
+#define WX_WINDOW_H_
 
 #include "wx/settings.h"        // solely for wxSystemColour
 

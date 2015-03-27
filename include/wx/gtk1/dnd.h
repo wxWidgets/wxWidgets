@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKDNDH__
-#define __GTKDNDH__
+#ifndef WX_GTKDND_H_
+#define WX_GTKDND_H_
 
 #if wxUSE_DRAG_AND_DROP
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FILEDIRPICKER_H_BASE_
-#define _WX_FILEDIRPICKER_H_BASE_
+#ifndef WX_FILEDIRPICKER_H_BASE_
+#define WX_FILEDIRPICKER_H_BASE_
 
 #include "wx/defs.h"
 

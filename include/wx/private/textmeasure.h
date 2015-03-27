@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRIVATE_TEXTMEASURE_H_
-#define _WX_PRIVATE_TEXTMEASURE_H_
+#ifndef WX_PRIVATE_TEXTMEASURE_H_
+#define WX_PRIVATE_TEXTMEASURE_H_
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxFont;

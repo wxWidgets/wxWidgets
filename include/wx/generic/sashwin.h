@@ -10,8 +10,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SASHWIN_H_G_
-#define _WX_SASHWIN_H_G_
+#ifndef WX_SASHWIN_H_G_
+#define WX_SASHWIN_H_G_
 
 #if wxUSE_SASH
 

@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CHECKLST_H_
-#define _WX_CHECKLST_H_
+#ifndef WX_CHECKLST_H_
+#define WX_CHECKLST_H_
 
 #include "wx/listbox.h"
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_LAYWIN_H_BASE_
-#define _WX_LAYWIN_H_BASE_
+#ifndef WX_LAYWIN_H_BASE_
+#define WX_LAYWIN_H_BASE_
 
 #include "wx/generic/laywin.h"
 

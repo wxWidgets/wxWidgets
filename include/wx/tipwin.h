@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TIPWIN_H_
-#define _WX_TIPWIN_H_
+#ifndef WX_TIPWIN_H_
+#define WX_TIPWIN_H_
 
 #if wxUSE_TIPWINDOW
 

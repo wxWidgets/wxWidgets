@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SPINBUTT_H_
-#define _WX_SPINBUTT_H_
+#ifndef WX_SPINBUTT_H_
+#define WX_SPINBUTT_H_
 
 #include "wx/control.h"
 #include "wx/event.h"

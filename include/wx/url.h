@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_URL_H
-#define _WX_URL_H
+#ifndef WX_URL_H
+#define WX_URL_H
 
 #include "wx/defs.h"
 

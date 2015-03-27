@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MODALHOOK_H_
-#define _WX_MODALHOOK_H_
+#ifndef WX_MODALHOOK_H_
+#define WX_MODALHOOK_H_
 
 #include "wx/vector.h"
 

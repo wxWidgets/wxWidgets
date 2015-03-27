@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CMDPROC_H_
-#define _WX_CMDPROC_H_
+#ifndef WX_CMDPROC_H_
+#define WX_CMDPROC_H_
 
 #include "wx/defs.h"
 #include "wx/object.h"

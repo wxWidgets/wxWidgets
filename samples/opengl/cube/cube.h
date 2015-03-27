@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CUBE_H_
-#define _WX_CUBE_H_
+#ifndef WX_CUBE_H_
+#define WX_CUBE_H_
 
 #include "wx/glcanvas.h"
 

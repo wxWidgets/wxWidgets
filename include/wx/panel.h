@@ -9,8 +9,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PANEL_H_BASE_
-#define _WX_PANEL_H_BASE_
+#ifndef WX_PANEL_H_BASE_
+#define WX_PANEL_H_BASE_
 
 // ----------------------------------------------------------------------------
 // headers and forward declarations

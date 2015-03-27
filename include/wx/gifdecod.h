@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GIFDECOD_H_
-#define _WX_GIFDECOD_H_
+#ifndef WX_GIFDECOD_H_
+#define WX_GIFDECOD_H_
 
 #include "wx/defs.h"
 

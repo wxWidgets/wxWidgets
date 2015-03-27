@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SSTREAM_H_
-#define _WX_SSTREAM_H_
+#ifndef WX_SSTREAM_H_
+#define WX_SSTREAM_H_
 
 #include "wx/stream.h"
 

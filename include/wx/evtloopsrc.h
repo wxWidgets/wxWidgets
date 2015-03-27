@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_EVTLOOPSRC_H_
-#define _WX_EVTLOOPSRC_H_
+#ifndef WX_EVTLOOPSRC_H_
+#define WX_EVTLOOPSRC_H_
 
 // Include the header to get wxUSE_EVENTLOOP_SOURCE definition from it.
 #include "wx/evtloop.h"

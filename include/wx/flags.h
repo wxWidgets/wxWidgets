@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SETH__
-#define _WX_SETH__
+#ifndef WX_SET_H_
+#define WX_SET_H_
 
 // wxBitset should be applied to an enum, then this can be used like
 // bitwise operators but keeps the type safety and information, the

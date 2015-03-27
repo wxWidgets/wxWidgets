@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_OSX_COCOA_PRIVATE_MARKUPTOATTR_H_
-#define _WX_OSX_COCOA_PRIVATE_MARKUPTOATTR_H_
+#ifndef WX_OSX_COCOA_PRIVATE_MARKUPTOATTR_H_
+#define WX_OSX_COCOA_PRIVATE_MARKUPTOATTR_H_
 
 #include "wx/private/markupparserattr.h"
 

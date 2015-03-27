@@ -8,8 +8,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef _WX_XML_H_
-#define _WX_XML_H_
+#ifndef WX_XML_H_
+#define WX_XML_H_
 
 #include "wx/defs.h"
 

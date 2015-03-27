@@ -12,8 +12,8 @@
 // wxFSVolume represents a volume/drive in a file system
 // ----------------------------------------------------------------------------
 
-#ifndef _WX_FSVOLUME_H_
-#define _WX_FSVOLUME_H_
+#ifndef WX_FSVOLUME_H_
+#define WX_FSVOLUME_H_
 
 #include "wx/defs.h"
 

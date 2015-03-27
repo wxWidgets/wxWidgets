@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_REGION_H__
-#define _WX_GENERIC_REGION_H__
+#ifndef WX_GENERIC_REGION_H_
+#define WX_GENERIC_REGION_H_
 
 class WXDLLIMPEXP_CORE wxRegionGeneric : public wxRegionBase
 {

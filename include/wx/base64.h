@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_BASE64_H_
-#define _WX_BASE64_H_
+#ifndef WX_BASE64_H_
+#define WX_BASE64_H_
 
 #if wxUSE_BASE64
 

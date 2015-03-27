@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PERSIST_H_
-#define _WX_PERSIST_H_
+#ifndef WX_PERSIST_H_
+#define WX_PERSIST_H_
 
 #include "wx/string.h"
 #include "wx/hashmap.h"

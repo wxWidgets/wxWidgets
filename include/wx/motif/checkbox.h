@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CHECKBOX_H_
-#define _WX_CHECKBOX_H_
+#ifndef WX_CHECKBOX_H_
+#define WX_CHECKBOX_H_
 
 // Checkbox item (single checkbox)
 class WXDLLIMPEXP_CORE wxCheckBox: public wxCheckBoxBase

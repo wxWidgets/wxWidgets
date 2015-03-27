@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DATEEVT_H_
-#define _WX_DATEEVT_H_
+#ifndef WX_DATEEVT_H_
+#define WX_DATEEVT_H_
 
 #include "wx/event.h"
 #include "wx/datetime.h"

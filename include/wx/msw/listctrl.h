@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_LISTCTRL_H_
-#define _WX_LISTCTRL_H_
+#ifndef WX_LISTCTRL_H_
+#define WX_LISTCTRL_H_
 
 #include "wx/textctrl.h"
 #include "wx/dynarray.h"

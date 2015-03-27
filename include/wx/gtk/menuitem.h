@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTKMENUITEM_H_
-#define _WX_GTKMENUITEM_H_
+#ifndef WX_GTKMENUITEM_H_
+#define WX_GTKMENUITEM_H_
 
 #include "wx/bitmap.h"
 

@@ -10,8 +10,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_OSX_EVTLOOP_H_
-#define _WX_OSX_EVTLOOP_H_
+#ifndef WX_OSX_EVTLOOP_H_
+#define WX_OSX_EVTLOOP_H_
 
 #ifdef __WXOSX_COCOA__
     #include "wx/osx/cocoa/evtloop.h"

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_NOTEBOOK_H_
-#define _WX_NOTEBOOK_H_
+#ifndef WX_NOTEBOOK_H_
+#define WX_NOTEBOOK_H_
 
 // ----------------------------------------------------------------------------
 // headers

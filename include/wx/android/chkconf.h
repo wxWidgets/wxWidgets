@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_ANDROID_CHKCONF_H_
-#define _WX_ANDROID_CHKCONF_H_
+#ifndef WX_ANDROID_CHKCONF_H_
+#define WX_ANDROID_CHKCONF_H_
 
 // For Qt under Android, use default configuration procedure as most features
 // should be supported (see documentation for more information)

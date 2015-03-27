@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_COLOUR_H_BASE_
-#define _WX_COLOUR_H_BASE_
+#ifndef WX_COLOUR_H_BASE_
+#define WX_COLOUR_H_BASE_
 
 #include "wx/defs.h"
 #include "wx/gdiobj.h"

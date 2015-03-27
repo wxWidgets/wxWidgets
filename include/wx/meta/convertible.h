@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_META_CONVERTIBLE_H_
-#define _WX_META_CONVERTIBLE_H_
+#ifndef WX_META_CONVERTIBLE_H_
+#define WX_META_CONVERTIBLE_H_
 
 //
 // Introduce an extra class to make this header compilable with g++3.2

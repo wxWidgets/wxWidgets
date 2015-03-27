@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_RICHTEXTCTRL_H_
-#define _WX_RICHTEXTCTRL_H_
+#ifndef WX_RICHTEXTCTRL_H_
+#define WX_RICHTEXTCTRL_H_
 
 #include "wx/richtext/richtextbuffer.h"
 

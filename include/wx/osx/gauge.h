@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GAUGE_H_
-#define _WX_GAUGE_H_
+#ifndef WX_GAUGE_H_
+#define WX_GAUGE_H_
 
 #include "wx/control.h"
 

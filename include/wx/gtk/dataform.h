@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_DATAFORM_H
-#define _WX_GTK_DATAFORM_H
+#ifndef WX_GTK_DATAFORM_H
+#define WX_GTK_DATAFORM_H
 
 class WXDLLIMPEXP_CORE wxDataFormat
 {

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ARTBROWS_H__
-#define __ARTBROWS_H__
+#ifndef ARTBROWS_H_
+#define ARTBROWS_H_
 
 #include "wx/dialog.h"
 #include "wx/artprov.h"

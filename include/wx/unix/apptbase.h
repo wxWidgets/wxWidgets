@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIX_APPTBASE_H_
-#define _WX_UNIX_APPTBASE_H_
+#ifndef WX_UNIX_APPTBASE_H_
+#define WX_UNIX_APPTBASE_H_
 
 #include "wx/evtloop.h"
 #include "wx/evtloopsrc.h"

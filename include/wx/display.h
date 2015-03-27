@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DISPLAY_H_BASE_
-#define _WX_DISPLAY_H_BASE_
+#ifndef WX_DISPLAY_H_BASE_
+#define WX_DISPLAY_H_BASE_
 
 // NB: no #if wxUSE_DISPLAY here, the display geometry part of this class (but
 //     not the video mode stuff) is always available but if wxUSE_DISPLAY == 0

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DYNLIB_H__
-#define _WX_DYNLIB_H__
+#ifndef WX_DYNLIB_H_
+#define WX_DYNLIB_H_
 
 #include "wx/defs.h"
 

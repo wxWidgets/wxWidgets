@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_PANEL_H_
-#define _WX_MSW_PANEL_H_
+#ifndef WX_MSW_PANEL_H_
+#define WX_MSW_PANEL_H_
 
 class WXDLLIMPEXP_FWD_CORE wxBrush;
 

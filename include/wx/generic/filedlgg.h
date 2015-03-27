@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FILEDLGG_H_
-#define _WX_FILEDLGG_H_
+#ifndef WX_FILEDLGG_H_
+#define WX_FILEDLGG_H_
 
 #include "wx/listctrl.h"
 #include "wx/datetime.h"

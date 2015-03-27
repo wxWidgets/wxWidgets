@@ -11,8 +11,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DIRDLGG_H_
-#define _WX_DIRDLGG_H_
+#ifndef WX_DIRDLGG_H_
+#define WX_DIRDLGG_H_
 
 class WXDLLIMPEXP_FWD_CORE wxGenericDirCtrl;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;

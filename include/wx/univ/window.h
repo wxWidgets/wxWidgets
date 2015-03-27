@@ -10,8 +10,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIV_WINDOW_H_
-#define _WX_UNIV_WINDOW_H_
+#ifndef WX_UNIV_WINDOW_H_
+#define WX_UNIV_WINDOW_H_
 
 #include "wx/bitmap.h"      // for m_bitmapBg
 

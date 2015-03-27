@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKCHOICEH__
-#define __GTKCHOICEH__
+#ifndef WX_GTKCHOICE_H_
+#define WX_GTKCHOICE_H_
 
 class WXDLLIMPEXP_FWD_BASE wxSortedArrayString;
 class WXDLLIMPEXP_FWD_BASE wxArrayString;

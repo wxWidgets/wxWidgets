@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DIRDLG_H_BASE_
-#define _WX_DIRDLG_H_BASE_
+#ifndef WX_DIRDLG_H_BASE_
+#define WX_DIRDLG_H_BASE_
 
 #if wxUSE_DIRDLG
 

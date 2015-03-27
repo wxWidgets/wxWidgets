@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CLRPICKER_H_BASE_
-#define _WX_CLRPICKER_H_BASE_
+#ifndef WX_CLRPICKER_H_BASE_
+#define WX_CLRPICKER_H_BASE_
 
 #include "wx/defs.h"
 

@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TESTBSTREAM_H__
-#define _WX_TESTBSTREAM_H__
+#ifndef WX_TESTBSTREAM_H_
+#define WX_TESTBSTREAM_H_
 
 #include "wx/cppunit.h"
 

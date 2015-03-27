@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSGQUEUE_H_
-#define _WX_MSGQUEUE_H_
+#ifndef WX_MSGQUEUE_H_
+#define WX_MSGQUEUE_H_
 
 // ----------------------------------------------------------------------------
 // headers

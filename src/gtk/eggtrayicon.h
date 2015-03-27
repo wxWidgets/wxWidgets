@@ -23,8 +23,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __EGG_TRAY_ICON_H__
-#define __EGG_TRAY_ICON_H__
+#ifndef EGG_TRAY_ICON_H_
+#define EGG_TRAY_ICON_H_
 
 #include <gtk/gtk.h>
 #ifdef GDK_WINDOWING_X11

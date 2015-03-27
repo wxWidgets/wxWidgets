@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DCSVG_H_
-#define _WX_DCSVG_H_
+#ifndef WX_DCSVG_H_
+#define WX_DCSVG_H_
 
 #include "wx/string.h"
 #include "wx/dc.h"

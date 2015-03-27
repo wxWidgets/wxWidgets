@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MOTIF_TEXTENTRY_H_
-#define _WX_MOTIF_TEXTENTRY_H_
+#ifndef WX_MOTIF_TEXTENTRY_H_
+#define WX_MOTIF_TEXTENTRY_H_
 
 // ----------------------------------------------------------------------------
 // wxTextEntry wraps XmTextXXX() methods suitable for single-line controls

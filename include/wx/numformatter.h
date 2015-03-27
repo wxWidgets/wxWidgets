@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_NUMFORMATTER_H_
-#define _WX_NUMFORMATTER_H_
+#ifndef WX_NUMFORMATTER_H_
+#define WX_NUMFORMATTER_H_
 
 #include "wx/string.h"
 

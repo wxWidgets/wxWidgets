@@ -10,8 +10,8 @@
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
-#ifndef _WX_MSW_GCCPRIV_H_
-#define _WX_MSW_GCCPRIV_H_
+#ifndef WX_MSW_GCCPRIV_H_
+#define WX_MSW_GCCPRIV_H_
 
 #if defined(__MINGW32__) && !defined(__GNUWIN32__)
     #define __GNUWIN32__

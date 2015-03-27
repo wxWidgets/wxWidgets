@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////// */
 
-#ifndef _WX_GTK_TREE_ENTRY_H_
-#define _WX_GTK_TREE_ENTRY_H_
+#ifndef WX_GTK_TREE_ENTRY_H_
+#define WX_GTK_TREE_ENTRY_H_
 
 #ifdef __cplusplus
 extern "C" {

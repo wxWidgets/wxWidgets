@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_THREAD_H_
-#define _WX_THREAD_H_
+#ifndef WX_THREAD_H_
+#define WX_THREAD_H_
 
 // ----------------------------------------------------------------------------
 // headers

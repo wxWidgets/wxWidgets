@@ -10,8 +10,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIV_THEME_H_
-#define _WX_UNIV_THEME_H_
+#ifndef WX_UNIV_THEME_H_
+#define WX_UNIV_THEME_H_
 
 #include "wx/string.h"
 

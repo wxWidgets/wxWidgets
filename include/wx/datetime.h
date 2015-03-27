@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DATETIME_H
-#define _WX_DATETIME_H
+#ifndef WX_DATETIME_H
+#define WX_DATETIME_H
 
 #include "wx/defs.h"
 

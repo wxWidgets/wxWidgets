@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CLNTDATAH__
-#define _WX_CLNTDATAH__
+#ifndef WX_CLNTDATA_H_
+#define WX_CLNTDATA_H_
 
 #include "wx/defs.h"
 #include "wx/string.h"

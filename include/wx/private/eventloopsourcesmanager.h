@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRIVATE_EVENTLOOPSOURCESMANAGER_H_
-#define _WX_PRIVATE_EVENTLOOPSOURCESMANAGER_H_
+#ifndef WX_PRIVATE_EVENTLOOPSOURCESMANAGER_H_
+#define WX_PRIVATE_EVENTLOOPSOURCESMANAGER_H_
 
 // For pulling in the value of wxUSE_EVENTLOOP_SOURCE
 #include "wx/evtloop.h"

@@ -5,8 +5,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FONTDATA_H_
-#define _WX_FONTDATA_H_
+#ifndef WX_FONTDATA_H_
+#define WX_FONTDATA_H_
 
 #include "wx/font.h"
 #include "wx/colour.h"

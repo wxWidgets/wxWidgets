@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_PRIVATE_WIDTHCALC_H_
-#define _WX_GENERIC_PRIVATE_WIDTHCALC_H_
+#ifndef WX_GENERIC_PRIVATE_WIDTHCALC_H_
+#define WX_GENERIC_PRIVATE_WIDTHCALC_H_
 
 #include "wx/defs.h"
 

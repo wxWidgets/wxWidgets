@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WXCHAR_H_
-#define _WX_WXCHAR_H_
+#ifndef WX_WXCHAR_H_
+#define WX_WXCHAR_H_
 
 // This header used to define CRT functions wrappers in wxWidgets 2.8. This is
 // now done in (headers included by) wx/crt.h, so include it for compatibility:

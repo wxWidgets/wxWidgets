@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_QT_FRAME_H_
-#define _WX_QT_FRAME_H_
+#ifndef WX_QT_FRAME_H_
+#define WX_QT_FRAME_H_
 
 #include "wx/frame.h"
 #include <QtWidgets/QMainWindow>

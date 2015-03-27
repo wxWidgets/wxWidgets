@@ -11,8 +11,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DIRCTRL_H_
-#define _WX_DIRCTRL_H_
+#ifndef WX_DIRCTRL_H_
+#define WX_DIRCTRL_H_
 
 #if wxUSE_DIRDLG
 

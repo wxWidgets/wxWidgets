@@ -16,8 +16,8 @@
 // headers
 // ---------------------------------------------------------------------------
 
-#ifndef _WX_MACCARBONHID_H_
-#define _WX_MACCARBONHID_H_
+#ifndef WX_MACCARBONHID_H_
+#define WX_MACCARBONHID_H_
 
 #include "wx/defs.h"
 #include "wx/string.h"

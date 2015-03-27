@@ -18,8 +18,8 @@
  *     change in the future.
  */
 
-#ifndef _WX_MEMCONF_H_
-#define _WX_MEMCONF_H_
+#ifndef WX_MEMCONF_H_
+#define WX_MEMCONF_H_
 
 #if wxUSE_CONFIG
 

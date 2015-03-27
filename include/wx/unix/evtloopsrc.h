@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIX_EVTLOOPSRC_H_
-#define _WX_UNIX_EVTLOOPSRC_H_
+#ifndef WX_UNIX_EVTLOOPSRC_H_
+#define WX_UNIX_EVTLOOPSRC_H_
 
 class wxFDIODispatcher;
 class wxFDIOHandler;

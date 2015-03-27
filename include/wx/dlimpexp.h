@@ -12,8 +12,8 @@
     This is a C file, not C++ one, do not use C++ comments here!
  */
 
-#ifndef _WX_DLIMPEXP_H_
-#define _WX_DLIMPEXP_H_
+#ifndef WX_DLIMPEXP_H_
+#define WX_DLIMPEXP_H_
 
 #if defined(HAVE_VISIBILITY)
 #    define WXEXPORT __attribute__ ((visibility("default")))

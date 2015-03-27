@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_INIT_H_
-#define _WX_MSW_INIT_H_
+#ifndef WX_MSW_INIT_H_
+#define WX_MSW_INIT_H_
 
 // ----------------------------------------------------------------------------
 // Windows-specific wxEntry() overload and wxIMPLEMENT_WXWIN_MAIN definition

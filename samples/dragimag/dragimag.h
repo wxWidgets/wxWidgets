@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DRAGIMAGSAMPLE_
-#define _WX_DRAGIMAGSAMPLE_
+#ifndef WX_DRAGIMAGSAMPLE_
+#define WX_DRAGIMAGSAMPLE_
 
 // derived classes
 

@@ -5,8 +5,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_QT_DATAOBJ2_H_
-#define _WX_QT_DATAOBJ2_H_
+#ifndef WX_QT_DATAOBJ2_H_
+#define WX_QT_DATAOBJ2_H_
 
 class WXDLLIMPEXP_CORE wxBitmapDataObject : public wxBitmapDataObjectBase
 {

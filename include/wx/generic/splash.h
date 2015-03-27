@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SPLASH_H_
-#define _WX_SPLASH_H_
+#ifndef WX_SPLASH_H_
+#define WX_SPLASH_H_
 
 #include "wx/bitmap.h"
 #include "wx/eventfilter.h"

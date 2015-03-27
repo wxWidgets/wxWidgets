@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_ARTPROV_H_
-#define _WX_ARTPROV_H_
+#ifndef WX_ARTPROV_H_
+#define WX_ARTPROV_H_
 
 #include "wx/string.h"
 #include "wx/bitmap.h"

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_MSGDLGG_H_
-#define _WX_GENERIC_MSGDLGG_H_
+#ifndef WX_GENERIC_MSGDLGG_H_
+#define WX_GENERIC_MSGDLGG_H_
 
 class WXDLLIMPEXP_FWD_CORE wxSizer;
 

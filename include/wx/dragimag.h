@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DRAGIMAG_H_BASE_
-#define _WX_DRAGIMAG_H_BASE_
+#ifndef WX_DRAGIMAG_H_BASE_
+#define WX_DRAGIMAG_H_BASE_
 
 #if wxUSE_DRAGIMAGE
 

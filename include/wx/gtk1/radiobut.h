@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKRADIOBUTTONH__
-#define __GTKRADIOBUTTONH__
+#ifndef WX_GTKRADIOBUTTON_H_
+#define WX_GTKRADIOBUTTON_H_
 
 //-----------------------------------------------------------------------------
 // wxRadioButton

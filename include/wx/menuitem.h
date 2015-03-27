@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MENUITEM_H_BASE_
-#define _WX_MENUITEM_H_BASE_
+#ifndef WX_MENUITEM_H_BASE_
+#define WX_MENUITEM_H_BASE_
 
 #include "wx/defs.h"
 

@@ -36,8 +36,8 @@ See mod_*.cpp and htmlwin.cpp for example :-)
 */
 
 
-#ifndef _WX_FORCELNK_H_
-#define _WX_FORCELNK_H_
+#ifndef WX_FORCELNK_H_
+#define WX_FORCELNK_H_
 
 #include "wx/link.h"
 

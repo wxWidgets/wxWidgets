@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_HTMLPREP_H_
-#define _WX_HTMLPREP_H_
+#ifndef WX_HTMLPREP_H_
+#define WX_HTMLPREP_H_
 
 #include "wx/defs.h"
 

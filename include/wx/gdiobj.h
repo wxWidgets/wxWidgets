@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GDIOBJ_H_BASE_
-#define _WX_GDIOBJ_H_BASE_
+#ifndef WX_GDIOBJ_H_BASE_
+#define WX_GDIOBJ_H_BASE_
 
 #include "wx/object.h"
 

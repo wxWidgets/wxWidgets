@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKFONTH__
-#define __GTKFONTH__
+#ifndef WX_GTKFONT_H_
+#define WX_GTKFONT_H_
 
 #include "wx/hash.h"
 

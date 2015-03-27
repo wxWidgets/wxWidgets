@@ -10,8 +10,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRINTDLG_H_
-#define _WX_PRINTDLG_H_
+#ifndef WX_PRINTDLG_H_
+#define WX_PRINTDLG_H_
 
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
