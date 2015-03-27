@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FONTDLG_H_BASE_
-#define _WX_FONTDLG_H_BASE_
+#ifndef WX_FONTDLG_H_BASE_
+#define WX_FONTDLG_H_BASE_
 
 #include "wx/defs.h"            // for wxUSE_FONTDLG
 

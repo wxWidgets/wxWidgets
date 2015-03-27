@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GENERICDATAVIEWCTRLH__
-#define __GENERICDATAVIEWCTRLH__
+#ifndef WX_GENERICDATAVIEWCTRL_H_
+#define WX_GENERICDATAVIEWCTRL_H_
 
 #include "wx/defs.h"
 #include "wx/object.h"

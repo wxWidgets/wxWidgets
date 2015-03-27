@@ -7,8 +7,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __GTKBRUSHH__
-#define __GTKBRUSHH__
+#ifndef WX_GTKBRUSH_H_
+#define WX_GTKBRUSH_H_
 
 #include "wx/defs.h"
 #include "wx/object.h"

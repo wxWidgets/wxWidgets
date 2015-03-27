@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WRAPWIN_H_
-#define _WX_WRAPWIN_H_
+#ifndef WX_WRAPWIN_H_
+#define WX_WRAPWIN_H_
 
 #include "wx/platform.h"
 

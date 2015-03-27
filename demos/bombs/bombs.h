@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DEMOS_BOMBS_BOMBS_H_
-#define _WX_DEMOS_BOMBS_BOMBS_H_
+#ifndef WX_DEMOS_BOMBS_BOMBS_H_
+#define WX_DEMOS_BOMBS_BOMBS_H_
 
 #include "game.h"
 
@@ -124,5 +124,5 @@ private:
 #define BOMBS_FONT wxFont(14, wxROMAN, wxNORMAL, wxNORMAL)
 #endif
 
-#endif // #ifndef _WX_DEMOS_BOMBS_BOMBS_H_
+#endif // #ifndef WX_DEMOS_BOMBS_BOMBS_H_
 

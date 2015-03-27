@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_APP_H_BASE_
-#define _WX_APP_H_BASE_
+#ifndef WX_APP_H_BASE_
+#define WX_APP_H_BASE_
 
 // ----------------------------------------------------------------------------
 // headers we have to include here

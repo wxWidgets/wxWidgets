@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_FILEPICKER_H_
-#define _WX_GTK_FILEPICKER_H_
+#ifndef WX_GTK_FILEPICKER_H_
+#define WX_GTK_FILEPICKER_H_
 
 // since GtkColorButton is available only for GTK+ >= 2.4,
 // we need to use generic versions if we detect (at runtime)

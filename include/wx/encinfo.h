@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_ENCINFO_H_
-#define _WX_ENCINFO_H_
+#ifndef WX_ENCINFO_H_
+#define WX_ENCINFO_H_
 
 #include "wx/string.h"
 

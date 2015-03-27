@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PROTOCOL_LOG_H_
-#define _WX_PROTOCOL_LOG_H_
+#ifndef WX_PROTOCOL_LOG_H_
+#define WX_PROTOCOL_LOG_H_
 
 #include "wx/string.h"
 

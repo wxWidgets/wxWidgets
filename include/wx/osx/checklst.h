@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MAC_CHECKLST_H_
-#define _WX_MAC_CHECKLST_H_
+#ifndef WX_MAC_CHECKLST_H_
+#define WX_MAC_CHECKLST_H_
 
 class WXDLLIMPEXP_CORE wxCheckListBox : public wxCheckListBoxBase
 {

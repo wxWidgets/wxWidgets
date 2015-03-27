@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __PRINTPSH__
-#define __PRINTPSH__
+#ifndef WX_PRINTPS_H_
+#define WX_PRINTPS_H_
 
 #include "wx/prntbase.h"
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PROPGRID_PROPGRIDPAGESTATE_H_
-#define _WX_PROPGRID_PROPGRIDPAGESTATE_H_
+#ifndef WX_PROPGRID_PROPGRIDPAGESTATE_H_
+#define WX_PROPGRID_PROPGRIDPAGESTATE_H_
 
 #include "wx/defs.h"
 

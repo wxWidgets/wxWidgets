@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DIALUP_H
-#define _WX_DIALUP_H
+#ifndef WX_DIALUP_H
+#define WX_DIALUP_H
 
 #if wxUSE_DIALUP_MANAGER
 

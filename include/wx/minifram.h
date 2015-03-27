@@ -8,8 +8,8 @@
 // Copyright:   (c) 2014 wxWidgets dev team
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MINIFRAM_H_BASE_
-#define _WX_MINIFRAM_H_BASE_
+#ifndef WX_MINIFRAM_H_BASE_
+#define WX_MINIFRAM_H_BASE_
 
 #include "wx/defs.h"
 

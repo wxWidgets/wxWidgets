@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKWINDOWH__
-#define __GTKWINDOWH__
+#ifndef WX_GTKWINDOW_H_
+#define WX_GTKWINDOW_H_
 
 typedef struct _GtkTooltips GtkTooltips;
 #ifdef HAVE_XIM

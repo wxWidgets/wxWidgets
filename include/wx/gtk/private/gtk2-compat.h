@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_PRIVATE_COMPAT_H_
-#define _WX_GTK_PRIVATE_COMPAT_H_
+#ifndef WX_GTK_PRIVATE_COMPAT_H_
+#define WX_GTK_PRIVATE_COMPAT_H_
 
 // ----------------------------------------------------------------------------
 // Implementations of new accessors for older GTK+ versions

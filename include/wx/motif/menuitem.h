@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MOTIF_MENUITEM_H
-#define _WX_MOTIF_MENUITEM_H
+#ifndef WX_MOTIF_MENUITEM_H
+#define WX_MOTIF_MENUITEM_H
 
 #include "wx/bitmap.h"
 

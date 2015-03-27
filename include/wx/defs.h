@@ -10,8 +10,8 @@
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
-#ifndef _WX_DEFS_H_
-#define _WX_DEFS_H_
+#ifndef WX_DEFS_H_
+#define WX_DEFS_H_
 
 /*  ---------------------------------------------------------------------------- */
 /*  compiler and OS identification */

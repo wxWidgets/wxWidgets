@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __FILESYS_H__
-#define __FILESYS_H__
+#ifndef WX_FILESYS_H_
+#define WX_FILESYS_H_
 
 #include "wx/defs.h"
 

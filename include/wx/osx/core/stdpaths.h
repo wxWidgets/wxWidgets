@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MAC_STDPATHS_H_
-#define _WX_MAC_STDPATHS_H_
+#ifndef WX_MAC_STDPATHS_H_
+#define WX_MAC_STDPATHS_H_
 
 struct __CFBundle;
 struct __CFURL;

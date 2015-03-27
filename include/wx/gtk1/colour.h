@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKCOLOURH__
-#define __GTKCOLOURH__
+#ifndef WX_GTKCOLOUR_H_
+#define WX_GTKCOLOUR_H_
 
 #include "wx/defs.h"
 #include "wx/object.h"

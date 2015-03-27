@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DCPRINT_H_
-#define _WX_DCPRINT_H_
+#ifndef WX_DCPRINT_H_
+#define WX_DCPRINT_H_
 
 #include "wx/dc.h"
 #include "wx/dcgraph.h"

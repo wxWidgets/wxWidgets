@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TASKBARBUTTON_H_
-#define _WX_TASKBARBUTTON_H_
+#ifndef WX_TASKBARBUTTON_H_
+#define WX_TASKBARBUTTON_H_
 
 #include "wx/defs.h"
 

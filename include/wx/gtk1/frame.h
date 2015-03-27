@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKFRAMEH__
-#define __GTKFRAMEH__
+#ifndef WX_GTKFRAME_H_
+#define WX_GTKFRAME_H_
 
 //-----------------------------------------------------------------------------
 // classes

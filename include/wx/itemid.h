@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_ITEMID_H_
-#define _WX_ITEMID_H_
+#ifndef WX_ITEMID_H_
+#define WX_ITEMID_H_
 
 // ----------------------------------------------------------------------------
 // wxItemId: an opaque item identifier used with wx{Tree,TreeList,DataView}Ctrl.

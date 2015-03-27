@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_COMBOCTRL_H_
-#define _WX_GENERIC_COMBOCTRL_H_
+#ifndef WX_GENERIC_COMBOCTRL_H_
+#define WX_GENERIC_COMBOCTRL_H_
 
 #if wxUSE_COMBOCTRL
 
@@ -126,7 +126,7 @@ private:
 };
 
 
-#ifndef _WX_COMBOCONTROL_H_
+#ifndef WX_COMBOCONTROL_H_
 
 // If native wxComboCtrl was not defined, then prepare a simple
 // front-end so that wxRTTI works as expected.

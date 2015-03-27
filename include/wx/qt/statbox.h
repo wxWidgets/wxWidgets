@@ -5,8 +5,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_QT_STATBOX_H_
-#define _WX_QT_STATBOX_H_
+#ifndef WX_QT_STATBOX_H_
+#define WX_QT_STATBOX_H_
 
 #include <QtWidgets/QGroupBox>
 

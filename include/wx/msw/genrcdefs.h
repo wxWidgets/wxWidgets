@@ -8,8 +8,8 @@
 
 #define EMIT(line) line
 
-EMIT(#ifndef _WX_RCDEFS_H)
-EMIT(#define _WX_RCDEFS_H)
+EMIT(#ifndef WX_RCDEFS_H)
+EMIT(#define WX_RCDEFS_H)
 
 #ifdef _MSC_FULL_VER
 #if _MSC_FULL_VER < 140040130

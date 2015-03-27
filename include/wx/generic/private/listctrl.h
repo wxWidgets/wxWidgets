@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_LISTCTRL_PRIVATE_H_
-#define _WX_GENERIC_LISTCTRL_PRIVATE_H_
+#ifndef WX_GENERIC_LISTCTRL_PRIVATE_H_
+#define WX_GENERIC_LISTCTRL_PRIVATE_H_
 
 #include "wx/defs.h"
 

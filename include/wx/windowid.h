@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WINDOWID_H_
-#define _WX_WINDOWID_H_
+#ifndef WX_WINDOWID_H_
+#define WX_WINDOWID_H_
 
 // NB: do not include defs.h as we are included from it
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DIALOG_H_BASE_
-#define _WX_DIALOG_H_BASE_
+#ifndef WX_DIALOG_H_BASE_
+#define WX_DIALOG_H_BASE_
 
 #include "wx/toplevel.h"
 #include "wx/containr.h"

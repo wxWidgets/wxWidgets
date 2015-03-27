@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PICKERBASE_H_BASE_
-#define _WX_PICKERBASE_H_BASE_
+#ifndef WX_PICKERBASE_H_BASE_
+#define WX_PICKERBASE_H_BASE_
 
 #include "wx/control.h"
 #include "wx/sizer.h"

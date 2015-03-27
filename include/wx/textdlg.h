@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TEXTDLG_H_BASE_
-#define _WX_TEXTDLG_H_BASE_
+#ifndef WX_TEXTDLG_H_BASE_
+#define WX_TEXTDLG_H_BASE_
 
 #include "wx/generic/textdlgg.h"
 

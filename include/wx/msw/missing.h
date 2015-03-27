@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MISSING_H_
-#define _WX_MISSING_H_
+#ifndef WX_MISSING_H_
+#define WX_MISSING_H_
 
 #ifndef WM_CHANGEUISTATE
     #define WM_CHANGEUISTATE    0x0127

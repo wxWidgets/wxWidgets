@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_OBJECTH__
-#define _WX_OBJECTH__
+#ifndef WX_OBJECT_H_
+#define WX_OBJECT_H_
 
 // ----------------------------------------------------------------------------
 // headers

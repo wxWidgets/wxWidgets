@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_META_MOVABLE_H_
-#define _WX_META_MOVABLE_H_
+#ifndef WX_META_MOVABLE_H_
+#define WX_META_MOVABLE_H_
 
 #include "wx/meta/pod.h"
 #include "wx/string.h" // for wxIsMovable<wxString> specialization

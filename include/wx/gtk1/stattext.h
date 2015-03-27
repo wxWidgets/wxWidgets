@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKSTATICTEXTH__
-#define __GTKSTATICTEXTH__
+#ifndef WX_GTKSTATICTEXT_H_
+#define WX_GTKSTATICTEXT_H_
 
 //-----------------------------------------------------------------------------
 // wxStaticText

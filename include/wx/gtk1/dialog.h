@@ -7,8 +7,8 @@
 // Licence:           wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKDIALOGH__
-#define __GTKDIALOGH__
+#ifndef WX_GTKDIALOG_H_
+#define WX_GTKDIALOG_H_
 
 //-----------------------------------------------------------------------------
 // wxDialog

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MEMTEXT_H
-#define _WX_MEMTEXT_H
+#ifndef WX_MEMTEXT_H
+#define WX_MEMTEXT_H
 
 #include "wx/defs.h"
 

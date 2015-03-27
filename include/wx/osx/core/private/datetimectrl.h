@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_OSX_CORE_PRIVATE_DATETIMECTRL_H_
-#define _WX_OSX_CORE_PRIVATE_DATETIMECTRL_H_
+#ifndef WX_OSX_CORE_PRIVATE_DATETIMECTRL_H_
+#define WX_OSX_CORE_PRIVATE_DATETIMECTRL_H_
 
 #if wxUSE_DATEPICKCTRL
 

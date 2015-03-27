@@ -10,8 +10,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRIVATE_COCOA_H_
-#define _WX_PRIVATE_COCOA_H_
+#ifndef WX_PRIVATE_COCOA_H_
+#define WX_PRIVATE_COCOA_H_
 
 #include <ApplicationServices/ApplicationServices.h>
 

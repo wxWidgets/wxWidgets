@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CHOICECE_H_BASE_
-#define _WX_CHOICECE_H_BASE_
+#ifndef WX_CHOICECE_H_BASE_
+#define WX_CHOICECE_H_BASE_
 
 // ----------------------------------------------------------------------------
 // headers

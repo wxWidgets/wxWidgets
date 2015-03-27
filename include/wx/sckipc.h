@@ -12,8 +12,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SCKIPC_H
-#define _WX_SCKIPC_H
+#ifndef WX_SCKIPC_H
+#define WX_SCKIPC_H
 
 #include "wx/defs.h"
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FRAME_H_
-#define _WX_FRAME_H_
+#ifndef WX_FRAME_H_
+#define WX_FRAME_H_
 
 #include "wx/toolbar.h"
 #include "wx/accel.h"

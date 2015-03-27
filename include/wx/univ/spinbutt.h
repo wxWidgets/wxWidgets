@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIV_SPINBUTT_H_
-#define _WX_UNIV_SPINBUTT_H_
+#ifndef WX_UNIV_SPINBUTT_H_
+#define WX_UNIV_SPINBUTT_H_
 
 #include "wx/univ/scrarrow.h"
 

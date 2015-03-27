@@ -7,8 +7,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __BMPBUTTONH__
-#define __BMPBUTTONH__
+#ifndef WX_GTKBMPBUTTON_H_
+#define WX_GTKBMPBUTTON_H_
 
 // ----------------------------------------------------------------------------
 // wxBitmapButton

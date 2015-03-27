@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_EVTLOOP_H_
-#define _WX_GTK_EVTLOOP_H_
+#ifndef WX_GTK_EVTLOOP_H_
+#define WX_GTK_EVTLOOP_H_
 
 // ----------------------------------------------------------------------------
 // wxGUIEventLoop for wxGTK

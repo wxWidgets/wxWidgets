@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_LISTBASE_H_BASE_
-#define _WX_LISTBASE_H_BASE_
+#ifndef WX_LISTBASE_H_BASE_
+#define WX_LISTBASE_H_BASE_
 
 #include "wx/colour.h"
 #include "wx/font.h"

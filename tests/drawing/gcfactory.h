@@ -7,8 +7,8 @@
 // Copyright:   (c) 2014 Ellié Computing <opensource@elliecomputing.com>
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TESTS_GCFACTORY_H_
-#define _WX_TESTS_GCFACTORY_H_
+#ifndef WX_TESTS_GCFACTORY_H_
+#define WX_TESTS_GCFACTORY_H_
 
 // wxCairoRenderer::CreateMeasuringContext() is not implement for wxX11
 #if wxUSE_GRAPHICS_CONTEXT && !defined(__WXX11__)
@@ -68,4 +68,4 @@ typedef void (*DestroyDrawingTestLifeCycleFunction) (DrawingTestGCFactory* lc);
 
 #endif // wxUSE_TEST_GC_DRAWING
 
-#endif // #ifndef _WX_TESTS_GCFACTORY_H_
+#endif // #ifndef WX_TESTS_GCFACTORY_H_

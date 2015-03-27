@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TEXTCTRL_H_BASE_
-#define _WX_TEXTCTRL_H_BASE_
+#ifndef WX_TEXTCTRL_H_BASE_
+#define WX_TEXTCTRL_H_BASE_
 
 // ----------------------------------------------------------------------------
 // headers

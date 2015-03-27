@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKSTATICBOXH__
-#define __GTKSTATICBOXH__
+#ifndef WX_GTKSTATICBOX_H_
+#define WX_GTKSTATICBOX_H_
 
 //-----------------------------------------------------------------------------
 // wxStaticBox

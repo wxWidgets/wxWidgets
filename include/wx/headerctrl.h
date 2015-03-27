@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_HEADERCTRL_H_
-#define _WX_HEADERCTRL_H_
+#ifndef WX_HEADERCTRL_H_
+#define WX_HEADERCTRL_H_
 
 #include "wx/control.h"
 

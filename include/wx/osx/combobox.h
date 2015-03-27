@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_COMBOBOX_H_
-#define _WX_COMBOBOX_H_
+#ifndef WX_COMBOBOX_H_
+#define WX_COMBOBOX_H_
 
 #include "wx/containr.h"
 #include "wx/choice.h"

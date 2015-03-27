@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PEN_H_
-#define _WX_PEN_H_
+#ifndef WX_PEN_H_
+#define WX_PEN_H_
 
 #include "wx/gdiobj.h"
 #include "wx/colour.h"

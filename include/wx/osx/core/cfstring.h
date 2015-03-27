@@ -9,8 +9,8 @@
 // Usage:       Darwin (base library)
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WX_CFSTRINGHOLDER_H__
-#define __WX_CFSTRINGHOLDER_H__
+#ifndef WX_CFSTRINGHOLDER_H_
+#define WX_CFSTRINGHOLDER_H_
 
 #include <CoreFoundation/CFString.h>
 

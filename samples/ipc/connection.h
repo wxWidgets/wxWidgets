@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SAMPLE_IPC_CONNECTION_H_
-#define _WX_SAMPLE_IPC_CONNECTION_H_
+#ifndef WX_SAMPLE_IPC_CONNECTION_H_
+#define WX_SAMPLE_IPC_CONNECTION_H_
 
 // This simple connection class adds logging of all operations
 class MyConnectionBase : public wxConnection

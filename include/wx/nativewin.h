@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_NATIVEWIN_H_
-#define _WX_NATIVEWIN_H_
+#ifndef WX_NATIVEWIN_H_
+#define WX_NATIVEWIN_H_
 
 #include "wx/toplevel.h"
 

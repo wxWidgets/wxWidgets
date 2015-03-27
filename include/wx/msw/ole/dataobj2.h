@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_OLE_DATAOBJ2_H
-#define _WX_MSW_OLE_DATAOBJ2_H
+#ifndef WX_MSW_OLE_DATAOBJ2_H
+#define WX_MSW_OLE_DATAOBJ2_H
 
 // ----------------------------------------------------------------------------
 // wxBitmapDataObject is a specialization of wxDataObject for bitmap data

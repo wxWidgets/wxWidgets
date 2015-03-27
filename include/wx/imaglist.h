@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_IMAGLIST_H_BASE_
-#define _WX_IMAGLIST_H_BASE_
+#ifndef WX_IMAGLIST_H_BASE_
+#define WX_IMAGLIST_H_BASE_
 
 #include "wx/defs.h"
 

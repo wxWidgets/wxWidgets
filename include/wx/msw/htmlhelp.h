@@ -8,8 +8,8 @@
  * Licence:     wxWindows licence
  */
 
-#ifndef __HTMLHELP_H__
-#define __HTMLHELP_H__
+#ifndef WX_HTMLHELP_H_
+#define WX_HTMLHELP_H_
 
 #define HH_DISPLAY_TOPIC        0x00
 #define HH_HELP_FINDER          0x00

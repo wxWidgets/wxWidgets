@@ -7,8 +7,8 @@
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-#ifndef _WX_HTTP_H
-#define _WX_HTTP_H
+#ifndef WX_HTTP_H
+#define WX_HTTP_H
 
 #include "wx/defs.h"
 

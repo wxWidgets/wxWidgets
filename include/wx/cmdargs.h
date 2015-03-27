@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CMDARGS_H_
-#define _WX_CMDARGS_H_
+#ifndef WX_CMDARGS_H_
+#define WX_CMDARGS_H_
 
 #include "wx/arrstr.h"
 

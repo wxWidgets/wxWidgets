@@ -7,8 +7,8 @@
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef _WX_RIBBON_PANEL_H_
-#define _WX_RIBBON_PANEL_H_
+#ifndef WX_RIBBON_PANEL_H_
+#define WX_RIBBON_PANEL_H_
 
 #include "wx/defs.h"
 

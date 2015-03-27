@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_LAYOUT_H_
-#define _WX_LAYOUT_H_
+#ifndef WX_LAYOUT_H_
+#define WX_LAYOUT_H_
 
 // ----------------------------------------------------------------------------
 // headers

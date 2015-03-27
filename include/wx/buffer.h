@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_BUFFER_H
-#define _WX_BUFFER_H
+#ifndef WX_BUFFER_H
+#define WX_BUFFER_H
 
 #include "wx/chartype.h"
 #include "wx/wxcrtbase.h"

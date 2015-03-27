@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DATAVIEWCTRL_CORE_H_
-#define _WX_DATAVIEWCTRL_CORE_H_
+#ifndef WX_DATAVIEWCTRL_CORE_H_
+#define WX_DATAVIEWCTRL_CORE_H_
 
 #include "wx/dataview.h"
 

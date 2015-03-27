@@ -5,8 +5,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_QT_EVTLOOP_H_
-#define _WX_QT_EVTLOOP_H_
+#ifndef WX_QT_EVTLOOP_H_
+#define WX_QT_EVTLOOP_H_
 
 #include <QtCore/QTimer>
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_FONTPICKER_H_
-#define _WX_GTK_FONTPICKER_H_
+#ifndef WX_GTK_FONTPICKER_H_
+#define WX_GTK_FONTPICKER_H_
 
 #include "wx/button.h"
 

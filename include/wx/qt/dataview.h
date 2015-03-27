@@ -5,8 +5,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_QT_DATAVIEW_H_
-#define _WX_QT_DATAVIEW_H_
+#ifndef WX_QT_DATAVIEW_H_
+#define WX_QT_DATAVIEW_H_
 
 class WXDLLIMPEXP_ADV wxDataViewColumn: public wxDataViewColumnBase
 {

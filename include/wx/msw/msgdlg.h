@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSGBOXDLG_H_
-#define _WX_MSGBOXDLG_H_
+#ifndef WX_MSGBOXDLG_H_
+#define WX_MSGBOXDLG_H_
 
 class WXDLLIMPEXP_CORE wxMessageDialog : public wxMessageDialogBase
 {

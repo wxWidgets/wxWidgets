@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TOKENZRH
-#define _WX_TOKENZRH
+#ifndef WX_TOKENZR_H_
+#define WX_TOKENZR_H_
 
 #include "wx/object.h"
 #include "wx/string.h"

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_SEH_H_
-#define _WX_MSW_SEH_H_
+#ifndef WX_MSW_SEH_H_
+#define WX_MSW_SEH_H_
 
 #if wxUSE_ON_FATAL_EXCEPTION
 

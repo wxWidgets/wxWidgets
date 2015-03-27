@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 //////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DEFSEXT_H_
-#define _WX_DEFSEXT_H_
+#ifndef WX_DEFSEXT_H_
+#define WX_DEFSEXT_H_
 
 //----------------------------------------------------------------------------
 // headers

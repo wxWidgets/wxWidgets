@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_META_REMOVEREF_H_
-#define _WX_META_REMOVEREF_H_
+#ifndef WX_META_REMOVEREF_H_
+#define WX_META_REMOVEREF_H_
 
 // wxRemoveRef<> is similar to C++11 std::remove_reference<> but works with all
 // compilers (but, to compensate for this, doesn't work with rvalue references).

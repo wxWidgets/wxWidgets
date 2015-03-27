@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CONTROL_H_
-#define _WX_CONTROL_H_
+#ifndef WX_CONTROL_H_
+#define WX_CONTROL_H_
 
 WXDLLIMPEXP_DATA_CORE(extern const char) wxControlNameStr[];
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_IPCBASEH__
-#define _WX_IPCBASEH__
+#ifndef WX_IPCBASE_H_
+#define WX_IPCBASE_H_
 
 #include "wx/defs.h"
 #include "wx/object.h"

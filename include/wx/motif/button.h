@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_BUTTON_H_
-#define _WX_BUTTON_H_
+#ifndef WX_BUTTON_H_
+#define WX_BUTTON_H_
 
 // Pushbutton
 class WXDLLIMPEXP_CORE wxButton: public wxButtonBase

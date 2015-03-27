@@ -6,8 +6,8 @@
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TESTS_CONTROLS_PICKERBASETEST_H_
-#define _WX_TESTS_CONTROLS_PICKERBASETEST_H_
+#ifndef WX_TESTS_CONTROLS_PICKERBASETEST_H_
+#define WX_TESTS_CONTROLS_PICKERBASETEST_H_
 
 class PickerBaseTestCase
 {

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WUPDLOCK_H_
-#define _WX_WUPDLOCK_H_
+#ifndef WX_WUPDLOCK_H_
+#define WX_WUPDLOCK_H_
 
 #include "wx/window.h"
 

@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_EFFECTS_H_
-#define _WX_EFFECTS_H_
+#ifndef WX_EFFECTS_H_
+#define WX_EFFECTS_H_
 
 // this class is deprecated and will be removed in the next wx version
 //

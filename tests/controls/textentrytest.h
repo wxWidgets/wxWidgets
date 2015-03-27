@@ -6,8 +6,8 @@
 // Copyright:   (c) 2007, 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TESTS_CONTROLS_TEXTENTRYTEST_H_
-#define _WX_TESTS_CONTROLS_TEXTENTRYTEST_H_
+#ifndef WX_TESTS_CONTROLS_TEXTENTRYTEST_H_
+#define WX_TESTS_CONTROLS_TEXTENTRYTEST_H_
 
 class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 

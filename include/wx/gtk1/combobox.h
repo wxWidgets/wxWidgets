@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKCOMBOBOXH__
-#define __GTKCOMBOBOXH__
+#ifndef WX_GTKCOMBOBOX_H_
+#define WX_GTKCOMBOBOX_H_
 
 #include "wx/defs.h"
 

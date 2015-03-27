@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_FONTDLGG_H
-#define _WX_GENERIC_FONTDLGG_H
+#ifndef WX_GENERIC_FONTDLGG_H
+#define WX_GENERIC_FONTDLGG_H
 
 #include "wx/gdicmn.h"
 #include "wx/font.h"

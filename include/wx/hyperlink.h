@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_HYPERLINK_H_
-#define _WX_HYPERLINK_H_
+#ifndef WX_HYPERLINK_H_
+#define WX_HYPERLINK_H_
 
 #include "wx/defs.h"
 

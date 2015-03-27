@@ -9,8 +9,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef _WX_UNIV_COMBOBOX_H_
-#define _WX_UNIV_COMBOBOX_H_
+#ifndef WX_UNIV_COMBOBOX_H_
+#define WX_UNIV_COMBOBOX_H_
 
 #include "wx/combo.h"
 

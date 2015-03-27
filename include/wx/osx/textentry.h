@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_OSX_TEXTENTRY_H_
-#define _WX_OSX_TEXTENTRY_H_
+#ifndef WX_OSX_TEXTENTRY_H_
+#define WX_OSX_TEXTENTRY_H_
 
 #if wxUSE_SYSTEM_OPTIONS
     // set this to 'true' if you want to use the 'classic' MLTE-based implementation

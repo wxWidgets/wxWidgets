@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WXSIZER_H__
-#define __WXSIZER_H__
+#ifndef WX_SIZER_H_
+#define WX_SIZER_H_
 
 #include "wx/defs.h"
 

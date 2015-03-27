@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SOUND_H_
-#define _WX_SOUND_H_
+#ifndef WX_SOUND_H_
+#define WX_SOUND_H_
 
 #if wxUSE_SOUND
 

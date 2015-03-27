@@ -5,8 +5,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_QT_PRINTQT_H_
-#define _WX_QT_PRINTQT_H_
+#ifndef WX_QT_PRINTQT_H_
+#define WX_QT_PRINTQT_H_
 
 #include "wx/prntbase.h"
 

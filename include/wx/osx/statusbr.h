@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_STATBAR_H_
-#define _WX_STATBAR_H_
+#ifndef WX_STATBAR_H_
+#define WX_STATBAR_H_
 
 class WXDLLIMPEXP_CORE wxStatusBarMac : public wxStatusBarGeneric
 {

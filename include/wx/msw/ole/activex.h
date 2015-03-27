@@ -12,8 +12,8 @@
 // Definitions
 // ============================================================================
 
-#ifndef _WX_MSW_OLE_ACTIVEXCONTAINER_H_
-#define _WX_MSW_OLE_ACTIVEXCONTAINER_H_
+#ifndef WX_MSW_OLE_ACTIVEXCONTAINER_H_
+#define WX_MSW_OLE_ACTIVEXCONTAINER_H_
 
 #if wxUSE_ACTIVEX
 

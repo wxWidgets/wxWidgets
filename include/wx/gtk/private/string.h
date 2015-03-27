@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_PRIVATE_STRING_H_
-#define _WX_GTK_PRIVATE_STRING_H_
+#ifndef WX_GTK_PRIVATE_STRING_H_
+#define WX_GTK_PRIVATE_STRING_H_
 
 // ----------------------------------------------------------------------------
 // Convenience class for g_freeing a gchar* on scope exit automatically

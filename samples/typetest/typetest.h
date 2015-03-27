@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TYPETEST_H_
-#define _WX_TYPETEST_H_
+#ifndef WX_TYPETEST_H_
+#define WX_TYPETEST_H_
 
 // Define a new application type
 class MyApp: public wxApp

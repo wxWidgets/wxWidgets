@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_POPUPWIN_H_BASE_
-#define _WX_POPUPWIN_H_BASE_
+#ifndef WX_POPUPWIN_H_BASE_
+#define WX_POPUPWIN_H_BASE_
 
 #include "wx/defs.h"
 

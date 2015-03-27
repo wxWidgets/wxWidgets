@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DEBUG_H_
-#define _WX_DEBUG_H_
+#ifndef WX_DEBUG_H_
+#define WX_DEBUG_H_
 
 #if !defined(__WXWINCE__)
     #include  <assert.h>

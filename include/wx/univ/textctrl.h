@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIV_TEXTCTRL_H_
-#define _WX_UNIV_TEXTCTRL_H_
+#ifndef WX_UNIV_TEXTCTRL_H_
+#define WX_UNIV_TEXTCTRL_H_
 
 class WXDLLIMPEXP_FWD_CORE wxCaret;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrlCommandProcessor;

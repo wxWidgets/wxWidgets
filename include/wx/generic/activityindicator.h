@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_ACTIVITYINDICATOR_H_
-#define _WX_GENERIC_ACTIVITYINDICATOR_H_
+#ifndef WX_GENERIC_ACTIVITYINDICATOR_H_
+#define WX_GENERIC_ACTIVITYINDICATOR_H_
 
 #ifndef wxHAS_NATIVE_ACTIVITYINDICATOR
     // This is the only implementation we have, so call it accordingly.

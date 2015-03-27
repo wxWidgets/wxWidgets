@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TASKBAR_H_
-#define _WX_TASKBAR_H_
+#ifndef WX_TASKBAR_H_
+#define WX_TASKBAR_H_
 
 #include "wx/icon.h"
 

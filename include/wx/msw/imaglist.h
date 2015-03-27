@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_IMAGLIST_H_
-#define _WX_IMAGLIST_H_
+#ifndef WX_IMAGLIST_H_
+#define WX_IMAGLIST_H_
 
 #include "wx/bitmap.h"
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TXTSTREAM_H_
-#define _WX_TXTSTREAM_H_
+#ifndef WX_TXTSTREAM_H_
+#define WX_TXTSTREAM_H_
 
 #include "wx/stream.h"
 #include "wx/convauto.h"

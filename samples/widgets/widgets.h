@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SAMPLE_WIDGETS_H_
-#define _WX_SAMPLE_WIDGETS_H_
+#ifndef WX_SAMPLE_WIDGETS_H_
+#define WX_SAMPLE_WIDGETS_H_
 
 #if wxUSE_TREEBOOK && !defined(__WXHANDHELD__)
     #include "wx/treebook.h"

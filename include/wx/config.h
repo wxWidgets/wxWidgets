@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CONFIG_H_BASE_
-#define _WX_CONFIG_H_BASE_
+#ifndef WX_CONFIG_H_BASE_
+#define WX_CONFIG_H_BASE_
 
 #include "wx/confbase.h"
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIX_FONTUTIL_H_
-#define _WX_UNIX_FONTUTIL_H_
+#ifndef WX_UNIX_FONTUTIL_H_
+#define WX_UNIX_FONTUTIL_H_
 
 #ifdef __X__
     typedef WXFontStructPtr wxNativeFont;

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_STRVARARG_H_
-#define _WX_STRVARARG_H_
+#ifndef WX_STRVARARG_H_
+#define WX_STRVARARG_H_
 
 #include "wx/platform.h"
 

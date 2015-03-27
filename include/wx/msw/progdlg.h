@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PROGDLG_H_
-#define _WX_PROGDLG_H_
+#ifndef WX_PROGDLG_H_
+#define WX_PROGDLG_H_
 
 class wxProgressDialogTaskRunner;
 class wxProgressDialogSharedData;

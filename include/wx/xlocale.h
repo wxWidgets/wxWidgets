@@ -23,8 +23,8 @@
             - time: strftime_l(), strptime_l()
  */
 
-#ifndef _WX_XLOCALE_H_
-#define _WX_XLOCALE_H_
+#ifndef WX_XLOCALE_H_
+#define WX_XLOCALE_H_
 
 #include "wx/defs.h"    // wxUSE_XLOCALE
 

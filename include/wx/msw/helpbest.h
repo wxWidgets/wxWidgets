@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_HELPBEST_H_
-#define _WX_HELPBEST_H_
+#ifndef WX_HELPBEST_H_
+#define WX_HELPBEST_H_
 
 #if wxUSE_HELP && wxUSE_MS_HTML_HELP \
     && wxUSE_WXHTML_HELP && !defined(__WXUNIVERSAL__)

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIV_STATLINE_H_
-#define _WX_UNIV_STATLINE_H_
+#ifndef WX_UNIV_STATLINE_H_
+#define WX_UNIV_STATLINE_H_
 
 class WXDLLIMPEXP_CORE wxStaticLine : public wxStaticLineBase
 {

@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WEBVIEW_FILE_HANDLER_H_
-#define _WX_WEBVIEW_FILE_HANDLER_H_
+#ifndef WX_WEBVIEW_FILE_HANDLER_H_
+#define WX_WEBVIEW_FILE_HANDLER_H_
 
 #include "wx/setup.h"
 

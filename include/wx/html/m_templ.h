@@ -18,8 +18,8 @@ I STRONGLY recommend reading and understanding these macros!!
 */
 
 
-#ifndef _WX_M_TEMPL_H_
-#define _WX_M_TEMPL_H_
+#ifndef WX_M_TEMPL_H_
+#define WX_M_TEMPL_H_
 
 #include "wx/defs.h"
 

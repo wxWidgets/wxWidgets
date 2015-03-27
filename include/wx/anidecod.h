@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_ANIDECOD_H
-#define _WX_ANIDECOD_H
+#ifndef WX_ANIDECOD_H
+#define WX_ANIDECOD_H
 
 #include "wx/defs.h"
 

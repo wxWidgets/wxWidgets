@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_OSX_CORE_EVTLOOP_H_
-#define _WX_OSX_CORE_EVTLOOP_H_
+#ifndef WX_OSX_CORE_EVTLOOP_H_
+#define WX_OSX_CORE_EVTLOOP_H_
 
 DECLARE_WXOSX_OPAQUE_CFREF( CFRunLoop )
 DECLARE_WXOSX_OPAQUE_CFREF( CFRunLoopObserver )

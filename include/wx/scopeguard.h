@@ -15,8 +15,8 @@
     http://www.cuj.com/documents/cujcexp1812alexandr/
  */
 
-#ifndef _WX_SCOPEGUARD_H_
-#define _WX_SCOPEGUARD_H_
+#ifndef WX_SCOPEGUARD_H_
+#define WX_SCOPEGUARD_H_
 
 #include "wx/defs.h"
 

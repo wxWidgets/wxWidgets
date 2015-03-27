@@ -19,8 +19,8 @@ references during linking. For now some generic dialogs are added in static buil
 of MSW, MAC and OS2
 */
 
-#ifndef __DIALOGSH__
-#define __DIALOGSH__
+#ifndef DIALOGS_H_
+#define DIALOGS_H_
 
 #ifdef __WXUNIVERSAL__
     #define USE_WXUNIVERSAL 1

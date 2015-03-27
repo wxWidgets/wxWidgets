@@ -10,8 +10,8 @@
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
-#ifndef _WX_MATH_H_
-#define _WX_MATH_H_
+#ifndef WX_MATH_H_
+#define WX_MATH_H_
 
 #include "wx/defs.h"
 

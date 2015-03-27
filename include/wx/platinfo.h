@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PLATINFO_H_
-#define _WX_PLATINFO_H_
+#ifndef WX_PLATINFO_H_
+#define WX_PLATINFO_H_
 
 #include "wx/string.h"
 

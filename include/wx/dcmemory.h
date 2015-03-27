@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DCMEMORY_H_BASE_
-#define _WX_DCMEMORY_H_BASE_
+#ifndef WX_DCMEMORY_H_BASE_
+#define WX_DCMEMORY_H_BASE_
 
 #include "wx/dc.h"
 #include "wx/bitmap.h"

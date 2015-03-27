@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FONTMAPPER_H_
-#define _WX_FONTMAPPER_H_
+#ifndef WX_FONTMAPPER_H_
+#define WX_FONTMAPPER_H_
 
 // ----------------------------------------------------------------------------
 // headers

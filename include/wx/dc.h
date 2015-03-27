@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DC_H_BASE_
-#define _WX_DC_H_BASE_
+#ifndef WX_DC_H_BASE_
+#define WX_DC_H_BASE_
 
 // ----------------------------------------------------------------------------
 // headers which we must include here

@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_REGION_H_
-#define _WX_GTK_REGION_H_
+#ifndef WX_GTK_REGION_H_
+#define WX_GTK_REGION_H_
 
 #ifdef __WXGTK3__
 typedef struct _cairo_region cairo_region_t;

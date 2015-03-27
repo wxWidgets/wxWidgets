@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_VALNUM_H_
-#define _WX_VALNUM_H_
+#ifndef WX_VALNUM_H_
+#define WX_VALNUM_H_
 
 #include "wx/defs.h"
 

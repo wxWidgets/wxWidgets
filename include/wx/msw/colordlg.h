@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_COLORDLG_H_
-#define _WX_COLORDLG_H_
+#ifndef WX_COLORDLG_H_
+#define WX_COLORDLG_H_
 
 #include "wx/dialog.h"
 

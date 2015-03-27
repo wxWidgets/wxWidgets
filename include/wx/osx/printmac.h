@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRINTWIN_H_
-#define _WX_PRINTWIN_H_
+#ifndef WX_PRINTWIN_H_
+#define WX_PRINTWIN_H_
 
 #include "wx/prntbase.h"
 

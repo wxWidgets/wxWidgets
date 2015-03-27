@@ -11,8 +11,8 @@
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
-#ifndef _WX_FEATURES_H_
-#define _WX_FEATURES_H_
+#ifndef WX_FEATURES_H_
+#define WX_FEATURES_H_
 
 /*  radio menu items are currently not implemented in wxMotif, use this
     symbol (kept for compatibility from the time when they were not implemented

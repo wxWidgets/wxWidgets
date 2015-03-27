@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_STATLINE_H_
-#define _WX_MSW_STATLINE_H_
+#ifndef WX_MSW_STATLINE_H_
+#define WX_MSW_STATLINE_H_
 
 // ----------------------------------------------------------------------------
 // wxStaticLine

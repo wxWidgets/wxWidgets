@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SEARCHCTRL_H_BASE_
-#define _WX_SEARCHCTRL_H_BASE_
+#ifndef WX_SEARCHCTRL_H_BASE_
+#define WX_SEARCHCTRL_H_BASE_
 
 #include "wx/defs.h"
 

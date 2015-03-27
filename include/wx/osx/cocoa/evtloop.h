@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_OSX_COCOA_EVTLOOP_H_
-#define _WX_OSX_COCOA_EVTLOOP_H_
+#ifndef WX_OSX_COCOA_EVTLOOP_H_
+#define WX_OSX_COCOA_EVTLOOP_H_
 
 class WXDLLIMPEXP_BASE wxGUIEventLoop : public wxCFEventLoop
 {

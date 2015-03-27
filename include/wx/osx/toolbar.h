@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TOOLBAR_H_
-#define _WX_TOOLBAR_H_
+#ifndef WX_TOOLBAR_H_
+#define WX_TOOLBAR_H_
 
 #if wxUSE_TOOLBAR
 

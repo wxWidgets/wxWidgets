@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_HEADERCOL_H_
-#define _WX_HEADERCOL_H_
+#ifndef WX_HEADERCOL_H_
+#define WX_HEADERCOL_H_
 
 #include "wx/bitmap.h"
 

@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef GTK_CALCTRL_H__
-#define GTK_CALCTRL_H__
+#ifndef WX_GTK_CALCTRL_H_
+#define WX_GTK_CALCTRL_H_
 
 class WXDLLIMPEXP_ADV wxGtkCalendarCtrl : public wxCalendarCtrlBase
 {

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_CALCTRLG_H
-#define _WX_GENERIC_CALCTRLG_H
+#ifndef WX_GENERIC_CALCTRLG_H
+#define WX_GENERIC_CALCTRLG_H
 
 #include "wx/control.h"         // the base class
 #include "wx/dcclient.h"        // for wxPaintDC

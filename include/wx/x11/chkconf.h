@@ -10,8 +10,8 @@
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
-#ifndef _WX_X11_CHKCONF_H_
-#define _WX_X11_CHKCONF_H_
+#ifndef WX_X11_CHKCONF_H_
+#define WX_X11_CHKCONF_H_
 
 /* wxPalette is always needed */
 #if !wxUSE_PALETTE

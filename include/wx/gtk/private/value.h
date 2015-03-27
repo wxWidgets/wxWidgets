@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_PRIVATE_VALUE_H_
-#define _WX_GTK_PRIVATE_VALUE_H_
+#ifndef WX_GTK_PRIVATE_VALUE_H_
+#define WX_GTK_PRIVATE_VALUE_H_
 
 // ----------------------------------------------------------------------------
 // wxGtkValue: RAII wrapper for GValue

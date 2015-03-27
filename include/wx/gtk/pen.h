@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_PEN_H_
-#define _WX_GTK_PEN_H_
+#ifndef WX_GTK_PEN_H_
+#define WX_GTK_PEN_H_
 
 typedef signed char wxGTKDash;
 

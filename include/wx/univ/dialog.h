@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIV_DIALOG_H_
-#define _WX_UNIV_DIALOG_H_
+#ifndef WX_UNIV_DIALOG_H_
+#define WX_UNIV_DIALOG_H_
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxDialogNameStr[];
 class WXDLLIMPEXP_FWD_CORE wxWindowDisabler;

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GEOMETRY_H_
-#define _WX_GEOMETRY_H_
+#ifndef WX_GEOMETRY_H_
+#define WX_GEOMETRY_H_
 
 #include "wx/defs.h"
 

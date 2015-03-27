@@ -11,8 +11,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_LAYWIN_H_G_
-#define _WX_LAYWIN_H_G_
+#ifndef WX_LAYWIN_H_G_
+#define WX_LAYWIN_H_G_
 
 #if wxUSE_SASH
     #include "wx/sashwin.h"

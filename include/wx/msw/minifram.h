@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MINIFRAM_H_
-#define _WX_MINIFRAM_H_
+#ifndef WX_MINIFRAM_H_
+#define WX_MINIFRAM_H_
 
 #include "wx/frame.h"
 

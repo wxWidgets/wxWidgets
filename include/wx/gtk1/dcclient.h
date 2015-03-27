@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKDCCLIENTH__
-#define __GTKDCCLIENTH__
+#ifndef WX_GTKDCCLIENT_H_
+#define WX_GTKDCCLIENT_H_
 
 #include "wx/gtk1/dc.h"
 #include "wx/window.h"

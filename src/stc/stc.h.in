@@ -27,8 +27,8 @@
                verbatim from src.h.in.
  */
 
-#ifndef _WX_STC_STC_H_
-#define _WX_STC_STC_H_
+#ifndef WX_STC_STC_H_
+#define WX_STC_STC_H_
 
 #include "wx/defs.h"
 

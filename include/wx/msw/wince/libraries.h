@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_LIBRARIES_H_
-#define _WX_LIBRARIES_H_
+#ifndef WX_LIBRARIES_H_
+#define WX_LIBRARIES_H_
 
 // NB: According to Microsoft, it is up to the OEM to decide whether
 //     some of libraries will be included in the system or not. For example,

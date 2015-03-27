@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DCMIRROR_H_
-#define _WX_DCMIRROR_H_
+#ifndef WX_DCMIRROR_H_
+#define WX_DCMIRROR_H_
 
 #include "wx/dc.h"
 

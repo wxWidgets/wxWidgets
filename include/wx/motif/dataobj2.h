@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MOTIF_DATAOBJ2_H_
-#define _WX_MOTIF_DATAOBJ2_H_
+#ifndef WX_MOTIF_DATAOBJ2_H_
+#define WX_MOTIF_DATAOBJ2_H_
 
 // ----------------------------------------------------------------------------
 // wxBitmapDataObject is a specialization of wxDataObject for bitmaps

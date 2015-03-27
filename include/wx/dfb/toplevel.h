@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DFB_TOPLEVEL_H_
-#define _WX_DFB_TOPLEVEL_H_
+#ifndef WX_DFB_TOPLEVEL_H_
+#define WX_DFB_TOPLEVEL_H_
 
 //-----------------------------------------------------------------------------
 // wxTopLevelWindowDFB

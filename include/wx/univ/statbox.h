@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIV_STATBOX_H_
-#define _WX_UNIV_STATBOX_H_
+#ifndef WX_UNIV_STATBOX_H_
+#define WX_UNIV_STATBOX_H_
 
 class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
 {

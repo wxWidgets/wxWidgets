@@ -8,8 +8,8 @@
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FRAMEMANAGER_H_
-#define _WX_FRAMEMANAGER_H_
+#ifndef WX_FRAMEMANAGER_H_
+#define WX_FRAMEMANAGER_H_
 
 // ----------------------------------------------------------------------------
 // headers

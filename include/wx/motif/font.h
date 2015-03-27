@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FONT_H_
-#define _WX_FONT_H_
+#ifndef WX_FONT_H_
+#define WX_FONT_H_
 
 #if __WXMOTIF20__ && !__WXLESSTIF__
     #define wxMOTIF_USE_RENDER_TABLE 1

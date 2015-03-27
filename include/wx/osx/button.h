@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_OSX_BUTTON_H_
-#define _WX_OSX_BUTTON_H_
+#ifndef WX_OSX_BUTTON_H_
+#define WX_OSX_BUTTON_H_
 
 #include "wx/control.h"
 #include "wx/gdicmn.h"

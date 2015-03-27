@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_ACTIVITYINDICATOR_H_
-#define _WX_ACTIVITYINDICATOR_H_
+#ifndef WX_ACTIVITYINDICATOR_H_
+#define WX_ACTIVITYINDICATOR_H_
 
 #include "wx/defs.h"
 

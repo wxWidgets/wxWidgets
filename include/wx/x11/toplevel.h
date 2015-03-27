@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_X11_TOPLEVEL_H_
-#define _WX_X11_TOPLEVEL_H_
+#ifndef WX_X11_TOPLEVEL_H_
+#define WX_X11_TOPLEVEL_H_
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowX11

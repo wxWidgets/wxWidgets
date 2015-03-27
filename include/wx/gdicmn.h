@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GDICMNH__
-#define _WX_GDICMNH__
+#ifndef WX_GDICMN_H_
+#define WX_GDICMN_H_
 
 // ---------------------------------------------------------------------------
 // headers

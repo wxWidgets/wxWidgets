@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKDCMEMORYH__
-#define __GTKDCMEMORYH__
+#ifndef WX_GTKDCMEMORY_H_
+#define WX_GTKDCMEMORY_H_
 
 #include "wx/dcmemory.h"
 #include "wx/gtk1/dcclient.h"

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_NONOWNEDWND_H_
-#define _WX_GTK_NONOWNEDWND_H_
+#ifndef WX_GTK_NONOWNEDWND_H_
+#define WX_GTK_NONOWNEDWND_H_
 
 class wxNonOwnedWindowShapeImpl;
 

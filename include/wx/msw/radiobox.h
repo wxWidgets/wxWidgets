@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_RADIOBOX_H_
-#define _WX_RADIOBOX_H_
+#ifndef WX_RADIOBOX_H_
+#define WX_RADIOBOX_H_
 
 #include "wx/statbox.h"
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __MOTIFTOPLEVELH__
-#define __MOTIFTOPLEVELH__
+#ifndef WX_MOTIFTOPLEVEL_H_
+#define WX_MOTIFTOPLEVEL_H_
 
 class WXDLLIMPEXP_CORE wxTopLevelWindowMotif : public wxTopLevelWindowBase
 {

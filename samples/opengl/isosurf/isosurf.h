@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_ISOSURF_H_
-#define _WX_ISOSURF_H_
+#ifndef WX_ISOSURF_H_
+#define WX_ISOSURF_H_
 
 // we need OpenGL headers for GLfloat/GLint types used below
 #if defined(__WXMAC__)

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_TASKBARICON_H_
-#define _WX_GTK_TASKBARICON_H_
+#ifndef WX_GTK_TASKBARICON_H_
+#define WX_GTK_TASKBARICON_H_
 
 class WXDLLIMPEXP_ADV wxTaskBarIcon: public wxTaskBarIconBase
 {

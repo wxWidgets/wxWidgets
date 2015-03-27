@@ -8,8 +8,8 @@
 // Licence:      wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MATRIXH__
-#define _WX_MATRIXH__
+#ifndef WX_MATRIX_H_
+#define WX_MATRIX_H_
 
 //! headerfiles="matrix.h wx/object.h"
 #include "wx/object.h"

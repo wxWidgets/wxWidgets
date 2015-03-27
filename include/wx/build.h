@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_BUILD_H_
-#define _WX_BUILD_H_
+#ifndef WX_BUILD_H_
+#define WX_BUILD_H_
 
 #include "wx/version.h"
 

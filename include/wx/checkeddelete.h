@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CHECKEDDELETE_H_
-#define _WX_CHECKEDDELETE_H_
+#ifndef WX_CHECKEDDELETE_H_
+#define WX_CHECKEDDELETE_H_
 
 #include "wx/cpp.h"
 

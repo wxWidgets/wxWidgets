@@ -8,8 +8,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __WX_PALETTEG_H__
-#define __WX_PALETTEG_H__
+#ifndef WX_PALETTEG_H_
+#define WX_PALETTEG_H_
 
 #include "wx/defs.h"
 #include "wx/object.h"

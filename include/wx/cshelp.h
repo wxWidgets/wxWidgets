@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CSHELP_H_
-#define _WX_CSHELP_H_
+#ifndef WX_CSHELP_H_
+#define WX_CSHELP_H_
 
 #include "wx/defs.h"
 

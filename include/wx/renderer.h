@@ -21,8 +21,8 @@
    theme DLLs and use them as wxRendererNative ones, of course).
  */
 
-#ifndef _WX_RENDERER_H_
-#define _WX_RENDERER_H_
+#ifndef WX_RENDERER_H_
+#define WX_RENDERER_H_
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxWindow;

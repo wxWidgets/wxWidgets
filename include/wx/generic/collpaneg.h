@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_COLLAPSABLE_PANE_H_GENERIC_
-#define _WX_COLLAPSABLE_PANE_H_GENERIC_
+#ifndef WX_COLLAPSABLE_PANE_H_GENERIC_
+#define WX_COLLAPSABLE_PANE_H_GENERIC_
 
 // forward declared
 class WXDLLIMPEXP_FWD_CORE wxButton;

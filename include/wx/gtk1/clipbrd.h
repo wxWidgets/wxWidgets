@@ -7,8 +7,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __GTKCLIPBOARDH__
-#define __GTKCLIPBOARDH__
+#ifndef WX_GTKCLIPBOARD_H_
+#define WX_GTKCLIPBOARD_H_
 
 #if wxUSE_CLIPBOARD
 

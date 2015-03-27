@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_EVTLOOPCONSOLE_H_
-#define _WX_MSW_EVTLOOPCONSOLE_H_
+#ifndef WX_MSW_EVTLOOPCONSOLE_H_
+#define WX_MSW_EVTLOOPCONSOLE_H_
 
 class WXDLLIMPEXP_BASE wxMSWEventLoopBase : public wxEventLoopManual
 {

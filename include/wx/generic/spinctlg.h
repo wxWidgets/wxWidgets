@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_SPINCTRL_H_
-#define _WX_GENERIC_SPINCTRL_H_
+#ifndef WX_GENERIC_SPINCTRL_H_
+#define WX_GENERIC_SPINCTRL_H_
 
 // ----------------------------------------------------------------------------
 // wxSpinCtrl is a combination of wxSpinButton and wxTextCtrl, so if

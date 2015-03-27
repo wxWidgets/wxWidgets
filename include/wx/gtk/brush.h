@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_BRUSH_H_
-#define _WX_GTK_BRUSH_H_
+#ifndef WX_GTK_BRUSH_H_
+#define WX_GTK_BRUSH_H_
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxColour;

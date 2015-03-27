@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_PRIVATE_COMPTR_H_
-#define _WX_MSW_PRIVATE_COMPTR_H_
+#ifndef WX_MSW_PRIVATE_COMPTR_H_
+#define WX_MSW_PRIVATE_COMPTR_H_
 
 // ----------------------------------------------------------------------------
 // wxCOMPtr: A minimalistic smart pointer for use with COM interfaces.

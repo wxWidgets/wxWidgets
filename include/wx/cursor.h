@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CURSOR_H_BASE_
-#define _WX_CURSOR_H_BASE_
+#ifndef WX_CURSOR_H_BASE_
+#define WX_CURSOR_H_BASE_
 
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"

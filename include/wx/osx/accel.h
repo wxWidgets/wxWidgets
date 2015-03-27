@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_ACCEL_H_
-#define _WX_ACCEL_H_
+#ifndef WX_ACCEL_H_
+#define WX_ACCEL_H_
 
 #include "wx/string.h"
 #include "wx/event.h"

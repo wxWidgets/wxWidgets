@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKAPPH__
-#define __GTKAPPH__
+#ifndef WX_GTKAPP_H_
+#define WX_GTKAPP_H_
 
 #include "wx/frame.h"
 #include "wx/icon.h"

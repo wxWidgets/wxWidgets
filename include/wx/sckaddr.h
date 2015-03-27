@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SCKADDR_H_
-#define _WX_SCKADDR_H_
+#ifndef WX_SCKADDR_H_
+#define WX_SCKADDR_H_
 
 #include "wx/defs.h"
 

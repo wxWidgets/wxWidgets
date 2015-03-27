@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SAMPLES_PROPGRID_PROPGRID_H_
-#define _WX_SAMPLES_PROPGRID_PROPGRID_H_
+#ifndef WX_SAMPLES_PROPGRID_PROPGRID_H_
+#define WX_SAMPLES_PROPGRID_PROPGRID_H_
 
 // -----------------------------------------------------------------------
 

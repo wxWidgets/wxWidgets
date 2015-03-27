@@ -7,8 +7,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TESTING_H_
-#define _WX_TESTING_H_
+#ifndef WX_TESTING_H_
+#define WX_TESTING_H_
 
 #include "wx/debug.h"
 #include "wx/string.h"

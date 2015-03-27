@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_HELPWIN_H_BASE_
-#define _WX_HELPWIN_H_BASE_
+#ifndef WX_HELPWIN_H_BASE_
+#define WX_HELPWIN_H_BASE_
 
 #if defined(__WXMSW__)
 #include "wx/msw/helpwin.h"

@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SPLITTER_H_BASE_
-#define _WX_SPLITTER_H_BASE_
+#ifndef WX_SPLITTER_H_BASE_
+#define WX_SPLITTER_H_BASE_
 
 #include "wx/event.h"
 

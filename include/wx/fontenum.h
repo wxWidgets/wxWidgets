@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FONTENUM_H_
-#define _WX_FONTENUM_H_
+#ifndef WX_FONTENUM_H_
+#define WX_FONTENUM_H_
 
 #include "wx/defs.h"
 

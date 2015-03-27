@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIV_NOTEBOOK_H_
-#define _WX_UNIV_NOTEBOOK_H_
+#ifndef WX_UNIV_NOTEBOOK_H_
+#define WX_UNIV_NOTEBOOK_H_
 
 #include "wx/arrstr.h"
 

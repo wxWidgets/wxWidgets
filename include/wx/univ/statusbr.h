@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIV_STATUSBR_H_
-#define _WX_UNIV_STATUSBR_H_
+#ifndef WX_UNIV_STATUSBR_H_
+#define WX_UNIV_STATUSBR_H_
 
 #include "wx/univ/inpcons.h"
 #include "wx/arrstr.h"

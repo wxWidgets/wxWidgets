@@ -24,8 +24,8 @@
 //  See http://www.boost.org/libs/smart_ptr/scoped_ptr.htm for documentation.
 //
 
-#ifndef _WX_SCOPED_PTR_H_
-#define _WX_SCOPED_PTR_H_
+#ifndef WX_SCOPED_PTR_H_
+#define WX_SCOPED_PTR_H_
 
 #include "wx/defs.h"
 #include "wx/checkeddelete.h"

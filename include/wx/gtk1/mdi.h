@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK1_MDI_H_
-#define _WX_GTK1_MDI_H_
+#ifndef WX_GTK1_MDI_H_
+#define WX_GTK1_MDI_H_
 
 #include "wx/frame.h"
 

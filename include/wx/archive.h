@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_ARCHIVE_H__
-#define _WX_ARCHIVE_H__
+#ifndef WX_ARCHIVE_H_
+#define WX_ARCHIVE_H_
 
 #include "wx/defs.h"
 

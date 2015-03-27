@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SLIDER_H_BASE_
-#define _WX_SLIDER_H_BASE_
+#ifndef WX_SLIDER_H_BASE_
+#define WX_SLIDER_H_BASE_
 
 // ----------------------------------------------------------------------------
 // headers

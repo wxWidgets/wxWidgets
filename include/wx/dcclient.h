@@ -6,8 +6,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DCCLIENT_H_BASE_
-#define _WX_DCCLIENT_H_BASE_
+#ifndef WX_DCCLIENT_H_BASE_
+#define WX_DCCLIENT_H_BASE_
 
 #include "wx/dc.h"
 

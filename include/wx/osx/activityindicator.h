@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_OSX_ACTIVITYINDICATOR_H_
-#define _WX_OSX_ACTIVITYINDICATOR_H_
+#ifndef WX_OSX_ACTIVITYINDICATOR_H_
+#define WX_OSX_ACTIVITYINDICATOR_H_
 
 // ----------------------------------------------------------------------------
 // wxActivityIndicator: implementation using GtkSpinner.

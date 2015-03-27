@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_HTMLLBOX_H_
-#define _WX_HTMLLBOX_H_
+#ifndef WX_HTMLLBOX_H_
+#define WX_HTMLLBOX_H_
 
 #include "wx/vlbox.h"               // base class
 #include "wx/html/htmlwin.h"

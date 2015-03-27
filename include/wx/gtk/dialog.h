@@ -7,8 +7,8 @@
 // Licence:           wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTKDIALOG_H_
-#define _WX_GTKDIALOG_H_
+#ifndef WX_GTKDIALOG_H_
+#define WX_GTKDIALOG_H_
 
 class WXDLLIMPEXP_FWD_CORE wxGUIEventLoop;
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_STATBOX_H_
-#define _WX_MSW_STATBOX_H_
+#ifndef WX_MSW_STATBOX_H_
+#define WX_MSW_STATBOX_H_
 
 // Group box
 class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase

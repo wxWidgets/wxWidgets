@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WXSTRINGOPS_H__
-#define _WX_WXSTRINGOPS_H__
+#ifndef WX_WXSTRINGOPS_H_
+#define WX_WXSTRINGOPS_H_
 
 #include "wx/chartype.h"
 #include "wx/stringimpl.h"

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIX_JOYSTICK_H_
-#define _WX_UNIX_JOYSTICK_H_
+#ifndef WX_UNIX_JOYSTICK_H_
+#define WX_UNIX_JOYSTICK_H_
 
 #include "wx/event.h"
 

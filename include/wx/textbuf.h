@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TEXTBUFFER_H
-#define _WX_TEXTBUFFER_H
+#ifndef WX_TEXTBUFFER_H
+#define WX_TEXTBUFFER_H
 
 #include "wx/defs.h"
 #include "wx/arrstr.h"

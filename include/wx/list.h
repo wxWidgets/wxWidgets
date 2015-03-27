@@ -21,8 +21,8 @@
   like the old class.
 */
 
-#ifndef _WX_LIST_H_
-#define _WX_LIST_H_
+#ifndef WX_LIST_H_
+#define WX_LIST_H_
 
 // -----------------------------------------------------------------------------
 // headers

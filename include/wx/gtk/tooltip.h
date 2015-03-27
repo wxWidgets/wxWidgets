@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTKTOOLTIP_H_
-#define _WX_GTKTOOLTIP_H_
+#ifndef WX_GTKTOOLTIP_H_
+#define WX_GTKTOOLTIP_H_
 
 #include "wx/string.h"
 #include "wx/object.h"

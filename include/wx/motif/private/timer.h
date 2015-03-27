@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MOTIF_PRIVATE_TIMER_H_
-#define _WX_MOTIF_PRIVATE_TIMER_H_
+#ifndef WX_MOTIF_PRIVATE_TIMER_H_
+#define WX_MOTIF_PRIVATE_TIMER_H_
 
 #include "wx/private/timer.h"
 

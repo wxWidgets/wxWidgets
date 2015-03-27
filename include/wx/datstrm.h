@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DATSTREAM_H_
-#define _WX_DATSTREAM_H_
+#ifndef WX_DATSTREAM_H_
+#define WX_DATSTREAM_H_
 
 #include "wx/stream.h"
 #include "wx/longlong.h"

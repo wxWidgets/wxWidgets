@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_PRIVATE_TEXTMEASURE_H_
-#define _WX_GENERIC_PRIVATE_TEXTMEASURE_H_
+#ifndef WX_GENERIC_PRIVATE_TEXTMEASURE_H_
+#define WX_GENERIC_PRIVATE_TEXTMEASURE_H_
 
 // ----------------------------------------------------------------------------
 // wxTextMeasure for the platforms without native support.

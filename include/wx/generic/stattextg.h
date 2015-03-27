@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_STATTEXTG_H_
-#define _WX_GENERIC_STATTEXTG_H_
+#ifndef WX_GENERIC_STATTEXTG_H_
+#define WX_GENERIC_STATTEXTG_H_
 
 // prevent it from including the platform-specific wxStaticText declaration as
 // this is not going to compile if it derives from wxGenericStaticText defined

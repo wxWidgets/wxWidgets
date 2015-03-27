@@ -14,8 +14,8 @@
     wxStringImpl is just a typedef to std:: string class.
 */
 
-#ifndef _WX_WXSTRINGIMPL_H__
-#define _WX_WXSTRINGIMPL_H__
+#ifndef WX_WXSTRINGIMPL_H_
+#define WX_WXSTRINGIMPL_H_
 
 // ----------------------------------------------------------------------------
 // headers

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_IMAGLISTG_H_
-#define _WX_IMAGLISTG_H_
+#ifndef WX_IMAGLISTG_H_
+#define WX_IMAGLISTG_H_
 
 #include "wx/list.h"
 

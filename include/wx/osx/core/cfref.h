@@ -13,8 +13,8 @@
     @discussion FIXME: Convert doc tags to something less buggy with C++
 */
 
-#ifndef _WX_MAC_COREFOUNDATION_CFREF_H__
-#define _WX_MAC_COREFOUNDATION_CFREF_H__
+#ifndef WX_MAC_COREFOUNDATION_CFREF_H_
+#define WX_MAC_COREFOUNDATION_CFREF_H_
 
 // Include unistd to ensure that NULL is defined
 #include <unistd.h>

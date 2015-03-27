@@ -10,8 +10,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UIACTIONSIMULATOR_H_
-#define _WX_UIACTIONSIMULATOR_H_
+#ifndef WX_UIACTIONSIMULATOR_H_
+#define WX_UIACTIONSIMULATOR_H_
 
 #include "wx/defs.h"
 

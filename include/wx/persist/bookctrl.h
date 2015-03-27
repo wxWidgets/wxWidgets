@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PERSIST_BOOKCTRL_H_
-#define _WX_PERSIST_BOOKCTRL_H_
+#ifndef WX_PERSIST_BOOKCTRL_H_
+#define WX_PERSIST_BOOKCTRL_H_
 
 #include "wx/persist/window.h"
 

@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_RADIOBOX_H_
-#define _WX_GTK_RADIOBOX_H_
+#ifndef WX_GTK_RADIOBOX_H_
+#define WX_GTK_RADIOBOX_H_
 
 #include "wx/bitmap.h"
 

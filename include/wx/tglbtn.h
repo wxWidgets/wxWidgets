@@ -9,8 +9,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TOGGLEBUTTON_H_BASE_
-#define _WX_TOGGLEBUTTON_H_BASE_
+#ifndef WX_TOGGLEBUTTON_H_BASE_
+#define WX_TOGGLEBUTTON_H_BASE_
 
 #include "wx/defs.h"
 

@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence (part of wxExtra library)
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MIMETYPE_H_
-#define _WX_MIMETYPE_H_
+#ifndef WX_MIMETYPE_H_
+#define WX_MIMETYPE_H_
 
 // ----------------------------------------------------------------------------
 // headers and such

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_XH_ALL_H_
-#define _WX_XH_ALL_H_
+#ifndef WX_XH_ALL_H_
+#define WX_XH_ALL_H_
 
 
 // Existing handlers:

@@ -6,8 +6,8 @@
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TESTS_ASSERTHELPER_H_
-#define _WX_TESTS_ASSERTHELPER_H_
+#ifndef WX_TESTS_ASSERTHELPER_H_
+#define WX_TESTS_ASSERTHELPER_H_
 
 #include <ostream>
 #include "wx/colour.h"

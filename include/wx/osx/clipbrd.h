@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_CLIPBRD_H_
-#define _WX_CLIPBRD_H_
+#ifndef WX_CLIPBRD_H_
+#define WX_CLIPBRD_H_
 
 #if wxUSE_CLIPBOARD
 

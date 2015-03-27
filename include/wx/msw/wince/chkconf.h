@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_WINCE_CHKCONF_H_
-#define _WX_MSW_WINCE_CHKCONF_H_
+#ifndef WX_MSW_WINCE_CHKCONF_H_
+#define WX_MSW_WINCE_CHKCONF_H_
 
 // ----------------------------------------------------------------------------
 // Disable features which don't work or don't make sense under CE

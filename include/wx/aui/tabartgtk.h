@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_AUI_TABARTGTK_H_
-#define _WX_AUI_TABARTGTK_H_
+#ifndef WX_AUI_TABARTGTK_H_
+#define WX_AUI_TABARTGTK_H_
 
 // ----------------------------------------------------------------------------
 // headers

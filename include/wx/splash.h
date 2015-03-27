@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SPLASH_H_BASE_
-#define _WX_SPLASH_H_BASE_
+#ifndef WX_SPLASH_H_BASE_
+#define WX_SPLASH_H_BASE_
 
 #include "wx/generic/splash.h"
 

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_META_INT2TYPE_H_
-#define _WX_META_INT2TYPE_H_
+#ifndef WX_META_INT2TYPE_H_
+#define WX_META_INT2TYPE_H_
 
 template <int N>
 struct wxInt2Type { enum { value=N }; };

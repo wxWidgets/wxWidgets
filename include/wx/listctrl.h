@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_LISTCTRL_H_BASE_
-#define _WX_LISTCTRL_H_BASE_
+#ifndef WX_LISTCTRL_H_BASE_
+#define WX_LISTCTRL_H_BASE_
 
 #include "wx/defs.h" // headers should include this before first wxUSE_XXX check
 

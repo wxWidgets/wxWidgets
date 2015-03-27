@@ -14,8 +14,8 @@
     missing from string.h.
 */
 
-#ifndef _WX_WXSTRING_H__
-#define _WX_WXSTRING_H__
+#ifndef WX_WXSTRING_H_
+#define WX_WXSTRING_H_
 
 // ----------------------------------------------------------------------------
 // headers

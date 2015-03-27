@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKSLIDERH__
-#define __GTKSLIDERH__
+#ifndef WX_GTKSLIDER_H_
+#define WX_GTKSLIDER_H_
 
 // ----------------------------------------------------------------------------
 // wxSlider

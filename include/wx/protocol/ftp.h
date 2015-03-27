@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WX_FTP_H__
-#define __WX_FTP_H__
+#ifndef WX_FTP_H_
+#define WX_FTP_H_
 
 #include "wx/defs.h"
 

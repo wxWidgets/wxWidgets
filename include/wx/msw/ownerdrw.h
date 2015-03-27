@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_OWNERDRW_H_
-#define _WX_OWNERDRW_H_
+#ifndef WX_OWNERDRW_H_
+#define WX_OWNERDRW_H_
 
 #if wxUSE_OWNER_DRAWN
 

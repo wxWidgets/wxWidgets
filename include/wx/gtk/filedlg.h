@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTKFILEDLG_H_
-#define _WX_GTKFILEDLG_H_
+#ifndef WX_GTKFILEDLG_H_
+#define WX_GTKFILEDLG_H_
 
 #include "wx/gtk/filectrl.h"    // for wxGtkFileChooser
 

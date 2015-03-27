@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WEBKIT_H
-#define _WX_WEBKIT_H
+#ifndef WX_WEBKIT_H
+#define WX_WEBKIT_H
 
 /**
     @class wxWebKitCtrl

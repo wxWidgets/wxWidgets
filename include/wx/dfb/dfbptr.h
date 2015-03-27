@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DFB_DFBPTR_H_
-#define _WX_DFB_DFBPTR_H_
+#ifndef WX_DFB_DFBPTR_H_
+#define WX_DFB_DFBPTR_H_
 
 //-----------------------------------------------------------------------------
 // wxDFB_DECLARE_INTERFACE

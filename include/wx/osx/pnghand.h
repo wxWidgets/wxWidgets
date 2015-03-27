@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PNGHAND_H_
-#define _WX_PNGHAND_H_
+#ifndef WX_PNGHAND_H_
+#define WX_PNGHAND_H_
 
 #include "wx/defs.h"
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_BITMAP_H_BASE_
-#define _WX_BITMAP_H_BASE_
+#ifndef WX_BITMAP_H_BASE_
+#define WX_BITMAP_H_BASE_
 
 // ----------------------------------------------------------------------------
 // headers

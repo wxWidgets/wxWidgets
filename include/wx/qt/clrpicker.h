@@ -5,8 +5,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_QT_CLRPICKER_H_
-#define _WX_QT_CLRPICKER_H_
+#ifndef WX_QT_CLRPICKER_H_
+#define WX_QT_CLRPICKER_H_
 
 #include "wx/generic/clrpickerg.h"
 

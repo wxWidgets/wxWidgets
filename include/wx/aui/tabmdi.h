@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_AUITABMDI_H_
-#define _WX_AUITABMDI_H_
+#ifndef WX_AUITABMDI_H_
+#define WX_AUITABMDI_H_
 
 #if wxUSE_AUI
 

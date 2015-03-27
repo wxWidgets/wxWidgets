@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_RTTIH__
-#define _WX_RTTIH__
+#ifndef WX_RTTI_H_
+#define WX_RTTI_H_
 
 #if !wxUSE_EXTENDED_RTTI     // XTI system is meant to replace these macros
 

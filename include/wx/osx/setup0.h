@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SETUP_H_
-#define _WX_SETUP_H_
+#ifndef WX_SETUP_H_
+#define WX_SETUP_H_
 
 
 /* --- start common options --- */

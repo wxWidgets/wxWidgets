@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_XRC_XH_AUINOTEBOOK_H_
-#define _WX_XRC_XH_AUINOTEBOOK_H_
+#ifndef WX_XRC_XH_AUINOTEBOOK_H_
+#define WX_XRC_XH_AUINOTEBOOK_H_
 
 #include "wx/xrc/xmlres.h"
 

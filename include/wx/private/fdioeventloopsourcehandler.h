@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRIVATE_FDIO_EVENT_LOOP_SOURCE_HANDLER_H
-#define _WX_PRIVATE_FDIO_EVENT_LOOP_SOURCE_HANDLER_H
+#ifndef WX_PRIVATE_FDIO_EVENT_LOOP_SOURCE_HANDLER_H
+#define WX_PRIVATE_FDIO_EVENT_LOOP_SOURCE_HANDLER_H
 
 #include "wx/evtloopsrc.h"
 

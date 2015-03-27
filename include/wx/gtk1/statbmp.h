@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKSTATICBITMAPH__
-#define __GTKSTATICBITMAPH__
+#ifndef WX_GTKSTATICBITMAP_H_
+#define WX_GTKSTATICBITMAP_H_
 
 #include "wx/icon.h"
 

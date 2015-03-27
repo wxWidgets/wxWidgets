@@ -9,8 +9,8 @@
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
-#ifndef _WX_COMPILER_H_
-#define _WX_COMPILER_H_
+#ifndef WX_COMPILER_H_
+#define WX_COMPILER_H_
 
 /*
     Compiler detection and related helpers.

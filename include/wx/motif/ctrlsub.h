@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MOTIF_CTRLSUB_H_
-#define _WX_MOTIF_CTRLSUB_H_
+#ifndef WX_MOTIF_CTRLSUB_H_
+#define WX_MOTIF_CTRLSUB_H_
 
 #include "wx/dynarray.h"
 #include "wx/generic/ctrlsub.h"

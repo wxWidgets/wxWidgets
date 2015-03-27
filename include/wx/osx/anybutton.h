@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_OSX_ANYBUTTON_H_
-#define _WX_OSX_ANYBUTTON_H_
+#ifndef WX_OSX_ANYBUTTON_H_
+#define WX_OSX_ANYBUTTON_H_
 
 // Any button
 class WXDLLIMPEXP_CORE wxAnyButton : public wxAnyButtonBase

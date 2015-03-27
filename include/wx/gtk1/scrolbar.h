@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKSCROLLBARH__
-#define __GTKSCROLLBARH__
+#ifndef WX_GTKSCROLLBAR_H_
+#define WX_GTKSCROLLBAR_H_
 
 #include "wx/defs.h"
 

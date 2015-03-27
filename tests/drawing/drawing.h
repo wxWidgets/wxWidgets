@@ -6,8 +6,8 @@
 // Copyright:   (c) 2014 Ellié Computing <opensource@elliecomputing.com>
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TESTS_DRAWING_H_
-#define _WX_TESTS_DRAWING_H_
+#ifndef WX_TESTS_DRAWING_H_
+#define WX_TESTS_DRAWING_H_
 
 #include "gcfactory.h"
 

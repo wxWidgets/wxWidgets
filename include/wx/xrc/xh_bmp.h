@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_XH_BMP_H_
-#define _WX_XH_BMP_H_
+#ifndef WX_XH_BMP_H_
+#define WX_XH_BMP_H_
 
 #include "wx/xrc/xmlres.h"
 

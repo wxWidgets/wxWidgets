@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_TOOLTIP_H_
-#define _WX_MSW_TOOLTIP_H_
+#ifndef WX_MSW_TOOLTIP_H_
+#define WX_MSW_TOOLTIP_H_
 
 #include "wx/object.h"
 #include "wx/gdicmn.h"

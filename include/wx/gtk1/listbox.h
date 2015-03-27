@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKLISTBOXH__
-#define __GTKLISTBOXH__
+#ifndef WX_GTKLISTBOX_H_
+#define WX_GTKLISTBOX_H_
 
 #include "wx/list.h"
 

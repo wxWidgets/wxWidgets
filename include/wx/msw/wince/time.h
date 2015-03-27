@@ -4,8 +4,8 @@
  * Missing time functions and structures for use under WinCE
  */
 
-#ifndef _WX_MSW_WINCE_TIME_H_
-#define _WX_MSW_WINCE_TIME_H_
+#ifndef WX_MSW_WINCE_TIME_H_
+#define WX_MSW_WINCE_TIME_H_
 
 #ifndef _TM_DEFINED
 

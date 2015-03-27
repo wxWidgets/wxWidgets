@@ -9,8 +9,8 @@
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
-#ifndef _WX_DFB_CHKCONF_H_
-#define _WX_DFB_CHKCONF_H_
+#ifndef WX_DFB_CHKCONF_H_
+#define WX_DFB_CHKCONF_H_
 
 #ifndef __WXUNIVERSAL__
 #   error "wxDirectFB cannot be built without wxUniversal"

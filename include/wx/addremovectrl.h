@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_ADDREMOVECTRL_H_
-#define _WX_ADDREMOVECTRL_H_
+#ifndef WX_ADDREMOVECTRL_H_
+#define WX_ADDREMOVECTRL_H_
 
 #include "wx/panel.h"
 

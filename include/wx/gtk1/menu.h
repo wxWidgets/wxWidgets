@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKMENUH__
-#define __GTKMENUH__
+#ifndef WX_GTKMENU_H_
+#define WX_GTKMENU_H_
 
 //-----------------------------------------------------------------------------
 // wxMenuBar

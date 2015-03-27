@@ -10,8 +10,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef _WX_MSW_GSOCKMSW_H_
-#define _WX_MSW_GSOCKMSW_H_
+#ifndef WX_MSW_GSOCKMSW_H_
+#define WX_MSW_GSOCKMSW_H_
 
 #include "wx/msw/wrapwin.h"
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_STACK_H_
-#define _WX_STACK_H_
+#ifndef WX_STACK_H_
+#define WX_STACK_H_
 
 #include "wx/vector.h"
 

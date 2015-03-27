@@ -10,8 +10,8 @@
 // WARNING: Parts of this file are generated. See misc/languages/README for
 // details.
 
-#ifndef _WX_LANGUAGE_H_
-#define _WX_LANGUAGE_H_
+#ifndef WX_LANGUAGE_H_
+#define WX_LANGUAGE_H_
 
 #include "wx/defs.h"
 

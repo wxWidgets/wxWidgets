@@ -9,8 +9,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef _WX_GTK_FILECTRL_H_
-#define _WX_GTK_FILECTRL_H_
+#ifndef WX_GTK_FILECTRL_H_
+#define WX_GTK_FILECTRL_H_
 
 #include "wx/control.h"
 #include "wx/filectrl.h"

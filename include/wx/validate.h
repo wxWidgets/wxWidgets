@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_VALIDATE_H_
-#define _WX_VALIDATE_H_
+#ifndef WX_VALIDATE_H_
+#define WX_VALIDATE_H_
 
 #include "wx/defs.h"
 

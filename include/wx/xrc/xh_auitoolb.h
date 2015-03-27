@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_XH_AUITOOLB_H_
-#define _WX_XH_AUITOOLB_H_
+#ifndef WX_XH_AUITOOLB_H_
+#define WX_XH_AUITOOLB_H_
 
 #include "wx/aui/auibar.h"
 #include "wx/menu.h"

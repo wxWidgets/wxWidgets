@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FILEBACK_H__
-#define _WX_FILEBACK_H__
+#ifndef WX_FILEBACK_H_
+#define WX_FILEBACK_H_
 
 #include "wx/defs.h"
 

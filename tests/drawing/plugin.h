@@ -6,8 +6,8 @@
 // Copyright:   (c) 2014 Ell8ié Computing <opensource@elliecomputing.com>
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TESTS_DRAWINGPLG_H_
-#define _WX_TESTS_DRAWINGPLG_H_
+#ifndef WX_TESTS_DRAWINGPLG_H_
+#define WX_TESTS_DRAWINGPLG_H_
 
 #include "gcfactory.h"
 
@@ -18,4 +18,4 @@ extern "C" WXEXPORT void DestroyDrawingTestLifeCycle (DrawingTestGCFactory* lc);
 
 #endif // wxUSE_TEST_GC_DRAWING
 
-#endif // #ifndef _WX_TESTS_DRAWINGPLG_H_
+#endif // #ifndef WX_TESTS_DRAWINGPLG_H_

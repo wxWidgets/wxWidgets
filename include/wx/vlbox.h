@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_VLBOX_H_
-#define _WX_VLBOX_H_
+#ifndef WX_VLBOX_H_
+#define WX_VLBOX_H_
 
 #include "wx/vscroll.h"         // base class
 #include "wx/bitmap.h"

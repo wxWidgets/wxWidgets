@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __X11TEXTCTRLH__
-#define __X11TEXTCTRLH__
+#ifndef WX_X11TEXTCTRL_H_
+#define WX_X11TEXTCTRL_H_
 
 // Set to 1 to use wxUniv's implementation, 0
 // to use wxX11's.

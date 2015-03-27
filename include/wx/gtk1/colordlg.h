@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __COLORDLG_H__
-#define __COLORDLG_H__
+#ifndef WX_GTKCOLORDLG_H_
+#define WX_GTKCOLORDLG_H_
 
 #include "wx/defs.h"
 #include "wx/gdicmn.h"

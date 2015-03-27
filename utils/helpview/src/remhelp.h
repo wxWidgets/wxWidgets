@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_REMHELP_H_
-#define _WX_REMHELP_H_
+#ifndef WX_REMHELP_H_
+#define WX_REMHELP_H_
 
 #include <wx/helpbase.h>
 #include <wx/ipc.h>

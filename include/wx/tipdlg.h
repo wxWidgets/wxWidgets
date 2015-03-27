@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TIPDLG_H_
-#define _WX_TIPDLG_H_
+#ifndef WX_TIPDLG_H_
+#define WX_TIPDLG_H_
 
 // ----------------------------------------------------------------------------
 // headers which we must include here

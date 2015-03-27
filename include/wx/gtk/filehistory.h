@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_FILEHISTORY_H_
-#define _WX_GTK_FILEHISTORY_H_
+#ifndef WX_GTK_FILEHISTORY_H_
+#define WX_GTK_FILEHISTORY_H_
 
 class WXDLLIMPEXP_CORE wxFileHistory : public wxFileHistoryBase
 {

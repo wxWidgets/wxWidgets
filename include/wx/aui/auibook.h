@@ -10,8 +10,8 @@
 
 
 
-#ifndef _WX_AUINOTEBOOK_H_
-#define _WX_AUINOTEBOOK_H_
+#ifndef WX_AUINOTEBOOK_H_
+#define WX_AUINOTEBOOK_H_
 
 // ----------------------------------------------------------------------------
 // headers

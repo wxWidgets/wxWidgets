@@ -7,8 +7,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_PRINT_H_
-#define _WX_GTK_PRINT_H_
+#ifndef WX_GTK_PRINT_H_
+#define WX_GTK_PRINT_H_
 
 #include "wx/defs.h"
 

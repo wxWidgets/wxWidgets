@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MOUSEMANAGER_H_
-#define _WX_MOUSEMANAGER_H_
+#ifndef WX_MOUSEMANAGER_H_
+#define WX_MOUSEMANAGER_H_
 
 #include "wx/event.h"
 

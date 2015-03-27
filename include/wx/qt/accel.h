@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_QT_ACCEL_H_
-#define _WX_QT_ACCEL_H_
+#ifndef WX_QT_ACCEL_H_
+#define WX_QT_ACCEL_H_
 
 #include <QtCore/QList>
 #include <QtWidgets/QShortcut>

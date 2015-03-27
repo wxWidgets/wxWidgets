@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_INFOBAR_H_
-#define _WX_INFOBAR_H_
+#ifndef WX_INFOBAR_H_
+#define WX_INFOBAR_H_
 
 #include "wx/defs.h"
 

@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TYPEINFO_H_
-#define _WX_TYPEINFO_H_
+#ifndef WX_TYPEINFO_H_
+#define WX_TYPEINFO_H_
 
 //
 // This file defines wxTypeId macro that should be used internally in

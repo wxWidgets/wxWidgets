@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TIMER_H_BASE_
-#define _WX_TIMER_H_BASE_
+#ifndef WX_TIMER_H_BASE_
+#define WX_TIMER_H_BASE_
 
 #include "wx/defs.h"
 

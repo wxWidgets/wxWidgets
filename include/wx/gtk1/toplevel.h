@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKTOPLEVELH__
-#define __GTKTOPLEVELH__
+#ifndef WX_GTKTOPLEVEL_H_
+#define WX_GTKTOPLEVEL_H_
 
 //-----------------------------------------------------------------------------
 // wxTopLevelWindowGTK

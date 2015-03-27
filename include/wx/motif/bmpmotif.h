@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_BMPMOTIF_H_
-#define _WX_BMPMOTIF_H_
+#ifndef WX_BMPMOTIF_H_
+#define WX_BMPMOTIF_H_
 
 #include "wx/defs.h"
 #include "wx/bitmap.h"

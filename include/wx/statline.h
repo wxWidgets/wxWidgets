@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_STATLINE_H_BASE_
-#define _WX_STATLINE_H_BASE_
+#ifndef WX_STATLINE_H_BASE_
+#define WX_STATLINE_H_BASE_
 
 // ----------------------------------------------------------------------------
 // headers

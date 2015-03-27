@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_SCROLLWIN_H_
-#define _WX_GENERIC_SCROLLWIN_H_
+#ifndef WX_GENERIC_SCROLLWIN_H_
+#define WX_GENERIC_SCROLLWIN_H_
 
 #include "wx/recguard.h"
 

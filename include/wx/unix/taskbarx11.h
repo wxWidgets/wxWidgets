@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIX_TASKBAR_H_
-#define _WX_UNIX_TASKBAR_H_
+#ifndef WX_UNIX_TASKBAR_H_
+#define WX_UNIX_TASKBAR_H_
 
 class WXDLLIMPEXP_FWD_ADV wxTaskBarIconArea;
 

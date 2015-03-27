@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKGAUGEH__
-#define __GTKGAUGEH__
+#ifndef WX_GTKGAUGE_H_
+#define WX_GTKGAUGE_H_
 
 //-----------------------------------------------------------------------------
 // wxGaugeBox

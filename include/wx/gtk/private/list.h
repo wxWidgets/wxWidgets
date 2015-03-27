@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_PRIVATE_LIST_H_
-#define _WX_GTK_PRIVATE_LIST_H_
+#ifndef WX_GTK_PRIVATE_LIST_H_
+#define WX_GTK_PRIVATE_LIST_H_
 
 // ----------------------------------------------------------------------------
 // Convenience class for calling g_list_free() automatically

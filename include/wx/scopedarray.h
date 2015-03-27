@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SCOPED_ARRAY_H_
-#define _WX_SCOPED_ARRAY_H_
+#ifndef WX_SCOPED_ARRAY_H_
+#define WX_SCOPED_ARRAY_H_
 
 #include "wx/defs.h"
 #include "wx/checkeddelete.h"

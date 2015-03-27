@@ -5,8 +5,8 @@
  *  Licence:     wxWindows licence
  */
 
-#ifndef _WX_QT_DEFS_H_
-#define _WX_QT_DEFS_H_
+#ifndef WX_QT_DEFS_H_
+#define WX_QT_DEFS_H_
 
 #ifdef __cplusplus
 

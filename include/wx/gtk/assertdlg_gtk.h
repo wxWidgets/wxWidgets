@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////// */
 
-#ifndef _WX_GTK_ASSERTDLG_H_
-#define _WX_GTK_ASSERTDLG_H_
+#ifndef WX_GTK_ASSERTDLG_H_
+#define WX_GTK_ASSERTDLG_H_
 
 #define GTK_TYPE_ASSERT_DIALOG            (gtk_assert_dialog_get_type ())
 #define GTK_ASSERT_DIALOG(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_ASSERT_DIALOG, GtkAssertDialog))

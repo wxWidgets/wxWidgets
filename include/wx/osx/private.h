@@ -1,5 +1,5 @@
-#ifndef _WX_PRIVATE_OSX_H_
-#define _WX_PRIVATE_OSX_H_
+#ifndef WX_PRIVATE_OSX_H_
+#define WX_PRIVATE_OSX_H_
 
 #include "wx/osx/core/private.h"
 

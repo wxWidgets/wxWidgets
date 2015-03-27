@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_VECTOR_H_
-#define _WX_VECTOR_H_
+#ifndef WX_VECTOR_H_
+#define WX_VECTOR_H_
 
 #include "wx/defs.h"
 

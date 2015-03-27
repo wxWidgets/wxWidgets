@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DATAVIEWCTRL_OSX_H_
-#define _WX_DATAVIEWCTRL_OSX_H_
+#ifndef WX_DATAVIEWCTRL_OSX_H_
+#define WX_DATAVIEWCTRL_OSX_H_
 
 #ifdef __WXMAC_CLASSIC__
 #  error "Native wxDataViewCtrl for classic environment not defined. Please use generic control."

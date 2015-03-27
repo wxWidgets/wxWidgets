@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_IMAGXPM_H_
-#define _WX_IMAGXPM_H_
+#ifndef WX_IMAGXPM_H_
+#define WX_IMAGXPM_H_
 
 #include "wx/image.h"
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_RICHTEXTUICUSTOMIZATION_H_
-#define _WX_RICHTEXTUICUSTOMIZATION_H_
+#ifndef WX_RICHTEXTUICUSTOMIZATION_H_
+#define WX_RICHTEXTUICUSTOMIZATION_H_
 
 #if wxUSE_RICHTEXT
 

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIV_SCRTHUMB_H_
-#define _WX_UNIV_SCRTHUMB_H_
+#ifndef WX_UNIV_SCRTHUMB_H_
+#define WX_UNIV_SCRTHUMB_H_
 
 // ----------------------------------------------------------------------------
 // wxScrollThumb is not a control but just a class containing the common

@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DATAVIEWCTRL_CARBON_H_
-#define _WX_DATAVIEWCTRL_CARBON_H_
+#ifndef WX_DATAVIEWCTRL_CARBON_H_
+#define WX_DATAVIEWCTRL_CARBON_H_
 
 #include "wx/defs.h"
 

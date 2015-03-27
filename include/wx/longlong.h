@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_LONGLONG_H
-#define _WX_LONGLONG_H
+#ifndef WX_LONGLONG_H
+#define WX_LONGLONG_H
 
 #include "wx/defs.h"
 

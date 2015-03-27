@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_INFOBAR_H_
-#define _WX_GENERIC_INFOBAR_H_
+#ifndef WX_GENERIC_INFOBAR_H_
+#define WX_GENERIC_INFOBAR_H_
 
 class WXDLLIMPEXP_FWD_CORE wxBitmapButton;
 class WXDLLIMPEXP_FWD_CORE wxStaticBitmap;

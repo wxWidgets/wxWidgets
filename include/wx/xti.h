@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_XTIH__
-#define _WX_XTIH__
+#ifndef WX_XTI_H_
+#define WX_XTI_H_
 
 // We want to support properties, event sources and events sinks through
 // explicit declarations, using templates and specialization to make the

@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_VSCROLL_H_
-#define _WX_VSCROLL_H_
+#ifndef WX_VSCROLL_H_
+#define WX_VSCROLL_H_
 
 #include "wx/panel.h"
 #include "wx/position.h"

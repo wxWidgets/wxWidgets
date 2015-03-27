@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKBUTTONH__
-#define __GTKBUTTONH__
+#ifndef WX_GTKBUTTON_H_
+#define WX_GTKBUTTON_H_
 
 #include "wx/defs.h"
 #include "wx/object.h"

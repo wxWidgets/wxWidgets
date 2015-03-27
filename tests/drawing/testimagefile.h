@@ -8,8 +8,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef _WX_TESTS_TESTIMAGEFILE_H_
-#define _WX_TESTS_TESTIMAGEFILE_H_
+#ifndef WX_TESTS_TESTIMAGEFILE_H_
+#define WX_TESTS_TESTIMAGEFILE_H_
 
 bool AreFilesContentsEqual(const wxString &filename, const wxString &refFilename)
 {

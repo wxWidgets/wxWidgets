@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_PRIVATE_MARKUPPARSERATTR_H_
-#define _WX_PRIVATE_MARKUPPARSERATTR_H_
+#ifndef WX_PRIVATE_MARKUPPARSERATTR_H_
+#define WX_PRIVATE_MARKUPPARSERATTR_H_
 
 #include "wx/private/markupparser.h"
 

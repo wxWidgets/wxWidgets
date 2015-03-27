@@ -7,10 +7,10 @@
  *                                                                           *
  *****************************************************************************/
 
-/* This define (__WX_SETUP_H__) is used both to insure setup.h is included
+/* This define (WX_SETUP_H_) is used both to insure setup.h is included
  * only once and to indicate that we are building using configure. */
-#ifndef __WX_SETUP_H__
-#define __WX_SETUP_H__
+#ifndef WX_SETUP_H_
+#define WX_SETUP_H_
 
 #include <wx/vms_x_fix.h>
 

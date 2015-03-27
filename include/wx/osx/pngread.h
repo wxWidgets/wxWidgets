@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef _WX_PNGREAD__
-#define _WX_PNGREAD__
+#ifndef WX_PNGREAD_H_
+#define WX_PNGREAD_H_
 
 #ifndef byte
 typedef unsigned char byte;

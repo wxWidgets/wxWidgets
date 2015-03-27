@@ -7,8 +7,8 @@
 /////////////////////////////////////////////////////////////////////////// */
 
 
-#ifndef __GTK_PIZZA_H__
-#define __GTK_PIZZA_H__
+#ifndef WX_GTK_PIZZA__H_
+#define WX_GTK_PIZZA__H_
 
 #ifdef __cplusplus
 extern "C" {

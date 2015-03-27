@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_HASHMAP_H_
-#define _WX_HASHMAP_H_
+#ifndef WX_HASHMAP_H_
+#define WX_HASHMAP_H_
 
 #include "wx/string.h"
 #include "wx/wxcrt.h"

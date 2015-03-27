@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_PRIVATE_ADDREMOVECTRL_H_
-#define _WX_GTK_PRIVATE_ADDREMOVECTRL_H_
+#ifndef WX_GTK_PRIVATE_ADDREMOVECTRL_H_
+#define WX_GTK_PRIVATE_ADDREMOVECTRL_H_
 
 #include "wx/artprov.h"
 #include "wx/bmpbuttn.h"

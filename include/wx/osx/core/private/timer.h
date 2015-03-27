@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_OSX_CORE_PRIVATE_TIMER_H_
-#define _WX_OSX_CORE_PRIVATE_TIMER_H_
+#ifndef WX_OSX_CORE_PRIVATE_TIMER_H_
+#define WX_OSX_CORE_PRIVATE_TIMER_H_
 
 #include "wx/private/timer.h"
 

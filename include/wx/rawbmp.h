@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_RAWBMP_H_
-#define _WX_RAWBMP_H_
+#ifndef WX_RAWBMP_H_
+#define WX_RAWBMP_H_
 
 #include "wx/defs.h"
 

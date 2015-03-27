@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DEMOS_BOMBS_GAME_H_
-#define _WX_DEMOS_BOMBS_GAME_H_
+#ifndef WX_DEMOS_BOMBS_GAME_H_
+#define WX_DEMOS_BOMBS_GAME_H_
 
 #define BG_HIDDEN   0x100
 #define BG_BOMB     0x200
@@ -111,4 +111,4 @@ private:
 
 };
 
-#endif // #ifndef _WX_DEMOS_BOMBS_GAME_H_
+#endif // #ifndef WX_DEMOS_BOMBS_GAME_H_

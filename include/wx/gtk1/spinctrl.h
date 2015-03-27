@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKSPINCTRLH__
-#define __GTKSPINCTRLH__
+#ifndef WX_GTKSPINCTRL_H_
+#define WX_GTKSPINCTRL_H_
 
 #include "wx/defs.h"
 

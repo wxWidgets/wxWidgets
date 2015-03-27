@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_IMAGPNG_H_
-#define _WX_IMAGPNG_H_
+#ifndef WX_IMAGPNG_H_
+#define WX_IMAGPNG_H_
 
 #include "wx/defs.h"
 

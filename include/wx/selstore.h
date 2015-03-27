@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SELSTORE_H_
-#define _WX_SELSTORE_H_
+#ifndef WX_SELSTORE_H_
+#define WX_SELSTORE_H_
 
 #include "wx/dynarray.h"
 

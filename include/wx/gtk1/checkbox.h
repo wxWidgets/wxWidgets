@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKCHECKBOXH__
-#define __GTKCHECKBOXH__
+#ifndef WX_GTKCHECKBOX_H_
+#define WX_GTKCHECKBOX_H_
 
 // ----------------------------------------------------------------------------
 // wxCheckBox

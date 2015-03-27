@@ -8,8 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FILEDIRPICKER_H_
-#define _WX_FILEDIRPICKER_H_
+#ifndef WX_FILEDIRPICKER_H_
+#define WX_FILEDIRPICKER_H_
 
 #include "wx/button.h"
 #include "wx/filedlg.h"

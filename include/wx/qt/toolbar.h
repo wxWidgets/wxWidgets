@@ -7,8 +7,8 @@
 
 #include <QtWidgets/QToolBar>
 
-#ifndef _WX_QT_TOOLBAR_H_
-#define _WX_QT_TOOLBAR_H_
+#ifndef WX_QT_TOOLBAR_H_
+#define WX_QT_TOOLBAR_H_
 
 class wxQtToolBar;
 

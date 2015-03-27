@@ -12,8 +12,8 @@
     @abstract   wxCFDataRef template class
 */
 
-#ifndef _WX_MAC_COREFOUNDATION_CFDATAREF_H__
-#define _WX_MAC_COREFOUNDATION_CFDATAREF_H__
+#ifndef WX_MAC_COREFOUNDATION_CFDATAREF_H_
+#define WX_MAC_COREFOUNDATION_CFDATAREF_H_
 
 #include "wx/osx/core/cfref.h"
 

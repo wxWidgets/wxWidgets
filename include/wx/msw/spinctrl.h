@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MSW_SPINCTRL_H_
-#define _WX_MSW_SPINCTRL_H_
+#ifndef WX_MSW_SPINCTRL_H_
+#define WX_MSW_SPINCTRL_H_
 
 #include "wx/spinbutt.h"    // the base class
 

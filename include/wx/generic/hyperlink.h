@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERICHYPERLINKCTRL_H_
-#define _WX_GENERICHYPERLINKCTRL_H_
+#ifndef WX_GENERICHYPERLINKCTRL_H_
+#define WX_GENERICHYPERLINKCTRL_H_
 
 // ----------------------------------------------------------------------------
 // wxGenericHyperlinkCtrl

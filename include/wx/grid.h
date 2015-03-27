@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GRID_H_BASE_
-#define _WX_GRID_H_BASE_
+#ifndef WX_GRID_H_BASE_
+#define WX_GRID_H_BASE_
 
 #include "wx/generic/grid.h"
 

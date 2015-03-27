@@ -7,8 +7,8 @@
 // Copyright:   (c)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-#ifndef __SCK_STREAM_H__
-#define __SCK_STREAM_H__
+#ifndef WX_SCK_STREAM_H_
+#define WX_SCK_STREAM_H_
 
 #include "wx/stream.h"
 

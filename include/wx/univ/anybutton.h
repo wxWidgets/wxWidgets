@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UNIV_ANYBUTTON_H_
-#define _WX_UNIV_ANYBUTTON_H_
+#ifndef WX_UNIV_ANYBUTTON_H_
+#define WX_UNIV_ANYBUTTON_H_
 #include "wx/univ/inphand.h"
 // ----------------------------------------------------------------------------
 // Common button functionality

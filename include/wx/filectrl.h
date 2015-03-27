@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FILECTRL_H_BASE_
-#define _WX_FILECTRL_H_BASE_
+#ifndef WX_FILECTRL_H_BASE_
+#define WX_FILECTRL_H_BASE_
 
 #include "wx/defs.h"
 

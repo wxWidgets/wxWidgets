@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MOTIF_RADIOBOX_H_
-#define _WX_MOTIF_RADIOBOX_H_
+#ifndef WX_MOTIF_RADIOBOX_H_
+#define WX_MOTIF_RADIOBOX_H_
 
 #ifndef wxWIDGET_ARRAY_DEFINED
     #define wxWIDGET_ARRAY_DEFINED

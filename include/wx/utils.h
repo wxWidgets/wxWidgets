@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UTILS_H_
-#define _WX_UTILS_H_
+#ifndef WX_UTILS_H_
+#define WX_UTILS_H_
 
 // ----------------------------------------------------------------------------
 // headers

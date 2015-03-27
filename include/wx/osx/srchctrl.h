@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SEARCHCTRL_H_
-#define _WX_SEARCHCTRL_H_
+#ifndef WX_SEARCHCTRL_H_
+#define WX_SEARCHCTRL_H_
 
 #if wxUSE_SEARCHCTRL
 

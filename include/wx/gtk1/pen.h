@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKPENH__
-#define __GTKPENH__
+#ifndef WX_GTKPEN_H_
+#define WX_GTKPEN_H_
 
 #include "wx/defs.h"
 #include "wx/object.h"

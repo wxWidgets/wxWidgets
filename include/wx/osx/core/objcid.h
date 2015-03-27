@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_OSX_CORE_OBJCID_H_
-#define _WX_OSX_CORE_OBJCID_H_
+#ifndef WX_OSX_CORE_OBJCID_H_
+#define WX_OSX_CORE_OBJCID_H_
 
 // ----------------------------------------------------------------------------
 // wxObjCID: Equivalent of Objective-C "id" that works in C++ code.

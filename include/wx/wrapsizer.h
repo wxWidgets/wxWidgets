@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_WRAPSIZER_H_
-#define _WX_WRAPSIZER_H_
+#ifndef WX_WRAPSIZER_H_
+#define WX_WRAPSIZER_H_
 
 #include "wx/sizer.h"
 

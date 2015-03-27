@@ -6,8 +6,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKMINIFRAMEH__
-#define __GTKMINIFRAMEH__
+#ifndef WX_GTKMINIFRAME_H_
+#define WX_GTKMINIFRAME_H_
 
 #include "wx/defs.h"
 
