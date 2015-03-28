@@ -2610,12 +2610,24 @@ void FormMain::OnTestReplaceClick( wxCommandEvent& WXUNUSED(event) )
         choices.Add(wxT("Flag 1"),0x0002);
         choices.Add(wxT("Flag 2"),0x0004);
         choices.Add(wxT("Flag 3"),0x0008);
+        const long maxVal = 0x000F;
+        // Look for unused property name
+        wxString propName = wxT("ReplaceFlagsProperty");
+        int idx = 0;
+        while ( m_pPropGridManager->GetPropertyByName(propName) )
+        {
+            propName = wxString::Format(_T("ReplaceFlagsProperty %i"), ++idx);
+        }
+        // Replace property and select new one
+        // with random value in range [1..maxVal]
+        const long propVal = wxGetLocalTime() % maxVal + 1;
         wxPGProperty* newId = m_pPropGridManager->ReplaceProperty( pgId,
-            new wxFlagsProperty(wxT("ReplaceFlagsProperty"), wxPG_LABEL, choices, 0x0003) );
+            new wxFlagsProperty(propName, wxPG_LABEL, choices, propVal) );
         m_pPropGridManager->SetPropertyAttribute( newId,
                                               wxPG_BOOL_USE_CHECKBOX,
                                               true,
                                               wxPG_RECURSE );
+        m_pPropGridManager->SelectProperty(newId);
     }
     else
         wxMessageBox(wxT("First select a property"));
