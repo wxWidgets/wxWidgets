@@ -255,9 +255,7 @@ struct FontParameters {
 class Font {
 protected:
 	FontID fid;
-#if PLAT_WX
-	int ascent;
-#endif
+
 	// Private so Font objects can not be copied
 	Font(const Font &);
 	Font &operator=(const Font &);
@@ -271,9 +269,7 @@ public:
 	FontID GetID() { return fid; }
 	// Alias another font - caller guarantees not to Release
 	void SetID(FontID fid_) { fid = fid_; }
-#if PLAT_WX
-	void SetAscent(int ascent_) { ascent = ascent_; }
-#endif
+
 	friend class Surface;
 	friend class SurfaceImpl;
 };
