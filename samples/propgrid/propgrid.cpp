@@ -2616,7 +2616,7 @@ void FormMain::OnTestReplaceClick( wxCommandEvent& WXUNUSED(event) )
         int idx = 0;
         while ( m_pPropGridManager->GetPropertyByName(propName) )
         {
-            propName = wxString::Format(_T("ReplaceFlagsProperty %i"), ++idx);
+            propName = wxString::Format(wxT("ReplaceFlagsProperty %i"), ++idx);
         }
         // Replace property and select new one
         // with random value in range [1..maxVal]
