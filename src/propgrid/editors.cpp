@@ -1984,7 +1984,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     wxVariant attrVal = prop->GetAttribute(wxPG_ATTR_AUTOCOMPLETE);
     if ( !attrVal.IsNull() )
     {
-        wxASSERT(attrVal.GetType() == wxS("arrstring"));
+        wxASSERT(attrVal.IsType(wxS("arrstring")));
         tc->AutoComplete(attrVal.GetArrayString());
     }
 

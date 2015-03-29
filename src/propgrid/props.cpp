@@ -327,7 +327,7 @@ bool wxIntProperty::StringToValue( wxVariant& variant, const wxString& text, int
 
 bool wxIntProperty::IntToValue( wxVariant& variant, int value, int WXUNUSED(argFlags) ) const
 {
-    if ( variant.GetType() != wxPG_VARIANT_TYPE_LONG || variant != (long)value )
+    if ( !variant.IsType(wxPG_VARIANT_TYPE_LONG) || variant != (long)value )
     {
         variant = (long)value;
         return true;
@@ -640,7 +640,7 @@ wxString wxUIntProperty::ValueToString( wxVariant& value,
     if ( index >= wxPG_UINT_TEMPLATE_MAX )
         index = wxPG_UINT_DEC;
 
-    if ( value.GetType() == wxPG_VARIANT_TYPE_LONG )
+    if (value.IsType(wxPG_VARIANT_TYPE_LONG))
     {
         return wxString::Format(gs_uintTemplates32[index],
                                 (unsigned long)value.GetLong());
@@ -1223,7 +1223,7 @@ bool wxEnumProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& WXUNUS
     // Make sure string value is in the list,
     // unless property has string as preferred value type
     // To reduce code size, use conversion here as well
-    if ( value.GetType() == wxPG_VARIANT_TYPE_STRING )
+    if ( value.IsType(wxPG_VARIANT_TYPE_STRING) )
         return ValueFromString_(value, NULL, value.GetString(), wxPG_PROPERTY_SPECIFIC);
 
     return true;
@@ -1232,7 +1232,7 @@ bool wxEnumProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& WXUNUS
 wxString wxEnumProperty::ValueToString( wxVariant& value,
                                             int WXUNUSED(argFlags) ) const
 {
-    if ( value.GetType() == wxPG_VARIANT_TYPE_STRING )
+    if ( value.IsType(wxPG_VARIANT_TYPE_STRING) )
         return value.GetString();
 
     int index = m_choices.Index(value.GetLong());

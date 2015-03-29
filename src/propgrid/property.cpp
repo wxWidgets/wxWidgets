@@ -936,7 +936,7 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
         {
             if ( overridesLeft &&
                  curChild->HasFlag(wxPG_PROP_COMPOSED_VALUE) &&
-                 childValue.GetType() == wxPG_VARIANT_TYPE_LIST )
+                 childValue.IsType(wxPG_VARIANT_TYPE_LIST) )
             {
                 wxVariantList& childList = childValue.GetList();
                 DoGenerateComposedValue(s, argFlags|wxPG_COMPOSITE_FRAGMENT,
@@ -1368,7 +1368,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
         // List variants are reserved a special purpose
         // as intermediate containers for child values
         // of properties with children.
-        if ( value.GetType() == wxPG_VARIANT_TYPE_LIST )
+        if ( value.IsType(wxPG_VARIANT_TYPE_LIST) )
         {
             //
             // However, situation is different for composed string properties
@@ -1389,7 +1389,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
 
         if ( pList && !pList->IsNull() )
         {
-            wxASSERT( pList->GetType() == wxPG_VARIANT_TYPE_LIST );
+            wxASSERT( pList->IsType(wxPG_VARIANT_TYPE_LIST) );
             wxASSERT( GetChildCount() );
             wxASSERT( !IsCategory() );
 
@@ -1408,7 +1408,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
                 if ( child )
                 {
                     //wxLogDebug(wxT("%i: child = %s, childValue.GetType()=%s"),i,child->GetBaseName().c_str(),childValue.GetType().c_str());
-                    if ( childValue.GetType() == wxPG_VARIANT_TYPE_LIST )
+                    if ( childValue.IsType(wxPG_VARIANT_TYPE_LIST) )
                     {
                         if ( child->HasFlag(wxPG_PROP_AGGREGATE) && !(flags & wxPG_SETVAL_AGGREGATED) )
                         {
@@ -2409,7 +2409,7 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
         {
             //wxLogDebug(wxT("  %s(n=%i), %s"),childValue.GetName().c_str(),n,childValue.GetType().c_str());
 
-            if ( childValue.GetType() == wxPG_VARIANT_TYPE_LIST )
+            if ( childValue.IsType(wxPG_VARIANT_TYPE_LIST) )
             {
                 wxVariant cv2(child->GetValue());
                 child->AdaptListToValue(childValue, &cv2);
@@ -2712,7 +2712,7 @@ bool wxPGProperty::AreAllChildrenSpecified( wxVariant* pendingList ) const
         {
             const wxVariant* childList = NULL;
 
-            if ( listValue && listValue->GetType() == wxPG_VARIANT_TYPE_LIST )
+            if ( listValue && listValue->IsType(wxPG_VARIANT_TYPE_LIST) )
                 childList = listValue;
 
             if ( !child->AreAllChildrenSpecified((wxVariant*)childList) )
@@ -2843,7 +2843,7 @@ wxPropertyCategory::~wxPropertyCategory()
 wxString wxPropertyCategory::ValueToString( wxVariant& WXUNUSED(value),
                                             int WXUNUSED(argFlags) ) const
 {
-    if ( m_value.GetType() == wxPG_VARIANT_TYPE_STRING )
+    if ( m_value.IsType(wxPG_VARIANT_TYPE_STRING) )
         return m_value.GetString();
     return wxEmptyString;
 }

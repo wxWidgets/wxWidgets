@@ -537,7 +537,7 @@ public:
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(DEFVAL) \
     wxString typeName(wxS(TYPENAME)); \
     wxVariant value = p->GetValue(); \
-    if ( value.GetType() != typeName ) \
+    if ( !value.IsType(typeName) ) \
     { \
         wxPGGetFailed(p, typeName); \
         return DEFVAL; \
@@ -546,7 +546,7 @@ public:
 #define wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL_WFALLBACK(TYPENAME, DEFVAL) \
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(DEFVAL) \
     wxVariant value = p->GetValue(); \
-    if ( value.GetType() != wxS(TYPENAME) ) \
+    if ( !value.IsType(wxS(TYPENAME)) ) \
         return DEFVAL; \
 
     wxArrayString GetPropertyValueAsArrayString( wxPGPropArg id ) const
