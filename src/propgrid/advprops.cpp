@@ -343,7 +343,7 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
         if ( property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_WRAP, 0) )
             mode = wxPG_PROPERTY_VALIDATION_WRAP;
 
-        if ( property->GetValueType() == wxT("double") )
+        if ( property->GetValueType() == wxPG_VARIANT_TYPE_DOUBLE )
         {
             double v_d;
             double step = property->GetAttributeAsDouble(wxPG_ATTR_SPINCTRL_STEP, 1.0);
@@ -483,7 +483,7 @@ wxPGWindowList wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgri
     wxDateTime dateValue(wxInvalidDateTime);
 
     wxVariant value = prop->GetValue();
-    if ( value.IsType(wxT("datetime")) )
+    if ( value.IsType(wxPG_VARIANT_TYPE_DATETIME) )
         dateValue = value.GetDateTime();
 
     ctrl->Create(propgrid->GetPanel(),
@@ -509,7 +509,7 @@ void wxPGDatePickerCtrlEditor::UpdateControl( wxPGProperty* property,
 
     wxDateTime dateValue(wxInvalidDateTime);
     wxVariant v(property->GetValue());
-    if ( v.IsType(wxT("datetime")) )
+    if ( v.IsType(wxPG_VARIANT_TYPE_DATETIME) )
         dateValue = v.GetDateTime();
 
     ctrl->SetValue( dateValue );
@@ -2204,7 +2204,7 @@ void wxDateProperty::OnSetValue()
 {
     //
     // Convert invalid dates to unspecified value
-    if ( m_value.IsType(wxT("datetime")) )
+    if ( m_value.IsType(wxPG_VARIANT_TYPE_DATETIME) )
     {
         if ( !m_value.GetDateTime().IsValid() )
             m_value.MakeNull();

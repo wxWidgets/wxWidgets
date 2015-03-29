@@ -732,7 +732,7 @@ TRET wxPropertyGridInterface::GetPropertyValueAs##BIGNAME( wxPGPropArg id ) cons
 { \
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(DEFRETVAL) \
     wxVariant value = p->GetValue(); \
-    if ( wxStrcmp(value.GetType(), wxPGTypeName_##T) != 0 ) \
+    if ( !value.IsType(wxPGTypeName_##T) ) \
     { \
         wxPGGetFailed(p,wxPGTypeName_##T); \
         return (TRET)DEFRETVAL; \
@@ -751,15 +751,15 @@ bool wxPropertyGridInterface::GetPropertyValueAsBool( wxPGPropArg id ) const
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
     wxVariant value = p->GetValue();
-    if ( wxStrcmp(value.GetType(), wxPGTypeName_bool) == 0 )
+    if ( value.IsType(wxPG_VARIANT_TYPE_BOOL) )
     {
         return value.GetBool();
     }
-    if ( wxStrcmp(value.GetType(), wxPGTypeName_long) == 0 )
+    if ( value.IsType(wxPG_VARIANT_TYPE_LONG) )
     {
         return value.GetLong()?true:false;
     }
-    wxPGGetFailed(p,wxPGTypeName_bool);
+    wxPGGetFailed(p, wxPG_VARIANT_TYPE_BOOL);
     return false;
 }
 
