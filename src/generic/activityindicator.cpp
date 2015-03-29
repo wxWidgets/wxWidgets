@@ -150,7 +150,7 @@ private:
         // the next position every time.
         gc->Rotate(m_frame*angle);
 
-        const bool isEnabled = m_win->IsEnabled();
+        const bool isEnabled = m_win->IsThisEnabled();
         for ( int n = 0; n < NUM_DOTS; n++ )
         {
             // Draw all dots uniformly grey when the window is disabled,
