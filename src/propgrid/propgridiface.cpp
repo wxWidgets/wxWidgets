@@ -39,15 +39,6 @@
 #include "wx/propgrid/property.h"
 #include "wx/propgrid/propgrid.h"
 
-
-const wxChar *wxPGTypeName_long = wxT("long");
-const wxChar *wxPGTypeName_bool = wxT("bool");
-const wxChar *wxPGTypeName_double = wxT("double");
-const wxChar *wxPGTypeName_wxString = wxT("string");
-const wxChar *wxPGTypeName_void = wxT("void*");
-const wxChar *wxPGTypeName_wxArrayString = wxT("arrstring");
-
-
 // ----------------------------------------------------------------------------
 // VariantDatas
 // ----------------------------------------------------------------------------
@@ -727,14 +718,14 @@ void wxPropertyGridInterface::SetPropertyCell( wxPGPropArg id,
 // -----------------------------------------------------------------------
 // GetPropertyValueAsXXX methods
 
-#define IMPLEMENT_GET_VALUE(T,TRET,BIGNAME,DEFRETVAL) \
+#define IMPLEMENT_GET_VALUE(TRET,PGTypeName,BIGNAME,DEFRETVAL) \
 TRET wxPropertyGridInterface::GetPropertyValueAs##BIGNAME( wxPGPropArg id ) const \
 { \
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(DEFRETVAL) \
     wxVariant value = p->GetValue(); \
-    if ( !value.IsType(wxPGTypeName_##T) ) \
+    if ( !value.IsType(PGTypeName) ) \
     { \
-        wxPGGetFailed(p,wxPGTypeName_##T); \
+        wxPGGetFailed(p, PGTypeName); \
         return (TRET)DEFRETVAL; \
     } \
     return (TRET)value.Get##BIGNAME(); \
@@ -763,8 +754,8 @@ bool wxPropertyGridInterface::GetPropertyValueAsBool( wxPGPropArg id ) const
     return false;
 }
 
-IMPLEMENT_GET_VALUE(long,long,Long,0)
-IMPLEMENT_GET_VALUE(double,double,Double,0.0)
+IMPLEMENT_GET_VALUE(long,wxPG_VARIANT_TYPE_LONG,Long,0)
+IMPLEMENT_GET_VALUE(double,wxPG_VARIANT_TYPE_DOUBLE,Double,0.0)
 
 bool wxPropertyGridInterface::IsPropertyExpanded( wxPGPropArg id ) const
 {
