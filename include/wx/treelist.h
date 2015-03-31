@@ -313,6 +313,7 @@ public:
     void SelectAll();
     void UnselectAll();
 
+    void EnsureVisible(wxTreeListItem item);
 
     // Checkbox handling
     // -----------------
