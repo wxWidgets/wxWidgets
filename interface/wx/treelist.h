@@ -710,6 +710,11 @@ public:
      */
     void UnselectAll();
 
+    /**
+        Call this to ensure that the given item is visible.
+     */
+    void EnsureVisible(wxTreeListItem item);
+
     //@}
 
 

@@ -286,7 +286,6 @@ public:
     void Collapse(wxTreeListItem item);
     bool IsExpanded(wxTreeListItem item) const;
 
-
     // Selection handling
     // ------------------
 
@@ -313,6 +312,7 @@ public:
     void SelectAll();
     void UnselectAll();
 
+    void EnsureVisible(wxTreeListItem item);
 
     // Checkbox handling
     // -----------------
