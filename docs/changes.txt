@@ -591,6 +591,7 @@ All (GUI):
 - Fix updating nested window scrollbars in some cases (sbrowne).
 - Fix wxPGChoices copy ctor (Snoits).
 - Fix wxPixelData<wxImage>::Offset() for alpha (Markus Rollmann).
+- Fix bug in wxImage::ClearAlpha() for shared data (Markus Rollmann).
 
 wxGTK:
 
