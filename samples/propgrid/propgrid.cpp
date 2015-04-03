@@ -2109,11 +2109,11 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     menuTry->Append(ID_SETCOLUMNS, wxT("Set Number of Columns") );
     menuTry->AppendSeparator();
     menuTry->Append(ID_TESTXRC, wxT("Display XRC sample") );
-    menuTry->AppendSeparator();
-    menuTry->Append(ID_RUNTESTFULL, wxT("Run Tests (full)") );
-    menuTry->Append(ID_RUNTESTPARTIAL, wxT("Run Tests (fast)") );
 
     menuFile->Append(ID_RUNMINIMAL, wxT("Run Minimal Sample") );
+    menuFile->AppendSeparator();
+    menuFile->Append(ID_RUNTESTFULL, wxT("Run Tests (full)") );
+    menuFile->Append(ID_RUNTESTPARTIAL, wxT("Run Tests (fast)") );
     menuFile->AppendSeparator();
     menuFile->Append(ID_QUIT, wxT("E&xit\tAlt-X"), wxT("Quit this program") );
 
