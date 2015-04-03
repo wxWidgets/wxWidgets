@@ -378,11 +378,16 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
         }
         else
         {
+            long step = property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_STEP, 1);
+#if defined(wxLongLong_t) && wxUSE_LONGLONG
             wxLongLong_t v_ll;
-            wxLongLong_t step = property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_STEP, 1);
-
-            // Try (long) long
+            // Try long long
             if ( s.ToLongLong(&v_ll, 10) )
+#else
+            long v_ll;
+            // Try long
+            if ( s.ToLong(&v_ll, 10) )
+#endif
             {
                 if ( bigStep )
                     step *= 10;
@@ -395,7 +400,11 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
                 // Min/Max check
                 wxIntProperty::DoValidation(property, v_ll, NULL, mode);
 
+#if defined(wxLongLong_t) && wxUSE_LONGLONG
                 s = wxLongLong(v_ll).ToString();
+#else
+                s = wxString::Format(wxT("%ld"), v_ll);
+#endif
             }
             else
             {

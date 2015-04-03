@@ -192,7 +192,7 @@ public:
       @code
           wxLongLong value;
           wxVariant variant = property->GetValue();
-          if ( variant.GetType() == "longlong" )
+          if ( variant.IsType("longlong") )
               value = variant.GetLongLong();
           else
               value = variant.GetLong();
@@ -223,9 +223,11 @@ public:
                    long value = 0 );
     virtual ~wxIntProperty();
 
+#if wxUSE_LONGLONG
     wxIntProperty( const wxString& label,
                    const wxString& name,
                    const wxLongLong& value );
+#endif
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
@@ -238,13 +240,20 @@ public:
     static wxValidator* GetClassValidator();
     virtual wxValidator* DoGetValidator() const;
 
-    /** Validation helper.
+    /** Validation helpers.
     */
+#if defined(wxLongLong_t) && wxUSE_LONGLONG
     static bool DoValidation( const wxPGProperty* property,
                               wxLongLong_t& value,
                               wxPGValidationInfo* pValidationInfo,
                               int mode =
                                 wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE );
+#endif
+    static bool DoValidation(const wxPGProperty* property,
+                             long& value,
+                             wxPGValidationInfo* pValidationInfo,
+                             int mode =
+                                wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
 
 protected:
 };
@@ -277,9 +286,11 @@ public:
                     const wxString& name = wxPG_LABEL,
                     unsigned long value = 0 );
     virtual ~wxUIntProperty();
+#if wxUSE_LONGLONG
     wxUIntProperty( const wxString& label,
                     const wxString& name,
                     const wxULongLong& value );
+#endif
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
@@ -291,12 +302,25 @@ public:
     virtual bool IntToValue( wxVariant& variant,
                              int number,
                              int argFlags = 0 ) const;
+
 protected:
     wxByte      m_base;
     wxByte      m_realBase; // translated to 8,16,etc.
     wxByte      m_prefix;
 private:
     void Init();
+
+    // Validation helpers.
+#if defined(wxULongLong_t) && wxUSE_LONGLONG
+    static bool DoValidation(const wxPGProperty* property,
+                             wxULongLong_t& value,
+                             wxPGValidationInfo* pValidationInfo,
+                             int mode =wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
+#endif
+    static bool DoValidation(const wxPGProperty* property,
+                             long& value,
+                             wxPGValidationInfo* pValidationInfo,
+                             int mode = wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
 };
 
 // -----------------------------------------------------------------------

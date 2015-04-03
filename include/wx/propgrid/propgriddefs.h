@@ -656,10 +656,13 @@ template<> inline wxVariant WXVARIANT( const wxColour& value )
 #define wxPG_VARIANT_TYPE_LIST          wxPGGlobalVars->m_strlist
 #define wxPG_VARIANT_TYPE_DOUBLE        wxS("double")
 #define wxPG_VARIANT_TYPE_ARRSTRING     wxS("arrstring")
+#if wxUSE_DATETIME
 #define wxPG_VARIANT_TYPE_DATETIME      wxS("datetime")
+#endif
+#if wxUSE_LONGLONG
 #define wxPG_VARIANT_TYPE_LONGLONG      wxS("longlong")
 #define wxPG_VARIANT_TYPE_ULONGLONG     wxS("ulonglong")
-
+#endif
 #endif // !SWIG
 
 // -----------------------------------------------------------------------
