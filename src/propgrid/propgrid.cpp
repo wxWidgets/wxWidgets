@@ -1213,7 +1213,7 @@ void wxPropertyGrid::OnTLPChanging( wxWindow* newTLP )
     if ( newTLP == m_tlp )
         return;
 
-    wxLongLong currentTime = ::wxGetLocalTimeMillis();
+    wxMilliClock_t currentTime = ::wxGetLocalTimeMillis();
 
     //
     // Parent changed so let's redetermine and re-hook the

@@ -535,7 +535,7 @@ protected:
 
     void OnMouseEvent( wxMouseEvent& event )
     {
-        wxLongLong t = ::wxGetLocalTimeMillis();
+        wxMilliClock_t t = ::wxGetLocalTimeMillis();
         int evtType = event.GetEventType();
 
         if ( m_property->HasFlag(wxPG_PROP_USE_DCC) &&
@@ -560,7 +560,7 @@ protected:
                 {
                     if ( m_downReceived || m_timeLastMouseUp == 1 )
                     {
-                        wxLongLong timeFromLastUp = (t-m_timeLastMouseUp);
+                        wxMilliClock_t timeFromLastUp = (t-m_timeLastMouseUp);
 
                         if ( timeFromLastUp < DOUBLE_CLICK_CONVERSION_TRESHOLD )
                         {
@@ -586,7 +586,7 @@ protected:
     }
 
 private:
-    wxLongLong                  m_timeLastMouseUp;
+    wxMilliClock_t              m_timeLastMouseUp;
     wxOwnerDrawnComboBox*       m_combo;
     wxPGProperty*               m_property;  // Selected property
     bool                        m_downReceived;
