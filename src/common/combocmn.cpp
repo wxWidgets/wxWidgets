@@ -1918,7 +1918,7 @@ bool wxComboCtrlBase::HandleButtonMouseEvent( wxMouseEvent& event,
 bool wxComboCtrlBase::PreprocessMouseEvent( wxMouseEvent& event,
                                             int WXUNUSED(flags) )
 {
-    wxLongLong t = ::wxGetLocalTimeMillis();
+    wxMilliClock_t t = ::wxGetLocalTimeMillis();
     int evtType = event.GetEventType();
 
 #if USES_WXPOPUPWINDOW || USES_GENERICTLW

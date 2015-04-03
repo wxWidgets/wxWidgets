@@ -731,10 +731,14 @@ void wxComboCtrl::DoTimerEvent()
     }
     else
     {
-        wxLongLong t = ::wxGetLocalTimeMillis();
+        wxMilliClock_t t = ::wxGetLocalTimeMillis();
         const wxRect& rect = m_animRect;
 
+#if wxUSE_LONGLONG
         int pos = (int) (t-m_animStart).GetLo();
+#else
+        int pos = (int) (t-m_animStart);
+#endif
         if ( pos < COMBOBOX_ANIMATION_DURATION )
         {
             int height = rect.height;

@@ -100,7 +100,7 @@ private:
 
 #if wxUSE_COMBOCTRL_POPUP_ANIMATION
     // Popup animation related
-    wxLongLong  m_animStart;
+    wxMilliClock_t m_animStart;
     wxTimer     m_animTimer;
     wxRect      m_animRect;
     int         m_animFlags;
