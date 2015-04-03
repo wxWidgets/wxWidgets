@@ -1422,7 +1422,11 @@ void FormMain::PopulateWithExamples ()
     pg->Append( new wxPointProperty( wxT("PointProperty"), wxT("Position"), GetPosition() ) );
 
     // UInt samples
+#if wxUSE_LONGLONG
     pg->Append( new wxUIntProperty( wxT("UIntProperty"), wxPG_LABEL, wxULongLong(wxULL(0xFEEEFEEEFEEE))));
+#else
+    pg->Append( new wxUIntProperty( wxT("UIntProperty"), wxPG_LABEL, 0xFEEEFEEE));
+#endif
     pg->SetPropertyAttribute( wxT("UIntProperty"), wxPG_UINT_PREFIX, wxPG_PREFIX_NONE );
     pg->SetPropertyAttribute( wxT("UIntProperty"), wxPG_UINT_BASE, wxPG_BASE_HEX );
     //pg->SetPropertyAttribute( wxT("UIntProperty"), wxPG_UINT_PREFIX, wxPG_PREFIX_NONE );

@@ -671,9 +671,15 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             RT_FAILURE();
 #endif
 
+#if wxUSE_LONGLONG && defined(wxLongLong_t)
         pgman->SetPropertyValue(wxT("IntProperty"),wxLL(10000000000));
         if ( pg->GetPropertyValueAsLongLong(wxT("IntProperty")) != wxLL(10000000000) )
             RT_FAILURE();
+#else
+        pgman->SetPropertyValue(wxT("IntProperty"),1000000000);
+        if ( pg->GetPropertyValueAsLong(wxT("IntProperty")) != 1000000000 )
+            RT_FAILURE();
+#endif
 
         pg->SetPropertyValue(wxT("StringProperty"),wxT("Text2"));
         pg->SetPropertyValue(wxT("IntProperty"),512);
@@ -721,9 +727,15 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             RT_FAILURE();
 #endif
 
+#if wxUSE_LONGLONG && defined(wxLongLong_t)
         pgman->SetPropertyValue(wxT("IntProperty"),wxLL(-80000000000));
         if ( pgman->GetPropertyValueAsLongLong(wxT("IntProperty")) != wxLL(-80000000000) )
             RT_FAILURE();
+#else
+        pgman->SetPropertyValue(wxT("IntProperty"),-1000000000);
+        if ( pgman->GetPropertyValueAsLong(wxT("IntProperty")) != -1000000000 )
+            RT_FAILURE();
+#endif
 
         // Make sure children of composite parent get updated as well
         // Original string value: "Lamborghini Diablo SV; 5707; [300; 3.9; 8.6] 300000; Not Convertible"
