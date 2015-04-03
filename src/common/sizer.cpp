@@ -2009,6 +2009,67 @@ void wxFlexGridSizer::RemoveGrowableRow( size_t idx )
 // wxBoxSizer
 //---------------------------------------------------------------------------
 
+wxSizerItem *wxBoxSizer::DoInsert(size_t index, wxSizerItem *item)
+{
+    const int flags = item->GetFlag();
+    if ( IsVertical() )
+    {
+        wxASSERT_MSG
+        (
+            !(flags & wxALIGN_BOTTOM),
+            wxS("Vertical alignment flags are ignored in vertical sizers")
+        );
+
+        // We need to accept wxALIGN_CENTRE_VERTICAL when it is combined with
+        // wxALIGN_CENTRE_HORIZONTAL because this is known as wxALIGN_CENTRE
+        // and we accept it historically in wxSizer API.
+        if ( !(flags & wxALIGN_CENTRE_HORIZONTAL) )
+        {
+            wxASSERT_MSG
+            (
+                !(flags & wxALIGN_CENTRE_VERTICAL),
+                wxS("Vertical alignment flags are ignored in vertical sizers")
+            );
+        }
+
+        if ( flags & wxEXPAND )
+        {
+            wxASSERT_MSG
+            (
+                !(flags & (wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL)),
+                wxS("Horizontal alignment flags are ignored with wxEXPAND")
+            );
+        }
+    }
+    else // horizontal
+    {
+        wxASSERT_MSG
+        (
+            !(flags & wxALIGN_RIGHT),
+            wxS("Horizontal alignment flags are ignored in horizontal sizers")
+        );
+
+        if ( !(flags & wxALIGN_CENTRE_VERTICAL) )
+        {
+            wxASSERT_MSG
+            (
+                !(flags & wxALIGN_CENTRE_HORIZONTAL),
+                wxS("Horizontal alignment flags are ignored in horizontal sizers")
+            );
+        }
+
+        if ( flags & wxEXPAND )
+        {
+            wxASSERT_MSG(
+                !(flags & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL)),
+                wxS("Vertical alignment flags are ignored with wxEXPAND")
+            );
+        }
+    }
+
+    return wxSizer::DoInsert(index, item);
+}
+
 wxSizerItem *wxBoxSizer::AddSpacer(int size)
 {
     return IsVertical() ? Add(0, size) : Add(size, 0);

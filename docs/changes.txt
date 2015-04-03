@@ -24,6 +24,8 @@ Changes in behaviour not resulting in compilation errors
 - Creating wxBitmap with 0 width or height now always fails in all ports
   (it used to succeed in wxMSW).
 
+- Using invalid flags with wxBoxSizer items now triggers asserts.
+
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
 

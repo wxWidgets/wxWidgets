@@ -941,6 +941,9 @@ public:
     virtual void RecalcSizes() wxOVERRIDE;
 
 protected:
+    // Only overridden to perform extra debugging checks.
+    virtual wxSizerItem *DoInsert(size_t index, wxSizerItem *item) wxOVERRIDE;
+
     // helpers for our code: this returns the component of the given wxSize in
     // the direction of the sizer and in the other direction, respectively
     int GetSizeInMajorDir(const wxSize& sz) const

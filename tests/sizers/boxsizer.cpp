@@ -381,7 +381,60 @@ void BoxSizerTestCase::RecalcSizesRespectsMaxSize2()
 
 void BoxSizerTestCase::IncompatibleFlags()
 {
-    WX_ASSERT_FAILS_WITH_ASSERT(
-        m_sizer->Add(10, 10, 0, wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL)
+#define ASSERT_SIZER_INVALID_FLAGS(f, msg) \
+    WX_ASSERT_FAILS_WITH_ASSERT_MESSAGE( \
+            "Expected assertion not generated for " msg, \
+            m_sizer->Add(10, 10, 0, f) \
+        )
+
+#define ASSERT_SIZER_INCOMPATIBLE_FLAGS(f1, f2) \
+    ASSERT_SIZER_INVALID_FLAGS(f1 | f2, \
+        "using incompatible flags " #f1 " and " #f2 \
+    )
+
+    // In horizontal sizers alignment is only used in vertical direction.
+    ASSERT_SIZER_INVALID_FLAGS(
+        wxALIGN_RIGHT,
+        "using wxALIGN_RIGHT in a horizontal sizer"
     );
+
+    ASSERT_SIZER_INVALID_FLAGS(
+        wxALIGN_CENTRE_HORIZONTAL,
+        "using wxALIGN_CENTRE_HORIZONTAL in a horizontal sizer"
+    );
+
+    // However using wxALIGN_CENTRE_HORIZONTAL together with
+    // wxALIGN_CENTRE_VERTICAL as done by wxSizerFlags::Centre() should work.
+    m_sizer->Add(10, 10, wxSizerFlags().Centre());
+
+    // Combining two vertical alignment flags doesn't make sense.
+    ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxALIGN_BOTTOM, wxALIGN_CENTRE_VERTICAL);
+
+    // Combining wxEXPAND with vertical alignment doesn't make sense neither.
+    ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxEXPAND, wxALIGN_CENTRE_VERTICAL);
+    ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxEXPAND, wxALIGN_BOTTOM);
+
+
+    // And now exactly the same thing in the other direction.
+    delete m_sizer;
+    m_sizer = new wxBoxSizer(wxVERTICAL);
+
+    ASSERT_SIZER_INVALID_FLAGS(
+        wxALIGN_BOTTOM,
+        "using wxALIGN_BOTTOM in a vertical sizer"
+    );
+
+    ASSERT_SIZER_INVALID_FLAGS(
+        wxALIGN_CENTRE_VERTICAL,
+        "using wxALIGN_CENTRE_VERTICAL in a vertical sizer"
+    );
+
+    m_sizer->Add(10, 10, wxSizerFlags().Centre());
+
+    ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxALIGN_RIGHT, wxALIGN_CENTRE_HORIZONTAL);
+    ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxEXPAND, wxALIGN_CENTRE_HORIZONTAL);
+    ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxEXPAND, wxALIGN_RIGHT);
+
+#undef ASSERT_SIZER_INCOMPATIBLE_FLAGS
+#undef ASSERT_SIZER_INVALID_FLAGS
 }
