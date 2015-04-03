@@ -190,10 +190,10 @@ public:
          or
 
       @code
-          wxLongLong_t value;
+          wxLongLong value;
           wxVariant variant = property->GetValue();
-          if ( variant.GetType() == "wxLongLong" )
-              value = wxLongLongFromVariant(variant);
+          if ( variant.GetType() == "longlong" )
+              value = variant.GetLongLong();
           else
               value = variant.GetLong();
       @endcode

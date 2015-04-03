@@ -1547,9 +1547,9 @@ wxVariant wxPGProperty::GetDefaultValue() const
             return wxVariant(0.0);
         if ( valueType == wxPG_VARIANT_TYPE_ARRSTRING )
             return wxVariant(wxArrayString());
-        if ( valueType == wxS("wxLongLong") )
+        if ( valueType == wxPG_VARIANT_TYPE_LONGLONG )
             return WXVARIANT(wxLongLong(0));
-        if ( valueType == wxS("wxULongLong") )
+        if ( valueType == wxPG_VARIANT_TYPE_ULONGLONG )
             return WXVARIANT(wxULongLong(0));
         if ( valueType == wxS("wxColour") )
             return WXVARIANT(*wxBLACK);
@@ -1559,9 +1559,9 @@ wxVariant wxPGProperty::GetDefaultValue() const
 #endif
         if ( valueType == wxS("wxFont") )
             return WXVARIANT(*wxNORMAL_FONT);
-        if ( valueType == wxS("wxPoint") )
+        if ( valueType == wxPoint_VariantType )
             return WXVARIANT(wxPoint(0, 0));
-        if ( valueType == wxS("wxSize") )
+        if ( valueType == wxSize_VariantType )
             return WXVARIANT(wxSize(0, 0));
     }
 

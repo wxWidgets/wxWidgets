@@ -533,25 +533,24 @@ public:
     bool GetPropertyValueAsBool( wxPGPropArg id ) const;
     double GetPropertyValueAsDouble( wxPGPropArg id ) const;
 
-#define wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(TYPENAME, DEFVAL) \
+#define wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(PGTypeName, DEFVAL) \
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(DEFVAL) \
-    wxString typeName(wxS(TYPENAME)); \
     wxVariant value = p->GetValue(); \
-    if ( !value.IsType(typeName) ) \
+    if ( !value.IsType(PGTypeName) ) \
     { \
-        wxPGGetFailed(p, typeName); \
+        wxPGGetFailed(p, PGTypeName); \
         return DEFVAL; \
     }
 
-#define wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL_WFALLBACK(TYPENAME, DEFVAL) \
+#define wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL_WFALLBACK(PGTypeName, DEFVAL) \
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(DEFVAL) \
     wxVariant value = p->GetValue(); \
-    if ( !value.IsType(wxS(TYPENAME)) ) \
+    if ( !value.IsType(PGTypeName) ) \
         return DEFVAL; \
 
     wxArrayString GetPropertyValueAsArrayString( wxPGPropArg id ) const
     {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL("arrstring",
+        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxPG_VARIANT_TYPE_ARRSTRING,
                                                    wxArrayString())
         return value.GetArrayString();
     }
@@ -572,7 +571,7 @@ public:
 
     wxArrayInt GetPropertyValueAsArrayInt( wxPGPropArg id ) const
     {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL("wxArrayInt",
+        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxArrayInt_VariantType,
                                                    wxArrayInt())
         wxArrayInt arr;
         arr << value;
@@ -582,7 +581,7 @@ public:
 #if wxUSE_DATETIME
     wxDateTime GetPropertyValueAsDateTime( wxPGPropArg id ) const
     {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL("datetime",
+        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxPG_VARIANT_TYPE_DATETIME,
                                                    wxDateTime())
         return value.GetDateTime();
     }
