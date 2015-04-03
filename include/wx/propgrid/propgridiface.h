@@ -1218,13 +1218,29 @@ public:
     }
 
 #if wxUSE_LONGLONG
-    /** Sets value (wxLongLong&) of a property.
+#ifdef wxLongLong_t
+    /** Sets value (wxLongLong_t&) of a property.
     */
+    void SetPropertyValue(wxPGPropArg id, wxLongLong_t value)
+    {
+        wxVariant v = WXVARIANT(wxLongLong(value));
+        SetPropVal(id, v);
+    }
+#endif
     void SetPropertyValue( wxPGPropArg id, wxLongLong value )
     {
         wxVariant v = WXVARIANT(value);
         SetPropVal( id, v );
     }
+#ifdef wxULongLong_t
+    /** Sets value (wxULongLong_t&) of a property.
+    */
+    void SetPropertyValue(wxPGPropArg id, wxULongLong_t value)
+    {
+        wxVariant v = WXVARIANT(wxULongLong(value));
+        SetPropVal(id, v);
+    }
+#endif
     /** Sets value (wxULongLong&) of a property.
     */
     void SetPropertyValue( wxPGPropArg id, wxULongLong value )

@@ -638,7 +638,7 @@ wxUIntProperty::wxUIntProperty( const wxString& label, const wxString& name,
     SetValue((long)value);
 }
 
-#if wxUSE_LONLONG
+#if wxUSE_LONGLONG
 wxUIntProperty::wxUIntProperty( const wxString& label, const wxString& name,
     const wxULongLong& value ) : wxPGProperty(label,name)
 {
