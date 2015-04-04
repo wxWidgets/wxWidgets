@@ -1517,11 +1517,13 @@ void wxGridSizer::SetItemBounds( wxSizerItem *item, int x, int y, int w, int h )
     wxSize sz( item->GetMinSizeWithBorder() );
     int flag = item->GetFlag();
 
-    if ((flag & wxEXPAND) || (flag & wxSHAPED))
+    // wxSHAPED maintains aspect ratio and so always applies to both
+    // directions.
+    if ( flag & wxSHAPED )
     {
-       sz = wxSize(w, h);
+        sz = wxSize(w, h);
     }
-    else
+    else // Otherwise we handle each direction individually.
     {
         if (flag & wxALIGN_CENTER_HORIZONTAL)
         {
@@ -1531,6 +1533,10 @@ void wxGridSizer::SetItemBounds( wxSizerItem *item, int x, int y, int w, int h )
         {
             pt.x = x + (w - sz.x);
         }
+        else if (flag & wxEXPAND)
+        {
+            sz.x = w;
+        }
 
         if (flag & wxALIGN_CENTER_VERTICAL)
         {
@@ -1539,6 +1545,10 @@ void wxGridSizer::SetItemBounds( wxSizerItem *item, int x, int y, int w, int h )
         else if (flag & wxALIGN_BOTTOM)
         {
             pt.y = y + (h - sz.y);
+        }
+        else if ( flag & wxEXPAND )
+        {
+            sz.y = h;
         }
     }
 

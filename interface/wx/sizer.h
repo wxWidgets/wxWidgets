@@ -68,7 +68,17 @@
              These flags are used to specify which side(s) of the sizer item
              the border width will apply to.}
     @itemdef{wxEXPAND,
-             The item will be expanded to fill the space assigned to the item.}
+             The item will be expanded to fill the space assigned to the item.
+             When used for the items of wxBoxSizer, the expansion only happens
+             in the transversal direction of the sizer as only the item
+             proportion governs its behaviour in the principal sizer direction.
+             But when it is used for the items of wxGridSizer, this flag can be
+             combined with the alignment flags which override it in the
+             corresponding direction if specified, e.g. @c wxEXPAND |
+             wxALIGN_CENTRE_VERTICAL would expand the item only horizontally
+             but center it vertically. Notice that this doesn't work for the
+             default left/top alignment and @c wxEXPAND still applies in both
+             directions if it is combined with @c wxALIGN_LEFT or @c wxALIGN_TOP.}
     @itemdef{wxSHAPED,
              The item will be expanded as much as possible while also
              maintaining its aspect ratio.}

@@ -136,4 +136,23 @@ void GridSizerTestCase::Expand()
     CPPUNIT_ASSERT_EQUAL( wxSize(sizeChild.x, sizeRest.y),
                           children[2]->GetSize() );
     CPPUNIT_ASSERT_EQUAL( sizeRest, children[3]->GetSize() );
+
+    // With expand and another alignment flag, they should expand only in the
+    // direction in which the alignment is not given.
+    SetChildren(children, wxSizerFlags().Expand().CentreVertical());
+    CPPUNIT_ASSERT_EQUAL( sizeChild, children[0]->GetSize() );
+    CPPUNIT_ASSERT_EQUAL( wxSize(sizeRest.x, sizeChild.y),
+                          children[1]->GetSize() );
+    CPPUNIT_ASSERT_EQUAL( sizeChild, children[2]->GetSize() );
+    CPPUNIT_ASSERT_EQUAL( wxSize(sizeRest.x, sizeChild.y),
+                          children[3]->GetSize() );
+
+    // Same as above but mirrored.
+    SetChildren(children, wxSizerFlags().Expand().CentreHorizontal());
+    CPPUNIT_ASSERT_EQUAL( sizeChild, children[0]->GetSize() );
+    CPPUNIT_ASSERT_EQUAL( sizeChild, children[1]->GetSize() );
+    CPPUNIT_ASSERT_EQUAL( wxSize(sizeChild.x, sizeRest.y),
+                          children[2]->GetSize() );
+    CPPUNIT_ASSERT_EQUAL( wxSize(sizeChild.x, sizeRest.y),
+                          children[3]->GetSize() );
 }
