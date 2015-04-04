@@ -384,6 +384,7 @@ enum
     ID_ENABLE,
     ID_SETREADONLY,
     ID_HIDE,
+    ID_BOOL_CHECKBOX,
     ID_DELETE,
     ID_DELETER,
     ID_DELETEALL,
@@ -492,6 +493,7 @@ wxBEGIN_EVENT_TABLE(FormMain, wxFrame)
     EVT_MENU( ID_ENABLE, FormMain::OnEnableDisable )
     EVT_MENU( ID_SETREADONLY, FormMain::OnSetReadOnly )
     EVT_MENU( ID_HIDE, FormMain::OnHide )
+    EVT_MENU( ID_BOOL_CHECKBOX, FormMain::OnBoolCheckbox )
 
     EVT_MENU( ID_ITERATE1, FormMain::OnIterate1Click )
     EVT_MENU( ID_ITERATE2, FormMain::OnIterate2Click )
@@ -1943,7 +1945,6 @@ void FormMain::CreateGrid( int style, int extraStyle )
 
     // Change some attributes in all properties
     //pgman->SetPropertyAttributeAll(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING,true);
-    //pgman->SetPropertyAttributeAll(wxPG_BOOL_USE_CHECKBOX,true);
 
     //m_pPropGridManager->SetSplitterLeft(true);
     //m_pPropGridManager->SetSplitterPosition(137);
@@ -2106,6 +2107,8 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     menuTry->AppendSeparator();
     menuTry->AppendCheckItem(ID_STATICLAYOUT, wxT("Static Layout"),
         wxT("Switches between user-modifiable and static layouts.") );
+    menuTry->AppendCheckItem(ID_BOOL_CHECKBOX, wxT("Render Boolean values as checkboxes"),
+        wxT("Renders Boolean values as checkboxes"));
     menuTry->Append(ID_SETCOLUMNS, wxT("Set Number of Columns") );
     menuTry->AppendSeparator();
     menuTry->Append(ID_TESTXRC, wxT("Display XRC sample") );
@@ -2534,6 +2537,11 @@ void FormMain::OnHide( wxCommandEvent& WXUNUSED(event) )
     }
 
     m_pPropGridManager->HideProperty( id, true );
+}
+
+void FormMain::OnBoolCheckbox(wxCommandEvent& evt)
+{
+    m_pPropGridManager->SetPropertyAttributeAll(wxPG_BOOL_USE_CHECKBOX, evt.IsChecked());
 }
 
 // -----------------------------------------------------------------------
