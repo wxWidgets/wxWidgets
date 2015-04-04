@@ -1406,6 +1406,18 @@ wxSizerItem *wxGridSizer::DoInsert(size_t index, wxSizerItem *item)
         }
     }
 
+    const int flags = item->GetFlag();
+    if ( flags & wxEXPAND )
+    {
+        // Check that expansion will happen in at least one of the directions.
+        wxASSERT_MSG
+        (
+            !(flags & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL)) ||
+                !(flags & (wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL)),
+            wxS("wxEXPAND flag will be overridden by alignment flags")
+        );
+    }
+
     return wxSizer::DoInsert(index, item);
 }
 

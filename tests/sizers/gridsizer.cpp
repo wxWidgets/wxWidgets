@@ -39,9 +39,11 @@ public:
 private:
     CPPUNIT_TEST_SUITE( GridSizerTestCase );
         CPPUNIT_TEST( Expand );
+        CPPUNIT_TEST( IncompatibleFlags );
     CPPUNIT_TEST_SUITE_END();
 
     void Expand();
+    void IncompatibleFlags();
 
     // Clear the current sizer contents and add the specified windows to it,
     // using the same flags for all of them.
@@ -155,4 +157,13 @@ void GridSizerTestCase::Expand()
                           children[2]->GetSize() );
     CPPUNIT_ASSERT_EQUAL( wxSize(sizeChild.x, sizeRest.y),
                           children[3]->GetSize() );
+}
+
+void GridSizerTestCase::IncompatibleFlags()
+{
+    WX_ASSERT_FAILS_WITH_ASSERT_MESSAGE
+    (
+        "Combining wxEXPAND and wxCENTRE should assert",
+        m_sizer->Add(10, 10, wxSizerFlags().Expand().Centre())
+    );
 }
