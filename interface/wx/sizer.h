@@ -1394,6 +1394,44 @@ public:
     wxSizerFlags& Centre();
 
     /**
+        Same as CentreHorizontal().
+
+        @since 3.1.0
+     */
+    wxSizerFlags& CenterHorizontal();
+
+    /**
+        Same as CentreVertical().
+
+        @since 3.1.0
+     */
+    wxSizerFlags& CenterVertical();
+
+    /**
+        Center an item only in horizontal direction.
+
+        This is mostly useful for 2D sizers as for the 1D ones it is shorter to
+        just use Centre() as the alignment is only used in one direction with
+        them anyhow. For 2D sizers, centering an item in one direction is quite
+        different from centering it in both directions however.
+
+        @see CentreVertical()
+
+        @since 3.1.0
+     */
+    wxSizerFlags& CentreHorizontal();
+
+    /**
+        Center an item only in vertical direction.
+
+        The remarks in CentreHorizontal() documentation also apply to this
+        function.
+
+        @since 3.1.0
+     */
+    wxSizerFlags& CentreVertical();
+
+    /**
         Sets the border in the given @a direction having twice the default
         border size.
     */

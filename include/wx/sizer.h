@@ -78,6 +78,12 @@ public:
     wxSizerFlags& Centre() { return Align(wxALIGN_CENTRE); }
     wxSizerFlags& Center() { return Centre(); }
 
+    wxSizerFlags& CentreVertical() { return Align(wxALIGN_CENTRE_VERTICAL); }
+    wxSizerFlags& CenterVertical() { return CentreVertical(); }
+
+    wxSizerFlags& CentreHorizontal() { return Align(wxALIGN_CENTRE_HORIZONTAL); }
+    wxSizerFlags& CenterHorizontal() { return CentreHorizontal(); }
+
     wxSizerFlags& Top()
     {
         m_flags &= ~(wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL);
