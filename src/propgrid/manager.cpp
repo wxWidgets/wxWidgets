@@ -1433,10 +1433,14 @@ void wxPropertyGridManager::Refresh(bool eraseBackground, const wxRect* rect )
 
 void wxPropertyGridManager::RefreshProperty( wxPGProperty* p )
 {
-    wxPropertyGrid* grid = p->GetGrid();
+    wxASSERT( p->IsRoot() ||
+              p->GetParentState() == p->GetParent()->GetParentState() );
 
-    if ( GetPage(m_selPage)->GetStatePtr() == p->GetParent()->GetParentState() )
+    if ( GetPage(m_selPage)->GetStatePtr() == p->GetParentState() )
+    {
+        wxPropertyGrid* grid = p->GetGrid();
         grid->RefreshProperty(p);
+    }
 }
 
 // -----------------------------------------------------------------------
