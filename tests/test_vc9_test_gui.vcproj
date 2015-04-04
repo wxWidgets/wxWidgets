@@ -987,6 +987,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\sizers\gridsizer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\gridtest.cpp"
 				>
 			</File>

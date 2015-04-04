@@ -235,6 +235,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_settings.obj \
 	$(OBJS)\test_gui_socket.obj \
 	$(OBJS)\test_gui_boxsizer.obj \
+	$(OBJS)\test_gui_gridsizer.obj \
 	$(OBJS)\test_gui_wrapsizer.obj \
 	$(OBJS)\test_gui_toplevel.obj \
 	$(OBJS)\test_gui_valnum.obj \
@@ -1057,6 +1058,9 @@ $(OBJS)\test_gui_socket.obj: .\net\socket.cpp
 
 $(OBJS)\test_gui_boxsizer.obj: .\sizers\boxsizer.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\sizers\boxsizer.cpp
+
+$(OBJS)\test_gui_gridsizer.obj: .\sizers\gridsizer.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\sizers\gridsizer.cpp
 
 $(OBJS)\test_gui_wrapsizer.obj: .\sizers\wrapsizer.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\sizers\wrapsizer.cpp

@@ -251,6 +251,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_settings.o \
 	test_gui_socket.o \
 	test_gui_boxsizer.o \
+	test_gui_gridsizer.o \
 	test_gui_wrapsizer.o \
 	test_gui_toplevel.o \
 	test_gui_valnum.o \
@@ -1013,6 +1014,9 @@ test_gui_socket.o: $(srcdir)/net/socket.cpp $(TEST_GUI_ODEP)
 
 test_gui_boxsizer.o: $(srcdir)/sizers/boxsizer.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/sizers/boxsizer.cpp
+
+test_gui_gridsizer.o: $(srcdir)/sizers/gridsizer.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/sizers/gridsizer.cpp
 
 test_gui_wrapsizer.o: $(srcdir)/sizers/wrapsizer.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/sizers/wrapsizer.cpp
