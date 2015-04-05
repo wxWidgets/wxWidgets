@@ -2247,6 +2247,17 @@
 #   endif
 #endif /* wxUSE_PREFERENCES_EDITOR */
 
+#if wxUSE_MEDIACTRL
+#   if !wxUSE_LONGLONG
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxMediaCtrl requires wxUSE_LONLONG"
+#       else
+#           undef wxUSE_LONLONG
+#           define wxUSE_LONLONG 1
+#       endif
+#   endif
+#endif /* wxUSE_MEDIACTRL */
+
 #endif /* wxUSE_GUI */
 
 #endif /* _WX_CHKCONF_H_ */
