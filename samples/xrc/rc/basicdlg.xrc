@@ -8,7 +8,7 @@
     <object class="wxBoxSizer">
         <orient>wxVERTICAL</orient>
         <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+            <flag>wxGROW|wxALL</flag>
             <border>5</border>
             <object class="wxTextCtrl" name="message_textctrl">
                 <size>500,150</size>
