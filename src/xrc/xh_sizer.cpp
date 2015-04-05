@@ -534,10 +534,220 @@ wxSizerItem* wxSizerXmlHandler::MakeSizerItem()
         return new wxSizerItem();
 }
 
+int wxSizerXmlHandler::GetSizerFlags()
+{
+    const wxString s = GetParamValue(wxS("flag"));
+    if ( s.empty() )
+        return 0;
+
+    // Parse flags keeping track of invalid combinations. This is somewhat
+    // redundant with the checks performed in wxSizer subclasses themselves but
+    // doing it here allows us to give the exact line number at which the
+    // offending line numbers are given, which is very valuable.
+    //
+    // We also can detect invalid flags combinations involving wxALIGN_LEFT and
+    // wxALIGN_TOP here, while this is impossible at wxSizer level as both of
+    // these flags have value of 0.
+
+
+    // As the logic is exactly the same in horizontal and vertical
+    // orientations, use arrays and loops to avoid duplicating the code.
+
+    enum Orient
+    {
+        Orient_Horz,
+        Orient_Vert,
+        Orient_Max
+    };
+
+    const char* const orientName[] = { "horizontal", "vertical" };
+
+    // The already seen alignment flag in the given orientation or empty if
+    // none have been seen yet.
+    wxString alignFlagIn[] = { wxString(), wxString() };
+
+    // Either "wxEXPAND" or "wxGROW" depending on the string used in the input,
+    // or empty string if none is specified.
+    wxString expandFlag;
+
+    // Indicates whether we can use alignment in the given orientation at all.
+    bool alignAllowedIn[] = { true, true };
+
+    // Find out the sizer orientation: it is the principal/major size direction
+    // for the 1D sizers and undefined/invalid for the 2D ones.
+    Orient orientSizer;
+    if ( wxBoxSizer* const boxSizer = wxDynamicCast(m_parentSizer, wxBoxSizer) )
+    {
+        orientSizer = boxSizer->GetOrientation() == wxHORIZONTAL
+                        ? Orient_Horz
+                        : Orient_Vert;
+
+        // Alignment can be only used in the transversal/minor direction.
+        alignAllowedIn[orientSizer] = false;
+    }
+    else
+    {
+        orientSizer = Orient_Max;
+    }
+
+    int flags = 0;
+
+    wxStringTokenizer tkn(s, wxS("| \t\n"), wxTOKEN_STRTOK);
+    while ( tkn.HasMoreTokens() )
+    {
+        const wxString flagName = tkn.GetNextToken();
+        const int n = m_styleNames.Index(flagName);
+        if ( n == wxNOT_FOUND )
+        {
+            ReportParamError
+            (
+                "flag",
+                wxString::Format("unknown sizer flag \"%s\"", flagName)
+            );
+            continue;
+        }
+
+        const int flag = m_styleValues[n];
+        flags |= flag;
+
+        Orient orientFlagAlign = Orient_Max;
+
+        switch ( flag )
+        {
+            case wxALIGN_CENTRE_HORIZONTAL:
+            case wxALIGN_RIGHT:
+                orientFlagAlign = Orient_Horz;
+                break;
+
+            case wxALIGN_CENTRE_VERTICAL:
+            case wxALIGN_BOTTOM:
+                orientFlagAlign = Orient_Vert;
+                break;
+
+            case wxEXPAND:
+                expandFlag = flagName;
+                break;
+
+            case 0:
+                // This is a special case: both wxALIGN_LEFT and wxALIGN_TOP
+                // have value of 0, so we need to examine the name of the flag
+                // and not just its value.
+                if ( flagName == wxS("wxALIGN_LEFT") )
+                    orientFlagAlign = Orient_Horz;
+                else if ( flagName == wxS("wxALIGN_TOP") )
+                    orientFlagAlign = Orient_Vert;
+                break;
+        }
+
+        if ( orientFlagAlign != Orient_Max )
+        {
+            if ( !alignAllowedIn[orientFlagAlign] )
+            {
+                ReportParamError
+                (
+                    "flag",
+                    wxString::Format
+                    (
+                        "%s alignment flag \"%s\" has no effect inside "
+                        "a %s box sizer, remove it and consider setting "
+                        "the item proportion instead",
+                        orientName[orientFlagAlign],
+                        flagName,
+                        orientName[orientFlagAlign]
+                    )
+                );
+
+                // Notice that we take care to not add this invalid flag to the
+                // flags we will actually use with wxSizer: they would just
+                // trigger an assert there which wouldn't be very useful as
+                // we've already given an error about this.
+                flags &= ~flag;
+            }
+            else if ( alignFlagIn[orientFlagAlign].empty() )
+            {
+                alignFlagIn[orientFlagAlign] = flagName;
+            }
+            else
+            {
+                ReportParamError
+                (
+                    "flag",
+                    wxString::Format
+                    (
+                        "both \"%s\" and \"%s\" specify %s alignment "
+                        "and can't be used together",
+                        alignFlagIn[orientFlagAlign],
+                        flagName,
+                        orientName[orientFlagAlign]
+                    )
+                );
+
+                flags &= ~flag;
+            }
+        }
+    }
+
+    // Finally check that the alignment flags are compatible with wxEXPAND.
+    if ( !expandFlag.empty() )
+    {
+        if ( orientSizer != Orient_Max )
+        {
+            const Orient orientOther = orientSizer == Orient_Horz
+                                            ? Orient_Vert
+                                            : Orient_Horz;
+
+            if ( !alignFlagIn[orientOther].empty() )
+            {
+                ReportParamError
+                (
+                    "flag",
+                    wxString::Format
+                    (
+                        "\"%s\" is incompatible with %s alignment flag "
+                        "\"%s\" in a %s box sizer",
+                        expandFlag,
+                        orientName[orientOther],
+                        alignFlagIn[orientOther],
+                        orientName[orientSizer]
+                    )
+                );
+
+                // Just as with the alignment flags above, ignore wxEXPAND
+                // completely to avoid asserts from wxSizer code.
+                flags &= ~wxEXPAND;
+            }
+        }
+        else // 2D sizer
+        {
+            if ( !alignFlagIn[Orient_Horz].empty() &&
+                    !alignFlagIn[Orient_Vert].empty() )
+            {
+                ReportParamError
+                (
+                    "flag",
+                    wxString::Format
+                    (
+                        "\"%s\" flag has no effect when combined "
+                        "with both \"%s\" and \"%s\" horizontal and "
+                        "vertical alignment flags",
+                        expandFlag,
+                        alignFlagIn[Orient_Horz],
+                        alignFlagIn[Orient_Vert]
+                    )
+                );
+
+                flags &= ~wxEXPAND;
+            }
+        }
+    }
+
+    return flags;
+}
+
 void wxSizerXmlHandler::SetSizerItemAttributes(wxSizerItem* sitem)
 {
     sitem->SetProportion(GetLong(wxT("option")));  // Should this check for "proportion" too?
-    sitem->SetFlag(GetStyle(wxT("flag")));
+    sitem->SetFlag(GetSizerFlags());
     sitem->SetBorder(GetDimension(wxT("border")));
     wxSize sz = GetSize(wxT("minsize"));
     if (!(sz == wxDefaultSize))
