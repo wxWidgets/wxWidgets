@@ -264,7 +264,7 @@ bool wxAnyValueTypeImplInt::ConvertValue(const wxAnyValueBuffer& src,
     wxAnyBaseIntType value = GetValue(src);
     if ( wxANY_VALUE_TYPE_CHECK_TYPE(dstType, wxString) )
     {
-#if defined(wxLongLong_t) && wxUSE_LONLONG
+#if defined(wxLongLong_t) && wxUSE_LONGLONG
         wxLongLong ll(value);
         wxString s = ll.ToString();
 #else
