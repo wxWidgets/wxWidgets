@@ -162,10 +162,16 @@ bool wxHandleFatalExceptions(bool doit)
         // use PID and date to make the report file name more unique
         wxString name = wxString::Format
                         (
+#if wxUSE_DATETIME
                             wxT("%s_%s_%lu.dmp"),
+#else
+                            wxT("%s_%lu.dmp"),
+#endif
                             wxTheApp ? (const wxChar*)wxTheApp->GetAppDisplayName().c_str()
                                      : wxT("wxwindows"),
+#if wxUSE_DATETIME
                             wxDateTime::Now().Format(wxT("%Y%m%dT%H%M%S")).c_str(),
+#endif
                             ::GetCurrentProcessId()
                         );
 
