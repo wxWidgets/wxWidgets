@@ -427,10 +427,15 @@ bool wxRichTextPrintout::SubstituteKeywords(wxString& str, const wxString& title
     num.Printf(wxT("%lu"), (unsigned long) pageCount);
     str.Replace(wxT("@PAGESCNT@"), num);
 
+#if wxUSE_DATETIME
     wxDateTime now = wxDateTime::Now();
 
     str.Replace(wxT("@DATE@"), now.FormatDate());
     str.Replace(wxT("@TIME@"), now.FormatTime());
+#else
+    str.Replace(wxT("@DATE@"), wxEmptyString);
+    str.Replace(wxT("@TIME@"), wxEmptyString);
+#endif
 
     str.Replace(wxT("@TITLE@"), title);
 
