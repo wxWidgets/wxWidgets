@@ -2258,6 +2258,17 @@
 #   endif
 #endif /* wxUSE_MEDIACTRL */
 
+#if wxUSE_STC
+#   if !wxUSE_STOPWATCH
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxStyledTextCtrl requires wxUSE_STOPWATCH"
+#       else
+#           undef wxUSE_STC
+#           define wxUSE_STC 0
+#       endif
+#   endif
+#endif /* wxUSE_STC */
+
 #endif /* wxUSE_GUI */
 
 #endif /* _WX_CHKCONF_H_ */
