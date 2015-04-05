@@ -568,9 +568,14 @@ wxString wxHtmlPrintout::TranslateHeader(const wxString& instr, int page)
     num.Printf(wxT("%lu"), (unsigned long)(m_PageBreaks.GetCount() - 1));
     r.Replace(wxT("@PAGESCNT@"), num);
 
+#if wxUSE_DATETIME
     const wxDateTime now = wxDateTime::Now();
     r.Replace(wxT("@DATE@"), now.FormatDate());
     r.Replace(wxT("@TIME@"), now.FormatTime());
+#else
+    r.Replace(wxT("@DATE@"), wxEmptyString);
+    r.Replace(wxT("@TIME@"), wxEmptyString);
+#endif
 
     r.Replace(wxT("@TITLE@"), GetTitle());
 
