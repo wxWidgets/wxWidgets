@@ -2269,6 +2269,25 @@
 #   endif
 #endif /* wxUSE_STC */
 
+#if wxUSE_RICHTEXT
+#   if !wxUSE_HTML
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxRichTextCtrl requires wxUSE_HTML"
+#       else
+#           undef wxUSE_RICHTEXT
+#           define wxUSE_RICHTEXT 0
+#       endif
+#   endif
+#   if !wxUSE_LONGLONG
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxRichTextCtrl requires wxUSE_LONLONG"
+#       else
+#           undef wxUSE_LONLONG
+#           define wxUSE_LONLONG 1
+#       endif
+#   endif
+#endif /* wxUSE_RICHTEXT */
+
 #endif /* wxUSE_GUI */
 
 #endif /* _WX_CHKCONF_H_ */
