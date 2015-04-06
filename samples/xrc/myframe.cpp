@@ -133,6 +133,11 @@ MyFrame::MyFrame(wxWindow* parent)
     // here.
     CreateStatusBar( 1 );
 #endif // wxUSE_STATUSBAR
+
+    // As we have created the toolbar and status bar after loading the main
+    // frame from resources, we need to readjust its minimal size to fit both
+    // its client area contains and the bars.
+    GetSizer()->SetSizeHints(this);
 }
 
 //-----------------------------------------------------------------------------
