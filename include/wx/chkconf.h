@@ -1538,6 +1538,17 @@
 #    endif
 #endif /* controls */
 
+#if wxUSE_ADDREMOVECTRL
+#   if !wxUSE_BMPBUTTON
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_ADDREMOVECTRL requires wxUSE_BMPBUTTON"
+#       else
+#           undef wxUSE_ADDREMOVECTRL
+#           define wxUSE_ADDREMOVECTRL 0
+#       endif
+#   endif
+#endif /* wxUSE_ADDREMOVECTRL */
+
 #if wxUSE_BMPBUTTON
 #    if !wxUSE_BUTTON
 #        ifdef wxABORT_ON_CONFIG_ERROR
