@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.3.0.1">
+<resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.5.3.0">
 
 <object class="wxDialog" name="variants_dialog">
     <title>Control Variants Example</title>
