@@ -45,6 +45,7 @@
 #include "wx/renderer.h" // this is needed for wxCONTROL_XXX flags
 #include "wx/bitmap.h" // wxBitmap used by-value
 #include "wx/textentry.h"
+#include "wx/time.h" // needed for wxMilliClock_t
 
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 class WXDLLIMPEXP_FWD_CORE wxComboPopup;
