@@ -227,7 +227,6 @@ enum
 };
 
 static const int BITMAP_SIZE_X = 32;
-static const int BITMAP_SIZE_Y = 15;
 
 // ----------------------------------------------------------------------------
 // event tables and other macros for wxWidgets

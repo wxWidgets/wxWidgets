@@ -474,10 +474,6 @@ const int  ID_RADIOBUTTON_2     = 167;
 
 const int  ID_SET_FONT          = 170;
 
-#if wxUSE_GAUGE
-const int  ID_GAUGE             = 180;
-#endif // wxUSE_GAUGE
-
 #if wxUSE_SLIDER
 const int  ID_SLIDER            = 181;
 #endif // wxUSE_SLIDER
@@ -504,7 +500,6 @@ const int  ID_SIZER_CHECK4      = 204;
 const int  ID_SIZER_CHECK14     = 205;
 const int  ID_SIZER_CHECKBIG    = 206;
 
-const int  ID_HYPERLINK         = 300;
 const int  ID_SPIN_TEXT         = 301;
 const int  ID_CHANGE_CHECK      = 302;
 
