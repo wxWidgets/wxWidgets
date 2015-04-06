@@ -215,13 +215,6 @@ void ChoiceWidgetsPage::CreateContent()
         wxT("&Set choice parameters"));
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
-    static const wxString modes[] =
-    {
-        wxT("single"),
-        wxT("extended"),
-        wxT("multiple"),
-    };
-
     m_chkSort = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Sort items"));
 
     wxButton *btn = new wxButton(this, ChoicePage_Reset, wxT("&Reset"));
