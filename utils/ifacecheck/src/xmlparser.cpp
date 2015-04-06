@@ -570,7 +570,7 @@ const wxMethod* wxClass::RecursiveUpwardFindMethod(const wxMethod& m,
             if (!parent) {
                 wxLogError("Could not find parent '%s' of class '%s'...",
                          m_parents[i], GetName());
-                return false;
+                return NULL;
             }
 
             const wxMethod *parentMethod = parent->RecursiveUpwardFindMethod(m, allclasses);
