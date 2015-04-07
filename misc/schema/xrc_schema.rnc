@@ -24,6 +24,9 @@
 #
 # You can also add validation for custom classes:
 #
+#     default namespace = "http://www.wxwidgets.org/wxxrc"
+#     namespace xrc = "http://www.wxwidgets.org/wxxrc"
+#
 #     include "xrc_schema.rnc" {
 #         customClasses = myExtensionClasses
 #     }
@@ -31,8 +34,9 @@
 #     myExtensionClasses = (MyFoo | MyBar | ...)
 #     MyFoo =
 #         element object {
-#             attribute class { "MyFoo" },
-#             stdObjectNodeAttributes,
+#             attribute class { "MyFoo" } &
+#             stdObjectNodeAttributes &
+#             [xrc:p="o"] element myElem {_, t_text }*
 #             ...
 #         }
 #     ...
