@@ -2,7 +2,6 @@
 // Name:        tests/misc/safearrayconverttest.cpp
 // Purpose:     Test conversions between wxVariant and OLE VARIANT using SAFEARRAYs
 // Author:      PB
-// RCS-ID:      $Id: typeinfotest.cpp 67656 2011-04-30 10:57:04Z DS $
 // Copyright:   (c) the wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

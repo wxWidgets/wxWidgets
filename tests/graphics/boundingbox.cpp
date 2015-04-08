@@ -3,7 +3,6 @@
 // Purpose:     wxGCDC bounding box unit tests
 // Author:      Vadim Zeitlin / Maarten Spoek / Toni Ruža
 // Created:     2011-01-36
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 //              (c) 2014 Toni Ruža <toni.ruza@gmail.com>
 ///////////////////////////////////////////////////////////////////////////////

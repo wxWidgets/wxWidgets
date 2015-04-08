@@ -3,7 +3,6 @@
 // Purpose:     Generic wxAddRemoveImpl implementation, also used in wxMSW
 // Author:      Vadim Zeitlin
 // Created:     2015-02-05
-// RCS-ID:      $Id$
 // Copyright:   (c) 2015 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

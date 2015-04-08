@@ -6,7 +6,6 @@ and this process might take HUGE amount of time
 
 Author : Viktor Voroshylo
 '''
-__version__='$Revision$'[11:-2]
 
 import sys
 
