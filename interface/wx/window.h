@@ -3482,9 +3482,8 @@ public:
                  modifier/virtualKeyCode combination.
 
         @remarks Use EVT_HOTKEY(hotkeyId, fnc) in the event table to capture the
-                 event. This function is currently only implemented
-                 under Windows. It is used in the Windows CE port for
-                 detecting hardware button presses.
+                 event. This function is currently only implemented under MSW
+                 and OSX and always returns false in the other ports.
 
         @see UnregisterHotKey()
     */
