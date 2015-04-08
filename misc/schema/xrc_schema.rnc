@@ -230,12 +230,15 @@ builtinWindowClasses =
     )
 
 builtinSizerClasses =
-    ( wxBoxSizer
-    | wxStaticBoxSizer
+    ( wxBoxSizer_horz
+    | wxBoxSizer_vert
+    | wxStaticBoxSizer_horz
+    | wxStaticBoxSizer_vert
     | wxGridSizer
     | wxFlexGridSizer
     | wxGridBagSizer
-    | wxWrapSizer
+    | wxWrapSizer_horz
+    | wxWrapSizer_vert
     | wxStdDialogButtonSizer
     )
 
@@ -1565,9 +1568,123 @@ wxWizardPage_any =
     }
 
 
+# There is no simple way to validate the combination of flags using "|" symbol,
+# so we have to resort to regular expressions here. They are long and unwieldy
+# which is especially bad for the error messages, so we try to make them more
+# clear by inserting a dummy match element providing the description of the
+# expected value.
+#
+# And to make writing and reading patterns simpler in this schema itself, we
+# always put the part containing the always allowed flags on a (very long) line
+# of its own (the one starting with "wxALL").
+
+t_sizer_flags_grow = xsd:string {
+        pattern = "(wxGROW|wxEXPAND" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "( *\| *" ~
+                  "(wxGROW|wxEXPAND" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  ")*"
+    }
+
+t_sizer_flags_alignv = xsd:string {
+        pattern = "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
+                  "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
+                  "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "( *\| *" ~
+                  "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
+                  "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
+                  "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  ")*"
+    }
+
+t_sizer_flags_alignh = xsd:string {
+        pattern = "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
+                  "|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL" ~
+                  "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "( *\| *" ~
+                  "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
+                  "|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL" ~
+                  "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  ")*"
+    }
+
+t_horz_sizer_flags = ("*** Sizer flags excluding vertical alignment ones ***"
+        | t_sizer_flags_grow
+        | t_sizer_flags_alignv
+        )
+t_vert_sizer_flags = ("*** Sizer flags excluding horizontal alignment ones ***"
+        | t_sizer_flags_grow
+        | t_sizer_flags_alignh
+        )
+
+t_sizer_flags_grow_alignv = xsd:string {
+        pattern = "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
+                  "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
+                  "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
+                  "|wxGROW|wxEXPAND" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "( *\| *" ~
+                  "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
+                  "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
+                  "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
+                  "|wxGROW|wxEXPAND" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  ")*"
+    }
+
+t_sizer_flags_grow_alignh = xsd:string {
+        pattern = "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
+                  "|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL" ~
+                  "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
+                  "|wxGROW|wxEXPAND" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "( *\| *" ~
+                  "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
+                  "|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL" ~
+                  "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
+                  "|wxGROW|wxEXPAND" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  ")*"
+    }
+
+t_sizer_flags_align = xsd:string {
+        pattern = "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
+                  "|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL" ~
+                  "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
+                  "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
+                  "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  "( *\| *" ~
+                  "(wxALIGN_CENTER|wxALIGN_CENTRE" ~
+                  "|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTRE_HORIZONTAL" ~
+                  "|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTRE_VERTICAL" ~
+                  "|wxALIGN_LEFT|wxALIGN_RIGHT" ~
+                  "|wxALIGN_TOP|wxALIGN_BOTTOM" ~
+                  "|wxALL|wxLEFT|wxRIGHT|wxTOP|wxBOTTOM|wxNORTH|wxSOUTH|wxEAST|wxWEST|wxSHAPED|wxSTRETCH_NOT|wxRESERVE_SPACE_EVEN_IF_HIDDEN)" ~
+                  ")*"
+    }
+
+t_grid_sizer_flags = ("*** Sizer flags with either wxGROW/wxEXPAND or alignment in each direction ***"
+        | t_sizer_flags_grow
+        | t_sizer_flags_grow_alignv
+        | t_sizer_flags_grow_alignh
+        | t_sizer_flags_align
+        )
 
 
-wxSizer_item =
+# The items of different sizers are very similar but not quite identical:
+#  - For 1D sizers we need to define 2 versions to ensure that alignment flags
+#    in the major sizer direction are not accepted.
+#  - Only 1D sizers have "option" attribute.
+#  - For 2D sizers we accept alignment flags in both directions but not when
+#    combined with wxGROW and/or wxEXPAND.
+#  - Only wxGridBagSizer items have cell{pos,span} attributes.
+wxBoxSizer_horz_item =
     element object {
         (
             (
@@ -1585,7 +1702,67 @@ wxSizer_item =
         [xrc:p="o"] element border   {_, t_dimension }* &
         [xrc:p="o"] element minsize  {_, t_size }* &
         [xrc:p="o"] element ratio    {_, t_size }* &
-        # TODO: cell{pos,span} are wxGridBagSizer-only and required in it, this is too lax
+        [xrc:p="o"] element flag     {_, t_horz_sizer_flags}*
+    }
+
+wxBoxSizer_vert_item =
+    element object {
+        (
+            (
+                attribute class { "spacer" } &
+                [xrc:p="o"] element size {_, t_size }*
+            )
+            |
+            (
+                attribute class { "sizeritem" } &
+                (windowNode | sizerNode)
+            )
+        ) &
+        stdObjectNodeAttributes &
+        [xrc:p="o"] element option   {_, t_integer }* &
+        [xrc:p="o"] element border   {_, t_dimension }* &
+        [xrc:p="o"] element minsize  {_, t_size }* &
+        [xrc:p="o"] element ratio    {_, t_size }* &
+        [xrc:p="o"] element flag     {_, t_vert_sizer_flags }*
+    }
+
+wxGridSizer_item =
+    element object {
+        (
+            (
+                attribute class { "spacer" } &
+                [xrc:p="o"] element size {_, t_size }*
+            )
+            |
+            (
+                attribute class { "sizeritem" } &
+                (windowNode | sizerNode)
+            )
+        ) &
+        stdObjectNodeAttributes &
+        [xrc:p="o"] element border   {_, t_dimension }* &
+        [xrc:p="o"] element minsize  {_, t_size }* &
+        [xrc:p="o"] element ratio    {_, t_size }* &
+        [xrc:p="o"] element flag     {_, t_grid_sizer_flags }*
+    }
+
+wxSizerGB_item =
+    element object {
+        (
+            (
+                attribute class { "spacer" } &
+                [xrc:p="o"] element size {_, t_size }*
+            )
+            |
+            (
+                attribute class { "sizeritem" } &
+                (windowNode | sizerNode)
+            )
+        ) &
+        stdObjectNodeAttributes &
+        [xrc:p="o"] element border   {_, t_dimension }* &
+        [xrc:p="o"] element minsize  {_, t_size }* &
+        [xrc:p="o"] element ratio    {_, t_size }* &
         [xrc:p="o"] element cellpos  {_, t_position }* &
         [xrc:p="o"] element cellspan {_, t_size }* &
         [xrc:p="o"] element flag     {_,
@@ -1595,23 +1772,45 @@ wxSizer_item =
         }*
     }
 
-wxBoxSizer =
+# Notice that horizontal orientation is the default (only for backwards
+# compatibility reasons, it would make more sense to require always specifying
+# it probably).
+wxBoxSizer_horz =
     element object {
         attribute class { "wxBoxSizer" } &
         stdObjectNodeAttributes &
         [xrc:p="o"] element minsize {_, t_size }* &
-        [xrc:p="o"] element orient  {_, ("wxHORIZONTAL" | "wxVERTICAL") }* &
-        (wxSizer_item | objectRef)*
+        [xrc:p="o"] element orient {_, "wxHORIZONTAL" }* &
+        (wxBoxSizer_horz_item | objectRef)*
     }
 
-wxStaticBoxSizer =
+wxBoxSizer_vert =
+    element object {
+        attribute class { "wxBoxSizer" } &
+        stdObjectNodeAttributes &
+        [xrc:p="o"] element minsize {_, t_size }* &
+        element orient {_, "wxVERTICAL" } &
+        (wxBoxSizer_vert_item | objectRef)*
+    }
+
+wxStaticBoxSizer_horz =
     element object {
         attribute class { "wxStaticBoxSizer" } &
         stdObjectNodeAttributes &
         [xrc:p="o"] element minsize {_, t_size }* &
         [xrc:p="important"] element label {_, t_text }* &
-        [xrc:p="o"] element orient  {_, ("wxHORIZONTAL" | "wxVERTICAL") }* &
-        (wxSizer_item | objectRef)*
+        [xrc:p="o"] element orient  {_, "wxHORIZONTAL" }* &
+        (wxBoxSizer_horz_item | objectRef)*
+    }
+
+wxStaticBoxSizer_vert =
+    element object {
+        attribute class { "wxStaticBoxSizer" } &
+        stdObjectNodeAttributes &
+        [xrc:p="o"] element minsize {_, t_size }* &
+        [xrc:p="important"] element label {_, t_text }* &
+        element orient {_, "wxVERTICAL" } &
+        (wxBoxSizer_vert_item | objectRef)*
     }
 
 wxGridSizer =
@@ -1623,7 +1822,7 @@ wxGridSizer =
         [xrc:p="o"] element cols    {_, t_unsigned }* &
         [xrc:p="o"] element vgap    {_, t_dimension }* &
         [xrc:p="o"] element hgap    {_, t_dimension }* &
-        (wxSizer_item | objectRef)*
+        (wxGridSizer_item | objectRef)*
     }
 
 wxFlexGridSizer =
@@ -1641,7 +1840,7 @@ wxFlexGridSizer =
                                                      "wxFLEX_GROWMODE_ALL") }* &
         [xrc:p="o"] element growablerows        {_, t_list_of_numbers }* &
         [xrc:p="o"] element growablecols        {_, t_list_of_numbers }* &
-        (wxSizer_item | objectRef)*
+        (wxGridSizer_item | objectRef)*
     }
 
 wxGridBagSizer =
@@ -1657,17 +1856,27 @@ wxGridBagSizer =
                                                      "wxFLEX_GROWMODE_ALL") }* &
         [xrc:p="o"] element growablerows        {_, t_list_of_numbers }* &
         [xrc:p="o"] element growablecols        {_, t_list_of_numbers }* &
-        (wxSizer_item | objectRef)*
+        (wxSizerGB_item | objectRef)*
     }
 
-wxWrapSizer =
+wxWrapSizer_horz =
     element object {
         attribute class { "wxWrapSizer" } &
         stdObjectNodeAttributes &
         [xrc:p="o"] element minsize {_, t_size }* &
-        [xrc:p="important"] element orient {_, ("wxHORIZONTAL" | "wxVERTICAL") }* &
+        [xrc:p="important"] element orient {_, "wxHORIZONTAL" }* &
         [xrc:p="o"] element flag    {_, t_style }* &
-        (wxSizer_item | objectRef)*
+        (wxBoxSizer_horz_item | objectRef)*
+    }
+
+wxWrapSizer_vert =
+    element object {
+        attribute class { "wxWrapSizer" } &
+        stdObjectNodeAttributes &
+        [xrc:p="o"] element minsize {_, t_size }* &
+        element orient {_, "wxVERTICAL" } &
+        [xrc:p="o"] element flag    {_, t_style }* &
+        (wxBoxSizer_vert_item | objectRef)*
     }
 
 wxStdDialogButtonSizer =
