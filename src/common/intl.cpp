@@ -1135,6 +1135,22 @@ wxString wxLocale::GetHeaderValue(const wxString& header,
 namespace
 {
 
+bool IsAtTwoSingleQuotes(const wxString& fmt, wxString::const_iterator p)
+{
+    if ( p != fmt.end() && *p == '\'')
+    {
+        ++p;
+        if ( p != fmt.end() && *p == '\'')
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+} // anonymous namespace
+
 // This function translates from Unicode date formats described at
 //
 //      http://unicode.org/reports/tr35/tr35-6.html#Date_Format_Patterns
@@ -1142,7 +1158,7 @@ namespace
 // to strftime()-like syntax. This translation is not lossless but we try to do
 // our best.
 
-static wxString TranslateFromUnicodeFormat(const wxString& fmt)
+wxString wxTranslateFromUnicodeFormat(const wxString& fmt)
 {
     wxString fmtWX;
     fmtWX.reserve(fmt.length());
@@ -1385,20 +1401,63 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
         if ( p == fmt.end() )
             break;
 
-        // not a special character so must be just a separator, treat as is
-        if ( *p == wxT('%') )
+        /*
+        Handle single quotes:
+        "Two single quotes represents [sic] a literal single quote, either
+        inside or outside single quotes. Text within single quotes is not
+        interpreted in any way (except for two adjacent single quotes)."
+        */
+
+        if ( IsAtTwoSingleQuotes(fmt, p) )
         {
-            // this one needs to be escaped
-            fmtWX += wxT('%');
+            fmtWX += '\'';
+            ++p; // the 2nd single quote is skipped by the for loop's increment
+            continue;
         }
 
-        fmtWX += *p;
+        bool isEndQuote = false;
+        if ( *p == '\'' )
+        {
+            ++p;
+            while ( p != fmt.end() )
+            {
+                if ( IsAtTwoSingleQuotes(fmt, p) )
+                {
+                    fmtWX += '\'';
+                    p += 2;
+                    continue;
+                }
+
+                if ( *p == '\'' )
+                {
+                    isEndQuote = true;
+                    break;
+                }
+
+                fmtWX += *p;
+                ++p;
+            }
+        }
+
+        if ( p == fmt.end() )
+            break;
+
+        if ( !isEndQuote )
+        {
+            // not a special character so must be just a separator, treat as is
+            if ( *p == wxT('%') )
+            {
+                // this one needs to be escaped
+                fmtWX += wxT('%');
+            }
+
+            fmtWX += *p;
+        }
     }
 
     return fmtWX;
 }
 
-} // anonymous namespace
 
 #endif // __WINDOWS__ || __WXOSX__
 
@@ -1476,7 +1535,7 @@ GetInfoFromLCID(LCID lcid,
             if ( ::GetLocaleInfo(lcid, GetLCTYPEFormatFromLocalInfo(index),
                                  buf, WXSIZEOF(buf)) )
             {
-                return TranslateFromUnicodeFormat(buf);
+                return wxTranslateFromUnicodeFormat(buf);
             }
             break;
 
@@ -1630,7 +1689,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
                 wxCFRef<CFDateFormatterRef> dateFormatter( CFDateFormatterCreate
                     (NULL, userLocaleRef, dateStyle, timeStyle));
                 wxCFStringRef cfs = wxCFRetain( CFDateFormatterGetFormat(dateFormatter ));
-                wxString format = TranslateFromUnicodeFormat(cfs.AsString());
+                wxString format = wxTranslateFromUnicodeFormat(cfs.AsString());
                 // we always want full years
                 format.Replace("%y","%Y");
                 return format;
