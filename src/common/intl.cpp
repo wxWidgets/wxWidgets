@@ -1158,6 +1158,9 @@ bool IsAtTwoSingleQuotes(const wxString& fmt, wxString::const_iterator p)
 // to strftime()-like syntax. This translation is not lossless but we try to do
 // our best.
 
+// The function is only exported because it is used in the unit test, it is not
+// part of the public API.
+WXDLLIMPEXP_BASE
 wxString wxTranslateFromUnicodeFormat(const wxString& fmt)
 {
     wxString fmtWX;
