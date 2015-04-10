@@ -1449,6 +1449,8 @@ void DateTimeTestCase::TestDateOnly()
     CPPUNIT_ASSERT_EQUAL( wxDateTime::Today(), wxDateTime::Now().GetDateOnly() );
 }
 
+#if defined(__WINDOWS__) || defined(__WXOSX__)
+
 // This function is defined in src/common/intl.cpp and as it is not public we
 // need to declare it here explicitly.
 WXDLLIMPEXP_BASE
@@ -1483,5 +1485,7 @@ void DateTimeTestCase::TestTranslateFromUnicodeFormat()
     CPPUNIT_ASSERT_EQUAL("'%H o'clock: It's about time'",
         wxTranslateFromUnicodeFormat("''H 'o''clock: It''s about time'''"));
 }
+
+#endif // ports having wxTranslateFromUnicodeFormat()
 
 #endif // wxUSE_DATETIME
