@@ -217,7 +217,7 @@ void wxQtSpinBox::valueChanged(int value)
     wxControl *handler = GetHandler();
     if ( handler )
     {
-        wxCommandEvent event( wxEVT_SPINCTRL, handler->GetId() );
+        wxSpinEvent event( wxEVT_SPINCTRL, handler->GetId() );
         event.SetInt( value );
         EmitEvent( event );
     }

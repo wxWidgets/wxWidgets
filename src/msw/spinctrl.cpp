@@ -684,7 +684,7 @@ void wxSpinCtrl::DoSetToolTip(wxToolTip *tip)
 
 void wxSpinCtrl::SendSpinUpdate(int value)
 {
-    wxCommandEvent event(wxEVT_SPINCTRL, GetId());
+    wxSpinEvent event(wxEVT_SPINCTRL, GetId());
     event.SetEventObject(this);
     event.SetInt(value);
 
