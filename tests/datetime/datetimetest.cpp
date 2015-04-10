@@ -1449,7 +1449,9 @@ void DateTimeTestCase::TestDateOnly()
     CPPUNIT_ASSERT_EQUAL( wxDateTime::Today(), wxDateTime::Now().GetDateOnly() );
 }
 
-// Forward declaration
+// This function is defined in src/common/intl.cpp and as it is not public we
+// need to declare it here explicitly.
+WXDLLIMPEXP_BASE
 wxString wxTranslateFromUnicodeFormat(const wxString& fmt);
 
 void DateTimeTestCase::TestTranslateFromUnicodeFormat()
