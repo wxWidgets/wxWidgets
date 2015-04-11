@@ -1496,14 +1496,16 @@ int wxStyledTextCtrl::GetPrintColourMode() const
 // Find some text in the document.
 int wxStyledTextCtrl::FindText(int minPos, int maxPos,
                const wxString& text,
-               int flags) {
+               int flags, int* findEnd) {
             TextToFind  ft;
             ft.chrg.cpMin = minPos;
             ft.chrg.cpMax = maxPos;
             const wxWX2MBbuf buf = wx2stc(text);
             ft.lpstrText = (char*)(const char*)buf;
 
-            return SendMsg(SCI_FINDTEXT, flags, (sptr_t)&ft);
+            int ret = SendMsg(SCI_FINDTEXT, flags, (sptr_t)&ft);
+            if (ret > 0 && findEnd) *findEnd = ft.chrgText.cpMax;
+            return ret;
 }
 
 // On Windows, will draw the document into a display context such as a printer.
