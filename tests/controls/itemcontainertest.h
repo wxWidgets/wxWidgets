@@ -52,7 +52,7 @@ protected:
     void Set();
     void SetSelection();
     void SetString();
-    void SimSelect();
+    virtual void SimSelect();
 
 private:
     wxDECLARE_NO_COPY_CLASS(ItemContainerTestCase);
