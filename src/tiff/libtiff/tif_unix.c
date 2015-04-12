@@ -154,11 +154,22 @@ TIFFFdOpen(int fd, const char* name, const char* mode)
 {
 	TIFF* tif;
 
+	/* Avoid warning about casting int fd to larger thandle_t in 64 bits. */
+#ifdef __clang__
+	#pragma clang diagnostic push
+	#pragma clang diagnostic ignored "-Wint-to-void-pointer-cast"
+#endif
+
 	tif = TIFFClientOpen(name, mode,
 	    (thandle_t) fd,
 	    _tiffReadProc, _tiffWriteProc,
 	    _tiffSeekProc, _tiffCloseProc, _tiffSizeProc,
 	    _tiffMapProc, _tiffUnmapProc);
+
+#ifdef __clang__
+	#pragma clang diagnostic pop
+#endif
+
 	if (tif)
 		tif->tif_fd = fd;
 	return (tif);
