@@ -699,8 +699,8 @@ int wxSizerXmlHandler::GetSizerFlags()
                     wxString::Format
                     (
                         "%s alignment flag %s has no effect inside "
-                        "a %s box sizer, remove it and consider setting "
-                        "the item proportion instead",
+                        "a %s box sizer, remove it and consider inserting "
+                        "a spacer instead",
                         orientName[orient],
                         flagDesc,
                         orientName[orient]
