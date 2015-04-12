@@ -344,7 +344,12 @@ public:
 
         return m_exitcode;
     }
-#endif // wxUSE_GUI
+#else // !wxUSE_GUI
+    virtual int OnRun()
+    {
+        return RunTests();
+    }
+#endif // wxUSE_GUI/!wxUSE_GUI
 
 private:
     void List(Test *test, const string& parent = "") const;
@@ -375,8 +380,10 @@ private:
     FilterEventFunc m_filterEventFunc;
     ProcessEventFunc m_processEventFunc;
 
+#if wxUSE_GUI
     // the program exit code
     int m_exitcode;
+#endif // wxUSE_GUI
 };
 
 IMPLEMENT_APP_NO_MAIN(TestApp)
@@ -512,7 +519,9 @@ TestApp::TestApp()
 
     m_locale = NULL;
 
+#if wxUSE_GUI
     m_exitcode = EXIT_SUCCESS;
+#endif // wxUSE_GUI
 }
 
 // Init
