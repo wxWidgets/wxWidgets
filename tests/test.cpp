@@ -336,13 +336,15 @@ public:
 
         event.Skip();
     }
-#else // !wxUSE_GUI
+
     virtual int OnRun()
     {
-        m_exitcode = RunTests();
+        if ( TestAppBase::OnRun() != 0 )
+            m_exitcode = EXIT_FAILURE;
+
         return m_exitcode;
     }
-#endif // wxUSE_GUI/!wxUSE_GUI
+#endif // wxUSE_GUI
 
 private:
     void List(Test *test, const string& parent = "") const;
@@ -715,7 +717,7 @@ int TestApp::OnExit()
     delete GetTopWindow();
 #endif // wxUSE_GUI
 
-    return m_exitcode;
+    return TestAppBase::OnExit();
 }
 
 // List the tests
