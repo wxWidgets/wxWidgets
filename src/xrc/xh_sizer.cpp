@@ -570,6 +570,10 @@ int wxSizerXmlHandler::GetSizerFlags()
     // or empty string if none is specified.
     wxString expandFlag;
 
+    // Either "wxALIGN_CENTRE" or "wxALIGN_CENTER" if either flag was found or
+    // empty string.
+    wxString centreFlag;
+
     // Indicates whether we can use alignment in the given orientation at all.
     bool alignAllowedIn[] = { true, true };
 
@@ -607,25 +611,68 @@ int wxSizerXmlHandler::GetSizerFlags()
             continue;
         }
 
-        const int flag = m_styleValues[n];
-        flags |= flag;
+        // Flag description is the string that appears in the error messages,
+        // the main difference from the flag name is that it can indicate that
+        // wxALIGN_CENTRE_XXX flag could have been encountered as part of
+        // wxALIGN_CENTRE which should make the error message more clear as
+        // seeing references to e.g. wxALIGN_CENTRE_VERTICAL when it's never
+        // used could be confusing.
+        wxString flagDesc = wxS('"') + flagName + wxS('"');
 
-        Orient orientFlagAlign = Orient_Max;
+        int flag = m_styleValues[n];
+
+        bool flagSpecifiesAlignIn[] = { false, false };
 
         switch ( flag )
         {
             case wxALIGN_CENTRE_HORIZONTAL:
             case wxALIGN_RIGHT:
-                orientFlagAlign = Orient_Horz;
+                flagSpecifiesAlignIn[Orient_Horz] = true;
                 break;
 
             case wxALIGN_CENTRE_VERTICAL:
             case wxALIGN_BOTTOM:
-                orientFlagAlign = Orient_Vert;
+                flagSpecifiesAlignIn[Orient_Vert] = true;
                 break;
 
             case wxEXPAND:
                 expandFlag = flagName;
+                break;
+
+            case wxALIGN_CENTRE:
+                // wxALIGN_CENTRE is a combination of wxALIGN_CENTRE_HORIZONTAL
+                // and wxALIGN_CENTRE_VERTICAL but we also handle it as just
+                // one of those flags if alignment in the other direction is
+                // not allowed for both compatibility and convenience reasons.
+                switch ( orientSizer )
+                {
+                    case Orient_Horz:
+                        flagSpecifiesAlignIn[Orient_Vert] = true;
+                        flagDesc.Printf
+                        (
+                             "\"wxALIGN_CENTRE_VERTICAL\" (as part of %s)",
+                             flagName
+                        );
+                        flag = wxALIGN_CENTRE_VERTICAL;
+                        break;
+
+                    case Orient_Vert:
+                        flagSpecifiesAlignIn[Orient_Horz] = true;
+                        flagDesc.Printf
+                        (
+                            "\"wxALIGN_CENTRE_HORIZONTAL\" (as part of %s)",
+                            flagName
+                        );
+                        flag = wxALIGN_CENTRE_HORIZONTAL;
+                        break;
+
+                    case Orient_Max:
+                        // For 2D sizers we need to deal with this flag at the
+                        // end, so just remember that we had it for now.
+                        centreFlag = flagName;
+                        flag = 0;
+                        break;
+                }
                 break;
 
             case 0:
@@ -633,27 +680,30 @@ int wxSizerXmlHandler::GetSizerFlags()
                 // have value of 0, so we need to examine the name of the flag
                 // and not just its value.
                 if ( flagName == wxS("wxALIGN_LEFT") )
-                    orientFlagAlign = Orient_Horz;
+                    flagSpecifiesAlignIn[Orient_Horz] = true;
                 else if ( flagName == wxS("wxALIGN_TOP") )
-                    orientFlagAlign = Orient_Vert;
+                    flagSpecifiesAlignIn[Orient_Vert] = true;
                 break;
         }
 
-        if ( orientFlagAlign != Orient_Max )
+        for ( int orient = 0; orient < Orient_Max; orient++ )
         {
-            if ( !alignAllowedIn[orientFlagAlign] )
+            if ( !flagSpecifiesAlignIn[orient] )
+                continue;
+
+            if ( !alignAllowedIn[orient] )
             {
                 ReportParamError
                 (
                     "flag",
                     wxString::Format
                     (
-                        "%s alignment flag \"%s\" has no effect inside "
+                        "%s alignment flag %s has no effect inside "
                         "a %s box sizer, remove it and consider setting "
                         "the item proportion instead",
-                        orientName[orientFlagAlign],
-                        flagName,
-                        orientName[orientFlagAlign]
+                        orientName[orient],
+                        flagDesc,
+                        orientName[orient]
                     )
                 );
 
@@ -661,11 +711,11 @@ int wxSizerXmlHandler::GetSizerFlags()
                 // flags we will actually use with wxSizer: they would just
                 // trigger an assert there which wouldn't be very useful as
                 // we've already given an error about this.
-                flags &= ~flag;
+                flag = 0;
             }
-            else if ( alignFlagIn[orientFlagAlign].empty() )
+            else if ( alignFlagIn[orient].empty() )
             {
-                alignFlagIn[orientFlagAlign] = flagName;
+                alignFlagIn[orient] = flagDesc;
             }
             else
             {
@@ -674,16 +724,66 @@ int wxSizerXmlHandler::GetSizerFlags()
                     "flag",
                     wxString::Format
                     (
-                        "both \"%s\" and \"%s\" specify %s alignment "
+                        "both %s and %s specify %s alignment "
                         "and can't be used together",
-                        alignFlagIn[orientFlagAlign],
-                        flagName,
-                        orientName[orientFlagAlign]
+                        alignFlagIn[orient],
+                        flagDesc,
+                        orientName[orient]
                     )
                 );
 
-                flags &= ~flag;
+                flag = 0;
             }
+        }
+
+        flags |= flag;
+    }
+
+    // Now that we know all the alignment flags we can interpret wxALIGN_CENTRE
+    // for the 2D sizers ("centreFlag" is only set in the 2D case).
+    if ( !centreFlag.empty() )
+    {
+        if ( !expandFlag.empty() )
+        {
+            ReportParamError
+            (
+                "flag",
+                wxString::Format
+                (
+                    "\"%s\" has no effect when combined with \"%s\"",
+                    centreFlag,
+                    expandFlag
+                )
+            );
+        }
+        else // !wxEXPAND
+        {
+            int flagsCentre = 0;
+
+            if ( alignFlagIn[Orient_Horz].empty() )
+                flagsCentre |= wxALIGN_CENTRE_HORIZONTAL;
+
+            if ( alignFlagIn[Orient_Vert].empty() )
+                flagsCentre |= wxALIGN_CENTRE_VERTICAL;
+
+            if ( !flagsCentre )
+            {
+                ReportParamError
+                (
+                    "flag",
+                    wxString::Format
+                    (
+                        "\"%s\" flag has no effect when combined "
+                        "with both %s and %s horizontal and "
+                        "vertical alignment flags",
+                        centreFlag,
+                        alignFlagIn[Orient_Horz],
+                        alignFlagIn[Orient_Vert]
+                    )
+                );
+            }
+
+            flags |= flagsCentre;
         }
     }
 
@@ -728,7 +828,7 @@ int wxSizerXmlHandler::GetSizerFlags()
                     wxString::Format
                     (
                         "\"%s\" flag has no effect when combined "
-                        "with both \"%s\" and \"%s\" horizontal and "
+                        "with both %s and %s horizontal and "
                         "vertical alignment flags",
                         expandFlag,
                         alignFlagIn[Orient_Horz],
