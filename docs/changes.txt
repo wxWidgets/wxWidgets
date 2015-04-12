@@ -592,6 +592,7 @@ All (GUI):
 - Fix wxPGChoices copy ctor (Snoits).
 - Fix wxPixelData<wxImage>::Offset() for alpha (Markus Rollmann).
 - Fix bug in wxImage::ClearAlpha() for shared data (Markus Rollmann).
+- Accept wxALIGN_CENTRE_HORIZONTAL in wxStaticText XRC handler (David Hart).
 
 wxGTK:
 
