@@ -1719,8 +1719,8 @@ void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
 
     wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
 
-    item0->Add( m_controlBar, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5 );
-    item0->Add( m_previewCanvas, 1, wxGROW|wxALIGN_CENTER_VERTICAL, 5 );
+    item0->Add( m_controlBar, wxSizerFlags().Expand().Border() );
+    item0->Add( m_previewCanvas, wxSizerFlags(1).Expand().Border() );
 
     SetAutoLayout( true );
     SetSizer( item0 );
