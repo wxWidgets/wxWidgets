@@ -92,9 +92,7 @@ bool OwnerDrawnApp::OnInit(void)
     if ( !wxApp::OnInit() )
         return false;
 
-    OwnerDrawnFrame *pFrame
-        = new OwnerDrawnFrame(NULL, wxT("wxWidgets Ownerdraw Sample"),
-                              50, 50, 450, 340);
+    new OwnerDrawnFrame(NULL, "wxWidgets Ownerdraw Sample", 50, 50, 450, 340);
 
     return true;
 }
