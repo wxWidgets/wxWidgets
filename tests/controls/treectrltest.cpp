@@ -587,7 +587,12 @@ void TreeCtrlTestCase::KeyNavigation()
 
     CPPUNIT_ASSERT(m_tree->IsExpanded(m_root));
 
+#ifdef wxHAS_GENERIC_TREECTRL
     sim.Char('-');
+#else
+    sim.Char(WXK_LEFT);
+#endif
+
     wxYield();
 
     CPPUNIT_ASSERT(!m_tree->IsExpanded(m_root));
