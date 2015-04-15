@@ -145,7 +145,7 @@ void StopWatchTestCase::RestartBug()
     WX_ASSERT_MESSAGE
     (
         ("Actual time value is %ld", t),
-        t >= offset + sleepTime
+        t >= offset + sleepTime - tolerance
     );
 
     // As above, this is not actually due to the fact of the test being
