@@ -1717,13 +1717,13 @@ void wxPreviewFrame::InitializeWithModality(wxPreviewFrameModalityKind kind)
     m_printPreview->SetCanvas(m_previewCanvas);
     m_printPreview->SetFrame(this);
 
-    wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* const sizer = new wxBoxSizer( wxVERTICAL );
 
-    item0->Add( m_controlBar, wxSizerFlags().Expand().Border() );
-    item0->Add( m_previewCanvas, wxSizerFlags(1).Expand().Border() );
+    sizer->Add( m_controlBar, wxSizerFlags().Expand().Border() );
+    sizer->Add( m_previewCanvas, wxSizerFlags(1).Expand().Border() );
 
     SetAutoLayout( true );
-    SetSizer( item0 );
+    SetSizer( sizer );
 
     m_modalityKind = kind;
     switch ( m_modalityKind )
