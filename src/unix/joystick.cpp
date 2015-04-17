@@ -129,7 +129,12 @@ void* wxJoystickThread::Entry()
         if (wxFD_ISSET(m_device, &read_fds))
         {
             memset(&j_evt, 0, sizeof(j_evt));
-            read(m_device, &j_evt, sizeof(j_evt));
+            if ( read(m_device, &j_evt, sizeof(j_evt)) == -1 )
+            {
+                // We can hardly do anything other than ignoring the error and
+                // hope that we read the next event successfully.
+                continue;
+            }
 
             //printf("time: %d\t value: %d\t type: %d\t number: %d\n",
             //       j_evt.time, j_evt.value, j_evt.type, j_evt.number);
