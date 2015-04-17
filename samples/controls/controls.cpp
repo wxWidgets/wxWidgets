@@ -1288,7 +1288,7 @@ void MyPanel::OnChangeCheck(wxCommandEvent& event)
 {
     // check/uncheck all the items in the wxCheckListBox
     for (unsigned int n=0; n < m_listbox->GetCount(); n++) {
-        m_listbox->Check(n, event.GetInt());
+        m_listbox->Check(n, event.GetInt() != 0);
     }
 }
 
