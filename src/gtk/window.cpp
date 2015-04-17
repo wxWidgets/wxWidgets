@@ -3327,59 +3327,13 @@ bool wxWindowGTK::Show( bool show )
     return true;
 }
 
-static void GetFrozen(wxWindowGTK* win, wxVector<wxWindowGTK*>& vector)
-{
-    if (win->IsFrozen())
-        vector.push_back(win);
-
-    wxWindowList& children = win->GetChildren();
-    for (wxWindowList::iterator i = children.begin(); i != children.end(); ++i)
-        GetFrozen(*i, vector);
-}
-
-extern "C" {
-static void find_scrollbar(GtkWidget* widget, void* data)
-{
-    bool& isScrollbar = *static_cast<bool*>(data);
-    if (!isScrollbar)
-    {
-        if (GTK_IS_SCROLLBAR(widget))
-            isScrollbar = true;
-        else if (GTK_IS_CONTAINER(widget))
-            gtk_container_forall((GtkContainer*)widget, find_scrollbar, data);
-    }
-}
-}
-
 void wxWindowGTK::DoEnable( bool enable )
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
-    wxVector<wxWindowGTK*> frozen;
-    if (enable)
-    {
-        // Ubuntu overlay scrollbar can cause GdkWindow.impl_window to change
-        // (by indirectly invoking gdk_window_ensure_native()), which messes up
-        // the freeze count. Avoid this by temporarily un-freezing window hierarchy.
-        bool isScrollbar = false;
-        find_scrollbar(m_widget, static_cast<void*>(&isScrollbar));
-        if (isScrollbar)
-        {
-            GetFrozen(wxGetTopLevelParent(static_cast<wxWindow*>(this)), frozen);
-            for (unsigned i = frozen.size(); i--;)
-                frozen[i]->DoThaw();
-        }
-    }
-
     gtk_widget_set_sensitive( m_widget, enable );
     if (m_wxwindow && (m_wxwindow != m_widget))
         gtk_widget_set_sensitive( m_wxwindow, enable );
-
-    if (enable)
-    {
-        for (unsigned i = frozen.size(); i--;)
-            frozen[i]->DoFreeze();
-    }
 }
 
 int wxWindowGTK::GetCharHeight() const
@@ -5172,7 +5126,22 @@ void wxWindowGTK::GTKFreezeWidget(GtkWidget* widget)
     {
         GdkWindow* window = gtk_widget_get_window(widget);
         if (window)
+        {
+#if GTK_CHECK_VERSION(2,18,0)
+#ifndef __WXGTK3__
+            if (gtk_check_version(2,18,0) == NULL)
+#endif
+            {
+                // impl_window for a non-native GdkWindow can change if
+                // gdk_window_ensure_native() is called on it or some other
+                // GdkWindow in the same TLW. Since the freeze count is on the
+                // impl_window, we have to make sure impl_window does not change
+                // after we call gdk_window_freeze_updates().
+                gdk_window_ensure_native(window);
+            }
+#endif
             gdk_window_freeze_updates(window);
+        }
     }
 }
 
