@@ -926,8 +926,8 @@ void FileSystemWatcherTestCase::TestTrees()
             RemoveAllWatches();
 
             // Clean up
-            RmDir(singledir);
             RmDir(treedir);
+            RmDir(singledir);
 
             Exit();
         }
