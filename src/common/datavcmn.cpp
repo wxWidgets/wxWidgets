@@ -746,7 +746,8 @@ bool wxDataViewRendererBase::FinishEditing()
         return true;
 
     wxVariant value;
-    GetValueFromEditorCtrl( m_editorCtrl, value );
+    if ( !GetValueFromEditorCtrl(m_editorCtrl, value) )
+        return false;
 
     wxDataViewCtrl* dv_ctrl = GetOwner()->GetOwner();
 

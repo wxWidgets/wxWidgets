@@ -1613,11 +1613,11 @@ t_sizer_flags_alignh = xsd:string {
                   ")*"
     }
 
-t_horz_sizer_flags = ("*** Sizer flags excluding vertical alignment ones ***"
+t_horz_sizer_flags = ("*** Sizer flags excluding horizontal alignment ones ***"
         | t_sizer_flags_grow
         | t_sizer_flags_alignv
         )
-t_vert_sizer_flags = ("*** Sizer flags excluding horizontal alignment ones ***"
+t_vert_sizer_flags = ("*** Sizer flags excluding vertical alignment ones ***"
         | t_sizer_flags_grow
         | t_sizer_flags_alignh
         )
