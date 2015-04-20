@@ -246,17 +246,16 @@ Some examples:
 
 @subsection overview_xrcformat_type_size Size
 
-Sizes and positions have the form of string with two comma-separated integer
-components, with optional "d" suffix. Semi-formally:
+Sizes and positions can be expressed in either @ref wxWindow::FromDIP()
+"DPI-independent pixel values" or in @ref wxWindow::ConvertDialogToPixels()
+"dialog units". The former is the default, to use the latter "d" suffix can be
+added. Semi-formally the format is:
 
   size := x "," y ["d"]
 
 where x and y are integers. Either of the components (or both) may be "-1" to
 signify default value. As a shortcut, empty string is equivalent to "-1,-1"
 (= wxDefaultSize or wxDefaultPosition).
-
-When the "d" suffix is used, integer values are interpreted as
-@ref wxWindow::ConvertDialogToPixels() "dialog units" in the parent window.
 
 Examples:
 @code
@@ -274,7 +273,8 @@ Same as @ref overview_xrcformat_type_size.
 
 Similarly to @ref overview_xrcformat_type_size "sizes", dimensions are expressed
 as integers with optional "d" suffix. When "d" suffix is used, the integer
-preceding it is interpreted as dialog units in the parent window.
+preceding it is interpreted as dialog units in the parent window, otherwise
+it's a DPI-independent pixel value.
 
 
 @subsection overview_xrcformat_type_text Text

@@ -37,6 +37,9 @@ Changes in behaviour which may result in build errors
 3.1.0: (released 2014-xx-xx)
 ----------------------------
 
+- Many improvements for high DPI monitors support, notably XRC now interprets
+  all pixel values as being in resolution-independent pixels.
+
 - wxQt branch implementing Qt5-based port of wxWidgets API was merged into
   the trunk (Mariano Reingart, Google Summer of Code project).
 

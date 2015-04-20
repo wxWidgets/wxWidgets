@@ -2125,11 +2125,11 @@ ParseValueInPixels(wxXmlResourceHandlerImpl* impl,
         return defaultValue;
     }
 
+    if ( !windowToUse )
+        windowToUse = impl->GetParentAsWindow();
+
     if ( inDLU )
     {
-        if ( !windowToUse )
-            windowToUse = impl->GetParentAsWindow();
-
         if ( !windowToUse )
         {
             impl->ReportParamError
@@ -2142,6 +2142,10 @@ ParseValueInPixels(wxXmlResourceHandlerImpl* impl,
         }
 
         XRCConvertFromDLU(windowToUse, value);
+    }
+    else // The value is in resolution-independent pixels.
+    {
+        value = wxWindow::FromDIP(value, windowToUse);
     }
 
     return value;
