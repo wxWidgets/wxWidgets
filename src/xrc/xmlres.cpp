@@ -49,6 +49,8 @@
 #include "wx/hashset.h"
 #include "wx/scopedptr.h"
 
+#include <limits.h>
+
 namespace
 {
 
@@ -2056,59 +2058,108 @@ wxString wxXmlResourceHandlerImpl::GetParamValue(const wxXmlNode* node)
     return GetNodeContent(node);
 }
 
+namespace
+{
+
+// Dimensions (linear or sizes/positions) can be expressed as absolute values
+// or as dialog units in XRC, define functions for parsing both of them.
+
+bool XRCConvertFromAbsValue(const wxString& s, int& value)
+{
+    long l;
+    if ( !s.ToLong(&l) )
+        return false;
+
+    if ( l > INT_MAX )
+        return false;
+
+    value = static_cast<int>(l);
+    return true;
+}
+
+template <typename T>
+inline
+bool XRCConvertFromAbsValue(const wxString& s, T& value)
+{
+    return XRCConvertFromAbsValue(s.BeforeFirst(','), value.x) &&
+            XRCConvertFromAbsValue(s.AfterLast(wxS(',')), value.y);
+}
+
+inline
+void XRCConvertFromDLU(wxWindow* w, int& value)
+{
+    value = w->ConvertDialogToPixels(wxPoint(value, 0)).x;
+}
+
+template <typename T>
+inline
+void XRCConvertFromDLU(wxWindow* w, T& value)
+{
+    value = w->ConvertDialogToPixels(value);
+}
+
+// Helper for parsing values (of type T, for which XRCConvertFromAbsValue() and
+// XRCConvertFromDLU() functions must be defined) which can be expressed either
+// in pixels or dialog units.
+template <typename T>
+T
+ParseValueInPixels(wxXmlResourceHandlerImpl* impl,
+                   const wxString& param,
+                   const T& defaultValue,
+                   wxWindow *windowToUse = NULL)
+{
+    const wxString s = impl->GetParamValue(param);
+    if ( s.empty() )
+        return defaultValue;
+
+    const bool inDLU = s.Last() == 'd';
+
+    T value;
+    if ( !XRCConvertFromAbsValue(inDLU ? wxString(s).RemoveLast() : s, value) )
+    {
+        impl->ReportParamError
+              (
+               param,
+               wxString::Format("cannot parse dimension value \"%s\"", s)
+              );
+        return defaultValue;
+    }
+
+    if ( inDLU )
+    {
+        if ( !windowToUse )
+            windowToUse = impl->GetParentAsWindow();
+
+        if ( !windowToUse )
+        {
+            impl->ReportParamError
+                  (
+                   param,
+                   wxString::Format("cannot interpret dimension value \"%s\" "
+                                    "in dialog units without a window", s)
+                  );
+            return defaultValue;
+        }
+
+        XRCConvertFromDLU(windowToUse, value);
+    }
+
+    return value;
+}
+
+} // anonymous namespace
 
 wxSize wxXmlResourceHandlerImpl::GetSize(const wxString& param,
                                      wxWindow *windowToUse)
 {
-    wxString s = GetParamValue(param);
-    if (s.empty()) s = wxT("-1,-1");
-    bool is_dlg;
-    long sx, sy = 0;
-
-    is_dlg = s[s.length()-1] == wxT('d');
-    if (is_dlg) s.RemoveLast();
-
-    if (!s.BeforeFirst(wxT(',')).ToLong(&sx) ||
-        !s.AfterLast(wxT(',')).ToLong(&sy))
-    {
-        ReportParamError
-        (
-            param,
-            wxString::Format("cannot parse coordinates value \"%s\"", s)
-        );
-        return wxDefaultSize;
-    }
-
-    if (is_dlg)
-    {
-        if (windowToUse)
-        {
-            return wxDLG_UNIT(windowToUse, wxSize(sx, sy));
-        }
-        else if (m_handler->m_parentAsWindow)
-        {
-            return wxDLG_UNIT(m_handler->m_parentAsWindow, wxSize(sx, sy));
-        }
-        else
-        {
-            ReportParamError
-            (
-                param,
-                "cannot convert dialog units: dialog unknown"
-            );
-            return wxDefaultSize;
-        }
-    }
-
-    return wxSize(sx, sy);
+    return ParseValueInPixels(this, param, wxDefaultSize, windowToUse);
 }
 
 
 
 wxPoint wxXmlResourceHandlerImpl::GetPosition(const wxString& param)
 {
-    wxSize sz = GetSize(param);
-    return wxPoint(sz.x, sz.y);
+    return ParseValueInPixels(this, param, wxDefaultPosition);
 }
 
 
@@ -2117,46 +2168,7 @@ wxCoord wxXmlResourceHandlerImpl::GetDimension(const wxString& param,
                                            wxCoord defaultv,
                                            wxWindow *windowToUse)
 {
-    wxString s = GetParamValue(param);
-    if (s.empty()) return defaultv;
-    bool is_dlg;
-    long sx;
-
-    is_dlg = s[s.length()-1] == wxT('d');
-    if (is_dlg) s.RemoveLast();
-
-    if (!s.ToLong(&sx))
-    {
-        ReportParamError
-        (
-            param,
-            wxString::Format("cannot parse dimension value \"%s\"", s)
-        );
-        return defaultv;
-    }
-
-    if (is_dlg)
-    {
-        if (windowToUse)
-        {
-            return wxDLG_UNIT(windowToUse, wxSize(sx, 0)).x;
-        }
-        else if (m_handler->m_parentAsWindow)
-        {
-            return wxDLG_UNIT(m_handler->m_parentAsWindow, wxSize(sx, 0)).x;
-        }
-        else
-        {
-            ReportParamError
-            (
-                param,
-                "cannot convert dialog units: dialog unknown"
-            );
-            return defaultv;
-        }
-    }
-
-    return sx;
+    return ParseValueInPixels(this, param, defaultv, windowToUse);
 }
 
 wxDirection

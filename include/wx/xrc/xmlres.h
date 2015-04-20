@@ -585,6 +585,8 @@ public:
     // Gets the value of a boolean attribute (only "0" and "1" are valid values)
     bool GetBoolAttr(const wxString& attr, bool defaultv);
 
+    // Returns the window associated with the handler (may be NULL).
+    wxWindow* GetParentAsWindow() const { return m_handler->GetParentAsWindow(); }
 
     // Sets common window options.
     void SetupWindow(wxWindow *wnd);
