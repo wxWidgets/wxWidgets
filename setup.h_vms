@@ -1428,4 +1428,9 @@ typedef pid_t GPid;
 
 #include <stdlib.h>
 
+#include <limits.h>
+#define LLONG_MIN __INT64_MIN
+#define LLONG_MAX __INT64_MAX
+#define ULLONG_MAX __UINT64_MAX
+
 #endif /* __WX_SETUP_H__ */
