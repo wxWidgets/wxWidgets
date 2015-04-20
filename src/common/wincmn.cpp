@@ -99,6 +99,10 @@ bool IsInCaptureStack(wxWindowBase* win);
 
 } // wxMouseCapture
 
+// We consider 96 DPI to be the standard value, this is correct at least for
+// MSW, but could conceivably need adjustment for the other platforms.
+static const int BASELINE_DPI = 96;
+
 // ----------------------------------------------------------------------------
 // static data
 // ----------------------------------------------------------------------------
@@ -801,11 +805,7 @@ double wxWindowBase::GetContentScaleFactor() const
     // We also use just the vertical component of the DPI because it's the one
     // that counts most and, in practice, it's equal to the horizontal one
     // anyhow.
-    //
-    // Finally, we consider 96 DPI to be the standard value, this is correct
-    // at least for MSW, but could conceivably need adjustment for the other
-    // platforms.
-    return wxScreenDC().GetPPI().y / 96.;
+    return double(wxScreenDC().GetPPI().y) / BASELINE_DPI;
 }
 
 // helper of GetWindowBorderSize(): as many ports don't implement support for
@@ -2867,11 +2867,14 @@ void wxWindowBase::OnInternalIdle()
 
 #ifndef wxHAVE_DPI_INDEPENDENT_PIXELS
 
-wxSize wxWindowBase::FromDIP(const wxSize& sz) const
+/* static */
+wxSize
+wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
 {
-    const double scale = GetContentScaleFactor();
+    const wxSize dpi = wxScreenDC().GetPPI();
 
-    return wxSize(wxRound(scale*sz.x), wxRound(scale*sz.y));
+    return wxSize(wxMulDivInt32(sz.x, dpi.x, BASELINE_DPI),
+                  wxMulDivInt32(sz.y, dpi.y, BASELINE_DPI));
 }
 
 #endif // !wxHAVE_DPI_INDEPENDENT_PIXELS

@@ -947,6 +947,45 @@ public:
      */
     wxSize FromDIP(const wxSize& sz) const;
 
+    /// @overload
+    wxPoint FromDIP(const wxPoint& pt) const;
+
+    /**
+        Convert DPI-independent distance in pixels to the value in pixels
+        appropriate for the current toolkit.
+
+        This is the same as FromDIP(const wxSize& sz) overload, but assumes
+        that the resolution is the same in horizontal and vertical directions.
+
+        @since 3.1.0
+     */
+    int FromDIP(int d) const;
+
+    /**
+        Non window-specific DPI-independent pixels conversion functions.
+
+        The display resolution depends on the window in general as different
+        windows can appear on different monitors using different resolutions,
+        however sometimes no window is available for converting the resolution
+        independent pixels to the physical values and in this case these static
+        overloads can be used with @NULL value for @a w argument.
+
+        Using these methods is discouraged as passing @NULL will prevent your
+        application from correctly supporting monitors with different
+        resolutions even in the future wxWidgets versions which will add
+        support for them, and passing non-@NULL window is just a less
+        convenient way of calling the non-static FromDIP() method.
+
+        @since 3.1.0
+     */
+    static wxSize FromDIP(const wxSize& sz, const wxWindow* w);
+
+    /// @overload
+    static wxPoint FromDIP(const wxPoint& pt, const wxWindow* w);
+
+    /// @overload
+    static wxSize FromDIP(const wxSize& sz, const wxWindow* w);
+
     /**
         This functions returns the best acceptable minimal size for the window.
 

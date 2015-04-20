@@ -955,10 +955,31 @@ public:
 
         // DPI-independent pixels, or DIPs, are pixel values for the standard
         // 96 DPI display, they are scaled to take the current resolution into
-        // account (i.e. by the factor returned by GetContentScaleFactor()) if
-        // necessary for the current platform.
+        // account (i.e. multiplied by the same factor as returned by
+        // GetContentScaleFactor()) if necessary for the current platform.
+        //
+        // Currently the conversion factor is the same for all windows but this
+        // will change with the monitor-specific resolution support in the
+        // future, so prefer using the non-static member functions.
+        //
+        // Similarly, currently in practice the factor is the same in both
+        // horizontal and vertical directions, but this could, in principle,
+        // change too, so prefer using the overloads taking wxPoint or wxSize.
 
-    wxSize FromDIP(const wxSize& sz) const;
+    static wxSize FromDIP(const wxSize& sz, const wxWindowBase* w);
+    static wxPoint FromDIP(const wxPoint& pt, const wxWindowBase* w)
+    {
+        const wxSize sz = FromDIP(wxSize(pt.x, pt.y), w);
+        return wxPoint(sz.x, sz.y);
+    }
+    static int FromDIP(int d, const wxWindowBase* w)
+    {
+        return FromDIP(wxSize(d, 0), w).x;
+    }
+
+    wxSize FromDIP(const wxSize& sz) const { return FromDIP(sz, this); }
+    wxPoint FromDIP(const wxPoint& pt) const { return FromDIP(pt, this); }
+    int FromDIP(int d) const { return FromDIP(d, this); }
 
 
         // Dialog units are based on the size of the current font.
@@ -1961,7 +1982,11 @@ inline wxWindow *wxWindowBase::GetGrandParent() const
 #ifdef wxHAVE_DPI_INDEPENDENT_PIXELS
 
 // FromDIP() becomes trivial in this case, so make it inline to avoid overhead.
-inline wxSize wxWindowBase::FromDIP(const wxSize& sz) const { return sz; }
+inline wxSize
+wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w)) const
+{
+    return sz;
+}
 
 #endif // wxHAVE_DPI_INDEPENDENT_PIXELS
 
