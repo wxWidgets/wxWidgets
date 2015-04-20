@@ -80,15 +80,21 @@ public:
     // simple accessors
     bool IsVertical() const { return HasFlag(wxGA_VERTICAL); }
 
-    // appearance params (not implemented for most ports)
-    virtual void SetShadowWidth(int w);
-    virtual int GetShadowWidth() const;
-
-    virtual void SetBezelFace(int w);
-    virtual int GetBezelFace() const;
-
     // overridden base class virtuals
     virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
+
+    // Deprecated methods not doing anything since a long time.
+    wxDEPRECATED_MSG("Remove calls to this method, it doesn't do anything")
+    void SetShadowWidth(int WXUNUSED(w)) { }
+
+    wxDEPRECATED_MSG("Remove calls to this method, it always returns 0")
+    int GetShadowWidth() const { return 0; }
+
+    wxDEPRECATED_MSG("Remove calls to this method, it doesn't do anything")
+    void SetBezelFace(int WXUNUSED(w)) { }
+
+    wxDEPRECATED_MSG("Remove calls to this method, it always returns 0")
+    int GetBezelFace() const { return 0; }
 
 protected:
     virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }

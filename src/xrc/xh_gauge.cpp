@@ -51,14 +51,6 @@ wxObject *wxGaugeXmlHandler::DoCreateResource()
     {
         control->SetValue(GetLong(wxT("value")));
     }
-    if( HasParam(wxT("shadow")))
-    {
-        control->SetShadowWidth(GetDimension(wxT("shadow")));
-    }
-    if( HasParam(wxT("bezel")))
-    {
-        control->SetBezelFace(GetDimension(wxT("bezel")));
-    }
 
     SetupWindow(control);
 

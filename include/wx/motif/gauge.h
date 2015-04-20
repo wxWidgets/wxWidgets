@@ -38,11 +38,9 @@ public:
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxGaugeNameStr);
 
-    void SetShadowWidth(int w);
     void SetRange(int r);
     void SetValue(int pos);
 
-    int GetShadowWidth() const ;
     int GetRange() const ;
     int GetValue() const ;
 

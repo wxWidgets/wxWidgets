@@ -40,11 +40,6 @@ public:
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxGaugeNameStr );
 
-    void SetShadowWidth( int WXUNUSED(w) ) { }
-    void SetBezelFace( int WXUNUSED(w) ) { }
-    int GetShadowWidth() const { return 0; }
-    int GetBezelFace() const { return 0; }
-
     // determinate mode API
     void SetRange( int r );
     void SetValue( int pos );

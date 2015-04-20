@@ -123,29 +123,11 @@ public:
                 const wxString& name = wxGaugeNameStr);
 
     /**
-        Returns the width of the 3D bezel face.
-
-        @remarks This method is not implemented (returns 0) for most platforms.
-
-        @see SetBezelFace()
-    */
-    int GetBezelFace() const;
-
-    /**
         Returns the maximum position of the gauge.
 
         @see SetRange()
     */
     int GetRange() const;
-
-    /**
-        Returns the 3D shadow margin width.
-
-        @remarks This method is not implemented (returns 0) for most platforms.
-
-        @see SetShadowWidth()
-    */
-    int GetShadowWidth() const;
 
     /**
         Returns the current position of the gauge.
@@ -171,16 +153,6 @@ public:
     virtual void Pulse();
 
     /**
-        Sets the 3D bezel face width.
-
-        @remarks This method is not implemented (doesn't do anything) for most
-                 platforms.
-
-        @see GetBezelFace()
-    */
-    void SetBezelFace(int width);
-
-    /**
         Sets the range (maximum value) of the gauge. This function makes the
         gauge switch to determinate mode, if it's not already.
 
@@ -191,14 +163,6 @@ public:
         @see GetRange()
     */
     void SetRange(int range);
-
-    /**
-        Sets the 3D shadow width.
-
-        @remarks This method is not implemented (doesn't do anything) for most
-                 platforms.
-    */
-    void SetShadowWidth(int width);
 
     /**
         Sets the position of the gauge. The @a pos must be between 0 and the
