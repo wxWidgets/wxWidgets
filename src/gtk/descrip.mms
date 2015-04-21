@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 26 June 2014                                                        *
+# Date : 21 April 2015                                                       *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -100,7 +100,7 @@ OBJECTS0= \
 	msgdlg.obj,\
 	treeentry_gtk.obj,textentry.obj,filectrl.obj,print.obj,win_gtk.obj,\
 	mnemonics.obj,private.obj,assertdlg_gtk.obj,infobar.obj,anybutton.obj,\
-	nonownedwnd.obj,textmeasure.obj,display.obj
+	nonownedwnd.obj,textmeasure.obj,display.obj,activityindicator.obj
 
 SOURCES =\
 	animate.cpp,\
@@ -267,3 +267,4 @@ anybutton.obj : anybutton.cpp
 nonownedwnd.obj : nonownedwnd.cpp
 textmeasure.obj : textmeasure.cpp
 display.obj : display.cpp
+activityindicator.obj : activityindicator.cpp
