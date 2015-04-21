@@ -623,6 +623,7 @@ wxOSX:
 - Compilation fix for wxWebView under 10.10.
 - Fix conversion of wxBitmap to wxImage in 64 bit builds.
 - Fix wxFileDialog::GetFilterIndex() for file open dialogs (phsilva).
+- Fix custom paper support (tijsv).
 
 
 3.0.2: (released 2014-10-06)

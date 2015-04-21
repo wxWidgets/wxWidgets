@@ -198,8 +198,18 @@ void wxOSXPrintData::TransferPaperInfoFrom( const wxPrintData &data )
                     wxString id, name(wxT("Custom paper"));
                     id.Printf(wxT("wxPaperCustom%dx%d"), papersize.x, papersize.y);
 
-                    PMPaperCreateCustom(printer, wxCFStringRef( id, wxFont::GetDefaultEncoding() ), wxCFStringRef( name, wxFont::GetDefaultEncoding() ),
-                                            papersize.x, papersize.y, &margins, &paper);
+                    if ( PMPaperCreateCustom
+                         (
+                            printer,
+                            wxCFStringRef(id, wxFont::GetDefaultEncoding()),
+                            wxCFStringRef(name, wxFont::GetDefaultEncoding()),
+                            papersize.x, papersize.y,
+                            &margins,
+                            &paper
+                         ) )
+                    {
+                        bestPaper = paper;
+                    }
                 }
                 if ( bestPaper != kPMNoData )
                 {
