@@ -192,7 +192,8 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
                            const wxSize& sz,
                            const wxString& name)
 {
-    parent = GetParentForModalDialog(parent, style);
+    // wxFD_MULTIPLE has the same value as wxDIALOG_NO_PARENT
+    parent = GetParentForModalDialog(parent, style & ~wxFD_MULTIPLE);
 
     if (!wxFileDialogBase::Create(parent, message, defaultDir, defaultFileName,
                                   wildCard, style, pos, sz, name))
