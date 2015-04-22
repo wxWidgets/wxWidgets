@@ -1064,3 +1064,26 @@ TEST_CASE("wxFileName::GetSizeSpecial", "[filename][linux][special-file]")
 }
 
 #endif // __LINUX__
+
+TEST_CASE("fn_str", "[filename][unicode]")
+{
+#if wxMBFILES
+    const char *pfn;
+#else
+    const wxChar *pfn;
+#endif
+
+    wxString fn = wxT("wx_file_mask.txt");
+    pfn = fn.fn_str();
+
+    INFO( "File name: " << fn );
+    CHECK( wxStrlen(pfn) > 0 );
+
+    // This file name contains UTF-16 characters
+    // ('wx_file_mask.txt' in Russian).
+    fn = wxT("wx_\x043C\x0430\x0441\x043A\x0430_\x0444\x0430\x0438\x043F\x0430.txt");
+    pfn = fn.fn_str();
+
+    INFO( "File name: " << fn );
+    CHECK( wxStrlen(pfn) > 0 );
+}
