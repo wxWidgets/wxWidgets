@@ -1588,6 +1588,9 @@
 		8EE5A2467401365C8217AF2F /* preferences.mm in Sources */ = {isa = PBXBuildFile; fileRef = 835C22B71A0F3C469310E1E0 /* preferences.mm */; };
 		8EE5A2467401365C8217AF30 /* preferences.mm in Sources */ = {isa = PBXBuildFile; fileRef = 835C22B71A0F3C469310E1E0 /* preferences.mm */; };
 		8EE5A2467401365C8217AF31 /* preferences.mm in Sources */ = {isa = PBXBuildFile; fileRef = 835C22B71A0F3C469310E1E0 /* preferences.mm */; };
+		8F949B9010863F66A58FFEF1 /* xh_activityindicator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB60FA0E3524391D8581AD7C /* xh_activityindicator.cpp */; };
+		8F949B9010863F66A58FFEF2 /* xh_activityindicator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB60FA0E3524391D8581AD7C /* xh_activityindicator.cpp */; };
+		8F949B9010863F66A58FFEF3 /* xh_activityindicator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB60FA0E3524391D8581AD7C /* xh_activityindicator.cpp */; };
 		8F98C20E7B223FF4B352C130 /* Catalogue.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 975E3B6A269434F0A069987D /* Catalogue.cxx */; };
 		8F98C20E7B223FF4B352C131 /* Catalogue.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 975E3B6A269434F0A069987D /* Catalogue.cxx */; };
 		8F98C20E7B223FF4B352C132 /* Catalogue.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 975E3B6A269434F0A069987D /* Catalogue.cxx */; };
@@ -1818,6 +1821,9 @@
 		A465A43B756630F1944B5A56 /* vscroll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1629FA905F903324AA5BE72C /* vscroll.cpp */; };
 		A465A43B756630F1944B5A57 /* vscroll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1629FA905F903324AA5BE72C /* vscroll.cpp */; };
 		A465A43B756630F1944B5A58 /* vscroll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1629FA905F903324AA5BE72C /* vscroll.cpp */; };
+		A4F2426F36653C6D87EC18AE /* activityindicator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5814208070CF3D899F132BA1 /* activityindicator.mm */; };
+		A4F2426F36653C6D87EC18AF /* activityindicator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5814208070CF3D899F132BA1 /* activityindicator.mm */; };
+		A4F2426F36653C6D87EC18B0 /* activityindicator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5814208070CF3D899F132BA1 /* activityindicator.mm */; };
 		A52A7D2FEB1434E29C64582C /* RESearch.cxx in Sources */ = {isa = PBXBuildFile; fileRef = E145FC31ED523B4AA5080A61 /* RESearch.cxx */; };
 		A52A7D2FEB1434E29C64582D /* RESearch.cxx in Sources */ = {isa = PBXBuildFile; fileRef = E145FC31ED523B4AA5080A61 /* RESearch.cxx */; };
 		A52A7D2FEB1434E29C64582E /* RESearch.cxx in Sources */ = {isa = PBXBuildFile; fileRef = E145FC31ED523B4AA5080A61 /* RESearch.cxx */; };
@@ -4093,6 +4099,7 @@
 		57E4784E521339BEB971D81D /* LexAVS.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexAVS.cxx; path = ../../src/stc/scintilla/lexers/LexAVS.cxx; sourceTree = "<group>"; };
 		57EB0085AFB93BFC88AC6FFC /* xh_listbk.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_listbk.cpp; path = ../../src/xrc/xh_listbk.cpp; sourceTree = "<group>"; };
 		580AFC66F3003582B43043B1 /* animateg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = animateg.cpp; path = ../../src/generic/animateg.cpp; sourceTree = "<group>"; };
+		5814208070CF3D899F132BA1 /* activityindicator.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = activityindicator.mm; path = ../../src/osx/cocoa/activityindicator.mm; sourceTree = "<group>"; };
 		58421C141C9E31C6A7A3C183 /* filefn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filefn.cpp; path = ../../src/common/filefn.cpp; sourceTree = "<group>"; };
 		58E1F571B01F34D4AB70CA18 /* property.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = property.cpp; path = ../../src/propgrid/property.cpp; sourceTree = "<group>"; };
 		58E7C516E2453A269280A404 /* modalhook.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = modalhook.cpp; path = ../../src/common/modalhook.cpp; sourceTree = "<group>"; };
@@ -4461,6 +4468,7 @@
 		BAD4614CABC934D6AFF8D9CD /* gzread.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = gzread.c; path = ../../src/zlib/gzread.c; sourceTree = "<group>"; };
 		BAD9A0BFED6A37E4A305E1D7 /* filename.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filename.cpp; path = ../../src/common/filename.cpp; sourceTree = "<group>"; };
 		BB3FF9FECCB5300A9561CE36 /* richtextsymboldlg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = richtextsymboldlg.cpp; path = ../../src/richtext/richtextsymboldlg.cpp; sourceTree = "<group>"; };
+		BB60FA0E3524391D8581AD7C /* xh_activityindicator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_activityindicator.cpp; path = ../../src/xrc/xh_activityindicator.cpp; sourceTree = "<group>"; };
 		BB7661E9E09A397790ED9545 /* sockunix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sockunix.cpp; path = ../../src/unix/sockunix.cpp; sourceTree = "<group>"; };
 		BB7DBBD53BA837D2B01CE2B6 /* xh_chckb.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_chckb.cpp; path = ../../src/xrc/xh_chckb.cpp; sourceTree = "<group>"; };
 		BBB30516233A39BE809405AA /* helpbase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = helpbase.cpp; path = ../../src/common/helpbase.cpp; sourceTree = "<group>"; };
@@ -5548,6 +5556,7 @@
 				A0A63980677D371C85A60B75 /* datetimectrl.mm */,
 				2A4D36DE66EC3EB09E883D6B /* taskbar.mm */,
 				018B15DE6F3A3D49B9CDE9DE /* hidjoystick.cpp */,
+				5814208070CF3D899F132BA1 /* activityindicator.mm */,
 			);
 			name = adv;
 			sourceTree = "<group>";
@@ -5625,6 +5634,7 @@
 		60328E6EA3793DA990E18FC1 /* xrc */ = {
 			isa = PBXGroup;
 			children = (
+				BB60FA0E3524391D8581AD7C /* xh_activityindicator.cpp */,
 				8C1E755F2408363288B2CE69 /* xh_animatctrl.cpp */,
 				3116006345D833509865FF7F /* xh_bannerwindow.cpp */,
 				07CDBBC10C8E37BBA8600DD6 /* xh_bmp.cpp */,
@@ -7724,6 +7734,7 @@
 				77BC918AF05C30E8A0BD27FA /* tipdlg.cpp in Sources */,
 				060E095718B03EF98C75479B /* treelist.cpp in Sources */,
 				82FA4AA043213728AC266702 /* wizard.cpp in Sources */,
+				EC3D181D65F33E09A675FFF4 /* addremovectrl.cpp in Sources */,
 				D00AF125FCB63A7A8F9B87E0 /* taskbarcmn.cpp in Sources */,
 				46F341B46F80376B962759F7 /* animateg.cpp in Sources */,
 				219304C9DDA33E9AADB515DE /* datetimectrl_osx.cpp in Sources */,
@@ -7738,6 +7749,7 @@
 				3316A16628B03D5E88529EA9 /* datetimectrl.mm in Sources */,
 				25C5C1713C0B39AC8EB6A390 /* taskbar.mm in Sources */,
 				C1DCF69200593986A8C606A8 /* hidjoystick.cpp in Sources */,
+				A4F2426F36653C6D87EC18B0 /* activityindicator.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7807,6 +7819,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F949B9010863F66A58FFEF3 /* xh_activityindicator.cpp in Sources */,
 				FBE4DB30865D3177B3A9993D /* xh_animatctrl.cpp in Sources */,
 				702616D38A5B345D9CC87116 /* xh_bannerwindow.cpp in Sources */,
 				94E510619F433AE3AC884757 /* xh_bmp.cpp in Sources */,
@@ -8412,6 +8425,7 @@
 				3316A16628B03D5E88529EA8 /* datetimectrl.mm in Sources */,
 				25C5C1713C0B39AC8EB6A38F /* taskbar.mm in Sources */,
 				C1DCF69200593986A8C606A7 /* hidjoystick.cpp in Sources */,
+				A4F2426F36653C6D87EC18AF /* activityindicator.mm in Sources */,
 				2DBF5F96CCC63F7481C26A44 /* webview_webkit.mm in Sources */,
 				64A716F87A5136F9A790EC5B /* webview.cpp in Sources */,
 				5C5D0983160A36189A770743 /* webviewarchivehandler.cpp in Sources */,
@@ -8444,6 +8458,7 @@
 				F3AC352D6DAE3A12A5664769 /* styleparams.cpp in Sources */,
 				2A7640E4210334AC93366901 /* winpars.cpp in Sources */,
 				87AA9C5D887B3C31A2AFB49E /* htmllbox.cpp in Sources */,
+				8F949B9010863F66A58FFEF2 /* xh_activityindicator.cpp in Sources */,
 				FBE4DB30865D3177B3A9993C /* xh_animatctrl.cpp in Sources */,
 				702616D38A5B345D9CC87115 /* xh_bannerwindow.cpp in Sources */,
 				94E510619F433AE3AC884756 /* xh_bmp.cpp in Sources */,
@@ -9600,6 +9615,7 @@
 				3316A16628B03D5E88529EA7 /* datetimectrl.mm in Sources */,
 				25C5C1713C0B39AC8EB6A38E /* taskbar.mm in Sources */,
 				C1DCF69200593986A8C606A6 /* hidjoystick.cpp in Sources */,
+				A4F2426F36653C6D87EC18AE /* activityindicator.mm in Sources */,
 				2DBF5F96CCC63F7481C26A43 /* webview_webkit.mm in Sources */,
 				64A716F87A5136F9A790EC5A /* webview.cpp in Sources */,
 				5C5D0983160A36189A770742 /* webviewarchivehandler.cpp in Sources */,
@@ -9632,6 +9648,7 @@
 				F3AC352D6DAE3A12A5664768 /* styleparams.cpp in Sources */,
 				2A7640E4210334AC93366900 /* winpars.cpp in Sources */,
 				87AA9C5D887B3C31A2AFB49D /* htmllbox.cpp in Sources */,
+				8F949B9010863F66A58FFEF1 /* xh_activityindicator.cpp in Sources */,
 				FBE4DB30865D3177B3A9993B /* xh_animatctrl.cpp in Sources */,
 				702616D38A5B345D9CC87114 /* xh_bannerwindow.cpp in Sources */,
 				94E510619F433AE3AC884755 /* xh_bmp.cpp in Sources */,
