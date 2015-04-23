@@ -416,8 +416,8 @@ void BoxSizerTestCase::IncompatibleFlags()
 
 
     // And now exactly the same thing in the other direction.
-    delete m_sizer;
     m_sizer = new wxBoxSizer(wxVERTICAL);
+    m_win->SetSizer(m_sizer);
 
     ASSERT_SIZER_INVALID_FLAGS(
         wxALIGN_BOTTOM,
