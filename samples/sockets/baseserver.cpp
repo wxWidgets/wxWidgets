@@ -754,7 +754,7 @@ void  EventWorker::DoWrite()
             m_written += m_socket->LastCount();
         }
         LogWorker(wxString::Format("Written %d of %d bytes, todo %d",
-                  m_socket->LastCount(),m_size,m_size - m_written));
+                  m_written, m_size, m_size - m_written));
     }
     while (!m_socket->Error());
 }
