@@ -54,11 +54,11 @@
     #include "wx/x11/private.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxPopupWindow, wxWindow)
-IMPLEMENT_DYNAMIC_CLASS(wxPopupTransientWindow, wxPopupWindow)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPopupWindow, wxWindow);
+wxIMPLEMENT_DYNAMIC_CLASS(wxPopupTransientWindow, wxPopupWindow);
 
 #if wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)
-    IMPLEMENT_DYNAMIC_CLASS(wxPopupComboWindow, wxPopupTransientWindow)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPopupComboWindow, wxPopupTransientWindow);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -80,7 +80,7 @@ protected:
 private:
     wxPopupTransientWindow *m_popup;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxPopupWindowHandler);
 };
 
@@ -96,7 +96,7 @@ protected:
 private:
     wxPopupTransientWindow *m_popup;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxPopupFocusHandler);
 };
 
@@ -104,21 +104,21 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxPopupWindowHandler, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(wxPopupWindowHandler, wxEvtHandler)
     EVT_LEFT_DOWN(wxPopupWindowHandler::OnLeftDown)
     EVT_MOUSE_CAPTURE_LOST(wxPopupWindowHandler::OnCaptureLost)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(wxPopupFocusHandler, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(wxPopupFocusHandler, wxEvtHandler)
     EVT_KILL_FOCUS(wxPopupFocusHandler::OnKillFocus)
     EVT_CHAR(wxPopupFocusHandler::OnChar)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(wxPopupTransientWindow, wxPopupWindow)
+wxBEGIN_EVENT_TABLE(wxPopupTransientWindow, wxPopupWindow)
 #if defined(__WXMSW__) || (defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON)
     EVT_IDLE(wxPopupTransientWindow::OnIdle)
 #endif
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
@@ -495,9 +495,9 @@ void wxPopupTransientWindow::OnIdle(wxIdleEvent& event)
 // wxPopupComboWindow
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxPopupComboWindow, wxPopupTransientWindow)
+wxBEGIN_EVENT_TABLE(wxPopupComboWindow, wxPopupTransientWindow)
     EVT_KEY_DOWN(wxPopupComboWindow::OnKeyDown)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxPopupComboWindow::wxPopupComboWindow(wxComboCtrl *parent)
                   : wxPopupTransientWindow(parent)

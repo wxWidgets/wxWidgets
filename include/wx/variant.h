@@ -389,7 +389,7 @@ protected:
     wxString        m_name;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxVariant)
+    wxDECLARE_DYNAMIC_CLASS(wxVariant);
 };
 
 

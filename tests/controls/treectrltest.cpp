@@ -107,7 +107,7 @@ private:
                  m_child2,
                  m_grandchild;
 
-    DECLARE_NO_COPY_CLASS(TreeCtrlTestCase)
+    wxDECLARE_NO_COPY_CLASS(TreeCtrlTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

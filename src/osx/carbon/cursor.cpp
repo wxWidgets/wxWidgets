@@ -23,7 +23,7 @@
 #include "wx/osx/private.h"
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject);
 
 
 class WXDLLEXPORT wxCursorRefData: public wxGDIRefData

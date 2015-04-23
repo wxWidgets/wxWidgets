@@ -25,7 +25,7 @@
     #include "wx/statusbr.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxStatusBarXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxStatusBarXmlHandler, wxXmlResourceHandler);
 
 wxStatusBarXmlHandler::wxStatusBarXmlHandler()
                       :wxXmlResourceHandler()

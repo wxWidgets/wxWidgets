@@ -24,7 +24,7 @@
     #include "wx/menu.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxMenuXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxMenuXmlHandler, wxXmlResourceHandler);
 
 wxMenuXmlHandler::wxMenuXmlHandler() :
         wxXmlResourceHandler(), m_insideMenu(false)
@@ -141,7 +141,7 @@ bool wxMenuXmlHandler::CanHandle(wxXmlNode *node)
            );
 }
 
-IMPLEMENT_DYNAMIC_CLASS(wxMenuBarXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxMenuBarXmlHandler, wxXmlResourceHandler);
 
 wxMenuBarXmlHandler::wxMenuBarXmlHandler() : wxXmlResourceHandler()
 {

@@ -16,7 +16,7 @@
 #include "wx/osx/private.h"
 #include "wx/graphics.h"
 
-IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl);
 
 // TODO : for the Screenshot use case, which doesn't work in Quartz
 // we should do a GetAsBitmap using something like

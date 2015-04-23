@@ -122,9 +122,9 @@ gtk_spinctrl_text_changed_callback( GtkWidget *WXUNUSED(widget), wxSpinCtrl *win
 // wxSpinCtrl
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxSpinCtrl, wxControl)
+wxBEGIN_EVENT_TABLE(wxSpinCtrl, wxControl)
     EVT_CHAR(wxSpinCtrl::OnChar)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
                         const wxString& value,

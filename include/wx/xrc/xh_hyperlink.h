@@ -18,7 +18,7 @@
 class WXDLLIMPEXP_XRC wxHyperlinkCtrlXmlHandler : public wxXmlResourceHandler
 {
     // Register with wxWindows' dynamic class subsystem.
-    DECLARE_DYNAMIC_CLASS(wxHyperlinkCtrlXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxHyperlinkCtrlXmlHandler);
 
 public:
     // Constructor.

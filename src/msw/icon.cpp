@@ -38,7 +38,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxGDIObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxIcon, wxGDIObject);
 
 // ============================================================================
 // implementation

@@ -221,8 +221,8 @@ private:
     // For wxTE_AUTO_URL
     void OnUrlMouseEvent(wxMouseEvent&);
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxTextCtrl)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS(wxTextCtrl);
 };
 
 #endif // _WX_GTK_TEXTCTRL_H_

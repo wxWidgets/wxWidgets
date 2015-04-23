@@ -17,7 +17,7 @@ class WXDLLIMPEXP_FWD_CORE wxListbook;
 
 class WXDLLIMPEXP_XRC wxListbookXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxListbookXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxListbookXmlHandler);
 
 public:
     wxListbookXmlHandler();

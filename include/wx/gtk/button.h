@@ -67,7 +67,7 @@ private:
     // Return the GtkLabel used by this button.
     GtkLabel *GTKGetLabel() const;
 
-    DECLARE_DYNAMIC_CLASS(wxButton)
+    wxDECLARE_DYNAMIC_CLASS(wxButton);
 };
 
 #endif // _WX_GTK_BUTTON_H_

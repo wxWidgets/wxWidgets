@@ -48,7 +48,7 @@ protected:
     virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxStaticLine)
+    wxDECLARE_DYNAMIC_CLASS(wxStaticLine);
 };
 
 #endif // _WX_UNIV_STATLINE_H_

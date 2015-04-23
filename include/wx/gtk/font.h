@@ -120,7 +120,7 @@ protected:
 private:
     void Init();
 
-    DECLARE_DYNAMIC_CLASS(wxFont)
+    wxDECLARE_DYNAMIC_CLASS(wxFont);
 };
 
 #endif // _WX_GTK_FONT_H_

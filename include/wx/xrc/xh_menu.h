@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxMenuXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxMenuXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxMenuXmlHandler);
 
 public:
     wxMenuXmlHandler();
@@ -29,7 +29,7 @@ private:
 
 class WXDLLIMPEXP_XRC wxMenuBarXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxMenuBarXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxMenuBarXmlHandler);
 
 public:
     wxMenuBarXmlHandler();

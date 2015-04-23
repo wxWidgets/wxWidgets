@@ -48,7 +48,7 @@ public:
     }
 
 private:
-    DECLARE_CLASS(wxDocMDIParentFrame)
+    wxDECLARE_CLASS(wxDocMDIParentFrame);
     wxDECLARE_NO_COPY_CLASS(wxDocMDIParentFrame);
 };
 
@@ -79,7 +79,7 @@ public:
     }
 
 private:
-    DECLARE_CLASS(wxDocMDIChildFrame)
+    wxDECLARE_CLASS(wxDocMDIChildFrame);
     wxDECLARE_NO_COPY_CLASS(wxDocMDIChildFrame);
 };
 

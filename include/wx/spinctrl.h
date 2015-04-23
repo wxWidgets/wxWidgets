@@ -87,7 +87,7 @@ protected:
     double m_value;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSpinDoubleEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSpinDoubleEvent);
 };
 
 // ----------------------------------------------------------------------------

@@ -45,7 +45,7 @@ static void response(GtkDialog*, int response_id, wxColourDialog* win)
 }
 }
 
-IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog);
 
 wxColourDialog::wxColourDialog(wxWindow *parent, wxColourData *data)
 {

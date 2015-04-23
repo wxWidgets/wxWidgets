@@ -47,12 +47,12 @@
 // ============================================================================
 
 
-BEGIN_EVENT_TABLE(wxBitmapComboBox, wxComboBox)
+wxBEGIN_EVENT_TABLE(wxBitmapComboBox, wxComboBox)
     EVT_SIZE(wxBitmapComboBox::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapComboBox, wxComboBox)
+wxIMPLEMENT_DYNAMIC_CLASS(wxBitmapComboBox, wxComboBox);
 
 
 // ----------------------------------------------------------------------------

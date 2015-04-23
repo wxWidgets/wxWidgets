@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxRadioButtonXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxRadioButtonXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxRadioButtonXmlHandler);
 
 public:
     wxRadioButtonXmlHandler();

@@ -37,16 +37,16 @@
 
 //---------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxSizerItem, wxObject)
-IMPLEMENT_CLASS(wxSizer, wxObject)
-IMPLEMENT_CLASS(wxGridSizer, wxSizer)
-IMPLEMENT_CLASS(wxFlexGridSizer, wxGridSizer)
-IMPLEMENT_CLASS(wxBoxSizer, wxSizer)
+wxIMPLEMENT_CLASS(wxSizerItem, wxObject);
+wxIMPLEMENT_CLASS(wxSizer, wxObject);
+wxIMPLEMENT_CLASS(wxGridSizer, wxSizer);
+wxIMPLEMENT_CLASS(wxFlexGridSizer, wxGridSizer);
+wxIMPLEMENT_CLASS(wxBoxSizer, wxSizer);
 #if wxUSE_STATBOX
-IMPLEMENT_CLASS(wxStaticBoxSizer, wxBoxSizer)
+wxIMPLEMENT_CLASS(wxStaticBoxSizer, wxBoxSizer);
 #endif
 #if wxUSE_BUTTON
-IMPLEMENT_CLASS(wxStdDialogButtonSizer, wxBoxSizer)
+wxIMPLEMENT_CLASS(wxStdDialogButtonSizer, wxBoxSizer);
 #endif
 
 WX_DEFINE_EXPORTED_LIST( wxSizerItemList )

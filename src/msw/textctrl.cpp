@@ -136,7 +136,7 @@ private:
     static bool             ms_inkEditLibLoadAttemped;
 #endif
 
-    DECLARE_DYNAMIC_CLASS(wxRichEditModule)
+    wxDECLARE_DYNAMIC_CLASS(wxRichEditModule);
 };
 
 HINSTANCE wxRichEditModule::ms_hRichEdit[Version_Max] = { NULL, NULL, NULL };
@@ -146,7 +146,7 @@ wxDynamicLibrary wxRichEditModule::ms_inkEditLib;
 bool             wxRichEditModule::ms_inkEditLibLoadAttemped = false;
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichEditModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichEditModule, wxModule);
 
 #if wxUSE_OLE
 
@@ -270,7 +270,7 @@ wxStack<int> gs_lenOfInsertedText;
 // event tables and other macros
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
+wxBEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_CHAR(wxTextCtrl::OnChar)
     EVT_KEY_DOWN(wxTextCtrl::OnKeyDown)
     EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
@@ -292,7 +292,7 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_UPDATE_UI(wxID_SELECTALL, wxTextCtrl::OnUpdateSelectAll)
 
     EVT_SET_FOCUS(wxTextCtrl::OnSetFocus)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

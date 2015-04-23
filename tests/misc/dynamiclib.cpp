@@ -38,8 +38,8 @@ private:
     CPPUNIT_TEST_SUITE_END();
 
     void Load();
-    
-    DECLARE_NO_COPY_CLASS(DynamicLibraryTestCase)
+
+    wxDECLARE_NO_COPY_CLASS(DynamicLibraryTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

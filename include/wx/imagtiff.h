@@ -50,7 +50,7 @@ protected:
 #endif
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxTIFFHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxTIFFHandler);
 };
 
 #endif // wxUSE_LIBTIFF

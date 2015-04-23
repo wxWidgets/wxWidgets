@@ -201,8 +201,8 @@ protected:
 #endif // wxUSE_UXTHEME
 
 
-  DECLARE_DYNAMIC_CLASS_NO_COPY(wxNotebook)
-  DECLARE_EVENT_TABLE()
+  wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxNotebook);
+  wxDECLARE_EVENT_TABLE();
 };
 
 #endif // wxUSE_NOTEBOOK

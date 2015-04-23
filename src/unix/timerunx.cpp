@@ -241,10 +241,10 @@ public:
     virtual bool OnInit() wxOVERRIDE { return true; }
     virtual void OnExit() wxOVERRIDE { wxTimerScheduler::Shutdown(); }
 
-    DECLARE_DYNAMIC_CLASS(wxTimerUnixModule)
+    wxDECLARE_DYNAMIC_CLASS(wxTimerUnixModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxTimerUnixModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxTimerUnixModule, wxModule);
 
 // ============================================================================
 // global functions

@@ -43,8 +43,8 @@ extern WXDLLEXPORT_DATA(const char) wxToolBarNameStr[] = "toolbar";
 // wxWidgets macros
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxToolBarBase, wxControl)
-END_EVENT_TABLE()
+wxBEGIN_EVENT_TABLE(wxToolBarBase, wxControl)
+wxEND_EVENT_TABLE()
 
 #include "wx/listimpl.cpp"
 
@@ -58,7 +58,7 @@ WX_DEFINE_LIST(wxToolBarToolsList)
 // wxToolBarToolBase
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxToolBarToolBase, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxToolBarToolBase, wxObject);
 
 wxToolBarToolBase::~wxToolBarToolBase()
 {

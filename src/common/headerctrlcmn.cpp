@@ -75,12 +75,12 @@ public:
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxHeaderCtrlNameStr[] = "wxHeaderCtrl";
 
-BEGIN_EVENT_TABLE(wxHeaderCtrlBase, wxControl)
+wxBEGIN_EVENT_TABLE(wxHeaderCtrlBase, wxControl)
     EVT_HEADER_SEPARATOR_DCLICK(wxID_ANY, wxHeaderCtrlBase::OnSeparatorDClick)
 #if wxUSE_MENUS
     EVT_HEADER_RIGHT_CLICK(wxID_ANY, wxHeaderCtrlBase::OnRClick)
 #endif // wxUSE_MENUS
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxHeaderCtrlBase::ScrollWindow(int dx,
                                     int WXUNUSED_UNLESS_DEBUG(dy),
@@ -470,7 +470,7 @@ wxHeaderCtrlSimple::UpdateColumnWidthToFit(unsigned int idx, int widthTitle)
 // wxHeaderCtrlEvent implementation
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxHeaderCtrlEvent, wxNotifyEvent)
+wxIMPLEMENT_DYNAMIC_CLASS(wxHeaderCtrlEvent, wxNotifyEvent);
 
 wxDEFINE_EVENT( wxEVT_HEADER_CLICK, wxHeaderCtrlEvent);
 wxDEFINE_EVENT( wxEVT_HEADER_RIGHT_CLICK, wxHeaderCtrlEvent);

@@ -68,7 +68,7 @@ protected:
 private:
     void Unshare();
 
-    DECLARE_DYNAMIC_CLASS(wxPen)
+    wxDECLARE_DYNAMIC_CLASS(wxPen);
 };
 
 #endif

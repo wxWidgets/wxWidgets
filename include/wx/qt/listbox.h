@@ -89,7 +89,7 @@ protected:
 private:
     virtual void Init(); //common construction
 
-    DECLARE_DYNAMIC_CLASS(wxListBox)
+    wxDECLARE_DYNAMIC_CLASS(wxListBox);
 };
 
 #endif // _WX_QT_LISTBOX_H_

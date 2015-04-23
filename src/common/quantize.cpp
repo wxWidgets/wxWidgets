@@ -1397,7 +1397,7 @@ prepare_range_limit_table (j_decompress_ptr cinfo)
  * wxQuantize
  */
 
-IMPLEMENT_DYNAMIC_CLASS(wxQuantize, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxQuantize, wxObject);
 
 void wxQuantize::DoQuantize(unsigned w, unsigned h, unsigned char **in_rows, unsigned char **out_rows,
     unsigned char *palette, int desiredNoColours)

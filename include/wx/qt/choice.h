@@ -75,7 +75,7 @@ protected:
 
 private:
 
-    DECLARE_DYNAMIC_CLASS(wxChoice)
+    wxDECLARE_DYNAMIC_CLASS(wxChoice);
 };
 
 #endif // _WX_QT_CHOICE_H_

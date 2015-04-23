@@ -1131,7 +1131,7 @@ class WXDLLIMPEXP_PROPGRID wxPGProperty : public wxObject
     friend class wxPropertyGridPopulator;
     friend class wxStringProperty;  // Proper "<composed>" support requires this
 
-    DECLARE_ABSTRACT_CLASS(wxPGProperty)
+    wxDECLARE_ABSTRACT_CLASS(wxPGProperty);
 public:
     typedef wxUint32 FlagType;
 
@@ -2538,7 +2538,7 @@ private:
 #ifndef WX_PG_DECLARE_PROPERTY_CLASS
     #define WX_PG_DECLARE_PROPERTY_CLASS(CLASSNAME) \
         public: \
-            DECLARE_DYNAMIC_CLASS(CLASSNAME) \
+            wxDECLARE_DYNAMIC_CLASS(CLASSNAME); \
             WX_PG_DECLARE_DOGETEDITORCLASS \
         private:
 #endif

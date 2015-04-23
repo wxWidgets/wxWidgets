@@ -79,15 +79,15 @@ bool wxRichTextFormattingDialog::sm_showToolTips = false;
 bool wxRichTextFormattingDialog::sm_restoreLastPage = true;
 int wxRichTextFormattingDialog::sm_lastPage = -1;
 
-IMPLEMENT_CLASS(wxRichTextDialogPage, wxPanel)
+wxIMPLEMENT_CLASS(wxRichTextDialogPage, wxPanel);
 
-IMPLEMENT_CLASS(wxRichTextFormattingDialog, wxPropertySheetDialog)
+wxIMPLEMENT_CLASS(wxRichTextFormattingDialog, wxPropertySheetDialog);
 
-BEGIN_EVENT_TABLE(wxRichTextFormattingDialog, wxPropertySheetDialog)
+wxBEGIN_EVENT_TABLE(wxRichTextFormattingDialog, wxPropertySheetDialog)
     EVT_BOOKCTRL_PAGE_CHANGED(wxID_ANY, wxRichTextFormattingDialog::OnTabChanged)
     EVT_BUTTON(wxID_HELP, wxRichTextFormattingDialog::OnHelp)
     EVT_UPDATE_UI(wxID_HELP, wxRichTextFormattingDialog::OnUpdateHelp)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_HELP_PROVISION(wxRichTextFormattingDialog)
 
@@ -489,22 +489,22 @@ bool wxRichTextFormattingDialogFactory::ShowHelp(int WXUNUSED(page), wxRichTextF
 
 class wxRichTextFormattingDialogModule: public wxModule
 {
-DECLARE_DYNAMIC_CLASS(wxRichTextFormattingDialogModule)
+    wxDECLARE_DYNAMIC_CLASS(wxRichTextFormattingDialogModule);
 public:
     wxRichTextFormattingDialogModule() {}
     bool OnInit() wxOVERRIDE { wxRichTextFormattingDialog::SetFormattingDialogFactory(new wxRichTextFormattingDialogFactory); return true; }
     void OnExit() wxOVERRIDE { wxRichTextFormattingDialog::SetFormattingDialogFactory(NULL); }
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextFormattingDialogModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextFormattingDialogModule, wxModule);
 
 /*
  * Font preview control
  */
 
-BEGIN_EVENT_TABLE(wxRichTextFontPreviewCtrl, wxWindow)
+wxBEGIN_EVENT_TABLE(wxRichTextFontPreviewCtrl, wxWindow)
     EVT_PAINT(wxRichTextFontPreviewCtrl::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxRichTextFontPreviewCtrl::wxRichTextFontPreviewCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& sz, long style)
 {
@@ -744,11 +744,11 @@ bool wxRichTextFormattingDialog::ConvertFromString(const wxString& str, int& ret
  * A control for displaying a small preview of a colour or bitmap
  */
 
-BEGIN_EVENT_TABLE(wxRichTextColourSwatchCtrl, wxControl)
+wxBEGIN_EVENT_TABLE(wxRichTextColourSwatchCtrl, wxControl)
     EVT_MOUSE_EVENTS(wxRichTextColourSwatchCtrl::OnMouseEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-IMPLEMENT_CLASS(wxRichTextColourSwatchCtrl, wxControl)
+wxIMPLEMENT_CLASS(wxRichTextColourSwatchCtrl, wxControl);
 
 wxRichTextColourSwatchCtrl::wxRichTextColourSwatchCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style)
 {
@@ -809,10 +809,10 @@ void wxRichTextColourSwatchCtrl::OnMouseEvent(wxMouseEvent& event)
  * A listbox to display styles.
  */
 
-IMPLEMENT_CLASS(wxRichTextFontListBox, wxHtmlListBox)
+wxIMPLEMENT_CLASS(wxRichTextFontListBox, wxHtmlListBox);
 
-BEGIN_EVENT_TABLE(wxRichTextFontListBox, wxHtmlListBox)
-END_EVENT_TABLE()
+wxBEGIN_EVENT_TABLE(wxRichTextFontListBox, wxHtmlListBox)
+wxEND_EVENT_TABLE()
 
 wxRichTextFontListBox::wxRichTextFontListBox(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     const wxSize& size, long style)

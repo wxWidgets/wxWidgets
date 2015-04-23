@@ -211,7 +211,7 @@ bool wxConvertAnyToVariant(const wxAny& any, wxVariant* variant)
 //
 class wxAnyValueTypeGlobalsManager : public wxModule
 {
-    DECLARE_DYNAMIC_CLASS(wxAnyValueTypeGlobalsManager)
+    wxDECLARE_DYNAMIC_CLASS(wxAnyValueTypeGlobalsManager);
 public:
     wxAnyValueTypeGlobalsManager() : wxModule() { }
     virtual ~wxAnyValueTypeGlobalsManager() { }
@@ -227,7 +227,7 @@ public:
 private:
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxAnyValueTypeGlobalsManager, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxAnyValueTypeGlobalsManager, wxModule);
 
 #endif // wxUSE_VARIANT
 

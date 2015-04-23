@@ -32,7 +32,7 @@
 
 #if wxUSE_SPINCTRL
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinDoubleEvent, wxNotifyEvent)
+wxIMPLEMENT_DYNAMIC_CLASS(wxSpinDoubleEvent, wxNotifyEvent);
 
 // There are port-specific versions for the wxSpinCtrl, so exclude the
 // contents of this file in those cases
@@ -110,10 +110,10 @@ public:
     wxSpinCtrlGenericBase *m_spin;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(wxSpinCtrlTextGeneric, wxTextCtrl)
+wxBEGIN_EVENT_TABLE(wxSpinCtrlTextGeneric, wxTextCtrl)
     EVT_CHAR(wxSpinCtrlTextGeneric::OnChar)
 
     // Forward the text events to wxSpinCtrl itself adjusting them slightly in
@@ -126,7 +126,7 @@ BEGIN_EVENT_TABLE(wxSpinCtrlTextGeneric, wxTextCtrl)
     EVT_TEXT_ENTER(wxID_ANY, wxSpinCtrlTextGeneric::OnTextEvent)
 
     EVT_KILL_FOCUS(wxSpinCtrlTextGeneric::OnKillFocus)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // wxSpinCtrlButtonGeneric: spin button used by spin control
@@ -156,13 +156,13 @@ public:
     wxSpinCtrlGenericBase *m_spin;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(wxSpinCtrlButtonGeneric, wxSpinButton)
+wxBEGIN_EVENT_TABLE(wxSpinCtrlButtonGeneric, wxSpinButton)
     EVT_SPIN_UP(  wxID_ANY, wxSpinCtrlButtonGeneric::OnSpinButton)
     EVT_SPIN_DOWN(wxID_ANY, wxSpinCtrlButtonGeneric::OnSpinButton)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // wxSpinCtrlGenericBase
@@ -366,10 +366,10 @@ bool wxSpinCtrlGenericBase::SetBackgroundColour(const wxColour& colour)
 // Handle sub controls events
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxSpinCtrlGenericBase, wxSpinCtrlBase)
+wxBEGIN_EVENT_TABLE(wxSpinCtrlGenericBase, wxSpinCtrlBase)
     EVT_CHAR(wxSpinCtrlGenericBase::OnTextChar)
     EVT_KILL_FOCUS(wxSpinCtrlGenericBase::OnTextLostFocus)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxSpinCtrlGenericBase::OnSpinButton(wxSpinEvent& event)
 {
@@ -664,7 +664,7 @@ wxString wxSpinCtrl::DoValueToText(double val)
 // wxSpinCtrlDouble
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlDouble, wxSpinCtrlGenericBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlDouble, wxSpinCtrlGenericBase);
 
 void wxSpinCtrlDouble::DoSendEvent()
 {

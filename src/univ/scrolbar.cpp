@@ -73,8 +73,8 @@ private:
 // implementation
 // ============================================================================
 
-BEGIN_EVENT_TABLE(wxScrollBar, wxScrollBarBase)
-END_EVENT_TABLE()
+wxBEGIN_EVENT_TABLE(wxScrollBar, wxScrollBarBase)
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // creation

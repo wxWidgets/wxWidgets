@@ -41,7 +41,7 @@ class WXDLLIMPEXP_FWD_HTML wxHtmlHelpDialog;
 
 class WXDLLIMPEXP_HTML wxHtmlHelpController : public wxHelpControllerBase // wxEvtHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxHtmlHelpController)
+    wxDECLARE_DYNAMIC_CLASS(wxHtmlHelpController);
 
 public:
     wxHtmlHelpController(int style = wxHF_DEFAULT_STYLE, wxWindow* parentWindow = NULL);

@@ -30,9 +30,9 @@
     #include "wx/arrstr.h"
 #endif
 
-BEGIN_EVENT_TABLE(wxChoice, wxComboBox)
+wxBEGIN_EVENT_TABLE(wxChoice, wxComboBox)
     EVT_COMBOBOX(wxID_ANY, wxChoice::OnComboBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxChoice::wxChoice(wxWindow *parent, wxWindowID id,
                    const wxPoint& pos,

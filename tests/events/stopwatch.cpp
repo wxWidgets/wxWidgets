@@ -53,7 +53,7 @@ private:
     void BackwardsClockBug();
     void RestartBug();
 
-    DECLARE_NO_COPY_CLASS(StopWatchTestCase)
+    wxDECLARE_NO_COPY_CLASS(StopWatchTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

@@ -74,7 +74,7 @@ protected:
     wxFontData m_data;
 
 private:
-   DECLARE_DYNAMIC_CLASS(wxGenericFontButton)
+    wxDECLARE_DYNAMIC_CLASS(wxGenericFontButton);
 };
 
 

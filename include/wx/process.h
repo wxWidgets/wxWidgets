@@ -143,7 +143,7 @@ protected:
 
     bool m_redirect;
 
-    DECLARE_DYNAMIC_CLASS(wxProcess)
+    wxDECLARE_DYNAMIC_CLASS(wxProcess);
     wxDECLARE_NO_COPY_CLASS(wxProcess);
 };
 
@@ -179,7 +179,7 @@ public:
     int m_pid,
         m_exitcode;
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxProcessEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxProcessEvent);
 };
 
 typedef void (wxEvtHandler::*wxProcessEventFunction)(wxProcessEvent&);

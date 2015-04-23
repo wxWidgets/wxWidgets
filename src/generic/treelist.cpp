@@ -979,7 +979,7 @@ wxTreeListModel::Compare(const wxDataViewItem& item1,
 // wxTreeListCtrl implementation
 // ============================================================================
 
-BEGIN_EVENT_TABLE(wxTreeListCtrl, wxWindow)
+wxBEGIN_EVENT_TABLE(wxTreeListCtrl, wxWindow)
     EVT_DATAVIEW_SELECTION_CHANGED(wxID_ANY, wxTreeListCtrl::OnSelectionChanged)
     EVT_DATAVIEW_ITEM_EXPANDING(wxID_ANY, wxTreeListCtrl::OnItemExpanding)
     EVT_DATAVIEW_ITEM_EXPANDED(wxID_ANY, wxTreeListCtrl::OnItemExpanded)
@@ -988,7 +988,7 @@ BEGIN_EVENT_TABLE(wxTreeListCtrl, wxWindow)
     EVT_DATAVIEW_COLUMN_SORTED(wxID_ANY, wxTreeListCtrl::OnColumnSorted)
 
     EVT_SIZE(wxTreeListCtrl::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // Creation
@@ -1665,7 +1665,7 @@ wxWindow* wxTreeListCtrl::GetView() const
 // wxTreeListEvent implementation
 // ============================================================================
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxTreeListEvent, wxNotifyEvent)
+wxIMPLEMENT_DYNAMIC_CLASS(wxTreeListEvent, wxNotifyEvent);
 
 #define wxDEFINE_TREELIST_EVENT(name) \
     wxDEFINE_EVENT(wxEVT_TREELIST_##name, wxTreeListEvent)

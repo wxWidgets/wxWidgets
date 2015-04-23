@@ -61,7 +61,7 @@ private:
 
     wxCheckBox* m_check;
 
-    DECLARE_NO_COPY_CLASS(CheckBoxTestCase)
+    wxDECLARE_NO_COPY_CLASS(CheckBoxTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

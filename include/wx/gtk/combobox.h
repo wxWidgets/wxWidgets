@@ -155,8 +155,8 @@ private:
 
     void Init();
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox);
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // _WX_GTK_COMBOBOX_H_

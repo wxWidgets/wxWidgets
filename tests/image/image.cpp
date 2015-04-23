@@ -96,7 +96,7 @@ private:
     void BMPFlippingAndRLECompression();
     void ScaleCompare();
 
-    DECLARE_NO_COPY_CLASS(ImageTestCase)
+    wxDECLARE_NO_COPY_CLASS(ImageTestCase);
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION( ImageTestCase );

@@ -48,9 +48,9 @@ static const int ID_GO_HOME = 1006;
 // wxGenericDirDialog
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericDirDialog, wxDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxGenericDirDialog, wxDialog);
 
-BEGIN_EVENT_TABLE(wxGenericDirDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(wxGenericDirDialog, wxDialog)
     EVT_CLOSE                (wxGenericDirDialog::OnCloseWindow)
     EVT_BUTTON               (wxID_OK,        wxGenericDirDialog::OnOK)
     EVT_BUTTON               (ID_NEW,         wxGenericDirDialog::OnNew)
@@ -59,7 +59,7 @@ BEGIN_EVENT_TABLE(wxGenericDirDialog, wxDialog)
     EVT_TREE_SEL_CHANGED     (wxID_ANY,       wxGenericDirDialog::OnTreeSelected)
     EVT_TEXT_ENTER           (ID_TEXTCTRL,    wxGenericDirDialog::OnOK)
     EVT_CHECKBOX             (ID_SHOW_HIDDEN, wxGenericDirDialog::OnShowHidden)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
                                        const wxString& defaultPath, long style,

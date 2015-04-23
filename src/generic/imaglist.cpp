@@ -27,8 +27,8 @@
 //  wxImageList
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericImageList, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxImageList, wxGenericImageList)
+wxIMPLEMENT_DYNAMIC_CLASS(wxGenericImageList, wxObject);
+wxIMPLEMENT_DYNAMIC_CLASS(wxImageList, wxGenericImageList);
 
 wxGenericImageList::wxGenericImageList( int width, int height, bool mask, int initialCount )
 {

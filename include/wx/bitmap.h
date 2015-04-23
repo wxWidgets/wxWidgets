@@ -146,7 +146,7 @@ private:
     wxString      m_extension;
     wxBitmapType  m_type;
 
-    DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
+    wxDECLARE_ABSTRACT_CLASS(wxBitmapHandler);
 };
 
 // ----------------------------------------------------------------------------
@@ -254,7 +254,7 @@ public:
 protected:
     static wxList sm_handlers;
 
-    DECLARE_ABSTRACT_CLASS(wxBitmapBase)
+    wxDECLARE_ABSTRACT_CLASS(wxBitmapBase);
 };
 
 #endif // wxUSE_BITMAP_BASE

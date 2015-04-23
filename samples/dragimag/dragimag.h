@@ -64,10 +64,10 @@ protected:
     wxBitmap    m_background;
     bool        m_useScreen;
 
-DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-DECLARE_APP(MyApp)
+wxDECLARE_APP(MyApp);
 
 #define TEST_USE_SCREEN   100
 

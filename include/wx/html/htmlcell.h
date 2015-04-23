@@ -356,7 +356,7 @@ protected:
     // unique identifier of the cell, generated from "id" property of tags
     wxString m_id;
 
-    DECLARE_ABSTRACT_CLASS(wxHtmlCell)
+    wxDECLARE_ABSTRACT_CLASS(wxHtmlCell);
     wxDECLARE_NO_COPY_CLASS(wxHtmlCell);
 };
 
@@ -399,7 +399,7 @@ protected:
     wxString m_Word;
     bool     m_allowLinebreak;
 
-    DECLARE_ABSTRACT_CLASS(wxHtmlWordCell)
+    wxDECLARE_ABSTRACT_CLASS(wxHtmlWordCell);
     wxDECLARE_NO_COPY_CLASS(wxHtmlWordCell);
 };
 
@@ -541,7 +541,7 @@ protected:
             // Maximum possible length if ignoring line wrap
 
 
-    DECLARE_ABSTRACT_CLASS(wxHtmlContainerCell)
+    wxDECLARE_ABSTRACT_CLASS(wxHtmlContainerCell);
     wxDECLARE_NO_COPY_CLASS(wxHtmlContainerCell);
 };
 
@@ -565,7 +565,7 @@ protected:
     wxColour m_Colour;
     unsigned m_Flags;
 
-    DECLARE_ABSTRACT_CLASS(wxHtmlColourCell)
+    wxDECLARE_ABSTRACT_CLASS(wxHtmlColourCell);
     wxDECLARE_NO_COPY_CLASS(wxHtmlColourCell);
 };
 
@@ -589,7 +589,7 @@ public:
 protected:
     wxFont m_Font;
 
-    DECLARE_ABSTRACT_CLASS(wxHtmlFontCell)
+    wxDECLARE_ABSTRACT_CLASS(wxHtmlFontCell);
     wxDECLARE_NO_COPY_CLASS(wxHtmlFontCell);
 };
 
@@ -625,7 +625,7 @@ protected:
     int m_WidthFloat;
             // width float is used in adjustWidth (it is in percents)
 
-    DECLARE_ABSTRACT_CLASS(wxHtmlWidgetCell)
+    wxDECLARE_ABSTRACT_CLASS(wxHtmlWidgetCell);
     wxDECLARE_NO_COPY_CLASS(wxHtmlWidgetCell);
 };
 

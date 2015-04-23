@@ -522,7 +522,7 @@ inline void wxCheckSetBrush(wxDC& dc, const wxBrush& brush)
  * This is the base for drawable objects.
  */
 
-IMPLEMENT_CLASS(wxRichTextObject, wxObject)
+wxIMPLEMENT_CLASS(wxRichTextObject, wxObject);
 
 wxRichTextObject::wxRichTextObject(wxRichTextObject* parent)
 {
@@ -1352,7 +1352,7 @@ void wxRichTextObject::Move(const wxPoint& pt)
  * This is the base for drawable objects.
  */
 
-IMPLEMENT_CLASS(wxRichTextCompositeObject, wxRichTextObject)
+wxIMPLEMENT_CLASS(wxRichTextCompositeObject, wxRichTextObject);
 
 wxRichTextCompositeObject::wxRichTextCompositeObject(wxRichTextObject* parent):
     wxRichTextObject(parent)
@@ -1932,7 +1932,7 @@ void wxRichTextCompositeObject::Move(const wxPoint& pt)
  * This box knows how to lay out paragraphs.
  */
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextParagraphLayoutBox, wxRichTextCompositeObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextParagraphLayoutBox, wxRichTextCompositeObject);
 
 wxRichTextParagraphLayoutBox::wxRichTextParagraphLayoutBox(wxRichTextObject* parent):
     wxRichTextCompositeObject(parent)
@@ -4773,7 +4773,7 @@ bool wxRichTextParagraphLayoutBox::FindNextParagraphNumber(wxRichTextParagraph* 
  * This object represents a single paragraph (or in a straight text editor, a line).
  */
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextParagraph, wxRichTextCompositeObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextParagraph, wxRichTextCompositeObject);
 
 wxArrayInt wxRichTextParagraph::sm_defaultTabs;
 
@@ -6766,7 +6766,7 @@ wxRichTextRange wxRichTextLine::GetAbsoluteRange() const
  * This object represents a single piece of text.
  */
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextPlainText, wxRichTextObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextPlainText, wxRichTextObject);
 
 wxRichTextPlainText::wxRichTextPlainText(const wxString& text, wxRichTextObject* parent, wxRichTextAttr* style):
     wxRichTextObject(parent)
@@ -7715,7 +7715,7 @@ long wxRichTextPlainText::GetFirstLineBreakPosition(long pos)
  * This is a kind of box, used to represent the whole buffer
  */
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextBuffer, wxRichTextParagraphLayoutBox)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextBuffer, wxRichTextParagraphLayoutBox);
 
 wxList                      wxRichTextBuffer::sm_handlers;
 wxList                      wxRichTextBuffer::sm_drawingHandlers;
@@ -9343,7 +9343,7 @@ bool wxRichTextStdRenderer::EnumerateStandardBulletNames(wxArrayString& bulletNa
  * wxRichTextBox
  */
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextBox, wxRichTextParagraphLayoutBox)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextBox, wxRichTextParagraphLayoutBox);
 
 wxRichTextBox::wxRichTextBox(wxRichTextObject* parent):
     wxRichTextParagraphLayoutBox(parent)
@@ -9391,7 +9391,7 @@ bool wxRichTextBox::EditProperties(wxWindow* parent, wxRichTextBuffer* buffer)
  * wxRichTextField
  */
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextField, wxRichTextParagraphLayoutBox)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextField, wxRichTextParagraphLayoutBox);
 
 wxRichTextField::wxRichTextField(const wxString& fieldType, wxRichTextObject* parent):
     wxRichTextParagraphLayoutBox(parent)
@@ -9505,9 +9505,9 @@ bool wxRichTextField::IsTopLevel() const
     return true;
 }
 
-IMPLEMENT_CLASS(wxRichTextFieldType, wxObject)
+wxIMPLEMENT_CLASS(wxRichTextFieldType, wxObject);
 
-IMPLEMENT_CLASS(wxRichTextFieldTypeStandard, wxRichTextFieldType)
+wxIMPLEMENT_CLASS(wxRichTextFieldTypeStandard, wxRichTextFieldType);
 
 wxRichTextFieldTypeStandard::wxRichTextFieldTypeStandard(const wxString& name, const wxString& label, int displayStyle)
 {
@@ -9736,7 +9736,7 @@ wxSize wxRichTextFieldTypeStandard::GetSize(wxRichTextField* WXUNUSED(obj), wxDC
     return sz;
 }
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextCell, wxRichTextBox)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextCell, wxRichTextBox);
 
 wxRichTextCell::wxRichTextCell(wxRichTextObject* parent):
     wxRichTextBox(parent)
@@ -10034,7 +10034,7 @@ int wxRichTextCell::GetRowSpan() const
 
 WX_DEFINE_OBJARRAY(wxRichTextObjectPtrArrayArray)
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextTable, wxRichTextBox)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextTable, wxRichTextBox);
 
 wxRichTextTable::wxRichTextTable(wxRichTextObject* parent): wxRichTextBox(parent)
 {
@@ -11588,7 +11588,7 @@ wxRichTextCell* wxRichTextTableBlock::GetFocusedCell(wxRichTextCtrl* ctrl)
 
 class wxRichTextModule: public wxModule
 {
-DECLARE_DYNAMIC_CLASS(wxRichTextModule)
+    wxDECLARE_DYNAMIC_CLASS(wxRichTextModule);
 public:
     wxRichTextModule() {}
     bool OnInit() wxOVERRIDE
@@ -11626,7 +11626,7 @@ public:
     }
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextModule, wxModule);
 
 
 // If the richtext lib is dynamically loaded after the app has already started
@@ -12417,7 +12417,7 @@ bool wxRichTextRange::LimitTo(const wxRichTextRange& range)
  * This object represents an image.
  */
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextImage, wxRichTextObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextImage, wxRichTextObject);
 
 wxRichTextImage::wxRichTextImage(const wxImage& image, wxRichTextObject* parent, wxRichTextAttr* charStyle):
     wxRichTextObject(parent)
@@ -12939,7 +12939,7 @@ wxString wxRichTextDecimalToRoman(long n)
  * Base class for file handlers
  */
 
-IMPLEMENT_CLASS(wxRichTextFileHandler, wxObject)
+wxIMPLEMENT_CLASS(wxRichTextFileHandler, wxObject);
 
 #if wxUSE_FFILE && wxUSE_STREAMS
 bool wxRichTextFileHandler::LoadFile(wxRichTextBuffer *buffer, const wxString& filename)
@@ -12975,7 +12975,7 @@ bool wxRichTextFileHandler::CanHandle(const wxString& filename) const
  * Plain text handler
  */
 
-IMPLEMENT_CLASS(wxRichTextPlainTextHandler, wxRichTextFileHandler)
+wxIMPLEMENT_CLASS(wxRichTextPlainTextHandler, wxRichTextFileHandler);
 
 #if wxUSE_STREAMS
 bool wxRichTextPlainTextHandler::DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream)
@@ -13503,7 +13503,7 @@ wxFont wxRichTextFontTableData::FindFont(const wxRichTextAttr& fontSpec, double 
     }
 }
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextFontTable, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextFontTable, wxObject);
 
 wxRichTextFontTable::wxRichTextFontTable()
 {
@@ -15032,7 +15032,7 @@ WX_DEFINE_OBJARRAY(wxRichTextVariantArray);
 WX_DEFINE_OBJARRAY(wxRichTextAttrArray);
 WX_DEFINE_OBJARRAY(wxRichTextRectArray);
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextProperties, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextProperties, wxObject);
 
 bool wxRichTextProperties::operator==(const wxRichTextProperties& props) const
 {
@@ -15342,8 +15342,8 @@ bool wxRichTextSelection::WithinSelection(const wxRichTextRange& range, const wx
     return false;
 }
 
-IMPLEMENT_CLASS(wxRichTextDrawingHandler, wxObject)
-IMPLEMENT_CLASS(wxRichTextDrawingContext, wxObject)
+wxIMPLEMENT_CLASS(wxRichTextDrawingHandler, wxObject);
+wxIMPLEMENT_CLASS(wxRichTextDrawingContext, wxObject);
 
 wxRichTextDrawingContext::wxRichTextDrawingContext(wxRichTextBuffer* buffer)
 {

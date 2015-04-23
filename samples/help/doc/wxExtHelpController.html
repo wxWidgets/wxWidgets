@@ -63,7 +63,7 @@ If the documentation itself contains a ';', only the part before
 that will be displayed in the listbox, but all of it used for search.<P>Lines starting with ';' will be ignored.<P>This confuses DOC++, so I leave it out for now:
 <TT>ifdef USE_HELP</TT>: public wxHelpControllerBase
 {
-DECLARE_CLASS(wxExtHelpController)
+wxDECLARE_CLASS(wxExtHelpController);
 <TT>else</TT>{
 <TT>endif
 

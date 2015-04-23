@@ -163,7 +163,7 @@ public:
 
     friend class wxQTMediaEvtHandler;
 
-    DECLARE_DYNAMIC_CLASS(wxQTMediaBackend)
+    wxDECLARE_DYNAMIC_CLASS(wxQTMediaBackend);
 };
 
 // helper to hijack background erasing for the QT window
@@ -199,7 +199,7 @@ private:
 //
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-IMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend)
+wxIMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend);
 
 //Time between timer calls - this is the Apple recommondation to the TCL
 //team I believe

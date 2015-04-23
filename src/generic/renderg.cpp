@@ -837,11 +837,11 @@ void wxRendererGeneric::DrawGauge(wxWindow* win,
 
 class wxGenericRendererModule: public wxModule
 {
-DECLARE_DYNAMIC_CLASS(wxGenericRendererModule)
+    wxDECLARE_DYNAMIC_CLASS(wxGenericRendererModule);
 public:
     wxGenericRendererModule() {}
     bool OnInit() wxOVERRIDE { return true; }
     void OnExit() wxOVERRIDE { wxRendererGeneric::Cleanup(); }
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericRendererModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxGenericRendererModule, wxModule);

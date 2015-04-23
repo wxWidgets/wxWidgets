@@ -149,7 +149,7 @@ private:
     void ObjectReferences();
     void IDRanges();
 
-    DECLARE_NO_COPY_CLASS(XrcTestCase)
+    wxDECLARE_NO_COPY_CLASS(XrcTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

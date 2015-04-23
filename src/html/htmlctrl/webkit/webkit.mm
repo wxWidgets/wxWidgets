@@ -34,13 +34,13 @@ extern WXDLLEXPORT_DATA(const char) wxWebKitCtrlNameStr[] = "webkitctrl";
 // macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxWebKitCtrl, wxControl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxWebKitCtrl, wxControl);
 
-BEGIN_EVENT_TABLE(wxWebKitCtrl, wxControl)
+wxBEGIN_EVENT_TABLE(wxWebKitCtrl, wxControl)
 #if defined(__WXMAC__) && wxOSX_USE_CARBON
     EVT_SIZE(wxWebKitCtrl::OnSize)
 #endif
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #if defined(__WXOSX__) && wxOSX_USE_CARBON
 
@@ -280,7 +280,7 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebKitCtrlEventHandler )
 // wxWebKit Events
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS( wxWebKitStateChangedEvent, wxCommandEvent )
+wxIMPLEMENT_DYNAMIC_CLASS(wxWebKitStateChangedEvent, wxCommandEvent);
 
 wxDEFINE_EVENT( wxEVT_WEBKIT_STATE_CHANGED, wxWebKitStateChangedEvent );
 
@@ -294,7 +294,7 @@ wxWebKitStateChangedEvent::wxWebKitStateChangedEvent( wxWindow* win )
     }
 }
 
-IMPLEMENT_DYNAMIC_CLASS( wxWebKitBeforeLoadEvent, wxCommandEvent )
+wxIMPLEMENT_DYNAMIC_CLASS(wxWebKitBeforeLoadEvent, wxCommandEvent);
 
 wxDEFINE_EVENT( wxEVT_WEBKIT_BEFORE_LOAD, wxWebKitBeforeLoadEvent );
 
@@ -310,7 +310,7 @@ wxWebKitBeforeLoadEvent::wxWebKitBeforeLoadEvent( wxWindow* win )
 }
 
 
-IMPLEMENT_DYNAMIC_CLASS( wxWebKitNewWindowEvent, wxCommandEvent )
+wxIMPLEMENT_DYNAMIC_CLASS(wxWebKitNewWindowEvent, wxCommandEvent);
 
 wxDEFINE_EVENT( wxEVT_WEBKIT_NEW_WINDOW, wxWebKitNewWindowEvent );
 

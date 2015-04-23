@@ -116,11 +116,11 @@ inline HMENU GetMDIWindowMenu(wxMDIParentFrame *frame)
 // wxWin macros
 // ---------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame)
-IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
-IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
+wxIMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame);
+wxIMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame);
+wxIMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow);
 
-BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
     EVT_ACTIVATE(wxMDIParentFrame::OnActivate)
     EVT_SIZE(wxMDIParentFrame::OnSize)
     EVT_ICONIZE(wxMDIParentFrame::OnIconized)
@@ -132,15 +132,15 @@ BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
     EVT_MENU_RANGE(wxID_MDI_WINDOW_FIRST, wxID_MDI_WINDOW_LAST,
                    wxMDIParentFrame::OnMDICommand)
 #endif // wxUSE_MENUS
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(wxMDIChildFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(wxMDIChildFrame, wxFrame)
     EVT_IDLE(wxMDIChildFrame::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(wxMDIClientWindow, wxWindow)
+wxBEGIN_EVENT_TABLE(wxMDIClientWindow, wxWindow)
     EVT_SCROLL(wxMDIClientWindow::OnScroll)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ===========================================================================
 // wxMDIParentFrame: the frame which contains the client window which manages

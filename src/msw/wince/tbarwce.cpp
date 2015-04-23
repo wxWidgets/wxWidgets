@@ -68,10 +68,10 @@
 // Event table
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxToolMenuBar, wxToolBar)
+wxIMPLEMENT_DYNAMIC_CLASS(wxToolMenuBar, wxToolBar);
 
-BEGIN_EVENT_TABLE(wxToolMenuBar, wxToolBar)
-END_EVENT_TABLE()
+wxBEGIN_EVENT_TABLE(wxToolMenuBar, wxToolBar)
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -567,10 +567,10 @@ WXLRESULT wxToolMenuBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lP
 // Event table
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarBase);
 
-BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
-END_EVENT_TABLE()
+wxBEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
+wxEND_EVENT_TABLE()
 
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
                                          const wxString& label,

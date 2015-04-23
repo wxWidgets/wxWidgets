@@ -449,7 +449,7 @@ void wxPGCell::SetEmptyData()
 // wxPGProperty
 // -----------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxPGProperty, wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxPGProperty, wxObject);
 
 wxString* wxPGProperty::sm_wxPG_LABEL = NULL;
 

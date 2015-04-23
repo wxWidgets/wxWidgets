@@ -24,21 +24,21 @@
 #include "customcombo.h"
 
 
-BEGIN_EVENT_TABLE(ListViewComboPopup, wxListView)
+wxBEGIN_EVENT_TABLE(ListViewComboPopup, wxListView)
     EVT_MOTION(ListViewComboPopup::OnMouseMove)
     // NOTE: Left down event is used instead of left up right now
     //       since MSW wxListCtrl doesn't seem to emit left ups
     //       consistently.
     EVT_LEFT_DOWN(ListViewComboPopup::OnMouseClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(TreeCtrlComboPopup, wxTreeCtrl)
+wxBEGIN_EVENT_TABLE(TreeCtrlComboPopup, wxTreeCtrl)
     EVT_MOTION(TreeCtrlComboPopup::OnMouseMove)
     // NOTE: Left down event is used instead of left up right now
     //       since MSW wxTreeCtrl doesn't seem to emit left ups
     //       consistently.
     EVT_LEFT_DOWN(TreeCtrlComboPopup::OnMouseClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 

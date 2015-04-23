@@ -922,7 +922,7 @@ bool Life::NextTic()
 
 class LifeModule: public wxModule
 {
-DECLARE_DYNAMIC_CLASS(LifeModule)
+    wxDECLARE_DYNAMIC_CLASS(LifeModule);
 
 public:
     LifeModule() {};
@@ -930,7 +930,7 @@ public:
     void OnExit();
 };
 
-IMPLEMENT_DYNAMIC_CLASS(LifeModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(LifeModule, wxModule);
 
 bool LifeModule::OnInit()
 {

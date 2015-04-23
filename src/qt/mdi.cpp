@@ -34,7 +34,7 @@ class wxQtMdiArea : public wxQtEventSignalHandler< QMdiArea, wxMDIClientWindow >
         wxQtMdiArea( wxWindow *parent, wxMDIClientWindow *handler );
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame)
+wxIMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame);
 
 wxMDIParentFrame::wxMDIParentFrame()
 {

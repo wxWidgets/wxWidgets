@@ -48,11 +48,11 @@
 
 #ifdef wxHAS_NATIVE_CALENDARCTRL
 
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxGenericCalendarCtrl, wxControl,"wx/calctrl.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxGenericCalendarCtrl, wxControl, "wx/calctrl.h");
 
 #endif
 
-BEGIN_EVENT_TABLE(wxGenericCalendarCtrl, wxControl)
+wxBEGIN_EVENT_TABLE(wxGenericCalendarCtrl, wxControl)
     EVT_PAINT(wxGenericCalendarCtrl::OnPaint)
 
     EVT_CHAR(wxGenericCalendarCtrl::OnChar)
@@ -61,7 +61,7 @@ BEGIN_EVENT_TABLE(wxGenericCalendarCtrl, wxControl)
     EVT_LEFT_DCLICK(wxGenericCalendarCtrl::OnDClick)
 
     EVT_SYS_COLOUR_CHANGED(wxGenericCalendarCtrl::OnSysColourChanged)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

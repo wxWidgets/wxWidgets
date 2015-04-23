@@ -728,9 +728,9 @@ private:
     // Is popup window wxPopupTransientWindow, wxPopupWindow or wxDialog?
     wxByte                  m_popupWinType;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
-    DECLARE_ABSTRACT_CLASS(wxComboCtrlBase)
+    wxDECLARE_ABSTRACT_CLASS(wxComboCtrlBase);
 };
 
 

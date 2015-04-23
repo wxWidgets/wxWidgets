@@ -50,13 +50,13 @@ const char wxCollapsiblePaneNameStr[] = "collapsiblePane";
 //-----------------------------------------------------------------------------
 
 wxDEFINE_EVENT( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEvent );
-IMPLEMENT_DYNAMIC_CLASS(wxGenericCollapsiblePane, wxControl)
-IMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePaneEvent, wxCommandEvent)
+wxIMPLEMENT_DYNAMIC_CLASS(wxGenericCollapsiblePane, wxControl);
+wxIMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePaneEvent, wxCommandEvent);
 
-BEGIN_EVENT_TABLE(wxGenericCollapsiblePane, wxControl)
+wxBEGIN_EVENT_TABLE(wxGenericCollapsiblePane, wxControl)
     EVT_BUTTON(wxID_ANY, wxGenericCollapsiblePane::OnButton)
     EVT_SIZE(wxGenericCollapsiblePane::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxGenericCollapsiblePane::Init()
 {

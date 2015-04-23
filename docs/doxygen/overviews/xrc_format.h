@@ -2554,7 +2554,7 @@ The subclass must satisfy a number of requirements:
 
  -# It must be derived from the class specified in @c class attribute.
  -# It must be visible in wxWidget's pseudo-RTTI mechanism, i.e. there must be
-    a DECLARE_DYNAMIC_CLASS() entry for it.
+    a wxDECLARE_DYNAMIC_CLASS() entry for it.
  -# It must support two-phase creation. In particular, this means that it has
     to have default constructor.
  -# It cannot provide custom Create() method and must be constructible using

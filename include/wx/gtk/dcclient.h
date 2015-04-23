@@ -127,7 +127,7 @@ private:
     void DrawingSetup(GdkGC*& gc, bool& originChanged);
     GdkPixmap* MonoToColor(GdkPixmap* monoPixmap, int x, int y, int w, int h) const;
 
-    DECLARE_ABSTRACT_CLASS(wxWindowDCImpl)
+    wxDECLARE_ABSTRACT_CLASS(wxWindowDCImpl);
 };
 
 //-----------------------------------------------------------------------------
@@ -142,7 +142,7 @@ public:
 
     virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
 
-    DECLARE_ABSTRACT_CLASS(wxClientDCImpl)
+    wxDECLARE_ABSTRACT_CLASS(wxClientDCImpl);
 };
 
 //-----------------------------------------------------------------------------
@@ -155,7 +155,7 @@ public:
     wxPaintDCImpl( wxDC *owner );
     wxPaintDCImpl( wxDC *owner, wxWindow *win );
 
-    DECLARE_ABSTRACT_CLASS(wxPaintDCImpl)
+    wxDECLARE_ABSTRACT_CLASS(wxPaintDCImpl);
 };
 
 #endif // _WX_GTKDCCLIENT_H_

@@ -54,7 +54,7 @@ protected:
     bool    m_status; // true if the user left-clicked
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxContextHelp)
+    wxDECLARE_DYNAMIC_CLASS(wxContextHelp);
 };
 
 #if wxUSE_BMPBUTTON
@@ -89,8 +89,8 @@ public:
     void OnContextHelp(wxCommandEvent& event);
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxContextHelpButton)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxContextHelpButton);
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif

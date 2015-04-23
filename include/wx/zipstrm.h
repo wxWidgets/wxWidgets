@@ -261,7 +261,7 @@ private:
     friend class wxZipInputStream;
     friend class wxZipOutputStream;
 
-    DECLARE_DYNAMIC_CLASS(wxZipEntry)
+    wxDECLARE_DYNAMIC_CLASS(wxZipEntry);
 };
 
 
@@ -490,7 +490,7 @@ protected:
         { return NewStream(stream); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxZipClassFactory)
+    wxDECLARE_DYNAMIC_CLASS(wxZipClassFactory);
 };
 
 

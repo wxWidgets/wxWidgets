@@ -25,7 +25,7 @@
 
 #include "wx/xml/xml.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxListBoxXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxListBoxXmlHandler, wxXmlResourceHandler);
 
 wxListBoxXmlHandler::wxListBoxXmlHandler()
                    : wxXmlResourceHandler(),

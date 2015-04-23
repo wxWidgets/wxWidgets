@@ -212,7 +212,7 @@ wxBEGIN_EVENT_TABLE(FlashFrame, wxFrame)
     EVT_ACTIVEX(wxID_ANY, FlashFrame::OnActiveXEvent)
 wxEND_EVENT_TABLE()
 
-IMPLEMENT_APP(FlashApp)
+wxIMPLEMENT_APP(FlashApp);
 
 // ============================================================================
 // implementation

@@ -205,7 +205,7 @@ protected:
     wxFileName m_newPath;
     wxString m_errorMsg;
 private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFileSystemWatcherEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFileSystemWatcherEvent);
 };
 
 typedef void (wxEvtHandler::*wxFileSystemWatcherEventFunction)

@@ -55,9 +55,9 @@
 #include "wx/artprov.h"
 #include "wx/spinctrl.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpFrame, wxFrame)
+wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpFrame, wxFrame);
 
-BEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
     EVT_ACTIVATE(wxHtmlHelpFrame::OnActivate)
     EVT_CLOSE(wxHtmlHelpFrame::OnCloseWindow)
 #ifdef __WXMAC__
@@ -65,7 +65,7 @@ BEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
     EVT_MENU(wxID_ABOUT, wxHtmlHelpFrame::OnAbout)
     EVT_MENU(wxID_HELP_CONTENTS, wxHtmlHelpFrame::OnAbout)
 #endif
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxHtmlHelpFrame::wxHtmlHelpFrame(wxWindow* parent, wxWindowID id, const wxString& title,
                                  int style, wxHtmlHelpData* data

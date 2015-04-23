@@ -69,12 +69,12 @@ static const int wxID_SKIP = 32000;  // whatever
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxGenericProgressDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(wxGenericProgressDialog, wxDialog)
     EVT_BUTTON(wxID_CANCEL, wxGenericProgressDialog::OnCancel)
     EVT_BUTTON(wxID_SKIP, wxGenericProgressDialog::OnSkip)
 
     EVT_CLOSE(wxGenericProgressDialog::OnClose)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // wxGenericProgressDialog implementation

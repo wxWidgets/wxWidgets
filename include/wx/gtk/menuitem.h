@@ -55,7 +55,7 @@ private:
     wxBitmap  m_bitmap; // Bitmap for menuitem, if any
     GtkWidget *m_menuItem;  // GtkMenuItem
 
-    DECLARE_DYNAMIC_CLASS(wxMenuItem)
+    wxDECLARE_DYNAMIC_CLASS(wxMenuItem);
 };
 
 #endif // _WX_GTKMENUITEM_H_

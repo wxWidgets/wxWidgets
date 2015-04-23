@@ -42,7 +42,7 @@ private:
     void wxStdListTest();
     void wxListCtorTest();
 
-    DECLARE_NO_COPY_CLASS(ListsTestCase)
+    wxDECLARE_NO_COPY_CLASS(ListsTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

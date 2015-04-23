@@ -98,8 +98,8 @@ protected:
 
 private:
     wxDECLARE_NO_ASSIGN_CLASS(wxTextValidator);
-    DECLARE_DYNAMIC_CLASS(wxTextValidator)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxTextValidator);
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif

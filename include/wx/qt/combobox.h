@@ -86,7 +86,7 @@ private:
     // From wxTextEntry:
     virtual wxWindow *GetEditableWindow() wxOVERRIDE { return this; }
 
-    DECLARE_DYNAMIC_CLASS(wxComboBox)
+    wxDECLARE_DYNAMIC_CLASS(wxComboBox);
 };
 
 #endif // _WX_QT_COMBOBOX_H_

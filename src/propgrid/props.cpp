@@ -1013,7 +1013,7 @@ wxValidator* wxFloatProperty::DoGetValidator() const
 // We cannot use standard WX_PG_IMPLEMENT_PROPERTY_CLASS macro, since
 // there is a custom GetEditorClass.
 
-IMPLEMENT_DYNAMIC_CLASS(wxBoolProperty, wxPGProperty)
+wxIMPLEMENT_DYNAMIC_CLASS(wxBoolProperty, wxPGProperty);
 
 const wxPGEditor* wxBoolProperty::DoGetEditorClass() const
 {
@@ -1829,7 +1829,7 @@ bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 // wxDirProperty
 // -----------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxDirProperty, wxLongStringProperty)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDirProperty, wxLongStringProperty);
 
 wxDirProperty::wxDirProperty( const wxString& name, const wxString& label, const wxString& value )
   : wxLongStringProperty(name,label,value)
@@ -2302,11 +2302,11 @@ bool wxLongStringProperty::StringToValue( wxVariant& variant, const wxString& te
 // wxPGArrayEditorDialog
 // -----------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxPGArrayEditorDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(wxPGArrayEditorDialog, wxDialog)
     EVT_IDLE(wxPGArrayEditorDialog::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-IMPLEMENT_ABSTRACT_CLASS(wxPGArrayEditorDialog, wxDialog)
+wxIMPLEMENT_ABSTRACT_CLASS(wxPGArrayEditorDialog, wxDialog);
 
 #include "wx/editlbox.h"
 #include "wx/listctrl.h"
@@ -2619,10 +2619,10 @@ void wxPGArrayEditorDialog::OnBeginLabelEdit(wxListEvent& evt)
 // wxPGArrayStringEditorDialog
 // -----------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxPGArrayStringEditorDialog, wxPGArrayEditorDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPGArrayStringEditorDialog, wxPGArrayEditorDialog);
 
-BEGIN_EVENT_TABLE(wxPGArrayStringEditorDialog, wxPGArrayEditorDialog)
-END_EVENT_TABLE()
+wxBEGIN_EVENT_TABLE(wxPGArrayStringEditorDialog, wxPGArrayEditorDialog)
+wxEND_EVENT_TABLE()
 
 // -----------------------------------------------------------------------
 

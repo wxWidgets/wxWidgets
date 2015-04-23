@@ -57,7 +57,7 @@ private:
     void Operators();
     void Union();
 
-    DECLARE_NO_COPY_CLASS(RectTestCase)
+    wxDECLARE_NO_COPY_CLASS(RectTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

@@ -55,7 +55,7 @@ protected:
 private:
     typedef wxControl base_type;
 
-    DECLARE_DYNAMIC_CLASS(wxRadioButton)
+    wxDECLARE_DYNAMIC_CLASS(wxRadioButton);
 };
 
 #endif // _WX_GTK_RADIOBUT_H_

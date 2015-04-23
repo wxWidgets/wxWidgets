@@ -183,8 +183,8 @@ private:
     wxTaskBarButton* m_taskBarButton;
 #endif
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxFrame)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxFrame);
 };
 
 #endif

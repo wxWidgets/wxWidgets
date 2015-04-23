@@ -32,7 +32,7 @@ int wxScreenDCImpl::sm_overlayWindowY = 0;
 // wxScreenDCImpl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxPaintDCImpl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxPaintDCImpl);
 
 wxScreenDCImpl::wxScreenDCImpl(wxScreenDC *owner)
               : wxPaintDCImpl(owner)

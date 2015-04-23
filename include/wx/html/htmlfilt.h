@@ -26,7 +26,7 @@
 
 class WXDLLIMPEXP_HTML wxHtmlFilter : public wxObject
 {
-    DECLARE_ABSTRACT_CLASS(wxHtmlFilter)
+    wxDECLARE_ABSTRACT_CLASS(wxHtmlFilter);
 
 public:
     wxHtmlFilter() : wxObject() {}
@@ -52,7 +52,7 @@ public:
 
 class WXDLLIMPEXP_HTML wxHtmlFilterPlainText : public wxHtmlFilter
 {
-    DECLARE_DYNAMIC_CLASS(wxHtmlFilterPlainText)
+    wxDECLARE_DYNAMIC_CLASS(wxHtmlFilterPlainText);
 
 public:
     virtual bool CanRead(const wxFSFile& file) const wxOVERRIDE;
@@ -66,7 +66,7 @@ public:
 
 class wxHtmlFilterHTML : public wxHtmlFilter
 {
-    DECLARE_DYNAMIC_CLASS(wxHtmlFilterHTML)
+    wxDECLARE_DYNAMIC_CLASS(wxHtmlFilterHTML);
 
     public:
         virtual bool CanRead(const wxFSFile& file) const wxOVERRIDE;

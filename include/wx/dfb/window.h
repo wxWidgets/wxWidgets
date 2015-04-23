@@ -185,9 +185,9 @@ private:
     friend class wxOverlayImpl; // for Add/RemoveOverlay
     friend class wxWindowDCImpl; // for PaintOverlays
 
-    DECLARE_DYNAMIC_CLASS(wxWindowDFB)
+    wxDECLARE_DYNAMIC_CLASS(wxWindowDFB);
     wxDECLARE_NO_COPY_CLASS(wxWindowDFB);
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // _WX_DFB_WINDOW_H_

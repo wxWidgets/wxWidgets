@@ -73,8 +73,8 @@ enum {
     SUMS_OFFSET  = 14
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxZipEntry, wxArchiveEntry)
-IMPLEMENT_DYNAMIC_CLASS(wxZipClassFactory, wxArchiveClassFactory)
+wxIMPLEMENT_DYNAMIC_CLASS(wxZipEntry, wxArchiveEntry);
+wxIMPLEMENT_DYNAMIC_CLASS(wxZipClassFactory, wxArchiveClassFactory);
 
 
 /////////////////////////////////////////////////////////////////////////////

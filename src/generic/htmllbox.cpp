@@ -196,17 +196,17 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxHtmlListBox, wxVListBox)
+wxBEGIN_EVENT_TABLE(wxHtmlListBox, wxVListBox)
     EVT_SIZE(wxHtmlListBox::OnSize)
     EVT_MOTION(wxHtmlListBox::OnMouseMove)
     EVT_LEFT_DOWN(wxHtmlListBox::OnLeftDown)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
 // ============================================================================
 
-IMPLEMENT_ABSTRACT_CLASS(wxHtmlListBox, wxVListBox)
+wxIMPLEMENT_ABSTRACT_CLASS(wxHtmlListBox, wxVListBox);
 
 
 // ----------------------------------------------------------------------------
@@ -598,7 +598,7 @@ void wxHtmlListBox::OnLeftDown(wxMouseEvent& event)
 // wxSimpleHtmlListBox
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxSimpleHtmlListBox, wxHtmlListBox)
+wxIMPLEMENT_ABSTRACT_CLASS(wxSimpleHtmlListBox, wxHtmlListBox);
 
 
 bool wxSimpleHtmlListBox::Create(wxWindow *parent, wxWindowID id,

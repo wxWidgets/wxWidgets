@@ -158,7 +158,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_HTML_CELL_CLICKED(wxID_ANY, MyFrame::OnHtmlCellClicked)
 wxEND_EVENT_TABLE()
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 // ============================================================================
 // implementation

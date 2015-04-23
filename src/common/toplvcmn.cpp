@@ -35,16 +35,16 @@
 // event table
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxTopLevelWindowBase, wxWindow)
+wxBEGIN_EVENT_TABLE(wxTopLevelWindowBase, wxWindow)
     EVT_CLOSE(wxTopLevelWindowBase::OnCloseWindow)
     EVT_SIZE(wxTopLevelWindowBase::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
 // ============================================================================
 
-IMPLEMENT_ABSTRACT_CLASS(wxTopLevelWindow, wxWindow)
+wxIMPLEMENT_ABSTRACT_CLASS(wxTopLevelWindow, wxWindow);
 
 // ----------------------------------------------------------------------------
 // construction/destruction

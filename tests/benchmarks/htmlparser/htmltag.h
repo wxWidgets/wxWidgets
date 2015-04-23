@@ -25,7 +25,7 @@ struct wx28HtmlCacheItem;
 
 class  wx28HtmlTagsCache : public wxObject
 {
-    DECLARE_DYNAMIC_CLASS(wx28HtmlTagsCache)
+    wxDECLARE_DYNAMIC_CLASS(wx28HtmlTagsCache);
 
 private:
     wx28HtmlCacheItem *m_Cache;
@@ -40,7 +40,7 @@ public:
     // Finds parameters for tag starting at at and fills the variables
     void QueryTag(int at, int* end1, int* end2);
 
-    DECLARE_NO_COPY_CLASS(wx28HtmlTagsCache)
+    wxDECLARE_NO_COPY_CLASS(wx28HtmlTagsCache);
 };
 
 
@@ -52,7 +52,7 @@ public:
 
 class  wx28HtmlTag : public wxObject
 {
-    DECLARE_CLASS(wx28HtmlTag)
+    wxDECLARE_CLASS(wx28HtmlTag);
 
 protected:
     // constructs wx28HtmlTag object based on HTML tag.
@@ -129,7 +129,7 @@ private:
     wx28HtmlTag *m_FirstChild, *m_LastChild;
     wx28HtmlTag *m_Parent;
 
-    DECLARE_NO_COPY_CLASS(wx28HtmlTag)
+    wxDECLARE_NO_COPY_CLASS(wx28HtmlTag);
 };
 
 

@@ -129,7 +129,7 @@ public:
 private:
     GtkWidget         *m_targetsWidgetAsync;  // for getting list of supported formats
 
-    DECLARE_DYNAMIC_CLASS(wxClipboard)
+    wxDECLARE_DYNAMIC_CLASS(wxClipboard);
 };
 
 #endif // _WX_GTK_CLIPBOARD_H_

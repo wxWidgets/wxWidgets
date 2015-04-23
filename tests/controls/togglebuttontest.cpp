@@ -41,7 +41,7 @@ private:
 
     wxToggleButton* m_button;
 
-    DECLARE_NO_COPY_CLASS(ToggleButtonTestCase)
+    wxDECLARE_NO_COPY_CLASS(ToggleButtonTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

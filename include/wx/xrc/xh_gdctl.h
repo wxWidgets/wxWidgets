@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxGenericDirCtrlXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxGenericDirCtrlXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxGenericDirCtrlXmlHandler);
 
 public:
     wxGenericDirCtrlXmlHandler();

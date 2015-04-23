@@ -19,7 +19,7 @@
 #include "wx/xrc/xh_datectrl.h"
 #include "wx/datectrl.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxDateCtrlXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDateCtrlXmlHandler, wxXmlResourceHandler);
 
 wxDateCtrlXmlHandler::wxDateCtrlXmlHandler() : wxXmlResourceHandler()
 {

@@ -862,7 +862,7 @@ public:
     wxIMPLEMENT_WX_THEME_SUPPORT            \
     wxIMPLEMENT_APP_NO_THEMES(appname)
 
-// Same as IMPLEMENT_APP(), but for console applications.
+// Same as wxIMPLEMENT_APP(), but for console applications.
 #define wxIMPLEMENT_APP_CONSOLE(appname)    \
     wxIMPLEMENT_WXWIN_MAIN_CONSOLE          \
     wxIMPLEMENT_APP_NO_MAIN(appname)

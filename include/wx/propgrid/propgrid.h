@@ -757,7 +757,7 @@ class WXDLLIMPEXP_PROPGRID wxPropertyGrid : public wxControl,
     friend class wxPropertyGridManager;
     friend class wxPGHeaderCtrl;
 
-    DECLARE_DYNAMIC_CLASS(wxPropertyGrid)
+    wxDECLARE_DYNAMIC_CLASS(wxPropertyGrid);
 public:
 
 #ifndef SWIG
@@ -2301,7 +2301,7 @@ private:
 
     bool ButtonTriggerKeyTest( int action, wxKeyEvent& event );
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // -----------------------------------------------------------------------
@@ -2606,7 +2606,7 @@ public:
 private:
     void Init();
     void OnPropertyGridSet();
-    DECLARE_DYNAMIC_CLASS(wxPropertyGridEvent)
+    wxDECLARE_DYNAMIC_CLASS(wxPropertyGridEvent);
 
     wxPGProperty*       m_property;
     wxPropertyGrid*     m_pg;

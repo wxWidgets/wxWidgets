@@ -52,7 +52,7 @@ private:
 
     int m_events;
 
-    DECLARE_NO_COPY_CLASS(TimerCounterHandler)
+    wxDECLARE_NO_COPY_CLASS(TimerCounterHandler);
 };
 
 // --------------------------------------------------------------------------
@@ -73,7 +73,7 @@ private:
     void OneShot();
     void Multiple();
 
-    DECLARE_NO_COPY_CLASS(TimerEventTestCase)
+    wxDECLARE_NO_COPY_CLASS(TimerEventTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default
@@ -98,7 +98,7 @@ void TimerEventTestCase::OneShot()
 
         wxEventLoopBase& m_loop;
 
-        // don't use DECLARE_NO_COPY_CLASS() to avoid upsetting MSVC
+        // don't use wxDECLARE_NO_COPY_CLASS() to avoid upsetting MSVC
     };
 
     wxEventLoop loop;

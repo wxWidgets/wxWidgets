@@ -60,7 +60,7 @@ public:
 private:
     T *m_array;
 
-    DECLARE_NO_COPY_TEMPLATE_CLASS(wxScopedArray, T)
+    wxDECLARE_NO_COPY_TEMPLATE_CLASS(wxScopedArray, T);
 };
 
 // ----------------------------------------------------------------------------

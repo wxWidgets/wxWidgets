@@ -49,7 +49,7 @@ extern GtkWidget *wxGetRootWindow();
 // wxMask
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMask,wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject);
 
 wxMask::wxMask()
 {
@@ -354,7 +354,7 @@ wxBitmapRefData::~wxBitmapRefData()
 
 #define M_BMPDATA ((wxBitmapRefData *)m_refData)
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmap,wxGDIObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject);
 
 wxGDIRefData *wxBitmap::CreateGDIRefData() const
 {

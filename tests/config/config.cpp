@@ -51,7 +51,7 @@ private:
     // return the number of values we (attempted to) read
     int ReadValues(wxConfig *config, bool has_values);
 
-    DECLARE_NO_COPY_CLASS(ConfigTestCase)
+    wxDECLARE_NO_COPY_CLASS(ConfigTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

@@ -425,7 +425,7 @@ WXHPEN wxPenRefData::GetHPEN() const
 // wxPen
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject);
 
 wxPen::wxPen(const wxColour& col, int width, wxPenStyle style)
 {

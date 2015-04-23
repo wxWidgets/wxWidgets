@@ -18,7 +18,7 @@
 
 class WXDLLIMPEXP_CORE wxMiniFrame: public wxFrame
 {
-    DECLARE_DYNAMIC_CLASS(wxMiniFrame)
+    wxDECLARE_DYNAMIC_CLASS(wxMiniFrame);
 
 public:
     wxMiniFrame() {}

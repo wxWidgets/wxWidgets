@@ -42,7 +42,7 @@ protected:
 private:
     QColor m_qtColor;
 
-    DECLARE_DYNAMIC_CLASS(wxColour)
+    wxDECLARE_DYNAMIC_CLASS(wxColour);
 };
 
 #endif // _WX_QT_COLOUR_H_

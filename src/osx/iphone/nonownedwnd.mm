@@ -69,7 +69,7 @@ wxPoint wxFromNSPoint( UIView* parent, const CGPoint& p )
 // c++ impl
 //
 
-IMPLEMENT_DYNAMIC_CLASS( wxNonOwnedWindowIPhoneImpl , wxNonOwnedWindowImpl )
+wxIMPLEMENT_DYNAMIC_CLASS(wxNonOwnedWindowIPhoneImpl , wxNonOwnedWindowImpl);
 
 wxNonOwnedWindowIPhoneImpl::wxNonOwnedWindowIPhoneImpl( wxNonOwnedWindow* nonownedwnd) :
     wxNonOwnedWindowImpl(nonownedwnd)

@@ -34,7 +34,7 @@ public:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
     int         m_value;
     wxListBox  *m_list;

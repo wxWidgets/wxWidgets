@@ -18,7 +18,7 @@
     #include "wx/dcmemory.h"
 #endif
 
-IMPLEMENT_ABSTRACT_CLASS(wxX11DCImpl, wxDCImpl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxX11DCImpl, wxDCImpl);
 
 //-----------------------------------------------------------------------------
 // wxDC

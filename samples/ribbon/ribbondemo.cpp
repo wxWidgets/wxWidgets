@@ -39,8 +39,8 @@ public:
     bool OnInit() wxOVERRIDE;
 };
 
-DECLARE_APP(MyApp)
-IMPLEMENT_APP(MyApp)
+wxDECLARE_APP(MyApp);
+wxIMPLEMENT_APP(MyApp);
 
 // -- frame --
 

@@ -23,8 +23,8 @@
     #include "wx/dcclient.h"
 #endif
 
-BEGIN_EVENT_TABLE(wxListBox, wxControl)
-END_EVENT_TABLE()
+wxBEGIN_EVENT_TABLE(wxListBox, wxControl)
+wxEND_EVENT_TABLE()
 
 #include "wx/osx/private.h"
 

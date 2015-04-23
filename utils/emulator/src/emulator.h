@@ -108,8 +108,8 @@ public:
     void OnPaint(wxPaintEvent& event);
     void OnEraseBackground(wxEraseEvent& event);
 
-DECLARE_CLASS(wxEmulatorContainer)
-DECLARE_EVENT_TABLE()
+    wxDECLARE_CLASS(wxEmulatorContainer);
+    wxDECLARE_EVENT_TABLE();
 
 };
 
@@ -127,7 +127,7 @@ public:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------

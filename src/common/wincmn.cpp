@@ -108,13 +108,13 @@ static const int BASELINE_DPI = 96;
 // ----------------------------------------------------------------------------
 
 
-IMPLEMENT_ABSTRACT_CLASS(wxWindowBase, wxEvtHandler)
+wxIMPLEMENT_ABSTRACT_CLASS(wxWindowBase, wxEvtHandler);
 
 // ----------------------------------------------------------------------------
 // event table
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxWindowBase, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(wxWindowBase, wxEvtHandler)
     EVT_SYS_COLOUR_CHANGED(wxWindowBase::OnSysColourChanged)
     EVT_INIT_DIALOG(wxWindowBase::OnInitDialog)
     EVT_MIDDLE_DOWN(wxWindowBase::OnMiddleClick)
@@ -124,7 +124,7 @@ BEGIN_EVENT_TABLE(wxWindowBase, wxEvtHandler)
 #endif // wxUSE_HELP
 
     EVT_SIZE(wxWindowBase::InternalOnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation of the common functionality of the wxWindow class
@@ -257,7 +257,7 @@ wxCONSTRUCTOR_DUMMY(wxWindow)
 #else
 
 #ifndef __WXUNIVERSAL__
-IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase);
 #endif
 
 #endif

@@ -279,9 +279,9 @@ static void wxInsertChildInNotebook( wxNotebook* parent, wxWindow* child )
 // wxNotebook
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxNotebook, wxBookCtrlBase)
+wxBEGIN_EVENT_TABLE(wxNotebook, wxBookCtrlBase)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxNotebook::Init()
 {

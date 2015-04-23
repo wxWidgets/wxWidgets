@@ -87,7 +87,7 @@ protected:
     wxPoint GTKGetEntryMargins(GtkEntry* entry) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxControl)
+    wxDECLARE_DYNAMIC_CLASS(wxControl);
 };
 
 #endif // _WX_GTK_CONTROL_H_

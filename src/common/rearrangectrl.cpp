@@ -39,9 +39,9 @@
 extern
 WXDLLIMPEXP_DATA_CORE(const char) wxRearrangeListNameStr[] = "wxRearrangeList";
 
-BEGIN_EVENT_TABLE(wxRearrangeList, wxCheckListBox)
+wxBEGIN_EVENT_TABLE(wxRearrangeList, wxCheckListBox)
     EVT_CHECKLISTBOX(wxID_ANY, wxRearrangeList::OnCheck)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool wxRearrangeList::Create(wxWindow *parent,
                              wxWindowID id,
@@ -192,13 +192,13 @@ void wxRearrangeList::OnCheck(wxCommandEvent& event)
 // wxRearrangeCtrl implementation
 // ============================================================================
 
-BEGIN_EVENT_TABLE(wxRearrangeCtrl, wxPanel)
+wxBEGIN_EVENT_TABLE(wxRearrangeCtrl, wxPanel)
     EVT_UPDATE_UI(wxID_UP, wxRearrangeCtrl::OnUpdateButtonUI)
     EVT_UPDATE_UI(wxID_DOWN, wxRearrangeCtrl::OnUpdateButtonUI)
 
     EVT_BUTTON(wxID_UP, wxRearrangeCtrl::OnButton)
     EVT_BUTTON(wxID_DOWN, wxRearrangeCtrl::OnButton)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxRearrangeCtrl::Init()
 {

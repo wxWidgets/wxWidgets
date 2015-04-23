@@ -17,7 +17,7 @@ class WXDLLIMPEXP_FWD_CORE wxNotebook;
 
 class WXDLLIMPEXP_XRC wxNotebookXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxNotebookXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxNotebookXmlHandler);
 
 public:
     wxNotebookXmlHandler();

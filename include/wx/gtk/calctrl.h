@@ -62,7 +62,7 @@ private:
     // the control while a handler for day-selected is running.
     wxDateTime m_selectedDate;
 
-    DECLARE_DYNAMIC_CLASS(wxGtkCalendarCtrl)
+    wxDECLARE_DYNAMIC_CLASS(wxGtkCalendarCtrl);
     wxDECLARE_NO_COPY_CLASS(wxGtkCalendarCtrl);
 };
 

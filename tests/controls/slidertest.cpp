@@ -57,7 +57,7 @@ private:
 
     wxSlider* m_slider;
 
-    DECLARE_NO_COPY_CLASS(SliderTestCase)
+    wxDECLARE_NO_COPY_CLASS(SliderTestCase);
 };
 
 bool SliderTestCase::ms_inversed = false;

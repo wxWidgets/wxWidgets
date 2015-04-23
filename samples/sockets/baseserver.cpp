@@ -146,7 +146,7 @@ private:
     wxTimer mTimer;
 };
 
-DECLARE_APP(Server);
+wxDECLARE_APP(Server);
 
 // just some common things shared between ThreadWorker and EventWorker
 class WorkerBase
@@ -201,7 +201,7 @@ private:
 };
 
 /******************* Implementation ******************/
-IMPLEMENT_APP_CONSOLE(Server)
+wxIMPLEMENT_APP_CONSOLE(Server);
 
 #include <wx/listimpl.cpp>
 WX_DEFINE_LIST(TList);

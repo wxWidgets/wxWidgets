@@ -48,7 +48,7 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-    DECLARE_DYNAMIC_CLASS(wxScrollBar)
+    wxDECLARE_DYNAMIC_CLASS(wxScrollBar);
 };
 
 #endif // _WX_GTK_SCROLLBAR_H_

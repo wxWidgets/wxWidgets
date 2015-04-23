@@ -126,7 +126,7 @@ private:
 public:
     bool m_inSetSelection;
 
-    DECLARE_DYNAMIC_CLASS(wxComboBox)
+    wxDECLARE_DYNAMIC_CLASS(wxComboBox);
 };
 
 #endif // _WX_COMBOBOX_H_

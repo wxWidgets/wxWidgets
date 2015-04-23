@@ -23,7 +23,7 @@ public:
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 
-    DECLARE_DYNAMIC_CLASS(wxSpinButtonXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxSpinButtonXmlHandler);
 };
 
 #endif // wxUSE_SPINBTN
@@ -38,7 +38,7 @@ public:
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 
-    DECLARE_DYNAMIC_CLASS(wxSpinCtrlXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxSpinCtrlXmlHandler);
 };
 
 #endif // wxUSE_SPINCTRL

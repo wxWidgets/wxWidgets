@@ -67,7 +67,7 @@ private:
     void FileNameToUrlConversion();
     void UnicodeFileNameToUrlConversion();
 
-    DECLARE_NO_COPY_CLASS(FileSystemTestCase)
+    wxDECLARE_NO_COPY_CLASS(FileSystemTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

@@ -58,9 +58,9 @@ static void wxTextWindowGainFocusProc(Widget w, XtPointer clientData, XmAnyCallb
 static void wxTextWindowLoseFocusProc(Widget w, XtPointer clientData, XmAnyCallbackStruct *cbs);
 static void wxTextWindowActivateProc(Widget w, XtPointer clientData, XmAnyCallbackStruct *ptr);
 
-    BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
-        EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
-        EVT_CHAR(wxTextCtrl::OnChar)
+wxBEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
+    EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
+    EVT_CHAR(wxTextCtrl::OnChar)
 
     EVT_MENU(wxID_CUT, wxTextCtrl::OnCut)
     EVT_MENU(wxID_COPY, wxTextCtrl::OnCopy)
@@ -74,7 +74,7 @@ static void wxTextWindowActivateProc(Widget w, XtPointer clientData, XmAnyCallba
     EVT_UPDATE_UI(wxID_UNDO, wxTextCtrl::OnUpdateUndo)
     EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
 
-    END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

@@ -86,7 +86,7 @@ private:
 // implementation
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl);
 
 // ----------------------------------------------------------------------------
 // wxRadioBox creation

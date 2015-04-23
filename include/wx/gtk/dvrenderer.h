@@ -104,7 +104,7 @@ protected:
     bool m_usingDefaultAttrs;
 
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRenderer);
 };
 
 #endif // _WX_GTK_DVRENDERER_H_

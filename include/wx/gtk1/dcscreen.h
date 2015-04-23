@@ -31,7 +31,7 @@ protected:
     virtual void DoGetSize(int *width, int *height) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxScreenDCImpl)
+    wxDECLARE_DYNAMIC_CLASS(wxScreenDCImpl);
 };
 
 #endif // __GTKDCSCREENH__

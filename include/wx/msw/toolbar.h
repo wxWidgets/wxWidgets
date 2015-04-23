@@ -170,8 +170,8 @@ private:
     WXHBRUSH MSWGetToolbarBgBrush();
 #endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxToolBar)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS(wxToolBar);
     wxDECLARE_NO_COPY_CLASS(wxToolBar);
 };
 

@@ -51,7 +51,7 @@ private:
 
     wxToolbook *m_toolbook;
 
-    DECLARE_NO_COPY_CLASS(ToolbookTestCase)
+    wxDECLARE_NO_COPY_CLASS(ToolbookTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

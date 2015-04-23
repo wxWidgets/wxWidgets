@@ -282,8 +282,8 @@ private:
     // false if we hit the limit set by SetMaxLength() and so didn't change it.
     bool AdjustSpaceLimit();
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxTextCtrl)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxTextCtrl);
 
     wxMenu* m_privateContextMenu;
 

@@ -131,13 +131,13 @@ protected:
     MyServer m_server;
 };
 
-DECLARE_APP(MyApp)
+wxDECLARE_APP(MyApp);
 
 // ============================================================================
 // implementation
 // ============================================================================
 
-IMPLEMENT_APP_CONSOLE(MyApp)
+wxIMPLEMENT_APP_CONSOLE(MyApp);
 
 // ----------------------------------------------------------------------------
 // MyApp

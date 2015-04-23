@@ -23,7 +23,7 @@ public:
     void SelectCallback(wxCommandEvent& event);
     void OnSize(wxSizeEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
 protected:
     friend void SelectCallback(wxListBox&, wxCommandEvent&);

@@ -26,7 +26,7 @@
 
 #include "wx/xml/xml.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxSplitterWindowXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxSplitterWindowXmlHandler, wxXmlResourceHandler);
 
 wxSplitterWindowXmlHandler::wxSplitterWindowXmlHandler() : wxXmlResourceHandler()
 {

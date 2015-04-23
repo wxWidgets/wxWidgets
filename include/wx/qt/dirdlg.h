@@ -40,7 +40,7 @@ public:     // overrides from wxGenericDirDialog
 
 private:
 
-    DECLARE_DYNAMIC_CLASS(wxDirDialog)
+    wxDECLARE_DYNAMIC_CLASS(wxDirDialog);
 };
 
 #endif // _WX_QT_DIRDLG_H_

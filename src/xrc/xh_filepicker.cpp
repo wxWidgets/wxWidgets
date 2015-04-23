@@ -19,7 +19,7 @@
 #include "wx/xrc/xh_filepicker.h"
 #include "wx/filepicker.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxFilePickerCtrlXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFilePickerCtrlXmlHandler, wxXmlResourceHandler);
 
 wxFilePickerCtrlXmlHandler::wxFilePickerCtrlXmlHandler() : wxXmlResourceHandler()
 {

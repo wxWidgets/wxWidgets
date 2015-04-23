@@ -170,7 +170,7 @@ protected:
     // wxDefaultCoord if it hadn't
     int m_heightOwn;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxChoice)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxChoice);
 };
 
 #endif // _WX_CHOICE_H_

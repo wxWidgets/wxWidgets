@@ -134,7 +134,7 @@ private:
     // this pointer is non-NULL only while the modal event loop is running
     wxDialogModalData *m_modalData;
 
-    DECLARE_DYNAMIC_CLASS(wxDialog)
+    wxDECLARE_DYNAMIC_CLASS(wxDialog);
     wxDECLARE_NO_COPY_CLASS(wxDialog);
 };
 

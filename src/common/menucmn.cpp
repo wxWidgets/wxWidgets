@@ -56,7 +56,7 @@ wxBEGIN_FLAGS( wxMenuStyle )
 wxFLAGS_MEMBER(wxMENU_TEAROFF)
 wxEND_FLAGS( wxMenuStyle )
 
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenu, wxEvtHandler, "wx/menu.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenu, wxEvtHandler, "wx/menu.h");
 wxCOLLECTION_TYPE_INFO( wxMenuItem *, wxMenuItemList ) ;
 
 #if wxUSE_EXTENDED_RTTI    
@@ -108,7 +108,7 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuBar, wxWindow, "wx/menu.h", \
 #if wxUSE_EXTENDED_RTTI    
 WX_DEFINE_LIST( wxMenuInfoHelperList )
 
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenuInfoHelper, wxObject, "wx/menu.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenuInfoHelper, wxObject, "wx/menu.h");
 
 wxBEGIN_PROPERTIES_TABLE(wxMenuInfoHelper)
 wxREADONLY_PROPERTY( Menu, wxMenu*, GetMenu, wxEMPTY_PARAMETER_VALUE, \

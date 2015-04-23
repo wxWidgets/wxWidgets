@@ -63,8 +63,8 @@ protected:
     bool ChangeBitmap(const wxBitmap& bmp);
 
 private:
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxBitmapButton)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS(wxBitmapButton);
 };
 
 #endif // _WX_UNIV_BMPBUTTN_H_

@@ -95,7 +95,7 @@ private:
     // the state (combination of wxCONTROL_XXX flags) of the arrows
     int m_arrowsState[wxScrollArrows::Arrow_Max];
 
-    DECLARE_DYNAMIC_CLASS(wxSpinButton)
+    wxDECLARE_DYNAMIC_CLASS(wxSpinButton);
 };
 
 // ----------------------------------------------------------------------------

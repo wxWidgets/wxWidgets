@@ -194,7 +194,7 @@ private:
     bool m_updateHorizontalExtent;
 
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxListBox)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxListBox);
 };
 
 #endif // wxUSE_LISTBOX

@@ -94,13 +94,13 @@
 // wxGenericComboCtrl
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxGenericComboCtrl, wxComboCtrlBase)
+wxBEGIN_EVENT_TABLE(wxGenericComboCtrl, wxComboCtrlBase)
     EVT_PAINT(wxGenericComboCtrl::OnPaintEvent)
     EVT_MOUSE_EVENTS(wxGenericComboCtrl::OnMouseEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericComboCtrl, wxComboCtrlBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxGenericComboCtrl, wxComboCtrlBase);
 
 void wxGenericComboCtrl::Init()
 {
@@ -491,7 +491,7 @@ bool wxGenericComboCtrl::PerformAction(const wxControlAction& action,
 // If native wxComboCtrl was not defined, then prepare a simple
 // front-end so that wxRTTI works as expected.
 #ifndef _WX_COMBOCONTROL_H_
-IMPLEMENT_DYNAMIC_CLASS(wxComboCtrl, wxGenericComboCtrl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxComboCtrl, wxGenericComboCtrl);
 #endif
 
 #endif // !wxCOMBOCONTROL_FULLY_FEATURED

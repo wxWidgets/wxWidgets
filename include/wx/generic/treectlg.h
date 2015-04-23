@@ -355,8 +355,8 @@ private:
     // operation.
     void ResetFindState();
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxGenericTreeCtrl)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS(wxGenericTreeCtrl);
     wxDECLARE_NO_COPY_CLASS(wxGenericTreeCtrl);
 };
 
@@ -368,7 +368,7 @@ private:
 
 class WXDLLIMPEXP_CORE wxTreeCtrl: public wxGenericTreeCtrl
 {
-    DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
+    wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
 
 public:
     wxTreeCtrl() {}

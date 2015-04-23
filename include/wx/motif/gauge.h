@@ -14,7 +14,7 @@
 // Group box
 class WXDLLIMPEXP_CORE wxGauge : public wxGaugeBase
 {
-    DECLARE_DYNAMIC_CLASS(wxGauge)
+    wxDECLARE_DYNAMIC_CLASS(wxGauge);
 
 public:
     inline wxGauge() { m_rangeMax = 0; m_gaugePos = 0; }

@@ -135,7 +135,7 @@ protected:
 private:
     QTreeWidget *m_qtTreeWidget;
 
-    DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
+    wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
 };
 
 #endif // _WX_QT_TREECTRL_H_

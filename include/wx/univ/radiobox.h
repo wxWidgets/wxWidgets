@@ -146,7 +146,7 @@ protected:
     wxEvtHandler *m_evtRadioHook;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxRadioBox)
+    wxDECLARE_DYNAMIC_CLASS(wxRadioBox);
 };
 
 #endif // _WX_UNIV_RADIOBOX_H_

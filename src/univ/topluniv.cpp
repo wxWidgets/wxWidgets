@@ -62,11 +62,11 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxTopLevelWindow, wxTopLevelWindowNative)
+wxBEGIN_EVENT_TABLE(wxTopLevelWindow, wxTopLevelWindowNative)
     WX_EVENT_TABLE_INPUT_CONSUMER(wxTopLevelWindow)
     EVT_NC_PAINT(wxTopLevelWindow::OnNcPaint)
     EVT_MENU_RANGE(wxID_CLOSE_FRAME, wxID_RESTORE_FRAME, wxTopLevelWindow::OnSystemMenu)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 WX_FORWARD_TO_INPUT_CONSUMER(wxTopLevelWindow)
 
@@ -407,7 +407,7 @@ public:
     wxInteractiveMoveHandler(wxInteractiveMoveData& data) : m_data(data) {}
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     void OnMouseMove(wxMouseEvent& event);
     void OnMouseDown(wxMouseEvent& event);
     void OnMouseUp(wxMouseEvent& event);
@@ -416,12 +416,12 @@ private:
     wxInteractiveMoveData& m_data;
 };
 
-BEGIN_EVENT_TABLE(wxInteractiveMoveHandler, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(wxInteractiveMoveHandler, wxEvtHandler)
     EVT_MOTION(wxInteractiveMoveHandler::OnMouseMove)
     EVT_LEFT_DOWN(wxInteractiveMoveHandler::OnMouseDown)
     EVT_LEFT_UP(wxInteractiveMoveHandler::OnMouseUp)
     EVT_KEY_DOWN(wxInteractiveMoveHandler::OnKeyDown)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 static inline LINKAGEMODE

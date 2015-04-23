@@ -82,7 +82,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_PlugProvider, MyFrame::OnPlugProvider)
 wxEND_EVENT_TABLE()
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 // ============================================================================
 // implementation

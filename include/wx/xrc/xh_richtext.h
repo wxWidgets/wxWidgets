@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextCtrlXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxRichTextCtrlXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxRichTextCtrlXmlHandler);
 
 public:
     wxRichTextCtrlXmlHandler();

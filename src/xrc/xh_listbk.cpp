@@ -26,7 +26,7 @@
 #include "wx/listbook.h"
 #include "wx/imaglist.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxListbookXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxListbookXmlHandler, wxXmlResourceHandler);
 
 wxListbookXmlHandler::wxListbookXmlHandler()
                      :wxXmlResourceHandler(),

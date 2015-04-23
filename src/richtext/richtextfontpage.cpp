@@ -14,13 +14,13 @@
  * wxRichTextFontPage type definition
  */
 
-IMPLEMENT_DYNAMIC_CLASS( wxRichTextFontPage, wxRichTextDialogPage )
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextFontPage, wxRichTextDialogPage);
 
 /*!
  * wxRichTextFontPage event table definition
  */
 
-BEGIN_EVENT_TABLE( wxRichTextFontPage, wxRichTextDialogPage )
+wxBEGIN_EVENT_TABLE( wxRichTextFontPage, wxRichTextDialogPage )
     EVT_LISTBOX( ID_RICHTEXTFONTPAGE_FACELISTBOX, wxRichTextFontPage::OnFaceListBoxSelected )
     EVT_BUTTON( ID_RICHTEXTFONTPAGE_COLOURCTRL, wxRichTextFontPage::OnColourClicked )
     EVT_BUTTON( ID_RICHTEXTFONTPAGE_BGCOLOURCTRL, wxRichTextFontPage::OnColourClicked )
@@ -45,7 +45,7 @@ BEGIN_EVENT_TABLE( wxRichTextFontPage, wxRichTextDialogPage )
     EVT_CHECKBOX( ID_RICHTEXTFONTPAGE_SUBSCRIPT, wxRichTextFontPage::OnRichtextfontpageSubscriptClick )
 ////@end wxRichTextFontPage event table entries
 
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_HELP_PROVISION(wxRichTextFontPage)
 

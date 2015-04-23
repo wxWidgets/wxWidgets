@@ -91,7 +91,7 @@ private:
     static void CreateTestFile(size_t len, const char *contents);
 
 
-    DECLARE_NO_COPY_CLASS(TextFileTestCase)
+    wxDECLARE_NO_COPY_CLASS(TextFileTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

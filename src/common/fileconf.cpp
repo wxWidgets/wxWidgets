@@ -316,7 +316,7 @@ wxFileName wxFileConfig::GetLocalFile(const wxString& szFile, int style)
 // ----------------------------------------------------------------------------
 // ctor
 // ----------------------------------------------------------------------------
-IMPLEMENT_ABSTRACT_CLASS(wxFileConfig, wxConfigBase)
+wxIMPLEMENT_ABSTRACT_CLASS(wxFileConfig, wxConfigBase);
 
 void wxFileConfig::Init()
 {

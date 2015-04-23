@@ -776,7 +776,7 @@ private:
     wxGrid * m_view;
     wxGridCellAttrProvider *m_attrProvider;
 
-    DECLARE_ABSTRACT_CLASS(wxGridTableBase)
+    wxDECLARE_ABSTRACT_CLASS(wxGridTableBase);
     wxDECLARE_NO_COPY_CLASS(wxGridTableBase);
 };
 
@@ -885,7 +885,7 @@ private:
     wxArrayString     m_rowLabels;
     wxArrayString     m_colLabels;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY( wxGridStringTable )
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxGridStringTable);
 };
 
 
@@ -2348,8 +2348,8 @@ private:
     wxGridFixedIndicesSet *m_setFixedRows,
                           *m_setFixedCols;
 
-    DECLARE_DYNAMIC_CLASS( wxGrid )
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxGrid);
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxGrid);
 };
 
@@ -2458,7 +2458,7 @@ private:
         m_selecting = sel;
     }
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridEvent);
 };
 
 class WXDLLIMPEXP_ADV wxGridSizeEvent : public wxNotifyEvent,
@@ -2514,7 +2514,7 @@ private:
         m_y = y;
     }
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridSizeEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridSizeEvent);
 };
 
 
@@ -2579,7 +2579,7 @@ protected:
     wxGridCellCoords  m_bottomRight;
     bool              m_selecting;
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridRangeSelectEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridRangeSelectEvent);
 };
 
 
@@ -2611,7 +2611,7 @@ private:
     int m_col;
     wxControl* m_ctrl;
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridEditorCreatedEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridEditorCreatedEvent);
 };
 
 

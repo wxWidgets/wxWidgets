@@ -26,7 +26,7 @@
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextHTMLHandler: public wxRichTextFileHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxRichTextHTMLHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxRichTextHTMLHandler);
 public:
     wxRichTextHTMLHandler(const wxString& name = wxT("HTML"), const wxString& ext = wxT("html"), int type = wxRICHTEXT_TYPE_HTML);
 

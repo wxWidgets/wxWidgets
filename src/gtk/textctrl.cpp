@@ -600,7 +600,7 @@ static void state_flags_changed(GtkWidget*, GtkStateFlags, wxTextCtrl* win)
 //  wxTextCtrl
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
+wxBEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_CHAR(wxTextCtrl::OnChar)
 
     EVT_MENU(wxID_CUT, wxTextCtrl::OnCut)
@@ -624,7 +624,7 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_RIGHT_DOWN  (wxTextCtrl::OnUrlMouseEvent)
     EVT_RIGHT_UP    (wxTextCtrl::OnUrlMouseEvent)
     EVT_RIGHT_DCLICK(wxTextCtrl::OnUrlMouseEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxTextCtrl::Init()
 {

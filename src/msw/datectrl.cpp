@@ -37,7 +37,7 @@
 #include "wx/datectrl.h"
 #include "wx/dateevt.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxControl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxControl);
 
 // ============================================================================
 // implementation

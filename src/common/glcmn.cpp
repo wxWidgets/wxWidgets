@@ -34,7 +34,7 @@
 #include "wx/build.h"
 WX_CHECK_BUILD_OPTIONS("wxGL")
 
-IMPLEMENT_CLASS(wxGLApp, wxApp)
+wxIMPLEMENT_CLASS(wxGLApp, wxApp);
 
 // ============================================================================
 // implementation

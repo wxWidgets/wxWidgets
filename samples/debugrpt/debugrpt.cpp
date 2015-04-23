@@ -206,7 +206,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(MyApp);
 };
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 // ============================================================================
 // implementation

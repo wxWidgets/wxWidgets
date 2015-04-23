@@ -30,7 +30,7 @@ private:
     bool m_insideBox;
     wxArrayString m_items;
 
-    DECLARE_DYNAMIC_CLASS(wxEditableListBoxXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxEditableListBoxXmlHandler);
 };
 
 #endif // wxUSE_XRC && wxUSE_EDITABLELISTBOX

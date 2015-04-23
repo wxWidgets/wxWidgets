@@ -52,7 +52,7 @@ private:
     // we cannot test wxControl directly (it's abstract) so we rather test wxCheckBox
     wxCheckBox *m_cb;
 
-    DECLARE_NO_COPY_CLASS(LabelTestCase)
+    wxDECLARE_NO_COPY_CLASS(LabelTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

@@ -90,8 +90,8 @@ private:
     // the absolute status fields widths
     wxArrayInt m_widthsAbs;
 
-    DECLARE_DYNAMIC_CLASS(wxStatusBarUniv)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxStatusBarUniv);
+    wxDECLARE_EVENT_TABLE();
     WX_DECLARE_INPUT_CONSUMER()
 };
 

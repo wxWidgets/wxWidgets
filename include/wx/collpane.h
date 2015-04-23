@@ -75,7 +75,7 @@ public:
 private:
     bool m_bCollapsed;
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxCollapsiblePaneEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxCollapsiblePaneEvent);
 };
 
 // ----------------------------------------------------------------------------

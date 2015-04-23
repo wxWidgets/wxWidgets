@@ -84,7 +84,7 @@ private:
     void SourceDestroyTest();
     void MultiConnectionTest();
 
-    DECLARE_NO_COPY_CLASS(EvtConnectionTestCase)
+    wxDECLARE_NO_COPY_CLASS(EvtConnectionTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

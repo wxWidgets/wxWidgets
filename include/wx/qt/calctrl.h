@@ -88,7 +88,7 @@ private:
     wxCalendarDateAttr *m_attrs[31];
 
 
-    DECLARE_DYNAMIC_CLASS(wxCalendarCtrl)
+    wxDECLARE_DYNAMIC_CLASS(wxCalendarCtrl);
 };
 
 #endif // _WX_QT_CALCTRL_H_

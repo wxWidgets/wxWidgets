@@ -104,7 +104,7 @@ private:
     // the array containing the checked status of the items
     wxArrayInt m_checks;
 
-    DECLARE_DYNAMIC_CLASS(wxCheckListBox)
+    wxDECLARE_DYNAMIC_CLASS(wxCheckListBox);
 };
 
 #endif // _WX_UNIV_CHECKLST_H_

@@ -60,8 +60,8 @@ public:
 
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxFileDialog)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxFileDialog);
+    wxDECLARE_EVENT_TABLE();
     void OnFakeOk( wxCommandEvent &event );
 };
 

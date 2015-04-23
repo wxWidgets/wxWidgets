@@ -99,10 +99,10 @@ private:
     // the class used to create it
     static const wxChar *ms_className;
 
-    DECLARE_DYNAMIC_CLASS(wxTimerHiddenWindowModule)
+    wxDECLARE_DYNAMIC_CLASS(wxTimerHiddenWindowModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxTimerHiddenWindowModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxTimerHiddenWindowModule, wxModule);
 
 // ============================================================================
 // implementation

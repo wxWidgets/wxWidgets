@@ -15,8 +15,8 @@
 #include "wx/slider.h"
 #include "wx/osx/private.h"
 
-BEGIN_EVENT_TABLE(wxSlider, wxControl)
-END_EVENT_TABLE()
+wxBEGIN_EVENT_TABLE(wxSlider, wxControl)
+wxEND_EVENT_TABLE()
 
  // The dimensions of the different styles of sliders (from Aqua document)
 #if wxOSX_USE_COCOA

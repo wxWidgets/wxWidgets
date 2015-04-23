@@ -44,7 +44,7 @@ private:
     void FrameShowTest();
     void TopLevelWindowShowTest(wxTopLevelWindow* tlw);
 
-    DECLARE_NO_COPY_CLASS(TopLevelWindowTestCase)
+    wxDECLARE_NO_COPY_CLASS(TopLevelWindowTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

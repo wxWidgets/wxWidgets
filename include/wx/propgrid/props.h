@@ -35,13 +35,13 @@ class wxPGArrayEditorDialog;
 //
 
 #define wxPG_IMPLEMENT_PROPERTY_CLASS(NAME, UPCLASS, EDITOR) \
-wxIMPLEMENT_DYNAMIC_CLASS(NAME, UPCLASS) \
+wxIMPLEMENT_DYNAMIC_CLASS(NAME, UPCLASS); \
 wxPG_IMPLEMENT_PROPERTY_CLASS_PLAIN(NAME, EDITOR)
 
 #if WXWIN_COMPATIBILITY_3_0
 // This macro is deprecated. Use wxPG_IMPLEMENT_PROPERTY_CLASS instead.
 #define WX_PG_IMPLEMENT_PROPERTY_CLASS(NAME, UPCLASS, T, T_AS_ARG, EDITOR) \
-IMPLEMENT_DYNAMIC_CLASS(NAME, UPCLASS) \
+wxIMPLEMENT_DYNAMIC_CLASS(NAME, UPCLASS); \
 WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(NAME, T, EDITOR)
 #endif // WXWIN_COMPATIBILITY_3_0
 
@@ -767,7 +767,7 @@ protected:
 */
 class WXDLLIMPEXP_PROPGRID wxDirProperty : public wxLongStringProperty
 {
-    DECLARE_DYNAMIC_CLASS(wxDirProperty)
+    wxDECLARE_DYNAMIC_CLASS(wxDirProperty);
 public:
     wxDirProperty( const wxString& name = wxPG_LABEL,
                    const wxString& label = wxPG_LABEL,
@@ -1022,8 +1022,8 @@ protected:
     }
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxPGArrayEditorDialog)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxPGArrayEditorDialog);
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // wxUSE_EDITABLELISTBOX
@@ -1076,8 +1076,8 @@ protected:
     virtual void ArraySwap( size_t first, size_t second );
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxPGArrayStringEditorDialog)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxPGArrayStringEditorDialog);
+    wxDECLARE_EVENT_TABLE();
 };
 
 // -----------------------------------------------------------------------

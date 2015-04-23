@@ -158,8 +158,8 @@ protected:
     int             m_sheetInnerBorder;
     int             m_selectedPage;
 
-    DECLARE_DYNAMIC_CLASS(wxPropertySheetDialog)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxPropertySheetDialog);
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // wxUSE_BOOKCTRL

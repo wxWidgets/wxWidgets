@@ -308,8 +308,8 @@ bool wxEntryStart(int& argc, wxChar **argv)
     wxAppPtr app(wxTheApp);
     if ( !app.get() )
     {
-        // if not, he might have used IMPLEMENT_APP() to give us a function to
-        // create it
+        // if not, he might have used wxIMPLEMENT_APP() to give us a
+        // function to create it
         wxAppInitializerFunction fnCreate = wxApp::GetInitializerFunction();
 
         if ( fnCreate )
@@ -321,8 +321,8 @@ bool wxEntryStart(int& argc, wxChar **argv)
 
     if ( !app.get() )
     {
-        // either IMPLEMENT_APP() was not used at all or it failed -- in any
-        // case we still need something
+        // either wxIMPLEMENT_APP() was not used at all or it failed -- in
+        // any case we still need something
         app.Set(new wxDummyConsoleApp);
     }
 

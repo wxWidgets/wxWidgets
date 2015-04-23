@@ -45,7 +45,7 @@ private:
     void DoLoadFile(const wxString& fullname);
     void DoLoadStream(wxInputStream& stream);
 
-    DECLARE_NO_COPY_CLASS(GarbageTestCase)
+    wxDECLARE_NO_COPY_CLASS(GarbageTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

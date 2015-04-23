@@ -62,7 +62,7 @@ private:
     wxWebView* m_browser;
     EventCounter* m_loaded;
 
-    DECLARE_NO_COPY_CLASS(WebTestCase)
+    wxDECLARE_NO_COPY_CLASS(WebTestCase);
 };
 
 //Convenience macro

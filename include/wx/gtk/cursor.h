@@ -52,7 +52,7 @@ protected:
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxCursor)
+    wxDECLARE_DYNAMIC_CLASS(wxCursor);
 };
 
 #endif // _WX_GTK_CURSOR_H_

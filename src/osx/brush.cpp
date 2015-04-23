@@ -18,7 +18,7 @@
 
 #include "wx/osx/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxBrush, wxGDIObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxBrush, wxGDIObject);
 
 class WXDLLEXPORT wxBrushRefData: public wxGDIRefData
 {

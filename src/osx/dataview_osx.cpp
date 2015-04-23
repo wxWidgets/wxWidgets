@@ -784,12 +784,12 @@ void wxDataViewCtrl::OnMouse(wxMouseEvent& event)
 #endif
 }
 
-IMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl,wxDataViewCtrlBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl,wxDataViewCtrlBase);
 
-BEGIN_EVENT_TABLE(wxDataViewCtrl,wxDataViewCtrlBase)
+wxBEGIN_EVENT_TABLE(wxDataViewCtrl,wxDataViewCtrlBase)
   EVT_SIZE(wxDataViewCtrl::OnSize)
   EVT_MOTION(wxDataViewCtrl::OnMouse)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #endif // (wxUSE_DATAVIEWCTRL != 0) && (!defined(wxUSE_GENERICDATAVIEWCTRL) || (wxUSE_GENERICDATAVIEWCTRL == 0))
 

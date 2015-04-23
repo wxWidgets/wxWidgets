@@ -59,10 +59,10 @@ enum //Internal find flags
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewIE, wxWebView);
 
-BEGIN_EVENT_TABLE(wxWebViewIE, wxControl)
+wxBEGIN_EVENT_TABLE(wxWebViewIE, wxControl)
     EVT_ACTIVEX(wxID_ANY, wxWebViewIE::onActiveXEvent)
     EVT_ERASE_BACKGROUND(wxWebViewIE::onEraseBg)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool wxWebViewIE::Create(wxWindow* parent,
            wxWindowID id,

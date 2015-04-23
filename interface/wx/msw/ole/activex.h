@@ -262,7 +262,7 @@ public:
         wxActiveXContainer* m_pAX;
         wxAutomationObject m_PDF;
 
-        wxDECLARE_DYNAMIC_CLASS(wxPDFMediaBackend)
+        wxDECLARE_DYNAMIC_CLASS(wxPDFMediaBackend);
     };
 
     wxIMPLEMENT_DYNAMIC_CLASS(wxPDFMediaBackend, wxMediaBackend);

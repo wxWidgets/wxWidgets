@@ -125,10 +125,10 @@ public:
 #define HELLO_QUIT 1
 #define HELLO_NEW  2
 
-DECLARE_APP(MyApp)
+wxDECLARE_APP(MyApp);
 
-// notice use of IMPLEMENT_APP_NO_MAIN() instead of the usual IMPLEMENT_APP!
-IMPLEMENT_APP_NO_MAIN(MyApp)
+// Notice use of wxIMPLEMENT_APP_NO_MAIN() instead of the usual wxIMPLEMENT_APP!
+wxIMPLEMENT_APP_NO_MAIN(MyApp);
 
 #ifdef _UNICODE
 // In Unicode build MFC normally requires to manually change the entry point to

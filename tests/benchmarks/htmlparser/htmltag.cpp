@@ -41,7 +41,7 @@ struct wx28HtmlCacheItem
 };
 
 
-IMPLEMENT_CLASS(wx28HtmlTagsCache,wxObject)
+wxIMPLEMENT_CLASS(wx28HtmlTagsCache,wxObject);
 
 #define CACHE_INCREMENT  64
 
@@ -207,7 +207,7 @@ void wx28HtmlTagsCache::QueryTag(int at, int* end1, int* end2)
 // wx28HtmlTag
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wx28HtmlTag,wxObject)
+wxIMPLEMENT_CLASS(wx28HtmlTag,wxObject);
 
 wx28HtmlTag::wx28HtmlTag(wx28HtmlTag *parent,
                      const wxString& source, int pos, int end_pos,

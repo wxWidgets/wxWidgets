@@ -225,10 +225,10 @@ public:
     wxDECLARE_NO_COPY_CLASS(wxMSWListItemData);
 };
 
-BEGIN_EVENT_TABLE(wxListCtrl, wxListCtrlBase)
+wxBEGIN_EVENT_TABLE(wxListCtrl, wxListCtrlBase)
     EVT_PAINT(wxListCtrl::OnPaint)
     EVT_CHAR_HOOK(wxListCtrl::OnCharHook)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

@@ -29,7 +29,7 @@
 #include <string.h>
 #include <ctype.h>
 
-IMPLEMENT_CLASS(wxURL, wxURI)
+wxIMPLEMENT_CLASS(wxURL, wxURI);
 
 // Protocols list
 wxProtoInfo *wxURL::ms_protocols = NULL;
@@ -454,10 +454,10 @@ public:
     virtual void OnExit() wxOVERRIDE;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxURLModule)
+    wxDECLARE_DYNAMIC_CLASS(wxURLModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxURLModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxURLModule, wxModule);
 
 wxURLModule::wxURLModule()
 {

@@ -28,7 +28,7 @@ public:
 private:
     QSystemTrayIcon m_qtSystemTrayIcon;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxTaskBarIcon)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxTaskBarIcon);
 };
 
 #endif // _WX_QT_TASKBAR_H_

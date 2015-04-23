@@ -386,7 +386,7 @@ private:
 #endif // wxUSE_GUI
 };
 
-IMPLEMENT_APP_NO_MAIN(TestApp)
+wxIMPLEMENT_APP_NO_MAIN(TestApp);
 
 
 // ----------------------------------------------------------------------------

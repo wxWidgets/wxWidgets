@@ -46,7 +46,7 @@ UINT_PTR CALLBACK wxFindReplaceDialogHookProc(HWND hwnd,
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFindReplaceDialog, wxDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFindReplaceDialog, wxDialog);
 
 // ----------------------------------------------------------------------------
 // wxFindReplaceDialogImpl: the internals of wxFindReplaceDialog

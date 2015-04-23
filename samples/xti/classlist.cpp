@@ -30,7 +30,7 @@
     #error This sample requires XTI (eXtended RTTI) enabled
 #endif
 
-// IMPLEMENT_DYNAMIC_CLASS( ClassListDialog, wxDialog )  -- see the header
+// wxIMPLEMENT_DYNAMIC_CLASS(ClassListDialog, wxDialog);  -- see the header
 wxBEGIN_EVENT_TABLE( ClassListDialog, wxDialog )
     EVT_LISTBOX( ID_LISTBOX, ClassListDialog::OnListboxSelected )
     EVT_TREE_SEL_CHANGED( ID_TREECTRL, ClassListDialog::OnTreectrlSelChanged )

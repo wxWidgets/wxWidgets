@@ -79,15 +79,15 @@
 // wxWidgets macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDocument, wxEvtHandler)
-IMPLEMENT_ABSTRACT_CLASS(wxView, wxEvtHandler)
-IMPLEMENT_ABSTRACT_CLASS(wxDocTemplate, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxDocManager, wxEvtHandler)
-IMPLEMENT_CLASS(wxDocChildFrame, wxFrame)
-IMPLEMENT_CLASS(wxDocParentFrame, wxFrame)
+wxIMPLEMENT_ABSTRACT_CLASS(wxDocument, wxEvtHandler);
+wxIMPLEMENT_ABSTRACT_CLASS(wxView, wxEvtHandler);
+wxIMPLEMENT_ABSTRACT_CLASS(wxDocTemplate, wxObject);
+wxIMPLEMENT_DYNAMIC_CLASS(wxDocManager, wxEvtHandler);
+wxIMPLEMENT_CLASS(wxDocChildFrame, wxFrame);
+wxIMPLEMENT_CLASS(wxDocParentFrame, wxFrame);
 
 #if wxUSE_PRINTING_ARCHITECTURE
-    IMPLEMENT_DYNAMIC_CLASS(wxDocPrintout, wxPrintout)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDocPrintout, wxPrintout);
 #endif
 
 // ============================================================================
@@ -942,7 +942,7 @@ wxView *wxDocTemplate::DoCreateView()
 // wxDocManager
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxDocManager, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(wxDocManager, wxEvtHandler)
     EVT_MENU(wxID_OPEN, wxDocManager::OnFileOpen)
     EVT_MENU(wxID_CLOSE, wxDocManager::OnFileClose)
     EVT_MENU(wxID_CLOSE_ALL, wxDocManager::OnFileCloseAll)
@@ -978,7 +978,7 @@ BEGIN_EVENT_TABLE(wxDocManager, wxEvtHandler)
     // NB: we keep "Print setup" menu item always enabled as it can be used
     //     even without an active document
 #endif // wxUSE_PRINTING_ARCHITECTURE
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxDocManager* wxDocManager::sm_docManager = NULL;
 

@@ -96,7 +96,7 @@ void            FindMax(int *max_thing, int thing);
     STDAPI_(__int64) CeGetRandomSeed();
 #endif
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 MainWindow *TheMainWindow = NULL;
 
@@ -108,11 +108,11 @@ void MainWindow::CreateFonts()
     m_italicFont = wxTheFontList->FindOrCreateFont(pointSize, wxSWISS, wxITALIC, wxNORMAL);
 }
 
-BEGIN_EVENT_TABLE(MainWindow, wxFrame)
+wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
     EVT_CLOSE(MainWindow::OnCloseWindow)
     EVT_CHAR(MainWindow::OnChar)
     EVT_MENU(wxID_ANY, MainWindow::OnPopup)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MainWindow::MainWindow(wxFrame *frame, wxWindowID id, const wxString& title,
      const wxPoint& pos, const wxSize& size, long style):
@@ -581,11 +581,11 @@ void MainWindow::OnChar(wxKeyEvent& event)
     canvas->OnChar(event);
 }
 
-BEGIN_EVENT_TABLE(MyCanvas, wxWindow)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxWindow)
     EVT_MOUSE_EVENTS(MyCanvas::OnMouseEvent)
     EVT_CHAR(MyCanvas::OnChar)
     EVT_PAINT(MyCanvas::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxFrame *frame):

@@ -41,8 +41,8 @@
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextListStylePage: public wxRichTextDialogPage
 {
-    DECLARE_DYNAMIC_CLASS( wxRichTextListStylePage )
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxRichTextListStylePage);
+    wxDECLARE_EVENT_TABLE();
     DECLARE_HELP_PROVISION()
 
 public:

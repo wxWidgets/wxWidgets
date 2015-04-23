@@ -93,12 +93,12 @@ protected:
 private:
     wxNotebook *m_nb;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(wxNotebookSpinBtn, wxSpinButton)
+wxBEGIN_EVENT_TABLE(wxNotebookSpinBtn, wxSpinButton)
     EVT_SPIN(wxID_ANY, wxNotebookSpinBtn::OnSpin)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

@@ -714,9 +714,9 @@ class wxSoundCleanupModule: public wxModule
 public:
     bool OnInit() wxOVERRIDE { return true; }
     void OnExit() wxOVERRIDE { wxSound::UnloadBackend(); }
-    DECLARE_DYNAMIC_CLASS(wxSoundCleanupModule)
+    wxDECLARE_DYNAMIC_CLASS(wxSoundCleanupModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxSoundCleanupModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxSoundCleanupModule, wxModule);
 
 #endif

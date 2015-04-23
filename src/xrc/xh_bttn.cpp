@@ -22,7 +22,7 @@
     #include "wx/button.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxButtonXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxButtonXmlHandler, wxXmlResourceHandler);
 
 wxButtonXmlHandler::wxButtonXmlHandler()
 : wxXmlResourceHandler()

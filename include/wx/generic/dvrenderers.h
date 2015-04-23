@@ -37,7 +37,7 @@ public:
     }
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomRenderer);
 };
 
 
@@ -70,7 +70,7 @@ protected:
     wxString   m_text;
 
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer);
 };
 
 // ---------------------------------------------------------
@@ -97,7 +97,7 @@ private:
     wxBitmap m_bitmap;
 
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapRenderer);
 };
 
 // ---------------------------------------------------------
@@ -129,7 +129,7 @@ private:
     bool    m_toggle;
 
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleRenderer);
 };
 
 // ---------------------------------------------------------
@@ -157,7 +157,7 @@ private:
     int         m_value;
 
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressRenderer);
 };
 
 // ---------------------------------------------------------
@@ -188,7 +188,7 @@ private:
     wxDataViewIconText   m_value;
 
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewIconTextRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewIconTextRenderer);
 };
 
 #endif // _WX_GENERIC_DVRENDERERS_H_

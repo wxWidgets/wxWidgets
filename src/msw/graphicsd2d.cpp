@@ -3436,14 +3436,14 @@ private:
     wxCOMPtr<ID2D1Factory> m_direct2dFactory;
 
 private :
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxD2DRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxD2DRenderer);
 };
 
 //-----------------------------------------------------------------------------
 // wxD2DRenderer implementation
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxD2DRenderer,wxGraphicsRenderer)
+wxIMPLEMENT_DYNAMIC_CLASS(wxD2DRenderer,wxGraphicsRenderer);
 
 static wxD2DRenderer *gs_D2DRenderer = NULL;
 

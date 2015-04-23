@@ -17,7 +17,7 @@
 
 #include "wx/xrc/xmlreshandler.h"
 
-IMPLEMENT_ABSTRACT_CLASS(wxXmlResourceHandler, wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxXmlResourceHandler, wxObject);
 
 wxXmlResourceHandlerImplBase* wxXmlResourceHandler::GetImpl() const
 {

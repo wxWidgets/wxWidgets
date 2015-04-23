@@ -414,7 +414,7 @@ wxEND_EVENT_TABLE()
 // MyApp
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 // The `main program' equivalent, creating the windows and returning the
 // main frame

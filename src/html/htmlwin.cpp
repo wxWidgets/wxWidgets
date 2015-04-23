@@ -39,8 +39,8 @@
 //#define DEBUG_HTML_SELECTION
 
 // HTML events:
-IMPLEMENT_DYNAMIC_CLASS(wxHtmlLinkEvent, wxCommandEvent)
-IMPLEMENT_DYNAMIC_CLASS(wxHtmlCellEvent, wxCommandEvent)
+wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlLinkEvent, wxCommandEvent);
+wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlCellEvent, wxCommandEvent);
 
 wxDEFINE_EVENT( wxEVT_HTML_CELL_CLICKED, wxHtmlCellEvent );
 wxDEFINE_EVENT( wxEVT_HTML_CELL_HOVER, wxHtmlCellEvent );
@@ -1683,7 +1683,7 @@ void wxHtmlWindow::SelectAll()
 
 
 
-IMPLEMENT_ABSTRACT_CLASS(wxHtmlProcessor,wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxHtmlProcessor, wxObject);
 
 wxBEGIN_PROPERTIES_TABLE(wxHtmlWindow)
 /*
@@ -1700,9 +1700,9 @@ wxEND_HANDLERS_TABLE()
 
 wxCONSTRUCTOR_5( wxHtmlWindow , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
 
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxHtmlWindow, wxScrolledWindow,"wx/html/htmlwin.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxHtmlWindow, wxScrolledWindow, "wx/html/htmlwin.h");
 
-BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
+wxBEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_SIZE(wxHtmlWindow::OnSize)
     EVT_LEFT_DOWN(wxHtmlWindow::OnMouseDown)
     EVT_LEFT_UP(wxHtmlWindow::OnMouseUp)
@@ -1719,7 +1719,7 @@ BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_MENU(wxID_COPY, wxHtmlWindow::OnCopy)
     EVT_TEXT_COPY(wxID_ANY, wxHtmlWindow::OnClipboardEvent)
 #endif // wxUSE_CLIPBOARD
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 //-----------------------------------------------------------------------------
 // wxHtmlWindowInterface implementation in wxHtmlWindow
@@ -1847,14 +1847,14 @@ void wxHtmlWindow::SetDefaultHTMLCursor(HTMLCursor type, const wxCursor& cursor)
 
 class wxHtmlWinModule: public wxModule
 {
-DECLARE_DYNAMIC_CLASS(wxHtmlWinModule)
+    wxDECLARE_DYNAMIC_CLASS(wxHtmlWinModule);
 public:
     wxHtmlWinModule() : wxModule() {}
     bool OnInit() wxOVERRIDE { return true; }
     void OnExit() wxOVERRIDE { wxHtmlWindow::CleanUpStatics(); }
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxHtmlWinModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlWinModule, wxModule);
 
 
 // This hack forces the linker to always link in m_* files

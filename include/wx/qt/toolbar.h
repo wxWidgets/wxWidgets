@@ -71,7 +71,7 @@ private:
 
     QToolBar *m_qtToolBar;
 
-    DECLARE_DYNAMIC_CLASS(wxToolBar)
+    wxDECLARE_DYNAMIC_CLASS(wxToolBar);
 };
 
 #endif // _WX_QT_TOOLBAR_H_

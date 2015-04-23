@@ -66,7 +66,7 @@ private:
     void DynamicRefTest();
 #endif
 
-    DECLARE_NO_COPY_CLASS(WeakRefTestCase)
+    wxDECLARE_NO_COPY_CLASS(WeakRefTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

@@ -187,8 +187,8 @@ protected:
     // currently pressed titlebar button
     long m_pressedButton;
 
-    DECLARE_DYNAMIC_CLASS(wxTopLevelWindow)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxTopLevelWindow);
+    wxDECLARE_EVENT_TABLE();
     WX_DECLARE_INPUT_CONSUMER()
 };
 

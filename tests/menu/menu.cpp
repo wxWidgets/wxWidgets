@@ -120,7 +120,7 @@ private:
     // The menu containing the item with MenuTestCase_Bar id.
     wxMenu* m_menuWithBar;
 
-    DECLARE_NO_COPY_CLASS(MenuTestCase)
+    wxDECLARE_NO_COPY_CLASS(MenuTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

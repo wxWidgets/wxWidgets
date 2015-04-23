@@ -27,7 +27,7 @@
 
 #include "wx/xml/xml.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxToolBarXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxToolBarXmlHandler, wxXmlResourceHandler);
 
 wxToolBarXmlHandler::wxToolBarXmlHandler()
 : wxXmlResourceHandler(), m_isInside(false), m_toolbar(NULL)

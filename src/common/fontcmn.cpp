@@ -97,7 +97,7 @@ wxENUM_MEMBER( wxFONTWEIGHT_LIGHT )
 wxENUM_MEMBER( wxFONTWEIGHT_BOLD )
 wxEND_ENUM( wxFontWeight )
 
-wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI(wxFont, wxGDIObject, "wx/font.h")
+wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI(wxFont, wxGDIObject, "wx/font.h");
 
 //WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxFont>)
 

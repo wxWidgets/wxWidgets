@@ -18,7 +18,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 class WXDLLIMPEXP_XRC wxMdiXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxMdiXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxMdiXmlHandler);
 
 public:
     wxMdiXmlHandler();

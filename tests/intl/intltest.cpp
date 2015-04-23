@@ -60,7 +60,7 @@ private:
 
     wxLocale *m_locale;
 
-    DECLARE_NO_COPY_CLASS(IntlTestCase)
+    wxDECLARE_NO_COPY_CLASS(IntlTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

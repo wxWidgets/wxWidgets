@@ -33,8 +33,8 @@
 // implementation
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxBufferedDC,wxMemoryDC)
-IMPLEMENT_ABSTRACT_CLASS(wxBufferedPaintDC,wxBufferedDC)
+wxIMPLEMENT_DYNAMIC_CLASS(wxBufferedDC, wxMemoryDC);
+wxIMPLEMENT_ABSTRACT_CLASS(wxBufferedPaintDC, wxBufferedDC);
 
 // ----------------------------------------------------------------------------
 // wxSharedDCBufferManager: helper class maintaining backing store bitmap
@@ -90,13 +90,13 @@ private:
     static wxBitmap *ms_buffer;
     static bool ms_usingSharedBuffer;
 
-    DECLARE_DYNAMIC_CLASS(wxSharedDCBufferManager)
+    wxDECLARE_DYNAMIC_CLASS(wxSharedDCBufferManager);
 };
 
 wxBitmap* wxSharedDCBufferManager::ms_buffer = NULL;
 bool wxSharedDCBufferManager::ms_usingSharedBuffer = false;
 
-IMPLEMENT_DYNAMIC_CLASS(wxSharedDCBufferManager, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxSharedDCBufferManager, wxModule);
 
 // ============================================================================
 // wxBufferedDC

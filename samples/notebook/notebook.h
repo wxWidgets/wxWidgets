@@ -29,7 +29,7 @@ public:
     bool OnInit() wxOVERRIDE;
 };
 
-DECLARE_APP(MyApp)
+wxDECLARE_APP(MyApp);
 
 
 class MyFrame : public wxFrame

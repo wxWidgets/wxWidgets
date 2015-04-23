@@ -38,7 +38,7 @@
     wxDEFINE_EVENT( wxEVT_POWER_SUSPEND_CANCEL, wxPowerEvent );
     wxDEFINE_EVENT( wxEVT_POWER_RESUME, wxPowerEvent );
 
-    IMPLEMENT_DYNAMIC_CLASS(wxPowerEvent, wxEvent)
+    wxIMPLEMENT_DYNAMIC_CLASS(wxPowerEvent, wxEvent);
 #endif
 
 // Provide stubs for systems without power resource management functions

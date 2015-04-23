@@ -53,7 +53,7 @@ public:
     int GetItemHeight() const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxCheckListBox)
+    wxDECLARE_DYNAMIC_CLASS(wxCheckListBox);
 };
 
 #endif   //__GTKCHECKLISTH__

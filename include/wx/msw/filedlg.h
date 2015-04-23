@@ -63,7 +63,7 @@ private:
     bool m_bMovedWindow;
     int m_centreDir;        // nothing to do if 0
 
-    DECLARE_DYNAMIC_CLASS(wxFileDialog)
+    wxDECLARE_DYNAMIC_CLASS(wxFileDialog);
     wxDECLARE_NO_COPY_CLASS(wxFileDialog);
 };
 

@@ -776,7 +776,7 @@ protected:
 #endif // wxUSE_PALETTE
 
 private:
-    DECLARE_ABSTRACT_CLASS(wxDCImpl)
+    wxDECLARE_ABSTRACT_CLASS(wxDCImpl);
 };
 
 
@@ -1373,7 +1373,7 @@ protected:
     wxDCImpl * const m_pimpl;
 
 private:
-    DECLARE_ABSTRACT_CLASS(wxDC)
+    wxDECLARE_ABSTRACT_CLASS(wxDC);
     wxDECLARE_NO_COPY_CLASS(wxDC);
 };
 

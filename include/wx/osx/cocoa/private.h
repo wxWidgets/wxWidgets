@@ -187,7 +187,7 @@ protected:
     // events, don't resend them
     bool m_hasEditor;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl);
 };
 
 DECLARE_WXCOCOA_OBJC_CLASS( wxNSWindow );
@@ -271,7 +271,7 @@ protected :
     CGWindowLevel   m_macWindowLevel;
     WXWindow        m_macWindow;
     void *          m_macFullScreenData ;
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowCocoaImpl)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowCocoaImpl);
 };
 
 DECLARE_WXCOCOA_OBJC_CLASS( wxNSButton );

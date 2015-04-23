@@ -23,7 +23,7 @@
 #include "wx/collpane.h"
 #include "wx/xrc/xh_collpane.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePaneXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePaneXmlHandler, wxXmlResourceHandler);
 
 wxCollapsiblePaneXmlHandler::wxCollapsiblePaneXmlHandler()
 : wxXmlResourceHandler(), m_isInside(false)

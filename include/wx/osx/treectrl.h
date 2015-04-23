@@ -61,7 +61,7 @@ enum {
 
 class WXDLLIMPEXP_CORE wxTreeItem: public wxObject
 {
-    DECLARE_DYNAMIC_CLASS(wxTreeItem)
+    wxDECLARE_DYNAMIC_CLASS(wxTreeItem);
 
 public:
 
@@ -208,7 +208,7 @@ protected:
     wxImageList* m_imageListNormal;
     wxImageList* m_imageListState;
 
-    DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
+    wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
 };
 
 /*
@@ -230,7 +230,7 @@ protected:
 
 class WXDLLIMPEXP_CORE wxTreeEvent: public wxCommandEvent
 {
-    DECLARE_DYNAMIC_CLASS(wxTreeEvent)
+    wxDECLARE_DYNAMIC_CLASS(wxTreeEvent);
 
 public:
     wxTreeEvent(wxEventType commandType = wxEVT_NULL, int id = 0);

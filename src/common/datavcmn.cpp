@@ -63,7 +63,7 @@ private:
     bool                    m_focusOnIdle;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 } // anonymous namespace
@@ -637,7 +637,7 @@ unsigned int wxDataViewVirtualListModel::GetChildren( const wxDataViewItem &WXUN
 // wxDataViewIconText
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxDataViewIconText,wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDataViewIconText,wxObject);
 
 IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxDataViewIconText, WXDLLIMPEXP_ADV)
 
@@ -645,7 +645,7 @@ IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxDataViewIconText, WXDLLIMPEXP_ADV)
 // wxDataViewRendererBase
 // ---------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewRendererBase, wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewRendererBase, wxObject);
 
 wxDataViewRendererBase::wxDataViewRendererBase( const wxString &varianttype,
                                                 wxDataViewCellMode WXUNUSED(mode),
@@ -952,12 +952,12 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
 // wxDataViewEditorCtrlEvtHandler
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxDataViewEditorCtrlEvtHandler, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(wxDataViewEditorCtrlEvtHandler, wxEvtHandler)
     EVT_CHAR           (wxDataViewEditorCtrlEvtHandler::OnChar)
     EVT_KILL_FOCUS     (wxDataViewEditorCtrlEvtHandler::OnKillFocus)
     EVT_IDLE           (wxDataViewEditorCtrlEvtHandler::OnIdle)
     EVT_TEXT_ENTER     (-1, wxDataViewEditorCtrlEvtHandler::OnTextEnter)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxDataViewEditorCtrlEvtHandler::OnIdle( wxIdleEvent &event )
 {
@@ -1030,7 +1030,7 @@ wxDataViewColumnBase::~wxDataViewColumnBase()
 // wxDataViewCtrlBase
 // ---------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewCtrlBase, wxControl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewCtrlBase, wxControl);
 
 wxDataViewCtrlBase::wxDataViewCtrlBase()
 {
@@ -1480,7 +1480,7 @@ void wxDataViewCtrlBase::StartEditor(const wxDataViewItem& item, unsigned int co
 // wxDataViewEvent
 // ---------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxDataViewEvent,wxNotifyEvent)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDataViewEvent,wxNotifyEvent);
 
 wxDEFINE_EVENT( wxEVT_DATAVIEW_SELECTION_CHANGED, wxDataViewEvent );
 
@@ -1887,11 +1887,11 @@ bool wxDataViewListStore::SetValueByRow( const wxVariant &value, unsigned int ro
 // wxDataViewListCtrl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxDataViewListCtrl,wxDataViewCtrl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDataViewListCtrl,wxDataViewCtrl);
 
-BEGIN_EVENT_TABLE(wxDataViewListCtrl,wxDataViewCtrl)
+wxBEGIN_EVENT_TABLE(wxDataViewListCtrl,wxDataViewCtrl)
    EVT_SIZE( wxDataViewListCtrl::OnSize )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxDataViewListCtrl::wxDataViewListCtrl()
 {
@@ -2413,13 +2413,13 @@ wxDataViewTreeStoreContainerNode *wxDataViewTreeStore::FindContainerNode( const 
 // wxDataViewTreeCtrl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxDataViewTreeCtrl,wxDataViewCtrl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDataViewTreeCtrl,wxDataViewCtrl);
 
-BEGIN_EVENT_TABLE(wxDataViewTreeCtrl,wxDataViewCtrl)
+wxBEGIN_EVENT_TABLE(wxDataViewTreeCtrl,wxDataViewCtrl)
    EVT_DATAVIEW_ITEM_EXPANDED(-1, wxDataViewTreeCtrl::OnExpanded)
    EVT_DATAVIEW_ITEM_COLLAPSED(-1, wxDataViewTreeCtrl::OnCollapsed)
    EVT_SIZE( wxDataViewTreeCtrl::OnSize )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool wxDataViewTreeCtrl::Create( wxWindow *parent, wxWindowID id,
            const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator )

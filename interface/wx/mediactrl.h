@@ -223,7 +223,7 @@ public:
     wxMediaCtrl::CreateControl which does the actual creation of the control,
     in cases where a custom control is not needed you may simply call wxControl::Create().
 
-    You need to make sure to use the @c DECLARE_CLASS and @c IMPLEMENT_CLASS macros.
+    You need to make sure to use the @c wxDECLARE_CLASS and @c wxIMPLEMENT_CLASS macros.
 
     The only real tricky part is that you need to make sure the file in compiled in,
     which if there are just backends in there will not happen and you may need to

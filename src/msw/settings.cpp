@@ -55,7 +55,7 @@ public:
     virtual void OnExit();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxSystemSettingsModule)
+    wxDECLARE_DYNAMIC_CLASS(wxSystemSettingsModule);
 };
 
 // ----------------------------------------------------------------------------
@@ -81,7 +81,7 @@ static wxFont *gs_fontDefault = NULL;
 // wxSystemSettingsModule
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxSystemSettingsModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxSystemSettingsModule, wxModule);
 
 bool wxSystemSettingsModule::OnInit()
 {

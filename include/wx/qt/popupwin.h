@@ -17,7 +17,7 @@ public:
 protected:
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPopupWindow)
+    wxDECLARE_DYNAMIC_CLASS(wxPopupWindow);
 };
 
 #endif // _WX_QT_POPUPWIN_H_

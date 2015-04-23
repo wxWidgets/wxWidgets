@@ -65,7 +65,7 @@ wxClassInfo* wxClassInfo::sm_first = NULL;
 wxHashTable* wxClassInfo::sm_classTable = NULL;
 
 // when using XTI, this method is already implemented inline inside
-// DECLARE_DYNAMIC_CLASS but otherwise we intentionally make this function
+// wxDECLARE_DYNAMIC_CLASS but otherwise we intentionally make this function
 // non-inline because this allows us to have a non-inline virtual function in
 // all wx classes and this solves linking problems for HP-UX native toolchain
 // and possibly others (we could make dtor non-inline as well but it's more
@@ -228,7 +228,7 @@ void wxClassInfo::Register()
         classTable = sm_classTable;
     }
 
-    // Using IMPLEMENT_DYNAMIC_CLASS() macro twice (which may happen if you
+    // Using wxIMPLEMENT_DYNAMIC_CLASS() macro twice (which may happen if you
     // link any object module twice mistakenly, or link twice against wx shared
     // library) will break this function because it will enter an infinite loop
     // and eventually die with "out of memory" - as this is quite hard to
@@ -236,7 +236,7 @@ void wxClassInfo::Register()
     wxASSERT_MSG( classTable->Get(m_className) == NULL,
         wxString::Format
         (
-            wxT("Class \"%s\" already in RTTI table - have you used IMPLEMENT_DYNAMIC_CLASS() multiple times or linked some object file twice)?"),
+            wxT("Class \"%s\" already in RTTI table - have you used wxIMPLEMENT_DYNAMIC_CLASS() multiple times or linked some object file twice)?"),
             m_className
         )
     );

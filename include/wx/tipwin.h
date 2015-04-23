@@ -85,7 +85,7 @@ private:
     wxTipWindow** m_windowPtr;
     wxRect m_rectBound;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
     friend class wxTipWindowView;
 

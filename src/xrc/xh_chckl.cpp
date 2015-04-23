@@ -26,7 +26,7 @@
 
 #include "wx/xml/xml.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxCheckListBoxXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxCheckListBoxXmlHandler, wxXmlResourceHandler);
 
 wxCheckListBoxXmlHandler::wxCheckListBoxXmlHandler()
 : wxXmlResourceHandler(), m_insideBox(false)

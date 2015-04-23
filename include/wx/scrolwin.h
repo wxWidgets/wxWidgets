@@ -471,7 +471,7 @@ public:
                      const wxString& name = wxPanelNameStr)
         : wxScrolled<wxPanel>(parent, winid, pos, size, style, name) {}
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxScrolledWindow)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxScrolledWindow);
 };
 
 typedef wxScrolled<wxWindow> wxScrolledCanvas;

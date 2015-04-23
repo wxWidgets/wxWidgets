@@ -1835,7 +1835,7 @@ wxgtk_renderer_editing_started( GtkCellRenderer *WXUNUSED(cell), GtkCellEditable
 }
 
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer, wxDataViewRendererBase)
+wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer, wxDataViewRendererBase);
 
 wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype, wxDataViewCellMode mode,
                                         int align ) :
@@ -2128,7 +2128,7 @@ bool GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
 
 } // anonymous namespace
 
-IMPLEMENT_CLASS(wxDataViewTextRenderer, wxDataViewRenderer)
+wxIMPLEMENT_CLASS(wxDataViewTextRenderer, wxDataViewRenderer);
 
 wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype, wxDataViewCellMode mode,
                                                 int align ) :
@@ -2229,7 +2229,7 @@ void SetPixbufProp(GtkCellRenderer *renderer, GdkPixbuf *pixbuf)
 
 } // anonymous namespace
 
-IMPLEMENT_CLASS(wxDataViewBitmapRenderer, wxDataViewRenderer)
+wxIMPLEMENT_CLASS(wxDataViewBitmapRenderer, wxDataViewRenderer);
 
 wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype, wxDataViewCellMode mode,
                                                     int align ) :
@@ -2307,7 +2307,7 @@ static void wxGtkToggleRendererToggledCallback( GtkCellRendererToggle *renderer,
     model->ChangeValue( value, item, model_col );
 }
 
-IMPLEMENT_CLASS(wxDataViewToggleRenderer, wxDataViewRenderer)
+wxIMPLEMENT_CLASS(wxDataViewToggleRenderer, wxDataViewRenderer);
 
 wxDataViewToggleRenderer::wxDataViewToggleRenderer( const wxString &varianttype,
                                                     wxDataViewCellMode mode, int align ) :
@@ -2398,7 +2398,7 @@ public:
 // wxDataViewCustomRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_CLASS(wxDataViewCustomRenderer, wxDataViewRenderer)
+wxIMPLEMENT_CLASS(wxDataViewCustomRenderer, wxDataViewRenderer);
 
 wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
                                                     wxDataViewCellMode mode,
@@ -2521,7 +2521,7 @@ wxDC *wxDataViewCustomRenderer::GetDC()
 // wxDataViewProgressRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_CLASS(wxDataViewProgressRenderer, wxDataViewCustomRenderer)
+wxIMPLEMENT_CLASS(wxDataViewProgressRenderer, wxDataViewCustomRenderer);
 
 wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
     const wxString &varianttype, wxDataViewCellMode mode, int align ) :
@@ -2756,7 +2756,7 @@ bool wxDataViewChoiceByIndexRenderer::GetValue( wxVariant &value ) const
 // wxDataViewIconTextRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_CLASS(wxDataViewIconTextRenderer, wxDataViewCustomRenderer)
+wxIMPLEMENT_CLASS(wxDataViewIconTextRenderer, wxDataViewCustomRenderer);
 
 wxDataViewIconTextRenderer::wxDataViewIconTextRenderer
                             (
@@ -4450,7 +4450,7 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
     return FALSE;
 }
 
-IMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl, wxDataViewCtrlBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl, wxDataViewCtrlBase);
 
 wxDataViewCtrl::~wxDataViewCtrl()
 {

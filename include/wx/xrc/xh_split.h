@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxSplitterWindowXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxSplitterWindowXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxSplitterWindowXmlHandler);
 
 public:
     wxSplitterWindowXmlHandler();

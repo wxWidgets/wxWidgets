@@ -61,7 +61,7 @@ private:
 
     wxSelectionStore *m_store;
 
-    DECLARE_NO_COPY_CLASS(SelStoreTestCase)
+    wxDECLARE_NO_COPY_CLASS(SelStoreTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

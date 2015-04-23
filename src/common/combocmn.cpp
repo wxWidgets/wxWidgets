@@ -72,7 +72,7 @@ wxFLAGS_MEMBER(wxCB_DROPDOWN)
 
 wxEND_FLAGS( wxComboBoxStyle )
 
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxComboBox, wxControl, "wx/combobox.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxComboBox, wxControl, "wx/combobox.h");
 
 wxBEGIN_PROPERTIES_TABLE(wxComboBox)
 wxEVENT_PROPERTY( Select, wxEVT_COMBOBOX, wxCommandEvent )
@@ -353,10 +353,10 @@ protected:
     wxComboCtrlBase*     m_combo;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(wxComboFrameEventHandler, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(wxComboFrameEventHandler, wxEvtHandler)
     EVT_IDLE(wxComboFrameEventHandler::OnIdle)
     EVT_LEFT_DOWN(wxComboFrameEventHandler::OnMouseEvent)
     EVT_RIGHT_DOWN(wxComboFrameEventHandler::OnMouseEvent)
@@ -366,7 +366,7 @@ BEGIN_EVENT_TABLE(wxComboFrameEventHandler, wxEvtHandler)
     EVT_MENU_OPEN(wxComboFrameEventHandler::OnMenuEvent)
     EVT_ACTIVATE(wxComboFrameEventHandler::OnActivate)
     EVT_CLOSE(wxComboFrameEventHandler::OnClose)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxComboFrameEventHandler::wxComboFrameEventHandler( wxComboCtrlBase* combo )
     : wxEvtHandler()
@@ -520,7 +520,7 @@ void wxComboPopupWindow::OnDismiss()
 {
     wxComboCtrlBase* combo = (wxComboCtrlBase*) GetParent();
     wxASSERT_MSG( wxDynamicCast(combo, wxComboCtrlBase),
-                  wxT("parent might not be wxComboCtrl, but check IMPLEMENT_DYNAMIC_CLASS(2) macro for correctness") );
+                  wxT("parent might not be wxComboCtrl, but check wxIMPLEMENT_DYNAMIC_CLASS(2) macro for correctness") );
 
     combo->OnPopupDismiss(true);
 }
@@ -551,11 +551,11 @@ public:
 private:
     wxComboCtrlBase*    m_combo;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
-BEGIN_EVENT_TABLE(wxComboPopupWindowEvtHandler, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(wxComboPopupWindowEvtHandler, wxEvtHandler)
     EVT_KEY_DOWN(wxComboPopupWindowEvtHandler::OnKeyEvent)
     EVT_KEY_UP(wxComboPopupWindowEvtHandler::OnKeyEvent)
     EVT_CHAR(wxComboPopupWindowEvtHandler::OnKeyEvent)
@@ -563,7 +563,7 @@ BEGIN_EVENT_TABLE(wxComboPopupWindowEvtHandler, wxEvtHandler)
     EVT_ACTIVATE(wxComboPopupWindowEvtHandler::OnActivate)
 #endif
     EVT_SIZE(wxComboPopupWindowEvtHandler::OnSizeEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 void wxComboPopupWindowEvtHandler::OnSizeEvent( wxSizeEvent& WXUNUSED(event) )
@@ -727,17 +727,17 @@ protected:
     wxComboCtrlBase*   m_combo;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
-BEGIN_EVENT_TABLE(wxComboBoxExtraInputHandler, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(wxComboBoxExtraInputHandler, wxEvtHandler)
     EVT_KEY_DOWN(wxComboBoxExtraInputHandler::OnKey)
     EVT_KEY_UP(wxComboBoxExtraInputHandler::OnKey)
     EVT_CHAR(wxComboBoxExtraInputHandler::OnKey)
     EVT_SET_FOCUS(wxComboBoxExtraInputHandler::OnFocus)
     EVT_KILL_FOCUS(wxComboBoxExtraInputHandler::OnFocus)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 void wxComboBoxExtraInputHandler::OnKey(wxKeyEvent& event)
@@ -821,13 +821,13 @@ protected:
     bool                m_blockEventsToPopup;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
-BEGIN_EVENT_TABLE(wxComboPopupEvtHandler, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(wxComboPopupEvtHandler, wxEvtHandler)
     EVT_MOUSE_EVENTS(wxComboPopupEvtHandler::OnMouseEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 void wxComboPopupEvtHandler::OnMouseEvent( wxMouseEvent& event )
@@ -960,7 +960,7 @@ public:
 // ----------------------------------------------------------------------------
 
 
-BEGIN_EVENT_TABLE(wxComboCtrlBase, wxControl)
+wxBEGIN_EVENT_TABLE(wxComboCtrlBase, wxControl)
     EVT_SIZE(wxComboCtrlBase::OnSizeEvent)
     EVT_SET_FOCUS(wxComboCtrlBase::OnFocusEvent)
     EVT_KILL_FOCUS(wxComboCtrlBase::OnFocusEvent)
@@ -969,10 +969,10 @@ BEGIN_EVENT_TABLE(wxComboCtrlBase, wxControl)
     EVT_KEY_DOWN(wxComboCtrlBase::OnKeyEvent)
     EVT_CHAR(wxComboCtrlBase::OnCharEvent)
     EVT_SYS_COLOUR_CHANGED(wxComboCtrlBase::OnSysColourChanged)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
-IMPLEMENT_ABSTRACT_CLASS(wxComboCtrlBase, wxControl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxComboCtrlBase, wxControl);
 
 void wxComboCtrlBase::Init()
 {

@@ -48,8 +48,8 @@ private:
     wxPoint m_pos;
     bool m_created;
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxGenericMessageDialog)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS(wxGenericMessageDialog);
 };
 
 #endif // _WX_GENERIC_MSGDLGG_H_

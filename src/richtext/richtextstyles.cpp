@@ -30,11 +30,11 @@
 
 #include "wx/richtext/richtextctrl.h"
 
-IMPLEMENT_CLASS(wxRichTextStyleDefinition, wxObject)
-IMPLEMENT_CLASS(wxRichTextCharacterStyleDefinition, wxRichTextStyleDefinition)
-IMPLEMENT_CLASS(wxRichTextParagraphStyleDefinition, wxRichTextStyleDefinition)
-IMPLEMENT_CLASS(wxRichTextListStyleDefinition, wxRichTextParagraphStyleDefinition)
-IMPLEMENT_CLASS(wxRichTextBoxStyleDefinition, wxRichTextStyleDefinition)
+wxIMPLEMENT_CLASS(wxRichTextStyleDefinition, wxObject);
+wxIMPLEMENT_CLASS(wxRichTextCharacterStyleDefinition, wxRichTextStyleDefinition);
+wxIMPLEMENT_CLASS(wxRichTextParagraphStyleDefinition, wxRichTextStyleDefinition);
+wxIMPLEMENT_CLASS(wxRichTextListStyleDefinition, wxRichTextParagraphStyleDefinition);
+wxIMPLEMENT_CLASS(wxRichTextBoxStyleDefinition, wxRichTextStyleDefinition);
 
 /*!
  * A definition
@@ -290,7 +290,7 @@ bool wxRichTextListStyleDefinition::IsNumbered(int i) const
  * The style manager
  */
 
-IMPLEMENT_CLASS(wxRichTextStyleSheet, wxObject)
+wxIMPLEMENT_CLASS(wxRichTextStyleSheet, wxObject);
 
 wxRichTextStyleSheet::~wxRichTextStyleSheet()
 {
@@ -554,13 +554,13 @@ static wxString wxGetRichTextStyle(const wxString& style)
  * wxRichTextStyleListBox: a listbox to display styles.
  */
 
-IMPLEMENT_CLASS(wxRichTextStyleListBox, wxHtmlListBox)
+wxIMPLEMENT_CLASS(wxRichTextStyleListBox, wxHtmlListBox);
 
-BEGIN_EVENT_TABLE(wxRichTextStyleListBox, wxHtmlListBox)
+wxBEGIN_EVENT_TABLE(wxRichTextStyleListBox, wxHtmlListBox)
     EVT_LEFT_DOWN(wxRichTextStyleListBox::OnLeftDown)
     EVT_LEFT_DCLICK(wxRichTextStyleListBox::OnLeftDoubleClick)
     EVT_IDLE(wxRichTextStyleListBox::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxRichTextStyleListBox::wxRichTextStyleListBox(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     const wxSize& size, long style)
@@ -1017,12 +1017,12 @@ void wxRichTextStyleListBox::ApplyStyle(int item)
  * switch shown style types
  */
 
-IMPLEMENT_CLASS(wxRichTextStyleListCtrl, wxControl)
+wxIMPLEMENT_CLASS(wxRichTextStyleListCtrl, wxControl);
 
-BEGIN_EVENT_TABLE(wxRichTextStyleListCtrl, wxControl)
+wxBEGIN_EVENT_TABLE(wxRichTextStyleListCtrl, wxControl)
     EVT_CHOICE(wxID_ANY, wxRichTextStyleListCtrl::OnChooseType)
     EVT_SIZE(wxRichTextStyleListCtrl::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxRichTextStyleListCtrl::wxRichTextStyleListCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pos,
     const wxSize& size, long style)
@@ -1230,10 +1230,10 @@ void wxRichTextStyleListCtrl::UpdateStyles()
  */
 
 
-BEGIN_EVENT_TABLE(wxRichTextStyleComboPopup, wxRichTextStyleListBox)
+wxBEGIN_EVENT_TABLE(wxRichTextStyleComboPopup, wxRichTextStyleListBox)
     EVT_MOTION(wxRichTextStyleComboPopup::OnMouseMove)
     EVT_LEFT_DOWN(wxRichTextStyleComboPopup::OnMouseClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool wxRichTextStyleComboPopup::Create( wxWindow* parent )
 {
@@ -1300,11 +1300,11 @@ void wxRichTextStyleComboPopup::OnMouseClick(wxMouseEvent& WXUNUSED(event))
  * A combo for applying styles.
  */
 
-IMPLEMENT_CLASS(wxRichTextStyleComboCtrl, wxComboCtrl)
+wxIMPLEMENT_CLASS(wxRichTextStyleComboCtrl, wxComboCtrl);
 
-BEGIN_EVENT_TABLE(wxRichTextStyleComboCtrl, wxComboCtrl)
+wxBEGIN_EVENT_TABLE(wxRichTextStyleComboCtrl, wxComboCtrl)
     EVT_IDLE(wxRichTextStyleComboCtrl::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool wxRichTextStyleComboCtrl::Create(wxWindow* parent, wxWindowID id, const wxPoint& pos,
         const wxSize& size, long style)

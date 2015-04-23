@@ -676,7 +676,7 @@ wxFileOffset wxStreamBuffer::Tell() const
 // wxStreamBase
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxStreamBase, wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxStreamBase, wxObject);
 
 wxStreamBase::wxStreamBase()
 {
@@ -714,7 +714,7 @@ wxFileOffset wxStreamBase::OnSysTell() const
 // wxInputStream
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxInputStream, wxStreamBase)
+wxIMPLEMENT_ABSTRACT_CLASS(wxInputStream, wxStreamBase);
 
 wxInputStream::wxInputStream()
 {
@@ -1037,7 +1037,7 @@ wxFileOffset wxInputStream::TellI() const
 // wxOutputStream
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxOutputStream, wxStreamBase)
+wxIMPLEMENT_ABSTRACT_CLASS(wxOutputStream, wxStreamBase);
 
 wxOutputStream::wxOutputStream()
 {
@@ -1121,7 +1121,7 @@ void wxOutputStream::Sync()
 // wxCountingOutputStream
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxCountingOutputStream, wxOutputStream)
+wxIMPLEMENT_DYNAMIC_CLASS(wxCountingOutputStream, wxOutputStream);
 
 wxCountingOutputStream::wxCountingOutputStream ()
 {
@@ -1186,7 +1186,7 @@ wxFileOffset wxCountingOutputStream::OnSysTell() const
 // wxFilterInputStream
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxFilterInputStream, wxInputStream)
+wxIMPLEMENT_ABSTRACT_CLASS(wxFilterInputStream, wxInputStream);
 
 wxFilterInputStream::wxFilterInputStream()
  :  m_parent_i_stream(NULL),
@@ -1216,7 +1216,7 @@ wxFilterInputStream::~wxFilterInputStream()
 // wxFilterOutputStream
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxFilterOutputStream, wxOutputStream)
+wxIMPLEMENT_ABSTRACT_CLASS(wxFilterOutputStream, wxOutputStream);
 
 wxFilterOutputStream::wxFilterOutputStream()
  :  m_parent_o_stream(NULL),
@@ -1254,7 +1254,7 @@ wxFilterOutputStream::~wxFilterOutputStream()
 // wxFilterClassFactoryBase
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxFilterClassFactoryBase, wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxFilterClassFactoryBase, wxObject);
 
 wxString wxFilterClassFactoryBase::PopExtension(const wxString& location) const
 {
@@ -1290,7 +1290,7 @@ bool wxFilterClassFactoryBase::CanHandle(const wxString& protocol,
 // wxFilterClassFactory
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxFilterClassFactory, wxFilterClassFactoryBase)
+wxIMPLEMENT_ABSTRACT_CLASS(wxFilterClassFactory, wxFilterClassFactoryBase);
 
 wxFilterClassFactory *wxFilterClassFactory::sm_first = NULL;
 

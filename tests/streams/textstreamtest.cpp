@@ -79,7 +79,7 @@ private:
 #endif // wxUSE_UNICODE
 
 
-    DECLARE_NO_COPY_CLASS(TextStreamTestCase)
+    wxDECLARE_NO_COPY_CLASS(TextStreamTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

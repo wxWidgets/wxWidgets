@@ -47,8 +47,8 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextColourSwatchCtrl;
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextBackgroundPage: public wxRichTextDialogPage
 {
-    DECLARE_DYNAMIC_CLASS( wxRichTextBackgroundPage )
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxRichTextBackgroundPage);
+    wxDECLARE_EVENT_TABLE();
     DECLARE_HELP_PROVISION()
 
 public:

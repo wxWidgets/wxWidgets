@@ -72,8 +72,8 @@ private:
     virtual void AddChildGTK(wxWindowGTK* child) wxOVERRIDE;
     GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
 
-    DECLARE_DYNAMIC_CLASS(wxCollapsiblePane)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxCollapsiblePane);
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // _WX_COLLAPSABLE_PANEL_H_GTK_

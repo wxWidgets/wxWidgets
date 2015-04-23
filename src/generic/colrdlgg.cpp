@@ -37,9 +37,9 @@
 #include "wx/colourdata.h"
 #include "wx/generic/colrdlgg.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericColourDialog, wxDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxGenericColourDialog, wxDialog);
 
-BEGIN_EVENT_TABLE(wxGenericColourDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(wxGenericColourDialog, wxDialog)
     EVT_BUTTON(wxID_ADD_CUSTOM, wxGenericColourDialog::OnAddCustom)
 #if wxUSE_SLIDER
     EVT_SLIDER(wxID_RED_SLIDER, wxGenericColourDialog::OnRedSlider)
@@ -49,7 +49,7 @@ BEGIN_EVENT_TABLE(wxGenericColourDialog, wxDialog)
     EVT_PAINT(wxGenericColourDialog::OnPaint)
     EVT_MOUSE_EVENTS(wxGenericColourDialog::OnMouseEvent)
     EVT_CLOSE(wxGenericColourDialog::OnCloseWindow)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 /*

@@ -155,7 +155,7 @@ class wxBitmapRefData: public wxGDIRefData
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS( wxBitmap, wxObject )
+wxIMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxObject);
 
 #define M_PIXDATA (*((wxBitmapRefData *)m_refData)->m_qtPixmap)
 
@@ -460,7 +460,7 @@ bool wxBitmap::HasAlpha() const
 // wxMask
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS( wxMask, wxObject )
+wxIMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject);
 
 wxMask::wxMask()
 {

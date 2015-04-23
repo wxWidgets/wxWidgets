@@ -194,8 +194,8 @@ private:
     friend WXDLLIMPEXP_CORE class wxControlRenderer; // for geometry methods
     friend class wxStdScrollBarInputHandler; // for geometry methods
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxScrollBar)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS(wxScrollBar);
 };
 
 // ----------------------------------------------------------------------------

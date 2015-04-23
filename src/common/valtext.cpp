@@ -56,10 +56,10 @@ static bool wxIsNumeric(const wxString& val)
 // wxTextValidator
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator)
-BEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
+wxIMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator);
+wxBEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
     EVT_CHAR(wxTextValidator::OnChar)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxTextValidator::wxTextValidator(long style, wxString *val)
 {

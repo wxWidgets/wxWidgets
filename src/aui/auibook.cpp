@@ -55,9 +55,9 @@ wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_TAB_MIDDLE_DOWN, wxAuiNotebookEvent);
 wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_TAB_RIGHT_UP, wxAuiNotebookEvent);
 wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_TAB_RIGHT_DOWN, wxAuiNotebookEvent);
 
-IMPLEMENT_CLASS(wxAuiNotebook, wxControl)
-IMPLEMENT_CLASS(wxAuiTabCtrl, wxControl)
-IMPLEMENT_DYNAMIC_CLASS(wxAuiNotebookEvent, wxBookCtrlEvent)
+wxIMPLEMENT_CLASS(wxAuiNotebook, wxControl);
+wxIMPLEMENT_CLASS(wxAuiTabCtrl, wxControl);
+wxIMPLEMENT_DYNAMIC_CLASS(wxAuiNotebookEvent, wxBookCtrlEvent);
 
 
 // -- wxAuiTabContainer class implementation --
@@ -970,7 +970,7 @@ void wxAuiTabContainer::DoShowHide()
 
 
 
-BEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
+wxBEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_PAINT(wxAuiTabCtrl::OnPaint)
     EVT_ERASE_BACKGROUND(wxAuiTabCtrl::OnEraseBackground)
     EVT_SIZE(wxAuiTabCtrl::OnSize)
@@ -988,7 +988,7 @@ BEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_KILL_FOCUS(wxAuiTabCtrl::OnKillFocus)
     EVT_CHAR(wxAuiTabCtrl::OnChar)
     EVT_MOUSE_CAPTURE_LOST(wxAuiTabCtrl::OnCaptureLost)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 wxAuiTabCtrl::wxAuiTabCtrl(wxWindow* parent,
@@ -1620,7 +1620,7 @@ const int wxAuiBaseTabCtrlId = 5380;
 #define EVT_AUI_RANGE(id1, id2, event, func) \
     wx__DECLARE_EVT2(event, id1, id2, wxAuiNotebookEventHandler(func))
 
-BEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
+wxBEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
     EVT_SIZE(wxAuiNotebook::OnSize)
     EVT_CHILD_FOCUS(wxAuiNotebook::OnChildFocusNotebook)
     EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
@@ -1657,7 +1657,7 @@ BEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
                       wxEVT_AUINOTEBOOK_BG_DCLICK,
                       wxAuiNotebook::OnTabBgDClick)
     EVT_NAVIGATION_KEY(wxAuiNotebook::OnNavigationKeyNotebook)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxAuiNotebook::Init()
 {

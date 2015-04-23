@@ -271,7 +271,7 @@ WX_DEFINE_ARRAY_PTR(WidgetsPage *, ArrayWidgetsPage);
 // misc macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_APP(WidgetsApp)
+wxIMPLEMENT_APP(WidgetsApp);
 
 // ----------------------------------------------------------------------------
 // event tables

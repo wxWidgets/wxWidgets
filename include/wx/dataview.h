@@ -755,7 +755,7 @@ private:
     int m_indent ;
 
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCtrlBase)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCtrlBase);
 };
 
 // ----------------------------------------------------------------------------
@@ -879,7 +879,7 @@ protected:
 #endif // wxUSE_DRAG_AND_DROP
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewEvent);
 };
 
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_SELECTION_CHANGED, wxDataViewEvent );
@@ -1117,8 +1117,8 @@ public:
     void OnSize( wxSizeEvent &event );
 
 private:
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewListCtrl)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewListCtrl);
 };
 
 //-----------------------------------------------------------------------------
@@ -1342,8 +1342,8 @@ public:
     void OnSize( wxSizeEvent &event );
 
 private:
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewTreeCtrl)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewTreeCtrl);
 };
 
 // old wxEVT_COMMAND_* constants

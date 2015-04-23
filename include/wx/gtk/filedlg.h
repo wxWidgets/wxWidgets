@@ -76,8 +76,8 @@ private:
 
     wxGtkFileChooser    m_fc;
 
-    DECLARE_DYNAMIC_CLASS(wxFileDialog)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxFileDialog);
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // _WX_GTKFILEDLG_H_

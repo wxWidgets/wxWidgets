@@ -1872,9 +1872,9 @@ private:
     unsigned int m_freezeCount;
 
 
-    DECLARE_ABSTRACT_CLASS(wxWindowBase)
+    wxDECLARE_ABSTRACT_CLASS(wxWindowBase);
     wxDECLARE_NO_COPY_CLASS(wxWindowBase);
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 

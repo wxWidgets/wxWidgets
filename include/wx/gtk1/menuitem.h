@@ -70,7 +70,7 @@ private:
     GtkWidget *m_menuItem;  // GtkMenuItem
     GtkWidget* m_labelWidget; // Label widget
 
-    DECLARE_DYNAMIC_CLASS(wxMenuItem)
+    wxDECLARE_DYNAMIC_CLASS(wxMenuItem);
 };
 
 #endif

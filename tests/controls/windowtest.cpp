@@ -74,7 +74,7 @@ private:
 
     wxWindow *m_window;
 
-    DECLARE_NO_COPY_CLASS(WindowTestCase)
+    wxDECLARE_NO_COPY_CLASS(WindowTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

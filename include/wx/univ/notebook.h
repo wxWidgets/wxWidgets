@@ -244,7 +244,7 @@ protected:
     // the padding
     wxSize m_sizePad;
 
-    DECLARE_DYNAMIC_CLASS(wxNotebook)
+    wxDECLARE_DYNAMIC_CLASS(wxNotebook);
 };
 
 #endif // _WX_UNIV_NOTEBOOK_H_

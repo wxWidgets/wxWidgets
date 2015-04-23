@@ -2895,7 +2895,7 @@ static struct wxXRCStaticCleanup
 
 class wxXmlResourceModule: public wxModule
 {
-DECLARE_DYNAMIC_CLASS(wxXmlResourceModule)
+    wxDECLARE_DYNAMIC_CLASS(wxXmlResourceModule);
 public:
     wxXmlResourceModule() {}
     bool OnInit() wxOVERRIDE
@@ -2920,7 +2920,7 @@ public:
     }
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxXmlResourceModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxXmlResourceModule, wxModule);
 
 
 // When wxXml is loaded dynamically after the application is already running

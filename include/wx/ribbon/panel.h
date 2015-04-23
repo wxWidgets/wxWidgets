@@ -134,8 +134,8 @@ protected:
     wxRect m_ext_button_rect;
 
 #ifndef SWIG
-    DECLARE_CLASS(wxRibbonPanel)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_CLASS(wxRibbonPanel);
+    wxDECLARE_EVENT_TABLE();
 #endif
 };
 
@@ -166,7 +166,7 @@ protected:
 
 #ifndef SWIG
 private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRibbonPanelEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRibbonPanelEvent);
 #endif
 };
 

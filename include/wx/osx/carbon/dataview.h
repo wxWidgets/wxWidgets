@@ -315,7 +315,7 @@ private:
 //
 // wxWidget internal stuff
 //
-    DECLARE_ABSTRACT_CLASS(wxMacDataBrowserTableViewControl)
+    wxDECLARE_ABSTRACT_CLASS(wxMacDataBrowserTableViewControl);
 };
 
 // ============================================================================

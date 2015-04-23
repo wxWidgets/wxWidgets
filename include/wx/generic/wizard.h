@@ -161,8 +161,8 @@ protected:
 
     friend class wxWizardSizer;
 
-    DECLARE_DYNAMIC_CLASS(wxWizard)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxWizard);
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxWizard);
 };
 

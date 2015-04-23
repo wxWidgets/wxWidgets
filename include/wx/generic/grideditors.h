@@ -41,8 +41,8 @@ private:
     // a combobox within a set focus event.
     bool                m_inSetFocus;
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxGridCellEditorEvtHandler)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS(wxGridCellEditorEvtHandler);
     wxDECLARE_NO_COPY_CLASS(wxGridCellEditorEvtHandler);
 };
 

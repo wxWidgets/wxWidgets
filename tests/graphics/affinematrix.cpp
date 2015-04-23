@@ -61,7 +61,7 @@ private:
     wxBitmap m_bmpOrig;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
-    DECLARE_NO_COPY_CLASS(AffineTransformTestCase)
+    wxDECLARE_NO_COPY_CLASS(AffineTransformTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

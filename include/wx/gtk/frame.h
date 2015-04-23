@@ -74,7 +74,7 @@ private:
 
     long m_fsSaveFlag;
 
-    DECLARE_DYNAMIC_CLASS(wxFrame)
+    wxDECLARE_DYNAMIC_CLASS(wxFrame);
 };
 
 #endif // _WX_GTK_FRAME_H_

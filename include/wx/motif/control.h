@@ -18,7 +18,7 @@
 // General item class
 class WXDLLIMPEXP_CORE wxControl: public wxControlBase
 {
-    DECLARE_ABSTRACT_CLASS(wxControl)
+    wxDECLARE_ABSTRACT_CLASS(wxControl);
 
 public:
     wxControl();
@@ -68,7 +68,7 @@ protected:
     // Motif: prevent callbacks being called while in SetValue
     bool m_inSetValue;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // _WX_CONTROL_H_

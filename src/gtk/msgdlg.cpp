@@ -39,7 +39,7 @@
     #include <hildon/hildon.h>
 #endif // wxUSE_LIBHILDON2
 
-IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
+wxIMPLEMENT_CLASS(wxMessageDialog, wxDialog);
 
 wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  const wxString& message,

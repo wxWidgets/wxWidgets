@@ -61,20 +61,20 @@ protected:
     wxRibbonPage* m_sibling;
     long m_flags;
 
-    DECLARE_CLASS(wxRibbonPageScrollButton)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_CLASS(wxRibbonPageScrollButton);
+    wxDECLARE_EVENT_TABLE();
 };
 
-IMPLEMENT_CLASS(wxRibbonPageScrollButton, wxRibbonControl)
+wxIMPLEMENT_CLASS(wxRibbonPageScrollButton, wxRibbonControl);
 
-BEGIN_EVENT_TABLE(wxRibbonPageScrollButton, wxRibbonControl)
+wxBEGIN_EVENT_TABLE(wxRibbonPageScrollButton, wxRibbonControl)
     EVT_ENTER_WINDOW(wxRibbonPageScrollButton::OnMouseEnter)
     EVT_ERASE_BACKGROUND(wxRibbonPageScrollButton::OnEraseBackground)
     EVT_LEAVE_WINDOW(wxRibbonPageScrollButton::OnMouseLeave)
     EVT_LEFT_DOWN(wxRibbonPageScrollButton::OnMouseDown)
     EVT_LEFT_UP(wxRibbonPageScrollButton::OnMouseUp)
     EVT_PAINT(wxRibbonPageScrollButton::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxRibbonPageScrollButton::wxRibbonPageScrollButton(wxRibbonPage* sibling,
                  wxWindowID id,
@@ -146,13 +146,13 @@ void wxRibbonPageScrollButton::OnMouseUp(wxMouseEvent& WXUNUSED(evt))
     }
 }
 
-IMPLEMENT_CLASS(wxRibbonPage, wxRibbonControl)
+wxIMPLEMENT_CLASS(wxRibbonPage, wxRibbonControl);
 
-BEGIN_EVENT_TABLE(wxRibbonPage, wxRibbonControl)
+wxBEGIN_EVENT_TABLE(wxRibbonPage, wxRibbonControl)
     EVT_ERASE_BACKGROUND(wxRibbonPage::OnEraseBackground)
     EVT_PAINT(wxRibbonPage::OnPaint)
     EVT_SIZE(wxRibbonPage::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxRibbonPage::wxRibbonPage()
 {

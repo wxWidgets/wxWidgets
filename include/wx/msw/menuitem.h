@@ -150,7 +150,7 @@ private:
     // Give wxMenu access to our MSWMustUseOwnerDrawn() and GetHBitmapForMenu().
     friend class wxMenu;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMenuItem)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxMenuItem);
 };
 
 #endif  //_MENUITEM_H

@@ -25,7 +25,7 @@
     #include "wx/dialog.h" // to get wxDEFAULT_DIALOG_STYLE
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxFrameXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFrameXmlHandler, wxXmlResourceHandler);
 
 wxFrameXmlHandler::wxFrameXmlHandler() : wxXmlResourceHandler()
 {

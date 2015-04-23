@@ -80,7 +80,7 @@ wxEND_EVENT_TABLE()
 // application
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()

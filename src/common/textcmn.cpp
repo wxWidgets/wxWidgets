@@ -99,7 +99,7 @@ wxFLAGS_MEMBER(wxTE_CHARWRAP)
 wxFLAGS_MEMBER(wxTE_WORDWRAP)
 wxEND_FLAGS( wxTextCtrlStyle )
 
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxTextCtrl, wxControl, "wx/textctrl.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxTextCtrl, wxControl, "wx/textctrl.h");
 
 wxBEGIN_PROPERTIES_TABLE(wxTextCtrl)
 wxEVENT_PROPERTY( TextUpdated, wxEVT_TEXT, wxCommandEvent )
@@ -122,14 +122,14 @@ wxCONSTRUCTOR_6( wxTextCtrl, wxWindow*, Parent, wxWindowID, Id, \
                 long, WindowStyle)
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxTextUrlEvent, wxCommandEvent)
+wxIMPLEMENT_DYNAMIC_CLASS(wxTextUrlEvent, wxCommandEvent);
 
 wxDEFINE_EVENT( wxEVT_TEXT, wxCommandEvent );
 wxDEFINE_EVENT( wxEVT_TEXT_ENTER, wxCommandEvent );
 wxDEFINE_EVENT( wxEVT_TEXT_URL, wxTextUrlEvent );
 wxDEFINE_EVENT( wxEVT_TEXT_MAXLEN, wxCommandEvent );
 
-IMPLEMENT_ABSTRACT_CLASS(wxTextCtrlBase, wxControl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxTextCtrlBase, wxControl);
 
 // ============================================================================
 // wxTextAttr implementation

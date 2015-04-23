@@ -79,8 +79,8 @@ private:
     // is modal right now?
     bool m_isShowingModal;
 
-    DECLARE_DYNAMIC_CLASS(wxDialog)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxDialog);
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif

@@ -189,7 +189,7 @@ bool HasAppKit_10_6()
 
 @end
 
-IMPLEMENT_CLASS(wxFileDialog, wxFileDialogBase)
+wxIMPLEMENT_CLASS(wxFileDialog, wxFileDialogBase);
 
 void wxFileDialog::Init()
 {

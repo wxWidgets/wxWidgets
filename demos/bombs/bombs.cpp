@@ -32,7 +32,7 @@
 #   include "bombs.xpm"
 #endif
 
-IMPLEMENT_APP(BombsApp)
+wxIMPLEMENT_APP(BombsApp);
 
 #ifdef __WXWINCE__
     STDAPI_(__int64) CeGetRandomSeed();
@@ -54,7 +54,7 @@ bool BombsApp::OnInit()
     return true;
 }
 
-BEGIN_EVENT_TABLE(BombsFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(BombsFrame, wxFrame)
     EVT_MENU(wxID_NEW,           BombsFrame::OnNewGame)
     EVT_MENU(bombsID_EASY,       BombsFrame::OnEasyGame)
     EVT_MENU(bombsID_MEDIUM,     BombsFrame::OnMediumGame)
@@ -62,7 +62,7 @@ BEGIN_EVENT_TABLE(BombsFrame, wxFrame)
     EVT_MENU(bombsID_EASYCORNER, BombsFrame::OnEasyCorner)
     EVT_MENU(wxID_EXIT,          BombsFrame::OnExit)
     EVT_MENU(wxID_ABOUT,         BombsFrame::OnAbout)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 BombsFrame::BombsFrame(BombsGame *game)
     : wxFrame(NULL, wxID_ANY, wxT("wxBombs"), wxDefaultPosition,
@@ -216,11 +216,11 @@ void BombsFrame::OnEasyCorner(wxCommandEvent& WXUNUSED(event))
     NewGame(m_lastLevel, true);
 }
 
-BEGIN_EVENT_TABLE(BombsCanvas, wxPanel)
+wxBEGIN_EVENT_TABLE(BombsCanvas, wxPanel)
     EVT_PAINT(BombsCanvas::OnPaint)
     EVT_MOUSE_EVENTS(BombsCanvas::OnMouseEvent)
     EVT_CHAR(BombsCanvas::OnChar)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 BombsCanvas::BombsCanvas(wxFrame *parent, BombsGame *game)
     : wxPanel(parent, wxID_ANY)

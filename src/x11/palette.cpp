@@ -53,8 +53,8 @@ not the functionality that wxPalette::Create() aims to provide.
 #endif
 #include "wx/x11/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxPalette, wxGDIObject)
-IMPLEMENT_DYNAMIC_CLASS(wxXPalette, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPalette, wxGDIObject);
+wxIMPLEMENT_DYNAMIC_CLASS(wxXPalette, wxObject);
 
 /*
 * Palette

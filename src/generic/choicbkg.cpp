@@ -39,14 +39,14 @@
 // event table
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxChoicebook, wxBookCtrlBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxChoicebook, wxBookCtrlBase);
 
 wxDEFINE_EVENT( wxEVT_CHOICEBOOK_PAGE_CHANGING, wxBookCtrlEvent );
 wxDEFINE_EVENT( wxEVT_CHOICEBOOK_PAGE_CHANGED,  wxBookCtrlEvent );
 
-BEGIN_EVENT_TABLE(wxChoicebook, wxBookCtrlBase)
+wxBEGIN_EVENT_TABLE(wxChoicebook, wxBookCtrlBase)
     EVT_CHOICE(wxID_ANY, wxChoicebook::OnChoiceSelected)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // wxChoicebook implementation

@@ -59,14 +59,14 @@
 // wxRTTI macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxSockAddress, wxObject)
-IMPLEMENT_ABSTRACT_CLASS(wxIPaddress, wxSockAddress)
-IMPLEMENT_DYNAMIC_CLASS(wxIPV4address, wxIPaddress)
+wxIMPLEMENT_ABSTRACT_CLASS(wxSockAddress, wxObject);
+wxIMPLEMENT_ABSTRACT_CLASS(wxIPaddress, wxSockAddress);
+wxIMPLEMENT_DYNAMIC_CLASS(wxIPV4address, wxIPaddress);
 #if wxUSE_IPV6
-IMPLEMENT_DYNAMIC_CLASS(wxIPV6address, wxIPaddress)
+wxIMPLEMENT_DYNAMIC_CLASS(wxIPV6address, wxIPaddress);
 #endif
 #if defined(__UNIX__) && !defined(__WINDOWS__) && !defined(__WINE__)
-IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
+wxIMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress);
 #endif
 
 // ============================================================================

@@ -140,4 +140,4 @@ int MainApp::OnExit()
 }
 
 
-IMPLEMENT_APP(MainApp)
+wxIMPLEMENT_APP(MainApp);

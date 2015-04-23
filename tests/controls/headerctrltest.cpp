@@ -47,7 +47,7 @@ private:
 
     wxHeaderCtrlSimple *m_header;
 
-    DECLARE_NO_COPY_CLASS(HeaderCtrlTestCase)
+    wxDECLARE_NO_COPY_CLASS(HeaderCtrlTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

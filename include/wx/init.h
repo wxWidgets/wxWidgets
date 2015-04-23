@@ -21,7 +21,7 @@
 // do common initialization, return true if ok (in this case wxEntryCleanup
 // must be called later), otherwise the program can't use wxWidgets at all
 //
-// this function also creates wxTheApp as a side effect, if IMPLEMENT_APP
+// this function also creates wxTheApp as a side effect, if wxIMPLEMENT_APP
 // hadn't been used a dummy default application object is created
 //
 // note that the parameters may be modified, this is why we pass them by

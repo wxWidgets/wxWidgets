@@ -142,7 +142,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_SOCKET(SOCKET_ID,  MyFrame::OnSocketEvent)
 wxEND_EVENT_TABLE()
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 
 // ==========================================================================

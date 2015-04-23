@@ -24,7 +24,7 @@
 
 #include "wx/dirctrl.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericDirCtrlXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxGenericDirCtrlXmlHandler, wxXmlResourceHandler);
 
 wxGenericDirCtrlXmlHandler::wxGenericDirCtrlXmlHandler()
 : wxXmlResourceHandler()

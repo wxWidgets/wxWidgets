@@ -135,7 +135,7 @@ private:
 
     wxSize m_area;
     
-    DECLARE_DYNAMIC_CLASS(wxBufferedDC)
+    wxDECLARE_DYNAMIC_CLASS(wxBufferedDC);
     wxDECLARE_NO_COPY_CLASS(wxBufferedDC);
 };
 
@@ -195,7 +195,7 @@ protected:
 private:
     wxPaintDC m_paintdc;
 
-    DECLARE_ABSTRACT_CLASS(wxBufferedPaintDC)
+    wxDECLARE_ABSTRACT_CLASS(wxBufferedPaintDC);
     wxDECLARE_NO_COPY_CLASS(wxBufferedPaintDC);
 };
 

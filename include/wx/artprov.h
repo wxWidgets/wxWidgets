@@ -236,7 +236,7 @@ private:
     // art resources cache (so that CreateXXX is not called that often):
     static wxArtProviderCache *sm_cache;
 
-    DECLARE_ABSTRACT_CLASS(wxArtProvider)
+    wxDECLARE_ABSTRACT_CLASS(wxArtProvider);
 };
 
 

@@ -44,7 +44,7 @@ private:
     wxDECLARE_EVENT_TABLE();
 };
 
-DECLARE_APP(MyApp)
+wxDECLARE_APP(MyApp);
 
 // Define a new frame type
 class MyFrame: public wxFrame

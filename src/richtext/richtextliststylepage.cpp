@@ -17,13 +17,13 @@
  * wxRichTextListStylePage type definition
  */
 
-IMPLEMENT_DYNAMIC_CLASS( wxRichTextListStylePage, wxRichTextDialogPage )
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextListStylePage, wxRichTextDialogPage);
 
 /*!
  * wxRichTextListStylePage event table definition
  */
 
-BEGIN_EVENT_TABLE( wxRichTextListStylePage, wxRichTextDialogPage )
+wxBEGIN_EVENT_TABLE(wxRichTextListStylePage, wxRichTextDialogPage)
 
 ////@begin wxRichTextListStylePage event table entries
     EVT_SPINCTRL( ID_RICHTEXTLISTSTYLEPAGE_LEVEL, wxRichTextListStylePage::OnLevelUpdated )
@@ -90,7 +90,7 @@ BEGIN_EVENT_TABLE( wxRichTextListStylePage, wxRichTextDialogPage )
 
 ////@end wxRichTextListStylePage event table entries
 
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_HELP_PROVISION(wxRichTextListStylePage)
 

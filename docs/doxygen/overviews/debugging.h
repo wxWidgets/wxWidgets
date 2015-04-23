@@ -38,9 +38,9 @@ be running on are unusually constrained (notice that when asserts are disabled
 their condition is not even evaluated so the only run-time cost is a single
 condition check and the extra space taken by the asserts in the code).
 
-This automatic deactivation of debugging code is done by IMPLEMENT_APP() macro
-so if you don't use you may need to explicitly call wxDISABLE_DEBUG_SUPPORT()
-yourself.
+This automatic deactivation of debugging code is done by wxIMPLEMENT_APP()
+macro so if you don't use you may need to explicitly call
+wxDISABLE_DEBUG_SUPPORT() yourself.
 
 Also notice that it is possible to build your own application with a different
 value of wxDEBUG_LEVEL than the one which was used for wxWidgets itself. E.g.

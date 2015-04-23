@@ -66,7 +66,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxPrinterDCImpl, wxMSWDCImpl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxPrinterDCImpl, wxMSWDCImpl);
 
 // ============================================================================
 // implementation

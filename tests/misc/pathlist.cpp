@@ -34,7 +34,7 @@ private:
 
     void FindValidPath();
 
-    DECLARE_NO_COPY_CLASS(PathListTestCase)
+    wxDECLARE_NO_COPY_CLASS(PathListTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

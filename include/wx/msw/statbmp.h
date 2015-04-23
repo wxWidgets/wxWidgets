@@ -96,7 +96,7 @@ private:
     void DeleteCurrentHandleIfNeeded();
 
 
-    DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
+    wxDECLARE_DYNAMIC_CLASS(wxStaticBitmap);
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxStaticBitmap);
 };

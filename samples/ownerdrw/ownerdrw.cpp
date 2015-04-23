@@ -84,7 +84,7 @@ wxBEGIN_EVENT_TABLE(OwnerDrawnFrame, wxFrame)
                 OwnerDrawnFrame::OnListboxDblClick)
 wxEND_EVENT_TABLE()
 
-IMPLEMENT_APP(OwnerDrawnApp)
+wxIMPLEMENT_APP(OwnerDrawnApp);
 
 // init our app: create windows
 bool OwnerDrawnApp::OnInit(void)

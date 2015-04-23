@@ -60,7 +60,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
+wxIMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow);
 
 // ============================================================================
 // wxControl implementation

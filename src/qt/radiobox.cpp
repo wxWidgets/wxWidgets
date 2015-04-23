@@ -52,7 +52,7 @@ void wxQtButtonGroup::buttonClicked(int index) {
 }
 
 
-IMPLEMENT_DYNAMIC_CLASS( wxRadioBox, wxControl )
+wxIMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl);
 
 
 wxRadioBox::wxRadioBox()

@@ -167,7 +167,7 @@ wxCreateDevNames(const wxString& driverName,
     return hDev;
 }
 
-IMPLEMENT_CLASS(wxWindowsPrintNativeData, wxPrintNativeDataBase)
+wxIMPLEMENT_CLASS(wxWindowsPrintNativeData, wxPrintNativeDataBase);
 
 wxWindowsPrintNativeData::wxWindowsPrintNativeData()
 {
@@ -700,7 +700,7 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
 // wxPrintDialog
 // ---------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxWindowsPrintDialog, wxPrintDialogBase)
+wxIMPLEMENT_CLASS(wxWindowsPrintDialog, wxPrintDialogBase);
 
 wxWindowsPrintDialog::wxWindowsPrintDialog(wxWindow *p, wxPrintDialogData* data)
 {
@@ -929,7 +929,7 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
 // wxWidnowsPageSetupDialog
 // ---------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxWindowsPageSetupDialog, wxPageSetupDialogBase)
+wxIMPLEMENT_CLASS(wxWindowsPageSetupDialog, wxPageSetupDialogBase);
 
 wxWindowsPageSetupDialog::wxWindowsPageSetupDialog()
 {

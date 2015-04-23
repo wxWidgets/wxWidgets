@@ -23,7 +23,7 @@
 
 #include "wx/xml/xml.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxSimpleHtmlListBoxXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxSimpleHtmlListBoxXmlHandler, wxXmlResourceHandler);
 
 wxSimpleHtmlListBoxXmlHandler::wxSimpleHtmlListBoxXmlHandler()
 : wxXmlResourceHandler(), m_insideBox(false)

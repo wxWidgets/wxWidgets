@@ -128,7 +128,7 @@ protected:
     virtual wxObjectRefData* CreateRefData() const wxOVERRIDE;
     virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const wxOVERRIDE;
 
-    DECLARE_DYNAMIC_CLASS(wxGraphicsObject)
+    wxDECLARE_DYNAMIC_CLASS(wxGraphicsObject);
 };
 
 class WXDLLIMPEXP_CORE wxGraphicsPen : public wxGraphicsObject
@@ -137,7 +137,7 @@ public:
     wxGraphicsPen() {}
     virtual ~wxGraphicsPen() {}
 private:
-    DECLARE_DYNAMIC_CLASS(wxGraphicsPen)
+    wxDECLARE_DYNAMIC_CLASS(wxGraphicsPen);
 };
 
 extern WXDLLIMPEXP_DATA_CORE(wxGraphicsPen) wxNullGraphicsPen;
@@ -148,7 +148,7 @@ public:
     wxGraphicsBrush() {}
     virtual ~wxGraphicsBrush() {}
 private:
-    DECLARE_DYNAMIC_CLASS(wxGraphicsBrush)
+    wxDECLARE_DYNAMIC_CLASS(wxGraphicsBrush);
 };
 
 extern WXDLLIMPEXP_DATA_CORE(wxGraphicsBrush) wxNullGraphicsBrush;
@@ -159,7 +159,7 @@ public:
     wxGraphicsFont() {}
     virtual ~wxGraphicsFont() {}
 private:
-    DECLARE_DYNAMIC_CLASS(wxGraphicsFont)
+    wxDECLARE_DYNAMIC_CLASS(wxGraphicsFont);
 };
 
 extern WXDLLIMPEXP_DATA_CORE(wxGraphicsFont) wxNullGraphicsFont;
@@ -185,7 +185,7 @@ public:
     { return (wxGraphicsBitmapData*) GetRefData(); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGraphicsBitmap)
+    wxDECLARE_DYNAMIC_CLASS(wxGraphicsBitmap);
 };
 
 extern WXDLLIMPEXP_DATA_CORE(wxGraphicsBitmap) wxNullGraphicsBitmap;
@@ -251,7 +251,7 @@ public:
     { return (wxGraphicsMatrixData*) GetRefData(); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGraphicsMatrix)
+    wxDECLARE_DYNAMIC_CLASS(wxGraphicsMatrix);
 };
 
 extern WXDLLIMPEXP_DATA_CORE(wxGraphicsMatrix) wxNullGraphicsMatrix;
@@ -337,7 +337,7 @@ public:
     { return (wxGraphicsPathData*) GetRefData(); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGraphicsPath)
+    wxDECLARE_DYNAMIC_CLASS(wxGraphicsPath);
 };
 
 extern WXDLLIMPEXP_DATA_CORE(wxGraphicsPath) wxNullGraphicsPath;
@@ -741,7 +741,7 @@ protected:
                                          const wxGraphicsBrush& backgroundBrush);
 
     wxDECLARE_NO_COPY_CLASS(wxGraphicsContext);
-    DECLARE_ABSTRACT_CLASS(wxGraphicsContext)
+    wxDECLARE_ABSTRACT_CLASS(wxGraphicsContext);
 };
 
 #if 0
@@ -774,7 +774,7 @@ private:
     wxGraphicsMatrix* m_matrix;
     wxGraphicsPath* m_path;
 
-    DECLARE_DYNAMIC_CLASS(wxGraphicsFigure)
+    wxDECLARE_DYNAMIC_CLASS(wxGraphicsFigure);
 };
 
 #endif
@@ -887,7 +887,7 @@ public:
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxGraphicsRenderer);
-    DECLARE_ABSTRACT_CLASS(wxGraphicsRenderer)
+    wxDECLARE_ABSTRACT_CLASS(wxGraphicsRenderer);
 };
 
 

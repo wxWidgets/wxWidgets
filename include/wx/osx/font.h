@@ -184,7 +184,7 @@ protected:
 
 private:
 
-    DECLARE_DYNAMIC_CLASS(wxFont)
+    wxDECLARE_DYNAMIC_CLASS(wxFont);
 };
 
 #endif // _WX_FONT_H_

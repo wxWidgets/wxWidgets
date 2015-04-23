@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxUnknownWidgetXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxUnknownWidgetXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxUnknownWidgetXmlHandler);
 
 public:
     wxUnknownWidgetXmlHandler();

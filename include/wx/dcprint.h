@@ -34,7 +34,7 @@ protected:
     wxPrinterDC(wxDCImpl *impl) : wxDC(impl) { }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPrinterDC)
+    wxDECLARE_DYNAMIC_CLASS(wxPrinterDC);
 };
 
 #endif // wxUSE_PRINTING_ARCHITECTURE

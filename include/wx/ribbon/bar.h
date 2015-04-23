@@ -75,7 +75,7 @@ protected:
 
 #ifndef SWIG
 private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRibbonBarEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRibbonBarEvent);
 #endif
 };
 
@@ -215,8 +215,8 @@ protected:
     wxRibbonDisplayMode m_ribbon_state;
 
 #ifndef SWIG
-    DECLARE_CLASS(wxRibbonBar)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_CLASS(wxRibbonBar);
+    wxDECLARE_EVENT_TABLE();
 #endif
 };
 

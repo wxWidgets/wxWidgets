@@ -36,11 +36,11 @@
 #include "wx/html/helpctrl.h"
 #include "wx/artprov.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpDialog, wxDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpDialog, wxDialog);
 
-BEGIN_EVENT_TABLE(wxHtmlHelpDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(wxHtmlHelpDialog, wxDialog)
     EVT_CLOSE(wxHtmlHelpDialog::OnCloseWindow)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxHtmlHelpDialog::wxHtmlHelpDialog(wxWindow* parent, wxWindowID id, const wxString& title,
                                  int style, wxHtmlHelpData* data)

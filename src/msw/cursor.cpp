@@ -78,7 +78,7 @@ private:
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject);
 
 // ----------------------------------------------------------------------------
 // globals

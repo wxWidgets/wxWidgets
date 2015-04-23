@@ -22,7 +22,7 @@
    #include "wx/stattext.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticTextXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxStaticTextXmlHandler, wxXmlResourceHandler);
 
 wxStaticTextXmlHandler::wxStaticTextXmlHandler()
 : wxXmlResourceHandler()

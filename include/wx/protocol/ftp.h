@@ -163,7 +163,7 @@ protected:
     friend class wxInputFTPStream;
     friend class wxOutputFTPStream;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxFTP)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxFTP);
     DECLARE_PROTOCOL(wxFTP)
 };
 

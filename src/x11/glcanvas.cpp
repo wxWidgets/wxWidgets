@@ -39,7 +39,7 @@
 // implementation
 // ============================================================================
 
-IMPLEMENT_CLASS(wxGLCanvas, wxWindow)
+wxIMPLEMENT_CLASS(wxGLCanvas, wxWindow);
 
 wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        wxWindowID id,

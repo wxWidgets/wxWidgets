@@ -298,9 +298,9 @@ private:
     WX_FORWARD_TO_SCROLL_HELPER()
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxDataViewCtrl)
+    wxDECLARE_DYNAMIC_CLASS(wxDataViewCtrl);
     wxDECLARE_NO_COPY_CLASS(wxDataViewCtrl);
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 

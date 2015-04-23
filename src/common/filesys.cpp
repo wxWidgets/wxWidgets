@@ -49,7 +49,7 @@ const wxString& wxFSFile::GetMimeType() const
 // wxFileSystemHandler
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxFileSystemHandler, wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxFileSystemHandler, wxObject);
 
 
 /* static */
@@ -293,8 +293,8 @@ wxString wxLocalFSHandler::FindNext()
 // wxFileSystem
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFileSystem, wxObject)
-IMPLEMENT_ABSTRACT_CLASS(wxFSFile, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFileSystem, wxObject);
+wxIMPLEMENT_ABSTRACT_CLASS(wxFSFile, wxObject);
 
 
 wxList wxFileSystem::m_Handlers;
@@ -726,7 +726,7 @@ wxString wxFileSystem::FileNameToURL(const wxFileName& filename)
 
 class wxFileSystemModule : public wxModule
 {
-    DECLARE_DYNAMIC_CLASS(wxFileSystemModule)
+    wxDECLARE_DYNAMIC_CLASS(wxFileSystemModule);
 
     public:
         wxFileSystemModule() :
@@ -753,7 +753,7 @@ class wxFileSystemModule : public wxModule
 
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxFileSystemModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFileSystemModule, wxModule);
 
 //// wxFSInputStream
 

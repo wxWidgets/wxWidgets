@@ -47,8 +47,8 @@ class wxRichTextCtrl;
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextIndentsSpacingPage: public wxRichTextDialogPage
 {
-    DECLARE_DYNAMIC_CLASS( wxRichTextIndentsSpacingPage )
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxRichTextIndentsSpacingPage);
+    wxDECLARE_EVENT_TABLE();
     DECLARE_HELP_PROVISION()
 
 public:

@@ -53,7 +53,7 @@ public:
     GdkBitmap *GetBitmap() const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxMask)
+    wxDECLARE_DYNAMIC_CLASS(wxMask);
 };
 
 //-----------------------------------------------------------------------------
@@ -147,7 +147,7 @@ private:
     friend class wxBitmapHandler;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxBitmap)
+    wxDECLARE_DYNAMIC_CLASS(wxBitmap);
 };
 
 

@@ -135,7 +135,7 @@ protected:
 private:
     void Init();
 
-    DECLARE_DYNAMIC_CLASS( wxGtkFileCtrl )
+    wxDECLARE_DYNAMIC_CLASS(wxGtkFileCtrl);
 };
 
 #endif // wxUSE_FILECTRL

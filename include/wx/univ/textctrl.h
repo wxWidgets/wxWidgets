@@ -526,8 +526,8 @@ private:
     // the object to which we delegate our undo/redo implementation
     wxTextCtrlCommandProcessor *m_cmdProcessor;
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxTextCtrl)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS(wxTextCtrl);
 
     friend class wxWrappedLineData;
 };

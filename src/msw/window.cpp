@@ -347,15 +347,15 @@ void wxGetCursorPosMSW(POINT* pt)
 // in wxUniv/MSW this class is abstract because it doesn't have DoPopupMenu()
 // method
 #ifdef __WXUNIVERSAL__
-    IMPLEMENT_ABSTRACT_CLASS(wxWindowMSW, wxWindowBase)
+    wxIMPLEMENT_ABSTRACT_CLASS(wxWindowMSW, wxWindowBase);
 #endif // __WXUNIVERSAL__
 
-BEGIN_EVENT_TABLE(wxWindowMSW, wxWindowBase)
+wxBEGIN_EVENT_TABLE(wxWindowMSW, wxWindowBase)
     EVT_SYS_COLOUR_CHANGED(wxWindowMSW::OnSysColourChanged)
 #ifdef __WXWINCE__
     EVT_INIT_DIALOG(wxWindowMSW::OnInitDialog)
 #endif
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ===========================================================================
 // implementation
@@ -7506,12 +7506,12 @@ public:
 private:
     static HHOOK ms_hMsgHookProc;
 
-    DECLARE_DYNAMIC_CLASS(wxIdleWakeUpModule)
+    wxDECLARE_DYNAMIC_CLASS(wxIdleWakeUpModule);
 };
 
 HHOOK wxIdleWakeUpModule::ms_hMsgHookProc = 0;
 
-IMPLEMENT_DYNAMIC_CLASS(wxIdleWakeUpModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxIdleWakeUpModule, wxModule);
 
 #endif // __WXWINCE__
 

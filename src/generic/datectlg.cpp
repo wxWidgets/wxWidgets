@@ -279,30 +279,30 @@ private:
     wxSize          m_useSize;
     wxString        m_format;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
-BEGIN_EVENT_TABLE(wxCalendarComboPopup, wxCalendarCtrl)
+wxBEGIN_EVENT_TABLE(wxCalendarComboPopup, wxCalendarCtrl)
     EVT_KEY_DOWN(wxCalendarComboPopup::OnCalKey)
     EVT_CALENDAR_SEL_CHANGED(wxID_ANY, wxCalendarComboPopup::OnSelChange)
     EVT_CALENDAR_PAGE_CHANGED(wxID_ANY, wxCalendarComboPopup::OnSelChange)
     EVT_CALENDAR(wxID_ANY, wxCalendarComboPopup::OnSelChange)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 // ============================================================================
 // wxDatePickerCtrlGeneric implementation
 // ============================================================================
 
-BEGIN_EVENT_TABLE(wxDatePickerCtrlGeneric, wxDatePickerCtrlBase)
+wxBEGIN_EVENT_TABLE(wxDatePickerCtrlGeneric, wxDatePickerCtrlBase)
     EVT_TEXT(wxID_ANY, wxDatePickerCtrlGeneric::OnText)
     EVT_SIZE(wxDatePickerCtrlGeneric::OnSize)
     EVT_SET_FOCUS(wxDatePickerCtrlGeneric::OnFocus)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #ifndef wxHAS_NATIVE_DATEPICKCTRL
-    IMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxControl)
+    wxIMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxControl);
 #endif
 
 // ----------------------------------------------------------------------------

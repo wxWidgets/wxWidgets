@@ -393,14 +393,14 @@ void wxFileData::MakeItem( wxListItem &item )
 //  wxFileListCtrl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFileListCtrl,wxListCtrl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFileListCtrl,wxListCtrl);
 
-BEGIN_EVENT_TABLE(wxFileListCtrl,wxListCtrl)
+wxBEGIN_EVENT_TABLE(wxFileListCtrl,wxListCtrl)
     EVT_LIST_DELETE_ITEM(wxID_ANY, wxFileListCtrl::OnListDeleteItem)
     EVT_LIST_DELETE_ALL_ITEMS(wxID_ANY, wxFileListCtrl::OnListDeleteAllItems)
     EVT_LIST_END_LABEL_EDIT(wxID_ANY, wxFileListCtrl::OnListEndLabelEdit)
     EVT_LIST_COL_CLICK(wxID_ANY, wxFileListCtrl::OnListColClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 wxFileListCtrl::wxFileListCtrl()
@@ -889,16 +889,16 @@ wxFileListCtrl::~wxFileListCtrl()
 // wxGenericFileCtrl implementation
 ///////////////////////////////////////////////////////////////////////////////
 
-IMPLEMENT_DYNAMIC_CLASS( wxGenericFileCtrl, wxNavigationEnabled<wxControl> )
+wxIMPLEMENT_DYNAMIC_CLASS( wxGenericFileCtrl, wxNavigationEnabled<wxControl> );
 
-BEGIN_EVENT_TABLE( wxGenericFileCtrl, wxNavigationEnabled<wxControl> )
+wxBEGIN_EVENT_TABLE( wxGenericFileCtrl, wxNavigationEnabled<wxControl> )
     EVT_LIST_ITEM_SELECTED( ID_FILELIST_CTRL, wxGenericFileCtrl::OnSelected )
     EVT_LIST_ITEM_ACTIVATED( ID_FILELIST_CTRL, wxGenericFileCtrl::OnActivated )
     EVT_CHOICE( ID_CHOICE, wxGenericFileCtrl::OnChoiceFilter )
     EVT_TEXT_ENTER( ID_TEXT, wxGenericFileCtrl::OnTextEnter )
     EVT_TEXT( ID_TEXT, wxGenericFileCtrl::OnTextChange )
     EVT_CHECKBOX( ID_CHECK, wxGenericFileCtrl::OnCheck )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool wxGenericFileCtrl::Create( wxWindow *parent,
                                 wxWindowID id,

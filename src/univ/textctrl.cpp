@@ -626,11 +626,11 @@ private:
 // implementation
 // ============================================================================
 
-BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
+wxBEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_CHAR(wxTextCtrl::OnChar)
 
     EVT_SIZE(wxTextCtrl::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // creation

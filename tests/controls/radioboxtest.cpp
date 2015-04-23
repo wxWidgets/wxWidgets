@@ -54,7 +54,7 @@ private:
 
     wxRadioBox* m_radio;
 
-    DECLARE_NO_COPY_CLASS(RadioBoxTestCase)
+    wxDECLARE_NO_COPY_CLASS(RadioBoxTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

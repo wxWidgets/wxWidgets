@@ -1500,10 +1500,10 @@ public:
     void OnExit();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxFontModule)
+    wxDECLARE_DYNAMIC_CLASS(wxFontModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxFontModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFontModule, wxModule);
 
 bool wxFontModule::OnInit()
 {

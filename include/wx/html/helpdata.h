@@ -161,7 +161,7 @@ private:
 
 class WXDLLIMPEXP_HTML wxHtmlHelpData : public wxObject
 {
-    DECLARE_DYNAMIC_CLASS(wxHtmlHelpData)
+    wxDECLARE_DYNAMIC_CLASS(wxHtmlHelpData);
     friend class wxHtmlSearchStatus;
 
 public:

@@ -132,7 +132,7 @@ protected:
     static wxArrayChoiceSpins ms_allChoiceSpins;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxChoice)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxChoice);
 };
 
 #endif // wxUSE_CHOICE

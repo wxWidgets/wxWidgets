@@ -26,8 +26,8 @@ public:
 private:
     Private* m_priv;
 
-    DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
-    DECLARE_NO_COPY_CLASS(wxTaskBarIcon)
+    wxDECLARE_DYNAMIC_CLASS(wxTaskBarIcon);
+    wxDECLARE_NO_COPY_CLASS(wxTaskBarIcon);
 };
 
 #endif // _WX_GTK_TASKBARICON_H_

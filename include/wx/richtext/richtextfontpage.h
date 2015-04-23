@@ -51,8 +51,8 @@ class wxRichTextFontPreviewCtrl;
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextFontPage: public wxRichTextDialogPage
 {
-    DECLARE_DYNAMIC_CLASS( wxRichTextFontPage )
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxRichTextFontPage);
+    wxDECLARE_EVENT_TABLE();
     DECLARE_HELP_PROVISION()
 
 public:

@@ -50,7 +50,7 @@ private:
 
     void RGBImage();
 
-    DECLARE_NO_COPY_CLASS(ImageRawTestCase)
+    wxDECLARE_NO_COPY_CLASS(ImageRawTestCase);
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION( ImageRawTestCase );

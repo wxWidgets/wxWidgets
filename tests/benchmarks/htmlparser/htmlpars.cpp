@@ -66,7 +66,7 @@ public:
 // wx28HtmlParser
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wx28HtmlParser,wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wx28HtmlParser, wxObject);
 
 wx28HtmlParser::wx28HtmlParser()
     : wxObject(), m_HandlersHash(wxKEY_STRING),
@@ -439,7 +439,7 @@ wxString wx28HtmlParser::GetInnerSource(const wx28HtmlTag& tag)
 // wx28HtmlTagHandler
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wx28HtmlTagHandler,wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wx28HtmlTagHandler, wxObject);
 
 void wx28HtmlTagHandler::ParseInnerSource(const wxString& source)
 {
@@ -455,7 +455,7 @@ void wx28HtmlTagHandler::ParseInnerSource(const wxString& source)
 // wx28HtmlEntitiesParser
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wx28HtmlEntitiesParser,wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wx28HtmlEntitiesParser,wxObject);
 
 wx28HtmlEntitiesParser::wx28HtmlEntitiesParser()
 #if !wxUSE_UNICODE
@@ -895,7 +895,7 @@ public:
 protected:
     virtual void AddText(const wxChar* WXUNUSED(txt)) {}
 
-    DECLARE_NO_COPY_CLASS(wxMetaTagParser)
+    wxDECLARE_NO_COPY_CLASS(wxMetaTagParser);
 };
 
 class wxMetaTagHandler : public wx28HtmlTagHandler
@@ -908,7 +908,7 @@ public:
 private:
     wxString *m_retval;
 
-    DECLARE_NO_COPY_CLASS(wxMetaTagHandler)
+    wxDECLARE_NO_COPY_CLASS(wxMetaTagHandler);
 };
 
 bool wxMetaTagHandler::HandleTag(const wx28HtmlTag& tag)

@@ -242,7 +242,7 @@ private:
 // wxQTMediaBackend
 // --------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend);
+wxIMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend);
 
 wxQTMediaBackend::wxQTMediaBackend() : 
     m_movie(nil), m_movieview(nil),
@@ -773,7 +773,7 @@ private:
 
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxAVMediaBackend, wxMediaBackend);
+wxIMPLEMENT_DYNAMIC_CLASS(wxAVMediaBackend, wxMediaBackend);
 
 wxAVMediaBackend::wxAVMediaBackend() :
 m_player(nil),

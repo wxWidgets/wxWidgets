@@ -104,7 +104,7 @@ private:
 
     wxGrid *m_grid;
 
-    DECLARE_NO_COPY_CLASS(GridTestCase)
+    wxDECLARE_NO_COPY_CLASS(GridTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

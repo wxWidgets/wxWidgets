@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxToggleButtonXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxToggleButtonXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxToggleButtonXmlHandler);
 
 public:
     wxToggleButtonXmlHandler();

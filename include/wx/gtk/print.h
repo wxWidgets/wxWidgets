@@ -107,7 +107,7 @@ private:
     bool                 m_showDialog;
     wxDC                *m_dc;
 
-    DECLARE_DYNAMIC_CLASS(wxGtkPrintDialog)
+    wxDECLARE_DYNAMIC_CLASS(wxGtkPrintDialog);
 };
 
 //----------------------------------------------------------------------------
@@ -142,7 +142,7 @@ private:
     wxPageSetupDialogData    m_pageDialogData;
     wxWindow                *m_parent;
 
-    DECLARE_DYNAMIC_CLASS(wxGtkPageSetupDialog)
+    wxDECLARE_DYNAMIC_CLASS(wxGtkPageSetupDialog);
 };
 
 //----------------------------------------------------------------------------
@@ -170,7 +170,7 @@ private:
     GtkPrintContext *m_gpc;
     wxDC            *m_dc;
 
-    DECLARE_DYNAMIC_CLASS(wxGtkPrinter)
+    wxDECLARE_DYNAMIC_CLASS(wxGtkPrinter);
     wxDECLARE_NO_COPY_CLASS(wxGtkPrinter);
 };
 
@@ -210,7 +210,7 @@ private:
     GtkPrintOperation   *m_job;
     GtkPrintContext     *m_context;
 
-    DECLARE_DYNAMIC_CLASS(wxGtkPrintNativeData)
+    wxDECLARE_DYNAMIC_CLASS(wxGtkPrintNativeData);
 };
 
 //-----------------------------------------------------------------------------
@@ -314,7 +314,7 @@ private:
     double                  m_PS2DEV;
     double                  m_DEV2PS;
 
-    DECLARE_DYNAMIC_CLASS(wxGtkPrinterDCImpl)
+    wxDECLARE_DYNAMIC_CLASS(wxGtkPrinterDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxGtkPrinterDCImpl);
 };
 
@@ -346,7 +346,7 @@ private:
     // resolution to use in DPI
     int m_resolution;
 
-    DECLARE_CLASS(wxGtkPrintPreview)
+    wxDECLARE_CLASS(wxGtkPrintPreview);
 };
 
 #endif // wxUSE_GTKPRINT

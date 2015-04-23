@@ -45,7 +45,7 @@ protected:
     wxCoord YLOG2DEVREL(wxCoord y) const    { return LogicalToDeviceYRel(y); }
 
 private:
-    DECLARE_CLASS(wxX11DCImpl)
+    wxDECLARE_CLASS(wxX11DCImpl);
 };
 
 #endif

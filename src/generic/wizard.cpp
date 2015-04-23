@@ -88,7 +88,7 @@ wxDEFINE_EVENT( wxEVT_WIZARD_FINISHED, wxWizardEvent );
 wxDEFINE_EVENT( wxEVT_WIZARD_HELP, wxWizardEvent );
 wxDEFINE_EVENT( wxEVT_WIZARD_PAGE_SHOWN, wxWizardEvent );
 
-BEGIN_EVENT_TABLE(wxWizard, wxDialog)
+wxBEGIN_EVENT_TABLE(wxWizard, wxDialog)
     EVT_BUTTON(wxID_CANCEL, wxWizard::OnCancel)
     EVT_BUTTON(wxID_BACKWARD, wxWizard::OnBackOrNext)
     EVT_BUTTON(wxID_FORWARD, wxWizard::OnBackOrNext)
@@ -99,9 +99,9 @@ BEGIN_EVENT_TABLE(wxWizard, wxDialog)
     EVT_WIZARD_CANCEL(wxID_ANY, wxWizard::OnWizEvent)
     EVT_WIZARD_FINISHED(wxID_ANY, wxWizard::OnWizEvent)
     EVT_WIZARD_HELP(wxID_ANY, wxWizard::OnWizEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxWizard, wxDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxWizard, wxDialog);
 
 /*
     TODO PROPERTIES :
@@ -110,9 +110,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxWizard, wxDialog)
         title
 */
 
-IMPLEMENT_ABSTRACT_CLASS(wxWizardPage, wxPanel)
-IMPLEMENT_DYNAMIC_CLASS(wxWizardPageSimple, wxWizardPage)
-IMPLEMENT_DYNAMIC_CLASS(wxWizardEvent, wxNotifyEvent)
+wxIMPLEMENT_ABSTRACT_CLASS(wxWizardPage, wxPanel);
+wxIMPLEMENT_DYNAMIC_CLASS(wxWizardPageSimple, wxWizardPage);
+wxIMPLEMENT_DYNAMIC_CLASS(wxWizardEvent, wxNotifyEvent);
 
 // ============================================================================
 // implementation

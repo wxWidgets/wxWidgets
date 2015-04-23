@@ -69,7 +69,7 @@ public:
     }
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxFileDialog, wxDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFileDialog, wxDialog);
 
 wxFileDialog::wxFileDialog(wxWindow *parent,
                            const wxString& message,
@@ -210,7 +210,7 @@ public:
         }
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxDirDialog, wxDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDirDialog, wxDialog);
 
 wxDirDialog::wxDirDialog(wxWindow *parent,
                          const wxString& message,

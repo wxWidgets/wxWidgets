@@ -129,17 +129,17 @@ public:
     void OnExit() { wxDDECleanUp(); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxDDEModule)
+    wxDECLARE_DYNAMIC_CLASS(wxDDEModule);
 };
 
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxDDEServer, wxServerBase)
-IMPLEMENT_DYNAMIC_CLASS(wxDDEClient, wxClientBase)
-IMPLEMENT_DYNAMIC_CLASS(wxDDEConnection, wxConnectionBase)
-IMPLEMENT_DYNAMIC_CLASS(wxDDEModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDDEServer, wxServerBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxDDEClient, wxClientBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxDDEConnection, wxConnectionBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxDDEModule, wxModule);
 
 // ============================================================================
 // implementation

@@ -2783,7 +2783,7 @@ void wxDataViewRenderer::OSXApplyEnabled(bool enabled)
     [GetNativeData()->GetItemCell() setEnabled:enabled];
 }
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer,wxDataViewRendererBase)
+wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer, wxDataViewRendererBase);
 
 // ---------------------------------------------------------
 // wxDataViewCustomRenderer
@@ -2818,7 +2818,7 @@ void wxDataViewCustomRenderer::OSXApplyAttr(const wxDataViewItemAttr& attr)
     // methods), then we should pass it on to wxDataViewRenderer here
 }
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomRenderer, wxDataViewRenderer)
+wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomRenderer, wxDataViewRenderer);
 
 // ---------------------------------------------------------
 // wxDataViewTextRenderer
@@ -2856,7 +2856,7 @@ wxDataViewTextRenderer::OSXOnCellChanged(NSObject *value,
     model->ChangeValue(valueText, item, col);
 }
 
-IMPLEMENT_CLASS(wxDataViewTextRenderer,wxDataViewRenderer)
+wxIMPLEMENT_CLASS(wxDataViewTextRenderer, wxDataViewRenderer);
 
 // ---------------------------------------------------------
 // wxDataViewBitmapRenderer
@@ -2890,7 +2890,7 @@ bool wxDataViewBitmapRenderer::MacRender()
     return true;
 }
 
-IMPLEMENT_CLASS(wxDataViewBitmapRenderer,wxDataViewRenderer)
+wxIMPLEMENT_CLASS(wxDataViewBitmapRenderer, wxDataViewRenderer);
 
 // -------------------------------------
 // wxDataViewChoiceRenderer
@@ -2945,7 +2945,7 @@ bool wxDataViewChoiceRenderer::MacRender()
     return true;
 }
 
-IMPLEMENT_CLASS(wxDataViewChoiceRenderer,wxDataViewRenderer)
+wxIMPLEMENT_CLASS(wxDataViewChoiceRenderer, wxDataViewRenderer);
 
 // ---------------------------------------------------------
 // wxDataViewDateRenderer
@@ -3036,7 +3036,7 @@ wxDataViewDateRenderer::OSXOnCellChanged(NSObject *value,
     model->ChangeValue(valueDate, item, col);
 }
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewDateRenderer,wxDataViewRenderer)
+wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewDateRenderer, wxDataViewRenderer);
 
 // ---------------------------------------------------------
 // wxDataViewIconTextRenderer
@@ -3086,7 +3086,7 @@ wxDataViewIconTextRenderer::OSXOnCellChanged(NSObject *value,
     model->ChangeValue(valueIconText, item, col);
 }
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewIconTextRenderer,wxDataViewRenderer)
+wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewIconTextRenderer,wxDataViewRenderer);
 
 // ---------------------------------------------------------
 // wxDataViewToggleRenderer
@@ -3126,7 +3126,7 @@ wxDataViewToggleRenderer::OSXOnCellChanged(NSObject *value,
     model->ChangeValue(valueToggle, item, col);
 }
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleRenderer,wxDataViewRenderer)
+wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleRenderer, wxDataViewRenderer);
 
 // ---------------------------------------------------------
 // wxDataViewProgressRenderer
@@ -3167,7 +3167,7 @@ wxDataViewProgressRenderer::OSXOnCellChanged(NSObject *value,
     model->ChangeValue(valueProgress, item, col);
 }
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressRenderer,wxDataViewRenderer)
+wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressRenderer, wxDataViewRenderer);
 
 // ---------------------------------------------------------
 // wxDataViewColumn

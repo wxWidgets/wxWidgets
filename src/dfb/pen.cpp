@@ -58,7 +58,7 @@ public:
 
 #define M_PENDATA ((wxPenRefData *)m_refData)
 
-IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject);
 
 wxPen::wxPen(const wxColour &colour, int width, wxPenStyle style)
 {

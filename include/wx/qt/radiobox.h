@@ -89,7 +89,7 @@ private:
     // Autofit layout for buttons (either vert. or horiz.):
     QBoxLayout *m_qtBoxLayout;
 
-    DECLARE_DYNAMIC_CLASS(wxRadioBox)
+    wxDECLARE_DYNAMIC_CLASS(wxRadioBox);
 };
 
 #endif // _WX_QT_RADIOBOX_H_

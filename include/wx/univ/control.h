@@ -95,8 +95,8 @@ private:
     wxString   m_label;
     int        m_indexAccel;
 
-    DECLARE_DYNAMIC_CLASS(wxControl)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxControl);
+    wxDECLARE_EVENT_TABLE();
     WX_DECLARE_INPUT_CONSUMER()
 };
 

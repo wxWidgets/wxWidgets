@@ -46,7 +46,7 @@
 // macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericDragImage, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxGenericDragImage, wxObject);
 
 // ============================================================================
 // implementation

@@ -242,8 +242,8 @@ private:
 
     WX_FORWARD_TO_SCROLL_HELPER()
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxGenericListCtrl)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS(wxGenericListCtrl);
 };
 
 #if (!defined(__WXMSW__) || defined(__WXUNIVERSAL__)) && (!(defined(__WXMAC__) && wxOSX_USE_CARBON) || defined(__WXUNIVERSAL__ ))
@@ -254,7 +254,7 @@ private:
 
 class WXDLLIMPEXP_CORE wxListCtrl: public wxGenericListCtrl
 {
-    DECLARE_DYNAMIC_CLASS(wxListCtrl)
+    wxDECLARE_DYNAMIC_CLASS(wxListCtrl);
 
 public:
     wxListCtrl() {}

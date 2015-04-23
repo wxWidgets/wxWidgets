@@ -43,12 +43,12 @@ extern WXDLLEXPORT_DATA(const char) wxStatusLineNameStr[] = "status_line";
 #if wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
-BEGIN_EVENT_TABLE(wxFrameBase, wxTopLevelWindow)
+wxBEGIN_EVENT_TABLE(wxFrameBase, wxTopLevelWindow)
     EVT_MENU_OPEN(wxFrameBase::OnMenuOpen)
     EVT_MENU_CLOSE(wxFrameBase::OnMenuClose)
 
     EVT_MENU_HIGHLIGHT_ALL(wxFrameBase::OnMenuHighlight)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 #endif // wxUSE_STATUSBAR
 
 /* static */
@@ -121,7 +121,7 @@ wxFLAGS_MEMBER(wxFRAME_FLOAT_ON_PARENT)
 wxFLAGS_MEMBER(wxFRAME_SHAPED)
 wxEND_FLAGS( wxFrameStyle )
 
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxFrame, wxTopLevelWindow, "wx/frame.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxFrame, wxTopLevelWindow, "wx/frame.h");
 
 wxBEGIN_PROPERTIES_TABLE(wxFrame)
 wxEVENT_PROPERTY( Menu, wxEVT_MENU, wxCommandEvent)

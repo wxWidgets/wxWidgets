@@ -162,7 +162,7 @@ static void wxFreePoolGC( GC gc )
 // wxWindowDC
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxWindowDCImpl, wxX11DCImpl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxWindowDCImpl, wxX11DCImpl);
 
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner )
   : wxX11DCImpl( owner )
@@ -2384,7 +2384,7 @@ int wxWindowDCImpl::GetDepth() const
 // wxClientDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxClientDCImpl, wxWindowDCImpl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxClientDCImpl, wxWindowDCImpl);
 
 wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window )
           : wxWindowDCImpl( owner, window )
@@ -2414,7 +2414,7 @@ void wxClientDCImpl::DoGetSize(int *width, int *height) const
 // wxPaintDC
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxPaintDCImpl, wxClientDCImpl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxPaintDCImpl, wxClientDCImpl);
 
 wxPaintDCImpl::wxPaintDCImpl(wxDC *owner, wxWindow* window)
   : wxClientDCImpl(owner, window)
@@ -2455,8 +2455,8 @@ public:
     void OnExit() { wxCleanUpGCPool(); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxDCModule)
+    wxDECLARE_DYNAMIC_CLASS(wxDCModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxDCModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDCModule, wxModule);
 

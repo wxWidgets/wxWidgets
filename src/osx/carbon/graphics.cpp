@@ -2634,14 +2634,14 @@ public :
     virtual void GetVersion(int *major, int *minor, int *micro) const wxOVERRIDE;
 
 private :
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsRenderer);
 } ;
 
 //-----------------------------------------------------------------------------
 // wxMacCoreGraphicsRenderer implementation
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMacCoreGraphicsRenderer,wxGraphicsRenderer)
+wxIMPLEMENT_DYNAMIC_CLASS(wxMacCoreGraphicsRenderer,wxGraphicsRenderer);
 
 static wxMacCoreGraphicsRenderer gs_MacCoreGraphicsRenderer;
 

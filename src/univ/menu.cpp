@@ -246,7 +246,7 @@ private:
     // do we currently have an opened submenu?
     bool m_hasOpenSubMenu;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -280,7 +280,7 @@ private:
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxPopupMenuWindow, wxPopupTransientWindow)
+wxBEGIN_EVENT_TABLE(wxPopupMenuWindow, wxPopupTransientWindow)
     EVT_KEY_DOWN(wxPopupMenuWindow::OnKeyDown)
 
     EVT_LEFT_UP(wxPopupMenuWindow::OnLeftUp)
@@ -289,16 +289,16 @@ BEGIN_EVENT_TABLE(wxPopupMenuWindow, wxPopupTransientWindow)
 #ifdef __WXMSW__
     EVT_IDLE(wxPopupMenuWindow::OnIdle)
 #endif
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(wxMenuBar, wxMenuBarBase)
+wxBEGIN_EVENT_TABLE(wxMenuBar, wxMenuBarBase)
     EVT_KILL_FOCUS(wxMenuBar::OnKillFocus)
 
     EVT_KEY_DOWN(wxMenuBar::OnKeyDown)
 
     EVT_LEFT_DOWN(wxMenuBar::OnLeftDown)
     EVT_MOTION(wxMenuBar::OnMouseMove)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

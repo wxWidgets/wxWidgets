@@ -60,7 +60,7 @@
 // Set to 1 to time file saving
 #define wxRICHTEXT_USE_OUTPUT_TIMINGS 0
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextXMLHandler, wxRichTextFileHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextXMLHandler, wxRichTextFileHandler);
 
 wxStringToStringHashMap wxRichTextXMLHandler::sm_nodeNameToClassMap;
 

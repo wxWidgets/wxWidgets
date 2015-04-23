@@ -120,7 +120,7 @@
     #include "wx/generic/fontdlgg.h"
 #endif // USE_FONTDLG_GENERIC
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_PAINT(MyCanvas::OnPaint)
@@ -2958,7 +2958,7 @@ void StdButtonSizerDialog::EnableDisableControls()
 // SettingsDialog
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(SettingsDialog, wxPropertySheetDialog)
+wxIMPLEMENT_CLASS(SettingsDialog, wxPropertySheetDialog);
 
 wxBEGIN_EVENT_TABLE(SettingsDialog, wxPropertySheetDialog)
 wxEND_EVENT_TABLE()

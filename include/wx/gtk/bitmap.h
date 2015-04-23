@@ -55,7 +55,7 @@ private:
     GdkPixmap* m_bitmap;
 #endif
 
-    DECLARE_DYNAMIC_CLASS(wxMask)
+    wxDECLARE_DYNAMIC_CLASS(wxMask);
 };
 
 //-----------------------------------------------------------------------------
@@ -177,7 +177,7 @@ public:
     void PurgeOtherRepresentations(Representation keep);
 #endif
 
-    DECLARE_DYNAMIC_CLASS(wxBitmap)
+    wxDECLARE_DYNAMIC_CLASS(wxBitmap);
 };
 
 #endif // _WX_GTK_BITMAP_H_

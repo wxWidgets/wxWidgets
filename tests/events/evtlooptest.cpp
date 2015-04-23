@@ -42,7 +42,7 @@ private:
 
     void TestExit();
 
-    DECLARE_NO_COPY_CLASS(EvtloopTestCase)
+    wxDECLARE_NO_COPY_CLASS(EvtloopTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

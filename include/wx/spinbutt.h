@@ -114,7 +114,7 @@ public:
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxSpinEvent(*this); }
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSpinEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSpinEvent);
 };
 
 typedef void (wxEvtHandler::*wxSpinEventFunction)(wxSpinEvent&);

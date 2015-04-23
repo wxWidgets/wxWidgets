@@ -61,7 +61,7 @@ protected:
     virtual void DoSetLabel(const wxString& str) wxOVERRIDE;
     virtual wxString DoGetLabel() const wxOVERRIDE;
 
-    DECLARE_DYNAMIC_CLASS(wxStaticText)
+    wxDECLARE_DYNAMIC_CLASS(wxStaticText);
 };
 
 #endif // _WX_UNIV_STATTEXT_H_

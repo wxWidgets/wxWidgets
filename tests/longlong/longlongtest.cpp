@@ -81,7 +81,7 @@ private:
     void LoHi();
     void Limits();
 
-    DECLARE_NO_COPY_CLASS(LongLongTestCase)
+    wxDECLARE_NO_COPY_CLASS(LongLongTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

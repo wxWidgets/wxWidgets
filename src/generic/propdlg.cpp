@@ -50,12 +50,12 @@
 // wxPropertySheetDialog
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxPropertySheetDialog, wxDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPropertySheetDialog, wxDialog);
 
-BEGIN_EVENT_TABLE(wxPropertySheetDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(wxPropertySheetDialog, wxDialog)
     EVT_ACTIVATE(wxPropertySheetDialog::OnActivate)
     EVT_IDLE(wxPropertySheetDialog::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool wxPropertySheetDialog::Create(wxWindow* parent, wxWindowID id, const wxString& title,
                                        const wxPoint& pos, const wxSize& sz, long style,

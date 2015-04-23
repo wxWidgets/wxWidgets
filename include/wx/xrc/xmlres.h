@@ -416,12 +416,12 @@ private:
 // e.g. <menuitem id="my_menu">...</menuitem>) to integer id that is needed by
 // wxWidgets event tables.
 // Example:
-//    BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+//    wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 //       EVT_MENU(XRCID("quit"), MyFrame::OnQuit)
 //       EVT_MENU(XRCID("about"), MyFrame::OnAbout)
 //       EVT_MENU(XRCID("new"), MyFrame::OnNew)
 //       EVT_MENU(XRCID("open"), MyFrame::OnOpen)
-//    END_EVENT_TABLE()
+//    wxEND_EVENT_TABLE()
 
 #define XRCID(str_id) \
     wxXmlResource::DoGetXRCID(str_id)

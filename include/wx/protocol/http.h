@@ -85,7 +85,7 @@ protected:
     wxString       m_contentType;
     int m_http_response;
 
-    DECLARE_DYNAMIC_CLASS(wxHTTP)
+    wxDECLARE_DYNAMIC_CLASS(wxHTTP);
     DECLARE_PROTOCOL(wxHTTP)
     wxDECLARE_NO_COPY_CLASS(wxHTTP);
 };

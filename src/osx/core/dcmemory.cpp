@@ -20,7 +20,7 @@
 // wxMemoryDCImpl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxMemoryDCImpl,wxPaintDCImpl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxMemoryDCImpl, wxPaintDCImpl);
 
 
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner )

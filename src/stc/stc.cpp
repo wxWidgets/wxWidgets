@@ -139,7 +139,7 @@ wxDEFINE_EVENT( wxEVT_STC_CLIPBOARD_PASTE, wxStyledTextEvent );
 
 
 
-BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
+wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_PAINT                   (wxStyledTextCtrl::OnPaint)
     EVT_SCROLLWIN               (wxStyledTextCtrl::OnScrollWin)
     EVT_SCROLL                  (wxStyledTextCtrl::OnScroll)
@@ -164,11 +164,11 @@ BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_ERASE_BACKGROUND        (wxStyledTextCtrl::OnEraseBackground)
     EVT_MENU_RANGE              (10, 16, wxStyledTextCtrl::OnMenu)
     EVT_LISTBOX_DCLICK          (wxID_ANY, wxStyledTextCtrl::OnListBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
-IMPLEMENT_CLASS(wxStyledTextCtrl, wxControl)
-IMPLEMENT_DYNAMIC_CLASS(wxStyledTextEvent, wxCommandEvent)
+wxIMPLEMENT_CLASS(wxStyledTextCtrl, wxControl);
+wxIMPLEMENT_DYNAMIC_CLASS(wxStyledTextEvent, wxCommandEvent);
 
 #ifdef LINK_LEXERS
 // forces the linking of the lexer modules

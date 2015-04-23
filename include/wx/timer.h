@@ -180,7 +180,7 @@ public:
 private:
     wxTimer* m_timer;
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxTimerEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxTimerEvent);
 };
 
 typedef void (wxEvtHandler::*wxTimerEventFunction)(wxTimerEvent&);

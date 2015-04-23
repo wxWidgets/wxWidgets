@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxListBoxXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxListBoxXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxListBoxXmlHandler);
 
 public:
     wxListBoxXmlHandler();

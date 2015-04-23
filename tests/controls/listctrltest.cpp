@@ -60,7 +60,7 @@ private:
 
     wxListCtrl *m_list;
 
-    DECLARE_NO_COPY_CLASS(ListCtrlTestCase)
+    wxDECLARE_NO_COPY_CLASS(ListCtrlTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

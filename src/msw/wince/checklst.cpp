@@ -41,9 +41,9 @@
 
 // define event table
 // ------------------
-BEGIN_EVENT_TABLE(wxCheckListBox, wxControl)
+wxBEGIN_EVENT_TABLE(wxCheckListBox, wxControl)
     EVT_SIZE(wxCheckListBox::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // control creation
 // ----------------

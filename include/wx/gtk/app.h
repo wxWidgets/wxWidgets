@@ -87,7 +87,7 @@ private:
     HildonProgram *m_hildonProgram;
 #endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2
 
-    DECLARE_DYNAMIC_CLASS(wxApp)
+    wxDECLARE_DYNAMIC_CLASS(wxApp);
 };
 
 #endif // _WX_GTK_APP_H_

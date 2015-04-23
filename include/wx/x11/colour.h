@@ -64,7 +64,7 @@ protected:
     virtual bool FromString(const wxString& str);
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxColour)
+    wxDECLARE_DYNAMIC_CLASS(wxColour);
 };
 
 #endif // _WX_COLOUR_H_

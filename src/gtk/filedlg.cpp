@@ -165,12 +165,12 @@ void wxFileDialog::AddChildGTK(wxWindowGTK* child)
 // wxFileDialog
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFileDialog,wxFileDialogBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFileDialog, wxFileDialogBase);
 
-BEGIN_EVENT_TABLE(wxFileDialog,wxFileDialogBase)
+wxBEGIN_EVENT_TABLE(wxFileDialog,wxFileDialogBase)
     EVT_BUTTON(wxID_OK, wxFileDialog::OnFakeOk)
     EVT_SIZE(wxFileDialog::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                            const wxString& defaultDir,

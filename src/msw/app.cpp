@@ -582,13 +582,13 @@ int wxApp::m_nCmdShow = SW_SHOWNORMAL;
 // wxWin macros
 // ---------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler);
 
-BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
     EVT_IDLE(wxApp::OnIdle)
     EVT_END_SESSION(wxApp::OnEndSession)
     EVT_QUERY_END_SESSION(wxApp::OnQueryEndSession)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // class to ensure that wxAppBase::CleanUp() is called if our Initialize()
 // fails

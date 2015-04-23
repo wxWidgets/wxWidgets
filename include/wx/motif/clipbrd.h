@@ -72,7 +72,7 @@ public:
     wxDataIdToDataObjectList m_idToObject;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxClipboard)
+    wxDECLARE_DYNAMIC_CLASS(wxClipboard);
 };
 
 #endif // wxUSE_CLIPBOARD

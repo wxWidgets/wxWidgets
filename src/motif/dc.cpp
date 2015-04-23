@@ -18,7 +18,7 @@
 
 #include "wx/motif/dc.h"
 
-IMPLEMENT_ABSTRACT_CLASS(wxMotifDCImpl, wxDCImpl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxMotifDCImpl, wxDCImpl);
 
 //-----------------------------------------------------------------------------
 // wxMotifDCImpl

@@ -47,7 +47,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxImageList, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxImageList, wxObject);
 
 #define GetHImageList()     ((HIMAGELIST)m_hImageList)
 

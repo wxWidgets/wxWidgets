@@ -228,8 +228,8 @@ protected:
     void DoChoice();
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxSingleChoiceDialog)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxSingleChoiceDialog);
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -291,7 +291,7 @@ protected:
     wxArrayInt m_selections;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMultiChoiceDialog)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxMultiChoiceDialog);
 };
 
 // ----------------------------------------------------------------------------

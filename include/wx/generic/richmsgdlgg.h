@@ -40,7 +40,7 @@ protected:
 private:
     void OnPaneChanged(wxCollapsiblePaneEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
     wxDECLARE_NO_COPY_CLASS(wxGenericRichMessageDialog);
 };

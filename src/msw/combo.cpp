@@ -128,16 +128,16 @@
 // ============================================================================
 
 
-BEGIN_EVENT_TABLE(wxComboCtrl, wxComboCtrlBase)
+wxBEGIN_EVENT_TABLE(wxComboCtrl, wxComboCtrlBase)
     EVT_PAINT(wxComboCtrl::OnPaintEvent)
     EVT_MOUSE_EVENTS(wxComboCtrl::OnMouseEvent)
 #if wxUSE_COMBOCTRL_POPUP_ANIMATION
     EVT_TIMER(wxID_ANY, wxComboCtrl::OnTimerEvent)
 #endif
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxComboCtrl, wxComboCtrlBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxComboCtrl, wxComboCtrlBase);
 
 void wxComboCtrl::Init()
 {

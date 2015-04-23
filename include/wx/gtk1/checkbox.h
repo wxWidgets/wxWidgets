@@ -59,7 +59,7 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxCheckBox)
+    wxDECLARE_DYNAMIC_CLASS(wxCheckBox);
 };
 
 #endif // __GTKCHECKBOXH__

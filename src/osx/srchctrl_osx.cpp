@@ -26,10 +26,10 @@
 
 #include "wx/osx/private.h"
 
-BEGIN_EVENT_TABLE(wxSearchCtrl, wxSearchCtrlBase)
-END_EVENT_TABLE()
+wxBEGIN_EVENT_TABLE(wxSearchCtrl, wxSearchCtrlBase)
+wxEND_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxSearchCtrl, wxSearchCtrlBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxSearchCtrl, wxSearchCtrlBase);
 
 
 #endif // wxUSE_NATIVE_SEARCH_CONTROL

@@ -82,7 +82,7 @@ wxFLAGS_MEMBER(wxGA_SMOOTH)
 wxFLAGS_MEMBER(wxGA_PROGRESS)
 wxEND_FLAGS( wxGaugeStyle )
 
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxGauge, wxControl, "wx/gauge.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxGauge, wxControl, "wx/gauge.h");
 
 wxBEGIN_PROPERTIES_TABLE(wxGauge)
 wxPROPERTY( Value, int, SetValue, GetValue, 0, 0 /*flags*/, \

@@ -88,7 +88,7 @@ static int wxXErrorHandler(Display *dpy, XErrorEvent *xevent)
 
 long wxApp::sm_lastMessageTime = 0;
 
-IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler);
 
 bool wxApp::Initialize(int& argC, wxChar **argV)
 {

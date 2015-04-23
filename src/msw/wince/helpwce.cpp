@@ -27,7 +27,7 @@
 
 #include "wx/msw/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxWinceHelpController, wxHelpControllerBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxWinceHelpController, wxHelpControllerBase);
 
 bool wxWinceHelpController::Initialize(const wxString& filename)
 {

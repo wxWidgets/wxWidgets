@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxStaticLineXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxStaticLineXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxStaticLineXmlHandler);
 
 public:
     wxStaticLineXmlHandler();

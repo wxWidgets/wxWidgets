@@ -16,7 +16,7 @@ public:
 protected:
 
 private:
-    DECLARE_ABSTRACT_CLASS(wxControlWithItems)
+    wxDECLARE_ABSTRACT_CLASS(wxControlWithItems);
 };
 
 #endif // _WX_QT_CTRLSUB_H_

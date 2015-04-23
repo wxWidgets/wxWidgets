@@ -47,11 +47,11 @@
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewWebKit, wxWebView);
 
-BEGIN_EVENT_TABLE(wxWebViewWebKit, wxControl)
+wxBEGIN_EVENT_TABLE(wxWebViewWebKit, wxControl)
 #if defined(__WXMAC__) && wxOSX_USE_CARBON
     EVT_SIZE(wxWebViewWebKit::OnSize)
 #endif
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #if defined(__WXOSX__) && wxOSX_USE_CARBON
 

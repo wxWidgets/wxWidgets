@@ -20,15 +20,15 @@
  * wxRichTextBackgroundPage type definition
  */
 
-IMPLEMENT_DYNAMIC_CLASS( wxRichTextBackgroundPage, wxRichTextDialogPage )
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextBackgroundPage, wxRichTextDialogPage);
 
 
 /*!
  * wxRichTextBackgroundPage event table definition
  */
 
-BEGIN_EVENT_TABLE( wxRichTextBackgroundPage, wxRichTextDialogPage )
-EVT_BUTTON(ID_RICHTEXT_BACKGROUND_COLOUR_SWATCH, wxRichTextBackgroundPage::OnColourSwatch)
+wxBEGIN_EVENT_TABLE( wxRichTextBackgroundPage, wxRichTextDialogPage )
+    EVT_BUTTON(ID_RICHTEXT_BACKGROUND_COLOUR_SWATCH, wxRichTextBackgroundPage::OnColourSwatch)
 
 ////@begin wxRichTextBackgroundPage event table entries
     EVT_UPDATE_UI( ID_RICHTEXT_SHADOW_HORIZONTAL_OFFSET, wxRichTextBackgroundPage::OnRichtextShadowUpdate )
@@ -47,7 +47,7 @@ EVT_BUTTON(ID_RICHTEXT_BACKGROUND_COLOUR_SWATCH, wxRichTextBackgroundPage::OnCol
     EVT_UPDATE_UI( ID_RICHTEXT_SHADOW_OPACITY, wxRichTextBackgroundPage::OnRichtextShadowOpacityUpdate )
 ////@end wxRichTextBackgroundPage event table entries
 
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_HELP_PROVISION(wxRichTextBackgroundPage)
 

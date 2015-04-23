@@ -79,9 +79,9 @@ static Pixmap bdiag, cdiag, fdiag, cross, horiz, verti;
 // macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxClientDCImpl, wxWindowDCImpl)
-IMPLEMENT_ABSTRACT_CLASS(wxPaintDCImpl, wxWindowDCImpl)
-IMPLEMENT_ABSTRACT_CLASS(wxWindowDCImpl, wxMotifDCImpl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxClientDCImpl, wxWindowDCImpl);
+wxIMPLEMENT_ABSTRACT_CLASS(wxPaintDCImpl, wxWindowDCImpl);
+wxIMPLEMENT_ABSTRACT_CLASS(wxWindowDCImpl, wxMotifDCImpl);
 
 #define IS_HATCH(s)    ((s)>=wxFIRST_HATCH && (s)<=wxLAST_HATCH)
 

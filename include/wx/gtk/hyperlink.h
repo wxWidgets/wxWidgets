@@ -66,7 +66,7 @@ protected:
 
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
 
-    DECLARE_DYNAMIC_CLASS(wxHyperlinkCtrl)
+    wxDECLARE_DYNAMIC_CLASS(wxHyperlinkCtrl);
 };
 
 #endif // _WX_GTKHYPERLINKCTRL_H_

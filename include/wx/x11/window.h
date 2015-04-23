@@ -190,9 +190,9 @@ private:
 
     wxString m_Label;
 
-    DECLARE_DYNAMIC_CLASS(wxWindowX11)
+    wxDECLARE_DYNAMIC_CLASS(wxWindowX11);
     wxDECLARE_NO_COPY_CLASS(wxWindowX11);
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------

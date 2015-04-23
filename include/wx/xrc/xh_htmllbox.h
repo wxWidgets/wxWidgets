@@ -25,7 +25,7 @@ private:
     bool m_insideBox;
     wxArrayString strList;
 
-    DECLARE_DYNAMIC_CLASS(wxSimpleHtmlListBoxXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxSimpleHtmlListBoxXmlHandler);
 };
 
 #endif // wxUSE_XRC && wxUSE_HTML

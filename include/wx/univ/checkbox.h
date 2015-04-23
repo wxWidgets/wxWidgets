@@ -143,7 +143,7 @@ private:
     // is the checkbox currently pressed?
     bool m_isPressed;
 
-    DECLARE_DYNAMIC_CLASS(wxCheckBox)
+    wxDECLARE_DYNAMIC_CLASS(wxCheckBox);
 };
 
 #endif // _WX_UNIV_CHECKBOX_H_

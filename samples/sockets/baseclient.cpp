@@ -121,7 +121,7 @@ private:
     wxTimer mTimer;
 };
 
-DECLARE_APP(Client);
+wxDECLARE_APP(Client);
 
 class ThreadWorker : public wxThread
 {
@@ -164,7 +164,7 @@ private:
 };
 
 /******************* Implementation ******************/
-IMPLEMENT_APP_CONSOLE(Client);
+wxIMPLEMENT_APP_CONSOLE(Client);
 
 #include <wx/listimpl.cpp>
 WX_DEFINE_LIST(TList);

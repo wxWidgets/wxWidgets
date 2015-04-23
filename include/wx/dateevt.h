@@ -39,7 +39,7 @@ public:
 private:
     wxDateTime m_date;
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDateEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDateEvent);
 };
 
 // ----------------------------------------------------------------------------

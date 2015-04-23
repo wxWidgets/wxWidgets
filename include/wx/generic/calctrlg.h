@@ -308,8 +308,8 @@ private:
     // the year control
     bool m_userChangedYear;
 
-    DECLARE_DYNAMIC_CLASS(wxGenericCalendarCtrl)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxGenericCalendarCtrl);
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxGenericCalendarCtrl);
 };
 

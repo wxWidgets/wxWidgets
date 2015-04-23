@@ -60,7 +60,7 @@ private:
     // Make a cursor from standard id
     WXCursor MakeCursor(WXDisplay* display, wxStockCursor id) const;
 
-    DECLARE_DYNAMIC_CLASS(wxCursor)
+    wxDECLARE_DYNAMIC_CLASS(wxCursor);
 };
 
 extern WXDLLIMPEXP_CORE void wxSetCursor(const wxCursor& cursor);

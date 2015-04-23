@@ -669,7 +669,7 @@ wxString wxRichTextPrinting::GetFooterText(wxRichTextOddEvenPage page, wxRichTex
  * Header/footer data
  */
 
-IMPLEMENT_CLASS(wxRichTextHeaderFooterData, wxObject)
+wxIMPLEMENT_CLASS(wxRichTextHeaderFooterData, wxObject);
 
 /// Copy
 void wxRichTextHeaderFooterData::Copy(const wxRichTextHeaderFooterData& data)

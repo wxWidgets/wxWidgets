@@ -355,7 +355,7 @@ wxBEGIN_EVENT_TABLE(wxRadioboxPage, wxWizardPageSimple)
     EVT_WIZARD_CANCEL(wxID_ANY, wxRadioboxPage::OnWizardCancel)
 wxEND_EVENT_TABLE()
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 // ----------------------------------------------------------------------------
 // the application class

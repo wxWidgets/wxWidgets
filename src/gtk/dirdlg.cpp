@@ -46,7 +46,7 @@ static void gtk_dirdialog_response_callback(GtkWidget * WXUNUSED(w),
 // wxDirDialog
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxDirDialog, wxDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDirDialog, wxDialog);
 
 wxDirDialog::wxDirDialog(wxWindow* parent,
                          const wxString& title,

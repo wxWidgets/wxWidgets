@@ -83,7 +83,7 @@ private:
     class wxMarkupText *m_markupText;
 #endif // wxUSE_MARKUP
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGenericStaticText)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxGenericStaticText);
 };
 
 #endif // _WX_GENERIC_STATTEXTG_H_

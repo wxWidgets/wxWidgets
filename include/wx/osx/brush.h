@@ -50,7 +50,7 @@ protected:
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxBrush)
+    wxDECLARE_DYNAMIC_CLASS(wxBrush);
 };
 
 #endif // _WX_BRUSH_H_

@@ -75,7 +75,7 @@ private:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 private:
-    DECLARE_DYNAMIC_CLASS(wxToolBar)
+    wxDECLARE_DYNAMIC_CLASS(wxToolBar);
 };
 
 #endif

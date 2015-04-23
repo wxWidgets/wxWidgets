@@ -39,8 +39,8 @@
 #endif
  // End __WXMSW__
 
-IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperType, wxObject)
-// IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperDatabase, wxList)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPrintPaperType, wxObject);
+// wxIMPLEMENT_DYNAMIC_CLASS(wxPrintPaperDatabase, wxList);
 
 /*
  * Paper size database for all platforms
@@ -350,14 +350,14 @@ wxPrintPaperType* wxPrintPaperDatabase::Item(size_t index) const
 
 class WXDLLEXPORT wxPrintPaperModule: public wxModule
 {
-DECLARE_DYNAMIC_CLASS(wxPrintPaperModule)
+    wxDECLARE_DYNAMIC_CLASS(wxPrintPaperModule);
 public:
     wxPrintPaperModule() {}
     bool OnInit() wxOVERRIDE;
     void OnExit() wxOVERRIDE;
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPrintPaperModule, wxModule);
 
 /*
  * Initialization/cleanup module

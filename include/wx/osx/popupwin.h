@@ -28,7 +28,7 @@ public:
 
     virtual bool Show(bool show = true);
     
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxPopupWindow)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxPopupWindow);
 };
 
 #endif // _WX_MAC_POPUPWIN_H_

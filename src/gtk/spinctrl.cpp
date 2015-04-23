@@ -104,9 +104,9 @@ private:
 // wxSpinCtrlGTKBase
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxSpinCtrlGTKBase, wxSpinCtrlBase)
+wxBEGIN_EVENT_TABLE(wxSpinCtrlGTKBase, wxSpinCtrlBase)
     EVT_CHAR(wxSpinCtrlGTKBase::OnChar)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool wxSpinCtrlGTKBase::Create(wxWindow *parent, wxWindowID id,
                         const wxString& value,
@@ -477,7 +477,7 @@ bool wxSpinCtrl::SetBase(int base)
 // wxSpinCtrlDouble
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlDouble, wxSpinCtrlGTKBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlDouble, wxSpinCtrlGTKBase);
 
 unsigned wxSpinCtrlDouble::GetDigits() const
 {

@@ -81,7 +81,7 @@ wxFLAGS_MEMBER(wxALIGN_RIGHT)
 wxFLAGS_MEMBER(wxALIGN_CENTRE)
 wxEND_FLAGS( wxStaticTextStyle )
 
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticText, wxControl, "wx/stattext.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticText, wxControl, "wx/stattext.h");
 
 wxBEGIN_PROPERTIES_TABLE(wxStaticText)
 wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxString(), 0 /*flags*/, \

@@ -100,10 +100,10 @@ public:
         wxDELETE(gs_factory);
     }
 
-    DECLARE_DYNAMIC_CLASS(wxDisplayModule)
+    wxDECLARE_DYNAMIC_CLASS(wxDisplayModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxDisplayModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDisplayModule, wxModule);
 
 // ============================================================================
 // wxDisplay implementation

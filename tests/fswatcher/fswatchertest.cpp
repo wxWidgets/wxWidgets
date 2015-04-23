@@ -456,7 +456,7 @@ private:
     void TestTrees();
     void TestNoEventsAfterRemove();
 
-    DECLARE_NO_COPY_CLASS(FileSystemWatcherTestCase)
+    wxDECLARE_NO_COPY_CLASS(FileSystemWatcherTestCase);
 };
 
 // the test currently hangs under OS X for some reason and this prevents tests

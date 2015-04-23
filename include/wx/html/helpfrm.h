@@ -67,7 +67,7 @@ class WXDLLIMPEXP_FWD_HTML wxHtmlHelpWindow;
 
 class WXDLLIMPEXP_HTML wxHtmlHelpFrame : public wxFrame
 {
-    DECLARE_DYNAMIC_CLASS(wxHtmlHelpFrame)
+    wxDECLARE_DYNAMIC_CLASS(wxHtmlHelpFrame);
 
 public:
     wxHtmlHelpFrame(wxHtmlHelpData* data = NULL) { Init(data); }
@@ -148,7 +148,7 @@ protected:
 
 private:
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxHtmlHelpFrame);
 };
 

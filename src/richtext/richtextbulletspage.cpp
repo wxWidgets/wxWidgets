@@ -19,13 +19,13 @@
  * wxRichTextBulletsPage type definition
  */
 
-IMPLEMENT_DYNAMIC_CLASS( wxRichTextBulletsPage, wxRichTextDialogPage )
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextBulletsPage, wxRichTextDialogPage);
 
 /*!
  * wxRichTextBulletsPage event table definition
  */
 
-BEGIN_EVENT_TABLE( wxRichTextBulletsPage, wxRichTextDialogPage )
+wxBEGIN_EVENT_TABLE(wxRichTextBulletsPage, wxRichTextDialogPage)
 
 ////@begin wxRichTextBulletsPage event table entries
     EVT_LISTBOX( ID_RICHTEXTBULLETSPAGE_STYLELISTBOX, wxRichTextBulletsPage::OnStylelistboxSelected )
@@ -57,7 +57,7 @@ BEGIN_EVENT_TABLE( wxRichTextBulletsPage, wxRichTextDialogPage )
     EVT_UPDATE_UI( ID_RICHTEXTBULLETSPAGE_NUMBERCTRL, wxRichTextBulletsPage::OnNumberctrlUpdate )
 ////@end wxRichTextBulletsPage event table entries
 
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_HELP_PROVISION(wxRichTextBulletsPage)
 

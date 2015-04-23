@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxDirPickerCtrlXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxDirPickerCtrlXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxDirPickerCtrlXmlHandler);
 
 public:
     wxDirPickerCtrlXmlHandler();

@@ -71,7 +71,7 @@ private:
     // satisfy the wxFontPickerWidgetBase interface.
     wxColour m_selectedColour;
 
-    DECLARE_DYNAMIC_CLASS(wxFontButton)
+    wxDECLARE_DYNAMIC_CLASS(wxFontButton);
 };
 
 #endif // _WX_GTK_FONTPICKER_H_

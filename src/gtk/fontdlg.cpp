@@ -58,7 +58,7 @@ static void response(GtkDialog* dialog, int response_id, wxFontDialog* win)
 // wxFontDialog
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
 
 bool wxFontDialog::DoCreate(wxWindow *parent)
 {

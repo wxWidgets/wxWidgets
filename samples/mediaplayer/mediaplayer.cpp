@@ -410,11 +410,11 @@ const wxChar* wxGetMediaStateText(int nState)
 // handle of the application.  These routines in wx _DO NOT_ check to see if
 // the wxApp exists, and thus will crash the application if you try it.
 //
-// IMPLEMENT_APP does this, and also implements the platform-specific entry
-// routine, such as main or WinMain().  Use IMPLEMENT_APP_NO_MAIN if you do
+// wxIMPLEMENT_APP does this, and also implements the platform-specific entry
+// routine, such as main or WinMain().  Use wxIMPLEMENT_APP_NO_MAIN if you do
 // not desire this behaviour.
 // ----------------------------------------------------------------------------
-IMPLEMENT_APP(wxMediaPlayerApp)
+wxIMPLEMENT_APP(wxMediaPlayerApp);
 
 // ----------------------------------------------------------------------------
 // wxMediaPlayerApp command line parsing

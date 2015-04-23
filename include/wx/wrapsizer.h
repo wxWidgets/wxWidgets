@@ -93,7 +93,7 @@ protected:
 
     wxBoxSizer m_rows;       // Sizer containing multiple rows of our items
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxWrapSizer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWrapSizer);
 };
 
 #endif // _WX_WRAPSIZER_H_

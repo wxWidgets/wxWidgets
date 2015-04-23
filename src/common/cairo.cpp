@@ -407,7 +407,7 @@ public:
     virtual void OnExit() wxOVERRIDE;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxCairoModule)
+    wxDECLARE_DYNAMIC_CLASS(wxCairoModule);
 };
 
 bool wxCairoModule::OnInit()
@@ -420,6 +420,6 @@ void wxCairoModule::OnExit()
     wxCairo::CleanUp();
 }
 
-IMPLEMENT_DYNAMIC_CLASS(wxCairoModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxCairoModule, wxModule);
 
 #endif // wxUSE_CAIRO

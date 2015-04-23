@@ -149,7 +149,7 @@ typedef HGLRC(WINAPI * PFNWGLCREATECONTEXTATTRIBSARBPROC)
 // wxGLContext
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxGLContext, wxObject)
+wxIMPLEMENT_CLASS(wxGLContext, wxObject);
 
 // The window will always be created first so the array will be initialized
 // and then the window will be assigned to the context.
@@ -219,14 +219,14 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 // wxGLCanvas
 // ============================================================================
 
-IMPLEMENT_CLASS(wxGLCanvas, wxWindow)
+wxIMPLEMENT_CLASS(wxGLCanvas, wxWindow);
 
-BEGIN_EVENT_TABLE(wxGLCanvas, wxWindow)
+wxBEGIN_EVENT_TABLE(wxGLCanvas, wxWindow)
 #if wxUSE_PALETTE
     EVT_PALETTE_CHANGED(wxGLCanvas::OnPaletteChanged)
     EVT_QUERY_NEW_PALETTE(wxGLCanvas::OnQueryNewPalette)
 #endif
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // wxGLCanvas construction

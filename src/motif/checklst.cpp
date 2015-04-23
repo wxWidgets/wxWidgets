@@ -33,8 +33,8 @@
 
 // define event table
 // ------------------
-BEGIN_EVENT_TABLE(wxCheckListBox, wxListBox)
-END_EVENT_TABLE()
+wxBEGIN_EVENT_TABLE(wxCheckListBox, wxListBox)
+wxEND_EVENT_TABLE()
 
 // control creation
 // ----------------

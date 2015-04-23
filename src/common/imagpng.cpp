@@ -90,7 +90,7 @@ bool IsTransparent(unsigned char a)
 // wxPNGHandler implementation
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler);
 
 #if wxUSE_STREAMS
 

@@ -19,7 +19,7 @@
 #include "wx/xrc/xh_bannerwindow.h"
 #include "wx/bannerwindow.h"
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxBannerWindowXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxBannerWindowXmlHandler, wxXmlResourceHandler);
 
 wxBannerWindowXmlHandler::wxBannerWindowXmlHandler()
     : wxXmlResourceHandler()

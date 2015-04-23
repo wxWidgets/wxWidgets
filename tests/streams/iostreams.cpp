@@ -65,7 +65,7 @@ private:
 
     wxString m_fnTemp;
 
-    DECLARE_NO_COPY_CLASS(IOStreamsTestCase)
+    wxDECLARE_NO_COPY_CLASS(IOStreamsTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

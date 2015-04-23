@@ -401,7 +401,7 @@ private:
   // Style flag
   long              m_style;
 
-  DECLARE_ABSTRACT_CLASS(wxConfigBase)
+  wxDECLARE_ABSTRACT_CLASS(wxConfigBase);
 };
 
 // a handy little class which changes current path to the path of given entry

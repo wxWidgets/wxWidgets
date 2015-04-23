@@ -43,8 +43,8 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMetafile, wxObject)
-IMPLEMENT_ABSTRACT_CLASS(wxMetafileDC, wxDC)
+wxIMPLEMENT_DYNAMIC_CLASS(wxMetafile, wxObject);
+wxIMPLEMENT_ABSTRACT_CLASS(wxMetafileDC, wxDC);
 
 // ============================================================================
 // implementation

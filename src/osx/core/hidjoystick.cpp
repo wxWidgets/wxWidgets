@@ -133,7 +133,7 @@ void wxGetIntFromCFDictionary(CFTypeRef cfDict, CFStringRef key, int* pOut)
 //
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject);
 
 //---------------------------------------------------------------------------
 // wxJoystick Constructor

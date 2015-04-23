@@ -85,7 +85,7 @@ private:
 
 #ifndef SWIG
 private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxAuiNotebookEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxAuiNotebookEvent);
 #endif
 };
 
@@ -235,8 +235,8 @@ protected:
     wxAuiTabContainerButton* m_pressedButton;
 
 #ifndef SWIG
-    DECLARE_CLASS(wxAuiTabCtrl)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_CLASS(wxAuiTabCtrl);
+    wxDECLARE_EVENT_TABLE();
 #endif
 };
 
@@ -432,8 +432,8 @@ protected:
     unsigned int m_flags;
 
 #ifndef SWIG
-    DECLARE_CLASS(wxAuiNotebook)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_CLASS(wxAuiNotebook);
+    wxDECLARE_EVENT_TABLE();
 #endif
 };
 

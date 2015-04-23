@@ -71,7 +71,7 @@ private:
     // Return the GtkLabel used by this toggle button.
     GtkLabel *GTKGetLabel() const;
 
-    DECLARE_DYNAMIC_CLASS(wxToggleButton)
+    wxDECLARE_DYNAMIC_CLASS(wxToggleButton);
 };
 
 //-----------------------------------------------------------------------------
@@ -113,7 +113,7 @@ public:
 private:
     typedef wxToggleButtonBase base_type;
 
-    DECLARE_DYNAMIC_CLASS(wxBitmapToggleButton)
+    wxDECLARE_DYNAMIC_CLASS(wxBitmapToggleButton);
 };
 
 #endif // _WX_GTK_TOGGLEBUTTON_H_

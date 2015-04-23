@@ -16,20 +16,20 @@
  * wxRichTextStylePage type definition
  */
 
-IMPLEMENT_DYNAMIC_CLASS( wxRichTextStylePage, wxRichTextDialogPage )
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextStylePage, wxRichTextDialogPage);
 
 /*!
  * wxRichTextStylePage event table definition
  */
 
-BEGIN_EVENT_TABLE( wxRichTextStylePage, wxRichTextDialogPage )
+wxBEGIN_EVENT_TABLE(wxRichTextStylePage, wxRichTextDialogPage)
 
 ////@begin wxRichTextStylePage event table entries
     EVT_UPDATE_UI( ID_RICHTEXTSTYLEPAGE_NEXT_STYLE, wxRichTextStylePage::OnNextStyleUpdate )
 
 ////@end wxRichTextStylePage event table entries
 
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_HELP_PROVISION(wxRichTextStylePage)
 

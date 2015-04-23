@@ -102,7 +102,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl);
 
 /*
     TOOLBAR PROPERTIES
@@ -123,11 +123,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
         dontattachtoframe
 */
 
-BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
+wxBEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
     EVT_MOUSE_EVENTS(wxToolBar::OnMouseEvent)
     EVT_SYS_COLOUR_CHANGED(wxToolBar::OnSysColourChanged)
     EVT_ERASE_BACKGROUND(wxToolBar::OnEraseBackground)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // private classes

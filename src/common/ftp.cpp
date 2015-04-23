@@ -60,7 +60,7 @@ static const size_t LEN_CODE = 3;
 // macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFTP, wxProtocol)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFTP, wxProtocol);
 IMPLEMENT_PROTOCOL(wxFTP, wxT("ftp"), wxT("ftp"), true)
 
 // ============================================================================

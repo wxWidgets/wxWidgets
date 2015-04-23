@@ -72,7 +72,7 @@ private:
 
     wxOwnerDrawnComboBox *m_combo;
 
-    DECLARE_NO_COPY_CLASS(OwnerDrawnComboBoxTestCase)
+    wxDECLARE_NO_COPY_CLASS(OwnerDrawnComboBoxTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

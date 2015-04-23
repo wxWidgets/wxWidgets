@@ -14,7 +14,7 @@
 #include "wx/qt/private/converter.h"
 #include <QtCore/QStringList>
 
-IMPLEMENT_DYNAMIC_CLASS( wxApp, wxAppBase )
+wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxAppBase);
 
 wxApp::wxApp()
 {

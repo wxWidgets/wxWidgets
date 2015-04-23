@@ -78,7 +78,7 @@ public:
 */
 class WXDLLIMPEXP_PROPGRID wxPGEditor : public wxObject
 {
-    DECLARE_ABSTRACT_CLASS(wxPGEditor)
+    wxDECLARE_ABSTRACT_CLASS(wxPGEditor);
 public:
 
     /** Constructor. */
@@ -232,7 +232,7 @@ public:
 
 
 #define WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(EDITOR,CLASSNAME,BASECLASS) \
-IMPLEMENT_DYNAMIC_CLASS(CLASSNAME, BASECLASS) \
+wxIMPLEMENT_DYNAMIC_CLASS(CLASSNAME, BASECLASS); \
 wxString CLASSNAME::GetName() const \
 { \
     return wxS(#EDITOR); \
@@ -246,7 +246,7 @@ wxPGEditor* wxPGEditor_##EDITOR = NULL;
 
 class WXDLLIMPEXP_PROPGRID wxPGTextCtrlEditor : public wxPGEditor
 {
-    DECLARE_DYNAMIC_CLASS(wxPGTextCtrlEditor)
+    wxDECLARE_DYNAMIC_CLASS(wxPGTextCtrlEditor);
 public:
     wxPGTextCtrlEditor() {}
     virtual ~wxPGTextCtrlEditor();
@@ -289,7 +289,7 @@ public:
 
 class WXDLLIMPEXP_PROPGRID wxPGChoiceEditor : public wxPGEditor
 {
-    DECLARE_DYNAMIC_CLASS(wxPGChoiceEditor)
+    wxDECLARE_DYNAMIC_CLASS(wxPGChoiceEditor);
 public:
     wxPGChoiceEditor() {}
     virtual ~wxPGChoiceEditor();
@@ -336,7 +336,7 @@ public:
 
 class WXDLLIMPEXP_PROPGRID wxPGComboBoxEditor : public wxPGChoiceEditor
 {
-    DECLARE_DYNAMIC_CLASS(wxPGComboBoxEditor)
+    wxDECLARE_DYNAMIC_CLASS(wxPGComboBoxEditor);
 public:
     wxPGComboBoxEditor() {}
     virtual ~wxPGComboBoxEditor();
@@ -374,7 +374,7 @@ public:
                                           const wxPoint& pos,
                                           const wxSize& size) const;
 
-    DECLARE_DYNAMIC_CLASS(wxPGChoiceAndButtonEditor)
+    wxDECLARE_DYNAMIC_CLASS(wxPGChoiceAndButtonEditor);
 };
 
 class WXDLLIMPEXP_PROPGRID
@@ -390,7 +390,7 @@ public:
                                           const wxPoint& pos,
                                           const wxSize& size) const;
 
-    DECLARE_DYNAMIC_CLASS(wxPGTextCtrlAndButtonEditor)
+    wxDECLARE_DYNAMIC_CLASS(wxPGTextCtrlAndButtonEditor);
 };
 
 
@@ -402,7 +402,7 @@ public:
 //
 class WXDLLIMPEXP_PROPGRID wxPGCheckBoxEditor : public wxPGEditor
 {
-    DECLARE_DYNAMIC_CLASS(wxPGCheckBoxEditor)
+    wxDECLARE_DYNAMIC_CLASS(wxPGCheckBoxEditor);
 public:
     wxPGCheckBoxEditor() {}
     virtual ~wxPGCheckBoxEditor();
@@ -464,7 +464,7 @@ public:
 */
 class WXDLLIMPEXP_PROPGRID wxPGEditorDialogAdapter : public wxObject
 {
-    DECLARE_ABSTRACT_CLASS(wxPGEditorDialogAdapter)
+    wxDECLARE_ABSTRACT_CLASS(wxPGEditorDialogAdapter);
 public:
     wxPGEditorDialogAdapter()
         : wxObject()

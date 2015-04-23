@@ -214,7 +214,7 @@ public:
     virtual bool InitGLVisual(const int *attribList);
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGLApp)
+    wxDECLARE_DYNAMIC_CLASS(wxGLApp);
 };
 
 #endif // !wxGL_APP_DEFINED

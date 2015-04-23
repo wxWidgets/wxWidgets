@@ -376,7 +376,7 @@ static void SetListboxClientData(const wxChar *name, wxCheckListBox *control);
 static void SetChoiceClientData(const wxChar *name, wxChoice *control);
 #endif // wxUSE_CHOICE
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 //----------------------------------------------------------------------
 // MyApp

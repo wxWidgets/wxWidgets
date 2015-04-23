@@ -149,7 +149,7 @@ public:
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     void MacVisibilityChanged();
 
 private:

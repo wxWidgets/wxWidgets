@@ -68,7 +68,7 @@ protected:
     // draw the control
     virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
 
-    DECLARE_DYNAMIC_CLASS(wxGauge)
+    wxDECLARE_DYNAMIC_CLASS(wxGauge);
 };
 
 #endif // _WX_UNIV_GAUGE_H_

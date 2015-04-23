@@ -77,9 +77,9 @@ bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED
 //-----------------------------------------------------------------------------
 
 #ifdef __WXUNIVERSAL__
-BEGIN_EVENT_TABLE(wxPopupWindow,wxPopupWindowBase)
+wxBEGIN_EVENT_TABLE(wxPopupWindow,wxPopupWindowBase)
     EVT_SIZE(wxPopupWindow::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 #endif
 
 wxPopupWindow::~wxPopupWindow()

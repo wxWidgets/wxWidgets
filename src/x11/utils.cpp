@@ -247,10 +247,10 @@ public:
     virtual void OnExit() { wxCloseDisplay(); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxX11DisplayModule)
+    wxDECLARE_DYNAMIC_CLASS(wxX11DisplayModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxX11DisplayModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxX11DisplayModule, wxModule);
 
 // ----------------------------------------------------------------------------
 // Some colour manipulation routines

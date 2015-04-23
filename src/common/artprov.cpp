@@ -124,7 +124,7 @@ wxArtProviderCache::ConstructHashID(const wxArtID& id,
 // wxArtProvider class
 // ============================================================================
 
-IMPLEMENT_ABSTRACT_CLASS(wxArtProvider, wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxArtProvider, wxObject);
 
 wxArtProvidersList *wxArtProvider::sm_providers = NULL;
 wxArtProviderCache *wxArtProvider::sm_cache = NULL;
@@ -430,7 +430,7 @@ public:
         wxArtProvider::CleanUpProviders();
     }
 
-    DECLARE_DYNAMIC_CLASS(wxArtProviderModule)
+    wxDECLARE_DYNAMIC_CLASS(wxArtProviderModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxArtProviderModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxArtProviderModule, wxModule);

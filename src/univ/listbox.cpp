@@ -96,9 +96,9 @@ protected:
 // implementation of wxListBox
 // ============================================================================
 
-BEGIN_EVENT_TABLE(wxListBox, wxListBoxBase)
+wxBEGIN_EVENT_TABLE(wxListBox, wxListBoxBase)
     EVT_SIZE(wxListBox::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // construction

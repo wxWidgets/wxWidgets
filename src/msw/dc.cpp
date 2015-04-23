@@ -102,7 +102,7 @@ using namespace wxMSWImpl;
     #define WXMICROWIN_CHECK_HDC_RET(x)
 #endif
 
-IMPLEMENT_ABSTRACT_CLASS(wxMSWDCImpl, wxDCImpl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxMSWDCImpl, wxDCImpl);
 
 // ---------------------------------------------------------------------------
 // constants
@@ -204,10 +204,10 @@ public:
     virtual void OnExit() { wxMSIMG32DLL.Unload(); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGDIDLLsCleanupModule)
+    wxDECLARE_DYNAMIC_CLASS(wxGDIDLLsCleanupModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxGDIDLLsCleanupModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxGDIDLLsCleanupModule, wxModule);
 
 } // namespace wxMSWImpl
 
@@ -2731,10 +2731,10 @@ public:
     virtual void OnExit() { wxMSWDCImpl::ClearCache(); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxDCModule)
+    wxDECLARE_DYNAMIC_CLASS(wxDCModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxDCModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDCModule, wxModule);
 
 #endif // wxUSE_DC_CACHEING
 

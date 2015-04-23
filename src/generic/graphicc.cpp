@@ -2476,14 +2476,14 @@ public :
     virtual wxString GetName() const wxOVERRIDE;
     virtual void GetVersion(int *major, int *minor, int *micro) const wxOVERRIDE;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxCairoRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCairoRenderer);
 } ;
 
 //-----------------------------------------------------------------------------
 // wxCairoRenderer implementation
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxCairoRenderer,wxGraphicsRenderer)
+wxIMPLEMENT_DYNAMIC_CLASS(wxCairoRenderer,wxGraphicsRenderer);
 
 static wxCairoRenderer gs_cairoGraphicsRenderer;
 

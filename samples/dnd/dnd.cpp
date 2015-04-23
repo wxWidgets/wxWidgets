@@ -113,7 +113,7 @@ public:
     virtual bool OnInit() wxOVERRIDE;
 };
 
-IMPLEMENT_APP(DnDApp)
+wxIMPLEMENT_APP(DnDApp);
 
 #if wxUSE_DRAG_AND_DROP || wxUSE_CLIPBOARD
 

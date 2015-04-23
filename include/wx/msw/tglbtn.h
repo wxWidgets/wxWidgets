@@ -64,7 +64,7 @@ protected:
     bool m_state;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxToggleButton)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxToggleButton);
 };
 
 //-----------------------------------------------------------------------------
@@ -105,7 +105,7 @@ public:
     virtual void SetLabel(const wxString& label) { wxToggleButton::SetLabel(label); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxBitmapToggleButton)
+    wxDECLARE_DYNAMIC_CLASS(wxBitmapToggleButton);
 };
 
 #endif // _WX_TOGGLEBUTTON_H_

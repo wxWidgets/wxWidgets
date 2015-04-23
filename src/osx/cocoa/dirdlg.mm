@@ -35,7 +35,7 @@
 
 #include "wx/osx/private.h"
 
-IMPLEMENT_CLASS(wxDirDialog, wxDialog)
+wxIMPLEMENT_CLASS(wxDirDialog, wxDialog);
 
 void wxDirDialog::Init()
 {
