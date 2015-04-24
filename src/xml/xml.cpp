@@ -826,7 +826,7 @@ bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding, int fl
     XML_SetUserData(parser, (void*)&ctx);
     XML_SetElementHandler(parser, StartElementHnd, EndElementHnd);
     XML_SetCharacterDataHandler(parser, TextHnd);
-    XML_SetCdataSectionHandler(parser, StartCdataHnd, EndCdataHnd);;
+    XML_SetCdataSectionHandler(parser, StartCdataHnd, EndCdataHnd);
     XML_SetCommentHandler(parser, CommentHnd);
     XML_SetProcessingInstructionHandler(parser, PIHnd);
     XML_SetDefaultHandler(parser, DefaultHnd);
