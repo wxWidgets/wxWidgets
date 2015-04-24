@@ -1092,11 +1092,11 @@ bool OutputNode(wxOutputStream& stream,
             break;
 
         case wxXML_PI_NODE:
-            rc = OutputString(stream, wxT("<?"), convMem, convFile) &&
+            rc = OutputString(stream, wxS("<?"), convMem, convFile) &&
                  OutputString(stream, node->GetName(), convMem, convFile) &&
-                 OutputString(stream, wxT(" "), convMem, convFile) &&
+                 OutputString(stream, wxS(" "), convMem, convFile) &&
                  OutputString(stream, node->GetContent(), convMem, convFile) &&
-                 OutputString(stream, wxT("?>"), convMem, convFile);
+                 OutputString(stream, wxS("?>"), convMem, convFile);
             break;
 
         default:
