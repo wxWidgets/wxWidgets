@@ -1350,7 +1350,8 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
     wxDataViewItem
         item(cell->GetOwner()->GetOwner()->GTKPathToItem(wxGtkTreePath(path)));
 
-    cell->StartEditing( item, renderrect );
+    if (cell->StartEditing(item, renderrect))
+        return GTK_CELL_EDITABLE(cell->GetEditorCtrl()->m_widget);
 
     return NULL;
 }
@@ -4326,39 +4327,10 @@ wxdataview_row_collapsed_callback( GtkTreeView* WXUNUSED(treeview), GtkTreeIter*
     // wxDataViewCtrl
 //-----------------------------------------------------------------------------
 
-void wxDataViewCtrl::AddChildGTK(wxWindowGTK* child)
+void wxDataViewCtrl::AddChildGTK(wxWindowGTK*)
 {
-    GtkWidget* treeview = GtkGetTreeView();
-
-    // Insert widget in GtkTreeView
-    if (gtk_widget_get_realized(treeview))
-        gtk_widget_set_parent_window( child->m_widget,
-          gtk_tree_view_get_bin_window( GTK_TREE_VIEW(treeview) ) );
-    gtk_widget_set_parent( child->m_widget, treeview );
-}
-
-static
-void gtk_dataviewctrl_size_callback( GtkWidget *WXUNUSED(widget),
-                                     GtkAllocation *WXUNUSED(gtk_alloc),
-                                     wxDataViewCtrl *win )
-{
-    wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
-    while (node)
-    {
-        wxWindow *child = node->GetData();
-
-        GtkRequisition req;
-        gtk_widget_get_preferred_size(child->m_widget, NULL, &req);
-
-        GtkAllocation alloc;
-        alloc.x = child->m_x;
-        alloc.y = child->m_y;
-        alloc.width = child->m_width;
-        alloc.height = child->m_height;
-        gtk_widget_size_allocate( child->m_widget, &alloc );
-
-        node = node->GetNext();
-    }
+    // this is for cell editing controls, which will be
+    // made children of the GtkTreeView automatically
 }
 
 
@@ -4514,9 +4486,6 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     gtk_container_add (GTK_CONTAINER (m_widget), m_treeview);
 
     m_focusWidget = GTK_WIDGET(m_treeview);
-
-    g_signal_connect (m_treeview, "size_allocate",
-                     G_CALLBACK (gtk_dataviewctrl_size_callback), this);
 
     bool fixed = (style & wxDV_VARIABLE_LINE_HEIGHT) == 0;
     gtk_tree_view_set_fixed_height_mode( GTK_TREE_VIEW(m_treeview), fixed );
