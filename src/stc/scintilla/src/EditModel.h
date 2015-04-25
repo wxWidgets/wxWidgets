@@ -48,6 +48,7 @@ public:
 	ContractionState cs;
 	// Hotspot support
 	Range hotspot;
+	int hoverIndicatorPos;
 
 	// Wrapping support
 	int wrapWidth;

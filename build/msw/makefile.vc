@@ -253,6 +253,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexGAP.obj \
 	$(OBJS)\wxscintilla_LexGui4Cli.obj \
 	$(OBJS)\wxscintilla_LexHaskell.obj \
+	$(OBJS)\wxscintilla_LexHex.obj \
 	$(OBJS)\wxscintilla_LexHTML.obj \
 	$(OBJS)\wxscintilla_LexInno.obj \
 	$(OBJS)\wxscintilla_LexKix.obj \
@@ -6713,6 +6714,9 @@ $(OBJS)\wxscintilla_LexGui4Cli.obj: ..\..\src\stc\scintilla\lexers\LexGui4Cli.cx
 
 $(OBJS)\wxscintilla_LexHaskell.obj: ..\..\src\stc\scintilla\lexers\LexHaskell.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexHaskell.cxx
+
+$(OBJS)\wxscintilla_LexHex.obj: ..\..\src\stc\scintilla\lexers\LexHex.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexHex.cxx
 
 $(OBJS)\wxscintilla_LexHTML.obj: ..\..\src\stc\scintilla\lexers\LexHTML.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexHTML.cxx

@@ -94,6 +94,7 @@
             src/stc/scintilla/lexers/LexGAP.cxx
             src/stc/scintilla/lexers/LexGui4Cli.cxx
             src/stc/scintilla/lexers/LexHaskell.cxx
+            src/stc/scintilla/lexers/LexHex.cxx
             src/stc/scintilla/lexers/LexHTML.cxx
             src/stc/scintilla/lexers/LexInno.cxx
             src/stc/scintilla/lexers/LexKix.cxx

@@ -419,8 +419,6 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 						sc.Forward();
 						HereDoc.Quoted = true;
 						HereDoc.State = 1;
-					} else if (!HereDoc.Indent && sc.chNext == '-') {	// <<- indent case
-						HereDoc.Indent = true;
 					} else if (setHereDoc.Contains(sc.chNext)) {
 						// an unquoted here-doc delimiter, no special handling
 						// TODO check what exactly bash considers part of the delim
@@ -469,7 +467,7 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 				if (sc.atLineStart) {
 					sc.SetState(SCE_SH_HERE_Q);
 					int prefixws = 0;
-					while (IsASpace(sc.ch) && !sc.atLineEnd) {	// whitespace prefix
+					while (sc.ch == '\t' && !sc.atLineEnd) {	// tabulation prefix
 						sc.Forward();
 						prefixws++;
 					}
@@ -481,7 +479,8 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 					char s[HERE_DELIM_MAX];
 					sc.GetCurrent(s, sizeof(s));
 					if (sc.LengthCurrent() == 0) {  // '' or "" delimiters
-						if (prefixws == 0 && HereDoc.Quoted && HereDoc.DelimiterLength == 0)
+						if ((prefixws == 0 || HereDoc.Indent) &&
+							HereDoc.Quoted && HereDoc.DelimiterLength == 0)
 							sc.SetState(SCE_SH_DEFAULT);
 						break;
 					}
@@ -672,7 +671,12 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 			} else if (sc.Match('<', '<')) {
 				sc.SetState(SCE_SH_HERE_DELIM);
 				HereDoc.State = 0;
-				HereDoc.Indent = false;
+				if (sc.GetRelative(2) == '-') {	// <<- indent case
+					HereDoc.Indent = true;
+					sc.Forward();
+				} else {
+					HereDoc.Indent = false;
+				}
 			} else if (sc.ch == '-'	&&	// one-char file test operators
 					   setSingleCharOp.Contains(sc.chNext) &&
 					   !setWord.Contains(sc.GetRelative(2)) &&

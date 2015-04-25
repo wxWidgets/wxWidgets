@@ -449,12 +449,12 @@ void ScintillaBase::CallTipShow(Point pt, const char *defn) {
 	PRectangle rcClient = GetClientRectangle();
 	int offset = vs.lineHeight + static_cast<int>(rc.Height());
 	// adjust so it displays above the text.
-	if (rc.bottom > rcClient.bottom) {
+	if (rc.bottom > rcClient.bottom && rc.Height() < rcClient.Height()) {
 		rc.top -= offset;
 		rc.bottom -= offset;
 	}
 	// adjust so it displays below the text.
-	if (rc.top < rcClient.top) {
+	if (rc.top < rcClient.top && rc.Height() < rcClient.Height()) {
 		rc.top += offset;
 		rc.bottom += offset;
 	}
@@ -587,7 +587,7 @@ void LexState::SetLexerModule(const LexerModule *lex) {
 }
 
 void LexState::SetLexer(uptr_t wParam) {
-	lexLanguage = wParam;
+	lexLanguage = static_cast<int>(wParam);
 	if (lexLanguage == SCLEX_CONTAINER) {
 		SetLexerModule(0);
 	} else {
@@ -999,7 +999,7 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 		return DocumentLexState()->PropGetInt(reinterpret_cast<const char *>(wParam), static_cast<int>(lParam));
 
 	case SCI_SETKEYWORDS:
-		DocumentLexState()->SetWordList(wParam, reinterpret_cast<const char *>(lParam));
+		DocumentLexState()->SetWordList(static_cast<int>(wParam), reinterpret_cast<const char *>(lParam));
 		break;
 
 	case SCI_SETLEXERLANGUAGE:
@@ -1011,7 +1011,7 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 
 	case SCI_PRIVATELEXERCALL:
 		return reinterpret_cast<sptr_t>(
-			DocumentLexState()->PrivateCall(wParam, reinterpret_cast<void *>(lParam)));
+			DocumentLexState()->PrivateCall(static_cast<int>(wParam), reinterpret_cast<void *>(lParam)));
 
 	case SCI_GETSTYLEBITSNEEDED:
 		return 8;
@@ -1023,7 +1023,8 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 		return DocumentLexState()->PropertyType(reinterpret_cast<const char *>(wParam));
 
 	case SCI_DESCRIBEPROPERTY:
-		return StringResult(lParam, DocumentLexState()->DescribeProperty(reinterpret_cast<const char *>(wParam)));
+		return StringResult(lParam,
+				    DocumentLexState()->DescribeProperty(reinterpret_cast<const char *>(wParam)));
 
 	case SCI_DESCRIBEKEYWORDSETS:
 		return StringResult(lParam, DocumentLexState()->DescribeWordListSets());
@@ -1032,26 +1033,27 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 		return DocumentLexState()->LineEndTypesSupported();
 
 	case SCI_ALLOCATESUBSTYLES:
-		return DocumentLexState()->AllocateSubStyles(wParam, lParam);
+		return DocumentLexState()->AllocateSubStyles(static_cast<int>(wParam), static_cast<int>(lParam));
 
 	case SCI_GETSUBSTYLESSTART:
-		return DocumentLexState()->SubStylesStart(wParam);
+		return DocumentLexState()->SubStylesStart(static_cast<int>(wParam));
 
 	case SCI_GETSUBSTYLESLENGTH:
-		return DocumentLexState()->SubStylesLength(wParam);
+		return DocumentLexState()->SubStylesLength(static_cast<int>(wParam));
 
 	case SCI_GETSTYLEFROMSUBSTYLE:
-		return DocumentLexState()->StyleFromSubStyle(wParam);
+		return DocumentLexState()->StyleFromSubStyle(static_cast<int>(wParam));
 
 	case SCI_GETPRIMARYSTYLEFROMSTYLE:
-		return DocumentLexState()->PrimaryStyleFromStyle(wParam);
+		return DocumentLexState()->PrimaryStyleFromStyle(static_cast<int>(wParam));
 
 	case SCI_FREESUBSTYLES:
 		DocumentLexState()->FreeSubStyles();
 		break;
 
 	case SCI_SETIDENTIFIERS:
-		DocumentLexState()->SetIdentifiers(wParam, reinterpret_cast<const char *>(lParam));
+		DocumentLexState()->SetIdentifiers(static_cast<int>(wParam),
+						   reinterpret_cast<const char *>(lParam));
 		break;
 
 	case SCI_DISTANCETOSECONDARYSTYLES:

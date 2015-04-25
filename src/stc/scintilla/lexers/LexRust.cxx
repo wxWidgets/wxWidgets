@@ -271,7 +271,7 @@ static void ScanNumber(Accessor& styler, int& pos) {
 		pos++;
 		c = styler.SafeGetCharAt(pos, '\0');
 		n = styler.SafeGetCharAt(pos + 1, '\0');
-		if (c == '8') {
+		if (c == '8' || c == 's') {
 			pos++;
 		} else if (c == '1' && n == '6') {
 			pos += 2;
@@ -279,6 +279,8 @@ static void ScanNumber(Accessor& styler, int& pos) {
 			pos += 2;
 		} else if (c == '6' && n == '4') {
 			pos += 2;
+		} else {
+			error = true;
 		}
 	/* See if it's a floating point literal. These literals have to be base 10.
 	 */

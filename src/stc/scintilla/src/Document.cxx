@@ -37,6 +37,7 @@
 #include "Document.h"
 #include "RESearch.h"
 #include "UniConversion.h"
+#include "UnicodeFromUTF8.h"
 
 #ifdef SCI_NAMESPACE
 using namespace Scintilla;
@@ -766,19 +767,6 @@ bool Document::NextCharacter(int &pos, int moveDir) const {
 	}
 }
 
-static inline int UnicodeFromBytes(const unsigned char *us) {
-	if (us[0] < 0xC2) {
-		return us[0];
-	} else if (us[0] < 0xE0) {
-		return ((us[0] & 0x1F) << 6) + (us[1] & 0x3F);
-	} else if (us[0] < 0xF0) {
-		return ((us[0] & 0xF) << 12) + ((us[1] & 0x3F) << 6) + (us[2] & 0x3F);
-	} else if (us[0] < 0xF5) {
-		return ((us[0] & 0x7) << 18) + ((us[1] & 0x3F) << 12) + ((us[2] & 0x3F) << 6) + (us[3] & 0x3F);
-	}
-	return us[0];
-}
-
 // Return -1  on out-of-bounds
 int SCI_METHOD Document::GetRelativePosition(int positionStart, int characterOffset) const {
 	int pos = positionStart;
@@ -788,6 +776,27 @@ int SCI_METHOD Document::GetRelativePosition(int positionStart, int characterOff
 			const int posNext = NextPosition(pos, increment);
 			if (posNext == pos)
 				return INVALID_POSITION;
+			pos = posNext;
+			characterOffset -= increment;
+		}
+	} else {
+		pos = positionStart + characterOffset;
+		if ((pos < 0) || (pos > Length()))
+			return INVALID_POSITION;
+	}
+	return pos;
+}
+
+int Document::GetRelativePositionUTF16(int positionStart, int characterOffset) const {
+	int pos = positionStart;
+	if (dbcsCodePage) {
+		const int increment = (characterOffset > 0) ? 1 : -1;
+		while (characterOffset != 0) {
+			const int posNext = NextPosition(pos, increment);
+			if (posNext == pos)
+				return INVALID_POSITION;
+			if (abs(pos-posNext) > 3)	// 4 byte character = 2*UTF16.
+				characterOffset -= increment;
 			pos = posNext;
 			characterOffset -= increment;
 		}
@@ -819,7 +828,7 @@ int SCI_METHOD Document::GetCharacterAndWidth(int position, int *pWidth) const {
 					character =  0xDC80 + leadByte;
 				} else {
 					bytesInCharacter = utf8status & UTF8MaskWidth;
-					character = UnicodeFromBytes(charBytes);
+					character = UnicodeFromUTF8(charBytes);
 				}
 			}
 		} else {
@@ -1320,6 +1329,21 @@ int Document::CountCharacters(int startPos, int endPos) const {
 	return count;
 }
 
+int Document::CountUTF16(int startPos, int endPos) const {
+	startPos = MovePositionOutsideChar(startPos, 1, false);
+	endPos = MovePositionOutsideChar(endPos, -1, false);
+	int count = 0;
+	int i = startPos;
+	while (i < endPos) {
+		count++;
+		const int next = NextPosition(i, 1);
+		if ((next - i) > 3)
+			count++;
+		i = next;
+	}
+	return count;
+}
+
 int Document::FindColumn(int line, int column) {
 	int position = LineStart(line);
 	if ((line >= 0) && (line < LinesTotal())) {
@@ -1610,7 +1634,7 @@ Document::CharacterExtracted Document::ExtractCharacter(int position) const {
 		// Treat as invalid and use up just one byte
 		return CharacterExtracted(unicodeReplacementChar, 1);
 	} else {
-		return CharacterExtracted(UnicodeFromBytes(charBytes), utf8status & UTF8MaskWidth);
+		return CharacterExtracted(UnicodeFromUTF8(charBytes), utf8status & UTF8MaskWidth);
 	}
 }
 
@@ -2359,6 +2383,9 @@ public:
 		doc(doc_), position(position_), characterIndex(0), lenBytes(0), lenCharacters(0) {
 		buffered[0] = 0;
 		buffered[1] = 0;
+		if (doc) {
+			ReadCharacter();
+		}
 	}
 	UTF8Iterator(const UTF8Iterator &other) {
 		doc = other.doc;
@@ -2381,10 +2408,8 @@ public:
 		}
 		return *this;
 	}
-	wchar_t operator*() {
-		if (lenCharacters == 0) {
-			ReadCharacter();
-		}
+	wchar_t operator*() const {
+		assert(lenCharacters != 0);
 		return buffered[characterIndex];
 	}
 	UTF8Iterator &operator++() {

@@ -72,11 +72,11 @@
 
 ## Line numbers and positions start at 0.
 ## String arguments may contain NUL ('\0') characters where the calls provide a length
-## argument and retrieve NUL characters. All retrieved strings except for those retrieved
-## by GetLine also have a NUL appended but client code should calculate the size that
-## will be returned rather than relying upon the NUL whenever possible. Allow for the
-## extra NUL character when allocating buffers. The size to allocate for a stringresult
-## can be determined by calling with a NULL (0) pointer.
+## argument and retrieve NUL characters. APIs marked as NUL-terminated also have a
+## NUL appended but client code should calculate the size that will be returned rather
+## than relying upon the NUL whenever possible. Allow for the extra NUL character when
+## allocating buffers. The size to allocate for a stringresult (not including NUL) can be
+## determined by calling with a NULL (0) pointer.
 
 cat Basics
 
@@ -186,6 +186,7 @@ set void SetAnchor=2026(position posAnchor,)
 
 # Retrieve the text of the line containing the caret.
 # Returns the index of the caret on the line.
+# Result is NUL-terminated.
 fun int GetCurLine=2027(int length, stringresult text)
 
 # Retrieve the position of the last correctly styled character.
@@ -479,6 +480,7 @@ get int StyleGetSize=2485(int style,)
 
 # Get the font of a style.
 # Returns the length of the fontName
+# Result is NUL-terminated.
 get int StyleGetFont=2486(int style, stringresult fontName)
 
 # Get is a style to have its end of line filled or not.
@@ -578,7 +580,7 @@ set void SetCaretPeriod=2076(int periodMilliseconds,)
 set void SetWordChars=2077(, string characters)
 
 # Get the set of characters making up words for when moving or selecting by word.
-# Retuns the number of characters
+# Returns the number of characters
 get int GetWordChars=2646(, stringresult characters)
 
 # Start a sequence of actions that is undone and redone as a unit.
@@ -605,6 +607,9 @@ val INDIC_SQUIGGLELOW=11
 val INDIC_DOTBOX=12
 val INDIC_SQUIGGLEPIXMAP=13
 val INDIC_COMPOSITIONTHICK=14
+val INDIC_COMPOSITIONTHIN=15
+val INDIC_FULLBOX=16
+val INDIC_TEXTFORE=17
 val INDIC_IME=32
 val INDIC_IME_MAX=35
 val INDIC_MAX=35
@@ -631,6 +636,30 @@ set void IndicSetUnder=2510(int indic, bool under)
 
 # Retrieve whether indicator drawn under or over text.
 get bool IndicGetUnder=2511(int indic,)
+
+# Set a hover indicator to plain, squiggle or TT.
+set void IndicSetHoverStyle=2680(int indic, int style)
+
+# Retrieve the hover style of an indicator.
+get int IndicGetHoverStyle=2681(int indic,)
+
+# Set the foreground hover colour of an indicator.
+set void IndicSetHoverFore=2682(int indic, colour fore)
+
+# Retrieve the foreground hover colour of an indicator.
+get colour IndicGetHoverFore=2683(int indic,)
+
+val SC_INDICVALUEBIT=0x1000000
+val SC_INDICVALUEMASK=0xFFFFFF
+
+enu IndicFlag=SC_INDICFLAG_
+val SC_INDICFLAG_VALUEFORE=1
+
+# Set the attributes of an indicator.
+set void IndicSetFlags=2684(int indic, int flags)
+
+# Retrieve the attributes of an indicator.
+get int IndicGetFlags=2685(int indic,)
 
 # Set the foreground colour of all whitespace and whether to use this setting.
 fun void SetWhitespaceFore=2084(bool useSetting, colour fore)
@@ -924,6 +953,7 @@ fun void SetSel=2160(position start, position end)
 
 # Retrieve the selected text.
 # Return the length of the text.
+# Result is NUL-terminated.
 fun int GetSelText=2161(, stringresult text)
 
 # Retrieve a range of text.
@@ -994,6 +1024,7 @@ fun void SetText=2181(, string text)
 
 # Retrieve all the text in the document.
 # Returns number of characters retrieved.
+# Result is NUL-terminated.
 fun int GetText=2182(int length, stringresult text)
 
 # Retrieve the number of characters in the document.
@@ -1031,6 +1062,12 @@ set void SetTargetEnd=2192(position pos,)
 
 # Get the position that ends the target.
 get position GetTargetEnd=2193(,)
+
+# Sets both the start and end of the target in one call.
+fun void SetTargetRange=2686(position start, position end)
+
+# Retrieve the text in the target.
+get int GetTargetText=2687(, stringresult characters)
 
 # Replace the target text with the argument text.
 # Text is counted so it can contain NULs.
@@ -1363,6 +1400,7 @@ set void SetMultiPaste=2614(int multiPaste,)
 get int GetMultiPaste=2615(,)
 
 # Retrieve the value of a tag from a regular expression search.
+# Result is NUL-terminated.
 get int GetTag=2616(int tagNumber, stringresult tagValue)
 
 # Make the target range start and end be the same as the selection range start and end.
@@ -1910,6 +1948,7 @@ get int AutoCGetCurrent=2445(,)
 
 # Get currently selected item text in the auto-completion list
 # Returns the length of the item text
+# Result is NUL-terminated.
 get int AutoCGetCurrentText=2610(, stringresult s)
 
 enu CaseInsensitiveBehaviour=SC_CASEINSENSITIVEBEHAVIOUR_
@@ -2058,12 +2097,6 @@ get int GetRangePointer=2643(int position, int rangeLength)
 # Return a position which, to avoid performance costs, should not be within
 # the range of a call to GetRangePointer.
 get position GetGapPosition=2644(,)
-
-# Always interpret keyboard input as Unicode
-set void SetKeysUnicode=2521(bool keysUnicode,)
-
-# Are keys always interpreted as Unicode?
-get bool GetKeysUnicode=2522(,)
 
 # Set the alpha fill colour of the given indicator.
 set void IndicSetAlpha=2523(int indicator, int alpha)
@@ -2419,6 +2452,7 @@ get int GetLineEndTypesActive=2658(,)
 set void SetRepresentation=2665(string encodedCharacter, string representation)
 
 # Set the way a character is drawn.
+# Result is NUL-terminated.
 get int GetRepresentation=2666(string encodedCharacter, stringresult representation)
 
 # Remove a character representation.
@@ -2455,10 +2489,12 @@ set void SetLexerLanguage=4006(, string language)
 fun void LoadLexerLibrary=4007(, string path)
 
 # Retrieve a "property" value previously set with SetProperty.
+# Result is NUL-terminated.
 get int GetProperty=4008(string key, stringresult buf)
 
 # Retrieve a "property" value previously set with SetProperty,
 # with "$()" variable replacement on returned buffer.
+# Result is NUL-terminated.
 get int GetPropertyExpanded=4009(string key, stringresult buf)
 
 # Retrieve a "property" value previously set with SetProperty,
@@ -2470,12 +2506,14 @@ get int GetStyleBitsNeeded=4011(,)
 
 # Retrieve the name of the lexer.
 # Return the length of the text.
+# Result is NUL-terminated.
 get int GetLexerLanguage=4012(, stringresult text)
 
 # For private communication between an application and a known lexer.
 fun int PrivateLexerCall=4013(int operation, int pointer)
 
 # Retrieve a '\n' separated list of properties understood by the current lexer.
+# Result is NUL-terminated.
 fun int PropertyNames=4014(, stringresult names)
 
 enu TypeProperty=SC_TYPE_
@@ -2487,9 +2525,11 @@ val SC_TYPE_STRING=2
 fun int PropertyType=4015(string name,)
 
 # Describe a property.
+# Result is NUL-terminated.
 fun int DescribeProperty=4016(string name, stringresult description)
 
 # Retrieve a '\n' separated list of descriptions of the keyword sets understood by the current lexer.
+# Result is NUL-terminated.
 fun int DescribeKeyWordSets=4017(, stringresult descriptions)
 
 # Bit set of LineEndType enumertion for which line ends beyond the standard
@@ -2522,6 +2562,7 @@ set void SetIdentifiers=4024(int style, string identifiers)
 get int DistanceToSecondaryStyles=4025(,)
 
 # Get the set of base styles that can be extended with sub styles
+# Result is NUL-terminated.
 get int GetSubStyleBases=4026(, stringresult styles)
 
 # Notifications
@@ -2719,6 +2760,9 @@ val SCLEX_AS=113
 val SCLEX_DMIS=114
 val SCLEX_REGISTRY=115
 val SCLEX_BIBTEX=116
+val SCLEX_SREC=117
+val SCLEX_IHEX=118
+val SCLEX_TEHEX=119
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -3599,6 +3643,11 @@ val SCE_V_OPERATOR=10
 val SCE_V_IDENTIFIER=11
 val SCE_V_STRINGEOL=12
 val SCE_V_USER=19
+val SCE_V_COMMENT_WORD=20
+val SCE_V_INPUT=21
+val SCE_V_OUTPUT=22
+val SCE_V_INOUT=23
+val SCE_V_PORT_CONNECT=24
 # Lexical states for SCLEX_KIX
 lex Kix=SCLEX_KIX SCE_KIX_
 val SCE_KIX_DEFAULT=0
@@ -4542,6 +4591,31 @@ val SCE_BIBTEX_KEY=3
 val SCE_BIBTEX_PARAMETER=4
 val SCE_BIBTEX_VALUE=5
 val SCE_BIBTEX_COMMENT=6
+# Lexical state for SCLEX_SREC
+lex Srec=SCLEX_SREC SCE_HEX_
+val SCE_HEX_DEFAULT=0
+val SCE_HEX_RECSTART=1
+val SCE_HEX_RECTYPE=2
+val SCE_HEX_RECTYPE_UNKNOWN=3
+val SCE_HEX_BYTECOUNT=4
+val SCE_HEX_BYTECOUNT_WRONG=5
+val SCE_HEX_NOADDRESS=6
+val SCE_HEX_DATAADDRESS=7
+val SCE_HEX_RECCOUNT=8
+val SCE_HEX_STARTADDRESS=9
+val SCE_HEX_ADDRESSFIELD_UNKNOWN=10
+val SCE_HEX_EXTENDEDADDRESS=11
+val SCE_HEX_DATA_ODD=12
+val SCE_HEX_DATA_EVEN=13
+val SCE_HEX_DATA_UNKNOWN=14
+val SCE_HEX_DATA_EMPTY=15
+val SCE_HEX_CHECKSUM=16
+val SCE_HEX_CHECKSUM_WRONG=17
+val SCE_HEX_GARBAGE=18
+# Lexical state for SCLEX_IHEX (shared with Srec)
+lex IHex=SCLEX_IHEX SCE_HEX_
+# Lexical state for SCLEX_TEHEX (shared with Srec)
+lex TEHex=SCLEX_TEHEX SCE_HEX_
 
 # Events
 
@@ -4594,3 +4668,11 @@ get bool GetUsePalette=2139(,)
 # In palette mode, Scintilla uses the environment's palette calls to display
 # more colours. This may lead to ugly displays.
 set void SetUsePalette=2039(bool usePalette,)
+
+# Deprecated in 3.5.5
+
+# Always interpret keyboard input as Unicode
+set void SetKeysUnicode=2521(bool keysUnicode,)
+
+# Are keys always interpreted as Unicode?
+get bool GetKeysUnicode=2522(,)

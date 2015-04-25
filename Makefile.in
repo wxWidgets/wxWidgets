@@ -261,6 +261,7 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexGAP.o \
 	wxscintilla_LexGui4Cli.o \
 	wxscintilla_LexHaskell.o \
+	wxscintilla_LexHex.o \
 	wxscintilla_LexHTML.o \
 	wxscintilla_LexInno.o \
 	wxscintilla_LexKix.o \
@@ -17139,6 +17140,9 @@ wxscintilla_LexGui4Cli.o: $(srcdir)/src/stc/scintilla/lexers/LexGui4Cli.cxx
 
 wxscintilla_LexHaskell.o: $(srcdir)/src/stc/scintilla/lexers/LexHaskell.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexHaskell.cxx
+
+wxscintilla_LexHex.o: $(srcdir)/src/stc/scintilla/lexers/LexHex.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexHex.cxx
 
 wxscintilla_LexHTML.o: $(srcdir)/src/stc/scintilla/lexers/LexHTML.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexHTML.cxx

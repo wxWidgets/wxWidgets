@@ -23,10 +23,17 @@ static PRectangle PixelGridAlign(const PRectangle &rc) {
 	return PRectangle::FromInts(int(rc.left + 0.5), int(rc.top), int(rc.right + 0.5), int(rc.bottom));
 }
 
-void Indicator::Draw(Surface *surface, const PRectangle &rc, const PRectangle &rcLine) const {
-	surface->PenColour(fore);
+void Indicator::Draw(Surface *surface, const PRectangle &rc, const PRectangle &rcLine, DrawState drawState, int value) const {
+	StyleAndColour sacDraw = sacNormal;
+	if (Flags() & SC_INDICFLAG_VALUEFORE) {
+		sacDraw.fore = value & SC_INDICVALUEMASK;
+	}
+	if (drawState == drawHover) {
+		sacDraw = sacHover;
+	}
+	surface->PenColour(sacDraw.fore);
 	int ymid = static_cast<int>(rc.bottom + rc.top) / 2;
-	if (style == INDIC_SQUIGGLE) {
+	if (sacDraw.style == INDIC_SQUIGGLE) {
 		int x = int(rc.left+0.5);
 		int xLast = int(rc.right+0.5);
 		int y = 0;
@@ -42,7 +49,7 @@ void Indicator::Draw(Surface *surface, const PRectangle &rc, const PRectangle &r
 			}
 			surface->LineTo(x, static_cast<int>(rc.top) + y);
 		}
-	} else if (style == INDIC_SQUIGGLEPIXMAP) {
+	} else if (sacDraw.style == INDIC_SQUIGGLEPIXMAP) {
 		PRectangle rcSquiggle = PixelGridAlign(rc);
 
 		int width = Platform::Minimum(4000, static_cast<int>(rcSquiggle.Width()));
@@ -51,17 +58,17 @@ void Indicator::Draw(Surface *surface, const PRectangle &rc, const PRectangle &r
 		for (int x = 0; x < width; x++) {
 			if (x%2) {
 				// Two halfway columns have a full pixel in middle flanked by light pixels
-				image.SetPixel(x, 0, fore, alphaSide);
-				image.SetPixel(x, 1, fore, alphaFull);
-				image.SetPixel(x, 2, fore, alphaSide);
+				image.SetPixel(x, 0, sacDraw.fore, alphaSide);
+				image.SetPixel(x, 1, sacDraw.fore, alphaFull);
+				image.SetPixel(x, 2, sacDraw.fore, alphaSide);
 			} else {
 				// Extreme columns have a full pixel at bottom or top and a mid-tone pixel in centre
-				image.SetPixel(x, (x%4) ? 0 : 2, fore, alphaFull);
-				image.SetPixel(x, 1, fore, alphaSide2);
+				image.SetPixel(x, (x % 4) ? 0 : 2, sacDraw.fore, alphaFull);
+				image.SetPixel(x, 1, sacDraw.fore, alphaSide2);
 			}
 		}
 		surface->DrawRGBAImage(rcSquiggle, image.GetWidth(), image.GetHeight(), image.Pixels());
-	} else if (style == INDIC_SQUIGGLELOW) {
+	} else if (sacDraw.style == INDIC_SQUIGGLELOW) {
 		surface->MoveTo(static_cast<int>(rc.left), static_cast<int>(rc.top));
 		int x = static_cast<int>(rc.left) + 3;
 		int y = 0;
@@ -72,7 +79,7 @@ void Indicator::Draw(Surface *surface, const PRectangle &rc, const PRectangle &r
 			x += 3;
 		}
 		surface->LineTo(static_cast<int>(rc.right), static_cast<int>(rc.top) + y);	// Finish the line
-	} else if (style == INDIC_TT) {
+	} else if (sacDraw.style == INDIC_TT) {
 		surface->MoveTo(static_cast<int>(rc.left), ymid);
 		int x = static_cast<int>(rc.left) + 5;
 		while (x < rc.right) {
@@ -88,7 +95,7 @@ void Indicator::Draw(Surface *surface, const PRectangle &rc, const PRectangle &r
 			surface->MoveTo(x-3, ymid);
 			surface->LineTo(x-3, ymid+2);
 		}
-	} else if (style == INDIC_DIAGONAL) {
+	} else if (sacDraw.style == INDIC_DIAGONAL) {
 		int x = static_cast<int>(rc.left);
 		while (x < rc.right) {
 			surface->MoveTo(x, static_cast<int>(rc.top) + 2);
@@ -101,24 +108,28 @@ void Indicator::Draw(Surface *surface, const PRectangle &rc, const PRectangle &r
 			surface->LineTo(endX, endY);
 			x += 4;
 		}
-	} else if (style == INDIC_STRIKE) {
+	} else if (sacDraw.style == INDIC_STRIKE) {
 		surface->MoveTo(static_cast<int>(rc.left), static_cast<int>(rc.top) - 4);
 		surface->LineTo(static_cast<int>(rc.right), static_cast<int>(rc.top) - 4);
-	} else if (style == INDIC_HIDDEN) {
+	} else if ((sacDraw.style == INDIC_HIDDEN) || (sacDraw.style == INDIC_TEXTFORE)) {
 		// Draw nothing
-	} else if (style == INDIC_BOX) {
+	} else if (sacDraw.style == INDIC_BOX) {
 		surface->MoveTo(static_cast<int>(rc.left), ymid + 1);
 		surface->LineTo(static_cast<int>(rc.right), ymid + 1);
 		surface->LineTo(static_cast<int>(rc.right), static_cast<int>(rcLine.top) + 1);
 		surface->LineTo(static_cast<int>(rc.left), static_cast<int>(rcLine.top) + 1);
 		surface->LineTo(static_cast<int>(rc.left), ymid + 1);
-	} else if (style == INDIC_ROUNDBOX || style == INDIC_STRAIGHTBOX) {
+	} else if (sacDraw.style == INDIC_ROUNDBOX ||
+		sacDraw.style == INDIC_STRAIGHTBOX ||
+		sacDraw.style == INDIC_FULLBOX) {
 		PRectangle rcBox = rcLine;
-		rcBox.top = rcLine.top + 1;
+		if (sacDraw.style != INDIC_FULLBOX)
+			rcBox.top = rcLine.top + 1;
 		rcBox.left = rc.left;
 		rcBox.right = rc.right;
-		surface->AlphaRectangle(rcBox, (style == INDIC_ROUNDBOX) ? 1 : 0, fore, fillAlpha, fore, outlineAlpha, 0);
-	} else if (style == INDIC_DOTBOX) {
+		surface->AlphaRectangle(rcBox, (sacDraw.style == INDIC_ROUNDBOX) ? 1 : 0, 
+			sacDraw.fore, fillAlpha, sacDraw.fore, outlineAlpha, 0);
+	} else if (sacDraw.style == INDIC_DOTBOX) {
 		PRectangle rcBox = PixelGridAlign(rc);
 		rcBox.top = rcLine.top + 1;
 		rcBox.bottom = rcLine.bottom;
@@ -128,36 +139,42 @@ void Indicator::Draw(Surface *surface, const PRectangle &rc, const PRectangle &r
 		// Draw horizontal lines top and bottom
 		for (int x=0; x<width; x++) {
 			for (int y = 0; y<static_cast<int>(rcBox.Height()); y += static_cast<int>(rcBox.Height()) - 1) {
-				image.SetPixel(x, y, fore, ((x + y) % 2) ? outlineAlpha : fillAlpha);
+				image.SetPixel(x, y, sacDraw.fore, ((x + y) % 2) ? outlineAlpha : fillAlpha);
 			}
 		}
 		// Draw vertical lines left and right
 		for (int y = 1; y<static_cast<int>(rcBox.Height()); y++) {
 			for (int x=0; x<width; x += width-1) {
-				image.SetPixel(x, y, fore, ((x + y) % 2) ? outlineAlpha : fillAlpha);
+				image.SetPixel(x, y, sacDraw.fore, ((x + y) % 2) ? outlineAlpha : fillAlpha);
 			}
 		}
 		surface->DrawRGBAImage(rcBox, image.GetWidth(), image.GetHeight(), image.Pixels());
-	} else if (style == INDIC_DASH) {
+	} else if (sacDraw.style == INDIC_DASH) {
 		int x = static_cast<int>(rc.left);
 		while (x < rc.right) {
 			surface->MoveTo(x, ymid);
 			surface->LineTo(Platform::Minimum(x + 4, static_cast<int>(rc.right)), ymid);
 			x += 7;
 		}
-	} else if (style == INDIC_DOTS) {
+	} else if (sacDraw.style == INDIC_DOTS) {
 		int x = static_cast<int>(rc.left);
 		while (x < static_cast<int>(rc.right)) {
 			PRectangle rcDot = PRectangle::FromInts(x, ymid, x + 1, ymid + 1);
-			surface->FillRectangle(rcDot, fore);
+			surface->FillRectangle(rcDot, sacDraw.fore);
 			x += 2;
 		}
-	} else if (style == INDIC_COMPOSITIONTHICK) {
+	} else if (sacDraw.style == INDIC_COMPOSITIONTHICK) {
 		PRectangle rcComposition(rc.left+1, rcLine.bottom-2, rc.right-1, rcLine.bottom);
-		surface->FillRectangle(rcComposition, fore);
+		surface->FillRectangle(rcComposition, sacDraw.fore);
+	} else if (sacDraw.style == INDIC_COMPOSITIONTHIN) {
+		PRectangle rcComposition(rc.left+1, rcLine.bottom-2, rc.right-1, rcLine.bottom-1);
+		surface->FillRectangle(rcComposition, sacDraw.fore);
 	} else {	// Either INDIC_PLAIN or unknown
 		surface->MoveTo(static_cast<int>(rc.left), ymid);
 		surface->LineTo(static_cast<int>(rc.right), ymid);
 	}
 }
 
+void Indicator::SetFlags(int attributes_) {
+	attributes = attributes_;
+}

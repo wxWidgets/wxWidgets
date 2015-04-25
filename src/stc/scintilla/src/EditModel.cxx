@@ -65,6 +65,7 @@ EditModel::EditModel() {
 	imeInteraction = imeWindowed;
 	foldFlags = 0;
 	hotspot = Range(invalidPosition);
+	hoverIndicatorPos = invalidPosition;
 	wrapWidth = LineLayout::wrapWidthInfinite;
 	pdoc = new Document();
 	pdoc->AddRef();

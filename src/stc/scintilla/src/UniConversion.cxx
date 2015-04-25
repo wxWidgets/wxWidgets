@@ -17,7 +17,6 @@ using namespace Scintilla;
 namespace Scintilla {
 #endif
 
-enum { SURROGATE_LEAD_FIRST = 0xD800 };
 enum { SURROGATE_TRAIL_FIRST = 0xDC00 };
 enum { SURROGATE_TRAIL_LAST = 0xDFFF };
 enum { SUPPLEMENTAL_PLANE_FIRST = 0x10000 };
@@ -43,7 +42,7 @@ unsigned int UTF8Length(const wchar_t *uptr, unsigned int tlen) {
 }
 
 void UTF8FromUTF16(const wchar_t *uptr, unsigned int tlen, char *putf, unsigned int len) {
-	int k = 0;
+	unsigned int k = 0;
 	for (unsigned int i = 0; i < tlen && uptr[i];) {
 		unsigned int uch = uptr[i];
 		if (uch < 0x80) {
@@ -67,7 +66,8 @@ void UTF8FromUTF16(const wchar_t *uptr, unsigned int tlen, char *putf, unsigned 
 		}
 		i++;
 	}
-	putf[len] = '\0';
+	if (k < len)
+		putf[k] = '\0';
 }
 
 unsigned int UTF8CharLength(unsigned char ch) {
@@ -82,10 +82,10 @@ unsigned int UTF8CharLength(unsigned char ch) {
 	}
 }
 
-unsigned int UTF16Length(const char *s, unsigned int len) {
-	unsigned int ulen = 0;
-	unsigned int charLen;
-	for (unsigned int i=0; i<len;) {
+size_t UTF16Length(const char *s, size_t len) {
+	size_t ulen = 0;
+	size_t charLen;
+	for (size_t i = 0; i<len;) {
 		unsigned char ch = static_cast<unsigned char>(s[i]);
 		if (ch < 0x80) {
 			charLen = 1;
@@ -103,10 +103,10 @@ unsigned int UTF16Length(const char *s, unsigned int len) {
 	return ulen;
 }
 
-unsigned int UTF16FromUTF8(const char *s, unsigned int len, wchar_t *tbuf, unsigned int tlen) {
-	unsigned int ui=0;
+size_t UTF16FromUTF8(const char *s, size_t len, wchar_t *tbuf, size_t tlen) {
+	size_t ui = 0;
 	const unsigned char *us = reinterpret_cast<const unsigned char *>(s);
-	unsigned int i=0;
+	size_t i = 0;
 	while ((i<len) && (ui<tlen)) {
 		unsigned char ch = us[i++];
 		if (ch < 0x80) {
@@ -145,7 +145,7 @@ unsigned int UTF32FromUTF8(const char *s, unsigned int len, unsigned int *tbuf, 
 	unsigned int i=0;
 	while ((i<len) && (ui<tlen)) {
 		unsigned char ch = us[i++];
-		wchar_t value = 0;
+		unsigned int value = 0;
 		if (ch < 0x80) {
 			value = ch;
 		} else if (((len-i) >= 1) && (ch < 0x80 + 0x40 + 0x20)) {

@@ -263,8 +263,10 @@ void MarginView::PaintMargin(Surface *surface, int topLine, PRectangle rc, PRect
 				PLATFORM_ASSERT(visibleLine < model.cs.LinesDisplayed());
 				const int lineDoc = model.cs.DocFromDisplay(visibleLine);
 				PLATFORM_ASSERT(model.cs.GetVisible(lineDoc));
-				const bool firstSubLine = visibleLine == model.cs.DisplayFromDoc(lineDoc);
-				const bool lastSubLine = visibleLine == model.cs.DisplayLastFromDoc(lineDoc);
+				const int firstVisibleLine = model.cs.DisplayFromDoc(lineDoc);
+				const int lastVisibleLine = model.cs.DisplayLastFromDoc(lineDoc);
+				const bool firstSubLine = visibleLine == firstVisibleLine;
+				const bool lastSubLine = visibleLine == lastVisibleLine;
 
 				int marks = model.pdoc->GetMark(lineDoc);
 				if (!firstSubLine)
@@ -403,9 +405,9 @@ void MarginView::PaintMargin(Surface *surface, int topLine, PRectangle rc, PRect
 						}
 					}
 				} else if (vs.ms[margin].style == SC_MARGIN_TEXT || vs.ms[margin].style == SC_MARGIN_RTEXT) {
-					if (firstSubLine) {
-						const StyledText stMargin = model.pdoc->MarginStyledText(lineDoc);
-						if (stMargin.text && ValidStyledText(vs, vs.marginStyleOffset, stMargin)) {
+					const StyledText stMargin = model.pdoc->MarginStyledText(lineDoc);
+					if (stMargin.text && ValidStyledText(vs, vs.marginStyleOffset, stMargin)) {
+						if (firstSubLine) {
 							surface->FillRectangle(rcMarker,
 								vs.styles[stMargin.StyleAt(0) + vs.marginStyleOffset].back);
 							if (vs.ms[margin].style == SC_MARGIN_RTEXT) {
@@ -414,6 +416,12 @@ void MarginView::PaintMargin(Surface *surface, int topLine, PRectangle rc, PRect
 							}
 							DrawStyledText(surface, vs, vs.marginStyleOffset, rcMarker,
 								stMargin, 0, stMargin.length, drawAll);
+						} else {
+							// if we're displaying annotation lines, color the margin to match the associated document line
+							const int annotationLines = model.pdoc->AnnotationLines(lineDoc);
+							if (annotationLines && (visibleLine > lastVisibleLine - annotationLines)) {
+								surface->FillRectangle(rcMarker, vs.styles[stMargin.StyleAt(0) + vs.marginStyleOffset].back);
+							}
 						}
 					}
 				}

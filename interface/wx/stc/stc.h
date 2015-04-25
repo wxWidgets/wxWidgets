@@ -148,6 +148,9 @@
 #define wxSTC_INDIC_DOTBOX 12
 #define wxSTC_INDIC_SQUIGGLEPIXMAP 13
 #define wxSTC_INDIC_COMPOSITIONTHICK 14
+#define wxSTC_INDIC_COMPOSITIONTHIN 15
+#define wxSTC_INDIC_FULLBOX 16
+#define wxSTC_INDIC_TEXTFORE 17
 #define wxSTC_INDIC_IME 32
 #define wxSTC_INDIC_IME_MAX 35
 #define wxSTC_INDIC_MAX 35
@@ -156,6 +159,9 @@
 #define wxSTC_INDIC1_MASK 0x40
 #define wxSTC_INDIC2_MASK 0x80
 #define wxSTC_INDICS_MASK 0xE0
+#define wxSTC_INDICVALUEBIT 0x1000000
+#define wxSTC_INDICVALUEMASK 0xFFFFFF
+#define wxSTC_INDICFLAG_VALUEFORE 1
 #define wxSTC_IV_NONE 0
 #define wxSTC_IV_REAL 1
 #define wxSTC_IV_LOOKFORWARD 2
@@ -495,6 +501,9 @@
 #define wxSTC_LEX_DMIS 114
 #define wxSTC_LEX_REGISTRY 115
 #define wxSTC_LEX_BIBTEX 116
+#define wxSTC_LEX_SREC 117
+#define wxSTC_LEX_IHEX 118
+#define wxSTC_LEX_TEHEX 119
 
 /// When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 /// value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -1378,6 +1387,11 @@
 #define wxSTC_V_IDENTIFIER 11
 #define wxSTC_V_STRINGEOL 12
 #define wxSTC_V_USER 19
+#define wxSTC_V_COMMENT_WORD 20
+#define wxSTC_V_INPUT 21
+#define wxSTC_V_OUTPUT 22
+#define wxSTC_V_INOUT 23
+#define wxSTC_V_PORT_CONNECT 24
 
 /// Lexical states for SCLEX_KIX
 #define wxSTC_KIX_DEFAULT 0
@@ -2322,6 +2336,27 @@
 #define wxSTC_BIBTEX_VALUE 5
 #define wxSTC_BIBTEX_COMMENT 6
 
+/// Lexical state for SCLEX_SREC
+#define wxSTC_HEX_DEFAULT 0
+#define wxSTC_HEX_RECSTART 1
+#define wxSTC_HEX_RECTYPE 2
+#define wxSTC_HEX_RECTYPE_UNKNOWN 3
+#define wxSTC_HEX_BYTECOUNT 4
+#define wxSTC_HEX_BYTECOUNT_WRONG 5
+#define wxSTC_HEX_NOADDRESS 6
+#define wxSTC_HEX_DATAADDRESS 7
+#define wxSTC_HEX_RECCOUNT 8
+#define wxSTC_HEX_STARTADDRESS 9
+#define wxSTC_HEX_ADDRESSFIELD_UNKNOWN 10
+#define wxSTC_HEX_EXTENDEDADDRESS 11
+#define wxSTC_HEX_DATA_ODD 12
+#define wxSTC_HEX_DATA_EVEN 13
+#define wxSTC_HEX_DATA_UNKNOWN 14
+#define wxSTC_HEX_DATA_EMPTY 15
+#define wxSTC_HEX_CHECKSUM 16
+#define wxSTC_HEX_CHECKSUM_WRONG 17
+#define wxSTC_HEX_GARBAGE 18
+
 //}}}
 
 // Commands that can be bound to keystrokes {{{
@@ -2906,6 +2941,7 @@ public:
     /**
         Retrieve the text of the line containing the caret.
         Returns the index of the caret on the line.
+        Result is NUL-terminated.
     */
     wxString GetCurLine(int* linePos=NULL);
 
@@ -3383,6 +3419,36 @@ public:
         Retrieve whether indicator drawn under or over text.
     */
     bool IndicatorGetUnder(int indic) const;
+
+    /**
+        Set a hover indicator to plain, squiggle or TT.
+    */
+    void IndicatorSetHoverStyle(int indic, int style);
+
+    /**
+        Retrieve the hover style of an indicator.
+    */
+    int IndicatorGetHoverStyle(int indic) const;
+
+    /**
+        Set the foreground hover colour of an indicator.
+    */
+    void IndicatorSetHoverForeground(int indic, const wxColour& fore);
+
+    /**
+        Retrieve the foreground hover colour of an indicator.
+    */
+    wxColour IndicatorGetHoverForeground(int indic) const;
+
+    /**
+        Set the attributes of an indicator.
+    */
+    void IndicatorSetFlags(int indic, int flags);
+
+    /**
+        Retrieve the attributes of an indicator.
+    */
+    int IndicatorGetFlags(int indic) const;
 
     /**
         Set the foreground colour of all whitespace and whether to use this setting.
@@ -3965,6 +4031,16 @@ public:
     int GetTargetEnd() const;
 
     /**
+        Sets both the start and end of the target in one call.
+    */
+    void SetTargetRange(int start, int end);
+
+    /**
+        Retrieve the text in the target.
+    */
+    wxString GetTargetText() const;
+
+    /**
         Replace the target text with the argument text.
         Text is counted so it can contain NULs.
         Returns the length of the replacement text.
@@ -4372,6 +4448,7 @@ public:
 
     /**
         Retrieve the value of a tag from a regular expression search.
+        Result is NUL-terminated.
     */
     wxString GetTag(int tagNumber) const;
 
@@ -5347,16 +5424,6 @@ public:
     int GetGapPosition() const;
 
     /**
-        Always interpret keyboard input as Unicode
-    */
-    void SetKeysUnicode(bool keysUnicode);
-
-    /**
-        Are keys always interpreted as Unicode?
-    */
-    bool GetKeysUnicode() const;
-
-    /**
         Set the alpha fill colour of the given indicator.
     */
     void IndicatorSetAlpha(int indicator, int alpha);
@@ -5852,6 +5919,7 @@ public:
 
     /**
         Set the way a character is drawn.
+        Result is NUL-terminated.
     */
     wxString GetRepresentation(const wxString& encodedCharacter) const;
 
@@ -5929,6 +5997,7 @@ public:
 
     /**
         Retrieve a '\n' separated list of properties understood by the current lexer.
+        Result is NUL-terminated.
     */
     wxString PropertyNames() const;
 
@@ -5939,11 +6008,13 @@ public:
 
     /**
         Describe a property.
+        Result is NUL-terminated.
     */
     wxString DescribeProperty(const wxString& name) const;
 
     /**
         Retrieve a '\n' separated list of descriptions of the keyword sets understood by the current lexer.
+        Result is NUL-terminated.
     */
     wxString DescribeKeyWordSets() const;
 
@@ -5996,6 +6067,7 @@ public:
 
     /**
         Get the set of base styles that can be extended with sub styles
+        Result is NUL-terminated.
     */
     wxString GetSubStyleBases() const;
 
