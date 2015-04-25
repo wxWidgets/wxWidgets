@@ -119,6 +119,8 @@ private:
     void AddPanel_3();
     void AddPanel_4();
     void AddPanel_5();
+
+    wxSizerFlags m_commonExpandFlags;
 };
 
 #endif //_GUIFRAME_H_

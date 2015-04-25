@@ -3073,7 +3073,7 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
     itemSizer8->Add(checkBox6, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
     item0->Add(itemSizer8, 0, wxGROW|wxALL, 0);
 
-    topSizer->Add( item0, 1, wxGROW|wxALIGN_CENTRE|wxALL, 5 );
+    topSizer->Add( item0, wxSizerFlags(1).Expand().Border(wxALL, 5) );
 
     panel->SetSizerAndFit(topSizer);
 
@@ -3130,7 +3130,7 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
     item0->Add(itemSizer5, 0, wxGROW|wxLEFT|wxRIGHT, 5);
 #endif
 
-    topSizer->Add( item0, 1, wxGROW|wxALIGN_CENTRE|wxALL, 5 );
+    topSizer->Add( item0, wxSizerFlags(1).Expand().Border(wxALL, 5) );
     topSizer->AddSpacer(5);
 
     panel->SetSizerAndFit(topSizer);
@@ -3211,7 +3211,7 @@ bool TestMessageBoxDialog::Create()
         sizerBtns->Add(m_buttons[n], wxSizerFlags().Centre().Left());
 
         m_labels[n] = new wxTextCtrl(this, wxID_ANY);
-        sizerBtns->Add(m_labels[n], wxSizerFlags().Centre().Expand());
+        sizerBtns->Add(m_labels[n], wxSizerFlags().Expand());
 
         m_labels[n]->Connect(wxEVT_UPDATE_UI,
                              wxUpdateUIEventHandler(

@@ -255,12 +255,12 @@ void wxGenericColourDialog::CreateWidgets()
 
     sliderSizer->Add(sliderX, sliderHeight );
 
-    wxSizerFlags flagsRight;
-    flagsRight.Align(wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL).DoubleBorder();
+    const wxSizerFlags sliderFlags
+        = wxSizerFlags().CentreVertical().DoubleBorder();
 
-    sliderSizer->Add(m_redSlider, flagsRight);
-    sliderSizer->Add(m_greenSlider,flagsRight);
-    sliderSizer->Add(m_blueSlider,flagsRight);
+    sliderSizer->Add(m_redSlider, sliderFlags);
+    sliderSizer->Add(m_greenSlider, sliderFlags);
+    sliderSizer->Add(m_blueSlider, sliderFlags);
 
     topSizer->Add(sliderSizer, wxSizerFlags().Centre().DoubleBorder());
 #else

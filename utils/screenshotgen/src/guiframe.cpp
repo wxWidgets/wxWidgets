@@ -31,6 +31,8 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
     bSizer0 = new wxBoxSizer( wxVERTICAL );
     m_notebook1 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
+    m_commonExpandFlags = wxSizerFlags(1).Expand().Border(wxALL, 20);
+
     //Add panels into m_notebook1
 
     //Tiny Controls
@@ -158,11 +160,11 @@ void GUIFrame::AddPanel_1()
     m_gauge1 = new wxGauge( m_panel1, wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL, wxDefaultValidator, wxT("_Gauge") );
     m_gauge1->SetValue( 50 );
     m_gauge1->SetToolTip( _("wxGauge") );
-    fgSizer1->Add( m_gauge1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 20 );
+    fgSizer1->Add(m_gauge1, m_commonExpandFlags);
 
     m_slider1 = new wxSlider( m_panel1, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
     m_slider1->SetToolTip( _("wxSlider") );
-    fgSizer1->Add( m_slider1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 20 );
+    fgSizer1->Add(m_slider1, m_commonExpandFlags);
 
     m_toggleBtn1 = new wxToggleButton( m_panel1, wxID_ANY, _("Untoggled"), wxDefaultPosition, wxDefaultSize, 0 );
     m_toggleBtn1->SetToolTip( _("wxToggleButton") );
@@ -188,7 +190,7 @@ void GUIFrame::AddPanel_1()
     m_scrollBar1 = new wxScrollBar( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSB_HORIZONTAL );
     m_scrollBar1->SetScrollbar(50, 1, 100, 1);
     m_scrollBar1->SetToolTip( _("wxScrollBar") );
-    fgSizer1->Add( m_scrollBar1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 20 );
+    fgSizer1->Add(m_scrollBar1, m_commonExpandFlags);
 
     m_panel1->SetSizer( fgSizer1 );
     m_panel1->Layout();
@@ -209,13 +211,13 @@ void GUIFrame::AddPanel_2()
     int m_checkList1NChoices = sizeof( m_checkList1Choices ) / sizeof( wxString );
     m_checkList1 = new wxCheckListBox( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_checkList1NChoices, m_checkList1Choices, 0 );
     m_checkList1->Check(0);
-    fgSizer2->Add( m_checkList1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
+    fgSizer2->Add(m_checkList1, m_commonExpandFlags);
 
     m_listBox1 = new wxListBox( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
     m_listBox1->Append( _("wxListBox") );
     m_listBox1->Append( _("Item1") );
     m_listBox1->Append( _("Item2") );
-    fgSizer2->Add( m_listBox1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
+    fgSizer2->Add(m_listBox1, m_commonExpandFlags);
 
     wxString m_radioBox1Choices[] = { _("Item1"), _("Item2") };
     int m_radioBox1NChoices = sizeof( m_radioBox1Choices ) / sizeof( wxString );
@@ -224,7 +226,7 @@ void GUIFrame::AddPanel_2()
     fgSizer2->Add( m_radioBox1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 
     m_staticBox1 = new wxStaticBox(m_panel2,wxID_ANY, _("wxStaticBox"), wxDefaultPosition, wxDefaultSize, 0, _("_StaticBox"));
-    fgSizer2->Add( m_staticBox1, 1, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 20 );
+    fgSizer2->Add(m_staticBox1, m_commonExpandFlags);
 
     m_treeCtrl1 = new wxTreeCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE|wxSUNKEN_BORDER );
     wxTreeItemId root = m_treeCtrl1->AddRoot(_("wxTreeCtrl"));
@@ -232,7 +234,7 @@ void GUIFrame::AddPanel_2()
     wxTreeItemId node2 = m_treeCtrl1->AppendItem(root, _("Node2"));
     m_treeCtrl1->AppendItem(node2, _("Node3"));
     m_treeCtrl1->ExpandAll();
-    fgSizer2->Add( m_treeCtrl1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
+    fgSizer2->Add( m_treeCtrl1, m_commonExpandFlags);
 
     m_listCtrl1 = new wxListCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxSize(220,120), wxLC_REPORT|wxSUNKEN_BORDER );
     m_listCtrl1->InsertColumn(0, "Names");
@@ -242,7 +244,7 @@ void GUIFrame::AddPanel_2()
         m_listCtrl1->SetItem(index, 1, wxString::Format("%d", index));
     }
     m_listCtrl1->SetToolTip( _("wxListCtrl") );
-    fgSizer2->Add( m_listCtrl1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 20 );
+    fgSizer2->Add( m_listCtrl1, m_commonExpandFlags);
 
     m_animationCtrl1 = new wxAnimationCtrl(m_panel2, wxID_ANY);
     m_animationCtrl1->SetToolTip(_("wxAnimationCtrl"));
@@ -261,9 +263,9 @@ void GUIFrame::AddPanel_2()
     wxTextCtrl* m_collText = new wxTextCtrl(win, -1, wxT("inside a wxCollapsiblePane"));
     collbSizer->Add( m_collSText, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0 );
     collbSizer->Add( m_collBut, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0 );
-    collbSizer->Add( m_collText, 0, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0 );
+    collbSizer->Add( m_collText, wxSizerFlags().Expand() );
     win->SetSizer(collbSizer);
-    fgSizer2->Add( m_collPane1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+    fgSizer2->Add( m_collPane1, wxSizerFlags().Expand().Border(wxALL, 5) );
 
     //wxCollapsiblePane 2
     m_collPane2 = new wxCollapsiblePane(m_panel2, -1, wxT("Expanded"));
@@ -276,12 +278,12 @@ void GUIFrame::AddPanel_2()
     wxTextCtrl* m_collText2 = new wxTextCtrl(win2, -1, wxT("inside a wxCollapsiblePane"));
     collbSizer2->Add( m_collSText2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0 );
     collbSizer2->Add( m_collBut2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0 );
-    collbSizer2->Add( m_collText2, 0, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 0 );
+    collbSizer2->Add( m_collText2, wxSizerFlags().Expand() );
     win2->SetSizer(collbSizer2);
 
     m_collPane2->Expand();
 
-    fgSizer2->Add( m_collPane2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+    fgSizer2->Add( m_collPane2, wxSizerFlags().Expand().Border(wxALL, 5) );
 
     m_panel2->SetSizer( fgSizer2 );
     m_panel2->Layout();
@@ -362,7 +364,7 @@ void GUIFrame::AddPanel_4()
     m_genericDirCtrl1->ShowHidden( false );
     m_genericDirCtrl1->SetToolTip( _("wxGenericDirCtrl") );
     m_genericDirCtrl1->SetMinSize( wxSize( -1,150 ) );
-    fgSizer5->Add( m_genericDirCtrl1, 1, wxEXPAND|wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
+    fgSizer5->Add(m_genericDirCtrl1, m_commonExpandFlags);
 
     m_dirPicker1 = new wxDirPickerCtrl( m_panel4, wxID_ANY, wxEmptyString, _("Select a folder"), wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE, wxDefaultValidator, wxT("_DirPickerCtrl") );
     #if defined(__WXMSW__)
@@ -419,11 +421,12 @@ void GUIFrame::AddPanel_5()
     m_bmpComboBox1->Append(_("Item3"), wxBitmap(wxT("bitmaps/bell.png"),wxBITMAP_TYPE_PNG));
     m_bmpComboBox1->Append(_("Item4"), wxBitmap(wxT("bitmaps/sound.png"),wxBITMAP_TYPE_PNG));
     m_bmpComboBox1->SetToolTip(_("wxBitmapComboBox"));
-    fgSizer4->Add( m_bmpComboBox1, 1, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 20 );
+    fgSizer4->Add(m_bmpComboBox1, m_commonExpandFlags);
+
 
     m_ownerDrawnComboBox1 = PenStyleComboBox::CreateSample(m_panel5);
     m_ownerDrawnComboBox1->SetToolTip(_("wxOwnerDrawnComboBox"));
-    fgSizer4->Add( m_ownerDrawnComboBox1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
+    fgSizer4->Add(m_ownerDrawnComboBox1, m_commonExpandFlags);
 
     fgSizer4->Add( 0, 90, 1, wxEXPAND, 5 );
 
@@ -449,7 +452,7 @@ void GUIFrame::AddPanel_5()
         popupList->InsertItem(popupList->GetItemCount(),wxT("Item3"));
 
         popupList->Select(0, true);
-        fgSizer4->Add( m_comboCtrl1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 20 );
+        fgSizer4->Add(m_comboCtrl1, m_commonExpandFlags);
 
     //wxComboCtrl 2
         m_comboCtrl2 = new wxComboCtrl(m_panel5,wxID_ANY,wxEmptyString);
@@ -472,7 +475,7 @@ void GUIFrame::AddPanel_5()
         popupTree->AppendItem(node2, _("Node2"));
 
         popupTree->ExpandAll();
-        fgSizer4->Add( m_comboCtrl2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 20 );
+        fgSizer4->Add(m_comboCtrl2, m_commonExpandFlags);
 
     m_panel5->SetSizer( fgSizer4 );
     m_panel5->Layout();

@@ -269,33 +269,35 @@ bool wxGenericProgressDialog::Create( const wxString& title,
 
     wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
 
-    // Windows dialogs usually have buttons in the lower right corner
-    const int sizerFlags =
+    const int borderFlags =
 #if defined(__WXMSW__) || defined(__WXOSX__)
-                           wxALIGN_RIGHT | wxALL
-#else // !MSW
-                           wxALIGN_CENTER_HORIZONTAL | wxBOTTOM | wxTOP
-#endif // MSW/!MSW
-                           ;
+        wxALL
+#else
+        wxBOTTOM | wxTOP
+#endif
+        ;
+
+    const wxSizerFlags sizerFlags
+        = wxSizerFlags().Border(borderFlags, LAYOUT_MARGIN);
 
     if ( HasPDFlag(wxPD_CAN_SKIP) )
     {
         m_btnSkip = new wxButton(this, wxID_SKIP, _("&Skip"));
 
-        buttonSizer->Add(m_btnSkip, 0, sizerFlags, LAYOUT_MARGIN);
+        buttonSizer->Add(m_btnSkip, sizerFlags);
     }
 
     if ( HasPDFlag(wxPD_CAN_ABORT) )
     {
         m_btnAbort = new wxButton(this, wxID_CANCEL);
 
-        buttonSizer->Add(m_btnAbort, 0, sizerFlags, LAYOUT_MARGIN);
+        buttonSizer->Add(m_btnAbort, sizerFlags);
     }
 
     if ( !HasPDFlag(wxPD_CAN_SKIP | wxPD_CAN_ABORT) )
         buttonSizer->AddSpacer(LAYOUT_MARGIN);
 
-    sizerTop->Add(buttonSizer, 0, sizerFlags, LAYOUT_MARGIN );
+    sizerTop->Add(buttonSizer, sizerFlags);
 #endif // __SMARTPHONE__/!__SMARTPHONE__
 
     SetSizerAndFit(sizerTop);

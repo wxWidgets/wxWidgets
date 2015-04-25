@@ -121,7 +121,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     sizerCmds->Add(btn, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
     sizerCmds->AddSpacer(20);
 
-    sizerMain->Add(sizerCmds, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    sizerMain->Add(sizerCmds, wxSizerFlags().Expand().Border(wxALL, 5));
 
     wxStaticBoxSizer * const
         sizerLog = new wxStaticBoxSizer(wxVERTICAL, panel, "Server &log");
@@ -134,9 +134,9 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
                                     wxDefaultPosition, wxSize(500, 140),
                                     wxTE_MULTILINE
                                  );
-    sizerLog->Add(textLog, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    sizerLog->Add(textLog, wxSizerFlags(1).Expand().Border(wxALL, 5));
 
-    sizerMain->Add(sizerLog, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    sizerMain->Add(sizerLog, wxSizerFlags(1).Expand().Border(wxALL, 5));
 
     panel->SetSizer(sizerMain);
     sizerMain->SetSizeHints(panel);

@@ -122,7 +122,7 @@ void wxPropertySheetDialog::CreateButtons(int flags)
     wxSizer *buttonSizer = CreateButtonSizer(flags);
     if( buttonSizer )
     {
-        m_innerSizer->Add( buttonSizer, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxRIGHT, 2);
+        m_innerSizer->Add( buttonSizer, wxSizerFlags().Expand().Border(wxALL, 2) );
         m_innerSizer->AddSpacer(2);
     }
 
@@ -180,9 +180,9 @@ void wxPropertySheetDialog::AddBookCtrl(wxSizer* sizer)
     // The book control has to be sized larger than the dialog because of a border bug
     // in WinCE
     int borderSize = -2;
-    sizer->Add( m_bookCtrl, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxRIGHT, borderSize );
+    sizer->Add( m_bookCtrl, wxSizerFlags(1).Expand().Border(wxLEFT|wxTOP|wxRIGHT, borderSize) );
 #else
-    sizer->Add( m_bookCtrl, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, m_sheetInnerBorder );
+    sizer->Add( m_bookCtrl, wxSizerFlags(1).Expand().Border(wxALL, m_sheetInnerBorder) );
 #endif
 }
 

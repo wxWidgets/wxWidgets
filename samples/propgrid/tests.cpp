@@ -173,7 +173,7 @@ void FormMain::OnDumpList( wxCommandEvent& WXUNUSED(event) )
         wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT;
     rowsizer->Add( new wxButton(dlg,wxID_OK,wxT("Ok")),
         0, butSzFlags, spacing );
-    topsizer->Add( rowsizer, 0, wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL, 0 );
+    topsizer->Add( rowsizer, wxSizerFlags().Right() );
 
     dlg->SetSizer( topsizer );
     topsizer->SetSizeHints( dlg );
@@ -354,7 +354,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT;
     rowsizer->Add( new wxButton(dlg,wxID_OK,wxT("Ok")),
         0, butSzFlags, spacing );
-    topsizer->Add( rowsizer, 0, wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL, 0 );
+    topsizer->Add( rowsizer, wxSizerFlags().Right() );
 
     dlg->SetSizer( topsizer );
     topsizer->SetSizeHints( dlg );
