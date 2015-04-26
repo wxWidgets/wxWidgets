@@ -47,6 +47,7 @@ All:
 
 - Allow calling wxItemContainer::Add() and similar with std::vector<> argument.
 - Add "%z" support to printf()-like functions like wxString::Format() (RIVDSL).
+- Add DOCTYPE support to wxXmlDocument (Nick Matthews).
 - Add wxPowerResourceBlocker (Tobias Taschner).
 - Add wxApp::StoreCurrentException() and RethrowStoredException() and implement
   their functionality by default when using C++11 compiler.

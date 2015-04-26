@@ -403,6 +403,56 @@ bool wxXmlNode::IsWhitespaceOnly() const
 
 
 //-----------------------------------------------------------------------------
+//  wxXmlDoctype
+//-----------------------------------------------------------------------------
+
+void wxXmlDoctype::Clear()
+{
+    m_rootName.clear();
+    m_systemId.clear();
+    m_publicId.clear();
+}
+
+wxString wxXmlDoctype::GetFullString() const
+{
+    wxString content;
+    if ( !m_rootName.empty() )
+    {
+        content = m_rootName;
+
+        if ( !m_publicId.empty() )
+        {
+            content << wxS(" PUBLIC \"") << m_publicId << wxS("\"");
+        }
+
+        if ( !m_systemId.empty() )
+        {
+            if ( m_publicId.empty() )
+                content << wxS(" SYSTEM");
+
+            // Prefer to use double quotes, but switch to single ones if a
+            // double quote appears inside the string to be quoted.
+            wxString quote;
+            if ( m_systemId.find('\"') == wxString::npos )
+                quote = wxS('"');
+            else if ( m_systemId.find('\'') == wxString::npos )
+                quote = wxS('\'');
+            else // It's an error if we can't use either kind of quotes.
+                return wxString();
+
+            content << wxS(' ') << quote << m_systemId << quote;
+        }
+    }
+
+    return content;
+}
+
+bool wxXmlDoctype::IsValid() const
+{
+    return !GetFullString().empty();
+}
+
+//-----------------------------------------------------------------------------
 //  wxXmlDocument
 //-----------------------------------------------------------------------------
 
@@ -452,6 +502,7 @@ void wxXmlDocument::DoCopy(const wxXmlDocument& doc)
     m_encoding = doc.m_encoding;
 #endif
     m_fileEncoding = doc.m_fileEncoding;
+    m_doctype = doc.m_doctype;
 
     if (doc.m_docNode)
         m_docNode = new wxXmlNode(*doc.m_docNode);
@@ -607,6 +658,7 @@ struct wxXmlParsingContext
           node(NULL),
           lastChild(NULL),
           lastAsText(NULL),
+          doctype(NULL),
           removeWhiteOnlyNodes(false)
     {}
 
@@ -617,6 +669,7 @@ struct wxXmlParsingContext
     wxXmlNode *lastAsText;              // the last _text_ child of "node"
     wxString   encoding;
     wxString   version;
+    wxXmlDoctype *doctype;
     bool       removeWhiteOnlyNodes;
 };
 
@@ -747,6 +800,21 @@ static void PIHnd(void *userData, const char *target, const char *data)
     ctx->lastAsText = NULL;
 }
 
+static void StartDoctypeHnd(void *userData, const char *doctypeName,
+                            const char *sysid, const char *pubid,
+                            int WXUNUSED(has_internal_subset))
+{
+    wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
+
+    *ctx->doctype = wxXmlDoctype(CharToString(ctx->conv, doctypeName),
+                                 CharToString(ctx->conv, sysid),
+                                 CharToString(ctx->conv, pubid));
+}
+
+static void EndDoctypeHnd(void *WXUNUSED(userData))
+{
+}
+
 static void DefaultHnd(void *userData, const char *s, int len)
 {
     // XML header:
@@ -819,6 +887,7 @@ bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding, int fl
     if ( encoding.CmpNoCase(wxS("UTF-8")) != 0 )
         ctx.conv = new wxCSConv(encoding);
 #endif
+    ctx.doctype = &m_doctype;
     ctx.removeWhiteOnlyNodes = (flags & wxXMLDOC_KEEP_WHITESPACE_NODES) == 0;
     ctx.parser = parser;
     ctx.node = root;
@@ -829,6 +898,7 @@ bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding, int fl
     XML_SetCdataSectionHandler(parser, StartCdataHnd, EndCdataHnd);
     XML_SetCommentHandler(parser, CommentHnd);
     XML_SetProcessingInstructionHandler(parser, PIHnd);
+    XML_SetDoctypeDeclHandler(parser, StartDoctypeHnd, EndDoctypeHnd);
     XML_SetDefaultHandler(parser, DefaultHnd);
     XML_SetUnknownEncodingHandler(parser, UnknownEncodingHnd, NULL);
 
@@ -1132,6 +1202,17 @@ bool wxXmlDocument::Save(wxOutputStream& stream, int indentstep) const
                                     GetVersion(), GetFileEncoding()
                                    );
     bool rc = OutputString(stream, dec, convMem.get(), convFile.get());
+
+    if ( rc )
+    {
+        const wxString doctype = m_doctype.GetFullString();
+        if ( !doctype.empty() )
+        {
+            rc = OutputString(stream,
+                              wxS("<!DOCTYPE ") + doctype + wxS(">\n"),
+                              convMem.get(), convFile.get());
+        }
+    }
 
     wxXmlNode *node = GetDocumentNode();
     if ( node )

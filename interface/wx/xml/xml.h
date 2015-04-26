@@ -44,13 +44,16 @@ enum wxXmlNodeType
     of pseudo-attributes these do not use the nodes attribute system. It is the users
     responsibility to code and decode the instruction text.
 
+    The @c wxXML_DOCUMENT_TYPE_NODE is not implemented at this time. Instead,
+    get and set the DOCTYPE values using the wxXmlDocument class.
+
     If @c wxUSE_UNICODE is 0, all strings are encoded in the encoding given to
     wxXmlDocument::Load (default is UTF-8).
 
     @library{wxxml}
     @category{xml}
 
-    @see wxXmlDocument, wxXmlAttribute
+    @see wxXmlDocument, wxXmlDoctype, wxXmlAttribute
 */
 class wxXmlNode
 {
@@ -433,6 +436,99 @@ public:
 };
 
 
+
+/**
+    @class wxXmlDoctype
+
+    Represents a DOCTYPE Declaration.
+
+    Example DOCTYPE: <tt>\<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"\></tt>.
+
+    In the above example, "plist" is the name of root element,
+    "-//Apple//DTD PLIST 1.0//EN" (without the quotes) is the public identifier and
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd" (again, without the quotes) is
+    the system identifier.
+
+    A valid DOCTYPE exists in one of following forms:
+
+    1. A root element name.
+    2. A root element name and a system identifier.
+    3. A root element name, a system identifier and a public identifier.
+    4. A root element name and a public identifier. Although this form is not
+    valid XML it is valid for SMGL.
+
+    The DOCTYPE may also contain an internal subset of declarations
+    added between square brackets at the end.
+    These have not been implemented at this time.
+
+    @since 3.1.0
+
+    @library{wxxml}
+    @category{xml}
+
+    @see wxXmlDocument
+*/
+class wxXmlDoctype
+{
+public:
+    /**
+        Creates and possible initializes the DOCTYPE.
+
+        @param name
+            The root name.
+        @param sysid
+            The system identifier.
+        @param pubid
+            The public identifier.
+    */
+    wxXmlDoctype(const wxString& rootName = wxString(),
+                 const wxString& systemId = wxString(),
+                 const wxString& publicId = wxString());
+
+    /**
+        Removes all the DOCTYPE values.
+    */
+    void Clear();
+
+    /**
+        Returns the root name of the document.
+    */
+    const wxString& GetRootName() const;
+
+    /**
+        Returns the system id of the document.
+    */
+    const wxString& GetSystemId() const;
+
+    /**
+        Returns the public id of the document.
+    */
+    const wxString& GetPublicId() const;
+
+    /**
+        Returns the formatted DOCTYPE contents.
+
+        This consists of all the text shown between the opening
+        "<!DOCTYPE " and closing ">" of a DOCTYPE declaration.
+
+        If this object is empty or invalid, i.e. IsValid() returns false, this
+        method returns an empty string.
+    */
+    wxString GetFullString() const;
+
+    /**
+        Returns true if the contents can produce a valid DOCTYPE string.
+
+        For an object to be valid, it must have a non-empty root name and a
+        valid system identifier (currently the validity checks of the latter
+        are limited to checking that it doesn't contain both single and double
+        quotes).
+    */
+    bool IsValid() const;
+};
+
+
+
 //* special indentation value for wxXmlDocument::Save
 #define wxXML_NO_INDENTATION           (-1)
 
@@ -526,10 +622,14 @@ enum wxXmlDocumentLoadFlag
     doc.Save("myfile2.xml");  // myfile2.xml != myfile.xml
     @endcode
 
+    If the root name value of the DOCTYPE is set, either by loading a file with a
+    DOCTYPE declaration or by setting it directly with the SetDoctype member,
+    then a DOCTYPE declaration will be added immediately after the XML declaration.
+
     @library{wxxml}
     @category{xml}
 
-    @see wxXmlNode, wxXmlAttribute
+    @see wxXmlNode, wxXmlAttribute, wxXmlDoctype
 */
 class wxXmlDocument : public wxObject
 {
@@ -611,6 +711,13 @@ public:
               encoding of in-memory representation!
     */
     const wxString& GetFileEncoding() const;
+
+    /**
+        Returns the DOCTYPE declaration data for the document.
+
+        @since 3.1.0
+    */
+    const wxXmlDoctype& GetDoctype() const;
 
     /**
         Returns the document node of the document.
@@ -699,6 +806,14 @@ public:
         Sets the enconding of the file which will be used to save the document.
     */
     void SetFileEncoding(const wxString& encoding);
+
+    /**
+        Sets the data which will appear in the DOCTYPE declaration when the
+        document is saved.
+
+        @since 3.1.0
+    */
+    void SetDoctype(const wxXmlDoctype& doctype);
 
     /**
         Sets the root element node of this document.
