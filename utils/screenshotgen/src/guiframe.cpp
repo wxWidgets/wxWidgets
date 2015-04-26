@@ -240,8 +240,8 @@ void GUIFrame::AddPanel_2()
     m_listCtrl1->InsertColumn(0, "Names");
     m_listCtrl1->InsertColumn(1, "Values");
     for(long index = 0; index < 5; index++) {
-        m_listCtrl1->InsertItem( index, wxString::Format(_("Item%d"),index));
-        m_listCtrl1->SetItem(index, 1, wxString::Format("%d", index));
+        m_listCtrl1->InsertItem( index, wxString::Format(_("Item%ld"),index));
+        m_listCtrl1->SetItem(index, 1, wxString::Format("%ld", index));
     }
     m_listCtrl1->SetToolTip( _("wxListCtrl") );
     fgSizer2->Add( m_listCtrl1, m_commonExpandFlags);
