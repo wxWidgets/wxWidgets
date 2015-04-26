@@ -41,7 +41,12 @@
 #endif
 
 
-#define IMAGE_SPACING_CTRL_VERTICAL 7  // Spacing used in control size calculation
+// Spacing used in control size calculation
+#ifdef __WXOSX__
+    #define IMAGE_SPACING_CTRL_VERTICAL 12
+#else
+    #define IMAGE_SPACING_CTRL_VERTICAL 7
+#endif
 
 
 // ============================================================================
