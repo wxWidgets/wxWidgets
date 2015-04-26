@@ -1852,6 +1852,24 @@ wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype, wxDataViewC
     //       after the m_renderer pointer has been initialized
 }
 
+bool wxDataViewRenderer::FinishEditing()
+{
+    wxWindow* editorCtrl = m_editorCtrl;
+
+    bool ret = wxDataViewRendererBase::FinishEditing();
+
+    if (editorCtrl && wxGetTopLevelParent(editorCtrl)->IsBeingDeleted())
+    {
+        // remove editor widget before editor control is deleted,
+        // to prevent several GTK warnings
+        gtk_cell_editable_remove_widget(GTK_CELL_EDITABLE(editorCtrl->m_widget));
+        // delete editor control now, if it is deferred multiple erroneous
+        // focus-out events will occur, causing debug warnings
+        delete editorCtrl;
+    }
+    return ret;
+}
+
 void wxDataViewRenderer::GtkPackIntoColumn(GtkTreeViewColumn *column)
 {
     gtk_tree_view_column_pack_end( column, m_renderer, TRUE /* expand */);
