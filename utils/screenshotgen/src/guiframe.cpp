@@ -415,12 +415,19 @@ void GUIFrame::AddPanel_5()
 
     fgSizer4->Add( 0, 120, 1, wxEXPAND, 5 );
 
-    m_bmpComboBox1 = new wxBitmapComboBox(m_panel5, wxID_ANY,_("Item1"));
+    /*
+    Create the wxBitmapComboBox control with wxCB_READONLY to ensure
+    it shows a bitmap next to the edit field which is more suitable
+    for a screenshot.
+    */
+    m_bmpComboBox1 = new wxBitmapComboBox(m_panel5, wxID_ANY,_("Item1"),
+        wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
     m_bmpComboBox1->Append(_("Item1"), wxBitmap(wxT("bitmaps/bell.png"),wxBITMAP_TYPE_PNG));
     m_bmpComboBox1->Append(_("Item2"), wxBitmap(wxT("bitmaps/sound.png"),wxBITMAP_TYPE_PNG));
     m_bmpComboBox1->Append(_("Item3"), wxBitmap(wxT("bitmaps/bell.png"),wxBITMAP_TYPE_PNG));
     m_bmpComboBox1->Append(_("Item4"), wxBitmap(wxT("bitmaps/sound.png"),wxBITMAP_TYPE_PNG));
     m_bmpComboBox1->SetToolTip(_("wxBitmapComboBox"));
+    m_bmpComboBox1->SetSelection(0);
     fgSizer4->Add(m_bmpComboBox1, m_commonExpandFlags);
 
 
