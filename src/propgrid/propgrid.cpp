@@ -1051,8 +1051,7 @@ void wxPropertyGrid::DoEndLabelEdit( bool commit, int selFlags )
             // for the same property and the same label.
             if ( m_processedEvent &&
                  m_processedEvent->GetEventType() == wxEVT_PG_LABEL_EDIT_ENDING &&
-                 m_processedEvent->GetProperty() == prop &&
-                 m_processedEvent->GetColumn() == m_selColumn)
+                 m_processedEvent->GetProperty() == prop )
             {
                 return;
             }
