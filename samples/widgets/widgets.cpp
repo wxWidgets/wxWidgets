@@ -1253,6 +1253,8 @@ void WidgetsPage::SetUpWidget()
             it != widgets.end();
             ++it )
     {
+        wxCHECK_RET(*it, "NULL widget");
+
 #if wxUSE_TOOLTIPS
         (*it)->SetToolTip(GetAttrs().m_tooltip);
 #endif // wxUSE_TOOLTIPS
