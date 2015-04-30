@@ -185,7 +185,7 @@ if [[ "$1" = "docset" ]]; then
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFeedURL $ATOMDIR/$ATOM
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFallbackURL http://docs.wxwidgets.org
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetDescription "API reference and conceptual documentation for wxWidgets 3.0"
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info NSHumanReadableCopyright "Copyright 1992-2014 wxWidgets team, Portions 1996 Artificial Intelligence Applications Institute"
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info NSHumanReadableCopyright "Copyright 1992-2015 wxWidgets team, Portions 1996 Artificial Intelligence Applications Institute"
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info isJavaScriptEnabled true
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info dashIndexFilePath index.html
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetPlatformFamily wx

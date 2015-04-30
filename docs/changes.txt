@@ -34,7 +34,7 @@ Changes in behaviour which may result in build errors
   need to request it explicitly, e.g. `wx-config --libs std,webview`.
 
 
-3.1.0: (released 2014-xx-xx)
+3.1.0: (released 2015-xx-xx)
 ----------------------------
 
 - Many improvements for high DPI monitors support, notably XRC now interprets
