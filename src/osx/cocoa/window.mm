@@ -2730,7 +2730,10 @@ bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
     int length = [text length];
     if ( peer )
     {
-        for (NSUInteger i = 0; i < length; ++i)
+        const wxString str = wxCFStringRef([text retain]).AsString();
+        for ( wxString::const_iterator it = str.begin();
+              it != str.end();
+              ++it )
         {
             wxKeyEvent wxevent(wxEVT_CHAR);
             
@@ -2749,7 +2752,7 @@ bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
                 wxevent.m_rawCode = 0;
                 wxevent.m_rawFlags = 0;
 
-                unichar aunichar = [text characterAtIndex:i];
+                const wxChar aunichar = *it;
 #if wxUSE_UNICODE
                 wxevent.m_uniChar = aunichar;
 #endif
