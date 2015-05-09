@@ -836,12 +836,15 @@ public:
 
     inline bool operator==(const wxDateTime& dt) const
     {
-        return GetValue() == dt.GetValue();
+        // Intentionally do not call GetValue() here, in order that
+        // invalid wxDateTimes may be compared for equality
+        return m_time == dt.m_time;
     }
 
     inline bool operator!=(const wxDateTime& dt) const
     {
-        return GetValue() != dt.GetValue();
+        // As above, don't use GetValue() here.
+        return m_time != dt.m_time;
     }
 
     // arithmetics with dates (see also below for more operators)
