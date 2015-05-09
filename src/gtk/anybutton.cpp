@@ -139,17 +139,32 @@ void wxAnyButton::GTKOnFocus(wxFocusEvent& event)
 wxAnyButton::State wxAnyButton::GTKGetCurrentBitmapState() const
 {
     if ( !IsThisEnabled() )
-        return m_bitmaps[State_Disabled].IsOk() ? State_Disabled : State_Normal;
+    {
+        if ( m_bitmaps[State_Disabled].IsOk() )
+            return State_Disabled;
+    }
+    else
+    {
+        if ( m_isPressed && m_bitmaps[State_Pressed].IsOk() )
+            return State_Pressed;
 
-    if ( m_isPressed && m_bitmaps[State_Pressed].IsOk() )
-        return State_Pressed;
+        if ( m_isCurrent && m_bitmaps[State_Current].IsOk() )
+            return State_Current;
 
-    if ( m_isCurrent && m_bitmaps[State_Current].IsOk() )
-        return State_Current;
+        if ( HasFocus() && m_bitmaps[State_Focused].IsOk() )
+            return State_Focused;
+    }
 
-    if ( HasFocus() && m_bitmaps[State_Focused].IsOk() )
-        return State_Focused;
+    // Fall back on the normal state: which still might be different from
+    // State_Normal for the toggle buttons, so the check for bitmap validity is
+    // still needed.
+    const State normalState = GetNormalState();
+    if ( m_bitmaps[normalState].IsOk() )
+        return normalState;
 
+    // And if nothing else can (or should) be used, finally fall back to the
+    // normal state which is the only one guaranteed to have a bitmap (if we're
+    // using bitmaps at all and we're only called in this case).
     return State_Normal;
 }
 
