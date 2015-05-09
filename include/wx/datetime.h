@@ -816,37 +816,31 @@ public:
 
     inline bool operator<(const wxDateTime& dt) const
     {
-        wxASSERT_MSG( IsValid() && dt.IsValid(), wxT("invalid wxDateTime") );
         return GetValue() < dt.GetValue();
     }
 
     inline bool operator<=(const wxDateTime& dt) const
     {
-        wxASSERT_MSG( IsValid() && dt.IsValid(), wxT("invalid wxDateTime") );
         return GetValue() <= dt.GetValue();
     }
 
     inline bool operator>(const wxDateTime& dt) const
     {
-        wxASSERT_MSG( IsValid() && dt.IsValid(), wxT("invalid wxDateTime") );
         return GetValue() > dt.GetValue();
     }
 
     inline bool operator>=(const wxDateTime& dt) const
     {
-        wxASSERT_MSG( IsValid() && dt.IsValid(), wxT("invalid wxDateTime") );
         return GetValue() >= dt.GetValue();
     }
 
     inline bool operator==(const wxDateTime& dt) const
     {
-        wxASSERT_MSG( IsValid() && dt.IsValid(), wxT("invalid wxDateTime") );
         return GetValue() == dt.GetValue();
     }
 
     inline bool operator!=(const wxDateTime& dt) const
     {
-        wxASSERT_MSG( IsValid() && dt.IsValid(), wxT("invalid wxDateTime") );
         return GetValue() != dt.GetValue();
     }
 
