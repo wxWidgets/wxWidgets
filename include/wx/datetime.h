@@ -450,7 +450,7 @@ public:
     // ------------------------------------------------------------------------
 
         // default ctor does not initialize the object, use Set()!
-    wxDateTime() { m_time = wxLongLong(wxINT32_MIN, 0); }
+    wxDateTime() { m_time = wxINT64_MIN; }
 
         // from time_t: seconds since the Epoch 00:00:00 UTC, Jan 1, 1970)
     inline wxDateTime(time_t timet);
@@ -704,7 +704,7 @@ public:
     // ------------------------------------------------------------------------
 
         // is the date valid?
-    inline bool IsValid() const { return m_time != wxInvalidDateTime.m_time; }
+    inline bool IsValid() const { return m_time != wxLongLong(wxINT64_MIN); }
 
         // get the broken down date/time representation in the given timezone
         //
