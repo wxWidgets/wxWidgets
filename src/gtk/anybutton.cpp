@@ -136,7 +136,7 @@ void wxAnyButton::GTKOnFocus(wxFocusEvent& event)
     GTKUpdateBitmap();
 }
 
-wxAnyButton::State wxAnyButton::GTKGetCurrentState() const
+wxAnyButton::State wxAnyButton::GTKGetCurrentBitmapState() const
 {
     if ( !IsThisEnabled() )
         return m_bitmaps[State_Disabled].IsOk() ? State_Disabled : State_Normal;
@@ -160,7 +160,7 @@ void wxAnyButton::GTKUpdateBitmap()
     {
         // if we do show them, this will return a state for which we do have a
         // valid bitmap
-        State state = GTKGetCurrentState();
+        State state = GTKGetCurrentBitmapState();
 
         GTKDoShowBitmap(m_bitmaps[state]);
     }
@@ -360,7 +360,7 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
     // update the bitmap immediately if necessary, otherwise it will be done
     // when the bitmap for the corresponding state is needed the next time by
     // GTKUpdateBitmap()
-    if ( bitmap.IsOk() && which == GTKGetCurrentState() )
+    if ( bitmap.IsOk() && which == GTKGetCurrentBitmapState() )
     {
         GTKDoShowBitmap(bitmap);
     }
