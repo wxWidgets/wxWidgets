@@ -1768,23 +1768,17 @@ inline wxDateTime wxDateTime::GetYearDay(wxDateTime_t yday) const
 
 inline bool wxDateTime::IsEqualTo(const wxDateTime& datetime) const
 {
-    wxASSERT_MSG( IsValid() && datetime.IsValid(), wxT("invalid wxDateTime"));
-
-    return m_time == datetime.m_time;
+    return *this == datetime;
 }
 
 inline bool wxDateTime::IsEarlierThan(const wxDateTime& datetime) const
 {
-    wxASSERT_MSG( IsValid() && datetime.IsValid(), wxT("invalid wxDateTime"));
-
-    return m_time < datetime.m_time;
+    return *this < datetime;
 }
 
 inline bool wxDateTime::IsLaterThan(const wxDateTime& datetime) const
 {
-    wxASSERT_MSG( IsValid() && datetime.IsValid(), wxT("invalid wxDateTime"));
-
-    return m_time > datetime.m_time;
+    return *this > datetime;
 }
 
 inline bool wxDateTime::IsStrictlyBetween(const wxDateTime& t1,
