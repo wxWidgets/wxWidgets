@@ -761,8 +761,6 @@ long wxExecute(char **argv, int flags, wxProcess *process,
     }
     else // we're in parent
     {
-        execData.OnStart(pid);
-
         // prepare for IO redirection
 
 #if HAS_PIPE_STREAMS
@@ -814,16 +812,23 @@ long wxExecute(char **argv, int flags, wxProcess *process,
             pipeErr.Close();
         }
 
-        // For the asynchronous case we don't have to do anything else, just
-        // let the process run.
         if ( !(flags & wxEXEC_SYNC) )
         {
             // Ensure that the housekeeping data is kept alive, it will be
             // destroyed only when the child terminates.
             execDataPtr.release();
-
-            return execData.pid;
         }
+
+        // Put the housekeeping data into the child process lookup table.
+        // Note that when running asynchronously, if the child has already
+        // finished this call will delete the execData and call any
+        // wxProcess's OnTerminate() handler immediately.
+        execData.OnStart(pid);
+
+        // For the asynchronous case we don't have to do anything else, just
+        // let the process run (if not already finished).
+        if ( !(flags & wxEXEC_SYNC) )
+            return pid;
 
 
         // If we don't need to dispatch any events, things are relatively
@@ -1608,9 +1613,21 @@ void wxExecuteData::OnStart(int pid_)
     if ( process )
         process->SetPid(pid);
 
-    // Finally, add this object itself to the list of child processes so that
+    // Add this object itself to the list of child processes so that
     // we can check for its termination the next time we get SIGCHLD.
     ms_childProcesses[pid] = this;
+
+    // However, if the child exited before we finished setting up above,
+    // we may have already missed its SIGCHLD.  So we also do an explicit
+    // check here before returning.
+    int exitcode;
+    if ( CheckForChildExit(pid, &exitcode) )
+    {
+        // Handle its termination if it did.
+        // This call will implicitly remove it from ms_childProcesses
+        // and, if running asynchronously, it will delete itself.
+        OnExit(exitcode);
+    }
 }
 
 void wxExecuteData::OnExit(int exitcode_)
