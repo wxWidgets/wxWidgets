@@ -2989,7 +2989,7 @@ void FormMain::OnMisc ( wxCommandEvent& event )
     }
     else if ( id == ID_SETVALUES )
     {
-        if ( m_storedValues.GetType() == wxT("list") )
+        if ( m_storedValues.IsType(wxT("list")) )
         {
             m_pPropGridManager->GetGrid()->SetPropertyValues(m_storedValues);
         }

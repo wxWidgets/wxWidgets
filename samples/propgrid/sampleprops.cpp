@@ -77,9 +77,9 @@ wxFontDataProperty::~wxFontDataProperty () { }
 
 void wxFontDataProperty::OnSetValue()
 {
-    if ( m_value.GetType() != wxT("wxFontData") )
+    if ( !m_value.IsType(wxT("wxFontData")) )
     {
-        if ( m_value.GetType() == wxT("wxFont") )
+        if ( m_value.IsType(wxT("wxFont")) )
         {
             wxFont font;
             font << m_value;
