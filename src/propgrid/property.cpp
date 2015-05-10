@@ -705,6 +705,20 @@ bool wxPGProperty::IsSomeParent( wxPGProperty* candidate ) const
     return false;
 }
 
+void wxPGProperty::SetLabel(const wxString& label)
+{
+    m_label = label;
+    // Update cell text if possible
+    if ( HasCell(0) )
+    {
+        wxPGCell& cell = GetCell(0);
+        if ( cell.HasText() )
+        {
+            cell.SetText(label);
+        }
+    }
+}
+
 void wxPGProperty::SetName( const wxString& newName )
 {
     wxPropertyGrid* pg = GetGrid();

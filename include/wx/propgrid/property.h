@@ -2128,7 +2128,7 @@ public:
         m_helpString = helpString;
     }
 
-    void SetLabel( const wxString& label ) { m_label = label; }
+    void SetLabel( const wxString& label );
 
     void SetName( const wxString& newName );
 
