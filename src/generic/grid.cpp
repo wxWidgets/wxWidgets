@@ -2726,7 +2726,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 
                 for ( i = pos; i < m_numRows; i++ )
                 {
-                    bottom += m_rowHeights[i];
+                    bottom += GetRowHeight(i);
                     m_rowBottoms[i] = bottom;
                 }
             }
@@ -2771,7 +2771,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 
                 for ( i = oldNumRows; i < m_numRows; i++ )
                 {
-                    bottom += m_rowHeights[i];
+                    bottom += GetRowHeight(i);
                     m_rowBottoms[i] = bottom;
                 }
             }
@@ -2807,7 +2807,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 int h = 0;
                 for ( i = 0; i < m_numRows; i++ )
                 {
-                    h += m_rowHeights[i];
+                    h += GetRowHeight(i);
                     m_rowBottoms[i] = h;
                 }
             }
@@ -2891,7 +2891,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 {
                     i = GetColAt( colPos );
 
-                    right += m_colWidths[i];
+                    right += GetColWidth(i);
                     m_colRights[i] = right;
                 }
             }
@@ -2949,7 +2949,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 {
                     i = GetColAt( colPos );
 
-                    right += m_colWidths[i];
+                    right += GetColWidth(i);
                     m_colRights[i] = right;
                 }
             }
@@ -3010,7 +3010,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 {
                     i = GetColAt( colPos );
 
-                    w += m_colWidths[i];
+                    w += GetColWidth(i);
                     m_colRights[i] = w;
                 }
             }
