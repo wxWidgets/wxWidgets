@@ -511,7 +511,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         wxAny any;
 
 #if wxUSE_DATETIME
-        prop = pgman->GetProperty("DateProperty");
+        prop = pgman->GetProperty(wxT("DateProperty"));
         wxDateTime testTime = wxDateTime::Now();
         any = testTime;
         prop->SetValue(any);
@@ -519,7 +519,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             RT_FAILURE();
 #endif
 
-        prop = pgman->GetProperty("IntProperty");
+        prop = pgman->GetProperty(wxT("IntProperty"));
         int testInt = 25537983;
         any = testInt;
         prop->SetValue(any);
@@ -530,15 +530,15 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             RT_FAILURE();
 #endif
 
-        prop = pgman->GetProperty("StringProperty");
-        wxString testString = "asd934jfyn3";
+        prop = pgman->GetProperty(wxT("StringProperty"));
+        wxString testString = wxT("asd934jfyn3");
         any = testString;
         prop->SetValue(any);
         if ( prop->GetValue().GetAny().As<wxString>() != testString )
             RT_FAILURE();
 
         // Test with a type generated with IMPLEMENT_VARIANT_OBJECT()
-        prop = pgman->GetProperty("ColourProperty");
+        prop = pgman->GetProperty(wxT("ColourProperty"));
         wxColour testCol = *wxCYAN;
         any = testCol;
         prop->SetValue(any);
@@ -547,7 +547,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
         // Test with a type with custom wxVariantData defined by
         // wxPG headers.
-        prop = pgman->GetProperty("Position");
+        prop = pgman->GetProperty(wxT("Position"));
         wxPoint testPoint(199, 199);
         any = testPoint;
         prop->SetValue(any);
@@ -742,50 +742,50 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
         //
         // This updates children as well
-        wxString nvs = "Lamborghini Diablo XYZ; 5707; [100; 3.9; 8.6] 3000002; Convertible";
+        wxString nvs = wxT("Lamborghini Diablo XYZ; 5707; [100; 3.9; 8.6] 3000002; Convertible");
         pgman->SetPropertyValue("Car", nvs);
 
-        if ( pgman->GetPropertyValueAsString("Car.Model") != "Lamborghini Diablo XYZ" )
+        if ( pgman->GetPropertyValueAsString(wxT("Car.Model")) != wxT("Lamborghini Diablo XYZ") )
         {
-            wxLogDebug("Did not match: Car.Model=%s", pgman->GetPropertyValueAsString("Car.Model").c_str());
+            wxLogDebug(wxT("Did not match: Car.Model=%s"), pgman->GetPropertyValueAsString(wxT("Car.Model")).c_str());
             RT_FAILURE();
         }
 
-        if ( pgman->GetPropertyValueAsInt("Car.Speeds.Max. Speed (mph)") != 100 )
+        if ( pgman->GetPropertyValueAsInt(wxT("Car.Speeds.Max. Speed (mph)")) != 100 )
         {
-            wxLogDebug("Did not match: Car.Speeds.Max. Speed (mph)=%s", pgman->GetPropertyValueAsString("Car.Speeds.Max. Speed (mph)").c_str());
+            wxLogDebug(wxT("Did not match: Car.Speeds.Max. Speed (mph)=%s"), pgman->GetPropertyValueAsString(wxT("Car.Speeds.Max. Speed (mph)")).c_str());
             RT_FAILURE();
         }
 
-        if ( pgman->GetPropertyValueAsInt("Car.Price ($)") != 3000002 )
+        if ( pgman->GetPropertyValueAsInt(wxT("Car.Price ($)")) != 3000002 )
         {
-            wxLogDebug("Did not match: Car.Price ($)=%s", pgman->GetPropertyValueAsString("Car.Price ($)").c_str());
+            wxLogDebug(wxT("Did not match: Car.Price ($)=%s"), pgman->GetPropertyValueAsString(wxT("Car.Price ($)")).c_str());
             RT_FAILURE();
         }
 
-        if ( !pgman->GetPropertyValueAsBool("Car.Convertible") )
+        if ( !pgman->GetPropertyValueAsBool(wxT("Car.Convertible")) )
         {
-            wxLogDebug("Did not match: Car.Convertible=%s", pgman->GetPropertyValueAsString("Car.Convertible").c_str());
+            wxLogDebug(wxT("Did not match: Car.Convertible=%s"), pgman->GetPropertyValueAsString(wxT("Car.Convertible")).c_str());
             RT_FAILURE();
         }
 
         // SetPropertyValueString for special cases such as wxColour
-        pgman->SetPropertyValueString("ColourProperty", "(123,4,255)");
-        col << pgman->GetPropertyValue("ColourProperty");
+        pgman->SetPropertyValueString(wxT("ColourProperty"), wxT("(123,4,255)"));
+        col << pgman->GetPropertyValue(wxT("ColourProperty"));
         if ( col != wxColour(123, 4, 255) )
             RT_FAILURE();
-        pgman->SetPropertyValueString("ColourProperty", "#FE860B");
-        col << pgman->GetPropertyValue("ColourProperty");
+        pgman->SetPropertyValueString(wxT("ColourProperty"), wxT("#FE860B"));
+        col << pgman->GetPropertyValue(wxT("ColourProperty"));
         if ( col != wxColour(254, 134, 11) )
             RT_FAILURE();
 
-        pgman->SetPropertyValueString("ColourPropertyWithAlpha",
-                                      "(10, 20, 30, 128)");
-        col << pgman->GetPropertyValue("ColourPropertyWithAlpha");
+        pgman->SetPropertyValueString(wxT("ColourPropertyWithAlpha"),
+                                      wxT("(10, 20, 30, 128)"));
+        col << pgman->GetPropertyValue(wxT("ColourPropertyWithAlpha"));
         if ( col != wxColour(10, 20, 30, 128) )
             RT_FAILURE();
-        if ( pgman->GetPropertyValueAsString("ColourPropertyWithAlpha")
-                != "(10,20,30,128)" )
+        if ( pgman->GetPropertyValueAsString(wxT("ColourPropertyWithAlpha"))
+                != wxT("(10,20,30,128)") )
             RT_FAILURE();
     }
 
@@ -908,20 +908,20 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         RT_START_TEST(DoubleToString)
 
         // Locale-specific decimal separator
-        wxString sep = wxString::Format("%g", 1.1)[1];
+        wxString sep = wxString::Format(wxT("%g"), 1.1)[1];
 
         wxString s;
 
         if ( wxPropertyGrid::DoubleToString(s, 123.123, 2, true) !=
-                wxString::Format("123%s12", sep.c_str()) )
+                wxString::Format(wxT("123%s12"), sep.c_str()) )
             RT_FAILURE();
         if ( wxPropertyGrid::DoubleToString(s, -123.123, 4, false) !=
-                wxString::Format("-123%s1230", sep.c_str()) )
+                wxString::Format(wxT("-123%s1230"), sep.c_str()) )
             RT_FAILURE();
         if ( wxPropertyGrid::DoubleToString(s, -0.02, 1, false) !=
-                wxString::Format("0%s0", sep) )
+                wxString::Format(wxT("0%s0"), sep) )
             RT_FAILURE();
-        if ( wxPropertyGrid::DoubleToString(s, -0.000123, 3, true) != "0" )
+        if ( wxPropertyGrid::DoubleToString(s, -0.000123, 3, true) != wxT("0") )
             RT_FAILURE();
     }
 #endif
@@ -1088,17 +1088,17 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         wxPGProperty* p;
 
         wxPGProperty* origParent =
-            pgman->GetProperty("Window Styles")->GetParent();
+            pgman->GetProperty(wxT("Window Styles"))->GetParent();
 
         // For testing purposes, let's set some custom cell colours
-        p = pgman->GetProperty("Window Styles");
+        p = pgman->GetProperty(wxT("Window Styles"));
         p->SetCell(2, wxPGCell("style"));
-        p = pgman->RemoveProperty("Window Styles");
+        p = pgman->RemoveProperty(wxT("Window Styles"));
         pgman->Refresh();
         pgman->Update();
 
         pgman->AppendIn(origParent, p);
-        wxASSERT( p->GetCell(2).GetText() == "style");
+        wxASSERT( p->GetCell(2).GetText() == wxT("style"));
         pgman->Refresh();
         pgman->Update();
     }
@@ -1161,7 +1161,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         RT_START_TEST(Clear)
 
         // Manager clear
-        pgman->SelectProperty("Label");
+        pgman->SelectProperty(wxT("Label"));
         pgman->Clear();
 
         if ( pgman->GetPageCount() )
@@ -1175,7 +1175,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pgman = m_pPropGridManager;
 
         // Grid clear
-        pgman->SelectProperty("Label");
+        pgman->SelectProperty(wxT("Label"));
         pgman->GetGrid()->Clear();
 
         if ( pgman->GetGrid()->GetRoot()->GetChildCount() )

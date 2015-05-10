@@ -46,9 +46,9 @@ MyFrame::MyFrame(wxWindow* parent)
                         wxPG_BOLD_MODIFIED );
     m_pg = pg;
 
-    pg->Append( new wxStringProperty("String Property", wxPG_LABEL) );
-    pg->Append( new wxIntProperty("Int Property", wxPG_LABEL) );
-    pg->Append( new wxBoolProperty("Bool Property", wxPG_LABEL) );
+    pg->Append( new wxStringProperty(wxT("String Property"), wxPG_LABEL) );
+    pg->Append( new wxIntProperty(wxT("Int Property"), wxPG_LABEL) );
+    pg->Append( new wxBoolProperty(wxT("Bool Property"), wxPG_LABEL) );
 
     SetSize(400, 600);
 }
