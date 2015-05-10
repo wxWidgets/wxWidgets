@@ -116,6 +116,7 @@ All (GUI):
 - Fix wxPGChoices copy ctor (Snoits).
 - Show how to handle files on command line in docview sample (Neil Mayhew).
 - Improve wxFileCtrl::SetFilename() and SetPath() (Kevin B. McCarty).
+- Fix a crash when using animated GIFs in wxHtmlListBox.
 
 wxGTK:
 
