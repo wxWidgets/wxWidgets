@@ -1098,15 +1098,15 @@ void wxPropertyGrid::DoEndLabelEdit( bool commit, int selFlags )
         {
             cell = &prop->GetCell(labelColIdx);
         }
-        else
+        else if ( labelColIdx != 0 )
         {
-            if ( labelColIdx == 0 )
-                prop->SetLabel(text);
-            else
-                cell = &prop->GetOrCreateCell(labelColIdx);
+            cell = &prop->GetOrCreateCell(labelColIdx);
         }
 
-        if ( cell )
+       if ( labelColIdx == 0 )
+            prop->SetLabel(text);
+
+       if ( cell && cell->HasText() )
             cell->SetText(text);
     }
 
