@@ -32,7 +32,6 @@
 #include "wx/fontutil.h"
 #include "wx/dynlib.h"
 #include "wx/paper.h"
-#include "wx/scopeguard.h"
 #include "wx/modalhook.h"
 
 #include <gtk/gtk.h>
@@ -612,6 +611,11 @@ wxGtkPrintDialog::wxGtkPrintDialog( wxWindow *parent, wxPrintDialogData *data )
 
     m_parent = parent;
     SetShowDialog(true);
+
+    const wxPrintData& printData = m_printDialogData.GetPrintData();
+    wxGtkPrintNativeData* native =
+        static_cast<wxGtkPrintNativeData*>(printData.GetNativeData());
+    native->SetPrintJob(gtk_print_operation_new());
 }
 
 wxGtkPrintDialog::wxGtkPrintDialog( wxWindow *parent, wxPrintData *data )
@@ -625,11 +629,22 @@ wxGtkPrintDialog::wxGtkPrintDialog( wxWindow *parent, wxPrintData *data )
 
     m_parent = parent;
     SetShowDialog(true);
+
+    const wxPrintData& printData = m_printDialogData.GetPrintData();
+    wxGtkPrintNativeData* native =
+        static_cast<wxGtkPrintNativeData*>(printData.GetNativeData());
+    native->SetPrintJob(gtk_print_operation_new());
 }
 
 
 wxGtkPrintDialog::~wxGtkPrintDialog()
 {
+    const wxPrintData& printData = m_printDialogData.GetPrintData();
+    wxGtkPrintNativeData* native =
+        static_cast<wxGtkPrintNativeData*>(printData.GetNativeData());
+    GtkPrintOperation* printOp = native->GetPrintJob();
+    g_object_unref(printOp);
+    native->SetPrintJob(NULL);
 }
 
 // This is called even if we actually don't want the dialog to appear.
@@ -921,10 +936,9 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     wxPrintData printdata = GetPrintDialogData().GetPrintData();
     wxGtkPrintNativeData *native = (wxGtkPrintNativeData*) printdata.GetNativeData();
 
-    wxGtkObject<GtkPrintOperation> printOp(gtk_print_operation_new());
-    native->SetPrintJob(printOp);
-    wxON_BLOCK_EXIT_OBJ1(*native, wxGtkPrintNativeData::SetPrintJob,
-                         static_cast<GtkPrintOperation*>(NULL));
+    // wxGtkPrintDialog needs to be created first as it creates the PrintOp
+    wxGtkPrintDialog dialog(parent, &m_printDialogData);
+    GtkPrintOperation* printOp = native->GetPrintJob();
 
     wxPrinterToGtkData dataToSend;
     dataToSend.printer = this;
@@ -937,7 +951,6 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
 
     // This is used to setup the DC and
     // show the dialog if desired
-    wxGtkPrintDialog dialog( parent, &m_printDialogData );
     dialog.SetPrintDC(m_dc);
     dialog.SetShowDialog(prompt);
 
