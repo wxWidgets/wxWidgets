@@ -75,6 +75,10 @@ enum
     implementations use the short help string for the tooltip text which is
     popped up when the mouse pointer enters the tool and the long help string
     for the applications status bar.
+
+    Notice that the toolbar can @e not be modified by changing its tools via
+    the (intentionally undocumented here) setter methods of this class, all the
+    modifications must be done using the methods of wxToolBar itself.
 */
 class wxToolBarToolBase : public wxObject
 {
@@ -93,8 +97,6 @@ public:
                       wxControl *control,
                       const wxString& label);
 
-    virtual ~wxToolBarToolBase();
-
     int GetId() const;
 
     wxControl *GetControl() const;
@@ -107,7 +109,6 @@ public:
     bool IsStretchableSpace() const;
     int GetStyle() const;
     wxItemKind GetKind() const;
-    void MakeStretchable();
 
     bool IsEnabled() const;
     bool IsToggled() const;
@@ -124,21 +125,9 @@ public:
 
     wxObject *GetClientData() const;
 
-    virtual bool Enable(bool enable);
-    virtual bool Toggle(bool toggle);
-    virtual bool SetToggle(bool toggle);
-    virtual bool SetShortHelp(const wxString& help);
-    virtual bool SetLongHelp(const wxString& help);
-    void Toggle();
-    virtual void SetNormalBitmap(const wxBitmap& bmp);
-    virtual void SetDisabledBitmap(const wxBitmap& bmp);
-    virtual void SetLabel(const wxString& label);
-    void SetClientData(wxObject *clientData);
-    
     virtual void Detach();
     virtual void Attach(wxToolBarBase *tbar);
 
-    virtual void SetDropdownMenu(wxMenu *menu);
     wxMenu *GetDropdownMenu() const;
 };
 
