@@ -1093,21 +1093,30 @@ void wxPropertyGrid::DoEndLabelEdit( bool commit, int selFlags )
         }
 
         wxString text = m_labelEditor->GetValue();
-        wxPGCell* cell = NULL;
-        if ( prop->HasCell(labelColIdx) )
-        {
-            cell = &prop->GetCell(labelColIdx);
-        }
-        else if ( labelColIdx != 0 )
-        {
-            cell = &prop->GetOrCreateCell(labelColIdx);
-        }
 
-       if ( labelColIdx == 0 )
+        // Cell handling for label in column 0
+        // is done internally in SetLabel() function
+        if ( labelColIdx == 0 )
+        {
             prop->SetLabel(text);
+        }
+        else
+        {
+            wxPGCell* cell = NULL;
+            if ( prop->HasCell(labelColIdx) )
+            {
+                cell = &prop->GetCell(labelColIdx);
+            }
+            else
+            {
+                cell = &prop->GetOrCreateCell(labelColIdx);
+            }
 
-       if ( cell && cell->HasText() )
-            cell->SetText(text);
+            if ( cell && cell->HasText() )
+            {
+                cell->SetText(text);
+            }
+        }
     }
 
     m_selColumn = 1;
