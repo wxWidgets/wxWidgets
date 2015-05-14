@@ -1495,7 +1495,7 @@ msgstr "Blanco"
 
 #: ../src/propgrid/advprops.cpp:1553
 msgid "Blue"
-msgstr "blauw"
+msgstr "Blauw"
 
 #: ../src/common/stockitem.cpp:143 ../src/generic/fontdlgg.cpp:333
 #: ../src/osx/carbon/fontdlg.cpp:524 ../src/richtext/richtextfontpage.cpp:353
@@ -2834,7 +2834,7 @@ msgid ""
 "New value is \n"
 "%s %1"
 msgstr ""
-"Wilt U het '%s' commando dat gebruikt wordt voor bestanden met extensie \"%s"
+"Wilt u het '%s' commando dat gebruikt wordt voor bestanden met extensie \"%s"
 "\" overschrijven?\n"
 "Huidige waarde is \n"
 "%s, \n"
@@ -3415,7 +3415,7 @@ msgstr "Laden van gedeelde bibliotheek '%s' mislukt"
 #: ../src/osx/core/sound.cpp:118
 #, c-format
 msgid "Failed to load sound from \"%s\" (error %d)."
-msgstr "Laden geluid van \"%s\" mislukt (fout %d)."
+msgstr "Laden van geluid \"%s\" mislukt (fout %d)."
 
 #: ../src/msw/utils.cpp:1000
 #, c-format
@@ -5148,7 +5148,7 @@ msgstr ""
 "Er is geen lettertype gevonden voor het tonen van tekst in de versleuteling "
 "'%s',\n"
 "maar een alternatieve versleuteling '%s' is beschikbaar.\n"
-"Wilt U deze versleuteling gebruiken (Anders moet U een andere kiezen)?"
+"Wilt u deze versleuteling gebruiken (Anders moet u een andere kiezen)?"
 
 #: ../src/common/fontmap.cpp:426
 #, c-format
@@ -5158,7 +5158,7 @@ msgid ""
 "(otherwise the text in this encoding will not be shown correctly)?"
 msgstr ""
 "Geen lettertype voor het tonen van tekst in versleuteling '%s' gevonden.\n"
-"Wilt U een lettertype selecteren voor deze versleuteling \n"
+"Wilt u een lettertype selecteren voor deze versleuteling \n"
 "(anders zal de tekst in deze versleuteling niet correct weergegeven worden)?"
 
 #: ../src/generic/animateg.cpp:142
@@ -5755,7 +5755,7 @@ msgid ""
 "or this program won't operate correctly."
 msgstr ""
 "Installeer alstublieft een nieuwere versie van comctl32.dll\n"
-"(Tenminste versie 4.70 is vereist maar U heeft %d.%02d)\n"
+"(Tenminste versie 4.70 is vereist maar u heeft %d.%02d)\n"
 "anders kan dit programma niet correct functioneren."
 
 #: ../src/common/headerctrlcmn.cpp:59
@@ -7088,7 +7088,7 @@ msgstr "Er is geen kolom of renderer voor de gespecificeerde kolomindex."
 msgid ""
 "There was a problem during page setup: you may need to set a default printer."
 msgstr ""
-"Er was een probleem tijdens pagina-instellingen: U moet mogelijk een "
+"Er was een probleem tijdens pagina-instellingen: u moet mogelijk een "
 "standaard printer instellen."
 
 #: ../src/html/htmprint.cpp:255
@@ -9032,7 +9032,7 @@ msgstr "~"
 #~ "Do you want to replace it?"
 #~ msgstr ""
 #~ "Bestand '%s' bestaat al.\n"
-#~ "Wilt U het vervangen?"
+#~ "Wilt u het vervangen?"
 
 #~ msgid "HELP"
 #~ msgstr "HELP"
