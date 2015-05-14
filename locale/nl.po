@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the wxWidgets package.
 #
 # Translators:
-# Thomas De Rocker, 2013-2014
+# Thomas De Rocker, 2013-2014, G. van Melle 2009-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-25 19:58+0100\n"
-"PO-Revision-Date: 2014-03-26 12:19+0100\n"
-"Last-Translator: Thomas De Rocker <thomasderocker@hotmail.com>\n"
+"PO-Revision-Date: 2015-05-01 21:56+0100\n"
+"Last-Translator: gvmelle <translations@gvmelle.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/projects/p/"
 "wxwidgets_unofficial/language/nl/)\n"
 "Language: nl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.7.6\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -111,9 +111,9 @@ msgid "%d of %lu"
 msgstr "%d of %lu"
 
 #: ../src/html/helpwnd.cpp:1678
-#, fuzzy, c-format
+#, c-format
 msgid "%i of %u"
-msgstr "%i van %i"
+msgstr "%i van %u"
 
 #: ../src/generic/filectrlg.cpp:315
 #, c-format
@@ -125,7 +125,7 @@ msgstr[1] "%ld bytes"
 #: ../src/html/helpwnd.cpp:1033
 #, c-format
 msgid "%lu of %lu"
-msgstr "%lu of %lu"
+msgstr "%lu van %lu"
 
 #: ../src/common/cmdline.cpp:1221
 #, c-format
@@ -163,9 +163,9 @@ msgid "%s files (%s)|%s"
 msgstr "%s bestanden (%s)|%s"
 
 #: ../src/html/helpwnd.cpp:1716
-#, fuzzy, c-format
+#, c-format
 msgid "%u of %u"
-msgstr "%lu of %lu"
+msgstr "%u van %u"
 
 #: ../src/common/stockitem.cpp:139 ../src/html/helpfrm.cpp:142
 #: ../src/html/helpfrm.cpp:144
@@ -1183,13 +1183,12 @@ msgid "Absolute"
 msgstr "Absoluut"
 
 #: ../src/propgrid/advprops.cpp:845
-#, fuzzy
 msgid "ActiveBorder"
-msgstr "Rand"
+msgstr "ActiveBorder"
 
 #: ../src/propgrid/advprops.cpp:846
 msgid "ActiveCaption"
-msgstr ""
+msgstr "ActiveCaption"
 
 #: ../src/common/stockitem.cpp:207
 msgid "Actual Size"
@@ -1327,7 +1326,7 @@ msgstr "Toepassen"
 
 #: ../src/propgrid/advprops.cpp:1559
 msgid "Aqua"
-msgstr ""
+msgstr "Agua"
 
 #: ../src/richtext/richtextbulletspage.cpp:274
 #: ../src/richtext/richtextliststylepage.cpp:482
@@ -1344,9 +1343,8 @@ msgid "Argument %u not found."
 msgstr "Argument %u niet gevonden."
 
 #: ../src/propgrid/advprops.cpp:1703
-#, fuzzy
 msgid "Arrow"
-msgstr "morgen"
+msgstr "Pijl"
 
 #: ../src/generic/aboutdlgg.cpp:184
 msgid "Artists"
@@ -1463,9 +1461,8 @@ msgstr "Achtergrondkleur"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:50
-#, fuzzy
 msgid "Backspace"
-msgstr "Terug"
+msgstr "Backspace"
 
 #: ../src/common/fmapbase.cpp:160
 msgid "Baltic (ISO-8859-13)"
@@ -1490,15 +1487,15 @@ msgstr "Bitmap renderer kan geen waarde renderen; waarde type: "
 
 #: ../src/propgrid/advprops.cpp:1544
 msgid "Black"
-msgstr ""
+msgstr "Zwart"
 
 #: ../src/propgrid/advprops.cpp:1705
 msgid "Blank"
-msgstr ""
+msgstr "Blanco"
 
 #: ../src/propgrid/advprops.cpp:1553
 msgid "Blue"
-msgstr ""
+msgstr "blauw"
 
 #: ../src/common/stockitem.cpp:143 ../src/generic/fontdlgg.cpp:333
 #: ../src/osx/carbon/fontdlg.cpp:524 ../src/richtext/richtextfontpage.cpp:353
@@ -1531,9 +1528,8 @@ msgid "Box styles"
 msgstr "Vak stijlen"
 
 #: ../src/propgrid/advprops.cpp:1552
-#, fuzzy
 msgid "Brown"
-msgstr "Bladeren"
+msgstr "Bruin"
 
 #: ../src/common/filepickercmn.cpp:43 ../src/common/filepickercmn.cpp:44
 msgid "Browse"
@@ -1553,9 +1549,8 @@ msgid "Bullets"
 msgstr "Opsommingtekens"
 
 #: ../src/propgrid/advprops.cpp:1706
-#, fuzzy
 msgid "Bullseye"
-msgstr "Opsommingsteken-stijl"
+msgstr "Roos"
 
 #: ../src/propgrid/advprops.cpp:847
 msgid "ButtonFace"
@@ -1904,9 +1899,8 @@ msgstr "Kan niet wachten op thread-beëindiging"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:73
-#, fuzzy
 msgid "Capital"
-msgstr "&Hoofdletters"
+msgstr "Hoofdletter"
 
 #: ../src/propgrid/advprops.cpp:851
 msgid "CaptionText"
@@ -1987,9 +1981,8 @@ msgstr ""
 "\"%s\" zal worden overschreven"
 
 #: ../src/propgrid/advprops.cpp:1707
-#, fuzzy
 msgid "Character"
-msgstr "&Lettertekencode:"
+msgstr "Letterteken"
 
 #: ../src/richtext/richtextstyles.cpp:1063
 msgid "Character styles"
@@ -2576,7 +2569,7 @@ msgstr "Maak nieuwe map"
 
 #: ../src/propgrid/advprops.cpp:1708
 msgid "Cross"
-msgstr ""
+msgstr "Kruis"
 
 #: ../src/common/accelcmn.cpp:323
 msgid "Ctrl+"
@@ -2593,9 +2586,8 @@ msgstr "Huidige map:"
 
 #: ../src/propgrid/advprops.cpp:868 ../src/propgrid/advprops.cpp:1524
 #: ../src/propgrid/advprops.cpp:1562
-#, fuzzy
 msgid "Custom"
-msgstr "Aangepaste grootte"
+msgstr "Aangepast"
 
 #: ../src/gtk/print.cpp:218
 msgid "Custom size"
@@ -2684,9 +2676,8 @@ msgid "Decorative"
 msgstr "Decoratief"
 
 #: ../src/propgrid/advprops.cpp:1702
-#, fuzzy
 msgid "Default"
-msgstr "standaard"
+msgstr "Standaard"
 
 #: ../src/common/fmapbase.cpp:796
 msgid "Default encoding"
@@ -2702,9 +2693,8 @@ msgstr "Standaardprinter"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:49
-#, fuzzy
 msgid "Del"
-msgstr "Verwijderen"
+msgstr "Del"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:48 ../src/common/stockitem.cpp:152
@@ -2967,13 +2957,12 @@ msgstr "Achtergrondkleur inschakelen."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:64
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:53
-#, fuzzy
 msgid "Enter"
-msgstr "Printer..."
+msgstr "Enter"
 
 #: ../src/richtext/richtextstyledlg.cpp:934
 msgid "Enter a box style name"
@@ -3066,13 +3055,12 @@ msgstr "Fout: "
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:67
 msgid "Esc"
-msgstr ""
+msgstr "Esc"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:68
-#, fuzzy
 msgid "Escape"
-msgstr "Liggend"
+msgstr "Escape"
 
 #: ../src/common/fmapbase.cpp:150
 msgid "Esperanto (ISO-8859-3)"
@@ -3425,9 +3413,9 @@ msgid "Failed to load shared library '%s'"
 msgstr "Laden van gedeelde bibliotheek '%s' mislukt"
 
 #: ../src/osx/core/sound.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load sound from \"%s\" (error %d)."
-msgstr "Laden van bronbestand \"%s\" mislukt."
+msgstr "Laden geluid van \"%s\" mislukt (fout %d)."
 
 #: ../src/msw/utils.cpp:1000
 #, c-format
@@ -3863,7 +3851,7 @@ msgstr "Van:"
 
 #: ../src/propgrid/advprops.cpp:1554
 msgid "Fuchsia"
-msgstr ""
+msgstr "Fuchsiapaars"
 
 #: ../src/common/imaggif.cpp:160
 msgid "GIF: Invalid gif index."
@@ -3951,20 +3939,19 @@ msgstr "Grafische kunst door "
 
 #: ../src/propgrid/advprops.cpp:1549
 msgid "Gray"
-msgstr ""
+msgstr "Grijs"
 
 #: ../src/propgrid/advprops.cpp:855
 msgid "GrayText"
-msgstr ""
+msgstr "GrayText"
 
 #: ../src/common/fmapbase.cpp:154
 msgid "Greek (ISO-8859-7)"
 msgstr "Grieks (ISO-8859-7)"
 
 #: ../src/propgrid/advprops.cpp:1550
-#, fuzzy
 msgid "Green"
-msgstr "MacGreek"
+msgstr "Groen"
 
 #: ../src/richtext/richtextborderspage.cpp:618
 msgid "Groove"
@@ -3989,7 +3976,7 @@ msgstr "HTML bestanden (*.html;*.htm)|*.html;*.htm|"
 
 #: ../src/propgrid/advprops.cpp:1709
 msgid "Hand"
-msgstr ""
+msgstr "Hand"
 
 #: ../src/common/stockitem.cpp:162
 msgid "Harddisk"
@@ -4055,14 +4042,12 @@ msgid "Hide this notification message."
 msgstr "Verberg dit notificatiebericht."
 
 #: ../src/propgrid/advprops.cpp:856
-#, fuzzy
 msgid "Highlight"
-msgstr "licht"
+msgstr "Markeer"
 
 #: ../src/propgrid/advprops.cpp:857
-#, fuzzy
 msgid "HighlightText"
-msgstr "Rechtsuitgelijnde tekst."
+msgstr "Gemarkeerde tekst"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:63 ../src/common/stockitem.cpp:164
@@ -4227,9 +4212,8 @@ msgid "Impossible to set permissions for the file '%s'"
 msgstr "Onmogelijk om machtigingen voor het bestand '%s' in te stellen"
 
 #: ../src/propgrid/advprops.cpp:858
-#, fuzzy
 msgid "InactiveBorder"
-msgstr "Rand"
+msgstr "InactiveBorder"
 
 #: ../src/propgrid/advprops.cpp:859
 msgid "InactiveCaption"
@@ -4274,9 +4258,8 @@ msgstr "Initialisatie mislukt in post init: voortijdig beëindigd.."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:52
-#, fuzzy
 msgid "Ins"
-msgstr "Invoeging"
+msgstr "Ins"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:51 ../src/richtext/richtextsymboldlg.cpp:472
@@ -4466,9 +4449,8 @@ msgstr "KP_"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgid "KP_Add"
-msgstr "KP_ADD"
+msgstr "KP_Add"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:99
@@ -4482,9 +4464,8 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgid "KP_Delete"
-msgstr "Verwijderen"
+msgstr "KP_Delete"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:108
@@ -4493,21 +4474,18 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgid "KP_Down"
-msgstr "Omlaag"
+msgstr "KP_Down"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgid "KP_End"
-msgstr "KP_END"
+msgstr "KP_End"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgid "KP_Enter"
-msgstr "Printer..."
+msgstr "KP_Enter"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
@@ -4516,21 +4494,18 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgid "KP_Home"
-msgstr "Thuis"
+msgstr "KP_Home"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgid "KP_Insert"
-msgstr "Invoegen"
+msgstr "KP_Insert"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgid "KP_Left"
-msgstr "Links"
+msgstr "KP_Left"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:103
@@ -4539,9 +4514,8 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:97
-#, fuzzy
 msgid "KP_Next"
-msgstr "Volgende"
+msgstr "KP_Next"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
@@ -4560,9 +4534,8 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgid "KP_Right"
-msgstr "Rechts"
+msgstr "KP_Right"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
@@ -4581,15 +4554,13 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
-#, fuzzy
 msgid "KP_Tab"
-msgstr "KP_TAB"
+msgstr "KP_Tab"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:91
-#, fuzzy
 msgid "KP_Up"
-msgstr "KP_UP"
+msgstr "KP_Up"
 
 #: ../src/richtext/richtextindentspage.cpp:270
 msgid "L&ine spacing:"
@@ -4695,7 +4666,7 @@ msgstr "Licht"
 
 #: ../src/propgrid/advprops.cpp:1558
 msgid "Lime"
-msgstr ""
+msgstr "Citroengeel"
 
 #: ../src/generic/helpext.cpp:294
 #, c-format
@@ -4954,7 +4925,7 @@ msgstr "Marges"
 
 #: ../src/propgrid/advprops.cpp:1545
 msgid "Maroon"
-msgstr ""
+msgstr "Kastanjebruin"
 
 #: ../src/generic/fdrepdlg.cpp:147
 msgid "Match case"
@@ -5067,7 +5038,7 @@ msgstr "Naam"
 
 #: ../src/propgrid/advprops.cpp:1546
 msgid "Navy"
-msgstr ""
+msgstr "Marineblauw"
 
 #: ../src/common/stockitem.cpp:175
 msgid "Network"
@@ -5286,122 +5257,117 @@ msgstr "Notitie"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:103
 msgid "Num *"
-msgstr ""
+msgstr "Num *"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:104
 msgid "Num +"
-msgstr ""
+msgstr "Num +"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
 msgid "Num ,"
-msgstr ""
+msgstr "Num ,"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:106
 msgid "Num -"
-msgstr ""
+msgstr "Num -"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:107
 msgid "Num ."
-msgstr ""
+msgstr "Num ."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:108
 msgid "Num /"
-msgstr ""
+msgstr "Num /"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
 msgid "Num ="
-msgstr ""
+msgstr "Num ="
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:99
 msgid "Num Begin"
-msgstr ""
+msgstr "Num Begin"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgid "Num Delete"
-msgstr "Verwijderen"
+msgstr "Num Delete"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgid "Num Down"
-msgstr "Omlaag"
+msgstr "Num Down"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:98
 msgid "Num End"
-msgstr ""
+msgstr "Num End"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:88
 msgid "Num Enter"
-msgstr ""
+msgstr "Num Enter"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgid "Num Home"
-msgstr "Thuis"
+msgstr "Num Home"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgid "Num Insert"
-msgstr "Invoegen"
+msgstr "Num Insert"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:84
 msgid "Num Lock"
-msgstr ""
+msgstr "Num Lock"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
 msgid "Num Page Down"
-msgstr ""
+msgstr "Num Page Down"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:94
 msgid "Num Page Up"
-msgstr ""
+msgstr "Num Page Up"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgid "Num Right"
-msgstr "Rechts"
+msgstr "Num Right"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:86
 msgid "Num Space"
-msgstr ""
+msgstr "Num Space"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
 msgid "Num Tab"
-msgstr ""
+msgstr "Num Tab"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:91
 msgid "Num Up"
-msgstr ""
+msgstr "Num Up"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:90
 msgid "Num left"
-msgstr ""
+msgstr "Num left"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:84
 msgid "Num_lock"
-msgstr ""
+msgstr "Num_lock"
 
 #: ../src/osx/carbon/dataview.cpp:900
 msgid "Number of columns could not be determined."
@@ -5438,7 +5404,7 @@ msgstr "Objecten moeten een id attribuut hebben"
 
 #: ../src/propgrid/advprops.cpp:1551
 msgid "Olive"
-msgstr ""
+msgstr "Olijfgroen"
 
 #: ../src/common/docview.cpp:1762 ../src/common/docview.cpp:1804
 msgid "Open File"
@@ -5488,7 +5454,7 @@ msgstr "Instellingen"
 
 #: ../src/propgrid/advprops.cpp:1556
 msgid "Orange"
-msgstr ""
+msgstr "Oranje"
 
 #: ../src/generic/prntdlgg.cpp:615 ../src/generic/prntdlgg.cpp:869
 msgid "Orientation"
@@ -5668,9 +5634,8 @@ msgstr "Pagina %d van %d"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:56
-#, fuzzy
 msgid "Page Down"
-msgstr "Pagina %d"
+msgstr "Page Down"
 
 #: ../src/gtk/print.cpp:795
 msgid "Page Setup"
@@ -5678,9 +5643,8 @@ msgstr "Pagina-instellingen"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgid "Page Up"
-msgstr "Pagina %d"
+msgstr "Page Up"
 
 #: ../src/common/prntbase.cpp:479 ../src/generic/prntdlgg.cpp:828
 msgid "Page setup"
@@ -5688,15 +5652,13 @@ msgstr "Pagina instellingen"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:56
-#, fuzzy
 msgid "PageDown"
-msgstr "Omlaag"
+msgstr "PageDown"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgid "PageUp"
-msgstr "Pagina's"
+msgstr "PageUp"
 
 #: ../src/generic/prntdlgg.cpp:216
 msgid "Pages"
@@ -5736,11 +5698,11 @@ msgstr "Selectie plakken"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:72
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: ../src/propgrid/advprops.cpp:1716
 msgid "Pencil"
-msgstr ""
+msgstr "Potlood"
 
 #: ../src/richtext/richtextbulletspage.cpp:159
 #: ../src/richtext/richtextliststylepage.cpp:222
@@ -5754,12 +5716,12 @@ msgstr "Machtigingen"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:58
 msgid "PgDn"
-msgstr ""
+msgstr "PgDn"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:57
 msgid "PgUp"
-msgstr ""
+msgstr "PgUp"
 
 #: ../src/richtext/richtextbuffer.cpp:12662
 msgid "Picture Properties"
@@ -5805,14 +5767,12 @@ msgid "Please wait while printing..."
 msgstr "Een ogenblik geduld. Bezig met printen..."
 
 #: ../src/propgrid/advprops.cpp:1717
-#, fuzzy
 msgid "Point Left"
-msgstr "Puntgrootte"
+msgstr "Wijs links"
 
 #: ../src/propgrid/advprops.cpp:1718
-#, fuzzy
 msgid "Point Right"
-msgstr "Rechts uitlijnen"
+msgstr "Wijs rechts"
 
 #: ../src/propgrid/advprops.cpp:639
 msgid "Point Size"
@@ -6011,7 +5971,7 @@ msgstr "Eigenschapsfout"
 
 #: ../src/propgrid/advprops.cpp:1547
 msgid "Purple"
-msgstr ""
+msgstr "Paars"
 
 #: ../src/common/paper.cpp:113
 msgid "Quarto, 215 x 275 mm"
@@ -6022,9 +5982,8 @@ msgid "Question"
 msgstr "Vraag"
 
 #: ../src/propgrid/advprops.cpp:1719
-#, fuzzy
 msgid "Question Arrow"
-msgstr "Vraag"
+msgstr "Vraagteken pijl"
 
 #: ../src/common/stockitem.cpp:156
 msgid "Quit"
@@ -6033,7 +5992,7 @@ msgstr "Afsluiten"
 #: ../src/osx/menu_osx.cpp:643
 #, c-format
 msgid "Quit %s"
-msgstr "%s afsluiten"
+msgstr "Stop %s"
 
 #: ../src/common/stockitem.cpp:263
 msgid "Quit this program"
@@ -6053,9 +6012,8 @@ msgid "Ready"
 msgstr "Gereed"
 
 #: ../src/propgrid/advprops.cpp:1555
-#, fuzzy
 msgid "Red"
-msgstr "Opnieuw"
+msgstr "Rood"
 
 #: ../src/common/stockitem.cpp:185 ../src/stc/stc_i18n.cpp:16
 msgid "Redo"
@@ -6192,9 +6150,8 @@ msgid "Right"
 msgstr "Rechts"
 
 #: ../src/propgrid/advprops.cpp:1704
-#, fuzzy
 msgid "Right Arrow"
-msgstr "Rechts"
+msgstr "Right Arrow"
 
 #: ../src/propgrid/advprops.cpp:1720
 msgid "Right Button"
@@ -6264,16 +6221,16 @@ msgstr "Script"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:85
 msgid "Scroll Lock"
-msgstr ""
+msgstr "Scroll Lock"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:85
 msgid "Scroll_lock"
-msgstr ""
+msgstr "Scroll_lock"
 
 #: ../src/propgrid/advprops.cpp:862
 msgid "Scrollbar"
-msgstr ""
+msgstr "Scrollbar"
 
 #: ../src/generic/srchctlg.cpp:56 ../src/html/helpwnd.cpp:535
 #: ../src/html/helpwnd.cpp:550
@@ -6321,9 +6278,8 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:74
-#, fuzzy
 msgid "Select"
-msgstr "Selectie"
+msgstr "Selecteer"
 
 #: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2450
 #: ../src/osx/textctrl_osx.cpp:587 ../src/richtext/richtextctrl.cpp:337
@@ -6471,7 +6427,7 @@ msgstr "Toont het lettertype voorbeeld."
 
 #: ../src/propgrid/advprops.cpp:1557
 msgid "Silver"
-msgstr ""
+msgstr "Zilver"
 
 #: ../src/univ/themes/mono.cpp:516
 msgid "Simple monochrome theme"
@@ -6564,9 +6520,8 @@ msgstr "Geluidsbestand '%s' heeft een niet ondersteund formaat."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:65
-#, fuzzy
 msgid "Space"
-msgstr "Tussenruimtebepaling"
+msgstr "Spatie"
 
 #: ../src/richtext/richtextliststylepage.cpp:467
 msgid "Spacing"
@@ -6578,7 +6533,7 @@ msgstr "Spellingscontrole"
 
 #: ../src/propgrid/advprops.cpp:1726
 msgid "Spraycan"
-msgstr ""
+msgstr "Spuitbus"
 
 #: ../src/richtext/richtextbulletspage.cpp:282
 #: ../src/richtext/richtextliststylepage.cpp:490
@@ -6715,7 +6670,7 @@ msgstr "Tabs"
 
 #: ../src/propgrid/advprops.cpp:1548
 msgid "Teal"
-msgstr ""
+msgstr "Blauwgroen"
 
 #: ../src/generic/fontdlgg.cpp:327
 msgid "Teletype"
@@ -7846,7 +7801,7 @@ msgstr "Of het lettertype is onderstreept."
 
 #: ../src/propgrid/advprops.cpp:1561
 msgid "White"
-msgstr ""
+msgstr "Wit"
 
 #: ../src/generic/fdrepdlg.cpp:144
 msgid "Whole word"
@@ -7865,19 +7820,16 @@ msgid "Win32s on Windows 3.1"
 msgstr "Windows 3.1 met Win32s"
 
 #: ../src/propgrid/advprops.cpp:865
-#, fuzzy
 msgid "Window"
-msgstr "&Venster"
+msgstr "Venster"
 
 #: ../src/propgrid/advprops.cpp:866
-#, fuzzy
 msgid "WindowFrame"
-msgstr "&Venster"
+msgstr "WindowFrame"
 
 #: ../src/propgrid/advprops.cpp:867
-#, fuzzy
 msgid "WindowText"
-msgstr "&Venster"
+msgstr "WindowText"
 
 #: ../src/msw/utils.cpp:1161
 msgid "Windows 2000"
@@ -8028,21 +7980,18 @@ msgstr "Windows/DOS OEM Cyrillic (CP 866)"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:109
-#, fuzzy
 msgid "Windows_Left"
-msgstr "Windows 7"
+msgstr "Windows_Left"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:111
-#, fuzzy
 msgid "Windows_Menu"
-msgstr "Windows ME"
+msgstr "Windows_Menu"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:110
-#, fuzzy
 msgid "Windows_Right"
-msgstr "Windows Vista"
+msgstr "Windows_Right"
 
 #: ../src/common/ffile.cpp:150
 #, c-format
@@ -8083,7 +8032,7 @@ msgstr "XPM: afgeknotte afbeeldingsgegevens op regel %d!"
 
 #: ../src/propgrid/advprops.cpp:1560
 msgid "Yellow"
-msgstr ""
+msgstr "Geel"
 
 #: ../include/wx/msgdlg.h:276 ../src/common/stockitem.cpp:206
 #: ../src/motif/msgdlg.cpp:196
