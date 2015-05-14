@@ -1848,7 +1848,16 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
 
     VirtualHeightChanged();
 
+    // Update values of all parents if they are containers of composed values.
     property->UpdateParentValues();
+
+    // Update editor controls of all parents if they are containers of composed values.
+    for( wxPGProperty *p = property->GetParent();
+         p && !p->IsRoot() && !p->IsCategory() && p->HasFlag(wxPG_PROP_COMPOSED_VALUE);
+         p = p->GetParent() )
+    {
+        p->RefreshEditor();
+    }
 
     m_itemsAdded = true;
 
