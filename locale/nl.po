@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-23 22:46+0400\n"
-"PO-Revision-Date: 2015-05-01 21:56+0100\n"
+"POT-Creation-Date: 2016-08-21 11:45+0200\n"
+"PO-Revision-Date: 2016-08-21 12:00+0200\n"
 "Last-Translator: gvmelle <translations@gvmelle.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/projects/p/"
 "wxwidgets_unofficial/language/nl/)\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.7.6\n"
+"X-Generator: Poedit 1.8.8\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -224,7 +224,7 @@ msgstr "&Bg kleur:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:299
 msgid "&Blur distance:"
-msgstr ""
+msgstr "&Vervagingsafstand:"
 
 #: ../src/common/stockitem.cpp:143
 msgid "&Bold"
@@ -422,7 +422,7 @@ msgstr "S&tart"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:213
 msgid "&Horizontal offset:"
-msgstr ""
+msgstr "&Horizontale verschuiving:"
 
 #: ../src/richtext/richtextindentspage.cpp:184
 #: ../src/richtext/richtextliststylepage.cpp:372
@@ -499,8 +499,7 @@ msgstr "&Netwerk"
 msgid "&New"
 msgstr "&Nieuw"
 
-#: ../src/aui/tabmdi.cpp:111 ../src/generic/mdig.cpp:100
-#: ../src/msw/mdi.cpp:180
+#: ../src/aui/tabmdi.cpp:111 ../src/generic/mdig.cpp:100 ../src/msw/mdi.cpp:180
 msgid "&Next"
 msgstr "&Volgende"
 
@@ -575,8 +574,7 @@ msgstr "&Positiemodus:"
 msgid "&Preferences"
 msgstr "&Voorkeuren"
 
-#: ../src/aui/tabmdi.cpp:112 ../src/generic/mdig.cpp:101
-#: ../src/msw/mdi.cpp:181
+#: ../src/aui/tabmdi.cpp:112 ../src/generic/mdig.cpp:101 ../src/msw/mdi.cpp:181
 msgid "&Previous"
 msgstr "&Vorig"
 
@@ -754,9 +752,8 @@ msgid "&Vertical alignment:"
 msgstr "&Vertikale uitlijning:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:236
-#, fuzzy
 msgid "&Vertical offset:"
-msgstr "&Vertikale uitlijning:"
+msgstr "&Verticale verschuiving:"
 
 #: ../src/generic/dbgrptg.cpp:340
 msgid "&View..."
@@ -1330,7 +1327,7 @@ msgstr "Animatiebestand is niet van type %ld."
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:858
 msgid "AppWorkspace"
-msgstr ""
+msgstr "AppWorkspace"
 
 #: ../src/generic/logg.cpp:1034
 #, c-format
@@ -1579,22 +1576,22 @@ msgstr "Roos"
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:861
 msgid "ButtonFace"
-msgstr ""
+msgstr "ButtonFace"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:862
 msgid "ButtonHighlight"
-msgstr ""
+msgstr "ButtonHighlight"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:863
 msgid "ButtonShadow"
-msgstr ""
+msgstr "ButtonShadow"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:864
 msgid "ButtonText"
-msgstr ""
+msgstr "ButtonText"
 
 #: ../src/common/paper.cpp:99
 msgid "C sheet, 17 x 22 in"
@@ -1933,7 +1930,7 @@ msgstr "Hoofdletter"
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:865
 msgid "CaptionText"
-msgstr ""
+msgstr "CaptionText"
 
 #: ../src/html/helpwnd.cpp:533
 msgid "Case sensitive"
@@ -2010,9 +2007,9 @@ msgstr ""
 "\"%s\" zal worden overschreven"
 
 #: ../src/gtk/filedlg.cpp:87 ../src/gtk/filepicker.cpp:190
-#, fuzzy, c-format
+#, c-format
 msgid "Changing current directory to \"%s\" failed"
-msgstr "Aanmaken map \"%s\" mislukt"
+msgstr "Het veranderen van de huidige directory naar \"%s\" is mislukt"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1718
@@ -2310,7 +2307,7 @@ msgstr "Kolombreedte kon niet worden ingesteld."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:112
 msgid "Command"
-msgstr ""
+msgstr "Commando"
 
 #: ../src/common/init.cpp:196
 #, c-format
@@ -2366,12 +2363,12 @@ msgstr "Inhoud"
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:866
 msgid "ControlDark"
-msgstr ""
+msgstr "ControlDark"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:867
 msgid "ControlLight"
-msgstr ""
+msgstr "ControlLight"
 
 #: ../src/common/strconv.cpp:2251
 #, c-format
@@ -2401,7 +2398,7 @@ msgstr "Selectie kopiëren"
 
 #: ../src/msw/glcanvas.cpp:183 ../src/unix/glx11.cpp:136
 msgid "Core OpenGL profile is not supported by the OpenGL driver."
-msgstr ""
+msgstr "Core OpenGL-profiel wordt niet ondersteund door de OpenGL-driver."
 
 #: ../src/richtext/richtextborderspage.cpp:569
 #: ../src/richtext/richtextborderspage.cpp:604
@@ -2605,9 +2602,9 @@ msgid "Create new directory"
 msgstr "Maak nieuwe map"
 
 #: ../src/xrc/xmlres.cpp:2441
-#, fuzzy, c-format
+#, c-format
 msgid "Creating %s \"%s\" failed."
-msgstr "Extractie van '%s' in '%s' mislukt."
+msgstr "Aanmaken van '%s' in '%s' mislukte."
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1719
@@ -2713,7 +2710,7 @@ msgstr "Genereren van foutopsporingsrapport mislukt."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:82
 msgid "Decimal"
-msgstr ""
+msgstr "Decimaal"
 
 #: ../src/generic/fontdlgg.cpp:323
 msgid "Decorative"
@@ -2869,7 +2866,7 @@ msgstr "Toont hulptekst terwijl u de boeken aan de linkerzijde doorbladert."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:83
 msgid "Divide"
-msgstr ""
+msgstr "Scheiding"
 
 #: ../src/msw/mimetype.cpp:725
 msgid ""
@@ -3002,33 +2999,28 @@ msgstr "Achtergrondkleur inschakelen."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:197
 #: ../src/richtext/richtextbackgroundpage.cpp:199
-#, fuzzy
 msgid "Enables a shadow."
-msgstr "Achtergrondkleur inschakelen."
+msgstr "Schakelt een schaduw in."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:301
 #: ../src/richtext/richtextbackgroundpage.cpp:303
-#, fuzzy
 msgid "Enables the blur distance."
-msgstr "De breedte-waarde inschakelen."
+msgstr "Schakelt de vervagingsafstand in."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:261
 #: ../src/richtext/richtextbackgroundpage.cpp:263
-#, fuzzy
 msgid "Enables the shadow colour."
-msgstr "Achtergrondkleur inschakelen."
+msgstr "Schakelt de schaduwkleur in."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:328
 #: ../src/richtext/richtextbackgroundpage.cpp:330
-#, fuzzy
 msgid "Enables the shadow opacity."
-msgstr "De breedte-waarde inschakelen."
+msgstr "Schakelt de schaduwondoorzichtigheid in."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:274
 #: ../src/richtext/richtextbackgroundpage.cpp:276
-#, fuzzy
 msgid "Enables the shadow spread."
-msgstr "De breedte-waarde inschakelen."
+msgstr "Schakelt de schaduwbreedte in."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:64
@@ -4150,7 +4142,7 @@ msgstr "Hoe het object zweeft relatief t.o.v. de tekst."
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1721
 msgid "I-Beam"
-msgstr ""
+msgstr "I-Beam"
 
 #: ../src/common/imagbmp.cpp:1195
 msgid "ICO: Error in reading mask DIB."
@@ -4303,12 +4295,12 @@ msgstr "InactiveBorder"
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:873
 msgid "InactiveCaption"
-msgstr ""
+msgstr "InactiveCaption"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:874
 msgid "InactiveCaptionText"
-msgstr ""
+msgstr "InactiveCaptionText"
 
 #: ../src/common/gifdecod.cpp:792
 #, c-format
@@ -4542,12 +4534,12 @@ msgstr "KP_Add"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:99
 msgid "KP_Begin"
-msgstr ""
+msgstr "KP_Begin"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:107
 msgid "KP_Decimal"
-msgstr ""
+msgstr "KP_Decimal"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:101
@@ -4557,7 +4549,7 @@ msgstr "KP_Delete"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:108
 msgid "KP_Divide"
-msgstr ""
+msgstr "KP_Divide"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:93
@@ -4577,7 +4569,7 @@ msgstr "KP_Enter"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
 msgid "KP_Equal"
-msgstr ""
+msgstr "KP_Equal"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:89
@@ -4597,7 +4589,7 @@ msgstr "KP_Left"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:103
 msgid "KP_Multiply"
-msgstr ""
+msgstr "KP_Multiply"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:97
@@ -4607,17 +4599,17 @@ msgstr "KP_Next"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
 msgid "KP_PageDown"
-msgstr ""
+msgstr "KP_PageDown"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:94
 msgid "KP_PageUp"
-msgstr ""
+msgstr "KP_PageUp"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:96
 msgid "KP_Prior"
-msgstr ""
+msgstr "KP_Prior"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:92
@@ -4627,17 +4619,17 @@ msgstr "KP_Right"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
 msgid "KP_Separator"
-msgstr ""
+msgstr "KP_Separator"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:86
 msgid "KP_Space"
-msgstr ""
+msgstr "KP_Space"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:106
 msgid "KP_Subtract"
-msgstr ""
+msgstr "KP_Subtract"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
@@ -4666,11 +4658,11 @@ msgid "Last page"
 msgstr "Laatste pagina"
 
 #: ../src/common/log.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Last repeated message (\"%s\", %u time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %u times) wasn't output"
-msgstr[0] "Laatst herhaald bericht (\"%s\", %lu keer) is niet uitgezonden"
-msgstr[1] "Laatst herhaald bericht (\"%s\", %lu keer) is niet uitgezonden"
+msgstr[0] "Laatst herhaald bericht (\"%s\", %u keer) is niet uitgevoerd"
+msgstr[1] "Laatst herhaald berichten (\"%s\", %u keer) zijn niet uitgevoerd"
 
 #: ../src/common/paper.cpp:104
 msgid "Ledger, 17 x 11 in"
@@ -4695,7 +4687,7 @@ msgstr "Links (&eerste regel):"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1722
 msgid "Left Button"
-msgstr ""
+msgstr "Linker knop"
 
 #: ../src/generic/prntdlgg.cpp:880
 msgid "Left margin (mm):"
@@ -5001,7 +4993,7 @@ msgstr "MacVietnamese"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1723
 msgid "Magnifier"
-msgstr ""
+msgstr "Vergrootglas"
 
 #: ../src/propgrid/advprops.cpp:2104
 msgid "Make a selection:"
@@ -5064,7 +5056,7 @@ msgstr "Minimaliseren"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1724
 msgid "Middle Button"
-msgstr ""
+msgstr "middelste knop"
 
 #: ../src/richtext/richtextsizepage.cpp:409
 msgid "Min height:"
@@ -5197,7 +5189,7 @@ msgstr "Nee"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1725
 msgid "No Entry"
-msgstr ""
+msgstr "Geen toegang"
 
 #: ../src/generic/animateg.cpp:150
 #, c-format
@@ -5500,7 +5492,7 @@ msgstr "Olijfgroen"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:326
 msgid "Opaci&ty:"
-msgstr ""
+msgstr "Ondoorzich&tigheid:"
 
 #: ../src/common/docview.cpp:1776 ../src/common/docview.cpp:1818
 msgid "Open File"
@@ -5763,7 +5755,7 @@ msgstr "Pagina's"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1726
 msgid "Paint Brush"
-msgstr ""
+msgstr "Penseel"
 
 #: ../src/generic/prntdlgg.cpp:602 ../src/generic/prntdlgg.cpp:801
 #: ../src/generic/prntdlgg.cpp:842 ../src/generic/prntdlgg.cpp:855
@@ -6024,7 +6016,7 @@ msgid "Printing Error"
 msgstr "Afdrukfout"
 
 #: ../src/common/prntbase.cpp:565
-#, fuzzy, c-format
+#, c-format
 msgid "Printing page %d"
 msgstr "Bezig met afdrukken van pagina %d..."
 
@@ -6236,7 +6228,7 @@ msgstr "Bronbestand '%s' is geen geldige berichtencatalogus."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:54
 msgid "Return"
-msgstr ""
+msgstr "Terugtoets"
 
 #: ../src/common/stockitem.cpp:189
 msgid "Revert to Saved"
@@ -6265,7 +6257,7 @@ msgstr "Right Arrow"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1731
 msgid "Right Button"
-msgstr ""
+msgstr "Rechter knop"
 
 #: ../src/generic/prntdlgg.cpp:892
 msgid "Right margin (mm):"
@@ -6436,7 +6428,7 @@ msgstr "Selecteert het lijstniveau voor bewerking."
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:80
 msgid "Separator"
-msgstr ""
+msgstr "Scheidingsteken"
 
 #: ../src/common/cmdline.cpp:1083
 #, c-format
@@ -6472,16 +6464,15 @@ msgstr ""
 
 #: ../src/richtext/richtextbackgroundpage.cpp:272
 msgid "Sh&adow spread:"
-msgstr ""
+msgstr "Sch&aduwbreedte:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:180
 msgid "Shadow"
-msgstr ""
+msgstr "Schaduw"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:259
-#, fuzzy
 msgid "Shadow c&olour:"
-msgstr "Kies Kleur"
+msgstr "Schad&uwkleur:"
 
 #: ../src/common/accelcmn.cpp:325
 msgid "Shift+"
@@ -6574,27 +6565,27 @@ msgstr "Grootte:"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1736
 msgid "Sizing"
-msgstr ""
+msgstr "Dimensionering"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1733
 msgid "Sizing N-S"
-msgstr ""
+msgstr "Dimensionering N-Z"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1732
 msgid "Sizing NE-SW"
-msgstr ""
+msgstr "Dimensionering NO-ZW"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1734
 msgid "Sizing NW-SE"
-msgstr ""
+msgstr "Dimensionering NW-ZO"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1735
 msgid "Sizing W-E"
-msgstr ""
+msgstr "Dimensionering W-O"
 
 #: ../src/generic/progdlgg.cpp:263 ../src/generic/progdlgg.cpp:776
 #: ../src/msw/progdlg.cpp:801
@@ -6612,7 +6603,7 @@ msgstr "Klein kapitaal"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:77
 msgid "Snapshot"
-msgstr ""
+msgstr "Momentopname"
 
 #: ../src/richtext/richtextborderspage.cpp:614
 msgid "Solid"
@@ -6716,7 +6707,7 @@ msgstr "Onderschrif&t"
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:81
 msgid "Subtract"
-msgstr ""
+msgstr "Aftrekken"
 
 #: ../src/richtext/richtextfontpage.cpp:296
 msgid "Supe&rscript"
@@ -6779,9 +6770,8 @@ msgstr "TIFF: Afbeeldingsgrootte is abnormaal groot."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:66
-#, fuzzy
 msgid "Tab"
-msgstr "Tabs"
+msgstr "Tab"
 
 #: ../src/richtext/richtextbuffer.cpp:11489
 msgid "Table Properties"
@@ -7001,9 +6991,8 @@ msgstr "Het formaat van bestand '%s' kan niet worden bepaald."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:220
 #: ../src/richtext/richtextbackgroundpage.cpp:222
-#, fuzzy
 msgid "The horizontal offset."
-msgstr "Onder elkaar"
+msgstr "De horizontale verschuiving."
 
 #: ../src/richtext/richtextindentspage.cpp:199
 #: ../src/richtext/richtextindentspage.cpp:201
@@ -7081,11 +7070,11 @@ msgid "The outline level."
 msgstr "Het Outline niveau."
 
 #: ../src/common/log.cpp:281
-#, fuzzy, c-format
+#, c-format
 msgid "The previous message repeated %u time."
 msgid_plural "The previous message repeated %u times."
-msgstr[0] "Het vorige bericht  %lu keer herhaald."
-msgstr[1] "Het vorige bericht  %lu keer herhaald."
+msgstr[0] "Het vorige bericht  is %u keer herhaald."
+msgstr[1] "Het vorige berichten zijn  %u keer herhaald."
 
 #: ../src/common/log.cpp:274
 msgid "The previous message repeated once."
@@ -7138,23 +7127,22 @@ msgstr "De rechterpositie."
 #: ../src/richtext/richtextbackgroundpage.cpp:310
 #: ../src/richtext/richtextbackgroundpage.cpp:312
 msgid "The shadow blur distance."
-msgstr ""
+msgstr "De vervagingsafstand van de schaduw."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:267
 #: ../src/richtext/richtextbackgroundpage.cpp:269
-#, fuzzy
 msgid "The shadow colour."
-msgstr "De lettertypekleur."
+msgstr "De schaduwkleur."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:337
 #: ../src/richtext/richtextbackgroundpage.cpp:339
 msgid "The shadow opacity."
-msgstr ""
+msgstr "De schaduwondoorzichtigheid."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:283
 #: ../src/richtext/richtextbackgroundpage.cpp:285
 msgid "The shadow spread."
-msgstr ""
+msgstr "De schaduwspreiding."
 
 #: ../src/richtext/richtextindentspage.cpp:267
 #: ../src/richtext/richtextliststylepage.cpp:439
@@ -7240,9 +7228,8 @@ msgstr ""
 
 #: ../src/richtext/richtextbackgroundpage.cpp:243
 #: ../src/richtext/richtextbackgroundpage.cpp:245
-#, fuzzy
 msgid "The vertical offset."
-msgstr "Vertikale uitlijning inschakelen."
+msgstr "De verticale verschuiving."
 
 #: ../src/osx/carbon/dataview.cpp:1338
 msgid "There is no column or renderer for the specified column index."
@@ -7353,12 +7340,12 @@ msgstr "Te veel kleuren in PNG. De afbeelding kan enigszins troebel overkomen."
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:877
 msgid "Tooltip"
-msgstr ""
+msgstr "Tooltip"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:878
 msgid "TooltipText"
-msgstr ""
+msgstr "TooltipText"
 
 #: ../src/common/stockitem.cpp:200 ../src/richtext/richtextsizepage.cpp:286
 #: ../src/richtext/richtextsizepage.cpp:290
@@ -7770,9 +7757,8 @@ msgstr "Eenheden voor de bovenpositie."
 #: ../src/richtext/richtextbackgroundpage.cpp:296
 #: ../src/richtext/richtextbackgroundpage.cpp:321
 #: ../src/richtext/richtextbackgroundpage.cpp:323
-#, fuzzy
 msgid "Units for this value."
-msgstr "Eenheden voor de linkermarge breedte."
+msgstr "eenheden voor deze waarde."
 
 #: ../src/generic/progdlgg.cpp:385 ../src/generic/progdlgg.cpp:658
 msgid "Unknown"
@@ -7889,7 +7875,7 @@ msgstr "Gebruik: %s"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:195
 msgid "Use &shadow"
-msgstr ""
+msgstr "Gebruik &schaduw"
 
 #: ../src/richtext/richtextindentspage.cpp:169
 #: ../src/richtext/richtextindentspage.cpp:171
@@ -7950,12 +7936,12 @@ msgstr "Weergaven"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1738
 msgid "Wait"
-msgstr ""
+msgstr "Wacht"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1740
 msgid "Wait Arrow"
-msgstr ""
+msgstr "Wacht pijl"
 
 #: ../src/unix/epolldispatcher.cpp:213
 #, c-format
@@ -7969,7 +7955,7 @@ msgstr "Waarschuwing: "
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1739
 msgid "Watch"
-msgstr ""
+msgstr "Bekijk"
 
 #. TRANSLATORS: Label of font weight
 #: ../src/propgrid/advprops.cpp:671
@@ -8024,9 +8010,8 @@ msgid "WindowText"
 msgstr "WindowText"
 
 #: ../src/msw/utils.cpp:1233
-#, fuzzy
 msgid "Windows 10"
-msgstr "Windows 8.1"
+msgstr "Windows 10"
 
 #: ../src/msw/utils.cpp:1183
 msgid "Windows 2000"
@@ -8124,9 +8109,8 @@ msgid "Windows NT %lu.%lu"
 msgstr "Windows NT %lu.%lu"
 
 #: ../src/msw/utils.cpp:1232
-#, fuzzy
 msgid "Windows Server 10"
-msgstr "Windows Server 2003"
+msgstr "Windows Server 10"
 
 #: ../src/msw/utils.cpp:1192
 msgid "Windows Server 2003"
