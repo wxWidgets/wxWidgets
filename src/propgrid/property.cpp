@@ -2299,7 +2299,7 @@ void wxPGProperty::DoAddChild( wxPGProperty* prop, int index,
 
 void wxPGProperty::DoPreAddChild( int index, wxPGProperty* prop )
 {
-    wxASSERT_MSG( prop->GetBaseName().length(),
+    wxASSERT_MSG( !prop->GetBaseName().empty(),
                   "Property's children must have unique, non-empty "
                   "names within their scope" );
 

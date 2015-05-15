@@ -982,7 +982,7 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
 
     if ( !label.empty() )
     {
-        wxASSERT_MSG( !pageObj->m_label.length(),
+        wxASSERT_MSG( pageObj->m_label.empty(),
                       wxT("If page label is given in constructor, empty label must be given in AddPage"));
         pageObj->m_label = label;
     }

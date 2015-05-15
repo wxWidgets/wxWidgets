@@ -95,7 +95,7 @@ wxString wxStringProperty::ValueToString( wxVariant& value,
         // Value stored in m_value is non-editable, non-full value
         if ( (argFlags & wxPG_FULL_VALUE) ||
              (argFlags & wxPG_EDITABLE_VALUE) ||
-             !s.length() )
+             s.empty() )
         {
             // Calling this under incorrect conditions will fail
             wxASSERT_MSG( argFlags & wxPG_VALUE_IS_CURRENT,
