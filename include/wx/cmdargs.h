@@ -128,7 +128,9 @@ private:
     void FreeArgs()
     {
         Free(m_argsA);
+        m_argsA = NULL;
         Free(m_argsW);
+        m_argsW = NULL;
     }
 
     wxArrayString m_args;
