@@ -2433,6 +2433,16 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
 
 void wxXmlResourceHandlerImpl::SetupWindow(wxWindow *wnd)
 {
+    // This is called immediately after creating a window, so it's a convenient
+    // place to check that it was created successfully without duplicating this
+    // check in all handlers.
+    if ( !wnd->GetHandle() )
+    {
+        wxLogError(_("Creating %s \"%s\" failed."),
+                   m_handler->m_class, GetName());
+        return;
+    }
+
     //FIXME : add cursor
 
     const wxString variant = GetParamValue(wxS("variant"));
