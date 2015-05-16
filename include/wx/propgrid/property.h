@@ -1754,6 +1754,21 @@ public:
         return (m_flags & flag) != 0;
     }
 #endif
+    /**
+        Returns true if property has given flag set.
+    */
+    bool HasFlag(FlagType flag) const
+    {
+        return (m_flags & flag) != 0;
+    }
+
+    /**
+        Returns true if property has all given flags set.
+    */
+    bool HasFlagsExact(FlagType flags) const
+    {
+        return (m_flags & flags) == flags;
+    }
 
     /** Returns comma-delimited string of property attributes.
     */
@@ -1766,13 +1781,16 @@ public:
     */
     wxVariant GetAttributesAsList() const;
 
+#if WXWIN_COMPATIBILITY_3_0
     /**
         Returns property flags.
     */
+    wxDEPRECATED_MSG("Use HasFlag or HasFlagsExact functions instead.")
     FlagType GetFlags() const
     {
         return m_flags;
     }
+#endif
 
     const wxPGEditor* GetEditorClass() const;
 
@@ -2105,7 +2123,7 @@ public:
                  example, if you want to disable a property, call
                  Enable(false) instead of setting wxPG_PROP_DISABLED flag.
 
-        @see HasFlag(), GetFlags()
+        @see HasFlag(), HasFlagsExact()
     */
     void ChangeFlag( wxPGPropertyFlags flag, bool set )
     {

@@ -183,7 +183,7 @@ wxPG_ITERATE_DEFAULT = wxPG_ITERATE_NORMAL
 // Macro to test if children of PWC should be iterated through
 #define wxPG_ITERATOR_PARENTEXMASK_TEST(PWC, PARENTMASK) \
         ( \
-        !(PWC->GetFlags() & PARENTMASK) && \
+        !PWC->HasFlag(PARENTMASK) && \
         PWC->GetChildCount() \
         )
 
@@ -240,8 +240,8 @@ private:
     wxPGProperty*               m_baseParent;
 
     // Masks are used to quickly exclude items
-    int                         m_itemExMask;
-    int                         m_parentExMask;
+    wxPGProperty::FlagType      m_itemExMask;
+    wxPGProperty::FlagType      m_parentExMask;
 };
 
 
