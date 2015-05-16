@@ -644,6 +644,7 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
     wxFont font;
     font << m_value;
 
+    /* TRANSLATORS: Label of font point size */
     AddPrivateChild( new wxIntProperty( _("Point Size"),
                      wxS("Point Size"),(long)font.GetPointSize() ) );
 
@@ -653,6 +654,7 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
          wxPGGlobalVars->m_fontFamilyChoices->Index(faceName) == wxNOT_FOUND )
         wxPGGlobalVars->m_fontFamilyChoices->AddAsSorted(faceName);
 
+    /* TRANSLATORS: Label of font face name */
     wxPGProperty* p = new wxEnumProperty(_("Face Name"), wxS("Face Name"),
                                          *wxPGGlobalVars->m_fontFamilyChoices);
 
@@ -660,17 +662,21 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
 
     AddPrivateChild( p );
 
+    /* TRANSLATORS: Label of font style */
     AddPrivateChild( new wxEnumProperty(_("Style"), wxS("Style"),
                      gs_fp_es_style_labels,gs_fp_es_style_values,
                      font.GetStyle()) );
 
+    /* TRANSLATORS: Label of font weight */
     AddPrivateChild( new wxEnumProperty(_("Weight"), wxS("Weight"),
                      gs_fp_es_weight_labels,gs_fp_es_weight_values,
                      font.GetWeight()) );
 
+    /* TRANSLATORS: Label of underlined font */
     AddPrivateChild( new wxBoolProperty(_("Underlined"), wxS("Underlined"),
                      font.GetUnderlined()) );
 
+    /* TRANSLATORS: Label of font family */
     AddPrivateChild( new wxEnumProperty(_("Family"), wxS("PointSize"),
                      gs_fp_es_family_labels,gs_fp_es_family_values,
                      font.GetFamily()) );
@@ -849,31 +855,31 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
 
 //#define wx_cp_es_syscolours_len 25
 static const char* const gs_cp_es_syscolour_labels[] = {
-    wxTRANSLATE("AppWorkspace"),
-    wxTRANSLATE("ActiveBorder"),
-    wxTRANSLATE("ActiveCaption"),
-    wxTRANSLATE("ButtonFace"),
-    wxTRANSLATE("ButtonHighlight"),
-    wxTRANSLATE("ButtonShadow"),
-    wxTRANSLATE("ButtonText"),
-    wxTRANSLATE("CaptionText"),
-    wxTRANSLATE("ControlDark"),
-    wxTRANSLATE("ControlLight"),
-    wxTRANSLATE("Desktop"),
-    wxTRANSLATE("GrayText"),
-    wxTRANSLATE("Highlight"),
-    wxTRANSLATE("HighlightText"),
-    wxTRANSLATE("InactiveBorder"),
-    wxTRANSLATE("InactiveCaption"),
-    wxTRANSLATE("InactiveCaptionText"),
-    wxTRANSLATE("Menu"),
-    wxTRANSLATE("Scrollbar"),
-    wxTRANSLATE("Tooltip"),
-    wxTRANSLATE("TooltipText"),
-    wxTRANSLATE("Window"),
-    wxTRANSLATE("WindowFrame"),
-    wxTRANSLATE("WindowText"),
-    wxTRANSLATE("Custom"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("AppWorkspace"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ActiveBorder"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ActiveCaption"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ButtonFace"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ButtonHighlight"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ButtonShadow"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ButtonText"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("CaptionText"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ControlDark"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ControlLight"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("Desktop"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("GrayText"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("Highlight"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("HighlightText"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("InactiveBorder"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("InactiveCaption"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("InactiveCaptionText"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("Menu"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("Scrollbar"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("Tooltip"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("TooltipText"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("Window"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("WindowFrame"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("WindowText"),
+    /* TRANSLATORS: Custom colour choice entry */ wxTRANSLATE("Custom"),
     NULL
 };
 
@@ -1525,6 +1531,7 @@ bool wxSystemColourProperty::DoSetAttribute( const wxString& name, wxVariant& va
         if ( ival && (m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
         {
             // Show custom choice
+            /* TRANSLATORS: Custom colour choice entry */
             m_choices.Add(_("Custom"), wxPG_COLOUR_CUSTOM);
             m_flags &= ~(wxPG_PROP_HIDE_CUSTOM_COLOUR);
         }
@@ -1563,7 +1570,7 @@ static const char* const gs_cp_es_normcolour_labels[] = {
     wxTRANSLATE("Aqua"),
     wxTRANSLATE("Yellow"),
     wxTRANSLATE("White"),
-    wxTRANSLATE("Custom"),
+    /* TRANSLATORS: Custom colour choice entry */ wxTRANSLATE("Custom"),
     NULL
 };
 
@@ -1703,34 +1710,34 @@ wxVariant wxColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 
 //#define wx_cp_es_syscursors_len 28
 static const char* const gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
-    wxTRANSLATE("Default"),
-    wxTRANSLATE("Arrow"),
-    wxTRANSLATE("Right Arrow"),
-    wxTRANSLATE("Blank"),
-    wxTRANSLATE("Bullseye"),
-    wxTRANSLATE("Character"),
-    wxTRANSLATE("Cross"),
-    wxTRANSLATE("Hand"),
-    wxTRANSLATE("I-Beam"),
-    wxTRANSLATE("Left Button"),
-    wxTRANSLATE("Magnifier"),
-    wxTRANSLATE("Middle Button"),
-    wxTRANSLATE("No Entry"),
-    wxTRANSLATE("Paint Brush"),
-    wxTRANSLATE("Pencil"),
-    wxTRANSLATE("Point Left"),
-    wxTRANSLATE("Point Right"),
-    wxTRANSLATE("Question Arrow"),
-    wxTRANSLATE("Right Button"),
-    wxTRANSLATE("Sizing NE-SW"),
-    wxTRANSLATE("Sizing N-S"),
-    wxTRANSLATE("Sizing NW-SE"),
-    wxTRANSLATE("Sizing W-E"),
-    wxTRANSLATE("Sizing"),
-    wxTRANSLATE("Spraycan"),
-    wxTRANSLATE("Wait"),
-    wxTRANSLATE("Watch"),
-    wxTRANSLATE("Wait Arrow"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Default"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Arrow"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Right Arrow"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Blank"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Bullseye"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Character"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Cross"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Hand"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("I-Beam"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Left Button"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Magnifier"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Middle Button"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("No Entry"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Paint Brush"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Pencil"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Point Left"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Point Right"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Question Arrow"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Right Button"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Sizing NE-SW"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Sizing N-S"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Sizing NW-SE"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Sizing W-E"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Sizing"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Spraycan"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Wait"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Watch"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Wait Arrow"),
     NULL
 };
 

@@ -204,7 +204,9 @@ wxPGGlobalVarsClass::wxPGGlobalVarsClass()
 {
     wxPGProperty::sm_wxPG_LABEL = new wxString(wxPG_LABEL_STRING);
 
+    /* TRANSLATORS: Name of Boolean false value */
     m_boolChoices.Add(_("False"));
+    /* TRANSLATORS: Name of Boolean true value */
     m_boolChoices.Add(_("True"));
 
     m_fontFamilyChoices = NULL;
@@ -404,6 +406,7 @@ void wxPropertyGrid::Init1()
 
     m_width = m_height = 0;
 
+    /* TRANSLATORS: Text  displayed for unspecified value */
     m_commonValues.push_back(new wxPGCommonValue(_("Unspecified"), wxPGGlobalVars->m_defaultRenderer) );
     m_cvUnspecified = 0;
 
@@ -3174,6 +3177,7 @@ void wxPropertyGrid::DoShowPropertyError( wxPGProperty* WXUNUSED(property), cons
     }
 #endif
 
+    /* TRANSLATORS: Caption of message box displaying any property error */
     ::wxMessageBox(msg, _("Property Error"));
 }
 
@@ -3306,6 +3310,7 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
             DoShowPropertyError(property, msg);
 
         if ( vfb & wxPG_VFB_SHOW_MESSAGEBOX )
+            /* TRANSLATORS: Caption of message box displaying any property error */
             ::wxMessageBox(msg, _("Property Error"));
     }
 
