@@ -943,6 +943,11 @@ public:
         controls automatic best size determination and using sizers to lay out
         them.
 
+        Also note that if either component of @a sz has the special value of
+        -1, it is returned unchanged independently of the current DPI, to
+        preserve the special value of -1 in wxWidgets API (it is often used to
+        mean "unspecified").
+
         @since 3.1.0
      */
     wxSize FromDIP(const wxSize& sz) const;
@@ -956,6 +961,9 @@ public:
 
         This is the same as FromDIP(const wxSize& sz) overload, but assumes
         that the resolution is the same in horizontal and vertical directions.
+
+        If @a d has the special value of -1, it is returned unchanged
+        independently of the current DPI.
 
         @since 3.1.0
      */
