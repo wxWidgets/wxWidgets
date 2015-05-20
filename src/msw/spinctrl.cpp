@@ -544,10 +544,20 @@ void wxSpinCtrl::SetRange(int minVal, int maxVal)
     // Manually adjust the old value to avoid an event being sent from
     // NormalizeValue() called from inside the base class SetRange() as we're
     // not supposed to generate any events from here.
-    if ( m_oldValue < minVal )
-        m_oldValue = minVal;
-    else if ( m_oldValue > maxVal )
-        m_oldValue = maxVal;
+    if ( minVal <= maxVal )
+    {
+        if ( m_oldValue < minVal )
+            m_oldValue = minVal;
+        else if ( m_oldValue > maxVal )
+            m_oldValue = maxVal;
+    }
+    else // reversed range
+    {
+        if ( m_oldValue > minVal )
+            m_oldValue = minVal;
+        else if ( m_oldValue < maxVal )
+            m_oldValue = maxVal;
+    }
 
     wxSpinButton::SetRange(minVal, maxVal);
 
