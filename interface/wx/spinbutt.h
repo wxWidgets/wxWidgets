@@ -168,6 +168,12 @@ public:
     /**
         Sets the range of the spin button.
 
+        In portable code, @a min should be less than or equal to @a max. In
+        wxMSW it is possible to specify minimum greater than maximum and the
+        native control supports the same range as if they were reversed, but
+        swaps the meaning of up and down arrows, however this dubious feature
+        is not supported on other platforms.
+
         @param min
             The minimum value for the spin button.
         @param max
