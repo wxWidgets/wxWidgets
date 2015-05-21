@@ -851,7 +851,10 @@ GtkEditable *wxTextCtrl::GetEditable() const
 
 GtkEntry *wxTextCtrl::GetEntry() const
 {
-    return GTK_ENTRY(m_text);
+    if (GTK_IS_ENTRY(m_text))
+        return (GtkEntry*)m_text;
+
+    return NULL;
 }
 
 int wxTextCtrl::GTKIMFilterKeypress(GdkEventKey* event) const
