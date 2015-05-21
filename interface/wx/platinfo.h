@@ -370,7 +370,7 @@ public:
     /**
         Returns the description of the operating system of this wxPlatformInfo instance.
         
-        See wxGetOSDescription() for more info.
+        See wxGetOsDescription() for more info.
     */
     wxString GetOperatingSystemDescription() const;
 
