@@ -637,7 +637,7 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
             child->InitAfterAdded(pageState, pageState->GetGrid());
         }
 
-        if ( propgrid && (propgrid->GetExtraStyle() & wxPG_EX_AUTO_UNSPECIFIED_VALUES) )
+        if ( propgrid && propgrid->HasExtraStyle(wxPG_EX_AUTO_UNSPECIFIED_VALUES) )
             SetFlagRecursively(wxPG_PROP_AUTO_UNSPECIFIED, true);
     }
 }
