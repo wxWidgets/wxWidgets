@@ -360,6 +360,7 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
             wxFontStyle fontstyle = wxFONTSTYLE_NORMAL;
             wxFontWeight fontweight = wxFONTWEIGHT_NORMAL;
             bool underlined = false;
+            bool strikethrough = false;
 
             if ( style & bold )
                 fontweight = wxFONTWEIGHT_BOLD ;
@@ -370,7 +371,8 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
             if ( style & underline )
                 underlined = true ;
 
-            m_info.Init(fontSize,wxFONTFAMILY_DEFAULT,fontstyle,fontweight,underlined,
+            m_info.Init(fontSize,wxFONTFAMILY_DEFAULT,fontstyle,
+                fontweight,underlined, strikethrough,
                 wxMacMakeStringFromPascal( qdFontName ), wxFONTENCODING_DEFAULT);
          }
     }
@@ -1088,8 +1090,6 @@ void wxNativeFontInfo::EnsureValid()
             m_qdFontStyle |= italic;
         if (m_underlined)
             m_qdFontStyle |= underline;
-        if (m_strikethrough)
-            m_qdFontStyle |= strikethrough;
 
 
         // we try to get as much styles as possible into ATSU
