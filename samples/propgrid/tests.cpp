@@ -146,7 +146,7 @@ void FormMain::OnDumpList( wxCommandEvent& WXUNUSED(event) )
             {
                 wxVariant& a = v[n];
 
-                t.Printf(wxT("  atribute %i: name=\"%s\"  (type=\"%s\"  value=\"%s\")\n"),(int)n,
+                t.Printf(wxT("  attribute %i: name=\"%s\"  (type=\"%s\"  value=\"%s\")\n"),(int)n,
                     a.GetName().c_str(),a.GetType().c_str(),a.GetString().c_str());
                 text += t;
             }
@@ -1418,7 +1418,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
     }
     else
     {
-        RT_MSG(wxT("All tests successfull"))
+        RT_MSG(wxT("All tests successful"))
         retVal = true;
 
         if ( !interactive )
