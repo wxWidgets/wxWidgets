@@ -4712,21 +4712,31 @@ void wxPropertyGrid::SetVirtualWidth( int width )
 
 void wxPropertyGrid::SetFocusOnCanvas()
 {
-    // To prevent wxPropertyGrid from stealing focus from other controls,
-    // only move focus to the grid if it was already in one if its child
-    // controls.
-    wxWindow* focus = wxWindow::FindFocus();
-    if ( focus )
+    // By default, to prevent wxPropertyGrid from stealing focus from
+    // other controls, only move focus to the grid if it was already
+    // in one of its child controls.
+    // If wxPG_EX_ALWAYS_ALLOW_FOCUS flag is set then wxPropertyGrid
+    // can take focus on the entire grid area (canvas) even if focus
+    // is moved from another control.
+    if ( HasExtraStyle(wxPG_EX_ALWAYS_ALLOW_FOCUS) )
     {
-        wxWindow* parent = focus->GetParent();
-        while ( parent )
+        SetFocus();
+    }
+    else
+    {
+        wxWindow* focus = wxWindow::FindFocus();
+        if ( focus )
         {
-            if ( parent == this )
+            wxWindow* parent = focus->GetParent();
+            while ( parent )
             {
-                SetFocus();
-                break;
+                if ( parent == this )
+                {
+                    SetFocus();
+                    break;
+                }
+                parent = parent->GetParent();
             }
-            parent = parent->GetParent();
         }
     }
 

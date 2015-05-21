@@ -663,7 +663,7 @@ bool wxPropertyGridManager::SetFont( const wxFont& font )
 void wxPropertyGridManager::SetExtraStyle( long exStyle )
 {
     wxWindow::SetExtraStyle( exStyle );
-    m_pPropGrid->SetExtraStyle( exStyle & 0xFFFFF000 );
+    m_pPropGrid->SetExtraStyle( exStyle & wxPG_EX_WINDOW_STYLE_MASK );
 #if wxUSE_TOOLBAR
     if ( (exStyle & (wxPG_EX_NO_FLAT_TOOLBAR|wxPG_EX_MODE_BUTTONS)) && m_pToolbar )
         RecreateControls();
