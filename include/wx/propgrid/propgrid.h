@@ -311,8 +311,18 @@ wxPG_EX_NO_TOOLBAR_DIVIDER              = 0x08000000,
 
 /** Show a separator below the toolbar.
 */
-wxPG_EX_TOOLBAR_SEPARATOR               = 0x10000000
+wxPG_EX_TOOLBAR_SEPARATOR               = 0x10000000,
 
+#if wxABI_VERSION >= 30003
+/** Allows to take focus on the entire area (on canvas)
+    even if wxPropertyGrid is not a standalone control.
+*/
+wxPG_EX_ALWAYS_ALLOW_FOCUS              = 0x00100000,
+#endif // 3.0.3+
+
+/** A mask which can be used to filter (out) all extra styles.
+*/
+wxPG_EX_WINDOW_STYLE_MASK               = 0x1FFFF000
 };
 
 #if wxPG_COMPATIBILITY_1_4
