@@ -30,9 +30,6 @@
 
 #endif /* __cplusplus */
 
-/* fill in with the string wxGetOsDescription() will return */
-#define WXWIN_OS_DESCRIPTION "OpenVMS"
-
 /* the installation location prefix from configure */
 #undef wxINSTALL_PREFIX
 

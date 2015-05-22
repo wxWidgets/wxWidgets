@@ -7396,21 +7396,6 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
 fi
 
 dnl ---------------------------------------------------------------------------
-dnl get the string with OS info - used by wxGetOsDescription() on MacOS X
-dnl ---------------------------------------------------------------------------
-
-if test "$cross_compiling" != "no"; then
-    dnl Use best guess from host as we can't use uname when cross compiling
-    OSINFO="\"$host\""
-else
-    dnl attualy work out OS version
-    OSINFO=`uname -s -r -m`
-    OSINFO="\"$OSINFO\""
-fi
-
-AC_DEFINE_UNQUOTED(WXWIN_OS_DESCRIPTION, $OSINFO)
-
-dnl ---------------------------------------------------------------------------
 dnl define the variable containing the installation prefix (used in dcpsg.cpp)
 dnl ---------------------------------------------------------------------------
 

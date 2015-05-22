@@ -37242,19 +37242,6 @@ $as_echo "$as_me: WARNING: GStreamer not available... disabling wxMediaCtrl" >&2
 fi
 
 
-if test "$cross_compiling" != "no"; then
-        OSINFO="\"$host\""
-else
-        OSINFO=`uname -s -r -m`
-    OSINFO="\"$OSINFO\""
-fi
-
-cat >>confdefs.h <<_ACEOF
-#define WXWIN_OS_DESCRIPTION $OSINFO
-_ACEOF
-
-
-
 if test "x$prefix" != "xNONE"; then
     wxPREFIX=$prefix
 else

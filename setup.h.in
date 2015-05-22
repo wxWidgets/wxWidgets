@@ -14,9 +14,6 @@
 
 #endif /* __cplusplus */
 
-/* fill in with the string wxGetOsDescription() will return */
-#undef WXWIN_OS_DESCRIPTION
-
 /* the installation location prefix from configure */
 #undef wxINSTALL_PREFIX
 
