@@ -26,6 +26,7 @@
 #include "wx/gifdecod.h"
 #include "wx/stream.h"
 #include "wx/anidecod.h" // wxImageArray
+#include "wx/scopedarray.h"
 
 #define GIF89_HDR     "GIF89a"
 #define NETSCAPE_LOOP "NETSCAPE2.0"
@@ -267,7 +268,7 @@ bool wxGIFHandler::DoSaveFile(const wxImage& image, wxOutputStream *stream,
     }
 
     const wxUint8 *src = image.GetData();
-    wxUint8 *eightBitData = new wxUint8[width];
+    wxScopedArray<wxUint8> eightBitData(width);
 
     SetupCompress(stream, 8);
 
@@ -287,14 +288,12 @@ bool wxGIFHandler::DoSaveFile(const wxImage& image, wxOutputStream *stream,
             src+=3;
         }
 
-        ok = CompressLine(stream, eightBitData, width);
+        ok = CompressLine(stream, eightBitData.get(), width);
         if (!ok)
         {
             break;
         }
     }
-
-    delete [] eightBitData;
 
     wxDELETE(m_hashTable);
 
