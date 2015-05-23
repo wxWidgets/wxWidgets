@@ -2408,8 +2408,10 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, wxRichTextDrawingContext& co
     if (wxRichTextBuffer::GetFloatingLayoutMode() && GetFloatCollector() && GetFloatCollector()->HasFloats())
     {
         int bottom = GetFloatCollector()->GetLastRectBottom();
-        if (bottom > maxHeight)
-            maxHeight = bottom;
+        // The floating objects are positioned relative to entire buffer, not this box
+        int maxFloatHeight = GetFloatCollector()->GetLastRectBottom() - GetPosition().y - topMargin;
+        if (maxFloatHeight > maxHeight)
+            maxHeight = maxFloatHeight;
     }
 
     if (attr.GetTextBoxAttr().GetSize().GetWidth().IsValid())
@@ -12529,14 +12531,22 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context
                 sz = contentRect.GetSize();
             }
 
+            // Take away space used by the image's margins
+            {
+                // Find the actual space available when margin is taken into account
+                wxRect marginRect, borderRect, contentRect, paddingRect, outlineRect;
+                marginRect = wxRect(0, 0, 100, 100); // To force GetBoxRects to return content rect
+                GetBoxRects(dc, buffer, GetAttributes(), marginRect, borderRect, contentRect, paddingRect, outlineRect);
+                sz += (contentRect.GetSize() - wxSize(100, 100));
+            }
+
             // Use a minimum size to stop images becoming very small
             parentWidth = wxMax(100, sz.GetWidth());
             parentHeight = wxMax(100, sz.GetHeight());
 
-            if (buffer->GetRichTextCtrl())
-                // Start with a maximum width of the control size, even if not specified by the content,
-                // to minimize the amount of picture overlapping the right-hand side
-                maxWidth = parentWidth;
+            // Start with a maximum width of the control size, even if not specified by the content,
+            // to minimize the amount of picture overlapping the right-hand side
+            maxWidth = parentWidth;
         }
     }
 
