@@ -117,53 +117,31 @@ static bool wxGIFHandler_BufferedOutput(wxOutputStream *, wxUint8 *buf, int c);
 bool wxGIFHandler::LoadFile(wxImage *image, wxInputStream& stream,
     bool verbose, int index)
 {
-    wxGIFDecoder *decod;
-    wxGIFErrorCode error;
-    bool ok = true;
-
-//    image->Destroy();
-    decod = new wxGIFDecoder();
-    error = decod->LoadGIF(stream);
-
-    if ((error != wxGIF_OK) && (error != wxGIF_TRUNCATED))
+    wxGIFDecoder decod;
+    switch ( decod.LoadGIF(stream) )
     {
-        if (verbose)
-        {
-            switch (error)
-            {
-                case wxGIF_INVFORMAT:
-                    wxLogError(_("GIF: error in GIF image format."));
-                    break;
-                case wxGIF_MEMERR:
-                    wxLogError(_("GIF: not enough memory."));
-                    break;
-                default:
-                    wxLogError(_("GIF: unknown error!!!"));
-                    break;
-            }
-        }
-        delete decod;
-        return false;
+        case wxGIF_OK:
+            break;
+
+        case wxGIF_INVFORMAT:
+            if ( verbose )
+                wxLogError(_("GIF: error in GIF image format."));
+            return false;
+
+        case wxGIF_MEMERR:
+            if ( verbose )
+                wxLogError(_("GIF: not enough memory."));
+            return false;
+
+        case wxGIF_TRUNCATED:
+            if ( verbose )
+                wxLogError(_("GIF: data stream seems to be truncated."));
+
+            // go on; image data is OK
+            break;
     }
 
-    if ((error == wxGIF_TRUNCATED) && verbose)
-    {
-        wxLogError(_("GIF: data stream seems to be truncated."));
-        // go on; image data is OK
-    }
-
-    if (ok)
-    {
-        ok = decod->ConvertToImage(index != -1 ? (size_t)index : 0, image);
-    }
-    else
-    {
-        wxLogError(_("GIF: Invalid gif index."));
-    }
-
-    delete decod;
-
-    return ok;
+    return decod.ConvertToImage(index != -1 ? (size_t)index : 0, image);
 }
 
 bool wxGIFHandler::SaveFile(wxImage *image,
