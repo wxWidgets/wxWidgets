@@ -9128,18 +9128,3 @@ msgstr "~"
 
 #~ msgid "wxRichTextStylePage"
 #~ msgstr "wxRichTextStylePage"
-
-#~ msgid "unknown line terminator"
-#~ msgstr "terminador de linha desconhecido"
-
-#~ msgid "writing"
-#~ msgstr "a escrever"
-
-#~ msgid "wxRichTextBulletsPage"
-#~ msgstr "wxRichTextBulletsPage"
-
-#~ msgid "wxRichTextListStylePage"
-#~ msgstr "wxRichTextListStylePage"
-
-#~ msgid "wxRichTextStylePage"
-#~ msgstr "wxRichTextStylePage"
