@@ -870,6 +870,11 @@ struct wxPrintfConvSpecParser
 
                     spec = &specs[nargs];
                 }
+
+                // If we hit the maximal number of arguments inside the inner
+                // loop, break out of the outer one as well.
+                if ( nargs == wxMAX_SVNPRINTF_ARGUMENTS )
+                    break;
             }
 
 
