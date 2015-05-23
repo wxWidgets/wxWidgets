@@ -690,7 +690,7 @@ void wxPropertyGridManager::DoThaw()
 
 void wxPropertyGridManager::SetWindowStyleFlag( long style )
 {
-    int oldWindowStyle = GetWindowStyleFlag();
+    long oldWindowStyle = GetWindowStyleFlag();
 
     wxWindow::SetWindowStyleFlag( style );
     m_pPropGrid->SetWindowStyleFlag( (m_pPropGrid->GetWindowStyleFlag()&~(wxPG_MAN_PASS_FLAGS_MASK)) |
