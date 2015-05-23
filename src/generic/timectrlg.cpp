@@ -414,6 +414,7 @@ private:
 
             case Field_Max:
                 wxFAIL_MSG( "Invalid field" );
+                return;
         }
 
         UpdateText();
