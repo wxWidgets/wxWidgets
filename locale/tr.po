@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets (unofficial)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
+"POT-Creation-Date: 2015-05-23 22:46+0400\n"
 "PO-Revision-Date: 2014-11-26 21:27+0200\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/"
@@ -71,6 +71,10 @@ msgstr " yatık"
 #: ../src/common/fontcmn.cpp:818
 msgid " light"
 msgstr " açık"
+
+#: ../src/common/fontcmn.cpp:805
+msgid " strikethrough"
+msgstr " üstüçizili"
 
 #: ../src/common/paper.cpp:118
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
@@ -8972,7 +8976,7 @@ msgstr "kayıtlı dosya uzunluğu Zip başlığında yok"
 msgid "str"
 msgstr "str"
 
-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
+#: ../src/common/fontcmn.cpp:980
 msgid "strikethrough"
 msgstr "üstüçizili"
 

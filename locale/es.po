@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
+"POT-Creation-Date: 2015-05-23 22:46+0400\n"
 "PO-Revision-Date: 2014-10-14 15:13+0100\n"
 "Last-Translator: \n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
@@ -66,6 +66,10 @@ msgstr "cursiva"
 #: ../src/common/fontcmn.cpp:818
 msgid " light"
 msgstr " ligera"
+
+#: ../src/common/fontcmn.cpp:805
+msgid " strikethrough"
+msgstr " tachado"
 
 #: ../src/common/paper.cpp:118
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
@@ -9081,7 +9085,7 @@ msgstr "longitud del archivo almacenada no está en la cabecera del Zip"
 msgid "str"
 msgstr "cad"
 
-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
+#: ../src/common/fontcmn.cpp:980
 msgid "strikethrough"
 msgstr "tachado"
 

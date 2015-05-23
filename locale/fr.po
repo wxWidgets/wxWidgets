@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
+"POT-Creation-Date: 2015-05-23 22:46+0400\n"
 "PO-Revision-Date: 2014-02-21 17:02+0100\n"
 "Last-Translator: Xaviou <x.psoud@gmail.com>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -65,6 +65,10 @@ msgstr "italique"
 #: ../src/common/fontcmn.cpp:818
 msgid " light"
 msgstr "léger"
+
+#: ../src/common/fontcmn.cpp:805
+msgid " strikethrough"
+msgstr " barré"
 
 #: ../src/common/paper.cpp:118
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
@@ -9119,7 +9123,7 @@ msgstr "longueur du fichier enregistré absente de l'en-tête du Zip"
 msgid "str"
 msgstr "str"
 
-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
+#: ../src/common/fontcmn.cpp:980
 msgid "strikethrough"
 msgstr "barré"
 

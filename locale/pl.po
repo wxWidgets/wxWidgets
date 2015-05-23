@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
+"POT-Creation-Date: 2015-05-23 22:46+0400\n"
 "PO-Revision-Date: 2014-06-04 16:19+1200\n"
 "Last-Translator: Mariusz Drozdowski <schemedit@wp.pl>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
@@ -65,6 +65,10 @@ msgstr "kursywa"
 #: ../src/common/fontcmn.cpp:818
 msgid " light"
 msgstr "lekki"
+
+#: ../src/common/fontcmn.cpp:805
+msgid " strikethrough"
+msgstr " przekreślenie"
 
 #: ../src/common/paper.cpp:118
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
@@ -9123,7 +9127,7 @@ msgstr "długość pliku nie w nagłówku Zip"
 msgid "str"
 msgstr "tekst"
 
-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
+#: ../src/common/fontcmn.cpp:980
 msgid "strikethrough"
 msgstr "Przekreślenie"
 

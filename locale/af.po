@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
+"POT-Creation-Date: 2015-05-23 22:46+0400\n"
 "PO-Revision-Date: 2013-11-04 10:21+0200\n"
 "Last-Translator: F Wolff <friedel@translate.org.za>\n"
 "Language-Team: translate-discuss-af@lists.sourceforge.net\n"
@@ -66,6 +66,10 @@ msgstr " kursief"
 #: ../src/common/fontcmn.cpp:818
 msgid " light"
 msgstr " lig"
+
+#: ../src/common/fontcmn.cpp:805
+msgid " strikethrough"
+msgstr " deurhaal"
 
 #: ../src/common/paper.cpp:118
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
@@ -9165,7 +9169,7 @@ msgstr ""
 msgid "str"
 msgstr "str"
 
-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
+#: ../src/common/fontcmn.cpp:980
 msgid "strikethrough"
 msgstr "deurhaal"
 

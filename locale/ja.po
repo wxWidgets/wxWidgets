@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
+"POT-Creation-Date: 2015-05-23 22:46+0400\n"
 "PO-Revision-Date: 2011-03-02 18:30+0900\n"
 "Last-Translator: Suzumizaki-Kimitaka(鈴見咲君高) <suzumizaki@free."
 "japandesign.ne.jp>\n"
@@ -65,6 +65,10 @@ msgstr " イタリック"
 #: ../src/common/fontcmn.cpp:818
 msgid " light"
 msgstr " 軽量"
+
+#: ../src/common/fontcmn.cpp:805
+msgid " strikethrough"
+msgstr " 打ち消し線"
 
 #: ../src/common/paper.cpp:118
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
@@ -9196,7 +9200,7 @@ msgstr "Zipヘッダーにファイルの長さが記されていません"
 msgid "str"
 msgstr "文字列"
 
-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
+#: ../src/common/fontcmn.cpp:980
 #, fuzzy
 msgid "strikethrough"
 msgstr "打ち消し線 (&S)"

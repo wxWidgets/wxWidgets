@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
+"POT-Creation-Date: 2015-05-23 22:46+0400\n"
 "PO-Revision-Date: 2012-01-20 09:14+0100\n"
 "Last-Translator: Pieter <pieter.clarysse@bricsys.com>\n"
 "Language-Team: KALBA <LL@li.org>\n"
@@ -63,6 +63,10 @@ msgstr " kursyvas"
 
 #: ../src/common/fontcmn.cpp:818
 msgid " light"
+msgstr ""
+
+#: ../src/common/fontcmn.cpp:805
+msgid " strikethrough"
 msgstr ""
 
 #: ../src/common/paper.cpp:118
@@ -8925,7 +8929,7 @@ msgstr ""
 msgid "str"
 msgstr ""
 
-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
+#: ../src/common/fontcmn.cpp:980
 msgid "strikethrough"
 msgstr ""
 

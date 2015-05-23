@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
+"POT-Creation-Date: 2015-05-23 22:46+0400\n"
 "PO-Revision-Date: 2012-08-07 13:31+0200\n"
 "Last-Translator: Jani Kinnunen <jani.kinnunen@wippies.fi>\n"
 "Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
@@ -73,6 +73,10 @@ msgstr " kursivoitu"
 #: ../src/common/fontcmn.cpp:818
 msgid " light"
 msgstr " heikko"
+
+#: ../src/common/fontcmn.cpp:805
+msgid " strikethrough"
+msgstr " yliviivaus"
 
 #: ../src/common/paper.cpp:118
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
@@ -9242,7 +9246,7 @@ msgstr ""
 msgid "str"
 msgstr "merkkijono"
 
-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
+#: ../src/common/fontcmn.cpp:980
 #, fuzzy
 msgid "strikethrough"
 msgstr "Yliviivaus"

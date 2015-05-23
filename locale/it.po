@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
+"POT-Creation-Date: 2015-05-23 22:46+0400\n"
 "PO-Revision-Date: 2014-04-15 15:07+0100\n"
 "Last-Translator: bovirus <bovirus@libero.it>\n"
 "Language-Team: wxWidgets translators <wx-translators@lists.wxwidgets.org>\n"
@@ -64,6 +64,10 @@ msgstr " corsivo"
 #: ../src/common/fontcmn.cpp:818
 msgid " light"
 msgstr " leggero"
+
+#: ../src/common/fontcmn.cpp:805
+msgid " strikethrough"
+msgstr " barrato"
 
 #: ../src/common/paper.cpp:118
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
@@ -9093,7 +9097,7 @@ msgstr "la lunghezza del file non è memorizzata nell'intestazione del file ZIP"
 msgid "str"
 msgstr "str"
 
-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
+#: ../src/common/fontcmn.cpp:980
 msgid "strikethrough"
 msgstr "Barrato"
 
