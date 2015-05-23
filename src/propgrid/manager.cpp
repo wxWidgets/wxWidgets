@@ -1260,7 +1260,7 @@ void wxPropertyGridManager::UpdateDescriptionBox( int new_splittery, int new_wid
     use_hei--;
 
     // Fix help control positions.
-    int cap_hei = m_pPropGrid->m_fontHeight;
+    int cap_hei = m_pPropGrid->GetFontHeight();
     int cap_y = new_splittery+m_splitterHeight+5;
     int cnt_y = cap_y+cap_hei+3;
     int sub_cap_hei = cap_y+cap_hei-use_hei;
@@ -1350,7 +1350,7 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
         }
 
         // Check if beyond minimum.
-        int nspy_min = propgridY + m_pPropGrid->m_lineHeight;
+        int nspy_min = propgridY + m_pPropGrid->GetRowHeight();
         if ( new_splittery < nspy_min )
             new_splittery = nspy_min;
 
@@ -1642,7 +1642,7 @@ void wxPropertyGridManager::RecreateControls()
                                                  wxDefaultPosition,
                                                  wxDefaultSize,
                                                  wxALIGN_LEFT|wxST_NO_AUTORESIZE);
-            m_pTxtHelpCaption->SetFont( m_pPropGrid->m_captionFont );
+            m_pTxtHelpCaption->SetFont(m_pPropGrid->GetCaptionFont());
             m_pTxtHelpCaption->SetCursor( *wxSTANDARD_CURSOR );
         }
         if ( !m_pTxtHelpContent )
@@ -1726,7 +1726,7 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
     if ( id == m_categorizedModeToolId )
     {
         // Categorized mode.
-        if ( m_pPropGrid->m_windowStyle & wxPG_HIDE_CATEGORIES )
+        if ( m_pPropGrid->HasFlag(wxPG_HIDE_CATEGORIES) )
         {
             if ( !m_pPropGrid->HasInternalFlag(wxPG_FL_CATMODE_AUTO_SORT) )
                 m_pPropGrid->m_windowStyle &= ~wxPG_AUTO_SORT;
@@ -1736,7 +1736,7 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
     else if ( id == m_alphabeticModeToolId )
     {
         // Alphabetic mode.
-        if ( !(m_pPropGrid->m_windowStyle & wxPG_HIDE_CATEGORIES) )
+        if ( !m_pPropGrid->HasFlag(wxPG_HIDE_CATEGORIES) )
         {
             if ( m_pPropGrid->HasFlag(wxPG_AUTO_SORT) )
                 m_pPropGrid->SetInternalFlag(wxPG_FL_CATMODE_AUTO_SORT);
@@ -1868,7 +1868,7 @@ void wxPropertyGridManager::SetSplitterLeft( bool subProps, bool allPages )
         for ( i=0; i<GetPageCount(); i++ )
         {
             int maxW = m_pState->GetColumnFitWidth(dc, m_arrPages[i]->m_properties, 0, subProps );
-            maxW += m_pPropGrid->m_marginWidth;
+            maxW += m_pPropGrid->GetMarginWidth();
             if ( maxW > highest )
                 highest = maxW;
             m_pState->m_dontCenterSplitter = true;
@@ -1895,7 +1895,7 @@ void wxPropertyGridManager::SetPageSplitterLeft(int page, bool subProps)
         dc.SetFont(m_pPropGrid->GetFont());
 
         int maxW = m_pState->GetColumnFitWidth(dc, m_arrPages[page]->m_properties, 0, subProps );
-        maxW += m_pPropGrid->m_marginWidth;
+        maxW += m_pPropGrid->GetMarginWidth();
         SetPageSplitterPosition( page, maxW );
 
 #if wxUSE_HEADERCTRL
@@ -1965,7 +1965,7 @@ void wxPropertyGridManager::OnResize( wxSizeEvent& WXUNUSED(event) )
 
     RecalculatePositions(width, height);
 
-    if ( m_pPropGrid && m_pPropGrid->m_parent )
+    if ( m_pPropGrid && m_pPropGrid->GetParent() )
     {
         int pgWidth, pgHeight;
         m_pPropGrid->GetClientSize(&pgWidth, &pgHeight);
@@ -2014,7 +2014,7 @@ void wxPropertyGridManager::OnMouseMove( wxMouseEvent &event )
 
         // Calculate drag limits
         int bottom_limit = m_height - m_splitterHeight + 1;
-        int top_limit = m_pPropGrid->m_lineHeight;
+        int top_limit = m_pPropGrid->GetRowHeight();
 #if wxUSE_TOOLBAR
         if ( m_pToolbar ) top_limit += m_pToolbar->GetSize().y;
 #endif
