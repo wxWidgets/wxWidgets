@@ -218,6 +218,8 @@ bool wxGIFHandler::DoSaveFile(const wxImage& image, wxOutputStream *stream,
 
     int width = image.GetWidth();
     int height = image.GetHeight();
+    wxCHECK_MSG( width && height, false, wxS("can't save 0-sized file") );
+
     int width_even = width + ((width % 2) ? 1 : 0);
 
     if (first)
