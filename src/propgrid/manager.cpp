@@ -457,7 +457,7 @@ bool wxPropertyGridManager::Create( wxWindow *parent,
         m_pPropGrid = CreatePropertyGrid();
 
     bool res = wxPanel::Create( parent, id, pos, size,
-                                (style&0xFFFF0000)|wxWANTS_CHARS,
+                                (style & wxWINDOW_STYLE_MASK)|wxWANTS_CHARS,
                                 name );
     Init2(style);
 
@@ -515,7 +515,7 @@ void wxPropertyGridManager::Init1()
                                           wxCLIP_CHILDREN)
 
 // Which flags can be passed to underlying wxPropertyGrid.
-#define wxPG_MAN_PASS_FLAGS_MASK       (0xFFF0|wxTAB_TRAVERSAL)
+#define wxPG_MAN_PASS_FLAGS_MASK       (wxPG_WINDOW_STYLE_MASK|wxTAB_TRAVERSAL)
 
 //
 // Initialize after parent etc. set
@@ -526,7 +526,7 @@ void wxPropertyGridManager::Init2( int style )
     if ( m_iFlags & wxPG_FL_INITIALIZED )
         return;
 
-    m_windowStyle |= (style&0x0000FFFF);
+    m_windowStyle |= (style & wxPG_WINDOW_STYLE_MASK);
 
     wxSize csz = GetClientSize();
 

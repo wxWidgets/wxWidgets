@@ -229,7 +229,14 @@ wxPG_DESCRIPTION                    = 0x00002000,
 /** wxPropertyGridManager only: don't show an internal border around the
     property grid. Recommended if you use a header.
 */
-wxPG_NO_INTERNAL_BORDER             = 0x00004000
+wxPG_NO_INTERNAL_BORDER             = 0x00004000,
+
+/** A mask which can be used to filter (out) all styles.
+*/
+wxPG_WINDOW_STYLE_MASK = wxPG_AUTO_SORT|wxPG_HIDE_CATEGORIES|wxPG_BOLD_MODIFIED|
+                         wxPG_SPLITTER_AUTO_CENTER|wxPG_TOOLTIPS|wxPG_HIDE_MARGIN|
+                         wxPG_STATIC_SPLITTER|wxPG_LIMITED_EDITING|wxPG_TOOLBAR|
+                         wxPG_DESCRIPTION|wxPG_NO_INTERNAL_BORDER
 };
 
 #if wxPG_COMPATIBILITY_1_4
@@ -344,7 +351,11 @@ wxPG_EX_ALWAYS_ALLOW_FOCUS              = 0x00100000,
 
 /** A mask which can be used to filter (out) all extra styles.
 */
-wxPG_EX_WINDOW_STYLE_MASK               = 0x1FFFF000
+wxPG_EX_WINDOW_STYLE_MASK = wxPG_EX_INIT_NOCAT|wxPG_EX_NO_FLAT_TOOLBAR|wxPG_EX_MODE_BUTTONS|
+                            wxPG_EX_HELP_AS_TOOLTIPS|wxPG_EX_NATIVE_DOUBLE_BUFFERING|wxPG_EX_AUTO_UNSPECIFIED_VALUES|
+                            wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES|wxPG_EX_HIDE_PAGE_BUTTONS|wxPG_EX_MULTIPLE_SELECTION|
+                            wxPG_EX_ENABLE_TLP_TRACKING|wxPG_EX_NO_TOOLBAR_DIVIDER|wxPG_EX_TOOLBAR_SEPARATOR|
+                            wxPG_EX_ALWAYS_ALLOW_FOCUS
 };
 
 #if wxPG_COMPATIBILITY_1_4
