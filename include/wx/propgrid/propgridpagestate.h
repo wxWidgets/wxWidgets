@@ -526,9 +526,7 @@ public:
     */
     wxPGProperty* GetSelection() const
     {
-        if ( m_selection.size() == 0 )
-            return NULL;
-        return m_selection[0];
+        return m_selection.empty()? NULL: m_selection[0];
     }
 
     void DoSetSelection( wxPGProperty* prop )

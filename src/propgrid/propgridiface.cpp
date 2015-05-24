@@ -1036,7 +1036,7 @@ bool wxPropertyGridInterface::RestoreEditableState( const wxString& src, int res
                 {
                     if ( restoreStates & SelectionState )
                     {
-                        if ( values.size() > 0 )
+                        if ( !values.empty() )
                         {
                             if ( pageState->IsDisplayed() )
                             {

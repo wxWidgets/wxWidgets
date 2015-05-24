@@ -1381,11 +1381,7 @@ void wxPropertyGridPageState::DoRemoveFromSelection( wxPGProperty* prop )
                 wxArrayPGProperty sel = m_selection;
                 sel.erase( sel.begin() + i );
 
-                wxPGProperty* newFirst;
-                if ( sel.size() )
-                    newFirst = sel[0];
-                else
-                    newFirst = NULL;
+                wxPGProperty* newFirst = sel.empty()? NULL: sel[0];
 
                 pg->DoSelectProperty(newFirst,
                                      wxPG_SEL_DONT_SEND_EVENT);
