@@ -1208,7 +1208,7 @@ wxSize wxPropertyGrid::DoGetBestSize() const
 
     wxClientDC dc(const_cast<wxPropertyGrid *>(this));
     int width = m_marginWidth;
-    for ( unsigned int i = 0; i < m_pState->m_colWidths.size(); i++ )
+    for ( unsigned int i = 0; i < m_pState->GetColumnCount(); i++ )
     {
         width += m_pState->GetColumnFitWidth(dc, m_pState->DoGetRoot(), i, true);
     }
@@ -2174,6 +2174,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     const wxPGProperty* firstSelected = GetSelection();
     const wxPropertyGridPageState* state = m_pState;
     const wxArrayInt& colWidths = state->m_colWidths;
+    const unsigned int colCount = state->GetColumnCount();
 
     // TODO: Only render columns that are within clipping region.
 
@@ -2269,7 +2270,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         unsigned int si;
         int sx = x;
 
-        for ( si=0; si<colWidths.size(); si++ )
+        for ( si = 0; si < colCount; si++ )
         {
             sx += colWidths[si];
             dc.DrawLine( sx, y, sx, y2 );
@@ -2407,14 +2408,14 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         // Calculate cellRect.x for the last cell
         unsigned int ci = 0;
         int cellX = x + 1;
-        for ( ci=0; ci<colWidths.size(); ci++ )
+        for ( ci = 0; ci < colCount; ci++ )
             cellX += colWidths[ci];
         cellRect.x = cellX;
 
         // Draw cells from back to front so that we can easily tell if the
         // cell on the right was empty from text
         bool prevFilled = true;
-        ci = colWidths.size();
+        ci = colCount;
         do
         {
             ci--;
@@ -3753,7 +3754,7 @@ wxRect wxPropertyGrid::GetEditorWidgetRect( wxPGProperty* p, int column ) const
 {
     int itemy = p->GetY2(m_lineHeight);
     int splitterX = m_pState->DoGetSplitterPosition(column-1);
-    int colEnd = splitterX + m_pState->m_colWidths[column];
+    int colEnd = splitterX + m_pState->GetColumnWidth(column);
     int imageOffset = 0;
 
     int vx, vy;  // Top left corner of client

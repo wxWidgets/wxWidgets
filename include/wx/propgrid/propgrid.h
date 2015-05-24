@@ -994,7 +994,7 @@ public:
     */
     unsigned int GetColumnCount() const
     {
-        return (unsigned int) m_pState->m_colWidths.size();
+        return m_pState->GetColumnCount();
     }
 
     /** Returns colour of empty space below properties. */
