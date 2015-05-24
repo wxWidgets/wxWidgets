@@ -1122,8 +1122,9 @@ bool wxPropertyGridManager::IsPropertySelected( wxPGPropArg id ) const
 
 wxPGProperty* wxPropertyGridManager::GetPageRoot( int index ) const
 {
-    wxASSERT( index >= 0 );
-    wxASSERT( index < (int)m_arrPages.size() );
+    wxCHECK_MSG( (index >= 0) && (index < (int)m_arrPages.size()),
+                 NULL,
+                 wxT("invalid page index") );
 
     return m_arrPages[index]->GetStatePtr()->m_properties;
 }
