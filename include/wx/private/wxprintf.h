@@ -838,7 +838,7 @@ struct wxPrintfConvSpecParser
 
                 for ( unsigned n = 0; n < numAsterisks; n++ )
                 {
-                    if ( nargs++ == wxMAX_SVNPRINTF_ARGUMENTS )
+                    if ( ++nargs == wxMAX_SVNPRINTF_ARGUMENTS )
                         break;
 
                     // TODO: we need to support specifiers of the form "%2$*1$s"
@@ -895,7 +895,7 @@ struct wxPrintfConvSpecParser
             // this conversion specifier is tied to the pos-th argument...
             pspec[spec->m_pos] = spec;
 
-            if ( nargs++ == wxMAX_SVNPRINTF_ARGUMENTS )
+            if ( ++nargs == wxMAX_SVNPRINTF_ARGUMENTS )
                 break;
         }
 
