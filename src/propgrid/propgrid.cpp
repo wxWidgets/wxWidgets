@@ -4656,9 +4656,8 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
         if ( !m_doubleBuffer )
         {
             // Create double buffer bitmap to draw on, if none
-            int w = (width>250)?width:250;
-            int h = height + dblh;
-            h = (h>400)?h:400;
+            int w = wxMax(width, 250);
+            int h = wxMax(height + dblh, 400);
             m_doubleBuffer = new wxBitmap( w, h );
         }
         else
