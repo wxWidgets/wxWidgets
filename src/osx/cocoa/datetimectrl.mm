@@ -176,7 +176,7 @@ wxDateTimeWidgetImpl::CreateDateTimePicker(wxDateTimePickerCtrl* wxpeer,
     }
     else
     {
-        [v setDateValue: NSDateFromWX(wxDateTime::Today())];
+        [v setDateValue: [NSDate date]];
     }
 
     wxDateTimeWidgetImpl* c = new wxDateTimeWidgetCocoaImpl(wxpeer, v);
