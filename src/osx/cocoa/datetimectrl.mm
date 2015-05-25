@@ -174,6 +174,10 @@ wxDateTimeWidgetImpl::CreateDateTimePicker(wxDateTimePickerCtrl* wxpeer,
     {
         [v setDateValue: NSDateFromWX(dt)];
     }
+    else
+    {
+        [v setDateValue: [NSDate date]];
+    }
 
     wxDateTimeWidgetImpl* c = new wxDateTimeWidgetCocoaImpl(wxpeer, v);
 #if !wxOSX_USE_NATIVE_FLIPPED
