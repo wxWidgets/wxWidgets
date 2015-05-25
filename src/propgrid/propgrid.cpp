@@ -1202,7 +1202,7 @@ wxSize wxPropertyGrid::DoGetBestSize() const
     // make it too small neither
     int numLines = wxMin
                    (
-                    wxMax(m_pState->m_properties->GetChildCount(), 3),
+                    wxMax(m_pState->DoGetRoot()->GetChildCount(), 3),
                     10
                    );
 
@@ -1647,7 +1647,7 @@ bool wxPropertyGrid::EnsureVisible( wxPGPropArg id )
         wxPGProperty* parent = p->GetParent();
         wxPGProperty* grandparent = parent->GetParent();
 
-        if ( grandparent && grandparent != m_pState->m_properties )
+        if ( grandparent && grandparent != m_pState->DoGetRoot() )
             Expand( grandparent );
 
         Expand( parent );
@@ -1850,7 +1850,7 @@ wxPGProperty* wxPropertyGrid::DoGetItemAtY( int y ) const
         return NULL;
 
     unsigned int a = 0;
-    return m_pState->m_properties->GetItemAtY(y, m_lineHeight, &a);
+    return m_pState->DoGetRoot()->GetItemAtY(y, m_lineHeight, &a);
 }
 
 // -----------------------------------------------------------------------
@@ -2010,7 +2010,7 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
     if ( !itemsRect )
     {
         tempItemsRect = wxRect(0, topItemY,
-                               m_pState->m_width,
+                               m_pState->GetVirtualWidth(),
                                bottomItemY);
         itemsRect = &tempItemsRect;
     }
@@ -2023,7 +2023,7 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
     // items added check
     if ( m_pState->m_itemsAdded ) PrepareAfterItemsAdded();
 
-    if ( m_pState->m_properties->GetChildCount() > 0 )
+    if ( m_pState->DoGetRoot()->GetChildCount() > 0 )
     {
         // paintFinishY and drawBottomY are in buffer/physical space
         int paintFinishY = DoDrawItems(dc, itemsRect);
@@ -2078,7 +2078,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     wxCHECK_MSG( !m_pState->m_itemsAdded, itemsRect->y,
                  "no items added" );
-    wxASSERT( m_pState->m_properties->GetChildCount() );
+    wxASSERT( m_pState->DoGetRoot()->GetChildCount() );
 
     int lh = m_lineHeight;
 
@@ -2208,7 +2208,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     wxPGProperty* nextP = visPropArray[0];
 
-    int gridWidth = state->m_width;
+    int gridWidth = state->GetVirtualWidth();
 
     y = firstItemTopY;
     for ( unsigned int arrInd=1;
@@ -2229,7 +2229,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         int greyDepthX = greyDepth - xRelMod;
 
         // Use basic depth if in non-categoric mode and parent is base array.
-        if ( !(windowStyle & wxPG_HIDE_CATEGORIES) || p->GetParent() != m_pState->m_properties )
+        if ( !(windowStyle & wxPG_HIDE_CATEGORIES) || p->GetParent() != m_pState->DoGetRoot() )
         {
             textMarginHere += ((p->GetDepth()-1)*m_subgroup_extramargin);
         }
@@ -2549,7 +2549,7 @@ wxRect wxPropertyGrid::GetPropertyRect( const wxPGProperty* p1, const wxPGProper
     wxRect r;
 
     if ( m_width < 10 || m_height < 10 ||
-         !m_pState->m_properties->GetChildCount() ||
+         !m_pState->DoGetRoot()->GetChildCount() ||
          p1 == NULL )
         return wxRect(0,0,0,0);
 
@@ -2585,7 +2585,7 @@ wxRect wxPropertyGrid::GetPropertyRect( const wxPGProperty* p1, const wxPGProper
         }
     }
 
-    return wxRect(0,visTop-vy,m_pState->m_width,visBottom-visTop);
+    return wxRect(0,visTop-vy,m_pState->GetVirtualWidth(),visBottom-visTop);
 }
 
 // -----------------------------------------------------------------------
@@ -2776,7 +2776,7 @@ void wxPropertyGrid::SwitchState( wxPropertyGridPageState* pNewState )
     if ( HasVirtualWidth() )
     {
         int minWidth = pgWidth;
-        if ( pNewState->m_width < minWidth )
+        if ( pNewState->GetVirtualWidth() < minWidth )
         {
             pNewState->m_width = minWidth;
             pNewState->CheckColumnWidths();
@@ -2790,7 +2790,7 @@ void wxPropertyGrid::SwitchState( wxPropertyGridPageState* pNewState )
         //    pNewState->m_fSplitterX = -1.0;
 
         pNewState->OnClientWidthChange(pgWidth,
-                                       pgWidth - pNewState->m_width);
+                                       pgWidth - pNewState->GetVirtualWidth());
     }
 
     m_propHover = NULL;
@@ -4581,7 +4581,7 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
 
     m_iFlags |= wxPG_FL_RECALCULATING_VIRTUAL_SIZE;
 
-    int x = m_pState->m_width;
+    int x = m_pState->GetVirtualWidth();
     int y = m_pState->m_virtualHeight;
 
     int width, height;
@@ -5034,7 +5034,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
     if ( m_dragStatus > 0 )
     {
         if ( x > (m_marginWidth + wxPG_DRAG_MARGIN) &&
-             x < (m_pState->m_width - wxPG_DRAG_MARGIN) )
+             x < (m_pState->GetVirtualWidth() - wxPG_DRAG_MARGIN) )
         {
 
             int newSplitterX = x - m_dragOffset;
