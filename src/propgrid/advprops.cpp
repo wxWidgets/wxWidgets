@@ -290,7 +290,7 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
 bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
                                   wxWindow* wnd, wxEvent& event ) const
 {
-    int evtType = event.GetEventType();
+    wxEventType evtType = event.GetEventType();
     int keycode = -1;
     int spins = 1;
     bool bigStep = false;

@@ -536,7 +536,7 @@ protected:
     void OnMouseEvent( wxMouseEvent& event )
     {
         wxMilliClock_t t = ::wxGetLocalTimeMillis();
-        int evtType = event.GetEventType();
+        wxEventType evtType = event.GetEventType();
 
         if ( m_property->HasFlag(wxPG_PROP_USE_DCC) &&
              !m_combo->IsPopupShown() )

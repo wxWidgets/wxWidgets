@@ -352,7 +352,7 @@ private:
 
             wxPropertyGrid* pg = m_manager->GetGrid();
             int col = hcEvent.GetColumn();
-            int evtType = event.GetEventType();
+            wxEventType evtType = event.GetEventType();
 
             if ( evtType == wxEVT_HEADER_RESIZING )
             {
