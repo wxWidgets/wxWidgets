@@ -259,12 +259,16 @@ short wxApp::MacHandleAEOApp(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNU
 
 short wxApp::MacHandleAEQuit(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNUSED(reply))
 {
-    wxCloseEvent event;
-    wxTheApp->OnQueryEndSession(event);
+    wxCloseEvent event(wxEVT_QUERY_END_SESSION, wxID_ANY);
+    event.SetEventObject(this);
+    event.SetCanVeto(true);
+    ProcessEvent(event);
     if ( !event.GetVeto() )
     {
-        wxCloseEvent event;
-        wxTheApp->OnEndSession(event);
+        wxCloseEvent event(wxEVT_END_SESSION, wxID_ANY);
+        event.SetEventObject(this);
+        event.SetCanVeto(false);
+        ProcessEvent(event);
     }
     return noErr ;
 }
@@ -425,15 +429,18 @@ void wxApp::OSXOnDidFinishLaunching()
 
 void wxApp::OSXOnWillTerminate()
 {
-    wxCloseEvent event;
+    wxCloseEvent event(wxEVT_END_SESSION, wxID_ANY);
+    event.SetEventObject(this);
     event.SetCanVeto(false);
-    wxTheApp->OnEndSession(event);
+    ProcessEvent(event);
 }
 
 bool wxApp::OSXOnShouldTerminate()
 {
-    wxCloseEvent event;
-    wxTheApp->OnQueryEndSession(event);
+    wxCloseEvent event(wxEVT_QUERY_END_SESSION, wxID_ANY);
+    event.SetEventObject(this);
+    event.SetCanVeto(true);
+    ProcessEvent(event);
     return !event.GetVeto();
 }
 #endif
