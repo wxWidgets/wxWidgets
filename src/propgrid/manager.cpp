@@ -777,9 +777,9 @@ bool wxPropertyGridManager::DoSelectPage( int index )
     if ( m_pToolbar )
     {
         if ( index >= 0 )
-            m_pToolbar->ToggleTool( nextPage->m_toolId, true );
+            m_pToolbar->ToggleTool( nextPage->GetToolId(), true );
         else
-            m_pToolbar->ToggleTool( prevPage->m_toolId, false );
+            m_pToolbar->ToggleTool( prevPage->GetToolId(), false );
     }
 #endif
 
@@ -1023,7 +1023,7 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
             pageObj->m_toolId = tool->GetId();
 
             // Connect to toolbar button events.
-            Connect(pageObj->m_toolId,
+            Connect(pageObj->GetToolId(),
                     wxEVT_TOOL,
                     wxCommandEventHandler(
                         wxPropertyGridManager::OnToolbarClick));
@@ -1758,7 +1758,7 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
         for ( size_t i = 0; i < GetPageCount(); i++ )
         {
             wxPropertyGridPage* pdc = m_arrPages[i];
-            if ( pdc->m_toolId == id )
+            if ( pdc->GetToolId() == id )
             {
                 index = i;
                 break;
@@ -1784,7 +1784,7 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
             if ( m_selPage >= 0 )
             {
                 wxPropertyGridPage* prevPage = m_arrPages[m_selPage];
-                tb->ToggleTool(prevPage->m_toolId, true);
+                tb->ToggleTool(prevPage->GetToolId(), true);
             }
         }
     }
