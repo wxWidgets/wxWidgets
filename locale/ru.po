@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets-2.9.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-25 19:58+0100\n"
+"POT-Creation-Date: 2015-05-23 22:46+0400\n"
 "PO-Revision-Date: 2014-03-27 12:47+0200\n"
 "Last-Translator: Pavel Maryanov <acid@jack.kiev.ua>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
@@ -36,7 +36,7 @@ msgstr " "
 msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr "              Приносим извинения за доставленные неудобства.\n"
 
-#: ../src/common/prntbase.cpp:558
+#: ../src/common/prntbase.cpp:573
 #, c-format
 msgid " (copy %d of %d)"
 msgstr " (копия %d из %d)"
@@ -51,25 +51,29 @@ msgstr " (ошибка %ld: %s)"
 msgid " (in module \"%s\")"
 msgstr " (в модуле \"%s\")"
 
-#: ../src/common/docview.cpp:1631
+#: ../src/common/docview.cpp:1645
 msgid " - "
 msgstr " - "
 
-#: ../src/html/htmprint.cpp:704 ../src/richtext/richtextprint.cpp:588
+#: ../src/html/htmprint.cpp:709 ../src/richtext/richtextprint.cpp:593
 msgid " Preview"
 msgstr " Предварительный просмотр"
 
-#: ../src/common/fontcmn.cpp:821
+#: ../src/common/fontcmn.cpp:822
 msgid " bold"
 msgstr " полужирный"
 
-#: ../src/common/fontcmn.cpp:837
+#: ../src/common/fontcmn.cpp:838
 msgid " italic"
 msgstr " курсив"
 
-#: ../src/common/fontcmn.cpp:817
+#: ../src/common/fontcmn.cpp:818
 msgid " light"
 msgstr " легкий"
+
+#: ../src/common/fontcmn.cpp:805
+msgid " strikethrough"
+msgstr " перечеркивание"
 
 #: ../src/common/paper.cpp:118
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
@@ -91,6 +95,7 @@ msgstr "Конверт #14, 5 x 11 1/2 дюйма"
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
 msgstr "Конверт #9, 3 7/8 x 8 7/8 дюйма"
 
+#: ../src/richtext/richtextbackgroundpage.cpp:342
 #: ../src/richtext/richtextsizepage.cpp:340
 #: ../src/richtext/richtextsizepage.cpp:374
 #: ../src/richtext/richtextsizepage.cpp:401
@@ -132,12 +137,12 @@ msgstr "%lu из %lu"
 msgid "%s (or %s)"
 msgstr "%s (или %s)"
 
-#: ../src/generic/logg.cpp:228
+#: ../src/generic/logg.cpp:229
 #, c-format
 msgid "%s Error"
 msgstr "Ошибка %s"
 
-#: ../src/generic/logg.cpp:240
+#: ../src/generic/logg.cpp:241
 #, c-format
 msgid "%s Information"
 msgstr "Информация %s"
@@ -147,7 +152,7 @@ msgstr "Информация %s"
 msgid "%s Preferences"
 msgstr "Параметры %s"
 
-#: ../src/generic/logg.cpp:232
+#: ../src/generic/logg.cpp:233
 #, c-format
 msgid "%s Warning"
 msgstr "Предупреждение %s"
@@ -193,7 +198,7 @@ msgstr "&Применить"
 msgid "&Apply Style"
 msgstr "&Применить стиль"
 
-#: ../src/msw/mdi.cpp:176
+#: ../src/msw/mdi.cpp:179
 msgid "&Arrange Icons"
 msgstr "&Упорядочить значки"
 
@@ -217,6 +222,10 @@ msgstr "&Перед абзацем:"
 msgid "&Bg colour:"
 msgstr "Цвет &фона:"
 
+#: ../src/richtext/richtextbackgroundpage.cpp:299
+msgid "&Blur distance:"
+msgstr ""
+
 #: ../src/common/stockitem.cpp:143
 msgid "&Bold"
 msgstr "&Жирный"
@@ -234,7 +243,7 @@ msgstr "C&низу"
 msgid "&Bottom:"
 msgstr "C&низу:"
 
-#: ../include/wx/richtext/richtextbuffer.h:3667
+#: ../include/wx/richtext/richtextbuffer.h:3860
 msgid "&Box"
 msgstr ""
 
@@ -253,11 +262,11 @@ msgstr "&CD-Rom"
 msgid "&Cancel"
 msgstr "&Отмена"
 
-#: ../src/msw/mdi.cpp:172
+#: ../src/msw/mdi.cpp:175
 msgid "&Cascade"
 msgstr "&Каскадом"
 
-#: ../include/wx/richtext/richtextbuffer.h:5761
+#: ../include/wx/richtext/richtextbuffer.h:5954
 msgid "&Cell"
 msgstr "&Ячейка"
 
@@ -269,8 +278,8 @@ msgstr "Код &символа:"
 msgid "&Clear"
 msgstr "О&чистить"
 
-#: ../src/common/prntbase.cpp:1584 ../src/common/stockitem.cpp:148
-#: ../src/generic/logg.cpp:520 ../src/html/helpfrm.cpp:139
+#: ../src/common/prntbase.cpp:1600 ../src/common/stockitem.cpp:148
+#: ../src/generic/logg.cpp:522 ../src/html/helpfrm.cpp:139
 #: ../src/univ/themes/win32.cpp:3756
 msgid "&Close"
 msgstr "&Закрыть"
@@ -318,7 +327,7 @@ msgstr "&Удалить стиль..."
 msgid "&Descending"
 msgstr "&Убыванию"
 
-#: ../src/generic/logg.cpp:686
+#: ../src/generic/logg.cpp:688
 msgid "&Details"
 msgstr "&Подробности"
 
@@ -397,7 +406,7 @@ msgid "&Height:"
 msgstr "&Высота:"
 
 #: ../src/common/stockitem.cpp:163 ../src/generic/wizard.cpp:436
-#: ../src/html/helpfrm.cpp:147 ../src/osx/menu_osx.cpp:788
+#: ../src/html/helpfrm.cpp:147 ../src/osx/menu_osx.cpp:768
 #: ../src/richtext/richtextstyledlg.cpp:303
 #: ../src/richtext/richtextsymboldlg.cpp:479
 msgid "&Help"
@@ -410,6 +419,10 @@ msgstr "&Скрыть подробности"
 #: ../src/common/stockitem.cpp:164
 msgid "&Home"
 msgstr "В &начало"
+
+#: ../src/richtext/richtextbackgroundpage.cpp:213
+msgid "&Horizontal offset:"
+msgstr ""
 
 #: ../src/richtext/richtextindentspage.cpp:184
 #: ../src/richtext/richtextliststylepage.cpp:372
@@ -466,7 +479,7 @@ msgstr "С&лева:"
 msgid "&List level:"
 msgstr "&Уровень списка:"
 
-#: ../src/generic/logg.cpp:521
+#: ../src/generic/logg.cpp:523
 msgid "&Log"
 msgstr "&Журнал"
 
@@ -487,7 +500,7 @@ msgid "&New"
 msgstr "&Новый"
 
 #: ../src/aui/tabmdi.cpp:111 ../src/generic/mdig.cpp:100
-#: ../src/msw/mdi.cpp:177
+#: ../src/msw/mdi.cpp:180
 msgid "&Next"
 msgstr "&Следующий"
 
@@ -542,7 +555,7 @@ msgstr "&Разрыв страницы"
 msgid "&Paste"
 msgstr "Вст&авить"
 
-#: ../include/wx/richtext/richtextbuffer.h:4811
+#: ../include/wx/richtext/richtextbuffer.h:5004
 msgid "&Picture"
 msgstr "&Рисунок"
 
@@ -563,7 +576,7 @@ msgid "&Preferences"
 msgstr "&Параметры"
 
 #: ../src/aui/tabmdi.cpp:112 ../src/generic/mdig.cpp:101
-#: ../src/msw/mdi.cpp:178
+#: ../src/msw/mdi.cpp:181
 msgid "&Previous"
 msgstr "&Предыдущий"
 
@@ -651,7 +664,7 @@ msgstr "&Размер"
 msgid "&Size:"
 msgstr "&Размер:"
 
-#: ../src/generic/progdlgg.cpp:283
+#: ../src/generic/progdlgg.cpp:285
 msgid "&Skip"
 msgstr "&Пропустить"
 
@@ -694,7 +707,7 @@ msgstr "&Символ:"
 msgid "&Synchronize values"
 msgstr "&Синхронизировать значения"
 
-#: ../include/wx/richtext/richtextbuffer.h:5870
+#: ../include/wx/richtext/richtextbuffer.h:6063
 msgid "&Table"
 msgstr "&Таблица"
 
@@ -739,6 +752,11 @@ msgstr "&Вверх"
 
 #: ../src/richtext/richtextsizepage.cpp:278
 msgid "&Vertical alignment:"
+msgstr "Выравнивание по &вертикали:"
+
+#: ../src/richtext/richtextbackgroundpage.cpp:236
+#, fuzzy
+msgid "&Vertical offset:"
 msgstr "Выравнивание по &вертикали:"
 
 #: ../src/generic/dbgrptg.cpp:340
@@ -856,7 +874,7 @@ msgstr "(закладки)"
 #: ../src/richtext/richtextfontpage.cpp:347
 #: ../src/richtext/richtextfontpage.cpp:351
 #: ../src/richtext/richtextfontpage.cpp:355
-#: ../src/richtext/richtextformatdlg.cpp:887
+#: ../src/richtext/richtextformatdlg.cpp:894
 #: ../src/richtext/richtextindentspage.cpp:274
 #: ../src/richtext/richtextindentspage.cpp:286
 #: ../src/richtext/richtextindentspage.cpp:287
@@ -883,7 +901,7 @@ msgstr "*)"
 msgid "+"
 msgstr "+"
 
-#: ../src/msw/utils.cpp:1227
+#: ../src/msw/utils.cpp:1255
 msgid ", 64-bit edition"
 msgstr ", 64-разрядный выпуск"
 
@@ -1170,12 +1188,12 @@ msgid "About"
 msgstr "О программе"
 
 #: ../src/generic/aboutdlgg.cpp:140 ../src/msw/aboutdlg.cpp:64
-#: ../src/osx/menu_osx.cpp:615
+#: ../src/osx/menu_osx.cpp:595
 #, c-format
 msgid "About %s"
 msgstr "О программе %s"
 
-#: ../src/osx/menu_osx.cpp:617
+#: ../src/osx/menu_osx.cpp:597
 msgid "About..."
 msgstr "О программе..."
 
@@ -1183,12 +1201,14 @@ msgstr "О программе..."
 msgid "Absolute"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:845
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:859
 #, fuzzy
 msgid "ActiveBorder"
 msgstr "Граница"
 
-#: ../src/propgrid/advprops.cpp:846
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:860
 msgid "ActiveCaption"
 msgstr ""
 
@@ -1201,11 +1221,11 @@ msgstr "Исходный размер"
 msgid "Add"
 msgstr "Добавить"
 
-#: ../src/richtext/richtextbuffer.cpp:11293
+#: ../src/richtext/richtextbuffer.cpp:11446
 msgid "Add Column"
 msgstr "Добавить столбец"
 
-#: ../src/richtext/richtextbuffer.cpp:11230
+#: ../src/richtext/richtextbuffer.cpp:11383
 msgid "Add Row"
 msgstr "Добавить строку"
 
@@ -1262,16 +1282,16 @@ msgstr "Выравнивание"
 msgid "All"
 msgstr "Все"
 
-#: ../src/common/fldlgcmn.cpp:107 ../src/generic/filectrlg.cpp:1205
+#: ../src/common/fldlgcmn.cpp:107 ../src/generic/filectrlg.cpp:1217
 #, c-format
 msgid "All files (%s)|%s"
 msgstr "Все файлы (%s)|%s"
 
-#: ../include/wx/defs.h:2890
+#: ../include/wx/defs.h:2916
 msgid "All files (*)|*"
 msgstr "Все файлы (*)|*"
 
-#: ../include/wx/defs.h:2887
+#: ../include/wx/defs.h:2913
 msgid "All files (*.*)|*.*"
 msgstr "Все файлы (*.*)|*.*"
 
@@ -1279,7 +1299,7 @@ msgstr "Все файлы (*.*)|*.*"
 msgid "All styles"
 msgstr "Все стили"
 
-#: ../src/propgrid/manager.cpp:1520
+#: ../src/propgrid/manager.cpp:1519
 msgid "Alphabetic Mode"
 msgstr "Алфавитный Режим"
 
@@ -1309,16 +1329,17 @@ msgstr "И включает в себя следующие файлы:\n"
 msgid "Animation file is not of type %ld."
 msgstr "Файл анимации имеет тип, отличный от %ld."
 
-#: ../src/propgrid/advprops.cpp:844
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:858
 msgid "AppWorkspace"
 msgstr ""
 
-#: ../src/generic/logg.cpp:1032
+#: ../src/generic/logg.cpp:1034
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Добавить в файл журнала '%s' (выбор [Нет] перепишет его)?"
 
-#: ../src/osx/menu_osx.cpp:635 ../src/osx/menu_osx.cpp:643
+#: ../src/osx/menu_osx.cpp:615 ../src/osx/menu_osx.cpp:623
 #, fuzzy
 msgid "Application"
 msgstr "Выбор"
@@ -1328,7 +1349,7 @@ msgstr "Выбор"
 msgid "Apply"
 msgstr "&Применить"
 
-#: ../src/propgrid/advprops.cpp:1559
+#: ../src/propgrid/advprops.cpp:1570
 msgid "Aqua"
 msgstr ""
 
@@ -1346,7 +1367,8 @@ msgstr "Арабский (ISO-8859-6)"
 msgid "Argument %u not found."
 msgstr "Индекс столбца не найден."
 
-#: ../src/propgrid/advprops.cpp:1703
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1714
 #, fuzzy
 msgid "Arrow"
 msgstr "завтра"
@@ -1451,12 +1473,12 @@ msgstr "BMP: wxImage не имеет собственного wxPalette."
 msgid "Back"
 msgstr "Назад"
 
-#: ../src/richtext/richtextbackgroundpage.cpp:119
+#: ../src/richtext/richtextbackgroundpage.cpp:149
 #: ../src/richtext/richtextformatdlg.cpp:391
 msgid "Background"
 msgstr "Фон"
 
-#: ../src/richtext/richtextbackgroundpage.cpp:131
+#: ../src/richtext/richtextbackgroundpage.cpp:161
 msgid "Background &colour:"
 msgstr "&Цвет фона:"
 
@@ -1493,15 +1515,16 @@ msgstr ""
 "Растровое изображение визуализации и не может оказать значение; значение "
 "типа: "
 
-#: ../src/propgrid/advprops.cpp:1544
+#: ../src/propgrid/advprops.cpp:1555
 msgid "Black"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1705
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1716
 msgid "Blank"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1553
+#: ../src/propgrid/advprops.cpp:1564
 msgid "Blue"
 msgstr ""
 
@@ -1527,7 +1550,7 @@ msgstr "Снизу"
 msgid "Bottom margin (mm):"
 msgstr "Нижнее поле (мм):"
 
-#: ../src/richtext/richtextbuffer.cpp:9223
+#: ../src/richtext/richtextbuffer.cpp:9376
 msgid "Box Properties"
 msgstr ""
 
@@ -1535,7 +1558,7 @@ msgstr ""
 msgid "Box styles"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1552
+#: ../src/propgrid/advprops.cpp:1563
 #, fuzzy
 msgid "Brown"
 msgstr "Обзор"
@@ -1557,24 +1580,29 @@ msgstr "Cтиль маркера"
 msgid "Bullets"
 msgstr "Маркеры"
 
-#: ../src/propgrid/advprops.cpp:1706
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1717
 #, fuzzy
 msgid "Bullseye"
 msgstr "Cтиль маркера"
 
-#: ../src/propgrid/advprops.cpp:847
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:861
 msgid "ButtonFace"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:848
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:862
 msgid "ButtonHighlight"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:849
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:863
 msgid "ButtonShadow"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:850
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:864
 msgid "ButtonText"
 msgstr ""
 
@@ -1582,7 +1610,7 @@ msgstr ""
 msgid "C sheet, 17 x 22 in"
 msgstr "Лист C, 17 x 22 дюйма"
 
-#: ../src/generic/logg.cpp:518
+#: ../src/generic/logg.cpp:520
 msgid "C&lear"
 msgstr "О&чистить"
 
@@ -1626,7 +1654,7 @@ msgstr "Ca&pitals"
 msgid "Can't &Undo "
 msgstr "О&тмена невозможна "
 
-#: ../src/common/image.cpp:2688
+#: ../src/common/image.cpp:2690
 msgid "Can't automatically determine the image format for non-seekable input."
 msgstr ""
 
@@ -1645,11 +1673,11 @@ msgstr "Невозможно скопировать значения непод�
 msgid "Can't create registry key '%s'"
 msgstr "Невозможно создать ключ реестра '%s'"
 
-#: ../src/msw/thread.cpp:671
+#: ../src/msw/thread.cpp:673
 msgid "Can't create thread"
 msgstr "Невозможно создать поток"
 
-#: ../src/msw/window.cpp:3851
+#: ../src/msw/window.cpp:3839
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "Невозможно создать окно класса %s"
@@ -1669,17 +1697,17 @@ msgstr "Невозможно удалить INI-файл '%s'"
 msgid "Can't delete value '%s' from key '%s'"
 msgstr "Невозможно удалить значение '%s' из ключа '%s'"
 
-#: ../src/msw/registry.cpp:1185
+#: ../src/msw/registry.cpp:1169
 #, c-format
 msgid "Can't enumerate subkeys of key '%s'"
 msgstr "Невозможно пересчитать подключи ключа '%s'"
 
-#: ../src/msw/registry.cpp:1140
+#: ../src/msw/registry.cpp:1124
 #, c-format
 msgid "Can't enumerate values of key '%s'"
 msgstr "Невозможно пересчитать значения ключа '%s'"
 
-#: ../src/msw/registry.cpp:1403
+#: ../src/msw/registry.cpp:1387
 #, c-format
 msgid "Can't export value of unsupported type %d."
 msgstr "Экспорт значения неподдерживаемого типа %d невозможен."
@@ -1722,7 +1750,7 @@ msgid "Can't read inflate stream: unexpected EOF in underlying stream."
 msgstr ""
 "Невозможно чтение сжимаемого потока: неожиданный EOF в нижлежащем потоке."
 
-#: ../src/msw/registry.cpp:1072
+#: ../src/msw/registry.cpp:1056
 #, c-format
 msgid "Can't read value of '%s'"
 msgstr "Невозможно прочитать значение '%s'"
@@ -1733,22 +1761,22 @@ msgstr "Невозможно прочитать значение '%s'"
 msgid "Can't read value of key '%s'"
 msgstr "Невозможно прочитать значение ключа '%s'"
 
-#: ../src/common/image.cpp:2485
+#: ../src/common/image.cpp:2487
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
 msgstr ""
 "Невозможно сохранить изображение в файл '%s': неизвестное расширение файла."
 
-#: ../src/generic/logg.cpp:577 ../src/generic/logg.cpp:994
+#: ../src/generic/logg.cpp:579 ../src/generic/logg.cpp:996
 msgid "Can't save log contents to file."
 msgstr "Невозможно сохранение содержания журнала в файл."
 
-#: ../src/msw/thread.cpp:635
+#: ../src/msw/thread.cpp:637
 msgid "Can't set thread priority"
 msgstr "Невозможно установить приоритет потока"
 
 #: ../src/msw/registry.cpp:888 ../src/msw/registry.cpp:932
-#: ../src/msw/registry.cpp:1089
+#: ../src/msw/registry.cpp:1073
 #, c-format
 msgid "Can't set value of '%s'"
 msgstr "Невозможно установить значение '%s'"
@@ -1806,11 +1834,11 @@ msgstr "Невозможно найти активное модемное сое
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Невозможно получить интервал приоритета для планировки политики %d."
 
-#: ../src/unix/utilsunx.cpp:978
+#: ../src/unix/utilsunx.cpp:983
 msgid "Cannot get the hostname"
 msgstr "Невозможно получить имя хоста"
 
-#: ../src/unix/utilsunx.cpp:1014
+#: ../src/unix/utilsunx.cpp:1019
 msgid "Cannot get the official hostname"
 msgstr "Невозможно получить официальное имя хоста"
 
@@ -1831,12 +1859,12 @@ msgstr "Не удается инициализировать сокеты"
 msgid "Cannot load icon from '%s'."
 msgstr "Невозможно загрузить пиктограмму из '%s'."
 
-#: ../src/xrc/xmlres.cpp:361
+#: ../src/xrc/xmlres.cpp:363
 #, c-format
 msgid "Cannot load resources from '%s'."
 msgstr "Не удается загрузить ресурсы из '%s'."
 
-#: ../src/xrc/xmlres.cpp:743
+#: ../src/xrc/xmlres.cpp:745
 #, c-format
 msgid "Cannot load resources from file '%s'."
 msgstr "Невозможно загрузить ресурсы из файла '%s'."
@@ -1865,7 +1893,7 @@ msgstr "Невозможно открыть файл для печати в Post
 msgid "Cannot open index file: %s"
 msgstr "Невозможно открыть файл индекса: %s"
 
-#: ../src/xrc/xmlres.cpp:725
+#: ../src/xrc/xmlres.cpp:727
 #, fuzzy, c-format
 msgid "Cannot open resources file '%s'."
 msgstr "Невозможно загрузить ресурсы из файла '%s'."
@@ -1879,7 +1907,7 @@ msgstr "Невозможно напечатать пустую страницу.
 msgid "Cannot read typename from '%s'!"
 msgstr "Чтение имени типа из '%s' невозможно!"
 
-#: ../src/msw/thread.cpp:893
+#: ../src/msw/thread.cpp:895
 #, fuzzy, c-format
 msgid "Cannot resume thread %lx"
 msgstr "Не удается возобновить поток %x"
@@ -1893,16 +1921,16 @@ msgstr "Невозможно извлечь политику планировк�
 msgid "Cannot set locale to language \"%s\"."
 msgstr "Не удается установить локали для языка \"%s\"."
 
-#: ../src/msw/thread.cpp:552 ../src/unix/threadpsx.cpp:831
+#: ../src/msw/thread.cpp:554 ../src/unix/threadpsx.cpp:831
 msgid "Cannot start thread: error writing TLS."
 msgstr "Невозможно запустить выполнение потока: ошибка записи TLS."
 
-#: ../src/msw/thread.cpp:877
+#: ../src/msw/thread.cpp:879
 #, fuzzy, c-format
 msgid "Cannot suspend thread %lx"
 msgstr "Не удается приостановить поток %x"
 
-#: ../src/msw/thread.cpp:800
+#: ../src/msw/thread.cpp:802
 msgid "Cannot wait for thread termination"
 msgstr "Невозможно дождаться окончания выполнения потока"
 
@@ -1912,7 +1940,8 @@ msgstr "Невозможно дождаться окончания выполн�
 msgid "Capital"
 msgstr "Ca&pitals"
 
-#: ../src/propgrid/advprops.cpp:851
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:865
 msgid "CaptionText"
 msgstr ""
 
@@ -1920,11 +1949,11 @@ msgstr ""
 msgid "Case sensitive"
 msgstr "С учетом регистра"
 
-#: ../src/propgrid/manager.cpp:1501
+#: ../src/propgrid/manager.cpp:1500
 msgid "Categorized Mode"
 msgstr "Режим \" По Категориям"
 
-#: ../src/richtext/richtextbuffer.cpp:9805
+#: ../src/richtext/richtextbuffer.cpp:9958
 msgid "Cell Properties"
 msgstr "Свойства ячейки"
 
@@ -1966,20 +1995,20 @@ msgstr "Ппо центру"
 msgid "Ch&oose..."
 msgstr "Вы&брать..."
 
-#: ../src/richtext/richtextbuffer.cpp:4276
+#: ../src/richtext/richtextbuffer.cpp:4348
 msgid "Change List Style"
 msgstr "Изменить стиль списка"
 
-#: ../src/richtext/richtextbuffer.cpp:3631
+#: ../src/richtext/richtextbuffer.cpp:3703
 msgid "Change Object Style"
 msgstr "Изменить стиль объекта"
 
-#: ../src/richtext/richtextbuffer.cpp:3904
-#: ../src/richtext/richtextbuffer.cpp:8045
+#: ../src/richtext/richtextbuffer.cpp:3976
+#: ../src/richtext/richtextbuffer.cpp:8122
 msgid "Change Properties"
 msgstr "Изменить свойства"
 
-#: ../src/richtext/richtextbuffer.cpp:3448
+#: ../src/richtext/richtextbuffer.cpp:3520
 msgid "Change Style"
 msgstr "Изменение стиля"
 
@@ -1990,7 +2019,13 @@ msgstr ""
 "Изменения не будут сохранены, чтобы избежать перезаписи существующего файла "
 "\"%s\""
 
-#: ../src/propgrid/advprops.cpp:1707
+#: ../src/gtk/filedlg.cpp:87 ../src/gtk/filepicker.cpp:190
+#, fuzzy, c-format
+msgid "Changing current directory to \"%s\" failed"
+msgstr "Ошибка создания каталога \"%s\""
+
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1718
 #, fuzzy
 msgid "Character"
 msgstr "Код &символа:"
@@ -2085,11 +2120,11 @@ msgstr ""
 msgid "Choose ISP to dial"
 msgstr "Выберите провайдера для набора номера"
 
-#: ../src/propgrid/props.cpp:1783
+#: ../src/propgrid/props.cpp:1855
 msgid "Choose a directory:"
 msgstr "Выберите каталог:"
 
-#: ../src/propgrid/props.cpp:1842
+#: ../src/propgrid/props.cpp:1914
 msgid "Choose a file"
 msgstr "Выберите файл"
 
@@ -2120,7 +2155,7 @@ msgstr ""
 msgid "Clear"
 msgstr "Очистить"
 
-#: ../src/generic/logg.cpp:518
+#: ../src/generic/logg.cpp:520
 msgid "Clear the log contents"
 msgstr "Очистить содержимое журнала"
 
@@ -2229,7 +2264,7 @@ msgid "Click to rename the selected style."
 msgstr "Нажмите, чтобы переименовать выбранный стиль."
 
 #: ../src/common/stockitem.cpp:148 ../src/generic/dbgrptg.cpp:97
-#: ../src/generic/progdlgg.cpp:805 ../src/generic/progdlgg.cpp:810
+#: ../src/generic/progdlgg.cpp:807 ../src/generic/progdlgg.cpp:812
 #: ../src/html/helpdlg.cpp:90 ../src/msw/progdlg.cpp:170
 #: ../src/msw/progdlg.cpp:679 ../src/richtext/richtextstyledlg.cpp:277
 #: ../src/richtext/richtextsymboldlg.cpp:476
@@ -2244,7 +2279,7 @@ msgstr "Закрыть Все"
 msgid "Close current document"
 msgstr "Закрыть текущий документ"
 
-#: ../src/generic/logg.cpp:520
+#: ../src/generic/logg.cpp:522
 msgid "Close this window"
 msgstr "Закрыть это окно"
 
@@ -2252,7 +2287,7 @@ msgstr "Закрыть это окно"
 msgid "Color"
 msgstr "Цвет"
 
-#: ../src/richtext/richtextformatdlg.cpp:779
+#: ../src/richtext/richtextformatdlg.cpp:786
 msgid "Colour"
 msgstr "Цвет"
 
@@ -2290,7 +2325,7 @@ msgstr "Ширина столбца не может быть установле�
 msgid "Command"
 msgstr ""
 
-#: ../src/common/init.cpp:188
+#: ../src/common/init.cpp:196
 #, c-format
 msgid ""
 "Command line argument %d couldn't be converted to Unicode and will be "
@@ -2304,7 +2339,7 @@ msgstr ""
 msgid "Common dialog failed with error code %0lx."
 msgstr "В общим диалоговом окне произошла ошибка с кодом %0lx."
 
-#: ../src/gtk/window.cpp:4551
+#: ../src/gtk/window.cpp:4557
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2323,7 +2358,7 @@ msgstr "Компьютер"
 msgid "Config entry name cannot start with '%c'."
 msgstr "Имя поля в файле конфигурации не может начинаться с '%c'."
 
-#: ../src/generic/filedlgg.cpp:357 ../src/gtk/filedlg.cpp:59
+#: ../src/generic/filedlgg.cpp:357 ../src/gtk/filedlg.cpp:60
 msgid "Confirm"
 msgstr "Подтвердите"
 
@@ -2339,15 +2374,17 @@ msgstr "Соединение..."
 msgid "Contents"
 msgstr "Содержание"
 
-#: ../src/propgrid/advprops.cpp:852
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:866
 msgid "ControlDark"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:853
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:867
 msgid "ControlLight"
 msgstr ""
 
-#: ../src/common/strconv.cpp:2259
+#: ../src/common/strconv.cpp:2251
 #, c-format
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "Преобразование кодировки в '%s' не работает."
@@ -2480,16 +2517,16 @@ msgstr "Не удалось установить минимальную шири
 msgid "Could not set property flags."
 msgstr "Не удалось установить флаги свойств."
 
-#: ../src/common/prntbase.cpp:1999
+#: ../src/common/prntbase.cpp:2015
 msgid "Could not start document preview."
 msgstr "Невозможно начать предварительный просмотр документа."
 
-#: ../src/generic/printps.cpp:178 ../src/gtk/print.cpp:1103
+#: ../src/generic/printps.cpp:178 ../src/gtk/print.cpp:1116
 #: ../src/msw/printwin.cpp:210
 msgid "Could not start printing."
 msgstr "Невозможно начать печать."
 
-#: ../src/common/wincmn.cpp:2131
+#: ../src/common/wincmn.cpp:2145
 msgid "Could not transfer data to window"
 msgstr "Невозможно передать данные в окно"
 
@@ -2507,7 +2544,7 @@ msgstr "Невозможно создать таймер"
 msgid "Couldn't create the overlay window"
 msgstr "Не удалось создать перекрывающееся окно"
 
-#: ../src/common/translation.cpp:2028
+#: ../src/common/translation.cpp:2024
 #, fuzzy
 msgid "Couldn't enumerate translations"
 msgstr "Не удалось завершить поток"
@@ -2517,7 +2554,7 @@ msgstr "Не удалось завершить поток"
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Невозможно найти символ '%s' в динамической библиотеке"
 
-#: ../src/msw/thread.cpp:920
+#: ../src/msw/thread.cpp:922
 msgid "Couldn't get the current thread pointer"
 msgstr "Невозможно получить указатель на текущий поток"
 
@@ -2566,7 +2603,7 @@ msgstr "Невозможно получить информацию об элем
 msgid "Couldn't save PNG image."
 msgstr "Невозможно сохранить изображение PNG."
 
-#: ../src/msw/thread.cpp:690
+#: ../src/msw/thread.cpp:692
 msgid "Couldn't terminate thread"
 msgstr "Не удалось завершить поток"
 
@@ -2583,7 +2620,13 @@ msgstr "Создать каталог"
 msgid "Create new directory"
 msgstr "Создать новый каталог"
 
-#: ../src/propgrid/advprops.cpp:1708
+#: ../src/xrc/xmlres.cpp:2441
+#, fuzzy, c-format
+msgid "Creating %s \"%s\" failed."
+msgstr "Извлечение '%s' в '%s' завершилось с неудачей."
+
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1719
 msgid "Cross"
 msgstr ""
 
@@ -2600,13 +2643,14 @@ msgstr "&Вырезать"
 msgid "Current directory:"
 msgstr "Текущий каталог:"
 
-#: ../src/propgrid/advprops.cpp:868 ../src/propgrid/advprops.cpp:1524
-#: ../src/propgrid/advprops.cpp:1562
+#. TRANSLATORS: Custom colour choice entry
+#: ../src/propgrid/advprops.cpp:882 ../src/propgrid/advprops.cpp:1535
+#: ../src/propgrid/advprops.cpp:1573
 #, fuzzy
 msgid "Custom"
 msgstr "Нестандартный размер"
 
-#: ../src/gtk/print.cpp:218
+#: ../src/gtk/print.cpp:217
 msgid "Custom size"
 msgstr "Нестандартный размер"
 
@@ -2692,7 +2736,8 @@ msgstr ""
 msgid "Decorative"
 msgstr "Декоративный"
 
-#: ../src/propgrid/advprops.cpp:1702
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1713
 #, fuzzy
 msgid "Default"
 msgstr "по-умолчанию"
@@ -2717,7 +2762,7 @@ msgstr "Удалить"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:48 ../src/common/stockitem.cpp:152
-#: ../src/richtext/richtextbuffer.cpp:8137 ../src/stc/stc_i18n.cpp:20
+#: ../src/richtext/richtextbuffer.cpp:8214 ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "Удалить"
 
@@ -2725,11 +2770,11 @@ msgstr "Удалить"
 msgid "Delete A&ll"
 msgstr "Удалить вс&е"
 
-#: ../src/richtext/richtextbuffer.cpp:11179
+#: ../src/richtext/richtextbuffer.cpp:11332
 msgid "Delete Column"
 msgstr "Удалить столбец"
 
-#: ../src/richtext/richtextbuffer.cpp:11129
+#: ../src/richtext/richtextbuffer.cpp:11282
 msgid "Delete Row"
 msgstr "Удалить строку"
 
@@ -2768,7 +2813,8 @@ msgstr "Зависимость \"%s\" модуль \"%s\" не существу�
 msgid "Descending"
 msgstr "По убыванию"
 
-#: ../src/generic/dirctrlg.cpp:547 ../src/propgrid/advprops.cpp:854
+#. TRANSLATORS: Keyword of system colour
+#: ../src/generic/dirctrlg.cpp:547 ../src/propgrid/advprops.cpp:868
 msgid "Desktop"
 msgstr "Рабочий стол"
 
@@ -2815,11 +2861,11 @@ msgstr "Каталог '%s' не может быть удален"
 msgid "Directory does not exist"
 msgstr "Каталог не существует"
 
-#: ../src/generic/filectrlg.cpp:1412
+#: ../src/generic/filectrlg.cpp:1424
 msgid "Directory doesn't exist."
 msgstr "Каталог не существует."
 
-#: ../src/common/docview.cpp:455
+#: ../src/common/docview.cpp:461
 msgid "Discard changes and reload the last saved version?"
 msgstr "Отменить изменения и повторно загрузите последнюю сохраненную версию?"
 
@@ -2860,12 +2906,12 @@ msgstr ""
 "Новое значение \n"
 "%s %1"
 
-#: ../src/common/docview.cpp:531
+#: ../src/common/docview.cpp:537
 #, c-format
 msgid "Do you want to save changes to %s?"
 msgstr "Хотите ли вы сохранить изменения в %s?"
 
-#: ../src/common/prntbase.cpp:537
+#: ../src/common/prntbase.cpp:542
 msgid "Document:"
 msgstr "Документ:"
 
@@ -2877,7 +2923,7 @@ msgstr "Документацию по "
 msgid "Documentation writers"
 msgstr "Авторы документации"
 
-#: ../src/common/sizer.cpp:2688
+#: ../src/common/sizer.cpp:2809
 msgid "Don't Save"
 msgstr "Не сохранять"
 
@@ -2885,7 +2931,7 @@ msgstr "Не сохранять"
 msgid "Done"
 msgstr "Готово"
 
-#: ../src/generic/progdlgg.cpp:482 ../src/msw/progdlg.cpp:407
+#: ../src/generic/progdlgg.cpp:484 ../src/msw/progdlg.cpp:407
 msgid "Done."
 msgstr "Готово."
 
@@ -2971,11 +3017,39 @@ msgstr ""
 msgid "Enable vertical alignment."
 msgstr "Не удалось установить выравнивание."
 
-#: ../src/richtext/richtextbackgroundpage.cpp:133
-#: ../src/richtext/richtextbackgroundpage.cpp:135
+#: ../src/richtext/richtextbackgroundpage.cpp:163
+#: ../src/richtext/richtextbackgroundpage.cpp:165
 #, fuzzy
 msgid "Enables a background colour."
 msgstr "Цвет фона"
+
+#: ../src/richtext/richtextbackgroundpage.cpp:197
+#: ../src/richtext/richtextbackgroundpage.cpp:199
+#, fuzzy
+msgid "Enables a shadow."
+msgstr "Цвет фона"
+
+#: ../src/richtext/richtextbackgroundpage.cpp:301
+#: ../src/richtext/richtextbackgroundpage.cpp:303
+#, fuzzy
+msgid "Enables the blur distance."
+msgstr "Не удалось установить максимальную ширину."
+
+#: ../src/richtext/richtextbackgroundpage.cpp:261
+#: ../src/richtext/richtextbackgroundpage.cpp:263
+#, fuzzy
+msgid "Enables the shadow colour."
+msgstr "Цвет фона"
+
+#: ../src/richtext/richtextbackgroundpage.cpp:328
+#: ../src/richtext/richtextbackgroundpage.cpp:330
+msgid "Enables the shadow opacity."
+msgstr ""
+
+#: ../src/richtext/richtextbackgroundpage.cpp:274
+#: ../src/richtext/richtextbackgroundpage.cpp:276
+msgid "Enables the shadow spread."
+msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:64
@@ -3033,8 +3107,8 @@ msgstr ""
 #: ../src/generic/dirctrlg.cpp:620 ../src/generic/dirdlgg.cpp:352
 #: ../src/generic/filectrlg.cpp:677 ../src/generic/filectrlg.cpp:791
 #: ../src/generic/filectrlg.cpp:805 ../src/generic/filectrlg.cpp:821
-#: ../src/generic/filectrlg.cpp:1381 ../src/generic/filectrlg.cpp:1412
-#: ../src/generic/filedlgg.cpp:365 ../src/gtk/filedlg.cpp:73
+#: ../src/generic/filectrlg.cpp:1393 ../src/generic/filectrlg.cpp:1424
+#: ../src/generic/filedlgg.cpp:365 ../src/gtk/filedlg.cpp:74
 #: ../src/gtk1/fontdlg.cpp:74
 msgid "Error"
 msgstr "Ошибка"
@@ -3055,7 +3129,7 @@ msgstr "Ошибка создания каталога"
 msgid "Error in reading image DIB."
 msgstr "Ошибка при чтении изображения DIB."
 
-#: ../src/propgrid/propgrid.cpp:6652
+#: ../src/propgrid/propgrid.cpp:6668
 #, c-format
 msgid "Error in resource: %s"
 msgstr "Ошибка в ресурс: %s"
@@ -3068,7 +3142,7 @@ msgstr "Ошибка чтения параметров настройки."
 msgid "Error saving user configuration data."
 msgstr "Ошибка сохранения конфигурационных данных пользователя."
 
-#: ../src/gtk/print.cpp:691
+#: ../src/gtk/print.cpp:706
 msgid "Error while printing: "
 msgstr "Ошибка при печати: "
 
@@ -3104,7 +3178,7 @@ msgstr "Исполняемые файлы (*.exe)|*.exe"
 msgid "Execute"
 msgstr "Выполнение"
 
-#: ../src/msw/utilsexc.cpp:897
+#: ../src/msw/utilsexc.cpp:892
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr "Ошибка выполнения команды '%s'"
@@ -3113,7 +3187,7 @@ msgstr "Ошибка выполнения команды '%s'"
 msgid "Executive, 7 1/4 x 10 1/2 in"
 msgstr "Executive, 7 1/4 x 10 1/2 дюйма"
 
-#: ../src/msw/registry.cpp:1254
+#: ../src/msw/registry.cpp:1238
 #, c-format
 msgid ""
 "Exporting registry key: file \"%s\" already exists and won't be overwritten."
@@ -3133,7 +3207,8 @@ msgstr "Извлечение '%s' в '%s' завершилось с неудач
 msgid "F"
 msgstr "F"
 
-#: ../src/propgrid/advprops.cpp:648
+#. TRANSLATORS: Label of font face name
+#: ../src/propgrid/advprops.cpp:658
 msgid "Face Name"
 msgstr "Название семейства"
 
@@ -3159,7 +3234,7 @@ msgstr "Не удалось разместить цвет для OpenGL"
 msgid "Failed to change video mode"
 msgstr "Не удалось изменить видео-режим"
 
-#: ../src/common/image.cpp:3141
+#: ../src/common/image.cpp:3143
 #, fuzzy, c-format
 msgid "Failed to check format of image file \"%s\"."
 msgstr "Невозможно сохранить изображение в файл \"%s\"."
@@ -3200,7 +3275,7 @@ msgstr "Невозможно подключиться: нет ISP для наб�
 msgid "Failed to convert file \"%s\" to Unicode."
 msgstr "Не удалось преобразовать файл \"%s\" в Unicode."
 
-#: ../src/generic/logg.cpp:974
+#: ../src/generic/logg.cpp:976
 msgid "Failed to copy dialog contents to the clipboard."
 msgstr "Не удалось скопировать содержимое диалога в буфер обмена."
 
@@ -3228,7 +3303,7 @@ msgstr "Невозможно скопировать подключ реестр�
 msgid "Failed to create DDE string"
 msgstr "Ошибка создания строки DDE"
 
-#: ../src/msw/mdi.cpp:614
+#: ../src/msw/mdi.cpp:617
 msgid "Failed to create MDI parent frame."
 msgstr "Ошибка создания родительского фрейма MDI."
 
@@ -3366,7 +3441,7 @@ msgstr "Невозможно инициализировать OpenGL"
 msgid "Failed to initiate dialup connection: %s"
 msgstr "Не удалось установить модемное соединение: %s"
 
-#: ../src/gtk/textctrl.cpp:1129
+#: ../src/gtk/textctrl.cpp:1142
 msgid "Failed to insert text in the control."
 msgstr "Не удалось вставить текст в элемент управления."
 
@@ -3392,12 +3467,12 @@ msgstr ""
 msgid "Failed to kill process %d"
 msgstr "Не удалось завершить процесс %d"
 
-#: ../src/common/image.cpp:2365
+#: ../src/common/image.cpp:2367
 #, fuzzy, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
 msgstr "Не удалось загрузить изображение %d из потока."
 
-#: ../src/common/image.cpp:2374
+#: ../src/common/image.cpp:2376
 #, fuzzy, c-format
 msgid "Failed to load icon \"%s\" from resources."
 msgstr "Не удалось загрузить изображение %d из потока."
@@ -3412,7 +3487,7 @@ msgstr "Не удалось загрузить изображение %%d из �
 msgid "Failed to load image %d from stream."
 msgstr "Не удалось загрузить изображение %d из потока."
 
-#: ../src/common/image.cpp:2452 ../src/common/image.cpp:2471
+#: ../src/common/image.cpp:2454 ../src/common/image.cpp:2473
 #, fuzzy, c-format
 msgid "Failed to load image from file \"%s\"."
 msgstr "Невозможно загрузить метафайл из файла \"%s\"."
@@ -3426,7 +3501,7 @@ msgstr "Невозможно загрузить метафайл из файла
 msgid "Failed to load mpr.dll."
 msgstr "Невозможно загрузить mpr.dll."
 
-#: ../src/msw/utils.cpp:993
+#: ../src/msw/utils.cpp:1015
 #, c-format
 msgid "Failed to load resource \"%s\"."
 msgstr "Не удалось загрузить ресурс \"%s\"."
@@ -3441,7 +3516,7 @@ msgstr "Ошибка загрузки разделяемой библиотек�
 msgid "Failed to load sound from \"%s\" (error %d)."
 msgstr "Не удалось загрузить ресурс \"%s\"."
 
-#: ../src/msw/utils.cpp:1000
+#: ../src/msw/utils.cpp:1022
 #, c-format
 msgid "Failed to lock resource \"%s\"."
 msgstr "Не удалось заблокировать ресурс \"%s\"."
@@ -3525,7 +3600,7 @@ msgstr "Не удалось прочитать PID из файла блокир�
 msgid "Failed to read config options."
 msgstr "Не удалось прочитать параметры конфигурации."
 
-#: ../src/common/docview.cpp:678
+#: ../src/common/docview.cpp:684
 #, c-format
 msgid "Failed to read document from the file \"%s\"."
 msgstr "Не удалось прочитать документ из файла \"%s\"."
@@ -3542,7 +3617,7 @@ msgstr "Не удалось прочитать из канала пробужд�
 msgid "Failed to redirect child process input/output"
 msgstr "Не удалось перенаправить ввод/вывод порожденного процесса"
 
-#: ../src/msw/utilsexc.cpp:706
+#: ../src/msw/utilsexc.cpp:703
 msgid "Failed to redirect the child process IO"
 msgstr "Не удалось перенаправить ввод/вывод порожденного процесса"
 
@@ -3607,7 +3682,7 @@ msgstr "Не удалось получить текст сообщения об 
 msgid "Failed to retrieve the supported clipboard formats"
 msgstr "Не удалось найти форматы, поддерживаемые буфером обмена"
 
-#: ../src/common/docview.cpp:649
+#: ../src/common/docview.cpp:655
 #, c-format
 msgid "Failed to save document to the file \"%s\"."
 msgstr "Не удалось сохранить документ в файл \"%s\"."
@@ -3644,7 +3719,7 @@ msgstr "Не удалось установить приоритет потока
 msgid "Failed to set temporary file permissions"
 msgstr "Невозможно установить разрешения временному файлу"
 
-#: ../src/gtk/textctrl.cpp:1070
+#: ../src/gtk/textctrl.cpp:1078
 msgid "Failed to set text in the text control."
 msgstr "Не удалось установить текст в текстовое поле."
 
@@ -3658,7 +3733,7 @@ msgstr "Не удалось установить приоритет потока
 msgid "Failed to set thread priority %d."
 msgstr "Не удалось установить приоритет потока %d."
 
-#: ../src/unix/utilsunx.cpp:781
+#: ../src/unix/utilsunx.cpp:779
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr ""
 
@@ -3722,11 +3797,13 @@ msgstr "Не удалось отправить отчет об отладке (�
 msgid "Failed to write to lock file '%s'"
 msgstr "Не удалось записать файл блокировки '%s'"
 
-#: ../src/propgrid/propgrid.cpp:188
+#. TRANSLATORS: Name of Boolean false value
+#: ../src/propgrid/propgrid.cpp:208
 msgid "False"
 msgstr "Ложь"
 
-#: ../src/propgrid/advprops.cpp:666
+#. TRANSLATORS: Label of font family
+#: ../src/propgrid/advprops.cpp:680
 msgid "Family"
 msgstr "Семейство"
 
@@ -3734,17 +3811,17 @@ msgstr "Семейство"
 msgid "File"
 msgstr "Файл"
 
-#: ../src/common/docview.cpp:666
+#: ../src/common/docview.cpp:672
 #, c-format
 msgid "File \"%s\" could not be opened for reading."
 msgstr "Файл \"%s\" не может быть открыт для чтения."
 
-#: ../src/common/docview.cpp:643
+#: ../src/common/docview.cpp:649
 #, c-format
 msgid "File \"%s\" could not be opened for writing."
 msgstr "Файл \"%s\" не может быть открыт для записи."
 
-#: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:56
+#: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:57
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "Файл '%s' уже существует, вы действительно хотите его переписать?"
@@ -3768,7 +3845,7 @@ msgstr "Файл не может быть загружен."
 msgid "File dialog failed with error code %0lx."
 msgstr "В файловом диалоговом окне произошла ошибка с кодом %0lx."
 
-#: ../src/common/docview.cpp:1778
+#: ../src/common/docview.cpp:1792
 msgid "File error"
 msgstr "Ошибка файла"
 
@@ -3797,7 +3874,7 @@ msgstr "Найти"
 msgid "First"
 msgstr "Первый"
 
-#: ../src/common/prntbase.cpp:1532
+#: ../src/common/prntbase.cpp:1548
 msgid "First page"
 msgstr "Первая страница"
 
@@ -3873,7 +3950,7 @@ msgstr "Найдено %i соответствий"
 msgid "From:"
 msgstr "От:"
 
-#: ../src/propgrid/advprops.cpp:1554
+#: ../src/propgrid/advprops.cpp:1565
 msgid "Fuchsia"
 msgstr ""
 
@@ -3897,7 +3974,7 @@ msgstr "GIF: недостаточно памяти."
 msgid "GIF: unknown error!!!"
 msgstr "GIF: неизвестная ошибка!!!"
 
-#: ../src/gtk/window.cpp:4533
+#: ../src/gtk/window.cpp:4539
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -3911,7 +3988,7 @@ msgstr "Тема GTK+"
 msgid "General"
 msgstr "Общие"
 
-#: ../src/common/prntbase.cpp:253
+#: ../src/common/prntbase.cpp:258
 msgid "Generic PostScript"
 msgstr "Общий PostScript"
 
@@ -3959,11 +4036,12 @@ msgstr "Перейти в родительский каталог"
 msgid "Graphics art by "
 msgstr "Графические искусства "
 
-#: ../src/propgrid/advprops.cpp:1549
+#: ../src/propgrid/advprops.cpp:1560
 msgid "Gray"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:855
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:869
 msgid "GrayText"
 msgstr ""
 
@@ -3971,7 +4049,7 @@ msgstr ""
 msgid "Greek (ISO-8859-7)"
 msgstr "Греческий (ISO-8859-7)"
 
-#: ../src/propgrid/advprops.cpp:1550
+#: ../src/propgrid/advprops.cpp:1561
 #, fuzzy
 msgid "Green"
 msgstr "MacGreek"
@@ -3997,7 +4075,8 @@ msgstr "HTML-якорь %s не существует."
 msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
 msgstr "Файлы HTML (*.html;*.htm)|*.html;*.htm|"
 
-#: ../src/propgrid/advprops.cpp:1709
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1720
 msgid "Hand"
 msgstr ""
 
@@ -4051,12 +4130,12 @@ msgstr "Файл справки \"%s\" не найден."
 msgid "Help: %s"
 msgstr "Помощь: %s"
 
-#: ../src/osx/menu_osx.cpp:635
+#: ../src/osx/menu_osx.cpp:615
 #, c-format
 msgid "Hide %s"
 msgstr "Скрыть %s"
 
-#: ../src/osx/menu_osx.cpp:637
+#: ../src/osx/menu_osx.cpp:617
 msgid "Hide Others"
 msgstr "Скрыть остальные"
 
@@ -4064,12 +4143,14 @@ msgstr "Скрыть остальные"
 msgid "Hide this notification message."
 msgstr "Скрыть это сообщение уведомления."
 
-#: ../src/propgrid/advprops.cpp:856
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:870
 #, fuzzy
 msgid "Highlight"
 msgstr "светлый"
 
-#: ../src/propgrid/advprops.cpp:857
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:871
 #, fuzzy
 msgid "HighlightText"
 msgstr "Выровнять по правому краю текста."
@@ -4089,7 +4170,8 @@ msgstr "Начальный каталог"
 msgid "How the object will float relative to the text."
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1710
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1721
 msgid "I-Beam"
 msgstr ""
 
@@ -4171,7 +4253,7 @@ msgstr ""
 "если\n"
 "это возможно, пожалуйста продолжайте генерацию отчета.\n"
 
-#: ../src/msw/registry.cpp:1419
+#: ../src/msw/registry.cpp:1403
 #, c-format
 msgid "Ignoring value \"%s\" of the key \"%s\"."
 msgstr "Значение \"%s\" ключа \"%s\" проигнорировано."
@@ -4192,20 +4274,20 @@ msgstr ""
 msgid "Illegal directory name."
 msgstr "Недопустимое имя каталога."
 
-#: ../src/generic/filectrlg.cpp:1380
+#: ../src/generic/filectrlg.cpp:1392
 msgid "Illegal file specification."
 msgstr "Неправильная спецификация файла."
 
-#: ../src/common/image.cpp:2158
+#: ../src/common/image.cpp:2160
 msgid "Image and mask have different sizes."
 msgstr "Изображение и маска имеют различные размеры."
 
-#: ../src/common/image.cpp:2611
+#: ../src/common/image.cpp:2613
 #, fuzzy, c-format
 msgid "Image file is not of type %d."
 msgstr "Файл изображения не относится к типу %ld."
 
-#: ../src/common/image.cpp:2741
+#: ../src/common/image.cpp:2743
 #, fuzzy, c-format
 msgid "Image is not of type %s."
 msgstr "Файл изображения не относится к типу %s."
@@ -4238,16 +4320,19 @@ msgstr "Невозможно переписать файл '%s'"
 msgid "Impossible to set permissions for the file '%s'"
 msgstr "Невозможно установить разрешения файлу '%s'"
 
-#: ../src/propgrid/advprops.cpp:858
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:872
 #, fuzzy
 msgid "InactiveBorder"
 msgstr "Граница"
 
-#: ../src/propgrid/advprops.cpp:859
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:873
 msgid "InactiveCaption"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:860
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:874
 msgid "InactiveCaptionText"
 msgstr ""
 
@@ -4280,7 +4365,7 @@ msgstr "Индийский (ISO-8859-12)"
 msgid "Info"
 msgstr "Инфо"
 
-#: ../src/common/init.cpp:276
+#: ../src/common/init.cpp:287
 msgid "Initialization failed in post init, aborting."
 msgstr "Сбой инициализации в пост init, прерываясь."
 
@@ -4295,22 +4380,22 @@ msgstr "Вставить"
 msgid "Insert"
 msgstr "Вставить"
 
-#: ../src/richtext/richtextbuffer.cpp:7983
+#: ../src/richtext/richtextbuffer.cpp:8060
 msgid "Insert Field"
 msgstr "Вставить поле"
 
-#: ../src/richtext/richtextbuffer.cpp:7894
-#: ../src/richtext/richtextbuffer.cpp:8852
+#: ../src/richtext/richtextbuffer.cpp:7971
+#: ../src/richtext/richtextbuffer.cpp:8929
 msgid "Insert Image"
 msgstr "Вставить изображение"
 
-#: ../src/richtext/richtextbuffer.cpp:7941
+#: ../src/richtext/richtextbuffer.cpp:8018
 msgid "Insert Object"
 msgstr "Вставить объект"
 
-#: ../src/richtext/richtextbuffer.cpp:7738
-#: ../src/richtext/richtextbuffer.cpp:7768
-#: ../src/richtext/richtextbuffer.cpp:7810
+#: ../src/richtext/richtextbuffer.cpp:7815
+#: ../src/richtext/richtextbuffer.cpp:7845
+#: ../src/richtext/richtextbuffer.cpp:7887
 #: ../src/richtext/richtextctrl.cpp:1263 ../src/richtext/richtextctrl.cpp:1471
 msgid "Insert Text"
 msgstr "Вставить текст"
@@ -4618,14 +4703,14 @@ msgstr "Альбом"
 msgid "Last"
 msgstr "Последний"
 
-#: ../src/common/prntbase.cpp:1556
+#: ../src/common/prntbase.cpp:1572
 msgid "Last page"
 msgstr "Последняя станица"
 
 #: ../src/common/log.cpp:309
 #, c-format
-msgid "Last repeated message (\"%s\", %lu time) wasn't output"
-msgid_plural "Last repeated message (\"%s\", %lu times) wasn't output"
+msgid "Last repeated message (\"%s\", %u time) wasn't output"
+msgid_plural "Last repeated message (\"%s\", %u times) wasn't output"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -4650,7 +4735,8 @@ msgstr "Слева"
 msgid "Left (&first line):"
 msgstr "Слева (первые строки):"
 
-#: ../src/propgrid/advprops.cpp:1711
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1722
 msgid "Left Button"
 msgstr ""
 
@@ -4709,7 +4795,7 @@ msgstr "Лицензии"
 msgid "Light"
 msgstr "Светлый"
 
-#: ../src/propgrid/advprops.cpp:1558
+#: ../src/propgrid/advprops.cpp:1569
 msgid "Lime"
 msgstr ""
 
@@ -4763,7 +4849,7 @@ msgstr "Файл блокировки '%s' имеет неверного вла�
 msgid "Lock file '%s' has incorrect permissions."
 msgstr "Файл блокировки '%s' имеет неверные разрешения."
 
-#: ../src/generic/logg.cpp:580
+#: ../src/generic/logg.cpp:582
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "Журнал записан в файл '%s'."
@@ -4954,11 +5040,12 @@ msgstr "MacTurkish"
 msgid "MacVietnamese"
 msgstr "MacVietnamese"
 
-#: ../src/propgrid/advprops.cpp:1712
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1723
 msgid "Magnifier"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:2093
+#: ../src/propgrid/advprops.cpp:2104
 msgid "Make a selection:"
 msgstr "Сделайте выбор:"
 
@@ -4967,7 +5054,7 @@ msgstr "Сделайте выбор:"
 msgid "Margins"
 msgstr "Поля"
 
-#: ../src/propgrid/advprops.cpp:1545
+#: ../src/propgrid/advprops.cpp:1556
 msgid "Maroon"
 msgstr ""
 
@@ -4994,8 +5081,9 @@ msgid "Memory VFS already contains file '%s'!"
 msgstr "Память VFS уже содержит файл '%s'!"
 
 #. TRANSLATORS: Name of keyboard key
+#. TRANSLATORS: Keyword of system colour
 #: ../src/common/accelcmn.cpp:71 ../src/msw/frame.cpp:399
-#: ../src/propgrid/advprops.cpp:861
+#: ../src/propgrid/advprops.cpp:875
 msgid "Menu"
 msgstr "Меню"
 
@@ -5015,7 +5103,8 @@ msgstr "Метод или свойство не найдено."
 msgid "Mi&nimize"
 msgstr "&Свернуть"
 
-#: ../src/propgrid/advprops.cpp:1713
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1724
 msgid "Middle Button"
 msgstr ""
 
@@ -5071,7 +5160,7 @@ msgstr "По умолчанию стиля для следующего абза�
 msgid "Moves the object to the previous paragraph."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:9803
+#: ../src/richtext/richtextbuffer.cpp:9956
 msgid "Multiple Cell Properties"
 msgstr ""
 
@@ -5079,7 +5168,7 @@ msgstr ""
 msgid "Name"
 msgstr "Имя"
 
-#: ../src/propgrid/advprops.cpp:1546
+#: ../src/propgrid/advprops.cpp:1557
 msgid "Navy"
 msgstr ""
 
@@ -5138,7 +5227,7 @@ msgstr "НовоеИмя"
 msgid "Next"
 msgstr "Следующий"
 
-#: ../src/common/prntbase.cpp:1551 ../src/html/helpwnd.cpp:665
+#: ../src/common/prntbase.cpp:1567 ../src/html/helpwnd.cpp:665
 msgid "Next page"
 msgstr "Следующая станица"
 
@@ -5147,7 +5236,8 @@ msgstr "Следующая станица"
 msgid "No"
 msgstr "Нет"
 
-#: ../src/propgrid/advprops.cpp:1714
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1725
 msgid "No Entry"
 msgstr ""
 
@@ -5210,17 +5300,17 @@ msgstr ""
 msgid "No handler found for animation type."
 msgstr "Не найдено обработчика для типа анимации."
 
-#: ../src/common/image.cpp:2593
+#: ../src/common/image.cpp:2595
 msgid "No handler found for image type."
 msgstr "Не найдено обработчика для этого типа изображения."
 
-#: ../src/common/image.cpp:2601 ../src/common/image.cpp:2712
-#: ../src/common/image.cpp:2765
+#: ../src/common/image.cpp:2603 ../src/common/image.cpp:2714
+#: ../src/common/image.cpp:2767
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr "Не определено обработчика для изображения типа %d."
 
-#: ../src/common/image.cpp:2735 ../src/common/image.cpp:2779
+#: ../src/common/image.cpp:2737 ../src/common/image.cpp:2781
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "Не определено обработчика для изображения типа %s."
@@ -5243,11 +5333,11 @@ msgstr "Нет renderer для указанного столбца."
 msgid "No sound"
 msgstr "Нет звука"
 
-#: ../src/common/image.cpp:2166 ../src/common/image.cpp:2207
+#: ../src/common/image.cpp:2168 ../src/common/image.cpp:2209
 msgid "No unused colour in image being masked."
 msgstr "Не было замаскировано ни одного неиспользованного цвета в изображении."
 
-#: ../src/common/image.cpp:3238
+#: ../src/common/image.cpp:3240
 msgid "No unused colour in image."
 msgstr "В изображении нет неиспользуемых цветов."
 
@@ -5278,7 +5368,7 @@ msgstr "Нормальный шрифт<br>и <u>подчеркнутый</u>. "
 msgid "Normal font:"
 msgstr "Нормальный шрифт:"
 
-#: ../src/propgrid/props.cpp:1017
+#: ../src/propgrid/props.cpp:1062
 #, c-format
 msgid "Not %s"
 msgstr "Не %s"
@@ -5430,7 +5520,7 @@ msgstr "Пронумерованных структуры"
 
 #: ../include/wx/msgdlg.h:278 ../src/common/stockitem.cpp:178
 #: ../src/gtk1/fontdlg.cpp:138 ../src/msw/dialog.cpp:120
-#: ../src/msw/msgdlg.cpp:476 ../src/msw/msgdlg.cpp:782
+#: ../src/msw/msgdlg.cpp:476 ../src/msw/msgdlg.cpp:775
 #: ../src/richtext/richtextstyledlg.cpp:297
 msgid "OK"
 msgstr "OK"
@@ -5452,11 +5542,15 @@ msgstr ""
 msgid "Objects must have an id attribute"
 msgstr "Объекты должны иметь атрибут id"
 
-#: ../src/propgrid/advprops.cpp:1551
+#: ../src/propgrid/advprops.cpp:1562
 msgid "Olive"
 msgstr ""
 
-#: ../src/common/docview.cpp:1762 ../src/common/docview.cpp:1804
+#: ../src/richtext/richtextbackgroundpage.cpp:326
+msgid "Opaci&ty:"
+msgstr ""
+
+#: ../src/common/docview.cpp:1776 ../src/common/docview.cpp:1818
 msgid "Open File"
 msgstr "Открыть файл"
 
@@ -5502,7 +5596,7 @@ msgstr "Параметр '%s': '%s' не может быть сконверти�
 msgid "Options"
 msgstr "Параметры"
 
-#: ../src/propgrid/advprops.cpp:1556
+#: ../src/propgrid/advprops.cpp:1567
 msgid "Orange"
 msgstr ""
 
@@ -5672,12 +5766,12 @@ msgstr "КНР Конверт №9 Развернутый 324 x 229 мм"
 msgid "Padding"
 msgstr "Отступ"
 
-#: ../src/common/prntbase.cpp:2058
+#: ../src/common/prntbase.cpp:2074
 #, c-format
 msgid "Page %d"
 msgstr "Страница %d"
 
-#: ../src/common/prntbase.cpp:2056
+#: ../src/common/prntbase.cpp:2072
 #, c-format
 msgid "Page %d of %d"
 msgstr "Страница %d из %d"
@@ -5688,7 +5782,7 @@ msgstr "Страница %d из %d"
 msgid "Page Down"
 msgstr "Страница %d"
 
-#: ../src/gtk/print.cpp:795
+#: ../src/gtk/print.cpp:810
 msgid "Page Setup"
 msgstr "Настройки страницы"
 
@@ -5698,7 +5792,7 @@ msgstr "Настройки страницы"
 msgid "Page Up"
 msgstr "Страница %d"
 
-#: ../src/common/prntbase.cpp:479 ../src/generic/prntdlgg.cpp:828
+#: ../src/common/prntbase.cpp:484 ../src/generic/prntdlgg.cpp:828
 msgid "Page setup"
 msgstr "Настройки страницы"
 
@@ -5718,7 +5812,8 @@ msgstr "Страницы"
 msgid "Pages"
 msgstr "Страницы"
 
-#: ../src/propgrid/advprops.cpp:1715
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1726
 msgid "Paint Brush"
 msgstr ""
 
@@ -5754,7 +5849,8 @@ msgstr "Вставить выбранное"
 msgid "Pause"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1716
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1727
 msgid "Pencil"
 msgstr ""
 
@@ -5777,7 +5873,7 @@ msgstr ""
 msgid "PgUp"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:12662
+#: ../src/richtext/richtextbuffer.cpp:12815
 msgid "Picture Properties"
 msgstr "Свойства рисунка"
 
@@ -5789,7 +5885,7 @@ msgstr "Ошибка создания потока ввода-вывода"
 msgid "Please choose a valid font."
 msgstr "Пожалуйста, выберите допустимый шрифт."
 
-#: ../src/generic/filedlgg.cpp:365 ../src/gtk/filedlg.cpp:72
+#: ../src/generic/filedlgg.cpp:365 ../src/gtk/filedlg.cpp:73
 msgid "Please choose an existing file."
 msgstr "Пожалуйста, выберите существующий файл."
 
@@ -5817,22 +5913,25 @@ msgid "Please select the columns to show and define their order:"
 msgstr ""
 "Пожалуйста, выберите столбцы, чтобы посмотреть и определить их порядок:"
 
-#: ../src/common/prntbase.cpp:533
+#: ../src/common/prntbase.cpp:538
 #, fuzzy
 msgid "Please wait while printing..."
 msgstr "Пожалуйста, дождитесь окончания печати\n"
 
-#: ../src/propgrid/advprops.cpp:1717
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1728
 #, fuzzy
 msgid "Point Left"
 msgstr "Размер в точках"
 
-#: ../src/propgrid/advprops.cpp:1718
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1729
 #, fuzzy
 msgid "Point Right"
 msgstr "Выровнять вправо"
 
-#: ../src/propgrid/advprops.cpp:639
+#. TRANSLATORS: Label of font point size
+#: ../src/propgrid/advprops.cpp:648
 msgid "Point Size"
 msgstr "Размер в точках"
 
@@ -5869,11 +5968,11 @@ msgstr "Файл PostScript"
 msgid "Preferences"
 msgstr "Параметры"
 
-#: ../src/osx/menu_osx.cpp:626
+#: ../src/osx/menu_osx.cpp:606
 msgid "Preferences..."
 msgstr "Параметры..."
 
-#: ../src/common/prntbase.cpp:541
+#: ../src/common/prntbase.cpp:546
 msgid "Preparing"
 msgstr "Подготовка"
 
@@ -5882,24 +5981,24 @@ msgstr "Подготовка"
 msgid "Preview:"
 msgstr "Предварительный просмотр:"
 
-#: ../src/common/prntbase.cpp:1537 ../src/html/helpwnd.cpp:664
+#: ../src/common/prntbase.cpp:1553 ../src/html/helpwnd.cpp:664
 msgid "Previous page"
 msgstr "Предыдущая страница"
 
 #. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:75 ../src/common/prntbase.cpp:421
-#: ../src/common/prntbase.cpp:1525 ../src/generic/prntdlgg.cpp:143
-#: ../src/generic/prntdlgg.cpp:157 ../src/gtk/print.cpp:605
-#: ../src/gtk/print.cpp:618
+#: ../src/common/accelcmn.cpp:75 ../src/common/prntbase.cpp:426
+#: ../src/common/prntbase.cpp:1541 ../src/generic/prntdlgg.cpp:143
+#: ../src/generic/prntdlgg.cpp:157 ../src/gtk/print.cpp:604
+#: ../src/gtk/print.cpp:622
 msgid "Print"
 msgstr "Печать"
 
-#: ../include/wx/prntbase.h:399 ../src/common/docview.cpp:1257
+#: ../include/wx/prntbase.h:399 ../src/common/docview.cpp:1271
 msgid "Print Preview"
 msgstr "Предварительный просмотр печати"
 
-#: ../src/common/prntbase.cpp:1999 ../src/common/prntbase.cpp:2041
-#: ../src/common/prntbase.cpp:2049
+#: ../src/common/prntbase.cpp:2015 ../src/common/prntbase.cpp:2057
+#: ../src/common/prntbase.cpp:2065
 msgid "Print Preview Failure"
 msgstr "Ошибка предварительного просмотра печати"
 
@@ -5919,7 +6018,7 @@ msgstr "Печать в цвете"
 msgid "Print previe&w..."
 msgstr "П&редварительный просмотр"
 
-#: ../src/common/docview.cpp:1251
+#: ../src/common/docview.cpp:1265
 msgid "Print preview creation failed."
 msgstr "Сбой при создании предварительного просмотра печати."
 
@@ -5967,20 +6066,25 @@ msgstr "Принтер..."
 msgid "Printer:"
 msgstr "Принтер:"
 
-#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:530
+#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:535
 #: ../src/html/htmprint.cpp:277
 msgid "Printing"
 msgstr "Печать"
 
-#: ../src/common/prntbase.cpp:596
+#: ../src/common/prntbase.cpp:612
 msgid "Printing "
 msgstr "Идет печать "
 
-#: ../src/common/prntbase.cpp:342
+#: ../src/common/prntbase.cpp:347
 msgid "Printing Error"
 msgstr "Ошибка печати"
 
-#: ../src/common/prntbase.cpp:556
+#: ../src/common/prntbase.cpp:565
+#, fuzzy, c-format
+msgid "Printing page %d"
+msgstr "Печать страницы %d..."
+
+#: ../src/common/prntbase.cpp:570
 #, c-format
 msgid "Printing page %d of %d"
 msgstr "Печать страницы %d из %d"
@@ -5995,7 +6099,7 @@ msgid "Printing..."
 msgstr "Идет печать..."
 
 #: ../include/wx/prntbase.h:267 ../include/wx/richtext/richtextprint.h:109
-#: ../src/common/docview.cpp:2121
+#: ../src/common/docview.cpp:2135
 msgid "Printout"
 msgstr "Распечатка"
 
@@ -6011,7 +6115,7 @@ msgstr ""
 msgid "Progress renderer cannot render value type; value type: "
 msgstr "Прогресс визуализации и не может оказать тип значения; тип значения: "
 
-#: ../src/common/prntbase.cpp:540
+#: ../src/common/prntbase.cpp:545
 msgid "Progress:"
 msgstr ""
 
@@ -6023,12 +6127,13 @@ msgstr "Свойства"
 msgid "Property"
 msgstr "Свойство"
 
-#: ../src/propgrid/propgrid.cpp:3182 ../src/propgrid/propgrid.cpp:3314
+#. TRANSLATORS: Caption of message box displaying any property error
+#: ../src/propgrid/propgrid.cpp:3181 ../src/propgrid/propgrid.cpp:3314
 #, fuzzy
 msgid "Property Error"
 msgstr "Свойство"
 
-#: ../src/propgrid/advprops.cpp:1547
+#: ../src/propgrid/advprops.cpp:1558
 msgid "Purple"
 msgstr ""
 
@@ -6036,11 +6141,12 @@ msgstr ""
 msgid "Quarto, 215 x 275 mm"
 msgstr "Quarto, 215 x 275 мм"
 
-#: ../src/generic/logg.cpp:1034
+#: ../src/generic/logg.cpp:1036
 msgid "Question"
 msgstr "Вопрос"
 
-#: ../src/propgrid/advprops.cpp:1719
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1730
 #, fuzzy
 msgid "Question Arrow"
 msgstr "Вопрос"
@@ -6049,7 +6155,7 @@ msgstr "Вопрос"
 msgid "Quit"
 msgstr "Выход"
 
-#: ../src/osx/menu_osx.cpp:643
+#: ../src/osx/menu_osx.cpp:623
 #, c-format
 msgid "Quit %s"
 msgstr "Выход из %s"
@@ -6067,11 +6173,11 @@ msgstr "RawCtrl+"
 msgid "Read error on file '%s'"
 msgstr "Ошибка чтения файла '%s'"
 
-#: ../src/common/prntbase.cpp:267
+#: ../src/common/prntbase.cpp:272
 msgid "Ready"
 msgstr "Готов"
 
-#: ../src/propgrid/advprops.cpp:1555
+#: ../src/propgrid/advprops.cpp:1566
 #, fuzzy
 msgid "Red"
 msgstr "Повторить"
@@ -6152,7 +6258,7 @@ msgstr "Renderer \"%s\" несовместимой версии %d.%d не мо�
 msgid "Rendering failed."
 msgstr "Визуализация не удалась."
 
-#: ../src/richtext/richtextbuffer.cpp:4449
+#: ../src/richtext/richtextbuffer.cpp:4521
 msgid "Renumber List"
 msgstr "Перенумеровать Список"
 
@@ -6180,7 +6286,7 @@ msgstr "Заменить на:"
 msgid "Required information entry is empty."
 msgstr "Запись необходимой информации пуст."
 
-#: ../src/common/translation.cpp:1979
+#: ../src/common/translation.cpp:1975
 #, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "Ресурс '%s' не является допустимым каталогом сообщений."
@@ -6209,12 +6315,14 @@ msgstr "&Слева направо"
 msgid "Right"
 msgstr "Направо"
 
-#: ../src/propgrid/advprops.cpp:1704
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1715
 #, fuzzy
 msgid "Right Arrow"
 msgstr "Направо"
 
-#: ../src/propgrid/advprops.cpp:1720
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1731
 msgid "Right Button"
 msgstr ""
 
@@ -6242,7 +6350,7 @@ msgstr "Стандартное название маркера:"
 msgid "SPECIAL"
 msgstr "СПЕЦИАЛЬНЫЕ"
 
-#: ../src/common/sizer.cpp:2686 ../src/common/stockitem.cpp:190
+#: ../src/common/sizer.cpp:2807 ../src/common/stockitem.cpp:190
 msgid "Save"
 msgstr "Сохранить"
 
@@ -6251,11 +6359,11 @@ msgstr "Сохранить"
 msgid "Save %s file"
 msgstr "Сохранить файл %s"
 
-#: ../src/generic/logg.cpp:516
+#: ../src/generic/logg.cpp:518
 msgid "Save &As..."
 msgstr "Сохранить &как..."
 
-#: ../src/common/docview.cpp:360
+#: ../src/common/docview.cpp:366
 msgid "Save As"
 msgstr "Сохранить как"
 
@@ -6271,7 +6379,7 @@ msgstr "Сохранить текущий документ"
 msgid "Save current document with a different filename"
 msgstr "Сохранение текущего документа с другим именем"
 
-#: ../src/generic/logg.cpp:516
+#: ../src/generic/logg.cpp:518
 msgid "Save log contents to file"
 msgstr "Сохранить содержание журнала в файл"
 
@@ -6289,7 +6397,8 @@ msgstr ""
 msgid "Scroll_lock"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:862
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:876
 msgid "Scrollbar"
 msgstr ""
 
@@ -6350,11 +6459,11 @@ msgstr "Выделить вс&е"
 msgid "Select All"
 msgstr "Выбрать все"
 
-#: ../src/common/docview.cpp:1884
+#: ../src/common/docview.cpp:1898
 msgid "Select a document template"
 msgstr "Выберите шаблон документа"
 
-#: ../src/common/docview.cpp:1958
+#: ../src/common/docview.cpp:1972
 msgid "Select a document view"
 msgstr "Выберите вид документа"
 
@@ -6392,11 +6501,11 @@ msgstr ""
 msgid "Separator expected after the option '%s'."
 msgstr "После параметра '%s' ожидался разделитель."
 
-#: ../src/osx/menu_osx.cpp:630
+#: ../src/osx/menu_osx.cpp:610
 msgid "Services"
 msgstr "Службы"
 
-#: ../src/richtext/richtextbuffer.cpp:11055
+#: ../src/richtext/richtextbuffer.cpp:11208
 msgid "Set Cell Style"
 msgstr "Задать стиль ячейки"
 
@@ -6417,6 +6526,19 @@ msgid "Several active dialup connections found, choosing one randomly."
 msgstr ""
 "Найдено несколько активных подсоединений, выбираем одно случайным образом."
 
+#: ../src/richtext/richtextbackgroundpage.cpp:272
+msgid "Sh&adow spread:"
+msgstr ""
+
+#: ../src/richtext/richtextbackgroundpage.cpp:180
+msgid "Shadow"
+msgstr ""
+
+#: ../src/richtext/richtextbackgroundpage.cpp:259
+#, fuzzy
+msgid "Shadow c&olour:"
+msgstr "Выберите цвет"
+
 #: ../src/common/accelcmn.cpp:325
 msgid "Shift+"
 msgstr "Shift+"
@@ -6429,7 +6551,7 @@ msgstr "Показать &скрытые каталоги"
 msgid "Show &hidden files"
 msgstr "Показать &скрытые файлы"
 
-#: ../src/osx/menu_osx.cpp:638
+#: ../src/osx/menu_osx.cpp:618
 msgid "Show All"
 msgstr "Показать все"
 
@@ -6483,7 +6605,7 @@ msgstr "Показывает предварительный просмотр п�
 msgid "Shows the font preview."
 msgstr "Показать предварительный просмотр шрифта"
 
-#: ../src/propgrid/advprops.cpp:1557
+#: ../src/propgrid/advprops.cpp:1568
 msgid "Silver"
 msgstr ""
 
@@ -6505,27 +6627,32 @@ msgstr "Размер"
 msgid "Size:"
 msgstr "Размер:"
 
-#: ../src/propgrid/advprops.cpp:1725
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1736
 msgid "Sizing"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1722
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1733
 msgid "Sizing N-S"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1721
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1732
 msgid "Sizing NE-SW"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1723
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1734
 msgid "Sizing NW-SE"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1724
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1735
 msgid "Sizing W-E"
 msgstr ""
 
-#: ../src/generic/progdlgg.cpp:263 ../src/generic/progdlgg.cpp:774
+#: ../src/generic/progdlgg.cpp:263 ../src/generic/progdlgg.cpp:776
 #: ../src/msw/progdlg.cpp:801
 msgid "Skip"
 msgstr "Пропустить"
@@ -6547,11 +6674,11 @@ msgstr ""
 msgid "Solid"
 msgstr ""
 
-#: ../src/common/docview.cpp:1780
+#: ../src/common/docview.cpp:1794
 msgid "Sorry, could not open this file."
 msgstr "Извините, этот файл не может быть открыт."
 
-#: ../src/common/prntbase.cpp:2041 ../src/common/prntbase.cpp:2049
+#: ../src/common/prntbase.cpp:2057 ../src/common/prntbase.cpp:2065
 msgid "Sorry, not enough memory to create a preview."
 msgstr ""
 "Извините, недостаточно памяти для создания окна предварительного просмотра."
@@ -6564,7 +6691,7 @@ msgstr ""
 msgid "Sorry, that name is taken. Please choose another."
 msgstr "Извините, что название взято. Пожалуйста, выберите другое."
 
-#: ../src/common/docview.cpp:1803
+#: ../src/common/docview.cpp:1817
 msgid "Sorry, the format for this file is unknown."
 msgstr "Извините, формат этого файла неизвестен."
 
@@ -6591,7 +6718,8 @@ msgstr "Интервал"
 msgid "Spell Check"
 msgstr "Проверка правописания"
 
-#: ../src/propgrid/advprops.cpp:1726
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1737
 msgid "Spraycan"
 msgstr ""
 
@@ -6626,7 +6754,8 @@ msgstr "Перечеркивание"
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr "Строка в цвет : Неверная спецификация цвета : %s"
 
-#: ../src/propgrid/advprops.cpp:655 ../src/richtext/richtextformatdlg.cpp:337
+#. TRANSLATORS: Label of font style
+#: ../src/propgrid/advprops.cpp:666 ../src/richtext/richtextformatdlg.cpp:337
 msgid "Style"
 msgstr "Стиль"
 
@@ -6712,7 +6841,7 @@ msgstr "TIFF: размер Изображения слишком большой.
 msgid "Tab"
 msgstr "Вкладки"
 
-#: ../src/richtext/richtextbuffer.cpp:11336
+#: ../src/richtext/richtextbuffer.cpp:11489
 msgid "Table Properties"
 msgstr "Свойства таблицы"
 
@@ -6728,7 +6857,7 @@ msgstr "Tabloid, 11 x 17 дюйма"
 msgid "Tabs"
 msgstr "Вкладки"
 
-#: ../src/propgrid/advprops.cpp:1548
+#: ../src/propgrid/advprops.cpp:1559
 msgid "Teal"
 msgstr ""
 
@@ -6736,7 +6865,7 @@ msgstr ""
 msgid "Teletype"
 msgstr "Телетайп"
 
-#: ../src/common/docview.cpp:1885
+#: ../src/common/docview.cpp:1899
 msgid "Templates"
 msgstr "Шаблоны"
 
@@ -6768,8 +6897,8 @@ msgstr "Доступные стили списка."
 msgid "The available styles."
 msgstr "Доступные стили."
 
-#: ../src/richtext/richtextbackgroundpage.cpp:139
-#: ../src/richtext/richtextbackgroundpage.cpp:141
+#: ../src/richtext/richtextbackgroundpage.cpp:169
+#: ../src/richtext/richtextbackgroundpage.cpp:171
 msgid "The background colour."
 msgstr "Цвет фона."
 
@@ -6869,7 +6998,7 @@ msgstr ""
 "\n"
 "Хотели бы вы, чтобы продолжить печать, она все-таки?"
 
-#: ../src/common/docview.cpp:1191
+#: ../src/common/docview.cpp:1205
 #, fuzzy, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -6883,7 +7012,7 @@ msgstr "Он был удален из списка наиболее часто �
 msgid "The first line indent."
 msgstr "Отступ первой строки."
 
-#: ../src/gtk/utilsgtk.cpp:432
+#: ../src/gtk/utilsgtk.cpp:438
 msgid "The following standard GTK+ options are also supported:\n"
 msgstr "Следующий стандарт GTK+ опции также поддерживаются:\n"
 
@@ -6923,10 +7052,16 @@ msgstr "Стиль шрифта."
 msgid "The font weight."
 msgstr "Толщина шрифта."
 
-#: ../src/common/docview.cpp:1472
+#: ../src/common/docview.cpp:1486
 #, c-format
 msgid "The format of file '%s' couldn't be determined."
 msgstr "Формат файла '%s' не удалось определить."
+
+#: ../src/richtext/richtextbackgroundpage.cpp:220
+#: ../src/richtext/richtextbackgroundpage.cpp:222
+#, fuzzy
+msgid "The horizontal offset."
+msgstr "&Горизонтальная черепица"
 
 #: ../src/richtext/richtextindentspage.cpp:199
 #: ../src/richtext/richtextindentspage.cpp:201
@@ -7014,8 +7149,8 @@ msgstr "Уровень структуры."
 
 #: ../src/common/log.cpp:281
 #, fuzzy, c-format
-msgid "The previous message repeated %lu time."
-msgid_plural "The previous message repeated %lu times."
+msgid "The previous message repeated %u time."
+msgid_plural "The previous message repeated %u times."
 msgstr[0] "Предыдущее сообщение повторяется один раз."
 msgstr[1] "Предыдущее сообщение повторяется %lu раза."
 msgstr[2] "Предыдущее сообщение повторяется %lu раз."
@@ -7071,6 +7206,27 @@ msgstr "Отступ справа."
 #, fuzzy
 msgid "The right position."
 msgstr "Позиция табуляции."
+
+#: ../src/richtext/richtextbackgroundpage.cpp:310
+#: ../src/richtext/richtextbackgroundpage.cpp:312
+msgid "The shadow blur distance."
+msgstr ""
+
+#: ../src/richtext/richtextbackgroundpage.cpp:267
+#: ../src/richtext/richtextbackgroundpage.cpp:269
+#, fuzzy
+msgid "The shadow colour."
+msgstr "Цвет шрифта."
+
+#: ../src/richtext/richtextbackgroundpage.cpp:337
+#: ../src/richtext/richtextbackgroundpage.cpp:339
+msgid "The shadow opacity."
+msgstr ""
+
+#: ../src/richtext/richtextbackgroundpage.cpp:283
+#: ../src/richtext/richtextbackgroundpage.cpp:285
+msgid "The shadow spread."
+msgstr ""
 
 #: ../src/richtext/richtextindentspage.cpp:267
 #: ../src/richtext/richtextliststylepage.cpp:439
@@ -7156,11 +7312,17 @@ msgstr ""
 "Версия сервиса удаленного доступа (RAS), установленного на этой машине, "
 "слишком устарела, пожалуйста, обновите его (функция %s не найдена)."
 
+#: ../src/richtext/richtextbackgroundpage.cpp:243
+#: ../src/richtext/richtextbackgroundpage.cpp:245
+#, fuzzy
+msgid "The vertical offset."
+msgstr "Не удалось установить выравнивание."
+
 #: ../src/osx/carbon/dataview.cpp:1338
 msgid "There is no column or renderer for the specified column index."
 msgstr "Нет столбца или визуализации для указанного столбца индекса."
 
-#: ../src/html/htmprint.cpp:735 ../src/richtext/richtextprint.cpp:614
+#: ../src/html/htmprint.cpp:740 ../src/richtext/richtextprint.cpp:619
 msgid ""
 "There was a problem during page setup: you may need to set a default printer."
 msgstr ""
@@ -7175,16 +7337,16 @@ msgstr ""
 "Этот документ не помещается на странице, горизонтально и будут обрезаны при "
 "печати."
 
-#: ../src/common/image.cpp:2718
+#: ../src/common/image.cpp:2720
 #, fuzzy, c-format
 msgid "This is not a %s."
 msgstr "PCX: это не файл PCX."
 
-#: ../src/common/wincmn.cpp:1653
+#: ../src/common/wincmn.cpp:1670
 msgid "This platform does not support background transparency."
 msgstr ""
 
-#: ../src/gtk/window.cpp:4562
+#: ../src/gtk/window.cpp:4568
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -7198,7 +7360,7 @@ msgstr ""
 "Эта система не поддерживает элементы управления датой, пожалуйста, обновите "
 "версию comctl32.dll"
 
-#: ../src/msw/thread.cpp:1249
+#: ../src/msw/thread.cpp:1251
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
@@ -7210,7 +7372,7 @@ msgstr ""
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr "Ошибка инициализации модуля потоков: не удалось создать ключ потока"
 
-#: ../src/msw/thread.cpp:1237
+#: ../src/msw/thread.cpp:1239
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
@@ -7222,11 +7384,11 @@ msgstr ""
 msgid "Thread priority setting is ignored."
 msgstr "Установка приоритета потока проигнорирована."
 
-#: ../src/msw/mdi.cpp:173
+#: ../src/msw/mdi.cpp:176
 msgid "Tile &Horizontally"
 msgstr "&Горизонтальная черепица"
 
-#: ../src/msw/mdi.cpp:174
+#: ../src/msw/mdi.cpp:177
 msgid "Tile &Vertically"
 msgstr "&Вертикальная черепица"
 
@@ -7252,7 +7414,7 @@ msgstr "До:"
 msgid "Toggle renderer cannot render value; value type: "
 msgstr "Переключение визуализации и не может оказать значение; значение типа: "
 
-#: ../src/richtext/richtextbuffer.cpp:8279
+#: ../src/richtext/richtextbuffer.cpp:8356
 msgid "Too many EndStyle calls!"
 msgstr "Слишком много EndStyle звонки!"
 
@@ -7260,11 +7422,13 @@ msgstr "Слишком много EndStyle звонки!"
 msgid "Too many colours in PNG, the image may be slightly blurred."
 msgstr "Слишком много цветов в PNG, изображение может быть слегка размыто."
 
-#: ../src/propgrid/advprops.cpp:863
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:877
 msgid "Tooltip"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:864
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:878
 msgid "TooltipText"
 msgstr ""
 
@@ -7285,7 +7449,8 @@ msgstr "Переводы "
 msgid "Translators"
 msgstr "Переводчики"
 
-#: ../src/propgrid/propgrid.cpp:189
+#. TRANSLATORS: Name of Boolean true value
+#: ../src/propgrid/propgrid.cpp:210
 msgid "True"
 msgstr "True"
 
@@ -7322,7 +7487,7 @@ msgstr ""
 msgid "Type must have enum - long conversion"
 msgstr "Тип должен иметь перечисление - длинное преобразование"
 
-#: ../src/propgrid/propgridiface.cpp:400
+#: ../src/propgrid/propgridiface.cpp:391
 #, c-format
 msgid ""
 "Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT "
@@ -7452,7 +7617,8 @@ msgstr "Отмена удаления"
 msgid "Underline"
 msgstr "Подчеркивание"
 
-#: ../src/osx/carbon/fontdlg.cpp:540 ../src/propgrid/advprops.cpp:663
+#. TRANSLATORS: Label of underlined font
+#: ../src/osx/carbon/fontdlg.cpp:540 ../src/propgrid/advprops.cpp:676
 #: ../src/richtext/richtextfontpage.cpp:357
 msgid "Underlined"
 msgstr "Подчеркнутый"
@@ -7670,7 +7836,19 @@ msgstr ""
 msgid "Units for the top position."
 msgstr "Позиция табуляции."
 
-#: ../src/generic/progdlgg.cpp:383 ../src/generic/progdlgg.cpp:656
+#: ../src/richtext/richtextbackgroundpage.cpp:231
+#: ../src/richtext/richtextbackgroundpage.cpp:233
+#: ../src/richtext/richtextbackgroundpage.cpp:254
+#: ../src/richtext/richtextbackgroundpage.cpp:256
+#: ../src/richtext/richtextbackgroundpage.cpp:294
+#: ../src/richtext/richtextbackgroundpage.cpp:296
+#: ../src/richtext/richtextbackgroundpage.cpp:321
+#: ../src/richtext/richtextbackgroundpage.cpp:323
+#, fuzzy
+msgid "Units for this value."
+msgstr "Позиция табуляции."
+
+#: ../src/generic/progdlgg.cpp:385 ../src/generic/progdlgg.cpp:658
 msgid "Unknown"
 msgstr "Неизвестный"
 
@@ -7721,7 +7899,7 @@ msgstr "Неизвестная ошибка DDE %08x"
 msgid "Unknown exception"
 msgstr "Неизвестный параметр '%s'"
 
-#: ../src/common/image.cpp:2703
+#: ../src/common/image.cpp:2705
 #, fuzzy
 msgid "Unknown image data format."
 msgstr "Неизвестный формат данных"
@@ -7751,7 +7929,8 @@ msgstr "Незакрытая скобка '{' в записи для типа mi
 msgid "Unnamed command"
 msgstr "Безимянная команда"
 
-#: ../src/propgrid/propgrid.cpp:411
+#. TRANSLATORS: Text  displayed for unspecified value
+#: ../src/propgrid/propgrid.cpp:410
 msgid "Unspecified"
 msgstr "Не указано"
 
@@ -7785,6 +7964,10 @@ msgstr "Римские цифры в верхнем регистре"
 msgid "Usage: %s"
 msgstr "Использование: %s"
 
+#: ../src/richtext/richtextbackgroundpage.cpp:195
+msgid "Use &shadow"
+msgstr ""
+
 #: ../src/richtext/richtextindentspage.cpp:169
 #: ../src/richtext/richtextindentspage.cpp:171
 #: ../src/richtext/richtextliststylepage.cpp:358
@@ -7804,18 +7987,18 @@ msgstr "Конфликт проверки"
 msgid "Value"
 msgstr "Значение"
 
-#: ../src/propgrid/props.cpp:385 ../src/propgrid/props.cpp:494
+#: ../src/propgrid/props.cpp:385 ../src/propgrid/props.cpp:492
 #, fuzzy, c-format
 msgid "Value must be %s or higher."
 msgstr "Значение должно быть %f или выше"
 
-#: ../src/propgrid/props.cpp:412 ../src/propgrid/props.cpp:521
+#: ../src/propgrid/props.cpp:412 ../src/propgrid/props.cpp:519
 #, fuzzy, c-format
 msgid "Value must be %s or less."
 msgstr "Значение должно быть %f или менее"
 
 #: ../src/propgrid/props.cpp:389 ../src/propgrid/props.cpp:416
-#: ../src/propgrid/props.cpp:498 ../src/propgrid/props.cpp:525
+#: ../src/propgrid/props.cpp:496 ../src/propgrid/props.cpp:523
 #, fuzzy, c-format
 msgid "Value must be between %s and %s."
 msgstr "Значение должно быть %f или менее"
@@ -7838,15 +8021,17 @@ msgstr "Просмотр файлов в виде подробного спис�
 msgid "View files as a list view"
 msgstr "Просмотр файлов в виде списка"
 
-#: ../src/common/docview.cpp:1959
+#: ../src/common/docview.cpp:1973
 msgid "Views"
 msgstr "Виды"
 
-#: ../src/propgrid/advprops.cpp:1727
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1738
 msgid "Wait"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1729
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1740
 msgid "Wait Arrow"
 msgstr ""
 
@@ -7859,11 +8044,13 @@ msgstr "Ошибка ожидания ввода/ввывода от epoll де�
 msgid "Warning: "
 msgstr "Предупреждение: "
 
-#: ../src/propgrid/advprops.cpp:1728
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1739
 msgid "Watch"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:659
+#. TRANSLATORS: Label of font weight
+#: ../src/propgrid/advprops.cpp:671
 msgid "Weight"
 msgstr "Вес"
 
@@ -7879,7 +8066,7 @@ msgstr "Западно-европейский с символом Евро (ISO-
 msgid "Whether the font is underlined."
 msgstr "Либо шрифт будет подчеркнут."
 
-#: ../src/propgrid/advprops.cpp:1561
+#: ../src/propgrid/advprops.cpp:1572
 msgid "White"
 msgstr ""
 
@@ -7895,58 +8082,66 @@ msgstr "Только слова целиком"
 msgid "Win32 theme"
 msgstr "Тема Win32"
 
-#: ../src/msw/utils.cpp:1111
+#: ../src/msw/utils.cpp:1133
 msgid "Win32s on Windows 3.1"
 msgstr "Win32s на Windows 3.1"
 
-#: ../src/propgrid/advprops.cpp:865
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:879
 #, fuzzy
 msgid "Window"
 msgstr "&Окно"
 
-#: ../src/propgrid/advprops.cpp:866
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:880
 #, fuzzy
 msgid "WindowFrame"
 msgstr "&Окно"
 
-#: ../src/propgrid/advprops.cpp:867
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:881
 #, fuzzy
 msgid "WindowText"
 msgstr "&Окно"
 
-#: ../src/msw/utils.cpp:1161
+#: ../src/msw/utils.cpp:1233
+#, fuzzy
+msgid "Windows 10"
+msgstr "Windows 8.1"
+
+#: ../src/msw/utils.cpp:1183
 msgid "Windows 2000"
 msgstr "Windows 2000"
 
-#: ../src/msw/utils.cpp:1193
+#: ../src/msw/utils.cpp:1215
 msgid "Windows 7"
 msgstr "Windows 7"
 
-#: ../src/msw/utils.cpp:1199
+#: ../src/msw/utils.cpp:1221
 msgid "Windows 8"
 msgstr "Windows 8"
 
-#: ../src/msw/utils.cpp:1205
+#: ../src/msw/utils.cpp:1227
 msgid "Windows 8.1"
 msgstr "Windows 8.1"
 
-#: ../src/msw/utils.cpp:1125
+#: ../src/msw/utils.cpp:1147
 msgid "Windows 95"
 msgstr "Windows 95"
 
-#: ../src/msw/utils.cpp:1121
+#: ../src/msw/utils.cpp:1143
 msgid "Windows 95 OSR2"
 msgstr "Windows 95 OSR2"
 
-#: ../src/msw/utils.cpp:1136
+#: ../src/msw/utils.cpp:1158
 msgid "Windows 98"
 msgstr "Windows 98"
 
-#: ../src/msw/utils.cpp:1132
+#: ../src/msw/utils.cpp:1154
 msgid "Windows 98 SE"
 msgstr "Windows 98 SE"
 
-#: ../src/msw/utils.cpp:1143
+#: ../src/msw/utils.cpp:1165
 #, c-format
 msgid "Windows 9x (%d.%d)"
 msgstr "Windows 9x (%d.%d)"
@@ -7959,7 +8154,7 @@ msgstr "Арабский Windows (CP 1256)"
 msgid "Windows Baltic (CP 1257)"
 msgstr "Балтийский Windows (CP 1257)"
 
-#: ../src/msw/utils.cpp:1105
+#: ../src/msw/utils.cpp:1127
 #, c-format
 msgid "Windows CE (%d.%d)"
 msgstr "Windows CE (%d.%d)"
@@ -8000,32 +8195,37 @@ msgstr ""
 msgid "Windows Korean (CP 949)"
 msgstr "Корейский Windows (CP 949)"
 
-#: ../src/msw/utils.cpp:1140
+#: ../src/msw/utils.cpp:1162
 msgid "Windows ME"
 msgstr "Windows ME"
 
-#: ../src/msw/utils.cpp:1213
+#: ../src/msw/utils.cpp:1241
 #, c-format
 msgid "Windows NT %lu.%lu"
 msgstr "Windows NT %lu.%lu"
 
-#: ../src/msw/utils.cpp:1170
+#: ../src/msw/utils.cpp:1232
+#, fuzzy
+msgid "Windows Server 10"
+msgstr "Windows Server 2003"
+
+#: ../src/msw/utils.cpp:1192
 msgid "Windows Server 2003"
 msgstr "Windows Server 2003"
 
-#: ../src/msw/utils.cpp:1186
+#: ../src/msw/utils.cpp:1208
 msgid "Windows Server 2008"
 msgstr "Windows Server 2008"
 
-#: ../src/msw/utils.cpp:1192
+#: ../src/msw/utils.cpp:1214
 msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2008 R2"
 
-#: ../src/msw/utils.cpp:1198
+#: ../src/msw/utils.cpp:1220
 msgid "Windows Server 2012"
 msgstr "Windows Server 2012"
 
-#: ../src/msw/utils.cpp:1204
+#: ../src/msw/utils.cpp:1226
 msgid "Windows Server 2012 R2"
 msgstr "Windows Server 2012 R2"
 
@@ -8041,7 +8241,7 @@ msgstr "Турецкий Windows (CP 1254)"
 msgid "Windows Vietnamese (CP 1258)"
 msgstr "Вьетнамский Windows (CP 1258)"
 
-#: ../src/msw/utils.cpp:1187
+#: ../src/msw/utils.cpp:1209
 msgid "Windows Vista"
 msgstr "Windows Vista"
 
@@ -8049,7 +8249,7 @@ msgstr "Windows Vista"
 msgid "Windows Western European (CP 1252)"
 msgstr "Западно-европейский Windows (CP 1252)"
 
-#: ../src/msw/utils.cpp:1176
+#: ../src/msw/utils.cpp:1198
 msgid "Windows XP"
 msgstr "Windows XP"
 
@@ -8084,7 +8284,7 @@ msgstr "Windows Vista"
 msgid "Write error on file '%s'"
 msgstr "Ошибка записи в файл '%s'"
 
-#: ../src/xml/xml.cpp:844
+#: ../src/xml/xml.cpp:914
 #, c-format
 msgid "XML parsing error: '%s' at line %d"
 msgstr "Ошибка разбора XML: '%s' в строке %d"
@@ -8116,7 +8316,7 @@ msgstr "XPM: нет цвета слева использовать для мас
 msgid "XPM: truncated image data at line %d!"
 msgstr "XPM-усеченный изображения данных в строке %d!"
 
-#: ../src/propgrid/advprops.cpp:1560
+#: ../src/propgrid/advprops.cpp:1571
 msgid "Yellow"
 msgstr ""
 
@@ -8137,7 +8337,7 @@ msgstr "Нельзя Init наложения два раза"
 msgid "You cannot add a new directory to this section."
 msgstr "Вы не можете добавить новый каталог в эту секцию."
 
-#: ../src/propgrid/propgrid.cpp:3296
+#: ../src/propgrid/propgrid.cpp:3295
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr ""
 
@@ -8149,11 +8349,11 @@ msgstr "&Увеличить"
 msgid "Zoom &Out"
 msgstr "У&меньшить"
 
-#: ../src/common/prntbase.cpp:1578 ../src/common/stockitem.cpp:209
+#: ../src/common/prntbase.cpp:1594 ../src/common/stockitem.cpp:209
 msgid "Zoom In"
 msgstr "Увеличить"
 
-#: ../src/common/prntbase.cpp:1564 ../src/common/stockitem.cpp:210
+#: ../src/common/prntbase.cpp:1580 ../src/common/stockitem.cpp:210
 msgid "Zoom Out"
 msgstr "Уменьшить"
 
@@ -8286,11 +8486,11 @@ msgstr "неверное смещение в элемент у zipfile"
 msgid "binary"
 msgstr "двоичный"
 
-#: ../src/common/fontcmn.cpp:988
+#: ../src/common/fontcmn.cpp:989
 msgid "bold"
 msgstr "жирный"
 
-#: ../src/msw/utils.cpp:1219
+#: ../src/msw/utils.cpp:1247
 #, c-format
 msgid "build %lu"
 msgstr "сборка %lu"
@@ -8428,6 +8628,10 @@ msgstr "ошибка контрольной суммы"
 msgid "checksum failure reading tar header block"
 msgstr "ошибка контрольной суммы читая заголовок блока tar"
 
+#: ../src/richtext/richtextbackgroundpage.cpp:227
+#: ../src/richtext/richtextbackgroundpage.cpp:250
+#: ../src/richtext/richtextbackgroundpage.cpp:290
+#: ../src/richtext/richtextbackgroundpage.cpp:317
 #: ../src/richtext/richtextborderspage.cpp:256
 #: ../src/richtext/richtextborderspage.cpp:290
 #: ../src/richtext/richtextborderspage.cpp:324
@@ -8490,15 +8694,15 @@ msgstr "двухместный"
 msgid "dump of the process state (binary)"
 msgstr "дамп состояния процесса (двоичный)"
 
-#: ../src/common/datetimefmt.cpp:1964
+#: ../src/common/datetimefmt.cpp:1974
 msgid "eighteenth"
 msgstr "восемнадцатый"
 
-#: ../src/common/datetimefmt.cpp:1954
+#: ../src/common/datetimefmt.cpp:1964
 msgid "eighth"
 msgstr "восьмой"
 
-#: ../src/common/datetimefmt.cpp:1957
+#: ../src/common/datetimefmt.cpp:1967
 msgid "eleventh"
 msgstr "одиннадцатый"
 
@@ -8538,11 +8742,11 @@ msgstr "ошибка записи элемента zip '%s': неверная д
 msgid "failed to flush the file '%s'"
 msgstr "ошибка сброса буфера файла '%s'."
 
-#: ../src/common/datetimefmt.cpp:1961
+#: ../src/common/datetimefmt.cpp:1971
 msgid "fifteenth"
 msgstr "пятнадцатый"
 
-#: ../src/common/datetimefmt.cpp:1951
+#: ../src/common/datetimefmt.cpp:1961
 msgid "fifth"
 msgstr "пятый"
 
@@ -8572,11 +8776,11 @@ msgstr ""
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "файл '%s': неожиданный символ %c в строке %d."
 
-#: ../src/richtext/richtextbuffer.cpp:8654
+#: ../src/richtext/richtextbuffer.cpp:8731
 msgid "files"
 msgstr "файлы"
 
-#: ../src/common/datetimefmt.cpp:1947
+#: ../src/common/datetimefmt.cpp:1957
 msgid "first"
 msgstr "первый"
 
@@ -8584,11 +8788,11 @@ msgstr "первый"
 msgid "font size"
 msgstr "размер шрифта"
 
-#: ../src/common/datetimefmt.cpp:1960
+#: ../src/common/datetimefmt.cpp:1970
 msgid "fourteenth"
 msgstr "четырнадцатый"
 
-#: ../src/common/datetimefmt.cpp:1950
+#: ../src/common/datetimefmt.cpp:1960
 msgid "fourth"
 msgstr "четвертый"
 
@@ -8596,8 +8800,8 @@ msgstr "четвертый"
 msgid "generate verbose log messages"
 msgstr "генерировать подробные сообщения отладки"
 
-#: ../src/richtext/richtextbuffer.cpp:12932
-#: ../src/richtext/richtextbuffer.cpp:13042
+#: ../src/richtext/richtextbuffer.cpp:13085
+#: ../src/richtext/richtextbuffer.cpp:13195
 msgid "image"
 msgstr "изображения"
 
@@ -8617,7 +8821,7 @@ msgstr "неправильные размеры даны для записи tar
 msgid "invalid data in extended tar header"
 msgstr "поврежденных данных в расширенном tar заголовка"
 
-#: ../src/generic/logg.cpp:1048
+#: ../src/generic/logg.cpp:1050
 msgid "invalid message box return value"
 msgstr "недопустимое значение возврата из окна сообщения"
 
@@ -8625,11 +8829,11 @@ msgstr "недопустимое значение возврата из окна
 msgid "invalid zip file"
 msgstr "неверный файл zip"
 
-#: ../src/common/fontcmn.cpp:993
+#: ../src/common/fontcmn.cpp:994
 msgid "italic"
 msgstr "курсив"
 
-#: ../src/common/fontcmn.cpp:983
+#: ../src/common/fontcmn.cpp:984
 msgid "light"
 msgstr "светлый"
 
@@ -8638,15 +8842,15 @@ msgstr "светлый"
 msgid "locale '%s' cannot be set."
 msgstr "локаль '%s' не может быть установлена."
 
-#: ../src/common/datetimefmt.cpp:2120
+#: ../src/common/datetimefmt.cpp:2130
 msgid "midnight"
 msgstr "полночь"
 
-#: ../src/common/datetimefmt.cpp:1965
+#: ../src/common/datetimefmt.cpp:1975
 msgid "nineteenth"
 msgstr "девятнадцатый"
 
-#: ../src/common/datetimefmt.cpp:1955
+#: ../src/common/datetimefmt.cpp:1965
 msgid "ninth"
 msgstr "девятый"
 
@@ -8667,7 +8871,7 @@ msgstr "шрифтов не нашел в %s, используя встроен�
 msgid "noname"
 msgstr "без имени"
 
-#: ../src/common/datetimefmt.cpp:2119
+#: ../src/common/datetimefmt.cpp:2129
 msgid "noon"
 msgstr "полдень"
 
@@ -8691,6 +8895,10 @@ msgstr "недостаточно памяти"
 msgid "process context description"
 msgstr "описание контекста процесса"
 
+#: ../src/richtext/richtextbackgroundpage.cpp:228
+#: ../src/richtext/richtextbackgroundpage.cpp:251
+#: ../src/richtext/richtextbackgroundpage.cpp:291
+#: ../src/richtext/richtextbackgroundpage.cpp:318
 #: ../src/richtext/richtextborderspage.cpp:257
 #: ../src/richtext/richtextborderspage.cpp:291
 #: ../src/richtext/richtextborderspage.cpp:325
@@ -8705,6 +8913,18 @@ msgstr "описание контекста процесса"
 msgid "pt"
 msgstr "pt"
 
+#: ../src/richtext/richtextbackgroundpage.cpp:226
+#: ../src/richtext/richtextbackgroundpage.cpp:229
+#: ../src/richtext/richtextbackgroundpage.cpp:230
+#: ../src/richtext/richtextbackgroundpage.cpp:249
+#: ../src/richtext/richtextbackgroundpage.cpp:252
+#: ../src/richtext/richtextbackgroundpage.cpp:253
+#: ../src/richtext/richtextbackgroundpage.cpp:289
+#: ../src/richtext/richtextbackgroundpage.cpp:292
+#: ../src/richtext/richtextbackgroundpage.cpp:293
+#: ../src/richtext/richtextbackgroundpage.cpp:316
+#: ../src/richtext/richtextbackgroundpage.cpp:319
+#: ../src/richtext/richtextbackgroundpage.cpp:320
 #: ../src/richtext/richtextborderspage.cpp:255
 #: ../src/richtext/richtextborderspage.cpp:258
 #: ../src/richtext/richtextborderspage.cpp:259
@@ -8812,7 +9032,7 @@ msgstr "чтение потока zip (точка входа %s): неверна
 msgid "reentrancy problem."
 msgstr "проблема повторного входа."
 
-#: ../src/common/datetimefmt.cpp:1948
+#: ../src/common/datetimefmt.cpp:1958
 msgid "second"
 msgstr "второй"
 
@@ -8820,11 +9040,11 @@ msgstr "второй"
 msgid "seek error"
 msgstr "ошибка сдвига"
 
-#: ../src/common/datetimefmt.cpp:1963
+#: ../src/common/datetimefmt.cpp:1973
 msgid "seventeenth"
 msgstr "семнадцатый"
 
-#: ../src/common/datetimefmt.cpp:1953
+#: ../src/common/datetimefmt.cpp:1963
 msgid "seventh"
 msgstr "седьмой"
 
@@ -8836,11 +9056,11 @@ msgstr "shift"
 msgid "show this help message"
 msgstr "показать это справочное сообщение"
 
-#: ../src/common/datetimefmt.cpp:1962
+#: ../src/common/datetimefmt.cpp:1972
 msgid "sixteenth"
 msgstr "шестнадцатый"
 
-#: ../src/common/datetimefmt.cpp:1952
+#: ../src/common/datetimefmt.cpp:1962
 msgid "sixth"
 msgstr "шестой"
 
@@ -8852,23 +9072,23 @@ msgstr "укажите используемый режим экрана (нап�
 msgid "specify the theme to use"
 msgstr "укажите тему для использования"
 
-#: ../src/richtext/richtextbuffer.cpp:9180
+#: ../src/richtext/richtextbuffer.cpp:9333
 msgid "standard/circle"
 msgstr "стандартный/круг"
 
-#: ../src/richtext/richtextbuffer.cpp:9181
+#: ../src/richtext/richtextbuffer.cpp:9334
 msgid "standard/circle-outline"
 msgstr "стандартный/circle-outline"
 
-#: ../src/richtext/richtextbuffer.cpp:9183
+#: ../src/richtext/richtextbuffer.cpp:9336
 msgid "standard/diamond"
 msgstr "стандартный/diamond"
 
-#: ../src/richtext/richtextbuffer.cpp:9182
+#: ../src/richtext/richtextbuffer.cpp:9335
 msgid "standard/square"
 msgstr "стандартный/кв."
 
-#: ../src/richtext/richtextbuffer.cpp:9184
+#: ../src/richtext/richtextbuffer.cpp:9337
 msgid "standard/triangle"
 msgstr "стандартный/треугольник"
 
@@ -8880,7 +9100,7 @@ msgstr "сохраненная длина файла не находится в 
 msgid "str"
 msgstr "str"
 
-#: ../src/common/fontcmn.cpp:804 ../src/common/fontcmn.cpp:979
+#: ../src/common/fontcmn.cpp:980
 msgid "strikethrough"
 msgstr "перечеркивание"
 
@@ -8889,7 +9109,7 @@ msgstr "перечеркивание"
 msgid "tar entry not open"
 msgstr "tar не открыта запись"
 
-#: ../src/common/datetimefmt.cpp:1956
+#: ../src/common/datetimefmt.cpp:1966
 msgid "tenth"
 msgstr "десятый"
 
@@ -8897,19 +9117,19 @@ msgstr "десятый"
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
 msgstr "ответ транзакции вызвал установку бита DDE_FBUSY."
 
-#: ../src/common/datetimefmt.cpp:1949
+#: ../src/common/datetimefmt.cpp:1959
 msgid "third"
 msgstr "третий"
 
-#: ../src/common/datetimefmt.cpp:1959
+#: ../src/common/datetimefmt.cpp:1969
 msgid "thirteenth"
 msgstr "тринадцатый"
 
-#: ../src/common/datetimefmt.cpp:1753
+#: ../src/common/datetimefmt.cpp:1763
 msgid "today"
 msgstr "сегодня"
 
-#: ../src/common/datetimefmt.cpp:1755
+#: ../src/common/datetimefmt.cpp:1765
 msgid "tomorrow"
 msgstr "завтра"
 
@@ -8922,15 +9142,15 @@ msgstr "косую черту игнорируется в '%s'"
 msgid "translator-credits"
 msgstr "переводчик-кредиты"
 
-#: ../src/common/datetimefmt.cpp:1958
+#: ../src/common/datetimefmt.cpp:1968
 msgid "twelfth"
 msgstr "двенадцатый"
 
-#: ../src/common/datetimefmt.cpp:1966
+#: ../src/common/datetimefmt.cpp:1976
 msgid "twentieth"
 msgstr "двадцатый"
 
-#: ../src/common/fontcmn.cpp:799 ../src/common/fontcmn.cpp:975
+#: ../src/common/fontcmn.cpp:800 ../src/common/fontcmn.cpp:976
 msgid "underlined"
 msgstr "подчеркнутый"
 
@@ -8944,7 +9164,7 @@ msgid "unexpected end of file"
 msgstr "неожиданный конец файла"
 
 #: ../src/common/tarstrm.cpp:371 ../src/common/tarstrm.cpp:394
-#: ../src/common/tarstrm.cpp:425 ../src/generic/progdlgg.cpp:400
+#: ../src/common/tarstrm.cpp:425 ../src/generic/progdlgg.cpp:402
 msgid "unknown"
 msgstr "неизвестный"
 
@@ -8971,11 +9191,11 @@ msgstr "неизвестное начало сдвига"
 msgid "unknown-%d"
 msgstr "неизвестный-%d"
 
-#: ../src/common/docview.cpp:507
+#: ../src/common/docview.cpp:513
 msgid "unnamed"
 msgstr "безымянный"
 
-#: ../src/common/docview.cpp:1613
+#: ../src/common/docview.cpp:1627
 #, c-format
 msgid "unnamed%d"
 msgstr "безымянный%d"
@@ -8984,7 +9204,7 @@ msgstr "безымянный%d"
 msgid "unsupported Zip compression method"
 msgstr "неподдерживаемый метод сжатия Zip"
 
-#: ../src/common/translation.cpp:1896
+#: ../src/common/translation.cpp:1892
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "используется каталог '%s' из '%s'."
@@ -9018,7 +9238,7 @@ msgstr "wxWidgets не смог открыть дисплей. Выход."
 msgid "xxxx"
 msgstr "xxxx"
 
-#: ../src/common/datetimefmt.cpp:1754
+#: ../src/common/datetimefmt.cpp:1764
 msgid "yesterday"
 msgstr "вчера"
 

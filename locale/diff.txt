@@ -1,0 +1,1388 @@
+diff --git a/locale/af.po b/locale/af.po
+index b6d57f7..3fd0fec 100644
+--- a/locale/af.po
++++ b/locale/af.po
+@@ -3,7 +3,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2013-11-04 10:21+0200\n"
+ "Last-Translator: F Wolff <friedel@translate.org.za>\n"
+ "Language-Team: translate-discuss-af@lists.sourceforge.net\n"
+@@ -67,6 +67,10 @@ msgstr " kursief"
+ msgid " light"
+ msgstr " lig"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " deurhaal"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "Koevert nr.10, 4 1/8 x 9 1/2 duim"
+@@ -9165,7 +9169,7 @@ msgstr ""
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "deurhaal"
+ 
+diff --git a/locale/an.po b/locale/an.po
+index 7474b32..a300a79 100644
+--- a/locale/an.po
++++ b/locale/an.po
+@@ -7,7 +7,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2014-04-13 17:41+0100\n"
+ "Last-Translator: Jorge Pérez Pérez <jorgtum@gmail.com>\n"
+ "Language-Team: softaragonés\n"
+@@ -71,6 +71,10 @@ msgstr " cursiva"
+ msgid " light"
+ msgstr " lichera"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " rayau"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "Sobre #10, 4 1/8 x 9 1/2 in"
+@@ -9124,7 +9128,7 @@ msgstr "a longaria d'o fichero almagazenau no ye en o capitero d'o Zip"
+ msgid "str"
+ msgstr "cad"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "rayau"
+ 
+diff --git a/locale/ar.po b/locale/ar.po
+index dc02b20..cdcea80 100644
+--- a/locale/ar.po
++++ b/locale/ar.po
+@@ -8,7 +8,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2012-03-22 18:41+0200\n"
+ "Last-Translator: Fatma Mehanna <fatma.mehanna@gmail.com>\n"
+ "Language-Team: arabictranslationteam@googlegroups.com\n"
+@@ -71,6 +71,10 @@ msgstr "مائل"
+ msgid " light"
+ msgstr "فاتح"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " يتوسطه خط"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 Envelope, 4 1/8 x 9 1/2 in"
+@@ -9106,7 +9110,7 @@ msgstr ""
+ msgid "str"
+ msgstr ""
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ #, fuzzy
+ msgid "strikethrough"
+ msgstr "&يتوسطه خط"
+diff --git a/locale/ca.po b/locale/ca.po
+index 044d573..2ff91b7 100644
+--- a/locale/ca.po
++++ b/locale/ca.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2003-07-22 11:31+0100\n"
+ "Last-Translator: Paco Rivière <friviere@wanadoo.es>\n"
+ "Language-Team: <wx-translators@wxwidgets.org>\n"
+@@ -64,6 +64,10 @@ msgstr "cursiva"
+ msgid " light"
+ msgstr "clar"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr ""
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 Sobre, 4 1/8 x 9 1/2 polz. "
+@@ -9443,7 +9447,7 @@ msgstr "Format no suportat de porta-retalls"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr ""
+ 
+diff --git a/locale/ca@valencia.po b/locale/ca@valencia.po
+index 4cd611e..48d5a5f 100644
+--- a/locale/ca@valencia.po
++++ b/locale/ca@valencia.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2003-07-22 11:31+0100\n"
+ "Last-Translator: Robert Millan <rmh@aybabtu.com>\n"
+ "Language-Team: <wx-translators@wxwidgets.org>\n"
+@@ -64,6 +64,10 @@ msgstr "cursiva"
+ msgid " light"
+ msgstr "clar"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr ""
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 Sobre, 4 1/8 x 9 1/2 polz. "
+@@ -9441,7 +9445,7 @@ msgstr "Format no suportat de porta-retalls"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr ""
+ 
+diff --git a/locale/cs.po b/locale/cs.po
+index 442c7e4..c471726 100644
+--- a/locale/cs.po
++++ b/locale/cs.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2014-12-16 22:36+0100\n"
+ "Last-Translator: Zbyněk Schwarz <zbynek.schwarz@gmail.com>\n"
+ "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
+@@ -67,6 +67,10 @@ msgstr "kurzíva"
+ msgid " light"
+ msgstr "tenké"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " přeškrtnuté"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "Obálka č. 10, 4 1/8 x 9 1/2 palce"
+@@ -8971,7 +8975,7 @@ msgstr "v hlavičce zip není uložená délka souboru"
+ msgid "str"
+ msgstr "řetězec"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "přeškrtnuté"
+ 
+diff --git a/locale/da.po b/locale/da.po
+index bb6a153..46b1ea8 100644
+--- a/locale/da.po
++++ b/locale/da.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2006-07-13 19:43+0100\n"
+ "Last-Translator: Morten Ulrich <mulrich15@yahoo.dk>\n"
+ "Language-Team: Dansk <da@li.org>\n"
+@@ -68,6 +68,10 @@ msgstr "kursiv"
+ msgid " light"
+ msgstr "let"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr ""
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 Konvolut, 4 1/8 x 9 1/2 tomme"
+@@ -9418,7 +9422,7 @@ msgstr "gemt fillængde ikke i Zip header"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr ""
+ 
+diff --git a/locale/de.po b/locale/de.po
+index 3842c18..4138bdf 100644
+--- a/locale/de.po
++++ b/locale/de.po
+@@ -6,7 +6,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2014-12-30 14:53+0100\n"
+ "Last-Translator: Wolfgang Stöggl <c72578@yahoo.de>\n"
+ "Language-Team: wxWidgets Team <wx-dev@wxwidgets.org>\n"
+@@ -71,6 +71,10 @@ msgstr " kursiv"
+ msgid " light"
+ msgstr " dünn"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " durchstreichen"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 Umschlag, 4 1/8 x 9 1/2 Zoll"
+@@ -9071,7 +9075,7 @@ msgstr "Gespeicherte Dateilänge nicht in Zip-Header"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "Durchstreichen"
+ 
+diff --git a/locale/el.po b/locale/el.po
+index eff1d68..04cc84b 100644
+--- a/locale/el.po
++++ b/locale/el.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2005-02-16 09:03+0200\n"
+ "Last-Translator: InterZone <info@interzone.gr>\n"
+ "Language-Team: Tsolakos Stavros <tsolako1@otenet.gr>, Nassos Yiannopoulos "
+@@ -65,6 +65,10 @@ msgstr "πλάγιο"
+ msgid " light"
+ msgstr "απαλό(light)"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr ""
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 Φάκελος, 4 1/8 x 9 1/2 ίντσες"
+@@ -9494,7 +9498,7 @@ msgstr "το μήκος του αποθκευμένου αρχείου δεν υ
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr ""
+ 
+diff --git a/locale/es.po b/locale/es.po
+index c4fa5f2..bcc01eb 100644
+--- a/locale/es.po
++++ b/locale/es.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2014-10-14 15:13+0100\n"
+ "Last-Translator: \n"
+ "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
+@@ -67,6 +67,10 @@ msgstr "cursiva"
+ msgid " light"
+ msgstr " ligera"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " tachado"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "Sobre #10, 4 1/8 x 9 1/2 in"
+@@ -9081,7 +9085,7 @@ msgstr "longitud del archivo almacenada no está en la cabecera del Zip"
+ msgid "str"
+ msgstr "cad"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "tachado"
+ 
+diff --git a/locale/eu.po b/locale/eu.po
+index ee3ea54..dabcb6f 100644
+--- a/locale/eu.po
++++ b/locale/eu.po
+@@ -3,7 +3,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2014-02-21 22:22+0100\n"
+ "Last-Translator: Xabier Aramendi <azpidatziak@gmail.com>\n"
+ "Language-Team: (EUS_Xabier Aramendi) <azpidatziak@gmail.com>\n"
+@@ -66,6 +66,10 @@ msgstr " etzana"
+ msgid " light"
+ msgstr " arina"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " tatxatuta"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 Gutunazala, 4 1/8 x 9 1/2 in"
+@@ -9044,7 +9048,7 @@ msgstr "bildutako agiri zabalera ez dago Zip idazburuan"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "Tatxatuta"
+ 
+diff --git a/locale/fi.po b/locale/fi.po
+index 26a49ca..3daac15 100644
+--- a/locale/fi.po
++++ b/locale/fi.po
+@@ -12,7 +12,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2012-08-07 13:31+0200\n"
+ "Last-Translator: Jani Kinnunen <jani.kinnunen@wippies.fi>\n"
+ "Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
+@@ -74,6 +74,10 @@ msgstr " kursivoitu"
+ msgid " light"
+ msgstr " heikko"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " yliviivaus"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 kirjekuori, 4 1/8″ x 9 1/2″"
+@@ -9242,7 +9246,7 @@ msgstr ""
+ msgid "str"
+ msgstr "merkkijono"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ #, fuzzy
+ msgid "strikethrough"
+ msgstr "Yliviivaus"
+diff --git a/locale/fr.po b/locale/fr.po
+index 310b6d4..a759dd5 100644
+--- a/locale/fr.po
++++ b/locale/fr.po
+@@ -4,7 +4,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2014-02-21 17:02+0100\n"
+ "Last-Translator: Xaviou <x.psoud@gmail.com>\n"
+ "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
+@@ -66,6 +66,10 @@ msgstr "italique"
+ msgid " light"
+ msgstr "léger"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " barré"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "Enveloppe n° 10 (4,125 x 9,5 pouces)"
+@@ -9119,7 +9123,7 @@ msgstr "longueur du fichier enregistré absente de l'en-tête du Zip"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "barré"
+ 
+diff --git a/locale/gl_ES.po b/locale/gl_ES.po
+index e4e46ee..df06995 100644
+--- a/locale/gl_ES.po
++++ b/locale/gl_ES.po
+@@ -5,7 +5,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2013-11-01 21:34+0100\n"
+ "Last-Translator: Nuria Andión <nandiez@gmail.com>\n"
+ "Language-Team: Proxecto Trasno <proxecto@trasno.net>\n"
+@@ -69,6 +69,10 @@ msgstr " cursiva"
+ msgid " light"
+ msgstr " clara"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " riscado"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "Sobre #10, 4 1/8 x 9 1/2 polgadas"
+@@ -9081,7 +9085,7 @@ msgstr "a lonxitude do ficheiro almacenado non está na cabeceira de zip"
+ msgid "str"
+ msgstr "cadea"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "riscado"
+ 
+diff --git a/locale/hi.po b/locale/hi.po
+index 03d591b..ccfb5ea 100644
+--- a/locale/hi.po
++++ b/locale/hi.po
+@@ -8,7 +8,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2008-07-28 23:09+0530\n"
+ "Last-Translator: Priyank Bolia <priyank.bolia@gmail.com>\n"
+ "Language-Team: हिन्दी (Hindi) <dysxhi@yahoo.co.in>\n"
+@@ -72,6 +72,11 @@ msgstr "तिरछा"
+ msgid " light"
+ msgstr "हल्का"
+ 
++#: ../src/common/fontcmn.cpp:805
++#, fuzzy
++msgid " strikethrough"
++msgstr " स्ट्राइक थुःरु"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#१० लिफ़ाफ़ा, ४ १/८ x 9 1/2 इंच"
+@@ -9294,7 +9299,7 @@ msgstr "सुरक्षित फ़ाइल की लंबाई जीज़
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ #, fuzzy
+ msgid "strikethrough"
+ msgstr "स्ट्राइक थुःरु (S)"
+diff --git a/locale/hu.po b/locale/hu.po
+index 86ef60b..6eff311 100644
+--- a/locale/hu.po
++++ b/locale/hu.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2009-07-26 20:12+0100\n"
+ "Last-Translator: Oaron <oaron1@gmail.com>\n"
+ "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
+@@ -66,6 +66,10 @@ msgstr "dőlt"
+ msgid " light"
+ msgstr "vékony"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr ""
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 Boriték, 4 1/8 x 9 1/2 hüvelyk"
+@@ -9376,7 +9380,7 @@ msgstr "a Zip fejrészben nincs meg a tárolt fájl hossza"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr ""
+ 
+diff --git a/locale/id.po b/locale/id.po
+index 92d72f4..b69dc1b 100644
+--- a/locale/id.po
++++ b/locale/id.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2013-10-25 22:00+0700\n"
+ "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
+ "Language-Team: ID <doplank@gmx.com>\n"
+@@ -68,6 +68,10 @@ msgstr "miring"
+ msgid " light"
+ msgstr "ringan"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " teks coret"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "Amplop #10, 4 1/8 x 9 1/2 in"
+@@ -9060,7 +9064,7 @@ msgstr "stored file length not in Zip header"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "teks coret"
+ 
+diff --git a/locale/it.po b/locale/it.po
+index 852a5d2..4814518 100644
+--- a/locale/it.po
++++ b/locale/it.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2014-04-15 15:07+0100\n"
+ "Last-Translator: bovirus <bovirus@libero.it>\n"
+ "Language-Team: wxWidgets translators <wx-translators@lists.wxwidgets.org>\n"
+@@ -65,6 +65,10 @@ msgstr " corsivo"
+ msgid " light"
+ msgstr " leggero"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " barrato"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "Busta #10, 4 1/8 x 9 1/2 pollici"
+@@ -9093,7 +9097,7 @@ msgstr "la lunghezza del file non è memorizzata nell'intestazione del file ZIP"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "Barrato"
+ 
+diff --git a/locale/ja.po b/locale/ja.po
+index bd36c4a..bb1306a 100644
+--- a/locale/ja.po
++++ b/locale/ja.po
+@@ -3,7 +3,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2011-03-02 18:30+0900\n"
+ "Last-Translator: Suzumizaki-Kimitaka(鈴見咲君高) <suzumizaki@free."
+ "japandesign.ne.jp>\n"
+@@ -66,6 +66,10 @@ msgstr " イタリック"
+ msgid " light"
+ msgstr " 軽量"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " 打ち消し線"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 封筒, 4 1/8 x 9 1/2 インチ"
+@@ -9196,7 +9200,7 @@ msgstr "Zipヘッダーにファイルの長さが記されていません"
+ msgid "str"
+ msgstr "文字列"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ #, fuzzy
+ msgid "strikethrough"
+ msgstr "打ち消し線 (&S)"
+diff --git a/locale/ko_KR.po b/locale/ko_KR.po
+index ab790c7..d55ce13 100644
+--- a/locale/ko_KR.po
++++ b/locale/ko_KR.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2009-04-23 18:29+0900\n"
+ "Last-Translator: 정성기 <dragoneyes.org@gmail.com>\n"
+ "Language-Team: Korean <Korean>\n"
+@@ -66,6 +66,10 @@ msgstr " 기울임"
+ msgid " light"
+ msgstr " 가늘게"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " 취소선"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 봉투, 4 1/8 x 9 1/2 in"
+@@ -9232,7 +9236,7 @@ msgstr "Zip 헤더에 파일의 길이가 없습니다."
+ msgid "str"
+ msgstr ""
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ #, fuzzy
+ msgid "strikethrough"
+ msgstr "취소선(&S)"
+diff --git a/locale/lt.po b/locale/lt.po
+index 848de43..2e354be 100644
+--- a/locale/lt.po
++++ b/locale/lt.po
+@@ -5,7 +5,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2012-01-20 09:14+0100\n"
+ "Last-Translator: Pieter <pieter.clarysse@bricsys.com>\n"
+ "Language-Team: KALBA <LL@li.org>\n"
+@@ -65,6 +65,10 @@ msgstr " kursyvas"
+ msgid " light"
+ msgstr ""
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr ""
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr ""
+@@ -8925,7 +8929,7 @@ msgstr ""
+ msgid "str"
+ msgstr ""
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr ""
+ 
+diff --git a/locale/lv.po b/locale/lv.po
+index bd625e0..ad9e131 100644
+--- a/locale/lv.po
++++ b/locale/lv.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2013-01-23 13:14+0300\n"
+ "Last-Translator: Jānis Eisaks <jancs@dv.lv>\n"
+ "Language-Team: wxWidgets translators <wx-translators@wxwindows.org>\n"
+@@ -69,6 +69,10 @@ msgstr "kursīvs"
+ msgid " light"
+ msgstr "gaišs"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " caursvītrots"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "Aploksne Nr. 10, 10.5 x 24.1 cm"
+@@ -9050,7 +9054,7 @@ msgstr ""
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "caursvītrots"
+ 
+diff --git a/locale/ms.po b/locale/ms.po
+index f567c16..16a6f5f 100644
+--- a/locale/ms.po
++++ b/locale/ms.po
+@@ -7,7 +7,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2006-11-06 10:48+0800\n"
+ "Last-Translator: Mahrazi Mohd Kamal <mahrazi@gmail.com>\n"
+ "Language-Team: ms_MY <ms@li.org>\n"
+@@ -70,6 +70,10 @@ msgstr "italik"
+ msgid " light"
+ msgstr "cerah"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr ""
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "Sampul #10, 4 1/8 x 9 1/2 in"
+@@ -9302,7 +9306,7 @@ msgstr "panjang fail disimpan tidak dalam kepala Zip"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr ""
+ 
+diff --git a/locale/nb.po b/locale/nb.po
+index 3fd01f4..a41c23f4 100644
+--- a/locale/nb.po
++++ b/locale/nb.po
+@@ -6,7 +6,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2005-04-14 00:30+0100\n"
+ "Last-Translator: Hans Fredrik Nordhaug <hans@nordhaug.priv.no>\n"
+ "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
+@@ -70,6 +70,10 @@ msgstr "kursiv"
+ msgid " light"
+ msgstr "lett"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr ""
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 konvolutt, 4 1/8 x 9 1/2 tommer"
+@@ -9395,7 +9399,7 @@ msgstr "lagret fillengde ikke funnet i Zip-hode"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr ""
+ 
+diff --git a/locale/ne.po b/locale/ne.po
+index 64cd4aa..7ab75eb 100644
+--- a/locale/ne.po
++++ b/locale/ne.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2015-05-09 20:03+0545\n"
+ "Last-Translator: drishtibachak@gmail.com\n"
+ "Language-Team: Him Prasad Gautam <himjee@yahoo.com>\n"
+@@ -67,6 +67,11 @@ msgstr "डल्केको"
+ msgid " light"
+ msgstr "हलुको"
+ 
++#: ../src/common/fontcmn.cpp:805
++#, fuzzy
++msgid " strikethrough"
++msgstr "strikethrough"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 खाम, 4 1/8 x 9 1/2 इन्च"
+@@ -8951,7 +8956,7 @@ msgstr "फाइलको लम्बाइ Zip header भन्दा अन
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "strikethrough"
+ 
+diff --git a/locale/nl.po b/locale/nl.po
+index bdd579b..209050c 100644
+--- a/locale/nl.po
++++ b/locale/nl.po
+@@ -8,7 +8,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2015-05-01 21:56+0100\n"
+ "Last-Translator: gvmelle <translations@gvmelle.com>\n"
+ "Language-Team: Dutch (http://www.transifex.com/projects/p/"
+@@ -72,6 +72,10 @@ msgstr "cursief"
+ msgid " light"
+ msgstr "licht"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " doorhalen"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "Envelop nr.10, 4 1/8 x 9 1/2 inch"
+@@ -9021,7 +9025,7 @@ msgstr "opgeslagen bestandslengte niet in Zip header"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "doorhalen"
+ 
+diff --git a/locale/pl.po b/locale/pl.po
+index 12a30e0..d26480a 100644
+--- a/locale/pl.po
++++ b/locale/pl.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2014-06-04 16:19+1200\n"
+ "Last-Translator: Mariusz Drozdowski <schemedit@wp.pl>\n"
+ "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
+@@ -66,6 +66,10 @@ msgstr "kursywa"
+ msgid " light"
+ msgstr "lekki"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " przekreślenie"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "Koperta #10, 4 1/8 x 9 1/2 cali"
+@@ -9123,7 +9127,7 @@ msgstr "długość pliku nie w nagłówku Zip"
+ msgid "str"
+ msgstr "tekst"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "Przekreślenie"
+ 
+diff --git a/locale/pt.po b/locale/pt.po
+index 807444f..b31e8ca 100644
+--- a/locale/pt.po
++++ b/locale/pt.po
+@@ -9,7 +9,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2014-03-07 16:07+0100\n"
+ "Last-Translator: Alfredo <.>\n"
+ "Language-Team: Portuguese <opensuse-pt@opensuse.org>\n"
+@@ -72,6 +72,10 @@ msgstr " itálico"
+ msgid " light"
+ msgstr " leve"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " rasurado"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "Envelope #10, 4 1/8 x 9 1/2 pol."
+@@ -9262,7 +9266,7 @@ msgstr "guardado tamanho do ficheiro não no cabeçalho Zip"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "Rasurado"
+ 
+diff --git a/locale/pt_BR.po b/locale/pt_BR.po
+index 4974f3b..8c35dc8 100644
+--- a/locale/pt_BR.po
++++ b/locale/pt_BR.po
+@@ -6,7 +6,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2013-10-02 16:24-0300\n"
+ "Last-Translator: Felipe <felipefpl@ig.com.br>\n"
+ "Language-Team: Felipe <felipefpl@ig.com.br>\n"
+@@ -70,6 +70,10 @@ msgstr "itálico"
+ msgid " light"
+ msgstr "leve"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " penetrar"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "Envelope #10, 4 1/8 x 9 1/2 em"
+@@ -9077,7 +9081,7 @@ msgstr "tamanho do arquivo armazenado não no cabeçalho Zip"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "strikethrough"
+ 
+diff --git a/locale/ro.po b/locale/ro.po
+index 4dc9142..2e26f10 100644
+--- a/locale/ro.po
++++ b/locale/ro.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: \n"
+ "Last-Translator: Cătălin Răceanu <cata_sr@yahoo.com>\n"
+ "Language-Team: ro.ro\n"
+@@ -69,6 +69,10 @@ msgstr " cursiv"
+ msgid " light"
+ msgstr " subțire"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " tăiat"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 Plic, 4 1/8 x 9 1/2 in"
+@@ -9094,7 +9098,7 @@ msgstr "lungimea fișierului conținut nu este in antetul Zip"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "tăiat"
+ 
+diff --git a/locale/ru.po b/locale/ru.po
+index fbb9cbc..52637ac 100644
+--- a/locale/ru.po
++++ b/locale/ru.po
+@@ -7,7 +7,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets-2.9.2\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2014-03-27 12:47+0200\n"
+ "Last-Translator: Pavel Maryanov <acid@jack.kiev.ua>\n"
+ "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
+@@ -71,6 +71,10 @@ msgstr " курсив"
+ msgid " light"
+ msgstr " легкий"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " перечеркивание"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "Конверт #10, 4 1/8 x 9 1/2 дюйма"
+@@ -9096,7 +9100,7 @@ msgstr "сохраненная длина файла не находится в
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "перечеркивание"
+ 
+diff --git a/locale/sk.po b/locale/sk.po
+index 9be7570..cf053ab 100644
+--- a/locale/sk.po
++++ b/locale/sk.po
+@@ -7,7 +7,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2007-05-09 20:02+0100\n"
+ "Last-Translator: Ivan Masár <helix84@centrum.sk>\n"
+ "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
+@@ -68,6 +68,10 @@ msgstr " kurzíva"
+ msgid " light"
+ msgstr " svetlé"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr ""
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 obálka, 4 1/8 x 9 1/2 palca"
+@@ -9269,7 +9273,7 @@ msgstr "uložená dĺžka súboru nie je v hlavičke Zip"
+ msgid "str"
+ msgstr ""
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr ""
+ 
+diff --git a/locale/sl.po b/locale/sl.po
+index 515f3a2..15f49f1 100644
+--- a/locale/sl.po
++++ b/locale/sl.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2012-12-30 00:14+0100\n"
+ "Last-Translator: filmsi\n"
+ "Language-Team: Martin Srebotnjak <miles@filmsi.net>\n"
+@@ -75,6 +75,10 @@ msgstr " ležeče"
+ msgid " light"
+ msgstr " rahlo"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " prečrtano"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "kuverta #10, 4 1/8 x 9 1/2 pal."
+@@ -10388,7 +10392,7 @@ msgstr "dolžine shranjene datoteke ni v glavi Zip"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ #, fuzzy
+ msgid "strikethrough"
+ msgstr "Prečrtano"
+diff --git a/locale/sq.po b/locale/sq.po
+index 148e056..474ecc1 100644
+--- a/locale/sq.po
++++ b/locale/sq.po
+@@ -3,7 +3,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2006-03-15 18:41+0200\n"
+ "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
+ "Language-Team: <wx-translators@wxwidgets.org>\n"
+@@ -67,6 +67,10 @@ msgstr "të pjerrta"
+ msgid " light"
+ msgstr "butë"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr ""
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "Zarf #10, 4 1/8 x 9 1/2 inç"
+@@ -9366,7 +9370,7 @@ msgstr ""
+ msgid "str"
+ msgstr ""
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr ""
+ 
+diff --git a/locale/sv.po b/locale/sv.po
+index b743ba5..aaaed52 100644
+--- a/locale/sv.po
++++ b/locale/sv.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2014-02-23 11:45+0100\n"
+ "Last-Translator: Jonas Rydberg <jonas@drevo.se>\n"
+ "Language-Team: wxWidgets translators <wx-translators@googlegroups.com>\n"
+@@ -64,6 +64,10 @@ msgstr " kursiv"
+ msgid " light"
+ msgstr " tunn"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " genomstruken"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 kuvert, 4 1/8 x 9 1/2 tum"
+@@ -9027,7 +9031,7 @@ msgstr "lagrad fillängd finns inte i Zip-huvud"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "genomstruken"
+ 
+diff --git a/locale/ta.po b/locale/ta.po
+index 65c047b..ae49a60 100644
+--- a/locale/ta.po
++++ b/locale/ta.po
+@@ -2,7 +2,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2014-02-24 21:51+0530\n"
+ "Last-Translator: DINAKAR T.D. <td.dinkar@gmail.com>\n"
+ "Language-Team: DINAKAR T.D. <td.dinkar@gmail.com>\n"
+@@ -65,6 +65,10 @@ msgstr "வலப்பக்க சாய்வு"
+ msgid " light"
+ msgstr "இலகு"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " ஊடாகக் கோடிடப்பட்டது"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 அஞ்சல் உறை, 4 1/8 x 9 1/2 in"
+@@ -9039,7 +9043,7 @@ msgstr "சேமிக்கப்பட்ட கோப்பின் நீ
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "ஊடாகக் கோடிடப்பட்டது"
+ 
+diff --git a/locale/tr.po b/locale/tr.po
+index 6e86870..9db85d3 100644
+--- a/locale/tr.po
++++ b/locale/tr.po
+@@ -8,7 +8,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets (unofficial)\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2014-11-26 21:27+0200\n"
+ "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
+ "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/"
+@@ -72,6 +72,10 @@ msgstr " yatık"
+ msgid " light"
+ msgstr " açık"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " üstüçizili"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 Zarf, 4 1/8 x 9 1/2 inç"
+@@ -8972,7 +8976,7 @@ msgstr "kayıtlı dosya uzunluğu Zip başlığında yok"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "üstüçizili"
+ 
+diff --git a/locale/uk.po b/locale/uk.po
+index 12984fe..fc1e0cb 100644
+--- a/locale/uk.po
++++ b/locale/uk.po
+@@ -6,7 +6,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2014-02-21 19:09+0200\n"
+ "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+ "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+@@ -70,6 +70,10 @@ msgstr " курсив"
+ msgid " light"
+ msgstr " легкий"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " перекреслення"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 Конверт, 4 1/8 x 9 1/2 дюйм"
+@@ -9078,7 +9082,7 @@ msgstr "довжина запакованого файл не у заголов
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "перекреслення"
+ 
+diff --git a/locale/vi.po b/locale/vi.po
+index 6eeb202..a280272 100644
+--- a/locale/vi.po
++++ b/locale/vi.po
+@@ -6,7 +6,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxstd 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2014-03-30 09:14+0700\n"
+ "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
+ "Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
+@@ -71,6 +71,10 @@ msgstr " nghiêng"
+ msgid " light"
+ msgstr " sáng"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " gạch giữa"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 Envelope, 4 1/8 x 9 1/2 in"
+@@ -9059,7 +9063,7 @@ msgstr "phần lưu giữ độ dài tập tin không ở trong phần đầu c
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "Gạch giữa"
+ 
+diff --git a/locale/wxstd.pot b/locale/wxstd.pot
+index 2aa65c1..d811f07 100644
+--- a/locale/wxstd.pot
++++ b/locale/wxstd.pot
+@@ -8,7 +8,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: PACKAGE VERSION\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+ "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+ "Language-Team: LANGUAGE <LL@li.org>\n"
+@@ -68,6 +68,10 @@ msgstr ""
+ msgid " light"
+ msgstr ""
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr ""
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr ""
+@@ -8863,7 +8867,7 @@ msgstr ""
+ msgid "str"
+ msgstr ""
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr ""
+ 
+diff --git a/locale/zh_CN.po b/locale/zh_CN.po
+index d73fb4d..7306577 100644
+--- a/locale/zh_CN.po
++++ b/locale/zh_CN.po
+@@ -9,7 +9,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2014-02-21 22:57-0800\n"
+ "Last-Translator: Jiawei Huang <hjiawei@gmail.com>\n"
+ "Language-Team: wxWidgets tranlators <wx-translators@wxwidgets.org>\n"
+@@ -72,6 +72,10 @@ msgstr " 斜体"
+ msgid " light"
+ msgstr " 细体"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " 删除线"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 信封，4 1/8 x 9 1/2 英寸"
+@@ -8993,7 +8997,7 @@ msgstr "Zip 头没有已存文件的长度信息"
+ msgid "str"
+ msgstr "str"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "删除线"
+ 
+diff --git a/locale/zh_TW.po b/locale/zh_TW.po
+index ce37e35..5a7382b 100644
+--- a/locale/zh_TW.po
++++ b/locale/zh_TW.po
+@@ -9,7 +9,7 @@ msgid ""
+ msgstr ""
+ "Project-Id-Version: wxWidgets 3.0\n"
+ "Report-Msgid-Bugs-To: \n"
+-"POT-Creation-Date: 2015-05-23 14:43+0400\n"
++"POT-Creation-Date: 2015-05-23 22:46+0400\n"
+ "PO-Revision-Date: 2013-02-27 14:58+0800\n"
+ "Last-Translator: Wei-Lun Chao <bluebat@member.fsf.org>\n"
+ "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
+@@ -71,6 +71,10 @@ msgstr "斜體"
+ msgid " light"
+ msgstr "細體"
+ 
++#: ../src/common/fontcmn.cpp:805
++msgid " strikethrough"
++msgstr " 刪除線"
++
+ #: ../src/common/paper.cpp:118
+ msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+ msgstr "#10 信封，4 1/8 x 9 1/2 英吋"
+@@ -9023,7 +9027,7 @@ msgstr "Zip 檔頭沒有已存檔案的長度資訊"
+ msgid "str"
+ msgstr "字串"
+ 
+-#: ../src/common/fontcmn.cpp:805 ../src/common/fontcmn.cpp:980
++#: ../src/common/fontcmn.cpp:980
+ msgid "strikethrough"
+ msgstr "刪除線"
+ 

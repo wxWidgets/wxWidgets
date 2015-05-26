@@ -457,7 +457,7 @@ bool wxPropertyGridManager::Create( wxWindow *parent,
         m_pPropGrid = CreatePropertyGrid();
 
     bool res = wxPanel::Create( parent, id, pos, size,
-                                (style&0xFFFF0000)|wxWANTS_CHARS,
+                                (style & wxWINDOW_STYLE_MASK)|wxWANTS_CHARS,
                                 name );
     Init2(style);
 
@@ -515,7 +515,7 @@ void wxPropertyGridManager::Init1()
                                           wxCLIP_CHILDREN)
 
 // Which flags can be passed to underlying wxPropertyGrid.
-#define wxPG_MAN_PASS_FLAGS_MASK       (0xFFF0|wxTAB_TRAVERSAL)
+#define wxPG_MAN_PASS_FLAGS_MASK       (wxPG_WINDOW_STYLE_MASK|wxTAB_TRAVERSAL)
 
 //
 // Initialize after parent etc. set
@@ -526,7 +526,7 @@ void wxPropertyGridManager::Init2( int style )
     if ( m_iFlags & wxPG_FL_INITIALIZED )
         return;
 
-    m_windowStyle |= (style&0x0000FFFF);
+    m_windowStyle |= (style & wxPG_WINDOW_STYLE_MASK);
 
     wxSize csz = GetClientSize();
 
@@ -575,7 +575,7 @@ void wxPropertyGridManager::Init2( int style )
 
     m_pPropGrid->SetId(useId);
 
-    m_pPropGrid->m_iFlags |= wxPG_FL_IN_MANAGER;
+    m_pPropGrid->SetInternalFlag(wxPG_FL_IN_MANAGER);
 
     m_pState = m_pPropGrid->m_pState;
 
@@ -690,7 +690,7 @@ void wxPropertyGridManager::DoThaw()
 
 void wxPropertyGridManager::SetWindowStyleFlag( long style )
 {
-    int oldWindowStyle = GetWindowStyleFlag();
+    long oldWindowStyle = GetWindowStyleFlag();
 
     wxWindow::SetWindowStyleFlag( style );
     m_pPropGrid->SetWindowStyleFlag( (m_pPropGrid->GetWindowStyleFlag()&~(wxPG_MAN_PASS_FLAGS_MASK)) |
@@ -1122,10 +1122,11 @@ bool wxPropertyGridManager::IsPropertySelected( wxPGPropArg id ) const
 
 wxPGProperty* wxPropertyGridManager::GetPageRoot( int index ) const
 {
-    wxASSERT( index >= 0 );
-    wxASSERT( index < (int)m_arrPages.size() );
+    wxCHECK_MSG( (index >= 0) && (index < (int)m_arrPages.size()),
+                 NULL,
+                 wxT("invalid page index") );
 
-    return m_arrPages[index]->GetStatePtr()->m_properties;
+    return m_arrPages[index]->GetRoot();
 }
 
 // -----------------------------------------------------------------------
@@ -1260,7 +1261,7 @@ void wxPropertyGridManager::UpdateDescriptionBox( int new_splittery, int new_wid
     use_hei--;
 
     // Fix help control positions.
-    int cap_hei = m_pPropGrid->m_fontHeight;
+    int cap_hei = m_pPropGrid->GetFontHeight();
     int cap_y = new_splittery+m_splitterHeight+5;
     int cnt_y = cap_y+cap_hei+3;
     int sub_cap_hei = cap_y+cap_hei-use_hei;
@@ -1350,7 +1351,7 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
         }
 
         // Check if beyond minimum.
-        int nspy_min = propgridY + m_pPropGrid->m_lineHeight;
+        int nspy_min = propgridY + m_pPropGrid->GetRowHeight();
         if ( new_splittery < nspy_min )
             new_splittery = nspy_min;
 
@@ -1632,7 +1633,7 @@ void wxPropertyGridManager::RecreateControls()
     if ( m_windowStyle & wxPG_DESCRIPTION )
     {
         // Has help box.
-        m_pPropGrid->m_iFlags |= (wxPG_FL_NOSTATUSBARHELP);
+        m_pPropGrid->SetInternalFlag(wxPG_FL_NOSTATUSBARHELP);
 
         if ( !m_pTxtHelpCaption )
         {
@@ -1642,7 +1643,7 @@ void wxPropertyGridManager::RecreateControls()
                                                  wxDefaultPosition,
                                                  wxDefaultSize,
                                                  wxALIGN_LEFT|wxST_NO_AUTORESIZE);
-            m_pTxtHelpCaption->SetFont( m_pPropGrid->m_captionFont );
+            m_pTxtHelpCaption->SetFont(m_pPropGrid->GetCaptionFont());
             m_pTxtHelpCaption->SetCursor( *wxSTANDARD_CURSOR );
         }
         if ( !m_pTxtHelpContent )
@@ -1661,7 +1662,7 @@ void wxPropertyGridManager::RecreateControls()
     else
     {
         // No help box.
-        m_pPropGrid->m_iFlags &= ~(wxPG_FL_NOSTATUSBARHELP);
+        m_pPropGrid->ClearInternalFlag(wxPG_FL_NOSTATUSBARHELP);
 
         if ( m_pTxtHelpCaption )
             m_pTxtHelpCaption->Destroy();
@@ -1726,7 +1727,7 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
     if ( id == m_categorizedModeToolId )
     {
         // Categorized mode.
-        if ( m_pPropGrid->m_windowStyle & wxPG_HIDE_CATEGORIES )
+        if ( m_pPropGrid->HasFlag(wxPG_HIDE_CATEGORIES) )
         {
             if ( !m_pPropGrid->HasInternalFlag(wxPG_FL_CATMODE_AUTO_SORT) )
                 m_pPropGrid->m_windowStyle &= ~wxPG_AUTO_SORT;
@@ -1736,7 +1737,7 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
     else if ( id == m_alphabeticModeToolId )
     {
         // Alphabetic mode.
-        if ( !(m_pPropGrid->m_windowStyle & wxPG_HIDE_CATEGORIES) )
+        if ( !m_pPropGrid->HasFlag(wxPG_HIDE_CATEGORIES) )
         {
             if ( m_pPropGrid->HasFlag(wxPG_AUTO_SORT) )
                 m_pPropGrid->SetInternalFlag(wxPG_FL_CATMODE_AUTO_SORT);
@@ -1867,8 +1868,8 @@ void wxPropertyGridManager::SetSplitterLeft( bool subProps, bool allPages )
 
         for ( i=0; i<GetPageCount(); i++ )
         {
-            int maxW = m_pState->GetColumnFitWidth(dc, m_arrPages[i]->m_properties, 0, subProps );
-            maxW += m_pPropGrid->m_marginWidth;
+            int maxW = m_pState->GetColumnFitWidth(dc, m_arrPages[i]->DoGetRoot(), 0, subProps );
+            maxW += m_pPropGrid->GetMarginWidth();
             if ( maxW > highest )
                 highest = maxW;
             m_pState->m_dontCenterSplitter = true;
@@ -1894,8 +1895,8 @@ void wxPropertyGridManager::SetPageSplitterLeft(int page, bool subProps)
         wxClientDC dc(this);
         dc.SetFont(m_pPropGrid->GetFont());
 
-        int maxW = m_pState->GetColumnFitWidth(dc, m_arrPages[page]->m_properties, 0, subProps );
-        maxW += m_pPropGrid->m_marginWidth;
+        int maxW = m_pState->GetColumnFitWidth(dc, m_arrPages[page]->DoGetRoot(), 0, subProps );
+        maxW += m_pPropGrid->GetMarginWidth();
         SetPageSplitterPosition( page, maxW );
 
 #if wxUSE_HEADERCTRL
@@ -1965,7 +1966,7 @@ void wxPropertyGridManager::OnResize( wxSizeEvent& WXUNUSED(event) )
 
     RecalculatePositions(width, height);
 
-    if ( m_pPropGrid && m_pPropGrid->m_parent )
+    if ( m_pPropGrid && m_pPropGrid->GetParent() )
     {
         int pgWidth, pgHeight;
         m_pPropGrid->GetClientSize(&pgWidth, &pgHeight);
@@ -1977,7 +1978,7 @@ void wxPropertyGridManager::OnResize( wxSizeEvent& WXUNUSED(event) )
             if ( page != m_pPropGrid->GetState() )
             {
                 page->OnClientWidthChange(pgWidth,
-                                          pgWidth - page->m_width,
+                                          pgWidth - page->GetVirtualWidth(),
                                           true);
             }
         }
@@ -2014,7 +2015,7 @@ void wxPropertyGridManager::OnMouseMove( wxMouseEvent &event )
 
         // Calculate drag limits
         int bottom_limit = m_height - m_splitterHeight + 1;
-        int top_limit = m_pPropGrid->m_lineHeight;
+        int top_limit = m_pPropGrid->GetRowHeight();
 #if wxUSE_TOOLBAR
         if ( m_pToolbar ) top_limit += m_pToolbar->GetSize().y;
 #endif

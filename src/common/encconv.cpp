@@ -438,11 +438,23 @@ wxFontEncodingArray wxEncodingConverter::GetPlatformEquivalents(wxFontEncoding e
     {
 #if defined(__WINDOWS__)
         platform = wxPLATFORM_WINDOWS;
-#elif defined(__WXGTK__) || defined(__WXMOTIF__)
-        platform = wxPLATFORM_UNIX;
 #elif defined(__WXMAC__)
         platform = wxPLATFORM_MAC;
+#else
+        platform = wxPLATFORM_UNIX;
 #endif
+    }
+
+    switch ( platform )
+    {
+        case wxPLATFORM_UNIX:
+        case wxPLATFORM_WINDOWS:
+        case wxPLATFORM_MAC:
+            break;
+
+        default:
+            wxFAIL_MSG(wxS("Invalid platform specified"));
+            return wxFontEncodingArray();
     }
 
     int i, clas, e ;

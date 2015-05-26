@@ -1770,7 +1770,7 @@ void wxPropertyGrid::CorrectEditorWidgetSizeX()
 
     // Use fixed selColumn 1 for main editor widgets
     int newSplitterx = m_pState->DoGetSplitterPosition(0);
-    int newWidth = newSplitterx + m_pState->m_colWidths[1];
+    int newWidth = newSplitterx + m_pState->GetColumnWidth(1);
 
     if ( m_wndEditor2 )
     {

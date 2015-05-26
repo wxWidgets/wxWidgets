@@ -1680,6 +1680,8 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
     cairo_t* cr = static_cast<cairo_t*>(impl->GetCairoContext());
     if (cr)
         Init(cairo_reference(cr));
+    else
+        m_context = NULL;
 #endif
     wxSize sz = dc.GetSize();
     m_width = sz.x;

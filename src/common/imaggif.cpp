@@ -26,6 +26,7 @@
 #include "wx/gifdecod.h"
 #include "wx/stream.h"
 #include "wx/anidecod.h" // wxImageArray
+#include "wx/scopedarray.h"
 
 #define GIF89_HDR     "GIF89a"
 #define NETSCAPE_LOOP "NETSCAPE2.0"
@@ -116,53 +117,31 @@ static bool wxGIFHandler_BufferedOutput(wxOutputStream *, wxUint8 *buf, int c);
 bool wxGIFHandler::LoadFile(wxImage *image, wxInputStream& stream,
     bool verbose, int index)
 {
-    wxGIFDecoder *decod;
-    wxGIFErrorCode error;
-    bool ok = true;
-
-//    image->Destroy();
-    decod = new wxGIFDecoder();
-    error = decod->LoadGIF(stream);
-
-    if ((error != wxGIF_OK) && (error != wxGIF_TRUNCATED))
+    wxGIFDecoder decod;
+    switch ( decod.LoadGIF(stream) )
     {
-        if (verbose)
-        {
-            switch (error)
-            {
-                case wxGIF_INVFORMAT:
-                    wxLogError(_("GIF: error in GIF image format."));
-                    break;
-                case wxGIF_MEMERR:
-                    wxLogError(_("GIF: not enough memory."));
-                    break;
-                default:
-                    wxLogError(_("GIF: unknown error!!!"));
-                    break;
-            }
-        }
-        delete decod;
-        return false;
+        case wxGIF_OK:
+            break;
+
+        case wxGIF_INVFORMAT:
+            if ( verbose )
+                wxLogError(_("GIF: error in GIF image format."));
+            return false;
+
+        case wxGIF_MEMERR:
+            if ( verbose )
+                wxLogError(_("GIF: not enough memory."));
+            return false;
+
+        case wxGIF_TRUNCATED:
+            if ( verbose )
+                wxLogError(_("GIF: data stream seems to be truncated."));
+
+            // go on; image data is OK
+            break;
     }
 
-    if ((error == wxGIF_TRUNCATED) && verbose)
-    {
-        wxLogError(_("GIF: data stream seems to be truncated."));
-        // go on; image data is OK
-    }
-
-    if (ok)
-    {
-        ok = decod->ConvertToImage(index != -1 ? (size_t)index : 0, image);
-    }
-    else
-    {
-        wxLogError(_("GIF: Invalid gif index."));
-    }
-
-    delete decod;
-
-    return ok;
+    return decod.ConvertToImage(index != -1 ? (size_t)index : 0, image);
 }
 
 bool wxGIFHandler::SaveFile(wxImage *image,
@@ -218,6 +197,8 @@ bool wxGIFHandler::DoSaveFile(const wxImage& image, wxOutputStream *stream,
 
     int width = image.GetWidth();
     int height = image.GetHeight();
+    wxCHECK_MSG( width && height, false, wxS("can't save 0-sized file") );
+
     int width_even = width + ((width % 2) ? 1 : 0);
 
     if (first)
@@ -265,7 +246,7 @@ bool wxGIFHandler::DoSaveFile(const wxImage& image, wxOutputStream *stream,
     }
 
     const wxUint8 *src = image.GetData();
-    wxUint8 *eightBitData = new wxUint8[width];
+    wxScopedArray<wxUint8> eightBitData(width);
 
     SetupCompress(stream, 8);
 
@@ -285,14 +266,12 @@ bool wxGIFHandler::DoSaveFile(const wxImage& image, wxOutputStream *stream,
             src+=3;
         }
 
-        ok = CompressLine(stream, eightBitData, width);
+        ok = CompressLine(stream, eightBitData.get(), width);
         if (!ok)
         {
             break;
         }
     }
-
-    delete [] eightBitData;
 
     wxDELETE(m_hashTable);
 
