@@ -3528,6 +3528,9 @@ bool wxPropertyGrid::DoEditorValidate()
     if ( guard.IsInside() )
         return false;
 
+    m_validationInfo.m_failureBehavior = m_permanentValidationFailureBehavior;
+    m_validationInfo.m_isFailing = true;
+
     wxPGProperty* selected = GetSelection();
     if ( selected )
     {
@@ -3541,6 +3544,8 @@ bool wxPropertyGrid::DoEditorValidate()
                 return false;
         }
     }
+
+    m_validationInfo.m_isFailing = false;
 #endif
     return true;
 }
