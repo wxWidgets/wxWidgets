@@ -200,18 +200,12 @@ bool wxNumericPropertyValidator::Validate(wxWindow* parent)
     if ( !wxTextValidator::Validate(parent) )
         return false;
 
-    wxWindow* wnd = GetWindow();
-    if ( !wxDynamicCast(wnd, wxTextCtrl) )
+    wxTextCtrl* tc = wxDynamicCast(GetWindow(), wxTextCtrl);
+    if ( !tc )
         return true;
 
     // Do not allow zero-length string
-    wxTextCtrl* tc = static_cast<wxTextCtrl*>(wnd);
-    wxString text = tc->GetValue();
-
-    if ( text.empty() )
-        return false;
-
-    return true;
+    return !tc->IsEmpty();
 }
 
 #endif // wxUSE_VALIDATORS
