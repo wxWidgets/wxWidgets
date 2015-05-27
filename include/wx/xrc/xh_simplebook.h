@@ -14,6 +14,8 @@
 
 #if wxUSE_XRC && wxUSE_BOOKCTRL
 
+#if wxABI_VERSION >= 30002
+
 class wxSimplebook;
 
 class WXDLLIMPEXP_XRC wxSimplebookXmlHandler : public wxXmlResourceHandler
@@ -30,6 +32,8 @@ private:
 
     wxDECLARE_DYNAMIC_CLASS(wxSimplebookXmlHandler);
 };
+
+#endif // wxABI_VERSION >= 30002
 
 #endif // wxUSE_XRC && wxUSE_BOOKCTRL
 
