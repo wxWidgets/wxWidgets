@@ -565,7 +565,7 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
         unsigned char depth = 1;
         if ( !parentIsRoot )
         {
-            depth = parent->m_depth;
+            depth = parent->GetDepth();
             if ( !parent->IsCategory() )
                 depth++;
         }
@@ -599,7 +599,7 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
         unsigned char depth = 1;
         if ( !parentIsRoot )
         {
-            depth = parent->m_depth + 1;
+            depth = parent->GetDepth() + 1;
         }
         m_depth = depth;
         m_depthBgCol = depth;

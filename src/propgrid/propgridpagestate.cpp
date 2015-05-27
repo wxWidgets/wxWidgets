@@ -610,9 +610,9 @@ bool wxPropertyGridPageState::EnableCategories( bool enable )
             // then the depth stays the same.
             if ( parent->IsCategory() &&
                  !p->IsCategory() )
-                p->m_depth = parent->m_depth;
+                p->m_depth = parent->GetDepth();
             else
-                p->m_depth = parent->m_depth + 1;
+                p->m_depth = parent->GetDepth() + 1;
 
         ITEM_ITERATION_LOOP_END
 
@@ -641,7 +641,7 @@ bool wxPropertyGridPageState::EnableCategories( bool enable )
 
             p->m_parent = parent;
 
-            p->m_depth = parent->m_depth + 1;
+            p->m_depth = parent->GetDepth() + 1;
 
         ITEM_ITERATION_LOOP_END
     }
