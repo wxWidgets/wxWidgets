@@ -1210,6 +1210,11 @@ unsigned int wxOnDraggingEnteredOrUpdated(wxWidgetCocoaImpl* viewImpl,
     sourceDragMask contains copy, link, generic, and private flags. Formerly
     this would result in wxDragLink which is not what is expected for text.
     Give precedence to the move and copy flag instead.
+
+    TODO:
+    In order to respect wxDrag_DefaultMove, access to dnd.mm's
+    DropSourceDelegate will be needed which contains the wxDrag value used.
+    (The draggingSource method of sender points to a DropSourceDelegate* ).
     */
     wxDragResult result = wxDragNone;
 
