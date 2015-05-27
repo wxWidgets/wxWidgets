@@ -931,6 +931,7 @@ bool wxFloatProperty::DoSetAttribute( const wxString& name, wxVariant& value )
     return false;
 }
 
+#if wxABI_VERSION >= 30003
 wxVariant wxFloatProperty::DoGetAttribute( const wxString& name ) const
 {
     wxVariant value;
@@ -940,6 +941,7 @@ wxVariant wxFloatProperty::DoGetAttribute( const wxString& name ) const
     }
     return value;
 }
+#endif // wxABI_VERSION >= 30003
 
 wxValidator*
 wxFloatProperty::GetClassValidator()
