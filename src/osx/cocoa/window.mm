@@ -1215,10 +1215,16 @@ unsigned int wxOnDraggingEnteredOrUpdated(wxWidgetCocoaImpl* viewImpl,
     {
         case wxDragLink:
             nsresult = NSDragOperationLink;
+            break;
+
         case wxDragMove:
             nsresult = NSDragOperationMove;
+            break;
+
         case wxDragCopy:
             nsresult = NSDragOperationCopy;
+            break;
+
         default :
             break;
     }
