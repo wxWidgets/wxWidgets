@@ -2267,10 +2267,9 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         }
 
         // Splitters
-        unsigned int si;
         int sx = x;
 
-        for ( si = 0; si < colCount; si++ )
+        for ( unsigned int si = 0; si < colCount; si++ )
         {
             sx += colWidths[si];
             dc.DrawLine( sx, y, sx, y2 );

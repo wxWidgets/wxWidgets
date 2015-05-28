@@ -1032,8 +1032,7 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
             }
         }
 
-        unsigned int i;
-        for ( i=0; i<cmnVals; i++ )
+        for ( unsigned int i = 0; i < cmnVals; i++ )
             labels.Add(propGrid->GetCommonValueLabel(i));
     }
 

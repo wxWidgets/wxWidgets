@@ -339,9 +339,7 @@ void wxPropertyGridPageState::CalculateFontAndBitmapStuff( int WXUNUSED(vspacing
     VirtualHeightChanged();
 
     // Recalculate caption text extents.
-    unsigned int i;
-
-    for ( i=0;i<m_regularArray.GetChildCount();i++ )
+    for ( unsigned int i = 0; i < m_regularArray.GetChildCount();i++ )
     {
         wxPGProperty* p =m_regularArray.Item(i);
 
@@ -788,11 +786,10 @@ int wxPropertyGridPageState::GetColumnFitWidth(wxClientDC& dc,
                                            bool subProps) const
 {
     wxPropertyGrid* pg = m_pPropGrid;
-    size_t i;
     int maxW = 0;
     int w, h;
 
-    for ( i=0; i<pwc->GetChildCount(); i++ )
+    for ( unsigned int i = 0; i <pwc->GetChildCount(); i++ )
     {
         wxPGProperty* p = pwc->Item(i);
         if ( !p->IsCategory() )
@@ -850,8 +847,7 @@ int wxPropertyGridPageState::GetColumnFullWidth( wxClientDC &dc, wxPGProperty *p
 int wxPropertyGridPageState::DoGetSplitterPosition( int splitterColumn ) const
 {
     int n = GetGrid()->GetMarginWidth();
-    int i;
-    for ( i=0; i<=splitterColumn; i++ )
+    for ( int i = 0; i <= splitterColumn; i++ )
         n += m_colWidths[i];
     return n;
 }
@@ -1479,8 +1475,7 @@ wxVariant wxPropertyGridPageState::DoGetPropertyValues( const wxString& listname
         {
             wxASSERT( !pwc->HasFlag(wxPG_PROP_AGGREGATE) );
 
-            size_t i;
-            for ( i=0; i<pwc->GetChildCount(); i++ )
+            for ( unsigned int i = 0; i < pwc->GetChildCount(); i++ )
             {
                 wxPGProperty* p = pwc->Item(i);
                 if ( !p->GetChildCount() || p->HasFlag(wxPG_PROP_AGGREGATE) )

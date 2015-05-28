@@ -1486,7 +1486,6 @@ void wxFlagsProperty::Init()
     //
     // Generate children
     //
-    unsigned int i;
 
     unsigned int prevChildCount = m_children.size();
 
@@ -1511,6 +1510,8 @@ void wxFlagsProperty::Init()
         }
         state->DoClearSelection();
     }
+
+    unsigned int i;
 
     // Delete old children
     for ( i=0; i<prevChildCount; i++ )
@@ -1664,9 +1665,8 @@ void wxFlagsProperty::OnSetValue()
     if ( newFlags != m_oldValue )
     {
         // Set child modified states
-        unsigned int i;
         const wxPGChoices& choices = m_choices;
-        for ( i = 0; i<GetItemCount(); i++ )
+        for ( unsigned int i = 0; i < GetItemCount(); i++ )
         {
             int flag;
 

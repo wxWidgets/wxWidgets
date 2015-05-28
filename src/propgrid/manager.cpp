@@ -240,7 +240,7 @@ public:
 
     virtual ~wxPGHeaderCtrl()
     {
-        for (unsigned int i=0; i<m_columns.size(); i++ )
+        for (size_t i = 0; i < m_columns.size(); i++ )
             delete m_columns[i];
     }
 
@@ -600,8 +600,7 @@ wxPropertyGridManager::~wxPropertyGridManager()
     //m_pPropGrid->ClearSelection();
     wxDELETE(m_pPropGrid);
 
-    size_t i;
-    for ( i=0; i<m_arrPages.size(); i++ )
+    for ( size_t i = 0; i < m_arrPages.size(); i++ )
     {
         delete m_arrPages[i];
     }
@@ -644,8 +643,7 @@ bool wxPropertyGridManager::SetFont( const wxFont& font )
     m_pPropGrid->SetFont(font);
 
     // TODO: Need to do caption recacalculations for other pages as well.
-    unsigned int i;
-    for ( i=0; i<m_arrPages.size(); i++ )
+    for ( unsigned int i = 0; i < m_arrPages.size(); i++ )
     {
         wxPropertyGridPage* page = GetPage(i);
 
@@ -801,8 +799,7 @@ void wxPropertyGridManager::SelectPage( int index )
 
 int wxPropertyGridManager::GetPageByName( const wxString& name ) const
 {
-    size_t i;
-    for ( i=0; i<GetPageCount(); i++ )
+    for ( size_t i = 0; i < GetPageCount(); i++ )
     {
         if ( m_arrPages[i]->m_label == name )
             return i;
@@ -816,8 +813,7 @@ int wxPropertyGridManager::GetPageByState( const wxPropertyGridPageState* pState
 {
     wxASSERT( pState );
 
-    size_t i;
-    for ( i=0; i<GetPageCount(); i++ )
+    for ( size_t i = 0; i < GetPageCount(); i++ )
     {
         if ( pState == m_arrPages[i]->GetStatePtr() )
             return i;
@@ -1060,8 +1056,7 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
 
 bool wxPropertyGridManager::IsAnyModified() const
 {
-    size_t i;
-    for ( i=0; i<GetPageCount(); i++ )
+    for ( size_t i = 0; i < GetPageCount(); i++ )
     {
         if ( m_arrPages[i]->GetStatePtr()->m_anyModified )
             return true;
@@ -1687,8 +1682,7 @@ void wxPropertyGridManager::RecreateControls()
 
 wxPGProperty* wxPropertyGridManager::DoGetPropertyByName( const wxString& name ) const
 {
-    size_t i;
-    for ( i=0; i<GetPageCount(); i++ )
+    for ( size_t i = 0; i < GetPageCount(); i++ )
     {
         wxPropertyGridPageState* pState = m_arrPages[i]->GetStatePtr();
         wxPGProperty* p = pState->BaseGetPropertyByName(name);
@@ -1862,9 +1856,8 @@ void wxPropertyGridManager::SetSplitterLeft( bool subProps, bool allPages )
         dc.SetFont(m_pPropGrid->GetFont());
 
         int highest = 0;
-        unsigned int i;
 
-        for ( i=0; i<GetPageCount(); i++ )
+        for ( size_t i = 0; i < GetPageCount(); i++ )
         {
             int maxW = m_pState->GetColumnFitWidth(dc, m_arrPages[i]->DoGetRoot(), 0, subProps );
             maxW += m_pPropGrid->GetMarginWidth();
@@ -2118,8 +2111,7 @@ void wxPropertyGridManager::SetSplitterPosition( int pos, int splitterColumn )
     wxASSERT_MSG( GetPageCount(),
                   wxT("SetSplitterPosition() has no effect until pages have been added") );
 
-    size_t i;
-    for ( i=0; i<GetPageCount(); i++ )
+    for ( size_t i = 0; i < GetPageCount(); i++ )
     {
         wxPropertyGridPage* page = GetPage(i);
         page->DoSetSplitterPosition( pos, splitterColumn,
