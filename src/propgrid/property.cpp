@@ -504,7 +504,7 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
     // (so propgrid can be NULL, too).
 
     wxPGProperty* parent = m_parent;
-    bool parentIsRoot = parent->IsKindOf(wxCLASSINFO(wxPGRootProperty));
+    bool parentIsRoot = wxDynamicCast(parent, wxPGRootProperty) != NULL;
 
     //
     // Convert invalid cells to default ones in this grid

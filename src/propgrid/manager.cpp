@@ -345,18 +345,16 @@ private:
 
     virtual bool ProcessEvent( wxEvent& event ) wxOVERRIDE
     {
-        if ( event.IsKindOf(wxCLASSINFO(wxHeaderCtrlEvent)) )
+        wxHeaderCtrlEvent* hcEvent = wxDynamicCast(&event, wxHeaderCtrlEvent);
+        if ( hcEvent )
         {
-            wxHeaderCtrlEvent& hcEvent =
-                static_cast<wxHeaderCtrlEvent&>(event);
-
             wxPropertyGrid* pg = m_manager->GetGrid();
-            int col = hcEvent.GetColumn();
+            int col = hcEvent->GetColumn();
             wxEventType evtType = event.GetEventType();
 
             if ( evtType == wxEVT_HEADER_RESIZING )
             {
-                int colWidth = hcEvent.GetWidth();
+                int colWidth = hcEvent->GetWidth();
 
                 OnSetColumnWidth(col, colWidth);
 
@@ -370,12 +368,12 @@ private:
             {
                 // Never allow column resize if layout is static
                 if ( m_manager->HasFlag(wxPG_STATIC_SPLITTER) )
-                    hcEvent.Veto();
+                    hcEvent->Veto();
                 // Allow application to veto dragging
                 else if ( pg->SendEvent(wxEVT_PG_COL_BEGIN_DRAG,
                                         NULL, NULL, 0,
                                         (unsigned int)col) )
-                    hcEvent.Veto();
+                    hcEvent->Veto();
 
                 return true;
             }
