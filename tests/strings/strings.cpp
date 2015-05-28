@@ -168,10 +168,23 @@ void StringTestCase::Format()
     }
 
 
+    // Positional parameters tests:
     CPPUNIT_ASSERT_EQUAL
     (
         "two one",
         wxString::Format(wxT("%2$s %1$s"), wxT("one"), wxT("two"))
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "hello hello",
+        wxString::Format("%1$s %1$s", "hello")
+    );
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        "4 world hello world 3",
+        wxString::Format("%4$d %2$s %1$s %2$s %3$d", "hello", "world", 3, 4)
     );
 }
 
