@@ -577,6 +577,10 @@ Major new features in this release
 3.0.3: (released 2015-??-??)
 ----------------------------
 
+All:
+
+- Fix wxFileName::MakeRelativeTo() for directory relatively to itself.
+
 Unix:
 
 - Fix wxIPaddress::Hostname() failing if /etc/hosts contained very long names.
