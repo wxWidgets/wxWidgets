@@ -1784,15 +1784,27 @@ bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
         m_dirs.Insert(wxT(".."), 0u);
     }
 
-    if ( format == wxPATH_UNIX || format == wxPATH_DOS )
+    switch ( GetFormat(format) )
     {
-        // a directory made relative with respect to itself is '.' under Unix
-        // and DOS, by definition (but we don't have to insert "./" for the
-        // files)
-        if ( m_dirs.IsEmpty() && IsDir() )
-        {
-            m_dirs.Add(wxT('.'));
-        }
+        case wxPATH_NATIVE:
+        case wxPATH_MAX:
+            wxFAIL_MSG( wxS("unreachable") );
+            wxFALLTHROUGH;
+
+        case wxPATH_UNIX:
+        case wxPATH_DOS:
+            // a directory made relative with respect to itself is '.' under
+            // Unix and DOS, by definition (but we don't have to insert "./"
+            // for the files)
+            if ( m_dirs.IsEmpty() && IsDir() )
+            {
+                m_dirs.Add(wxT('.'));
+            }
+            break;
+
+        case wxPATH_MAC:
+        case wxPATH_VMS:
+            break;
     }
 
     m_relative = true;
