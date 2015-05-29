@@ -2247,17 +2247,15 @@ bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGr
     wxTextCtrl* ed = new wxTextCtrl(dlg,wxID_ANY,value,
         wxDefaultPosition,wxDefaultSize,edStyle);
 
-    rowsizer->Add( ed, 1, wxEXPAND|wxALL, spacing );
-    topsizer->Add( rowsizer, 1, wxEXPAND, 0 );
+    rowsizer->Add(ed, wxSizerFlags(1).Expand().Border(wxALL, spacing));
+    topsizer->Add(rowsizer, wxSizerFlags(1).Expand());
 
     wxStdDialogButtonSizer* buttonSizer = new wxStdDialogButtonSizer();
     if ( !prop->HasFlag(wxPG_PROP_READONLY) )
         buttonSizer->AddButton(new wxButton(dlg, wxID_OK));
     buttonSizer->AddButton(new wxButton(dlg, wxID_CANCEL));
     buttonSizer->Realize();
-    topsizer->Add( buttonSizer, 0,
-                   wxALIGN_RIGHT|wxBOTTOM|wxRIGHT,
-                   spacing );
+    topsizer->Add(buttonSizer, wxSizerFlags(0).Right().Border(wxBOTTOM|wxRIGHT, spacing));
 
     dlg->SetSizer( topsizer );
     topsizer->SetSizeHints( dlg );
@@ -2396,7 +2394,7 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
     // Message
     if ( !message.empty() )
         topsizer->Add( new wxStaticText(this,-1,message),
-            0, wxALIGN_LEFT|wxALL, spacing );
+            wxSizerFlags(0).Left().Border(wxALL, spacing) );
 
     m_elb = new wxEditableListBox(this, wxID_ANY, message,
                                   wxDefaultPosition,
@@ -2444,16 +2442,14 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
         wxListEventHandler(wxPGArrayEditorDialog::OnEndLabelEdit),
         NULL, this);
 
-    topsizer->Add( m_elb, 1, wxEXPAND, spacing );
+    topsizer->Add(m_elb, wxSizerFlags(1).Expand().Border(0, spacing));
 
     // Standard dialog buttons
     wxStdDialogButtonSizer* buttonSizer = new wxStdDialogButtonSizer();
     buttonSizer->AddButton(new wxButton(this, wxID_OK));
     buttonSizer->AddButton(new wxButton(this, wxID_CANCEL));
     buttonSizer->Realize();
-    topsizer->Add( buttonSizer, 0,
-                   wxALIGN_RIGHT|wxALL,
-                   spacing );
+    topsizer->Add(buttonSizer, wxSizerFlags(0).Right().Border(wxALL, spacing));
 
     m_elb->SetFocus();
 
