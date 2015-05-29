@@ -2256,7 +2256,7 @@ bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGr
     buttonSizer->AddButton(new wxButton(dlg, wxID_CANCEL));
     buttonSizer->Realize();
     topsizer->Add( buttonSizer, 0,
-                   wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxBOTTOM|wxRIGHT,
+                   wxALIGN_RIGHT|wxBOTTOM|wxRIGHT,
                    spacing );
 
     dlg->SetSizer( topsizer );
@@ -2396,7 +2396,7 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
     // Message
     if ( !message.empty() )
         topsizer->Add( new wxStaticText(this,-1,message),
-            0, wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL|wxALL, spacing );
+            0, wxALIGN_LEFT|wxALL, spacing );
 
     m_elb = new wxEditableListBox(this, wxID_ANY, message,
                                   wxDefaultPosition,
@@ -2452,7 +2452,7 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
     buttonSizer->AddButton(new wxButton(this, wxID_CANCEL));
     buttonSizer->Realize();
     topsizer->Add( buttonSizer, 0,
-                   wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL,
+                   wxALIGN_RIGHT|wxALL,
                    spacing );
 
     m_elb->SetFocus();
