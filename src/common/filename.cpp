@@ -1837,7 +1837,7 @@ bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
         case wxPATH_NATIVE:
         case wxPATH_MAX:
             wxFAIL_MSG( wxS("unreachable") );
-            wxFALLTHROUGH;
+            // fall through
 
         case wxPATH_UNIX:
         case wxPATH_DOS:
