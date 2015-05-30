@@ -1985,7 +1985,7 @@ void wxPropertyGridManager::OnResize( wxSizeEvent& WXUNUSED(event) )
 
 void wxPropertyGridManager::OnMouseEntry( wxMouseEvent& WXUNUSED(event) )
 {
-    // Correct cursor. This is required atleast for wxGTK, for which
+    // Correct cursor. This is required at least for wxGTK, for which
     // setting button's cursor to *wxSTANDARD_CURSOR does not work.
     SetCursor( wxNullCursor );
     m_onSplitter = 0;

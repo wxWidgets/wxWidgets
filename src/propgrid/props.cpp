@@ -1948,7 +1948,7 @@ wxValidator* wxFileProperty::GetClassValidator()
 #if wxUSE_VALIDATORS
     WX_PG_DOGETVALIDATOR_ENTRY()
 
-    // Atleast wxPython 2.6.2.1 required that the string argument is given
+    // At least wxPython 2.6.2.1 required that the string argument is given
     static wxString v;
     wxTextValidator* validator = new wxTextValidator(wxFILTER_EXCLUDE_CHAR_LIST,&v);
 

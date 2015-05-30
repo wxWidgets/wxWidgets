@@ -281,7 +281,7 @@ wxPG_EX_HELP_AS_TOOLTIPS            = 0x00010000,
 /** Prevent TAB from focusing to wxButtons. This behaviour was default
     in version 1.2.0 and earlier.
     NOTE! Tabbing to button doesn't work yet. Problem seems to be that on wxMSW
-      atleast the button doesn't properly propagate key events (yes, I'm using
+      at least the button doesn't properly propagate key events (yes, I'm using
       wxWANTS_CHARS).
 */
 //wxPG_EX_NO_TAB_TO_BUTTON            = 0x00020000,
