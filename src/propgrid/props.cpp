@@ -2228,7 +2228,7 @@ bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGr
 
 {
     // launch editor dialog
-    wxDialog* dlg = new wxDialog(propGrid,-1,prop->GetLabel(),wxDefaultPosition,wxDefaultSize,
+    wxDialog* dlg = new wxDialog(propGrid, wxID_ANY, prop->GetLabel(), wxDefaultPosition, wxDefaultSize,
                                  wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLIP_CHILDREN);
 
     dlg->SetFont(propGrid->GetFont()); // To allow entering chars of the same set as the propGrid
@@ -2393,7 +2393,7 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
 
     // Message
     if ( !message.empty() )
-        topsizer->Add( new wxStaticText(this,-1,message),
+        topsizer->Add( new wxStaticText(this, wxID_ANY, message),
             wxSizerFlags(0).Left().Border(wxALL, spacing) );
 
     m_elb = new wxEditableListBox(this, wxID_ANY, message,
