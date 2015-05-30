@@ -166,13 +166,11 @@ void FormMain::OnDumpList( wxCommandEvent& WXUNUSED(event) )
     wxTextCtrl* ed = new wxTextCtrl(dlg, 11, text,
                                     wxDefaultPosition, wxDefaultSize,
                                     wxTE_MULTILINE);
-    rowsizer->Add( ed, 1, wxEXPAND|wxALL, spacing );
-    topsizer->Add( rowsizer, 1, wxEXPAND, 0 );
+    rowsizer->Add( ed, wxSizerFlags(1).Expand().Border(wxALL, spacing));
+    topsizer->Add( rowsizer, wxSizerFlags(1).Expand());
     rowsizer = new wxBoxSizer( wxHORIZONTAL );
-    const int butSzFlags =
-        wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT;
     rowsizer->Add( new wxButton(dlg,wxID_OK,wxT("Ok")),
-        0, butSzFlags, spacing );
+        wxSizerFlags(0).CentreHorizontal().CentreVertical().Border(wxBOTTOM|wxLEFT|wxRIGHT, spacing));
     topsizer->Add( rowsizer, wxSizerFlags().Right() );
 
     dlg->SetSizer( topsizer );
@@ -347,13 +345,11 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
     wxTextCtrl* ed = new wxTextCtrl(dlg, 11, wxEmptyString,
                                     wxDefaultPosition, wxDefaultSize,
                                     wxTE_MULTILINE);
-    rowsizer->Add( ed, 1, wxEXPAND|wxALL, spacing );
-    topsizer->Add( rowsizer, 1, wxEXPAND, 0 );
+    rowsizer->Add( ed, wxSizerFlags(1).Expand().Border(wxALL, spacing));
+    topsizer->Add( rowsizer, wxSizerFlags(1).Expand());
     rowsizer = new wxBoxSizer( wxHORIZONTAL );
-    const int butSzFlags =
-        wxALIGN_CENTRE_HORIZONTAL|wxALIGN_CENTRE_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT;
     rowsizer->Add( new wxButton(dlg,wxID_OK,wxT("Ok")),
-        0, butSzFlags, spacing );
+        wxSizerFlags(0).CentreHorizontal().CentreVertical().Border(wxBOTTOM|wxLEFT|wxRIGHT, spacing));
     topsizer->Add( rowsizer, wxSizerFlags().Right() );
 
     dlg->SetSizer( topsizer );
@@ -1206,7 +1202,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         if ( pgman->GetGrid()->GetSplitterPosition() != trySplitterPos )
             RT_FAILURE_MSG(wxString::Format(wxT("Splitter position was %i (should have been %i)"),(int)pgman->GetGrid()->GetSplitterPosition(),trySplitterPos).c_str());
 
-        m_topSizer->Add( m_pPropGridManager, 1, wxEXPAND );
+        m_topSizer->Add( m_pPropGridManager, wxSizerFlags(1).Expand());
         FinalizePanel();
 
         wxSize sz = GetSize();

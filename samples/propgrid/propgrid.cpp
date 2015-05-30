@@ -1840,16 +1840,16 @@ void FormMain::FinalizePanel( bool wasCreated )
     // Button for tab traversal testing
     m_topSizer->Add( new wxButton(m_panel, wxID_ANY,
                      wxT("Should be able to move here with Tab")),
-                     0, wxEXPAND );
+                     wxSizerFlags(0).Expand());
     m_topSizer->Add( new wxButton(m_panel, ID_SHOWPOPUP,
                      wxT("Show Popup")),
-                     0, wxEXPAND );
+                     wxSizerFlags(0).Expand());
 
     m_panel->SetSizer( m_topSizer );
     m_topSizer->SetSizeHints( m_panel );
 
     wxBoxSizer* panelSizer = new wxBoxSizer( wxHORIZONTAL );
-    panelSizer->Add( m_panel, 1, wxEXPAND|wxFIXED_MINSIZE );
+    panelSizer->Add( m_panel, wxSizerFlags(1).Expand().FixedMinSize());
 
     SetSizer( panelSizer );
     panelSizer->SetSizeHints( this );
@@ -1957,7 +1957,7 @@ void FormMain::CreateGrid( int style, int extraStyle )
             wxPropertyGridEventHandler(FormMain::OnPropertyGridChange) );
     */
 
-    m_topSizer->Add( m_pPropGridManager, 1, wxEXPAND );
+    m_topSizer->Add( m_pPropGridManager, wxSizerFlags(1).Expand());
 
     FinalizePanel(wasCreated);
 }
@@ -3242,7 +3242,7 @@ struct PropertyGridPopup : wxPopupWindow
         ::SetMinSize(m_grid);
 
         m_sizer = new wxBoxSizer( wxVERTICAL );
-        m_sizer->Add(m_grid, 0, wxALL | wxEXPAND, 0);
+        m_sizer->Add(m_grid, wxSizerFlags(0).Expand().Border(wxALL, 0));
         m_panel->SetAutoLayout(true);
         m_panel->SetSizer(m_sizer);
         m_sizer->Fit(m_panel);
