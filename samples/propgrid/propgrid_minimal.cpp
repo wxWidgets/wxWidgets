@@ -46,7 +46,7 @@ MyFrame::MyFrame(wxWindow* parent)
     MenuBar->Append(Menu, wxT("Action"));
     SetMenuBar(MenuBar);
 
-    wxPropertyGrid *pg = new wxPropertyGrid(this,-1,wxDefaultPosition,wxSize(400,400),
+    wxPropertyGrid *pg = new wxPropertyGrid(this,wxID_ANY,wxDefaultPosition,wxSize(400,400),
                         wxPG_SPLITTER_AUTO_CENTER |
                         wxPG_BOLD_MODIFIED );
     m_pg = pg;

@@ -123,7 +123,7 @@ void FormMain::OnDumpList( wxCommandEvent& WXUNUSED(event) )
     wxString text = wxT("This only tests that wxVariant related routines do not crash.");
     wxString t;
 
-    wxDialog* dlg = new wxDialog(this,-1,wxT("wxVariant Test"),
+    wxDialog* dlg = new wxDialog(this,wxID_ANY,wxT("wxVariant Test"),
         wxDefaultPosition,wxDefaultSize,wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER);
 
     unsigned int i;
@@ -335,7 +335,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
     wxArrayString errorMessages;
     wxDialog* dlg = NULL;
 
-    dlg = new wxDialog(this,-1,wxT("wxPropertyGrid Regression Tests"),
+    dlg = new wxDialog(this,wxID_ANY,wxT("wxPropertyGrid Regression Tests"),
         wxDefaultPosition,wxDefaultSize,wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER);
 
     // multi-line text editor dialog
