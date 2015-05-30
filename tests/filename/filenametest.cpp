@@ -445,17 +445,20 @@ void FileNameTestCase::TestNormalize()
 
 void FileNameTestCase::TestRelative()
 {
-    wxFileName fn("a/b.cpp");
+    const wxString pathSep = wxFileName::GetPathSeparator();
+
+    wxFileName fn("a" + pathSep + "b.cpp");
     fn.MakeRelativeTo("a");
     CPPUNIT_ASSERT_EQUAL( "b.cpp", fn.GetFullPath() );
 
-    fn.AssignDir("a/b");
+    fn.AssignDir("a" + pathSep + "b");
     fn.MakeRelativeTo("a");
-    CPPUNIT_ASSERT_EQUAL( "b/", fn.GetFullPath() );
+
+    CPPUNIT_ASSERT_EQUAL( "b" + pathSep, fn.GetFullPath() );
 
     fn.AssignDir("a");
     fn.MakeRelativeTo("a");
-    CPPUNIT_ASSERT_EQUAL( "./", fn.GetFullPath() );
+    CPPUNIT_ASSERT_EQUAL( "." + pathSep, fn.GetFullPath() );
 }
 
 void FileNameTestCase::TestReplace()
