@@ -31,7 +31,7 @@ to work with new wxWidgets (shared/dynamic) libraries without the need to
 rebuild. There is no requirement to preserve compatibility in the other
 direction (i.e. make new headers compatible with old libraries) as this
 would preclude any additions whatsoever to the stable branch. But see
-also section (4).
+also the section about `wxABI_VERSION`.
 
 
 What kind of changes are NOT binary compatible
