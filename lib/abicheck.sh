@@ -29,7 +29,7 @@ if [[ "$1" == "--generate" ]]; then
     rm -f $expected_abi_file
     for library in $file_mask; do
         # NOTE: don't use -C option as otherwise cut won't work correctly
-        nm $nm_options $library | cut -d ' ' -f 3 | sort >>$expected_abi_file
+        nm $nm_options $library | cut -d ' ' -f 2,3 | sort >>$expected_abi_file
     done
 
     echo "Expected wxWidgets ABI generated in \"$expected_abi_file\"..."
@@ -53,7 +53,7 @@ elif [[ -z "$1" ]]; then
     rm -f $actual_abi_file
     for library in $file_mask; do
         # NOTE: don't use -C option as otherwise cut won't work correctly
-        nm $nm_options $library | cut -d ' ' -f 3 | sort >>$actual_abi_file
+        nm $nm_options $library | cut -d ' ' -f 2,3 | sort >>$actual_abi_file
     done
 
     result=`diff -u $expected_abi_file $actual_abi_file`
