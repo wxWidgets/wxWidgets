@@ -226,7 +226,7 @@ $(OBJS)\wxpoem.exe: $(WXPOEM_OBJECTS) $(OBJS)\wxpoem_wxpoem_rc.o
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %%f in (wxpoem.txt wxpoem.dat) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
+	for %%f in (wxpoem.txt wxpoem.dat wxpoem.idx) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
 $(OBJS)\wxpoem_wxpoem.o: ./wxpoem.cpp
 	$(CXX) -c -o $@ $(WXPOEM_CXXFLAGS) $(CPPDEPS) $<
