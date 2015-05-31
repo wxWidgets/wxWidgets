@@ -156,6 +156,7 @@ wxMSW:
 - Fix reading of not NUL-terminated strings using wxRegKey (Steffen Olszewski).
 - Fix unexpected change in MDI children order after showing a file dialog.
 - Don't send events for already selected radio popup menu items (Kinaou Hervé).
+- wxListCtrl::GetItemCount() in wxEVT_LIST_INSERT_ITEM is no longer off by 1.
 
 wxOSX/Cocoa:
 

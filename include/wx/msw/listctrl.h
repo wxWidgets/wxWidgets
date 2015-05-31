@@ -409,8 +409,6 @@ protected:
 
     int               m_colCount;   // Windows doesn't have GetColumnCount so must
                                     // keep track of inserted/deleted columns
-    long              m_count;      // Keep track of item count to save calls to
-                                    // ListView_GetItemCount
 
     // all wxMSWListItemData objects we use
     wxVector<wxMSWListItemData *> m_internalData;

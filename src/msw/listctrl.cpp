@@ -248,7 +248,6 @@ void wxListCtrl::Init()
     m_ownsImageListState = false;
 
     m_colCount = 0;
-    m_count = 0;
     m_textCtrl = NULL;
 
     m_hasAnyAttr = false;
@@ -1145,7 +1144,7 @@ bool wxListCtrl::SetItemPosition(long item, const wxPoint& pos)
 // Gets the number of items in the list control
 int wxListCtrl::GetItemCount() const
 {
-    return m_count;
+    return GetHwnd() ? ListView_GetItemCount(GetHwnd()) : 0;
 }
 
 wxSize wxListCtrl::GetItemSpacing() const
@@ -1381,10 +1380,6 @@ bool wxListCtrl::DeleteItem(long item)
         wxLogLastError(wxT("ListView_DeleteItem"));
         return false;
     }
-
-    m_count--;
-    wxASSERT_MSG( m_count == ListView_GetItemCount(GetHwnd()),
-                  wxT("m_count should match ListView_GetItemCount"));
 
     // the virtual list control doesn't refresh itself correctly, help it
     if ( IsVirtual() )
@@ -1711,16 +1706,7 @@ long wxListCtrl::InsertItem(const wxListItem& info)
         }
     }
 
-    const long rv = ListView_InsertItem(GetHwnd(), & item);
-
-    // failing to insert the item is really unexpected
-    wxCHECK_MSG( rv != -1, rv, "failed to insert an item in wxListCtrl" );
-
-    m_count++;
-    wxASSERT_MSG( m_count == ListView_GetItemCount(GetHwnd()),
-                  wxT("m_count should match ListView_GetItemCount"));
-
-    return rv;
+    return ListView_InsertItem(GetHwnd(), &item);
 }
 
 long wxListCtrl::InsertItem(long index, const wxString& label)
@@ -2171,16 +2157,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
 
             case LVN_DELETEITEM:
-                if ( m_count == 0 )
-                {
-                    // this should be prevented by the post-processing code
-                    // below, but "just in case"
-                    return false;
-                }
-
                 eventType = wxEVT_LIST_DELETE_ITEM;
                 event.m_itemIndex = iItem;
-
                 break;
 
             case LVN_INSERTITEM:
@@ -2576,9 +2554,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // the user should have access to it in OnDeleteAllItems() handler)
             FreeAllInternalData();
 
-            // the control is empty now, synchronize the cached number of items
-            // with the real one
-            m_count = 0;
             return true;
 
         case LVN_DELETEITEM:
@@ -3102,9 +3077,6 @@ void wxListCtrl::SetItemCount(long count)
     {
         wxLogLastError(wxT("ListView_SetItemCount"));
     }
-    m_count = count;
-    wxASSERT_MSG( m_count == ListView_GetItemCount(GetHwnd()),
-                  wxT("m_count should match ListView_GetItemCount"));
 }
 
 void wxListCtrl::RefreshItem(long item)
