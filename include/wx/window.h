@@ -408,8 +408,6 @@ public:
 
     wxDEPRECATED_MSG("use GetEffectiveMinSize() instead")
     wxSize GetBestFittingSize() const;
-    wxDEPRECATED_MSG("use GetEffectiveMinSize() instead")
-    wxSize GetAdjustedMinSize() const;
 
         // A 'Smart' SetSize that will fill in default size values with 'best'
         // size.  Sets the minsize to what was passed in.
