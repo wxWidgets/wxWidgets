@@ -32,6 +32,13 @@ protected:
         m_isHot = false;
     }
 
+    // Explicitly define the destructor even if it's trivial to make it
+    // protected. This avoids compiler warnings about the fact that this class
+    // has virtual functions, but no virtual destructor without making the dtor
+    // virtual which is not needed here as objects are never deleted via
+    // pointers to this class (and protected dtor enforces this).
+    ~wxMSWOwnerDrawnButtonBase() { }
+
     // Make the control owner drawn if necessary to implement support for the
     // given foreground colour.
     void MSWMakeOwnerDrawnIfNecessary(const wxColour& colFg);
