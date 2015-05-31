@@ -2169,7 +2169,6 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, wxRichTextDrawingContext& co
     // Check the bottom edge of any floating object
     if (wxRichTextBuffer::GetFloatingLayoutMode() && GetFloatCollector() && GetFloatCollector()->HasFloats())
     {
-        int bottom = GetFloatCollector()->GetLastRectBottom();
         // The floating objects are positioned relative to entire buffer, not this box
         int maxFloatHeight = GetFloatCollector()->GetLastRectBottom() - GetPosition().y - topMargin;
         if (maxFloatHeight > maxHeight)
