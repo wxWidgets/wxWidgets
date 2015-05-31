@@ -3477,7 +3477,14 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // to avoid such surprises, we force the generation of focus events
             // now, before we generate the selection change ones
             if ( !m_changingSelection && !m_isBeingDeleted )
+            {
+                // Setting focus can generate selection events too however,
+                // suppress them as they're completely artificial and we'll
+                // generate the real ones soon.
+                TempSetter set(m_changingSelection);
+
                 SetFocus();
+            }
             break;
 
         // instead of explicitly checking for _WIN32_IE, check if the
