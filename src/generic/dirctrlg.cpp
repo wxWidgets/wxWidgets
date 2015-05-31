@@ -414,8 +414,6 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
     SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
 
-    Init();
-
     long treeStyle = wxTR_HAS_BUTTONS;
 
     // On Windows CE, if you hide the root, you get a crash when
