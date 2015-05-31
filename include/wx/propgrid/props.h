@@ -956,14 +956,14 @@ public:
     */
     virtual void SetDialogValue( const wxVariant& WXUNUSED(value) )
     {
-        wxFAIL_MSG(wxT("re-implement this member function in derived class"));
+        wxFAIL_MSG(wxS("re-implement this member function in derived class"));
     }
 
     /** Return value modified by dialog.
     */
     virtual wxVariant GetDialogValue() const
     {
-        wxFAIL_MSG(wxT("re-implement this member function in derived class"));
+        wxFAIL_MSG(wxS("re-implement this member function in derived class"));
         return wxVariant();
     }
 

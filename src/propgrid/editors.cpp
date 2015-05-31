@@ -523,7 +523,7 @@ public:
         : wxEvtHandler()
     {
         wxASSERT_MSG( wxDynamicCast(property, wxBoolProperty),
-           wxT("Double-click processor should be used only with wxBoolProperty") );
+           wxS("Double-click processor should be used only with wxBoolProperty") );
 
         m_timeLastMouseUp = 0;
         m_combo = combo;
@@ -802,7 +802,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     if ( (flags & wxODCB_PAINTING_CONTROL) )
         paintdata.m_choiceItem = -1;
 
-    wxCHECK_RET( pDc, wxT("Invalid DC") );
+    wxCHECK_RET( pDc, wxS("Invalid DC") );
 
     wxDC& dc = *pDc;
     dc.SetBrush(*wxWHITE_BRUSH);

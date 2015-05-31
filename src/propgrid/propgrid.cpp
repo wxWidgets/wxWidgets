@@ -982,8 +982,8 @@ void wxPropertyGrid::DoBeginLabelEdit( unsigned int colIndex,
                                        int selFlags )
 {
     wxPGProperty* selected = GetSelection();
-    wxCHECK_RET(selected, wxT("No property selected"));
-    wxCHECK_RET(colIndex != 1, wxT("Do not use this for column 1"));
+    wxCHECK_RET(selected, wxS("No property selected"));
+    wxCHECK_RET(colIndex != 1, wxS("Do not use this for column 1"));
 
     if ( !(selFlags & wxPG_SEL_DONT_SEND_EVENT) )
     {
@@ -1374,7 +1374,7 @@ static wxColour wxPGAdjustColour(const wxColour& src, int ra,
     isinside++;
     wxCHECK_MSG( isinside < 3,
                  *wxBLACK,
-                 wxT("wxPGAdjustColour should not be recursively called more than once") );
+                 wxS("wxPGAdjustColour should not be recursively called more than once") );
 
     wxColour dst;
 
@@ -1704,7 +1704,7 @@ wxPoint wxPropertyGrid::GetGoodEditorDialogPosition( wxPGProperty* p,
     int x = splitterX;
     int y = p->GetY();
 
-    wxCHECK_MSG( y >= 0, wxPoint(-1,-1), wxT("invalid y?") );
+    wxCHECK_MSG( y >= 0, wxPoint(-1,-1), wxS("invalid y?") );
 
     ImprovedClientToScreen( &x, &y );
 
@@ -1831,7 +1831,7 @@ wxString& wxPropertyGrid::CreateEscapeSequences( wxString& dst_str, wxString& sr
                 dst_str << wxS('\t');
             else
             {
-                //wxLogDebug(wxT("WARNING: Could not create escape sequence for character #%i"),(int)a);
+                //wxLogDebug(wxS("WARNING: Could not create escape sequence for character #%i"),(int)a);
                 dst_str << a;
             }
         }
@@ -2648,7 +2648,7 @@ void wxPropertyGrid::DrawItemAndValueRelated( wxPGProperty* p )
 
 void wxPropertyGrid::DrawItemAndChildren( wxPGProperty* p )
 {
-    wxCHECK_RET( p, wxT("invalid property id") );
+    wxCHECK_RET( p, wxS("invalid property id") );
 
     // Do not draw if in non-visible page
     if ( p->GetParentState() != m_pState )
@@ -3100,7 +3100,7 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
             }
             else
             {
-                wxLogDebug(wxT("WARNING: wxEVT_PG_CHANGING is about to happen with old value."));
+                wxLogDebug(wxS("WARNING: wxEVT_PG_CHANGING is about to happen with old value."));
             }
         }
     }
@@ -4049,12 +4049,12 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
     /*
     if (p)
     {
-        wxLogDebug(wxT("SelectProperty( %s (%s[%i]) )"),p->GetLabel().c_str(),
+        wxLogDebug(wxS("SelectProperty( %s (%s[%i]) )"),p->GetLabel().c_str(),
             p->m_parent->GetLabel().c_str(),p->GetIndexInParent());
     }
     else
     {
-        wxLogDebug(wxT("SelectProperty( NULL, -1 )"));
+        wxLogDebug(wxS("SelectProperty( NULL, -1 )"));
     }
     */
 
@@ -4205,7 +4205,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                 const wxPGEditor* editor = p->GetEditorClass();
                 wxCHECK_MSG(editor, false,
-                    wxT("NULL editor class not allowed"));
+                    wxS("NULL editor class not allowed"));
 
                 m_iFlags &= ~wxPG_FL_FIXED_WIDTH_EDITOR;
 
@@ -4505,7 +4505,7 @@ bool wxPropertyGrid::DoCollapse( wxPGProperty* p, bool sendEvents )
 
 bool wxPropertyGrid::DoExpand( wxPGProperty* p, bool sendEvents )
 {
-    wxCHECK_MSG( p, false, wxT("invalid property id") );
+    wxCHECK_MSG( p, false, wxS("invalid property id") );
 
     wxPGProperty* pwc = (wxPGProperty*)p;
 
@@ -5585,7 +5585,7 @@ void wxPropertyGrid::AddActionTrigger( int action, int keycode, int modifiers )
 
         // Can add secondary?
         wxASSERT_MSG( !(it->second&~(0xFFFF)),
-                      wxT("You can only add up to two separate actions per key combination.") );
+                      wxS("You can only add up to two separate actions per key combination.") );
 
         action = it->second | (action<<16);
     }
@@ -5919,7 +5919,7 @@ void wxPropertyGrid::OnIdle( wxIdleEvent& WXUNUSED(event) )
 
         cntAfter = m_deletedProperties.size();
         wxASSERT_MSG( cntAfter <= cntBefore,
-            wxT("Increased number of pending items after deletion") );
+            wxS("Increased number of pending items after deletion") );
         // Break if deletion was not done
         if ( cntAfter >= cntBefore )
             break;
@@ -5933,7 +5933,7 @@ void wxPropertyGrid::OnIdle( wxIdleEvent& WXUNUSED(event) )
 
         cntAfter = m_removedProperties.size();
         wxASSERT_MSG( cntAfter <= cntBefore,
-            wxT("Increased number of pending items after removal") );
+            wxS("Increased number of pending items after removal") );
         // Break if removal was not done
         if ( cntAfter >= cntBefore )
             break;
@@ -6446,13 +6446,13 @@ wxPGProperty* wxPropertyGridPopulator::Add( const wxString& propClass,
 
     if ( parent->HasFlag(wxPG_PROP_AGGREGATE) )
     {
-        ProcessError(wxString::Format(wxT("new children cannot be added to '%s'"),parent->GetName().c_str()));
+        ProcessError(wxString::Format(wxS("new children cannot be added to '%s'"),parent->GetName().c_str()));
         return NULL;
     }
 
     if ( !classInfo || !classInfo->IsKindOf(wxCLASSINFO(wxPGProperty)) )
     {
-        ProcessError(wxString::Format(wxT("'%s' is not valid property class"),propClass.c_str()));
+        ProcessError(wxString::Format(wxS("'%s' is not valid property class"),propClass.c_str()));
         return NULL;
     }
 
@@ -6495,7 +6495,7 @@ wxPGChoices wxPropertyGridPopulator::ParseChoices( const wxString& choicesString
         wxString ids = choicesString.substr(1);
         wxPGHashMapS2P::iterator it = m_dictIdChoices.find(ids);
         if ( it == m_dictIdChoices.end() )
-            ProcessError(wxString::Format(wxT("No choices defined for id '%s'"),ids.c_str()));
+            ProcessError(wxString::Format(wxS("No choices defined for id '%s'"),ids.c_str()));
         else
             choices.AssignData((wxPGChoicesData*)it->second);
     }
@@ -6536,7 +6536,7 @@ wxPGChoices wxPropertyGridPopulator::ParseChoices( const wxString& choicesString
                             choices.Add(label, l);
                         }
                         labelValid = false;
-                        //wxLogDebug(wxT("%s, %s"),label.c_str(),value.c_str());
+                        //wxLogDebug(wxS("%s, %s"),label.c_str(),value.c_str());
                         value.clear();
                         label.clear();
                         state = 1;
@@ -6624,9 +6624,9 @@ bool wxPropertyGridPopulator::AddAttribute( const wxString& name,
         long v;
 
         // Auto-detect type
-        if ( valuel == wxT("true") || valuel == wxT("yes") || valuel == wxT("1") )
+        if ( valuel == wxS("true") || valuel == wxS("yes") || valuel == wxS("1") )
             variant = true;
-        else if ( valuel == wxT("false") || valuel == wxT("no") || valuel == wxT("0") )
+        else if ( valuel == wxS("false") || valuel == wxS("no") || valuel == wxS("0") )
             variant = false;
         else if ( value.ToLong(&v, 0) )
             variant = v;
@@ -6635,26 +6635,26 @@ bool wxPropertyGridPopulator::AddAttribute( const wxString& name,
     }
     else
     {
-        if ( type == wxT("string") )
+        if ( type == wxS("string") )
         {
             variant = value;
         }
-        else if ( type == wxT("int") )
+        else if ( type == wxS("int") )
         {
             long v = 0;
             value.ToLong(&v, 0);
             variant = v;
         }
-        else if ( type == wxT("bool") )
+        else if ( type == wxS("bool") )
         {
-            if ( valuel == wxT("true") || valuel == wxT("yes") || valuel == wxT("1") )
+            if ( valuel == wxS("true") || valuel == wxS("yes") || valuel == wxS("1") )
                 variant = true;
             else
                 variant = false;
         }
         else
         {
-            ProcessError(wxString::Format(wxT("Invalid attribute type '%s'"),type.c_str()));
+            ProcessError(wxString::Format(wxS("Invalid attribute type '%s'"),type.c_str()));
             return false;
         }
     }

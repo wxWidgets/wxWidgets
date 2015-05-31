@@ -521,7 +521,7 @@ public:
     void SelectPage( const wxString& label )
     {
         int index = GetPageByName(label);
-        wxCHECK_RET( index >= 0, wxT("No page with such name") );
+        wxCHECK_RET( index >= 0, wxS("No page with such name") );
         SelectPage( index );
     }
 

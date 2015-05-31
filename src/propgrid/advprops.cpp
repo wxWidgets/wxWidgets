@@ -402,7 +402,7 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
 #if defined(wxLongLong_t) && wxUSE_LONGLONG
                 s = wxLongLong(v_ll).ToString();
 #else
-                s = wxString::Format(wxT("%ld"), v_ll);
+                s = wxString::Format(wxS("%ld"), v_ll);
 #endif
             }
             else
@@ -474,7 +474,7 @@ wxPGWindowList wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgri
 {
     wxCHECK_MSG( wxDynamicCast(property, wxDateProperty),
                  NULL,
-                 wxT("DatePickerCtrl editor can only be used with wxDateProperty or derivative.") );
+                 wxS("DatePickerCtrl editor can only be used with wxDateProperty or derivative.") );
 
     wxDateProperty* prop = wxDynamicCast(property, wxDateProperty);
 
@@ -829,7 +829,7 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
         dc.SetFont(wxFontInfo(oldFont.GetPointSize().Bold().FaceName(drawFace));
 
         dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT) );
-        dc.DrawText( wxT("Aa"), rect.x+2, rect.y+1 );
+        dc.DrawText( wxS("Aa"), rect.x+2, rect.y+1 );
 
         dc.SetFont(oldFont);
     }
@@ -1070,7 +1070,7 @@ int wxSystemColourProperty::ColToInd( const wxColour& colour ) const
 
         if ( colour == GetColour(ind) )
         {
-            /*wxLogDebug(wxT("%s(%s): Index %i for ( getcolour(%i,%i,%i), colour(%i,%i,%i))"),
+            /*wxLogDebug(wxS("%s(%s): Index %i for ( getcolour(%i,%i,%i), colour(%i,%i,%i))"),
                 GetClassName(),GetLabel().c_str(),
                 (int)i,(int)GetColour(ind).Red(),(int)GetColour(ind).Green(),(int)GetColour(ind).Blue(),
                 (int)colour.Red(),(int)colour.Green(),(int)colour.Blue());*/
@@ -1364,7 +1364,7 @@ public:
             dc.SetBrush( *wxWHITE );
 
         wxRect imageRect = propertyGrid->GetImageRect(property, item);
-        wxLogDebug(wxT("%i, %i"),imageRect.x,imageRect.y);
+        wxLogDebug(wxS("%i, %i"),imageRect.x,imageRect.y);
         dc.DrawRectangle( rect.x+imageRect.x, rect.y+imageRect.y,
                           imageRect.width, imageRect.height );
 
@@ -1629,7 +1629,7 @@ wxColourProperty::wxColourProperty( const wxString& label,
                              gs_cp_es_normcolour_values,
                              &gs_wxColourProperty_choicesCache, value )
 {
-    wxASSERT_MSG( wxTheColourDatabase, wxT("No colour database") );
+    wxASSERT_MSG( wxTheColourDatabase, wxS("No colour database") );
     if ( wxTheColourDatabase )
     {
         // Extend colour database with PG-specific colours.
@@ -1874,14 +1874,14 @@ const wxString& wxPGGetDefaultImageWildcard()
             wxString ext_up = ext_lo.Upper();
 
             str.append( ext_up );
-            str.append( wxT(" files (*.") );
+            str.append( wxS(" files (*.") );
             str.append( ext_up );
-            str.append( wxT(")|*.") );
+            str.append( wxS(")|*.") );
             str.append( ext_lo );
-            str.append( wxT("|") );
+            str.append( wxS("|") );
         }
 
-        str.append ( wxT("All files (*.*)|*.*") );
+        str.append ( wxS("All files (*.*)|*.*") );
 
         wxPGGlobalVars->m_pDefaultImageWildcard = str;
     }
@@ -2043,14 +2043,14 @@ void wxMultiChoiceProperty::GenerateValueAsString( wxVariant& value,
     tempStr.Empty();
 
     if ( itemCount )
-        tempStr.append( wxT("\"") );
+        tempStr.append( wxS("\"") );
 
     for ( i = 0; i < itemCount; i++ )
     {
         tempStr.append( strings[i] );
-        tempStr.append( wxT("\"") );
+        tempStr.append( wxS("\"") );
         if ( i < (itemCount-1) )
-            tempStr.append ( wxT(" \"") );
+            tempStr.append ( wxS(" \"") );
     }
 }
 
@@ -2115,7 +2115,7 @@ bool wxMultiChoiceProperty::OnEvent( wxPropertyGrid* propgrid,
 
         if ( dlg.ShowModal() == wxID_OK && choiceCount )
         {
-            int userStringMode = GetAttributeAsLong(wxT("UserStringMode"), 0);
+            int userStringMode = GetAttributeAsLong(wxS("UserStringMode"), 0);
 
             wxArrayInt arrInt = dlg.GetSelections();
 
@@ -2156,7 +2156,7 @@ bool wxMultiChoiceProperty::StringToValue( wxVariant& variant, const wxString& t
 {
     wxArrayString arr;
 
-    int userStringMode = GetAttributeAsLong(wxT("UserStringMode"), 0);
+    int userStringMode = GetAttributeAsLong(wxS("UserStringMode"), 0);
 
     WX_PG_TOKENIZER2_BEGIN(text,wxT('"'))
         if ( userStringMode > 0 || (m_choices.IsOk() && m_choices.Index( token ) != wxNOT_FOUND) )
@@ -2251,7 +2251,7 @@ wxString wxDateProperty::ValueToString( wxVariant& value,
     wxDateTime dateTime = value.GetDateTime();
 
     if ( !dateTime.IsValid() )
-        return wxT("Invalid");
+        return wxS("Invalid");
 
     if ( ms_defaultDateFormat.empty() )
     {
@@ -2283,8 +2283,8 @@ wxString wxDateProperty::DetermineDefaultDateFormat( bool showCentury )
     wxString format;
 
     wxDateTime dt;
-    dt.ParseFormat(wxT("2003-10-13"), wxT("%Y-%m-%d"));
-    wxString str(dt.Format(wxT("%x")));
+    dt.ParseFormat(wxS("2003-10-13"), wxS("%Y-%m-%d"));
+    wxString str(dt.Format(wxS("%x")));
 
     const wxChar *p = str.c_str();
     while ( *p )
@@ -2292,25 +2292,25 @@ wxString wxDateProperty::DetermineDefaultDateFormat( bool showCentury )
         int n=wxAtoi(p);
         if (n == dt.GetDay())
         {
-            format.Append(wxT("%d"));
+            format.Append(wxS("%d"));
             p += 2;
         }
         else if (n == (int)dt.GetMonth()+1)
         {
-            format.Append(wxT("%m"));
+            format.Append(wxS("%m"));
             p += 2;
         }
         else if (n == dt.GetYear())
         {
-            format.Append(wxT("%Y"));
+            format.Append(wxS("%Y"));
             p += 4;
         }
         else if (n == (dt.GetYear() % 100))
         {
             if (showCentury)
-                format.Append(wxT("%Y"));
+                format.Append(wxS("%Y"));
             else
-                format.Append(wxT("%y"));
+                format.Append(wxS("%y"));
             p += 2;
         }
         else

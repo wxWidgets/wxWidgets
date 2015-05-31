@@ -722,7 +722,7 @@ bool wxPropertyGridManager::DoSelectPage( int index )
 
     wxCHECK_MSG( index >= -1 && index < (int)GetPageCount(),
                  false,
-                 wxT("invalid page index") );
+                 wxS("invalid page index") );
 
     if ( m_selPage == index )
         return true;
@@ -923,7 +923,7 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
         index = GetPageCount();
 
     wxCHECK_MSG( (size_t)index == GetPageCount(), NULL,
-        wxT("wxPropertyGridManager currently only supports appending pages (due to wxToolBar limitation)."));
+        wxS("wxPropertyGridManager currently only supports appending pages (due to wxToolBar limitation)."));
 
     bool needInit = true;
     bool isPageInserted = m_iFlags & wxPG_MAN_FL_PAGE_INSERTED ? true : false;
@@ -977,7 +977,7 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
     if ( !label.empty() )
     {
         wxASSERT_MSG( pageObj->m_label.empty(),
-                      wxT("If page label is given in constructor, empty label must be given in AddPage"));
+                      wxS("If page label is given in constructor, empty label must be given in AddPage"));
         pageObj->m_label = label;
     }
 
@@ -1117,7 +1117,7 @@ wxPGProperty* wxPropertyGridManager::GetPageRoot( int index ) const
 {
     wxCHECK_MSG( (index >= 0) && (index < (int)m_arrPages.size()),
                  NULL,
-                 wxT("invalid page index") );
+                 wxS("invalid page index") );
 
     return m_arrPages[index]->GetRoot();
 }
@@ -1128,7 +1128,7 @@ bool wxPropertyGridManager::RemovePage( int page )
 {
     wxCHECK_MSG( (page >= 0) && (page < (int)GetPageCount()),
                  false,
-                 wxT("invalid page index") );
+                 wxS("invalid page index") );
 
     wxPropertyGridPage* pd = m_arrPages[page];
 
@@ -1632,7 +1632,7 @@ void wxPropertyGridManager::RecreateControls()
         {
             m_pTxtHelpCaption = new wxStaticText(this,
                                                  wxID_ANY,
-                                                 wxT(""),
+                                                 wxS(""),
                                                  wxDefaultPosition,
                                                  wxDefaultSize,
                                                  wxALIGN_LEFT|wxST_NO_AUTORESIZE);
@@ -1643,7 +1643,7 @@ void wxPropertyGridManager::RecreateControls()
         {
             m_pTxtHelpContent = new wxStaticText(this,
                                                  wxID_ANY,
-                                                 wxT(""),
+                                                 wxS(""),
                                                  wxDefaultPosition,
                                                  wxDefaultSize,
                                                  wxALIGN_LEFT|wxST_NO_AUTORESIZE);
@@ -1879,7 +1879,7 @@ void wxPropertyGridManager::SetSplitterLeft( bool subProps, bool allPages )
 void wxPropertyGridManager::SetPageSplitterLeft(int page, bool subProps)
 {
     wxASSERT_MSG( (page < (int) GetPageCount()),
-                  wxT("SetPageSplitterLeft() has no effect until pages have been added") );
+                  wxS("SetPageSplitterLeft() has no effect until pages have been added") );
 
     if (page < (int) GetPageCount())
     {
@@ -1900,7 +1900,7 @@ void wxPropertyGridManager::SetPageSplitterLeft(int page, bool subProps)
 void wxPropertyGridManager::ReconnectEventHandlers(wxWindowID oldId, wxWindowID newId)
 {
     wxCHECK_RET( oldId != newId,
-                 wxT("Attempting to reconnect event handlers to the same window"));
+                 wxS("Attempting to reconnect event handlers to the same window"));
 
     if (oldId != wxID_NONE)
     {
@@ -1925,7 +1925,7 @@ void wxPropertyGridManager::OnPropertyGridSelect( wxPropertyGridEvent& event )
 {
     // Check id.
     wxASSERT_MSG( GetId() == m_pPropGrid->GetId(),
-        wxT("wxPropertyGridManager id must be set with wxPropertyGridManager::SetId (not wxWindow::SetId).") );
+        wxS("wxPropertyGridManager id must be set with wxPropertyGridManager::SetId (not wxWindow::SetId).") );
 
     SetDescribedProperty(event.GetProperty());
     event.Skip();
@@ -2109,7 +2109,7 @@ void wxPropertyGridManager::OnMouseUp( wxMouseEvent &event )
 void wxPropertyGridManager::SetSplitterPosition( int pos, int splitterColumn )
 {
     wxASSERT_MSG( GetPageCount(),
-                  wxT("SetSplitterPosition() has no effect until pages have been added") );
+                  wxS("SetSplitterPosition() has no effect until pages have been added") );
 
     for ( size_t i = 0; i < GetPageCount(); i++ )
     {

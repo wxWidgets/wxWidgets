@@ -99,8 +99,8 @@ wxString wxStringProperty::ValueToString( wxVariant& value,
         {
             // Calling this under incorrect conditions will fail
             wxASSERT_MSG( argFlags & wxPG_VALUE_IS_CURRENT,
-                          "Sorry, currently default wxPGProperty::ValueToString() "
-                          "implementation only works if value is m_value." );
+                          wxS("Sorry, currently default wxPGProperty::ValueToString() ")
+                          wxS("implementation only works if value is m_value.") );
 
             DoGenerateComposedValue(s, argFlags);
         }
@@ -189,7 +189,7 @@ wxNumericPropertyValidator::
         arr.Add(wxS("e")); arr.Add(wxS("E"));
 
         // Use locale-specific decimal point
-        arr.Add(wxString::Format("%g", 1.1)[1]);
+        arr.Add(wxString::Format(wxS("%g"), 1.1)[1]);
     }
 
     SetIncludes(arr);
@@ -1253,7 +1253,7 @@ void wxEnumProperty::OnSetValue()
     }
     else
     {
-        wxFAIL_MSG( wxT("Unexpected value type") );
+        wxFAIL_MSG( wxS("Unexpected value type") );
         return;
     }
 
@@ -1445,7 +1445,7 @@ void wxEditEnumProperty::OnSetValue()
     }
     else
     {
-        wxFAIL_MSG( wxT("Unexpected value type") );
+        wxFAIL_MSG( wxS("Unexpected value type") );
         return;
     }
 
