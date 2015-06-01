@@ -293,8 +293,15 @@ private:
 
     void DetermineAllColumnWidths() const
     {
-        const unsigned int colCount = m_page->GetColumnCount();
+        wxPropertyGrid* pg = m_manager->GetGrid();
 
+        int sbWidth = pg->HasScrollbar(wxSB_VERTICAL)
+                        ? wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, pg)
+                        : 0;
+        // Internal border width
+        int borderWidth = (pg->GetSize().x - pg->GetClientSize().x - sbWidth) / 2;
+
+        const unsigned int colCount = m_page->GetColumnCount();
         for ( unsigned int i = 0; i < colCount; i++ )
         {
             wxHeaderColumnSimple* colInfo = m_columns[i];
@@ -303,15 +310,21 @@ private:
             int colMinWidth = m_page->GetColumnMinWidth(i);
             if ( i == 0 )
             {
-                wxPropertyGrid* pg = m_manager->GetGrid();
-                int margin = pg->GetMarginWidth();
-
                 // Compensate for the internal border
-                margin += (pg->GetSize().x - pg->GetClientSize().x) / 2;
+                int margin = pg->GetMarginWidth() + borderWidth;
 
                 colWidth += margin;
                 colMinWidth += margin;
             }
+            else if ( i == colCount-1 )
+            {
+                // Compensate for the internal border and scrollbar
+                int margin = pg->GetMarginWidth() + borderWidth + sbWidth;
+
+                colWidth += margin;
+                colMinWidth += margin;
+            }
+
             colInfo->SetWidth(colWidth);
             colInfo->SetMinWidth(colMinWidth);
         }
@@ -321,8 +334,14 @@ private:
     {
         wxPropertyGrid* pg = m_manager->GetGrid();
 
+        int sbWidth = pg->HasScrollbar(wxSB_VERTICAL)
+                        ? wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, pg)
+                        : 0;
+        // Internal border width
+        int borderWidth = (pg->GetSize().x - pg->GetClientSize().x - sbWidth) / 2;
+
         // Compensate for the internal border
-        int x = -((pg->GetSize().x - pg->GetClientSize().x) / 2);
+        int x = -borderWidth;
 
         for ( int i=0; i<col; i++ )
             x += m_columns[i]->GetWidth();
