@@ -244,26 +244,6 @@ public:
             delete m_columns[i];
     }
 
-    int DetermineColumnWidth(unsigned int idx, int* pMinWidth) const
-    {
-        const wxPropertyGridPage* page = m_page;
-        int colWidth = page->GetColumnWidth(idx);
-        int colMinWidth = page->GetColumnMinWidth(idx);
-        if ( idx == 0 )
-        {
-            wxPropertyGrid* pg = m_manager->GetGrid();
-            int margin = pg->GetMarginWidth();
-
-            // Compensate for the internal border
-            margin += (pg->GetSize().x - pg->GetClientSize().x) / 2;
-
-            colWidth += margin;
-            colMinWidth += margin;
-        }
-        *pMinWidth = colMinWidth;
-        return colWidth;
-    }
-
     void OnPageChanged(const wxPropertyGridPage* page)
     {
         m_page = page;
@@ -273,34 +253,19 @@ public:
     void OnPageUpdated()
     {
         // Get column info from the page
-        const wxPropertyGridPage* page = m_page;
-        unsigned int colCount = page->GetColumnCount();
+        unsigned int colCount = m_page->GetColumnCount();
         EnsureColumnCount(colCount);
-
-        for ( unsigned int i=0; i<colCount; i++ )
-        {
-            wxHeaderColumnSimple* colInfo = m_columns[i];
-            int colMinWidth = 0;
-            int colWidth = DetermineColumnWidth(i, &colMinWidth);
-            colInfo->SetWidth(colWidth);
-            colInfo->SetMinWidth(colMinWidth);
-        }
-
+        DetermineAllColumnWidths();
         SetColumnCount(colCount);
     }
 
     void OnColumWidthsChanged()
     {
-        const wxPropertyGridPage* page = m_page;
-        unsigned int colCount = page->GetColumnCount();
+        unsigned int colCount = m_page->GetColumnCount();
 
+        DetermineAllColumnWidths();
         for ( unsigned int i=0; i<colCount; i++ )
         {
-            wxHeaderColumnSimple* colInfo = m_columns[i];
-            int colMinWidth = 0;
-            int colWidth = DetermineColumnWidth(i, &colMinWidth);
-            colInfo->SetWidth(colWidth);
-            colInfo->SetMinWidth(colMinWidth);
             UpdateColumn(i);
         }
     }
@@ -323,6 +288,32 @@ private:
         {
             wxHeaderColumnSimple* colInfo = new wxHeaderColumnSimple(wxEmptyString);
             m_columns.push_back(colInfo);
+        }
+    }
+
+    void DetermineAllColumnWidths() const
+    {
+        const unsigned int colCount = m_page->GetColumnCount();
+
+        for ( unsigned int i = 0; i < colCount; i++ )
+        {
+            wxHeaderColumnSimple* colInfo = m_columns[i];
+
+            int colWidth = m_page->GetColumnWidth(i);
+            int colMinWidth = m_page->GetColumnMinWidth(i);
+            if ( i == 0 )
+            {
+                wxPropertyGrid* pg = m_manager->GetGrid();
+                int margin = pg->GetMarginWidth();
+
+                // Compensate for the internal border
+                margin += (pg->GetSize().x - pg->GetClientSize().x) / 2;
+
+                colWidth += margin;
+                colMinWidth += margin;
+            }
+            colInfo->SetWidth(colWidth);
+            colInfo->SetMinWidth(colMinWidth);
         }
     }
 
