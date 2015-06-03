@@ -159,8 +159,9 @@ private:
 public: \
     static bool IsSameClass(const wxAnyValueType* otherType) \
     { \
-        const wxAnyValueType* const inst = sm_instance.get(); \
-        return wxTypeId(*inst) == wxTypeId(*otherType); \
+        const wxAnyValueType& inst = *sm_instance.get(); \
+        const wxAnyValueType& otherRef = *otherType; \
+        return wxTypeId(inst) == wxTypeId(otherRef); \
     } \
     virtual bool IsSameType(const wxAnyValueType* otherType) const \
     { \
