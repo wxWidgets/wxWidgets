@@ -73,7 +73,7 @@ public:
     void OnClickDynamicHandlerApp(wxCommandEvent& event);
     void OnClickStaticHandlerApp(wxCommandEvent& event);
 
-    // we override wxConsoleApp::FilterEvent used to highlight the events
+    // we override wxAppConsole::FilterEvent used to highlight the events
     // handling order
     virtual int FilterEvent(wxEvent& event) wxOVERRIDE;
 

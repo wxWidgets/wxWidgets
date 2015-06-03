@@ -49,7 +49,7 @@ void wxQtIdleTimer::idle()
 wxQtEventLoopBase::wxQtEventLoopBase()
 {
     // We need a QCoreApplication for event loops, create it here if it doesn't
-    // already exist as we can't modify wxConsoleApp
+    // already exist as we can't modify wxAppConsole
     if ( !QCoreApplication::instance() )
     {
         new QApplication( wxAppConsole::GetInstance()->argc, wxAppConsole::GetInstance()->argv );
