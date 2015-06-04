@@ -79,7 +79,7 @@ public:
     void OnEditSelectAll (wxCommandEvent &event);
     void OnEditSelectLine (wxCommandEvent &event);
     //! view
-    void OnHilightLang (wxCommandEvent &event);
+    void OnHighlightLang (wxCommandEvent &event);
     void OnDisplayEOL (wxCommandEvent &event);
     void OnIndentGuide (wxCommandEvent &event);
     void OnLineNumber (wxCommandEvent &event);
