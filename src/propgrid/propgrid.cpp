@@ -6168,7 +6168,7 @@ bool wxPGStringTokenizer::HasMoreTokens()
 
     wxUniChar delim = m_delimeter;
     wxUniChar a;
-    wxUniChar prev_a = wxT('\0');
+    wxUniChar prev_a = wxS('\0');
 
     bool inToken = false;
 
@@ -6186,11 +6186,11 @@ bool wxPGStringTokenizer::HasMoreTokens()
         }
         else
         {
-            if ( prev_a != wxT('\\') )
+            if ( prev_a != wxS('\\') )
             {
                 if ( a != delim )
                 {
-                    if ( a != wxT('\\') )
+                    if ( a != wxS('\\') )
                         m_readyToken << a;
                 }
                 else
@@ -6204,7 +6204,7 @@ bool wxPGStringTokenizer::HasMoreTokens()
             else
             {
                 m_readyToken << a;
-                prev_a = wxT('\0');
+                prev_a = wxS('\0');
             }
         }
         ++i;

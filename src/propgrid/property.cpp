@@ -1870,13 +1870,14 @@ wxVariant wxPGProperty::GetAttributesAsList() const
 // Slots of utility flags are NULL
 const unsigned int gs_propFlagToStringSize = 14;
 
-static const wxChar* const gs_propFlagToString[gs_propFlagToStringSize] = {
+// Store the literals in the internal representation for better performance.
+static const wxStringCharType* const gs_propFlagToString[gs_propFlagToStringSize] = {
     NULL,
-    wxT("DISABLED"),
-    wxT("HIDDEN"),
+    wxS("DISABLED"),
+    wxS("HIDDEN"),
     NULL,
-    wxT("NOEDITOR"),
-    wxT("COLLAPSED"),
+    wxS("NOEDITOR"),
+    wxS("COLLAPSED"),
     NULL,
     NULL,
     NULL,
@@ -1897,7 +1898,7 @@ wxString wxPGProperty::GetFlagsAsString( FlagType flagsMask ) const
     {
         if ( relevantFlags & a )
         {
-            const wxChar* fs = gs_propFlagToString[i];
+            const wxStringCharType* fs = gs_propFlagToString[i];
             wxASSERT(fs);
             if ( !s.empty() )
                 s << wxS("|");
@@ -1916,7 +1917,7 @@ void wxPGProperty::SetFlagsFromString( const wxString& str )
     WX_PG_TOKENIZER1_BEGIN(str, wxS('|'))
         for ( unsigned int i = 0; i < gs_propFlagToStringSize; i++ )
         {
-            const wxChar* fs = gs_propFlagToString[i];
+            const wxStringCharType* fs = gs_propFlagToString[i];
             if ( fs && str == fs )
             {
                 flags |= (1<<i);
