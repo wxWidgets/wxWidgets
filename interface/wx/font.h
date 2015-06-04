@@ -114,7 +114,7 @@ enum wxFontFlag
     /// Underlined style (not underlined by default).
     wxFONTFLAG_UNDERLINED       = 1 << 6,
 
-    /// Strike-through style (implemented in MSW, GTK, and OSX)
+    /// Strike-through style (implemented in MSW, GTK, and wxOSX)
     wxFONTFLAG_STRIKETHROUGH    = 1 << 7,
 
     /// the mask of all currently used flags
@@ -388,7 +388,7 @@ public:
     /**
         Use a strike-through version of the font.
 
-        Currently this is only implemented in wxMSW, wxGTK and OSX.
+        Currently this is only implemented in wxMSW, wxGTK, and wxOSX.
      */
     wxFontInfo& Strikethrough(bool strikethrough = true);
 
@@ -790,7 +790,7 @@ public:
     /**
         Returns stricken-through version of this font.
 
-        Currently stricken-through fonts are only supported in wxMSW, wxGTK and OSX.
+        Currently stricken-through fonts are only supported in wxMSW, wxGTK, and wxOSX.
 
         @see MakeStrikethrough()
 
@@ -852,7 +852,7 @@ public:
     /**
         Changes this font to be stricken-through.
 
-        Currently stricken-through fonts are only supported in wxMSW, wxGTK and OSX.
+        Currently stricken-through fonts are only supported in wxMSW, wxGTK, and wxOSX.
 
         @see Strikethrough()
 
@@ -1056,7 +1056,7 @@ public:
     /**
         Sets strike-through attribute of the font.
 
-        Currently stricken-through fonts are only supported in wxMSW, wxGTK and OSX.
+        Currently stricken-through fonts are only supported in wxMSW, wxGTK, and wxOSX.
 
         @param strikethrough
             @true to add strike-through style, @false to remove it.

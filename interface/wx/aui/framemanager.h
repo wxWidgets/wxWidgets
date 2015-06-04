@@ -46,7 +46,7 @@ enum wxAuiManagerOption
     /// When a docked pane is resized, its content is refreshed in live (instead of moving
     /// the border alone and refreshing the content at the end).
     wxAUI_MGR_LIVE_RESIZE              = 1 << 8,
-    /// Default behavior.
+    /// Default behaviour.
     wxAUI_MGR_DEFAULT = wxAUI_MGR_ALLOW_FLOATING |
                         wxAUI_MGR_TRANSPARENT_HINT |
                         wxAUI_MGR_HINT_FADE |
@@ -144,7 +144,7 @@ enum wxAuiManagerOption
            When a docked pane is resized, its content is refreshed in live (instead of moving
            the border alone and refreshing the content at the end).
     @style{wxAUI_MGR_DEFAULT}
-           Default behavior, combines: wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT |
+           Default behaviour, combines: wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT |
            wxAUI_MGR_HINT_FADE | wxAUI_MGR_NO_VENETIAN_BLINDS_FADE.
     @endStyleTable
 

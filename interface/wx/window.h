@@ -3530,7 +3530,7 @@ public:
 
         @remarks Use EVT_HOTKEY(hotkeyId, fnc) in the event table to capture the
                  event. This function is currently only implemented under MSW
-                 and OSX and always returns false in the other ports.
+                 and OS X and always returns false in the other ports.
 
         @see UnregisterHotKey()
     */

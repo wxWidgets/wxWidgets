@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        minimal.cpp
-// Purpose:     Minimal wxWindows sample
+// Purpose:     Minimal wxWidgets sample
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
@@ -24,7 +24,7 @@
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers)
+// need because it includes almost all "standard" wxWidgets headers)
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
@@ -95,7 +95,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
 wxEND_EVENT_TABLE()
 
-// Create a new application object: this macro will allow wxWindows to create
+// Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
 // static object for many reasons) and also implements the accessor function
 // wxGetApp() which will return the reference of the right type (i.e. MyApp and
@@ -114,7 +114,7 @@ wxIMPLEMENT_APP(MyApp);
 bool MyApp::OnInit()
 {
     // create the main application window
-    MyFrame *frame = new MyFrame(wxT("Minimal wxWindows App"));
+    MyFrame *frame = new MyFrame(wxT("Minimal wxWidgets App"));
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -158,7 +158,7 @@ MyFrame::MyFrame(const wxString& title)
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText(wxT("Welcome to wxWindows!"));
+    SetStatusText(wxT("Welcome to wxWidgets!"));
 #endif // wxUSE_STATUSBAR
 }
 

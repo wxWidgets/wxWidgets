@@ -173,9 +173,9 @@ void wxTextEntry::DoSetValue(const wxString& value, int flags)
 {
     if (value != DoGetValue())
     {
-        // use Remove() rather than SelectAll() to avoid unnecessary clipboard
+        // Use Remove() rather than SelectAll() to avoid unnecessary clipboard
         // operations, and prevent triggering an apparent bug in GTK which
-        // causes the the subsequent WriteText() to append rather than overwrite
+        // causes the subsequent WriteText() to append rather than overwrite.
         {
             EventsSuppressor noevents(this);
             Remove(0, -1);

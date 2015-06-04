@@ -1121,7 +1121,7 @@ bool wxTarOutputStream::PutNextEntry(wxTarEntry *entry)
         if (m_tarstart != wxInvalidOffset)
             m_datapos = m_tarstart + m_tarsize;
 
-        // types that are not allowd any data
+        // types that are not allowed any data
         const char nodata[] = {
             wxTAR_LNKTYPE, wxTAR_SYMTYPE, wxTAR_CHRTYPE, wxTAR_BLKTYPE,
             wxTAR_DIRTYPE, wxTAR_FIFOTYPE, 0

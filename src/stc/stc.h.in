@@ -7,7 +7,7 @@
 //              This class delegates all method calls and events to the
 //              Scintilla objects and so forth.  This allows the use of
 //              Scintilla without polluting the namespace with all the
-//              classes and itentifiers from Scintilla.
+//              classes and identifiers from Scintilla.
 //
 // Author:      Robin Dunn
 //

@@ -654,7 +654,7 @@ void wxGridCellAttrData::UpdateAttrRows( size_t pos, int numRows )
         {
             if (numRows > 0)
             {
-                // If rows inserted, include row counter where necessary
+                // If rows inserted, increment row counter where necessary
                 coords.SetRow(row + numRows);
             }
             else if (numRows < 0)
@@ -688,15 +688,15 @@ void wxGridCellAttrData::UpdateAttrCols( size_t pos, int numCols )
         {
             if ( numCols > 0 )
             {
-                // If rows inserted, include row counter where necessary
+                // If cols inserted, increment col counter where necessary
                 coords.SetCol(col + numCols);
             }
             else if (numCols < 0)
             {
-                // If rows deleted ...
+                // If cols deleted ...
                 if ((size_t)col >= pos - numCols)
                 {
-                    // ...either decrement row counter (if row still exists)...
+                    // ...either decrement col counter (if col still exists)...
                     coords.SetCol(col + numCols);
                 }
                 else
@@ -800,12 +800,12 @@ void wxGridRowOrColAttrData::UpdateAttrRowsOrCols( size_t pos, int numRowsOrCols
         {
             if ( numRowsOrCols > 0 )
             {
-                // If rows inserted, include row counter where necessary
+                // If rows or cols inserted, increment row/col counter where necessary
                 rowOrCol += numRowsOrCols;
             }
             else if ( numRowsOrCols < 0)
             {
-                // If rows deleted, either decrement row counter (if row still exists)
+                // If rows/cols deleted, either decrement row/col counter (if row/col still exists)
                 if ((size_t)rowOrCol >= pos - numRowsOrCols)
                     rowOrCol += numRowsOrCols;
                 else
@@ -5186,7 +5186,7 @@ wxGrid::UpdateBlockBeingSelected(int topRow, int leftCol,
                 break;
 
             case wxGridSelectRows:
-                // only full rows selection allowd, ensure that we do select
+                // only full rows selection allowed, ensure that we do select
                 // full rows
                 leftCol = 0;
                 rightCol = GetNumberCols() - 1;

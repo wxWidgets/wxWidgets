@@ -1414,7 +1414,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
     }
     else
     {
-        RT_MSG(wxT("All tests successfull"))
+        RT_MSG(wxT("All tests successful"))
         retVal = true;
 
         if ( !interactive )

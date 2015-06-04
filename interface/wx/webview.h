@@ -206,7 +206,7 @@ public:
     It is designed to allow the creation of multiple backends for each port,
     although currently just one is available. It differs from wxHtmlWindow in
     that each backend is actually a full rendering engine, Trident on MSW and
-    Webkit on OSX and GTK. This allows the correct viewing complex pages with
+    Webkit on OS X and GTK. This allows the correct viewing of complex pages with
     javascript and css.
 
     @section descriptions Backend Descriptions
@@ -235,7 +235,7 @@ public:
 
     @par wxWEBVIEW_WEBKIT (OSX)
 
-    The OSX WebKit backend uses Apple's
+    The OS X WebKit backend uses Apple's
     <a href="http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/WebKit/Classes/WebView_Class/Reference/Reference.html#//apple_ref/doc/uid/20001903">WebView</a>
     class. This backend has full support for custom schemes and virtual file
     systems.
@@ -499,21 +499,21 @@ public:
     /**
         Returns @true if the current selection can be copied.
 
-        @note This always returns @c true on the OSX WebKit backend.
+        @note This always returns @c true on the OS X WebKit backend.
     */
     virtual bool CanCopy() const = 0;
 
     /**
         Returns @true if the current selection can be cut.
 
-         @note This always returns @c true on the OSX WebKit backend.
+         @note This always returns @c true on the OS X WebKit backend.
     */
     virtual bool CanCut() const = 0;
 
     /**
         Returns @true if data can be pasted.
 
-        @note This always returns @c true on the OSX WebKit backend.
+        @note This always returns @c true on the OS X WebKit backend.
     */
     virtual bool CanPaste() const = 0;
 
@@ -688,7 +688,7 @@ public:
               are changed, since this will require a new search. To reset the
               search, for example resetting the highlights call the function
               with an empty search phrase. This always returns @c wxNOT_FOUND
-              on the OSX WebKit backend.
+              on the OS X WebKit backend.
         @since 2.9.5
     */
     virtual long Find(const wxString& text, wxWebViewFindFlags flags = wxWEBVIEW_FIND_DEFAULT) = 0;

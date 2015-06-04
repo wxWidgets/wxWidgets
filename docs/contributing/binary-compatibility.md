@@ -37,7 +37,7 @@ also the section about `wxABI_VERSION`.
 What kind of changes are NOT binary compatible
 ----------------------------------------------
 
-If its still up, the
+If it's still up, the
 [KDE guide](http://techbase.kde.org/Policies/Binary_Compatibility_Issues_With_C++)
 is a good reference.
 
@@ -45,7 +45,7 @@ is a good reference.
 The changes that are NOT binary compatible:
 
 - Adding a virtual function
-- Changing the name of a any function or variable
+- Changing the name of any function or variable
 - Changing the signature of a virtual function (adding a parameter,
   even a default one)
 - Changing the order of the virtual functions in a class ("switching" them, etc.)

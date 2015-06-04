@@ -786,7 +786,7 @@ void wxApp::WakeUpIdle()
 }
 
 // ----------------------------------------------------------------------------
-// other wxApp event hanlders
+// other wxApp event handlers
 // ----------------------------------------------------------------------------
 
 void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))

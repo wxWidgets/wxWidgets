@@ -1578,7 +1578,7 @@ public:
        context, if this wxDC has something that could be thought of in that
        way.  (Not all of them do.)
 
-       For example, on Windows the return value is an HDC, on OSX it is a
+       For example, on Windows the return value is an HDC, on OS X it is a
        CGContextRef and on wxGTK it will be a GdkDrawable.  If the DC is a
        wxGCDC then the return value will be the value returned from
        wxGraphicsContext::GetNativeContext.  A value of NULL is returned if

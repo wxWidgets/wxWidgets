@@ -4388,7 +4388,7 @@ WXDLLIMPEXP_CORE wxWindow* wxFindFocusDescendant(wxWindow* ancestor);
 
 // deprecated variants _not_ requiring a semicolon after them and without wx prefix
 // (note that also some wx-prefixed macro do _not_ require a semicolon because
-//  it's not always possible to force the compire to require it)
+// it's not always possible to force the compiler to require it)
 
 #define DECLARE_EVENT_TABLE_ENTRY(type, winid, idLast, fn, obj) \
     wxDECLARE_EVENT_TABLE_ENTRY(type, winid, idLast, fn, obj)
