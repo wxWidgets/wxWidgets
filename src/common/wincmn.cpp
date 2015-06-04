@@ -2476,12 +2476,21 @@ void wxWindowBase::SetSizerAndFit(wxSizer *sizer, bool deleteOld)
 
 void wxWindowBase::SetContainingSizer(wxSizer* sizer)
 {
-    // adding a window to a sizer twice is going to result in fatal and
-    // hard to debug problems later because when deleting the second
-    // associated wxSizerItem we're going to dereference a dangling
-    // pointer; so try to detect this as early as possible
-    wxASSERT_MSG( !sizer || m_containingSizer != sizer,
-                  wxT("Adding a window to the same sizer twice?") );
+    // Adding a window to another sizer if it's already managed by one would
+    // result in crashes later because one of the two sizers won't be notified
+    // about the window destruction and so will use a dangling pointer when it
+    // is destroyed itself. As such problems are hard to debug, don't allow
+    // them to happen in the first place.
+    if ( sizer )
+    {
+        // This would be caught by the check below too, but give a more clear
+        // error message in this case.
+        wxASSERT_MSG( m_containingSizer != sizer,
+                      wxS("Adding a window to the same sizer twice?") );
+
+        wxCHECK_RET( !m_containingSizer,
+                     wxS("Adding a window already in a sizer, detach it first!") );
+    }
 
     m_containingSizer = sizer;
 }
