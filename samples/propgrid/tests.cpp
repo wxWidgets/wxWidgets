@@ -92,7 +92,7 @@ public:
                                      int argFlags = 0 ) const wxOVERRIDE
     {
         if ( index == (int)(m_choices.GetCount()-1) )
-            return wxT("");
+            return wxEmptyString;
 
         return wxColourProperty::ColourToString(col, index, argFlags);
     }

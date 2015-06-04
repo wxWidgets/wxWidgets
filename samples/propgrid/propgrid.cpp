@@ -1305,7 +1305,7 @@ void FormMain::PopulateWithExamples ()
     soc.Add( wxT("Look, it continues"), 200 );
     soc.Add( wxT("Even More"), 240 );
     soc.Add( wxT("And More"), 280 );
-    soc.Add( wxT(""), 300 );
+    soc.Add( wxEmptyString, 300 );
     soc.Add( wxT("True End of the List"), 320 );
 
     // Test custom colours ([] operator of wxPGChoices returns
