@@ -82,8 +82,8 @@ wxBEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
     EVT_MENU (myID_BRACEMATCH,         Edit::OnBraceMatch)
     EVT_MENU (myID_GOTO,               Edit::OnGoto)
     // view
-    EVT_MENU_RANGE (myID_HILIGHTFIRST, myID_HILIGHTLAST,
-                                       Edit::OnHilightLang)
+    EVT_MENU_RANGE (myID_HIGHLIGHTFIRST, myID_HIGHLIGHTLAST,
+                                       Edit::OnHighlightLang)
     EVT_MENU (myID_DISPLAYEOL,         Edit::OnDisplayEOL)
     EVT_MENU (myID_INDENTGUIDE,        Edit::OnIndentGuide)
     EVT_MENU (myID_LINENUMBER,         Edit::OnLineNumber)
@@ -290,8 +290,8 @@ void Edit::OnEditSelectLine (wxCommandEvent &WXUNUSED(event)) {
     SetSelection (lineStart, lineEnd);
 }
 
-void Edit::OnHilightLang (wxCommandEvent &event) {
-    InitializePrefs (g_LanguagePrefs [event.GetId() - myID_HILIGHTFIRST].name);
+void Edit::OnHighlightLang (wxCommandEvent &event) {
+    InitializePrefs (g_LanguagePrefs [event.GetId() - myID_HIGHLIGHTFIRST].name);
 }
 
 void Edit::OnDisplayEOL (wxCommandEvent &WXUNUSED(event)) {

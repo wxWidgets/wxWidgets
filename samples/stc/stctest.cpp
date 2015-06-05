@@ -486,10 +486,10 @@ void AppFrame::CreateMenu ()
     menuEdit->Append (myID_SELECTLINE, _("Select &line\tCtrl+L"));
 
     // highlight submenu
-    wxMenu *menuHilight = new wxMenu;
+    wxMenu *menuHighlight = new wxMenu;
     int Nr;
     for (Nr = 0; Nr < g_LanguagePrefsSize; Nr++) {
-        menuHilight->Append (myID_HILIGHTFIRST + Nr,
+        menuHighlight->Append (myID_HIGHLIGHTFIRST + Nr,
                              g_LanguagePrefs [Nr].name);
     }
 
@@ -500,7 +500,7 @@ void AppFrame::CreateMenu ()
 
     // View menu
     wxMenu *menuView = new wxMenu;
-    menuView->Append (myID_HILIGHTLANG, _("&Highlight language .."), menuHilight);
+    menuView->Append (myID_HIGHLIGHTLANG, _("&Highlight language .."), menuHighlight);
     menuView->AppendSeparator();
     menuView->AppendCheckItem (myID_FOLDTOGGLE, _("&Toggle current fold\tCtrl+T"));
     menuView->AppendCheckItem (myID_OVERTYPE, _("&Overwrite mode\tIns"));
