@@ -476,6 +476,14 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FileSystemWatcherTestCase,
 void FileSystemWatcherTestCase::setUp()
 {
     wxLog::AddTraceMask(wxTRACE_FSWATCHER);
+
+    // Before each test, remove the dir if it exists.
+    // It would exist if the previous test run was aborted.
+    wxString tmp = wxStandardPaths::Get().GetTempDir();
+    wxFileName dir;
+    dir.AssignDir(tmp);
+    dir.AppendDir("fswatcher_test");
+    dir.Rmdir(wxPATH_RMDIR_RECURSIVE);
     EventGenerator::Get().GetWatchDir();
 }
 
