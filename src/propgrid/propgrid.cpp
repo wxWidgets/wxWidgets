@@ -1736,17 +1736,16 @@ wxPoint wxPropertyGrid::GetGoodEditorDialogPosition( wxPGProperty* p,
 
 wxString& wxPropertyGrid::ExpandEscapeSequences( wxString& dst_str, wxString& src_str )
 {
+    dst_str.clear();
+
     if ( src_str.empty() )
     {
-        dst_str = src_str;
-        return src_str;
+        return dst_str;
     }
 
     bool prev_is_slash = false;
 
     wxString::const_iterator i = src_str.begin();
-
-    dst_str.clear();
 
     for ( ; i != src_str.end(); ++i )
     {
@@ -1795,16 +1794,15 @@ wxString& wxPropertyGrid::ExpandEscapeSequences( wxString& dst_str, wxString& sr
 
 wxString& wxPropertyGrid::CreateEscapeSequences( wxString& dst_str, wxString& src_str )
 {
+    dst_str.clear();
+
     if ( src_str.empty() )
     {
-        dst_str = src_str;
-        return src_str;
+        return dst_str;
     }
 
     wxString::const_iterator i = src_str.begin();
     wxUniChar prev_a = wxS('\0');
-
-    dst_str.clear();
 
     for ( ; i != src_str.end(); ++i )
     {
