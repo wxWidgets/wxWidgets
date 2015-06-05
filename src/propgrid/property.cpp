@@ -1904,7 +1904,7 @@ wxString wxPGProperty::GetFlagsAsString( FlagType flagsMask ) const
                 s << wxS("|");
             s << fs;
         }
-        a = a << 1;
+        a <<= 1;
     }
 
     return s;
