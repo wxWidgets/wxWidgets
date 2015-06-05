@@ -831,12 +831,12 @@ void FileSystemWatcherTestCase::TestTrees()
             CPPUNIT_ASSERT(m_watcher);
 
             size_t treeitems = 1; // the trunk
-#ifndef __WINDOWS__
-            // When there's no file mask, wxMSW sets a single watch
+#if !defined(__WINDOWS__) && !defined(wxHAVE_FSEVENTS_FILE_NOTIFICATIONS)
+            // When there's no file mask, wxMSW and wxOSX set a single watch
             // on the trunk which is implemented recursively.
             // wxGTK always sets an additional watch for each subdir
             treeitems += subdirs + 1; // +1 for 'child'
-#endif // __WINDOWS__
+#endif // !__WINDOWS__ && !wxHAVE_FSEVENTS_FILE_NOTIFICATIONS
 
             // Store the initial count; there may already be some watches
             const int initial = m_watcher->GetWatchedPathsCount();
@@ -862,9 +862,9 @@ void FileSystemWatcherTestCase::TestTrees()
             // Except that in wxMSW this isn't true: each watch will be a
             // single, recursive dir; so fudge the count
             size_t fudge = 0;
-#ifdef __WINDOWS__
+#if defined(__WINDOWS__) || defined(wxHAVE_FSEVENTS_FILE_NOTIFICATIONS)
             fudge = 1;
-#endif // __WINDOWS__
+#endif // __WINDOWS__ || wxHAVE_FSEVENTS_FILE_NOTIFICATIONS
             m_watcher->AddTree(dir);
             CPPUNIT_ASSERT_EQUAL(plustree + fudge, m_watcher->GetWatchedPathsCount());
             m_watcher->RemoveTree(child);
@@ -900,7 +900,12 @@ void FileSystemWatcherTestCase::TestTrees()
             // When we use a filter, both wxMSW and wxGTK implementations set
             // an additional watch for each subdir (+1 for the root dir itself
             // and another +1 for "child").
+            // On OS X, if we use FSEvents then we still only have 1 watch.
+#ifdef wxHAVE_FSEVENTS_FILE_NOTIFICATIONS
+            const size_t treeitems = 1;
+#else
             const size_t treeitems = subdirs + 2;
+#endif
             m_watcher->AddTree(dir, wxFSW_EVENT_ALL, "*.txt");
 
             const int plustree = m_watcher->GetWatchedPathsCount();

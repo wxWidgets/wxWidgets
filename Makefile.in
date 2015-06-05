@@ -2253,7 +2253,8 @@ COND_TOOLKIT_OSX_CARBON_BASE_OSX_SRC =  \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
 	src/unix/wakeuppipe.cpp \
-	src/unix/fswatcher_kqueue.cpp
+	src/unix/fswatcher_kqueue.cpp \
+	src/osx/fswatcher_fsevents.cpp
 @COND_TOOLKIT_OSX_CARBON@BASE_OSX_SRC = $(COND_TOOLKIT_OSX_CARBON_BASE_OSX_SRC)
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/mimetype.cpp \
@@ -2277,7 +2278,8 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
 	src/unix/wakeuppipe.cpp \
-	src/unix/fswatcher_kqueue.cpp
+	src/unix/fswatcher_kqueue.cpp \
+	src/osx/fswatcher_fsevents.cpp
 @COND_TOOLKIT_OSX_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC)
 COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
 	src/osx/core/mimetype.cpp \
@@ -2301,7 +2303,8 @@ COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
 	src/unix/wakeuppipe.cpp \
-	src/unix/fswatcher_kqueue.cpp
+	src/unix/fswatcher_kqueue.cpp \
+	src/osx/fswatcher_fsevents.cpp
 @COND_TOOLKIT_OSX_IPHONE@BASE_OSX_SRC = $(COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC)
 COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2442,7 +2445,8 @@ COND_TOOLKIT_OSX_CARBON_BASE_OSX_HDR =  \
 	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
-	wx/unix/fswatcher_kqueue.h
+	wx/unix/fswatcher_kqueue.h \
+	wx/osx/fswatcher_fsevents.h
 @COND_TOOLKIT_OSX_CARBON@BASE_OSX_HDR = $(COND_TOOLKIT_OSX_CARBON_BASE_OSX_HDR)
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/osx/core/cfdataref.h \
@@ -2463,7 +2467,8 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
-	wx/unix/fswatcher_kqueue.h
+	wx/unix/fswatcher_kqueue.h \
+	wx/osx/fswatcher_fsevents.h
 @COND_TOOLKIT_OSX_COCOA@BASE_OSX_HDR = $(COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR)
 COND_TOOLKIT_COCOA_BASE_OSX_HDR =  \
 	wx/unix/app.h \
@@ -4513,7 +4518,8 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_threadpsx.o \
 	monodll_utilsunx.o \
 	monodll_wakeuppipe.o \
-	monodll_fswatcher_kqueue.o
+	monodll_fswatcher_kqueue.o \
+	monodll_fswatcher_fsevents.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS)
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS = \
 @COND_PLATFORM_MSDOS_1@	monodll_msdos_dir.o monodll_msdos_mimetype.o \
@@ -6888,7 +6894,8 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_threadpsx.o \
 	monolib_utilsunx.o \
 	monolib_wakeuppipe.o \
-	monolib_fswatcher_kqueue.o
+	monolib_fswatcher_kqueue.o \
+	monolib_fswatcher_fsevents.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_MSDOS_1@	= monolib_msdos_dir.o monolib_msdos_mimetype.o \
@@ -9316,7 +9323,8 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_threadpsx.o \
 	basedll_utilsunx.o \
 	basedll_wakeuppipe.o \
-	basedll_fswatcher_kqueue.o
+	basedll_fswatcher_kqueue.o \
+	basedll_fswatcher_fsevents.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_MSDOS_1@	= basedll_msdos_dir.o basedll_msdos_mimetype.o \
@@ -9404,7 +9412,8 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_threadpsx.o \
 	baselib_utilsunx.o \
 	baselib_wakeuppipe.o \
-	baselib_fswatcher_kqueue.o
+	baselib_fswatcher_kqueue.o \
+	baselib_fswatcher_fsevents.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_MSDOS_1@	= baselib_msdos_dir.o baselib_msdos_mimetype.o \
@@ -17740,6 +17749,9 @@ monodll_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(MONODLL_ODEP)
 monodll_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_base.cpp
 
+monodll_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
+
 monodll_msdos_dir.o: $(srcdir)/src/msdos/dir.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msdos/dir.cpp
 
@@ -23661,6 +23673,9 @@ monolib_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(MONOLIB_ODEP)
 
 monolib_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_base.cpp
+
+monolib_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
 
 monolib_msdos_dir.o: $(srcdir)/src/msdos/dir.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msdos/dir.cpp
@@ -29584,6 +29599,9 @@ basedll_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(BASEDLL_ODEP)
 basedll_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_base.cpp
 
+basedll_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
+
 basedll_msdos_dir.o: $(srcdir)/src/msdos/dir.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msdos/dir.cpp
 
@@ -30063,6 +30081,9 @@ baselib_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(BASELIB_ODEP)
 
 baselib_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_base.cpp
+
+baselib_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
 
 baselib_msdos_dir.o: $(srcdir)/src/msdos/dir.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msdos/dir.cpp

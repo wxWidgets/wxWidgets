@@ -151,10 +151,12 @@ BASE_COREFOUNDATION_HDR =
 # Base files used by OS X ports (not Carbon)
 BASE_OSX_SHARED_SRC =
     src/osx/core/mimetype.cpp
+    src/osx/fswatcher_fsevents.cpp
     $(BASE_COREFOUNDATION_SRC)
     $(BASE_UNIX_AND_DARWIN_SRC)
 
 BASE_OSX_SHARED_HDR =
+    wx/osx/fswatcher_fsevents.h
     $(BASE_COREFOUNDATION_HDR)
     $(BASE_UNIX_AND_DARWIN_HDR)
 

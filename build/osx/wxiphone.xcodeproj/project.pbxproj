@@ -432,6 +432,7 @@
 		825EAD51920B387DB4F8C426 /* LexAsn1.cxx in Sources */ = {isa = PBXBuildFile; fileRef = A46D50BEBF523B3F88831086 /* LexAsn1.cxx */; };
 		8292D346BFC33D6E8D3CDDBF /* xh_sttxt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B3F1680BBE8331A7B745638C /* xh_sttxt.cpp */; };
 		82FA4AA043213728AC266700 /* wizard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8F08F70E1EF239999A4D2AC4 /* wizard.cpp */; };
+		830A61EA04FD367C9EB6A757 /* fswatcher_fsevents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B83407D156C3CC3A66F05A4 /* fswatcher_fsevents.cpp */; };
 		834F2ADD0520313FBAC4F927 /* LexCsound.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 0A59A5C2305D3D1C8049BE71 /* LexCsound.cxx */; };
 		83616D33080E3F0F9FA5FBB4 /* xh_html.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 889FFA9573A835F280A21CB4 /* xh_html.cpp */; };
 		83C492B87F4A3A97930F227A /* ExternalLexer.cxx in Sources */ = {isa = PBXBuildFile; fileRef = FD6D2664C05131C3A06E98B4 /* ExternalLexer.cxx */; };
@@ -1126,6 +1127,7 @@
 		5AACC1EC2E2A33B3ABF5EDCA /* xh_radbt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_radbt.cpp; path = ../../src/xrc/xh_radbt.cpp; sourceTree = "<group>"; };
 		5AFB85719CBC3D60BA2EDC2E /* CharClassify.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CharClassify.cxx; path = ../../src/stc/scintilla/src/CharClassify.cxx; sourceTree = "<group>"; };
 		5B32A13D5B3336098B1B9765 /* pngtrans.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pngtrans.c; path = ../../src/png/pngtrans.c; sourceTree = "<group>"; };
+		5B83407D156C3CC3A66F05A4 /* fswatcher_fsevents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fswatcher_fsevents.cpp; path = ../../src/osx/fswatcher_fsevents.cpp; sourceTree = "<group>"; };
 		5B9586328A1F3C4BA0390AA5 /* time.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = time.cpp; path = ../../src/common/time.cpp; sourceTree = "<group>"; };
 		5BD6231188AB329CAA5E1171 /* evtloop_cf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = evtloop_cf.cpp; path = ../../src/osx/core/evtloop_cf.cpp; sourceTree = "<group>"; };
 		5BEC6B3CAFB532CBB9F95D74 /* jutils.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jutils.c; path = ../../src/jpeg/jutils.c; sourceTree = "<group>"; };
@@ -2619,6 +2621,7 @@
 				DC75C7251C1732B0B07C7BD3 /* utilsunx.cpp */,
 				B38F3D4DC6D139BA93401F7A /* wakeuppipe.cpp */,
 				C019CE87CF9931B0B77C0823 /* fswatcher_kqueue.cpp */,
+				5B83407D156C3CC3A66F05A4 /* fswatcher_fsevents.cpp */,
 				7A34C5BBBA543DC0A50DE1B6 /* event.cpp */,
 				C9A305CEC03B3085B159B617 /* fs_mem.cpp */,
 				E968913A9A593B258BD8EACB /* msgout.cpp */,
@@ -2930,6 +2933,7 @@
 				B5C7FD8C27F43F3289A77FC9 /* utilsunx.cpp in Sources */,
 				F9C5EAC42CCF3267B4100BAE /* wakeuppipe.cpp in Sources */,
 				FF7DB2884F6E3C5DB4BDF61D /* fswatcher_kqueue.cpp in Sources */,
+				830A61EA04FD367C9EB6A757 /* fswatcher_fsevents.cpp in Sources */,
 				55D893FDD00633FEA82ABD81 /* event.cpp in Sources */,
 				131B879180AE3FB481F81CC7 /* fs_mem.cpp in Sources */,
 				05814571E7A83F5DBFB6E4C4 /* msgout.cpp in Sources */,
