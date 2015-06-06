@@ -1240,8 +1240,7 @@ bool wxSystemColourProperty::QueryColourFromUser( wxVariant& variant ) const
     wxColourData data;
     data.SetChooseFull(true);
     data.SetColour(val.m_colour);
-    int i;
-    for ( i = 0; i < 16; i++)
+    for ( int i = 0; i < 16; i++ )
     {
         wxColour colour(i*16, i*16, i*16);
         data.SetCustomColour(i, colour);
@@ -2028,15 +2027,15 @@ void wxMultiChoiceProperty::GenerateValueAsString( wxVariant& value,
         strings = value.GetArrayString();
 
     wxString& tempStr = *target;
-    unsigned int i;
-    unsigned int itemCount = strings.size();
+
+    size_t itemCount = strings.size();
 
     tempStr.Empty();
 
     if ( itemCount )
         tempStr.append( wxS("\"") );
 
-    for ( i = 0; i < itemCount; i++ )
+    for ( size_t i = 0; i < itemCount; i++ )
     {
         tempStr.append( strings[i] );
         tempStr.append( wxS("\"") );

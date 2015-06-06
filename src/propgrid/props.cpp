@@ -1636,9 +1636,8 @@ void wxFlagsProperty::OnSetValue()
         long fullFlags = 0;
 
         // normalize the value (i.e. remove extra flags)
-        unsigned int i;
         const wxPGChoices& choices = m_choices;
-        for ( i = 0; i < GetItemCount(); i++ )
+        for ( unsigned int i = 0; i < GetItemCount(); i++ )
         {
             fullFlags |= choices.GetValue(i);
         }
@@ -1684,10 +1683,9 @@ wxString wxFlagsProperty::ValueToString( wxVariant& value,
         return text;
 
     long flags = value;
-    unsigned int i;
-    const wxPGChoices& choices = m_choices;
 
-    for ( i = 0; i < GetItemCount(); i++ )
+    const wxPGChoices& choices = m_choices;
+    for ( unsigned int i = 0; i < GetItemCount(); i++ )
     {
         int doAdd;
         doAdd = ( (flags & choices.GetValue(i)) == choices.GetValue(i) );
@@ -1747,8 +1745,7 @@ bool wxFlagsProperty::StringToValue( wxVariant& variant, const wxString& text, i
 // Converts string id to a relevant bit.
 long wxFlagsProperty::IdToBit( const wxString& id ) const
 {
-    unsigned int i;
-    for ( i = 0; i < GetItemCount(); i++ )
+    for ( unsigned int i = 0; i < GetItemCount(); i++ )
     {
         if ( id == GetLabel(i) )
         {
@@ -1765,8 +1762,7 @@ void wxFlagsProperty::RefreshChildren()
     int flags = m_value.GetLong();
 
     const wxPGChoices& choices = m_choices;
-    unsigned int i;
-    for ( i = 0; i < GetItemCount(); i++ )
+    for ( unsigned int i = 0; i < GetItemCount(); i++ )
     {
         long flag;
 
@@ -2740,7 +2736,6 @@ wxArrayStringProperty::ArrayStringToString( wxString& dst,
     wxString pdr;
     wxString preas;
 
-    unsigned int i;
     unsigned int itemCount = src.size();
 
     dst.Empty();
@@ -2757,7 +2752,7 @@ wxArrayStringProperty::ArrayStringToString( wxString& dst,
 
     wxString delimStr(delimiter);
 
-    for ( i = 0; i < itemCount; i++ )
+    for ( unsigned int i = 0; i < itemCount; i++ )
     {
         wxString str( src.Item(i) );
 

@@ -889,7 +889,6 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
                                             const wxVariantList* valueOverrides,
                                             wxPGHashMapS2S* childResults ) const
 {
-    int i;
     int iMax = m_children.size();
 
     text.clear();
@@ -921,6 +920,7 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
         }
     }
 
+    int i;
     for ( i = 0; i < iMax; i++ )
     {
         wxVariant childValue;
@@ -1523,8 +1523,7 @@ void wxPGProperty::SetFlagRecursively( wxPGPropertyFlags flag, bool set )
 {
     ChangeFlag(flag, set);
 
-    unsigned int i;
-    for ( i = 0; i < GetChildCount(); i++ )
+    for ( unsigned int i = 0; i < GetChildCount(); i++ )
         Item(i)->SetFlagRecursively(flag, set);
 }
 
@@ -1603,8 +1602,7 @@ void wxPGProperty::DoEnable( bool enable )
         SetFlag(wxPG_PROP_DISABLED);
 
     // Apply same to sub-properties as well
-    unsigned int i;
-    for ( i = 0; i < GetChildCount(); i++ )
+    for ( unsigned int i = 0; i < GetChildCount(); i++ )
         Item(i)->DoEnable( enable );
 }
 
@@ -2102,8 +2100,7 @@ bool wxPGProperty::DoHide( bool hide, int flags )
 
     if ( flags & wxPG_RECURSE )
     {
-        unsigned int i;
-        for ( i = 0; i < GetChildCount(); i++ )
+        for ( unsigned int i = 0; i < GetChildCount(); i++ )
             Item(i)->DoHide(hide, flags | wxPG_RECURSE_STARTS);
     }
 
@@ -2649,8 +2646,7 @@ void wxPGProperty::DeleteChildren()
 
 bool wxPGProperty::IsChildSelected( bool recursive ) const
 {
-    size_t i;
-    for ( i = 0; i < GetChildCount(); i++ )
+    for ( unsigned int i = 0; i < GetChildCount(); i++ )
     {
         wxPGProperty* child = Item(i);
 

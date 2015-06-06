@@ -862,8 +862,7 @@ void wxPropertyGridManager::Clear()
 
     m_pPropGrid->Freeze();
 
-    int i;
-    for ( i=(int)GetPageCount()-1; i>=0; i-- )
+    for ( int i=(int)GetPageCount()-1; i>=0; i-- )
         RemovePage(i);
 
     m_pPropGrid->Thaw();

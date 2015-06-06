@@ -2073,8 +2073,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
         // We need to find location of item.
         wxPGProperty* cat_parent = &m_regularArray;
         int cat_index = m_regularArray.GetChildCount();
-        size_t i;
-        for ( i = 0; i < m_regularArray.GetChildCount(); i++ )
+        for ( unsigned int i = 0; i < m_regularArray.GetChildCount(); i++ )
         {
             wxPGProperty* p = m_regularArray.Item(i);
             if ( p == item ) { cat_index = i; break; }
