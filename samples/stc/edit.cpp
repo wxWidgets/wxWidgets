@@ -622,7 +622,7 @@ bool Edit::InitializePrefs (const wxString &name) {
     SetFoldFlags (wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED |
                   wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED);
 
-    // set spaces and indention
+    // set spaces and indentation
     SetTabWidth (4);
     SetUseTabs (false);
     SetTabIndents (true);
@@ -647,7 +647,7 @@ bool Edit::InitializePrefs (const wxString &name) {
 bool Edit::LoadFile ()
 {
 #if wxUSE_FILEDLG
-    // get filname
+    // get filename
     if (!m_filename) {
         wxFileDialog dlg (this, wxT("Open file"), wxEmptyString, wxEmptyString,
                           wxT("Any file (*)|*"), wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR);
@@ -684,7 +684,7 @@ bool Edit::SaveFile ()
     // return if no change
     if (!Modified()) return true;
 
-    // get filname
+    // get filename
     if (!m_filename) {
         wxFileDialog dlg (this, wxT("Save file"), wxEmptyString, wxEmptyString, wxT("Any file (*)|*"),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
@@ -741,7 +741,7 @@ EditProperties::EditProperties (Edit *edit,
     SetTitle (_("Properties"));
     wxString text;
 
-    // fullname
+    // full name
     wxBoxSizer *fullname = new wxBoxSizer (wxHORIZONTAL);
     fullname->Add (10, 0);
     fullname->Add (new wxStaticText (this, wxID_ANY, _("Full filename"),

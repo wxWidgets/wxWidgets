@@ -91,7 +91,7 @@ class App: public wxApp {
     friend class AppFrame;
 
 public:
-    //! the main function called durning application start
+    //! the main function called during application start
     virtual bool OnInit ();
 
     //! application exit function
@@ -485,7 +485,7 @@ void AppFrame::CreateMenu ()
     menuEdit->Append (wxID_SELECTALL, _("&Select all\tCtrl+A"));
     menuEdit->Append (myID_SELECTLINE, _("Select &line\tCtrl+L"));
 
-    // hilight submenu
+    // highlight submenu
     wxMenu *menuHilight = new wxMenu;
     int Nr;
     for (Nr = 0; Nr < g_LanguagePrefsSize; Nr++) {
@@ -500,7 +500,7 @@ void AppFrame::CreateMenu ()
 
     // View menu
     wxMenu *menuView = new wxMenu;
-    menuView->Append (myID_HILIGHTLANG, _("&Hilight language .."), menuHilight);
+    menuView->Append (myID_HILIGHTLANG, _("&Highlight language .."), menuHilight);
     menuView->AppendSeparator();
     menuView->AppendCheckItem (myID_FOLDTOGGLE, _("&Toggle current fold\tCtrl+T"));
     menuView->AppendCheckItem (myID_OVERTYPE, _("&Overwrite mode\tIns"));
