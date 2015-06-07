@@ -163,7 +163,7 @@ void FormMain::OnDumpList( wxCommandEvent& WXUNUSED(event) )
     const int spacing = 8;
     wxBoxSizer* topsizer = new wxBoxSizer( wxVERTICAL );
     wxBoxSizer* rowsizer = new wxBoxSizer( wxHORIZONTAL );
-    wxTextCtrl* ed = new wxTextCtrl(dlg, 11, text,
+    wxTextCtrl* ed = new wxTextCtrl(dlg, wxID_ANY, text,
                                     wxDefaultPosition, wxDefaultSize,
                                     wxTE_MULTILINE);
     rowsizer->Add( ed, wxSizerFlags(1).Expand().Border(wxALL, spacing));
@@ -342,7 +342,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
     const int spacing = 8;
     wxBoxSizer* topsizer = new wxBoxSizer( wxVERTICAL );
     wxBoxSizer* rowsizer = new wxBoxSizer( wxHORIZONTAL );
-    wxTextCtrl* ed = new wxTextCtrl(dlg, 11, wxEmptyString,
+    wxTextCtrl* ed = new wxTextCtrl(dlg, wxID_ANY, wxEmptyString,
                                     wxDefaultPosition, wxDefaultSize,
                                     wxTE_MULTILINE);
     rowsizer->Add( ed, wxSizerFlags(1).Expand().Border(wxALL, spacing));
