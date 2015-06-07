@@ -2358,7 +2358,7 @@ void wxPGProperty::RemoveChild( wxPGProperty* p )
     wxArrayPGProperty::iterator it;
     wxArrayPGProperty& children = m_children;
 
-    for ( it=children.begin(); it != children.end(); it++ )
+    for ( it=children.begin(); it != children.end(); ++it )
     {
         if ( *it == p )
         {

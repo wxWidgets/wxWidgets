@@ -883,7 +883,7 @@ const wxString& wxPropertyGrid::DoubleToString(wxString& target,
         bool isZero = true;
         wxString::const_iterator i = target.begin() + 1;
 
-        for ( ; i != target.end(); i++ )
+        for ( ; i != target.end(); ++i )
         {
             if ( *i != wxS('0') && *i != wxS('.') && *i != wxS(',') )
             {
