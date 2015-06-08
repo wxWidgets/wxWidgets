@@ -474,7 +474,7 @@ void wxPropertyGrid::Init2()
 
     CalculateFontAndBitmapStuff( wxPG_DEFAULT_VSPACING );
 
-    // Allocate cell datas
+    // Allocate cell data
     m_propertyDefaultCell.SetEmptyData();
     m_categoryDefaultCell.SetEmptyData();
 
@@ -653,7 +653,7 @@ void wxPropertyGrid::SetWindowStyleFlag( long style )
         if ( !(old_style & wxPG_AUTO_SORT) && (style & wxPG_AUTO_SORT) )
         {
             //
-            // Autosort enabled
+            // Auto sort enabled
             //
             if ( !IsFrozen() )
                 PrepareAfterItemsAdded();
@@ -1229,7 +1229,7 @@ void wxPropertyGrid::OnTLPChanging( wxWindow* newTLP )
     wxMilliClock_t currentTime = ::wxGetLocalTimeMillis();
 
     //
-    // Parent changed so let's redetermine and re-hook the
+    // Parent changed so let's re-determine and re-hook the
     // correct top-level window.
     if ( m_tlp )
     {
@@ -1990,7 +1990,7 @@ void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
 
 //
 // This is the one called by OnPaint event handler and others.
-// topy and bottomy are already unscrolled (ie. physical)
+// topy and bottomy are already unscrolled (i.e. physical)
 //
 void wxPropertyGrid::DrawItems( wxDC& dc,
                                 unsigned int topItemY,
@@ -2184,7 +2184,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     int y = firstItemTopY;
 
     //
-    // Pregenerate list of visible properties.
+    // Pre-generate list of visible properties.
     wxArrayPGProperty visPropArray;
     visPropArray.reserve((m_height/m_lineHeight)+6);
 
@@ -2565,7 +2565,7 @@ wxRect wxPropertyGrid::GetPropertyRect( const wxPGProperty* p1, const wxPGProper
     else
         visBottom = m_height + visTop;
 
-    // If seleced property is inside the range, we'll extend the range to include
+    // If selected property is inside the range, we'll extend the range to include
     // control's size.
     wxPGProperty* selected = GetSelection();
     if ( selected )
@@ -4136,7 +4136,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
         // First, deactivate previous
         if ( prevFirstSel )
         {
-            // Must double-check if this is an selected in case of forceswitch
+            // Must double-check if this is an selected in case of force switch
             if ( p != prevFirstSel )
             {
                 if ( !CommitChangesFromEditor(flags) )
@@ -4264,7 +4264,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                     SetupChildEventHandling(primaryCtrl);
 
-                    // Focus and select all (wxTextCtrl, wxComboBox etc)
+                    // Focus and select all (wxTextCtrl, wxComboBox etc.)
                     if ( flags & wxPG_SEL_FOCUS )
                     {
                         primaryCtrl->SetFocus();
@@ -4480,7 +4480,7 @@ bool wxPropertyGrid::DoCollapse( wxPGProperty* p, bool sendEvents )
         DoClearSelection();
     }
 
-    // Store dont-center-splitter flag 'cause we need to temporarily set it
+    // Store dont-center-splitter flag because we need to temporarily set it
     bool prevDontCenterSplitter = m_pState->m_dontCenterSplitter;
     m_pState->m_dontCenterSplitter = true;
 
@@ -4900,7 +4900,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                     else if ( m_dragStatus == 0 )
                     {
                         //
-                        // Begin draggin the splitter
+                        // Begin dragging the splitter
                         //
 
                         // send event
@@ -5171,7 +5171,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
         else
         {
             // Do not allow splitter cursor on caption items.
-            // (also not if we were dragging and its started
+            // (also not if we were dragging and it's started
             // outside the splitter region)
 
             if ( !m_propHover->IsCategory() &&
@@ -5624,7 +5624,7 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
 
     wxCHECK2(!IsFrozen(), return);
 
-    // Travelsal between items, collapsing/expanding, etc.
+    // Traversal between items, collapsing/expanding, etc.
     wxPGProperty* selected = GetSelection();
     int keycode = event.GetKeyCode();
     bool editorFocused = IsEditorFocused();
@@ -5955,7 +5955,7 @@ void wxPropertyGrid::HandleFocusChange( wxWindow* newFocused )
 {
     //
     // Never allow focus to be changed when handling editor event.
-    // Especially because they may be displaing a dialog which
+    // Especially because they may be displaying a dialog which
     // could cause all kinds of weird (native) focus changes.
     if ( HasInternalFlag(wxPG_FL_IN_HANDLECUSTOMEDITOREVENT) )
         return;
@@ -6362,7 +6362,7 @@ wxPropertyGridEvent::~wxPropertyGridEvent()
     #endif
 
         // Use iterate from the back since it is more likely that the event
-        // being desroyed is at the end of the array.
+        // being destroyed is at the end of the array.
         wxVector<wxPropertyGridEvent*>& liveEvents = m_pg->m_liveEvents;
 
         for ( int i = liveEvents.size()-1; i >= 0; i-- )

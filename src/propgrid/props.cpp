@@ -2094,7 +2094,7 @@ bool wxFileProperty::StringToValue( wxVariant& variant, const wxString& text, in
 
 bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 {
-    // Return false on some occasions to make sure those attribs will get
+    // Return false on some occasions to make sure those attributes will get
     // stored in m_attributes.
     if ( name == wxPG_FILE_SHOW_FULL_PATH )
     {

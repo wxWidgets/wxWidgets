@@ -542,7 +542,7 @@ wxPGProperty* wxPropertyGridInterface::GetPropertyByName( const wxString& name )
     if ( p )
         return p;
 
-    // Check if its "Property.SubProperty" format
+    // Check if it is "Property.SubProperty" format
     int pos = name.Find(wxS('.'));
     if ( pos <= 0 )
         return NULL;

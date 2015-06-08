@@ -483,7 +483,7 @@ void wxPGProperty::Init()
 void wxPGProperty::Init( const wxString& label, const wxString& name )
 {
     // We really need to check if &label and &name are NULL pointers
-    // (this can if we are called before property grid has been initalized)
+    // (this can if we are called before property grid has been initialized)
 
     if ( (&label) != NULL && label != wxPG_LABEL )
         m_label = label;
@@ -799,7 +799,7 @@ void wxPGProperty::GetDisplayInfo( unsigned int column,
         // Not painting list of choice popups, so get text from property
         if ( column != 1 || !IsValueUnspecified() || IsCategory() )
         {
-            // Overrride default cell settings with
+            // Override default cell settings with
             // custom settings defined for choice item.
             if (column == 1 && !IsValueUnspecified() && choiceIndex != wxNOT_FOUND)
             {
@@ -1100,7 +1100,7 @@ bool wxPGProperty::StringToValue( wxVariant& v, const wxString& text, int argFla
     wxString token;
     size_t pos = 0;
 
-    // Its best only to add non-empty group items
+    // It is best only to add non-empty group items
     bool addOnlyIfNotEmpty = false;
     const wxChar delimiter = wxS(';');
 
@@ -1162,7 +1162,7 @@ bool wxPGProperty::StringToValue( wxVariant& v, const wxString& text, int argFla
                                 // *after* child->StringToValue() has been
                                 // called, since variant's value may be set by
                                 // assigning another variant into it, which
-                                // then usually causes name to be copied (ie.
+                                // then usually causes name to be copied (i.e.
                                 // usually cleared) as well. wxBoolProperty
                                 // being case in point with its use of
                                 // wxPGVariant_Bool macro as an optimization.
@@ -2654,7 +2654,7 @@ bool wxPGProperty::IsChildSelected( bool recursive ) const
         if ( m_parentState->DoIsPropertySelected( child ) )
             return true;
 
-        // Test sub-childs
+        // Test sub-children
         if ( recursive && child->IsChildSelected( recursive ) )
             return true;
     }

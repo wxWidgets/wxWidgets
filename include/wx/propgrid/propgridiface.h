@@ -395,7 +395,7 @@ public:
     const wxPGAttributeStorage& GetPropertyAttributes( wxPGPropArg id ) const
     {
         // If 'id' refers to invalid property, then we will return dummy
-        // attributes (ie. root property's attributes, which contents should
+        // attributes (i.e. root property's attributes, which contents should
         // should always be empty and of no consequence).
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(m_pState->DoGetRoot()->GetAttributes());
         return p->GetAttributes();

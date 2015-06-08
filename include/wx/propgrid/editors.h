@@ -148,7 +148,7 @@ public:
         @remarks wxPropertyGrid will automatically unfocus the editor when
                 wxEVT_TEXT_ENTER is received and when it results in
                 property value being modified. This happens regardless of
-                editor type (ie. behaviour is same for any wxTextCtrl and
+                editor type (i.e. behaviour is same for any wxTextCtrl and
                 wxComboBox based editor).
     */
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
@@ -439,7 +439,7 @@ public:
 
 
 // -----------------------------------------------------------------------
-// Editor class registeration macro (mostly for internal use)
+// Editor class registration macro (mostly for internal use)
 
 #define wxPGRegisterEditorClass(EDITOR) \
     if ( wxPGEditor_##EDITOR == NULL ) \

@@ -45,7 +45,7 @@
 #include "wx/propgrid/manager.h"
 
 
-#define wxPG_MAN_ALTERNATE_BASE_ID          11249 // Needed for wxID_ANY madnesss
+#define wxPG_MAN_ALTERNATE_BASE_ID          11249 // Needed for wxID_ANY madness
 
 
 // -----------------------------------------------------------------------
@@ -652,7 +652,7 @@ bool wxPropertyGridManager::SetFont( const wxFont& font )
     bool res = wxWindow::SetFont(font);
     m_pPropGrid->SetFont(font);
 
-    // TODO: Need to do caption recacalculations for other pages as well.
+    // TODO: Need to do caption recalculations for other pages as well.
     for ( unsigned int i = 0; i < m_arrPages.size(); i++ )
     {
         wxPropertyGridPage* page = GetPage(i);
@@ -1202,7 +1202,7 @@ bool wxPropertyGridManager::ProcessEvent( wxEvent& event )
     int evtType = event.GetEventType();
 
     // NB: For some reason, under wxPython, Connect in Init doesn't work properly,
-    //     so we'll need to call OnPropertyGridSelect manually. Multiple call's
+    //     so we'll need to call OnPropertyGridSelect manually. Multiple calls
     //     don't really matter.
     if ( evtType == wxEVT_PG_SELECTED )
         OnPropertyGridSelect((wxPropertyGridEvent&)event);
@@ -2068,7 +2068,7 @@ void wxPropertyGridManager::OnMouseClick( wxMouseEvent &event )
         if ( m_dragStatus == 0 )
         {
             //
-            // Begin draggin the splitter
+            // Begin dragging the splitter
             //
 
             BEGIN_MOUSE_CAPTURE

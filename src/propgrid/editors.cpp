@@ -897,7 +897,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         {
             // TODO: This aligns text so that it seems to be horizontally
             //       on the same line as property values. Not really
-            //       sure if its needed, but seems to not cause any harm.
+            //       sure if it is needed, but seems to not cause any harm.
             pt.x -= 1;
 
             if ( item < 0 && (flags & wxODCB_PAINTING_CONTROL) )
@@ -1915,7 +1915,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     if ( forColumn != 1 )
         s.x -= 2;
 
-    // Take button into acccount
+    // Take button into account
     if ( secondary )
     {
         s.x -= (secondary->GetSize().x + wxPG_TEXTCTRL_AND_BUTTON_SPACING);
@@ -2019,7 +2019,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
     wxSize s(sz.y-(wxPG_BUTTON_SIZEDEC*2)+(wxPG_NAT_BUTTON_BORDER_Y*2),
         sz.y-(wxPG_BUTTON_SIZEDEC*2)+(wxPG_NAT_BUTTON_BORDER_Y*2));
 
-    // Reduce button width to lineheight
+    // Reduce button width to line height
     if ( s.x > m_lineHeight )
         s.x = m_lineHeight;
 

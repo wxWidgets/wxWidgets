@@ -1372,7 +1372,7 @@ void wxPropertyGridPageState::DoRemoveFromSelection( wxPGProperty* prop )
             wxPropertyGrid* pg = m_pPropGrid;
             if ( i == 0 && pg->GetState() == this )
             {
-                // If first item (ie. one with the active editor) was
+                // If first item (i.e. one with the active editor) was
                 // deselected, then we need to take some extra measures.
                 wxArrayPGProperty sel = m_selection;
                 sel.erase( sel.begin() + i );
@@ -1972,7 +1972,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
 
     wxPropertyGrid* pg = GetGrid();
 
-    // Try to unselect property and its subproperties.
+    // Try to unselect property and its sub-properties.
     if ( DoIsPropertySelected(item) )
     {
         if ( pg && pg->GetState() == this )

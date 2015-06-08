@@ -2343,7 +2343,7 @@ public:
                          wxString* pString,
                          const wxPGCell** pCell );
 #endif //  WXWIN_COMPATIBILITY_3_0
-    // This function can return modfied (customized) cell object.
+    // This function can return modified (customized) cell object.
     void GetDisplayInfo( unsigned int column,
                          int choiceIndex,
                          int flags,
