@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-23 22:46+0400\n"
-"PO-Revision-Date: 2014-12-16 22:36+0100\n"
+"PO-Revision-Date: 2015-06-08 08:22+0100\n"
 "Last-Translator: Zbyněk Schwarz <zbynek.schwarz@gmail.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "Language: cs_CZ\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Bookmarks: 1524,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 1.8.1\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -220,7 +220,7 @@ msgstr "&Barva pozadí:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:299
 msgid "&Blur distance:"
-msgstr ""
+msgstr "&Délka rozostření:"
 
 #: ../src/common/stockitem.cpp:143
 msgid "&Bold"
@@ -417,9 +417,8 @@ msgid "&Home"
 msgstr "&Domů"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:213
-#, fuzzy
 msgid "&Horizontal offset:"
-msgstr "&Svislé posunutí:"
+msgstr "&Vodorovné posunutí:"
 
 #: ../src/richtext/richtextindentspage.cpp:184
 #: ../src/richtext/richtextliststylepage.cpp:372
@@ -751,7 +750,6 @@ msgid "&Vertical alignment:"
 msgstr "&Svislé zarovnání"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:236
-#, fuzzy
 msgid "&Vertical offset:"
 msgstr "&Svislé posunutí:"
 
@@ -2003,9 +2001,9 @@ msgid "Changes won't be saved to avoid overwriting the existing file \"%s\""
 msgstr "Změny nebudou uloženy, aby se zabránilo přepsání souboru \"%s\""
 
 #: ../src/gtk/filedlg.cpp:87 ../src/gtk/filepicker.cpp:190
-#, fuzzy, c-format
+#, c-format
 msgid "Changing current directory to \"%s\" failed"
-msgstr "Nelze vytvořit adresář \"%s\""
+msgstr "Změna současného adresáře na \"%s\" selhala"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1718
@@ -2594,9 +2592,9 @@ msgid "Create new directory"
 msgstr "Vytvořit nový adresář"
 
 #: ../src/xrc/xmlres.cpp:2441
-#, fuzzy, c-format
+#, c-format
 msgid "Creating %s \"%s\" failed."
-msgstr "Extrakce '%s' do '%s' selhala."
+msgstr "Vytvoření %s \"%s\" selhalo."
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1719
@@ -2986,37 +2984,32 @@ msgstr "Povolit svislé zarovnání."
 #: ../src/richtext/richtextbackgroundpage.cpp:163
 #: ../src/richtext/richtextbackgroundpage.cpp:165
 msgid "Enables a background colour."
-msgstr "Povolit barvu pozadí."
+msgstr "Povoluje barvu pozadí."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:197
 #: ../src/richtext/richtextbackgroundpage.cpp:199
-#, fuzzy
 msgid "Enables a shadow."
-msgstr "Povolit barvu pozadí."
+msgstr "Povoluje stín."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:301
 #: ../src/richtext/richtextbackgroundpage.cpp:303
-#, fuzzy
 msgid "Enables the blur distance."
-msgstr "Povolit hodnotu šířky."
+msgstr "Povolí délku rozostření."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:261
 #: ../src/richtext/richtextbackgroundpage.cpp:263
-#, fuzzy
 msgid "Enables the shadow colour."
-msgstr "Povolit barvu pozadí."
+msgstr "Povoluje barvu stínu."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:328
 #: ../src/richtext/richtextbackgroundpage.cpp:330
-#, fuzzy
 msgid "Enables the shadow opacity."
-msgstr "Povolit hodnotu šířky."
+msgstr "Povoluje neprůhlednost stínu."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:274
 #: ../src/richtext/richtextbackgroundpage.cpp:276
-#, fuzzy
 msgid "Enables the shadow spread."
-msgstr "Povolit hodnotu šířky."
+msgstr "Povolí rozprostření stínu."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:64
@@ -4645,12 +4638,12 @@ msgid "Last page"
 msgstr "Poslední stránka"
 
 #: ../src/common/log.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Last repeated message (\"%s\", %u time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %u times) wasn't output"
-msgstr[0] "Poslední opakovaná zpráva (\"%s\", %lukrát) nebyla vypsána"
-msgstr[1] "Poslední opakovaná zpráva (\"%s\", %lukrát) nebyla vypsána"
-msgstr[2] "Poslední opakovaná zpráva (\"%s\", %lukrát) nebyla vypsána"
+msgstr[0] "Poslední opakovaná zpráva (\"%s\", %ukrát) nebyla vypsána"
+msgstr[1] "Poslední opakovaná zpráva (\"%s\", %ukrát) nebyla vypsána"
+msgstr[2] "Poslední opakovaná zpráva (\"%s\", %ukrát) nebyla vypsána"
 
 #: ../src/common/paper.cpp:104
 msgid "Ledger, 17 x 11 in"
@@ -5475,7 +5468,7 @@ msgstr "Olivová"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:326
 msgid "Opaci&ty:"
-msgstr ""
+msgstr "&Neprůhlednost"
 
 #: ../src/common/docview.cpp:1776 ../src/common/docview.cpp:1818
 msgid "Open File"
@@ -5999,9 +5992,9 @@ msgid "Printing Error"
 msgstr "Chyba tisku"
 
 #: ../src/common/prntbase.cpp:565
-#, fuzzy, c-format
+#, c-format
 msgid "Printing page %d"
-msgstr "Tisk strany %d..."
+msgstr "Tisk strany %d"
 
 #: ../src/common/prntbase.cpp:570
 #, c-format
@@ -6442,17 +6435,15 @@ msgstr ""
 
 #: ../src/richtext/richtextbackgroundpage.cpp:272
 msgid "Sh&adow spread:"
-msgstr ""
+msgstr "&Rozprostření stínu:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:180
-#, fuzzy
 msgid "Shadow"
-msgstr "Stín tlačítka"
+msgstr "Stín"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:259
-#, fuzzy
 msgid "Shadow c&olour:"
-msgstr "Vyberte barvu"
+msgstr "&Barva stínu"
 
 #: ../src/common/accelcmn.cpp:325
 msgid "Shift+"
@@ -6971,9 +6962,8 @@ msgstr "Formát souboru '%s' nelze určit."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:220
 #: ../src/richtext/richtextbackgroundpage.cpp:222
-#, fuzzy
 msgid "The horizontal offset."
-msgstr "Povolit svislé posunutí."
+msgstr "Vodorovné posunutí."
 
 #: ../src/richtext/richtextindentspage.cpp:199
 #: ../src/richtext/richtextindentspage.cpp:201
@@ -7051,12 +7041,12 @@ msgid "The outline level."
 msgstr "Úroveň odstavce"
 
 #: ../src/common/log.cpp:281
-#, fuzzy, c-format
+#, c-format
 msgid "The previous message repeated %u time."
 msgid_plural "The previous message repeated %u times."
-msgstr[0] "Předchozí zpráva opakovaná %lukrát"
-msgstr[1] "Předchozí zpráva opakovaná %lukrát"
-msgstr[2] "Předchozí zpráva opakovaná %lukrát"
+msgstr[0] "Předchozí zpráva opakovaná %ukrát."
+msgstr[1] "Předchozí zpráva opakovaná %ukrát."
+msgstr[2] "Předchozí zpráva opakovaná %ukrát."
 
 #: ../src/common/log.cpp:274
 msgid "The previous message repeated once."
@@ -7109,23 +7099,22 @@ msgstr "Pozice vpravo."
 #: ../src/richtext/richtextbackgroundpage.cpp:310
 #: ../src/richtext/richtextbackgroundpage.cpp:312
 msgid "The shadow blur distance."
-msgstr ""
+msgstr "Délka rozostření stínu."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:267
 #: ../src/richtext/richtextbackgroundpage.cpp:269
-#, fuzzy
 msgid "The shadow colour."
-msgstr "Barva písma"
+msgstr "Barva stínu."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:337
 #: ../src/richtext/richtextbackgroundpage.cpp:339
 msgid "The shadow opacity."
-msgstr ""
+msgstr "Neprůhlednost stínu."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:283
 #: ../src/richtext/richtextbackgroundpage.cpp:285
 msgid "The shadow spread."
-msgstr ""
+msgstr "Rozprostření stínu."
 
 #: ../src/richtext/richtextindentspage.cpp:267
 #: ../src/richtext/richtextliststylepage.cpp:439
@@ -7210,9 +7199,8 @@ msgstr ""
 
 #: ../src/richtext/richtextbackgroundpage.cpp:243
 #: ../src/richtext/richtextbackgroundpage.cpp:245
-#, fuzzy
 msgid "The vertical offset."
-msgstr "Povolit svislé posunutí."
+msgstr "Svislé posunutí."
 
 #: ../src/osx/carbon/dataview.cpp:1338
 msgid "There is no column or renderer for the specified column index."
@@ -7733,9 +7721,8 @@ msgstr "Jednotky pro horní pozici."
 #: ../src/richtext/richtextbackgroundpage.cpp:296
 #: ../src/richtext/richtextbackgroundpage.cpp:321
 #: ../src/richtext/richtextbackgroundpage.cpp:323
-#, fuzzy
 msgid "Units for this value."
-msgstr "Jednotky pro levý okraj."
+msgstr "Jednotky pro tuto hodnotu."
 
 #: ../src/generic/progdlgg.cpp:385 ../src/generic/progdlgg.cpp:658
 msgid "Unknown"
@@ -7852,7 +7839,7 @@ msgstr "Použití: %s"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:195
 msgid "Use &shadow"
-msgstr ""
+msgstr "Použít &stín"
 
 #: ../src/richtext/richtextindentspage.cpp:169
 #: ../src/richtext/richtextindentspage.cpp:171
@@ -7987,9 +7974,8 @@ msgid "WindowText"
 msgstr "Text okna"
 
 #: ../src/msw/utils.cpp:1233
-#, fuzzy
 msgid "Windows 10"
-msgstr "Windows 8.1"
+msgstr "Windows 10"
 
 #: ../src/msw/utils.cpp:1183
 msgid "Windows 2000"
@@ -8087,9 +8073,8 @@ msgid "Windows NT %lu.%lu"
 msgstr "Windows NT %lu.%lu"
 
 #: ../src/msw/utils.cpp:1232
-#, fuzzy
 msgid "Windows Server 10"
-msgstr "Windows Server 2003"
+msgstr "Windows Server 10"
 
 #: ../src/msw/utils.cpp:1192
 msgid "Windows Server 2003"
