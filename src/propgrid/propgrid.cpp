@@ -6150,8 +6150,8 @@ void wxPropertyGrid::RegisterDefaultEditors()
 //   Needed to handle C-style string lists (e.g. "str1" "str2")
 // -----------------------------------------------------------------------
 
-wxPGStringTokenizer::wxPGStringTokenizer( const wxString& str, wxChar delimeter )
-    : m_str(&str), m_curPos(str.begin()), m_delimeter(delimeter)
+wxPGStringTokenizer::wxPGStringTokenizer( const wxString& str, wxChar delimiter )
+    : m_str(&str), m_curPos(str.begin()), m_delimiter(delimiter)
 {
 }
 
@@ -6165,7 +6165,7 @@ bool wxPGStringTokenizer::HasMoreTokens()
 
     wxString::const_iterator i = m_curPos;
 
-    wxUniChar delim = m_delimeter;
+    wxUniChar delim = m_delimiter;
     wxUniChar a;
     wxUniChar prev_a = wxS('\0');
 
