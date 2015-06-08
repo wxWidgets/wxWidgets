@@ -1696,10 +1696,12 @@ void wxPropertyGrid::SetCurControlBoldFont()
 wxPoint wxPropertyGrid::GetGoodEditorDialogPosition( wxPGProperty* p,
                                                      const wxSize& sz )
 {
-#if wxPG_SMALL_SCREEN
-    // On small-screen devices, always show dialogs with default position and size.
-    return wxDefaultPosition;
-#else
+    if ( IsSmallScreen() )
+    {
+        // On small-screen devices, always show dialogs with default position and size.
+        return wxDefaultPosition;
+    }
+
     int splitterX = GetSplitterPosition();
     int x = splitterX;
     int y = p->GetY();
@@ -1729,7 +1731,6 @@ wxPoint wxPropertyGrid::GetGoodEditorDialogPosition( wxPGProperty* p,
         new_y = y + m_lineHeight;
 
     return wxPoint(new_x,new_y);
-#endif
 }
 
 // -----------------------------------------------------------------------

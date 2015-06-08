@@ -177,14 +177,6 @@
 // Use this macro to generate standard custom image height from
 #define wxPG_STD_CUST_IMAGE_HEIGHT(LINEHEIGHT)  (LINEHEIGHT-3)
 
-
-#if defined(__WXWINCE__)
-    #define wxPG_SMALL_SCREEN       1
-#else
-    #define wxPG_SMALL_SCREEN       0
-#endif
-
-
 // Undefine wxPG_ICON_WIDTH to use supplied xpm bitmaps instead
 // (for tree buttons)
 //#undef wxPG_ICON_WIDTH

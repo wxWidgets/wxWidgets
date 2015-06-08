@@ -1833,7 +1833,19 @@ wxValidator* wxDirProperty::DoGetValidator() const
 bool wxDirProperty::OnButtonClick( wxPropertyGrid* propGrid, wxString& value )
 {
     // Update property value from editor, if necessary
-    wxSize dlg_sz(300,400);
+    wxSize dlg_sz;
+    wxPoint dlg_pos;
+
+    if ( wxPropertyGrid::IsSmallScreen() )
+    {
+        dlg_sz = wxDefaultSize;
+        dlg_pos = wxDefaultPosition;
+    }
+    else
+    {
+        dlg_sz.Set(300, 400);
+        dlg_pos = propGrid->GetGoodEditorDialogPosition(this, dlg_sz);
+    }
 
     wxString dlgMessage(m_dlgMessage);
     if ( dlgMessage.empty() )
@@ -1842,13 +1854,7 @@ bool wxDirProperty::OnButtonClick( wxPropertyGrid* propGrid, wxString& value )
                      dlgMessage,
                      value,
                      0,
-#if !wxPG_SMALL_SCREEN
-                     propGrid->GetGoodEditorDialogPosition(this,dlg_sz),
-                     dlg_sz
-#else
-                     wxDefaultPosition,
-                     wxDefaultSize
-#endif
+                     dlg_pos, dlg_sz
                     );
 
     if ( dlg.ShowModal() == wxID_OK )
@@ -2225,11 +2231,7 @@ bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGr
     dlg->SetFont(propGrid->GetFont()); // To allow entering chars of the same set as the propGrid
 
     // Multi-line text editor dialog.
-#if !wxPG_SMALL_SCREEN
-    const int spacing = 8;
-#else
-    const int spacing = 4;
-#endif
+    const int spacing = wxPropertyGrid::IsSmallScreen()? 4 : 8;
     wxBoxSizer* topsizer = new wxBoxSizer( wxVERTICAL );
     wxBoxSizer* rowsizer = new wxBoxSizer( wxHORIZONTAL );
     long edStyle = wxTE_MULTILINE;
@@ -2251,11 +2253,12 @@ bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGr
     dlg->SetSizer( topsizer );
     topsizer->SetSizeHints( dlg );
 
-#if !wxPG_SMALL_SCREEN
-    dlg->SetSize(400,300);
+    if ( !wxPropertyGrid::IsSmallScreen())
+    {
+        dlg->SetSize(400,300);
 
-    dlg->Move( propGrid->GetGoodEditorDialogPosition(prop,dlg->GetSize()) );
-#endif
+        dlg->Move( propGrid->GetGoodEditorDialogPosition(prop,dlg->GetSize()) );
+    }
 
     int res = dlg->ShowModal();
 
@@ -2372,11 +2375,7 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
 
     SetFont(parent->GetFont()); // To allow entering chars of the same set as the propGrid
 
-#if !wxPG_SMALL_SCREEN
-    const int spacing = 4;
-#else
-    const int spacing = 3;
-#endif
+    const int spacing = wxPropertyGrid::IsSmallScreen()? 3: 4;
 
     m_modified = false;
 
@@ -2447,13 +2446,14 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
     SetSizer( topsizer );
     topsizer->SetSizeHints( this );
 
-#if !wxPG_SMALL_SCREEN
-    if ( sz.x == wxDefaultSize.x &&
-         sz.y == wxDefaultSize.y )
-        SetSize( wxSize(275,360) );
-    else
-        SetSize(sz);
-#endif
+    if ( !wxPropertyGrid::IsSmallScreen() )
+    {
+        if ( sz.x == wxDefaultSize.x &&
+             sz.y == wxDefaultSize.y )
+            SetSize(275, 360);
+        else
+            SetSize(sz);
+    }
 
     return res;
 }
@@ -2821,9 +2821,10 @@ bool wxArrayStringProperty::OnButtonClick( wxPropertyGrid* propGrid,
     dlg->SetDialogValue( useValue );
     dlg->Create(propGrid, wxEmptyString, m_label);
 
-#if !wxPG_SMALL_SCREEN
-    dlg->Move( propGrid->GetGoodEditorDialogPosition(this,dlg->GetSize()) );
-#endif
+    if ( !wxPropertyGrid::IsSmallScreen() )
+    {
+        dlg->Move( propGrid->GetGoodEditorDialogPosition(this,dlg->GetSize()) );
+    }
 
     bool retVal;
 

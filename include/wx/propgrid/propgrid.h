@@ -1556,6 +1556,12 @@ public:
     static wxString& CreateEscapeSequences( wxString& dst_str,
                                             wxString& src_str );
 
+    // Checks system screen design used for laying out various dialogs.
+    static bool IsSmallScreen()
+    {
+        return wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA;
+    }
+
     /**
         Returns rectangle that fully contains properties between and including
         p1 and p2. Rectangle is in virtual scrolled window coordinates.
