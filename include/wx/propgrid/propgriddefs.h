@@ -224,9 +224,9 @@ class wxPGValidationInfo;
 
 // -----------------------------------------------------------------------
 
-/** @section propgrid_misc wxPropertyGrid Miscellanous
+/** @section propgrid_misc wxPropertyGrid Miscellaneous
 
-    This section describes some miscellanous values, types and macros.
+    This section describes some miscellaneous values, types and macros.
     @{
 */
 

@@ -833,7 +833,7 @@ void wxPGProperty::GetDisplayInfo( unsigned int column,
 
         if ( choiceIndex != wxNOT_FOUND )
         {
-            // Overrride default cell settings with
+            // Override default cell settings with
             // custom settings defined for choice item.
             const wxPGChoiceEntry& entry = m_choices[choiceIndex];
             cell.MergeFrom(entry);

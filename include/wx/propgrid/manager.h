@@ -513,7 +513,7 @@ public:
     /** Select and displays a given page.
 
         @param index
-            Index of page being seleced. Can be -1 to select nothing.
+            Index of page being selected. Can be -1 to select nothing.
     */
     void SelectPage( int index );
 
@@ -623,7 +623,7 @@ protected:
     /**
         Creates property grid for the manager. Reimplement in derived class to
         use subclassed wxPropertyGrid. However, if you do this then you
-        must also use the two-step construction (ie. default constructor and
+        must also use the two-step construction (i.e. default constructor and
         Create() instead of constructor with arguments) when creating the
         manager.
     */

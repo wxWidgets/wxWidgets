@@ -606,7 +606,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
 /**
     The text will be echoed as asterisks (wxTE_PASSWORD will be passed to
-    textctrl etc).
+    textctrl etc.).
 */
 #define wxPG_STRING_PASSWORD                wxS("Password")
 
@@ -1473,7 +1473,7 @@ public:
     /** Returns which choice is currently selected. Only applies to properties
         which have choices.
 
-        Needs to reimplemented in derived class if property value does not
+        Needs to be reimplemented in derived class if property value does not
         map directly to a choice. Integer as index, bool, and string usually do.
     */
     virtual int GetChoiceSelection() const;
@@ -1594,7 +1594,7 @@ public:
     wxString GetName() const;
 
     /**
-        Returns property's base name (ie parent's name is not added in any
+        Returns property's base name (i.e. parent's name is not added in any
         case)
      */
     const wxString& GetBaseName() const { return m_name; }
@@ -2237,7 +2237,7 @@ public:
     inline bool SetMaxLength( int maxLen );
 
     /** Call with 'false' in OnSetValue to cancel value changes after all
-        (ie. cancel 'true' returned by StringToValue() or IntToValue()).
+        (i.e. cancel 'true' returned by StringToValue() or IntToValue()).
     */
     void SetWasModified( bool set = true )
     {
@@ -2409,7 +2409,7 @@ protected:
         Start looking for the child at this index.
 
         @remarks
-        Does not support scope (ie. Parent.Child notation).
+        Does not support scope (i.e. Parent.Child notation).
     */
     wxPGProperty* GetPropertyByNameWH( const wxString& name,
                                        unsigned int hintIndex ) const;

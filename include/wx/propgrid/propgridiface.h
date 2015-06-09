@@ -761,7 +761,7 @@ public:
     }
 
     /**
-        Returns true if property is shown (ie hideproperty with true not
+        Returns true if property is shown (i.e. HideProperty with true not
         called for it).
     */
     bool IsPropertyShown( wxPGPropArg id ) const
@@ -928,7 +928,7 @@ public:
         DoSetPropertyAttribute(id,attrName,value,argFlags);
     }
 
-    /** Sets property attribute for all applicapple properties.
+    /** Sets property attribute for all applicable properties.
         Be sure to use this method only after all properties have been
         added to the grid.
     */
@@ -1068,7 +1068,7 @@ public:
         This is mainly for use with textctrl editor. Not all other editors fully
         support it.
         @param flags
-        By default changes are applied recursively. Set this paramter
+        By default changes are applied recursively. Set this parameter
         wxPG_DONT_RECURSE to prevent this.
     */
     void SetPropertyReadOnly( wxPGPropArg id,

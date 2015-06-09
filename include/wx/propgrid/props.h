@@ -969,7 +969,7 @@ public:
 
     /** Override to return wxValidator to be used with the wxTextCtrl
         in dialog. Note that the validator is used in the standard
-        wx way, ie. it immediately prevents user from entering invalid
+        wx way, i.e. it immediately prevents user from entering invalid
         input.
 
         @remarks

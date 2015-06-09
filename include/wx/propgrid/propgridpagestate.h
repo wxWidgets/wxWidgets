@@ -223,7 +223,7 @@ public:
     void Prev();
 
     /**
-        Set base parent, ie a property when, in which iteration returns, it
+        Set base parent, i.e. a property when, in which iteration returns, it
         ends.
 
         Default base parent is the root of the used wxPropertyGridPageState.
@@ -402,7 +402,7 @@ protected:
 /** @class wxPropertyGridPageState
 
     Contains low-level property page information (properties, column widths,
-    etc) of a single wxPropertyGrid or single wxPropertyGridPage. Generally you
+    etc.) of a single wxPropertyGrid or single wxPropertyGridPage. Generally you
     should not use this class directly, but instead member functions in
     wxPropertyGridInterface, wxPropertyGrid, wxPropertyGridPage, and
     wxPropertyGridManager.

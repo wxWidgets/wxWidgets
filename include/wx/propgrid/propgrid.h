@@ -1759,7 +1759,7 @@ public:
     virtual void DrawItemAndChildren( wxPGProperty* p );
 
     /**
-        Draws item, children, and consequtive parents as long as category is
+        Draws item, children, and consecutive parents as long as category is
         not met.
      */
     void DrawItemAndValueRelated( wxPGProperty* p );
