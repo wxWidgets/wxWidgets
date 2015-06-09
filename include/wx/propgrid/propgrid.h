@@ -1557,10 +1557,7 @@ public:
                                             wxString& src_str );
 
     // Checks system screen design used for laying out various dialogs.
-    static bool IsSmallScreen()
-    {
-        return wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA;
-    }
+    static bool IsSmallScreen();
 
     /**
         Returns rectangle that fully contains properties between and including
