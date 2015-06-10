@@ -472,6 +472,13 @@ bool wxLocale::Init(int language, int flags)
 
             // change locale used by Windows functions
             ::SetThreadLocale(lcid);
+
+            // SetThreadUILanguage() is available on XP, but with unclear
+            // behavior, so avoid calling it there.
+            if ( wxGetWinVersion() >= wxWinVersion_Vista )
+            {
+                SetThreadUILanguage(LANGIDFROMLCID(lcid));
+            }
 #endif
 
             // and also call setlocale() to change locale used by the CRT
