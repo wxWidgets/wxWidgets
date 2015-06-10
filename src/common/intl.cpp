@@ -55,6 +55,7 @@
 #endif
 
 #ifdef __WIN32__
+    #include "wx/dynlib.h"
     #include "wx/msw/private.h"
 #endif
 
@@ -480,6 +481,18 @@ bool wxLocale::Init(int language, int flags)
 
             // change locale used by Windows functions
             ::SetThreadLocale(lcid);
+
+            // SetThreadUILanguage() may be available on XP, but with unclear
+            // behavior, so avoid calling it there.
+            if ( wxGetWinVersion() >= wxWinVersion_Vista )
+            {
+                wxLoadedDLL dllKernel32(wxS("kernel32.dll"));
+                typedef LANGID(WINAPI *SetThreadUILanguage_t)(LANGID);
+                SetThreadUILanguage_t pfnSetThreadUILanguage = NULL;
+                wxDL_INIT_FUNC(pfn, SetThreadUILanguage, dllKernel32);
+                if (pfnSetThreadUILanguage)
+                    pfnSetThreadUILanguage(LANGIDFROMLCID(lcid));
+            }
 #endif
 
             // and also call setlocale() to change locale used by the CRT
