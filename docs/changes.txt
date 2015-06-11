@@ -158,6 +158,7 @@ wxMSW:
 - Don't send events for already selected radio popup menu items (Kinaou Hervé).
 - wxListCtrl::GetItemCount() in wxEVT_LIST_INSERT_ITEM is no longer off by 1.
 - Don't send bogus root selection events when clicking wxTreeCtrl (sbrowne).
+- Fix wxStackWalker to work with Unicode identifiers (Suzumizaki-Kimitaka).
 
 wxOSX/Cocoa:
 
