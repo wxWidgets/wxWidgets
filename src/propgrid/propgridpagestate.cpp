@@ -1206,7 +1206,7 @@ void wxPropertyGridPageState::DoSetColumnProportion( unsigned int column,
                                                  int proportion )
 {
     wxASSERT_MSG( proportion >= 1,
-                  "Column proportion must 1 or higher" );
+                  wxS("Column proportion must 1 or higher") );
 
     if ( proportion < 1 )
         proportion = 1;
@@ -1684,7 +1684,7 @@ bool wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
     if ( scheduledParent && !scheduledParent->IsCategory() )
     {
         wxASSERT_MSG( !property->GetBaseName().empty(),
-                      "Property's children must have unique, non-empty names within their scope" );
+                      wxS("Property's children must have unique, non-empty names within their scope") );
     }
 
     property->m_parentState = this;
@@ -1720,7 +1720,7 @@ bool wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
          (!scheduledParent || scheduledParent->IsCategory()) )
     {
         wxFAIL_MSG(wxString::Format(
-            "wxPropertyGrid item with name \"%s\" already exists",
+            wxS("wxPropertyGrid item with name \"%s\" already exists"),
             property->GetName()));
 
         wxPGGlobalVars->m_warnings++;

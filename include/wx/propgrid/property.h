@@ -801,13 +801,13 @@ public:
 
     const wxPGChoiceEntry& Item( unsigned int i ) const
     {
-        wxASSERT_MSG( i < GetCount(), "invalid index" );
+        wxASSERT_MSG( i < GetCount(), wxS("invalid index") );
         return m_items[i];
     }
 
     wxPGChoiceEntry& Item( unsigned int i )
     {
-        wxASSERT_MSG( i < GetCount(), "invalid index" );
+        wxASSERT_MSG( i < GetCount(), wxS("invalid index") );
         return m_items[i];
     }
 

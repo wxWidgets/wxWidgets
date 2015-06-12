@@ -352,8 +352,8 @@ public:
     wxPropertyGridIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT,
                                         wxPGProperty* firstProp = NULL )
     {
-        wxFAIL_MSG( "Please only iterate through individual pages "
-                    "or use CreateVIterator()" );
+        wxFAIL_MSG( wxS("Please only iterate through individual pages ")
+                    wxS("or use CreateVIterator()") );
         return wxPropertyGridInterface::GetIterator( flags, firstProp );
     }
 
@@ -361,8 +361,8 @@ public:
     GetIterator(int flags = wxPG_ITERATE_DEFAULT,
                 wxPGProperty* firstProp = NULL) const
     {
-        wxFAIL_MSG( "Please only iterate through individual pages "
-                    " or use CreateVIterator()" );
+        wxFAIL_MSG( wxS("Please only iterate through individual pages ")
+                    wxS("or use CreateVIterator()") );
         return wxPropertyGridInterface::GetIterator( flags, firstProp );
     }
 
@@ -374,16 +374,16 @@ public:
     */
     wxPropertyGridIterator GetIterator( int flags, int startPos )
     {
-        wxFAIL_MSG( "Please only iterate through individual pages "
-                    "or use CreateVIterator()" );
+        wxFAIL_MSG( wxS("Please only iterate through individual pages ")
+                    wxS("or use CreateVIterator()") );
 
         return wxPropertyGridInterface::GetIterator( flags, startPos );
     }
 
     wxPropertyGridConstIterator GetIterator( int flags, int startPos ) const
     {
-        wxFAIL_MSG( "Please only iterate through individual pages "
-                    "or use CreateVIterator()" );
+        wxFAIL_MSG( wxS("Please only iterate through individual pages ")
+                    wxS("or use CreateVIterator()") );
         return wxPropertyGridInterface::GetIterator( flags, startPos );
     }
 

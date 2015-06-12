@@ -526,7 +526,7 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
     // Make sure deprecated virtual functions are not implemented
     wxString s = GetValueAsString( 0xFFFF );
     wxASSERT_MSG( s == g_invalidStringContent,
-                  "Implement ValueToString() instead of GetValueAsString()" );
+                  wxS("Implement ValueToString() instead of GetValueAsString()") );
 #endif
 
     if ( !parentIsRoot && !parent->IsCategory() )
@@ -614,8 +614,8 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
                             wxPG_PROP_AGGREGATE) ||
                       ((m_flags & wxPG_PROP_PARENTAL_FLAGS) ==
                             wxPG_PROP_MISC_PARENT),
-                      "wxPGProperty parental flags set incorrectly at "
-                      "this time" );
+                      wxS("wxPGProperty parental flags set incorrectly at ")
+                      wxS("this time") );
 
         if ( HasFlag(wxPG_PROP_AGGREGATE) )
         {
@@ -843,7 +843,7 @@ void wxPGProperty::GetDisplayInfo( unsigned int column,
     }
 
     wxASSERT_MSG( cell.GetData(),
-                  wxString::Format("Invalid cell for property %s",
+                  wxString::Format(wxS("Invalid cell for property %s"),
                                    GetName().c_str()) );
 
     // We need to return customized cell object.
@@ -1008,13 +1008,13 @@ wxString wxPGProperty::ValueToString( wxVariant& WXUNUSED(value),
 {
     wxCHECK_MSG( GetChildCount() > 0,
                  wxEmptyString,
-                 "If user property does not have any children, it must "
-                 "override GetValueAsString" );
+                 wxS("If user property does not have any children, it must ")
+                 wxS("override GetValueAsString") );
 
     // FIXME: Currently code below only works if value is actually m_value
     wxASSERT_MSG( argFlags & wxPG_VALUE_IS_CURRENT,
-                  "Sorry, currently default wxPGProperty::ValueToString() "
-                  "implementation only works if value is m_value." );
+                  wxS("Sorry, currently default wxPGProperty::ValueToString() ")
+                  wxS("implementation only works if value is m_value.") );
 
     wxString text;
     DoGenerateComposedValue(text, argFlags);
@@ -2293,8 +2293,8 @@ void wxPGProperty::DoAddChild( wxPGProperty* prop, int index,
 void wxPGProperty::DoPreAddChild( int index, wxPGProperty* prop )
 {
     wxASSERT_MSG( !prop->GetBaseName().empty(),
-                  "Property's children must have unique, non-empty "
-                  "names within their scope" );
+                  wxS("Property's children must have unique, non-empty ")
+                  wxS("names within their scope") );
 
     prop->m_arrIndex = index;
     m_children.insert( m_children.begin()+index,
@@ -2314,8 +2314,8 @@ void wxPGProperty::AddPrivateChild( wxPGProperty* prop )
 
     wxASSERT_MSG( (m_flags & wxPG_PROP_PARENTAL_FLAGS) ==
                     wxPG_PROP_AGGREGATE,
-                  "Do not mix up AddPrivateChild() calls with other "
-                  "property adders." );
+                  wxS("Do not mix up AddPrivateChild() calls with other ")
+                  wxS("property adders.") );
 
     DoPreAddChild( m_children.size(), prop );
 }
@@ -2344,8 +2344,8 @@ wxPGProperty* wxPGProperty::InsertChild( int index,
 
         wxASSERT_MSG( (m_flags & wxPG_PROP_PARENTAL_FLAGS) ==
                         wxPG_PROP_MISC_PARENT,
-                      "Do not mix up AddPrivateChild() calls with other "
-                      "property adders." );
+                      wxS("Do not mix up AddPrivateChild() calls with other ")
+                      wxS("property adders.") );
 
         DoPreAddChild( index, childProperty );
     }
