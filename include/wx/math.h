@@ -15,6 +15,17 @@
 
 #include "wx/defs.h"
 
+#ifdef wxNEEDS_STRICT_ANSI_WORKAROUNDS
+    /*
+        In addition to declaring _finite() ourselves below, we also must work
+        around a compilation error in MinGW standard header itself, see
+        https://sourceforge.net/p/mingw/bugs/2250/
+     */
+    #ifndef __NO_INLINE__
+        #define __NO_INLINE__
+    #endif
+#endif
+
 #include <math.h>
 
 #ifndef M_PI
