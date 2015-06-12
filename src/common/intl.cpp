@@ -50,6 +50,8 @@
 
 #ifdef __WIN32__
     #include "wx/msw/private.h"
+    // Some compilers' winnls.h header doesn't declare this function:
+    extern "C" WINBASEAPI LANGID WINAPI SetThreadUILanguage(LANGID LangId);
 #endif
 
 #include "wx/file.h"
