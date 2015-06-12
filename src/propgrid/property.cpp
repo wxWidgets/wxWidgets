@@ -1007,7 +1007,7 @@ wxString wxPGProperty::ValueToString( wxVariant& WXUNUSED(value),
                                       int argFlags ) const
 {
     wxCHECK_MSG( GetChildCount() > 0,
-                 wxString(),
+                 wxEmptyString,
                  "If user property does not have any children, it must "
                  "override GetValueAsString" );
 
