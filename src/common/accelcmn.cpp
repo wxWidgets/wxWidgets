@@ -38,6 +38,8 @@ wxAcceleratorTable wxNullAcceleratorTable;
 // wxAcceleratorEntry implementation
 // ============================================================================
 
+wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
 static const struct wxKeyName
 {
     wxKeyCode code;
@@ -111,6 +113,8 @@ static const struct wxKeyName
     { WXK_WINDOWS_MENU,     /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Windows_Menu") },
     { WXK_COMMAND,          /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Command") },
 };
+
+wxGCC_WARNING_RESTORE(missing-field-initializers)
 
 // return true if the 2 strings refer to the same accel
 //
