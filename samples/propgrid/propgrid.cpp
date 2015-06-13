@@ -374,7 +374,6 @@ protected:
 enum
 {
     PGID = 1,
-    TCID,
     ID_ABOUT,
     ID_QUIT,
     ID_APPENDPROP,
