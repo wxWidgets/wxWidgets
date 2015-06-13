@@ -892,7 +892,7 @@ void FormMain::OnPropertyGridColBeginDrag( wxPropertyGridEvent& event )
     }
     else
     {
-        wxLogMessage(wxT("Splitter %i resize began"), event.GetColumn());
+        wxLogDebug(wxT("Splitter %i resize began"), event.GetColumn());
     }
 }
 
@@ -902,14 +902,14 @@ void FormMain::OnPropertyGridColDragging( wxPropertyGridEvent& event )
 {
     wxUnusedVar(event);
     // For now, let's not spam the log output
-    //wxLogMessage(wxT("Splitter %i is being resized"), event.GetColumn());
+    //wxLogDebug(wxT("Splitter %i is being resized"), event.GetColumn());
 }
 
 // -----------------------------------------------------------------------
 
 void FormMain::OnPropertyGridColEndDrag( wxPropertyGridEvent& event )
 {
-    wxLogMessage(wxT("Splitter %i resize ended"), event.GetColumn());
+    wxLogDebug(wxT("Splitter %i resize ended"), event.GetColumn());
 }
 
 // -----------------------------------------------------------------------
