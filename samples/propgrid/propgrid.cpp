@@ -1013,7 +1013,7 @@ static const long _fs_framestyle_values[] = {
 
 void FormMain::OnTestXRC(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(wxT("Sorrt, not yet implemented"));
+    wxMessageBox(wxT("Sorry, not yet implemented"));
 }
 
 void FormMain::OnEnableCommonValues(wxCommandEvent& WXUNUSED(event))
@@ -1384,7 +1384,7 @@ void FormMain::PopulateWithExamples ()
 
     // Add string property with arbitrarily wide bitmap in front of it. We
     // intentionally lower-than-typical row height here so that the ugly
-    // scaling code wont't be run.
+    // scaling code won't be run.
     pg->Append( new wxStringProperty( wxT("StringPropertyWithBitmap"),
                 wxPG_LABEL,
                 wxT("Test Text")) );
@@ -2015,7 +2015,7 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
               );
 
     //
-    // Create menubar
+    // Create menu bar
     wxMenu *menuFile = new wxMenu(wxEmptyString, wxMENU_TEAROFF);
     wxMenu *menuTry = new wxMenu;
     wxMenu *menuTools1 = new wxMenu;
