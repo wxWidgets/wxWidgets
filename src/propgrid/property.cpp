@@ -1865,44 +1865,33 @@ wxVariant wxPGProperty::GetAttributesAsList() const
     return v;
 }
 
-// Slots of utility flags are NULL
-const unsigned int gs_propFlagToStringSize = 14;
-
+// Utility flags are excluded.
 // Store the literals in the internal representation for better performance.
-static const wxStringCharType* const gs_propFlagToString[gs_propFlagToStringSize] = {
-    NULL,
-    wxS("DISABLED"),
-    wxS("HIDDEN"),
-    NULL,
-    wxS("NOEDITOR"),
-    wxS("COLLAPSED"),
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
+static const struct
+{
+    wxPGProperty::FlagType  m_flag;
+    const wxStringCharType* m_name;
+} gs_propFlagToString[4] =
+{ { wxPG_PROP_DISABLED,  wxS("DISABLED")  },
+  { wxPG_PROP_HIDDEN,    wxS("HIDDEN")    },
+  { wxPG_PROP_NOEDITOR,  wxS("NOEDITOR")  },
+  { wxPG_PROP_COLLAPSED, wxS("COLLAPSED") } };
 
 wxString wxPGProperty::GetFlagsAsString( FlagType flagsMask ) const
 {
     wxString s;
-    int relevantFlags = m_flags & flagsMask & wxPG_STRING_STORED_FLAGS;
-    FlagType a = 1;
+    const FlagType relevantFlags = m_flags & flagsMask & wxPG_STRING_STORED_FLAGS;
 
-    for ( unsigned int i = 0; i < gs_propFlagToStringSize; i++ )
+    for ( unsigned int i = 0; i < WXSIZEOF(gs_propFlagToString); i++ )
     {
-        if ( relevantFlags & a )
+        if ( relevantFlags & gs_propFlagToString[i].m_flag )
         {
-            const wxStringCharType* fs = gs_propFlagToString[i];
-            wxASSERT(fs);
             if ( !s.empty() )
-                s << wxS("|");
-            s << fs;
+            {
+                s.append(wxS("|"));
+            }
+            s.append(gs_propFlagToString[i].m_name);
         }
-        a <<= 1;
     }
 
     return s;
@@ -1913,12 +1902,11 @@ void wxPGProperty::SetFlagsFromString( const wxString& str )
     FlagType flags = 0;
 
     WX_PG_TOKENIZER1_BEGIN(str, wxS('|'))
-        for ( unsigned int i = 0; i < gs_propFlagToStringSize; i++ )
+        for ( unsigned int i = 0; i < WXSIZEOF(gs_propFlagToString); i++ )
         {
-            const wxStringCharType* fs = gs_propFlagToString[i];
-            if ( fs && str == fs )
+            if ( token == gs_propFlagToString[i].m_name )
             {
-                flags |= (1<<i);
+                flags |= gs_propFlagToString[i].m_flag;
                 break;
             }
         }
