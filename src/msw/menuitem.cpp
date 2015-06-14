@@ -1272,7 +1272,7 @@ int wxMenuItem::MSGetMenuItemPos() const
 
         if ( state & MF_POPUP )
         {
-            if ( ::GetSubMenu(hMenu, i) == (HMENU)id )
+            if ( ::GetSubMenu(hMenu, i) == (HMENU)wxUIntToPtr(id) )
                 return i;
         }
         else if ( !(state & MF_SEPARATOR) )
