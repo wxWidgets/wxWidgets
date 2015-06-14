@@ -280,6 +280,10 @@ protected:
         } \
     }
 
+inline bool GetRandomBooleanVal()
+{
+    return (rand() % 2) != 0;
+}
 
 int gpiro_cmpfunc(const void* a, const void* b)
 {
@@ -1333,6 +1337,248 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         // Recreate the original grid
         CreateGrid( -1, -1 );
         pgman = m_pPropGridManager;
+    }
+
+    {
+        RT_START_TEST(SetFlagsAsString and GetFlagsAsString)
+
+        unsigned int seed = time(NULL) % UINT_MAX;
+        srand(seed);
+
+        // Select the most error prone page as visible.
+        pgman->SelectPage(1);
+
+        for ( i = 0; i < 3; i++ )
+        {
+            wxPropertyGridPage* page = pgman->GetPage(i);
+
+            wxPropertyGridIterator it;
+            for ( it = page->GetIterator(wxPG_ITERATE_VISIBLE);
+                  !it.AtEnd();
+                  ++it )
+            {
+                wxPGProperty *p = *it;
+
+                // Save initial flags
+                wxPGProperty::FlagType oldFlags = 0;
+                if( p->HasFlag(wxPG_PROP_COLLAPSED) )
+                {
+                    oldFlags |= wxPG_PROP_COLLAPSED;
+                }
+                if( p->HasFlag(wxPG_PROP_DISABLED) )
+                {
+                    oldFlags |= wxPG_PROP_DISABLED;
+                }
+                if( p->HasFlag(wxPG_PROP_HIDDEN) )
+                {
+                    oldFlags |= wxPG_PROP_HIDDEN;
+                }
+                if( p->HasFlag(wxPG_PROP_NOEDITOR) )
+                {
+                    oldFlags |= wxPG_PROP_NOEDITOR;
+                }
+
+                wxString flags;
+
+                if ( p->IsCategory() )
+                {
+                    if ( GetRandomBooleanVal() )
+                    {
+                        if ( !flags.empty() )
+                        {
+                            flags.append(wxS("|"));
+                        }
+                        flags.append(wxS("COLLAPSED"));
+                    }
+                }
+
+                if (GetRandomBooleanVal() )
+                {
+                    if ( !flags.empty() )
+                    {
+                        flags.append(wxS("|"));
+                    }
+                    flags.append(wxS("DISABLED"));
+                }
+
+                if ( GetRandomBooleanVal() )
+                {
+                    if ( !flags.empty() )
+                    {
+                        flags.append(wxS("|"));
+                    }
+                    flags.append(wxS("HIDDEN"));
+                }
+
+                // Set flags
+                p->SetFlagsFromString(flags);
+
+                // Verify if flags have been properly set
+                if ( flags.Find(wxS("COLLAPSED")) != wxNOT_FOUND &&
+                     !p->HasFlag(wxPG_PROP_COLLAPSED) )
+                {
+                    RT_FAILURE_MSG(wxString::Format(wxS("Error setting flag from string 'COLLAPSED' for property '%s'"),
+                        p->GetName().c_str()).c_str());
+                }
+                if ( flags.Find(wxS("COLLAPSED")) == wxNOT_FOUND &&
+                     p->HasFlag(wxPG_PROP_COLLAPSED) )
+                {
+                    RT_FAILURE_MSG(wxString::Format(wxS("Error resetting flag from string 'COLLAPSED'for property '%s'"),
+                        p->GetName().c_str()).c_str());
+                }
+                if ( flags.Find(wxS("DISABLED")) != wxNOT_FOUND &&
+                     !p->HasFlag(wxPG_PROP_DISABLED) )
+                {
+                    RT_FAILURE_MSG(wxString::Format(wxS("Error setting flag from string 'DISABLED' for property '%s'"),
+                        p->GetName().c_str()).c_str());
+                }
+                if ( flags.Find(wxS("DISABLED")) == wxNOT_FOUND &&
+                     p->HasFlag(wxPG_PROP_DISABLED) )
+                {
+                    RT_FAILURE_MSG(wxString::Format(wxS("Error resetting flag from string 'DISABLED' for property '%s'"),
+                        p->GetName().c_str()).c_str());
+                }
+                if ( flags.Find(wxS("HIDDEN")) != wxNOT_FOUND &&
+                     !p->HasFlag(wxPG_PROP_HIDDEN) )
+                {
+                    RT_FAILURE_MSG(wxString::Format(wxS("Error setting flag from string 'HIDDEN' for property '%s'"),
+                        p->GetName().c_str()).c_str());
+                }
+                if ( flags.Find(wxS("HIDDEN")) == wxNOT_FOUND &&
+                     p->HasFlag(wxPG_PROP_HIDDEN) )
+                {
+                    RT_FAILURE_MSG(wxString::Format(wxS("Error resetting flag from string 'HIDDEN' for property '%s'"),
+                        p->GetName().c_str()).c_str());
+                }
+
+                // Get individual flags
+                bool ok;
+
+                flags = p->GetFlagsAsString(wxPG_PROP_COLLAPSED);
+                if ( p->HasFlag(wxPG_PROP_COLLAPSED) )
+                {
+                    ok = (flags == wxS("COLLAPSED"));
+                }
+                else
+                {
+                    ok = flags.empty();
+                }
+                if ( !ok )
+                {
+                    RT_FAILURE_MSG(wxString::Format(wxS("Invalid string for wxPG_PROP_COLLAPSED flag for property '%s'"),
+                        p->GetName().c_str()).c_str());
+                }
+
+                flags = p->GetFlagsAsString(wxPG_PROP_DISABLED);
+                if ( p->HasFlag(wxPG_PROP_DISABLED) )
+                {
+                    ok = (flags == wxS("DISABLED"));
+                }
+                else
+                {
+                    ok = flags.empty();
+                }
+                if ( !ok )
+                {
+                    RT_FAILURE_MSG(wxString::Format(wxS("Invalid string for wxPG_PROP_DISABLED flag for property '%s'"),
+                        p->GetName().c_str()).c_str());
+                }
+
+                flags = p->GetFlagsAsString(wxPG_PROP_HIDDEN);
+                if ( p->HasFlag(wxPG_PROP_HIDDEN) )
+                {
+                    ok = (flags == wxS("HIDDEN"));
+                }
+                else
+                {
+                    ok = flags.empty();
+                }
+                if ( !ok )
+                {
+                    RT_FAILURE_MSG(wxString::Format(wxS("Invalid string for wxPG_PROP_HIDDEN flag for property '%s'"),
+                        p->GetName().c_str()).c_str());
+                }
+
+                flags = p->GetFlagsAsString(wxPG_PROP_NOEDITOR);
+                if ( p->HasFlag(wxPG_PROP_NOEDITOR) )
+                {
+                    ok = (flags == wxS("NOEDITOR"));
+                }
+                else
+                {
+                    ok = flags.empty();
+                }
+                if ( !ok )
+                {
+                    RT_FAILURE_MSG(wxString::Format(wxS("Invalid string for wxPG_PROP_NOEDITOR flag for property '%s'"),
+                        p->GetName().c_str()).c_str());
+                }
+
+                // Get all flags
+                flags = p->GetFlagsAsString(wxPG_STRING_STORED_FLAGS);
+                if ( p->HasFlag(wxPG_PROP_COLLAPSED) )
+                {
+                    ok = (flags.Find(wxS("COLLAPSED")) != wxNOT_FOUND);
+                }
+                else
+                {
+                    ok = (flags.Find(wxS("COLLAPSED")) == wxNOT_FOUND);
+                }
+                if ( !ok )
+                {
+                    RT_FAILURE_MSG(wxString::Format(wxS("Invalid string for wxPG_PROP_COLLAPSED flag for property '%s'"),
+                        p->GetName().c_str()).c_str());
+                }
+
+                if ( p->HasFlag(wxPG_PROP_DISABLED) )
+                {
+                    ok = (flags.Find(wxS("DISABLED")) != wxNOT_FOUND);
+                }
+                else
+                {
+                    ok = (flags.Find(wxS("DISABLED")) == wxNOT_FOUND);
+                }
+                if ( !ok )
+                {
+                    RT_FAILURE_MSG(wxString::Format(wxS("Invalid string for wxPG_PROP_DISBALED flag for property '%s'"),
+                        p->GetName().c_str()).c_str());
+                }
+
+                if ( p->HasFlag(wxPG_PROP_HIDDEN) )
+                {
+                    ok = (flags.Find(wxS("HIDDEN")) != wxNOT_FOUND);
+                }
+                else
+                {
+                    ok = (flags.Find(wxS("HIDDEN")) == wxNOT_FOUND);
+                }
+                if ( !ok )
+                {
+                    RT_FAILURE_MSG(wxString::Format(wxS("Invalid string for wxPG_PROP_HIDDEN flag for property '%s'"),
+                        p->GetName().c_str()).c_str());
+                }
+
+                if ( p->HasFlag(wxPG_PROP_NOEDITOR) )
+                {
+                    ok = (flags.Find(wxS("NOEDITOR")) != wxNOT_FOUND);
+                }
+                else
+                {
+                    ok = (flags.Find(wxS("NOEDITOR")) == wxNOT_FOUND);
+                }
+                if ( !ok )
+                {
+                    RT_FAILURE_MSG(wxString::Format(wxS("Invalid string for wxPG_PROP_NOEDITOR flag for property '%s'"),
+                        p->GetName().c_str()).c_str());
+                }
+
+                // Restore original flags
+                p->ChangeFlag(wxPG_PROP_COLLAPSED, (oldFlags & wxPG_PROP_COLLAPSED) != 0);
+                p->ChangeFlag(wxPG_PROP_DISABLED, (oldFlags & wxPG_PROP_DISABLED) != 0);
+                p->ChangeFlag(wxPG_PROP_HIDDEN, (oldFlags & wxPG_PROP_HIDDEN) != 0);
+                p->ChangeFlag(wxPG_PROP_NOEDITOR, (oldFlags & wxPG_PROP_NOEDITOR) != 0);
+            }
+        }
     }
 
     if ( fullTest )
