@@ -361,7 +361,7 @@ typedef short int WXTYPE;
     Check for C++11 compilers, it is important to do it before the
     __has_include() checks because of g++ 4.9.2+ complications below.
  */
-#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
+#if (defined(__cplusplus) && __cplusplus >= 201103L) || wxCHECK_VISUALC_VERSION(10)
     #ifndef HAVE_TYPE_TRAITS
         #define HAVE_TYPE_TRAITS
     #endif
