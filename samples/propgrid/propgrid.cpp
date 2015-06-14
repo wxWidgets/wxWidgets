@@ -2472,8 +2472,7 @@ void FormMain::OnFitColumnsClick( wxCommandEvent& WXUNUSED(event) )
     int dx = oldFullSize.x - oldGridSize.x;
     int dy = oldFullSize.y - oldGridSize.y;
 
-    newSz.x += dx;
-    newSz.y += dy;
+    newSz.IncBy(dx, dy);
 
     SetSize(newSz);
 }

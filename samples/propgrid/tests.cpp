@@ -1211,8 +1211,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
         wxSize sz = GetSize();
         wxSize origSz = sz;
-        sz.x += 5;
-        sz.y += 5;
+        sz.IncBy(5, 5);
 
         if ( pgman->GetGrid()->GetSplitterPosition() != trySplitterPos )
             RT_FAILURE_MSG(wxString::Format(wxT("Splitter position was %i (should have been %i)"),(int)pgman->GetGrid()->GetSplitterPosition(),trySplitterPos).c_str());
