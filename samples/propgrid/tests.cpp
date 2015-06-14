@@ -1209,9 +1209,11 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         m_topSizer->Add( m_pPropGridManager, wxSizerFlags(1).Expand());
         FinalizePanel();
 
-        wxSize sz = GetSize();
-        wxSize origSz = sz;
+        wxSize origSz = GetSize();
+
+        wxSize sz = origSz;
         sz.IncBy(5, 5);
+        SetSize(sz);
 
         if ( pgman->GetGrid()->GetSplitterPosition() != trySplitterPos )
             RT_FAILURE_MSG(wxString::Format(wxT("Splitter position was %i (should have been %i)"),(int)pgman->GetGrid()->GetSplitterPosition(),trySplitterPos).c_str());
