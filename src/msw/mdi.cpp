@@ -1241,32 +1241,13 @@ bool wxMDIChildFrame::HandleWindowPosChanging(void *pos)
 
 bool wxMDIChildFrame::HandleGetMinMaxInfo(void *mmInfo)
 {
-    MINMAXINFO *info = (MINMAXINFO *)mmInfo;
+    // Get the window max size from DefMDIChildProc() as it calculates it
+    // correctly from the size of the MDI parent frame.
+    MSWDefWindowProc(WM_GETMINMAXINFO, 0, (LPARAM)mmInfo);
 
-    // let the default window proc calculate the size of MDI children
-    // frames because it is based on the size of the MDI client window,
-    // not on the values specified in wxWindow m_max variables
-    bool processed = MSWDefWindowProc(WM_GETMINMAXINFO, 0, (LPARAM)mmInfo) != 0;
-
-    int minWidth = GetMinWidth(),
-        minHeight = GetMinHeight();
-
-    // but allow GetSizeHints() to set the min size
-    if ( minWidth != wxDefaultCoord )
-    {
-        info->ptMinTrackSize.x = minWidth;
-
-        processed = true;
-    }
-
-    if ( minHeight != wxDefaultCoord )
-    {
-        info->ptMinTrackSize.y = minHeight;
-
-        processed = true;
-    }
-
-    return processed;
+    // But then handle the message as usual at the base class level to allow
+    // overriding min/max frame size as for the normal frames.
+    return false;
 }
 
 // ---------------------------------------------------------------------------
