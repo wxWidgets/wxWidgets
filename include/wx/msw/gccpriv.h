@@ -151,6 +151,15 @@
      */
     #define wxDECL_FOR_STRICT_MINGW32(rettype, func, params) \
         extern "C" _CRTIMP rettype __cdecl __MINGW_NOTHROW func params ;
+
+    /*
+        There is a bug resulting in a compilation error in MinGW standard
+        math.h header, see https://sourceforge.net/p/mingw/bugs/2250/, work
+        around it here because math.h is also included from several other
+        standard headers (e.g. <algorithm>) and we don't want to duplicate this
+        hack everywhere this happens.
+     */
+    wxDECL_FOR_STRICT_MINGW32(double, _hypot, (double, double));
 #else
     #define wxDECL_FOR_STRICT_MINGW32(rettype, func, params)
 #endif
