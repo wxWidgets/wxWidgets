@@ -461,7 +461,7 @@ WX_PG_DECLARE_EDITOR_WITH_DECL(ChoiceAndButton,WXDLLIMPEXP_PROPGRID)
 template<class T>
 wxVariant WXVARIANT( const T& WXUNUSED(value) )
 {
-    wxFAIL_MSG("Code should always call specializations of this template");
+    wxFAIL_MSG(wxS("Code should always call specializations of this template"));
     return wxVariant();
 }
 
@@ -559,8 +559,8 @@ expdecl wxVariant& operator << ( wxVariant &variant, const classname &value )\
 expdecl classname& classname##RefFromVariant( wxVariant& variant ) \
 { \
     wxASSERT_MSG( variant.GetType() == wxS(#classname), \
-                  wxString::Format("Variant type should have been '%s'" \
-                                   "instead of '%s'", \
+                  wxString::Format(wxS("Variant type should have been '%s'") \
+                                   wxS("instead of '%s'"), \
                                    wxS(#classname), \
                                    variant.GetType().c_str())); \
     classname##VariantData *data = \
@@ -570,8 +570,8 @@ expdecl classname& classname##RefFromVariant( wxVariant& variant ) \
 expdecl const classname& classname##RefFromVariant( const wxVariant& variant ) \
 { \
     wxASSERT_MSG( variant.GetType() == wxS(#classname), \
-                  wxString::Format("Variant type should have been '%s'" \
-                                   "instead of '%s'", \
+                  wxString::Format(wxS("Variant type should have been '%s'") \
+                                   wxS("instead of '%s'"), \
                                    wxS(#classname), \
                                    variant.GetType().c_str())); \
     classname##VariantData *data = \

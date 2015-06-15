@@ -71,6 +71,10 @@
     #else
         #define wxFinite(x) isfinite(x)
     #endif
+#elif defined(wxNEEDS_STRICT_ANSI_WORKAROUNDS)
+    wxDECL_FOR_STRICT_MINGW32(int, _finite, (double));
+
+    #define wxFinite(x) _finite(x)
 #elif ( defined(__GNUG__)||defined(__GNUWIN32__)||defined(__DJGPP__)|| \
       defined(__SGI_CC__)||defined(__SUNCC__)||defined(__XLC__)|| \
       defined(__HPUX__) ) && ( !defined(wxOSX_USE_IPHONE) || wxOSX_USE_IPHONE == 0 )

@@ -50,6 +50,8 @@
 
 #ifdef __WIN32__
     #include "wx/msw/private.h"
+    // Some compilers' winnls.h header doesn't declare this function:
+    extern "C" WINBASEAPI LANGID WINAPI SetThreadUILanguage(LANGID LangId);
 #endif
 
 #include "wx/file.h"
@@ -472,6 +474,13 @@ bool wxLocale::Init(int language, int flags)
 
             // change locale used by Windows functions
             ::SetThreadLocale(lcid);
+
+            // SetThreadUILanguage() is available on XP, but with unclear
+            // behavior, so avoid calling it there.
+            if ( wxGetWinVersion() >= wxWinVersion_Vista )
+            {
+                SetThreadUILanguage(LANGIDFROMLCID(lcid));
+            }
 #endif
 
             // and also call setlocale() to change locale used by the CRT

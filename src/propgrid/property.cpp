@@ -526,7 +526,7 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
     // Make sure deprecated virtual functions are not implemented
     wxString s = GetValueAsString( 0xFFFF );
     wxASSERT_MSG( s == g_invalidStringContent,
-                  "Implement ValueToString() instead of GetValueAsString()" );
+                  wxS("Implement ValueToString() instead of GetValueAsString()") );
 #endif
 
     if ( !parentIsRoot && !parent->IsCategory() )
@@ -614,8 +614,8 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
                             wxPG_PROP_AGGREGATE) ||
                       ((m_flags & wxPG_PROP_PARENTAL_FLAGS) ==
                             wxPG_PROP_MISC_PARENT),
-                      "wxPGProperty parental flags set incorrectly at "
-                      "this time" );
+                      wxS("wxPGProperty parental flags set incorrectly at ")
+                      wxS("this time") );
 
         if ( HasFlag(wxPG_PROP_AGGREGATE) )
         {
@@ -843,7 +843,7 @@ void wxPGProperty::GetDisplayInfo( unsigned int column,
     }
 
     wxASSERT_MSG( cell.GetData(),
-                  wxString::Format("Invalid cell for property %s",
+                  wxString::Format(wxS("Invalid cell for property %s"),
                                    GetName().c_str()) );
 
     // We need to return customized cell object.
@@ -1007,14 +1007,14 @@ wxString wxPGProperty::ValueToString( wxVariant& WXUNUSED(value),
                                       int argFlags ) const
 {
     wxCHECK_MSG( GetChildCount() > 0,
-                 wxString(),
-                 "If user property does not have any children, it must "
-                 "override GetValueAsString" );
+                 wxEmptyString,
+                 wxS("If user property does not have any children, it must ")
+                 wxS("override GetValueAsString") );
 
     // FIXME: Currently code below only works if value is actually m_value
     wxASSERT_MSG( argFlags & wxPG_VALUE_IS_CURRENT,
-                  "Sorry, currently default wxPGProperty::ValueToString() "
-                  "implementation only works if value is m_value." );
+                  wxS("Sorry, currently default wxPGProperty::ValueToString() ")
+                  wxS("implementation only works if value is m_value.") );
 
     wxString text;
     DoGenerateComposedValue(text, argFlags);
@@ -1865,44 +1865,33 @@ wxVariant wxPGProperty::GetAttributesAsList() const
     return v;
 }
 
-// Slots of utility flags are NULL
-const unsigned int gs_propFlagToStringSize = 14;
-
+// Utility flags are excluded.
 // Store the literals in the internal representation for better performance.
-static const wxStringCharType* const gs_propFlagToString[gs_propFlagToStringSize] = {
-    NULL,
-    wxS("DISABLED"),
-    wxS("HIDDEN"),
-    NULL,
-    wxS("NOEDITOR"),
-    wxS("COLLAPSED"),
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
+static const struct
+{
+    wxPGProperty::FlagType  m_flag;
+    const wxStringCharType* m_name;
+} gs_propFlagToString[4] =
+{ { wxPG_PROP_DISABLED,  wxS("DISABLED")  },
+  { wxPG_PROP_HIDDEN,    wxS("HIDDEN")    },
+  { wxPG_PROP_NOEDITOR,  wxS("NOEDITOR")  },
+  { wxPG_PROP_COLLAPSED, wxS("COLLAPSED") } };
 
 wxString wxPGProperty::GetFlagsAsString( FlagType flagsMask ) const
 {
     wxString s;
-    int relevantFlags = m_flags & flagsMask & wxPG_STRING_STORED_FLAGS;
-    FlagType a = 1;
+    const FlagType relevantFlags = m_flags & flagsMask & wxPG_STRING_STORED_FLAGS;
 
-    for ( unsigned int i = 0; i < gs_propFlagToStringSize; i++ )
+    for ( unsigned int i = 0; i < WXSIZEOF(gs_propFlagToString); i++ )
     {
-        if ( relevantFlags & a )
+        if ( relevantFlags & gs_propFlagToString[i].m_flag )
         {
-            const wxStringCharType* fs = gs_propFlagToString[i];
-            wxASSERT(fs);
             if ( !s.empty() )
-                s << wxS("|");
-            s << fs;
+            {
+                s.append(wxS("|"));
+            }
+            s.append(gs_propFlagToString[i].m_name);
         }
-        a <<= 1;
     }
 
     return s;
@@ -1913,12 +1902,11 @@ void wxPGProperty::SetFlagsFromString( const wxString& str )
     FlagType flags = 0;
 
     WX_PG_TOKENIZER1_BEGIN(str, wxS('|'))
-        for ( unsigned int i = 0; i < gs_propFlagToStringSize; i++ )
+        for ( unsigned int i = 0; i < WXSIZEOF(gs_propFlagToString); i++ )
         {
-            const wxStringCharType* fs = gs_propFlagToString[i];
-            if ( fs && str == fs )
+            if ( token == gs_propFlagToString[i].m_name )
             {
-                flags |= (1<<i);
+                flags |= gs_propFlagToString[i].m_flag;
                 break;
             }
         }
@@ -2293,8 +2281,8 @@ void wxPGProperty::DoAddChild( wxPGProperty* prop, int index,
 void wxPGProperty::DoPreAddChild( int index, wxPGProperty* prop )
 {
     wxASSERT_MSG( !prop->GetBaseName().empty(),
-                  "Property's children must have unique, non-empty "
-                  "names within their scope" );
+                  wxS("Property's children must have unique, non-empty ")
+                  wxS("names within their scope") );
 
     prop->m_arrIndex = index;
     m_children.insert( m_children.begin()+index,
@@ -2314,8 +2302,8 @@ void wxPGProperty::AddPrivateChild( wxPGProperty* prop )
 
     wxASSERT_MSG( (m_flags & wxPG_PROP_PARENTAL_FLAGS) ==
                     wxPG_PROP_AGGREGATE,
-                  "Do not mix up AddPrivateChild() calls with other "
-                  "property adders." );
+                  wxS("Do not mix up AddPrivateChild() calls with other ")
+                  wxS("property adders.") );
 
     DoPreAddChild( m_children.size(), prop );
 }
@@ -2344,8 +2332,8 @@ wxPGProperty* wxPGProperty::InsertChild( int index,
 
         wxASSERT_MSG( (m_flags & wxPG_PROP_PARENTAL_FLAGS) ==
                         wxPG_PROP_MISC_PARENT,
-                      "Do not mix up AddPrivateChild() calls with other "
-                      "property adders." );
+                      wxS("Do not mix up AddPrivateChild() calls with other ")
+                      wxS("property adders.") );
 
         DoPreAddChild( index, childProperty );
     }

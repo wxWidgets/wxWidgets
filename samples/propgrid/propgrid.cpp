@@ -374,7 +374,6 @@ protected:
 enum
 {
     PGID = 1,
-    TCID,
     ID_ABOUT,
     ID_QUIT,
     ID_APPENDPROP,
@@ -893,7 +892,7 @@ void FormMain::OnPropertyGridColBeginDrag( wxPropertyGridEvent& event )
     }
     else
     {
-        wxLogMessage(wxT("Splitter %i resize began"), event.GetColumn());
+        wxLogDebug(wxT("Splitter %i resize began"), event.GetColumn());
     }
 }
 
@@ -903,14 +902,14 @@ void FormMain::OnPropertyGridColDragging( wxPropertyGridEvent& event )
 {
     wxUnusedVar(event);
     // For now, let's not spam the log output
-    //wxLogMessage(wxT("Splitter %i is being resized"), event.GetColumn());
+    //wxLogDebug(wxT("Splitter %i is being resized"), event.GetColumn());
 }
 
 // -----------------------------------------------------------------------
 
 void FormMain::OnPropertyGridColEndDrag( wxPropertyGridEvent& event )
 {
-    wxLogMessage(wxT("Splitter %i resize ended"), event.GetColumn());
+    wxLogDebug(wxT("Splitter %i resize ended"), event.GetColumn());
 }
 
 // -----------------------------------------------------------------------
@@ -1014,7 +1013,7 @@ static const long _fs_framestyle_values[] = {
 
 void FormMain::OnTestXRC(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(wxT("Sorrt, not yet implemented"));
+    wxMessageBox(wxT("Sorry, not yet implemented"));
 }
 
 void FormMain::OnEnableCommonValues(wxCommandEvent& WXUNUSED(event))
@@ -1163,7 +1162,7 @@ void FormMain::PopulateWithStandardItems ()
 
     for ( it = pg->GetGrid()->GetIterator();
           !it.AtEnd();
-          it++ )
+          ++it )
     {
         wxPGProperty* p = *it;
         if ( p->IsCategory() )
@@ -1385,7 +1384,7 @@ void FormMain::PopulateWithExamples ()
 
     // Add string property with arbitrarily wide bitmap in front of it. We
     // intentionally lower-than-typical row height here so that the ugly
-    // scaling code wont't be run.
+    // scaling code won't be run.
     pg->Append( new wxStringProperty( wxT("StringPropertyWithBitmap"),
                 wxPG_LABEL,
                 wxT("Test Text")) );
@@ -2016,7 +2015,7 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
               );
 
     //
-    // Create menubar
+    // Create menu bar
     wxMenu *menuFile = new wxMenu(wxEmptyString, wxMENU_TEAROFF);
     wxMenu *menuTry = new wxMenu;
     wxMenu *menuTools1 = new wxMenu;
@@ -2371,7 +2370,7 @@ void FormMain::OnIterate1Click( wxCommandEvent& WXUNUSED(event) )
     for ( it = m_pPropGridManager->GetCurrentPage()->
             GetIterator();
           !it.AtEnd();
-          it++ )
+          ++it )
     {
         wxPGProperty* p = *it;
         int res = IterateMessage( p );
@@ -2388,7 +2387,7 @@ void FormMain::OnIterate2Click( wxCommandEvent& WXUNUSED(event) )
     for ( it = m_pPropGridManager->GetCurrentPage()->
             GetIterator( wxPG_ITERATE_VISIBLE );
           !it.AtEnd();
-          it++ )
+          ++it )
     {
         wxPGProperty* p = *it;
 
@@ -2425,7 +2424,7 @@ void FormMain::OnIterate4Click( wxCommandEvent& WXUNUSED(event) )
     for ( it = m_pPropGridManager->GetCurrentPage()->
             GetIterator( wxPG_ITERATE_CATEGORIES );
           !it.AtEnd();
-          it++ )
+          ++it )
     {
         wxPGProperty* p = *it;
 
@@ -2473,8 +2472,7 @@ void FormMain::OnFitColumnsClick( wxCommandEvent& WXUNUSED(event) )
     int dx = oldFullSize.x - oldGridSize.x;
     int dy = oldFullSize.y - oldGridSize.y;
 
-    newSz.x += dx;
-    newSz.y += dy;
+    newSz.IncBy(dx, dy);
 
     SetSize(newSz);
 }
