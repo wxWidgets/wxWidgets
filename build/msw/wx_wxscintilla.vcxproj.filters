@@ -50,6 +50,12 @@
     <ClCompile Include="..\..\src\stc\scintilla\src\Document.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\scintilla\src\EditModel.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\stc\scintilla\src\EditView.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\src\Editor.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -101,6 +107,9 @@
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexBasic.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexBibTeX.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexBullant.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -140,6 +149,9 @@
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexDMAP.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexDMIS.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexECL.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -171,6 +183,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexHaskell.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexHex.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexInno.cxx">
@@ -275,6 +290,9 @@
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexRebol.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexRegistry.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexRuby.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -354,6 +372,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\src\LineMarker.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\stc\scintilla\src\MarginView.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\src\PerLine.cxx">
