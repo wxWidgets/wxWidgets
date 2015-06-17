@@ -173,7 +173,7 @@ MyFrame::MyFrame()
     m_text = new wxTextCtrl(panel, wxID_ANY);
     m_check = new wxCheckBox(panel, wxID_ANY, wxT("show welcome message box at startup"));
 
-    // put evreything in a sizer
+    // put everything in a sizer
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(st, wxSizerFlags().Border(wxLEFT|wxBOTTOM|wxTOP, 10));
     sizer->Add(m_text, wxSizerFlags().Border(wxLEFT|wxBOTTOM|wxRIGHT, 10).Expand());
