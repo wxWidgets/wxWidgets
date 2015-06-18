@@ -369,10 +369,20 @@ void MyApp::GenerateReport(wxDebugReport::Context ctx)
     // can also add an existing file directly, it will be copied
     // automatically
 #ifdef __WXMSW__
-    report->AddFile(wxT("c:\\autoexec.bat"), wxT("DOS startup file"));
-#else
-    report->AddFile(wxT("/etc/motd"), wxT("Message of the day"));
-#endif
+    wxString windir;
+    if ( !wxGetEnv("WINDIR", &windir) )
+        windir = "C:\\Windows";
+    fn.AssignDir(windir);
+    fn.AppendDir("system32");
+    fn.AppendDir("drivers");
+    fn.AppendDir("etc");
+#else // !__WXMSW__
+    fn.AssignDir("/etc");
+#endif // __WXMSW__/!__WXMSW__
+    fn.SetFullName("hosts");
+
+    if ( fn.FileExists() )
+        report->AddFile(fn.GetFullPath(), "Local hosts file");
 
     // calling Show() is not mandatory, but is more polite
     if ( wxDebugReportPreviewStd().Show(*report) )
