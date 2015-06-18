@@ -82,6 +82,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/private/keyboard.h"
 #include "wx/msw/dcclient.h"
+#include "wx/msw/seh.h"
 #include "wx/private/textmeasure.h"
 
 #if wxUSE_TOOLTIPS
@@ -2757,10 +2758,21 @@ wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     LRESULT rc;
 
-    if ( wnd && wxGUIEventLoop::AllowProcessing(wnd) )
-        rc = wnd->MSWWindowProc(message, wParam, lParam);
-    else
-        rc = ::DefWindowProc(hWnd, message, wParam, lParam);
+    // We have to catch unhandled Win32 exceptions here because otherwise they
+    // would be simply lost if we're called from a kernel callback (as it
+    // happens when we process WM_PAINT, for example under WOW64: the 32 bit
+    // exceptions can't pass through the 64 bit kernel in this case and so are
+    // mostly just suppressed, although the exact behaviour differs across
+    // Windows versions, see the "Remarks" section of WindowProc documentation
+    // at https://msdn.microsoft.com/en-us/library/ms633573.aspx
+    wxSEH_TRY
+    {
+        if ( wnd && wxGUIEventLoop::AllowProcessing(wnd) )
+            rc = wnd->MSWWindowProc(message, wParam, lParam);
+        else
+            rc = ::DefWindowProc(hWnd, message, wParam, lParam);
+    }
+    wxSEH_HANDLE(0)
 
     return rc;
 }
