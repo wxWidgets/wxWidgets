@@ -17,6 +17,7 @@
 #include "wx/frame.h"
 #include "wx/icon.h"
 #include "wx/menu.h"
+#include "wx/choicdlg.h"
 #include "wx/msgdlg.h"
 #include "wx/button.h"
 #include "wx/dcclient.h"
@@ -26,6 +27,7 @@
 #include "wx/ffile.h"
 #include "wx/filename.h"
 #include "wx/debugrpt.h"
+#include "wx/dynlib.h"
 
 #if !wxUSE_DEBUGREPORT
     #error "This sample can't be built without wxUSE_DEBUGREPORT"
@@ -142,6 +144,7 @@ void foo(int n)
 
 enum
 {
+    DebugRpt_ListLoadedDLLs = 50,
     DebugRpt_Quit = wxID_EXIT,
     DebugRpt_Crash = 100,
     DebugRpt_Current,
@@ -157,6 +160,7 @@ public:
     MyFrame();
 
 private:
+    void OnListLoadedDLLs(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnReportForCrash(wxCommandEvent& event);
     void OnReportForCurrent(wxCommandEvent& event);
@@ -231,6 +235,7 @@ wxIMPLEMENT_APP(MyApp);
 // ----------------------------------------------------------------------------
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_MENU(DebugRpt_ListLoadedDLLs, MyFrame::OnListLoadedDLLs)
     EVT_MENU(DebugRpt_Quit, MyFrame::OnQuit)
     EVT_MENU(DebugRpt_Crash, MyFrame::OnReportForCrash)
     EVT_MENU(DebugRpt_Current, MyFrame::OnReportForCurrent)
@@ -251,6 +256,8 @@ MyFrame::MyFrame()
     SetIcon(wxICON(sample));
 
     wxMenu *menuFile = new wxMenu;
+    menuFile->Append(DebugRpt_ListLoadedDLLs, wxT("&List loaded DLLs...\tCtrl-L"));
+    menuFile->AppendSeparator();
     menuFile->Append(DebugRpt_Quit, wxT("E&xit\tAlt-X"));
 
     wxMenu *menuReport = new wxMenu;
@@ -278,6 +285,47 @@ MyFrame::MyFrame()
     CreateStatusBar();
 
     Show();
+}
+
+void MyFrame::OnListLoadedDLLs(wxCommandEvent& WXUNUSED(event))
+{
+    const wxDynamicLibraryDetailsArray loaded = wxDynamicLibrary::ListLoaded();
+    const size_t count = loaded.size();
+    if ( !count )
+    {
+        wxLogError("Failed to get the list of loaded dynamic libraries.");
+        return;
+    }
+
+    wxArrayString names;
+    names.reserve(count);
+    for ( size_t n = 0; n < count; n++ )
+    {
+        names.push_back(loaded[n].GetName());
+    }
+
+    for ( ;; )
+    {
+        const int sel = wxGetSingleChoiceIndex
+                        (
+                            "Choose a library to show more information about it",
+                            "List of loaded dynamic libraries",
+                            names,
+                            this
+                        );
+        if ( sel == wxNOT_FOUND )
+            return;
+
+        const wxDynamicLibraryDetails& det = loaded[sel];
+        void *addr = 0;
+        size_t len = 0;
+        det.GetAddress(&addr, &len);
+        wxLogMessage("Full path is \"%s\", memory range %p:%p, version \"%s\"",
+                     det.GetPath(),
+                     addr,
+                     static_cast<void*>(static_cast<char*>(addr) + len),
+                     det.GetVersion());
+    }
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
