@@ -20,6 +20,7 @@
 #include "wx/msgdlg.h"
 #include "wx/button.h"
 #include "wx/dcclient.h"
+#include "wx/timer.h"
 
 #include "wx/datetime.h"
 #include "wx/ffile.h"
@@ -145,6 +146,7 @@ enum
     DebugRpt_Crash = 100,
     DebugRpt_Current,
     DebugRpt_Paint,
+    DebugRpt_Timer,
     DebugRpt_Upload,
     DebugRpt_About = wxID_ABOUT
 };
@@ -159,11 +161,23 @@ private:
     void OnReportForCrash(wxCommandEvent& event);
     void OnReportForCurrent(wxCommandEvent& event);
     void OnReportPaint(wxCommandEvent& event);
+    void OnReportTimer(wxCommandEvent& event);
     void OnReportUpload(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
     void OnPaint(wxPaintEvent& event);
 
+    // a timer whose only purpose in life is to crash as soon as it's started
+    class BadTimer : public wxTimer
+    {
+    public:
+        BadTimer() { }
+
+        virtual void Notify() wxOVERRIDE
+        {
+            foo(8);
+        }
+    } m_badTimer;
 
     // number of lines drawn in OnPaint()
     int m_numLines;
@@ -221,6 +235,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DebugRpt_Crash, MyFrame::OnReportForCrash)
     EVT_MENU(DebugRpt_Current, MyFrame::OnReportForCurrent)
     EVT_MENU(DebugRpt_Paint, MyFrame::OnReportPaint)
+    EVT_MENU(DebugRpt_Timer, MyFrame::OnReportTimer)
     EVT_MENU(DebugRpt_Upload, MyFrame::OnReportUpload)
     EVT_MENU(DebugRpt_About, MyFrame::OnAbout)
 
@@ -245,6 +260,8 @@ MyFrame::MyFrame()
                        wxT("Create report for the current program context"));
     menuReport->Append(DebugRpt_Paint, wxT("Report for &paint handler\tCtrl-P"),
                        wxT("Provoke a repeatable crash in wxEVT_PAINT handler"));
+    menuReport->Append(DebugRpt_Timer, wxT("Report for &timer handler\tCtrl-T"),
+                       wxT("Provoke a crash in wxEVT_TIMER handler"));
     menuReport->AppendSeparator();
     menuReport->AppendCheckItem(DebugRpt_Upload, wxT("Up&load debug report"),
                        wxT("You need to configure a web server accepting debug report uploads to use this function"));
@@ -289,6 +306,12 @@ void MyFrame::OnReportPaint(wxCommandEvent& WXUNUSED(event))
 
     // ensure it's called immediately
     Refresh();
+}
+
+void MyFrame::OnReportTimer(wxCommandEvent& WXUNUSED(event))
+{
+    // this will result in a crash in BadTimer::OnNotify() soon
+    m_badTimer.StartOnce(100);
 }
 
 void MyFrame::OnReportUpload(wxCommandEvent& event)
