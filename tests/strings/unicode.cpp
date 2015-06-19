@@ -277,7 +277,7 @@ void UnicodeTestCase::ConversionWithNULs()
     wxString szTheString2("The\0String", wxConvLocal, lenNulString);
     CPPUNIT_ASSERT_EQUAL( lenNulString, szTheString2.length() );
     CPPUNIT_ASSERT( wxTmemcmp(szTheString2.c_str(), L"The\0String",
-                    lenNulString + 1) == 0 );
+                    lenNulString) == 0 );
 #else // !wxUSE_UNICODE
     wxString szTheString("TheString");
     szTheString.insert(3, 1, '\0');
