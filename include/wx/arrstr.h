@@ -171,7 +171,7 @@ public:
   void Clear();
     // preallocates memory for given number of items
   void Alloc(size_t nCount);
-    // minimzes the memory usage (by freeing all extra memory)
+    // minimizes the memory usage (by freeing all extra memory)
   void Shrink();
 
   // simple accessors
