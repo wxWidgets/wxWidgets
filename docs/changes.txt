@@ -134,6 +134,7 @@ wxMSW:
 - Improve wxMimeTypesManager open command detection (Eric Jensen).
 - Make wxFILTER_INCLUDE_LIST in wxTextValidator actually usable.
 - Fix handling crashes in wxEVT_PAINT event handlers.
+- Fix wxStackWalker to work with Unicode identifiers (Suzumizaki-kimitaka).
 - Fix appearance of toggled wxToggleButtons with bitmap (tm).
 - Fix setting menu item bitmaps after appending them (Artur Wieczorek).
 - Fix setting label of submenu items (Artur Wieczorek).
