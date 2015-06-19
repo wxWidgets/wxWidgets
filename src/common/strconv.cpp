@@ -1702,8 +1702,18 @@ wxMBConvUTF16swap::ToWChar(wchar_t *dst, size_t dstLen,
         wxUint16 tmp[2];
 
         tmp[0] = wxUINT16_SWAP_ALWAYS(*inBuff);
-        inBuff++;
-        tmp[1] = wxUINT16_SWAP_ALWAYS(*inBuff);
+        if ( ++inBuff < inEnd )
+        {
+            // Normal case, we have a next character to decode.
+            tmp[1] = wxUINT16_SWAP_ALWAYS(*inBuff);
+        }
+        else // End of input.
+        {
+            // Setting the second character to 0 ensures we correctly return
+            // wxCONV_FAILED if the first one is the first half of a surrogate
+            // as the second half can't be 0 in this case.
+            tmp[1] = 0;
+        }
 
         const size_t numChars = decode_utf16(tmp, ch);
         if ( numChars == wxCONV_FAILED )
