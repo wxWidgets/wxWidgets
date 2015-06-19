@@ -108,7 +108,7 @@ void MiscTestCase::Delete()
     CPPUNIT_ASSERT( array != NULL );
 
     // Check that wxDELETEA sets the pointer to NULL:
-    wxDELETE( array );
+    wxDELETEA( array );
     CPPUNIT_ASSERT( array == NULL );
 
     // this results in compilation error, as it should
