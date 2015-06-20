@@ -71,8 +71,7 @@ public:
     bool GetColour() const { return m_colour; }
     wxDuplexMode GetDuplex() const { return m_duplexMode; }
     wxPaperSize GetPaperId() const { return m_paperId; }
-    const wxSize& GetPaperSize() const { return m_paperSize; } // Not used yet: confusable with paper size
-                                                                      // in wxPageSetupDialogData
+    const wxSize& GetPaperSize() const { return m_paperSize; }
     wxPrintQuality GetQuality() const { return m_printQuality; }
     wxPrintBin GetBin() const { return m_bin; }
     wxPrintMode GetPrintMode() const { return m_printMode; }

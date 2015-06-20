@@ -384,8 +384,18 @@ public:
         Sets the paper id. This indicates the type of paper to be used. For a
         mapping between paper id, paper size and string name, see
         wxPrintPaperDatabase in @c "paper.h" (not yet documented).
+
+        @see SetPaperSize()
     */
     void SetPaperId(wxPaperSize paperId);
+
+    /**
+        Sets custom paper size.
+
+        This method can be used to set up custom paper size. When using a
+        standard size, prefer to use SetPaperId() instead.
+     */
+    void SetPaperSize(const wxSize& size);
 
     /**
         Sets the printer name. This can be the empty string to indicate that
