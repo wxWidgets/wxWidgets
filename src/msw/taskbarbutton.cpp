@@ -326,7 +326,7 @@ inline HRESULT InitPropVariantFromString(PCWSTR psz, PROPVARIANT *ppropvar)
     ppropvar->vt = VT_LPWSTR;
 
 #if wxUSE_DYNLIB_CLASS
-    typedef HRESULT (WINAPI *SHStrDupW_t)(LPCTSTR, LPTSTR*);
+    typedef HRESULT (WINAPI *SHStrDupW_t)(LPCWSTR, LPWSTR*);
     static SHStrDupW_t s_pfnSHStrDupW = NULL;
     if ( !s_pfnSHStrDupW )
     {
@@ -939,7 +939,7 @@ bool wxTaskBarButtonImpl::InitOrUpdateThumbBarButtons()
         // Truncate the tooltip if its length longer than szTip(THUMBBUTTON)
         // allowed length (260).
         tooltip.Truncate(260);
-        wxStrlcpy(buttons[i].szTip, tooltip.t_str(), tooltip.length());
+        wxStrlcpy(buttons[i].szTip, tooltip.wc_str(), tooltip.length());
         buttons[i].dwMask =
             static_cast<THUMBBUTTONMASK>(buttons[i].dwMask | THB_TOOLTIP);
     }
