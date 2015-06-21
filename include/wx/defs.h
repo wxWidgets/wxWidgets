@@ -1779,7 +1779,12 @@ enum wxBorder
 /*
  * Window (Frame/dialog/subwindow/panel item) style flags
  */
-#define wxVSCROLL               0x80000000
+
+/* The cast is needed to avoid g++ -Wnarrowing warnings when initializing
+ * values of int type with wxVSCROLL on 32 bit platforms, where its value is
+ * greater than INT_MAX.
+ */
+#define wxVSCROLL               ((int)0x80000000)
 #define wxHSCROLL               0x40000000
 #define wxCAPTION               0x20000000
 
