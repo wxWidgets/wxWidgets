@@ -307,19 +307,19 @@ wxTextInputStream& wxTextInputStream::operator>>(wchar_t& wc)
 
 wxTextInputStream& wxTextInputStream::operator>>(wxInt16& i)
 {
-    i = (wxInt16)Read16();
+    i = Read16S();
     return *this;
 }
 
 wxTextInputStream& wxTextInputStream::operator>>(wxInt32& i)
 {
-    i = (wxInt32)Read32();
+    i = Read32S();
     return *this;
 }
 
 wxTextInputStream& wxTextInputStream::operator>>(wxInt64& i)
 {
-    i = (wxInt64)Read64();
+    i = Read64S();
     return *this;
 }
 
@@ -517,7 +517,7 @@ wxTextOutputStream& wxTextOutputStream::operator<<(char c)
 
 wxTextOutputStream& wxTextOutputStream::operator<<(wchar_t wc)
 {
-    WriteString( wxString(&wc, *m_conv, 1) );
+    PutChar(wc);
 
     return *this;
 }
