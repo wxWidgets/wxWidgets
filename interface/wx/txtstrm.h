@@ -409,7 +409,7 @@ public:
     wxTextOutputStream& operator<<(const wxString& string);
 
     /**
-        Uses WriteString() to insert @a c as ASCI.
+        Uses WriteString() to insert @a c as ASCII.
     */
     wxTextOutputStream& operator<<(char c);
 
