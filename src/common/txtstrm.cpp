@@ -526,63 +526,55 @@ wxTextOutputStream& wxTextOutputStream::operator<<(wchar_t wc)
 
 wxTextOutputStream& wxTextOutputStream::operator<<(wxInt16 c)
 {
-    wxString str;
-    str.Printf(wxT("%d"), (signed int)c);
-    WriteString(str);
+    Write(c);
 
     return *this;
 }
 
 wxTextOutputStream& wxTextOutputStream::operator<<(wxInt32 c)
 {
-    wxString str;
-    str.Printf(wxT("%ld"), (signed long)c);
-    WriteString(str);
+    Write(c);
 
     return *this;
 }
 
 wxTextOutputStream& wxTextOutputStream::operator<<(wxInt64 c)
 {
-    WriteString(wxString::Format("%" wxLongLongFmtSpec "d", c));
+    Write(c);
 
     return *this;
 }
 
 wxTextOutputStream& wxTextOutputStream::operator<<(wxUint16 c)
 {
-    wxString str;
-    str.Printf(wxT("%u"), (unsigned int)c);
-    WriteString(str);
+    Write(c);
 
     return *this;
 }
 
 wxTextOutputStream& wxTextOutputStream::operator<<(wxUint32 c)
 {
-    wxString str;
-    str.Printf(wxT("%lu"), (unsigned long)c);
-    WriteString(str);
+    Write(c);
 
     return *this;
 }
 
 wxTextOutputStream& wxTextOutputStream::operator<<(wxUint64 c)
 {
-    WriteString(wxString::Format("%" wxLongLongFmtSpec "u", c));
+    Write(c);
 
     return *this;
 }
 
 wxTextOutputStream &wxTextOutputStream::operator<<(double f)
 {
-    WriteDouble(f);
+    Write(f);
     return *this;
 }
 
 wxTextOutputStream& wxTextOutputStream::operator<<(float f)
 {
-    WriteDouble((double)f);
+    Write(f);
     return *this;
 }
 

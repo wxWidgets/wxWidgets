@@ -301,6 +301,14 @@ public:
     void SetMode(wxEOL mode = wxEOL_NATIVE);
 
     /**
+        Writes @a i to the stream using wxString::operator<<().
+
+        @since 3.1.0
+    */
+    template<typename T>
+    void Write(const T& i);
+
+    /**
         Writes the 64 bit integer @a i64 to the stream.
 
         @since 3.1.0
