@@ -123,6 +123,15 @@ public:
     void SetMode( wxEOL mode = wxEOL_NATIVE );
     wxEOL GetMode() { return m_mode; }
 
+    template<typename T>
+    void Write(const T& i)
+    {
+        wxString str;
+        str << i;
+
+        WriteString(str);
+    }
+
     void Write64(wxUint64 i);
     void Write32(wxUint32 i);
     void Write16(wxUint16 i);
