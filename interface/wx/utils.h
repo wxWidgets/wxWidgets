@@ -851,9 +851,10 @@ wxString wxGetOsDescription();
     On systems where only the micro version can't be detected or doesn't make
     sense such as Windows, it will have a value of 0.
 
-    For Unix-like systems (@c wxOS_UNIX) the major and minor version integers will 
-    contain the kernel major and minor version numbers (as returned by the
-    'uname -r' command); e.g. "4" and "1" if the machine is using kernel 4.1.4.
+    For Unix-like systems (@c wxOS_UNIX) the major, minor, and micro version
+    integers will contain the kernel's major, minor, and micro version
+    numbers (as returned by the 'uname -r' command); e.g. "4", "1", and "4" if
+    the machine is using kernel 4.1.4.
 
     For OS X systems (@c wxOS_MAC) the major and minor version integers are the
     natural version numbers associated with the OS; e.g. "10", "11" and "2" if
