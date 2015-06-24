@@ -82,16 +82,6 @@ wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
     if ( minorVsn != NULL )
         *minorVsn = min;
 
-#if 0
-    SInt32 theSystem;
-    Gestalt(gestaltSystemVersion, &theSystem);
-
-    if ( majorVsn != NULL )
-        *majorVsn = (theSystem >> 8);
-
-    if ( minorVsn != NULL )
-        *minorVsn = (theSystem & 0xFF);
-#endif
     return wxOS_MAC_OSX_DARWIN;
 }
 
