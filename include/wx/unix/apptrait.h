@@ -61,7 +61,9 @@ public:
 #if defined(__WXMAC__) && wxUSE_STDPATHS
     virtual wxStandardPaths& GetStandardPaths() wxOVERRIDE;
 #endif
-    virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const wxOVERRIDE;
+    wxPortId GetToolkitVersion(int *majVer = NULL,
+                               int *minVer = NULL,
+                               int *microVer = NULL) const wxOVERRIDE;
 
 #ifdef __WXGTK20__
     virtual wxString GetDesktopEnvironment() const wxOVERRIDE;

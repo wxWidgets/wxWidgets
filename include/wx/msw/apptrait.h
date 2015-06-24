@@ -49,7 +49,9 @@ public:
     virtual bool DoMessageFromThreadWait();
     virtual WXDWORD WaitForThread(WXHANDLE hThread, int flags);
 #endif // wxUSE_THREADS
-    virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const;
+    wxPortId GetToolkitVersion(int *majVer = NULL,
+                               int *minVer = NULL,
+                               int *microVer = NULL) const wxOVERRIDE;
 
     virtual bool CanUseStderr();
     virtual bool WriteToStderr(const wxString& text);
@@ -77,7 +79,9 @@ public:
     virtual WXDWORD WaitForThread(WXHANDLE hThread, int WXUNUSED(flags))
         { return DoSimpleWaitForThread(hThread); }
 #endif // wxUSE_THREADS
-    virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const;
+    virtual wxPortId GetToolkitVersion(int *majVer = NULL,
+                                       int *minVer = NULL,
+                                       int *microVer = NULL) const;
 
     virtual bool CanUseStderr() { return false; }
     virtual bool WriteToStderr(const wxString& WXUNUSED(text)) { return false; }
