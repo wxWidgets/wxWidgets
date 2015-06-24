@@ -23,6 +23,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_ACTIVITYINDICATOR
+
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
     #include "wx/button.h"
@@ -149,3 +151,5 @@ void ActivityIndicatorWidgetsPage::RecreateWidget()
     m_sizerIndicator->AddStretchSpacer();
     m_sizerIndicator->Layout();
 }
+
+#endif // wxUSE_ACTIVITYINDICATOR
