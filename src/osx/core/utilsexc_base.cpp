@@ -72,15 +72,16 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 {
     // This returns 10 and 6 for OS X 10.6, consistent with behaviour on
     // other platforms.
-    SInt32 maj, min;
-    Gestalt(gestaltSystemVersionMajor, &maj);
-    Gestalt(gestaltSystemVersionMinor, &min);
 
-    if ( verMaj != NULL )
-        *verMaj = maj;
+    if (verMaj)
+    {
+        Gestalt(gestaltSystemVersionMajor, verMaj);
+    }
 
-    if ( verMin != NULL )
-        *verMin = min;
+    if (verMin)
+    {
+        Gestalt(gestaltSystemVersionMinor, verMin);
+    }
 
     return wxOS_MAC_OSX_DARWIN;
 }
