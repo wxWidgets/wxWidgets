@@ -375,6 +375,7 @@ protected:
     virtual void DoFreeze();
     virtual void DoThaw();
 
+    void GTKConnectFreezeWidget(GtkWidget* widget);
     void GTKFreezeWidget(GtkWidget *w);
     void GTKThawWidget(GtkWidget *w);
     void GTKDisconnect(void* instance);
