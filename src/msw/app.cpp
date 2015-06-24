@@ -245,11 +245,13 @@ WXDWORD wxGUIAppTraits::WaitForThread(WXHANDLE hThread, int flags)
 }
 #endif // wxUSE_THREADS
 
-wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer, int *minVer) const
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer,
+                                           int *minVer,
+                                           int *microVer) const
 {
     // on Windows, the toolkit version is the same of the OS version
     // as Windows integrates the OS kernel with the GUI toolkit.
-    wxGetOsVersion(majVer, minVer);
+    wxGetOsVersion(majVer, minVer, microVer);
 
 #if defined(__WXHANDHELD__) || defined(__WXWINCE__)
     return wxPORT_WINCE;

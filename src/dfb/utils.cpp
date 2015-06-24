@@ -30,10 +30,13 @@
 // toolkit info
 // ----------------------------------------------------------------------------
 
-wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj,
+                                           int *verMin,
+                                           int *verMicro) const
 {
     if ( verMaj ) *verMaj = DIRECTFB_MAJOR_VERSION;
     if ( verMin ) *verMaj = DIRECTFB_MINOR_VERSION;
+    if ( verMicro ) *verMicro = DIRECTFB_MICRO_VERSION;
 
     return wxPORT_DFB;
 }

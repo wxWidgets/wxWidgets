@@ -206,15 +206,17 @@ public:
         { return m_tkVersionMajor; }
     int GetToolkitMinorVersion() const
         { return m_tkVersionMinor; }
+    int GetToolkitMicroVersion() const
+        { return m_tkVersionMicro; }
 
-    bool CheckToolkitVersion(int major, int minor) const
+    bool CheckToolkitVersion(int major, int minor, int micro = 0) const
     {
         return DoCheckVersion(GetToolkitMajorVersion(),
                               GetToolkitMinorVersion(),
-                              0,
+                              GetToolkitMicroVersion(),
                               major,
                               minor,
-                              0);
+                              micro);
     }
 
     bool IsUsingUniversalWidgets() const
@@ -268,8 +270,12 @@ public:
         m_osVersionMicro = micro;
     }
 
-    void SetToolkitVersion(int major, int minor)
-        { m_tkVersionMajor=major; m_tkVersionMinor=minor; }
+    void SetToolkitVersion(int major, int minor, int micro = 0)
+    {
+        m_tkVersionMajor = major;
+        m_tkVersionMinor = minor;
+        m_tkVersionMicro = micro;
+    }
 
     void SetOperatingSystemId(wxOperatingSystemId n)
         { m_os = n; }
@@ -298,6 +304,7 @@ public:
                m_os != wxOS_UNKNOWN &&
                !m_osDesc.IsEmpty() &&
                m_tkVersionMajor != -1 && m_tkVersionMinor != -1 &&
+               m_tkVersionMicro != -1 &&
                m_port != wxPORT_UNKNOWN &&
                m_arch != wxARCH_INVALID &&
                m_endian != wxENDIAN_INVALID;
@@ -346,7 +353,7 @@ protected:
 
     // Version of the underlying toolkit
     // (-1 means not initialized yet; zero means no toolkit).
-    int m_tkVersionMajor, m_tkVersionMinor;
+    int m_tkVersionMajor, m_tkVersionMinor, m_tkVersionMicro;
 
     // name of the wxWidgets port
     wxPortId m_port;
