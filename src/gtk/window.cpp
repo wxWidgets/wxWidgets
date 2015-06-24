@@ -2138,9 +2138,6 @@ static void frame_clock_layout(GdkFrameClock*, wxWindow* win)
 
 void wxWindowGTK::GTKHandleRealized()
 {
-    if (IsFrozen())
-        DoFreeze();
-
     GdkWindow* const window = GTKGetDrawingWindow();
 
     if (m_wxwindow)
@@ -2223,11 +2220,6 @@ void wxWindowGTK::GTKHandleRealized()
 void wxWindowGTK::GTKHandleUnrealize()
 {
     m_isGtkPositionValid = false;
-
-    // unrealizing a frozen window seems to have some lingering effect
-    // preventing updates to the affected area
-    if (IsFrozen())
-        DoThaw();
 
     if (m_wxwindow)
     {
@@ -2578,12 +2570,6 @@ wxWindowGTK::~wxWindowGTK()
         m_imContext = NULL;
     }
 
-    // avoid problem with GTK+ 2.18 where a frozen window causes the whole
-    // TLW to be frozen, and if the window is then destroyed, nothing ever
-    // gets painted again
-    while (IsFrozen())
-        Thaw();
-
 #ifdef __WXGTK3__
     if (m_styleProvider)
         g_object_unref(m_styleProvider);
@@ -2628,6 +2614,10 @@ bool wxWindowGTK::PreCreation( wxWindowGTK *parent, const wxPoint &pos,  const w
 void wxWindowGTK::PostCreation()
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
+
+    GTKConnectFreezeWidget(m_widget);
+    if (m_wxwindow && m_wxwindow != m_widget)
+        GTKConnectFreezeWidget(m_wxwindow);
 
 #if wxGTK_HAS_COMPOSITING_SUPPORT
     // Set RGBA visual as soon as possible to minimize the possibility that
@@ -5120,53 +5110,49 @@ GdkWindow* wxWindowGTK::GTKGetDrawingWindow() const
 // freeze/thaw
 // ----------------------------------------------------------------------------
 
+extern "C" {
+static gboolean draw_freeze(GtkWidget*, void*, wxWindow*)
+{
+    // stop other handlers from being invoked
+    return true;
+}
+}
+
+void wxWindowGTK::GTKConnectFreezeWidget(GtkWidget* widget)
+{
+#ifdef __WXGTK3__
+    gulong id = g_signal_connect(widget, "draw", G_CALLBACK(draw_freeze), this);
+#else
+    gulong id = g_signal_connect(widget, "expose-event", G_CALLBACK(draw_freeze), this);
+#endif
+    g_signal_handler_block(widget, id);
+}
+
 void wxWindowGTK::GTKFreezeWidget(GtkWidget* widget)
 {
-    if (widget && gtk_widget_get_has_window(widget))
-    {
-        GdkWindow* window = gtk_widget_get_window(widget);
-        if (window)
-        {
-#if GTK_CHECK_VERSION(2,18,0)
-#ifndef __WXGTK3__
-            if (gtk_check_version(2,18,0) == NULL)
-#endif
-            {
-                // impl_window for a non-native GdkWindow can change if
-                // gdk_window_ensure_native() is called on it or some other
-                // GdkWindow in the same TLW. Since the freeze count is on the
-                // impl_window, we have to make sure impl_window does not change
-                // after we call gdk_window_freeze_updates().
-                gdk_window_ensure_native(window);
-            }
-#endif
-            gdk_window_freeze_updates(window);
-        }
-    }
+    g_signal_handlers_unblock_by_func(widget, (void*)draw_freeze, this);
 }
 
 void wxWindowGTK::GTKThawWidget(GtkWidget* widget)
 {
-    if (widget && gtk_widget_get_has_window(widget))
-    {
-        GdkWindow* window = gtk_widget_get_window(widget);
-        if (window)
-            gdk_window_thaw_updates(window);
-    }
+    g_signal_handlers_block_by_func(widget, (void*)draw_freeze, this);
+    gtk_widget_queue_draw(widget);
 }
 
 void wxWindowGTK::DoFreeze()
 {
-    GtkWidget* widget = m_wxwindow;
-    if (widget == NULL)
-        widget = m_widget;
-    GTKFreezeWidget(widget);
+    wxCHECK_RET(m_widget, "invalid window");
+
+    GTKFreezeWidget(m_widget);
+    if (m_wxwindow && m_wxwindow != m_widget)
+        GTKFreezeWidget(m_wxwindow);
 }
 
 void wxWindowGTK::DoThaw()
 {
-    GtkWidget* widget = m_wxwindow;
-    if (widget == NULL)
-        widget = m_widget;
-    GTKThawWidget(widget);
+    wxCHECK_RET(m_widget, "invalid window");
+
+    GTKThawWidget(m_widget);
+    if (m_wxwindow && m_wxwindow != m_widget)
+        GTKThawWidget(m_wxwindow);
 }
