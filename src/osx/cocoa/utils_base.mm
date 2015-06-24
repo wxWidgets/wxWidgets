@@ -28,7 +28,7 @@
 #endif
 
 // our OS version is the same in non GUI and GUI cases
-wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
+wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 {
 #ifdef wxHAS_NSPROCESSINFO
     if ([NSProcessInfo instancesRespondToSelector:@selector(operatingSystemVersion)])
@@ -40,6 +40,9 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 
         if ( verMin != NULL )
             *verMin = osVer.minorVersion;
+
+        if ( verMicro != NULL )
+            *verMicro = osVer.patchVersion;
     }
     else
 #endif
@@ -47,13 +50,15 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
         // On OS X versions prior to 10.10 NSProcessInfo does not provide the OS version
         // Deprecated Gestalt calls are required instead
 wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        SInt32 maj, min;
+        SInt32 maj, min, micro;
 #ifdef __WXOSX_IPHONE__
         maj = 7;
         min = 0;
+        micro = 0;
 #else
         Gestalt(gestaltSystemVersionMajor, &maj);
         Gestalt(gestaltSystemVersionMinor, &min);
+        Gestalt(gestaltSystemVersionBugFix, &micro);
 #endif
 wxGCC_WARNING_RESTORE()
 
@@ -62,6 +67,9 @@ wxGCC_WARNING_RESTORE()
 
         if ( verMin != NULL )
             *verMin = min;
+
+        if ( verMicro != NULL )
+            *verMicro = micro;
     }
 
     return wxOS_MAC_OSX_DARWIN;

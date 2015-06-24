@@ -1235,7 +1235,7 @@ bool wxIsPlatform64Bit()
 #endif // Win64/Win32
 }
 
-wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
+wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 {
     static struct
     {
@@ -1273,6 +1273,8 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
         *verMaj = s_version.verMaj;
     if ( verMin )
         *verMin = s_version.verMin;
+    if ( verMicro )
+        *verMicro = 0;
 
     return s_version.os;
 }

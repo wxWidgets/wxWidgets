@@ -141,7 +141,8 @@ WXDLLIMPEXP_BASE wxString wxGetOsDescription();
 
 // Get OS version
 WXDLLIMPEXP_BASE wxOperatingSystemId wxGetOsVersion(int *verMaj = NULL,
-                                                    int *verMin = NULL);
+                                                    int *verMin = NULL,
+                                                    int *verMicro = NULL);
 
 // Check is OS version is at least the specified major and minor version
 WXDLLIMPEXP_BASE bool wxCheckOsVersion(int majorVsn, int minorVsn = 0);
