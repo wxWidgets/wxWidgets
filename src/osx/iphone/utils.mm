@@ -318,7 +318,7 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
 // TODO move these into a BASE file
 
-wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
+wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 {
     // get OS version
     int major, minor;
@@ -338,6 +338,8 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
         *verMaj = major;
     if ( verMin )
         *verMin = minor;
+    if ( verMicro )
+        *verMicro = (major == -1) ? -1 : 0;
 
     return wxOS_MAC_OSX_DARWIN;
 }
