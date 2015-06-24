@@ -68,7 +68,7 @@ long UMAGetSystemVersion()
 }
 
 // our OS version is the same in non GUI and GUI cases
-wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
+wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 {
     // This returns 10 and 6 for OS X 10.6, consistent with behaviour on
     // other platforms.
@@ -76,11 +76,11 @@ wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
     Gestalt(gestaltSystemVersionMajor, &maj);
     Gestalt(gestaltSystemVersionMinor, &min);
 
-    if ( majorVsn != NULL )
-        *majorVsn = maj;
+    if ( verMaj != NULL )
+        *verMaj = maj;
 
-    if ( minorVsn != NULL )
-        *minorVsn = min;
+    if ( verMin != NULL )
+        *verMin = min;
 
     return wxOS_MAC_OSX_DARWIN;
 }
