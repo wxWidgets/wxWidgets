@@ -188,9 +188,11 @@ public:
         { return m_osVersionMajor; }
     int GetOSMinorVersion() const
         { return m_osVersionMinor; }
+    int GetOSMicroVersion() const
+        { return m_osVersionMicro; }
 
     // return true if the OS version >= major.minor
-    bool CheckOSVersion(int major, int minor) const;
+    bool CheckOSVersion(int major, int minor, int micro = 0) const;
 
     int GetToolkitMajorVersion() const
         { return m_tkVersionMajor; }
@@ -201,8 +203,10 @@ public:
     {
         return DoCheckVersion(GetToolkitMajorVersion(),
                               GetToolkitMinorVersion(),
+                              0,
                               major,
-                              minor);
+                              minor,
+                              0);
     }
 
     bool IsUsingUniversalWidgets() const
@@ -249,8 +253,13 @@ public:
     // setters
     // -----------------
 
-    void SetOSVersion(int major, int minor)
-        { m_osVersionMajor=major; m_osVersionMinor=minor; }
+    void SetOSVersion(int major, int minor, int micro = 0)
+    {
+        m_osVersionMajor = major;
+        m_osVersionMinor = minor;
+        m_osVersionMicro = micro;
+    }
+
     void SetToolkitVersion(int major, int minor)
         { m_tkVersionMajor=major; m_tkVersionMinor=minor; }
 
@@ -277,6 +286,7 @@ public:
     bool IsOk() const
     {
         return m_osVersionMajor != -1 && m_osVersionMinor != -1 &&
+               m_osVersionMicro != -1 &&
                m_os != wxOS_UNKNOWN &&
                !m_osDesc.IsEmpty() &&
                m_tkVersionMajor != -1 && m_tkVersionMinor != -1 &&
@@ -289,9 +299,12 @@ public:
 
 
 protected:
-    static bool DoCheckVersion(int majorCur, int minorCur, int major, int minor)
+    static bool DoCheckVersion(int majorCur, int minorCur, int microCur,
+                               int major, int minor, int micro)
     {
-        return majorCur > major || (majorCur == major && minorCur >= minor);
+        return majorCur > major
+            || (majorCur == major && minorCur > minor)
+            || (majorCur == major && minorCur == minor && microCur >= micro);
     }
 
     bool m_initializedForCurrentPlatform;
@@ -305,7 +318,8 @@ protected:
     // Version of the OS; valid if m_os != wxOS_UNKNOWN
     // (-1 means not initialized yet).
     int m_osVersionMajor,
-        m_osVersionMinor;
+        m_osVersionMinor,
+        m_osVersionMicro;
 
     // Operating system ID.
     wxOperatingSystemId m_os;

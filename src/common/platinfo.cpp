@@ -145,6 +145,7 @@ wxPlatformInfo::wxPlatformInfo(wxPortId pid, int tkMajor, int tkMinor,
     m_os = id;
     m_osVersionMajor = osMajor;
     m_osVersionMinor = osMinor;
+    m_osVersionMicro = -1;
 
     m_endian = endian;
     m_arch = arch;
@@ -156,6 +157,7 @@ bool wxPlatformInfo::operator==(const wxPlatformInfo &t) const
            m_tkVersionMinor == t.m_tkVersionMinor &&
            m_osVersionMajor == t.m_osVersionMajor &&
            m_osVersionMinor == t.m_osVersionMinor &&
+           m_osVersionMicro == t.m_osVersionMicro &&
            m_os == t.m_os &&
            m_osDesc == t.m_osDesc &&
            m_ldi == t.m_ldi &&
@@ -188,7 +190,7 @@ void wxPlatformInfo::InitForCurrentPlatform()
         m_desktopEnv = traits->GetDesktopEnvironment();
     }
 
-    m_os = wxGetOsVersion(&m_osVersionMajor, &m_osVersionMinor);
+    m_os = wxGetOsVersion(&m_osVersionMajor, &m_osVersionMinor, &m_osVersionMicro);
     m_osDesc = wxGetOsDescription();
     m_endian = wxIsPlatformLittleEndian() ? wxENDIAN_LITTLE : wxENDIAN_BIG;
     m_arch = wxIsPlatform64Bit() ? wxARCH_64 : wxARCH_32;
@@ -298,7 +300,7 @@ wxString wxPlatformInfo::GetEndiannessName(wxEndianness end)
     return wxEndiannessNames[end];
 }
 
-bool wxPlatformInfo::CheckOSVersion(int major, int minor) const
+bool wxPlatformInfo::CheckOSVersion(int major, int minor, int micro) const
 {
     // If this instance of wxPlatformInfo has been initialized by InitForCurrentPlatform()
     // this check gets forwarded to the wxCheckOsVersion which might do more than a simple
@@ -308,8 +310,10 @@ bool wxPlatformInfo::CheckOSVersion(int major, int minor) const
     else
         return DoCheckVersion(GetOSMajorVersion(),
                             GetOSMinorVersion(),
+                            GetOSMicroVersion(),
                             major,
-                            minor);
+                            minor,
+                            micro);
 }
 
 // ----------------------------------------------------------------------------
