@@ -28,18 +28,18 @@
 #endif
 
 // our OS version is the same in non GUI and GUI cases
-wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
+wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 {
 #ifdef wxHAS_NSPROCESSINFO
     if ([NSProcessInfo instancesRespondToSelector:@selector(operatingSystemVersion)])
     {
         NSOperatingSystemVersion osVer = [NSProcessInfo processInfo].operatingSystemVersion;
 
-        if ( majorVsn != NULL )
-            *majorVsn = osVer.majorVersion;
+        if ( verMaj != NULL )
+            *verMaj = osVer.majorVersion;
 
-        if ( minorVsn != NULL )
-            *minorVsn = osVer.minorVersion;
+        if ( verMin != NULL )
+            *verMin = osVer.minorVersion;
     }
     else
 #endif
@@ -57,11 +57,11 @@ wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 #endif
 wxGCC_WARNING_RESTORE()
 
-        if ( majorVsn != NULL )
-            *majorVsn = maj;
+        if ( verMaj != NULL )
+            *verMaj = maj;
 
-        if ( minorVsn != NULL )
-            *minorVsn = min;
+        if ( verMin != NULL )
+            *verMin = min;
     }
 
     return wxOS_MAC_OSX_DARWIN;
