@@ -747,26 +747,22 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
         if ( pgman->GetPropertyValueAsString(wxT("Car.Model")) != wxT("Lamborghini Diablo XYZ") )
         {
-            wxLogDebug(wxT("Did not match: Car.Model=%s"), pgman->GetPropertyValueAsString(wxT("Car.Model")).c_str());
-            RT_FAILURE();
+            RT_FAILURE_MSG(wxString::Format(wxS("Did not match: Car.Model=%s"), pgman->GetPropertyValueAsString(wxS("Car.Model")).c_str()).c_str());
         }
 
         if ( pgman->GetPropertyValueAsInt(wxT("Car.Speeds.Max. Speed (mph)")) != 100 )
         {
-            wxLogDebug(wxT("Did not match: Car.Speeds.Max. Speed (mph)=%s"), pgman->GetPropertyValueAsString(wxT("Car.Speeds.Max. Speed (mph)")).c_str());
-            RT_FAILURE();
+            RT_FAILURE_MSG(wxString::Format(wxS("Did not match: Car.Speeds.Max. Speed (mph)=%s"), pgman->GetPropertyValueAsString(wxS("Car.Speeds.Max. Speed (mph)")).c_str()).c_str());
         }
 
         if ( pgman->GetPropertyValueAsInt(wxT("Car.Price ($)")) != 3000002 )
         {
-            wxLogDebug(wxT("Did not match: Car.Price ($)=%s"), pgman->GetPropertyValueAsString(wxT("Car.Price ($)")).c_str());
-            RT_FAILURE();
+            RT_FAILURE_MSG(wxString::Format(wxS("Did not match: Car.Price ($)=%s"), pgman->GetPropertyValueAsString(wxS("Car.Price ($)")).c_str()).c_str());
         }
 
         if ( !pgman->GetPropertyValueAsBool(wxT("Car.Convertible")) )
         {
-            wxLogDebug(wxT("Did not match: Car.Convertible=%s"), pgman->GetPropertyValueAsString(wxT("Car.Convertible")).c_str());
-            RT_FAILURE();
+            RT_FAILURE_MSG(wxString::Format(wxS("Did not match: Car.Convertible=%s"), pgman->GetPropertyValueAsString(wxS("Car.Convertible")).c_str()).c_str());
         }
 
         // SetPropertyValueString for special cases such as wxColour
