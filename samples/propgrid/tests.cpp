@@ -258,7 +258,7 @@ protected:
         wxString s1 = wxString::Format(wxT("Test failure in tests.cpp, line %i."),__LINE__-1); \
         errorMessages.push_back(s1); \
         wxLogDebug(s1); \
-        wxString s2 = wxString::Format(wxT("Message: %s"),MSG); \
+        wxString s2 = wxString::Format(wxT("Message: %s"),MSG.c_str()); \
         errorMessages.push_back(s2); \
         wxLogDebug(s2); \
         failures++; \
@@ -271,7 +271,7 @@ protected:
         if ( h1_ != h2_ ) \
         { \
             wxString s_ = wxString::Format(wxT("VirtualHeight = %i, should be %i (%s)"), h1_, h2_, EXTRATEXT.c_str()); \
-            RT_FAILURE_MSG(s_.c_str()); \
+            RT_FAILURE_MSG(s_); \
             _failed_ = true; \
         } \
         else \
@@ -379,9 +379,9 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         {
             wxPGProperty* p = it.GetProperty();
             if ( p->IsCategory() )
-                RT_FAILURE_MSG(wxString::Format(wxT("'%s' is a category (non-private child property expected)"),p->GetLabel().c_str()).c_str())
+                RT_FAILURE_MSG(wxString::Format(wxT("'%s' is a category (non-private child property expected)"),p->GetLabel().c_str()))
             else if ( p->GetParent()->HasFlag(wxPG_PROP_AGGREGATE) )
-                RT_FAILURE_MSG(wxString::Format(wxT("'%s' is a private child (non-private child property expected)"),p->GetLabel().c_str()).c_str())
+                RT_FAILURE_MSG(wxString::Format(wxT("'%s' is a private child (non-private child property expected)"),p->GetLabel().c_str()))
             count++;
         }
 
@@ -394,7 +394,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         {
             wxPGProperty* p = it.GetProperty();
             if ( !p->IsCategory() )
-                RT_FAILURE_MSG(wxString::Format(wxT("'%s' is not a category (only category was expected)"),p->GetLabel().c_str()).c_str())
+                RT_FAILURE_MSG(wxString::Format(wxT("'%s' is not a category (only category was expected)"),p->GetLabel().c_str()))
             count++;
         }
 
@@ -407,7 +407,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         {
             wxPGProperty* p = it.GetProperty();
             if ( p->GetParent()->HasFlag(wxPG_PROP_AGGREGATE) )
-                RT_FAILURE_MSG(wxString::Format(wxT("'%s' is a private child (non-private child property or category expected)"),p->GetLabel().c_str()).c_str())
+                RT_FAILURE_MSG(wxString::Format(wxT("'%s' is a private child (non-private child property or category expected)"),p->GetLabel().c_str()))
             count++;
         }
 
@@ -420,9 +420,9 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         {
             wxPGProperty* p = it.GetProperty();
             if ( (p->GetParent() != p->GetParentState()->DoGetRoot() && !p->GetParent()->IsExpanded()) )
-                RT_FAILURE_MSG(wxString::Format(wxT("'%s' had collapsed parent (only visible properties expected)"),p->GetLabel().c_str()).c_str())
+                RT_FAILURE_MSG(wxString::Format(wxT("'%s' had collapsed parent (only visible properties expected)"),p->GetLabel().c_str()))
             else if ( p->HasFlag(wxPG_PROP_HIDDEN) )
-                RT_FAILURE_MSG(wxString::Format(wxT("'%s' was hidden (only visible properties expected)"),p->GetLabel().c_str()).c_str())
+                RT_FAILURE_MSG(wxString::Format(wxT("'%s' was hidden (only visible properties expected)"),p->GetLabel().c_str()))
             count++;
         }
 
@@ -747,22 +747,22 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
         if ( pgman->GetPropertyValueAsString(wxT("Car.Model")) != wxT("Lamborghini Diablo XYZ") )
         {
-            RT_FAILURE_MSG(wxString::Format(wxS("Did not match: Car.Model=%s"), pgman->GetPropertyValueAsString(wxS("Car.Model")).c_str()).c_str());
+            RT_FAILURE_MSG(wxString::Format(wxS("Did not match: Car.Model=%s"), pgman->GetPropertyValueAsString(wxS("Car.Model")).c_str()));
         }
 
         if ( pgman->GetPropertyValueAsInt(wxT("Car.Speeds.Max. Speed (mph)")) != 100 )
         {
-            RT_FAILURE_MSG(wxString::Format(wxS("Did not match: Car.Speeds.Max. Speed (mph)=%s"), pgman->GetPropertyValueAsString(wxS("Car.Speeds.Max. Speed (mph)")).c_str()).c_str());
+            RT_FAILURE_MSG(wxString::Format(wxS("Did not match: Car.Speeds.Max. Speed (mph)=%s"), pgman->GetPropertyValueAsString(wxS("Car.Speeds.Max. Speed (mph)")).c_str()));
         }
 
         if ( pgman->GetPropertyValueAsInt(wxT("Car.Price ($)")) != 3000002 )
         {
-            RT_FAILURE_MSG(wxString::Format(wxS("Did not match: Car.Price ($)=%s"), pgman->GetPropertyValueAsString(wxS("Car.Price ($)")).c_str()).c_str());
+            RT_FAILURE_MSG(wxString::Format(wxS("Did not match: Car.Price ($)=%s"), pgman->GetPropertyValueAsString(wxS("Car.Price ($)")).c_str()));
         }
 
         if ( !pgman->GetPropertyValueAsBool(wxT("Car.Convertible")) )
         {
-            RT_FAILURE_MSG(wxString::Format(wxS("Did not match: Car.Convertible=%s"), pgman->GetPropertyValueAsString(wxS("Car.Convertible")).c_str()).c_str());
+            RT_FAILURE_MSG(wxString::Format(wxS("Did not match: Car.Convertible=%s"), pgman->GetPropertyValueAsString(wxS("Car.Convertible")).c_str()));
         }
 
         // SetPropertyValueString for special cases such as wxColour
@@ -1200,7 +1200,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pgman->SetSplitterPosition(trySplitterPos);
 
         if ( pgman->GetGrid()->GetSplitterPosition() != trySplitterPos )
-            RT_FAILURE_MSG(wxString::Format(wxT("Splitter position was %i (should have been %i)"),(int)pgman->GetGrid()->GetSplitterPosition(),trySplitterPos).c_str());
+            RT_FAILURE_MSG(wxString::Format(wxT("Splitter position was %i (should have been %i)"),(int)pgman->GetGrid()->GetSplitterPosition(),trySplitterPos));
 
         m_topSizer->Add( m_pPropGridManager, wxSizerFlags(1).Expand());
         FinalizePanel();
@@ -1212,7 +1212,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         SetSize(sz);
 
         if ( pgman->GetGrid()->GetSplitterPosition() != trySplitterPos )
-            RT_FAILURE_MSG(wxString::Format(wxT("Splitter position was %i (should have been %i)"),(int)pgman->GetGrid()->GetSplitterPosition(),trySplitterPos).c_str());
+            RT_FAILURE_MSG(wxString::Format(wxT("Splitter position was %i (should have been %i)"),(int)pgman->GetGrid()->GetSplitterPosition(),trySplitterPos));
 
         SetSize(origSz);
 
@@ -1415,37 +1415,37 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                      !p->HasFlag(wxPG_PROP_COLLAPSED) )
                 {
                     RT_FAILURE_MSG(wxString::Format(wxS("Error setting flag from string 'COLLAPSED' for property '%s'"),
-                        p->GetName().c_str()).c_str());
+                        p->GetName().c_str()));
                 }
                 if ( flags.Find(wxS("COLLAPSED")) == wxNOT_FOUND &&
                      p->HasFlag(wxPG_PROP_COLLAPSED) )
                 {
                     RT_FAILURE_MSG(wxString::Format(wxS("Error resetting flag from string 'COLLAPSED'for property '%s'"),
-                        p->GetName().c_str()).c_str());
+                        p->GetName().c_str()));
                 }
                 if ( flags.Find(wxS("DISABLED")) != wxNOT_FOUND &&
                      !p->HasFlag(wxPG_PROP_DISABLED) )
                 {
                     RT_FAILURE_MSG(wxString::Format(wxS("Error setting flag from string 'DISABLED' for property '%s'"),
-                        p->GetName().c_str()).c_str());
+                        p->GetName().c_str()));
                 }
                 if ( flags.Find(wxS("DISABLED")) == wxNOT_FOUND &&
                      p->HasFlag(wxPG_PROP_DISABLED) )
                 {
                     RT_FAILURE_MSG(wxString::Format(wxS("Error resetting flag from string 'DISABLED' for property '%s'"),
-                        p->GetName().c_str()).c_str());
+                        p->GetName().c_str()));
                 }
                 if ( flags.Find(wxS("HIDDEN")) != wxNOT_FOUND &&
                      !p->HasFlag(wxPG_PROP_HIDDEN) )
                 {
                     RT_FAILURE_MSG(wxString::Format(wxS("Error setting flag from string 'HIDDEN' for property '%s'"),
-                        p->GetName().c_str()).c_str());
+                        p->GetName().c_str()));
                 }
                 if ( flags.Find(wxS("HIDDEN")) == wxNOT_FOUND &&
                      p->HasFlag(wxPG_PROP_HIDDEN) )
                 {
                     RT_FAILURE_MSG(wxString::Format(wxS("Error resetting flag from string 'HIDDEN' for property '%s'"),
-                        p->GetName().c_str()).c_str());
+                        p->GetName().c_str()));
                 }
 
                 // Get individual flags
@@ -1463,7 +1463,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 if ( !ok )
                 {
                     RT_FAILURE_MSG(wxString::Format(wxS("Invalid string for wxPG_PROP_COLLAPSED flag for property '%s'"),
-                        p->GetName().c_str()).c_str());
+                        p->GetName().c_str()));
                 }
 
                 flags = p->GetFlagsAsString(wxPG_PROP_DISABLED);
@@ -1478,7 +1478,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 if ( !ok )
                 {
                     RT_FAILURE_MSG(wxString::Format(wxS("Invalid string for wxPG_PROP_DISABLED flag for property '%s'"),
-                        p->GetName().c_str()).c_str());
+                        p->GetName().c_str()));
                 }
 
                 flags = p->GetFlagsAsString(wxPG_PROP_HIDDEN);
@@ -1493,7 +1493,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 if ( !ok )
                 {
                     RT_FAILURE_MSG(wxString::Format(wxS("Invalid string for wxPG_PROP_HIDDEN flag for property '%s'"),
-                        p->GetName().c_str()).c_str());
+                        p->GetName().c_str()));
                 }
 
                 flags = p->GetFlagsAsString(wxPG_PROP_NOEDITOR);
@@ -1508,7 +1508,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 if ( !ok )
                 {
                     RT_FAILURE_MSG(wxString::Format(wxS("Invalid string for wxPG_PROP_NOEDITOR flag for property '%s'"),
-                        p->GetName().c_str()).c_str());
+                        p->GetName().c_str()));
                 }
 
                 // Get all flags
@@ -1524,7 +1524,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 if ( !ok )
                 {
                     RT_FAILURE_MSG(wxString::Format(wxS("Invalid string for wxPG_PROP_COLLAPSED flag for property '%s'"),
-                        p->GetName().c_str()).c_str());
+                        p->GetName().c_str()));
                 }
 
                 if ( p->HasFlag(wxPG_PROP_DISABLED) )
@@ -1538,7 +1538,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 if ( !ok )
                 {
                     RT_FAILURE_MSG(wxString::Format(wxS("Invalid string for wxPG_PROP_DISBALED flag for property '%s'"),
-                        p->GetName().c_str()).c_str());
+                        p->GetName().c_str()));
                 }
 
                 if ( p->HasFlag(wxPG_PROP_HIDDEN) )
@@ -1552,7 +1552,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 if ( !ok )
                 {
                     RT_FAILURE_MSG(wxString::Format(wxS("Invalid string for wxPG_PROP_HIDDEN flag for property '%s'"),
-                        p->GetName().c_str()).c_str());
+                        p->GetName().c_str()));
                 }
 
                 if ( p->HasFlag(wxPG_PROP_NOEDITOR) )
@@ -1566,7 +1566,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 if ( !ok )
                 {
                     RT_FAILURE_MSG(wxString::Format(wxS("Invalid string for wxPG_PROP_NOEDITOR flag for property '%s'"),
-                        p->GetName().c_str()).c_str());
+                        p->GetName().c_str()));
                 }
 
                 // Restore original flags
