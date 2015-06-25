@@ -546,7 +546,7 @@ bool wxIntProperty::DoValidation( const wxPGProperty* property,
                                            value,
                                            pValidationInfo,
                                            mode, LLONG_MIN, LLONG_MAX,
-                                           "%" wxLongLongFmtSpec "d");
+                                           wxS("%") wxS(wxLongLongFmtSpec) wxS("d"));
 }
 #endif
 
@@ -607,22 +607,24 @@ enum
     wxPG_UINT_TEMPLATE_MAX
 };
 
-static const wxChar* const gs_uintTemplates32[wxPG_UINT_TEMPLATE_MAX] = {
-    wxT("%lx"),wxT("0x%lx"),wxT("$%lx"),
-    wxT("%lX"),wxT("0x%lX"),wxT("$%lX"),
-    wxT("%lu"),wxT("%lo")
+static const wxStringCharType* const gs_uintTemplates32[wxPG_UINT_TEMPLATE_MAX] = {
+    wxS("%lx"),wxS("0x%lx"),wxS("$%lx"),
+    wxS("%lX"),wxS("0x%lX"),wxS("$%lX"),
+    wxS("%lu"),wxS("%lo")
 };
 
-static const char* const gs_uintTemplates64[wxPG_UINT_TEMPLATE_MAX] = {
-    "%" wxLongLongFmtSpec "x",
-    "0x%" wxLongLongFmtSpec "x",
-    "$%" wxLongLongFmtSpec "x",
-    "%" wxLongLongFmtSpec "X",
-    "0x%" wxLongLongFmtSpec "X",
-    "$%" wxLongLongFmtSpec "X",
-    "%" wxLongLongFmtSpec "u",
-    "%" wxLongLongFmtSpec "o"
+#if wxUSE_LONGLONG
+static const wxStringCharType* const gs_uintTemplates64[wxPG_UINT_TEMPLATE_MAX] = {
+    wxS("%") wxS(wxLongLongFmtSpec) wxS("x"),
+    wxS("0x%") wxS(wxLongLongFmtSpec) wxS("x"),
+    wxS("$%") wxS(wxLongLongFmtSpec) wxS("x"),
+    wxS("%") wxS(wxLongLongFmtSpec) wxS("X"),
+    wxS("0x%") wxS(wxLongLongFmtSpec) wxS("X"),
+    wxS("$%") wxS(wxLongLongFmtSpec) wxS("X"),
+    wxS("%") wxS(wxLongLongFmtSpec) wxS("u"),
+    wxS("%") wxS(wxLongLongFmtSpec) wxS("o")
 };
+#endif // wxUSE_LONGLONG
 
 wxPG_IMPLEMENT_PROPERTY_CLASS(wxUIntProperty,wxPGProperty,TextCtrl)
 
@@ -749,7 +751,7 @@ bool wxUIntProperty::DoValidation(const wxPGProperty* property,
 {
     return NumericValidation<wxULongLong_t>(property, value, pValidationInfo,
                                             mode, 0, ULLONG_MAX,
-                                            "%" wxLongLongFmtSpec "u");
+                                            wxS("%") wxS(wxLongLongFmtSpec) wxS("u"));
 }
 #endif
 
