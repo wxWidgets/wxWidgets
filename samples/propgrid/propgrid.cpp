@@ -1551,9 +1551,36 @@ void FormMain::PopulateWithExamples ()
     // Test adding variable height bitmaps in wxPGChoices
     wxPGChoices bc;
 
-    bc.Add(wxT("Wee"), wxBitmap(16, 16));
-    bc.Add(wxT("Not so wee"), wxBitmap(32, 32));
-    bc.Add(wxT("Friggin' huge"), wxBitmap(64, 64));
+    wxBitmap smallBmp(16, 16);
+    {
+        wxMemoryDC dc(smallBmp);
+        dc.SetBackground(*wxYELLOW);
+        dc.Clear();
+        dc.SetPen(*wxBLUE);
+        dc.SetBrush(*wxBLUE);
+        dc.DrawCircle(8, 8, 4);
+    }
+    wxBitmap mediumBmp(32, 32);
+    {
+        wxMemoryDC dc(mediumBmp);
+        dc.SetBackground(*wxGREEN);
+        dc.Clear();
+        dc.SetPen(*wxBLUE);
+        dc.SetBrush(*wxBLUE);
+        dc.DrawRectangle(7, 7, 18, 18);
+    }
+    wxBitmap largeBmp(64, 64);
+    {
+        wxMemoryDC dc(largeBmp);
+        dc.SetBackground(*wxCYAN);
+        dc.Clear();
+        dc.SetPen(*wxLIGHT_GREY);
+        dc.SetBrush(*wxLIGHT_GREY);
+        dc.DrawEllipse(12, 22, 40, 20);
+    }
+    bc.Add(wxT("Wee"), smallBmp);
+    bc.Add(wxT("Not so wee"), mediumBmp);
+    bc.Add(wxT("Friggin' huge"), largeBmp);
 
     pg->Append( new wxEnumProperty(wxT("Variable Height Bitmaps"),
                                    wxPG_LABEL,
