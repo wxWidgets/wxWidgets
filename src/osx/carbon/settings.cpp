@@ -135,7 +135,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_HOTLIGHT:
         case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
         case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
-        case wxSYS_COLOUR_MENUHILIGHT:
+        case wxSYS_COLOUR_MENUHIGHLIGHT:
             // TODO:
             resultColor = *wxBLACK;
             break ;

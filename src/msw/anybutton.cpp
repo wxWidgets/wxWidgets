@@ -1000,7 +1000,7 @@ void DrawRect(HDC hdc, const RECT& r)
    The button frame looks like this normally:
 
    WWWWWWWWWWWWWWWWWWB
-   WHHHHHHHHHHHHHHHHGB  W = white       (HILIGHT)
+   WHHHHHHHHHHHHHHHHGB  W = white       (HIGHLIGHT)
    WH               GB  H = light grey  (LIGHT)
    WH               GB  G = dark grey   (SHADOW)
    WH               GB  B = black       (DKSHADOW)
@@ -1040,7 +1040,7 @@ void DrawButtonFrame(HDC hdc, RECT& rectBtn,
     AutoHPEN hpenBlack(GetSysColor(COLOR_3DDKSHADOW)),
              hpenGrey(GetSysColor(COLOR_3DSHADOW)),
              hpenLightGr(GetSysColor(COLOR_3DLIGHT)),
-             hpenWhite(GetSysColor(COLOR_3DHILIGHT));
+             hpenWhite(GetSysColor(COLOR_3DHIGHLIGHT));
 
     SelectInHDC selectPen(hdc, hpenBlack);
 
