@@ -477,6 +477,13 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             pgman->DeleteProperty(p);
         }
 
+        // Check if grid is empty.
+        it = pgman->GetVIterator(wxPG_ITERATE_ALL&~(wxPG_IT_CHILDREN(wxPG_PROP_AGGREGATE)));
+        if ( !it.AtEnd() )
+        {
+            RT_FAILURE_MSG(wxString(wxS("Not all properties are deleted")));
+        }
+
         // Recreate grid
         CreateGrid( -1, -1 );
         pgman = m_pPropGridManager;
