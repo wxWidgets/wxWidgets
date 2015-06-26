@@ -74,7 +74,7 @@ wxColour wxSystemSettings::GetColour(wxSystemColour index)
         wxColourScheme::MAX /* wxSYS_COLOUR_HOTLIGHT */,
         wxColourScheme::TITLEBAR_ACTIVE_TEXT /* wxSYS_COLOUR_GRADIENTACTIVECAPTION */,
         wxColourScheme::TITLEBAR_TEXT /* wxSYS_COLOUR_GRADIENTINACTIVECAPTION */,
-        wxColourScheme::MAX /* wxSYS_COLOUR_MENUHILIGHT */,
+        wxColourScheme::MAX /* wxSYS_COLOUR_MENUHIGHLIGHT */,
         wxColourScheme::MAX /* wxSYS_COLOUR_MENUBAR */,
         wxColourScheme::CONTROL_TEXT /* wxSYS_COLOUR_LISTBOXTEXT */,
         wxColourScheme::HIGHLIGHT_TEXT /* wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT */

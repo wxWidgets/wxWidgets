@@ -296,7 +296,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             return *wxWHITE;    // ?
 
         case wxSYS_COLOUR_ACTIVECAPTION:
-        case wxSYS_COLOUR_MENUHILIGHT:
+        case wxSYS_COLOUR_MENUHIGHLIGHT:
             if (!gs_objects.m_colMenuItemHighlight.IsOk())
             {
                 int red, green, blue;

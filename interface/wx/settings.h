@@ -93,7 +93,7 @@ enum wxSystemColour
         The colour used to highlight menu items when the menu appears as a flat menu.
         The highlighted menu item is outlined with @c wxSYS_COLOUR_HIGHLIGHT.
     */
-    wxSYS_COLOUR_MENUHILIGHT,
+    wxSYS_COLOUR_MENUHIGHLIGHT,
 
     /**
         The background colour for the menu bar when menus appear as flat menus.
@@ -127,11 +127,9 @@ enum wxSystemColour
         //!< Synonym for @c wxSYS_COLOUR_BTNFACE.
     wxSYS_COLOUR_3DSHADOW = wxSYS_COLOUR_BTNSHADOW,
         //!< Synonym for @c wxSYS_COLOUR_BTNSHADOW.
-    wxSYS_COLOUR_BTNHILIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
+    wxSYS_COLOUR_BTNHIGHLIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
         //!< Synonym for @c wxSYS_COLOUR_BTNHIGHLIGHT.
     wxSYS_COLOUR_3DHIGHLIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
-        //!< Synonym for @c wxSYS_COLOUR_BTNHIGHLIGHT.
-    wxSYS_COLOUR_3DHILIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
         //!< Synonym for @c wxSYS_COLOUR_BTNHIGHLIGHT.
 
     /**

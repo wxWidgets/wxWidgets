@@ -1272,7 +1272,7 @@ void wxMenuItem::DrawStdCheckMark(WXHDC hdc_, const RECT* rc, wxODStatus stat)
         if ( (stat & wxODDisabled) && !(stat & wxODSelected) )
         {
             DrawColorCheckMark(hdc, rc->left + 1, rc->top + 1,
-                               cx, cy, hdcMask, COLOR_3DHILIGHT);
+                               cx, cy, hdcMask, COLOR_3DHIGHLIGHT);
         }
 
         // then draw a check mark

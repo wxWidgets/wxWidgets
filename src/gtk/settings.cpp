@@ -252,7 +252,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         bg(MenuBarWidget(), GTK_STATE_FLAG_NORMAL, gdkRGBA);
         break;
     case wxSYS_COLOUR_ACTIVECAPTION:
-    case wxSYS_COLOUR_MENUHILIGHT:
+    case wxSYS_COLOUR_MENUHIGHLIGHT:
         bg(MenuItemWidget(), GTK_STATE_FLAG_PRELIGHT, gdkRGBA);
         break;
     case wxSYS_COLOUR_MENUTEXT:
@@ -361,9 +361,9 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             break;
 
         case wxSYS_COLOUR_BTNHIGHLIGHT:
-        //case wxSYS_COLOUR_BTNHILIGHT:
+        //case wxSYS_COLOUR_BTNHIGHLIGHT:
         //case wxSYS_COLOUR_3DHIGHLIGHT:
-        //case wxSYS_COLOUR_3DHILIGHT:
+        //case wxSYS_COLOUR_3DHIGHLIGHT:
             color = *wxWHITE;
             break;
 
@@ -410,7 +410,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             break;
 
         case wxSYS_COLOUR_ACTIVECAPTION:
-        case wxSYS_COLOUR_MENUHILIGHT:
+        case wxSYS_COLOUR_MENUHIGHLIGHT:
             color = wxColor(MenuItemStyle()->bg[GTK_STATE_SELECTED]);
             break;
 
