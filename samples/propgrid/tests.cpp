@@ -959,7 +959,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         }
     }
 
-    if ( !(pgman->GetWindowStyleFlag()&wxPG_HIDE_CATEGORIES) )
+    if ( !pgman->HasFlag(wxPG_HIDE_CATEGORIES) )
     {
         RT_START_TEST(Collapse_and_GetFirstCategory_and_GetNextCategory)
 
@@ -1000,7 +1000,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         }
     }
 
-    //if ( !(pgman->GetWindowStyleFlag()&wxPG_HIDE_CATEGORIES) )
+    //if ( !pgman->HasFlag(wxPG_HIDE_CATEGORIES) )
     {
         RT_START_TEST(Expand_and_GetFirstCategory_and_GetNextCategory)
 
@@ -1045,7 +1045,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pgman = m_pPropGridManager;
     }
 
-    //if ( !(pgman->GetWindowStyleFlag()&wxPG_HIDE_CATEGORIES) )
+    //if ( !pgman->HasFlag(wxPG_HIDE_CATEGORIES) )
     {
         RT_START_TEST(RandomCollapse)
 
