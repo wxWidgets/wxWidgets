@@ -24,6 +24,7 @@
 #include <mshtml.h>
 #include "wx/msw/registry.h"
 #include "wx/msw/missing.h"
+#include "wx/msw/ole/safearray.h"
 #include "wx/filesys.h"
 #include "wx/dynlib.h"
 #include "wx/scopeguard.h"
@@ -146,74 +147,24 @@ void wxWebViewIE::LoadURL(const wxString& url)
 namespace
 {
 
-// Simple RAII wrapper for accessing SAFEARRAY<VARIANT>. This class is not specific
-// to wxWebView at all and could be extended to work for any type and extracted
-// into a header later if it is ever needed elsewhere, but for now keep it here
-// as it is only used in MakeOneElementVariantSafeArray() which, itself, is
-// only used by DoSetPage() below.
-class wxSafeArrayVariantAccessor
-{
-public:
-    explicit wxSafeArrayVariantAccessor(SAFEARRAY* sa)
-        : m_sa(sa),
-          m_data(DoAccessData(sa))
-    {
-    }
-
-    VARIANT* GetData() const
-    {
-        return m_data;
-    }
-
-    ~wxSafeArrayVariantAccessor()
-    {
-        if ( m_data )
-            SafeArrayUnaccessData(m_sa);
-    }
-
-private:
-    static VARIANT* DoAccessData(SAFEARRAY* sa)
-    {
-        VARIANT *param;
-        HRESULT hr = SafeArrayAccessData(sa, (LPVOID*)&param);
-        if ( FAILED(hr) )
-        {
-            wxLogLastError(wxT("SafeArrayAccessData"));
-            return NULL;
-        }
-
-        return param;
-    }
-
-    SAFEARRAY* const m_sa;
-    VARIANT* const m_data;
-
-    wxDECLARE_NO_COPY_CLASS(wxSafeArrayVariantAccessor);
-};
-
 // Helper function: wrap the given string in a SAFEARRAY<VARIANT> of size 1.
 SAFEARRAY* MakeOneElementVariantSafeArray(const wxString& str)
 {
-    SAFEARRAY* const sa = SafeArrayCreateVector(VT_VARIANT, 0, 1);
-    if ( !sa )
+    wxSafeArray<VT_VARIANT> sa;
+    if ( !sa.Create(1) )
     {
         wxLogLastError(wxT("SafeArrayCreateVector"));
         return NULL;
     }
 
-    wxSafeArrayVariantAccessor access(sa);
-
-    VARIANT* const param = access.GetData();
-    if ( !param )
+    long ind = 0;
+    if ( !sa.SetElement(&ind, str) )
     {
-        SafeArrayDestroy(sa);
+        wxLogLastError(wxT("SafeArrayPtrOfIndex"));
         return NULL;
     }
 
-    param->vt = VT_BSTR;
-    param->bstrVal = SysAllocString(str.wc_str());
-
-    return sa;
+    return sa.Detach();
 }
 
 } // anonymous namespace
