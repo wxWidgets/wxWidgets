@@ -1175,6 +1175,35 @@ void FormMain::PopulateWithStandardItems ()
 
 // -----------------------------------------------------------------------
 
+// Helper procedure to rescale bitmaps
+static void RescaleBitmap(const wxBitmap& srcBmp, wxBitmap& dstBmp)
+{
+    // Source bitmap should rescaled to the size of target bitmap.
+    if ( srcBmp.GetSize() != dstBmp.GetSize() )
+    {
+#if wxUSE_IMAGE
+        // Use high-quality wxImage scaling functions
+        wxImage img = srcBmp.ConvertToImage();
+        img.Rescale(dstBmp.GetWidth(), dstBmp.GetHeight(), wxIMAGE_QUALITY_HIGH);
+        dstBmp = img;
+#else
+        // Old method of scaling the image
+        double scaleX = (double)dstBmp.GetWidth() / (double)srcBmp.GetWidth();
+        double scaleY = (double)dstBmp.GetHeight() / (double)srcBmp.GetHeight();
+        dstBmp.UseAlpha(srcBmp.HasAlpha());
+        {
+            wxMemoryDC dc(dstBmp);
+            dc.SetUserScale(scaleX, scaleY);
+            dc.DrawBitmap(srcBmp, 0, 0);
+        }
+#endif
+    }
+    else
+    {
+        dstBmp = srcBmp;
+    }
+}
+
 void FormMain::PopulateWithExamples ()
 {
     wxPropertyGridManager* pgman = m_pPropGridManager;
@@ -1550,34 +1579,18 @@ void FormMain::PopulateWithExamples ()
     //
     // Test adding variable height bitmaps in wxPGChoices
     wxPGChoices bc;
-
     wxBitmap smallBmp(16, 16);
-    {
-        wxMemoryDC dc(smallBmp);
-        dc.SetBackground(*wxYELLOW);
-        dc.Clear();
-        dc.SetPen(*wxBLUE);
-        dc.SetBrush(*wxBLUE);
-        dc.DrawCircle(8, 8, 4);
-    }
+    wxBitmap bmp = wxArtProvider::GetBitmap(wxART_CDROM);
+    RescaleBitmap(bmp, smallBmp);
+
     wxBitmap mediumBmp(32, 32);
-    {
-        wxMemoryDC dc(mediumBmp);
-        dc.SetBackground(*wxGREEN);
-        dc.Clear();
-        dc.SetPen(*wxBLUE);
-        dc.SetBrush(*wxBLUE);
-        dc.DrawRectangle(7, 7, 18, 18);
-    }
+    bmp = wxArtProvider::GetBitmap(wxART_FLOPPY);
+    RescaleBitmap(bmp, mediumBmp);
+
     wxBitmap largeBmp(64, 64);
-    {
-        wxMemoryDC dc(largeBmp);
-        dc.SetBackground(*wxCYAN);
-        dc.Clear();
-        dc.SetPen(*wxLIGHT_GREY);
-        dc.SetBrush(*wxLIGHT_GREY);
-        dc.DrawEllipse(12, 22, 40, 20);
-    }
+    bmp = wxArtProvider::GetBitmap(wxART_HARDDISK);
+    RescaleBitmap(bmp, largeBmp);
+
     bc.Add(wxT("Wee"), smallBmp);
     bc.Add(wxT("Not so wee"), mediumBmp);
     bc.Add(wxT("Friggin' huge"), largeBmp);
