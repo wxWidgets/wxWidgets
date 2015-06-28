@@ -271,11 +271,11 @@ public:
     void Expand() { m_isCollapsed = false; }
     void Collapse() { m_isCollapsed = true; }
 
-    void SetHilight( bool set = true ) { m_hasHilight = set; }
+    void SetHighlight( bool set = true ) { m_hasHighlight = set; }
 
     // status inquiries
     bool HasChildren() const { return !m_children.IsEmpty(); }
-    bool IsSelected()  const { return m_hasHilight != 0; }
+    bool IsSelected()  const { return m_hasHighlight != 0; }
     bool IsExpanded()  const { return !m_isCollapsed; }
     bool HasPlus()     const { return m_hasPlus || HasChildren(); }
     bool IsBold()      const { return m_isBold != 0; }
@@ -348,7 +348,7 @@ private:
 
     // use bitfields to save size
     unsigned int        m_isCollapsed :1;
-    unsigned int        m_hasHilight  :1; // same as focused
+    unsigned int        m_hasHighlight  :1; // same as focused
     unsigned int        m_hasPlus     :1; // used for item which doesn't have
                                           // children but has a [+] button
     unsigned int        m_isBold      :1; // render the label in bold font
@@ -600,7 +600,7 @@ wxGenericTreeItem::wxGenericTreeItem(wxGenericTreeItem *parent,
     m_x = m_y = 0;
 
     m_isCollapsed = true;
-    m_hasHilight = false;
+    m_hasHighlight = false;
     m_hasPlus = false;
     m_isBold = false;
 
@@ -940,7 +940,7 @@ void wxGenericTreeCtrl::Init()
     m_indent = 15;
     m_spacing = 18;
 
-    m_hilightBrush = new wxBrush
+    m_highlightBrush = new wxBrush
                          (
                             wxSystemSettings::GetColour
                             (
@@ -949,7 +949,7 @@ void wxGenericTreeCtrl::Init()
                             wxBRUSHSTYLE_SOLID
                          );
 
-    m_hilightUnfocusedBrush = new wxBrush
+    m_highlightUnfocusedBrush = new wxBrush
                               (
                                  wxSystemSettings::GetColour
                                  (
@@ -1048,8 +1048,8 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
 
 wxGenericTreeCtrl::~wxGenericTreeCtrl()
 {
-    delete m_hilightBrush;
-    delete m_hilightUnfocusedBrush;
+    delete m_highlightBrush;
+    delete m_highlightUnfocusedBrush;
 
     DeleteAllItems();
 
@@ -1704,7 +1704,7 @@ wxTreeItemId wxGenericTreeCtrl::AddRoot(const wxString& text,
     if (!HasFlag(wxTR_MULTIPLE))
     {
         m_current = m_key_current = m_anchor;
-        m_current->SetHilight( true );
+        m_current->SetHighlight( true );
     }
 
     InvalidateBestSize();
@@ -1765,7 +1765,7 @@ void wxGenericTreeCtrl::ChildrenClosing(wxGenericTreeItem* item)
 
     if ( item != m_current && IsDescendantOf(item, m_current) )
     {
-        m_current->SetHilight( false );
+        m_current->SetHighlight( false );
         m_current = NULL;
         m_select_me = item;
     }
@@ -1960,7 +1960,7 @@ void wxGenericTreeCtrl::Unselect()
 {
     if (m_current)
     {
-        m_current->SetHilight( false );
+        m_current->SetHighlight( false );
         RefreshLine( m_current );
 
         m_current = NULL;
@@ -1988,7 +1988,7 @@ void wxGenericTreeCtrl::UnselectAllChildren(wxGenericTreeItem *item)
 {
     if (item->IsSelected())
     {
-        item->SetHilight(false);
+        item->SetHighlight(false);
         RefreshLine(item);
     }
 
@@ -2040,7 +2040,7 @@ void wxGenericTreeCtrl::SelectChildren(const wxTreeItemId& parent)
     for ( size_t n = 0; n < count; ++n )
     {
         m_current = m_key_current = children[n];
-        m_current->SetHilight(true);
+        m_current->SetHighlight(true);
         RefreshSelected();
     }
 
@@ -2085,7 +2085,7 @@ wxGenericTreeCtrl::TagAllChildrenUntilLast(wxGenericTreeItem *crt_item,
                                            wxGenericTreeItem *last_item,
                                            bool select)
 {
-    crt_item->SetHilight(select);
+    crt_item->SetHighlight(select);
     RefreshLine(crt_item);
 
     if (crt_item==last_item)
@@ -2194,12 +2194,12 @@ void wxGenericTreeCtrl::DoSelectItem(const wxTreeItemId& itemId,
     {
         bool select = true; // the default
 
-        // Check if we need to toggle hilight (ctrl mode)
+        // Check if we need to toggle highlight (ctrl mode)
         if (!unselect_others)
             select=!item->IsSelected();
 
         m_current = m_key_current = item;
-        m_current->SetHilight(select);
+        m_current->SetHighlight(select);
         RefreshLine( m_current );
     }
 
@@ -2228,7 +2228,7 @@ void wxGenericTreeCtrl::SelectItem(const wxTreeItemId& itemId, bool select)
         if ( GetEventHandler()->ProcessEvent( event ) && !event.IsAllowed() )
             return;
 
-        item->SetHilight(false);
+        item->SetHighlight(false);
         RefreshLine(item);
 
         event.SetEventType(wxEVT_TREE_SEL_CHANGED);
@@ -2562,7 +2562,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     if ( item->IsSelected() )
     {
-        dc.SetBrush(*(m_hasFocus ? m_hilightBrush : m_hilightUnfocusedBrush));
+        dc.SetBrush(*(m_hasFocus ? m_highlightBrush : m_highlightUnfocusedBrush));
         drawItemBackground = true;
     }
     else
@@ -3687,7 +3687,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 
                 if ( m_oldSelection )
                 {
-                    m_oldSelection->SetHilight(false);
+                    m_oldSelection->SetHighlight(false);
                     RefreshLine(m_oldSelection);
                 }
             }
@@ -3725,7 +3725,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 
         if ( m_oldSelection )
         {
-            m_oldSelection->SetHilight(true);
+            m_oldSelection->SetHighlight(true);
             RefreshLine(m_oldSelection);
             m_oldSelection = NULL;
         }

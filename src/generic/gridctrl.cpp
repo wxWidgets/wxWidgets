@@ -618,7 +618,7 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
                 overflowCols = cols - 1;
         }
 
-        if (overflowCols > 0) // redraw overflow cells w/ proper hilight
+        if (overflowCols > 0) // redraw overflow cells w/ proper highlight
         {
             hAlign = wxALIGN_LEFT; // if oveflowed then it's left aligned
             wxRect clip = rect;

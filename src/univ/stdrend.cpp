@@ -303,7 +303,7 @@ void wxStdRenderer::DrawButtonLabel(wxDC& dc,
 
    WWWWWWWWWWWWWWWWWWWWWWB
    WHHHHHHHHHHHHHHHHHHHHGB
-   WH                   GB  W = white       (HILIGHT)
+   WH                   GB  W = white       (HIGHLIGHT)
    WH                   GB  H = light grey  (LIGHT)
    WH                   GB  G = dark grey   (SHADOI)
    WH                   GB  B = black       (DKSHADOI)

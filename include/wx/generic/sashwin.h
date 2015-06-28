@@ -175,7 +175,7 @@ private:
     wxColour    m_lightShadowColour;
     wxColour    m_mediumShadowColour;
     wxColour    m_darkShadowColour;
-    wxColour    m_hilightColour;
+    wxColour    m_highlightColour;
     wxColour    m_faceColour;
     bool        m_mouseCaptured;
     wxCursor*   m_currentCursor;

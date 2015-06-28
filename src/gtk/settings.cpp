@@ -361,9 +361,9 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             break;
 
         case wxSYS_COLOUR_BTNHIGHLIGHT:
-        //case wxSYS_COLOUR_BTNHILIGHT:
+        //case wxSYS_COLOUR_BTNHIGHLIGHT:
         //case wxSYS_COLOUR_3DHIGHLIGHT:
-        //case wxSYS_COLOUR_3DHILIGHT:
+        //case wxSYS_COLOUR_3DHIGHLIGHT:
             color = *wxWHITE;
             break;
 

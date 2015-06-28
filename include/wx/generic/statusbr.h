@@ -101,7 +101,7 @@ protected:
     int               m_borderY;
 
     wxPen             m_mediumShadowPen;
-    wxPen             m_hilightPen;
+    wxPen             m_highlightPen;
 
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
