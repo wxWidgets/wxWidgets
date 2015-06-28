@@ -1370,6 +1370,14 @@ void FormMain::PopulateWithExamples ()
     pg->SetPropertyHelpString(wxT("EnumProperty 4"),
         wxT("Should have one extra item when compared to EnumProperty 3"));
 
+    // Plus property value bitmap
+    pg->Append( new wxEnumProperty(wxS("EnumProperty With Bitmap"), wxS("EnumProperty 5"),
+        soc, 280) );
+    pg->SetPropertyHelpString(wxS("EnumProperty 5"),
+        wxS("Should have bitmap in front of the displayed value"));
+    wxBitmap bmpVal = wxArtProvider::GetBitmap(wxART_REMOVABLE);
+    pg->SetPropertyImage(wxS("EnumProperty 5"), bmpVal);
+
     // Password property example.
     pg->Append( new wxStringProperty(wxT("Password"),wxPG_LABEL, wxT("password")) );
     pg->SetPropertyAttribute( wxT("Password"), wxPG_STRING_PASSWORD, true );
