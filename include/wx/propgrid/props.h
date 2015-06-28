@@ -618,7 +618,7 @@ public:
     // helpers
     size_t GetItemCount() const { return m_choices.GetCount(); }
     const wxString& GetLabel( size_t ind ) const
-        { return m_choices.GetLabel(static_cast<int>(ind)); }
+        { return m_choices.GetLabel(static_cast<unsigned int>(ind)); }
 
 protected:
     // Used to detect if choices have been changed
