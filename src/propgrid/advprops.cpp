@@ -638,8 +638,6 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
         wxPGGlobalVars->m_fontFamilyChoices = new wxPGChoices(faceNames);
     }
 
-    wxString emptyString(wxEmptyString);
-
     wxFont font;
     font << m_value;
 
