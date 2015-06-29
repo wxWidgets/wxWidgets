@@ -119,7 +119,7 @@ wxString wxStringProperty::ValueToString( wxVariant& value,
     // If string is password and value is for visual purposes,
     // then return asterisks instead the actual string.
     if ( (m_flags & wxPG_PROP_PASSWORD) && !(argFlags & (wxPG_FULL_VALUE|wxPG_EDITABLE_VALUE)) )
-        return wxString(wxChar('*'), s.Length());
+        return wxString(wxS('*'), s.Length());
 
     return s;
 }
@@ -279,7 +279,7 @@ bool wxIntProperty::StringToValue( wxVariant& variant, const wxString& text, int
 
         for ( ; i != iMax; ++i )
         {
-            wxChar c = *i;
+            wxUniChar c = *i;
             if ( c != wxS('0') && c != wxS(' ') )
                 break;
             firstNonZeroPos++;
@@ -879,7 +879,7 @@ const wxString& wxPropertyGrid::DoubleToString(wxString& target,
             new_len--;
         }
 
-        wxChar cur_char = *i;
+        wxUniChar cur_char = *i;
         if ( cur_char != wxS('.') && cur_char != wxS(',') )
             new_len++;
 
