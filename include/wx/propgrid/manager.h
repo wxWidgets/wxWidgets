@@ -535,7 +535,11 @@ public:
     bool SelectProperty( wxPGPropArg id, bool focus = false )
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-        return p->GetParentState()->DoSelectProperty(p, focus);
+        unsigned int flags = wxPG_SEL_DONT_SEND_EVENT;
+        if ( focus )
+            flags |= wxPG_SEL_FOCUS;
+
+        return p->GetParentState()->DoSelectProperty(p, flags);
     }
 
 #if wxUSE_HEADERCTRL
