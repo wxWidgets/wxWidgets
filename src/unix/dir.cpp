@@ -100,6 +100,9 @@ wxDirData::wxDirData(const wxString& dirname)
 
     // do open the dir
     m_dir = opendir(m_dirname.fn_str());
+
+    wxLogSysError(12, _("Cannot enumerate files in directory '%s'"),
+                  m_dirname.c_str());
 }
 
 wxDirData::~wxDirData()
