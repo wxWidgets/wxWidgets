@@ -355,9 +355,7 @@ public:
 #if wxUSE_HOTKEY
     bool HandleHotKey(WXWPARAM wParam, WXLPARAM lParam);
 #endif
-#ifdef __WIN32__
     int HandleMenuChar(int chAccel, WXLPARAM lParam);
-#endif
     // Create and process a clipboard event specified by type.
     bool HandleClipboardEvent( WXUINT nMsg );
 

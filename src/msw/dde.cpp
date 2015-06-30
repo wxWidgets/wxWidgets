@@ -46,12 +46,6 @@
 // macros and constants
 // ----------------------------------------------------------------------------
 
-#ifdef __WIN32__
-    #define _EXPORT
-#else
-    #define _EXPORT _export
-#endif
-
 #if wxUSE_UNICODE
     #define DDE_CP      CP_WINUNICODE
 #else

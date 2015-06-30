@@ -48,7 +48,7 @@ public:
 
     wxRegionRefData(const wxRegionRefData& data) : wxGDIRefData()
     {
-#if defined(__WIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
         DWORD noBytes = ::GetRegionData(data.m_region, 0, NULL);
         RGNDATA *rgnData = (RGNDATA*) new char[noBytes];
         ::GetRegionData(data.m_region, noBytes, rgnData);

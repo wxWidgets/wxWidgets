@@ -244,7 +244,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 static const int gs_metricsMap[] =
 {
     -1,  // wxSystemMetric enums start at 1, so give a dummy value for pos 0.
-#if defined(__WIN32__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
     SM_CMOUSEBUTTONS,
 #else
     -1,
@@ -260,7 +260,7 @@ static const int gs_metricsMap[] =
 #endif
     SM_CXDOUBLECLK,
     SM_CYDOUBLECLK,
-#if defined(__WIN32__) && defined(SM_CXDRAG)
+#if defined(SM_CXDRAG)
     SM_CXDRAG,
     SM_CYDRAG,
     SM_CXEDGE,
@@ -288,7 +288,7 @@ static const int gs_metricsMap[] =
     SM_CXSCREEN,
     SM_CYSCREEN,
 
-#if defined(__WIN32__) && defined(SM_CXSIZEFRAME)
+#if defined(SM_CXSIZEFRAME)
     SM_CXSIZEFRAME,
     SM_CYSIZEFRAME,
     SM_CXSMICON,
@@ -307,7 +307,7 @@ static const int gs_metricsMap[] =
 #endif
     SM_CYCAPTION,
     SM_CYMENU,
-#if defined(__WIN32__) && defined(SM_NETWORK)
+#if defined(SM_NETWORK)
     SM_NETWORK,
 #else
     -1,
@@ -317,7 +317,7 @@ static const int gs_metricsMap[] =
 #else
     -1,
 #endif
-#if defined(__WIN32__) && defined(SM_SHOWSOUNDS)
+#if defined(SM_SHOWSOUNDS)
     SM_SHOWSOUNDS,
 #else
     -1,

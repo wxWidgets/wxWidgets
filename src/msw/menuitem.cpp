@@ -615,7 +615,6 @@ void wxMenuItem::Check(bool check)
                 return;
             }
 
-#ifdef __WIN32__
             // calling CheckMenuRadioItem() with such parameters hangs my system
             // (NT4 SP6) and I suspect this could happen to the others as well,
             // so don't do it!
@@ -630,7 +629,6 @@ void wxMenuItem::Check(bool check)
             {
                 wxLogLastError(wxT("CheckMenuRadioItem"));
             }
-#endif // __WIN32__
 
             // also uncheck all the other items in this radio group
             wxMenuItemList::compatibility_iterator node = items.Item(start);

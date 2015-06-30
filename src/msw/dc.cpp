@@ -1334,11 +1334,7 @@ void wxMSWDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
     }
     else
     {
-#ifdef __WIN32__
         ::DrawIconEx(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), GetHiconOf(icon), icon.GetWidth(), icon.GetHeight(), 0, NULL, DI_NORMAL);
-#else
-        ::DrawIcon(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), GetHiconOf(icon));
-#endif
     }
 
     CalcBoundingBox(x, y);
@@ -1390,7 +1386,6 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
     }
     if ( useMask )
     {
-#ifdef __WIN32__
         // use MaskBlt() with ROP which doesn't do anything to dst in the mask
         // points
         bool ok = false;
@@ -1435,7 +1430,6 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
         }
 
         if ( !ok )
-#endif // Win32
         {
             // Rather than reproduce wxMSWDCImpl::Blit, let's do it at the wxWin API
             // level
@@ -2326,7 +2320,6 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 
     if (useMask)
     {
-#ifdef __WIN32__
         // we want the part of the image corresponding to the mask to be
         // transparent, so use "DSTCOPY" ROP for the mask points (the usual
         // meaning of fg and bg is inverted which corresponds to wxWin notion
@@ -2356,7 +2349,6 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
         }
 
         if ( !success )
-#endif // Win32
         {
             // Blit bitmap with mask
             HDC dc_mask ;

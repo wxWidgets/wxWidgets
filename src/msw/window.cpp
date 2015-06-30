@@ -111,9 +111,7 @@
     #include <mmsystem.h>
 #endif
 
-#ifdef __WIN32__
-    #include <windowsx.h>
-#endif
+#include <windowsx.h>
 
 #if defined(__WXWINCE__)
     #include "wx/msw/wince/missing.h"
@@ -1635,7 +1633,7 @@ void wxWindowMSW::Update()
     // just calling UpdateWindow() is not enough, what we did in our WM_PAINT
     // handler needs to be really drawn right now
     (void)::GdiFlush();
-#endif // __WIN32__
+#endif // !WinCE
 }
 
 // ---------------------------------------------------------------------------

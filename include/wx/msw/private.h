@@ -99,20 +99,8 @@ WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
     #define APIENTRY FAR PASCAL
 #endif
 
-#ifdef __WIN32__
+#ifndef _EXPORT
     #define _EXPORT
-#else
-    #define _EXPORT _export
-#endif
-
-#ifndef __WIN32__
-    typedef signed short int SHORT;
-#endif
-
-#if !defined(__WIN32__)  // 3.x uses FARPROC for dialogs
-#ifndef STRICT
-    #define DLGPROC FARPROC
-#endif
 #endif
 
 /*
@@ -160,7 +148,7 @@ extern LONG APIENTRY _EXPORT
 // ---------------------------------------------------------------------------
 
 // a wrapper macro for ZeroMemory()
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if !defined(__WXMICROWIN__)
 #define wxZeroMemory(obj)   ::ZeroMemory(&obj, sizeof(obj))
 #else
 #define wxZeroMemory(obj)   memset((void*) & obj, 0, sizeof(obj))

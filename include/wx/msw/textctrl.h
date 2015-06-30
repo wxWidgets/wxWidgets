@@ -74,9 +74,7 @@ public:
     virtual void MarkDirty();
     virtual void DiscardEdits();
 
-#ifdef __WIN32__
     virtual bool EmulateKeyPress(const wxKeyEvent& event);
-#endif // __WIN32__
 
 #if wxUSE_RICHEDIT
     // apply text attribute to the range of text (only works with richedit

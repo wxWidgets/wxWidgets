@@ -201,7 +201,7 @@ wxFontEncoding wxGetFontEncFromCharSet(int cs)
             fontEncoding = wxFONTENCODING_MAX;
             break;
 
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if !defined(__WXMICROWIN__)
         case EASTEUROPE_CHARSET:
             fontEncoding = wxFONTENCODING_CP1250;
             break;

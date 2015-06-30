@@ -299,7 +299,6 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
     GetPosition(&x, &y);
     GetSize(&w, &h);
 
-#ifdef __WIN32__
     // Normally we just use the handle of provided image but in some cases we
     // create our own temporary bitmap, so the actual handle may end up being
     // different from the original one.
@@ -333,8 +332,6 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
 
     m_currentHandle = (WXHANDLE)handle;
     m_ownsCurrentHandle = handle != handleOrig;
-
-#endif // Win32
 
     if ( ImageIsOk() )
     {

@@ -1272,8 +1272,6 @@ void wxTextCtrl::Clear()
     }
 }
 
-#ifdef __WIN32__
-
 bool wxTextCtrl::EmulateKeyPress(const wxKeyEvent& event)
 {
     SetFocus();
@@ -1288,8 +1286,6 @@ bool wxTextCtrl::EmulateKeyPress(const wxKeyEvent& event)
     // in the control - this should work in 99% of cases
     return GetValue().length() != lenOld;
 }
-
-#endif // __WIN32__
 
 // ----------------------------------------------------------------------------
 // Accessors
