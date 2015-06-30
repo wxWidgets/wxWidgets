@@ -90,10 +90,8 @@ SpinForTextCtrl gs_spinForTextCtrl;
 // wnd proc for the buddy text ctrl
 // ----------------------------------------------------------------------------
 
-LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
-                                            UINT message,
-                                            WPARAM wParam,
-                                            LPARAM lParam)
+LRESULT APIENTRY
+wxBuddyTextWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     wxSpinCtrl * const spin = wxSpinCtrl::GetSpinForTextCtrl(hwnd);
 

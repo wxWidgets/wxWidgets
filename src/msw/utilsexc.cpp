@@ -333,8 +333,8 @@ static DWORD __stdcall wxExecuteThread(void *arg)
 
 // window procedure of a hidden window which is created just to receive
 // the notification message when a process exits
-LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
-                                            WPARAM wParam, LPARAM lParam)
+LRESULT APIENTRY
+wxExecuteWindowCbk(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     if ( message == wxWM_PROC_TERMINATED )
     {

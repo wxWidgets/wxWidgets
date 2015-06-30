@@ -75,10 +75,8 @@ wxEND_EVENT_TABLE()
 // function prototypes
 // ----------------------------------------------------------------------------
 
-LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
-                                            UINT message,
-                                            WPARAM wParam,
-                                            LPARAM lParam);
+LRESULT APIENTRY
+wxComboEditWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 // ---------------------------------------------------------------------------
 // global vars
@@ -125,10 +123,8 @@ bool ShouldForwardFromEditToCombo(UINT message)
 // wnd proc for subclassed edit control
 // ----------------------------------------------------------------------------
 
-LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
-                                            UINT message,
-                                            WPARAM wParam,
-                                            LPARAM lParam)
+LRESULT APIENTRY
+wxComboEditWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HWND hwndCombo = ::GetParent(hWnd);
     wxWindow *win = wxFindWinFromHandle((WXHWND)hwndCombo);

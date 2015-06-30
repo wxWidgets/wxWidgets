@@ -76,7 +76,7 @@ static inline bool IsZoomed(HWND WXUNUSED(hwnd)) { return false; }
 
 // NB: wxDlgProc must be defined here and not in dialog.cpp because the latter
 //     is not included by wxUniv build which does need wxDlgProc
-LONG APIENTRY _EXPORT
+LONG APIENTRY
 wxDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 // ----------------------------------------------------------------------------
@@ -1430,7 +1430,7 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
 }
 
 // the DialogProc for all wxWidgets dialogs
-LONG APIENTRY _EXPORT
+LONG APIENTRY
 wxDlgProc(HWND hDlg,
           UINT message,
           WPARAM WXUNUSED(wParam),

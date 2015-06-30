@@ -250,8 +250,8 @@ bool gs_insideCaptureChanged = false;
 // ---------------------------------------------------------------------------
 
 // the window proc for all our windows
-LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
-                                   WPARAM wParam, LPARAM lParam);
+LRESULT WXDLLEXPORT APIENTRY
+wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 
 #if wxDEBUG_LEVEL >= 2
@@ -2727,7 +2727,8 @@ wxWindowCreationHook::~wxWindowCreationHook()
 }
 
 // Main window proc
-LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT WXDLLEXPORT APIENTRY
+wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     // trace all messages: useful for the debugging but noticeably slows down
     // the code so don't do it by default

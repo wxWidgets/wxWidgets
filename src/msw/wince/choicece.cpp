@@ -56,10 +56,8 @@ wxArrayChoiceSpins wxChoice::ms_allChoiceSpins;
 // wnd proc for the buddy text ctrl
 // ----------------------------------------------------------------------------
 
-LRESULT APIENTRY _EXPORT wxBuddyChoiceWndProc(HWND hwnd,
-                                            UINT message,
-                                            WPARAM wParam,
-                                            LPARAM lParam)
+LRESULT APIENTRY
+wxBuddyChoiceWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     wxChoice *spin = (wxChoice *)wxGetWindowUserData(hwnd);
 

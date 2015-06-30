@@ -91,10 +91,8 @@ static WXFARPROC gs_wndprocNotebookSpinBtn = (WXFARPROC)NULL;
 // the pointer to standard tab control wnd proc
 static WXFARPROC gs_wndprocNotebook = (WXFARPROC)NULL;
 
-LRESULT APIENTRY _EXPORT wxNotebookWndProc(HWND hwnd,
-                                           UINT message,
-                                           WPARAM wParam,
-                                           LPARAM lParam);
+LRESULT APIENTRY
+wxNotebookWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 #endif // USE_NOTEBOOK_ANTIFLICKER
 
@@ -797,10 +795,8 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
 #if USE_NOTEBOOK_ANTIFLICKER
 
 // wnd proc for the spin button
-LRESULT APIENTRY _EXPORT wxNotebookSpinBtnWndProc(HWND hwnd,
-                                                  UINT message,
-                                                  WPARAM wParam,
-                                                  LPARAM lParam)
+LRESULT APIENTRY
+wxNotebookSpinBtnWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     if ( message == WM_ERASEBKGND )
         return 0;
@@ -809,10 +805,8 @@ LRESULT APIENTRY _EXPORT wxNotebookSpinBtnWndProc(HWND hwnd,
                             hwnd, message, wParam, lParam);
 }
 
-LRESULT APIENTRY _EXPORT wxNotebookWndProc(HWND hwnd,
-                                           UINT message,
-                                           WPARAM wParam,
-                                           LPARAM lParam)
+LRESULT APIENTRY
+wxNotebookWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     return ::CallWindowProc(CASTWNDPROC gs_wndprocNotebook,
                             hwnd, message, wParam, lParam);

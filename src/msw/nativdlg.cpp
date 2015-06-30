@@ -36,8 +36,8 @@
 // global functions
 // ---------------------------------------------------------------------------
 
-extern LONG APIENTRY _EXPORT wxDlgProc(HWND hWnd, UINT message,
-                                       WPARAM wParam, LPARAM lParam);
+extern LONG APIENTRY
+wxDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 // ===========================================================================
 // implementation

@@ -83,10 +83,8 @@ wxArrayTextSpins wxTextCtrl::ms_allTextSpins;
 // wnd proc for the buddy text ctrl
 // ----------------------------------------------------------------------------
 
-LRESULT APIENTRY _EXPORT wxBuddyTextCtrlWndProc(HWND hwnd,
-                                                UINT message,
-                                                WPARAM wParam,
-                                                LPARAM lParam)
+LRESULT APIENTRY
+wxBuddyTextCtrlWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     wxTextCtrl *spin = (wxTextCtrl *)wxGetWindowUserData(hwnd);
 
