@@ -217,7 +217,7 @@ enum wxPosixPermissions
     #elif wxCHECK_MINGW32_VERSION(3, 5) // mingw-runtime version (not gcc)
         #define wxHAS_HUGE_STDIO_FILES
 
-        wxDECL_FOR_STRICT_MINGW32(int, fseeko64, (FILE*, long long, int));
+        wxDECL_FOR_STRICT_MINGW32(int, fseeko64, (FILE*, long long, int))
         #define wxFseek fseeko64
 
         #ifdef wxNEEDS_STRICT_ANSI_WORKAROUNDS
