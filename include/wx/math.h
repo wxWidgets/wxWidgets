@@ -90,7 +90,7 @@
         #define wxFinite(x) isfinite(x)
     #endif
 #elif defined(wxNEEDS_STRICT_ANSI_WORKAROUNDS)
-    wxDECL_FOR_STRICT_MINGW32(int, _finite, (double));
+    wxDECL_FOR_STRICT_MINGW32(int, _finite, (double))
 
     #define wxFinite(x) _finite(x)
 #elif ( defined(__GNUG__)||defined(__GNUWIN32__)||defined(__DJGPP__)|| \
