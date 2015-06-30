@@ -1482,8 +1482,6 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
         state |= wxDATAVIEW_CELL_PRELIT;
     if (flags & GTK_CELL_RENDERER_INSENSITIVE)
         state |= wxDATAVIEW_CELL_INSENSITIVE;
-    if (flags & GTK_CELL_RENDERER_INSENSITIVE)
-        state |= wxDATAVIEW_CELL_INSENSITIVE;
     if (flags & GTK_CELL_RENDERER_FOCUSED)
         state |= wxDATAVIEW_CELL_FOCUSED;
     cell->WXCallRender( rect, dc, state );
