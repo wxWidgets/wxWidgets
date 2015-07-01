@@ -10,7 +10,7 @@
 //
 // Changes:
 // 	2008-10-25 - Initial release
-//	2008-10-26 - Changed how <name> is highlighted in  'function <name>' so that
+//	2008-10-26 - Changed how <name> is hilighted in  'function <name>' so that
 //				 local isFunction = "" and local functions = "" don't get falsely highlighted
 //	2008-12-14 - Added bounds checking for szFirstWord and szDo
 //			   - Replaced SetOfCharacters with CharacterSet
