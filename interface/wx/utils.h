@@ -1030,6 +1030,8 @@ enum
         even if its IO is not redirected.
 
         This flag is ignored under the other platforms.
+
+        @since 2.9.3
      */
     wxEXEC_HIDE_CONSOLE = 32,
 
