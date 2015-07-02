@@ -1185,7 +1185,7 @@ static void RescaleBitmap(const wxBitmap& srcBmp, wxBitmap& dstBmp)
         // Use high-quality wxImage scaling functions
         wxImage img = srcBmp.ConvertToImage();
         img.Rescale(dstBmp.GetWidth(), dstBmp.GetHeight(), wxIMAGE_QUALITY_HIGH);
-        dstBmp = img;
+        dstBmp = wxBitmap(img);
 #else
         // Old method of scaling the image
         double scaleX = (double)dstBmp.GetWidth() / (double)srcBmp.GetWidth();
