@@ -349,7 +349,15 @@ public:
     */
     virtual void SetTabCtrlHeight(int height);
 
-    //@{
+    /**
+        Ensure that all tabs have the same height, even if some of them don't
+        have bitmaps.
+
+        Passing ::wxDefaultSize as @a size undoes the effect of a previous call
+        to this function and instructs the control to use dynamic tab height.
+     */
+    virtual void SetUniformBitmapSize(const wxSize& size);
+
     /**
         Split performs a split operation programmatically. The argument @a page
         indicates the page that will be split off.  This page will also become the
@@ -358,9 +366,7 @@ public:
         The @a direction argument specifies where the pane should go, it should be one
         of the following: wxTOP, wxBOTTOM, wxLEFT, or wxRIGHT.
     */
-    virtual void SetUniformBitmapSize(const wxSize& size);
     virtual void Split(size_t page, int direction);
-    //@}
 
     /**
         Shows the window menu for the active tab control associated with this notebook,
