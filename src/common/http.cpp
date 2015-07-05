@@ -22,7 +22,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
-    #include "wx/app.h"
 #endif
 
 #include "wx/tokenzr.h"
