@@ -731,20 +731,18 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     wxString text;
 
     const wxPGChoices& choices = p->GetChoices();
-    const wxPGCommonValue* comVal = NULL;
-    int comVals = p->GetDisplayedCommonValueCount();
     int comValIndex = -1;
 
-    int choiceCount = 0;
-    if ( choices.IsOk() )
-        choiceCount = choices.GetCount();
+    const int choiceCount = choices.IsOk()? choices.GetCount(): 0;
 
-    if ( item >= choiceCount && comVals > 0 )
+    if ( item >= choiceCount && p->GetDisplayedCommonValueCount() > 0 )
     {
         comValIndex = item - choiceCount;
-        comVal = GetCommonValue(comValIndex);
         if ( !p->IsValueUnspecified() )
-            text = comVal->GetLabel();
+        {
+            const wxPGCommonValue* cv = GetCommonValue(comValIndex);
+            text = cv->GetLabel();
+        }
     }
     else
     {
