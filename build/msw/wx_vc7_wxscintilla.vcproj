@@ -287,6 +287,12 @@
 				RelativePath="..\..\src\stc\scintilla\src\Document.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\src\EditModel.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\src\EditView.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\src\Editor.cxx">
 			</File>
 			<File
@@ -338,6 +344,9 @@
 				RelativePath="..\..\src\stc\scintilla\lexers\LexBasic.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexBibTeX.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexBullant.cxx">
 			</File>
 			<File
@@ -377,6 +386,9 @@
 				RelativePath="..\..\src\stc\scintilla\lexers\LexDMAP.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexDMIS.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexECL.cxx">
 			</File>
 			<File
@@ -408,6 +420,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexHaskell.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexHex.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexInno.cxx">
@@ -512,6 +527,9 @@
 				RelativePath="..\..\src\stc\scintilla\lexers\LexRebol.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexRegistry.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexRuby.cxx">
 			</File>
 			<File
@@ -591,6 +609,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\LineMarker.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\src\MarginView.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\PerLine.cxx">

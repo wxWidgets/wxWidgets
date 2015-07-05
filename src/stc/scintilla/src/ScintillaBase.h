@@ -38,6 +38,8 @@ protected:
 		idcmdSelectAll=16
 	};
 
+	enum { maxLenInputIME = 200 };
+
 	bool displayPopupMenu;
 	Menu popup;
 	AutoComplete ac;
@@ -46,6 +48,7 @@ protected:
 
 	int listType;			///< 0 is an autocomplete list
 	int maxListWidth;		/// Maximum width of list, in average character widths
+	int multiAutoCMode; /// Mode for autocompleting when multiple selections are present
 
 #ifdef SCI_LEXER
 	LexState *DocumentLexState();
@@ -59,7 +62,7 @@ protected:
 	virtual void Initialise() = 0;
 	virtual void Finalise();
 
-	virtual void AddCharUTF(char *s, unsigned int len, bool treatAsDBCS=false);
+	virtual void AddCharUTF(const char *s, unsigned int len, bool treatAsDBCS=false);
 	void Command(int cmdId);
 	virtual void CancelModes();
 	virtual int KeyCommand(unsigned int iMessage);

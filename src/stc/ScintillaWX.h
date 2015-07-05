@@ -26,6 +26,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <stdexcept>
 
 // These are all Scintilla headers
 #include "Platform.h"
@@ -59,6 +60,9 @@
 #include "Document.h"
 #include "Selection.h"
 #include "PositionCache.h"
+#include "EditModel.h"
+#include "MarginView.h"
+#include "EditView.h"
 #include "Editor.h"
 #include "PropSetSimple.h"
 #include "ScintillaBase.h"
@@ -113,38 +117,38 @@ public:
     ~ScintillaWX();
 
     // base class virtuals
-    virtual void Initialise();
-    virtual void Finalise();
-    virtual void StartDrag();
-    virtual bool SetIdle(bool on);
-    virtual void SetTicking(bool on);
-    virtual void SetMouseCapture(bool on);
-    virtual bool HaveMouseCapture();
-    virtual void ScrollText(int linesToMove);
-    virtual void SetVerticalScrollPos();
-    virtual void SetHorizontalScrollPos();
-    virtual bool ModifyScrollBars(int nMax, int nPage);
-    virtual void Copy();
-    virtual void Paste();
-    virtual void CopyToClipboard(const SelectionText &selectedText);
+    virtual void Initialise() wxOVERRIDE;
+    virtual void Finalise() wxOVERRIDE;
+    virtual void StartDrag() wxOVERRIDE;
+    virtual bool SetIdle(bool on) wxOVERRIDE;
+    virtual void SetTicking(bool on) wxOVERRIDE;
+    virtual void SetMouseCapture(bool on) wxOVERRIDE;
+    virtual bool HaveMouseCapture() wxOVERRIDE;
+    virtual void ScrollText(int linesToMove) wxOVERRIDE;
+    virtual void SetVerticalScrollPos() wxOVERRIDE;
+    virtual void SetHorizontalScrollPos() wxOVERRIDE;
+    virtual bool ModifyScrollBars(int nMax, int nPage) wxOVERRIDE;
+    virtual void Copy() wxOVERRIDE;
+    virtual void Paste() wxOVERRIDE;
+    virtual void CopyToClipboard(const SelectionText &selectedText) wxOVERRIDE;
 
-    virtual void CreateCallTipWindow(PRectangle rc);
-    virtual void AddToPopUp(const char *label, int cmd = 0, bool enabled = true);
-    virtual void ClaimSelection();
+    virtual void CreateCallTipWindow(PRectangle rc) wxOVERRIDE;
+    virtual void AddToPopUp(const char *label, int cmd = 0, bool enabled = true) wxOVERRIDE;
+    virtual void ClaimSelection() wxOVERRIDE;
 
     virtual sptr_t DefWndProc(unsigned int iMessage,
                               uptr_t wParam,
-                              sptr_t lParam);
+                              sptr_t lParam) wxOVERRIDE;
     virtual sptr_t WndProc(unsigned int iMessage,
                            uptr_t wParam,
-                           sptr_t lParam);
+                           sptr_t lParam) wxOVERRIDE;
 
-    virtual void NotifyChange();
-    virtual void NotifyParent(SCNotification scn);
+    virtual void NotifyChange() wxOVERRIDE;
+    virtual void NotifyParent(SCNotification scn) wxOVERRIDE;
 
-    virtual void CancelModes();
+    virtual void CancelModes() wxOVERRIDE;
 
-    virtual void UpdateSystemCaret();
+    virtual void UpdateSystemCaret() wxOVERRIDE;
 
     // Event delegates
     void DoPaint(wxDC* dc, wxRect rect);
@@ -182,7 +186,7 @@ public:
     void FullPaint();
     void FullPaintDC(wxDC* dc);
     bool CanPaste();
-    bool GetHideSelection() { return hideSelection; }
+    bool GetHideSelection() { return view.hideSelection; }
     void DoScrollToLine(int line);
     void DoScrollToColumn(int column);
     void ClipChildren(wxDC& dc, PRectangle rect);

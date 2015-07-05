@@ -34,19 +34,15 @@ public:
 	enum validLevel { llInvalid, llCheckTextAndStyle, llPositions, llLines } validity;
 	int xHighlightGuide;
 	bool highlightColumn;
-	Selection *psel;
 	bool containsCaret;
 	int edgeColumn;
 	char *chars;
 	unsigned char *styles;
-	int styleBitsSet;
-	char *indicators;
 	XYPOSITION *positions;
 	char bracePreviousStyles[2];
 
 	// Hotspot support
-	int hsStart;
-	int hsEnd;
+	Range hotspot;
 
 	// Wrapped line support
 	int widthLine;
@@ -63,9 +59,9 @@ public:
 	Range SubLineRange(int line) const;
 	bool InLine(int offset, int line) const;
 	void SetLineStart(int line, int start);
-	void SetBracesHighlight(Range rangeLine, Position braces[],
+	void SetBracesHighlight(Range rangeLine, const Position braces[],
 		char bracesMatchStyle, int xHighlight, bool ignoreStyle);
-	void RestoreBracesHighlight(Range rangeLine, Position braces[], bool ignoreStyle);
+	void RestoreBracesHighlight(Range rangeLine, const Position braces[], bool ignoreStyle);
 	int FindBefore(XYPOSITION x, int lower, int upper) const;
 	int FindPositionFromX(XYPOSITION x, Range range, bool charPosition) const;
 	Point PointFromPosition(int posInLine, int lineHeight) const;
@@ -108,10 +104,10 @@ class PositionCacheEntry {
 public:
 	PositionCacheEntry();
 	~PositionCacheEntry();
-	void Set(unsigned int styleNumber_, const char *s_, unsigned int len_, XYPOSITION *positions_, unsigned int clock);
+	void Set(unsigned int styleNumber_, const char *s_, unsigned int len_, XYPOSITION *positions_, unsigned int clock_);
 	void Clear();
 	bool Retrieve(unsigned int styleNumber_, const char *s_, unsigned int len_, XYPOSITION *positions_) const;
-	static int Hash(unsigned int styleNumber_, const char *s, unsigned int len);
+	static unsigned int Hash(unsigned int styleNumber_, const char *s, unsigned int len);
 	bool NewerThan(const PositionCacheEntry &other) const;
 	void ResetClock();
 };
@@ -132,7 +128,7 @@ public:
 	SpecialRepresentations();
 	void SetRepresentation(const char *charBytes, const char *value);
 	void ClearRepresentation(const char *charBytes);
-	Representation *RepresentationFromCharacter(const char *charBytes, size_t len);
+	const Representation *RepresentationFromCharacter(const char *charBytes, size_t len) const;
 	bool Contains(const char *charBytes, size_t len) const;
 	void Clear();
 };
@@ -140,8 +136,8 @@ public:
 struct TextSegment {
 	int start;
 	int length;
-	Representation *representation;
-	TextSegment(int start_=0, int length_=0, Representation *representation_=0) :
+	const Representation *representation;
+	TextSegment(int start_=0, int length_=0, const Representation *representation_=0) :
 		start(start_), length(length_), representation(representation_) {
 	}
 	int end() const {
@@ -151,18 +147,17 @@ struct TextSegment {
 
 // Class to break a line of text into shorter runs at sensible places.
 class BreakFinder {
-	LineLayout *ll;
-	int lineStart;
-	int lineEnd;
+	const LineLayout *ll;
+	Range lineRange;
 	int posLineStart;
 	int nextBreak;
 	std::vector<int> selAndEdge;
 	unsigned int saeCurrentPos;
 	int saeNext;
 	int subBreak;
-	Document *pdoc;
+	const Document *pdoc;
 	EncodingFamily encodingFamily;
-	SpecialRepresentations *preprs;
+	const SpecialRepresentations *preprs;
 	void Insert(int val);
 	// Private so BreakFinder objects can not be copied
 	BreakFinder(const BreakFinder &);
@@ -172,8 +167,8 @@ public:
 	enum { lengthStartSubdivision = 300 };
 	// Try to make each subdivided run lengthEachSubdivision or shorter.
 	enum { lengthEachSubdivision = 100 };
-	BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posLineStart_,
-		int xStart, bool breakForSelection, Document *pdoc_, SpecialRepresentations *preprs_);
+	BreakFinder(const LineLayout *ll_, const Selection *psel, Range rangeLine_, int posLineStart_,
+		int xStart, bool breakForSelection, const Document *pdoc_, const SpecialRepresentations *preprs_, const ViewStyle *pvsDraw);
 	~BreakFinder();
 	TextSegment Next();
 	bool More() const;
@@ -191,7 +186,7 @@ public:
 	void Clear();
 	void SetSize(size_t size_);
 	size_t GetSize() const { return pces.size(); }
-	void MeasureWidths(Surface *surface, ViewStyle &vstyle, unsigned int styleNumber,
+	void MeasureWidths(Surface *surface, const ViewStyle &vstyle, unsigned int styleNumber,
 		const char *s, unsigned int len, XYPOSITION *positions, Document *pdoc);
 };
 

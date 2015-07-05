@@ -8,8 +8,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <ctype.h>
 #include <stdarg.h>
+#include <ctype.h>
 
 #include <algorithm>
 
@@ -69,6 +69,8 @@ static char **ArrayFromWordList(char *wordlist, int *len, bool onlyLineEnds = fa
 
 WordList::WordList(bool onlyLineEnds_) :
 	words(0), list(0), len(0), onlyLineEnds(onlyLineEnds_) {
+	// Prevent warnings by static analyzers about uninitialized starts.
+	starts[0] = -1;
 }
 
 WordList::~WordList() {

@@ -31,6 +31,8 @@
 /// The SC_CP_UTF8 value can be used to enter Unicode mode.
 /// This is the same value as CP_UTF8 in Windows
 #define wxSTC_CP_UTF8 65001
+#define wxSTC_IME_WINDOWED 0
+#define wxSTC_IME_INLINE 1
 #define wxSTC_MARKER_MAX 31
 #define wxSTC_MARK_CIRCLE 0
 #define wxSTC_MARK_ROUNDRECT 1
@@ -146,12 +148,20 @@
 #define wxSTC_INDIC_DOTBOX 12
 #define wxSTC_INDIC_SQUIGGLEPIXMAP 13
 #define wxSTC_INDIC_COMPOSITIONTHICK 14
-#define wxSTC_INDIC_MAX 31
+#define wxSTC_INDIC_COMPOSITIONTHIN 15
+#define wxSTC_INDIC_FULLBOX 16
+#define wxSTC_INDIC_TEXTFORE 17
+#define wxSTC_INDIC_IME 32
+#define wxSTC_INDIC_IME_MAX 35
+#define wxSTC_INDIC_MAX 35
 #define wxSTC_INDIC_CONTAINER 8
 #define wxSTC_INDIC0_MASK 0x20
 #define wxSTC_INDIC1_MASK 0x40
 #define wxSTC_INDIC2_MASK 0x80
 #define wxSTC_INDICS_MASK 0xE0
+#define wxSTC_INDICVALUEBIT 0x1000000
+#define wxSTC_INDICVALUEMASK 0xFFFFFF
+#define wxSTC_INDICFLAG_VALUEFORE 1
 #define wxSTC_IV_NONE 0
 #define wxSTC_IV_REAL 1
 #define wxSTC_IV_LOOKFORWARD 2
@@ -176,6 +186,7 @@
 #define wxSTC_FIND_WORDSTART 0x00100000
 #define wxSTC_FIND_REGEXP 0x00200000
 #define wxSTC_FIND_POSIX 0x00400000
+#define wxSTC_FIND_CXX11REGEX 0x00800000
 #define wxSTC_FOLDLEVELBASE 0x400
 #define wxSTC_FOLDLEVELWHITEFLAG 0x1000
 #define wxSTC_FOLDLEVELHEADERFLAG 0x2000
@@ -191,6 +202,7 @@
 #define wxSTC_FOLDFLAG_LINEAFTER_EXPANDED 0x0008
 #define wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED 0x0010
 #define wxSTC_FOLDFLAG_LEVELNUMBERS 0x0040
+#define wxSTC_FOLDFLAG_LINESTATE 0x0080
 #define wxSTC_TIME_FOREVER 10000000
 #define wxSTC_WRAP_NONE 0
 #define wxSTC_WRAP_WORD 1
@@ -210,6 +222,9 @@
 #define wxSTC_CACHE_CARET 1
 #define wxSTC_CACHE_PAGE 2
 #define wxSTC_CACHE_DOCUMENT 3
+#define wxSTC_PHASES_ONE 0
+#define wxSTC_PHASES_TWO 1
+#define wxSTC_PHASES_MULTIPLE 2
 
 /// Control font anti-aliasing.
 #define wxSTC_EFF_QUALITY_MASK 0xF
@@ -225,6 +240,8 @@
 #define wxSTC_STATUS_OK 0
 #define wxSTC_STATUS_FAILURE 1
 #define wxSTC_STATUS_BADALLOC 2
+#define wxSTC_STATUS_WARN_START 1000
+#define wxSTC_STATUS_WARN_REGEX 1001
 #define wxSTC_CURSORNORMAL -1
 #define wxSTC_CURSORARROW 2
 #define wxSTC_CURSORWAIT 4
@@ -265,6 +282,8 @@
 #define wxSTC_SEL_THIN 3
 #define wxSTC_CASEINSENSITIVEBEHAVIOUR_RESPECTCASE 0
 #define wxSTC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE 1
+#define wxSTC_MULTIAUTOC_ONCE 0
+#define wxSTC_MULTIAUTOC_EACH 1
 #define wxSTC_ORDER_PRESORTED 0
 #define wxSTC_ORDER_PERFORMSORT 1
 #define wxSTC_ORDER_CUSTOM 2
@@ -282,12 +301,15 @@
 #define wxSTC_ANNOTATION_HIDDEN 0
 #define wxSTC_ANNOTATION_STANDARD 1
 #define wxSTC_ANNOTATION_BOXED 2
+#define wxSTC_ANNOTATION_INDENTED 3
 #define wxSTC_UNDO_MAY_COALESCE 1
 #define wxSTC_SCVS_NONE 0
 #define wxSTC_SCVS_RECTANGULARSELECTION 1
 #define wxSTC_SCVS_USERACCESSIBLE 2
 #define wxSTC_TECHNOLOGY_DEFAULT 0
 #define wxSTC_TECHNOLOGY_DIRECTWRITE 1
+#define wxSTC_TECHNOLOGY_DIRECTWRITERETAIN 2
+#define wxSTC_TECHNOLOGY_DIRECTWRITEDC 3
 
 /// Line end types which may be used in addition to LF, CR, and CRLF
 /// SC_LINE_END_TYPE_UNICODE includes U+2028 Line Separator,
@@ -325,7 +347,9 @@
 #define wxSTC_MOD_CHANGEANNOTATION 0x20000
 #define wxSTC_MOD_CONTAINER 0x40000
 #define wxSTC_MOD_LEXERSTATE 0x80000
-#define wxSTC_MODEVENTMASKALL 0xFFFFF
+#define wxSTC_MOD_INSERTCHECK 0x100000
+#define wxSTC_MOD_CHANGETABSTOPS 0x200000
+#define wxSTC_MODEVENTMASKALL 0x3FFFFF
 #define wxSTC_UPDATE_CONTENT 0x1
 #define wxSTC_UPDATE_SELECTION 0x2
 #define wxSTC_UPDATE_V_SCROLL 0x4
@@ -474,6 +498,12 @@
 #define wxSTC_LEX_RUST 111
 #define wxSTC_LEX_DMAP 112
 #define wxSTC_LEX_AS 113
+#define wxSTC_LEX_DMIS 114
+#define wxSTC_LEX_REGISTRY 115
+#define wxSTC_LEX_BIBTEX 116
+#define wxSTC_LEX_SREC 117
+#define wxSTC_LEX_IHEX 118
+#define wxSTC_LEX_TEHEX 119
 
 /// When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 /// value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -524,6 +554,8 @@
 #define wxSTC_C_PREPROCESSORCOMMENT 23
 #define wxSTC_C_PREPROCESSORCOMMENTDOC 24
 #define wxSTC_C_USERLITERAL 25
+#define wxSTC_C_TASKMARKER 26
+#define wxSTC_C_ESCAPESEQUENCE 27
 
 /// Lexical states for SCLEX_D
 #define wxSTC_D_DEFAULT 0
@@ -1355,6 +1387,11 @@
 #define wxSTC_V_IDENTIFIER 11
 #define wxSTC_V_STRINGEOL 12
 #define wxSTC_V_USER 19
+#define wxSTC_V_COMMENT_WORD 20
+#define wxSTC_V_INPUT 21
+#define wxSTC_V_OUTPUT 22
+#define wxSTC_V_INOUT 23
+#define wxSTC_V_PORT_CONNECT 24
 
 /// Lexical states for SCLEX_KIX
 #define wxSTC_KIX_DEFAULT 0
@@ -1367,6 +1404,7 @@
 #define wxSTC_KIX_KEYWORD 7
 #define wxSTC_KIX_FUNCTIONS 8
 #define wxSTC_KIX_OPERATOR 9
+#define wxSTC_KIX_COMMENTSTREAM 10
 #define wxSTC_KIX_IDENTIFIER 31
 
 /// Lexical states for SCLEX_GUI4CLI
@@ -1477,6 +1515,7 @@
 #define wxSTC_VHDL_STDPACKAGE 12
 #define wxSTC_VHDL_STDTYPE 13
 #define wxSTC_VHDL_USERWORD 14
+#define wxSTC_VHDL_BLOCK_COMMENT 15
 
 /// Lexical states for SCLEX_CAML
 #define wxSTC_CAML_DEFAULT 0
@@ -1598,6 +1637,7 @@
 #define wxSTC_SQL_USER3 21
 #define wxSTC_SQL_USER4 22
 #define wxSTC_SQL_QUOTEDIDENTIFIER 23
+#define wxSTC_SQL_QOPERATOR 24
 
 /// Lexical states for SCLEX_SMALLTALK
 #define wxSTC_ST_DEFAULT 0
@@ -2243,6 +2283,9 @@
 #define wxSTC_RUST_LIFETIME 18
 #define wxSTC_RUST_MACRO 19
 #define wxSTC_RUST_LEXERROR 20
+#define wxSTC_RUST_BYTESTRING 21
+#define wxSTC_RUST_BYTESTRINGR 22
+#define wxSTC_RUST_BYTECHARACTER 23
 
 /// Lexical states for SCLEX_DMAP
 #define wxSTC_DMAP_DEFAULT 0
@@ -2256,6 +2299,63 @@
 #define wxSTC_DMAP_WORD 8
 #define wxSTC_DMAP_WORD2 9
 #define wxSTC_DMAP_WORD3 10
+
+/// Lexical states for SCLEX_DMIS
+#define wxSTC_DMIS_DEFAULT 0
+#define wxSTC_DMIS_COMMENT 1
+#define wxSTC_DMIS_STRING 2
+#define wxSTC_DMIS_NUMBER 3
+#define wxSTC_DMIS_KEYWORD 4
+#define wxSTC_DMIS_MAJORWORD 5
+#define wxSTC_DMIS_MINORWORD 6
+#define wxSTC_DMIS_UNSUPPORTED_MAJOR 7
+#define wxSTC_DMIS_UNSUPPORTED_MINOR 8
+#define wxSTC_DMIS_LABEL 9
+
+/// Lexical states for SCLEX_REGISTRY
+#define wxSTC_REG_DEFAULT 0
+#define wxSTC_REG_COMMENT 1
+#define wxSTC_REG_VALUENAME 2
+#define wxSTC_REG_STRING 3
+#define wxSTC_REG_HEXDIGIT 4
+#define wxSTC_REG_VALUETYPE 5
+#define wxSTC_REG_ADDEDKEY 6
+#define wxSTC_REG_DELETEDKEY 7
+#define wxSTC_REG_ESCAPED 8
+#define wxSTC_REG_KEYPATH_GUID 9
+#define wxSTC_REG_STRING_GUID 10
+#define wxSTC_REG_PARAMETER 11
+#define wxSTC_REG_OPERATOR 12
+
+/// Lexical state for SCLEX_BIBTEX
+#define wxSTC_BIBTEX_DEFAULT 0
+#define wxSTC_BIBTEX_ENTRY 1
+#define wxSTC_BIBTEX_UNKNOWN_ENTRY 2
+#define wxSTC_BIBTEX_KEY 3
+#define wxSTC_BIBTEX_PARAMETER 4
+#define wxSTC_BIBTEX_VALUE 5
+#define wxSTC_BIBTEX_COMMENT 6
+
+/// Lexical state for SCLEX_SREC
+#define wxSTC_HEX_DEFAULT 0
+#define wxSTC_HEX_RECSTART 1
+#define wxSTC_HEX_RECTYPE 2
+#define wxSTC_HEX_RECTYPE_UNKNOWN 3
+#define wxSTC_HEX_BYTECOUNT 4
+#define wxSTC_HEX_BYTECOUNT_WRONG 5
+#define wxSTC_HEX_NOADDRESS 6
+#define wxSTC_HEX_DATAADDRESS 7
+#define wxSTC_HEX_RECCOUNT 8
+#define wxSTC_HEX_STARTADDRESS 9
+#define wxSTC_HEX_ADDRESSFIELD_UNKNOWN 10
+#define wxSTC_HEX_EXTENDEDADDRESS 11
+#define wxSTC_HEX_DATA_ODD 12
+#define wxSTC_HEX_DATA_EVEN 13
+#define wxSTC_HEX_DATA_UNKNOWN 14
+#define wxSTC_HEX_DATA_EMPTY 15
+#define wxSTC_HEX_CHECKSUM 16
+#define wxSTC_HEX_CHECKSUM_WRONG 17
+#define wxSTC_HEX_GARBAGE 18
 
 //}}}
 
@@ -2709,6 +2809,11 @@ public:
     void InsertText(int pos, const wxString& text);
 
     /**
+        Change the text that is being inserted in response to SC_MOD_INSERTCHECK
+    */
+    void ChangeInsertion(int length, const wxString& text);
+
+    /**
         Delete all text in the document.
     */
     void ClearAll();
@@ -2836,6 +2941,7 @@ public:
     /**
         Retrieve the text of the line containing the caret.
         Returns the index of the caret on the line.
+        Result is NUL-terminated.
     */
     wxString GetCurLine(int* linePos=NULL);
 
@@ -2893,9 +2999,34 @@ public:
     int GetTabWidth() const;
 
     /**
+        Clear explicit tabstops on a line.
+    */
+    void ClearTabStops(int line);
+
+    /**
+        Add an explicit tab stop for a line.
+    */
+    void AddTabStop(int line, int x);
+
+    /**
+        Find the next explicit tab stop position on a line after a position.
+    */
+    int GetNextTabStop(int line, int x);
+
+    /**
         Set the code page used to interpret the bytes of the document as characters.
     */
     void SetCodePage(int codePage);
+
+    /**
+        Is the IME displayed in a winow or inline?
+    */
+    int GetIMEInteraction() const;
+
+    /**
+        Choose to display the the IME in a winow or inline.
+    */
+    void SetIMEInteraction(int imeInteraction);
 
     /**
         Set the symbol used for a particular marker number,
@@ -3288,6 +3419,36 @@ public:
         Retrieve whether indicator drawn under or over text.
     */
     bool IndicatorGetUnder(int indic) const;
+
+    /**
+        Set a hover indicator to plain, squiggle or TT.
+    */
+    void IndicatorSetHoverStyle(int indic, int style);
+
+    /**
+        Retrieve the hover style of an indicator.
+    */
+    int IndicatorGetHoverStyle(int indic) const;
+
+    /**
+        Set the foreground hover colour of an indicator.
+    */
+    void IndicatorSetHoverForeground(int indic, const wxColour& fore);
+
+    /**
+        Retrieve the foreground hover colour of an indicator.
+    */
+    wxColour IndicatorGetHoverForeground(int indic) const;
+
+    /**
+        Set the attributes of an indicator.
+    */
+    void IndicatorSetFlags(int indic, int flags);
+
+    /**
+        Retrieve the attributes of an indicator.
+    */
+    int IndicatorGetFlags(int indic) const;
 
     /**
         Set the foreground colour of all whitespace and whether to use this setting.
@@ -3870,6 +4031,16 @@ public:
     int GetTargetEnd() const;
 
     /**
+        Sets both the start and end of the target in one call.
+    */
+    void SetTargetRange(int start, int end);
+
+    /**
+        Retrieve the text in the target.
+    */
+    wxString GetTargetText() const;
+
+    /**
         Replace the target text with the argument text.
         Text is counted so it can contain NULs.
         Returns the length of the replacement text.
@@ -4237,7 +4408,7 @@ public:
     void AppendText(const wxString& text);
 
     /**
-        Is drawing done in two phases with backgrounds drawn before faoregrounds?
+        Is drawing done in two phases with backgrounds drawn before foregrounds?
     */
     bool GetTwoPhaseDraw() const;
 
@@ -4246,6 +4417,19 @@ public:
         and then the foreground. This avoids chopping off characters that overlap the next run.
     */
     void SetTwoPhaseDraw(bool twoPhase);
+
+    /**
+        How many phases is drawing done in?
+    */
+    int GetPhasesDraw() const;
+
+    /**
+        In one phase draw, text is drawn in a series of rectangular blocks with no overlap.
+        In two phase draw, text is drawn in a series of lines allowing runs to overlap horizontally.
+        In multiple phase draw, each element is drawn over the whole drawing area, allowing text
+        to overlap from one line to the next.
+    */
+    void SetPhasesDraw(int phases);
 
     /**
         Scroll so that a display line is at the top of the display.
@@ -4264,6 +4448,7 @@ public:
 
     /**
         Retrieve the value of a tag from a regular expression search.
+        Result is NUL-terminated.
     */
     wxString GetTag(int tagNumber) const;
 
@@ -5074,6 +5259,16 @@ public:
     int AutoCompGetCaseInsensitiveBehaviour() const;
 
     /**
+        Change the effect of autocompleting when there are multiple selections.
+    */
+    void AutoCompSetMulti(int multi);
+
+    /**
+        Retrieve the effect of autocompleting when there are multiple selections..
+    */
+    int AutoCompGetMulti() const;
+
+    /**
         Set the way autocompletion lists are ordered.
     */
     void AutoCompSetOrder(int order);
@@ -5227,16 +5422,6 @@ public:
         the range of a call to GetRangePointer.
     */
     int GetGapPosition() const;
-
-    /**
-        Always interpret keyboard input as Unicode
-    */
-    void SetKeysUnicode(bool keysUnicode);
-
-    /**
-        Are keys always interpreted as Unicode?
-    */
-    bool GetKeysUnicode() const;
 
     /**
         Set the alpha fill colour of the given indicator.
@@ -5734,6 +5919,7 @@ public:
 
     /**
         Set the way a character is drawn.
+        Result is NUL-terminated.
     */
     wxString GetRepresentation(const wxString& encodedCharacter) const;
 
@@ -5811,6 +5997,7 @@ public:
 
     /**
         Retrieve a '\n' separated list of properties understood by the current lexer.
+        Result is NUL-terminated.
     */
     wxString PropertyNames() const;
 
@@ -5821,11 +6008,13 @@ public:
 
     /**
         Describe a property.
+        Result is NUL-terminated.
     */
     wxString DescribeProperty(const wxString& name) const;
 
     /**
         Retrieve a '\n' separated list of descriptions of the keyword sets understood by the current lexer.
+        Result is NUL-terminated.
     */
     wxString DescribeKeyWordSets() const;
 
@@ -5878,6 +6067,7 @@ public:
 
     /**
         Get the set of base styles that can be extended with sub styles
+        Result is NUL-terminated.
     */
     wxString GetSubStyleBases() const;
 

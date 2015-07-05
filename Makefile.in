@@ -236,6 +236,7 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexBaan.o \
 	wxscintilla_LexBash.o \
 	wxscintilla_LexBasic.o \
+	wxscintilla_LexBibTeX.o \
 	wxscintilla_LexBullant.o \
 	wxscintilla_LexCaml.o \
 	wxscintilla_LexCLW.o \
@@ -249,6 +250,7 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexCSS.o \
 	wxscintilla_LexD.o \
 	wxscintilla_LexDMAP.o \
+	wxscintilla_LexDMIS.o \
 	wxscintilla_LexECL.o \
 	wxscintilla_LexEiffel.o \
 	wxscintilla_LexErlang.o \
@@ -259,6 +261,7 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexGAP.o \
 	wxscintilla_LexGui4Cli.o \
 	wxscintilla_LexHaskell.o \
+	wxscintilla_LexHex.o \
 	wxscintilla_LexHTML.o \
 	wxscintilla_LexInno.o \
 	wxscintilla_LexKix.o \
@@ -294,6 +297,7 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexPython.o \
 	wxscintilla_LexR.o \
 	wxscintilla_LexRebol.o \
+	wxscintilla_LexRegistry.o \
 	wxscintilla_LexRuby.o \
 	wxscintilla_LexRust.o \
 	wxscintilla_LexScriptol.o \
@@ -336,11 +340,14 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_ContractionState.o \
 	wxscintilla_Decoration.o \
 	wxscintilla_Document.o \
+	wxscintilla_EditModel.o \
+	wxscintilla_EditView.o \
 	wxscintilla_Editor.o \
 	wxscintilla_ExternalLexer.o \
 	wxscintilla_Indicator.o \
 	wxscintilla_KeyMap.o \
 	wxscintilla_LineMarker.o \
+	wxscintilla_MarginView.o \
 	wxscintilla_PerLine.o \
 	wxscintilla_PositionCache.o \
 	wxscintilla_RESearch.o \
@@ -17059,6 +17066,9 @@ wxscintilla_LexBash.o: $(srcdir)/src/stc/scintilla/lexers/LexBash.cxx
 wxscintilla_LexBasic.o: $(srcdir)/src/stc/scintilla/lexers/LexBasic.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexBasic.cxx
 
+wxscintilla_LexBibTeX.o: $(srcdir)/src/stc/scintilla/lexers/LexBibTeX.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexBibTeX.cxx
+
 wxscintilla_LexBullant.o: $(srcdir)/src/stc/scintilla/lexers/LexBullant.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexBullant.cxx
 
@@ -17098,6 +17108,9 @@ wxscintilla_LexD.o: $(srcdir)/src/stc/scintilla/lexers/LexD.cxx
 wxscintilla_LexDMAP.o: $(srcdir)/src/stc/scintilla/lexers/LexDMAP.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexDMAP.cxx
 
+wxscintilla_LexDMIS.o: $(srcdir)/src/stc/scintilla/lexers/LexDMIS.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexDMIS.cxx
+
 wxscintilla_LexECL.o: $(srcdir)/src/stc/scintilla/lexers/LexECL.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexECL.cxx
 
@@ -17127,6 +17140,9 @@ wxscintilla_LexGui4Cli.o: $(srcdir)/src/stc/scintilla/lexers/LexGui4Cli.cxx
 
 wxscintilla_LexHaskell.o: $(srcdir)/src/stc/scintilla/lexers/LexHaskell.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexHaskell.cxx
+
+wxscintilla_LexHex.o: $(srcdir)/src/stc/scintilla/lexers/LexHex.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexHex.cxx
 
 wxscintilla_LexHTML.o: $(srcdir)/src/stc/scintilla/lexers/LexHTML.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexHTML.cxx
@@ -17232,6 +17248,9 @@ wxscintilla_LexR.o: $(srcdir)/src/stc/scintilla/lexers/LexR.cxx
 
 wxscintilla_LexRebol.o: $(srcdir)/src/stc/scintilla/lexers/LexRebol.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexRebol.cxx
+
+wxscintilla_LexRegistry.o: $(srcdir)/src/stc/scintilla/lexers/LexRegistry.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexRegistry.cxx
 
 wxscintilla_LexRuby.o: $(srcdir)/src/stc/scintilla/lexers/LexRuby.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexRuby.cxx
@@ -17359,6 +17378,12 @@ wxscintilla_Decoration.o: $(srcdir)/src/stc/scintilla/src/Decoration.cxx
 wxscintilla_Document.o: $(srcdir)/src/stc/scintilla/src/Document.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/Document.cxx
 
+wxscintilla_EditModel.o: $(srcdir)/src/stc/scintilla/src/EditModel.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/EditModel.cxx
+
+wxscintilla_EditView.o: $(srcdir)/src/stc/scintilla/src/EditView.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/EditView.cxx
+
 wxscintilla_Editor.o: $(srcdir)/src/stc/scintilla/src/Editor.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/Editor.cxx
 
@@ -17373,6 +17398,9 @@ wxscintilla_KeyMap.o: $(srcdir)/src/stc/scintilla/src/KeyMap.cxx
 
 wxscintilla_LineMarker.o: $(srcdir)/src/stc/scintilla/src/LineMarker.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LineMarker.cxx
+
+wxscintilla_MarginView.o: $(srcdir)/src/stc/scintilla/src/MarginView.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/MarginView.cxx
 
 wxscintilla_PerLine.o: $(srcdir)/src/stc/scintilla/src/PerLine.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/PerLine.cxx

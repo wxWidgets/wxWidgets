@@ -282,6 +282,12 @@ void wxStyledTextCtrl::InsertText(int pos, const wxString& text)
     SendMsg(SCI_INSERTTEXT, pos, (sptr_t)(const char*)wx2stc(text));
 }
 
+// Change the text that is being inserted in response to SC_MOD_INSERTCHECK
+void wxStyledTextCtrl::ChangeInsertion(int length, const wxString& text)
+{
+    SendMsg(SCI_CHANGEINSERTION, length, (sptr_t)(const char*)wx2stc(text));
+}
+
 // Delete all text in the document.
 void wxStyledTextCtrl::ClearAll()
 {
@@ -443,6 +449,7 @@ void wxStyledTextCtrl::SetAnchor(int posAnchor)
 
 // Retrieve the text of the line containing the caret.
 // Returns the index of the caret on the line.
+// Result is NUL-terminated.
 wxString wxStyledTextCtrl::GetCurLine(int* linePos) {
         int len = LineLength(GetCurrentLine());
         if (!len) {
@@ -523,6 +530,24 @@ int wxStyledTextCtrl::GetTabWidth() const
     return SendMsg(SCI_GETTABWIDTH, 0, 0);
 }
 
+// Clear explicit tabstops on a line.
+void wxStyledTextCtrl::ClearTabStops(int line)
+{
+    SendMsg(SCI_CLEARTABSTOPS, line, 0);
+}
+
+// Add an explicit tab stop for a line.
+void wxStyledTextCtrl::AddTabStop(int line, int x)
+{
+    SendMsg(SCI_ADDTABSTOP, line, x);
+}
+
+// Find the next explicit tab stop position on a line after a position.
+int wxStyledTextCtrl::GetNextTabStop(int line, int x)
+{
+    return SendMsg(SCI_GETNEXTTABSTOP, line, x);
+}
+
 // Set the code page used to interpret the bytes of the document as characters.
 void wxStyledTextCtrl::SetCodePage(int codePage) {
 #if wxUSE_UNICODE
@@ -533,6 +558,18 @@ void wxStyledTextCtrl::SetCodePage(int codePage) {
                  wxT("wxSTC_CP_UTF8 may not be used when wxUSE_UNICODE is off."));
 #endif
     SendMsg(SCI_SETCODEPAGE, codePage);
+}
+
+// Is the IME displayed in a winow or inline?
+int wxStyledTextCtrl::GetIMEInteraction() const
+{
+    return SendMsg(SCI_GETIMEINTERACTION, 0, 0);
+}
+
+// Choose to display the the IME in a winow or inline.
+void wxStyledTextCtrl::SetIMEInteraction(int imeInteraction)
+{
+    SendMsg(SCI_SETIMEINTERACTION, imeInteraction, 0);
 }
 
 // Set the symbol used for a particular marker number,
@@ -1031,6 +1068,43 @@ void wxStyledTextCtrl::IndicatorSetUnder(int indic, bool under)
 bool wxStyledTextCtrl::IndicatorGetUnder(int indic) const
 {
     return SendMsg(SCI_INDICGETUNDER, indic, 0) != 0;
+}
+
+// Set a hover indicator to plain, squiggle or TT.
+void wxStyledTextCtrl::IndicatorSetHoverStyle(int indic, int style)
+{
+    SendMsg(SCI_INDICSETHOVERSTYLE, indic, style);
+}
+
+// Retrieve the hover style of an indicator.
+int wxStyledTextCtrl::IndicatorGetHoverStyle(int indic) const
+{
+    return SendMsg(SCI_INDICGETHOVERSTYLE, indic, 0);
+}
+
+// Set the foreground hover colour of an indicator.
+void wxStyledTextCtrl::IndicatorSetHoverForeground(int indic, const wxColour& fore)
+{
+    SendMsg(SCI_INDICSETHOVERFORE, indic, wxColourAsLong(fore));
+}
+
+// Retrieve the foreground hover colour of an indicator.
+wxColour wxStyledTextCtrl::IndicatorGetHoverForeground(int indic) const
+{
+    long c = SendMsg(SCI_INDICGETHOVERFORE, indic, 0);
+    return wxColourFromLong(c);
+}
+
+// Set the attributes of an indicator.
+void wxStyledTextCtrl::IndicatorSetFlags(int indic, int flags)
+{
+    SendMsg(SCI_INDICSETFLAGS, indic, flags);
+}
+
+// Retrieve the attributes of an indicator.
+int wxStyledTextCtrl::IndicatorGetFlags(int indic) const
+{
+    return SendMsg(SCI_INDICGETFLAGS, indic, 0);
 }
 
 // Set the foreground colour of all whitespace and whether to use this setting.
@@ -1797,6 +1871,24 @@ int wxStyledTextCtrl::GetTargetEnd() const
     return SendMsg(SCI_GETTARGETEND, 0, 0);
 }
 
+// Sets both the start and end of the target in one call.
+void wxStyledTextCtrl::SetTargetRange(int start, int end)
+{
+    SendMsg(SCI_SETTARGETRANGE, start, end);
+}
+
+// Retrieve the text in the target.
+wxString wxStyledTextCtrl::GetTargetText() const {
+         int startPos = GetTargetStart();
+         int endPos = GetTargetEnd();
+         wxMemoryBuffer mbuf(endPos-startPos+1);   // leave room for the null...
+         char* buf = (char*)mbuf.GetWriteBuf(endPos-startPos+1);
+         SendMsg(SCI_GETTARGETTEXT, 0, (sptr_t)buf);
+         mbuf.UngetWriteBuf(endPos-startPos);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);
+}
+
 // Replace the target text with the argument text.
 // Text is counted so it can contain NULs.
 // Returns the length of the replacement text.
@@ -2237,7 +2329,7 @@ void wxStyledTextCtrl::AppendText(const wxString& text) {
                     SendMsg(SCI_APPENDTEXT, wx2stclen(text, buf), (sptr_t)(const char*)buf);
 }
 
-// Is drawing done in two phases with backgrounds drawn before faoregrounds?
+// Is drawing done in two phases with backgrounds drawn before foregrounds?
 bool wxStyledTextCtrl::GetTwoPhaseDraw() const
 {
     return SendMsg(SCI_GETTWOPHASEDRAW, 0, 0) != 0;
@@ -2248,6 +2340,21 @@ bool wxStyledTextCtrl::GetTwoPhaseDraw() const
 void wxStyledTextCtrl::SetTwoPhaseDraw(bool twoPhase)
 {
     SendMsg(SCI_SETTWOPHASEDRAW, twoPhase, 0);
+}
+
+// How many phases is drawing done in?
+int wxStyledTextCtrl::GetPhasesDraw() const
+{
+    return SendMsg(SCI_GETPHASESDRAW, 0, 0);
+}
+
+// In one phase draw, text is drawn in a series of rectangular blocks with no overlap.
+// In two phase draw, text is drawn in a series of lines allowing runs to overlap horizontally.
+// In multiple phase draw, each element is drawn over the whole drawing area, allowing text
+// to overlap from one line to the next.
+void wxStyledTextCtrl::SetPhasesDraw(int phases)
+{
+    SendMsg(SCI_SETPHASESDRAW, phases, 0);
 }
 
 // Scroll so that a display line is at the top of the display.
@@ -2269,6 +2376,7 @@ int wxStyledTextCtrl::GetMultiPaste() const
 }
 
 // Retrieve the value of a tag from a regular expression search.
+// Result is NUL-terminated.
 wxString wxStyledTextCtrl::GetTag(int tagNumber) const {
          const int msg = SCI_GETTAG;
          int len = SendMsg(msg, tagNumber, (sptr_t)NULL);
@@ -3285,6 +3393,18 @@ int wxStyledTextCtrl::AutoCompGetCaseInsensitiveBehaviour() const
     return SendMsg(SCI_AUTOCGETCASEINSENSITIVEBEHAVIOUR, 0, 0);
 }
 
+// Change the effect of autocompleting when there are multiple selections.
+void wxStyledTextCtrl::AutoCompSetMulti(int multi)
+{
+    SendMsg(SCI_AUTOCSETMULTI, multi, 0);
+}
+
+// Retrieve the effect of autocompleting when there are multiple selections..
+int wxStyledTextCtrl::AutoCompGetMulti() const
+{
+    return SendMsg(SCI_AUTOCGETMULTI, 0, 0);
+}
+
 // Set the way autocompletion lists are ordered.
 void wxStyledTextCtrl::AutoCompSetOrder(int order)
 {
@@ -3466,18 +3586,6 @@ const char* wxStyledTextCtrl::GetRangePointer(int position, int rangeLength) con
 int wxStyledTextCtrl::GetGapPosition() const
 {
     return SendMsg(SCI_GETGAPPOSITION, 0, 0);
-}
-
-// Always interpret keyboard input as Unicode
-void wxStyledTextCtrl::SetKeysUnicode(bool keysUnicode)
-{
-    SendMsg(SCI_SETKEYSUNICODE, keysUnicode, 0);
-}
-
-// Are keys always interpreted as Unicode?
-bool wxStyledTextCtrl::GetKeysUnicode() const
-{
-    return SendMsg(SCI_GETKEYSUNICODE, 0, 0) != 0;
 }
 
 // Set the alpha fill colour of the given indicator.
@@ -4148,6 +4256,7 @@ void wxStyledTextCtrl::SetRepresentation(const wxString& encodedCharacter, const
 }
 
 // Set the way a character is drawn.
+// Result is NUL-terminated.
 wxString wxStyledTextCtrl::GetRepresentation(const wxString& encodedCharacter) const {
          int msg = SCI_GETREPRESENTATION;
          int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(encodedCharacter), (sptr_t)NULL);
@@ -4261,6 +4370,7 @@ void* wxStyledTextCtrl::PrivateLexerCall(int operation, void* pointer) {
 }
 
 // Retrieve a '\n' separated list of properties understood by the current lexer.
+// Result is NUL-terminated.
 wxString wxStyledTextCtrl::PropertyNames() const {
          const int msg = SCI_PROPERTYNAMES;
          int len = SendMsg(msg, 0, (sptr_t)NULL);
@@ -4281,6 +4391,7 @@ int wxStyledTextCtrl::PropertyType(const wxString& name)
 }
 
 // Describe a property.
+// Result is NUL-terminated.
 wxString wxStyledTextCtrl::DescribeProperty(const wxString& name) const {
          const int msg = SCI_DESCRIBEPROPERTY;
          int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(name), (sptr_t)NULL);
@@ -4295,6 +4406,7 @@ wxString wxStyledTextCtrl::DescribeProperty(const wxString& name) const {
 }
 
 // Retrieve a '\n' separated list of descriptions of the keyword sets understood by the current lexer.
+// Result is NUL-terminated.
 wxString wxStyledTextCtrl::DescribeKeyWordSets() const {
          const int msg = SCI_DESCRIBEKEYWORDSETS;
          int len = SendMsg(msg, 0, (sptr_t)NULL);
@@ -4365,6 +4477,7 @@ int wxStyledTextCtrl::DistanceToSecondaryStyles() const
 }
 
 // Get the set of base styles that can be extended with sub styles
+// Result is NUL-terminated.
 wxString wxStyledTextCtrl::GetSubStyleBases() const {
          int msg = SCI_GETSUBSTYLEBASES;
          int len = SendMsg(msg, 0, (sptr_t)NULL);
@@ -5317,7 +5430,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
 {
-    return wxVersionInfo("Scintilla", 3, 4, 1, "Scintilla 3.4.1");
+    return wxVersionInfo("Scintilla", 3, 5, 5, "Scintilla 3.5.5");
 }
 
 #endif // wxUSE_STC

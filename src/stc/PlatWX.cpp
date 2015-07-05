@@ -1643,10 +1643,11 @@ wxWX2MBbuf wx2stc(const wxString& str)
     size_t wclen         = str.length();
     size_t len           = UTF8Length(wcstr, wclen);
 
-    wxCharBuffer buffer(len+1);
-    UTF8FromUTF16(wcstr, wclen, buffer.data(), len);
-
-    // TODO check NULL termination!!
+    // The buffer object adds extra byte for the terminating NUL and we must
+    // pass the total length, including this NUL, to UTF8FromUTF16() to ensure
+    // that it NULL-terminates the string.
+    wxCharBuffer buffer(len);
+    UTF8FromUTF16(wcstr, wclen, buffer.data(), len + 1);
 
     return buffer;
 }
