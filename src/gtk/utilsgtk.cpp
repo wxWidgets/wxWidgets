@@ -20,6 +20,7 @@
 #include "wx/apptrait.h"
 #include "wx/process.h"
 #include "wx/sysopt.h"
+#include "wx/vector.h"
 
 #include "wx/gtk/private/timer.h"
 #include "wx/evtloop.h"
@@ -254,30 +255,68 @@ class StackDump : public wxStackWalker
 public:
     StackDump(GtkAssertDialog *dlg) { m_dlg=dlg; }
 
+    void ShowStackInDialog()
+    {
+        ProcessFrames(0);
+
+        for ( wxVector<Frame>::const_iterator it = m_frames.begin();
+              it != m_frames.end();
+              ++it )
+        {
+            gtk_assert_dialog_append_stack_frame(m_dlg,
+                                                 it->name.utf8_str(),
+                                                 it->file.utf8_str(),
+                                                 it->line);
+        }
+
+        m_frames.clear();
+    }
+
 protected:
     virtual void OnStackFrame(const wxStackFrame& frame) wxOVERRIDE
     {
-        wxString fncname = frame.GetName();
-
-        // append this stack frame's info in the dialog
-        if (!frame.GetFileName().empty() || !fncname.empty())
+        const wxString name = frame.GetName();
+        if ( name.StartsWith("wxOnAssert") )
         {
-            gtk_assert_dialog_append_stack_frame(m_dlg,
-                                                fncname.utf8_str(),
-                                                frame.GetFileName().utf8_str(),
-                                                frame.GetLine());
+            // Ignore all frames until the wxOnAssert() one, just as we do in
+            // wxAppTraitsBase::GetAssertStackTrace().
+            m_frames.clear();
+            return;
         }
+
+        // Also ignore frames which don't have neither the function name nor
+        // the file name, showing them in the dialog wouldn't provide any
+        // useful information.
+        if ( name.empty() && frame.GetFileName().empty() )
+            return;
+
+        m_frames.push_back(Frame(frame));
     }
 
 private:
     GtkAssertDialog *m_dlg;
+
+    struct Frame
+    {
+        explicit Frame(const wxStackFrame& f)
+            : name(f.GetName()),
+              file(f.GetFileName()),
+              line(f.GetLine())
+        {
+        }
+
+        wxString name;
+        wxString file;
+        int line;
+    };
+
+    wxVector<Frame> m_frames;
 };
 
 static void get_stackframe_callback(void* p)
 {
     StackDump* dump = static_cast<StackDump*>(p);
-    // skip over frames up to including wxOnAssert()
-    dump->ProcessFrames(6);
+    dump->ShowStackInDialog();
 }
 
 #endif // wxDEBUG_LEVEL && wxUSE_STACKWALKER
