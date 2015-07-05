@@ -903,9 +903,15 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 
             if ( choices.IsOk() && item >= 0 && comValIndex < 0 )
             {
+                // This aligns bitmap horizontally so that it is
+                // on the same position as bitmap drawn for static content
+                // (without editor).
+                wxRect r(rect);
+                r.x -= 1;
+
                 cell = &choices.Item(item);
                 renderer = wxPGGlobalVars->m_defaultRenderer;
-                int imageOffset = renderer->PreDrawCell(dc, rect, *cell,
+                int imageOffset = renderer->PreDrawCell(dc, r, *cell,
                                                         renderFlags );
                 if ( imageOffset )
                     imageOffset += wxCC_CUSTOM_IMAGE_MARGIN1 +
