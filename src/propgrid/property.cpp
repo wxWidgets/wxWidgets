@@ -333,7 +333,7 @@ wxSize wxPGDefaultRenderer::GetImageSize( const wxPGProperty* property,
             wxBitmap* bmp = property->GetValueImage();
 
             if ( bmp && bmp->IsOk() )
-                return wxSize(bmp->GetWidth(),bmp->GetHeight());
+                return bmp->GetSize();
         }
     }
     return wxSize(0,0);
@@ -2135,7 +2135,7 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
     {
         // Resize the image
         wxSize maxSz = GetGrid()->GetImageSize();
-        wxSize imSz(bmp.GetWidth(),bmp.GetHeight());
+        wxSize imSz = bmp.GetSize();
 
         if ( imSz.y != maxSz.y )
         {
