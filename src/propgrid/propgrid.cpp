@@ -2603,7 +2603,7 @@ void wxPropertyGrid::DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 )
         PrepareAfterItemsAdded();
 
     wxRect r = GetPropertyRect(p1, p2);
-    if ( r.width > 0 )
+    if ( !r.IsEmpty() )
     {
         // Convert rectangle from logical grid coordinates to physical ones
         int vx, vy;
