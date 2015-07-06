@@ -1199,7 +1199,7 @@ bool wxPropertyGridManager::RemovePage( int page )
 
 bool wxPropertyGridManager::ProcessEvent( wxEvent& event )
 {
-    int evtType = event.GetEventType();
+    const wxEventType evtType = event.GetEventType();
 
     // NB: For some reason, under wxPython, Connect in Init doesn't work properly,
     //     so we'll need to call OnPropertyGridSelect manually. Multiple calls
