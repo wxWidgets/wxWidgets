@@ -2552,8 +2552,6 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
 wxRect wxPropertyGrid::GetPropertyRect( const wxPGProperty* p1, const wxPGProperty* p2 ) const
 {
-    wxRect r;
-
     if ( m_width < 10 || m_height < 10 ||
          !m_pState->DoGetRoot()->GetChildCount() ||
          p1 == NULL )
