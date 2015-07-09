@@ -70,6 +70,8 @@
 #endif
 
 #include "wx/evtloop.h"
+#include "wx/nativewin.h"
+#include "wx/spinctrl.h"
 
 #include "resource.h"
 
@@ -121,6 +123,38 @@ public:
     wxDECLARE_EVENT_TABLE();
 };
 
+class MyPanel : public wxPanel
+{
+public:
+    MyPanel(wxWindow *parent, const wxPoint& pos)
+        : wxPanel(parent, wxID_ANY, pos)
+    {
+        wxSizer* const sizer = new wxFlexGridSizer(2, wxSize(5, 5));
+        sizer->Add(new wxStaticText(this, wxID_ANY, "Enter your &name:"),
+                   wxSizerFlags().Center().Right());
+        m_textName = new wxTextCtrl(this, wxID_ANY);
+        m_textName->SetHint("First Last");
+        sizer->Add(m_textName, wxSizerFlags().Expand().CenterVertical());
+
+        sizer->Add(new wxStaticText(this, wxID_ANY, "And your &age:"),
+                   wxSizerFlags().Center().Right());
+        m_spinAge = new wxSpinCtrl(this, wxID_ANY);
+        sizer->Add(m_spinAge, wxSizerFlags().Expand().CenterVertical());
+
+        wxStaticBoxSizer* const
+            box = new wxStaticBoxSizer(wxVERTICAL, this, "wxWidgets box");
+        box->Add(sizer, wxSizerFlags(1).Expand());
+        SetSizer(box);
+
+        // We won't be resized automatically, so set our size ourselves.
+        SetSize(GetBestSize());
+    }
+
+private:
+    wxTextCtrl* m_textName;
+    wxSpinCtrl* m_spinAge;
+};
+
 // ID for the menu quit command
 #define HELLO_QUIT 1
 #define HELLO_NEW  2
@@ -147,6 +181,18 @@ CMainWindow::CMainWindow()
     LoadAccelTable( wxT("MainAccelTable") );
     Create( NULL, wxT("Hello Foundation Application"),
         WS_OVERLAPPEDWINDOW, rectDefault, NULL, wxT("MainMenu") );
+
+    // Create a container representing the MFC window in wxWidgets window
+    // hierarchy.
+    m_containerWX = new wxNativeContainerWindow(m_hWnd);
+
+    // Now we can create children of this container as usual.
+    new MyPanel(m_containerWX, wxPoint(5, 5));
+
+    // An ugly but necessary workaround to prevent the container TLW from
+    // resizing the panel to fit its entire client area as it would do if it
+    // were its only child.
+    new wxWindow(m_containerWX, wxID_ANY, wxPoint(4, 4), wxSize(1, 1));
 }
 
 void CMainWindow::OnPaint()

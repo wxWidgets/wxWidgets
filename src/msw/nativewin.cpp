@@ -69,11 +69,24 @@ WXLRESULT wxNativeContainerWindow::MSWWindowProc(WXUINT nMsg,
                                                  WXWPARAM wParam,
                                                  WXLPARAM lParam)
 {
-    if ( nMsg == WM_DESTROY )
+    switch ( nMsg )
     {
-        OnNativeDestroyed();
+        case WM_CLOSE:
+            // wxWindow itself, unlike wxFrame, doesn't react to WM_CLOSE and
+            // just ignores it without even passing it to DefWindowProc(),
+            // which means that the original WM_CLOSE handler wouldn't be
+            // called if we didn't explicitly do it here.
+            return MSWDefWindowProc(nMsg, wParam, lParam);
 
-        return 0;
+        case WM_DESTROY:
+            // Send it to the original handler which may have some cleanup to
+            // do as well. Notice that we must do it before calling
+            // OnNativeDestroyed() as we can't use this object after doing it.
+            MSWDefWindowProc(nMsg, wParam, lParam);
+
+            OnNativeDestroyed();
+
+            return 0;
     }
 
     return wxTopLevelWindow::MSWWindowProc(nMsg, wParam, lParam);
