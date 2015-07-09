@@ -57,7 +57,8 @@ inline bool UTF8IsNEL(const unsigned char *us) {
 
 enum { SURROGATE_LEAD_FIRST = 0xD800 };
 enum { SURROGATE_LEAD_LAST = 0xDBFF };
-inline unsigned int UTF16CharLength(wchar_t uch) {
+inline unsigned int UTF16CharLength(wchar_t wch) {
+	const int uch = wch;
 	return ((uch >= SURROGATE_LEAD_FIRST) && (uch <= SURROGATE_LEAD_LAST)) ? 2 : 1;
 }
 
