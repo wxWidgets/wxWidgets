@@ -1595,12 +1595,36 @@ public:
     wxBitmap GetAsBitmap(const wxRect *subrect = NULL) const;
 
 
+    /**
+        Set the scale to use for translating wxDC coordinates to the physical
+        pixels.
+
+        The effect of calling this function is similar to that of calling
+        SetUserScale().
+     */
     void SetLogicalScale(double x, double y);
+
+    /**
+        Return the scale set by the last call to SetLogicalScale().
+     */
     void GetLogicalScale(double *x, double *y) const;
+
+    /**
+        Change the offset used for translating wxDC coordinates.
+
+        @see SetLogicalOrigin(), SetDeviceOrigin()
+     */
     void SetLogicalOrigin(wxCoord x, wxCoord y);
+
+    //@{
+    /**
+        Return the coordinates of the logical point (0, 0).
+
+        @see SetLogicalOrigin()
+     */
     void GetLogicalOrigin(wxCoord *x, wxCoord *y) const;
     wxPoint GetLogicalOrigin() const;
-    
+    //@}
 };
 
 
