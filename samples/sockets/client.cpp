@@ -645,7 +645,7 @@ void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
             Run();
         }
 
-        virtual void* Entry() wxOVERRIDE
+        virtual void* Entry()
         {
             DoDownload(m_url);
 
