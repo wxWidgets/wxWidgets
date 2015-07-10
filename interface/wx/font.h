@@ -28,7 +28,7 @@ enum wxFontFamily
     /// between @c wxFONTFAMILY_MODERN and @c wxFONTFAMILY_TELETYPE.
     wxFONTFAMILY_MODERN = wxMODERN,
 
-    /// A teletype (i.e. monospaced) font.
+    /// A teletype (i.e.\ monospaced) font.
     /// Monospace fonts have a fixed width like typewriters and often have strong angular
     /// or block serifs. Monospace font faces are often used code samples and have a simple,
     /// functional font style.
