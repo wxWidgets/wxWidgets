@@ -316,6 +316,13 @@ void wxHtmlParser::AddTag(const wxHtmlTag& tag)
         if (m_stopParsing)
             return;
     }
+#if wxDEBUG_LEVEL
+    else if (m_HandlersHash.empty())
+    {
+        wxFAIL_MSG( "No HTML tag handlers registered, is your program linked "
+                    "correctly (you might need to use FORCE_WXHTML_MODULES)?" );
+    }
+#endif // wxDEBUG_LEVEL
     if (!inner)
     {
         if (tag.HasEnding())
