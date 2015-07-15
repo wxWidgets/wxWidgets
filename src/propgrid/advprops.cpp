@@ -802,7 +802,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
 /*
 wxSize wxFontProperty::OnMeasureImage() const
 {
-    return wxSize(-1,-1);
+    return wxPG_DEFAULT_IMAGE_SIZE;
 }
 
 void wxFontProperty::OnCustomPaint(wxDC& dc,

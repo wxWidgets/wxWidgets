@@ -1293,7 +1293,7 @@ public:
         @remarks
         - Default behaviour is to return wxSize(0,0), which means no image.
         - Default image width or height is indicated with dimension -1.
-        - You can also return wxPG_DEFAULT_IMAGE_SIZE, i.e. wxSize(-1, -1).
+        - You can also return wxPG_DEFAULT_IMAGE_SIZE, i.e. wxDefaultSize.
     */
     virtual wxSize OnMeasureImage( int item = -1 ) const;
 

@@ -3777,7 +3777,8 @@ wxRect wxPropertyGrid::GetEditorWidgetRect( wxPGProperty* p, int column ) const
         {
             //m_iFlags |= wxPG_FL_CUR_USES_CUSTOM_IMAGE;
             int iw = p->OnMeasureImage().x;
-            if ( iw < 1 )
+            wxASSERT( iw == wxDefaultCoord || iw >= 0 );
+            if ( iw == wxDefaultCoord || iw == 0 )
                 iw = wxPG_CUSTOM_IMAGE_WIDTH;
             imageOffset = p->GetImageOffset(iw);
         }
@@ -3827,17 +3828,15 @@ wxSize wxPropertyGrid::GetImageSize( wxPGProperty* p, int item ) const
     else if ( item >= 0 && choiceCount == 0 )
         return wxSize(0, 0);
 
-    if ( cis.x < 0 )
+    wxASSERT( cis.x == wxDefaultCoord || cis.x >= 0 );
+    if ( cis.x == wxDefaultCoord )
     {
-        if ( cis.x <= -1 )
-            cis.x = wxPG_CUSTOM_IMAGE_WIDTH;
+        cis.x = wxPG_CUSTOM_IMAGE_WIDTH;
     }
-    if ( cis.y <= 0 )
+    wxASSERT( cis.y == wxDefaultCoord || cis.y >= 0 );
+    if ( cis.y == wxDefaultCoord || cis.y == 0 )
     {
-        if ( cis.y >= -1 )
-            cis.y = wxPG_STD_CUST_IMAGE_HEIGHT(m_lineHeight);
-        else
-            cis.y = -cis.y;
+        cis.y = wxPG_STD_CUST_IMAGE_HEIGHT(m_lineHeight);
     }
     return cis;
 }

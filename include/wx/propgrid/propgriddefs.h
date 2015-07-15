@@ -246,7 +246,7 @@ class wxPGValidationInfo;
 /** If property is supposed to have custom-painted image, then returning
     this in OnMeasureImage() will usually be enough.
 */
-#define wxPG_DEFAULT_IMAGE_SIZE             wxSize(-1, -1)
+#define wxPG_DEFAULT_IMAGE_SIZE  wxDefaultSize
 
 
 /** This callback function is used for sorting properties.
