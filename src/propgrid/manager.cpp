@@ -1313,7 +1313,7 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
 #if wxUSE_TOOLBAR
     if ( m_pToolbar )
     {
-        m_pToolbar->SetSize(0, 0, width, -1);
+        m_pToolbar->SetSize(0, 0, width, wxDefaultCoord);
         propgridY += m_pToolbar->GetSize().y;
 
         if ( HasExtraStyle(wxPG_EX_TOOLBAR_SEPARATOR) )
@@ -1325,7 +1325,7 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
 #if wxUSE_HEADERCTRL
     if ( m_showHeader )
     {
-        m_pHeaderCtrl->SetSize(0, propgridY, width, -1);
+        m_pHeaderCtrl->SetSize(0, propgridY, width, wxDefaultCoord);
         propgridY += m_pHeaderCtrl->GetSize().y;
     }
 #endif
@@ -1827,8 +1827,8 @@ void wxPropertyGridManager::SetDescription( const wxString& label, const wxStrin
         m_pTxtHelpCaption->SetLabel(label);
         m_pTxtHelpContent->SetLabel(content);
 
-        m_pTxtHelpCaption->SetSize(-1,osz1.y);
-        m_pTxtHelpContent->SetSize(-1,osz2.y);
+        m_pTxtHelpCaption->SetSize(wxDefaultCoord, osz1.y);
+        m_pTxtHelpContent->SetSize(wxDefaultCoord, osz2.y);
 
         UpdateDescriptionBox( m_splitterY, m_width, m_height );
     }

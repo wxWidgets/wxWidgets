@@ -1312,7 +1312,7 @@ bool wxPGProperty::SetValueFromInt( long number, int argFlags )
 wxSize wxPGProperty::OnMeasureImage( int WXUNUSED(item) ) const
 {
     if ( m_valueBitmap )
-        return wxSize(m_valueBitmap->GetWidth(),-1);
+        return wxSize(m_valueBitmap->GetWidth(), wxDefaultCoord);
 
     return wxSize(0,0);
 }

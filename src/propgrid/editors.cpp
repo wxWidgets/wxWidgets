@@ -2009,7 +2009,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
 
    wxPoint p(pos.x+sz.x,
              pos.y+wxPG_BUTTON_SIZEDEC-wxPG_NAT_BUTTON_BORDER_Y);
-   wxSize s(25, -1);
+   wxSize s(25, wxDefaultCoord);
 
    wxButton* but = new wxButton();
    but->Create(GetPanel(),wxID_ANY,wxS("..."),p,s,wxWANTS_CHARS);

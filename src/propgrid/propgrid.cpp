@@ -1707,7 +1707,7 @@ wxPoint wxPropertyGrid::GetGoodEditorDialogPosition( wxPGProperty* p,
     int x = splitterX;
     int y = p->GetY();
 
-    wxCHECK_MSG( y >= 0, wxPoint(-1,-1), wxS("invalid y?") );
+    wxCHECK_MSG( y >= 0, wxDefaultPosition, wxS("invalid y?") );
 
     ImprovedClientToScreen( &x, &y );
 
