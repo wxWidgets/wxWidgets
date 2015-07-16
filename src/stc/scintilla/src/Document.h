@@ -207,6 +207,9 @@ public:
 		bool operator==(const WatcherWithUserData &other) const {
 			return (watcher == other.watcher) && (userData == other.userData);
 		}
+		bool operator!=(const WatcherWithUserData &other) const {
+			return (watcher != other.watcher) || (userData != other.userData);
+		}
 	};
 
 private:
