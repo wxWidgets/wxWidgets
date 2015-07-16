@@ -591,27 +591,28 @@ enum wxPG_KEYBOARD_ACTIONS
 
 // -----------------------------------------------------------------------
 
-
 // wxPropertyGrid::DoSelectProperty flags (selFlags)
-
-// Focuses to created editor
-#define wxPG_SEL_FOCUS                  0x0001
-// Forces deletion and recreation of editor
-#define wxPG_SEL_FORCE                  0x0002
-// For example, doesn't cause EnsureVisible
-#define wxPG_SEL_NONVISIBLE             0x0004
-// Do not validate editor's value before selecting
-#define wxPG_SEL_NOVALIDATE             0x0008
-// Property being deselected is about to be deleted
-#define wxPG_SEL_DELETING               0x0010
-// Property's values was set to unspecified by the user
-#define wxPG_SEL_SETUNSPEC              0x0020
-// Property's event handler changed the value
-#define wxPG_SEL_DIALOGVAL              0x0040
-// Set to disable sending of wxEVT_PG_SELECTED event
-#define wxPG_SEL_DONT_SEND_EVENT        0x0080
-// Don't make any graphics updates
-#define wxPG_SEL_NO_REFRESH             0x0100
+enum wxPG_SELECT_PROPERTY_FLAGS
+{
+    // Focuses to created editor
+    wxPG_SEL_FOCUS                 = 0x0001,
+    // Forces deletion and recreation of editor
+    wxPG_SEL_FORCE                 = 0x0002,
+    // For example, doesn't cause EnsureVisible
+    wxPG_SEL_NONVISIBLE            = 0x0004,
+    // Do not validate editor's value before selecting
+    wxPG_SEL_NOVALIDATE            = 0x0008,
+    // Property being deselected is about to be deleted
+    wxPG_SEL_DELETING              = 0x0010,
+    // Property's values was set to unspecified by the user
+    wxPG_SEL_SETUNSPEC             = 0x0020,
+    // Property's event handler changed the value
+    wxPG_SEL_DIALOGVAL             = 0x0040,
+    // Set to disable sending of wxEVT_PG_SELECTED event
+    wxPG_SEL_DONT_SEND_EVENT       = 0x0080,
+    // Don't make any graphics updates
+    wxPG_SEL_NO_REFRESH            = 0x0100
+};
 
 // -----------------------------------------------------------------------
 
