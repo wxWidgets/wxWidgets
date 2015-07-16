@@ -469,7 +469,7 @@ public:
     /** Returns help string associated with a property. */
     wxString GetPropertyHelpString( wxPGPropArg id ) const
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(m_emptyString)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxEmptyString)
         return p->GetHelpString();
     }
 
