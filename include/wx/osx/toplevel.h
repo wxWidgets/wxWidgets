@@ -81,6 +81,9 @@ public:
 
     virtual void SetRepresentedFilename(const wxString& filename);
 
+    // do *not* call this to iconize the frame, this is a private function!
+    void OSXSetIconizeState(bool iconic);
+
 protected:
     // common part of all ctors
     void Init();
