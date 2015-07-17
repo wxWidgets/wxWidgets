@@ -640,6 +640,7 @@ wxOSX:
 - Fix handling of "Cancel" button in wxSearchCtrl (John Roberts).
 - Generate correct events for WXK_NUMPAD_ENTER (John Roberts).
 - Fix handling of WXK_NUMPAD_ENTER in wxTextCtrl (John Roberts).
+- Generate wxEVT_TEXT_ENTER for wxTE_PASSWORD controls too (mj_smoker).
 - Send wxIconizeEvent when a window is iconized/restore (Rob Krakora).
 - Use correct colour for disabled wxStaticText (sbrowne).
 - Fix printing all pages non-interactively (John Roberts).
