@@ -1015,7 +1015,7 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
 
             wxToolBarToolBase* tool;
 
-            if ( &bmp != &wxNullBitmap )
+            if ( bmp.IsOk() )
                 tool = m_pToolbar->AddTool(wxID_ANY, label, bmp,
                                            label, wxITEM_RADIO);
             else
