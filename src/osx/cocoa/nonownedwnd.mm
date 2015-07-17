@@ -322,6 +322,8 @@ static NSResponder* s_formerFirstResponder = NULL;
 - (void)windowDidResignKey:(NSNotification *)notification;
 - (void)windowDidBecomeKey:(NSNotification *)notification;
 - (void)windowDidMove:(NSNotification *)notification;
+- (void)windowDidMiniaturize:(NSNotification *)notification;
+- (void)windowDidDeminiaturize:(NSNotification *)notification;
 - (BOOL)windowShouldClose:(id)window;
 - (BOOL)windowShouldZoom:(NSWindow *)window toFrame:(NSRect)newFrame;
 #if wxHAS_FULL_SCREEN_API
@@ -411,6 +413,28 @@ extern int wxOSXGetIdFromSelector(SEL action );
 {
     wxUnusedVar(sender);
     [self triggerMenu:_cmd];
+}
+
+- (void)windowDidMiniaturize:(NSNotification *)notification
+{
+    NSWindow* window = (NSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
+    if ( windowimpl )
+    {
+        if ( wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer() )
+            wxpeer->HandleMiniaturize(0, [window isMiniaturized]);
+    }
+}
+
+- (void)windowDidDeminiaturize:(NSNotification *)notification
+{
+    NSWindow* window = (NSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
+    if ( windowimpl )
+    {
+        if ( wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer() )
+            wxpeer->HandleMiniaturize(0, [window isMiniaturized]);
+    }
 }
 
 - (BOOL)windowShouldClose:(id)nwindow

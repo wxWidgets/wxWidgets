@@ -82,6 +82,9 @@ public:
 
     virtual void SetRepresentedFilename(const wxString& filename);
 
+    // do *not* call this to iconize the frame, this is a private function!
+    void OSXSetIconizeState(bool iconic);
+
 protected:
     // common part of all ctors
     void Init();
@@ -92,6 +95,7 @@ protected:
     // should the frame be maximized when it will be shown? set by Maximize()
     // when it is called while the frame is hidden
     bool m_maximizeOnShow;
+
 private :
     wxDECLARE_EVENT_TABLE();
 };

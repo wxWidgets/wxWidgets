@@ -4263,8 +4263,6 @@ public:
 
     An event being sent when the frame is iconized (minimized) or restored.
 
-    Currently only wxMSW and wxGTK generate such events.
-
     @onlyfor{wxmsw,wxgtk}
 
     @beginEventTable{wxIconizeEvent}
