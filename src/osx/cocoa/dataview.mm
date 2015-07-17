@@ -1799,7 +1799,19 @@ outlineView:(NSOutlineView*)outlineView
     // set the state (enabled/disabled) of the item: this must be done first as
     // even if we return below because the cell is empty, it still needs to be
     // disabled if it's not supposed to be enabled
-    renderer->OSXApplyEnabled(model->IsEnabled(dvItem, colIdx));
+    bool enabled = true;
+    switch ( renderer->GetMode() )
+    {
+        case wxDATAVIEW_CELL_INERT:
+            enabled = false;
+            break;
+
+        case wxDATAVIEW_CELL_ACTIVATABLE:
+        case wxDATAVIEW_CELL_EDITABLE:
+            enabled = model->IsEnabled(dvItem, colIdx);
+            break;
+    }
+    renderer->OSXApplyEnabled(enabled);
 
     // check if we have anything to render
     wxVariant value;
