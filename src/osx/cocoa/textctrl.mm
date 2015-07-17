@@ -213,17 +213,29 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
         {
             if (commandSelector == @selector(insertNewline:))
             {
-                wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(wxpeer), wxTopLevelWindow);
-                if ( tlw && tlw->GetDefaultItem() )
+                if ( wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER )
                 {
-                    wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
-                    if ( def && def->IsEnabled() )
+                    wxCommandEvent event(wxEVT_TEXT_ENTER, wxpeer->GetId());
+                    event.SetEventObject( wxpeer );
+                    wxTextWidgetImpl* impl = (wxNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );
+                    wxTextEntry * const entry = impl->GetTextEntry();
+                    event.SetString( entry->GetValue() );
+                    handled = wxpeer->HandleWindowEvent( event );
+                }
+                else
+                {
+                    wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(wxpeer), wxTopLevelWindow);
+                    if ( tlw && tlw->GetDefaultItem() )
                     {
-                        wxCommandEvent event(wxEVT_BUTTON, def->GetId() );
-                        event.SetEventObject(def);
-                        def->Command(event);
-                        handled = YES;
-                    }
+                        wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
+                        if ( def && def->IsEnabled() )
+                        {
+                            wxCommandEvent event(wxEVT_BUTTON, def->GetId() );
+                            event.SetEventObject(def);
+                            def->Command(event);
+                            handled = YES;
+                        }
+                     }
                 }
             }
         }
