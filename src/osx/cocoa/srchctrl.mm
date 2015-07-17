@@ -155,7 +155,7 @@ public :
         if ( wxpeer )
         {
             NSString *searchString = [m_searchField stringValue];
-            if ( searchString == nil )
+            if ( searchString == nil || !searchString.length )
             {
                 wxpeer->HandleSearchFieldCancelHit();
             }
