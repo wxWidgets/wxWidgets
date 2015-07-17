@@ -60,10 +60,8 @@
 
     [super setEnabled: flag]; 
     
-    if (![self drawsBackground]) { 
-        // Static text is drawn incorrectly when disabled. 
-        // For an explanation, see 
-        // http://www.cocoabuilder.com/archive/message/cocoa/2006/7/21/168028 
+    if (![self drawsBackground])
+    { 
         if (flag)
         { 
             if (m_textColor)
@@ -76,7 +74,7 @@
                 [m_textColor release];
                 m_textColor = [[self textColor] retain];
             }
-            [self setTextColor: [NSColor secondarySelectedControlColor]]; 
+            [self setTextColor: [NSColor disabledControlTextColor]]; 
         } 
     } 
 } 
