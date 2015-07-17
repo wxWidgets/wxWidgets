@@ -637,6 +637,7 @@ wxOSX:
 - Fix using wxHTTP and wxFTP from worker thread.
 - Fix wxFileDialog::GetFilterIndex() for file open dialogs (phsilva).
 - Fix wxSearchCtrl appearance under 10.10 (John Roberts).
+- Fix handling of "Cancel" button in wxSearchCtrl (John Roberts).
 - Generate correct events for WXK_NUMPAD_ENTER (John Roberts).
 - Fix handling of WXK_NUMPAD_ENTER in wxTextCtrl (John Roberts).
 - Send wxIconizeEvent when a window is iconized/restore (Rob Krakora).
