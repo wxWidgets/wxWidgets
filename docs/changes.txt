@@ -641,6 +641,7 @@ wxOSX:
 - Generate correct events for WXK_NUMPAD_ENTER (John Roberts).
 - Fix handling of WXK_NUMPAD_ENTER in wxTextCtrl (John Roberts).
 - Send wxIconizeEvent when a window is iconized/restore (Rob Krakora).
+- Use correct colour for disabled wxStaticText (sbrowne).
 - Fix printing all pages non-interactively (John Roberts).
 - Fix custom paper support (tijsv).
 - Return false from wxSound::Create()/IsOk() if the file doesn't exist.
