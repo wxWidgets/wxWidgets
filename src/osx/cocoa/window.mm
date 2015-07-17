@@ -232,6 +232,10 @@ long wxOSXTranslateCocoaKey( NSEvent* event, int eventType )
             {
                 switch ( [s characterAtIndex:0] )
                 {
+                    // numpad enter key End-of-text character ETX U+0003
+                    case 3:
+                        retval = WXK_NUMPAD_ENTER;
+                        break;
                     // backspace key
                     case 0x7F :
                     case 8 :
@@ -344,9 +348,6 @@ long wxOSXTranslateCocoaKey( NSEvent* event, int eventType )
                 break;
             case 69: // +
                 retval = WXK_NUMPAD_ADD;
-                break;
-            case 76: // Enter
-                retval = WXK_NUMPAD_ENTER;
                 break;
             case 65: // .
                 retval = WXK_NUMPAD_DECIMAL;
