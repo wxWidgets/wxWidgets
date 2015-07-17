@@ -266,7 +266,7 @@ public:
         switching.
     */
     wxPropertyGridPage* AddPage( const wxString& label = wxEmptyString,
-                                 const wxBitmap& bmp = wxPG_NULL_BITMAP,
+                                 const wxBitmap& bmp = wxNullBitmap,
                                  wxPropertyGridPage* pageObj = NULL )
     {
         return InsertPage(-1, label, bmp, pageObj);

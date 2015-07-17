@@ -235,7 +235,9 @@ class wxPGValidationInfo;
 
 // This is the value placed in wxPGProperty::sm_wxPG_LABEL
 #define wxPG_LABEL_STRING       wxS("@!")
+#if WXWIN_COMPATIBILITY_3_0
 #define wxPG_NULL_BITMAP        wxNullBitmap
+#endif // WXWIN_COMPATIBILITY_3_0
 #define wxPG_COLOUR_BLACK       (*wxBLACK)
 
 /** Convert Red, Green and Blue to a single 32-bit value.
