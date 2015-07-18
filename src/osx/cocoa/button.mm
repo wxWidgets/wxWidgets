@@ -159,17 +159,17 @@ void wxButtonCocoaImpl::GetLayoutInset(int &left , int &top , int &right, int &b
             case NSRegularControlSize:
                 left = right = 6;
                 top = 4;
-                bottom = 8;
+                bottom = 7;
                 break;
             case NSSmallControlSize:
                 left = right = 5;
                 top = 4;
-                bottom = 7;
+                bottom = 6;
                 break;
             case NSMiniControlSize:
                 left = right = 1;
                 top = 0;
-                bottom = 2;
+                bottom = 1;
                 break;
         }
     }
