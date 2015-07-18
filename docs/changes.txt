@@ -643,6 +643,7 @@ wxOSX:
 - Generate wxEVT_TEXT_ENTER for wxTE_PASSWORD controls too (mj_smoker).
 - Send wxIconizeEvent when a window is iconized/restore (Rob Krakora).
 - Use correct colour for disabled wxStaticText (sbrowne).
+- Fix bottom margins sizes for several controls (sbrowne).
 - Fix initial position of controls with layout insets (Tim Kosse).
 - Don't allow pasting rich text in non-wxTE_RICH text controls (Tim Kosse).
 - Fix printing all pages non-interactively (John Roberts).
