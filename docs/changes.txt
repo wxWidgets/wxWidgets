@@ -644,6 +644,7 @@ wxOSX:
 - Send wxIconizeEvent when a window is iconized/restore (Rob Krakora).
 - Use correct colour for disabled wxStaticText (sbrowne).
 - Fix initial position of controls with layout insets (Tim Kosse).
+- Don't allow pasting rich text in non-wxTE_RICH text controls (Tim Kosse).
 - Fix printing all pages non-interactively (John Roberts).
 - Fix custom paper support (tijsv).
 - Return false from wxSound::Create()/IsOk() if the file doesn't exist.

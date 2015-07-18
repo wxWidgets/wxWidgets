@@ -580,6 +580,11 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w )
     [tv setHorizontallyResizable:NO];
     [tv setAutoresizingMask:NSViewWidthSizable];
 
+    if ( !wxPeer->HasFlag(wxTE_RICH | wxTE_RICH2) )
+    {
+        [tv setRichText:NO];
+    }
+
     [m_scrollView setDocumentView: tv];
 
     [tv setDelegate: tv];
