@@ -128,6 +128,26 @@ public:
         }
     }
 
+    virtual void Enable(bool enable = true)
+    {
+        wxNSDatePicker* const nsdatePicker = View();
+
+        [nsdatePicker setEnabled: enable];
+
+        if ( enable )
+        {
+            wxWindow* const wxpeer = GetWXPeer();
+            if ( wxpeer )
+                [nsdatePicker setTextColor: wxpeer->GetForegroundColour().OSXGetNSColor()];
+            else
+                [nsdatePicker setTextColor: [NSColor controlTextColor]];
+        }
+        else
+        {
+            [nsdatePicker setTextColor: [NSColor disabledControlTextColor]];
+        }
+    }
+
 private:
     wxNSDatePicker* View() const
     {
@@ -169,6 +189,9 @@ wxDateTimeWidgetImpl::CreateDateTimePicker(wxDateTimePickerCtrl* wxpeer,
     [v setDatePickerElements: elements];
 
     [v setDatePickerStyle: NSTextFieldAndStepperDatePickerStyle];
+
+    // Avoid a disabled looking transparent background for the text cells.
+    [v setDrawsBackground: YES];
 
     if ( dt.IsValid() )
     {
