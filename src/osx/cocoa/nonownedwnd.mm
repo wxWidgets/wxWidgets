@@ -422,7 +422,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
     if ( windowimpl )
     {
         if ( wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer() )
-            wxpeer->HandleMiniaturize(0, [window isMiniaturized]);
+            wxpeer->OSXHandleMiniaturize(0, [window isMiniaturized]);
     }
 }
 
@@ -433,7 +433,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
     if ( windowimpl )
     {
         if ( wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer() )
-            wxpeer->HandleMiniaturize(0, [window isMiniaturized]);
+            wxpeer->OSXHandleMiniaturize(0, [window isMiniaturized]);
     }
 }
 
