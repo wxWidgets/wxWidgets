@@ -2690,6 +2690,7 @@ ADVANCED_OSX_COCOA_SRC =
 
 ADVANCED_OSX_COCOA_HDR =
     wx/generic/animate.h
+    wx/osx/activityindicator.h
     wx/osx/dataview.h
     wx/osx/datectrl.h
     wx/osx/datetimectrl.h
@@ -2700,7 +2701,6 @@ ADVANCED_OSX_COCOA_HDR =
     wx/osx/taskbarosx.h
     wx/osx/timectrl.h
     wx/osx/core/joystick.h
-    wx/osx/cocoa/activityindicator.h
     wx/osx/cocoa/dataview.h
 
 ADVANCED_OSX_IPHONE_SRC =

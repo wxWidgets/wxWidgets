@@ -3802,6 +3802,7 @@ COND_TOOLKIT_OSX_CARBON_ADVANCED_PLATFORM_HDR =  \
 @COND_TOOLKIT_OSX_CARBON@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_OSX_CARBON_ADVANCED_PLATFORM_HDR)
 COND_TOOLKIT_OSX_COCOA_ADVANCED_PLATFORM_HDR =  \
 	wx/generic/animate.h \
+	wx/osx/activityindicator.h \
 	wx/osx/dataview.h \
 	wx/osx/datectrl.h \
 	wx/osx/datetimectrl.h \
@@ -3812,8 +3813,7 @@ COND_TOOLKIT_OSX_COCOA_ADVANCED_PLATFORM_HDR =  \
 	wx/osx/taskbarosx.h \
 	wx/osx/timectrl.h \
 	wx/osx/core/joystick.h \
-	wx/osx/cocoa/dataview.h \
-	wx/osx/cocoa/activityindicator.h
+	wx/osx/cocoa/dataview.h
 @COND_TOOLKIT_OSX_COCOA@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_OSX_COCOA_ADVANCED_PLATFORM_HDR)
 @COND_TOOLKIT_OSX_IPHONE@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_OSX_IPHONE@	wx/generic/animate.h wx/osx/sound.h
