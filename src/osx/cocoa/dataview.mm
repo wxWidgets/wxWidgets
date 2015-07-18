@@ -2999,31 +2999,27 @@ bool wxDataViewDateRenderer::MacRender()
     // in the first instance; but as this is often impossible due to
     // space restrictions the style is shortened per loop; finally, if
     // the shortest time and date format does not fit into the cell
-    // the time part is dropped; remark: the time part itself is not
-    // modified per iteration loop and only uses the short style,
-    // means that only the hours and minutes are being shown
+    // the time part is dropped
 
     // GetObject() returns a date for testing the size of a date object
     [GetNativeData()->GetItemCell() setObjectValue:GetNativeData()->GetObject()];
-    [[GetNativeData()->GetItemCell() formatter] setTimeStyle:NSDateFormatterShortStyle];
-    for (int dateFormatterStyle=4; dateFormatterStyle>0; --dateFormatterStyle)
+
+    bool formatFound = false;
+    int  dateFormatterStyle = kCFDateFormatterFullStyle;
+    while ( !formatFound && (dateFormatterStyle > 0) )
     {
-        [[GetNativeData()->GetItemCell() formatter] setDateStyle:(NSDateFormatterStyle)dateFormatterStyle];
-        if (dateFormatterStyle == 1)
+        int timeFormatterStyle = dateFormatterStyle;
+
+        while ( !formatFound && (timeFormatterStyle >= dateFormatterStyle - 1) )
         {
-            // if the shortest style for displaying the date and time
-            // is too long to be fully visible remove the time part of
-            // the date:
-            if ([GetNativeData()->GetItemCell() cellSize].width > [GetNativeData()->GetColumnPtr() width])
-                [[GetNativeData()->GetItemCell() formatter] setTimeStyle:NSDateFormatterNoStyle];
-            {
-                // basically not necessary as the loop would end anyway
-                // but let's save the last comparison
-                break;
-            }
+            [[GetNativeData()->GetItemCell() formatter] setDateStyle:(NSDateFormatterStyle)dateFormatterStyle];
+            [[GetNativeData()->GetItemCell() formatter] setTimeStyle:(NSDateFormatterStyle)timeFormatterStyle];
+            if ( [GetNativeData()->GetItemCell() cellSize].width <= [GetNativeData()->GetColumnPtr() width] )
+                formatFound = true;
+            else
+                --timeFormatterStyle;
         }
-        else if ([GetNativeData()->GetItemCell() cellSize].width <= [GetNativeData()->GetColumnPtr() width])
-            break;
+        --dateFormatterStyle;
     }
     // set data (the style is set by the previous loop); on OSX the
     // date has to be specified with respect to UTC; in wxWidgets the
