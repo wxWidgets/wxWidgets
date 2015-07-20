@@ -553,8 +553,8 @@ bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
 }
 
 void
-wxNonOwnedWindow::HandleMiniaturize(double WXUNUSED(timestampsec),
-                                    bool miniaturized)
+wxNonOwnedWindow::OSXHandleMiniaturize(double WXUNUSED(timestampsec),
+                                       bool miniaturized)
 {
     if ( wxTopLevelWindowMac* top = (wxTopLevelWindowMac*) MacGetTopLevelWindow() )
         top->OSXSetIconizeState(miniaturized);
