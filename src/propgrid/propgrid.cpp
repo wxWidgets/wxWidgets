@@ -5621,6 +5621,21 @@ void wxPropertyGrid::ClearActionTriggers( int action )
     while ( didSomething );
 }
 
+#if WXWIN_COMPATIBILITY_3_0
+// Utility to find if specific item is in a vector. Returns index to
+// the item, or wxNOT_FOUND if not present.
+template<typename CONTAINER, typename T>
+int wxPGFindInVector( CONTAINER vector, const T& item )
+{
+    for ( unsigned int i=0; i<vector.size(); i++ )
+    {
+        if ( vector[i] == item )
+            return (int) i;
+    }
+    return wxNOT_FOUND;
+}
+#endif // WXWIN_COMPATIBILITY_3_0
+
 void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
 {
     //
