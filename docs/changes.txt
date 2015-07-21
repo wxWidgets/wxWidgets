@@ -159,6 +159,7 @@ wxMSW:
 - wxListCtrl::GetItemCount() in wxEVT_LIST_INSERT_ITEM is no longer off by 1.
 - Don't send bogus root selection events when clicking wxTreeCtrl (sbrowne).
 - Avoid bogus assert after calling wxDatePickerCtrl::SetRange().
+- Add solution file for building with MSVS 2014 (Peter Tissen).
 
 wxOSX/Cocoa:
 
