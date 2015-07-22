@@ -148,7 +148,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\include\wx\msw\setup.h">
+    <CustomBuild Include="..\..\include\wx\msw\setup0.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">Creating $(OutDir)$(wxIncSubDir)\wx\setup.h</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">Creating $(OutDir)$(wxIncSubDir)\wx\setup.h</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">copy "%(FullPath)" $(OutDir)$(wxIncSubDir)\wx\setup.h</Command>
