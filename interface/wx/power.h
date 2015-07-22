@@ -106,8 +106,7 @@ wxEventType wxEVT_POWER_RESUME;
     powering off the screen and Acquire() method can be used to do this.
 
     Notice that currently this functionality is only implemented for MSW and
-    OS X and on the latter only ::wxPOWER_RESOURCE_SYSTEM is supported for
-    versions earlier than 10.9.
+    OS X.
 
     If possible, use wxPowerResourceBlocker class to ensure that Release() is
     called instead of calling it manually.

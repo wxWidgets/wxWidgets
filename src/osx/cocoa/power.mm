@@ -60,10 +60,16 @@ bool UpdatePowerResourceUsage(wxPowerResourceKind kind, const wxString& reason)
 #endif
         if ( !g_pmAssertionID )
         {
+            CFStringRef assertType;
+            if ( kind == wxPOWER_RESOURCE_SCREEN )
+                assertType = kIOPMAssertionTypeNoDisplaySleep;
+            else
+                assertType = kIOPMAssertionTypeNoIdleSleep;
+
             // Use power manager API for < 10.9 systems
             IOReturn success = IOPMAssertionCreateWithName
                                (
-                                    kIOPMAssertionTypeNoIdleSleep,
+                                    assertType,
                                     kIOPMAssertionLevelOn,
                                     cfreason,
                                     &g_pmAssertionID
