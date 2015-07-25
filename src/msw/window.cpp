@@ -2769,17 +2769,17 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_MOVING:
             {
                 LPRECT pRect = (LPRECT)lParam;
-                wxRect rc;
-                rc.SetLeft(pRect->left);
-                rc.SetTop(pRect->top);
-                rc.SetRight(pRect->right);
-                rc.SetBottom(pRect->bottom);
-                processed = HandleMoving(rc);
+                wxRect rect;
+                rect.SetLeft(pRect->left);
+                rect.SetTop(pRect->top);
+                rect.SetRight(pRect->right);
+                rect.SetBottom(pRect->bottom);
+                processed = HandleMoving(rect);
                 if (processed) {
-                    pRect->left = rc.GetLeft();
-                    pRect->top = rc.GetTop();
-                    pRect->right = rc.GetRight();
-                    pRect->bottom = rc.GetBottom();
+                    pRect->left = rect.GetLeft();
+                    pRect->top = rect.GetTop();
+                    pRect->right = rect.GetRight();
+                    pRect->bottom = rect.GetBottom();
                 }
             }
             break;
@@ -2799,17 +2799,17 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_SIZING:
             {
                 LPRECT pRect = (LPRECT)lParam;
-                wxRect rc;
-                rc.SetLeft(pRect->left);
-                rc.SetTop(pRect->top);
-                rc.SetRight(pRect->right);
-                rc.SetBottom(pRect->bottom);
-                processed = HandleSizing(rc);
+                wxRect rect;
+                rect.SetLeft(pRect->left);
+                rect.SetTop(pRect->top);
+                rect.SetRight(pRect->right);
+                rect.SetBottom(pRect->bottom);
+                processed = HandleSizing(rect);
                 if (processed) {
-                    pRect->left = rc.GetLeft();
-                    pRect->top = rc.GetTop();
-                    pRect->right = rc.GetRight();
-                    pRect->bottom = rc.GetBottom();
+                    pRect->left = rect.GetLeft();
+                    pRect->top = rect.GetTop();
+                    pRect->right = rect.GetRight();
+                    pRect->bottom = rect.GetBottom();
                 }
             }
             break;

@@ -4126,23 +4126,23 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             wxDataViewItem itemDragged = GetItemByRow( drag_item_row );
 
             // Notify cell about drag
-            wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, m_owner->GetId() );
-            event.SetEventObject( m_owner );
-            event.SetItem( itemDragged );
-            event.SetModel( model );
-            if (!m_owner->HandleWindowEvent( event ))
+            wxDataViewEvent evt( wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, m_owner->GetId() );
+            evt.SetEventObject( m_owner );
+            evt.SetItem( itemDragged );
+            evt.SetModel( model );
+            if (!m_owner->HandleWindowEvent( evt ))
                 return;
 
-            if (!event.IsAllowed())
+            if (!evt.IsAllowed())
                 return;
 
-            wxDataObject *obj = event.GetDataObject();
+            wxDataObject *obj = evt.GetDataObject();
             if (!obj)
                 return;
 
             wxDataViewDropSource drag( this, drag_item_row );
             drag.SetData( *obj );
-            /* wxDragResult res = */ drag.DoDragDrop(event.GetDragFlags());
+            /* wxDragResult res = */ drag.DoDragDrop(evt.GetDragFlags());
             delete obj;
         }
         return;

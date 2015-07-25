@@ -1526,10 +1526,10 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
     // need this to make the "[+]" appear
     if ( firstChild )
     {
-        TVGetItemRectParam param;
+        TVGetItemRectParam param2;
 
-        wxTreeView_GetItemRect(GetHwnd(), HITEM(parent), param, FALSE);
-        ::InvalidateRect(GetHwnd(), &param.rect, FALSE);
+        wxTreeView_GetItemRect(GetHwnd(), HITEM(parent), param2, FALSE);
+        ::InvalidateRect(GetHwnd(), &param2.rect, FALSE);
     }
 
     // associate the application tree item with Win32 tree item handle
