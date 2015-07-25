@@ -1974,10 +1974,10 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     {
         case WXK_RETURN:
             {
-                wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
-                InitCommandEvent(event);
-                event.SetString(GetValue());
-                if ( HandleWindowEvent(event) )
+                wxCommandEvent evt(wxEVT_TEXT_ENTER, m_windowId);
+                InitCommandEvent(evt);
+                evt.SetString(GetValue());
+                if ( HandleWindowEvent(evt) )
                 if ( !HasFlag(wxTE_MULTILINE) )
                     return;
                 //else: multiline controls need Enter for themselves

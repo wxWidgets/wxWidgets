@@ -663,7 +663,7 @@ int wxFileDialog::ShowModal()
         const wxChar* extension = filterBuffer.t_str();
         int maxFilter = (int)(of.nFilterIndex*2L) - 1;
 
-        for( int i = 0; i < maxFilter; i++ )           // get extension
+        for( int j = 0; j < maxFilter; j++ )           // get extension
             extension = extension + wxStrlen( extension ) + 1;
 
         // use dummy name a to avoid assert in AppendExtension
@@ -725,11 +725,11 @@ int wxFileDialog::ShowModal()
             m_fileNames.Add(toke.GetNextToken());
 #endif // OFN_EXPLORER
 
-        wxString dir(m_dir);
+        m_path = m_dir;
         if ( m_dir.Last() != wxT('\\') )
-            dir += wxT('\\');
+            m_path += wxT('\\');
 
-        m_path = dir + m_fileName;
+        m_path += m_fileName;
         m_filterIndex = (int)of.nFilterIndex - 1;
     }
     else
@@ -745,7 +745,7 @@ int wxFileDialog::ShowModal()
             const wxChar* extension = filterBuffer.t_str();
             int   maxFilter = (int)(of.nFilterIndex*2L) - 1;
 
-            for( int i = 0; i < maxFilter; i++ )           // get extension
+            for( int j = 0; j < maxFilter; j++ )           // get extension
                 extension = extension + wxStrlen( extension ) + 1;
 
             m_fileName = AppendExtension(fileNameBuffer, extension);

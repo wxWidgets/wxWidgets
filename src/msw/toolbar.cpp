@@ -799,10 +799,10 @@ bool wxToolBar::Realize()
                             // MapBitmap() to work correctly
                             for ( int y = 0; y < h; y++ )
                             {
-                                for ( int x = 0; x < w; x++ )
+                                for ( int xx = 0; xx < w; xx++ )
                                 {
-                                    if ( imgGreyed.IsTransparent(x, y) )
-                                        imgGreyed.SetRGB(x, y,
+                                    if ( imgGreyed.IsTransparent(xx, y) )
+                                        imgGreyed.SetRGB(xx, y,
                                                          wxLIGHT_GREY->Red(),
                                                          wxLIGHT_GREY->Green(),
                                                          wxLIGHT_GREY->Blue());
@@ -885,11 +885,11 @@ bool wxToolBar::Realize()
 
         if ( addBitmap ) // no old bitmap or we can't replace it
         {
-            TBADDBITMAP addBitmap;
-            addBitmap.hInst = 0;
-            addBitmap.nID = (UINT_PTR)hBitmap;
+            TBADDBITMAP tbAddBitmap;
+            tbAddBitmap.hInst = 0;
+            tbAddBitmap.nID = (UINT_PTR)hBitmap;
             if ( ::SendMessage(GetHwnd(), TB_ADDBITMAP,
-                               (WPARAM) nButtons, (LPARAM)&addBitmap) == -1 )
+                               (WPARAM) nButtons, (LPARAM)&tbAddBitmap) == -1 )
             {
                 wxFAIL_MSG(wxT("Could not add bitmap to toolbar"));
             }
@@ -1025,12 +1025,12 @@ bool wxToolBar::Realize()
                             while ( nodePrev )
                             {
                                 TBBUTTON& prevButton = buttons[prevIndex];
-                                wxToolBarToolBase *tool = nodePrev->GetData();
-                                if ( !tool->IsButton() || tool->GetKind() != wxITEM_RADIO )
+                                wxToolBarToolBase *toolPrev = nodePrev->GetData();
+                                if ( !toolPrev->IsButton() || toolPrev->GetKind() != wxITEM_RADIO )
                                     break;
 
-                                if ( tool->Toggle(false) )
-                                    DoToggleTool(tool, false);
+                                if ( toolPrev->Toggle(false) )
+                                    DoToggleTool(toolPrev, false);
 
                                 prevButton.fsState &= ~TBSTATE_CHECKED;
                                 nodePrev = nodePrev->GetPrevious();
