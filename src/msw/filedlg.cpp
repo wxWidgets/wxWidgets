@@ -756,7 +756,7 @@ int wxFileDialog::ShowModal()
         m_fileName = wxFileNameFromPath(fileNameBuffer);
         m_fileNames.Add(m_fileName);
         m_dir = wxPathOnly(fileNameBuffer);
-        }
+    }
 
     return wxID_OK;
 
