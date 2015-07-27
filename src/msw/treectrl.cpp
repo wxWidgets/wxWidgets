@@ -3652,7 +3652,10 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     if ( MSWIsOnItem(tvhti.flags) )
                     {
                         event.m_item = tvhti.hItem;
-                        eventType = hdr->code == NM_DBLCLK
+                        // Cast is needed for the very old (gcc 3.4.5) MinGW
+                        // headers which didn't define NM_DBLCLK as unsigned,
+                        // resulting in signed/unsigned comparison warning.
+                        eventType = hdr->code == (UINT)NM_DBLCLK
                                     ? wxEVT_TREE_ITEM_ACTIVATED
                                     : wxEVT_TREE_ITEM_RIGHT_CLICK;
 
