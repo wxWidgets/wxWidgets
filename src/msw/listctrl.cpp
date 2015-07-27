@@ -1225,7 +1225,7 @@ wxColour wxListCtrl::GetTextColour() const
 // Sets the text colour of the listview
 void wxListCtrl::SetTextColour(const wxColour& col)
 {
-    ListView_SetTextColor(GetHwnd(), PALETTERGB(col.Red(), col.Green(), col.Blue()));
+    ListView_SetTextColor(GetHwnd(), wxColourToPalRGB(col));
 }
 
 // Gets the index of the topmost visible item when in
