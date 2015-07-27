@@ -109,7 +109,7 @@ bool wxFileDropTarget::OnDrop(long x, long y, const void *data, size_t size )
 
   bool ret = OnDropFiles( x, y, 1, files );
 
-  free( files );
+  delete[] files;
 
   return ret;
 }
