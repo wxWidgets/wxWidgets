@@ -14,6 +14,7 @@
 #if wxUSE_STC
 
 #ifndef WX_PRECOMP
+    #include "wx/math.h"
     #include "wx/menu.h"
     #include "wx/dcmemory.h"
     #include "wx/settings.h"
@@ -50,8 +51,8 @@ Point Point::FromLong(long lpoint) {
 }
 
 wxRect wxRectFromPRectangle(PRectangle prc) {
-    wxRect r(prc.left, prc.top,
-             prc.Width(), prc.Height());
+    wxRect r(wxRound(prc.left), wxRound(prc.top),
+             wxRound(prc.Width()), wxRound(prc.Height()));
     return r;
 }
 
@@ -140,7 +141,7 @@ void Font::Create(const FontParameters &fp) {
     else
         weight = wxFONTWEIGHT_NORMAL;
 
-    wxFont font(fp.size,
+    wxFont font(wxRound(fp.size),
         wxFONTFAMILY_DEFAULT,
         fp.italic ? wxFONTSTYLE_ITALIC :  wxFONTSTYLE_NORMAL,
         weight,
@@ -320,8 +321,8 @@ void SurfaceImpl::Polygon(Point *pts, int npts, ColourDesired fore, ColourDesire
     wxPoint *p = new wxPoint[npts];
 
     for (int i=0; i<npts; i++) {
-        p[i].x = pts[i].x;
-        p[i].y = pts[i].y;
+        p[i].x = wxRound(pts[i].x);
+        p[i].y = wxRound(pts[i].y);
     }
     hdc->DrawPolygon(npts, p);
     delete [] p;
@@ -501,7 +502,7 @@ void SurfaceImpl::Copy(PRectangle rc, Point from, Surface &surfaceSource) {
     wxRect r = wxRectFromPRectangle(rc);
     hdc->Blit(r.x, r.y, r.width, r.height,
               ((SurfaceImpl&)surfaceSource).hdc,
-              from.x, from.y, wxCOPY);
+              wxRound(from.x), wxRound(from.y), wxCOPY);
 }
 
 void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font, XYPOSITION ybase,
@@ -514,7 +515,7 @@ void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font, XYPOSITION ybase,
 
     // ybase is where the baseline should be, but wxWin uses the upper left
     // corner, so I need to calculate the real position for the text...
-    hdc->DrawText(stc2wx(s, len), rc.left, ybase - GetAscent(font));
+    hdc->DrawText(stc2wx(s, len), wxRound(rc.left), wxRound(ybase - GetAscent(font)));
 }
 
 void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, XYPOSITION ybase,
@@ -527,7 +528,7 @@ void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, XYPOSITION ybase,
     hdc->SetClippingRegion(wxRectFromPRectangle(rc));
 
     // see comments above
-    hdc->DrawText(stc2wx(s, len), rc.left, ybase - GetAscent(font));
+    hdc->DrawText(stc2wx(s, len), wxRound(rc.left), wxRound(ybase - GetAscent(font)));
     hdc->DestroyClippingRegion();
 }
 
@@ -542,7 +543,7 @@ void SurfaceImpl::DrawTextTransparent(PRectangle rc, Font &font, XYPOSITION ybas
 
     // ybase is where the baseline should be, but wxWin uses the upper left
     // corner, so I need to calculate the real position for the text...
-    hdc->DrawText(stc2wx(s, len), rc.left, ybase - GetAscent(font));
+    hdc->DrawText(stc2wx(s, len), wxRound(rc.left), wxRound(ybase - GetAscent(font)));
 
     hdc->SetBackgroundMode(wxBRUSHSTYLE_SOLID);
 }
@@ -784,7 +785,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
     if (! wid) return PRectangle();
 #if wxUSE_DISPLAY
     // Get the display the point is found on
-    int n = wxDisplay::GetFromPoint(wxPoint(pt.x, pt.y));
+    int n = wxDisplay::GetFromPoint(wxPoint(wxRound(pt.x), wxRound(pt.y)));
     wxDisplay dpy(n == wxNOT_FOUND ? 0 : n);
     rect = dpy.GetGeometry();
 #else
@@ -1428,7 +1429,7 @@ void Menu::Destroy() {
 }
 
 void Menu::Show(Point pt, Window &w) {
-    GETWIN(w.GetID())->PopupMenu((wxMenu*)mid, pt.x - 4, pt.y);
+    GETWIN(w.GetID())->PopupMenu((wxMenu*)mid, wxRound(pt.x - 4), wxRound(pt.y));
     Destroy();
 }
 

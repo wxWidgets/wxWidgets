@@ -78,6 +78,17 @@ typedef struct client_info {
 } TIFFClientInfoLink;
 
 /*
+ * Union allowing to cast between the OS-specific handles and integer file
+ * descriptors without triggering compiler warnings, even if their types are
+ * not the same.
+ */
+typedef union fd_as_handle_union
+{
+    int fd;
+    thandle_t h;
+} fd_as_handle_union_t;
+
+/*
  * Typedefs for ``method pointers'' used internally.
  * these are depriciated and provided only for backwards compatibility
  */

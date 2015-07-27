@@ -505,7 +505,7 @@ bool wxListCtrl::SetForegroundColour(const wxColour& col)
     if ( !wxWindow::SetForegroundColour(col) )
         return false;
 
-    ListView_SetTextColor(GetHwnd(), wxColourToRGB(col));
+    SetTextColour(col);
 
     return true;
 }
@@ -519,8 +519,10 @@ bool wxListCtrl::SetBackgroundColour(const wxColour& col)
     // we set the same colour for both the "empty" background and the items
     // background
     COLORREF color = wxColourToRGB(col);
-    ListView_SetBkColor(GetHwnd(), color);
-    ListView_SetTextBkColor(GetHwnd(), color);
+    if ( !ListView_SetBkColor(GetHwnd(), color) )
+        wxLogLastError(wxS("ListView_SetBkColor()"));
+    if ( !ListView_SetTextBkColor(GetHwnd(), color) )
+        wxLogLastError(wxS("ListView_SetTextBkColor()"));
 
     return true;
 }
@@ -936,7 +938,7 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
     // to, so do it explicitly
     if ( changingFocus && !HasFlag(wxLC_SINGLE_SEL) )
     {
-        ListView_SetSelectionMark(GetHwnd(), item);
+        (void)ListView_SetSelectionMark(GetHwnd(), item);
     }
 
     return true;
@@ -1225,7 +1227,8 @@ wxColour wxListCtrl::GetTextColour() const
 // Sets the text colour of the listview
 void wxListCtrl::SetTextColour(const wxColour& col)
 {
-    ListView_SetTextColor(GetHwnd(), PALETTERGB(col.Red(), col.Green(), col.Blue()));
+    if ( !ListView_SetTextColor(GetHwnd(), wxColourToPalRGB(col)) )
+        wxLogLastError(wxS("ListView_SetTextColor()"));
 }
 
 // Gets the index of the topmost visible item when in
@@ -2656,7 +2659,8 @@ bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
     it.iSubItem = col;
     it.pszText = text;
     it.cchTextMax = WXSIZEOF(text);
-    ListView_GetItem(hwndList, &it);
+    if ( !ListView_GetItem(hwndList, &it) )
+        return false;
 
     HIMAGELIST himl = ListView_GetImageList(hwndList, LVSIL_SMALL);
     if ( himl && ImageList_GetImageCount(himl) )
@@ -3086,7 +3090,8 @@ void wxListCtrl::RefreshItem(long item)
 
 void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
 {
-    ListView_RedrawItems(GetHwnd(), itemFrom, itemTo);
+    if ( !ListView_RedrawItems(GetHwnd(), itemFrom, itemTo) )
+        wxLogLastError(wxS("ListView_RedrawItems"));
 }
 
 // ----------------------------------------------------------------------------

@@ -77,15 +77,8 @@ public:
         wxVersionDLL *verDLL;
     };
 
-    // TODO: fix EnumerateLoadedModules() to use EnumerateLoadedModules64()
-    #ifdef __WIN64__
-        typedef DWORD64 DWORD_32_64;
-    #else
-        typedef DWORD DWORD_32_64;
-    #endif
-
     static BOOL CALLBACK
-    EnumModulesProc(PCSTR name, DWORD_32_64 base, ULONG size, void *data);
+    EnumModulesProc(const wxChar* name, DWORD64 base, ULONG size, PVOID data);
 };
 
 // ============================================================================
@@ -172,8 +165,8 @@ wxString wxVersionDLL::GetFileVersion(const wxString& filename) const
 
 /* static */
 BOOL CALLBACK
-wxDynamicLibraryDetailsCreator::EnumModulesProc(PCSTR name,
-                                                DWORD_32_64 base,
+wxDynamicLibraryDetailsCreator::EnumModulesProc(const wxChar* name,
+                                                DWORD64 base,
                                                 ULONG size,
                                                 void *data)
 {
@@ -276,15 +269,9 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
         params.dlls = &dlls;
         params.verDLL = &verDLL;
 
-        // Note that the cast of EnumModulesProc is needed because the type of
-        // PENUMLOADED_MODULES_CALLBACK changed: in old SDK versions its first
-        // argument was non-const PSTR while now it's PCSTR. By explicitly
-        // casting to whatever the currently used headers require we ensure
-        // that the code compilers in any case.
-        if ( !wxDbgHelpDLL::EnumerateLoadedModules
+        if ( !wxDbgHelpDLL::CallEnumerateLoadedModules
                             (
                                 ::GetCurrentProcess(),
-                                (PENUMLOADED_MODULES_CALLBACK)
                                 wxDynamicLibraryDetailsCreator::EnumModulesProc,
                                 &params
                             ) )
