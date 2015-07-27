@@ -24,6 +24,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/scrolbar.h"
+    #include "wx/math.h"
     #include "wx/menu.h"
     #include "wx/timer.h"
 #endif // WX_PRECOMP
@@ -433,7 +434,7 @@ bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
         horizEnd = 0;
     if (!horizontalScrollBarVisible || Wrapping())
         horizEnd = 0;
-    int pageWidth = rcText.Width();
+    int pageWidth = wxRound(rcText.Width());
 
     if (stc->m_hScrollBar == NULL) {  // Use built-in scrollbar
         int sbMax    = stc->GetScrollRange(wxHORIZONTAL);
@@ -664,7 +665,7 @@ void ScintillaWX::UpdateSystemCaret() {
             CreateSystemCaret();
         }
         Point pos = PointMainCaret();
-        ::SetCaretPos(pos.x, pos.y);
+        ::SetCaretPos(wxRound(pos.x), wxRound(pos.y));
     }
 #endif
 }
@@ -842,7 +843,7 @@ void ScintillaWX::FullPaintDC(wxDC* dc) {
 void ScintillaWX::DoHScroll(int type, int pos) {
     int xPos = xOffset;
     PRectangle rcText = GetTextRectangle();
-    int pageWidth = rcText.Width() * 2 / 3;
+    int pageWidth = wxRound(rcText.Width() * 2 / 3);
     if (type == wxEVT_SCROLLWIN_LINEUP || type == wxEVT_SCROLL_LINEUP)
         xPos -= H_SCROLL_STEP;
     else if (type == wxEVT_SCROLLWIN_LINEDOWN || type == wxEVT_SCROLL_LINEDOWN)
@@ -852,7 +853,7 @@ void ScintillaWX::DoHScroll(int type, int pos) {
     else if (type == wxEVT_SCROLLWIN_PAGEDOWN || type == wxEVT_SCROLL_PAGEDOWN) {
         xPos += pageWidth;
         if (xPos > scrollWidth - rcText.Width()) {
-            xPos = scrollWidth - rcText.Width();
+            xPos = wxRound(scrollWidth - rcText.Width());
         }
     }
     else if (type == wxEVT_SCROLLWIN_TOP || type == wxEVT_SCROLL_TOP)
@@ -894,14 +895,14 @@ void ScintillaWX::DoMouseWheel(wxMouseWheelAxis axis, int rotation, int delta,
     int pixels;
 
     if (axis == wxMOUSE_WHEEL_HORIZONTAL) {
-        wheelHRotation += rotation * (columnsPerAction * vs.spaceWidth);
+        wheelHRotation += wxRound(rotation * (columnsPerAction * vs.spaceWidth));
         pixels = wheelHRotation / delta;
         wheelHRotation -= pixels * delta;
         if (pixels != 0) {
             xPos += pixels;
             PRectangle rcText = GetTextRectangle();
             if (xPos > scrollWidth - rcText.Width()) {
-                xPos = scrollWidth - rcText.Width();
+                xPos = wxRound(scrollWidth - rcText.Width());
             }
             HorizontalScrollTo(xPos);
         }
@@ -1190,7 +1191,7 @@ void ScintillaWX::DoScrollToLine(int line) {
 
 
 void ScintillaWX::DoScrollToColumn(int column) {
-    HorizontalScrollTo(column * vs.spaceWidth);
+    HorizontalScrollTo(wxRound(column * vs.spaceWidth));
 }
 
 // wxGTK doesn't appear to need this explicit clipping code any longer, but I
