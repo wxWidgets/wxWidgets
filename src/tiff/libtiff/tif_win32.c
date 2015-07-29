@@ -209,8 +209,8 @@ TIFFFdOpen(int ifd, const char* name, const char* mode)
 	TIFF* tif;
 	int fSuppressMap;
 	int m;
-	fSuppressMap=0;
 	fd_as_handle_union_t fdh;
+	fSuppressMap=0;
 	fdh.fd = ifd;
 	for (m=0; mode[m]!=0; m++)
 	{
