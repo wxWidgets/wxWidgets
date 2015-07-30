@@ -2109,6 +2109,8 @@ void wxGtkPrinterDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width
 void wxGtkPrinterDCImpl::DestroyClippingRegion()
 {
     cairo_reset_clip(m_cairo);
+
+    wxDCImpl::DestroyClippingRegion();
 }
 
 bool wxGtkPrinterDCImpl::StartDoc(const wxString& WXUNUSED(message))
