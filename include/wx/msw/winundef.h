@@ -29,17 +29,23 @@
 #if defined(CreateDialog)
     #undef CreateDialog
 
+        #ifdef _UNICODE
+    inline HWND CreateDialog(HINSTANCE hInstance,
+                             LPCWSTR pTemplate,
+                             HWND hwndParent,
+                             DLGPROC pDlgProc)
+    {
+            return CreateDialogW(hInstance, pTemplate, hwndParent, pDlgProc);
+    }
+        #else
     inline HWND CreateDialog(HINSTANCE hInstance,
                              LPCTSTR pTemplate,
                              HWND hwndParent,
                              DLGPROC pDlgProc)
     {
-        #ifdef _UNICODE
-            return CreateDialogW(hInstance, pTemplate, hwndParent, pDlgProc);
-        #else
             return CreateDialogA(hInstance, pTemplate, hwndParent, pDlgProc);
-        #endif
     }
+#endif
 #endif
 
 // CreateFont
@@ -47,6 +53,29 @@
 #ifdef CreateFont
     #undef CreateFont
 
+        #ifdef _UNICODE
+    inline HFONT CreateFont(int height,
+                            int width,
+                            int escapement,
+                            int orientation,
+                            int weight,
+                            DWORD italic,
+                            DWORD underline,
+                            DWORD strikeout,
+                            DWORD charset,
+                            DWORD outprecision,
+                            DWORD clipprecision,
+                            DWORD quality,
+                            DWORD family,
+                            LPCWSTR facename)
+    {
+            return CreateFontW(height, width, escapement, orientation,
+                               weight, italic, underline, strikeout, charset,
+                               outprecision, clipprecision, quality,
+                               family, facename);
+	        }
+
+        #else
     inline HFONT CreateFont(int height,
                             int width,
                             int escapement,
@@ -61,19 +90,13 @@
                             DWORD quality,
                             DWORD family,
                             LPCTSTR facename)
-    {
-        #ifdef _UNICODE
-            return CreateFontW(height, width, escapement, orientation,
-                               weight, italic, underline, strikeout, charset,
-                               outprecision, clipprecision, quality,
-                               family, facename);
-        #else
+   {
             return CreateFontA(height, width, escapement, orientation,
                                weight, italic, underline, strikeout, charset,
                                outprecision, clipprecision, quality,
                                family, facename);
-        #endif
     }
+        #endif
 #endif // CreateFont
 
 // CreateWindow
@@ -81,6 +104,20 @@
 #if defined(CreateWindow)
     #undef CreateWindow
 
+        #ifdef _UNICODE
+    inline HWND CreateWindow(LPCWSTR lpClassName,
+                             LPCWSTR lpWndClass,
+                             DWORD dwStyle,
+                             int x, int y, int w, int h,
+                             HWND hWndParent,
+                             HMENU hMenu,
+                             HINSTANCE hInstance,
+                             LPVOID lpParam)
+    {
+            return CreateWindowW(lpClassName, lpWndClass, dwStyle, x, y, w, h,
+                                 hWndParent, hMenu, hInstance, lpParam);
+    }
+        #else
     inline HWND CreateWindow(LPCTSTR lpClassName,
                              LPCTSTR lpWndClass,
                              DWORD dwStyle,
@@ -90,14 +127,10 @@
                              HINSTANCE hInstance,
                              LPVOID lpParam)
     {
-        #ifdef _UNICODE
-            return CreateWindowW(lpClassName, lpWndClass, dwStyle, x, y, w, h,
-                                 hWndParent, hMenu, hInstance, lpParam);
-        #else
             return CreateWindowA(lpClassName, lpWndClass, dwStyle, x, y, w, h,
                                  hWndParent, hMenu, hInstance, lpParam);
-        #endif
     }
+#endif
 #endif
 
 // LoadMenu
@@ -105,14 +138,17 @@
 #ifdef LoadMenu
     #undef LoadMenu
 
+        #ifdef _UNICODE
+    inline HMENU LoadMenu(HINSTANCE instance, LPCWSTR name)
+    {
+            return LoadMenuW(instance, name);
+    }
+        #else
     inline HMENU LoadMenu(HINSTANCE instance, LPCTSTR name)
     {
-        #ifdef _UNICODE
-            return LoadMenuW(instance, name);
-        #else
             return LoadMenuA(instance, name);
-        #endif
     }
+#endif
 #endif
 
 // FindText
@@ -120,14 +156,17 @@
 #ifdef FindText
     #undef FindText
 
+        #ifdef _UNICODE
+    inline HWND APIENTRY FindText(LPFINDREPLACEW lpfindreplace)
+    {
+            return FindTextW(lpfindreplace);
+    }
+        #else
     inline HWND APIENTRY FindText(LPFINDREPLACE lpfindreplace)
     {
-        #ifdef _UNICODE
-            return FindTextW(lpfindreplace);
-        #else
             return FindTextA(lpfindreplace);
-        #endif
     }
+#endif
 #endif
 
 // GetCharWidth
@@ -154,7 +193,7 @@
       return FindWindowW(classname, windowname);
    }
    #else
-   inline HWND FindWindow(LPCSTR classname, LPCSTR windowname)
+   inline HWND FindWindow(LPCTSTR classname, LPCTSTR windowname)
    {
       return FindWindowA(classname, windowname);
    }
@@ -205,7 +244,7 @@
       return GetClassInfoW(h, name, winclass);
    }
    #else
-   inline BOOL GetClassInfo(HINSTANCE h, LPCSTR name, LPWNDCLASSA winclass)
+   inline BOOL GetClassInfo(HINSTANCE h, LPCTSTR name, LPWNDCLASSA winclass)
    {
       return GetClassInfoA(h, name, winclass);
    }
@@ -222,7 +261,7 @@
       return LoadAcceleratorsW(h, name);
    }
    #else
-   inline HACCEL LoadAccelerators(HINSTANCE h, LPCSTR name)
+   inline HACCEL LoadAccelerators(HINSTANCE h, LPCTSTR name)
    {
       return LoadAcceleratorsA(h, name);
    }
@@ -239,7 +278,7 @@
       return DrawTextW(h, str, count, rect, format);
    }
    #else
-   inline int DrawText(HDC h, LPCSTR str, int count, LPRECT rect, UINT format)
+   inline int DrawText(HDC h, LPCTSTR str, int count, LPRECT rect, UINT format)
    {
       return DrawTextA(h, str, count, rect, format);
    }
@@ -256,9 +295,9 @@
    // and DOCINFOA but only DOCINFO in both ANSI and Unicode.
    #if defined( __GNUG__ )
       #if !wxCHECK_W32API_VERSION( 0, 5 )
-        #define DOCINFOW DOCINFO
-        #define DOCINFOA DOCINFO
-      #endif
+      #define DOCINFOW DOCINFO
+      #define DOCINFOA DOCINFO
+   #endif
    #endif
 
    #ifdef _UNICODE
@@ -305,27 +344,33 @@
 // LoadIcon
 #ifdef LoadIcon
     #undef LoadIcon
+        #ifdef _UNICODE
+    inline HICON LoadIcon(HINSTANCE hInstance, LPCWSTR lpIconName)
+    {
+            return LoadIconW(hInstance, lpIconName);
+    }
+        #else // ANSI
     inline HICON LoadIcon(HINSTANCE hInstance, LPCTSTR lpIconName)
     {
-        #ifdef _UNICODE
-            return LoadIconW(hInstance, lpIconName);
-        #else // ANSI
             return LoadIconA(hInstance, lpIconName);
-        #endif // Unicode/ANSI
     }
+        #endif // Unicode/ANSI
 #endif // LoadIcon
 
 // LoadBitmap
 #ifdef LoadBitmap
     #undef LoadBitmap
+        #ifdef _UNICODE
+    inline HBITMAP LoadBitmap(HINSTANCE hInstance, LPCWSTR lpBitmapName)
+    {
+            return LoadBitmapW(hInstance, lpBitmapName);
+    }
+        #else // ANSI
     inline HBITMAP LoadBitmap(HINSTANCE hInstance, LPCTSTR lpBitmapName)
     {
-        #ifdef _UNICODE
-            return LoadBitmapW(hInstance, lpBitmapName);
-        #else // ANSI
             return LoadBitmapA(hInstance, lpBitmapName);
-        #endif // Unicode/ANSI
     }
+        #endif // Unicode/ANSI
 #endif // LoadBitmap
 
 // LoadLibrary
@@ -338,7 +383,7 @@
         return LoadLibraryW(lpLibFileName);
     }
     #else
-    inline HINSTANCE LoadLibrary(LPCSTR lpLibFileName)
+    inline HINSTANCE LoadLibrary(LPCTSTR lpLibFileName)
     {
         return LoadLibraryA(lpLibFileName);
     }
@@ -354,7 +399,7 @@
         return FindResourceW(hModule, lpName, lpType);
     }
     #else
-    inline HRSRC FindResource(HMODULE hModule, LPCSTR lpName, LPCSTR lpType)
+    inline HRSRC FindResource(HMODULE hModule, LPCTSTR lpName, LPCTSTR lpType)
     {
         return FindResourceA(hModule, lpName, lpType);
     }
