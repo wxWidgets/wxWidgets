@@ -38082,7 +38082,7 @@ else
   AR="$ac_cv_prog_AR"
 fi
 
-        AROPTIONS=rcu
+        AROPTIONS=rc
     fi
 
 
