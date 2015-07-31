@@ -86,7 +86,7 @@ public:
     SpinBtnWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~SpinBtnWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const wxOVERRIDE { return m_spinbtn; }
+    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_spinbtn; }
     virtual Widgets GetWidgets() const wxOVERRIDE
     {
         Widgets widgets(WidgetsPage::GetWidgets());

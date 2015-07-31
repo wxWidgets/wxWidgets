@@ -65,7 +65,7 @@ public:
     ColourPickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~ColourPickerWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const wxOVERRIDE { return m_clrPicker; }
+    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_clrPicker; }
     virtual void RecreateWidget() wxOVERRIDE { RecreatePicker(); }
 
     // lazy creation of the content

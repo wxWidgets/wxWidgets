@@ -70,7 +70,7 @@ public:
     SearchCtrlWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~SearchCtrlWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const wxOVERRIDE { return m_srchCtrl; }
+    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_srchCtrl; }
     virtual wxTextEntryBase *GetTextEntry() const wxOVERRIDE { return m_srchCtrl; }
     virtual void RecreateWidget() wxOVERRIDE;
 

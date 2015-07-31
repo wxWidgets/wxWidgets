@@ -77,7 +77,7 @@ class ChoiceWidgetsPage : public ItemContainerWidgetsPage
 public:
     ChoiceWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxControl *GetWidget() const wxOVERRIDE { return m_choice; }
+    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_choice; }
     virtual wxItemContainer* GetContainer() const wxOVERRIDE { return m_choice; }
     virtual void RecreateWidget() wxOVERRIDE { CreateChoice(); }
 

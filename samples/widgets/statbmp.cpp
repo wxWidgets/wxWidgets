@@ -52,7 +52,7 @@ public:
         : WidgetsPage(book, imaglist, statbmp_xpm) {}
 
     virtual void CreateContent() wxOVERRIDE;
-    virtual wxControl *GetWidget() const wxOVERRIDE { return m_statbmp; }
+    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_statbmp; }
     virtual void RecreateWidget() wxOVERRIDE;
 
 private:

@@ -93,7 +93,7 @@ public:
     StaticWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~StaticWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const wxOVERRIDE { return m_statText; }
+    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_statText; }
     virtual Widgets GetWidgets() const wxOVERRIDE
     {
         Widgets widgets;

@@ -64,7 +64,7 @@ public:
         m_sizerIndicator = NULL;
     }
 
-    virtual wxControl *GetWidget() const wxOVERRIDE { return m_indicator; }
+    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_indicator; }
     virtual void RecreateWidget() wxOVERRIDE;
 
     // lazy creation of the content

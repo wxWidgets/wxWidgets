@@ -103,7 +103,7 @@ class BitmapComboBoxWidgetsPage : public ItemContainerWidgetsPage
 public:
     BitmapComboBoxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxControl *GetWidget() const wxOVERRIDE { return m_combobox; }
+    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_combobox; }
     virtual wxItemContainer* GetContainer() const wxOVERRIDE { return m_combobox; }
     virtual void RecreateWidget() wxOVERRIDE { CreateCombo(); }
 

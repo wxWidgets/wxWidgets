@@ -83,7 +83,7 @@ enum
     ALL_CTRLS        = 1 << ALL_PAGE
 };
 
-typedef wxVector<wxControl *> Widgets;
+typedef wxVector<wxWindow *> Widgets;
 
 // ----------------------------------------------------------------------------
 // WidgetsPage: a book page demonstrating some widget
@@ -131,7 +131,7 @@ public:
                 const char *const icon[]);
 
     // return the control shown by this page
-    virtual wxControl *GetWidget() const = 0;
+    virtual wxWindow *GetWidget() const = 0;
 
     // return the control shown by this page, if it supports text entry interface
     virtual wxTextEntryBase *GetTextEntry() const { return NULL; }

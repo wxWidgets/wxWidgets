@@ -88,7 +88,7 @@ public:
     BookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist, const char *const icon[]);
     virtual ~BookWidgetsPage();
 
-    virtual wxControl *GetWidget() const wxOVERRIDE { return m_book; }
+    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_book; }
     virtual void RecreateWidget() wxOVERRIDE { RecreateBook(); }
 
     // lazy creation of the content

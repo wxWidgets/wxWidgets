@@ -75,7 +75,7 @@ public:
     GaugeWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~GaugeWidgetsPage();
 
-    virtual wxControl *GetWidget() const wxOVERRIDE { return m_gauge; }
+    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_gauge; }
     virtual void RecreateWidget() wxOVERRIDE { CreateGauge(); }
 
     // lazy creation of the content
