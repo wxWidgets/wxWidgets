@@ -683,39 +683,15 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
 
             wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
 
-            if ( UMAGetSystemVersion() >= 0x1070 )
+            if ( [nsEvent hasPreciseScrollingDeltas] )
             {
-                if ( [nsEvent hasPreciseScrollingDeltas] )
-                {
-                    deltaX = [nsEvent scrollingDeltaX];
-                    deltaY = [nsEvent scrollingDeltaY];
-                }
-                else
-                {
-                    deltaX = [nsEvent scrollingDeltaX] * 10;
-                    deltaY = [nsEvent scrollingDeltaY] * 10;
-                }
+                deltaX = [nsEvent scrollingDeltaX];
+                deltaY = [nsEvent scrollingDeltaY];
             }
             else
             {
-                const EventRef cEvent = (EventRef) [nsEvent eventRef];
-                // see http://developer.apple.com/qa/qa2005/qa1453.html
-                // for more details on why we have to look for the exact type
-                
-                bool isMouseScrollEvent = false;
-                if ( cEvent )
-                    isMouseScrollEvent = ::GetEventKind(cEvent) == kEventMouseScroll;
-                
-                if ( isMouseScrollEvent )
-                {
-                    deltaX = [nsEvent deviceDeltaX];
-                    deltaY = [nsEvent deviceDeltaY];
-                }
-                else
-                {
-                    deltaX = ([nsEvent deltaX] * 10);
-                    deltaY = ([nsEvent deltaY] * 10);
-                }
+                deltaX = [nsEvent scrollingDeltaX] * 10;
+                deltaY = [nsEvent scrollingDeltaY] * 10;
             }
             
             wxevent.m_wheelDelta = 10;

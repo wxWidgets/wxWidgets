@@ -1099,8 +1099,6 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
             // we have to emulate this
             [v setBezeled:NO];
             [v setBordered:NO];
-            if ( UMAGetSystemVersion() < 0x1070 )
-                c->SetNeedsFocusRect( true );
         }
         else
         {
