@@ -11,6 +11,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/utils.h"
+#include "wx/platinfo.h"
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
@@ -346,7 +347,7 @@ void wxBell()
     ProcessSerialNumber psn = { 0, kCurrentProcess };
     TransformProcessType(&psn, kProcessTransformToForegroundApplication);
     
-    if ( UMAGetSystemVersion() >= 0x1090 )
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 9) )
     {
         [[NSRunningApplication currentApplication] activateWithOptions:
          (NSApplicationActivateAllWindows | NSApplicationActivateIgnoringOtherApps)];
