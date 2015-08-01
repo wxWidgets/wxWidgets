@@ -34,6 +34,7 @@
     #include "wx/menuitem.h"
     #include "wx/treectrl.h"
     #include "wx/listctrl.h"
+    #include "wx/platinfo.h"
 #endif
 
 #include "wx/tooltip.h"
@@ -2215,7 +2216,7 @@ bool wxWindowMac::MacHasScrollBarCorner() const
             if ( frame )
             {
                 // starting from 10.7 there are no resize indicators anymore
-                if ( (frame->GetWindowStyleFlag() & wxRESIZE_BORDER) && UMAGetSystemVersion() < 0x1070)
+                if ( (frame->GetWindowStyleFlag() & wxRESIZE_BORDER) && !wxPlatformInfo::Get().CheckOSVersion(10, 7) )
                 {
                     // Parent frame has resize handle
                     wxPoint frameBottomRight = frame->GetScreenRect().GetBottomRight();

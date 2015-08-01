@@ -55,18 +55,6 @@ wxSocketManager *wxOSXSocketManagerCF = NULL;
 
 #if ( !wxUSE_GUI && !wxOSX_USE_IPHONE ) || wxOSX_USE_COCOA_OR_CARBON
 
-// have a fast version for mac code that returns the version as a return value
-
-long UMAGetSystemVersion()
-{
-    static SInt32 sUMASystemVersion = 0 ;
-    if ( sUMASystemVersion == 0 )
-    {
-        verify_noerr(Gestalt(gestaltSystemVersion, &sUMASystemVersion));
-    }
-    return sUMASystemVersion ;
-}
-
 // our OS version is the same in non GUI and GUI cases
 wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
 {

@@ -54,8 +54,6 @@
 // wxBase part of it).
 #include <Carbon/Carbon.h>
 
-WXDLLIMPEXP_BASE long UMAGetSystemVersion() ;
-
 void WXDLLIMPEXP_CORE wxMacStringToPascal( const wxString&from , unsigned char * to );
 wxString WXDLLIMPEXP_CORE wxMacMakeStringFromPascal( const unsigned char * from );
 
