@@ -485,16 +485,6 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
     {
         m_filterPanel = CreateFilterPanel(extracontrol);
         accView = m_filterPanel->GetHandle();
-        if( HasFlag(wxFD_OPEN) )
-        {
-            if ( UMAGetSystemVersion() < 0x1060 || !HasAppKit_10_6() )
-            {
-                wxOpenPanelDelegate* del = [[wxOpenPanelDelegate alloc]init];
-                [del setFileDialog:this];
-                [panel setDelegate:del];
-                m_delegate = del;
-            }
-        }
     }
     else
     {
@@ -642,21 +632,11 @@ int wxFileDialog::ShowModal()
         [oPanel setMessage:cf.AsNSString()];
         [oPanel setAllowsMultipleSelection: (HasFlag(wxFD_MULTIPLE) ? YES : NO )];
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
-        if ( UMAGetSystemVersion() >= 0x1060 && HasAppKit_10_6() )
-        {
-            [oPanel setAllowedFileTypes: (m_delegate == nil ? types : nil)];
-            if ( !m_dir.IsEmpty() )
-                [oPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString() 
-                                                   isDirectory:YES]];
-            returnCode = [oPanel runModal];
-        }
-        else 
-#endif
-        {
-            returnCode = [oPanel runModalForDirectory:m_dir.IsEmpty() ? nil : dir.AsNSString()
-                                                 file:file.AsNSString() types:(m_delegate == nil ? types : nil)];
-        }
+        [oPanel setAllowedFileTypes: (m_delegate == nil ? types : nil)];
+        if ( !m_dir.IsEmpty() )
+            [oPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString() 
+                                               isDirectory:YES]];
+        returnCode = [oPanel runModal];
             
         ModalFinishedCallback(oPanel, returnCode);
     }
