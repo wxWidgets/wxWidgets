@@ -161,8 +161,10 @@ public:
         Constructor, creating the window.
 
         @param parent
-            The window parent. This may be @NULL. If it is non-@NULL, the frame will
-            always be displayed on top of the parent window on Windows.
+            The window parent. This may be, and often is, @NULL. If it is
+            non-@NULL, the frame will be minimized when its parent is minimized
+            and restored when it is restored (although it will still be
+            possible to minimize and restore just this frame itself).
         @param id
             The window identifier. It may take a value of -1 to indicate a default value.
         @param title
