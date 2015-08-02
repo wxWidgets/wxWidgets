@@ -24,7 +24,6 @@ installed when you install Xcode 3.x.
 
 ---------
 
-# Build the library for Cocoa (wxWidgets 2.9.0 and later)
 mkdir build-cocoa-debug
 cd build-cocoa-debug
 ../configure --enable-debug
@@ -35,7 +34,7 @@ cd demos;   make;cd ..
 
 ---------
 
-# Build the library for Carbon
+# Build the library for Carbon (old, deprecated, 32 bits only)
 mkdir build-carbon-debug
 cd build-carbon-debug
 ../configure --with-carbon --enable-debug --disable-shared --enable-macosx_arch=i386 --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk  CC=/Developer/usr/bin/gcc-4.2 CXX=/Developer/usr/bin/g++-4.2 LD=/Developer/usr/bin/ld
@@ -131,8 +130,8 @@ binaries together. Assuming building on a PPC system:
 
 2. Then, build for Intel, in a different folder. This time use:
 
-export CFLAGS="-g -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386"
-export LDFLAGS="-syslibroot,/Developer/SDKs/MacOSX10.5.sdk"
+export CFLAGS="-g -isysroot /Developer/SDKs/MacOSX10.7.sdk -arch i386"
+export LDFLAGS="-syslibroot,/Developer/SDKs/MacOSX10.7.sdk"
 
 ./configure --disable-dependency-tracking --enable-static=yes --enable-shared=no \
   --target=i386-apple-darwin8 --host=powerpc-apple-darwin8 --build=i386-apple-darwin8
