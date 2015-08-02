@@ -1310,7 +1310,7 @@ public:
 
         See @ref thread_deletion for a broader explanation of this routine.
     */
-    ExitCode Wait(wxThreadWait flags = wxTHREAD_WAIT_BLOCK);
+    ExitCode Wait(wxThreadWait flags = wxTHREAD_WAIT_DEFAULT);
 
     /**
         Give the rest of the thread's time-slice to the system allowing the other
