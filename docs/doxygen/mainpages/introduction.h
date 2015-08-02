@@ -90,9 +90,9 @@ NetBSD, Solaris, AIX, ...) and require GTK+ 2.6 or later or GTK+ 3.x. The
 primary supported compiler is GNU g++.
 
 @li wxOSX: wxOSX/Cocoa is the primary port for Apple computers, replacing the
-older and now deprecated wxOSX/Carbon port. wxOSX supports either PowerPC or
-Intel Macs running OS X 10.5 or higher and can be compiled in either 32 or 64
-bits using Apple Developer Tools (both GNU g++ and clang are supported).
+older and now deprecated wxOSX/Carbon port. wxOSX/Cocoa supports 32 or 64 bit
+Intel Macs running OS X 10.7 or later. The port can be built either with g++
+or clang.
 
 Other platforms (iOS, Windows CE, OS/2), compilers (Borland C++ under Windows,
 Sun CC, HP-UX aCC, IBM xlC or SGI mipsPro under Unix) and ports (wxOSX/Carbon,
