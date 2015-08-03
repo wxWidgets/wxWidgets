@@ -45,6 +45,8 @@ Changes in behaviour which may result in build errors
 - wxQt branch implementing Qt5-based port of wxWidgets API was merged into
   the trunk (Mariano Reingart, Google Summer of Code project).
 
+- Added wxNativeWindow allowing to embed native widgets in wxWidgets programs.
+
 All:
 
 - Allow calling wxItemContainer::Add() and similar with std::vector<> argument.

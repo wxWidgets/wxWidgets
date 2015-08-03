@@ -5975,6 +5975,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_osx_cocoa_menu.o \
 	monodll_osx_cocoa_menuitem.o \
 	monodll_osx_cocoa_msgdlg.o \
+	monodll_cocoa_nativewin.o \
 	monodll_cocoa_nonownedwnd.o \
 	monodll_osx_cocoa_notebook.o \
 	monodll_osx_cocoa_radiobut.o \
@@ -8351,6 +8352,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_osx_cocoa_menu.o \
 	monolib_osx_cocoa_menuitem.o \
 	monolib_osx_cocoa_msgdlg.o \
+	monolib_cocoa_nativewin.o \
 	monolib_cocoa_nonownedwnd.o \
 	monolib_osx_cocoa_notebook.o \
 	monolib_osx_cocoa_radiobut.o \
@@ -10884,6 +10886,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_osx_cocoa_menu.o \
 	coredll_osx_cocoa_menuitem.o \
 	coredll_osx_cocoa_msgdlg.o \
+	coredll_cocoa_nativewin.o \
 	coredll_cocoa_nonownedwnd.o \
 	coredll_osx_cocoa_notebook.o \
 	coredll_osx_cocoa_radiobut.o \
@@ -12663,6 +12666,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_osx_cocoa_menu.o \
 	corelib_osx_cocoa_menuitem.o \
 	corelib_osx_cocoa_msgdlg.o \
+	corelib_cocoa_nativewin.o \
 	corelib_cocoa_nonownedwnd.o \
 	corelib_osx_cocoa_notebook.o \
 	corelib_osx_cocoa_radiobut.o \
@@ -18307,6 +18311,9 @@ monodll_osx_cocoa_menuitem.o: $(srcdir)/src/osx/cocoa/menuitem.mm $(MONODLL_ODEP
 
 monodll_osx_cocoa_msgdlg.o: $(srcdir)/src/osx/cocoa/msgdlg.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/msgdlg.mm
+
+monodll_cocoa_nativewin.o: $(srcdir)/src/osx/cocoa/nativewin.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/nativewin.mm
 
 monodll_cocoa_nonownedwnd.o: $(srcdir)/src/osx/cocoa/nonownedwnd.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/nonownedwnd.mm
@@ -24232,6 +24239,9 @@ monolib_osx_cocoa_menuitem.o: $(srcdir)/src/osx/cocoa/menuitem.mm $(MONOLIB_ODEP
 
 monolib_osx_cocoa_msgdlg.o: $(srcdir)/src/osx/cocoa/msgdlg.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/msgdlg.mm
+
+monolib_cocoa_nativewin.o: $(srcdir)/src/osx/cocoa/nativewin.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/nativewin.mm
 
 monolib_cocoa_nonownedwnd.o: $(srcdir)/src/osx/cocoa/nonownedwnd.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/nonownedwnd.mm
@@ -30839,6 +30849,9 @@ coredll_osx_cocoa_menuitem.o: $(srcdir)/src/osx/cocoa/menuitem.mm $(COREDLL_ODEP
 coredll_osx_cocoa_msgdlg.o: $(srcdir)/src/osx/cocoa/msgdlg.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/msgdlg.mm
 
+coredll_cocoa_nativewin.o: $(srcdir)/src/osx/cocoa/nativewin.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/nativewin.mm
+
 coredll_cocoa_nonownedwnd.o: $(srcdir)/src/osx/cocoa/nonownedwnd.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/nonownedwnd.mm
 
@@ -35239,6 +35252,9 @@ corelib_osx_cocoa_menuitem.o: $(srcdir)/src/osx/cocoa/menuitem.mm $(CORELIB_ODEP
 
 corelib_osx_cocoa_msgdlg.o: $(srcdir)/src/osx/cocoa/msgdlg.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/msgdlg.mm
+
+corelib_cocoa_nativewin.o: $(srcdir)/src/osx/cocoa/nativewin.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/nativewin.mm
 
 corelib_cocoa_nonownedwnd.o: $(srcdir)/src/osx/cocoa/nonownedwnd.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/nonownedwnd.mm

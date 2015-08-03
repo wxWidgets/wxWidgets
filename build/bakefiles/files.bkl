@@ -2545,6 +2545,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/menu.mm
     src/osx/cocoa/menuitem.mm
     src/osx/cocoa/msgdlg.mm
+    src/osx/cocoa/nativewin.mm
     src/osx/cocoa/nonownedwnd.mm
     src/osx/cocoa/notebook.mm
     src/osx/cocoa/radiobut.mm
