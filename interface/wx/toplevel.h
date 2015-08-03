@@ -536,8 +536,9 @@ public:
     virtual void ShowWithoutActivating();
 
     /**
-        Adds or removes a full screen button to the right upper corner of a
-        window's title bar under OS X 10.7 and later.
+        Enables the maximize button to toggle full screen mode. Prior to 
+        OS X 10.10 a full screen button is added to the right upper corner
+        of a window's title bar.
 
         Currently only available for wxOSX/Cocoa.
 
@@ -546,7 +547,7 @@ public:
             if @false the button is removed.
 
         @return @true if the button was added or removed, @false if running
-        under a pre-OS X 10.7 system or another OS.
+        under another OS.
 
         @note Having the button is also required to let ShowFullScreen()
         make use of the full screen API available since OS X 10.7: a full
