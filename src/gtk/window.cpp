@@ -3055,6 +3055,9 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
                 // nor for the ones we have but don't current show
                 switch ( policy[i] )
                 {
+#if GTK_CHECK_VERSION(3,16,0)
+                    case GTK_POLICY_EXTERNAL:
+#endif
                     case GTK_POLICY_NEVER:
                         // never shown so doesn't take any place
                         continue;
