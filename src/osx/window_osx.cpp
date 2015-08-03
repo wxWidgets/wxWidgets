@@ -466,30 +466,6 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos,
     {
         SetPosition(pos);
     }
-
-    // todo remove if refactoring works correctly
-#if 0
-    wxASSERT_MSG( GetPeer() != NULL && GetPeer()->IsOk() , wxT("No valid mac control") ) ;
-
-    if (!GetParent()->GetChildren().Find((wxWindow*)this))
-        GetParent()->AddChild( this );
-
-    GetPeer()->InstallEventHandler();
-    GetPeer()->Embed(GetParent()->GetPeer());
-
-    GetParent()->MacChildAdded() ;
-
-    // adjust font, controlsize etc
-    DoSetWindowVariant( m_windowVariant ) ;
-
-    GetPeer()->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics), GetFont().GetEncoding() ) ;
-
-    // for controls we want to use best size for wxDefaultSize params )
-    if ( !GetPeer()->IsUserPane() )
-        SetInitialSize(size);
-
-    SetCursor( *wxSTANDARD_CURSOR ) ;
-#endif
 }
 
 void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
