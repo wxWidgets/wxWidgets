@@ -1224,13 +1224,13 @@ wxString wxGetOsDescription()
                                     ? _("Windows Server 2012 R2")
                                     : _("Windows 8.1");
                             break;
-
-                        case 4:
-                            str = wxIsWindowsServer() == 1
-                                    ? _("Windows Server 10")
-                                    : _("Windows 10");
-                            break;
                     }
+                    break;
+
+                case 10:
+                    str = wxIsWindowsServer() == 1
+                            ? _("Windows Server 10")
+                            : _("Windows 10");
                     break;
             }
 
