@@ -620,6 +620,13 @@ void wxSlider::SetRange(int minValue, int maxValue)
 
     if ( m_labels )
     {
+        Move(wxDefaultPosition); // Force a re-layout the labels.
+        // Update the label with value adjusted by the control
+        // (old value can be  out of new range).
+        if ( HasFlag(wxSL_VALUE_LABEL) )
+        {
+            SetValue(GetValue());
+        }
         ::SetWindowText((*m_labels)[SliderLabel_Min],
                         Format(ValueInvertOrNot(m_rangeMin)).t_str());
         ::SetWindowText((*m_labels)[SliderLabel_Max],
