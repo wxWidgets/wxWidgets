@@ -1391,10 +1391,11 @@ wxWinVersion wxGetWinVersion()
                         case 3:
                             return wxWinVersion_8_1;
 
-                        case 4:
-                            return wxWinVersion_10;
-					}
+                    }
                     break;
+                    
+                case 10:
+                    return wxWinVersion_10;
             }
         default:
             // Do nothing just to silence GCC warning
