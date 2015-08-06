@@ -80,7 +80,6 @@ static const int EXPANDER_OFFSET = 1;
 // Below is the compare stuff.
 // For the generic implementation, both the leaf nodes and the nodes are sorted for
 // fast search when needed
-static wxDataViewModel* g_model;
 
 // The column is either the index of the column to be used for sorting or one
 // of the special values in this enum:
@@ -95,9 +94,6 @@ enum
     // Sort using the model default sort order.
     SortColumn_Default = -1
 };
-
-static int g_column = SortColumn_None;
-static bool g_asending = true;
 
 // ----------------------------------------------------------------------------
 // helper functions
@@ -407,17 +403,18 @@ public:
 // wxDataViewTreeNode
 //-----------------------------------------------------------------------------
 
+class wxDataViewMainWindow;
 class wxDataViewTreeNode;
 WX_DEFINE_ARRAY( wxDataViewTreeNode *, wxDataViewTreeNodes );
-
-int LINKAGEMODE wxGenericTreeModelNodeCmp( wxDataViewTreeNode ** node1,
-                                           wxDataViewTreeNode ** node2);
 
 class wxDataViewTreeNode
 {
 public:
-    wxDataViewTreeNode(wxDataViewTreeNode *parent, const wxDataViewItem& item)
-        : m_parent(parent),
+    wxDataViewTreeNode(wxDataViewMainWindow *window,
+                       wxDataViewTreeNode *parent,
+                       const wxDataViewItem& item)
+        : m_window(window),
+          m_parent(parent),
           m_item(item),
           m_branchData(NULL)
     {
@@ -439,9 +436,9 @@ public:
         }
     }
 
-    static wxDataViewTreeNode* CreateRootNode()
+    static wxDataViewTreeNode* CreateRootNode(wxDataViewMainWindow *w)
     {
-        wxDataViewTreeNode *n = new wxDataViewTreeNode(NULL, wxDataViewItem());
+        wxDataViewTreeNode *n = new wxDataViewTreeNode(w, NULL, wxDataViewItem());
         n->m_branchData = new BranchNodeData;
         n->m_branchData->open = true;
         return n;
@@ -455,17 +452,7 @@ public:
         return m_branchData->children;
     }
 
-    void InsertChild(wxDataViewTreeNode *node, unsigned index)
-    {
-        if ( !m_branchData )
-            m_branchData = new BranchNodeData;
-
-        m_branchData->children.Insert(node, index);
-
-        // TODO: insert into sorted array directly in O(log n) instead of resorting in O(n log n)
-        if (g_column >= -1)
-            m_branchData->children.Sort( &wxGenericTreeModelNodeCmp );
-    }
+    void InsertChild(wxDataViewTreeNode *node, unsigned index);
 
     void RemoveChild(wxDataViewTreeNode *node)
     {
@@ -580,27 +567,10 @@ public:
             m_parent->ChangeSubTreeCount(num);
     }
 
-    void Resort()
-    {
-        if ( !m_branchData )
-            return;
-
-        if (g_column >= -1)
-        {
-            wxDataViewTreeNodes& nodes = m_branchData->children;
-
-            nodes.Sort( &wxGenericTreeModelNodeCmp );
-            int len = nodes.GetCount();
-            for (int i = 0; i < len; i ++)
-            {
-                if ( nodes[i]->HasChildren() )
-                    nodes[i]->Resort();
-            }
-        }
-    }
-
+    void Resort();
 
 private:
+    wxDataViewMainWindow *m_window;
     wxDataViewTreeNode  *m_parent;
 
     // Corresponding model item.
@@ -633,12 +603,6 @@ private:
     BranchNodeData *m_branchData;
 };
 
-
-int LINKAGEMODE wxGenericTreeModelNodeCmp( wxDataViewTreeNode ** node1,
-                                           wxDataViewTreeNode ** node2)
-{
-    return g_model->Compare( (*node1)->GetItem(), (*node2)->GetItem(), g_column, g_asending );
-}
 
 
 //-----------------------------------------------------------------------------
@@ -680,10 +644,10 @@ public:
     // SortPrepare() was called -- and ignored -- while we were frozen.
     virtual void DoThaw()
     {
-        if ( g_column == SortColumn_OnThaw )
+        if ( m_sortColumn == SortColumn_OnThaw )
         {
             Resort();
-            g_column = SortColumn_None;
+            m_sortColumn = SortColumn_None;
         }
 
         wxWindow::DoThaw();
@@ -691,23 +655,23 @@ public:
 
     void SortPrepare()
     {
-        g_model = GetModel();
+        wxDataViewModel* model = GetModel();
 
         wxDataViewColumn* col = GetOwner()->GetSortingColumn();
         if( !col )
         {
-            if (g_model->HasDefaultCompare())
+            if (model->HasDefaultCompare())
             {
                 // See below for the explanation of IsFrozen() test.
                 if ( IsFrozen() )
-                    g_column = SortColumn_OnThaw;
+                    m_sortColumn = SortColumn_OnThaw;
                 else
-                    g_column = SortColumn_Default;
+                    m_sortColumn = SortColumn_Default;
             }
             else
-                g_column = SortColumn_None;
+                m_sortColumn = SortColumn_None;
 
-            g_asending = true;
+            m_sortAscending = true;
             return;
         }
 
@@ -716,12 +680,12 @@ public:
         // them all at once when the window is finally thawed, see above.
         if ( IsFrozen() )
         {
-            g_column = SortColumn_OnThaw;
+            m_sortColumn = SortColumn_OnThaw;
             return;
         }
 
-        g_column = col->GetModelColumn();
-        g_asending = col->IsSortOrderAscending();
+        m_sortColumn = col->GetModelColumn();
+        m_sortAscending = col->IsSortOrderAscending();
     }
 
     void SetOwner( wxDataViewCtrl* owner ) { m_owner = owner; }
@@ -844,6 +808,9 @@ public:
     void StartEditing(const wxDataViewItem& item, const wxDataViewColumn* col);
     void FinishEditing();
 
+    int GetSortColumn() const { return m_sortColumn; }
+    bool IsAscendingSort() const { return m_sortAscending; }
+
 private:
     void InvalidateCount() { m_count = -1; }
     void UpdateCount(int count)
@@ -911,6 +878,10 @@ private:
 
     // This is the tree node under the cursor
     wxDataViewTreeNode * m_underMouse;
+
+    // sorted column + extra flags
+    int m_sortColumn;
+    bool m_sortAscending;
 
     // The control used for editing or NULL.
     wxWeakRef<wxWindow> m_editorCtrl;
@@ -1469,13 +1440,74 @@ void wxDataViewRenameTimer::Notify()
     m_owner->OnRenameTimer();
 }
 
+
+
+// ----------------------------------------------------------------------------
+// wxDataViewTreeNode
+// ----------------------------------------------------------------------------
+
+// Used by wxGenericTreeModelNodeCmp sort callback only.
+//
+// This is not thread safe but it should be fine if all events are handled in
+// one thread.
+static wxDataViewModel* g_model;
+static int g_column;
+static bool g_asending;
+
+int LINKAGEMODE wxGenericTreeModelNodeCmp(wxDataViewTreeNode ** node1,
+    wxDataViewTreeNode ** node2)
+{
+    return g_model->Compare((*node1)->GetItem(), (*node2)->GetItem(), g_column, g_asending);
+}
+
+
+void wxDataViewTreeNode::InsertChild(wxDataViewTreeNode *node, unsigned index)
+{
+    if (!m_branchData)
+        m_branchData = new BranchNodeData;
+
+    m_branchData->children.Insert(node, index);
+
+    // TODO: insert into sorted array directly in O(log n) instead of resorting in O(n log n)
+    if ((g_column = m_window->GetSortColumn()) >= -1)
+    {
+        g_model = m_window->GetModel();
+        g_asending = m_window->IsAscendingSort();
+
+        m_branchData->children.Sort(&wxGenericTreeModelNodeCmp);
+    }
+}
+
+void wxDataViewTreeNode::Resort()
+{
+    if (!m_branchData)
+        return;
+
+    if ((g_column = m_window->GetSortColumn()) >= -1)
+    {
+        wxDataViewTreeNodes& nodes = m_branchData->children;
+
+        g_model = m_window->GetModel();
+        g_asending = m_window->IsAscendingSort();
+        nodes.Sort(&wxGenericTreeModelNodeCmp);
+        int len = nodes.GetCount();
+        for (int i = 0; i < len; i++)
+        {
+            if (nodes[i]->HasChildren())
+                nodes[i]->Resort();
+        }
+    }
+}
+
 //-----------------------------------------------------------------------------
 // wxDataViewMainWindow
 //-----------------------------------------------------------------------------
 
 // The tree building helper, declared firstly
-static void BuildTreeHelper( const wxDataViewModel * model,  const wxDataViewItem & item,
-                             wxDataViewTreeNode * node);
+static void BuildTreeHelper(wxDataViewMainWindow *window,
+                            const wxDataViewModel *model,
+                            const wxDataViewItem & item,
+                            wxDataViewTreeNode * node);
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewMainWindow, wxWindow);
 
@@ -1532,11 +1564,15 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     // TODO: maybe there is something system colour to use
     m_penExpander = wxPen(wxColour(0,0,0));
 
-    m_root = wxDataViewTreeNode::CreateRootNode();
+    m_root = wxDataViewTreeNode::CreateRootNode(this);
 
     // Make m_count = -1 will cause the class recaculate the real displaying number of rows.
     m_count = -1;
     m_underMouse = NULL;
+
+    m_sortColumn = SortColumn_None;
+    m_sortAscending = true;
+
     UpdateDisplay();
 }
 
@@ -2330,7 +2366,7 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         int posInModel = modelSiblings.Index(item, /*fromEnd=*/true);
         wxCHECK_MSG( posInModel != wxNOT_FOUND, false, "adding non-existent item?" );
 
-        wxDataViewTreeNode *itemNode = new wxDataViewTreeNode(parentNode, item);
+        wxDataViewTreeNode *itemNode = new wxDataViewTreeNode(this, parentNode, item);
         itemNode->SetHasChildren(GetModel()->IsContainer(item));
 
         parentNode->SetHasChildren(true);
@@ -2503,7 +2539,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
 bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
 {
     SortPrepare();
-    g_model->Resort();
+    GetModel()->Resort();
 
     GetOwner()->InvalidateColBestWidths();
 
@@ -2534,7 +2570,7 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
     return true;
 */
     SortPrepare();
-    g_model->Resort();
+    GetModel()->Resort();
 
     GetOwner()->InvalidateColBestWidth(view_column);
 
@@ -3148,7 +3184,7 @@ void wxDataViewMainWindow::Expand( unsigned int row )
         if( node->GetChildNodes().empty() )
         {
             SortPrepare();
-            ::BuildTreeHelper(GetModel(), node->GetItem(), node);
+            ::BuildTreeHelper(this, GetModel(), node->GetItem(), node);
         }
 
         const unsigned countNewRows = node->GetSubTreeCount();
@@ -3253,7 +3289,7 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
                 // child nodes in the control's representation yet. We have
                 // to realize its subtree now.
                 SortPrepare();
-                ::BuildTreeHelper(model, node->GetItem(), node);
+                ::BuildTreeHelper(this, model, node->GetItem(), node);
             }
 
             const wxDataViewTreeNodes& nodes = node->GetChildNodes();
@@ -3463,8 +3499,8 @@ int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item) const
     }
 }
 
-static void BuildTreeHelper( const wxDataViewModel * model,  const wxDataViewItem & item,
-                             wxDataViewTreeNode * node)
+static void BuildTreeHelper( wxDataViewMainWindow *window, const wxDataViewModel * model,
+                             const wxDataViewItem & item, wxDataViewTreeNode * node)
 {
     if( !model->IsContainer( item ) )
         return;
@@ -3474,7 +3510,7 @@ static void BuildTreeHelper( const wxDataViewModel * model,  const wxDataViewIte
 
     for ( unsigned int index = 0; index < num; index++ )
     {
-        wxDataViewTreeNode *n = new wxDataViewTreeNode(node, children[index]);
+        wxDataViewTreeNode *n = new wxDataViewTreeNode(window, node, children[index]);
 
         if( model->IsContainer(children[index]) )
             n->SetHasChildren( true );
@@ -3496,12 +3532,12 @@ void wxDataViewMainWindow::BuildTree(wxDataViewModel * model)
         return;
     }
 
-    m_root = wxDataViewTreeNode::CreateRootNode();
+    m_root = wxDataViewTreeNode::CreateRootNode(this);
 
     // First we define a invalid item to fetch the top-level elements
     wxDataViewItem item;
     SortPrepare();
-    BuildTreeHelper( model, item, m_root);
+    BuildTreeHelper(this, model, item, m_root);
     InvalidateCount();
 }
 
