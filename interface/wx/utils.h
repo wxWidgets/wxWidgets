@@ -733,10 +733,6 @@ wxString wxGetHomeDir();
     note that the returned name is @e not fully qualified, i.e. it does not
     include the domain name.
 
-    Under Windows or NT, this function first looks in the environment variable
-    SYSTEM_NAME; if this is not found, the entry @b HostName in the wxWidgets
-    section of the WIN.INI file is tried.
-
     @return The hostname if successful or an empty string otherwise.
 
     @see wxGetFullHostName()
@@ -835,7 +831,7 @@ bool wxGetUserName(char* buf, int sz);
 /**
     Returns the string containing the description of the current platform in a
     user-readable form. For example, this function may return strings like
-    "Windows NT Version 4.0" or "Linux 2.2.2 i386".
+    "Windows 10 (build 10240), 64-bit edition" or "Linux 4.1.4 i386".
 
     @see wxGetOsVersion()
 
@@ -851,16 +847,21 @@ wxString wxGetOsDescription();
     
     For Unix-like systems (@c wxOS_UNIX) the major and minor version integers will 
     contain the kernel major and minor version numbers (as returned by the
-    'uname -r' command); e.g. "2" and "6" if the machine is using kernel 2.6.19.
+    'uname -r' command); e.g. "4" and "1" if the machine is using kernel 4.1.4.
 
     For Mac OS X systems (@c wxOS_MAC) the major and minor version integers are the
-    natural version numbers associated with the OS; e.g. "10" and "6" if the machine
-    is using Mac OS X Snow Leopard.    
+    natural version numbers associated with the OS; e.g. "10" and "11" if the machine
+    is using Mac OS X El Capitan.
     
     For Windows-like systems (@c wxOS_WINDOWS) the major and minor version integers will 
     contain the following values:
     @beginTable
     @row3col{<b>Windows OS name</b>, <b>Major version</b>, <b>Minor version</b>}
+    @row3col{Windows 10,               10, 0}
+    @row3col{Windows 8.1,               6, 3}
+    @row3col{Windows Server 2012 R2,    6, 3}
+    @row3col{Windows 8,                 6, 2}
+    @row3col{Windows Server 2012,       6, 2}
     @row3col{Windows 7,                 6, 1}
     @row3col{Windows Server 2008 R2,    6, 1}
     @row3col{Windows Server 2008,       6, 0}
@@ -868,7 +869,6 @@ wxString wxGetOsDescription();
     @row3col{Windows Server 2003 R2,    5, 2}
     @row3col{Windows Server 2003,       5, 2}
     @row3col{Windows XP,                5, 1}
-    @row3col{Windows 2000,              5, 0}
     @endDefList
     See the <a href="http://msdn.microsoft.com/en-us/library/ms724832(VS.85).aspx">MSDN</a>
     for more info about the values above.
