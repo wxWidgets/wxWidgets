@@ -1150,6 +1150,14 @@ wxString wxGetOsDescription()
 
 #endif // !__DARWIN__
 
+bool wxCheckOsVersion(int majorVsn, int minorVsn)
+{
+    int majorCur, minorCur;
+    wxGetOsVersion(&majorCur, &minorCur);
+
+    return majorCur > majorVsn || (majorCur == majorVsn && minorCur >= minorVsn);
+}
+
 unsigned long wxGetProcessId()
 {
     return (unsigned long)getpid();

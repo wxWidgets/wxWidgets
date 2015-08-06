@@ -880,6 +880,18 @@ wxString wxGetOsDescription();
 wxOperatingSystemId wxGetOsVersion(int* major = NULL, int* minor = NULL);
 
 /**
+    Returns @true the version of the operating system on which the program
+    is running under is the same or later than the given version.
+
+    @since 3.1.0
+
+    @see wxGetOsVersion(), wxPlatformInfo
+
+    @header{wx/utils.h}
+*/
+bool wxCheckOsVersion(int majorVsn, int minorVsn = 0);
+
+/**
     Returns @true if the operating system the program is running under is 64
     bit. The check is performed at run-time and may differ from the value
     available at compile-time (at compile-time you can just check if

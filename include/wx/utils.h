@@ -143,6 +143,9 @@ WXDLLIMPEXP_BASE wxString wxGetOsDescription();
 WXDLLIMPEXP_BASE wxOperatingSystemId wxGetOsVersion(int *majorVsn = NULL,
                                                     int *minorVsn = NULL);
 
+// Check is OS version is at least the specified major and minor version
+WXDLLIMPEXP_BASE bool wxCheckOsVersion(int majorVsn, int minorVsn = 0);
+
 // Get platform endianness
 WXDLLIMPEXP_BASE bool wxIsPlatformLittleEndian();
 

@@ -1327,6 +1327,21 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
     return s_version.os;
 }
 
+bool wxCheckOsVersion(int majorVsn, int minorVsn)
+{
+    OSVERSIONINFOEX osvi = { sizeof(osvi), 0, 0, 0, 0, { 0 }, 0, 0 };
+    DWORDLONG const dwlConditionMask =
+        ::VerSetConditionMask(
+        ::VerSetConditionMask(
+        0, VER_MAJORVERSION, VER_GREATER_EQUAL),
+        VER_MINORVERSION, VER_GREATER_EQUAL);
+
+    osvi.dwMajorVersion = majorVsn;
+    osvi.dwMinorVersion = minorVsn;
+
+    return ::VerifyVersionInfo(&osvi, VER_MAJORVERSION | VER_MINORVERSION, dwlConditionMask) != FALSE;
+}
+
 wxWinVersion wxGetWinVersion()
 {
     int verMaj,
