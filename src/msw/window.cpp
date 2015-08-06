@@ -917,22 +917,9 @@ void wxWindowMSW::WarpPointer(int x, int y)
 
 void wxWindowMSW::MSWUpdateUIState(int action, int state)
 {
-    // WM_CHANGEUISTATE only appeared in Windows 2000 so it can do us no good
-    // to use it on older systems -- and could possibly do some harm
-    static int s_needToUpdate = -1;
-    if ( s_needToUpdate == -1 )
-    {
-        int verMaj, verMin;
-        s_needToUpdate = wxGetOsVersion(&verMaj, &verMin) == wxOS_WINDOWS_NT &&
-                            verMaj >= 5;
-    }
-
-    if ( s_needToUpdate )
-    {
-        // we send WM_CHANGEUISTATE so if nothing needs changing then the system
-        // won't send WM_UPDATEUISTATE
-        ::SendMessage(GetHwnd(), WM_CHANGEUISTATE, MAKEWPARAM(action, state), 0);
-    }
+    // we send WM_CHANGEUISTATE so if nothing needs changing then the system
+    // won't send WM_UPDATEUISTATE
+    ::SendMessage(GetHwnd(), WM_CHANGEUISTATE, MAKEWPARAM(action, state), 0);
 }
 
 // ---------------------------------------------------------------------------

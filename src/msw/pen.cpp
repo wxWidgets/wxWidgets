@@ -300,19 +300,6 @@ bool wxPenRefData::Alloc()
    const COLORREF col = m_colour.GetPixel();
 
 #ifdef wxHAVE_EXT_CREATE_PEN
-   // Only NT can display dashed or dotted lines with width > 1
-   static const int os = wxGetOsVersion();
-   if ( os != wxOS_WINDOWS_NT &&
-           (m_style == wxPENSTYLE_DOT ||
-            m_style == wxPENSTYLE_LONG_DASH ||
-            m_style == wxPENSTYLE_SHORT_DASH ||
-            m_style == wxPENSTYLE_DOT_DASH ||
-            m_style == wxPENSTYLE_USER_DASH) &&
-            m_width > 1 )
-   {
-       m_width = 1;
-   }
-
    // check if it's a standard kind of pen which can be created with just
    // CreatePen()
    if ( m_join == wxJOIN_ROUND &&

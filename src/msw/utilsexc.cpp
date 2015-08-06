@@ -761,8 +761,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
     DWORD dwFlags = CREATE_SUSPENDED;
 
 #ifndef __WXWINCE__
-    if ( (flags & wxEXEC_MAKE_GROUP_LEADER) &&
-            (wxGetOsVersion() == wxOS_WINDOWS_NT) )
+    if ( (flags & wxEXEC_MAKE_GROUP_LEADER) )
         dwFlags |= CREATE_NEW_PROCESS_GROUP;
 
     dwFlags |= CREATE_DEFAULT_ERROR_MODE ;

@@ -1341,15 +1341,7 @@ bool wxTopLevelWindowMSW::SetTransparent(wxByte alpha)
 
 bool wxTopLevelWindowMSW::CanSetTransparent()
 {
-    // The API is available on win2k and above
-
-    static int os_type = -1;
-    static int ver_major = -1;
-
-    if (os_type == -1)
-        os_type = ::wxGetOsVersion(&ver_major);
-
-    return (os_type == wxOS_WINDOWS_NT && ver_major >= 5);
+    return true;
 }
 
 void wxTopLevelWindowMSW::DoFreeze()
