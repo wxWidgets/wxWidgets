@@ -56,30 +56,26 @@ wxSocketManager *wxOSXSocketManagerCF = NULL;
 #if ( !wxUSE_GUI && !wxOSX_USE_IPHONE ) || wxOSX_USE_COCOA_OR_CARBON
 
 // our OS version is the same in non GUI and GUI cases
-wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
+wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 {
     // This returns 10 and 6 for OS X 10.6, consistent with behaviour on
     // other platforms.
-    SInt32 maj, min;
-    Gestalt(gestaltSystemVersionMajor, &maj);
-    Gestalt(gestaltSystemVersionMinor, &min);
 
-    if ( majorVsn != NULL )
-        *majorVsn = maj;
+    if (verMaj)
+    {
+        Gestalt(gestaltSystemVersionMajor, verMaj);
+    }
 
-    if ( minorVsn != NULL )
-        *minorVsn = min;
+    if (verMin)
+    {
+        Gestalt(gestaltSystemVersionMinor, verMin);
+    }
 
-#if 0
-    SInt32 theSystem;
-    Gestalt(gestaltSystemVersion, &theSystem);
+    if (verMicro)
+    {
+        Gestalt(gestaltSystemVersionBugFix, verMicro);
+    }
 
-    if ( majorVsn != NULL )
-        *majorVsn = (theSystem >> 8);
-
-    if ( minorVsn != NULL )
-        *minorVsn = (theSystem & 0xFF);
-#endif
     return wxOS_MAC_OSX_DARWIN;
 }
 

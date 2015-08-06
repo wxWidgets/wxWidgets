@@ -27,6 +27,10 @@ Changes in behaviour not resulting in compilation errors
 - Using invalid flags with wxBoxSizer or wxGridSizer items now triggers asserts
   when done from the code or error messages when done in XRC.
 
+- The pure virtual function wxAppTrait::GetToolkitVersion() now has a parameter
+  for getting the micro version. If you override GetToolkitVersion() you need
+  to add this new third parameter.
+
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
 
@@ -68,6 +72,8 @@ All:
 - Add wxART_FULL_SCREEN standard bitmap (Igor Korot).
 - Fix wxStringTokenizer copy ctor and assignment operator.
 - Added wxASSERT_MSG_AT() and wxFAIL_MSG_AT() macros.
+- Add parameter to get the micro version to OS and toolkit version
+  functions. See wxGetOsVersion(), wxPlatformInfo, and wxAppTraits.
 
 Unix:
 

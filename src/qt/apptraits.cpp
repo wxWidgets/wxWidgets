@@ -39,12 +39,16 @@ wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 
 // #endif
 
-wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer, int *minVer) const
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer,
+                                           int *minVer,
+                                           int *microVer) const
 {
     if ( majVer )
         *majVer = QT_VERSION >> 16;
     if ( minVer )
         *minVer = (QT_VERSION >> 8) & 0xFF;
+    if ( microVer )
+        *microVer = QT_VERSION & 0xFF;
 
     return wxPORT_QT;
 }

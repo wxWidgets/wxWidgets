@@ -166,10 +166,12 @@ void wxDisplaySizeMM(int *width, int *height)
 }
 
 
-wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj,
+                                           int *verMin,
+                                           int *verMicro) const
 {
     // We suppose that toolkit version is the same as OS version under Mac
-    wxGetOsVersion(verMaj, verMin);
+    wxGetOsVersion(verMaj, verMin, verMicro);
 
     return wxPORT_OSX;
 }

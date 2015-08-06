@@ -188,27 +188,35 @@ public:
         { return m_osVersionMajor; }
     int GetOSMinorVersion() const
         { return m_osVersionMinor; }
+    int GetOSMicroVersion() const
+        { return m_osVersionMicro; }
 
-    // return true if the OS version >= major.minor
-    bool CheckOSVersion(int major, int minor) const
+    // return true if the OS version >= major.minor.micro
+    bool CheckOSVersion(int major, int minor, int micro = 0) const
     {
         return DoCheckVersion(GetOSMajorVersion(),
                               GetOSMinorVersion(),
+                              GetOSMicroVersion(),
                               major,
-                              minor);
+                              minor,
+                              micro);
     }
 
     int GetToolkitMajorVersion() const
         { return m_tkVersionMajor; }
     int GetToolkitMinorVersion() const
         { return m_tkVersionMinor; }
+    int GetToolkitMicroVersion() const
+        { return m_tkVersionMicro; }
 
-    bool CheckToolkitVersion(int major, int minor) const
+    bool CheckToolkitVersion(int major, int minor, int micro = 0) const
     {
         return DoCheckVersion(GetToolkitMajorVersion(),
                               GetToolkitMinorVersion(),
+                              GetToolkitMicroVersion(),
                               major,
-                              minor);
+                              minor,
+                              micro);
     }
 
     bool IsUsingUniversalWidgets() const
@@ -255,10 +263,19 @@ public:
     // setters
     // -----------------
 
-    void SetOSVersion(int major, int minor)
-        { m_osVersionMajor=major; m_osVersionMinor=minor; }
-    void SetToolkitVersion(int major, int minor)
-        { m_tkVersionMajor=major; m_tkVersionMinor=minor; }
+    void SetOSVersion(int major, int minor, int micro = 0)
+    {
+        m_osVersionMajor = major;
+        m_osVersionMinor = minor;
+        m_osVersionMicro = micro;
+    }
+
+    void SetToolkitVersion(int major, int minor, int micro = 0)
+    {
+        m_tkVersionMajor = major;
+        m_tkVersionMinor = minor;
+        m_tkVersionMicro = micro;
+    }
 
     void SetOperatingSystemId(wxOperatingSystemId n)
         { m_os = n; }
@@ -283,9 +300,11 @@ public:
     bool IsOk() const
     {
         return m_osVersionMajor != -1 && m_osVersionMinor != -1 &&
+               m_osVersionMicro != -1 &&
                m_os != wxOS_UNKNOWN &&
                !m_osDesc.IsEmpty() &&
                m_tkVersionMajor != -1 && m_tkVersionMinor != -1 &&
+               m_tkVersionMicro != -1 &&
                m_port != wxPORT_UNKNOWN &&
                m_arch != wxARCH_INVALID &&
                m_endian != wxENDIAN_INVALID;
@@ -295,9 +314,12 @@ public:
 
 
 protected:
-    static bool DoCheckVersion(int majorCur, int minorCur, int major, int minor)
+    static bool DoCheckVersion(int majorCur, int minorCur, int microCur,
+                               int major, int minor, int micro)
     {
-        return majorCur > major || (majorCur == major && minorCur >= minor);
+        return majorCur > major
+            || (majorCur == major && minorCur > minor)
+            || (majorCur == major && minorCur == minor && microCur >= micro);
     }
 
     void InitForCurrentPlatform();
@@ -309,7 +331,8 @@ protected:
     // Version of the OS; valid if m_os != wxOS_UNKNOWN
     // (-1 means not initialized yet).
     int m_osVersionMajor,
-        m_osVersionMinor;
+        m_osVersionMinor,
+        m_osVersionMicro;
 
     // Operating system ID.
     wxOperatingSystemId m_os;
@@ -330,7 +353,7 @@ protected:
 
     // Version of the underlying toolkit
     // (-1 means not initialized yet; zero means no toolkit).
-    int m_tkVersionMajor, m_tkVersionMinor;
+    int m_tkVersionMajor, m_tkVersionMinor, m_tkVersionMicro;
 
     // name of the wxWidgets port
     wxPortId m_port;

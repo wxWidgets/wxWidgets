@@ -494,12 +494,16 @@ wxString wxGetOsDescription()
     return osname;
 }
 
-wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
+wxOperatingSystemId wxGetOsVersion(int *verMaj,
+                                   int *verMin,
+                                   int *verMicro)
 {
     if ( verMaj )
         *verMaj = _osmajor;
     if ( verMin )
         *verMin = _osminor;
+    if ( verMicro )
+        *verMicro = 0;
 
     return wxOS_DOS;
 }

@@ -1114,23 +1114,30 @@ wxLinuxDistributionInfo wxGetLinuxDistributionInfo()
 // these functions are in src/osx/utilsexc_base.cpp for wxMac
 #ifndef __DARWIN__
 
-wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
+wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 {
     // get OS version
-    int major, minor;
+    int major = -1, minor = -1, micro = -1;
     wxString release = wxGetCommandOutput(wxT("uname -r"));
-    if ( release.empty() ||
-         wxSscanf(release.c_str(), wxT("%d.%d"), &major, &minor) != 2 )
+    if ( !release.empty() )
     {
-        // failed to get version string or unrecognized format
-        major =
-        minor = -1;
+        if ( wxSscanf(release.c_str(), wxT("%d.%d.%d"), &major, &minor, &micro ) != 3 )
+        {
+            micro = 0;
+            if ( wxSscanf(release.c_str(), wxT("%d.%d"), &major, &minor ) != 2 )
+            {
+                // failed to get version string or unrecognized format
+                major = minor = micro = -1;
+            }
+        }
     }
 
     if ( verMaj )
         *verMaj = major;
     if ( verMin )
         *verMin = minor;
+    if ( verMicro )
+        *verMicro = micro;
 
     // try to understand which OS are we running
     wxString kernel = wxGetCommandOutput(wxT("uname -s"));
