@@ -53,7 +53,7 @@ extern WXDLLIMPEXP_BASE wxSocketManager *wxOSXSocketManagerCF;
 wxSocketManager *wxOSXSocketManagerCF = NULL;
 #endif // wxUSE_SOCKETS
 
-#if ( !wxUSE_GUI && !wxOSX_USE_IPHONE ) || wxOSX_USE_CARBON
+#if wxOSX_USE_CARBON
 
 // our OS version is the same in non GUI and GUI cases
 wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
