@@ -494,12 +494,7 @@ CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromNSImage( WX_NSImage ns
 
 double wxOSXGetMainScreenContentScaleFactor()
 {
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7)
-    if ( [ [NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)] )
-        return [[NSScreen mainScreen] backingScaleFactor];
-    else
-#endif
-        return 1.0;
+    return [[NSScreen mainScreen] backingScaleFactor];
 }
 
 CGImageRef wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage, double *scaleptr )

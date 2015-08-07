@@ -52,7 +52,7 @@
 // then the delegate method - (BOOL)panel:(id)sender shouldShowFilename:(NSString *)filename will have to
 // be implemented
 
-@interface wxOpenPanelDelegate : NSObject wxOSX_10_6_AND_LATER(<NSOpenSavePanelDelegate>)
+@interface wxOpenPanelDelegate : NSObject <NSOpenSavePanelDelegate>
 {
     wxFileDialog* _dialog;
 }

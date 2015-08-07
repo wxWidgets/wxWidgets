@@ -412,7 +412,7 @@ bool wxApp::DoInitGui()
         }
 
         appcontroller = OSXCreateAppController();
-        [[NSApplication sharedApplication] setDelegate:(id wxOSX_10_6_AND_LATER(<NSApplicationDelegate>))appcontroller];
+        [[NSApplication sharedApplication] setDelegate:(id <NSApplicationDelegate>)appcontroller];
         [NSColor setIgnoresAlpha:NO];
 
         // calling finishLaunching so early before running the loop seems to trigger some 'MenuManager compatibility' which leads

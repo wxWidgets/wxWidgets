@@ -41,7 +41,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog);
 // wxCPWCDelegate - Window Closed delegate
 // ---------------------------------------------------------------------------
 
-@interface wxCPWCDelegate : NSObject wxOSX_10_6_AND_LATER(<NSWindowDelegate>)
+@interface wxCPWCDelegate : NSObject <NSWindowDelegate>
 {
     bool m_bIsClosed;
 }
