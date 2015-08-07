@@ -618,4 +618,45 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
 #endif // wxUSE_GUI
 
+// our OS version is the same in non GUI and GUI cases
+wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+    if ([NSProcessInfo instancesRespondToSelector:@selector(operatingSystemVersion)])
+    {
+        NSOperatingSystemVersion osVer = [NSProcessInfo processInfo].operatingSystemVersion;
+
+        if ( majorVsn != NULL )
+            *majorVsn = osVer.majorVersion;
+
+        if ( minorVsn != NULL )
+            *minorVsn = osVer.minorVersion;
+    }
+    else
+#endif
+    {
+        // On OS X versions prior to 10.10 NSProcessInfo does not provide the OS version
+        SInt32 maj, min;
+        Gestalt(gestaltSystemVersionMajor, &maj);
+        Gestalt(gestaltSystemVersionMinor, &min);
+
+        if ( majorVsn != NULL )
+            *majorVsn = maj;
+
+        if ( minorVsn != NULL )
+            *minorVsn = min;
+    }
+
+    return wxOS_MAC_OSX_DARWIN;
+}
+
+wxString wxGetOsDescription()
+{
+    NSString* osDesc = [NSProcessInfo processInfo].operatingSystemVersionString;
+    wxCFStringRef cf(wxCFRetain(osDesc));
+
+    return wxString::Format(wxT("Mac OS X %s"),
+                            cf.AsString());
+}
+
 #endif // wxOSX_USE_COCOA
