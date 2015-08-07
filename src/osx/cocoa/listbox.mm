@@ -30,7 +30,7 @@
 
 class wxListWidgetCocoaImpl;
 
-@interface wxNSTableDataSource : NSObject wxOSX_10_6_AND_LATER(<NSTableViewDataSource>)
+@interface wxNSTableDataSource : NSObject <NSTableViewDataSource>
 {
     wxListWidgetCocoaImpl* impl;
 }
@@ -50,7 +50,7 @@ class wxListWidgetCocoaImpl;
 
 @end
 
-@interface wxNSTableView : NSTableView wxOSX_10_6_AND_LATER(<NSTableViewDelegate>)
+@interface wxNSTableView : NSTableView <NSTableViewDelegate>
 {
 }
 

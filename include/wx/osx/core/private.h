@@ -20,17 +20,6 @@
 #include "wx/osx/core/cfstring.h"
 #include "wx/osx/core/cfdataref.h"
 
-// Define helper macros allowing to insert small snippets of code to be
-// compiled for high enough OS X version only: this shouldn't be abused for
-// anything big but it's handy for e.g. specifying OS X 10.6-only protocols in
-// the Objective C classes declarations when they're not supported under the
-// previous versions
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
-    #define wxOSX_10_6_AND_LATER(x) x
-#else
-    #define wxOSX_10_6_AND_LATER(x)
-#endif
-
 // platform specific Clang analyzer support
 #ifndef NS_RETURNS_RETAINED
 #   if WX_HAS_CLANG_FEATURE(attribute_ns_returns_retained)

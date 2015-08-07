@@ -58,7 +58,7 @@
 // and under 10.4, we are not getting a 'close' event however...
 #define wxOSX_USE_NEEDSUPDATE_HOOK 1
 
-@interface wxNSMenuController : NSObject wxOSX_10_6_AND_LATER(<NSMenuDelegate>)
+@interface wxNSMenuController : NSObject <NSMenuDelegate>
 {
 }
 

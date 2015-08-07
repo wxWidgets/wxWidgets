@@ -22,13 +22,13 @@ Platforms
 
 wxWidgets currently supports the following primary platforms:
 
-- Windows XP, Vista, 7 and 8 (32/64 bits).
+- Windows XP, Vista, 7, 8 and 10 (32/64 bits).
 - Most Unix variants using the GTK+ toolkit (version 2.6 or newer or 3.x).
 - Mac OS X (10.7 or newer) using Cocoa (32/64 bits) or Carbon (32 only).
 
 Most popular C++ compilers are supported including but not limited to:
 
-- Microsoft Visual C++ 2003 or later (up to 2013).
+- Microsoft Visual C++ 2003 or later (up to 2015).
 - g++ 3.4 or later, including MinGW/MinGW-64/TDM under Windows.
 - Clang under OS X and Linux.
 - Intel icc compiler.

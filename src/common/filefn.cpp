@@ -1679,15 +1679,6 @@ static bool wxCheckWin32Permission(const wxString& path, DWORD access)
         return false;
     }
 
-    if ( wxGetOsVersion() == wxOS_WINDOWS_9X )
-    {
-        // FAT directories always allow all access, even if they have the
-        // readonly flag set, and FAT files can only be read-only
-        return (dwAttr & FILE_ATTRIBUTE_DIRECTORY) ||
-                    (access != GENERIC_WRITE ||
-                        !(dwAttr & FILE_ATTRIBUTE_READONLY));
-    }
-
     HANDLE h = ::CreateFile
                  (
                     path.t_str(),

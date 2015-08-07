@@ -2606,13 +2606,6 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
     int flags;
     if ( IsDir() )
     {
-        if ( wxGetOsVersion() == wxOS_WINDOWS_9X )
-        {
-            wxLogError(_("Setting directory access times is not supported "
-                         "under this OS version"));
-            return false;
-        }
-
         path = GetPath();
         flags = FILE_FLAG_BACKUP_SEMANTICS;
     }

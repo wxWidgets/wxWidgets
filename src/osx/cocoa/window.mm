@@ -1755,9 +1755,7 @@ void wxOSXCocoaClassAddWXMethods(Class c)
     wxOSX_CLASS_ADD_METHOD(c, @selector(mouseEntered:), (IMP) wxOSX_mouseEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(mouseExited:), (IMP) wxOSX_mouseEvent, "v@:@" )
         
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
     wxOSX_CLASS_ADD_METHOD(c, @selector(magnifyWithEvent:), (IMP)wxOSX_mouseEvent, "v@:@")
-#endif
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(cursorUpdate:), (IMP) wxOSX_cursorUpdate, "v@:@" )
 
@@ -1870,13 +1868,8 @@ void wxWidgetCocoaImpl::SetVisibility( bool visible )
 
 double wxWidgetCocoaImpl::GetContentScaleFactor() const
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
     NSWindow* tlw = [m_osxView window];
-    if ( [ tlw respondsToSelector:@selector(backingScaleFactor) ] )
-        return [tlw backingScaleFactor];
-    else
-#endif
-        return 1.0;
+    return [tlw backingScaleFactor];
 }
 
 // ----------------------------------------------------------------------------
@@ -1884,7 +1877,7 @@ double wxWidgetCocoaImpl::GetContentScaleFactor() const
 // ----------------------------------------------------------------------------
 
 // define a delegate used to refresh the window during animation
-@interface wxNSAnimationDelegate : NSObject wxOSX_10_6_AND_LATER(<NSAnimationDelegate>)
+@interface wxNSAnimationDelegate : NSObject <NSAnimationDelegate>
 {
     wxWindow *m_win;
     bool m_isDone;

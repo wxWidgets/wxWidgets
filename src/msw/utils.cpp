@@ -891,36 +891,33 @@ bool wxShutdown(int WXUNUSED_IN_WINCE(flags))
 #else
     bool bOK = true;
 
-    if ( wxGetOsVersion(NULL, NULL) == wxOS_WINDOWS_NT ) // if is NT or 2K
+    // Get a token for this process.
+    HANDLE hToken;
+    bOK = ::OpenProcessToken(GetCurrentProcess(),
+                                TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
+                                &hToken) != 0;
+    if ( bOK )
     {
-        // Get a token for this process.
-        HANDLE hToken;
-        bOK = ::OpenProcessToken(GetCurrentProcess(),
-                                 TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
-                                 &hToken) != 0;
+        TOKEN_PRIVILEGES tkp;
+
+        // Get the LUID for the shutdown privilege.
+        bOK = ::LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME,
+                                        &tkp.Privileges[0].Luid) != 0;
+
         if ( bOK )
         {
-            TOKEN_PRIVILEGES tkp;
+            tkp.PrivilegeCount = 1;  // one privilege to set
+            tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-            // Get the LUID for the shutdown privilege.
-            bOK = ::LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME,
-                                         &tkp.Privileges[0].Luid) != 0;
+            // Get the shutdown privilege for this process.
+            ::AdjustTokenPrivileges(hToken, FALSE, &tkp, 0,
+                                    (PTOKEN_PRIVILEGES)NULL, 0);
 
-            if ( bOK )
-            {
-                tkp.PrivilegeCount = 1;  // one privilege to set
-                tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-
-                // Get the shutdown privilege for this process.
-                ::AdjustTokenPrivileges(hToken, FALSE, &tkp, 0,
-                                        (PTOKEN_PRIVILEGES)NULL, 0);
-
-                // Cannot test the return value of AdjustTokenPrivileges.
-                bOK = ::GetLastError() == ERROR_SUCCESS;
-            }
-
-            ::CloseHandle(hToken);
+            // Cannot test the return value of AdjustTokenPrivileges.
+            bOK = ::GetLastError() == ERROR_SUCCESS;
         }
+
+        ::CloseHandle(hToken);
     }
 
     if ( bOK )
@@ -1328,6 +1325,21 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
         *verMin = s_version.verMin;
 
     return s_version.os;
+}
+
+bool wxCheckOsVersion(int majorVsn, int minorVsn)
+{
+    OSVERSIONINFOEX osvi = { sizeof(osvi), 0, 0, 0, 0, { 0 }, 0, 0 };
+    DWORDLONG const dwlConditionMask =
+        ::VerSetConditionMask(
+        ::VerSetConditionMask(
+        0, VER_MAJORVERSION, VER_GREATER_EQUAL),
+        VER_MINORVERSION, VER_GREATER_EQUAL);
+
+    osvi.dwMajorVersion = majorVsn;
+    osvi.dwMinorVersion = minorVsn;
+
+    return ::VerifyVersionInfo(&osvi, VER_MAJORVERSION | VER_MINORVERSION, dwlConditionMask) != FALSE;
 }
 
 wxWinVersion wxGetWinVersion()

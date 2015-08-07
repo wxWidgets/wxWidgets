@@ -301,7 +301,7 @@ private:
 @end
 
 
-@interface wxNSToolbarDelegate : NSObject wxOSX_10_6_AND_LATER(<NSToolbarDelegate>)
+@interface wxNSToolbarDelegate : NSObject <NSToolbarDelegate>
 {
     bool m_isSelectable;
 }

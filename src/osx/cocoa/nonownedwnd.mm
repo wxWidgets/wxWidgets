@@ -91,18 +91,10 @@ bool shouldHandleSelector(SEL selector)
 
 }
 
-
-#define wxHAS_FULL_SCREEN_API (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7)
-
-#if wxHAS_FULL_SCREEN_API
-
 static bool IsUsingFullScreenApi(WXWindow macWindow)
 {
-    return [macWindow respondsToSelector:@selector(toggleFullScreen:)]
-        && ([macWindow collectionBehavior] & NSWindowCollectionBehaviorFullScreenPrimary);
+    return ([macWindow collectionBehavior] & NSWindowCollectionBehaviorFullScreenPrimary);
 }
-
-#endif
 
 //
 // wx category for NSWindow (our own and wrapped instances)
@@ -313,7 +305,7 @@ static NSResponder* s_formerFirstResponder = NULL;
 // controller
 //
 
-@interface wxNonOwnedWindowController : NSObject wxOSX_10_6_AND_LATER(<NSWindowDelegate>)
+@interface wxNonOwnedWindowController : NSObject <NSWindowDelegate>
 {
 }
 
@@ -326,9 +318,7 @@ static NSResponder* s_formerFirstResponder = NULL;
 - (void)windowDidDeminiaturize:(NSNotification *)notification;
 - (BOOL)windowShouldClose:(id)window;
 - (BOOL)windowShouldZoom:(NSWindow *)window toFrame:(NSRect)newFrame;
-#if wxHAS_FULL_SCREEN_API
 - (void)windowWillEnterFullScreen:(NSNotification *)notification;
-#endif
 
 @end
 
@@ -585,8 +575,6 @@ extern int wxOSXGetIdFromSelector(SEL action );
     return true;
 }
 
-#if wxHAS_FULL_SCREEN_API
-
 // work around OS X bug, on a secondary monitor an already fully sized window
 // (eg maximized) will not be correctly put to full screen size and keeps a 22px
 // title band at the top free, therefore we force the correct content size
@@ -606,8 +594,6 @@ extern int wxOSXGetIdFromSelector(SEL action );
         [view setFrameSize: expectedframerect.size];
     }
 }
-
-#endif
 
 @end
 
@@ -1000,44 +986,32 @@ typedef struct
 
 bool wxNonOwnedWindowCocoaImpl::IsFullScreen() const
 {
-#if wxHAS_FULL_SCREEN_API
     if ( IsUsingFullScreenApi(m_macWindow) )
     {
         return [m_macWindow styleMask] & NSFullScreenWindowMask;
     }
-#endif
 
     return m_macFullScreenData != NULL ;
 }
 
 bool wxNonOwnedWindowCocoaImpl::EnableFullScreenView(bool enable)
 {
-#if wxHAS_FULL_SCREEN_API
-    if ( [ m_macWindow respondsToSelector:@selector(setCollectionBehavior:) ] )
+    NSUInteger collectionBehavior = [m_macWindow collectionBehavior];
+    if (enable)
     {
-        NSUInteger collectionBehavior = [m_macWindow collectionBehavior];
-        if (enable)
-        {
-            collectionBehavior |= NSWindowCollectionBehaviorFullScreenPrimary;
-        }
-        else
-        {
-            collectionBehavior &= ~NSWindowCollectionBehaviorFullScreenPrimary;
-        }
-        [m_macWindow setCollectionBehavior: collectionBehavior];
-
-        return true;
+        collectionBehavior |= NSWindowCollectionBehaviorFullScreenPrimary;
     }
-#else
-    wxUnusedVar(enable);
-#endif
+    else
+    {
+        collectionBehavior &= ~NSWindowCollectionBehaviorFullScreenPrimary;
+    }
+    [m_macWindow setCollectionBehavior: collectionBehavior];
 
-    return false;
+    return true;
 }
 
 bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
 {
-#if wxHAS_FULL_SCREEN_API
     if ( IsUsingFullScreenApi(m_macWindow) )
     {
         if ( show != IsFullScreen() )
@@ -1047,7 +1021,6 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
 
         return true;
     }
-#endif
 
     if ( show )
     {

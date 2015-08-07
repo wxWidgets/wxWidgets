@@ -412,7 +412,7 @@ bool wxApp::DoInitGui()
         }
 
         appcontroller = OSXCreateAppController();
-        [[NSApplication sharedApplication] setDelegate:(id wxOSX_10_6_AND_LATER(<NSApplicationDelegate>))appcontroller];
+        [[NSApplication sharedApplication] setDelegate:(id <NSApplicationDelegate>)appcontroller];
         [NSColor setIgnoresAlpha:NO];
 
         // calling finishLaunching so early before running the loop seems to trigger some 'MenuManager compatibility' which leads
@@ -617,5 +617,68 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 }
 
 #endif // wxUSE_GUI
+
+// our OS version is the same in non GUI and GUI cases
+wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+    if ([NSProcessInfo instancesRespondToSelector:@selector(operatingSystemVersion)])
+    {
+        NSOperatingSystemVersion osVer = [NSProcessInfo processInfo].operatingSystemVersion;
+
+        if ( majorVsn != NULL )
+            *majorVsn = osVer.majorVersion;
+
+        if ( minorVsn != NULL )
+            *minorVsn = osVer.minorVersion;
+    }
+    else
+#endif
+    {
+        // On OS X versions prior to 10.10 NSProcessInfo does not provide the OS version
+        SInt32 maj, min;
+        Gestalt(gestaltSystemVersionMajor, &maj);
+        Gestalt(gestaltSystemVersionMinor, &min);
+
+        if ( majorVsn != NULL )
+            *majorVsn = maj;
+
+        if ( minorVsn != NULL )
+            *minorVsn = min;
+    }
+
+    return wxOS_MAC_OSX_DARWIN;
+}
+
+bool wxCheckOsVersion(int majorVsn, int minorVsn)
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+    if ([NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)])
+    {
+        NSOperatingSystemVersion osVer;
+        osVer.majorVersion = majorVsn;
+        osVer.minorVersion = minorVsn;
+        osVer.patchVersion = 0;
+
+        return [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:osVer] != NO;
+    }
+    else
+#endif
+    {
+        int majorCur, minorCur;
+        wxGetOsVersion(&majorCur, &minorCur);
+
+        return majorCur > majorVsn || (majorCur == majorVsn && minorCur >= minorVsn);
+    }
+}
+
+wxString wxGetOsDescription()
+{
+    NSString* osDesc = [NSProcessInfo processInfo].operatingSystemVersionString;
+    wxCFStringRef cf(wxCFRetain(osDesc));
+
+    return wxString::Format(wxT("Mac OS X %s"),
+                            cf.AsString());
+}
 
 #endif // wxOSX_USE_COCOA
