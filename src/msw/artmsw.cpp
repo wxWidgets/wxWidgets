@@ -197,7 +197,15 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
             ::DestroyIcon(sii.hIcon);
 
             if ( bitmap.IsOk() )
+            {
+                wxSize sizeNeeded = (size == wxDefaultSize)?
+                                      wxArtProvider::GetNativeSizeHint(client): size;
+                if ( sizeNeeded != wxDefaultSize && bitmap.GetSize() != sizeNeeded )
+                {
+                    wxArtProvider::RescaleBitmap(bitmap, sizeNeeded);
+                }
                 return bitmap;
+            }
         }
     }
 #endif // wxHAS_SHGetStockIconInfo
