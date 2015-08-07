@@ -650,6 +650,28 @@ wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
     return wxOS_MAC_OSX_DARWIN;
 }
 
+bool wxCheckOsVersion(int majorVsn, int minorVsn)
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+    if ([NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)])
+    {
+        NSOperatingSystemVersion osVer;
+        osVer.majorVersion = majorVsn;
+        osVer.minorVersion = minorVsn;
+        osVer.patchVersion = 0;
+
+        return [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:osVer] != NO;
+    }
+    else
+#endif
+    {
+        int majorCur, minorCur;
+        wxGetOsVersion(&majorCur, &minorCur);
+
+        return majorCur > majorVsn || (majorCur == majorVsn && minorCur >= minorVsn);
+    }
+}
+
 wxString wxGetOsDescription()
 {
     NSString* osDesc = [NSProcessInfo processInfo].operatingSystemVersionString;

@@ -1148,8 +1148,6 @@ wxString wxGetOsDescription()
     return wxGetCommandOutput(wxT("uname -s -r -m"));
 }
 
-#endif // !__DARWIN__
-
 bool wxCheckOsVersion(int majorVsn, int minorVsn)
 {
     int majorCur, minorCur;
@@ -1157,6 +1155,8 @@ bool wxCheckOsVersion(int majorVsn, int minorVsn)
 
     return majorCur > majorVsn || (majorCur == majorVsn && minorCur >= minorVsn);
 }
+
+#endif // !__DARWIN__
 
 unsigned long wxGetProcessId()
 {
