@@ -32,116 +32,6 @@
 
 const char wxEditableListBoxNameStr[] = "editableListBox";
 
-static const char* const eledit_xpm[] = {
-"16 16 3 1",
-"   c None",
-".  c #000000",
-"+  c #00007F",
-"                ",
-"                ",
-"      .. ..     ",
-"        .       ",
-"        .       ",
-"  ++++  .  ++++ ",
-"     ++ . ++  ++",
-"  +++++ . ++++++",
-" ++  ++ . ++    ",
-" ++  ++ . ++  ++",
-"  +++++ .  ++++ ",
-"        .       ",
-"        .       ",
-"      .. ..     ",
-"                ",
-"                "};
-#if 0
-static const char* const elnew_xpm[] = {
-"16 16 5 1",
-"   c None",
-".  c #7F7F7F",
-"+  c #FFFFFF",
-"@  c #FFFF00",
-"#  c #000000",
-"                ",
-"                ",
-" .  .+ .@       ",
-"  . .@.@# # #   ",
-"  @.@+....   #  ",
-" ... @@         ",
-"  @ . @.     #  ",
-" .# .@          ",
-"    .        #  ",
-"  #             ",
-"             #  ",
-"  #             ",
-"             #  ",
-"  # # # # # #   ",
-"                ",
-"                "};
-
-static const char* const eldel_xpm[] = {
-"16 16 3 1",
-"   c None",
-".  c #7F0000",
-"+  c #FFFFFF",
-"                ",
-"                ",
-"                ",
-" ..+        ..+ ",
-" ....+     ..+  ",
-"  ....+   ..+   ",
-"    ...+ .+     ",
-"     .....+     ",
-"      ...+      ",
-"     .....+     ",
-"    ...+ ..+    ",
-"   ...+   ..+   ",
-"  ...+     .+   ",
-"  ...+      .+  ",
-"   .         .  ",
-"                "};
-
-static const char* const eldown_xpm[] = {
-"16 16 2 1",
-"   c None",
-".  c #000000",
-"                ",
-"                ",
-"         ...    ",
-"        ...     ",
-"       ...      ",
-"       ...      ",
-"       ...      ",
-"       ...      ",
-"   ...........  ",
-"    .........   ",
-"     .......    ",
-"      .....     ",
-"       ...      ",
-"        .       ",
-"                ",
-"                "};
-
-static const char* const elup_xpm[] = {
-"16 16 2 1",
-"   c None",
-".  c #000000",
-"                ",
-"        .       ",
-"       ...      ",
-"      .....     ",
-"     .......    ",
-"    .........   ",
-"   ...........  ",
-"       ...      ",
-"       ...      ",
-"       ...      ",
-"       ...      ",
-"      ...       ",
-"     ...        ",
-"                ",
-"                ",
-"                "};
-#endif
 // list control with auto-resizable column:
 class CleverListCtrl : public wxListCtrl
 {
@@ -244,14 +134,8 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
 
     if ( m_style & wxEL_ALLOW_EDIT )
     {
-        // Temporary hack: the icon will be moved to wxArProvider.
-        wxBitmap bmp(eledit_xpm);
-        wxSize sizeNeeded = wxArtProvider::GetSizeHint(wxART_BUTTON);
-        if ( bmp.GetSize() != sizeNeeded )
-        {
-            wxArtProvider::RescaleBitmap(bmp, sizeNeeded);
-        }
-        m_bEdit = new wxBitmapButton(subp, wxID_ELB_EDIT, bmp);
+        m_bEdit = new wxBitmapButton(subp, wxID_ELB_EDIT,
+                                     wxArtProvider::GetBitmap(wxART_EDIT, wxART_BUTTON));
         subsizer->Add(m_bEdit, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
     }
 
