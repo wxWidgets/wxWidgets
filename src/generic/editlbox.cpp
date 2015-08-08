@@ -24,122 +24,13 @@
 #include "wx/editlbox.h"
 #include "wx/sizer.h"
 #include "wx/listctrl.h"
+#include "wx/artprov.h"
 
 // ============================================================================
 // implementation
 // ============================================================================
 
 const char wxEditableListBoxNameStr[] = "editableListBox";
-
-static const char* const eledit_xpm[] = {
-"16 16 3 1",
-"   c None",
-".  c #000000",
-"+  c #00007F",
-"                ",
-"                ",
-"      .. ..     ",
-"        .       ",
-"        .       ",
-"  ++++  .  ++++ ",
-"     ++ . ++  ++",
-"  +++++ . ++++++",
-" ++  ++ . ++    ",
-" ++  ++ . ++  ++",
-"  +++++ .  ++++ ",
-"        .       ",
-"        .       ",
-"      .. ..     ",
-"                ",
-"                "};
-
-static const char* const elnew_xpm[] = {
-"16 16 5 1",
-"   c None",
-".  c #7F7F7F",
-"+  c #FFFFFF",
-"@  c #FFFF00",
-"#  c #000000",
-"                ",
-"                ",
-" .  .+ .@       ",
-"  . .@.@# # #   ",
-"  @.@+....   #  ",
-" ... @@         ",
-"  @ . @.     #  ",
-" .# .@          ",
-"    .        #  ",
-"  #             ",
-"             #  ",
-"  #             ",
-"             #  ",
-"  # # # # # #   ",
-"                ",
-"                "};
-
-static const char* const eldel_xpm[] = {
-"16 16 3 1",
-"   c None",
-".  c #7F0000",
-"+  c #FFFFFF",
-"                ",
-"                ",
-"                ",
-" ..+        ..+ ",
-" ....+     ..+  ",
-"  ....+   ..+   ",
-"    ...+ .+     ",
-"     .....+     ",
-"      ...+      ",
-"     .....+     ",
-"    ...+ ..+    ",
-"   ...+   ..+   ",
-"  ...+     .+   ",
-"  ...+      .+  ",
-"   .         .  ",
-"                "};
-
-static const char* const eldown_xpm[] = {
-"16 16 2 1",
-"   c None",
-".  c #000000",
-"                ",
-"                ",
-"         ...    ",
-"        ...     ",
-"       ...      ",
-"       ...      ",
-"       ...      ",
-"       ...      ",
-"   ...........  ",
-"    .........   ",
-"     .......    ",
-"      .....     ",
-"       ...      ",
-"        .       ",
-"                ",
-"                "};
-
-static const char* const elup_xpm[] = {
-"16 16 2 1",
-"   c None",
-".  c #000000",
-"                ",
-"        .       ",
-"       ...      ",
-"      .....     ",
-"     .......    ",
-"    .........   ",
-"   ...........  ",
-"       ...      ",
-"       ...      ",
-"       ...      ",
-"       ...      ",
-"      ...       ",
-"     ...        ",
-"                ",
-"                ",
-"                "};
 
 // list control with auto-resizable column:
 class CleverListCtrl : public wxListCtrl
@@ -243,28 +134,33 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
 
     if ( m_style & wxEL_ALLOW_EDIT )
     {
-        m_bEdit = new wxBitmapButton(subp, wxID_ELB_EDIT, wxBitmap(eledit_xpm));
+        m_bEdit = new wxBitmapButton(subp, wxID_ELB_EDIT,
+                                     wxArtProvider::GetBitmap(wxART_EDIT, wxART_BUTTON));
         subsizer->Add(m_bEdit, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
     }
 
     if ( m_style & wxEL_ALLOW_NEW )
     {
-        m_bNew = new wxBitmapButton(subp, wxID_ELB_NEW, wxBitmap(elnew_xpm));
+        m_bNew = new wxBitmapButton(subp, wxID_ELB_NEW,
+                                    wxArtProvider::GetBitmap(wxART_NEW, wxART_BUTTON));
         subsizer->Add(m_bNew, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
     }
 
     if ( m_style & wxEL_ALLOW_DELETE )
     {
-        m_bDel = new wxBitmapButton(subp, wxID_ELB_DELETE, wxBitmap(eldel_xpm));
+        m_bDel = new wxBitmapButton(subp, wxID_ELB_DELETE,
+                                    wxArtProvider::GetBitmap(wxART_DELETE, wxART_BUTTON));
         subsizer->Add(m_bDel, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
     }
 
     if (!(m_style & wxEL_NO_REORDER))
     {
-        m_bUp = new wxBitmapButton(subp, wxID_ELB_UP, wxBitmap(elup_xpm));
+        m_bUp = new wxBitmapButton(subp, wxID_ELB_UP,
+                                   wxArtProvider::GetBitmap(wxART_GO_UP, wxART_BUTTON));
         subsizer->Add(m_bUp, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
 
-        m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN, wxBitmap(eldown_xpm));
+        m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN,
+                                     wxArtProvider::GetBitmap(wxART_GO_DOWN, wxART_BUTTON));
         subsizer->Add(m_bDown, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
     }
 
