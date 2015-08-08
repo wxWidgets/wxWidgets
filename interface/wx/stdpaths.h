@@ -228,8 +228,9 @@ public:
     virtual wxString GetResourcesDir() const;
 
     /**
-        Return the directory for storing temporary files.
-        To create unique temporary files, it is best to use wxFileName::CreateTempFileName
+        Return the directory for storing temporary files, for the current user. Same as
+        wxFileName::GetTempDir().
+        To create unique temporary files, it is best to use wxFileName::CreateTempFileName()
         for correct behaviour when multiple processes are attempting to create temporary files.
 
         @since 2.7.2
