@@ -675,10 +675,8 @@ bool wxCheckOsVersion(int majorVsn, int minorVsn)
 wxString wxGetOsDescription()
 {
     NSString* osDesc = [NSProcessInfo processInfo].operatingSystemVersionString;
-    wxCFStringRef cf(wxCFRetain(osDesc));
 
-    return wxString::Format(wxT("Mac OS X %s"),
-                            cf.AsString());
+    return wxString::Format("%s %s", _("Mac OS X"), wxCFStringRef::AsString(osDesc));
 }
 
 #endif // wxOSX_USE_COCOA
