@@ -636,9 +636,12 @@ wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
 #endif
     {
         // On OS X versions prior to 10.10 NSProcessInfo does not provide the OS version
+        // Deprecated Gestalt calls are required instead
+wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         SInt32 maj, min;
         Gestalt(gestaltSystemVersionMajor, &maj);
         Gestalt(gestaltSystemVersionMinor, &min);
+wxGCC_WARNING_RESTORE()
 
         if ( majorVsn != NULL )
             *majorVsn = maj;
@@ -675,10 +678,8 @@ bool wxCheckOsVersion(int majorVsn, int minorVsn)
 wxString wxGetOsDescription()
 {
     NSString* osDesc = [NSProcessInfo processInfo].operatingSystemVersionString;
-    wxCFStringRef cf(wxCFRetain(osDesc));
 
-    return wxString::Format(wxT("Mac OS X %s"),
-                            cf.AsString());
+    return wxString::Format("%s %s", _("Mac OS X"), wxCFStringRef::AsString(osDesc));
 }
 
 #endif // wxOSX_USE_COCOA
