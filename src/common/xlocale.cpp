@@ -87,6 +87,7 @@ wxXLocale& wxXLocale::GetCLocale()
 
 #ifdef wxHAS_XLOCALE_SUPPORT
 
+#if wxUSE_INTL
 wxXLocale::wxXLocale(wxLanguage lang)
 {
     const wxLanguageInfo * const info = wxLocale::GetLanguageInfo(lang);
@@ -99,6 +100,7 @@ wxXLocale::wxXLocale(wxLanguage lang)
         Init(info->GetLocaleName().c_str());
     }
 }
+#endif // wxUSE_INTL
 
 #if wxCHECK_VISUALC_VERSION(8)
 

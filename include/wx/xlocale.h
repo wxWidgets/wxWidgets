@@ -76,8 +76,10 @@ public:
     // Construct an uninitialized locale
     wxXLocale() { m_locale = NULL; }
 
+#if wxUSE_INTL
     // Construct from a symbolic language constant
     wxXLocale(wxLanguage lang);
+#endif
 
     // Construct from the given language string
     wxXLocale(const char *loc) { Init(loc); }
