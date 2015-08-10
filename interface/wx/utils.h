@@ -880,7 +880,7 @@ wxString wxGetOsDescription();
 wxOperatingSystemId wxGetOsVersion(int* major = NULL, int* minor = NULL);
 
 /**
-    Returns @true the version of the operating system on which the program
+    Returns @true if the version of the operating system on which the program
     is running under is the same or later than the given version.
 
     @since 3.1.0
