@@ -636,9 +636,12 @@ wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
 #endif
     {
         // On OS X versions prior to 10.10 NSProcessInfo does not provide the OS version
+        // Deprecated Gestalt calls are required instead
+wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         SInt32 maj, min;
         Gestalt(gestaltSystemVersionMajor, &maj);
         Gestalt(gestaltSystemVersionMinor, &min);
+wxGCC_WARNING_RESTORE()
 
         if ( majorVsn != NULL )
             *majorVsn = maj;
