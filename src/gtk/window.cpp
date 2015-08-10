@@ -1724,7 +1724,7 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
 
 static void AdjustRangeValue(GtkRange* range, double step)
 {
-    if (range && gtk_widget_get_visible(GTK_WIDGET(range)))
+    if (gtk_widget_get_visible(GTK_WIDGET(range)))
     {
         GtkAdjustment* adj = gtk_range_get_adjustment(range);
         double value = gtk_adjustment_get_value(adj);
@@ -1788,21 +1788,30 @@ scroll_event(GtkWidget* widget, GdkEventScroll* gdk_event, wxWindow* win)
                     delta_x = 0;
                 }
             }
+            bool handled = false;
             if (delta_x)
             {
                 event.m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
                 event.m_wheelRotation = int(event.m_wheelDelta * delta_x);
-                if (!win->GTKProcessEvent(event))
+                handled = win->GTKProcessEvent(event);
+                if (!handled && range_h)
+                {
                     AdjustRangeValue(range_h, event.m_columnsPerAction * delta_x);
+                    handled = true;
+                }
             }
             if (delta_y)
             {
                 event.m_wheelAxis = wxMOUSE_WHEEL_VERTICAL;
                 event.m_wheelRotation = int(event.m_wheelDelta * -delta_y);
-                if (!win->GTKProcessEvent(event))
+                handled = win->GTKProcessEvent(event);
+                if (!handled && range_v)
+                {
                     AdjustRangeValue(range_v, event.m_linesPerAction * delta_y);
+                    handled = true;
+                }
             }
-            return true;
+            return handled;
 #endif // GTK_CHECK_VERSION(3,4,0)
     }
     GtkRange *range;
