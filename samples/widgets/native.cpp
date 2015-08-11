@@ -63,6 +63,10 @@ void BuildTestMenu(wxMenu *menu)
 
 #include "wx/msw/wrapcctl.h"    // for BS_SPLITBUTTON
 
+#ifndef BS_SPLITBUTTON
+    #define BS_SPLITBUTTON 0x000c
+#endif // BS_SPLITBUTTON
+
 class NativeWindow : public wxNativeWindow
 {
 public:
@@ -92,6 +96,9 @@ public:
     }
 
 protected:
+    // This code requires NMBCDROPDOWN to work, we don't really want to
+    // reproduce its definition here for very old compilers not having it.
+#ifdef BCN_DROPDOWN
     // Split buttons under MSW don't show the menu on their own, unlike their
     // equivalents under the other platforms, so do it manually here. This also
     // shows how to handle a native event in MSW (for the specific case of
@@ -111,6 +118,7 @@ protected:
 
         return true;
     }
+#endif // defined(BCN_DROPDOWN)
 };
 
 #elif defined(__WXGTK__)
