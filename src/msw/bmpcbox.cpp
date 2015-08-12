@@ -311,32 +311,79 @@ int wxBitmapComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
                                     void **clientData, wxClientDataType type)
 {
     const unsigned int numItems = items.GetCount();
-    const unsigned int countNew = GetCount() + numItems;
 
-    wxASSERT( numItems == 1 || !HasFlag(wxCB_SORT) );  // Sanity check
-
-    m_bitmaps.Alloc(countNew);
-
-    for ( unsigned int i = 0; i < numItems; i++ )
+    int index;
+    if ( HasFlag(wxCB_SORT) )
     {
-        m_bitmaps.Insert(new wxBitmap(wxNullBitmap), pos + i);
+        // Since we don't know at what positions new elements will be actually inserted
+        // we need to add them one by one, check for each one the position it was added at
+        // and reserve the slot for corresponding bitmap at the same postion in the bitmap array.
+        index = pos;
+        for ( unsigned int i = 0; i < numItems; i++ )
+        {
+            if ( clientData )
+                index = wxComboBox::DoInsertItems(items[i], pos+i, clientData+i, type);
+            else
+                index = wxComboBox::DoInsertItems(items[i], pos+i, NULL, wxClientData_None);
+
+            wxASSERT_MSG( index != wxNOT_FOUND, wxS("Invalid wxBitmapComboBox state") );
+            if ( index == wxNOT_FOUND )
+            {
+                continue;
+            }
+
+            // Update the bitmap array.
+            if ( GetCount() > m_bitmaps.Count() )
+            {
+                wxASSERT_MSG( GetCount() == m_bitmaps.Count() + 1,
+                              wxS("Invalid wxBitmapComboBox state") );
+                // Control is in the normal state.
+                // New item has been just added.
+                // Insert bitmap at the given index into the array.
+                wxASSERT_MSG( (size_t)index <= m_bitmaps.Count(),
+                              wxS("wxBitmapComboBox item index out of bound") );
+                m_bitmaps.Insert(new wxBitmap(wxNullBitmap), index);
+            }
+            else
+            {
+                // No. of items after insertion <= No. bitmaps:
+                // (This can happen if control is e.g. recreated with RecreateControl).
+                // In this case existing bitmaps are reused.
+                // Required and actual indices should be the same to assure
+                // consistency between list of items and bitmap array.
+                wxASSERT_MSG( (size_t)index < m_bitmaps.Count(),
+                              wxS("wxBitmapComboBox item index out of bound") );
+                wxASSERT_MSG( (unsigned int)index == pos+i,
+                              wxS("Invalid index for wxBitmapComboBox item") );
+            }
+        }
     }
-
-    const int index = wxComboBox::DoInsertItems(items, pos,
-                                                clientData, type);
-
-    if ( index == wxNOT_FOUND )
+    else
     {
-        for ( int i = numItems-1; i >= 0; i-- )
-            BCBDoDeleteOneItem(pos + i);
-    }
-    else if ( ((unsigned int)index) != pos )
-    {
-        // Move pre-inserted empty bitmap into correct position
-        // (usually happens when combo box has wxCB_SORT style)
-        wxBitmap* bmp = static_cast<wxBitmap*>(m_bitmaps[pos]);
-        m_bitmaps.RemoveAt(pos);
-        m_bitmaps.Insert(bmp, index);
+        const unsigned int countNew = GetCount() + numItems;
+
+        m_bitmaps.Alloc(countNew);
+
+        for ( unsigned int i = 0; i < numItems; i++ )
+        {
+            m_bitmaps.Insert(new wxBitmap(wxNullBitmap), pos + i);
+        }
+
+        index = wxComboBox::DoInsertItems(items, pos, clientData, type);
+        // This returns index of the last item in the inserted block.
+
+        if ( index == wxNOT_FOUND )
+        {
+            for ( int i = numItems-1; i >= 0; i-- )
+                BCBDoDeleteOneItem(pos + i);
+        }
+        else
+        {
+            // Index of the last inserted item should be consistent
+            // with required position and number of items.
+            wxASSERT_MSG( (unsigned int)index == pos+numItems-1,
+                           wxS("Invalid index for wxBitmapComboBox item") );
+        }
     }
 
     return index;
