@@ -105,6 +105,7 @@ enum wxZipFlags
     wxZIP_ENHANCED          = 0x0010,
     wxZIP_PATCH             = 0x0020,
     wxZIP_STRONG_ENC        = 0x0040,
+    wxZIP_LANG_ENC_UTF8     = 0x0800,   // filename and comment are UTF8
     wxZIP_UNUSED            = 0x0F80,
     wxZIP_RESERVED          = 0xF000
 };
