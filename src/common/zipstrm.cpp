@@ -984,7 +984,9 @@ size_t wxZipEntry::ReadLocal(wxInputStream& stream, wxMBConv& conv)
     if ((sumsValid || size) || m_Method == wxZIP_METHOD_STORE)
         m_Size = size;
 
-    SetName(ReadString(stream, nameLen, conv), wxPATH_UNIX);
+    wxMBConv& strConv =
+        ( (m_Flags & wxZIP_LANG_ENC_UTF8) == 0 ) ? conv : wxConvUTF8;
+    SetName(ReadString(stream, nameLen, strConv), wxPATH_UNIX);
     if (stream.LastRead() != nameLen + 0u)
         return 0;
 
@@ -1052,7 +1054,9 @@ size_t wxZipEntry::ReadCentral(wxInputStream& stream, wxMBConv& conv)
        >> m_DiskStart >> m_InternalAttributes >> m_ExternalAttributes;
     SetOffset(ds.Read32());
 
-    SetName(ReadString(stream, nameLen, conv), wxPATH_UNIX);
+    wxMBConv& strConv =
+        ((m_Flags & wxZIP_LANG_ENC_UTF8) == 0) ? conv : wxConvUTF8;
+    SetName(ReadString(stream, nameLen, strConv), wxPATH_UNIX);
     if (stream.LastRead() != nameLen + 0u)
         return 0;
 
@@ -1066,7 +1070,7 @@ size_t wxZipEntry::ReadCentral(wxInputStream& stream, wxMBConv& conv)
     }
 
     if (commentLen) {
-        m_Comment = ReadString(stream, commentLen, conv);
+        m_Comment = ReadString(stream, commentLen, strConv);
         if (stream.LastRead() != commentLen + 0u)
             return 0;
     } else {
