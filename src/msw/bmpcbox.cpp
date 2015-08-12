@@ -360,16 +360,33 @@ int wxBitmapComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
     }
     else
     {
-        const unsigned int countNew = GetCount() + numItems;
-
-        m_bitmaps.Alloc(countNew);
-
-        for ( unsigned int i = 0; i < numItems; i++ )
+        if ( GetCount() == m_bitmaps.Count() )
         {
-            m_bitmaps.Insert(new wxBitmap(wxNullBitmap), pos + i);
+            // Control is in the normal state.
+            // Just insert new bitmaps into the array.
+            const unsigned int countNew = GetCount() + numItems;
+            m_bitmaps.Alloc(countNew);
+
+            for ( unsigned int i = 0; i < numItems; i++ )
+            {
+                m_bitmaps.Insert(new wxBitmap(wxNullBitmap), pos + i);
+            }
+        }
+        else
+        {
+            wxASSERT_MSG( GetCount() < m_bitmaps.Count(),
+                          wxS("Invalid wxBitmapComboBox state") );
+            // There are less items then bitmaps.
+            // (This can happen if control is e.g. recreated with RecreateControl).
+            // In this case existing bitmaps are reused.
+            // The whole block of inserted items should be within the range
+            // of indices of the existing bitmap array.
+            wxASSERT_MSG( pos + numItems <= m_bitmaps.Count(),
+                      wxS("wxBitmapComboBox item index out of bound") );
         }
 
-        index = wxComboBox::DoInsertItems(items, pos, clientData, type);
+        index = wxComboBox::DoInsertItems(items, pos,
+                                          clientData, type);
         // This returns index of the last item in the inserted block.
 
         if ( index == wxNOT_FOUND )
