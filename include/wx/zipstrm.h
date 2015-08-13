@@ -234,6 +234,8 @@ private:
     size_t WriteDescriptor(wxOutputStream& stream, wxUint32 crc,
                            wxFileOffset compressedSize, wxFileOffset size);
 
+    bool LoadExtraInfo(const char* extraData, wxUint16 extraLen, bool localInfo);
+
     wxUint8      m_SystemMadeBy;       // one of enum wxZipSystem
     wxUint8      m_VersionMadeBy;      // major * 10 + minor
 
