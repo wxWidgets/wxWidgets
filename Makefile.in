@@ -6854,7 +6854,8 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_unix_mediactrl.o
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
-@COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS = monodll_helpbest.o
+@COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS = \
+@COND_TOOLKIT_MSW@	monodll_helpbest.o monodll_chm.o
 @COND_PLATFORM_MACOSX_1@__WEBVIEW_SRC_PLATFORM_OBJECTS \
 @COND_PLATFORM_MACOSX_1@	= monodll_osx_webview_webkit.o
 @COND_TOOLKIT_GTK@__WEBVIEW_SRC_PLATFORM_OBJECTS = \
@@ -9233,7 +9234,8 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_unix_mediactrl.o
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
-@COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_helpbest.o
+@COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_1 = \
+@COND_TOOLKIT_MSW@	monolib_helpbest.o monolib_chm.o
 @COND_PLATFORM_MACOSX_1@__WEBVIEW_SRC_PLATFORM_OBJECTS_1 \
 @COND_PLATFORM_MACOSX_1@	= monolib_osx_webview_webkit.o
 @COND_TOOLKIT_GTK@__WEBVIEW_SRC_PLATFORM_OBJECTS_1 = \
@@ -14146,7 +14148,8 @@ COND_USE_SOVERSOLARIS_1___htmldll___so_symlinks_uninst_cmd = rm -f \
 @COND_PLATFORM_WIN32_1@__htmldll___win32rc = htmldll_version_rc.o
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS_2 = htmldll_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_2 = htmldll_chm.o
-@COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_2 = htmldll_helpbest.o
+@COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_2 = \
+@COND_TOOLKIT_MSW@	htmldll_helpbest.o htmldll_chm.o
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1___htmllib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1@__htmllib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1___htmllib___depname)
@@ -14161,7 +14164,8 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1___htmllib___depname = \
 @COND_USE_PCH_1@	= ./.pch/wxprec_htmllib/wx/wxprec.h.gch
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS_3 = htmllib_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_3 = htmllib_chm.o
-@COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_3 = htmllib_helpbest.o
+@COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_3 = \
+@COND_TOOLKIT_MSW@	htmllib_helpbest.o htmllib_chm.o
 @COND_SHARED_1@____wxhtml_namedll_DEP = $(__htmldll___depname)
 @COND_SHARED_0@____wxhtml_namelib_DEP = $(__htmllib___depname)
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_1___webviewdll___depname = \
@@ -23355,6 +23359,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_chm.o: $(srcdir)/src/html/chm.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
+
 @COND_PLATFORM_UNIX_1_USE_GUI_1@monodll_chm.o: $(srcdir)/src/html/chm.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
 
@@ -29282,6 +29289,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_chm.o: $(srcdir)/src/html/chm.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
 
 @COND_PLATFORM_UNIX_1_USE_GUI_1@monolib_chm.o: $(srcdir)/src/html/chm.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
@@ -40407,6 +40417,9 @@ htmldll_winpars.o: $(srcdir)/src/html/winpars.cpp $(HTMLDLL_ODEP)
 htmldll_htmllbox.o: $(srcdir)/src/generic/htmllbox.cpp $(HTMLDLL_ODEP)
 	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/generic/htmllbox.cpp
 
+@COND_TOOLKIT_MSW@htmldll_chm.o: $(srcdir)/src/html/chm.cpp $(HTMLDLL_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
+
 @COND_PLATFORM_UNIX_1@htmldll_chm.o: $(srcdir)/src/html/chm.cpp $(HTMLDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
 
@@ -40490,6 +40503,9 @@ htmllib_winpars.o: $(srcdir)/src/html/winpars.cpp $(HTMLLIB_ODEP)
 
 htmllib_htmllbox.o: $(srcdir)/src/generic/htmllbox.cpp $(HTMLLIB_ODEP)
 	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/generic/htmllbox.cpp
+
+@COND_TOOLKIT_MSW@htmllib_chm.o: $(srcdir)/src/html/chm.cpp $(HTMLLIB_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
 
 @COND_PLATFORM_UNIX_1@htmllib_chm.o: $(srcdir)/src/html/chm.cpp $(HTMLLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp

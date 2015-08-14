@@ -1132,6 +1132,7 @@ HTMLDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_302)$(__DEBUGRUNTIME) /DWIN32 \
 HTMLDLL_OBJECTS =  \
 	$(OBJS)\htmldll_dummy.obj \
 	$(OBJS)\htmldll_helpbest.obj \
+	$(OBJS)\htmldll_chm.obj \
 	$(OBJS)\htmldll_helpctrl.obj \
 	$(OBJS)\htmldll_helpdata.obj \
 	$(OBJS)\htmldll_helpdlg.obj \
@@ -1174,6 +1175,7 @@ HTMLLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_317)$(__DEBUGRUNTIME) /DWIN32 \
 HTMLLIB_OBJECTS =  \
 	$(OBJS)\htmllib_dummy.obj \
 	$(OBJS)\htmllib_helpbest.obj \
+	$(OBJS)\htmllib_chm.obj \
 	$(OBJS)\htmllib_helpctrl.obj \
 	$(OBJS)\htmllib_helpdata.obj \
 	$(OBJS)\htmllib_helpdlg.obj \
@@ -1924,6 +1926,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_mediactrl_wmp10.obj \
 	$(OBJS)\monodll_mediactrl_qt.obj \
 	$(OBJS)\monodll_helpbest.obj \
+	$(OBJS)\monodll_chm.obj \
 	$(OBJS)\monodll_helpctrl.obj \
 	$(OBJS)\monodll_helpdata.obj \
 	$(OBJS)\monodll_helpdlg.obj \
@@ -2747,6 +2750,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_mediactrl_wmp10.obj \
 	$(OBJS)\monolib_mediactrl_qt.obj \
 	$(OBJS)\monolib_helpbest.obj \
+	$(OBJS)\monolib_chm.obj \
 	$(OBJS)\monolib_helpctrl.obj \
 	$(OBJS)\monolib_helpdata.obj \
 	$(OBJS)\monolib_helpdlg.obj \
@@ -7738,6 +7742,9 @@ $(OBJS)\monodll_mediactrl_qt.obj: ..\..\src\msw\mediactrl_qt.cpp
 $(OBJS)\monodll_helpbest.obj: ..\..\src\msw\helpbest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\helpbest.cpp
 
+$(OBJS)\monodll_chm.obj: ..\..\src\html\chm.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\html\chm.cpp
+
 $(OBJS)\monodll_helpctrl.obj: ..\..\src\html\helpctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\html\helpctrl.cpp
 
@@ -10233,6 +10240,9 @@ $(OBJS)\monolib_mediactrl_qt.obj: ..\..\src\msw\mediactrl_qt.cpp
 
 $(OBJS)\monolib_helpbest.obj: ..\..\src\msw\helpbest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\helpbest.cpp
+
+$(OBJS)\monolib_chm.obj: ..\..\src\html\chm.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\html\chm.cpp
 
 $(OBJS)\monolib_helpctrl.obj: ..\..\src\html\helpctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\html\helpctrl.cpp
@@ -16039,6 +16049,9 @@ $(OBJS)\htmldll_version.res: ..\..\src\msw\version.rc
 $(OBJS)\htmldll_helpbest.obj: ..\..\src\msw\helpbest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(HTMLDLL_CXXFLAGS) ..\..\src\msw\helpbest.cpp
 
+$(OBJS)\htmldll_chm.obj: ..\..\src\html\chm.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(HTMLDLL_CXXFLAGS) ..\..\src\html\chm.cpp
+
 $(OBJS)\htmldll_helpctrl.obj: ..\..\src\html\helpctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(HTMLDLL_CXXFLAGS) ..\..\src\html\helpctrl.cpp
 
@@ -16119,6 +16132,9 @@ $(OBJS)\htmllib_dummy.obj: ..\..\src\common\dummy.cpp
 
 $(OBJS)\htmllib_helpbest.obj: ..\..\src\msw\helpbest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(HTMLLIB_CXXFLAGS) ..\..\src\msw\helpbest.cpp
+
+$(OBJS)\htmllib_chm.obj: ..\..\src\html\chm.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(HTMLLIB_CXXFLAGS) ..\..\src\html\chm.cpp
 
 $(OBJS)\htmllib_helpctrl.obj: ..\..\src\html\helpctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(HTMLLIB_CXXFLAGS) ..\..\src\html\helpctrl.cpp

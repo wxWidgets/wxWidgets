@@ -2841,6 +2841,7 @@ MEDIA_GTK1_SRC =
 
 HTML_MSW_SRC =
     src/msw/helpbest.cpp
+    src/html/chm.cpp
 HTML_CMN_SRC =
     src/html/helpctrl.cpp
     src/html/helpdata.cpp

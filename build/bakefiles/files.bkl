@@ -3353,6 +3353,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="HTML_SRC_PLATFORM">
     <if cond="TOOLKIT=='MSW'">
         src/msw/helpbest.cpp
+        src/html/chm.cpp
     </if>
     <if cond="PLATFORM_UNIX=='1'">
         src/html/chm.cpp

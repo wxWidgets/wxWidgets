@@ -331,6 +331,9 @@
 			Name="wxHTML Sources"
 			UniqueIdentifier="{2F6FA2A9-E2B7-5B50-9F90-38855A21AF00}">
 			<File
+				RelativePath="..\..\src\html\chm.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\html\helpctrl.cpp">
 			</File>
 			<File
