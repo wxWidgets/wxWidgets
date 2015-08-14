@@ -1118,8 +1118,8 @@ size_t wxZipEntry::WriteLocal(wxOutputStream& stream, wxMBConv& conv) const
     {
         ds.Write16(1);  // id
         ds.Write16(16); // record size
-        ds.Write64(m_CompressedSize);
-        ds.Write64(m_Size);
+        ds.Write64(static_cast<wxInt64>(m_CompressedSize));
+        ds.Write64(static_cast<wxInt64>(m_Size));
     }
     if (GetLocalExtraLen())
         stream.Write(m_LocalExtra->GetData(), GetLocalExtraLen());
@@ -1244,11 +1244,11 @@ size_t wxZipEntry::WriteCentral(wxOutputStream& stream, wxMBConv& conv) const
         ds.Write16(1); // tag
         ds.Write16(z64InfoLen); // record size
         if (m_CompressedSize > 0xffffffff)
-            ds.Write64(m_CompressedSize);
+            ds.Write64(static_cast<wxInt64>(m_CompressedSize));
         if (m_Size > 0xffffffff)
-            ds.Write64(m_Size);
+            ds.Write64(static_cast<wxInt64>(m_Size));
         if (m_Offset > 0xffffffff)
-            ds.Write64(m_Offset);
+            ds.Write64(static_cast<wxInt64>(m_Offset));
     }
     if (GetExtraLen())
         stream.Write(GetExtra(), GetExtraLen());
@@ -1403,7 +1403,7 @@ bool wxZipEndRec::Write(wxOutputStream& stream, wxMBConv& conv) const
         // Write zip64 end of central directory locator
         ds.Write32(Z64_LOC_MAGIC);
         ds.Write32(m_StartDisk);
-        ds.Write64(z64endOffset);
+        ds.Write64(static_cast<wxInt64>(z64endOffset));
         ds.Write32(1); // total number of disks
     }
 
