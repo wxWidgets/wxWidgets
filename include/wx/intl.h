@@ -190,7 +190,6 @@ enum wxLanguage
     wxLANGUAGE_ITALIAN_SWISS,
     wxLANGUAGE_JAPANESE,
     wxLANGUAGE_JAVANESE,
-    wxLANGUAGE_KABYLE,
     wxLANGUAGE_KANNADA,
     wxLANGUAGE_KASHMIRI,
     wxLANGUAGE_KASHMIRI_INDIA,
@@ -309,6 +308,7 @@ enum wxLanguage
     wxLANGUAGE_YORUBA,
     wxLANGUAGE_ZHUANG,
     wxLANGUAGE_ZULU,
+    wxLANGUAGE_KABYLE,
 
     // for custom, user-defined languages:
     wxLANGUAGE_USER_DEFINED
