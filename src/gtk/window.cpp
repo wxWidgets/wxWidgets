@@ -3275,6 +3275,12 @@ bool wxWindowGTK::Show( bool show )
     return true;
 }
 
+bool wxWindowGTK::IsShown() const
+{
+    // return false for non-selected wxNotebook pages
+    return m_isShown && (m_widget == NULL || gtk_widget_get_child_visible(m_widget));
+}
+
 void wxWindowGTK::DoEnable( bool enable )
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );

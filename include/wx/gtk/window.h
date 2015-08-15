@@ -62,6 +62,7 @@ public:
     virtual void Lower();
 
     virtual bool Show( bool show = true );
+    virtual bool IsShown() const;
 
     virtual bool IsRetained() const;
 
