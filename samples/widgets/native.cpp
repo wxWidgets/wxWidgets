@@ -225,7 +225,7 @@ private:
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(NativeWidgetsPage, wxS("Native"), NATIVE_CTRLS);
+IMPLEMENT_WIDGETS_PAGE(NativeWidgetsPage, wxT("Native"), NATIVE_CTRLS);
 
 NativeWidgetsPage::NativeWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
                  : WidgetsPage(book, imaglist, native_xpm)
