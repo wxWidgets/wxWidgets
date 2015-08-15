@@ -64,6 +64,7 @@ public:
     virtual void Lower() wxOVERRIDE;
 
     virtual bool Show( bool show = true ) wxOVERRIDE;
+    virtual bool IsShown() const wxOVERRIDE;
 
     virtual bool IsRetained() const wxOVERRIDE;
 
