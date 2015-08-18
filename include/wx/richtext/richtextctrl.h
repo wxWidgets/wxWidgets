@@ -2075,7 +2075,7 @@ public:
         list (ok, newPos).
         @endWxPerlOnly
     */
-    bool DeleteSelectedContent(long* newPos= NULL);
+    virtual bool DeleteSelectedContent(long* newPos= NULL);
 
     /**
         Transforms logical (unscrolled) position to physical window position.
