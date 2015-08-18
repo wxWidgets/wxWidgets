@@ -1565,10 +1565,10 @@ public:
 
         @see Create(), wxValidator
     */
-    wxListView(wxWindow* parent, wxWindowID id,
+    wxListView(wxWindow* parent, wxWindowID winid = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = wxLC_ICON,
+               long style = wxLC_REPORT,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxListCtrlNameStr);
 
