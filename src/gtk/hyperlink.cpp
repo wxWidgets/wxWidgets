@@ -54,18 +54,45 @@ static inline bool UseNative()
 // "clicked"
 // ----------------------------------------------------------------------------
 
+#ifdef __WXGTK3__
 extern "C" {
-static void gtk_hyperlink_clicked_callback( GtkWidget *WXUNUSED(widget),
-                                            wxHyperlinkCtrl *linkCtrl )
+static gboolean activate_link(GtkWidget*, wxHyperlinkCtrl* win)
 {
-    // send the event
-    linkCtrl->SendEvent();
+    win->SendEvent();
+    return true;
 }
 }
+#else
+static GSList* gs_hyperlinkctrl_list;
+extern "C" {
+static void clicked_hook(GtkLinkButton* button, const char*, void*)
+{
+    for (GSList* p = gs_hyperlinkctrl_list; p; p = p->next)
+    {
+        wxHyperlinkCtrl* win = static_cast<wxHyperlinkCtrl*>(p->data);
+        if (win->m_widget == (GtkWidget*)button)
+        {
+            win->SendEvent();
+            return;
+        }
+    }
+    gtk_link_button_set_uri_hook(NULL, NULL, NULL);
+    GTK_BUTTON_GET_CLASS(button)->clicked(GTK_BUTTON(button));
+    gtk_link_button_set_uri_hook(clicked_hook, NULL, NULL);
+}
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // wxHyperlinkCtrl
 // ----------------------------------------------------------------------------
+
+wxHyperlinkCtrl::~wxHyperlinkCtrl()
+{
+#ifndef __WXGTK3__
+    gs_hyperlinkctrl_list = g_slist_remove(gs_hyperlinkctrl_list, this);
+#endif
+}
 
 bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     const wxString& label, const wxString& url, const wxPoint& pos,
@@ -98,10 +125,12 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
         SetURL(url.empty() ? label : url);
         SetLabel(label.empty() ? url : label);
 
-        // our signal handlers:
-        g_signal_connect_after (m_widget, "clicked",
-                                G_CALLBACK (gtk_hyperlink_clicked_callback),
-                                this);
+#ifdef __WXGTK3__
+        g_signal_connect(m_widget, "activate_link", G_CALLBACK(activate_link), this);
+#else
+        gs_hyperlinkctrl_list = g_slist_prepend(gs_hyperlinkctrl_list, this);
+        gtk_link_button_set_uri_hook(clicked_hook, NULL, NULL);
+#endif
 
         m_parent->DoAddChild( this );
 
