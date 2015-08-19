@@ -1091,9 +1091,9 @@ public:
     *control << 123.456 << " some text\n";
     @endcode
 
-    However the possibility to create an ostream associated with wxTextCtrl may
-    be useful if you need to redirect the output of a function taking an
-    ostream as parameter to a text control.
+    However the possibility to create a @c std::ostream associated with wxTextCtrl may
+    be useful if you need to redirect the output of a function taking a
+    @c std::ostream as parameter to a text control.
 
     Another commonly requested need is to redirect @c std::cout to the text
     control. This may be done in the following way:
