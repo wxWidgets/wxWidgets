@@ -2104,7 +2104,7 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
 
     menuTry->Append(ID_SELECTSTYLE, wxT("Set Window Style"),
         wxT("Select window style flags used by the grid."));
-    menuTry->Append(ID_ENABLELABELEDITING, wxT("Enable label editing"),
+    menuTry->AppendCheckItem(ID_ENABLELABELEDITING, wxT("Enable label editing"),
         wxT("This calls wxPropertyGrid::MakeColumnEditable(0)"));
 #if wxUSE_HEADERCTRL
     menuTry->AppendCheckItem(ID_SHOWHEADER,
@@ -2692,9 +2692,9 @@ void FormMain::OnFreezeClick( wxCommandEvent& event )
 
 // -----------------------------------------------------------------------
 
-void FormMain::OnEnableLabelEditing( wxCommandEvent& WXUNUSED(event) )
+void FormMain::OnEnableLabelEditing(wxCommandEvent& event)
 {
-    m_propGrid->MakeColumnEditable(0);
+    m_propGrid->MakeColumnEditable(0, event.IsChecked());
 }
 
 // -----------------------------------------------------------------------
