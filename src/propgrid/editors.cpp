@@ -1906,8 +1906,8 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     if ( prop->HasFlag(wxPG_PROP_READONLY) && forColumn == 1 )
         tcFlags |= wxTE_READONLY;
 
-    wxPoint p(pos.x,pos.y);
-    wxSize s(sz.x,sz.y);
+    wxPoint p(pos);
+    wxSize s(sz);
 
    // Need to reduce width of text control on Mac
 #if defined(__WXMAC__)
