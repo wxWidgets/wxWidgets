@@ -677,9 +677,45 @@ bool wxCheckOsVersion(int majorVsn, int minorVsn)
 
 wxString wxGetOsDescription()
 {
-    NSString* osDesc = [NSProcessInfo processInfo].operatingSystemVersionString;
 
-    return wxString::Format("%s %s", _("Mac OS X"), wxCFStringRef::AsString(osDesc));
+    int majorVer, minorVer;
+    wxGetOsVersion(&majorVer, &minorVer);
+
+    wxString osBrand = _("OS X");
+    wxString osName;
+    if (majorVer == 10)
+    {
+        switch (minorVer)
+        {
+            case 7:
+                osName = _("Lion");
+                // 10.7 was the last version where the "Mac" prefix was used
+                osBrand = _("Mac OS X");
+                break;
+            case 8:
+                osName = _("Mountain Lion");
+                break;
+            case 9:
+                osName = _("Mavericks");
+                break;
+            case 10:
+                osName = _("Yosemite");
+                break;
+            case 11:
+                osName = _("El Capitan");
+                break;
+        };
+    }
+
+    wxString osDesc = osBrand;
+    if (!osName.empty())
+        osDesc += " " + osName;
+
+    NSString* osVersionString = [NSProcessInfo processInfo].operatingSystemVersionString;
+    if (osVersionString)
+        osDesc += " " + wxCFStringRef::AsString(osVersionString);
+
+    return osDesc;
 }
 
 #endif // wxOSX_USE_COCOA
