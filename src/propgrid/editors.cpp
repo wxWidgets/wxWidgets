@@ -1926,10 +1926,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     }
 
     // If the height is significantly higher, then use border, and fill the rect exactly.
-    bool hasSpecialSize = false;
-
-    if ( (sz.y - m_lineHeight) > 5 )
-        hasSpecialSize = true;
+    const bool hasSpecialSize = (sz.y - m_lineHeight) > 5;
 
     wxWindow* ctrlParent = GetPanel();
 
