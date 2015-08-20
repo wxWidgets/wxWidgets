@@ -120,8 +120,6 @@ public:
         Returns the search button visibility value.
         If there is a menu attached, the search button will be visible regardless of
         the search button visibility value.
-
-        This always returns @false in Mac OS X v10.3
     */
     virtual bool IsSearchButtonVisible() const;
 
@@ -148,8 +146,6 @@ public:
         Sets the search button visibility value on the search control.
         If there is a menu attached, the search button will be visible regardless of
         the search button visibility value.
-
-        This has no effect in Mac OS X v10.3
     */
     virtual void ShowSearchButton(bool show);
 
