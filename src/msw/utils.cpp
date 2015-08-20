@@ -1226,7 +1226,7 @@ wxString wxGetOsDescription()
 
                 case 10:
                     str = wxIsWindowsServer() == 1
-                            ? _("Windows Server 10")
+                            ? _("Windows Server 2016")
                             : _("Windows 10");
                     break;
             }
