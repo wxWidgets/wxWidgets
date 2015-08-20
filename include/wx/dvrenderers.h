@@ -422,7 +422,9 @@ public:
 class WXDLLIMPEXP_ADV wxDataViewDateRenderer: public wxDataViewCustomRenderer
 {
 public:
-    wxDataViewDateRenderer(const wxString &varianttype = wxT("datetime"),
+    static wxString GetDefaultType() { return wxS("datetime"); }
+
+    wxDataViewDateRenderer(const wxString &varianttype = GetDefaultType(),
                            wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
                            int align = wxDVR_DEFAULT_ALIGNMENT);
 
