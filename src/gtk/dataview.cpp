@@ -2439,6 +2439,14 @@ void wxDataViewCustomRenderer::GtkInitTextRenderer()
     g_object_ref_sink(m_text_renderer);
 
     GtkApplyAlignment(GTK_CELL_RENDERER(m_text_renderer));
+#if GTK_CHECK_VERSION(2,18,0)
+#ifndef __WXGTK3__
+    if (gtk_check_version(2,18,0) == NULL)
+#endif
+    {
+        gtk_cell_renderer_set_padding(GTK_CELL_RENDERER(m_text_renderer), 0, 0);
+    }
+#endif
 }
 
 GtkCellRendererText *wxDataViewCustomRenderer::GtkGetTextRenderer() const
