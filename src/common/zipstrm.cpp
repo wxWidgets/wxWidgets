@@ -1073,7 +1073,7 @@ size_t wxZipEntry::ReadLocal(wxInputStream& stream, wxMBConv& conv)
             if (stream.LastRead() != extraLen + 0u)
                 return 0;
 
-            if (LoadExtraInfo(m_Extra->GetData(), extraLen, true))
+            if (LoadExtraInfo(m_LocalExtra->GetData(), extraLen, true))
             {
                 Release(m_LocalExtra);
                 m_LocalExtra = NULL;
