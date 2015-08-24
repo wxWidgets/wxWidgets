@@ -1094,7 +1094,7 @@ size_t wxZipEntry::WriteLocal(wxOutputStream& stream, wxMBConv& conv) const
 
     bool z64Required = m_CompressedSize > 0xffffffff || m_Size > 0xffffffff;
     wxUint16 versionNeeded =
-        (z64Required) ? Z64_VERSION_NEEDED_TO_EXTRACT : m_VersionNeeded;
+        z64Required ? Z64_VERSION_NEEDED_TO_EXTRACT : int(m_VersionNeeded);
 
     wxDataOutputStream ds(stream);
 
