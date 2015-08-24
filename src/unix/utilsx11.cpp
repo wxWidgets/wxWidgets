@@ -894,8 +894,7 @@ bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
     if (gtk_check_version(2,14,0) == NULL)
 #endif
     {
-        GdkScreen* screen = gdk_window_get_screen(wxGetTopLevelGDK());
-        if (gtk_show_uri(screen, url.utf8_str(), GDK_CURRENT_TIME, NULL))
+        if (gtk_show_uri(NULL, url.utf8_str(), GDK_CURRENT_TIME, NULL))
             return true;
     }
 #endif // GTK_CHECK_VERSION(2,14,0)
