@@ -62,7 +62,16 @@ long UMAGetSystemVersion()
     static SInt32 sUMASystemVersion = 0 ;
     if ( sUMASystemVersion == 0 )
     {
-        verify_noerr(Gestalt(gestaltSystemVersion, &sUMASystemVersion));
+        // gestaltSystemVersion is deprecated since 10.8 and produces a runtime
+        // warning since 10.10 and will always return 0x109z. (z = micro version)
+        // As a workaround to the runtime warning return the hard coded value
+        // to supress the operating system warning.
+        int majorCur, minorCur;
+        wxGetOsVersion(&majorCur, &minorCur);
+        if ( majorCur > 10 || (majorCur == 10 && minorCur >= 10) )
+            sUMASystemVersion = 0x1090;
+        else
+            verify_noerr(Gestalt(gestaltSystemVersion, &sUMASystemVersion));
     }
     return sUMASystemVersion ;
 }
