@@ -3178,12 +3178,17 @@ void wxDataViewColumn::SetSortOrder( bool ascending )
 {
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
 
+    GtkSortType order = GTK_SORT_DESCENDING;
     if (ascending)
-        gtk_tree_view_column_set_sort_order( column, GTK_SORT_ASCENDING );
-    else
-        gtk_tree_view_column_set_sort_order( column, GTK_SORT_DESCENDING );
+        order = GTK_SORT_ASCENDING;
 
+    gtk_tree_view_column_set_sort_order(column, order);
     gtk_tree_view_column_set_sort_indicator( column, TRUE );
+
+    wxDataViewCtrlInternal* internal = m_owner->GtkGetInternal();
+    internal->SetSortOrder(order);
+    internal->SetSortColumn(m_model_column);
+    internal->SetDataViewSortColumn(this);
 }
 
 bool wxDataViewColumn::IsSortOrderAscending() const
