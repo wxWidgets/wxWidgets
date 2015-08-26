@@ -583,7 +583,6 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w )
     if ( !wxPeer->HasFlag(wxTE_RICH | wxTE_RICH2) )
     {
         [tv setRichText:NO];
-        [tv setAutomaticQuoteSubstitutionEnabled:NO];
     }
 
     [m_scrollView setDocumentView: tv];
