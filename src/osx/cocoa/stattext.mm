@@ -60,8 +60,10 @@
 
     [super setEnabled: flag]; 
     
-    if (![self drawsBackground])
-    { 
+    if (![self drawsBackground]) {
+        // Static text is drawn incorrectly when disabled.
+        // For an explanation, see
+        // http://www.cocoabuilder.com/archive/message/cocoa/2006/7/21/168028
         if (flag)
         { 
             if (m_textColor)
