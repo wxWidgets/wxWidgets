@@ -3202,7 +3202,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_GTK2_SRC" hints="files">
     $(ADVANCED_GTK_SRC)
     src/gtk/eggtrayicon.c
-    src/gtk/hildon/notifmsg.cpp
     src/generic/activityindicator.cpp
 </set>
 <set var="ADVANCED_GTK_HDR" hints="files">
@@ -3213,7 +3212,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="ADVANCED_GTK2_HDR" hints="files">
     $(ADVANCED_GTK_HDR)
-    wx/gtk/hildon/notifmsg.h
 </set>
 
 <set var="ADVANCED_GTK_NATIVE_SRC" hints="files">

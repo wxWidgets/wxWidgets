@@ -2758,7 +2758,6 @@ ADVANCED_GTK2_SRC =
     $(ADVANCED_GTK_SRC)
     src/generic/activityindicator.cpp
     src/gtk/eggtrayicon.c
-    src/gtk/hildon/notifmsg.cpp
 ADVANCED_GTK_HDR =
     $(ADVANCED_GTK_PLATFORM_HDR)
     wx/generic/activityindicator.h
@@ -2766,7 +2765,6 @@ ADVANCED_GTK_HDR =
     wx/gtk/taskbar.h
 ADVANCED_GTK2_HDR =
     $(ADVANCED_GTK_HDR)
-    wx/gtk/hildon/notifmsg.h
 
 ADVANCED_GTK_NATIVE_SRC =
     src/gtk/aboutdlg.cpp

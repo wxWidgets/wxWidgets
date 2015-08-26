@@ -954,10 +954,6 @@ WEBKIT_LIBS
 WEBKIT_CFLAGS
 COND_PYTHON
 PYTHON
-HILDON2_LIBS
-HILDON2_CFLAGS
-HILDON_LIBS
-HILDON_CFLAGS
 LIBNOTIFY_LIBS
 LIBNOTIFY_CFLAGS
 GNOMEVFS_LIBS
@@ -1104,7 +1100,6 @@ with_libmspack
 with_gtkprint
 with_gnomevfs
 with_libnotify
-with_hildon
 with_opengl
 with_dmalloc
 with_sdl
@@ -1408,10 +1403,6 @@ GNOMEVFS_CFLAGS
 GNOMEVFS_LIBS
 LIBNOTIFY_CFLAGS
 LIBNOTIFY_LIBS
-HILDON_CFLAGS
-HILDON_LIBS
-HILDON2_CFLAGS
-HILDON2_LIBS
 WEBKIT_CFLAGS
 WEBKIT_LIBS
 CAIRO_CFLAGS
@@ -2332,7 +2323,6 @@ Optional Packages:
   --without-gtkprint      don't use GTK printing support
   --with-gnomevfs         use GNOME VFS for associating MIME types
   --with-libnotify        use libnotify for notifications
-  --with-hildon           use Hildon framework for Nokia 770/800/810
   --with-opengl           use OpenGL (or Mesa)
   --with-dmalloc          use dmalloc library (http://dmalloc.com/)
   --with-sdl              use SDL for audio on Unix
@@ -2405,13 +2395,6 @@ Some influential environment variables:
               C compiler flags for LIBNOTIFY, overriding pkg-config
   LIBNOTIFY_LIBS
               linker flags for LIBNOTIFY, overriding pkg-config
-  HILDON_CFLAGS
-              C compiler flags for HILDON, overriding pkg-config
-  HILDON_LIBS linker flags for HILDON, overriding pkg-config
-  HILDON2_CFLAGS
-              C compiler flags for HILDON2, overriding pkg-config
-  HILDON2_LIBS
-              linker flags for HILDON2, overriding pkg-config
   WEBKIT_CFLAGS
               C compiler flags for WEBKIT, overriding pkg-config
   WEBKIT_LIBS linker flags for WEBKIT, overriding pkg-config
@@ -4077,8 +4060,6 @@ DEFAULT_wxUSE_STD_STRING=$DEFAULT_STD_FLAG
 
 DEFAULT_wxUSE_DMALLOC=no
 DEFAULT_wxUSE_LIBGNOMEVFS=no
-DEFAULT_wxUSE_LIBHILDON=no
-DEFAULT_wxUSE_LIBHILDON2=no
 DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
 
@@ -5281,50 +5262,6 @@ fi
             fi
           else
             result=$wxUSE_LIBNOTIFY
-          fi
-
-          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
-$as_echo "$result" >&6; }
-
-
-          withstring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$withstring" = xwithout; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${withstring:-with}-hildon" >&5
-$as_echo_n "checking for --${withstring:-with}-hildon... " >&6; }
-
-# Check whether --with-hildon was given.
-if test "${with_hildon+set}" = set; then :
-  withval=$with_hildon;
-                        if test "$withval" = yes; then
-                          wx_cv_use_hildon='wxUSE_LIBHILDON=yes'
-                        else
-                          wx_cv_use_hildon='wxUSE_LIBHILDON=no'
-                        fi
-
-else
-
-                        wx_cv_use_hildon='wxUSE_LIBHILDON=${'DEFAULT_wxUSE_LIBHILDON":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_hildon"
-
-          if test x"$withstring" = xwithout; then
-            if test $wxUSE_LIBHILDON = yes; then
-              result=no
-            else
-              result=yes
-            fi
-          else
-            result=$wxUSE_LIBHILDON
           fi
 
           { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
@@ -34349,184 +34286,6 @@ fi
         fi
     fi
 
-    if test "$wxUSE_LIBHILDON" = "yes" ; then
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for HILDON" >&5
-$as_echo_n "checking for HILDON... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$HILDON_CFLAGS"; then
-        pkg_cv_HILDON_CFLAGS="$HILDON_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"hildon-lgpl >= 0.9\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "hildon-lgpl >= 0.9") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_HILDON_CFLAGS=`$PKG_CONFIG --cflags "hildon-lgpl >= 0.9" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$HILDON_LIBS"; then
-        pkg_cv_HILDON_LIBS="$HILDON_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"hildon-lgpl >= 0.9\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "hildon-lgpl >= 0.9") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_HILDON_LIBS=`$PKG_CONFIG --libs "hildon-lgpl >= 0.9" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        HILDON_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "hildon-lgpl >= 0.9"`
-        else
-	        HILDON_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "hildon-lgpl >= 0.9"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$HILDON_PKG_ERRORS" >&5
-
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libhildon_lgpl not found" >&5
-$as_echo "$as_me: WARNING: libhildon_lgpl not found" >&2;}
-                        wxUSE_LIBHILDON="no"
-                        ac_hildon_lgpl=0
-
-
-elif test $pkg_failed = untried; then
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libhildon_lgpl not found" >&5
-$as_echo "$as_me: WARNING: libhildon_lgpl not found" >&2;}
-                        wxUSE_LIBHILDON="no"
-                        ac_hildon_lgpl=0
-
-
-else
-	HILDON_CFLAGS=$pkg_cv_HILDON_CFLAGS
-	HILDON_LIBS=$pkg_cv_HILDON_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $HILDON_LIBS"
-                CFLAGS="$CFLAGS $HILDON_CFLAGS"
-                CXXFLAGS="$CXXFLAGS $HILDON_CFLAGS"
-                $as_echo "#define wxUSE_LIBHILDON 1" >>confdefs.h
-
-                ac_hildon_lgpl=1
-
-fi
-
-        if test "$ac_hildon_lgpl" = 0 ; then
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for HILDON2" >&5
-$as_echo_n "checking for HILDON2... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$HILDON2_CFLAGS"; then
-        pkg_cv_HILDON2_CFLAGS="$HILDON2_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"hildon-1 >= 1.99\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "hildon-1 >= 1.99") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_HILDON2_CFLAGS=`$PKG_CONFIG --cflags "hildon-1 >= 1.99" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$HILDON2_LIBS"; then
-        pkg_cv_HILDON2_LIBS="$HILDON2_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"hildon-1 >= 1.99\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "hildon-1 >= 1.99") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_HILDON2_LIBS=`$PKG_CONFIG --libs "hildon-1 >= 1.99" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        HILDON2_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "hildon-1 >= 1.99"`
-        else
-	        HILDON2_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "hildon-1 >= 1.99"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$HILDON2_PKG_ERRORS" >&5
-
-
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libhildon_1 not found" >&5
-$as_echo "$as_me: WARNING: libhildon_1 not found" >&2;}
-                            wxUSE_LIBHILDON2="no"
-
-
-elif test $pkg_failed = untried; then
-
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libhildon_1 not found" >&5
-$as_echo "$as_me: WARNING: libhildon_1 not found" >&2;}
-                            wxUSE_LIBHILDON2="no"
-
-
-else
-	HILDON2_CFLAGS=$pkg_cv_HILDON2_CFLAGS
-	HILDON2_LIBS=$pkg_cv_HILDON2_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $HILDON2_LIBS"
-                    CFLAGS="$CFLAGS $HILDON2_CFLAGS"
-                    CXXFLAGS="$CXXFLAGS $HILDON2_CFLAGS"
-                    $as_echo "#define wxUSE_LIBHILDON2 1" >>confdefs.h
-
-
-fi
-        fi
-    fi
 fi
 
 if test "$wxUSE_CMDLINE_PARSER" = "yes"; then
@@ -37639,12 +37398,6 @@ case "$TOOLKIT" in
             fi
             if test "$wxUSE_LIBNOTIFY" = "yes" ; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA libnotify"
-            fi
-            if test "$wxUSE_LIBHILDON" = "yes"; then
-                TOOLKIT_EXTRA="$TOOLKIT_EXTRA hildon"
-            fi
-            if test "$wxUSE_LIBHILDON2" = "yes"; then
-                TOOLKIT_EXTRA="$TOOLKIT_EXTRA hildon"
             fi
 
             if test "$TOOLKIT_EXTRA" != ""; then

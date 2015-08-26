@@ -3763,8 +3763,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_HDR =  \
 	$(ADVANCED_GTK_PLATFORM_HDR) \
 	wx/gtk/notifmsg.h \
 	wx/gtk/taskbar.h \
-	wx/generic/activityindicator.h \
-	wx/gtk/hildon/notifmsg.h
+	wx/generic/activityindicator.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_ADVANCED_PLATFORM_HDR =  \
 	$(ADVANCED_GTK_PLATFORM_HDR) \
@@ -6587,7 +6586,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_gtk_notifmsg.o \
 	monodll_gtk_taskbar.o \
 	monodll_gtk_eggtrayicon.o \
-	monodll_hildon_notifmsg.o \
 	monodll_generic_activityindicator.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS =  \
@@ -6735,7 +6733,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monodll_gtk_notifmsg.o \
 	monodll_gtk_taskbar.o \
 	monodll_gtk_eggtrayicon.o \
-	monodll_hildon_notifmsg.o \
 	monodll_generic_activityindicator.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
@@ -8961,7 +8958,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_2 =  \
 	monolib_gtk_notifmsg.o \
 	monolib_gtk_taskbar.o \
 	monolib_gtk_eggtrayicon.o \
-	monolib_hildon_notifmsg.o \
 	monolib_generic_activityindicator.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_2 =  \
@@ -9109,7 +9105,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 	monolib_gtk_notifmsg.o \
 	monolib_gtk_taskbar.o \
 	monolib_gtk_eggtrayicon.o \
-	monolib_hildon_notifmsg.o \
 	monolib_generic_activityindicator.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
@@ -13335,7 +13330,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_4 =  \
 	advdll_gtk_notifmsg.o \
 	advdll_gtk_taskbar.o \
 	advdll_gtk_eggtrayicon.o \
-	advdll_hildon_notifmsg.o \
 	advdll_generic_activityindicator.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_4 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_4)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_4 =  \
@@ -13483,7 +13477,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_5 =  \
 	advdll_gtk_notifmsg.o \
 	advdll_gtk_taskbar.o \
 	advdll_gtk_eggtrayicon.o \
-	advdll_hildon_notifmsg.o \
 	advdll_generic_activityindicator.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_5 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_5)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_5 =  \
@@ -13684,7 +13677,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_6 =  \
 	advlib_gtk_notifmsg.o \
 	advlib_gtk_taskbar.o \
 	advlib_gtk_eggtrayicon.o \
-	advlib_hildon_notifmsg.o \
 	advlib_generic_activityindicator.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_6 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_6)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_6 =  \
@@ -13832,7 +13824,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_7 =  \
 	advlib_gtk_notifmsg.o \
 	advlib_gtk_taskbar.o \
 	advlib_gtk_eggtrayicon.o \
-	advlib_hildon_notifmsg.o \
 	advlib_generic_activityindicator.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_7 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_7)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___ADVANCED_PLATFORM_SRC_OBJECTS_7 =  \
@@ -23180,9 +23171,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_hildon_notifmsg.o: $(srcdir)/src/gtk/hildon/notifmsg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/hildon/notifmsg.cpp
-
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_gtk1_eggtrayicon.o: $(srcdir)/src/gtk1/eggtrayicon.c $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk1/eggtrayicon.c
 
@@ -29101,9 +29089,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_hildon_notifmsg.o: $(srcdir)/src/gtk/hildon/notifmsg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/hildon/notifmsg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_gtk1_eggtrayicon.o: $(srcdir)/src/gtk1/eggtrayicon.c $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk1/eggtrayicon.c
@@ -39539,9 +39524,6 @@ advdll_addremovectrl.o: $(srcdir)/src/common/addremovectrl.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_gtk_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CCC) -c -o $@ $(ADVDLL_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_hildon_notifmsg.o: $(srcdir)/src/gtk/hildon/notifmsg.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/hildon/notifmsg.cpp
-
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@advdll_gtk1_eggtrayicon.o: $(srcdir)/src/gtk1/eggtrayicon.c $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	$(CCC) -c -o $@ $(ADVDLL_CFLAGS) $(srcdir)/src/gtk1/eggtrayicon.c
 
@@ -40063,9 +40045,6 @@ advlib_addremovectrl.o: $(srcdir)/src/common/addremovectrl.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_gtk_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CCC) -c -o $@ $(ADVLIB_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_hildon_notifmsg.o: $(srcdir)/src/gtk/hildon/notifmsg.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/hildon/notifmsg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@advlib_gtk1_eggtrayicon.o: $(srcdir)/src/gtk1/eggtrayicon.c $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	$(CCC) -c -o $@ $(ADVLIB_CFLAGS) $(srcdir)/src/gtk1/eggtrayicon.c
@@ -41697,11 +41676,6 @@ GTK_DIST: UNIV_DIST
 	mkdir $(DISTDIR)/src/gtk/gnome
 	$(CP_P) $(INCDIR)/wx/gtk/gnome/*.h $(DISTDIR)/include/wx/gtk/gnome
 	$(CP_P) $(GTKDIR)/gnome/*.cpp $(DISTDIR)/src/gtk/gnome
-
-	mkdir $(DISTDIR)/include/wx/gtk/hildon
-	mkdir $(DISTDIR)/src/gtk/hildon
-	$(CP_P) $(INCDIR)/wx/gtk/hildon/*.h $(DISTDIR)/include/wx/gtk/hildon
-	$(CP_P) $(GTKDIR)/hildon/*.cpp $(DISTDIR)/src/gtk/hildon
 
 	mkdir $(DISTDIR)/src/osx
 	mkdir $(DISTDIR)/src/osx/core

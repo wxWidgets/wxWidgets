@@ -284,7 +284,6 @@ library:
 @itemdef{wxUSE_DETECT_SM, Use code to detect X11 session manager.}
 @itemdef{wxUSE_GTKPRINT, Use GTK+ printing support.}
 @itemdef{wxUSE_LIBGNOMEVFS, Use GNOME VFS support. Currently has no effect. }
-@itemdef{wxUSE_LIBHILDON, Use Hildon framework for Nokia 770. Currently has no effect. }
 @endDefList
 
 
