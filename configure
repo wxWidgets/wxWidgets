@@ -781,8 +781,6 @@ COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2
 COND_PLATFORM_UNIX_1
 COND_PLATFORM_UNIX_0
 COND_PLATFORM_OS2_1
-COND_PLATFORM_MSDOS_1
-COND_PLATFORM_MSDOS_0
 COND_PLATFORM_MAC_1
 COND_PLATFORM_MAC_0
 COND_PLATFORM_MACOSX_1_USE_SOVERSION_1
@@ -799,7 +797,6 @@ COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2
 COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0
-COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0
 COND_PLATFORM_MACOSX_1
 COND_PLATFORM_MACOSX_0_USE_SOVERSION_1
 COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1
@@ -894,7 +891,6 @@ PLATFORM_BEOS
 PLATFORM_MACOSX
 PLATFORM_MACOS
 PLATFORM_MAC
-PLATFORM_MSDOS
 PLATFORM_WIN32
 PLATFORM_UNIX
 IF_GNU_MAKE
@@ -4030,14 +4026,6 @@ case "${host}" in
   *-*-cygwin* | *-*-mingw32* )
                 PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_MSW=1
-  ;;
-
-  *-pc-msdosdjgpp )
-    USE_UNIX=0
-    USE_DOS=1
-    $as_echo "#define __DOS__ 1" >>confdefs.h
-
-    PROGRAM_EXT=".exe"
   ;;
 
   arm-apple-darwin*)
@@ -28791,16 +28779,6 @@ fi
 
 
 if test "$wxUSE_SHARED" = "yes"; then
-    case "${host}" in
-      *-pc-msdosdjgpp )
-                wxUSE_SHARED=no
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Host system doesn't support shared libraries, disabling" >&5
-$as_echo "$as_me: WARNING: Host system doesn't support shared libraries, disabling" >&2;}
-      ;;
-    esac
-fi
-
-if test "$wxUSE_SHARED" = "yes"; then
 
 
     case "${host}" in
@@ -38311,7 +38289,6 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
 
     PLATFORM_UNIX=0
     PLATFORM_WIN32=0
-    PLATFORM_MSDOS=0
     PLATFORM_MAC=0
     PLATFORM_MACOS=0
     PLATFORM_MACOSX=0
@@ -38321,9 +38298,6 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
         case "${BAKEFILE_HOST}" in
             *-*-mingw32* )
                 PLATFORM_WIN32=1
-            ;;
-            *-pc-msdosdjgpp )
-                PLATFORM_MSDOS=1
             ;;
             *-*-darwin* )
                 PLATFORM_MAC=1
@@ -38345,9 +38319,6 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
             win32 )
                 PLATFORM_WIN32=1
             ;;
-            msdos )
-                PLATFORM_MSDOS=1
-            ;;
             darwin )
                 PLATFORM_MAC=1
                 PLATFORM_MACOSX=1
@@ -38363,7 +38334,6 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
             ;;
         esac
     fi
-
 
 
 
@@ -38424,11 +38394,6 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
             SO_SUFFIX="dll"
             SO_SUFFIX_MODULE="dll"
             DLLIMP_SUFFIX="dll.a"
-            EXEEXT=".exe"
-            DLLPREFIX=""
-            dlldir="$bindir"
-        ;;
-        *-pc-msdosdjgpp )
             EXEEXT=".exe"
             DLLPREFIX=""
             dlldir="$bindir"
@@ -38737,8 +38702,7 @@ fi
       *-*-sunos4* | \
       *-*-osf* | \
       *-*-dgux5* | \
-      *-*-sysv5* | \
-      *-pc-msdosdjgpp )
+      *-*-sysv5* )
               ;;
 
       *)
@@ -39632,11 +39596,6 @@ EOF
         COND_PLATFORM_MACOSX_1=""
     fi
 
-    COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$PLATFORM_MSDOS" = "x0" ; then
-        COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0=""
-    fi
-
     COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$PLATFORM_WIN32" = "x1" -a "x$SHARED" = "x0" ; then
         COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0=""
@@ -39715,16 +39674,6 @@ EOF
     COND_PLATFORM_MAC_1="#"
     if test "x$PLATFORM_MAC" = "x1" ; then
         COND_PLATFORM_MAC_1=""
-    fi
-
-    COND_PLATFORM_MSDOS_0="#"
-    if test "x$PLATFORM_MSDOS" = "x0" ; then
-        COND_PLATFORM_MSDOS_0=""
-    fi
-
-    COND_PLATFORM_MSDOS_1="#"
-    if test "x$PLATFORM_MSDOS" = "x1" ; then
-        COND_PLATFORM_MSDOS_1=""
     fi
 
     COND_PLATFORM_OS2_1="#"

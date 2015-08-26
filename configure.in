@@ -274,13 +274,6 @@ case "${host}" in
     DEFAULT_DEFAULT_wxUSE_MSW=1
   ;;
 
-  *-pc-msdosdjgpp )
-    USE_UNIX=0
-    USE_DOS=1
-    AC_DEFINE(__DOS__)
-    PROGRAM_EXT=".exe"
-  ;;
-
   arm-apple-darwin*)
     dnl iPhone
     USE_BSD=1
@@ -3563,16 +3556,6 @@ fi
 
 
 dnl --- the marker for quick search, leave it here: SHARED_LIB_SETUP ---
-
-if test "$wxUSE_SHARED" = "yes"; then
-    case "${host}" in
-      *-pc-msdosdjgpp )
-        dnl only static for now
-        wxUSE_SHARED=no
-        AC_MSG_WARN([Host system doesn't support shared libraries, disabling])
-      ;;
-    esac
-fi
 
 if test "$wxUSE_SHARED" = "yes"; then
 

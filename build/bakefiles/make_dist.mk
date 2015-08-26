@@ -30,7 +30,6 @@ GTK1DIR  = $(WXDIR)/src/gtk1
 X11DIR   = $(WXDIR)/src/x11
 X11INC   = $(WXDIR)/include/wx/x11
 MOTIFDIR = $(WXDIR)/src/motif
-MSDOSDIR = $(WXDIR)/src/msdos
 MSWDIR   = $(WXDIR)/src/msw
 MACDIR   = $(WXDIR)/src/osx
 COCOADIR = $(WXDIR)/src/cocoa
@@ -289,7 +288,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/include/wx/protocol
 	mkdir $(DISTDIR)/include/wx/unix
 	mkdir $(DISTDIR)/include/wx/xml
-	mkdir $(DISTDIR)/include/wx/msdos
 	mkdir $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/include/wx/richtext
@@ -306,7 +304,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/src/osx
 	mkdir $(DISTDIR)/src/osx/core
 	mkdir $(DISTDIR)/src/osx/carbon
-	mkdir $(DISTDIR)/src/msdos
 	mkdir $(DISTDIR)/src/msw
 	$(CP_P) $(DOCDIR)/base/readme.txt $(DISTDIR)/README.txt
 	$(CP_P) $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common

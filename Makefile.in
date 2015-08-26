@@ -740,7 +740,6 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/msw/fswatcher.h \
 	$(BASE_WINCE_HDR) \
 	$(BASE_OSX_HDR) \
-	wx/msdos/mimetype.h \
 	wx/fs_inet.h \
 	wx/protocol/file.h \
 	wx/protocol/ftp.h \
@@ -881,9 +880,6 @@ ALL_BASE_SOURCES =  \
 	src/msw/fswatcher.cpp \
 	$(BASE_WINCE_SRC) \
 	$(BASE_OSX_SRC) \
-	src/msdos/dir.cpp \
-	src/msdos/mimetype.cpp \
-	src/msdos/utilsdos.cpp \
 	src/common/event.cpp \
 	src/common/fs_mem.cpp \
 	src/common/msgout.cpp \
@@ -2588,7 +2584,6 @@ COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/osx/core/stdpaths.h
 @COND_TOOLKIT_@BASE_OSX_HDR = $(COND_TOOLKIT__BASE_OSX_HDR)
 @COND_PLATFORM_MACOSX_1@BASE_PLATFORM_HDR = $(BASE_OSX_HDR)
-@COND_PLATFORM_MSDOS_1@BASE_PLATFORM_HDR = wx/msdos/mimetype.h
 COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
@@ -4528,9 +4523,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_fswatcher_kqueue.o \
 	monodll_fswatcher_fsevents.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS)
-@COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS = \
-@COND_PLATFORM_MSDOS_1@	monodll_msdos_dir.o monodll_msdos_mimetype.o \
-@COND_PLATFORM_MSDOS_1@	monodll_utilsdos.o
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_fdiodispatcher.o \
 	monodll_selectdispatcher.o \
@@ -4574,7 +4566,6 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	$(__BASE_WINCE_SRC_OBJECTS)
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS)
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS = monodll_wince_time.o
-@COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_WIN32_1@	= monodll_msw_main.o monodll_volume.o
 @COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS \
@@ -6906,9 +6897,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_fswatcher_kqueue.o \
 	monolib_fswatcher_fsevents.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1)
-@COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS_1 \
-@COND_PLATFORM_MSDOS_1@	= monolib_msdos_dir.o monolib_msdos_mimetype.o \
-@COND_PLATFORM_MSDOS_1@	monolib_utilsdos.o
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_fdiodispatcher.o \
 	monolib_selectdispatcher.o \
@@ -6952,7 +6940,6 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	$(__BASE_WINCE_SRC_OBJECTS_1)
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1)
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_1 = monolib_wince_time.o
-@COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1 = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_WIN32_1@	= monolib_msw_main.o monolib_volume.o
 @COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1 \
@@ -9337,9 +9324,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_fswatcher_kqueue.o \
 	basedll_fswatcher_fsevents.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2)
-@COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS_2 \
-@COND_PLATFORM_MSDOS_1@	= basedll_msdos_dir.o basedll_msdos_mimetype.o \
-@COND_PLATFORM_MSDOS_1@	basedll_utilsdos.o
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_fdiodispatcher.o \
 	basedll_selectdispatcher.o \
@@ -9383,7 +9367,6 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	$(__BASE_WINCE_SRC_OBJECTS_2)
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2)
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_2 = basedll_wince_time.o
-@COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_WIN32_1@	= basedll_main.o basedll_volume.o
 @COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_2 \
@@ -9426,9 +9409,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_fswatcher_kqueue.o \
 	baselib_fswatcher_fsevents.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3)
-@COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS_3 \
-@COND_PLATFORM_MSDOS_1@	= baselib_msdos_dir.o baselib_msdos_mimetype.o \
-@COND_PLATFORM_MSDOS_1@	baselib_utilsdos.o
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_fdiodispatcher.o \
 	baselib_selectdispatcher.o \
@@ -9472,7 +9452,6 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	$(__BASE_WINCE_SRC_OBJECTS_3)
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3)
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_3 = baselib_wince_time.o
-@COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_WIN32_1@	= baselib_main.o baselib_volume.o
 @COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_3 \
@@ -9644,7 +9623,6 @@ COND_USE_SOVERSOLARIS_1___coredll___so_symlinks_uninst_cmd = rm -f \
 	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOVERSOLARIS_1@__coredll___so_symlinks_uninst_cmd = $(COND_USE_SOVERSOLARIS_1___coredll___so_symlinks_uninst_cmd)
 @COND_PLATFORM_WIN32_1@__coredll___win32rc = coredll_version_rc.o
-@COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4 = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4 \
 @COND_PLATFORM_WIN32_1@	= coredll_msw_main.o coredll_volume.o
 @COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_4 \
@@ -11424,7 +11402,6 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname = \
 @COND_ICC_PCH_1@	./.pch/wxprec_corelib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_corelib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_corelib/wx/wxprec.h.gch
-@COND_PLATFORM_MSDOS_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_5 = 
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_5 \
 @COND_PLATFORM_WIN32_1@	= corelib_msw_main.o corelib_volume.o
 @COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_5 \
@@ -17788,15 +17765,6 @@ monodll_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(MONODLL_ODEP
 monodll_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
 
-monodll_msdos_dir.o: $(srcdir)/src/msdos/dir.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msdos/dir.cpp
-
-monodll_msdos_mimetype.o: $(srcdir)/src/msdos/mimetype.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msdos/mimetype.cpp
-
-monodll_utilsdos.o: $(srcdir)/src/msdos/utilsdos.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msdos/utilsdos.cpp
-
 monodll_event.o: $(srcdir)/src/common/event.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/event.cpp
 
@@ -23718,15 +23686,6 @@ monolib_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(MONOLIB_ODEP
 
 monolib_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
-
-monolib_msdos_dir.o: $(srcdir)/src/msdos/dir.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msdos/dir.cpp
-
-monolib_msdos_mimetype.o: $(srcdir)/src/msdos/mimetype.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msdos/mimetype.cpp
-
-monolib_utilsdos.o: $(srcdir)/src/msdos/utilsdos.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msdos/utilsdos.cpp
 
 monolib_event.o: $(srcdir)/src/common/event.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/event.cpp
@@ -29650,15 +29609,6 @@ basedll_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(BASEDLL_ODEP
 basedll_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
 
-basedll_msdos_dir.o: $(srcdir)/src/msdos/dir.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msdos/dir.cpp
-
-basedll_msdos_mimetype.o: $(srcdir)/src/msdos/mimetype.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msdos/mimetype.cpp
-
-basedll_utilsdos.o: $(srcdir)/src/msdos/utilsdos.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msdos/utilsdos.cpp
-
 basedll_event.o: $(srcdir)/src/common/event.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/event.cpp
 
@@ -30132,15 +30082,6 @@ baselib_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(BASELIB_ODEP
 
 baselib_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
-
-baselib_msdos_dir.o: $(srcdir)/src/msdos/dir.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msdos/dir.cpp
-
-baselib_msdos_mimetype.o: $(srcdir)/src/msdos/mimetype.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msdos/mimetype.cpp
-
-baselib_utilsdos.o: $(srcdir)/src/msdos/utilsdos.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msdos/utilsdos.cpp
 
 baselib_event.o: $(srcdir)/src/common/event.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/event.cpp
@@ -41434,7 +41375,6 @@ GTK1DIR  = $(WXDIR)/src/gtk1
 X11DIR   = $(WXDIR)/src/x11
 X11INC   = $(WXDIR)/include/wx/x11
 MOTIFDIR = $(WXDIR)/src/motif
-MSDOSDIR = $(WXDIR)/src/msdos
 MSWDIR   = $(WXDIR)/src/msw
 MACDIR   = $(WXDIR)/src/osx
 COCOADIR = $(WXDIR)/src/cocoa
@@ -41693,7 +41633,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/include/wx/protocol
 	mkdir $(DISTDIR)/include/wx/unix
 	mkdir $(DISTDIR)/include/wx/xml
-	mkdir $(DISTDIR)/include/wx/msdos
 	mkdir $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/include/wx/richtext
@@ -41710,7 +41649,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/src/osx
 	mkdir $(DISTDIR)/src/osx/core
 	mkdir $(DISTDIR)/src/osx/carbon
-	mkdir $(DISTDIR)/src/msdos
 	mkdir $(DISTDIR)/src/msw
 	$(CP_P) $(DOCDIR)/base/readme.txt $(DISTDIR)/README.txt
 	$(CP_P) $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common
