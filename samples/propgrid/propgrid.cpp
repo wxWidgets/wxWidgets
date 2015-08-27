@@ -2820,13 +2820,13 @@ void FormMain::OnCatColours( wxCommandEvent& event )
     if ( event.IsChecked() )
     {
         // Set custom colours.
-        pg->SetPropertyTextColour( wxT("Appearance"), wxColour(255,0,0), false );
+        pg->SetPropertyTextColour( wxT("Appearance"), wxColour(255,0,0), wxPG_DONT_RECURSE );
         pg->SetPropertyBackgroundColour( wxT("Appearance"), wxColour(255,255,183) );
         pg->SetPropertyTextColour( wxT("Appearance"), wxColour(255,0,183) );
-        pg->SetPropertyTextColour( wxT("PositionCategory"), wxColour(0,255,0), false );
+        pg->SetPropertyTextColour( wxT("PositionCategory"), wxColour(0,255,0), wxPG_DONT_RECURSE );
         pg->SetPropertyBackgroundColour( wxT("PositionCategory"), wxColour(255,226,190) );
         pg->SetPropertyTextColour( wxT("PositionCategory"), wxColour(255,0,190) );
-        pg->SetPropertyTextColour( wxT("Environment"), wxColour(0,0,255), false );
+        pg->SetPropertyTextColour( wxT("Environment"), wxColour(0,0,255), wxPG_DONT_RECURSE );
         pg->SetPropertyBackgroundColour( wxT("Environment"), wxColour(208,240,175) );
         pg->SetPropertyTextColour( wxT("Environment"), wxColour(255,255,255) );
         pg->SetPropertyBackgroundColour( wxT("More Examples"), wxColour(172,237,255) );
