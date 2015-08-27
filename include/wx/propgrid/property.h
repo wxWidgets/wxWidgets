@@ -2451,9 +2451,7 @@ protected:
 
     bool HasCell( unsigned int column ) const
     {
-        if ( m_cells.size() > column )
-            return true;
-        return false;
+        return m_cells.size() > column;
     }
 
     void InitAfterAdded( wxPropertyGridPageState* pageState,
