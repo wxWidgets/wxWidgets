@@ -107,10 +107,8 @@
 
 #include <string.h>
 
-#if !defined(__WXMICROWIN__)
-    #include <shellapi.h>
-    #include <mmsystem.h>
-#endif
+#include <shellapi.h>
+#include <mmsystem.h>
 
 #include <windowsx.h>
 
@@ -273,14 +271,6 @@ static wxWindowMSW *FindWindowForMouseEvent(wxWindowMSW *win, int *x, int *y);
 // wrapper around BringWindowToTop() API
 static inline void wxBringWindowToTop(HWND hwnd)
 {
-#ifdef __WXMICROWIN__
-    // It seems that MicroWindows brings the _parent_ of the window to the top,
-    // which can be the wrong one.
-
-    // activate (set focus to) specified window
-    ::SetFocus(hwnd);
-#endif
-
     // raise top level parent to top of z order
     if (!::SetWindowPos(hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE))
     {
@@ -931,17 +921,12 @@ namespace
 
 inline int GetScrollPosition(HWND hWnd, int wOrient)
 {
-#ifdef __WXMICROWIN__
-    return ::GetScrollPosWX(hWnd, wOrient);
-#else
     WinStruct<SCROLLINFO> scrollInfo;
     scrollInfo.cbSize = sizeof(SCROLLINFO);
     scrollInfo.fMask = SIF_POS;
     ::GetScrollInfo(hWnd, wOrient, &scrollInfo );
 
     return scrollInfo.nPos;
-
-#endif
 }
 
 inline UINT WXOrientToSB(int orient)
@@ -1555,9 +1540,7 @@ bool wxWindowMSW::Reparent(wxWindowBase *parent)
 
 static inline void SendSetRedraw(HWND hwnd, bool on)
 {
-#ifndef __WXMICROWIN__
     ::SendMessage(hwnd, WM_SETREDRAW, (WPARAM)on, 0);
-#endif
 }
 
 void wxWindowMSW::DoFreeze()
@@ -1617,7 +1600,7 @@ void wxWindowMSW::Update()
         wxLogLastError(wxT("UpdateWindow"));
     }
 
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
     // just calling UpdateWindow() is not enough, what we did in our WM_PAINT
     // handler needs to be really drawn right now
     (void)::GdiFlush();
@@ -2864,7 +2847,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             break;
 #endif // !__WXWINCE__
 
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
         case WM_ACTIVATEAPP:
             // This implicitly sends a wxEVT_ACTIVATE_APP event
             wxTheApp->SetActive(wParam != 0, FindFocus());
@@ -2970,28 +2953,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_XBUTTONDBLCLK:
 #endif // wxHAS_XBUTTON
             {
-#ifdef __WXMICROWIN__
-                // MicroWindows seems to ignore the fact that a window is
-                // disabled. So catch mouse events and throw them away if
-                // necessary.
-                wxWindowMSW* win = this;
-                for ( ;; )
-                {
-                    if (!win->IsEnabled())
-                    {
-                        processed = true;
-                        break;
-                    }
-
-                    win = win->GetParent();
-                    if ( !win || win->IsTopLevel() )
-                        break;
-                }
-
-                if ( processed )
-                    break;
-
-#endif // __WXMICROWIN__
                 int x = GET_X_LPARAM(lParam),
                     y = GET_Y_LPARAM(lParam);
 
@@ -3080,7 +3041,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                                             HIWORD(lParam),
                                             wParam);
             break;
-#endif // __WXMICROWIN__
+#endif // MM_JOY1MOVE
 
         case WM_COMMAND:
             {
@@ -3306,7 +3267,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
         // CTLCOLOR messages are sent by children to query the parent for their
         // colors
-#ifndef __WXMICROWIN__
         case WM_CTLCOLORMSGBOX:
         case WM_CTLCOLOREDIT:
         case WM_CTLCOLORLISTBOX:
@@ -3322,7 +3282,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 processed = HandleCtlColor(&rc.hBrush, (WXHDC)hdc, (WXHWND)hwnd);
             }
             break;
-#endif // !__WXMICROWIN__
 
         case WM_SYSCOLORCHANGE:
             // the return value for this message is ignored
@@ -3522,7 +3481,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             break;
 
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
         case WM_INITMENUPOPUP:
             processed = HandleMenuPopup(wxEVT_MENU_OPEN, (WXHMENU)wParam);
             break;
@@ -3540,7 +3499,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_UNINITMENUPOPUP:
             processed = HandleMenuPopup(wxEVT_MENU_CLOSE, (WXHMENU)wParam);
             break;
-#endif // !__WXMICROWIN__
+#endif // !__WXWINCE__
 #endif // wxUSE_MENUS && !defined(__WXUNIVERSAL__)
 
 #ifndef __WXWINCE__
@@ -3855,7 +3814,6 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
 
 bool wxWindowMSW::HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
-#ifndef __WXMICROWIN__
     LPNMHDR hdr = (LPNMHDR)lParam;
     HWND hWnd = hdr->hwndFrom;
     wxWindow *win = wxFindWinFromHandle(hWnd);
@@ -3889,9 +3847,6 @@ bool wxWindowMSW::HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
     // by default, handle it ourselves
     return MSWOnNotify(idCtrl, lParam, result);
-#else // __WXMICROWIN__
-    return false;
-#endif
 }
 
 #if wxUSE_TOOLTIPS
@@ -4196,10 +4151,10 @@ bool wxWindowMSW::HandleInitDialog(WXHWND WXUNUSED(hWndFocus))
 
 bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
 {
-#if defined (__WXMICROWIN__) || defined(__WXWINCE__)
+#if defined(__WXWINCE__)
     wxUnusedVar(wParam);
     return false;
-#else // __WXMICROWIN__
+#else // __WXWINCE__
     HDROP hFilesInfo = (HDROP) wParam;
 
     // Get the total number of files dropped
@@ -4241,7 +4196,6 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
                                   short nHitTest,
                                   int WXUNUSED(mouseMsg))
 {
-#ifndef __WXMICROWIN__
     // the logic is as follows:
     //  0. if we're busy, set the busy cursor (even for non client elements)
     //  1. don't set custom cursor for non client area of enabled windows
@@ -4319,7 +4273,6 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
         // cursor set, stop here
         return true;
     }
-#endif // __WXMICROWIN__
 
     // pass up the window chain
     return false;
@@ -4560,8 +4513,6 @@ bool wxWindowMSW::HandleDisplayChange()
     return HandleWindowEvent(event);
 }
 
-#ifndef __WXMICROWIN__
-
 bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush, WXHDC hDC, WXHWND hWnd)
 {
 #if !wxUSE_CONTROLS || defined(__WXUNIVERSAL__)
@@ -4578,8 +4529,6 @@ bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush, WXHDC hDC, WXHWND hWnd)
 
     return *brush != NULL;
 }
-
-#endif // __WXMICROWIN__
 
 bool wxWindowMSW::HandlePaletteChanged(WXHWND hWndPalChange)
 {
@@ -6708,13 +6657,11 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
         // FIXME: this is clearly not the best way to do it but I think we'll
         //        need to change HWND <-> wxWindow code more heavily than I can
         //        do it now to fix it
-#ifndef __WXMICROWIN__
         if ( ::GetWindow(hwnd, GW_OWNER) )
         {
             // it's a dialog box, don't go upwards
             break;
         }
-#endif
 
         hwnd = ::GetParent(hwnd);
         win = wxFindWinFromHandle(hwnd);
@@ -6723,7 +6670,7 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
     return win;
 }
 
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
 
 // Windows keyboard hook. Allows interception of e.g. F1, ESCAPE
 // in active frames and dialogs, regardless of where the focus is.
@@ -6813,7 +6760,7 @@ void wxSetKeyboardHook(bool doIt)
     }
 }
 
-#endif // !__WXMICROWIN__
+#endif // !__WXWINCE__
 
 #if wxDEBUG_LEVEL >= 2
 const wxChar *wxGetMessageName(int message)

@@ -1013,7 +1013,7 @@ wxDoCopyFile(wxFile& fileIn,
 bool
 wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 {
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__)
     // CopyFile() copies file attributes and modification time too, so use it
     // instead of our code if available
     //
@@ -1173,7 +1173,7 @@ bool wxMkdir(const wxString& dir, int perm)
     // for the GNU compiler
 #elif (!(defined(__WINDOWS__) || defined(__DOS__))) || \
       (defined(__GNUWIN32__) && !defined(__MINGW32__)) ||                \
-      defined(__WINE__) || defined(__WXMICROWIN__)
+      defined(__WINE__)
     const wxChar *dirname = dir.c_str();
   #if defined(MSVCRT)
     wxUnusedVar(perm);
@@ -1478,7 +1478,7 @@ wxString wxGetOSDirectory()
 {
 #ifdef __WXWINCE__
     return wxString(wxT("\\Windows"));
-#elif defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+#elif defined(__WINDOWS__)
     wxChar buf[MAX_PATH];
     if ( !GetWindowsDirectory(buf, MAX_PATH) )
     {

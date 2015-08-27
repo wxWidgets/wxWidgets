@@ -35,7 +35,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__)
     #include "wx/msw/private.h"
     #include "wx/msw/missing.h"
     #define wxHAVE_WIN32_MB2WC

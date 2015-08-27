@@ -88,7 +88,7 @@
     #endif
 #endif // wxUSE_EXCEPTIONS
 
-#if !defined(__WINDOWS__) || defined(__WXMICROWIN__)
+#if !defined(__WINDOWS__)
   #include  <signal.h>      // for SIGTRAP used by wxTrap()
 #endif  //Win/Unix
 
@@ -1128,7 +1128,7 @@ void wxAbort()
 
 void wxTrap()
 {
-#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+#if defined(__WINDOWS__)
     DebugBreak();
 #elif defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
     Debugger();
@@ -1296,7 +1296,7 @@ static
 bool DoShowAssertDialog(const wxString& msg)
 {
     // under Windows we can show the dialog even in the console mode
-#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+#if defined(__WINDOWS__)
     wxString msgDlg(msg);
 
     // this message is intentionally not translated -- it is for developers

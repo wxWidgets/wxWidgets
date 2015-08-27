@@ -159,14 +159,7 @@ wxFont wxCreateFontFromStockObject(int index)
         {
             wxNativeFontInfo info;
             info.lf = lf;
-            // Under MicroWindows we pass the HFONT as well
-            // because it's hard to convert HFONT -> LOGFONT -> HFONT
-            // It's OK to delete stock objects, the delete will be ignored.
-#ifdef __WXMICROWIN__
-            font.Create(info, (WXHFONT) hFont);
-#else
             font.Create(info);
-#endif
         }
         else
         {
@@ -335,10 +328,6 @@ static const int gs_metricsMap[] =
 // Get a system metric, e.g. scrollbar size
 int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(win))
 {
-#ifdef __WXMICROWIN__
-    // TODO: probably use wxUniv themes functionality
-    return 0;
-#else // !__WXMICROWIN__
     wxCHECK_MSG( index > 0 && (size_t)index < WXSIZEOF(gs_metricsMap), 0,
                  wxT("invalid metric") );
 
@@ -363,7 +352,6 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
     }
 
     return rc;
-#endif // __WXMICROWIN__/!__WXMICROWIN__
 }
 
 bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)

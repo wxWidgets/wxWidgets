@@ -104,7 +104,7 @@
 // global variables
 // ---------------------------------------------------------------------------
 
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
 extern void wxSetKeyboardHook(bool doIt);
 #endif
 
@@ -613,9 +613,7 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     // ensure that base cleanup is done if we return too early
     wxCallBaseCleanup callBaseCleanup(this);
 
-#if !defined(__WXMICROWIN__)
     InitCommonControls();
-#endif // !defined(__WXMICROWIN__)
 
 #if defined(__SMARTPHONE__) || defined(__POCKETPC__)
     SHInitExtraControls();
@@ -623,7 +621,7 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 
     wxOleInitialize();
 
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
     wxSetKeyboardHook(true);
 #endif
 
@@ -730,7 +728,7 @@ void wxApp::CleanUp()
     // class method first and only then do our clean up
     wxAppBase::CleanUp();
 
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
     wxSetKeyboardHook(false);
 #endif
 

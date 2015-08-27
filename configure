@@ -1084,7 +1084,6 @@ with_mac
 with_wine
 with_msw
 with_directfb
-with_microwin
 with_x11
 with_qt
 enable_nanox
@@ -2309,7 +2308,6 @@ Optional Packages:
   --with-wine             use Wine
   --with-msw              use MS-Windows
   --with-directfb         use DirectFB
-  --with-microwin         use MicroWindows
   --with-x11              use X11
   --with-qt               use Qt
   --with-libpng           use libpng (PNG image format)
@@ -3823,13 +3821,12 @@ USE_ALPHA=
 
 NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 
-ALL_TOOLKITS="GTK OSX_CARBON OSX_COCOA OSX_IPHONE MICROWIN MOTIF MSW X11 DFB QT"
+ALL_TOOLKITS="GTK OSX_CARBON OSX_COCOA OSX_IPHONE MOTIF MSW X11 DFB QT"
 
 DEFAULT_wxUSE_GTK=0
 DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_wxUSE_OSX_COCOA=0
 DEFAULT_wxUSE_OSX_IPHONE=0
-DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_wxUSE_MOTIF=0
 DEFAULT_wxUSE_MSW=0
 DEFAULT_wxUSE_X11=0
@@ -3840,7 +3837,6 @@ DEFAULT_DEFAULT_wxUSE_GTK=0
 DEFAULT_DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_DEFAULT_wxUSE_OSX_COCOA=0
 DEFAULT_DEFAULT_wxUSE_OSX_IPHONE=0
-DEFAULT_DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_DEFAULT_wxUSE_MOTIF=0
 DEFAULT_DEFAULT_wxUSE_MSW=0
 DEFAULT_DEFAULT_wxUSE_X11=0
@@ -4550,12 +4546,6 @@ if test "${with_directfb+set}" = set; then :
 fi
 
 
-# Check whether --with-microwin was given.
-if test "${with_microwin+set}" = set; then :
-  withval=$with_microwin; wxUSE_MICROWIN="$withval" CACHE_MICROWIN=1 TOOLKIT_GIVEN=1
-fi
-
-
 # Check whether --with-x11 was given.
 if test "${with_x11+set}" = set; then :
   withval=$with_x11; wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1
@@ -4702,7 +4692,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
             NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
                   + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_OSX_IPHONE:-0} + ${wxUSE_DFB:-0} \
-                  + ${wxUSE_MICROWIN:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} \
+                  + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} \
                   + ${wxUSE_X11:-0} + ${wxUSE_QT:-0}`
 
 
@@ -24733,36 +24723,6 @@ $as_echo "yes" >&6; }
                            GUIDIST=DFB_DIST
 
 fi
-    fi
-
-    if test "$wxUSE_MICROWIN" = 1; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for MicroWindows" >&5
-$as_echo_n "checking for MicroWindows... " >&6; }
-        if test "x$MICROWINDOWS" = x ; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found" >&5
-$as_echo "not found" >&6; }
-            as_fn_error $? "Cannot find MicroWindows library. Make sure MICROWINDOWS is set." "$LINENO" 5
-        else
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: $MICROWINDOWS" >&5
-$as_echo "$MICROWINDOWS" >&6; }
-        fi
-
-        if test -f $MICROWINDOWS/lib/libmwin.a; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: MicroWindows' libraries found." >&5
-$as_echo "MicroWindows' libraries found." >&6; }
-        else
-            as_fn_error $? "Cannot find MicroWindows libraries, make sure they are compiled." "$LINENO" 5
-        fi
-
-        TOOLKIT_INCLUDE="-I$MICROWINDOWS/include"
-        GUI_TK_LIBRARY="-L$MICROWINDOWS/lib -lmwin -lmwengine -mwfonts -mwdrivers -mwinlib"
-
-        wxUSE_UNIVERSAL="yes"
-
-        TOOLKIT=MICROWIN
-        GUIDIST=MICROWIN_DIST
-
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXMSW__ -D__WIN95__ -D__WIN32__ -DMWIN -DMICROWIN_NOCONTROLS -DMICROWIN_TODO=1"
     fi
 
         if test "$wxUSE_X11" = 1 -o "$wxUSE_MOTIF" = 1; then

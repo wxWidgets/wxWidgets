@@ -35,7 +35,7 @@
 #define M_PENDATA ((wxPenRefData*)m_refData)
 
 // Win32 has ExtCreatePen() but WinCE doesn't
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
     #define wxHAVE_EXT_CREATE_PEN
 #endif
 

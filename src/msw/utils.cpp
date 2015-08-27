@@ -56,7 +56,7 @@
     #include <winsock.h>
 #endif
 
-#if !defined(__GNUWIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if !defined(__GNUWIN32__) && !defined(__WXWINCE__)
     #include <direct.h>
 
     #include <dos.h>
@@ -86,7 +86,7 @@
     #include <lm.h>
 #endif // USE_NET_API
 
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
     #ifndef __UNIX__
         #include <io.h>
     #endif
@@ -106,7 +106,7 @@
 // ----------------------------------------------------------------------------
 
 // In the WIN.INI file
-#if (!defined(USE_NET_API) && !defined(__WXWINCE__)) || defined(__WXMICROWIN__)
+#if (!defined(USE_NET_API) && !defined(__WXWINCE__))
 static const wxChar WX_SECTION[] = wxT("wxWindows");
 #endif
 
@@ -153,7 +153,7 @@ bool wxGetHostName(wxChar *buf, int maxSize)
 // get full hostname (with domain name if possible)
 bool wxGetFullHostName(wxChar *buf, int maxSize)
 {
-#if !defined( __WXMICROWIN__) && wxUSE_DYNLIB_CLASS && wxUSE_SOCKETS
+#if wxUSE_DYNLIB_CLASS && wxUSE_SOCKETS
     // TODO should use GetComputerNameEx() when available
 
     // we don't want to always link with Winsock DLL as we might not use it at
@@ -229,7 +229,7 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
             }
         }
     }
-#endif // !__WXMICROWIN__
+#endif // wxUSE_DYNLIB_CLASS && wxUSE_SOCKETS
 
     return wxGetHostName(buf, maxSize);
 }
@@ -1300,8 +1300,6 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 
 #if defined(__WXWINCE__)
         s_version.os = wxOS_WINDOWS_CE;
-#elif defined(__WXMICROWIN__)
-        s_version.os = wxOS_WINDOWS_MICRO;
 #else // "normal" desktop Windows system, use run-time detection
         switch ( info.dwPlatformId )
         {
@@ -1454,7 +1452,6 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCharset(wxFontEncoding encoding)
         case wxFONTENCODING_CP1252:
             return ANSI_CHARSET;
 
-#if !defined(__WXMICROWIN__)
         // The following four fonts are multi-byte charsets
         case wxFONTENCODING_CP932:
             return SHIFTJIS_CHARSET;
@@ -1494,7 +1491,6 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCharset(wxFontEncoding encoding)
 
         case wxFONTENCODING_CP874:
             return THAI_CHARSET;
-#endif // !__WXMICROWIN__
 
         case wxFONTENCODING_CP437:
             return OEM_CHARSET;

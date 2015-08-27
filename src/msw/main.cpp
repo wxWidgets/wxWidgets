@@ -54,10 +54,6 @@
     #define DllMain DllEntryPoint
 #endif // __BORLANDC__
 
-#if defined(__WXMICROWIN__)
-    #define HINSTANCE HANDLE
-#endif
-
 // defined in common/init.cpp
 extern int wxEntryReal(int& argc, wxChar **argv);
 extern int wxEntryCleanupReal(int& argc, wxChar **argv);

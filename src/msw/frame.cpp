@@ -462,7 +462,7 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
 
 void wxFrame::InternalSetMenuBar()
 {
-#if defined(__WXMICROWIN__) || defined(__WXWINCE__)
+#if defined(__WXWINCE__)
     // Nothing
 #else
     if ( !::SetMenu(GetHwnd(), (HMENU)m_hMenu) )
@@ -564,7 +564,7 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 bool wxFrame::ShowFullScreen(bool show, long style)
 {
     // TODO-CE: add support for CE
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
     if ( IsFullScreen() == show )
         return false;
 
@@ -637,7 +637,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
         }
 #endif // wxUSE_STATUSBAR
     }
-#endif // !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#endif // !defined(__WXWINCE__)
 
     return wxFrameBase::ShowFullScreen(show, style);
 }
@@ -848,7 +848,7 @@ bool wxFrame::MSWDoTranslateMessage(wxFrame *frame, WXMSG *pMsg)
 
 bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
 {
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
     switch ( id )
     {
         case SIZE_RESTORED:
@@ -1001,7 +1001,7 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
             }
             break;
 
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
         case WM_QUERYDRAGICON:
             {
                 const wxIcon& icon = GetIcon();
@@ -1011,7 +1011,7 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
                 processed = rc != 0;
             }
             break;
-#endif // !__WXMICROWIN__
+#endif // !__WXWINCE__
     }
 #if wxUSE_TASKBARBUTTON
     if ( message == wxMsgTaskbarButtonCreated )

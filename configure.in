@@ -99,7 +99,7 @@ NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 dnl the list of all available toolkits
 dnl
 dnl update NUM_TOOLKITS calculation below when adding a new toolkit here!
-ALL_TOOLKITS="GTK OSX_CARBON OSX_COCOA OSX_IPHONE MICROWIN MOTIF MSW X11 DFB QT"
+ALL_TOOLKITS="GTK OSX_CARBON OSX_COCOA OSX_IPHONE MOTIF MSW X11 DFB QT"
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
@@ -107,7 +107,6 @@ DEFAULT_wxUSE_GTK=0
 DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_wxUSE_OSX_COCOA=0
 DEFAULT_wxUSE_OSX_IPHONE=0
-DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_wxUSE_MOTIF=0
 DEFAULT_wxUSE_MSW=0
 DEFAULT_wxUSE_X11=0
@@ -121,7 +120,6 @@ DEFAULT_DEFAULT_wxUSE_GTK=0
 DEFAULT_DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_DEFAULT_wxUSE_OSX_COCOA=0
 DEFAULT_DEFAULT_wxUSE_OSX_IPHONE=0
-DEFAULT_DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_DEFAULT_wxUSE_MOTIF=0
 DEFAULT_DEFAULT_wxUSE_MSW=0
 DEFAULT_DEFAULT_wxUSE_X11=0
@@ -433,7 +431,6 @@ AC_ARG_WITH(mac,           [  --with-mac              same as --with-osx], [wxUS
 AC_ARG_WITH(wine,          [  --with-wine             use Wine], [wxUSE_WINE="$withval" CACHE_WINE=1])
 AC_ARG_WITH(msw,           [  --with-msw              use MS-Windows], [wxUSE_MSW="$withval" CACHE_MSW=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(directfb,      [  --with-directfb         use DirectFB], [wxUSE_DFB="$withval" wxUSE_UNIVERSAL="yes" CACHE_DFB=1 TOOLKIT_GIVEN=1])
-AC_ARG_WITH(microwin,      [  --with-microwin         use MicroWindows], [wxUSE_MICROWIN="$withval" CACHE_MICROWIN=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(qt,            [  --with-qt               use Qt], [wxUSE_QT="$withval" CACHE_QT=1 TOOLKIT_GIVEN=1])
 WX_ARG_ENABLE(nanox,       [  --enable-nanox          use NanoX], wxUSE_NANOX)
@@ -490,7 +487,7 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl this? what about using ALL_TOOLKITS? TODO)
     NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
                   + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_OSX_IPHONE:-0} + ${wxUSE_DFB:-0} \
-                  + ${wxUSE_MICROWIN:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} \
+                  + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} \
                   + ${wxUSE_X11:-0} + ${wxUSE_QT:-0}`
 
 
@@ -2913,32 +2910,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                            AC_MSG_ERROR([DirectFB not found.])
                          ]
                          )
-    fi
-
-    if test "$wxUSE_MICROWIN" = 1; then
-        AC_MSG_CHECKING(for MicroWindows)
-        if test "x$MICROWINDOWS" = x ; then
-            AC_MSG_RESULT(not found)
-            AC_MSG_ERROR([Cannot find MicroWindows library. Make sure MICROWINDOWS is set.])
-        else
-            AC_MSG_RESULT($MICROWINDOWS)
-        fi
-
-        if test -f $MICROWINDOWS/lib/libmwin.a; then
-            AC_MSG_RESULT(MicroWindows' libraries found.)
-        else
-            AC_MSG_ERROR([Cannot find MicroWindows libraries, make sure they are compiled.])
-        fi
-
-        TOOLKIT_INCLUDE="-I$MICROWINDOWS/include"
-        GUI_TK_LIBRARY="-L$MICROWINDOWS/lib -lmwin -lmwengine -mwfonts -mwdrivers -mwinlib"
-
-        wxUSE_UNIVERSAL="yes"
-
-        TOOLKIT=MICROWIN
-        GUIDIST=MICROWIN_DIST
-
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXMSW__ -D__WIN95__ -D__WIN32__ -DMWIN -DMICROWIN_NOCONTROLS -DMICROWIN_TODO=1"
     fi
 
     dnl common part of X11 and Motif port checks

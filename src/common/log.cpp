@@ -1054,7 +1054,7 @@ static void wxLogWrap(FILE *f, const char *pszPrefix, const char *psz)
 // get error code from syste
 unsigned long wxSysErrorCode()
 {
-#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+#if defined(__WINDOWS__)
     return ::GetLastError();
 #else   //Unix
     return errno;
@@ -1067,7 +1067,7 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
     if ( nErrCode == 0 )
         nErrCode = wxSysErrorCode();
 
-#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+#if defined(__WINDOWS__)
     static wxChar s_szBuf[1024];
 
     // get error message from system

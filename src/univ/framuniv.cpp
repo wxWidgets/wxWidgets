@@ -301,9 +301,5 @@ bool wxFrame::Enable(bool enable)
 {
     if (!wxFrameBase::Enable(enable))
         return false;
-#ifdef __WXMICROWIN__
-    if (m_frameMenuBar)
-        m_frameMenuBar->Enable(enable);
-#endif
     return true;
 }

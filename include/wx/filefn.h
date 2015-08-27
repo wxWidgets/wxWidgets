@@ -31,7 +31,7 @@
     #include <dirent.h>
 #endif
 
-#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+#if defined(__WINDOWS__)
 #if !defined( __GNUWIN32__ ) && !defined(__WXWINCE__) && !defined(__CYGWIN__)
     #include <direct.h>
     #include <dos.h>

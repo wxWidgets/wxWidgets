@@ -62,9 +62,7 @@ void wxBeginBusyCursor(const wxCursor *cursor)
     if ( gs_wxBusyCursorCount++ == 0 )
     {
         gs_wxBusyCursor = (HCURSOR)cursor->GetHCURSOR();
-#ifndef __WXMICROWIN__
         gs_wxBusyCursorOld = ::SetCursor(gs_wxBusyCursor);
-#endif
     }
     //else: nothing to do, already set
 }
@@ -77,9 +75,7 @@ void wxEndBusyCursor()
 
     if ( --gs_wxBusyCursorCount == 0 )
     {
-#ifndef __WXMICROWIN__
         ::SetCursor(gs_wxBusyCursorOld);
-#endif
         gs_wxBusyCursorOld = 0;
     }
 }
@@ -123,10 +119,6 @@ void wxGetMousePosition( int* x, int* y )
 // Return true if we have a colour display
 bool wxColourDisplay()
 {
-#ifdef __WXMICROWIN__
-    // MICROWIN_TODO
-    return true;
-#else
     // this function is called from wxDC ctor so it is called a *lot* of times
     // hence we optimize it a bit but doing the check only once
     //
@@ -143,7 +135,6 @@ bool wxColourDisplay()
     }
 
     return s_isColour != 0;
-#endif
 }
 
 // Returns depth of screen
@@ -156,41 +147,22 @@ int wxDisplayDepth()
 // Get size of display
 void wxDisplaySize(int *width, int *height)
 {
-#ifdef __WXMICROWIN__
-    RECT rect;
-    HWND hWnd = GetDesktopWindow();
-    ::GetWindowRect(hWnd, & rect);
-
-    if ( width )
-        *width = rect.right - rect.left;
-    if ( height )
-        *height = rect.bottom - rect.top;
-#else // !__WXMICROWIN__
     ScreenHDC dc;
 
     if ( width )
         *width = ::GetDeviceCaps(dc, HORZRES);
     if ( height )
         *height = ::GetDeviceCaps(dc, VERTRES);
-#endif // __WXMICROWIN__/!__WXMICROWIN__
 }
 
 void wxDisplaySizeMM(int *width, int *height)
 {
-#ifdef __WXMICROWIN__
-    // MICROWIN_TODO
-    if ( width )
-        *width = 0;
-    if ( height )
-        *height = 0;
-#else
     ScreenHDC dc;
 
     if ( width )
         *width = ::GetDeviceCaps(dc, HORZSIZE);
     if ( height )
         *height = ::GetDeviceCaps(dc, VERTSIZE);
-#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -214,8 +186,6 @@ wxString WXDLLEXPORT wxGetWindowClass(WXHWND hWnd)
 {
     wxString str;
 
-    // MICROWIN_TODO
-#ifndef __WXMICROWIN__
     if ( hWnd )
     {
         int len = 256; // some starting value
@@ -236,7 +206,6 @@ wxString WXDLLEXPORT wxGetWindowClass(WXHWND hWnd)
             }
         }
     }
-#endif // !__WXMICROWIN__
 
     return str;
 }

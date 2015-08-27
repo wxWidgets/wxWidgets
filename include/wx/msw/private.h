@@ -15,11 +15,6 @@
 
 #include "wx/msw/wrapwin.h"
 
-#ifdef __WXMICROWIN__
-    // Extra prototypes and symbols not defined by MicroWindows
-    #include "wx/msw/microwin.h"
-#endif
-
 #include "wx/log.h"
 
 #if wxUSE_GUI
@@ -144,11 +139,7 @@ extern LONG APIENTRY
 // ---------------------------------------------------------------------------
 
 // a wrapper macro for ZeroMemory()
-#if !defined(__WXMICROWIN__)
 #define wxZeroMemory(obj)   ::ZeroMemory(&obj, sizeof(obj))
-#else
-#define wxZeroMemory(obj)   memset((void*) & obj, 0, sizeof(obj))
-#endif
 
 // This one is a macro so that it can be tested with #ifdef, it will be
 // undefined if it cannot be implemented for a given compiler.

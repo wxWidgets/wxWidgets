@@ -347,7 +347,7 @@ public:
     static int DoMustScroll(wxDialog* dialog, wxSize& windowSize, wxSize& displaySize);
 };
 
-#if defined(__WXUNIVERSAL__) && !defined(__WXMICROWIN__)
+#if defined(__WXUNIVERSAL__)
     #include "wx/univ/dialog.h"
 #else
     #if defined(__WXMSW__)

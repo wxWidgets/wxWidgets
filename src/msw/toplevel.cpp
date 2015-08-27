@@ -63,17 +63,6 @@
     #define ICON_SMALL 0
 #endif
 
-// ----------------------------------------------------------------------------
-// stubs for missing functions under MicroWindows
-// ----------------------------------------------------------------------------
-
-#ifdef __WXMICROWIN__
-
-// static inline bool IsIconic(HWND WXUNUSED(hwnd)) { return false; }
-static inline bool IsZoomed(HWND WXUNUSED(hwnd)) { return false; }
-
-#endif // __WXMICROWIN__
-
 // NB: wxDlgProc must be defined here and not in dialog.cpp because the latter
 //     is not included by wxUniv build which does need wxDlgProc
 LONG APIENTRY
@@ -426,10 +415,6 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
                                        const wxPoint& pos,
                                        const wxSize& size)
 {
-#ifdef __WXMICROWIN__
-    // no dialogs support under MicroWin yet
-    return CreateFrame(title, pos, size);
-#else // !__WXMICROWIN__
     // static cast is valid as we're only ever called for dialogs
     wxWindow * const
         parent = static_cast<wxDialog *>(this)->GetParentForModalDialog();
@@ -504,7 +489,6 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
 #endif
 
     return true;
-#endif // __WXMICROWIN__/!__WXMICROWIN__
 }
 
 bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
@@ -1180,7 +1164,6 @@ void wxTopLevelWindowMSW::SetIcons(const wxIconBundle& icons)
 
 bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
 {
-#if !defined(__WXMICROWIN__)
     // get system (a.k.a. window) menu
     HMENU hmenu = GetSystemMenu(GetHwnd(), FALSE /* get it */);
     if ( !hmenu )
@@ -1207,7 +1190,6 @@ bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
         wxLogLastError(wxT("DrawMenuBar"));
     }
 #endif
-#endif // !__WXMICROWIN__
 
     return true;
 }
