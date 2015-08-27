@@ -2013,6 +2013,16 @@ public:
     void SetTextColour( const wxColour& colour,
                         int flags = wxPG_RECURSE );
 
+    /**
+        Sets property's default text and background colours.
+
+        @param flags
+            Default is wxPG_RECURSE which causes colours to be set recursively.
+            Omit this flag to only set colours for the property in question
+            and not any of its children.
+    */
+    void SetDefaultColours(int flags = wxPG_RECURSE);
+
     /** Set default value of a property. Synonymous to
 
         @code
@@ -2396,6 +2406,14 @@ protected:
                           wxPGCellData* unmodCellData,
                           FlagType ignoreWithFlags,
                           bool recursively );
+
+    /**
+        Clear cells associated with property.
+
+        @param recursively
+            If @true, apply this operation recursively in child properties.
+    */
+    void ClearCells(FlagType ignoreWithFlags, bool recursively);
 
     /**
         Makes sure m_cells has size of column+1 (or more).

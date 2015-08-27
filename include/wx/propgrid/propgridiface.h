@@ -953,8 +953,19 @@ public:
                                       int flags = wxPG_RECURSE );
 
     /** Resets text and background colours of given property.
+        @param id
+            Property name or pointer.
+
+        @param flags
+            Default is wxPG_DONT_RECURSE which causes colour to be reset
+            only for the property in question (for backward compatibility).
     */
-    void SetPropertyColoursToDefault( wxPGPropArg id );
+#if WXWIN_COMPATIBILITY_3_0
+    void SetPropertyColoursToDefault(wxPGPropArg id);
+    void SetPropertyColoursToDefault(wxPGPropArg id, int flags);
+#else
+    void SetPropertyColoursToDefault(wxPGPropArg id, int flags = wxPG_DONT_RECURSE);
+#endif // WXWIN_COMPATIBILITY_3_0
 
     /**
         Sets text colour of a property.

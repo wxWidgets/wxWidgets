@@ -1681,6 +1681,22 @@ void wxPGProperty::AdaptiveSetCell( unsigned int firstCol,
     }
 }
 
+void wxPGProperty::ClearCells(FlagType ignoreWithFlags, bool recursively)
+{
+    if ( !(m_flags & ignoreWithFlags) && !IsRoot() )
+    {
+        m_cells.clear();
+    }
+
+    if ( recursively )
+    {
+        for ( unsigned int i = 0; i < GetChildCount(); i++ )
+        {
+            Item(i)->ClearCells(ignoreWithFlags, recursively);
+        }
+    }
+}
+
 const wxPGCell& wxPGProperty::GetCell( unsigned int column ) const
 {
     if ( m_cells.size() > column )
@@ -1772,6 +1788,27 @@ void wxPGProperty::SetTextColour( const wxColour& colour,
                      firstCellData,
                      recursively ? wxPG_PROP_CATEGORY : 0,
                      recursively );
+}
+
+void wxPGProperty::SetDefaultColours(int flags)
+{
+    wxPGProperty* firstProp = this;
+    bool recursively = flags & wxPG_RECURSE ? true : false;
+
+    // If category is tried to set recursively, skip it and only
+    // affect the children.
+    if ( recursively )
+    {
+        while ( firstProp->IsCategory() )
+        {
+            if ( !firstProp->GetChildCount() )
+                return;
+            firstProp = firstProp->Item(0);
+        }
+    }
+
+    ClearCells(recursively ? wxPG_PROP_CATEGORY : 0,
+               recursively);
 }
 
 wxPGEditorDialogAdapter* wxPGProperty::GetEditorDialog() const

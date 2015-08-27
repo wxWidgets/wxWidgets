@@ -685,11 +685,18 @@ void wxPropertyGridInterface::SetPropertyTextColour( wxPGPropArg id,
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridInterface::SetPropertyColoursToDefault( wxPGPropArg id )
+#if WXWIN_COMPATIBILITY_3_0
+void wxPropertyGridInterface::SetPropertyColoursToDefault(wxPGPropArg id)
+{
+    SetPropertyColoursToDefault(id, wxPG_DONT_RECURSE);
+}
+#endif // WXWIN_COMPATIBILITY_3_0
+
+void wxPropertyGridInterface::SetPropertyColoursToDefault(wxPGPropArg id, int flags)
 {
     wxPG_PROP_ARG_CALL_PROLOG()
 
-    p->m_cells.clear();
+    p->SetDefaultColours(flags);
 }
 
 // -----------------------------------------------------------------------
