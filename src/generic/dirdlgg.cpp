@@ -91,23 +91,6 @@ bool wxGenericDirDialog::Create(wxWindow* parent,
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
-    // smartphones does not support or do not waste space for wxButtons
-#if defined(__SMARTPHONE__)
-
-    wxMenu *dirMenu = new wxMenu;
-    dirMenu->Append(ID_GO_HOME, _("Home"));
-
-    if (!HasFlag(wxDD_DIR_MUST_EXIST))
-    {
-        dirMenu->Append(ID_NEW, _("New directory"));
-    }
-
-    dirMenu->AppendCheckItem(ID_SHOW_HIDDEN, _("Show hidden directories"));
-    dirMenu->AppendSeparator();
-    dirMenu->Append(wxID_CANCEL, _("Cancel"));
-
-#else
-
     // 0) 'New' and 'Home' Buttons
     wxSizer* buttonsizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -138,8 +121,6 @@ bool wxGenericDirDialog::Create(wxWindow* parent,
 
     topsizer->Add( buttonsizer, 0, wxTOP | wxALIGN_RIGHT, 10 );
 
-#endif // __SMARTPHONE__/!__SMARTPHONE__
-
     // 1) dir ctrl
     m_dirCtrl = NULL; // this is necessary, event handler called from
                       // wxGenericDirCtrl would crash otherwise!
@@ -164,12 +145,10 @@ bool wxGenericDirDialog::Create(wxWindow* parent,
 
     topsizer->Add(m_dirCtrl, wxSizerFlags(flagsBorder2).Proportion(1).Expand());
 
-#ifndef __SMARTPHONE__
     // TODO: Make this an option depending on a flag?
     wxCheckBox *
         check = new wxCheckBox(this, ID_SHOW_HIDDEN, _("Show &hidden directories"));
     topsizer->Add(check, wxSizerFlags(flagsBorder2).Right());
-#endif // !__SMARTPHONE__
 
     // 2) text ctrl
     m_input = new wxTextCtrl( this, ID_TEXTCTRL, m_path, wxDefaultPosition );
@@ -181,11 +160,6 @@ bool wxGenericDirDialog::Create(wxWindow* parent,
     {
         topsizer->Add(buttonSizer, wxSizerFlags().Expand().DoubleBorder());
     }
-
-#ifdef __SMARTPHONE__
-    // overwrite menu set by CreateSeparatedButtonSizer() call above
-    SetRightMenu(wxID_ANY, _("Options"), dirMenu);
-#endif
 
     m_input->SetFocus();
 

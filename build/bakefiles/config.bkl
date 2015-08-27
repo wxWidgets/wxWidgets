@@ -460,17 +460,11 @@ it if SHARED=1 unless you know what you are doing.
         </set>
 
         <set var="TOOLKIT" overwrite="0">
-            <if cond="FORMAT=='msevc4prj'">WINCE</if>
-            <if cond="FORMAT=='msvs2005prj' and MSVS_PLATFORMS=='pocketpc2003'">WINCE</if>
-            <if cond="FORMAT=='msvs2008prj' and MSVS_PLATFORMS=='pocketpc2003'">WINCE</if>
             <if cond="FORMAT=='msvs2005prj' and MSVS_PLATFORMS=='win32,win64'">$(WIN32_TOOLKIT)</if>
             <if cond="FORMAT=='msvs2008prj' and MSVS_PLATFORMS=='win32,win64'">$(WIN32_TOOLKIT)</if>
             <if cond="FORMAT not in ['msevc4prj','msvs2005prj','msvs2008prj'] and PLATFORM_WIN32=='1'">$(WIN32_TOOLKIT)</if>
         </set>
         <set var="TOOLKIT_LOWERCASE">
-            <if cond="FORMAT=='msevc4prj'">wince</if>
-            <if cond="FORMAT=='msvs2005prj' and MSVS_PLATFORMS=='pocketpc2003'">wince</if>
-            <if cond="FORMAT=='msvs2008prj' and MSVS_PLATFORMS=='pocketpc2003'">wince</if>
             <if cond="FORMAT=='msvs2005prj' and MSVS_PLATFORMS=='win32,win64'">$(WIN32_TOOLKIT_LOWERCASE)</if>
             <if cond="FORMAT=='msvs2008prj' and MSVS_PLATFORMS=='win32,win64'">$(WIN32_TOOLKIT_LOWERCASE)</if>
             <if cond="FORMAT not in ['msevc4prj','msvs2005prj','msvs2008prj'] and PLATFORM_WIN32=='1'">$(WIN32_TOOLKIT_LOWERCASE)</if>
@@ -567,20 +561,6 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         <!-- Free version does not distribute OpenGL,
              in commercial distribution better use dmars_smake format -->
         <set var="USE_OPENGL">0</set>
-    </if>
-
-    <!-- No need for wxUniv on embedded devices (yet): -->
-    <if cond="FORMAT=='msevc4prj' or (FORMAT=='msvs2005prj' and MSVS_PLATFORMS=='pocketpc2003') or (FORMAT=='msvs2008prj' and MSVS_PLATFORMS=='pocketpc2003')">
-        <set var="WXUNIV">0</set>
-        <!-- Uploading debug reports from PDAs seems impractical -->
-        <set var="USE_QA">0</set>
-        <set var="MONOLITHIC">1</set> <!-- sic! -->
-        <set var="USE_OPENGL">0</set> <!-- need OpenGL ES support first -->
-        <!-- RTTI and exceptions need separate cccrtti.lib with eVC4 -->
-        <if cond="FORMAT=='msevc4prj'">
-            <set var="USE_RTTI">0</set>
-            <set var="USE_EXCEPTIONS">0</set>
-        </if>
     </if>
 
 </makefile>

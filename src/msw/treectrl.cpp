@@ -767,7 +767,7 @@ bool wxTreeCtrl::Create(wxWindow *parent,
             wstyle |= TVS_FULLROWSELECT;
     }
 
-#if !defined(__WXWINCE__) && defined(TVS_INFOTIP)
+#if defined(TVS_INFOTIP)
     // Need so that TVN_GETINFOTIP messages will be sent
     wstyle |= TVS_INFOTIP;
 #endif
@@ -2967,7 +2967,6 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                 break;
 
             case WM_MOUSEMOVE:
-#ifndef __WXWINCE__
                 if ( m_htClickedItem )
                 {
                     int cx = abs(m_ptClick.x - x);
@@ -3014,7 +3013,6 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                         }
                     }
                 }
-#endif // __WXWINCE__
 
 #if wxUSE_DRAGIMAGE
                 if ( m_dragImage )
@@ -3320,7 +3318,6 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
             }
 
-#ifndef __WXWINCE__
         // These *must* not be removed or TVN_GETINFOTIP will
         // not be processed each time the mouse is moved
         // and the tooltip will only ever update once.
@@ -3344,7 +3341,6 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
             }
 #endif // TVN_GETINFOTIP
-#endif // !__WXWINCE__
 
         case TVN_GETDISPINFO:
             eventType = wxEVT_TREE_GET_INFO;
@@ -3775,7 +3771,6 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             DeleteTextCtrl();
             break;
 
-#ifndef __WXWINCE__
 #ifdef TVN_GETINFOTIP
          case TVN_GETINFOTIP:
             {
@@ -3786,7 +3781,6 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
             }
             break;
-#endif
 #endif
 
         case TVN_SELCHANGING:

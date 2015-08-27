@@ -39,12 +39,8 @@
     extern "C" int vswscanf(const wchar_t *, const wchar_t *, va_list);
 #endif
 
-#ifndef __WXWINCE__
-    #include <time.h>
-    #include <locale.h>
-#else
-    #include "wx/msw/wince/time.h"
-#endif
+#include <time.h>
+#include <locale.h>
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
@@ -57,14 +53,7 @@
     #include <langinfo.h>
 #endif
 
-#ifdef __WXWINCE__
-    // there is no errno.h under CE apparently
-    #define wxSET_ERRNO(value)
-#else
-    #include <errno.h>
-
-    #define wxSET_ERRNO(value) errno = value
-#endif
+#include <errno.h>
 
 #if defined(__DARWIN__)
     #include "wx/osx/core/cfref.h"
@@ -139,13 +128,6 @@ WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 
 char* wxSetlocale(int category, const char *locale)
 {
-#ifdef __WXWINCE__
-    // FIXME-CE: there is no setlocale() in CE CRT, use SetThreadLocale()?
-    wxUnusedVar(category);
-    wxUnusedVar(locale);
-
-    return NULL;
-#else // !__WXWINCE__
 #ifdef __WXMAC__
     char *rv = NULL ;
     if ( locale != NULL && locale[0] == 0 )
@@ -173,7 +155,6 @@ char* wxSetlocale(int category, const char *locale)
         wxUpdateLocaleIsUtf8();
     }
     return rv;
-#endif // __WXWINCE__/!__WXWINCE__
 }
 
 // ============================================================================
@@ -927,7 +908,7 @@ wxCRT_StrtoullBase(const T* nptr, T** endptr, int base, T* sign)
                     // Then it's an error.
                     if ( endptr )
                         *endptr = (T*) nptr;
-                    wxSET_ERRNO(EINVAL);
+                    errno = EINVAL;
                     return sum;
                 }
             }
@@ -967,7 +948,7 @@ wxCRT_StrtoullBase(const T* nptr, T** endptr, int base, T* sign)
 
         if ( sum < prevsum )
         {
-            wxSET_ERRNO(ERANGE);
+            errno = ERANGE;
             break;
         }
     }
@@ -988,7 +969,7 @@ static wxULongLong_t wxCRT_DoStrtoull(const T* nptr, T** endptr, int base)
 
     if ( sign == wxT('-') )
     {
-        wxSET_ERRNO(ERANGE);
+        errno = ERANGE;
         uval = 0;
     }
 
@@ -1010,7 +991,7 @@ static wxLongLong_t wxCRT_DoStrtoll(const T* nptr, T** endptr, int base)
         }
         else
         {
-            wxSET_ERRNO(ERANGE);
+            errno = ERANGE;
         }
     }
     else if ( uval <= wxINT64_MAX )
@@ -1019,7 +1000,7 @@ static wxLongLong_t wxCRT_DoStrtoll(const T* nptr, T** endptr, int base)
     }
     else
     {
-        wxSET_ERRNO(ERANGE);
+        errno = ERANGE;
     }
 
     return val;
@@ -1104,17 +1085,6 @@ char *strdup(const char *s)
     return dest ;
 }
 #endif // wxNEED_STRDUP
-
-#if defined(__WXWINCE__) && (_WIN32_WCE <= 211)
-
-void *calloc( size_t num, size_t size )
-{
-    void** ptr = (void **)malloc(num * size);
-    memset( ptr, 0, num * size);
-    return ptr;
-}
-
-#endif // __WXWINCE__ <= 211
 
 // ============================================================================
 // wxLocaleIsUtf8

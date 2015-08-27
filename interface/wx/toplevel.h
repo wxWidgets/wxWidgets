@@ -226,14 +226,6 @@ public:
     virtual wxString GetTitle() const;
 
     /**
-        Unique to the wxWinCE port. Responds to showing/hiding SIP (soft input
-        panel) area and resize window accordingly. Override this if you want to
-        avoid resizing or do additional operations.
-    */
-    virtual bool HandleSettingChange(WXWPARAM wParam,
-                                     WXLPARAM lParam);
-
-    /**
         Iconizes or restores the window.
 
         @param iconize
@@ -403,24 +395,6 @@ public:
     virtual void SetIcons(const wxIconBundle& icons);
 
     /**
-        Sets action or menu activated by pressing left hardware button on the
-        smart phones. Unavailable on full keyboard machines.
-
-        @param id
-            Identifier for this button.
-        @param label
-            Text to be displayed on the screen area dedicated to this hardware
-            button.
-        @param subMenu
-            The menu to be opened after pressing this hardware button.
-
-        @see SetRightMenu().
-    */
-    void SetLeftMenu(int id = wxID_ANY,
-                     const wxString& label = wxEmptyString,
-                     wxMenu* subMenu = NULL);
-
-    /**
         A simpler interface for setting the size hints than SetSizeHints().
     */
     virtual void SetMaxSize(const wxSize& size);
@@ -429,24 +403,6 @@ public:
         A simpler interface for setting the size hints than SetSizeHints().
     */
     virtual void SetMinSize(const wxSize& size);
-
-    /**
-        Sets action or menu activated by pressing right hardware button on the
-        smart phones. Unavailable on full keyboard machines.
-
-        @param id
-            Identifier for this button.
-        @param label
-            Text to be displayed on the screen area dedicated to this hardware
-            button.
-        @param subMenu
-            The menu to be opened after pressing this hardware button.
-
-        @see SetLeftMenu().
-    */
-    void SetRightMenu(int id = wxID_ANY,
-                      const wxString& label = wxEmptyString,
-                      wxMenu* subMenu = NULL);
 
     /**
         Allows specification of minimum and maximum window sizes, and window

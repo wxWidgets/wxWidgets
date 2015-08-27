@@ -37,9 +37,7 @@
     #include "wx/module.h"
 #endif // WX_PRECOMP
 
-#ifndef __WXWINCE__
-    #include <locale.h>
-#endif
+#include <locale.h>
 
 // standard headers
 #include <ctype.h>
@@ -466,9 +464,6 @@ bool wxLocale::Init(int language, int flags)
         }
         else // language supported by Windows
         {
-            // Windows CE doesn't have SetThreadLocale() and there doesn't seem
-            // to be any equivalent
-#ifndef __WXWINCE__
             const wxUint32 lcid = info->GetLCID();
 
             // change locale used by Windows functions
@@ -485,7 +480,6 @@ bool wxLocale::Init(int language, int flags)
                 if (pfnSetThreadUILanguage)
                     pfnSetThreadUILanguage(LANGIDFROMLCID(lcid));
             }
-#endif
 
             // and also call setlocale() to change locale used by the CRT
             locale = info->GetLocaleName();

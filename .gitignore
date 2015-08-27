@@ -13,7 +13,6 @@
 /autom4te.cache
 
 # /build/
-/build/wince
 
 # /build/autoconf_prepend-include/autoconf/
 /build/autoconf_prepend-include/autoconf/autoconf.m4f
@@ -50,27 +49,10 @@
 /build/msw/vc*_mswud
 /build/msw/wx_vc8arm_*.vcproj
 /build/msw/wx_vc8arm.sln
-/build/msw/vc8arm_winceu
-/build/msw/vc8arm_winceud
-/build/msw/vc9arm_winceu
-/build/msw/vc9arm_winceud
 /build/msw/ipch
 /build/msw/wx_vc12.opensdf
 /build/msw/wx_vc12.sdf
 /build/msw/*.suo
-
-# /build/wince/
-/build/wince/vc_msw
-/build/wince/vc_mswd
-/build/wince/vc_mswu
-/build/wince/vc_mswud
-/build/wince/vc_mswdll
-/build/wince/vc_mswddll
-/build/wince/vc_mswudll
-/build/wince/vc_mswuddll
-/build/wince/wx.sln
-/build/wince/wx_*.vcproj
-/build/wince/wx_*.vcproj.*.user
 
 # /demos/bombs/
 /demos/bombs/*.sln
@@ -1636,11 +1618,7 @@
 /samples/minimal/vc_mswunivudll
 /samples/minimal/vc_mswunivuddll
 /samples/minimal/minimal_vc8arm.vcproj
-/samples/minimal/vc8arm_winceu
-/samples/minimal/vc8arm_winceud
 /samples/minimal/minimal_vc9arm.vcproj
-/samples/minimal/vc9arm_winceu
-/samples/minimal/vc9arm_winceud
 
 # /samples/nativdlg/
 /samples/nativdlg/*.sln

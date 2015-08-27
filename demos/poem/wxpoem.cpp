@@ -92,10 +92,6 @@ void            FindMax(int *max_thing, int thing);
     #include "wx/clipbrd.h"
 #endif
 
-#ifdef __WXWINCE__
-    STDAPI_(__int64) CeGetRandomSeed();
-#endif
-
 wxIMPLEMENT_APP(MyApp);
 
 MainWindow *TheMainWindow = NULL;
@@ -519,14 +515,10 @@ bool MyApp::OnInit()
     poem_buffer = new wxChar[BUFFER_SIZE];
 
     // Seed the random number generator
-#ifdef __WXWINCE__
-    srand((unsigned) CeGetRandomSeed());
-#else
     time_t current_time;
 
     (void)time(&current_time);
     srand((unsigned int)current_time);
-#endif
 
 //    randomize();
     pages[0] = 0;

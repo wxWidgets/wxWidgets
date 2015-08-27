@@ -34,11 +34,6 @@
 
 #define M_PENDATA ((wxPenRefData*)m_refData)
 
-// Win32 has ExtCreatePen() but WinCE doesn't
-#if !defined(__WXWINCE__)
-    #define wxHAVE_EXT_CREATE_PEN
-#endif
-
 // ----------------------------------------------------------------------------
 // wxPenRefData: contains information about an HPEN and its handle
 // ----------------------------------------------------------------------------
@@ -220,7 +215,6 @@ static int ConvertPenStyle(wxPenStyle style)
             wxFAIL_MSG( wxT("unknown pen style") );
             // fall through
 
-#ifdef wxHAVE_EXT_CREATE_PEN
         case wxPENSTYLE_DOT:
             return PS_DOT;
 
@@ -238,13 +232,10 @@ static int ConvertPenStyle(wxPenStyle style)
         case wxPENSTYLE_HORIZONTAL_HATCH:
         case wxPENSTYLE_VERTICAL_HATCH:
         case wxPENSTYLE_SOLID:
-#endif // wxHAVE_EXT_CREATE_PEN
 
             return PS_SOLID;
     }
 }
-
-#ifdef wxHAVE_EXT_CREATE_PEN
 
 static int ConvertJoinStyle(wxPenJoin join)
 {
@@ -284,8 +275,6 @@ static int ConvertCapStyle(wxPenCap cap)
     }
 }
 
-#endif // wxHAVE_EXT_CREATE_PEN
-
 bool wxPenRefData::Alloc()
 {
    if ( m_hPen )
@@ -299,7 +288,6 @@ bool wxPenRefData::Alloc()
 
    const COLORREF col = m_colour.GetPixel();
 
-#ifdef wxHAVE_EXT_CREATE_PEN
    // check if it's a standard kind of pen which can be created with just
    // CreatePen()
    if ( m_join == wxJOIN_ROUND &&
@@ -307,11 +295,9 @@ bool wxPenRefData::Alloc()
                 m_style != wxPENSTYLE_USER_DASH &&
                     m_style != wxPENSTYLE_STIPPLE &&
                         (m_width <= 1 || m_style == wxPENSTYLE_SOLID) )
-#endif // !wxHAVE_EXT_CREATE_PEN
    {
        m_hPen = ::CreatePen(ConvertPenStyle(m_style), m_width, col);
    }
-#ifdef wxHAVE_EXT_CREATE_PEN
    else // need to use ExtCreatePen()
    {
        DWORD styleMSW = PS_GEOMETRIC |
@@ -384,7 +370,6 @@ bool wxPenRefData::Alloc()
 
        delete [] dash;
    }
-#endif // wxHAVE_EXT_CREATE_PEN
 
    return m_hPen != 0;
 }

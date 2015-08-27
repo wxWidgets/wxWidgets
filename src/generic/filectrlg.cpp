@@ -38,9 +38,7 @@
     #include "wx/msw/wrapwin.h"
 #endif
 
-#if defined(__WXWINCE__)
-#define IsTopMostDir(dir) (dir == wxT("\\") || dir == wxT("/"))
-#elif defined(__DOS__) || defined(__WINDOWS__)
+#if defined(__DOS__) || defined(__WINDOWS__)
 #define IsTopMostDir(dir)   (dir.empty())
 #else
 #define IsTopMostDir(dir)   (dir == wxT("/"))
@@ -175,7 +173,7 @@ void wxFileData::ReadData()
         return;
     }
 
-#if defined(__DOS__) || (defined(__WINDOWS__) && !defined(__WXWINCE__))
+#if defined(__DOS__) || defined(__WINDOWS__)
     // c:\.. is a drive don't stat it
     if ((m_fileName == wxT("..")) && (m_filePath.length() <= 5))
     {
@@ -184,38 +182,6 @@ void wxFileData::ReadData()
         return;
     }
 #endif // __DOS__ || __WINDOWS__
-
-#ifdef __WXWINCE__
-
-    // WinCE
-
-    DWORD fileAttribs = GetFileAttributes(m_filePath.fn_str());
-    m_type |= (fileAttribs & FILE_ATTRIBUTE_DIRECTORY) != 0 ? is_dir : 0;
-
-    wxString p, f, ext;
-    wxFileName::SplitPath(m_filePath, & p, & f, & ext);
-    if (wxStricmp(ext, wxT("exe")) == 0)
-        m_type |= is_exe;
-
-    // Find out size
-    m_size = 0;
-    HANDLE fileHandle = CreateFile(m_filePath.fn_str(),
-            GENERIC_READ,
-            FILE_SHARE_READ,
-            NULL,
-            OPEN_EXISTING,
-            FILE_ATTRIBUTE_NORMAL,
-            NULL);
-
-    if (fileHandle != INVALID_HANDLE_VALUE)
-    {
-        m_size = GetFileSize(fileHandle, 0);
-        CloseHandle(fileHandle);
-    }
-
-    m_dateTime = wxFileModificationTime(m_filePath);
-
-#else
 
     // OTHER PLATFORMS
 
@@ -238,8 +204,6 @@ void wxFileData::ReadData()
 
         m_dateTime = buff.st_mtime;
     }
-#endif
-    // __WXWINCE__
 
 #if defined(__UNIX__)
     if ( hasStat )
@@ -534,7 +498,7 @@ void wxFileListCtrl::UpdateFiles()
     item.m_itemId = 0;
     item.m_col = 0;
 
-#if (defined(__WINDOWS__) || defined(__DOS__) || defined(__WXMAC__)) && !defined(__WXWINCE__)
+#if defined(__WINDOWS__) || defined(__DOS__) || defined(__WXMAC__)
     if ( IsTopMostDir(m_dirName) )
     {
         wxArrayString names, paths;
@@ -569,7 +533,7 @@ void wxFileListCtrl::UpdateFiles()
         if ( !IsTopMostDir(m_dirName) && !m_dirName.empty() )
         {
             wxString p(wxPathOnly(m_dirName));
-#if (defined(__UNIX__) || defined(__WXWINCE__))
+#if defined(__UNIX__)
             if (p.empty()) p = wxT("/");
 #endif // __UNIX__
             wxFileData *fd = new wxFileData(p, wxT(".."), wxFileData::is_dir, wxFileIconsTable::folder);
@@ -963,11 +927,7 @@ bool wxGenericFileCtrl::Create( wxWindow *parent,
     if ( !( m_style & wxFC_MULTIPLE ) )
         style2 |= wxLC_SINGLE_SEL;
 
-#ifdef __WXWINCE__
-    style2 |= wxSIMPLE_BORDER;
-#else
     style2 |= wxSUNKEN_BORDER;
-#endif
 
     m_list = new wxFileListCtrl( this, ID_FILELIST_CTRL,
                                  wxEmptyString, false,
@@ -1294,10 +1254,6 @@ void wxGenericFileCtrl::OnSelected( wxListEvent &event )
     m_inSelected = true;
     const wxString filename( event.m_item.m_text );
 
-#ifdef __WXWINCE__
-    // No double-click on most WinCE devices, so do action immediately.
-    HandleAction( filename );
-#else
     if ( filename == wxT( ".." ) )
     {
         m_inSelected = false;
@@ -1328,7 +1284,6 @@ void wxGenericFileCtrl::OnSelected( wxListEvent &event )
         GenerateSelectionChangedEvent( this, this );
 
     m_ignoreChanges = false;
-#endif
     m_inSelected = false;
 }
 

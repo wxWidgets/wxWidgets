@@ -474,7 +474,6 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
     InitBook();
 
-#ifndef __WXHANDHELD__
     // the lower one only has the log listbox and a button to clear it
 #if USE_LOG
     wxSizer *sizerDown = new wxStaticBoxSizer(
@@ -504,12 +503,6 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     sizerTop->Add(0, 5, 0, wxGROW); // spacer in between
     sizerTop->Add(sizerDown, 0,  wxGROW | (wxALL & ~wxTOP), 10);
 
-#else // !__WXHANDHELD__/__WXHANDHELD__
-
-    sizerTop->Add(m_book, 1, wxGROW | wxALL );
-
-#endif // __WXHANDHELD__
-
     m_panel->SetSizer(sizerTop);
 
     const wxSize sizeMin = m_panel->GetBestSize();
@@ -527,14 +520,10 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
 void WidgetsFrame::InitBook()
 {
-#if USE_ICONS_IN_BOOK
     wxImageList *imageList = new wxImageList(ICON_SIZE, ICON_SIZE);
 
     wxImage img(sample_xpm);
     imageList->Add(wxBitmap(img.Scale(ICON_SIZE, ICON_SIZE)));
-#else
-    wxImageList *imageList = NULL;
-#endif
 
 #if !USE_TREEBOOK
     WidgetsBookCtrl *books[MAX_PAGES];
@@ -608,9 +597,7 @@ void WidgetsFrame::InitBook()
 
     GetMenuBar()->Append(menuPages, wxT("&Page"));
 
-#if USE_ICONS_IN_BOOK
     m_book->AssignImageList(imageList);
-#endif
 
     for ( cat = 0; cat < MAX_PAGES; cat++ )
     {
@@ -618,9 +605,7 @@ void WidgetsFrame::InitBook()
         m_book->AddPage(NULL,WidgetsCategories[cat],false,0);
 #else
         m_book->AddPage(books[cat],WidgetsCategories[cat],false,0);
-#if USE_ICONS_IN_BOOK
         books[cat]->SetImageList(imageList);
-#endif
 #endif
 
         // now do add them
@@ -1242,12 +1227,7 @@ WidgetsPage::WidgetsPage(WidgetsBookCtrl *book,
                      wxCLIP_CHILDREN |
                      wxTAB_TRAVERSAL)
 {
-#if USE_ICONS_IN_BOOK
     imaglist->Add(wxBitmap(wxImage(icon).Scale(ICON_SIZE, ICON_SIZE)));
-#else
-    wxUnusedVar(imaglist);
-    wxUnusedVar(icon);
-#endif
 }
 
 /* static */

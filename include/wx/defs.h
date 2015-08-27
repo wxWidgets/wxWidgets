@@ -709,9 +709,7 @@ typedef short int WXTYPE;
 /*  NULL declaration: it must be defined as 0 for C++ programs (in particular, */
 /*  it must not be defined as "(void *)0" which is standard for C but completely */
 /*  breaks C++ code) */
-#if !defined(__HANDHELDPC__)
 #include <stddef.h>
-#endif
 
 #ifdef __cplusplus
 
@@ -850,13 +848,6 @@ typedef short int WXTYPE;
     #define WXUNUSED_IN_UNICODE(param)  WXUNUSED(param)
 #else
     #define WXUNUSED_IN_UNICODE(param)  param
-#endif
-
-/*  some arguments are not used in WinCE build */
-#ifdef __WXWINCE__
-    #define WXUNUSED_IN_WINCE(param)  WXUNUSED(param)
-#else
-    #define WXUNUSED_IN_WINCE(param)  param
 #endif
 
 /*  unused parameters in non stream builds */
@@ -1724,11 +1715,7 @@ enum wxBorder
 };
 
 /* This makes it easier to specify a 'normal' border for a control */
-#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
-#define wxDEFAULT_CONTROL_BORDER    wxBORDER_SIMPLE
-#else
 #define wxDEFAULT_CONTROL_BORDER    wxBORDER_SUNKEN
-#endif
 
 /*  ---------------------------------------------------------------------------- */
 /*  Window style flags */

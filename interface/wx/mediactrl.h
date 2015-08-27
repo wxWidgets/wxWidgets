@@ -197,8 +197,7 @@ public:
 
     - @b wxMEDIABACKEND_DIRECTSHOW: Use ActiveMovie/DirectShow.
       Uses the native ActiveMovie (I.E. DirectShow) control.
-      Default backend on Windows and supported by nearly all Windows versions,
-      even some Windows CE versions.
+      Default backend on Windows and supported by nearly all Windows versions.
       May display a windows media player logo while inactive.
     - @b wxMEDIABACKEND_QUICKTIME: Use QuickTime. Mac Only.
       WARNING: May not working correctly embedded in a wxNotebook.

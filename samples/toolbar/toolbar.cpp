@@ -316,12 +316,6 @@ bool MyApp::OnInit()
 
 void MyFrame::RecreateToolbar()
 {
-#ifdef __WXWINCE__
-    // On Windows CE, we should not delete the
-    // previous toolbar in case it contains the menubar.
-    // We'll try to accommodate this usage in due course.
-    wxToolBar* toolBar = CreateToolBar();
-#else
     // delete and recreate the toolbar
     wxToolBarBase *toolBar = GetToolBar();
     long style = toolBar ? toolBar->GetWindowStyle() : TOOLBAR_STYLE;
@@ -363,7 +357,6 @@ void MyFrame::RecreateToolbar()
         style |= wxTB_HORZ_LAYOUT;
 
     toolBar = CreateToolBar(style, ID_TOOLBAR);
-#endif
 
     PopulateToolbar(toolBar);
 }

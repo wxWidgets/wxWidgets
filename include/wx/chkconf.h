@@ -1240,9 +1240,7 @@
    checks use wxUSE_XXX symbols in #if tests.
  */
 
-#if defined(__WXWINCE__)
-#  include "wx/msw/wince/chkconf.h"
-#elif defined(__WINDOWS__)
+#if defined(__WINDOWS__)
 #  include "wx/msw/chkconf.h"
 #  if defined(__WXGTK__)
 #      include "wx/gtk/chkconf.h"

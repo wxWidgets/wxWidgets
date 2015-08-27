@@ -230,7 +230,7 @@ void wxClientDCImpl::InitDC()
     // we also need to take the menu/toolbar manually into account under
     // Windows CE because they're just another control there, not anything
     // special as usually under Windows
-#if defined(__WXUNIVERSAL__) || defined(__WXWINCE__)
+#if defined(__WXUNIVERSAL__)
     wxPoint ptOrigin = m_window->GetClientAreaOrigin();
     if ( ptOrigin.x || ptOrigin.y )
     {
@@ -241,7 +241,7 @@ void wxClientDCImpl::InitDC()
     // clip the DC to avoid overwriting the non client area
     wxSize size = m_window->GetClientSize();
     DoSetClippingRegion(0, 0, size.x, size.y);
-#endif // __WXUNIVERSAL__ || __WXWINCE__
+#endif // __WXUNIVERSAL__
 }
 
 wxClientDCImpl::~wxClientDCImpl()

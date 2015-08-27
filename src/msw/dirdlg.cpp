@@ -25,8 +25,7 @@
 
 #if wxUSE_DIRDLG
 
-#if wxUSE_OLE && (!defined(__WXWINCE__) || \
-    (defined(__HANDHELDPC__) && (_WIN32_WCE >= 500)))
+#if wxUSE_OLE
 
 #include "wx/dirdlg.h"
 #include "wx/modalhook.h"
@@ -47,7 +46,7 @@
 
 // We can only use IFileDialog under desktop Windows and we need
 // wxDynamicLibrary for it.
-#if wxUSE_DYNLIB_CLASS && !defined(__WXWINCE__)
+#if wxUSE_DYNLIB_CLASS
     #define wxUSE_IFILEDIALOG 1
 #else
     #define wxUSE_IFILEDIALOG 0
@@ -261,13 +260,7 @@ int wxDirDialog::ShowSHBrowseForFolder(WXHWND owner)
     bi.hwndOwner      = owner;
     bi.pidlRoot       = NULL;
     bi.pszDisplayName = NULL;
-    // Please don't change this without checking it compiles
-    // with eVC++ first.
-#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
-    bi.lpszTitle      = m_message.mb_str();
-#else
     bi.lpszTitle      = m_message.c_str();
-#endif
     bi.ulFlags        = BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT;
     bi.lpfn           = BrowseCallbackProc;
     bi.lParam         = wxMSW_CONV_LPARAM(m_path); // param for the callback

@@ -1360,7 +1360,7 @@ public:
     bool CopyToolTip(wxToolTip *tip);
 #else // !wxUSE_TOOLTIPS
         // make it much easier to compile apps in an environment
-        // that doesn't support tooltips, such as PocketPC
+        // that doesn't support tooltips
     void SetToolTip(const wxString & WXUNUSED(tip)) { }
     void UnsetToolTip() { }
 #endif // wxUSE_TOOLTIPS/!wxUSE_TOOLTIPS

@@ -118,59 +118,6 @@
 
 #endif /* __WXGTK__ && __WINDOWS__ */
 
-/* detect MS SmartPhone */
-#if defined( WIN32_PLATFORM_WFSP )
-#   ifndef __SMARTPHONE__
-#       define __SMARTPHONE__
-#   endif
-#   ifndef __WXWINCE__
-#       define __WXWINCE__
-#   endif
-#endif
-
-/* detect PocketPC */
-#if defined( WIN32_PLATFORM_PSPC )
-#   ifndef __POCKETPC__
-#       define __POCKETPC__
-#   endif
-#   ifndef __WXWINCE__
-#       define __WXWINCE__
-#   endif
-#endif
-
-/* detect Standard WinCE SDK */
-#if defined( WCE_PLATFORM_STANDARDSDK )
-#   ifndef __WINCE_STANDARDSDK__
-#       define __WINCE_STANDARDSDK__
-#   endif
-#   ifndef __WXWINCE__
-#       define __WXWINCE__
-#   endif
-#endif
-
-#if defined(_WIN32_WCE) && !defined(WIN32_PLATFORM_WFSP) && !defined(WIN32_PLATFORM_PSPC)
-#   if (_WIN32_WCE >= 400)
-#       ifndef __WINCE_NET__
-#           define __WINCE_NET__
-#       endif
-#   elif (_WIN32_WCE >= 200)
-#       ifndef __HANDHELDPC__
-#           define __HANDHELDPC__
-#       endif
-#   endif
-#   ifndef __WXWINCE__
-#       define __WXWINCE__
-#   endif
-#endif
-
-#if defined(__WXWINCE__) && defined(_MSC_VER) && (_MSC_VER == 1201)
-    #define __EVC4__
-#endif
-
-#if defined(__POCKETPC__) || defined(__SMARTPHONE__) || defined(__WXGPE__)
-#   define __WXHANDHELD__
-#endif
-
 #ifdef __ANDROID__
 #   define __WXANDROID__
 #   include "wx/android/config_android.h"
@@ -408,9 +355,7 @@
 #endif
 
 /* Force linking against required libraries under Windows: */
-#ifdef __WXWINCE__
-#   include "wx/msw/wince/libraries.h"
-#elif defined __WINDOWS__
+#if defined __WINDOWS__
 #   include "wx/msw/libraries.h"
 #endif
 

@@ -136,11 +136,9 @@ LifeSamplesDialog::LifeSamplesDialog(wxWindow *parent)
 
     // activate
     SetSizer(sizer3);
-#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     sizer3->SetSizeHints(this);
     sizer3->Fit(this);
     Centre(wxBOTH | wxCENTRE_ON_SCREEN);
-#endif
 }
 
 LifeSamplesDialog::~LifeSamplesDialog()
@@ -204,9 +202,7 @@ XLife is (c) 1989 by Jon Bennett et al.")),
 
     // activate
     SetSizer(sizer);
-#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     sizer->SetSizeHints(this);
     sizer->Fit(this);
     Centre(wxBOTH | wxCENTRE_ON_SCREEN);
-#endif
 }

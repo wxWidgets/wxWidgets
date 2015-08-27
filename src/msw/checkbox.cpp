@@ -173,9 +173,6 @@ wxSize wxCheckBox::DoGetBestClientSize() const
         wCheckbox = s_checkSize;
         hCheckbox = s_checkSize;
     }
-#ifdef __WXWINCE__
-    hCheckbox += 1;
-#endif
 
     wxSize best(wCheckbox, hCheckbox);
     CacheBestSize(best);

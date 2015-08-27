@@ -30,7 +30,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
                                      ports (wxGTK, wxMotif, wxX11)
 
        MSW_DESKTOP                   files used only on desktop Windows
-                                     versions and not under Windows CE
+                                     versions
 
        xxx_NATIVE                    native files not used by wxUniv (used as
                                      complement of LOWLEVEL when most of the
@@ -149,9 +149,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/main.cpp
     src/msw/volume.cpp
 </set>
-<set var="BASE_WINCE_SRC" hints="files">
-    <if cond="TOOLKIT=='WINCE'">src/msw/wince/time.cpp</if>
-</set>
 <set var="BASE_WIN32_HDR" hints="files">
     wx/msw/apptrait.h
     wx/msw/apptbase.h
@@ -174,12 +171,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/wrapcdlg.h
     wx/msw/wrapwin.h
     wx/msw/fswatcher.h
-</set>
-<set var="BASE_WINCE_HDR" hints="files">
-    <if cond="TOOLKIT=='WINCE'">
-        wx/msw/wince/time.h
-        wx/msw/wince/chkconf.h
-    </if>
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
@@ -742,13 +733,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/urlmsw.cpp
 </set>
 <set var="NET_WIN32_HDR" hints="files">
-</set>
-
-<set var="NET_WINCE_SRC" hints="files">
-    <if cond="TOOLKIT=='WINCE'">src/msw/wince/net.cpp</if>
-</set>
-<set var="NET_WINCE_HDR" hints="files">
-    <if cond="TOOLKIT=='WINCE'">wx/msw/wince/net.h</if>
 </set>
 
 
@@ -2146,36 +2130,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/ole/uuid.h
 </set>
 
-<!-- Files used by WindowsCE port but not by desktop MSW port: -->
-<set var="WINCE_SRC" hints="files">
-    src/generic/dirdlgg.cpp
-    src/generic/fdrepdlg.cpp
-    src/generic/filedlgg.cpp
-    src/generic/fontdlgg.cpp
-    src/msw/wince/checklst.cpp
-    src/msw/wince/choicece.cpp
-    src/msw/wince/crt.cpp
-    src/msw/wince/filedlgwce.cpp
-    src/msw/wince/filefnwce.cpp
-    src/msw/wince/helpwce.cpp
-    src/msw/wince/menuce.cpp
-    src/msw/wince/tbarwce.cpp
-    src/msw/wince/textctrlce.cpp
-</set>
-<set var="WINCE_HDR" hints="files">
-    wx/generic/fdrepdlg.h
-    wx/generic/filedlgg.h
-    wx/generic/fontdlgg.h
-    wx/msw/wince/checklst.h
-    wx/msw/wince/choicece.h
-    wx/msw/wince/helpwce.h
-    wx/msw/wince/libraries.h
-    wx/msw/wince/missing.h
-    wx/msw/wince/tbarwce.h
-    wx/msw/wince/textctrlce.h
-    wx/msw/wince/resources.h
-</set>
-
 
 <!-- ====================================================================== -->
 <!--                                wxDFB                                   -->
@@ -3266,9 +3220,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='MSW'">
         src/generic/animateg.cpp
     </if>
-    <if cond="TOOLKIT=='WINCE'">
-        src/generic/animateg.cpp
-    </if>
     <if cond="TOOLKIT=='X11'">
         src/generic/animateg.cpp
     </if>
@@ -3643,7 +3594,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </if>
     <if cond="TOOLKIT=='QT'">src/qt/glcanvas.cpp</if>
     <if cond="TOOLKIT=='MSW'">src/msw/glcanvas.cpp</if>
-    <if cond="TOOLKIT=='WINCE'">src/msw/glcanvas.cpp</if>
     <if cond="TOOLKIT=='MOTIF'">src/x11/glcanvas.cpp src/unix/glx11.cpp</if>
     <if cond="TOOLKIT=='X11'">src/x11/glcanvas.cpp src/unix/glx11.cpp</if>
 </set>
@@ -3671,7 +3621,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </if>
     <if cond="TOOLKIT=='Qt'">wx/qt/glcanvas.h</if>
     <if cond="TOOLKIT=='MSW'">wx/msw/glcanvas.h</if>
-    <if cond="TOOLKIT=='WINCE'">wx/msw/glcanvas.h</if>
     <if cond="TOOLKIT=='MOTIF'">wx/x11/glcanvas.h wx/unix/glx11.h</if>
     <if cond="TOOLKIT=='X11'">wx/x11/glcanvas.h wx/unix/glx11.h</if>
 </set>
@@ -3874,7 +3823,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </set>
     <set var="BASE_PLATFORM_SRC" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_SRC)</if>
-        <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_SRC) $(BASE_WINCE_SRC)</if>
+        <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_OSX_SHARED_SRC)</if>
     </set>
     <set var="BASE_AND_GUI_TOOLKIT_SRC" hints="files">
@@ -3904,7 +3853,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </set>
     <set var="BASE_PLATFORM_HDR" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_HDR)</if>
-        <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_HDR) $(BASE_WINCE_HDR)</if>
+        <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_HDR)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_OSX_HDR)</if>
     </set>
 
@@ -3920,11 +3869,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- wxNet files: -->
     <set var="NET_PLATFORM_SRC" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(NET_UNIX_SRC)</if>
-        <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_SRC) $(NET_WINCE_SRC)</if>
+        <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(NET_UNIX_SRC) $(NET_OSX_SRC)</if>
     </set>
     <set var="NET_PLATFORM_HDR" hints="files">
-        <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_HDR) $(NET_WINCE_HDR)</if>
+        <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_HDR)</if>
     </set>
 
     <set var="NET_SRC" hints="files">
@@ -3940,7 +3889,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_SRC) $(MSW_DESKTOP_LOWLEVEL_SRC)</if>
-        <if cond="TOOLKIT=='WINCE'">$(MSW_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='OSX_CARBON'">$(OSX_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_LOWLEVEL_SRC)</if>
@@ -3955,7 +3903,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_HDR) $(MSW_DESKTOP_LOWLEVEL_HDR)</if>
-        <if cond="TOOLKIT=='WINCE'">$(MSW_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='OSX_CARBON'">$(OSX_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_LOWLEVEL_HDR)</if>
@@ -3976,7 +3923,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_SRC)</if>
         <if cond="TOOLKIT=='MSW'">$(MSW_SRC) $(MSW_DESKTOP_SRC)</if>
-        <if cond="TOOLKIT=='WINCE'">$(MSW_SRC) $(WINCE_SRC)</if>
         <if cond="TOOLKIT=='OSX_CARBON'">$(OSX_CARBON_SRC)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_COCOA_SRC)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_IPHONE_SRC)</if>
@@ -3989,7 +3935,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_HDR)</if>
         <if cond="TOOLKIT=='MSW'">$(MSW_HDR) $(MSW_DESKTOP_HDR) $(MSW_RSC)</if>
-        <if cond="TOOLKIT=='WINCE'">$(MSW_HDR) $(WINCE_HDR)</if>
         <if cond="TOOLKIT=='OSX_CARBON'">$(OSX_SHARED_HDR) $(OSX_CARBON_HDR)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_SHARED_HDR) $(OSX_COCOA_HDR)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_SHARED_HDR) $(OSX_IPHONE_HDR)</if>
@@ -4009,7 +3954,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- wxAdvanced files: -->
     <set var="ADVANCED_PLATFORM_SRC" hints="files">
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_SRC) $(ADVANCED_MSW_DESKTOP_SRC)</if>
-        <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_SRC)</if>
         <if cond="TOOLKIT=='OSX_CARBON'">$(ADVANCED_OSX_CARBON_SRC)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(ADVANCED_OSX_COCOA_SRC)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(ADVANCED_OSX_IPHONE_SRC)</if>
@@ -4023,7 +3967,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </set>
     <set var="ADVANCED_PLATFORM_HDR" hints="files">
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_HDR) $(ADVANCED_MSW_DESKTOP_HDR)</if>
-        <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_HDR)</if>
         <if cond="TOOLKIT=='OSX_CARBON'">$(ADVANCED_OSX_CARBON_HDR)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(ADVANCED_OSX_COCOA_HDR)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(ADVANCED_OSX_IPHONE_HDR)</if>
@@ -4041,13 +3984,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_GTK_NATIVE_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_GTK_NATIVE_SRC)</if>
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_NATIVE_SRC)</if>
-        <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_NATIVE_SRC)</if>
     </set>
     <set var="ADVANCED_PLATFORM_NATIVE_HDR" hints="files">
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_GTK_NATIVE_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_GTK_NATIVE_HDR)</if>
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_NATIVE_HDR)</if>
-        <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_NATIVE_HDR)</if>
     </set>
 
     <set var="ADVANCED_SRC" hints="files">
@@ -4062,7 +4003,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- wxMedia files: -->
     <set var="MEDIA_PLATFORM_SRC" hints="files">
         <if cond="TOOLKIT=='MSW'">$(MEDIA_MSW_SRC) $(MEDIA_MSW_DESKTOP_SRC)</if>
-        <if cond="TOOLKIT=='WINCE'">$(MEDIA_MSW_SRC)</if>
         <if cond="TOOLKIT=='OSX_CARBON'">$(MEDIA_OSX_CARBON_SRC)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(MEDIA_OSX_COCOA_SRC)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(MEDIA_OSX_IPHONE_SRC)</if>
@@ -4074,7 +4014,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </set>
     <set var="MEDIA_PLATFORM_HDR" hints="files">
         <if cond="TOOLKIT=='MSW'">$(MEDIA_MSW_HDR) $(MEDIA_MSW_DESKTOP_HDR)</if>
-        <if cond="TOOLKIT=='WINCE'">$(MEDIA_MSW_HDR)</if>
         <if cond="TOOLKIT=='OSX_CARBON'">$(MEDIA_OSX_CARBON_HDR)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(MEDIA_OSX_COCOA_HDR)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(MEDIA_OSX_IPHONE_HDR)</if>
@@ -4119,7 +4058,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="ALL_PORTS_BASE_HEADERS" make_var="1" hints="files">
         $(BASE_CMN_HDR)
         $(BASE_UNIX_HDR)
-        $(BASE_WIN32_HDR) $(BASE_WINCE_HDR)
+        $(BASE_WIN32_HDR)
         $(BASE_OSX_HDR)
         $(NET_CMN_HDR)
         $(XML_HDR)
@@ -4128,14 +4067,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- used by 'make dist', should include wxBase sources for all ports -->
     <set var="ALL_BASE_SOURCES" make_var="1" hints="files">
         $(BASE_CMN_SRC)
-        $(BASE_UNIX_SRC) $(BASE_WIN32_SRC) $(BASE_WINCE_SRC)
+        $(BASE_UNIX_SRC) $(BASE_WIN32_SRC)
         $(BASE_OSX_SRC)
         $(BASE_AND_GUI_CMN_SRC)
         $(BASE_AND_GUI_OSX_CARBON_SRC)
         $(BASE_AND_GUI_OSX_COCOA_SRC)
         $(BASE_AND_GUI_WIN32_SRC)
         $(NET_CMN_SRC) $(NET_UNIX_SRC) $(NET_OSX_SRC)
-        $(NET_WIN32_SRC) $(NET_WINCE_SRC)
+        $(NET_WIN32_SRC)
         $(XML_SRC)
     </set>
 

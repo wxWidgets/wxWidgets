@@ -305,7 +305,6 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
         bool processNow;
         switch (msg.message)
         {
-#if !defined(__WXWINCE__)
             case WM_NCMOUSEMOVE:
 
             case WM_NCLBUTTONDOWN:
@@ -317,7 +316,6 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
             case WM_NCMBUTTONDOWN:
             case WM_NCMBUTTONUP:
             case WM_NCMBUTTONDBLCLK:
-#endif
 
             case WM_KEYDOWN:
             case WM_KEYUP:
@@ -346,10 +344,8 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
             case WM_IME_KEYDOWN:
             case WM_IME_KEYUP:
 
-#if !defined(__WXWINCE__)
             case WM_MOUSEHOVER:
             case WM_MOUSELEAVE:
-#endif
 #ifdef WM_NCMOUSELEAVE
             case WM_NCMOUSELEAVE:
 #endif

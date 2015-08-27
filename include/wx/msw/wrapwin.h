@@ -43,11 +43,6 @@
     #define _WIN32_IE 0x0700
 #endif
 
-/* Deal with clash with __WINDOWS__ include guard */
-#if defined(__WXWINCE__) && defined(__WINDOWS__)
-#undef __WINDOWS__
-#endif
-
 // For IPv6 support, we must include winsock2.h before winsock.h, and
 // windows.h include winsock.h so do it before including it
 #if wxUSE_IPV6
@@ -55,10 +50,6 @@
 #endif
 
 #include <windows.h>
-
-#if defined(__WXWINCE__) && !defined(__WINDOWS__)
-#define __WINDOWS__
-#endif
 
 // #undef the macros defined in winsows.h which conflict with code elsewhere
 #include "wx/msw/winundef.h"

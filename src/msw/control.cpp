@@ -261,37 +261,6 @@ wxBorder wxControl::GetDefaultBorder() const
     return wxControlBase::GetDefaultBorder();
 }
 
-// This is a helper for all wxControls made with UPDOWN native control.
-// In wxMSW it was only wxSpinCtrl derived from wxSpinButton but in
-// WinCE of Smartphones this happens also for native wxTextCtrl,
-// wxChoice and others.
-wxSize wxControl::GetBestSpinnerSize(const bool is_vertical) const
-{
-    // take size according to layout
-    wxSize bestSize(
-#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
-                    0,GetCharHeight()
-#else
-                    ::GetSystemMetrics(is_vertical ? SM_CXVSCROLL : SM_CXHSCROLL),
-                    ::GetSystemMetrics(is_vertical ? SM_CYVSCROLL : SM_CYHSCROLL)
-#endif
-    );
-
-    // correct size as for undocumented MSW variants cases (WinCE and perhaps others)
-    if (bestSize.x==0)
-        bestSize.x = bestSize.y;
-    if (bestSize.y==0)
-        bestSize.y = bestSize.x;
-
-    // double size according to layout
-    if (is_vertical)
-        bestSize.y *= 2;
-    else
-        bestSize.x *= 2;
-
-    return bestSize;
-}
-
 /* static */ wxVisualAttributes
 wxControl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {

@@ -116,7 +116,7 @@
             The 2003 PSDK includes a slightly earlier version of VC8 than the
             main release and does not have the printf_p functions.
          */
-        #if defined _MSC_FULL_VER && _MSC_FULL_VER >= 140050727 && !defined __WXWINCE__
+        #if defined _MSC_FULL_VER && _MSC_FULL_VER >= 140050727
             #define wxCRT_VsnprintfA    _vsprintf_p
             #define wxCRT_VsnprintfW    _vswprintf_p
         #endif

@@ -121,12 +121,7 @@ protected:
     wxCheckBox *m_chkSort;
 
     // the choice itself and the sizer it is in
-#ifdef __WXWINCE__
-    wxChoiceBase
-#else
-    wxChoice
-#endif
-                  *m_choice;
+    wxChoice *m_choice;
 
     wxSizer *m_sizerChoice;
 

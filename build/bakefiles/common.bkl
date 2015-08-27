@@ -88,8 +88,7 @@
         <if cond="DEBUG_RUNTIME_LIBS=='1'">d</if>
     </set>
     <set var="WXUNICODEFLAG">
-        <!-- WinCE is Unicode-only platform: -->
-        <if cond="UNICODE=='1' and FORMAT!='msevc4prj'">u</if>
+        <if cond="UNICODE=='1'">u</if>
     </set>
     <set var="WX_U_D_SUFFIX">
         $(WXUNICODEFLAG)$(WXDEBUGFLAG)
@@ -344,7 +343,6 @@
         <if cond="FORMAT=='msvc'">
             <ldflags>$(LINK_TARGET_CPU)</ldflags>
         </if>
-        <include cond="FORMAT=='msevc4prj'">$(TOP_SRCDIR)build/wince/missing</include>
     </template>
 
     <template id="anylib">
@@ -424,35 +422,25 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
 
     <define-tag name="msvc-copy-setup-h" rules="dll,lib">
         <if cond="IS_MSVC_PRJ">
-            <if cond="FORMAT=='msevc4prj'">
-                <msvc-headers-setup-h>
-                    msw/wince/setup.h
-                </msvc-headers-setup-h>
-                <set var="_custom_build_include_wx_msw_wince_setup_h">
-                    $(msvc_copy_setup_h_script % 'msw\wince\setup.h')
-                </set>
-            </if>
-            <if cond="FORMAT!='msevc4prj'">
-                <msvc-headers-setup-h>
-                    msw/setup.h
-                    univ/setup.h
-                </msvc-headers-setup-h>
-                <set var="_custom_build_include_wx_msw_setup_h">
-                    <if cond="WXUNIV=='0' and TOOLKIT=='MSW'">
-                        $(msvc_copy_setup_h_script % 'msw\setup.h')
-                    </if>
-                </set>
-                <set var="_custom_build_include_wx_gtk_setup_h">
-                    <if cond="WXUNIV=='0' and TOOLKIT=='GTK'">
-                        $(msvc_copy_setup_h_script % 'gtk\setup.h')
-                    </if>
-                </set>
-                <set var="_custom_build_include_wx_univ_setup_h">
-                    <if cond="WXUNIV=='1'">
-                        $(msvc_copy_setup_h_script % 'univ\setup.h')
-                    </if>
-                </set>
-            </if>
+            <msvc-headers-setup-h>
+                msw/setup.h
+                univ/setup.h
+            </msvc-headers-setup-h>
+            <set var="_custom_build_include_wx_msw_setup_h">
+                <if cond="WXUNIV=='0' and TOOLKIT=='MSW'">
+                    $(msvc_copy_setup_h_script % 'msw\setup.h')
+                </if>
+            </set>
+            <set var="_custom_build_include_wx_gtk_setup_h">
+                <if cond="WXUNIV=='0' and TOOLKIT=='GTK'">
+                    $(msvc_copy_setup_h_script % 'gtk\setup.h')
+                </if>
+            </set>
+            <set var="_custom_build_include_wx_univ_setup_h">
+                <if cond="WXUNIV=='1'">
+                    $(msvc_copy_setup_h_script % 'univ\setup.h')
+                </if>
+            </set>
         </if>
     </define-tag>
 

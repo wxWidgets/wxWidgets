@@ -16,11 +16,7 @@
 
 #if wxUSE_DATETIME
 
-#ifdef __WXWINCE__
-    #include "wx/msw/wince/time.h"
-#else
-    #include <time.h>
-#endif // OS
+#include <time.h>
 
 #include <limits.h>             // for INT_MIN
 
@@ -120,8 +116,8 @@ extern WXDLLIMPEXP_DATA_BASE(const wxDateTime) wxDefaultDateTime;
 // if configure detected strftime(), we have it too
 #ifdef HAVE_STRFTIME
     #define wxHAS_STRFTIME
-// suppose everyone else has strftime except Win CE unless VC8 is used
-#elif !defined(__WXWINCE__) || defined(__VISUALC8__)
+// suppose everyone else has strftime
+#else
     #define wxHAS_STRFTIME
 #endif
 
@@ -226,11 +222,6 @@ public:
         // day or not
         //
         // TODO move this to intl.h
-
-// Required for WinCE
-#ifdef USA
-#undef USA
-#endif
 
     enum Country
     {

@@ -34,7 +34,7 @@ const char wxDirDialogNameStr[] = "wxDirCtrl";
     @beginStyleTable
     @style{wxDD_DEFAULT_STYLE}
            Equivalent to a combination of wxDEFAULT_DIALOG_STYLE and
-           wxRESIZE_BORDER (the last one is not used under wxWinCE).
+           wxRESIZE_BORDER.
     @style{wxDD_DIR_MUST_EXIST}
            The dialog will allow the user to choose only an existing folder.
            When this style is not given, a "Create new directory" button is

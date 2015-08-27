@@ -147,7 +147,17 @@ wxSpinButton::~wxSpinButton()
 
 wxSize wxSpinButton::DoGetBestSize() const
 {
-    return GetBestSpinnerSize( (GetWindowStyle() & wxSP_VERTICAL) != 0 );
+    const bool vert = HasFlag(wxSP_VERTICAL);
+
+    wxSize bestSize(::GetSystemMetrics(vert ? SM_CXVSCROLL : SM_CXHSCROLL),
+                    ::GetSystemMetrics(vert ? SM_CYVSCROLL : SM_CYHSCROLL));
+
+    if ( vert )
+        bestSize.y *= 2;
+    else
+        bestSize.x *= 2;
+
+    return bestSize;
 }
 
 // ----------------------------------------------------------------------------

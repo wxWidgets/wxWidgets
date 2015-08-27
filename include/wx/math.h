@@ -144,7 +144,7 @@ inline double wxRadToDeg(double rad) { return (rad * 180.0) / M_PI; }
 #endif /* __cplusplus */
 
 
-#if defined(__WINDOWS__) && !defined(__WXWINCE__)
+#if defined(__WINDOWS__)
     #define wxMulDivInt32( a , b , c ) ::MulDiv( a , b , c )
 #else
     #define wxMulDivInt32( a , b , c ) (wxRound((a)*(((wxDouble)b)/((wxDouble)c))))

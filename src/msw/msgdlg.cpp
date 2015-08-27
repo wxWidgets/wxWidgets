@@ -17,23 +17,13 @@
 
 #if wxUSE_MSGDLG
 
-// there is no hook support under CE so we can't use the code for message box
-// positioning there
-#ifndef __WXWINCE__
-    #define wxUSE_MSGBOX_HOOK 1
-#else
-    #define wxUSE_MSGBOX_HOOK 0
-#endif
-
 #ifndef WX_PRECOMP
     #include "wx/msgdlg.h"
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/utils.h"
     #include "wx/msw/private.h"
-    #if wxUSE_MSGBOX_HOOK
-        #include "wx/hashmap.h"
-    #endif
+    #include "wx/hashmap.h"
 #endif
 
 #include "wx/ptr_scpd.h"
@@ -43,16 +33,8 @@
 #include "wx/msw/private/msgdlg.h"
 #include "wx/modalhook.h"
 #include "wx/fontutil.h"
-
-#if wxUSE_MSGBOX_HOOK
-    #include "wx/textbuf.h"
-    #include "wx/display.h"
-#endif
-
-// For MB_TASKMODAL
-#ifdef __WXWINCE__
-    #include "wx/msw/wince/missing.h"
-#endif
+#include "wx/textbuf.h"
+#include "wx/display.h"
 
 // Interestingly, this symbol currently seems to be absent from Platform SDK
 // headers but it is documented at MSDN.
@@ -63,8 +45,6 @@
 using namespace wxMSWMessageDialog;
 
 wxIMPLEMENT_CLASS(wxMessageDialog, wxDialog);
-
-#if wxUSE_MSGBOX_HOOK
 
 // there can potentially be one message box per thread so we use a hash map
 // with thread ids as keys and (currently shown) message boxes as values
@@ -419,8 +399,6 @@ void wxMessageDialog::AdjustButtonLabels()
     }
 }
 
-#endif // wxUSE_MSGBOX_HOOK
-
 /* static */
 wxFont wxMessageDialog::GetMessageFont()
 {
@@ -482,12 +460,7 @@ int wxMessageDialog::ShowMessageBox()
     const long wxStyle = GetMessageDialogStyle();
     if ( wxStyle & wxYES_NO )
     {
-#if !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
-        if (wxStyle & wxCANCEL)
-            msStyle = MB_YESNOCANCEL;
-        else
-#endif // !(__SMARTPHONE__ && __WXWINCE__)
-            msStyle = MB_YESNO;
+         msStyle = MB_YESNO;
 
         if ( wxStyle & wxNO_DEFAULT )
             msStyle |= MB_DEFBUTTON2;
@@ -537,17 +510,14 @@ int wxMessageDialog::ShowMessageBox()
     if ( wxStyle & wxSTAY_ON_TOP )
         msStyle |= MB_TOPMOST;
 
-#ifndef __WXWINCE__
     if ( wxApp::MSWGetDefaultLayout(m_parent) == wxLayout_RightToLeft )
         msStyle |= MB_RTLREADING | MB_RIGHT;
-#endif
 
     if (hWnd)
         msStyle |= MB_APPLMODAL;
     else
         msStyle |= MB_TASKMODAL;
 
-#if wxUSE_MSGBOX_HOOK
     // install the hook in any case as we don't know in advance if the message
     // box is not going to be too big (requiring the replacement of the static
     // control with an edit one)
@@ -555,7 +525,6 @@ int wxMessageDialog::ShowMessageBox()
     m_hook = ::SetWindowsHookEx(WH_CBT,
                                 &wxMessageDialog::HookFunction, NULL, tid);
     HookMap()[tid] = this;
-#endif // wxUSE_MSGBOX_HOOK
 
     // do show the dialog
     const int msAns = MessageBox

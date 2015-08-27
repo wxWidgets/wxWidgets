@@ -1675,10 +1675,6 @@ void MyFrame::FileOpenGeneric(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::FilesOpenGeneric(wxCommandEvent& WXUNUSED(event) )
 {
-    // On PocketPC you can disable OK-only dialogs policy using system option
-    int buttons = wxSystemOptions::GetOptionInt(wxT("wince.dialog.real-ok-cancel"));
-    wxSystemOptions::SetOption(wxT("wince.dialog.real-ok-cancel"), 1);
-
     wxString wildcards = wxT("All files (*.*)|*.*|C++ files (*.cpp;*.h)|*.cpp;*.h");
     wxGenericFileDialog dialog(this, wxT("Testing open multiple file dialog"),
                         wxEmptyString, wxEmptyString, wildcards,
@@ -1706,9 +1702,6 @@ void MyFrame::FilesOpenGeneric(wxCommandEvent& WXUNUSED(event) )
         wxMessageDialog dialog2(this, msg, wxT("Selected files"));
         dialog2.ShowModal();
     }
-
-    // restore system option
-    wxSystemOptions::SetOption(wxT("wince.dialog.real-ok-cancel"), buttons);
 }
 
 void MyFrame::FileSaveGeneric(wxCommandEvent& WXUNUSED(event) )
@@ -2695,9 +2688,7 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
     dc.SetBackgroundMode(wxTRANSPARENT);
     dc.DrawText(
                 wxT("wxWidgets common dialogs")
-#if !defined(__SMARTPHONE__)
                 wxT(" test application")
-#endif
                 , 10, 10);
 }
 

@@ -95,9 +95,9 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
     m_pStaticLine->Hide();
 #endif
 
-    // FIXME: at least under wxCE and wxGTK1 the background is black if we don't do
+    // FIXME: at least under wxGTK1 the background is black if we don't do
     //        this, no idea why...
-#if defined(__WXWINCE__) || defined(__WXGTK__)
+#if defined(__WXGTK__)
     SetBackgroundColour(parent->GetBackgroundColour());
 #endif
 

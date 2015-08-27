@@ -11,7 +11,7 @@
 #ifndef _WX_SAMPLE_WIDGETS_H_
 #define _WX_SAMPLE_WIDGETS_H_
 
-#if wxUSE_TREEBOOK && !defined(__WXHANDHELD__)
+#if wxUSE_TREEBOOK
     #include "wx/treebook.h"
     #define USE_TREEBOOK 1
     #define WidgetsBookCtrl wxTreebook
@@ -29,18 +29,13 @@
     #define wxWidgetsbookEventHandler(func) wxBookCtrlEventHandler(func)
 #endif
 
-#if wxUSE_LOG && !defined(__WXHANDHELD__)
+#if wxUSE_LOG
     #define USE_LOG 1
 #else
     #define USE_LOG 0
 #endif
 
-#if defined(__WXHANDHELD__)
-    #define USE_ICONS_IN_BOOK 0
-#else
-    #define USE_ICONS_IN_BOOK 1
-    #define ICON_SIZE         16
-#endif
+#define ICON_SIZE         16
 
 class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 class WXDLLIMPEXP_FWD_CORE wxSizer;

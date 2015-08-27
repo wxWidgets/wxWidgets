@@ -357,9 +357,7 @@ bool MyApp::OnInit()
 
     // Create the main application window
     MyFrame *frame = new MyFrame(wxT("Calendar wxWidgets sample")
-#ifndef __WXWINCE__
                                  ,wxPoint(50, 50), wxSize(450, 340)
-#endif
                                  );
 
     frame->Show(true);

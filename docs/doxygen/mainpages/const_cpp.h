@@ -25,7 +25,6 @@ using @ifdef_ and not @if_.
 @beginDefList
 @itemdef{__WXBASE__, Only wxBase, no GUI features (same as @c wxUSE_GUI == 0)}
 @itemdef{__WXDFB__, wxUniversal using DirectFB}
-@itemdef{__WXWINCE__, Windows CE}
 @itemdef{__WXGTK__, GTK+}
 @itemdef{__WXGTK12__, GTK+ 1.2 or higher}
 @itemdef{__WXGTK20__, GTK+ 2.0 or higher}
@@ -103,7 +102,6 @@ symbols, although this has not always been followed.
 @itemdef{__WIN32__, Win32 API}
 @itemdef{__WIN64__, Win64 (mostly same as Win32 but data type sizes are different)}
 @itemdef{__WINE__, Wine}
-@itemdef{_WIN32_WCE, Windows CE version}
 @endDefList
 
 
@@ -122,20 +120,6 @@ compiler used.
 
 
 
-@section page_cppconst_hardware Hardware Type
-
-@beginDefList
-@itemdef{__SMARTPHONE__, Generic mobile devices with phone buttons and a small display}
-@itemdef{__PDA__, Personal digital assistant, usually with touch screen}
-@itemdef{__HANDHELD__, Small but powerful computer, usually with a keyboard}
-@itemdef{__POCKETPC__, Microsoft-powered PocketPC devices with touch-screen}
-@itemdef{__WINCE_STANDARDSDK__, Microsoft-powered Windows CE devices, for generic Windows CE applications}
-@itemdef{__WINCE_NET__, Microsoft-powered Windows CE .NET devices (_WIN32_WCE is 400 or greater)}
-@itemdef{WIN32_PLATFORM_WFSP, Microsoft-powered smartphone}
-@endDefList
-
-
-
 @section page_cppconst_compiler Compilers
 
 @beginDefList
@@ -143,7 +127,6 @@ compiler used.
                         to the compiler version: 500 is 5.0.}
 @itemdef{__DJGPP__, DJGPP}
 @itemdef{__DIGITALMARS__, Digital Mars (not used any more).}
-@itemdef{__EVC4__, Embedded Visual C++ 4 (can be only used for building wxWinCE)}
 @itemdef{__GNUG__, Gnu C++ on any platform, see also wxCHECK_GCC_VERSION}
 @itemdef{__GNUWIN32__, Gnu-Win32 compiler, see also wxCHECK_W32API_VERSION}
 @itemdef{__INTELC__, Intel C++ compiler}

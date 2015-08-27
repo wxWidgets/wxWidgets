@@ -235,7 +235,7 @@ private:
 
     // we need to return a special WM_GETDLGCODE value to process just the
     // arrows but let the other navigation characters through
-#if defined(__WXMSW__) && !defined(__WXWINCE__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     virtual WXLRESULT
     MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 #endif // __WXMSW__

@@ -117,17 +117,10 @@ static const int VIEWPORT_EXTENT = 134217727;
    coordinates used.
  */
 
-#ifdef __WXWINCE__
-    #define XLOG2DEV(x) ((x-m_logicalOriginX)*m_signX)
-    #define YLOG2DEV(y) ((y-m_logicalOriginY)*m_signY)
-    #define XDEV2LOG(x) ((x)*m_signX+m_logicalOriginX)
-    #define YDEV2LOG(y) ((y)*m_signY+m_logicalOriginY)
-#else
-    #define XLOG2DEV(x) (x)
-    #define YLOG2DEV(y) (y)
-    #define XDEV2LOG(x) (x)
-    #define YDEV2LOG(y) (y)
-#endif
+#define XLOG2DEV(x) (x)
+#define YLOG2DEV(y) (y)
+#define XDEV2LOG(x) (x)
+#define YDEV2LOG(y) (y)
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -382,16 +375,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxBrushAttrsSetter);
 };
 
-#ifdef __WXWINCE__
-
-#define SET_STRETCH_BLT_MODE(hdc)
-
-#else // !__WXWINCE__
-
 // this class sets the stretch blit mode to COLORONCOLOR during its lifetime
-//
-// don't use it directly, use SET_STRETCH_BLT_MODE() macro instead as it
-// expands to nothing under WinCE which doesn't have SetStretchBltMode()
 class StretchBltModeChanger
 {
 public:
@@ -420,11 +404,6 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(StretchBltModeChanger);
 };
-
-#define SET_STRETCH_BLT_MODE(hdc) \
-    StretchBltModeChanger wxMAKE_UNIQUE_NAME(stretchModeChanger)(hdc)
-
-#endif // __WXWINCE__/!__WXWINCE__
 
 // ===========================================================================
 // implementation
@@ -590,36 +569,12 @@ void wxMSWDCImpl::SetClippingHrgn(WXHRGN hrgn)
     // note that we combine the new clipping region with the existing one: this
     // is compatible with what the other ports do and is the documented
     // behaviour now (starting with 2.3.3)
-#if defined(__WXWINCE__)
-    RECT rectClip;
-    if ( !::GetClipBox(GetHdc(), &rectClip) )
-        return;
-
-    // GetClipBox returns logical coordinates, so transform to device
-    rectClip.left = LogicalToDeviceX(rectClip.left);
-    rectClip.top = LogicalToDeviceY(rectClip.top);
-    rectClip.right = LogicalToDeviceX(rectClip.right);
-    rectClip.bottom = LogicalToDeviceY(rectClip.bottom);
-
-    HRGN hrgnDest = ::CreateRectRgn(0, 0, 0, 0);
-    HRGN hrgnClipOld = ::CreateRectRgn(rectClip.left, rectClip.top,
-                                       rectClip.right, rectClip.bottom);
-
-    if ( ::CombineRgn(hrgnDest, hrgnClipOld, (HRGN)hrgn, RGN_AND) != ERROR )
-    {
-        ::SelectClipRgn(GetHdc(), hrgnDest);
-    }
-
-    ::DeleteObject(hrgnClipOld);
-    ::DeleteObject(hrgnDest);
-#else // !WinCE
     if ( ::ExtSelectClipRgn(GetHdc(), (HRGN)hrgn, RGN_AND) == ERROR )
     {
         wxLogLastError(wxT("ExtSelectClipRgn"));
 
         return;
     }
-#endif // WinCE/!WinCE
 
     m_clipping = true;
 
@@ -726,9 +681,7 @@ void wxMSWDCImpl::Clear()
 
     ::OffsetRect(&rect, -m_deviceOriginX, -m_deviceOriginY);
 
-#ifndef __WXWINCE__
     (void) ::SetMapMode(GetHdc(), MM_TEXT);
-#endif
 
     DWORD colour = ::GetBkColor(GetHdc());
     HBRUSH brush = ::CreateSolidBrush(colour);
@@ -738,14 +691,11 @@ void wxMSWDCImpl::Clear()
     RealizeScaleAndOrigin();
 }
 
-bool wxMSWDCImpl::DoFloodFill(wxCoord WXUNUSED_IN_WINCE(x),
-                       wxCoord WXUNUSED_IN_WINCE(y),
-                       const wxColour& WXUNUSED_IN_WINCE(col),
-                       wxFloodFillStyle WXUNUSED_IN_WINCE(style))
+bool wxMSWDCImpl::DoFloodFill(wxCoord x,
+                       wxCoord y,
+                       const wxColour& col,
+                       wxFloodFillStyle style)
 {
-#ifdef __WXWINCE__
-    return false;
-#else
     bool success = (0 != ::ExtFloodFill(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
                          col.GetPixel(),
                          style == wxFLOOD_SURFACE ? FLOODFILLSURFACE
@@ -770,7 +720,6 @@ bool wxMSWDCImpl::DoFloodFill(wxCoord WXUNUSED_IN_WINCE(x),
     CalcBoundingBox(x, y);
 
     return success;
-#endif
 }
 
 bool wxMSWDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
@@ -818,15 +767,6 @@ void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
     wxCoord r = (wxCoord)sqrt(dx*dx + dy*dy);
 
 
-#ifdef __WXWINCE__
-    // Slower emulation since WinCE doesn't support Pie and Arc
-    double sa = acos((x1-xc)/r)/M_PI*180; // between 0 and 180
-    if( y1>yc )
-        sa = -sa; // below center
-    double ea = atan2(yc-y2, x2-xc)/M_PI*180;
-    DoDrawEllipticArcRot( xc-r, yc-r, 2*r, 2*r, sa, ea );
-#else
-
     wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
     // treat the special case of full circle separately
@@ -867,7 +807,6 @@ void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
 
     CalcBoundingBox(xc - r, yc - r);
     CalcBoundingBox(xc + r, yc + r);
-#endif
 }
 
 void wxMSWDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1,
@@ -886,11 +825,7 @@ void wxMSWDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1,
     rect.right  = x2;
     rect.bottom = y2;
 
-#ifdef __WXWINCE__
-    DrawFrameControl(GetHdc(), &rect, DFC_BUTTON, DFCS_BUTTONCHECK | DFCS_CHECKED);
-#else
     DrawFrameControl(GetHdc(), &rect, DFC_MENU, DFCS_MENUCHECK);
-#endif
 
     CalcBoundingBox(x1, y1);
     CalcBoundingBox(x2, y2);
@@ -914,7 +849,7 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
                          const wxPoint points[],
                          wxCoord xoffset,
                          wxCoord yoffset,
-                         wxPolygonFillMode WXUNUSED_IN_WINCE(fillStyle))
+                         wxPolygonFillMode fillStyle)
 {
     wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
@@ -930,13 +865,9 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
 
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
         }
-#ifndef __WXWINCE__
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-#endif
         (void)Polygon(GetHdc(), cpoints, n);
-#ifndef __WXWINCE__
         SetPolyFillMode(GetHdc(),prev);
-#endif
         delete[] cpoints;
     }
     else
@@ -945,13 +876,9 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
         for (i = 0; i < n; i++)
             CalcBoundingBox(points[i].x, points[i].y);
 
-#ifndef __WXWINCE__
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-#endif
         (void)Polygon(GetHdc(), (POINT*) points, n);
-#ifndef __WXWINCE__
         SetPolyFillMode(GetHdc(),prev);
-#endif
     }
 }
 
@@ -963,9 +890,6 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
                         wxCoord yoffset,
                         wxPolygonFillMode fillStyle)
 {
-#ifdef __WXWINCE__
-    wxDCImpl::DoDrawPolyPolygon(n, count, points, xoffset, yoffset, fillStyle);
-#else
     wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
     int i, cnt;
     for (i = cnt = 0; i < n; i++)
@@ -982,13 +906,9 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
 
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
         }
-#ifndef __WXWINCE__
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-#endif
         (void)PolyPolygon(GetHdc(), cpoints, count, n);
-#ifndef __WXWINCE__
         SetPolyFillMode(GetHdc(),prev);
-#endif
         delete[] cpoints;
     }
     else
@@ -996,16 +916,10 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
         for (i = 0; i < cnt; i++)
             CalcBoundingBox(points[i].x, points[i].y);
 
-#ifndef __WXWINCE__
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-#endif
         (void)PolyPolygon(GetHdc(), (POINT*) points, count, n);
-#ifndef __WXWINCE__
         SetPolyFillMode(GetHdc(),prev);
-#endif
     }
-#endif
-  // __WXWINCE__
 }
 
 void wxMSWDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset)
@@ -1047,10 +961,9 @@ void wxMSWDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
             x2dev = XLOG2DEV(x2),
             y2dev = YLOG2DEV(y2);
 
-    // Windows (but not Windows CE) draws the filled rectangles without outline
+    // Windows draws the filled rectangles without outline
     // (i.e. drawn with a transparent pen) one pixel smaller in both directions
     // and we want them to have the same size regardless of which pen is used
-#ifndef __WXWINCE__
     if ( m_pen.IsTransparent() )
     {
         // Right edge to be extended is "displayed right edge"
@@ -1062,7 +975,6 @@ void wxMSWDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
             x2dev++;
         y2dev++;
     }
-#endif // !__WXWINCE__
 
     (void)Rectangle(GetHdc(), x1dev, y1dev, x2dev, y2dev);
 
@@ -1120,7 +1032,7 @@ void wxMSWDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord hei
     CalcBoundingBox(x2, y2);
 }
 
-#if wxUSE_SPLINES && !defined(__WXWINCE__)
+#if wxUSE_SPLINES
 void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
 {
     // quadratic b-spline to cubic bezier spline conversion
@@ -1215,10 +1127,6 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
 // Chris Breeze 20/5/98: first implementation of DrawEllipticArc on Windows
 void wxMSWDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
-#ifdef __WXWINCE__
-    DoDrawEllipticArcRot( x, y, w, h, sa, ea );
-#else
-
     wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
     wxCoord x2 = x + w;
@@ -1258,7 +1166,6 @@ void wxMSWDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,doub
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);
-#endif
 }
 
 void wxMSWDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
@@ -1312,7 +1219,7 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
         }
     }
 
-    SET_STRETCH_BLT_MODE(GetHdc());
+    StretchBltModeChanger stretchModeChanger(GetHdc());
 
     if ( useMask )
     {
@@ -1898,7 +1805,6 @@ void wxMSWDCImpl::RealizeScaleAndOrigin()
     // although it may seem wasteful to always use MM_ANISOTROPIC here instead
     // of using MM_TEXT if there is no scaling, benchmarking doesn't detect any
     // noticeable difference between these mapping modes
-#ifndef __WXWINCE__
     ::SetMapMode(GetHdc(), MM_ANISOTROPIC);
 
     // wxWidgets API assumes that the coordinate space is "infinite" (i.e. only
@@ -1926,7 +1832,6 @@ void wxMSWDCImpl::RealizeScaleAndOrigin()
 
     ::SetViewportOrgEx(GetHdc(), m_deviceOriginX, m_deviceOriginY, NULL);
     ::SetWindowOrgEx(GetHdc(), m_logicalOriginX, m_logicalOriginY, NULL);
-#endif
 }
 
 void wxMSWDCImpl::SetMapMode(wxMappingMode mode)
@@ -2279,7 +2184,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                 wxLogLastError(wxT("BitBlt"));
             }
 
-            SET_STRETCH_BLT_MODE(GetHdc());
+            StretchBltModeChanger stretchModeChanger(GetHdc());
 
             // copy src to buffer using selected raster op
             if ( !::StretchBlt(dc_buffer, 0, 0, dstWidth, dstHeight,
@@ -2335,8 +2240,6 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
         // if we already have a DIB, draw it using StretchDIBits(), otherwise
         // use StretchBlt() if available and finally fall back to BitBlt()
 
-        // FIXME: use appropriate WinCE functions
-#ifndef __WXWINCE__
         const int caps = ::GetDeviceCaps(GetHdc(), RASTERCAPS);
         if ( bmpSrc.IsOk() && (caps & RC_STRETCHDIB) )
         {
@@ -2347,7 +2250,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                              sizeof(ds),
                              &ds) == sizeof(ds) )
             {
-                SET_STRETCH_BLT_MODE(GetHdc());
+                StretchBltModeChanger stretchModeChanger(GetHdc());
 
                 // Unlike all the other functions used here (i.e. AlphaBlt(),
                 // MaskBlt(), BitBlt() and StretchBlt()), StretchDIBits() does
@@ -2394,10 +2297,8 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
         }
 
         if ( !success && (caps & RC_STRETCHBLT) )
-#endif
-        // __WXWINCE__
         {
-            SET_STRETCH_BLT_MODE(GetHdc());
+            StretchBltModeChanger stretchModeChanger(GetHdc());
 
             if ( !::StretchBlt
                     (

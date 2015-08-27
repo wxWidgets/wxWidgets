@@ -451,11 +451,7 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
         PRINTDLG pd;
 
         memset(&pd, 0, sizeof(PRINTDLG));
-#ifdef __WXWINCE__
-        pd.cbStruct    = sizeof(PRINTDLG);
-#else
         pd.lStructSize    = sizeof(PRINTDLG);
-#endif
 
         pd.hwndOwner      = NULL;
         pd.hDevMode       = NULL; // Will be created by PrintDlg

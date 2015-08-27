@@ -177,7 +177,7 @@ WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     if ( m_windowStyle & wxLB_SORT )
         msStyle |= LBS_SORT;
 
-#if wxUSE_OWNER_DRAWN && !defined(__WXWINCE__)
+#if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW )
     {
         // we don't support LBS_OWNERDRAWVARIABLE yet and we also always put
@@ -742,11 +742,7 @@ bool wxListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
 
     MEASUREITEMSTRUCT *pStruct = (MEASUREITEMSTRUCT *)item;
 
-#ifdef __WXWINCE__
-    HDC hdc = GetDC(NULL);
-#else
     HDC hdc = CreateIC(wxT("DISPLAY"), NULL, NULL, 0);
-#endif
 
     {
         wxDCTemp dc((WXHDC)hdc);
@@ -756,11 +752,7 @@ bool wxListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
         pStruct->itemWidth  = dc.GetCharWidth();
     }
 
-#ifdef __WXWINCE__
-    ReleaseDC(NULL, hdc);
-#else
     DeleteDC(hdc);
-#endif
 
     return true;
 }

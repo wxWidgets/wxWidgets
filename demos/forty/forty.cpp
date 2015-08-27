@@ -68,10 +68,8 @@ FortyApp::~FortyApp()
 bool FortyApp::OnInit()
 {
     bool largecards = false;
-#ifndef __WXWINCE__
     m_helpFile = wxGetCwd() + wxFILE_SEP_PATH + wxT("about.htm");
     if (!wxFileExists(m_helpFile))
-#endif
     {
         m_helpFile = wxPathOnly(argv[0]) + wxFILE_SEP_PATH + wxT("about.htm");
     }

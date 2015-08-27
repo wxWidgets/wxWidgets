@@ -55,12 +55,7 @@
 // you can set USE_NOTEBOOK_ANTIFLICKER to 0 for desktop Windows versions too
 // to disable code whih results in flicker-less notebook redrawing at the
 // expense of some extra GDI resource consumption
-#ifdef __WXWINCE__
-    // notebooks are never resized under CE anyhow
-    #define USE_NOTEBOOK_ANTIFLICKER    0
-#else
-    #define USE_NOTEBOOK_ANTIFLICKER    1
-#endif
+#define USE_NOTEBOOK_ANTIFLICKER    1
 
 // ----------------------------------------------------------------------------
 // constants
@@ -173,19 +168,8 @@ bool wxNotebook::Create(wxWindow *parent,
 {
     if ( (style & wxBK_ALIGN_MASK) == wxBK_DEFAULT )
     {
-#if defined(__POCKETPC__)
-        style |= wxBK_BOTTOM | wxNB_FLAT;
-#else
         style |= wxBK_TOP;
-#endif
     }
-
-#ifdef __WXWINCE__
-    // Not sure why, but without this style, there is no border
-    // around the notebook tabs.
-    if (style & wxNB_FLAT)
-        style |= wxBORDER_SUNKEN;
-#endif
 
 #if !wxUSE_UXTHEME
     // ComCtl32 notebook tabs simply don't work unless they're on top if we
@@ -286,18 +270,6 @@ bool wxNotebook::Create(wxWindow *parent,
     }
 #endif // wxUSE_UXTHEME
 
-    // Undocumented hack to get flat notebook style
-    // In fact, we should probably only do this in some
-    // curcumstances, i.e. if we know we will have a border
-    // at the bottom (the tab control doesn't draw it itself)
-#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
-    if (HasFlag(wxNB_FLAT))
-    {
-        SendMessage(GetHwnd(), CCM_SETVERSION, COMCTL32_VERSION, 0);
-        if (!m_hasBgCol)
-            SetBackgroundColour(*wxWHITE);
-    }
-#endif
     return true;
 }
 
@@ -923,7 +895,6 @@ void wxNotebook::OnSize(wxSizeEvent& event)
         event.Skip();
         return;
     }
-#ifndef __WXWINCE__
     else
     {
         // Without this, we can sometimes get droppings at the edges
@@ -946,7 +917,6 @@ void wxNotebook::OnSize(wxSizeEvent& event)
         rect = wxRect(0, 0, 4, sz.y);
         RefreshRect(rect);
     }
-#endif // !__WXWINCE__
 
     // fit all the notebook pages to the tab control's display area
 

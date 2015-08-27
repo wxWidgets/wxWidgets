@@ -57,15 +57,10 @@
     #endif
 #endif
 
-#ifndef __WXWINCE__
 #include <time.h>
-#else
-#include "wx/msw/private.h"
-#include "wx/msw/wince/time.h"
-#endif
 
 
-#if !defined(__WXMAC__) && !defined(__WXWINCE__)
+#if !defined(__WXMAC__)
     #include <sys/types.h>      // for time_t
 #endif
 
@@ -93,23 +88,6 @@ const int MICROSECONDS_PER_SECOND = 1000*1000;
 // ============================================================================
 // implementation
 // ============================================================================
-
-// NB: VC8 safe time functions could/should be used for wxMSW as well probably
-#if defined(__WXWINCE__) && defined(__VISUALC8__)
-
-struct tm *wxLocaltime_r(const time_t *t, struct tm* tm)
-{
-    __time64_t t64 = *t;
-    return _localtime64_s(tm, &t64) == 0 ? tm : NULL;
-}
-
-struct tm *wxGmtime_r(const time_t* t, struct tm* tm)
-{
-    __time64_t t64 = *t;
-    return _gmtime64_s(tm, &t64) == 0 ? tm : NULL;
-}
-
-#else // !wxWinCE with VC8
 
 #if (!defined(HAVE_LOCALTIME_R) || !defined(HAVE_GMTIME_R)) && wxUSE_THREADS && !defined(__WINDOWS__)
 static wxMutex timeLock;
@@ -161,8 +139,6 @@ struct tm *wxGmtime_r(const time_t* ticks, struct tm* temp)
   return temp;
 }
 #endif // !HAVE_GMTIME_R
-
-#endif // wxWinCE with VC8/other platforms
 
 // returns the time zone in the C sense, i.e. the difference UTC - local
 // (in seconds)

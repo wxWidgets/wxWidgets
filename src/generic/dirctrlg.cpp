@@ -102,12 +102,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
 {
 #ifdef wxHAS_FILESYSTEM_VOLUMES
 
-#ifdef __WXWINCE__
-    // No logical drives; return "\"
-    paths.Add(wxT("\\"));
-    names.Add(wxT("\\"));
-    icon_ids.Add(wxFileIconsTable::computer);
-#elif defined(__WIN32__) && wxUSE_FSVOLUME
+#if defined(__WIN32__) && wxUSE_FSVOLUME
     // TODO: this code (using wxFSVolumeBase) should be used for all platforms
     //       but unfortunately wxFSVolumeBase is not implemented everywhere
     const wxArrayString as = wxFSVolumeBase::GetVolumes();
@@ -228,11 +223,9 @@ bool wxIsDriveAvailable(const wxString& dirName)
 
 #elif defined(__WINDOWS__)
 
-int setdrive(int WXUNUSED_IN_WINCE(drive))
+int setdrive(int drive)
 {
-#ifdef __WXWINCE__
-    return 0;
-#elif defined(wxHAS_DRIVE_FUNCTIONS)
+#if defined(wxHAS_DRIVE_FUNCTIONS)
     return _chdrive(drive);
 #else
     wxChar  newdrive[4];
@@ -254,11 +247,8 @@ int setdrive(int WXUNUSED_IN_WINCE(drive))
 #endif // !GNUWIN32
 }
 
-bool wxIsDriveAvailable(const wxString& WXUNUSED_IN_WINCE(dirName))
+bool wxIsDriveAvailable(const wxString& dirName)
 {
-#ifdef __WXWINCE__
-    return false;
-#else
 #ifdef __WIN32__
     UINT errorMode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
 #endif
@@ -288,7 +278,6 @@ bool wxIsDriveAvailable(const wxString& WXUNUSED_IN_WINCE(dirName))
 #endif
 
     return success;
-#endif
 }
 #endif // __WINDOWS__
 
@@ -416,11 +405,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     long treeStyle = wxTR_HAS_BUTTONS;
 
-    // On Windows CE, if you hide the root, you get a crash when
-    // attempting to access data for children of the root item.
-#ifndef __WXWINCE__
     treeStyle |= wxTR_HIDE_ROOT;
-#endif
 
 #ifdef __WXGTK20__
     treeStyle |= wxTR_NO_LINES;
@@ -717,7 +702,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
 
     wxString dirName(data->m_path);
 
-#if (defined(__WINDOWS__) && !defined(__WXWINCE__)) || defined(__DOS__)
+#if defined(__WINDOWS__) || defined(__DOS__)
     // Check if this is a root directory and if so,
     // whether the drive is available.
     if (!wxIsDriveAvailable(dirName))

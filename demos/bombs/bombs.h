@@ -118,11 +118,7 @@ private:
  * BombsCanvas::x_cell and y_cell
  */
 
-#ifdef __WXWINCE__
-#define BOMBS_FONT wxFont(12, wxSWISS, wxNORMAL, wxNORMAL)
-#else
 #define BOMBS_FONT wxFont(14, wxROMAN, wxNORMAL, wxNORMAL)
-#endif
 
 #endif // #ifndef _WX_DEMOS_BOMBS_BOMBS_H_
 

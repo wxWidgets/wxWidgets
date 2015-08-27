@@ -14,12 +14,7 @@
 #include "wx/gdicmn.h"
 #include "wx/font.h"
 
-#ifdef __WXWINCE__
-#define USE_SPINCTRL_FOR_POINT_SIZE 1
-class WXDLLIMPEXP_FWD_CORE wxSpinEvent;
-#else
 #define USE_SPINCTRL_FOR_POINT_SIZE 0
-#endif
 
 /*
  * FONT DIALOG

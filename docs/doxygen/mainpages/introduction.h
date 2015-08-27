@@ -94,7 +94,7 @@ older and now deprecated wxOSX/Carbon port. wxOSX/Cocoa supports 32 or 64 bit
 Intel Macs running OS X 10.7 or later. The port can be built either with g++
 or clang.
 
-Other platforms (iOS, Windows CE, OS/2), compilers (Borland C++ under Windows,
+Other platforms (e.g. iOS), compilers (Borland C++ under Windows,
 Sun CC, HP-UX aCC, IBM xlC or SGI mipsPro under Unix) and ports (wxOSX/Carbon,
 wxGTK1, wxX11, wxDFB, wxPM...) are also supported but to a lesser extent.
 Please see the @subpage page_port "platform details page" for more information.

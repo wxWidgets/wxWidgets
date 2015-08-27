@@ -48,11 +48,6 @@
 #include "wx/msw/private.h"
 #include "wx/msw/dc.h"
 
-#ifdef __WXWINCE__
-// Implemented in menu.cpp
-UINT GetMenuState(HMENU hMenu, UINT id, UINT flags) ;
-#endif
-
 #if wxUSE_UXTHEME
     #include "wx/msw/uxtheme.h"
 #endif
