@@ -40,14 +40,6 @@
     #include "wx/msw/crashrpt.h"
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
-#ifdef __WXWINCE__
-    // there is no ExitProcess() under CE but exiting the main thread has the
-    // same effect
-    #ifndef ExitProcess
-        #define ExitProcess ExitThread
-    #endif
-#endif // __WXWINCE__
-
 #ifdef __BORLANDC__
     // BC++ has to be special: its run-time expects the DLL entry point to be
     // named DllEntryPoint instead of the (more) standard DllMain
@@ -269,11 +261,6 @@ wxMSWEntryCommon(HINSTANCE hInstance, int nCmdShow)
     {
         args = wxCmdLineParser::ConvertStringToArgs(cmdLine);
     }
-
-#ifdef __WXWINCE__
-    // WinCE doesn't insert the program itself, so do it ourselves.
-    args.Insert(wxGetFullModuleName(), 0);
-#endif
 
     wxArgs.Init(args);
 

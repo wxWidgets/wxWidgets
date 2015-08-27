@@ -195,11 +195,9 @@ private:
     // skip some portion
     bool m_skip;
 
-#if !defined(__SMARTPHONE__)
     // the abort and skip buttons (or NULL if none)
     wxButton *m_btnAbort;
     wxButton *m_btnSkip;
-#endif
 
     // saves the time when elapsed time was updated so there is only one
     // update per second

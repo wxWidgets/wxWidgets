@@ -34,10 +34,7 @@
 
 #define M_PENDATA ((wxPenRefData*)m_refData)
 
-// Win32 has ExtCreatePen() but WinCE doesn't
-#if !defined(__WXWINCE__)
-    #define wxHAVE_EXT_CREATE_PEN
-#endif
+#define wxHAVE_EXT_CREATE_PEN
 
 // ----------------------------------------------------------------------------
 // wxPenRefData: contains information about an HPEN and its handle

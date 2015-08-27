@@ -23,7 +23,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_CHOICE && !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
+#if wxUSE_CHOICE
 
 #include "wx/choice.h"
 
@@ -799,4 +799,4 @@ WXHBRUSH wxChoice::MSWControlColor(WXHDC hDC, WXHWND hWnd)
     return wxChoiceBase::MSWControlColor(hDC, hWnd);
 }
 
-#endif // wxUSE_CHOICE && !(__SMARTPHONE__ && __WXWINCE__)
+#endif // wxUSE_CHOICE

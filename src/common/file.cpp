@@ -23,7 +23,7 @@
 #if wxUSE_FILE
 
 // standard
-#if defined(__WINDOWS__) && !defined(__GNUWIN32__) && !defined(__WXWINCE__)
+#if defined(__WINDOWS__) && !defined(__GNUWIN32__)
 
 #define   WIN32_LEAN_AND_MEAN
 #define   NOSERVICE
@@ -46,8 +46,6 @@
 #define   NOCRYPT
 #define   NOMCX
 
-#elif defined(__WINDOWS__) && defined(__WXWINCE__)
-    #include  "wx/msw/missing.h"
 #elif (defined(__UNIX__) || defined(__GNUWIN32__))
     #include  <unistd.h>
     #include  <time.h>
@@ -81,9 +79,7 @@
 
 #include  <stdio.h>       // SEEK_xxx constants
 
-#ifndef __WXWINCE__
-    #include <errno.h>
-#endif
+#include <errno.h>
 
 // Windows compilers don't have these constants
 #ifndef W_OK
@@ -113,10 +109,6 @@
 #if defined(__UNIX__) && !defined(O_BINARY)
     #define   O_BINARY    (0)
 #endif  //__UNIX__
-
-#ifdef __WXWINCE__
-    #include "wx/msw/private.h"
-#endif
 
 // ============================================================================
 // implementation of wxFile
@@ -175,13 +167,7 @@ bool wxFile::CheckForError(wxFileOffset rc) const
     if ( rc != -1 )
         return false;
 
-    const_cast<wxFile *>(this)->m_lasterror =
-#ifndef __WXWINCE__
-                                                errno
-#else
-                                                ::GetLastError()
-#endif
-                                                ;
+    const_cast<wxFile *>(this)->m_lasterror = errno;
 
     return true;
 }

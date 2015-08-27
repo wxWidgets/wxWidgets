@@ -17,13 +17,7 @@
 
 #if wxUSE_MSGDLG
 
-// there is no hook support under CE so we can't use the code for message box
-// positioning there
-#ifndef __WXWINCE__
-    #define wxUSE_MSGBOX_HOOK 1
-#else
-    #define wxUSE_MSGBOX_HOOK 0
-#endif
+#define wxUSE_MSGBOX_HOOK 1
 
 #ifndef WX_PRECOMP
     #include "wx/msgdlg.h"
@@ -47,11 +41,6 @@
 #if wxUSE_MSGBOX_HOOK
     #include "wx/textbuf.h"
     #include "wx/display.h"
-#endif
-
-// For MB_TASKMODAL
-#ifdef __WXWINCE__
-    #include "wx/msw/wince/missing.h"
 #endif
 
 // Interestingly, this symbol currently seems to be absent from Platform SDK
@@ -482,12 +471,7 @@ int wxMessageDialog::ShowMessageBox()
     const long wxStyle = GetMessageDialogStyle();
     if ( wxStyle & wxYES_NO )
     {
-#if !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
-        if (wxStyle & wxCANCEL)
-            msStyle = MB_YESNOCANCEL;
-        else
-#endif // !(__SMARTPHONE__ && __WXWINCE__)
-            msStyle = MB_YESNO;
+         msStyle = MB_YESNO;
 
         if ( wxStyle & wxNO_DEFAULT )
             msStyle |= MB_DEFBUTTON2;
@@ -537,10 +521,8 @@ int wxMessageDialog::ShowMessageBox()
     if ( wxStyle & wxSTAY_ON_TOP )
         msStyle |= MB_TOPMOST;
 
-#ifndef __WXWINCE__
     if ( wxApp::MSWGetDefaultLayout(m_parent) == wxLayout_RightToLeft )
         msStyle |= MB_RTLREADING | MB_RIGHT;
-#endif
 
     if (hWnd)
         msStyle |= MB_APPLMODAL;

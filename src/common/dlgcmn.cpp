@@ -223,47 +223,15 @@ wxSizer *wxDialogBase::CreateTextSizer(const wxString& message,
 
 wxSizer *wxDialogBase::CreateButtonSizer(long flags)
 {
-#ifdef __SMARTPHONE__
-    wxDialog* dialog = (wxDialog*) this;
-    if ( flags & wxOK )
-        dialog->SetLeftMenu(wxID_OK);
-
-    if ( flags & wxCANCEL )
-        dialog->SetRightMenu(wxID_CANCEL);
-
-    if ( flags & wxYES )
-        dialog->SetLeftMenu(wxID_YES);
-
-    if ( flags & wxNO )
-        dialog->SetRightMenu(wxID_NO);
-
-    return NULL;
-#else // !__SMARTPHONE__
-
 #if wxUSE_BUTTON
 
-#ifdef __POCKETPC__
-    // PocketPC guidelines recommend for Ok/Cancel dialogs to use OK button
-    // located inside caption bar and implement Cancel functionality through
-    // Undo outside dialog. As native behaviour this will be default here but
-    // can be replaced with real wxButtons by setting the option below to 1
-    if ( (flags & ~(wxCANCEL|wxNO_DEFAULT)) != wxOK ||
-            wxSystemOptions::GetOptionInt(wxT("wince.dialog.real-ok-cancel")) )
-#endif // __POCKETPC__
-    {
-        return CreateStdDialogButtonSizer(flags);
-    }
-#ifdef __POCKETPC__
-    return NULL;
-#endif // __POCKETPC__
+    return CreateStdDialogButtonSizer(flags);
 
 #else // !wxUSE_BUTTON
     wxUnusedVar(flags);
 
     return NULL;
 #endif // wxUSE_BUTTON/!wxUSE_BUTTON
-
-#endif // __SMARTPHONE__/!__SMARTPHONE__
 }
 
 wxSizer *wxDialogBase::CreateSeparatedSizer(wxSizer *sizer)

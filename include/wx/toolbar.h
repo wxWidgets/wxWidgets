@@ -69,10 +69,8 @@ enum
 
     #if defined(__WXUNIVERSAL__)
        #include "wx/univ/toolbar.h"
-    #elif defined(__WXMSW__) && (!defined(_WIN32_WCE) || (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__)))
+    #elif defined(__WXMSW__)
        #include "wx/msw/toolbar.h"
-    #elif defined(__WXWINCE__)
-       #include "wx/msw/wince/tbarwce.h"
     #elif defined(__WXMOTIF__)
        #include "wx/motif/toolbar.h"
     #elif defined(__WXGTK20__)

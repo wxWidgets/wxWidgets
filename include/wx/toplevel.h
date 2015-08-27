@@ -86,21 +86,7 @@ class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowBase;
 
 // default style
 //
-// under Windows CE (at least when compiling with eVC 4) we should create
-// top level windows without any styles at all for them to appear
-// "correctly", i.e. as full screen windows with a "hide" button (same as
-// "close" but round instead of squared and just hides the applications
-// instead of closing it) in the title bar
-#if defined(__WXWINCE__)
-    #if defined(__SMARTPHONE__)
-        #define wxDEFAULT_FRAME_STYLE (wxMAXIMIZE)
-    #elif defined(__WINCE_STANDARDSDK__)
-        #define wxDEFAULT_FRAME_STYLE (wxMAXIMIZE|wxCLOSE_BOX)
-    #else
-        #define wxDEFAULT_FRAME_STYLE (wxNO_BORDER)
-    #endif
-#else // !__WXWINCE__
-    #define wxDEFAULT_FRAME_STYLE \
+#define wxDEFAULT_FRAME_STYLE \
             (wxSYSTEM_MENU | \
              wxRESIZE_BORDER | \
              wxMINIMIZE_BOX | \
@@ -108,7 +94,6 @@ class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowBase;
              wxCLOSE_BOX | \
              wxCAPTION | \
              wxCLIP_CHILDREN)
-#endif
 
 
 // Dialogs are created in a special way
@@ -222,12 +207,6 @@ public:
     // notice that the window is still closed prior to the application exit and
     // so it can still veto it even if it returns false from here
     virtual bool ShouldPreventAppExit() const { return true; }
-
-
-#if defined(__SMARTPHONE__)
-    virtual void SetLeftMenu(int id = wxID_ANY, const wxString& label = wxEmptyString, wxMenu *subMenu = NULL) = 0;
-    virtual void SetRightMenu(int id = wxID_ANY, const wxString& label = wxEmptyString, wxMenu *subMenu = NULL) = 0;
-#endif // __SMARTPHONE__
 
     // centre the window on screen: this is just a shortcut
     void CentreOnScreen(int dir = wxBOTH) { DoCentre(dir | wxCENTRE_ON_SCREEN); }

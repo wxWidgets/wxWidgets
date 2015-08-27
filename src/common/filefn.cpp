@@ -182,11 +182,8 @@ void wxPathList::Add(const wxArrayString &arr)
 }
 
 // Add paths e.g. from the PATH environment variable
-void wxPathList::AddEnvList (const wxString& WXUNUSED_IN_WINCE(envVariable))
+void wxPathList::AddEnvList (const wxString& envVariable)
 {
-    // No environment variables on WinCE
-#ifndef __WXWINCE__
-
     // The space has been removed from the tokenizers, otherwise a
     // path such as "C:\Program Files" would be split into 2 paths:
     // "C:\Program" and "Files"; this is true for both Windows and Unix.
@@ -205,7 +202,6 @@ void wxPathList::AddEnvList (const wxString& WXUNUSED_IN_WINCE(envVariable))
         wxArrayString arr = wxStringTokenize(val, PATH_TOKS);
         WX_APPEND_ARRAY(*this, arr);
     }
-#endif // !__WXWINCE__
 }
 
 // Given a full filename (with path), ensure that that file can
@@ -521,8 +517,6 @@ static CharType *wxDoExpandPath(CharType *buf, const wxString& name)
                 break;
         } else
 #  endif
-            // No env variables on WinCE
-#ifndef __WXWINCE__
 #ifdef __WINDOWS__
         if (*s++ == wxT('$') && (*s == wxT('{') || *s == wxT(')')))
 #else
@@ -550,8 +544,6 @@ static CharType *wxDoExpandPath(CharType *buf, const wxString& name)
                     s++;
             }
         }
-#endif
-        // __WXWINCE__
     }
 
     /* Expand ~ and ~user */
@@ -633,7 +625,7 @@ wchar_t *wxExpandPath(wchar_t *buf, const wxString& name)
  */
 wxChar *
 wxContractPath (const wxString& filename,
-                const wxString& WXUNUSED_IN_WINCE(envname),
+                const wxString& envname,
                 const wxString& user)
 {
   static wxChar dest[_MAXPATHLEN];
@@ -648,7 +640,6 @@ wxContractPath (const wxString& filename,
 
   // Handle environment
   wxString val;
-#ifndef __WXWINCE__
   wxChar *tcp;
   if (!envname.empty() && !(val = wxGetenv (envname)).empty() &&
      (tcp = wxStrstr (dest, val)) != NULL)
@@ -660,7 +651,6 @@ wxContractPath (const wxString& filename,
         wxStrcat (tcp, wxT("}"));
         wxStrcat (tcp, wxFileFunctionsBuffer);
     }
-#endif
 
   // Handle User's home (ignore root homes!)
   val = wxGetUserHome (user);
@@ -1130,11 +1120,9 @@ wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite)
         return false;
     }
 
-#if !defined(__WXWINCE__)
     // Normal system call
   if ( wxRename (file1, file2) == 0 )
     return true;
-#endif
 
   // Try to copy
   if (wxCopyFile(file1, file2, overwrite)) {
@@ -1190,11 +1178,7 @@ bool wxMkdir(const wxString& dir, int perm)
   #endif
 #else  // !MSW, !DOS and !OS/2 VAC++
     wxUnusedVar(perm);
-  #ifdef __WXWINCE__
-    if ( CreateDirectory(dir.fn_str(), NULL) == 0 )
-  #else
     if ( wxMkDir(dir.fn_str()) != 0 )
-  #endif
 #endif // !MSW/MSW
     {
         wxLogSysError(_("Directory '%s' couldn't be created"), dir);
@@ -1209,11 +1193,7 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 #if defined(__VMS__)
     return false; //to be changed since rmdir exists in VMS7.x
 #else
-  #if defined(__WXWINCE__)
-    if ( RemoveDirectory(dir.fn_str()) == 0 )
-  #else
     if ( wxRmDir(dir.fn_str()) != 0 )
-  #endif
     {
         wxLogSysError(_("Directory '%s' couldn't be deleted"), dir);
         return false;
@@ -1320,11 +1300,6 @@ wxString wxFindNextFile()
 
 wxChar *wxDoGetCwd(wxChar *buf, int sz)
 {
-#if defined(__WXWINCE__)
-    // TODO
-    if(buf && sz>0) buf[0] = wxT('\0');
-    return buf;
-#else
     if ( !buf )
     {
         buf = new wxChar[sz + 1];
@@ -1417,8 +1392,6 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
     #undef cbuf
 #endif
 
-#endif
-    // __WXWINCE__
 }
 
 wxString wxGetCwd()
@@ -1436,12 +1409,7 @@ bool wxSetWorkingDirectory(const wxString& d)
 #elif defined(__WINDOWS__)
 
 #ifdef __WIN32__
-#ifdef __WXWINCE__
-    // No equivalent in WinCE
-    wxUnusedVar(d);
-#else
     success = (SetCurrentDirectory(d.t_str()) != 0);
-#endif
 #else
     // Must change drive, too.
     bool isDriveSpec = ((strlen(d) > 1) && (d[1] == ':'));
@@ -1476,9 +1444,7 @@ bool wxSetWorkingDirectory(const wxString& d)
 // On non-Windows platform, probably just return the empty string.
 wxString wxGetOSDirectory()
 {
-#ifdef __WXWINCE__
-    return wxString(wxT("\\Windows"));
-#elif defined(__WINDOWS__)
+#if defined(__WINDOWS__)
     wxChar buf[MAX_PATH];
     if ( !GetWindowsDirectory(buf, MAX_PATH) )
     {
@@ -1760,7 +1726,7 @@ bool wxIsExecutable(const wxString &path)
 //
 wxFileKind wxGetFileKind(int fd)
 {
-#if defined __WINDOWS__ && !defined __WXWINCE__ && defined wxGetOSFHandle
+#if defined __WINDOWS__ && defined wxGetOSFHandle
     switch (::GetFileType(wxGetOSFHandle(fd)) & ~FILE_TYPE_REMOTE)
     {
         case FILE_TYPE_CHAR:

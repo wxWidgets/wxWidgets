@@ -132,10 +132,6 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         }
     }
 
-#ifdef __WXWINCE__
-    index |= SYS_COLOR_INDEX_FLAG;
-#endif
-
     COLORREF colSys = ::GetSysColor(index);
 
     wxColour ret = wxRGBToColour(colSys);
@@ -176,19 +172,6 @@ wxFont wxCreateFontFromStockObject(int index)
 
 wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 {
-#ifdef __WXWINCE__
-    // under CE only a single SYSTEM_FONT exists
-    index;
-
-    if ( !gs_fontDefault )
-    {
-        gs_fontDefault = new wxFont(wxCreateFontFromStockObject(SYSTEM_FONT));
-    }
-
-    wxASSERT(gs_fontDefault->IsOk() &&
-             wxFontEnumerator::IsValidFacename(gs_fontDefault->GetFaceName()));
-    return *gs_fontDefault;
-#else // !__WXWINCE__
     // wxWindow ctor calls GetFont(wxSYS_DEFAULT_GUI_FONT) so we're
     // called fairly often -- this is why we cache this particular font
     if ( index == wxSYS_DEFAULT_GUI_FONT )
@@ -220,7 +203,6 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 #endif // wxUSE_FONTENUM
 
     return font;
-#endif // __WXWINCE__/!__WXWINCE__
 }
 
 // ----------------------------------------------------------------------------
@@ -237,11 +219,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 static const int gs_metricsMap[] =
 {
     -1,  // wxSystemMetric enums start at 1, so give a dummy value for pos 0.
-#if !defined(__WXWINCE__)
     SM_CMOUSEBUTTONS,
-#else
-    -1,
-#endif
 
     SM_CXBORDER,
     SM_CYBORDER,
@@ -380,7 +358,6 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
 
 extern wxFont wxGetCCDefaultFont()
 {
-#ifndef __WXWINCE__
     // the default font used for the common controls seems to be the desktop
     // font which is also used for the icon titles and not the stock default
     // GUI font
@@ -399,7 +376,6 @@ extern wxFont wxGetCCDefaultFont()
     {
         wxLogLastError(wxT("SystemParametersInfo(SPI_GETICONTITLELOGFONT"));
     }
-#endif // __WXWINCE__
 
     // fall back to the default font for the normal controls
     return wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);

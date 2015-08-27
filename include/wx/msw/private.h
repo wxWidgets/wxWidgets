@@ -67,12 +67,6 @@ WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
 // define things missing from some compilers' headers
 // ---------------------------------------------------------------------------
 
-#if defined(__WXWINCE__)
-#ifndef ZeroMemory
-    inline void ZeroMemory(void *buf, size_t len) { memset(buf, 0, len); }
-#endif
-#endif // old mingw32
-
 // this defines a CASTWNDPROC macro which casts a pointer to the type of a
 // window proc
 #if defined(STRICT) || defined(__GNUC__)
@@ -146,10 +140,7 @@ extern LONG APIENTRY
 // Vc++, bcc, dmc, ow, mingw akk have _get_osfhandle() and Cygwin has
 // get_osfhandle. Others are currently unknown, e.g. Salford, Intel, Visual
 // Age.
-#if defined(__WXWINCE__)
-    #define wxGetOSFHandle(fd) ((HANDLE)fd)
-    #define wxOpenOSFHandle(h, flags) ((int)wxPtrToUInt(h))
-#elif defined(__CYGWIN__)
+#if defined(__CYGWIN__)
     #define wxGetOSFHandle(fd) ((HANDLE)get_osfhandle(fd))
 #elif defined(__VISUALC__) \
    || defined(__BORLANDC__) \
@@ -642,12 +633,6 @@ private:
 };
 
 // set the given map mode for the life time of this object
-//
-// NB: SetMapMode() is not supported by CE so we also define a helper macro
-//     to avoid using it there
-#ifdef __WXWINCE__
-    #define wxCHANGE_HDC_MAP_MODE(hdc, mm)
-#else // !__WXWINCE__
     class HDCMapModeChanger
     {
     public:
@@ -676,7 +661,6 @@ private:
 
     #define wxCHANGE_HDC_MAP_MODE(hdc, mm) \
         HDCMapModeChanger wxMAKE_UNIQUE_NAME(wxHDCMapModeChanger)(hdc, mm)
-#endif // __WXWINCE__/!__WXWINCE__
 
 // smart pointer using GlobalAlloc/GlobalFree()
 class GlobalPtr

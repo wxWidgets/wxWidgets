@@ -445,7 +445,6 @@ COCOA_DIST: ALL_GUI_DIST
 
 MSW_DIST: UNIV_DIST
 	mkdir $(DISTDIR)/include/wx/msw/ole
-	mkdir $(DISTDIR)/include/wx/msw/wince
 	$(CP_P) $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
 	$(CP_P) $(INCDIR)/wx/msw/*.cur $(DISTDIR)/include/wx/msw
 	$(CP_P) $(INCDIR)/wx/msw/*.ico $(DISTDIR)/include/wx/msw
@@ -453,9 +452,7 @@ MSW_DIST: UNIV_DIST
 	$(CP_P) $(INCDIR)/wx/msw/*.rc $(DISTDIR)/include/wx/msw
 	$(CP_P) $(INCDIR)/wx/msw/*.manifest $(DISTDIR)/include/wx/msw
 	$(CP_P) $(INCDIR)/wx/msw/ole/*.h $(DISTDIR)/include/wx/msw/ole
-	$(CP_P) $(INCDIR)/wx/msw/wince/*.h $(DISTDIR)/include/wx/msw/wince
 	mkdir $(DISTDIR)/src/msw/ole
-	mkdir $(DISTDIR)/src/msw/wince
 	$(CP_P) $(MSWDIR)/*.cpp $(DISTDIR)/src/msw
 	$(CP_P) $(MSWDIR)/*.c $(DISTDIR)/src/msw
 	$(CP_P) $(MSWDIR)/*.rc $(DISTDIR)/src/msw
@@ -466,19 +463,15 @@ MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	$(CP_P) $(WXDIR)/build/msw/* $(DISTDIR)/build/msw
 	$(CP_P) $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/include/wx/msw/ole
-	mkdir $(DISTDIR)/include/wx/msw/wince
 	$(CP_P) $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
 	$(CP_P) $(INCDIR)/wx/msw/*.rc $(DISTDIR)/include/wx/msw
 	$(CP_P) $(INCDIR)/wx/msw/*.manifest $(DISTDIR)/include/wx/msw
 	$(CP_P) $(INCDIR)/wx/msw/ole/*.h $(DISTDIR)/include/wx/msw/ole
-	$(CP_P) $(INCDIR)/wx/msw/wince/*.h $(DISTDIR)/include/wx/msw/wince
 	mkdir $(DISTDIR)/src/msw/ole
-	mkdir $(DISTDIR)/src/msw/wince
 	$(CP_P) $(MSWDIR)/*.cpp $(DISTDIR)/src/msw
 	$(CP_P) $(MSWDIR)/*.rc $(DISTDIR)/src/msw
 	$(CP_P) $(MSWDIR)/*.c $(DISTDIR)/src/msw
 	$(CP_P) $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
-	$(CP_P) $(MSWDIR)/wince/*.* $(DISTDIR)/src/msw/wince
 	$(CP_P) $(SRCDIR)/*.??? $(DISTDIR)/src
 
 UNIV_DIST: ALL_GUI_DIST

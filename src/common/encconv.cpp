@@ -33,10 +33,6 @@
     bool gMacEncodingsInited[wxFONTENCODING_MACMAX-wxFONTENCODING_MACMIN+1] ;
 #endif
 
-#ifdef __WXWINCE__
-    #include "wx/msw/wince/missing.h"       // for bsearch()
-#endif
-
 static const wxUint16* GetEncTable(wxFontEncoding enc)
 {
 #ifdef __WXMAC__

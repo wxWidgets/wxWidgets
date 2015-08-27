@@ -115,12 +115,8 @@ void ResolveShellFunctions()
 #if wxUSE_DYNLIB_CLASS
 
     // start with the newest functions, fall back to the oldest ones
-#ifdef __WXWINCE__
-    wxString shellDllName(wxT("coredll"));
-#else
     // first check for SHGetFolderPath (shell32.dll 5.0)
     wxString shellDllName(wxT("shell32"));
-#endif
 
     wxDynamicLibrary dllShellFunctions( shellDllName );
     if ( !dllShellFunctions.IsLoaded() )
@@ -133,11 +129,7 @@ void ResolveShellFunctions()
     wxLogNull noLog;
 
 #if wxUSE_UNICODE
-    #ifdef __WXWINCE__
-        static const wchar_t UNICODE_SUFFIX = L''; // WinCE SH functions don't seem to have 'W'
-    #else
-        static const wchar_t UNICODE_SUFFIX = L'W';
-    #endif
+    static const wchar_t UNICODE_SUFFIX = L'W';
 #else // !Unicode
     static const char UNICODE_SUFFIX = 'A';
 #endif // Unicode/!Unicode
@@ -388,15 +380,10 @@ wxString wxStandardPathsWin16::GetConfigDir() const
     // this is for compatibility with earlier wxFileConfig versions
     // which used the Windows directory for the global files
     wxString dir;
-#ifndef __WXWINCE__
     if ( !::GetWindowsDirectory(wxStringBuffer(dir, MAX_PATH), MAX_PATH) )
     {
         wxLogLastError(wxT("GetWindowsDirectory"));
     }
-#else
-    // TODO: use CSIDL_WINDOWS (eVC4, possibly not eVC3)
-    dir = wxT("\\Windows");
-#endif
 
     return dir;
 }

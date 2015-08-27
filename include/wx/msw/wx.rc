@@ -11,10 +11,6 @@
 
 #include <windows.h>
 
-#if defined(_WIN32_WCE)
-    #include "wx/msw/wince/wince.rc"
-#endif
-
 #include "wx/msw/rcdefs.h"
 
 //////////////////////////////////////////////////////////////////////////////

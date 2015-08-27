@@ -920,17 +920,7 @@ static wxString wxCreateTempImpl(
         dir = wxFileName::GetTempDir();
     }
 
-#if defined(__WXWINCE__)
-    path = dir + wxT("\\") + name;
-    int i = 1;
-    while (wxFileName::FileExists(path))
-    {
-        path = dir + wxT("\\") + name ;
-        path << i;
-        i ++;
-    }
-
-#elif defined(__WINDOWS__)
+#if defined(__WINDOWS__)
     if (!::GetTempFileName(dir.t_str(), name.t_str(), 0,
                            wxStringBuffer(path, MAX_PATH + 1)))
     {
@@ -1238,9 +1228,7 @@ wxString wxFileName::GetTempDir()
     // if no environment variables are set, use the system default
     if ( dir.empty() )
     {
-#if defined(__WXWINCE__)
-        dir = CheckIfDirExists(wxT("\\temp"));
-#elif defined(__WINDOWS__)
+#if defined(__WINDOWS__)
         if ( !::GetTempPath(MAX_PATH, wxStringBuffer(dir, MAX_PATH + 1)) )
         {
             wxLogLastError(wxT("GetTempPath"));
@@ -1345,10 +1333,7 @@ bool wxFileName::Rmdir(const wxString& dir, int flags)
         fileop.wFunc = FO_DELETE;
         fileop.pFrom = path.t_str();
         fileop.fFlags = FOF_SILENT | FOF_NOCONFIRMATION;
-    #ifndef __WXWINCE__
-        // FOF_NOERRORUI is not defined in WinCE
         fileop.fFlags |= FOF_NOERRORUI;
-    #endif
 
         int ret = SHFileOperation(&fileop);
         if ( ret != 0 )
@@ -1551,7 +1536,7 @@ bool wxFileName::Normalize(int flags,
         m_dirs.Add(dir);
     }
 
-#if defined(__WIN32__) && !defined(__WXWINCE__) && wxUSE_OLE
+#if defined(__WIN32__) && wxUSE_OLE
     if ( (flags & wxPATH_NORM_SHORTCUT) )
     {
         wxString filename;
@@ -1589,7 +1574,6 @@ bool wxFileName::Normalize(int flags,
     return true;
 }
 
-#ifndef __WXWINCE__
 bool wxFileName::ReplaceEnvVariable(const wxString& envname,
                                     const wxString& replacementFmtString,
                                     wxPathFormat format)
@@ -1613,7 +1597,6 @@ bool wxFileName::ReplaceEnvVariable(const wxString& envname,
 
     return true;
 }
-#endif
 
 bool wxFileName::ReplaceHomeDir(wxPathFormat format)
 {
@@ -1636,18 +1619,7 @@ bool wxFileName::ReplaceHomeDir(wxPathFormat format)
 // get the shortcut target
 // ----------------------------------------------------------------------------
 
-// WinCE (3) doesn't have CLSID_ShellLink, IID_IShellLink definitions.
-// The .lnk file is a plain text file so it should be easy to
-// make it work. Hint from Google Groups:
-// "If you open up a lnk file, you'll see a
-// number, followed by a pound sign (#), followed by more text. The
-// number is the number of characters that follows the pound sign. The
-// characters after the pound sign are the command line (which _can_
-// include arguments) to be executed. Any path (e.g. \windows\program
-// files\myapp.exe) that includes spaces needs to be enclosed in
-// quotation marks."
-
-#if defined(__WIN32__) && !defined(__WXWINCE__) && wxUSE_OLE
+#if defined(__WIN32__) && wxUSE_OLE
 
 bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
                                    wxString& targetFilename,
@@ -1707,7 +1679,7 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
     return success;
 }
 
-#endif // __WIN32__ && !__WXWINCE__
+#endif // __WIN32__
 
 
 // ----------------------------------------------------------------------------
@@ -1887,11 +1859,8 @@ wxString wxFileName::GetForbiddenChars(wxPathFormat format)
 }
 
 /* static */
-wxString wxFileName::GetVolumeSeparator(wxPathFormat WXUNUSED_IN_WINCE(format))
+wxString wxFileName::GetVolumeSeparator(wxPathFormat format)
 {
-#ifdef __WXWINCE__
-    return wxEmptyString;
-#else
     wxString sepVol;
 
     if ( (GetFormat(format) == wxPATH_DOS) ||
@@ -1902,7 +1871,6 @@ wxString wxFileName::GetVolumeSeparator(wxPathFormat WXUNUSED_IN_WINCE(format))
     //else: leave empty
 
     return sepVol;
-#endif
 }
 
 /* static */
@@ -2162,7 +2130,7 @@ wxString wxFileName::GetShortPath() const
 {
     wxString path(GetFullPath());
 
-#if defined(__WINDOWS__) && defined(__WIN32__) && !defined(__WXWINCE__)
+#if defined(__WINDOWS__) && defined(__WIN32__)
     DWORD sz = ::GetShortPathName(path.t_str(), NULL, 0);
     if ( sz != 0 )
     {
@@ -2188,7 +2156,7 @@ wxString wxFileName::GetLongPath() const
     wxString pathOut,
              path = GetFullPath();
 
-#if defined(__WIN32__) && !defined(__WXWINCE__)
+#if defined(__WIN32__)
 
 #if wxUSE_DYNLIB_CLASS
     typedef DWORD (WINAPI *GET_LONG_PATH_NAME)(const wxChar *, wxChar *, DWORD);

@@ -50,13 +50,13 @@
 #endif
 
 // Doesn't work with Cygwin at present
-#if wxUSE_SOCKETS && (defined(__WXWINCE__) || defined(__CYGWIN32__))
+#if wxUSE_SOCKETS && (defined(__CYGWIN32__))
     // apparently we need to include winsock.h to get WSADATA and other stuff
     // used in wxGetFullHostName() with the old mingw32 versions
     #include <winsock.h>
 #endif
 
-#if !defined(__GNUWIN32__) && !defined(__WXWINCE__)
+#if !defined(__GNUWIN32__)
     #include <direct.h>
 
     #include <dos.h>
@@ -86,14 +86,12 @@
     #include <lm.h>
 #endif // USE_NET_API
 
-#if !defined(__WXWINCE__)
-    #ifndef __UNIX__
-        #include <io.h>
-    #endif
+#ifndef __UNIX__
+    #include <io.h>
+#endif
 
-    #ifndef __GNUWIN32__
-        #include <shellapi.h>
-    #endif
+#ifndef __GNUWIN32__
+    #include <shellapi.h>
 #endif
 
 #include <errno.h>
@@ -106,11 +104,11 @@
 // ----------------------------------------------------------------------------
 
 // In the WIN.INI file
-#if (!defined(USE_NET_API) && !defined(__WXWINCE__))
+#if !defined(USE_NET_API)
 static const wxChar WX_SECTION[] = wxT("wxWindows");
 #endif
 
-#if (!defined(USE_NET_API) && !defined(__WXWINCE__))
+#if !defined(USE_NET_API)
 static const wxChar eUSERNAME[]  = wxT("UserName");
 #endif
 
@@ -127,17 +125,6 @@ WXDLLIMPEXP_DATA_BASE(const wxChar *) wxUserResourceStr = wxT("TEXT");
 // Get hostname only (without domain name)
 bool wxGetHostName(wxChar *buf, int maxSize)
 {
-#if defined(__WXWINCE__)
-    // GetComputerName() is not supported but the name seems to be stored in
-    // this location in the registry, at least for PPC2003 and WM5
-    wxString hostName;
-    wxRegKey regKey(wxRegKey::HKLM, wxT("Ident"));
-    if ( !regKey.HasValue(wxT("Name")) ||
-            !regKey.QueryValue(wxT("Name"), hostName) )
-        return false;
-
-    wxStrlcpy(buf, hostName.t_str(), maxSize);
-#else // !__WXWINCE__
     DWORD nSize = maxSize;
     if ( !::GetComputerName(buf, &nSize) )
     {
@@ -145,7 +132,6 @@ bool wxGetHostName(wxChar *buf, int maxSize)
 
         return false;
     }
-#endif // __WXWINCE__/!__WXWINCE__
 
     return true;
 }
@@ -235,13 +221,9 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
 }
 
 // Get user ID e.g. jacs
-bool wxGetUserId(wxChar *WXUNUSED_IN_WINCE(buf),
-                 int WXUNUSED_IN_WINCE(maxSize))
+bool wxGetUserId(wxChar *buf,
+                 int maxSize)
 {
-#if defined(__WXWINCE__)
-    // TODO-CE
-    return false;
-#else
     DWORD nSize = maxSize;
     if ( ::GetUserName(buf, &nSize) == 0 )
     {
@@ -255,7 +237,6 @@ bool wxGetUserId(wxChar *WXUNUSED_IN_WINCE(buf),
     }
 
     return true;
-#endif
 }
 
 // Get user name e.g. Julian Smart
@@ -263,17 +244,7 @@ bool wxGetUserName(wxChar *buf, int maxSize)
 {
     wxCHECK_MSG( buf && ( maxSize > 0 ), false,
                     wxT("empty buffer in wxGetUserName") );
-#if defined(__WXWINCE__) && wxUSE_REGKEY
-    wxLogNull noLog;
-    wxRegKey key(wxRegKey::HKCU, wxT("ControlPanel\\Owner"));
-    if(!key.Open(wxRegKey::Read))
-        return false;
-    wxString name;
-    if(!key.QueryValue(wxT("Owner"),name))
-        return false;
-    wxStrlcpy(buf, name.c_str(), maxSize);
-    return true;
-#elif defined(USE_NET_API)
+#if defined(USE_NET_API)
     CHAR szUserName[256];
     if ( !wxGetUserId(szUserName, WXSIZEOF(szUserName)) )
         return false;
@@ -386,8 +357,6 @@ const wxChar* wxGetHomeDir(wxString *pstr)
         #endif
         strDir = windowsPath;
     #endif
-#elif defined(__WXWINCE__)
-    strDir = wxT("\\");
 #else
     strDir.clear();
 
@@ -457,14 +426,10 @@ wxString wxGetUserHome(const wxString& user)
     return home;
 }
 
-bool wxGetDiskSpace(const wxString& WXUNUSED_IN_WINCE(path),
-                    wxDiskspaceSize_t *WXUNUSED_IN_WINCE(pTotal),
-                    wxDiskspaceSize_t *WXUNUSED_IN_WINCE(pFree))
+bool wxGetDiskSpace(const wxString& path,
+                    wxDiskspaceSize_t *pTotal,
+                    wxDiskspaceSize_t *pFree)
 {
-#ifdef __WXWINCE__
-    // TODO-CE
-    return false;
-#else
     if ( path.empty() )
         return false;
 
@@ -508,21 +473,15 @@ bool wxGetDiskSpace(const wxString& WXUNUSED_IN_WINCE(path),
     }
 
     return true;
-#endif
-    // __WXWINCE__
 }
 
 // ----------------------------------------------------------------------------
 // env vars
 // ----------------------------------------------------------------------------
 
-bool wxGetEnv(const wxString& WXUNUSED_IN_WINCE(var),
-              wxString *WXUNUSED_IN_WINCE(value))
+bool wxGetEnv(const wxString& var,
+              wxString *value)
 {
-#ifdef __WXWINCE__
-    // no environment variables under CE
-    return false;
-#else // Win32
     // first get the size of the buffer
     DWORD dwRet = ::GetEnvironmentVariable(var.t_str(), NULL, 0);
     if ( !dwRet )
@@ -539,17 +498,10 @@ bool wxGetEnv(const wxString& WXUNUSED_IN_WINCE(var),
     }
 
     return true;
-#endif // WinCE/32
 }
 
 bool wxDoSetEnv(const wxString& var, const wxChar *value)
 {
-#ifdef __WXWINCE__
-    // no environment variables under CE
-    wxUnusedVar(var);
-    wxUnusedVar(value);
-    return false;
-#else // !__WXWINCE__
     // update the CRT environment if possible as people expect getenv() to also
     // work and it is not affected by Win32 SetEnvironmentVariable() call (OTOH
     // the CRT does use Win32 call to update the process environment block so
@@ -579,7 +531,6 @@ bool wxDoSetEnv(const wxString& var, const wxChar *value)
 #endif // compiler
 
     return true;
-#endif // __WXWINCE__/!__WXWINCE__
 }
 
 bool wxSetEnv(const wxString& variable, const wxString& value)
@@ -860,9 +811,6 @@ bool wxShell(const wxString& command)
 {
     wxString cmd;
 
-#ifdef __WXWINCE__
-    cmd = command;
-#else
     wxChar *shell = wxGetenv(wxT("COMSPEC"));
     if ( !shell )
         shell = (wxChar*) wxT("\\COMMAND.COM");
@@ -877,18 +825,13 @@ bool wxShell(const wxString& command)
         // pass the command to execute to the command processor
         cmd.Printf(wxT("%s /c %s"), shell, command.c_str());
     }
-#endif
 
     return wxExecute(cmd, wxEXEC_SYNC) == 0;
 }
 
 // Shutdown or reboot the PC
-bool wxShutdown(int WXUNUSED_IN_WINCE(flags))
+bool wxShutdown(int flags)
 {
-#ifdef __WXWINCE__
-    // TODO-CE
-    return false;
-#else
     bool bOK = true;
 
     // Get a token for this process.
@@ -952,7 +895,6 @@ bool wxShutdown(int WXUNUSED_IN_WINCE(flags))
     }
 
     return bOK;
-#endif // WinCE/!WinCE
 }
 
 // ----------------------------------------------------------------------------
@@ -1298,9 +1240,6 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 
         s_version.initialized = true;
 
-#if defined(__WXWINCE__)
-        s_version.os = wxOS_WINDOWS_CE;
-#else // "normal" desktop Windows system, use run-time detection
         switch ( info.dwPlatformId )
         {
             case VER_PLATFORM_WIN32_NT:
@@ -1311,7 +1250,6 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
                 s_version.os = wxOS_WINDOWS_9X;
                 break;
         }
-#endif // Windows versions
 
         s_version.verMaj = info.dwMajorVersion;
         s_version.verMin = info.dwMinorVersion;
@@ -1459,10 +1397,8 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCharset(wxFontEncoding encoding)
         case wxFONTENCODING_CP936:
             return GB2312_CHARSET;
 
-#ifndef __WXWINCE__
         case wxFONTENCODING_CP949:
             return HANGUL_CHARSET;
-#endif
 
         case wxFONTENCODING_CP950:
             return CHINESEBIG5_CHARSET;

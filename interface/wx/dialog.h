@@ -305,17 +305,6 @@ public:
     virtual bool DoLayoutAdaptation();
 
     /**
-        This function is called when the titlebar OK button is pressed
-        (PocketPC only). A command event for the identifier returned by
-        GetAffirmativeId() is sent by default. You can override this function.
-        If the function returns @false, wxWidgets will call Close() for the
-        dialog.
-
-        @onlyfor{wxmsw}
-    */
-    virtual bool DoOK();
-
-    /**
         A static function enabling or disabling layout adaptation for all
         dialogs.
 

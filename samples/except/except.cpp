@@ -449,7 +449,7 @@ MyFrame::MyFrame()
     SetMenuBar(menuBar);
 #endif // wxUSE_MENUS
 
-#if wxUSE_STATUSBAR && !defined(__WXWINCE__)
+#if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
     SetStatusText(wxT("Welcome to wxWidgets!"));

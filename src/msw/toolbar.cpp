@@ -23,7 +23,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE && !defined(__SMARTPHONE__)
+#if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE
 
 #include "wx/toolbar.h"
 
@@ -60,9 +60,7 @@
 // for CE where it doesn't compile (and is probably not needed anyhow) and may
 // also be turned off for other systems if you always use 24bpp images and so
 // never need it
-#ifndef __WXWINCE__
-    #define wxREMAP_BUTTON_COLOURS
-#endif // !__WXWINCE__
+#define wxREMAP_BUTTON_COLOURS
 
 // ----------------------------------------------------------------------------
 // constants
@@ -710,13 +708,8 @@ bool wxToolBar::Realize()
         if ( remapValue != Remap_TransparentBg )
 #endif // wxREMAP_BUTTON_COLOURS
         {
-            // VZ: why do we hardcode grey colour for CE?
             dcAllButtons.SetBackground(wxBrush(
-#ifdef __WXWINCE__
-                                        wxColour(0xc0, 0xc0, 0xc0)
-#else // !__WXWINCE__
                                         GetBackgroundColour()
-#endif // __WXWINCE__/!__WXWINCE__
                                        ));
             dcAllButtons.Clear();
         }

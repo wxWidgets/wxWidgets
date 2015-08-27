@@ -156,12 +156,7 @@ protected:
                *m_chkOwnerDraw;
 
     // the listbox itself and the sizer it is in
-#ifdef __WXWINCE__
-    wxListBoxBase
-#else
-    wxListBox
-#endif
-                  *m_lbox;
+    wxListBox *m_lbox;
 
     wxSizer *m_sizerLbox;
 

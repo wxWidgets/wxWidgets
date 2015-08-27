@@ -58,11 +58,7 @@ static const int wxID_NEXT_TIP = 32000;  // whatever
    device we display on - take it from something like wxDesktopPolicy in the future
  */
 
-#if defined(__SMARTPHONE__)
-    #define wxLARGESMALL(large,small) small
-#else
-    #define wxLARGESMALL(large,small) large
-#endif
+#define wxLARGESMALL(large,small) large
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -251,16 +247,10 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     m_checkbox->SetValue(showAtStartup);
     m_checkbox->SetFocus();
 
-    // smart phones does not support or do not waste space for wxButtons
-#ifndef __SMARTPHONE__
     wxButton *btnNext = new wxButton(this, wxID_NEXT_TIP, _("&Next Tip"));
-#endif
 
-    // smart phones does not support or do not waste space for wxButtons
-#ifndef __SMARTPHONE__
     wxButton *btnClose = new wxButton(this, wxID_CLOSE);
     SetAffirmativeId(wxID_CLOSE);
-#endif
 
 
     // 2) put them in boxes
@@ -280,16 +270,10 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     else
         bottom->Add( m_checkbox, 0, wxCENTER );
 
-    // smart phones does not support or do not waste space for wxButtons
-#ifdef __SMARTPHONE__
-    SetRightMenu(wxID_NEXT_TIP, _("Next"));
-    SetLeftMenu(wxID_CLOSE);
-#else
     if (!isPda)
         bottom->Add( 10,10,1 );
     bottom->Add( btnNext, 0, wxCENTER | wxLEFT, wxLARGESMALL(10,0) );
     bottom->Add( btnClose, 0, wxCENTER | wxLEFT, wxLARGESMALL(10,0) );
-#endif
 
     if (isPda)
         topsizer->Add( bottom, 0, wxCENTER | wxALL, 5 );

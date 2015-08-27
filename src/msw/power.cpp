@@ -30,16 +30,6 @@
 #include "wx/atomic.h"
 #include "wx/msw/private.h"
 
-#if !defined(__WINCE_STANDARDSDK__)
-
-#ifdef __WXWINCE__
-    typedef SYSTEM_POWER_STATUS_EX SYSTEM_POWER_STATUS;
-    BOOL GetSystemPowerStatus(SYSTEM_POWER_STATUS *status)
-    {
-        return GetSystemPowerStatusEx(status, TRUE);
-    }
-#endif
-
 // ----------------------------------------------------------------------------
 // wxPowerResource
 // ----------------------------------------------------------------------------
@@ -134,15 +124,12 @@ static inline bool wxGetPowerStatus(SYSTEM_POWER_STATUS *sps)
     return true;
 }
 
-#endif
-
 // ============================================================================
 // implementation
 // ============================================================================
 
 wxPowerType wxGetPowerType()
 {
-#if !defined(__WINCE_STANDARDSDK__)
     SYSTEM_POWER_STATUS sps;
     if ( wxGetPowerStatus(&sps) )
     {
@@ -160,14 +147,12 @@ wxPowerType wxGetPowerType()
                 break;
         }
     }
-#endif
 
     return wxPOWER_UNKNOWN;
 }
 
 wxBatteryState wxGetBatteryState()
 {
-#if !defined(__WINCE_STANDARDSDK__)
     SYSTEM_POWER_STATUS sps;
     if ( wxGetPowerStatus(&sps) )
     {
@@ -185,7 +170,6 @@ wxBatteryState wxGetBatteryState()
                 return wxBATTERY_CRITICAL_STATE;
         }
     }
-#endif
 
     return wxBATTERY_UNKNOWN_STATE;
 }

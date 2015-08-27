@@ -77,7 +77,7 @@
    functions.  Otherwise, we implement them ourselves to only support the
    'C' locale */
 #if defined(HAVE_LOCALE_T) || \
-    (wxCHECK_VISUALC_VERSION(8) && !defined(__WXWINCE__))
+    (wxCHECK_VISUALC_VERSION(8))
     #define wxHAS_XLOCALE_SUPPORT
 #else
     #undef wxHAS_XLOCALE_SUPPORT

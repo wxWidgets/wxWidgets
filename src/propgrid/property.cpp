@@ -56,7 +56,7 @@ const char* g_invalidStringContent = "@__TOTALLY_INVALID_STRING__@";
 
 static void wxPGDrawFocusRect( wxDC& dc, const wxRect& rect )
 {
-#if defined(__WXMSW__) && !defined(__WXWINCE__)
+#if defined(__WXMSW__)
     // FIXME: Use DrawFocusRect code above (currently it draws solid line
     //   for caption focus but works ok for other stuff).
     //   Also, it seems that this code may not work in future wx versions.

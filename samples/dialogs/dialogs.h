@@ -34,13 +34,7 @@ of MSW, MAC and OS2
     #define USE_DLL 0
 #endif
 
-#if defined(__WXWINCE__)
-    #define USE_WXWINCE 1
-#else
-    #define USE_WXWINCE 0
-#endif
-
-#if defined(__WXMSW__) && !USE_WXWINCE
+#if defined(__WXMSW__)
     #define USE_WXMSW 1
 #else
     #define USE_WXMSW 0
@@ -72,13 +66,13 @@ of MSW, MAC and OS2
     ((USE_WXMSW || USE_WXMAC) && USE_GENERIC_DIALOGS && wxUSE_DIRDLG)
 #define USE_FILEDLG_GENERIC \
     ((((USE_WXMSW || USE_WXMAC || USE_WXGTK) \
-                    && USE_GENERIC_DIALOGS) || USE_WXWINCE) && wxUSE_FILEDLG)
+                    && USE_GENERIC_DIALOGS) ) && wxUSE_FILEDLG)
 #define USE_FONTDLG_GENERIC \
     ((USE_WXMSW || USE_WXMACFONTDLG) && USE_GENERIC_DIALOGS && wxUSE_FONTDLG)
 
 // Turn USE_MODAL_PRESENTATION to 0 if there is any reason for not presenting difference
 // between modal and modeless dialogs (ie. not implemented it in your port yet)
-#if defined(__SMARTPHONE__) || !wxUSE_BOOKCTRL
+#if !wxUSE_BOOKCTRL
     #define USE_MODAL_PRESENTATION 0
 #else
     #define USE_MODAL_PRESENTATION 1

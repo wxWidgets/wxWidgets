@@ -436,15 +436,9 @@ extern bool
 wxGetDirectoryTimes(const wxString& dirname,
                     FILETIME *ftAccess, FILETIME *ftCreate, FILETIME *ftMod)
 {
-#ifdef __WXWINCE__
-    // FindFirst() is going to fail
-    wxASSERT_MSG( !dirname.empty(),
-                  wxT("incorrect directory name format in wxGetDirectoryTimes") );
-#else
     // FindFirst() is going to fail
     wxASSERT_MSG( !dirname.empty() && dirname.Last() != wxT('\\'),
                   wxT("incorrect directory name format in wxGetDirectoryTimes") );
-#endif
 
     FIND_STRUCT fs;
     FIND_DATA fd = FindFirst(dirname, wxEmptyString, &fs);

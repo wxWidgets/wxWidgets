@@ -27,9 +27,7 @@
 
 #include "wx/strconv.h"
 
-#ifndef __WXWINCE__
 #include <errno.h>
-#endif
 
 #include <ctype.h>
 #include <string.h>

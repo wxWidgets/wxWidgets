@@ -62,10 +62,6 @@
 #include "wx/versioninfo.h"
 #include "wx/math.h"
 
-#if defined(__WXWINCE__) && wxUSE_DATETIME
-    #include "wx/datetime.h"
-#endif
-
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -77,20 +73,14 @@
     #include "wx/statusbr.h"
 #endif // wxUSE_GUI
 
-#ifndef __WXWINCE__
-    #include <time.h>
-#else
-    #include "wx/msw/wince/time.h"
-#endif
+#include <time.h>
 
 #ifdef __WXMAC__
     #include "wx/osx/private.h"
 #endif
 
-#if !defined(__WXWINCE__)
-    #include <sys/types.h>
-    #include <sys/stat.h>
-#endif
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #if defined(__WINDOWS__)
     #include "wx/msw/private.h"
@@ -156,19 +146,10 @@ wxString wxDecToHex(int dec)
 // Return the current date/time
 wxString wxNow()
 {
-#ifdef __WXWINCE__
-#if wxUSE_DATETIME
-    wxDateTime now = wxDateTime::Now();
-    return now.Format();
-#else
-    return wxEmptyString;
-#endif
-#else
     time_t now = time(NULL);
     char *date = ctime(&now);
     date[24] = '\0';
     return wxString::FromAscii(date);
-#endif
 }
 
 #if WXWIN_COMPATIBILITY_2_8
@@ -357,25 +338,6 @@ bool wxPlatform::Is(int platform)
 #ifdef __WINDOWS__
     if (platform == wxOS_WINDOWS)
         return true;
-#endif
-#ifdef __WXWINCE__
-    if (platform == wxOS_WINDOWS_CE)
-        return true;
-#endif
-
-#if 0
-
-// FIXME: wxWinPocketPC and wxWinSmartPhone are unknown symbols
-
-#if defined(__WXWINCE__) && defined(__POCKETPC__)
-    if (platform == wxWinPocketPC)
-        return true;
-#endif
-#if defined(__WXWINCE__) && defined(__SMARTPHONE__)
-    if (platform == wxWinSmartPhone)
-        return true;
-#endif
-
 #endif
 
 #ifdef __WXGTK__

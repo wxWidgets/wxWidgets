@@ -117,10 +117,7 @@
     
     <!-- under Unix this is an option (detected at configure-time);
          under Windows this is not an user option! -->
-    <set var="WX_PORT">
-        <if cond="FORMAT=='msevc4prj'">wince</if>
-        <if cond="FORMAT!='msevc4prj'">msw</if>
-    </set>
+    <set var="WX_PORT">msw</set>
 
     <set var="WXLIBINCLUDE">$(WXLIBPATH)$(DIRSEP)$(WX_PORT)$(WXLIBPOSTFIX)</set>
 
