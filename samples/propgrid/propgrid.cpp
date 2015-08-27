@@ -558,6 +558,8 @@ wxBEGIN_EVENT_TABLE(FormMain, wxFrame)
 
     EVT_MENU( ID_RUNMINIMAL, FormMain::OnRunMinimalClick )
 
+    EVT_UPDATE_UI( ID_CATCOLOURS, FormMain::OnCatColoursUpdateUI )
+
     EVT_CONTEXT_MENU( FormMain::OnContextMenu )
     EVT_BUTTON(ID_SHOWPOPUP, FormMain::OnShowPopup)
 wxEND_EVENT_TABLE()
@@ -2789,9 +2791,30 @@ void FormMain::OnColourScheme( wxCommandEvent& event )
 
 // -----------------------------------------------------------------------
 
+void FormMain::OnCatColoursUpdateUI(wxUpdateUIEvent& WXUNUSED(event))
+{
+    // Prevent menu item from being checked
+    // if it is selected from imroper page.
+    const wxPropertyGrid* pg = m_pPropGridManager->GetGrid();
+    m_itemCatColours->SetCheckable(
+         pg->GetPropertyByName("Appearance") &&
+         pg->GetPropertyByName("PositionCategory") &&
+         pg->GetPropertyByName("Environment") &&
+         pg->GetPropertyByName("More Examples") );
+}
+
 void FormMain::OnCatColours( wxCommandEvent& event )
 {
     wxPropertyGrid* pg = m_pPropGridManager->GetGrid();
+    if ( !pg->GetPropertyByName("Appearance") ||
+         !pg->GetPropertyByName("PositionCategory") ||
+         !pg->GetPropertyByName("Environment") ||
+         !pg->GetPropertyByName("More Examples") )
+    {
+        wxMessageBox("First switch to 'Standard Items' page!");
+        return;
+    }
+
     m_pPropGridManager->Freeze();
 
     if ( event.IsChecked() )
