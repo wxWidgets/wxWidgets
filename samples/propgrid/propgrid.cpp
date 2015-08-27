@@ -2836,9 +2836,12 @@ void FormMain::OnCatColours( wxCommandEvent& event )
     {
         // Revert to original.
         pg->SetPropertyColoursToDefault( wxT("Appearance") );
+        pg->SetPropertyColoursToDefault( wxT("Appearance"), wxPG_RECURSE );
         pg->SetPropertyColoursToDefault( wxT("PositionCategory") );
+        pg->SetPropertyColoursToDefault( wxT("PositionCategory"), wxPG_RECURSE );
         pg->SetPropertyColoursToDefault( wxT("Environment") );
-        pg->SetPropertyColoursToDefault( wxT("More Examples") );
+        pg->SetPropertyColoursToDefault( wxT("Environment"), wxPG_RECURSE );
+        pg->SetPropertyColoursToDefault( wxT("More Examples"), wxPG_RECURSE );
     }
     m_pPropGridManager->Thaw();
     m_pPropGridManager->Refresh();
