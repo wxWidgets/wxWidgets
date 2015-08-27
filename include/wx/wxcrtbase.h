@@ -37,7 +37,7 @@
 #include <wctype.h>
 #include <time.h>
 
-#if defined(__WINDOWS__) && !defined(__WXWINCE__)
+#if defined(__WINDOWS__)
     #include <io.h>
 #endif
 
@@ -85,24 +85,10 @@
 #endif /* _WIN32_WCE */
 
 /* string.h functions */
-#ifndef strdup
-    #if defined(__WXWINCE__)
-        #if _WIN32_WCE <= 211
-            #define wxNEED_STRDUP
-        #endif
-    #endif
-#endif /* strdup */
 
 #ifdef wxNEED_STRDUP
     WXDLLIMPEXP_BASE char *strdup(const char* s);
 #endif
-
-/* missing functions in some WinCE versions */
-#ifdef _WIN32_WCE
-#if (_WIN32_WCE < 300)
-WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
-#endif
-#endif /* _WIN32_WCE */
 
 
 /* -------------------------------------------------------------------------
@@ -157,14 +143,11 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 #define wxCRT_StrspnW    wcsspn
 #define wxCRT_StrstrW    wcsstr
 
-/* these functions are not defined under CE, at least in VC8 CRT */
-#if !defined(__WXWINCE__)
-    #define wxCRT_StrcollA   strcoll
-    #define wxCRT_StrxfrmA   strxfrm
+#define wxCRT_StrcollA   strcoll
+#define wxCRT_StrxfrmA   strxfrm
 
-    #define wxCRT_StrcollW   wcscoll
-    #define wxCRT_StrxfrmW   wcsxfrm
-#endif /* __WXWINCE__ */
+#define wxCRT_StrcollW   wcscoll
+#define wxCRT_StrxfrmW   wcsxfrm
 
 /* Almost all compilers have strdup(), but VC++ and MinGW call it _strdup().
    And it's not available in MinGW strict ANSI mode nor under Windows CE. */
@@ -174,7 +157,7 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
     #ifndef __WX_STRICT_ANSI_GCC__
         #define wxCRT_StrdupA _strdup
     #endif
-#elif !defined(__WXWINCE__)
+#else
     #define wxCRT_StrdupA strdup
 #endif
 
@@ -259,7 +242,7 @@ extern unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int 
 #if defined(__BORLANDC__) || defined(__DJGPP__)
     #define wxCRT_StricmpA stricmp
     #define wxCRT_StrnicmpA strnicmp
-#elif defined(__SYMANTEC__) || (defined(__VISUALC__) && !defined(__WXWINCE__))
+#elif defined(__SYMANTEC__) || defined(__VISUALC__)
     #define wxCRT_StricmpA _stricmp
     #define wxCRT_StrnicmpA _strnicmp
 #elif defined(__UNIX__) || (defined(__GNUWIN32__) && !defined(__WX_STRICT_ANSI_GCC__))
@@ -459,15 +442,8 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
     wxDECL_FOR_STRICT_MINGW32(int, _wrename, (const wchar_t*, const wchar_t*))
     wxDECL_FOR_STRICT_MINGW32(int, _wremove, (const wchar_t*))
 
-    /* WinCE CRT doesn't provide these functions so use our own */
-    #ifdef __WXWINCE__
-        WXDLLIMPEXP_BASE int wxCRT_Rename(const wchar_t *src,
-                                          const wchar_t *dst);
-        WXDLLIMPEXP_BASE int wxCRT_Remove(const wchar_t *path);
-    #else
-        #define wxCRT_Rename   _wrename
-        #define wxCRT_Remove _wremove
-    #endif
+    #define wxCRT_Rename   _wrename
+    #define wxCRT_Remove _wremove
     #define wxCRT_Fopen    _wfopen
     #define wxCRT_Freopen  _wfreopen
 
@@ -515,30 +491,18 @@ WXDLLIMPEXP_BASE int wxCRT_FputcW(wchar_t wc, FILE *stream);
 */
 #define wxTmpnam(x)         wxTmpnam_is_insecure_use_wxTempFile_instead
 
-/* FIXME-CE: provide our own perror() using ::GetLastError() */
-#ifndef __WXWINCE__
-
 #define wxCRT_PerrorA   perror
 #ifdef wxHAVE_TCHAR_SUPPORT
     #define wxCRT_PerrorW _wperror
 #endif
 
-#endif /* !__WXWINCE__ */
-
 /* -------------------------------------------------------------------------
                                   stdlib.h
    ------------------------------------------------------------------------- */
 
-/* there are no env vars at all under CE, so no _tgetenv neither */
-#ifdef __WXWINCE__
-    /* can't define as inline function as this is a C file... */
-    #define wxCRT_GetenvA(name)     (name, NULL)
-    #define wxCRT_GetenvW(name)     (name, NULL)
-#else
-    #define wxCRT_GetenvA           getenv
-    #ifdef _tgetenv
-        #define wxCRT_GetenvW       _wgetenv
-    #endif
+#define wxCRT_GetenvA           getenv
+#ifdef _tgetenv
+    #define wxCRT_GetenvW       _wgetenv
 #endif
 
 #ifndef wxCRT_GetenvW

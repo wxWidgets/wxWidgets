@@ -57,10 +57,8 @@
     #include "wx/config.h"
 #endif
 
-#ifndef __WXWINCE__
-    #include <sys/types.h>
-    #include <sys/stat.h>
-#endif
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #ifdef __UNIX__
     #include <dirent.h>
@@ -70,17 +68,13 @@
     #endif
 #endif
 
-#ifndef __WXWINCE__
 #include <time.h>
-#endif
 
 #if defined(__UNIX__) || defined(__DOS__)
 #include <unistd.h>
 #endif
 
-#if defined(__WXWINCE__)
-#define IsTopMostDir(dir) (dir == wxT("\\") || dir == wxT("/"))
-#elif defined(__DOS__) || defined(__WINDOWS__)
+#if defined(__DOS__) || defined(__WINDOWS__)
 #define IsTopMostDir(dir)   (dir.empty())
 #else
 #define IsTopMostDir(dir)   (dir == wxT("/"))

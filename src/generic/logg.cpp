@@ -67,11 +67,6 @@
 
 #include "wx/time.h"
 
-#ifdef __SMARTPHONE__
-// the suffix we add to the button to show that the dialog can be expanded
-#define EXPAND_SUFFIX wxT(" >>")
-#endif
-
 #define CAN_SAVE_FILES (wxUSE_FILE && wxUSE_FILEDLG)
 
 // ----------------------------------------------------------------------------
@@ -687,9 +682,6 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
         // happens to pop up a Log message while translating this :-)
         ms_details = wxTRANSLATE("&Details");
         ms_details = wxGetTranslation(ms_details);
-#ifdef __SMARTPHONE__
-        ms_details = wxStripMenuCodes(ms_details);
-#endif
     }
 
     if ( ms_maxLength == 0 )
@@ -744,8 +736,6 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
 
 
     // add the details pane
-#ifndef __SMARTPHONE__
-
 #if wxUSE_COLLPANE
     wxCollapsiblePane * const
         collpane = new wxCollapsiblePane(this, wxID_ANY, ms_details);
@@ -781,10 +771,6 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
 
     win->SetSizer(paneSz);
     paneSz->SetSizeHints(win);
-#else // __SMARTPHONE__
-    SetLeftMenu(wxID_OK);
-    SetRightMenu(wxID_MORE, ms_details + EXPAND_SUFFIX);
-#endif // __SMARTPHONE__/!__SMARTPHONE__
 
     SetSizerAndFit(sizerTop);
 
@@ -810,11 +796,6 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
                                 wxLC_REPORT |
                                 wxLC_NO_HEADER |
                                 wxLC_SINGLE_SEL);
-#ifdef __WXWINCE__
-    // This makes a big aesthetic difference on WinCE but I
-    // don't want to risk problems on other platforms
-    m_listctrl->Hide();
-#endif
 
     // no need to translate these strings as they're not shown to the
     // user anyhow (we use wxLC_NO_HEADER style)

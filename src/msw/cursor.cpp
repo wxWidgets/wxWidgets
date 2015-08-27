@@ -145,10 +145,8 @@ void wxCursorRefData::Free()
 {
     if ( m_hCursor )
     {
-#ifndef __WXWINCE__
         if ( m_destroyCursor )
             ::DestroyCursor((HCURSOR)m_hCursor);
-#endif
 
         m_hCursor = 0;
     }
@@ -223,12 +221,10 @@ wxCursor::wxCursor(const wxString& filename,
             hcursor = ::LoadCursor(wxGetInstance(), filename.t_str());
             break;
 
-#ifndef __WXWINCE__
         case wxBITMAP_TYPE_ANI:
         case wxBITMAP_TYPE_CUR:
             hcursor = ::LoadCursorFromFile(filename.t_str());
             break;
-#endif
 
         case wxBITMAP_TYPE_ICO:
             hcursor = wxBitmapToHCURSOR

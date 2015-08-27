@@ -105,15 +105,6 @@
 
 #endif
 
-#if defined(__WXWINCE__)
-    #ifndef DFCS_FLAT
-        #define DFCS_FLAT 0
-    #endif
-    #ifndef DFCS_MONO
-        #define DFCS_MONO 0
-    #endif
-#endif
-
 #ifndef DFCS_HOT
     #define DFCS_HOT 0x1000
 #endif

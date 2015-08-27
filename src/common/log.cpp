@@ -46,17 +46,11 @@
 #include "wx/vector.h"
 
 // other standard headers
-#ifndef __WXWINCE__
 #include <errno.h>
-#endif
 
 #include <stdlib.h>
 
-#ifndef __WXWINCE__
 #include <time.h>
-#else
-#include "wx/msw/wince/time.h"
-#endif
 
 #if defined(__WINDOWS__)
     #include "wx/msw/private.h" // includes windows.h
@@ -1092,7 +1086,6 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
 
     // copy it to our buffer and free memory
     // Crashes on SmartPhone (FIXME)
-#if !defined(__SMARTPHONE__) /* of WinCE */
     if( lpMsgBuf != 0 )
     {
         wxStrlcpy(s_szBuf, (const wxChar *)lpMsgBuf, WXSIZEOF(s_szBuf));
@@ -1109,7 +1102,6 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
         }
     }
     else
-#endif // !__SMARTPHONE__
     {
         s_szBuf[0] = wxS('\0');
     }

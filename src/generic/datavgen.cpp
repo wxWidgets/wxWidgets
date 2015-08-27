@@ -4674,13 +4674,11 @@ WXLRESULT wxDataViewCtrl::MSWWindowProc(WXUINT nMsg,
 {
     WXLRESULT rc = wxDataViewCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
 
-#ifndef __WXWINCE__
     // we need to process arrows ourselves for scrolling
     if ( nMsg == WM_GETDLGCODE )
     {
         rc |= DLGC_WANTARROWS;
     }
-#endif
 
     return rc;
 }

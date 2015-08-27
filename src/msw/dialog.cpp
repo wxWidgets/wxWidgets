@@ -42,10 +42,6 @@
 #include "wx/evtloop.h"
 #include "wx/scopedptr.h"
 
-#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
-    #include "wx/msw/wince/resources.h"
-#endif // __SMARTPHONE__ && __WXWINCE__
-
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -115,13 +111,6 @@ bool wxDialog::Create(wxWindow *parent,
 
     if ( !m_hasFont )
         SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-
-#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
-    SetLeftMenu(wxID_OK, _("OK"));
-#endif
-#if wxUSE_TOOLBAR && defined(__POCKETPC__)
-    CreateToolBar();
-#endif
 
 #if wxUSE_DIALOG_SIZEGRIP
     if ( HasFlag(wxRESIZE_BORDER) )
@@ -325,43 +314,6 @@ void wxDialog::OnWindowCreate(wxWindowCreateEvent& event)
 // wxWin event handlers
 // ----------------------------------------------------------------------------
 
-#ifdef __POCKETPC__
-// Responds to the OK button in a PocketPC titlebar. This
-// can be overridden, or you can change the id used for
-// sending the event, by calling SetAffirmativeId.
-bool wxDialog::DoOK()
-{
-    const int idOk = GetAffirmativeId();
-    if ( EmulateButtonClickIfPresent(idOk) )
-        return true;
-
-    wxCommandEvent event(wxEVT_BUTTON, GetAffirmativeId());
-    event.SetEventObject(this);
-
-    return HandleWindowEvent(event);
-}
-#endif // __POCKETPC__
-
-#if wxUSE_TOOLBAR && defined(__POCKETPC__)
-// create main toolbar by calling OnCreateToolBar()
-wxToolBar* wxDialog::CreateToolBar(long style, wxWindowID winid, const wxString& name)
-{
-    m_dialogToolBar = OnCreateToolBar(style, winid, name);
-
-    return m_dialogToolBar;
-}
-
-// return a new toolbar
-wxToolBar *wxDialog::OnCreateToolBar(long style,
-                                       wxWindowID winid,
-                                       const wxString& name)
-{
-    return new wxToolMenuBar(this, winid,
-                         wxDefaultPosition, wxDefaultSize,
-                         style, name);
-}
-#endif
-
 // ---------------------------------------------------------------------------
 // dialog Windows messages processing
 // ---------------------------------------------------------------------------
@@ -373,28 +325,6 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
 
     switch ( message )
     {
-#ifdef __WXWINCE__
-        // react to pressing the OK button in the title
-        case WM_COMMAND:
-        {
-            switch ( LOWORD(wParam) )
-            {
-#ifdef __POCKETPC__
-                case IDOK:
-                    processed = DoOK();
-                    if (!processed)
-                        processed = !Close();
-#endif
-#ifdef __SMARTPHONE__
-                case IDM_LEFT:
-                case IDM_RIGHT:
-                    processed = HandleCommand( LOWORD(wParam) , 0 , NULL );
-                    break;
-#endif // __SMARTPHONE__
-            }
-            break;
-        }
-#endif
         case WM_CLOSE:
             // if we can't close, tell the system that we processed the
             // message - otherwise it would close us

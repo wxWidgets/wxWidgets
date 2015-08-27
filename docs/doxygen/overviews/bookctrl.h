@@ -34,8 +34,7 @@ circumstances than the other variants.
 @section overview_bookctrl_bestbookctrl Best Book
 
 ::wxBookCtrl is mapped to the class best suited for a given platform. Currently
-it provides wxChoicebook for smartphones equipped with WinCE, and wxNotebook
-for all other platforms. The mapping consists of:
+it provides wxNotebook for all platforms. The mapping consists of:
 
 @beginTable
 @row2col{ ::wxBookCtrl, wxChoicebook or wxNotebook }

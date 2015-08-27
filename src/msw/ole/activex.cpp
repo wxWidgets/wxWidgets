@@ -444,17 +444,7 @@ public:
     //*************************IOleInPlaceSiteEx***********************
     HRESULT STDMETHODCALLTYPE OnInPlaceActivateEx(BOOL * pfNoRedraw, DWORD)
     {
-#ifdef __WXWINCE__
-        IRunnableObject* runnable = NULL;
-        HRESULT hr = QueryInterface(
-            IID_IRunnableObject, (void**)(& runnable));
-        if (SUCCEEDED(hr))
-        {
-            runnable->LockRunning(TRUE, FALSE);
-        }
-#else
         OleLockRunning(m_window->m_ActiveX, TRUE, FALSE);
-#endif
         if (pfNoRedraw)
             (*pfNoRedraw) = FALSE;
         return S_OK;
@@ -462,17 +452,7 @@ public:
 
     HRESULT STDMETHODCALLTYPE OnInPlaceDeactivateEx(BOOL)
     {
-#ifdef __WXWINCE__
-        IRunnableObject* runnable = NULL;
-        HRESULT hr = QueryInterface(
-            IID_IRunnableObject, (void**)(& runnable));
-        if (SUCCEEDED(hr))
-        {
-            runnable->LockRunning(FALSE, FALSE);
-        }
-#else
         OleLockRunning(m_window->m_ActiveX, FALSE, FALSE);
-#endif
         return S_OK;
     }
     STDMETHOD(RequestUIActivate)(){ return S_OK;}
@@ -526,9 +506,7 @@ public:
     HRESULT STDMETHODCALLTYPE LockContainer(BOOL){return S_OK;}
     //********************IOleItemContainer***************************
     HRESULT STDMETHODCALLTYPE
-    #if 0 // defined(__WXWINCE__) && __VISUALC__ < 1400
-    GetObject
-    #elif defined(_UNICODE)
+    #if defined(_UNICODE)
     GetObjectW
     #else
     GetObjectA

@@ -14,22 +14,12 @@
 #include "wx/panel.h"
 
 // this option is always enabled (there doesn't seem to be any good reason to
-// disable it) for desktop Windows versions but Windows CE dialogs are usually
-// not resizable and never show resize gripper anyhow so don't use it there
-#ifdef __WXWINCE__
-    #define wxUSE_DIALOG_SIZEGRIP 0
-#else
-    #define wxUSE_DIALOG_SIZEGRIP 1
-#endif
+// disable it) for desktop Windows versions
+#define wxUSE_DIALOG_SIZEGRIP 1
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxDialogNameStr[];
 
 class WXDLLIMPEXP_FWD_CORE wxDialogModalData;
-
-#if wxUSE_TOOLBAR && (defined(__SMARTPHONE__) || defined(__POCKETPC__))
-class WXDLLIMPEXP_FWD_CORE wxToolBar;
-extern WXDLLIMPEXP_DATA_CORE(const char) wxToolBarNameStr[];
-#endif
 
 // Dialog boxes
 class WXDLLIMPEXP_CORE wxDialog : public wxDialogBase
@@ -69,22 +59,6 @@ public:
     virtual void EndModal(int retCode);
 
 
-    // we treat dialog toolbars specially under Windows CE
-#if wxUSE_TOOLBAR && defined(__POCKETPC__)
-    // create main toolbar by calling OnCreateToolBar()
-    virtual wxToolBar* CreateToolBar(long style = -1,
-                                     wxWindowID winid = wxID_ANY,
-                                     const wxString& name = wxToolBarNameStr);
-    // return a new toolbar
-    virtual wxToolBar *OnCreateToolBar(long style,
-                                       wxWindowID winid,
-                                       const wxString& name );
-
-    // get the main toolbar
-    wxToolBar *GetToolBar() const { return m_dialogToolBar; }
-#endif // wxUSE_TOOLBAR && __POCKETPC__
-
-
     // implementation only from now on
     // -------------------------------
 
@@ -94,14 +68,6 @@ public:
 #if wxUSE_DIALOG_SIZEGRIP
     virtual void SetWindowStyleFlag(long style);
 #endif // wxUSE_DIALOG_SIZEGRIP
-
-#ifdef __POCKETPC__
-    // Responds to the OK button in a PocketPC titlebar. This
-    // can be overridden, or you can change the id used for
-    // sending the event with SetAffirmativeId. Returns false
-    // if the event was not processed.
-    virtual bool DoOK();
-#endif
 
     // Windows callbacks
     WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
@@ -126,10 +92,6 @@ private:
     // gripper window for a resizable dialog, NULL if we're not resizable
     WXHWND m_hGripper;
 #endif // wxUSE_DIALOG_SIZEGRIP
-
-#if wxUSE_TOOLBAR && defined(__POCKETPC__)
-    wxToolBar*  m_dialogToolBar;
-#endif
 
     // this pointer is non-NULL only while the modal event loop is running
     wxDialogModalData *m_modalData;

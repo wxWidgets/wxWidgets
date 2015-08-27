@@ -29,11 +29,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxDirSelectorPromptStr[];
 // deprecated, on by default now, use wxDD_DIR_MUST_EXIST to disable it
 #define wxDD_NEW_DIR_BUTTON     0
 
-#ifdef __WXWINCE__
-    #define wxDD_DEFAULT_STYLE      wxDEFAULT_DIALOG_STYLE
-#else
-    #define wxDD_DEFAULT_STYLE      (wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
-#endif
+#define wxDD_DEFAULT_STYLE      (wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
 
 //-------------------------------------------------------------------------
 // wxDirDialogBase
@@ -90,9 +86,6 @@ protected:
     #define wxDirDialog wxGenericDirDialog
 #elif defined(__WXMSW__) && !wxUSE_OLE
     #include "wx/generic/dirdlgg.h"
-    #define wxDirDialog wxGenericDirDialog
-#elif defined(__WXMSW__) && defined(__WXWINCE__) && !defined(__HANDHELDPC__)
-    #include "wx/generic/dirdlgg.h"     // MS PocketPC or MS Smartphone
     #define wxDirDialog wxGenericDirDialog
 #elif defined(__WXMSW__)
     #include "wx/msw/dirdlg.h"  // Native MSW

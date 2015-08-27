@@ -64,10 +64,8 @@
     (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500)) || \
     (defined(__GNUG__) && defined(__MSVCRT__))
 
-#ifndef __WXWINCE__
     #undef wxUSE_BEGIN_THREAD
     #define wxUSE_BEGIN_THREAD
-#endif
 
 #endif
 
@@ -947,11 +945,8 @@ unsigned long wxThread::GetCurrentId()
     return (unsigned long)::GetCurrentThreadId();
 }
 
-bool wxThread::SetConcurrency(size_t WXUNUSED_IN_WINCE(level))
+bool wxThread::SetConcurrency(size_t level)
 {
-#ifdef __WXWINCE__
-    return false;
-#else
     wxASSERT_MSG( IsMain(), wxT("should only be called from the main thread") );
 
     // ok only for the default one
@@ -1015,7 +1010,6 @@ bool wxThread::SetConcurrency(size_t WXUNUSED_IN_WINCE(level))
     }
 
     return true;
-#endif // __WXWINCE__/!__WXWINCE__
 }
 
 // ctor and dtor

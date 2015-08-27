@@ -1779,34 +1779,6 @@ MSW_DESKTOP_HDR =
     wx/msw/ole/automtn.h
     wx/msw/ole/uuid.h
 
-# Files used by WindowsCE port but not by desktop MSW port:
-WINCE_SRC =
-    src/generic/dirdlgg.cpp
-    src/generic/fdrepdlg.cpp
-    src/generic/filedlgg.cpp
-    src/generic/fontdlgg.cpp
-    src/msw/wince/checklst.cpp
-    src/msw/wince/choicece.cpp
-    src/msw/wince/crt.cpp
-    src/msw/wince/filedlgwce.cpp
-    src/msw/wince/filefnwce.cpp
-    src/msw/wince/helpwce.cpp
-    src/msw/wince/menuce.cpp
-    src/msw/wince/tbarwce.cpp
-    src/msw/wince/textctrlce.cpp
-WINCE_HDR =
-    wx/generic/fdrepdlg.h
-    wx/generic/filedlgg.h
-    wx/generic/fontdlgg.h
-    wx/msw/wince/checklst.h
-    wx/msw/wince/choicece.h
-    wx/msw/wince/helpwce.h
-    wx/msw/wince/libraries.h
-    wx/msw/wince/missing.h
-    wx/msw/wince/tbarwce.h
-    wx/msw/wince/textctrlce.h
-    wx/msw/wince/resources.h
-
 # wxDFB
 
 DFB_LOWLEVEL_SRC =

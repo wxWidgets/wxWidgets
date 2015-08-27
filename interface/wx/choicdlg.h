@@ -17,8 +17,6 @@
 
 /**
     Default style of the choice dialog.
-
-    @remarks wxRESIZE_BORDER is not used under WinCE.
 */
 #define wxCHOICEDLG_STYLE (wxDEFAULT_DIALOG_STYLE | wxOK | wxCANCEL | wxCENTRE | wxRESIZE_BORDER)
 

@@ -237,11 +237,6 @@ bool wxRadioBox::Create(wxWindow *parent,
 
     m_radioButtons->SetFont(GetFont());
 
-#ifdef __WXWINCE__
-    // Set the z-order correctly
-    SetWindowPos(GetHwnd(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
-#endif
-
     SetMajorDim(majorDim == 0 ? n : majorDim, style);
     // Select the first radio button if we have any buttons at all.
     if ( n > 0 )
@@ -543,10 +538,6 @@ bool wxRadioBox::Reparent(wxWindowBase *newParent)
     {
         ::SetParent((*m_radioButtons)[item], hwndParent);
     }
-#ifdef __WXWINCE__
-    // put static box under the buttons in the Z-order
-    SetWindowPos(GetHwnd(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
-#endif
     return true;
 }
 
@@ -782,8 +773,6 @@ int wxRadioBox::GetItemFromPoint(const wxPoint& pt) const
 // radio box drawing
 // ----------------------------------------------------------------------------
 
-#ifndef __WXWINCE__
-
 WXHRGN wxRadioBox::MSWGetRegionWithoutChildren()
 {
     RECT rc;
@@ -804,8 +793,6 @@ WXHRGN wxRadioBox::MSWGetRegionWithoutChildren()
 
     return (WXHRGN)hrgn;
 }
-
-#endif // __WXWINCE__
 
 // ---------------------------------------------------------------------------
 // window proc for radio buttons
@@ -899,7 +886,6 @@ wxRadioBtnWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
             break;
 
-#ifndef __WXWINCE__
         case WM_HELP:
             {
                 bool processed = false;
@@ -936,7 +922,6 @@ wxRadioBtnWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
                     return 0;
             }
             break;
-#endif // !__WXWINCE__
     }
 
     return ::CallWindowProc(CASTWNDPROC s_wndprocRadioBtn, hwnd, message, wParam, lParam);

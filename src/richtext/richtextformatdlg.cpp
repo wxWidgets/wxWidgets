@@ -448,10 +448,8 @@ bool wxRichTextFormattingDialogFactory::SetSheetStyle(wxRichTextFormattingDialog
 bool wxRichTextFormattingDialogFactory::CreateButtons(wxRichTextFormattingDialog* dialog)
 {
     int flags = wxOK|wxCANCEL;
-#ifndef __WXWINCE__
     if (dialog->GetWindowStyleFlag() & wxRICHTEXT_FORMAT_HELP_BUTTON)
         flags |= wxHELP;
-#endif
 
     // If using a toolbook, also follow Mac style and don't create buttons
 #if !wxRICHTEXT_USE_TOOLBOOK

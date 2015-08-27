@@ -105,11 +105,9 @@ void wxTextMeasure::DoGetTextExtent(const wxString& string,
         wxLogLastError(wxT("GetTextExtentPoint32()"));
     }
 
-#if !defined(_WIN32_WCE) || (_WIN32_WCE >= 400)
     // the result computed by GetTextExtentPoint32() may be too small as it
     // accounts for under/overhang of the first/last character while we want
     // just the bounding rect for this string so adjust the width as needed
-    // (using API not available in 2002 SDKs of WinCE)
     if ( len > 0 )
     {
         ABC widthABC;
@@ -131,7 +129,6 @@ void wxTextMeasure::DoGetTextExtent(const wxString& string,
         }
         //else: GetCharABCWidths() failed, not a TrueType font?
     }
-#endif // !defined(_WIN32_WCE) || (_WIN32_WCE >= 400)
 
     *width = sizeRect.cx;
     *height = sizeRect.cy;

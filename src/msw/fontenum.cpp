@@ -145,19 +145,12 @@ void wxFontEnumeratorHelper::DoEnumerate()
 {
     HDC hDC = ::GetDC(NULL);
 
-#ifdef __WXWINCE__
-    ::EnumFontFamilies(hDC,
-                       m_facename.empty() ? NULL : wxMSW_CONV_LPCTSTR(m_facename),
-                       (FONTENUMPROC)wxFontEnumeratorProc,
-                       (LPARAM)this) ;
-#else // !__WXWINCE__
     LOGFONT lf;
     lf.lfCharSet = (BYTE)m_charset;
     wxStrlcpy(lf.lfFaceName, m_facename.c_str(), WXSIZEOF(lf.lfFaceName));
     lf.lfPitchAndFamily = 0;
     ::EnumFontFamiliesEx(hDC, &lf, (FONTENUMPROC)wxFontEnumeratorProc,
                          (LPARAM)this, 0 /* reserved */) ;
-#endif // WinCE/!WinCE
 
     ::ReleaseDC(NULL, hDC);
 }

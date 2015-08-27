@@ -46,7 +46,7 @@
     #define wxSEH_HANDLE(rc)
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
-#if wxUSE_ON_FATAL_EXCEPTION && defined(__VISUALC__) && !defined(__WXWINCE__)
+#if wxUSE_ON_FATAL_EXCEPTION && defined(__VISUALC__)
     #include <eh.h>
 
     // C++ exception to structured exceptions translator: we need it in order

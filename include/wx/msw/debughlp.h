@@ -13,9 +13,7 @@
 #include "wx/dynlib.h"
 
 #include "wx/msw/wrapwin.h"
-#ifndef __WXWINCE__
 #include <imagehlp.h>
-#endif // __WXWINCE__
 #include "wx/msw/private.h"
 
 // wxUSE_DBGHELP can be predefined on the compiler command line to force using

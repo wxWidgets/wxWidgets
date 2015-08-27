@@ -269,12 +269,8 @@ wxSize wxControl::GetBestSpinnerSize(const bool is_vertical) const
 {
     // take size according to layout
     wxSize bestSize(
-#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
-                    0,GetCharHeight()
-#else
                     ::GetSystemMetrics(is_vertical ? SM_CXVSCROLL : SM_CXHSCROLL),
                     ::GetSystemMetrics(is_vertical ? SM_CYVSCROLL : SM_CYHSCROLL)
-#endif
     );
 
     // correct size as for undocumented MSW variants cases (WinCE and perhaps others)

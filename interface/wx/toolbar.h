@@ -802,16 +802,6 @@ public:
     virtual wxToolBarToolBase* RemoveTool(int id);
 
     /**
-        Sets the bitmap resource identifier for specifying tool bitmaps as
-        indices into a custom bitmap.
-
-        This is a Windows CE-specific method not available in the other ports.
-
-        @onlyfor{wxmsw_wince}
-    */
-    void SetBitmapResource(int resourceId);
-
-    /**
         Sets the dropdown menu for the tool given by its @e id. The tool itself
         will delete the menu when it's no longer needed. Only supported under
         GTK+ und MSW.

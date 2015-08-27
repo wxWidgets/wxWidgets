@@ -44,10 +44,6 @@
 #include "wx/msw/dragimag.h"
 #include "wx/msw/private.h"
 
-#ifdef __WXWINCE__  // for SM_CXCURSOR and SM_CYCURSOR
-#include "wx/msw/wince/missing.h"
-#endif // __WXWINCE__
-
 // Wine doesn't have this yet
 #ifndef ListView_CreateDragImage
 #define ListView_CreateDragImage(hwnd, i, lpptUpLeft) \
@@ -147,9 +143,6 @@ bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor)
         ImageList_Destroy(GetHimageList());
     m_hImageList = 0;
 
-#ifdef __WXWINCE__
-    UINT flags = ILC_COLOR;
-#else
     UINT flags wxDUMMY_INITIALIZE(0) ;
     if (image.GetDepth() <= 4)
         flags = ILC_COLOR4;
@@ -161,7 +154,6 @@ bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor)
         flags = ILC_COLOR24;
     else
         flags = ILC_COLOR32;
-#endif
 
     bool mask = (image.GetMask() != 0);
 
@@ -204,9 +196,6 @@ bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor)
         ImageList_Destroy(GetHimageList());
     m_hImageList = 0;
 
-#ifdef __WXWINCE__
-    UINT flags = ILC_COLOR;
-#else
     UINT flags wxDUMMY_INITIALIZE(0) ;
     if (image.GetDepth() <= 4)
         flags = ILC_COLOR4;
@@ -218,7 +207,6 @@ bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor)
         flags = ILC_COLOR24;
     else
         flags = ILC_COLOR32;
-#endif
 
     flags |= ILC_MASK;
 

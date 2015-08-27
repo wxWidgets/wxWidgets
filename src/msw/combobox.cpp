@@ -310,11 +310,9 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
             break;
 
         case CBN_SELENDOK:
-#ifndef __SMARTPHONE__
             // we need to reset this to prevent the selection from being undone
             // by wxChoice, see wxChoice::MSWCommand() and comments there
             m_lastAcceptedSelection = wxID_NONE;
-#endif
 
             // set these variables so that they could be also fixed in
             // CBN_EDITCHANGE below
@@ -500,10 +498,8 @@ WXDWORD wxComboBox::MSWGetStyle(long style, WXDWORD *exstyle) const
 
     if ( style & wxCB_READONLY )
         msStyle |= CBS_DROPDOWNLIST;
-#ifndef __WXWINCE__
     else if ( style & wxCB_SIMPLE )
         msStyle |= CBS_SIMPLE; // A list (shown always) and edit control
-#endif
     else
         msStyle |= CBS_DROPDOWN;
 
@@ -705,7 +701,6 @@ wxWindow *wxComboBox::MSWFindItem(long id, WXHWND hWnd) const
 
 void wxComboBox::SetLayoutDirection(wxLayoutDirection dir)
 {
-#ifndef __WXWINCE__
     // Edit field and drop-down list must be handled explicitly.
 
     // Edit field is a special EDIT control (e.g. it always returns null
@@ -735,7 +730,6 @@ void wxComboBox::SetLayoutDirection(wxLayoutDirection dir)
     {
         wxUpdateLayoutDirection(info.hwndList, dir);
     }
-#endif // !__WXWINCE__
 
     wxChoice::SetLayoutDirection(dir);
 }

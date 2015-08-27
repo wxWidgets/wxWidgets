@@ -158,9 +158,7 @@ protected:
     virtual void DoSetItemToolTip(unsigned int n, wxToolTip * tooltip);
 #endif
 
-#ifndef __WXWINCE__
     virtual WXHRGN MSWGetRegionWithoutChildren();
-#endif // __WXWINCE__
 
     // resolve ambiguity in base classes
     virtual wxBorder GetDefaultBorder() const { return wxRadioBoxBase::GetDefaultBorder(); }

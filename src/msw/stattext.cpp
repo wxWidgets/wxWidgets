@@ -100,11 +100,6 @@ wxSize wxStaticText::DoGetBestClientSize() const
     wxCoord widthTextMax, heightTextTotal;
     dc.GetMultiLineTextExtent(GetLabelText(), &widthTextMax, &heightTextTotal);
 
-#ifdef __WXWINCE__
-    if ( widthTextMax )
-        widthTextMax += 2;
-#endif // __WXWINCE__
-
     // This extra pixel is a hack we use to ensure that a wxStaticText
     // vertically centered around the same position as a wxTextCtrl shows its
     // text on exactly the same baseline. It is not clear why is this needed

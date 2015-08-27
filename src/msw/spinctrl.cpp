@@ -284,11 +284,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     style |= wxSP_VERTICAL;
 
     if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
-#ifdef __WXWINCE__
-        style |= wxBORDER_SIMPLE;
-#else
         style |= wxBORDER_SUNKEN;
-#endif
 
     SetWindowStyle(style);
 
@@ -521,11 +517,9 @@ void wxSpinCtrl::SetSelection(long from, long to)
 
 void wxSpinCtrl::SetLayoutDirection(wxLayoutDirection dir)
 {
-#ifndef __WXWINCE__
     // Buddy text field is plain EDIT control so we need to set its layout
     // direction in a specific way.
     wxUpdateEditLayoutDirection(GetBuddyHwnd(), dir);
-#endif // !__WXWINCE__
 
     wxSpinButton::SetLayoutDirection(dir);
 

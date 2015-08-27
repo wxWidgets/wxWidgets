@@ -1070,11 +1070,7 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& paneInfo)
         pinfo.name.Printf(wxT("%08lx%08x%08x%08lx"),
              (unsigned long)(wxPtrToUInt(pinfo.window) & 0xffffffff),
              (unsigned int)time(NULL),
-#ifdef __WXWINCE__
-             (unsigned int)GetTickCount(),
-#else
              (unsigned int)clock(),
-#endif
              (unsigned long)m_panes.GetCount());
     }
 

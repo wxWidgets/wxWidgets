@@ -237,7 +237,6 @@ void wxComboCtrl::OnResize()
 // Draws non-XP GUI dotted line around the focus area
 static void wxMSWDrawFocusRect( wxDC& dc, const wxRect& rect )
 {
-#if !defined(__WXWINCE__)
     /*
     RECT mswRect;
     mswRect.left = rect.x;
@@ -262,16 +261,6 @@ static void wxMSWDrawFocusRect( wxDC& dc, const wxRect& rect )
     dc.DrawRectangle(rect);
 
     dc.SetLogicalFunction(wxCOPY);
-#else
-    dc.SetLogicalFunction(wxINVERT);
-
-    dc.SetPen(wxPen(*wxBLACK,1,wxDOT));
-    dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
-    dc.DrawRectangle(rect);
-
-    dc.SetLogicalFunction(wxCOPY);
-#endif
 }
 
 // draw focus background on area in a way typical on platform

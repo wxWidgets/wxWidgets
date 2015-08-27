@@ -852,13 +852,6 @@ typedef short int WXTYPE;
     #define WXUNUSED_IN_UNICODE(param)  param
 #endif
 
-/*  some arguments are not used in WinCE build */
-#ifdef __WXWINCE__
-    #define WXUNUSED_IN_WINCE(param)  WXUNUSED(param)
-#else
-    #define WXUNUSED_IN_WINCE(param)  param
-#endif
-
 /*  unused parameters in non stream builds */
 #if wxUSE_STREAMS
     #define WXUNUSED_UNLESS_STREAMS(param)  param
@@ -1723,12 +1716,7 @@ enum wxBorder
     wxBORDER_MASK   = 0x1f200000
 };
 
-/* This makes it easier to specify a 'normal' border for a control */
-#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
-#define wxDEFAULT_CONTROL_BORDER    wxBORDER_SIMPLE
-#else
 #define wxDEFAULT_CONTROL_BORDER    wxBORDER_SUNKEN
-#endif
 
 /*  ---------------------------------------------------------------------------- */
 /*  Window style flags */

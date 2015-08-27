@@ -124,7 +124,6 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     // painting manually is reported not to work under Windows CE (see #10093),
     // so don't do it there even if this probably means that alpha is not
     // supported there -- but at least bitmaps without alpha appear correctly
-#ifndef __WXWINCE__
     // Windows versions before XP (and even XP if the application has no
     // manifest and so the old comctl32.dll is used) don't draw correctly the
     // images with alpha channel so we need to draw them ourselves and it's
@@ -134,7 +133,6 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     {
         Connect(wxEVT_PAINT, wxPaintEventHandler(wxStaticBitmap::DoPaintManually));
     }
-#endif // !__WXWINCE__
 
     return true;
 }
@@ -240,8 +238,6 @@ void wxStaticBitmap::WXHandleSize(wxSizeEvent& event)
     event.Skip();
 }
 
-#ifndef __WXWINCE__
-
 void wxStaticBitmap::DoPaintManually(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
@@ -263,8 +259,6 @@ void wxStaticBitmap::DoPaintManually(wxPaintEvent& WXUNUSED(event))
                   (size.GetHeight() - bmp.GetHeight()) / 2,
                   true /* use mask */);
 }
-
-#endif // !__WXWINCE__
 
 void wxStaticBitmap::SetImage( const wxGDIImage* image )
 {

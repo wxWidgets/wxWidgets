@@ -32,11 +32,6 @@
 
 #include "wx/msw/private.h"
 
-#ifdef __WXWINCE__
-    #include <winreg.h>
-    #include <ole2.h>
-#endif
-
 #include <shlobj.h>            // for DROPFILES structure
 
 #include "wx/dnd.h"
@@ -406,31 +401,17 @@ wxDropTarget::~wxDropTarget()
 
 bool wxDropTarget::Register(WXHWND hwnd)
 {
-    // FIXME
-    // RegisterDragDrop not available on Windows CE >= 400?
-    // Or maybe we can dynamically load them from ceshell.dll
-    // or similar.
-#if defined(__WXWINCE__) && _WIN32_WCE >= 400
-    wxUnusedVar(hwnd);
-    return false;
-#else
     HRESULT hr;
 
-    // May exist in later WinCE versions
-#ifndef __WXWINCE__
     hr = ::CoLockObjectExternal(m_pIDropTarget, TRUE, FALSE);
     if ( FAILED(hr) ) {
         wxLogApiError(wxT("CoLockObjectExternal"), hr);
         return false;
     }
-#endif
 
     hr = ::RegisterDragDrop((HWND) hwnd, m_pIDropTarget);
     if ( FAILED(hr) ) {
-    // May exist in later WinCE versions
-#ifndef __WXWINCE__
         ::CoLockObjectExternal(m_pIDropTarget, FALSE, FALSE);
-#endif
         wxLogApiError(wxT("RegisterDragDrop"), hr);
         return false;
     }
@@ -441,31 +422,22 @@ bool wxDropTarget::Register(WXHWND hwnd)
     MSWInitDragImageSupport();
 
     return true;
-#endif
 }
 
 void wxDropTarget::Revoke(WXHWND hwnd)
 {
-#if defined(__WXWINCE__) && _WIN32_WCE >= 400
-    // Not available, see note above
-    wxUnusedVar(hwnd);
-#else
     HRESULT hr = ::RevokeDragDrop((HWND) hwnd);
 
     if ( FAILED(hr) ) {
         wxLogApiError(wxT("RevokeDragDrop"), hr);
     }
 
-    // May exist in later WinCE versions
-#ifndef __WXWINCE__
     ::CoLockObjectExternal(m_pIDropTarget, FALSE, TRUE);
-#endif
 
     MSWEndDragImageSupport();
 
     // remove window reference
     m_pIDropTarget->SetHwnd(0);
-#endif
 }
 
 // ----------------------------------------------------------------------------

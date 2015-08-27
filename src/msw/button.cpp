@@ -148,11 +148,9 @@ WXDWORD wxButton::MSWGetStyle(long style, WXDWORD *exstyle) const
         msStyle |= BS_TOP;
     if ( style & wxBU_BOTTOM )
         msStyle |= BS_BOTTOM;
-#ifndef __WXWINCE__
     // flat 2d buttons
     if ( style & wxNO_BORDER )
         msStyle |= BS_FLAT;
-#endif // __WXWINCE__
 
     return msStyle;
 }

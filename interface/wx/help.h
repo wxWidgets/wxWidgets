@@ -265,7 +265,6 @@ public:
     An appropriate class is aliased to the name wxHelpController for each platform, as
     follows:
     - On desktop Windows, wxCHMHelpController is used (MS HTML Help).
-    - On Windows CE, wxWinceHelpController is used.
     - On all other platforms, wxHtmlHelpController is used if wxHTML is compiled
       into wxWidgets; otherwise wxExtHelpController is used (for invoking an
       external browser).
@@ -285,8 +284,6 @@ public:
       HTB versions of the help file. For wxMSW only.
     - wxExtHelpController, for controlling external browsers under Unix.
       The default browser is Netscape Navigator. The 'help' sample shows its use.
-    - wxWinceHelpController, for controlling a simple @c .htm help controller for
-      Windows CE applications.
     - wxHtmlHelpController, a sophisticated help controller using wxHTML, in a
       similar style to the Microsoft HTML Help viewer and using some of the same
       files. Although it has an API compatible with other help controllers, it has

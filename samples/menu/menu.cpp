@@ -680,9 +680,6 @@ MyFrame::MyFrame()
                  wxT("menubar itself.\n\n")
                  wxT("Right click the band below to test popup menus.\n"));
 #endif
-#ifdef __POCKETPC__
-    EnableContextMenu();
-#endif
 }
 
 MyFrame::~MyFrame()
@@ -1329,9 +1326,6 @@ MyDialog::MyDialog(wxWindow* parent)
 
     m_textctrl->AppendText(wxT("Dialogs do not have menus, but popup menus should function the same\n\n")
                  wxT("Right click this text ctrl to test popup menus.\n"));
-#endif
-#ifdef __POCKETPC__
-    EnableContextMenu();
 #endif
 }
 
