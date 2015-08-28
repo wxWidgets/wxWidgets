@@ -2923,23 +2923,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
             return;
     }
 
-    wxVariant value;
-    wx_model->GetValue( value, item, column );
-
-    // It is always possible to leave a cell empty, don't warn about type
-    // mismatch in this case.
-    if (!value.IsNull())
-    {
-        if (value.GetType() != cell->GetVariantType())
-        {
-            wxLogDebug("Wrong type returned from the model: "
-                       "%s required but actual type is %s",
-                       cell->GetVariantType(),
-                       value.GetType());
-        }
-    }
-
-    cell->SetValue( value );
+    cell->PrepareValue(wx_model, item, column);
 
     // deal with disabled items
     bool enabled = wx_model->IsEnabled( item, column );

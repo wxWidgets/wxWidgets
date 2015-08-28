@@ -1814,23 +1814,10 @@ outlineView:(NSOutlineView*)outlineView
     renderer->OSXApplyEnabled(enabled);
 
     // check if we have anything to render
-    wxVariant value;
-    model->GetValue(value, dvItem, colIdx);
-    if ( value.IsNull() )
+    if ( !renderer->PrepareValue(model, dvItem, colIdx) )
     {
         // for consistency with the generic implementation, just handle missing
         // values as blank
-        return;
-    }
-
-    if ( value.GetType() != renderer->GetVariantType() )
-    {
-        wxLogDebug("Wrong type returned from the model: "
-                   "%s required but actual type is %s",
-                   renderer->GetVariantType(),
-                   value.GetType());
-
-        // we can't use the value of wrong type
         return;
     }
 

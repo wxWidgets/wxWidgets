@@ -683,8 +683,7 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     m_item = item; // remember for later
 
     unsigned int col = GetOwner()->GetModelColumn();
-    wxVariant value;
-    dv_ctrl->GetModel()->GetValue( value, item, col );
+    const wxVariant& value = CheckedGetValue(dv_ctrl->GetModel(), item, col);
 
     m_editorCtrl = CreateEditorCtrl( dv_ctrl->GetMainWindow(), labelRect, value );
 
@@ -778,13 +777,57 @@ bool wxDataViewRendererBase::FinishEditing()
     return false;
 }
 
+wxVariant
+wxDataViewRendererBase::CheckedGetValue(const wxDataViewModel* model,
+                                        const wxDataViewItem& item,
+                                        unsigned column) const
+{
+    wxVariant value;
+    model->GetValue(value, item, column);
+
+    // We always allow the cell to be null, regardless of the renderer type.
+    if ( !value.IsNull() )
+    {
+        if ( value.GetType() != GetVariantType() )
+        {
+            // If you're seeing this message, this indicates that either your
+            // renderer is using the wrong type, or your model returns values
+            // of the wrong type.
+            wxLogDebug("Wrong type returned from the model for column %u: "
+                       "%s required but actual type is %s",
+                       column,
+                       GetVariantType(),
+                       value.GetType());
+
+            // Don't return data of mismatching type, this could be unexpected.
+            value.MakeNull();
+        }
+    }
+
+    return value;
+}
+
+bool
+wxDataViewRendererBase::PrepareValue(const wxDataViewModel* model,
+                                     const wxDataViewItem& item,
+                                     unsigned column)
+{
+    const wxVariant& value = CheckedGetValue(model, item, column);
+
+    if ( value.IsNull() )
+        return false;
+
+    SetValue(value);
+
+    return true;
+}
+
 void wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
                                             const wxDataViewItem& item,
                                             unsigned column)
 {
-    wxVariant value;
-    model->GetValue(value, item, column);
-    SetValue(value);
+    if ( !PrepareValue(model, item, column) )
+        return;
 
     wxDataViewItemAttr attr;
     model->GetAttr(item, column, attr);

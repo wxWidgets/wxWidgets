@@ -121,7 +121,27 @@ public:
 
     wxString GetVariantType() const             { return m_variantType; }
 
-    // helper that calls SetValue and SetAttr:
+    // Prepare for rendering the value of the corresponding item in the given
+    // column taken from the provided non-null model.
+    //
+    // Notice that the column must be the same as GetOwner()->GetModelColumn(),
+    // it is only passed to this method because the existing code already has
+    // it and should probably be removed in the future.
+    //
+    // Returns false if the value is missing (or invalid, i.e. has a wrong type
+    // differing from GetVariantType() of this renderer, in which case a debug
+    // error is also logged as it indicates an error in the user code).
+    bool PrepareValue(const wxDataViewModel* model,
+                      const wxDataViewItem& item,
+                      unsigned column);
+
+    // Prepare for rendering the given item by both calling PrepareValue() and
+    // setting up the attributes.
+    //
+    // This is currently only used in the generic version but should really be
+    // used everywhere, i.e. SetEnabled() and SetAttr() should be overridden in
+    // the native versions instead of adding platform-specific equivalents for
+    // them as it's done currently.
     void PrepareForItem(const wxDataViewModel *model,
                         const wxDataViewItem& item, unsigned column);
 
@@ -177,6 +197,12 @@ public:
 protected:
     // Called from {Cancel,Finish}Editing() to cleanup m_editorCtrl
     void DestroyEditControl();
+
+    // Helper of PrepareValue() also used in StartEditing(): returns the value
+    // checking that its type matches our GetVariantType().
+    wxVariant CheckedGetValue(const wxDataViewModel* model,
+                              const wxDataViewItem& item,
+                              unsigned column) const;
 
     wxString                m_variantType;
     wxDataViewColumn       *m_owner;
