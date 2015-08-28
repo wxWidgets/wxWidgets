@@ -267,19 +267,14 @@ int wxDirDialog::ShowSHBrowseForFolder(WXHWND owner)
 
     static const int verComCtl32 = wxApp::GetComCtl32Version();
 
-    // we always add the edit box (it doesn't hurt anybody, does it?) if it is
-    // supported by the system
-    if ( verComCtl32 >= 471 )
-    {
-        bi.ulFlags |= BIF_EDITBOX;
-    }
+    // we always add the edit box (it doesn't hurt anybody, does it?)
+    bi.ulFlags |= BIF_EDITBOX;
 
     // to have the "New Folder" button we must use the "new" dialog style which
     // is also the only way to have a resizable dialog
     //
-    // "new" style is only available in the version 5.0+ of comctl32.dll
     const bool needNewDir = !HasFlag(wxDD_DIR_MUST_EXIST);
-    if ( (needNewDir || HasFlag(wxRESIZE_BORDER)) && (verComCtl32 >= 500) )
+    if ( needNewDir || HasFlag(wxRESIZE_BORDER) )
     {
         if (needNewDir)
         {
