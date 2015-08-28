@@ -808,32 +808,40 @@ wxDataViewRendererBase::CheckedGetValue(const wxDataViewModel* model,
 }
 
 bool
-wxDataViewRendererBase::PrepareValue(const wxDataViewModel* model,
-                                     const wxDataViewItem& item,
-                                     unsigned column)
+wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
+                                       const wxDataViewItem& item,
+                                       unsigned column)
 {
+    // Now check if we have a value and remember it if we do.
     const wxVariant& value = CheckedGetValue(model, item, column);
+    if ( !value.IsNull() )
+    {
+        SetValue(value);
 
-    if ( value.IsNull() )
-        return false;
+        // Also set up the attributes for this item if it's not empty.
+        wxDataViewItemAttr attr;
+        model->GetAttr(item, column, attr);
+        SetAttr(attr);
+    }
 
-    SetValue(value);
+    // Finally determine the enabled/disabled state and apply it, even to the
+    // empty cells.
+    bool enabled = true;
+    switch ( GetMode() )
+    {
+        case wxDATAVIEW_CELL_INERT:
+            enabled = false;
+            break;
+
+        case wxDATAVIEW_CELL_ACTIVATABLE:
+        case wxDATAVIEW_CELL_EDITABLE:
+            enabled = model->IsEnabled(item, column);
+            break;
+    }
+
+    SetEnabled(enabled);
 
     return true;
-}
-
-void wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
-                                            const wxDataViewItem& item,
-                                            unsigned column)
-{
-    if ( !PrepareValue(model, item, column) )
-        return;
-
-    wxDataViewItemAttr attr;
-    model->GetAttr(item, column, attr);
-    SetAttr(attr);
-
-    SetEnabled(model->IsEnabled(item, column));
 }
 
 
@@ -989,6 +997,18 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
     // get the alignment to use
     dc->DrawLabel(ellipsizedText.empty() ? text : ellipsizedText,
                   rectText, GetEffectiveAlignment());
+}
+
+void wxDataViewCustomRendererBase::SetEnabled(bool enabled)
+{
+    // The native base renderer needs to know about the enabled state as well
+    // but in the generic case the base class method is pure, so we can't just
+    // call it unconditionally.
+#ifndef wxHAS_GENERIC_DATAVIEWCTRL
+    wxDataViewRenderer::SetEnabled(enabled);
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
+
+    m_enabled = enabled;
 }
 
 //-----------------------------------------------------------------------------

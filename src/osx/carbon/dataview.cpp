@@ -1419,7 +1419,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
       dataViewColumnPtr = GetColumnPtr(propertyID);
       wxCHECK_MSG(dataViewColumnPtr                != NULL,errDataBrowserNotConfigured,_("No column for the specified column position existing."));
       wxCHECK_MSG(dataViewColumnPtr->GetRenderer() != NULL,errDataBrowserNotConfigured,_("No renderer specified for column."));
-      if (dataViewColumnPtr->GetRenderer()->PrepareValue(dataViewCtrlPtr->GetModel(),wxDataViewItem(reinterpret_cast<void*>(itemID)),dataViewColumnPtr->GetModelColumn()))
+      if (dataViewColumnPtr->GetRenderer()->PrepareForItem(dataViewCtrlPtr->GetModel(),wxDataViewItem(reinterpret_cast<void*>(itemID)),dataViewColumnPtr->GetModelColumn()))
       {
         dataViewColumnPtr->GetRenderer()->GetNativeData()->SetItemDataRef(itemData);
         wxCHECK_MSG(dataViewColumnPtr->GetRenderer()->MacRender(),errDataBrowserNotConfigured,_("Rendering failed."));

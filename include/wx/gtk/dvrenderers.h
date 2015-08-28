@@ -49,12 +49,11 @@ public:
 
     virtual void SetAlignment( int align );
 
-    virtual bool GtkSupportsAttrs() const { return true; }
-    virtual bool GtkSetAttr(const wxDataViewItemAttr& attr);
-
     virtual GtkCellRendererText *GtkGetTextRenderer() const;
 
 protected:
+    virtual void SetAttr(const wxDataViewItemAttr& attr) wxOVERRIDE;
+
     // implementation of Set/GetValue()
     bool SetTextValue(const wxString& str);
     bool GetTextValue(wxString& str) const;
@@ -135,16 +134,6 @@ public:
     void GTKSetRenderParams(GTKRenderParams* renderParams)
     {
         m_renderParams = renderParams;
-    }
-
-    // we may or not support attributes, as we don't know it, return true to
-    // make it possible to use them
-    virtual bool GtkSupportsAttrs() const { return true; }
-
-    virtual bool GtkSetAttr(const wxDataViewItemAttr& attr)
-    {
-        SetAttr(attr);
-        return !attr.IsDefault();
     }
 
     virtual GtkCellRendererText *GtkGetTextRenderer() const;

@@ -1889,6 +1889,24 @@ void wxDataViewRenderer::SetMode( wxDataViewCellMode mode )
     GtkSetMode(mode);
 }
 
+void wxDataViewRenderer::SetEnabled(bool enabled)
+{
+    // a) this sets the appearance to disabled grey and should only be done for
+    // the active cells which are disabled, not for the cells which can never
+    // be edited at all
+    if ( GetMode() != wxDATAVIEW_CELL_INERT )
+    {
+        GValue gvalue = G_VALUE_INIT;
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, enabled );
+        g_object_set_property( G_OBJECT(m_renderer), "sensitive", &gvalue );
+        g_value_unset( &gvalue );
+    }
+
+    // b) this actually disables the control/renderer
+    GtkSetMode(enabled ? GetMode() : wxDATAVIEW_CELL_INERT);
+}
+
 void wxDataViewRenderer::GtkSetMode( wxDataViewCellMode mode )
 {
     GtkCellRendererMode gtkMode;
@@ -2031,6 +2049,12 @@ wxDataViewRenderer::GtkOnCellChanged(const wxVariant& value,
     model->ChangeValue( value, item, col );
 }
 
+void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& WXUNUSED(attr))
+{
+    // There is no way to apply attributes to an arbitrary renderer, so we
+    // simply can't do anything here.
+}
+
 // ---------------------------------------------------------
 // wxDataViewTextRenderer
 // ---------------------------------------------------------
@@ -2054,10 +2078,9 @@ namespace
 
 // helper function used by wxDataViewTextRenderer and
 // wxDataViewCustomRenderer::RenderText(): it applies the attributes to the
-// given text renderer and returns true if anything was done
-bool GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
+// given text renderer
+void GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
 {
-    bool usingDefaultAttrs = true;
     if (attr.HasColour())
     {
         const GdkColor * const gcol = attr.GetColour().GetColor();
@@ -2067,8 +2090,6 @@ bool GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
         g_value_set_boxed( &gvalue, gcol );
         g_object_set_property( G_OBJECT(renderer), "foreground_gdk", &gvalue );
         g_value_unset( &gvalue );
-
-        usingDefaultAttrs = false;
     }
     else
     {
@@ -2086,8 +2107,6 @@ bool GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
         g_value_set_enum( &gvalue, PANGO_STYLE_ITALIC );
         g_object_set_property( G_OBJECT(renderer), "style", &gvalue );
         g_value_unset( &gvalue );
-
-        usingDefaultAttrs = false;
     }
     else
     {
@@ -2106,8 +2125,6 @@ bool GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
         g_value_set_enum( &gvalue, PANGO_WEIGHT_BOLD );
         g_object_set_property( G_OBJECT(renderer), "weight", &gvalue );
         g_value_unset( &gvalue );
-
-        usingDefaultAttrs = false;
     }
     else
     {
@@ -2139,8 +2156,6 @@ bool GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
         g_value_unset( &gvalue );
     }
 #endif
-
-    return !usingDefaultAttrs;
 }
 
 } // anonymous namespace
@@ -2217,9 +2232,16 @@ void wxDataViewTextRenderer::SetAlignment( int align )
     g_value_unset( &gvalue );
 }
 
-bool wxDataViewTextRenderer::GtkSetAttr(const wxDataViewItemAttr& attr)
+void wxDataViewTextRenderer::SetAttr(const wxDataViewItemAttr& attr)
 {
-    return GtkApplyAttr(GtkGetTextRenderer(), attr);
+    // An optimization: don't bother resetting the attributes if we're already
+    // using the defaults.
+    if ( attr.IsDefault() && m_usingDefaultAttrs )
+        return;
+
+    GtkApplyAttr(GtkGetTextRenderer(), attr);
+
+    m_usingDefaultAttrs = attr.IsDefault();
 }
 
 GtkCellRendererText *wxDataViewTextRenderer::GtkGetTextRenderer() const
@@ -2923,37 +2945,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
             return;
     }
 
-    cell->PrepareValue(wx_model, item, column);
-
-    // deal with disabled items
-    bool enabled = wx_model->IsEnabled( item, column );
-
-    // a) this sets the appearance to disabled grey    
-    GValue gvalue = G_VALUE_INIT;
-    g_value_init( &gvalue, G_TYPE_BOOLEAN );
-    g_value_set_boolean( &gvalue, enabled );
-    g_object_set_property( G_OBJECT(renderer), "sensitive", &gvalue );
-    g_value_unset( &gvalue );
-
-    // b) this actually disables the control/renderer
-    cell->GtkSetMode(enabled ? cell->GetMode() : wxDATAVIEW_CELL_INERT);
-
-    // deal with attributes: if the renderer doesn't support them at all, we
-    // don't even need to query the model for them
-    if ( !cell->GtkSupportsAttrs() )
-        return;
-
-    // it can support attributes so check if this item has any
-    wxDataViewItemAttr attr;
-    if ( wx_model->GetAttr( item, column, attr )
-            || !cell->GtkIsUsingDefaultAttrs() )
-    {
-        bool usingDefaultAttrs = !cell->GtkSetAttr(attr);
-        cell->GtkSetUsingDefaultAttrs(usingDefaultAttrs);
-    }
-    // else: no custom attributes specified and we're already using the default
-    //       ones -- nothing to do
-    
+    cell->PrepareForItem(wx_model, item, column);
 }
 
 } // extern "C"
