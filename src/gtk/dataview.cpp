@@ -2897,6 +2897,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     wxDataViewRenderer *cell = (wxDataViewRenderer*) data;
 
     wxDataViewItem item( (void*) iter->user_data );
+    const unsigned column = cell->GetOwner()->GetModelColumn();
 
     wxDataViewModel *wx_model = tree_model->internal->GetDataViewModel();
 
@@ -2905,8 +2906,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
         gboolean visible;
         if (wx_model->IsContainer( item ))
         {
-            visible = wx_model->HasContainerColumns( item ) ||
-                        (cell->GetOwner()->GetModelColumn() == 0);
+            visible = wx_model->HasContainerColumns( item ) || (column == 0);
         }
         else
         {
@@ -2924,7 +2924,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     }
 
     wxVariant value;
-    wx_model->GetValue( value, item, cell->GetOwner()->GetModelColumn() );
+    wx_model->GetValue( value, item, column );
 
     // It is always possible to leave a cell empty, don't warn about type
     // mismatch in this case.
@@ -2942,7 +2942,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     cell->SetValue( value );
 
     // deal with disabled items
-    bool enabled = wx_model->IsEnabled( item, cell->GetOwner()->GetModelColumn() );
+    bool enabled = wx_model->IsEnabled( item, column );
 
     // a) this sets the appearance to disabled grey    
     GValue gvalue = G_VALUE_INIT;
@@ -2961,7 +2961,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 
     // it can support attributes so check if this item has any
     wxDataViewItemAttr attr;
-    if ( wx_model->GetAttr( item, cell->GetOwner()->GetModelColumn(), attr )
+    if ( wx_model->GetAttr( item, column, attr )
             || !cell->GtkIsUsingDefaultAttrs() )
     {
         bool usingDefaultAttrs = !cell->GtkSetAttr(attr);
