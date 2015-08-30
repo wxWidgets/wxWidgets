@@ -37,8 +37,16 @@
 
 #include "wx/image.h"
 
-#include "wx/propgrid/propgrid.h"
+// This define is necessary to prevent macro clearing
+#define __wxPG_SOURCE_FILE__
 
+#include "wx/propgrid/propgrid.h"
+#include "wx/propgrid/property.h"
+#include "wx/propgrid/props.h"
+
+#if wxPG_USE_RENDERER_NATIVE
+#include "wx/renderer.h"
+#endif
 
 #define PWC_CHILD_SUMMARY_LIMIT         16 // Maximum number of children summarized in a parent property's
                                            // value field.
@@ -54,12 +62,25 @@ const char* g_invalidStringContent = "@__TOTALLY_INVALID_STRING__@";
 
 // -----------------------------------------------------------------------
 
-static void wxPGDrawFocusRect( wxDC& dc, const wxRect& rect )
+// In 3.0 comaptibilty mode we always need to use custom renderer because
+// native renderer for this port requires a reference to the valid window
+// to be drawn which is not passed to DrawCaptionSelectionRect function.
+#if wxPG_USE_RENDERER_NATIVE && !WXWIN_COMPATIBILITY_3_0
+ #define wxPG_USE_NATIVE_FOCUS_RECT_RENDERER 1
+#else
+ #define wxPG_USE_NATIVE_FOCUS_RECT_RENDERER 0
+#endif // wxPG_USE_RENDERER_NATIVE/!wxPG_USE_RENDERER_NATIVE
+
+static void wxPGDrawFocusRect(wxWindow *win, wxDC& dc,
+                              int x, int y, int w, int h)
 {
-#if defined(__WXMSW__) && !defined(__WXWINCE__)
-    // FIXME: Use DrawFocusRect code above (currently it draws solid line
-    //   for caption focus but works ok for other stuff).
-    //   Also, it seems that this code may not work in future wx versions.
+    wxRect rect(x, y+((h-dc.GetCharHeight())/2), w, h);
+#if wxPG_USE_NATIVE_FOCUS_RECT_RENDERER
+    wxASSERT_MSG( win, wxS("Invalid window to be drawn") );
+    wxRendererNative::Get().DrawFocusRect(win, dc, rect);
+#else
+    wxUnusedVar(win);
+#ifdef __WXMSW__
     dc.SetLogicalFunction(wxINVERT);
 
     wxPen pen(*wxBLACK,1,wxPENSTYLE_DOT);
@@ -79,7 +100,8 @@ static void wxPGDrawFocusRect( wxDC& dc, const wxRect& rect )
     dc.DrawRectangle(rect);
 
     dc.SetLogicalFunction(wxCOPY);
-#endif
+#endif // __WXMSW__/!__WXMSW__
+#endif // wxPG_USE_NATIVE_FOCUS_RECT_RENDERER/!wxPG_USE_NATIVE_FOCUS_RECT_RENDERER
 }
 
 // -----------------------------------------------------------------------
@@ -123,11 +145,19 @@ void wxPGCellRenderer::DrawEditorValue( wxDC& dc, const wxRect& rect,
     }
 }
 
-void wxPGCellRenderer::DrawCaptionSelectionRect( wxDC& dc, int x, int y, int w, int h ) const
+#if WXWIN_COMPATIBILITY_3_0
+void wxPGCellRenderer::DrawCaptionSelectionRect(wxDC& dc,
+                                                int x, int y, int w, int h) const
 {
-    wxRect focusRect(x,y+((h-dc.GetCharHeight())/2),w,h);
-    wxPGDrawFocusRect(dc,focusRect);
+    wxPGDrawFocusRect(NULL, dc, x, y, w, h);
 }
+#else
+void wxPGCellRenderer::DrawCaptionSelectionRect(wxWindow* win, wxDC& dc,
+                                                int x, int y, int w, int h) const
+{
+    wxPGDrawFocusRect(win, dc, x, y, w, h);
+}
+#endif // WXWIN_COMPATIBILITY_3_0/!WXWIN_COMPATIBILITY_3_0
 
 int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPGCell& cell, int flags ) const
 {
@@ -306,7 +336,11 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
                 imageOffset += wxCC_CUSTOM_IMAGE_MARGIN2 + 4;
             }
 
+#if WXWIN_COMPATIBILITY_3_0
             DrawCaptionSelectionRect( dc,
+#else
+            DrawCaptionSelectionRect( const_cast<wxPropertyGrid*>(propertyGrid), dc,
+#endif // WXWIN_COMPATIBILITY_3_0
                                       rect.x+wxPG_XBEFORETEXT-wxPG_CAPRECTXMARGIN+imageOffset,
                                       rect.y-wxPG_CAPRECTYMARGIN+1,
                                       ((wxPropertyCategory*)property)->GetTextExtent(propertyGrid,

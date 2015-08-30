@@ -119,9 +119,14 @@ public:
 
     /** Paints property category selection rectangle.
     */
+#if WXWIN_COMPATIBILITY_3_0
     virtual void DrawCaptionSelectionRect( wxDC& dc,
                                            int x, int y,
                                            int w, int h ) const;
+#else
+    virtual void DrawCaptionSelectionRect(wxWindow *win, wxDC& dc,
+                                          int x, int y, int w, int h) const;
+#endif // WXWIN_COMPATIBILITY_3_0
 
     /** Utility to draw vertically centered text.
     */
