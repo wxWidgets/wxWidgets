@@ -899,14 +899,8 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
 
             AC_MSG_RESULT([$WX_PORT])
         else
-
             dnl Use the setting given by the user
-            if test -z "$TOOLKIT" ; then
-                WX_PORT=$TOOLKIT
-            else
-                dnl try with PORT
-                WX_PORT=$PORT
-            fi
+            WX_PORT=$TOOLKIT
         fi
 
         AC_SUBST(WX_PORT)
