@@ -1697,9 +1697,7 @@ wxString wxFlagsProperty::ValueToString( wxVariant& value,
     const wxPGChoices& choices = m_choices;
     for ( unsigned int i = 0; i < GetItemCount(); i++ )
     {
-        int doAdd;
-        doAdd = ( (flags & choices.GetValue(i)) == choices.GetValue(i) );
-
+        bool doAdd = ( (flags & choices.GetValue(i)) == choices.GetValue(i) );
         if ( doAdd )
         {
             text += choices.GetLabel(i);
