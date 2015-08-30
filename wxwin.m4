@@ -748,12 +748,12 @@ AC_DEFUN([WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS],
 
 
 dnl ---------------------------------------------------------------------------
-dnl _WX_SELECTEDCONFIG_CHECKFOR([RESULTVAR], [STRING], [MSG]
-dnl                             [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+dnl _WX_SELECTEDCONFIG_CHECKFOR([RESULTVAR], [STRING], [MSG])
 dnl
-dnl Outputs the given MSG. Then searches the given STRING in the wxWidgets
-dnl additional CPP flags and put the result of the search in WX_$RESULTVAR
-dnl also adding the "yes" or "no" message result to MSG.
+dnl Sets WX_$RESULTVAR to the value of $RESULTVAR if it's different from
+dnl "auto". If it is "auto", check for the presence of STRING in
+dnl $WX_SELECTEDCONFIG (which is supposed to be set by caller) and set
+dnl WX_$RESULTVAR to either 0 or 1, also outputting "yes" or "no" after MSG.
 dnl ---------------------------------------------------------------------------
 AC_DEFUN([_WX_SELECTEDCONFIG_CHECKFOR],
         [
@@ -772,11 +772,9 @@ AC_DEFUN([_WX_SELECTEDCONFIG_CHECKFOR],
             if test "$WX_$1" != "0"; then
                 WX_$1=1
                 AC_MSG_RESULT([yes])
-                ifelse([$4], , :, [$4])
             else
                 WX_$1=0
                 AC_MSG_RESULT([no])
-                ifelse([$5], , :, [$5])
             fi
         else
 
