@@ -640,7 +640,8 @@ MyFrame::MyFrame(wxFrame* parent,
     PopulateToolbar(m_extraToolBar);
 #endif
 
-    m_textWindow = new wxTextCtrl(m_panel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+    // Use a read-only text control; Cut tool will not cut selected text anyway.
+    m_textWindow = new wxTextCtrl(m_panel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY);
 
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     m_panel->SetSizer(sizer);
