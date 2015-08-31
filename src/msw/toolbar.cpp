@@ -1362,6 +1362,10 @@ bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id_)
 
     bool allowLeftClick = OnLeftClick(id, toggled);
 
+    // Verify that the tool has not been deleted in the LeftClick handler.
+    if ( !m_tools.Member(tool) )
+        return true; // The tool has been deleted, nothing else to do.
+
     // Restore the unpressed state. Enabled/toggled state might have been
     // changed since so take care of it.
     if (tool->IsEnabled())
