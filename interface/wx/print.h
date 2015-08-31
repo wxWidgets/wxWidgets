@@ -526,8 +526,8 @@ public:
     /**
         Invokes the print setup dialog.
 
-        @remarks
-        The setup dialog is obsolete from Windows 95, though retained
+        @deprecated
+        The setup dialog is obsolete, though retained
         for backward compatibility.
     */
     virtual bool Setup(wxWindow* parent);

@@ -52,8 +52,8 @@ enum
     @style{wxSP_NOBORDER}
            No border (default).
     @style{wxSP_NO_XP_THEME}
-           Under Windows XP, switches off the attempt to draw the splitter
-           using Windows XP theming, so the borders and sash will take on the
+           Under Windows, switches off the attempt to draw the splitter
+           using Windows theming, so the borders and sash will take on the
            pre-XP look.
     @style{wxSP_PERMIT_UNSPLIT}
            Always allow to unsplit, even with the minimum pane size other than zero.

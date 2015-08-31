@@ -28,7 +28,7 @@ enum wxSystemFont
     /// dialog box controls, and text.
     wxSYS_SYSTEM_FONT,
 
-    /// Device-dependent font (Windows NT and later only).
+    /// Device-dependent font.
     wxSYS_DEVICE_DEFAULT_FONT,
 
     /**

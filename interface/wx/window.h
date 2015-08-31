@@ -137,7 +137,7 @@ enum wxWindowVariant
            is the old name for this style. Windows only.
     @style{wxBORDER_THEME}
            Displays a native border suitable for a control, on the current
-           platform. On Windows XP or Vista, this will be a themed border; on
+           platform. On Windows, this will be a themed border; on
            most other platforms a sunken border will be used. For more
            information for themed borders on Windows, please see Themed
            borders on Windows.

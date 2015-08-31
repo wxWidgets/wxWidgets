@@ -164,9 +164,8 @@ struct wxFontMetrics
 
     @section Support for Transformation Matrix
 
-    On some platforms (currently only under MSW and only on Windows NT, i.e.
-    not Windows 9x/ME, systems) wxDC has support for applying an arbitrary
-    affine transformation matrix to its coordinate system. Call
+    On some platforms (currently only under MSW) wxDC has support for applying 
+    an arbitrary affine transformation matrix to its coordinate system. Call
     CanUseTransformMatrix() to check if this support is available and then call
     SetTransformMatrix() if it is. If the transformation matrix is not
     supported, SetTransformMatrix() always simply returns false and doesn't do
@@ -1516,10 +1515,7 @@ public:
         Check if the use of transformation matrix is supported by the current
         system.
 
-        Currently this function always returns @false for non-MSW platforms and
-        may return @false for old (Windows 9x/ME) Windows systems. Normally
-        support for the transformation matrix is always available in any
-        relatively recent Windows versions.
+        Currently this function always returns @false for non-MSW platforms.
 
         @since 2.9.2
     */
