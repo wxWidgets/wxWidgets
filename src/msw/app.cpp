@@ -892,47 +892,10 @@ int wxApp::GetComCtl32Version()
     return s_verComCtl32;
 }
 
-/* static */
-int wxApp::GetShell32Version()
-{
-    static int s_verShell32 = -1;
-    if ( s_verShell32 == -1 )
-    {
-        // we're prepared to handle the errors
-        wxLogNull noLog;
-
-        wxDynamicLibrary dllShell32(wxT("shell32.dll"), wxDL_VERBATIM);
-        if ( dllShell32.IsLoaded() )
-        {
-            s_verShell32 = CallDllGetVersion(dllShell32);
-
-            if ( !s_verShell32 )
-            {
-                // there doesn't seem to be any way to distinguish between 4.00
-                // and 4.70 (starting from 4.71 we have DllGetVersion()) so
-                // just assume it is 4.0
-                s_verShell32 = 400;
-            }
-        }
-        else // failed load the DLL?
-        {
-            s_verShell32 = 0;
-        }
-    }
-
-    return s_verShell32;
-}
-
 #else // !wxUSE_DYNLIB_CLASS
 
 /* static */
 int wxApp::GetComCtl32Version()
-{
-    return 0;
-}
-
-/* static */
-int wxApp::GetShell32Version()
 {
     return 0;
 }

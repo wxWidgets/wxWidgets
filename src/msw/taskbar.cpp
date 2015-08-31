@@ -45,14 +45,6 @@
     #define NIF_INFO        0x00000010
 #endif
 
-#ifndef NOTIFYICONDATA_V1_SIZE
-    #ifdef UNICODE
-        #define NOTIFYICONDATA_V1_SIZE 0x0098
-    #else
-        #define NOTIFYICONDATA_V1_SIZE 0x0058
-    #endif
-#endif
-
 #ifndef NOTIFYICONDATA_V2_SIZE
     #ifdef UNICODE
         #define NOTIFYICONDATA_V2_SIZE 0x03A8
@@ -122,12 +114,8 @@ struct NotifyIconData : public NOTIFYICONDATA
         // we could do complicated tests for the exact system version it's
         // easier to just use an old size which should be supported everywhere
         // from Windows 2000 up and which is all we need as we don't use any
-        // newer features so far. But if we're running under a really ancient
-        // system (Win9x), fall back to even smaller size -- then the balloon
-        // related features won't be available but the rest will still work.
-        cbSize = wxTheApp->GetShell32Version() >= 500
-                    ? NOTIFYICONDATA_V2_SIZE
-                    : NOTIFYICONDATA_V1_SIZE;
+        // newer features so far.
+        cbSize = NOTIFYICONDATA_V2_SIZE;
 
         hWnd = (HWND) hwnd;
         uCallbackMessage = gs_msgTaskbar;
