@@ -519,7 +519,7 @@ AC_DEFUN([WX_ARG_ENABLE_YESNOAUTO],
                 $2=0
             elif test "$enableval" = "auto" ; then
                 AC_MSG_RESULT([will be automatically detected])
-                $2="auto"
+                $2=""
             else
                 AC_MSG_ERROR([
     Unrecognized option value (allowed values: yes, no, auto)
@@ -545,7 +545,7 @@ AC_DEFUN([WX_ARG_WITH_YESNOAUTO],
                 $2=0
             elif test "$withval" = "auto" ; then
                 AC_MSG_RESULT([will be automatically detected])
-                $2="auto"
+                $2=""
             else
                 AC_MSG_ERROR([
     Unrecognized option value (allowed values: yes, auto)
@@ -597,7 +597,7 @@ AC_DEFUN([WX_STANDARD_OPTIONS],
                 AC_MSG_CHECKING([for the --with-toolkit option])
                 if test "$withval" = "auto" ; then
                     AC_MSG_RESULT([will be automatically detected])
-                    TOOLKIT="auto"
+                    TOOLKIT=""
                 else
                     TOOLKIT="$withval"
 
@@ -671,7 +671,7 @@ AC_DEFUN([WX_STANDARD_OPTIONS],
                 AC_MSG_CHECKING([for the --with-wxversion option])
                 if test "$withval" = "auto" ; then
                     AC_MSG_RESULT([will be automatically detected])
-                    WX_RELEASE="auto"
+                    WX_RELEASE=""
                 else
 
                     wx_requested_major_version=`echo $withval | \
@@ -706,7 +706,7 @@ dnl ---------------------------------------------------------------------------
 dnl WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS
 dnl
 dnl Sets the WXCONFIG_FLAGS string using the SHARED,DEBUG,UNICODE variable values
-dnl which are different from "auto".
+dnl which were specified.
 dnl Thus this macro needs to be called only once all options have been set.
 dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS],
@@ -730,11 +730,11 @@ AC_DEFUN([WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS],
             WXCONFIG_FLAGS="$WXCONFIG_FLAGS""--unicode=no "
         fi
 
-        if test "$TOOLKIT" != "auto" ; then
+        if test -n "$TOOLKIT" ; then
             WXCONFIG_FLAGS="$WXCONFIG_FLAGS""--toolkit=$TOOLKIT "
         fi
 
-        if test "$WX_RELEASE" != "auto" ; then
+        if test -n "$WX_RELEASE" ; then
             WXCONFIG_FLAGS="$WXCONFIG_FLAGS""--version=$WX_RELEASE "
         fi
 
@@ -750,14 +750,14 @@ AC_DEFUN([WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS],
 dnl ---------------------------------------------------------------------------
 dnl _WX_SELECTEDCONFIG_CHECKFOR([RESULTVAR], [STRING], [MSG])
 dnl
-dnl Sets WX_$RESULTVAR to the value of $RESULTVAR if it's different from
-dnl "auto". If it is "auto", check for the presence of STRING in
+dnl Sets WX_$RESULTVAR to the value of $RESULTVAR if it's defined. Otherwise,
+dnl auto-detect the value by checking for the presence of STRING in
 dnl $WX_SELECTEDCONFIG (which is supposed to be set by caller) and set
 dnl WX_$RESULTVAR to either 0 or 1, also outputting "yes" or "no" after MSG.
 dnl ---------------------------------------------------------------------------
 AC_DEFUN([_WX_SELECTEDCONFIG_CHECKFOR],
         [
-        if test "$$1" = "auto" ; then
+        if test -z "$$1" ; then
 
             dnl The user does not have particular preferences for this option;
             dnl so we will detect the wxWidgets relative build setting and use it
@@ -821,19 +821,16 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
             echo "[[dbg]] WX_SELECTEDCONFIG: $WX_SELECTEDCONFIG"
         fi
 
-
         dnl we could test directly for WX_SHARED with a line like:
         dnl    _WX_SELECTEDCONFIG_CHECKFOR([SHARED], [shared],
         dnl                                [if wxWidgets was built in SHARED mode])
         dnl but wx-config --selected-config DOES NOT outputs the 'shared'
         dnl word when wx was built in shared mode; it rather outputs the
         dnl 'static' word when built in static mode.
-        if test $WX_SHARED = "1"; then
+        if test "$WX_SHARED" = "1"; then
             STATIC=0
-        elif test $WX_SHARED = "0"; then
+        elif test "$WX_SHARED" = "0"; then
             STATIC=1
-        elif test $WX_SHARED = "auto"; then
-            STATIC="auto"
         fi
 
         dnl Now set the WX_UNICODE, WX_DEBUG, WX_STATIC variables
@@ -856,7 +853,7 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
         AC_SUBST(WX_SHARED)
 
         dnl detect the WX_PORT to use
-        if test "$TOOLKIT" = "auto" ; then
+        if test -z "$TOOLKIT" ; then
 
             dnl The user does not have particular preferences for this option;
             dnl so we will detect the wxWidgets relative build setting and use it
@@ -932,17 +929,17 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
         fi
 
         dnl now we can finally update the DEBUG,UNICODE,SHARED options
-        dnl to their final values if they were set to 'auto'
-        if test "$DEBUG" = "auto"; then
+        dnl to their final values if they were not already set
+        if test -z "$DEBUG" ; then
             DEBUG=$WX_DEBUG
         fi
-        if test "$UNICODE" = "auto"; then
+        if test -z "$UNICODE" ; then
             UNICODE=$WX_UNICODE
         fi
-        if test "$SHARED" = "auto"; then
+        if test -z "$SHARED" ; then
             SHARED=$WX_SHARED
         fi
-        if test "$TOOLKIT" = "auto"; then
+        if test -z "$TOOLKIT" ; then
             TOOLKIT=$WX_PORT
         fi
 
