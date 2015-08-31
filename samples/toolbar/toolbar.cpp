@@ -481,6 +481,8 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
                          wxT("Delete this tool. This is a very long tooltip to test whether it does the right thing when the tooltip is more than Windows can cope with."));
     }
 
+    m_nPrint = 1;
+
     // add a stretchable space before the "Help" button to make it
     // right-aligned
     toolBar->AddStretchableSpace();
@@ -530,7 +532,7 @@ MyFrame::MyFrame(wxFrame* parent,
     m_searchTool = NULL;
 
     m_rows = 1;
-    m_nPrint = 1;
+    m_nPrint = 0; // set to 1 in PopulateToolbar()
 
 #if wxUSE_STATUSBAR
     // Give it a status line
