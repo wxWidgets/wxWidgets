@@ -1362,6 +1362,17 @@ bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id_)
 
     bool allowLeftClick = OnLeftClick(id, toggled);
 
+    // Check if the tool hasn't been deleted in the event handler (notice that
+    // it's also possible that this tool was deleted and a new tool with the
+    // same ID was created, so we really need to check if the pointer to the
+    // tool with the given ID didn't change, not just that it's non null).
+    if ( FindById(id) != tool )
+    {
+        // The rest of this event handler deals with updating the tool and must
+        // not be executed if the tool doesn't exist any more.
+        return true;
+    }
+
     // Restore the unpressed state. Enabled/toggled state might have been
     // changed since so take care of it.
     if (tool->IsEnabled())
