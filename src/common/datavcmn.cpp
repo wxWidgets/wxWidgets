@@ -683,8 +683,7 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     m_item = item; // remember for later
 
     unsigned int col = GetOwner()->GetModelColumn();
-    wxVariant value;
-    dv_ctrl->GetModel()->GetValue( value, item, col );
+    const wxVariant& value = CheckedGetValue(dv_ctrl->GetModel(), item, col);
 
     m_editorCtrl = CreateEditorCtrl( dv_ctrl->GetMainWindow(), labelRect, value );
 
@@ -778,19 +777,71 @@ bool wxDataViewRendererBase::FinishEditing()
     return false;
 }
 
-void wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
-                                            const wxDataViewItem& item,
-                                            unsigned column)
+wxVariant
+wxDataViewRendererBase::CheckedGetValue(const wxDataViewModel* model,
+                                        const wxDataViewItem& item,
+                                        unsigned column) const
 {
     wxVariant value;
     model->GetValue(value, item, column);
-    SetValue(value);
 
-    wxDataViewItemAttr attr;
-    model->GetAttr(item, column, attr);
-    SetAttr(attr);
+    // We always allow the cell to be null, regardless of the renderer type.
+    if ( !value.IsNull() )
+    {
+        if ( value.GetType() != GetVariantType() )
+        {
+            // If you're seeing this message, this indicates that either your
+            // renderer is using the wrong type, or your model returns values
+            // of the wrong type.
+            wxLogDebug("Wrong type returned from the model for column %u: "
+                       "%s required but actual type is %s",
+                       column,
+                       GetVariantType(),
+                       value.GetType());
 
-    SetEnabled(model->IsEnabled(item, column));
+            // Don't return data of mismatching type, this could be unexpected.
+            value.MakeNull();
+        }
+    }
+
+    return value;
+}
+
+bool
+wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
+                                       const wxDataViewItem& item,
+                                       unsigned column)
+{
+    // Now check if we have a value and remember it if we do.
+    const wxVariant& value = CheckedGetValue(model, item, column);
+    if ( !value.IsNull() )
+    {
+        SetValue(value);
+
+        // Also set up the attributes for this item if it's not empty.
+        wxDataViewItemAttr attr;
+        model->GetAttr(item, column, attr);
+        SetAttr(attr);
+    }
+
+    // Finally determine the enabled/disabled state and apply it, even to the
+    // empty cells.
+    bool enabled = true;
+    switch ( GetMode() )
+    {
+        case wxDATAVIEW_CELL_INERT:
+            enabled = false;
+            break;
+
+        case wxDATAVIEW_CELL_ACTIVATABLE:
+        case wxDATAVIEW_CELL_EDITABLE:
+            enabled = model->IsEnabled(item, column);
+            break;
+    }
+
+    SetEnabled(enabled);
+
+    return true;
 }
 
 
@@ -946,6 +997,18 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
     // get the alignment to use
     dc->DrawLabel(ellipsizedText.empty() ? text : ellipsizedText,
                   rectText, GetEffectiveAlignment());
+}
+
+void wxDataViewCustomRendererBase::SetEnabled(bool enabled)
+{
+    // The native base renderer needs to know about the enabled state as well
+    // but in the generic case the base class method is pure, so we can't just
+    // call it unconditionally.
+#ifndef wxHAS_GENERIC_DATAVIEWCTRL
+    wxDataViewRenderer::SetEnabled(enabled);
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
+
+    m_enabled = enabled;
 }
 
 //-----------------------------------------------------------------------------

@@ -55,37 +55,21 @@ public:
     void GtkInitHandlers();
     void GtkUpdateAlignment() { GtkApplyAlignment(m_renderer); }
 
-    // should be overridden to return true if the renderer supports properties
-    // corresponding to wxDataViewItemAttr field, see wxGtkTreeCellDataFunc()
-    // for details
-    virtual bool GtkSupportsAttrs() const { return false; }
-
-    // if GtkSupportsAttrs() returns true, this function will be called to
-    // effectively set the attribute to use for rendering the next item
-    //
-    // it should return true if the attribute had any non-default properties
-    virtual bool GtkSetAttr(const wxDataViewItemAttr& WXUNUSED(attr))
-        { return false; }
-
-
-    // these functions are only called if GtkSupportsAttrs() returns true and
-    // are used to remember whether the renderer currently uses the default
-    // attributes or if we changed (and not reset them)
-    bool GtkIsUsingDefaultAttrs() const { return m_usingDefaultAttrs; }
-    void GtkSetUsingDefaultAttrs(bool def) { m_usingDefaultAttrs = def; }
-
     // return the text renderer used by this renderer for setting text cell
     // specific attributes: can return NULL if this renderer doesn't render any
     // text
     virtual GtkCellRendererText *GtkGetTextRenderer() const { return NULL; }
 
-
+private:
     // Change the mode at GTK level without touching m_mode, this is useful for
     // temporarily making the renderer insensitive but does mean that GetMode()
     // may return a value different from the actual GTK renderer mode.
     void GtkSetMode(wxDataViewCellMode mode);
 
 protected:
+    virtual void SetAttr(const wxDataViewItemAttr& attr) wxOVERRIDE;
+    virtual void SetEnabled(bool enabled) wxOVERRIDE;
+
     virtual void GtkOnCellChanged(const wxVariant& value,
                                   const wxDataViewItem& item,
                                   unsigned col);

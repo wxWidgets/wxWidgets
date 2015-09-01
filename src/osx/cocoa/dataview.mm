@@ -1796,53 +1796,12 @@ outlineView:(NSOutlineView*)outlineView
     data->SetItem(item);
     data->SetItemCell(cell);
 
-    // set the state (enabled/disabled) of the item: this must be done first as
-    // even if we return below because the cell is empty, it still needs to be
-    // disabled if it's not supposed to be enabled
-    bool enabled = true;
-    switch ( renderer->GetMode() )
-    {
-        case wxDATAVIEW_CELL_INERT:
-            enabled = false;
-            break;
-
-        case wxDATAVIEW_CELL_ACTIVATABLE:
-        case wxDATAVIEW_CELL_EDITABLE:
-            enabled = model->IsEnabled(dvItem, colIdx);
-            break;
-    }
-    renderer->OSXApplyEnabled(enabled);
-
     // check if we have anything to render
-    wxVariant value;
-    model->GetValue(value, dvItem, colIdx);
-    if ( value.IsNull() )
+    if ( renderer->PrepareForItem(model, dvItem, colIdx) )
     {
-        // for consistency with the generic implementation, just handle missing
-        // values as blank
-        return;
+        // and do render it in this case
+        renderer->MacRender();
     }
-
-    if ( value.GetType() != renderer->GetVariantType() )
-    {
-        wxLogDebug("Wrong type returned from the model: "
-                   "%s required but actual type is %s",
-                   renderer->GetVariantType(),
-                   value.GetType());
-
-        // we can't use the value of wrong type
-        return;
-    }
-
-    // use the attributes: notice that we need to do this whether we have them
-    // or not as even if this cell doesn't have any attributes, the previous
-    // one might have had some and then we need to reset them back to default
-    wxDataViewItemAttr attr;
-    model->GetAttr(dvItem, colIdx, attr);
-    renderer->OSXApplyAttr(attr);
-
-    // and finally do draw it
-    renderer->MacRender();
 }
 
 //
@@ -2721,7 +2680,7 @@ wxDataViewRenderer::OSXOnCellChanged(NSObject *object,
     model->ChangeValue(value, item, col);
 }
 
-void wxDataViewRenderer::OSXApplyAttr(const wxDataViewItemAttr& attr)
+void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
 {
     wxDataViewRendererNativeData * const data = GetNativeData();
     NSCell * const cell = data->GetItemCell();
@@ -2790,7 +2749,7 @@ void wxDataViewRenderer::OSXApplyAttr(const wxDataViewItemAttr& attr)
         [(id)cell setTextColor:colText];
 }
 
-void wxDataViewRenderer::OSXApplyEnabled(bool enabled)
+void wxDataViewRenderer::SetEnabled(bool enabled)
 {
     [GetNativeData()->GetItemCell() setEnabled:enabled];
 }
@@ -2816,18 +2775,6 @@ bool wxDataViewCustomRenderer::MacRender()
 {
     [GetNativeData()->GetItemCell() setObjectValue:[[[wxCustomRendererObject alloc] initWithRenderer:this] autorelease]];
     return true;
-}
-
-void wxDataViewCustomRenderer::OSXApplyAttr(const wxDataViewItemAttr& attr)
-{
-    // simply save the attribute so that it could be reused from our Render()
-    SetAttr(attr);
-
-    // it's not necessary to call the base class version which sets the cell
-    // properties to correspond to this attribute because we currently don't
-    // use any NSCell methods in custom renderers anyhow but if we ever start
-    // doing this (e.g. override RenderText() here to use NSTextFieldCell
-    // methods), then we should pass it on to wxDataViewRenderer here
 }
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomRenderer, wxDataViewRenderer);

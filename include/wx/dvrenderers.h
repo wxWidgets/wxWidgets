@@ -115,15 +115,21 @@ public:
     virtual bool SetValue(const wxVariant& value) = 0;
     virtual bool GetValue(wxVariant& value) const = 0;
 
-    virtual void SetAttr(const wxDataViewItemAttr& WXUNUSED(attr)) { }
-
-    virtual void SetEnabled(bool WXUNUSED(enabled)) { }
-
     wxString GetVariantType() const             { return m_variantType; }
 
-    // helper that calls SetValue and SetAttr:
-    void PrepareForItem(const wxDataViewModel *model,
-                        const wxDataViewItem& item, unsigned column);
+    // Prepare for rendering the value of the corresponding item in the given
+    // column taken from the provided non-null model.
+    //
+    // Notice that the column must be the same as GetOwner()->GetModelColumn(),
+    // it is only passed to this method because the existing code already has
+    // it and should probably be removed in the future.
+    //
+    // Return true if this cell is non-empty or false otherwise (and also if
+    // the model returned a value of the wrong, i.e. different from our
+    // GetVariantType(), type, in which case a debug error is also logged).
+    bool PrepareForItem(const wxDataViewModel *model,
+                        const wxDataViewItem& item,
+                        unsigned column);
 
     // renderer properties:
     virtual void SetMode( wxDataViewCellMode mode ) = 0;
@@ -175,8 +181,20 @@ public:
     int GetEffectiveAlignment() const;
 
 protected:
+    // These methods are called from PrepareForItem() and should do whatever is
+    // needed for the current platform to ensure that the item is rendered
+    // using the given attributes and enabled/disabled state.
+    virtual void SetAttr(const wxDataViewItemAttr& attr) = 0;
+    virtual void SetEnabled(bool enabled) = 0;
+
     // Called from {Cancel,Finish}Editing() to cleanup m_editorCtrl
     void DestroyEditControl();
+
+    // Helper of PrepareForItem() also used in StartEditing(): returns the
+    // value checking that its type matches our GetVariantType().
+    wxVariant CheckedGetValue(const wxDataViewModel* model,
+                              const wxDataViewItem& item,
+                              unsigned column) const;
 
     wxString                m_variantType;
     wxDataViewColumn       *m_owner;
@@ -292,7 +310,7 @@ public:
 
     // Store the enabled state of the item so that it can be accessed from
     // Render() via GetEnabled() if needed.
-    virtual void SetEnabled(bool enabled) { m_enabled = enabled; }
+    virtual void SetEnabled(bool enabled);
     bool GetEnabled() const { return m_enabled; }
 
 
