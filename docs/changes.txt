@@ -628,6 +628,7 @@ wxMSW:
 - Fix wxDV_ROW_LINES in horizontally scrolled wxDataViewCtrl.
 - Fix RegisterHotKey() with negative IDs (troelsk).
 - Fix event object type for wxEVT_SPINCTRL events.
+- Fix bug if wxToolBar tool was deleted from its own handler (Artur Wieczorek).
 
 wxOSX:
 
