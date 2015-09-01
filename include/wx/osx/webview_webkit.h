@@ -145,6 +145,7 @@ public:
     void OnMouseEvents(wxMouseEvent &event);
 
     bool m_busy;
+    bool m_nextNavigationIsNewWindow;
 
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl);
