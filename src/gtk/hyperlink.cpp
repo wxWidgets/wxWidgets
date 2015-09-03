@@ -58,6 +58,7 @@ static inline bool UseNative()
 extern "C" {
 static gboolean activate_link(GtkWidget*, wxHyperlinkCtrl* win)
 {
+    win->SetVisited(true);
     win->SendEvent();
     return true;
 }
@@ -72,6 +73,7 @@ static void clicked_hook(GtkLinkButton* button, const char*, void*)
         wxHyperlinkCtrl* win = static_cast<wxHyperlinkCtrl*>(p->data);
         if (win->m_widget == (GtkWidget*)button)
         {
+            win->SetVisited(true);
             win->SendEvent();
             return;
         }
@@ -248,6 +250,32 @@ wxColour wxHyperlinkCtrl::GetVisitedColour() const
         return wxGenericHyperlinkCtrl::GetVisitedColour();
 
     return ret;
+}
+
+void wxHyperlinkCtrl::SetVisited(bool visited)
+{
+    base_type::SetVisited(visited);
+#if GTK_CHECK_VERSION(2,14,0)
+#ifndef __WXGTK3__
+    if (gtk_check_version(2,14,0) == NULL)
+#endif
+    {
+        gtk_link_button_set_visited(GTK_LINK_BUTTON(m_widget), visited);
+    }
+#endif
+}
+
+bool wxHyperlinkCtrl::GetVisited() const
+{
+#if GTK_CHECK_VERSION(2,14,0)
+#ifndef __WXGTK3__
+    if (gtk_check_version(2,14,0) == NULL)
+#endif
+    {
+        return gtk_link_button_get_visited(GTK_LINK_BUTTON(m_widget)) != 0;
+    }
+#endif
+    return base_type::GetVisited();
 }
 
 void wxHyperlinkCtrl::SetHoverColour(const wxColour &colour)
