@@ -167,6 +167,7 @@ wxMSW:
 - Avoid bogus assert after calling wxDatePickerCtrl::SetRange().
 - Add solution file for building with MSVS 2014 (Peter Tissen).
 - Correct wxGetOsDescription() for Windows 10 (Tobias Taschner).
+- Don't send wxActivateEvent for minimized windows (bzcdr).
 
 wxOSX/Cocoa:
 

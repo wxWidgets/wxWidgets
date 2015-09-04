@@ -4044,9 +4044,19 @@ bool wxWindowMSW::HandleDestroy()
 // ---------------------------------------------------------------------------
 
 bool wxWindowMSW::HandleActivate(int state,
-                              bool WXUNUSED(minimized),
-                              WXHWND WXUNUSED(activate))
+                                 bool minimized,
+                                 WXHWND WXUNUSED(activate))
 {
+    if ( minimized )
+    {
+        // Getting activation event when the window is minimized, as happens
+        // e.g. when the window task bar icon is clicked, is unexpected and
+        // managed to even break the logic in wx itself (see #17128), so just
+        // don't do it as there doesn't seem to be any need to be notified
+        // about the activation of the window icon in the task bar in practice.
+        return false;
+    }
+
     wxActivateEvent event(wxEVT_ACTIVATE,
                           (state == WA_ACTIVE) || (state == WA_CLICKACTIVE),
                           m_windowId,

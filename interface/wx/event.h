@@ -3005,6 +3005,11 @@ public:
         a @c wxEVT_ACTIVATE or @c wxEVT_ACTIVATE_APP event.
     @endEventTable
 
+    @note Until wxWidgets 3.1.0 activation events could be sent by wxMSW when
+    the window was minimized. This reflected the native MSW behaviour but was
+    often surprising and unexpected, so starting from 3.1.0 such events are not
+    sent any more when the window is in the minimized state.
+
     @library{wxcore}
     @category{events}
 
