@@ -1093,18 +1093,6 @@ bool wxNSTextFieldControl::becomeFirstResponder(WXWidget slf, void *_cmd)
     s_widgetBecomingFirstResponder = slf;
     bool retval = wxWidgetCocoaImpl::becomeFirstResponder(slf, _cmd);
     s_widgetBecomingFirstResponder = nil;
-    if ( retval )
-    {
-        NSText* editor = [m_textField currentEditor];
-        if ( editor )
-        {
-            long textLength = [[m_textField stringValue] length];
-            m_selStart = wxMin(textLength,wxMax(m_selStart,0)) ;
-            m_selEnd = wxMax(0,wxMin(textLength,m_selEnd)) ;
-            
-            [editor setSelectedRange:NSMakeRange(m_selStart, m_selEnd-m_selStart)];
-        }
-    }
     return retval;
 }
 
