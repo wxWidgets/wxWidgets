@@ -576,11 +576,11 @@ wxRendererGeneric::DrawSplitterSash(wxWindow *win,
     }
 
     dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE)));
 
     if ( win->HasFlag(wxSP_3DSASH) )
     {
         // Draw the 3D sash
+        dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE)));
         dc.DrawRectangle(position + 2, 0, 3, h);
 
         dc.SetPen(m_penLightGrey);
@@ -598,6 +598,7 @@ wxRendererGeneric::DrawSplitterSash(wxWindow *win,
     else
     {
         // Draw a flat sash
+        dc.SetBrush(wxBrush(win->GetBackgroundColour()));
         dc.DrawRectangle(position, 0, 3, h);
     }
 }
