@@ -1519,7 +1519,10 @@ void wxGenericCalendarCtrl::OnWheel(wxMouseEvent& event)
     switch ( event.GetWheelAxis() )
     {
         case wxMOUSE_WHEEL_VERTICAL:
-            span = wxDateSpan::Month();
+            // For consistency with the native controls, scrolling upwards
+            // should go to the past, even if the rotation is positive and
+            // could be normally expected to increase the date.
+            span = -wxDateSpan::Month();
             break;
 
         case wxMOUSE_WHEEL_HORIZONTAL:
