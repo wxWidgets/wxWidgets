@@ -232,6 +232,8 @@ public :
     virtual void SetTitle( const wxString& title, wxFontEncoding encoding ) ;
 
     virtual bool EnableCloseButton(bool enable) wxOVERRIDE;
+    virtual bool EnableMaximizeButton(bool enable) wxOVERRIDE;
+    virtual bool EnableMinimizeButton(bool enable) wxOVERRIDE;
 
     virtual bool IsMaximized() const;
 

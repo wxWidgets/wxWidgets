@@ -946,6 +946,20 @@ bool wxNonOwnedWindowCocoaImpl::EnableCloseButton(bool enable)
     return true;
 }
 
+bool wxNonOwnedWindowCocoaImpl::EnableMaximizeButton(bool enable)
+{
+    [[m_macWindow standardWindowButton:NSWindowZoomButton] setEnabled:enable];
+
+    return true;
+}
+
+bool wxNonOwnedWindowCocoaImpl::EnableMinimizeButton(bool enable)
+{
+    [[m_macWindow standardWindowButton:NSWindowMiniaturizeButton] setEnabled:enable];
+
+    return true;
+}
+
 bool wxNonOwnedWindowCocoaImpl::IsMaximized() const
 {
     if (([m_macWindow styleMask] & NSResizableWindowMask) != 0)

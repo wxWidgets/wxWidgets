@@ -206,6 +206,8 @@ public:
 
     // enable/disable close button [x]
     virtual bool EnableCloseButton(bool WXUNUSED(enable) = true) { return false; }
+    virtual bool EnableMaximizeButton(bool WXUNUSED(enable) = true) { return false; }
+    virtual bool EnableMinimizeButton(bool WXUNUSED(enable) = true) { return false; }
 
     // Attracts the users attention to this window if the application is
     // inactive (should be called when a background event occurs)

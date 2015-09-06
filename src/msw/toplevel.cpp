@@ -1194,6 +1194,56 @@ bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
     return true;
 }
 
+// Window must have wxCAPTION and either wxCLOSE_BOX or wxSYSTEM_MENU for the
+// button to be visible. Also check for wxMAXIMIZE_BOX because we don't want
+// to enable a button that is excluded from the current style.
+
+bool wxTopLevelWindowMSW::EnableMaximizeButton(bool enable)
+{
+    if ( ( HasFlag(wxCAPTION) &&
+         ( HasFlag(wxCLOSE_BOX) || HasFlag(wxSYSTEM_MENU) ) ) &&
+         HasFlag(wxMAXIMIZE_BOX) )
+    {
+        if ( enable )
+        {
+            SetWindowStyleFlag(GetWindowStyleFlag() | wxMAXIMIZE_BOX);
+        }
+        else
+        {
+            SetWindowStyleFlag(GetWindowStyleFlag() ^ wxMAXIMIZE_BOX);
+            // Restore the style to our internal store
+            wxWindowBase::SetWindowStyleFlag(GetWindowStyle() | wxMAXIMIZE_BOX);
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+bool wxTopLevelWindowMSW::EnableMinimizeButton(bool enable)
+{
+    if ( ( HasFlag(wxCAPTION) &&
+         ( HasFlag(wxCLOSE_BOX) || HasFlag(wxSYSTEM_MENU) ) ) &&
+         HasFlag(wxMINIMIZE_BOX) )
+    {
+        if ( enable )
+        {
+            SetWindowStyleFlag(GetWindowStyleFlag() | wxMINIMIZE_BOX);
+        }
+        else
+        {
+            SetWindowStyleFlag(GetWindowStyleFlag() ^ wxMINIMIZE_BOX);
+            // Restore the style to our internal store
+            wxWindowBase::SetWindowStyleFlag(GetWindowStyle() | wxMINIMIZE_BOX);
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
 void wxTopLevelWindowMSW::RequestUserAttention(int flags)
 {
 #if defined(FLASHW_STOP) && wxUSE_DYNLIB_CLASS

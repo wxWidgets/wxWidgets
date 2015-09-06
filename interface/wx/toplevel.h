@@ -149,6 +149,39 @@ public:
     virtual bool EnableCloseButton(bool enable = true);
 
     /**
+        Enables or disables the Maximize button (in the right or left upper
+        corner of a frame or dialog).
+
+        Currently only implemented for wxMSW and wxOSX.
+
+        The window style must contain wxMAXIMIZE_BOX.
+
+        Returns @true if operation was successful. Note that a successful
+        operation does not change the window style flags.
+
+        @since 3.1.0
+    */
+    virtual bool EnableMaximizeButton(bool enable = true);
+
+    /**
+        Enables or disables the Minimize button (in the right or left upper
+        corner of a frame or dialog).
+
+        Currently only implemented for wxMSW and wxOSX.
+
+        The window style must contain wxMINIMIZE_BOX.
+
+        Note that in wxMSW a successful operation will change the window
+        style flags.
+
+        Returns @true if operation was successful. Note that a successful
+        operation does not change the window style flags.
+
+        @since 3.1.0
+    */
+    virtual bool EnableMinimizeButton(bool enable = true);
+
+    /**
         Returns a pointer to the button which is the default for this window, or
         @c @NULL. The default button is the one activated by pressing the Enter
         key.
