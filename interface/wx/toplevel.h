@@ -142,8 +142,6 @@ public:
         corner of a dialog) and the Close entry of the system menu (most often
         in the left upper corner of the dialog).
 
-        Currently only implemented for wxMSW and wxGTK.
-
         Returns @true if operation was successful. This may be wrong on X11
         (including GTK+) where the window manager may not support this operation
         and there is no way to find out.

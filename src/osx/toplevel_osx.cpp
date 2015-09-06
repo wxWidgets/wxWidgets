@@ -205,6 +205,16 @@ bool wxTopLevelWindowMac::IsFullScreen() const
     return m_nowpeer->IsFullScreen();
 }
 
+bool wxTopLevelWindowMac::EnableCloseButton(bool enable)
+{
+    // Unlike in wxMSW, wxSYSTEM_MENU is not sufficient to show
+    // a close button unless combined with one of the resize buttons.
+    if ( HasFlag(wxCLOSE_BOX) )
+        return m_nowpeer->EnableCloseButton( enable);
+
+    return false;
+}
+
 void wxTopLevelWindowMac::RequestUserAttention(int flags)
 {
     return m_nowpeer->RequestUserAttention(flags);

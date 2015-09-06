@@ -939,6 +939,13 @@ void wxNonOwnedWindowCocoaImpl::SetTitle( const wxString& title, wxFontEncoding 
     [m_macWindow setTitle:wxCFStringRef( title , encoding ).AsNSString()];
 }
 
+bool wxNonOwnedWindowCocoaImpl::EnableCloseButton(bool enable)
+{
+    [[m_macWindow standardWindowButton:NSWindowCloseButton] setEnabled:enable];
+
+    return true;
+}
+
 bool wxNonOwnedWindowCocoaImpl::IsMaximized() const
 {
     if (([m_macWindow styleMask] & NSResizableWindowMask) != 0)

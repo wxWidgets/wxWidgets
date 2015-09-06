@@ -74,6 +74,10 @@ public:
     virtual void SetTitle( const wxString& title);
     virtual wxString GetTitle() const;
 
+    // EnableCloseButton(false) used to disable the "Close"
+    // button on the title bar
+    virtual bool EnableCloseButton(bool enable = true) wxOVERRIDE;
+
     virtual void SetLabel(const wxString& label) { SetTitle( label ); }
     virtual wxString GetLabel() const            { return GetTitle(); }
     

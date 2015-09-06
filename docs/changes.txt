@@ -173,6 +173,7 @@ wxOSX/Cocoa:
 
 - Use more efficient FSEvents (10.7+) in wxFileSystemWatcher (Roberto Perpuly).
 - Implement wxWindow::Disable() for non-native controls too (Steve Browne).
+- Implement wxTopLevelWindow::EnableCloseButton() (John Roberts).
 - Fix wxEVT_CHAR for non-BMP Unicode characters (ARATA Mizuki).
 - Add support for wxEVT_COMBOBOX_DROPDOWN and wxEVT_COMBOBOX_CLOSEUP
   events (Igor Korot).
