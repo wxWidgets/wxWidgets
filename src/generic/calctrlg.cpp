@@ -59,6 +59,7 @@ wxBEGIN_EVENT_TABLE(wxGenericCalendarCtrl, wxControl)
 
     EVT_LEFT_DOWN(wxGenericCalendarCtrl::OnClick)
     EVT_LEFT_DCLICK(wxGenericCalendarCtrl::OnDClick)
+    EVT_MOUSEWHEEL(wxGenericCalendarCtrl::OnWheel)
 
     EVT_SYS_COLOUR_CHANGED(wxGenericCalendarCtrl::OnSysColourChanged)
 wxEND_EVENT_TABLE()
@@ -1509,6 +1510,34 @@ wxCalendarHitTestResult wxGenericCalendarCtrl::HitTest(const wxPoint& pos,
     else
     {
         return wxCAL_HITTEST_NOWHERE;
+    }
+}
+
+void wxGenericCalendarCtrl::OnWheel(wxMouseEvent& event)
+{
+    const int rot = event.GetWheelRotation();
+    switch ( event.GetWheelAxis() )
+    {
+        case wxMOUSE_WHEEL_VERTICAL:
+        {
+            if ( rot > 0 )
+                SetDateAndNotify(m_date - wxDateSpan::Month());
+            else if ( rot < 0 )
+                SetDateAndNotify(m_date + wxDateSpan::Month());
+        }
+        break;
+
+        case wxMOUSE_WHEEL_HORIZONTAL:
+        {
+            if ( rot < 0 )
+                SetDateAndNotify(m_date - wxDateSpan::Year());
+            else if ( rot > 0 )
+                SetDateAndNotify(m_date + wxDateSpan::Year());
+        }
+        break;
+
+        default: // unknown axis
+            break;
     }
 }
 
