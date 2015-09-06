@@ -681,28 +681,31 @@ wxString wxGetOsDescription()
     int majorVer, minorVer;
     wxGetOsVersion(&majorVer, &minorVer);
 
-    wxString osBrand = _("OS X");
+    // Notice that neither the OS name itself nor the code names seem to be
+    // ever translated, OS X itself uses the English words even for the
+    // languages not using Roman alphabet.
+    wxString osBrand = "OS X";
     wxString osName;
     if (majorVer == 10)
     {
         switch (minorVer)
         {
             case 7:
-                osName = _("Lion");
+                osName = "Lion";
                 // 10.7 was the last version where the "Mac" prefix was used
-                osBrand = _("Mac OS X");
+                osBrand = "Mac OS X";
                 break;
             case 8:
-                osName = _("Mountain Lion");
+                osName = "Mountain Lion";
                 break;
             case 9:
-                osName = _("Mavericks");
+                osName = "Mavericks";
                 break;
             case 10:
-                osName = _("Yosemite");
+                osName = "Yosemite";
                 break;
             case 11:
-                osName = _("El Capitan");
+                osName = "El Capitan";
                 break;
         };
     }
