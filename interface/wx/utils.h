@@ -858,6 +858,7 @@ wxString wxGetOsDescription();
     @beginTable
     @row3col{<b>Windows OS name</b>, <b>Major version</b>, <b>Minor version</b>}
     @row3col{Windows 10,               10, 0}
+    @row3col{Windows Server 2016,      10, 0}
     @row3col{Windows 8.1,               6, 3}
     @row3col{Windows Server 2012 R2,    6, 3}
     @row3col{Windows 8,                 6, 2}
