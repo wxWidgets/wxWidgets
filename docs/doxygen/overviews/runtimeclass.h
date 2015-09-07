@@ -30,8 +30,8 @@ all the others. This macro is limited to wxWidgets classes only and only works
 with pointers (unlike the real dynamic_cast which also accepts references).
 
 Each class that you wish to be known to the type system should have a macro
-such as DECLARE_DYNAMIC_CLASS just inside the class declaration. The macro
-IMPLEMENT_DYNAMIC_CLASS should be in the implementation file. Note that these
+such as wxDECLARE_DYNAMIC_CLASS just inside the class declaration. The macro
+wxIMPLEMENT_DYNAMIC_CLASS should be in the implementation file. Note that these
 are entirely optional; use them if you wish to check object types, or create
 instances of classes using the class name. However, it is good to get into the
 habit of adding these macros for all classes.
@@ -39,13 +39,13 @@ habit of adding these macros for all classes.
 Variations on these macros are used for multiple inheritance, and abstract
 classes that cannot be instantiated dynamically or otherwise.
 
-DECLARE_DYNAMIC_CLASS inserts a static wxClassInfo declaration into the class,
-initialized by IMPLEMENT_DYNAMIC_CLASS. When initialized, the wxClassInfo
+wxDECLARE_DYNAMIC_CLASS inserts a static wxClassInfo declaration into the class,
+initialized by wxIMPLEMENT_DYNAMIC_CLASS. When initialized, the wxClassInfo
 object inserts itself into a linked list (accessed through wxClassInfo::first
 and wxClassInfo::next pointers). The linked list is fully created by the time
 all global initialisation is done.
 
-IMPLEMENT_DYNAMIC_CLASS is a macro that not only initialises the static
+wxIMPLEMENT_DYNAMIC_CLASS is a macro that not only initialises the static
 wxClassInfo member, but defines a global function capable of creating a dynamic
 object of the class in question. A pointer to this function is stored in
 wxClassInfo, and is used when an object should be created dynamically.
@@ -64,7 +64,7 @@ wxClassInfo object instead, then you can simply call wxClassInfo::CreateObject.
 @section overview_rtti_classinfo wxClassInfo
 
 This class stores meta-information about classes. An application may use macros
-such as DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS to record runtime
+such as wxDECLARE_DYNAMIC_CLASS and wxIMPLEMENT_DYNAMIC_CLASS to record runtime
 information about a class, including:
 
 @li Its position in the inheritance hierarchy.
@@ -72,8 +72,8 @@ information about a class, including:
 @li A string representation of the class name.
 @li A function that can be called to construct an instance of this class.
 
-The DECLARE_... macros declare a static wxClassInfo variable in a class, which
-is initialized by macros of the form IMPLEMENT_... in the implementation C++
+The wxDECLARE_... macros declare a static wxClassInfo variable in a class, which
+is initialized by macros of the form wxIMPLEMENT_... in the implementation C++
 file. Classes whose instances may be constructed dynamically are given a global
 constructor function which returns a new object.
 
@@ -89,7 +89,7 @@ In a header file frame.h:
 @code
 class wxFrame : public wxWindow
 {
-    DECLARE_DYNAMIC_CLASS(wxFrame)
+    wxDECLARE_DYNAMIC_CLASS(wxFrame);
 
 private:
     wxString m_title;
@@ -102,7 +102,7 @@ public:
 In a C++ file frame.cpp:
 
 @code
-IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow);
 
 wxFrame::wxFrame()
 {

@@ -40,8 +40,8 @@ same code to draw to several different devices. You can draw using the member
 functions of wxDC, such as wxDC::DrawLine and wxDC::DrawText. Control colour on
 a window (wxColour) with brushes (wxBrush) and pens (wxPen).
 
-To intercept events, you add a DECLARE_EVENT_TABLE macro to the window class
-declaration, and put a BEGIN_EVENT_TABLE ... END_EVENT_TABLE block in the
+To intercept events, you add a wxDECLARE_EVENT_TABLE macro to the window class
+declaration, and put a wxBEGIN_EVENT_TABLE ... wxEND_EVENT_TABLE block in the
 implementation file. Between these macros, you add event macros which map the
 event (such as a mouse click) to a member function. These might override
 predefined event handlers such as for wxKeyEvent and wxMouseEvent.
