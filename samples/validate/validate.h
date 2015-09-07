@@ -85,7 +85,6 @@ public:
 class MyComboBoxValidator : public wxValidator
 {
 public:
-    MyComboBoxValidator(const MyComboBoxValidator& tocopy) { m_var=tocopy.m_var; }
     MyComboBoxValidator(wxString* var) { m_var=var; }
 
     virtual bool Validate(wxWindow* parent) wxOVERRIDE;
