@@ -54,8 +54,8 @@ public:
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) wxOVERRIDE;
 #endif
 #if wxUSE_THREADS && defined(__WXGTK20__)
-    virtual void MutexGuiEnter();
-    virtual void MutexGuiLeave();
+    virtual void MutexGuiEnter() wxOVERRIDE;
+    virtual void MutexGuiLeave() wxOVERRIDE;
 #endif
 
 #if defined(__WXMAC__) && wxUSE_STDPATHS
@@ -64,13 +64,13 @@ public:
     virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const wxOVERRIDE;
 
 #ifdef __WXGTK20__
-    virtual wxString GetDesktopEnvironment() const;
+    virtual wxString GetDesktopEnvironment() const wxOVERRIDE;
     virtual wxString GetStandardCmdLineOptions(wxArrayString& names,
-                                               wxArrayString& desc) const;
+                                               wxArrayString& desc) const wxOVERRIDE;
 #endif // __WXGTK20____
 
 #if defined(__WXGTK20__)
-    virtual bool ShowAssertDialog(const wxString& msg);
+    virtual bool ShowAssertDialog(const wxString& msg) wxOVERRIDE;
 #endif
 
 #if wxUSE_SOCKETS
@@ -80,7 +80,7 @@ public:
 #endif
 
 #ifdef wxHAS_GUI_FDIOMANAGER
-    virtual wxFDIOManager *GetFDIOManager();
+    virtual wxFDIOManager *GetFDIOManager() wxOVERRIDE;
 #endif
 
 #endif // wxUSE_SOCKETS

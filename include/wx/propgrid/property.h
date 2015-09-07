@@ -184,11 +184,11 @@ public:
                          wxPGProperty* property,
                          int column,
                          int item,
-                         int flags ) const;
+                         int flags ) const wxOVERRIDE;
 
     virtual wxSize GetImageSize( const wxPGProperty* property,
                                  int column,
-                                 int item ) const;
+                                 int item ) const wxOVERRIDE;
 
 protected:
 };
@@ -2572,7 +2572,7 @@ private:
 //
 
 #define WX_PG_DECLARE_DOGETEDITORCLASS \
-    virtual const wxPGEditor* DoGetEditorClass() const;
+    virtual const wxPGEditor* DoGetEditorClass() const wxOVERRIDE;
 
 #ifndef WX_PG_DECLARE_PROPERTY_CLASS
     #define WX_PG_DECLARE_PROPERTY_CLASS(CLASSNAME) \
@@ -2612,7 +2612,7 @@ public:
     wxPGRootProperty( const wxString& name = wxS("<Root>") );
     virtual ~wxPGRootProperty();
 
-    virtual bool StringToValue( wxVariant&, const wxString&, int ) const
+    virtual bool StringToValue( wxVariant&, const wxString&, int ) const wxOVERRIDE
     {
         return false;
     }
@@ -2642,8 +2642,8 @@ public:
 
     int GetTextExtent( const wxWindow* wnd, const wxFont& font ) const;
 
-    virtual wxString ValueToString( wxVariant& value, int argFlags ) const;
-    virtual wxString GetValueAsString( int argFlags = 0 ) const;
+    virtual wxString ValueToString( wxVariant& value, int argFlags ) const wxOVERRIDE;
+    virtual wxString GetValueAsString( int argFlags = 0 ) const wxOVERRIDE;
 
 protected:
     void SetTextColIndex( unsigned int colInd )

@@ -124,14 +124,14 @@ public:
     wxIPV4address(const wxIPV4address& other) : wxIPaddress(other) { }
 
     // implement wxSockAddress pure virtuals:
-    virtual Family Type() { return IPV4; }
-    virtual wxSockAddress *Clone() const { return new wxIPV4address(*this); }
+    virtual Family Type() wxOVERRIDE { return IPV4; }
+    virtual wxSockAddress *Clone() const wxOVERRIDE { return new wxIPV4address(*this); }
 
 
     // implement wxIPaddress pure virtuals:
-    virtual bool IsLocalHost() const;
+    virtual bool IsLocalHost() const wxOVERRIDE;
 
-    virtual wxString IPAddress() const;
+    virtual wxString IPAddress() const wxOVERRIDE;
 
 
     // IPv4-specific methods:
@@ -143,7 +143,7 @@ public:
     bool BroadcastAddress();
 
 private:
-    virtual void DoInitImpl();
+    virtual void DoInitImpl() wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxIPV4address);
 };
@@ -198,8 +198,8 @@ public:
     void Filename(const wxString& name);
     wxString Filename() const;
 
-    virtual Family Type() { return UNIX; }
-    virtual wxSockAddress *Clone() const { return new wxUNIXaddress(*this); }
+    virtual Family Type() wxOVERRIDE { return UNIX; }
+    virtual wxSockAddress *Clone() const wxOVERRIDE { return new wxUNIXaddress(*this); }
 
 private:
     wxSockAddressImpl& GetUNIX();

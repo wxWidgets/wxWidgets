@@ -25,14 +25,14 @@ public:
                         wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                         int align = wxDVR_DEFAULT_ALIGNMENT );
 
-    virtual void SetMode( wxDataViewCellMode mode );
-    virtual wxDataViewCellMode GetMode() const;
+    virtual void SetMode( wxDataViewCellMode mode ) wxOVERRIDE;
+    virtual wxDataViewCellMode GetMode() const wxOVERRIDE;
 
-    virtual void SetAlignment( int align );
-    virtual int GetAlignment() const;
+    virtual void SetAlignment( int align ) wxOVERRIDE;
+    virtual int GetAlignment() const wxOVERRIDE;
 
-    virtual void EnableEllipsize(wxEllipsizeMode mode = wxELLIPSIZE_MIDDLE);
-    virtual wxEllipsizeMode GetEllipsizeMode() const;
+    virtual void EnableEllipsize(wxEllipsizeMode mode = wxELLIPSIZE_MIDDLE) wxOVERRIDE;
+    virtual wxEllipsizeMode GetEllipsizeMode() const wxOVERRIDE;
 
     virtual bool FinishEditing() wxOVERRIDE;
 

@@ -31,13 +31,13 @@ public:
     wxRichTextHTMLHandler(const wxString& name = wxT("HTML"), const wxString& ext = wxT("html"), int type = wxRICHTEXT_TYPE_HTML);
 
     /// Can we save using this handler?
-    virtual bool CanSave() const { return true; }
+    virtual bool CanSave() const wxOVERRIDE { return true; }
 
     /// Can we load using this handler?
-    virtual bool CanLoad() const { return false; }
+    virtual bool CanLoad() const wxOVERRIDE { return false; }
 
     /// Can we handle this filename (if using files)? By default, checks the extension.
-    virtual bool CanHandle(const wxString& filename) const;
+    virtual bool CanHandle(const wxString& filename) const wxOVERRIDE;
 
 // Accessors and operations unique to this handler
 
@@ -75,8 +75,8 @@ protected:
 // Implementation
 
 #if wxUSE_STREAMS
-    virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream);
-    virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream);
+    virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream) wxOVERRIDE;
+    virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream) wxOVERRIDE;
 
     /// Output character formatting
     void BeginCharacterFormatting(const wxRichTextAttr& currentStyle, const wxRichTextAttr& thisStyle, const wxRichTextAttr& paraStyle, wxTextOutputStream& stream );

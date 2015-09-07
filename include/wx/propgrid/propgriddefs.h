@@ -521,11 +521,11 @@ public:\
 \
     const classname &GetValue() const { return m_value; } \
 \
-    virtual bool Eq(wxVariantData& data) const; \
+    virtual bool Eq(wxVariantData& data) const wxOVERRIDE; \
 \
-    virtual wxString GetType() const; \
+    virtual wxString GetType() const wxOVERRIDE; \
 \
-    virtual wxVariantData* Clone() const { return new classname##VariantData(m_value); } \
+    virtual wxVariantData* Clone() const wxOVERRIDE { return new classname##VariantData(m_value); } \
 \
     DECLARE_WXANY_CONVERSION() \
 protected:\

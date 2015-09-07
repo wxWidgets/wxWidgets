@@ -190,7 +190,7 @@ public:
     }
 
 #ifdef __WXMSW__
-    virtual bool IsShown() const;
+    virtual bool IsShown() const wxOVERRIDE;
 #endif // __WXMSW__
 
     // this is an implementation detail: called when the native window is

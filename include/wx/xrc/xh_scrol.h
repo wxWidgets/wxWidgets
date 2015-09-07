@@ -18,8 +18,8 @@ class WXDLLIMPEXP_XRC wxScrollBarXmlHandler : public wxXmlResourceHandler
 {
 public:
     wxScrollBarXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+    virtual wxObject *DoCreateResource() wxOVERRIDE;
+    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxScrollBarXmlHandler);
 };

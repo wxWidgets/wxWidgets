@@ -20,8 +20,8 @@ class WXDLLIMPEXP_XRC wxStaticLineXmlHandler : public wxXmlResourceHandler
 
 public:
     wxStaticLineXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+    virtual wxObject *DoCreateResource() wxOVERRIDE;
+    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
 };
 
 #endif // wxUSE_XRC && wxUSE_STATLINE

@@ -349,7 +349,7 @@ public:
     virtual ~wxListHeaderWindow();
 
     // We never need focus as we don't have any keyboard interface.
-    virtual bool AcceptsFocus() const { return false; }
+    virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
 
     void DrawCurrent();
     void AdjustDC( wxDC& dc );
@@ -365,7 +365,7 @@ public:
     int m_colToSend;
     int m_widthToSend;
 
-    virtual void OnInternalIdle();
+    virtual void OnInternalIdle() wxOVERRIDE;
 
 private:
     // common part of all ctors
@@ -389,7 +389,7 @@ private:
 
 public:
     wxListRenameTimer( wxListMainWindow *owner );
-    void Notify();
+    void Notify() wxOVERRIDE;
 };
 
 //-----------------------------------------------------------------------------
@@ -407,7 +407,7 @@ public:
     {
     }
 
-    virtual void Notify();
+    virtual void Notify() wxOVERRIDE;
 
 private:
     wxListMainWindow *m_owner;
@@ -694,7 +694,7 @@ public:
                      const wxPoint& point = wxDefaultPosition );
 
     // override base class virtual to reset m_lineHeight when the font changes
-    virtual bool SetFont(const wxFont& font)
+    virtual bool SetFont(const wxFont& font) wxOVERRIDE
     {
         if ( !wxWindow::SetFont(font) )
             return false;
@@ -724,7 +724,7 @@ public:
         return m_hasFocus ? m_highlightBrush : m_highlightUnfocusedBrush;
     }
 
-    bool HasFocus() const
+    bool HasFocus() const wxOVERRIDE
     {
         return m_hasFocus;
     }
@@ -780,7 +780,7 @@ protected:
            m_lineSelectSingleOnUp;
 
 protected:
-    wxWindow *GetMainWindowOfCompositeControl() { return GetParent(); }
+    wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE { return GetParent(); }
 
     // the total count of items in a virtual list control
     size_t m_countVirt;

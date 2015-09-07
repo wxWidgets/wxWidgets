@@ -19,8 +19,8 @@ class WXDLLIMPEXP_XRC wxBannerWindowXmlHandler : public wxXmlResourceHandler
 public:
     wxBannerWindowXmlHandler();
 
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+    virtual wxObject *DoCreateResource() wxOVERRIDE;
+    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxBannerWindowXmlHandler);
 };

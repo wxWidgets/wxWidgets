@@ -20,8 +20,8 @@ class WXDLLIMPEXP_XRC wxToggleButtonXmlHandler : public wxXmlResourceHandler
 
 public:
     wxToggleButtonXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+    virtual wxObject *DoCreateResource() wxOVERRIDE;
+    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
 
 protected:
     virtual void DoCreateToggleButton(wxObject *control);

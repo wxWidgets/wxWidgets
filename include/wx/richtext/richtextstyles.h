@@ -143,7 +143,7 @@ public:
     virtual ~wxRichTextCharacterStyleDefinition() {}
 
     /// Clones the object
-    virtual wxRichTextStyleDefinition* Clone() const { return new wxRichTextCharacterStyleDefinition(*this); }
+    virtual wxRichTextStyleDefinition* Clone() const wxOVERRIDE { return new wxRichTextCharacterStyleDefinition(*this); }
 
 protected:
 };
@@ -181,7 +181,7 @@ public:
     bool operator ==(const wxRichTextParagraphStyleDefinition& def) const;
 
     /// Clones the object
-    virtual wxRichTextStyleDefinition* Clone() const { return new wxRichTextParagraphStyleDefinition(*this); }
+    virtual wxRichTextStyleDefinition* Clone() const wxOVERRIDE { return new wxRichTextParagraphStyleDefinition(*this); }
 
 protected:
 
@@ -218,7 +218,7 @@ public:
     bool operator ==(const wxRichTextListStyleDefinition& def) const;
 
     /// Clones the object
-    virtual wxRichTextStyleDefinition* Clone() const { return new wxRichTextListStyleDefinition(*this); }
+    virtual wxRichTextStyleDefinition* Clone() const wxOVERRIDE { return new wxRichTextListStyleDefinition(*this); }
 
     /// Sets/gets the attributes for the given level
     void SetLevelAttributes(int i, const wxRichTextAttr& attr);
@@ -284,7 +284,7 @@ public:
     bool operator ==(const wxRichTextBoxStyleDefinition& def) const;
 
     /// Clones the object
-    virtual wxRichTextStyleDefinition* Clone() const { return new wxRichTextBoxStyleDefinition(*this); }
+    virtual wxRichTextStyleDefinition* Clone() const wxOVERRIDE { return new wxRichTextBoxStyleDefinition(*this); }
 
 protected:
 };
@@ -556,7 +556,7 @@ public:
 
 protected:
     /// Returns the HTML for this item
-    virtual wxString OnGetItem(size_t n) const;
+    virtual wxString OnGetItem(size_t n) const wxOVERRIDE;
 
 private:
 
@@ -656,23 +656,23 @@ private:
 class wxRichTextStyleComboPopup : public wxRichTextStyleListBox, public wxComboPopup
 {
 public:
-    virtual void Init()
+    virtual void Init() wxOVERRIDE
     {
         m_itemHere = -1; // hot item in list
         m_value = -1;
     }
 
-    virtual bool Create( wxWindow* parent );
+    virtual bool Create( wxWindow* parent ) wxOVERRIDE;
 
-    virtual wxWindow *GetControl() { return this; }
+    virtual wxWindow *GetControl() wxOVERRIDE { return this; }
 
-    virtual void SetStringValue( const wxString& s );
+    virtual void SetStringValue( const wxString& s ) wxOVERRIDE;
 
-    virtual wxString GetStringValue() const;
+    virtual wxString GetStringValue() const wxOVERRIDE;
 
     /// Can we set the selection based on the editor caret position?
     // virtual bool CanAutoSetSelection() { return ((m_combo == NULL) || !m_combo->IsPopupShown()); }
-    virtual bool CanAutoSetSelection() { return false; }
+    virtual bool CanAutoSetSelection() wxOVERRIDE { return false; }
 
     //
     // Popup event handlers

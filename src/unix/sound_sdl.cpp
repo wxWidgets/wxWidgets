@@ -39,7 +39,7 @@ class wxSoundBackendSDLNotification : public wxEvent
 public:
     wxDECLARE_DYNAMIC_CLASS(wxSoundBackendSDLNotification);
     wxSoundBackendSDLNotification();
-    wxEvent *Clone() const { return new wxSoundBackendSDLNotification(*this); }
+    wxEvent *Clone() const wxOVERRIDE { return new wxSoundBackendSDLNotification(*this); }
 };
 
 typedef void (wxEvtHandler::*wxSoundBackendSDLNotificationFunction)

@@ -20,8 +20,8 @@ class WXDLLIMPEXP_XRC wxComboCtrlXmlHandler : public wxXmlResourceHandler
 
 public:
     wxComboCtrlXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+    virtual wxObject *DoCreateResource() wxOVERRIDE;
+    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
 
 private:
 };

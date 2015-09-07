@@ -272,7 +272,7 @@ public:
     virtual void SetString(unsigned int n, const wxString& s) wxOVERRIDE;
 
     // resolve ambiguity between wxItemContainer and wxVListBox versions
-    void Clear();
+    void Clear() wxOVERRIDE;
 
 protected:
     virtual int DoInsertItems(const wxArrayStringsAdapter & items,

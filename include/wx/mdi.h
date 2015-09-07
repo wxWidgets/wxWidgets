@@ -239,7 +239,7 @@ public:
 
     // title is used as the tab label
     virtual wxString GetTitle() const wxOVERRIDE { return m_title; }
-    virtual void SetTitle(const wxString& title) = 0;
+    virtual void SetTitle(const wxString& title) wxOVERRIDE = 0;
 
     // no maximize etc
     virtual void Maximize(bool WXUNUSED(maximize) = true) wxOVERRIDE { }

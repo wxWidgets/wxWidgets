@@ -20,8 +20,8 @@ class WXDLLIMPEXP_XRC wxFrameXmlHandler : public wxXmlResourceHandler
 
 public:
     wxFrameXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+    virtual wxObject *DoCreateResource() wxOVERRIDE;
+    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
 };
 
 #endif // wxUSE_XRC

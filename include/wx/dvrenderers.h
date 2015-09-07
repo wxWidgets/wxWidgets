@@ -305,12 +305,12 @@ public:
 
     // Override the base class virtual method to simply store the attribute so
     // that it can be accessed using GetAttr() from Render() if needed.
-    virtual void SetAttr(const wxDataViewItemAttr& attr) { m_attr = attr; }
+    virtual void SetAttr(const wxDataViewItemAttr& attr) wxOVERRIDE { m_attr = attr; }
     const wxDataViewItemAttr& GetAttr() const { return m_attr; }
 
     // Store the enabled state of the item so that it can be accessed from
     // Render() via GetEnabled() if needed.
-    virtual void SetEnabled(bool enabled);
+    virtual void SetEnabled(bool enabled) wxOVERRIDE;
     bool GetEnabled() const { return m_enabled; }
 
 
@@ -326,7 +326,7 @@ public:
     // Prepare DC to use attributes and call Render().
     void WXCallRender(wxRect rect, wxDC *dc, int state);
 
-    virtual bool IsCustomRenderer() const { return true; }
+    virtual bool IsCustomRenderer() const wxOVERRIDE { return true; }
 
 protected:
     // helper for GetSize() implementations, respects attributes
@@ -368,13 +368,13 @@ public:
     wxDataViewSpinRenderer( int min, int max,
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
                             int alignment = wxDVR_DEFAULT_ALIGNMENT );
-    virtual bool HasEditorCtrl() const { return true; }
-    virtual wxWindow* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
-    virtual bool GetValueFromEditorCtrl( wxWindow* editor, wxVariant &value );
-    virtual bool Render( wxRect rect, wxDC *dc, int state );
-    virtual wxSize GetSize() const;
-    virtual bool SetValue( const wxVariant &value );
-    virtual bool GetValue( wxVariant &value ) const;
+    virtual bool HasEditorCtrl() const wxOVERRIDE { return true; }
+    virtual wxWindow* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value ) wxOVERRIDE;
+    virtual bool GetValueFromEditorCtrl( wxWindow* editor, wxVariant &value ) wxOVERRIDE;
+    virtual bool Render( wxRect rect, wxDC *dc, int state ) wxOVERRIDE;
+    virtual wxSize GetSize() const wxOVERRIDE;
+    virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
+    virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
 
 private:
     long    m_data;
@@ -446,13 +446,13 @@ public:
                            wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
                            int align = wxDVR_DEFAULT_ALIGNMENT);
 
-    virtual bool HasEditorCtrl() const { return true; }
-    virtual wxWindow *CreateEditorCtrl(wxWindow *parent, wxRect labelRect, const wxVariant &value);
-    virtual bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant &value);
-    virtual bool SetValue(const wxVariant &value);
-    virtual bool GetValue(wxVariant& value) const;
-    virtual bool Render( wxRect cell, wxDC *dc, int state );
-    virtual wxSize GetSize() const;
+    virtual bool HasEditorCtrl() const wxOVERRIDE { return true; }
+    virtual wxWindow *CreateEditorCtrl(wxWindow *parent, wxRect labelRect, const wxVariant &value) wxOVERRIDE;
+    virtual bool GetValueFromEditorCtrl(wxWindow* editor, wxVariant &value) wxOVERRIDE;
+    virtual bool SetValue(const wxVariant &value) wxOVERRIDE;
+    virtual bool GetValue(wxVariant& value) const wxOVERRIDE;
+    virtual bool Render( wxRect cell, wxDC *dc, int state ) wxOVERRIDE;
+    virtual wxSize GetSize() const wxOVERRIDE;
 
 private:
     wxDateTime    m_date;

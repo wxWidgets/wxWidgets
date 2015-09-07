@@ -98,10 +98,10 @@ public:
         m_swx = swx;
     }
 
-    bool OnDropText(wxCoord x, wxCoord y, const wxString& data);
-    wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def);
-    wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def);
-    void OnLeave();
+    bool OnDropText(wxCoord x, wxCoord y, const wxString& data) wxOVERRIDE;
+    wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE;
+    wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE;
+    void OnLeave() wxOVERRIDE;
 
 private:
     ScintillaWX* m_swx;
@@ -185,7 +185,7 @@ public:
     // helpers
     void FullPaint();
     void FullPaintDC(wxDC* dc);
-    bool CanPaste();
+    bool CanPaste() wxOVERRIDE;
     bool GetHideSelection() { return view.hideSelection; }
     void DoScrollToLine(int line);
     void DoScrollToColumn(int column);
