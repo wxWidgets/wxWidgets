@@ -66,6 +66,64 @@ public:
         ResourceCat_Messages
     };
 
+    /// Possible values for userDir parameter of GetUserDir().
+    enum Dir
+    {
+        /**
+            Directory containing user documents.
+
+            Example return values:
+            - Unix/Mac: @c ~/Documents
+            - Windows: @c "C:\Users\username\Documents"
+        */
+        Dir_Documents,
+
+        /**
+            Directory containing files on the users desktop.
+
+            Example return values:
+            - Unix/Mac: @c ~/Desktop
+            - Windows: @c "C:\Users\username\Desktop"
+        */
+        Dir_Desktop,
+
+        /**
+            Directory for downloaded files
+
+            Example return values:
+            - Unix/Mac: @c ~/Downloads
+            - Windows: @c "C:\Users\username\Downloads" (Only available on Vista and newer)
+        */
+        Dir_Downloads,
+
+        /**
+            Directory containing music files.
+
+            Example return values:
+            - Unix/Mac: @c ~/Music
+            - Windows: @c "C:\Users\username\Music"
+        */
+        Dir_Music,
+
+        /**
+            Directory containing picture files.
+
+            Example return values:
+            - Unix/Mac: @c ~/Pictures
+            - Windows: @c "C:\Users\username\Pictures"
+        */
+        Dir_Pictures,
+
+        /**
+            Directory containing video files.
+
+            Example return values:
+            - Unix: @c ~/Videos
+            - Windows: @c "C:\Users\username\Videos"
+            - Mac: @c ~/Movies
+        */
+        Dir_Videos
+    };
 
     /**
         MSW-specific function undoing the effect of IgnoreAppSubDir() calls.
@@ -138,17 +196,11 @@ public:
     virtual wxString GetDataDir() const;
 
     /**
-        Return the directory containing the current user's documents.
-
-        Example return values:
-        - Unix: @c ~ (the home directory)
-        - Windows: @c "C:\Users\username\Documents" or
-                   @c "C:\Documents and Settings\username\My Documents"
-        - Mac: @c ~/Documents
+        Same as calling GetUserDir() with Dir_Documents parameter.
 
         @since 2.7.0
 
-        @see GetAppDocumentsDir()
+        @see GetAppDocumentsDir(), GetUserDir()
     */
     virtual wxString GetDocumentsDir() const;
 
@@ -258,6 +310,17 @@ public:
         - Mac: @c "~/Library/Application Support/appinfo"
     */
     virtual wxString GetUserDataDir() const;
+
+    /**
+        Return the path of the specified user data directory.
+
+        If the value could not be determined the users home directory is returned.
+
+        @note On Unix this supports the xdg user dirs specification.
+
+        @since 3.1.0
+    */
+    virtual wxString GetUserDir(Dir userDir) const;
 
     /**
         Return the directory for user data files which shouldn't be shared with

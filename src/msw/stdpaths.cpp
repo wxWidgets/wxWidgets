@@ -36,6 +36,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/wrapshl.h"
+#include <initguid.h>
 
 // ----------------------------------------------------------------------------
 // types
@@ -43,6 +44,7 @@
 
 typedef HRESULT (WINAPI *SHGetFolderPath_t)(HWND, int, HANDLE, DWORD, LPTSTR);
 typedef HRESULT (WINAPI *SHGetSpecialFolderPath_t)(HWND, LPTSTR, int, BOOL);
+typedef HRESULT (WINAPI *SHGetKnownFolderPath_t)(const GUID&, DWORD, HANDLE, PWSTR *);
 
 // ----------------------------------------------------------------------------
 // constants
@@ -86,6 +88,9 @@ typedef HRESULT (WINAPI *SHGetSpecialFolderPath_t)(HWND, LPTSTR, int, BOOL);
 namespace
 {
 
+DEFINE_GUID(wxFOLDERID_Downloads,
+    0x374de290, 0x123f, 0x4565, 0x91, 0x64, 0x39, 0xc4, 0x92, 0x5e, 0x46, 0x7b);
+
 struct ShellFunctions
 {
     ShellFunctions()
@@ -97,6 +102,7 @@ struct ShellFunctions
 
     SHGetFolderPath_t pSHGetFolderPath;
     SHGetSpecialFolderPath_t pSHGetSpecialFolderPath;
+    SHGetKnownFolderPath_t pSHGetKnownFolderPath;
 
     bool initialized;
 };
@@ -145,6 +151,9 @@ void ResolveShellFunctions()
         gs_shellFuncs.pSHGetSpecialFolderPath = (SHGetSpecialFolderPath_t)
             dllShellFunctions.GetSymbol(funcname + UNICODE_SUFFIX);
     }
+
+    gs_shellFuncs.pSHGetKnownFolderPath = (SHGetKnownFolderPath_t)
+        dllShellFunctions.GetSymbol("SHGetKnownFolderPath");
 
     // finally we fall back on SHGetSpecialFolderLocation (shell32.dll 4.0),
     // but we don't need to test for it -- it is available even under Win95
@@ -242,6 +251,28 @@ wxString wxStandardPaths::DoGetDirectory(int csidl)
     return dir;
 }
 
+wxString wxStandardPaths::DoGetKnownFolder(const GUID& rfid)
+{
+    if (!gs_shellFuncs.initialized)
+        ResolveShellFunctions();
+
+    wxString dir;
+
+    if ( gs_shellFuncs.pSHGetKnownFolderPath )
+    {
+        PWSTR pDir;
+        HRESULT hr = gs_shellFuncs.pSHGetKnownFolderPath(rfid, 0, 0, &pDir);
+        if ( SUCCEEDED(hr) )
+        {
+            dir = pDir;
+            CoTaskMemFree(pDir);
+        }
+    }
+
+    return dir;
+}
+
+
 wxString wxStandardPaths::GetAppDir() const
 {
     if ( m_appDir.empty() )
@@ -252,9 +283,38 @@ wxString wxStandardPaths::GetAppDir() const
     return m_appDir;
 }
 
-wxString wxStandardPaths::GetDocumentsDir() const
+wxString wxStandardPaths::GetUserDir(Dir userDir) const
 {
-    return DoGetDirectory(CSIDL_PERSONAL);
+    int csidl;
+    switch (userDir)
+    {
+        case Dir_Desktop:
+            csidl = CSIDL_DESKTOPDIRECTORY;
+            break;
+        case Dir_Downloads:
+        {
+            csidl = CSIDL_PERSONAL;
+            // Downloads folder is only available since Vista
+            wxString dir = DoGetKnownFolder(wxFOLDERID_Downloads);
+            if ( !dir.empty() )
+                return dir;
+            break;
+        }
+        case Dir_Music:
+            csidl = CSIDL_MYMUSIC;
+            break;
+        case Dir_Pictures:
+            csidl = CSIDL_MYPICTURES;
+            break;
+        case Dir_Videos:
+            csidl = CSIDL_MYVIDEO;
+            break;
+        default:
+            csidl = CSIDL_PERSONAL;
+            break;
+    }
+
+    return DoGetDirectory(csidl);
 }
 
 // ----------------------------------------------------------------------------
