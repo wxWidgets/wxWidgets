@@ -250,7 +250,7 @@ MyFrame::MyFrame()
                                wxT("&3D Sash"),
                                wxT("Toggle wxSP_3DSASH flag"));
     splitMenu->Check(SPLIT_3DSASH, true);
-#if __WXMSW__
+#ifdef __WXMSW__
     splitMenu->AppendCheckItem(SPLIT_NOTHEME,
                                wxT("Disable XP &theme"),
                                wxT("Toggle wxSP_NO_XP_THEME flag"));
