@@ -2751,7 +2751,7 @@ void wxWindowGTK::PostCreation()
 
     // unless the window was created initially hidden (i.e. Hide() had been
     // called before Create()), we should show it at GTK+ level as well
-    if ( IsShown() )
+    if (m_isShown)
         gtk_widget_show( m_widget );
 }
 
@@ -2969,7 +2969,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
 
 bool wxWindowGTK::GTKShowFromOnIdle()
 {
-    if (IsShown() && m_showOnIdle && !gtk_widget_get_visible (m_widget))
+    if (m_isShown && m_showOnIdle && !gtk_widget_get_visible(m_widget))
     {
         GtkAllocation alloc;
         alloc.x = m_x;
