@@ -159,6 +159,11 @@ public :
 
     virtual void SetTitle( const wxString& title, wxFontEncoding encoding ) ;
 
+    // Title bar buttons don't exist in iOS.
+    virtual bool EnableCloseButton(bool WXUNUSED(enable)) { return false; }
+    virtual bool EnableMaximizeButton(bool WXUNUSED(enable)) { return false; }
+    virtual bool EnableMinimizeButton(bool WXUNUSED(enable)) { return false; }
+
     virtual bool IsMaximized() const;
 
     virtual bool IsIconized() const;
