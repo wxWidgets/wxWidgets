@@ -406,7 +406,7 @@ TAG_HANDLER_BEGIN(SUBSUP, "SUB,SUP")
 
         m_WParser->SetScriptMode(issub ? wxHTML_SCRIPT_SUB : wxHTML_SCRIPT_SUP);
         m_WParser->SetScriptBaseline(
-                oldbase + c ? c->GetScriptBaseline() : 0);
+                oldbase + (c ? c->GetScriptBaseline() : 0));
 
         // select smaller font
         m_WParser->SetFontSize(m_WParser->GetFontSize()-2);
