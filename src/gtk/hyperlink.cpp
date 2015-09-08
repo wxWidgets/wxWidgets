@@ -121,7 +121,10 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
             x_alignment = 0.0;
         else if (HasFlag(wxHL_ALIGN_RIGHT))
             x_alignment = 1.0;
+
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         gtk_button_set_alignment(GTK_BUTTON(m_widget), x_alignment, 0.5);
+        wxGCC_WARNING_RESTORE()
 
         // set to non empty strings both the url and the label
         SetURL(url.empty() ? label : url);
@@ -209,13 +212,20 @@ wxColour wxHyperlinkCtrl::GetNormalColour() const
     wxColour ret;
     if ( UseNative() )
     {
-        GdkColor *link_color = NULL;
+        GdkColor* link_color;
+        GdkColor color = { 0, 0, 0, 0xeeee };
 
-        // convert GdkColor in wxColour
-        gtk_widget_style_get(m_widget, "link-color", &link_color, NULL);
+        GtkWidget* widget = gtk_bin_get_child(GTK_BIN(m_widget));
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+        gtk_widget_ensure_style(widget);
+        gtk_widget_style_get(widget, "link-color", &link_color, NULL);
         if (link_color)
-            ret = wxColour(*link_color);
-        gdk_color_free (link_color);
+        {
+            color = *link_color;
+            gdk_color_free(link_color);
+        }
+        wxGCC_WARNING_RESTORE()
+        ret = wxColour(color);
     }
     else
         ret = wxGenericHyperlinkCtrl::GetNormalColour();
@@ -238,16 +248,23 @@ wxColour wxHyperlinkCtrl::GetVisitedColour() const
     wxColour ret;
     if ( UseNative() )
     {
-        GdkColor *link_color = NULL;
+        GdkColor* link_color;
+        GdkColor color = { 0, 0x5555, 0x1a1a, 0x8b8b };
 
-        // convert GdkColor in wxColour
-        gtk_widget_style_get(m_widget, "visited-link-color", &link_color, NULL);
+        GtkWidget* widget = gtk_bin_get_child(GTK_BIN(m_widget));
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+        gtk_widget_ensure_style(widget);
+        gtk_widget_style_get(widget, "visited-link-color", &link_color, NULL);
         if (link_color)
-            ret = wxColour(*link_color);
-        gdk_color_free (link_color);
+        {
+            color = *link_color;
+            gdk_color_free(link_color);
+        }
+        wxGCC_WARNING_RESTORE()
+        ret = wxColour(color);
     }
     else
-        return wxGenericHyperlinkCtrl::GetVisitedColour();
+        ret = base_type::GetVisitedColour();
 
     return ret;
 }
