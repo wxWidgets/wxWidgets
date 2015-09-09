@@ -711,12 +711,12 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/unix/evtloop.h \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
-	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
 	wx/unix/fswatcher_inotify.h \
+	wx/unix/stdpaths.h \
 	wx/msw/apptrait.h \
 	wx/msw/apptbase.h \
 	wx/msw/chkconf.h \
@@ -850,7 +850,6 @@ ALL_BASE_SOURCES =  \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
-	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
@@ -858,6 +857,7 @@ ALL_BASE_SOURCES =  \
 	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/unix/fswatcher_inotify.cpp \
+	src/unix/stdpaths.cpp \
 	src/msw/basemsw.cpp \
 	src/msw/crashrpt.cpp \
 	src/msw/debughlp.cpp \
@@ -884,8 +884,11 @@ ALL_BASE_SOURCES =  \
 	src/common/utilscmn.cpp \
 	src/osx/carbon/utils.cpp \
 	src/osx/carbon/uma.cpp \
+	src/unix/stdpaths.cpp \
+	src/osx/core/stdpaths_cf.cpp \
 	src/osx/cocoa/utils.mm \
 	src/osx/cocoa/power.mm \
+	src/osx/cocoa/stdpaths.mm \
 	src/msw/main.cpp \
 	src/msw/volume.cpp \
 	src/common/fs_inet.cpp \
@@ -2233,7 +2236,6 @@ COND_TOOLKIT_OSX_CARBON_BASE_OSX_SRC =  \
 	src/osx/core/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp \
 	src/common/fdiodispatcher.cpp \
@@ -2246,7 +2248,6 @@ COND_TOOLKIT_OSX_CARBON_BASE_OSX_SRC =  \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
-	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
@@ -2258,7 +2259,6 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp \
 	src/common/fdiodispatcher.cpp \
@@ -2271,7 +2271,6 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
-	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
@@ -2283,7 +2282,6 @@ COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
 	src/osx/core/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp \
 	src/common/fdiodispatcher.cpp \
@@ -2296,7 +2294,6 @@ COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
-	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
@@ -2315,7 +2312,6 @@ COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
-	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
@@ -2324,7 +2320,6 @@ COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp
 @COND_TOOLKIT_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_COCOA_BASE_OSX_SRC)
@@ -2339,7 +2334,6 @@ COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
-	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
@@ -2348,7 +2342,6 @@ COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp
 @COND_TOOLKIT_GTK@BASE_OSX_SRC = $(COND_TOOLKIT_GTK_BASE_OSX_SRC)
@@ -2363,7 +2356,6 @@ COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
-	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
@@ -2372,7 +2364,6 @@ COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp
 @COND_TOOLKIT_X11@BASE_OSX_SRC = $(COND_TOOLKIT_X11_BASE_OSX_SRC)
@@ -2387,7 +2378,6 @@ COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
-	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
@@ -2396,7 +2386,6 @@ COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp
 @COND_TOOLKIT_MOTIF@BASE_OSX_SRC = $(COND_TOOLKIT_MOTIF_BASE_OSX_SRC)
@@ -2411,7 +2400,6 @@ COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/stackwalk.cpp \
-	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
@@ -2420,7 +2408,6 @@ COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
-	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp
 @COND_TOOLKIT_@BASE_OSX_SRC = $(COND_TOOLKIT__BASE_OSX_SRC)
@@ -2440,7 +2427,6 @@ COND_TOOLKIT_OSX_CARBON_BASE_OSX_HDR =  \
 	wx/unix/evtloop.h \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
-	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
@@ -2462,7 +2448,6 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/unix/evtloop.h \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
-	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
@@ -2476,7 +2461,6 @@ COND_TOOLKIT_COCOA_BASE_OSX_HDR =  \
 	wx/unix/evtloop.h \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
-	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
@@ -2498,7 +2482,6 @@ COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
 	wx/unix/evtloop.h \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
-	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
@@ -2520,7 +2503,6 @@ COND_TOOLKIT_X11_BASE_OSX_HDR =  \
 	wx/unix/evtloop.h \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
-	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
@@ -2542,7 +2524,6 @@ COND_TOOLKIT_MOTIF_BASE_OSX_HDR =  \
 	wx/unix/evtloop.h \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
-	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
@@ -2564,7 +2545,6 @@ COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/unix/evtloop.h \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
-	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
@@ -2587,12 +2567,12 @@ COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
 	wx/unix/evtloop.h \
 	wx/unix/evtloopsrc.h \
 	wx/unix/pipe.h \
-	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
-	wx/unix/fswatcher_inotify.h
+	wx/unix/fswatcher_inotify.h \
+	wx/unix/stdpaths.h
 @COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR)
 COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/apptrait.h \
@@ -4369,7 +4349,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_core_mimetype.o \
 	monodll_cfstring.o \
 	monodll_evtloop_cf.o \
-	monodll_stdpaths_cf.o \
 	monodll_strconv_cf.o \
 	monodll_utilsexc_base.o \
 	monodll_fdiodispatcher.o \
@@ -4382,7 +4361,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_fdiounix.o \
 	monodll_unix_snglinst.o \
 	monodll_unix_stackwalk.o \
-	monodll_unix_stdpaths.o \
 	monodll_timerunx.o \
 	monodll_threadpsx.o \
 	monodll_utilsunx.o \
@@ -4401,14 +4379,14 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_fdiounix.o \
 	monodll_unix_snglinst.o \
 	monodll_unix_stackwalk.o \
-	monodll_unix_stdpaths.o \
 	monodll_timerunx.o \
 	monodll_threadpsx.o \
 	monodll_utilsunx.o \
 	monodll_wakeuppipe.o \
 	monodll_fswatcher_kqueue.o \
 	monodll_unix_mimetype.o \
-	monodll_fswatcher_inotify.o
+	monodll_fswatcher_inotify.o \
+	monodll_unix_stdpaths.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_basemsw.o \
@@ -4433,10 +4411,15 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS)
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_WIN32_1@	= monodll_msw_main.o monodll_volume.o
-@COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS \
-@COND_TOOLKIT_OSX_CARBON@	= monodll_carbon_utils.o monodll_uma.o
+COND_TOOLKIT_OSX_CARBON___BASE_AND_GUI_TOOLKIT_SRC_OBJECTS =  \
+	monodll_carbon_utils.o \
+	monodll_uma.o \
+	monodll_unix_stdpaths.o \
+	monodll_stdpaths_cf.o
+@COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS = $(COND_TOOLKIT_OSX_CARBON___BASE_AND_GUI_TOOLKIT_SRC_OBJECTS)
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS \
-@COND_TOOLKIT_OSX_COCOA@	= monodll_osx_cocoa_utils.o monodll_cocoa_power.o
+@COND_TOOLKIT_OSX_COCOA@	= monodll_osx_cocoa_utils.o monodll_cocoa_power.o \
+@COND_TOOLKIT_OSX_COCOA@	monodll_cocoa_stdpaths.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_MACOSX_1@	= monodll_socketiohandler.o monodll_sockunix.o \
 @COND_PLATFORM_MACOSX_1@	monodll_sockosx.o
@@ -6533,7 +6516,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_core_mimetype.o \
 	monolib_cfstring.o \
 	monolib_evtloop_cf.o \
-	monolib_stdpaths_cf.o \
 	monolib_strconv_cf.o \
 	monolib_utilsexc_base.o \
 	monolib_fdiodispatcher.o \
@@ -6546,7 +6528,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_fdiounix.o \
 	monolib_unix_snglinst.o \
 	monolib_unix_stackwalk.o \
-	monolib_unix_stdpaths.o \
 	monolib_timerunx.o \
 	monolib_threadpsx.o \
 	monolib_utilsunx.o \
@@ -6565,14 +6546,14 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_fdiounix.o \
 	monolib_unix_snglinst.o \
 	monolib_unix_stackwalk.o \
-	monolib_unix_stdpaths.o \
 	monolib_timerunx.o \
 	monolib_threadpsx.o \
 	monolib_utilsunx.o \
 	monolib_wakeuppipe.o \
 	monolib_fswatcher_kqueue.o \
 	monolib_unix_mimetype.o \
-	monolib_fswatcher_inotify.o
+	monolib_fswatcher_inotify.o \
+	monolib_unix_stdpaths.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_basemsw.o \
@@ -6597,10 +6578,15 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1)
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_WIN32_1@	= monolib_msw_main.o monolib_volume.o
-@COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1 \
-@COND_TOOLKIT_OSX_CARBON@	= monolib_carbon_utils.o monolib_uma.o
+COND_TOOLKIT_OSX_CARBON___BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1 =  \
+	monolib_carbon_utils.o \
+	monolib_uma.o \
+	monolib_unix_stdpaths.o \
+	monolib_stdpaths_cf.o
+@COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_CARBON___BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1)
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1 \
-@COND_TOOLKIT_OSX_COCOA@	= monolib_osx_cocoa_utils.o monolib_cocoa_power.o
+@COND_TOOLKIT_OSX_COCOA@	= monolib_osx_cocoa_utils.o monolib_cocoa_power.o \
+@COND_TOOLKIT_OSX_COCOA@	monolib_cocoa_stdpaths.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_MACOSX_1@	= monolib_socketiohandler.o monolib_sockunix.o \
 @COND_PLATFORM_MACOSX_1@	monolib_sockosx.o
@@ -8750,7 +8736,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_core_mimetype.o \
 	basedll_cfstring.o \
 	basedll_evtloop_cf.o \
-	basedll_stdpaths_cf.o \
 	basedll_strconv_cf.o \
 	basedll_utilsexc_base.o \
 	basedll_fdiodispatcher.o \
@@ -8763,7 +8748,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_fdiounix.o \
 	basedll_unix_snglinst.o \
 	basedll_unix_stackwalk.o \
-	basedll_unix_stdpaths.o \
 	basedll_timerunx.o \
 	basedll_threadpsx.o \
 	basedll_utilsunx.o \
@@ -8782,14 +8766,14 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_fdiounix.o \
 	basedll_unix_snglinst.o \
 	basedll_unix_stackwalk.o \
-	basedll_unix_stdpaths.o \
 	basedll_timerunx.o \
 	basedll_threadpsx.o \
 	basedll_utilsunx.o \
 	basedll_wakeuppipe.o \
 	basedll_fswatcher_kqueue.o \
 	basedll_unix_mimetype.o \
-	basedll_fswatcher_inotify.o
+	basedll_fswatcher_inotify.o \
+	basedll_unix_stdpaths.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_basemsw.o \
@@ -8814,10 +8798,15 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2)
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_WIN32_1@	= basedll_main.o basedll_volume.o
-@COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_2 \
-@COND_TOOLKIT_OSX_CARBON@	= basedll_carbon_utils.o basedll_uma.o
+COND_TOOLKIT_OSX_CARBON___BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_2 =  \
+	basedll_carbon_utils.o \
+	basedll_uma.o \
+	basedll_unix_stdpaths.o \
+	basedll_stdpaths_cf.o
+@COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_CARBON___BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_2)
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_2 \
-@COND_TOOLKIT_OSX_COCOA@	= basedll_cocoa_utils.o basedll_cocoa_power.o
+@COND_TOOLKIT_OSX_COCOA@	= basedll_cocoa_utils.o basedll_cocoa_power.o \
+@COND_TOOLKIT_OSX_COCOA@	basedll_cocoa_stdpaths.o
 COND_MONOLITHIC_0_SHARED_0___baselib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_MONOLITHIC_0_SHARED_0@__baselib___depname = $(COND_MONOLITHIC_0_SHARED_0___baselib___depname)
@@ -8833,7 +8822,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_core_mimetype.o \
 	baselib_cfstring.o \
 	baselib_evtloop_cf.o \
-	baselib_stdpaths_cf.o \
 	baselib_strconv_cf.o \
 	baselib_utilsexc_base.o \
 	baselib_fdiodispatcher.o \
@@ -8846,7 +8834,6 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_fdiounix.o \
 	baselib_unix_snglinst.o \
 	baselib_unix_stackwalk.o \
-	baselib_unix_stdpaths.o \
 	baselib_timerunx.o \
 	baselib_threadpsx.o \
 	baselib_utilsunx.o \
@@ -8865,14 +8852,14 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_fdiounix.o \
 	baselib_unix_snglinst.o \
 	baselib_unix_stackwalk.o \
-	baselib_unix_stdpaths.o \
 	baselib_timerunx.o \
 	baselib_threadpsx.o \
 	baselib_utilsunx.o \
 	baselib_wakeuppipe.o \
 	baselib_fswatcher_kqueue.o \
 	baselib_unix_mimetype.o \
-	baselib_fswatcher_inotify.o
+	baselib_fswatcher_inotify.o \
+	baselib_unix_stdpaths.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_basemsw.o \
@@ -8897,10 +8884,15 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3)
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_WIN32_1@	= baselib_main.o baselib_volume.o
-@COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_3 \
-@COND_TOOLKIT_OSX_CARBON@	= baselib_carbon_utils.o baselib_uma.o
+COND_TOOLKIT_OSX_CARBON___BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_3 =  \
+	baselib_carbon_utils.o \
+	baselib_uma.o \
+	baselib_unix_stdpaths.o \
+	baselib_stdpaths_cf.o
+@COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_CARBON___BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_3)
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_3 \
-@COND_TOOLKIT_OSX_COCOA@	= baselib_cocoa_utils.o baselib_cocoa_power.o
+@COND_TOOLKIT_OSX_COCOA@	= baselib_cocoa_utils.o baselib_cocoa_power.o \
+@COND_TOOLKIT_OSX_COCOA@	baselib_cocoa_stdpaths.o
 @COND_SHARED_1@____wxbase_namedll_DEP = $(__basedll___depname)
 @COND_SHARED_0@____wxbase_namelib_DEP = $(__baselib___depname)
 COND_MONOLITHIC_0_SHARED_1___netdll___depname = \
@@ -9064,10 +9056,15 @@ COND_USE_SOVERSOLARIS_1___coredll___so_symlinks_uninst_cmd = rm -f \
 @COND_PLATFORM_WIN32_1@__coredll___win32rc = coredll_version_rc.o
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4 \
 @COND_PLATFORM_WIN32_1@	= coredll_msw_main.o coredll_volume.o
-@COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_4 \
-@COND_TOOLKIT_OSX_CARBON@	= coredll_carbon_utils.o coredll_uma.o
+COND_TOOLKIT_OSX_CARBON___BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_4 =  \
+	coredll_carbon_utils.o \
+	coredll_uma.o \
+	coredll_unix_stdpaths.o \
+	coredll_stdpaths_cf.o
+@COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_4 = $(COND_TOOLKIT_OSX_CARBON___BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_4)
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_4 \
-@COND_TOOLKIT_OSX_COCOA@	= coredll_osx_cocoa_utils.o coredll_power.o
+@COND_TOOLKIT_OSX_COCOA@	= coredll_osx_cocoa_utils.o coredll_power.o \
+@COND_TOOLKIT_OSX_COCOA@	coredll_cocoa_stdpaths.o
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_4) \
 	$(__PLATFORM_SRC_OBJECTS_8) \
@@ -10669,10 +10666,15 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname = \
 @COND_USE_PCH_1@	= ./.pch/wxprec_corelib/wx/wxprec.h.gch
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_5 \
 @COND_PLATFORM_WIN32_1@	= corelib_msw_main.o corelib_volume.o
-@COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_5 \
-@COND_TOOLKIT_OSX_CARBON@	= corelib_carbon_utils.o corelib_uma.o
+COND_TOOLKIT_OSX_CARBON___BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_5 =  \
+	corelib_carbon_utils.o \
+	corelib_uma.o \
+	corelib_unix_stdpaths.o \
+	corelib_stdpaths_cf.o
+@COND_TOOLKIT_OSX_CARBON@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_5 = $(COND_TOOLKIT_OSX_CARBON___BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_5)
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_5 \
-@COND_TOOLKIT_OSX_COCOA@	= corelib_osx_cocoa_utils.o corelib_power.o
+@COND_TOOLKIT_OSX_COCOA@	= corelib_osx_cocoa_utils.o corelib_power.o \
+@COND_TOOLKIT_OSX_COCOA@	corelib_cocoa_stdpaths.o
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_6) \
 	$(__PLATFORM_SRC_OBJECTS_9) \
@@ -16777,9 +16779,6 @@ monodll_cfstring.o: $(srcdir)/src/osx/core/cfstring.cpp $(MONODLL_ODEP)
 monodll_evtloop_cf.o: $(srcdir)/src/osx/core/evtloop_cf.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/evtloop_cf.cpp
 
-monodll_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
-
 monodll_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/strconv_cf.cpp
 
@@ -16813,11 +16812,17 @@ monodll_carbon_utils.o: $(srcdir)/src/osx/carbon/utils.cpp $(MONODLL_ODEP)
 monodll_uma.o: $(srcdir)/src/osx/carbon/uma.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/uma.cpp
 
+monodll_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
+
 monodll_osx_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
 
 monodll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
+
+monodll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 monodll_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fs_inet.cpp
@@ -18433,12 +18438,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@monodll_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
 
-@COND_PLATFORM_UNIX_1@monodll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
-
-@COND_PLATFORM_MACOSX_1@monodll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
-
 @COND_PLATFORM_UNIX_1@monodll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
 
@@ -18468,6 +18467,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1@monodll_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
+
+@COND_PLATFORM_UNIX_1@monodll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
+
+@COND_TOOLKIT_OSX_CARBON@monodll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
 
 @COND_PLATFORM_UNIX_1@monodll_socketiohandler.o: $(srcdir)/src/common/socketiohandler.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/socketiohandler.cpp
@@ -22294,9 +22299,6 @@ monolib_cfstring.o: $(srcdir)/src/osx/core/cfstring.cpp $(MONOLIB_ODEP)
 monolib_evtloop_cf.o: $(srcdir)/src/osx/core/evtloop_cf.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/evtloop_cf.cpp
 
-monolib_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
-
 monolib_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/strconv_cf.cpp
 
@@ -22330,11 +22332,17 @@ monolib_carbon_utils.o: $(srcdir)/src/osx/carbon/utils.cpp $(MONOLIB_ODEP)
 monolib_uma.o: $(srcdir)/src/osx/carbon/uma.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/uma.cpp
 
+monolib_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
+
 monolib_osx_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
 
 monolib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
+
+monolib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 monolib_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fs_inet.cpp
@@ -23950,12 +23958,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@monolib_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
 
-@COND_PLATFORM_UNIX_1@monolib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
-
-@COND_PLATFORM_MACOSX_1@monolib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
-
 @COND_PLATFORM_UNIX_1@monolib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
 
@@ -23985,6 +23987,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1@monolib_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
+
+@COND_PLATFORM_UNIX_1@monolib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
+
+@COND_TOOLKIT_OSX_CARBON@monolib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
 
 @COND_PLATFORM_UNIX_1@monolib_socketiohandler.o: $(srcdir)/src/common/socketiohandler.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/socketiohandler.cpp
@@ -27811,9 +27819,6 @@ basedll_cfstring.o: $(srcdir)/src/osx/core/cfstring.cpp $(BASEDLL_ODEP)
 basedll_evtloop_cf.o: $(srcdir)/src/osx/core/evtloop_cf.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/evtloop_cf.cpp
 
-basedll_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
-
 basedll_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/strconv_cf.cpp
 
@@ -27847,11 +27852,17 @@ basedll_carbon_utils.o: $(srcdir)/src/osx/carbon/utils.cpp $(BASEDLL_ODEP)
 basedll_uma.o: $(srcdir)/src/osx/carbon/uma.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/uma.cpp
 
+basedll_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
+
 basedll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
 
 basedll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
+
+basedll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 @COND_PLATFORM_UNIX_1@basedll_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
@@ -27913,12 +27924,6 @@ basedll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@basedll_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
 
-@COND_PLATFORM_UNIX_1@basedll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
-
-@COND_PLATFORM_MACOSX_1@basedll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
-
 @COND_PLATFORM_UNIX_1@basedll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
 
@@ -27948,6 +27953,12 @@ basedll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(BASEDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1@basedll_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
+
+@COND_PLATFORM_UNIX_1@basedll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
+
+@COND_TOOLKIT_OSX_CARBON@basedll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASEDLL_ODEP)
+@COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
 
 baselib_any.o: $(srcdir)/src/common/any.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/any.cpp
@@ -28282,9 +28293,6 @@ baselib_cfstring.o: $(srcdir)/src/osx/core/cfstring.cpp $(BASELIB_ODEP)
 baselib_evtloop_cf.o: $(srcdir)/src/osx/core/evtloop_cf.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/evtloop_cf.cpp
 
-baselib_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
-
 baselib_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/strconv_cf.cpp
 
@@ -28318,11 +28326,17 @@ baselib_carbon_utils.o: $(srcdir)/src/osx/carbon/utils.cpp $(BASELIB_ODEP)
 baselib_uma.o: $(srcdir)/src/osx/carbon/uma.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/uma.cpp
 
+baselib_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
+
 baselib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
 
 baselib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
+
+baselib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 @COND_PLATFORM_UNIX_1@baselib_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
@@ -28384,12 +28398,6 @@ baselib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1@baselib_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
 
-@COND_PLATFORM_UNIX_1@baselib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
-
-@COND_PLATFORM_MACOSX_1@baselib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
-
 @COND_PLATFORM_UNIX_1@baselib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
 
@@ -28419,6 +28427,12 @@ baselib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(BASELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1@baselib_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
+
+@COND_PLATFORM_UNIX_1@baselib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
+
+@COND_TOOLKIT_OSX_CARBON@baselib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASELIB_ODEP)
+@COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
 
 netdll_version_rc.o: $(srcdir)/src/msw/version.rc $(NETDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)  --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define wxUSE_GUI=0 --define WXUSINGDLL --define WXMAKINGDLL_NET
@@ -28552,11 +28566,20 @@ coredll_carbon_utils.o: $(srcdir)/src/osx/carbon/utils.cpp $(COREDLL_ODEP)
 coredll_uma.o: $(srcdir)/src/osx/carbon/uma.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/uma.cpp
 
+coredll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
+
+coredll_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
+
 coredll_osx_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
 
 coredll_power.o: $(srcdir)/src/osx/cocoa/power.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
+
+coredll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 coredll_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/bmpbuttn.cpp
@@ -32614,11 +32637,20 @@ corelib_carbon_utils.o: $(srcdir)/src/osx/carbon/utils.cpp $(CORELIB_ODEP)
 corelib_uma.o: $(srcdir)/src/osx/carbon/uma.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/uma.cpp
 
+corelib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
+
+corelib_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
+
 corelib_osx_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
 
 corelib_power.o: $(srcdir)/src/osx/cocoa/power.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
+
+corelib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 corelib_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/bmpbuttn.cpp
