@@ -1060,8 +1060,11 @@ size_t wxZipEntry::ReadLocal(wxInputStream& stream, wxMBConv& conv)
     if ((sumsValid || size) || m_Method == wxZIP_METHOD_STORE)
         m_Size = size;
 
-    wxMBConv& strConv =
-        ( (m_Flags & wxZIP_LANG_ENC_UTF8) == 0 ) ? conv : wxConvUTF8;
+    // Explicit cast to the base class is needed to work around apparent
+    // compiler bug in MSVS 2005 (FIXME-VC8).
+    wxMBConv& strConv = m_Flags & wxZIP_LANG_ENC_UTF8
+                            ? static_cast<wxMBConv&>(wxConvUTF8)
+                            : conv;
     SetName(ReadString(stream, nameLen, strConv), wxPATH_UNIX);
     if (stream.LastRead() != nameLen + 0u)
         return 0;
