@@ -2663,6 +2663,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/treelist.cpp
     src/generic/wizard.cpp
     src/common/addremovectrl.cpp
+    src/common/notifmsgcmn.cpp
 </set>
 
 <set var="ADVANCED_CMN_HDR" hints="files">
@@ -2728,7 +2729,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/taskbar.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
-    wx/msw/notifmsg.h
     wx/msw/sound.h
     wx/msw/taskbar.h
 </set>
@@ -2782,6 +2782,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/taskbar.mm
     src/osx/core/hidjoystick.cpp
     src/osx/cocoa/activityindicator.mm
+    src/osx/cocoa/notifmsg.mm
 </set>
 
 <set var="ADVANCED_OSX_COCOA_HDR" hints="files">
@@ -2879,7 +2880,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="ADVANCED_GTK_HDR" hints="files">
     $(ADVANCED_GTK_PLATFORM_HDR)
-    wx/gtk/notifmsg.h
     wx/gtk/taskbar.h
     wx/generic/activityindicator.h
 </set>

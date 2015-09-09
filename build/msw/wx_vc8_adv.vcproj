@@ -838,6 +838,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\notifmsgcmn.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\odcombocmn.cpp"
 				>
 			</File>
@@ -1283,10 +1287,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\joystick.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\msw\notifmsg.h"
 				>
 			</File>
 			<File

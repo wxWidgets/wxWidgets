@@ -2510,10 +2510,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\msw\notifmsg.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\msw\ole\oleutils.h"
 				>
 			</File>

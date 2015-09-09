@@ -462,6 +462,7 @@
     </ClCompile>
     <ClCompile Include="..\..\src\common\gridcmn.cpp" />
     <ClCompile Include="..\..\src\common\hyperlnkcmn.cpp" />
+    <ClCompile Include="..\..\src\common\notifmsgcmn.cpp" />
     <ClCompile Include="..\..\src\common\odcombocmn.cpp" />
     <ClCompile Include="..\..\src\common\richtooltipcmn.cpp" />
     <ClCompile Include="..\..\src\common\taskbarcmn.cpp" />
@@ -544,7 +545,6 @@
     </CustomBuild>
     <ClInclude Include="..\..\include\wx\msw\hyperlink.h" />
     <ClInclude Include="..\..\include\wx\msw\joystick.h" />
-    <ClInclude Include="..\..\include\wx\msw\notifmsg.h" />
     <ClInclude Include="..\..\include\wx\msw\sound.h" />
     <ClInclude Include="..\..\include\wx\msw\taskbar.h" />
     <ClInclude Include="..\..\include\wx\msw\timectrl.h" />

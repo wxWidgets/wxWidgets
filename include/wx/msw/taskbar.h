@@ -49,7 +49,8 @@ public:
     bool ShowBalloon(const wxString& title,
                      const wxString& text,
                      unsigned msec = 0,
-                     int flags = 0);
+                     int flags = 0,
+                     const wxIcon& icon = wxNullIcon);
 #endif // wxUSE_TASKBARICON_BALLOONS
 
 protected:

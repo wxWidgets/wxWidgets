@@ -2393,6 +2393,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_treelist.o \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_addremovectrl.o \
+	$(OBJS)\monodll_notifmsgcmn.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_aboutdlg.o \
 	$(OBJS)\monodll_notifmsg.o \
@@ -2447,6 +2448,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_treelist.o \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_addremovectrl.o \
+	$(OBJS)\monodll_notifmsgcmn.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_aboutdlg.o \
 	$(OBJS)\monodll_notifmsg.o \
@@ -3221,6 +3223,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_treelist.o \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_addremovectrl.o \
+	$(OBJS)\monolib_notifmsgcmn.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_aboutdlg.o \
 	$(OBJS)\monolib_notifmsg.o \
@@ -3275,6 +3278,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_treelist.o \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_addremovectrl.o \
+	$(OBJS)\monolib_notifmsgcmn.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_aboutdlg.o \
 	$(OBJS)\monolib_notifmsg.o \
@@ -4522,6 +4526,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_treelist.o \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_addremovectrl.o \
+	$(OBJS)\advdll_notifmsgcmn.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_aboutdlg.o \
 	$(OBJS)\advdll_notifmsg.o \
@@ -4576,6 +4581,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_treelist.o \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_addremovectrl.o \
+	$(OBJS)\advdll_notifmsgcmn.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_aboutdlg.o \
 	$(OBJS)\advdll_notifmsg.o \
@@ -4629,6 +4635,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_treelist.o \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_addremovectrl.o \
+	$(OBJS)\advlib_notifmsgcmn.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_aboutdlg.o \
 	$(OBJS)\advlib_notifmsg.o \
@@ -4683,6 +4690,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_treelist.o \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_addremovectrl.o \
+	$(OBJS)\advlib_notifmsgcmn.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_aboutdlg.o \
 	$(OBJS)\advlib_notifmsg.o \
@@ -8977,6 +8985,11 @@ $(OBJS)\monodll_addremovectrl.o: ../../src/common/addremovectrl.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_notifmsgcmn.o: ../../src/common/notifmsgcmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11483,6 +11496,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_addremovectrl.o: ../../src/common/addremovectrl.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_notifmsgcmn.o: ../../src/common/notifmsgcmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -15364,6 +15382,9 @@ $(OBJS)\advdll_wizard.o: ../../src/generic/wizard.cpp
 $(OBJS)\advdll_addremovectrl.o: ../../src/common/addremovectrl.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_notifmsgcmn.o: ../../src/common/notifmsgcmn.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -15518,6 +15539,9 @@ $(OBJS)\advlib_wizard.o: ../../src/generic/wizard.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_addremovectrl.o: ../../src/common/addremovectrl.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_notifmsgcmn.o: ../../src/common/notifmsgcmn.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_taskbarcmn.o: ../../src/common/taskbarcmn.cpp

@@ -2253,6 +2253,7 @@ ADVANCED_CMN_SRC =
     src/common/datavcmn.cpp
     src/common/gridcmn.cpp
     src/common/hyperlnkcmn.cpp
+	src/common/notifmsgcmn.cpp
     src/common/odcombocmn.cpp
     src/common/richtooltipcmn.cpp
     src/generic/aboutdlgg.cpp
@@ -2342,7 +2343,6 @@ ADVANCED_MSW_SRC =
     src/msw/sound.cpp
     src/msw/taskbar.cpp
 ADVANCED_MSW_HDR =
-    wx/msw/notifmsg.h
     wx/msw/sound.h
     wx/msw/taskbar.h
 
@@ -2389,6 +2389,7 @@ ADVANCED_OSX_COCOA_SRC =
     src/osx/dataview_osx.cpp
     src/osx/cocoa/dataview.mm
     src/osx/cocoa/datetimectrl.mm
+    src/osx/cocoa/notifmsg.mm
     src/osx/cocoa/taskbar.mm
     src/osx/core/hidjoystick.cpp
 
@@ -2464,7 +2465,6 @@ ADVANCED_GTK2_SRC =
 ADVANCED_GTK_HDR =
     $(ADVANCED_GTK_PLATFORM_HDR)
     wx/generic/activityindicator.h
-    wx/gtk/notifmsg.h
     wx/gtk/taskbar.h
 ADVANCED_GTK2_HDR =
     $(ADVANCED_GTK_HDR)
