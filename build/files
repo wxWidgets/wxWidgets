@@ -33,7 +33,6 @@ BASE_UNIX_AND_DARWIN_SRC =
     src/unix/fdiounix.cpp
     src/unix/snglinst.cpp
     src/unix/stackwalk.cpp
-    src/unix/stdpaths.cpp
     src/unix/timerunx.cpp
     src/unix/threadpsx.cpp
     src/unix/utilsunx.cpp
@@ -48,7 +47,6 @@ BASE_UNIX_AND_DARWIN_HDR =
     wx/unix/evtloop.h
     wx/unix/evtloopsrc.h
     wx/unix/pipe.h
-    wx/unix/stdpaths.h
     wx/unix/stackwalk.h
     wx/unix/tls.h
     wx/unix/fswatcher_kqueue.h
@@ -71,10 +69,12 @@ BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR =
 BASE_UNIX_SRC =
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
     src/unix/fswatcher_inotify.cpp
+    src/unix/stdpaths.cpp
 
 BASE_UNIX_HDR =
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
     wx/unix/fswatcher_inotify.h
+    wx/unix/stdpaths.h
 
 
 ## Windows
@@ -134,7 +134,6 @@ BASE_WIN32_HDR =
 BASE_COREFOUNDATION_SRC =
     src/osx/core/cfstring.cpp
     src/osx/core/evtloop_cf.cpp
-    src/osx/core/stdpaths_cf.cpp
     src/osx/core/strconv_cf.cpp
     src/osx/core/utilsexc_base.cpp
 
@@ -164,10 +163,13 @@ BASE_OSX_SHARED_HDR =
 BASE_AND_GUI_OSX_CARBON_SRC =
     src/osx/carbon/utils.cpp
     src/osx/carbon/uma.cpp
+    src/unix/stdpaths.cpp
+    src/osx/core/stdpaths_cf.cpp
 
 BASE_AND_GUI_OSX_COCOA_SRC =
     src/osx/cocoa/utils.mm
     src/osx/cocoa/power.mm
+    src/osx/cocoa/stdpaths.mm
 
 BASE_AND_GUI_OSX_IPHONE_SRC =
     src/osx/iphone/utils.mm
