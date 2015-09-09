@@ -1152,8 +1152,10 @@ size_t wxZipEntry::ReadCentral(wxInputStream& stream, wxMBConv& conv)
        >> m_DiskStart >> m_InternalAttributes >> m_ExternalAttributes;
     SetOffset(ds.Read32());
 
-    wxMBConv& strConv =
-        ((m_Flags & wxZIP_LANG_ENC_UTF8) == 0) ? conv : wxConvUTF8;
+    // Another MSVS 2005 workaround, see above (FIXME-VC8).
+    wxMBConv& strConv = m_Flags & wxZIP_LANG_ENC_UTF8
+                            ? static_cast<wxMBConv&>(wxConvUTF8)
+                            : conv;
     SetName(ReadString(stream, nameLen, strConv), wxPATH_UNIX);
     if (stream.LastRead() != nameLen + 0u)
         return 0;
