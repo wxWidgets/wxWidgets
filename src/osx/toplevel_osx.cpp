@@ -224,3 +224,12 @@ void wxTopLevelWindowMac::SetRepresentedFilename(const wxString& filename)
 {
     m_nowpeer->SetRepresentedFilename(filename);
 }
+
+void wxTopLevelWindowMac::OSXSetIconizeState(bool iconize)
+{
+    if ( iconize != m_iconized )
+    {
+        m_iconized = iconize;
+        (void)SendIconizeEvent(iconize);
+    }
+}

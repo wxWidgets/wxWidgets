@@ -58,6 +58,7 @@ static inline bool UseNative()
 extern "C" {
 static gboolean activate_link(GtkWidget*, wxHyperlinkCtrl* win)
 {
+    win->SetVisited(true);
     win->SendEvent();
     return true;
 }
@@ -72,6 +73,7 @@ static void clicked_hook(GtkLinkButton* button, const char*, void*)
         wxHyperlinkCtrl* win = static_cast<wxHyperlinkCtrl*>(p->data);
         if (win->m_widget == (GtkWidget*)button)
         {
+            win->SetVisited(true);
             win->SendEvent();
             return;
         }
@@ -119,7 +121,10 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
             x_alignment = 0.0;
         else if (HasFlag(wxHL_ALIGN_RIGHT))
             x_alignment = 1.0;
+
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         gtk_button_set_alignment(GTK_BUTTON(m_widget), x_alignment, 0.5);
+        wxGCC_WARNING_RESTORE()
 
         // set to non empty strings both the url and the label
         SetURL(url.empty() ? label : url);
@@ -207,13 +212,20 @@ wxColour wxHyperlinkCtrl::GetNormalColour() const
     wxColour ret;
     if ( UseNative() )
     {
-        GdkColor *link_color = NULL;
+        GdkColor* link_color;
+        GdkColor color = { 0, 0, 0, 0xeeee };
 
-        // convert GdkColor in wxColour
-        gtk_widget_style_get(m_widget, "link-color", &link_color, NULL);
+        GtkWidget* widget = gtk_bin_get_child(GTK_BIN(m_widget));
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+        gtk_widget_ensure_style(widget);
+        gtk_widget_style_get(widget, "link-color", &link_color, NULL);
         if (link_color)
-            ret = wxColour(*link_color);
-        gdk_color_free (link_color);
+        {
+            color = *link_color;
+            gdk_color_free(link_color);
+        }
+        wxGCC_WARNING_RESTORE()
+        ret = wxColour(color);
     }
     else
         ret = wxGenericHyperlinkCtrl::GetNormalColour();
@@ -236,18 +248,51 @@ wxColour wxHyperlinkCtrl::GetVisitedColour() const
     wxColour ret;
     if ( UseNative() )
     {
-        GdkColor *link_color = NULL;
+        GdkColor* link_color;
+        GdkColor color = { 0, 0x5555, 0x1a1a, 0x8b8b };
 
-        // convert GdkColor in wxColour
-        gtk_widget_style_get(m_widget, "visited-link-color", &link_color, NULL);
+        GtkWidget* widget = gtk_bin_get_child(GTK_BIN(m_widget));
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+        gtk_widget_ensure_style(widget);
+        gtk_widget_style_get(widget, "visited-link-color", &link_color, NULL);
         if (link_color)
-            ret = wxColour(*link_color);
-        gdk_color_free (link_color);
+        {
+            color = *link_color;
+            gdk_color_free(link_color);
+        }
+        wxGCC_WARNING_RESTORE()
+        ret = wxColour(color);
     }
     else
-        return wxGenericHyperlinkCtrl::GetVisitedColour();
+        ret = base_type::GetVisitedColour();
 
     return ret;
+}
+
+void wxHyperlinkCtrl::SetVisited(bool visited)
+{
+    base_type::SetVisited(visited);
+#if GTK_CHECK_VERSION(2,14,0)
+#ifndef __WXGTK3__
+    if (gtk_check_version(2,14,0) == NULL)
+#endif
+    {
+        gtk_link_button_set_visited(GTK_LINK_BUTTON(m_widget), visited);
+    }
+#endif
+}
+
+bool wxHyperlinkCtrl::GetVisited() const
+{
+#if GTK_CHECK_VERSION(2,14,0)
+#ifndef __WXGTK3__
+    if (gtk_check_version(2,14,0) == NULL)
+#endif
+    {
+        return gtk_link_button_get_visited(GTK_LINK_BUTTON(m_widget)) != 0;
+    }
+#endif
+    return base_type::GetVisited();
 }
 
 void wxHyperlinkCtrl::SetHoverColour(const wxColour &colour)

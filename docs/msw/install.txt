@@ -2,7 +2,7 @@
                    --------------------------------
 
 This is wxWidgets for Microsoft Windows 9x/ME, Windows NT
-and later (2000, XP, Vista, 7, 8, etc) including both 32 bit and 64
+and later (2000, XP, Vista, 7, 8, 10, etc) including both 32 bit and 64
 bit versions.
 
 
@@ -19,11 +19,11 @@ Installation
 If you are using one of the supported compilers, you can download the
 pre-built in binaries from
 
-    https://sourceforge.net/projects/wxwindows/files/3.0.0/binaries/
+    https://sourceforge.net/projects/wxwindows/files/3.0.3/binaries/
 
 or
 
-             ftp://ftp.wxwidgets.org/pub/3.0.0/binaries/
+             ftp://ftp.wxwidgets.org/pub/3.0.3/binaries/
 
 In this case, just uncompress the binaries archive under any directory
 and skip to "Building Applications Using wxWidgets" part.
@@ -98,8 +98,8 @@ Microsoft Visual C++ Compilation
 
 Ready to use project files are provided for VC++ versions 6, 7, 8, 9
 and 10 (also known as MSVS 6, 2003, 2005, 2008 and 2010 respectively).
-For VC++ 11 (2012, respectively), you need to import the existing VC10
-project files into VC11 IDE first.
+For VC++ 11, 12 and 14 (2012, 2013 and 2015 respectively), you need to
+import the existing VC10 project files into VC11, VC12 or VC14 IDE first.
 
 Simply open wx_vcN.sln (for N=7, 8, 9 or 10) or wx.dsw (for VC6) file,
 select the appropriate configuration (Debug or Release, static or DLL)

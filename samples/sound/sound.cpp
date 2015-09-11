@@ -81,6 +81,7 @@ public:
 
 private:
     bool CreateSound(wxSound& snd) const;
+    wxSound* TryCreateSound() const;
 
     wxSound*    m_sound;
     wxString    m_soundFile;
@@ -975,6 +976,17 @@ bool MyFrame::CreateSound(wxSound& snd) const
     return snd.Create(m_soundFile);
 }
 
+wxSound* MyFrame::TryCreateSound() const
+{
+    wxSound* const sound = new wxSound;
+    if ( !CreateSound(*sound) )
+    {
+        delete sound;
+        return NULL;
+    }
+
+    return sound;
+}
 
 void MyFrame::NotifyUsingFile(const wxString& name)
 {
@@ -1054,12 +1066,9 @@ void MyFrame::OnPlaySync(wxCommandEvent& WXUNUSED(event))
 {
     wxBusyCursor busy;
     if ( !m_sound )
-    {
-        m_sound = new wxSound;
-        CreateSound(*m_sound);
-    }
+        m_sound = TryCreateSound();
 
-    if (m_sound->IsOk())
+    if (m_sound)
         m_sound->Play(wxSOUND_SYNC);
 }
 
@@ -1067,12 +1076,9 @@ void MyFrame::OnPlayAsync(wxCommandEvent& WXUNUSED(event))
 {
     wxBusyCursor busy;
     if ( !m_sound )
-    {
-        m_sound = new wxSound;
-        CreateSound(*m_sound);
-    }
+        m_sound = TryCreateSound();
 
-    if (m_sound->IsOk())
+    if (m_sound)
         m_sound->Play(wxSOUND_ASYNC);
 }
 
@@ -1089,10 +1095,7 @@ void MyFrame::OnPlayLoop(wxCommandEvent& WXUNUSED(event))
 {
     wxBusyCursor busy;
     if ( !m_sound )
-    {
-        m_sound = new wxSound;
-        CreateSound(*m_sound);
-    }
+        m_sound = TryCreateSound();
 
     if (m_sound->IsOk())
         m_sound->Play(wxSOUND_ASYNC | wxSOUND_LOOP);
