@@ -1223,7 +1223,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
         wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW,
                              webKitWindow->GetId(),
-                             wxCFStringRef::AsString( url ), "");
+                             wxStringWithNSString( url ), "");
 
         if (webKitWindow && webKitWindow->GetEventHandler())
             webKitWindow->GetEventHandler()->ProcessEvent(event);
