@@ -85,6 +85,8 @@ All (GUI):
 - Add wxAppProgressIndicator for MSW (Chaobin Zhang) and OS X (Tobias Taschner).
 - Add wxEVT_MAGNIFY mouse event (Joost Nieuwenhuijse).
 - Add wxProcess::Activate().
+- Fix setting colours of labels in wxSlider.
+- Fix setting background colour of wxRadioBox buttons.
 - Add wxTopLevelWindow::Enable{Maximize,Minimize}Button() (John Roberts).
 - Make results of wxDC::DrawEllipticArc() consistent across all platforms.
 - XRC handler for wxAuiToolBar added (Kinaou Hervé, David Hart).
