@@ -71,6 +71,9 @@ wxWidgetImplType* wxWidgetImpl::CreateGroupBox( wxWindowMac* wxpeer,
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSBox* v = [[wxNSBox alloc] initWithFrame:r];
+    NSSize margin = { 0.0, 0.0 };
+    [v setContentViewMargins: margin];
+    [v sizeToFit];
     wxStaticBoxCocoaImpl* c = new wxStaticBoxCocoaImpl( wxpeer, v );
 #if !wxOSX_USE_NATIVE_FLIPPED
     c->SetFlipped(false);

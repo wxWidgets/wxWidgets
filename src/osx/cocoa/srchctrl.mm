@@ -155,7 +155,7 @@ public :
         if ( wxpeer )
         {
             NSString *searchString = [m_searchField stringValue];
-            if ( searchString == nil )
+            if ( searchString == nil || !searchString.length )
             {
                 wxpeer->HandleSearchFieldCancelHit();
             }
@@ -165,7 +165,25 @@ public :
             }
         }
     }
-    
+
+    virtual void SetCentredLook( bool centre )
+    {
+        SEL sel = @selector(setCenteredLook:);
+        if ( [m_searchFieldCell respondsToSelector: sel] )
+        {
+            // all this avoids xcode parsing warnings when using
+            // [m_searchFieldCell setCenteredLook:NO];
+            NSMethodSignature* signature =
+            [NSSearchFieldCell instanceMethodSignatureForSelector:sel];
+            NSInvocation* invocation =
+            [NSInvocation invocationWithMethodSignature: signature];
+            [invocation setTarget: m_searchFieldCell];
+            [invocation setSelector:sel];
+            [invocation setArgument:&centre atIndex:2];
+            [invocation invoke];
+        }
+    }
+
 private:
     wxNSSearchField* m_searchField;
     NSSearchFieldCell* m_searchFieldCell;
@@ -192,6 +210,7 @@ wxWidgetImplType* wxWidgetImpl::CreateSearchControl( wxSearchCtrl* wxpeer,
 
     wxNSSearchFieldControl* c = new wxNSSearchFieldControl( wxpeer, v );
     c->SetNeedsFrame( false );
+    c->SetCentredLook( false );
     c->SetStringValue( str );
     return c;
 }
