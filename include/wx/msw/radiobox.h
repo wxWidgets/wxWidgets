@@ -100,6 +100,8 @@ public:
     virtual void SetFocus();
     virtual bool SetFont(const wxFont& font);
     virtual bool ContainsHWND(WXHWND hWnd) const;
+    virtual bool SetForegroundColour(const wxColour& colour);
+    virtual bool SetBackgroundColour(const wxColour& colour);
 #if wxUSE_TOOLTIPS
     virtual bool HasToolTips() const;
 #endif // wxUSE_TOOLTIPS

@@ -91,6 +91,8 @@ public:
     virtual bool Show(bool show = true);
     virtual bool Enable(bool show = true);
     virtual bool SetFont(const wxFont& font);
+    virtual bool SetForegroundColour(const wxColour& colour);
+    virtual bool SetBackgroundColour(const wxColour& colour);
 
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
 
