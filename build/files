@@ -2341,6 +2341,7 @@ ADVANCED_MSW_SRC =
     src/common/taskbarcmn.cpp
     src/msw/aboutdlg.cpp
     src/msw/notifmsg.cpp
+    src/msw/rt/notifmsgrt.cpp
     src/msw/richtooltip.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp

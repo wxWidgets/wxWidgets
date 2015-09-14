@@ -2680,6 +2680,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_richtooltip.obj \
 	$(OBJS)\monodll_sound.obj \
 	$(OBJS)\monodll_taskbar.obj \
+	$(OBJS)\monodll_notifmsgrt.obj \
 	$(OBJS)\monodll_joystick.obj \
 	$(OBJS)\monodll_animateg.obj \
 	$(OBJS)\monodll_bmpcbox.obj \
@@ -2735,6 +2736,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_richtooltip.obj \
 	$(OBJS)\monodll_sound.obj \
 	$(OBJS)\monodll_taskbar.obj \
+	$(OBJS)\monodll_notifmsgrt.obj \
 	$(OBJS)\monodll_joystick.obj \
 	$(OBJS)\monodll_animateg.obj
 !endif
@@ -3512,6 +3514,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_richtooltip.obj \
 	$(OBJS)\monolib_sound.obj \
 	$(OBJS)\monolib_taskbar.obj \
+	$(OBJS)\monolib_notifmsgrt.obj \
 	$(OBJS)\monolib_joystick.obj \
 	$(OBJS)\monolib_animateg.obj \
 	$(OBJS)\monolib_bmpcbox.obj \
@@ -3567,6 +3570,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_richtooltip.obj \
 	$(OBJS)\monolib_sound.obj \
 	$(OBJS)\monolib_taskbar.obj \
+	$(OBJS)\monolib_notifmsgrt.obj \
 	$(OBJS)\monolib_joystick.obj \
 	$(OBJS)\monolib_animateg.obj
 !endif
@@ -4881,6 +4885,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_richtooltip.obj \
 	$(OBJS)\advdll_sound.obj \
 	$(OBJS)\advdll_taskbar.obj \
+	$(OBJS)\advdll_notifmsgrt.obj \
 	$(OBJS)\advdll_joystick.obj \
 	$(OBJS)\advdll_animateg.obj \
 	$(OBJS)\advdll_bmpcbox.obj \
@@ -4936,6 +4941,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_richtooltip.obj \
 	$(OBJS)\advdll_sound.obj \
 	$(OBJS)\advdll_taskbar.obj \
+	$(OBJS)\advdll_notifmsgrt.obj \
 	$(OBJS)\advdll_joystick.obj \
 	$(OBJS)\advdll_animateg.obj
 !endif
@@ -4992,6 +4998,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_richtooltip.obj \
 	$(OBJS)\advlib_sound.obj \
 	$(OBJS)\advlib_taskbar.obj \
+	$(OBJS)\advlib_notifmsgrt.obj \
 	$(OBJS)\advlib_joystick.obj \
 	$(OBJS)\advlib_animateg.obj \
 	$(OBJS)\advlib_bmpcbox.obj \
@@ -5047,6 +5054,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_richtooltip.obj \
 	$(OBJS)\advlib_sound.obj \
 	$(OBJS)\advlib_taskbar.obj \
+	$(OBJS)\advlib_notifmsgrt.obj \
 	$(OBJS)\advlib_joystick.obj \
 	$(OBJS)\advlib_animateg.obj
 !endif
@@ -9550,6 +9558,11 @@ $(OBJS)\monodll_taskbar.obj: ..\..\src\msw\taskbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_notifmsgrt.obj: ..\..\src\msw\rt\notifmsgrt.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\rt\notifmsgrt.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_joystick.obj: ..\..\src\msw\joystick.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\joystick.cpp
 !endif
@@ -12067,6 +12080,11 @@ $(OBJS)\monolib_sound.obj: ..\..\src\msw\sound.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_taskbar.obj: ..\..\src\msw\taskbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\taskbar.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_notifmsgrt.obj: ..\..\src\msw\rt\notifmsgrt.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\rt\notifmsgrt.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -15948,6 +15966,9 @@ $(OBJS)\advdll_sound.obj: ..\..\src\msw\sound.cpp
 $(OBJS)\advdll_taskbar.obj: ..\..\src\msw\taskbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\taskbar.cpp
 
+$(OBJS)\advdll_notifmsgrt.obj: ..\..\src\msw\rt\notifmsgrt.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\rt\notifmsgrt.cpp
+
 $(OBJS)\advdll_joystick.obj: ..\..\src\msw\joystick.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\joystick.cpp
 
@@ -16106,6 +16127,9 @@ $(OBJS)\advlib_sound.obj: ..\..\src\msw\sound.cpp
 
 $(OBJS)\advlib_taskbar.obj: ..\..\src\msw\taskbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\taskbar.cpp
+
+$(OBJS)\advlib_notifmsgrt.obj: ..\..\src\msw\rt\notifmsgrt.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\rt\notifmsgrt.cpp
 
 $(OBJS)\advlib_joystick.obj: ..\..\src\msw\joystick.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\joystick.cpp

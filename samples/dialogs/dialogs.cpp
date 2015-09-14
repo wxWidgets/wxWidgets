@@ -2289,6 +2289,14 @@ private:
 
 void MyFrame::OnNotifMsg(wxCommandEvent& WXUNUSED(event))
 {
+#ifdef __WXMSW__
+    // Try to enable toast notifications (available since Win8)
+    if ( !wxNotificationMessage::MSWUseToasts() )
+    {
+        wxLogDebug("Toast notifications not available.");
+    }
+#endif
+
     TestNotificationMessageWindow* dlg = new TestNotificationMessageWindow(this);
     dlg->Show();
 }

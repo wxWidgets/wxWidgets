@@ -934,6 +934,10 @@
 					ExcludedFromBuild="true"
 				/>
 			</File>
+			<File
+				RelativePath="..\..\src\msw\rt\notifmsgrt.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Generic Sources"

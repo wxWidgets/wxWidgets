@@ -5875,6 +5875,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_richtooltip.o \
 	monodll_msw_sound.o \
 	monodll_msw_taskbar.o \
+	monodll_notifmsgrt.o \
 	monodll_msw_joystick.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS =  \
@@ -5990,6 +5991,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monodll_richtooltip.o \
 	monodll_msw_sound.o \
 	monodll_msw_taskbar.o \
+	monodll_notifmsgrt.o \
 	monodll_msw_joystick.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_1)
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
@@ -7877,6 +7879,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_2 =  \
 	monolib_richtooltip.o \
 	monolib_msw_sound.o \
 	monolib_msw_taskbar.o \
+	monolib_notifmsgrt.o \
 	monolib_msw_joystick.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_2)
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_2 =  \
@@ -7992,6 +7995,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 	monolib_richtooltip.o \
 	monolib_msw_sound.o \
 	monolib_msw_taskbar.o \
+	monolib_notifmsgrt.o \
 	monolib_msw_joystick.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_3)
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
@@ -11558,6 +11562,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_4 =  \
 	advdll_richtooltip.o \
 	advdll_msw_sound.o \
 	advdll_msw_taskbar.o \
+	advdll_notifmsgrt.o \
 	advdll_msw_joystick.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_4 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_4)
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_4 =  \
@@ -11673,6 +11678,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_5 =  \
 	advdll_richtooltip.o \
 	advdll_msw_sound.o \
 	advdll_msw_taskbar.o \
+	advdll_notifmsgrt.o \
 	advdll_msw_joystick.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_5 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_5)
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_5 =  \
@@ -11854,6 +11860,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_6 =  \
 	advlib_richtooltip.o \
 	advlib_msw_sound.o \
 	advlib_msw_taskbar.o \
+	advlib_notifmsgrt.o \
 	advlib_msw_joystick.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_6 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_6)
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_6 =  \
@@ -11969,6 +11976,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_7 =  \
 	advlib_richtooltip.o \
 	advlib_msw_sound.o \
 	advlib_msw_taskbar.o \
+	advlib_notifmsgrt.o \
 	advlib_msw_joystick.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_7 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_7)
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_7 =  \
@@ -20028,6 +20036,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_taskbar.o: $(srcdir)/src/msw/taskbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/taskbar.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_notifmsgrt.o: $(srcdir)/src/msw/rt/notifmsgrt.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/rt/notifmsgrt.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
@@ -24839,6 +24850,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_taskbar.o: $(srcdir)/src/msw/taskbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/taskbar.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_notifmsgrt.o: $(srcdir)/src/msw/rt/notifmsgrt.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/rt/notifmsgrt.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
@@ -33123,6 +33137,9 @@ advdll_notifmsgcmn.o: $(srcdir)/src/common/notifmsgcmn.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@advdll_msw_taskbar.o: $(srcdir)/src/msw/taskbar.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/taskbar.cpp
 
+@COND_TOOLKIT_MSW@advdll_notifmsgrt.o: $(srcdir)/src/msw/rt/notifmsgrt.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/rt/notifmsgrt.cpp
+
 @COND_TOOLKIT_MSW@advdll_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
@@ -33569,6 +33586,9 @@ advlib_notifmsgcmn.o: $(srcdir)/src/common/notifmsgcmn.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_MSW@advlib_msw_taskbar.o: $(srcdir)/src/msw/taskbar.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/taskbar.cpp
+
+@COND_TOOLKIT_MSW@advlib_notifmsgrt.o: $(srcdir)/src/msw/rt/notifmsgrt.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/rt/notifmsgrt.cpp
 
 @COND_TOOLKIT_MSW@advlib_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp

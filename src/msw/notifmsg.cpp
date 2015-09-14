@@ -33,11 +33,11 @@
     #include "wx/toplevel.h"
     #include "wx/app.h"
     #include "wx/string.h"
+    #include  "wx/app.h"
 #endif // WX_PRECOMP
 
 #include "wx/private/notifmsg.h"
-#include "wx/generic/notifmsg.h"
-#include "wx/generic/private/notifmsg.h"
+#include "wx/msw/rt/private/notifmsg.h"
 
 #include "wx/taskbar.h"
 
@@ -337,9 +337,19 @@ wxTaskBarIcon *wxNotificationMessage::UseTaskBarIcon(wxTaskBarIcon *icon)
     return wxBalloonNotifMsgImpl::UseTaskBarIcon(icon);
 }
 
+bool wxNotificationMessage::MSWUseToasts(
+    const wxString& shortcutPath,
+    const wxString& appId)
+{
+    return wxToastNotificationHelper::UseToasts(shortcutPath, appId);
+}
+
 void wxNotificationMessage::Init()
 {
-    m_impl = new wxBalloonNotifMsgImpl(this);
+    if ( wxToastNotificationHelper::IsEnabled() )
+        m_impl = wxToastNotificationHelper::CreateInstance(this);
+    else
+        m_impl = new wxBalloonNotifMsgImpl(this);
 }
 
 #endif // wxUSE_NOTIFICATION_MESSAGE && wxUSE_TASKBARICON

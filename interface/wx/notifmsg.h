@@ -20,6 +20,16 @@
 
     @section platform_notes Platform Notes
 
+    @par Windows
+    Up to Windows 8.1 balloon notifications are displayed from an icon in the
+    notification area of the taskbar. If your application uses a wxTaskBarIcon
+    you should call UseTaskBarIcon() to ensure that only one icon is shown in
+    the notification area. Windows 10 displays all notifications as popup
+    toasts. To suppress the additional icon in the notification area on
+    Windows 10 and for toast notification support on Windows 8 it is
+    recommended to call MSWUseToasts() before showing the first notification
+    message.
+    
     @par OS X
     The OS X implementation uses Notification Center to display native notifications.
     In order to use actions your notifications must use the alert style. This can
@@ -84,7 +94,7 @@ public:
        @return @false if the current implementation or OS version
        does not support actions in notifications.
        
-       @since 3.1.0	   
+       @since 3.1.0
     */
     bool AddAction(wxWindowID actionid, const wxString &label = wxString());
     
@@ -170,5 +180,39 @@ public:
     */
     static wxTaskBarIcon *UseTaskBarIcon(wxTaskBarIcon *icon);
 
+    
+    /**
+        Enables toast notifications available since Windows 8 and suppresses
+        the additional icon in the notification area on Windows 10.
+        
+        Toast notifications @b require a shortcut to the application in the
+        start menu. The start menu shortcut needs to contain an Application 
+        User Model ID. It is recommended that the applications setup creates the
+        shortcut and the application specifies the setup created shortcut in
+        @c shortcutPath. A call to this method will verify (and if necessary
+        modify) the shortcut before enabling toast notifications.
+        
+        @param shortcutPath
+            Path to a shortcut file referencing the applications executable. If 
+            the string is empty the applications display name will be used. If 
+            not fully qualified, it will be used as a path relative to the 
+            users start menu directory. The file extension .lnk is optional.
+        @param appId
+            The applications <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd378459(vs.85).aspx">
+            Application User Model ID</a>. If empty it will be extracted from
+            the shortcut. If the shortcut does not contain an id an id will be
+            automatically created from the applications vendor and app name.
+    
+        @return @false if toast notifications could not be enabled.
+        
+        @onlyfor{wxmsw}
+        
+        @see wxAppConsole::SetAppName(), wxAppConsole::SetVendorName()
+        
+        @since 3.1.0
+    */
+    static bool MSWUseToasts(
+        const wxString& shortcutPath = wxString(),
+        const wxString& appId = wxString());
 };
 

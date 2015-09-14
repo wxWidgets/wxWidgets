@@ -160,9 +160,14 @@ public:
     }
 
 #if defined(__WXMSW__) && defined(wxHAS_NATIVE_NOTIFICATION_MESSAGE)
+    static bool MSWUseToasts(
+        const wxString& shortcutPath = wxString(),
+        const wxString& appId = wxString());
+
     // returns the task bar icon which was used previously (may be NULL)
     static wxTaskBarIcon *UseTaskBarIcon(wxTaskBarIcon *icon);
-#endif
+
+#endif // defined(__WXMSW__) && defined(wxHAS_NATIVE_NOTIFICATION_MESSAGE)
 
 private:
     // common part of all ctors
