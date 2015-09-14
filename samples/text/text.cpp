@@ -776,7 +776,7 @@ void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
     if ( !ms_logMouse )
         return;
 
-    if ( !ev.Moving() )
+    if ( !ev.GetEventType() != wxEVT_MOTION )
     {
         wxString msg;
         if ( ev.Entering() )
