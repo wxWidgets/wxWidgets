@@ -3129,6 +3129,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/toplevel.h \
 	wx/msw/treectrl.h \
 	wx/msw/window.h \
+	wx/msw/rt/utils.h \
 	wx/msw/checklst.h \
 	wx/msw/fdrepdlg.h \
 	wx/msw/fontdlg.h \
@@ -4912,6 +4913,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_uxtheme.o \
 	monodll_msw_window.o \
 	monodll_graphicsd2d.o \
+	monodll_utilsrt.o \
 	monodll_helpchm.o \
 	monodll_helpwin.o \
 	monodll_automtn.o \
@@ -5614,6 +5616,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_uxtheme.o \
 	monodll_msw_window.o \
 	monodll_graphicsd2d.o \
+	monodll_utilsrt.o \
 	monodll_helpchm.o \
 	monodll_helpwin.o \
 	monodll_automtn.o \
@@ -6912,6 +6915,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_uxtheme.o \
 	monolib_msw_window.o \
 	monolib_graphicsd2d.o \
+	monolib_utilsrt.o \
 	monolib_helpchm.o \
 	monolib_helpwin.o \
 	monolib_automtn.o \
@@ -7614,6 +7618,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_uxtheme.o \
 	monolib_msw_window.o \
 	monolib_graphicsd2d.o \
+	monolib_utilsrt.o \
 	monolib_helpchm.o \
 	monolib_helpwin.o \
 	monolib_automtn.o \
@@ -9055,6 +9060,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_uxtheme.o \
 	coredll_msw_window.o \
 	coredll_graphicsd2d.o \
+	coredll_utilsrt.o \
 	coredll_helpchm.o \
 	coredll_helpwin.o \
 	coredll_automtn.o \
@@ -9757,6 +9763,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_uxtheme.o \
 	coredll_msw_window.o \
 	coredll_graphicsd2d.o \
+	coredll_utilsrt.o \
 	coredll_helpchm.o \
 	coredll_helpwin.o \
 	coredll_automtn.o \
@@ -10520,6 +10527,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_uxtheme.o \
 	corelib_msw_window.o \
 	corelib_graphicsd2d.o \
+	corelib_utilsrt.o \
 	corelib_helpchm.o \
 	corelib_helpwin.o \
 	corelib_automtn.o \
@@ -11222,6 +11230,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_uxtheme.o \
 	corelib_msw_window.o \
 	corelib_graphicsd2d.o \
+	corelib_utilsrt.o \
 	corelib_helpchm.o \
 	corelib_helpwin.o \
 	corelib_automtn.o \
@@ -17982,6 +17991,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_graphicsd2d.o: $(srcdir)/src/msw/graphicsd2d.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/graphicsd2d.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_utilsrt.o: $(srcdir)/src/msw/rt/utilsrt.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/rt/utilsrt.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_helpchm.o: $(srcdir)/src/msw/helpchm.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/helpchm.cpp
 
@@ -22790,6 +22802,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_graphicsd2d.o: $(srcdir)/src/msw/graphicsd2d.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/graphicsd2d.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_utilsrt.o: $(srcdir)/src/msw/rt/utilsrt.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/rt/utilsrt.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_helpchm.o: $(srcdir)/src/msw/helpchm.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/helpchm.cpp
@@ -27660,6 +27675,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_graphicsd2d.o: $(srcdir)/src/msw/graphicsd2d.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/graphicsd2d.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_utilsrt.o: $(srcdir)/src/msw/rt/utilsrt.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/rt/utilsrt.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_helpchm.o: $(srcdir)/src/msw/helpchm.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/helpchm.cpp
 
@@ -31043,6 +31061,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_graphicsd2d.o: $(srcdir)/src/msw/graphicsd2d.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/graphicsd2d.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_utilsrt.o: $(srcdir)/src/msw/rt/utilsrt.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/rt/utilsrt.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_helpchm.o: $(srcdir)/src/msw/helpchm.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/helpchm.cpp

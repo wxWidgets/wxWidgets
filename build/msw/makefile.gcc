@@ -1843,6 +1843,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_uxtheme.o \
 	$(OBJS)\monodll_window.o \
 	$(OBJS)\monodll_graphicsd2d.o \
+	$(OBJS)\monodll_utilsrt.o \
 	$(OBJS)\monodll_helpchm.o \
 	$(OBJS)\monodll_helpwin.o \
 	$(OBJS)\monodll_automtn.o \
@@ -2131,6 +2132,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_uxtheme.o \
 	$(OBJS)\monodll_window.o \
 	$(OBJS)\monodll_graphicsd2d.o \
+	$(OBJS)\monodll_utilsrt.o \
 	$(OBJS)\monodll_helpchm.o \
 	$(OBJS)\monodll_helpwin.o \
 	$(OBJS)\monodll_automtn.o \
@@ -2673,6 +2675,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_uxtheme.o \
 	$(OBJS)\monolib_window.o \
 	$(OBJS)\monolib_graphicsd2d.o \
+	$(OBJS)\monolib_utilsrt.o \
 	$(OBJS)\monolib_helpchm.o \
 	$(OBJS)\monolib_helpwin.o \
 	$(OBJS)\monolib_automtn.o \
@@ -2961,6 +2964,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_uxtheme.o \
 	$(OBJS)\monolib_window.o \
 	$(OBJS)\monolib_graphicsd2d.o \
+	$(OBJS)\monolib_utilsrt.o \
 	$(OBJS)\monolib_helpchm.o \
 	$(OBJS)\monolib_helpwin.o \
 	$(OBJS)\monolib_automtn.o \
@@ -3386,6 +3390,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_uxtheme.o \
 	$(OBJS)\coredll_window.o \
 	$(OBJS)\coredll_graphicsd2d.o \
+	$(OBJS)\coredll_utilsrt.o \
 	$(OBJS)\coredll_helpchm.o \
 	$(OBJS)\coredll_helpwin.o \
 	$(OBJS)\coredll_automtn.o \
@@ -3674,6 +3679,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_uxtheme.o \
 	$(OBJS)\coredll_window.o \
 	$(OBJS)\coredll_graphicsd2d.o \
+	$(OBJS)\coredll_utilsrt.o \
 	$(OBJS)\coredll_helpchm.o \
 	$(OBJS)\coredll_helpwin.o \
 	$(OBJS)\coredll_automtn.o \
@@ -3962,6 +3968,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_uxtheme.o \
 	$(OBJS)\corelib_window.o \
 	$(OBJS)\corelib_graphicsd2d.o \
+	$(OBJS)\corelib_utilsrt.o \
 	$(OBJS)\corelib_helpchm.o \
 	$(OBJS)\corelib_helpwin.o \
 	$(OBJS)\corelib_automtn.o \
@@ -4250,6 +4257,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_uxtheme.o \
 	$(OBJS)\corelib_window.o \
 	$(OBJS)\corelib_graphicsd2d.o \
+	$(OBJS)\corelib_utilsrt.o \
 	$(OBJS)\corelib_helpchm.o \
 	$(OBJS)\corelib_helpwin.o \
 	$(OBJS)\corelib_automtn.o \
@@ -7940,6 +7948,11 @@ $(OBJS)\monodll_graphicsd2d.o: ../../src/msw/graphicsd2d.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_utilsrt.o: ../../src/msw/rt/utilsrt.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_helpchm.o: ../../src/msw/helpchm.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10455,6 +10468,11 @@ $(OBJS)\monolib_graphicsd2d.o: ../../src/msw/graphicsd2d.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_utilsrt.o: ../../src/msw/rt/utilsrt.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_helpchm.o: ../../src/msw/helpchm.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12904,6 +12922,11 @@ $(OBJS)\coredll_graphicsd2d.o: ../../src/msw/graphicsd2d.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_utilsrt.o: ../../src/msw/rt/utilsrt.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_helpchm.o: ../../src/msw/helpchm.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -14369,6 +14392,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_graphicsd2d.o: ../../src/msw/graphicsd2d.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_utilsrt.o: ../../src/msw/rt/utilsrt.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

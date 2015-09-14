@@ -1550,6 +1550,7 @@ MSW_LOWLEVEL_SRC =
     src/msw/printwin.cpp
     src/msw/region.cpp
     src/msw/renderer.cpp
+    src/msw/rt/utilsrt.cpp
     src/msw/settings.cpp
     src/msw/textmeasure.cpp
     src/msw/tooltip.cpp
@@ -1716,6 +1717,7 @@ MSW_HDR =
     wx/msw/region.h
     wx/msw/rcdefs.h
     wx/msw/richmsgdlg.h
+    wx/msw/rt/utils.h
     wx/msw/scrolbar.h
     wx/msw/slider.h
     wx/msw/spinbutt.h

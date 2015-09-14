@@ -65,6 +65,19 @@
 // Recommended setting: 1, required by wxMediaCtrl
 #define wxUSE_ACTIVEX 1
 
+// Enable WinRT support
+//
+// Default is 1 for compilers which support it, i.e. VS2012+ currently. If you
+// use an earlier MSVC version or another compiler and installed the necessary
+// SDK components manually, you need to change this setting.
+//
+// Recommended setting: 1
+#if defined(_MSC_VER) && _MSC_VER >= 1700
+    #define wxUSE_WINRT 1
+#else
+    #define wxUSE_WINRT 0
+#endif
+
 // wxDC caching implementation
 #define wxUSE_DC_CACHEING 1
 

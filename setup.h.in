@@ -653,6 +653,12 @@
 
 #define wxUSE_ACTIVEX 0
 
+#if defined(_MSC_VER) && _MSC_VER >= 1700
+    #define wxUSE_WINRT 0
+#else
+    #define wxUSE_WINRT 0
+#endif
+
 #define wxUSE_DC_CACHEING 0
 
 #define wxUSE_WXDIB 0

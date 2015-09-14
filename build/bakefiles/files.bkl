@@ -1895,6 +1895,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/uxtheme.cpp
     src/msw/window.cpp
     src/msw/graphicsd2d.cpp
+    src/msw/rt/utilsrt.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
     wx/msw/nonownedwnd.h
@@ -2075,6 +2076,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/toplevel.h
     wx/msw/treectrl.h
     wx/msw/window.h
+    wx/msw/rt/utils.h
 </set>
 <set var="MSW_RSC" hints="files">
     <!-- Resources must be installed together with headers: -->
