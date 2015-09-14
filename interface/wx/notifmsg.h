@@ -158,5 +158,17 @@ public:
         @return @false if an error occurred.
     */
     virtual bool Show(int timeout = Timeout_Auto);
+
+    /**
+        If the application already uses a wxTaskBarIcon, it should be connected
+        to notifications by using this method. This has no effect if toast
+        notifications are used.
+        
+        @return the task bar icon which was used previously (may be @c NULL)
+        
+        @onlyfor{wxmsw}
+    */
+    static wxTaskBarIcon *UseTaskBarIcon(wxTaskBarIcon *icon);
+
 };
 
