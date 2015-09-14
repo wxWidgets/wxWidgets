@@ -1936,7 +1936,6 @@ OSX_CARBON_COCOA_SRC =
     src/osx/carbon/overlay.cpp
     src/osx/carbon/popupwin.cpp
     src/osx/carbon/renderer.cpp
-    src/osx/carbon/settings.cpp
     src/osx/carbon/statbrma.cpp
     src/osx/carbon/region.cpp
     # cocoa bridge
@@ -2085,6 +2084,7 @@ OSX_CARBON_SRC =
     src/osx/carbon/printdlg.cpp
     src/osx/carbon/radiobut.cpp
     src/osx/carbon/scrolbar.cpp
+    src/osx/carbon/settings.cpp
     src/osx/carbon/slider.cpp
     src/osx/carbon/spinbutt.cpp
     src/osx/carbon/srchctrl.cpp
@@ -2138,6 +2138,7 @@ OSX_COCOA_SRC =
     src/osx/cocoa/preferences.mm
     src/osx/cocoa/printdlg.mm
     src/osx/cocoa/scrolbar.mm
+    src/osx/cocoa/settings.mm
     src/osx/cocoa/slider.mm
     src/osx/cocoa/spinbutt.mm
     src/osx/cocoa/srchctrl.mm
