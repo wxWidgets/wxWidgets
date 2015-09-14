@@ -140,7 +140,7 @@ static wxMutex *gs_mutexDeleteThread = NULL;
 // gs_nThreadsBeingDeleted will have been deleted
 static wxCondition *gs_condAllDeleted = NULL;
 
-#ifndef __WXOSX__
+#ifndef __DARWIN__
 // this mutex must be acquired before any call to a GUI function
 // (it's not inside #if wxUSE_GUI because this file is compiled as part
 // of wxBase)
@@ -1132,7 +1132,7 @@ void wxThreadInternal::Wait()
     // deadlock so make sure we release it temporarily
     if ( wxThread::IsMain() )
     {
-#ifdef __WXOSX__
+#ifdef __DARWIN__
         // give the thread we're waiting for chance to do the GUI call
         // it might be in, we don't do this conditionally as the to be waited on
         // thread might have to acquire the mutex later but before terminating
@@ -1171,7 +1171,7 @@ void wxThreadInternal::Wait()
         }
     }
 
-#ifndef __WXOSX__
+#ifndef __DARWIN__
     // reacquire GUI mutex
     if ( wxThread::IsMain() )
         wxMutexGuiEnter();
@@ -1769,7 +1769,7 @@ bool wxThread::IsPaused() const
 // wxThreadModule
 //--------------------------------------------------------------------
 
-#ifdef __WXOSX__
+#ifdef __DARWIN__
 void wxOSXThreadModuleOnInit();
 void wxOSXThreadModuleOnExit();
 #endif
@@ -1800,7 +1800,7 @@ bool wxThreadModule::OnInit()
 
     gs_mutexAllThreads = new wxMutex();
 
-#ifdef __WXOSX__
+#ifdef __DARWIN__
     wxOSXThreadModuleOnInit();
 #else
     gs_mutexGui = new wxMutex();
@@ -1858,7 +1858,7 @@ void wxThreadModule::OnExit()
 
     delete gs_mutexAllThreads;
 
-#ifdef __WXOSX__
+#ifdef __DARWIN__
     wxOSXThreadModuleOnExit();
 #else
     // destroy GUI mutex
