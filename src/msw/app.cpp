@@ -377,10 +377,7 @@ bool wxConsoleStderr::DoInit()
     if ( !m_dllKernel32.Load(wxT("kernel32.dll")) )
         return false;
 
-    typedef BOOL (WINAPI *AttachConsole_t)(DWORD dwProcessId);
-    AttachConsole_t wxDL_INIT_FUNC(pfn, AttachConsole, m_dllKernel32);
-
-    if ( !pfnAttachConsole || !pfnAttachConsole(ATTACH_PARENT_PROCESS) )
+    if ( !::AttachConsole(ATTACH_PARENT_PROCESS) )
         return false;
 
     // console attached, set m_hStderr now to ensure that we free it in the
