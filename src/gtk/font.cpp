@@ -161,12 +161,9 @@ void wxFontRefData::InitFromNative()
 }
 
 wxFontRefData::wxFontRefData( const wxFontRefData& data )
-             : wxGDIRefData()
+             : wxGDIRefData(),
+               m_nativeFontInfo(data.m_nativeFontInfo)
 {
-    // Forces a copy of the internal data.  wxNativeFontInfo should probably
-    // have a copy ctor and assignment operator to fix this properly but that
-    // would break binary compatibility...
-    m_nativeFontInfo.FromString(data.m_nativeFontInfo.ToString());
 }
 
 wxFontRefData::wxFontRefData(int size, wxFontFamily family, wxFontStyle style,
