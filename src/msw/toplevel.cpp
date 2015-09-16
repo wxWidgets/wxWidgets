@@ -1078,44 +1078,28 @@ bool wxTopLevelWindowMSW::EnableMinimizeButton(bool enable)
 
 void wxTopLevelWindowMSW::RequestUserAttention(int flags)
 {
-#if defined(FLASHW_STOP) && wxUSE_DYNLIB_CLASS
-    // available in the headers, check if it is supported by the system
-    typedef BOOL (WINAPI *FlashWindowEx_t)(FLASHWINFO *pfwi);
-    static FlashWindowEx_t s_pfnFlashWindowEx = NULL;
-    if ( !s_pfnFlashWindowEx )
+#if defined(FLASHW_STOP)
+    WinStruct<FLASHWINFO> fwi;
+    fwi.hwnd = GetHwnd();
+    fwi.dwFlags = FLASHW_ALL;
+    if ( flags & wxUSER_ATTENTION_INFO )
     {
-        wxDynamicLibrary dllUser32(wxT("user32.dll"));
-        s_pfnFlashWindowEx = (FlashWindowEx_t)
-                                dllUser32.GetSymbol(wxT("FlashWindowEx"));
-
-        // we can safely unload user32.dll here, it's going to remain loaded as
-        // long as the program is running anyhow
+        // just flash a few times
+        fwi.uCount = 3;
+    }
+    else // wxUSER_ATTENTION_ERROR
+    {
+        // flash until the user notices it
+        fwi.dwFlags |= FLASHW_TIMERNOFG;
     }
 
-    if ( s_pfnFlashWindowEx )
-    {
-        WinStruct<FLASHWINFO> fwi;
-        fwi.hwnd = GetHwnd();
-        fwi.dwFlags = FLASHW_ALL;
-        if ( flags & wxUSER_ATTENTION_INFO )
-        {
-            // just flash a few times
-            fwi.uCount = 3;
-        }
-        else // wxUSER_ATTENTION_ERROR
-        {
-            // flash until the user notices it
-            fwi.dwFlags |= FLASHW_TIMERNOFG;
-        }
-
-        s_pfnFlashWindowEx(&fwi);
-    }
-    else // FlashWindowEx() not available
-#endif // FlashWindowEx() defined
+    ::FlashWindowEx(&fwi);
+#else
     {
         wxUnusedVar(flags);
         ::FlashWindow(GetHwnd(), TRUE);
     }
+#endif // defined(FLASHW_STOP)
 }
 
 wxMenu *wxTopLevelWindowMSW::MSWGetSystemMenu() const
@@ -1157,28 +1141,6 @@ wxMenu *wxTopLevelWindowMSW::MSWGetSystemMenu() const
 
 bool wxTopLevelWindowMSW::SetTransparent(wxByte alpha)
 {
-#if wxUSE_DYNLIB_CLASS
-    typedef DWORD (WINAPI *PSETLAYEREDWINDOWATTR)(HWND, DWORD, BYTE, DWORD);
-    static PSETLAYEREDWINDOWATTR
-        pSetLayeredWindowAttributes = (PSETLAYEREDWINDOWATTR)-1;
-
-    if ( pSetLayeredWindowAttributes == (PSETLAYEREDWINDOWATTR)-1 )
-    {
-        wxDynamicLibrary dllUser32(wxT("user32.dll"));
-
-        // use RawGetSymbol() and not GetSymbol() to avoid error messages under
-        // Windows 95: there is nothing the user can do about this anyhow
-        pSetLayeredWindowAttributes = (PSETLAYEREDWINDOWATTR)
-            dllUser32.RawGetSymbol(wxT("SetLayeredWindowAttributes"));
-
-        // it's ok to destroy dllUser32 here, we link statically to user32.dll
-        // anyhow so it won't be unloaded
-    }
-
-    if ( !pSetLayeredWindowAttributes )
-        return false;
-#endif // wxUSE_DYNLIB_CLASS
-
     LONG exstyle = GetWindowLong(GetHwnd(), GWL_EXSTYLE);
 
     // if setting alpha to fully opaque then turn off the layered style
@@ -1189,14 +1151,12 @@ bool wxTopLevelWindowMSW::SetTransparent(wxByte alpha)
         return true;
     }
 
-#if wxUSE_DYNLIB_CLASS
     // Otherwise, set the layered style if needed and set the alpha value
     if ((exstyle & WS_EX_LAYERED) == 0 )
         SetWindowLong(GetHwnd(), GWL_EXSTYLE, exstyle | WS_EX_LAYERED);
 
-    if ( pSetLayeredWindowAttributes(GetHwnd(), 0, (BYTE)alpha, LWA_ALPHA) )
+    if ( ::SetLayeredWindowAttributes(GetHwnd(), 0, (BYTE)alpha, LWA_ALPHA) )
         return true;
-#endif // wxUSE_DYNLIB_CLASS
 
     return false;
 }
