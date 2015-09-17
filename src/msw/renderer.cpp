@@ -103,6 +103,14 @@
     #define PP_BAR 1
     #define PP_CHUNK 3
 
+    #define LISS_NORMAL 1
+    #define LISS_HOT 2
+    #define LISS_SELECTED 3
+    #define LISS_DISABLED 4
+    #define LISS_SELECTEDNOTFOCUS 5
+    #define LISS_HOTSELECTED 6
+
+    #define LVP_LISTITEM 1
 #endif
 
 #if defined(__WXWINCE__)
@@ -282,6 +290,11 @@ public:
         if ( !DoDrawXPButton(BP_PUSHBUTTON, win, dc, rect, flags) )
             m_rendererNative.DrawPushButton(win, dc, rect, flags);
     }
+
+    virtual void DrawItemSelectionRect(wxWindow *win,
+                                       wxDC& dc,
+                                       const wxRect& rect,
+                                       int flags = 0);
 
     virtual void DrawTextCtrl(wxWindow* win,
                               wxDC& dc,
@@ -834,6 +847,38 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
     }
 
     DoDrawButtonLike(hTheme, part, dc, rect, flags);
+}
+
+void
+wxRendererXP::DrawItemSelectionRect(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags)
+{
+    wxUxThemeHandle hTheme(win, L"LISTVIEW");
+
+    int itemState = LISS_NORMAL;
+    if ( flags & wxCONTROL_SELECTED )
+        itemState = LISS_SELECTED;
+    if ( !(flags & wxCONTROL_FOCUSED) )
+        itemState = LISS_SELECTEDNOTFOCUS;
+    if ( flags & wxCONTROL_DISABLED )
+        itemState |= LISS_DISABLED;
+
+    wxUxThemeEngine* const te = wxUxThemeEngine::Get();
+    if ( te->IsThemePartDefined(hTheme, LVP_LISTITEM, itemState) )
+    {
+        RECT rc;
+        wxCopyRectToRECT(rect, rc);
+        if ( te->IsThemeBackgroundPartiallyTransparent(hTheme, LVP_LISTITEM, itemState) )
+            te->DrawThemeParentBackground(GetHwndOf(win), GetHdcOf(dc.GetTempHDC()), &rc);
+
+        te->DrawThemeBackground(hTheme, GetHdcOf(dc.GetTempHDC()), LVP_LISTITEM, itemState, &rc, 0);
+    }
+    else
+    {
+        m_rendererNative.DrawItemSelectionRect(win, dc, rect, flags);
+    }
 }
 
 // Uses the theme to draw the border and fill for something like a wxTextCtrl
