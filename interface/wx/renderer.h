@@ -405,9 +405,32 @@ public:
         (otherwise the selection rectangle is e.g. often grey and not blue).
         This may be ignored by the renderer or deduced by the code directly from
         the @a win.
+
+        @see DrawItemText()
     */
     virtual void DrawItemSelectionRect(wxWindow* win, wxDC& dc,
                                        const wxRect& rect, int flags = 0) = 0;
+
+
+    /**
+        Draw item text in the correct color based on selection status.
+
+        Background of the text should be painted with DrawItemSelectionRect().
+
+        The supported @a flags are @c wxCONTROL_SELECTED for items
+        which are selected.
+        @c wxCONTROL_FOCUSED may be used to indicate if the control has the focus.
+        @c wxCONTROL_DISABLED may be used to indicate if the control is disabled.
+
+        @since 3.1.0
+        @see DrawItemSelectionRect()
+    */
+    virtual void DrawItemText(wxWindow* win,
+                              wxDC& dc,
+                              const wxString& text,
+                              const wxRect& rect,
+                              int align = wxALIGN_LEFT | wxALIGN_TOP,
+                              int flags = 0) = 0;
 
     /**
         Draw a blank push button that looks very similar to wxButton.

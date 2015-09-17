@@ -97,6 +97,7 @@ All (GUI):
 - Add support for sorting wxDataViewCtrl by multiple columns (Trigve).
 - Allow dropping data on wxDataViewCtrl background (Laurent Poujoulat).
 - Add wxRendererNative::DrawGauge() (Tobias Taschner).
+- Add wxRendererNative::DrawItemText() (Tobias Taschner).
 - Add wxHtmlWindow::SetDefaultHTMLCursor() (Jeff A. Marr).
 - Add default ctor and Create() to wxContextHelpButton (Hanmac).
 - Send events when toggling wxPropertyGrid nodes from keyboard (Armel Asselin).

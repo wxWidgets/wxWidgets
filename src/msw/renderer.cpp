@@ -111,6 +111,9 @@
     #define LISS_HOTSELECTED 6
 
     #define LVP_LISTITEM 1
+
+    #define DTT_TEXTCOLOR       (1UL << 0)      // crText has been specified
+    #define DTT_STATEID         (1UL << 8)      // IStateId has been specified
 #endif
 
 #if defined(__WXWINCE__)
@@ -323,6 +326,12 @@ public:
                            int max,
                            int flags = 0);
 
+    virtual void DrawItemText(wxWindow* win,
+                              wxDC& dc,
+                              const wxString& text,
+                              const wxRect& rect,
+                              int align = wxALIGN_LEFT | wxALIGN_TOP,
+                              int flags = 0);
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
@@ -878,6 +887,63 @@ wxRendererXP::DrawItemSelectionRect(wxWindow *win,
     else
     {
         m_rendererNative.DrawItemSelectionRect(win, dc, rect, flags);
+    }
+}
+
+void wxRendererXP::DrawItemText(wxWindow* win,
+                                wxDC& dc,
+                                const wxString& text,
+                                const wxRect& rect,
+                                int align,
+                                int flags)
+{
+    wxUxThemeHandle hTheme(win, L"LISTVIEW");
+
+    int itemState = LISS_NORMAL;
+    if ( flags & wxCONTROL_SELECTED )
+        itemState = LISS_SELECTED;
+    if ( !(flags & wxCONTROL_FOCUSED) )
+        itemState = LISS_SELECTEDNOTFOCUS;
+    if ( flags & wxCONTROL_DISABLED )
+        itemState |= LISS_DISABLED;
+
+    wxUxThemeEngine* te = wxUxThemeEngine::Get();
+    if ( te->IsThemePartDefined(hTheme, LVP_LISTITEM, itemState) )
+    {
+        RECT rc;
+        wxCopyRectToRECT(rect, rc);
+
+        DTTOPTS textOpts;
+        textOpts.dwSize = sizeof(textOpts);
+        textOpts.dwFlags = DTT_STATEID;
+        textOpts.iStateId = itemState;
+        if (flags & wxCONTROL_DISABLED)
+        {
+            textOpts.dwFlags |= DTT_TEXTCOLOR;
+            textOpts.crText = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT).GetPixel();
+        }
+
+        DWORD textFlags = DT_NOPREFIX | DT_END_ELLIPSIS;
+        if ( align & wxALIGN_CENTER )
+            textFlags |= DT_CENTER;
+        else if ( align & wxALIGN_RIGHT )
+            textFlags |= DT_RIGHT;
+        else
+            textFlags |= DT_LEFT;
+
+        if ( align & wxALIGN_BOTTOM )
+            textFlags |= DT_BOTTOM;
+        else if ( align & wxALIGN_CENTER_VERTICAL )
+            textFlags |= DT_VCENTER;
+        else
+            textFlags |= DT_TOP;
+
+        te->DrawThemeTextEx(hTheme, dc.GetHDC(), LVP_LISTITEM, itemState,
+                            text.wchar_str(), -1, textFlags, &rc, &textOpts);
+    }
+    else
+    {
+        m_rendererNative.DrawItemText(win, dc, text, rect, align, flags);
     }
 }
 
