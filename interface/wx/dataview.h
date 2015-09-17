@@ -907,6 +907,11 @@ wxEventType wxEVT_DATAVIEW_ITEM_DROP;
     you need to handle any mouse events not covered by the ones above, consider
     using a custom renderer for the cells that must handle them.
 
+    @note Under wxMSW this control uses wxSystemThemedControl for an explorer
+    style appearance by default since wxWidgets 3.1.0. If this is not desired,
+    you can call wxSystemThemedControl::EnableSystemTheme with @c false
+    argument to disable this.
+
     @library{wxadv}
     @category{ctrl,dvc}
     @appearance{dataviewctrl}

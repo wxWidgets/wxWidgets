@@ -992,6 +992,9 @@
 				RelativePath="..\..\src\msw\statusbar.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\msw\systhemectrl.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\msw\taskbarbutton.cpp">
 			</File>
 			<File
@@ -2575,6 +2578,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\stc\stc.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\systhemectrl.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\aui\tabart.h">

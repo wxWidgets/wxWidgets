@@ -4659,6 +4659,8 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     sizer->Add( m_clientArea, 1, wxGROW );
     SetSizer( sizer );
 
+    EnableSystemTheme();
+
     return true;
 }
 
@@ -5417,6 +5419,14 @@ void wxDataViewCtrl::DontUseColumnForSorting(int idx)
 void wxDataViewCtrl::ToggleSortByColumn(int column)
 {
     m_headerArea->ToggleSortByColumn(column);
+}
+
+void wxDataViewCtrl::DoEnableSystemTheme(bool enable, wxWindow* window)
+{
+    wxSystemThemedControl::DoEnableSystemTheme(enable, window);
+    wxSystemThemedControl::DoEnableSystemTheme(enable, m_clientArea);
+    if ( m_headerArea )
+        wxSystemThemedControl::DoEnableSystemTheme(enable, m_headerArea);
 }
 
 #endif // !wxUSE_GENERICDATAVIEWCTRL

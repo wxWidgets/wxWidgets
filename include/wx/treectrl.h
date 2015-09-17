@@ -22,6 +22,7 @@
 #include "wx/control.h"
 #include "wx/treebase.h"
 #include "wx/textctrl.h" // wxTextCtrl::ms_classinfo used through wxCLASSINFO macro
+#include "wx/systhemectrl.h"
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
@@ -33,7 +34,7 @@ class WXDLLIMPEXP_FWD_CORE wxImageList;
 // wxTreeCtrlBase
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTreeCtrlBase : public wxControl
+class WXDLLIMPEXP_CORE wxTreeCtrlBase : public wxSystemThemedControl<wxControl>
 {
 public:
     wxTreeCtrlBase();
