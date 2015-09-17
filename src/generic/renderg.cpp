@@ -138,6 +138,13 @@ public:
 
     virtual void DrawGauge(wxWindow* win, wxDC& dc, const wxRect& rect, int value, int max, int flags = 0) wxOVERRIDE;
 
+    virtual void DrawItemText(wxWindow* win,
+                              wxDC& dc,
+                              const wxString& text,
+                              const wxRect& rect,
+                              int align = wxALIGN_LEFT | wxALIGN_TOP,
+                              int flags = 0) wxOVERRIDE;
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win) wxOVERRIDE;
 
     virtual wxRendererVersion GetVersion() const wxOVERRIDE
@@ -830,6 +837,46 @@ void wxRendererGeneric::DrawGauge(wxWindow* win,
     dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.DrawRectangle(progRect);
+}
+
+void
+wxRendererGeneric::DrawItemText(wxWindow* win,
+                                wxDC& dc,
+                                const wxString& text,
+                                const wxRect& rect,
+                                int align,
+                                int flags)
+{
+    // Determine text color
+    wxColour textColour;
+    if ( flags & wxCONTROL_SELECTED )
+    {
+        if ( flags & wxCONTROL_FOCUSED )
+        {
+            textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+        }
+        else // !focused
+        {
+            textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
+        }
+    }
+    else if ( flags & wxCONTROL_DISABLED )
+    {
+        textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
+    }
+    else // enabled but not selected
+    {
+        textColour = win->GetForegroundColour();
+    }
+
+    const wxString paintText = wxControl::Ellipsize(text, dc,
+                                                    wxELLIPSIZE_END,
+                                                    rect.GetWidth());
+
+    // Draw text
+    dc.SetTextForeground(textColour);
+    dc.SetTextBackground(wxTransparentColour);
+    dc.DrawLabel(paintText, rect, align);
 }
 
 // ----------------------------------------------------------------------------

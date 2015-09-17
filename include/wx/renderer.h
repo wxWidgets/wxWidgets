@@ -329,6 +329,14 @@ public:
                            int max,
                            int flags = 0) = 0;
 
+    // Draw text using the appropriate color for normal and selected states.
+    virtual void DrawItemText(wxWindow* win,
+                              wxDC& dc,
+                              const wxString& text,
+                              const wxRect& rect,
+                              int align = wxALIGN_LEFT | wxALIGN_TOP,
+                              int flags = 0) = 0;
+
     // geometry functions
     // ------------------
 
@@ -514,6 +522,14 @@ public:
                            int max,
                            int flags = 0)
         { m_rendererNative.DrawGauge(win, dc, rect, value, max, flags); }
+
+    virtual void DrawItemText(wxWindow* win,
+                              wxDC& dc,
+                              const wxString& text,
+                              const wxRect& rect,
+                              int align = wxALIGN_LEFT | wxALIGN_TOP,
+                              int flags = 0)
+        { m_rendererNative.DrawItemText(win, dc, text, rect, align, flags); }
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
         { return m_rendererNative.GetSplitterParams(win); }

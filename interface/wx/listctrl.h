@@ -258,6 +258,10 @@ enum
            Processes a @c wxEVT_LIST_CACHE_HINT event type.
     @endEventTable
 
+    @note Under wxMSW this control uses wxSystemThemedControl for an explorer
+    style appearance by default since wxWidgets 3.1.0. If this is not desired,
+    you can call wxSystemThemedControl::EnableSystemTheme with @c false
+    argument to disable this.
 
     @library{wxcore}
     @category{ctrl}

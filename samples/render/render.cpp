@@ -276,6 +276,18 @@ private:
             wxRect(x2, y, widthGauge, heightGauge), 25, 100, m_flags);
 
         y += lineHeight + heightGauge;
+
+        const wxCoord heightListItem = 48;
+        const wxCoord widthListItem = 260;
+
+        dc.DrawText("DrawItemSelectionRect()", x1, y);
+        wxRendererNative::GetDefault().DrawItemSelectionRect(this, dc,
+            wxRect(x2, y, widthListItem, heightListItem), m_flags | wxCONTROL_SELECTED);
+
+        wxRendererNative::GetDefault().DrawItemText(this, dc, "DrawItemText()",
+            wxRect(x2, y, widthListItem, heightListItem).Inflate(-2, -2), m_align, m_flags | wxCONTROL_SELECTED);
+
+        y += lineHeight + heightListItem;
     }
 
     int m_flags;

@@ -4278,6 +4278,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xpmdecod.h \
 	wx/xpmhand.h \
 	wx/xrc/xmlreshandler.h \
+	wx/systhemectrl.h \
 	$(LOWLEVEL_HDR) \
 	$(GUI_CORE_HEADERS) \
 	$(ADVANCED_HDR) \
@@ -5905,6 +5906,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_textentry.o \
 	monodll_msw_tglbtn.o \
 	monodll_treectrl.o \
+	monodll_systhemectrl.o \
 	monodll_msw_checklst.o \
 	monodll_msw_fdrepdlg.o \
 	monodll_msw_fontdlg.o
@@ -6065,6 +6067,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_msw_textentry.o \
 	monodll_msw_tglbtn.o \
 	monodll_treectrl.o \
+	monodll_systhemectrl.o \
 	monodll_dirdlgg.o \
 	monodll_generic_fdrepdlg.o \
 	monodll_filedlgg.o \
@@ -8277,6 +8280,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_textentry.o \
 	monolib_msw_tglbtn.o \
 	monolib_treectrl.o \
+	monolib_systhemectrl.o \
 	monolib_msw_checklst.o \
 	monolib_msw_fdrepdlg.o \
 	monolib_msw_fontdlg.o
@@ -8437,6 +8441,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_textentry.o \
 	monolib_msw_tglbtn.o \
 	monolib_treectrl.o \
+	monolib_systhemectrl.o \
 	monolib_dirdlgg.o \
 	monolib_generic_fdrepdlg.o \
 	monolib_filedlgg.o \
@@ -10801,6 +10806,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_textentry.o \
 	coredll_msw_tglbtn.o \
 	coredll_treectrl.o \
+	coredll_systhemectrl.o \
 	coredll_msw_checklst.o \
 	coredll_msw_fdrepdlg.o \
 	coredll_msw_fontdlg.o
@@ -10961,6 +10967,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_textentry.o \
 	coredll_msw_tglbtn.o \
 	coredll_treectrl.o \
+	coredll_systhemectrl.o \
 	coredll_dirdlgg.o \
 	coredll_generic_fdrepdlg.o \
 	coredll_filedlgg.o \
@@ -12580,6 +12587,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_textentry.o \
 	corelib_msw_tglbtn.o \
 	corelib_treectrl.o \
+	corelib_systhemectrl.o \
 	corelib_msw_checklst.o \
 	corelib_msw_fdrepdlg.o \
 	corelib_msw_fontdlg.o
@@ -12740,6 +12748,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_textentry.o \
 	corelib_msw_tglbtn.o \
 	corelib_treectrl.o \
+	corelib_systhemectrl.o \
 	corelib_dirdlgg.o \
 	corelib_generic_fdrepdlg.o \
 	corelib_filedlgg.o \
@@ -21776,6 +21785,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/treectrl.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_systhemectrl.o: $(srcdir)/src/msw/systhemectrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/systhemectrl.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_systhemectrl.o: $(srcdir)/src/msw/systhemectrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/systhemectrl.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_anybutton_osx.o: $(srcdir)/src/osx/anybutton_osx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/anybutton_osx.cpp
 
@@ -27694,6 +27709,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/treectrl.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_systhemectrl.o: $(srcdir)/src/msw/systhemectrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/systhemectrl.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_systhemectrl.o: $(srcdir)/src/msw/systhemectrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/systhemectrl.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_anybutton_osx.o: $(srcdir)/src/osx/anybutton_osx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/anybutton_osx.cpp
@@ -33719,6 +33740,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/treectrl.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_systhemectrl.o: $(srcdir)/src/msw/systhemectrl.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/systhemectrl.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_systhemectrl.o: $(srcdir)/src/msw/systhemectrl.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/systhemectrl.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_anybutton_osx.o: $(srcdir)/src/osx/anybutton_osx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/anybutton_osx.cpp
 
@@ -38122,6 +38149,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/treectrl.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_systhemectrl.o: $(srcdir)/src/msw/systhemectrl.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/systhemectrl.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_systhemectrl.o: $(srcdir)/src/msw/systhemectrl.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/systhemectrl.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_anybutton_osx.o: $(srcdir)/src/osx/anybutton_osx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/anybutton_osx.cpp

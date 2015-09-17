@@ -29,6 +29,7 @@
 #include "wx/spinctrl.h"
 #include "wx/choice.h"
 #include "wx/imaglist.h"
+#include "wx/renderer.h"
 
 const char wxDataViewCtrlNameStr[] = "dataviewCtrl";
 
@@ -974,7 +975,7 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
                                          int xoffset,
                                          wxRect rect,
                                          wxDC *dc,
-                                         int WXUNUSED(state))
+                                         int state)
 {
     wxRect rectText = rect;
     rectText.x += xoffset;
@@ -994,9 +995,20 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
                                     );
     }
 
+    int flags = 0;
+    if ( state & wxDATAVIEW_CELL_SELECTED )
+        flags |= wxCONTROL_SELECTED | wxCONTROL_FOCUSED;
+    if ( !GetOwner()->GetOwner()->IsEnabled() )
+        flags |= wxCONTROL_DISABLED;
+
     // get the alignment to use
-    dc->DrawLabel(ellipsizedText.empty() ? text : ellipsizedText,
-                  rectText, GetEffectiveAlignment());
+    wxRendererNative::Get().DrawItemText(
+        GetOwner()->GetOwner(),
+        *dc,
+        ellipsizedText.empty() ? text : ellipsizedText,
+        rectText,
+        GetEffectiveAlignment(),
+        flags);
 }
 
 void wxDataViewCustomRendererBase::SetEnabled(bool enabled)
