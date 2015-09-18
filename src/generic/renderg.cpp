@@ -113,6 +113,13 @@ public:
                                 const wxRect& rect,
                                 int flags = 0) wxOVERRIDE;
 
+    virtual void DrawCollapseButton(wxWindow *win,
+        wxDC& dc,
+        const wxRect& rect,
+        int flags = 0);
+
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc);
+
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
                                        const wxRect& rect,
@@ -684,6 +691,42 @@ wxRendererGeneric::DrawPushButton(wxWindow *win,
     dc.SetBrush(wxBrush(bgCol));
     dc.SetPen(wxPen(bgCol));
     dc.DrawRectangle(rect);
+}
+
+void
+wxRendererGeneric::DrawCollapseButton(wxWindow *win,
+                                wxDC& dc,
+                                const wxRect& rect,
+                                int flags)
+{
+    int arrowHalf = rect.width / 5;
+    int rectMid = rect.width / 2;
+    int arrowTopY = (rect.height / 2) - (arrowHalf / 2);
+
+    wxPoint pt[3];
+    if (flags & wxCONTROL_EXPANDED)
+    {
+        // This should always result in arrow with odd width.
+        pt[0] = wxPoint(rectMid - arrowHalf, arrowTopY);
+        pt[1] = wxPoint(rectMid + arrowHalf, arrowTopY);
+        pt[2] = wxPoint(rectMid, arrowTopY + arrowHalf);
+    }
+    else
+    {
+        // This should always result in arrow with odd height.
+        pt[0] = wxPoint(arrowTopY, rectMid - arrowHalf);
+        pt[1] = wxPoint(arrowTopY + arrowHalf, rectMid);
+        pt[2] = wxPoint(arrowTopY, rectMid + arrowHalf);
+    }
+
+    dc.SetBrush(wxBrush(win->GetForegroundColour()));
+    dc.SetPen(wxPen(win->GetForegroundColour()));
+    dc.DrawPolygon(WXSIZEOF(pt), pt, rect.x, rect.y);
+}
+
+wxSize wxRendererGeneric::GetCollapseButtonSize(wxWindow *WXUNUSED(win), wxDC& WXUNUSED(dc))
+{
+    return wxSize(18, 18);
 }
 
 void

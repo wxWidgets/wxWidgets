@@ -37,7 +37,7 @@ enum
     /** Only for the menu items. */
     wxCONTROL_ISSUBMENU  = wxCONTROL_SPECIAL,
 
-    /** Only for the tree items. */
+    /** Only for the tree items and collapse buttons. */
     wxCONTROL_EXPANDED   = wxCONTROL_SPECIAL,
 
     /** Only for the status bar panes. */
@@ -440,6 +440,24 @@ public:
     */
     virtual void DrawPushButton(wxWindow* win, wxDC& dc, const wxRect& rect,
                                 int flags = 0) = 0;
+
+    /**
+        Draw a collapse button.
+
+        @a flags may have the @c wxCONTROL_EXPANDED or @c wxCONTROL_CURRENT
+        bit set, see @ref wxCONTROL_FLAGS.
+
+        @since 3.1.0
+    */
+    virtual void DrawCollapseButton(wxWindow *win, wxDC& dc,
+                                    const wxRect& rect, int flags = 0) = 0;
+
+    /**
+        Returns the size of a collapse button.
+
+        @since 3.1.0
+    */
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc) = 0;
 
     /**
         Draw the border for sash window: this border must be such that the sash

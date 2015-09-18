@@ -246,6 +246,12 @@ private:
                                  wxRect(wxPoint(x2, y), sizeCheck), m_flags);
         y += lineHeight + sizeCheck.y;
 
+        dc.DrawText("DrawCollapseButton()", x1, y);
+        const wxSize sizeCollapse = renderer.GetCollapseButtonSize(this, dc);
+        renderer.DrawCollapseButton(this, dc,
+                                    wxRect(wxPoint(x2, y), sizeCollapse), m_flags);
+        y += lineHeight + sizeCollapse.y;
+
         dc.DrawText("DrawTreeItemButton()", x1, y);
         renderer.DrawTreeItemButton(this, dc,
                                     wxRect(x2, y, 20, 20), m_flags);
