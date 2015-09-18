@@ -12,7 +12,7 @@
 #define _WX_COLLAPSABLE_PANE_H_GENERIC_
 
 // forward declared
-class WXDLLIMPEXP_FWD_CORE wxButton;
+class WXDLLIMPEXP_FWD_CORE wxCollapsibleHeaderCtrl;
 class WXDLLIMPEXP_FWD_CORE wxStaticLine;
 #if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
 class WXDLLIMPEXP_FWD_CORE wxDisclosureTriangle;
@@ -63,8 +63,7 @@ public:
         { return m_pPane==NULL || !m_pPane->IsShown(); }
     virtual wxWindow *GetPane() const
         { return m_pPane; }
-    virtual wxString GetLabel() const
-        { return m_strLabel; }
+    virtual wxString GetLabel() const;
 
     virtual bool Layout();
 
@@ -80,21 +79,17 @@ protected:
     // overridden methods
     virtual wxSize DoGetBestSize() const;
 
-    wxString GetBtnLabel() const;
     int GetBorder() const;
 
     // child controls
 #if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
     wxDisclosureTriangle *m_pButton;
 #else
-    wxButton *m_pButton;
+    wxCollapsibleHeaderCtrl *m_pButton;
 #endif
     wxStaticLine *m_pStaticLine;
     wxWindow *m_pPane;
     wxSizer *m_sz;
-
-    // the button label without ">>" or "<<"
-    wxString m_strLabel;
 
 private:
     void Init();

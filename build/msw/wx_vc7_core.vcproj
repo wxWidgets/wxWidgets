@@ -1071,6 +1071,9 @@
 				RelativePath="..\..\src\generic\clrpickerg.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\generic\collheaderctrlg.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\generic\collpaneg.cpp">
 			</File>
 			<File
@@ -1669,6 +1672,9 @@
 				RelativePath="..\..\include\wx\generic\clrpickerg.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\generic\collheaderctrl.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\generic\collpaneg.h">
 			</File>
 			<File
@@ -1984,6 +1990,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\cmndata.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\collheaderctrl.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\collpane.h">

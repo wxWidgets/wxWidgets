@@ -3292,6 +3292,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/toplevel.h \
 	wx/msw/treectrl.h \
 	wx/msw/window.h \
+	wx/generic/collheaderctrl.h \
 	wx/msw/checklst.h \
 	wx/msw/fdrepdlg.h \
 	wx/msw/fontdlg.h \
@@ -3737,6 +3738,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/toplevel.h \
 	wx/msw/treectrl.h \
 	wx/msw/window.h \
+	wx/generic/collheaderctrl.h \
 	wx/generic/fdrepdlg.h \
 	wx/generic/filedlgg.h \
 	wx/generic/fontdlgg.h \
@@ -4279,6 +4281,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xpmhand.h \
 	wx/xrc/xmlreshandler.h \
 	wx/systhemectrl.h \
+	wx/collheaderctrl.h \
 	$(LOWLEVEL_HDR) \
 	$(GUI_CORE_HEADERS) \
 	$(ADVANCED_HDR) \
@@ -4952,6 +4955,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_univ_toolbar.o \
 	monodll_topluniv.o \
 	monodll_winuniv.o \
+	monodll_collheaderctrlg.o \
 	monodll_gtk.o \
 	monodll_metal.o \
 	monodll_mono.o \
@@ -5620,7 +5624,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_paletteg.o \
 	monodll_regiong.o \
 	monodll_generic_statusbr.o \
-	monodll_generic_textmeasure.o
+	monodll_generic_textmeasure.o \
+	monodll_collheaderctrlg.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS =  \
 	monodll_generic_accel.o \
@@ -5666,7 +5671,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS =  \
 	monodll_gtk1_stattext.o \
 	monodll_gtk1_toolbar.o \
 	monodll_gtk1_textctrl.o \
-	monodll_gtk1_tglbtn.o
+	monodll_gtk1_tglbtn.o \
+	monodll_collheaderctrlg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_generic_accel.o \
@@ -5844,7 +5850,8 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_prntdlgg.o \
 	monodll_generic_statline.o \
 	monodll_generic_statusbr.o \
-	monodll_tabg.o
+	monodll_tabg.o \
+	monodll_collheaderctrlg.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_clrpickerg.o \
@@ -5907,6 +5914,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_tglbtn.o \
 	monodll_treectrl.o \
 	monodll_systhemectrl.o \
+	monodll_collheaderctrlg.o \
 	monodll_msw_checklst.o \
 	monodll_msw_fdrepdlg.o \
 	monodll_msw_fontdlg.o
@@ -6068,6 +6076,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_msw_tglbtn.o \
 	monodll_treectrl.o \
 	monodll_systhemectrl.o \
+	monodll_collheaderctrlg.o \
 	monodll_dirdlgg.o \
 	monodll_generic_fdrepdlg.o \
 	monodll_filedlgg.o \
@@ -7326,6 +7335,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_univ_toolbar.o \
 	monolib_topluniv.o \
 	monolib_winuniv.o \
+	monolib_collheaderctrlg.o \
 	monolib_gtk.o \
 	monolib_metal.o \
 	monolib_mono.o \
@@ -7994,7 +8004,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_paletteg.o \
 	monolib_regiong.o \
 	monolib_generic_statusbr.o \
-	monolib_generic_textmeasure.o
+	monolib_generic_textmeasure.o \
+	monolib_collheaderctrlg.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_accel.o \
@@ -8040,7 +8051,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk1_stattext.o \
 	monolib_gtk1_toolbar.o \
 	monolib_gtk1_textctrl.o \
-	monolib_gtk1_tglbtn.o
+	monolib_gtk1_tglbtn.o \
+	monolib_collheaderctrlg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_accel.o \
@@ -8218,7 +8230,8 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_prntdlgg.o \
 	monolib_generic_statline.o \
 	monolib_generic_statusbr.o \
-	monolib_tabg.o
+	monolib_tabg.o \
+	monolib_collheaderctrlg.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_clrpickerg.o \
@@ -8281,6 +8294,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_tglbtn.o \
 	monolib_treectrl.o \
 	monolib_systhemectrl.o \
+	monolib_collheaderctrlg.o \
 	monolib_msw_checklst.o \
 	monolib_msw_fdrepdlg.o \
 	monolib_msw_fontdlg.o
@@ -8442,6 +8456,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_tglbtn.o \
 	monolib_treectrl.o \
 	monolib_systhemectrl.o \
+	monolib_collheaderctrlg.o \
 	monolib_dirdlgg.o \
 	monolib_generic_fdrepdlg.o \
 	monolib_filedlgg.o \
@@ -9852,6 +9867,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_univ_toolbar.o \
 	coredll_topluniv.o \
 	coredll_winuniv.o \
+	coredll_collheaderctrlg.o \
 	coredll_gtk.o \
 	coredll_metal.o \
 	coredll_mono.o \
@@ -10520,7 +10536,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_paletteg.o \
 	coredll_regiong.o \
 	coredll_generic_statusbr.o \
-	coredll_generic_textmeasure.o
+	coredll_generic_textmeasure.o \
+	coredll_collheaderctrlg.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_accel.o \
@@ -10566,7 +10583,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk1_stattext.o \
 	coredll_gtk1_toolbar.o \
 	coredll_gtk1_textctrl.o \
-	coredll_gtk1_tglbtn.o
+	coredll_gtk1_tglbtn.o \
+	coredll_collheaderctrlg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_accel.o \
@@ -10744,7 +10762,8 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_prntdlgg.o \
 	coredll_generic_statline.o \
 	coredll_generic_statusbr.o \
-	coredll_tabg.o
+	coredll_tabg.o \
+	coredll_collheaderctrlg.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_clrpickerg.o \
@@ -10807,6 +10826,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_tglbtn.o \
 	coredll_treectrl.o \
 	coredll_systhemectrl.o \
+	coredll_collheaderctrlg.o \
 	coredll_msw_checklst.o \
 	coredll_msw_fdrepdlg.o \
 	coredll_msw_fontdlg.o
@@ -10968,6 +10988,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_tglbtn.o \
 	coredll_treectrl.o \
 	coredll_systhemectrl.o \
+	coredll_collheaderctrlg.o \
 	coredll_dirdlgg.o \
 	coredll_generic_fdrepdlg.o \
 	coredll_filedlgg.o \
@@ -11633,6 +11654,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_univ_toolbar.o \
 	corelib_topluniv.o \
 	corelib_winuniv.o \
+	corelib_collheaderctrlg.o \
 	corelib_gtk.o \
 	corelib_metal.o \
 	corelib_mono.o \
@@ -12301,7 +12323,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_paletteg.o \
 	corelib_regiong.o \
 	corelib_generic_statusbr.o \
-	corelib_generic_textmeasure.o
+	corelib_generic_textmeasure.o \
+	corelib_collheaderctrlg.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_accel.o \
@@ -12347,7 +12370,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk1_stattext.o \
 	corelib_gtk1_toolbar.o \
 	corelib_gtk1_textctrl.o \
-	corelib_gtk1_tglbtn.o
+	corelib_gtk1_tglbtn.o \
+	corelib_collheaderctrlg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_accel.o \
@@ -12525,7 +12549,8 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_prntdlgg.o \
 	corelib_generic_statline.o \
 	corelib_generic_statusbr.o \
-	corelib_tabg.o
+	corelib_tabg.o \
+	corelib_collheaderctrlg.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_clrpickerg.o \
@@ -12588,6 +12613,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_tglbtn.o \
 	corelib_treectrl.o \
 	corelib_systhemectrl.o \
+	corelib_collheaderctrlg.o \
 	corelib_msw_checklst.o \
 	corelib_msw_fdrepdlg.o \
 	corelib_msw_fontdlg.o
@@ -12749,6 +12775,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_tglbtn.o \
 	corelib_treectrl.o \
 	corelib_systhemectrl.o \
+	corelib_collheaderctrlg.o \
 	corelib_dirdlgg.o \
 	corelib_generic_fdrepdlg.o \
 	corelib_filedlgg.o \
@@ -15108,6 +15135,7 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS =  \
 	monodll_utilscocoa.o \
 	monodll_generic_caret.o \
 	monodll_clrpickerg.o \
+	monodll_collheaderctrlg.o \
 	monodll_collpaneg.o \
 	monodll_colrdlgg.o \
 	monodll_dirdlgg.o \
@@ -15254,6 +15282,7 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_12 =  \
 	monolib_utilscocoa.o \
 	monolib_generic_caret.o \
 	monolib_clrpickerg.o \
+	monolib_collheaderctrlg.o \
 	monolib_collpaneg.o \
 	monolib_colrdlgg.o \
 	monolib_dirdlgg.o \
@@ -15400,6 +15429,7 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_14 =  \
 	coredll_utilscocoa.o \
 	coredll_generic_caret.o \
 	coredll_clrpickerg.o \
+	coredll_collheaderctrlg.o \
 	coredll_collpaneg.o \
 	coredll_colrdlgg.o \
 	coredll_dirdlgg.o \
@@ -15531,6 +15561,7 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_1_0 =  \
 	corelib_utilscocoa.o \
 	corelib_generic_caret.o \
 	corelib_clrpickerg.o \
+	corelib_collheaderctrlg.o \
 	corelib_collpaneg.o \
 	corelib_colrdlgg.o \
 	corelib_dirdlgg.o \
@@ -21461,6 +21492,33 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@monodll_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@monodll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_USE_GUI_1_WXUNIV_1@monodll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_mdig.o: $(srcdir)/src/generic/mdig.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
 
@@ -27385,6 +27443,33 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1_WXUNIV_1@monolib_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@monolib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_USE_GUI_1_WXUNIV_1@monolib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_mdig.o: $(srcdir)/src/generic/mdig.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
@@ -33416,6 +33501,33 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@coredll_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@coredll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_USE_GUI_1_WXUNIV_1@coredll_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_mdig.o: $(srcdir)/src/generic/mdig.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
 
@@ -37825,6 +37937,33 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1_WXUNIV_1@corelib_filedlgg.o: $(srcdir)/src/generic/filedlgg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/filedlgg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@corelib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
+
+@COND_USE_GUI_1_WXUNIV_1@corelib_collheaderctrlg.o: $(srcdir)/src/generic/collheaderctrlg.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/collheaderctrlg.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_mdig.o: $(srcdir)/src/generic/mdig.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
