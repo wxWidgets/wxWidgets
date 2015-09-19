@@ -81,20 +81,16 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
     // sizer containing the expand button and possibly a static line
     m_sz = new wxBoxSizer(wxVERTICAL);
 
-#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
-    // on Mac we use the special disclosure triangle button
-    m_pStaticLine = NULL;
-    m_pButton = new wxDisclosureTriangle(this, wxID_ANY, label);
-    m_sz->Add(m_pButton);
-#else
     // create children and lay them out using a wxBoxSizer
     // (so that we automatically get RTL features)
     m_pButton = new wxCollapsibleHeaderCtrl(this, wxID_ANY, label, wxPoint(0, 0),
                              wxDefaultSize);
-    m_pStaticLine = new wxStaticLine(this, wxID_ANY);
 
     // on other platforms we put the static line and the button horizontally
     m_sz->Add(m_pButton, 0, wxLEFT|wxTOP|wxBOTTOM, GetBorder());
+
+#if !defined( __WXMAC__ ) || defined(__WXUNIVERSAL__)
+    m_pStaticLine = new wxStaticLine(this, wxID_ANY);
     m_sz->Add(m_pStaticLine, 0, wxEXPAND, GetBorder());
     m_pStaticLine->Hide();
 #endif
@@ -183,14 +179,11 @@ void wxGenericCollapsiblePane::Collapse(bool collapse)
     // update our state
     m_pPane->Show(!collapse);
 
-    // update button label
-#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
-    m_pButton->SetOpen( !collapse );
-#else
+    // update button
     // NB: this must be done after updating our "state"
     m_pButton->SetCollapsed(collapse);
-    m_pStaticLine->Show(!collapse);
-#endif
+    if ( m_pStaticLine )
+        m_pStaticLine->Show(!collapse);
 
 
     OnStateChange(GetBestSize());
@@ -198,12 +191,8 @@ void wxGenericCollapsiblePane::Collapse(bool collapse)
 
 void wxGenericCollapsiblePane::SetLabel(const wxString &label)
 {
-#ifdef __WXMAC__
-    m_pButton->SetLabel(label);
-#else
     m_pButton->SetLabel(label);
     m_pButton->SetInitialSize();
-#endif
 
     Layout();
 }

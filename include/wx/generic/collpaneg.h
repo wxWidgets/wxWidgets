@@ -14,9 +14,6 @@
 // forward declared
 class WXDLLIMPEXP_FWD_CORE wxCollapsibleHeaderCtrl;
 class WXDLLIMPEXP_FWD_CORE wxStaticLine;
-#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
-class WXDLLIMPEXP_FWD_CORE wxDisclosureTriangle;
-#endif
 
 #include "wx/containr.h"
 
@@ -82,11 +79,7 @@ protected:
     int GetBorder() const;
 
     // child controls
-#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
-    wxDisclosureTriangle *m_pButton;
-#else
     wxCollapsibleHeaderCtrl *m_pButton;
-#endif
     wxStaticLine *m_pStaticLine;
     wxWindow *m_pPane;
     wxSizer *m_sz;
