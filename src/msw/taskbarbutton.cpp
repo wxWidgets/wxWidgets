@@ -698,7 +698,7 @@ bool wxThumbBarButton::UpdateParentTaskBarButton()
 /* static */
 wxTaskBarButton* wxTaskBarButton::New(wxWindow* parent)
 {
-    wxCOMPtr<wxITaskbarList3> taskbarList;
+    wxITaskbarList3* taskbarList = NULL;
 
     HRESULT hr = CoCreateInstance
                  (
@@ -720,6 +720,7 @@ wxTaskBarButton* wxTaskBarButton::New(wxWindow* parent)
         // This is however unexpected.
         wxLogApiError(wxT("ITaskbarList3::Init"), hr);
 
+        taskbarList->Release();
         return NULL;
     }
 
