@@ -32915,7 +32915,7 @@ else
         fi
     else
         if test "$GCC" = yes ; then
-                                                OPTIMISE_CFLAGS="-O2 -fno-strict-aliasing"
+            OPTIMISE_CFLAGS="-O2"
         else
             OPTIMISE_CFLAGS="-O"
         fi

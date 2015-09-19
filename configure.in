@@ -5101,10 +5101,7 @@ else
         fi
     else
         if test "$GCC" = yes ; then
-            dnl Switch on optimisation but keep strict-aliasing off for
-            dnl now (see -fstrict-aliasing in the gcc manual). When it is
-            dnl switched back on consider using -Wstrict-aliasing=2.
-            OPTIMISE_CFLAGS="-O2 -fno-strict-aliasing"
+            OPTIMISE_CFLAGS="-O2"
         else
             OPTIMISE_CFLAGS="-O"
         fi
