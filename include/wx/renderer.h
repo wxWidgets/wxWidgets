@@ -260,6 +260,17 @@ public:
                                 const wxRect& rect,
                                 int flags = 0) = 0;
 
+    // draw collapse button
+    //
+    // flags may use wxCONTROL_CHECKED, wxCONTROL_UNDETERMINED and wxCONTROL_CURRENT
+    virtual void DrawCollapseButton(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0) = 0;
+
+    // Returns the default size of a collapse button
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc) = 0;
+
     // draw rectangle indicating that an item in e.g. a list control
     // has been selected or focused
     //
@@ -469,6 +480,15 @@ public:
                                 const wxRect& rect,
                                 int flags = 0)
         { m_rendererNative.DrawPushButton( win, dc, rect, flags ); }
+
+    virtual void DrawCollapseButton(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0)
+        { m_rendererNative.DrawCollapseButton(win, dc, rect, flags); }
+
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc)
+        { return m_rendererNative.GetCollapseButtonSize(win, dc); }
 
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,

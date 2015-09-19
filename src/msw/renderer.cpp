@@ -114,6 +114,15 @@
 
     #define DTT_TEXTCOLOR       (1UL << 0)      // crText has been specified
     #define DTT_STATEID         (1UL << 8)      // IStateId has been specified
+
+    #define TDLG_EXPANDOBUTTON 13
+
+    #define TDLGEBS_NORMAL 1
+    #define TDLGEBS_HOVER 2
+    #define TDLGEBS_PRESSED 3
+    #define TDLGEBS_EXPANDEDNORMAL 4
+    #define TDLGEBS_EXPANDEDHOVER 5
+    #define TDLGEBS_EXPANDEDPRESSED 6
 #endif
 
 #if defined(__WXWINCE__)
@@ -293,6 +302,13 @@ public:
         if ( !DoDrawXPButton(BP_PUSHBUTTON, win, dc, rect, flags) )
             m_rendererNative.DrawPushButton(win, dc, rect, flags);
     }
+
+    virtual void DrawCollapseButton(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0);
+
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc);
 
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
@@ -856,6 +872,74 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
     }
 
     DoDrawButtonLike(hTheme, part, dc, rect, flags);
+}
+
+void
+wxRendererXP::DrawCollapseButton(wxWindow *win,
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags)
+{
+    wxUxThemeHandle hTheme(win, L"TASKDIALOG");
+    wxUxThemeEngine* const te = wxUxThemeEngine::Get();
+
+    int state;
+    if (flags & wxCONTROL_PRESSED)
+        state = TDLGEBS_PRESSED;
+    else if (flags & wxCONTROL_CURRENT)
+        state = TDLGEBS_HOVER;
+    else
+        state = TDLGEBS_NORMAL;
+
+    if ( flags & wxCONTROL_EXPANDED )
+        state += 3;
+
+    if ( te->IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, state) )
+    {
+        if (flags & wxCONTROL_EXPANDED)
+            flags |= wxCONTROL_CHECKED;
+
+        wxRect adjustedRect = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
+
+        RECT r;
+        wxCopyRectToRECT(adjustedRect, r);
+
+        te->DrawThemeBackground
+            (
+            hTheme,
+            GetHdcOf(dc.GetTempHDC()),
+            TDLG_EXPANDOBUTTON,
+            state,
+            &r,
+            NULL
+            );
+    }
+    else
+        m_rendererNative.DrawCollapseButton(win, dc, rect, flags);
+}
+
+wxSize wxRendererXP::GetCollapseButtonSize(wxWindow *win, wxDC& dc)
+{
+    wxUxThemeHandle hTheme(win, L"TASKDIALOG");
+    wxUxThemeEngine* const te = wxUxThemeEngine::Get();
+
+    // EXPANDOBUTTON scales ugly if not using the correct size, get size from theme
+
+    if ( te->IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL) )
+    {
+        SIZE s;
+        te->GetThemePartSize(hTheme,
+            GetHdcOf(dc.GetTempHDC()),
+            TDLG_EXPANDOBUTTON,
+            TDLGEBS_NORMAL,
+            NULL,
+            TS_TRUE,
+            &s);
+
+        return wxSize(s.cx, s.cy);
+    }
+    else
+        return m_rendererNative.GetCollapseButtonSize(win, dc);
 }
 
 void

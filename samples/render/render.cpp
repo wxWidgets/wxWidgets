@@ -125,6 +125,8 @@ private:
         { OnToggleDrawFlag(event, wxCONTROL_CURRENT); }
     void OnDrawUndetermined(wxCommandEvent &event)
         { OnToggleDrawFlag(event, wxCONTROL_UNDETERMINED); }
+    void OnDrawSpecial(wxCommandEvent &event)
+        { OnToggleDrawFlag(event, wxCONTROL_SPECIAL); }
 
     void OnAlignLeft(wxCommandEvent& WXUNUSED(event))
         { OnChangeAlign(wxALIGN_LEFT); }
@@ -198,7 +200,9 @@ private:
             flagsString += "wxCONTROL_CHECKED ";
         if ( m_flags & wxCONTROL_UNDETERMINED )
             flagsString += "wxCONTROL_UNDETERMINED ";
-        if ( flagsString.empty() )
+        if (m_flags & wxCONTROL_SPECIAL)
+            flagsString += "wxCONTROL_SPECIAL ";
+        if (flagsString.empty())
             flagsString = "(none)";
         dc.DrawText("Using flags: " + flagsString, x1, y);
         y += lineHeight*3;
@@ -241,6 +245,12 @@ private:
         renderer.DrawRadioBitmap(this, dc,
                                  wxRect(wxPoint(x2, y), sizeCheck), m_flags);
         y += lineHeight + sizeCheck.y;
+
+        dc.DrawText("DrawCollapseButton()", x1, y);
+        const wxSize sizeCollapse = renderer.GetCollapseButtonSize(this, dc);
+        renderer.DrawCollapseButton(this, dc,
+                                    wxRect(wxPoint(x2, y), sizeCollapse), m_flags);
+        y += lineHeight + sizeCollapse.y;
 
         dc.DrawText("DrawTreeItemButton()", x1, y);
         renderer.DrawTreeItemButton(this, dc,
@@ -316,6 +326,7 @@ enum
     Render_DrawChecked,
     Render_DrawHot,
     Render_DrawUndetermined,
+    Render_DrawSpecial,
 
     Render_AlignLeft,
     Render_AlignCentre,
@@ -352,6 +363,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Render_DrawChecked, MyFrame::OnDrawChecked)
     EVT_MENU(Render_DrawHot, MyFrame::OnDrawHot)
     EVT_MENU(Render_DrawUndetermined, MyFrame::OnDrawUndetermined)
+    EVT_MENU(Render_DrawSpecial, MyFrame::OnDrawSpecial)
     EVT_MENU(Render_AlignLeft, MyFrame::OnAlignLeft)
     EVT_MENU(Render_AlignCentre, MyFrame::OnAlignCentre)
     EVT_MENU(Render_AlignRight, MyFrame::OnAlignRight)
@@ -432,6 +444,8 @@ MyFrame::MyFrame()
                               "Draw in &hot state\tCtrl-H");
     menuFile->AppendCheckItem(Render_DrawUndetermined,
                               "Draw in unde&termined state\tCtrl-T");
+    menuFile->AppendCheckItem(Render_DrawSpecial,
+                              "Draw in &special state\tCtrl-S");
     menuFile->AppendSeparator();
 
     menuFile->AppendRadioItem(Render_AlignLeft, "&Left align\tCtrl-1");

@@ -1885,6 +1885,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_msw_tglbtn.obj \
 	$(OBJS)\monodll_treectrl.obj \
 	$(OBJS)\monodll_systhemectrl.obj \
+	$(OBJS)\monodll_collheaderctrlg.obj \
 	$(OBJS)\monodll_msw_checklst.obj \
 	$(OBJS)\monodll_msw_fdrepdlg.obj \
 	$(OBJS)\monodll_fontdlg.obj \
@@ -2161,6 +2162,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_univ_toolbar.obj \
 	$(OBJS)\monodll_topluniv.obj \
 	$(OBJS)\monodll_winuniv.obj \
+	$(OBJS)\monodll_collheaderctrlg.obj \
 	$(OBJS)\monodll_gtk.obj \
 	$(OBJS)\monodll_metal.obj \
 	$(OBJS)\monodll_mono.obj \
@@ -2704,6 +2706,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_msw_tglbtn.obj \
 	$(OBJS)\monolib_treectrl.obj \
 	$(OBJS)\monolib_systhemectrl.obj \
+	$(OBJS)\monolib_collheaderctrlg.obj \
 	$(OBJS)\monolib_msw_checklst.obj \
 	$(OBJS)\monolib_msw_fdrepdlg.obj \
 	$(OBJS)\monolib_fontdlg.obj \
@@ -2980,6 +2983,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_univ_toolbar.obj \
 	$(OBJS)\monolib_topluniv.obj \
 	$(OBJS)\monolib_winuniv.obj \
+	$(OBJS)\monolib_collheaderctrlg.obj \
 	$(OBJS)\monolib_gtk.obj \
 	$(OBJS)\monolib_metal.obj \
 	$(OBJS)\monolib_mono.obj \
@@ -3397,6 +3401,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_msw_tglbtn.obj \
 	$(OBJS)\coredll_treectrl.obj \
 	$(OBJS)\coredll_systhemectrl.obj \
+	$(OBJS)\coredll_collheaderctrlg.obj \
 	$(OBJS)\coredll_msw_checklst.obj \
 	$(OBJS)\coredll_msw_fdrepdlg.obj \
 	$(OBJS)\coredll_fontdlg.obj \
@@ -3673,6 +3678,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_univ_toolbar.obj \
 	$(OBJS)\coredll_topluniv.obj \
 	$(OBJS)\coredll_winuniv.obj \
+	$(OBJS)\coredll_collheaderctrlg.obj \
 	$(OBJS)\coredll_gtk.obj \
 	$(OBJS)\coredll_metal.obj \
 	$(OBJS)\coredll_mono.obj \
@@ -3963,6 +3969,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_msw_tglbtn.obj \
 	$(OBJS)\corelib_treectrl.obj \
 	$(OBJS)\corelib_systhemectrl.obj \
+	$(OBJS)\corelib_collheaderctrlg.obj \
 	$(OBJS)\corelib_msw_checklst.obj \
 	$(OBJS)\corelib_msw_fdrepdlg.obj \
 	$(OBJS)\corelib_fontdlg.obj \
@@ -4239,6 +4246,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_univ_toolbar.obj \
 	$(OBJS)\corelib_topluniv.obj \
 	$(OBJS)\corelib_winuniv.obj \
+	$(OBJS)\corelib_collheaderctrlg.obj \
 	$(OBJS)\corelib_gtk.obj \
 	$(OBJS)\corelib_metal.obj \
 	$(OBJS)\corelib_mono.obj \
@@ -7792,6 +7800,11 @@ $(OBJS)\monodll_evtloop.obj: ..\..\src\msw\evtloop.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_collheaderctrlg.obj: ..\..\src\generic\collheaderctrlg.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\collheaderctrlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_accelcmn.obj: ..\..\src\common\accelcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\accelcmn.cpp
 !endif
@@ -10294,6 +10307,11 @@ $(OBJS)\monolib_evtloop.obj: ..\..\src\msw\evtloop.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_collheaderctrlg.obj: ..\..\src\generic\collheaderctrlg.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\collheaderctrlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_accelcmn.obj: ..\..\src\common\accelcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\accelcmn.cpp
 !endif
@@ -12733,6 +12751,11 @@ $(OBJS)\coredll_evtloop.obj: ..\..\src\msw\evtloop.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_collheaderctrlg.obj: ..\..\src\generic\collheaderctrlg.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\collheaderctrlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_accelcmn.obj: ..\..\src\common\accelcmn.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\common\accelcmn.cpp
 !endif
@@ -14194,6 +14217,11 @@ $(OBJS)\corelib_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_evtloop.obj: ..\..\src\msw\evtloop.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_collheaderctrlg.obj: ..\..\src\generic\collheaderctrlg.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\collheaderctrlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

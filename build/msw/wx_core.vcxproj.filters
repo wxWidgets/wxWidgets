@@ -438,6 +438,9 @@
     <ClCompile Include="..\..\src\generic\clrpickerg.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\generic\collheaderctrlg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\generic\collpaneg.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
@@ -973,6 +976,9 @@
     <ClInclude Include="..\..\include\wx\cmndata.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\collheaderctrl.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\collpane.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -1142,6 +1148,9 @@
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\clrpickerg.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\collheaderctrl.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\collpaneg.h">
