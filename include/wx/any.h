@@ -192,11 +192,7 @@ class wxAnyValueTypeOpsInplace
 public:
     static void DeleteValue(wxAnyValueBuffer& buf)
     {
-        T* value = reinterpret_cast<T*>(&buf.m_buffer[0]);
-        value->~T();
-
-        // Some compiler may given 'unused variable' warnings without this
-        wxUnusedVar(value);
+        GetValue(buf).~T();
     }
 
     static void SetValue(const T& value,
@@ -209,11 +205,17 @@ public:
 
     static const T& GetValue(const wxAnyValueBuffer& buf)
     {
-        // Breaking this code into two lines should suppress
-        // GCC's 'type-punned pointer will break strict-aliasing rules'
-        // warning.
-        const T* value = reinterpret_cast<const T*>(&buf.m_buffer[0]);
-        return *value;
+        // Use a union to avoid undefined behaviour (and gcc -Wstrict-alias
+        // warnings about it) which would occur if we just casted a wxByte
+        // pointer to a T one.
+        union
+        {
+            const T* ptr;
+            const wxByte *buf;
+        } u;
+        u.buf = buf.m_buffer;
+
+        return *u.ptr;
     }
 };
 
