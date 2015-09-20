@@ -981,20 +981,6 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
     rectText.x += xoffset;
     rectText.width -= xoffset;
 
-    // check if we want to ellipsize the text if it doesn't fit
-    wxString ellipsizedText;
-    if ( GetEllipsizeMode() != wxELLIPSIZE_NONE )
-    {
-        ellipsizedText = wxControl::Ellipsize
-                                    (
-                                        text,
-                                        *dc,
-                                        GetEllipsizeMode(),
-                                        rectText.width,
-                                        wxELLIPSIZE_FLAGS_NONE
-                                    );
-    }
-
     int flags = 0;
     if ( state & wxDATAVIEW_CELL_SELECTED )
         flags |= wxCONTROL_SELECTED | wxCONTROL_FOCUSED;
@@ -1005,10 +991,11 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
     wxRendererNative::Get().DrawItemText(
         GetOwner()->GetOwner(),
         *dc,
-        ellipsizedText.empty() ? text : ellipsizedText,
+        text,
         rectText,
         GetEffectiveAlignment(),
-        flags);
+        flags,
+        GetEllipsizeMode());
 }
 
 void wxDataViewCustomRendererBase::SetEnabled(bool enabled)
