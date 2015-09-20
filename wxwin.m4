@@ -928,11 +928,8 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
                          ])
         fi
 
-        dnl now we can finally update the DEBUG,UNICODE,SHARED options
-        dnl to their final values if they were not already set
-        if test -z "$DEBUG" ; then
-            DEBUG=$WX_DEBUG
-        fi
+        dnl now we can finally update the options to their final values if they
+        dnl were not already set
         if test -z "$UNICODE" ; then
             UNICODE=$WX_UNICODE
         fi
@@ -943,20 +940,17 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
             TOOLKIT=$WX_PORT
         fi
 
-        dnl in case the user needs a BUILD=debug/release var...
-        if test "$DEBUG" = "1"; then
-            BUILD="debug"
-        elif test "$DEBUG" = "0" -o "$DEBUG" = ""; then
-            BUILD="release"
-        fi
-
-        dnl respect the DEBUG variable adding the optimize/debug flags
+        dnl respect the DEBUG variable adding the optimize/debug flags and also
+        dnl define a BUILD variable in case the user wants to use it
+        dnl
         dnl NOTE: the CXXFLAGS are merged together with the CPPFLAGS so we
         dnl       don't need to set them, too
         if test "$DEBUG" = "1"; then
+            BUILD="debug"
             CXXFLAGS="$CXXFLAGS -g -O0"
             CFLAGS="$CFLAGS -g -O0"
-        else
+        elif test "$DEBUG" = "0"; then
+            BUILD="release"
             CXXFLAGS="$CXXFLAGS -O2"
             CFLAGS="$CFLAGS -O2"
         fi
