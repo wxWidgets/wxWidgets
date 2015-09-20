@@ -1549,6 +1549,17 @@
 #   endif
 #endif /* wxUSE_ADDREMOVECTRL */
 
+#if wxUSE_ANIMATIONCTRL
+#   if !wxUSE_STREAMS
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_ANIMATIONCTRL requires wxUSE_STREAMS"
+#       else
+#           undef wxUSE_ANIMATIONCTRL
+#           define wxUSE_ANIMATIONCTRL 0
+#       endif
+#   endif
+#endif /* wxUSE_ANIMATIONCTRL */
+
 #if wxUSE_BMPBUTTON
 #    if !wxUSE_BUTTON
 #        ifdef wxABORT_ON_CONFIG_ERROR
