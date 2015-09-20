@@ -1781,6 +1781,20 @@
 #   endif
 #endif /* wxUSE_CALENDARCTRL */
 
+#if wxUSE_DATEPICKCTRL
+    /* Only the generic implementation, not used under MSW and OSX, needs
+     * wxComboCtrl. */
+#   if !wxUSE_COMBOCTRL && (defined(__WXUNIVERSAL__) || \
+            !(defined(__WXMSW__) || defined(__WXOSX_COCOA__)))
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxDatePickerCtrl requires wxUSE_COMBOCTRL"
+#       else
+#           undef wxUSE_COMBOCTRL
+#           define wxUSE_COMBOCTRL 1
+#       endif
+#   endif
+#endif /* wxUSE_DATEPICKCTRL */
+
 #if wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL
 #   if !wxUSE_DATETIME
 #       ifdef wxABORT_ON_CONFIG_ERROR
