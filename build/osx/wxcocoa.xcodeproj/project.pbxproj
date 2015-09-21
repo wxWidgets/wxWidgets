@@ -520,6 +520,9 @@
 		246B4FF96BA135258FE45F4F /* encconv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C269E9CA99DF3AE5B1BD6AFA /* encconv.cpp */; };
 		246B4FF96BA135258FE45F50 /* encconv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C269E9CA99DF3AE5B1BD6AFA /* encconv.cpp */; };
 		246B4FF96BA135258FE45F51 /* encconv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C269E9CA99DF3AE5B1BD6AFA /* encconv.cpp */; };
+		24720CDA1BB03D77008E8A43 /* collheaderctrlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24720CD91BB03D77008E8A43 /* collheaderctrlg.cpp */; settings = {ASSET_TAGS = (); }; };
+		24720CDB1BB03D77008E8A43 /* collheaderctrlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24720CD91BB03D77008E8A43 /* collheaderctrlg.cpp */; settings = {ASSET_TAGS = (); }; };
+		24720CDC1BB03D77008E8A43 /* collheaderctrlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24720CD91BB03D77008E8A43 /* collheaderctrlg.cpp */; settings = {ASSET_TAGS = (); }; };
 		2480859662ED399799E120A5 /* pen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA819575B5136B09FA8FEB1 /* pen.cpp */; };
 		2480859662ED399799E120A6 /* pen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA819575B5136B09FA8FEB1 /* pen.cpp */; };
 		2480859662ED399799E120A7 /* pen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA819575B5136B09FA8FEB1 /* pen.cpp */; };
@@ -3934,6 +3937,7 @@
 		23FC98E2305230E2990471E3 /* wxcrt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = wxcrt.cpp; path = ../../src/common/wxcrt.cpp; sourceTree = "<group>"; };
 		242BF97B558634A79322052C /* prntbase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = prntbase.cpp; path = ../../src/common/prntbase.cpp; sourceTree = "<group>"; };
 		24396D584D053948A3FF0DCD /* imagpng.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imagpng.cpp; path = ../../src/common/imagpng.cpp; sourceTree = "<group>"; };
+		24720CD91BB03D77008E8A43 /* collheaderctrlg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = collheaderctrlg.cpp; path = ../../src/generic/collheaderctrlg.cpp; sourceTree = "<group>"; };
 		24930711031D35288D28B04B /* choiccmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = choiccmn.cpp; path = ../../src/common/choiccmn.cpp; sourceTree = "<group>"; };
 		24BD2EF635673E819B8406CB /* LexRust.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexRust.cxx; path = ../../src/stc/scintilla/lexers/LexRust.cxx; sourceTree = "<group>"; };
 		24DF23D67E693D999B875101 /* toolbkg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = toolbkg.cpp; path = ../../src/generic/toolbkg.cpp; sourceTree = "<group>"; };
@@ -5295,6 +5299,7 @@
 				2AFC4A1CDA473688A590D19F /* utilscocoa.mm */,
 				6A82EDCFFBAC30098B238957 /* caret.cpp */,
 				2B5A9DF3206B3954A4B38BFD /* clrpickerg.cpp */,
+				24720CD91BB03D77008E8A43 /* collheaderctrlg.cpp */,
 				84758329F2163F00A9C005DF /* collpaneg.cpp */,
 				66AC0EA493AB3B6A86DAE174 /* colrdlgg.cpp */,
 				E9D416E57FEB3F0B95734FF6 /* dirdlgg.cpp */,
@@ -6883,6 +6888,8 @@
 /* Begin PBXProject section */
 		19367367C9323490BB936F06 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 6976B5F5F3A63A21A92029E3 /* Build configuration list for PBXProject "wxcocoa" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
@@ -7645,6 +7652,7 @@
 				1EA81A0E8E5A3B38B4D80339 /* srchcmn.cpp in Sources */,
 				4AEC67BF65B039D99F421668 /* statbar.cpp in Sources */,
 				7C52E7CC12463941B0E4D404 /* statbmpcmn.cpp in Sources */,
+				24720CDC1BB03D77008E8A43 /* collheaderctrlg.cpp in Sources */,
 				D9DCBE799DB634C2A73FD6BF /* statboxcmn.cpp in Sources */,
 				8B38C6C416BA3A51B37F60C6 /* statlinecmn.cpp in Sources */,
 				D9EE059D3C3C3C13AE4419F3 /* stattextcmn.cpp in Sources */,
@@ -8281,6 +8289,7 @@
 				23965E313EDC3BBE9B2FA1C6 /* imagpng.cpp in Sources */,
 				46E331300D8F349DB36AB50B /* imagpnm.cpp in Sources */,
 				AAABEE399008310A8BC9BE44 /* imagtga.cpp in Sources */,
+				24720CDB1BB03D77008E8A43 /* collheaderctrlg.cpp in Sources */,
 				3C36437B2E933F83984D431F /* imagtiff.cpp in Sources */,
 				774A89998E09308CBFB03EE1 /* imagxpm.cpp in Sources */,
 				63F2517EC6B2334CA825A6FA /* layout.cpp in Sources */,
@@ -9472,6 +9481,7 @@
 				23965E313EDC3BBE9B2FA1C5 /* imagpng.cpp in Sources */,
 				46E331300D8F349DB36AB50A /* imagpnm.cpp in Sources */,
 				AAABEE399008310A8BC9BE43 /* imagtga.cpp in Sources */,
+				24720CDA1BB03D77008E8A43 /* collheaderctrlg.cpp in Sources */,
 				3C36437B2E933F83984D431E /* imagtiff.cpp in Sources */,
 				774A89998E09308CBFB03EE0 /* imagxpm.cpp in Sources */,
 				63F2517EC6B2334CA825A6F9 /* layout.cpp in Sources */,

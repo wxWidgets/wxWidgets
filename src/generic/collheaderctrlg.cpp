@@ -185,8 +185,10 @@ void wxGenericCollapsibleHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     dc.DrawLabel(text, textRect, wxALIGN_CENTRE_VERTICAL, indexAccel);
 
+#ifdef __WXMSW__
     if ( HasFocus() )
         wxRendererNative::Get().DrawFocusRect(this, dc, textRect.Inflate(1), flags);
+#endif
 }
 
 

@@ -101,6 +101,13 @@ public:
                                 const wxRect& rect,
                                 int flags = 0) wxOVERRIDE;
 
+    virtual void DrawCollapseButton(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0);
+
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc);
+
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
                                        const wxRect& rect,
@@ -523,6 +530,43 @@ wxRendererMac::DrawPushButton(wxWindow *win,
 
     DrawMacThemeButton(win, dc, rect, flags,
                        kind, kThemeAdornmentNone);
+}
+
+void wxRendererMac::DrawCollapseButton(wxWindow *win,
+                                wxDC& dc,
+                                const wxRect& rect,
+                                int flags)
+{
+    int adornment = (flags & wxCONTROL_EXPANDED)
+        ? kThemeAdornmentArrowUpArrow
+        : kThemeAdornmentArrowDownArrow;
+
+    DrawMacThemeButton(win, dc, rect, flags,
+                       kThemeArrowButton, adornment);
+}
+
+wxSize wxRendererMac::GetCollapseButtonSize(wxWindow *WXUNUSED(win), wxDC& WXUNUSED(dc))
+{
+    wxSize size;
+    SInt32 width, height;
+    OSStatus errStatus;
+
+    errStatus = GetThemeMetric(kThemeMetricDisclosureButtonWidth, &width);
+    if (errStatus == noErr)
+    {
+        size.SetWidth(width);
+    }
+
+    errStatus = GetThemeMetric(kThemeMetricDisclosureButtonHeight, &height);
+    if (errStatus == noErr)
+    {
+        size.SetHeight(height);
+    }
+
+    // strict metrics size cutoff the button, increase the size
+    size.IncBy(1);
+
+    return size;
 }
 
 void
