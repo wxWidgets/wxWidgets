@@ -23,7 +23,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxCollapsibleHeaderCtrlNameStr[];
 // wxGenericCollapsibleHeaderCtrl
 //
 
-class wxCollapsibleHeaderCtrlBase : public wxControl
+class WXDLLIMPEXP_CORE wxCollapsibleHeaderCtrlBase : public wxControl
 {
 public:
     wxCollapsibleHeaderCtrlBase() { }
@@ -74,11 +74,12 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COLLAPSIBLEHEADER_CHANGED, wxCo
 #define EVT_COLLAPSIBLEHEADER_CHANGED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COLLAPSIBLEHEADER_CHANGED, id, wxCollapsibleHeaderChangedHandler(fn))
 
-// There currently only is the native implementation, use for all ports
+// Currently there is only the native implementation, use it for all ports.
 
 #include "wx/generic/collheaderctrl.h"
 
-class wxCollapsibleHeaderCtrl : public wxGenericCollapsibleHeaderCtrl
+class WXDLLIMPEXP_CORE wxCollapsibleHeaderCtrl
+    : public wxGenericCollapsibleHeaderCtrl
 {
 public:
     wxCollapsibleHeaderCtrl() { }

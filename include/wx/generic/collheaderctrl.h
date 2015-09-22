@@ -10,7 +10,8 @@
 #ifndef _WX_GENERIC_COLLAPSIBLEHEADER_CTRL_H_
 #define _WX_GENERIC_COLLAPSIBLEHEADER_CTRL_H_
 
-class wxGenericCollapsibleHeaderCtrl : public wxCollapsibleHeaderCtrlBase
+class WXDLLIMPEXP_CORE wxGenericCollapsibleHeaderCtrl
+    : public wxCollapsibleHeaderCtrlBase
 {
 public:
     wxGenericCollapsibleHeaderCtrl() { Init(); }
