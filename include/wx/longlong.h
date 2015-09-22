@@ -175,8 +175,12 @@ public:
         // convert to long with range checking in debug mode (only!)
     long ToLong() const
     {
+        // This assert is useless if long long is the same as long (which is
+        // the case under the standard Unix LP64 model).
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
         wxASSERT_MSG( (m_ll >= LONG_MIN) && (m_ll <= LONG_MAX),
                       wxT("wxLongLong to long conversion loss of precision") );
+#endif
 
         return wx_truncate_cast(long, m_ll);
     }
