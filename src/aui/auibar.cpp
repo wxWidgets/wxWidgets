@@ -124,7 +124,7 @@ const wxColour DISABLED_TEXT_COLOR(DISABLED_TEXT_GREY_HUE,
                                    DISABLED_TEXT_GREY_HUE,
                                    DISABLED_TEXT_GREY_HUE);
 
-wxAuiDefaultToolBarArt::wxAuiDefaultToolBarArt()
+wxAuiGenericToolBarArt::wxAuiGenericToolBarArt()
 {
     m_baseColour = GetBaseColor();
 
@@ -160,48 +160,48 @@ wxAuiDefaultToolBarArt::wxAuiDefaultToolBarArt()
     m_font = *wxNORMAL_FONT;
 }
 
-wxAuiDefaultToolBarArt::~wxAuiDefaultToolBarArt()
+wxAuiGenericToolBarArt::~wxAuiGenericToolBarArt()
 {
     m_font = *wxNORMAL_FONT;
 }
 
 
-wxAuiToolBarArt* wxAuiDefaultToolBarArt::Clone()
+wxAuiToolBarArt* wxAuiGenericToolBarArt::Clone()
 {
-    return static_cast<wxAuiToolBarArt*>(new wxAuiDefaultToolBarArt);
+    return static_cast<wxAuiToolBarArt*>(new wxAuiGenericToolBarArt);
 }
 
-void wxAuiDefaultToolBarArt::SetFlags(unsigned int flags)
+void wxAuiGenericToolBarArt::SetFlags(unsigned int flags)
 {
     m_flags = flags;
 }
 
-void wxAuiDefaultToolBarArt::SetFont(const wxFont& font)
+void wxAuiGenericToolBarArt::SetFont(const wxFont& font)
 {
     m_font = font;
 }
 
-void wxAuiDefaultToolBarArt::SetTextOrientation(int orientation)
+void wxAuiGenericToolBarArt::SetTextOrientation(int orientation)
 {
     m_textOrientation = orientation;
 }
 
-unsigned int wxAuiDefaultToolBarArt::GetFlags()
+unsigned int wxAuiGenericToolBarArt::GetFlags()
 {
     return m_flags;
 }
 
-wxFont wxAuiDefaultToolBarArt::GetFont()
+wxFont wxAuiGenericToolBarArt::GetFont()
 {
     return m_font;
 }
 
-int wxAuiDefaultToolBarArt::GetTextOrientation()
+int wxAuiGenericToolBarArt::GetTextOrientation()
 {
     return m_textOrientation;
 }
 
-void wxAuiDefaultToolBarArt::DrawBackground(
+void wxAuiGenericToolBarArt::DrawBackground(
                                     wxDC& dc,
                                     wxWindow* WXUNUSED(wnd),
                                     const wxRect& _rect)
@@ -213,7 +213,7 @@ void wxAuiDefaultToolBarArt::DrawBackground(
     dc.GradientFillLinear(rect, startColour, endColour, wxSOUTH);
 }
 
-void wxAuiDefaultToolBarArt::DrawPlainBackground(wxDC& dc,
+void wxAuiGenericToolBarArt::DrawPlainBackground(wxDC& dc,
                                                    wxWindow* WXUNUSED(wnd),
                                                    const wxRect& _rect)
 {
@@ -226,7 +226,7 @@ void wxAuiDefaultToolBarArt::DrawPlainBackground(wxDC& dc,
                      rect.GetWidth() + 2, rect.GetHeight() + 1);
 }
 
-void wxAuiDefaultToolBarArt::DrawLabel(
+void wxAuiGenericToolBarArt::DrawLabel(
                                     wxDC& dc,
                                     wxWindow* WXUNUSED(wnd),
                                     const wxAuiToolBarItem& item,
@@ -253,7 +253,7 @@ void wxAuiDefaultToolBarArt::DrawLabel(
 }
 
 
-void wxAuiDefaultToolBarArt::DrawButton(
+void wxAuiGenericToolBarArt::DrawButton(
                                     wxDC& dc,
                                     wxWindow* WXUNUSED(wnd),
                                     const wxAuiToolBarItem& item,
@@ -354,7 +354,7 @@ void wxAuiDefaultToolBarArt::DrawButton(
 }
 
 
-void wxAuiDefaultToolBarArt::DrawDropDownButton(
+void wxAuiGenericToolBarArt::DrawDropDownButton(
                                     wxDC& dc,
                                     wxWindow* WXUNUSED(wnd),
                                     const wxAuiToolBarItem& item,
@@ -480,7 +480,7 @@ void wxAuiDefaultToolBarArt::DrawDropDownButton(
     }
 }
 
-void wxAuiDefaultToolBarArt::DrawControlLabel(
+void wxAuiGenericToolBarArt::DrawControlLabel(
                                     wxDC& dc,
                                     wxWindow* WXUNUSED(wnd),
                                     const wxAuiToolBarItem& item,
@@ -522,7 +522,7 @@ void wxAuiDefaultToolBarArt::DrawControlLabel(
     }
 }
 
-wxSize wxAuiDefaultToolBarArt::GetLabelSize(
+wxSize wxAuiGenericToolBarArt::GetLabelSize(
                                         wxDC& dc,
                                         wxWindow* WXUNUSED(wnd),
                                         const wxAuiToolBarItem& item)
@@ -545,7 +545,7 @@ wxSize wxAuiDefaultToolBarArt::GetLabelSize(
     return wxSize(width, height);
 }
 
-wxSize wxAuiDefaultToolBarArt::GetToolSize(
+wxSize wxAuiGenericToolBarArt::GetToolSize(
                                         wxDC& dc,
                                         wxWindow* WXUNUSED(wnd),
                                         const wxAuiToolBarItem& item)
@@ -594,7 +594,7 @@ wxSize wxAuiDefaultToolBarArt::GetToolSize(
     return wxSize(width, height);
 }
 
-void wxAuiDefaultToolBarArt::DrawSeparator(
+void wxAuiGenericToolBarArt::DrawSeparator(
                                     wxDC& dc,
                                     wxWindow* WXUNUSED(wnd),
                                     const wxRect& _rect)
@@ -627,7 +627,7 @@ void wxAuiDefaultToolBarArt::DrawSeparator(
     dc.GradientFillLinear(rect, startColour, endColour, horizontal ? wxSOUTH : wxEAST);
 }
 
-void wxAuiDefaultToolBarArt::DrawGripper(wxDC& dc,
+void wxAuiGenericToolBarArt::DrawGripper(wxDC& dc,
                                     wxWindow* WXUNUSED(wnd),
                                     const wxRect& rect)
 {
@@ -666,7 +666,7 @@ void wxAuiDefaultToolBarArt::DrawGripper(wxDC& dc,
 
 }
 
-void wxAuiDefaultToolBarArt::DrawOverflowButton(wxDC& dc,
+void wxAuiGenericToolBarArt::DrawOverflowButton(wxDC& dc,
                                           wxWindow* /*wnd*/,
                                           const wxRect& rect,
                                           int state)
@@ -699,7 +699,7 @@ void wxAuiDefaultToolBarArt::DrawOverflowButton(wxDC& dc,
     dc.DrawBitmap(m_overflowBmp, x, y, true);
 }
 
-int wxAuiDefaultToolBarArt::GetElementSize(int element_id)
+int wxAuiGenericToolBarArt::GetElementSize(int element_id)
 {
     switch (element_id)
     {
@@ -710,7 +710,7 @@ int wxAuiDefaultToolBarArt::GetElementSize(int element_id)
     }
 }
 
-void wxAuiDefaultToolBarArt::SetElementSize(int element_id, int size)
+void wxAuiGenericToolBarArt::SetElementSize(int element_id, int size)
 {
     switch (element_id)
     {
@@ -720,7 +720,7 @@ void wxAuiDefaultToolBarArt::SetElementSize(int element_id, int size)
     }
 }
 
-int wxAuiDefaultToolBarArt::ShowDropDown(wxWindow* wnd,
+int wxAuiGenericToolBarArt::ShowDropDown(wxWindow* wnd,
                                          const wxAuiToolBarItemArray& items)
 {
     wxMenu menuPopup;
