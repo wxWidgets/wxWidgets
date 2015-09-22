@@ -47,7 +47,15 @@ public:
         const wxSize& size = wxDefaultSize,
         long style = wxBORDER_NONE,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxCollapsibleHeaderCtrlNameStr);
+        const wxString& name = wxCollapsibleHeaderCtrlNameStr)
+    {
+        if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
+            return false;
+
+        SetLabel(label);
+
+        return true;
+    }
 
     virtual void SetCollapsed(bool collapsed = true) = 0;
 

@@ -57,10 +57,11 @@ bool wxGenericCollapsibleHeaderCtrl::Create(wxWindow *parent,
     const wxValidator& validator,
     const wxString& name)
 {
-    if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
+    if ( !wxCollapsibleHeaderCtrlBase::Create(parent, id, label, pos, size,
+                                              style, validator, name) )
+    {
         return false;
-
-    SetLabel(label);
+    }
 
     Bind(wxEVT_PAINT, &wxGenericCollapsibleHeaderCtrl::OnPaint, this);
     Bind(wxEVT_LEFT_DOWN, &wxGenericCollapsibleHeaderCtrl::OnLeftDown, this);
