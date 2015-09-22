@@ -56,11 +56,7 @@
 #endif
 
 // define off_t
-#if !defined(__WXMAC__) || defined(__UNIX__) || defined(__MACH__)
-    #include  <sys/types.h>
-#else
-    typedef long off_t;
-#endif
+#include  <sys/types.h>
 
 #if defined(__VISUALC__)
     typedef _off_t off_t;
