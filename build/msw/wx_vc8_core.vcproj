@@ -3077,6 +3077,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\aui\barartmsw.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\bitmap.h"
 				>
 			</File>

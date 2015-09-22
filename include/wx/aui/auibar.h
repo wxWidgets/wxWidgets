@@ -750,6 +750,12 @@ typedef void (wxEvtHandler::*wxAuiToolBarEventFunction)(wxAuiToolBarEvent&);
 #define wxEVT_COMMAND_AUITOOLBAR_MIDDLE_CLICK     wxEVT_AUITOOLBAR_MIDDLE_CLICK
 #define wxEVT_COMMAND_AUITOOLBAR_BEGIN_DRAG       wxEVT_AUITOOLBAR_BEGIN_DRAG
 
+#ifdef __WXMSW__
+    #define wxHAS_NATIVE_TOOLBAR_ART
+    #include "wx/aui/barartmsw.h"
+    #define wxAuiDefaultToolBarArt wxAuiMSWToolBarArt
+#endif
+
 #ifndef wxHAS_NATIVE_TOOLBAR_ART
     #define wxAuiDefaultToolBarArt wxAuiGenericToolBarArt
 #endif

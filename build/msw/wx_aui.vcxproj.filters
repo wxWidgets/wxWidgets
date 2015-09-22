@@ -31,6 +31,9 @@
     <ClCompile Include="..\..\src\aui\auibook.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\aui\barartmsw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\aui\dockart.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -69,6 +72,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\aui\auibook.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\aui\barartmsw.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\aui\dockart.h">
