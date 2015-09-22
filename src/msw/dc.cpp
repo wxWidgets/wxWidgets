@@ -812,10 +812,6 @@ void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
 void wxMSWDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1,
                            wxCoord width, wxCoord height)
 {
-    // cases when we don't have DrawFrameControl()
-#if defined(__SYMANTEC__)
-    return wxDCBase::DoDrawCheckMark(x1, y1, width, height);
-#else // normal case
     wxCoord x2 = x1 + width,
             y2 = y1 + height;
 
@@ -829,7 +825,6 @@ void wxMSWDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1,
 
     CalcBoundingBox(x1, y1);
     CalcBoundingBox(x2, y2);
-#endif // Normal
 }
 
 void wxMSWDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
