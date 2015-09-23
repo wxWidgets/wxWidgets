@@ -71,7 +71,7 @@
     #include <sys/timeb.h>
 #endif
 
-#if defined(__DJGPP__) || defined(__WINE__)
+#if defined(__WINE__)
     #include <sys/timeb.h>
     #include <values.h>
 #endif
@@ -172,7 +172,7 @@ int wxGetTimeZone()
             gmtoffset += 3600;
     }
     return (int)gmtoffset;
-#elif defined(__DJGPP__) || defined(__WINE__)
+#elif defined(__WINE__)
     struct timeb tb;
     ftime(&tb);
     return tb.timezone*60;

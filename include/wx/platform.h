@@ -238,21 +238,6 @@
 #endif /* __BORLANDC__ */
 
 /*
-   OS: first of all, test for MS-DOS platform. We must do this before testing
-       for Unix, because DJGPP compiler defines __unix__ under MS-DOS
- */
-#if defined(__GO32__) || defined(__DJGPP__) || defined(__DOS__)
-#    ifndef __DOS__
-#        define __DOS__
-#    endif
-    /* define it if it hadn't been done by configure yet */
-#    if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
-#        ifdef __DJGPP__
-#            define wxSIZE_T_IS_ULONG
-#        endif
-#    endif
-
-/*
    OS: then test for generic Unix defines, then for particular flavours and
        finally for Unix-like systems
        Mac OS X matches this case (__MACH__), prior Mac OS do not.
@@ -369,7 +354,6 @@
  */
 #if ( defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
     ( defined( __CYGWIN__ ) && defined( __WINDOWS__ ) ) ) && \
-    !defined(__DOS__) && \
     !defined(__WXMOTIF__) && \
     !defined(__WXX11__)
 #    include "wx/msw/gccpriv.h"

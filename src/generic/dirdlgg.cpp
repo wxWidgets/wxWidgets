@@ -94,13 +94,10 @@ bool wxGenericDirDialog::Create(wxWindow* parent,
     // 0) 'New' and 'Home' Buttons
     wxSizer* buttonsizer = new wxBoxSizer( wxHORIZONTAL );
 
-    // VS: 'Home directory' concept is unknown to MS-DOS
-#if !defined(__DOS__)
     wxBitmapButton* homeButton =
         new wxBitmapButton(this, ID_GO_HOME,
                            wxArtProvider::GetBitmap(wxART_GO_HOME, wxART_BUTTON));
     buttonsizer->Add( homeButton, 0, wxLEFT|wxRIGHT, 10 );
-#endif
 
     // I'm not convinced we need a New button, and we tend to get annoying
     // accidental-editing with label editing enabled.
