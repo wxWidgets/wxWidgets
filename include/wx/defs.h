@@ -1130,8 +1130,7 @@ typedef wxUint32 wxDword;
     #define wxLongLongFmtSpec "I64"
 #elif (defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8)  || \
         defined(__GNUC__) || \
-        defined(__CYGWIN__) || \
-        (defined(__DJGPP__) && __DJGPP__ >= 2)
+        defined(__CYGWIN__)
     #define wxLongLong_t long long
     #define wxLongLongSuffix ll
     #define wxLongLongFmtSpec "ll"

@@ -32,13 +32,6 @@
 #endif // __WINDOWS__
 #endif // native Win compiler
 
-#if defined(__DOS__)
-    #ifdef __DJGPP__
-        #include <io.h>
-        #include <unistd.h>
-    #endif
-#endif
-
 #ifdef __BORLANDC__ // Please someone tell me which version of Borland needs
                     // this (3.1 I believe) and how to test for it.
                     // If this works for Borland 4.0 as well, then no worries.

@@ -75,7 +75,7 @@
     wxDECL_FOR_STRICT_MINGW32(int, _finite, (double))
 
     #define wxFinite(x) _finite(x)
-#elif ( defined(__GNUG__)||defined(__GNUWIN32__)||defined(__DJGPP__)|| \
+#elif ( defined(__GNUG__)||defined(__GNUWIN32__)|| \
       defined(__SGI_CC__)||defined(__SUNCC__)||defined(__XLC__)|| \
       defined(__HPUX__) ) && ( !defined(wxOSX_USE_IPHONE) || wxOSX_USE_IPHONE == 0 )
 #ifdef __SOLARIS__
@@ -89,7 +89,7 @@
 
 #if defined(__VISUALC__)||defined(__BORLAND__)
     #define wxIsNaN(x) _isnan(x)
-#elif defined(__GNUG__)||defined(__GNUWIN32__)||defined(__DJGPP__)|| \
+#elif defined(__GNUG__)||defined(__GNUWIN32__)|| \
       defined(__SGI_CC__)||defined(__SUNCC__)||defined(__XLC__)|| \
       defined(__HPUX__)
     #define wxIsNaN(x) isnan(x)

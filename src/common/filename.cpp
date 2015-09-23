@@ -118,10 +118,6 @@
 #include <unistd.h>
 #endif
 
-#ifdef __DJGPP__
-#include <unistd.h>
-#endif
-
 #ifndef S_ISREG
     #define S_ISREG(mode) ((mode) & S_IFREG)
 #endif
@@ -1000,11 +996,9 @@ static wxString wxCreateTempImpl(
     {
         path = wxConvFile.cMB2WX( (const char*) buf );
     }
-#else // !HAVE_MKTEMP (includes __DOS__)
+#else // !HAVE_MKTEMP
     // generate the unique file name ourselves
-    #if !defined(__DOS__)
     path << (unsigned int)getpid();
-    #endif
 
     wxString pathTry;
 
@@ -2280,7 +2274,7 @@ wxPathFormat wxFileName::GetFormat( wxPathFormat format )
 {
     if (format == wxPATH_NATIVE)
     {
-#if defined(__WINDOWS__) || defined(__DOS__)
+#if defined(__WINDOWS__)
         format = wxPATH_DOS;
 #elif defined(__VMS)
         format = wxPATH_VMS;

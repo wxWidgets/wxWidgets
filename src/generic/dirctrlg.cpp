@@ -204,24 +204,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
 // wxIsDriveAvailable
 // ----------------------------------------------------------------------------
 
-#if defined(__DOS__)
-
-bool wxIsDriveAvailable(const wxString& dirName)
-{
-    if ( dirName.length() == 3 && dirName[1u] == wxT(':') )
-    {
-        wxString dirNameLower(dirName.Lower());
-        // VS: always return true for removable media, since Win95 doesn't
-        //     like it when MS-DOS app accesses empty floppy drive
-        return (dirNameLower[0u] == wxT('a') ||
-                dirNameLower[0u] == wxT('b') ||
-                wxDirExists(dirNameLower));
-    }
-    else
-        return true;
-}
-
-#elif defined(__WINDOWS__)
+#if defined(__WINDOWS__)
 
 int setdrive(int drive)
 {
@@ -444,7 +427,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     wxString rootName;
 
-#if defined(__WINDOWS__) || defined(__DOS__)
+#if defined(__WINDOWS__)
     rootName = _("Computer");
 #else
     rootName = _("Sections");
@@ -702,7 +685,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
 
     wxString dirName(data->m_path);
 
-#if defined(__WINDOWS__) || defined(__DOS__)
+#if defined(__WINDOWS__)
     // Check if this is a root directory and if so,
     // whether the drive is available.
     if (!wxIsDriveAvailable(dirName))
@@ -716,7 +699,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
     // This may take a longish time. Go to busy cursor
     wxBusyCursor busy;
 
-#if defined(__WINDOWS__) || defined(__DOS__)
+#if defined(__WINDOWS__)
     if (dirName.Last() == ':')
         dirName += wxString(wxFILE_SEP_PATH);
 #endif
@@ -866,7 +849,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
     path2 += wxString(wxFILE_SEP_PATH);
 
     // In MSW case is not significant
-#if defined(__WINDOWS__) || defined(__DOS__)
+#if defined(__WINDOWS__)
     path2.MakeLower();
 #endif
 
@@ -883,7 +866,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
                 childPath += wxString(wxFILE_SEP_PATH);
 
             // In MSW case is not significant
-#if defined(__WINDOWS__) || defined(__DOS__)
+#if defined(__WINDOWS__)
             childPath.MakeLower();
 #endif
 
