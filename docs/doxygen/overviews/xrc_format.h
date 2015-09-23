@@ -2282,13 +2282,17 @@ Example of sizers XRC code:
 @endcode
 
 The sizer classes that can be used are listed below, together with their
-class-specific properties. All classes support the following properties:
+class-specific properties. All classes except wxStdDialogButtonSizer 
+support the following properties:
 
 @beginTable
 @hdr3col{property, type, description}
 @row3col{minsize, @ref overview_xrcformat_type_size,
     Minimal size that this sizer will have, see wxSizer::SetMinSize()
     (default: no min size).}
+@row3col{hideitems, @ref overview_xrcformat_type_bool,
+    Whether the sizer will be created with all its items hidden
+    (default: 0).}
 @endTable
 
 @subsection overview_xrcformat_wxboxsizer wxBoxSizer
