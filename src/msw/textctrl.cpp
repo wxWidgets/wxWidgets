@@ -563,7 +563,16 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
         if ( m_verRichEdit >= 4 )
         {
             wxTextCtrlOleCallback *cb = new wxTextCtrlOleCallback(this);
-            contextMenuConnected = ::SendMessage(GetHwnd(), EM_SETOLECALLBACK, 0, (LPARAM)cb) != 0;
+            if ( ::SendMessage(GetHwnd(), EM_SETOLECALLBACK, 0, (LPARAM)cb) )
+            {
+                // If we succeeded in setting up the callback, we don't need to
+                // connect to wxEVT_CONTEXT_MENU to show the menu ourselves,
+                // but we do need to connect to wxEVT_RIGHT_UP to generate
+                // wxContextMenuEvent ourselves as we're not going to get it
+                // from the control which consumes it.
+                contextMenuConnected = true;
+                Bind(wxEVT_RIGHT_UP, &wxTextCtrl::OnRightUp, this);
+            }
         }
 #endif
         if ( !contextMenuConnected )
@@ -2404,6 +2413,16 @@ void wxTextCtrl::OnSetFocus(wxFocusEvent& event)
 
 // the rest of the file only deals with the rich edit controls
 #if wxUSE_RICHEDIT
+
+void wxTextCtrl::OnRightUp(wxMouseEvent& eventMouse)
+{
+    wxContextMenuEvent eventMenu(wxEVT_CONTEXT_MENU,
+                                 GetId(),
+                                 ClientToScreen(eventMouse.GetPosition()));
+
+    if ( !ProcessWindowEvent(eventMenu) )
+        eventMouse.Skip();
+}
 
 void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
 {

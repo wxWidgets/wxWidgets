@@ -247,6 +247,9 @@ protected:
     // the paragraph styles globally.
     bool MSWSetParaFormat(const wxTextAttr& attr, long from, long to);
 
+    // Send wxEVT_CONTEXT_MENU event from here if the control doesn't do it on
+    // its own.
+    void OnRightUp(wxMouseEvent& event);
 
     // we're using RICHEDIT (and not simple EDIT) control if this field is not
     // 0, it also gives the version of the RICHEDIT control being used
