@@ -148,7 +148,7 @@ enum
         See ::WX_GL_MAJOR_VERSION and ::WX_GL_MINOR_VERSION for more precise
         version selection.
 
-        @since 3.1.0
+        @since 3.0.3
      */
     WX_GL_CORE_PROFILE,
 
@@ -162,7 +162,7 @@ enum
         result in using OpenGL version at least 3.2 but can still be used
         there for portability.
 
-        @since 3.1.0
+        @since 3.0.3
      */
     WX_GL_MAJOR_VERSION,
 
@@ -172,7 +172,7 @@ enum
         This attribute has the same semantics as ::WX_GL_MAJOR_VERSION but is
         for the minor OpenGL version, e.g. 2 if OpenGL 3.2 is requested.
 
-        @since 3.1.0
+        @since 3.0.3
      */
     WX_GL_MINOR_VERSION
 
