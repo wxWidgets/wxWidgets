@@ -983,7 +983,8 @@ void wxRendererXP::DrawItemText(wxWindow* win,
         itemState |= LISS_DISABLED;
 
     wxUxThemeEngine* te = wxUxThemeEngine::Get();
-    if ( te->IsThemePartDefined(hTheme, LVP_LISTITEM, itemState) )
+    if ( te->IsThemePartDefined(hTheme, LVP_LISTITEM, itemState) &&
+         te->DrawThemeTextEx)
     {
         RECT rc;
         wxCopyRectToRECT(rect, rc);

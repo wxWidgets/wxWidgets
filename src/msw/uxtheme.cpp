@@ -112,11 +112,14 @@ bool wxUxThemeEngine::Initialize()
     // we're prepared to handle the errors
     wxLogNull noLog;
 
-    if ( !m_dllUxTheme.Load(wxT("uxtheme.dll")) )
+    if (!m_dllUxTheme.Load(wxT("uxtheme.dll")))
         return false;
 
+#define RESOLVE_OPTIONAL_UXTHEME_FUNCTION(type, funcname)                     \
+    funcname = (type)m_dllUxTheme.GetSymbol(wxT(#funcname))
+
 #define RESOLVE_UXTHEME_FUNCTION(type, funcname)                              \
-    funcname = (type)m_dllUxTheme.GetSymbol(wxT(#funcname));                   \
+    RESOLVE_OPTIONAL_UXTHEME_FUNCTION(type, funcname);						  \
     if ( !funcname )                                                          \
         return false
 
@@ -124,7 +127,7 @@ bool wxUxThemeEngine::Initialize()
     RESOLVE_UXTHEME_FUNCTION(PFNWXUCLOSETHEMEDATA, CloseThemeData);
     RESOLVE_UXTHEME_FUNCTION(PFNWXUDRAWTHEMEBACKGROUND, DrawThemeBackground);
     RESOLVE_UXTHEME_FUNCTION(PFNWXUDRAWTHEMETEXT, DrawThemeText);
-    RESOLVE_UXTHEME_FUNCTION(PFNWXUDRAWTHEMETEXTEX, DrawThemeTextEx);
+    RESOLVE_OPTIONAL_UXTHEME_FUNCTION(PFNWXUDRAWTHEMETEXTEX, DrawThemeTextEx);
     RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEBACKGROUNDCONTENTRECT, GetThemeBackgroundContentRect);
     RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEBACKGROUNDEXTENT, GetThemeBackgroundExtent);
     RESOLVE_UXTHEME_FUNCTION(PFNWXUGETTHEMEPARTSIZE, GetThemePartSize);
