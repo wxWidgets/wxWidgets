@@ -1772,6 +1772,11 @@ wxSizerGB_item =
         }*
     }
 
+# All sizer objects except wxStdDialogButtonSizer have these properties.
+stdSizerProperties = 
+        [xrc:p="o"] element minsize   {_, t_size }* &
+        [xrc:p="o"] element hideitems {_, t_bool }*
+
 # Notice that horizontal orientation is the default (only for backwards
 # compatibility reasons, it would make more sense to require always specifying
 # it probably).
@@ -1779,7 +1784,7 @@ wxBoxSizer_horz =
     element object {
         attribute class { "wxBoxSizer" } &
         stdObjectNodeAttributes &
-        [xrc:p="o"] element minsize {_, t_size }* &
+        stdSizerProperties &
         [xrc:p="o"] element orient {_, "wxHORIZONTAL" }* &
         (wxBoxSizer_horz_item | objectRef)*
     }
@@ -1788,7 +1793,7 @@ wxBoxSizer_vert =
     element object {
         attribute class { "wxBoxSizer" } &
         stdObjectNodeAttributes &
-        [xrc:p="o"] element minsize {_, t_size }* &
+        stdSizerProperties &
         element orient {_, "wxVERTICAL" } &
         (wxBoxSizer_vert_item | objectRef)*
     }
@@ -1797,7 +1802,7 @@ wxStaticBoxSizer_horz =
     element object {
         attribute class { "wxStaticBoxSizer" } &
         stdObjectNodeAttributes &
-        [xrc:p="o"] element minsize {_, t_size }* &
+        stdSizerProperties &
         [xrc:p="important"] element label {_, t_text }* &
         [xrc:p="o"] element orient  {_, "wxHORIZONTAL" }* &
         (wxBoxSizer_horz_item | objectRef)*
@@ -1807,7 +1812,7 @@ wxStaticBoxSizer_vert =
     element object {
         attribute class { "wxStaticBoxSizer" } &
         stdObjectNodeAttributes &
-        [xrc:p="o"] element minsize {_, t_size }* &
+        stdSizerProperties &
         [xrc:p="important"] element label {_, t_text }* &
         element orient {_, "wxVERTICAL" } &
         (wxBoxSizer_vert_item | objectRef)*
@@ -1817,7 +1822,7 @@ wxGridSizer =
     element object {
         attribute class { "wxGridSizer" } &
         stdObjectNodeAttributes &
-        [xrc:p="o"] element minsize {_, t_size }* &
+        stdSizerProperties &
         [xrc:p="o"] element rows    {_, t_unsigned }* &
         [xrc:p="o"] element cols    {_, t_unsigned }* &
         [xrc:p="o"] element vgap    {_, t_dimension }* &
@@ -1829,7 +1834,7 @@ wxFlexGridSizer =
     element object {
         attribute class { "wxFlexGridSizer" } &
         stdObjectNodeAttributes &
-        [xrc:p="o"] element minsize             {_, t_size }* &
+        stdSizerProperties &
         [xrc:p="o"] element rows                {_, t_unsigned }* &
         [xrc:p="o"] element cols                {_, t_unsigned }* &
         [xrc:p="o"] element vgap                {_, t_dimension }* &
@@ -1847,7 +1852,7 @@ wxGridBagSizer =
     element object {
         attribute class { "wxGridBagSizer" } &
         stdObjectNodeAttributes &
-        [xrc:p="o"] element minsize             {_, t_size }* &
+        stdSizerProperties &
         [xrc:p="o"] element vgap                {_, t_dimension }* &
         [xrc:p="o"] element hgap                {_, t_dimension }* &
         [xrc:p="o"] element flexibledirection   {_, ("wxVERTICAL" | "wxHORIZONTAL" | "wxBOTH") }* &
@@ -1863,7 +1868,7 @@ wxWrapSizer_horz =
     element object {
         attribute class { "wxWrapSizer" } &
         stdObjectNodeAttributes &
-        [xrc:p="o"] element minsize {_, t_size }* &
+        stdSizerProperties &
         [xrc:p="important"] element orient {_, "wxHORIZONTAL" }* &
         [xrc:p="o"] element flag    {_, t_style }* &
         (wxBoxSizer_horz_item | objectRef)*
@@ -1873,7 +1878,7 @@ wxWrapSizer_vert =
     element object {
         attribute class { "wxWrapSizer" } &
         stdObjectNodeAttributes &
-        [xrc:p="o"] element minsize {_, t_size }* &
+        stdSizerProperties &
         element orient {_, "wxVERTICAL" } &
         [xrc:p="o"] element flag    {_, t_style }* &
         (wxBoxSizer_vert_item | objectRef)*
