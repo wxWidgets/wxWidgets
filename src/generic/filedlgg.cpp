@@ -325,7 +325,7 @@ bool wxGenericFileDialog::Show( bool show )
 void wxGenericFileDialog::OnOk( wxCommandEvent &WXUNUSED(event) )
 {
     wxArrayString selectedFiles;
-    m_filectrl->GetFilenames(selectedFiles);
+    m_filectrl->GetPaths(selectedFiles);
 
     if (selectedFiles.Count() == 0)
         return;
