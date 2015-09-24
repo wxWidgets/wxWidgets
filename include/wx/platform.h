@@ -242,7 +242,7 @@
        finally for Unix-like systems
        Mac OS X matches this case (__MACH__), prior Mac OS do not.
  */
-#elif defined(__UNIX__) || defined(__unix) || defined(__unix__) || \
+#if defined(__UNIX__) || defined(__unix) || defined(__unix__) || \
       defined(____SVR4____) || defined(__LINUX__) || defined(__sgi) || \
       defined(__hpux) || defined(sun) || defined(__SUN__) || defined(_AIX) || \
       defined(__VMS) || defined(__BEOS__) || defined(__MACH__)
