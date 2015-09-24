@@ -181,17 +181,6 @@
 #endif
 
 /*
-   Win64-specific checks.
- */
-#ifdef __WIN64__
-#   if wxUSE_STACKWALKER
-#       undef wxUSE_CRASHREPORT
-#       define wxUSE_CRASHREPORT 0
-#   endif
-#endif /* __WIN64__ */
-
-
-/*
    Compiler-specific checks.
  */
 
