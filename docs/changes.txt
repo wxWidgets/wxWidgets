@@ -80,6 +80,7 @@ All (GUI):
 - Allow requesting modern (3.x+) OpenGL version in wxGLCanvas (Fabio Arnold).
 - Add wxActivityIndicator.
 - Add wxWindow::FromDIP() for simpler high DPI support.
+- Allow initially hiding sizer items in XRC (Bogdan Iordanescu).
 - Allow customizing window shown by wxBusyInfo.
 - Add wxAddRemoveCtrl.
 - Add wxAppProgressIndicator for MSW (Chaobin Zhang) and OS X (Tobias Taschner).
