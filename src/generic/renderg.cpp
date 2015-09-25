@@ -884,7 +884,7 @@ void wxRendererGeneric::DrawGauge(wxWindow* win,
 }
 
 void
-wxRendererGeneric::DrawItemText(wxWindow* win,
+wxRendererGeneric::DrawItemText(wxWindow* WXUNUSED(win),
                                 wxDC& dc,
                                 const wxString& text,
                                 const wxRect& rect,
@@ -909,17 +909,15 @@ wxRendererGeneric::DrawItemText(wxWindow* win,
     {
         textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
     }
-    else // enabled but not selected
-    {
-        textColour = win->GetForegroundColour();
-    }
 
     const wxString paintText = wxControl::Ellipsize(text, dc,
                                                     ellipsizeMode,
                                                     rect.GetWidth());
 
-    // Draw text
-    dc.SetTextForeground(textColour);
+    // Draw text taking care not to change its colour if it had been set by the
+    // caller for a normal item to allow having items in non-default colours.
+    if ( textColour.IsOk() )
+        dc.SetTextForeground(textColour);
     dc.SetTextBackground(wxTransparentColour);
     dc.DrawLabel(paintText, rect, align);
 }
