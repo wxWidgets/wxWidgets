@@ -616,6 +616,26 @@ int wxRendererMSW::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
 
 #if wxUSE_UXTHEME
 
+namespace
+{
+
+int GetListItemState(int flags)
+{
+    int itemState = (flags & wxCONTROL_CURRENT) ? LISS_HOT : LISS_NORMAL;
+    if (flags & wxCONTROL_SELECTED)
+    {
+        itemState = (flags & wxCONTROL_CURRENT) ? LISS_HOTSELECTED : LISS_SELECTED;
+        if (!(flags & wxCONTROL_FOCUSED))
+            itemState = LISS_SELECTEDNOTFOCUS;
+    }
+    if (flags & wxCONTROL_DISABLED)
+        itemState = LISS_DISABLED;
+
+    return itemState;
+}
+
+} // anonymous namespace
+
 /* static */
 wxRendererNative& wxRendererXP::Get()
 {
@@ -942,13 +962,7 @@ wxRendererXP::DrawItemSelectionRect(wxWindow *win,
 {
     wxUxThemeHandle hTheme(win, L"LISTVIEW");
 
-    int itemState = LISS_NORMAL;
-    if ( flags & wxCONTROL_SELECTED )
-        itemState = LISS_SELECTED;
-    if ( !(flags & wxCONTROL_FOCUSED) )
-        itemState = LISS_SELECTEDNOTFOCUS;
-    if ( flags & wxCONTROL_DISABLED )
-        itemState |= LISS_DISABLED;
+    int itemState = GetListItemState(flags);
 
     wxUxThemeEngine* const te = wxUxThemeEngine::Get();
     if ( te->IsThemePartDefined(hTheme, LVP_LISTITEM, itemState) )
@@ -976,13 +990,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
 {
     wxUxThemeHandle hTheme(win, L"LISTVIEW");
 
-    int itemState = LISS_NORMAL;
-    if ( flags & wxCONTROL_SELECTED )
-        itemState = LISS_SELECTED;
-    if ( !(flags & wxCONTROL_FOCUSED) )
-        itemState = LISS_SELECTEDNOTFOCUS;
-    if ( flags & wxCONTROL_DISABLED )
-        itemState |= LISS_DISABLED;
+    int itemState = GetListItemState(flags);
 
     wxUxThemeEngine* te = wxUxThemeEngine::Get();
     if ( te->DrawThemeTextEx && // Might be not available if we're under XP
@@ -1002,7 +1010,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
         }
 
         DWORD textFlags = DT_NOPREFIX;
-        if ( align & wxALIGN_CENTER )
+        if ( align & wxALIGN_CENTER_HORIZONTAL )
             textFlags |= DT_CENTER;
         else if ( align & wxALIGN_RIGHT )
             textFlags |= DT_RIGHT;
