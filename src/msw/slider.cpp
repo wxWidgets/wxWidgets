@@ -580,7 +580,7 @@ WXHBRUSH wxSlider::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
 
         // Anything really refreshing the slider would work here, we use a
         // dummy WM_ENABLE but using TBM_SETPOS would work too, for example.
-        ::PostMessage(hWnd, WM_ENABLE, (BOOL)IsEnabled(), 0);
+        ::PostMessage(hWnd, WM_ENABLE, ::IsWindowEnabled(hWnd), 0);
     }
 
     return hBrush;
