@@ -1000,7 +1000,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
         }
 
         DWORD textFlags = DT_NOPREFIX | DT_END_ELLIPSIS;
-        if ( align & wxALIGN_CENTER )
+        if ( align & wxALIGN_CENTER_HORIZONTAL )
             textFlags |= DT_CENTER;
         else if ( align & wxALIGN_RIGHT )
             textFlags |= DT_RIGHT;
