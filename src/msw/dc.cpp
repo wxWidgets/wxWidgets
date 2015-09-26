@@ -175,6 +175,33 @@ private:
 };
 
 static wxOnceOnlyDLLLoader wxMSIMG32DLL(wxT("msimg32"));
+static wxOnceOnlyDLLLoader wxGDI32DLL(wxT("gdi32.dll"));
+
+// Note that originally these function pointers were local static members within
+// functions, but we can't do that, because wxWidgets may be initialized,
+// uninitialized, and reinitialized within the same program, and our dynamically
+// loaded dll's may be unloaded and reloaded as part of that, almost certainly
+// ending up at different base addresses due to address space layout
+// randomization.
+#ifdef USE_DYNAMIC_GDI_FUNCS
+typedef BOOL (WINAPI *AlphaBlend_t)(HDC,int,int,int,int,
+                                    HDC,int,int,int,int,
+                                    BLENDFUNCTION);
+static AlphaBlend_t gs_pfnAlphaBlend = NULL;
+static bool gs_triedToLoadAlphaBlend = false;
+
+typedef BOOL (WINAPI *GradientFill_t)(HDC, PTRIVERTEX, ULONG, PVOID, ULONG, ULONG);
+static GradientFill_t gs_pfnGradientFill = NULL;
+static bool gs_triedToLoadGradientFill = false;
+
+typedef DWORD (WINAPI *GetLayout_t)(HDC);
+static GetLayout_t gs_pfnGetLayout = NULL;
+static bool gs_triedToLoadGetLayout = false;
+
+typedef DWORD (WINAPI *SetLayout_t)(HDC, DWORD);
+static SetLayout_t gs_pfnSetLayout = NULL;
+static bool gs_triedToLoadSetLayout = false;
+#endif // USE_DYNAMIC_GDI_FUNCS
 
 // we must ensure that DLLs are unloaded before the static objects cleanup time
 // because we may hit the notorious DllMain() dead lock in this case if wx is
@@ -184,7 +211,24 @@ class wxGDIDLLsCleanupModule : public wxModule
 {
 public:
     virtual bool OnInit() { return true; }
-    virtual void OnExit() { wxMSIMG32DLL.Unload(); }
+    virtual void OnExit()
+    {
+        wxMSIMG32DLL.Unload();
+        wxGDI32DLL.Unload();
+#ifdef USE_DYNAMIC_GDI_FUNCS
+        gs_pfnGetLayout = NULL;
+        gs_triedToLoadGetLayout = false;
+
+        gs_pfnSetLayout = NULL;
+        gs_triedToLoadSetLayout = false;
+
+        gs_pfnAlphaBlend = NULL;
+        gs_triedToLoadAlphaBlend = false;
+
+        gs_pfnGradientFill = NULL;
+        gs_triedToLoadGradientFill = false;
+#endif // USE_DYNAMIC_GDI_FUNCS
+    }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxGDIDLLsCleanupModule);
@@ -212,11 +256,13 @@ namespace wxDynLoadWrappers
 // libgdi32.a import library (at least up to w32api 4.0.3).
 DWORD GetLayout(HDC hdc)
 {
-    typedef DWORD (WINAPI *GetLayout_t)(HDC);
-    static GetLayout_t
-        wxDL_INIT_FUNC(s_pfn, GetLayout, wxDynamicLibrary(wxT("gdi32.dll")));
+    if ( !gs_triedToLoadGetLayout )
+    {
+        gs_pfnGetLayout = (GetLayout_t)wxGDI32DLL.GetSymbol(wxT("GetLayout"));
+        gs_triedToLoadGetLayout = true;
+    }
 
-    return s_pfnGetLayout ? s_pfnGetLayout(hdc) : GDI_ERROR;
+    return gs_pfnGetLayout ? gs_pfnGetLayout(hdc) : GDI_ERROR;
 }
 
 // SetLayout is present in newer w32api versions but in older one (e.g. the one
@@ -224,11 +270,13 @@ DWORD GetLayout(HDC hdc)
 // at it.
 DWORD SetLayout(HDC hdc, DWORD dwLayout)
 {
-    typedef DWORD (WINAPI *SetLayout_t)(HDC, DWORD);
-    static SetLayout_t
-        wxDL_INIT_FUNC(s_pfn, SetLayout, wxDynamicLibrary(wxT("gdi32.dll")));
+    if ( !gs_triedToLoadSetLayout )
+    {
+        gs_pfnSetLayout = (SetLayout_t)wxGDI32DLL.GetSymbol(wxT("SetLayout"));
+        gs_triedToLoadSetLayout = true;
+    }
 
-    return s_pfnSetLayout ? s_pfnSetLayout(hdc, dwLayout) : GDI_ERROR;
+    return gs_pfnSetLayout ? gs_pfnSetLayout(hdc, dwLayout) : GDI_ERROR;
 }
 
 // AlphaBlend() requires linking with libmsimg32.a and we want to avoid this as
@@ -237,33 +285,34 @@ BOOL AlphaBlend(HDC hdcDest, int xDest, int yDest, int wDest, int hDest,
                 HDC hdcSrc, int xSrc, int ySrc, int wSrc, int hSrc,
                 BLENDFUNCTION bf)
 {
-    typedef BOOL (WINAPI *AlphaBlend_t)(HDC,int,int,int,int,
-                                        HDC,int,int,int,int,
-                                        BLENDFUNCTION);
-    static const AlphaBlend_t pfnAlphaBlend =
-        (AlphaBlend_t)wxMSIMG32DLL.GetSymbol(wxT("AlphaBlend"));
+    if ( !gs_triedToLoadAlphaBlend )
+    {
+        gs_pfnAlphaBlend = (AlphaBlend_t)wxMSIMG32DLL.GetSymbol(wxT("AlphaBlend"));
+        gs_triedToLoadAlphaBlend = true;
+    }
 
-    if ( !pfnAlphaBlend )
+    if ( !gs_pfnAlphaBlend )
         return FALSE;
 
-    return pfnAlphaBlend(hdcDest, xDest, yDest, wDest, hDest,
-                         hdcSrc, xSrc, ySrc, wSrc, hSrc,
-                         bf);
+    return gs_pfnAlphaBlend(hdcDest, xDest, yDest, wDest, hDest,
+                            hdcSrc, xSrc, ySrc, wSrc, hSrc,
+                            bf);
 }
 
 // Just as AlphaBlend(), this one lives in msimg32.dll.
 BOOL GradientFill(HDC hdc, PTRIVERTEX pVert, ULONG numVert,
                   PVOID pMesh, ULONG numMesh, ULONG mode)
 {
-    typedef BOOL
-        (WINAPI *GradientFill_t)(HDC, PTRIVERTEX, ULONG, PVOID, ULONG, ULONG);
-    static const GradientFill_t pfnGradientFill =
-        (GradientFill_t)wxMSIMG32DLL.GetSymbol(wxT("GradientFill"));
+    if ( !gs_triedToLoadGradientFill )
+    {
+        gs_pfnGradientFill = (GradientFill_t)wxMSIMG32DLL.GetSymbol(wxT("GradientFill"));
+        gs_triedToLoadGradientFill = true;
+    }
 
-    if ( !pfnGradientFill )
+    if ( !gs_pfnGradientFill )
         return FALSE;
 
-    return pfnGradientFill(hdc, pVert, numVert, pMesh, numMesh, mode);
+    return gs_pfnGradientFill(hdc, pVert, numVert, pMesh, numMesh, mode);
 }
 
 #elif defined(USE_STATIC_GDI_FUNCS)
