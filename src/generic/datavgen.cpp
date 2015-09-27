@@ -4876,7 +4876,7 @@ public:
              GetExpanderColumnOrFirstOne(const_cast<wxDataViewCtrl*>(dvc)) == column );
     }
 
-    virtual void UpdateWithRow(int row) wxOVERRIDE
+    virtual void UpdateWithRow(int row)
     {
         int indent = 0;
         wxDataViewItem item;
