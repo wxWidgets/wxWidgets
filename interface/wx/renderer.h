@@ -430,7 +430,8 @@ public:
                               const wxString& text,
                               const wxRect& rect,
                               int align = wxALIGN_LEFT | wxALIGN_TOP,
-                              int flags = 0) = 0;
+                              int flags = 0,
+                              wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END) = 0;
 
     /**
         Draw a blank push button that looks very similar to wxButton.

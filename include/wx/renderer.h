@@ -346,7 +346,8 @@ public:
                               const wxString& text,
                               const wxRect& rect,
                               int align = wxALIGN_LEFT | wxALIGN_TOP,
-                              int flags = 0) = 0;
+                              int flags = 0,
+                              wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END) = 0;
 
     // geometry functions
     // ------------------
@@ -548,8 +549,9 @@ public:
                               const wxString& text,
                               const wxRect& rect,
                               int align = wxALIGN_LEFT | wxALIGN_TOP,
-                              int flags = 0)
-        { m_rendererNative.DrawItemText(win, dc, text, rect, align, flags); }
+                              int flags = 0,
+                              wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END)
+        { m_rendererNative.DrawItemText(win, dc, text, rect, align, flags, ellipsizeMode); }
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
         { return m_rendererNative.GetSplitterParams(win); }

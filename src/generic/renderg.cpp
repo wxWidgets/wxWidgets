@@ -150,7 +150,8 @@ public:
                               const wxString& text,
                               const wxRect& rect,
                               int align = wxALIGN_LEFT | wxALIGN_TOP,
-                              int flags = 0) wxOVERRIDE;
+                              int flags = 0,
+                              wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END) wxOVERRIDE;
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win) wxOVERRIDE;
 
@@ -883,12 +884,13 @@ void wxRendererGeneric::DrawGauge(wxWindow* win,
 }
 
 void
-wxRendererGeneric::DrawItemText(wxWindow* win,
+wxRendererGeneric::DrawItemText(wxWindow* WXUNUSED(win),
                                 wxDC& dc,
                                 const wxString& text,
                                 const wxRect& rect,
                                 int align,
-                                int flags)
+                                int flags,
+                                wxEllipsizeMode ellipsizeMode)
 {
     // Determine text color
     wxColour textColour;
@@ -907,17 +909,14 @@ wxRendererGeneric::DrawItemText(wxWindow* win,
     {
         textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
     }
-    else // enabled but not selected
-    {
-        textColour = win->GetForegroundColour();
-    }
 
     const wxString paintText = wxControl::Ellipsize(text, dc,
-                                                    wxELLIPSIZE_END,
+                                                    ellipsizeMode,
                                                     rect.GetWidth());
 
     // Draw text
-    dc.SetTextForeground(textColour);
+    if (textColour.IsOk())
+        dc.SetTextForeground(textColour);
     dc.SetTextBackground(wxTransparentColour);
     dc.DrawLabel(paintText, rect, align);
 }
