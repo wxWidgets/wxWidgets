@@ -54,6 +54,18 @@
     #define NMLVFINDITEM NM_FINDITEM
 #endif
 
+// MinGW headers lack casts to WPARAM inside several ListView_XXX() macros, so
+// add them to suppress the warnings about implicit conversions/truncation.
+// However do not add them for MSVC as it has casts not only to WPARAM but
+// actually to int first, and then to WPARAM, and casting to WPARAM here would
+// result in warnings when casting 64 bit WPARAM to 32 bit int inside the
+// macros in Win64 builds.
+#ifdef __MINGW32__
+    #define NO_ITEM (static_cast<WPARAM>(-1))
+#else
+    #define NO_ITEM (-1)
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -1337,10 +1349,7 @@ void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
 
 wxSize wxListCtrl::MSWGetBestViewRect(int x, int y) const
 {
-    // The cast is necessary to suppress a MinGW warning due to a missing cast
-    // to WPARAM in the definition of ListView_ApproximateViewRect() in its
-    // own headers (this was the case up to at least MinGW 4.8).
-    const DWORD rc = ListView_ApproximateViewRect(GetHwnd(), x, y, (WPARAM)-1);
+    const DWORD rc = ListView_ApproximateViewRect(GetHwnd(), x, y, NO_ITEM);
 
     wxSize size(LOWORD(rc), HIWORD(rc));
 
@@ -2738,12 +2747,8 @@ static void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
     }
 
     // same thing for CDIS_FOCUS (except simpler as there is only one of them)
-    //
-    // NB: cast is needed to work around the bug in mingw32 headers which don't
-    //     have it inside ListView_GetNextItem() itself (unlike SDK ones)
     if ( ::GetFocus() == hwndList &&
-            ListView_GetNextItem(
-                hwndList, static_cast<WPARAM>(-1), LVNI_FOCUSED) == item )
+            ListView_GetNextItem(hwndList, NO_ITEM, LVNI_FOCUSED) == item )
     {
         nmcd.uItemState |= CDIS_FOCUS;
     }
