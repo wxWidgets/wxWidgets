@@ -148,10 +148,25 @@ CPP_METHODDEF(void) wx_term_source ( j_decompress_ptr cinfo )
 
 // JPEG error manager:
 
+#ifdef __VISUALC__
+    // We don't care about the size of this struct, but we still get an
+    // annoying warning C4324 here:
+    //
+    //  'wx_error_mgr' : structure was padded due to __declspec(align())
+    //
+    // and suppressing it seems to be the only way to avoid it.
+    #pragma warning(push)
+    #pragma warning(disable: 4324)
+#endif
+
 struct wx_error_mgr : public jpeg_error_mgr
 {
   jmp_buf setjmp_buffer;    /* for return to caller */
 };
+
+#ifdef __VISUALC__
+    #pragma warning(pop)
+#endif
 
 /*
  * Here's the routine that will replace the standard error_exit method:
