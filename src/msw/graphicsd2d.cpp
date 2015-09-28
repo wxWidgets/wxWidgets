@@ -314,10 +314,10 @@ class wxD2DResourceManager;
 class wxD2DManagedObject
 {
 public:
-    virtual void Bind(wxD2DResourceManager* manager) = NULL;
-    virtual void UnBind() = NULL;
-    virtual bool IsBound() = NULL;
-    virtual wxD2DResourceManager* GetManager() = NULL;
+    virtual void Bind(wxD2DResourceManager* manager) = 0;
+    virtual void UnBind() = 0;
+    virtual bool IsBound() = 0;
+    virtual wxD2DResourceManager* GetManager() = 0;
 
     virtual ~wxD2DManagedObject() {};
 };
@@ -2797,7 +2797,7 @@ private:
     // A ID2D1DrawingStateBlock represents the drawing state of a render target:
     // the anti aliasing mode, transform, tags, and text-rendering options.
     // The context owns these pointers and is responsible for releasing them.
-    wxStack<wxCOMPtr<ID2D1DrawingStateBlock>> m_stateStack;
+    wxStack<wxCOMPtr<ID2D1DrawingStateBlock> > m_stateStack;
 
     ClipMode m_clipMode;
 
@@ -2806,7 +2806,7 @@ private:
     // A direct2d layer is a device-dependent resource.
     wxCOMPtr<ID2D1Layer> m_clipLayer;
 
-    wxStack<wxCOMPtr<ID2D1Layer>> m_layers;
+    wxStack<wxCOMPtr<ID2D1Layer> > m_layers;
 
     ID2D1RenderTarget* m_cachedRenderTarget;
 
