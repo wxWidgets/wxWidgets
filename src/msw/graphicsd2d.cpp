@@ -1375,10 +1375,9 @@ public:
         return S_OK;
     }
 
-    HRESULT STDMETHODCALLTYPE CopyPalette(__RPC__in_opt IWICPalette *palette) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE CopyPalette(__RPC__in_opt IWICPalette*  WXUNUSED(palette)) wxOVERRIDE
     {
-        palette = NULL;
-        return S_OK;
+        return WINCODEC_ERR_PALETTEUNAVAILABLE;
     }
 
     HRESULT STDMETHODCALLTYPE CopyPixels(
