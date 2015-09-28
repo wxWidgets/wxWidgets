@@ -99,6 +99,7 @@ public:
     wxBitmap bitmap;      // tab's bitmap
     wxRect rect;          // tab's hit rectangle
     bool active;          // true if the page is currently active
+    bool hover;           // true if mouse hovering over tab
 };
 
 class WXDLLIMPEXP_AUI wxAuiTabContainerButton
@@ -233,6 +234,8 @@ protected:
     bool m_isDragging;
     wxAuiTabContainerButton* m_hoverButton;
     wxAuiTabContainerButton* m_pressedButton;
+
+    void SetHoverTab(wxWindow* wnd);
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxAuiTabCtrl);
