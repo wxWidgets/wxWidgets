@@ -46,6 +46,8 @@
 
 #include "wx/graphics.h"
 #include "wx/dc.h"
+#include "wx/dcclient.h"
+#include "wx/dcmemory.h"
 #include "wx/dynlib.h"
 #include "wx/image.h"
 #include "wx/module.h"
@@ -53,6 +55,7 @@
 #include "wx/private/graphics.h"
 #include "wx/stack.h"
 #include "wx/sharedptr.h"
+#include "wx/window.h"
 
 // This must be the last header included to only affect the DEFINE_GUID()
 // occurrences below but not any GUIDs declared in the standard files included
@@ -311,10 +314,10 @@ class wxD2DResourceManager;
 class wxD2DManagedObject
 {
 public:
-    virtual void Bind(wxD2DResourceManager* manager) = NULL;
-    virtual void UnBind() = NULL;
-    virtual bool IsBound() = NULL;
-    virtual wxD2DResourceManager* GetManager() = NULL;
+    virtual void Bind(wxD2DResourceManager* manager) = 0;
+    virtual void UnBind() = 0;
+    virtual bool IsBound() = 0;
+    virtual wxD2DResourceManager* GetManager() = 0;
 
     virtual ~wxD2DManagedObject() {};
 };
@@ -1352,6 +1355,8 @@ public:
     {
     }
 
+    virtual ~wxHatchBitmapSource() {}
+
     HRESULT STDMETHODCALLTYPE GetSize(__RPC__out UINT *width, __RPC__out UINT *height) wxOVERRIDE
     {
         if (width != NULL) *width = 8;
@@ -1372,10 +1377,9 @@ public:
         return S_OK;
     }
 
-    HRESULT STDMETHODCALLTYPE CopyPalette(__RPC__in_opt IWICPalette *palette) wxOVERRIDE
+    HRESULT STDMETHODCALLTYPE CopyPalette(__RPC__in_opt IWICPalette*  WXUNUSED(palette)) wxOVERRIDE
     {
-        palette = NULL;
-        return S_OK;
+        return WINCODEC_ERR_PALETTEUNAVAILABLE;
     }
 
     HRESULT STDMETHODCALLTYPE CopyPixels(
@@ -1449,7 +1453,7 @@ public:
 
     ULONG STDMETHODCALLTYPE Release(void) wxOVERRIDE
     {
-        wxCHECK2_MSG(m_refCount > 0, 0, "Unbalanced number of calls to Release");
+        wxCHECK_MSG(m_refCount > 0, 0, "Unbalanced number of calls to Release");
 
         ULONG refCount = InterlockedDecrement(&m_refCount);
         if (m_refCount == 0)
@@ -2794,7 +2798,7 @@ private:
     // A ID2D1DrawingStateBlock represents the drawing state of a render target:
     // the anti aliasing mode, transform, tags, and text-rendering options.
     // The context owns these pointers and is responsible for releasing them.
-    wxStack<wxCOMPtr<ID2D1DrawingStateBlock>> m_stateStack;
+    wxStack<wxCOMPtr<ID2D1DrawingStateBlock> > m_stateStack;
 
     ClipMode m_clipMode;
 
@@ -2803,7 +2807,7 @@ private:
     // A direct2d layer is a device-dependent resource.
     wxCOMPtr<ID2D1Layer> m_clipLayer;
 
-    wxStack<wxCOMPtr<ID2D1Layer>> m_layers;
+    wxStack<wxCOMPtr<ID2D1Layer> > m_layers;
 
     ID2D1RenderTarget* m_cachedRenderTarget;
 
@@ -3697,6 +3701,12 @@ void wxD2DRenderer::GetVersion(int* major, int* minor, int* micro) const
                 break;
             case wxDirect2D::wxD2D_VERSION_1_1:
                 *minor = 1;
+                break;
+            case wxDirect2D::wxD2D_VERSION_NONE:
+                // This is not supposed to happen, but we handle this value in
+                // the switch to ensure that we'll get warnings if any new
+                // values, not handled here, are added to the enum later.
+                *minor = -1;
                 break;
             }
         }
