@@ -35,7 +35,7 @@ wxEventType wxEVT_CHOICEBOOK_PAGE_CHANGING;
     @beginStyleTable
     @style{wxCHB_DEFAULT}
            Choose the default location for the labels depending on the current
-           platform (left everywhere except Mac where it is top).
+           platform (but currently it's the same everywhere, namely wxCHB_TOP).
     @style{wxCHB_TOP}
            Place labels above the page area.
     @style{wxCHB_LEFT}
