@@ -1452,7 +1452,7 @@ public:
 
     ULONG STDMETHODCALLTYPE Release(void) wxOVERRIDE
     {
-        wxCHECK2_MSG(m_refCount > 0, 0, "Unbalanced number of calls to Release");
+        wxCHECK_MSG(m_refCount > 0, 0, "Unbalanced number of calls to Release");
 
         ULONG refCount = InterlockedDecrement(&m_refCount);
         if (m_refCount == 0)
