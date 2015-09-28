@@ -5220,6 +5220,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
                 wxRect floatAvailableRect = collector->GetAvailableRect(rect.y + currentPosition.y, rect.y + currentPosition.y + lineHeight);
                 int x1 = wxMax(availableRect.x, (floatAvailableRect.x + startOffset));
                 int x2 = wxMin(availableRect.GetRight(), (floatAvailableRect.GetRight() - rightIndent));
+                oldAvailableRect = availableRect;
                 availableRect.x = x1;
                 availableRect.width = x2 - x1 + 1;
             }
