@@ -1355,6 +1355,8 @@ public:
     {
     }
 
+    virtual ~wxHatchBitmapSource() {}
+
     HRESULT STDMETHODCALLTYPE GetSize(__RPC__out UINT *width, __RPC__out UINT *height) wxOVERRIDE
     {
         if (width != NULL) *width = 8;
@@ -3699,6 +3701,12 @@ void wxD2DRenderer::GetVersion(int* major, int* minor, int* micro) const
                 break;
             case wxDirect2D::wxD2D_VERSION_1_1:
                 *minor = 1;
+                break;
+            case wxDirect2D::wxD2D_VERSION_NONE:
+                // This is not supposed to happen, but we handle this value in
+                // the switch to ensure that we'll get warnings if any new
+                // values, not handled here, are added to the enum later.
+                *minor = -1;
                 break;
             }
         }
