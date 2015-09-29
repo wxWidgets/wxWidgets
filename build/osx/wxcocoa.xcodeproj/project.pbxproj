@@ -532,6 +532,9 @@
 		24A5A71C79733E9CB913C5B7 /* LexPB.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8744F2C80ECF375999195935 /* LexPB.cxx */; };
 		24A5A71C79733E9CB913C5B8 /* LexPB.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8744F2C80ECF375999195935 /* LexPB.cxx */; };
 		24A5A71C79733E9CB913C5B9 /* LexPB.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8744F2C80ECF375999195935 /* LexPB.cxx */; };
+		24AC00E71BA6C3900042A970 /* settings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 24AC00E61BA6C3900042A970 /* settings.mm */; };
+		24AC00E81BA6C3900042A970 /* settings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 24AC00E61BA6C3900042A970 /* settings.mm */; };
+		24AC00E91BA6C3900042A970 /* settings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 24AC00E61BA6C3900042A970 /* settings.mm */; };
 		254028D56649374E8D3CC85C /* libwx_osx_cocoau_html.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D9F65758E0363AF9AEC59A47 /* libwx_osx_cocoau_html.dylib */; };
 		254028D56649374E8D3CC85D /* libwx_osx_cocoau_html.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D9F65758E0363AF9AEC59A47 /* libwx_osx_cocoau_html.dylib */; };
 		2563C775427E3D68BD384F2F /* richtextstyles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D30617843F33310089C1F77A /* richtextstyles.cpp */; };
@@ -844,9 +847,6 @@
 		42ED9BAFD6E936849F1D36CB /* xtixml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4048A3523EC03409BD899BEF /* xtixml.cpp */; };
 		42ED9BAFD6E936849F1D36CC /* xtixml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4048A3523EC03409BD899BEF /* xtixml.cpp */; };
 		42ED9BAFD6E936849F1D36CD /* xtixml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4048A3523EC03409BD899BEF /* xtixml.cpp */; };
-		437519A6002A3A0FB2C9A8FC /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6CC2B05353C3284B37B2DD7 /* settings.cpp */; };
-		437519A6002A3A0FB2C9A8FD /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6CC2B05353C3284B37B2DD7 /* settings.cpp */; };
-		437519A6002A3A0FB2C9A8FE /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6CC2B05353C3284B37B2DD7 /* settings.cpp */; };
 		438EAEA4B30C325C827F6197 /* xh_fontpicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87E609641B583666AB9D1D58 /* xh_fontpicker.cpp */; };
 		438EAEA4B30C325C827F6198 /* xh_fontpicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87E609641B583666AB9D1D58 /* xh_fontpicker.cpp */; };
 		438EAEA4B30C325C827F6199 /* xh_fontpicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87E609641B583666AB9D1D58 /* xh_fontpicker.cpp */; };
@@ -3939,6 +3939,7 @@
 		24396D584D053948A3FF0DCD /* imagpng.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imagpng.cpp; path = ../../src/common/imagpng.cpp; sourceTree = "<group>"; };
 		24720CD91BB03D77008E8A43 /* collheaderctrlg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = collheaderctrlg.cpp; path = ../../src/generic/collheaderctrlg.cpp; sourceTree = "<group>"; };
 		24930711031D35288D28B04B /* choiccmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = choiccmn.cpp; path = ../../src/common/choiccmn.cpp; sourceTree = "<group>"; };
+		24AC00E61BA6C3900042A970 /* settings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = settings.mm; path = ../../src/osx/cocoa/settings.mm; sourceTree = "<group>"; };
 		24BD2EF635673E819B8406CB /* LexRust.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexRust.cxx; path = ../../src/stc/scintilla/lexers/LexRust.cxx; sourceTree = "<group>"; };
 		24DF23D67E693D999B875101 /* toolbkg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = toolbkg.cpp; path = ../../src/generic/toolbkg.cpp; sourceTree = "<group>"; };
 		24E82A05E9A9323287CDB15B /* artstd.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = artstd.cpp; path = ../../src/common/artstd.cpp; sourceTree = "<group>"; };
@@ -4630,7 +4631,6 @@
 		E5357E76650035639844D15B /* stringimpl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stringimpl.cpp; path = ../../src/common/stringimpl.cpp; sourceTree = "<group>"; };
 		E5A9B63746753EDFB2EC48D3 /* xh_frame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_frame.cpp; path = ../../src/xrc/xh_frame.cpp; sourceTree = "<group>"; };
 		E6AB648BC5173104A96CAE66 /* xml.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xml.cpp; path = ../../src/xml/xml.cpp; sourceTree = "<group>"; };
-		E6CC2B05353C3284B37B2DD7 /* settings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = settings.cpp; path = ../../src/osx/carbon/settings.cpp; sourceTree = "<group>"; };
 		E72CF5F9C1E53BCFAA2BC253 /* KeyMap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = KeyMap.cxx; path = ../../src/stc/scintilla/src/KeyMap.cxx; sourceTree = "<group>"; };
 		E72F0A2EE3DB34E193D8CCA7 /* LexLaTeX.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexLaTeX.cxx; path = ../../src/stc/scintilla/lexers/LexLaTeX.cxx; sourceTree = "<group>"; };
 		E78CBF86AAE637CB982B2EC0 /* LexMarkdown.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexMarkdown.cxx; path = ../../src/stc/scintilla/lexers/LexMarkdown.cxx; sourceTree = "<group>"; };
@@ -5293,7 +5293,6 @@
 				2128AD8BD12E3F33AD57478E /* overlay.cpp */,
 				530DC2E26BF2313E8702AD43 /* popupwin.cpp */,
 				425BFA3FDB7D3EA7ADCE1087 /* renderer.cpp */,
-				E6CC2B05353C3284B37B2DD7 /* settings.cpp */,
 				E1F2E9C9052D3E53BBD17DE3 /* statbrma.cpp */,
 				00DA3D3EEF5E305CA73A1871 /* region.cpp */,
 				2AFC4A1CDA473688A590D19F /* utilscocoa.mm */,
@@ -5335,6 +5334,7 @@
 				835C22B71A0F3C469310E1E0 /* preferences.mm */,
 				C9E32802E8ED3E729FF34CFC /* printdlg.mm */,
 				CC2E24773D853A77B9FEFA4C /* scrolbar.mm */,
+				24AC00E61BA6C3900042A970 /* settings.mm */,
 				9B862D1027C4367BBF44420F /* slider.mm */,
 				3C4A7A93CAFC3E22A2A5F7F3 /* spinbutt.mm */,
 				14EF4B028AD63B4A885D29A1 /* srchctrl.mm */,
@@ -7455,6 +7455,7 @@
 				A3321FE2A87D3BD69E0BB00B /* notebook_osx.cpp in Sources */,
 				0C9A379D97B133FA831175A9 /* printdlg_osx.cpp in Sources */,
 				B1775EF7C72233408044034D /* radiobox_osx.cpp in Sources */,
+				24AC00E91BA6C3900042A970 /* settings.mm in Sources */,
 				6A081BF19747385CB4C18781 /* radiobut_osx.cpp in Sources */,
 				DF8CE011EAC23F73BDA1C44F /* scrolbar_osx.cpp in Sources */,
 				27E73CA5C35A30CE89946ECC /* slider_osx.cpp in Sources */,
@@ -7491,7 +7492,6 @@
 				CD2A9111B8A83AFA8B5B97E7 /* overlay.cpp in Sources */,
 				805CCAE64D023561AD334B55 /* popupwin.cpp in Sources */,
 				6832385DDBB33D1B90C73CBC /* renderer.cpp in Sources */,
-				437519A6002A3A0FB2C9A8FE /* settings.cpp in Sources */,
 				F6A1AC5CF84E32C19F91A616 /* statbrma.cpp in Sources */,
 				D070C3BE95483FE38BABA1C0 /* region.cpp in Sources */,
 				07158EBC05A637ECA9DC7B51 /* utilscocoa.mm in Sources */,
@@ -8163,7 +8163,6 @@
 				CD2A9111B8A83AFA8B5B97E6 /* overlay.cpp in Sources */,
 				805CCAE64D023561AD334B54 /* popupwin.cpp in Sources */,
 				6832385DDBB33D1B90C73CBB /* renderer.cpp in Sources */,
-				437519A6002A3A0FB2C9A8FD /* settings.cpp in Sources */,
 				F6A1AC5CF84E32C19F91A615 /* statbrma.cpp in Sources */,
 				D070C3BE95483FE38BABA1BF /* region.cpp in Sources */,
 				07158EBC05A637ECA9DC7B50 /* utilscocoa.mm in Sources */,
@@ -8385,6 +8384,7 @@
 				B84642DA949638A189032CE7 /* http.cpp in Sources */,
 				6CA1BAEBBDB4336E9E201F96 /* protocol.cpp in Sources */,
 				E39021D3CDCD33BAA646B007 /* sckaddr.cpp in Sources */,
+				24AC00E81BA6C3900042A970 /* settings.mm in Sources */,
 				9F608A33D52D327FAA295625 /* sckfile.cpp in Sources */,
 				BCD81FD3D1EC305F801E1C1C /* sckipc.cpp in Sources */,
 				A3A898DA3114311EB7F02228 /* sckstrm.cpp in Sources */,
@@ -9355,7 +9355,6 @@
 				CD2A9111B8A83AFA8B5B97E5 /* overlay.cpp in Sources */,
 				805CCAE64D023561AD334B53 /* popupwin.cpp in Sources */,
 				6832385DDBB33D1B90C73CBA /* renderer.cpp in Sources */,
-				437519A6002A3A0FB2C9A8FC /* settings.cpp in Sources */,
 				F6A1AC5CF84E32C19F91A614 /* statbrma.cpp in Sources */,
 				D070C3BE95483FE38BABA1BE /* region.cpp in Sources */,
 				07158EBC05A637ECA9DC7B4F /* utilscocoa.mm in Sources */,
@@ -9577,6 +9576,7 @@
 				B84642DA949638A189032CE6 /* http.cpp in Sources */,
 				6CA1BAEBBDB4336E9E201F95 /* protocol.cpp in Sources */,
 				E39021D3CDCD33BAA646B006 /* sckaddr.cpp in Sources */,
+				24AC00E71BA6C3900042A970 /* settings.mm in Sources */,
 				9F608A33D52D327FAA295624 /* sckfile.cpp in Sources */,
 				BCD81FD3D1EC305F801E1C1B /* sckipc.cpp in Sources */,
 				A3A898DA3114311EB7F02227 /* sckstrm.cpp in Sources */,

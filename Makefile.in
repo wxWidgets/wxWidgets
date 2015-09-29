@@ -5397,7 +5397,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_src_cocoa_radiobut.o \
 	monodll_cocoa_region.o \
 	monodll_src_cocoa_scrolbar.o \
-	monodll_cocoa_settings.o \
+	monodll_src_cocoa_settings.o \
 	monodll_src_cocoa_slider.o \
 	monodll_cocoa_sound.o \
 	monodll_src_cocoa_spinbutt.o \
@@ -5757,7 +5757,8 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS =  \
 	monodll_carbon_tglbtn.o \
 	monodll_carbon_toolbar.o \
 	monodll_carbon_tooltip.o \
-	monodll_carbon_window.o
+	monodll_carbon_window.o \
+	monodll_carbon_settings.o
 @COND_TOOLKIT_OSX_CARBON@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS)
 COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS) \
@@ -5795,7 +5796,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_cocoa_tglbtn.o \
 	monodll_osx_cocoa_toolbar.o \
 	monodll_osx_cocoa_tooltip.o \
-	monodll_osx_cocoa_window.o
+	monodll_osx_cocoa_window.o \
+	monodll_osx_cocoa_settings.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS) \
@@ -7559,7 +7561,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_src_cocoa_radiobut.o \
 	monolib_cocoa_region.o \
 	monolib_src_cocoa_scrolbar.o \
-	monolib_cocoa_settings.o \
+	monolib_src_cocoa_settings.o \
 	monolib_src_cocoa_slider.o \
 	monolib_cocoa_sound.o \
 	monolib_src_cocoa_spinbutt.o \
@@ -7919,7 +7921,8 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_1 =  \
 	monolib_carbon_tglbtn.o \
 	monolib_carbon_toolbar.o \
 	monolib_carbon_tooltip.o \
-	monolib_carbon_window.o
+	monolib_carbon_window.o \
+	monolib_carbon_settings.o
 @COND_TOOLKIT_OSX_CARBON@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_12) \
@@ -7957,7 +7960,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_cocoa_tglbtn.o \
 	monolib_osx_cocoa_toolbar.o \
 	monolib_osx_cocoa_tooltip.o \
-	monolib_osx_cocoa_window.o
+	monolib_osx_cocoa_window.o \
+	monolib_osx_cocoa_settings.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_12) \
@@ -9869,7 +9873,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_src_cocoa_radiobut.o \
 	coredll_cocoa_region.o \
 	coredll_src_cocoa_scrolbar.o \
-	coredll_cocoa_settings.o \
+	coredll_src_cocoa_settings.o \
 	coredll_src_cocoa_slider.o \
 	coredll_sound.o \
 	coredll_src_cocoa_spinbutt.o \
@@ -10229,7 +10233,8 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_2 =  \
 	coredll_carbon_tglbtn.o \
 	coredll_carbon_toolbar.o \
 	coredll_carbon_tooltip.o \
-	coredll_carbon_window.o
+	coredll_carbon_window.o \
+	coredll_carbon_settings.o
 @COND_TOOLKIT_OSX_CARBON@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_14) \
@@ -10267,7 +10272,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_cocoa_tglbtn.o \
 	coredll_osx_cocoa_toolbar.o \
 	coredll_osx_cocoa_tooltip.o \
-	coredll_osx_cocoa_window.o
+	coredll_osx_cocoa_window.o \
+	coredll_osx_cocoa_settings.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_14) \
@@ -11474,7 +11480,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_src_cocoa_radiobut.o \
 	corelib_cocoa_region.o \
 	corelib_src_cocoa_scrolbar.o \
-	corelib_cocoa_settings.o \
+	corelib_src_cocoa_settings.o \
 	corelib_src_cocoa_slider.o \
 	corelib_sound.o \
 	corelib_src_cocoa_spinbutt.o \
@@ -11834,7 +11840,8 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_3 =  \
 	corelib_carbon_tglbtn.o \
 	corelib_carbon_toolbar.o \
 	corelib_carbon_tooltip.o \
-	corelib_carbon_window.o
+	corelib_carbon_window.o \
+	corelib_carbon_settings.o
 @COND_TOOLKIT_OSX_CARBON@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_1_0) \
@@ -11872,7 +11879,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_cocoa_tglbtn.o \
 	corelib_osx_cocoa_toolbar.o \
 	corelib_osx_cocoa_tooltip.o \
-	corelib_osx_cocoa_window.o
+	corelib_osx_cocoa_window.o \
+	corelib_osx_cocoa_settings.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_1_0) \
@@ -14115,7 +14123,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS =  \
 	monodll_carbon_overlay.o \
 	monodll_carbon_popupwin.o \
 	monodll_carbon_renderer.o \
-	monodll_carbon_settings.o \
 	monodll_statbrma.o \
 	monodll_carbon_region.o \
 	monodll_utilscocoa.o \
@@ -14262,7 +14269,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_12 =  \
 	monolib_carbon_overlay.o \
 	monolib_carbon_popupwin.o \
 	monolib_carbon_renderer.o \
-	monolib_carbon_settings.o \
 	monolib_statbrma.o \
 	monolib_carbon_region.o \
 	monolib_utilscocoa.o \
@@ -14409,7 +14415,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_14 =  \
 	coredll_carbon_overlay.o \
 	coredll_carbon_popupwin.o \
 	coredll_carbon_renderer.o \
-	coredll_carbon_settings.o \
 	coredll_statbrma.o \
 	coredll_carbon_region.o \
 	coredll_utilscocoa.o \
@@ -14541,7 +14546,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_1_0 =  \
 	corelib_carbon_overlay.o \
 	corelib_carbon_popupwin.o \
 	corelib_carbon_renderer.o \
-	corelib_carbon_settings.o \
 	corelib_statbrma.o \
 	corelib_carbon_region.o \
 	corelib_utilscocoa.o \
@@ -17376,6 +17380,9 @@ monodll_carbon_tooltip.o: $(srcdir)/src/osx/carbon/tooltip.cpp $(MONODLL_ODEP)
 monodll_carbon_window.o: $(srcdir)/src/osx/carbon/window.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/window.cpp
 
+monodll_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
+
 monodll_cocoa_anybutton.o: $(srcdir)/src/osx/cocoa/anybutton.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/anybutton.mm
 
@@ -17480,6 +17487,9 @@ monodll_osx_cocoa_tooltip.o: $(srcdir)/src/osx/cocoa/tooltip.mm $(MONODLL_ODEP)
 
 monodll_osx_cocoa_window.o: $(srcdir)/src/osx/cocoa/window.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/window.mm
+
+monodll_osx_cocoa_settings.o: $(srcdir)/src/osx/cocoa/settings.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/settings.mm
 
 monodll_iphone_anybutton.o: $(srcdir)/src/osx/iphone/anybutton.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/anybutton.mm
@@ -17703,7 +17713,7 @@ monodll_cocoa_region.o: $(srcdir)/src/cocoa/region.mm $(MONODLL_ODEP)
 monodll_src_cocoa_scrolbar.o: $(srcdir)/src/cocoa/scrolbar.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/cocoa/scrolbar.mm
 
-monodll_cocoa_settings.o: $(srcdir)/src/cocoa/settings.mm $(MONODLL_ODEP)
+monodll_src_cocoa_settings.o: $(srcdir)/src/cocoa/settings.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/cocoa/settings.mm
 
 monodll_src_cocoa_slider.o: $(srcdir)/src/cocoa/slider.mm $(MONODLL_ODEP)
@@ -20946,15 +20956,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_carbon_renderer.o: $(srcdir)/src/osx/carbon/renderer.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/renderer.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_statbrma.o: $(srcdir)/src/osx/carbon/statbrma.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/statbrma.cpp
 
@@ -22890,6 +22891,9 @@ monolib_carbon_tooltip.o: $(srcdir)/src/osx/carbon/tooltip.cpp $(MONOLIB_ODEP)
 monolib_carbon_window.o: $(srcdir)/src/osx/carbon/window.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/window.cpp
 
+monolib_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
+
 monolib_cocoa_anybutton.o: $(srcdir)/src/osx/cocoa/anybutton.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/anybutton.mm
 
@@ -22994,6 +22998,9 @@ monolib_osx_cocoa_tooltip.o: $(srcdir)/src/osx/cocoa/tooltip.mm $(MONOLIB_ODEP)
 
 monolib_osx_cocoa_window.o: $(srcdir)/src/osx/cocoa/window.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/window.mm
+
+monolib_osx_cocoa_settings.o: $(srcdir)/src/osx/cocoa/settings.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/settings.mm
 
 monolib_iphone_anybutton.o: $(srcdir)/src/osx/iphone/anybutton.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/anybutton.mm
@@ -23217,7 +23224,7 @@ monolib_cocoa_region.o: $(srcdir)/src/cocoa/region.mm $(MONOLIB_ODEP)
 monolib_src_cocoa_scrolbar.o: $(srcdir)/src/cocoa/scrolbar.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/cocoa/scrolbar.mm
 
-monolib_cocoa_settings.o: $(srcdir)/src/cocoa/settings.mm $(MONOLIB_ODEP)
+monolib_src_cocoa_settings.o: $(srcdir)/src/cocoa/settings.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/cocoa/settings.mm
 
 monolib_src_cocoa_slider.o: $(srcdir)/src/cocoa/slider.mm $(MONOLIB_ODEP)
@@ -26460,15 +26467,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_carbon_renderer.o: $(srcdir)/src/osx/carbon/renderer.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/renderer.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_statbrma.o: $(srcdir)/src/osx/carbon/statbrma.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/statbrma.cpp
 
@@ -29070,6 +29068,9 @@ coredll_carbon_tooltip.o: $(srcdir)/src/osx/carbon/tooltip.cpp $(COREDLL_ODEP)
 coredll_carbon_window.o: $(srcdir)/src/osx/carbon/window.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/window.cpp
 
+coredll_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
+
 coredll_cocoa_anybutton.o: $(srcdir)/src/osx/cocoa/anybutton.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/anybutton.mm
 
@@ -29174,6 +29175,9 @@ coredll_osx_cocoa_tooltip.o: $(srcdir)/src/osx/cocoa/tooltip.mm $(COREDLL_ODEP)
 
 coredll_osx_cocoa_window.o: $(srcdir)/src/osx/cocoa/window.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/window.mm
+
+coredll_osx_cocoa_settings.o: $(srcdir)/src/osx/cocoa/settings.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/settings.mm
 
 coredll_iphone_anybutton.o: $(srcdir)/src/osx/iphone/anybutton.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/anybutton.mm
@@ -29397,7 +29401,7 @@ coredll_cocoa_region.o: $(srcdir)/src/cocoa/region.mm $(COREDLL_ODEP)
 coredll_src_cocoa_scrolbar.o: $(srcdir)/src/cocoa/scrolbar.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/cocoa/scrolbar.mm
 
-coredll_cocoa_settings.o: $(srcdir)/src/cocoa/settings.mm $(COREDLL_ODEP)
+coredll_src_cocoa_settings.o: $(srcdir)/src/cocoa/settings.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/cocoa/settings.mm
 
 coredll_src_cocoa_slider.o: $(srcdir)/src/cocoa/slider.mm $(COREDLL_ODEP)
@@ -32040,15 +32044,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_carbon_renderer.o: $(srcdir)/src/osx/carbon/renderer.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/renderer.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_statbrma.o: $(srcdir)/src/osx/carbon/statbrma.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/statbrma.cpp
 
@@ -33132,6 +33127,9 @@ corelib_carbon_tooltip.o: $(srcdir)/src/osx/carbon/tooltip.cpp $(CORELIB_ODEP)
 corelib_carbon_window.o: $(srcdir)/src/osx/carbon/window.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/window.cpp
 
+corelib_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
+
 corelib_cocoa_anybutton.o: $(srcdir)/src/osx/cocoa/anybutton.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/anybutton.mm
 
@@ -33236,6 +33234,9 @@ corelib_osx_cocoa_tooltip.o: $(srcdir)/src/osx/cocoa/tooltip.mm $(CORELIB_ODEP)
 
 corelib_osx_cocoa_window.o: $(srcdir)/src/osx/cocoa/window.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/window.mm
+
+corelib_osx_cocoa_settings.o: $(srcdir)/src/osx/cocoa/settings.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/settings.mm
 
 corelib_iphone_anybutton.o: $(srcdir)/src/osx/iphone/anybutton.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/anybutton.mm
@@ -33459,7 +33460,7 @@ corelib_cocoa_region.o: $(srcdir)/src/cocoa/region.mm $(CORELIB_ODEP)
 corelib_src_cocoa_scrolbar.o: $(srcdir)/src/cocoa/scrolbar.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/cocoa/scrolbar.mm
 
-corelib_cocoa_settings.o: $(srcdir)/src/cocoa/settings.mm $(CORELIB_ODEP)
+corelib_src_cocoa_settings.o: $(srcdir)/src/cocoa/settings.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/cocoa/settings.mm
 
 corelib_src_cocoa_slider.o: $(srcdir)/src/cocoa/slider.mm $(CORELIB_ODEP)
@@ -36101,15 +36102,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_carbon_renderer.o: $(srcdir)/src/osx/carbon/renderer.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/renderer.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_statbrma.o: $(srcdir)/src/osx/carbon/statbrma.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/statbrma.cpp
