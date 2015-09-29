@@ -987,7 +987,6 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
     if ( !GetOwner()->GetOwner()->IsEnabled() )
         flags |= wxCONTROL_DISABLED;
 
-    // get the alignment to use
     wxRendererNative::Get().DrawItemText(
         GetOwner()->GetOwner(),
         *dc,
