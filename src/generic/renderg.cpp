@@ -183,6 +183,46 @@ protected:
     static wxRendererGeneric* sm_rendererGeneric;
 };
 
+// ----------------------------------------------------------------------------
+// misc. drawing functions
+// ----------------------------------------------------------------------------
+
+// Draw focus rect for individual cell. Unlike native focus rect, we render
+// this in foreground text color (typically white) to enhance contrast and
+// make it visible.
+static void DrawSelectedCellFocusRect(wxDC& dc, const wxRect& rect)
+{
+    // (This code is based on wxRendererGeneric::DrawFocusRect and modified.)
+
+    // draw the pixels manually because the "dots" in wxPen with wxDOT style
+    // may be short traits and not really dots
+    //
+    // note that to behave in the same manner as DrawRect(), we must exclude
+    // the bottom and right borders from the rectangle
+    wxCoord x1 = rect.GetLeft(),
+        y1 = rect.GetTop(),
+        x2 = rect.GetRight(),
+        y2 = rect.GetBottom();
+
+    wxDCPenChanger pen(dc, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+
+    wxCoord z;
+    for (z = x1 + 1; z < x2; z += 2)
+        dc.DrawPoint(z, rect.GetTop());
+
+    wxCoord shift = z == x2 ? 0 : 1;
+    for (z = y1 + shift; z < y2; z += 2)
+        dc.DrawPoint(x2, z);
+
+    shift = z == y2 ? 0 : 1;
+    for (z = x2 - shift; z > x1; z -= 2)
+        dc.DrawPoint(z, y2);
+
+    shift = z == x1 ? 0 : 1;
+    for (z = y2 - shift; z > y1; z -= 2)
+        dc.DrawPoint(x1, z);
+}
+
 // ============================================================================
 // wxRendererGeneric implementation
 // ============================================================================
@@ -754,16 +794,26 @@ wxRendererGeneric::DrawItemSelectionRect(wxWindow * win,
     }
 
     dc.SetBrush(brush);
-    if ((flags & wxCONTROL_CURRENT) && (flags & wxCONTROL_FOCUSED)
+    bool drawFocusRect = (flags & wxCONTROL_CURRENT) && (flags & wxCONTROL_FOCUSED)
 #if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
                 && IsControlActive( (ControlRef)win->GetHandle() )
 #endif
-    )
+        ;
+
+    if ( drawFocusRect && !(flags & wxCONTROL_CELL) )
         dc.SetPen( *wxBLACK_PEN );
     else
         dc.SetPen( *wxTRANSPARENT_PEN );
 
     dc.DrawRectangle( rect );
+
+    if ( drawFocusRect && (flags & wxCONTROL_CELL) )
+    {
+        wxRect focusRect(rect);
+        focusRect.Deflate(1);
+
+        DrawSelectedCellFocusRect(dc, focusRect);
+    }
 
     // it's unused everywhere except in wxOSX/Carbon
     wxUnusedVar(win);

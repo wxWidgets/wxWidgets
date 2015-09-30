@@ -387,6 +387,12 @@ void wxRendererMSWBase::DrawItemSelectionRect(wxWindow *win,
                                               const wxRect& rect,
                                               int flags)
 {
+    if ( flags & wxCONTROL_CELL )
+    {
+        m_rendererNative.DrawItemSelectionRect(win, dc, rect, flags);
+        return;
+    }
+
     wxBrush brush;
     if ( flags & wxCONTROL_SELECTED )
     {
