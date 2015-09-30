@@ -1021,7 +1021,10 @@ void wxRendererXP::DrawItemText(wxWindow* win,
         if ( align & wxALIGN_CENTER_HORIZONTAL )
             textFlags |= DT_CENTER;
         else if ( align & wxALIGN_RIGHT )
+        {
             textFlags |= DT_RIGHT;
+            rc.right--; // Alignment is inconsistent with DrawLabel otherwise
+        }
         else
             textFlags |= DT_LEFT;
 
