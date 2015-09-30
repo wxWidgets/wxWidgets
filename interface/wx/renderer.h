@@ -46,6 +46,9 @@ enum
     /** Checkboxes only: flat border. */
     wxCONTROL_FLAT       = wxCONTROL_SPECIAL,
 
+    /** Item selection rect only: cell inside selection. */
+    wxCONTROL_CELL       = wxCONTROL_SPECIAL,
+
     /** Mouse is currently over the control. */
     wxCONTROL_CURRENT    = 0x00000010,
 
@@ -404,7 +407,8 @@ public:
         @c wxCONTROL_FOCUSED may be used to indicate if the control has the focus
         (otherwise the selection rectangle is e.g. often grey and not blue).
         This may be ignored by the renderer or deduced by the code directly from
-        the @a win.
+        the @a win. Additionally @c wxCONTROL_CELL may be used to draw a cell inside
+        a bigger selection area.
 
         @see DrawItemText()
     */
