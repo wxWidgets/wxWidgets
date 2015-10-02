@@ -4458,9 +4458,6 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
         g_object_unref(style);
 #endif
     }
-
-    // Style change may affect GTK+'s size calculation:
-    InvalidateBestSize();
 }
 
 void wxWindowGTK::DoApplyWidgetStyle(GtkRcStyle *style)
@@ -4768,6 +4765,7 @@ bool wxWindowGTK::SetFont( const wxFont &font )
         // apply style change (forceStyle=true so that new style is applied
         // even if the font changed from valid to wxNullFont):
         GTKApplyWidgetStyle(true);
+        InvalidateBestSize();
     }
 
 #ifdef __WXGTK3__
