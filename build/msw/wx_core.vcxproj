@@ -901,6 +901,7 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\statusbar.cpp" />
+    <ClCompile Include="..\..\src\msw\systhemectrl.cpp" />
     <ClCompile Include="..\..\src\msw\taskbarbutton.cpp" />
     <ClCompile Include="..\..\src\msw\textctrl.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
@@ -1004,7 +1005,6 @@
     <ClCompile Include="..\..\src\generic\vlbox.cpp" />
     <ClCompile Include="..\..\src\generic\vscroll.cpp" />
     <ClCompile Include="..\..\src\xrc\xmlreshandler.cpp" />
-    <ClCompile Include="..\..\src\msw\systhemectrl.cpp" />
     <ClCompile Include="..\..\src\generic\collheaderctrlg.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -1334,6 +1334,7 @@
     <ClInclude Include="..\..\include\wx\statline.h" />
     <ClInclude Include="..\..\include\wx\stattext.h" />
     <ClInclude Include="..\..\include\wx\statusbr.h" />
+    <ClInclude Include="..\..\include\wx\systhemectrl.h" />
     <ClInclude Include="..\..\include\wx\taskbarbutton.h" />
     <ClInclude Include="..\..\include\wx\tbarbase.h" />
     <ClInclude Include="..\..\include\wx\textcompleter.h" />
@@ -1374,7 +1375,6 @@
     <ClInclude Include="..\..\include\wx\preferences.h" />
     <ClInclude Include="..\..\include\wx\testing.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\safearray.h" />
-    <ClInclude Include="..\..\include\wx\systhemectrl.h" />
     <ClInclude Include="..\..\include\wx\collheaderctrl.h" />
     <ClInclude Include="..\..\include\wx\generic\collheaderctrl.h" />
   </ItemGroup>
