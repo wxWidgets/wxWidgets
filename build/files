@@ -3086,6 +3086,11 @@ AUI_CMN_HDR =
     wx/xrc/xh_auinotbk.h
     wx/xrc/xh_auitoolb.h
 
+AUI_MSW_HDR =
+    wx/aui/tabartmsw.h
+AUI_MSW_SRC =
+    src/aui/tabartmsw.cpp
+
 # wxRibbon
 
 RIBBON_SRC =

@@ -3653,6 +3653,18 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         wx/aui/tabartgtk.h
     </if>
 </set>
+<set var="AUI_MSW_SRC" hints="files">
+    src/aui/tabartmsw.cpp
+</set>
+<set var="AUI_MSW_HDR" hints="files">
+    wx/aui/tabartmsw.h
+</set>
+<set var="AUI_PLATFORM_SRC" hints="files">
+    <if cond="TOOLKIT=='MSW'">$(AUI_MSW_SRC)</if>
+</set>
+<set var="AUI_PLATFORM_HDR" hints="files">
+    <if cond="TOOLKIT=='MSW'">$(AUI_MSW_HDR)</if>
+</set>
 <set var="AUI_CMN_SRC" hints="files">
     src/aui/framemanager.cpp
     src/aui/dockart.cpp
@@ -3667,6 +3679,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="AUI_SRC" hints="files">
     $(AUI_CMN_SRC)
     $(AUI_GTK_SRC)
+    $(AUI_PLATFORM_SRC)
 </set>
 <set var="AUI_CMN_HDR" hints="files">
     wx/aui/framemanager.h
@@ -3683,6 +3696,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="AUI_HDR" hints="files">
     $(AUI_CMN_HDR)
     $(AUI_GTK_HDR)
+    $(AUI_PLATFORM_HDR)
 </set>
 
 <!-- ====================================================================== -->
