@@ -10,8 +10,7 @@
 
     A static bitmap control displays a bitmap. Native implementations on some
     platforms are only meant for display of the small icons in the dialog
-    boxes. In particular, under Windows 9x the size of bitmap is limited
-    to 64*64 pixels.
+    boxes.
 
     If you want to display larger images portably, you may use generic
     implementation wxGenericStaticBitmap declared in \<wx/generic/statbmpg.h\>.

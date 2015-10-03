@@ -289,26 +289,23 @@ bool wxListCtrl::Create(wxWindow *parent,
 
 void wxListCtrl::MSWSetExListStyles()
 {
-    // for comctl32.dll v 4.70+ we want to have some non default extended
+    // we want to have some non default extended
     // styles because it's prettier (and also because wxGTK does it like this)
-    if ( wxApp::GetComCtl32Version() >= 470 )
-    {
-        ::SendMessage
-        (
-            GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0,
-            // LVS_EX_LABELTIP shouldn't be used under Windows CE where it's
-            // not defined in the SDK headers
+    ::SendMessage
+    (
+        GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0,
+        // LVS_EX_LABELTIP shouldn't be used under Windows CE where it's
+        // not defined in the SDK headers
 #ifdef LVS_EX_LABELTIP
-            LVS_EX_LABELTIP |
+        LVS_EX_LABELTIP |
 #endif
-            LVS_EX_FULLROWSELECT |
-            LVS_EX_SUBITEMIMAGES |
-            // normally this should be governed by a style as it's probably not
-            // always appropriate, but we don't have any free styles left and
-            // it seems better to enable it by default than disable
-            LVS_EX_HEADERDRAGDROP
-        );
-    }
+        LVS_EX_FULLROWSELECT |
+        LVS_EX_SUBITEMIMAGES |
+        // normally this should be governed by a style as it's probably not
+        // always appropriate, but we don't have any free styles left and
+        // it seems better to enable it by default than disable
+        LVS_EX_HEADERDRAGDROP
+    );
 }
 
 WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -371,13 +368,6 @@ WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 #if !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
     if ( style & wxLC_VIRTUAL )
     {
-        int ver = wxApp::GetComCtl32Version();
-        if ( ver < 470 )
-        {
-            wxLogWarning(_("Please install a newer version of comctl32.dll\n(at least version 4.70 is required but you have %d.%02d)\nor this program won't operate correctly."),
-                        ver / 100, ver % 100);
-        }
-
         wstyle |= LVS_OWNERDATA;
     }
 #endif // ancient cygwin
@@ -1631,7 +1621,7 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
 
     long item;
 #ifdef LVM_SUBITEMHITTEST
-    if ( ptrSubItem && wxApp::GetComCtl32Version() >= 470 )
+    if ( ptrSubItem )
     {
         item = ListView_SubItemHitTest(GetHwnd(), &hitTestInfo);
         *ptrSubItem = hitTestInfo.iSubItem;
@@ -3285,40 +3275,36 @@ static void wxConvertToMSWListCol(HWND hwndList,
 #ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
-        if ( wxApp::GetComCtl32Version() >= 470 )
+        lvCol.mask |= LVCF_IMAGE;
+
+        // we use LVCFMT_BITMAP_ON_RIGHT because the images on the right
+        // seem to be generally nicer than on the left and the generic
+        // version only draws them on the right (we don't have a flag to
+        // specify the image location anyhow)
+        //
+        // we don't use LVCFMT_COL_HAS_IMAGES because it doesn't seem to
+        // make any difference in my tests -- but maybe we should?
+        if ( item.m_image != -1 )
         {
-            lvCol.mask |= LVCF_IMAGE;
-
-            // we use LVCFMT_BITMAP_ON_RIGHT because the images on the right
-            // seem to be generally nicer than on the left and the generic
-            // version only draws them on the right (we don't have a flag to
-            // specify the image location anyhow)
-            //
-            // we don't use LVCFMT_COL_HAS_IMAGES because it doesn't seem to
-            // make any difference in my tests -- but maybe we should?
-            if ( item.m_image != -1 )
+            // as we're going to overwrite the format field, get its
+            // current value first -- unless we want to overwrite it anyhow
+            if ( !(lvCol.mask & LVCF_FMT) )
             {
-                // as we're going to overwrite the format field, get its
-                // current value first -- unless we want to overwrite it anyhow
-                if ( !(lvCol.mask & LVCF_FMT) )
+                LV_COLUMN lvColOld;
+                wxZeroMemory(lvColOld);
+                lvColOld.mask = LVCF_FMT;
+                if ( ListView_GetColumn(hwndList, col, &lvColOld) )
                 {
-                    LV_COLUMN lvColOld;
-                    wxZeroMemory(lvColOld);
-                    lvColOld.mask = LVCF_FMT;
-                    if ( ListView_GetColumn(hwndList, col, &lvColOld) )
-                    {
-                        lvCol.fmt = lvColOld.fmt;
-                    }
-
-                    lvCol.mask |= LVCF_FMT;
+                    lvCol.fmt = lvColOld.fmt;
                 }
 
-                lvCol.fmt |= LVCFMT_BITMAP_ON_RIGHT | LVCFMT_IMAGE;
+                lvCol.mask |= LVCF_FMT;
             }
 
-            lvCol.iImage = item.m_image;
+            lvCol.fmt |= LVCFMT_BITMAP_ON_RIGHT | LVCFMT_IMAGE;
         }
-        //else: it doesn't support item images anyhow
+
+        lvCol.iImage = item.m_image;
     }
 #endif // _WIN32_IE >= 0x0300
 }

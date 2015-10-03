@@ -29,7 +29,7 @@ enum wxOperatingSystemId
     wxOS_MAC = wxOS_MAC_OS|wxOS_MAC_OSX_DARWIN,
 
     wxOS_WINDOWS_9X     = 1 << 2,     //!< Windows 9x family (95/98/ME)
-    wxOS_WINDOWS_NT     = 1 << 3,     //!< Windows NT family (NT/2000/XP/Vista/7)
+    wxOS_WINDOWS_NT     = 1 << 3,     //!< Windows NT family (XP/Vista/7/8/10)
     wxOS_WINDOWS_MICRO  = 1 << 4,     //!< MicroWindows
     wxOS_WINDOWS_CE     = 1 << 5,     //!< Windows CE (Windows Mobile)
     
