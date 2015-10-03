@@ -654,6 +654,7 @@ wxOSX:
 - Fix printing all pages non-interactively (John Roberts).
 - Fix custom paper support (tijsv).
 - Return false from wxSound::Create()/IsOk() if the file doesn't exist.
+- Fix scrolling behaviour of wxSearchCtrl (John Roberts).
 
 
 3.0.2: (released 2014-10-06)
