@@ -11,6 +11,8 @@
 #ifndef _WX_MSW_STDPATHS_H_
 #define _WX_MSW_STDPATHS_H_
 
+struct _GUID;
+
 // ----------------------------------------------------------------------------
 // wxStandardPaths
 // ----------------------------------------------------------------------------
@@ -72,7 +74,7 @@ protected:
     // get the path corresponding to the given standard CSIDL_XXX constant
     static wxString DoGetDirectory(int csidl);
 
-    static wxString DoGetKnownFolder(const GUID& rfid);
+    static wxString DoGetKnownFolder(const _GUID& rfid);
 
     // return the directory of the application itself
     wxString GetAppDir() const;
