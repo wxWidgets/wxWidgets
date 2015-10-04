@@ -13,6 +13,10 @@
 #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/dc.h"
+#endif
+
 #include "wx/aui/tabart.h"
 #include "wx/aui/auibook.h"
 #include "wx/msw/uxtheme.h"
@@ -381,7 +385,7 @@ void wxAuiMSWTabArt::DrawButton(wxDC& dc,
 
     wxUxThemeEngine* te = wxUxThemeEngine::Get();
 
-    wchar_t* themeId = NULL;
+    const wchar_t* themeId = NULL;
     int part = 0;
 
     switch (bitmap_id)
