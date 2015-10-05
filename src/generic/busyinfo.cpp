@@ -58,12 +58,17 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
     wxControl* title;
     if ( !flags.m_title.empty() )
     {
+#if wxUSE_MARKUP
         title = new wxStaticTextWithMarkupSupport(panel, wxID_ANY, wxString(),
                                                   wxDefaultPosition,
                                                   wxDefaultSize,
                                                   wxALIGN_CENTRE);
         title->SetFont(title->GetFont().Scaled(2));
         title->SetLabelMarkup(flags.m_title);
+#else
+        title = new wxStaticText(panel, wxID_ANY, wxString());
+        title->SetLabelText(flags.m_title);
+#endif
 
         sizer->Add(title, wxSizerFlags().DoubleBorder().Expand());
     }
