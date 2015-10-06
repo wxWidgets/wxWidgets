@@ -92,7 +92,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         break;
     case wxSYS_COLOUR_INFOBK:
         // tooltip (bogus)
-        sysColor = [NSColor windowFrameColor];
+        sysColor = [NSColor windowBackgroundColor];
         break;
     case wxSYS_COLOUR_APPWORKSPACE:
         // MDI window color (bogus)
