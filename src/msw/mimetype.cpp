@@ -40,6 +40,12 @@
     #include "wx/msw/registry.h"
     #include "wx/msw/private.h"
     #include <shlwapi.h>
+
+    // For MSVC we can link in the required library explicitly, for the other
+    // compilers (e.g. MinGW) this needs to be done at makefiles level.
+    #ifdef __VISUALC__
+        #pragma comment(lib, "shlwapi")
+    #endif
 #endif // OS
 
 // Unfortunately the corresponding SDK constants are absent from the headers

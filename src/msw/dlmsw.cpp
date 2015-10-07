@@ -28,6 +28,12 @@
 #include "wx/msw/debughlp.h"
 #include "wx/filename.h"
 
+// For MSVC we can link in the required library explicitly, for the other
+// compilers (e.g. MinGW) this needs to be done at makefiles level.
+#ifdef __VISUALC__
+    #pragma comment(lib, "version")
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------

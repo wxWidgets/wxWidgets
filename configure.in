@@ -2626,7 +2626,7 @@ if test "$USE_WIN32" = 1 ; then
     ],
     [ ])
 
-    LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -ladvapi32 -lwsock32 -lgdi32"
+    LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lcomdlg32 -ladvapi32 -lversion -lwsock32 -lgdi32"
     case "${host}" in
         x86_64-*-mingw32* )
             dnl we need to define this to embed the manifest for correct

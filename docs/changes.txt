@@ -33,6 +33,11 @@ Changes in behaviour which may result in build errors
 - "webview" library is not included in `wx-config --libs` output any more, you
   need to request it explicitly, e.g. `wx-config --libs std,webview`.
 
+- wxMSW now requires linking with shlwapi.lib and version.lib. This is done
+  automatically in most cases, but if you use a static build of the library
+  with a non-MSVC compiler such as MinGW and do not use wx-config, then you
+  will need to add these libraries to your make or project files yourself.
+
 - WXWIN_OS_DESCRIPTION doesn't exist any longer, use wxGetOsDescription().
 
 

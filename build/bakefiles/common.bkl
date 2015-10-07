@@ -553,12 +553,14 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
                 <sys-lib>winspool</sys-lib>
                 <sys-lib>winmm</sys-lib>
                 <sys-lib>shell32</sys-lib>
+                <sys-lib>shlwapi</sys-lib>
                 <sys-lib>comctl32</sys-lib>
                 <sys-lib>ole32</sys-lib>
                 <sys-lib>oleaut32</sys-lib>
                 <sys-lib>uuid</sys-lib>
                 <sys-lib>rpcrt4</sys-lib>
                 <sys-lib>advapi32</sys-lib>
+                <sys-lib>version</sys-lib>
                 <sys-lib>wsock32</sys-lib>
                 <!-- this one is only used if wxUSE_URL_NATIVE==1 but we don't
                      know if it is here so just add it unconditionally -->

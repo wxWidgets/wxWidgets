@@ -23086,7 +23086,7 @@ fi
 
 
 
-    LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -ladvapi32 -lwsock32 -lgdi32"
+    LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lcomdlg32 -ladvapi32 -lversion -lwsock32 -lgdi32"
     case "${host}" in
         x86_64-*-mingw32* )
                                                 WINDRES_CPU_DEFINE="--define WX_CPU_AMD64"
