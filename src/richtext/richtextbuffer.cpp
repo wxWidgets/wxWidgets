@@ -979,18 +979,13 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxRi
 
         wxColour col(borders.GetTop().GetColour());
         wxPenStyle penStyle = wxPENSTYLE_SOLID;
-        if (borders.GetRight().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
+        if (borders.GetTop().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
             penStyle = wxPENSTYLE_DOT;
-        else if (borders.GetRight().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
+        else if (borders.GetTop().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
             penStyle = wxPENSTYLE_LONG_DASH;
 
         if (borderTop == 1 || penStyle != wxPENSTYLE_SOLID)
         {
-            wxPenStyle penStyle = wxPENSTYLE_SOLID;
-            if (borders.GetTop().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
-                penStyle = wxPENSTYLE_DOT;
-            else if (borders.GetTop().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
-                penStyle = wxPENSTYLE_LONG_DASH;
             wxPen pen(col, borderTop, penStyle);
             dc.SetPen(pen);
             // See note above.
