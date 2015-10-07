@@ -50,6 +50,7 @@ Changes in behaviour which may result in build errors
 All:
 
 - Add UTF-8 and ZIP 64 support to wxZip{Input,Output}Stream (Tobias Taschner).
+- Add wxStandardPaths::GetUserDir() (Tobias Taschner).
 - Allow calling wxItemContainer::Add() and similar with std::vector<> argument.
 - Add "%z" support to printf()-like functions like wxString::Format() (RIVDSL).
 - Add DOCTYPE support to wxXmlDocument (Nick Matthews).
@@ -140,6 +141,7 @@ wxGTK:
 wxMSW:
 
 - Make default wxSizer border DPI-aware.
+- Implement native tab art for wxAUI (Tobias Taschner).
 - Improve wxMimeTypesManager open command detection (Eric Jensen).
 - Make wxFILTER_INCLUDE_LIST in wxTextValidator actually usable.
 - Fix handling crashes in wxEVT_PAINT event handlers.
@@ -184,3 +186,4 @@ wxOSX/Cocoa:
 - Add support for wxEVT_COMBOBOX_DROPDOWN and wxEVT_COMBOBOX_CLOSEUP
   events (Igor Korot).
 - Implement strike-through support in wxFont (Igor Korot).
+- Provide native implementation of wxStandardPaths (Tobias Taschner).

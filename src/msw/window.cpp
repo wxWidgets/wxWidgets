@@ -637,24 +637,6 @@ wxWindowMSW::MSWShowWithEffect(bool show,
     if ( !wxWindowBase::Show(show) )
         return false;
 
-    typedef BOOL (WINAPI *AnimateWindow_t)(HWND, DWORD, DWORD);
-
-    static AnimateWindow_t s_pfnAnimateWindow = NULL;
-    static bool s_initDone = false;
-    if ( !s_initDone )
-    {
-        wxDynamicLibrary dllUser32(wxT("user32.dll"), wxDL_VERBATIM | wxDL_QUIET);
-        wxDL_INIT_FUNC(s_pfn, AnimateWindow, dllUser32);
-
-        s_initDone = true;
-
-        // notice that it's ok to unload user32.dll here as it won't be really
-        // unloaded, being still in use because we link to it statically too
-    }
-
-    if ( !s_pfnAnimateWindow )
-        return Show(show);
-
     // Show() has a side effect of sending a WM_SIZE to the window, which helps
     // ensuring that it's laid out correctly, but AnimateWindow() doesn't do
     // this so send the event ourselves
@@ -719,7 +701,7 @@ wxWindowMSW::MSWShowWithEffect(bool show,
             return false;
     }
 
-    if ( !(*s_pfnAnimateWindow)(GetHwnd(), timeout, dwFlags) )
+    if ( !::AnimateWindow(GetHwnd(), timeout, dwFlags) )
     {
         wxLogLastError(wxT("AnimateWindow"));
 

@@ -253,9 +253,6 @@
 		131B879180AE3FB481F81CC8 /* fs_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A305CEC03B3085B159B617 /* fs_mem.cpp */; };
 		131B879180AE3FB481F81CC9 /* fs_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A305CEC03B3085B159B617 /* fs_mem.cpp */; };
 		131B879180AE3FB481F81CCA /* fs_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A305CEC03B3085B159B617 /* fs_mem.cpp */; };
-		13250B531B1B3F9998C59DA9 /* stdpaths_cf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B2DEE3EC7CE374DB0CE6EEA /* stdpaths_cf.cpp */; };
-		13250B531B1B3F9998C59DAA /* stdpaths_cf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B2DEE3EC7CE374DB0CE6EEA /* stdpaths_cf.cpp */; };
-		13250B531B1B3F9998C59DAB /* stdpaths_cf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B2DEE3EC7CE374DB0CE6EEA /* stdpaths_cf.cpp */; };
 		135DFCE48FC03D8294D01A89 /* xmlrsall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 29922DF1D0D63C33A186E783 /* xmlrsall.cpp */; };
 		135DFCE48FC03D8294D01A8A /* xmlrsall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 29922DF1D0D63C33A186E783 /* xmlrsall.cpp */; };
 		135DFCE48FC03D8294D01A8B /* xmlrsall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 29922DF1D0D63C33A186E783 /* xmlrsall.cpp */; };
@@ -532,6 +529,12 @@
 		24A5A71C79733E9CB913C5B7 /* LexPB.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8744F2C80ECF375999195935 /* LexPB.cxx */; };
 		24A5A71C79733E9CB913C5B8 /* LexPB.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8744F2C80ECF375999195935 /* LexPB.cxx */; };
 		24A5A71C79733E9CB913C5B9 /* LexPB.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8744F2C80ECF375999195935 /* LexPB.cxx */; };
+		24D4E0F61BA05FC200586317 /* stdpaths.mm in Sources */ = {isa = PBXBuildFile; fileRef = 24D4E0F51BA05FC200586317 /* stdpaths.mm */; };
+		24D4E0F71BA05FC200586317 /* stdpaths.mm in Sources */ = {isa = PBXBuildFile; fileRef = 24D4E0F51BA05FC200586317 /* stdpaths.mm */; };
+		24D4E0F81BA05FC200586317 /* stdpaths.mm in Sources */ = {isa = PBXBuildFile; fileRef = 24D4E0F51BA05FC200586317 /* stdpaths.mm */; };
+		24AC00E71BA6C3900042A970 /* settings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 24AC00E61BA6C3900042A970 /* settings.mm */; };
+		24AC00E81BA6C3900042A970 /* settings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 24AC00E61BA6C3900042A970 /* settings.mm */; };
+		24AC00E91BA6C3900042A970 /* settings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 24AC00E61BA6C3900042A970 /* settings.mm */; };
 		254028D56649374E8D3CC85C /* libwx_osx_cocoau_html.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D9F65758E0363AF9AEC59A47 /* libwx_osx_cocoau_html.dylib */; };
 		254028D56649374E8D3CC85D /* libwx_osx_cocoau_html.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D9F65758E0363AF9AEC59A47 /* libwx_osx_cocoau_html.dylib */; };
 		2563C775427E3D68BD384F2F /* richtextstyles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D30617843F33310089C1F77A /* richtextstyles.cpp */; };
@@ -844,9 +847,6 @@
 		42ED9BAFD6E936849F1D36CB /* xtixml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4048A3523EC03409BD899BEF /* xtixml.cpp */; };
 		42ED9BAFD6E936849F1D36CC /* xtixml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4048A3523EC03409BD899BEF /* xtixml.cpp */; };
 		42ED9BAFD6E936849F1D36CD /* xtixml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4048A3523EC03409BD899BEF /* xtixml.cpp */; };
-		437519A6002A3A0FB2C9A8FC /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6CC2B05353C3284B37B2DD7 /* settings.cpp */; };
-		437519A6002A3A0FB2C9A8FD /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6CC2B05353C3284B37B2DD7 /* settings.cpp */; };
-		437519A6002A3A0FB2C9A8FE /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6CC2B05353C3284B37B2DD7 /* settings.cpp */; };
 		438EAEA4B30C325C827F6197 /* xh_fontpicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87E609641B583666AB9D1D58 /* xh_fontpicker.cpp */; };
 		438EAEA4B30C325C827F6198 /* xh_fontpicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87E609641B583666AB9D1D58 /* xh_fontpicker.cpp */; };
 		438EAEA4B30C325C827F6199 /* xh_fontpicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87E609641B583666AB9D1D58 /* xh_fontpicker.cpp */; };
@@ -2527,9 +2527,6 @@
 		E8EE34F0A78C31B489B19FEE /* LexMSSQL.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 1C71BF55495034FFBE653C80 /* LexMSSQL.cxx */; };
 		E8EE34F0A78C31B489B19FEF /* LexMSSQL.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 1C71BF55495034FFBE653C80 /* LexMSSQL.cxx */; };
 		E8EE34F0A78C31B489B19FF0 /* LexMSSQL.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 1C71BF55495034FFBE653C80 /* LexMSSQL.cxx */; };
-		E8F0C87119C63E8E81423A7C /* stdpaths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F8C1E6D73ABD3A219B2C0603 /* stdpaths.cpp */; };
-		E8F0C87119C63E8E81423A7D /* stdpaths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F8C1E6D73ABD3A219B2C0603 /* stdpaths.cpp */; };
-		E8F0C87119C63E8E81423A7E /* stdpaths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F8C1E6D73ABD3A219B2C0603 /* stdpaths.cpp */; };
 		E92EB502F79638B0BE569EF4 /* CallTip.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 4F58B88D42A93BD0B74ADF75 /* CallTip.cxx */; };
 		E92EB502F79638B0BE569EF5 /* CallTip.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 4F58B88D42A93BD0B74ADF75 /* CallTip.cxx */; };
 		E92EB502F79638B0BE569EF6 /* CallTip.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 4F58B88D42A93BD0B74ADF75 /* CallTip.cxx */; };
@@ -3939,7 +3936,9 @@
 		24396D584D053948A3FF0DCD /* imagpng.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imagpng.cpp; path = ../../src/common/imagpng.cpp; sourceTree = "<group>"; };
 		24720CD91BB03D77008E8A43 /* collheaderctrlg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = collheaderctrlg.cpp; path = ../../src/generic/collheaderctrlg.cpp; sourceTree = "<group>"; };
 		24930711031D35288D28B04B /* choiccmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = choiccmn.cpp; path = ../../src/common/choiccmn.cpp; sourceTree = "<group>"; };
+		24AC00E61BA6C3900042A970 /* settings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = settings.mm; path = ../../src/osx/cocoa/settings.mm; sourceTree = "<group>"; };
 		24BD2EF635673E819B8406CB /* LexRust.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexRust.cxx; path = ../../src/stc/scintilla/lexers/LexRust.cxx; sourceTree = "<group>"; };
+		24D4E0F51BA05FC200586317 /* stdpaths.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = stdpaths.mm; path = ../../src/osx/cocoa/stdpaths.mm; sourceTree = "<group>"; };
 		24DF23D67E693D999B875101 /* toolbkg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = toolbkg.cpp; path = ../../src/generic/toolbkg.cpp; sourceTree = "<group>"; };
 		24E82A05E9A9323287CDB15B /* artstd.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = artstd.cpp; path = ../../src/common/artstd.cpp; sourceTree = "<group>"; };
 		25A81E9028793C109D868068 /* xh_timectrl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_timectrl.cpp; path = ../../src/xrc/xh_timectrl.cpp; sourceTree = "<group>"; };
@@ -4237,7 +4236,6 @@
 		7A34C5BBBA543DC0A50DE1B6 /* event.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = event.cpp; path = ../../src/common/event.cpp; sourceTree = "<group>"; };
 		7A3F26F539473705AA82411D /* combobox.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = combobox.cpp; path = ../../src/osx/carbon/combobox.cpp; sourceTree = "<group>"; };
 		7AF8F8A78A5130DCB4D46729 /* LexCmake.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexCmake.cxx; path = ../../src/stc/scintilla/lexers/LexCmake.cxx; sourceTree = "<group>"; };
-		7B2DEE3EC7CE374DB0CE6EEA /* stdpaths_cf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stdpaths_cf.cpp; path = ../../src/osx/core/stdpaths_cf.cpp; sourceTree = "<group>"; };
 		7B389A14D6BF3AFD8CCE0807 /* protocol.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = protocol.cpp; path = ../../src/common/protocol.cpp; sourceTree = "<group>"; };
 		7BA6ADD758693BD180D3275B /* treebase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = treebase.cpp; path = ../../src/common/treebase.cpp; sourceTree = "<group>"; };
 		7C6CC76872BA32D2B61EB8AB /* libwx_baseu_xml.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libwx_baseu_xml.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -4630,7 +4628,6 @@
 		E5357E76650035639844D15B /* stringimpl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stringimpl.cpp; path = ../../src/common/stringimpl.cpp; sourceTree = "<group>"; };
 		E5A9B63746753EDFB2EC48D3 /* xh_frame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_frame.cpp; path = ../../src/xrc/xh_frame.cpp; sourceTree = "<group>"; };
 		E6AB648BC5173104A96CAE66 /* xml.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xml.cpp; path = ../../src/xml/xml.cpp; sourceTree = "<group>"; };
-		E6CC2B05353C3284B37B2DD7 /* settings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = settings.cpp; path = ../../src/osx/carbon/settings.cpp; sourceTree = "<group>"; };
 		E72CF5F9C1E53BCFAA2BC253 /* KeyMap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = KeyMap.cxx; path = ../../src/stc/scintilla/src/KeyMap.cxx; sourceTree = "<group>"; };
 		E72F0A2EE3DB34E193D8CCA7 /* LexLaTeX.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexLaTeX.cxx; path = ../../src/stc/scintilla/lexers/LexLaTeX.cxx; sourceTree = "<group>"; };
 		E78CBF86AAE637CB982B2EC0 /* LexMarkdown.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexMarkdown.cxx; path = ../../src/stc/scintilla/lexers/LexMarkdown.cxx; sourceTree = "<group>"; };
@@ -4697,7 +4694,6 @@
 		F83172EE2DAE352FB969D4F2 /* jcapistd.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jcapistd.c; path = ../../src/jpeg/jcapistd.c; sourceTree = "<group>"; };
 		F84F0DB790A23D92A193D2B4 /* http.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = http.cpp; path = ../../src/common/http.cpp; sourceTree = "<group>"; };
 		F8638A6CCF773CCFB70DFC29 /* xh_collpane.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_collpane.cpp; path = ../../src/xrc/xh_collpane.cpp; sourceTree = "<group>"; };
-		F8C1E6D73ABD3A219B2C0603 /* stdpaths.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stdpaths.cpp; path = ../../src/unix/stdpaths.cpp; sourceTree = "<group>"; };
 		FA59091E3ED83FB781FB9659 /* glcanvas_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = glcanvas_osx.cpp; path = ../../src/osx/glcanvas_osx.cpp; sourceTree = "<group>"; };
 		FA7029BB5751398AA02D8C24 /* imagtga.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imagtga.cpp; path = ../../src/common/imagtga.cpp; sourceTree = "<group>"; };
 		FADE850169F7347F83FE1499 /* xh_statbar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_statbar.cpp; path = ../../src/xrc/xh_statbar.cpp; sourceTree = "<group>"; };
@@ -5293,7 +5289,6 @@
 				2128AD8BD12E3F33AD57478E /* overlay.cpp */,
 				530DC2E26BF2313E8702AD43 /* popupwin.cpp */,
 				425BFA3FDB7D3EA7ADCE1087 /* renderer.cpp */,
-				E6CC2B05353C3284B37B2DD7 /* settings.cpp */,
 				E1F2E9C9052D3E53BBD17DE3 /* statbrma.cpp */,
 				00DA3D3EEF5E305CA73A1871 /* region.cpp */,
 				2AFC4A1CDA473688A590D19F /* utilscocoa.mm */,
@@ -5335,6 +5330,7 @@
 				835C22B71A0F3C469310E1E0 /* preferences.mm */,
 				C9E32802E8ED3E729FF34CFC /* printdlg.mm */,
 				CC2E24773D853A77B9FEFA4C /* scrolbar.mm */,
+				24AC00E61BA6C3900042A970 /* settings.mm */,
 				9B862D1027C4367BBF44420F /* slider.mm */,
 				3C4A7A93CAFC3E22A2A5F7F3 /* spinbutt.mm */,
 				14EF4B028AD63B4A885D29A1 /* srchctrl.mm */,
@@ -5954,7 +5950,6 @@
 				7C97C1F26B5A38C49543060C /* mimetype.cpp */,
 				5168ADF7BE39351F8F24E1E6 /* cfstring.cpp */,
 				5BD6231188AB329CAA5E1171 /* evtloop_cf.cpp */,
-				7B2DEE3EC7CE374DB0CE6EEA /* stdpaths_cf.cpp */,
 				D5F9383D1CE931499F339D85 /* strconv_cf.cpp */,
 				81390F96937631078EFCD891 /* utilsexc_base.cpp */,
 				47F784C2BB5A3B5DAD276583 /* fdiodispatcher.cpp */,
@@ -5967,7 +5962,6 @@
 				3B548B1FF2A238809315C8A9 /* fdiounix.cpp */,
 				3D5D8B68EA743F6E97ADF612 /* snglinst.cpp */,
 				EA2520F427493A22A70A5C09 /* stackwalk.cpp */,
-				F8C1E6D73ABD3A219B2C0603 /* stdpaths.cpp */,
 				0CB2CC8E60833A6993BEA321 /* timerunx.cpp */,
 				AB466912FDA23F8B87A00A3C /* threadpsx.cpp */,
 				DC75C7251C1732B0B07C7BD3 /* utilsunx.cpp */,
@@ -5980,6 +5974,7 @@
 				4188821BBA833CCAA678B234 /* utilscmn.cpp */,
 				789F45D14FF23E248FCFB5FA /* utils.mm */,
 				60DFD5962DE3379F801AF78F /* power.mm */,
+				24D4E0F51BA05FC200586317 /* stdpaths.mm */,
 			);
 			name = base;
 			sourceTree = "<group>";
@@ -7358,7 +7353,6 @@
 				4657E7382E9E3EDC8DE24020 /* mimetype.cpp in Sources */,
 				1DBDF75500D73A3098015E81 /* cfstring.cpp in Sources */,
 				9FBC642677C63D01AA2511BE /* evtloop_cf.cpp in Sources */,
-				13250B531B1B3F9998C59DAB /* stdpaths_cf.cpp in Sources */,
 				AAAB5DF8E60736D88273DD00 /* strconv_cf.cpp in Sources */,
 				4E140367282F38C8A904A006 /* utilsexc_base.cpp in Sources */,
 				D36E76A4CAF5352D9397E201 /* fdiodispatcher.cpp in Sources */,
@@ -7367,11 +7361,11 @@
 				403FBA20CEFE3EAFB4E6B907 /* dir.cpp in Sources */,
 				20BEEFFA08F3396791596872 /* dlunix.cpp in Sources */,
 				CBBD7B32DB7B3E24AE745D7A /* epolldispatcher.cpp in Sources */,
+				24D4E0F81BA05FC200586317 /* stdpaths.mm in Sources */,
 				D18E2985C48733B2B7B3D444 /* evtloopunix.cpp in Sources */,
 				3D22FC202D903007AEE3D166 /* fdiounix.cpp in Sources */,
 				4B88254FF9963833A276A64E /* snglinst.cpp in Sources */,
 				5F78DB0417BF3CE1B4E35C81 /* stackwalk.cpp in Sources */,
-				E8F0C87119C63E8E81423A7E /* stdpaths.cpp in Sources */,
 				2F35A207C3993DE08E4FE0B2 /* timerunx.cpp in Sources */,
 				F5D2146C94E733FAAB6D286C /* threadpsx.cpp in Sources */,
 				B5C7FD8C27F43F3289A77FCB /* utilsunx.cpp in Sources */,
@@ -7455,6 +7449,7 @@
 				A3321FE2A87D3BD69E0BB00B /* notebook_osx.cpp in Sources */,
 				0C9A379D97B133FA831175A9 /* printdlg_osx.cpp in Sources */,
 				B1775EF7C72233408044034D /* radiobox_osx.cpp in Sources */,
+				24AC00E91BA6C3900042A970 /* settings.mm in Sources */,
 				6A081BF19747385CB4C18781 /* radiobut_osx.cpp in Sources */,
 				DF8CE011EAC23F73BDA1C44F /* scrolbar_osx.cpp in Sources */,
 				27E73CA5C35A30CE89946ECC /* slider_osx.cpp in Sources */,
@@ -7491,7 +7486,6 @@
 				CD2A9111B8A83AFA8B5B97E7 /* overlay.cpp in Sources */,
 				805CCAE64D023561AD334B55 /* popupwin.cpp in Sources */,
 				6832385DDBB33D1B90C73CBC /* renderer.cpp in Sources */,
-				437519A6002A3A0FB2C9A8FE /* settings.cpp in Sources */,
 				F6A1AC5CF84E32C19F91A616 /* statbrma.cpp in Sources */,
 				D070C3BE95483FE38BABA1C0 /* region.cpp in Sources */,
 				07158EBC05A637ECA9DC7B51 /* utilscocoa.mm in Sources */,
@@ -8063,7 +8057,6 @@
 				4657E7382E9E3EDC8DE2401F /* mimetype.cpp in Sources */,
 				1DBDF75500D73A3098015E80 /* cfstring.cpp in Sources */,
 				9FBC642677C63D01AA2511BD /* evtloop_cf.cpp in Sources */,
-				13250B531B1B3F9998C59DAA /* stdpaths_cf.cpp in Sources */,
 				AAAB5DF8E60736D88273DCFF /* strconv_cf.cpp in Sources */,
 				4E140367282F38C8A904A005 /* utilsexc_base.cpp in Sources */,
 				D36E76A4CAF5352D9397E200 /* fdiodispatcher.cpp in Sources */,
@@ -8076,7 +8069,6 @@
 				3D22FC202D903007AEE3D165 /* fdiounix.cpp in Sources */,
 				4B88254FF9963833A276A64D /* snglinst.cpp in Sources */,
 				5F78DB0417BF3CE1B4E35C80 /* stackwalk.cpp in Sources */,
-				E8F0C87119C63E8E81423A7D /* stdpaths.cpp in Sources */,
 				2F35A207C3993DE08E4FE0B1 /* timerunx.cpp in Sources */,
 				F5D2146C94E733FAAB6D286B /* threadpsx.cpp in Sources */,
 				B5C7FD8C27F43F3289A77FCA /* utilsunx.cpp in Sources */,
@@ -8163,7 +8155,6 @@
 				CD2A9111B8A83AFA8B5B97E6 /* overlay.cpp in Sources */,
 				805CCAE64D023561AD334B54 /* popupwin.cpp in Sources */,
 				6832385DDBB33D1B90C73CBB /* renderer.cpp in Sources */,
-				437519A6002A3A0FB2C9A8FD /* settings.cpp in Sources */,
 				F6A1AC5CF84E32C19F91A615 /* statbrma.cpp in Sources */,
 				D070C3BE95483FE38BABA1BF /* region.cpp in Sources */,
 				07158EBC05A637ECA9DC7B50 /* utilscocoa.mm in Sources */,
@@ -8203,6 +8194,7 @@
 				9241AAE354C53190BF3D5BA4 /* radiobut.mm in Sources */,
 				8EE5A2467401365C8217AF30 /* preferences.mm in Sources */,
 				22E90F33B5C9308EBF37A701 /* printdlg.mm in Sources */,
+				24D4E0F71BA05FC200586317 /* stdpaths.mm in Sources */,
 				5303FA25D0773FAEB963D8E4 /* scrolbar.mm in Sources */,
 				30AEDF41EC5C374DBF96EFFC /* slider.mm in Sources */,
 				5DA146A9F7653F53BF5299E9 /* spinbutt.mm in Sources */,
@@ -8385,6 +8377,7 @@
 				B84642DA949638A189032CE7 /* http.cpp in Sources */,
 				6CA1BAEBBDB4336E9E201F96 /* protocol.cpp in Sources */,
 				E39021D3CDCD33BAA646B007 /* sckaddr.cpp in Sources */,
+				24AC00E81BA6C3900042A970 /* settings.mm in Sources */,
 				9F608A33D52D327FAA295625 /* sckfile.cpp in Sources */,
 				BCD81FD3D1EC305F801E1C1C /* sckipc.cpp in Sources */,
 				A3A898DA3114311EB7F02228 /* sckstrm.cpp in Sources */,
@@ -9255,7 +9248,6 @@
 				4657E7382E9E3EDC8DE2401E /* mimetype.cpp in Sources */,
 				1DBDF75500D73A3098015E7F /* cfstring.cpp in Sources */,
 				9FBC642677C63D01AA2511BC /* evtloop_cf.cpp in Sources */,
-				13250B531B1B3F9998C59DA9 /* stdpaths_cf.cpp in Sources */,
 				AAAB5DF8E60736D88273DCFE /* strconv_cf.cpp in Sources */,
 				4E140367282F38C8A904A004 /* utilsexc_base.cpp in Sources */,
 				D36E76A4CAF5352D9397E1FF /* fdiodispatcher.cpp in Sources */,
@@ -9268,7 +9260,6 @@
 				3D22FC202D903007AEE3D164 /* fdiounix.cpp in Sources */,
 				4B88254FF9963833A276A64C /* snglinst.cpp in Sources */,
 				5F78DB0417BF3CE1B4E35C7F /* stackwalk.cpp in Sources */,
-				E8F0C87119C63E8E81423A7C /* stdpaths.cpp in Sources */,
 				2F35A207C3993DE08E4FE0B0 /* timerunx.cpp in Sources */,
 				F5D2146C94E733FAAB6D286A /* threadpsx.cpp in Sources */,
 				B5C7FD8C27F43F3289A77FC9 /* utilsunx.cpp in Sources */,
@@ -9355,7 +9346,6 @@
 				CD2A9111B8A83AFA8B5B97E5 /* overlay.cpp in Sources */,
 				805CCAE64D023561AD334B53 /* popupwin.cpp in Sources */,
 				6832385DDBB33D1B90C73CBA /* renderer.cpp in Sources */,
-				437519A6002A3A0FB2C9A8FC /* settings.cpp in Sources */,
 				F6A1AC5CF84E32C19F91A614 /* statbrma.cpp in Sources */,
 				D070C3BE95483FE38BABA1BE /* region.cpp in Sources */,
 				07158EBC05A637ECA9DC7B4F /* utilscocoa.mm in Sources */,
@@ -9395,6 +9385,7 @@
 				9241AAE354C53190BF3D5BA3 /* radiobut.mm in Sources */,
 				8EE5A2467401365C8217AF2F /* preferences.mm in Sources */,
 				22E90F33B5C9308EBF37A700 /* printdlg.mm in Sources */,
+				24D4E0F61BA05FC200586317 /* stdpaths.mm in Sources */,
 				5303FA25D0773FAEB963D8E3 /* scrolbar.mm in Sources */,
 				30AEDF41EC5C374DBF96EFFB /* slider.mm in Sources */,
 				5DA146A9F7653F53BF5299E8 /* spinbutt.mm in Sources */,
@@ -9577,6 +9568,7 @@
 				B84642DA949638A189032CE6 /* http.cpp in Sources */,
 				6CA1BAEBBDB4336E9E201F95 /* protocol.cpp in Sources */,
 				E39021D3CDCD33BAA646B006 /* sckaddr.cpp in Sources */,
+				24AC00E71BA6C3900042A970 /* settings.mm in Sources */,
 				9F608A33D52D327FAA295624 /* sckfile.cpp in Sources */,
 				BCD81FD3D1EC305F801E1C1B /* sckipc.cpp in Sources */,
 				A3A898DA3114311EB7F02227 /* sckstrm.cpp in Sources */,

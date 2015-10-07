@@ -62,6 +62,7 @@ enum
     wxCONTROL_EXPANDED   = wxCONTROL_SPECIAL, // only for the tree items
     wxCONTROL_SIZEGRIP   = wxCONTROL_SPECIAL, // only for the status bar panes
     wxCONTROL_FLAT       = wxCONTROL_SPECIAL, // checkboxes only: flat border
+    wxCONTROL_CELL       = wxCONTROL_SPECIAL, // only for item selection rect
     wxCONTROL_CURRENT    = 0x00000010,  // mouse is currently over the control
     wxCONTROL_SELECTED   = 0x00000020,  // selected item in e.g. listbox
     wxCONTROL_CHECKED    = 0x00000040,  // (check/radio button) is checked
@@ -346,7 +347,8 @@ public:
                               const wxString& text,
                               const wxRect& rect,
                               int align = wxALIGN_LEFT | wxALIGN_TOP,
-                              int flags = 0) = 0;
+                              int flags = 0,
+                              wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END) = 0;
 
     // geometry functions
     // ------------------
@@ -548,8 +550,9 @@ public:
                               const wxString& text,
                               const wxRect& rect,
                               int align = wxALIGN_LEFT | wxALIGN_TOP,
-                              int flags = 0)
-        { m_rendererNative.DrawItemText(win, dc, text, rect, align, flags); }
+                              int flags = 0,
+                              wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END)
+        { m_rendererNative.DrawItemText(win, dc, text, rect, align, flags, ellipsizeMode); }
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
         { return m_rendererNative.GetSplitterParams(win); }

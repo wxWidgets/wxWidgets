@@ -3961,6 +3961,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\aui\tabartmsw.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\aui\tabmdi.h"
 				>
 			</File>

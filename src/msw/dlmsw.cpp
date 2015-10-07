@@ -32,40 +32,6 @@
 // private classes
 // ----------------------------------------------------------------------------
 
-// wrap some functions from version.dll: load them dynamically and provide a
-// clean interface
-class wxVersionDLL
-{
-public:
-    // load version.dll and bind to its functions
-    wxVersionDLL();
-
-    // return the file version as string, e.g. "x.y.z.w"
-    wxString GetFileVersion(const wxString& filename) const;
-
-private:
-    typedef DWORD (APIENTRY *GetFileVersionInfoSize_t)(PTSTR, PDWORD);
-    typedef BOOL (APIENTRY *GetFileVersionInfo_t)(PTSTR, DWORD, DWORD, PVOID);
-    typedef BOOL (APIENTRY *VerQueryValue_t)(const PVOID, PTSTR, PVOID *, PUINT);
-
-    #define DO_FOR_ALL_VER_FUNCS(what)                                        \
-        what(GetFileVersionInfoSize);                                         \
-        what(GetFileVersionInfo);                                             \
-        what(VerQueryValue)
-
-    #define DECLARE_VER_FUNCTION(func) func ## _t m_pfn ## func
-
-    DO_FOR_ALL_VER_FUNCS(DECLARE_VER_FUNCTION);
-
-    #undef DECLARE_VER_FUNCTION
-
-
-    wxDynamicLibrary m_dll;
-
-
-    wxDECLARE_NO_COPY_CLASS(wxVersionDLL);
-};
-
 // class used to create wxDynamicLibraryDetails objects
 class WXDLLIMPEXP_BASE wxDynamicLibraryDetailsCreator
 {
@@ -74,87 +40,44 @@ public:
     struct EnumModulesProcParams
     {
         wxDynamicLibraryDetailsArray *dlls;
-        wxVersionDLL *verDLL;
     };
 
     static BOOL CALLBACK
     EnumModulesProc(const wxChar* name, DWORD64 base, ULONG size, PVOID data);
 };
 
-// ============================================================================
-// wxVersionDLL implementation
-// ============================================================================
-
 // ----------------------------------------------------------------------------
-// loading
+// DLL version operations
 // ----------------------------------------------------------------------------
 
-wxVersionDLL::wxVersionDLL()
-{
-    // don't give errors if DLL can't be loaded or used, we're prepared to
-    // handle it
-    wxLogNull noLog;
-
-    if ( m_dll.Load(wxT("version.dll"), wxDL_VERBATIM) )
-    {
-        // the functions we load have either 'A' or 'W' suffix depending on
-        // whether we're in ANSI or Unicode build
-        #ifdef UNICODE
-            #define SUFFIX L"W"
-        #else // ANSI
-            #define SUFFIX "A"
-        #endif // UNICODE/ANSI
-
-        #define LOAD_VER_FUNCTION(name)                                       \
-            m_pfn ## name = (name ## _t)m_dll.GetSymbol(wxT(#name SUFFIX));    \
-        if ( !m_pfn ## name )                                                 \
-        {                                                                     \
-            m_dll.Unload();                                                   \
-            return;                                                           \
-        }
-
-        DO_FOR_ALL_VER_FUNCS(LOAD_VER_FUNCTION);
-
-        #undef LOAD_VER_FUNCTION
-    }
-}
-
-// ----------------------------------------------------------------------------
-// wxVersionDLL operations
-// ----------------------------------------------------------------------------
-
-wxString wxVersionDLL::GetFileVersion(const wxString& filename) const
+static wxString GetFileVersion(const wxString& filename)
 {
     wxString ver;
-    if ( m_dll.IsLoaded() )
-    {
-        wxChar *pc = const_cast<wxChar *>((const wxChar*) filename.t_str());
+    wxChar *pc = const_cast<wxChar *>((const wxChar*) filename.t_str());
 
-        DWORD dummy;
-        DWORD sizeVerInfo = m_pfnGetFileVersionInfoSize(pc, &dummy);
-        if ( sizeVerInfo )
+    DWORD dummy;
+    DWORD sizeVerInfo = ::GetFileVersionInfoSize(pc, &dummy);
+    if ( sizeVerInfo )
+    {
+        wxCharBuffer buf(sizeVerInfo);
+        if ( ::GetFileVersionInfo(pc, 0, sizeVerInfo, buf.data()) )
         {
-            wxCharBuffer buf(sizeVerInfo);
-            if ( m_pfnGetFileVersionInfo(pc, 0, sizeVerInfo, buf.data()) )
+            void *pVer;
+            UINT sizeInfo;
+            if ( ::VerQueryValue(buf.data(),
+                                    const_cast<wxChar *>(wxT("\\")),
+                                    &pVer,
+                                    &sizeInfo) )
             {
-                void *pVer;
-                UINT sizeInfo;
-                if ( m_pfnVerQueryValue(buf.data(),
-                                        const_cast<wxChar *>(wxT("\\")),
-                                        &pVer,
-                                        &sizeInfo) )
-                {
-                    VS_FIXEDFILEINFO *info = (VS_FIXEDFILEINFO *)pVer;
-                    ver.Printf(wxT("%d.%d.%d.%d"),
-                               HIWORD(info->dwFileVersionMS),
-                               LOWORD(info->dwFileVersionMS),
-                               HIWORD(info->dwFileVersionLS),
-                               LOWORD(info->dwFileVersionLS));
-                }
+                VS_FIXEDFILEINFO *info = (VS_FIXEDFILEINFO *)pVer;
+                ver.Printf(wxT("%d.%d.%d.%d"),
+                            HIWORD(info->dwFileVersionMS),
+                            LOWORD(info->dwFileVersionMS),
+                            HIWORD(info->dwFileVersionLS),
+                            LOWORD(info->dwFileVersionLS));
             }
         }
     }
-    //else: we failed to load DLL, can't retrieve version info
 
     return ver;
 }
@@ -191,7 +114,7 @@ wxDynamicLibraryDetailsCreator::EnumModulesProc(const wxChar* name,
         if ( !fullname.empty() )
         {
             details->m_path = fullname;
-            details->m_version = params->verDLL->GetFileVersion(fullname);
+            details->m_version = GetFileVersion(fullname);
         }
     }
 
@@ -258,12 +181,8 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
 #if wxUSE_DBGHELP
     if ( wxDbgHelpDLL::Init() )
     {
-        // prepare to use functions for version info extraction
-        wxVersionDLL verDLL;
-
         wxDynamicLibraryDetailsCreator::EnumModulesProcParams params;
         params.dlls = &dlls;
-        params.verDLL = &verDLL;
 
         if ( !wxDbgHelpDLL::CallEnumerateLoadedModules
                             (

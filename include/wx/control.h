@@ -20,33 +20,10 @@
 #if wxUSE_CONTROLS
 
 #include "wx/window.h"      // base class
+#include "wx/gdicmn.h"      // wxEllipsize...
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxControlNameStr[];
 
-
-// ----------------------------------------------------------------------------
-// Ellipsize() constants
-// ----------------------------------------------------------------------------
-
-enum wxEllipsizeFlags
-{
-    wxELLIPSIZE_FLAGS_NONE = 0,
-    wxELLIPSIZE_FLAGS_PROCESS_MNEMONICS = 1,
-    wxELLIPSIZE_FLAGS_EXPAND_TABS = 2,
-
-    wxELLIPSIZE_FLAGS_DEFAULT = wxELLIPSIZE_FLAGS_PROCESS_MNEMONICS |
-                                wxELLIPSIZE_FLAGS_EXPAND_TABS
-};
-
-// NB: Don't change the order of these values, they're the same as in
-//     PangoEllipsizeMode enum.
-enum wxEllipsizeMode
-{
-    wxELLIPSIZE_NONE,
-    wxELLIPSIZE_START,
-    wxELLIPSIZE_MIDDLE,
-    wxELLIPSIZE_END
-};
 
 // ----------------------------------------------------------------------------
 // wxControl is the base class for all controls

@@ -69,7 +69,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/fdiounix.cpp
     src/unix/snglinst.cpp
     src/unix/stackwalk.cpp
-    src/unix/stdpaths.cpp
     src/unix/timerunx.cpp
     src/unix/threadpsx.cpp
     src/unix/utilsunx.cpp
@@ -85,7 +84,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/unix/evtloop.h
     wx/unix/evtloopsrc.h
     wx/unix/pipe.h
-    wx/unix/stdpaths.h
     wx/unix/stackwalk.h
     wx/unix/tls.h
     wx/unix/fswatcher_kqueue.h
@@ -115,10 +113,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_UNIX_SRC" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
     src/unix/fswatcher_inotify.cpp
+    src/unix/stdpaths.cpp
 </set>
 <set var="BASE_UNIX_HDR" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
     wx/unix/fswatcher_inotify.h
+    wx/unix/stdpaths.h
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
@@ -181,7 +181,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_COREFOUNDATION_SRC" hints="files">
     src/osx/core/cfstring.cpp
     src/osx/core/evtloop_cf.cpp
-    src/osx/core/stdpaths_cf.cpp
     src/osx/core/strconv_cf.cpp
     src/osx/core/utilsexc_base.cpp
 </set>
@@ -212,11 +211,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_AND_GUI_OSX_CARBON_SRC" hints="files">
     src/osx/carbon/utils.cpp
     src/osx/carbon/uma.cpp
+    src/unix/stdpaths.cpp
+    src/osx/core/stdpaths_cf.cpp
 </set>
 
 <set var="BASE_AND_GUI_OSX_COCOA_SRC" hints="files">
     src/osx/cocoa/utils.mm
     src/osx/cocoa/power.mm
+    src/osx/cocoa/stdpaths.mm
 </set>
 
 <set var="BASE_AND_GUI_OSX_IPHONE_SRC" hints="files">
@@ -2289,7 +2291,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/overlay.cpp
     src/osx/carbon/popupwin.cpp
     src/osx/carbon/renderer.cpp
-    src/osx/carbon/settings.cpp
     src/osx/carbon/statbrma.cpp
     src/osx/carbon/region.cpp
     <!-- cocoa bridge -->
@@ -2454,6 +2455,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/toolbar.cpp
     src/osx/carbon/tooltip.cpp
     src/osx/carbon/window.cpp
+    src/osx/carbon/settings.cpp
 </set>
 
 <!-- wxMac Carbon header files -->
@@ -2510,6 +2512,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/toolbar.mm
     src/osx/cocoa/tooltip.mm
     src/osx/cocoa/window.mm
+    src/osx/cocoa/settings.mm
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
     wx/osx/cocoa/chkconf.h
@@ -3653,6 +3656,18 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         wx/aui/tabartgtk.h
     </if>
 </set>
+<set var="AUI_MSW_SRC" hints="files">
+    src/aui/tabartmsw.cpp
+</set>
+<set var="AUI_MSW_HDR" hints="files">
+    wx/aui/tabartmsw.h
+</set>
+<set var="AUI_PLATFORM_SRC" hints="files">
+    <if cond="TOOLKIT=='MSW'">$(AUI_MSW_SRC)</if>
+</set>
+<set var="AUI_PLATFORM_HDR" hints="files">
+    <if cond="TOOLKIT=='MSW'">$(AUI_MSW_HDR)</if>
+</set>
 <set var="AUI_CMN_SRC" hints="files">
     src/aui/framemanager.cpp
     src/aui/dockart.cpp
@@ -3667,6 +3682,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="AUI_SRC" hints="files">
     $(AUI_CMN_SRC)
     $(AUI_GTK_SRC)
+    $(AUI_PLATFORM_SRC)
 </set>
 <set var="AUI_CMN_HDR" hints="files">
     wx/aui/framemanager.h
@@ -3683,6 +3699,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="AUI_HDR" hints="files">
     $(AUI_CMN_HDR)
     $(AUI_GTK_HDR)
+    $(AUI_PLATFORM_HDR)
 </set>
 
 <!-- ====================================================================== -->

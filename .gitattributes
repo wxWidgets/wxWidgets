@@ -27,8 +27,12 @@
 configure.in eol=lf
 Makefile.am  eol=lf
 Makefile.in  eol=lf
+makefile.unx eol=lf
 
 config.guess eol=lf
 config.sub   eol=lf
 configure    eol=lf
 configure.in eol=lf
+
+# Ignore changes in the generated files.
+build/upmake    -diff

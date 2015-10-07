@@ -63,7 +63,7 @@ wxEventType wxEVT_NOTEBOOK_PAGE_CHANGING;
     @endStyleTable
 
     The styles wxNB_LEFT, RIGHT and BOTTOM are not supported under
-    Microsoft Windows XP when using visual themes.
+    Microsoft Windows when using visual themes.
 
     @beginEventEmissionTable{wxBookCtrlEvent}
     @event{EVT_NOTEBOOK_PAGE_CHANGED(id, func)}
@@ -78,7 +78,7 @@ wxEventType wxEVT_NOTEBOOK_PAGE_CHANGING;
 
     @section notebook_bg Page backgrounds
 
-    On Windows XP, the default theme paints a gradient on the notebook's pages.
+    On Windows, the default theme paints a background on the notebook's pages.
     If you wish to suppress this theme, for aesthetic or performance reasons,
     there are three ways of doing it.
     You can use @c wxNB_NOPAGETHEME to disable themed drawing for a particular

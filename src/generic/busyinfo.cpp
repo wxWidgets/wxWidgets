@@ -63,7 +63,11 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
                                                   wxDefaultSize,
                                                   wxALIGN_CENTRE);
         title->SetFont(title->GetFont().Scaled(2));
+#if wxUSE_MARKUP
         title->SetLabelMarkup(flags.m_title);
+#else
+        title->SetLabelText(flags.m_title);
+#endif
 
         sizer->Add(title, wxSizerFlags().DoubleBorder().Expand());
     }

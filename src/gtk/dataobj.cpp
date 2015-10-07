@@ -235,7 +235,7 @@ wxTextDataObject::GetAllFormats(wxDataFormat *formats,
 
 bool wxFileDataObject::GetDataHere(void *buf) const
 {
-    char* out = reinterpret_cast<char*>(buf);
+    char* out = static_cast<char*>(buf);
 
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
@@ -243,10 +243,11 @@ bool wxFileDataObject::GetDataHere(void *buf) const
         if (uri)
         {
             size_t const len = strlen(uri);
-            strcpy(out, uri);
+            memcpy(out, uri, len);
             out += len;
             *(out++) = '\r';
             *(out++) = '\n';
+            g_free(uri);
         }
     }
     *out = 0;

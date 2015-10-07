@@ -227,31 +227,13 @@ wxString wxAssocQueryString(ASSOCSTR assoc,
                             wxString ext,
                             const wxString& verb = wxString())
 {
-    typedef HRESULT (WINAPI *AssocQueryString_t)(ASSOCF, ASSOCSTR,
-                                                  LPCTSTR, LPCTSTR, LPTSTR,
-                                                  DWORD *);
-    static AssocQueryString_t s_pfnAssocQueryString = (AssocQueryString_t)-1;
-    static wxDynamicLibrary s_dllShlwapi;
-
-    if ( s_pfnAssocQueryString == (AssocQueryString_t)-1 )
-    {
-        if ( !s_dllShlwapi.Load(wxT("shlwapi.dll"), wxDL_VERBATIM | wxDL_QUIET) )
-            s_pfnAssocQueryString = NULL;
-        else
-            wxDL_INIT_FUNC_AW(s_pfn, AssocQueryString, s_dllShlwapi);
-    }
-
-    if ( !s_pfnAssocQueryString )
-        return wxString();
-
-
     DWORD dwSize = MAX_PATH;
     TCHAR bufOut[MAX_PATH] = { 0 };
 
     if ( ext.empty() || ext[0] != '.' )
         ext.Prepend('.');
 
-    HRESULT hr = s_pfnAssocQueryString
+    HRESULT hr = ::AssocQueryString
                  (
                     wxASSOCF_NOTRUNCATE,// Fail if buffer is too small.
                     assoc,              // The association to retrieve.

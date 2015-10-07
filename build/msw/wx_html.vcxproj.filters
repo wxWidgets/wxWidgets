@@ -33,6 +33,9 @@
     <ClCompile Include="..\..\src\generic\htmllbox.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\html\chm.cpp">
+      <Filter>wxHTML Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\html\helpctrl.cpp">
       <Filter>wxHTML Sources</Filter>
     </ClCompile>
