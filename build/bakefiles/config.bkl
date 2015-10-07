@@ -3,7 +3,7 @@
 <makefile>
 
     <set var="IS_MSVC_PRJ">
-        $(FORMAT in ['msvc6prj','msevc4prj','msvs2003prj','msvs2005prj','msvs2008prj'])
+        $(FORMAT in ['msvc6prj','msvs2003prj','msvs2005prj','msvs2008prj'])
     </set>
     <set var="IS_MSVC">
         $(IS_MSVC_PRJ=='1' or FORMAT=='msvc')
@@ -54,7 +54,7 @@
             </description>
         </option>
 
-        <if cond="FORMAT not in ['autoconf','msvc6prj','msevc4prj','msvs2003prj','msvs2005prj','msvs2008prj']">
+        <if cond="FORMAT not in ['autoconf','msvc6prj','msvs2003prj','msvs2005prj','msvs2008prj']">
             <option name="TOOLKIT_VERSION">
                 <values>,2</values>
                 <values-description>,2</values-description>
@@ -462,12 +462,12 @@ it if SHARED=1 unless you know what you are doing.
         <set var="TOOLKIT" overwrite="0">
             <if cond="FORMAT=='msvs2005prj' and MSVS_PLATFORMS=='win32,win64'">$(WIN32_TOOLKIT)</if>
             <if cond="FORMAT=='msvs2008prj' and MSVS_PLATFORMS=='win32,win64'">$(WIN32_TOOLKIT)</if>
-            <if cond="FORMAT not in ['msevc4prj','msvs2005prj','msvs2008prj'] and PLATFORM_WIN32=='1'">$(WIN32_TOOLKIT)</if>
+            <if cond="FORMAT not in ['msvs2005prj','msvs2008prj'] and PLATFORM_WIN32=='1'">$(WIN32_TOOLKIT)</if>
         </set>
         <set var="TOOLKIT_LOWERCASE">
             <if cond="FORMAT=='msvs2005prj' and MSVS_PLATFORMS=='win32,win64'">$(WIN32_TOOLKIT_LOWERCASE)</if>
             <if cond="FORMAT=='msvs2008prj' and MSVS_PLATFORMS=='win32,win64'">$(WIN32_TOOLKIT_LOWERCASE)</if>
-            <if cond="FORMAT not in ['msevc4prj','msvs2005prj','msvs2008prj'] and PLATFORM_WIN32=='1'">$(WIN32_TOOLKIT_LOWERCASE)</if>
+            <if cond="FORMAT not in ['msvs2005prj','msvs2008prj'] and PLATFORM_WIN32=='1'">$(WIN32_TOOLKIT_LOWERCASE)</if>
         </set>
         <if cond="FORMAT in ['msvc6prj','msvs2003prj','msvs2005prj','msvs2008prj']">
             <set var="TOOLKIT_VERSION">
