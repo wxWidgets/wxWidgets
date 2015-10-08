@@ -1265,7 +1265,10 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 
 bool wxCheckOsVersion(int majorVsn, int minorVsn)
 {
-    OSVERSIONINFOEX osvi = { sizeof(osvi), 0, 0, 0, 0, { 0 }, 0, 0 };
+    OSVERSIONINFOEX osvi;
+    wxZeroMemory(osvi);
+    osvi.dwOSVersionInfoSize = sizeof(osvi);
+
     DWORDLONG const dwlConditionMask =
         ::VerSetConditionMask(
         ::VerSetConditionMask(
@@ -1341,7 +1344,7 @@ wxWinVersion wxGetWinVersion()
 
                     }
                     break;
-                    
+
                 case 10:
                     return wxWinVersion_10;
             }

@@ -742,6 +742,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
         wxASSERT_MSG( !inExistingGroup || item->GetKind() == wxITEM_RADIO,
                       wxT("Removing non radio button from radio group?") );
+        wxUnusedVar(inExistingGroup);
     }
 
     // remove the item from the menu
