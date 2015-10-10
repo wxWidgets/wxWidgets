@@ -301,6 +301,8 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
     m_frameToolBar = toolbar;
     if (toolbar)
     {
+        gtk_container_remove(
+            GTK_CONTAINER(gtk_widget_get_parent(toolbar->m_widget)), toolbar->m_widget);
         if (toolbar->IsVertical())
         {
             // Vertical toolbar and m_wxwindow go into an hbox, inside the
@@ -316,9 +318,7 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
                 gtk_box_pack_start(GTK_BOX(hbox), m_wxwindow, true, true, 0);
                 g_object_unref(m_wxwindow);
             }
-            gtk_widget_reparent(toolbar->m_widget, hbox);
-            gtk_box_set_child_packing(GTK_BOX(hbox),
-                toolbar->m_widget, false, false, 0, GTK_PACK_START);
+            gtk_box_pack_start(GTK_BOX(hbox), toolbar->m_widget, false, false, 0);
 
             int pos = 0;  // left
             if (toolbar->HasFlag(wxTB_RIGHT))
@@ -328,9 +328,7 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
         else
         {
             // Horizontal toolbar goes into vbox (m_mainWidget)
-            gtk_widget_reparent(toolbar->m_widget, m_mainWidget);
-            gtk_box_set_child_packing(GTK_BOX(m_mainWidget),
-                toolbar->m_widget, false, false, 0, GTK_PACK_START);
+            gtk_box_pack_start(GTK_BOX(m_mainWidget), toolbar->m_widget, false, false, 0);
 
             int pos = 0;  // top
             if (m_frameMenuBar)
@@ -358,9 +356,9 @@ void wxFrame::SetStatusBar(wxStatusBar *statbar)
     if (statbar)
     {
         // statusbar goes into bottom of vbox (m_mainWidget)
-        gtk_widget_reparent(statbar->m_widget, m_mainWidget);
-        gtk_box_set_child_packing(GTK_BOX(m_mainWidget),
-            statbar->m_widget, false, false, 0, GTK_PACK_END);
+        gtk_container_remove(
+            GTK_CONTAINER(gtk_widget_get_parent(statbar->m_widget)), statbar->m_widget);
+        gtk_box_pack_end(GTK_BOX(m_mainWidget), statbar->m_widget, false, false, 0);
         // make sure next size_allocate on statusbar causes a size event
         statbar->m_useCachedClientSize = false;
         statbar->m_clientWidth = 0;
