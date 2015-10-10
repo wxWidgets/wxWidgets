@@ -2211,9 +2211,6 @@ void wxBoxSizer::RecalcSizes()
         minMajorSize += GetSizeInMajorDir(item->GetMinSizeWithBorder());
     }
 
-    // update our min size have changed
-    SizeInMajorDir(m_minSize) = minMajorSize;
-
 
     // space and sum of proportions for the remaining items, both may change
     // below
