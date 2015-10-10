@@ -725,11 +725,16 @@ public:
     wxSizerItem* PrependStretchSpacer(int prop = 1);
 
     /**
-        This method is abstract and has to be overwritten by any derived class.
-        Here, the sizer will do the actual calculation of its children's
-        positions and sizes.
+        Method which must be overridden in the derived sizer classes.
+
+        The implementation should reposition the children using the current
+        total size available to the sizer (@c m_size) and the size computed by
+        the last call to CalcMin().
+
+        @since 3.1.0, before this version RecalcSizes() method not taking any
+            arguments had to be overridden in the derived classes instead.
     */
-    virtual void RecalcSizes() = 0;
+    virtual void RepositionChildren(const wxSize& minSize) = 0;
 
     /**
         Removes a child window from the sizer, but does @b not destroy it
