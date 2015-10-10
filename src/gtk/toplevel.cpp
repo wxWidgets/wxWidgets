@@ -857,7 +857,8 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
     m_fsIsShowing = show;
 
 #ifdef GDK_WINDOWING_X11
-    GdkDisplay *display = gtk_widget_get_display(m_widget);
+    GdkScreen* screen = gtk_widget_get_screen(m_widget);
+    GdkDisplay* display = gdk_screen_get_display(screen);
     Display* xdpy = NULL;
     Window xroot = None;
     wxX11FullScreenMethod method = wxX11_FS_WMSPEC;
@@ -865,7 +866,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
     if (GDK_IS_X11_DISPLAY(display))
     {
         xdpy = GDK_DISPLAY_XDISPLAY(display);
-        xroot = GDK_WINDOW_XID(gtk_widget_get_root_window(m_widget));
+        xroot = GDK_WINDOW_XID(gdk_screen_get_root_window(screen));
         method = wxGetFullScreenMethodX11(xdpy, (WXWindow)xroot);
     }
 
@@ -892,7 +893,6 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
             GetPosition( &m_fsSaveFrame.x, &m_fsSaveFrame.y );
             GetSize( &m_fsSaveFrame.width, &m_fsSaveFrame.height );
 
-            GdkScreen* screen = gtk_widget_get_screen(m_widget);
             const int screen_width = gdk_screen_get_width(screen);
             const int screen_height = gdk_screen_get_height(screen);
 
