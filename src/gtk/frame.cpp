@@ -338,7 +338,10 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
                 hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
                 gtk_widget_show(hbox);
                 gtk_box_pack_start(GTK_BOX(m_mainWidget), hbox, true, true, 0);
-                gtk_widget_reparent(m_wxwindow, hbox);
+                g_object_ref(m_wxwindow);
+                gtk_container_remove(GTK_CONTAINER(m_mainWidget), m_wxwindow);
+                gtk_box_pack_start(GTK_BOX(hbox), m_wxwindow, true, true, 0);
+                g_object_unref(m_wxwindow);
             }
             gtk_widget_reparent(toolbar->m_widget, hbox);
             gtk_box_set_child_packing(GTK_BOX(hbox),
