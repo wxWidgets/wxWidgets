@@ -733,7 +733,10 @@ void wxTreeListModel::DeleteItem(Node* item)
         previous->DeleteNext();
     }
 
-    ItemDeleted(ToDVI(parent), ToDVI(item));
+    // Note that the item is already deleted by now, so we can't use it in any
+    // way, e.g. by calling ToDVI(item) which does dereference the pointer, but
+    // ToNonRootDVI() that we use here does not.
+    ItemDeleted(ToDVI(parent), ToNonRootDVI(item));
 }
 
 void wxTreeListModel::DeleteAllItems()
