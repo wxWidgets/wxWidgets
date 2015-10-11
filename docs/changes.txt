@@ -589,6 +589,7 @@ Unix:
 All (GUI):
 
 - Fix hang when deleting columns from wxTreeListCtrl.
+- Fix crash when deleting items from wxTreeListCtrl (Rexxar).
 - Allow requesting modern (3.x+) OpenGL version in wxGLCanvas (Fabio Arnold).
 - Allow using Ctrl-dragging to add to selection in wxGrid (Knut Petter Lehre).
 - Fix several floating point rounding bugs in wxPropertyGrid (Artur Wieczorek).
