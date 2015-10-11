@@ -1569,6 +1569,7 @@ wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEvent );
 wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_DROP, wxDataViewEvent );
 
 
+#if wxUSE_SPINCTRL
 
 // -------------------------------------
 // wxDataViewSpinRenderer
@@ -1637,6 +1638,8 @@ bool wxDataViewSpinRenderer::GetValue( wxVariant &value ) const
     value = m_data;
     return true;
 }
+
+#endif // wxUSE_SPINCTRL
 
 // -------------------------------------
 // wxDataViewChoiceRenderer

@@ -358,6 +358,8 @@ private:
     #error "unknown native wxDataViewCtrl implementation"
 #endif
 
+#if wxUSE_SPINCTRL
+
 // ----------------------------------------------------------------------------
 // wxDataViewSpinRenderer
 // ----------------------------------------------------------------------------
@@ -380,6 +382,8 @@ private:
     long    m_data;
     long    m_min,m_max;
 };
+
+#endif // wxUSE_SPINCTRL
 
 #if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(__WXOSX_CARBON__)
 
