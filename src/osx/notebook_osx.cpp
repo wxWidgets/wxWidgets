@@ -30,8 +30,6 @@
 #define IS_VALID_PAGE(nPage) ((nPage) < GetPageCount())
 
 wxBEGIN_EVENT_TABLE(wxNotebook, wxBookCtrlBase)
-    EVT_NOTEBOOK_PAGE_CHANGED(wxID_ANY, wxNotebook::OnSelChange)
-
     EVT_SIZE(wxNotebook::OnSize)
     EVT_SET_FOCUS(wxNotebook::OnSetFocus)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
@@ -313,16 +311,6 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
-void wxNotebook::OnSelChange(wxBookCtrlEvent& event)
-{
-    // is it our tab control?
-    if ( event.GetEventObject() == this )
-        ChangePage(event.GetOldSelection(), event.GetSelection());
-
-    // we want to give others a chance to process this message as well
-    event.Skip();
-}
-
 void wxNotebook::OnSetFocus(wxFocusEvent& event)
 {
     // set focus to the currently selected page if any
@@ -465,21 +453,13 @@ bool wxNotebook::OSXHandleClicked( double WXUNUSED(timestampsec) )
     SInt32 newSel = GetPeer()->GetValue() - 1 ;
     if ( newSel != m_selection )
     {
-        wxBookCtrlEvent changing(
-            wxEVT_NOTEBOOK_PAGE_CHANGING, m_windowId,
-            newSel , m_selection );
-        changing.SetEventObject( this );
-        HandleWindowEvent( changing );
-
-        if ( changing.IsAllowed() )
+        if ( SendPageChangingEvent(newSel) )
         {
-            wxBookCtrlEvent event(
-                wxEVT_NOTEBOOK_PAGE_CHANGED, m_windowId,
-                newSel, m_selection );
-            event.SetEventObject( this );
-            HandleWindowEvent( event );
-
-            m_selection = newSel;
+            // m_selection is set to newSel in ChangePage()
+            // so store its value for event use.
+            int oldSel = m_selection;
+            ChangePage(oldSel, newSel);
+            SendPageChangedEvent(oldSel, newSel);
         }
         else
         {
