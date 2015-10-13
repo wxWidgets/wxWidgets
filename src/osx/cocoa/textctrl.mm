@@ -302,8 +302,9 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     // programmatically.
     if ( !wxMacEditHelper::IsCurrentEditor(self) )
     {
+        NSString *text = [str isKindOfClass:[NSAttributedString class]] ? [str string] : str;
         wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
-        if ( impl && lastKeyDownEvent && impl->DoHandleCharEvent(lastKeyDownEvent, str) )
+        if ( impl && lastKeyDownEvent && impl->DoHandleCharEvent(lastKeyDownEvent, text) )
             return;
     }
 
