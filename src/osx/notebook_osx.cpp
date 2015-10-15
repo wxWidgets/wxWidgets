@@ -100,11 +100,15 @@ int wxNotebook::DoSetSelection(size_t nPage, int flags)
                 return m_selection;
             }
             //else: program allows the page change
-
-            SendPageChangedEvent(m_selection, nPage);
         }
 
-        ChangePage(m_selection, nPage);
+        // m_selection is set to newSel in ChangePage()
+        // so store its value for event use.
+        int oldSelection = m_selection;
+        ChangePage(oldSelection, nPage);
+
+        if ( flags & SetSelection_SendEvent )
+            SendPageChangedEvent(oldSelection, nPage);
     }
     //else: no change
 
@@ -453,18 +457,8 @@ bool wxNotebook::OSXHandleClicked( double WXUNUSED(timestampsec) )
     SInt32 newSel = GetPeer()->GetValue() - 1 ;
     if ( newSel != m_selection )
     {
-        if ( SendPageChangingEvent(newSel) )
-        {
-            // m_selection is set to newSel in ChangePage()
-            // so store its value for event use.
-            int oldSel = m_selection;
-            ChangePage(oldSel, newSel);
-            SendPageChangedEvent(oldSel, newSel);
-        }
-        else
-        {
+        if ( DoSetSelection(newSel, SetSelection_SendEvent ) != newSel )
             GetPeer()->SetValue( m_selection + 1 ) ;
-        }
 
         status = true ;
     }
