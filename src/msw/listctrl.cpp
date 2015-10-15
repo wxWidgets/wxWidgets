@@ -1415,7 +1415,18 @@ bool wxListCtrl::DeleteAllItems()
 {
     // Calling ListView_DeleteAllItems() will always generate an event but we
     // shouldn't do it if the control is empty
-    return !GetItemCount() || ListView_DeleteAllItems(GetHwnd()) != 0;
+    if ( !GetItemCount() )
+        return true;
+
+    if ( !ListView_DeleteAllItems(GetHwnd()) )
+        return false;
+
+    // Virtual controls don't refresh their scrollbar position automatically,
+    // do it for them when clearing them.
+    if ( IsVirtual() )
+        Refresh();
+
+    return true;
 }
 
 // Deletes all items
