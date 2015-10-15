@@ -3499,7 +3499,8 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/carbon/region.h \
 	wx/osx/carbon/statbmp.h \
 	wx/osx/carbon/uma.h \
-	wx/generic/region.h
+	wx/generic/region.h \
+	wx/osx/cocoa/stdpaths.h
 @COND_TOOLKIT_OSX_COCOA@GUI_HDR = $(COND_TOOLKIT_OSX_COCOA_GUI_HDR)
 COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/html/webkit.h \

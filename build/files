@@ -2154,6 +2154,7 @@ OSX_COCOA_HDR =
     wx/osx/cocoa/chkconf.h
     wx/osx/cocoa/evtloop.h
     wx/osx/cocoa/private.h
+    wx/osx/cocoa/stdpaths.h
     $(OSX_CARBON_HDR) # FIXME: these headers need moved somewhere shared...
     wx/generic/region.h
 

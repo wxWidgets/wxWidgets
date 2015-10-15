@@ -2520,6 +2520,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/cocoa/private.h
     $(OSX_CARBON_HDR) <!-- FIXME: these headers need moved somewhere shared... -->
     wx/generic/region.h
+    wx/osx/cocoa/stdpaths.h
 </set>
 
 <!-- ====================================================================== -->
