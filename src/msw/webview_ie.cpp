@@ -281,8 +281,8 @@ wxString wxWebViewIE::GetPageSource() const
             if(SUCCEEDED(hr))
             {
                 BSTR bstr;
-                htmlTag->get_outerHTML(&bstr);
-                source = wxString(bstr);
+                if ( htmlTag->get_outerHTML(&bstr) == S_OK )
+                    source = wxString(bstr);
             }
         }
         return source;
@@ -622,16 +622,15 @@ wxString wxWebViewIE::GetCurrentTitle() const
 {
     wxCOMPtr<IHTMLDocument2> document(GetDocument());
 
+    wxString s;
     if(document)
     {
         BSTR title;
-        document->get_nameProp(&title);
-        return wxString(title);
+        if ( document->get_nameProp(&title) == S_OK )
+            s = title;
     }
-    else
-    {
-        return "";
-    }
+
+    return s;
 }
 
 bool wxWebViewIE::CanCut() const
@@ -756,16 +755,13 @@ bool wxWebViewIE::IsEditable() const
     if(document)
     {
         BSTR mode;
-        document->get_designMode(&mode);
-        if(wxString(mode) == "On")
-            return true;
-        else
-            return false;
+        if ( document->get_designMode(&mode) == S_OK )
+        {
+            if ( wxString(mode) == "On" )
+                return true;
+        }
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 void wxWebViewIE::SelectAll()
@@ -785,8 +781,8 @@ bool wxWebViewIE::HasSelection() const
         if(SUCCEEDED(hr))
         {
             BSTR type;
-            selection->get_type(&type);
-            sel = wxString(type);
+            if ( selection->get_type(&type) == S_OK )
+                sel = wxString(type);
         }
         return sel != "None";
     }
@@ -821,8 +817,8 @@ wxString wxWebViewIE::GetSelectedText() const
                 if(SUCCEEDED(hr))
                 {
                     BSTR text;
-                    range->get_text(&text);
-                    selected = wxString(text);
+                    if ( range->get_text(&text) == S_OK )
+                        selected = wxString(text);
                 }
             }
         }
@@ -854,8 +850,8 @@ wxString wxWebViewIE::GetSelectedSource() const
                 if(SUCCEEDED(hr))
                 {
                     BSTR text;
-                    range->get_htmlText(&text);
-                    selected = wxString(text);
+                    if ( range->get_htmlText(&text) == S_OK )
+                        selected = wxString(text);
                 }
             }
         }
@@ -895,8 +891,8 @@ wxString wxWebViewIE::GetPageText() const
         if(SUCCEEDED(hr))
         {
             BSTR out;
-            body->get_innerText(&out);
-            text = wxString(out);
+            if ( body->get_innerText(&out) == S_OK )
+                text = wxString(out);
         }
         return text;
     }
