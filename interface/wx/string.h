@@ -745,14 +745,16 @@ public:
         Use mb_str() or utf8_str() to convert to other encodings.
         
         @param replaceWith
-            The Character that will replace found unicode character. defaults to underscore "_"
+            The character that will replace found unicode character. 
+            Defaults to underscore "_".
+            This parameter is new since wxWidgets 3.1.0.
     */
-    const char* ToAscii(const char replaceWith) const;
+    const char* ToAscii(char replaceWith) const;
 
     /**
         @overload
     */
-    const wxCharBuffer ToAscii(const char replaceWith) const;
+    const wxCharBuffer ToAscii(char replaceWith) const;
 
     /**
         Return the string as an std::string in current locale encoding.
