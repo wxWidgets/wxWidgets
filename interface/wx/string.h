@@ -743,13 +743,16 @@ public:
         (underscore) character.
 
         Use mb_str() or utf8_str() to convert to other encodings.
+        
+        @param replaceWith
+            The Character that will replace found unicode character. defaults to underscore "_"
     */
-    const char* ToAscii() const;
+    const char* ToAscii(const char replaceWith) const;
 
     /**
         @overload
     */
-    const wxCharBuffer ToAscii() const;
+    const wxCharBuffer ToAscii(const char replaceWith) const;
 
     /**
         Return the string as an std::string in current locale encoding.
