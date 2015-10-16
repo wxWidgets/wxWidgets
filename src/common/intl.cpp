@@ -176,7 +176,7 @@ wxString wxLanguageInfo::GetLocaleName() const
 // ----------------------------------------------------------------------------
 
 #include "wx/arrimpl.cpp"
-WX_DECLARE_EXPORTED_OBJARRAY(wxLanguageInfo, wxLanguageInfoArray);
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxLanguageInfo, wxLanguageInfoArray, WXDLLIMPEXP_BASE);
 WX_DEFINE_OBJARRAY(wxLanguageInfoArray)
 
 wxLanguageInfoArray *wxLocale::ms_languagesDB = NULL;
