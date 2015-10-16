@@ -1556,7 +1556,7 @@ public:
     static wxString FromAscii(const char *ascii, size_t len);
     static wxString FromAscii(const char *ascii);
     static wxString FromAscii(char ascii);
-    const wxScopedCharBuffer wxString::ToAscii(const char replaceWith='_') const;
+    const wxScopedCharBuffer ToAscii(const char replaceWith='_') const;
 #else // ANSI
     static wxString FromAscii(const char *ascii) { return wxString( ascii ); }
     static wxString FromAscii(const char *ascii, size_t len)
