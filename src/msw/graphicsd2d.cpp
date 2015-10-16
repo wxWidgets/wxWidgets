@@ -3476,7 +3476,9 @@ wxD2DRenderer::wxD2DRenderer()
     result = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &m_direct2dFactory);
 
     if (FAILED(result))
+    {
         wxFAIL_MSG("Could not create Direct2D Factory.");
+    }
 }
 
 wxD2DRenderer::~wxD2DRenderer()
