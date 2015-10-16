@@ -1205,7 +1205,7 @@ wxString wxString::FromAscii(char ascii)
     return wxString(wxUniChar((wchar_t)c));
 }
 
-const wxScopedCharBuffer wxString::ToAscii(const char replaceWith) const
+const wxScopedCharBuffer wxString::ToAscii(char replaceWith) const
 {
     // this will allocate enough space for the terminating NUL too
     wxCharBuffer buffer(length());
