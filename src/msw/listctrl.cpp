@@ -301,6 +301,7 @@ void wxListCtrl::MSWSetExListStyles()
 #endif
         LVS_EX_FULLROWSELECT |
         LVS_EX_SUBITEMIMAGES |
+        LVS_EX_DOUBLEBUFFER |
         // normally this should be governed by a style as it's probably not
         // always appropriate, but we don't have any free styles left and
         // it seems better to enable it by default than disable
