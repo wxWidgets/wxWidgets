@@ -738,10 +738,12 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
     // Update indices of radio groups.
     if ( m_radioData )
     {
-        bool inExistingGroup = m_radioData->UpdateOnRemoveItem(pos);
-
-        wxASSERT_MSG( !inExistingGroup || item->GetKind() == wxITEM_RADIO,
-                      wxT("Removing non radio button from radio group?") );
+        if ( m_radioData->UpdateOnRemoveItem(pos) )
+        {
+            wxASSERT_MSG( item->GetKind() == wxITEM_RADIO,
+                          wxT("Removing non radio button from radio group?") );
+        }
+        //else: item being removed is not in a radio group
     }
 
     // remove the item from the menu
