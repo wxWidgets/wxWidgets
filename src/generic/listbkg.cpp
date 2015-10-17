@@ -165,7 +165,13 @@ void wxListbook::OnSize(wxSizeEvent& event)
     // the other one is not accounted for in client size computations)
     wxListView * const list = GetListView();
     if ( list )
+    {
         list->Arrange();
+
+        const int sel = GetSelection();
+        if ( sel != wxNOT_FOUND )
+            list->EnsureVisible(sel);
+    }
 
     event.Skip();
 }
