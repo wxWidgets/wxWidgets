@@ -580,6 +580,7 @@ Major new features in this release
 All:
 
 - Fix wxFileName::MakeRelativeTo() for directory relatively to itself.
+- Fix wxLocale::IsOk() return true even if setting the locale failed.
 
 Unix:
 
