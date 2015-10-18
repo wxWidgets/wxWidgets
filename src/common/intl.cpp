@@ -540,6 +540,11 @@ bool wxLocale::Init(int language, int flags)
     {
         wxLogWarning(_("Cannot set locale to language \"%s\"."), name.c_str());
 
+        // As we failed to change locale, there is no need to restore the
+        // previous one: it's still valid.
+        free(const_cast<char *>(m_pszOldLocale));
+        m_pszOldLocale = NULL;
+
         // continue nevertheless and try to load at least the translations for
         // this language
     }
@@ -1034,8 +1039,11 @@ wxLocale::~wxLocale()
     // restore old locale pointer
     wxSetLocale(m_pOldLocale);
 
-    wxSetlocale(LC_ALL, m_pszOldLocale);
-    free(const_cast<char *>(m_pszOldLocale));
+    if ( m_pszOldLocale )
+    {
+        wxSetlocale(LC_ALL, m_pszOldLocale);
+        free(const_cast<char *>(m_pszOldLocale));
+    }
 }
 
 
