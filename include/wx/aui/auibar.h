@@ -269,13 +269,15 @@ public:
     wxAuiToolBarArt() { }
     virtual ~wxAuiToolBarArt() { }
 
-    virtual wxAuiToolBarArt* Clone() = 0;
+    virtual wxAuiToolBarArt* Clone() const = 0;
     virtual void SetFlags(unsigned int flags) = 0;
-    virtual unsigned int GetFlags() = 0;
+    virtual unsigned int GetFlags() const = 0;
     virtual void SetFont(const wxFont& font) = 0;
-    virtual wxFont GetFont() = 0;
+    virtual wxFont GetFont() const = 0;
+    virtual void SetBackgroundColour(const wxColour& colour) = 0;
+    virtual wxColour GetBackgroundColour() const = 0;
     virtual void SetTextOrientation(int orientation) = 0;
-    virtual int GetTextOrientation() = 0;
+    virtual int GetTextOrientation() const = 0;
 
     virtual void DrawBackground(
                          wxDC& dc,
@@ -355,13 +357,15 @@ public:
     wxAuiDefaultToolBarArt();
     virtual ~wxAuiDefaultToolBarArt();
 
-    virtual wxAuiToolBarArt* Clone() wxOVERRIDE;
+    virtual wxAuiToolBarArt* Clone() const wxOVERRIDE;
     virtual void SetFlags(unsigned int flags) wxOVERRIDE;
-    virtual unsigned int GetFlags() wxOVERRIDE;
+    virtual unsigned int GetFlags() const wxOVERRIDE;
     virtual void SetFont(const wxFont& font) wxOVERRIDE;
-    virtual wxFont GetFont() wxOVERRIDE;
+    virtual wxFont GetFont() const wxOVERRIDE;
+    virtual void SetBackgroundColour(const wxColour& colour) wxOVERRIDE;
+    virtual wxColour GetBackgroundColour() const wxOVERRIDE;
     virtual void SetTextOrientation(int orientation) wxOVERRIDE;
-    virtual int GetTextOrientation() wxOVERRIDE;
+    virtual int GetTextOrientation() const wxOVERRIDE;
 
     virtual void DrawBackground(
                 wxDC& dc,
@@ -481,6 +485,7 @@ public:
     wxAuiToolBarArt* GetArtProvider() const;
 
     bool SetFont(const wxFont& font) wxOVERRIDE;
+    bool SetBackgroundColour(const wxColour &colour) wxOVERRIDE;
 
 
     wxAuiToolBarItem* AddTool(int toolId,

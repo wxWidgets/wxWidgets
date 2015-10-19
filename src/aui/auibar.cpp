@@ -166,7 +166,7 @@ wxAuiDefaultToolBarArt::~wxAuiDefaultToolBarArt()
 }
 
 
-wxAuiToolBarArt* wxAuiDefaultToolBarArt::Clone()
+wxAuiToolBarArt* wxAuiDefaultToolBarArt::Clone() const
 {
     return static_cast<wxAuiToolBarArt*>(new wxAuiDefaultToolBarArt);
 }
@@ -181,22 +181,32 @@ void wxAuiDefaultToolBarArt::SetFont(const wxFont& font)
     m_font = font;
 }
 
+void wxAuiDefaultToolBarArt::SetBackgroundColour(const wxColour& colour)
+{
+  m_baseColour = colour;
+}
+
 void wxAuiDefaultToolBarArt::SetTextOrientation(int orientation)
 {
     m_textOrientation = orientation;
 }
 
-unsigned int wxAuiDefaultToolBarArt::GetFlags()
+unsigned int wxAuiDefaultToolBarArt::GetFlags() const
 {
     return m_flags;
 }
 
-wxFont wxAuiDefaultToolBarArt::GetFont()
+wxFont wxAuiDefaultToolBarArt::GetFont() const
 {
     return m_font;
 }
 
-int wxAuiDefaultToolBarArt::GetTextOrientation()
+wxColour wxAuiDefaultToolBarArt::GetBackgroundColour() const
+{
+  return m_baseColour;
+}
+
+int wxAuiDefaultToolBarArt::GetTextOrientation() const
 {
     return m_textOrientation;
 }
@@ -220,8 +230,7 @@ void wxAuiDefaultToolBarArt::DrawPlainBackground(wxDC& dc,
     wxRect rect = _rect;
     rect.height++;
 
-    dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
-
+    dc.SetBrush(m_baseColour);
     dc.DrawRectangle(rect.GetX() - 1, rect.GetY() - 1,
                      rect.GetWidth() + 2, rect.GetHeight() + 1);
 }
@@ -1420,6 +1429,17 @@ bool wxAuiToolBar::SetFont(const wxFont& font)
     return res;
 }
 
+bool wxAuiToolBar::SetBackgroundColour(const wxColour &colour)
+{
+    bool res = wxWindow::SetBackgroundColour(colour);
+
+    if (m_art)
+    {
+      m_art->SetBackgroundColour(colour);
+    }
+
+    return res;
+}
 
 void wxAuiToolBar::SetHoverItem(wxAuiToolBarItem* pitem)
 {
