@@ -241,37 +241,33 @@ bool wxGenericProgressDialog::Create( const wxString& title,
     m_btnAbort =
     m_btnSkip = NULL;
 
-    wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxStdDialogButtonSizer *buttonSizer = new wxStdDialogButtonSizer();
 
-    const int borderFlags =
-#if defined(__WXMSW__) || defined(__WXOSX__)
-        wxALL
-#else
-        wxBOTTOM | wxTOP
-#endif
-        ;
+    const int borderFlags = wxALL;
 
-    const wxSizerFlags sizerFlags
+    wxSizerFlags sizerFlags
         = wxSizerFlags().Border(borderFlags, LAYOUT_MARGIN);
 
     if ( HasPDFlag(wxPD_CAN_SKIP) )
     {
         m_btnSkip = new wxButton(this, wxID_SKIP, _("&Skip"));
 
-        buttonSizer->Add(m_btnSkip, sizerFlags);
+        buttonSizer->SetNegativeButton(m_btnSkip);
     }
 
     if ( HasPDFlag(wxPD_CAN_ABORT) )
     {
         m_btnAbort = new wxButton(this, wxID_CANCEL);
 
-        buttonSizer->Add(m_btnAbort, sizerFlags);
+        buttonSizer->AddButton(m_btnAbort);
     }
 
     if ( !HasPDFlag(wxPD_CAN_SKIP | wxPD_CAN_ABORT) )
         buttonSizer->AddSpacer(LAYOUT_MARGIN);
 
-    sizerTop->Add(buttonSizer, sizerFlags);
+    buttonSizer->Realize();
+
+    sizerTop->Add(buttonSizer, sizerFlags.Expand());
 
     SetSizerAndFit(sizerTop);
 
