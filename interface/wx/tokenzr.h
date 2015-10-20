@@ -142,7 +142,8 @@ public:
     size_t GetPosition() const;
 
     /**
-        Returns the part of the starting string without all token already extracted.
+        Returns the part of the initial string which is yet to be tokenized.
+        That is, the substring from the current position upto the end.
     */
     wxString GetString() const;
 
