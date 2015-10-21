@@ -1,21 +1,21 @@
 # Initial translation by unknown translator
 # Updated by Thomas Krebs <Thomas.Krebs@mecadtron.de>
-# Wolfgang Stöggl <c72578@yahoo.de>, 2014.
+# Wolfgang Stöggl <c72578@yahoo.de>, 2014-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-23 22:46+0400\n"
-"PO-Revision-Date: 2014-12-30 14:53+0100\n"
-"Last-Translator: Wolfgang Stöggl <c72578@yahoo.de>\n"
+"POT-Creation-Date: 2015-10-21 18:43+0200\n"
+"PO-Revision-Date: 2015-10-21 19:34+0200\n"
+"Last-Translator: Wolfgang Stoeggl <c72578@yahoo.de>\n"
 "Language-Team: wxWidgets Team <wx-dev@wxwidgets.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 1.7.1\n"
+"X-Generator: Poedit 1.8.6\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -223,7 +223,7 @@ msgstr "&Hg Farbe:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:299
 msgid "&Blur distance:"
-msgstr ""
+msgstr "&Weichzeichnungsentfernung"
 
 #: ../src/common/stockitem.cpp:143
 msgid "&Bold"
@@ -420,9 +420,8 @@ msgid "&Home"
 msgstr "&Start"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:213
-#, fuzzy
 msgid "&Horizontal offset:"
-msgstr "Vertikal &Absatz:"
+msgstr "&Horizontaler Versatz:"
 
 #: ../src/richtext/richtextindentspage.cpp:184
 #: ../src/richtext/richtextliststylepage.cpp:372
@@ -499,8 +498,7 @@ msgstr "&Netzwerk"
 msgid "&New"
 msgstr "&Neu"
 
-#: ../src/aui/tabmdi.cpp:111 ../src/generic/mdig.cpp:100
-#: ../src/msw/mdi.cpp:180
+#: ../src/aui/tabmdi.cpp:111 ../src/generic/mdig.cpp:100 ../src/msw/mdi.cpp:180
 msgid "&Next"
 msgstr "&Weiter"
 
@@ -575,8 +573,7 @@ msgstr "&Positionierungs-Modus:"
 msgid "&Preferences"
 msgstr "&Einstellungen"
 
-#: ../src/aui/tabmdi.cpp:112 ../src/generic/mdig.cpp:101
-#: ../src/msw/mdi.cpp:181
+#: ../src/aui/tabmdi.cpp:112 ../src/generic/mdig.cpp:101 ../src/msw/mdi.cpp:181
 msgid "&Previous"
 msgstr "&Zurück"
 
@@ -754,9 +751,8 @@ msgid "&Vertical alignment:"
 msgstr "&Vertikale Ausrichtung:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:236
-#, fuzzy
 msgid "&Vertical offset:"
-msgstr "Vertikal &Absatz:"
+msgstr "&Vertikaler Versatz:"
 
 #: ../src/generic/dbgrptg.cpp:340
 msgid "&View..."
@@ -1200,16 +1196,17 @@ msgstr "Über …"
 msgid "Absolute"
 msgstr "Absolut"
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:859
-#, fuzzy
 msgid "ActiveBorder"
-msgstr "Rahmen"
+msgstr "ActiveBorder"
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:860
 msgid "ActiveCaption"
-msgstr ""
+msgstr "ActiveCaption"
 
 #: ../src/common/stockitem.cpp:207
 msgid "Actual Size"
@@ -1328,10 +1325,11 @@ msgstr "Und enthält die folgenden Dateien:\n"
 msgid "Animation file is not of type %ld."
 msgstr "Animationsdatei hat nicht den Typ %ld."
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:858
 msgid "AppWorkspace"
-msgstr ""
+msgstr "AppWorkspace"
 
 #: ../src/generic/logg.cpp:1034
 #, c-format
@@ -1506,7 +1504,7 @@ msgstr "Bitmap"
 
 #: ../src/osx/carbon/dataview.cpp:2394
 msgid "Bitmap renderer cannot render value; value type: "
-msgstr "Bitmapdarsteller kann den Wert nicht wiedergeben; Typ des Werts:"
+msgstr "Bitmapdarsteller kann den Wert nicht wiedergeben; Typ des Werts: "
 
 #: ../src/propgrid/advprops.cpp:1555
 msgid "Black"
@@ -1572,31 +1570,35 @@ msgstr "Stil der Gliederungspunkte"
 msgid "Bullets"
 msgstr "Gliederungspunkte"
 
+# Sieht aus wie das innere Feld bei Darts
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1717
-#, fuzzy
 msgid "Bullseye"
-msgstr "Mittelpunkt"
+msgstr "Bullseye"
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:861
 msgid "ButtonFace"
-msgstr ""
+msgstr "ButtonFace"
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:862
 msgid "ButtonHighlight"
-msgstr ""
+msgstr "ButtonHighlight"
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:863
 msgid "ButtonShadow"
-msgstr ""
+msgstr "ButtonShadow"
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:864
 msgid "ButtonText"
-msgstr ""
+msgstr "ButtonText"
 
 #: ../src/common/paper.cpp:99
 msgid "C sheet, 17 x 22 in"
@@ -1935,10 +1937,11 @@ msgstr "Kann nicht auf Threadende warten"
 msgid "Capital"
 msgstr "Großbuchstaben"
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:865
 msgid "CaptionText"
-msgstr ""
+msgstr "CaptionText"
 
 #: ../src/html/helpwnd.cpp:533
 msgid "Case sensitive"
@@ -2015,9 +2018,9 @@ msgstr ""
 "»%s« zu vermeiden."
 
 #: ../src/gtk/filedlg.cpp:87 ../src/gtk/filepicker.cpp:190
-#, fuzzy, c-format
+#, c-format
 msgid "Changing current directory to \"%s\" failed"
-msgstr "Konnte das Verzeichnis »%s« nicht erzeugen."
+msgstr "Wechseln des aktuellen Ordners auf »%s« fehlgeschlagen"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1718
@@ -2368,15 +2371,17 @@ msgstr "Verbinde …"
 msgid "Contents"
 msgstr "Inhalte"
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:866
 msgid "ControlDark"
-msgstr ""
+msgstr "ControlDark"
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:867
 msgid "ControlLight"
-msgstr ""
+msgstr "ControlLight"
 
 #: ../src/common/strconv.cpp:2251
 #, c-format
@@ -2612,9 +2617,9 @@ msgid "Create new directory"
 msgstr "Neues Verzeichnis anlegen"
 
 #: ../src/xrc/xmlres.cpp:2441
-#, fuzzy, c-format
+#, c-format
 msgid "Creating %s \"%s\" failed."
-msgstr "Extrahieren von »%s« in »%s« schlug fehl."
+msgstr "Erstellung von %s »%s« fehlgeschlagen."
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1719
@@ -2674,11 +2679,11 @@ msgstr "DIB-Header: Kodierung entspricht nicht der Bittiefe."
 
 #: ../src/common/imagbmp.cpp:1073
 msgid "DIB Header: Image height > 32767 pixels for file."
-msgstr "DIB-Header: Bildhöhe > 32767 pixels."
+msgstr "DIB-Header: Bildhöhe > 32767 Pixel."
 
 #: ../src/common/imagbmp.cpp:1065
 msgid "DIB Header: Image width > 32767 pixels for file."
-msgstr "DIB-Header: Bildbreite > 32767 pixels."
+msgstr "DIB-Header: Bildbreite > 32767 Pixel."
 
 #: ../src/common/imagbmp.cpp:1093
 msgid "DIB Header: Unknown bitdepth in file."
@@ -2702,7 +2707,7 @@ msgstr "Dateiobjekt hat ein ungültiges Dateiformat"
 
 #: ../src/osx/carbon/dataview.cpp:2489
 msgid "Date renderer cannot render value; value type: "
-msgstr "Datums-Renderer kann den Wert nicht darstellen; Werttyp:"
+msgstr "Datums-Renderer kann den Wert nicht darstellen; Werttyp: "
 
 #: ../src/generic/dbgrptg.cpp:300
 #, c-format
@@ -3011,33 +3016,28 @@ msgstr "Ermöglicht eine Hintergrundfarbe."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:197
 #: ../src/richtext/richtextbackgroundpage.cpp:199
-#, fuzzy
 msgid "Enables a shadow."
-msgstr "Ermöglicht eine Hintergrundfarbe."
+msgstr "Aktiviert einen Schatten."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:301
 #: ../src/richtext/richtextbackgroundpage.cpp:303
-#, fuzzy
 msgid "Enables the blur distance."
-msgstr "Breitenwert einschalten."
+msgstr "Weichzeichnungsentfernung aktivieren."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:261
 #: ../src/richtext/richtextbackgroundpage.cpp:263
-#, fuzzy
 msgid "Enables the shadow colour."
-msgstr "Ermöglicht eine Hintergrundfarbe."
+msgstr "Aktiviert die Schattenfarbe."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:328
 #: ../src/richtext/richtextbackgroundpage.cpp:330
-#, fuzzy
 msgid "Enables the shadow opacity."
-msgstr "Breitenwert einschalten."
+msgstr "Aktiviert die Schattendeckkraft."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:274
 #: ../src/richtext/richtextbackgroundpage.cpp:276
-#, fuzzy
 msgid "Enables the shadow spread."
-msgstr "Breitenwert einschalten."
+msgstr "Aktiviert die Schatten-Ausbreitung."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:64
@@ -3131,7 +3131,7 @@ msgstr "Fehler beim Speichern der Benutzer-Optionen."
 
 #: ../src/gtk/print.cpp:706
 msgid "Error while printing: "
-msgstr "Fehler während des Druckens:"
+msgstr "Fehler während des Druckens: "
 
 #: ../src/common/log.cpp:223
 msgid "Error: "
@@ -4041,10 +4041,11 @@ msgstr "Grafikgestaltung von "
 msgid "Gray"
 msgstr "Grau"
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:869
 msgid "GrayText"
-msgstr ""
+msgstr "GrayText"
 
 #: ../src/common/fmapbase.cpp:154
 msgid "Greek (ISO-8859-7)"
@@ -4078,7 +4079,7 @@ msgstr "HTML-Dateien (*.html;*.htm)|*.html;*.htm|"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1720
 msgid "Hand"
-msgstr ""
+msgstr "Hand"
 
 #: ../src/common/stockitem.cpp:162
 msgid "Harddisk"
@@ -4148,11 +4149,11 @@ msgstr "Diese Meldung ausblenden."
 msgid "Highlight"
 msgstr "Hervorheben"
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:871
-#, fuzzy
 msgid "HighlightText"
-msgstr "Rechtsbündiger Text."
+msgstr "HighlightText"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:63 ../src/common/stockitem.cpp:164
@@ -4220,7 +4221,7 @@ msgstr "ISO-2022-JP"
 
 #: ../src/osx/carbon/dataview.cpp:2418
 msgid "Icon & text renderer cannot render value; value type: "
-msgstr "Bild- & Text-Renderer kann den Wert nicht darstellen; Werttyp"
+msgstr "Bild- & Text-Renderer kann den Wert nicht darstellen; Werttyp: "
 
 #: ../src/html/htmprint.cpp:282
 msgid ""
@@ -4316,21 +4317,23 @@ msgstr "Versuch die Datei »%s« zu überschreiben, fehlgeschlagen"
 msgid "Impossible to set permissions for the file '%s'"
 msgstr "Konnte die Zugriffsrechte für Datei »%s« nicht setzen"
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:872
-#, fuzzy
 msgid "InactiveBorder"
-msgstr "Rahmen"
+msgstr "InactiveBorder"
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:873
 msgid "InactiveCaption"
-msgstr ""
+msgstr "InactiveCaption"
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:874
 msgid "InactiveCaptionText"
-msgstr ""
+msgstr "InactiveCaptionText"
 
 #: ../src/common/gifdecod.cpp:792
 #, c-format
@@ -4689,13 +4692,13 @@ msgid "Last page"
 msgstr "Letzte Seite"
 
 #: ../src/common/log.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Last repeated message (\"%s\", %u time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %u times) wasn't output"
 msgstr[0] ""
-"Die letzte wiederholte Nachricht (»%s«, %lu Mal) wurde nicht ausgegeben"
+"Die letzte wiederholte Nachricht (»%s«, %u Mal) wurde nicht ausgegeben"
 msgstr[1] ""
-"Die letzte wiederholte Nachricht (»%s«, %lu Mal) wurde nicht ausgegeben"
+"Die letzte wiederholte Nachricht (»%s«, %u Mal) wurde nicht ausgegeben"
 
 #: ../src/common/paper.cpp:104
 msgid "Ledger, 17 x 11 in"
@@ -4715,7 +4718,7 @@ msgstr "Links"
 #: ../src/richtext/richtextindentspage.cpp:204
 #: ../src/richtext/richtextliststylepage.cpp:390
 msgid "Left (&first line):"
-msgstr "Links (&ertse Zeile):"
+msgstr "Links (&erste Zeile):"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1722
@@ -5526,7 +5529,7 @@ msgstr "Olivgrün"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:326
 msgid "Opaci&ty:"
-msgstr ""
+msgstr "Deckkraf&t:"
 
 #: ../src/common/docview.cpp:1776 ../src/common/docview.cpp:1818
 msgid "Open File"
@@ -5893,15 +5896,13 @@ msgstr "Bitte warten Sie während gedruckt wird …"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1728
-#, fuzzy
 msgid "Point Left"
-msgstr "Größe in Punkt"
+msgstr "Punkt links"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1729
-#, fuzzy
 msgid "Point Right"
-msgstr "Rechtsbündig"
+msgstr "Punkt rechts"
 
 #. TRANSLATORS: Label of font point size
 #: ../src/propgrid/advprops.cpp:648
@@ -6053,9 +6054,9 @@ msgid "Printing Error"
 msgstr "Fehler beim Drucken"
 
 #: ../src/common/prntbase.cpp:565
-#, fuzzy, c-format
+#, c-format
 msgid "Printing page %d"
-msgstr "Drucke Seite %d …"
+msgstr "Seite %d wird gedruckt"
 
 #: ../src/common/prntbase.cpp:570
 #, c-format
@@ -6505,16 +6506,15 @@ msgstr ""
 
 #: ../src/richtext/richtextbackgroundpage.cpp:272
 msgid "Sh&adow spread:"
-msgstr ""
+msgstr "Schatten-Ausbreitung:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:180
 msgid "Shadow"
-msgstr ""
+msgstr "Schatten"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:259
-#, fuzzy
 msgid "Shadow c&olour:"
-msgstr "Farbe wählen"
+msgstr "Schattenf&arbe:"
 
 #: ../src/common/accelcmn.cpp:325
 msgid "Shift+"
@@ -6607,27 +6607,31 @@ msgstr "Größe:"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1736
 msgid "Sizing"
-msgstr ""
+msgstr "Größenänderung"
 
+# Ein Cursor für die Größenänderung, dessen Pfeile von Norden nach Süden zeigen
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1733
 msgid "Sizing N-S"
-msgstr ""
+msgstr "Größenänderung N-S"
 
+# Ein Cursor für die Größenänderung, dessen Pfeile von NO nach SW zeigen
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1732
 msgid "Sizing NE-SW"
-msgstr ""
+msgstr "Größenänderung NO-SW"
 
+# Ein Cursor für die Größenänderung, dessen Pfeile von NW nach SO zeigen
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1734
 msgid "Sizing NW-SE"
-msgstr ""
+msgstr "Größenänderung NW-SO"
 
+# Ein Cursor für die Größenänderung, dessen Pfeile von W nach O zeigen
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1735
 msgid "Sizing W-E"
-msgstr ""
+msgstr "Größenänderung W-O"
 
 #: ../src/generic/progdlgg.cpp:263 ../src/generic/progdlgg.cpp:776
 #: ../src/msw/progdlg.cpp:801
@@ -7035,9 +7039,8 @@ msgstr "Das Format der Datei »%s« konnte nicht bestimmt werden."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:220
 #: ../src/richtext/richtextbackgroundpage.cpp:222
-#, fuzzy
 msgid "The horizontal offset."
-msgstr "Vertikalen Absatz einschalten."
+msgstr "Der horizontale Versatz."
 
 #: ../src/richtext/richtextindentspage.cpp:199
 #: ../src/richtext/richtextindentspage.cpp:201
@@ -7115,11 +7118,11 @@ msgid "The outline level."
 msgstr "Die Umrandungsebene."
 
 #: ../src/common/log.cpp:281
-#, fuzzy, c-format
+#, c-format
 msgid "The previous message repeated %u time."
 msgid_plural "The previous message repeated %u times."
-msgstr[0] "Die vorangegangene Nachricht wurde ein Mal wiederholt."
-msgstr[1] "Die vorangegangene Nachricht wurde %lu Mal wiederholt."
+msgstr[0] "Die vorangegangene Nachricht wurde %u Mal wiederholt."
+msgstr[1] "Die vorangegangene Nachricht wurde %u Mal wiederholt."
 
 #: ../src/common/log.cpp:274
 msgid "The previous message repeated once."
@@ -7173,23 +7176,22 @@ msgstr "Abstand nach rechts."
 #: ../src/richtext/richtextbackgroundpage.cpp:310
 #: ../src/richtext/richtextbackgroundpage.cpp:312
 msgid "The shadow blur distance."
-msgstr ""
+msgstr "Die Schatten-Weichzeichnungsentfernung."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:267
 #: ../src/richtext/richtextbackgroundpage.cpp:269
-#, fuzzy
 msgid "The shadow colour."
-msgstr "Die Schriftfarbe."
+msgstr "Die Schattenfarbe."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:337
 #: ../src/richtext/richtextbackgroundpage.cpp:339
 msgid "The shadow opacity."
-msgstr ""
+msgstr "Die Schattendeckkraft."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:283
 #: ../src/richtext/richtextbackgroundpage.cpp:285
 msgid "The shadow spread."
-msgstr ""
+msgstr "Die Schatten-Ausbreitung."
 
 #: ../src/richtext/richtextindentspage.cpp:267
 #: ../src/richtext/richtextliststylepage.cpp:439
@@ -7275,9 +7277,8 @@ msgstr ""
 
 #: ../src/richtext/richtextbackgroundpage.cpp:243
 #: ../src/richtext/richtextbackgroundpage.cpp:245
-#, fuzzy
 msgid "The vertical offset."
-msgstr "Vertikalen Absatz einschalten."
+msgstr "Der vertikale Versatz."
 
 #: ../src/osx/carbon/dataview.cpp:1338
 msgid "There is no column or renderer for the specified column index."
@@ -7377,7 +7378,7 @@ msgstr "Bis:"
 
 #: ../src/osx/carbon/dataview.cpp:2449
 msgid "Toggle renderer cannot render value; value type: "
-msgstr "Umschalt-Renderer konnte den Wert nicht darstellen; Werttyp:"
+msgstr "Umschalt-Renderer konnte den Wert nicht darstellen; Werttyp: "
 
 #: ../src/richtext/richtextbuffer.cpp:8356
 msgid "Too many EndStyle calls!"
@@ -7808,9 +7809,8 @@ msgstr "Einheit des Abstands nach oben."
 #: ../src/richtext/richtextbackgroundpage.cpp:296
 #: ../src/richtext/richtextbackgroundpage.cpp:321
 #: ../src/richtext/richtextbackgroundpage.cpp:323
-#, fuzzy
 msgid "Units for this value."
-msgstr "Einheiten für den linken Rand"
+msgstr "Einheiten für diesen Wert."
 
 #: ../src/generic/progdlgg.cpp:385 ../src/generic/progdlgg.cpp:658
 msgid "Unknown"
@@ -7927,7 +7927,7 @@ msgstr "Verwendung: %s"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:195
 msgid "Use &shadow"
-msgstr ""
+msgstr "&Schatten verwenden"
 
 #: ../src/richtext/richtextindentspage.cpp:169
 #: ../src/richtext/richtextindentspage.cpp:171
@@ -7994,7 +7994,7 @@ msgstr "﻿Warten"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1740
 msgid "Wait Arrow"
-msgstr ""
+msgstr "Wartepfeil"
 
 #: ../src/unix/epolldispatcher.cpp:213
 #, c-format
@@ -8009,7 +8009,7 @@ msgstr "Warnung: "
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1739
 msgid "Watch"
-msgstr ""
+msgstr "Uhr"
 
 #. TRANSLATORS: Label of font weight
 #: ../src/propgrid/advprops.cpp:671
@@ -8053,22 +8053,21 @@ msgstr "Win32s on Windows 3.1"
 msgid "Window"
 msgstr "Fenster"
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:880
-#, fuzzy
 msgid "WindowFrame"
-msgstr "&Fenster"
+msgstr "WindowFrame"
 
+# Original wird verwendet
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:881
-#, fuzzy
 msgid "WindowText"
-msgstr "Windows 7"
+msgstr "WindowText"
 
 #: ../src/msw/utils.cpp:1233
-#, fuzzy
 msgid "Windows 10"
-msgstr "Windows 8.1"
+msgstr "Windows 10"
 
 #: ../src/msw/utils.cpp:1183
 msgid "Windows 2000"
@@ -8166,9 +8165,8 @@ msgid "Windows NT %lu.%lu"
 msgstr "Windows NT %lu.%lu"
 
 #: ../src/msw/utils.cpp:1232
-#, fuzzy
 msgid "Windows Server 10"
-msgstr "Windows Server 2003"
+msgstr "Windows Server 10"
 
 #: ../src/msw/utils.cpp:1192
 msgid "Windows Server 2003"
@@ -8327,7 +8325,7 @@ msgstr "Einpassen"
 
 #: ../src/msw/dde.cpp:1144
 msgid "a DDEML application has created a prolonged race condition."
-msgstr "Eine DDEML-Anwendung hat eine »prolonged race condition« ausgeloest."
+msgstr "Eine DDEML-Anwendung hat eine »prolonged race condition« ausgelöst."
 
 #: ../src/msw/dde.cpp:1132
 msgid ""
@@ -9195,8 +9193,7 @@ msgstr "wxGetTimeOfDay fehlgeschlagen."
 #: ../src/osx/carbon/dataview.cpp:1301
 msgid "wxWidget control pointer is not a data view pointer"
 msgstr ""
-"Zeiger auf ein wxwWidget Kontrollelement ist kein Zeiger auf eine "
-"Datenanzeige"
+"Zeiger auf ein wxWidget Kontrollelement ist kein Zeiger auf eine Datenanzeige"
 
 #: ../src/osx/carbon/dataview.cpp:905
 msgid "wxWidget's control not initialized."
