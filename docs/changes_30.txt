@@ -346,9 +346,9 @@ Changes in behaviour which may result in compilation errors
 - Removed global GetLine() function from wx/protocol/protocol.h, use
   wxProtocol::ReadLine() instead.
 
-- wxVariant no longer derives from wxObject. wxVariantData also no longer
-  derives from wxObject; instead of using wxDynamicCast with wxVariantData you
-  can use the macro wxDynamicCastVariantData with the same arguments.
+- wxVariantData no longer derives from wxObject; instead of using
+  wxDynamicCast with wxVariantData you can use the macro
+  wxDynamicCastVariantData with the same arguments.
 
 - wxWindow::Next/PrevControlId() don't exist any more as they couldn't be
   implemented correctly any longer because automatically generated ids are not
