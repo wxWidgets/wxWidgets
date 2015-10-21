@@ -561,7 +561,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 // wxNSTextViewControl
 
-wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w )
+wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long style )
     : wxWidgetCocoaImpl(wxPeer, w),
       wxTextWidgetImpl(wxPeer)
 {
@@ -580,6 +580,15 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w )
     [tv setVerticallyResizable:YES];
     [tv setHorizontallyResizable:NO];
     [tv setAutoresizingMask:NSViewWidthSizable];
+
+    if ( style & wxTE_RIGHT)
+    {
+        [tv setAlignment:NSRightTextAlignment];
+    }
+    else if ( style & wxTE_CENTRE)
+    {
+        [tv setAlignment:NSCenterTextAlignment];
+    }
 
     if ( !wxPeer->HasFlag(wxTE_RICH | wxTE_RICH2) )
     {
@@ -1064,7 +1073,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
     {
         wxNSTextScrollView* v = nil;
         v = [[wxNSTextScrollView alloc] initWithFrame:r];
-        c = new wxNSTextViewControl( wxpeer, v );
+        c = new wxNSTextViewControl( wxpeer, v, style );
         c->SetNeedsFocusRect( true );
     }
     else
