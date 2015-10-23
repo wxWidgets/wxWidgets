@@ -404,7 +404,10 @@ public:
             An integer by which the tool may be identified in subsequent
             operations.
         @param label
-            The string to be displayed with the tool.
+            The string to be displayed with the tool. This string may include
+            mnemonics, i.e. characters prefixed by an ampersand ("&"), but they
+            are stripped from it and not actually shown in the toolbar as tools
+            can't be activated from keyboard.
         @param bitmap
             The primary tool bitmap.
         @param shortHelp
