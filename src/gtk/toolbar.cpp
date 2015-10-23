@@ -535,8 +535,11 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             }
             if (!tool->GetLabel().empty())
             {
+                wxString const
+                    label = wxControl::RemoveMnemonics(tool->GetLabel());
+
                 gtk_tool_button_set_label(
-                    GTK_TOOL_BUTTON(tool->m_item), wxGTK_CONV(tool->GetLabel()));
+                    GTK_TOOL_BUTTON(tool->m_item), wxGTK_CONV(label));
                 // needed for labels in horizontal toolbar with wxTB_HORZ_LAYOUT
                 gtk_tool_item_set_is_important(tool->m_item, true);
             }
