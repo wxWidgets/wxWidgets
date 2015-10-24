@@ -604,6 +604,7 @@ All (GUI):
 - Fix bug in wxImage::ClearAlpha() for shared data (Markus Rollmann).
 - Accept wxALIGN_CENTRE_HORIZONTAL in wxStaticText XRC handler (David Hart).
 - Fix appearance after updating a wxGrid with hidden rows/columns (iwbnwif).
+- Make wxAuiNotebookXmlHandler actually work.
 
 wxGTK:
 
