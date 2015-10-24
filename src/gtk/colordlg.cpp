@@ -65,6 +65,7 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
         gtk_color_selection_dialog_get_color_selection(
         GTK_COLOR_SELECTION_DIALOG(m_widget)));
     gtk_color_selection_set_has_palette(sel, true);
+    gtk_color_selection_set_has_opacity_control(sel, true);
 
     return true;
 }
