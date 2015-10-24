@@ -1148,6 +1148,10 @@ public:
 
         Consider using wxListView if possible to avoid dealing with this
         error-prone and confusing method.
+
+        Also notice that contrary to the usual rule that only user actions
+        generate events, this method does generate wxEVT_LIST_ITEM_SELECTED
+        event when it is used to select an item.
     */
     bool SetItemState(long item, long state, long stateMask);
 
@@ -1631,12 +1635,15 @@ public:
     /**
         Selects or unselects the given item.
 
+        Notice that this method inherits the unusual behaviour of
+        wxListCtrl::SetItemState() which sends a wxEVT_LIST_ITEM_SELECTED event
+        when it is used to select an item, contrary to the usual rule that only
+        the user actions result in selection.
+
         @param n
             the item to select or unselect
         @param on
             if @true (default), selects the item, otherwise unselects it
-
-        @see wxListCtrl::SetItemState
     */
     void Select(long n, bool on = true);
 
