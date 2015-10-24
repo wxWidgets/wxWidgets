@@ -75,7 +75,7 @@ protected:
     wxRect m_singleCustomColourRect;
 
     // Size of each colour rectangle
-    wxPoint m_smallRectangleSize;
+    wxSize m_smallRectangleSize;
 
     // Grid spacing (between rectangles)
     int m_gridSpacing;

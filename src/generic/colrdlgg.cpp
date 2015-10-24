@@ -207,8 +207,7 @@ void wxGenericColourDialog::CalculateMeasurements()
     // For single customizable colour
     const wxSize customRectangleSize(40, 40);
 
-    m_smallRectangleSize.x = 18;
-    m_smallRectangleSize.y = 14;
+    m_smallRectangleSize.Set(18, 14);
 
     m_gridSpacing = 6;
     m_sectionSpacing = 15;
