@@ -204,10 +204,11 @@ void wxGenericColourDialog::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 void wxGenericColourDialog::CalculateMeasurements()
 {
+    // For single customizable colour
+    const wxSize customRectangleSize(40, 40);
+
     m_smallRectangleSize.x = 18;
     m_smallRectangleSize.y = 14;
-    m_customRectangleSize.x = 40;
-    m_customRectangleSize.y = 40;
 
     m_gridSpacing = 6;
     m_sectionSpacing = 15;
@@ -224,8 +225,7 @@ void wxGenericColourDialog::CalculateMeasurements()
 
     m_singleCustomColourRect.x = m_customColoursRect.width + m_customColoursRect.x + m_sectionSpacing;
     m_singleCustomColourRect.y = 80;
-    m_singleCustomColourRect.width = m_customRectangleSize.x;
-    m_singleCustomColourRect.height = m_customRectangleSize.y;
+    m_singleCustomColourRect.SetSize(customRectangleSize);
 
     m_okButtonX = 10;
     m_customButtonX = m_singleCustomColourRect.x ;
@@ -447,8 +447,7 @@ void wxGenericColourDialog::PaintCustomColour(wxDC& dc)
     wxBrush *brush = new wxBrush(m_colourData.m_dataColour);
     dc.SetBrush(*brush);
 
-    dc.DrawRectangle( m_singleCustomColourRect.x, m_singleCustomColourRect.y,
-                      m_customRectangleSize.x, m_customRectangleSize.y);
+    dc.DrawRectangle(m_singleCustomColourRect);
 
     dc.SetBrush(wxNullBrush);
     delete brush;

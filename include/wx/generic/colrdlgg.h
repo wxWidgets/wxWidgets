@@ -77,9 +77,6 @@ protected:
     // Size of each colour rectangle
     wxPoint m_smallRectangleSize;
 
-    // For single customizable colour
-    wxPoint m_customRectangleSize;
-
     // Grid spacing (between rectangles)
     int m_gridSpacing;
 
