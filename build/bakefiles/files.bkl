@@ -2370,8 +2370,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/palette.h
     wx/osx/pen.h
     wx/osx/popupwin.h
-    wx/osx/pnghand.h
-    wx/osx/pngread.h
     wx/osx/printdlg.h
     wx/osx/printmac.h
     wx/osx/private.h

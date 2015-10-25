@@ -3346,8 +3346,6 @@ COND_TOOLKIT_OSX_CARBON_GUI_HDR =  \
 	wx/osx/palette.h \
 	wx/osx/pen.h \
 	wx/osx/popupwin.h \
-	wx/osx/pnghand.h \
-	wx/osx/pngread.h \
 	wx/osx/printdlg.h \
 	wx/osx/printmac.h \
 	wx/osx/private.h \
@@ -3447,8 +3445,6 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/palette.h \
 	wx/osx/pen.h \
 	wx/osx/popupwin.h \
-	wx/osx/pnghand.h \
-	wx/osx/pngread.h \
 	wx/osx/printdlg.h \
 	wx/osx/printmac.h \
 	wx/osx/private.h \
@@ -3553,8 +3549,6 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/osx/palette.h \
 	wx/osx/pen.h \
 	wx/osx/popupwin.h \
-	wx/osx/pnghand.h \
-	wx/osx/pngread.h \
 	wx/osx/printdlg.h \
 	wx/osx/printmac.h \
 	wx/osx/private.h \

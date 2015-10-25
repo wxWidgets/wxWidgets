@@ -2014,8 +2014,6 @@ OSX_SHARED_HDR =
     wx/osx/palette.h
     wx/osx/pen.h
     wx/osx/popupwin.h
-    wx/osx/pnghand.h
-    wx/osx/pngread.h
     wx/osx/printdlg.h
     wx/osx/printmac.h
     wx/osx/private.h
