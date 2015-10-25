@@ -11,8 +11,6 @@
 #ifndef _WX_SLIDER_H_
 #define _WX_SLIDER_H_
 
-#include "wx/control.h"
-#include "wx/slider.h"
 #include "wx/stattext.h"
 
 // Slider
