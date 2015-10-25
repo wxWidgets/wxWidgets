@@ -23,7 +23,7 @@ class WXDLLIMPEXP_CORE wxSlider: public wxSliderBase
 public:
     wxSlider();
 
-    inline wxSlider(wxWindow *parent, wxWindowID id,
+    wxSlider(wxWindow *parent, wxWindowID id,
                     int value, int minValue, int maxValue,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
@@ -49,14 +49,14 @@ public:
 
     void SetRange(int minValue, int maxValue);
 
-    inline int GetMin() const { return m_rangeMin; }
-    inline int GetMax() const { return m_rangeMax; }
+    int GetMin() const { return m_rangeMin; }
+    int GetMax() const { return m_rangeMax; }
 
     void SetMin(int minValue) { SetRange(minValue, m_rangeMax); }
     void SetMax(int maxValue) { SetRange(m_rangeMin, maxValue); }
 
     // For trackbars only
-    inline int GetTickFreq() const { return m_tickFreq; }
+    int GetTickFreq() const { return m_tickFreq; }
     void SetPageSize(int pageSize);
     int GetPageSize() const ;
     void ClearSel() ;

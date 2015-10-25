@@ -22,7 +22,7 @@ class WXDLLIMPEXP_CORE wxRadioBox: public wxControl, public wxRadioBoxBase
 public:
 // Constructors & destructor
     wxRadioBox();
-    inline wxRadioBox(wxWindow *parent, wxWindowID id, const wxString& title,
+    wxRadioBox(wxWindow *parent, wxWindowID id, const wxString& title,
              const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
              int n = 0, const wxString choices[] = NULL,
              int majorDim = 0, long style = wxRA_SPECIFY_COLS,
@@ -30,7 +30,7 @@ public:
         {
             Create(parent, id, title, pos, size, n, choices, majorDim, style, val, name);
         }
-    inline wxRadioBox(wxWindow *parent, wxWindowID id, const wxString& title,
+    wxRadioBox(wxWindow *parent, wxWindowID id, const wxString& title,
              const wxPoint& pos, const wxSize& size,
              const wxArrayString& choices,
              int majorDim = 0, long style = wxRA_SPECIFY_COLS,
@@ -82,8 +82,8 @@ public:
     void SetFocus();
 
 // Other variable access functions
-    inline int GetNumberOfRowsOrCols() const { return m_noRowsOrCols; }
-    inline void SetNumberOfRowsOrCols(int n) { m_noRowsOrCols = n; }
+    int GetNumberOfRowsOrCols() const { return m_noRowsOrCols; }
+    void SetNumberOfRowsOrCols(int n) { m_noRowsOrCols = n; }
 
     void OnRadioButton( wxCommandEvent& event ) ;
 

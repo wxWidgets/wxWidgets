@@ -16,8 +16,8 @@ class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
     wxDECLARE_DYNAMIC_CLASS(wxStaticBox);
 
 public:
-    inline wxStaticBox() {}
-    inline wxStaticBox(wxWindow *parent, wxWindowID id,
+    wxStaticBox() {}
+    wxStaticBox(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
