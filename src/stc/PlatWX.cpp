@@ -257,8 +257,13 @@ void SurfaceImpl::InitPixMap(int width, int height, Surface *surface, WindowID w
     hdcOwned = true;
     if (width < 1) width = 1;
     if (height < 1) height = 1;
+#ifdef __WXMSW__
+    bitmap = new wxBitmap(width, height);
+    wxUnusedVar(winid);
+#else
     bitmap = new wxBitmap();
     bitmap->CreateScaled(width, height,wxBITMAP_SCREEN_DEPTH,((wxWindow*)winid)->GetContentScaleFactor());
+#endif
     ((wxMemoryDC*)hdc)->SelectObject(*bitmap);
 }
 
