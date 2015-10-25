@@ -9,8 +9,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/gdicmn.h"
-#include "wx/gdicmn.h"
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
 #include <QtCore/QRect>
 #include <QtCore/QString>
@@ -21,6 +22,11 @@
     #include "wx/datetime.h"
     #include <QtCore/QDate>
 #endif // wxUSE_DATETIME
+
+#include "wx/kbdstate.h"
+#include "wx/gdicmn.h"
+#include "wx/gdicmn.h"
+
 
 wxPoint wxQtConvertPoint( const QPoint &point )
 {

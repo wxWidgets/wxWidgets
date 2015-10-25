@@ -25,6 +25,10 @@
     #include "wx/msw/wrapwin.h"
 #endif
 
+#if defined(__WXQT__)
+    #include <QtGui/QFont>
+#endif
+
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
 struct WXDLLIMPEXP_FWD_CORE wxNativeEncodingInfo;
 

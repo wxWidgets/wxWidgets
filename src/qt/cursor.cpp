@@ -7,10 +7,20 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-#include "wx/cursor.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
 #include <QApplication>
 #include <QBitmap>
+
+#ifndef WX_PRECOMP
+    #include "wx/bitmap.h"
+#endif // WX_PRECOMP
+
+#include "wx/cursor.h"
+
 
 void wxSetCursor(const wxCursor& cursor)
 {

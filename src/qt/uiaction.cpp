@@ -8,12 +8,17 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#include <QtTest/QtTestGui>
+
 #include "wx/qt/defs.h"
 #include "wx/qt/private/utils.h"
 #include "wx/uiaction.h"
 #include "wx/qt/private/converter.h"
 
-#include <QtTest/QtTestGui>
 
 #if wxUSE_UIACTIONSIMULATOR
 

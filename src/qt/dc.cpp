@@ -8,12 +8,22 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#include <QtGui/QBitmap>
+
+#ifndef WX_PRECOMP
+    #include "wx/icon.h"
+    #include "wx/log.h"
+#endif // WX_PRECOMP
+
 #include "wx/dc.h"
-#include "wx/icon.h"
 #include "wx/qt/dc.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"
-#include <QtGui/QBitmap>
+
 
 static void SetPenColour( QPainter *qtPainter, QColor col )
 {

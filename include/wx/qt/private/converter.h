@@ -14,6 +14,8 @@
 #include "wx/defs.h"
 #include <QtCore/Qt>
 
+#include "wx/kbdstate.h"
+
 // Rely on overloading and let the compiler pick the correct version, which makes
 // them easier to use then to write wxQtConvertQtRectToWxRect() or wxQtConvertWxRectToQtRect()
 

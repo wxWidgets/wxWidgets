@@ -8,8 +8,16 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include "wx/bitmap.h"
+#endif // WX_PRECOMP
+
 #include "wx/button.h"
-#include "wx/bitmap.h"
+#include "wx/stockitem.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/winevent.h"
 

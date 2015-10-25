@@ -8,17 +8,26 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/utils.h"
-#include "wx/window.h"
-#include "wx/cursor.h"
-#include "wx/qt/private/utils.h"
-#include "wx/qt/private/converter.h"
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
 #include <QtGui/QCursor>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDesktopWidget>
 #include <QtGui/QDesktopServices>
 #include <QtCore/QUrl>
+
+#ifndef WX_PRECOMP
+    #include "wx/cursor.h"
+    #include "wx/log.h"
+    #include "wx/window.h"
+#endif // WX_PRECOMP
+
+#include "wx/utils.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
+
 
 void wxMissingImplementation( const char fileName[], unsigned lineNumber,
     const char feature[] )

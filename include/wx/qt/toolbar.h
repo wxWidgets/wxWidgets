@@ -10,6 +10,7 @@
 #ifndef _WX_QT_TOOLBAR_H_
 #define _WX_QT_TOOLBAR_H_
 
+class QActionGroup;
 class wxQtToolBar;
 
 class WXDLLIMPEXP_CORE wxToolBar : public wxToolBarBase
