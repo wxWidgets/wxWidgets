@@ -11,10 +11,11 @@
 #ifndef _WX_SLIDER_H_
 #define _WX_SLIDER_H_
 
+#include "wx/compositewin.h"
 #include "wx/stattext.h"
 
 // Slider
-class WXDLLIMPEXP_CORE wxSlider: public wxSliderBase
+class WXDLLIMPEXP_CORE wxSlider: public wxCompositeWindow<wxSliderBase>
 {
     wxDECLARE_DYNAMIC_CLASS(wxSlider);
 
@@ -100,6 +101,15 @@ protected:
     int           m_lineSize;
     int           m_tickFreq;
 private :
+    virtual wxWindowList GetCompositeWindowParts() const wxOVERRIDE
+    {
+        wxWindowList parts;
+        parts.push_back(m_macMinimumStatic);
+        parts.push_back(m_macMaximumStatic);
+        parts.push_back(m_macValueStatic);
+        return parts;
+    }
+
     wxDECLARE_EVENT_TABLE();
 };
 

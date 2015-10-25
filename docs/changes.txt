@@ -193,3 +193,4 @@ wxOSX/Cocoa:
 - Implement strike-through support in wxFont (Igor Korot).
 - Provide native implementation of wxStandardPaths (Tobias Taschner).
 - Add wxTE_{RIGHT,CENTER} support for multiline wxTextCtrl (Andreas Falkenhahn).
+- Don't leave wxSlider labels shown when the slider itself is hidden.
