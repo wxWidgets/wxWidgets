@@ -2392,7 +2392,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/toolbar.h
     wx/osx/tooltip.h
     wx/osx/toplevel.h
-    wx/osx/treectrl.h
     wx/osx/uma.h
     wx/osx/window.h
     <!-- Generic implementations used by wxOSX: -->

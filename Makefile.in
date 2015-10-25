@@ -3368,7 +3368,6 @@ COND_TOOLKIT_OSX_CARBON_GUI_HDR =  \
 	wx/osx/toolbar.h \
 	wx/osx/tooltip.h \
 	wx/osx/toplevel.h \
-	wx/osx/treectrl.h \
 	wx/osx/uma.h \
 	wx/osx/window.h \
 	wx/generic/caret.h \
@@ -3467,7 +3466,6 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/toolbar.h \
 	wx/osx/tooltip.h \
 	wx/osx/toplevel.h \
-	wx/osx/treectrl.h \
 	wx/osx/uma.h \
 	wx/osx/window.h \
 	wx/generic/caret.h \
@@ -3571,7 +3569,6 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/osx/toolbar.h \
 	wx/osx/tooltip.h \
 	wx/osx/toplevel.h \
-	wx/osx/treectrl.h \
 	wx/osx/uma.h \
 	wx/osx/window.h \
 	wx/generic/caret.h \
