@@ -11,10 +11,7 @@
 #ifndef _WX_STATBOX_H_
 #define _WX_STATBOX_H_
 
-#include "wx/control.h"
-
-// Group box
-class WXDLLIMPEXP_CORE wxStaticBox: public wxControl
+class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
 {
     wxDECLARE_DYNAMIC_CLASS(wxStaticBox);
 
