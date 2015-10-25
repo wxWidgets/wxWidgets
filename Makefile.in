@@ -3330,7 +3330,6 @@ COND_TOOLKIT_OSX_CARBON_GUI_HDR =  \
 	wx/osx/fontdlg.h \
 	wx/osx/frame.h \
 	wx/osx/gauge.h \
-	wx/osx/helpxxxx.h \
 	wx/osx/icon.h \
 	wx/osx/imaglist.h \
 	wx/osx/listbox.h \
@@ -3432,7 +3431,6 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/fontdlg.h \
 	wx/osx/frame.h \
 	wx/osx/gauge.h \
-	wx/osx/helpxxxx.h \
 	wx/osx/icon.h \
 	wx/osx/imaglist.h \
 	wx/osx/listbox.h \
@@ -3539,7 +3537,6 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/osx/fontdlg.h \
 	wx/osx/frame.h \
 	wx/osx/gauge.h \
-	wx/osx/helpxxxx.h \
 	wx/osx/icon.h \
 	wx/osx/imaglist.h \
 	wx/osx/listbox.h \

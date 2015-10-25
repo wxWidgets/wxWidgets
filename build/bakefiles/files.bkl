@@ -2354,7 +2354,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/fontdlg.h
     wx/osx/frame.h
     wx/osx/gauge.h
-    wx/osx/helpxxxx.h
     wx/osx/icon.h
     wx/osx/imaglist.h
     wx/osx/listbox.h
