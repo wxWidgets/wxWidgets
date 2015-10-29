@@ -37,6 +37,19 @@
 #include "wx/colourdata.h"
 #include "wx/generic/colrdlgg.h"
 
+#if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+#include "wx/statbmp.h"
+#include "wx/dcmemory.h"
+#include "wx/dcgraph.h"
+#endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+
+#define wxID_ADD_CUSTOM     3000
+#if wxUSE_SLIDER
+    #define wxID_RED_SLIDER     3001
+    #define wxID_GREEN_SLIDER   3002
+    #define wxID_BLUE_SLIDER    3003
+#endif // wxUSE_SLIDER
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxGenericColourDialog, wxDialog);
 
 wxBEGIN_EVENT_TABLE(wxGenericColourDialog, wxDialog)
@@ -164,7 +177,7 @@ int wxGenericColourDialog::ShowModal()
 // Internal functions
 void wxGenericColourDialog::OnMouseEvent(wxMouseEvent& event)
 {
-  if (event.ButtonDown(1))
+  if (event.ButtonDown(wxMOUSE_BTN_LEFT))
   {
     int x = (int)event.GetX();
     int y = (int)event.GetY();
@@ -177,6 +190,8 @@ void wxGenericColourDialog::OnMouseEvent(wxMouseEvent& event)
       int ptr = (int)(selX + selY*8);
       OnBasicColourClick(ptr);
     }
+    // wxStaticBitmap (used to ARGB preview) events are handled in the dedicated handler.
+#if !wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
     else if ((x >= m_customColoursRect.x && x <= (m_customColoursRect.x + m_customColoursRect.width)) &&
         (y >= m_customColoursRect.y && y <= (m_customColoursRect.y + m_customColoursRect.height)))
     {
@@ -185,6 +200,7 @@ void wxGenericColourDialog::OnMouseEvent(wxMouseEvent& event)
       int ptr = (int)(selX + selY*8);
       OnCustomColourClick(ptr);
     }
+#endif
     else
         event.Skip();
   }
@@ -192,13 +208,34 @@ void wxGenericColourDialog::OnMouseEvent(wxMouseEvent& event)
       event.Skip();
 }
 
+#if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+void wxGenericColourDialog::OnCustomColourMouseClick(wxMouseEvent& event)
+{
+    // Find index of custom colour
+    // and call the handler.
+    for (int i = 0; i < WXSIZEOF(m_customColoursBmp); i++)
+    {
+        if ( m_customColoursBmp[i]->GetId() == event.GetId() )
+        {
+              OnCustomColourClick(i);
+              return;
+        }
+    }
+
+    event.Skip();
+}
+#endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+
 void wxGenericColourDialog::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 
     PaintBasicColours(dc);
-    PaintCustomColours(dc);
+    // wxStaticBitmap controls are updated on their own.
+#if !wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+    PaintCustomColours(dc, -1);
     PaintCustomColour(dc);
+#endif // !wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
     PaintHighlight(dc, true);
 }
 
@@ -235,6 +272,33 @@ void wxGenericColourDialog::CreateWidgets()
 {
     wxBeginBusyCursor();
 
+#if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+    // Bitmap to preview selected colour (with alpha channel)
+    wxBitmap customColourBmp(m_singleCustomColourRect.GetSize(), 32);
+    customColourBmp.UseAlpha();
+    DoPreviewBitmap(customColourBmp, m_colourData.GetColour());
+    m_customColourBmp = new wxStaticBitmap(this, wxID_ANY, customColourBmp,
+                                           m_singleCustomColourRect.GetLeftTop(),
+                                           m_singleCustomColourRect.GetSize(),
+                                           wxBORDER_SUNKEN);
+
+    // 16 bitmaps to preview custom colours (with alpha channel)
+    for (int i = 0; i < WXSIZEOF(m_customColoursBmp); i++)
+    {
+        int x = ((i % 8)*(m_smallRectangleSize.x+m_gridSpacing)) + m_customColoursRect.x;
+        int y = ((i / 8)*(m_smallRectangleSize.y+m_gridSpacing)) + m_customColoursRect.y;
+
+        wxBitmap bmp(m_smallRectangleSize, 32);
+        bmp.UseAlpha();
+        DoPreviewBitmap(bmp, m_customColours[i]);
+        m_customColoursBmp[i] = new wxStaticBitmap(this, wxID_ANY, bmp,
+                                                   wxPoint(x, y), m_smallRectangleSize);
+        m_customColoursBmp[i]->Bind(wxEVT_LEFT_DOWN,
+                                    &wxGenericColourDialog::OnCustomColourMouseClick, this);
+
+    }
+#endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
 
     const int sliderHeight = 160;
@@ -249,6 +313,16 @@ void wxGenericColourDialog::CreateWidgets()
         wxDefaultPosition, wxSize(wxDefaultCoord, sliderHeight), wxSL_VERTICAL|wxSL_LABELS|wxSL_INVERSE);
     m_blueSlider = new wxSlider(this, wxID_BLUE_SLIDER, m_colourData.m_dataColour.Blue(), 0, 255,
         wxDefaultPosition, wxSize(wxDefaultCoord, sliderHeight), wxSL_VERTICAL|wxSL_LABELS|wxSL_INVERSE);
+    if ( m_colourData.GetChooseAlpha() )
+    {
+        m_alphaSlider = new wxSlider(this, wxID_ANY, m_colourData.m_dataColour.Alpha(), 0, 255,
+            wxDefaultPosition, wxSize(wxDefaultCoord, sliderHeight), wxSL_VERTICAL|wxSL_LABELS|wxSL_INVERSE);
+        m_alphaSlider->Bind(wxEVT_SLIDER, &wxGenericColourDialog::OnAlphaSlider, this);
+    }
+    else
+    {
+        m_alphaSlider = NULL;
+    }
 
     wxBoxSizer *sliderSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -260,6 +334,10 @@ void wxGenericColourDialog::CreateWidgets()
     sliderSizer->Add(m_redSlider, sliderFlags);
     sliderSizer->Add(m_greenSlider, sliderFlags);
     sliderSizer->Add(m_blueSlider, sliderFlags);
+    if ( m_colourData.GetChooseAlpha() )
+   {
+        sliderSizer->Add(m_alphaSlider, sliderFlags);
+    }
 
     topSizer->Add(sliderSizer, wxSizerFlags().Centre().DoubleBorder());
 #else
@@ -370,28 +448,37 @@ void wxGenericColourDialog::PaintBasicColours(wxDC& dc)
     }
 }
 
-void wxGenericColourDialog::PaintCustomColours(wxDC& dc)
+#if !wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+void wxGenericColourDialog::PaintCustomColours(wxDC& dc, int clrIndex)
 {
-  int i;
-  for (i = 0; i < 2; i++)
-  {
-    int j;
-    for (j = 0; j < 8; j++)
+    int idxStart;
+    int idxEnd;
+    // For clrIndex == -1 redraw all custom colours
+    if ( clrIndex < 0 || clrIndex >= WXSIZEOF(m_customColours) )
     {
-      int ptr = i*8 + j;
-
-      int x = (j*(m_smallRectangleSize.x+m_gridSpacing)) + m_customColoursRect.x;
-      int y = (i*(m_smallRectangleSize.y+m_gridSpacing)) + m_customColoursRect.y;
-
-      dc.SetPen(*wxBLACK_PEN);
-
-      wxBrush brush(m_customColours[ptr]);
-      dc.SetBrush(brush);
-
-      dc.DrawRectangle( x, y, m_smallRectangleSize.x, m_smallRectangleSize.y);
+        idxStart = 0;
+        idxEnd = WXSIZEOF(m_customColours) - 1;
     }
-  }
+    else
+    {
+        idxStart = clrIndex;
+        idxEnd = clrIndex;
+    }
+
+    for (int i = idxStart; i <= idxEnd; i++)
+    {
+        int x = ((i % 8)*(m_smallRectangleSize.x+m_gridSpacing)) + m_customColoursRect.x;
+        int y = ((i / 8)*(m_smallRectangleSize.y+m_gridSpacing)) + m_customColoursRect.y;
+
+        dc.SetPen(*wxBLACK_PEN);
+
+        wxBrush brush(m_customColours[i]);
+        dc.SetBrush(brush);
+
+        dc.DrawRectangle(x, y, m_smallRectangleSize.x, m_smallRectangleSize.y);
+    }
 }
+#endif // !wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
 
 void wxGenericColourDialog::PaintHighlight(wxDC& dc, bool draw)
 {
@@ -441,6 +528,14 @@ void wxGenericColourDialog::PaintHighlight(wxDC& dc, bool draw)
 
 void wxGenericColourDialog::PaintCustomColour(wxDC& dc)
 {
+#if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+    wxUnusedVar(dc);
+
+    wxBitmap bmp(m_singleCustomColourRect.GetSize(), 32);
+    bmp.UseAlpha();
+    DoPreviewBitmap(bmp, m_colourData.GetColour());
+    m_customColourBmp->SetBitmap(bmp);
+#else
     dc.SetPen(*wxBLACK_PEN);
 
     wxBrush *brush = new wxBrush(m_colourData.m_dataColour);
@@ -450,6 +545,7 @@ void wxGenericColourDialog::PaintCustomColour(wxDC& dc)
 
     dc.SetBrush(wxNullBrush);
     delete brush;
+#endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA/!wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
 }
 
 void wxGenericColourDialog::OnBasicColourClick(int which)
@@ -464,11 +560,16 @@ void wxGenericColourDialog::OnBasicColourClick(int which)
     m_redSlider->SetValue( m_standardColours[m_colourSelection].Red() );
     m_greenSlider->SetValue( m_standardColours[m_colourSelection].Green() );
     m_blueSlider->SetValue( m_standardColours[m_colourSelection].Blue() );
+    if ( m_colourData.GetChooseAlpha() )
+    {
+        m_alphaSlider->SetValue( m_standardColours[m_colourSelection].Alpha() );
+    }
 #endif // wxUSE_SLIDER
 
     m_colourData.m_dataColour.Set(m_standardColours[m_colourSelection].Red(),
                                 m_standardColours[m_colourSelection].Green(),
-                                m_standardColours[m_colourSelection].Blue());
+                                m_standardColours[m_colourSelection].Blue(),
+                                m_standardColours[m_colourSelection].Alpha());
 
     PaintCustomColour(dc);
     PaintHighlight(dc, true);
@@ -485,11 +586,16 @@ void wxGenericColourDialog::OnCustomColourClick(int which)
     m_redSlider->SetValue( m_customColours[m_colourSelection].Red() );
     m_greenSlider->SetValue( m_customColours[m_colourSelection].Green() );
     m_blueSlider->SetValue( m_customColours[m_colourSelection].Blue() );
+    if ( m_colourData.GetChooseAlpha() )
+    {
+        m_alphaSlider->SetValue( m_customColours[m_colourSelection].Alpha() );
+    }
 #endif // wxUSE_SLIDER
 
     m_colourData.m_dataColour.Set(m_customColours[m_colourSelection].Red(),
                                 m_customColours[m_colourSelection].Green(),
-                                m_customColours[m_colourSelection].Blue());
+                                m_customColours[m_colourSelection].Blue(),
+                                m_customColours[m_colourSelection].Alpha());
 
     PaintCustomColour(dc);
     PaintHighlight(dc, true);
@@ -521,11 +627,19 @@ void wxGenericColourDialog::OnAddCustom(wxCommandEvent& WXUNUSED(event))
 
   m_customColours[m_colourSelection].Set(m_colourData.m_dataColour.Red(),
                                      m_colourData.m_dataColour.Green(),
-                                     m_colourData.m_dataColour.Blue());
+                                     m_colourData.m_dataColour.Blue(),
+                                     m_colourData.m_dataColour.Alpha());
 
   m_colourData.SetCustomColour(m_colourSelection, m_customColours[m_colourSelection]);
 
-  PaintCustomColours(dc);
+#if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+    wxBitmap bmp(m_smallRectangleSize, 32);
+    bmp.UseAlpha();
+    DoPreviewBitmap(bmp, m_customColours[m_colourSelection]);
+    m_customColoursBmp[m_colourSelection]->SetBitmap(bmp);
+#else
+    PaintCustomColours(dc, m_colourSelection);
+#endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA/!wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
 }
 
 #if wxUSE_SLIDER
@@ -536,7 +650,8 @@ void wxGenericColourDialog::OnRedSlider(wxCommandEvent& WXUNUSED(event))
     return;
 
   wxClientDC dc(this);
-  m_colourData.m_dataColour.Set((unsigned char)m_redSlider->GetValue(), m_colourData.m_dataColour.Green(), m_colourData.m_dataColour.Blue());
+  m_colourData.m_dataColour.Set((unsigned char)m_redSlider->GetValue(), m_colourData.m_dataColour.Green(), m_colourData.m_dataColour.Blue(),
+                                m_colourData.m_dataColour.Alpha());
   PaintCustomColour(dc);
 }
 
@@ -546,7 +661,8 @@ void wxGenericColourDialog::OnGreenSlider(wxCommandEvent& WXUNUSED(event))
     return;
 
   wxClientDC dc(this);
-  m_colourData.m_dataColour.Set(m_colourData.m_dataColour.Red(), (unsigned char)m_greenSlider->GetValue(), m_colourData.m_dataColour.Blue());
+  m_colourData.m_dataColour.Set(m_colourData.m_dataColour.Red(), (unsigned char)m_greenSlider->GetValue(), m_colourData.m_dataColour.Blue(),
+                                m_colourData.m_dataColour.Alpha());
   PaintCustomColour(dc);
 }
 
@@ -556,10 +672,87 @@ void wxGenericColourDialog::OnBlueSlider(wxCommandEvent& WXUNUSED(event))
     return;
 
   wxClientDC dc(this);
-  m_colourData.m_dataColour.Set(m_colourData.m_dataColour.Red(), m_colourData.m_dataColour.Green(), (unsigned char)m_blueSlider->GetValue());
+  m_colourData.m_dataColour.Set(m_colourData.m_dataColour.Red(), m_colourData.m_dataColour.Green(), (unsigned char)m_blueSlider->GetValue(),
+                                m_colourData.m_dataColour.Alpha());
   PaintCustomColour(dc);
 }
 
+void wxGenericColourDialog::OnAlphaSlider(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour c(m_colourData.GetColour().Red(), m_colourData.GetColour().Green(), m_colourData.GetColour().Blue(),
+               (unsigned char)m_alphaSlider->GetValue());
+    m_colourData.SetColour(c);
+
+    wxClientDC dc(this);
+    PaintCustomColour(dc);
+}
+
 #endif // wxUSE_SLIDER
+
+#if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+void wxGenericColourDialog::DoPreviewBitmap(wxBitmap& bmp, const wxColour& colour)
+{
+    if ( bmp.HasAlpha() && colour.Alpha() != wxALPHA_OPAQUE )
+    {
+        // For real ARGB draw a chessboard grid
+        // with actual ARGB fields and reference RGB fields.
+        const int w = bmp.GetWidth();
+        const int h = bmp.GetHeight();
+
+        // Calculate field size: 4 fields per row/column,
+        // with size in range [2..10]
+        int dx = wxMax(wxMin(w / 4, 10), 2);
+        int dy = wxMax(wxMin(h / 4, 10), 2);
+        // We want a square field
+        dx = wxMax(dx, dy);
+        dy = dx;
+
+        // Prepare opaque colour
+        wxColour colourRGB(colour.Red(), colour.Green(), colour.Blue(), wxALPHA_OPAQUE);
+
+        {
+            wxBrush brushARGB(colour);
+            wxBrush brushRGB(colourRGB);
+
+            wxMemoryDC mdc(bmp);
+            {
+                wxGCDC gdc(mdc);
+
+                gdc.SetPen(*wxTRANSPARENT_PEN);
+
+                for (int x = 0, ix = 0; x < w; x += dx, ix++)
+                {
+                    for (int y = 0, iy = 0; y < h; y += dy, iy++)
+                    {
+                        if ( (ix+iy) % 2 == 0 )
+                        {
+                            gdc.SetBrush(brushARGB);
+                        }
+                        else
+                        {
+                            gdc.SetBrush(brushRGB);
+                        }
+                        gdc.DrawRectangle(x, y, dx, dy);
+                    }
+                }
+
+                // Draw a frame
+                gdc.SetPen(*wxBLACK_PEN);
+                gdc.SetBrush(*wxTRANSPARENT_BRUSH);
+                gdc.DrawRectangle(0, 0, w, h);
+            }
+        }
+    }
+    else
+    {
+        wxMemoryDC mdc(bmp);
+        // Fill with custom colour
+        wxBrush brush(colour);
+        mdc.SetPen(*wxBLACK_PEN);
+        mdc.SetBrush(brush);
+        mdc.DrawRectangle(wxPoint(0, 0), bmp.GetSize());
+    }
+}
+#endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
 
 #endif // wxUSE_COLOURDLG
