@@ -328,15 +328,30 @@ void wxGenericColourDialog::CreateWidgets()
 
     sliderSizer->Add(sliderX, sliderHeight );
 
+    const wxSizerFlags sliderLabelFlags = wxSizerFlags().Right().Border();
+    const wxSizerFlags onesliderFlags = wxSizerFlags().CenterHorizontal();
     const wxSizerFlags sliderFlags
         = wxSizerFlags().CentreVertical().DoubleBorder();
 
-    sliderSizer->Add(m_redSlider, sliderFlags);
-    sliderSizer->Add(m_greenSlider, sliderFlags);
-    sliderSizer->Add(m_blueSlider, sliderFlags);
+    wxBoxSizer *redSliderSizer = new wxBoxSizer(wxVERTICAL);
+    redSliderSizer->Add(new wxStaticText(this, wxID_ANY, _("Red:")), sliderLabelFlags);
+    redSliderSizer->Add(m_redSlider, onesliderFlags);
+    wxBoxSizer *greenSliderSizer = new wxBoxSizer(wxVERTICAL);
+    greenSliderSizer->Add(new wxStaticText(this, wxID_ANY, _("Green:")), sliderLabelFlags);
+    greenSliderSizer->Add(m_greenSlider, onesliderFlags);
+    wxBoxSizer *blueSliderSizer = new wxBoxSizer(wxVERTICAL);
+    blueSliderSizer->Add(new wxStaticText(this, wxID_ANY, _("Blue:")), sliderLabelFlags);
+    blueSliderSizer->Add(m_blueSlider, onesliderFlags);
+
+    sliderSizer->Add(redSliderSizer, sliderFlags);
+    sliderSizer->Add(greenSliderSizer, sliderFlags);
+    sliderSizer->Add(blueSliderSizer, sliderFlags);
     if ( m_colourData.GetChooseAlpha() )
-   {
-        sliderSizer->Add(m_alphaSlider, sliderFlags);
+    {
+        wxBoxSizer *alphaSliderSizer = new wxBoxSizer(wxVERTICAL);
+        alphaSliderSizer->Add(new wxStaticText(this, wxID_ANY, _("Opacity:")), sliderLabelFlags);
+        alphaSliderSizer->Add(m_alphaSlider, onesliderFlags);
+        sliderSizer->Add(alphaSliderSizer, sliderFlags);
     }
 
     topSizer->Add(sliderSizer, wxSizerFlags().Centre().DoubleBorder());
