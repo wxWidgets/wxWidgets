@@ -221,6 +221,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 #if USE_COLOURDLG_GENERIC
     EVT_MENU(DIALOGS_CHOOSE_COLOUR_GENERIC,         MyFrame::ChooseColourGeneric)
+    EVT_MENU(DIALOGS_CHOOSE_COLOUR_GENERIC_ALPHA,   MyFrame::ChooseColourGeneric)
 #endif // USE_COLOURDLG_GENERIC
 
 #if wxUSE_PROGRESSDLG
@@ -400,7 +401,10 @@ bool MyApp::OnInit()
     #endif // USE_COLOURDLG_GENERIC || USE_FONTDLG_GENERIC
 
     #if USE_COLOURDLG_GENERIC
-        choices_menu->Append(DIALOGS_CHOOSE_COLOUR_GENERIC, wxT("&Choose colour (generic)"));
+        wxMenu *colourGeneric_menu = new wxMenu;
+        colourGeneric_menu->Append(DIALOGS_CHOOSE_COLOUR_GENERIC, wxT("&No opacity"));
+        colourGeneric_menu->Append(DIALOGS_CHOOSE_COLOUR_GENERIC_ALPHA, wxT("&With opacity"));
+        choices_menu->Append(wxID_ANY, wxT("&Choose colour (generic)"), colourGeneric_menu);
     #endif // USE_COLOURDLG_GENERIC
 
     #if USE_FONTDLG_GENERIC
@@ -741,12 +745,13 @@ void MyFrame::GetColour(wxCommandEvent& WXUNUSED(event))
 
 
 #if USE_COLOURDLG_GENERIC
-void MyFrame::ChooseColourGeneric(wxCommandEvent& WXUNUSED(event))
+void MyFrame::ChooseColourGeneric(wxCommandEvent& event)
 {
     m_clrData.SetColour(m_canvas->GetBackgroundColour());
 
     //FIXME:TODO:This has no effect...
     m_clrData.SetChooseFull(true);
+    m_clrData.SetChooseAlpha(event.GetId() == DIALOGS_CHOOSE_COLOUR_GENERIC_ALPHA);
 
     for (int i = 0; i < 16; i++)
     {
