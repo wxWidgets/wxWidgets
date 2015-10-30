@@ -181,6 +181,7 @@ wxMSW:
 - Correct wxGetOsDescription() for Windows 10 (Tobias Taschner).
 - Make wxListCtrl &c appearance more native on modern systems (Tobias Taschner).
 - Don't send wxActivateEvent for minimized windows (bzcdr).
+- Return correct OS version under Windows 8 and later.
 
 wxOSX/Cocoa:
 
