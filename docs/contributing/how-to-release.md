@@ -1,39 +1,41 @@
-Making a new wxWidgets release
-==============================
+# Making a New wxWidgets Release
 
-Before making the release
--------------------------
+Creating a new release requires a few things before getting started:
 
-Change the version in include/wx/version.h.
+* Linux or OSX with 7z installed.
+* Windows with HTML Help Workshop installed.
+* Doxygen 1.8.8, and GraphViz installed on both machines.
 
-Update docs/readme.txt. Please review its contents in addition to just
-changing the version number.
+Unless mentioned otherwise, all steps should be run on Linux or OSX so that the
+repository export used for the release is primarily using LF line endings. Files
+that require CRLF line endings will be converted appropriately.
 
-Put a date on the release line in docs/changes.txt.
+## Pre-Release Steps
 
-Update the date in the manual (docs/doxygen/mainpages/manual.h).
+* Change the version in `include/wx/version.h`.
+* Update `docs/readme.txt`. Please review its contents in addition to just
+  changing the version number.
+* Put a date on the release line in `docs/changes.txt`.
+* Update the date in the manual (`docs/doxygen/mainpages/manual.h`).
+* Update the release announcement post in `docs/publicity/announce.txt`.
 
-Update the release announcement post in docs/publicity/announce.txt.
+Finally, tag the release:
 
-Tag the release:
+    git tag vX.Y.Z -m 'Tag X.Y.Z release.'
 
-    git tag WX_x_y_z -m 'Tag x.y.z release.'
-
-
-Creating release files
-----------------------
+## Creating Release Files
 
 Follow these steps assuming the current working directory is the root of git
 working copy and you want to prepare distribution for the version x.y.z:
 
 1. Run `./build/tools/git-make-release.sh x.y.z` to create source archives
-   ../wxWidgets-x.y.z.{7z,tar.bz2,zip} and wxWidgets_x.y.z_Headers.zip.
+   `wxWidgets-x.y.z.{7z,tar.bz2,zip}` and `wxWidgets-x.y.z-headers.7z`.
 
 2. Run `./build/tools/make-html-docs.sh x.y.z` to create HTML documentation
-   archives ../wxWidgets-x.y.z.{tar.bz2,zip}
+   archives `wxWidgets-x.y.z-docs-html.{tar.bz2,zip}`.
 
-3. This step must be done under Windows as it relies on having hhc.exe, the
-   Html Help compiler, in PATH: run the following commands
+3. Run the following commands under Windows since it relies on having `hhc.exe`
+   (the HTML Help compiler) in your PATH:
 
     ```
     cd docs\doxygen
@@ -43,7 +45,7 @@ working copy and you want to prepare distribution for the version x.y.z:
     ```
 
 4. This step also must be done under Windows as it uses Inno Setup to produce
-   the .exe file and it also requires the CHM file built above:
+   the `.exe` file and it also requires the CHM file built above:
 
     ```
     md x.y.z-sources
@@ -55,9 +57,7 @@ working copy and you want to prepare distribution for the version x.y.z:
     iscc build\tools\wxwidgets.iss
     ```
 
-
-Uploading
----------
+## Uploading
 
 Upload the files to SourceForge. This can be done via the web interface or just
 scp to sfusername,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z
@@ -67,10 +67,10 @@ The following files need to be uploaded:
     wxWidgets-x.y.z.7z
     wxWidgets-x.y.z.tar.bz2
     wxWidgets-x.y.z.zip
-    wxWidgets-docs-chm-x.y.z.zip
-    wxWidgets-docs-html-x.y.z.tar.bz2
-    wxWidgets-docs-html-x.y.z.zip
-    wxWidgets-x.y.z_Headers.7z
+    wxWidgets-x.y.z-docs-chm.zip
+    wxWidgets-x.y.z-docs-html.tar.bz2
+    wxWidgets-x.y.z-docs-html.zip
+    wxWidgets-x.y.z-headers.7z
 
 You will need to use the web interface to mark the latest uploaded files as
 being "default downloads" for the appropriate platforms (.zip or .exe for MSW,
@@ -91,20 +91,17 @@ And upload the change log too:
     scp docs/changes.txt \
         sfuser,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z
 
-
 Also upload the files to the FTP mirror at ftp.wxwidgets.org (ask Chris for
 access if you don't have it).
 
 Create http://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it if not done yet).
 
-
-Announcement
-------------
+## Announcement
 
 Update http://www.wxwidgets.org, usually a news item is enough but something
 more can be called for for major releases.
 
-Post docs/publicity/announce.txt at least to wx-announce@googlegroups.com and
+Post `docs/publicity/announce.txt` at least to wx-announce@googlegroups.com and
 to wx-users for the important releases.
 
 Submit a link to http://www.reddit.com/r/programming
@@ -120,12 +117,10 @@ Also update docs/index.html for the minor or major (i.e. not micro) releases.
 
 Post to wxBlog if necessary.
 
-Announce on Google+/Twitter/whatever the person doing the release prefers (we
-don't have "official" wxWidgets account, should we?).
+Create a new post on our official Google+ page here:
+https://plus.google.com/+wxwidgets/ (contact Bryan for access)
 
-
-Version updates
----------------
+## Version Updates
 
 Trac: mark the milestone corresponding to the release as completed and add a
 new version for it to allow reporting bugs against it and create the next
@@ -134,10 +129,10 @@ milestone (ask Vadim or Robin to do it or to get admin password).
 Update the roadmap at http://trac.wxwidgets.org/wiki/Roadmap to at least
 mention the new release there.
 
-Run misc/scripts/inc_release to increment micro version, i.e. replace x.y.z
+Run `misc/scripts/inc_release` to increment micro version, i.e. replace x.y.z
 with x.y.z+1 (minor or major versions updates require manual intervention)
 and rerun both `bakefile_gen` and `autoconf` afterwards to update the version
 in the generated files too.
 
 Update the definition of the stable and release branches in
-build/buildbot/config/include/defs.xml after a minor version change.
+`build/buildbot/config/include/defs.xml` after a minor version change.
