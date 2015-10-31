@@ -154,10 +154,10 @@
 /*
    Clang Support
  */
- 
+
 #ifndef WX_HAS_CLANG_FEATURE
-#   ifndef __has_feature      
-#       define WX_HAS_CLANG_FEATURE(x) 0 
+#   ifndef __has_feature
+#       define WX_HAS_CLANG_FEATURE(x) 0
 #   else
 #       define WX_HAS_CLANG_FEATURE(x) __has_feature(x)
 #   endif
@@ -1261,7 +1261,7 @@ typedef wxUint32 wxDword;
 #else
     /*
        This should never happen for the current architectures but if you're
-       using one where it does, please contact wx-dev@lists.wxwidgets.org.
+       using one where it does, please contact wx-dev@googlegroups.com.
      */
     #error "Pointers can't be stored inside integer types."
 #endif

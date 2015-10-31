@@ -114,11 +114,8 @@ documentation instead.
  Support for wxBase is available from the same places as for wxWidgets itself,
 namely:
 
-* Usenet newsgroup comp.soft-sys.wxwindows
-
-* Mailing lists: see http://lists.wxwidgets.org/ for more information
-
-* WWW page: http://www.wxwidgets.org/
+* Website: https://www.wxwidgets.org/
+* Mailing Lists: https://www.wxwidgets.org/support/mailing-lists/
 
 
  Hope you will find wxBase useful!

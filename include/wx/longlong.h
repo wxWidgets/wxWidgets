@@ -45,12 +45,12 @@
         #warning "Your compiler does not appear to support 64 bit "\
                  "integers, using emulation class instead.\n" \
                  "Please report your compiler version to " \
-                 "wx-dev@lists.wxwidgets.org!"
+                 "wx-dev@googlegroups.com!"
     #else
         #pragma warning "Your compiler does not appear to support 64 bit "\
                         "integers, using emulation class instead.\n" \
                         "Please report your compiler version to " \
-                        "wx-dev@lists.wxwidgets.org!"
+                        "wx-dev@googlegroups.com!"
     #endif
 
     #define wxUSE_LONGLONG_WX 1

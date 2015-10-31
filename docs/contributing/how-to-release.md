@@ -98,17 +98,17 @@ Create http://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it if not done yet).
 
 ## Announcement
 
-Update http://www.wxwidgets.org, usually a news item is enough but something
+Update https://www.wxwidgets.org, usually a news item is enough but something
 more can be called for for major releases.
 
 Post `docs/publicity/announce.txt` at least to wx-announce@googlegroups.com and
 to wx-users for the important releases.
 
-Submit a link to http://www.reddit.com/r/programming
+Submit a link to https://www.reddit.com/r/programming
 
-Submit to http://isocpp.org/blog/suggest
+Submit to https://isocpp.org/blog/suggest
 
-For major releases, submit the announcement to http://slashdot.org/submission
+For major releases, submit the announcement to https://slashdot.org/submission
 
 Modify the links at downloads/index.html to point to the new release. Also
 update the release date on this page.

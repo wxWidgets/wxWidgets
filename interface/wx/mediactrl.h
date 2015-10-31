@@ -226,7 +226,7 @@ public:
 
     The only real tricky part is that you need to make sure the file in compiled in,
     which if there are just backends in there will not happen and you may need to
-    use a force link hack (see http://www.wxwidgets.org/wiki/index.php/RTTI).
+    use a force link hack (see https://wiki.wxwidgets.org/RTTI).
 
     This is a rather simple example of how to create a backend in the
     wxActiveXContainer documentation.

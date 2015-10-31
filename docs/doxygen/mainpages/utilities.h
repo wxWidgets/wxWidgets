@@ -16,11 +16,12 @@ are available to the users in the @c utils hierarchy (even if some of them are
 explicitly conceived for wxWidgets maintainance and will probably be of
 little use to others).
 
-Please note that these utilities do represent only the utilities developed
-and maintained by the wxWidgets team.
-There are lots of other user-contributed and user-maintained packages;
-see the wxWidgets download page: http://www.wxwidgets.org/downloads
-or directly http://wxcode.sourceforge.net or http://www.wxcommunity.com/ .
+Please note that these utilities only represent the utilities developed and
+maintained by the wxWidgets team. There are lots of other user-contributed and
+user-maintained packages such as:
+
+@li http://wxcode.sourceforge.net
+@li https://forums.wxwidgets.org/viewforum.php?f=20
 
 
 
@@ -87,4 +88,3 @@ See @ref overview_xrc for more info.
 You can find it under @c utils/wxrc.
 
 */
-

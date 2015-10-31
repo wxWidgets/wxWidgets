@@ -26,7 +26,7 @@ in 2013. Currently wxWidgets is developed and maintained by Julian Smart, Vadim
 Zeitlin, Stefan Csomor, Robert Roebling, Vaclav Slavik and many others.
 
 More information about wxWidgets is available on its web site at
-http://www.wxwidgets.org.
+https://www.wxwidgets.org.
 
 
 
@@ -111,21 +111,21 @@ configurations but at least 1GB and possibly more is required.
 
 @section page_introduction_where Where to get wxWidgets and support for it
 
-The download links can be found at http://www.wxwidgets.org. The primary
-download location is https://sourceforge.net/downloads/wxwindows/ and there is
-also an FTP mirror at ftp://ftp.wxwidgets.org/pub/. Additionally, the latest
-version can always be retrieved from our version control system using Git
-(https://github.com/wxWidgets/wxWidgets).
+The download links can be found at https://www.wxwidgets.org. The primary
+download location is https://github.com/wxWidgets/wxWidgets/releases/latest.
+Additionally, the latest version can always be retrieved from our version
+control system using Git (https://github.com/wxWidgets/wxWidgets).
 
 wxWidgets documentation that you are reading is also available online at
 http://docs.wxwidgets.org/trunk/ and please also visit our wiki at
-http://wiki.wxwidgets.org/ for user-contributed contents.
+https://wiki.wxwidgets.org/ for user-contributed contents.
 
 And if you have any questions, you can join wxWidgets community using
 
-- Web-based <a href="http://forums.wxwidgets.org/">wxForum</a>.
-- <a href="http://www.wxwidgets.org/support/maillst2.htm">Mailing lists</a>.
-- @c #wxwidgets IRC channel.
-- Or asking questions with @c wxwidgets tag on http://stackoverflow.com/
+- Web-based <a href="https://forums.wxwidgets.org/">wxForum</a>
+- <a href="https://www.wxwidgets.org/support/mailing-lists/">Mailing lists</a>
+- <a href="https://www.wxwidgets.org/support/irc/">#wxwidgets IRC Channel</a>
+- Or asking questions with @c wxwidgets tag on Stack Overflow:
+  https://stackoverflow.com/questions/tagged/wxwidgets
 
 */
