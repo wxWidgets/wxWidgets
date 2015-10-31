@@ -2,13 +2,18 @@
 
 Creating a new release requires a few things before getting started:
 
-* Linux or OSX with 7z installed.
-* Windows with HTML Help Workshop installed.
-* Doxygen 1.8.8, and GraphViz installed on both machines.
+* Linux or OSX.
+* Windows 7+ with HTML Help Workshop, and Inno Setup installed.
+* 7-Zip, Doxygen 1.8.8, and GraphViz installed on both machines.
 
 Unless mentioned otherwise, all steps should be run on Linux or OSX so that the
 repository export used for the release is primarily using LF line endings. Files
 that require CRLF line endings will be converted appropriately.
+
+*Important:* Ensure that 7-Zip, HTML Help Workshop, Doxygen, GraphViz and Inno
+Setup have all been added to your Path in Windows. You can confirm this by
+running `7z`, `hhc`, `iscc`, `doxygen -v`, and `dot -V` in a command prompt.
+Add the missing installed folder locations of any executables to your Path.
 
 ## Pre-Release Steps
 
@@ -25,37 +30,27 @@ Finally, tag the release:
 
 ## Creating Release Files
 
-Follow these steps assuming the current working directory is the root of git
-working copy and you want to prepare distribution for the version x.y.z:
+The release scripts can be run from any working directory, and they will
+generate all release package files under `release/wxWidgets-x.y-z`. They all
+build the release packages based on the current HEAD commit, so always ensure
+you have the appropriate tag or commit checked out.
 
-1. Run `./build/tools/git-make-release.sh x.y.z` to create source archives
-   `wxWidgets-x.y.z.{7z,tar.bz2,zip}` and `wxWidgets-x.y.z-headers.7z`.
+1. Run `./build/tools/release.sh x.y.z` to create source archives
+   `wxWidgets-x.y.z.{7z,tar.bz2,zip}`, `wxWidgets-x.y.z-headers.7z`, and
+   `wxWidgets-x.y.z-docs-html.{tar.bz2,zip}` packages.
 
-2. Run `./build/tools/make-html-docs.sh x.y.z` to create HTML documentation
-   archives `wxWidgets-x.y.z-docs-html.{tar.bz2,zip}`.
+2. Copy just the `wxWidgets-x.y.z.zip` package into the same
+   `release\wxWidgets-x.y.z` folder on Windows.
 
-3. Run the following commands under Windows since it relies on having `hhc.exe`
-   (the HTML Help compiler) in your PATH:
+3. Run `build/tools/release.bat x.y.z` in a Windows command prompt.
 
-    ```
-    cd docs\doxygen
-    regen.bat chm
-    cd out
-    zip ..\..\..\wxWidgets-x.y.z-docs-chm.zip wx.chm
-    ```
+4. Copy these Windows packages back to your Linux or OSX `release` directory so
+   you can continue with the upload step with all packages available:
 
-4. This step also must be done under Windows as it uses Inno Setup to produce
-   the `.exe` file and it also requires the CHM file built above:
-
-    ```
-    md x.y.z-sources
-    cd x.y.z-sources
-    7z x ..\wxWidgets-x.y.z.7z
-    md docs\htmlhelp
-    cp ..\docs\doxygen\out\wx.chm docs\htmlhelp
-    set WXW_VER=x.y.z
-    iscc build\tools\wxwidgets.iss
-    ```
+   ```
+   wxMSW-x.y.z-Setup.exe
+   wxWidgets-x.y.z.chm
+   ```
 
 ## Uploading
 
@@ -67,7 +62,7 @@ The following files need to be uploaded:
     wxWidgets-x.y.z.7z
     wxWidgets-x.y.z.tar.bz2
     wxWidgets-x.y.z.zip
-    wxWidgets-x.y.z-docs-chm.zip
+    wxWidgets-x.y.z.chm
     wxWidgets-x.y.z-docs-html.tar.bz2
     wxWidgets-x.y.z-docs-html.zip
     wxWidgets-x.y.z-headers.7z

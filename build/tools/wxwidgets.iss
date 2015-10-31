@@ -7,9 +7,9 @@
     #define WXW_DIR "..\.."
 #endif
 
-#if GetEnv("WXW_VER") == "git"
-    #define INFOFILE  WXW_DIR + "\BuildGit.txt"
-    #define WX_VERSION "SVN"
+#if GetEnv("WXW_VER") == "Snapshot"
+    #define INFOFILE WXW_DIR + "\BuildGit.txt"
+    #define WX_VERSION "Snapshot"
 #elif GetEnv("WXW_VER") != ""
     #define INFOFILE WXW_DIR + "\docs\msw\install.txt"
     #define WX_VERSION GetEnv("WXW_VER")

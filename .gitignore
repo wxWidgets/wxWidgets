@@ -114,6 +114,9 @@
 /demos/poem/poemM5.mcp
 /demos/poem/poemM*Data
 
+# /distrib/release/
+/distrib/release
+
 # /docs/doxygen/
 /docs/doxygen/doxygen.log
 /docs/doxygen/out
