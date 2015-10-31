@@ -124,7 +124,7 @@ And if you have any questions, you can join wxWidgets community using
 
 - Web-based <a href="https://forums.wxwidgets.org/">wxForum</a>
 - <a href="https://www.wxwidgets.org/support/mailing-lists/">Mailing lists</a>
-- <a href="https://www.wxwidgets.org/support/irc/">#wxwidgets IRC Channel</a>
+- <a href="https://www.wxwidgets.org/support/irc/">IRC Channel</a>
 - Or asking questions with @c wxwidgets tag on Stack Overflow:
   https://stackoverflow.com/questions/tagged/wxwidgets
 

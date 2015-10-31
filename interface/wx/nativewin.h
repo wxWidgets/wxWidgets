@@ -37,7 +37,7 @@
 
     @since 3.1.0
 
-    @library{core}
+    @library{wxcore}
     @category{ctrl}
  */
 class wxNativeWindow : public wxWindow

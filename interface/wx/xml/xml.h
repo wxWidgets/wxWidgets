@@ -58,7 +58,7 @@ enum wxXmlNodeType
     If @c wxUSE_UNICODE is 0, all strings are encoded in the encoding given to
     wxXmlDocument::Load (default is UTF-8).
 
-    @Note
+    @note
     Once a wxXmlNode has been added to a wxXmlDocument it becomes owned by the
     document and this has two implications. Firstly, the wxXmlDocument takes
     responsibility for deleting the node so the user should not @c delete it;
@@ -908,4 +908,3 @@ public:
     */
     static wxVersionInfo GetLibraryVersionInfo();
 };
-
