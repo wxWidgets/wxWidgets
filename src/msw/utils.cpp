@@ -1009,12 +1009,12 @@ OSVERSIONINFOEXW wxGetWindowsVersionInfo()
     // RtlGetVersion() directly, if it is available.
 #if wxUSE_DYNLIB_CLASS
     wxDynamicLibrary dllNtDll;
-    if ( dllNtDll.RawLoad(wxS("ntdll.dll")) )
+    if ( dllNtDll.Load(wxS("ntdll.dll")) )
     {
         typedef LONG /* NTSTATUS */ (WINAPI *RtlGetVersion_t)(OSVERSIONINFOEXW*);
 
         RtlGetVersion_t wxDL_INIT_FUNC(pfn, RtlGetVersion, dllNtDll);
-        if ( pfnRtlGetVersion && pfnRtlGetVersion(&info) )
+        if ( pfnRtlGetVersion && (pfnRtlGetVersion(&info) == 0) )
             return info;
     }
 #endif // wxUSE_DYNLIB_CLASS
@@ -1355,7 +1355,7 @@ wxWinVersion wxGetWinVersion()
 
                     }
                     break;
-                    
+
                 case 10:
                     return wxWinVersion_10;
             }
