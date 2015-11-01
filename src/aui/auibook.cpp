@@ -431,6 +431,10 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     if (!dc.IsOk())
         return;
 
+    // ensure we show as many tabs as possible
+    while (m_tabOffset > 0 && IsTabVisible(page_count-1, m_tabOffset-1, &dc, wnd))
+        --m_tabOffset;
+
     // find out if size of tabs is larger than can be
     // afforded on screen
     int total_width = 0;
