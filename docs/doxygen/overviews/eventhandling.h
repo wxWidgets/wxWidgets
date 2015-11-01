@@ -438,14 +438,14 @@ doesn't count as having handled the event and the search continues):
     </li>
 
     <li value="1">
-    If this event handler is disabled via a call to
-    wxEvtHandler::SetEvtHandlerEnabled() the next three steps are skipped and
-    the event handler resumes at step (5).
+    If the object is a wxWindow and has an associated validator, wxValidator
+    gets a chance to process the event.
     </li>
 
     <li value="2">
-    If the object is a wxWindow and has an associated validator, wxValidator
-    gets a chance to process the event.
+    If this event handler is disabled via a call to
+    wxEvtHandler::SetEvtHandlerEnabled() the two next steps are skipped and
+    the event handler resumes at step (5).
     </li>
 
     <li value="3">
