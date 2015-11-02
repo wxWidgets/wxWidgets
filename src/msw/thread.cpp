@@ -800,9 +800,10 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
                 break;
 
             case WAIT_OBJECT_0 + 1:
-                // new message arrived, process it -- but only if we're the
-                // main thread as we don't support processing messages in
-                // the other ones
+            case WAIT_OBJECT_0 + 2:
+                // Wake up has been signaled or a new message arrived, process
+                // it -- but only if we're the main thread as we don't support
+                // processing messages in the other ones
                 //
                 // NB: we still must include QS_ALLINPUT even when waiting
                 //     in a secondary thread because if it had created some
