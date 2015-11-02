@@ -280,10 +280,14 @@ gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event,
     {
         if (win->GetWindowStyle() & wxRESIZE_BORDER)
         {
+            GdkCursor* cursor = NULL;
+            GdkWindow* window = gtk_widget_get_window(widget);
             if ((x > win->m_width-14) && (y > win->m_height-14))
-               gdk_window_set_cursor(gtk_widget_get_window(widget), gdk_cursor_new(GDK_BOTTOM_RIGHT_CORNER));
-            else
-               gdk_window_set_cursor(gtk_widget_get_window(widget), NULL);
+            {
+                GdkDisplay* display = gdk_window_get_display(window);
+                cursor = gdk_cursor_new_for_display(display, GDK_BOTTOM_RIGHT_CORNER);
+            }
+            gdk_window_set_cursor(window, cursor);
         }
         return TRUE;
     }
