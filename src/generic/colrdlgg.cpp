@@ -307,15 +307,16 @@ void wxGenericColourDialog::CreateWidgets()
 #if wxUSE_SLIDER
     const int sliderX = m_singleCustomColourRect.x + m_singleCustomColourRect.width + m_sectionSpacing;
 
-    m_redSlider = new wxSlider(this, wxID_RED_SLIDER, m_colourData.m_dataColour.Red(), 0, 255,
+    wxColour c = m_colourData.GetColour();
+    m_redSlider = new wxSlider(this, wxID_RED_SLIDER, c.Red(), 0, 255,
         wxDefaultPosition, wxSize(wxDefaultCoord, sliderHeight), wxSL_VERTICAL|wxSL_LABELS|wxSL_INVERSE);
-    m_greenSlider = new wxSlider(this, wxID_GREEN_SLIDER, m_colourData.m_dataColour.Green(), 0, 255,
+    m_greenSlider = new wxSlider(this, wxID_GREEN_SLIDER, c.Green(), 0, 255,
         wxDefaultPosition, wxSize(wxDefaultCoord, sliderHeight), wxSL_VERTICAL|wxSL_LABELS|wxSL_INVERSE);
-    m_blueSlider = new wxSlider(this, wxID_BLUE_SLIDER, m_colourData.m_dataColour.Blue(), 0, 255,
+    m_blueSlider = new wxSlider(this, wxID_BLUE_SLIDER, c.Blue(), 0, 255,
         wxDefaultPosition, wxSize(wxDefaultCoord, sliderHeight), wxSL_VERTICAL|wxSL_LABELS|wxSL_INVERSE);
     if ( m_colourData.GetChooseAlpha() )
     {
-        m_alphaSlider = new wxSlider(this, wxID_ANY, m_colourData.m_dataColour.Alpha(), 0, 255,
+        m_alphaSlider = new wxSlider(this, wxID_ANY, c.Alpha(), 0, 255,
             wxDefaultPosition, wxSize(wxDefaultCoord, sliderHeight), wxSL_VERTICAL|wxSL_LABELS|wxSL_INVERSE);
         m_alphaSlider->Bind(wxEVT_SLIDER, &wxGenericColourDialog::OnAlphaSlider, this);
     }
@@ -431,13 +432,13 @@ void wxGenericColourDialog::InitializeColours(void)
                 }
             }
         }
-        m_colourData.m_dataColour.Set( curr.Red(), curr.Green(), curr.Blue() );
+        m_colourData.SetColour(curr);
     }
     else
     {
         m_whichKind = 1;
         m_colourSelection = 0;
-        m_colourData.m_dataColour.Set( 0, 0, 0 );
+        m_colourData.SetColour(wxColour(0, 0, 0));
     }
 }
 
@@ -553,7 +554,7 @@ void wxGenericColourDialog::PaintCustomColour(wxDC& dc)
 #else
     dc.SetPen(*wxBLACK_PEN);
 
-    wxBrush *brush = new wxBrush(m_colourData.m_dataColour);
+    wxBrush *brush = new wxBrush(m_colourData.GetColour());
     dc.SetBrush(*brush);
 
     dc.DrawRectangle(m_singleCustomColourRect);
@@ -581,10 +582,7 @@ void wxGenericColourDialog::OnBasicColourClick(int which)
     }
 #endif // wxUSE_SLIDER
 
-    m_colourData.m_dataColour.Set(m_standardColours[m_colourSelection].Red(),
-                                m_standardColours[m_colourSelection].Green(),
-                                m_standardColours[m_colourSelection].Blue(),
-                                m_standardColours[m_colourSelection].Alpha());
+    m_colourData.SetColour(m_standardColours[m_colourSelection]);
 
     PaintCustomColour(dc);
     PaintHighlight(dc, true);
@@ -607,10 +605,7 @@ void wxGenericColourDialog::OnCustomColourClick(int which)
     }
 #endif // wxUSE_SLIDER
 
-    m_colourData.m_dataColour.Set(m_customColours[m_colourSelection].Red(),
-                                m_customColours[m_colourSelection].Green(),
-                                m_customColours[m_colourSelection].Blue(),
-                                m_customColours[m_colourSelection].Alpha());
+    m_colourData.SetColour(m_customColours[m_colourSelection]);
 
     PaintCustomColour(dc);
     PaintHighlight(dc, true);
@@ -640,10 +635,7 @@ void wxGenericColourDialog::OnAddCustom(wxCommandEvent& WXUNUSED(event))
     PaintHighlight(dc, true);
   }
 
-  m_customColours[m_colourSelection].Set(m_colourData.m_dataColour.Red(),
-                                     m_colourData.m_dataColour.Green(),
-                                     m_colourData.m_dataColour.Blue(),
-                                     m_colourData.m_dataColour.Alpha());
+  m_customColours[m_colourSelection] = m_colourData.GetColour();
 
   m_colourData.SetCustomColour(m_colourSelection, m_customColours[m_colourSelection]);
 
@@ -665,8 +657,8 @@ void wxGenericColourDialog::OnRedSlider(wxCommandEvent& WXUNUSED(event))
     return;
 
   wxClientDC dc(this);
-  m_colourData.m_dataColour.Set((unsigned char)m_redSlider->GetValue(), m_colourData.m_dataColour.Green(), m_colourData.m_dataColour.Blue(),
-                                m_colourData.m_dataColour.Alpha());
+  wxColour c = m_colourData.GetColour();
+  m_colourData.SetColour(wxColour((unsigned char)m_redSlider->GetValue(), c.Green(), c.Blue(), c.Alpha()));
   PaintCustomColour(dc);
 }
 
@@ -676,8 +668,8 @@ void wxGenericColourDialog::OnGreenSlider(wxCommandEvent& WXUNUSED(event))
     return;
 
   wxClientDC dc(this);
-  m_colourData.m_dataColour.Set(m_colourData.m_dataColour.Red(), (unsigned char)m_greenSlider->GetValue(), m_colourData.m_dataColour.Blue(),
-                                m_colourData.m_dataColour.Alpha());
+  wxColour c = m_colourData.GetColour();
+  m_colourData.SetColour(wxColour(c.Red(), (unsigned char)m_greenSlider->GetValue(), c.Blue(), c.Alpha()));
   PaintCustomColour(dc);
 }
 
@@ -687,16 +679,15 @@ void wxGenericColourDialog::OnBlueSlider(wxCommandEvent& WXUNUSED(event))
     return;
 
   wxClientDC dc(this);
-  m_colourData.m_dataColour.Set(m_colourData.m_dataColour.Red(), m_colourData.m_dataColour.Green(), (unsigned char)m_blueSlider->GetValue(),
-                                m_colourData.m_dataColour.Alpha());
+  wxColour c = m_colourData.GetColour();
+  m_colourData.SetColour(wxColour(c.Red(), c.Green(), (unsigned char)m_blueSlider->GetValue(), c.Alpha()));
   PaintCustomColour(dc);
 }
 
 void wxGenericColourDialog::OnAlphaSlider(wxCommandEvent& WXUNUSED(event))
 {
-    wxColour c(m_colourData.GetColour().Red(), m_colourData.GetColour().Green(), m_colourData.GetColour().Blue(),
-               (unsigned char)m_alphaSlider->GetValue());
-    m_colourData.SetColour(c);
+    wxColour c = m_colourData.GetColour();
+    m_colourData.SetColour(wxColour(c.Red(), c.Green(), c.Blue(), (unsigned char)m_alphaSlider->GetValue()));
 
     wxClientDC dc(this);
     PaintCustomColour(dc);
