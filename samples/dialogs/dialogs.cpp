@@ -753,14 +753,10 @@ void MyFrame::ChooseColourGeneric(wxCommandEvent& event)
     m_clrData.SetChooseFull(true);
     m_clrData.SetChooseAlpha(event.GetId() == DIALOGS_CHOOSE_COLOUR_GENERIC_ALPHA);
 
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < wxColourData::NUM_CUSTOM; i++)
     {
-        wxColour colour(
-            (unsigned char)(i*16),
-            (unsigned char)(i*16),
-            (unsigned char)(i*16)
-        );
-        m_clrData.SetCustomColour(i, colour);
+        unsigned char n = i*(256/wxColourData::NUM_CUSTOM);
+        m_clrData.SetCustomColour(i, wxColour(n, n, n));
     }
 
     wxGenericColourDialog *dialog = new wxGenericColourDialog(this, &m_clrData);
