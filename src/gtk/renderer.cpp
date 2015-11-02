@@ -41,6 +41,10 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk2-compat.h"
 
+#if defined(__WXGTK3__) && !GTK_CHECK_VERSION(3,14,0)
+    #define GTK_STATE_FLAG_CHECKED (1 << 11)
+#endif
+
 // ----------------------------------------------------------------------------
 // wxRendererGTK: our wxRendererNative implementation
 // ----------------------------------------------------------------------------
@@ -551,7 +555,11 @@ wxRendererGTK::DrawCheckBox(wxWindow* win,
     {
         int stateFlags = GTK_STATE_FLAG_NORMAL;
         if (flags & wxCONTROL_CHECKED)
+        {
             stateFlags = GTK_STATE_FLAG_ACTIVE;
+            if (gtk_check_version(3,14,0) == NULL)
+                stateFlags = GTK_STATE_FLAG_CHECKED;
+        }
         if (flags & wxCONTROL_DISABLED)
             stateFlags |= GTK_STATE_FLAG_INSENSITIVE;
         if (flags & wxCONTROL_UNDETERMINED)
@@ -866,7 +874,11 @@ void wxRendererGTK::DrawRadioBitmap(wxWindow* win, wxDC& dc, const wxRect& rect,
 #ifdef __WXGTK3__
     int state = GTK_STATE_FLAG_NORMAL;
     if (flags & wxCONTROL_CHECKED)
+    {
         state = GTK_STATE_FLAG_ACTIVE;
+        if (gtk_check_version(3,14,0) == NULL)
+            state = GTK_STATE_FLAG_CHECKED;
+    }
     else if (flags & wxCONTROL_UNDETERMINED)
         state = GTK_STATE_FLAG_INCONSISTENT;
     if (flags & wxCONTROL_DISABLED)
