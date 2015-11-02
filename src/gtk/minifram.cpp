@@ -288,6 +288,8 @@ gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event,
                 cursor = gdk_cursor_new_for_display(display, GDK_BOTTOM_RIGHT_CORNER);
             }
             gdk_window_set_cursor(window, cursor);
+            if (cursor)
+                g_object_unref(cursor);
         }
         return TRUE;
     }
