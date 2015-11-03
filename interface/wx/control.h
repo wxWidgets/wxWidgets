@@ -383,7 +383,8 @@ public:     // static functions
             wxDC::GetPartialTextExtents() function.
         @param mode
             The ellipsization mode. This is the setting which determines
-            which part of the string should be replaced by the ellipsis.
+            which part of the string should be replaced by the ellipsis
+            (unless it is ::wxELLIPSIZE_NONE in which case nothing is done).
             See ::wxEllipsizeMode enumeration values for more info.
         @param maxWidth
             The maximum width of the returned string in pixels.
