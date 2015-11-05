@@ -22,6 +22,7 @@ environment:
     ARCH: amd64
     wxUSE_STL: 1
   - TOOLSET: mingw
+    wxUSE_STL: 0
   - TOOLSET: msys2
     MSYSTEM: MINGW32
   - TOOLSET: cygwin
