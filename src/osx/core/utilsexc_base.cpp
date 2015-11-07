@@ -73,6 +73,14 @@ wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
     return wxOS_MAC_OSX_DARWIN;
 }
 
+bool wxCheckOsVersion(int majorVsn, int minorVsn)
+{
+    int majorCur, minorCur;
+    wxGetOsVersion(&majorCur, &minorCur);
+
+    return majorCur > majorVsn || (majorCur == majorVsn && minorCur >= minorVsn);
+}
+
 #include <sys/utsname.h>
 
 wxString wxGetOsDescription()
