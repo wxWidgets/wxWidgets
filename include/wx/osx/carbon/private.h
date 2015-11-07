@@ -998,6 +998,11 @@ public :
 
     virtual void SetTitle( const wxString& title, wxFontEncoding encoding ) ;
 
+    // Enabling/disabling of title bar buttons not implemented for Carbon.
+    virtual bool EnableCloseButton(bool WXUNUSED(enable)) { return false; }
+    virtual bool EnableMaximizeButton(bool WXUNUSED(enable)) { return false; }
+    virtual bool EnableMinimizeButton(bool WXUNUSED(enable)) { return false; }
+
     virtual bool IsMaximized() const;
 
     virtual bool IsIconized() const;
