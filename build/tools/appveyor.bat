@@ -14,11 +14,13 @@ goto :eof
 :mingw
 cd build\msw
 path C:\MinGW\bin;%path%
-echo "--- Compiler version:"
-g++ --version
-echo "--- Binutils version:"
-ar --version
-echo "--- Starting the build"
+echo --- Tools versions:
+g++ --version | head -1
+mingw32-make --version | head -1
+ar --version | head -1
+echo.
+echo --- Starting the build
+echo.
 mingw32-make SHELL=cmd -f makefile.gcc setup_h BUILD=debug SHARED=0 USE_STC=0 USE_RIBBON=0 USE_PROPGRID=0 USE_AUI=0
 mingw32-make SHELL=cmd -j3 -f makefile.gcc BUILD=debug SHARED=0 USE_STC=0 USE_RIBBON=0 USE_PROPGRID=0 USE_AUI=0
 goto :eof
