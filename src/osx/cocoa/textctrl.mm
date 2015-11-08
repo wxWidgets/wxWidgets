@@ -561,25 +561,42 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 // wxNSTextViewControl
 
-wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w )
+wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long style )
     : wxWidgetCocoaImpl(wxPeer, w),
       wxTextWidgetImpl(wxPeer)
 {
     wxNSTextScrollView* sv = (wxNSTextScrollView*) w;
     m_scrollView = sv;
 
+    wxNSTextView* tv;
+    
     [m_scrollView setHasVerticalScroller:YES];
-    [m_scrollView setHasHorizontalScroller:NO];
-    // TODO Remove if no regression, this was causing automatic resizes of multi-line textfields when the tlw changed
-    // [m_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
     NSSize contentSize = [m_scrollView contentSize];
+    
+    if ( (style & wxTE_DONTWRAP) || ( style & wxHSCROLL) )
+    {
+        [m_scrollView setHasHorizontalScroller:YES];
 
-    wxNSTextView* tv = [[wxNSTextView alloc] initWithFrame: NSMakeRect(0, 0,
-            contentSize.width, contentSize.height)];
-    m_textView = tv;
-    [tv setVerticallyResizable:YES];
-    [tv setHorizontallyResizable:NO];
-    [tv setAutoresizingMask:NSViewWidthSizable];
+        tv = [[wxNSTextView alloc] initWithFrame: NSMakeRect(0, 0,
+                FLT_MAX, contentSize.height)];
+        m_textView = tv;
+        [tv setVerticallyResizable:YES];
+        [tv setHorizontallyResizable:YES];
+        [tv setAutoresizingMask:(NSViewWidthSizable | NSViewHeightSizable)];
+        [[tv textContainer] setContainerSize:NSMakeSize(FLT_MAX, FLT_MAX)];
+        [[tv textContainer] setWidthTracksTextView:NO];
+    }
+    else
+    {
+        [m_scrollView setHasHorizontalScroller:NO];
+
+        tv = [[wxNSTextView alloc] initWithFrame: NSMakeRect(0, 0,
+                contentSize.width, contentSize.height)];
+        m_textView = tv;
+        [tv setVerticallyResizable:YES];
+        [tv setHorizontallyResizable:NO];
+        [tv setAutoresizingMask:NSViewWidthSizable];
+    }
 
     if ( !wxPeer->HasFlag(wxTE_RICH | wxTE_RICH2) )
     {
@@ -1055,7 +1072,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
     {
         wxNSTextScrollView* v = nil;
         v = [[wxNSTextScrollView alloc] initWithFrame:r];
-        c = new wxNSTextViewControl( wxpeer, v );
+        c = new wxNSTextViewControl( wxpeer, v, style );
         c->SetNeedsFocusRect( true );
     }
     else

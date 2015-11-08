@@ -62,7 +62,7 @@ private:
 class wxNSTextViewControl : public wxWidgetCocoaImpl, public wxTextWidgetImpl
 {
 public:
-    wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w );
+    wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long style );
     virtual ~wxNSTextViewControl();
 
     virtual wxString GetStringValue() const ;
