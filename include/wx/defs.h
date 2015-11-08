@@ -696,6 +696,29 @@ typedef short int WXTYPE;
 #endif
 
 /*
+   Macros to suppress and restore clang warning only when it is valid.
+
+   Example:
+        wxCLANG_WARNING_SUPPRESS(inconsistent-missing-override)
+        virtual wxClassInfo *GetClassInfo() const
+        wxCLANG_WARNING_RESTORE(inconsistent-missing-override)
+*/
+#if defined(__has_warning)
+#    define wxCLANG_HAS_WARNING(x) __has_warning(x) /* allow macro expansion for the warning name */
+#    define wxCLANG_IF_VALID_WARNING(x,y) \
+         wxCONCAT(wxCLANG_IF_VALID_WARNING_,wxCLANG_HAS_WARNING(wxSTRINGIZE(wxCONCAT(-W,x))))(y)
+#    define wxCLANG_IF_VALID_WARNING_0(x)
+#    define wxCLANG_IF_VALID_WARNING_1(x) x
+#    define wxCLANG_WARNING_SUPPRESS(x) \
+         wxCLANG_IF_VALID_WARNING(x,wxGCC_WARNING_SUPPRESS(x))
+#    define wxCLANG_WARNING_RESTORE(x) \
+         wxCLANG_IF_VALID_WARNING(x,wxGCC_WARNING_RESTORE(x))
+#else
+#    define wxCLANG_WARNING_SUPPRESS(x)
+#    define wxCLANG_WARNING_RESTORE(x)
+#endif
+
+/*
     Combination of the two variants above: should be used for deprecated
     functions which are defined inline and are used by wxWidgets itself.
  */
