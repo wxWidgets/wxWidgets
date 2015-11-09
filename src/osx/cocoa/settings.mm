@@ -164,6 +164,8 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 // Get a system metric, e.g. scrollbar size
 int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow *WXUNUSED(win))
 {
+    int value;
+
     switch ( index )
     {
         case wxSYS_MOUSE_BUTTONS:
@@ -193,8 +195,15 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow *WXUNUSED(w
         // TODO case wxSYS_ICONSPACING_Y:
         // TODO case wxSYS_WINDOWMIN_X:
         // TODO case wxSYS_WINDOWMIN_Y:
-        // TODO case wxSYS_SCREEN_X:
-        // TODO case wxSYS_SCREEN_Y:
+
+        case wxSYS_SCREEN_X:
+            wxDisplaySize(&value, NULL);
+            return value;
+
+        case wxSYS_SCREEN_Y:
+            wxDisplaySize(NULL, &value);
+            return value;
+
         // TODO case wxSYS_FRAMESIZE_X:
         // TODO case wxSYS_FRAMESIZE_Y:
         // TODO case wxSYS_SMALLICON_X:
@@ -222,6 +231,11 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow *WXUNUSED(w
 
         case wxSYS_SWAP_BUTTONS:
             return 0;
+
+        case wxSYS_DCLICK_MSEC:
+            // default on mac is 30 ticks, we shouldn't really use wxSYS_DCLICK_MSEC anyway
+            // but rather rely on the 'click-count' by the system delivered in a mouse event
+            return 500;
 
         default:
             return -1;  // unsupported metric
