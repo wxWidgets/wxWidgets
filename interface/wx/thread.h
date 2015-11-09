@@ -1036,8 +1036,8 @@ public:
 
         @warning
             It is a good idea to explicitly specify a value as systems'
-            default values vary from just a couple of KB on some systems (BSD and
-            OS/2 systems) to one or several MB (Windows, Solaris, Linux).
+            default values vary from just a couple of KB on some systems (BSD systems)
+            to one or several MB (Windows, Solaris, Linux).
             So, if you have a thread that requires more than just a few KB of memory, you
             will have mysterious problems on some platforms but not on the common ones.
             On the other hand, just indicating a large stack size by default will give you

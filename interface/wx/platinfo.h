@@ -286,7 +286,7 @@ public:
     /**
         Returns the operating system family name for the given wxOperatingSystemId
         enumeration value: @c Unix for @c wxOS_UNIX, @c Macintosh for @c wxOS_MAC,
-        @c Windows for @c wxOS_WINDOWS, @c DOS for @c wxOS_DOS, @c OS/2 for @c wxOS_OS2.
+        @c Windows for @c wxOS_WINDOWS.
     */
     static wxString GetOperatingSystemFamilyName(wxOperatingSystemId os);
 

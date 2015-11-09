@@ -140,7 +140,7 @@
 #define wxCRT_StrxfrmW   wcsxfrm
 
 /* Almost all compilers have strdup(), but VC++ and MinGW call it _strdup().
-   And it's not available in MinGW strict ANSI mode nor under Windows CE. */
+   And it's not available in MinGW strict ANSI mode. */
 #if (defined(__VISUALC__) && __VISUALC__ >= 1400)
     #define wxCRT_StrdupA _strdup
 #elif defined(__MINGW32__)
@@ -593,7 +593,7 @@ WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,
         #define wxCRT_ToupperW   towupper
     #endif
 #else /* !__GLIBC__ */
-    /* There is a bug in MSVC RTL: toxxx() functions dosn't do anything
+    /* There is a bug in MSVC RTL: toxxx() functions doesn't do anything
        with signed chars < 0, so "fix" it here. */
     #define wxCRT_TolowerW(c)   towlower((wxUChar)(wxChar)(c))
     #define wxCRT_ToupperW(c)   towupper((wxUChar)(wxChar)(c))

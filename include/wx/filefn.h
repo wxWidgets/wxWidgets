@@ -589,7 +589,7 @@ WXDLLIMPEXP_BASE bool wxIsExecutable(const wxString &path);
 #elif defined(__MAC__)
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_MAC
   #define wxPATH_SEP          wxPATH_SEP_MAC
-#else   // Windows and OS/2
+#else   // Windows
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_DOS
   #define wxPATH_SEP          wxPATH_SEP_DOS
 #endif  // Unix/Windows
@@ -598,7 +598,7 @@ WXDLLIMPEXP_BASE bool wxIsExecutable(const wxString &path);
 // filename1.IsSameAs(filename2, wxARE_FILENAMES_CASE_SENSITIVE)
 #if defined(__UNIX__) && !defined(__DARWIN__)
   #define wxARE_FILENAMES_CASE_SENSITIVE  true
-#else   // Windows, Mac OS and OS/2
+#else   // Windows and Mac OS
   #define wxARE_FILENAMES_CASE_SENSITIVE  false
 #endif  // Unix/Windows
 

@@ -1157,7 +1157,7 @@ bool wxMkdir(const wxString& dir, int perm)
 #if defined(__WXMAC__) && !defined(__UNIX__)
     if ( mkdir(dir.fn_str(), 0) != 0 )
 
-    // assume mkdir() has 2 args on non Windows-OS/2 platforms and on Windows too
+    // assume mkdir() has 2 args on non Windows platforms and on Windows too
     // for the GNU compiler
 #elif (!defined(__WINDOWS__)) || \
       (defined(__GNUWIN32__) && !defined(__MINGW32__)) ||                \
@@ -1169,7 +1169,7 @@ bool wxMkdir(const wxString& dir, int perm)
   #else
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
   #endif
-#else  // !MSW and !OS/2 VAC++
+#else  // MSW and VC++
     wxUnusedVar(perm);
     if ( wxMkDir(dir.fn_str()) != 0 )
 #endif // !MSW/MSW

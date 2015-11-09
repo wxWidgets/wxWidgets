@@ -675,7 +675,7 @@ select_colors (j_decompress_ptr cinfo, int desired_colors)
  * it needs a work array to hold the best-distance-so-far for each histogram
  * cell (because the inner loop has to be over cells, not colormap entries).
  * The work array elements have to be INT32s, so the work array would need
- * 256Kb at our recommended precision.  This is not feasible in DOS machines.
+ * 256Kb at our recommended precision.
  *
  * To get around these problems, we apply Thomas' method to compute the
  * nearest colors for only the cells within a small subbox of the histogram.
@@ -694,9 +694,8 @@ select_colors (j_decompress_ptr cinfo, int desired_colors)
  *
  * Thomas' article also describes a refined method which is asymptotically
  * faster than the brute-force method, but it is also far more complex and
- * cannot efficiently be applied to small subboxes.  It is therefore not
- * useful for programs intended to be portable to DOS machines.  On machines
- * with plenty of memory, filling the whole histogram in one shot with Thomas'
+ * cannot efficiently be applied to small subboxes.  On machines with
+ * plenty of memory, filling the whole histogram in one shot with Thomas'
  * refined method might be faster than the present code --- but then again,
  * it might not be any faster, and it's certainly more complicated.
  */
