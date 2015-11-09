@@ -103,14 +103,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
     if ( !wxTextCtrlBase::Create( parent, id, pos, size, style & ~(wxHSCROLL | wxVSCROLL), validator, name ) )
         return false;
 
-    if ( m_windowStyle & wxTE_MULTILINE )
-    {
-        // always turn on this style for multi-line controls
-        m_windowStyle |= wxTE_PROCESS_ENTER;
-        style |= wxTE_PROCESS_ENTER ;
-    }
-
-
     SetPeer(wxWidgetImpl::CreateTextControl( this, GetParent(), GetId(), str, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate(pos, size) ;

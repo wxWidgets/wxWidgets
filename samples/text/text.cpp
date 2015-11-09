@@ -1160,7 +1160,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_tab->SetClientData((void *)wxT("tab"));
 
     m_enter = new MyTextCtrl( this, 100, wxT("Multiline, allow <ENTER> processing."),
-      wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE);
+      wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE | wxTE_PROCESS_ENTER );
     m_enter->SetClientData((void *)wxT("enter"));
 
     m_textrich = new MyTextCtrl(this, wxID_ANY, wxT("Allows more than 30Kb of text\n")
