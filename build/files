@@ -2160,6 +2160,8 @@ OSX_IPHONE_SRC =
     $(OSX_CARBON_COCOA_SRC)
     src/generic/regiong.cpp
     src/generic/icon.cpp
+    src/osx/carbon/settings.cpp
+    src/osx/cocoa/stdpaths.mm
     # iphone files
     src/osx/iphone/anybutton.mm
     src/osx/iphone/button.mm
