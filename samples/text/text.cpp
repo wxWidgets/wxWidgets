@@ -1156,7 +1156,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #endif
 
     m_tab = new MyTextCtrl( this, 100, wxT("Multiline, allow <TAB> processing."),
-      wxPoint(180,90), wxDefaultSize, wxTE_MULTILINE |  wxTE_PROCESS_TAB );
+      wxPoint(180,90), wxSize(200,70), wxTE_MULTILINE |  wxTE_PROCESS_TAB );
     m_tab->SetClientData((void *)wxT("tab"));
 
     m_enter = new MyTextCtrl( this, 100, wxT("Multiline, allow <ENTER> processing."),
