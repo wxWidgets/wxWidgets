@@ -1037,11 +1037,7 @@ int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
         return 0;
     }
 
-    bool shift = evt.ShiftDown(),
-         ctrl  = evt.ControlDown(),
-         alt   = evt.AltDown();
-
-    if (ctrl && key >= 1 && key <= 26 && key != WXK_BACK)
+    if (evt.RawControlDown() && key >= 1 && key <= 26 && key != WXK_BACK)
         key += 'A' - 1;
 
     switch (key) {
@@ -1082,23 +1078,18 @@ int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
     case WXK_MENU:              key = SCK_MENU; break;
     }
 
-#ifdef __WXMAC__
-    if ( evt.MetaDown() ) {
-        // check for a few common Mac Meta-key combos and remap them to Ctrl
-        // for Scintilla
-        switch ( key ) {
-        case 'Z':       // Undo
-        case 'X':       // Cut
-        case 'C':       // Copy
-        case 'V':       // Paste
-        case 'A':       // Select All
-            ctrl = true;
-            break;
-        }
-    }
-#endif
-
-    int rv = KeyDown(key, shift, ctrl, alt, consumed);
+    int rv = KeyDownWithModifiers
+             (
+                key,
+                ModifierFlags
+                (
+                    evt.ShiftDown(),
+                    evt.ControlDown(),
+                    evt.AltDown(),
+                    evt.RawControlDown()
+                ),
+                consumed
+             );
 
     if (key)
         return rv;
