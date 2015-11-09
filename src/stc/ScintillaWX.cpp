@@ -282,6 +282,25 @@ void ScintillaWX::Initialise() {
     stc->SetDropTarget(dropTarget);
 #endif // wxUSE_DRAG_AND_DROP
     vs.extraFontFlag = true;   // UseAntiAliasing
+
+    // Set up default OS X key mappings. Remember that SCI_CTRL stands for
+    // "Cmd" key here, as elsewhere in wx API, while SCI_ALT is the "Option"
+    // key (and "Ctrl" key, if we ever need it, should be represented by
+    // SCI_META).
+#if __WXMAC__
+    kmap.AssignCmdKey(SCK_LEFT, SCI_CTRL, SCI_VCHOME);
+    kmap.AssignCmdKey(SCK_RIGHT, SCI_CTRL, SCI_LINEEND);
+    kmap.AssignCmdKey(SCK_LEFT, SCI_ALT, SCI_WORDLEFT);
+    kmap.AssignCmdKey(SCK_RIGHT, SCI_ALT, SCI_WORDRIGHT);
+    kmap.AssignCmdKey(SCK_LEFT, SCI_ALT | SCI_SHIFT, SCI_WORDLEFTEXTEND);
+    kmap.AssignCmdKey(SCK_RIGHT, SCI_ALT | SCI_SHIFT, SCI_WORDRIGHTEXTEND);
+    kmap.AssignCmdKey(SCK_LEFT, SCI_CTRL | SCI_SHIFT, SCI_VCHOMEEXTEND);
+    kmap.AssignCmdKey(SCK_RIGHT, SCI_CTRL | SCI_SHIFT, SCI_LINEENDEXTEND);
+    kmap.AssignCmdKey(SCK_UP, SCI_CTRL | SCI_SHIFT, SCI_DOCUMENTSTARTEXTEND);
+    kmap.AssignCmdKey(SCK_DOWN, SCI_CTRL | SCI_SHIFT, SCI_DOCUMENTENDEXTEND);
+    kmap.AssignCmdKey(SCK_UP, SCI_CTRL, SCI_DOCUMENTSTART);
+    kmap.AssignCmdKey(SCK_DOWN, SCI_CTRL, SCI_DOCUMENTEND);
+#endif // __WXMAC__
 }
 
 
