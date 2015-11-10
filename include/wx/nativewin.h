@@ -69,7 +69,10 @@ class WXDLLIMPEXP_CORE wxNativeWindow : public wxWindow
 {
 public:
     // Default ctor, Create() must be called later to really create the window.
-    wxNativeWindow() { }
+    wxNativeWindow()
+    {
+        Init();
+    }
 
     // Create a window from an existing native window handle.
     //
@@ -80,13 +83,46 @@ public:
     // 0 if the handle was invalid.
     wxNativeWindow(wxWindow* parent, wxWindowID winid, wxNativeWindowHandle handle)
     {
+        Init();
+
         Create(parent, winid, handle);
     }
 
     // Same as non-default ctor, but with a return code.
     bool Create(wxWindow* parent, wxWindowID winid, wxNativeWindowHandle handle);
 
+    // By default the native window with which this wxWindow is associated is
+    // owned by the user code and needs to be destroyed by it in a platform
+    // specific way, however this function can be called to let wxNativeWindow
+    // dtor take care of destroying the native window instead of having to do
+    // it from the user code.
+    void Disown()
+    {
+        wxCHECK_RET( m_ownedByUser, wxS("Can't disown more than once") );
+
+        m_ownedByUser = false;
+
+        DoDisown();
+    }
+
+#ifdef __WXMSW__
+    // Prevent the native window, not owned by us, from being destroyed by the
+    // base class dtor, unless Disown() had been called.
+    virtual ~wxNativeWindow();
+#endif // __WXMSW__
+
 private:
+    void Init()
+    {
+        m_ownedByUser = true;
+    }
+
+    // This is implemented in platform-specific code.
+    void DoDisown();
+
+    // If the native widget owned by the user code.
+    bool m_ownedByUser;
+
     wxDECLARE_NO_COPY_CLASS(wxNativeWindow);
 };
 

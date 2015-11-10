@@ -15,8 +15,8 @@
     This class can be used as a bridge between wxWidgets and native GUI
     toolkit, i.e. standard Windows controls under MSW, GTK+ widgets or Cocoa
     views. Using it involves writing code specific to each platform, at the
-    very least for creating the native window, but possibly also to handle its
-    events, but this class takes care of all the generic parts.
+    very least for creating and destroying the native window, but possibly also
+    to handle its events, but this class takes care of all the generic parts.
 
     @note Check whether @c wxHAS_NATIVE_WINDOW is defined before using this
         class as it is not available under all platforms.
@@ -26,14 +26,24 @@
     @code
         #include <wx/nativewin.h>
 
-        wxNativeWindow* switch = new wxNativeWindow(parent, wxID_ANY, gtk_switch_new());
+        GtkWidget* w = gtk_switch_new();
+        wxNativeWindow* switch = new wxNativeWindow(parent, wxID_ANY, w);
+        g_object_unref(w);
     @endcode
     and then use @c switch as usual, e.g. add it to a sizer to layout it
     correctly. Of course, you will still have to use the native GTK+ functions
     to handle its events and change or retrieve its state.
 
-    See the "native" page of the widgets sample for another example of using
-    it.
+    Notice that the native window still remains owned by the caller, to allow
+    reusing it later independently of wxWidgets. If you want wxWidgets to
+    delete the native window when the wxNativeWindow itself is destroyed, you
+    need to explicitly call Disown(). Otherwise you need to perform the
+    necessary cleanup in your own code by calling the appropriate
+    platform-specific function: under MSW, this is @c ::DestroyWindow(), under
+    GTK @c g_object_unref() and under Cocoa -- @c -release:.
+
+    See the "native" page of the widgets sample for the examples of using
+    this class under all major platforms.
 
     @since 3.1.0
 
@@ -76,4 +86,12 @@ public:
             typically because the supplied parameters are invalid.
      */
     bool Create(wxWindow* parent, wxWindowID winid, wxNativeWindowHandle handle);
+
+    /**
+        Indicate that the user code yields ownership of the native window.
+
+        This method can be called at most once and after calling it, the native
+        window will be destroyed when this wxNativeWindow object is.
+     */
+    void Disown();
 };
