@@ -54,7 +54,7 @@ while <tt>__WINDOWS__</tt> should be used for the platform tests.}
 
 There are two wxWidgets ports to Mac OS X. One of them, wxOSX is the successor of the
 venerable wxMac, it currently exists in three versions: Carbon and Cocoa for the
-desktop and a very early iPhone port. And there is the Cocoa port named wxCocoa 
+desktop and a very early iPhone port. And there is the Cocoa port named wxCocoa
 which has not been updated very actively since beginning 2008. To summarize:
 
 @li If you want to test for wxOSX on the desktop, use
@@ -141,7 +141,7 @@ compiler used.
                     @c 1020 for @c 4.2 (the first supported version), @c 1100 for
                     @c 5.0, @c 1200 for @c 6.0 and so on. For convenience, the symbols
                     __VISUALCn__ are also defined for each major compiler version from
-                    5 to 12, i.e. you can use tests such as <tt>#ifdef \_\_VISUALC7\_\_</tt>
+                    5 to 12, i.e. you can use tests such as <tt>\#ifdef \_\_VISUALC7\_\_</tt>
                     to test for compiler version being precisely 7.}
 @itemdef{__XLC__, AIX compiler}
 @itemdef{__WATCOMC__, Watcom C++. The value of this macro corresponds to
@@ -260,7 +260,7 @@ configuration.
         includes a number of wxWidgets headers thus making it unnecessary to include
         them explicitly. However if this is not defined, you do need to include them
         and so the usual idiom which allows to support both cases is to first include
-        @c wx/wxprec.h} and then, inside <tt>#ifndef WX_PRECOMP</tt>, individual
+        @c wx/wxprec.h} and then, inside <tt>\#ifndef WX_PRECOMP</tt>, individual
         headers you need.}
 @itemdef{_UNICODE and UNICODE, both are defined if wxUSE_UNICODE is set to @c 1}
 @itemdef{wxUSE_GUI,

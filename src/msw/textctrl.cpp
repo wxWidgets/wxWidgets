@@ -66,6 +66,10 @@
     #include "wx/msw/ole/oleutils.h"
 #endif // wxUSE_RICHEDIT
 
+#if wxUSE_INKEDIT
+    #include <wx/dynlib.h>
+#endif
+
 #include "wx/msw/missing.h"
 
 #if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT

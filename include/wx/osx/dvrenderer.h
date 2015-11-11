@@ -86,7 +86,11 @@ public:
 protected:
     virtual void SetAttr(const wxDataViewItemAttr& attr) wxOVERRIDE;
     virtual void SetEnabled(bool enabled) wxOVERRIDE;
-#endif // Cocoa
+#else
+protected:
+    void SetAttr(const wxDataViewItemAttr& WXUNUSED(attr)) wxOVERRIDE { };
+    void SetEnabled(bool WXUNUSED(enabled)) wxOVERRIDE { };
+#endif
 
 private:
     // contains the alignment flags

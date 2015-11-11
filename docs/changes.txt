@@ -181,6 +181,7 @@ wxMSW:
 - Correct wxGetOsDescription() for Windows 10 (Tobias Taschner).
 - Make wxListCtrl &c appearance more native on modern systems (Tobias Taschner).
 - Don't send wxActivateEvent for minimized windows (bzcdr).
+- Return correct OS version under Windows 8.1 and later.
 
 wxOSX/Cocoa:
 
@@ -194,3 +195,4 @@ wxOSX/Cocoa:
 - Provide native implementation of wxStandardPaths (Tobias Taschner).
 - Add wxTE_{RIGHT,CENTER} support for multiline wxTextCtrl (Andreas Falkenhahn).
 - Don't leave wxSlider labels shown when the slider itself is hidden.
+- Don't generate wxEVT_TEXT_ENTER for controls without wxTE_PROCESS_ENTER.

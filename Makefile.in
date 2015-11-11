@@ -5794,7 +5794,9 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	monodll_iphone_textctrl.o \
 	monodll_iphone_toolbar.o \
 	monodll_iphone_utils.o \
-	monodll_iphone_window.o
+	monodll_iphone_window.o \
+	monodll_carbon_settings.o \
+	monodll_cocoa_stdpaths.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS)
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS = 
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_1 = \
@@ -7963,7 +7965,9 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	monolib_iphone_textctrl.o \
 	monolib_iphone_toolbar.o \
 	monolib_iphone_utils.o \
-	monolib_iphone_window.o
+	monolib_iphone_window.o \
+	monolib_carbon_settings.o \
+	monolib_cocoa_stdpaths.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1)
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_1 = 
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_3 = \
@@ -10287,7 +10291,9 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	coredll_iphone_textctrl.o \
 	coredll_iphone_toolbar.o \
 	coredll_iphone_utils.o \
-	coredll_iphone_window.o
+	coredll_iphone_window.o \
+	coredll_carbon_settings.o \
+	coredll_cocoa_stdpaths.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2)
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_2 = 
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_5 = \
@@ -11899,7 +11905,9 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	corelib_iphone_textctrl.o \
 	corelib_iphone_toolbar.o \
 	corelib_iphone_utils.o \
-	corelib_iphone_window.o
+	corelib_iphone_window.o \
+	corelib_carbon_settings.o \
+	corelib_cocoa_stdpaths.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3)
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_3 = 
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_7 = \
@@ -16814,9 +16822,6 @@ monodll_osx_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(MONODLL_ODEP)
 monodll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
-monodll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
-
 monodll_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fs_inet.cpp
 
@@ -17383,9 +17388,6 @@ monodll_carbon_tooltip.o: $(srcdir)/src/osx/carbon/tooltip.cpp $(MONODLL_ODEP)
 
 monodll_carbon_window.o: $(srcdir)/src/osx/carbon/window.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/window.cpp
-
-monodll_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
 
 monodll_cocoa_anybutton.o: $(srcdir)/src/osx/cocoa/anybutton.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/anybutton.mm
@@ -18472,6 +18474,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_OSX_CARBON@monodll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
+
+@COND_TOOLKIT_OSX_COCOA@monodll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONODLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONODLL_ODEP)
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 @COND_PLATFORM_UNIX_1@monodll_socketiohandler.o: $(srcdir)/src/common/socketiohandler.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/socketiohandler.cpp
@@ -20990,6 +20998,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_utilscocoa.o: $(srcdir)/src/osx/carbon/utilscocoa.mm $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/carbon/utilscocoa.mm
 
+@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
+
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
+
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
 
@@ -22331,9 +22345,6 @@ monolib_osx_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(MONOLIB_ODEP)
 monolib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
-monolib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
-
 monolib_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fs_inet.cpp
 
@@ -22900,9 +22911,6 @@ monolib_carbon_tooltip.o: $(srcdir)/src/osx/carbon/tooltip.cpp $(MONOLIB_ODEP)
 
 monolib_carbon_window.o: $(srcdir)/src/osx/carbon/window.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/window.cpp
-
-monolib_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
 
 monolib_cocoa_anybutton.o: $(srcdir)/src/osx/cocoa/anybutton.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/anybutton.mm
@@ -23989,6 +23997,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_OSX_CARBON@monolib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
+
+@COND_TOOLKIT_OSX_COCOA@monolib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONOLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONOLIB_ODEP)
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 @COND_PLATFORM_UNIX_1@monolib_socketiohandler.o: $(srcdir)/src/common/socketiohandler.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/socketiohandler.cpp
@@ -26507,6 +26521,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_utilscocoa.o: $(srcdir)/src/osx/carbon/utilscocoa.mm $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/carbon/utilscocoa.mm
 
+@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
+
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
+
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
 
@@ -28565,9 +28585,6 @@ coredll_osx_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(COREDLL_ODEP)
 coredll_power.o: $(srcdir)/src/osx/cocoa/power.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
-coredll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
-
 coredll_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/bmpbuttn.cpp
 
@@ -29096,9 +29113,6 @@ coredll_carbon_tooltip.o: $(srcdir)/src/osx/carbon/tooltip.cpp $(COREDLL_ODEP)
 coredll_carbon_window.o: $(srcdir)/src/osx/carbon/window.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/window.cpp
 
-coredll_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
-
 coredll_cocoa_anybutton.o: $(srcdir)/src/osx/cocoa/anybutton.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/anybutton.mm
 
@@ -29599,6 +29613,12 @@ coredll_mono.o: $(srcdir)/src/univ/themes/mono.cpp $(COREDLL_ODEP)
 
 coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/themes/win32.cpp
+
+@COND_TOOLKIT_OSX_COCOA@coredll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(COREDLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(COREDLL_ODEP)
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
@@ -32099,6 +32119,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_utilscocoa.o: $(srcdir)/src/osx/carbon/utilscocoa.mm $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/carbon/utilscocoa.mm
 
+@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
+
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
+
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
 
@@ -32633,9 +32659,6 @@ corelib_osx_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(CORELIB_ODEP)
 corelib_power.o: $(srcdir)/src/osx/cocoa/power.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
-corelib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
-
 corelib_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/bmpbuttn.cpp
 
@@ -33164,9 +33187,6 @@ corelib_carbon_tooltip.o: $(srcdir)/src/osx/carbon/tooltip.cpp $(CORELIB_ODEP)
 corelib_carbon_window.o: $(srcdir)/src/osx/carbon/window.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/window.cpp
 
-corelib_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
-
 corelib_cocoa_anybutton.o: $(srcdir)/src/osx/cocoa/anybutton.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/anybutton.mm
 
@@ -33667,6 +33687,12 @@ corelib_mono.o: $(srcdir)/src/univ/themes/mono.cpp $(CORELIB_ODEP)
 
 corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/themes/win32.cpp
+
+@COND_TOOLKIT_OSX_COCOA@corelib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(CORELIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(CORELIB_ODEP)
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
@@ -36166,6 +36192,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_utilscocoa.o: $(srcdir)/src/osx/carbon/utilscocoa.mm $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/carbon/utilscocoa.mm
+
+@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
+
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_carbon_settings.o: $(srcdir)/src/osx/carbon/settings.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/settings.cpp
 
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp

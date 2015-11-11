@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets-2.9.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-23 22:46+0400\n"
-"PO-Revision-Date: 2014-03-27 12:47+0200\n"
+"PO-Revision-Date: 2015-11-06 11:44+0200\n"
 "Last-Translator: Pavel Maryanov <acid@jack.kiev.ua>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "Language: ru_RU\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.8.6\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -115,9 +115,9 @@ msgid "%d of %lu"
 msgstr "%d из %lu"
 
 #: ../src/html/helpwnd.cpp:1678
-#, fuzzy, c-format
+#, c-format
 msgid "%i of %u"
-msgstr "%i из %i"
+msgstr "%i из %u"
 
 #: ../src/generic/filectrlg.cpp:315
 #, c-format
@@ -168,9 +168,9 @@ msgid "%s files (%s)|%s"
 msgstr "%s файлы (%s)|%s"
 
 #: ../src/html/helpwnd.cpp:1716
-#, fuzzy, c-format
+#, c-format
 msgid "%u of %u"
-msgstr "%lu из %lu"
+msgstr "%u из %u"
 
 #: ../src/common/stockitem.cpp:139 ../src/html/helpfrm.cpp:142
 #: ../src/html/helpfrm.cpp:144
@@ -224,7 +224,7 @@ msgstr "Цвет &фона:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:299
 msgid "&Blur distance:"
-msgstr ""
+msgstr "Расстояние &размытия:"
 
 #: ../src/common/stockitem.cpp:143
 msgid "&Bold"
@@ -422,7 +422,7 @@ msgstr "В &начало"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:213
 msgid "&Horizontal offset:"
-msgstr ""
+msgstr "&Горизонтальное смещение:"
 
 #: ../src/richtext/richtextindentspage.cpp:184
 #: ../src/richtext/richtextliststylepage.cpp:372
@@ -489,7 +489,7 @@ msgstr "П&ереместить"
 
 #: ../src/richtext/richtextsizepage.cpp:672
 msgid "&Move the object to:"
-msgstr ""
+msgstr "&Переместить объект в:"
 
 #: ../src/common/stockitem.cpp:175
 msgid "&Network"
@@ -499,14 +499,13 @@ msgstr "&Сеть"
 msgid "&New"
 msgstr "&Новый"
 
-#: ../src/aui/tabmdi.cpp:111 ../src/generic/mdig.cpp:100
-#: ../src/msw/mdi.cpp:180
+#: ../src/aui/tabmdi.cpp:111 ../src/generic/mdig.cpp:100 ../src/msw/mdi.cpp:180
 msgid "&Next"
 msgstr "&Следующий"
 
 #: ../src/generic/wizard.cpp:432 ../src/generic/wizard.cpp:627
 msgid "&Next >"
-msgstr "&Следующий >"
+msgstr "&Далее >"
 
 #: ../src/richtext/richtextsizepage.cpp:681
 msgid "&Next Paragraph"
@@ -575,8 +574,7 @@ msgstr "Режим &размещения:"
 msgid "&Preferences"
 msgstr "&Параметры"
 
-#: ../src/aui/tabmdi.cpp:112 ../src/generic/mdig.cpp:101
-#: ../src/msw/mdi.cpp:181
+#: ../src/aui/tabmdi.cpp:112 ../src/generic/mdig.cpp:101 ../src/msw/mdi.cpp:181
 msgid "&Previous"
 msgstr "&Предыдущий"
 
@@ -648,7 +646,6 @@ msgid "&Save as"
 msgstr "&Сохранить как"
 
 #: ../include/wx/richmsgdlg.h:29
-#, fuzzy
 msgid "&See details"
 msgstr "&Подробности"
 
@@ -755,9 +752,8 @@ msgid "&Vertical alignment:"
 msgstr "Выравнивание по &вертикали:"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:236
-#, fuzzy
 msgid "&Vertical offset:"
-msgstr "Выравнивание по &вертикали:"
+msgstr "&Вертикальное смещение:"
 
 #: ../src/generic/dbgrptg.cpp:340
 msgid "&View..."
@@ -789,9 +785,9 @@ msgid "'%s' contains illegal characters"
 msgstr "'%s' содержит недопустмые знаки"
 
 #: ../src/common/valtext.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' doesn't consist only of valid characters"
-msgstr "'%s' должно содержать только символы алфавита."
+msgstr "'%s' должно содержать только допустимые символы."
 
 #: ../src/common/config.cpp:523 ../src/msw/regconf.cpp:258
 #, c-format
@@ -809,14 +805,14 @@ msgid "'%s' is not a valid message catalog."
 msgstr "'%s' - неверный каталог сообщений."
 
 #: ../src/common/valtext.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not one of the valid strings"
-msgstr "'%s' - неверный каталог сообщений."
+msgstr "'%s' — недопустимая строка"
 
 #: ../src/common/valtext.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is one of the invalid strings"
-msgstr "'%s' недопустимо"
+msgstr "'%s' — недопустимая строка"
 
 #: ../src/common/textbuf.cpp:237
 #, c-format
@@ -912,7 +908,7 @@ msgstr "-"
 
 #: ../src/generic/filepickerg.cpp:66
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: ../src/richtext/richtextindentspage.cpp:276
 #: ../src/richtext/richtextliststylepage.cpp:450
@@ -1199,18 +1195,17 @@ msgstr "О программе..."
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
-msgstr ""
+msgstr "Абсолютный"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:859
-#, fuzzy
 msgid "ActiveBorder"
-msgstr "Граница"
+msgstr "АктивнаяГраница"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:860
 msgid "ActiveCaption"
-msgstr ""
+msgstr "АктивныйЗаголовок"
 
 #: ../src/common/stockitem.cpp:207
 msgid "Actual Size"
@@ -1332,7 +1327,7 @@ msgstr "Файл анимации имеет тип, отличный от %ld."
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:858
 msgid "AppWorkspace"
-msgstr ""
+msgstr "РабочаяОбластьПриложения"
 
 #: ../src/generic/logg.cpp:1034
 #, c-format
@@ -1340,18 +1335,16 @@ msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Добавить в файл журнала '%s' (выбор [Нет] перепишет его)?"
 
 #: ../src/osx/menu_osx.cpp:615 ../src/osx/menu_osx.cpp:623
-#, fuzzy
 msgid "Application"
-msgstr "Выбор"
+msgstr "Приложение"
 
 #: ../src/common/stockitem.cpp:141
-#, fuzzy
 msgid "Apply"
-msgstr "&Применить"
+msgstr "Применить"
 
 #: ../src/propgrid/advprops.cpp:1570
 msgid "Aqua"
-msgstr ""
+msgstr "Аква"
 
 #: ../src/richtext/richtextbulletspage.cpp:274
 #: ../src/richtext/richtextliststylepage.cpp:482
@@ -1363,15 +1356,14 @@ msgid "Arabic (ISO-8859-6)"
 msgstr "Арабский (ISO-8859-6)"
 
 #: ../src/msw/ole/automtn.cpp:678
-#, fuzzy, c-format
+#, c-format
 msgid "Argument %u not found."
-msgstr "Индекс столбца не найден."
+msgstr "Аргумент %u не найден."
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1714
-#, fuzzy
 msgid "Arrow"
-msgstr "завтра"
+msgstr "Стрелка"
 
 #: ../src/generic/aboutdlgg.cpp:184
 msgid "Artists"
@@ -1488,9 +1480,8 @@ msgstr "Цвет фона"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:50
-#, fuzzy
 msgid "Backspace"
-msgstr "Назад"
+msgstr "Backspace"
 
 #: ../src/common/fmapbase.cpp:160
 msgid "Baltic (ISO-8859-13)"
@@ -1517,7 +1508,7 @@ msgstr ""
 
 #: ../src/propgrid/advprops.cpp:1555
 msgid "Black"
-msgstr ""
+msgstr "Чёрный"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1716
@@ -1526,7 +1517,7 @@ msgstr ""
 
 #: ../src/propgrid/advprops.cpp:1564
 msgid "Blue"
-msgstr ""
+msgstr "Голубой"
 
 #: ../src/common/stockitem.cpp:143 ../src/generic/fontdlgg.cpp:333
 #: ../src/osx/carbon/fontdlg.cpp:524 ../src/richtext/richtextfontpage.cpp:353
@@ -1552,16 +1543,15 @@ msgstr "Нижнее поле (мм):"
 
 #: ../src/richtext/richtextbuffer.cpp:9376
 msgid "Box Properties"
-msgstr ""
+msgstr "Свойства поля"
 
 #: ../src/richtext/richtextstyles.cpp:1065
 msgid "Box styles"
-msgstr ""
+msgstr "Стили полей"
 
 #: ../src/propgrid/advprops.cpp:1563
-#, fuzzy
 msgid "Brown"
-msgstr "Обзор"
+msgstr "Коричневый"
 
 #: ../src/common/filepickercmn.cpp:43 ../src/common/filepickercmn.cpp:44
 msgid "Browse"
@@ -1582,29 +1572,28 @@ msgstr "Маркеры"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1717
-#, fuzzy
 msgid "Bullseye"
-msgstr "Cтиль маркера"
+msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:861
 msgid "ButtonFace"
-msgstr ""
+msgstr "ВерхКнопки"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:862
 msgid "ButtonHighlight"
-msgstr ""
+msgstr "ПодсветкаКнопки"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:863
 msgid "ButtonShadow"
-msgstr ""
+msgstr "ТеньКнопки"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:864
 msgid "ButtonText"
-msgstr ""
+msgstr "ТекстКнопки"
 
 #: ../src/common/paper.cpp:99
 msgid "C sheet, 17 x 22 in"
@@ -1657,6 +1646,8 @@ msgstr "О&тмена невозможна "
 #: ../src/common/image.cpp:2690
 msgid "Can't automatically determine the image format for non-seekable input."
 msgstr ""
+"Не удается автоматически определить формат изображения для входных данных "
+"без поддержки поиска."
 
 #: ../src/msw/registry.cpp:498
 #, c-format
@@ -1936,14 +1927,13 @@ msgstr "Невозможно дождаться окончания выполн�
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:73
-#, fuzzy
 msgid "Capital"
-msgstr "Ca&pitals"
+msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:865
 msgid "CaptionText"
-msgstr ""
+msgstr "ТекстЗаголовка"
 
 #: ../src/html/helpwnd.cpp:533
 msgid "Case sensitive"
@@ -2026,9 +2016,8 @@ msgstr "Ошибка создания каталога \"%s\""
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1718
-#, fuzzy
 msgid "Character"
-msgstr "Код &символа:"
+msgstr ""
 
 #: ../src/richtext/richtextstyles.cpp:1063
 msgid "Character styles"
@@ -2646,9 +2635,8 @@ msgstr "Текущий каталог:"
 #. TRANSLATORS: Custom colour choice entry
 #: ../src/propgrid/advprops.cpp:882 ../src/propgrid/advprops.cpp:1535
 #: ../src/propgrid/advprops.cpp:1573
-#, fuzzy
 msgid "Custom"
-msgstr "Нестандартный размер"
+msgstr "Пользовательский"
 
 #: ../src/gtk/print.cpp:217
 msgid "Custom size"
@@ -2738,9 +2726,8 @@ msgstr "Декоративный"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1713
-#, fuzzy
 msgid "Default"
-msgstr "по-умолчанию"
+msgstr "По умолчанию"
 
 #: ../src/common/fmapbase.cpp:796
 msgid "Default encoding"
@@ -2756,9 +2743,8 @@ msgstr "Принтер по-умолчанию"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:49
-#, fuzzy
 msgid "Del"
-msgstr "Удалить"
+msgstr "ВУД"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:48 ../src/common/stockitem.cpp:152
@@ -3054,13 +3040,12 @@ msgstr ""
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:64
 msgid "End"
-msgstr ""
+msgstr "END"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:53
-#, fuzzy
 msgid "Enter"
-msgstr "Принтер"
+msgstr "ВВОД"
 
 #: ../src/richtext/richtextstyledlg.cpp:934
 #, fuzzy
@@ -3153,13 +3138,12 @@ msgstr "Ошибка: "
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:67
 msgid "Esc"
-msgstr ""
+msgstr "ESC"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:68
-#, fuzzy
 msgid "Escape"
-msgstr "Альбом"
+msgstr "ESCAPE"
 
 #: ../src/common/fmapbase.cpp:150
 msgid "Esperanto (ISO-8859-3)"
@@ -4038,21 +4022,20 @@ msgstr "Графические искусства "
 
 #: ../src/propgrid/advprops.cpp:1560
 msgid "Gray"
-msgstr ""
+msgstr "Серый"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:869
 msgid "GrayText"
-msgstr ""
+msgstr "СерыйТекст"
 
 #: ../src/common/fmapbase.cpp:154
 msgid "Greek (ISO-8859-7)"
 msgstr "Греческий (ISO-8859-7)"
 
 #: ../src/propgrid/advprops.cpp:1561
-#, fuzzy
 msgid "Green"
-msgstr "MacGreek"
+msgstr "Зелёный"
 
 #: ../src/richtext/richtextborderspage.cpp:618
 msgid "Groove"
@@ -4145,15 +4128,13 @@ msgstr "Скрыть это сообщение уведомления."
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:870
-#, fuzzy
 msgid "Highlight"
-msgstr "светлый"
+msgstr ""
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:871
-#, fuzzy
 msgid "HighlightText"
-msgstr "Выровнять по правому краю текста."
+msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:63 ../src/common/stockitem.cpp:164
@@ -4322,9 +4303,8 @@ msgstr "Невозможно установить разрешения файл�
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:872
-#, fuzzy
 msgid "InactiveBorder"
-msgstr "Граница"
+msgstr "НеактивнаяГраница"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:873
@@ -4371,9 +4351,8 @@ msgstr "Сбой инициализации в пост init, прерываяс
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:52
-#, fuzzy
 msgid "Ins"
-msgstr "Вставить"
+msgstr "INS"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:51 ../src/richtext/richtextsymboldlg.cpp:472
@@ -4402,14 +4381,12 @@ msgstr "Вставить текст"
 
 #: ../src/richtext/richtextindentspage.cpp:295
 #: ../src/richtext/richtextindentspage.cpp:297
-#, fuzzy
 msgid "Inserts a page break before the paragraph."
-msgstr "Интервал перед абзацем."
+msgstr "Вставляет разрыв страницы перед абзацем."
 
 #: ../src/richtext/richtextborderspage.cpp:620
-#, fuzzy
 msgid "Inset"
-msgstr "Вставить"
+msgstr ""
 
 #: ../src/gtk/app.cpp:413
 #, c-format
@@ -4566,9 +4543,8 @@ msgstr "KP_"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:104
-#, fuzzy
 msgid "KP_Add"
-msgstr "KP_ADD"
+msgstr "KP_Add"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:99
@@ -4582,9 +4558,8 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgid "KP_Delete"
-msgstr "Удалить"
+msgstr "KP_Delete"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:108
@@ -4593,21 +4568,18 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgid "KP_Down"
-msgstr "Вниз"
+msgstr "KP_Down"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:98
-#, fuzzy
 msgid "KP_End"
-msgstr "KP_END"
+msgstr "KP_End"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:88
-#, fuzzy
 msgid "KP_Enter"
-msgstr "Принтер"
+msgstr "KP_Enter"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:102
@@ -4616,21 +4588,18 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgid "KP_Home"
-msgstr "В начало"
+msgstr "KP_Home"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgid "KP_Insert"
-msgstr "Вставить"
+msgstr "KP_Insert"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:90
-#, fuzzy
 msgid "KP_Left"
-msgstr "Слева"
+msgstr "KP_Left"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:103
@@ -4639,9 +4608,8 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:97
-#, fuzzy
 msgid "KP_Next"
-msgstr "Следующий"
+msgstr "KP_Next"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:95
@@ -4660,9 +4628,8 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgid "KP_Right"
-msgstr "Направо"
+msgstr "KP_Right"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:105
@@ -4681,15 +4648,13 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:87
-#, fuzzy
 msgid "KP_Tab"
-msgstr "KP_TAB"
+msgstr "KP_Tab"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:91
-#, fuzzy
 msgid "KP_Up"
-msgstr "KP_UP"
+msgstr "KP_Up"
 
 #: ../src/richtext/richtextindentspage.cpp:270
 msgid "L&ine spacing:"
@@ -4738,7 +4703,7 @@ msgstr "Слева (первые строки):"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1722
 msgid "Left Button"
-msgstr ""
+msgstr "Стрелка влево"
 
 #: ../src/generic/prntdlgg.cpp:880
 msgid "Left margin (mm):"
@@ -5151,9 +5116,8 @@ msgstr "Перейти вверх"
 
 #: ../src/richtext/richtextsizepage.cpp:682
 #: ../src/richtext/richtextsizepage.cpp:684
-#, fuzzy
 msgid "Moves the object to the next paragraph."
-msgstr "По умолчанию стиля для следующего абзаца."
+msgstr "Перемещает объект в следующий абзац."
 
 #: ../src/richtext/richtextsizepage.cpp:676
 #: ../src/richtext/richtextsizepage.cpp:678
@@ -5181,9 +5145,8 @@ msgid "New"
 msgstr "Новый"
 
 #: ../src/richtext/richtextstyledlg.cpp:243
-#, fuzzy
 msgid "New &Box Style..."
-msgstr "Новые И Стиль Списка..."
+msgstr "Новый стиль &поля..."
 
 #: ../src/richtext/richtextstyledlg.cpp:225
 msgid "New &Character Style..."
@@ -5431,15 +5394,13 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:101
-#, fuzzy
 msgid "Num Delete"
-msgstr "Удалить"
+msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:93
-#, fuzzy
 msgid "Num Down"
-msgstr "Вниз"
+msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:98
@@ -5453,15 +5414,13 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:89
-#, fuzzy
 msgid "Num Home"
-msgstr "В начало"
+msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:100
-#, fuzzy
 msgid "Num Insert"
-msgstr "Вставить"
+msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:84
@@ -5480,9 +5439,8 @@ msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:92
-#, fuzzy
 msgid "Num Right"
-msgstr "Направо"
+msgstr ""
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:86
@@ -5778,9 +5736,8 @@ msgstr "Страница %d из %d"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:56
-#, fuzzy
 msgid "Page Down"
-msgstr "Страница %d"
+msgstr "Page Down"
 
 #: ../src/gtk/print.cpp:810
 msgid "Page Setup"
@@ -5788,9 +5745,8 @@ msgstr "Настройки страницы"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgid "Page Up"
-msgstr "Страница %d"
+msgstr "Page Up"
 
 #: ../src/common/prntbase.cpp:484 ../src/generic/prntdlgg.cpp:828
 msgid "Page setup"
@@ -5798,15 +5754,13 @@ msgstr "Настройки страницы"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:56
-#, fuzzy
 msgid "PageDown"
-msgstr "Вниз"
+msgstr "PageDown"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:55
-#, fuzzy
 msgid "PageUp"
-msgstr "Страницы"
+msgstr "PageUp"
 
 #: ../src/generic/prntdlgg.cpp:216
 msgid "Pages"
@@ -5914,9 +5868,8 @@ msgstr ""
 "Пожалуйста, выберите столбцы, чтобы посмотреть и определить их порядок:"
 
 #: ../src/common/prntbase.cpp:538
-#, fuzzy
 msgid "Please wait while printing..."
-msgstr "Пожалуйста, дождитесь окончания печати\n"
+msgstr "Дождитесь окончания печати..."
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1728
@@ -6324,7 +6277,7 @@ msgstr "Направо"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1731
 msgid "Right Button"
-msgstr ""
+msgstr "Стрелка вправо"
 
 #: ../src/generic/prntdlgg.cpp:892
 msgid "Right margin (mm):"
@@ -6706,9 +6659,8 @@ msgstr "Звуковой файл '%s' неподдерживаемого фор
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:65
-#, fuzzy
 msgid "Space"
-msgstr "Интервал"
+msgstr "ПРОБЕЛ"
 
 #: ../src/richtext/richtextliststylepage.cpp:467
 msgid "Spacing"
@@ -6837,9 +6789,8 @@ msgstr "TIFF: размер Изображения слишком большой.
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:66
-#, fuzzy
 msgid "Tab"
-msgstr "Вкладки"
+msgstr "TAB"
 
 #: ../src/richtext/richtextbuffer.cpp:11489
 msgid "Table Properties"
@@ -7314,9 +7265,8 @@ msgstr ""
 
 #: ../src/richtext/richtextbackgroundpage.cpp:243
 #: ../src/richtext/richtextbackgroundpage.cpp:245
-#, fuzzy
 msgid "The vertical offset."
-msgstr "Не удалось установить выравнивание."
+msgstr "Вертикальное смещение."
 
 #: ../src/osx/carbon/dataview.cpp:1338
 msgid "There is no column or renderer for the specified column index."
@@ -7338,9 +7288,9 @@ msgstr ""
 "печати."
 
 #: ../src/common/image.cpp:2720
-#, fuzzy, c-format
+#, c-format
 msgid "This is not a %s."
-msgstr "PCX: это не файл PCX."
+msgstr "Это не %s."
 
 #: ../src/common/wincmn.cpp:1670
 msgid "This platform does not support background transparency."
@@ -8009,9 +7959,8 @@ msgstr "Версия "
 
 #: ../src/richtext/richtextsizepage.cpp:291
 #: ../src/richtext/richtextsizepage.cpp:293
-#, fuzzy
 msgid "Vertical alignment."
-msgstr "Не удалось установить выравнивание."
+msgstr "Вертикальное выравнивание."
 
 #: ../src/generic/filedlgg.cpp:208
 msgid "View files as a detailed view"
@@ -8068,7 +8017,7 @@ msgstr "Либо шрифт будет подчеркнут."
 
 #: ../src/propgrid/advprops.cpp:1572
 msgid "White"
-msgstr ""
+msgstr "Белый"
 
 #: ../src/generic/fdrepdlg.cpp:144
 msgid "Whole word"
@@ -8088,26 +8037,22 @@ msgstr "Win32s на Windows 3.1"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:879
-#, fuzzy
 msgid "Window"
-msgstr "&Окно"
+msgstr "Окно"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:880
-#, fuzzy
 msgid "WindowFrame"
-msgstr "&Окно"
+msgstr "РамкаОкна"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:881
-#, fuzzy
 msgid "WindowText"
-msgstr "&Окно"
+msgstr "ТекстОкна"
 
 #: ../src/msw/utils.cpp:1233
-#, fuzzy
 msgid "Windows 10"
-msgstr "Windows 8.1"
+msgstr "Windows 10"
 
 #: ../src/msw/utils.cpp:1183
 msgid "Windows 2000"
@@ -8189,7 +8134,7 @@ msgstr "Японский Windows (CP 932) или Shift-JIS"
 
 #: ../src/common/fmapbase.cpp:180
 msgid "Windows Johab (CP 1361)"
-msgstr ""
+msgstr "Windows Johab (CP 1361)"
 
 #: ../src/common/fmapbase.cpp:169
 msgid "Windows Korean (CP 949)"
@@ -8205,9 +8150,8 @@ msgid "Windows NT %lu.%lu"
 msgstr "Windows NT %lu.%lu"
 
 #: ../src/msw/utils.cpp:1232
-#, fuzzy
 msgid "Windows Server 10"
-msgstr "Windows Server 2003"
+msgstr "Windows Server 10"
 
 #: ../src/msw/utils.cpp:1192
 msgid "Windows Server 2003"
@@ -8263,21 +8207,18 @@ msgstr "Кириллица Windows/DOS OEM (CP 866)"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:109
-#, fuzzy
 msgid "Windows_Left"
-msgstr "Windows 7"
+msgstr "Windows_Left"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:111
-#, fuzzy
 msgid "Windows_Menu"
-msgstr "Windows ME"
+msgstr "Windows_Menu"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:110
-#, fuzzy
 msgid "Windows_Right"
-msgstr "Windows Vista"
+msgstr "Windows_Right"
 
 #: ../src/common/ffile.cpp:150
 #, c-format
@@ -8318,7 +8259,7 @@ msgstr "XPM-усеченный изображения данных в строк
 
 #: ../src/propgrid/advprops.cpp:1571
 msgid "Yellow"
-msgstr ""
+msgstr "Жёлтый"
 
 #: ../include/wx/msgdlg.h:276 ../src/common/stockitem.cpp:206
 #: ../src/motif/msgdlg.cpp:196
@@ -8340,6 +8281,8 @@ msgstr "Вы не можете добавить новый каталог в э�
 #: ../src/propgrid/propgrid.cpp:3295
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr ""
+"Вы ввели недопустимое значение. Нажмите клавишу ESC, чтобы отменить "
+"изменения."
 
 #: ../src/common/stockitem.cpp:209
 msgid "Zoom &In"
@@ -8660,7 +8603,7 @@ msgstr "ошибка контрольной суммы читая заголов
 #: ../src/richtext/richtextsizepage.cpp:625
 #: ../src/richtext/richtextsizepage.cpp:660
 msgid "cm"
-msgstr ""
+msgstr "см"
 
 #: ../src/html/chm.cpp:347
 msgid "compression error"

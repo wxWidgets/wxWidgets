@@ -83,6 +83,6 @@ Bug reports
 -----------
 
 Please send bug reports with a description of your environment,
-compiler and the error message(s) to the wxwin-developers mailing list at:
+compiler and the error message(s) to the developers mailing list at:
 
-    wx-dev@lists.wxwidgets.org
+    https://www.wxwidgets.org/support/mailing-lists/

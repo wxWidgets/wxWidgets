@@ -93,11 +93,5 @@ A. For Unix, you should be able to get the source distribution of any GNU mirror
 Q. What's i18n?
 A. Count the number of letters in the word "internationalization".
 
-Q. Where to send comments,
-                 additional translations,
-                 flames,
-                 money?
-A. To Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>,
-      wxWidgets list <wx-dev@lists.wxwidgets.org>,
-      /dev/null (platform-dependent),
-      wxWidgets dev team Swiss bank account.
+Q. Where to send comments, or additional translations?
+A. wxWidgets mailing list <wx-dev@googlegroups.com>.

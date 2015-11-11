@@ -14,7 +14,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [3.1.0], [wx-dev@lists.wxwidgets.org])
+AC_INIT([wxWidgets], [3.1.0], [wx-dev@googlegroups.com])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -299,7 +299,7 @@ case "${host}" in
 
   *)
     AC_MSG_WARN([*** System type ${host} is unknown, assuming generic Unix and continuing nevertheless.])
-    AC_MSG_WARN([*** Please report the build results to wx-dev@lists.wxwidgets.org.])
+    AC_MSG_WARN([*** Please report the build results to wx-dev@googlegroups.com.])
 
     DEFAULT_DEFAULT_wxUSE_X11=1
     DEFAULT_wxUSE_SHARED=no
@@ -1205,7 +1205,7 @@ elif test "x$wxUSE_MACOSX_VERSION_MIN" = "x"; then
     wxUSE_MACOSX_VERSION_MIN=10.5
 fi
 
-if test "x$MACOSX_SDK_OPTS" != "x"; then 
+if test "x$MACOSX_SDK_OPTS" != "x"; then
     eval "CC=\"$CC $MACOSX_SDK_OPTS\""
     eval "CXX=\"$CXX $MACOSX_SDK_OPTS\""
     eval "LD=\"$LD $MACOSX_SDK_OPTS\""
@@ -7286,12 +7286,12 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
             USE_MEDIA=0
         fi
 
-    elif test "$wxUSE_MAC" = 1; then 
+    elif test "$wxUSE_MAC" = 1; then
         if test "$wxUSE_OSX_IPHONE" = 1; then
             dnl this will also be used for cocoa in the future
             GST_LIBS="-framework AVFoundation -framework CoreMedia"
         else
-            dnl We always have the necessary libraries under Mac 
+            dnl We always have the necessary libraries under Mac
             dnl but we need to link with it explicitly.
             GST_LIBS="-framework QTKit"
         fi

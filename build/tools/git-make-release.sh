@@ -8,9 +8,9 @@
 #
 # To summarize, here are the steps to create the release:
 #
-#   % git svn tag WX_x_y_z
-#   % ./build/tools/git-make-release.sh x.y.z
-#   % ... upload ../wxWidgets-x.y.z.{7z,tar.bz2,zip} ...
+#   % git tag vX.Y.Z -m 'Tag X.Y.Z release.'
+#   % ./build/tools/git-make-release.sh X.Y.Z
+#   % ... upload ../wxWidgets-X.Y.Z.{7z,tar.bz2,zip} ...
 
 version=$1
 if [ -z "$version" ]; then
@@ -55,4 +55,4 @@ cd $prefix
 zip -q -r ../$prefix.zip .
 
 7z a ../$prefix.7z . >/dev/null
-7z a ../${prefix}_headers.7z include >/dev/null
+7z a ../${prefix}-headers.7z include >/dev/null

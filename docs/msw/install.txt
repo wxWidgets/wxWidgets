@@ -386,8 +386,7 @@ UNICODE=0
   (ditto).
 
 WXUNIV=1
-  Build wxUniversal instead of native wxMSW (see
-  http://www.wxwidgets.org/wxuniv.htm for more information).
+  Build wxUniversal instead of native wxMSW
 
 MONOLITHIC=1
   Starting with version 2.5.1, wxWidgets has the ability to be built as
@@ -468,7 +467,7 @@ COMPILER_PREFIX=<string>
   If you build with multiple versions of the same compiler, you can put
   their outputs into directories like "vc6_lib", "vc8_lib" etc. instead of
   "vc_lib" by setting this variable to e.g. "vc6". This is merely a
-  convenience variable, you can achieve the same effect (but different 
+  convenience variable, you can achieve the same effect (but different
   directory names) with the CFG option.
 
 CFLAGS

@@ -27,7 +27,7 @@ dnl
 
 dnl ---------------------------------------------------------------------------
 dnl Lots of compiler & linker detection code contained here was taken from
-dnl wxWidgets configure.in script (see http://www.wxwidgets.org)
+dnl wxWidgets configure.in script (see https://www.wxwidgets.org)
 dnl ---------------------------------------------------------------------------
 
 
@@ -946,7 +946,7 @@ while test ${D}# -gt 0; do
         args="${D}{args} ${D}1 ${D}2"
         shift
         ;;
-       
+
        -arch|-isysroot)
         # collect these options and values
         ldargs="${D}{ldargs} ${D}1 ${D}2"
