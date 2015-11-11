@@ -287,7 +287,7 @@ void ScintillaWX::Initialise() {
     // "Cmd" key here, as elsewhere in wx API, while SCI_ALT is the "Option"
     // key (and "Ctrl" key, if we ever need it, should be represented by
     // SCI_META).
-#if __WXMAC__
+#ifdef __WXMAC__
     kmap.AssignCmdKey(SCK_LEFT, SCI_CTRL, SCI_VCHOME);
     kmap.AssignCmdKey(SCK_RIGHT, SCI_CTRL, SCI_LINEEND);
     kmap.AssignCmdKey(SCK_LEFT, SCI_ALT, SCI_WORDLEFT);
