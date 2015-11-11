@@ -512,8 +512,14 @@ void wxWindowMSW::SetId(wxWindowID winid)
     // changing its ID because Windows still uses the old one.
     if ( GetHwnd() )
     {
+        ::SetLastError(0);
+
         if ( !::SetWindowLong(GetHwnd(), GWL_ID, winid) )
-            wxLogLastError(wxT("SetWindowLong(GWL_ID)"));
+        {
+            const DWORD err = ::GetLastError();
+            if ( err )
+                wxLogApiError(wxT("SetWindowLong(GWL_ID)"), err);
+        }
     }
 }
 
