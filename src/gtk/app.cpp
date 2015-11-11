@@ -428,7 +428,9 @@ void wxApp::CleanUp()
         g_source_remove(m_idleSourceId);
 
     // release reference acquired by Initialize()
-    g_type_class_unref(g_type_class_peek(GTK_TYPE_WIDGET));
+    gpointer gt = g_type_class_peek(GTK_TYPE_WIDGET);
+    if (gt != NULL)
+        g_type_class_unref(gt);
 
     gdk_threads_leave();
 
