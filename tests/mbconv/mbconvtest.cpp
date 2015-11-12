@@ -203,6 +203,12 @@ private:
     void UTF8PUA_f4_80_82_a5() { UTF8PUA("\xf4\x80\x82\xa5", u1000a5); }
     void UTF8Octal_backslash245() { UTF8Octal("\\245", L"\\245"); }
 
+    // Test that converting string with incomplete surrogates in them fails
+    // (surrogates are only used in UTF-16, i.e. when wchar_t is 16 bits).
+#if SIZEOF_WCHAR_T == 2
+    void UTF8_fail_broken_surrogates();
+#endif // SIZEOF_WCHAR_T == 2
+
     // implementation for the utf-8 tests (see comments below)
     void UTF8(const char *charSequence, const wchar_t *wideSequence);
     void UTF8PUA(const char *charSequence, const wchar_t *wideSequence);
@@ -461,6 +467,12 @@ void MBConvTestCase::UTF8Tests()
         wxConvUTF8,
         1
         );
+
+#if SIZEOF_WCHAR_T == 2
+    // Can't use \ud800 as it's an invalid Unicode character.
+    const wchar_t wc = 0xd800;
+    CPPUNIT_ASSERT_EQUAL(wxCONV_FAILED, wxConvUTF8.FromWChar(NULL, 0, &wc, 1));
+#endif // SIZEOF_WCHAR_T == 2
 }
 
 void MBConvTestCase::UTF16LETests()
