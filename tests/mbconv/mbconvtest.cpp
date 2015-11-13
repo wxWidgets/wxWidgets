@@ -1096,15 +1096,16 @@ void MBConvTestCase::TestEncoder(
     memcpy( inputCopy.data(), wideBuffer, (wideChars*sizeof(wchar_t)) );
     inputCopy.data()[wideChars] = 0;
 
-    // calculate the output size
+    // calculate the output size: notice that it can be greater than the real
+    // size as the converter is allowed to estimate the maximal size needed
+    // instead of computing it precisely
     size_t outputWritten = converter.WC2MB
         (
         0,
         (const wchar_t*)inputCopy.data(),
         0
         );
-    // make sure the correct output length was calculated
-    CPPUNIT_ASSERT_EQUAL( multiBytes, outputWritten );
+    CPPUNIT_ASSERT( outputWritten >= multiBytes );
 
     // convert the string
     size_t guardBytes = 8; // to make sure we're not overrunning the output buffer
