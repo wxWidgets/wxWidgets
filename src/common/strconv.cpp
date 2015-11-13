@@ -1419,7 +1419,12 @@ size_t wxMBConvUTF8::FromWChar(char *buf, size_t n,
 #ifdef WC_UTF16
         // cast is ok for WC_UTF16
         size_t pa = decode_utf16((const wxUint16 *)psz, cc);
+
+        // we could have consumed two input code units if we decoded a
+        // surrogate, so adjust the input pointer and, if necessary, the length
         psz += (pa == wxCONV_FAILED) ? 1 : pa;
+        if ( pa == 2 && !isNulTerminated )
+            srcLen--;
 #else
         cc = (*psz++) & 0x7fffffff;
 #endif
