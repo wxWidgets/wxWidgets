@@ -540,7 +540,8 @@ void wxRichTextCtrl::OnSetFocus(wxFocusEvent& WXUNUSED(event))
 #if !wxRICHTEXT_USE_OWN_CARET
         PositionCaret();
 #endif
-        GetCaret()->Show();
+        if (!GetCaret()->IsVisible())
+            GetCaret()->Show();
     }
 
 #if defined(__WXGTK__) && !wxRICHTEXT_USE_OWN_CARET
@@ -554,7 +555,7 @@ void wxRichTextCtrl::OnSetFocus(wxFocusEvent& WXUNUSED(event))
 
 void wxRichTextCtrl::OnKillFocus(wxFocusEvent& WXUNUSED(event))
 {
-    if (GetCaret())
+    if (GetCaret() && GetCaret()->IsVisible())
         GetCaret()->Hide();
 
 #if defined(__WXGTK__) && !wxRICHTEXT_USE_OWN_CARET
@@ -2856,7 +2857,8 @@ void wxRichTextCtrl::OnIdle(wxIdleEvent& event)
     {
         ((wxRichTextCaret*) GetCaret())->SetNeedsUpdate(false);
         PositionCaret();
-        GetCaret()->Show();
+        if (!GetCaret()->IsVisible())
+            GetCaret()->Show();
     }
 #endif
 
@@ -2898,7 +2900,8 @@ void wxRichTextCtrl::OnScroll(wxScrollWinEvent& event)
 #if wxRICHTEXT_USE_OWN_CARET
     if (!((wxRichTextCaret*) GetCaret())->GetNeedsUpdate())
     {
-        GetCaret()->Hide();
+        if (GetCaret()->IsVisible())
+            GetCaret()->Hide();
         ((wxRichTextCaret*) GetCaret())->SetNeedsUpdate();
     }
 #endif
@@ -5419,7 +5422,8 @@ void wxRichTextCaret::Notify()
     // Workaround for lack of kill focus event in wxOSX
     if (m_richTextCtrl && !m_richTextCtrl->HasFocus())
     {
-        Hide();
+        if (IsVisible())
+            Hide();
         return;
     }
 #endif
