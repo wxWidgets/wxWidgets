@@ -5018,7 +5018,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
     }
 
     // Make space for a bullet with no subindent.
-    if ((leftIndent == 0) && (attr.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE))
+    if ((leftSubIndent == 0) && (attr.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE))
     {
         wxSize bulletSize;
         if (wxRichTextBuffer::GetRenderer() && wxRichTextBuffer::GetRenderer()->MeasureBullet(this, dc, attr, bulletSize))
