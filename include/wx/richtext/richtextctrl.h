@@ -2218,6 +2218,10 @@ public:
 
 #endif
 
+    /// Set the line increment height in pixels
+    void SetLineHeight(int height) { m_lineHeight = height; }
+    int GetLineHeight() const { return m_lineHeight; }
+
 // Implementation
 
     /**
@@ -2407,6 +2411,9 @@ protected:
 
     /// Whether images are enabled for this control
     bool                    m_enableImages;
+
+    /// Line height in pixels
+    int                     m_lineHeight;
 
     /// Whether delayed image loading is enabled for this control
     bool                    m_enableDelayedImageLoading;

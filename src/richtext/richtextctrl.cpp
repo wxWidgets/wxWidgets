@@ -389,6 +389,9 @@ void wxRichTextCtrl::Init()
     m_enableDelayedImageLoading = false;
     m_delayedImageProcessingRequired = false;
     m_delayedImageProcessingTime = 0;
+
+    // Line height in pixels
+    m_lineHeight = 5;
 }
 
 void wxRichTextCtrl::DoThaw()
@@ -2923,7 +2926,7 @@ void wxRichTextCtrl::SetupScrollbars(bool atTop, bool fromOnPaint)
 
     // TODO: reimplement scrolling so we scroll by line, not by fixed number
     // of pixels. See e.g. wxVScrolledWindow for ideas.
-    int pixelsPerUnit = 5;
+    int pixelsPerUnit = GetLineHeight();
     wxSize clientSize = GetClientSize();
 
     int maxHeight = (int) (0.5 + GetScale() * (GetBuffer().GetCachedSize().y + GetBuffer().GetTopMargin()));
