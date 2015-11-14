@@ -6375,9 +6375,16 @@ public:
     */
     wxList& GetActions() { return m_actions; }
 
+    /**
+        Indicate whether the control should be frozen when performing Do/Undo
+    */
+    bool GetFreeze() const { return m_freeze; }
+    void SetFreeze(bool freeze) { m_freeze = freeze; }
+
 protected:
 
     wxList  m_actions;
+    bool    m_freeze;
 };
 
 /**
@@ -6447,6 +6454,11 @@ public:
         and the action's range start position.
     */
     wxRichTextObject* GetObject() const { return m_object; }
+
+    /**
+        Returns the associated rich text control.
+    */
+    wxRichTextCtrl* GetRichTextCtrl() const { return m_ctrl; }
 
     /**
         Stores the object to replace the one at the position defined by the container address
