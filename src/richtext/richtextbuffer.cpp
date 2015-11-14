@@ -11645,11 +11645,13 @@ void wxRichTextModuleInit()
 wxRichTextCommand::wxRichTextCommand(const wxString& name, wxRichTextCommandId id, wxRichTextBuffer* buffer,
                                      wxRichTextParagraphLayoutBox* container, wxRichTextCtrl* ctrl, bool ignoreFirstTime): wxCommand(true, name)
 {
+    m_freeze = ctrl ? ctrl->IsFrozen() : false;
     /* wxRichTextAction* action = */ new wxRichTextAction(this, name, id, buffer, container, ctrl, ignoreFirstTime);
 }
 
 wxRichTextCommand::wxRichTextCommand(const wxString& name): wxCommand(true, name)
 {
+    m_freeze = false;
 }
 
 wxRichTextCommand::~wxRichTextCommand()
@@ -11661,6 +11663,9 @@ void wxRichTextCommand::AddAction(wxRichTextAction* action)
 {
     if (!m_actions.Member(action))
         m_actions.Append(action);
+
+    if (!m_freeze && action->GetRichTextCtrl() && action->GetRichTextCtrl()->IsFrozen())
+        m_freeze = true;
 }
 
 bool wxRichTextCommand::Do()
@@ -11668,7 +11673,13 @@ bool wxRichTextCommand::Do()
     for (wxList::compatibility_iterator node = m_actions.GetFirst(); node; node = node->GetNext())
     {
         wxRichTextAction* action = (wxRichTextAction*) node->GetData();
+        if (GetFreeze() && node == m_actions.GetFirst() && action->GetRichTextCtrl())
+            action->GetRichTextCtrl()->Freeze();
+
         action->Do();
+
+        if (GetFreeze() && node == m_actions.GetLast() && action->GetRichTextCtrl())
+            action->GetRichTextCtrl()->Thaw();
     }
 
     return true;
@@ -11679,7 +11690,13 @@ bool wxRichTextCommand::Undo()
     for (wxList::compatibility_iterator node = m_actions.GetLast(); node; node = node->GetPrevious())
     {
         wxRichTextAction* action = (wxRichTextAction*) node->GetData();
+        if (GetFreeze() && node == m_actions.GetLast() && action->GetRichTextCtrl())
+            action->GetRichTextCtrl()->Freeze();
+
         action->Undo();
+
+        if (GetFreeze() && node == m_actions.GetFirst() && action->GetRichTextCtrl())
+            action->GetRichTextCtrl()->Thaw();
     }
 
     return true;
