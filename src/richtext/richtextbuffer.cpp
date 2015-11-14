@@ -2881,6 +2881,7 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
     if (para)
     {
         wxRichTextAttr originalAttr = para->GetAttributes();
+        wxRichTextProperties originalProperties = para->GetProperties();
 
         wxRichTextObjectList::compatibility_iterator node = m_children.Find(para);
 
@@ -2950,7 +2951,10 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
             wxASSERT(firstPara != NULL);
 
             if (!(fragment.GetAttributes().GetFlags() & wxTEXT_ATTR_KEEP_FIRST_PARA_STYLE))
+            {
                 para->SetAttributes(firstPara->GetAttributes());
+                para->SetProperties(firstPara->GetProperties());
+            }
 
             // Save empty paragraph attributes for appending later
             // These are character attributes deliberately set for a new paragraph. Without this,
@@ -3028,9 +3032,15 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
             }
 
             if ((fragment.GetAttributes().GetFlags() & wxTEXT_ATTR_KEEP_FIRST_PARA_STYLE) && firstPara)
+            {
                 finalPara->SetAttributes(firstPara->GetAttributes());
+                finalPara->SetProperties(firstPara->GetProperties());
+            }
             else if (finalPara && finalPara != para)
+            {
                 finalPara->SetAttributes(originalAttr);
+                finalPara->SetProperties(originalProperties);
+            }
 
             return true;
         }
