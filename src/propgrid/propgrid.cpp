@@ -4660,7 +4660,12 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
 
     if ( !HasExtraStyle(wxPG_EX_NATIVE_DOUBLE_BUFFERING) )
     {
+        // Scaled bitmaps only work on Mac currently
+#ifdef __WXOSX_COCOA__
         double scaleFactor = GetContentScaleFactor();
+#else
+        double scaleFactor = 1.0;
+#endif
         int dblh = (m_lineHeight*2);
         if ( !m_doubleBuffer )
         {
