@@ -5249,7 +5249,7 @@ bool wxRichTextCtrl::ProcessDelayedImageLoading(const wxRect& screenRect, wxRich
 
                                 wxImage image;
                                 bool changed = false;
-                                if (imageObj->LoadAndScaleImageCache(image, contentRect.GetSize(), false, changed) && changed)
+                                if (imageObj->LoadAndScaleImageCache(image, contentRect.GetSize(), context, changed) && changed)
                                 {
                                     loadCount ++;
                                 }

@@ -2499,6 +2499,12 @@ public:
 
     bool GetDelayedImageLoading() const { return m_enableDelayedImageLoading; }
 
+    /**
+        Returns the buffer pointer.
+    */
+
+    wxRichTextBuffer* GetBuffer() const { return m_buffer; }
+
     wxRichTextBuffer*   m_buffer;
     bool                m_enableVirtualAttributes;
     bool                m_enableImages;
@@ -5064,7 +5070,7 @@ public:
     /**
         Do the loading and scaling
     */
-    virtual bool LoadAndScaleImageCache(wxImage& image, const wxSize& sz, bool delayLoading, bool& changed);
+    virtual bool LoadAndScaleImageCache(wxImage& image, const wxSize& sz, wxRichTextDrawingContext& context, bool& changed);
 
     /**
         Gets the original image size.

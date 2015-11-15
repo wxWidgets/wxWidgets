@@ -79,7 +79,7 @@ public:
 #endif
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_DEFAULT_TYPE );
 #if wxUSE_IMAGE
-    wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH);
+    wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH, double scale = 1.0);
 #endif // wxUSE_IMAGE
     wxBitmap(GdkPixbuf* pixbuf, int depth = 0);
     wxEXPLICIT wxBitmap(const wxCursor& cursor);

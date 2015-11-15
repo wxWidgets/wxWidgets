@@ -590,7 +590,7 @@ static void CopyImageData(
 
 #if wxUSE_IMAGE
 #ifdef __WXGTK3__
-wxBitmap::wxBitmap(const wxImage& image, int depth)
+wxBitmap::wxBitmap(const wxImage& image, int depth, double WXUNUSED(scale))
 {
     wxCHECK_RET(image.IsOk(), "invalid image");
 
@@ -636,7 +636,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
     }
 }
 #else
-wxBitmap::wxBitmap(const wxImage& image, int depth)
+wxBitmap::wxBitmap(const wxImage& image, int depth, double WXUNUSED(scale))
 {
     wxCHECK_RET(image.IsOk(), "invalid image");
 

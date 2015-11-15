@@ -12483,7 +12483,7 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context
     // Don't repeat unless absolutely necessary
     if (m_imageCache.IsOk() && !resetCache && !context.GetLayingOut())
     {
-        retImageSize = wxSize(m_imageCache.GetWidth(), m_imageCache.GetHeight());
+        retImageSize = wxSize(m_imageCache.GetScaledWidth(), m_imageCache.GetScaledHeight());
         return true;
     }
 
@@ -12636,16 +12636,16 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context
     retImageSize = wxSize(width, height);
 
     bool changed = false;
-    return LoadAndScaleImageCache(image, retImageSize, context.GetDelayedImageLoading(), changed);
+    return LoadAndScaleImageCache(image, retImageSize, context, changed);
 }
 
 // Do the loading and scaling
-bool wxRichTextImage::LoadAndScaleImageCache(wxImage& image, const wxSize& sz, bool delayLoading, bool& changed)
+bool wxRichTextImage::LoadAndScaleImageCache(wxImage& image, const wxSize& sz, wxRichTextDrawingContext& context, bool& changed)
 {
     int width = sz.x;
     int height = sz.y;
 
-    if (m_imageCache.IsOk() && m_imageCache.GetWidth() == width && m_imageCache.GetHeight() == height)
+    if (m_imageCache.IsOk() && m_imageCache.GetScaledWidth() == width && m_imageCache.GetScaledHeight() == height)
     {
         // Do nothing, we didn't need to change the image cache
         changed = false;
@@ -12654,7 +12654,7 @@ bool wxRichTextImage::LoadAndScaleImageCache(wxImage& image, const wxSize& sz, b
     {
         changed = true;
 
-        if (delayLoading)
+        if (context.GetDelayedImageLoading())
         {
             if (m_imageCache.IsOk())
                 m_imageCache = wxNullBitmap;
@@ -12680,6 +12680,10 @@ bool wxRichTextImage::LoadAndScaleImageCache(wxImage& image, const wxSize& sz, b
             m_imageCache = wxBitmap(image);
         else
         {
+            double scaleFactor = 1.0;
+            if (context.GetBuffer() && context.GetBuffer()->GetRichTextCtrl())
+                scaleFactor = context.GetBuffer()->GetRichTextCtrl()->GetContentScaleFactor();
+
             // If the original width and height is small, e.g. 400 or below,
             // scale up and then down to improve image quality. This can make
             // a big difference, with not much performance hit.
@@ -12688,11 +12692,14 @@ bool wxRichTextImage::LoadAndScaleImageCache(wxImage& image, const wxSize& sz, b
             if (image.GetWidth() <= upscaleThreshold || image.GetHeight() <= upscaleThreshold)
             {
                 img = image.Scale(image.GetWidth()*2, image.GetHeight()*2);
-                img.Rescale(width, height, wxIMAGE_QUALITY_HIGH);
+                img.Rescale(width*scaleFactor, height*scaleFactor, wxIMAGE_QUALITY_HIGH);
             }
             else
-                img = image.Scale(width, height, wxIMAGE_QUALITY_HIGH);
-            m_imageCache = wxBitmap(img);
+                img = image.Scale(width*scaleFactor, height*scaleFactor, wxIMAGE_QUALITY_HIGH);
+                
+            // On Mac, this will create a bitmap that is twice as big as the required dimensions,
+            // with a scale factor that indicates that the extra detail should be used on HiDPI displays.
+            m_imageCache = wxBitmap(img, wxBITMAP_SCREEN_DEPTH, scaleFactor);
         }
     }
 

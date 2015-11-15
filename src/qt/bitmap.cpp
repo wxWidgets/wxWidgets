@@ -220,7 +220,7 @@ wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type )
     LoadFile(filename, type);
 }
 
-wxBitmap::wxBitmap(const wxImage& image, int depth )
+wxBitmap::wxBitmap(const wxImage& image, int depth, double WXUNUSED(scale) )
 {
     Qt::ImageConversionFlags flags = 0;
     if (depth == 1)
