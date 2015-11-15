@@ -232,9 +232,16 @@ bool gs_insideCaptureChanged = false;
 LRESULT WXDLLEXPORT APIENTRY
 wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-
 #if wxDEBUG_LEVEL >= 2
-    const wxChar *wxGetMessageName(int message);
+const wxChar *wxGetMessageName(int message);
+
+inline
+void wxTraceMSWMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    wxLogTrace("winmsg",
+               wxT("Processing %s(hWnd=%p, wParam=%p, lParam=%p)"),
+               wxGetMessageName(message), hWnd, wParam, lParam);
+}
 #endif  // wxDEBUG_LEVEL >= 2
 
 void wxRemoveHandleAssociation(wxWindowMSW *win);
@@ -2604,14 +2611,10 @@ wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     // trace all messages: useful for the debugging but noticeably slows down
     // the code so don't do it by default
 #if wxDEBUG_LEVEL >= 2
-    // notice that we cast wParam and lParam to long to avoid mismatch with
-    // format specifiers in 64 bit builds where they are both int64 quantities
-    //
-    // casting like this loses information, of course, but it shouldn't matter
-    // much for this diagnostic code and it keeps the code simple
-    wxLogTrace("winmsg",
-               wxT("Processing %s(hWnd=%p, wParam=%08lx, lParam=%08lx)"),
-               wxGetMessageName(message), hWnd, (long)wParam, (long)lParam);
+    // We have to do this inside a helper function as wxLogTrace() constructs
+    // an object internally, but objects can't be used in functions using __try
+    // (expanded from wxSEH_TRY below) with MSVC.
+    wxTraceMSWMessage(hWnd, message, wParam, lParam);
 #endif // wxDEBUG_LEVEL >= 2
 
     wxWindowMSW *wnd = wxFindWinFromHandle(hWnd);
