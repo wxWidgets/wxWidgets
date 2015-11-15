@@ -1545,7 +1545,7 @@ void MyFrame::OnFileSave(wxCommandEvent& WXUNUSED(event))
     if ( m_panel->m_textrich->SaveFile(wxT("dummy.txt")) )
     {
 #if wxUSE_FILE
-        // verify that the fil length is correct
+        // verify that the file length is correct
         wxFile file(wxT("dummy.txt"));
         wxLogStatus(this,
                     wxT("Successfully saved file (text len = %lu, file size = %ld)"),
