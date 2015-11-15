@@ -22,7 +22,7 @@
  *
  * Image lists can also create and draw images used for drag and drop functionality.
  * This is not yet implemented in wxImageList. We need to discuss a generic API
- * for doing drag and drop and see whether it ties in with the Win95 view of it.
+ * for doing drag and drop.
  * See below for candidate functions and an explanation of how they might be
  * used.
  */

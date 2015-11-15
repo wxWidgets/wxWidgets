@@ -870,7 +870,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     SetMenuBar(menuBar);
 
     // create a status bar just for fun (by default with 1 pane only)
-    // but don't create it on limited screen space (WinCE)
+    // but don't create it on limited screen space (mobile device)
     bool is_pda = wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA;
 
 #if wxUSE_STATUSBAR

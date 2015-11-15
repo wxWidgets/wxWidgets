@@ -41,9 +41,8 @@ bool wxNativeEncodingInfo::FromString( const wxString& s )
     wxString tmp = tokenizer.GetNextToken();
     if ( !tmp )
     {
-        // default charset (don't use DEFAULT_CHARSET though because of subtle
-        // Windows 9x/NT differences in handling it)
-        charset = 0;
+        // default charset
+        charset = 0; // DEFAULT_CHARSET ?
     }
     else
     {

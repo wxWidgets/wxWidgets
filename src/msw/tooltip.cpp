@@ -97,8 +97,7 @@ public:
 
         // the structure TOOLINFO has been extended with a 4 byte field in
         // version 4.70 of comctl32.dll and another one in 5.01 but we don't
-        // use these extended fields so use the old struct size to ensure that
-        // the tooltips work on old (Windows 95) systems too
+        // use these extended fields so use the old struct size
         cbSize = TTTOOLINFO_V1_SIZE;
 
         hwnd = hwndOwner;

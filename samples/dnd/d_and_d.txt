@@ -1,4 +1,4 @@
-                        Drag-and-Drop Support in wxWindows
+                        Drag-and-Drop Support in wxWidgets
                         ==================================
 
 1. Overview
@@ -7,9 +7,7 @@
  a) What is it?
 
     We're calling drag-and-drop (or d&d for short) the OLE mechanism of data
-transfer. Please note that it's not the same thing as the file oriented d&d
-of Windows 3.1 "File Manager" which is designed for and limited to the file
-names only.
+transfer.
 
     OLE d&d allows application to transfer data of any type to the same or
 another process.

@@ -141,8 +141,7 @@
     #define HAVE_TRACKMOUSEEVENT
 #endif // everything needed for TrackMouseEvent()
 
-// not all compilers/platforms have X button related declarations (notably
-// Windows CE doesn't, and probably some old SDKs don't neither)
+// not all compilers/platforms have X button related declarations
 #ifdef WM_XBUTTONDOWN
     #define wxHAS_XBUTTON
 #endif
@@ -284,8 +283,7 @@ static void EnsureParentHasControlParentStyle(wxWindow *parent)
 
 // GetCursorPos can return an error, so use this function
 // instead.
-// Error originally observed with WinCE, but later using Remote Desktop
-// to connect to XP.
+// Error observed when using Remote Desktop to connect to XP.
 void wxGetCursorPosMSW(POINT* pt)
 {
     if (!GetCursorPos(pt))
@@ -5592,9 +5590,8 @@ int wxWindowMSW::HandleMenuChar(int chAccel,
 
     WinStruct<MENUITEMINFO> mii;
 
-    // we could use MIIM_FTYPE here as we only need to know if the item is
-    // ownerdrawn or not and not dwTypeData which MIIM_TYPE also returns, but
-    // MIIM_FTYPE is not supported under Win95
+    // we should use MIIM_FTYPE here as we only need to know if the item is
+    // ownerdrawn or not and not dwTypeData which MIIM_TYPE also returns
     mii.fMask = MIIM_TYPE | MIIM_DATA;
 
     // find if we have this letter in any owner drawn item

@@ -75,7 +75,7 @@ static wxFont *gs_fontDefault = NULL;
 // from GetSystemMetric, and should it? Perhaps call it GetSystemParameter
 // and pass an optional void* arg to get further info.
 // Should also have SetSystemParameter.
-// Also implement WM_WININICHANGE (NT) / WM_SETTINGCHANGE (Win95)
+// Also implement WM_WININICHANGE
 
 // ----------------------------------------------------------------------------
 // wxSystemSettingsModule

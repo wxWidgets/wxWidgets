@@ -2192,8 +2192,8 @@ WXHBRUSH wxTextCtrl::MSWControlColor(WXHDC hDC, WXHWND hWnd)
 bool wxTextCtrl::HasSpaceLimit(unsigned int *len) const
 {
     // HACK: we try to automatically extend the limit for the amount of text
-    //       to allow (interactively) entering more than 64Kb of text under
-    //       Win9x but we shouldn't reset the text limit which was previously
+    //       to allow (interactively) entering more than 64Kb of text
+    //       but we shouldn't reset the text limit which was previously
     //       set explicitly with SetMaxLength()
     //
     //       Unfortunately there is no EM_GETLIMITTEXTSETBYUSER and so we don't

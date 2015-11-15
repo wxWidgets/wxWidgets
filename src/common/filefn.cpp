@@ -1619,8 +1619,7 @@ int WXDLLIMPEXP_BASE wxParseCommonDialogsFilter(const wxString& filterStr,
 static bool wxCheckWin32Permission(const wxString& path, DWORD access)
 {
     // quoting the MSDN: "To obtain a handle to a directory, call the
-    // CreateFile function with the FILE_FLAG_BACKUP_SEMANTICS flag", but this
-    // doesn't work under Win9x/ME but then it's not needed there anyhow
+    // CreateFile function with the FILE_FLAG_BACKUP_SEMANTICS flag"
     const DWORD dwAttr = ::GetFileAttributes(path.t_str());
     if ( dwAttr == INVALID_FILE_ATTRIBUTES )
     {

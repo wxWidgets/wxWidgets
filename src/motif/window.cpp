@@ -419,9 +419,7 @@ wxWindow::~wxWindow()
         // child windows.
 
         // GRG, Feb/2000: commented this out when adding support for
-        //   wxSCROLL[WIN]_THUMBRELEASE events. Also it was reported
-        //   that this call crashed wxMotif under OS/2, so it seems
-        //   that leaving it out is the right thing to do.
+        //   wxSCROLL[WIN]_THUMBRELEASE events.
         // SN, Feb/2000: newgrid/griddemo shows why it is needed :-(
         XtDestroyWidget((Widget) GetMainWidget());
         SetMainWidget((WXWidget) NULL);

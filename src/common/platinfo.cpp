@@ -47,10 +47,10 @@ static const wxChar* const wxOperatingSystemIdNames[] =
     wxT("Apple Mac OS"),
     wxT("Apple Mac OS X"),
 
-    wxT("Microsoft Windows 9X"),
+    _("Unknown"),
     wxT("Microsoft Windows NT"),
-    wxT("Microsoft Windows Micro"),
-    wxT("Microsoft Windows CE"),
+    _("Unknown"),
+    _("Unknown"),
 
     wxT("Linux"),
     wxT("FreeBSD"),
@@ -61,11 +61,11 @@ static const wxChar* const wxOperatingSystemIdNames[] =
     wxT("AIX"),
     wxT("HPUX"),
 
-    wxT("Other Unix"),
-    wxT("Other Unix"),
+    _("Other Unix"),
+    _("Other Unix"),
 
-    wxT("DOS"),
-    wxT("OS/2"),
+    _("Unknown"),
+    _("Unknown"),
 
 };
 
@@ -77,10 +77,10 @@ static const wxChar* const wxPortIdNames[] =
     wxT("wxGTK"),
     wxT("wxDFB"),
     wxT("wxX11"),
-    wxT("wxOS2"),
+    _("Unknown"),
     wxT("wxMac"),
     wxT("wxCocoa"),
-    wxT("wxWinCE"),
+    _("Unknown"),
     wxT("wxQT")
 };
 
@@ -226,7 +226,7 @@ wxString wxPlatformInfo::GetOperatingSystemDirectory()
 
 wxString wxPlatformInfo::GetOperatingSystemFamilyName(wxOperatingSystemId os)
 {
-    const wxChar* string = wxT("Unknown");
+    const wxChar* string = _("Unknown");
     if ( os & wxOS_MAC )
         string = wxT("Macintosh");
     else if ( os & wxOS_WINDOWS )
@@ -234,9 +234,9 @@ wxString wxPlatformInfo::GetOperatingSystemFamilyName(wxOperatingSystemId os)
     else if ( os & wxOS_UNIX )
         string = wxT("Unix");
     else if ( os == wxOS_DOS )
-        string = wxT("DOS");
+        string = _("Unknown");
     else if ( os == wxOS_OS2 )
-        string = wxT("OS/2");
+        string = _("Unknown");
 
     return string;
 }

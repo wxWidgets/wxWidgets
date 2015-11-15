@@ -1426,7 +1426,7 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
 
     // NB: don't take DEFAULT_GUI_FONT (a.k.a. wxSYS_DEFAULT_GUI_FONT)
     //     because it's not TrueType and so can't have non zero
-    //     orientation/escapement under Win9x
+    //     orientation/escapement
     wxFont font = m_font.IsOk() ? m_font : *wxSWISS_FONT;
     LOGFONT lf;
     if ( ::GetObject(GetHfontOf(font), sizeof(lf), &lf) == 0 )
@@ -2327,11 +2327,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                                      dwRop
                                      ) == (int)GDI_ERROR )
                 {
-                    // On Win9x this API fails most (all?) of the time, so
-                    // logging it becomes quite distracting.  Since it falls
-                    // back to the code below this is not really serious, so
-                    // don't log it.
-                    //wxLogLastError(wxT("StretchDIBits"));
+                    wxLogLastError(wxT("StretchDIBits"));
                 }
                 else
                 {

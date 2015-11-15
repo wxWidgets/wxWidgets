@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/scopeguard.h
-// Purpose:     declares wxwxScopeGuard and related macros
+// Purpose:     declares wxScopeGuard and related macros
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     03.07.2003
@@ -29,8 +29,8 @@
 namespace wxPrivate
 {
     // in the original implementation this was a member template function of
-    // ScopeGuardImplBase but gcc 2.8 which is still used for OS/2 doesn't
-    // support member templates and so we must make it global
+    // ScopeGuardImplBase but old gcc didn't support member templates
+    // and so we must make it global
     template <class ScopeGuardImpl>
     void OnScopeExit(ScopeGuardImpl& guard)
     {

@@ -171,7 +171,6 @@ public:
 
         @remarks Different versions of Windows and different versions of other
                  platforms support very different subsets of the styles above
-                 - there is no similarity even between Windows95 and Windows98 -
                  so handle with care.
 
         @see SetStyle(), SetColour(), SetWidth()

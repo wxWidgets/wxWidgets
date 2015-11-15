@@ -77,9 +77,8 @@
 #endif
 
 // VZ: there is some code using NetXXX() functions to get the full user name:
-//     I don't think it's a good idea because they don't work under Win95 and
-//     seem to return the same as wxGetUserId() under NT. If you really want
-//     to use them, just #define USE_NET_API
+//     I don't think it's a good idea because they seem to return the same as
+//     wxGetUserId(). If you really want to use them, just #define USE_NET_API
 #undef USE_NET_API
 
 #ifdef USE_NET_API
@@ -227,7 +226,7 @@ bool wxGetUserId(wxChar *buf,
     DWORD nSize = maxSize;
     if ( ::GetUserName(buf, &nSize) == 0 )
     {
-        // actually, it does happen on Win9x if the user didn't log on
+        // actually, it does happen if the user didn't log on
         DWORD res = ::GetEnvironmentVariable(wxT("username"), buf, maxSize);
         if ( res == 0 )
         {
@@ -1073,57 +1072,6 @@ wxString wxGetOsDescription()
     const OSVERSIONINFOEXW info = wxGetWindowsVersionInfo();
     switch ( info.dwPlatformId )
     {
-#ifdef VER_PLATFORM_WIN32_CE
-        case VER_PLATFORM_WIN32_CE:
-            str.Printf(_("Windows CE (%d.%d)"),
-                       info.dwMajorVersion,
-                       info.dwMinorVersion);
-            break;
-#endif
-        case VER_PLATFORM_WIN32s:
-            str = _("Win32s on Windows 3.1");
-            break;
-
-        case VER_PLATFORM_WIN32_WINDOWS:
-            switch (info.dwMinorVersion)
-            {
-                case 0:
-                    if ( info.szCSDVersion[1] == 'B' ||
-                         info.szCSDVersion[1] == 'C' )
-                    {
-                        str = _("Windows 95 OSR2");
-                    }
-                    else
-                    {
-                        str = _("Windows 95");
-                    }
-                    break;
-                case 10:
-                    if ( info.szCSDVersion[1] == 'B' ||
-                         info.szCSDVersion[1] == 'C' )
-                    {
-                        str = _("Windows 98 SE");
-                    }
-                    else
-                    {
-                        str = _("Windows 98");
-                    }
-                    break;
-                case 90:
-                    str = _("Windows ME");
-                    break;
-                default:
-                    str.Printf(_("Windows 9x (%d.%d)"),
-                               info.dwMajorVersion,
-                               info.dwMinorVersion);
-                    break;
-            }
-            if ( !wxIsEmpty(info.szCSDVersion) )
-            {
-                str << wxT(" (") << info.szCSDVersion << wxT(')');
-            }
-            break;
-
         case VER_PLATFORM_WIN32_NT:
             switch ( info.dwMajorVersion )
             {
@@ -1131,7 +1079,7 @@ wxString wxGetOsDescription()
                     switch ( info.dwMinorVersion )
                     {
                         case 0:
-                            str = _("Windows 2000");
+                            str = "Windows 2000";
                             break;
 
                         case 2:
@@ -1140,13 +1088,13 @@ wxString wxGetOsDescription()
                             // type to resolve this ambiguity
                             if ( wxIsWindowsServer() == 1 )
                             {
-                                str = _("Windows Server 2003");
+                                str = "Windows Server 2003";
                                 break;
                             }
                             //else: must be XP, fall through
 
                         case 1:
-                            str = _("Windows XP");
+                            str = "Windows XP";
                             break;
                     }
                     break;
@@ -1156,40 +1104,40 @@ wxString wxGetOsDescription()
                     {
                         case 0:
                             str = wxIsWindowsServer() == 1
-                                    ? _("Windows Server 2008")
-                                    : _("Windows Vista");
+                                    ? "Windows Server 2008"
+                                    : "Windows Vista";
                             break;
 
                         case 1:
                             str = wxIsWindowsServer() == 1
-                                    ? _("Windows Server 2008 R2")
-                                    : _("Windows 7");
+                                    ? "Windows Server 2008 R2"
+                                    : "Windows 7";
                             break;
 
                         case 2:
                             str = wxIsWindowsServer() == 1
-                                    ? _("Windows Server 2012")
-                                    : _("Windows 8");
+                                    ? "Windows Server 2012"
+                                    : "Windows 8";
                             break;
 
                         case 3:
                             str = wxIsWindowsServer() == 1
-                                    ? _("Windows Server 2012 R2")
-                                    : _("Windows 8.1");
+                                    ? "Windows Server 2012 R2"
+                                    : "Windows 8.1";
                             break;
                     }
                     break;
 
                 case 10:
                     str = wxIsWindowsServer() == 1
-                            ? _("Windows Server 2016")
-                            : _("Windows 10");
+                            ? "Windows Server 2016"
+                            : "Windows 10";
                     break;
             }
 
             if ( str.empty() )
             {
-                str.Printf(_("Windows NT %lu.%lu"),
+                str.Printf("Windows NT %lu.%lu",
                            info.dwMajorVersion,
                            info.dwMinorVersion);
             }
@@ -1259,10 +1207,6 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
             case VER_PLATFORM_WIN32_NT:
                 s_version.os = wxOS_WINDOWS_NT;
                 break;
-
-            case VER_PLATFORM_WIN32_WINDOWS:
-                s_version.os = wxOS_WINDOWS_9X;
-                break;
         }
 
         s_version.verMaj = info.dwMajorVersion;
@@ -1301,29 +1245,9 @@ wxWinVersion wxGetWinVersion()
         verMin;
     switch ( wxGetOsVersion(&verMaj, &verMin) )
     {
-        case wxOS_WINDOWS_9X:
-            if ( verMaj == 4 )
-            {
-                switch ( verMin )
-                {
-                    case 0:
-                        return wxWinVersion_95;
-
-                    case 10:
-                        return wxWinVersion_98;
-
-                    case 90:
-                        return wxWinVersion_ME;
-                }
-            }
-            break;
-
         case wxOS_WINDOWS_NT:
             switch ( verMaj )
             {
-                case 3:
-                    return wxWinVersion_NT3;
-
                 case 4:
                     return wxWinVersion_NT4;
 

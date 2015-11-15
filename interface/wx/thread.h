@@ -1034,19 +1034,6 @@ public:
             something with the thread (e.g. pass its ID to an external library)
             before it starts.
 
-        @warning
-            It is a good idea to explicitly specify a value as systems'
-            default values vary from just a couple of KB on some systems (BSD systems)
-            to one or several MB (Windows, Solaris, Linux).
-            So, if you have a thread that requires more than just a few KB of memory, you
-            will have mysterious problems on some platforms but not on the common ones.
-            On the other hand, just indicating a large stack size by default will give you
-            performance issues on those systems with small default stack since those
-            typically use fully committed memory for the stack.
-            On the contrary, if you use a lot of threads (say several hundred),
-            virtual address space can get tight unless you explicitly specify a
-            smaller amount of thread stack space for each thread.
-
         @return One of:
           - @b wxTHREAD_NO_ERROR - No error.
           - @b wxTHREAD_NO_RESOURCE - There were insufficient resources to create the thread.

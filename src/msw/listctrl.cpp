@@ -1655,10 +1655,10 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
         flags |= wxLIST_HITTEST_NOWHERE;
 
     // note a bug or at least a very strange feature of comtl32.dll (tested
-    // with version 4.0 under Win95 and 6.0 under Win 2003): if you click to
-    // the right of the item label, ListView_HitTest() returns a combination of
-    // LVHT_ONITEMICON, LVHT_ONITEMLABEL and LVHT_ONITEMSTATEICON -- filter out
-    // the bits which don't make sense
+    // with version 4.0 and 6.0): if you click to the right of the item label,
+    // ListView_HitTest() returns a combination of LVHT_ONITEMICON,
+    // LVHT_ONITEMLABEL and LVHT_ONITEMSTATEICON -- filter out the bits which
+    // don't make sense
     if ( hitTestInfo.flags & LVHT_ONITEMLABEL )
     {
         flags |= wxLIST_HITTEST_ONITEMLABEL;

@@ -196,7 +196,7 @@ WXDLLIMPEXP_CORE wxMouseState wxGetMouseState();
  * A custom platform symbol:
  *
  *  #define stPDA 100
- *  #ifdef __WXWINCE__
+ *  #ifdef __WXMSW__
  *      wxPlatform::AddPlatform(stPDA);
  *  #endif
  *

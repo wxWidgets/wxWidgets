@@ -1060,8 +1060,8 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
         ::DrawState(hdc, NULL, NULL, wxMSW_CONV_LPARAM(text),
                     text.length(), x, y, 0, 0, flags);
 
-        // ::SetTextAlign(hdc, TA_RIGHT) doesn't work with DSS_DISABLED or DSS_MONO
-        // as the last parameter in DrawState() (at least with Windows98). So we have
+        // ::SetTextAlign(hdc, TA_RIGHT) doesn't always work with DSS_DISABLED
+        // or DSS_MONO as the last parameter in DrawState(). So we have
         // to take care of right alignment ourselves.
         wxString accel = GetItemLabel().AfterFirst(wxT('\t'));
         if ( !accel.empty() )

@@ -52,9 +52,9 @@ public:
     HKCU,       // current user
     HKLM,       // local machine
     HKUSR,      // users
-    HKPD,       // performance data (WinNT/2K only)
+    HKPD,       // performance data
     HKCC,       // current config
-    HKDD,       // dynamic data (Win95/98 only)
+    HKDD,       // dynamic data (obsolete)
     HKMAX
   };
 
