@@ -45,8 +45,7 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Define to the sub-directory in which libtool stores uninstalled libraries.
-   */
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
 #undef LT_OBJDIR
 
 /* Name of package */
@@ -77,10 +76,7 @@
 #undef PNG_ARM_NEON_CHECK_SUPPORTED
 
 /* Enable ARM Neon optimizations */
-#undef PNG_ARM_NEON_SUPPORTED
-
-/* Disable ARM Neon optimizations */
-#undef PNG_NO_ARM_NEON
+#undef PNG_ARM_NEON_OPT
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
