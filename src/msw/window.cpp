@@ -238,9 +238,14 @@ const wxChar *wxGetMessageName(int message);
 inline
 void wxTraceMSWMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    // The casts to size_t allow to avoid having different code for Win32 and
+    // Win64 as size_t is of the right size in both cases, unlike int or long.
     wxLogTrace("winmsg",
-               wxT("Processing %s(hWnd=%p, wParam=%p, lParam=%p)"),
-               wxGetMessageName(message), hWnd, wParam, lParam);
+               wxT("Processing %s(hWnd=%p, wParam=%zx, lParam=%zx)"),
+               wxGetMessageName(message),
+               hWnd,
+               static_cast<size_t>(wParam),
+               static_cast<size_t>(lParam));
 }
 #endif  // wxDEBUG_LEVEL >= 2
 
