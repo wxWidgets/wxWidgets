@@ -1,0 +1,35 @@
+# Windows-specific files that require CRLF:
+
+*.bat       eol=crlf
+*.bcc       eol=crlf
+*.dsw       eol=crlf
+*.gcc       eol=crlf
+*.props     eol=crlf
+*.rc        eol=crlf
+*.sln       eol=crlf
+*.vc        eol=crlf
+*.vcproj    eol=crlf
+*.vcxproj   eol=crlf
+
+# Documentation used with Windows installer:
+
+/BuildGit.txt         text=auto
+/docs/changes.txt     text=auto
+/docs/licence.txt     text=auto
+/docs/readme.txt      text=auto
+/docs/msw/*.txt       text=auto
+
+# Unix-specific files that require LF:
+
+*.h.in       eol=lf
+*.m4         eol=lf
+*.sh         eol=lf
+configure.in eol=lf
+Makefile.am  eol=lf
+Makefile.in  eol=lf
+makefile.unx eol=lf
+
+config.guess eol=lf
+config.sub   eol=lf
+configure    eol=lf
+configure.in eol=lf
