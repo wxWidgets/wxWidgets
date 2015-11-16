@@ -1105,7 +1105,14 @@ int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
                     evt.ShiftDown(),
                     evt.ControlDown(),
                     evt.AltDown(),
+                    // Under Mac, ControlDown() returns the status of Cmd key,
+                    // so we sneak the status of the real Ctrl key via SCI_META
+                    // but we shouldn't be doing this elsewhere.
+#ifdef __WXMAC__
                     evt.RawControlDown()
+#else
+                    0
+#endif
                 ),
                 consumed
              );
