@@ -458,6 +458,7 @@ public:
 
     void EnableAlternateRowColours(bool enable = true);
     void SetAlternateRowColour(const wxColour& colour);
+    wxColour GetAlternateRowColour() const { return m_alternateRowColour.GetBackgroundColour(); }
 
 protected:
     // Real implementations methods to which our public forwards.

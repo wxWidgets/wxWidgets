@@ -790,6 +790,14 @@ public:
     void SetAlternateRowColour(const wxColour& colour);
 
     /**
+        Get the alternative row background colour.
+
+        @since 3.1.0
+        @see SetAlternateRowColour()
+     */
+    wxColour GetAlternateRowColour() const;
+
+    /**
         Determines which item (if any) is at the specified point, giving details
         in @a flags. Returns index of the item or @c wxNOT_FOUND if no item is at
         the specified point.
