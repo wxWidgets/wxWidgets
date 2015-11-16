@@ -31,21 +31,22 @@ Finally, tag the release:
 ## Creating Release Files
 
 The release scripts can be run from any working directory, and they will
-generate all release package files under `release/wxWidgets-x.y-z`. They all
-build the release packages based on the current HEAD commit, so always ensure
-you have the appropriate tag or commit checked out.
+generate all release package files under `distrib/release/x.y.z`. The scripts
+build the release packages based on the current HEAD commit, so always
+ensure you have the appropriate tag or commit checked out.
 
 1. Run `./build/tools/release.sh x.y.z` to create source archives
    `wxWidgets-x.y.z.{7z,tar.bz2,zip}`, `wxWidgets-x.y.z-headers.7z`, and
    `wxWidgets-x.y.z-docs-html.{tar.bz2,zip}` packages.
 
 2. Copy just the `wxWidgets-x.y.z.zip` package into the same
-   `release\wxWidgets-x.y.z` folder on Windows.
+   `distrib\release\x.y.z` folder on Windows.
 
 3. Run `build/tools/release.bat x.y.z` in a Windows command prompt.
 
-4. Copy these Windows packages back to your Linux or OSX `release` directory so
-   you can continue with the upload step with all packages available:
+4. Copy these Windows packages back to your Linux or OSX `distrib/release/x.y.z`
+   directory so you can continue with the upload step with all packages
+   available:
 
    ```
    wxMSW-x.y.z-Setup.exe
