@@ -164,6 +164,7 @@ private:
         CPPUNIT_TEST( BindFunctionUsingBaseEvent );
         CPPUNIT_TEST( BindNonHandler );
         CPPUNIT_TEST( InvalidBind );
+        CPPUNIT_TEST( UnbindFromHandler );
     CPPUNIT_TEST_SUITE_END();
 
     void BuiltinConnect();
@@ -178,6 +179,7 @@ private:
     void BindFunctionUsingBaseEvent();
     void BindNonHandler();
     void InvalidBind();
+    void UnbindFromHandler();
 
 
     // these member variables exceptionally don't use "m_" prefix because
@@ -458,4 +460,49 @@ void EvtHandlerTestCase::InvalidBind()
     MyHandler myHandler;
     myHandler.Bind(MyEventType, &MyHandler::OnMyEvent, &mySink);
 #endif
+}
+
+void EvtHandlerTestCase::UnbindFromHandler()
+{
+    struct Handler1
+    {
+        void OnDontCall(MyEvent&)
+        {
+            // Although this handler is bound, the second one below is bound
+            // later and so will be called first and will disconnect this one
+            // before it has a chance to be called.
+            CPPUNIT_FAIL("shouldn't be called");
+        }
+    } h1;
+
+    handler.Bind(MyEventType, &Handler1::OnDontCall, &h1);
+
+    class Handler2
+    {
+    public:
+        Handler2(MyHandler& handler, Handler1& h1)
+        {
+            m_handler = &handler;
+            m_h1 = &h1;
+        }
+
+        void OnUnbind(MyEvent& e)
+        {
+            m_handler->Unbind(MyEventType, &Handler1::OnDontCall, m_h1);
+
+            // Check that the now disconnected first handler is not executed.
+            e.Skip();
+        }
+
+    private:
+        // Use pointers instead of references just to avoid warnings about the
+        // class being non-copyable even though these pointers don't change and
+        // are non-NULL.
+        MyHandler* m_handler;
+        Handler1* m_h1;
+    } h2(handler, h1);
+
+    handler.Bind(MyEventType, &Handler2::OnUnbind, &h2);
+
+    handler.ProcessEvent(e);
 }
