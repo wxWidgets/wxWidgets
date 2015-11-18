@@ -1044,17 +1044,20 @@ void wxDataViewEditorCtrlEvtHandler::OnChar( wxKeyEvent &event )
 {
     switch ( event.m_keyCode )
     {
-        case WXK_RETURN:
-            m_finished = true;
-            m_owner->FinishEditing();
-            break;
-
         case WXK_ESCAPE:
-        {
             m_finished = true;
             m_owner->CancelEditing();
             break;
-        }
+
+        case WXK_RETURN:
+            if ( !event.HasAnyModifiers() )
+            {
+                m_finished = true;
+                m_owner->FinishEditing();
+                break;
+            }
+            wxFALLTHROUGH; // Ctrl/Alt/Shift-Enter is not handled specially
+
         default:
             event.Skip();
     }
