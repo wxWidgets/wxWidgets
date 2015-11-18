@@ -2113,9 +2113,15 @@ wxTextCtrl::MSWHandleMessage(WXLRESULT *rc,
                     //     live with it.
                     *rc = lDlgCode;
                 }
-                if (IsMultiLine())
-                    // Clear the DLGC_HASSETSEL bit from the return value
+
+                if ( IsMultiLine() )
+                {
+                    // The presence of this style, coming from the default EDIT
+                    // WndProc, indicates that the control contents should be
+                    // selected when it gets focus, but we don't want this to
+                    // happen for the multiline controls, so clear it.
                     *rc &= ~DLGC_HASSETSEL;
+                }
             }
             break;
 
