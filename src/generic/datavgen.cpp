@@ -3632,7 +3632,17 @@ void wxDataViewMainWindow::OnCharHook(wxKeyEvent& event)
                 return;
 
             case WXK_RETURN:
+                // Shift-Enter is not special neither.
+                if ( event.ShiftDown() )
+                    break;
+                wxFALLTHROUGH;
+
             case WXK_TAB:
+                // Ctrl/Alt-Tab or Enter could be used for something else, so
+                // don't handle them here.
+                if ( event.HasModifiers() )
+                    break;
+
                 m_editorRenderer->FinishEditing();
                 return;
         }
