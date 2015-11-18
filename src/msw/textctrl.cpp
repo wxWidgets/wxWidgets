@@ -2058,14 +2058,27 @@ void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
     event.Skip();
 }
 
-WXLRESULT wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+bool
+wxTextCtrl::MSWHandleMessage(WXLRESULT *rc,
+                             WXUINT nMsg,
+                             WXWPARAM wParam,
+                             WXLPARAM lParam)
 {
-    WXLRESULT lRc = wxTextCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
+    bool processed = wxTextCtrlBase::MSWHandleMessage(rc, nMsg, wParam, lParam);
 
     switch ( nMsg )
     {
         case WM_GETDLGCODE:
             {
+                // Ensure that the result value is initialized even if the base
+                // class didn't handle WM_GETDLGCODE but just update the value
+                // returned by it if it did handle it.
+                if ( !processed )
+                {
+                    *rc = MSWDefWindowProc(nMsg, wParam, lParam);
+                    processed = true;
+                }
+
                 // we always want the chars and the arrows: the arrows for
                 // navigation and the chars because we want Ctrl-C to work even
                 // in a read only control
@@ -2089,7 +2102,7 @@ WXLRESULT wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                     if ( HasFlag(wxTE_PROCESS_TAB) )
                         lDlgCode |= DLGC_WANTTAB;
 
-                    lRc |= lDlgCode;
+                    *rc |= lDlgCode;
                 }
                 else // !editable
                 {
@@ -2098,11 +2111,11 @@ WXLRESULT wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                     //     including DLGC_WANTMESSAGE). This is strange (how
                     //     does it work in the native Win32 apps?) but for now
                     //     live with it.
-                    lRc = lDlgCode;
+                    *rc = lDlgCode;
                 }
                 if (IsMultiLine())
                     // Clear the DLGC_HASSETSEL bit from the return value
-                    lRc &= ~DLGC_HASSETSEL;
+                    *rc &= ~DLGC_HASSETSEL;
             }
             break;
 
@@ -2122,7 +2135,7 @@ WXLRESULT wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 #endif // wxUSE_MENUS
     }
 
-    return lRc;
+    return processed;
 }
 
 // ----------------------------------------------------------------------------
