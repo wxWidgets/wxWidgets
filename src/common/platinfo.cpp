@@ -42,15 +42,17 @@ static wxPlatformInfo gs_platInfo(wxPORT_UNKNOWN);
 // constants
 // ----------------------------------------------------------------------------
 
+// Keep "Unknown" entries to avoid breaking the indexes
+
 static const wxChar* const wxOperatingSystemIdNames[] =
 {
     wxT("Apple Mac OS"),
     wxT("Apple Mac OS X"),
 
-    _("Unknown"),
+    wxT("Unknown"), // STL build: cannot use _() to translate strings here
     wxT("Microsoft Windows NT"),
-    _("Unknown"),
-    _("Unknown"),
+    wxT("Unknown"),
+    wxT("Unknown"),
 
     wxT("Linux"),
     wxT("FreeBSD"),
@@ -61,11 +63,11 @@ static const wxChar* const wxOperatingSystemIdNames[] =
     wxT("AIX"),
     wxT("HPUX"),
 
-    _("Other Unix"),
-    _("Other Unix"),
+    wxT("Other Unix"),
+    wxT("Other Unix"),
 
-    _("Unknown"),
-    _("Unknown"),
+    wxT("Unknown"),
+    wxT("Unknown"),
 
 };
 
@@ -77,10 +79,10 @@ static const wxChar* const wxPortIdNames[] =
     wxT("wxGTK"),
     wxT("wxDFB"),
     wxT("wxX11"),
-    _("Unknown"),
+    wxT("Unknown"),
     wxT("wxMac"),
     wxT("wxCocoa"),
-    _("Unknown"),
+    wxT("Unknown"),
     wxT("wxQT")
 };
 
@@ -226,7 +228,7 @@ wxString wxPlatformInfo::GetOperatingSystemDirectory()
 
 wxString wxPlatformInfo::GetOperatingSystemFamilyName(wxOperatingSystemId os)
 {
-    const wxChar* string = _("Unknown");
+    const wxChar* string = wxT("Unknown");
     if ( os & wxOS_MAC )
         string = wxT("Macintosh");
     else if ( os & wxOS_WINDOWS )
@@ -234,9 +236,9 @@ wxString wxPlatformInfo::GetOperatingSystemFamilyName(wxOperatingSystemId os)
     else if ( os & wxOS_UNIX )
         string = wxT("Unix");
     else if ( os == wxOS_DOS )
-        string = _("Unknown");
+        string = wxT("Unknown");
     else if ( os == wxOS_OS2 )
-        string = _("Unknown");
+        string = wxT("Unknown");
 
     return string;
 }
@@ -365,4 +367,3 @@ wxEndianness wxPlatformInfo::GetEndianness(const wxString& end)
 
     return wxENDIAN_INVALID;
 }
-
