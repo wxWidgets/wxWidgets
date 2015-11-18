@@ -1237,6 +1237,7 @@ bool wxSystemColourProperty::QueryColourFromUser( wxVariant& variant ) const
 
     wxColourData data;
     data.SetChooseFull(true);
+    data.SetChooseAlpha(GetAttributeAsLong(wxPG_COLOUR_HAS_ALPHA, 0) != 0);
     data.SetColour(val.m_colour);
     for ( int i = 0; i < 16; i++ )
     {
