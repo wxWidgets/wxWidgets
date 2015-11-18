@@ -3671,6 +3671,15 @@ protected:
         virtual bool TryParent(wxEvent& event), return DoTryApp(event); )
 #endif // WXWIN_COMPATIBILITY_2_8
 
+    // Overriding this method allows filtering the event handlers dynamically
+    // connected to this object. If this method returns false, the handler is
+    // not connected at all. If it returns true, it is connected using the
+    // possibly modified fields of the given entry.
+    virtual bool OnDynamicBind(wxDynamicEventTableEntry& WXUNUSED(entry))
+    {
+        return true;
+    }
+
 
     static const wxEventTable sm_eventTable;
     virtual const wxEventTable *GetEventTable() const;

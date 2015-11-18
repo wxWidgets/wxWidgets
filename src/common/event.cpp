@@ -1693,6 +1693,13 @@ void wxEvtHandler::DoBind(int id,
     wxDynamicEventTableEntry *entry =
         new wxDynamicEventTableEntry(eventType, id, lastId, func, userData);
 
+    // Check if the derived class allows binding such event handlers.
+    if ( !OnDynamicBind(*entry) )
+    {
+        delete entry;
+        return;
+    }
+
     if (!m_dynamicEvents)
         m_dynamicEvents = new DynamicEvents;
 
