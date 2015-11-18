@@ -1239,10 +1239,10 @@ bool wxSystemColourProperty::QueryColourFromUser( wxVariant& variant ) const
     data.SetChooseFull(true);
     data.SetChooseAlpha(GetAttributeAsLong(wxPG_COLOUR_HAS_ALPHA, 0) != 0);
     data.SetColour(val.m_colour);
-    for ( int i = 0; i < 16; i++ )
+    for ( int i = 0; i < wxColourData::NUM_CUSTOM; i++ )
     {
-        wxColour colour(i*16, i*16, i*16);
-        data.SetCustomColour(i, colour);
+        unsigned char n = i*(256/wxColourData::NUM_CUSTOM);
+        data.SetCustomColour(i, wxColour(n, n, n));
     }
 
     wxColourDialog dialog(propgrid, &data);
