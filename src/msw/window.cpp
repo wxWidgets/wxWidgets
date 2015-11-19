@@ -2316,7 +2316,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                         // currently active button should get enter press even
                         // if there is a default button elsewhere so check if
                         // this window is a button first
-                        wxWindow *btn = NULL;
+                        wxButton *btn = NULL;
                         if ( lDlgCode & DLGC_DEFPUSHBUTTON )
                         {
                             // let IsDialogMessage() handle this for all
@@ -2325,8 +2325,11 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                             long style = ::GetWindowLong(msg->hwnd, GWL_STYLE);
                             if ( (style & BS_OWNERDRAW) == BS_OWNERDRAW )
                             {
-                                // emulate the button click
-                                btn = wxFindWinFromHandle(msg->hwnd);
+                                btn = wxDynamicCast
+                                      (
+                                        wxFindWinFromHandle(msg->hwnd),
+                                        wxButton
+                                      );
                             }
                         }
                         else // not a button itself, do we have default button?
@@ -2367,25 +2370,12 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                                                   );
                                 }
                             }
-                            else // bCtrlDown
-                            {
-                                win = wxGetTopLevelParent(win);
-                            }
 
-                            wxTopLevelWindow * const
-                                tlw = wxDynamicCast(win, wxTopLevelWindow);
-                            if ( tlw )
-                            {
-                                btn = wxDynamicCast(tlw->GetDefaultItem(),
-                                                    wxButton);
-                            }
+                            btn = MSWGetDefaultButtonFor(win);
                         }
 
-                        if ( btn && btn->IsEnabled() && btn->IsShownOnScreen() )
-                        {
-                            btn->MSWCommand(BN_CLICKED, 0 /* unused */);
+                        if ( MSWClickButtonIfPossible(btn) )
                             return true;
-                        }
 
                         // This "Return" key press won't be actually used for
                         // navigation so don't generate wxNavigationKeyEvent
@@ -2543,6 +2533,36 @@ bool wxWindowMSW::MSWSafeIsDialogMessage(WXMSG* msg)
 }
 
 #endif // __WXUNIVERSAL__
+
+/* static */
+wxButton* wxWindowMSW::MSWGetDefaultButtonFor(wxWindow* win)
+{
+#if wxUSE_BUTTON
+    win = wxGetTopLevelParent(win);
+
+    wxTopLevelWindow *const tlw = wxDynamicCast(win, wxTopLevelWindow);
+    if ( tlw )
+        return wxDynamicCast(tlw->GetDefaultItem(), wxButton);
+#endif // wxUSE_BUTTON
+
+    return NULL;
+}
+
+/* static */
+bool wxWindowMSW::MSWClickButtonIfPossible(wxButton* btn)
+{
+#if wxUSE_BUTTON
+    if ( btn && btn->IsEnabled() && btn->IsShownOnScreen() )
+    {
+        btn->MSWCommand(BN_CLICKED, 0 /* unused */);
+        return true;
+    }
+#endif // wxUSE_BUTTON
+
+    wxUnusedVar(btn);
+
+    return false;
+}
 
 // ---------------------------------------------------------------------------
 // message params unpackers
