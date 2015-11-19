@@ -14,6 +14,8 @@
 
 #include "wx/settings.h"        // solely for wxSystemColour
 
+class WXDLLIMPEXP_FWD_CORE wxButton;
+
 // if this is set to 1, we use deferred window sizing to reduce flicker when
 // resizing complicated window hierarchies, but this can in theory result in
 // different behaviour than the old code so we keep the possibility to use it
@@ -533,6 +535,16 @@ public:
     // Find the menu corresponding to the given handle.
     virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu);
 #endif // wxUSE_MENUS && !__WXUNIVERSAL__
+
+    // Return the default button for the TLW containing this window or NULL if
+    // none.
+    static wxButton* MSWGetDefaultButtonFor(wxWindow* win);
+
+    // Simulate a click on the given button if it is non-null, enabled and
+    // shown.
+    //
+    // Return true if the button was clicked, false otherwise.
+    static bool MSWClickButtonIfPossible(wxButton* btn);
 
 protected:
     // this allows you to implement standard control borders without
