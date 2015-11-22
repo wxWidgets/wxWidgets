@@ -38,21 +38,21 @@ class WXDLLIMPEXP_CORE wxApp: public wxAppBase
     wxApp();
     virtual ~wxApp();
 
-    virtual void WakeUpIdle();
+    virtual void WakeUpIdle() wxOVERRIDE;
 
-    virtual void SetPrintMode(int mode) { m_printMode = mode; }
+    virtual void SetPrintMode(int mode) wxOVERRIDE { m_printMode = mode; }
     virtual int GetPrintMode() const { return m_printMode; }
 
     // calling OnInit with an auto-release pool ready ...
-    virtual bool CallOnInit();
+    virtual bool CallOnInit() wxOVERRIDE;
 #if wxUSE_GUI
     // setting up all MacOS Specific Event-Handlers etc
-    virtual bool OnInitGui();
+    virtual bool OnInitGui() wxOVERRIDE;
 #endif // wxUSE_GUI
 
-    virtual int OnRun();
+    virtual int OnRun() wxOVERRIDE;
 
-    virtual bool ProcessIdle();
+    virtual bool ProcessIdle() wxOVERRIDE;
 
     // implementation only
     void OnIdle(wxIdleEvent& event);
@@ -67,8 +67,8 @@ public:
 
     static bool           sm_isEmbedded;
     // Implementation
-    virtual bool Initialize(int& argc, wxChar **argv);
-    virtual void CleanUp();
+    virtual bool Initialize(int& argc, wxChar **argv) wxOVERRIDE;
+    virtual void CleanUp() wxOVERRIDE;
 
     // the installed application event handler
     WXEVENTHANDLERREF    MacGetEventHandler() { return m_macEventHandler ; }

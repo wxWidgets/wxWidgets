@@ -38,7 +38,7 @@ public:
 
     wxColourData &GetColourData() { return m_colourData; }
 
-    virtual int ShowModal();
+    virtual int ShowModal() wxOVERRIDE;
 
     // Internal functions
     void OnMouseEvent(wxMouseEvent& event);

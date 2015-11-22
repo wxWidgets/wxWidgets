@@ -727,7 +727,7 @@ public:
 
 #ifdef __WXMAC__
 protected:
-    virtual void UpdateMacScrollWindow() { Update(); }
+    virtual void UpdateMacScrollWindow() wxOVERRIDE { Update(); }
 #endif // __WXMAC__
 
 private:
@@ -794,7 +794,7 @@ public:
 
 #ifdef __WXMAC__
 protected:
-    virtual void UpdateMacScrollWindow() { Update(); }
+    virtual void UpdateMacScrollWindow() wxOVERRIDE { Update(); }
 #endif // __WXMAC__
 
 private:
@@ -859,7 +859,7 @@ public:
 
 #ifdef __WXMAC__
 protected:
-    virtual void UpdateMacScrollWindow() { Update(); }
+    virtual void UpdateMacScrollWindow() wxOVERRIDE { Update(); }
 #endif // __WXMAC__
 
 private:

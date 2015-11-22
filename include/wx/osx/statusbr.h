@@ -27,13 +27,13 @@ public:
               const wxString& name = wxStatusBarNameStr);
 
     // Implementation
-    virtual void MacHiliteChanged();
+    virtual void MacHiliteChanged() wxOVERRIDE;
     void OnPaint(wxPaintEvent& event);
 
 protected:
-    virtual void DrawFieldText(wxDC& dc, const wxRect& rc, int i, int textHeight);
-    virtual void DrawField(wxDC& dc, int i, int textHeight);
-    virtual void DoUpdateStatusText(int number = 0);
+    virtual void DrawFieldText(wxDC& dc, const wxRect& rc, int i, int textHeight) wxOVERRIDE;
+    virtual void DrawField(wxDC& dc, int i, int textHeight) wxOVERRIDE;
+    virtual void DoUpdateStatusText(int number = 0) wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxStatusBarMac);
     wxDECLARE_EVENT_TABLE();

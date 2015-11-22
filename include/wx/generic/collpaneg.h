@@ -53,16 +53,16 @@ public:
                 const wxString& name = wxCollapsiblePaneNameStr);
 
     // public wxCollapsiblePane API
-    virtual void Collapse(bool collapse = true);
-    virtual void SetLabel(const wxString &label);
+    virtual void Collapse(bool collapse = true) wxOVERRIDE;
+    virtual void SetLabel(const wxString &label) wxOVERRIDE;
 
-    virtual bool IsCollapsed() const
+    virtual bool IsCollapsed() const wxOVERRIDE
         { return m_pPane==NULL || !m_pPane->IsShown(); }
-    virtual wxWindow *GetPane() const
+    virtual wxWindow *GetPane() const wxOVERRIDE
         { return m_pPane; }
-    virtual wxString GetLabel() const;
+    virtual wxString GetLabel() const wxOVERRIDE;
 
-    virtual bool Layout();
+    virtual bool Layout() wxOVERRIDE;
 
 
     // for the generic collapsible pane only:
@@ -74,7 +74,7 @@ public:
 
 protected:
     // overridden methods
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
     int GetBorder() const;
 

@@ -217,7 +217,7 @@ public:
     virtual void SizeWindows();
 
 #ifdef __WXMAC__
-    virtual bool MacClipGrandChildren() const { return true ; }
+    virtual bool MacClipGrandChildren() const wxOVERRIDE { return true ; }
 #endif
 
     // Sets the sash size: this doesn't do anything and shouldn't be used at
