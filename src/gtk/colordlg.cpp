@@ -97,6 +97,8 @@ void wxColourDialog::ColourDataToDialog()
         gtk_color_selection_set_current_rgba(sel, color);
 #else
         gtk_color_selection_set_current_color(sel, color.GetColor());
+        // Convert alpha range: [0,255] -> [0,65535]
+        gtk_color_selection_set_current_alpha(sel, 257*color.Alpha());
 #endif
     }
 
@@ -129,11 +131,17 @@ void wxColourDialog::DialogToColourData()
 #ifdef __WXGTK3__
     GdkRGBA clr;
     gtk_color_selection_get_current_rgba(sel, &clr);
+    m_data.SetColour(clr);
 #else
     GdkColor clr;
     gtk_color_selection_get_current_color(sel, &clr);
+    // Set RGB colour
+    wxColour cRGB(clr);
+    guint16 alpha = gtk_color_selection_get_current_alpha(sel);
+    // Set RGBA colour (convert alpha range: [0,65535] -> [0,255]).
+    wxColour cRGBA(cRGB.Red(), cRGB.Green(), cRGB.Blue(), alpha/257);
+    m_data.SetColour(cRGBA);
 #endif
-    m_data.SetColour(clr);
 
     // Extract custom palette:
 
