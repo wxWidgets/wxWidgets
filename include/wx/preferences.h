@@ -81,7 +81,7 @@ public:
 
     virtual wxString GetName() const wxOVERRIDE;
 #ifdef __WXOSX_COCOA__
-    virtual wxBitmap GetLargeIcon() const;
+    virtual wxBitmap GetLargeIcon() const wxOVERRIDE;
 #endif
 
 private:
