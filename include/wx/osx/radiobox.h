@@ -54,32 +54,32 @@ public:
              const wxString& name = wxRadioBoxNameStr);
 
     // Enabling
-    virtual bool Enable(bool enable = true);
-    virtual bool Enable(unsigned int item, bool enable = true);
-    virtual bool IsItemEnabled(unsigned int item) const;
+    virtual bool Enable(bool enable = true) wxOVERRIDE;
+    virtual bool Enable(unsigned int item, bool enable = true) wxOVERRIDE;
+    virtual bool IsItemEnabled(unsigned int item) const wxOVERRIDE;
 
     // Showing
-    virtual bool Show(bool show = true);
-    virtual bool Show(unsigned int item, bool show = true);
-    virtual bool IsItemShown(unsigned int item) const;
+    virtual bool Show(bool show = true) wxOVERRIDE;
+    virtual bool Show(unsigned int item, bool show = true) wxOVERRIDE;
+    virtual bool IsItemShown(unsigned int item) const wxOVERRIDE;
 
     // Specific functions (in wxWidgets2 reference)
-    virtual void SetSelection(int item);
-    virtual int GetSelection() const;
+    virtual void SetSelection(int item) wxOVERRIDE;
+    virtual int GetSelection() const wxOVERRIDE;
 
-    virtual unsigned int GetCount() const { return m_noItems; }
+    virtual unsigned int GetCount() const wxOVERRIDE { return m_noItems; }
 
-    virtual wxString GetString(unsigned int item) const;
-    virtual void SetString(unsigned int item, const wxString& label);
+    virtual wxString GetString(unsigned int item) const wxOVERRIDE;
+    virtual void SetString(unsigned int item, const wxString& label) wxOVERRIDE;
 
-    virtual wxString GetLabel() const;
-    virtual void SetLabel(const wxString& label) ;
+    virtual wxString GetLabel() const wxOVERRIDE;
+    virtual void SetLabel(const wxString& label) wxOVERRIDE;
 
     // protect native font of box
-    virtual bool SetFont( const wxFont &font );
+    virtual bool SetFont( const wxFont &font ) wxOVERRIDE;
 // Other external functions
-    void Command(wxCommandEvent& event);
-    void SetFocus();
+    void Command(wxCommandEvent& event) wxOVERRIDE;
+    void SetFocus() wxOVERRIDE;
 
 // Other variable access functions
     int GetNumberOfRowsOrCols() const { return m_noRowsOrCols; }
@@ -89,7 +89,7 @@ public:
 
 protected:
     // resolve ambiguity in base classes
-    virtual wxBorder GetDefaultBorder() const { return wxRadioBoxBase::GetDefaultBorder(); }
+    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxRadioBoxBase::GetDefaultBorder(); }
 
     wxRadioButton    *m_radioButtonCycle;
 
@@ -97,10 +97,10 @@ protected:
     int               m_noRowsOrCols;
 
 // Internal functions
-    virtual wxSize DoGetBestSize() const ;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
     virtual void DoSetSize(int x, int y,
                            int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
 
     wxDECLARE_EVENT_TABLE();
 };
