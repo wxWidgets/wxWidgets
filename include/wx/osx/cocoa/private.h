@@ -200,74 +200,74 @@ public :
 
     virtual ~wxNonOwnedWindowCocoaImpl();
 
-    virtual void WillBeDestroyed() ;
+    virtual void WillBeDestroyed() wxOVERRIDE;
     void Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,
-    long style, long extraStyle, const wxString& name ) ;
+    long style, long extraStyle, const wxString& name ) wxOVERRIDE;
     void Create( wxWindow* parent, WXWindow nativeWindow );
 
-    WXWindow GetWXWindow() const;
-    void Raise();
-    void Lower();
-    bool Show(bool show);
+    WXWindow GetWXWindow() const wxOVERRIDE;
+    void Raise() wxOVERRIDE;
+    void Lower() wxOVERRIDE;
+    bool Show(bool show) wxOVERRIDE;
 
     virtual bool ShowWithEffect(bool show,
                                 wxShowEffect effect,
-                                unsigned timeout);
+                                unsigned timeout) wxOVERRIDE;
 
-    void Update();
-    bool SetTransparent(wxByte alpha);
-    bool SetBackgroundColour(const wxColour& col );
-    void SetExtraStyle( long exStyle );
-    void SetWindowStyleFlag( long style );
-    bool SetBackgroundStyle(wxBackgroundStyle style);
-    bool CanSetTransparent();
+    void Update() wxOVERRIDE;
+    bool SetTransparent(wxByte alpha) wxOVERRIDE;
+    bool SetBackgroundColour(const wxColour& col ) wxOVERRIDE;
+    void SetExtraStyle( long exStyle ) wxOVERRIDE;
+    void SetWindowStyleFlag( long style ) wxOVERRIDE;
+    bool SetBackgroundStyle(wxBackgroundStyle style) wxOVERRIDE;
+    bool CanSetTransparent() wxOVERRIDE;
 
-    void MoveWindow(int x, int y, int width, int height);
-    void GetPosition( int &x, int &y ) const;
-    void GetSize( int &width, int &height ) const;
+    void MoveWindow(int x, int y, int width, int height) wxOVERRIDE;
+    void GetPosition( int &x, int &y ) const wxOVERRIDE;
+    void GetSize( int &width, int &height ) const wxOVERRIDE;
 
-    void GetContentArea( int &left , int &top , int &width , int &height ) const;
-    bool SetShape(const wxRegion& region);
+    void GetContentArea( int &left , int &top , int &width , int &height ) const wxOVERRIDE;
+    bool SetShape(const wxRegion& region) wxOVERRIDE;
 
-    virtual void SetTitle( const wxString& title, wxFontEncoding encoding ) ;
+    virtual void SetTitle( const wxString& title, wxFontEncoding encoding ) wxOVERRIDE;
 
     virtual bool EnableCloseButton(bool enable) wxOVERRIDE;
     virtual bool EnableMaximizeButton(bool enable) wxOVERRIDE;
     virtual bool EnableMinimizeButton(bool enable) wxOVERRIDE;
 
-    virtual bool IsMaximized() const;
+    virtual bool IsMaximized() const wxOVERRIDE;
 
-    virtual bool IsIconized() const;
+    virtual bool IsIconized() const wxOVERRIDE;
 
-    virtual void Iconize( bool iconize );
+    virtual void Iconize( bool iconize ) wxOVERRIDE;
 
-    virtual void Maximize(bool maximize);
+    virtual void Maximize(bool maximize) wxOVERRIDE;
 
-    virtual bool IsFullScreen() const;
+    virtual bool IsFullScreen() const wxOVERRIDE;
 
     bool EnableFullScreenView(bool enable) wxOVERRIDE;
 
-    virtual bool ShowFullScreen(bool show, long style);
+    virtual bool ShowFullScreen(bool show, long style) wxOVERRIDE;
 
-    virtual void ShowWithoutActivating();
+    virtual void ShowWithoutActivating() wxOVERRIDE;
 
-    virtual void RequestUserAttention(int flags);
+    virtual void RequestUserAttention(int flags) wxOVERRIDE;
 
-    virtual void ScreenToWindow( int *x, int *y );
+    virtual void ScreenToWindow( int *x, int *y ) wxOVERRIDE;
 
-    virtual void WindowToScreen( int *x, int *y );
+    virtual void WindowToScreen( int *x, int *y ) wxOVERRIDE;
 
-    virtual bool IsActive();
+    virtual bool IsActive() wxOVERRIDE;
 
-    virtual void SetModified(bool modified);
-    virtual bool IsModified() const;
+    virtual void SetModified(bool modified) wxOVERRIDE;
+    virtual bool IsModified() const wxOVERRIDE;
 
-    virtual void SetRepresentedFilename(const wxString& filename);
+    virtual void SetRepresentedFilename(const wxString& filename) wxOVERRIDE;
 
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
     
-    CGWindowLevel   GetWindowLevel() const { return m_macWindowLevel; }
-    void            RestoreWindowLevel();
+    CGWindowLevel   GetWindowLevel() const wxOVERRIDE { return m_macWindowLevel; }
+    void            RestoreWindowLevel() wxOVERRIDE;
     
     static WX_NSResponder GetNextFirstResponder() ;
     static WX_NSResponder GetFormerFirstResponder() ;
