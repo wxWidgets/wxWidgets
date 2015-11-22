@@ -128,7 +128,7 @@ public:
         }
     }
 
-    virtual void Enable(bool enable = true)
+    virtual void Enable(bool enable = true) wxOVERRIDE
     {
         wxNSDatePicker* const nsdatePicker = View();
 
