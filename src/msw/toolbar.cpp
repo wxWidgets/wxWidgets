@@ -496,6 +496,20 @@ wxSize wxToolBar::DoGetBestSize() const
 
     if ( !IsVertical() )
     {
+        wxToolBarToolsList::compatibility_iterator node;
+        for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+        {
+            wxToolBarTool * const
+                tool = static_cast<wxToolBarTool *>(node->GetData());
+            if (tool->IsControl())
+            {
+                int y = tool->GetControl()->GetSize().y;
+                // Approximate border size
+                if (y > (sizeBest.y - 4))
+                    sizeBest.y = y + 4;
+            }
+        }
+
         // Without the extra height, DoGetBestSize can report a size that's
         // smaller than the actual window, causing windows to overlap slightly
         // in some circumstances, leading to missing borders (especially noticeable
@@ -1090,7 +1104,9 @@ bool wxToolBar::Realize()
             if ( diff < 0 )
             {
                 // the control is too high, resize to fit
-                control->SetSize(wxDefaultCoord, height - 2);
+                // Actually don't set the size, otherwise we can never fit
+                // the toolbar around the controls.
+                // control->SetSize(wxDefaultCoord, height - 2);
 
                 diff = 2;
             }
@@ -1733,6 +1749,20 @@ bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
             h = r.bottom - r.top - 3;
         else
             h = r.bottom - r.top;
+
+        // Take control height into account
+        for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+        {
+            wxToolBarTool * const
+                tool = static_cast<wxToolBarTool *>(node->GetData());
+            if (tool->IsControl())
+            {
+                int y = (tool->GetControl()->GetSize().y - 2); // -2 since otherwise control height + 4 (below) is too much
+                if (y > h)
+                    h = y;
+            }
+        }
+
         if ( m_maxRows )
         {
             // FIXME: hardcoded separator line height...
