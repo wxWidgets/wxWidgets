@@ -979,6 +979,21 @@ public:
     wxPoint FromDIP(const wxPoint& pt) const { return FromDIP(pt, this); }
     int FromDIP(int d) const { return FromDIP(d, this); }
 
+    static wxSize ToDIP(const wxSize& sz, const wxWindowBase* w);
+    static wxPoint ToDIP(const wxPoint& pt, const wxWindowBase* w)
+    {
+        const wxSize sz = ToDIP(wxSize(pt.x, pt.y), w);
+        return wxPoint(sz.x, sz.y);
+    }
+    static int ToDIP(int d, const wxWindowBase* w)
+    {
+        return ToDIP(wxSize(d, 0), w).x;
+    }
+
+    wxSize ToDIP(const wxSize& sz) const { return ToDIP(sz, this); }
+    wxPoint ToDIP(const wxPoint& pt) const { return ToDIP(pt, this); }
+    int ToDIP(int d) const { return ToDIP(d, this); }
+
 
         // Dialog units are based on the size of the current font.
 
