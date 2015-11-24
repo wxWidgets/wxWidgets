@@ -2259,7 +2259,7 @@ bool wxTextCtrl::AcceptsFocusFromKeyboard() const
 
 wxSize wxTextCtrl::DoGetBestSize() const
 {
-    return DoGetSizeFromTextSize( DEFAULT_ITEM_WIDTH );
+    return DoGetSizeFromTextSize( FromDIP(DEFAULT_ITEM_WIDTH) );
 }
 
 wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const

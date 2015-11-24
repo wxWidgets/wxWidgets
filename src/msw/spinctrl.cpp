@@ -308,7 +308,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     if ( sizeText.x <= 0 )
     {
         // DEFAULT_ITEM_WIDTH is the default width for the text control
-        sizeText.x = DEFAULT_ITEM_WIDTH + MARGIN_BETWEEN + sizeBtn.x;
+        sizeText.x = FromDIP(DEFAULT_ITEM_WIDTH) + MARGIN_BETWEEN + sizeBtn.x;
     }
 
     sizeText.x -= sizeBtn.x + MARGIN_BETWEEN;

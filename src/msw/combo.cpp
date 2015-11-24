@@ -227,7 +227,7 @@ void wxComboCtrl::OnResize()
 
     // Technically Classic Windows style combo has more narrow button,
     // but the native renderer doesn't paint it well like that.
-    int btnWidth = 17;
+    int btnWidth = FromDIP(17);
     CalculateAreas(btnWidth);
 
     // Position textctrl using standard routine
