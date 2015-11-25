@@ -114,15 +114,9 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         }
     }
 
-    if ( sysColor )
-    {
-        return wxColour(sysColor);
-    }
-    else
-    {
-        wxFAIL_MSG(wxT("Unimplemented system colour index"));
-        return wxColour();
-    }
+    wxCHECK_MSG( sysColor, wxColour(), wxS("Unimplemented system colour") );
+
+    return wxColour(sysColor);
 }
 
 // ----------------------------------------------------------------------------
