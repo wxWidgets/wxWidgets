@@ -33,6 +33,7 @@
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/string.h"
 
 // ============================================================================
 // signal handlers implementation
@@ -43,8 +44,8 @@ extern "C"
 void
 wx_gtk_insert_text_callback(GtkEditable *editable,
                             const gchar * new_text,
-                            gint WXUNUSED(new_text_length),
-                            gint * WXUNUSED(position),
+                            gint new_text_length,
+                            gint * position,
                             wxTextEntry *text)
 {
     GtkEntry *entry = GTK_ENTRY (editable);
@@ -76,6 +77,40 @@ wx_gtk_insert_text_callback(GtkEditable *editable,
             // Notify the user code about overflow.
             text->SendMaxLenEvent();
         }
+    }
+
+    // Check if we have to convert all input to upper-case
+    if ( !handled && text->GTKIsUpperCase() )
+    {
+        const wxGtkString upper(g_utf8_strup(new_text, new_text_length));
+
+        // Use the converted text to generate events
+        if ( !text->GTKEntryOnInsertText(upper) )
+        {
+            // Event not handled, so do insert the text: we have to do it
+            // ourselves to use the upper-case version of it
+
+            // Prevent recursive call to this handler again
+            g_signal_handlers_block_by_func
+            (
+                editable,
+                (gpointer)wx_gtk_insert_text_callback,
+                text
+            );
+
+            gtk_editable_insert_text(editable, upper, strlen(upper), position);
+
+            g_signal_handlers_unblock_by_func
+            (
+                editable,
+                (gpointer)wx_gtk_insert_text_callback,
+                text
+            );
+        }
+
+        // Don't call the default handler in any case, either the event was
+        // handled in the user code or we've already inserted the text.
+        handled = true;
     }
 
     if ( !handled && text->GTKEntryOnInsertText(new_text) )
@@ -386,7 +421,7 @@ void wxTextEntry::SetEditable(bool editable)
 }
 
 // ----------------------------------------------------------------------------
-// max text length
+// input restrictions
 // ----------------------------------------------------------------------------
 
 void wxTextEntry::SetMaxLength(unsigned long len)
@@ -409,6 +444,16 @@ void wxTextEntry::SendMaxLenEvent()
     event.SetEventObject(win);
     event.SetString(GetValue());
     win->HandleWindowEvent(event);
+}
+
+void wxTextEntry::ForceUpper()
+{
+    if ( !m_isUpperCase )
+    {
+        ConvertToUpperCase();
+
+        m_isUpperCase = true;
+    }
 }
 
 // ----------------------------------------------------------------------------

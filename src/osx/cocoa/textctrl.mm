@@ -116,27 +116,34 @@ protected :
 
 NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
-// a minimal NSFormatter that just avoids getting too long entries
-@interface wxMaximumLengthFormatter : NSFormatter
+// an NSFormatter used to implement SetMaxLength() and ForceUpper() methods
+@interface wxTextEntryFormatter : NSFormatter
 {
     int maxLength;
     wxTextEntry* field;
+    bool forceUpper;
 }
 
 @end
 
-@implementation wxMaximumLengthFormatter
+@implementation wxTextEntryFormatter
 
 - (id)init 
 {
     self = [super init];
     maxLength = 0;
+    forceUpper = false;
     return self;
 }
 
 - (void) setMaxLength:(int) maxlen 
 {
     maxLength = maxlen;
+}
+
+- (void) forceUpper
+{
+    forceUpper = true;
 }
 
 - (NSString *)stringForObjectValue:(id)anObject 
@@ -155,12 +162,25 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 - (BOOL)isPartialStringValid:(NSString **)partialStringPtr proposedSelectedRange:(NSRangePointer)proposedSelRangePtr 
               originalString:(NSString *)origString originalSelectedRange:(NSRange)origSelRange errorDescription:(NSString **)error
 {
-    int len = [*partialStringPtr length];
-    if ( maxLength > 0 && len > maxLength )
+    if ( maxLength > 0 )
     {
-        field->SendMaxLenEvent();
-        return NO;
+        if ( [*partialStringPtr length] > maxLength )
+        {
+            field->SendMaxLenEvent();
+            return NO;
+        }
     }
+
+    if ( forceUpper )
+    {
+        NSString* upper = [*partialStringPtr uppercaseString];
+        if ( ![*partialStringPtr isEqual:upper] )
+        {
+            *partialStringPtr = upper;
+            return NO;
+        }
+    }
+
     return YES;
 }
 
@@ -869,12 +889,30 @@ void wxNSTextFieldControl::SetStringValue( const wxString &str)
     [m_textField setStringValue: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
 }
 
+wxTextEntryFormatter* wxNSTextFieldControl::GetFormatter()
+{
+    // We only ever call setFormatter with wxTextEntryFormatter, so the cast is
+    // safe.
+    wxTextEntryFormatter*
+        formatter = (wxTextEntryFormatter*)[m_textField formatter];
+    if ( !formatter )
+    {
+        formatter = [[[wxTextEntryFormatter alloc] init] autorelease];
+        [formatter setTextEntry:GetTextEntry()];
+        [m_textField setFormatter:formatter];
+    }
+
+    return formatter;
+}
+
 void wxNSTextFieldControl::SetMaxLength(unsigned long len)
 {
-    wxMaximumLengthFormatter* formatter = [[[wxMaximumLengthFormatter alloc] init] autorelease];
-    [formatter setMaxLength:len];
-    [formatter setTextEntry:GetTextEntry()];
-    [m_textField setFormatter:formatter];
+    [GetFormatter() setMaxLength:len];
+}
+
+void wxNSTextFieldControl::ForceUpper()
+{
+    [GetFormatter() forceUpper];
 }
 
 void wxNSTextFieldControl::Copy()

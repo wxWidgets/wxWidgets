@@ -898,7 +898,7 @@ void wxTextEntry::SetEditable(bool editable)
 }
 
 // ----------------------------------------------------------------------------
-// max length
+// input restrictions
 // ----------------------------------------------------------------------------
 
 void wxTextEntry::SetMaxLength(unsigned long len)
@@ -911,6 +911,15 @@ void wxTextEntry::SetMaxLength(unsigned long len)
     }
 
     ::SendMessage(GetEditHwnd(), EM_LIMITTEXT, len, 0);
+}
+
+void wxTextEntry::ForceUpper()
+{
+    ConvertToUpperCase();
+
+    const HWND hwnd = GetEditHwnd();
+    const LONG styleOld = ::GetWindowLong(hwnd, GWL_STYLE);
+    ::SetWindowLong(hwnd, GWL_STYLE, styleOld | ES_UPPERCASE);
 }
 
 // ----------------------------------------------------------------------------

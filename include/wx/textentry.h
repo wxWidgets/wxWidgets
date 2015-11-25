@@ -138,9 +138,15 @@ public:
     virtual void SetEditable(bool editable) = 0;
 
 
+    // input restrictions
+    // ------------------
+
     // set the max number of characters which may be entered in a single line
     // text control
     virtual void SetMaxLength(unsigned long WXUNUSED(len)) { }
+
+    // convert any lower-case characters to upper-case on the fly in this entry
+    virtual void ForceUpper();
 
 
     // hints
@@ -207,6 +213,10 @@ public:
         else
             SuppressTextChangedEvents();
     }
+
+    // change the entry value to be in upper case only, if needed (i.e. if it's
+    // not already the case)
+    void ConvertToUpperCase();
 
 protected:
     // flags for DoSetValue(): common part of SetValue() and ChangeValue() and

@@ -655,7 +655,10 @@ public :
 
     virtual bool CanClipMaxLength() const { return false; }
     virtual void SetMaxLength(unsigned long WXUNUSED(len)) {}
-    
+
+    virtual bool CanForceUpper() { return false; }
+    virtual void ForceUpper() {}
+
     virtual bool GetStyle( long position, wxTextAttr& style);
     virtual void SetStyle( long start, long end, const wxTextAttr& style ) ;
     virtual void Copy() ;
