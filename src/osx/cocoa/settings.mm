@@ -116,10 +116,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 
     if ( sysColor )
     {
-        CGColorRef cgCol = sysColor.CGColor;
-        // wxColour takes ownership of CF reference
-        CFRetain(cgCol);
-        return wxColour(cgCol);
+        return wxColour(sysColor);
     }
     else
     {
