@@ -358,8 +358,7 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
         wxRect ar = rect;
 
         // make a rect for the arrow
-        ar.height = 4;
-        ar.width = 8;
+        ar.SetSize(wxWindow::FromDIP(wxSize(8, 4), win));
         ar.y += (rect.height - ar.height)/2;
         ar.x = ar.x + rect.width - 3*ar.width/2;
         arrowSpace = 3*ar.width/2; // space to preserve when drawing the label
