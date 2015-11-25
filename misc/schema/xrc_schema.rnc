@@ -1432,6 +1432,7 @@ wxTextCtrl =
         stdWindowProperties &
         [xrc:p="o"] element value     {_, t_text }* &
         [xrc:p="o"] element maxlength {_, t_integer }* &
+        [xrc:p="o"] element forceupper{_, t_bool }* &
         [xrc:p="o"] element hint      {_, t_text }*
     }
 
