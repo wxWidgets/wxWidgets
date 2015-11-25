@@ -120,8 +120,8 @@ wxDataViewColumn* GetExpanderColumnOrFirstOne(wxDataViewCtrl* dataview)
 wxTextCtrl *CreateEditorTextCtrl(wxWindow *parent, const wxRect& labelRect, const wxString& value)
 {
     wxTextCtrl* ctrl = new wxTextCtrl(parent, wxID_ANY, value,
-                                      wxPoint(labelRect.x,labelRect.y),
-                                      wxSize(labelRect.width,labelRect.height),
+                                      labelRect.GetPosition(),
+                                      labelRect.GetSize(),
                                       wxTE_PROCESS_ENTER);
 
     // Adjust size of wxTextCtrl editor to fit text, even if it means being
