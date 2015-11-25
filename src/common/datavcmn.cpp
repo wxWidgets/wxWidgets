@@ -745,15 +745,19 @@ bool wxDataViewRendererBase::FinishEditing()
     if (!m_editorCtrl)
         return true;
 
+    // Try to get the value, normally we should succeed but if we fail, don't
+    // return immediately, we still need to destroy the edit control.
     wxVariant value;
-    if ( !GetValueFromEditorCtrl(m_editorCtrl, value) )
-        return false;
+    const bool gotValue = GetValueFromEditorCtrl(m_editorCtrl, value);
 
     wxDataViewCtrl* dv_ctrl = GetOwner()->GetOwner();
 
     DestroyEditControl();
 
     dv_ctrl->GetMainWindow()->SetFocus();
+
+    if ( !gotValue )
+        return false;
 
     bool isValid = Validate(value);
     unsigned int col = GetOwner()->GetModelColumn();
