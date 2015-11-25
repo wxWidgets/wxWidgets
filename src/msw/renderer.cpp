@@ -604,10 +604,13 @@ int wxRendererMSW::GetHeaderButtonHeight(wxWindow * win)
 
     wxON_BLOCK_EXIT1( ::DestroyWindow, hwndHeader );
 
-    // Must ensure the proper font is set or the wrong value will be returned
-    // At 200% scaling it was returning a height of 28 when it should have been 40
-    WXHANDLE hFont = (win && win->GetFont().IsOk() ? win->GetFont() : wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT)).GetResourceHandle();
-    ::SendMessage(hwndHeader, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
+    // Set the font, even if it's the default one, before measuring the window.
+    wxFont font;
+    if ( win )
+        font = win->GetFont();
+    if ( !font.IsOk() )
+        wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    ::SendMessage(hwndHeader, WM_SETFONT, (WPARAM)GetHfontOf(font), 0);
 
     // initialize the struct filled with the values by Header_Layout()
     RECT parentRect = { 0, 0, 100, 100 };
