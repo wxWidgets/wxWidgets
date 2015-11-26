@@ -180,6 +180,9 @@ public:
     // wxDVR_DEFAULT_ALIGNMENT.
     int GetEffectiveAlignment() const;
 
+    // Send wxEVT_DATAVIEW_ITEM_EDITING_STARTED event.
+    void NotifyEditingStarted(const wxDataViewItem& item);
+
 protected:
     // These methods are called from PrepareForItem() and should do whatever is
     // needed for the current platform to ensure that the item is rendered

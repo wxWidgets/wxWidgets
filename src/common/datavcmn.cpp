@@ -703,15 +703,22 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     m_editorCtrl->SetFocus();
 #endif
 
-    // Now we should send Editing Started event
+    NotifyEditingStarted(item);
+
+    return true;
+}
+
+void wxDataViewRendererBase::NotifyEditingStarted(const wxDataViewItem& item)
+{
+    wxDataViewColumn* const column = GetOwner();
+    wxDataViewCtrl* const dv_ctrl = column->GetOwner();
+
     wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_EDITING_STARTED, dv_ctrl->GetId() );
-    event.SetDataViewColumn( GetOwner() );
+    event.SetDataViewColumn( column );
     event.SetModel( dv_ctrl->GetModel() );
     event.SetItem( item );
     event.SetEventObject( dv_ctrl );
     dv_ctrl->GetEventHandler()->ProcessEvent( event );
-
-    return true;
 }
 
 void wxDataViewRendererBase::DestroyEditControl()

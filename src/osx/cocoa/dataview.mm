@@ -1886,22 +1886,20 @@ outlineView:(NSOutlineView*)outlineView
     wxDataViewColumn* const
         col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
 
-    wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
-
-
     // stop editing of a custom item first (if necessary)
     dvc->FinishCustomItemEditing();
 
     // now, send the event:
-    wxDataViewEvent
-        event(wxEVT_DATAVIEW_ITEM_EDITING_STARTED,dvc->GetId());
-
-    event.SetEventObject(dvc);
-    event.SetItem(
-            wxDataViewItemFromItem([self itemAtRow:currentlyEditedRow]));
-    event.SetColumn(dvc->GetColumnPosition(col));
-    event.SetDataViewColumn(col);
-    dvc->GetEventHandler()->ProcessEvent(event);
+    wxDataViewRenderer* const renderer = col->GetRenderer();
+    if ( renderer )
+    {
+        renderer->NotifyEditingStarted
+                  (
+                    wxDataViewItemFromItem([self itemAtRow:currentlyEditedRow])
+                  );
+    }
+    //else: we should always have a renderer but don't crash if for some
+    //      unfathomable reason we don't have it
 }
 
 -(void) textDidEndEditing:(NSNotification*)notification

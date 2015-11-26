@@ -1815,12 +1815,8 @@ wxgtk_renderer_editing_started( GtkCellRenderer *WXUNUSED(cell), GtkCellEditable
 
     wxDataViewColumn *column = wxrenderer->GetOwner();
     wxDataViewCtrl *dv = column->GetOwner();
-    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_EDITING_STARTED, dv->GetId() );
-    event.SetDataViewColumn( column );
-    event.SetModel( dv->GetModel() );
     wxDataViewItem item(dv->GTKPathToItem(wxGtkTreePath(path)));
-    event.SetItem( item );
-    dv->HandleWindowEvent( event );
+    wxrenderer->NotifyEditingStarted(item);
 
     if (GTK_IS_CELL_EDITABLE(editable))
     {
