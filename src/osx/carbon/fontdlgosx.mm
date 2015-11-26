@@ -184,12 +184,7 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     [[NSFontPanel sharedFontPanel] setPanelFont: font.OSXGetNSFont() isMultiple:NO];
 
     if(fontdata.m_fontColour.IsOk())
-        [[NSColorPanel sharedColorPanel] setColor:
-            [NSColor colorWithCalibratedRed:fontdata.m_fontColour.Red() / 255.0
-                                        green:fontdata.m_fontColour.Green() / 255.0
-                                        blue:fontdata.m_fontColour.Blue() / 255.0
-                                        alpha:1.0]
-        ];
+        [[NSColorPanel sharedColorPanel] setColor: fontdata.m_fontColour.OSXGetNSColor()];
     else
         [[NSColorPanel sharedColorPanel] setColor:[NSColor blackColor]];
 #endif
@@ -418,12 +413,7 @@ bool wxFontDialog::Create(wxWindow *parent)
     }
 
     if(m_fontData.m_fontColour.IsOk())
-        [[NSColorPanel sharedColorPanel] setColor:
-            [NSColor colorWithCalibratedRed:m_fontData.m_fontColour.Red() / 255.0
-                                        green:m_fontData.m_fontColour.Green() / 255.0
-                                        blue:m_fontData.m_fontColour.Blue() / 255.0
-                                        alpha:1.0]
-        ];
+        [[NSColorPanel sharedColorPanel] setColor: fontdata.m_fontColour.OSXGetNSColor()];
     else
         [[NSColorPanel sharedColorPanel] setColor:[NSColor blackColor]];
 
