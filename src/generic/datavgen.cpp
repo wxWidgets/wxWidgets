@@ -2251,6 +2251,8 @@ wxDataViewMainWindow::StartEditing(const wxDataViewItem& item,
     const wxRect itemRect = GetItemRect(item, col);
     if ( renderer->StartEditing(item, itemRect) )
     {
+        renderer->NotifyEditingStarted(item);
+
         // Save the renderer to be able to finish/cancel editing it later and
         // save the control to be able to detect if we're still editing it.
         m_editorRenderer = renderer;
