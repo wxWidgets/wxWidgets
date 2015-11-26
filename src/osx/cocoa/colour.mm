@@ -34,6 +34,68 @@ wxColour::wxColour(WX_NSColor col)
         return;
     }
 
+    // Some colours use patterns, we can handle them with the help of CGColorRef
+    if ( NSColor* colPat = [col colorUsingColorSpaceName:NSPatternColorSpace] )
+    {
+        NSImage* const nsimage = [colPat patternImage];
+        if ( nsimage )
+        {
+            NSSize size = [nsimage size];
+            NSRect r = NSMakeRect(0, 0, size.width, size.height);
+            CGImageRef cgimage = [nsimage CGImageForProposedRect:&r context:nil hints:nil];
+            if ( cgimage )
+            {
+                // Callbacks for CGPatternCreate()
+                struct PatternCreateCallbacks
+                {
+                    static void Draw(void *info, CGContextRef ctx)
+                    {
+                        CGImageRef image = (CGImageRef) info;
+                        CGContextDrawImage
+                        (
+                            ctx,
+                            CGRectMake(0, 0, CGImageGetWidth(image), CGImageGetHeight(image)),
+                            image
+                        );
+                    }
+
+                    static void Release(void * WXUNUSED(info))
+                    {
+                        // Do not release the image here, we don't own it as it
+                        // comes from NSImage.
+                    }
+                };
+
+                const CGPatternCallbacks callbacks =
+                {
+                    /* version: */ 0,
+                    &PatternCreateCallbacks::Draw,
+                    &PatternCreateCallbacks::Release
+                };
+
+                CGPatternRef pattern = CGPatternCreate
+                                       (
+                                            cgimage,
+                                            CGRectMake(0, 0, size.width, size.height),
+                                            CGAffineTransformMake(1, 0, 0, 1, 0, 0),
+                                            size.width,
+                                            size.height,
+                                            kCGPatternTilingConstantSpacing,
+                                            /* isColored: */ true,
+                                            &callbacks
+                                       );
+                CGColorSpaceRef space = CGColorSpaceCreatePattern(NULL);
+                CGFloat components[1] = { 1.0 };
+                CGColorRef cgcolor = CGColorCreateWithPattern(space, pattern, components);
+                CGColorSpaceRelease(space);
+                CGPatternRelease(pattern);
+
+                InitCGColorRef(cgcolor);
+                return;
+            }
+        }
+    }
+
     // Don't assert here, this will more likely than not result in a crash as
     // colours are often created in drawing code which will be called again
     // when the assert dialog is shown, resulting in a recursive assertion
