@@ -208,11 +208,7 @@ int RunMixedFontDialog(wxFontDialog* dialog)
         fontdata.m_chosenFont = wxFont( theFont );
 
         //Get the shared color panel along with the chosen color and set the chosen color
-        NSColor* theColor = [[[NSColorPanel sharedColorPanel] color] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-
-        fontdata.m_fontColour.Set((unsigned char) ([theColor redComponent] * 255.0),
-                                    (unsigned char) ([theColor greenComponent] * 255.0),
-                                    (unsigned char) ([theColor blueComponent] * 255.0));
+        fontdata.m_fontColour = wxColour([[NSColorPanel sharedColorPanel] color]);
 #endif
         retval = wxID_OK ;
     }
@@ -525,11 +521,7 @@ int wxFontDialog::ShowModal()
                                     theFontWeight >= 9 ? wxFONTWEIGHT_BOLD : wxFONTWEIGHT_NORMAL);
 
     //Get the shared color panel along with the chosen color and set the chosen color
-    NSColor* theColor = [[theColorPanel color] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-
-    m_fontData.m_fontColour.Set((unsigned char) ([theColor redComponent] * 255.0),
-                                (unsigned char) ([theColor greenComponent] * 255.0),
-                                (unsigned char) ([theColor blueComponent] * 255.0));
+    m_fontData.m_fontColour = wxColour([theColorPanel color]);
 
     //Friendly debug stuff
 #ifdef FONTDLGDEBUG

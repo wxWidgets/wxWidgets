@@ -157,14 +157,7 @@ int wxColourDialog::ShowModal()
     [theCPDelegate release];
 
     //Get the shared color panel along with the chosen color and set the chosen color
-    NSColor* theColor = [[theColorPanel color] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-
-    m_colourData.GetColour().Set(
-                                (unsigned char) ([theColor redComponent] * 255.0),
-                                (unsigned char) ([theColor greenComponent] * 255.0),
-                                (unsigned char) ([theColor blueComponent] * 255.0),
-                                (unsigned char) ([theColor alphaComponent] * 255.0)
-                                 );
+    m_colourData.GetColour() = wxColour([theColorPanel color]);
 
     //Release the pool, we're done :)
     [thePool release];

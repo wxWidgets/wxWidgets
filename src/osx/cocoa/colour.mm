@@ -1,10 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/osx/cocoa/colour.mm
-// Purpose:     Cocoa additions to wxColour class
-// Author:      Kevin Ollivier
-// Modified by:
-// Created:     2009-10-31
-// Copyright:   (c) Kevin Ollivier
+// Purpose:     Conversions between NSColor and wxColour
+// Author:      Vadim Zeitlin
+// Created:     2015-11-26 (completely replacing the old version of the file)
+// Copyright:   (c) 2015 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -12,31 +11,34 @@
 
 #include "wx/colour.h"
 
-#ifndef WX_PRECOMP
-    #include "wx/gdicmn.h"
-#endif
-
 #include "wx/osx/private.h"
+
+// Helper function to avoid writing too many casts in wxColour ctor.
+static inline wxColour::ChannelType NSColorChannelToWX(CGFloat c)
+{
+    return static_cast<wxColour::ChannelType>(c * 255 + 0.5);
+}
 
 wxColour::wxColour(WX_NSColor col)
 {
-    size_t noComp = [col numberOfComponents];
-
-    CGFloat components[4];
-    CGFloat *p;
-    if ( noComp < 1 || noComp > WXSIZEOF(components) )
+    // Simplest case is when we can directly get the RGBA components:
+    if ( NSColor* colRGBA = [col colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
     {
-        // TODO verify whether we really are on a RGB color space
-        m_alpha = wxALPHA_OPAQUE;
-        [col getComponents: components];
-        p = components;
-    }
-    else // Unsupported colour format.
-    {
-        p = NULL;
+        InitRGBA
+        (
+             NSColorChannelToWX([colRGBA redComponent]),
+             NSColorChannelToWX([colRGBA greenComponent]),
+             NSColorChannelToWX([colRGBA blueComponent]),
+             NSColorChannelToWX([colRGBA alphaComponent])
+        );
+        return;
     }
 
-    InitFromComponents(components, noComp);
+    // Don't assert here, this will more likely than not result in a crash as
+    // colours are often created in drawing code which will be called again
+    // when the assert dialog is shown, resulting in a recursive assertion
+    // failure and, hence, a crash.
+    NSLog(@"Failed to convert NSColor \"%@\" to wxColour.", col);
 }
 
 WX_NSColor wxColour::OSXGetNSColor() const

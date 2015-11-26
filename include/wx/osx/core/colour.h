@@ -58,7 +58,8 @@ public:
     wxColour& operator=(const RGBColor& col);
 #endif
 #if wxOSX_USE_COCOA
-    wxColour(WX_NSColor color);
+    // This ctor does not take ownership of the color.
+    explicit wxColour(WX_NSColor color);
     WX_NSColor OSXGetNSColor() const;
 #endif
     wxColour& operator=(CGColorRef col);
