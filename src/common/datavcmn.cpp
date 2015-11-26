@@ -703,8 +703,6 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     m_editorCtrl->SetFocus();
 #endif
 
-    NotifyEditingStarted(item);
-
     return true;
 }
 
