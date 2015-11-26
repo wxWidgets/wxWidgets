@@ -72,7 +72,7 @@ protected :
     void InitRGBColor( const RGBColor& col );
 #endif
     void InitCGColorRef( CGColorRef col );
-    void InitFromComponents(const CGFloat* components, size_t numComponents );
+
 private:
     wxCFRef<CGColorRef>     m_cgColour;
 

@@ -107,24 +107,20 @@ void wxColour::InitCGColorRef( CGColorRef col )
         m_alpha = wxALPHA_OPAQUE;
         components = CGColorGetComponents( col );
     }
-    InitFromComponents(components, noComp);
-}
 
-void wxColour::InitFromComponents(const CGFloat* components, size_t numComponents )
-{
-    if ( numComponents < 1 || !components )
+    if ( noComp < 1 || !components )
     {
         m_alpha = wxALPHA_OPAQUE;
         m_red = m_green = m_blue = 0;
         return;
     }
 
-    if ( numComponents >= 3 )
+    if ( noComp >= 3 )
     {
         m_red = (int)(components[0]*255+0.5);
         m_green = (int)(components[1]*255+0.5);
         m_blue = (int)(components[2]*255+0.5);
-        if ( numComponents == 4 )
+        if ( noComp == 4 )
             m_alpha =  (int)(components[3]*255+0.5);
     }
     else
