@@ -54,7 +54,7 @@ public:
 
 #define M_BRUSHDATA ((wxBrushRefData *)m_refData)
 
-IMPLEMENT_DYNAMIC_CLASS(wxBrush,wxGDIObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxBrush,wxGDIObject);
 
 wxBrush::wxBrush( const wxColour &colour, wxBrushStyle style )
 {

@@ -19,7 +19,7 @@
 #include "wx/xrc/xh_srchctrl.h"
 #include "wx/srchctrl.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxSearchCtrlXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxSearchCtrlXmlHandler, wxXmlResourceHandler);
 
 wxSearchCtrlXmlHandler::wxSearchCtrlXmlHandler() : wxXmlResourceHandler()
 {

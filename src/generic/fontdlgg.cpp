@@ -57,12 +57,12 @@ public:
 
 private:
     void OnPaint(wxPaintEvent& event);
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(wxFontPreviewer, wxWindow)
+wxBEGIN_EVENT_TABLE(wxFontPreviewer, wxWindow)
     EVT_PAINT(wxFontPreviewer::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxFontPreviewer::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
@@ -184,9 +184,9 @@ static wxFontWeight wxFontWeightStringToInt(const wxString& weight)
 // wxGenericFontDialog
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericFontDialog, wxDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxGenericFontDialog, wxDialog);
 
-BEGIN_EVENT_TABLE(wxGenericFontDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(wxGenericFontDialog, wxDialog)
     EVT_CHECKBOX(wxID_FONT_UNDERLINE, wxGenericFontDialog::OnChangeFont)
     EVT_CHOICE(wxID_FONT_STYLE, wxGenericFontDialog::OnChangeFont)
     EVT_CHOICE(wxID_FONT_WEIGHT, wxGenericFontDialog::OnChangeFont)
@@ -199,7 +199,7 @@ BEGIN_EVENT_TABLE(wxGenericFontDialog, wxDialog)
     EVT_CHOICE(wxID_FONT_SIZE, wxGenericFontDialog::OnChangeFont)
 #endif
     EVT_CLOSE(wxGenericFontDialog::OnCloseWindow)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 #define NUM_COLS 48

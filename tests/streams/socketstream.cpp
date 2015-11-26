@@ -91,7 +91,7 @@ protected:
     int m_port;
     void (*m_accept)(wxSocketBase&);
 
-    DECLARE_NO_COPY_CLASS(SocketServerThread)
+    wxDECLARE_NO_COPY_CLASS(SocketServerThread);
 };
 
 // The test case for socket streams

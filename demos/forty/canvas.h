@@ -39,7 +39,7 @@ public:
     void LayoutGame();
     void ShowPlayerDialog();
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
 private:
     wxFont* m_font;

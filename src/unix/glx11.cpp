@@ -112,7 +112,7 @@ typedef GLXContext(*PFNGLXCREATECONTEXTATTRIBSARBPROC)
 // wxGLContext implementation
 // ============================================================================
 
-IMPLEMENT_CLASS(wxGLContext, wxObject)
+wxIMPLEMENT_CLASS(wxGLContext, wxObject);
 
 wxGLContext::wxGLContext(wxGLCanvas *gc, const wxGLContext *other)
 {

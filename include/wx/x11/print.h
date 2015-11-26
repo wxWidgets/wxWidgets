@@ -19,7 +19,7 @@
 
 class WXDLLIMPEXP_CORE wxPrinter: public wxPrinterBase
 {
-    DECLARE_DYNAMIC_CLASS(wxPrinter)
+    wxDECLARE_DYNAMIC_CLASS(wxPrinter);
 
 public:
     wxPrinter(wxPrintData *data = NULL);
@@ -37,7 +37,7 @@ public:
 
 class WXDLLIMPEXP_CORE wxPrintPreview: public wxPrintPreviewBase
 {
-    DECLARE_CLASS(wxPrintPreview)
+    wxDECLARE_CLASS(wxPrintPreview);
 
 public:
     wxPrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting = NULL, wxPrintData *data = NULL);

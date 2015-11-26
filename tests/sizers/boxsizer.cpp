@@ -58,7 +58,7 @@ private:
     wxWindow *m_win;
     wxSizer *m_sizer;
 
-    DECLARE_NO_COPY_CLASS(BoxSizerTestCase)
+    wxDECLARE_NO_COPY_CLASS(BoxSizerTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default
@@ -416,8 +416,8 @@ void BoxSizerTestCase::IncompatibleFlags()
 
 
     // And now exactly the same thing in the other direction.
-    delete m_sizer;
     m_sizer = new wxBoxSizer(wxVERTICAL);
+    m_win->SetSizer(m_sizer);
 
     ASSERT_SIZER_INVALID_FLAGS(
         wxALIGN_BOTTOM,

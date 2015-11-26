@@ -114,10 +114,10 @@ public:
     virtual void OnExit() wxOVERRIDE { wxDCFactory::Set(NULL); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxDCFactoryCleanupModule)
+    wxDECLARE_DYNAMIC_CLASS(wxDCFactoryCleanupModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxDCFactoryCleanupModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxDCFactoryCleanupModule, wxModule);
 
 //-----------------------------------------------------------------------------
 // wxNativeDCFactory
@@ -186,7 +186,7 @@ wxDCImpl *wxNativeDCFactory::CreatePrinterDC( wxPrinterDC *owner, const wxPrintD
 // wxWindowDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxWindowDC, wxDC)
+wxIMPLEMENT_ABSTRACT_CLASS(wxWindowDC, wxDC);
 
 wxWindowDC::wxWindowDC(wxWindow *win)
           : wxDC(wxDCFactory::Get()->CreateWindowDC(this, win))
@@ -197,7 +197,7 @@ wxWindowDC::wxWindowDC(wxWindow *win)
 // wxClientDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxClientDC, wxWindowDC)
+wxIMPLEMENT_ABSTRACT_CLASS(wxClientDC, wxWindowDC);
 
 wxClientDC::wxClientDC(wxWindow *win)
           : wxWindowDC(wxDCFactory::Get()->CreateClientDC(this, win))
@@ -208,7 +208,7 @@ wxClientDC::wxClientDC(wxWindow *win)
 // wxMemoryDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
+wxIMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC);
 
 wxMemoryDC::wxMemoryDC()
           : wxDC(wxDCFactory::Get()->CreateMemoryDC(this))
@@ -262,7 +262,7 @@ wxBitmap& wxMemoryDC::GetSelectedBitmap()
 // wxPaintDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxPaintDC, wxClientDC)
+wxIMPLEMENT_ABSTRACT_CLASS(wxPaintDC, wxClientDC);
 
 wxPaintDC::wxPaintDC(wxWindow *win)
          : wxClientDC(wxDCFactory::Get()->CreatePaintDC(this, win))
@@ -273,7 +273,7 @@ wxPaintDC::wxPaintDC(wxWindow *win)
 // wxScreenDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
+wxIMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC);
 
 wxScreenDC::wxScreenDC()
           : wxDC(wxDCFactory::Get()->CreateScreenDC(this))
@@ -286,7 +286,7 @@ wxScreenDC::wxScreenDC()
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
-IMPLEMENT_DYNAMIC_CLASS(wxPrinterDC, wxDC)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPrinterDC, wxDC);
 
 wxPrinterDC::wxPrinterDC()
            : wxDC(wxDCFactory::Get()->CreatePrinterDC(this, wxPrintData()))
@@ -314,7 +314,7 @@ int wxPrinterDC::GetResolution() const
 // wxDCImpl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDCImpl, wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxDCImpl, wxObject);
 
 wxDCImpl::wxDCImpl( wxDC *owner )
         : m_window(NULL)
@@ -1051,7 +1051,7 @@ void wxDCImpl::DoGetFontMetrics(int *height,
 // wxDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject);
 
 void wxDC::CopyAttributes(const wxDC& dc)
 {

@@ -27,7 +27,7 @@ public:
 private:
     void Init();
 
-    DECLARE_ABSTRACT_CLASS(wxScreenDCImpl)
+    wxDECLARE_ABSTRACT_CLASS(wxScreenDCImpl);
 };
 
 #endif // _WX_GTKDCSCREEN_H_

@@ -57,7 +57,7 @@ public:
     bool OnInit();
 };
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 // Define a new frame type
 class MyFrame: public wxFrame
@@ -68,7 +68,7 @@ public:
     void OnCloseWindow(wxCloseEvent& event);
     void OnExit(wxCommandEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new canvas which can receive some events
@@ -85,7 +85,7 @@ private:
     wxBrush WaterBrush;
     int Sealevel;
 
-DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // `Main program' equivalent, creating windows and returning main app frame
@@ -112,10 +112,10 @@ bool MyApp::OnInit()
   return true;
 }
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_CLOSE(MyFrame::OnCloseWindow)
   EVT_MENU(wxID_EXIT, MyFrame::OnExit)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size):
@@ -140,9 +140,9 @@ void MyFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
     destroyed = true;
 }
 
-BEGIN_EVENT_TABLE(MyCanvas, wxWindow)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxWindow)
   EVT_PAINT(MyCanvas::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxFrame *frame):

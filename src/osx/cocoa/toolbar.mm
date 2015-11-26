@@ -29,9 +29,9 @@ const short kwxMacToolBarLeftMargin =  4;
 const short kwxMacToolBorder = 0;
 const short kwxMacToolSpacing = 6;
 
-BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
+wxBEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
     EVT_PAINT( wxToolBar::OnPaint )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 #pragma mark -

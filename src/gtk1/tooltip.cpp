@@ -29,7 +29,7 @@ static GtkTooltips *ss_tooltips = NULL;
 // wxToolTip
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxToolTip, wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxToolTip, wxObject);
 
 wxToolTip::wxToolTip( const wxString &tip )
 {

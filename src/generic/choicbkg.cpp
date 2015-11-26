@@ -39,14 +39,14 @@
 // event table
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxChoicebook, wxBookCtrlBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxChoicebook, wxBookCtrlBase);
 
 wxDEFINE_EVENT( wxEVT_CHOICEBOOK_PAGE_CHANGING, wxBookCtrlEvent );
 wxDEFINE_EVENT( wxEVT_CHOICEBOOK_PAGE_CHANGED,  wxBookCtrlEvent );
 
-BEGIN_EVENT_TABLE(wxChoicebook, wxBookCtrlBase)
+wxBEGIN_EVENT_TABLE(wxChoicebook, wxBookCtrlBase)
     EVT_CHOICE(wxID_ANY, wxChoicebook::OnChoiceSelected)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // wxChoicebook implementation
@@ -92,8 +92,13 @@ wxChoicebook::Create(wxWindow *parent,
         mainSizer->Add(0, 0, 1, wxEXPAND, 0);
 
     m_controlSizer = new wxBoxSizer(IsVertical() ? wxHORIZONTAL : wxVERTICAL);
-    m_controlSizer->Add(m_bookctrl, 1, wxGROW, 0);
-    mainSizer->Add(m_controlSizer, 0, (IsVertical() ? wxGROW : wxALIGN_CENTRE_VERTICAL)|wxALL, m_controlMargin);
+    m_controlSizer->Add(m_bookctrl, wxSizerFlags(1).Expand());
+    wxSizerFlags flags;
+    if ( IsVertical() )
+        flags.Expand();
+    else
+        flags.CentreVertical();
+    mainSizer->Add(m_controlSizer, flags.Border(wxALL, m_controlMargin));
     SetSizer(mainSizer);
     return true;
 }

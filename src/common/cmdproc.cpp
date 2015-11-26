@@ -36,8 +36,8 @@
 // implementation
 // ============================================================================
 
-IMPLEMENT_CLASS(wxCommand, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxCommandProcessor, wxObject)
+wxIMPLEMENT_CLASS(wxCommand, wxObject);
+wxIMPLEMENT_DYNAMIC_CLASS(wxCommandProcessor, wxObject);
 
 // ----------------------------------------------------------------------------
 // wxCommand

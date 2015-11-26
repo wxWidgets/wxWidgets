@@ -63,8 +63,8 @@ BOOL CALLBACK wxAbortProc(HDC hdc, int error);
 // wxWin macros
 // ---------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxWindowsPrinter, wxPrinterBase)
-    IMPLEMENT_CLASS(wxWindowsPrintPreview, wxPrintPreviewBase)
+    wxIMPLEMENT_DYNAMIC_CLASS(wxWindowsPrinter, wxPrinterBase);
+    wxIMPLEMENT_CLASS(wxWindowsPrintPreview, wxPrintPreviewBase);
 
 // ===========================================================================
 // implementation

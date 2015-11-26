@@ -31,10 +31,10 @@
 wxDEFINE_EVENT(wxEVT_RIBBONBUTTONBAR_CLICKED, wxRibbonButtonBarEvent);
 wxDEFINE_EVENT(wxEVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED, wxRibbonButtonBarEvent);
 
-IMPLEMENT_DYNAMIC_CLASS(wxRibbonButtonBarEvent, wxCommandEvent)
-IMPLEMENT_CLASS(wxRibbonButtonBar, wxRibbonControl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRibbonButtonBarEvent, wxCommandEvent);
+wxIMPLEMENT_CLASS(wxRibbonButtonBar, wxRibbonControl);
 
-BEGIN_EVENT_TABLE(wxRibbonButtonBar, wxRibbonControl)
+wxBEGIN_EVENT_TABLE(wxRibbonButtonBar, wxRibbonControl)
     EVT_ERASE_BACKGROUND(wxRibbonButtonBar::OnEraseBackground)
     EVT_ENTER_WINDOW(wxRibbonButtonBar::OnMouseEnter)
     EVT_LEAVE_WINDOW(wxRibbonButtonBar::OnMouseLeave)
@@ -44,7 +44,7 @@ BEGIN_EVENT_TABLE(wxRibbonButtonBar, wxRibbonControl)
     EVT_LEFT_DOWN(wxRibbonButtonBar::OnMouseDown)
     EVT_LEFT_DCLICK(wxRibbonButtonBar::OnMouseDown)
     EVT_LEFT_UP(wxRibbonButtonBar::OnMouseUp)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 class wxRibbonButtonBarButtonSizeInfo
 {

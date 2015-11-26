@@ -1281,10 +1281,10 @@ public:
         gs_envVars.clear();
     }
 
-    DECLARE_DYNAMIC_CLASS(wxSetEnvModule)
+    wxDECLARE_DYNAMIC_CLASS(wxSetEnvModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxSetEnvModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxSetEnvModule, wxModule);
 
 #endif // USE_PUTENV
 

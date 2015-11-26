@@ -42,7 +42,7 @@ private:
 
     wxChoice* m_choice;
 
-    DECLARE_NO_COPY_CLASS(ChoiceTestCase)
+    wxDECLARE_NO_COPY_CLASS(ChoiceTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

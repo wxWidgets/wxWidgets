@@ -2165,7 +2165,7 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
     // default behaviour, i.e. sorts items alphabetically and so call it
     // directly if we're not in derived class (much more efficient!)
     // RN: Note that if you find you're code doesn't sort as expected this
-    //     may be why as if you don't use the DECLARE_CLASS/IMPLEMENT_CLASS
+    //     may be why as if you don't use the wxDECLARE_CLASS/wxIMPLEMENT_CLASS
     //     combo for your derived wxTreeCtrl if will sort without
     //     OnCompareItems
     if ( GetClassInfo() == wxCLASSINFO(wxTreeCtrl) )

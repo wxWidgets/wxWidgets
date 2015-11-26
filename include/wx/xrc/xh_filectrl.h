@@ -22,7 +22,7 @@ public:
     virtual bool CanHandle(wxXmlNode *node);
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxFileCtrlXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxFileCtrlXmlHandler);
 };
 
 #endif // wxUSE_XRC && wxUSE_FILECTRL

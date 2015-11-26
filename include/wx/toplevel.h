@@ -339,7 +339,7 @@ protected:
     bool m_modified;
 
     wxDECLARE_NO_COPY_CLASS(wxTopLevelWindowBase);
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -390,7 +390,7 @@ protected:
         {
         }
 
-        DECLARE_DYNAMIC_CLASS_NO_COPY(wxTopLevelWindow)
+        wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxTopLevelWindow);
     };
 #endif // __WXUNIVERSAL__/!__WXUNIVERSAL__
 

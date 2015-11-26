@@ -39,7 +39,7 @@ class OwnerDrawnFrame : public wxFrame
 {
 public:
     // ctor & dtor
-    OwnerDrawnFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h);
+    OwnerDrawnFrame(wxFrame *frame, const wxString& title, int x, int y, int w, int h);
     ~OwnerDrawnFrame(){};
 
     // notifications
@@ -84,7 +84,7 @@ wxBEGIN_EVENT_TABLE(OwnerDrawnFrame, wxFrame)
                 OwnerDrawnFrame::OnListboxDblClick)
 wxEND_EVENT_TABLE()
 
-IMPLEMENT_APP(OwnerDrawnApp)
+wxIMPLEMENT_APP(OwnerDrawnApp);
 
 // init our app: create windows
 bool OwnerDrawnApp::OnInit(void)
@@ -92,9 +92,7 @@ bool OwnerDrawnApp::OnInit(void)
     if ( !wxApp::OnInit() )
         return false;
 
-    OwnerDrawnFrame *pFrame
-        = new OwnerDrawnFrame(NULL, wxT("wxWidgets Ownerdraw Sample"),
-                              50, 50, 450, 340);
+    new OwnerDrawnFrame(NULL, "wxWidgets Ownerdraw Sample", 50, 50, 450, 340);
 
     return true;
 }
@@ -257,7 +255,7 @@ void OwnerDrawnFrame::InitMenu()
 }
 
 // main frame constructor
-OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxChar *title,
+OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxString& title,
                                  int x, int y, int w, int h)
          : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {

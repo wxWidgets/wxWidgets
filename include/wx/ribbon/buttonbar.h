@@ -192,8 +192,8 @@ protected:
     bool m_show_tooltips_for_disabled;
 
 #ifndef SWIG
-    DECLARE_CLASS(wxRibbonButtonBar)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_CLASS(wxRibbonButtonBar);
+    wxDECLARE_EVENT_TABLE();
 #endif
 };
 
@@ -229,7 +229,7 @@ protected:
 
 #ifndef SWIG
 private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRibbonButtonBarEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRibbonButtonBarEvent);
 #endif
 };
 

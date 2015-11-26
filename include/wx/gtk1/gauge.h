@@ -40,12 +40,8 @@ public:
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxGaugeNameStr );
 
-    void SetShadowWidth( int WXUNUSED(w) ) { }
-    void SetBezelFace( int WXUNUSED(w) ) { }
     void SetRange( int r );
     void SetValue( int pos );
-    int GetShadowWidth() const { return 0; }
-    int GetBezelFace() const { return 0; }
     int GetRange() const;
     int GetValue() const;
 
@@ -73,7 +69,7 @@ protected:
     virtual wxVisualAttributes GetDefaultAttributes() const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGauge)
+    wxDECLARE_DYNAMIC_CLASS(wxGauge);
 };
 
 #endif

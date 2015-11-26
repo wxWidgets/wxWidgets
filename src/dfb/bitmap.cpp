@@ -391,7 +391,7 @@ public:
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxBitmapBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxBitmapBase);
 
 bool wxBitmap::Create(const wxIDirectFBSurfacePtr& surface)
 {

@@ -65,10 +65,10 @@ public:
     }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPluginLibraryModule )
+    wxDECLARE_DYNAMIC_CLASS(wxPluginLibraryModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxPluginLibraryModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPluginLibraryModule, wxModule);
 
 
 wxPluginLibrary::wxPluginLibrary(const wxString &libname, int flags)

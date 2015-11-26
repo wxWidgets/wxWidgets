@@ -190,7 +190,7 @@ private:
     void Swap();
     void IndexFromEnd();
 
-    DECLARE_NO_COPY_CLASS(ArraysTestCase)
+    wxDECLARE_NO_COPY_CLASS(ArraysTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

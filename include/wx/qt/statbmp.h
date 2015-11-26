@@ -41,7 +41,7 @@ protected:
 private:
     QLabel *m_qtLabel;
 
-    DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
+    wxDECLARE_DYNAMIC_CLASS(wxStaticBitmap);
 };
 
 #endif // _WX_QT_STATBMP_H_

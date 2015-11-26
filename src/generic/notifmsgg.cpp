@@ -83,7 +83,7 @@ private:
     wxTimer m_timer;
 
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxNotificationMessageDialog);
 };
 
@@ -91,11 +91,11 @@ private:
 // wxNotificationMessageDialog implementation
 // ============================================================================
 
-BEGIN_EVENT_TABLE(wxNotificationMessageDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(wxNotificationMessageDialog, wxDialog)
     EVT_CLOSE(wxNotificationMessageDialog::OnClose)
 
     EVT_TIMER(wxID_ANY, wxNotificationMessageDialog::OnTimer)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxNotificationMessageDialog::wxNotificationMessageDialog(wxWindow *parent,
                                                          const wxString& text,

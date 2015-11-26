@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxBitmapXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxBitmapXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxBitmapXmlHandler);
 
 public:
     wxBitmapXmlHandler();
@@ -26,7 +26,7 @@ public:
 
 class WXDLLIMPEXP_XRC wxIconXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxIconXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxIconXmlHandler);
 
 public:
     wxIconXmlHandler();

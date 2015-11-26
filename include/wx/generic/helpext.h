@@ -97,7 +97,7 @@ private:
     // Is the viewer a variant of netscape?
     bool             m_BrowserIsNetscape;
 
-    DECLARE_CLASS(wxExtHelpController)
+    wxDECLARE_CLASS(wxExtHelpController);
 };
 
 #endif // wxUSE_HELP

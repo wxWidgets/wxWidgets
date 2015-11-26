@@ -59,7 +59,7 @@ protected:
 private:
     typedef wxSpinButtonBase base_type;
 
-    DECLARE_DYNAMIC_CLASS(wxSpinButton)
+    wxDECLARE_DYNAMIC_CLASS(wxSpinButton);
 };
 
 #endif // _WX_GTK_SPINBUTT_H_

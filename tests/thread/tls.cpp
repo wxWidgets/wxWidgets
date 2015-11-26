@@ -88,7 +88,7 @@ private:
     void TestInt();
     void TestStruct();
 
-    DECLARE_NO_COPY_CLASS(TLSTestCase)
+    wxDECLARE_NO_COPY_CLASS(TLSTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

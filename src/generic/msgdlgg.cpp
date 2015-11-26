@@ -71,14 +71,14 @@ protected:
 // icons
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxGenericMessageDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(wxGenericMessageDialog, wxDialog)
         EVT_BUTTON(wxID_YES, wxGenericMessageDialog::OnYes)
         EVT_BUTTON(wxID_NO, wxGenericMessageDialog::OnNo)
         EVT_BUTTON(wxID_HELP, wxGenericMessageDialog::OnHelp)
         EVT_BUTTON(wxID_CANCEL, wxGenericMessageDialog::OnCancel)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-IMPLEMENT_CLASS(wxGenericMessageDialog, wxDialog)
+wxIMPLEMENT_CLASS(wxGenericMessageDialog, wxDialog);
 
 wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
                                                 const wxString& message,

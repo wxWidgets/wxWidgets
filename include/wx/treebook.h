@@ -219,8 +219,8 @@ private:
     size_t DoInternalGetPageCount() const { return m_treeIds.GetCount(); }
 
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxTreebook)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxTreebook);
 };
 
 

@@ -95,9 +95,9 @@ static const wxCoord SLIDER_LABEL_MARGIN = 2;
 // implementation of wxSlider
 // ============================================================================
 
-BEGIN_EVENT_TABLE(wxSlider, wxControl)
+wxBEGIN_EVENT_TABLE(wxSlider, wxControl)
     EVT_SIZE(wxSlider::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // wxSlider creation

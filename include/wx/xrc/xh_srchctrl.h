@@ -22,7 +22,7 @@ public:
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 
-    DECLARE_DYNAMIC_CLASS(wxSearchCtrlXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxSearchCtrlXmlHandler);
 };
 
 #endif // wxUSE_XRC && wxUSE_SEARCHCTRL

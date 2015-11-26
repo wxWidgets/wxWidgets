@@ -97,9 +97,9 @@
 #define  ID_NEW_DIR       (wxID_FILEDLGG + 4)
 #define  ID_FILE_CTRL     (wxID_FILEDLGG + 5)
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericFileDialog, wxFileDialogBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxGenericFileDialog, wxFileDialogBase);
 
-BEGIN_EVENT_TABLE(wxGenericFileDialog,wxDialog)
+wxBEGIN_EVENT_TABLE(wxGenericFileDialog,wxDialog)
     EVT_BUTTON(ID_LIST_MODE, wxGenericFileDialog::OnList)
     EVT_BUTTON(ID_REPORT_MODE, wxGenericFileDialog::OnReport)
     EVT_BUTTON(ID_UP_DIR, wxGenericFileDialog::OnUp)
@@ -112,7 +112,7 @@ BEGIN_EVENT_TABLE(wxGenericFileDialog,wxDialog)
 #if defined(__DOS__) || defined(__WINDOWS__)
     EVT_UPDATE_UI(ID_NEW_DIR, wxGenericFileDialog::OnUpdateButtonsUI)
 #endif // defined(__DOS__) || defined(__WINDOWS__)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 long wxGenericFileDialog::ms_lastViewStyle = wxLC_LIST;
 bool wxGenericFileDialog::ms_lastShowHidden = false;
@@ -417,7 +417,7 @@ void wxGenericFileDialog::OnUpdateButtonsUI(wxUpdateUIEvent& event)
 
 #ifdef wxHAS_GENERIC_FILEDIALOG
 
-IMPLEMENT_DYNAMIC_CLASS(wxFileDialog, wxGenericFileDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFileDialog, wxGenericFileDialog);
 
 #endif // wxHAS_GENERIC_FILEDIALOG
 

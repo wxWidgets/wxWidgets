@@ -42,7 +42,7 @@ protected:
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const wxOVERRIDE;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxAcceleratorTable)
+    wxDECLARE_DYNAMIC_CLASS(wxAcceleratorTable);
 };
 
 #endif // _WX_GENERIC_ACCEL_H_

@@ -67,7 +67,7 @@ class WXDLLIMPEXP_PROPGRID wxPropertyGridPage : public wxEvtHandler,
                                                 public wxPropertyGridPageState
 {
     friend class wxPropertyGridManager;
-    DECLARE_CLASS(wxPropertyGridPage)
+    wxDECLARE_CLASS(wxPropertyGridPage);
 public:
 
     wxPropertyGridPage();
@@ -188,7 +188,7 @@ protected:
 private:
     bool                    m_isDefault; // is this base page object?
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // -----------------------------------------------------------------------
@@ -220,7 +220,7 @@ class wxPGHeaderCtrl;
 class WXDLLIMPEXP_PROPGRID
     wxPropertyGridManager : public wxPanel, public wxPropertyGridInterface
 {
-    DECLARE_CLASS(wxPropertyGridManager)
+    wxDECLARE_CLASS(wxPropertyGridManager);
     friend class wxPropertyGridPage;
 public:
 
@@ -753,7 +753,7 @@ protected:
     // Reconnect propgrid event handlers.
     void ReconnectEventHandlers(wxWindowID oldId, wxWindowID newId);
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // -----------------------------------------------------------------------

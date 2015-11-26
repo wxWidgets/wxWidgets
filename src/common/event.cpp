@@ -60,49 +60,49 @@
 // ----------------------------------------------------------------------------
 
 #if wxUSE_BASE
-    IMPLEMENT_DYNAMIC_CLASS(wxEvtHandler, wxObject)
-    IMPLEMENT_ABSTRACT_CLASS(wxEvent, wxObject)
-    IMPLEMENT_DYNAMIC_CLASS(wxIdleEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxThreadEvent, wxEvent)
+    wxIMPLEMENT_DYNAMIC_CLASS(wxEvtHandler, wxObject);
+    wxIMPLEMENT_ABSTRACT_CLASS(wxEvent, wxObject);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxIdleEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxThreadEvent, wxEvent);
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
-    IMPLEMENT_DYNAMIC_CLASS(wxCommandEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxNotifyEvent, wxCommandEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxScrollEvent, wxCommandEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxScrollWinEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxMouseEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxKeyEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxSizeEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxPaintEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxNcPaintEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxEraseEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxMoveEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxFocusEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxChildFocusEvent, wxCommandEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxCloseEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxShowEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxMaximizeEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxIconizeEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxMenuEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxJoystickEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxDropFilesEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxActivateEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxInitDialogEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxSetCursorEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxSysColourChangedEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxDisplayChangedEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxUpdateUIEvent, wxCommandEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxNavigationKeyEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxPaletteChangedEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxQueryNewPaletteEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxWindowCreateEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxWindowDestroyEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxHelpEvent, wxCommandEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxContextMenuEvent, wxCommandEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxMouseCaptureChangedEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxMouseCaptureLostEvent, wxEvent)
-    IMPLEMENT_DYNAMIC_CLASS(wxClipboardTextEvent, wxCommandEvent)
+    wxIMPLEMENT_DYNAMIC_CLASS(wxCommandEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxNotifyEvent, wxCommandEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxScrollEvent, wxCommandEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxScrollWinEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxMouseEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxKeyEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxSizeEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxPaintEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxNcPaintEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxEraseEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxMoveEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxFocusEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxChildFocusEvent, wxCommandEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxCloseEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxShowEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxMaximizeEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxIconizeEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxMenuEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxJoystickEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxDropFilesEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxActivateEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxInitDialogEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxSetCursorEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxSysColourChangedEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxDisplayChangedEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxUpdateUIEvent, wxCommandEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxNavigationKeyEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxPaletteChangedEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxQueryNewPaletteEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxWindowCreateEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxWindowDestroyEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxHelpEvent, wxCommandEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxContextMenuEvent, wxCommandEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxMouseCaptureChangedEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxMouseCaptureLostEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxClipboardTextEvent, wxCommandEvent);
 #endif // wxUSE_GUI
 
 #if wxUSE_BASE
@@ -136,10 +136,10 @@ public:
     virtual bool OnInit() { return true; }
     virtual void OnExit() { wxEventHashTable::ClearAll(); }
 
-    DECLARE_DYNAMIC_CLASS(wxEventTableEntryModule)
+    wxDECLARE_DYNAMIC_CLASS(wxEventTableEntryModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxEventTableEntryModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxEventTableEntryModule, wxModule);
 
 #endif // wxUSE_MEMORY_TRACING
 

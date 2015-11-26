@@ -61,12 +61,12 @@
 // wxNumberEntryDialog
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxNumberEntryDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(wxNumberEntryDialog, wxDialog)
     EVT_BUTTON(wxID_OK, wxNumberEntryDialog::OnOK)
     EVT_BUTTON(wxID_CANCEL, wxNumberEntryDialog::OnCancel)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-IMPLEMENT_CLASS(wxNumberEntryDialog, wxDialog)
+wxIMPLEMENT_CLASS(wxNumberEntryDialog, wxDialog);
 
 bool wxNumberEntryDialog::Create(wxWindow *parent,
                                          const wxString& message,

@@ -34,7 +34,7 @@ protected:
 private:
     void OnDestroy(wxWindowDestroyEvent&);
 
-    DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
+    wxDECLARE_DYNAMIC_CLASS(wxTaskBarIcon);
 };
 
 #endif // _WX_UNIX_TASKBAR_H_

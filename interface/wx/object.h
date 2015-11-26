@@ -41,7 +41,7 @@
         virtual wxObjectRefData *CreateRefData() const;
         virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
-        wxDECLARE_DYNAMIC_CLASS(MyCar)
+        wxDECLARE_DYNAMIC_CLASS(MyCar);
     };
 
 

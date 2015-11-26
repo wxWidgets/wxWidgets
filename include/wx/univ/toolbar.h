@@ -132,7 +132,7 @@ private:
             m_maxHeight;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxToolBar)
+    wxDECLARE_DYNAMIC_CLASS(wxToolBar);
 };
 
 #endif // _WX_UNIV_TOOLBAR_H_

@@ -59,7 +59,7 @@ private:
     // common part of all ctors
     void Init();
 
-    DECLARE_DYNAMIC_CLASS(wxToggleButton)
+    wxDECLARE_DYNAMIC_CLASS(wxToggleButton);
 };
 
 #endif // _WX_UNIV_TGLBTN_H_

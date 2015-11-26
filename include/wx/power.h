@@ -69,7 +69,7 @@ public:
 private:
     bool m_veto;
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPowerEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPowerEvent);
 };
 
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_BASE, wxEVT_POWER_SUSPENDING, wxPowerEvent );

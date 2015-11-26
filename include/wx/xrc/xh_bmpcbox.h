@@ -18,7 +18,7 @@ class WXDLLIMPEXP_FWD_ADV wxBitmapComboBox;
 
 class WXDLLIMPEXP_XRC wxBitmapComboBoxXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxBitmapComboBoxXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxBitmapComboBoxXmlHandler);
 
 public:
     wxBitmapComboBoxXmlHandler();

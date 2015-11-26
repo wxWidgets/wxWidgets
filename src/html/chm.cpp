@@ -909,7 +909,7 @@ wxString wxChmFSHandler::FindNext()
 
 class wxChmSupportModule : public wxModule
 {
-    DECLARE_DYNAMIC_CLASS(wxChmSupportModule)
+    wxDECLARE_DYNAMIC_CLASS(wxChmSupportModule);
 
 public:
     virtual bool OnInit()
@@ -921,6 +921,6 @@ public:
 }
 ;
 
-IMPLEMENT_DYNAMIC_CLASS(wxChmSupportModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxChmSupportModule, wxModule);
 
 #endif // wxUSE_LIBMSPACK

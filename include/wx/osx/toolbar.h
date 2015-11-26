@@ -18,8 +18,8 @@
 
 class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase
 {
-  DECLARE_DYNAMIC_CLASS(wxToolBar)
- public:
+    wxDECLARE_DYNAMIC_CLASS(wxToolBar);
+public:
   /*
    * Public interface
    */
@@ -114,7 +114,7 @@ protected:
     virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle);
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 #if wxOSX_USE_NATIVE_TOOLBAR
     bool m_macUsesNativeToolbar ;
     void* m_macToolbar ;

@@ -84,7 +84,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif
 wxEND_EVENT_TABLE()
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit()
 {

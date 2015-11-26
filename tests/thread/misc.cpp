@@ -223,7 +223,7 @@ private:
     void TestThreadRun();
     void TestThreadConditions();
 
-    DECLARE_NO_COPY_CLASS(MiscThreadTestCase)
+    wxDECLARE_NO_COPY_CLASS(MiscThreadTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

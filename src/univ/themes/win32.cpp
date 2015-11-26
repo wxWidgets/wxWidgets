@@ -3603,7 +3603,7 @@ public:
     void Detach();
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     void OnSystemMenu(wxCommandEvent &event);
     void OnCloseFrame(wxCommandEvent &event);
     void OnClose(wxCloseEvent &event);
@@ -3652,11 +3652,11 @@ void wxWin32SystemMenuEvtHandler::Detach()
     }
 }
 
-BEGIN_EVENT_TABLE(wxWin32SystemMenuEvtHandler, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(wxWin32SystemMenuEvtHandler, wxEvtHandler)
     EVT_MENU(wxID_SYSTEM_MENU, wxWin32SystemMenuEvtHandler::OnSystemMenu)
     EVT_MENU(wxID_CLOSE_FRAME, wxWin32SystemMenuEvtHandler::OnCloseFrame)
     EVT_CLOSE(wxWin32SystemMenuEvtHandler::OnClose)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxWin32SystemMenuEvtHandler::OnSystemMenu(wxCommandEvent &WXUNUSED(event))
 {

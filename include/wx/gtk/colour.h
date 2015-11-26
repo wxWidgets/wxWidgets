@@ -53,7 +53,7 @@ protected:
 
     virtual bool FromString(const wxString& str) wxOVERRIDE;
 
-    DECLARE_DYNAMIC_CLASS(wxColour)
+    wxDECLARE_DYNAMIC_CLASS(wxColour);
 };
 
 #endif // _WX_GTK_COLOUR_H_

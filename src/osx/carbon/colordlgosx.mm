@@ -30,7 +30,7 @@
 //Mac OSX 10.2+ only
 #if USE_NATIVE_FONT_DIALOG_FOR_MACOSX && wxUSE_COLOURDLG
 
-IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog);
 
 #include "wx/osx/private.h"
 

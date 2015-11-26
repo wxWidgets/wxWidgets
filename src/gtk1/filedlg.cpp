@@ -19,11 +19,11 @@
 // wxFileDialog
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFileDialog,wxGenericFileDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFileDialog, wxGenericFileDialog);
 
-BEGIN_EVENT_TABLE(wxFileDialog,wxGenericFileDialog)
+wxBEGIN_EVENT_TABLE(wxFileDialog,wxGenericFileDialog)
     EVT_BUTTON(wxID_OK, wxFileDialog::OnFakeOk)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                            const wxString& defaultDir,

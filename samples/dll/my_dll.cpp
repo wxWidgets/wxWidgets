@@ -172,7 +172,7 @@ void MyDllApp::OnTerminate(wxThreadEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 
 // we can't have WinMain() in a DLL and want to start the app ourselves
-IMPLEMENT_APP_NO_MAIN(MyDllApp)
+wxIMPLEMENT_APP_NO_MAIN(MyDllApp);
 
 namespace
 {
@@ -202,7 +202,7 @@ unsigned wxSTDCALL MyAppLauncher(void* event)
     if ( !hInstance )
         return 0; // failed to get DLL's handle
 
-    // IMPLEMENT_WXWIN_MAIN does this as the first thing
+    // wxIMPLEMENT_WXWIN_MAIN does this as the first thing
     wxDISABLE_DEBUG_SUPPORT();
 
     // We do this before wxEntry() explicitly, even though wxEntry() would

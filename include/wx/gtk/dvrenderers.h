@@ -60,7 +60,7 @@ protected:
     bool GetTextValue(wxString& str) const;
 
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer);
 };
 
 // ---------------------------------------------------------
@@ -80,7 +80,7 @@ public:
     bool GetValue( wxVariant &value ) const;
 
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapRenderer);
 };
 
 // ---------------------------------------------------------
@@ -100,7 +100,7 @@ public:
     bool GetValue( wxVariant &value ) const;
 
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleRenderer);
 };
 
 // ---------------------------------------------------------
@@ -164,7 +164,7 @@ private:
     // them forward to m_text_renderer if our RenderText() is called
     GTKRenderParams* m_renderParams;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomRenderer);
 };
 
 // ---------------------------------------------------------
@@ -201,7 +201,7 @@ private:
 #endif // !wxUSE_UNICODE
 
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressRenderer);
 };
 
 // ---------------------------------------------------------
@@ -234,7 +234,7 @@ private:
     // we use the base class m_renderer for the text and this one for the icon
     GtkCellRenderer *m_rendererIcon;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewIconTextRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewIconTextRenderer);
 };
 
 // -------------------------------------

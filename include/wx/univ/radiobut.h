@@ -71,7 +71,7 @@ protected:
     virtual void SendEvent() wxOVERRIDE;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxRadioButton)
+    wxDECLARE_DYNAMIC_CLASS(wxRadioButton);
 };
 
 #endif // _WX_UNIV_RADIOBUT_H_

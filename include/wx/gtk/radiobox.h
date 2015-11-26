@@ -147,7 +147,7 @@ protected:
     virtual void GTKWidgetDoSetMnemonic(GtkWidget* w) wxOVERRIDE;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxRadioBox)
+    wxDECLARE_DYNAMIC_CLASS(wxRadioBox);
 };
 
 #endif // _WX_GTK_RADIOBOX_H_

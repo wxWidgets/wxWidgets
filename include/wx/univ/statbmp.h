@@ -67,7 +67,7 @@ private:
     // the bitmap which we show
     wxBitmap m_bitmap;
 
-    DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
+    wxDECLARE_DYNAMIC_CLASS(wxStaticBitmap);
 };
 
 #endif // _WX_UNIV_STATBMP_H_

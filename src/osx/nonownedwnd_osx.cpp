@@ -91,7 +91,7 @@ void wxNonOwnedWindowImpl::Associate( WXWindow window, wxNonOwnedWindowImpl *imp
 // wxNonOwnedWindow creation
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS( wxNonOwnedWindowImpl , wxObject )
+wxIMPLEMENT_ABSTRACT_CLASS(wxNonOwnedWindowImpl, wxObject);
 
 wxNonOwnedWindow *wxNonOwnedWindow::s_macDeactivateWindow = NULL;
 

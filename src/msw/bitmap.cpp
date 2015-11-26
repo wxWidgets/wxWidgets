@@ -154,10 +154,10 @@ private:
 // macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
-IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject);
+wxIMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject);
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject);
 
 // ============================================================================
 // implementation

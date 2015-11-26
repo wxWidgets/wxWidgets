@@ -202,9 +202,9 @@ void wxHtmlHelpWindow::UpdateMergedIndex()
 // wxHtmlHelpWindow
 //---------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpWindow, wxWindow)
+wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpWindow, wxWindow);
 
-BEGIN_EVENT_TABLE(wxHtmlHelpWindow, wxWindow)
+wxBEGIN_EVENT_TABLE(wxHtmlHelpWindow, wxWindow)
     EVT_TOOL_RANGE(wxID_HTML_PANEL, wxID_HTML_OPTIONS, wxHtmlHelpWindow::OnToolbar)
     EVT_BUTTON(wxID_HTML_BOOKMARKSREMOVE, wxHtmlHelpWindow::OnToolbar)
     EVT_BUTTON(wxID_HTML_BOOKMARKSADD, wxHtmlHelpWindow::OnToolbar)
@@ -218,7 +218,7 @@ BEGIN_EVENT_TABLE(wxHtmlHelpWindow, wxWindow)
     EVT_BUTTON(wxID_HTML_INDEXBUTTONALL, wxHtmlHelpWindow::OnIndexAll)
     EVT_COMBOBOX(wxID_HTML_BOOKMARKSLIST, wxHtmlHelpWindow::OnBookmarksSel)
     EVT_SIZE(wxHtmlHelpWindow::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxHtmlHelpWindow::wxHtmlHelpWindow(wxWindow* parent, wxWindowID id,
                                     const wxPoint& pos,
@@ -1283,14 +1283,14 @@ public:
         UpdateTestWin();
     }
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxHtmlHelpWindowOptionsDialog);
 };
 
-BEGIN_EVENT_TABLE(wxHtmlHelpWindowOptionsDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(wxHtmlHelpWindowOptionsDialog, wxDialog)
     EVT_COMBOBOX(wxID_ANY, wxHtmlHelpWindowOptionsDialog::OnUpdate)
     EVT_SPINCTRL(wxID_ANY, wxHtmlHelpWindowOptionsDialog::OnUpdateSpin)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxHtmlHelpWindow::OptionsDialog()
 {

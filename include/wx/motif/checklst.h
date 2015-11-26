@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_CORE wxCheckListBox : public wxCheckListBoxBase
 {
-    DECLARE_DYNAMIC_CLASS(wxCheckListBox)
+    wxDECLARE_DYNAMIC_CLASS(wxCheckListBox);
 
 public:
     // ctors
@@ -69,7 +69,7 @@ public:
 private:
     void DoToggleItem( int item, int x );
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif

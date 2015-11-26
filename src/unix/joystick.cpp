@@ -52,7 +52,7 @@ enum {
 };
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject);
 
 
 ////////////////////////////////////////////////////////////////////////////

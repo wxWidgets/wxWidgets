@@ -457,8 +457,8 @@ private:
     void OnCharHook(wxKeyEvent& event);
 
 
-    DECLARE_DYNAMIC_CLASS(wxListCtrl)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxListCtrl);
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxListCtrl);
 };
 

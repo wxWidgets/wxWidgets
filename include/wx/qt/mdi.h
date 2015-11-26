@@ -39,7 +39,7 @@ public:
 protected:
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
+    wxDECLARE_DYNAMIC_CLASS(wxMDIParentFrame);
 };
 
 

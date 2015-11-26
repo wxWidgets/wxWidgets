@@ -78,7 +78,7 @@ private:
 // wxBrushRefData implementation
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxBrush, wxGDIObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxBrush, wxGDIObject);
 
 // ----------------------------------------------------------------------------
 // wxBrushRefData ctors/dtor

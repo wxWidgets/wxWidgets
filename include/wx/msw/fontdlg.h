@@ -27,7 +27,7 @@ public:
     virtual int ShowModal();
 
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxFontDialog)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxFontDialog);
 };
 
 #endif

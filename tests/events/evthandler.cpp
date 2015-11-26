@@ -124,10 +124,10 @@ public:
     void OnIdle(wxIdleEvent&) { g_called.method = true; }
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(MyClassWithEventTable, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(MyClassWithEventTable, wxEvtHandler)
     EVT_IDLE(MyClassWithEventTable::OnIdle)
 
     EVT_MYEVENT(MyClassWithEventTable::OnMyEvent)
@@ -136,7 +136,7 @@ BEGIN_EVENT_TABLE(MyClassWithEventTable, wxEvtHandler)
     // this shouldn't compile:
     //EVT_MYEVENT(MyClassWithEventTable::OnIdle)
     //EVT_IDLE(MyClassWithEventTable::OnAnotherEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 } // anonymous namespace
 
@@ -185,7 +185,7 @@ private:
     MyHandler handler;
     MyEvent e;
 
-    DECLARE_NO_COPY_CLASS(EvtHandlerTestCase)
+    wxDECLARE_NO_COPY_CLASS(EvtHandlerTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

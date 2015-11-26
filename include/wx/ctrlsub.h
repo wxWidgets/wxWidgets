@@ -492,7 +492,7 @@ private:
         wxControlWithItems() { }
 
     private:
-        DECLARE_ABSTRACT_CLASS(wxControlWithItems)
+        wxDECLARE_ABSTRACT_CLASS(wxControlWithItems);
         wxDECLARE_NO_COPY_CLASS(wxControlWithItems);
     };
 #endif

@@ -43,10 +43,10 @@ wxDEFINE_EVENT(wxEVT_RIBBONBAR_TAB_LEFT_DCLICK, wxRibbonBarEvent);
 wxDEFINE_EVENT(wxEVT_RIBBONBAR_TOGGLED, wxRibbonBarEvent);
 wxDEFINE_EVENT(wxEVT_RIBBONBAR_HELP_CLICK, wxRibbonBarEvent);
 
-IMPLEMENT_CLASS(wxRibbonBar, wxRibbonControl)
-IMPLEMENT_DYNAMIC_CLASS(wxRibbonBarEvent, wxNotifyEvent)
+wxIMPLEMENT_CLASS(wxRibbonBar, wxRibbonControl);
+wxIMPLEMENT_DYNAMIC_CLASS(wxRibbonBarEvent, wxNotifyEvent);
 
-BEGIN_EVENT_TABLE(wxRibbonBar, wxRibbonControl)
+wxBEGIN_EVENT_TABLE(wxRibbonBar, wxRibbonControl)
   EVT_ERASE_BACKGROUND(wxRibbonBar::OnEraseBackground)
   EVT_LEAVE_WINDOW(wxRibbonBar::OnMouseLeave)
   EVT_LEFT_DOWN(wxRibbonBar::OnMouseLeftDown)
@@ -60,7 +60,7 @@ BEGIN_EVENT_TABLE(wxRibbonBar, wxRibbonControl)
   EVT_LEFT_DCLICK(wxRibbonBar::OnMouseDoubleClick)
   EVT_SIZE(wxRibbonBar::OnSize)
   EVT_KILL_FOCUS(wxRibbonBar::OnKillFocus)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxRibbonBar::AddPage(wxRibbonPage *page)
 {

@@ -45,7 +45,7 @@
 
 #if wxOSX_USE_EXPERIMENTAL_FONTDIALOG
 
-IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
 
 #include "wx/osx/private.h"
 
@@ -298,12 +298,12 @@ public:
 
 private:
     void OnPaint(wxPaintEvent& event);
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(wxFontPreviewCtrl, wxWindow)
+wxBEGIN_EVENT_TABLE(wxFontPreviewCtrl, wxWindow)
     EVT_PAINT(wxFontPreviewCtrl::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
@@ -332,7 +332,7 @@ void wxFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 class wxFontColourSwatchCtrl: public wxControl
 {
-    DECLARE_CLASS(wxFontColourSwatchCtrl)
+    wxDECLARE_CLASS(wxFontColourSwatchCtrl);
 public:
     wxFontColourSwatchCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0);
     virtual ~wxFontColourSwatchCtrl();
@@ -349,18 +349,18 @@ public:
 protected:
     wxColour    m_colour;
 
-DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 /*
  * A control for displaying a small preview of a colour or bitmap
  */
 
-BEGIN_EVENT_TABLE(wxFontColourSwatchCtrl, wxControl)
+wxBEGIN_EVENT_TABLE(wxFontColourSwatchCtrl, wxControl)
     EVT_MOUSE_EVENTS(wxFontColourSwatchCtrl::OnMouseEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-IMPLEMENT_CLASS(wxFontColourSwatchCtrl, wxControl)
+wxIMPLEMENT_CLASS(wxFontColourSwatchCtrl, wxControl);
 
 wxFontColourSwatchCtrl::wxFontColourSwatchCtrl(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style):
     wxControl(parent, id, pos, size, style)
@@ -407,13 +407,13 @@ void wxFontColourSwatchCtrl::OnMouseEvent(wxMouseEvent& event)
  * wxFontDialog type definition
  */
 
-IMPLEMENT_DYNAMIC_CLASS( wxFontDialog, wxDialog )
+wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
 
 /*!
  * wxFontDialog event table definition
  */
 
-BEGIN_EVENT_TABLE( wxFontDialog, wxDialog )
+wxBEGIN_EVENT_TABLE( wxFontDialog, wxDialog )
     EVT_LISTBOX( wxID_FONTDIALOG_FACENAME, wxFontDialog::OnFontdialogFacenameSelected )
     EVT_SPINCTRL( wxID_FONTDIALOG_FONTSIZE, wxFontDialog::OnFontdialogFontsizeUpdated )
     EVT_TEXT( wxID_FONTDIALOG_FONTSIZE, wxFontDialog::OnFontdialogFontsizeTextUpdated )
@@ -422,7 +422,7 @@ BEGIN_EVENT_TABLE( wxFontDialog, wxDialog )
     EVT_CHECKBOX( wxID_FONTDIALOG_UNDERLINED, wxFontDialog::OnFontdialogUnderlinedClick )
     EVT_BUTTON( wxID_OK, wxFontDialog::OnOkClick )
     EVT_BUTTON(wxID_FONTDIALOG_COLOUR, wxFontDialog::OnColourChanged)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 /*!
  * wxFontDialog constructors

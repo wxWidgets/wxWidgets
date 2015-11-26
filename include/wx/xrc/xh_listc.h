@@ -37,7 +37,7 @@ private:
     // which is wxIMAGE_LIST_NORMAL or small if it is wxIMAGE_LIST_SMALL)
     long GetImageIndex(wxListCtrl *listctrl, int which);
 
-    DECLARE_DYNAMIC_CLASS(wxListCtrlXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxListCtrlXmlHandler);
 };
 
 #endif // wxUSE_XRC && wxUSE_LISTCTRL

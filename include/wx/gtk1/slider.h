@@ -67,7 +67,7 @@ public:
     float           m_oldPos;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxSlider)
+    wxDECLARE_DYNAMIC_CLASS(wxSlider);
 };
 
 #endif // __GTKSLIDERH__

@@ -15,7 +15,7 @@
 
 class WXDLLIMPEXP_ADV wxJoystick: public wxObject
 {
-    DECLARE_DYNAMIC_CLASS(wxJoystick)
+    wxDECLARE_DYNAMIC_CLASS(wxJoystick);
 public:
 /*
 * Public interface

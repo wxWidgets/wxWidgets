@@ -463,6 +463,7 @@
 		8B9C9FCB954F3596A4CED9A5 /* jdapimin.c in Sources */ = {isa = PBXBuildFile; fileRef = 86884BC843F6337EABF744BB /* jdapimin.c */; };
 		8DE45CEAF2DD3C22AA019F74 /* deflate.c in Sources */ = {isa = PBXBuildFile; fileRef = 3CF73F49AEC238C99CE89845 /* deflate.c */; };
 		8E674574343A3C009B1BCD00 /* tif_codec.c in Sources */ = {isa = PBXBuildFile; fileRef = 88FF67EB6E7D302A9CDEF660 /* tif_codec.c */; };
+		8F949B9010863F66A58FFEF1 /* xh_activityindicator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB60FA0E3524391D8581AD7C /* xh_activityindicator.cpp */; };
 		8F98C20E7B223FF4B352C130 /* Catalogue.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 975E3B6A269434F0A069987D /* Catalogue.cxx */; };
 		8FB5FBC5730C33F1A3D85D9F /* LexD.cxx in Sources */ = {isa = PBXBuildFile; fileRef = B9DFC4083C6A38CABE4BB4E3 /* LexD.cxx */; };
 		8FC1C07FEE793897A1E96D23 /* statbmpg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA2119A7C67D37B290C17989 /* statbmpg.cpp */; };
@@ -1455,6 +1456,7 @@
 		BAD4614CABC934D6AFF8D9CD /* gzread.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = gzread.c; path = ../../src/zlib/gzread.c; sourceTree = "<group>"; };
 		BAD9A0BFED6A37E4A305E1D7 /* filename.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filename.cpp; path = ../../src/common/filename.cpp; sourceTree = "<group>"; };
 		BB3FF9FECCB5300A9561CE36 /* richtextsymboldlg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = richtextsymboldlg.cpp; path = ../../src/richtext/richtextsymboldlg.cpp; sourceTree = "<group>"; };
+		BB60FA0E3524391D8581AD7C /* xh_activityindicator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_activityindicator.cpp; path = ../../src/xrc/xh_activityindicator.cpp; sourceTree = "<group>"; };
 		BB7661E9E09A397790ED9545 /* sockunix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sockunix.cpp; path = ../../src/unix/sockunix.cpp; sourceTree = "<group>"; };
 		BB7DBBD53BA837D2B01CE2B6 /* xh_chckb.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_chckb.cpp; path = ../../src/xrc/xh_chckb.cpp; sourceTree = "<group>"; };
 		BBB30516233A39BE809405AA /* helpbase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = helpbase.cpp; path = ../../src/common/helpbase.cpp; sourceTree = "<group>"; };
@@ -2279,6 +2281,7 @@
 		60328E6EA3793DA990E18FC1 /* xrc */ = {
 			isa = PBXGroup;
 			children = (
+				BB60FA0E3524391D8581AD7C /* xh_activityindicator.cpp */,
 				8C1E755F2408363288B2CE69 /* xh_animatctrl.cpp */,
 				3116006345D833509865FF7F /* xh_bannerwindow.cpp */,
 				07CDBBC10C8E37BBA8600DD6 /* xh_bmp.cpp */,
@@ -3286,6 +3289,7 @@
 				F3AC352D6DAE3A12A5664768 /* styleparams.cpp in Sources */,
 				2A7640E4210334AC93366900 /* winpars.cpp in Sources */,
 				87AA9C5D887B3C31A2AFB49D /* htmllbox.cpp in Sources */,
+				8F949B9010863F66A58FFEF1 /* xh_activityindicator.cpp in Sources */,
 				FBE4DB30865D3177B3A9993B /* xh_animatctrl.cpp in Sources */,
 				702616D38A5B345D9CC87114 /* xh_bannerwindow.cpp in Sources */,
 				94E510619F433AE3AC884755 /* xh_bmp.cpp in Sources */,
@@ -3661,6 +3665,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 477B609FA2373FB58F4C8768 /* wxiphone.xcconfig */;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					"wxUSE_BASE=1",
+				);
 			};
 			name = Debug;
 		};
@@ -3676,6 +3684,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 477B609FA2373FB58F4C8768 /* wxiphone.xcconfig */;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					"wxUSE_BASE=1",
+				);
 			};
 			name = Release;
 		};

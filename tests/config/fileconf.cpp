@@ -126,7 +126,7 @@ private:
                              size_t nGroups,
                              ...);
 
-    DECLARE_NO_COPY_CLASS(FileConfigTestCase)
+    wxDECLARE_NO_COPY_CLASS(FileConfigTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

@@ -32,7 +32,7 @@
 // DrawingView implementation
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(DrawingView, wxView)
+wxIMPLEMENT_DYNAMIC_CLASS(DrawingView, wxView);
 
 wxBEGIN_EVENT_TABLE(DrawingView, wxView)
     EVT_MENU(wxID_CUT, DrawingView::OnCut)
@@ -144,7 +144,7 @@ void DrawingView::OnCut(wxCommandEvent& WXUNUSED(event) )
 // TextEditView implementation
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(TextEditView, wxView)
+wxIMPLEMENT_DYNAMIC_CLASS(TextEditView, wxView);
 
 wxBEGIN_EVENT_TABLE(TextEditView, wxView)
     EVT_MENU(wxID_COPY, TextEditView::OnCopy)
@@ -300,7 +300,7 @@ void ImageCanvas::OnDraw(wxDC& dc)
 // ImageView implementation
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(ImageView, wxView)
+wxIMPLEMENT_DYNAMIC_CLASS(ImageView, wxView);
 
 ImageDocument* ImageView::GetDocument()
 {

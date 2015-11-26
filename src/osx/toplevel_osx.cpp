@@ -50,8 +50,8 @@
 // wxTopLevelWindowMac implementation
 // ============================================================================
 
-BEGIN_EVENT_TABLE(wxTopLevelWindowMac, wxTopLevelWindowBase)
-END_EVENT_TABLE()
+wxBEGIN_EVENT_TABLE(wxTopLevelWindowMac, wxTopLevelWindowBase)
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowMac creation

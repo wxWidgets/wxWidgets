@@ -93,16 +93,16 @@ protected:
 private:
     friend class wxComboBox; // it accesses our DoGetItemClientData()
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
 // event tables and such
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxComboListBox, wxListBox)
+wxBEGIN_EVENT_TABLE(wxComboListBox, wxListBox)
     EVT_LEFT_UP(wxComboListBox::OnLeftUp)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

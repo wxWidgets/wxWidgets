@@ -28,7 +28,7 @@
 #include "wx/propdlg.h"
 #include "wx/imaglist.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxPropertySheetDialogXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPropertySheetDialogXmlHandler, wxXmlResourceHandler);
 
 wxPropertySheetDialogXmlHandler::wxPropertySheetDialogXmlHandler()
                      :wxXmlResourceHandler(),

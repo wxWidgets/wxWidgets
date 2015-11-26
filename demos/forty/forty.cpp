@@ -34,7 +34,7 @@
 
 #include "wx/stockitem.h"
 
-BEGIN_EVENT_TABLE(FortyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(FortyFrame, wxFrame)
     EVT_MENU(wxID_NEW, FortyFrame::NewGame)
     EVT_MENU(wxID_EXIT, FortyFrame::Exit)
     EVT_MENU(wxID_ABOUT, FortyFrame::About)
@@ -46,10 +46,10 @@ BEGIN_EVENT_TABLE(FortyFrame, wxFrame)
     EVT_MENU(HELPING_HAND, FortyFrame::ToggleHelpingHand)
     EVT_MENU(LARGE_CARDS, FortyFrame::ToggleCardSize)
     EVT_CLOSE(FortyFrame::OnCloseWindow)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object
-IMPLEMENT_APP (FortyApp)
+wxIMPLEMENT_APP(FortyApp);
 
 wxColour* FortyApp::m_backgroundColour = 0;
 wxColour* FortyApp::m_textColour = 0;

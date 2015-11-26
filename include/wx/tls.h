@@ -130,7 +130,7 @@
     private:
         wxTlsKey m_key;
 
-        DECLARE_NO_COPY_TEMPLATE_CLASS(wxTlsValue, T)
+        wxDECLARE_NO_COPY_TEMPLATE_CLASS(wxTlsValue, T);
     };
 
     #define wxTLS_TYPE(T) wxTlsValue<T>

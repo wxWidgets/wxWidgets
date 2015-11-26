@@ -43,7 +43,7 @@ private:
 
     wxRearrangeList* m_rearrange;
 
-    DECLARE_NO_COPY_CLASS(RearrangeListTestCase)
+    wxDECLARE_NO_COPY_CLASS(RearrangeListTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

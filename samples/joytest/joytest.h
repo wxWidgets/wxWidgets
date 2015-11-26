@@ -25,7 +25,7 @@ public:
 #endif // wxUSE_SOUND
 };
 
-DECLARE_APP(MyApp)
+wxDECLARE_APP(MyApp);
 
 class MyCanvas: public wxScrolledWindow
 {
@@ -48,7 +48,7 @@ public:
     void OnActivate(wxActivateEvent& event);
     void OnQuit(wxCommandEvent& event);
 
-DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #define JOYTEST_QUIT        1

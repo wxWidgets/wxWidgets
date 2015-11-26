@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxFontPickerCtrlXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxFontPickerCtrlXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxFontPickerCtrlXmlHandler);
 
 public:
     wxFontPickerCtrlXmlHandler();

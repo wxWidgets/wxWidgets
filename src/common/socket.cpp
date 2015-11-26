@@ -122,11 +122,11 @@ wxDEFINE_EVENT(wxEVT_SOCKET, wxSocketEvent);
 // wxWin macros
 // --------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxSocketBase, wxObject)
-IMPLEMENT_CLASS(wxSocketServer, wxSocketBase)
-IMPLEMENT_CLASS(wxSocketClient, wxSocketBase)
-IMPLEMENT_CLASS(wxDatagramSocket, wxSocketBase)
-IMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent)
+wxIMPLEMENT_CLASS(wxSocketBase, wxObject);
+wxIMPLEMENT_CLASS(wxSocketServer, wxSocketBase);
+wxIMPLEMENT_CLASS(wxSocketClient, wxSocketBase);
+wxIMPLEMENT_CLASS(wxDatagramSocket, wxSocketBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent);
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -2145,10 +2145,10 @@ public:
     }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxSocketModule)
+    wxDECLARE_DYNAMIC_CLASS(wxSocketModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxSocketModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxSocketModule, wxModule);
 
 #if defined(wxUSE_SELECT_DISPATCHER) && wxUSE_SELECT_DISPATCHER
 // NOTE: we need to force linking against socketiohandler.cpp otherwise in

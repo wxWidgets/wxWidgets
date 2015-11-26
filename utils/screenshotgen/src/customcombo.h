@@ -117,7 +117,7 @@ protected:
     int             m_itemHere;     // hot item in popup
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -241,7 +241,7 @@ protected:
     wxTreeItemId        m_itemHere;     // hot item in popup
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 

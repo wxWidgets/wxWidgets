@@ -76,9 +76,9 @@ protected:
     wxString m_descriptiveText;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxSearchCtrl)
+    wxDECLARE_DYNAMIC_CLASS(wxSearchCtrl);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // wxUSE_SEARCHCTRL

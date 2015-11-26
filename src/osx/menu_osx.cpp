@@ -37,7 +37,7 @@
 // ----------------------
 #include <string.h>
 
-IMPLEMENT_ABSTRACT_CLASS( wxMenuImpl , wxObject )
+wxIMPLEMENT_ABSTRACT_CLASS(wxMenuImpl, wxObject);
 
 wxMenuImpl::~wxMenuImpl()
 {

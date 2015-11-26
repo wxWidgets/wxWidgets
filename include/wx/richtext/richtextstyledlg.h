@@ -78,8 +78,8 @@ class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextStyleOrganiserDialog: public wxDialog
 {
-    DECLARE_DYNAMIC_CLASS( wxRichTextStyleOrganiserDialog )
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxRichTextStyleOrganiserDialog);
+    wxDECLARE_EVENT_TABLE();
     DECLARE_HELP_PROVISION()
 
 public:

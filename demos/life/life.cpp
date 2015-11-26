@@ -97,7 +97,7 @@ enum
 // --------------------------------------------------------------------------
 
 // Event tables
-BEGIN_EVENT_TABLE(LifeFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(LifeFrame, wxFrame)
     EVT_MENU            (wxID_NEW,     LifeFrame::OnMenu)
 #if wxUSE_FILEDLG
     EVT_MENU            (wxID_OPEN,    LifeFrame::OnOpen)
@@ -122,13 +122,13 @@ BEGIN_EVENT_TABLE(LifeFrame, wxFrame)
     EVT_COMMAND_SCROLL  (ID_SLIDER,    LifeFrame::OnSlider)
     EVT_TIMER           (ID_TIMER,     LifeFrame::OnTimer)
     EVT_CLOSE           (              LifeFrame::OnClose)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(LifeNavigator, wxMiniFrame)
+wxBEGIN_EVENT_TABLE(LifeNavigator, wxMiniFrame)
     EVT_CLOSE           (             LifeNavigator::OnClose)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(LifeCanvas, wxWindow)
+wxBEGIN_EVENT_TABLE(LifeCanvas, wxWindow)
     EVT_PAINT           (             LifeCanvas::OnPaint)
     EVT_SCROLLWIN       (             LifeCanvas::OnScroll)
     EVT_SIZE            (             LifeCanvas::OnSize)
@@ -137,11 +137,11 @@ BEGIN_EVENT_TABLE(LifeCanvas, wxWindow)
     EVT_LEFT_UP         (             LifeCanvas::OnMouse)
     EVT_LEFT_DCLICK     (             LifeCanvas::OnMouse)
     EVT_ERASE_BACKGROUND(             LifeCanvas::OnEraseBackground)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 // Create a new application object
-IMPLEMENT_APP(LifeApp)
+wxIMPLEMENT_APP(LifeApp);
 
 
 // ==========================================================================

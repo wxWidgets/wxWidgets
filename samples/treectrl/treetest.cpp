@@ -188,7 +188,7 @@ wxBEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
     EVT_RIGHT_DCLICK(MyTreeCtrl::OnRMouseDClick)
 wxEND_EVENT_TABLE()
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit()
 {
@@ -930,9 +930,9 @@ void MyFrame::OnSetBgColour(wxCommandEvent& WXUNUSED(event))
 
 // MyTreeCtrl implementation
 #if USE_GENERIC_TREECTRL
-IMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxGenericTreeCtrl)
+wxIMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxGenericTreeCtrl);
 #else
-IMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxTreeCtrl)
+wxIMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxTreeCtrl);
 #endif
 
 MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,

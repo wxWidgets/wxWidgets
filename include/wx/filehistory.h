@@ -94,7 +94,7 @@ private:
         wxFileHistory(size_t maxFiles = 9, wxWindowID idBase = wxID_FILE1)
             : wxFileHistoryBase(maxFiles, idBase) {}
 
-        DECLARE_DYNAMIC_CLASS(wxFileHistory)
+        wxDECLARE_DYNAMIC_CLASS(wxFileHistory);
     };
 #endif
 

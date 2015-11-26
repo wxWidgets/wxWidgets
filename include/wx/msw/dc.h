@@ -323,7 +323,7 @@ protected:
     static wxObjectList     sm_dcCache;
 #endif
 
-    DECLARE_CLASS(wxMSWDCImpl)
+    wxDECLARE_CLASS(wxMSWDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxMSWDCImpl);
 };
 

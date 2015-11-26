@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxColourPickerCtrlXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxColourPickerCtrlXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxColourPickerCtrlXmlHandler);
 
 public:
     wxColourPickerCtrlXmlHandler();

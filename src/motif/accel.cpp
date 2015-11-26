@@ -20,7 +20,7 @@
 
 #include <ctype.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject);
 
 class WXDLLEXPORT wxAcceleratorRefData: public wxObjectRefData
 {

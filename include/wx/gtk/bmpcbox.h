@@ -140,7 +140,7 @@ protected:
 private:
     void Init();
 
-    DECLARE_DYNAMIC_CLASS(wxBitmapComboBox)
+    wxDECLARE_DYNAMIC_CLASS(wxBitmapComboBox);
 };
 
 #endif // _WX_GTK_BMPCBOX_H_

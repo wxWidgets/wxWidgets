@@ -35,7 +35,7 @@ protected:
     virtual bool DoCanRead(wxInputStream& stream) wxOVERRIDE;
 #endif
 
-    DECLARE_DYNAMIC_CLASS(wxIFFHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxIFFHandler);
 };
 
 #endif // wxUSE_IMAGE && wxUSE_IFF

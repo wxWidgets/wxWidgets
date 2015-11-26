@@ -108,7 +108,7 @@ private:
                                 // (or a rect with width/height == 0 to show it for the entire window)
     unsigned int m_id;          // the id of this tooltip (ignored when m_rect width/height is 0)
 
-    DECLARE_ABSTRACT_CLASS(wxToolTip)
+    wxDECLARE_ABSTRACT_CLASS(wxToolTip);
     wxDECLARE_NO_COPY_CLASS(wxToolTip);
 };
 

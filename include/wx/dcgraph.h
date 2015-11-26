@@ -47,7 +47,7 @@ public:
 #endif // __WXMSW__
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGCDC)
+    wxDECLARE_DYNAMIC_CLASS(wxGCDC);
     wxDECLARE_NO_COPY_CLASS(wxGCDC);
 };
 
@@ -218,7 +218,7 @@ protected:
 private:
     void Init(wxGraphicsContext*);
 
-    DECLARE_CLASS(wxGCDCImpl)
+    wxDECLARE_CLASS(wxGCDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxGCDCImpl);
 };
 

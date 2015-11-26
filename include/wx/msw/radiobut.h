@@ -75,7 +75,7 @@ private:
     // sometimes gets out of sync in WM_COMMAND handler
     bool m_isChecked;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxRadioButton)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxRadioButton);
 };
 
 #endif // _WX_RADIOBUT_H_

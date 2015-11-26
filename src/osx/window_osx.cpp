@@ -75,12 +75,12 @@
 #include <string.h>
 
 #ifdef __WXUNIVERSAL__
-    IMPLEMENT_ABSTRACT_CLASS(wxWindowMac, wxWindowBase)
+    wxIMPLEMENT_ABSTRACT_CLASS(wxWindowMac, wxWindowBase);
 #endif
 
-BEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
+wxBEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
     EVT_MOUSE_EVENTS(wxWindowMac::OnMouseEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #define wxMAC_DEBUG_REDRAW 0
 #ifndef wxMAC_DEBUG_REDRAW
@@ -167,18 +167,18 @@ protected:
     {
     }
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxBlindPlateWindow)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxBlindPlateWindow);
+    wxDECLARE_EVENT_TABLE();
 };
 
 wxBlindPlateWindow::~wxBlindPlateWindow()
 {
 }
 
-IMPLEMENT_DYNAMIC_CLASS(wxBlindPlateWindow, wxWindow)
+wxIMPLEMENT_DYNAMIC_CLASS(wxBlindPlateWindow, wxWindow);
 
-BEGIN_EVENT_TABLE(wxBlindPlateWindow, wxWindow)
-END_EVENT_TABLE()
+wxBEGIN_EVENT_TABLE(wxBlindPlateWindow, wxWindow)
+wxEND_EVENT_TABLE()
 
 
 // ----------------------------------------------------------------------------
@@ -2856,7 +2856,7 @@ void wxWidgetImpl::RemoveAssociations(wxWidgetImpl* impl)
     }
 }
 
-IMPLEMENT_ABSTRACT_CLASS( wxWidgetImpl , wxObject )
+wxIMPLEMENT_ABSTRACT_CLASS(wxWidgetImpl, wxObject);
 
 wxWidgetImpl::wxWidgetImpl( wxWindowMac* peer , bool isRootControl, bool isUserPane )
 {

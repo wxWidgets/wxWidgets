@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxAnimationCtrlXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxAnimationCtrlXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxAnimationCtrlXmlHandler);
 
 public:
     wxAnimationCtrlXmlHandler();

@@ -178,7 +178,7 @@ private:
     void TestShortcuts();
 #endif // __WINDOWS__
 
-    DECLARE_NO_COPY_CLASS(FileNameTestCase)
+    wxDECLARE_NO_COPY_CLASS(FileNameTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

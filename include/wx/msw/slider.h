@@ -140,7 +140,7 @@ protected:
     // Platform-specific implementation of SetTickFreq
     virtual void DoSetTickFreq(int freq);
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxSlider)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxSlider);
 };
 
 #endif // _WX_SLIDER_H_

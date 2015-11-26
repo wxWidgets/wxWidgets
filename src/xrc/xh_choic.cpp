@@ -25,7 +25,7 @@
 
 #include "wx/xml/xml.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxChoiceXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxChoiceXmlHandler, wxXmlResourceHandler);
 
 wxChoiceXmlHandler::wxChoiceXmlHandler()
 : wxXmlResourceHandler() , m_insideBox(false)

@@ -213,7 +213,7 @@ void wxSVGFileDC::SetBitmapHandler(wxSVGBitmapHandler* handler)
 // wxSVGFileDCImpl
 // ----------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxSVGFileDCImpl, wxDC)
+wxIMPLEMENT_ABSTRACT_CLASS(wxSVGFileDCImpl, wxDC);
 
 wxSVGFileDCImpl::wxSVGFileDCImpl( wxSVGFileDC *owner, const wxString &filename,
                     int width, int height, double dpi ) :

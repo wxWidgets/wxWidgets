@@ -14,7 +14,7 @@
 // Group box
 class WXDLLIMPEXP_CORE wxGauge : public wxGaugeBase
 {
-    DECLARE_DYNAMIC_CLASS(wxGauge)
+    wxDECLARE_DYNAMIC_CLASS(wxGauge);
 
 public:
     inline wxGauge() { m_rangeMax = 0; m_gaugePos = 0; }
@@ -38,11 +38,9 @@ public:
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxGaugeNameStr);
 
-    void SetShadowWidth(int w);
     void SetRange(int r);
     void SetValue(int pos);
 
-    int GetShadowWidth() const ;
     int GetRange() const ;
     int GetValue() const ;
 

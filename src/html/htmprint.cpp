@@ -832,14 +832,14 @@ wxHtmlPrintout *wxHtmlEasyPrinting::CreatePrintout()
 
 class wxHtmlPrintingModule: public wxModule
 {
-DECLARE_DYNAMIC_CLASS(wxHtmlPrintingModule)
+    wxDECLARE_DYNAMIC_CLASS(wxHtmlPrintingModule);
 public:
     wxHtmlPrintingModule() : wxModule() {}
     bool OnInit() wxOVERRIDE { return true; }
     void OnExit() wxOVERRIDE { wxHtmlPrintout::CleanUpStatics(); }
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxHtmlPrintingModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlPrintingModule, wxModule);
 
 
 // This hack forces the linker to always link in m_* files

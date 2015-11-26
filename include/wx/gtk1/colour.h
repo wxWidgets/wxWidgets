@@ -63,7 +63,7 @@ protected:
     InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxColour)
+    wxDECLARE_DYNAMIC_CLASS(wxColour);
 };
 
 #endif // __GTKCOLOURH__

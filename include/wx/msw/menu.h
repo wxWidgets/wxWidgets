@@ -173,7 +173,7 @@ private:
     int m_maxAccelWidth;
 #endif // wxUSE_OWNER_DRAWN
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMenu)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxMenu);
 };
 
 // ----------------------------------------------------------------------------
@@ -261,7 +261,7 @@ protected:
 #endif
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMenuBar)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxMenuBar);
 };
 
 #endif // _WX_MENU_H_

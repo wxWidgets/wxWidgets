@@ -84,11 +84,11 @@ static wxWindow* gs_toBeFocusedWindow = NULL;
 // event tables
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxWindowX11, wxWindowBase)
+wxIMPLEMENT_ABSTRACT_CLASS(wxWindowX11, wxWindowBase);
 
-BEGIN_EVENT_TABLE(wxWindowX11, wxWindowBase)
+wxBEGIN_EVENT_TABLE(wxWindowX11, wxWindowBase)
     EVT_SYS_COLOUR_CHANGED(wxWindowX11::OnSysColourChanged)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
@@ -1778,10 +1778,10 @@ public:
     virtual void OnExit();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxWinModule)
+    wxDECLARE_DYNAMIC_CLASS(wxWinModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxWinModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxWinModule, wxModule);
 
 bool wxWinModule::OnInit()
 {

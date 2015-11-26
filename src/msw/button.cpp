@@ -61,9 +61,9 @@
 // macros
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxButton, wxButtonBase)
+wxBEGIN_EVENT_TABLE(wxButton, wxButtonBase)
     EVT_CHAR_HOOK(wxButton::OnCharHook)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

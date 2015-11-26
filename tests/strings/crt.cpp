@@ -63,7 +63,7 @@ private:
     void Strpbrk();
     void Strnlen();
 
-    DECLARE_NO_COPY_CLASS(CrtTestCase)
+    wxDECLARE_NO_COPY_CLASS(CrtTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

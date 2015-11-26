@@ -54,7 +54,7 @@ class wxAccelRefData : public wxObjectRefData
 // implementation
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS( wxAcceleratorTable, wxObject )
+wxIMPLEMENT_DYNAMIC_CLASS( wxAcceleratorTable, wxObject );
 
 QShortcut *ConvertAccelerator( wxAcceleratorEntry *e, QWidget *parent )
 {

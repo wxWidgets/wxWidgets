@@ -181,8 +181,8 @@ private:
     wxCursor*   m_currentCursor;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxSashWindow)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxSashWindow);
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxSashWindow);
 };
 
@@ -232,7 +232,7 @@ private:
     wxSashDragStatus    m_dragStatus;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSashEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSashEvent);
 };
 
 typedef void (wxEvtHandler::*wxSashEventFunction)(wxSashEvent&);

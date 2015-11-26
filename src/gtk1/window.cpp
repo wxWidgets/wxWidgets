@@ -2412,7 +2412,7 @@ wxMouseState wxGetMouseState()
 // in wxUniv/MSW this class is abstract because it doesn't have DoPopupMenu()
 // method
 #ifdef __WXUNIVERSAL__
-    IMPLEMENT_ABSTRACT_CLASS(wxWindowGTK, wxWindowBase)
+    wxIMPLEMENT_ABSTRACT_CLASS(wxWindowGTK, wxWindowBase);
 #endif // __WXUNIVERSAL__
 
 void wxWindowGTK::Init()
@@ -4198,10 +4198,10 @@ public:
     void OnExit();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxWinModule)
+    wxDECLARE_DYNAMIC_CLASS(wxWinModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxWinModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxWinModule, wxModule);
 
 bool wxWinModule::OnInit()
 {

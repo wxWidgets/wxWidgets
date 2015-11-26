@@ -210,7 +210,7 @@ private:
     void UTF8(const char *charSequence, const wchar_t *wideSequence, int option);
 #endif // HAVE_WCHAR_H
 
-    DECLARE_NO_COPY_CLASS(MBConvTestCase)
+    wxDECLARE_NO_COPY_CLASS(MBConvTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

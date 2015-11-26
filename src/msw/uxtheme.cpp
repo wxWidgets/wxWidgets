@@ -62,10 +62,10 @@ public:
     }
 
 
-    DECLARE_DYNAMIC_CLASS(wxUxThemeModule)
+    wxDECLARE_DYNAMIC_CLASS(wxUxThemeModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxUxThemeModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxUxThemeModule, wxModule);
 
 // ============================================================================
 // wxUxThemeEngine implementation

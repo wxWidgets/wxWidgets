@@ -23,7 +23,7 @@
 // Choice item
 class WXDLLIMPEXP_CORE wxChoice: public wxChoiceBase
 {
-    DECLARE_DYNAMIC_CLASS(wxChoice)
+    wxDECLARE_DYNAMIC_CLASS(wxChoice);
 
 public:
     wxChoice();

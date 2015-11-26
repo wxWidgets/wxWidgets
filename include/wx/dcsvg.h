@@ -242,7 +242,7 @@ private:
    // incremented in each SetClippingRegion() call.
    size_t m_clipUniqueId;
 
-   DECLARE_ABSTRACT_CLASS(wxSVGFileDCImpl)
+   wxDECLARE_ABSTRACT_CLASS(wxSVGFileDCImpl);
 };
 
 

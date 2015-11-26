@@ -52,7 +52,7 @@ wxDEFINE_EVENT( wxEVT_TOGGLEBUTTON, wxCommandEvent );
 // wxToggleBitmapButton
 // ------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxToggleBitmapButton, wxControl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxToggleBitmapButton, wxControl);
 
 bool wxToggleBitmapButton::Create(wxWindow *parent, wxWindowID id,
                             const wxBitmap &label, const wxPoint &pos,
@@ -225,7 +225,7 @@ wxToggleBitmapButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant
 // wxToggleButton
 // ------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxToggleButton, wxControl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxToggleButton, wxControl);
 
 bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxString &label, const wxPoint &pos,

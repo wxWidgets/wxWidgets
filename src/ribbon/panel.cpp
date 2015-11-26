@@ -33,11 +33,11 @@
 
 wxDEFINE_EVENT(wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, wxRibbonPanelEvent);
 
-IMPLEMENT_DYNAMIC_CLASS(wxRibbonPanelEvent, wxCommandEvent)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRibbonPanelEvent, wxCommandEvent);
 
-IMPLEMENT_CLASS(wxRibbonPanel, wxRibbonControl)
+wxIMPLEMENT_CLASS(wxRibbonPanel, wxRibbonControl);
 
-BEGIN_EVENT_TABLE(wxRibbonPanel, wxRibbonControl)
+wxBEGIN_EVENT_TABLE(wxRibbonPanel, wxRibbonControl)
     EVT_ENTER_WINDOW(wxRibbonPanel::OnMouseEnter)
     EVT_ERASE_BACKGROUND(wxRibbonPanel::OnEraseBackground)
     EVT_KILL_FOCUS(wxRibbonPanel::OnKillFocus)
@@ -46,7 +46,7 @@ BEGIN_EVENT_TABLE(wxRibbonPanel, wxRibbonControl)
     EVT_LEFT_DOWN(wxRibbonPanel::OnMouseClick)
     EVT_PAINT(wxRibbonPanel::OnPaint)
     EVT_SIZE(wxRibbonPanel::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxRibbonPanel::wxRibbonPanel() : m_expanded_dummy(NULL), m_expanded_panel(NULL)
 {

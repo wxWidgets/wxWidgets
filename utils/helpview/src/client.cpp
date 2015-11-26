@@ -55,25 +55,25 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-EVT_MENU(CLIENT_QUIT, MyFrame::OnExit)
-EVT_MENU(CLIENT_HELPMAIN, MyFrame::OnHelp_Main)
-EVT_MENU(CLIENT_HELPBOOK1, MyFrame::OnHelp_Book1)
-EVT_MENU(CLIENT_HELPBOOK2, MyFrame::OnHelp_Book2)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_MENU(CLIENT_QUIT, MyFrame::OnExit)
+    EVT_MENU(CLIENT_HELPMAIN, MyFrame::OnHelp_Main)
+    EVT_MENU(CLIENT_HELPBOOK1, MyFrame::OnHelp_Book1)
+    EVT_MENU(CLIENT_HELPBOOK2, MyFrame::OnHelp_Book2)
 
-EVT_MENU(CLIENT_HELPINDEX, MyFrame::OnHelp_Index)
-EVT_MENU(CLIENT_HELPCONTENTS, MyFrame::OnHelp_Contents)
-EVT_MENU(CLIENT_HELPSEARCH, MyFrame::OnHelp_Search)
-EVT_MENU(CLIENT_HELPTITLE, MyFrame::OnHelp_Title)
-EVT_MENU(CLIENT_HELPADDBOOK, MyFrame::OnHelp_Addbook)
-EVT_MENU(CLIENT_HELPTEMPDIR, MyFrame::OnHelp_Tempdir)
-EVT_MENU(CLIENT_HELPQUIT, MyFrame::OnHelp_Quitserver)
+    EVT_MENU(CLIENT_HELPINDEX, MyFrame::OnHelp_Index)
+    EVT_MENU(CLIENT_HELPCONTENTS, MyFrame::OnHelp_Contents)
+    EVT_MENU(CLIENT_HELPSEARCH, MyFrame::OnHelp_Search)
+    EVT_MENU(CLIENT_HELPTITLE, MyFrame::OnHelp_Title)
+    EVT_MENU(CLIENT_HELPADDBOOK, MyFrame::OnHelp_Addbook)
+    EVT_MENU(CLIENT_HELPTEMPDIR, MyFrame::OnHelp_Tempdir)
+    EVT_MENU(CLIENT_HELPQUIT, MyFrame::OnHelp_Quitserver)
 
-EVT_MENU(DIALOG_MODAL, MyFrame::ModalDlg)
-EVT_BUTTON(BUTTON_MODAL, MyFrame::ModalDlg)
-END_EVENT_TABLE()
+    EVT_MENU(DIALOG_MODAL, MyFrame::ModalDlg)
+    EVT_BUTTON(BUTTON_MODAL, MyFrame::ModalDlg)
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // globals
@@ -245,9 +245,9 @@ void MyFrame::ModalDlg(wxCommandEvent& WXUNUSED(event))
     dlg.ShowModal();
 }
 
-BEGIN_EVENT_TABLE(MyModalDialog, wxDialog)
-EVT_BUTTON(wxID_ANY, MyModalDialog::OnButton)
-END_EVENT_TABLE()
+wxBEGIN_EVENT_TABLE(MyModalDialog, wxDialog)
+    EVT_BUTTON(wxID_ANY, MyModalDialog::OnButton)
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // MyModalDialog

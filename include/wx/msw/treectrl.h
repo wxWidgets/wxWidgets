@@ -339,7 +339,7 @@ private:
     friend class wxTreeItemIndirectData;
     friend class wxTreeSortHelper;
 
-    DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
+    wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
     wxDECLARE_NO_COPY_CLASS(wxTreeCtrl);
 };
 

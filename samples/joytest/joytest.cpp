@@ -36,7 +36,7 @@
 
 MyFrame *frame = NULL;
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 // For drawing lines in a canvas
 long xpos = -1;

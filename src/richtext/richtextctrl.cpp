@@ -154,11 +154,11 @@ private:
 };
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS( wxRichTextCtrl, wxControl )
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextCtrl, wxControl);
 
-IMPLEMENT_DYNAMIC_CLASS( wxRichTextEvent, wxNotifyEvent )
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextEvent, wxNotifyEvent);
 
-BEGIN_EVENT_TABLE( wxRichTextCtrl, wxControl )
+wxBEGIN_EVENT_TABLE(wxRichTextCtrl, wxControl)
     EVT_PAINT(wxRichTextCtrl::OnPaint)
     EVT_ERASE_BACKGROUND(wxRichTextCtrl::OnEraseBackground)
     EVT_IDLE(wxRichTextCtrl::OnIdle)
@@ -209,7 +209,7 @@ BEGIN_EVENT_TABLE( wxRichTextCtrl, wxControl )
     EVT_MENU(wxID_RICHTEXT_PROPERTIES3, wxRichTextCtrl::OnProperties)
     EVT_UPDATE_UI(wxID_RICHTEXT_PROPERTIES3, wxRichTextCtrl::OnUpdateProperties)
 
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 /*!
  * wxRichTextCtrl

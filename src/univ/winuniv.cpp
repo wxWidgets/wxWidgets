@@ -88,18 +88,18 @@ public:
 
 // we can't use wxWindowNative here as it won't be expanded inside the macro
 #if defined(__WXMSW__)
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowMSW)
+    wxIMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowMSW);
 #elif defined(__WXGTK__)
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowGTK)
+    wxIMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowGTK);
 #elif defined(__WXOSX__)
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowMac)
+    wxIMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowMac);
 #elif defined(__WXDFB__)
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowDFB)
+    wxIMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowDFB);
 #elif defined(__WXX11__)
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowX11)
+    wxIMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowX11);
 #endif
 
-BEGIN_EVENT_TABLE(wxWindow, wxWindowNative)
+wxBEGIN_EVENT_TABLE(wxWindow, wxWindowNative)
     EVT_SIZE(wxWindow::OnSize)
 
 #if wxUSE_ACCEL || wxUSE_MENUS
@@ -114,7 +114,7 @@ BEGIN_EVENT_TABLE(wxWindow, wxWindowNative)
     EVT_PAINT(wxWindow::OnPaint)
     EVT_NC_PAINT(wxWindow::OnNcPaint)
     EVT_ERASE_BACKGROUND(wxWindow::OnErase)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // creation

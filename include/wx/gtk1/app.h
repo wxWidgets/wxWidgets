@@ -71,7 +71,7 @@ private:
     // true if we're inside an assert modal dialog
     bool m_isInAssert;
 
-    DECLARE_DYNAMIC_CLASS(wxApp)
+    wxDECLARE_DYNAMIC_CLASS(wxApp);
 };
 
 #endif // __GTKAPPH__

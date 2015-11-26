@@ -405,10 +405,10 @@ public:
         close( idleFds[1] );
     }
 private:
-    DECLARE_DYNAMIC_CLASS(wxIdlePipeModule)
+    wxDECLARE_DYNAMIC_CLASS(wxIdlePipeModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxIdlePipeModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxIdlePipeModule, wxModule);
 
 static void wxInputCallback( XtPointer, int* fd, XtInputId* )
 {

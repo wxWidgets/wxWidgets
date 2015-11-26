@@ -235,7 +235,7 @@ private:
     // MSWGetSystemMenu(). Owned by this window.
     wxMenu *m_menuSystem;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxTopLevelWindowMSW);
 };
 

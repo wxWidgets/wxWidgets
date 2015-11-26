@@ -179,7 +179,7 @@ public :
 protected :
     wxMenuItem* m_peer;
 
-    DECLARE_ABSTRACT_CLASS(wxMenuItemImpl)
+    wxDECLARE_ABSTRACT_CLASS(wxMenuItemImpl);
 } ;
 
 class wxMenuImpl : public wxObject
@@ -213,7 +213,7 @@ public :
 protected :
     wxMenu* m_peer;
 
-    DECLARE_ABSTRACT_CLASS(wxMenuItemImpl)
+    wxDECLARE_ABSTRACT_CLASS(wxMenuItemImpl);
 } ;
 #endif
 
@@ -568,7 +568,7 @@ protected :
     bool                m_needsFrame;
     bool                m_shouldSendEvents;
 
-    DECLARE_ABSTRACT_CLASS(wxWidgetImpl)
+    wxDECLARE_ABSTRACT_CLASS(wxWidgetImpl);
 };
 
 //
@@ -913,7 +913,7 @@ public :
     virtual void RestoreWindowLevel() {}
 protected :
     wxNonOwnedWindow*   m_wxPeer;
-    DECLARE_ABSTRACT_CLASS(wxNonOwnedWindowImpl)
+    wxDECLARE_ABSTRACT_CLASS(wxNonOwnedWindowImpl);
 };
 
 #endif // wxUSE_GUI

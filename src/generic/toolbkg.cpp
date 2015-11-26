@@ -35,16 +35,16 @@
 // event table
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxToolbook, wxBookCtrlBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxToolbook, wxBookCtrlBase);
 
 wxDEFINE_EVENT( wxEVT_TOOLBOOK_PAGE_CHANGING, wxBookCtrlEvent );
 wxDEFINE_EVENT( wxEVT_TOOLBOOK_PAGE_CHANGED,  wxBookCtrlEvent );
 
-BEGIN_EVENT_TABLE(wxToolbook, wxBookCtrlBase)
+wxBEGIN_EVENT_TABLE(wxToolbook, wxBookCtrlBase)
     EVT_SIZE(wxToolbook::OnSize)
     EVT_TOOL_RANGE(1, 50, wxToolbook::OnToolSelected)
     EVT_IDLE(wxToolbook::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // wxToolbook implementation

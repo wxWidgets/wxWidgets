@@ -121,7 +121,7 @@ public :
     virtual void         controlTextDidChange();
 protected:
     WXWidget m_osxView;
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetIPhoneImpl)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetIPhoneImpl);
 };
 
 class wxNonOwnedWindowIPhoneImpl : public wxNonOwnedWindowImpl
@@ -189,7 +189,7 @@ protected :
     WX_UIWindow          m_macWindow;
     void *              m_macFullScreenData ;
     bool                m_initialShowSent;
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowIPhoneImpl)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowIPhoneImpl);
 };
 
 #ifdef __OBJC__

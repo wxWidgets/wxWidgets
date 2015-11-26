@@ -107,7 +107,7 @@ private:
                  m_child2,
                  m_grandchild;
 
-    DECLARE_NO_COPY_CLASS(TreeCtrlTestCase)
+    wxDECLARE_NO_COPY_CLASS(TreeCtrlTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default
@@ -587,7 +587,12 @@ void TreeCtrlTestCase::KeyNavigation()
 
     CPPUNIT_ASSERT(m_tree->IsExpanded(m_root));
 
+#ifdef wxHAS_GENERIC_TREECTRL
     sim.Char('-');
+#else
+    sim.Char(WXK_LEFT);
+#endif
+
     wxYield();
 
     CPPUNIT_ASSERT(!m_tree->IsExpanded(m_root));

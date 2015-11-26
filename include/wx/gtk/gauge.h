@@ -40,11 +40,6 @@ public:
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxGaugeNameStr );
 
-    void SetShadowWidth( int WXUNUSED(w) ) { }
-    void SetBezelFace( int WXUNUSED(w) ) { }
-    int GetShadowWidth() const { return 0; }
-    int GetBezelFace() const { return 0; }
-
     // determinate mode API
     void SetRange( int r );
     void SetValue( int pos );
@@ -78,7 +73,7 @@ protected:
 private:
     void Init() { m_rangeMax = m_gaugePos = 0; }
 
-    DECLARE_DYNAMIC_CLASS(wxGauge)
+    wxDECLARE_DYNAMIC_CLASS(wxGauge);
 };
 
 #endif

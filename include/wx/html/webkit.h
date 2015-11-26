@@ -28,7 +28,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxWebKitCtrlNameStr[];
 class WXDLLIMPEXP_CORE wxWebKitCtrl : public wxControl
 {
 public:
-    DECLARE_DYNAMIC_CLASS(wxWebKitCtrl)
+    wxDECLARE_DYNAMIC_CLASS(wxWebKitCtrl);
 
     wxWebKitCtrl() {}
     wxWebKitCtrl(wxWindow *parent,
@@ -97,7 +97,7 @@ public:
     void OnMove(wxMoveEvent &event);
     void OnMouseEvents(wxMouseEvent &event);
 protected:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     void MacVisibilityChanged();
 
 private:
@@ -140,7 +140,7 @@ enum {
 
 class WXDLLIMPEXP_CORE wxWebKitBeforeLoadEvent : public wxCommandEvent
 {
-    DECLARE_DYNAMIC_CLASS( wxWebKitBeforeLoadEvent )
+    wxDECLARE_DYNAMIC_CLASS(wxWebKitBeforeLoadEvent);
 
 public:
     bool IsCancelled() { return m_cancelled; }
@@ -161,7 +161,7 @@ protected:
 
 class WXDLLIMPEXP_CORE wxWebKitStateChangedEvent : public wxCommandEvent
 {
-    DECLARE_DYNAMIC_CLASS( wxWebKitStateChangedEvent )
+    wxDECLARE_DYNAMIC_CLASS(wxWebKitStateChangedEvent);
 
 public:
     int GetState() { return m_state; }
@@ -180,7 +180,7 @@ protected:
 
 class WXDLLIMPEXP_CORE wxWebKitNewWindowEvent : public wxCommandEvent
 {
-    DECLARE_DYNAMIC_CLASS( wxWebKitNewWindowEvent )
+    wxDECLARE_DYNAMIC_CLASS(wxWebKitNewWindowEvent);
 public:
     wxString GetURL() const { return m_url; }
     void SetURL(const wxString& url) { m_url = url; }

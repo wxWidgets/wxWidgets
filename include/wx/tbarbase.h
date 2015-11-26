@@ -265,7 +265,7 @@ protected:
     wxMenu *m_dropdownMenu;
 #endif
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxToolBarToolBase)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxToolBarToolBase);
 };
 
 // a list of toolbar tools
@@ -695,7 +695,7 @@ protected:
     wxCoord m_defaultWidth, m_defaultHeight;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxToolBarBase);
 };
 

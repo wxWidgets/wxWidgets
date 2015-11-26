@@ -167,7 +167,7 @@ private:
     void Iteration();
 #endif
 
-    DECLARE_NO_COPY_CLASS(UnicodeTestCase)
+    wxDECLARE_NO_COPY_CLASS(UnicodeTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

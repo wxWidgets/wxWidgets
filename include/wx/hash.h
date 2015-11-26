@@ -275,7 +275,7 @@ private:
         virtual void DoDeleteContents( wxHashTableBase_Node* node )           \
             { delete (eltype*)node->GetData(); }                              \
                                                                               \
-        DECLARE_NO_COPY_CLASS(hashclass)                                      \
+        wxDECLARE_NO_COPY_CLASS(hashclass);                                   \
     }
 
 

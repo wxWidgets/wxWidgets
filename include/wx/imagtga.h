@@ -38,7 +38,7 @@ protected:
     virtual bool DoCanRead(wxInputStream& stream) wxOVERRIDE;
 #endif // wxUSE_STREAMS
 
-    DECLARE_DYNAMIC_CLASS(wxTGAHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxTGAHandler);
 };
 
 #endif // wxUSE_TGA

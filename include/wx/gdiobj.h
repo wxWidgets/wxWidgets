@@ -86,7 +86,7 @@ protected:
     virtual wxGDIRefData *CreateGDIRefData() const = 0;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const = 0;
 
-    DECLARE_DYNAMIC_CLASS(wxGDIObject)
+    wxDECLARE_DYNAMIC_CLASS(wxGDIObject);
 };
 
 #endif // _WX_GDIOBJ_H_BASE_

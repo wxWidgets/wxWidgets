@@ -67,7 +67,7 @@ wxCursorRefData::~wxCursorRefData()
 
 #define M_CURSORDATA static_cast<wxCursorRefData*>(m_refData)
 
-IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject);
 
 wxCursor::wxCursor()
 {

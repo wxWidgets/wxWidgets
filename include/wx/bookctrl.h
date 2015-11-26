@@ -356,10 +356,10 @@ private:
     // internal border
     unsigned int m_internalBorder;
 
-    DECLARE_ABSTRACT_CLASS(wxBookCtrlBase)
+    wxDECLARE_ABSTRACT_CLASS(wxBookCtrlBase);
     wxDECLARE_NO_COPY_CLASS(wxBookCtrlBase);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -398,7 +398,7 @@ private:
     int m_nSel,     // currently selected page
         m_nOldSel;  // previously selected page
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxBookCtrlEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxBookCtrlEvent);
 };
 
 typedef void (wxEvtHandler::*wxBookCtrlEventFunction)(wxBookCtrlEvent&);

@@ -56,7 +56,7 @@ enum {
 // wxWidgets macro: implement dynamic class
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS( MyResizableListCtrl, wxListCtrl )
+wxIMPLEMENT_DYNAMIC_CLASS( MyResizableListCtrl, wxListCtrl );
 
 //-----------------------------------------------------------------------------
 // Event table: connect the events to the handler functions to process them

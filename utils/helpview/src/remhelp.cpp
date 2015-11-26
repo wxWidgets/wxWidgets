@@ -84,7 +84,7 @@ bool rhhcConnection::OnDisconnect()
 
 // wxRemoteHtmlHelpController class
 
-IMPLEMENT_CLASS(wxRemoteHtmlHelpController, wxHelpControllerBase)
+wxIMPLEMENT_CLASS(wxRemoteHtmlHelpController, wxHelpControllerBase);
 
 wxRemoteHtmlHelpController::wxRemoteHtmlHelpController(int style )
 {

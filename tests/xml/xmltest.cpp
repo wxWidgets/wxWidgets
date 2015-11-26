@@ -95,7 +95,7 @@ private:
     void SetRoot();
     void CopyNode();
 
-    DECLARE_NO_COPY_CLASS(XmlTestCase)
+    wxDECLARE_NO_COPY_CLASS(XmlTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

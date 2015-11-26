@@ -31,8 +31,8 @@
 
 wxDEFINE_EVENT( wxEVT_END_PROCESS, wxProcessEvent );
 
-IMPLEMENT_DYNAMIC_CLASS(wxProcess, wxEvtHandler)
-IMPLEMENT_DYNAMIC_CLASS(wxProcessEvent, wxEvent)
+wxIMPLEMENT_DYNAMIC_CLASS(wxProcess, wxEvtHandler);
+wxIMPLEMENT_DYNAMIC_CLASS(wxProcessEvent, wxEvent);
 
 // ============================================================================
 // wxProcess implementation

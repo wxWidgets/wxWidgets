@@ -31,7 +31,7 @@ private:
     wxString m_helpFile;
 };
 
-DECLARE_APP(FortyApp)
+wxDECLARE_APP(FortyApp);
 
 class FortyCanvas;
 class FortyFrame: public wxFrame
@@ -56,7 +56,7 @@ public:
 
     FortyCanvas* GetCanvas() { return m_canvas; }
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
 private:
     enum MenuCommands {

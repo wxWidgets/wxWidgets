@@ -63,7 +63,7 @@ private:
     void GraphicsGetTextExtent();
 #endif // TEST_GC
 
-    DECLARE_NO_COPY_CLASS(MeasuringTextTestCase)
+    wxDECLARE_NO_COPY_CLASS(MeasuringTextTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

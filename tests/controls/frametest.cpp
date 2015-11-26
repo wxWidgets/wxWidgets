@@ -38,7 +38,7 @@ private:
 
     wxFrame *m_frame;
 
-    DECLARE_NO_COPY_CLASS(FrameTestCase)
+    wxDECLARE_NO_COPY_CLASS(FrameTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

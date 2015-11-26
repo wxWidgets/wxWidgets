@@ -42,7 +42,7 @@ private:
     void FileDialog();
     void CustomDialog();
 
-    DECLARE_NO_COPY_CLASS(ModalDialogsTestCase)
+    wxDECLARE_NO_COPY_CLASS(ModalDialogsTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

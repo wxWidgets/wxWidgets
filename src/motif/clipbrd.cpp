@@ -185,7 +185,7 @@ static void wxClipboardCallback( Widget widget, long* data_id,
 #endif // Less/Motif
 }
 
-IMPLEMENT_DYNAMIC_CLASS(wxClipboard,wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject);
 
 wxClipboard::wxClipboard()
 {

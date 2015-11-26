@@ -182,7 +182,7 @@ private:
     void GlibcMisc1();
     void GlibcMisc2();
 
-    DECLARE_NO_COPY_CLASS(VsnprintfTestCase)
+    wxDECLARE_NO_COPY_CLASS(VsnprintfTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

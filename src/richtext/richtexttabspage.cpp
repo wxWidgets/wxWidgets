@@ -16,13 +16,13 @@
  * wxRichTextTabsPage type definition
  */
 
-IMPLEMENT_DYNAMIC_CLASS( wxRichTextTabsPage, wxRichTextDialogPage )
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextTabsPage, wxRichTextDialogPage);
 
 /*!
  * wxRichTextTabsPage event table definition
  */
 
-BEGIN_EVENT_TABLE( wxRichTextTabsPage, wxRichTextDialogPage )
+wxBEGIN_EVENT_TABLE(wxRichTextTabsPage, wxRichTextDialogPage)
 
 ////@begin wxRichTextTabsPage event table entries
     EVT_LISTBOX( ID_RICHTEXTTABSPAGE_TABLIST, wxRichTextTabsPage::OnTablistSelected )
@@ -34,7 +34,7 @@ BEGIN_EVENT_TABLE( wxRichTextTabsPage, wxRichTextDialogPage )
     EVT_UPDATE_UI( ID_RICHTEXTTABSPAGE_DELETE_ALL_TABS, wxRichTextTabsPage::OnDeleteAllTabsUpdate )
 ////@end wxRichTextTabsPage event table entries
 
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_HELP_PROVISION(wxRichTextTabsPage)
 

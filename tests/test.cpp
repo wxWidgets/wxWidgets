@@ -336,11 +336,18 @@ public:
 
         event.Skip();
     }
+
+    virtual int OnRun()
+    {
+        if ( TestAppBase::OnRun() != 0 )
+            m_exitcode = EXIT_FAILURE;
+
+        return m_exitcode;
+    }
 #else // !wxUSE_GUI
     virtual int OnRun()
     {
-        m_exitcode = RunTests();
-        return m_exitcode;
+        return RunTests();
     }
 #endif // wxUSE_GUI/!wxUSE_GUI
 
@@ -373,11 +380,13 @@ private:
     FilterEventFunc m_filterEventFunc;
     ProcessEventFunc m_processEventFunc;
 
+#if wxUSE_GUI
     // the program exit code
     int m_exitcode;
+#endif // wxUSE_GUI
 };
 
-IMPLEMENT_APP_NO_MAIN(TestApp)
+wxIMPLEMENT_APP_NO_MAIN(TestApp);
 
 
 // ----------------------------------------------------------------------------
@@ -467,7 +476,7 @@ extern bool IsAutomaticTest()
             username = wxGetUserId();
 
         username.MakeLower();
-        s_isAutomatic = username.Matches("buildslave*") ||
+        s_isAutomatic = username == "buildbot" ||
                             username.Matches("sandbox*");
     }
 
@@ -510,7 +519,9 @@ TestApp::TestApp()
 
     m_locale = NULL;
 
+#if wxUSE_GUI
     m_exitcode = EXIT_SUCCESS;
+#endif // wxUSE_GUI
 }
 
 // Init
@@ -715,7 +726,7 @@ int TestApp::OnExit()
     delete GetTopWindow();
 #endif // wxUSE_GUI
 
-    return m_exitcode;
+    return TestAppBase::OnExit();
 }
 
 // List the tests

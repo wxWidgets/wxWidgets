@@ -177,8 +177,8 @@ protected:
     wxFileData::fileListFieldType m_sort_field;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxFileListCtrl)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxFileListCtrl);
+    wxDECLARE_EVENT_TABLE();
 };
 
 class WXDLLIMPEXP_CORE wxGenericFileCtrl : public wxNavigationEnabled<wxControl>,
@@ -294,8 +294,8 @@ private:
     bool    m_ignoreChanges;
     bool    m_noSelChgEvent; // suppress selection changed events.
 
-    DECLARE_DYNAMIC_CLASS( wxGenericFileCtrl )
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxGenericFileCtrl);
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // wxUSE_FILECTRL

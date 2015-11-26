@@ -41,7 +41,7 @@
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxVListBox, wxVScrolledWindow)
+wxBEGIN_EVENT_TABLE(wxVListBox, wxVScrolledWindow)
     EVT_PAINT(wxVListBox::OnPaint)
 
     EVT_KEY_DOWN(wxVListBox::OnKeyDown)
@@ -52,13 +52,13 @@ BEGIN_EVENT_TABLE(wxVListBox, wxVScrolledWindow)
     EVT_KILL_FOCUS(wxVListBox::OnSetOrKillFocus)
 
     EVT_SIZE(wxVListBox::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
 // ============================================================================
 
-IMPLEMENT_ABSTRACT_CLASS(wxVListBox, wxVScrolledWindow)
+wxIMPLEMENT_ABSTRACT_CLASS(wxVListBox, wxVScrolledWindow);
 const char wxVListBoxNameStr[] = "wxVListBox";
 
 // ----------------------------------------------------------------------------

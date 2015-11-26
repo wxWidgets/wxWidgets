@@ -183,8 +183,8 @@ private:
     // the popup listbox
     wxListBox *m_lbox;
 
-    //DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxComboBox)
+    //wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS(wxComboBox);
 };
 
 #endif // _WX_UNIV_COMBOBOX_H_

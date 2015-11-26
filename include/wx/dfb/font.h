@@ -114,7 +114,7 @@ protected:
     virtual wxFontFamily DoGetFamily() const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxFont)
+    wxDECLARE_DYNAMIC_CLASS(wxFont);
 };
 
 #endif // _WX_DFB_FONT_H_

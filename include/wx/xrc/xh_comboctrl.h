@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxComboCtrlXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxComboCtrlXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxComboCtrlXmlHandler);
 
 public:
     wxComboCtrlXmlHandler();

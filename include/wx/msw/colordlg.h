@@ -67,7 +67,7 @@ protected:
     bool m_movedWindow;
 
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxColourDialog)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxColourDialog);
 };
 
 #endif // _WX_COLORDLG_H_

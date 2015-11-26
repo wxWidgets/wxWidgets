@@ -58,11 +58,11 @@ static const int wxID_TEXT = 3000;
 // wxTextEntryDialog
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxTextEntryDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(wxTextEntryDialog, wxDialog)
     EVT_BUTTON(wxID_OK, wxTextEntryDialog::OnOK)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-IMPLEMENT_CLASS(wxTextEntryDialog, wxDialog)
+wxIMPLEMENT_CLASS(wxTextEntryDialog, wxDialog);
 
 bool wxTextEntryDialog::Create(wxWindow *parent,
                                      const wxString& message,
@@ -187,7 +187,7 @@ void wxTextEntryDialog::SetTextValidator( const wxTextValidator& validator )
 // wxPasswordEntryDialog
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxPasswordEntryDialog, wxTextEntryDialog)
+wxIMPLEMENT_CLASS(wxPasswordEntryDialog, wxTextEntryDialog);
 
 bool wxPasswordEntryDialog::Create(wxWindow *parent,
                                    const wxString& message,

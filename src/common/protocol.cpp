@@ -33,7 +33,7 @@
 // wxProtoInfo
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxProtoInfo, wxObject)
+wxIMPLEMENT_CLASS(wxProtoInfo, wxObject);
 
 wxProtoInfo::wxProtoInfo(const wxChar *name, const wxChar *serv,
                          const bool need_host1, wxClassInfo *info)
@@ -56,9 +56,9 @@ wxProtoInfo::wxProtoInfo(const wxChar *name, const wxChar *serv,
 // ----------------------------------------------------------------------------
 
 #if wxUSE_SOCKETS
-IMPLEMENT_ABSTRACT_CLASS(wxProtocol, wxSocketClient)
+wxIMPLEMENT_ABSTRACT_CLASS(wxProtocol, wxSocketClient);
 #else
-IMPLEMENT_ABSTRACT_CLASS(wxProtocol, wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxProtocol, wxObject);
 #endif
 
 wxProtocol::wxProtocol()

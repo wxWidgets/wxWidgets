@@ -141,7 +141,7 @@ public:
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height) wxOVERRIDE;
     virtual void DoGetSizeMM(int* width, int* height) const wxOVERRIDE;
 
-    DECLARE_ABSTRACT_CLASS(wxGTKDCImpl)
+    wxDECLARE_ABSTRACT_CLASS(wxGTKDCImpl);
 };
 
 // this must be defined when wxDC::Blit() honours the DC origin and needed to

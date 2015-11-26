@@ -35,7 +35,7 @@ class WXDLLIMPEXP_HTML wxHtmlListBox : public wxVListBox,
                                        public wxHtmlWindowInterface,
                                        public wxHtmlWindowMouseHelper
 {
-    DECLARE_ABSTRACT_CLASS(wxHtmlListBox)
+    wxDECLARE_ABSTRACT_CLASS(wxHtmlListBox);
 public:
     // constructors and such
     // ---------------------
@@ -183,7 +183,7 @@ private:
     friend class wxHtmlListBoxWinInterface;
 
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxHtmlListBox);
 };
 
@@ -198,7 +198,7 @@ private:
 class WXDLLIMPEXP_HTML wxSimpleHtmlListBox :
     public wxWindowWithItems<wxHtmlListBox, wxItemContainer>
 {
-    DECLARE_ABSTRACT_CLASS(wxSimpleHtmlListBox)
+    wxDECLARE_ABSTRACT_CLASS(wxSimpleHtmlListBox);
 public:
     // wxListbox-compatible constructors
     // ---------------------------------

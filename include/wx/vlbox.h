@@ -302,9 +302,9 @@ private:
     // the selection bg colour
     wxColour m_colBgSel;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxVListBox);
-    DECLARE_ABSTRACT_CLASS(wxVListBox)
+    wxDECLARE_ABSTRACT_CLASS(wxVListBox);
 };
 
 #endif // _WX_VLBOX_H_

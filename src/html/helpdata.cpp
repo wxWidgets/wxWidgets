@@ -260,7 +260,7 @@ wxString wxHtmlHelpDataItem::GetIndentedName() const
 }
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpData, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpData, wxObject);
 
 wxHtmlHelpData::wxHtmlHelpData()
 {

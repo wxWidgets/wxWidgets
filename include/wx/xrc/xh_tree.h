@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxTreeCtrlXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxTreeCtrlXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxTreeCtrlXmlHandler);
 
 public:
     wxTreeCtrlXmlHandler();

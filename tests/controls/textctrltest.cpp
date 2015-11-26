@@ -122,7 +122,7 @@ private:
 
     static long ms_style;
 
-    DECLARE_NO_COPY_CLASS(TextCtrlTestCase)
+    wxDECLARE_NO_COPY_CLASS(TextCtrlTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

@@ -114,9 +114,9 @@ wxDocument class, you need to derive a new class and override at least the
 member functions SaveObject and LoadObject. SaveObject and LoadObject will be
 called by the framework when the document needs to be saved or loaded.
 
-Use the macros DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS in order to
-allow the framework to create document objects on demand. When you create a
-wxDocTemplate object on application initialization, you should pass
+Use the macros wxDECLARE_DYNAMIC_CLASS and wxIMPLEMENT_DYNAMIC_CLASS in order
+to allow the framework to create document objects on demand. When you create
+a wxDocTemplate object on application initialization, you should pass
 CLASSINFO(YourDocumentClass) to the wxDocTemplate constructor so that it knows
 how to create an instance of this class.
 
@@ -139,8 +139,8 @@ To use the abstract wxView class, you need to derive a new class and override
 at least the member functions OnCreate, OnDraw, OnUpdate and OnClose. You will
 probably want to respond to menu commands from the frame containing the view.
 
-Use the macros DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS in order to
-allow the framework to create view objects on demand. When you create a
+Use the macros wxDECLARE_DYNAMIC_CLASS and wxIMPLEMENT_DYNAMIC_CLASS in order
+to allow the framework to create view objects on demand. When you create a
 wxDocTemplate object on application initialization, you should pass
 CLASSINFO(YourViewClass) to the wxDocTemplate constructor so that it knows how
 to create an instance of this class.
@@ -295,10 +295,10 @@ In order to respond to a file load command from one of these identifiers, you
 need to handle them using an event handler, for example:
 
 @code
-BEGIN_EVENT_TABLE(wxDocParentFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(wxDocParentFrame, wxFrame)
     EVT_MENU(wxID_EXIT, wxDocParentFrame::OnExit)
     EVT_MENU_RANGE(wxID_FILE1, wxID_FILE9, wxDocParentFrame::OnMRUFile)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxDocParentFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {

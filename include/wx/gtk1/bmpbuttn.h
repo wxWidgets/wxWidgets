@@ -66,7 +66,7 @@ protected:
     void Init();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxBitmapButton)
+    wxDECLARE_DYNAMIC_CLASS(wxBitmapButton);
 };
 
 #endif // __BMPBUTTONH__

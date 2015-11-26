@@ -24,7 +24,7 @@
 
 static const long DEFAULT_RANGE = 100;
 
-IMPLEMENT_DYNAMIC_CLASS(wxGaugeXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxGaugeXmlHandler, wxXmlResourceHandler);
 
 wxGaugeXmlHandler::wxGaugeXmlHandler()
                   :wxXmlResourceHandler()
@@ -50,14 +50,6 @@ wxObject *wxGaugeXmlHandler::DoCreateResource()
     if( HasParam(wxT("value")))
     {
         control->SetValue(GetLong(wxT("value")));
-    }
-    if( HasParam(wxT("shadow")))
-    {
-        control->SetShadowWidth(GetDimension(wxT("shadow")));
-    }
-    if( HasParam(wxT("bezel")))
-    {
-        control->SetBezelFace(GetDimension(wxT("bezel")));
     }
 
     SetupWindow(control);

@@ -41,7 +41,7 @@ private:
     void VeryLittleSpace();
     void HasThreeDots();
 
-    DECLARE_NO_COPY_CLASS(EllipsizationTestCase)
+    wxDECLARE_NO_COPY_CLASS(EllipsizationTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

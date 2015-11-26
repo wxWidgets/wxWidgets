@@ -21,7 +21,7 @@ public:
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 
-    DECLARE_DYNAMIC_CLASS(wxSliderXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxSliderXmlHandler);
 };
 
 #endif // wxUSE_XRC && wxUSE_SLIDER

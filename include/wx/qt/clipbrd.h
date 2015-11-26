@@ -37,8 +37,8 @@ private:
     wxEvtHandlerRef    m_sink;
 
     bool m_open;
-    
-    DECLARE_DYNAMIC_CLASS(wxClipboard)
+
+    wxDECLARE_DYNAMIC_CLASS(wxClipboard);
 };
 
 #endif // _WX_QT_CLIPBRD_H_

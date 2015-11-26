@@ -111,9 +111,9 @@ public:
     static int m_nCmdShow;
 
 protected:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxApp);
-    DECLARE_DYNAMIC_CLASS(wxApp)
+    wxDECLARE_DYNAMIC_CLASS(wxApp);
 };
 
 #ifdef __WXWINCE__

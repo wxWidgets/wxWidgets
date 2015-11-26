@@ -164,7 +164,7 @@ DEFINE_GUID(IID_IFileDialog,
 // wxWidgets macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxDirDialog, wxDialog)
+wxIMPLEMENT_CLASS(wxDirDialog, wxDialog);
 
 // ----------------------------------------------------------------------------
 // private functions prototypes

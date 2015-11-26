@@ -75,7 +75,7 @@ static void MaskToAlpha(GdkPixmap* mask, GdkPixbuf* pixbuf, int w, int h)
 // wxMask
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMask, wxMaskBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxMask, wxMaskBase);
 
 wxMask::wxMask()
 {
@@ -410,7 +410,7 @@ bool wxBitmapRefData::IsOk() const
 
 #define M_BMPDATA static_cast<wxBitmapRefData*>(m_refData)
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmap,wxGDIObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxBitmap,wxGDIObject);
 
 wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type)
 {

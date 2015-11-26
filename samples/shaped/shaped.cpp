@@ -217,7 +217,7 @@ private:
 // the application class
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 // `Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()

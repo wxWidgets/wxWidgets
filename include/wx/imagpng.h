@@ -57,7 +57,7 @@ protected:
 #endif
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPNGHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxPNGHandler);
 };
 
 #endif

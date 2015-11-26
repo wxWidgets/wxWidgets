@@ -51,7 +51,7 @@ private:
     void TestCtypeFunctionsWith(const wxXLocale& loc);
     void TestStdlibFunctionsWith(const wxXLocale& loc);
 
-    DECLARE_NO_COPY_CLASS(XLocaleTestCase)
+    wxDECLARE_NO_COPY_CLASS(XLocaleTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

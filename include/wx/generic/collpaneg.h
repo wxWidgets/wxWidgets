@@ -103,8 +103,8 @@ private:
     void OnButton(wxCommandEvent &ev);
     void OnSize(wxSizeEvent &ev);
 
-    DECLARE_DYNAMIC_CLASS(wxGenericCollapsiblePane)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxGenericCollapsiblePane);
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // _WX_COLLAPSABLE_PANE_H_GENERIC_

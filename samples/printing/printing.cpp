@@ -62,7 +62,7 @@ wxPageSetupDialogData* g_pageSetupData = NULL;
 // MyApp
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_APP(MyApp)
+wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit(void)
 {

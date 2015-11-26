@@ -45,7 +45,7 @@ protected:
     void DoApplyWidgetStyle(GtkRcStyle *style);
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxStaticBox)
+    wxDECLARE_DYNAMIC_CLASS(wxStaticBox);
 };
 
 #endif // __GTKSTATICBOXH__

@@ -47,7 +47,7 @@ public:
 private:
     QScrollBar *m_qtScrollBar;
 
-    DECLARE_DYNAMIC_CLASS(wxScrollBar)
+    wxDECLARE_DYNAMIC_CLASS(wxScrollBar);
 };
 
 

@@ -96,7 +96,7 @@ private:
 
     char m_testData[TEST_SIZE];
 
-    DECLARE_NO_COPY_CLASS(StdStreamTestCase)
+    wxDECLARE_NO_COPY_CLASS(StdStreamTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

@@ -67,7 +67,7 @@ wxBEGIN_FLAGS( wxPanelStyle )
     wxFLAGS_MEMBER(wxHSCROLL)
 wxEND_FLAGS( wxPanelStyle )
 
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxPanel, wxWindow, "wx/panel.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxPanel, wxWindow, "wx/panel.h");
 
 wxBEGIN_PROPERTIES_TABLE(wxPanel)
     wxPROPERTY_FLAGS( WindowStyle, wxPanelStyle, long, \

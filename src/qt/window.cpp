@@ -82,7 +82,7 @@ void wxQtShortcutHandler::activated()
 //##############################################################################
 
 #ifdef __WXUNIVERSAL__
-    IMPLEMENT_ABSTRACT_CLASS(wxWindow, wxWindowBase)
+    wxIMPLEMENT_ABSTRACT_CLASS(wxWindow, wxWindowBase);
 #endif // __WXUNIVERSAL__
 
 // We use the QObject property capabilities to store the wxWindow pointer, so we

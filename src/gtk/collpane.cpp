@@ -34,7 +34,7 @@ const char wxCollapsiblePaneNameStr[] = "collapsiblePane";
 
 wxDEFINE_EVENT( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEvent );
 
-IMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePaneEvent, wxCommandEvent)
+wxIMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePaneEvent, wxCommandEvent);
 
 // ============================================================================
 // implementation
@@ -163,11 +163,11 @@ void wxCollapsiblePane::AddChildGTK(wxWindowGTK* child)
 // wxCollapsiblePane
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePane, wxControl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePane, wxControl);
 
-BEGIN_EVENT_TABLE(wxCollapsiblePane, wxCollapsiblePaneBase)
+wxBEGIN_EVENT_TABLE(wxCollapsiblePane, wxCollapsiblePaneBase)
     EVT_SIZE(wxCollapsiblePane::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool wxCollapsiblePane::Create(wxWindow *parent,
                                wxWindowID id,

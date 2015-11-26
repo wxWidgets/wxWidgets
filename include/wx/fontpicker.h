@@ -180,7 +180,7 @@ private:
     wxFontPickerWidget* GetPickerWidget() const
         { return static_cast<wxFontPickerWidget*>(m_picker); }
 
-    DECLARE_DYNAMIC_CLASS(wxFontPickerCtrl)
+    wxDECLARE_DYNAMIC_CLASS(wxFontPickerCtrl);
 };
 
 
@@ -210,7 +210,7 @@ public:
 private:
     wxFont m_font;
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFontPickerEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFontPickerEvent);
 };
 
 // ----------------------------------------------------------------------------

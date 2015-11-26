@@ -105,7 +105,7 @@ private:
     int m_toolId;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxAuiToolBarEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxAuiToolBarEvent);
 };
 
 
@@ -692,8 +692,8 @@ private:
     // Common part of OnLeaveWindow() and OnCaptureLost().
     void DoResetMouseState();
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_CLASS(wxAuiToolBar)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_CLASS(wxAuiToolBar);
 };
 
 

@@ -34,13 +34,13 @@
 
 // we only have to do it here when we use wxStatusBarGeneric in addition to the
 // standard wxStatusBar class, if wxStatusBarGeneric is the same as
-// wxStatusBar, then the corresponding IMPLEMENT_DYNAMIC_CLASS is already in
+// wxStatusBar, then the corresponding wxIMPLEMENT_DYNAMIC_CLASS is already in
 // common/statbar.cpp
 #if defined(__WXMAC__) || \
     (defined(wxUSE_NATIVE_STATUSBAR) && wxUSE_NATIVE_STATUSBAR)
     #include "wx/generic/statusbr.h"
 
-    IMPLEMENT_DYNAMIC_CLASS(wxStatusBarGeneric, wxWindow)
+    wxIMPLEMENT_DYNAMIC_CLASS(wxStatusBarGeneric, wxWindow);
 #endif // wxUSE_NATIVE_STATUSBAR
 
 // Default status border dimensions
@@ -87,7 +87,7 @@ gboolean statusbar_query_tooltip(GtkWidget*   WXUNUSED(widget),
 // wxStatusBarGeneric
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxStatusBarGeneric, wxWindow)
+wxBEGIN_EVENT_TABLE(wxStatusBarGeneric, wxWindow)
     EVT_PAINT(wxStatusBarGeneric::OnPaint)
     EVT_SIZE(wxStatusBarGeneric::OnSize)
 #ifdef __WXGTK20__
@@ -95,7 +95,7 @@ BEGIN_EVENT_TABLE(wxStatusBarGeneric, wxWindow)
     EVT_RIGHT_DOWN(wxStatusBarGeneric::OnRightDown)
 #endif
     EVT_SYS_COLOUR_CHANGED(wxStatusBarGeneric::OnSysColourChanged)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxStatusBarGeneric::Init()
 {

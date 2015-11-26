@@ -30,7 +30,7 @@
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxIconArray)
 
-IMPLEMENT_DYNAMIC_CLASS(wxIconBundle, wxGDIObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxIconBundle, wxGDIObject);
 
 #define M_ICONBUNDLEDATA static_cast<wxIconBundleRefData*>(m_refData)
 

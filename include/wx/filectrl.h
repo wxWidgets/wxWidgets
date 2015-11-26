@@ -115,7 +115,7 @@ protected:
     wxString m_directory;
     wxArrayString m_files;
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN( wxFileCtrlEvent )
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFileCtrlEvent);
 };
 
 typedef void ( wxEvtHandler::*wxFileCtrlEventFunction )( wxFileCtrlEvent& );

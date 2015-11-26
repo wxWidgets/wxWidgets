@@ -38,7 +38,7 @@ protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
-    DECLARE_DYNAMIC_CLASS(wxCursor)
+    wxDECLARE_DYNAMIC_CLASS(wxCursor);
 };
 
 #endif // _WX_DFB_CURSOR_H_

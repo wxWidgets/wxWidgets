@@ -137,8 +137,8 @@ private:
     void Init();
     virtual void AddChildGTK(wxWindowGTK* child) wxOVERRIDE;
 
-    DECLARE_DYNAMIC_CLASS(wxNotebook)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxNotebook);
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // _WX_GTKNOTEBOOK_H_

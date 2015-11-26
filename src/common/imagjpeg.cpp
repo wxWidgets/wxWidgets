@@ -79,7 +79,7 @@ typedef boolean wxjpeg_boolean;
 // wxJPEGHandler
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxJPEGHandler,wxImageHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxJPEGHandler,wxImageHandler);
 
 #if wxUSE_STREAMS
 

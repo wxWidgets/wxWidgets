@@ -61,7 +61,7 @@ private:
     wxMenu*     m_topMenu;        // Top-level menu e.g. popup-menu
     wxBitmap  m_bitmap; // Bitmap for menuitem, if any
 
-    DECLARE_DYNAMIC_CLASS(wxMenuItem)
+    wxDECLARE_DYNAMIC_CLASS(wxMenuItem);
 };
 
 #endif  // _WX_MOTIF_MENUITEM_H

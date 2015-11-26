@@ -162,7 +162,7 @@ static gint gtk_radiobutton_focus_out( GtkWidget *WXUNUSED(widget),
 // wxRadioBox
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxRadioBox,wxControl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl);
 
 void wxRadioBox::Init()
 {

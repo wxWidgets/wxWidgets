@@ -36,7 +36,7 @@ private:
 
     void Operators();
 
-    DECLARE_NO_COPY_CLASS(SizeTestCase)
+    wxDECLARE_NO_COPY_CLASS(SizeTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

@@ -235,7 +235,7 @@ static const char wxPostScriptHeaderReencodeISO2[] =
 //-------------------------------------------------------------------------------
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC);
 
 wxPostScriptDC::wxPostScriptDC()
               : wxDC(new wxPostScriptDCImpl(this))
@@ -258,7 +258,7 @@ static const double DEV2PS = 72.0 / 600.0;
 #define YLOG2DEVREL(x)  ((double)(LogicalToDeviceYRel(x)) * DEV2PS)
 
 
-IMPLEMENT_ABSTRACT_CLASS(wxPostScriptDCImpl, wxDCImpl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxPostScriptDCImpl, wxDCImpl);
 
 //-------------------------------------------------------------------------------
 

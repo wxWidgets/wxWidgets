@@ -37,7 +37,7 @@ class ModuleA : public Module
 public:
     ModuleA();
 private:
-    DECLARE_DYNAMIC_CLASS(ModuleA)
+    wxDECLARE_DYNAMIC_CLASS(ModuleA);
 };
 
 class ModuleB : public Module
@@ -45,7 +45,7 @@ class ModuleB : public Module
 public:
     ModuleB();
 private:
-    DECLARE_DYNAMIC_CLASS(ModuleB)
+    wxDECLARE_DYNAMIC_CLASS(ModuleB);
 };
 
 class ModuleC : public Module
@@ -53,7 +53,7 @@ class ModuleC : public Module
 public:
     ModuleC();
 private:
-    DECLARE_DYNAMIC_CLASS(ModuleC)
+    wxDECLARE_DYNAMIC_CLASS(ModuleC);
 };
 
 class ModuleD : public Module
@@ -61,30 +61,30 @@ class ModuleD : public Module
 public:
     ModuleD();
 private:
-    DECLARE_DYNAMIC_CLASS(ModuleD)
+    wxDECLARE_DYNAMIC_CLASS(ModuleD);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(ModuleA, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(ModuleA, wxModule);
 ModuleA::ModuleA()
 {
     AddDependency(CLASSINFO(ModuleB));
     AddDependency(CLASSINFO(ModuleD));
 }
 
-IMPLEMENT_DYNAMIC_CLASS(ModuleB, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(ModuleB, wxModule);
 ModuleB::ModuleB()
 {
     AddDependency(CLASSINFO(ModuleC));
     AddDependency(CLASSINFO(ModuleD));
 }
 
-IMPLEMENT_DYNAMIC_CLASS(ModuleC, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(ModuleC, wxModule);
 ModuleC::ModuleC()
 {
     AddDependency(CLASSINFO(ModuleD));
 }
 
-IMPLEMENT_DYNAMIC_CLASS(ModuleD, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(ModuleD, wxModule);
 ModuleD::ModuleD()
 {
 }
@@ -104,7 +104,7 @@ private:
     CPPUNIT_TEST_SUITE_END();
 
     void LoadOrder();
-    DECLARE_NO_COPY_CLASS(ModuleTestCase)
+    wxDECLARE_NO_COPY_CLASS(ModuleTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

@@ -195,14 +195,14 @@ private:
     CallTip*      m_ct;
     ScintillaWX*  m_swx;
     int           m_cx, m_cy;
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(wxSTCCallTip, wxSTCCallTipBase)
+wxBEGIN_EVENT_TABLE(wxSTCCallTip, wxSTCCallTipBase)
     EVT_PAINT(wxSTCCallTip::OnPaint)
     EVT_SET_FOCUS(wxSTCCallTip::OnFocus)
     EVT_LEFT_DOWN(wxSTCCallTip::OnLeftDown)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 //----------------------------------------------------------------------

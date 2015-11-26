@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 14 December 2010                                                    *
+# Date : 20 April 2015                                                       *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -77,3 +77,4 @@ propgrid.obj : propgrid.cpp
 propgridiface.obj : propgridiface.cpp
 propgridpagestate.obj : propgridpagestate.cpp
 props.obj : props.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/warn=disable=(INTSIGNCHANGE) $(MMS$TARGET_NAME).cpp

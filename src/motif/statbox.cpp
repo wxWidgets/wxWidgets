@@ -28,9 +28,9 @@
 
 #include "wx/motif/private.h"
 
-BEGIN_EVENT_TABLE(wxStaticBox, wxControl)
+wxBEGIN_EVENT_TABLE(wxStaticBox, wxControl)
 //EVT_ERASE_BACKGROUND(wxStaticBox::OnEraseBackground)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // wxXmSizeKeeper

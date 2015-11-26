@@ -32,7 +32,7 @@ protected:
         const wxString &name );
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxControl)
+    wxDECLARE_DYNAMIC_CLASS(wxControl);
 };
 
 #endif // _WX_QT_CONTROL_H_

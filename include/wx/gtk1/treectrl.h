@@ -357,7 +357,7 @@ protected:
                               wxTreeItemData *data);
 
 
-    DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
+    wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
 };
 
 #endif

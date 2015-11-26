@@ -62,7 +62,7 @@ protected:
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxIcon)
+    wxDECLARE_DYNAMIC_CLASS(wxIcon);
 
     bool LoadIconFromSystemResource(const wxString& resourceName, int desiredWidth, int desiredHeight);
     bool LoadIconFromBundleResource(const wxString& resourceName, int desiredWidth, int desiredHeight);
@@ -93,7 +93,7 @@ public:
         { return LoadFile(bitmap, name, flags, -1, -1); }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxICONResourceHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxICONResourceHandler);
 };
 
 #endif

@@ -279,7 +279,7 @@ private:
     friend class WXDLLIMPEXP_FWD_CORE wxTreeCtrl;
     friend class WXDLLIMPEXP_FWD_CORE wxGenericTreeCtrl;
 
-    DECLARE_DYNAMIC_CLASS(wxTreeEvent)
+    wxDECLARE_DYNAMIC_CLASS(wxTreeEvent);
 };
 
 typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);

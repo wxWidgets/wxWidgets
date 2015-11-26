@@ -43,7 +43,7 @@ private:
 
     wxDC* m_DCPtr;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomRenderer);
 };
 
 // ---------------------------------------------------------
@@ -68,7 +68,7 @@ public:
 #endif // Cocoa
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer);
 };
 
 // ---------------------------------------------------------
@@ -87,7 +87,7 @@ public:
     virtual bool MacRender();
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapRenderer);
 };
 
 #if wxOSX_USE_COCOA
@@ -117,7 +117,7 @@ public:
 private:
     wxArrayString m_choices;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewChoiceRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewChoiceRenderer);
 };
 
 #endif // wxOSX_USE_COCOA
@@ -143,7 +143,7 @@ public:
 #endif // Cocoa
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewIconTextRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewIconTextRenderer);
 };
 
 // ---------------------------------------------------------
@@ -168,7 +168,7 @@ public:
 #endif // Cocoa
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleRenderer);
 };
 
 // ---------------------------------------------------------
@@ -194,7 +194,7 @@ public:
 #endif // Cocoa
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressRenderer);
 };
 
 // ---------------------------------------------------------
@@ -219,7 +219,7 @@ public:
 #endif // Cocoa
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewDateRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewDateRenderer);
 };
 
 #endif // _WX_OSX_DVRENDERERS_H_

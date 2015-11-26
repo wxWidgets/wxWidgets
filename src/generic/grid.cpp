@@ -166,15 +166,15 @@ namespace
 // implementation
 // ============================================================================
 
-IMPLEMENT_ABSTRACT_CLASS(wxGridCellEditorEvtHandler, wxEvtHandler)
+wxIMPLEMENT_ABSTRACT_CLASS(wxGridCellEditorEvtHandler, wxEvtHandler);
 
-BEGIN_EVENT_TABLE( wxGridCellEditorEvtHandler, wxEvtHandler )
+wxBEGIN_EVENT_TABLE( wxGridCellEditorEvtHandler, wxEvtHandler )
     EVT_KILL_FOCUS( wxGridCellEditorEvtHandler::OnKillFocus )
     EVT_KEY_DOWN( wxGridCellEditorEvtHandler::OnKeyDown )
     EVT_CHAR( wxGridCellEditorEvtHandler::OnChar )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(wxGridHeaderCtrl, wxHeaderCtrl)
+wxBEGIN_EVENT_TABLE(wxGridHeaderCtrl, wxHeaderCtrl)
     EVT_HEADER_CLICK(wxID_ANY, wxGridHeaderCtrl::OnClick)
     EVT_HEADER_DCLICK(wxID_ANY, wxGridHeaderCtrl::OnDoubleClick)
     EVT_HEADER_RIGHT_CLICK(wxID_ANY, wxGridHeaderCtrl::OnRightClick)
@@ -185,7 +185,7 @@ BEGIN_EVENT_TABLE(wxGridHeaderCtrl, wxHeaderCtrl)
 
     EVT_HEADER_BEGIN_REORDER(wxID_ANY, wxGridHeaderCtrl::OnBeginReorder)
     EVT_HEADER_END_REORDER(wxID_ANY, wxGridHeaderCtrl::OnEndReorder)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxGridOperations& wxGridRowOperations::Dual() const
 {
@@ -997,7 +997,7 @@ const wxGridCornerHeaderRenderer& wxGridCellAttrProvider::GetCornerRenderer()
 // wxGridTableBase
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS( wxGridTableBase, wxObject )
+wxIMPLEMENT_ABSTRACT_CLASS(wxGridTableBase, wxObject);
 
 wxGridTableBase::wxGridTableBase()
 {
@@ -1254,7 +1254,7 @@ wxGridTableMessage::wxGridTableMessage( wxGridTableBase *table, int id,
 
 WX_DEFINE_OBJARRAY(wxGridStringArray)
 
-IMPLEMENT_DYNAMIC_CLASS( wxGridStringTable, wxGridTableBase )
+wxIMPLEMENT_DYNAMIC_CLASS(wxGridStringTable, wxGridTableBase);
 
 wxGridStringTable::wxGridStringTable()
         : wxGridTableBase()
@@ -1602,20 +1602,20 @@ void wxGridStringTable::SetColLabelValue( int col, const wxString& value )
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE(wxGridSubwindow, wxWindow)
+wxBEGIN_EVENT_TABLE(wxGridSubwindow, wxWindow)
     EVT_MOUSE_CAPTURE_LOST(wxGridSubwindow::OnMouseCaptureLost)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxGridSubwindow::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
 {
     m_owner->CancelMouseCapture();
 }
 
-BEGIN_EVENT_TABLE( wxGridRowLabelWindow, wxGridSubwindow )
+wxBEGIN_EVENT_TABLE( wxGridRowLabelWindow, wxGridSubwindow )
     EVT_PAINT( wxGridRowLabelWindow::OnPaint )
     EVT_MOUSEWHEEL( wxGridRowLabelWindow::OnMouseWheel )
     EVT_MOUSE_EVENTS( wxGridRowLabelWindow::OnMouseEvent )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxGridRowLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
@@ -1649,11 +1649,11 @@ void wxGridRowLabelWindow::OnMouseWheel( wxMouseEvent& event )
 
 //////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( wxGridColLabelWindow, wxGridSubwindow )
+wxBEGIN_EVENT_TABLE( wxGridColLabelWindow, wxGridSubwindow )
     EVT_PAINT( wxGridColLabelWindow::OnPaint )
     EVT_MOUSEWHEEL( wxGridColLabelWindow::OnMouseWheel )
     EVT_MOUSE_EVENTS( wxGridColLabelWindow::OnMouseEvent )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxGridColLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
@@ -1687,11 +1687,11 @@ void wxGridColLabelWindow::OnMouseWheel( wxMouseEvent& event )
 
 //////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( wxGridCornerLabelWindow, wxGridSubwindow )
+wxBEGIN_EVENT_TABLE( wxGridCornerLabelWindow, wxGridSubwindow )
     EVT_MOUSEWHEEL( wxGridCornerLabelWindow::OnMouseWheel )
     EVT_MOUSE_EVENTS( wxGridCornerLabelWindow::OnMouseEvent )
     EVT_PAINT( wxGridCornerLabelWindow::OnPaint )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxGridCornerLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
@@ -1713,7 +1713,7 @@ void wxGridCornerLabelWindow::OnMouseWheel( wxMouseEvent& event )
 
 //////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( wxGridWindow, wxGridSubwindow )
+wxBEGIN_EVENT_TABLE( wxGridWindow, wxGridSubwindow )
     EVT_PAINT( wxGridWindow::OnPaint )
     EVT_MOUSEWHEEL( wxGridWindow::OnMouseWheel )
     EVT_MOUSE_EVENTS( wxGridWindow::OnMouseEvent )
@@ -1723,7 +1723,7 @@ BEGIN_EVENT_TABLE( wxGridWindow, wxGridSubwindow )
     EVT_SET_FOCUS( wxGridWindow::OnFocus )
     EVT_KILL_FOCUS( wxGridWindow::OnFocus )
     EVT_ERASE_BACKGROUND( wxGridWindow::OnEraseBackground )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
@@ -2115,7 +2115,7 @@ void wxGridWindow::OnFocus(wxFocusEvent& event)
 
 /////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( wxGrid, wxScrolledWindow )
+wxBEGIN_EVENT_TABLE( wxGrid, wxScrolledWindow )
     EVT_PAINT( wxGrid::OnPaint )
     EVT_SIZE( wxGrid::OnSize )
     EVT_KEY_DOWN( wxGrid::OnKeyDown )
@@ -2123,7 +2123,7 @@ BEGIN_EVENT_TABLE( wxGrid, wxScrolledWindow )
     EVT_CHAR ( wxGrid::OnChar )
     EVT_ERASE_BACKGROUND( wxGrid::OnEraseBackground )
     EVT_COMMAND(wxID_ANY, wxEVT_GRID_HIDE_EDITOR, wxGrid::OnHideEditor )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool wxGrid::Create(wxWindow *parent, wxWindowID id,
                           const wxPoint& pos, const wxSize& size,
@@ -9113,7 +9113,7 @@ void wxGrid::SetDropTarget(wxDropTarget *dropTarget)
 // grid event classes
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS( wxGridEvent, wxNotifyEvent )
+wxIMPLEMENT_DYNAMIC_CLASS(wxGridEvent, wxNotifyEvent);
 
 wxGridEvent::wxGridEvent( int id, wxEventType type, wxObject* obj,
                           int row, int col, int x, int y, bool sel,
@@ -9126,7 +9126,7 @@ wxGridEvent::wxGridEvent( int id, wxEventType type, wxObject* obj,
     SetEventObject(obj);
 }
 
-IMPLEMENT_DYNAMIC_CLASS( wxGridSizeEvent, wxNotifyEvent )
+wxIMPLEMENT_DYNAMIC_CLASS(wxGridSizeEvent, wxNotifyEvent);
 
 wxGridSizeEvent::wxGridSizeEvent( int id, wxEventType type, wxObject* obj,
                                   int rowOrCol, int x, int y,
@@ -9140,7 +9140,7 @@ wxGridSizeEvent::wxGridSizeEvent( int id, wxEventType type, wxObject* obj,
 }
 
 
-IMPLEMENT_DYNAMIC_CLASS( wxGridRangeSelectEvent, wxNotifyEvent )
+wxIMPLEMENT_DYNAMIC_CLASS(wxGridRangeSelectEvent, wxNotifyEvent);
 
 wxGridRangeSelectEvent::wxGridRangeSelectEvent(int id, wxEventType type, wxObject* obj,
                                                const wxGridCellCoords& topLeft,
@@ -9156,7 +9156,7 @@ wxGridRangeSelectEvent::wxGridRangeSelectEvent(int id, wxEventType type, wxObjec
 }
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxGridEditorCreatedEvent, wxCommandEvent)
+wxIMPLEMENT_DYNAMIC_CLASS(wxGridEditorCreatedEvent, wxCommandEvent);
 
 wxGridEditorCreatedEvent::wxGridEditorCreatedEvent(int id, wxEventType type,
                                                    wxObject* obj, int row,

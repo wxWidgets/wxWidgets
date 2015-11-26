@@ -96,7 +96,7 @@ private:
     void Swap();
     void Sort();
 
-    DECLARE_NO_COPY_CLASS(VectorsTestCase)
+    wxDECLARE_NO_COPY_CLASS(VectorsTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

@@ -170,10 +170,15 @@ public:
 
         wxScopedArray<wxString> oldTexts(m_columnsTexts);
         m_columnsTexts = new wxString[numColumns - 2];
+
+        // As above, n is the index in the new column texts array and m is the
+        // index in the old one.
         for ( unsigned n = 1, m = 1; n < numColumns - 1; n++, m++ )
         {
-            if ( n == col )
+            if ( m == col )
             {
+                // Skip copying the deleted column and keep the new index the
+                // same (so compensate for "n++" done in the loop).
                 n--;
             }
             else // Not the deleted column.
@@ -974,7 +979,7 @@ wxTreeListModel::Compare(const wxDataViewItem& item1,
 // wxTreeListCtrl implementation
 // ============================================================================
 
-BEGIN_EVENT_TABLE(wxTreeListCtrl, wxWindow)
+wxBEGIN_EVENT_TABLE(wxTreeListCtrl, wxWindow)
     EVT_DATAVIEW_SELECTION_CHANGED(wxID_ANY, wxTreeListCtrl::OnSelectionChanged)
     EVT_DATAVIEW_ITEM_EXPANDING(wxID_ANY, wxTreeListCtrl::OnItemExpanding)
     EVT_DATAVIEW_ITEM_EXPANDED(wxID_ANY, wxTreeListCtrl::OnItemExpanded)
@@ -983,7 +988,7 @@ BEGIN_EVENT_TABLE(wxTreeListCtrl, wxWindow)
     EVT_DATAVIEW_COLUMN_SORTED(wxID_ANY, wxTreeListCtrl::OnColumnSorted)
 
     EVT_SIZE(wxTreeListCtrl::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // Creation
@@ -1660,7 +1665,7 @@ wxWindow* wxTreeListCtrl::GetView() const
 // wxTreeListEvent implementation
 // ============================================================================
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxTreeListEvent, wxNotifyEvent)
+wxIMPLEMENT_DYNAMIC_CLASS(wxTreeListEvent, wxNotifyEvent);
 
 #define wxDEFINE_TREELIST_EVENT(name) \
     wxDEFINE_EVENT(wxEVT_TREELIST_##name, wxTreeListEvent)

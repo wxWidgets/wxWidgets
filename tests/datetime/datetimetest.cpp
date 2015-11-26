@@ -255,7 +255,7 @@ private:
     void TestDateOnly();
     void TestTranslateFromUnicodeFormat();
 
-    DECLARE_NO_COPY_CLASS(DateTimeTestCase)
+    wxDECLARE_NO_COPY_CLASS(DateTimeTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

@@ -303,8 +303,8 @@ private:
     // by not extending the selection but by choosing it directly
     int m_selAnchor;
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxListBox)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS(wxListBox);
 };
 
 #endif // _WX_UNIV_LISTBOX_H_

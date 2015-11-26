@@ -20,7 +20,7 @@
 
 #include "wx/osx/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxGDIObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxIcon, wxGDIObject);
 
 #define M_ICONDATA ((wxIconRefData *)m_refData)
 
@@ -497,7 +497,7 @@ void wxIcon::CopyFromBitmap( const wxBitmap& bmp )
 
 }
 
-IMPLEMENT_DYNAMIC_CLASS(wxICONResourceHandler, wxBitmapHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxICONResourceHandler, wxBitmapHandler);
 
 bool  wxICONResourceHandler::LoadFile(
     wxBitmap *bitmap, const wxString& name, wxBitmapType WXUNUSED(flags),

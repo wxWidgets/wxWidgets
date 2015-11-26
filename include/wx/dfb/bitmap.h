@@ -88,7 +88,7 @@ protected:
 
     bool CreateWithFormat(int width, int height, int dfbFormat);
 
-    DECLARE_DYNAMIC_CLASS(wxBitmap)
+    wxDECLARE_DYNAMIC_CLASS(wxBitmap);
 };
 
 #endif // _WX_DFB_BITMAP_H_

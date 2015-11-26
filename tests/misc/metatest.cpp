@@ -43,7 +43,7 @@ private:
     void ImplicitConversion();
     void MinMax();
 
-    DECLARE_NO_COPY_CLASS(MetaProgrammingTestCase)
+    wxDECLARE_NO_COPY_CLASS(MetaProgrammingTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

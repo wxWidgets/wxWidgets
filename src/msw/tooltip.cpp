@@ -343,7 +343,7 @@ void wxToolTip::RelayEvent(WXMSG *msg)
 // ctor & dtor
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxToolTip, wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxToolTip, wxObject);
 
 wxToolTip::wxToolTip(const wxString &tip)
          : m_text(tip)

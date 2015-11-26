@@ -117,7 +117,7 @@ protected:
     wxString m_strToMatch;
 };
 
-IMPLEMENT_APP_CONSOLE(IfaceCheckApp)
+wxIMPLEMENT_APP_CONSOLE(IfaceCheckApp);
 
 int IfaceCheckApp::OnRun()
 {

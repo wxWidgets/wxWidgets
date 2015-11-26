@@ -27,7 +27,7 @@ static const long DEFAULT_MIN = 0;
 static const long DEFAULT_MAX = 100;
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxSliderXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxSliderXmlHandler, wxXmlResourceHandler);
 
 wxSliderXmlHandler::wxSliderXmlHandler()
                    :wxXmlResourceHandler()

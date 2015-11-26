@@ -23,7 +23,7 @@
     #include "wx/frame.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxPanelXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPanelXmlHandler, wxXmlResourceHandler);
 
 wxPanelXmlHandler::wxPanelXmlHandler() : wxXmlResourceHandler()
 {

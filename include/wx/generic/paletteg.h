@@ -44,7 +44,7 @@ protected:
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPalette)
+    wxDECLARE_DYNAMIC_CLASS(wxPalette);
 };
 
 #endif // __WX_PALETTEG_H__

@@ -82,17 +82,13 @@ wxFLAGS_MEMBER(wxGA_SMOOTH)
 wxFLAGS_MEMBER(wxGA_PROGRESS)
 wxEND_FLAGS( wxGaugeStyle )
 
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxGauge, wxControl, "wx/gauge.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxGauge, wxControl, "wx/gauge.h");
 
 wxBEGIN_PROPERTIES_TABLE(wxGauge)
 wxPROPERTY( Value, int, SetValue, GetValue, 0, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group"))
 wxPROPERTY( Range, int, SetRange, GetRange, 0, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group"))
-wxPROPERTY( ShadowWidth, int, SetShadowWidth, GetShadowWidth, \
-           0, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
-wxPROPERTY( BezelFace, int, SetBezelFace, GetBezelFace, \
-           0, 0 /*flags*/, wxT("Helpstring"), wxT("group"))
 
 wxPROPERTY_FLAGS( WindowStyle, wxGaugeStyle, long, SetWindowStyleFlag, \
                  GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
@@ -201,29 +197,6 @@ void wxGaugeBase::Pulse()
         }
     }
 #endif
-}
-
-// ----------------------------------------------------------------------------
-// wxGauge appearance params
-// ----------------------------------------------------------------------------
-
-void wxGaugeBase::SetShadowWidth(int WXUNUSED(w))
-{
-}
-
-int wxGaugeBase::GetShadowWidth() const
-{
-    return 0;
-}
-
-
-void wxGaugeBase::SetBezelFace(int WXUNUSED(w))
-{
-}
-
-int wxGaugeBase::GetBezelFace() const
-{
-    return 0;
 }
 
 #endif // wxUSE_GAUGE

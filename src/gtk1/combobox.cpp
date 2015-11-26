@@ -169,7 +169,7 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
 // wxComboBox
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxComboBox, wxControl)
+wxBEGIN_EVENT_TABLE(wxComboBox, wxControl)
     EVT_SIZE(wxComboBox::OnSize)
     EVT_CHAR(wxComboBox::OnChar)
 
@@ -188,7 +188,7 @@ BEGIN_EVENT_TABLE(wxComboBox, wxControl)
     EVT_UPDATE_UI(wxID_REDO, wxComboBox::OnUpdateRedo)
     EVT_UPDATE_UI(wxID_CLEAR, wxComboBox::OnUpdateDelete)
     EVT_UPDATE_UI(wxID_SELECTALL, wxComboBox::OnUpdateSelectAll)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool wxComboBox::Create( wxWindow *parent, wxWindowID id,
                          const wxString& value,

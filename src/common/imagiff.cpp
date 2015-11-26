@@ -718,7 +718,7 @@ int wxIFFDecoder::ReadIFF()
 // wxIFFHandler
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxIFFHandler, wxImageHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxIFFHandler, wxImageHandler);
 
 #if wxUSE_STREAMS
 

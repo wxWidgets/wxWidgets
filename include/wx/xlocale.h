@@ -148,8 +148,8 @@ public:
     }
 
     // Default copy ctor, assignment operator and dtor are ok (or would be if
-    // we didn't use DECLARE_NO_COPY_CLASS() for consistency with the xlocale
-    // version)
+    // we didn't use wxDECLARE_NO_COPY_CLASS() for consistency with the
+    // xlocale version)
 
 
     // Get the global "C" locale object

@@ -49,7 +49,7 @@ private:
     void VariantListReturnSafeArray();
     void StringsReturnSafeArray();
 
-    DECLARE_NO_COPY_CLASS(SafeArrayConvertTestCase )
+    wxDECLARE_NO_COPY_CLASS(SafeArrayConvertTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

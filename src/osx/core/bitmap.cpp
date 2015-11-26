@@ -26,8 +26,8 @@
 
 #include "wx/filename.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
-IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject);
+wxIMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject);
 
 #if wxOSX_USE_CARBON
 #include "wx/osx/uma.h"
@@ -1822,7 +1822,7 @@ WXHBITMAP wxMask::GetHBITMAP() const
 
 class WXDLLEXPORT wxBundleResourceHandler: public wxBitmapHandler
 {
-    DECLARE_ABSTRACT_CLASS(wxBundleResourceHandler)
+    wxDECLARE_ABSTRACT_CLASS(wxBundleResourceHandler);
     
 public:
     inline wxBundleResourceHandler()
@@ -1836,12 +1836,12 @@ public:
                           int desiredHeight) wxOVERRIDE;
 };
 
-IMPLEMENT_ABSTRACT_CLASS(wxBundleResourceHandler, wxBitmapHandler);
+wxIMPLEMENT_ABSTRACT_CLASS(wxBundleResourceHandler, wxBitmapHandler);
 
 class WXDLLEXPORT wxPNGResourceHandler: public wxBundleResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxPNGResourceHandler)
-    
+    wxDECLARE_DYNAMIC_CLASS(wxPNGResourceHandler);
+
 public:
     inline wxPNGResourceHandler()
     {
@@ -1851,12 +1851,12 @@ public:
     }
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxPNGResourceHandler, wxBundleResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPNGResourceHandler, wxBundleResourceHandler);
 
 class WXDLLEXPORT wxJPEGResourceHandler: public wxBundleResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxJPEGResourceHandler)
-    
+    wxDECLARE_DYNAMIC_CLASS(wxJPEGResourceHandler);
+
 public:
     inline wxJPEGResourceHandler()
     {
@@ -1866,7 +1866,7 @@ public:
     }
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxJPEGResourceHandler, wxBundleResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxJPEGResourceHandler, wxBundleResourceHandler);
 
 bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
                                      const wxString& name,

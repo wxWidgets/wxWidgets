@@ -217,8 +217,8 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextCtrl : public wxControl,
                                             public wxTextCtrlIface,
                                             public wxScrollHelper
 {
-    DECLARE_DYNAMIC_CLASS( wxRichTextCtrl )
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxRichTextCtrl);
+    wxDECLARE_EVENT_TABLE();
 
 public:
 // Constructors
@@ -2653,7 +2653,7 @@ protected:
     wxRichTextParagraphLayoutBox*   m_oldContainer;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRichTextEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRichTextEvent);
 };
 
 /*!

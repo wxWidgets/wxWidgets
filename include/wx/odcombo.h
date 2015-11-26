@@ -222,7 +222,7 @@ private:
     wxTimer                 m_partialCompletionTimer;
 #endif // wxUSE_TIMER
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -391,9 +391,9 @@ protected:
 private:
     void Init();
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
-    DECLARE_DYNAMIC_CLASS(wxOwnerDrawnComboBox)
+    wxDECLARE_DYNAMIC_CLASS(wxOwnerDrawnComboBox);
 };
 
 

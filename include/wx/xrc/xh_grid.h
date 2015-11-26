@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxGridXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxGridXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxGridXmlHandler);
 
 public:
     wxGridXmlHandler();

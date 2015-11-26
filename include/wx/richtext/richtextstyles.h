@@ -45,7 +45,7 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextStyleDefinition: public wxObject
 {
-    DECLARE_CLASS(wxRichTextStyleDefinition)
+    wxDECLARE_CLASS(wxRichTextStyleDefinition);
 public:
 
     /// Copy constructors
@@ -129,7 +129,7 @@ protected:
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextCharacterStyleDefinition: public wxRichTextStyleDefinition
 {
-    DECLARE_DYNAMIC_CLASS(wxRichTextCharacterStyleDefinition)
+    wxDECLARE_DYNAMIC_CLASS(wxRichTextCharacterStyleDefinition);
 public:
 
     /// Copy constructor
@@ -154,7 +154,7 @@ protected:
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextParagraphStyleDefinition: public wxRichTextStyleDefinition
 {
-    DECLARE_DYNAMIC_CLASS(wxRichTextParagraphStyleDefinition)
+    wxDECLARE_DYNAMIC_CLASS(wxRichTextParagraphStyleDefinition);
 public:
 
     /// Copy constructor
@@ -195,7 +195,7 @@ protected:
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextListStyleDefinition: public wxRichTextParagraphStyleDefinition
 {
-    DECLARE_DYNAMIC_CLASS(wxRichTextListStyleDefinition)
+    wxDECLARE_DYNAMIC_CLASS(wxRichTextListStyleDefinition);
 public:
 
     /// Copy constructor
@@ -261,7 +261,7 @@ protected:
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextBoxStyleDefinition: public wxRichTextStyleDefinition
 {
-    DECLARE_DYNAMIC_CLASS(wxRichTextBoxStyleDefinition)
+    wxDECLARE_DYNAMIC_CLASS(wxRichTextBoxStyleDefinition);
 public:
 
     /// Copy constructor
@@ -295,7 +295,7 @@ protected:
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextStyleSheet: public wxObject
 {
-    DECLARE_CLASS( wxRichTextStyleSheet )
+    wxDECLARE_CLASS(wxRichTextStyleSheet);
 
 public:
     /// Constructors
@@ -466,8 +466,8 @@ protected:
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextStyleListBox: public wxHtmlListBox
 {
-    DECLARE_CLASS(wxRichTextStyleListBox)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_CLASS(wxRichTextStyleListBox);
+    wxDECLARE_EVENT_TABLE();
 
 public:
     /// Which type of style definition is currently showing?
@@ -578,8 +578,8 @@ private:
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextStyleListCtrl: public wxControl
 {
-    DECLARE_CLASS(wxRichTextStyleListCtrl)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_CLASS(wxRichTextStyleListCtrl);
+    wxDECLARE_EVENT_TABLE();
 
 public:
 
@@ -690,7 +690,7 @@ protected:
     int             m_value;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 /*!
@@ -700,8 +700,8 @@ private:
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextStyleComboCtrl: public wxComboCtrl
 {
-    DECLARE_CLASS(wxRichTextStyleComboCtrl)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_CLASS(wxRichTextStyleComboCtrl);
+    wxDECLARE_EVENT_TABLE();
 
 public:
     wxRichTextStyleComboCtrl()

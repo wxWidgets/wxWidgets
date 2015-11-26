@@ -54,7 +54,7 @@ private:
 
     wxButton* m_button;
 
-    DECLARE_NO_COPY_CLASS(ButtonTestCase)
+    wxDECLARE_NO_COPY_CLASS(ButtonTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

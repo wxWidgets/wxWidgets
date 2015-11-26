@@ -244,7 +244,7 @@ protected:
 #endif // wxUSE_TOOLBAR
 
 #if wxUSE_MENUS && wxUSE_STATUSBAR
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 #endif // wxUSE_MENUS && wxUSE_STATUSBAR
 
     wxDECLARE_NO_COPY_CLASS(wxFrameBase);

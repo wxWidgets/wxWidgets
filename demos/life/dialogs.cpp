@@ -57,9 +57,9 @@ enum
 // --------------------------------------------------------------------------
 
 // Event tables
-BEGIN_EVENT_TABLE(LifeSamplesDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(LifeSamplesDialog, wxDialog)
     EVT_LISTBOX (ID_LISTBOX, LifeSamplesDialog::OnListBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 // ==========================================================================

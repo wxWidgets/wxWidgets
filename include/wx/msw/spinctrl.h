@@ -160,8 +160,8 @@ private:
     void UpdateBuddyStyle();
 
 
-    DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxSpinCtrl);
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxSpinCtrl);
 };
 

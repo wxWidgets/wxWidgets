@@ -68,7 +68,7 @@ struct GifHashTableType
     wxUint32 HTable[HT_SIZE];
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxGIFHandler,wxImageHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxGIFHandler,wxImageHandler);
 
 //----------------------------------------------------------------------------
 // Forward declarations

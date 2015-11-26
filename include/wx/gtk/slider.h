@@ -78,7 +78,7 @@ protected:
     // set the slider value unconditionally
     void GTKSetValue(int value);
 
-    DECLARE_DYNAMIC_CLASS(wxSlider)
+    wxDECLARE_DYNAMIC_CLASS(wxSlider);
 };
 
 #endif // _WX_GTK_SLIDER_H_

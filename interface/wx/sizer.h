@@ -1372,6 +1372,10 @@ public:
     /**
         Sets the wxSizerFlags to have a border of a number of pixels specified
         by @a borderinpixels with the directions specified by @a direction.
+
+        Prefer to use the overload below or DoubleBorder() or TripleBorder()
+        versions instead of hard-coding the border value in pixels to avoid too
+        small borders on devices with high DPI displays.
     */
     wxSizerFlags& Border(int direction, int borderinpixels);
 
@@ -1478,6 +1482,10 @@ public:
 
     /**
         Returns the border used by default in Border() method.
+
+        This value is scaled appropriately for the current DPI on the systems
+        where physical pixel values are used for the control positions and
+        sizes, i.e. not with wxGTK or wxOSX.
     */
     static int GetDefaultBorder();
 

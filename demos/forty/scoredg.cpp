@@ -125,9 +125,9 @@ void ScoreCanvas::OnDraw(wxDC& dc)
 }
 #endif
 
-BEGIN_EVENT_TABLE(ScoreDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(ScoreDialog, wxDialog)
     EVT_CLOSE(ScoreDialog::OnCloseWindow)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 ScoreDialog::ScoreDialog(wxWindow* parent, ScoreFile* file) :
     wxDialog(parent, wxID_ANY, _("Scores"),

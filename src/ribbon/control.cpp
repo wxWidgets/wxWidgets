@@ -26,7 +26,7 @@
 #include "wx/msw/private.h"
 #endif
 
-IMPLEMENT_CLASS(wxRibbonControl, wxControl)
+wxIMPLEMENT_CLASS(wxRibbonControl, wxControl);
 
 bool wxRibbonControl::Create(wxWindow *parent, wxWindowID id,
                     const wxPoint& pos,

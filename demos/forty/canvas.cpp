@@ -28,9 +28,9 @@
 #include "playerdg.h"
 #include "canvas.h"
 
-BEGIN_EVENT_TABLE(FortyCanvas, wxScrolledWindow)
+wxBEGIN_EVENT_TABLE(FortyCanvas, wxScrolledWindow)
     EVT_MOUSE_EVENTS(FortyCanvas::OnMouseEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 FortyCanvas::FortyCanvas(wxWindow* parent, const wxPoint& pos, const wxSize& size) :
              wxScrolledWindow(parent, wxID_ANY, pos, size, 0),

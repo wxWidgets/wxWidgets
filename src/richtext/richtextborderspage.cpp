@@ -21,13 +21,13 @@
  * wxRichTextBordersPage type definition
  */
 
-IMPLEMENT_DYNAMIC_CLASS( wxRichTextBordersPage, wxRichTextDialogPage )
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextBordersPage, wxRichTextDialogPage);
 
 /*!
  * wxRichTextBordersPage event table definition
  */
 
-BEGIN_EVENT_TABLE( wxRichTextBordersPage, wxRichTextDialogPage )
+wxBEGIN_EVENT_TABLE(wxRichTextBordersPage, wxRichTextDialogPage)
 
     EVT_CHECKBOX(wxID_ANY, wxRichTextBordersPage::OnCommand)
     EVT_TEXT(wxID_ANY, wxRichTextBordersPage::OnCommand)
@@ -96,7 +96,7 @@ BEGIN_EVENT_TABLE( wxRichTextBordersPage, wxRichTextDialogPage )
     EVT_UPDATE_UI( ID_RICHTEXTBORDERSPAGE_CORNER_UNITS, wxRichTextBordersPage::OnRichtextborderspageCornerUpdate )
 ////@end wxRichTextBordersPage event table entries
 
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_HELP_PROVISION(wxRichTextBordersPage)
 
@@ -1325,9 +1325,9 @@ void wxRichTextBordersPage::OnRichtextOutlineLeftStyleSelected( wxCommandEvent& 
     }
 }
 
-BEGIN_EVENT_TABLE(wxRichTextBorderPreviewCtrl, wxWindow)
+wxBEGIN_EVENT_TABLE(wxRichTextBorderPreviewCtrl, wxWindow)
     EVT_PAINT(wxRichTextBorderPreviewCtrl::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxRichTextBorderPreviewCtrl::wxRichTextBorderPreviewCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& sz, long style)
 {

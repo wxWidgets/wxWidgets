@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxBitmapButtonXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxBitmapButtonXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxBitmapButtonXmlHandler);
 
 public:
     wxBitmapButtonXmlHandler();

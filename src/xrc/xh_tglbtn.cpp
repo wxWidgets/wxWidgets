@@ -20,7 +20,7 @@
 #include "wx/tglbtn.h"
 #include "wx/button.h" // solely for wxBU_EXACTFIT
 
-IMPLEMENT_DYNAMIC_CLASS(wxToggleButtonXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxToggleButtonXmlHandler, wxXmlResourceHandler);
 
 wxToggleButtonXmlHandler::wxToggleButtonXmlHandler()
     : wxXmlResourceHandler()

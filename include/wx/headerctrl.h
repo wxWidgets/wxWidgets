@@ -232,7 +232,7 @@ private:
     void OnRClick(wxHeaderCtrlEvent& event);
 #endif // wxUSE_MENUS
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -418,7 +418,7 @@ protected:
     unsigned int m_order;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHeaderCtrlEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHeaderCtrlEvent);
 };
 
 

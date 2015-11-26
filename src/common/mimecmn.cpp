@@ -750,9 +750,9 @@ public:
         }
     }
 
-    DECLARE_DYNAMIC_CLASS(wxMimeTypeCmnModule)
+    wxDECLARE_DYNAMIC_CLASS(wxMimeTypeCmnModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxMimeTypeCmnModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxMimeTypeCmnModule, wxModule);
 
 #endif // wxUSE_MIMETYPE

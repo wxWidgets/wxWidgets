@@ -16,8 +16,8 @@
 
 #include "wx/region.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
-IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject);
+wxIMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject);
 
 //-----------------------------------------------------------------------------
 // wxRegionRefData

@@ -27,7 +27,7 @@ private:
     bool m_isInside;
     wxCollapsiblePane *m_collpane;
 
-    DECLARE_DYNAMIC_CLASS(wxCollapsiblePaneXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxCollapsiblePaneXmlHandler);
 };
 
 #endif // wxUSE_XRC && wxUSE_COLLPANE

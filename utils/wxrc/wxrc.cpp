@@ -254,7 +254,7 @@ private:
         void GenCPPHeader();
 };
 
-IMPLEMENT_APP_CONSOLE(XmlResApp)
+wxIMPLEMENT_APP_CONSOLE(XmlResApp);
 
 int XmlResApp::OnRun()
 {

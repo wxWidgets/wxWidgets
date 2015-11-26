@@ -238,7 +238,7 @@ public:
     void OnExit() wxOVERRIDE {}
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGtkPrintModule)
+    wxDECLARE_DYNAMIC_CLASS(wxGtkPrintModule);
 };
 
 bool wxGtkPrintModule::OnInit()
@@ -252,7 +252,7 @@ bool wxGtkPrintModule::OnInit()
     return true;
 }
 
-IMPLEMENT_DYNAMIC_CLASS(wxGtkPrintModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxGtkPrintModule, wxModule);
 
 //----------------------------------------------------------------------------
 // wxGtkPrintFactory
@@ -386,7 +386,7 @@ extern "C"
 // wxGtkPrintNativeData
 //----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxGtkPrintNativeData, wxPrintNativeDataBase)
+wxIMPLEMENT_CLASS(wxGtkPrintNativeData, wxPrintNativeDataBase);
 
 wxGtkPrintNativeData::wxGtkPrintNativeData()
 {
@@ -599,7 +599,7 @@ void wxGtkPrintNativeData::SetPageSetupToSettings(GtkPrintSettings* settings, Gt
 // wxGtkPrintDialog
 //----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxGtkPrintDialog, wxPrintDialogBase)
+wxIMPLEMENT_CLASS(wxGtkPrintDialog, wxPrintDialogBase);
 
 wxGtkPrintDialog::wxGtkPrintDialog( wxWindow *parent, wxPrintDialogData *data )
                     : wxPrintDialogBase(parent, wxID_ANY, _("Print"),
@@ -744,7 +744,7 @@ int wxGtkPrintDialog::ShowModal()
 // wxGtkPageSetupDialog
 //----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxGtkPageSetupDialog, wxPageSetupDialogBase)
+wxIMPLEMENT_CLASS(wxGtkPageSetupDialog, wxPageSetupDialogBase);
 
 wxGtkPageSetupDialog::wxGtkPageSetupDialog( wxWindow *parent,
                             wxPageSetupDialogData* data )
@@ -866,7 +866,7 @@ int wxGtkPageSetupDialog::ShowModal()
 // wxGtkPrinter
 //----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxGtkPrinter, wxPrinterBase)
+wxIMPLEMENT_CLASS(wxGtkPrinter, wxPrinterBase);
 
 wxGtkPrinter::wxGtkPrinter( wxPrintDialogData *data ) :
     wxPrinterBase( data )
@@ -1173,7 +1173,7 @@ bool wxGtkPrinter::Setup( wxWindow * WXUNUSED(parent) )
 
 #endif
 
-IMPLEMENT_ABSTRACT_CLASS(wxGtkPrinterDCImpl, wxDCImpl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxGtkPrinterDCImpl, wxDCImpl);
 
 wxGtkPrinterDCImpl::wxGtkPrinterDCImpl(wxPrinterDC *owner, const wxPrintData& data)
                   : wxDCImpl( owner )
@@ -2269,7 +2269,7 @@ int wxGtkPrinterDCImpl::GetResolution() const
 // Print preview
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxGtkPrintPreview, wxPrintPreviewBase)
+wxIMPLEMENT_CLASS(wxGtkPrintPreview, wxPrintPreviewBase);
 
 void wxGtkPrintPreview::Init(wxPrintout * WXUNUSED(printout),
                              wxPrintout * WXUNUSED(printoutForPrinting),

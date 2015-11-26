@@ -59,7 +59,7 @@ wxString GetMRUEntryLabel(int n, const wxString& path)
 // File history (a.k.a. MRU, most recently used, files list)
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFileHistory, wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFileHistory, wxObject);
 
 wxFileHistoryBase::wxFileHistoryBase(size_t maxFiles, wxWindowID idBase)
 {

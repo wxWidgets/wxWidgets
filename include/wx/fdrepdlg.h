@@ -161,7 +161,7 @@ public:
 private:
     wxString m_strReplace;
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFindDialogEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFindDialogEvent);
 };
 
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_FIND, wxFindDialogEvent );

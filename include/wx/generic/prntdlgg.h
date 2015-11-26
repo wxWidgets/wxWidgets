@@ -128,7 +128,7 @@ private:
 #endif
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPostScriptPrintNativeData)
+    wxDECLARE_DYNAMIC_CLASS(wxPostScriptPrintNativeData);
 };
 
 // ----------------------------------------------------------------------------
@@ -177,8 +177,8 @@ protected:
     void Init(wxWindow *parent);
 
 private:
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxGenericPrintDialog)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS(wxGenericPrintDialog);
 };
 
 class WXDLLIMPEXP_CORE wxGenericPrintSetupDialog : public wxDialog
@@ -213,8 +213,8 @@ public:
     wxPrintData*        m_targetData;
 
 private:
-    DECLARE_EVENT_TABLE()
-    DECLARE_CLASS(wxGenericPrintSetupDialog)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_CLASS(wxGenericPrintSetupDialog);
 };
 #endif
     // wxUSE_POSTSCRIPT
@@ -246,8 +246,8 @@ public:
     wxPageSetupDialogData m_pageData;
 
 private:
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGenericPageSetupDialog)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxGenericPageSetupDialog);
 };
 
 #endif

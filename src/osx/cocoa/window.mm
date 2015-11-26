@@ -1810,7 +1810,7 @@ void wxOSXCocoaClassAddWXMethods(Class c)
 // C++ implementation class
 //
 
-IMPLEMENT_DYNAMIC_CLASS( wxWidgetCocoaImpl , wxWidgetImpl )
+wxIMPLEMENT_DYNAMIC_CLASS(wxWidgetCocoaImpl , wxWidgetImpl);
 
 wxWidgetCocoaImpl::wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, bool isRootControl, bool isUserPane ) :
     wxWidgetImpl( peer, isRootControl, isUserPane )

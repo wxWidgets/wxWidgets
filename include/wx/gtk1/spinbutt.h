@@ -56,8 +56,8 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
 private:
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxSpinButton)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS(wxSpinButton);
 };
 
 #endif

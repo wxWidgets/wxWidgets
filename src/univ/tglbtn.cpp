@@ -25,7 +25,7 @@
 
 wxDEFINE_EVENT( wxEVT_TOGGLEBUTTON, wxCommandEvent );
 
-IMPLEMENT_DYNAMIC_CLASS(wxToggleButton, wxToggleButtonBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxToggleButton, wxToggleButtonBase);
 
 wxToggleButton::wxToggleButton()
 {

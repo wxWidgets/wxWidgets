@@ -429,8 +429,8 @@ public:
 private:
     wxMenu *m_menu;
     wxString m_title;
-    
-    DECLARE_DYNAMIC_CLASS(wxMenuInfoHelper)
+
+    wxDECLARE_DYNAMIC_CLASS(wxMenuInfoHelper);
 };
 
 WX_DECLARE_EXPORTED_LIST(wxMenuInfoHelper, wxMenuInfoHelperList );

@@ -57,7 +57,7 @@ protected:
 private:
     wxString m_selectedDirectory;
 
-    DECLARE_DYNAMIC_CLASS(wxDirDialog)
+    wxDECLARE_DYNAMIC_CLASS(wxDirDialog);
 };
 
 #endif // __GTKDIRDLGH__

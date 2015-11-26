@@ -176,7 +176,7 @@ public:
     }
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     void OnSize(wxSizeEvent& event)
     {
         SizeColumns();
@@ -184,16 +184,16 @@ private:
     }
 };
 
-BEGIN_EVENT_TABLE(CleverListCtrl, wxListCtrl)
+wxBEGIN_EVENT_TABLE(CleverListCtrl, wxListCtrl)
    EVT_SIZE(CleverListCtrl::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 // ----------------------------------------------------------------------------
 // wxEditableListBox
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxEditableListBox, wxPanel)
+wxIMPLEMENT_CLASS(wxEditableListBox, wxPanel);
 
 // NB: generate the IDs at runtime to avoid conflict with XRCID values,
 //     they could cause XRCCTRL() failures in XRC-based dialogs
@@ -204,7 +204,7 @@ const wxWindowIDRef wxID_ELB_UP = wxWindow::NewControlId();
 const wxWindowIDRef wxID_ELB_DOWN = wxWindow::NewControlId();
 const wxWindowIDRef wxID_ELB_LISTCTRL = wxWindow::NewControlId();
 
-BEGIN_EVENT_TABLE(wxEditableListBox, wxPanel)
+wxBEGIN_EVENT_TABLE(wxEditableListBox, wxPanel)
     EVT_LIST_ITEM_SELECTED(wxID_ELB_LISTCTRL, wxEditableListBox::OnItemSelected)
     EVT_LIST_END_LABEL_EDIT(wxID_ELB_LISTCTRL, wxEditableListBox::OnEndLabelEdit)
     EVT_BUTTON(wxID_ELB_NEW, wxEditableListBox::OnNewItem)
@@ -212,7 +212,7 @@ BEGIN_EVENT_TABLE(wxEditableListBox, wxPanel)
     EVT_BUTTON(wxID_ELB_DOWN, wxEditableListBox::OnDownItem)
     EVT_BUTTON(wxID_ELB_EDIT, wxEditableListBox::OnEditItem)
     EVT_BUTTON(wxID_ELB_DELETE, wxEditableListBox::OnDelItem)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
                           const wxString& label,

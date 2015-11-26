@@ -92,7 +92,7 @@ public:
 private:
     pthread_key_t m_key;
 
-    DECLARE_NO_COPY_CLASS(PthreadKey)
+    wxDECLARE_NO_COPY_CLASS(PthreadKey);
 };
 
 BENCHMARK_FUNC(PosixTLS)
@@ -132,7 +132,7 @@ public:
 private:
     DWORD m_slot;
 
-    DECLARE_NO_COPY_CLASS(TlsSlot)
+    wxDECLARE_NO_COPY_CLASS(TlsSlot);
 };
 
 BENCHMARK_FUNC(Win32TLS)

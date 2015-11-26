@@ -129,7 +129,7 @@ protected:
 private:
     void Init(); //common construction
 
-    DECLARE_DYNAMIC_CLASS(wxListBox)
+    wxDECLARE_DYNAMIC_CLASS(wxListBox);
 };
 
 #endif // _WX_GTK_LISTBOX_H_

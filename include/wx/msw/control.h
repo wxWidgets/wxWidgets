@@ -130,7 +130,7 @@ protected:
     wxArrayLong m_subControls;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxControl)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxControl);
 };
 
 #endif // _WX_CONTROL_H_

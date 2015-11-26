@@ -71,7 +71,7 @@ private:
 
     wxFTP *m_ftp;
 
-    DECLARE_NO_COPY_CLASS(FTPTestCase)
+    wxDECLARE_NO_COPY_CLASS(FTPTestCase);
 };
 
 // NOTE: we do not run FTPTestCase suite by default because buildslaves typically

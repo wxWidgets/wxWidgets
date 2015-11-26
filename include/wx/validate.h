@@ -90,7 +90,7 @@ protected:
 private:
     static bool ms_isSilent;
 
-    DECLARE_DYNAMIC_CLASS(wxValidator)
+    wxDECLARE_DYNAMIC_CLASS(wxValidator);
     wxDECLARE_NO_ASSIGN_CLASS(wxValidator);
 };
 

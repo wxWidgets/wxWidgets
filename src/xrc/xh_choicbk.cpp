@@ -26,7 +26,7 @@
 #include "wx/choicebk.h"
 #include "wx/imaglist.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxChoicebookXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxChoicebookXmlHandler, wxXmlResourceHandler);
 
 wxChoicebookXmlHandler::wxChoicebookXmlHandler()
                        :wxXmlResourceHandler(),

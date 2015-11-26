@@ -238,7 +238,7 @@ private:
 // ========================================================================
 // wxRegionGeneric
 // ========================================================================
-//IMPLEMENT_DYNAMIC_CLASS(wxRegionGeneric, wxGDIObject)
+//wxIMPLEMENT_DYNAMIC_CLASS(wxRegionGeneric, wxGDIObject);
 
 #define M_REGIONDATA ((wxRegionRefData *)m_refData)
 #define M_REGIONDATA_OF(rgn) ((wxRegionRefData *)(rgn.m_refData))
@@ -400,7 +400,7 @@ wxRegionContain wxRegionGeneric::DoContainsRect(const wxRect& rect) const
 // ========================================================================
 // wxRegionIteratorGeneric
 // ========================================================================
-//IMPLEMENT_DYNAMIC_CLASS(wxRegionIteratorGeneric,wxObject)
+//wxIMPLEMENT_DYNAMIC_CLASS(wxRegionIteratorGeneric, wxObject);
 
 wxRegionIteratorGeneric::wxRegionIteratorGeneric()
 {

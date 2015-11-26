@@ -77,7 +77,7 @@ wxBEGIN_FLAGS( wxRadioBoxStyle )
     wxFLAGS_MEMBER(wxRA_SPECIFY_ROWS)
 wxEND_FLAGS( wxRadioBoxStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxRadioBox, wxControl,"wx/radiobox.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxRadioBox, wxControl, "wx/radiobox.h");
 
 wxBEGIN_PROPERTIES_TABLE(wxRadioBox)
     wxEVENT_PROPERTY( Select , wxEVT_RADIOBOX , wxCommandEvent )
@@ -85,7 +85,7 @@ wxBEGIN_PROPERTIES_TABLE(wxRadioBox)
 wxEND_PROPERTIES_TABLE()
 
 #else
-IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl);
 #endif
 
 /*

@@ -57,12 +57,12 @@
 // Keep linker from discarding wxStockGDIMac
 wxFORCE_LINK_MODULE(gdiobj)
 
-IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
-BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler);
+wxBEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
     EVT_IDLE(wxApp::OnIdle)
     EVT_END_SESSION(wxApp::OnEndSession)
     EVT_QUERY_END_SESSION(wxApp::OnQueryEndSession)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 wxWindow* wxApp::s_captureWindow = NULL ;

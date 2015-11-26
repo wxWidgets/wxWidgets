@@ -29,7 +29,7 @@
 #include "wx/osx/dcprint.h"
 #include "wx/graphics.h"
 
-IMPLEMENT_ABSTRACT_CLASS(wxPrinterDCImpl, wxGCDCImpl)
+wxIMPLEMENT_ABSTRACT_CLASS(wxPrinterDCImpl, wxGCDCImpl);
 
 class wxNativePrinterDC
 {

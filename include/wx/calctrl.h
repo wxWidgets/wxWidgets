@@ -172,7 +172,7 @@ public:
 private:
     wxDateTime::WeekDay m_wday;
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxCalendarEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxCalendarEvent);
 };
 
 // ----------------------------------------------------------------------------

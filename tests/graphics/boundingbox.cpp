@@ -135,7 +135,7 @@ private:
     void GradientFillConcentric();
     void DrawCheckMark();
 
-    DECLARE_NO_COPY_CLASS(GCDCBoundingBoxTestCase)
+    wxDECLARE_NO_COPY_CLASS(GCDCBoundingBoxTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

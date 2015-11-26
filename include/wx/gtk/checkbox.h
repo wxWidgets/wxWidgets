@@ -61,7 +61,7 @@ private:
     GtkWidget *m_widgetCheckbox;
     GtkWidget *m_widgetLabel;
 
-    DECLARE_DYNAMIC_CLASS(wxCheckBox)
+    wxDECLARE_DYNAMIC_CLASS(wxCheckBox);
 };
 
 #endif // _WX_GTKCHECKBOX_H_

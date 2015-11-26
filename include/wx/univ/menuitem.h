@@ -121,7 +121,7 @@ protected:
             m_height;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxMenuItem)
+    wxDECLARE_DYNAMIC_CLASS(wxMenuItem);
 };
 
 #endif // _WX_UNIV_MENUITEM_H_

@@ -104,7 +104,7 @@ private:
     // value that is going to be rendered
     wxVariant m_value;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRenderer)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRenderer);
 };
 
 #endif // _WX_OSX_DVRENDERER_H_

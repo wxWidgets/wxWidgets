@@ -24,7 +24,7 @@
 #include "wx/osx/private.h"
 
 
-IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
+wxIMPLEMENT_CLASS(wxMessageDialog, wxDialog);
 
 
 namespace 

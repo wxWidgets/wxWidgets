@@ -57,10 +57,10 @@ public:
     virtual bool OnInit() wxOVERRIDE { return true; }
     virtual void OnExit() wxOVERRIDE { wxDELETE(gs_cLocale); }
 
-    DECLARE_DYNAMIC_CLASS(wxXLocaleModule)
+    wxDECLARE_DYNAMIC_CLASS(wxXLocaleModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxXLocaleModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxXLocaleModule, wxModule);
 
 
 // ============================================================================

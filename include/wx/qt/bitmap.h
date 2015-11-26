@@ -83,7 +83,7 @@ protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
-    DECLARE_DYNAMIC_CLASS(wxBitmap)
+    wxDECLARE_DYNAMIC_CLASS(wxBitmap);
 };
 
 class WXDLLIMPEXP_CORE wxMask : public wxObject
@@ -118,7 +118,7 @@ public:
     QBitmap *GetHandle() const;
 
 protected:
-    DECLARE_DYNAMIC_CLASS(wxMask)
+    wxDECLARE_DYNAMIC_CLASS(wxMask);
 
 private:
     QBitmap *m_qtBitmap;

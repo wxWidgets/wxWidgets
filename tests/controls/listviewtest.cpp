@@ -41,7 +41,7 @@ private:
 
     wxListView *m_list;
 
-    DECLARE_NO_COPY_CLASS(ListViewTestCase)
+    wxDECLARE_NO_COPY_CLASS(ListViewTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

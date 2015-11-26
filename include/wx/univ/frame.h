@@ -81,8 +81,8 @@ protected:
     virtual void PositionToolBar() wxOVERRIDE;
 #endif // wxUSE_TOOLBAR
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxFrame)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS(wxFrame);
 };
 
 #endif // _WX_UNIV_FRAME_H_

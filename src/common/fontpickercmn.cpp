@@ -42,8 +42,8 @@ const char wxFontPickerCtrlNameStr[] = "fontpicker";
 const char wxFontPickerWidgetNameStr[] = "fontpickerwidget";
 
 wxDEFINE_EVENT(wxEVT_FONTPICKER_CHANGED, wxFontPickerEvent);
-IMPLEMENT_DYNAMIC_CLASS(wxFontPickerCtrl, wxPickerBase)
-IMPLEMENT_DYNAMIC_CLASS(wxFontPickerEvent, wxCommandEvent)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFontPickerCtrl, wxPickerBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxFontPickerEvent, wxCommandEvent);
 
 // ----------------------------------------------------------------------------
 // wxFontPickerCtrl

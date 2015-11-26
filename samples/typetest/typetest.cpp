@@ -46,9 +46,9 @@
 #include "wx/mstream.h"
 
 // Create a new application object
-IMPLEMENT_APP    (MyApp)
+wxIMPLEMENT_APP(MyApp);
 
-IMPLEMENT_DYNAMIC_CLASS    (MyApp, wxApp)
+wxIMPLEMENT_DYNAMIC_CLASS(MyApp, wxApp);
 
 wxBEGIN_EVENT_TABLE(MyApp, wxApp)
     EVT_MENU(TYPES_VARIANT,   MyApp::DoVariantDemo)

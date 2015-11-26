@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_XRC wxScrolledWindowXmlHandler : public wxXmlResourceHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxScrolledWindowXmlHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxScrolledWindowXmlHandler);
 
 public:
     wxScrolledWindowXmlHandler();

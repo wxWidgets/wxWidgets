@@ -93,7 +93,7 @@ protected:
     // when it is called while the frame is hidden
     bool m_maximizeOnShow;
 private :
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // _WX_MSW_TOPLEVEL_H_

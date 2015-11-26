@@ -16,13 +16,13 @@
  * wxRichTextIndentsSpacingPage type definition
  */
 
-IMPLEMENT_DYNAMIC_CLASS( wxRichTextIndentsSpacingPage, wxRichTextDialogPage )
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextIndentsSpacingPage, wxRichTextDialogPage);
 
 /*!
  * wxRichTextIndentsSpacingPage event table definition
  */
 
-BEGIN_EVENT_TABLE( wxRichTextIndentsSpacingPage, wxRichTextDialogPage )
+wxBEGIN_EVENT_TABLE( wxRichTextIndentsSpacingPage, wxRichTextDialogPage )
 
 ////@begin wxRichTextIndentsSpacingPage event table entries
     EVT_RADIOBUTTON( ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_LEFT, wxRichTextIndentsSpacingPage::OnAlignmentLeftSelected )
@@ -39,7 +39,7 @@ BEGIN_EVENT_TABLE( wxRichTextIndentsSpacingPage, wxRichTextDialogPage )
     EVT_COMBOBOX( ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_LINE, wxRichTextIndentsSpacingPage::OnSpacingLineSelected )
 ////@end wxRichTextIndentsSpacingPage event table entries
 
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_HELP_PROVISION(wxRichTextIndentsSpacingPage)
 

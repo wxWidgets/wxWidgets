@@ -52,7 +52,7 @@ protected:
 
     WXPixmap m_insensPixmap;
 
-    DECLARE_DYNAMIC_CLASS(wxBitmapButton)
+    wxDECLARE_DYNAMIC_CLASS(wxBitmapButton);
 };
 
 #endif // _WX_BMPBUTTN_H_

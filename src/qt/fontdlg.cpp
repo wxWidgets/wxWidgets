@@ -26,7 +26,7 @@ public:
         }
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
 
 bool wxFontDialog::DoCreate(wxWindow *parent)
 {

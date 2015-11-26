@@ -156,11 +156,11 @@ private:
     // the maximum length of the log message
     static size_t ms_maxLength;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxLogDialog);
 };
 
-BEGIN_EVENT_TABLE(wxLogDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(wxLogDialog, wxDialog)
     EVT_BUTTON(wxID_OK, wxLogDialog::OnOk)
 #if wxUSE_CLIPBOARD
     EVT_BUTTON(wxID_COPY,   wxLogDialog::OnCopy)
@@ -169,7 +169,7 @@ BEGIN_EVENT_TABLE(wxLogDialog, wxDialog)
     EVT_BUTTON(wxID_SAVE,   wxLogDialog::OnSave)
 #endif // CAN_SAVE_FILES
     EVT_LIST_ITEM_ACTIVATED(wxID_ANY, wxLogDialog::OnListItemActivated)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #endif // wxUSE_LOG_DIALOG
 
@@ -479,11 +479,11 @@ private:
     wxTextCtrl  *m_pTextCtrl;
     wxLogWindow *m_log;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxLogFrame);
 };
 
-BEGIN_EVENT_TABLE(wxLogFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(wxLogFrame, wxFrame)
     // wxLogWindow menu events
     EVT_MENU(Menu_Close, wxLogFrame::OnClose)
 #if CAN_SAVE_FILES
@@ -492,7 +492,7 @@ BEGIN_EVENT_TABLE(wxLogFrame, wxFrame)
     EVT_MENU(Menu_Clear, wxLogFrame::OnClear)
 
     EVT_CLOSE(wxLogFrame::OnCloseWindow)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxLogFrame::wxLogFrame(wxWindow *pParent, wxLogWindow *log, const wxString& szTitle)
           : wxFrame(pParent, wxID_ANY, szTitle)

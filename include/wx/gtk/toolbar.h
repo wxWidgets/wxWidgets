@@ -95,7 +95,7 @@ private:
     GtkToolbar* m_toolbar;
     GtkTooltips* m_tooltips;
 
-    DECLARE_DYNAMIC_CLASS(wxToolBar)
+    wxDECLARE_DYNAMIC_CLASS(wxToolBar);
 };
 
 #endif

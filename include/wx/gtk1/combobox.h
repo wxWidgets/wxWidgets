@@ -176,8 +176,8 @@ protected:
     virtual bool UseGTKStyleBase() const { return true; }
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox);
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif

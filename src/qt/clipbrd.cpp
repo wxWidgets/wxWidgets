@@ -19,7 +19,7 @@
 // wxClipboard ctor/dtor
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxClipboard,wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject);
 
 #define QtClipboard  QApplication::clipboard()
 typedef wxScopedArray<wxDataFormat> wxDataFormatArray;

@@ -42,7 +42,7 @@ private:
 
     wxColourPickerCtrl *m_colour;
 
-    DECLARE_NO_COPY_CLASS(ColourPickerCtrlTestCase)
+    wxDECLARE_NO_COPY_CLASS(ColourPickerCtrlTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default
@@ -86,7 +86,7 @@ private:
 
     wxDirPickerCtrl *m_dir;
 
-    DECLARE_NO_COPY_CLASS(DirPickerCtrlTestCase)
+    wxDECLARE_NO_COPY_CLASS(DirPickerCtrlTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default
@@ -131,7 +131,7 @@ private:
 
     wxFilePickerCtrl *m_file;
 
-    DECLARE_NO_COPY_CLASS(FilePickerCtrlTestCase)
+    wxDECLARE_NO_COPY_CLASS(FilePickerCtrlTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default
@@ -180,7 +180,7 @@ private:
 
     wxFontPickerCtrl *m_font;
 
-    DECLARE_NO_COPY_CLASS(FontPickerCtrlTestCase)
+    wxDECLARE_NO_COPY_CLASS(FontPickerCtrlTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

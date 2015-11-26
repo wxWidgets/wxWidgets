@@ -78,7 +78,7 @@ private:
     wxString m_filename;
     WXHANDLE m_hMF;
 
-    DECLARE_DYNAMIC_CLASS(wxEnhMetaFile)
+    wxDECLARE_DYNAMIC_CLASS(wxEnhMetaFile);
 };
 
 // ----------------------------------------------------------------------------
@@ -106,7 +106,7 @@ public:
     wxEnhMetaFile *Close();
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxEnhMetaFileDC)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxEnhMetaFileDC);
 };
 
 #if wxUSE_DRAG_AND_DROP

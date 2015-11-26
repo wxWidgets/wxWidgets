@@ -62,7 +62,7 @@
 // Is browser a netscape browser?
 #define WXEXTHELP_ENVVAR_BROWSERISNETSCAPE  wxT("WX_HELPBROWSER_NS")
 
-IMPLEMENT_CLASS(wxExtHelpController, wxHelpControllerBase)
+wxIMPLEMENT_CLASS(wxExtHelpController, wxHelpControllerBase);
 
 wxExtHelpController::wxExtHelpController(wxWindow* parentWindow)
                    : wxHelpControllerBase(parentWindow)

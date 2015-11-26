@@ -49,7 +49,7 @@ private:
 
     wxSpinCtrl* m_spin;
 
-    DECLARE_NO_COPY_CLASS(SpinCtrlTestCase)
+    wxDECLARE_NO_COPY_CLASS(SpinCtrlTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

@@ -188,10 +188,10 @@ public:
     }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxExecuteModule)
+    wxDECLARE_DYNAMIC_CLASS(wxExecuteModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxExecuteModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxExecuteModule, wxModule);
 
 #if wxUSE_STREAMS && !defined(__WXWINCE__)
 

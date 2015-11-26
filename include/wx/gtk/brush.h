@@ -47,7 +47,7 @@ protected:
     virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
 
-    DECLARE_DYNAMIC_CLASS(wxBrush)
+    wxDECLARE_DYNAMIC_CLASS(wxBrush);
 };
 
 #endif // _WX_GTK_BRUSH_H_

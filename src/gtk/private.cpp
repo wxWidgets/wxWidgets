@@ -276,10 +276,10 @@ public:
         }
     }
 
-    DECLARE_DYNAMIC_CLASS(WidgetsCleanupModule)
+    wxDECLARE_DYNAMIC_CLASS(WidgetsCleanupModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(WidgetsCleanupModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(WidgetsCleanupModule, wxModule);
 
 static WidgetsCleanupModule gs_widgetsCleanupModule;
 

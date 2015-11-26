@@ -22,7 +22,7 @@
    #include "wx/stattext.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticTextXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxStaticTextXmlHandler, wxXmlResourceHandler);
 
 wxStaticTextXmlHandler::wxStaticTextXmlHandler()
 : wxXmlResourceHandler()
@@ -32,6 +32,8 @@ wxStaticTextXmlHandler::wxStaticTextXmlHandler()
     XRC_ADD_STYLE(wxALIGN_RIGHT);
     XRC_ADD_STYLE(wxALIGN_CENTER);
     XRC_ADD_STYLE(wxALIGN_CENTRE);
+    XRC_ADD_STYLE(wxALIGN_CENTER_HORIZONTAL);
+    XRC_ADD_STYLE(wxALIGN_CENTRE_HORIZONTAL);
     AddWindowStyles();
 }
 

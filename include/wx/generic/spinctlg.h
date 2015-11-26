@@ -167,7 +167,7 @@ private:
     // Implement pure virtual function inherited from wxCompositeWindow.
     virtual wxWindowList GetCompositeWindowParts() const;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #else // !wxUSE_SPINBTN
@@ -341,7 +341,7 @@ private:
 
     int m_base;
 
-    DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
+    wxDECLARE_DYNAMIC_CLASS(wxSpinCtrl);
 };
 
 #endif // wxHAS_NATIVE_SPINCTRL
@@ -423,7 +423,7 @@ private:
 
     wxString m_format;
 
-    DECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble)
+    wxDECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble);
 };
 
 #endif // _WX_GENERIC_SPINCTRL_H_

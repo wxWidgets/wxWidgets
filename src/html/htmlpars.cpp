@@ -73,7 +73,7 @@ public:
 // wxHtmlParser
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxHtmlParser,wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxHtmlParser,wxObject);
 
 wxHtmlParser::wxHtmlParser()
     : wxObject(),
@@ -412,7 +412,7 @@ wxString wxHtmlParser::GetInnerSource(const wxHtmlTag& tag)
 // wxHtmlTagHandler
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxHtmlTagHandler,wxObject)
+wxIMPLEMENT_ABSTRACT_CLASS(wxHtmlTagHandler, wxObject);
 
 void wxHtmlTagHandler::ParseInnerSource(const wxString& source)
 {
@@ -428,7 +428,7 @@ void wxHtmlTagHandler::ParseInnerSource(const wxString& source)
 // wxHtmlEntitiesParser
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxHtmlEntitiesParser,wxObject)
+wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlEntitiesParser, wxObject);
 
 wxHtmlEntitiesParser::wxHtmlEntitiesParser()
 #if !wxUSE_UNICODE

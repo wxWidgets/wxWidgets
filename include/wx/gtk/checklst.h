@@ -42,7 +42,7 @@ public:
     void DoCreateCheckList();
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxCheckListBox)
+    wxDECLARE_DYNAMIC_CLASS(wxCheckListBox);
 };
 
 #endif   // _WX_GTKCHECKLIST_H_

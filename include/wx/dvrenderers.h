@@ -72,7 +72,7 @@ private:
     wxString    m_text;
     wxIcon      m_icon;
 
-    DECLARE_DYNAMIC_CLASS(wxDataViewIconText)
+    wxDECLARE_DYNAMIC_CLASS(wxDataViewIconText);
 };
 
 DECLARE_VARIANT_OBJECT_EXPORTED(wxDataViewIconText, WXDLLIMPEXP_ADV)
@@ -188,7 +188,7 @@ protected:
     wxDataViewCtrl* GetView() const;
 
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRendererBase)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRendererBase);
 };
 
 // include the real wxDataViewRenderer declaration for the native ports

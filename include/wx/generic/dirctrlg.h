@@ -206,8 +206,8 @@ private:
     wxDirFilterListCtrl* m_filterListCtrl;
 
 private:
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxGenericDirCtrl)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS(wxGenericDirCtrl);
     wxDECLARE_NO_COPY_CLASS(wxGenericDirCtrl);
 };
 
@@ -255,8 +255,8 @@ public:
 protected:
     wxGenericDirCtrl*    m_dirCtrl;
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_CLASS(wxDirFilterListCtrl)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_CLASS(wxDirFilterListCtrl);
     wxDECLARE_NO_COPY_CLASS(wxDirFilterListCtrl);
 };
 

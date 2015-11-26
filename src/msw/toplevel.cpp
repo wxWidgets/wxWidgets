@@ -101,18 +101,18 @@ private:
     // the class used to create it
     static const wxChar *ms_className;
 
-    DECLARE_DYNAMIC_CLASS(wxTLWHiddenParentModule)
+    wxDECLARE_DYNAMIC_CLASS(wxTLWHiddenParentModule);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxTLWHiddenParentModule, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxTLWHiddenParentModule, wxModule);
 
 // ============================================================================
 // wxTopLevelWindowMSW implementation
 // ============================================================================
 
-BEGIN_EVENT_TABLE(wxTopLevelWindowMSW, wxTopLevelWindowBase)
+wxBEGIN_EVENT_TABLE(wxTopLevelWindowMSW, wxTopLevelWindowBase)
     EVT_ACTIVATE(wxTopLevelWindowMSW::OnActivate)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowMSW creation

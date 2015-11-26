@@ -37,16 +37,16 @@
 
 //---------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxSizerItem, wxObject)
-IMPLEMENT_CLASS(wxSizer, wxObject)
-IMPLEMENT_CLASS(wxGridSizer, wxSizer)
-IMPLEMENT_CLASS(wxFlexGridSizer, wxGridSizer)
-IMPLEMENT_CLASS(wxBoxSizer, wxSizer)
+wxIMPLEMENT_CLASS(wxSizerItem, wxObject);
+wxIMPLEMENT_CLASS(wxSizer, wxObject);
+wxIMPLEMENT_CLASS(wxGridSizer, wxSizer);
+wxIMPLEMENT_CLASS(wxFlexGridSizer, wxGridSizer);
+wxIMPLEMENT_CLASS(wxBoxSizer, wxSizer);
 #if wxUSE_STATBOX
-IMPLEMENT_CLASS(wxStaticBoxSizer, wxBoxSizer)
+wxIMPLEMENT_CLASS(wxStaticBoxSizer, wxBoxSizer);
 #endif
 #if wxUSE_BUTTON
-IMPLEMENT_CLASS(wxStdDialogButtonSizer, wxBoxSizer)
+wxIMPLEMENT_CLASS(wxStdDialogButtonSizer, wxBoxSizer);
 #endif
 
 WX_DEFINE_EXPORTED_LIST( wxSizerItemList )
@@ -83,6 +83,34 @@ WX_DEFINE_EXPORTED_LIST( wxSizerItemList )
        growablecols
     minsize
 */
+
+// ----------------------------------------------------------------------------
+// wxSizerFlags
+// ----------------------------------------------------------------------------
+
+#ifdef wxNEEDS_BORDER_IN_PX
+
+int wxSizerFlags::ms_defaultBorderInPx = 0;
+
+/* static */
+int wxSizerFlags::DoGetDefaultBorderInPx()
+{
+    // Hard code 5px as it's the minimal border size between two controls, see
+    // the table at the bottom of
+    // https://msdn.microsoft.com/en-us/library/windows/desktop/dn742486.aspx
+    //
+    // Of course, ideal would be to use the appropriate sizes for the borders
+    // between related and unrelated controls, as explained at the above URL,
+    // but we don't have a way to specify this in our API currently.
+    //
+    // We also have to use the DPI for the primary monitor here as we don't
+    // have any associated window, so this is wrong on systems using multiple
+    // monitors with different resolutions too -- but, again, without changes
+    // in the API, there is nothing we can do about this.
+    return wxWindow::FromDIP(5, NULL);
+}
+
+#endif // wxNEEDS_BORDER_IN_PX
 
 // ----------------------------------------------------------------------------
 // wxSizerItem

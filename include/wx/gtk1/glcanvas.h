@@ -101,7 +101,7 @@ public:
 #endif // WXWIN_COMPATIBILITY_2_8
 
 private:
-    DECLARE_CLASS(wxGLCanvas)
+    wxDECLARE_CLASS(wxGLCanvas);
 };
 
 #endif // _WX_GLCANVAS_H_

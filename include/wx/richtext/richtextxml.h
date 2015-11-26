@@ -175,7 +175,7 @@ class WXDLLIMPEXP_FWD_XML wxXmlDocument;
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextXMLHandler: public wxRichTextFileHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxRichTextXMLHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxRichTextXMLHandler);
 public:
     wxRichTextXMLHandler(const wxString& name = wxT("XML"), const wxString& ext = wxT("xml"), int type = wxRICHTEXT_TYPE_XML)
         : wxRichTextFileHandler(name, ext, type)

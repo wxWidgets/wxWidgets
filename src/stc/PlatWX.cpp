@@ -840,17 +840,17 @@ public:
 #endif
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(wxSTCListBox, wxListView)
+wxBEGIN_EVENT_TABLE(wxSTCListBox, wxListView)
     EVT_SET_FOCUS( wxSTCListBox::OnFocus)
     EVT_KILL_FOCUS(wxSTCListBox::OnKillFocus)
 #ifdef __WXMAC__
     EVT_KEY_DOWN(  wxSTCListBox::OnKeyDown)
     EVT_CHAR(      wxSTCListBox::OnChar)
 #endif
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 
@@ -973,15 +973,15 @@ public:
     wxListView* GetLB() { return lv; }
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
 };
 
-BEGIN_EVENT_TABLE(wxSTCListBoxWin, wxPopupWindow)
+wxBEGIN_EVENT_TABLE(wxSTCListBoxWin, wxPopupWindow)
     EVT_SET_FOCUS          (          wxSTCListBoxWin::OnFocus)
     EVT_SIZE               (          wxSTCListBoxWin::OnSize)
     EVT_LIST_ITEM_ACTIVATED(wxID_ANY, wxSTCListBoxWin::OnActivate)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 
@@ -1125,15 +1125,15 @@ public:
     wxListView* GetLB() { return lv; }
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
-BEGIN_EVENT_TABLE(wxSTCListBoxWin, wxWindow)
+wxBEGIN_EVENT_TABLE(wxSTCListBoxWin, wxWindow)
     EVT_SET_FOCUS          (          wxSTCListBoxWin::OnFocus)
     EVT_SIZE               (          wxSTCListBoxWin::OnSize)
     EVT_LIST_ITEM_ACTIVATED(wxID_ANY, wxSTCListBoxWin::OnActivate)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #endif // wxUSE_POPUPWIN -----------------------------------
 

@@ -108,8 +108,8 @@ protected:
     }
 
 private:
-    DECLARE_DYNAMIC_CLASS(MySpecialWidget)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(MySpecialWidget);
+    wxDECLARE_EVENT_TABLE();
 };
 @endcode
 

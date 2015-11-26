@@ -109,7 +109,7 @@ private:
     friend class wxTCPEventHandler;
 
     wxDECLARE_NO_COPY_CLASS(wxTCPConnection);
-    DECLARE_DYNAMIC_CLASS(wxTCPConnection)
+    wxDECLARE_DYNAMIC_CLASS(wxTCPConnection);
 };
 
 class WXDLLIMPEXP_NET wxTCPServer : public wxServerBase
@@ -132,7 +132,7 @@ protected:
 #endif // __UNIX_LIKE__
 
     wxDECLARE_NO_COPY_CLASS(wxTCPServer);
-    DECLARE_DYNAMIC_CLASS(wxTCPServer)
+    wxDECLARE_DYNAMIC_CLASS(wxTCPServer);
 };
 
 class WXDLLIMPEXP_NET wxTCPClient : public wxClientBase
@@ -151,7 +151,7 @@ public:
     virtual wxConnectionBase *OnMakeConnection() wxOVERRIDE;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxTCPClient)
+    wxDECLARE_DYNAMIC_CLASS(wxTCPClient);
 };
 
 #endif // wxUSE_SOCKETS && wxUSE_IPC

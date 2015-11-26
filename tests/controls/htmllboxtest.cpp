@@ -38,7 +38,7 @@ private:
 
     wxSimpleHtmlListBox* m_htmllbox;
 
-    DECLARE_NO_COPY_CLASS(HtmlListBoxTestCase)
+    wxDECLARE_NO_COPY_CLASS(HtmlListBoxTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

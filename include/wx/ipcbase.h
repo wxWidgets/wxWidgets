@@ -222,7 +222,7 @@ protected:
   bool          m_connected;
 
   wxDECLARE_NO_ASSIGN_CLASS(wxConnectionBase);
-  DECLARE_CLASS(wxConnectionBase)
+  wxDECLARE_CLASS(wxConnectionBase);
 };
 
 
@@ -238,7 +238,7 @@ public:
   // Callbacks to SERVER - override at will
   virtual wxConnectionBase *OnAcceptConnection(const wxString& topic) = 0;
 
-  DECLARE_CLASS(wxServerBase)
+  wxDECLARE_CLASS(wxServerBase);
 };
 
 class WXDLLIMPEXP_BASE wxClientBase : public wxObject
@@ -257,7 +257,7 @@ public:
   // Callbacks to CLIENT - override at will
   virtual wxConnectionBase *OnMakeConnection() = 0;
 
-  DECLARE_CLASS(wxClientBase)
+  wxDECLARE_CLASS(wxClientBase);
 };
 
 #endif // _WX_IPCBASEH__

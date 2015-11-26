@@ -171,7 +171,7 @@ protected:
     wxBitmapType m_type;
 
 private:
-    DECLARE_CLASS(wxImageHandler)
+    wxDECLARE_CLASS(wxImageHandler);
 };
 
 //-----------------------------------------------------------------------------
@@ -622,7 +622,7 @@ private:
     bool DoSave(wxImageHandler& handler, wxOutputStream& stream) const;
 #endif // wxUSE_STREAMS
 
-    DECLARE_DYNAMIC_CLASS(wxImage)
+    wxDECLARE_DYNAMIC_CLASS(wxImage);
 };
 
 

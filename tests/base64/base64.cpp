@@ -104,7 +104,7 @@ private:
     void EncodeDecodeRandom();
     void DecodeInvalid();
 
-    DECLARE_NO_COPY_CLASS(Base64TestCase)
+    wxDECLARE_NO_COPY_CLASS(Base64TestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

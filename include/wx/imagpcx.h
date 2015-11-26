@@ -36,7 +36,7 @@ protected:
 #endif // wxUSE_STREAMS
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPCXHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxPCXHandler);
 };
 #endif // wxUSE_PCX
 

@@ -50,7 +50,7 @@ private:
 
     wxNotebook *m_notebook;
 
-    DECLARE_NO_COPY_CLASS(NotebookTestCase)
+    wxDECLARE_NO_COPY_CLASS(NotebookTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

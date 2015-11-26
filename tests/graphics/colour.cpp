@@ -54,7 +54,7 @@ private:
     void GetSetRGB();
     void FromString();
 
-    DECLARE_NO_COPY_CLASS(ColourTestCase)
+    wxDECLARE_NO_COPY_CLASS(ColourTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

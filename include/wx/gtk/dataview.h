@@ -222,7 +222,7 @@ private:
     void GtkEnableSelectionEvents();
     void GtkDisableSelectionEvents();
 
-    DECLARE_DYNAMIC_CLASS(wxDataViewCtrl)
+    wxDECLARE_DYNAMIC_CLASS(wxDataViewCtrl);
     wxDECLARE_NO_COPY_CLASS(wxDataViewCtrl);
 };
 

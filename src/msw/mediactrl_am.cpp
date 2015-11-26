@@ -1479,7 +1479,7 @@ public:
     wxEvtHandler* m_evthandler;
 
     friend class wxAMMediaEvtHandler;
-    DECLARE_DYNAMIC_CLASS(wxAMMediaBackend)
+    wxDECLARE_DYNAMIC_CLASS(wxAMMediaBackend);
 };
 
 class WXDLLIMPEXP_MEDIA wxAMMediaEvtHandler : public wxEvtHandler
@@ -1515,7 +1515,7 @@ private:
 //
 //---------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxAMMediaBackend, wxMediaBackend)
+wxIMPLEMENT_DYNAMIC_CLASS(wxAMMediaBackend, wxMediaBackend);
 
 //---------------------------------------------------------------------------
 // Usual debugging macros

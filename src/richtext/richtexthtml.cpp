@@ -32,7 +32,7 @@
 #include "wx/fs_mem.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextHTMLHandler, wxRichTextFileHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextHTMLHandler, wxRichTextFileHandler);
 
 int wxRichTextHTMLHandler::sm_fileCounter = 1;
 

@@ -47,7 +47,7 @@ private:
     void Delete();
     void StaticCast();
 
-    DECLARE_NO_COPY_CLASS(MiscTestCase)
+    wxDECLARE_NO_COPY_CLASS(MiscTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

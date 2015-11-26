@@ -230,7 +230,7 @@ int RunMixedFontDialog(wxFontDialog* dialog)
 
 #if USE_NATIVE_FONT_DIALOG_FOR_MACOSX
 
-IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
+wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
 
 // Cocoa headers
 

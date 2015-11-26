@@ -18,14 +18,14 @@
  * wxRichTextMarginsPage type definition
  */
 
-IMPLEMENT_DYNAMIC_CLASS( wxRichTextMarginsPage, wxRichTextDialogPage )
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextMarginsPage, wxRichTextDialogPage);
 
 
 /*!
  * wxRichTextMarginsPage event table definition
  */
 
-BEGIN_EVENT_TABLE( wxRichTextMarginsPage, wxRichTextDialogPage )
+wxBEGIN_EVENT_TABLE(wxRichTextMarginsPage, wxRichTextDialogPage)
 
 ////@begin wxRichTextMarginsPage event table entries
     EVT_UPDATE_UI( ID_RICHTEXT_LEFT_MARGIN, wxRichTextMarginsPage::OnRichtextLeftMarginUpdate )
@@ -62,7 +62,7 @@ BEGIN_EVENT_TABLE( wxRichTextMarginsPage, wxRichTextDialogPage )
 
 ////@end wxRichTextMarginsPage event table entries
 
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_HELP_PROVISION(wxRichTextMarginsPage)
 

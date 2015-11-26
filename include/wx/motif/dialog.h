@@ -82,7 +82,7 @@ protected:
 
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxDialog)
+    wxDECLARE_DYNAMIC_CLASS(wxDialog);
 };
 
 #endif // _WX_DIALOG_H_

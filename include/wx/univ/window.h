@@ -284,8 +284,8 @@ private:
     static wxWindow *ms_winLastAltPress;
 #endif // wxUSE_MENUS
 
-    DECLARE_DYNAMIC_CLASS(wxWindow)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(wxWindow);
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // _WX_UNIV_WINDOW_H_

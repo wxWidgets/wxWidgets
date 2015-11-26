@@ -126,7 +126,7 @@ public:
 protected:
     wxVector<wxDataFormat> m_formats;
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxClipboardEvent)
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxClipboardEvent);
 };
 
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_CLIPBOARD_CHANGED, wxClipboardEvent );

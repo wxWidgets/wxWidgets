@@ -90,7 +90,7 @@ private:
     bool m_selected;
     int m_imageId;
     
-    DECLARE_DYNAMIC_CLASS(wxNotebookPageInfo)
+    wxDECLARE_DYNAMIC_CLASS(wxNotebookPageInfo);
 };
 
 WX_DECLARE_EXPORTED_LIST(wxNotebookPageInfo, wxNotebookPageInfoList );

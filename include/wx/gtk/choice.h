@@ -111,7 +111,7 @@ protected:
 private:
     void Init();
 
-    DECLARE_DYNAMIC_CLASS(wxChoice)
+    wxDECLARE_DYNAMIC_CLASS(wxChoice);
 };
 
 

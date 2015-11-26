@@ -281,13 +281,13 @@ bool wxSymbolPickerDialog::sm_showToolTips = false;
  * wxSymbolPickerDialog type definition
  */
 
-IMPLEMENT_DYNAMIC_CLASS( wxSymbolPickerDialog, wxDialog )
+wxIMPLEMENT_DYNAMIC_CLASS(wxSymbolPickerDialog, wxDialog);
 
 /*!
  * wxSymbolPickerDialog event table definition
  */
 
-BEGIN_EVENT_TABLE( wxSymbolPickerDialog, wxDialog )
+wxBEGIN_EVENT_TABLE(wxSymbolPickerDialog, wxDialog)
     EVT_LISTBOX(ID_SYMBOLPICKERDIALOG_LISTCTRL, wxSymbolPickerDialog::OnSymbolSelected)
 
 ////@begin wxSymbolPickerDialog event table entries
@@ -306,7 +306,7 @@ BEGIN_EVENT_TABLE( wxSymbolPickerDialog, wxDialog )
     EVT_UPDATE_UI( wxID_HELP, wxSymbolPickerDialog::OnHelpUpdate )
 ////@end wxSymbolPickerDialog event table entries
 
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_HELP_PROVISION(wxSymbolPickerDialog)
 
@@ -750,20 +750,20 @@ wxIcon wxSymbolPickerDialog::GetIconResource( const wxString& name )
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxSymbolListCtrl, wxVScrolledWindow)
+wxBEGIN_EVENT_TABLE(wxSymbolListCtrl, wxVScrolledWindow)
     EVT_PAINT(wxSymbolListCtrl::OnPaint)
     EVT_SIZE(wxSymbolListCtrl::OnSize)
 
     EVT_KEY_DOWN(wxSymbolListCtrl::OnKeyDown)
     EVT_LEFT_DOWN(wxSymbolListCtrl::OnLeftDown)
     EVT_LEFT_DCLICK(wxSymbolListCtrl::OnLeftDClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
 // ============================================================================
 
-IMPLEMENT_ABSTRACT_CLASS(wxSymbolListCtrl, wxVScrolledWindow)
+wxIMPLEMENT_ABSTRACT_CLASS(wxSymbolListCtrl, wxVScrolledWindow);
 
 // ----------------------------------------------------------------------------
 // wxSymbolListCtrl creation

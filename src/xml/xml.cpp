@@ -37,7 +37,7 @@
 WX_CHECK_BUILD_OPTIONS("wxXML")
 
 
-IMPLEMENT_CLASS(wxXmlDocument, wxObject)
+wxIMPLEMENT_CLASS(wxXmlDocument, wxObject);
 
 
 // a private utility used by wxXML

@@ -153,7 +153,7 @@ private:
 
     const char m_tag;
 
-    DECLARE_NO_COPY_CLASS(TestWindow)
+    wxDECLARE_NO_COPY_CLASS(TestWindow);
 };
 
 // a scroll window handling paint event: we want to have a special test case
@@ -261,7 +261,7 @@ private:
     void DocView();
     void ContextMenuEvent();
 
-    DECLARE_NO_COPY_CLASS(EventPropagationTestCase)
+    wxDECLARE_NO_COPY_CLASS(EventPropagationTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

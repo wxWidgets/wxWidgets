@@ -53,7 +53,7 @@ public:
 #endif
 
 protected:
-    DECLARE_DYNAMIC_CLASS(wxButton)
+    wxDECLARE_DYNAMIC_CLASS(wxButton);
 };
 
 // OS X specific class, not part of public wx API

@@ -21,7 +21,7 @@
 #include "wx/html/htmlwin.h"
 #include "wx/filesys.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxHtmlWindowXmlHandler, wxXmlResourceHandler)
+wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlWindowXmlHandler, wxXmlResourceHandler);
 
 wxHtmlWindowXmlHandler::wxHtmlWindowXmlHandler()
 : wxXmlResourceHandler()

@@ -38,7 +38,7 @@ protected:
 #endif
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPNMHandler)
+    wxDECLARE_DYNAMIC_CLASS(wxPNMHandler);
 };
 #endif
 

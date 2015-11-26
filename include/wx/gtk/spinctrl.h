@@ -81,7 +81,7 @@ protected:
 
     friend class wxSpinCtrlEventDisabler;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 //-----------------------------------------------------------------------------
@@ -143,7 +143,7 @@ private:
 
     int m_base;
 
-    DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
+    wxDECLARE_DYNAMIC_CLASS(wxSpinCtrl);
 };
 
 //-----------------------------------------------------------------------------
@@ -199,7 +199,7 @@ public:
     virtual int GetBase() const wxOVERRIDE { return 10; }
     virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
 
-    DECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble)
+    wxDECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble);
 };
 
 #endif // _WX_GTK_SPINCTRL_H_

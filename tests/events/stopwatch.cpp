@@ -53,7 +53,7 @@ private:
     void BackwardsClockBug();
     void RestartBug();
 
-    DECLARE_NO_COPY_CLASS(StopWatchTestCase)
+    wxDECLARE_NO_COPY_CLASS(StopWatchTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default
@@ -103,7 +103,7 @@ void StopWatchTestCase::Misc()
     WX_ASSERT_MESSAGE
     (
         ("Actual time value is %ld", t),
-        t > sleepTime - tolerance && t < sleepTime + tolerance
+        t > sleepTime - tolerance && t < 2*sleepTime
     );
 
     sw.Pause();
@@ -119,7 +119,7 @@ void StopWatchTestCase::Misc()
     WX_ASSERT_MESSAGE
     (
         ("Actual time value is %ld", t),
-        t > 2*sleepTime - tolerance && t < 2*sleepTime + tolerance
+        t > 2*sleepTime - tolerance && t < 3*sleepTime
     );
 }
 
@@ -153,7 +153,7 @@ void StopWatchTestCase::RestartBug()
     WX_ASSERT_MESSAGE
     (
         ("Actual time value is %ld", t),
-        t >= offset + sleepTime
+        t >= offset + sleepTime - tolerance
     );
 
     // As above, this is not actually due to the fact of the test being

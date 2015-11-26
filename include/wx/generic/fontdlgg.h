@@ -91,8 +91,8 @@ private:
     bool       m_useEvents;
 
     //  static bool fontDialogCancelled;
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxGenericFontDialog)
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS(wxGenericFontDialog);
 };
 
 #endif // _WX_GENERIC_FONTDLGG_H

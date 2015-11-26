@@ -60,10 +60,10 @@ public:
 wxDEFINE_EVENT(wxEVT_RIBBONTOOLBAR_CLICKED, wxRibbonToolBarEvent);
 wxDEFINE_EVENT(wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED, wxRibbonToolBarEvent);
 
-IMPLEMENT_DYNAMIC_CLASS(wxRibbonToolBarEvent, wxCommandEvent)
-IMPLEMENT_CLASS(wxRibbonToolBar, wxRibbonControl)
+wxIMPLEMENT_DYNAMIC_CLASS(wxRibbonToolBarEvent, wxCommandEvent);
+wxIMPLEMENT_CLASS(wxRibbonToolBar, wxRibbonControl);
 
-BEGIN_EVENT_TABLE(wxRibbonToolBar, wxRibbonControl)
+wxBEGIN_EVENT_TABLE(wxRibbonToolBar, wxRibbonControl)
     EVT_ENTER_WINDOW(wxRibbonToolBar::OnMouseEnter)
     EVT_ERASE_BACKGROUND(wxRibbonToolBar::OnEraseBackground)
     EVT_LEAVE_WINDOW(wxRibbonToolBar::OnMouseLeave)
@@ -73,7 +73,7 @@ BEGIN_EVENT_TABLE(wxRibbonToolBar, wxRibbonControl)
     EVT_MOTION(wxRibbonToolBar::OnMouseMove)
     EVT_PAINT(wxRibbonToolBar::OnPaint)
     EVT_SIZE(wxRibbonToolBar::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxRibbonToolBar::wxRibbonToolBar()
 {

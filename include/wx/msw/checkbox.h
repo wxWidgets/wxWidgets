@@ -74,7 +74,7 @@ private:
     // current state of the checkbox
     wxCheckBoxState m_state;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckBox)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckBox);
 };
 
 #endif // _WX_CHECKBOX_H_

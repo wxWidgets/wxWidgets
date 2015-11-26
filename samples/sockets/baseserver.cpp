@@ -146,7 +146,7 @@ private:
     wxTimer mTimer;
 };
 
-DECLARE_APP(Server);
+wxDECLARE_APP(Server);
 
 // just some common things shared between ThreadWorker and EventWorker
 class WorkerBase
@@ -201,7 +201,7 @@ private:
 };
 
 /******************* Implementation ******************/
-IMPLEMENT_APP_CONSOLE(Server)
+wxIMPLEMENT_APP_CONSOLE(Server);
 
 #include <wx/listimpl.cpp>
 WX_DEFINE_LIST(TList);
@@ -754,7 +754,7 @@ void  EventWorker::DoWrite()
             m_written += m_socket->LastCount();
         }
         LogWorker(wxString::Format("Written %d of %d bytes, todo %d",
-                  m_socket->LastCount(),m_size,m_size - m_written));
+                  m_written, m_size, m_size - m_written));
     }
     while (!m_socket->Error());
 }

@@ -49,10 +49,10 @@ public:
     virtual bool SupportsExtraControl() const wxOVERRIDE { return true; }
 
     virtual QFileDialog *GetHandle() const;
-    
+
 private:
-    
-    DECLARE_DYNAMIC_CLASS(wxFileDialog)
+
+    wxDECLARE_DYNAMIC_CLASS(wxFileDialog);
 };
 
 #endif // _WX_QT_FILEDLG_H_

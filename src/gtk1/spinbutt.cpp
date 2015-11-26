@@ -102,9 +102,9 @@ static void gtk_spinbutt_callback( GtkWidget *WXUNUSED(widget), wxSpinButton *wi
 // wxSpinButton
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxSpinButton, wxControl)
+wxBEGIN_EVENT_TABLE(wxSpinButton, wxControl)
     EVT_SIZE(wxSpinButton::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool wxSpinButton::Create(wxWindow *parent,
                           wxWindowID id,

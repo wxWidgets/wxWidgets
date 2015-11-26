@@ -95,7 +95,7 @@ private:
 
     wxRichTextCtrl* m_rich;
 
-    DECLARE_NO_COPY_CLASS(RichTextCtrlTestCase)
+    wxDECLARE_NO_COPY_CLASS(RichTextCtrlTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default

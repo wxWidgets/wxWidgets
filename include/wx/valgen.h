@@ -85,7 +85,7 @@ protected:
     double*     m_pDouble;
 
 private:
-    DECLARE_CLASS(wxGenericValidator)
+    wxDECLARE_CLASS(wxGenericValidator);
     wxDECLARE_NO_ASSIGN_CLASS(wxGenericValidator);
 };
 

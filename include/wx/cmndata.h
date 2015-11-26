@@ -138,7 +138,7 @@ private:
     wxPrintNativeDataBase  *m_nativeData;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPrintData)
+    wxDECLARE_DYNAMIC_CLASS(wxPrintData);
 };
 
 /*
@@ -213,7 +213,7 @@ private:
     wxPrintData     m_printData;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPrintDialogData)
+    wxDECLARE_DYNAMIC_CLASS(wxPrintDialogData);
 };
 
 /*
@@ -302,7 +302,7 @@ private:
     wxPrintData     m_printData;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPageSetupDialogData)
+    wxDECLARE_DYNAMIC_CLASS(wxPageSetupDialogData);
 };
 
 #endif // wxUSE_PRINTING_ARCHITECTURE

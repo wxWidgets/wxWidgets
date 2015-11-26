@@ -34,10 +34,10 @@ public:
 
 private:
     typedef wxStockGDI super;
-    DECLARE_DYNAMIC_CLASS(wxStockGDIMac)
+    wxDECLARE_DYNAMIC_CLASS(wxStockGDIMac);
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxStockGDIMac, wxModule)
+wxIMPLEMENT_DYNAMIC_CLASS(wxStockGDIMac, wxModule);
 
 bool wxStockGDIMac::OnInit()
 {

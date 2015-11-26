@@ -45,7 +45,7 @@ private:
     // changing the message between constructing the dialog and showing it
     void GTKCreateMsgDialog();
 
-    DECLARE_DYNAMIC_CLASS(wxMessageDialog)
+    wxDECLARE_DYNAMIC_CLASS(wxMessageDialog);
 };
 
 #endif // _WX_GTK_MSGDLG_H_

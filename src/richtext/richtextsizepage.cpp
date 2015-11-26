@@ -17,14 +17,14 @@
  * wxRichTextSizePage type definition
  */
 
-IMPLEMENT_DYNAMIC_CLASS( wxRichTextSizePage, wxRichTextDialogPage )
+wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextSizePage, wxRichTextDialogPage);
 
 
 /*!
  * wxRichTextSizePage event table definition
  */
 
-BEGIN_EVENT_TABLE( wxRichTextSizePage, wxRichTextDialogPage )
+wxBEGIN_EVENT_TABLE(wxRichTextSizePage, wxRichTextDialogPage)
 
 ////@begin wxRichTextSizePage event table entries
     EVT_UPDATE_UI( ID_RICHTEXT_VERTICAL_ALIGNMENT_COMBOBOX, wxRichTextSizePage::OnRichtextVerticalAlignmentComboboxUpdate )
@@ -52,7 +52,7 @@ BEGIN_EVENT_TABLE( wxRichTextSizePage, wxRichTextDialogPage )
     EVT_BUTTON( ID_RICHTEXT_PARA_DOWN, wxRichTextSizePage::OnRichtextParaDownClick )
 ////@end wxRichTextSizePage event table entries
 
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_HELP_PROVISION(wxRichTextSizePage)
 

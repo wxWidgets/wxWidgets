@@ -39,7 +39,7 @@ private:
 
     void ReadWrite();
 
-    DECLARE_NO_COPY_CLASS(RegConfigTestCase)
+    wxDECLARE_NO_COPY_CLASS(RegConfigTestCase);
 };
 
 // register in the unnamed registry so that these tests are run by default
