@@ -8,15 +8,24 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/bitmap.h"
-#include "wx/image.h"
-#include "wx/rawbmp.h"
-#include "wx/qt/private/converter.h"
-#include "wx/qt/private/utils.h"
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
 #include <QtGui/QPixmap>
 #include <QtGui/QBitmap>
 #include <QtWidgets/QLabel>
+
+#ifndef WX_PRECOMP
+    #include "wx/icon.h"
+    #include "wx/image.h"
+#endif // WX_PRECOMP
+
+#include "wx/bitmap.h"
+#include "wx/rawbmp.h"
+#include "wx/qt/private/converter.h"
+#include "wx/qt/private/utils.h"
+
 
 static wxImage ConvertImage( QImage qtImage )
 {
@@ -211,7 +220,7 @@ wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type )
     LoadFile(filename, type);
 }
 
-wxBitmap::wxBitmap(const wxImage& image, int depth )
+wxBitmap::wxBitmap(const wxImage& image, int depth, double WXUNUSED(scale) )
 {
     Qt::ImageConversionFlags flags = 0;
     if (depth == 1)

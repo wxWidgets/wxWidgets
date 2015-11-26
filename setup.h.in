@@ -14,9 +14,6 @@
 
 #endif /* __cplusplus */
 
-/* fill in with the string wxGetOsDescription() will return */
-#undef WXWIN_OS_DESCRIPTION
-
 /* the installation location prefix from configure */
 #undef wxINSTALL_PREFIX
 
@@ -813,14 +810,6 @@
  * Use GNOME VFS for MIME types
  */
 #define wxUSE_LIBGNOMEVFS 0
-/*
- * Use the Hildon framework
- */
-#define wxUSE_LIBHILDON 0
-/*
- * Use the Hildon 2.0 framework
- */
-#define wxUSE_LIBHILDON2 0
 /*
  * Use libnotify library.
  */

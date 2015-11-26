@@ -23,8 +23,8 @@ class WXDLLIMPEXP_AUI wxAuiToolBarXmlHandler : public wxXmlResourceHandler
 {
 public:
     wxAuiToolBarXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+    virtual wxObject *DoCreateResource() wxOVERRIDE;
+    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
 
 private:
     bool m_isInside;

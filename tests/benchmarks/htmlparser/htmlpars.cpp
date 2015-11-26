@@ -28,10 +28,6 @@
 #include "wx/html/htmldefs.h"
 #include "wx/arrimpl.cpp"
 
-#ifdef __WXWINCE__
-    #include "wx/msw/wince/missing.h"       // for bsearch()
-#endif
-
 // DLL options compatibility check:
 WX_CHECK_BUILD_OPTIONS("wxHTML")
 
@@ -846,23 +842,10 @@ wxChar wx28HtmlEntitiesParser::GetEntityChar(const wxString& entity)
                 substitutions_cnt++;
 
         wx28HtmlEntityInfo *info = NULL;
-#ifdef __WXWINCE__
-        // bsearch crashes under WinCE for some reason
-        size_t i;
-        for (i = 0; i < substitutions_cnt; i++)
-        {
-            if (entity == substitutions[i].name)
-            {
-                info = & substitutions[i];
-                break;
-            }
-        }
-#else
         info = (wx28HtmlEntityInfo*) bsearch(entity.c_str(), substitutions,
                                            substitutions_cnt,
                                            sizeof(wx28HtmlEntityInfo),
                                            wx28HtmlEntityCompare);
-#endif
         if (info)
             code = info->code;
     }

@@ -37,9 +37,7 @@
 #include "wx/fontutil.h"
 #include "wx/fontmap.h"
 
-#ifndef __WXWINCE__
-    #include "wx/sysopt.h"
-#endif
+#include "wx/sysopt.h"
 
 #include "wx/scopeguard.h"
 #include "wx/tokenzr.h"
@@ -386,7 +384,8 @@ void wxFontRefData::Init(const wxNativeFontInfo& info, WXHFONT hFont)
     m_hFont = (HFONT)hFont;
     m_nativeFontInfo = info;
 
-    // TODO: m_sizeUsingPixels?
+    // size of native fonts is expressed in pixels
+    m_sizeUsingPixels = true;
 }
 
 wxFontRefData::~wxFontRefData()
@@ -431,13 +430,9 @@ void wxNativeFontInfo::Init()
     // DEFAULT_QUALITY but some fonts (e.g. "Terminal 6pt") are not available
     // then so we allow to set a global option to choose between quality and
     // wider font selection
-#ifdef __WXWINCE__
-    lf.lfQuality = CLEARTYPE_QUALITY;
-#else
     lf.lfQuality = wxSystemOptions::GetOptionInt("msw.font.no-proof-quality")
                     ? DEFAULT_QUALITY
                     : PROOF_QUALITY;
-#endif
 }
 
 int wxNativeFontInfo::GetPointSize() const

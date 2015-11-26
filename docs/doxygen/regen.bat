@@ -4,9 +4,15 @@ REM This bash script regenerates the HTML doxygen version of the
 REM wxWidgets manual and adjusts the doxygen log to make it more
 REM readable.
 
-mkdir out 2>&1 >NUL
-mkdir out\html 2>&1 >NUL
-mkdir out\html\generic 2>&1 >NUL
+where /q doxygen
+if %ERRORLEVEL% neq 0 (
+    echo Error: Doxygen was not found in your PATH.
+    exit /b 1
+)
+
+if not exist out (mkdir out)
+if not exist out\html (mkdir out\html)
+if not exist out\html\generic (mkdir out\html\generic)
 
 REM These not automatically copied by Doxygen because they're not
 REM used in doxygen documentation, only in our html footer and by our
@@ -92,6 +98,7 @@ REM     not included!
 REM
 set PATH=%PATH%;%HHC_PATH%
 doxygen Doxyfile
+if %errorlevel% neq 0 exit /b %errorlevel%
 
 REM Check that class inheritance diagram images are present for html/chm docs.
 REM

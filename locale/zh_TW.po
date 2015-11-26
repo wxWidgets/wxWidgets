@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-25 19:58+0100\n"
+"POT-Creation-Date: 2015-05-23 22:46+0400\n"
 "PO-Revision-Date: 2013-02-27 14:58+0800\n"
 "Last-Translator: Wei-Lun Chao <bluebat@member.fsf.org>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -36,7 +36,7 @@ msgstr " "
 msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr "              謝謝，我們對您遇到的不便表示抱歉！\n"
 
-#: ../src/common/prntbase.cpp:558
+#: ../src/common/prntbase.cpp:573
 #, fuzzy, c-format
 msgid " (copy %d of %d)"
 msgstr "%d / %d 頁"
@@ -51,25 +51,29 @@ msgstr " (錯誤 %ld: %s)"
 msgid " (in module \"%s\")"
 msgstr "(在模組中：\"%s\")"
 
-#: ../src/common/docview.cpp:1631
+#: ../src/common/docview.cpp:1645
 msgid " - "
 msgstr " - "
 
-#: ../src/html/htmprint.cpp:704 ../src/richtext/richtextprint.cpp:588
+#: ../src/html/htmprint.cpp:709 ../src/richtext/richtextprint.cpp:593
 msgid " Preview"
 msgstr "預覽"
 
-#: ../src/common/fontcmn.cpp:821
+#: ../src/common/fontcmn.cpp:822
 msgid " bold"
 msgstr "粗體"
 
-#: ../src/common/fontcmn.cpp:837
+#: ../src/common/fontcmn.cpp:838
 msgid " italic"
 msgstr "斜體"
 
-#: ../src/common/fontcmn.cpp:817
+#: ../src/common/fontcmn.cpp:818
 msgid " light"
 msgstr "細體"
+
+#: ../src/common/fontcmn.cpp:805
+msgid " strikethrough"
+msgstr " 刪除線"
 
 #: ../src/common/paper.cpp:118
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
@@ -91,6 +95,7 @@ msgstr "#14 信封，5 x 11 1/2 英吋"
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
 msgstr "#9 信封, 3 7/8 x 8 7/8 英吋"
 
+#: ../src/richtext/richtextbackgroundpage.cpp:342
 #: ../src/richtext/richtextsizepage.cpp:340
 #: ../src/richtext/richtextsizepage.cpp:374
 #: ../src/richtext/richtextsizepage.cpp:401
@@ -130,12 +135,12 @@ msgstr "%lu / %lu"
 msgid "%s (or %s)"
 msgstr "%s (或 %s)"
 
-#: ../src/generic/logg.cpp:228
+#: ../src/generic/logg.cpp:229
 #, c-format
 msgid "%s Error"
 msgstr "%s 錯誤"
 
-#: ../src/generic/logg.cpp:240
+#: ../src/generic/logg.cpp:241
 #, c-format
 msgid "%s Information"
 msgstr "%s 資訊"
@@ -145,7 +150,7 @@ msgstr "%s 資訊"
 msgid "%s Preferences"
 msgstr "偏好設定"
 
-#: ../src/generic/logg.cpp:232
+#: ../src/generic/logg.cpp:233
 #, c-format
 msgid "%s Warning"
 msgstr "%s 警告"
@@ -191,7 +196,7 @@ msgstr "套用(&A)"
 msgid "&Apply Style"
 msgstr "套用樣式(&A)"
 
-#: ../src/msw/mdi.cpp:176
+#: ../src/msw/mdi.cpp:179
 msgid "&Arrange Icons"
 msgstr "排列圖示(&A)"
 
@@ -215,6 +220,10 @@ msgstr "段落之前(&B):"
 msgid "&Bg colour:"
 msgstr "背景顏色(&B)："
 
+#: ../src/richtext/richtextbackgroundpage.cpp:299
+msgid "&Blur distance:"
+msgstr ""
+
 #: ../src/common/stockitem.cpp:143
 msgid "&Bold"
 msgstr "粗體(&B)"
@@ -232,7 +241,7 @@ msgstr "底端(&B)"
 msgid "&Bottom:"
 msgstr "底端(&B):"
 
-#: ../include/wx/richtext/richtextbuffer.h:3667
+#: ../include/wx/richtext/richtextbuffer.h:3860
 msgid "&Box"
 msgstr "文字方塊(&B)"
 
@@ -251,11 +260,11 @@ msgstr "唯讀光碟(&C)"
 msgid "&Cancel"
 msgstr "取消(&C)"
 
-#: ../src/msw/mdi.cpp:172
+#: ../src/msw/mdi.cpp:175
 msgid "&Cascade"
 msgstr "層疊排列(&C)"
 
-#: ../include/wx/richtext/richtextbuffer.h:5761
+#: ../include/wx/richtext/richtextbuffer.h:5954
 msgid "&Cell"
 msgstr "儲存格(&C)"
 
@@ -267,8 +276,8 @@ msgstr "字元碼(&C):"
 msgid "&Clear"
 msgstr "清除(&C)"
 
-#: ../src/common/prntbase.cpp:1584 ../src/common/stockitem.cpp:148
-#: ../src/generic/logg.cpp:520 ../src/html/helpfrm.cpp:139
+#: ../src/common/prntbase.cpp:1600 ../src/common/stockitem.cpp:148
+#: ../src/generic/logg.cpp:522 ../src/html/helpfrm.cpp:139
 #: ../src/univ/themes/win32.cpp:3756
 msgid "&Close"
 msgstr "關閉(&C)"
@@ -316,7 +325,7 @@ msgstr "刪除樣式(&D)"
 msgid "&Descending"
 msgstr "遞減(&D)"
 
-#: ../src/generic/logg.cpp:686
+#: ../src/generic/logg.cpp:688
 msgid "&Details"
 msgstr "細節(&D)"
 
@@ -395,7 +404,7 @@ msgid "&Height:"
 msgstr "高度(&H):"
 
 #: ../src/common/stockitem.cpp:163 ../src/generic/wizard.cpp:436
-#: ../src/html/helpfrm.cpp:147 ../src/osx/menu_osx.cpp:788
+#: ../src/html/helpfrm.cpp:147 ../src/osx/menu_osx.cpp:768
 #: ../src/richtext/richtextstyledlg.cpp:303
 #: ../src/richtext/richtextsymboldlg.cpp:479
 msgid "&Help"
@@ -408,6 +417,11 @@ msgstr "隱藏細節(&H)"
 #: ../src/common/stockitem.cpp:164
 msgid "&Home"
 msgstr "首頁(&H)"
+
+#: ../src/richtext/richtextbackgroundpage.cpp:213
+#, fuzzy
+msgid "&Horizontal offset:"
+msgstr "垂直位置(&O):"
 
 #: ../src/richtext/richtextindentspage.cpp:184
 #: ../src/richtext/richtextliststylepage.cpp:372
@@ -464,7 +478,7 @@ msgstr "左側(&L)："
 msgid "&List level:"
 msgstr "清單層級(&L):"
 
-#: ../src/generic/logg.cpp:521
+#: ../src/generic/logg.cpp:523
 msgid "&Log"
 msgstr "日誌(&L)"
 
@@ -485,7 +499,7 @@ msgid "&New"
 msgstr "新增(&N)"
 
 #: ../src/aui/tabmdi.cpp:111 ../src/generic/mdig.cpp:100
-#: ../src/msw/mdi.cpp:177
+#: ../src/msw/mdi.cpp:180
 msgid "&Next"
 msgstr "下一個(&N)"
 
@@ -540,7 +554,7 @@ msgstr "換頁符號(&P)"
 msgid "&Paste"
 msgstr "貼上(&P)"
 
-#: ../include/wx/richtext/richtextbuffer.h:4811
+#: ../include/wx/richtext/richtextbuffer.h:5004
 msgid "&Picture"
 msgstr "圖片(&P)"
 
@@ -562,7 +576,7 @@ msgid "&Preferences"
 msgstr "偏好設定(&P)"
 
 #: ../src/aui/tabmdi.cpp:112 ../src/generic/mdig.cpp:101
-#: ../src/msw/mdi.cpp:178
+#: ../src/msw/mdi.cpp:181
 msgid "&Previous"
 msgstr "前一個(&P)"
 
@@ -649,7 +663,7 @@ msgstr "大小(&S)"
 msgid "&Size:"
 msgstr "大小(&S)："
 
-#: ../src/generic/progdlgg.cpp:283
+#: ../src/generic/progdlgg.cpp:285
 msgid "&Skip"
 msgstr "略過(&S)"
 
@@ -692,7 +706,7 @@ msgstr "樣式(&S)："
 msgid "&Synchronize values"
 msgstr ""
 
-#: ../include/wx/richtext/richtextbuffer.h:5870
+#: ../include/wx/richtext/richtextbuffer.h:6063
 msgid "&Table"
 msgstr "表格(&T) "
 
@@ -738,6 +752,11 @@ msgstr "向上(&U)"
 #: ../src/richtext/richtextsizepage.cpp:278
 msgid "&Vertical alignment:"
 msgstr "垂直對齊(&V):"
+
+#: ../src/richtext/richtextbackgroundpage.cpp:236
+#, fuzzy
+msgid "&Vertical offset:"
+msgstr "垂直位置(&O):"
 
 #: ../src/generic/dbgrptg.cpp:340
 msgid "&View..."
@@ -854,7 +873,7 @@ msgstr "(書籤)"
 #: ../src/richtext/richtextfontpage.cpp:347
 #: ../src/richtext/richtextfontpage.cpp:351
 #: ../src/richtext/richtextfontpage.cpp:355
-#: ../src/richtext/richtextformatdlg.cpp:887
+#: ../src/richtext/richtextformatdlg.cpp:894
 #: ../src/richtext/richtextindentspage.cpp:274
 #: ../src/richtext/richtextindentspage.cpp:286
 #: ../src/richtext/richtextindentspage.cpp:287
@@ -881,7 +900,7 @@ msgstr "*)"
 msgid "+"
 msgstr "+"
 
-#: ../src/msw/utils.cpp:1227
+#: ../src/msw/utils.cpp:1255
 msgid ", 64-bit edition"
 msgstr "，64 位元版"
 
@@ -1168,12 +1187,12 @@ msgid "About"
 msgstr "關於"
 
 #: ../src/generic/aboutdlgg.cpp:140 ../src/msw/aboutdlg.cpp:64
-#: ../src/osx/menu_osx.cpp:615
+#: ../src/osx/menu_osx.cpp:595
 #, c-format
 msgid "About %s"
 msgstr "關於 %s"
 
-#: ../src/osx/menu_osx.cpp:617
+#: ../src/osx/menu_osx.cpp:597
 #, fuzzy
 msgid "About..."
 msgstr "關於"
@@ -1182,12 +1201,14 @@ msgstr "關於"
 msgid "Absolute"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:845
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:859
 #, fuzzy
 msgid "ActiveBorder"
 msgstr "邊框"
 
-#: ../src/propgrid/advprops.cpp:846
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:860
 msgid "ActiveCaption"
 msgstr ""
 
@@ -1200,11 +1221,11 @@ msgstr "實際大小`"
 msgid "Add"
 msgstr "加入"
 
-#: ../src/richtext/richtextbuffer.cpp:11293
+#: ../src/richtext/richtextbuffer.cpp:11446
 msgid "Add Column"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:11230
+#: ../src/richtext/richtextbuffer.cpp:11383
 msgid "Add Row"
 msgstr ""
 
@@ -1261,16 +1282,16 @@ msgstr "對齊"
 msgid "All"
 msgstr "所有"
 
-#: ../src/common/fldlgcmn.cpp:107 ../src/generic/filectrlg.cpp:1205
+#: ../src/common/fldlgcmn.cpp:107 ../src/generic/filectrlg.cpp:1217
 #, c-format
 msgid "All files (%s)|%s"
 msgstr "所有檔案 (%s)|%s"
 
-#: ../include/wx/defs.h:2890
+#: ../include/wx/defs.h:2916
 msgid "All files (*)|*"
 msgstr "所有檔案 (*)|*"
 
-#: ../include/wx/defs.h:2887
+#: ../include/wx/defs.h:2913
 msgid "All files (*.*)|*.*"
 msgstr "所有檔案 (*.*)|*.*"
 
@@ -1278,7 +1299,7 @@ msgstr "所有檔案 (*.*)|*.*"
 msgid "All styles"
 msgstr "所有樣式"
 
-#: ../src/propgrid/manager.cpp:1520
+#: ../src/propgrid/manager.cpp:1519
 msgid "Alphabetic Mode"
 msgstr "字母順序模式"
 
@@ -1308,16 +1329,17 @@ msgstr "且包含以下檔案：\n"
 msgid "Animation file is not of type %ld."
 msgstr "動畫檔不是 %ld 的型態。"
 
-#: ../src/propgrid/advprops.cpp:844
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:858
 msgid "AppWorkspace"
 msgstr ""
 
-#: ../src/generic/logg.cpp:1032
+#: ../src/generic/logg.cpp:1034
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "把日誌加到檔案 '%s' 的尾端(選擇 [否] 將覆寫該檔案)？"
 
-#: ../src/osx/menu_osx.cpp:635 ../src/osx/menu_osx.cpp:643
+#: ../src/osx/menu_osx.cpp:615 ../src/osx/menu_osx.cpp:623
 msgid "Application"
 msgstr "應用程式"
 
@@ -1325,7 +1347,7 @@ msgstr "應用程式"
 msgid "Apply"
 msgstr "套用"
 
-#: ../src/propgrid/advprops.cpp:1559
+#: ../src/propgrid/advprops.cpp:1570
 msgid "Aqua"
 msgstr ""
 
@@ -1343,7 +1365,8 @@ msgstr "阿拉伯語 (ISO-8859-6)"
 msgid "Argument %u not found."
 msgstr "找不到參數 '%u'。"
 
-#: ../src/propgrid/advprops.cpp:1703
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1714
 #, fuzzy
 msgid "Arrow"
 msgstr "明天"
@@ -1448,12 +1471,12 @@ msgstr "BMP: wxImage 沒有自己的 wxPalette。"
 msgid "Back"
 msgstr "向後"
 
-#: ../src/richtext/richtextbackgroundpage.cpp:119
+#: ../src/richtext/richtextbackgroundpage.cpp:149
 #: ../src/richtext/richtextformatdlg.cpp:391
 msgid "Background"
 msgstr "背景"
 
-#: ../src/richtext/richtextbackgroundpage.cpp:131
+#: ../src/richtext/richtextbackgroundpage.cpp:161
 msgid "Background &colour:"
 msgstr "背景顏色(&C)"
 
@@ -1488,15 +1511,16 @@ msgstr "點陣圖"
 msgid "Bitmap renderer cannot render value; value type: "
 msgstr "點陣圖渲染器無法渲染該值，型態為: "
 
-#: ../src/propgrid/advprops.cpp:1544
+#: ../src/propgrid/advprops.cpp:1555
 msgid "Black"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1705
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1716
 msgid "Blank"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1553
+#: ../src/propgrid/advprops.cpp:1564
 msgid "Blue"
 msgstr ""
 
@@ -1522,7 +1546,7 @@ msgstr "底端"
 msgid "Bottom margin (mm):"
 msgstr "底邊距(公釐)："
 
-#: ../src/richtext/richtextbuffer.cpp:9223
+#: ../src/richtext/richtextbuffer.cpp:9376
 msgid "Box Properties"
 msgstr "文字方塊性質"
 
@@ -1530,7 +1554,7 @@ msgstr "文字方塊性質"
 msgid "Box styles"
 msgstr "文字方塊樣式"
 
-#: ../src/propgrid/advprops.cpp:1552
+#: ../src/propgrid/advprops.cpp:1563
 #, fuzzy
 msgid "Brown"
 msgstr "瀏覽"
@@ -1552,24 +1576,29 @@ msgstr "項目符號樣式"
 msgid "Bullets"
 msgstr "項目符號"
 
-#: ../src/propgrid/advprops.cpp:1706
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1717
 #, fuzzy
 msgid "Bullseye"
 msgstr "項目符號樣式"
 
-#: ../src/propgrid/advprops.cpp:847
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:861
 msgid "ButtonFace"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:848
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:862
 msgid "ButtonHighlight"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:849
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:863
 msgid "ButtonShadow"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:850
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:864
 msgid "ButtonText"
 msgstr ""
 
@@ -1577,7 +1606,7 @@ msgstr ""
 msgid "C sheet, 17 x 22 in"
 msgstr "C 印刷紙, 17 x 22 英吋"
 
-#: ../src/generic/logg.cpp:518
+#: ../src/generic/logg.cpp:520
 msgid "C&lear"
 msgstr "清除(&L)"
 
@@ -1621,7 +1650,7 @@ msgstr "大寫(&P)"
 msgid "Can't &Undo "
 msgstr "無法回復(&U)"
 
-#: ../src/common/image.cpp:2688
+#: ../src/common/image.cpp:2690
 msgid "Can't automatically determine the image format for non-seekable input."
 msgstr "無法自動決定用於不可尋指輸入的影像格式。"
 
@@ -1640,11 +1669,11 @@ msgstr "無法複製不支援類型 %d 的值。"
 msgid "Can't create registry key '%s'"
 msgstr "無法建立登錄機碼 '%s'"
 
-#: ../src/msw/thread.cpp:671
+#: ../src/msw/thread.cpp:673
 msgid "Can't create thread"
 msgstr "無法建立執行緒"
 
-#: ../src/msw/window.cpp:3851
+#: ../src/msw/window.cpp:3839
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "無法建立類別 '%s' 的視窗"
@@ -1664,17 +1693,17 @@ msgstr "無法刪除 INI 檔 '%s'"
 msgid "Can't delete value '%s' from key '%s'"
 msgstr "無法刪除機值 '%s' @ '%s'"
 
-#: ../src/msw/registry.cpp:1185
+#: ../src/msw/registry.cpp:1169
 #, c-format
 msgid "Can't enumerate subkeys of key '%s'"
 msgstr "無法列舉機碼 '%s' 的子機碼"
 
-#: ../src/msw/registry.cpp:1140
+#: ../src/msw/registry.cpp:1124
 #, c-format
 msgid "Can't enumerate values of key '%s'"
 msgstr "無法列舉機碼 '%s' 的值"
 
-#: ../src/msw/registry.cpp:1403
+#: ../src/msw/registry.cpp:1387
 #, c-format
 msgid "Can't export value of unsupported type %d."
 msgstr "無法匯出不支援類型 %d 的值。"
@@ -1716,7 +1745,7 @@ msgstr "無法讀取解壓資料流：%s"
 msgid "Can't read inflate stream: unexpected EOF in underlying stream."
 msgstr "無法讀取解壓資料流：資料流中有未預期的結尾。"
 
-#: ../src/msw/registry.cpp:1072
+#: ../src/msw/registry.cpp:1056
 #, c-format
 msgid "Can't read value of '%s'"
 msgstr "無法讀取 '%s' 的值"
@@ -1727,21 +1756,21 @@ msgstr "無法讀取 '%s' 的值"
 msgid "Can't read value of key '%s'"
 msgstr "無法讀取機碼 '%s' 的值"
 
-#: ../src/common/image.cpp:2485
+#: ../src/common/image.cpp:2487
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
 msgstr "無法儲存圖像到檔案 '%s' 中：不明的附檔名。"
 
-#: ../src/generic/logg.cpp:577 ../src/generic/logg.cpp:994
+#: ../src/generic/logg.cpp:579 ../src/generic/logg.cpp:996
 msgid "Can't save log contents to file."
 msgstr "無法將日誌內容儲存到檔案中。"
 
-#: ../src/msw/thread.cpp:635
+#: ../src/msw/thread.cpp:637
 msgid "Can't set thread priority"
 msgstr "無法設定執行緒的優先等級"
 
 #: ../src/msw/registry.cpp:888 ../src/msw/registry.cpp:932
-#: ../src/msw/registry.cpp:1089
+#: ../src/msw/registry.cpp:1073
 #, c-format
 msgid "Can't set value of '%s'"
 msgstr "無法設定 '%s' 的值"
@@ -1797,11 +1826,11 @@ msgstr "無法提取「%s」的作用中實體"
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "無法取得排程原則 %d 的優先等級範圍。"
 
-#: ../src/unix/utilsunx.cpp:978
+#: ../src/unix/utilsunx.cpp:983
 msgid "Cannot get the hostname"
 msgstr "無法取得主機名稱。"
 
-#: ../src/unix/utilsunx.cpp:1014
+#: ../src/unix/utilsunx.cpp:1019
 msgid "Cannot get the official hostname"
 msgstr "無法取得正式的主機名稱。"
 
@@ -1822,12 +1851,12 @@ msgstr "無法初始化通訊端"
 msgid "Cannot load icon from '%s'."
 msgstr "無法從 '%s' 中載入圖示。"
 
-#: ../src/xrc/xmlres.cpp:361
+#: ../src/xrc/xmlres.cpp:363
 #, c-format
 msgid "Cannot load resources from '%s'."
 msgstr "無法從檔案 '%s' 中載入資源。"
 
-#: ../src/xrc/xmlres.cpp:743
+#: ../src/xrc/xmlres.cpp:745
 #, c-format
 msgid "Cannot load resources from file '%s'."
 msgstr "無法從檔案 '%s' 中載入資源。"
@@ -1856,7 +1885,7 @@ msgstr "無法開啟檔案進行 PostScript 列印！"
 msgid "Cannot open index file: %s"
 msgstr "無法開啟索引檔： %s"
 
-#: ../src/xrc/xmlres.cpp:725
+#: ../src/xrc/xmlres.cpp:727
 #, c-format
 msgid "Cannot open resources file '%s'."
 msgstr "無法開啟資源檔 '%s'。"
@@ -1870,7 +1899,7 @@ msgstr "無法列印空頁面。"
 msgid "Cannot read typename from '%s'!"
 msgstr "無法從 '%s' 讀取類型名稱！"
 
-#: ../src/msw/thread.cpp:893
+#: ../src/msw/thread.cpp:895
 #, fuzzy, c-format
 msgid "Cannot resume thread %lx"
 msgstr "無法恢復執行緒 %x"
@@ -1884,16 +1913,16 @@ msgstr "無法取得執行緒排程原則。"
 msgid "Cannot set locale to language \"%s\"."
 msgstr "無法設定為語言 \"%s\"。"
 
-#: ../src/msw/thread.cpp:552 ../src/unix/threadpsx.cpp:831
+#: ../src/msw/thread.cpp:554 ../src/unix/threadpsx.cpp:831
 msgid "Cannot start thread: error writing TLS."
 msgstr "無法啟動執行緒：寫入「執行緒內部儲存區」時發生錯誤。"
 
-#: ../src/msw/thread.cpp:877
+#: ../src/msw/thread.cpp:879
 #, fuzzy, c-format
 msgid "Cannot suspend thread %lx"
 msgstr "無法暫停執行緒 %x"
 
-#: ../src/msw/thread.cpp:800
+#: ../src/msw/thread.cpp:802
 msgid "Cannot wait for thread termination"
 msgstr "無法等候執行緒終結"
 
@@ -1903,7 +1932,8 @@ msgstr "無法等候執行緒終結"
 msgid "Capital"
 msgstr "大寫(&P)"
 
-#: ../src/propgrid/advprops.cpp:851
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:865
 msgid "CaptionText"
 msgstr ""
 
@@ -1911,11 +1941,11 @@ msgstr ""
 msgid "Case sensitive"
 msgstr "區分大小寫"
 
-#: ../src/propgrid/manager.cpp:1501
+#: ../src/propgrid/manager.cpp:1500
 msgid "Categorized Mode"
 msgstr "已分類模式"
 
-#: ../src/richtext/richtextbuffer.cpp:9805
+#: ../src/richtext/richtextbuffer.cpp:9958
 msgid "Cell Properties"
 msgstr "儲存格性質"
 
@@ -1957,20 +1987,20 @@ msgstr "中間"
 msgid "Ch&oose..."
 msgstr "選擇(&O)…"
 
-#: ../src/richtext/richtextbuffer.cpp:4276
+#: ../src/richtext/richtextbuffer.cpp:4348
 msgid "Change List Style"
 msgstr "變更清單樣式"
 
-#: ../src/richtext/richtextbuffer.cpp:3631
+#: ../src/richtext/richtextbuffer.cpp:3703
 msgid "Change Object Style"
 msgstr "變更物件樣式"
 
-#: ../src/richtext/richtextbuffer.cpp:3904
-#: ../src/richtext/richtextbuffer.cpp:8045
+#: ../src/richtext/richtextbuffer.cpp:3976
+#: ../src/richtext/richtextbuffer.cpp:8122
 msgid "Change Properties"
 msgstr "變更性質"
 
-#: ../src/richtext/richtextbuffer.cpp:3448
+#: ../src/richtext/richtextbuffer.cpp:3520
 msgid "Change Style"
 msgstr "變更樣式"
 
@@ -1979,7 +2009,13 @@ msgstr "變更樣式"
 msgid "Changes won't be saved to avoid overwriting the existing file \"%s\""
 msgstr "為了避免覆寫已存在的檔案 \"%s\" ，變更將不會被儲存。"
 
-#: ../src/propgrid/advprops.cpp:1707
+#: ../src/gtk/filedlg.cpp:87 ../src/gtk/filepicker.cpp:190
+#, fuzzy, c-format
+msgid "Changing current directory to \"%s\" failed"
+msgstr "無法建立目錄 \"%s\""
+
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1718
 #, fuzzy
 msgid "Character"
 msgstr "字元碼(&C):"
@@ -2074,11 +2110,11 @@ msgstr ""
 msgid "Choose ISP to dial"
 msgstr "選擇 ISP 進行撥號"
 
-#: ../src/propgrid/props.cpp:1783
+#: ../src/propgrid/props.cpp:1855
 msgid "Choose a directory:"
 msgstr "選擇目錄"
 
-#: ../src/propgrid/props.cpp:1842
+#: ../src/propgrid/props.cpp:1914
 msgid "Choose a file"
 msgstr "選擇檔案"
 
@@ -2109,7 +2145,7 @@ msgstr "類別未註冊。"
 msgid "Clear"
 msgstr "清除"
 
-#: ../src/generic/logg.cpp:518
+#: ../src/generic/logg.cpp:520
 msgid "Clear the log contents"
 msgstr "清除日誌內容"
 
@@ -2217,7 +2253,7 @@ msgid "Click to rename the selected style."
 msgstr "點擊以重新命名所選樣式。"
 
 #: ../src/common/stockitem.cpp:148 ../src/generic/dbgrptg.cpp:97
-#: ../src/generic/progdlgg.cpp:805 ../src/generic/progdlgg.cpp:810
+#: ../src/generic/progdlgg.cpp:807 ../src/generic/progdlgg.cpp:812
 #: ../src/html/helpdlg.cpp:90 ../src/msw/progdlg.cpp:170
 #: ../src/msw/progdlg.cpp:679 ../src/richtext/richtextstyledlg.cpp:277
 #: ../src/richtext/richtextsymboldlg.cpp:476
@@ -2232,7 +2268,7 @@ msgstr "全部關閉"
 msgid "Close current document"
 msgstr "關閉當前的文件"
 
-#: ../src/generic/logg.cpp:520
+#: ../src/generic/logg.cpp:522
 msgid "Close this window"
 msgstr "關閉視窗"
 
@@ -2240,7 +2276,7 @@ msgstr "關閉視窗"
 msgid "Color"
 msgstr "顏色"
 
-#: ../src/richtext/richtextformatdlg.cpp:779
+#: ../src/richtext/richtextformatdlg.cpp:786
 msgid "Colour"
 msgstr "顏色"
 
@@ -2278,7 +2314,7 @@ msgstr "無法設定欄位寬度。"
 msgid "Command"
 msgstr ""
 
-#: ../src/common/init.cpp:188
+#: ../src/common/init.cpp:196
 #, c-format
 msgid ""
 "Command line argument %d couldn't be converted to Unicode and will be "
@@ -2290,7 +2326,7 @@ msgstr "由於命令列參數 %d 無法被轉換為 Unicode 編碼，其將被�
 msgid "Common dialog failed with error code %0lx."
 msgstr "共同對話視窗錯誤，錯誤碼 %0lx。"
 
-#: ../src/gtk/window.cpp:4551
+#: ../src/gtk/window.cpp:4557
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2309,7 +2345,7 @@ msgstr "我的電腦"
 msgid "Config entry name cannot start with '%c'."
 msgstr "組態項目名稱不能以 '%c' 開頭。"
 
-#: ../src/generic/filedlgg.cpp:357 ../src/gtk/filedlg.cpp:59
+#: ../src/generic/filedlgg.cpp:357 ../src/gtk/filedlg.cpp:60
 msgid "Confirm"
 msgstr "確認"
 
@@ -2325,15 +2361,17 @@ msgstr "連線中…"
 msgid "Contents"
 msgstr "目錄"
 
-#: ../src/propgrid/advprops.cpp:852
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:866
 msgid "ControlDark"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:853
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:867
 msgid "ControlLight"
 msgstr ""
 
-#: ../src/common/strconv.cpp:2259
+#: ../src/common/strconv.cpp:2251
 #, c-format
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "無法轉換到字集 '%s'。"
@@ -2465,16 +2503,16 @@ msgstr "無法設定最小寬度。"
 msgid "Could not set property flags."
 msgstr "無法設定性質旗標。"
 
-#: ../src/common/prntbase.cpp:1999
+#: ../src/common/prntbase.cpp:2015
 msgid "Could not start document preview."
 msgstr "無法啟動文件預覽。"
 
-#: ../src/generic/printps.cpp:178 ../src/gtk/print.cpp:1103
+#: ../src/generic/printps.cpp:178 ../src/gtk/print.cpp:1116
 #: ../src/msw/printwin.cpp:210
 msgid "Could not start printing."
 msgstr "無法啟動列印。"
 
-#: ../src/common/wincmn.cpp:2131
+#: ../src/common/wincmn.cpp:2145
 msgid "Could not transfer data to window"
 msgstr "無法轉移資料到視窗中。"
 
@@ -2492,7 +2530,7 @@ msgstr "無法建立計時器。"
 msgid "Couldn't create the overlay window"
 msgstr "無法建立 overlay 視窗"
 
-#: ../src/common/translation.cpp:2028
+#: ../src/common/translation.cpp:2024
 msgid "Couldn't enumerate translations"
 msgstr "無法列舉翻譯"
 
@@ -2501,7 +2539,7 @@ msgstr "無法列舉翻譯"
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "在動態連結檔中找不到符號 '%s'。"
 
-#: ../src/msw/thread.cpp:920
+#: ../src/msw/thread.cpp:922
 msgid "Couldn't get the current thread pointer"
 msgstr "無法取得目前執行緒指標。"
 
@@ -2547,7 +2585,7 @@ msgstr "無法取得清單控制元件中細項 %d 的資訊。"
 msgid "Couldn't save PNG image."
 msgstr "無法儲存 PNG 圖像。"
 
-#: ../src/msw/thread.cpp:690
+#: ../src/msw/thread.cpp:692
 msgid "Couldn't terminate thread"
 msgstr "無法終止執行緒。"
 
@@ -2564,7 +2602,13 @@ msgstr "建立目錄"
 msgid "Create new directory"
 msgstr "建立新目錄"
 
-#: ../src/propgrid/advprops.cpp:1708
+#: ../src/xrc/xmlres.cpp:2441
+#, fuzzy, c-format
+msgid "Creating %s \"%s\" failed."
+msgstr "無法將 '%s' 解開至 '%s' 中。"
+
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1719
 msgid "Cross"
 msgstr ""
 
@@ -2581,13 +2625,14 @@ msgstr "剪下(&T)"
 msgid "Current directory:"
 msgstr "目前目錄："
 
-#: ../src/propgrid/advprops.cpp:868 ../src/propgrid/advprops.cpp:1524
-#: ../src/propgrid/advprops.cpp:1562
+#. TRANSLATORS: Custom colour choice entry
+#: ../src/propgrid/advprops.cpp:882 ../src/propgrid/advprops.cpp:1535
+#: ../src/propgrid/advprops.cpp:1573
 #, fuzzy
 msgid "Custom"
 msgstr "自訂大小"
 
-#: ../src/gtk/print.cpp:218
+#: ../src/gtk/print.cpp:217
 msgid "Custom size"
 msgstr "自訂大小"
 
@@ -2673,7 +2718,8 @@ msgstr ""
 msgid "Decorative"
 msgstr "修飾"
 
-#: ../src/propgrid/advprops.cpp:1702
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1713
 #, fuzzy
 msgid "Default"
 msgstr "預設值"
@@ -2698,7 +2744,7 @@ msgstr "刪除"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:48 ../src/common/stockitem.cpp:152
-#: ../src/richtext/richtextbuffer.cpp:8137 ../src/stc/stc_i18n.cpp:20
+#: ../src/richtext/richtextbuffer.cpp:8214 ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "刪除"
 
@@ -2706,12 +2752,12 @@ msgstr "刪除"
 msgid "Delete A&ll"
 msgstr "刪除全部(&L)"
 
-#: ../src/richtext/richtextbuffer.cpp:11179
+#: ../src/richtext/richtextbuffer.cpp:11332
 #, fuzzy
 msgid "Delete Column"
 msgstr "刪除選取項目"
 
-#: ../src/richtext/richtextbuffer.cpp:11129
+#: ../src/richtext/richtextbuffer.cpp:11282
 #, fuzzy
 msgid "Delete Row"
 msgstr "刪除"
@@ -2752,7 +2798,8 @@ msgstr "不存在模組「%2$s」的依存「%1$s」。"
 msgid "Descending"
 msgstr "遞減"
 
-#: ../src/generic/dirctrlg.cpp:547 ../src/propgrid/advprops.cpp:854
+#. TRANSLATORS: Keyword of system colour
+#: ../src/generic/dirctrlg.cpp:547 ../src/propgrid/advprops.cpp:868
 msgid "Desktop"
 msgstr "桌面"
 
@@ -2797,11 +2844,11 @@ msgstr "目錄 '%s' 無法刪除"
 msgid "Directory does not exist"
 msgstr "目錄不存在"
 
-#: ../src/generic/filectrlg.cpp:1412
+#: ../src/generic/filectrlg.cpp:1424
 msgid "Directory doesn't exist."
 msgstr "目錄不存在。"
 
-#: ../src/common/docview.cpp:455
+#: ../src/common/docview.cpp:461
 msgid "Discard changes and reload the last saved version?"
 msgstr "捨棄變更並重新載入最後一次儲存的版本？"
 
@@ -2839,12 +2886,12 @@ msgstr ""
 "新的值是\n"
 "%s %1"
 
-#: ../src/common/docview.cpp:531
+#: ../src/common/docview.cpp:537
 #, c-format
 msgid "Do you want to save changes to %s?"
 msgstr "您想儲存對於 %s 的修改？"
 
-#: ../src/common/prntbase.cpp:537
+#: ../src/common/prntbase.cpp:542
 #, fuzzy
 msgid "Document:"
 msgstr "文件撰寫由 "
@@ -2857,7 +2904,7 @@ msgstr "文件撰寫由 "
 msgid "Documentation writers"
 msgstr "文件撰寫者"
 
-#: ../src/common/sizer.cpp:2688
+#: ../src/common/sizer.cpp:2809
 msgid "Don't Save"
 msgstr "不儲存"
 
@@ -2865,7 +2912,7 @@ msgstr "不儲存"
 msgid "Done"
 msgstr "完成"
 
-#: ../src/generic/progdlgg.cpp:482 ../src/msw/progdlg.cpp:407
+#: ../src/generic/progdlgg.cpp:484 ../src/msw/progdlg.cpp:407
 msgid "Done."
 msgstr "完成。"
 
@@ -2948,10 +2995,40 @@ msgstr "啟用寬度值。"
 msgid "Enable vertical alignment."
 msgstr "啟用垂直對齊。"
 
-#: ../src/richtext/richtextbackgroundpage.cpp:133
-#: ../src/richtext/richtextbackgroundpage.cpp:135
+#: ../src/richtext/richtextbackgroundpage.cpp:163
+#: ../src/richtext/richtextbackgroundpage.cpp:165
 msgid "Enables a background colour."
 msgstr "啟用背景顏色。"
+
+#: ../src/richtext/richtextbackgroundpage.cpp:197
+#: ../src/richtext/richtextbackgroundpage.cpp:199
+#, fuzzy
+msgid "Enables a shadow."
+msgstr "啟用背景顏色。"
+
+#: ../src/richtext/richtextbackgroundpage.cpp:301
+#: ../src/richtext/richtextbackgroundpage.cpp:303
+#, fuzzy
+msgid "Enables the blur distance."
+msgstr "啟用寬度值。"
+
+#: ../src/richtext/richtextbackgroundpage.cpp:261
+#: ../src/richtext/richtextbackgroundpage.cpp:263
+#, fuzzy
+msgid "Enables the shadow colour."
+msgstr "啟用背景顏色。"
+
+#: ../src/richtext/richtextbackgroundpage.cpp:328
+#: ../src/richtext/richtextbackgroundpage.cpp:330
+#, fuzzy
+msgid "Enables the shadow opacity."
+msgstr "啟用寬度值。"
+
+#: ../src/richtext/richtextbackgroundpage.cpp:274
+#: ../src/richtext/richtextbackgroundpage.cpp:276
+#, fuzzy
+msgid "Enables the shadow spread."
+msgstr "啟用寬度值。"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:64
@@ -3007,8 +3084,8 @@ msgstr "環境變數擴充失敗:  '%c' 沒有出現在位置 %u / '%s'。"
 #: ../src/generic/dirctrlg.cpp:620 ../src/generic/dirdlgg.cpp:352
 #: ../src/generic/filectrlg.cpp:677 ../src/generic/filectrlg.cpp:791
 #: ../src/generic/filectrlg.cpp:805 ../src/generic/filectrlg.cpp:821
-#: ../src/generic/filectrlg.cpp:1381 ../src/generic/filectrlg.cpp:1412
-#: ../src/generic/filedlgg.cpp:365 ../src/gtk/filedlg.cpp:73
+#: ../src/generic/filectrlg.cpp:1393 ../src/generic/filectrlg.cpp:1424
+#: ../src/generic/filedlgg.cpp:365 ../src/gtk/filedlg.cpp:74
 #: ../src/gtk1/fontdlg.cpp:74
 msgid "Error"
 msgstr "錯誤"
@@ -3029,7 +3106,7 @@ msgstr "建立目錄錯誤"
 msgid "Error in reading image DIB."
 msgstr "讀取圖像 DIB 時發生錯誤。"
 
-#: ../src/propgrid/propgrid.cpp:6652
+#: ../src/propgrid/propgrid.cpp:6668
 #, c-format
 msgid "Error in resource: %s"
 msgstr "資源錯誤: %s"
@@ -3042,7 +3119,7 @@ msgstr "讀取設定選項時發生錯誤。"
 msgid "Error saving user configuration data."
 msgstr "儲存使用者配置資料錯誤。"
 
-#: ../src/gtk/print.cpp:691
+#: ../src/gtk/print.cpp:706
 msgid "Error while printing: "
 msgstr "列印時發生錯誤: "
 
@@ -3078,7 +3155,7 @@ msgstr "可執行檔 (*.exe)|*.exe|"
 msgid "Execute"
 msgstr "執行"
 
-#: ../src/msw/utilsexc.cpp:897
+#: ../src/msw/utilsexc.cpp:892
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr "指令 '%s' 執行失敗"
@@ -3087,7 +3164,7 @@ msgstr "指令 '%s' 執行失敗"
 msgid "Executive, 7 1/4 x 10 1/2 in"
 msgstr "Executive, 7 1/4 x 10 1/2 英吋"
 
-#: ../src/msw/registry.cpp:1254
+#: ../src/msw/registry.cpp:1238
 #, c-format
 msgid ""
 "Exporting registry key: file \"%s\" already exists and won't be overwritten."
@@ -3106,7 +3183,8 @@ msgstr "無法將 '%s' 解開至 '%s' 中。"
 msgid "F"
 msgstr "F"
 
-#: ../src/propgrid/advprops.cpp:648
+#. TRANSLATORS: Label of font face name
+#: ../src/propgrid/advprops.cpp:658
 msgid "Face Name"
 msgstr "字體名稱"
 
@@ -3132,7 +3210,7 @@ msgstr "無法為 OpenGL 分配顏色。"
 msgid "Failed to change video mode"
 msgstr "變更顯示模式失敗"
 
-#: ../src/common/image.cpp:3141
+#: ../src/common/image.cpp:3143
 #, c-format
 msgid "Failed to check format of image file \"%s\"."
 msgstr "無法確認圖片檔 \"%s\" 的格式。"
@@ -3173,7 +3251,7 @@ msgstr "連線失敗：沒有可撥號的 ISP。"
 msgid "Failed to convert file \"%s\" to Unicode."
 msgstr "無法轉換檔案 \"%s\" 為 Unicode"
 
-#: ../src/generic/logg.cpp:974
+#: ../src/generic/logg.cpp:976
 msgid "Failed to copy dialog contents to the clipboard."
 msgstr "無法複製對話視窗內容至剪貼簿。"
 
@@ -3201,7 +3279,7 @@ msgstr "複製註冊表子鍵 '%s'至 '%s'失敗。"
 msgid "Failed to create DDE string"
 msgstr "無法建立「動態資料交換」字串"
 
-#: ../src/msw/mdi.cpp:614
+#: ../src/msw/mdi.cpp:617
 msgid "Failed to create MDI parent frame."
 msgstr "無法建立 MDI 主框架。"
 
@@ -3339,7 +3417,7 @@ msgstr "無法初始化 OpenGL"
 msgid "Failed to initiate dialup connection: %s"
 msgstr "無法初始撥號連線：%s"
 
-#: ../src/gtk/textctrl.cpp:1129
+#: ../src/gtk/textctrl.cpp:1142
 msgid "Failed to insert text in the control."
 msgstr "無法於控制項中插入文字"
 
@@ -3363,12 +3441,12 @@ msgstr "無法停止執行緒，偵測到潛在的記憶體流失 - 請重新啟
 msgid "Failed to kill process %d"
 msgstr "無法刪除程序 %d"
 
-#: ../src/common/image.cpp:2365
+#: ../src/common/image.cpp:2367
 #, fuzzy, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
 msgstr "無法從串流載入圖像 %d。"
 
-#: ../src/common/image.cpp:2374
+#: ../src/common/image.cpp:2376
 #, fuzzy, c-format
 msgid "Failed to load icon \"%s\" from resources."
 msgstr "無法從串流載入圖像 %d。"
@@ -3383,7 +3461,7 @@ msgstr "無法載入圖像 %%d 自檔案 '%s' 。"
 msgid "Failed to load image %d from stream."
 msgstr "無法從串流載入圖像 %d。"
 
-#: ../src/common/image.cpp:2452 ../src/common/image.cpp:2471
+#: ../src/common/image.cpp:2454 ../src/common/image.cpp:2473
 #, c-format
 msgid "Failed to load image from file \"%s\"."
 msgstr "無法從檔案 '%s' 載入影像。"
@@ -3397,7 +3475,7 @@ msgstr "從檔案 \"%s\"讀取中繼檔案失敗。"
 msgid "Failed to load mpr.dll."
 msgstr "無法載入 mpr.dll。"
 
-#: ../src/msw/utils.cpp:993
+#: ../src/msw/utils.cpp:1015
 #, c-format
 msgid "Failed to load resource \"%s\"."
 msgstr "讀取資源 \"%s\" 失敗。"
@@ -3412,7 +3490,7 @@ msgstr "無法載入共享函式庫 '%s'"
 msgid "Failed to load sound from \"%s\" (error %d)."
 msgstr "讀取資源 \"%s\" 失敗。"
 
-#: ../src/msw/utils.cpp:1000
+#: ../src/msw/utils.cpp:1022
 #, c-format
 msgid "Failed to lock resource \"%s\"."
 msgstr "無法鎖定資源 \"%s\"。"
@@ -3497,7 +3575,7 @@ msgstr "無法從鎖定的檔案中讀出「程序識別碼」。"
 msgid "Failed to read config options."
 msgstr "讀取設定選項時發生錯誤。"
 
-#: ../src/common/docview.cpp:678
+#: ../src/common/docview.cpp:684
 #, c-format
 msgid "Failed to read document from the file \"%s\"."
 msgstr "無法從檔案 \"%s\" 讀取文件。"
@@ -3514,7 +3592,7 @@ msgstr "從喚醒管線讀取時失敗"
 msgid "Failed to redirect child process input/output"
 msgstr "無法轉向子程序的「輸入/輸出」"
 
-#: ../src/msw/utilsexc.cpp:706
+#: ../src/msw/utilsexc.cpp:703
 msgid "Failed to redirect the child process IO"
 msgstr "無法轉向子程序的「輸入/輸出」"
 
@@ -3577,7 +3655,7 @@ msgstr "無法取得 RAS 錯誤訊息的對應文字"
 msgid "Failed to retrieve the supported clipboard formats"
 msgstr "無法取得支援的剪貼簿格式"
 
-#: ../src/common/docview.cpp:649
+#: ../src/common/docview.cpp:655
 #, c-format
 msgid "Failed to save document to the file \"%s\"."
 msgstr "無法儲存文件至 \"%s\" 檔案中。"
@@ -3614,7 +3692,7 @@ msgstr "無法設定執行緒的優先等級為 %d。"
 msgid "Failed to set temporary file permissions"
 msgstr "無法設定暫存檔的存取權限"
 
-#: ../src/gtk/textctrl.cpp:1070
+#: ../src/gtk/textctrl.cpp:1078
 msgid "Failed to set text in the text control."
 msgstr "無法在文字控制項中設定文字。"
 
@@ -3628,7 +3706,7 @@ msgstr "無法設定執行緒的優先等級為 %d。"
 msgid "Failed to set thread priority %d."
 msgstr "無法設定執行緒的優先等級為 %d。"
 
-#: ../src/unix/utilsunx.cpp:781
+#: ../src/unix/utilsunx.cpp:779
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr "設置非阻斷管線時失敗，程式也許掛機。"
 
@@ -3692,11 +3770,13 @@ msgstr "上傳除錯報告失敗 (錯誤代號 %d)。"
 msgid "Failed to write to lock file '%s'"
 msgstr "無法寫入鎖定檔案 '%s'"
 
-#: ../src/propgrid/propgrid.cpp:188
+#. TRANSLATORS: Name of Boolean false value
+#: ../src/propgrid/propgrid.cpp:208
 msgid "False"
 msgstr "假"
 
-#: ../src/propgrid/advprops.cpp:666
+#. TRANSLATORS: Label of font family
+#: ../src/propgrid/advprops.cpp:680
 msgid "Family"
 msgstr "字族"
 
@@ -3704,17 +3784,17 @@ msgstr "字族"
 msgid "File"
 msgstr "檔案"
 
-#: ../src/common/docview.cpp:666
+#: ../src/common/docview.cpp:672
 #, c-format
 msgid "File \"%s\" could not be opened for reading."
 msgstr "檔案 \"%s\" 無法開啟為讀取模式。"
 
-#: ../src/common/docview.cpp:643
+#: ../src/common/docview.cpp:649
 #, c-format
 msgid "File \"%s\" could not be opened for writing."
 msgstr "檔案 \"%s\" 無法開啟為寫入模式。"
 
-#: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:56
+#: ../src/generic/filedlgg.cpp:354 ../src/gtk/filedlg.cpp:57
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "檔案 '%s' 已存在，是否真要覆寫？"
@@ -3738,7 +3818,7 @@ msgstr "檔案無法載入。"
 msgid "File dialog failed with error code %0lx."
 msgstr "檔案對話視窗錯誤，錯誤碼 %0lx。"
 
-#: ../src/common/docview.cpp:1778
+#: ../src/common/docview.cpp:1792
 msgid "File error"
 msgstr "檔案錯誤"
 
@@ -3767,7 +3847,7 @@ msgstr "尋找"
 msgid "First"
 msgstr "最前"
 
-#: ../src/common/prntbase.cpp:1532
+#: ../src/common/prntbase.cpp:1548
 msgid "First page"
 msgstr "第一頁"
 
@@ -3843,7 +3923,7 @@ msgstr "找到 %i 個符合項目"
 msgid "From:"
 msgstr "從："
 
-#: ../src/propgrid/advprops.cpp:1554
+#: ../src/propgrid/advprops.cpp:1565
 msgid "Fuchsia"
 msgstr ""
 
@@ -3867,7 +3947,7 @@ msgstr "GIF: 記憶體不足。"
 msgid "GIF: unknown error!!!"
 msgstr "GIF: 不明的錯誤！！！"
 
-#: ../src/gtk/window.cpp:4533
+#: ../src/gtk/window.cpp:4539
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -3882,7 +3962,7 @@ msgstr "GTK+ 布景主題"
 msgid "General"
 msgstr ""
 
-#: ../src/common/prntbase.cpp:253
+#: ../src/common/prntbase.cpp:258
 msgid "Generic PostScript"
 msgstr "普通 PostScript"
 
@@ -3930,11 +4010,12 @@ msgstr "進入父目錄"
 msgid "Graphics art by "
 msgstr "美術設計由 "
 
-#: ../src/propgrid/advprops.cpp:1549
+#: ../src/propgrid/advprops.cpp:1560
 msgid "Gray"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:855
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:869
 msgid "GrayText"
 msgstr ""
 
@@ -3942,7 +4023,7 @@ msgstr ""
 msgid "Greek (ISO-8859-7)"
 msgstr "希臘語 (ISO-8859-7)"
 
-#: ../src/propgrid/advprops.cpp:1550
+#: ../src/propgrid/advprops.cpp:1561
 #, fuzzy
 msgid "Green"
 msgstr "MacGreek"
@@ -3968,7 +4049,8 @@ msgstr "HTML 錨點 %s 不存在。"
 msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
 msgstr "超文件檔 (*.html;*.htm)|*.html;*.htm|"
 
-#: ../src/propgrid/advprops.cpp:1709
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1720
 msgid "Hand"
 msgstr ""
 
@@ -4022,12 +4104,12 @@ msgstr "找不到 \"%s\" 檔案。"
 msgid "Help: %s"
 msgstr "說明：%s"
 
-#: ../src/osx/menu_osx.cpp:635
+#: ../src/osx/menu_osx.cpp:615
 #, c-format
 msgid "Hide %s"
 msgstr "隱藏 %s"
 
-#: ../src/osx/menu_osx.cpp:637
+#: ../src/osx/menu_osx.cpp:617
 msgid "Hide Others"
 msgstr "隱藏其他"
 
@@ -4035,12 +4117,14 @@ msgstr "隱藏其他"
 msgid "Hide this notification message."
 msgstr "隱藏這個通知訊息"
 
-#: ../src/propgrid/advprops.cpp:856
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:870
 #, fuzzy
 msgid "Highlight"
 msgstr "細體"
 
-#: ../src/propgrid/advprops.cpp:857
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:871
 #, fuzzy
 msgid "HighlightText"
 msgstr "文字向右對齊。"
@@ -4060,7 +4144,8 @@ msgstr "家目錄"
 msgid "How the object will float relative to the text."
 msgstr "物件與文字之間的相對位置。"
 
-#: ../src/propgrid/advprops.cpp:1710
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1721
 msgid "I-Beam"
 msgstr ""
 
@@ -4137,7 +4222,7 @@ msgstr ""
 "但我們不建議這樣做, 因為除錯報告有助於加強本程式.\n"
 "在可能的情況下, 請盡量選擇讓程式產生除錯報告.\n"
 
-#: ../src/msw/registry.cpp:1419
+#: ../src/msw/registry.cpp:1403
 #, c-format
 msgid "Ignoring value \"%s\" of the key \"%s\"."
 msgstr "忽略值 \"%s\" (鍵 \"%s\")。"
@@ -4158,20 +4243,20 @@ msgstr "非法的針對Create方法的參數計數"
 msgid "Illegal directory name."
 msgstr "不合法的目錄名稱。"
 
-#: ../src/generic/filectrlg.cpp:1380
+#: ../src/generic/filectrlg.cpp:1392
 msgid "Illegal file specification."
 msgstr "不合規範的檔案描述。"
 
-#: ../src/common/image.cpp:2158
+#: ../src/common/image.cpp:2160
 msgid "Image and mask have different sizes."
 msgstr "圖像和遮罩的大小不一致。"
 
-#: ../src/common/image.cpp:2611
+#: ../src/common/image.cpp:2613
 #, c-format
 msgid "Image file is not of type %d."
 msgstr "影像檔不是型態 %d。"
 
-#: ../src/common/image.cpp:2741
+#: ../src/common/image.cpp:2743
 #, c-format
 msgid "Image is not of type %s."
 msgstr "影像不是型態 %s。"
@@ -4203,16 +4288,19 @@ msgstr "無法覆寫檔案 '%s'"
 msgid "Impossible to set permissions for the file '%s'"
 msgstr "無法設定檔案 '%s' 的存取權限"
 
-#: ../src/propgrid/advprops.cpp:858
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:872
 #, fuzzy
 msgid "InactiveBorder"
 msgstr "邊框"
 
-#: ../src/propgrid/advprops.cpp:859
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:873
 msgid "InactiveCaption"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:860
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:874
 msgid "InactiveCaptionText"
 msgstr ""
 
@@ -4245,7 +4333,7 @@ msgstr "印度語 (ISO-8859-12)"
 msgid "Info"
 msgstr "資訊"
 
-#: ../src/common/init.cpp:276
+#: ../src/common/init.cpp:287
 msgid "Initialization failed in post init, aborting."
 msgstr "安裝後續的啟始失效，忽略中。"
 
@@ -4260,23 +4348,23 @@ msgstr "內縮"
 msgid "Insert"
 msgstr "插入"
 
-#: ../src/richtext/richtextbuffer.cpp:7983
+#: ../src/richtext/richtextbuffer.cpp:8060
 #, fuzzy
 msgid "Insert Field"
 msgstr "插入文字"
 
-#: ../src/richtext/richtextbuffer.cpp:7894
-#: ../src/richtext/richtextbuffer.cpp:8852
+#: ../src/richtext/richtextbuffer.cpp:7971
+#: ../src/richtext/richtextbuffer.cpp:8929
 msgid "Insert Image"
 msgstr "插入圖片"
 
-#: ../src/richtext/richtextbuffer.cpp:7941
+#: ../src/richtext/richtextbuffer.cpp:8018
 msgid "Insert Object"
 msgstr "插入物件"
 
-#: ../src/richtext/richtextbuffer.cpp:7738
-#: ../src/richtext/richtextbuffer.cpp:7768
-#: ../src/richtext/richtextbuffer.cpp:7810
+#: ../src/richtext/richtextbuffer.cpp:7815
+#: ../src/richtext/richtextbuffer.cpp:7845
+#: ../src/richtext/richtextbuffer.cpp:7887
 #: ../src/richtext/richtextctrl.cpp:1263 ../src/richtext/richtextctrl.cpp:1471
 msgid "Insert Text"
 msgstr "插入文字"
@@ -4580,14 +4668,14 @@ msgstr "橫向列印"
 msgid "Last"
 msgstr "最後"
 
-#: ../src/common/prntbase.cpp:1556
+#: ../src/common/prntbase.cpp:1572
 msgid "Last page"
 msgstr "最後一頁"
 
 #: ../src/common/log.cpp:309
-#, c-format
-msgid "Last repeated message (\"%s\", %lu time) wasn't output"
-msgid_plural "Last repeated message (\"%s\", %lu times) wasn't output"
+#, fuzzy, c-format
+msgid "Last repeated message (\"%s\", %u time) wasn't output"
+msgid_plural "Last repeated message (\"%s\", %u times) wasn't output"
 msgstr[0] "最後一筆重複的訊息 (「%s」, %lu 次) 並無輸出"
 
 #: ../src/common/paper.cpp:104
@@ -4610,7 +4698,8 @@ msgstr "左"
 msgid "Left (&first line):"
 msgstr "左(第一列)(&F):"
 
-#: ../src/propgrid/advprops.cpp:1711
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1722
 msgid "Left Button"
 msgstr ""
 
@@ -4669,7 +4758,7 @@ msgstr "授權"
 msgid "Light"
 msgstr "細體"
 
-#: ../src/propgrid/advprops.cpp:1558
+#: ../src/propgrid/advprops.cpp:1569
 msgid "Lime"
 msgstr ""
 
@@ -4723,7 +4812,7 @@ msgstr "上鎖檔案 '%s' 沒有正確的所有者。"
 msgid "Lock file '%s' has incorrect permissions."
 msgstr "上鎖檔案 '%s' 沒有正確的權限。"
 
-#: ../src/generic/logg.cpp:580
+#: ../src/generic/logg.cpp:582
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "儲存日誌到檔案 '%s'。"
@@ -4913,11 +5002,12 @@ msgstr "MacTurkish"
 msgid "MacVietnamese"
 msgstr "MacVietnamese"
 
-#: ../src/propgrid/advprops.cpp:1712
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1723
 msgid "Magnifier"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:2093
+#: ../src/propgrid/advprops.cpp:2104
 msgid "Make a selection:"
 msgstr "選取項目："
 
@@ -4926,7 +5016,7 @@ msgstr "選取項目："
 msgid "Margins"
 msgstr "外邊距"
 
-#: ../src/propgrid/advprops.cpp:1545
+#: ../src/propgrid/advprops.cpp:1556
 msgid "Maroon"
 msgstr ""
 
@@ -4953,8 +5043,9 @@ msgid "Memory VFS already contains file '%s'!"
 msgstr "「記憶體虛擬檔案系統」已包含檔案 '%s'！"
 
 #. TRANSLATORS: Name of keyboard key
+#. TRANSLATORS: Keyword of system colour
 #: ../src/common/accelcmn.cpp:71 ../src/msw/frame.cpp:399
-#: ../src/propgrid/advprops.cpp:861
+#: ../src/propgrid/advprops.cpp:875
 msgid "Menu"
 msgstr "選單"
 
@@ -4974,7 +5065,8 @@ msgstr "找不到方法或性質。"
 msgid "Mi&nimize"
 msgstr "最小化(&N)"
 
-#: ../src/propgrid/advprops.cpp:1713
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1724
 msgid "Middle Button"
 msgstr ""
 
@@ -5029,7 +5121,7 @@ msgstr "將物件移至下個段落。"
 msgid "Moves the object to the previous paragraph."
 msgstr "將物件移至上個段落。"
 
-#: ../src/richtext/richtextbuffer.cpp:9803
+#: ../src/richtext/richtextbuffer.cpp:9956
 msgid "Multiple Cell Properties"
 msgstr "儲存格性質(多個)"
 
@@ -5037,7 +5129,7 @@ msgstr "儲存格性質(多個)"
 msgid "Name"
 msgstr "名稱"
 
-#: ../src/propgrid/advprops.cpp:1546
+#: ../src/propgrid/advprops.cpp:1557
 msgid "Navy"
 msgstr ""
 
@@ -5095,7 +5187,7 @@ msgstr "新名稱"
 msgid "Next"
 msgstr "下一個"
 
-#: ../src/common/prntbase.cpp:1551 ../src/html/helpwnd.cpp:665
+#: ../src/common/prntbase.cpp:1567 ../src/html/helpwnd.cpp:665
 msgid "Next page"
 msgstr "下一頁"
 
@@ -5104,7 +5196,8 @@ msgstr "下一頁"
 msgid "No"
 msgstr "否"
 
-#: ../src/propgrid/advprops.cpp:1714
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1725
 msgid "No Entry"
 msgstr ""
 
@@ -5165,17 +5258,17 @@ msgstr ""
 msgid "No handler found for animation type."
 msgstr "沒有找到動畫類型處理常式。"
 
-#: ../src/common/image.cpp:2593
+#: ../src/common/image.cpp:2595
 msgid "No handler found for image type."
 msgstr "沒有找到圖像類型處理常式。"
 
-#: ../src/common/image.cpp:2601 ../src/common/image.cpp:2712
-#: ../src/common/image.cpp:2765
+#: ../src/common/image.cpp:2603 ../src/common/image.cpp:2714
+#: ../src/common/image.cpp:2767
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr "沒有定義類型 %d 的圖像處理常式。"
 
-#: ../src/common/image.cpp:2735 ../src/common/image.cpp:2779
+#: ../src/common/image.cpp:2737 ../src/common/image.cpp:2781
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "沒有定義類型 %s 的圖像處理常式。"
@@ -5196,11 +5289,11 @@ msgstr "該欄位無指定任何渲染器。"
 msgid "No sound"
 msgstr "沒有聲音"
 
-#: ../src/common/image.cpp:2166 ../src/common/image.cpp:2207
+#: ../src/common/image.cpp:2168 ../src/common/image.cpp:2209
 msgid "No unused colour in image being masked."
 msgstr "圖像中沒有被遮罩的未用顏色。"
 
-#: ../src/common/image.cpp:3238
+#: ../src/common/image.cpp:3240
 msgid "No unused colour in image."
 msgstr "圖像中沒有未用的顏色。"
 
@@ -5231,7 +5324,7 @@ msgstr "正常字體<br>且<u>加底線</u>。 "
 msgid "Normal font:"
 msgstr "正常字型："
 
-#: ../src/propgrid/props.cpp:1017
+#: ../src/propgrid/props.cpp:1062
 #, c-format
 msgid "Not %s"
 msgstr "非 %s"
@@ -5383,7 +5476,7 @@ msgstr "大綱編號"
 
 #: ../include/wx/msgdlg.h:278 ../src/common/stockitem.cpp:178
 #: ../src/gtk1/fontdlg.cpp:138 ../src/msw/dialog.cpp:120
-#: ../src/msw/msgdlg.cpp:476 ../src/msw/msgdlg.cpp:782
+#: ../src/msw/msgdlg.cpp:476 ../src/msw/msgdlg.cpp:775
 #: ../src/richtext/richtextstyledlg.cpp:297
 msgid "OK"
 msgstr "確認"
@@ -5405,11 +5498,15 @@ msgstr "物件實作不支援具名參數。"
 msgid "Objects must have an id attribute"
 msgstr "物件必須有 id 屬性"
 
-#: ../src/propgrid/advprops.cpp:1551
+#: ../src/propgrid/advprops.cpp:1562
 msgid "Olive"
 msgstr ""
 
-#: ../src/common/docview.cpp:1762 ../src/common/docview.cpp:1804
+#: ../src/richtext/richtextbackgroundpage.cpp:326
+msgid "Opaci&ty:"
+msgstr ""
+
+#: ../src/common/docview.cpp:1776 ../src/common/docview.cpp:1818
 msgid "Open File"
 msgstr "開啟檔案"
 
@@ -5455,7 +5552,7 @@ msgstr "選項 '%s'：'%s' 無法轉換成日期。"
 msgid "Options"
 msgstr "選項"
 
-#: ../src/propgrid/advprops.cpp:1556
+#: ../src/propgrid/advprops.cpp:1567
 msgid "Orange"
 msgstr ""
 
@@ -5625,12 +5722,12 @@ msgstr "中式信封 #9 轉向 324 x 229 公釐"
 msgid "Padding"
 msgstr "內邊距"
 
-#: ../src/common/prntbase.cpp:2058
+#: ../src/common/prntbase.cpp:2074
 #, c-format
 msgid "Page %d"
 msgstr "第 %d 頁"
 
-#: ../src/common/prntbase.cpp:2056
+#: ../src/common/prntbase.cpp:2072
 #, c-format
 msgid "Page %d of %d"
 msgstr "%d / %d 頁"
@@ -5641,7 +5738,7 @@ msgstr "%d / %d 頁"
 msgid "Page Down"
 msgstr "第 %d 頁"
 
-#: ../src/gtk/print.cpp:795
+#: ../src/gtk/print.cpp:810
 msgid "Page Setup"
 msgstr "頁面設定"
 
@@ -5651,7 +5748,7 @@ msgstr "頁面設定"
 msgid "Page Up"
 msgstr "第 %d 頁"
 
-#: ../src/common/prntbase.cpp:479 ../src/generic/prntdlgg.cpp:828
+#: ../src/common/prntbase.cpp:484 ../src/generic/prntdlgg.cpp:828
 msgid "Page setup"
 msgstr "頁面設定"
 
@@ -5671,7 +5768,8 @@ msgstr "頁"
 msgid "Pages"
 msgstr "頁"
 
-#: ../src/propgrid/advprops.cpp:1715
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1726
 msgid "Paint Brush"
 msgstr ""
 
@@ -5708,7 +5806,8 @@ msgstr "貼上選取項目"
 msgid "Pause"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1716
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1727
 msgid "Pencil"
 msgstr ""
 
@@ -5731,7 +5830,7 @@ msgstr ""
 msgid "PgUp"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:12662
+#: ../src/richtext/richtextbuffer.cpp:12815
 msgid "Picture Properties"
 msgstr "圖片性質"
 
@@ -5743,7 +5842,7 @@ msgstr "無法建立管道"
 msgid "Please choose a valid font."
 msgstr "請選擇一個有效的字型。"
 
-#: ../src/generic/filedlgg.cpp:365 ../src/gtk/filedlg.cpp:72
+#: ../src/generic/filedlgg.cpp:365 ../src/gtk/filedlg.cpp:73
 msgid "Please choose an existing file."
 msgstr "請選擇一個已存在的檔案。"
 
@@ -5770,22 +5869,25 @@ msgstr ""
 msgid "Please select the columns to show and define their order:"
 msgstr "請選取欄位以顯示並定義它們的排序："
 
-#: ../src/common/prntbase.cpp:533
+#: ../src/common/prntbase.cpp:538
 #, fuzzy
 msgid "Please wait while printing..."
 msgstr "列印中，請稍待\n"
 
-#: ../src/propgrid/advprops.cpp:1717
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1728
 #, fuzzy
 msgid "Point Left"
 msgstr "字點大小"
 
-#: ../src/propgrid/advprops.cpp:1718
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1729
 #, fuzzy
 msgid "Point Right"
 msgstr "靠右對齊"
 
-#: ../src/propgrid/advprops.cpp:639
+#. TRANSLATORS: Label of font point size
+#: ../src/propgrid/advprops.cpp:648
 msgid "Point Size"
 msgstr "字點大小"
 
@@ -5822,11 +5924,11 @@ msgstr "PostScript 文件"
 msgid "Preferences"
 msgstr "偏好設定"
 
-#: ../src/osx/menu_osx.cpp:626
+#: ../src/osx/menu_osx.cpp:606
 msgid "Preferences..."
 msgstr "偏好設定..."
 
-#: ../src/common/prntbase.cpp:541
+#: ../src/common/prntbase.cpp:546
 msgid "Preparing"
 msgstr ""
 
@@ -5835,24 +5937,24 @@ msgstr ""
 msgid "Preview:"
 msgstr "預覽︰"
 
-#: ../src/common/prntbase.cpp:1537 ../src/html/helpwnd.cpp:664
+#: ../src/common/prntbase.cpp:1553 ../src/html/helpwnd.cpp:664
 msgid "Previous page"
 msgstr "前一頁"
 
 #. TRANSLATORS: Name of keyboard key
-#: ../src/common/accelcmn.cpp:75 ../src/common/prntbase.cpp:421
-#: ../src/common/prntbase.cpp:1525 ../src/generic/prntdlgg.cpp:143
-#: ../src/generic/prntdlgg.cpp:157 ../src/gtk/print.cpp:605
-#: ../src/gtk/print.cpp:618
+#: ../src/common/accelcmn.cpp:75 ../src/common/prntbase.cpp:426
+#: ../src/common/prntbase.cpp:1541 ../src/generic/prntdlgg.cpp:143
+#: ../src/generic/prntdlgg.cpp:157 ../src/gtk/print.cpp:604
+#: ../src/gtk/print.cpp:622
 msgid "Print"
 msgstr "列印"
 
-#: ../include/wx/prntbase.h:399 ../src/common/docview.cpp:1257
+#: ../include/wx/prntbase.h:399 ../src/common/docview.cpp:1271
 msgid "Print Preview"
 msgstr "預覽列印"
 
-#: ../src/common/prntbase.cpp:1999 ../src/common/prntbase.cpp:2041
-#: ../src/common/prntbase.cpp:2049
+#: ../src/common/prntbase.cpp:2015 ../src/common/prntbase.cpp:2057
+#: ../src/common/prntbase.cpp:2065
 msgid "Print Preview Failure"
 msgstr "預覽列印失敗"
 
@@ -5873,7 +5975,7 @@ msgstr "彩色列印"
 msgid "Print previe&w..."
 msgstr "預覽列印"
 
-#: ../src/common/docview.cpp:1251
+#: ../src/common/docview.cpp:1265
 msgid "Print preview creation failed."
 msgstr "建立預覽列印失敗。"
 
@@ -5922,20 +6024,25 @@ msgstr "印表機…"
 msgid "Printer:"
 msgstr "印表機:"
 
-#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:530
+#: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:535
 #: ../src/html/htmprint.cpp:277
 msgid "Printing"
 msgstr "列印"
 
-#: ../src/common/prntbase.cpp:596
+#: ../src/common/prntbase.cpp:612
 msgid "Printing "
 msgstr "正在列印 "
 
-#: ../src/common/prntbase.cpp:342
+#: ../src/common/prntbase.cpp:347
 msgid "Printing Error"
 msgstr "列印時發生錯誤"
 
-#: ../src/common/prntbase.cpp:556
+#: ../src/common/prntbase.cpp:565
+#, fuzzy, c-format
+msgid "Printing page %d"
+msgstr "正在列印第 %d 頁…"
+
+#: ../src/common/prntbase.cpp:570
 #, fuzzy, c-format
 msgid "Printing page %d of %d"
 msgstr "正在列印第 %d 頁…"
@@ -5950,7 +6057,7 @@ msgid "Printing..."
 msgstr "列印中…"
 
 #: ../include/wx/prntbase.h:267 ../include/wx/richtext/richtextprint.h:109
-#: ../src/common/docview.cpp:2121
+#: ../src/common/docview.cpp:2135
 msgid "Printout"
 msgstr "列印"
 
@@ -5964,7 +6071,7 @@ msgstr "處理除錯報告失敗, 檔案被儲存在目錄 \"%s\" 中。"
 msgid "Progress renderer cannot render value type; value type: "
 msgstr "程序渲染器無法渲染該值，型態為: "
 
-#: ../src/common/prntbase.cpp:540
+#: ../src/common/prntbase.cpp:545
 msgid "Progress:"
 msgstr ""
 
@@ -5976,11 +6083,12 @@ msgstr "性質"
 msgid "Property"
 msgstr "性質"
 
-#: ../src/propgrid/propgrid.cpp:3182 ../src/propgrid/propgrid.cpp:3314
+#. TRANSLATORS: Caption of message box displaying any property error
+#: ../src/propgrid/propgrid.cpp:3181 ../src/propgrid/propgrid.cpp:3314
 msgid "Property Error"
 msgstr "性質錯誤"
 
-#: ../src/propgrid/advprops.cpp:1547
+#: ../src/propgrid/advprops.cpp:1558
 msgid "Purple"
 msgstr ""
 
@@ -5988,11 +6096,12 @@ msgstr ""
 msgid "Quarto, 215 x 275 mm"
 msgstr "四開，215 x 275 mm"
 
-#: ../src/generic/logg.cpp:1034
+#: ../src/generic/logg.cpp:1036
 msgid "Question"
 msgstr "問題"
 
-#: ../src/propgrid/advprops.cpp:1719
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1730
 #, fuzzy
 msgid "Question Arrow"
 msgstr "問題"
@@ -6001,7 +6110,7 @@ msgstr "問題"
 msgid "Quit"
 msgstr "離開"
 
-#: ../src/osx/menu_osx.cpp:643
+#: ../src/osx/menu_osx.cpp:623
 #, c-format
 msgid "Quit %s"
 msgstr "離開 %s"
@@ -6019,11 +6128,11 @@ msgstr "RawCtrl+"
 msgid "Read error on file '%s'"
 msgstr "讀取檔案 '%s' 時發生錯誤"
 
-#: ../src/common/prntbase.cpp:267
+#: ../src/common/prntbase.cpp:272
 msgid "Ready"
 msgstr "就緒"
 
-#: ../src/propgrid/advprops.cpp:1555
+#: ../src/propgrid/advprops.cpp:1566
 #, fuzzy
 msgid "Red"
 msgstr "重做"
@@ -6106,7 +6215,7 @@ msgstr "潤算器 \"%s\" %d.%d 版本不完整。而且無法載入。"
 msgid "Rendering failed."
 msgstr "潤算失敗。"
 
-#: ../src/richtext/richtextbuffer.cpp:4449
+#: ../src/richtext/richtextbuffer.cpp:4521
 msgid "Renumber List"
 msgstr "重新編號清單"
 
@@ -6134,7 +6243,7 @@ msgstr "置換："
 msgid "Required information entry is empty."
 msgstr "所需的資訊項目空白。"
 
-#: ../src/common/translation.cpp:1979
+#: ../src/common/translation.cpp:1975
 #, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "資源 '%s' 不是有效的訊息分類。"
@@ -6163,12 +6272,14 @@ msgstr ""
 msgid "Right"
 msgstr "右側"
 
-#: ../src/propgrid/advprops.cpp:1704
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1715
 #, fuzzy
 msgid "Right Arrow"
 msgstr "右側"
 
-#: ../src/propgrid/advprops.cpp:1720
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1731
 msgid "Right Button"
 msgstr ""
 
@@ -6196,7 +6307,7 @@ msgstr "標準項目符號名稱(&T):"
 msgid "SPECIAL"
 msgstr "SPECIAL"
 
-#: ../src/common/sizer.cpp:2686 ../src/common/stockitem.cpp:190
+#: ../src/common/sizer.cpp:2807 ../src/common/stockitem.cpp:190
 msgid "Save"
 msgstr "儲存"
 
@@ -6205,11 +6316,11 @@ msgstr "儲存"
 msgid "Save %s file"
 msgstr "儲存檔案 %s "
 
-#: ../src/generic/logg.cpp:516
+#: ../src/generic/logg.cpp:518
 msgid "Save &As..."
 msgstr "另存為(&A)…"
 
-#: ../src/common/docview.cpp:360
+#: ../src/common/docview.cpp:366
 msgid "Save As"
 msgstr "另存為"
 
@@ -6225,7 +6336,7 @@ msgstr "儲存目前文件"
 msgid "Save current document with a different filename"
 msgstr "儲存當前文件至不同的檔名"
 
-#: ../src/generic/logg.cpp:516
+#: ../src/generic/logg.cpp:518
 msgid "Save log contents to file"
 msgstr "將日誌內容存到檔案中"
 
@@ -6243,7 +6354,8 @@ msgstr ""
 msgid "Scroll_lock"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:862
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:876
 msgid "Scrollbar"
 msgstr ""
 
@@ -6303,11 +6415,11 @@ msgstr "選擇全部(&A)"
 msgid "Select All"
 msgstr "選擇全部"
 
-#: ../src/common/docview.cpp:1884
+#: ../src/common/docview.cpp:1898
 msgid "Select a document template"
 msgstr "選擇文件範本"
 
-#: ../src/common/docview.cpp:1958
+#: ../src/common/docview.cpp:1972
 msgid "Select a document view"
 msgstr "選擇文件檢視"
 
@@ -6345,11 +6457,11 @@ msgstr ""
 msgid "Separator expected after the option '%s'."
 msgstr "在選項 '%s' 之後應有分隔字元。"
 
-#: ../src/osx/menu_osx.cpp:630
+#: ../src/osx/menu_osx.cpp:610
 msgid "Services"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:11055
+#: ../src/richtext/richtextbuffer.cpp:11208
 msgid "Set Cell Style"
 msgstr "設定儲存格樣式"
 
@@ -6369,6 +6481,19 @@ msgstr "設定…"
 msgid "Several active dialup connections found, choosing one randomly."
 msgstr "多個撥號連線中，隨機選擇一個。"
 
+#: ../src/richtext/richtextbackgroundpage.cpp:272
+msgid "Sh&adow spread:"
+msgstr ""
+
+#: ../src/richtext/richtextbackgroundpage.cpp:180
+msgid "Shadow"
+msgstr ""
+
+#: ../src/richtext/richtextbackgroundpage.cpp:259
+#, fuzzy
+msgid "Shadow c&olour:"
+msgstr "選擇顏色"
+
 #: ../src/common/accelcmn.cpp:325
 msgid "Shift+"
 msgstr "Shift+"
@@ -6381,7 +6506,7 @@ msgstr "顯示隱藏目錄(&H)"
 msgid "Show &hidden files"
 msgstr "顯示隱藏檔案(&H)"
 
-#: ../src/osx/menu_osx.cpp:638
+#: ../src/osx/menu_osx.cpp:618
 msgid "Show All"
 msgstr "顯示所有 "
 
@@ -6435,7 +6560,7 @@ msgstr "預覽段落設定。"
 msgid "Shows the font preview."
 msgstr "顯示字型預覽。"
 
-#: ../src/propgrid/advprops.cpp:1557
+#: ../src/propgrid/advprops.cpp:1568
 msgid "Silver"
 msgstr ""
 
@@ -6457,27 +6582,32 @@ msgstr "大小"
 msgid "Size:"
 msgstr "大小："
 
-#: ../src/propgrid/advprops.cpp:1725
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1736
 msgid "Sizing"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1722
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1733
 msgid "Sizing N-S"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1721
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1732
 msgid "Sizing NE-SW"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1723
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1734
 msgid "Sizing NW-SE"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1724
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1735
 msgid "Sizing W-E"
 msgstr ""
 
-#: ../src/generic/progdlgg.cpp:263 ../src/generic/progdlgg.cpp:774
+#: ../src/generic/progdlgg.cpp:263 ../src/generic/progdlgg.cpp:776
 #: ../src/msw/progdlg.cpp:801
 msgid "Skip"
 msgstr "略過"
@@ -6500,11 +6630,11 @@ msgstr ""
 msgid "Solid"
 msgstr "單色"
 
-#: ../src/common/docview.cpp:1780
+#: ../src/common/docview.cpp:1794
 msgid "Sorry, could not open this file."
 msgstr "對不起，無法開啟檔案。"
 
-#: ../src/common/prntbase.cpp:2041 ../src/common/prntbase.cpp:2049
+#: ../src/common/prntbase.cpp:2057 ../src/common/prntbase.cpp:2065
 msgid "Sorry, not enough memory to create a preview."
 msgstr "對不起，記憶體不足無法建立預覽。"
 
@@ -6516,7 +6646,7 @@ msgstr "對不起，記憶體不足無法建立預覽。"
 msgid "Sorry, that name is taken. Please choose another."
 msgstr "抱歉，名字已被使用，請選擇其他名字。"
 
-#: ../src/common/docview.cpp:1803
+#: ../src/common/docview.cpp:1817
 msgid "Sorry, the format for this file is unknown."
 msgstr "對不起，這個檔案格式是不明的。"
 
@@ -6543,7 +6673,8 @@ msgstr "間距"
 msgid "Spell Check"
 msgstr "拼字檢查"
 
-#: ../src/propgrid/advprops.cpp:1726
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1737
 msgid "Spraycan"
 msgstr ""
 
@@ -6579,7 +6710,8 @@ msgstr "刪除線"
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr "顏色名稱：不正確的顏色規格：%s。"
 
-#: ../src/propgrid/advprops.cpp:655 ../src/richtext/richtextformatdlg.cpp:337
+#. TRANSLATORS: Label of font style
+#: ../src/propgrid/advprops.cpp:666 ../src/richtext/richtextformatdlg.cpp:337
 msgid "Style"
 msgstr "樣式"
 
@@ -6666,7 +6798,7 @@ msgstr "TIFF：影像大小過大。"
 msgid "Tab"
 msgstr "定位點"
 
-#: ../src/richtext/richtextbuffer.cpp:11336
+#: ../src/richtext/richtextbuffer.cpp:11489
 msgid "Table Properties"
 msgstr "表格性質"
 
@@ -6682,7 +6814,7 @@ msgstr "小報, 11 x 17 英吋"
 msgid "Tabs"
 msgstr "定位點"
 
-#: ../src/propgrid/advprops.cpp:1548
+#: ../src/propgrid/advprops.cpp:1559
 msgid "Teal"
 msgstr ""
 
@@ -6690,7 +6822,7 @@ msgstr ""
 msgid "Teletype"
 msgstr "電傳打字機"
 
-#: ../src/common/docview.cpp:1885
+#: ../src/common/docview.cpp:1899
 msgid "Templates"
 msgstr "範本"
 
@@ -6722,8 +6854,8 @@ msgstr "可用的項目符號樣式。"
 msgid "The available styles."
 msgstr "可用的樣式。"
 
-#: ../src/richtext/richtextbackgroundpage.cpp:139
-#: ../src/richtext/richtextbackgroundpage.cpp:141
+#: ../src/richtext/richtextbackgroundpage.cpp:169
+#: ../src/richtext/richtextbackgroundpage.cpp:171
 msgid "The background colour."
 msgstr "背景顏色。"
 
@@ -6822,7 +6954,7 @@ msgstr ""
 "\n"
 "無論如何您都要列印此份文件？"
 
-#: ../src/common/docview.cpp:1191
+#: ../src/common/docview.cpp:1205
 #, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -6838,7 +6970,7 @@ msgstr ""
 msgid "The first line indent."
 msgstr "首列縮排。"
 
-#: ../src/gtk/utilsgtk.cpp:432
+#: ../src/gtk/utilsgtk.cpp:438
 msgid "The following standard GTK+ options are also supported:\n"
 msgstr "也支援以下的標準 GTK+ 選項:\n"
 
@@ -6878,10 +7010,16 @@ msgstr "字型樣式。"
 msgid "The font weight."
 msgstr "字型粗細。"
 
-#: ../src/common/docview.cpp:1472
+#: ../src/common/docview.cpp:1486
 #, c-format
 msgid "The format of file '%s' couldn't be determined."
 msgstr "無法確定檔案 '%s' 的格式。"
+
+#: ../src/richtext/richtextbackgroundpage.cpp:220
+#: ../src/richtext/richtextbackgroundpage.cpp:222
+#, fuzzy
+msgid "The horizontal offset."
+msgstr "啟用垂直位置。"
 
 #: ../src/richtext/richtextindentspage.cpp:199
 #: ../src/richtext/richtextindentspage.cpp:201
@@ -6961,9 +7099,9 @@ msgid "The outline level."
 msgstr "大綱層級。"
 
 #: ../src/common/log.cpp:281
-#, c-format
-msgid "The previous message repeated %lu time."
-msgid_plural "The previous message repeated %lu times."
+#, fuzzy, c-format
+msgid "The previous message repeated %u time."
+msgid_plural "The previous message repeated %u times."
 msgstr[0] "前一個訊息重複了 %lu 次。"
 
 #: ../src/common/log.cpp:274
@@ -7013,6 +7151,27 @@ msgstr "右內邊距。"
 #, fuzzy
 msgid "The right position."
 msgstr "跳格位置。"
+
+#: ../src/richtext/richtextbackgroundpage.cpp:310
+#: ../src/richtext/richtextbackgroundpage.cpp:312
+msgid "The shadow blur distance."
+msgstr ""
+
+#: ../src/richtext/richtextbackgroundpage.cpp:267
+#: ../src/richtext/richtextbackgroundpage.cpp:269
+#, fuzzy
+msgid "The shadow colour."
+msgstr "字型顏色。"
+
+#: ../src/richtext/richtextbackgroundpage.cpp:337
+#: ../src/richtext/richtextbackgroundpage.cpp:339
+msgid "The shadow opacity."
+msgstr ""
+
+#: ../src/richtext/richtextbackgroundpage.cpp:283
+#: ../src/richtext/richtextbackgroundpage.cpp:285
+msgid "The shadow spread."
+msgstr ""
 
 #: ../src/richtext/richtextindentspage.cpp:267
 #: ../src/richtext/richtextliststylepage.cpp:439
@@ -7096,11 +7255,17 @@ msgstr ""
 "於此機器安裝的遠端存取服務 (RAS) 的版本太舊，請更新它 (缺少以下必要的功能："
 "%s)。"
 
+#: ../src/richtext/richtextbackgroundpage.cpp:243
+#: ../src/richtext/richtextbackgroundpage.cpp:245
+#, fuzzy
+msgid "The vertical offset."
+msgstr "啟用垂直位置。"
+
 #: ../src/osx/carbon/dataview.cpp:1338
 msgid "There is no column or renderer for the specified column index."
 msgstr "所指定的欄位索引或是該欄位索引的渲染器不存在。"
 
-#: ../src/html/htmprint.cpp:735 ../src/richtext/richtextprint.cpp:614
+#: ../src/html/htmprint.cpp:740 ../src/richtext/richtextprint.cpp:619
 msgid ""
 "There was a problem during page setup: you may need to set a default printer."
 msgstr "頁面設定時有問題：你必須設定預設印表機。"
@@ -7111,16 +7276,16 @@ msgid ""
 "when it is printed."
 msgstr "此文件的水平尺寸不符合頁面，若要列印的話將 會被截斷。"
 
-#: ../src/common/image.cpp:2718
+#: ../src/common/image.cpp:2720
 #, c-format
 msgid "This is not a %s."
 msgstr "這不是 %s。"
 
-#: ../src/common/wincmn.cpp:1653
+#: ../src/common/wincmn.cpp:1670
 msgid "This platform does not support background transparency."
 msgstr "這個平臺不支援透明背景。"
 
-#: ../src/gtk/window.cpp:4562
+#: ../src/gtk/window.cpp:4568
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -7132,7 +7297,7 @@ msgid ""
 "comctl32.dll"
 msgstr "本系統不支援日期擷取控制, 請升級您的 comctl32.dll 版本"
 
-#: ../src/msw/thread.cpp:1249
+#: ../src/msw/thread.cpp:1251
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
@@ -7142,7 +7307,7 @@ msgstr "執行緒模組初始化失敗：無法存值到執行緒內部儲存區
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr "執行緒模組初始化失敗：無法建立執行緒機碼"
 
-#: ../src/msw/thread.cpp:1237
+#: ../src/msw/thread.cpp:1239
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
@@ -7152,11 +7317,11 @@ msgstr "執行緒模組初始化失敗：無法在「執行緒內部儲存區」
 msgid "Thread priority setting is ignored."
 msgstr "忽略執行緒的優先等級設定。"
 
-#: ../src/msw/mdi.cpp:173
+#: ../src/msw/mdi.cpp:176
 msgid "Tile &Horizontally"
 msgstr "水平排列(&H)"
 
-#: ../src/msw/mdi.cpp:174
+#: ../src/msw/mdi.cpp:177
 msgid "Tile &Vertically"
 msgstr "垂直排列(&V)"
 
@@ -7180,7 +7345,7 @@ msgstr "到："
 msgid "Toggle renderer cannot render value; value type: "
 msgstr "切換渲染器無法渲染該值，型態為: "
 
-#: ../src/richtext/richtextbuffer.cpp:8279
+#: ../src/richtext/richtextbuffer.cpp:8356
 msgid "Too many EndStyle calls!"
 msgstr "呼叫 EndStyle 太多次！"
 
@@ -7188,11 +7353,13 @@ msgstr "呼叫 EndStyle 太多次！"
 msgid "Too many colours in PNG, the image may be slightly blurred."
 msgstr "太多顏色在 PNG 中，圖像可能有點模糊。"
 
-#: ../src/propgrid/advprops.cpp:863
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:877
 msgid "Tooltip"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:864
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:878
 msgid "TooltipText"
 msgstr ""
 
@@ -7213,7 +7380,8 @@ msgstr "翻譯由 "
 msgid "Translators"
 msgstr "翻譯者"
 
-#: ../src/propgrid/propgrid.cpp:189
+#. TRANSLATORS: Name of Boolean true value
+#: ../src/propgrid/propgrid.cpp:210
 msgid "True"
 msgstr "True"
 
@@ -7250,7 +7418,7 @@ msgstr "參數 %u 的類別不吻合。"
 msgid "Type must have enum - long conversion"
 msgstr "必須進行 enum - long 的類型轉換"
 
-#: ../src/propgrid/propgridiface.cpp:400
+#: ../src/propgrid/propgridiface.cpp:391
 #, c-format
 msgid ""
 "Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT "
@@ -7378,7 +7546,8 @@ msgstr "取消刪除"
 msgid "Underline"
 msgstr "底線"
 
-#: ../src/osx/carbon/fontdlg.cpp:540 ../src/propgrid/advprops.cpp:663
+#. TRANSLATORS: Label of underlined font
+#: ../src/osx/carbon/fontdlg.cpp:540 ../src/propgrid/advprops.cpp:676
 #: ../src/richtext/richtextfontpage.cpp:357
 msgid "Underlined"
 msgstr "加底線"
@@ -7596,7 +7765,19 @@ msgstr "上內邊距單位。"
 msgid "Units for the top position."
 msgstr "上內邊距單位。"
 
-#: ../src/generic/progdlgg.cpp:383 ../src/generic/progdlgg.cpp:656
+#: ../src/richtext/richtextbackgroundpage.cpp:231
+#: ../src/richtext/richtextbackgroundpage.cpp:233
+#: ../src/richtext/richtextbackgroundpage.cpp:254
+#: ../src/richtext/richtextbackgroundpage.cpp:256
+#: ../src/richtext/richtextbackgroundpage.cpp:294
+#: ../src/richtext/richtextbackgroundpage.cpp:296
+#: ../src/richtext/richtextbackgroundpage.cpp:321
+#: ../src/richtext/richtextbackgroundpage.cpp:323
+#, fuzzy
+msgid "Units for this value."
+msgstr "左外邊距單位。"
+
+#: ../src/generic/progdlgg.cpp:385 ../src/generic/progdlgg.cpp:658
 msgid "Unknown"
 msgstr "不明的"
 
@@ -7646,7 +7827,7 @@ msgstr "未知的錯誤，錯誤碼 %08x"
 msgid "Unknown exception"
 msgstr "未知的例外"
 
-#: ../src/common/image.cpp:2703
+#: ../src/common/image.cpp:2705
 msgid "Unknown image data format."
 msgstr "未知的影像資料格式。"
 
@@ -7674,7 +7855,8 @@ msgstr "mime 類型 %s 中有不成對的'{'。"
 msgid "Unnamed command"
 msgstr "未命名的指令"
 
-#: ../src/propgrid/propgrid.cpp:411
+#. TRANSLATORS: Text  displayed for unspecified value
+#: ../src/propgrid/propgrid.cpp:410
 msgid "Unspecified"
 msgstr "未指定"
 
@@ -7708,6 +7890,10 @@ msgstr "大寫羅馬數字"
 msgid "Usage: %s"
 msgstr "使用方式：%s"
 
+#: ../src/richtext/richtextbackgroundpage.cpp:195
+msgid "Use &shadow"
+msgstr ""
+
 #: ../src/richtext/richtextindentspage.cpp:169
 #: ../src/richtext/richtextindentspage.cpp:171
 #: ../src/richtext/richtextliststylepage.cpp:358
@@ -7727,18 +7913,18 @@ msgstr "驗證衝突"
 msgid "Value"
 msgstr "值"
 
-#: ../src/propgrid/props.cpp:385 ../src/propgrid/props.cpp:494
+#: ../src/propgrid/props.cpp:385 ../src/propgrid/props.cpp:492
 #, c-format
 msgid "Value must be %s or higher."
 msgstr "值必須大於或等於 %s。"
 
-#: ../src/propgrid/props.cpp:412 ../src/propgrid/props.cpp:521
+#: ../src/propgrid/props.cpp:412 ../src/propgrid/props.cpp:519
 #, c-format
 msgid "Value must be %s or less."
 msgstr "值必須小於或等於 %s。"
 
 #: ../src/propgrid/props.cpp:389 ../src/propgrid/props.cpp:416
-#: ../src/propgrid/props.cpp:498 ../src/propgrid/props.cpp:525
+#: ../src/propgrid/props.cpp:496 ../src/propgrid/props.cpp:523
 #, c-format
 msgid "Value must be between %s and %s."
 msgstr "值必須介於 %s 和 %s 之間。"
@@ -7760,15 +7946,17 @@ msgstr "按詳細資料檢視檔案"
 msgid "View files as a list view"
 msgstr "按清單檢視檔案"
 
-#: ../src/common/docview.cpp:1959
+#: ../src/common/docview.cpp:1973
 msgid "Views"
 msgstr "檢視"
 
-#: ../src/propgrid/advprops.cpp:1727
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1738
 msgid "Wait"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:1729
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1740
 msgid "Wait Arrow"
 msgstr ""
 
@@ -7781,11 +7969,13 @@ msgstr "等候 epoll 描述子 %d 的輸出入失敗"
 msgid "Warning: "
 msgstr "警告："
 
-#: ../src/propgrid/advprops.cpp:1728
+#. TRANSLATORS: System cursor name
+#: ../src/propgrid/advprops.cpp:1739
 msgid "Watch"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:659
+#. TRANSLATORS: Label of font weight
+#: ../src/propgrid/advprops.cpp:671
 msgid "Weight"
 msgstr "粗細"
 
@@ -7801,7 +7991,7 @@ msgstr "西歐語系附歐元 (ISO-8859-15)"
 msgid "Whether the font is underlined."
 msgstr "字型是否加底線。"
 
-#: ../src/propgrid/advprops.cpp:1561
+#: ../src/propgrid/advprops.cpp:1572
 msgid "White"
 msgstr ""
 
@@ -7817,60 +8007,68 @@ msgstr "只限完整的字"
 msgid "Win32 theme"
 msgstr "Win32 布景主題"
 
-#: ../src/msw/utils.cpp:1111
+#: ../src/msw/utils.cpp:1133
 msgid "Win32s on Windows 3.1"
 msgstr "Windows 3.1 上的 Win32s"
 
-#: ../src/propgrid/advprops.cpp:865
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:879
 #, fuzzy
 msgid "Window"
 msgstr "視窗(&W)"
 
-#: ../src/propgrid/advprops.cpp:866
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:880
 #, fuzzy
 msgid "WindowFrame"
 msgstr "視窗(&W)"
 
-#: ../src/propgrid/advprops.cpp:867
+#. TRANSLATORS: Keyword of system colour
+#: ../src/propgrid/advprops.cpp:881
 #, fuzzy
 msgid "WindowText"
 msgstr "視窗(&W)"
 
-#: ../src/msw/utils.cpp:1161
+#: ../src/msw/utils.cpp:1233
+#, fuzzy
+msgid "Windows 10"
+msgstr "Windows 98"
+
+#: ../src/msw/utils.cpp:1183
 msgid "Windows 2000"
 msgstr "Windows 2000"
 
-#: ../src/msw/utils.cpp:1193
+#: ../src/msw/utils.cpp:1215
 msgid "Windows 7"
 msgstr "Windows 7"
 
-#: ../src/msw/utils.cpp:1199
+#: ../src/msw/utils.cpp:1221
 #, fuzzy
 msgid "Windows 8"
 msgstr "Windows 98"
 
-#: ../src/msw/utils.cpp:1205
+#: ../src/msw/utils.cpp:1227
 #, fuzzy
 msgid "Windows 8.1"
 msgstr "Windows 98"
 
-#: ../src/msw/utils.cpp:1125
+#: ../src/msw/utils.cpp:1147
 msgid "Windows 95"
 msgstr "Windows 95"
 
-#: ../src/msw/utils.cpp:1121
+#: ../src/msw/utils.cpp:1143
 msgid "Windows 95 OSR2"
 msgstr "Windows 95 OSR2"
 
-#: ../src/msw/utils.cpp:1136
+#: ../src/msw/utils.cpp:1158
 msgid "Windows 98"
 msgstr "Windows 98"
 
-#: ../src/msw/utils.cpp:1132
+#: ../src/msw/utils.cpp:1154
 msgid "Windows 98 SE"
 msgstr "Windows 98 SE"
 
-#: ../src/msw/utils.cpp:1143
+#: ../src/msw/utils.cpp:1165
 #, c-format
 msgid "Windows 9x (%d.%d)"
 msgstr "Windows 9x (%d.%d)"
@@ -7883,7 +8081,7 @@ msgstr "Windows 阿拉伯語 (CP 1256)"
 msgid "Windows Baltic (CP 1257)"
 msgstr "Windows 波羅的海語 (CP 1257)"
 
-#: ../src/msw/utils.cpp:1105
+#: ../src/msw/utils.cpp:1127
 #, c-format
 msgid "Windows CE (%d.%d)"
 msgstr "Windows CE (%d.%d)"
@@ -7925,33 +8123,38 @@ msgstr "Windows 阿拉伯語 (CP 1256)"
 msgid "Windows Korean (CP 949)"
 msgstr "Windows 韓語 (CP 949)"
 
-#: ../src/msw/utils.cpp:1140
+#: ../src/msw/utils.cpp:1162
 msgid "Windows ME"
 msgstr "Windows ME"
 
-#: ../src/msw/utils.cpp:1213
+#: ../src/msw/utils.cpp:1241
 #, c-format
 msgid "Windows NT %lu.%lu"
 msgstr "Windows NT %lu.%lu"
 
-#: ../src/msw/utils.cpp:1170
+#: ../src/msw/utils.cpp:1232
+#, fuzzy
+msgid "Windows Server 10"
+msgstr "Windows Server 2003"
+
+#: ../src/msw/utils.cpp:1192
 msgid "Windows Server 2003"
 msgstr "Windows Server 2003"
 
-#: ../src/msw/utils.cpp:1186
+#: ../src/msw/utils.cpp:1208
 msgid "Windows Server 2008"
 msgstr "Windows Server 2008"
 
-#: ../src/msw/utils.cpp:1192
+#: ../src/msw/utils.cpp:1214
 msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2008 R2"
 
-#: ../src/msw/utils.cpp:1198
+#: ../src/msw/utils.cpp:1220
 #, fuzzy
 msgid "Windows Server 2012"
 msgstr "Windows Server 2003"
 
-#: ../src/msw/utils.cpp:1204
+#: ../src/msw/utils.cpp:1226
 #, fuzzy
 msgid "Windows Server 2012 R2"
 msgstr "Windows Server 2008 R2"
@@ -7969,7 +8172,7 @@ msgstr "Windows 土耳其語 (CP 1254)"
 msgid "Windows Vietnamese (CP 1258)"
 msgstr "Windows 希臘語 (CP 1253)"
 
-#: ../src/msw/utils.cpp:1187
+#: ../src/msw/utils.cpp:1209
 msgid "Windows Vista"
 msgstr "Windows Vista"
 
@@ -7977,7 +8180,7 @@ msgstr "Windows Vista"
 msgid "Windows Western European (CP 1252)"
 msgstr "Windows 西歐語系 (CP 1252)"
 
-#: ../src/msw/utils.cpp:1176
+#: ../src/msw/utils.cpp:1198
 msgid "Windows XP"
 msgstr "Windows XP"
 
@@ -8012,7 +8215,7 @@ msgstr "Windows Vista"
 msgid "Write error on file '%s'"
 msgstr "寫入檔案 '%s' 時發生錯誤"
 
-#: ../src/xml/xml.cpp:844
+#: ../src/xml/xml.cpp:914
 #, c-format
 msgid "XML parsing error: '%s' at line %d"
 msgstr "XML 解析錯誤：'%s' 在第 %d 列"
@@ -8044,7 +8247,7 @@ msgstr "XPM：沒有剩下供作為遮罩的顏色！"
 msgid "XPM: truncated image data at line %d!"
 msgstr "XPM：影像資料於第 %d 列被截斷！"
 
-#: ../src/propgrid/advprops.cpp:1560
+#: ../src/propgrid/advprops.cpp:1571
 msgid "Yellow"
 msgstr ""
 
@@ -8065,7 +8268,7 @@ msgstr "您不能初始化 overlay 兩次"
 msgid "You cannot add a new directory to this section."
 msgstr "您不能在這區段加入新的目錄。"
 
-#: ../src/propgrid/propgrid.cpp:3296
+#: ../src/propgrid/propgrid.cpp:3295
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr "您輸入了無效的值，按 ESC 以取消編輯。"
 
@@ -8077,11 +8280,11 @@ msgstr "放大(&I)"
 msgid "Zoom &Out"
 msgstr "縮小(&O)"
 
-#: ../src/common/prntbase.cpp:1578 ../src/common/stockitem.cpp:209
+#: ../src/common/prntbase.cpp:1594 ../src/common/stockitem.cpp:209
 msgid "Zoom In"
 msgstr "放大"
 
-#: ../src/common/prntbase.cpp:1564 ../src/common/stockitem.cpp:210
+#: ../src/common/prntbase.cpp:1580 ../src/common/stockitem.cpp:210
 msgid "Zoom Out"
 msgstr "縮小"
 
@@ -8213,11 +8416,11 @@ msgstr "zip 檔案中輸入的偏移值錯誤"
 msgid "binary"
 msgstr "二進位"
 
-#: ../src/common/fontcmn.cpp:988
+#: ../src/common/fontcmn.cpp:989
 msgid "bold"
 msgstr "粗體"
 
-#: ../src/msw/utils.cpp:1219
+#: ../src/msw/utils.cpp:1247
 #, c-format
 msgid "build %lu"
 msgstr "組建 %lu"
@@ -8353,6 +8556,10 @@ msgstr "總和檢查碼錯誤"
 msgid "checksum failure reading tar header block"
 msgstr "讀取 tar標頭區塊時發生檢查碼錯誤"
 
+#: ../src/richtext/richtextbackgroundpage.cpp:227
+#: ../src/richtext/richtextbackgroundpage.cpp:250
+#: ../src/richtext/richtextbackgroundpage.cpp:290
+#: ../src/richtext/richtextbackgroundpage.cpp:317
 #: ../src/richtext/richtextborderspage.cpp:256
 #: ../src/richtext/richtextborderspage.cpp:290
 #: ../src/richtext/richtextborderspage.cpp:324
@@ -8415,15 +8622,15 @@ msgstr "雙倍"
 msgid "dump of the process state (binary)"
 msgstr "傾印程序狀態（二進位碼）"
 
-#: ../src/common/datetimefmt.cpp:1964
+#: ../src/common/datetimefmt.cpp:1974
 msgid "eighteenth"
 msgstr "第十八"
 
-#: ../src/common/datetimefmt.cpp:1954
+#: ../src/common/datetimefmt.cpp:1964
 msgid "eighth"
 msgstr "第八"
 
-#: ../src/common/datetimefmt.cpp:1957
+#: ../src/common/datetimefmt.cpp:1967
 msgid "eleventh"
 msgstr "第十一"
 
@@ -8463,11 +8670,11 @@ msgstr "寫入 zip 條目 '%s' 時發生錯誤：不當的 crc 或長度"
 msgid "failed to flush the file '%s'"
 msgstr "重新整理檔案 '%s' 失敗"
 
-#: ../src/common/datetimefmt.cpp:1961
+#: ../src/common/datetimefmt.cpp:1971
 msgid "fifteenth"
 msgstr "第十五"
 
-#: ../src/common/datetimefmt.cpp:1951
+#: ../src/common/datetimefmt.cpp:1961
 msgid "fifth"
 msgstr "第五"
 
@@ -8496,11 +8703,11 @@ msgstr "檔案 '%s' 第 %d 列：忽略對不可變更機碼 '%s' 的值。"
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "檔案 '%s'： 不應有字元 %c 存在於第 %d 列中。"
 
-#: ../src/richtext/richtextbuffer.cpp:8654
+#: ../src/richtext/richtextbuffer.cpp:8731
 msgid "files"
 msgstr "檔案"
 
-#: ../src/common/datetimefmt.cpp:1947
+#: ../src/common/datetimefmt.cpp:1957
 msgid "first"
 msgstr "第一"
 
@@ -8508,11 +8715,11 @@ msgstr "第一"
 msgid "font size"
 msgstr "字型大小"
 
-#: ../src/common/datetimefmt.cpp:1960
+#: ../src/common/datetimefmt.cpp:1970
 msgid "fourteenth"
 msgstr "第十四"
 
-#: ../src/common/datetimefmt.cpp:1950
+#: ../src/common/datetimefmt.cpp:1960
 msgid "fourth"
 msgstr "第四"
 
@@ -8520,8 +8727,8 @@ msgstr "第四"
 msgid "generate verbose log messages"
 msgstr "產生冗長的記錄訊息"
 
-#: ../src/richtext/richtextbuffer.cpp:12932
-#: ../src/richtext/richtextbuffer.cpp:13042
+#: ../src/richtext/richtextbuffer.cpp:13085
+#: ../src/richtext/richtextbuffer.cpp:13195
 msgid "image"
 msgstr "圖像"
 
@@ -8541,7 +8748,7 @@ msgstr "給了 tar 項目不正確的大小"
 msgid "invalid data in extended tar header"
 msgstr "tar 擴充標頭中有無效的資料"
 
-#: ../src/generic/logg.cpp:1048
+#: ../src/generic/logg.cpp:1050
 msgid "invalid message box return value"
 msgstr "訊息框傳回無效的值"
 
@@ -8549,11 +8756,11 @@ msgstr "訊息框傳回無效的值"
 msgid "invalid zip file"
 msgstr "無效的 zip 檔案"
 
-#: ../src/common/fontcmn.cpp:993
+#: ../src/common/fontcmn.cpp:994
 msgid "italic"
 msgstr "斜體"
 
-#: ../src/common/fontcmn.cpp:983
+#: ../src/common/fontcmn.cpp:984
 msgid "light"
 msgstr "細體"
 
@@ -8562,15 +8769,15 @@ msgstr "細體"
 msgid "locale '%s' cannot be set."
 msgstr "無法設定語區為 '%s'。"
 
-#: ../src/common/datetimefmt.cpp:2120
+#: ../src/common/datetimefmt.cpp:2130
 msgid "midnight"
 msgstr "午夜"
 
-#: ../src/common/datetimefmt.cpp:1965
+#: ../src/common/datetimefmt.cpp:1975
 msgid "nineteenth"
 msgstr "第十九"
 
-#: ../src/common/datetimefmt.cpp:1955
+#: ../src/common/datetimefmt.cpp:1965
 msgid "ninth"
 msgstr "第九"
 
@@ -8591,7 +8798,7 @@ msgstr "於 %s 找不到字型，將使用內建字型"
 msgid "noname"
 msgstr "未命名"
 
-#: ../src/common/datetimefmt.cpp:2119
+#: ../src/common/datetimefmt.cpp:2129
 msgid "noon"
 msgstr "中午"
 
@@ -8615,6 +8822,10 @@ msgstr "記憶體不足"
 msgid "process context description"
 msgstr "程序上下文描述"
 
+#: ../src/richtext/richtextbackgroundpage.cpp:228
+#: ../src/richtext/richtextbackgroundpage.cpp:251
+#: ../src/richtext/richtextbackgroundpage.cpp:291
+#: ../src/richtext/richtextbackgroundpage.cpp:318
 #: ../src/richtext/richtextborderspage.cpp:257
 #: ../src/richtext/richtextborderspage.cpp:291
 #: ../src/richtext/richtextborderspage.cpp:325
@@ -8629,6 +8840,18 @@ msgstr "程序上下文描述"
 msgid "pt"
 msgstr ""
 
+#: ../src/richtext/richtextbackgroundpage.cpp:226
+#: ../src/richtext/richtextbackgroundpage.cpp:229
+#: ../src/richtext/richtextbackgroundpage.cpp:230
+#: ../src/richtext/richtextbackgroundpage.cpp:249
+#: ../src/richtext/richtextbackgroundpage.cpp:252
+#: ../src/richtext/richtextbackgroundpage.cpp:253
+#: ../src/richtext/richtextbackgroundpage.cpp:289
+#: ../src/richtext/richtextbackgroundpage.cpp:292
+#: ../src/richtext/richtextbackgroundpage.cpp:293
+#: ../src/richtext/richtextbackgroundpage.cpp:316
+#: ../src/richtext/richtextbackgroundpage.cpp:319
+#: ../src/richtext/richtextbackgroundpage.cpp:320
 #: ../src/richtext/richtextborderspage.cpp:255
 #: ../src/richtext/richtextborderspage.cpp:258
 #: ../src/richtext/richtextborderspage.cpp:259
@@ -8736,7 +8959,7 @@ msgstr "讀取 zip 串流 (條目 %s): 不良的長度"
 msgid "reentrancy problem."
 msgstr "重複進入問題。"
 
-#: ../src/common/datetimefmt.cpp:1948
+#: ../src/common/datetimefmt.cpp:1958
 msgid "second"
 msgstr "第二"
 
@@ -8744,11 +8967,11 @@ msgstr "第二"
 msgid "seek error"
 msgstr "搜尋失敗"
 
-#: ../src/common/datetimefmt.cpp:1963
+#: ../src/common/datetimefmt.cpp:1973
 msgid "seventeenth"
 msgstr "第十七"
 
-#: ../src/common/datetimefmt.cpp:1953
+#: ../src/common/datetimefmt.cpp:1963
 msgid "seventh"
 msgstr "第七"
 
@@ -8760,11 +8983,11 @@ msgstr "shift"
 msgid "show this help message"
 msgstr "顯示這個說明訊息"
 
-#: ../src/common/datetimefmt.cpp:1962
+#: ../src/common/datetimefmt.cpp:1972
 msgid "sixteenth"
 msgstr "第十六"
 
-#: ../src/common/datetimefmt.cpp:1952
+#: ../src/common/datetimefmt.cpp:1962
 msgid "sixth"
 msgstr "第六"
 
@@ -8776,23 +8999,23 @@ msgstr "設定顯示模式 (例如 640x480-16)"
 msgid "specify the theme to use"
 msgstr "設定布景主題"
 
-#: ../src/richtext/richtextbuffer.cpp:9180
+#: ../src/richtext/richtextbuffer.cpp:9333
 msgid "standard/circle"
 msgstr "標準/圓形"
 
-#: ../src/richtext/richtextbuffer.cpp:9181
+#: ../src/richtext/richtextbuffer.cpp:9334
 msgid "standard/circle-outline"
 msgstr "標準/圓框"
 
-#: ../src/richtext/richtextbuffer.cpp:9183
+#: ../src/richtext/richtextbuffer.cpp:9336
 msgid "standard/diamond"
 msgstr "標準/菱形"
 
-#: ../src/richtext/richtextbuffer.cpp:9182
+#: ../src/richtext/richtextbuffer.cpp:9335
 msgid "standard/square"
 msgstr "標準/方形"
 
-#: ../src/richtext/richtextbuffer.cpp:9184
+#: ../src/richtext/richtextbuffer.cpp:9337
 msgid "standard/triangle"
 msgstr "標準/三角形"
 
@@ -8804,7 +9027,7 @@ msgstr "Zip 檔頭沒有已存檔案的長度資訊"
 msgid "str"
 msgstr "字串"
 
-#: ../src/common/fontcmn.cpp:804 ../src/common/fontcmn.cpp:979
+#: ../src/common/fontcmn.cpp:980
 msgid "strikethrough"
 msgstr "刪除線"
 
@@ -8813,7 +9036,7 @@ msgstr "刪除線"
 msgid "tar entry not open"
 msgstr "tar 項目未開啟"
 
-#: ../src/common/datetimefmt.cpp:1956
+#: ../src/common/datetimefmt.cpp:1966
 msgid "tenth"
 msgstr "第十"
 
@@ -8821,19 +9044,19 @@ msgstr "第十"
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
 msgstr "交涉的回應，設定了 DDE_FBUSY 位元。"
 
-#: ../src/common/datetimefmt.cpp:1949
+#: ../src/common/datetimefmt.cpp:1959
 msgid "third"
 msgstr "第三"
 
-#: ../src/common/datetimefmt.cpp:1959
+#: ../src/common/datetimefmt.cpp:1969
 msgid "thirteenth"
 msgstr "第十三"
 
-#: ../src/common/datetimefmt.cpp:1753
+#: ../src/common/datetimefmt.cpp:1763
 msgid "today"
 msgstr "今天"
 
-#: ../src/common/datetimefmt.cpp:1755
+#: ../src/common/datetimefmt.cpp:1765
 msgid "tomorrow"
 msgstr "明天"
 
@@ -8849,15 +9072,15 @@ msgstr ""
 "張家偉 <cwahbong@users.sourceforge.net>\n"
 "趙惟倫 <bluebat@member.fsf.org>"
 
-#: ../src/common/datetimefmt.cpp:1958
+#: ../src/common/datetimefmt.cpp:1968
 msgid "twelfth"
 msgstr "第十二"
 
-#: ../src/common/datetimefmt.cpp:1966
+#: ../src/common/datetimefmt.cpp:1976
 msgid "twentieth"
 msgstr "第二十"
 
-#: ../src/common/fontcmn.cpp:799 ../src/common/fontcmn.cpp:975
+#: ../src/common/fontcmn.cpp:800 ../src/common/fontcmn.cpp:976
 msgid "underlined"
 msgstr "加底線"
 
@@ -8871,7 +9094,7 @@ msgid "unexpected end of file"
 msgstr "意外的檔案結尾"
 
 #: ../src/common/tarstrm.cpp:371 ../src/common/tarstrm.cpp:394
-#: ../src/common/tarstrm.cpp:425 ../src/generic/progdlgg.cpp:400
+#: ../src/common/tarstrm.cpp:425 ../src/generic/progdlgg.cpp:402
 msgid "unknown"
 msgstr "不明的"
 
@@ -8898,11 +9121,11 @@ msgstr "不明的搜尋基準點"
 msgid "unknown-%d"
 msgstr "不明-%d"
 
-#: ../src/common/docview.cpp:507
+#: ../src/common/docview.cpp:513
 msgid "unnamed"
 msgstr "未命名"
 
-#: ../src/common/docview.cpp:1613
+#: ../src/common/docview.cpp:1627
 #, c-format
 msgid "unnamed%d"
 msgstr "未命名-%d"
@@ -8911,7 +9134,7 @@ msgstr "未命名-%d"
 msgid "unsupported Zip compression method"
 msgstr "不支援的 Zip 壓縮方法"
 
-#: ../src/common/translation.cpp:1896
+#: ../src/common/translation.cpp:1892
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "使用記載檔 '%s' — '%s'。"
@@ -8945,7 +9168,7 @@ msgstr "wxWidgets 無法開啟顯示設備。程式結束中。"
 msgid "xxxx"
 msgstr "xxxx"
 
-#: ../src/common/datetimefmt.cpp:1754
+#: ../src/common/datetimefmt.cpp:1764
 msgid "yesterday"
 msgstr "昨天"
 
@@ -9233,9 +9456,6 @@ msgstr "~"
 #~ msgid "Can't monitor non-existent path \"%s\" for changes."
 #~ msgstr "無法監視不存在的路徑「%s」是否有變更。"
 
-#~ msgid "Enable vertical offset."
-#~ msgstr "啟用垂直位置。"
-
 #~ msgid "File system containing watched object was unmounted"
 #~ msgstr "被監看的物件所在的檔案系統未掛載"
 
@@ -9247,6 +9467,3 @@ msgstr "~"
 
 #~ msgid "Units for the object offset."
 #~ msgstr "物件位置單位。"
-
-#~ msgid "Vertical &Offset:"
-#~ msgstr "垂直位置(&O):"

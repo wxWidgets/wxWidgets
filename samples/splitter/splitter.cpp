@@ -56,6 +56,8 @@ enum
     SPLIT_LIVE,
     SPLIT_BORDER,
     SPLIT_3DSASH,
+    SPLIT_NOTHEME,
+    SPLIT_CUSTOM_COLOUR,
     SPLIT_SETPOSITION,
     SPLIT_SETMINSIZE,
     SPLIT_SETGRAVITY,
@@ -95,6 +97,14 @@ public:
                   { ToggleFlag(wxSP_BORDER, event.IsChecked()); }
     void OnToggle3DSash(wxCommandEvent& event)
                   { ToggleFlag(wxSP_3DSASH, event.IsChecked()); }
+    void OnToggleNoTheme(wxCommandEvent& event)
+                  { ToggleFlag(wxSP_NO_XP_THEME, event.IsChecked()); }
+    void OnToggleCustomColour(wxCommandEvent& event)
+    {
+        m_splitter->SetBackgroundColour((event.IsChecked() ? *wxBLUE : wxNullColour));
+        m_splitter->Refresh();
+    }
+
     void OnSetPosition(wxCommandEvent& event);
     void OnSetMinSize(wxCommandEvent& event);
     void OnSetGravity(wxCommandEvent& event);
@@ -185,6 +195,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(SPLIT_LIVE, MyFrame::OnToggleLive)
     EVT_MENU(SPLIT_BORDER, MyFrame::OnToggleBorder)
     EVT_MENU(SPLIT_3DSASH, MyFrame::OnToggle3DSash)
+    EVT_MENU(SPLIT_NOTHEME, MyFrame::OnToggleNoTheme)
+    EVT_MENU(SPLIT_CUSTOM_COLOUR, MyFrame::OnToggleCustomColour)
     EVT_MENU(SPLIT_SETPOSITION, MyFrame::OnSetPosition)
     EVT_MENU(SPLIT_SETMINSIZE, MyFrame::OnSetMinSize)
     EVT_MENU(SPLIT_SETGRAVITY, MyFrame::OnSetGravity)
@@ -238,6 +250,14 @@ MyFrame::MyFrame()
                                wxT("&3D Sash"),
                                wxT("Toggle wxSP_3DSASH flag"));
     splitMenu->Check(SPLIT_3DSASH, true);
+#ifdef __WXMSW__
+    splitMenu->AppendCheckItem(SPLIT_NOTHEME,
+                               wxT("Disable XP &theme"),
+                               wxT("Toggle wxSP_NO_XP_THEME flag"));
+#endif
+    splitMenu->AppendCheckItem(SPLIT_CUSTOM_COLOUR,
+                               wxT("Use custom &colour"),
+                               wxT("Toggle custom colour"));
     splitMenu->Append(SPLIT_SETPOSITION,
                       wxT("Set splitter &position\tCtrl-P"),
                       wxT("Set the splitter position"));

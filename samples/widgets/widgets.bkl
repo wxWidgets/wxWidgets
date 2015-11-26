@@ -3,6 +3,23 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
+    <!--
+        The source file using native controls uses Cocoa under OS X, so it must
+        be compiled as Objective C++ which means it must have .mm extension.
+        But this would make it uncompilable under the other platforms and we
+        don't want to have two files with identical contents. Hence this hack:
+        we have native.mm which just includes native.cpp under OS X, while
+        elsewhere we just compile native.cpp directly.
+      -->
+    <set var="NATIVE_OBJCPP_SRC">
+        <if cond="OUT_OF_TREE_MAKEFILES=='1'">
+            <!-- We can't determine if we're using Cocoa or not, assume we don't -->
+        </if>
+        <if cond="TOOLKIT=='OSX_COCOA' and WXUNIV=='0'">
+            native_wrapper.mm
+        </if>
+    </set>
+
     <exe id="widgets" template="wx_sample" template_append="wx_append">
         <sources>
             activityindicator.cpp
@@ -23,6 +40,8 @@
             hyperlnk.cpp
             itemcontainer.cpp
             listbox.cpp
+            $(NATIVE_OBJCPP_SRC)
+            native.cpp
             notebook.cpp
             odcombobox.cpp
             radiobox.cpp

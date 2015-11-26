@@ -87,9 +87,9 @@ public:
     int GetScrollPos();
 
     // don't hide base class virtuals
-    virtual void SetScrollPos( int orient, int pos, bool refresh = true )
+    virtual void SetScrollPos( int orient, int pos, bool refresh = true ) wxOVERRIDE
         { return wxControl::SetScrollPos(orient, pos, refresh); }
-    virtual int GetScrollPos( int orient ) const
+    virtual int GetScrollPos( int orient ) const wxOVERRIDE
         { return wxControl::GetScrollPos(orient); }
 
     //we need to resize the webview when the control size changes
@@ -98,7 +98,7 @@ public:
     void OnMouseEvents(wxMouseEvent &event);
 protected:
     wxDECLARE_EVENT_TABLE();
-    void MacVisibilityChanged();
+    void MacVisibilityChanged() wxOVERRIDE;
 
 private:
     wxWindow *m_parent;

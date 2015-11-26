@@ -102,12 +102,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
 {
 #ifdef wxHAS_FILESYSTEM_VOLUMES
 
-#ifdef __WXWINCE__
-    // No logical drives; return "\"
-    paths.Add(wxT("\\"));
-    names.Add(wxT("\\"));
-    icon_ids.Add(wxFileIconsTable::computer);
-#elif defined(__WIN32__) && wxUSE_FSVOLUME
+#if defined(__WIN32__) && wxUSE_FSVOLUME
     // TODO: this code (using wxFSVolumeBase) should be used for all platforms
     //       but unfortunately wxFSVolumeBase is not implemented everywhere
     const wxArrayString as = wxFSVolumeBase::GetVolumes();
@@ -209,30 +204,11 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
 // wxIsDriveAvailable
 // ----------------------------------------------------------------------------
 
-#if defined(__DOS__)
+#if defined(__WINDOWS__)
 
-bool wxIsDriveAvailable(const wxString& dirName)
+int setdrive(int drive)
 {
-    if ( dirName.length() == 3 && dirName[1u] == wxT(':') )
-    {
-        wxString dirNameLower(dirName.Lower());
-        // VS: always return true for removable media, since Win95 doesn't
-        //     like it when MS-DOS app accesses empty floppy drive
-        return (dirNameLower[0u] == wxT('a') ||
-                dirNameLower[0u] == wxT('b') ||
-                wxDirExists(dirNameLower));
-    }
-    else
-        return true;
-}
-
-#elif defined(__WINDOWS__)
-
-int setdrive(int WXUNUSED_IN_WINCE(drive))
-{
-#ifdef __WXWINCE__
-    return 0;
-#elif defined(wxHAS_DRIVE_FUNCTIONS)
+#if defined(wxHAS_DRIVE_FUNCTIONS)
     return _chdrive(drive);
 #else
     wxChar  newdrive[4];
@@ -254,11 +230,8 @@ int setdrive(int WXUNUSED_IN_WINCE(drive))
 #endif // !GNUWIN32
 }
 
-bool wxIsDriveAvailable(const wxString& WXUNUSED_IN_WINCE(dirName))
+bool wxIsDriveAvailable(const wxString& dirName)
 {
-#ifdef __WXWINCE__
-    return false;
-#else
 #ifdef __WIN32__
     UINT errorMode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
 #endif
@@ -288,7 +261,6 @@ bool wxIsDriveAvailable(const wxString& WXUNUSED_IN_WINCE(dirName))
 #endif
 
     return success;
-#endif
 }
 #endif // __WINDOWS__
 
@@ -414,15 +386,9 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
     SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
 
-    Init();
-
     long treeStyle = wxTR_HAS_BUTTONS;
 
-    // On Windows CE, if you hide the root, you get a crash when
-    // attempting to access data for children of the root item.
-#ifndef __WXWINCE__
     treeStyle |= wxTR_HIDE_ROOT;
-#endif
 
 #ifdef __WXGTK20__
     treeStyle |= wxTR_NO_LINES;
@@ -461,7 +427,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     wxString rootName;
 
-#if defined(__WINDOWS__) || defined(__DOS__)
+#if defined(__WINDOWS__)
     rootName = _("Computer");
 #else
     rootName = _("Sections");
@@ -719,7 +685,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
 
     wxString dirName(data->m_path);
 
-#if (defined(__WINDOWS__) && !defined(__WXWINCE__)) || defined(__DOS__)
+#if defined(__WINDOWS__)
     // Check if this is a root directory and if so,
     // whether the drive is available.
     if (!wxIsDriveAvailable(dirName))
@@ -733,7 +699,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
     // This may take a longish time. Go to busy cursor
     wxBusyCursor busy;
 
-#if defined(__WINDOWS__) || defined(__DOS__)
+#if defined(__WINDOWS__)
     if (dirName.Last() == ':')
         dirName += wxString(wxFILE_SEP_PATH);
 #endif
@@ -883,7 +849,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
     path2 += wxString(wxFILE_SEP_PATH);
 
     // In MSW case is not significant
-#if defined(__WINDOWS__) || defined(__DOS__)
+#if defined(__WINDOWS__)
     path2.MakeLower();
 #endif
 
@@ -900,7 +866,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
                 childPath += wxString(wxFILE_SEP_PATH);
 
             // In MSW case is not significant
-#if defined(__WINDOWS__) || defined(__DOS__)
+#if defined(__WINDOWS__)
             childPath.MakeLower();
 #endif
 

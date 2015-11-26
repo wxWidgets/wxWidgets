@@ -56,7 +56,7 @@ wxPGProperty* wxPGPropArgCls::GetPtr( wxPropertyGridInterface* iface ) const
 {
     if ( m_flags == IsProperty )
     {
-        wxASSERT_MSG( m_ptr.property, wxT("invalid property ptr") );
+        wxASSERT_MSG( m_ptr.property, wxS("invalid property ptr") );
         return m_ptr.property;
     }
     else if ( m_flags & IsWxString )
@@ -168,13 +168,13 @@ wxPGProperty* wxPropertyGridInterface::ReplaceProperty( wxPGPropArg id, wxPGProp
     wxPGProperty* replaced = p;
     wxCHECK_MSG( replaced && property,
                  wxNullProperty,
-                 wxT("NULL property") );
+                 wxS("NULL property") );
     wxCHECK_MSG( !replaced->IsCategory(),
                  wxNullProperty,
-                 wxT("cannot replace this type of property") );
+                 wxS("cannot replace this type of property") );
     wxCHECK_MSG( !m_pState->IsInNonCatMode(),
                  wxNullProperty,
-                 wxT("cannot replace properties in alphabetic mode") );
+                 wxS("cannot replace properties in alphabetic mode") );
 
     // Get address to the slot
     wxPGProperty* parent = replaced->GetParent();
@@ -424,7 +424,7 @@ void wxPropertyGridInterface::SetValidationFailureBehavior( int vfbFlags )
 wxPGProperty* wxPropertyGridInterface::GetPropertyByNameA( const wxString& name ) const
 {
     wxPGProperty* p = GetPropertyByName(name);
-    wxASSERT_MSG(p,wxString::Format(wxT("no property with name '%s'"),name.c_str()));
+    wxASSERT_MSG(p,wxString::Format(wxS("no property with name '%s'"),name.c_str()));
     return p;
 }
 
@@ -452,8 +452,7 @@ void wxPropertyGridInterface::DoSetPropertyAttribute( wxPGPropArg id, const wxSt
 
     if ( argFlags & wxPG_RECURSE )
     {
-        unsigned int i;
-        for ( i = 0; i < p->GetChildCount(); i++ )
+        for ( unsigned int i = 0; i < p->GetChildCount(); i++ )
             DoSetPropertyAttribute(p->Item(i), name, value, argFlags);
     }
 }
@@ -494,12 +493,12 @@ void wxPropertyGridInterface::GetPropertiesWithFlag( wxArrayPGProperty* targetAr
 
         if ( !inverse )
         {
-            if ( (property->GetFlags() & flags) == flags )
+            if ( property->HasFlagsExact(flags) )
                 targetArr->push_back((wxPGProperty*)property);
         }
         else
         {
-            if ( (property->GetFlags() & flags) != flags )
+            if ( !property->HasFlagsExact(flags) )
                 targetArr->push_back((wxPGProperty*)property);
         }
     }
@@ -543,8 +542,8 @@ wxPGProperty* wxPropertyGridInterface::GetPropertyByName( const wxString& name )
     if ( p )
         return p;
 
-    // Check if its "Property.SubProperty" format
-    int pos = name.Find(wxT('.'));
+    // Check if it is "Property.SubProperty" format
+    int pos = name.Find(wxS('.'));
     if ( pos <= 0 )
         return NULL;
 
@@ -686,11 +685,18 @@ void wxPropertyGridInterface::SetPropertyTextColour( wxPGPropArg id,
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridInterface::SetPropertyColoursToDefault( wxPGPropArg id )
+#if WXWIN_COMPATIBILITY_3_0
+void wxPropertyGridInterface::SetPropertyColoursToDefault(wxPGPropArg id)
+{
+    SetPropertyColoursToDefault(id, wxPG_DONT_RECURSE);
+}
+#endif // WXWIN_COMPATIBILITY_3_0
+
+void wxPropertyGridInterface::SetPropertyColoursToDefault(wxPGPropArg id, int flags)
 {
     wxPG_PROP_ARG_CALL_PROLOG()
 
-    p->m_cells.clear();
+    p->SetDefaultColours(flags);
 }
 
 // -----------------------------------------------------------------------
@@ -777,7 +783,7 @@ bool wxPropertyGridInterface::ChangePropertyValue( wxPGPropArg id, wxVariant new
 void wxPropertyGridInterface::BeginAddChildren( wxPGPropArg id )
 {
     wxPG_PROP_ARG_CALL_PROLOG()
-    wxCHECK_RET( p->HasFlag(wxPG_PROP_AGGREGATE), wxT("only call on properties with fixed children") );
+    wxCHECK_RET( p->HasFlag(wxPG_PROP_AGGREGATE), wxS("only call on properties with fixed children") );
     p->ClearFlag(wxPG_PROP_AGGREGATE);
     p->SetFlag(wxPG_PROP_MISC_PARENT);
 }
@@ -794,7 +800,7 @@ bool wxPropertyGridInterface::EditorValidate()
 void wxPropertyGridInterface::EndAddChildren( wxPGPropArg id )
 {
     wxPG_PROP_ARG_CALL_PROLOG()
-    wxCHECK_RET( p->HasFlag(wxPG_PROP_MISC_PARENT), wxT("only call on properties for which BeginAddChildren was called prior") );
+    wxCHECK_RET( p->HasFlag(wxPG_PROP_MISC_PARENT), wxS("only call on properties for which BeginAddChildren was called prior") );
     p->ClearFlag(wxPG_PROP_MISC_PARENT);
     p->SetFlag(wxPG_PROP_AGGREGATE);
 }
@@ -1036,7 +1042,7 @@ bool wxPropertyGridInterface::RestoreEditableState( const wxString& src, int res
                 {
                     if ( restoreStates & SelectionState )
                     {
-                        if ( values.size() > 0 )
+                        if ( !values.empty() )
                         {
                             if ( pageState->IsDisplayed() )
                             {

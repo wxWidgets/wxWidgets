@@ -54,6 +54,7 @@ WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_hyperlnk.obj \
 	$(OBJS)\widgets_itemcontainer.obj \
 	$(OBJS)\widgets_listbox.obj \
+	$(OBJS)\widgets_native.obj \
 	$(OBJS)\widgets_notebook.obj \
 	$(OBJS)\widgets_odcombobox.obj \
 	$(OBJS)\widgets_radiobox.obj \
@@ -317,6 +318,9 @@ $(OBJS)\widgets_itemcontainer.obj: .\itemcontainer.cpp
 
 $(OBJS)\widgets_listbox.obj: .\listbox.cpp
 	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) .\listbox.cpp
+
+$(OBJS)\widgets_native.obj: .\native.cpp
+	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) .\native.cpp
 
 $(OBJS)\widgets_notebook.obj: .\notebook.cpp
 	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) .\notebook.cpp

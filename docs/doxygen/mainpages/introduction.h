@@ -26,7 +26,7 @@ in 2013. Currently wxWidgets is developed and maintained by Julian Smart, Vadim
 Zeitlin, Stefan Csomor, Robert Roebling, Vaclav Slavik and many others.
 
 More information about wxWidgets is available on its web site at
-http://www.wxwidgets.org.
+https://www.wxwidgets.org.
 
 
 
@@ -78,10 +78,10 @@ paragraphs, but here are some of the benefits:
 wxWidgets first-tier "ports", ie implementations of wxWidgets API, are:
 
 @li wxMSW: This is the native port for Microsoft Windows systems (from Windows
-95 up to Windows 8.1 with at least Windows XP being recommended), either 32 or
-64 bits. The primarily supported compilers are Microsoft Visual C++ (versions 6
-up to 2013 are supported, at least 2005 is recommended) and GNU g++ (either
-from the traditional MinGW, TDM-GCC or MinGW-w64 distributions).
+XP up to Windows 10), either 32 or 64 bits. The primarily supported compilers
+are Microsoft Visual C++ (versions 2003 up to 2015 are supported, at least 2005
+is recommended) and GNU g++ (either from the traditional MinGW, TDM-GCC or
+MinGW-w64 distributions).
 
 @li wxGTK: wxGTK2 and wxGTK3 are the ports using GTK+ library version 2.x and
 3.x respectively. They are very similar, with wxGTK2 being, however, more
@@ -90,11 +90,11 @@ NetBSD, Solaris, AIX, ...) and require GTK+ 2.6 or later or GTK+ 3.x. The
 primary supported compiler is GNU g++.
 
 @li wxOSX: wxOSX/Cocoa is the primary port for Apple computers, replacing the
-older and now deprecated wxOSX/Carbon port. wxOSX supports either PowerPC or
-Intel Macs running OS X 10.5 or higher and can be compiled in either 32 or 64
-bits using Apple Developer Tools (both GNU g++ and clang are supported).
+older and now deprecated wxOSX/Carbon port. wxOSX/Cocoa supports 32 or 64 bit
+Intel Macs running OS X 10.7 or later. The port can be built either with g++
+or clang.
 
-Other platforms (iOS, Windows CE, OS/2), compilers (Borland C++ under Windows,
+Other platforms (e.g. iOS), compilers (Borland C++ under Windows,
 Sun CC, HP-UX aCC, IBM xlC or SGI mipsPro under Unix) and ports (wxOSX/Carbon,
 wxGTK1, wxX11, wxDFB, wxPM...) are also supported but to a lesser extent.
 Please see the @subpage page_port "platform details page" for more information.
@@ -111,21 +111,21 @@ configurations but at least 1GB and possibly more is required.
 
 @section page_introduction_where Where to get wxWidgets and support for it
 
-The download links can be found at http://www.wxwidgets.org. The primary
-download location is https://sourceforge.net/downloads/wxwindows/ and there is
-also an FTP mirror at ftp://ftp.wxwidgets.org/pub/. Additionally, the latest
-version can always be retrieved from our version control system using Git
-(https://github.com/wxWidgets/wxWidgets).
+The download links can be found at https://www.wxwidgets.org. The primary
+download location is https://github.com/wxWidgets/wxWidgets/releases/latest.
+Additionally, the latest version can always be retrieved from our version
+control system using Git (https://github.com/wxWidgets/wxWidgets).
 
 wxWidgets documentation that you are reading is also available online at
 http://docs.wxwidgets.org/trunk/ and please also visit our wiki at
-http://wiki.wxwidgets.org/ for user-contributed contents.
+https://wiki.wxwidgets.org/ for user-contributed contents.
 
 And if you have any questions, you can join wxWidgets community using
 
-- Web-based <a href="http://forums.wxwidgets.org/">wxForum</a>.
-- <a href="http://www.wxwidgets.org/support/maillst2.htm">Mailing lists</a>.
-- @c #wxwidgets IRC channel.
-- Or asking questions with @c wxwidgets tag on http://stackoverflow.com/
+- Web-based <a href="https://forums.wxwidgets.org/">wxForum</a>
+- <a href="https://www.wxwidgets.org/support/mailing-lists/">Mailing lists</a>
+- <a href="https://www.wxwidgets.org/support/irc/">IRC Channel</a>
+- Or asking questions with @c wxwidgets tag on Stack Overflow:
+  https://stackoverflow.com/questions/tagged/wxwidgets
 
 */

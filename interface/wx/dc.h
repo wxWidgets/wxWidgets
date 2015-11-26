@@ -164,9 +164,8 @@ struct wxFontMetrics
 
     @section Support for Transformation Matrix
 
-    On some platforms (currently only under MSW and only on Windows NT, i.e.
-    not Windows 9x/ME, systems) wxDC has support for applying an arbitrary
-    affine transformation matrix to its coordinate system. Call
+    On some platforms (currently only under MSW) wxDC has support for applying 
+    an arbitrary affine transformation matrix to its coordinate system. Call
     CanUseTransformMatrix() to check if this support is available and then call
     SetTransformMatrix() if it is. If the transformation matrix is not
     supported, SetTransformMatrix() always simply returns false and doesn't do
@@ -1516,10 +1515,7 @@ public:
         Check if the use of transformation matrix is supported by the current
         system.
 
-        Currently this function always returns @false for non-MSW platforms and
-        may return @false for old (Windows 9x/ME) Windows systems. Normally
-        support for the transformation matrix is always available in any
-        relatively recent Windows versions.
+        Currently this function always returns @false for non-MSW platforms.
 
         @since 2.9.2
     */
@@ -1578,7 +1574,7 @@ public:
        context, if this wxDC has something that could be thought of in that
        way.  (Not all of them do.)
 
-       For example, on Windows the return value is an HDC, on OSX it is a
+       For example, on Windows the return value is an HDC, on OS X it is a
        CGContextRef and on wxGTK it will be a GdkDrawable.  If the DC is a
        wxGCDC then the return value will be the value returned from
        wxGraphicsContext::GetNativeContext.  A value of NULL is returned if
@@ -1595,12 +1591,36 @@ public:
     wxBitmap GetAsBitmap(const wxRect *subrect = NULL) const;
 
 
+    /**
+        Set the scale to use for translating wxDC coordinates to the physical
+        pixels.
+
+        The effect of calling this function is similar to that of calling
+        SetUserScale().
+     */
     void SetLogicalScale(double x, double y);
+
+    /**
+        Return the scale set by the last call to SetLogicalScale().
+     */
     void GetLogicalScale(double *x, double *y) const;
+
+    /**
+        Change the offset used for translating wxDC coordinates.
+
+        @see SetLogicalOrigin(), SetDeviceOrigin()
+     */
     void SetLogicalOrigin(wxCoord x, wxCoord y);
+
+    //@{
+    /**
+        Return the coordinates of the logical point (0, 0).
+
+        @see SetLogicalOrigin()
+     */
     void GetLogicalOrigin(wxCoord *x, wxCoord *y) const;
     wxPoint GetLogicalOrigin() const;
-    
+    //@}
 };
 
 

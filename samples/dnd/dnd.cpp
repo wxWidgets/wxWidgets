@@ -1050,7 +1050,7 @@ DnDFrame::DnDFrame()
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
     sizer->Add(sizer_top, 1, wxEXPAND );
 #if wxUSE_LOG
-    sizer->Add(m_ctrlLog, 2, wxEXPAND);
+    sizer->Add(m_ctrlLog, 1, wxEXPAND);
     sizer->SetItemMinSize(m_ctrlLog, 450, 200);
 #endif // wxUSE_LOG
     sizer->AddSpacer(50);

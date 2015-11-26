@@ -81,7 +81,7 @@ wxLANGUAGE_FRENCH_CANADIAN             fr_CA  LANG_FRENCH      SUBLANG_FRENCH_CA
 wxLANGUAGE_FRENCH_LUXEMBOURG           fr_LU  LANG_FRENCH      SUBLANG_FRENCH_LUXEMBOURG           LTR    "French (Luxembourg)"
 wxLANGUAGE_FRENCH_MONACO               fr_MC  LANG_FRENCH      SUBLANG_FRENCH_MONACO               LTR    "French (Monaco)"
 wxLANGUAGE_FRENCH_SWISS                fr_CH  LANG_FRENCH      SUBLANG_FRENCH_SWISS                LTR    "French (Swiss)"
-wxLANGUAGE_FRISIAN                     fy     -                -                                   LTR    "Frisian"
+wxLANGUAGE_FRISIAN                     fy     LANG_FRISIAN     SUBLANG_DEFAULT                     LTR    "Frisian"
 wxLANGUAGE_GALICIAN                    gl_ES  -                -                                   LTR    "Galician"
 wxLANGUAGE_GEORGIAN                    ka_GE  LANG_GEORGIAN    SUBLANG_DEFAULT                     LTR    "Georgian"
 wxLANGUAGE_GERMAN                      de_DE  LANG_GERMAN      SUBLANG_GERMAN                      LTR    "German"

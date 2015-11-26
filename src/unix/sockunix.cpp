@@ -90,6 +90,11 @@ wxSocketError wxSocketImplUnix::GetLastError() const
 
 void wxSocketImplUnix::DoEnableEvents(int flags, bool enable)
 {
+    // No events for blocking sockets, they should be usable from the other
+    // threads and the events only work for the sockets used by the main one.
+    if ( GetSocketFlags() & wxSOCKET_BLOCK )
+        return;
+
     wxSocketManager * const manager = wxSocketManager::Get();
     if (!manager)
         return;

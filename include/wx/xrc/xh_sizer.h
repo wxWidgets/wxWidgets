@@ -23,8 +23,8 @@ class WXDLLIMPEXP_XRC wxSizerXmlHandler : public wxXmlResourceHandler
 
 public:
     wxSizerXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+    virtual wxObject *DoCreateResource() wxOVERRIDE;
+    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
 
 protected:
     virtual wxSizer* DoCreateSizer(const wxString& name);
@@ -69,8 +69,8 @@ class WXDLLIMPEXP_XRC wxStdDialogButtonSizerXmlHandler
 
 public:
     wxStdDialogButtonSizerXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+    virtual wxObject *DoCreateResource() wxOVERRIDE;
+    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
 
 private:
     bool m_isInside;

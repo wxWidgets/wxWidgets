@@ -194,6 +194,7 @@ public:
     {
         Col_EditableText,
         Col_IconText,
+        Col_Date,
         Col_TextWithAttr,
         Col_Custom,
         Col_Max

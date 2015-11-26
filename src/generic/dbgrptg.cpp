@@ -231,7 +231,7 @@ void wxDumpOpenExternalDlg::OnBrowse(wxCommandEvent& )
                      fname.GetPathWithSep(),
                      fname.GetFullName()
 #ifdef __WXMSW__
-                     , _("Executable files (*.exe)|*.exe|") + wxALL_FILES
+                     , wxString(_("Executable files (*.exe)|*.exe|")) + wxALL_FILES
 #endif // __WXMSW__
                      );
     if ( dlg.ShowModal() == wxID_OK )
@@ -332,7 +332,7 @@ wxDebugReportDialog::wxDebugReportDialog(wxDebugReport& dbgrpt)
 
     wxSizer *sizerPreview =
         new wxStaticBoxSizer(wxVERTICAL, this, _("&Debug report preview:"));
-    sizerPreview->Add(CreateTextSizer(msg), SizerFlags(0).Centre());
+    sizerPreview->Add(CreateTextSizer(msg), wxSizerFlags().Centre().Border());
 
     // ... and the list of files in this debug report with buttons to view them
     wxSizer *sizerFileBtns = new wxBoxSizer(wxVERTICAL);

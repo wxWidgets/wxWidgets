@@ -63,7 +63,7 @@ public:
 	bool isSet;
 	ColourOptional(ColourDesired colour_=ColourDesired(0,0,0), bool isSet_=false) : ColourDesired(colour_), isSet(isSet_) {
 	}
-	ColourOptional(uptr_t wParam, sptr_t lParam) : ColourDesired(lParam), isSet(wParam != 0) {
+	ColourOptional(uptr_t wParam, sptr_t lParam) : ColourDesired(static_cast<long>(lParam)), isSet(wParam != 0) {
 	}
 };
 
@@ -83,8 +83,11 @@ public:
 	LineMarker markers[MARKER_MAX + 1];
 	int largestMarkerHeight;
 	Indicator indicators[INDIC_MAX + 1];
+	unsigned int indicatorsDynamic;
+	unsigned int indicatorsSetFore;
 	int technology;
 	int lineHeight;
+	int lineOverlap;
 	unsigned int maxAscent;
 	unsigned int maxDescent;
 	XYPOSITION aveCharWidth;
@@ -157,7 +160,7 @@ public:
 	ViewStyle();
 	ViewStyle(const ViewStyle &source);
 	~ViewStyle();
-	void Init(size_t stylesSize_=64);
+	void Init(size_t stylesSize_=256);
 	void Refresh(Surface &surface, int tabInChars);
 	void ReleaseAllExtendedStyles();
 	int AllocateExtendedStyles(int numberStyles);
@@ -169,7 +172,11 @@ public:
 	int ExternalMarginWidth() const;
 	bool ValidStyle(size_t styleIndex) const;
 	void CalcLargestMarkerHeight();
+	ColourOptional Background(int marksOfLine, bool caretActive, bool lineContainsCaret) const;
+	bool SelectionBackgroundDrawn() const;
+	bool WhitespaceBackgroundDrawn() const;
 	ColourDesired WrapColour() const;
+
 	bool SetWrapState(int wrapState_);
 	bool SetWrapVisualFlags(int wrapVisualFlags_);
 	bool SetWrapVisualFlagsLocation(int wrapVisualFlagsLocation_);

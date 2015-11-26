@@ -906,9 +906,6 @@ WX_STRTOX_FUNC(wxULongLong_t, wxStrtoull, wxCRT_StrtoullA, wxCRT_StrtoullW)
 #undef WX_STRTOX_FUNC
 
 
-// there is no command interpreter under CE, hence no system()
-#ifndef __WXWINCE__
-
 // mingw32 doesn't provide _tsystem() even though it provides other stdlib.h
 // functions in their wide versions
 #ifdef wxCRT_SystemW
@@ -916,8 +913,6 @@ inline int wxSystem(const wxString& str) { return wxCRT_SystemW(str.wc_str()); }
 #else
 inline int wxSystem(const wxString& str) { return wxCRT_SystemA(str.mb_str()); }
 #endif
-
-#endif // !__WXWINCE__/__WXWINCE__
 
 inline char* wxGetenv(const char *name) { return wxCRT_GetenvA(name); }
 inline wchar_t* wxGetenv(const wchar_t *name) { return wxCRT_GetenvW(name); }

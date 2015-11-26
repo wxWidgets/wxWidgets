@@ -113,6 +113,13 @@ public:
                                 const wxRect& rect,
                                 int flags = 0) wxOVERRIDE;
 
+    virtual void DrawCollapseButton(wxWindow *win,
+        wxDC& dc,
+        const wxRect& rect,
+        int flags = 0);
+
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc);
+
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
                                        const wxRect& rect,
@@ -137,6 +144,14 @@ public:
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
     virtual void DrawGauge(wxWindow* win, wxDC& dc, const wxRect& rect, int value, int max, int flags = 0) wxOVERRIDE;
+
+    virtual void DrawItemText(wxWindow* win,
+                              wxDC& dc,
+                              const wxString& text,
+                              const wxRect& rect,
+                              int align = wxALIGN_LEFT | wxALIGN_TOP,
+                              int flags = 0,
+                              wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END) wxOVERRIDE;
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win) wxOVERRIDE;
 
@@ -167,6 +182,46 @@ protected:
 
     static wxRendererGeneric* sm_rendererGeneric;
 };
+
+// ----------------------------------------------------------------------------
+// misc. drawing functions
+// ----------------------------------------------------------------------------
+
+// Draw focus rect for individual cell. Unlike native focus rect, we render
+// this in foreground text color (typically white) to enhance contrast and
+// make it visible.
+static void DrawSelectedCellFocusRect(wxDC& dc, const wxRect& rect)
+{
+    // (This code is based on wxRendererGeneric::DrawFocusRect and modified.)
+
+    // draw the pixels manually because the "dots" in wxPen with wxDOT style
+    // may be short traits and not really dots
+    //
+    // note that to behave in the same manner as DrawRect(), we must exclude
+    // the bottom and right borders from the rectangle
+    wxCoord x1 = rect.GetLeft(),
+        y1 = rect.GetTop(),
+        x2 = rect.GetRight(),
+        y2 = rect.GetBottom();
+
+    wxDCPenChanger pen(dc, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+
+    wxCoord z;
+    for (z = x1 + 1; z < x2; z += 2)
+        dc.DrawPoint(z, rect.GetTop());
+
+    wxCoord shift = z == x2 ? 0 : 1;
+    for (z = y1 + shift; z < y2; z += 2)
+        dc.DrawPoint(x2, z);
+
+    shift = z == y2 ? 0 : 1;
+    for (z = x2 - shift; z > x1; z -= 2)
+        dc.DrawPoint(z, y2);
+
+    shift = z == x1 ? 0 : 1;
+    for (z = y2 - shift; z > y1; z -= 2)
+        dc.DrawPoint(x1, z);
+}
 
 // ============================================================================
 // wxRendererGeneric implementation
@@ -303,8 +358,7 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
         wxRect ar = rect;
 
         // make a rect for the arrow
-        ar.height = 4;
-        ar.width = 8;
+        ar.SetSize(wxWindow::FromDIP(wxSize(8, 4), win));
         ar.y += (rect.height - ar.height)/2;
         ar.x = ar.x + rect.width - 3*ar.width/2;
         arrowSpace = 3*ar.width/2; // space to preserve when drawing the label
@@ -576,11 +630,11 @@ wxRendererGeneric::DrawSplitterSash(wxWindow *win,
     }
 
     dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE)));
 
     if ( win->HasFlag(wxSP_3DSASH) )
     {
         // Draw the 3D sash
+        dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE)));
         dc.DrawRectangle(position + 2, 0, 3, h);
 
         dc.SetPen(m_penLightGrey);
@@ -598,6 +652,7 @@ wxRendererGeneric::DrawSplitterSash(wxWindow *win,
     else
     {
         // Draw a flat sash
+        dc.SetBrush(wxBrush(win->GetBackgroundColour()));
         dc.DrawRectangle(position, 0, 3, h);
     }
 }
@@ -679,6 +734,42 @@ wxRendererGeneric::DrawPushButton(wxWindow *win,
 }
 
 void
+wxRendererGeneric::DrawCollapseButton(wxWindow *win,
+                                wxDC& dc,
+                                const wxRect& rect,
+                                int flags)
+{
+    int arrowHalf = rect.width / 5;
+    int rectMid = rect.width / 2;
+    int arrowTopY = (rect.height / 2) - (arrowHalf / 2);
+
+    wxPoint pt[3];
+    if (flags & wxCONTROL_EXPANDED)
+    {
+        // This should always result in arrow with odd width.
+        pt[0] = wxPoint(rectMid - arrowHalf, arrowTopY);
+        pt[1] = wxPoint(rectMid + arrowHalf, arrowTopY);
+        pt[2] = wxPoint(rectMid, arrowTopY + arrowHalf);
+    }
+    else
+    {
+        // This should always result in arrow with odd height.
+        pt[0] = wxPoint(arrowTopY, rectMid - arrowHalf);
+        pt[1] = wxPoint(arrowTopY + arrowHalf, rectMid);
+        pt[2] = wxPoint(arrowTopY, rectMid + arrowHalf);
+    }
+
+    dc.SetBrush(wxBrush(win->GetForegroundColour()));
+    dc.SetPen(wxPen(win->GetForegroundColour()));
+    dc.DrawPolygon(WXSIZEOF(pt), pt, rect.x, rect.y);
+}
+
+wxSize wxRendererGeneric::GetCollapseButtonSize(wxWindow *WXUNUSED(win), wxDC& WXUNUSED(dc))
+{
+    return wxSize(18, 18);
+}
+
+void
 wxRendererGeneric::DrawItemSelectionRect(wxWindow * win,
                                          wxDC& dc,
                                          const wxRect& rect,
@@ -702,16 +793,26 @@ wxRendererGeneric::DrawItemSelectionRect(wxWindow * win,
     }
 
     dc.SetBrush(brush);
-    if ((flags & wxCONTROL_CURRENT) && (flags & wxCONTROL_FOCUSED)
+    bool drawFocusRect = (flags & wxCONTROL_CURRENT) && (flags & wxCONTROL_FOCUSED)
 #if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
                 && IsControlActive( (ControlRef)win->GetHandle() )
 #endif
-    )
+        ;
+
+    if ( drawFocusRect && !(flags & wxCONTROL_CELL) )
         dc.SetPen( *wxBLACK_PEN );
     else
         dc.SetPen( *wxTRANSPARENT_PEN );
 
     dc.DrawRectangle( rect );
+
+    if ( drawFocusRect && (flags & wxCONTROL_CELL) )
+    {
+        wxRect focusRect(rect);
+        focusRect.Deflate(1);
+
+        DrawSelectedCellFocusRect(dc, focusRect);
+    }
 
     // it's unused everywhere except in wxOSX/Carbon
     wxUnusedVar(win);
@@ -829,6 +930,45 @@ void wxRendererGeneric::DrawGauge(wxWindow* win,
     dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.DrawRectangle(progRect);
+}
+
+void
+wxRendererGeneric::DrawItemText(wxWindow* WXUNUSED(win),
+                                wxDC& dc,
+                                const wxString& text,
+                                const wxRect& rect,
+                                int align,
+                                int flags,
+                                wxEllipsizeMode ellipsizeMode)
+{
+    // Determine text color
+    wxColour textColour;
+    if ( flags & wxCONTROL_SELECTED )
+    {
+        if ( flags & wxCONTROL_FOCUSED )
+        {
+            textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+        }
+        else // !focused
+        {
+            textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
+        }
+    }
+    else if ( flags & wxCONTROL_DISABLED )
+    {
+        textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
+    }
+
+    const wxString paintText = wxControl::Ellipsize(text, dc,
+                                                    ellipsizeMode,
+                                                    rect.GetWidth());
+
+    // Draw text taking care not to change its colour if it had been set by the
+    // caller for a normal item to allow having items in non-default colours.
+    if ( textColour.IsOk() )
+        dc.SetTextForeground(textColour);
+    dc.SetTextBackground(wxTransparentColour);
+    dc.DrawLabel(paintText, rect, align);
 }
 
 // ----------------------------------------------------------------------------

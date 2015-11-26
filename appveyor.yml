@@ -1,0 +1,43 @@
+version: '{build}'
+
+branches:
+  only:
+  - master
+  - WX_3_0_BRANCH
+
+environment:
+  matrix:
+  - TOOLSET: msbuild
+    CONFIGURATION: DLL Release
+    ARCH: x64
+    wxUSE_STL: 1
+  - TOOLSET: nmake
+    VS: '9.0'
+    BUILD: release
+    ARCH: x86
+    wxUSE_STL: 0
+  - TOOLSET: nmake
+    VS: '14.0'
+    BUILD: debug
+    ARCH: amd64
+    wxUSE_STL: 1
+  - TOOLSET: mingw
+    wxUSE_STL: 0
+  - TOOLSET: msys2
+    MSYSTEM: MINGW32
+  - TOOLSET: cygwin
+
+clone_depth: 50
+
+before_build:
+- ps: |
+    $env:PATH = $env:PATH -replace "C:\\Program Files \(x86\)\\Git\\bin",""
+    if (($env:compiler -ne "msys2") -and ($env:compiler -ne "cygwin")) {
+      gc include\wx\msw\setup0.h |
+      %{$_ -replace "define wxUSE_STL 0", "define wxUSE_STL $env:wxUSE_STL"} |
+      sc include\wx\msw\setup.h
+    }
+
+build_script: build\tools\appveyor.bat
+
+test: off

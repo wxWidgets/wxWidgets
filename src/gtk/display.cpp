@@ -24,8 +24,6 @@ GdkWindow* wxGetTopLevelGDK();
 
 //-----------------------------------------------------------------------------
 
-#if !(wxUSE_LIBHILDON || wxUSE_LIBHILDON2)
-
 #ifdef GDK_WINDOWING_X11
 void wxGetWorkAreaX11(Screen* screen, int& x, int& y, int& width, int& height);
 #endif
@@ -70,19 +68,13 @@ wx_gdk_screen_get_monitor_workarea(GdkScreen* screen, int monitor, GdkRectangle*
 }
 #define gdk_screen_get_monitor_workarea wx_gdk_screen_get_monitor_workarea
 
-#endif // !(wxUSE_LIBHILDON || wxUSE_LIBHILDON2)
-
 void wxClientDisplayRect(int* x, int* y, int* width, int* height)
 {
-#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
-    GdkRectangle rect = { 0, 0, 672, 396 };
-#else
     GdkRectangle rect;
     GdkWindow* window = wxGetTopLevelGDK();
     GdkScreen* screen = gdk_window_get_screen(window);
     int monitor = gdk_screen_get_monitor_at_window(screen, window);
     gdk_screen_get_monitor_workarea(screen, monitor, &rect);
-#endif
     if (x)
         *x = rect.x;
     if (y)

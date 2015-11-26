@@ -48,19 +48,19 @@ public:
 
 
     // overridden base class virtual methods
-    virtual void SetLabel(const wxString& label);
-    virtual bool SetFont(const wxFont &font);
+    virtual void SetLabel(const wxString& label) wxOVERRIDE;
+    virtual bool SetFont(const wxFont &font) wxOVERRIDE;
 
 protected:
-    virtual wxSize DoGetBestClientSize() const;
+    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 
-    virtual wxString DoGetLabel() const { return m_label; }
-    virtual void DoSetLabel(const wxString& label);
+    virtual wxString DoGetLabel() const wxOVERRIDE { return m_label; }
+    virtual void DoSetLabel(const wxString& label) wxOVERRIDE;
 
-    void DoSetSize(int x, int y, int width, int height, int sizeFlags);
+    void DoSetSize(int x, int y, int width, int height, int sizeFlags) wxOVERRIDE;
 
 #if wxUSE_MARKUP
-    virtual bool DoSetLabelMarkup(const wxString& markup);
+    virtual bool DoSetLabelMarkup(const wxString& markup) wxOVERRIDE;
 #endif // wxUSE_MARKUP
 
 private:

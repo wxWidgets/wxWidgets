@@ -94,8 +94,7 @@ bool operator == (const wxArrayInt& array1, const wxArrayInt& array2)
 {
     if ( array1.size() != array2.size() )
         return false;
-    size_t i;
-    for ( i=0; i<array1.size(); i++ )
+    for ( size_t i = 0; i < array1.size(); i++ )
     {
         if ( array1[i] != array2[i] )
             return false;
@@ -290,7 +289,7 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
 bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
                                   wxWindow* wnd, wxEvent& event ) const
 {
-    int evtType = event.GetEventType();
+    wxEventType evtType = event.GetEventType();
     int keycode = -1;
     int spins = 1;
     bool bigStep = false;
@@ -403,7 +402,7 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
 #if defined(wxLongLong_t) && wxUSE_LONGLONG
                 s = wxLongLong(v_ll).ToString();
 #else
-                s = wxString::Format(wxT("%ld"), v_ll);
+                s = wxString::Format(wxS("%ld"), v_ll);
 #endif
             }
             else
@@ -475,7 +474,7 @@ wxPGWindowList wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgri
 {
     wxCHECK_MSG( wxDynamicCast(property, wxDateProperty),
                  NULL,
-                 wxT("DatePickerCtrl editor can only be used with wxDateProperty or derivative.") );
+                 wxS("DatePickerCtrl editor can only be used with wxDateProperty or derivative.") );
 
     wxDateProperty* prop = wxDynamicCast(property, wxDateProperty);
 
@@ -639,11 +638,10 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
         wxPGGlobalVars->m_fontFamilyChoices = new wxPGChoices(faceNames);
     }
 
-    wxString emptyString(wxEmptyString);
-
     wxFont font;
     font << m_value;
 
+    /* TRANSLATORS: Label of font point size */
     AddPrivateChild( new wxIntProperty( _("Point Size"),
                      wxS("Point Size"),(long)font.GetPointSize() ) );
 
@@ -653,6 +651,7 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
          wxPGGlobalVars->m_fontFamilyChoices->Index(faceName) == wxNOT_FOUND )
         wxPGGlobalVars->m_fontFamilyChoices->AddAsSorted(faceName);
 
+    /* TRANSLATORS: Label of font face name */
     wxPGProperty* p = new wxEnumProperty(_("Face Name"), wxS("Face Name"),
                                          *wxPGGlobalVars->m_fontFamilyChoices);
 
@@ -660,17 +659,21 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
 
     AddPrivateChild( p );
 
+    /* TRANSLATORS: Label of font style */
     AddPrivateChild( new wxEnumProperty(_("Style"), wxS("Style"),
                      gs_fp_es_style_labels,gs_fp_es_style_values,
                      font.GetStyle()) );
 
+    /* TRANSLATORS: Label of font weight */
     AddPrivateChild( new wxEnumProperty(_("Weight"), wxS("Weight"),
                      gs_fp_es_weight_labels,gs_fp_es_weight_values,
                      font.GetWeight()) );
 
+    /* TRANSLATORS: Label of underlined font */
     AddPrivateChild( new wxBoolProperty(_("Underlined"), wxS("Underlined"),
                      font.GetUnderlined()) );
 
+    /* TRANSLATORS: Label of font family */
     AddPrivateChild( new wxEnumProperty(_("Family"), wxS("PointSize"),
                      gs_fp_es_family_labels,gs_fp_es_family_values,
                      font.GetFamily()) );
@@ -799,7 +802,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
 /*
 wxSize wxFontProperty::OnMeasureImage() const
 {
-    return wxSize(-1,-1);
+    return wxPG_DEFAULT_IMAGE_SIZE;
 }
 
 void wxFontProperty::OnCustomPaint(wxDC& dc,
@@ -824,7 +827,7 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
         dc.SetFont(wxFontInfo(oldFont.GetPointSize().Bold().FaceName(drawFace));
 
         dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT) );
-        dc.DrawText( wxT("Aa"), rect.x+2, rect.y+1 );
+        dc.DrawText( wxS("Aa"), rect.x+2, rect.y+1 );
 
         dc.SetFont(oldFont);
     }
@@ -849,31 +852,31 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
 
 //#define wx_cp_es_syscolours_len 25
 static const char* const gs_cp_es_syscolour_labels[] = {
-    wxTRANSLATE("AppWorkspace"),
-    wxTRANSLATE("ActiveBorder"),
-    wxTRANSLATE("ActiveCaption"),
-    wxTRANSLATE("ButtonFace"),
-    wxTRANSLATE("ButtonHighlight"),
-    wxTRANSLATE("ButtonShadow"),
-    wxTRANSLATE("ButtonText"),
-    wxTRANSLATE("CaptionText"),
-    wxTRANSLATE("ControlDark"),
-    wxTRANSLATE("ControlLight"),
-    wxTRANSLATE("Desktop"),
-    wxTRANSLATE("GrayText"),
-    wxTRANSLATE("Highlight"),
-    wxTRANSLATE("HighlightText"),
-    wxTRANSLATE("InactiveBorder"),
-    wxTRANSLATE("InactiveCaption"),
-    wxTRANSLATE("InactiveCaptionText"),
-    wxTRANSLATE("Menu"),
-    wxTRANSLATE("Scrollbar"),
-    wxTRANSLATE("Tooltip"),
-    wxTRANSLATE("TooltipText"),
-    wxTRANSLATE("Window"),
-    wxTRANSLATE("WindowFrame"),
-    wxTRANSLATE("WindowText"),
-    wxTRANSLATE("Custom"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("AppWorkspace"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ActiveBorder"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ActiveCaption"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ButtonFace"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ButtonHighlight"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ButtonShadow"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ButtonText"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("CaptionText"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ControlDark"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ControlLight"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("Desktop"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("GrayText"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("Highlight"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("HighlightText"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("InactiveBorder"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("InactiveCaption"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("InactiveCaptionText"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("Menu"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("Scrollbar"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("Tooltip"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("TooltipText"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("Window"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("WindowFrame"),
+    /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("WindowText"),
+    /* TRANSLATORS: Custom colour choice entry */ wxTRANSLATE("Custom"),
     NULL
 };
 
@@ -942,10 +945,7 @@ wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxS
                       gs_cp_es_syscolour_values,
                       &gs_wxSystemColourProperty_choicesCache )
 {
-    if ( &value )
         Init( value.m_type, value.m_colour );
-    else
-        Init( wxPG_COLOUR_CUSTOM, *wxWHITE );
 }
 
 
@@ -954,10 +954,7 @@ wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxS
     const wxColourPropertyValue& value )
     : wxEnumProperty( label, name, labels, values, choicesCache )
 {
-    if ( &value )
         Init( value.m_type, value.m_colour );
-    else
-        Init( wxPG_COLOUR_CUSTOM, *wxWHITE );
 }
 
 
@@ -966,10 +963,7 @@ wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxS
     const wxColour& value )
     : wxEnumProperty( label, name, labels, values, choicesCache )
 {
-    if ( &value )
         Init( wxPG_COLOUR_CUSTOM, value );
-    else
-        Init( wxPG_COLOUR_CUSTOM, *wxWHITE );
 }
 
 
@@ -1065,7 +1059,7 @@ int wxSystemColourProperty::ColToInd( const wxColour& colour ) const
 
         if ( colour == GetColour(ind) )
         {
-            /*wxLogDebug(wxT("%s(%s): Index %i for ( getcolour(%i,%i,%i), colour(%i,%i,%i))"),
+            /*wxLogDebug(wxS("%s(%s): Index %i for ( getcolour(%i,%i,%i), colour(%i,%i,%i))"),
                 GetClassName(),GetLabel().c_str(),
                 (int)i,(int)GetColour(ind).Red(),(int)GetColour(ind).Green(),(int)GetColour(ind).Blue(),
                 (int)colour.Red(),(int)colour.Green(),(int)colour.Blue());*/
@@ -1243,12 +1237,12 @@ bool wxSystemColourProperty::QueryColourFromUser( wxVariant& variant ) const
 
     wxColourData data;
     data.SetChooseFull(true);
+    data.SetChooseAlpha(GetAttributeAsLong(wxPG_COLOUR_HAS_ALPHA, 0) != 0);
     data.SetColour(val.m_colour);
-    int i;
-    for ( i = 0; i < 16; i++)
+    for ( int i = 0; i < wxColourData::NUM_CUSTOM; i++ )
     {
-        wxColour colour(i*16, i*16, i*16);
-        data.SetCustomColour(i, colour);
+        unsigned char n = i*(256/wxColourData::NUM_CUSTOM);
+        data.SetCustomColour(i, wxColour(n, n, n));
     }
 
     wxColourDialog dialog(propgrid, &data);
@@ -1359,7 +1353,7 @@ public:
             dc.SetBrush( *wxWHITE );
 
         wxRect imageRect = propertyGrid->GetImageRect(property, item);
-        wxLogDebug(wxT("%i, %i"),imageRect.x,imageRect.y);
+        wxLogDebug(wxS("%i, %i"),imageRect.x,imageRect.y);
         dc.DrawRectangle( rect.x+imageRect.x, rect.y+imageRect.y,
                           imageRect.width, imageRect.height );
 
@@ -1525,6 +1519,7 @@ bool wxSystemColourProperty::DoSetAttribute( const wxString& name, wxVariant& va
         if ( ival && (m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
         {
             // Show custom choice
+            /* TRANSLATORS: Custom colour choice entry */
             m_choices.Add(_("Custom"), wxPG_COLOUR_CUSTOM);
             m_flags &= ~(wxPG_PROP_HIDE_CUSTOM_COLOUR);
         }
@@ -1563,7 +1558,7 @@ static const char* const gs_cp_es_normcolour_labels[] = {
     wxTRANSLATE("Aqua"),
     wxTRANSLATE("Yellow"),
     wxTRANSLATE("White"),
-    wxTRANSLATE("Custom"),
+    /* TRANSLATORS: Custom colour choice entry */ wxTRANSLATE("Custom"),
     NULL
 };
 
@@ -1623,7 +1618,7 @@ wxColourProperty::wxColourProperty( const wxString& label,
                              gs_cp_es_normcolour_values,
                              &gs_wxColourProperty_choicesCache, value )
 {
-    wxASSERT_MSG( wxTheColourDatabase, wxT("No colour database") );
+    wxASSERT_MSG( wxTheColourDatabase, wxS("No colour database") );
     if ( wxTheColourDatabase )
     {
         // Extend colour database with PG-specific colours.
@@ -1703,34 +1698,34 @@ wxVariant wxColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 
 //#define wx_cp_es_syscursors_len 28
 static const char* const gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
-    wxTRANSLATE("Default"),
-    wxTRANSLATE("Arrow"),
-    wxTRANSLATE("Right Arrow"),
-    wxTRANSLATE("Blank"),
-    wxTRANSLATE("Bullseye"),
-    wxTRANSLATE("Character"),
-    wxTRANSLATE("Cross"),
-    wxTRANSLATE("Hand"),
-    wxTRANSLATE("I-Beam"),
-    wxTRANSLATE("Left Button"),
-    wxTRANSLATE("Magnifier"),
-    wxTRANSLATE("Middle Button"),
-    wxTRANSLATE("No Entry"),
-    wxTRANSLATE("Paint Brush"),
-    wxTRANSLATE("Pencil"),
-    wxTRANSLATE("Point Left"),
-    wxTRANSLATE("Point Right"),
-    wxTRANSLATE("Question Arrow"),
-    wxTRANSLATE("Right Button"),
-    wxTRANSLATE("Sizing NE-SW"),
-    wxTRANSLATE("Sizing N-S"),
-    wxTRANSLATE("Sizing NW-SE"),
-    wxTRANSLATE("Sizing W-E"),
-    wxTRANSLATE("Sizing"),
-    wxTRANSLATE("Spraycan"),
-    wxTRANSLATE("Wait"),
-    wxTRANSLATE("Watch"),
-    wxTRANSLATE("Wait Arrow"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Default"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Arrow"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Right Arrow"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Blank"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Bullseye"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Character"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Cross"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Hand"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("I-Beam"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Left Button"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Magnifier"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Middle Button"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("No Entry"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Paint Brush"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Pencil"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Point Left"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Point Right"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Question Arrow"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Right Button"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Sizing NE-SW"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Sizing N-S"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Sizing NW-SE"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Sizing W-E"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Sizing"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Spraycan"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Wait"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Watch"),
+    /* TRANSLATORS: System cursor name */ wxTRANSLATE("Wait Arrow"),
     NULL
 };
 
@@ -1868,14 +1863,14 @@ const wxString& wxPGGetDefaultImageWildcard()
             wxString ext_up = ext_lo.Upper();
 
             str.append( ext_up );
-            str.append( wxT(" files (*.") );
+            str.append( wxS(" files (*.") );
             str.append( ext_up );
-            str.append( wxT(")|*.") );
+            str.append( wxS(")|*.") );
             str.append( ext_lo );
-            str.append( wxT("|") );
+            str.append( wxS("|") );
         }
 
-        str.append ( wxT("All files (*.*)|*.*") );
+        str.append ( wxS("All files (*.*)|*.*") );
 
         wxPGGlobalVars->m_pDefaultImageWildcard = str;
     }
@@ -2031,20 +2026,20 @@ void wxMultiChoiceProperty::GenerateValueAsString( wxVariant& value,
         strings = value.GetArrayString();
 
     wxString& tempStr = *target;
-    unsigned int i;
-    unsigned int itemCount = strings.size();
+
+    size_t itemCount = strings.size();
 
     tempStr.Empty();
 
     if ( itemCount )
-        tempStr.append( wxT("\"") );
+        tempStr.append( wxS("\"") );
 
-    for ( i = 0; i < itemCount; i++ )
+    for ( size_t i = 0; i < itemCount; i++ )
     {
         tempStr.append( strings[i] );
-        tempStr.append( wxT("\"") );
+        tempStr.append( wxS("\"") );
         if ( i < (itemCount-1) )
-            tempStr.append ( wxT(" \"") );
+            tempStr.append ( wxS(" \"") );
     }
 }
 
@@ -2057,7 +2052,7 @@ wxArrayInt wxMultiChoiceProperty::GetValueAsIndices() const
     // Translate values to string indices.
     wxArrayInt selections;
 
-    if ( !m_choices.IsOk() || !m_choices.GetCount() || !(&valueArr) )
+    if ( !m_choices.IsOk() || !m_choices.GetCount() )
     {
         for ( i=0; i<valueArr.size(); i++ )
             selections.Add(-1);
@@ -2109,7 +2104,7 @@ bool wxMultiChoiceProperty::OnEvent( wxPropertyGrid* propgrid,
 
         if ( dlg.ShowModal() == wxID_OK && choiceCount )
         {
-            int userStringMode = GetAttributeAsLong(wxT("UserStringMode"), 0);
+            int userStringMode = GetAttributeAsLong(wxS("UserStringMode"), 0);
 
             wxArrayInt arrInt = dlg.GetSelections();
 
@@ -2127,8 +2122,7 @@ bool wxMultiChoiceProperty::OnEvent( wxPropertyGrid* propgrid,
                     value.push_back(extraStrings[n]);
             }
 
-            unsigned int i;
-            for ( i=0; i<arrInt.size(); i++ )
+            for ( size_t i = 0; i < arrInt.size(); i++ )
                 value.Add(m_choices.GetLabel(arrInt.Item(i)));
 
             if ( userStringMode == 2 )
@@ -2151,7 +2145,7 @@ bool wxMultiChoiceProperty::StringToValue( wxVariant& variant, const wxString& t
 {
     wxArrayString arr;
 
-    int userStringMode = GetAttributeAsLong(wxT("UserStringMode"), 0);
+    int userStringMode = GetAttributeAsLong(wxS("UserStringMode"), 0);
 
     WX_PG_TOKENIZER2_BEGIN(text,wxT('"'))
         if ( userStringMode > 0 || (m_choices.IsOk() && m_choices.Index( token ) != wxNOT_FOUND) )
@@ -2246,7 +2240,7 @@ wxString wxDateProperty::ValueToString( wxVariant& value,
     wxDateTime dateTime = value.GetDateTime();
 
     if ( !dateTime.IsValid() )
-        return wxT("Invalid");
+        return wxS("Invalid");
 
     if ( ms_defaultDateFormat.empty() )
     {
@@ -2278,8 +2272,8 @@ wxString wxDateProperty::DetermineDefaultDateFormat( bool showCentury )
     wxString format;
 
     wxDateTime dt;
-    dt.ParseFormat(wxT("2003-10-13"), wxT("%Y-%m-%d"));
-    wxString str(dt.Format(wxT("%x")));
+    dt.ParseFormat(wxS("2003-10-13"), wxS("%Y-%m-%d"));
+    wxString str(dt.Format(wxS("%x")));
 
     const wxChar *p = str.c_str();
     while ( *p )
@@ -2287,25 +2281,25 @@ wxString wxDateProperty::DetermineDefaultDateFormat( bool showCentury )
         int n=wxAtoi(p);
         if (n == dt.GetDay())
         {
-            format.Append(wxT("%d"));
+            format.Append(wxS("%d"));
             p += 2;
         }
         else if (n == (int)dt.GetMonth()+1)
         {
-            format.Append(wxT("%m"));
+            format.Append(wxS("%m"));
             p += 2;
         }
         else if (n == dt.GetYear())
         {
-            format.Append(wxT("%Y"));
+            format.Append(wxS("%Y"));
             p += 4;
         }
         else if (n == (dt.GetYear() % 100))
         {
             if (showCentury)
-                format.Append(wxT("%Y"));
+                format.Append(wxS("%Y"));
             else
-                format.Append(wxT("%y"));
+                format.Append(wxS("%y"));
             p += 2;
         }
         else

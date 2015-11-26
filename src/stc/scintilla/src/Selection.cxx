@@ -81,6 +81,11 @@ int SelectionRange::Length() const {
 	}
 }
 
+void SelectionRange::MoveForInsertDelete(bool insertion, int startChange, int length) {
+	caret.MoveForInsertDelete(insertion, startChange, length);
+	anchor.MoveForInsertDelete(insertion, startChange, length);
+}
+
 bool SelectionRange::Contains(int pos) const {
 	if (anchor > caret)
 		return (pos >= caret.Position()) && (pos <= anchor.Position());
@@ -226,8 +231,24 @@ SelectionRange &Selection::Range(size_t r) {
 	return ranges[r];
 }
 
+const SelectionRange &Selection::Range(size_t r) const {
+	return ranges[r];
+}
+
 SelectionRange &Selection::RangeMain() {
 	return ranges[mainRange];
+}
+
+const SelectionRange &Selection::RangeMain() const {
+	return ranges[mainRange];
+}
+
+SelectionPosition Selection::Start() const {
+	if (IsRectangular()) {
+		return rangeRectangular.Start();
+	} else {
+		return ranges[mainRange].Start();
+	}
 }
 
 bool Selection::MoveExtends() const {
@@ -267,9 +288,11 @@ int Selection::Length() const {
 
 void Selection::MovePositions(bool insertion, int startChange, int length) {
 	for (size_t i=0; i<ranges.size(); i++) {
-		ranges[i].caret.MoveForInsertDelete(insertion, startChange, length);
-		ranges[i].anchor.MoveForInsertDelete(insertion, startChange, length);
+		ranges[i].MoveForInsertDelete(insertion, startChange, length);
 	}
+	if (selType == selRectangle) {
+		rangeRectangular.MoveForInsertDelete(insertion, startChange, length);
+	} 
 }
 
 void Selection::TrimSelection(SelectionRange range) {

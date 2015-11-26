@@ -67,8 +67,8 @@ public:
     void UpdatePreview();
 
     /// Transfer data from/to window
-    virtual bool TransferDataFromWindow();
-    virtual bool TransferDataToWindow();
+    virtual bool TransferDataFromWindow() wxOVERRIDE;
+    virtual bool TransferDataToWindow() wxOVERRIDE;
 
     /// Gets the attributes associated with the main formatting dialog
     wxRichTextAttr* GetAttributes();

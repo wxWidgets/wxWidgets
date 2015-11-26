@@ -266,11 +266,20 @@ public:
         g_signal_connect( m_widget, "realize",
                       G_CALLBACK (gtk_pseudo_window_realized_callback), this );
 
+        // gtk_widget_modify_bg() is deprecated in 3.0 but doesn't seem to have
+        // any obvious replacement as gtk_widget_override_background_color()
+        // mentioned in the deprecation message it is itself deprecated in
+        // 3.16, so just continue using it for now. In longer term the best
+        // would probably be to catch "draw" signal and paint the background
+        // ourselves.
         GdkColor col;
         col.red = 128 * 256;
         col.green = 192 * 256;
         col.blue = 255 * 256;
+
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         gtk_widget_modify_bg( m_widget, GTK_STATE_NORMAL, &col );
+        wxGCC_WARNING_RESTORE(deprecated-declarations)
     }
 
     bool SetTransparent(wxByte WXUNUSED(alpha)) wxOVERRIDE
@@ -899,7 +908,7 @@ void wxAuiManager::UpdateHintWindowConfig()
 
 // SetManagedWindow() is usually called once when the frame
 // manager class is being initialized.  "frame" specifies
-// the frame which should be managed by the frame mananger
+// the frame which should be managed by the frame manager
 void wxAuiManager::SetManagedWindow(wxWindow* wnd)
 {
     wxASSERT_MSG(wnd, wxT("specified window must be non-NULL"));
@@ -1061,11 +1070,7 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& paneInfo)
         pinfo.name.Printf(wxT("%08lx%08x%08x%08lx"),
              (unsigned long)(wxPtrToUInt(pinfo.window) & 0xffffffff),
              (unsigned int)time(NULL),
-#ifdef __WXWINCE__
-             (unsigned int)GetTickCount(),
-#else
              (unsigned int)clock(),
-#endif
              (unsigned long)m_panes.GetCount());
     }
 
@@ -1458,7 +1463,7 @@ wxString wxAuiManager::SavePaneInfo(wxAuiPaneInfo& pane)
     return result;
 }
 
-// Load a "pane" with the pane infor settings in pane_part
+// Load a "pane" with the pane information settings in pane_part
 void wxAuiManager::LoadPaneInfo(wxString pane_part, wxAuiPaneInfo &pane)
 {
     // replace escaped characters so we can
@@ -1899,8 +1904,8 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
     }
 
 
-    // add the verticle sizer (caption, pane window) to the
-    // horizontal sizer (gripper, verticle sizer)
+    // add the vertical sizer (caption, pane window) to the
+    // horizontal sizer (gripper, vertical sizer)
     horz_pane_sizer->Add(vert_pane_sizer, 1, wxEXPAND);
 
     // finally, add the pane sizer to the dock sizer
@@ -2680,7 +2685,7 @@ void wxAuiManager::Update()
 
 /*
     // N.B. More work needs to be done on frame minimum sizes;
-    // this is some intresting code that imposes the minimum size,
+    // this is some interesting code that imposes the minimum size,
     // but we may want to include a more flexible mechanism or
     // options for multiple minimum-size modes, e.g. strict or lax
     wxSize min_size = sizer->GetMinSize();
@@ -2782,7 +2787,7 @@ wxAuiDockUIPart* wxAuiManager::GetPanePart(wxWindow* wnd)
 // a dock's offset in pixels from the left side of the window
 // (for horizontal docks) or from the top of the window (for
 // vertical docks).  This value is necessary for calculating
-// fixel-pane/toolbar offsets when they are dragged.
+// pixel-pane/toolbar offsets when they are dragged.
 
 int wxAuiManager::GetDockPixelOffset(wxAuiPaneInfo& test)
 {
@@ -3854,7 +3859,12 @@ void wxAuiManager::OnRender(wxAuiManagerEvent& evt)
         wxAuiDockUIPart& part = m_uiParts.Item(i);
 
         // don't draw hidden pane items or items that aren't windows
-        if (part.sizer_item && ((!part.sizer_item->IsWindow() && !part.sizer_item->IsSpacer() && !part.sizer_item->IsSizer()) || !part.sizer_item->IsShown()))
+        if (part.sizer_item &&
+                ((!part.sizer_item->IsWindow() &&
+                  !part.sizer_item->IsSpacer() &&
+                  !part.sizer_item->IsSizer()) ||
+                  !part.sizer_item->IsShown() ||
+                   part.rect.IsEmpty()))
             continue;
 
         switch (part.type)
@@ -4392,7 +4402,7 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
         }
 
 
-        // for some reason, an arithmatic error somewhere is causing
+        // for some reason, an arithmetic error somewhere is causing
         // the proportion calculations to always be off by 1 pixel;
         // for now we will add the 1 pixel on, but we really should
         // determine what's causing this.
@@ -4669,7 +4679,7 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
                                         pt.y - m_actionOffset.y);
         }
 
-        // this will do the actiual move operation;
+        // this will do the actual move operation;
         // in the case that the pane has been floated,
         // this call will create the floating pane
         // and do the reparenting

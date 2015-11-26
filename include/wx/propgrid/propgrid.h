@@ -229,7 +229,14 @@ wxPG_DESCRIPTION                    = 0x00002000,
 /** wxPropertyGridManager only: don't show an internal border around the
     property grid. Recommended if you use a header.
 */
-wxPG_NO_INTERNAL_BORDER             = 0x00004000
+wxPG_NO_INTERNAL_BORDER             = 0x00004000,
+
+/** A mask which can be used to filter (out) all styles.
+*/
+wxPG_WINDOW_STYLE_MASK = wxPG_AUTO_SORT|wxPG_HIDE_CATEGORIES|wxPG_BOLD_MODIFIED|
+                         wxPG_SPLITTER_AUTO_CENTER|wxPG_TOOLTIPS|wxPG_HIDE_MARGIN|
+                         wxPG_STATIC_SPLITTER|wxPG_LIMITED_EDITING|wxPG_TOOLBAR|
+                         wxPG_DESCRIPTION|wxPG_NO_INTERNAL_BORDER
 };
 
 #if wxPG_COMPATIBILITY_1_4
@@ -274,7 +281,7 @@ wxPG_EX_HELP_AS_TOOLTIPS            = 0x00010000,
 /** Prevent TAB from focusing to wxButtons. This behaviour was default
     in version 1.2.0 and earlier.
     NOTE! Tabbing to button doesn't work yet. Problem seems to be that on wxMSW
-      atleast the button doesn't properly propagate key events (yes, I'm using
+      at least the button doesn't properly propagate key events (yes, I'm using
       wxWANTS_CHARS).
 */
 //wxPG_EX_NO_TAB_TO_BUTTON            = 0x00020000,
@@ -335,8 +342,20 @@ wxPG_EX_NO_TOOLBAR_DIVIDER              = 0x08000000,
 
 /** Show a separator below the toolbar.
 */
-wxPG_EX_TOOLBAR_SEPARATOR               = 0x10000000
+wxPG_EX_TOOLBAR_SEPARATOR               = 0x10000000,
 
+/** Allows to take focus on the entire area (on canvas)
+    even if wxPropertyGrid is not a standalone control.
+*/
+wxPG_EX_ALWAYS_ALLOW_FOCUS              = 0x00100000,
+
+/** A mask which can be used to filter (out) all extra styles.
+*/
+wxPG_EX_WINDOW_STYLE_MASK = wxPG_EX_INIT_NOCAT|wxPG_EX_NO_FLAT_TOOLBAR|wxPG_EX_MODE_BUTTONS|
+                            wxPG_EX_HELP_AS_TOOLTIPS|wxPG_EX_NATIVE_DOUBLE_BUFFERING|wxPG_EX_AUTO_UNSPECIFIED_VALUES|
+                            wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES|wxPG_EX_HIDE_PAGE_BUTTONS|wxPG_EX_MULTIPLE_SELECTION|
+                            wxPG_EX_ENABLE_TLP_TRACKING|wxPG_EX_NO_TOOLBAR_DIVIDER|wxPG_EX_TOOLBAR_SEPARATOR|
+                            wxPG_EX_ALWAYS_ALLOW_FOCUS
 };
 
 #if wxPG_COMPATIBILITY_1_4
@@ -572,27 +591,28 @@ enum wxPG_KEYBOARD_ACTIONS
 
 // -----------------------------------------------------------------------
 
-
 // wxPropertyGrid::DoSelectProperty flags (selFlags)
-
-// Focuses to created editor
-#define wxPG_SEL_FOCUS                  0x0001
-// Forces deletion and recreation of editor
-#define wxPG_SEL_FORCE                  0x0002
-// For example, doesn't cause EnsureVisible
-#define wxPG_SEL_NONVISIBLE             0x0004
-// Do not validate editor's value before selecting
-#define wxPG_SEL_NOVALIDATE             0x0008
-// Property being deselected is about to be deleted
-#define wxPG_SEL_DELETING               0x0010
-// Property's values was set to unspecified by the user
-#define wxPG_SEL_SETUNSPEC              0x0020
-// Property's event handler changed the value
-#define wxPG_SEL_DIALOGVAL              0x0040
-// Set to disable sending of wxEVT_PG_SELECTED event
-#define wxPG_SEL_DONT_SEND_EVENT        0x0080
-// Don't make any graphics updates
-#define wxPG_SEL_NO_REFRESH             0x0100
+enum wxPG_SELECT_PROPERTY_FLAGS
+{
+    // Focuses to created editor
+    wxPG_SEL_FOCUS                 = 0x0001,
+    // Forces deletion and recreation of editor
+    wxPG_SEL_FORCE                 = 0x0002,
+    // For example, doesn't cause EnsureVisible
+    wxPG_SEL_NONVISIBLE            = 0x0004,
+    // Do not validate editor's value before selecting
+    wxPG_SEL_NOVALIDATE            = 0x0008,
+    // Property being deselected is about to be deleted
+    wxPG_SEL_DELETING              = 0x0010,
+    // Property's values was set to unspecified by the user
+    wxPG_SEL_SETUNSPEC             = 0x0020,
+    // Property's event handler changed the value
+    wxPG_SEL_DIALOGVAL             = 0x0040,
+    // Set to disable sending of wxEVT_PG_SELECTED event
+    wxPG_SEL_DONT_SEND_EVENT       = 0x0080,
+    // Don't make any graphics updates
+    wxPG_SEL_NO_REFRESH            = 0x0100
+};
 
 // -----------------------------------------------------------------------
 
@@ -975,7 +995,7 @@ public:
     */
     unsigned int GetColumnCount() const
     {
-        return (unsigned int) m_pState->m_colWidths.size();
+        return m_pState->GetColumnCount();
     }
 
     /** Returns colour of empty space below properties. */
@@ -1537,6 +1557,9 @@ public:
     static wxString& CreateEscapeSequences( wxString& dst_str,
                                             wxString& src_str );
 
+    // Checks system screen design used for laying out various dialogs.
+    static bool IsSmallScreen();
+
     /**
         Returns rectangle that fully contains properties between and including
         p1 and p2. Rectangle is in virtual scrolled window coordinates.
@@ -1737,7 +1760,7 @@ public:
     virtual void DrawItemAndChildren( wxPGProperty* p );
 
     /**
-        Draws item, children, and consequtive parents as long as category is
+        Draws item, children, and consecutive parents as long as category is
         not met.
      */
     void DrawItemAndValueRelated( wxPGProperty* p );

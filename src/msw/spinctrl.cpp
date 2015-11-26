@@ -90,10 +90,8 @@ SpinForTextCtrl gs_spinForTextCtrl;
 // wnd proc for the buddy text ctrl
 // ----------------------------------------------------------------------------
 
-LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
-                                            UINT message,
-                                            WPARAM wParam,
-                                            LPARAM lParam)
+LRESULT APIENTRY
+wxBuddyTextWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     wxSpinCtrl * const spin = wxSpinCtrl::GetSpinForTextCtrl(hwnd);
 
@@ -196,12 +194,12 @@ void wxSpinCtrl::OnChar(wxKeyEvent& event)
     {
         case WXK_RETURN:
             {
-                wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
-                InitCommandEvent(event);
+                wxCommandEvent evt(wxEVT_TEXT_ENTER, m_windowId);
+                InitCommandEvent(evt);
                 wxString val = wxGetWindowText(m_hwndBuddy);
-                event.SetString(val);
-                event.SetInt(GetValue());
-                if ( HandleWindowEvent(event) )
+                evt.SetString(val);
+                evt.SetInt(GetValue());
+                if ( HandleWindowEvent(evt) )
                     return;
                 break;
             }
@@ -286,11 +284,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     style |= wxSP_VERTICAL;
 
     if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
-#ifdef __WXWINCE__
-        style |= wxBORDER_SIMPLE;
-#else
         style |= wxBORDER_SUNKEN;
-#endif
 
     SetWindowStyle(style);
 
@@ -314,7 +308,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     if ( sizeText.x <= 0 )
     {
         // DEFAULT_ITEM_WIDTH is the default width for the text control
-        sizeText.x = DEFAULT_ITEM_WIDTH + MARGIN_BETWEEN + sizeBtn.x;
+        sizeText.x = FromDIP(DEFAULT_ITEM_WIDTH) + MARGIN_BETWEEN + sizeBtn.x;
     }
 
     sizeText.x -= sizeBtn.x + MARGIN_BETWEEN;
@@ -523,11 +517,9 @@ void wxSpinCtrl::SetSelection(long from, long to)
 
 void wxSpinCtrl::SetLayoutDirection(wxLayoutDirection dir)
 {
-#ifndef __WXWINCE__
     // Buddy text field is plain EDIT control so we need to set its layout
     // direction in a specific way.
     wxUpdateEditLayoutDirection(GetBuddyHwnd(), dir);
-#endif // !__WXWINCE__
 
     wxSpinButton::SetLayoutDirection(dir);
 
@@ -544,10 +536,20 @@ void wxSpinCtrl::SetRange(int minVal, int maxVal)
     // Manually adjust the old value to avoid an event being sent from
     // NormalizeValue() called from inside the base class SetRange() as we're
     // not supposed to generate any events from here.
-    if ( m_oldValue < minVal )
-        m_oldValue = minVal;
-    else if ( m_oldValue > maxVal )
-        m_oldValue = maxVal;
+    if ( minVal <= maxVal )
+    {
+        if ( m_oldValue < minVal )
+            m_oldValue = minVal;
+        else if ( m_oldValue > maxVal )
+            m_oldValue = maxVal;
+    }
+    else // reversed range
+    {
+        if ( m_oldValue > minVal )
+            m_oldValue = minVal;
+        else if ( m_oldValue < maxVal )
+            m_oldValue = maxVal;
+    }
 
     wxSpinButton::SetRange(minVal, maxVal);
 

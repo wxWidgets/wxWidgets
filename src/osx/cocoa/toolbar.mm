@@ -301,7 +301,7 @@ private:
 @end
 
 
-@interface wxNSToolbarDelegate : NSObject wxOSX_10_6_AND_LATER(<NSToolbarDelegate>)
+@interface wxNSToolbarDelegate : NSObject <NSToolbarDelegate>
 {
     bool m_isSelectable;
 }
@@ -1185,12 +1185,7 @@ bool wxToolBar::Realize()
                         if ( tool->IsStretchable() )
                             nsItemId = NSToolbarFlexibleSpaceItemIdentifier;
                         else 
-                        {
-                            if ( UMAGetSystemVersion() < 0x1070 )
-                                nsItemId = NSToolbarSeparatorItemIdentifier;
-                            else
-                                nsItemId = NSToolbarSpaceItemIdentifier;
-                        }
+                            nsItemId = NSToolbarSpaceItemIdentifier;
                     }
                     else
                     {
@@ -1443,12 +1438,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                     if ( tool->IsStretchable() )
                         nsItemId = NSToolbarFlexibleSpaceItemIdentifier;
                     else 
-                    {
-                        if ( UMAGetSystemVersion() < 0x1070 )
-                            nsItemId = NSToolbarSeparatorItemIdentifier;
-                        else
-                            nsItemId = NSToolbarSpaceItemIdentifier;
-                    }
+                        nsItemId = NSToolbarSpaceItemIdentifier;
 
                     NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:nsItemId];
                     tool->SetToolbarItemRef( item );

@@ -31,12 +31,12 @@ public:
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                             int align = wxDVR_DEFAULT_ALIGNMENT );
 
-    virtual bool SetValue( const wxVariant &value )
+    virtual bool SetValue( const wxVariant &value ) wxOVERRIDE
     {
         return SetTextValue(value);
     }
 
-    virtual bool GetValue( wxVariant &value ) const
+    virtual bool GetValue( wxVariant &value ) const wxOVERRIDE
     {
         wxString str;
         if ( !GetTextValue(str) )
@@ -47,14 +47,13 @@ public:
         return true;
     }
 
-    virtual void SetAlignment( int align );
+    virtual void SetAlignment( int align ) wxOVERRIDE;
 
-    virtual bool GtkSupportsAttrs() const { return true; }
-    virtual bool GtkSetAttr(const wxDataViewItemAttr& attr);
-
-    virtual GtkCellRendererText *GtkGetTextRenderer() const;
+    virtual GtkCellRendererText *GtkGetTextRenderer() const wxOVERRIDE;
 
 protected:
+    virtual void SetAttr(const wxDataViewItemAttr& attr) wxOVERRIDE;
+
     // implementation of Set/GetValue()
     bool SetTextValue(const wxString& str);
     bool GetTextValue(wxString& str) const;
@@ -76,8 +75,8 @@ public:
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                               int align = wxDVR_DEFAULT_ALIGNMENT );
 
-    bool SetValue( const wxVariant &value );
-    bool GetValue( wxVariant &value ) const;
+    bool SetValue( const wxVariant &value ) wxOVERRIDE;
+    bool GetValue( wxVariant &value ) const wxOVERRIDE;
 
 protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapRenderer);
@@ -96,8 +95,8 @@ public:
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                               int align = wxDVR_DEFAULT_ALIGNMENT );
 
-    bool SetValue( const wxVariant &value );
-    bool GetValue( wxVariant &value ) const;
+    bool SetValue( const wxVariant &value ) wxOVERRIDE;
+    bool GetValue( wxVariant &value ) const wxOVERRIDE;
 
 protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleRenderer);
@@ -120,14 +119,14 @@ public:
 
 
     // Create DC on request
-    virtual wxDC *GetDC();
+    virtual wxDC *GetDC() wxOVERRIDE;
 
     // override the base class function to use GTK text cell renderer
     virtual void RenderText(const wxString& text,
                             int xoffset,
                             wxRect cell,
                             wxDC *dc,
-                            int state);
+                            int state) wxOVERRIDE;
 
     struct GTKRenderParams;
 
@@ -137,17 +136,7 @@ public:
         m_renderParams = renderParams;
     }
 
-    // we may or not support attributes, as we don't know it, return true to
-    // make it possible to use them
-    virtual bool GtkSupportsAttrs() const { return true; }
-
-    virtual bool GtkSetAttr(const wxDataViewItemAttr& attr)
-    {
-        SetAttr(attr);
-        return !attr.IsDefault();
-    }
-
-    virtual GtkCellRendererText *GtkGetTextRenderer() const;
+    virtual GtkCellRendererText *GtkGetTextRenderer() const wxOVERRIDE;
 
 private:
     bool Init(wxDataViewCellMode mode, int align);
@@ -182,11 +171,11 @@ public:
                                 int align = wxDVR_DEFAULT_ALIGNMENT );
     virtual ~wxDataViewProgressRenderer();
 
-    bool SetValue( const wxVariant &value );
-    bool GetValue( wxVariant &value ) const;
+    bool SetValue( const wxVariant &value ) wxOVERRIDE;
+    bool GetValue( wxVariant &value ) const wxOVERRIDE;
 
-    virtual bool Render( wxRect cell, wxDC *dc, int state );
-    virtual wxSize GetSize() const;
+    virtual bool Render( wxRect cell, wxDC *dc, int state ) wxOVERRIDE;
+    virtual wxSize GetSize() const wxOVERRIDE;
 
 private:
     void GTKSetLabel();
@@ -218,15 +207,15 @@ public:
                                 int align = wxDVR_DEFAULT_ALIGNMENT );
     virtual ~wxDataViewIconTextRenderer();
 
-    bool SetValue( const wxVariant &value );
-    bool GetValue( wxVariant &value ) const;
+    bool SetValue( const wxVariant &value ) wxOVERRIDE;
+    bool GetValue( wxVariant &value ) const wxOVERRIDE;
 
-    virtual void GtkPackIntoColumn(GtkTreeViewColumn *column);
+    virtual void GtkPackIntoColumn(GtkTreeViewColumn *column) wxOVERRIDE;
 
 protected:
     virtual void GtkOnCellChanged(const wxVariant& value,
                                   const wxDataViewItem& item,
-                                  unsigned col);
+                                  unsigned col) wxOVERRIDE;
 
 private:
     wxDataViewIconText   m_value;
@@ -247,12 +236,12 @@ public:
     wxDataViewChoiceRenderer(const wxArrayString &choices,
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
                              int alignment = wxDVR_DEFAULT_ALIGNMENT );
-    virtual bool Render( wxRect rect, wxDC *dc, int state );
-    virtual wxSize GetSize() const;
-    virtual bool SetValue( const wxVariant &value );
-    virtual bool GetValue( wxVariant &value ) const;
+    virtual bool Render( wxRect rect, wxDC *dc, int state ) wxOVERRIDE;
+    virtual wxSize GetSize() const wxOVERRIDE;
+    virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
+    virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
 
-    void SetAlignment( int align );
+    void SetAlignment( int align ) wxOVERRIDE;
 
     wxString GetChoice(size_t index) const { return m_choices[index]; }
     const wxArrayString& GetChoices() const { return m_choices; }
@@ -273,11 +262,11 @@ public:
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
                               int alignment = wxDVR_DEFAULT_ALIGNMENT );
 
-    virtual bool SetValue( const wxVariant &value );
-    virtual bool GetValue( wxVariant &value ) const;
+    virtual bool SetValue( const wxVariant &value ) wxOVERRIDE;
+    virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
 
 private:
-    virtual void GtkOnTextEdited(const char *itempath, const wxString& str);
+    virtual void GtkOnTextEdited(const char *itempath, const wxString& str) wxOVERRIDE;
 };
 
 

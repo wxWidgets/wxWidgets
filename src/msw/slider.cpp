@@ -580,7 +580,7 @@ WXHBRUSH wxSlider::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
 
         // Anything really refreshing the slider would work here, we use a
         // dummy WM_ENABLE but using TBM_SETPOS would work too, for example.
-        ::PostMessage(hWnd, WM_ENABLE, (BOOL)IsEnabled(), 0);
+        ::PostMessage(hWnd, WM_ENABLE, ::IsWindowEnabled(hWnd), 0);
     }
 
     return hBrush;
@@ -620,6 +620,14 @@ void wxSlider::SetRange(int minValue, int maxValue)
 
     if ( m_labels )
     {
+        Move(wxDefaultPosition); // Force a re-layout the labels.
+
+        // Update the label with the value adjusted by the control as
+        // old value can be out of the new range.
+        if ( HasFlag(wxSL_VALUE_LABEL) )
+        {
+            SetValue(GetValue());
+        }
         ::SetWindowText((*m_labels)[SliderLabel_Min],
                         Format(ValueInvertOrNot(m_rangeMin)).t_str());
         ::SetWindowText((*m_labels)[SliderLabel_Max],

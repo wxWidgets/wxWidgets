@@ -1796,41 +1796,12 @@ outlineView:(NSOutlineView*)outlineView
     data->SetItem(item);
     data->SetItemCell(cell);
 
-    // set the state (enabled/disabled) of the item: this must be done first as
-    // even if we return below because the cell is empty, it still needs to be
-    // disabled if it's not supposed to be enabled
-    renderer->OSXApplyEnabled(model->IsEnabled(dvItem, colIdx));
-
     // check if we have anything to render
-    wxVariant value;
-    model->GetValue(value, dvItem, colIdx);
-    if ( value.IsNull() )
+    if ( renderer->PrepareForItem(model, dvItem, colIdx) )
     {
-        // for consistency with the generic implementation, just handle missing
-        // values as blank
-        return;
+        // and do render it in this case
+        renderer->MacRender();
     }
-
-    if ( value.GetType() != renderer->GetVariantType() )
-    {
-        wxLogDebug("Wrong type returned from the model: "
-                   "%s required but actual type is %s",
-                   renderer->GetVariantType(),
-                   value.GetType());
-
-        // we can't use the value of wrong type
-        return;
-    }
-
-    // use the attributes: notice that we need to do this whether we have them
-    // or not as even if this cell doesn't have any attributes, the previous
-    // one might have had some and then we need to reset them back to default
-    wxDataViewItemAttr attr;
-    model->GetAttr(dvItem, colIdx, attr);
-    renderer->OSXApplyAttr(attr);
-
-    // and finally do draw it
-    renderer->MacRender();
 }
 
 //
@@ -2709,7 +2680,7 @@ wxDataViewRenderer::OSXOnCellChanged(NSObject *object,
     model->ChangeValue(value, item, col);
 }
 
-void wxDataViewRenderer::OSXApplyAttr(const wxDataViewItemAttr& attr)
+void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
 {
     wxDataViewRendererNativeData * const data = GetNativeData();
     NSCell * const cell = data->GetItemCell();
@@ -2778,7 +2749,7 @@ void wxDataViewRenderer::OSXApplyAttr(const wxDataViewItemAttr& attr)
         [(id)cell setTextColor:colText];
 }
 
-void wxDataViewRenderer::OSXApplyEnabled(bool enabled)
+void wxDataViewRenderer::SetEnabled(bool enabled)
 {
     [GetNativeData()->GetItemCell() setEnabled:enabled];
 }
@@ -2804,18 +2775,6 @@ bool wxDataViewCustomRenderer::MacRender()
 {
     [GetNativeData()->GetItemCell() setObjectValue:[[[wxCustomRendererObject alloc] initWithRenderer:this] autorelease]];
     return true;
-}
-
-void wxDataViewCustomRenderer::OSXApplyAttr(const wxDataViewItemAttr& attr)
-{
-    // simply save the attribute so that it could be reused from our Render()
-    SetAttr(attr);
-
-    // it's not necessary to call the base class version which sets the cell
-    // properties to correspond to this attribute because we currently don't
-    // use any NSCell methods in custom renderers anyhow but if we ever start
-    // doing this (e.g. override RenderText() here to use NSTextFieldCell
-    // methods), then we should pass it on to wxDataViewRenderer here
 }
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomRenderer, wxDataViewRenderer);
@@ -2987,31 +2946,27 @@ bool wxDataViewDateRenderer::MacRender()
     // in the first instance; but as this is often impossible due to
     // space restrictions the style is shortened per loop; finally, if
     // the shortest time and date format does not fit into the cell
-    // the time part is dropped; remark: the time part itself is not
-    // modified per iteration loop and only uses the short style,
-    // means that only the hours and minutes are being shown
+    // the time part is dropped
 
     // GetObject() returns a date for testing the size of a date object
     [GetNativeData()->GetItemCell() setObjectValue:GetNativeData()->GetObject()];
-    [[GetNativeData()->GetItemCell() formatter] setTimeStyle:NSDateFormatterShortStyle];
-    for (int dateFormatterStyle=4; dateFormatterStyle>0; --dateFormatterStyle)
+
+    bool formatFound = false;
+    int  dateFormatterStyle = kCFDateFormatterFullStyle;
+    while ( !formatFound && (dateFormatterStyle > 0) )
     {
-        [[GetNativeData()->GetItemCell() formatter] setDateStyle:(NSDateFormatterStyle)dateFormatterStyle];
-        if (dateFormatterStyle == 1)
+        int timeFormatterStyle = dateFormatterStyle;
+
+        while ( !formatFound && (timeFormatterStyle >= dateFormatterStyle - 1) )
         {
-            // if the shortest style for displaying the date and time
-            // is too long to be fully visible remove the time part of
-            // the date:
-            if ([GetNativeData()->GetItemCell() cellSize].width > [GetNativeData()->GetColumnPtr() width])
-                [[GetNativeData()->GetItemCell() formatter] setTimeStyle:NSDateFormatterNoStyle];
-            {
-                // basically not necessary as the loop would end anyway
-                // but let's save the last comparison
-                break;
-            }
+            [[GetNativeData()->GetItemCell() formatter] setDateStyle:(NSDateFormatterStyle)dateFormatterStyle];
+            [[GetNativeData()->GetItemCell() formatter] setTimeStyle:(NSDateFormatterStyle)timeFormatterStyle];
+            if ( [GetNativeData()->GetItemCell() cellSize].width <= [GetNativeData()->GetColumnPtr() width] )
+                formatFound = true;
+            else
+                --timeFormatterStyle;
         }
-        else if ([GetNativeData()->GetItemCell() cellSize].width <= [GetNativeData()->GetColumnPtr() width])
-            break;
+        --dateFormatterStyle;
     }
     // set data (the style is set by the previous loop); on OSX the
     // date has to be specified with respect to UTC; in wxWidgets the

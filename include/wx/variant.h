@@ -438,7 +438,7 @@ private:
 };
 
 #define DECLARE_WXANY_CONVERSION() \
-virtual bool GetAsAny(wxAny* any) const; \
+virtual bool GetAsAny(wxAny* any) const wxOVERRIDE; \
 static wxVariantData* VariantDataFactory(const wxAny& any);
 
 #define _REGISTER_WXANY_CONVERSION(T, CLASSNAME, FUNC) \
@@ -489,12 +489,12 @@ public:\
 \
     classname &GetValue() { return m_value; } \
 \
-    virtual bool Eq(wxVariantData& data) const; \
+    virtual bool Eq(wxVariantData& data) const wxOVERRIDE; \
 \
-    virtual wxString GetType() const; \
-    virtual wxClassInfo* GetValueClassInfo(); \
+    virtual wxString GetType() const wxOVERRIDE; \
+    virtual wxClassInfo* GetValueClassInfo() wxOVERRIDE; \
 \
-    virtual wxVariantData* Clone() const { return new classname##VariantData(m_value); } \
+    virtual wxVariantData* Clone() const wxOVERRIDE { return new classname##VariantData(m_value); } \
 \
     DECLARE_WXANY_CONVERSION() \
 protected:\

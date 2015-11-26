@@ -11,7 +11,7 @@
 #ifndef _WX_SAMPLE_WIDGETS_H_
 #define _WX_SAMPLE_WIDGETS_H_
 
-#if wxUSE_TREEBOOK && !defined(__WXHANDHELD__)
+#if wxUSE_TREEBOOK
     #include "wx/treebook.h"
     #define USE_TREEBOOK 1
     #define WidgetsBookCtrl wxTreebook
@@ -29,18 +29,13 @@
     #define wxWidgetsbookEventHandler(func) wxBookCtrlEventHandler(func)
 #endif
 
-#if wxUSE_LOG && !defined(__WXHANDHELD__)
+#if wxUSE_LOG
     #define USE_LOG 1
 #else
     #define USE_LOG 0
 #endif
 
-#if defined(__WXHANDHELD__)
-    #define USE_ICONS_IN_BOOK 0
-#else
-    #define USE_ICONS_IN_BOOK 1
-    #define ICON_SIZE         16
-#endif
+#define ICON_SIZE         16
 
 class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 class WXDLLIMPEXP_FWD_CORE wxSizer;
@@ -83,7 +78,7 @@ enum
     ALL_CTRLS        = 1 << ALL_PAGE
 };
 
-typedef wxVector<wxControl *> Widgets;
+typedef wxVector<wxWindow *> Widgets;
 
 // ----------------------------------------------------------------------------
 // WidgetsPage: a book page demonstrating some widget
@@ -98,6 +93,7 @@ struct WidgetAttributes
         m_tooltip = "This is a tooltip";
 #endif // wxUSE_TOOLTIPS
         m_enabled = true;
+        m_show = true;
         m_dir = wxLayout_LeftToRight;
         m_variant = wxWINDOW_VARIANT_NORMAL;
         m_cursor = *wxSTANDARD_CURSOR;
@@ -114,6 +110,7 @@ struct WidgetAttributes
     wxColour m_colBg;
     wxColour m_colPageBg;
     bool m_enabled;
+    bool m_show;
     wxLayoutDirection m_dir;
     wxWindowVariant m_variant;
     wxCursor m_cursor;
@@ -129,7 +126,7 @@ public:
                 const char *const icon[]);
 
     // return the control shown by this page
-    virtual wxControl *GetWidget() const = 0;
+    virtual wxWindow *GetWidget() const = 0;
 
     // return the control shown by this page, if it supports text entry interface
     virtual wxTextEntryBase *GetTextEntry() const { return NULL; }

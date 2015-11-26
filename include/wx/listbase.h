@@ -16,6 +16,7 @@
 #include "wx/gdicmn.h"
 #include "wx/event.h"
 #include "wx/control.h"
+#include "wx/systhemectrl.h"
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
@@ -377,7 +378,7 @@ private:
 // the real control class but is just used for implementation convenience. We
 // should define the public class functions as pure virtual here in the future
 // however.
-class WXDLLIMPEXP_CORE wxListCtrlBase : public wxControl
+class WXDLLIMPEXP_CORE wxListCtrlBase : public wxSystemThemedControl<wxControl>
 {
 public:
     wxListCtrlBase() { }
@@ -457,6 +458,7 @@ public:
 
     void EnableAlternateRowColours(bool enable = true);
     void SetAlternateRowColour(const wxColour& colour);
+    wxColour GetAlternateRowColour() const { return m_alternateRowColour.GetBackgroundColour(); }
 
 protected:
     // Real implementations methods to which our public forwards.

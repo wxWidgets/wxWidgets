@@ -1586,17 +1586,7 @@ wxWindowBase::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     wxVisualAttributes attrs;
     attrs.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
     attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
-
-    // On Smartphone/PocketPC, wxSYS_COLOUR_WINDOW is a better reflection of
-    // the usual background colour than wxSYS_COLOUR_BTNFACE.
-    // It's a pity that wxSYS_COLOUR_WINDOW isn't always a suitable background
-    // colour on other platforms.
-
-#if defined(__WXWINCE__) && (defined(__SMARTPHONE__) || defined(__POCKETPC__))
-    attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-#else
     attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
-#endif
     return attrs;
 }
 
@@ -2476,12 +2466,21 @@ void wxWindowBase::SetSizerAndFit(wxSizer *sizer, bool deleteOld)
 
 void wxWindowBase::SetContainingSizer(wxSizer* sizer)
 {
-    // adding a window to a sizer twice is going to result in fatal and
-    // hard to debug problems later because when deleting the second
-    // associated wxSizerItem we're going to dereference a dangling
-    // pointer; so try to detect this as early as possible
-    wxASSERT_MSG( !sizer || m_containingSizer != sizer,
-                  wxT("Adding a window to the same sizer twice?") );
+    // Adding a window to another sizer if it's already managed by one would
+    // result in crashes later because one of the two sizers won't be notified
+    // about the window destruction and so will use a dangling pointer when it
+    // is destroyed itself. As such problems are hard to debug, don't allow
+    // them to happen in the first place.
+    if ( sizer )
+    {
+        // This would be caught by the check below too, but give a more clear
+        // error message in this case.
+        wxASSERT_MSG( m_containingSizer != sizer,
+                      wxS("Adding a window to the same sizer twice?") );
+
+        wxCHECK_RET( !m_containingSizer,
+                     wxS("Adding a window already in a sizer, detach it first!") );
+    }
 
     m_containingSizer = sizer;
 }
@@ -2873,8 +2872,22 @@ wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
 {
     const wxSize dpi = wxScreenDC().GetPPI();
 
-    return wxSize(wxMulDivInt32(sz.x, dpi.x, BASELINE_DPI),
-                  wxMulDivInt32(sz.y, dpi.y, BASELINE_DPI));
+    // Take care to not scale -1 because it has a special meaning of
+    // "unspecified" which should be preserved.
+    return wxSize(sz.x == -1 ? -1 : wxMulDivInt32(sz.x, dpi.x, BASELINE_DPI),
+                  sz.y == -1 ? -1 : wxMulDivInt32(sz.y, dpi.y, BASELINE_DPI));
+}
+
+/* static */
+wxSize
+wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
+{
+    const wxSize dpi = wxScreenDC().GetPPI();
+
+    // Take care to not scale -1 because it has a special meaning of
+    // "unspecified" which should be preserved.
+    return wxSize(sz.x == -1 ? -1 : wxMulDivInt32(sz.x, BASELINE_DPI, dpi.x),
+                  sz.y == -1 ? -1 : wxMulDivInt32(sz.y, BASELINE_DPI, dpi.y));
 }
 
 #endif // !wxHAVE_DPI_INDEPENDENT_PIXELS

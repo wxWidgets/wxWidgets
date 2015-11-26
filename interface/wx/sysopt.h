@@ -75,12 +75,6 @@
         appearance but not all fonts are available in this quality,
         e.g. the Terminal font in small sizes is not and this option may be
         used if wider fonts selection is more important than higher quality.
-    @flag{wince.dialog.real-ok-cancel}
-        The PocketPC guidelines recommend for Ok/Cancel dialogs to use an OK button
-        located inside the caption bar and implement Cancel functionality through
-        Undo outside the dialog.
-        wxDialog::CreateButtonSizer will follow the native behaviour on WinCE but
-        it can be overridden with real wxButtons by setting the option below to 1.
     @endFlagTable
 
 
@@ -118,10 +112,9 @@
         Tells wxListCtrl to use the generic control even when it is capable of
         using the native control instead. Also known as wxMAC_ALWAYS_USE_GENERIC_LISTCTRL.
     @flag{mac.textcontrol-use-spell-checker}
-        This option only has effect for Mac OS X 10.4 and higher.
         If 1 activates the spell checking in wxTextCtrl.
     @flag{osx.openfiledialog.always-show-types}
-        Per default a wxFileDialog with wxFD_OPEN does not show a types-popup on OSX but allows
+        Per default a wxFileDialog with wxFD_OPEN does not show a types-popup on OS X but allows
         the selection of files from any of the supported types. Setting this to 1 shows a wxChoice 
         for selection (if there is more than one supported filetype).
     @endFlagTable

@@ -395,7 +395,7 @@ public:
     const wxPGAttributeStorage& GetPropertyAttributes( wxPGPropArg id ) const
     {
         // If 'id' refers to invalid property, then we will return dummy
-        // attributes (ie. root property's attributes, which contents should
+        // attributes (i.e. root property's attributes, which contents should
         // should always be empty and of no consequence).
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(m_pState->DoGetRoot()->GetAttributes());
         return p->GetAttributes();
@@ -469,7 +469,7 @@ public:
     /** Returns help string associated with a property. */
     wxString GetPropertyHelpString( wxPGPropArg id ) const
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(m_emptyString)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxEmptyString)
         return p->GetHelpString();
     }
 
@@ -761,7 +761,7 @@ public:
     }
 
     /**
-        Returns true if property is shown (ie hideproperty with true not
+        Returns true if property is shown (i.e. HideProperty with true not
         called for it).
     */
     bool IsPropertyShown( wxPGPropArg id ) const
@@ -928,7 +928,7 @@ public:
         DoSetPropertyAttribute(id,attrName,value,argFlags);
     }
 
-    /** Sets property attribute for all applicapple properties.
+    /** Sets property attribute for all applicable properties.
         Be sure to use this method only after all properties have been
         added to the grid.
     */
@@ -953,8 +953,19 @@ public:
                                       int flags = wxPG_RECURSE );
 
     /** Resets text and background colours of given property.
+        @param id
+            Property name or pointer.
+
+        @param flags
+            Default is wxPG_DONT_RECURSE which causes colour to be reset
+            only for the property in question (for backward compatibility).
     */
-    void SetPropertyColoursToDefault( wxPGPropArg id );
+#if WXWIN_COMPATIBILITY_3_0
+    void SetPropertyColoursToDefault(wxPGPropArg id);
+    void SetPropertyColoursToDefault(wxPGPropArg id, int flags);
+#else
+    void SetPropertyColoursToDefault(wxPGPropArg id, int flags = wxPG_DONT_RECURSE);
+#endif // WXWIN_COMPATIBILITY_3_0
 
     /**
         Sets text colour of a property.
@@ -1028,7 +1039,7 @@ public:
     void SetPropertyEditor( wxPGPropArg id, const wxPGEditor* editor )
     {
         wxPG_PROP_ARG_CALL_PROLOG()
-        wxCHECK_RET( editor, wxT("unknown/NULL editor") );
+        wxCHECK_RET( editor, wxS("unknown/NULL editor") );
         p->SetEditor(editor);
         RefreshProperty(p);
     }
@@ -1068,7 +1079,7 @@ public:
         This is mainly for use with textctrl editor. Not all other editors fully
         support it.
         @param flags
-        By default changes are applied recursively. Set this paramter
+        By default changes are applied recursively. Set this parameter
         wxPG_DONT_RECURSE to prevent this.
     */
     void SetPropertyReadOnly( wxPGPropArg id,

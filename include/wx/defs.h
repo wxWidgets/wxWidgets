@@ -154,10 +154,10 @@
 /*
    Clang Support
  */
- 
+
 #ifndef WX_HAS_CLANG_FEATURE
-#   ifndef __has_feature      
-#       define WX_HAS_CLANG_FEATURE(x) 0 
+#   ifndef __has_feature
+#       define WX_HAS_CLANG_FEATURE(x) 0
 #   else
 #       define WX_HAS_CLANG_FEATURE(x) __has_feature(x)
 #   endif
@@ -530,7 +530,7 @@ typedef short int WXTYPE;
 
 /*  wxCALLBACK should be used for the functions which are called back by */
 /*  Windows (such as compare function for wxListCtrl) */
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__)
     #define wxCALLBACK wxSTDCALL
 #else
     /*  no stdcall under Unix nor Win16 */
@@ -696,6 +696,29 @@ typedef short int WXTYPE;
 #endif
 
 /*
+   Macros to suppress and restore clang warning only when it is valid.
+
+   Example:
+        wxCLANG_WARNING_SUPPRESS(inconsistent-missing-override)
+        virtual wxClassInfo *GetClassInfo() const
+        wxCLANG_WARNING_RESTORE(inconsistent-missing-override)
+*/
+#if defined(__has_warning)
+#    define wxCLANG_HAS_WARNING(x) __has_warning(x) /* allow macro expansion for the warning name */
+#    define wxCLANG_IF_VALID_WARNING(x,y) \
+         wxCONCAT(wxCLANG_IF_VALID_WARNING_,wxCLANG_HAS_WARNING(wxSTRINGIZE(wxCONCAT(-W,x))))(y)
+#    define wxCLANG_IF_VALID_WARNING_0(x)
+#    define wxCLANG_IF_VALID_WARNING_1(x) x
+#    define wxCLANG_WARNING_SUPPRESS(x) \
+         wxCLANG_IF_VALID_WARNING(x,wxGCC_WARNING_SUPPRESS(x))
+#    define wxCLANG_WARNING_RESTORE(x) \
+         wxCLANG_IF_VALID_WARNING(x,wxGCC_WARNING_RESTORE(x))
+#else
+#    define wxCLANG_WARNING_SUPPRESS(x)
+#    define wxCLANG_WARNING_RESTORE(x)
+#endif
+
+/*
     Combination of the two variants above: should be used for deprecated
     functions which are defined inline and are used by wxWidgets itself.
  */
@@ -709,9 +732,7 @@ typedef short int WXTYPE;
 /*  NULL declaration: it must be defined as 0 for C++ programs (in particular, */
 /*  it must not be defined as "(void *)0" which is standard for C but completely */
 /*  breaks C++ code) */
-#if !defined(__HANDHELDPC__)
 #include <stddef.h>
-#endif
 
 #ifdef __cplusplus
 
@@ -850,13 +871,6 @@ typedef short int WXTYPE;
     #define WXUNUSED_IN_UNICODE(param)  WXUNUSED(param)
 #else
     #define WXUNUSED_IN_UNICODE(param)  param
-#endif
-
-/*  some arguments are not used in WinCE build */
-#ifdef __WXWINCE__
-    #define WXUNUSED_IN_WINCE(param)  WXUNUSED(param)
-#else
-    #define WXUNUSED_IN_WINCE(param)  param
 #endif
 
 /*  unused parameters in non stream builds */
@@ -1139,9 +1153,7 @@ typedef wxUint32 wxDword;
     #define wxLongLongFmtSpec "I64"
 #elif (defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8)  || \
         defined(__GNUC__) || \
-        defined(__CYGWIN__) || \
-        defined(__WXMICROWIN__) || \
-        (defined(__DJGPP__) && __DJGPP__ >= 2)
+        defined(__CYGWIN__)
     #define wxLongLong_t long long
     #define wxLongLongSuffix ll
     #define wxLongLongFmtSpec "ll"
@@ -1272,7 +1284,7 @@ typedef wxUint32 wxDword;
 #else
     /*
        This should never happen for the current architectures but if you're
-       using one where it does, please contact wx-dev@lists.wxwidgets.org.
+       using one where it does, please contact wx-dev@googlegroups.com.
      */
     #error "Pointers can't be stored inside integer types."
 #endif
@@ -1725,11 +1737,7 @@ enum wxBorder
 };
 
 /* This makes it easier to specify a 'normal' border for a control */
-#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
-#define wxDEFAULT_CONTROL_BORDER    wxBORDER_SIMPLE
-#else
 #define wxDEFAULT_CONTROL_BORDER    wxBORDER_SUNKEN
-#endif
 
 /*  ---------------------------------------------------------------------------- */
 /*  Window style flags */
@@ -1779,7 +1787,12 @@ enum wxBorder
 /*
  * Window (Frame/dialog/subwindow/panel item) style flags
  */
-#define wxVSCROLL               0x80000000
+
+/* The cast is needed to avoid g++ -Wnarrowing warnings when initializing
+ * values of int type with wxVSCROLL on 32 bit platforms, where its value is
+ * greater than INT_MAX.
+ */
+#define wxVSCROLL               ((int)0x80000000)
 #define wxHSCROLL               0x40000000
 #define wxCAPTION               0x20000000
 
@@ -3219,7 +3232,7 @@ typedef wxW64 long         WXLPARAM;
 typedef wxW64 long         WXLRESULT;
 #endif
 
-#if defined(__GNUWIN32__) || defined(__WXMICROWIN__)
+#if defined(__GNUWIN32__)
 typedef int             (*WXFARPROC)();
 #else
 typedef int             (__stdcall *WXFARPROC)();

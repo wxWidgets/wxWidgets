@@ -69,7 +69,7 @@ wxFontDataProperty::wxFontDataProperty( const wxString& label, const wxString& n
     m_value_wxFontData << fontData;
 
     // Add extra children.
-    AddPrivateChild( new wxColourProperty(_("Colour"), wxPG_LABEL,
+    AddPrivateChild( new wxColourProperty(wxT("Colour"), wxPG_LABEL,
                                           fontData.GetColour() ) );
 }
 
@@ -77,9 +77,9 @@ wxFontDataProperty::~wxFontDataProperty () { }
 
 void wxFontDataProperty::OnSetValue()
 {
-    if ( m_value.GetType() != "wxFontData" )
+    if ( !m_value.IsType(wxT("wxFontData")) )
     {
-        if ( m_value.GetType() == "wxFont" )
+        if ( m_value.IsType(wxT("wxFont")) )
         {
             wxFont font;
             font << m_value;
@@ -277,7 +277,7 @@ wxVariant wxPointProperty::ChildChanged( wxVariant& thisValue,
 // -----------------------------------------------------------------------
 
 WX_PG_IMPLEMENT_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(wxDirsProperty, ',',
-                                                    "Browse")
+                                                    wxT("Browse"))
 
 #if wxUSE_VALIDATORS
 
@@ -292,7 +292,7 @@ wxValidator* wxDirsProperty::DoGetValidator() const
 bool wxDirsProperty::OnCustomStringEdit( wxWindow* parent, wxString& value )
 {
     wxDirDialog dlg(parent,
-                    _("Select a directory to be added to the list:"),
+                    wxT("Select a directory to be added to the list:"),
                     value,
                     0);
 
@@ -497,7 +497,7 @@ wxArrayDoubleProperty::wxArrayDoubleProperty (const wxString& label,
 
     //
     // Need to figure out delimiter needed for this locale
-    // (ie. can't use comma when comma acts as decimal point in float).
+    // (i.e. can't use comma when comma acts as decimal point in float).
     wxChar use_delimiter = wxT(',');
 
     if (wxString::Format(wxT("%.2f"),12.34).Find(use_delimiter) >= 0)
@@ -657,7 +657,7 @@ wxValidator* wxArrayDoubleProperty::DoGetValidator() const
     wxArrayString incChars(numValidator.GetIncludes());
     // Accept also a delimiter and space character
     incChars.Add(m_delimiter);
-    incChars.Add(" ");
+    incChars.Add(wxT(" "));
 
     validator->SetIncludes(incChars);
 
@@ -670,9 +670,9 @@ wxValidator* wxArrayDoubleProperty::DoGetValidator() const
 bool wxArrayDoubleProperty::ValidateValue(wxVariant& value,
                                  wxPGValidationInfo& validationInfo) const
 {
-    if (!value.IsType("wxArrayDouble"))
+    if (!value.IsType(wxT("wxArrayDouble")))
     {
-        validationInfo.SetFailureMessage(_("At least one element is not a valid floating-point number."));
+        validationInfo.SetFailureMessage(wxT("At least one element is not a valid floating-point number."));
         return false;
     }
 

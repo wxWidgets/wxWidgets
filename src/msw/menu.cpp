@@ -45,20 +45,6 @@
 #include "wx/msw/private.h"
 #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
 
-#ifdef __WXWINCE__
-#include <windows.h>
-#include <windowsx.h>
-#include <tchar.h>
-#include <ole2.h>
-#include <shellapi.h>
-#if (_WIN32_WCE < 400) && !defined(__HANDHELDPC__)
-#include <aygshell.h>
-#endif
-
-#include "wx/msw/wince/missing.h"
-
-#endif
-
 // other standard headers
 #include <string.h>
 
@@ -234,10 +220,8 @@ namespace
 {
 
 // make the given menu item default
-void SetDefaultMenuItem(HMENU WXUNUSED_IN_WINCE(hmenu),
-                        UINT WXUNUSED_IN_WINCE(id))
+void SetDefaultMenuItem(HMENU hmenu, UINT id)
 {
-#ifndef __WXWINCE__
     WinStruct<MENUITEMINFO> mii;
     mii.fMask = MIIM_STATE;
     mii.fState = MFS_DEFAULT;
@@ -246,16 +230,14 @@ void SetDefaultMenuItem(HMENU WXUNUSED_IN_WINCE(hmenu),
     {
         wxLogLastError(wxT("SetMenuItemInfo"));
     }
-#endif // !__WXWINCE__
 }
 
 // make the given menu item owner-drawn
-void SetOwnerDrawnMenuItem(HMENU WXUNUSED_IN_WINCE(hmenu),
-                           UINT WXUNUSED_IN_WINCE(id),
-                           ULONG_PTR WXUNUSED_IN_WINCE(data),
-                           BOOL WXUNUSED_IN_WINCE(byPositon = FALSE))
+void SetOwnerDrawnMenuItem(HMENU hmenu,
+                           UINT id,
+                           ULONG_PTR data,
+                           BOOL byPositon = FALSE)
 {
-#ifndef __WXWINCE__
     WinStruct<MENUITEMINFO> mii;
     mii.fMask = MIIM_FTYPE | MIIM_DATA;
     mii.fType = MFT_OWNERDRAW;
@@ -268,22 +250,7 @@ void SetOwnerDrawnMenuItem(HMENU WXUNUSED_IN_WINCE(hmenu),
     {
         wxLogLastError(wxT("SetMenuItemInfo"));
     }
-#endif // !__WXWINCE__
 }
-
-#ifdef __WXWINCE__
-UINT GetMenuState(HMENU hMenu, UINT id, UINT flags)
-{
-    WinStruct<MENUITEMINFO> info;
-    info.fMask = MIIM_STATE;
-    // MF_BYCOMMAND is zero so test MF_BYPOSITION
-    if ( !::GetMenuItemInfo(hMenu, id, flags & MF_BYPOSITION ? TRUE : FALSE , & info) )
-    {
-        wxLogLastError(wxT("GetMenuItemInfo"));
-    }
-    return info.fState;
-}
-#endif // __WXWINCE__
 
 } // anonymous namespace
 
@@ -462,12 +429,6 @@ bool wxMenu::MSWGetRadioGroupRange(int pos, int *start, int *end) const
     return m_radioData && m_radioData->GetGroupRange(pos, start, end);
 }
 
-#if defined(__WXWINCE__)
-#define wxUSE_MENUITEMINFO 0
-#else
-#define wxUSE_MENUITEMINFO 1
-#endif
-
 // append a new item or submenu to the menu
 bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 {
@@ -564,7 +525,6 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 #endif
         !pItem->IsSeparator() )
             {
-#if wxUSE_MENUITEMINFO
                 WinStruct<MENUITEMINFO> mii;
                 mii.fMask = MIIM_STRING | MIIM_DATA;
 
@@ -620,41 +580,13 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                     // boxes are used together with bitmaps and this is not the
                     // case in wx API
                     WinStruct<MENUINFO> mi;
-
-                    // don't call SetMenuInfo() directly, this would prevent
-                    // the app from starting up under Windows 95/NT 4
-                    typedef BOOL (WINAPI *SetMenuInfo_t)(HMENU, MENUINFO *);
-
-                    wxDynamicLibrary dllUser(wxT("user32"));
-                    wxDYNLIB_FUNCTION(SetMenuInfo_t, SetMenuInfo, dllUser);
-                    if ( pfnSetMenuInfo )
+                    mi.fMask = MIM_STYLE;
+                    mi.dwStyle = MNS_CHECKORBMP;
+                    if ( !::SetMenuInfo(GetHmenu(), &mi) )
                     {
-                        mi.fMask = MIM_STYLE;
-                        mi.dwStyle = MNS_CHECKORBMP;
-                        if ( !(*pfnSetMenuInfo)(GetHmenu(), &mi) )
-                        {
-                            wxLogLastError(wxT("SetMenuInfo(MNS_NOCHECK)"));
-                        }
+                        wxLogLastError(wxT("SetMenuInfo(MNS_NOCHECK)"));
                     }
                 }
-#else
-        if ( pItem->GetBitmap().IsOk() )
-        {
-            flags |= MF_BITMAP;
-            pData = reinterpret_cast<LPCTSTR>(
-                pItem->GetHBitmapForMenu(wxMenuItem::Normal));
-        }
-        else
-        {
-            flags |= MF_STRING;
-#ifdef __WXWINCE__
-            itemText = wxMenuItem::GetLabelText(itemText);
-            pData = itemText.t_str();
-#else
-            pData = wxMSW_CONV_LPTSTR(itemText);
-#endif
-            }
-#endif // wxUSE_MENUITEMINFO / !wxUSE_MENUITEMINFO
         }
 
 #if wxUSE_OWNER_DRAWN
@@ -688,7 +620,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
             {
                 // we must use position in SetOwnerDrawnMenuItem because
                 // all separators have the same id
-                int pos = 0;
+                int position = 0;
                 wxMenuItemList::compatibility_iterator node = GetMenuItems().GetFirst();
                 while (node)
                 {
@@ -697,14 +629,14 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                     if ( !item->IsOwnerDrawn())
                     {
                         item->SetOwnerDrawn(true);
-                        SetOwnerDrawnMenuItem(GetHmenu(), pos,
+                        SetOwnerDrawnMenuItem(GetHmenu(), position,
                                               reinterpret_cast<ULONG_PTR>(item), TRUE);
                     }
 
                     item->SetMarginWidth(m_maxBitmapWidth);
 
                     node = node->GetNext();
-                    pos++;
+                    position++;
                 }
 
                 // set menu as ownerdrawn
@@ -806,10 +738,12 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
     // Update indices of radio groups.
     if ( m_radioData )
     {
-        bool inExistingGroup = m_radioData->UpdateOnRemoveItem(pos);
-
-        wxASSERT_MSG( !inExistingGroup || item->GetKind() == wxITEM_RADIO,
-                      wxT("Removing non radio button from radio group?") );
+        if ( m_radioData->UpdateOnRemoveItem(pos) )
+        {
+            wxASSERT_MSG( item->GetKind() == wxITEM_RADIO,
+                          wxT("Removing non radio button from radio group?") );
+        }
+        //else: item being removed is not in a radio group
     }
 
     // remove the item from the menu
@@ -923,34 +857,20 @@ void wxMenu::SetTitle(const wxString& label)
         else
         {
             // modify the title
-#ifdef __WXWINCE__
-            WinStruct<MENUITEMINFO> info;
-            info.fMask = MIIM_TYPE;
-            info.fType = MFT_STRING;
-            info.cch = m_title.length();
-            info.dwTypeData = wxMSW_CONV_LPTSTR(m_title);
-            if ( !SetMenuItemInfo(hMenu, 0, TRUE, & info) )
-            {
-                wxLogLastError(wxT("SetMenuItemInfo"));
-            }
-#else
             if ( !ModifyMenu(hMenu, 0u,
                              MF_BYPOSITION | MF_STRING,
                              (UINT_PTR)idMenuTitle, m_title.t_str()) )
             {
                 wxLogLastError(wxT("ModifyMenu"));
             }
-#endif
         }
     }
 
-#ifdef __WIN32__
     // put the title string in bold face
     if ( !m_title.empty() )
     {
         SetDefaultMenuItem(GetHmenu(), (UINT)idMenuTitle);
     }
-#endif // Win32
 }
 
 // ---------------------------------------------------------------------------
@@ -1026,16 +946,6 @@ void wxMenuBar::Init()
 {
     m_eventHandler = this;
     m_hMenu = 0;
-#if wxUSE_TOOLBAR && defined(__WXWINCE__)
-    m_toolBar = NULL;
-#endif
-    // Not using a combined wxToolBar/wxMenuBar? then use
-    // a commandbar in WinCE .NET just to implement the
-    // menubar.
-#if defined(WINCE_WITH_COMMANDBAR)
-    m_commandBar = NULL;
-    m_adornmentsAdded = false;
-#endif
 }
 
 wxMenuBar::wxMenuBar()
@@ -1066,29 +976,13 @@ wxMenuBar::wxMenuBar(size_t count, wxMenu *menus[], const wxString titles[], lon
 
 wxMenuBar::~wxMenuBar()
 {
-    // In Windows CE (not .NET), the menubar is always associated
-    // with a toolbar, which destroys the menu implicitly.
-#if defined(WINCE_WITHOUT_COMMANDBAR) && defined(__POCKETPC__)
-    if (GetToolBar())
-    {
-        wxToolMenuBar* toolMenuBar = wxDynamicCast(GetToolBar(), wxToolMenuBar);
-        if (toolMenuBar)
-            toolMenuBar->SetMenuBar(NULL);
-    }
-#else
     // we should free Windows resources only if Windows doesn't do it for us
     // which happens if we're attached to a frame
     if (m_hMenu && !IsAttached())
     {
-#if defined(WINCE_WITH_COMMANDBAR)
-        ::DestroyWindow((HWND) m_commandBar);
-        m_commandBar = (WXHWND) NULL;
-#else
         ::DestroyMenu((HMENU)m_hMenu);
-#endif
         m_hMenu = (WXHMENU)NULL;
     }
-#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -1102,64 +996,11 @@ void wxMenuBar::Refresh()
 
     wxCHECK_RET( IsAttached(), wxT("can't refresh unattached menubar") );
 
-#if defined(WINCE_WITHOUT_COMMANDBAR)
-    if (GetToolBar())
-    {
-        CommandBar_DrawMenuBar((HWND) GetToolBar()->GetHWND(), 0);
-    }
-#elif defined(WINCE_WITH_COMMANDBAR)
-    if (m_commandBar)
-        DrawMenuBar((HWND) m_commandBar);
-#else
     DrawMenuBar(GetHwndOf(GetFrame()));
-#endif
 }
 
 WXHMENU wxMenuBar::Create()
 {
-    // Note: this doesn't work at all on Smartphone,
-    // since you have to use resources.
-    // We'll have to find another way to add a menu
-    // by changing/adding menu items to an existing menu.
-#if defined(WINCE_WITHOUT_COMMANDBAR)
-    if ( m_hMenu != 0 )
-        return m_hMenu;
-
-    wxToolMenuBar * const bar = static_cast<wxToolMenuBar *>(GetToolBar());
-    if ( !bar )
-        return NULL;
-
-    HWND hCommandBar = GetHwndOf(bar);
-
-    // notify comctl32.dll about the version of the headers we use before using
-    // any other TB_XXX messages
-    SendMessage(hCommandBar, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
-
-    TBBUTTON tbButton;
-    wxZeroMemory(tbButton);
-    tbButton.iBitmap = I_IMAGENONE;
-    tbButton.fsState = TBSTATE_ENABLED;
-    tbButton.fsStyle = TBSTYLE_DROPDOWN |
-                       TBSTYLE_NO_DROPDOWN_ARROW |
-                       TBSTYLE_AUTOSIZE;
-
-    for ( unsigned i = 0; i < GetMenuCount(); i++ )
-    {
-        HMENU hPopupMenu = (HMENU) GetMenu(i)->GetHMenu();
-        tbButton.dwData = (DWORD)hPopupMenu;
-        wxString label = wxStripMenuCodes(GetMenuLabel(i));
-        tbButton.iString = (int) wxMSW_CONV_LPCTSTR(label);
-
-        tbButton.idCommand = NewControlId();
-        if ( !::SendMessage(hCommandBar, TB_INSERTBUTTON, i, (LPARAM)&tbButton) )
-        {
-            wxLogLastError(wxT("TB_INSERTBUTTON"));
-        }
-    }
-
-    m_hMenu = bar->GetHMenu();
-    return m_hMenu;
-#else // !__WXWINCE__
     if ( m_hMenu != 0 )
         return m_hMenu;
 
@@ -1185,7 +1026,6 @@ WXHMENU wxMenuBar::Create()
     }
 
     return m_hMenu;
-#endif // __WXWINCE__/!__WXWINCE__
 }
 
 int wxMenuBar::MSWPositionForWxMenu(wxMenu *menu, int wxpos)
@@ -1194,11 +1034,7 @@ int wxMenuBar::MSWPositionForWxMenu(wxMenu *menu, int wxpos)
     wxASSERT(menu->GetHMenu());
     wxASSERT(m_hMenu);
 
-#if defined(__WXWINCE__)
-    int totalMSWItems = GetMenuCount();
-#else
     int totalMSWItems = GetMenuItemCount((HMENU)m_hMenu);
-#endif
 
     int i; // For old C++ compatibility
     for(i=wxpos; i<totalMSWItems; i++)
@@ -1281,24 +1117,11 @@ void wxMenuBar::SetMenuLabel(size_t pos, const wxString& label)
         id = pos;
     }
 
-#ifdef __WXWINCE__
-    WinStruct<MENUITEMINFO> info;
-    info.fMask = MIIM_TYPE;
-    info.fType = MFT_STRING;
-    info.cch = label.length();
-    info.dwTypeData = wxMSW_CONV_LPTSTR(label);
-    if ( !SetMenuItemInfo(GetHmenu(), id, TRUE, &info) )
-    {
-        wxLogLastError(wxT("SetMenuItemInfo"));
-    }
-
-#else
     if ( ::ModifyMenu(GetHmenu(), mswpos, MF_BYPOSITION | MF_STRING | flagsOld,
                       id, label.t_str()) == (int)0xFFFFFFFF )
     {
         wxLogLastError(wxT("ModifyMenu"));
     }
-#endif
 
     Refresh();
 }
@@ -1323,11 +1146,7 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 
     menu->wxMenuBase::SetTitle(title);
 
-#if defined(WINCE_WITHOUT_COMMANDBAR)
-    if (IsAttached())
-#else
     if (GetHmenu())
-#endif
     {
         int mswpos = MSWPositionForWxMenu(menuOld,pos);
 
@@ -1365,11 +1184,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     // wxMenuBarBase::Insert is called and GetMenu(pos) is the new menu.
     // If IsAttached() is false this won't be used anyway
     bool isAttached =
-#if defined(WINCE_WITHOUT_COMMANDBAR)
-        IsAttached();
-#else
         (GetHmenu() != 0);
-#endif
 
     if ( !wxMenuBarBase::Insert(pos, menu, title) )
         return false;
@@ -1378,27 +1193,6 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 
     if ( isAttached )
     {
-#if defined(WINCE_WITHOUT_COMMANDBAR)
-        if (!GetToolBar())
-            return false;
-        TBBUTTON tbButton;
-        memset(&tbButton, 0, sizeof(TBBUTTON));
-        tbButton.iBitmap = I_IMAGENONE;
-        tbButton.fsState = TBSTATE_ENABLED;
-        tbButton.fsStyle = TBSTYLE_DROPDOWN | TBSTYLE_NO_DROPDOWN_ARROW | TBSTYLE_AUTOSIZE;
-
-        HMENU hPopupMenu = (HMENU) menu->GetHMenu() ;
-        tbButton.dwData = (DWORD)hPopupMenu;
-        wxString label = wxStripMenuCodes(title);
-        tbButton.iString = (int) wxMSW_CONV_LPCTSTR(label);
-
-        tbButton.idCommand = NewControlId();
-        if (!::SendMessage((HWND) GetToolBar()->GetHWND(), TB_INSERTBUTTON, pos, (LPARAM)&tbButton))
-        {
-            wxLogLastError(wxT("TB_INSERTBUTTON"));
-            return false;
-        }
-#else
         // We have a problem with the index if there is an extra "Window" menu
         // in this menu bar, which is added by wxMDIParentFrame to it directly
         // using Windows API (so that it remains invisible to the user code),
@@ -1430,7 +1224,6 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
         {
             wxLogLastError(wxT("InsertMenu"));
         }
-#endif
 #if wxUSE_ACCEL
         if ( menu->HasAccels() )
         {
@@ -1456,40 +1249,13 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
 
     menu->wxMenuBase::SetTitle(title);
 
-#if defined(WINCE_WITHOUT_COMMANDBAR)
-    if (IsAttached())
-#else
     if (GetHmenu())
-#endif
     {
-#if defined(WINCE_WITHOUT_COMMANDBAR)
-        if (!GetToolBar())
-            return false;
-        TBBUTTON tbButton;
-        memset(&tbButton, 0, sizeof(TBBUTTON));
-        tbButton.iBitmap = I_IMAGENONE;
-        tbButton.fsState = TBSTATE_ENABLED;
-        tbButton.fsStyle = TBSTYLE_DROPDOWN | TBSTYLE_NO_DROPDOWN_ARROW | TBSTYLE_AUTOSIZE;
-
-        size_t pos = GetMenuCount();
-        HMENU hPopupMenu = (HMENU) menu->GetHMenu() ;
-        tbButton.dwData = (DWORD)hPopupMenu;
-        wxString label = wxStripMenuCodes(title);
-        tbButton.iString = (int) wxMSW_CONV_LPCTSTR(label);
-
-        tbButton.idCommand = NewControlId();
-        if (!::SendMessage((HWND) GetToolBar()->GetHWND(), TB_INSERTBUTTON, pos, (LPARAM)&tbButton))
-        {
-            wxLogLastError(wxT("TB_INSERTBUTTON"));
-            return false;
-        }
-#else
         if ( !::AppendMenu(GetHmenu(), MF_POPUP | MF_STRING,
                            (UINT_PTR)submenu, title.t_str()) )
         {
             wxLogLastError(wxT("AppendMenu"));
         }
-#endif
 
 #if wxUSE_ACCEL
         if ( menu->HasAccels() )
@@ -1512,26 +1278,12 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     if ( !menu )
         return NULL;
 
-#if defined(WINCE_WITHOUT_COMMANDBAR)
-    if (IsAttached())
-#else
     if (GetHmenu())
-#endif
     {
-#if defined(WINCE_WITHOUT_COMMANDBAR)
-        if (GetToolBar())
-        {
-            if (!::SendMessage((HWND) GetToolBar()->GetHWND(), TB_DELETEBUTTON, (UINT) pos, (LPARAM) 0))
-            {
-                wxLogLastError(wxT("TB_DELETEBUTTON"));
-            }
-        }
-#else
         if ( !::RemoveMenu(GetHmenu(), (UINT)MSWPositionForWxMenu(menu,pos), MF_BYPOSITION) )
         {
             wxLogLastError(wxT("RemoveMenu"));
         }
-#endif
 
 #if wxUSE_ACCEL
         if ( menu->HasAccels() )
@@ -1587,48 +1339,10 @@ void wxMenuBar::Attach(wxFrame *frame)
 {
     wxMenuBarBase::Attach(frame);
 
-#if defined(WINCE_WITH_COMMANDBAR)
-    if (!m_hMenu)
-        this->Create();
-    if (!m_commandBar)
-        m_commandBar = (WXHWND) CommandBar_Create(wxGetInstance(), (HWND) frame->GetHWND(), NewControlId());
-    if (m_commandBar)
-    {
-        if (m_hMenu)
-        {
-            if (!CommandBar_InsertMenubarEx((HWND) m_commandBar, NULL, (LPTSTR) m_hMenu, 0))
-            {
-                wxLogLastError(wxT("CommandBar_InsertMenubarEx"));
-            }
-        }
-    }
-#endif
-
 #if wxUSE_ACCEL
     RebuildAccelTable();
 #endif // wxUSE_ACCEL
 }
-
-#if defined(WINCE_WITH_COMMANDBAR)
-bool wxMenuBar::AddAdornments(long style)
-{
-    if (m_adornmentsAdded || !m_commandBar)
-        return false;
-
-    if (style & wxCLOSE_BOX)
-    {
-        if (!CommandBar_AddAdornments((HWND) m_commandBar, 0, 0))
-        {
-            wxLogLastError(wxT("CommandBar_AddAdornments"));
-        }
-        else
-        {
-            return true;
-        }
-    }
-    return false;
-}
-#endif
 
 void wxMenuBar::Detach()
 {

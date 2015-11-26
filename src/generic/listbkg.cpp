@@ -95,16 +95,10 @@ wxListbook::Create(wxWindow *parent,
     if ( GetListView()->InReportView() )
         GetListView()->InsertColumn(0, wxS("Pages"));
 
-#ifdef __WXMSW__
-    // On XP with themes enabled the GetViewRect used in GetControllerSize() to
-    // determine the space needed for the list view will incorrectly return
-    // (0,0,0,0) the first time.  So send a pending event so OnSize will be
-    // called again after the window is ready to go.  Technically we don't
-    // need to do this on non-XP windows, but if things are already sized
-    // correctly then nothing changes and so there is no harm.
-    wxSizeEvent evt;
-    GetEventHandler()->AddPendingEvent(evt);
-#endif
+    // Ensure that we rearrange the items in our list view after all the pages
+    // are added.
+    PostSizeEvent();
+
     return true;
 }
 
@@ -165,7 +159,13 @@ void wxListbook::OnSize(wxSizeEvent& event)
     // the other one is not accounted for in client size computations)
     wxListView * const list = GetListView();
     if ( list )
+    {
         list->Arrange();
+
+        const int sel = GetSelection();
+        if ( sel != wxNOT_FOUND )
+            list->EnsureVisible(sel);
+    }
 
     event.Skip();
 }

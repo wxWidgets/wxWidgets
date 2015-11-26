@@ -261,6 +261,7 @@ This concludes our basic tutorial of the cross-platform Bakefile build system
 management tool. From here, please be sure to take a good look at the Bakefile
 documentation to see what else it is capable of. Please post questions to the
 bakefile-devel@lists.sourceforge.net list, or if you have questions specific
-to the wx template Bakefile, send an email to wx-users@lists.wxwidgets.org.
+to the wx template Bakefile, send an email to the wxWidgets users mailing list:
+https://www.wxwidgets.org/support/mailing-lists/
 
 Enjoy using Bakefile!

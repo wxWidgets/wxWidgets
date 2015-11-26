@@ -881,10 +881,9 @@ void wxGCDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
     CalcBoundingBox(x, y);
     CalcBoundingBox(x + w, y + h);
 
-    if ( m_graphicContext->ShouldOffset() )
+    if (m_pen.IsOk() && m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT && m_pen.GetWidth() > 0)
     {
-        // if we are offsetting the entire rectangle is moved 0.5, so the
-        // border line gets off by 1
+        // outline is one pixel larger than what raster-based wxDC implementations draw
         w -= 1;
         h -= 1;
     }
@@ -910,10 +909,9 @@ void wxGCDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
     CalcBoundingBox(x, y);
     CalcBoundingBox(x + w, y + h);
 
-    if ( m_graphicContext->ShouldOffset() )
+    if (m_pen.IsOk() && m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT && m_pen.GetWidth() > 0)
     {
-        // if we are offsetting the entire rectangle is moved 0.5, so the
-        // border line gets off by 1
+        // outline is one pixel larger than what raster-based wxDC implementations draw
         w -= 1;
         h -= 1;
     }
@@ -930,13 +928,6 @@ void wxGCDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
     CalcBoundingBox(x, y);
     CalcBoundingBox(x + w, y + h);
 
-    if ( m_graphicContext->ShouldOffset() )
-    {
-        // if we are offsetting the entire rectangle is moved 0.5, so the
-        // border line gets off by 1
-        w -= 1;
-        h -= 1;
-    }
     m_graphicContext->DrawEllipse(x,y,w,h);
 }
 

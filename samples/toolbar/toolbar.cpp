@@ -316,12 +316,6 @@ bool MyApp::OnInit()
 
 void MyFrame::RecreateToolbar()
 {
-#ifdef __WXWINCE__
-    // On Windows CE, we should not delete the
-    // previous toolbar in case it contains the menubar.
-    // We'll try to accommodate this usage in due course.
-    wxToolBar* toolBar = CreateToolBar();
-#else
     // delete and recreate the toolbar
     wxToolBarBase *toolBar = GetToolBar();
     long style = toolBar ? toolBar->GetWindowStyle() : TOOLBAR_STYLE;
@@ -363,7 +357,6 @@ void MyFrame::RecreateToolbar()
         style |= wxTB_HORZ_LAYOUT;
 
     toolBar = CreateToolBar(style, ID_TOOLBAR);
-#endif
 
     PopulateToolbar(toolBar);
 }
@@ -481,6 +474,8 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
                          wxT("Delete this tool. This is a very long tooltip to test whether it does the right thing when the tooltip is more than Windows can cope with."));
     }
 
+    m_nPrint = 1;
+
     // add a stretchable space before the "Help" button to make it
     // right-aligned
     toolBar->AddStretchableSpace();
@@ -530,7 +525,7 @@ MyFrame::MyFrame(wxFrame* parent,
     m_searchTool = NULL;
 
     m_rows = 1;
-    m_nPrint = 1;
+    m_nPrint = 0; // set to 1 in PopulateToolbar()
 
 #if wxUSE_STATUSBAR
     // Give it a status line
@@ -638,7 +633,8 @@ MyFrame::MyFrame(wxFrame* parent,
     PopulateToolbar(m_extraToolBar);
 #endif
 
-    m_textWindow = new wxTextCtrl(m_panel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+    // Use a read-only text control; Cut tool will not cut selected text anyway.
+    m_textWindow = new wxTextCtrl(m_panel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY);
 
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     m_panel->SetSizer(sizer);
@@ -810,9 +806,9 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& event)
 {
     if ( event.IsChecked() )
-        m_textWindow->WriteText( wxT("Help button down now.\n") );
+        m_textWindow->AppendText( wxT("Help button down now.\n") );
     else
-        m_textWindow->WriteText( wxT("Help button up now.\n") );
+        m_textWindow->AppendText( wxT("Help button up now.\n") );
 
     (void)wxMessageBox(wxT("wxWidgets toolbar sample"), wxT("About wxToolBar"));
 }
@@ -821,7 +817,7 @@ void MyFrame::OnToolLeftClick(wxCommandEvent& event)
 {
     wxString str;
     str.Printf( wxT("Clicked on tool %d\n"), event.GetId());
-    m_textWindow->WriteText( str );
+    m_textWindow->AppendText( str );
 
     if (event.GetId() == wxID_COPY)
     {
@@ -858,6 +854,7 @@ void MyFrame::DoEnablePrint()
 
     wxToolBarBase *tb = GetToolBar();
     tb->EnableTool(wxID_PRINT, !tb->GetToolEnabled(wxID_PRINT));
+    m_textWindow->AppendText("Print tool state changed.\n");
 }
 
 void MyFrame::DoDeletePrint()
@@ -867,6 +864,7 @@ void MyFrame::DoDeletePrint()
 
     wxToolBarBase *tb = GetToolBar();
     tb->DeleteTool( wxID_PRINT );
+    m_textWindow->AppendText("Print tool was deleted.\n");
 
     m_nPrint--;
 }
@@ -875,6 +873,7 @@ void MyFrame::DoToggleHelp()
 {
     wxToolBarBase *tb = GetToolBar();
     tb->ToggleTool( wxID_HELP, !tb->GetToolState( wxID_HELP ) );
+    m_textWindow->AppendText("Help tool was toggled.\n");
 }
 
 void MyFrame::OnToggleSearch(wxCommandEvent& WXUNUSED(event))
@@ -995,7 +994,7 @@ void MyFrame::OnToolDropdown(wxCommandEvent& event)
 {
     wxString str;
     str.Printf( wxT("Dropdown on tool %d\n"), event.GetId());
-    m_textWindow->WriteText( str );
+    m_textWindow->AppendText( str );
 
     event.Skip();
 }

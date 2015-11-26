@@ -26,6 +26,7 @@
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/gtk3-compat.h"
 
 //-----------------------------------------------------------------------------
 // data
@@ -279,10 +280,16 @@ gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event,
     {
         if (win->GetWindowStyle() & wxRESIZE_BORDER)
         {
+            GdkCursor* cursor = NULL;
+            GdkWindow* window = gtk_widget_get_window(widget);
             if ((x > win->m_width-14) && (y > win->m_height-14))
-               gdk_window_set_cursor(gtk_widget_get_window(widget), gdk_cursor_new(GDK_BOTTOM_RIGHT_CORNER));
-            else
-               gdk_window_set_cursor(gtk_widget_get_window(widget), NULL);
+            {
+                GdkDisplay* display = gdk_window_get_display(window);
+                cursor = gdk_cursor_new_for_display(display, GDK_BOTTOM_RIGHT_CORNER);
+            }
+            gdk_window_set_cursor(window, cursor);
+            if (cursor)
+                g_object_unref(cursor);
         }
         return TRUE;
     }
@@ -357,6 +364,17 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
         GDK_POINTER_MOTION_MASK |
         GDK_POINTER_MOTION_HINT_MASK);
     gtk_widget_show(eventbox);
+#ifdef __WXGTK3__
+    g_object_ref(m_mainWidget);
+    gtk_container_remove(GTK_CONTAINER(m_widget), m_mainWidget);
+    gtk_container_add(GTK_CONTAINER(eventbox), m_mainWidget);
+    g_object_unref(m_mainWidget);
+
+    gtk_widget_set_margin_start(m_mainWidget, m_miniEdge);
+    gtk_widget_set_margin_end(m_mainWidget, m_miniEdge);
+    gtk_widget_set_margin_top(m_mainWidget, m_miniTitle + m_miniEdge);
+    gtk_widget_set_margin_bottom(m_mainWidget, m_miniEdge);
+#else
     // Use a GtkAlignment to position m_mainWidget inside the decorations
     GtkWidget* alignment = gtk_alignment_new(0, 0, 1, 1);
     gtk_alignment_set_padding(GTK_ALIGNMENT(alignment),
@@ -365,6 +383,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     // The GtkEventBox and GtkAlignment go between m_widget and m_mainWidget
     gtk_widget_reparent(m_mainWidget, alignment);
     gtk_container_add(GTK_CONTAINER(eventbox), alignment);
+#endif
     gtk_container_add(GTK_CONTAINER(m_widget), eventbox);
 
     m_gdkDecor = 0;

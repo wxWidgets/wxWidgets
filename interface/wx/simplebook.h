@@ -19,7 +19,7 @@
     See the @ref page_samples_notebook for an example of wxSimplebook in
     action.
 
-    Notice that is often convenient to use ShowNewPage() instead of the base
+    Notice that it is often convenient to use ShowNewPage() instead of the base
     class AddPage().
 
     There are no special styles defined for this class as it has no visual

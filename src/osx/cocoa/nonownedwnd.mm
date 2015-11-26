@@ -91,18 +91,10 @@ bool shouldHandleSelector(SEL selector)
 
 }
 
-
-#define wxHAS_FULL_SCREEN_API (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7)
-
-#if wxHAS_FULL_SCREEN_API
-
 static bool IsUsingFullScreenApi(WXWindow macWindow)
 {
-    return [macWindow respondsToSelector:@selector(toggleFullScreen:)]
-        && ([macWindow collectionBehavior] & NSWindowCollectionBehaviorFullScreenPrimary);
+    return ([macWindow collectionBehavior] & NSWindowCollectionBehaviorFullScreenPrimary);
 }
-
-#endif
 
 //
 // wx category for NSWindow (our own and wrapped instances)
@@ -313,7 +305,7 @@ static NSResponder* s_formerFirstResponder = NULL;
 // controller
 //
 
-@interface wxNonOwnedWindowController : NSObject wxOSX_10_6_AND_LATER(<NSWindowDelegate>)
+@interface wxNonOwnedWindowController : NSObject <NSWindowDelegate>
 {
 }
 
@@ -322,11 +314,11 @@ static NSResponder* s_formerFirstResponder = NULL;
 - (void)windowDidResignKey:(NSNotification *)notification;
 - (void)windowDidBecomeKey:(NSNotification *)notification;
 - (void)windowDidMove:(NSNotification *)notification;
+- (void)windowDidMiniaturize:(NSNotification *)notification;
+- (void)windowDidDeminiaturize:(NSNotification *)notification;
 - (BOOL)windowShouldClose:(id)window;
 - (BOOL)windowShouldZoom:(NSWindow *)window toFrame:(NSRect)newFrame;
-#if wxHAS_FULL_SCREEN_API
 - (void)windowWillEnterFullScreen:(NSNotification *)notification;
-#endif
 
 @end
 
@@ -411,6 +403,28 @@ extern int wxOSXGetIdFromSelector(SEL action );
 {
     wxUnusedVar(sender);
     [self triggerMenu:_cmd];
+}
+
+- (void)windowDidMiniaturize:(NSNotification *)notification
+{
+    NSWindow* window = (NSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
+    if ( windowimpl )
+    {
+        if ( wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer() )
+            wxpeer->OSXHandleMiniaturize(0, [window isMiniaturized]);
+    }
+}
+
+- (void)windowDidDeminiaturize:(NSNotification *)notification
+{
+    NSWindow* window = (NSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
+    if ( windowimpl )
+    {
+        if ( wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer() )
+            wxpeer->OSXHandleMiniaturize(0, [window isMiniaturized]);
+    }
 }
 
 - (BOOL)windowShouldClose:(id)nwindow
@@ -561,8 +575,6 @@ extern int wxOSXGetIdFromSelector(SEL action );
     return true;
 }
 
-#if wxHAS_FULL_SCREEN_API
-
 // work around OS X bug, on a secondary monitor an already fully sized window
 // (eg maximized) will not be correctly put to full screen size and keeps a 22px
 // title band at the top free, therefore we force the correct content size
@@ -582,8 +594,6 @@ extern int wxOSXGetIdFromSelector(SEL action );
         [view setFrameSize: expectedframerect.size];
     }
 }
-
-#endif
 
 @end
 
@@ -929,6 +939,27 @@ void wxNonOwnedWindowCocoaImpl::SetTitle( const wxString& title, wxFontEncoding 
     [m_macWindow setTitle:wxCFStringRef( title , encoding ).AsNSString()];
 }
 
+bool wxNonOwnedWindowCocoaImpl::EnableCloseButton(bool enable)
+{
+    [[m_macWindow standardWindowButton:NSWindowCloseButton] setEnabled:enable];
+
+    return true;
+}
+
+bool wxNonOwnedWindowCocoaImpl::EnableMaximizeButton(bool enable)
+{
+    [[m_macWindow standardWindowButton:NSWindowZoomButton] setEnabled:enable];
+
+    return true;
+}
+
+bool wxNonOwnedWindowCocoaImpl::EnableMinimizeButton(bool enable)
+{
+    [[m_macWindow standardWindowButton:NSWindowMiniaturizeButton] setEnabled:enable];
+
+    return true;
+}
+
 bool wxNonOwnedWindowCocoaImpl::IsMaximized() const
 {
     if (([m_macWindow styleMask] & NSResizableWindowMask) != 0)
@@ -976,44 +1007,32 @@ typedef struct
 
 bool wxNonOwnedWindowCocoaImpl::IsFullScreen() const
 {
-#if wxHAS_FULL_SCREEN_API
     if ( IsUsingFullScreenApi(m_macWindow) )
     {
         return [m_macWindow styleMask] & NSFullScreenWindowMask;
     }
-#endif
 
     return m_macFullScreenData != NULL ;
 }
 
 bool wxNonOwnedWindowCocoaImpl::EnableFullScreenView(bool enable)
 {
-#if wxHAS_FULL_SCREEN_API
-    if ( [ m_macWindow respondsToSelector:@selector(setCollectionBehavior:) ] )
+    NSUInteger collectionBehavior = [m_macWindow collectionBehavior];
+    if (enable)
     {
-        NSUInteger collectionBehavior = [m_macWindow collectionBehavior];
-        if (enable)
-        {
-            collectionBehavior |= NSWindowCollectionBehaviorFullScreenPrimary;
-        }
-        else
-        {
-            collectionBehavior &= ~NSWindowCollectionBehaviorFullScreenPrimary;
-        }
-        [m_macWindow setCollectionBehavior: collectionBehavior];
-
-        return true;
+        collectionBehavior |= NSWindowCollectionBehaviorFullScreenPrimary;
     }
-#else
-    wxUnusedVar(enable);
-#endif
+    else
+    {
+        collectionBehavior &= ~NSWindowCollectionBehaviorFullScreenPrimary;
+    }
+    [m_macWindow setCollectionBehavior: collectionBehavior];
 
-    return false;
+    return true;
 }
 
 bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
 {
-#if wxHAS_FULL_SCREEN_API
     if ( IsUsingFullScreenApi(m_macWindow) )
     {
         if ( show != IsFullScreen() )
@@ -1023,7 +1042,6 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
 
         return true;
     }
-#endif
 
     if ( show )
     {

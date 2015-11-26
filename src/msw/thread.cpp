@@ -64,10 +64,8 @@
     (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500)) || \
     (defined(__GNUG__) && defined(__MSVCRT__))
 
-#ifndef __WXWINCE__
     #undef wxUSE_BEGIN_THREAD
     #define wxUSE_BEGIN_THREAD
-#endif
 
 #endif
 
@@ -338,7 +336,6 @@ private:
 
 wxSemaphoreInternal::wxSemaphoreInternal(int initialcount, int maxcount)
 {
-#if !defined(_WIN32_WCE) || (_WIN32_WCE >= 300)
     if ( maxcount == 0 )
     {
         // make it practically infinite
@@ -352,7 +349,6 @@ wxSemaphoreInternal::wxSemaphoreInternal(int initialcount, int maxcount)
                         maxcount,
                         NULL            // no name
                     );
-#endif
     if ( !m_semaphore )
     {
         wxLogLastError(wxT("CreateSemaphore()"));
@@ -391,7 +387,6 @@ wxSemaError wxSemaphoreInternal::WaitTimeout(unsigned long milliseconds)
 
 wxSemaError wxSemaphoreInternal::Post()
 {
-#if !defined(_WIN32_WCE) || (_WIN32_WCE >= 300)
     if ( !::ReleaseSemaphore(m_semaphore, 1, NULL /* ptr to previous count */) )
     {
         if ( GetLastError() == ERROR_TOO_MANY_POSTS )
@@ -406,9 +401,6 @@ wxSemaError wxSemaphoreInternal::Post()
     }
 
     return wxSEMA_NO_ERROR;
-#else
-    return wxSEMA_MISC_ERROR;
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -808,9 +800,10 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
                 break;
 
             case WAIT_OBJECT_0 + 1:
-                // new message arrived, process it -- but only if we're the
-                // main thread as we don't support processing messages in
-                // the other ones
+            case WAIT_OBJECT_0 + 2:
+                // Wake up has been signaled or a new message arrived, process
+                // it -- but only if we're the main thread as we don't support
+                // processing messages in the other ones
                 //
                 // NB: we still must include QS_ALLINPUT even when waiting
                 //     in a secondary thread because if it had created some
@@ -947,11 +940,8 @@ unsigned long wxThread::GetCurrentId()
     return (unsigned long)::GetCurrentThreadId();
 }
 
-bool wxThread::SetConcurrency(size_t WXUNUSED_IN_WINCE(level))
+bool wxThread::SetConcurrency(size_t level)
 {
-#ifdef __WXWINCE__
-    return false;
-#else
     wxASSERT_MSG( IsMain(), wxT("should only be called from the main thread") );
 
     // ok only for the default one
@@ -1015,7 +1005,6 @@ bool wxThread::SetConcurrency(size_t WXUNUSED_IN_WINCE(level))
     }
 
     return true;
-#endif // __WXWINCE__/!__WXWINCE__
 }
 
 // ctor and dtor

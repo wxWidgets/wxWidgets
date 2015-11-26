@@ -454,7 +454,7 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
 
         wxRect r(tab_x, tab_y+1, tab_width, tab_height-3);
 
-        // start the gradent up a bit and leave the inside border inset
+        // start the gradient up a bit and leave the inside border inset
         // by a pixel for a 3D look.  Only the top half of the inactive
         // tab will have a slight gradient
         r.x += 3;

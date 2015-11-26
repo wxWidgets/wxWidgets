@@ -96,7 +96,7 @@ public:
     SliderWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~SliderWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const wxOVERRIDE { return m_slider; }
+    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_slider; }
     virtual void RecreateWidget() wxOVERRIDE { CreateSlider(); }
 
     // lazy creation of the content

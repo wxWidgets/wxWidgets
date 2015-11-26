@@ -258,6 +258,10 @@ enum
            Processes a @c wxEVT_LIST_CACHE_HINT event type.
     @endEventTable
 
+    @note Under wxMSW this control uses wxSystemThemedControl for an explorer
+    style appearance by default since wxWidgets 3.1.0. If this is not desired,
+    you can call wxSystemThemedControl::EnableSystemTheme with @c false
+    argument to disable this.
 
     @library{wxcore}
     @category{ctrl}
@@ -786,6 +790,14 @@ public:
     void SetAlternateRowColour(const wxColour& colour);
 
     /**
+        Get the alternative row background colour.
+
+        @since 3.1.0
+        @see SetAlternateRowColour()
+     */
+    wxColour GetAlternateRowColour() const;
+
+    /**
         Determines which item (if any) is at the specified point, giving details
         in @a flags. Returns index of the item or @c wxNOT_FOUND if no item is at
         the specified point.
@@ -1144,6 +1156,10 @@ public:
 
         Consider using wxListView if possible to avoid dealing with this
         error-prone and confusing method.
+
+        Also notice that contrary to the usual rule that only user actions
+        generate events, this method does generate wxEVT_LIST_ITEM_SELECTED
+        event when it is used to select an item.
     */
     bool SetItemState(long item, long state, long stateMask);
 
@@ -1565,10 +1581,10 @@ public:
 
         @see Create(), wxValidator
     */
-    wxListView(wxWindow* parent, wxWindowID id,
+    wxListView(wxWindow* parent, wxWindowID winid = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = wxLC_ICON,
+               long style = wxLC_REPORT,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxListCtrlNameStr);
 
@@ -1627,12 +1643,15 @@ public:
     /**
         Selects or unselects the given item.
 
+        Notice that this method inherits the unusual behaviour of
+        wxListCtrl::SetItemState() which sends a wxEVT_LIST_ITEM_SELECTED event
+        when it is used to select an item, contrary to the usual rule that only
+        the user actions result in selection.
+
         @param n
             the item to select or unselect
         @param on
             if @true (default), selects the item, otherwise unselects it
-
-        @see wxListCtrl::SetItemState
     */
     void Select(long n, bool on = true);
 

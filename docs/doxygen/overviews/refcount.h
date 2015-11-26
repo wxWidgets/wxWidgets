@@ -79,7 +79,6 @@ operators and copy constructors since they are reference-counted:
 @li wxPalette
 @li wxPen
 @li wxRegion
-@li wxString
 @li wxVariant
 @li wxVariantData
 

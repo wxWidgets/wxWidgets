@@ -49,8 +49,6 @@
     #include "wx/msw/mimetype.h"
 #elif ( defined(__DARWIN__) )
     #include "wx/osx/mimetype.h"
-#elif defined(__DOS__)
-    #include "wx/msdos/mimetype.h"
 #else // Unix
     #include "wx/unix/mimetype.h"
 #endif

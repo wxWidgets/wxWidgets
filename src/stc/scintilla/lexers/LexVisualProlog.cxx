@@ -13,10 +13,10 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <assert.h>
+#include <ctype.h>
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4786)
@@ -396,7 +396,7 @@ void SCI_METHOD LexerVisualProlog::Lex(unsigned int startPos, int length, int in
         if (sc.atLineEnd) {
             // Update the line state, so it can be seen by next line
             int lineState = 0;
-            if (SCE_VISUALPROLOG_STRING_VERBATIM_EOL == sc.state) {
+            if (SCE_VISUALPROLOG_STRING_VERBATIM_EOL == sc.state) { 
                 lineState = closingQuote;
             } else if (SCE_VISUALPROLOG_COMMENT_BLOCK == sc.state) {
                 lineState = nestLevel;

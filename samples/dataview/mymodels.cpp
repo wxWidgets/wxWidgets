@@ -428,6 +428,10 @@ void MyListModel::GetValueByRow( wxVariant &variant,
             }
             break;
 
+        case Col_Date:
+            variant = wxDateTime(1, wxDateTime::Jan, 2000).Add(wxTimeSpan(row));
+            break;
+
         case Col_TextWithAttr:
             {
                 static const char *labels[5] =
@@ -454,6 +458,7 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
     switch ( col )
     {
         case Col_EditableText:
+        case Col_Date:
             return false;
 
         case Col_IconText:
@@ -524,6 +529,7 @@ bool MyListModel::SetValueByRow( const wxVariant &variant,
             }
             return true;
 
+        case Col_Date:
         case Col_TextWithAttr:
         case Col_Custom:
             wxLogError("Cannot edit the column %d", col);

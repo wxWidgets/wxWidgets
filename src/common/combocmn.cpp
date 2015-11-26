@@ -205,10 +205,10 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #endif
 
 
-// Popupwin is really only supported on wxMSW (not WINCE) and wxGTK, regardless
+// Popupwin is really only supported on wxMSW and wxGTK, regardless
 // what the wxUSE_POPUPWIN says.
 // FIXME: Why isn't wxUSE_POPUPWIN reliable any longer? (it was in wxW2.6.2)
-#if (!defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXMAC__)) || defined(__WXWINCE__)
+#if (!defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXMAC__))
 #undef wxUSE_POPUPWIN
 #define wxUSE_POPUPWIN 0
 #endif
@@ -520,7 +520,7 @@ void wxComboPopupWindow::OnDismiss()
 {
     wxComboCtrlBase* combo = (wxComboCtrlBase*) GetParent();
     wxASSERT_MSG( wxDynamicCast(combo, wxComboCtrlBase),
-                  wxT("parent might not be wxComboCtrl, but check wxIMPLEMENT_DYNAMIC_CLASS(2) macro for correctness") );
+                  wxT("parent might not be wxComboCtrl, but check wxIMPLEMENT_DYNAMIC_CLASS2() macro for correctness") );
 
     combo->OnPopupDismiss(true);
 }
@@ -1223,7 +1223,7 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
             // Make very small buttons square, as it makes
             // them accommodate arrow image better and still
             // looks decent.
-            if ( height > 18 )
+            if ( height > FromDIP(18) )
                 butWidth = (height*butWidth)/bestHeight;
             else
                 butWidth = butHeight;

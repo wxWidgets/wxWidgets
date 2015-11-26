@@ -220,6 +220,8 @@ protected:
     // Reset all columns currently used for sorting.
     void ResetAllSortColumns();
 
+    virtual void DoEnableSystemTheme(bool enable, wxWindow* window) wxOVERRIDE;
+
 public:     // utility functions not part of the API
 
     // returns the "best" width for the idx-th column

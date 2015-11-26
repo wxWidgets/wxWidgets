@@ -40,9 +40,6 @@ public:
         {
             m_updated = -1;
 
-#ifdef __POCKETPC__
-            EnableContextMenu();
-#endif
         }
 
     // add one item to the listctrl in report mode

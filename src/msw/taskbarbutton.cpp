@@ -27,6 +27,8 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/taskbarbutton.h"
+#include "wx/scopedptr.h"
+#include "wx/msw/private/comptr.h"
 
 #include <shlwapi.h>
 #include <initguid.h>
@@ -326,7 +328,7 @@ inline HRESULT InitPropVariantFromString(PCWSTR psz, PROPVARIANT *ppropvar)
     ppropvar->vt = VT_LPWSTR;
 
 #if wxUSE_DYNLIB_CLASS
-    typedef HRESULT (WINAPI *SHStrDupW_t)(LPCTSTR, LPTSTR*);
+    typedef HRESULT (WINAPI *SHStrDupW_t)(LPCWSTR, LPWSTR*);
     static SHStrDupW_t s_pfnSHStrDupW = NULL;
     if ( !s_pfnSHStrDupW )
     {
@@ -372,8 +374,8 @@ THUMBBUTTONFLAGS GetNativeThumbButtonFlags(const wxThumbBarButton& button)
 bool AddShellLink(IObjectCollection *collection,
                   const wxTaskBarJumpListItem& item)
 {
-    IShellLink* shellLink = NULL;
-    IPropertyStore* propertyStore = NULL;
+    wxCOMPtr<IShellLink> shellLink;
+    wxCOMPtr<IPropertyStore> propertyStore;
 
     HRESULT hr = CoCreateInstance
                  (
@@ -410,7 +412,6 @@ bool AddShellLink(IObjectCollection *collection,
     if ( FAILED(hr) )
     {
         wxLogApiError("IShellLink(QueryInterface)", hr);
-        shellLink->Release();
         return false;
     }
 
@@ -436,13 +437,11 @@ bool AddShellLink(IObjectCollection *collection,
 
     // Save the changes we made to the property store.
     propertyStore->Commit();
-    propertyStore->Release();
     PropVariantClear(&pv);
 
     // Add this IShellLink object to the given collection.
     hr = collection->AddObject(shellLink);
 
-    shellLink->Release();
     return SUCCEEDED(hr);
 }
 
@@ -454,7 +453,7 @@ wxTaskBarJumpListItem* GetItemFromIShellLink(IShellLink* link)
     wxTaskBarJumpListItem* item =
         new wxTaskBarJumpListItem(NULL, wxTASKBAR_JUMP_LIST_DESTIONATION);
 
-    IPropertyStore *linkProps;
+    wxCOMPtr<IPropertyStore> linkProps;
     HRESULT hr = link->QueryInterface
                  (
                      wxIID_IPropertyStore,
@@ -470,7 +469,6 @@ wxTaskBarJumpListItem* GetItemFromIShellLink(IShellLink* link)
     linkProps->GetValue(PKEY_Link_Arguments, &var);
     item->SetArguments(wxString(var.pwszVal));
     PropVariantClear(&var);
-    linkProps->Release();
 
     const int bufferSize = 2048;
     wchar_t buffer[bufferSize];
@@ -580,8 +578,8 @@ private:
 
     wxTaskBarJumpList *m_jumpList;
 
-    ICustomDestinationList    *m_destinationList;
-    IObjectArray              *m_objectArray;
+    wxCOMPtr<ICustomDestinationList>    m_destinationList;
+    wxCOMPtr<IObjectArray>              m_objectArray;
 
     wxScopedPtr<wxTaskBarJumpListCategory> m_tasks;
     wxScopedPtr<wxTaskBarJumpListCategory> m_frequent;
@@ -939,7 +937,7 @@ bool wxTaskBarButtonImpl::InitOrUpdateThumbBarButtons()
         // Truncate the tooltip if its length longer than szTip(THUMBBUTTON)
         // allowed length (260).
         tooltip.Truncate(260);
-        wxStrlcpy(buttons[i].szTip, tooltip.t_str(), tooltip.length());
+        wxStrlcpy(buttons[i].szTip, tooltip.wc_str(), tooltip.length());
         buttons[i].dwMask =
             static_cast<THUMBBUTTONMASK>(buttons[i].dwMask | THB_TOOLTIP);
     }
@@ -1299,9 +1297,6 @@ wxTaskBarJumpListImpl::wxTaskBarJumpListImpl(wxTaskBarJumpList *jumpList,
 
 wxTaskBarJumpListImpl::~wxTaskBarJumpListImpl()
 {
-    if ( m_destinationList )
-        m_destinationList->Release();
-
     for ( wxTaskBarJumpListCategories::iterator it = m_customCategories.begin();
           it != m_customCategories.end();
           ++it )
@@ -1415,8 +1410,9 @@ bool wxTaskBarJumpListImpl::BeginUpdate()
         return false;
 
     unsigned int max_count = 0;
+    m_objectArray = NULL;
     HRESULT hr = m_destinationList->BeginList(&max_count,
-        wxIID_IObjectArray, reinterpret_cast<void**>(&(m_objectArray)));
+        wxIID_IObjectArray, reinterpret_cast<void**>(&m_objectArray));
     if ( !m_appID.empty() )
         m_destinationList->SetAppID(m_appID.wc_str());
 
@@ -1425,7 +1421,6 @@ bool wxTaskBarJumpListImpl::BeginUpdate()
 
 bool wxTaskBarJumpListImpl::CommitUpdate()
 {
-    m_objectArray->Release();
     return SUCCEEDED(m_destinationList->CommitList());
 }
 
@@ -1434,7 +1429,7 @@ void wxTaskBarJumpListImpl::AddTasksToDestinationList()
     if ( !m_tasks.get() )
         return;
 
-    IObjectCollection* collection = CreateObjectCollection();
+    wxCOMPtr<IObjectCollection> collection(CreateObjectCollection());
     if ( !collection )
         return;
 
@@ -1449,7 +1444,6 @@ void wxTaskBarJumpListImpl::AddTasksToDestinationList()
         AddShellLink(collection, *(*it));
     }
     m_destinationList->AddUserTasks(collection);
-    collection->Release();
 }
 
 void wxTaskBarJumpListImpl::AddCustomCategoriesToDestionationList()
@@ -1458,7 +1452,7 @@ void wxTaskBarJumpListImpl::AddCustomCategoriesToDestionationList()
           it != m_customCategories.end();
           ++it )
     {
-        IObjectCollection* collection = CreateObjectCollection();
+        wxCOMPtr<IObjectCollection> collection(CreateObjectCollection());
         if ( !collection )
             continue;
 
@@ -1474,13 +1468,12 @@ void wxTaskBarJumpListImpl::AddCustomCategoriesToDestionationList()
         }
         m_destinationList->AppendCategory((*it)->GetTitle().wc_str(),
                                           collection);
-        collection->Release();
     }
 }
 
 void wxTaskBarJumpListImpl::LoadKnownCategory(const wxString& title)
 {
-    IApplicationDocumentLists *docList = 0;
+    wxCOMPtr<IApplicationDocumentLists> docList;
     HRESULT hr = CoCreateInstance
                  (
                     wxCLSID_ApplicationDocumentLists,
@@ -1497,7 +1490,7 @@ void wxTaskBarJumpListImpl::LoadKnownCategory(const wxString& title)
     if ( !m_appID.empty() )
         docList->SetAppID(m_appID.wc_str());
 
-    IObjectArray *array = NULL;
+    wxCOMPtr<IObjectArray> array;
     wxASSERT_MSG( title == "Recent" || title == "Frequent", "Invalid title." );
     hr = docList->GetList
                  (
@@ -1516,7 +1509,7 @@ void wxTaskBarJumpListImpl::LoadKnownCategory(const wxString& title)
     array->GetCount(&count);
     for (UINT i = 0; i < count; ++i)
     {
-        IUnknown *collectionItem = NULL;
+        wxCOMPtr<IUnknown> collectionItem;
         hr = array->GetAt(i, wxIID_IUnknown,
                           reinterpret_cast<void **>(&collectionItem));
         if ( FAILED(hr) )
@@ -1525,21 +1518,19 @@ void wxTaskBarJumpListImpl::LoadKnownCategory(const wxString& title)
             continue;
         }
 
-        IShellLink *shellLink = NULL;
-        IShellItem *shellItem = NULL;
+        wxCOMPtr<IShellLink> shellLink;
+        wxCOMPtr<IShellItem> shellItem;
         wxTaskBarJumpListItem* item = NULL;
 
         if ( SUCCEEDED(collectionItem->QueryInterface(
                  wxIID_IShellLink, reinterpret_cast<void**>(&shellLink))) )
         {
             item = GetItemFromIShellLink(shellLink);
-            shellLink->Release();
         }
         else if ( SUCCEEDED(collectionItem->QueryInterface(
                       wxIID_IShellItem, reinterpret_cast<void**>(&shellItem))) )
         {
             item = GetItemFromIShellItem(shellItem);
-            shellItem->Release();
         }
         else
         {
@@ -1553,11 +1544,7 @@ void wxTaskBarJumpListImpl::LoadKnownCategory(const wxString& title)
             else
                 m_recent->Append(item);
         }
-        collectionItem->Release();
     }
-
-    array->Release();
-    docList->Release();
 }
 
 #endif // wxUSE_TASKBARBUTTON

@@ -18,7 +18,7 @@
 #if wxUSE_FILEDLG
 
 // NOTE : it probably also supports MAC, untested
-#if !defined(__UNIX__) && !defined(__DOS__) && !defined(__WIN32__)
+#if !defined(__UNIX__) && !defined(__WIN32__)
 #error wxGenericFileDialog currently only supports Unix, win32 and DOS
 #endif
 
@@ -57,10 +57,8 @@
     #include "wx/config.h"
 #endif
 
-#ifndef __WXWINCE__
-    #include <sys/types.h>
-    #include <sys/stat.h>
-#endif
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #ifdef __UNIX__
     #include <dirent.h>
@@ -70,17 +68,13 @@
     #endif
 #endif
 
-#ifndef __WXWINCE__
 #include <time.h>
-#endif
 
-#if defined(__UNIX__) || defined(__DOS__)
+#if defined(__UNIX__)
 #include <unistd.h>
 #endif
 
-#if defined(__WXWINCE__)
-#define IsTopMostDir(dir) (dir == wxT("\\") || dir == wxT("/"))
-#elif defined(__DOS__) || defined(__WINDOWS__)
+#if defined(__WINDOWS__)
 #define IsTopMostDir(dir)   (dir.empty())
 #else
 #define IsTopMostDir(dir)   (dir == wxT("/"))
@@ -109,9 +103,9 @@ wxBEGIN_EVENT_TABLE(wxGenericFileDialog,wxDialog)
     EVT_FILECTRL_FILEACTIVATED(ID_FILE_CTRL, wxGenericFileDialog::OnFileActivated)
 
     EVT_UPDATE_UI(ID_UP_DIR, wxGenericFileDialog::OnUpdateButtonsUI)
-#if defined(__DOS__) || defined(__WINDOWS__)
+#if defined(__WINDOWS__)
     EVT_UPDATE_UI(ID_NEW_DIR, wxGenericFileDialog::OnUpdateButtonsUI)
-#endif // defined(__DOS__) || defined(__WINDOWS__)
+#endif // defined(__WINDOWS__)
 wxEND_EVENT_TABLE()
 
 long wxGenericFileDialog::ms_lastViewStyle = wxLC_LIST;
@@ -210,11 +204,9 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
     m_upDirButton = AddBitmapButton( ID_UP_DIR, wxART_GO_DIR_UP,
                                      _("Go to parent directory"), buttonsizer );
 
-#ifndef __DOS__ // VS: Home directory is meaningless in MS-DOS...
     AddBitmapButton( ID_HOME_DIR, wxART_GO_HOME,
                      _("Go to home directory"), buttonsizer );
     buttonsizer->Add( 20, 20 );
-#endif //!__DOS__
 
     m_newDirButton = AddBitmapButton( ID_NEW_DIR, wxART_NEW_DIR,
                                       _("Create new directory"), buttonsizer );
@@ -331,7 +323,7 @@ bool wxGenericFileDialog::Show( bool show )
 void wxGenericFileDialog::OnOk( wxCommandEvent &WXUNUSED(event) )
 {
     wxArrayString selectedFiles;
-    m_filectrl->GetFilenames(selectedFiles);
+    m_filectrl->GetPaths(selectedFiles);
 
     if (selectedFiles.Count() == 0)
         return;

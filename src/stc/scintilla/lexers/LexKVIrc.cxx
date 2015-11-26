@@ -359,7 +359,7 @@ static void FoldKVIrcDoc(unsigned int startPos, int length, int /*initStyle - un
                       WordList *[], Accessor &styler)
 {
     /* Based on CMake's folder */
-
+    
     /* Exiting if folding isnt enabled */
     if ( styler.GetPropertyInt("fold") == 0 )
         return;

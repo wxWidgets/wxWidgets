@@ -30,40 +30,60 @@ enum wxXmlNodeType
 
     Represents a node in an XML document. See wxXmlDocument.
 
-    Node has a name and may have content and attributes.
+    Each node is named and depending on the node type it may also hold content
+    or be given attributes.
 
-    Most common node types are @c wxXML_TEXT_NODE (name and attributes are irrelevant)
-    and @c wxXML_ELEMENT_NODE.
+    The two most common node types are @c wxXML_ELEMENT_NODE and
+    @c wxXML_TEXT_NODE. @c wxXML_ELEMENT_NODE represents a pair of XML element
+    tags, whilst @c wxXML_TEXT_NODE represents the text value that can belong
+    to the element.
 
-    Example: in <tt>\<title\>hi\</title\></tt> there is an element with the name
-    @c title and irrelevant content and one child of type @c wxXML_TEXT_NODE
-    with @c hi as content.
+    A @c wxXML_ELEMENT_NODE has a title, and optionally attributes, but does not
+    have any content. A @c wxXML_TEXT_NODE does not have a title or attributes
+    but should normally have content.
 
-    The @c wxXML_PI_NODE type sets the name to the PI target and the contents to
+    For example: in the XML fragment <tt>\<title\>hi\</title\></tt> there is an
+    element node with the name @c title and a single text node child with the
+    text @c hi as content.
+
+    A @c wxXML_PI_NODE represents a Processing Instruction (PI) node with
+    the name parameter set as the target and the contents parameter set as
     the instructions. Note that whilst the PI instructions are often in the form
-    of pseudo-attributes these do not use the nodes attribute system. It is the users
-    responsibility to code and decode the instruction text.
+    of pseudo-attributes, these do not use the node's attribute member. It is
+    the user's responsibility to code and decode the PI instruction text.
+
+    The @c wxXML_DOCUMENT_TYPE_NODE is not implemented at this time. Instead,
+    you should get and set the DOCTYPE values using the wxXmlDocument class.
 
     If @c wxUSE_UNICODE is 0, all strings are encoded in the encoding given to
     wxXmlDocument::Load (default is UTF-8).
 
+    @note
+    Once a wxXmlNode has been added to a wxXmlDocument it becomes owned by the
+    document and this has two implications. Firstly, the wxXmlDocument takes
+    responsibility for deleting the node so the user should not @c delete it;
+    and secondly, a wxXmlNode must always be created on the heap and never on
+    the stack.
+
     @library{wxxml}
     @category{xml}
 
-    @see wxXmlDocument, wxXmlAttribute
+    @see wxXmlDocument, wxXmlDoctype, wxXmlAttribute
 */
 class wxXmlNode
 {
 public:
     /**
-        Creates this XML node and eventually insert it into an existing XML tree.
+        Creates this XML node and inserts it into the XML tree as a child of
+        the specified parent. Once added, the XML tree takes ownership of this
+        object and there is no need to delete it.
 
         @param parent
             The parent node to which append this node instance.
             If this argument is @NULL this new node will be floating and it can
             be appended later to another one using the AddChild() or InsertChild()
-            functions. Otherwise the child is already added to the XML tree by
-            this constructor and it shouldn't be done again.
+            functions. Otherwise the child is added to the XML tree by this
+            constructor and it shouldn't be done again.
         @param type
             One of the ::wxXmlNodeType enumeration value.
         @param name
@@ -127,7 +147,8 @@ public:
     virtual void AddAttribute(wxXmlAttribute* attr);
 
     /**
-        Adds node @a child as the last child of this node.
+        Adds node @a child as the last child of this node. Once added, the XML
+        tree takes ownership of this object and there is no need to delete it.
 
         @note
         Note that this function works in O(n) time where @e n is the number
@@ -254,7 +275,8 @@ public:
 
     /**
         Inserts the @a child node immediately before @a followingNode in the
-        children list.
+        children list. Once inserted, the XML tree takes ownership of the new
+        child and there is no need to delete it.
 
         @return @true if @a followingNode has been found and the @a child
                 node has been inserted.
@@ -271,7 +293,8 @@ public:
 
     /**
         Inserts the @a child node immediately after @a precedingNode in the
-        children list.
+        children list. Once inserted, the XML tree takes ownership of the new
+        child and there is no need to delete it.
 
         @return @true if @a precedingNode has been found and the @a child
                 node has been inserted.
@@ -433,10 +456,103 @@ public:
 };
 
 
-//* special indentation value for wxXmlDocument::Save
+
+/**
+    @class wxXmlDoctype
+
+    Represents a DOCTYPE Declaration.
+
+    Example DOCTYPE: <tt>\<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"\></tt>.
+
+    In the above example, "plist" is the name of root element,
+    "-//Apple//DTD PLIST 1.0//EN" (without the quotes) is the public identifier and
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd" (again, without the quotes) is
+    the system identifier.
+
+    A valid DOCTYPE exists in one of following forms:
+
+    1. A root element name.
+    2. A root element name and a system identifier.
+    3. A root element name, a system identifier and a public identifier.
+    4. A root element name and a public identifier. Although this form is not
+    valid XML it is valid for SMGL.
+
+    The DOCTYPE may also contain an internal subset of declarations
+    added between square brackets at the end.
+    These have not been implemented at this time.
+
+    @since 3.1.0
+
+    @library{wxxml}
+    @category{xml}
+
+    @see wxXmlDocument
+*/
+class wxXmlDoctype
+{
+public:
+    /**
+        Creates and possible initializes the DOCTYPE.
+
+        @param name
+            The root name.
+        @param sysid
+            The system identifier.
+        @param pubid
+            The public identifier.
+    */
+    wxXmlDoctype(const wxString& rootName = wxString(),
+                 const wxString& systemId = wxString(),
+                 const wxString& publicId = wxString());
+
+    /**
+        Removes all the DOCTYPE values.
+    */
+    void Clear();
+
+    /**
+        Returns the root name of the document.
+    */
+    const wxString& GetRootName() const;
+
+    /**
+        Returns the system id of the document.
+    */
+    const wxString& GetSystemId() const;
+
+    /**
+        Returns the public id of the document.
+    */
+    const wxString& GetPublicId() const;
+
+    /**
+        Returns the formatted DOCTYPE contents.
+
+        This consists of all the text shown between the opening
+        "<!DOCTYPE " and closing ">" of a DOCTYPE declaration.
+
+        If this object is empty or invalid, i.e. IsValid() returns false, this
+        method returns an empty string.
+    */
+    wxString GetFullString() const;
+
+    /**
+        Returns true if the contents can produce a valid DOCTYPE string.
+
+        For an object to be valid, it must have a non-empty root name and a
+        valid system identifier (currently the validity checks of the latter
+        are limited to checking that it doesn't contain both single and double
+        quotes).
+    */
+    bool IsValid() const;
+};
+
+
+
+//* Special indentation value for wxXmlDocument::Save.
 #define wxXML_NO_INDENTATION           (-1)
 
-//* flags for wxXmlDocument::Load
+//* Flags for wxXmlDocument::Load.
 enum wxXmlDocumentLoadFlag
 {
     wxXMLDOC_NONE,
@@ -453,6 +569,16 @@ enum wxXmlDocumentLoadFlag
     wxXmlDocument internally uses the expat library which comes with wxWidgets to
     parse the given stream.
 
+    A wxXmlDocument is in fact a list of wxXmlNode organised into a structure
+    that reflects the XML tree being represented by the document.
+
+    @note
+    Ownership is passed to the XML tree as each wxXmlNode is added to it,
+    and this has two implications. Firstly, the wxXmlDocument takes
+    responsibility for deleting the node so the user should not @c delete it;
+    and secondly, a wxXmlNode must always be created on the heap and never
+    on the stack.
+
     A simple example of using XML classes is:
 
     @code
@@ -460,17 +586,19 @@ enum wxXmlDocumentLoadFlag
     if (!doc.Load("myfile.xml"))
         return false;
 
-    // start processing the XML file
+    // Start processing the XML file.
     if (doc.GetRoot()->GetName() != "myroot-node")
         return false;
 
-    // examine prologue
+    // Examine prologue.
     wxXmlNode *prolog = doc.GetDocumentNode()->GetChildren();
-    while (prolog) {
+    while (prolog)
+    {
 
-        if (prolog->GetType() == wxXML_PI_NODE && prolog->GetName() == "target") {
+        if (prolog->GetType() == wxXML_PI_NODE && prolog->GetName() == "target")
+        {
 
-            // process Process Instruction contents
+            // Process Process Instruction (PI) contents.
             wxString pi = prolog->GetContent();
 
             ...
@@ -479,26 +607,27 @@ enum wxXmlDocumentLoadFlag
     }
 
     wxXmlNode *child = doc.GetRoot()->GetChildren();
-    while (child) {
-
-        if (child->GetName() == "tag1") {
-
-            // process text enclosed by tag1/tag1
+    while (child)
+    {
+        if (child->GetName() == "tag1")
+        {
+            // Process text enclosed by tag1/tag1.
             wxString content = child->GetNodeContent();
 
             ...
 
-            // process attributes of tag1
+            // Process attributes of tag1.
             wxString attrvalue1 =
                 child->GetAttribute("attr1", "default-value");
             wxString attrvalue2 =
                 child->GetAttribute("attr2", "default-value");
 
             ...
+        }
+        else if (child->GetName() == "tag2")
+        {
 
-        } else if (child->GetName() == "tag2") {
-
-            // process tag2 ...
+            // Process tag2 ...
         }
 
         child = child->GetNext();
@@ -507,7 +636,7 @@ enum wxXmlDocumentLoadFlag
 
     Note that if you want to preserve the original formatting of the loaded file
     including whitespaces and indentation, you need to turn off whitespace-only
-    textnode removal and automatic indentation:
+    textnode removal and automatic indentation. For example:
 
     @code
     wxXmlDocument doc;
@@ -526,10 +655,48 @@ enum wxXmlDocumentLoadFlag
     doc.Save("myfile2.xml");  // myfile2.xml != myfile.xml
     @endcode
 
+    wxXmlDocument can also be used to create documents. The following code gives
+    an example of creating a simple document with two nested element nodes, the
+    second of which has an attribute, and a text node. It also demonstrates
+    how to write the resulting output to a wxString:
+
+    @code
+    // Create a document and add the root node.
+    wxXmlDocument xmlDoc;
+
+    wxXmlNode* root = new wxXmlNode(NULL, wxXML_ELEMENT_NODE, "Root");
+    xmlDoc.SetRoot(root);
+
+    // Add some XML.
+    wxXmlNode* library = new wxXmlNode (root, wxXML_ELEMENT_NODE, "Library");
+    library->AddAttribute("type", "CrossPlatformList");
+    wxXmlNode* name = new wxXmlNode(library, wxXML_ELEMENT_NODE, "Name");
+    name->AddChild(new wxXmlNode(wxXML_TEXT_NODE, "", "wxWidgets"));
+
+    // Write the output to a wxString.
+    wxStringOutputStream stream;
+    xmlDoc.Save(stream);
+    @endcode
+
+    This will produce a document that looks something like the following:
+
+    @code
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Root>
+      <Library type="CrossPlatformList">
+        <Name>wxWidgets</Name>
+      </Library>
+    </Root>
+    @endcode
+
+    If the root name value of the DOCTYPE is set, either by loading a file with a
+    DOCTYPE declaration or by setting it directly with the SetDoctype member,
+    then a DOCTYPE declaration will be added immediately after the XML declaration.
+
     @library{wxxml}
     @category{xml}
 
-    @see wxXmlNode, wxXmlAttribute
+    @see wxXmlNode, wxXmlAttribute, wxXmlDoctype
 */
 class wxXmlDocument : public wxObject
 {
@@ -611,6 +778,13 @@ public:
               encoding of in-memory representation!
     */
     const wxString& GetFileEncoding() const;
+
+    /**
+        Returns the DOCTYPE declaration data for the document.
+
+        @since 3.1.0
+    */
+    const wxXmlDoctype& GetDoctype() const;
 
     /**
         Returns the document node of the document.
@@ -701,6 +875,14 @@ public:
     void SetFileEncoding(const wxString& encoding);
 
     /**
+        Sets the data which will appear in the DOCTYPE declaration when the
+        document is saved.
+
+        @since 3.1.0
+    */
+    void SetDoctype(const wxXmlDoctype& doctype);
+
+    /**
         Sets the root element node of this document.
 
         Will create the document node if necessary. Any previous
@@ -726,4 +908,3 @@ public:
     */
     static wxVersionInfo GetLibraryVersionInfo();
 };
-

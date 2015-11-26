@@ -113,6 +113,7 @@ typedef wxString wxArtID;
 
 #define wxART_FULL_SCREEN          wxART_MAKE_ART_ID(wxART_FULL_SCREEN)
 
+#define wxART_EDIT                 wxART_MAKE_ART_ID(wxART_EDIT)
 
 // ----------------------------------------------------------------------------
 // wxArtProvider class
@@ -187,6 +188,9 @@ public:
     // Get the size hint of an icon from a specific wxArtClient, queries
     // the topmost provider if platform_dependent = false
     static wxSize GetSizeHint(const wxArtClient& client, bool platform_dependent = false);
+
+    // Rescale bitmap (used internally if requested size is other than the available).
+    static void RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded);
 
 protected:
     friend class wxArtProviderModule;

@@ -191,8 +191,11 @@ public:
     void OnClearModifyStatusClick( wxCommandEvent& event );
     void OnFreezeClick( wxCommandEvent& event );
     void OnEnableLabelEditing( wxCommandEvent& event );
+#if wxUSE_HEADERCTRL
     void OnShowHeader( wxCommandEvent& event );
+#endif
     void OnDumpList( wxCommandEvent& event );
+    void OnCatColoursUpdateUI( wxUpdateUIEvent& event );
     void OnCatColours( wxCommandEvent& event );
     void OnSetColumns( wxCommandEvent& event );
     void OnMisc( wxCommandEvent& event );

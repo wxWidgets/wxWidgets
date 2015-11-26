@@ -174,7 +174,7 @@ wxDropSource::~wxDropSource()
 // Name    : DoDragDrop
 // Purpose : start drag and drop operation
 // Returns : wxDragResult - the code of performed operation
-// Params  : [in] int flags: specifies if moving is allowe (or only copying)
+// Params  : [in] int flags: specifies if moving is allowed (or only copying)
 // Notes   : you must call SetData() before if you had used def ctor
 wxDragResult wxDropSource::DoDragDrop(int flags)
 {

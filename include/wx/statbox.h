@@ -39,7 +39,7 @@ public:
     // borderOther is the margin on all other sides
     virtual void GetBordersForSizer(int *borderTop, int *borderOther) const
     {
-        const int BORDER = 5; // FIXME: hardcoded value
+        const int BORDER = FromDIP(5); // FIXME: hardcoded value
 
         *borderTop = GetLabel().empty() ? BORDER : GetCharHeight();
         *borderOther = BORDER;

@@ -485,7 +485,7 @@ public:
 
     /**
         Check whether the operating system and/or C run time environment supports
-        this locale. For example in Windows 2000 and Windows XP, support for many
+        this locale. For example in Windows, support for many
         locales is not installed by default. Returns @true if the locale is
         supported.
 

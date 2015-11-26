@@ -452,7 +452,7 @@ bool wxNotificationMessage::Show(int timeout)
 {
     if ( !m_impl )
     {
-        if ( !ms_alwaysUseGeneric && wxTheApp->GetShell32Version() >= 500 )
+        if ( !ms_alwaysUseGeneric )
         {
             if ( timeout == Timeout_Never )
                 m_impl = new wxManualNotifMsgImpl(GetParent());

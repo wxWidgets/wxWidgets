@@ -69,7 +69,7 @@ protected:
               break;
         }
 
-        wxLogMessage("%s,%d)", s, size);
+        wxLogMessage("%s,%lu)", s, (unsigned long)size);
     }
 };
 

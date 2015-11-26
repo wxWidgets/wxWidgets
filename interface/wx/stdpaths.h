@@ -66,6 +66,64 @@ public:
         ResourceCat_Messages
     };
 
+    /// Possible values for userDir parameter of GetUserDir().
+    enum Dir
+    {
+        /**
+            Directory containing user documents.
+
+            Example return values:
+            - Unix/Mac: @c ~/Documents
+            - Windows: @c "C:\Users\username\Documents"
+        */
+        Dir_Documents,
+
+        /**
+            Directory containing files on the users desktop.
+
+            Example return values:
+            - Unix/Mac: @c ~/Desktop
+            - Windows: @c "C:\Users\username\Desktop"
+        */
+        Dir_Desktop,
+
+        /**
+            Directory for downloaded files
+
+            Example return values:
+            - Unix/Mac: @c ~/Downloads
+            - Windows: @c "C:\Users\username\Downloads" (Only available on Vista and newer)
+        */
+        Dir_Downloads,
+
+        /**
+            Directory containing music files.
+
+            Example return values:
+            - Unix/Mac: @c ~/Music
+            - Windows: @c "C:\Users\username\Music"
+        */
+        Dir_Music,
+
+        /**
+            Directory containing picture files.
+
+            Example return values:
+            - Unix/Mac: @c ~/Pictures
+            - Windows: @c "C:\Users\username\Pictures"
+        */
+        Dir_Pictures,
+
+        /**
+            Directory containing video files.
+
+            Example return values:
+            - Unix: @c ~/Videos
+            - Windows: @c "C:\Users\username\Videos"
+            - Mac: @c ~/Movies
+        */
+        Dir_Videos
+    };
 
     /**
         MSW-specific function undoing the effect of IgnoreAppSubDir() calls.
@@ -93,7 +151,8 @@ public:
 
         Example return values:
         - Unix: @c ~/appinfo
-        - Windows: @c "C:\Documents and Settings\username\My Documents\appinfo"
+        - Windows: @c "C:\Users\username\Documents\appinfo" or
+                   @c "C:\Documents and Settings\username\My Documents\appinfo"
         - Mac: @c ~/Documents/appinfo
 
         @since 2.9.0
@@ -104,8 +163,12 @@ public:
         Return the directory containing the system config files.
         Example return values:
         - Unix: @c /etc
-        - Windows: @c "C:\Documents and Settings\All Users\Application Data"
+        - Windows: @c "C:\ProgramData\appinfo" or
+                   @c "C:\Documents and Settings\All Users\Application Data\appinfo"
         - Mac: @c /Library/Preferences
+
+        @note Under Windows this includes @c appinfo which makes it inconsistent
+        with other ports.
 
         @see wxFileConfig
     */
@@ -133,16 +196,11 @@ public:
     virtual wxString GetDataDir() const;
 
     /**
-        Return the directory containing the current user's documents.
-
-        Example return values:
-        - Unix: @c ~ (the home directory)
-        - Windows: @c "C:\Documents and Settings\username\My Documents"
-        - Mac: @c ~/Documents
+        Same as calling GetUserDir() with Dir_Documents parameter.
 
         @since 2.7.0
 
-        @see GetAppDocumentsDir()
+        @see GetAppDocumentsDir(), GetUserDir()
     */
     virtual wxString GetDocumentsDir() const;
 
@@ -222,8 +280,9 @@ public:
     virtual wxString GetResourcesDir() const;
 
     /**
-        Return the directory for storing temporary files.
-        To create unique temporary files, it is best to use wxFileName::CreateTempFileName
+        Return the directory for storing temporary files, for the current user. Same as
+        wxFileName::GetTempDir().
+        To create unique temporary files, it is best to use wxFileName::CreateTempFileName()
         for correct behaviour when multiple processes are attempting to create temporary files.
 
         @since 2.7.2
@@ -233,7 +292,8 @@ public:
     /**
         Return the directory for the user config files:
         - Unix: @c ~ (the home directory)
-        - Windows: @c "C:\Documents and Settings\username\Application Data"
+        - Windows: @c "C:\Users\username\AppData\Roaming" or
+                   @c "C:\Documents and Settings\username\Application Data"
         - Mac: @c ~/Library/Preferences
 
         Only use this method if you have a single configuration file to put in this
@@ -245,16 +305,29 @@ public:
     /**
         Return the directory for the user-dependent application data files:
         - Unix: @c ~/.appinfo
-        - Windows: @c "C:\Documents and Settings\username\Application Data\appinfo"
+        - Windows: @c "C:\Users\username\AppData\Roaming\appinfo" or
+                   @c "C:\Documents and Settings\username\Application Data\appinfo"
         - Mac: @c "~/Library/Application Support/appinfo"
     */
     virtual wxString GetUserDataDir() const;
+
+    /**
+        Return the path of the specified user data directory.
+
+        If the value could not be determined the users home directory is returned.
+
+        @note On Unix this supports the xdg user dirs specification.
+
+        @since 3.1.0
+    */
+    virtual wxString GetUserDir(Dir userDir) const;
 
     /**
         Return the directory for user data files which shouldn't be shared with
         the other machines.
 
         This is the same as GetUserDataDir() for all platforms except Windows where it returns
+        @c "C:\Users\username\AppData\Local\appinfo" or
         @c "C:\Documents and Settings\username\Local Settings\Application Data\appinfo"
     */
     virtual wxString GetUserLocalDataDir() const;

@@ -159,13 +159,17 @@ private:
 public: \
     static bool IsSameClass(const wxAnyValueType* otherType) \
     { \
-        return wxTypeId(*sm_instance.get()) == wxTypeId(*otherType); \
+        return AreSameClasses(*sm_instance.get(), *otherType); \
     } \
-    virtual bool IsSameType(const wxAnyValueType* otherType) const \
+    virtual bool IsSameType(const wxAnyValueType* otherType) const wxOVERRIDE \
     { \
         return IsSameClass(otherType); \
     } \
 private: \
+    static bool AreSameClasses(const wxAnyValueType& a, const wxAnyValueType& b) \
+    { \
+        return wxTypeId(a) == wxTypeId(b); \
+    } \
     static wxAnyValueTypeScopedPtr sm_instance; \
 public: \
     static wxAnyValueType* GetInstance() \
@@ -190,11 +194,7 @@ class wxAnyValueTypeOpsInplace
 public:
     static void DeleteValue(wxAnyValueBuffer& buf)
     {
-        T* value = reinterpret_cast<T*>(&buf.m_buffer[0]);
-        value->~T();
-
-        // Some compiler may given 'unused variable' warnings without this
-        wxUnusedVar(value);
+        GetValue(buf).~T();
     }
 
     static void SetValue(const T& value,
@@ -207,11 +207,17 @@ public:
 
     static const T& GetValue(const wxAnyValueBuffer& buf)
     {
-        // Breaking this code into two lines should suppress
-        // GCC's 'type-punned pointer will break strict-aliasing rules'
-        // warning.
-        const T* value = reinterpret_cast<const T*>(&buf.m_buffer[0]);
-        return *value;
+        // Use a union to avoid undefined behaviour (and gcc -Wstrict-alias
+        // warnings about it) which would occur if we just casted a wxByte
+        // pointer to a T one.
+        union
+        {
+            const T* ptr;
+            const wxByte *buf;
+        } u;
+        u.buf = buf.m_buffer;
+
+        return *u.ptr;
     }
 };
 
@@ -333,7 +339,7 @@ public:
 
     virtual bool ConvertValue(const wxAnyValueBuffer& src,
                               wxAnyValueType* dstType,
-                              wxAnyValueBuffer& dst) const
+                              wxAnyValueBuffer& dst) const wxOVERRIDE
     {
         wxUnusedVar(src);
         wxUnusedVar(dstType);
@@ -462,7 +468,7 @@ public: \
     virtual ~wxAnyValueTypeImpl##TYPENAME() { } \
     virtual bool ConvertValue(const wxAnyValueBuffer& src, \
                               wxAnyValueType* dstType, \
-                              wxAnyValueBuffer& dst) const \
+                              wxAnyValueBuffer& dst) const wxOVERRIDE \
     { \
         GV value = GetValue(src); \
         return CONVFUNC(value, dstType, dst); \
@@ -558,7 +564,7 @@ public: \
  \
     virtual bool ConvertValue(const wxAnyValueBuffer& src, \
                               wxAnyValueType* dstType, \
-                              wxAnyValueBuffer& dst) const \
+                              wxAnyValueBuffer& dst) const wxOVERRIDE \
     { \
         wxUnusedVar(src); \
         wxUnusedVar(dstType); \

@@ -86,6 +86,8 @@
     #define HAVE_WGETCWD
 #endif
 
+wxDECL_FOR_STRICT_MINGW32(int, _fileno, (FILE*))
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -180,11 +182,8 @@ void wxPathList::Add(const wxArrayString &arr)
 }
 
 // Add paths e.g. from the PATH environment variable
-void wxPathList::AddEnvList (const wxString& WXUNUSED_IN_WINCE(envVariable))
+void wxPathList::AddEnvList (const wxString& envVariable)
 {
-    // No environment variables on WinCE
-#ifndef __WXWINCE__
-
     // The space has been removed from the tokenizers, otherwise a
     // path such as "C:\Program Files" would be split into 2 paths:
     // "C:\Program" and "Files"; this is true for both Windows and Unix.
@@ -203,7 +202,6 @@ void wxPathList::AddEnvList (const wxString& WXUNUSED_IN_WINCE(envVariable))
         wxArrayString arr = wxStringTokenize(val, PATH_TOKS);
         WX_APPEND_ARRAY(*this, arr);
     }
-#endif // !__WXWINCE__
 }
 
 // Given a full filename (with path), ensure that that file can
@@ -519,8 +517,6 @@ static CharType *wxDoExpandPath(CharType *buf, const wxString& name)
                 break;
         } else
 #  endif
-            // No env variables on WinCE
-#ifndef __WXWINCE__
 #ifdef __WINDOWS__
         if (*s++ == wxT('$') && (*s == wxT('{') || *s == wxT(')')))
 #else
@@ -548,8 +544,6 @@ static CharType *wxDoExpandPath(CharType *buf, const wxString& name)
                     s++;
             }
         }
-#endif
-        // __WXWINCE__
     }
 
     /* Expand ~ and ~user */
@@ -631,7 +625,7 @@ wchar_t *wxExpandPath(wchar_t *buf, const wxString& name)
  */
 wxChar *
 wxContractPath (const wxString& filename,
-                const wxString& WXUNUSED_IN_WINCE(envname),
+                const wxString& envname,
                 const wxString& user)
 {
   static wxChar dest[_MAXPATHLEN];
@@ -646,7 +640,6 @@ wxContractPath (const wxString& filename,
 
   // Handle environment
   wxString val;
-#ifndef __WXWINCE__
   wxChar *tcp;
   if (!envname.empty() && !(val = wxGetenv (envname)).empty() &&
      (tcp = wxStrstr (dest, val)) != NULL)
@@ -658,7 +651,6 @@ wxContractPath (const wxString& filename,
         wxStrcat (tcp, wxT("}"));
         wxStrcat (tcp, wxFileFunctionsBuffer);
     }
-#endif
 
   // Handle User's home (ignore root homes!)
   val = wxGetUserHome (user);
@@ -1011,7 +1003,7 @@ wxDoCopyFile(wxFile& fileIn,
 bool
 wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 {
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__)
     // CopyFile() copies file attributes and modification time too, so use it
     // instead of our code if available
     //
@@ -1128,11 +1120,9 @@ wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite)
         return false;
     }
 
-#if !defined(__WXWINCE__)
     // Normal system call
   if ( wxRename (file1, file2) == 0 )
     return true;
-#endif
 
   // Try to copy
   if (wxCopyFile(file1, file2, overwrite)) {
@@ -1169,9 +1159,9 @@ bool wxMkdir(const wxString& dir, int perm)
 
     // assume mkdir() has 2 args on non Windows-OS/2 platforms and on Windows too
     // for the GNU compiler
-#elif (!(defined(__WINDOWS__) || defined(__DOS__))) || \
+#elif (!defined(__WINDOWS__)) || \
       (defined(__GNUWIN32__) && !defined(__MINGW32__)) ||                \
-      defined(__WINE__) || defined(__WXMICROWIN__)
+      defined(__WINE__)
     const wxChar *dirname = dir.c_str();
   #if defined(MSVCRT)
     wxUnusedVar(perm);
@@ -1179,20 +1169,9 @@ bool wxMkdir(const wxString& dir, int perm)
   #else
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
   #endif
-#elif defined(__DOS__)
-    const wxChar *dirname = dir.c_str();
-  #if defined(__DJGPP__)
-    if ( mkdir(wxFNCONV(dirname), perm) != 0 )
-  #else
-    #error "Unsupported DOS compiler!"
-  #endif
-#else  // !MSW, !DOS and !OS/2 VAC++
+#else  // !MSW and !OS/2 VAC++
     wxUnusedVar(perm);
-  #ifdef __WXWINCE__
-    if ( CreateDirectory(dir.fn_str(), NULL) == 0 )
-  #else
     if ( wxMkDir(dir.fn_str()) != 0 )
-  #endif
 #endif // !MSW/MSW
     {
         wxLogSysError(_("Directory '%s' couldn't be created"), dir);
@@ -1207,11 +1186,7 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 #if defined(__VMS__)
     return false; //to be changed since rmdir exists in VMS7.x
 #else
-  #if defined(__WXWINCE__)
-    if ( RemoveDirectory(dir.fn_str()) == 0 )
-  #else
     if ( wxRmDir(dir.fn_str()) != 0 )
-  #endif
     {
         wxLogSysError(_("Directory '%s' couldn't be deleted"), dir);
         return false;
@@ -1318,11 +1293,6 @@ wxString wxFindNextFile()
 
 wxChar *wxDoGetCwd(wxChar *buf, int sz)
 {
-#if defined(__WXWINCE__)
-    // TODO
-    if(buf && sz>0) buf[0] = wxT('\0');
-    return buf;
-#else
     if ( !buf )
     {
         buf = new wxChar[sz + 1];
@@ -1376,16 +1346,6 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
     }
     else // ok, but we might need to massage the path into the right format
     {
-#ifdef __DJGPP__
-        // VS: DJGPP is a strange mix of DOS and UNIX API and returns paths
-        //     with / deliminers. We don't like that.
-        for (wxChar *ch = buf; *ch; ch++)
-        {
-            if (*ch == wxT('/'))
-                *ch = wxT('\\');
-        }
-#endif // __DJGPP__
-
 // MBN: we hope that in the case the user is compiling a GTK+/Motif app,
 //      he needs Unix as opposed to Win32 pathnames
 #if defined( __CYGWIN__ ) && defined( __WINDOWS__ )
@@ -1415,8 +1375,6 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
     #undef cbuf
 #endif
 
-#endif
-    // __WXWINCE__
 }
 
 wxString wxGetCwd()
@@ -1429,17 +1387,12 @@ wxString wxGetCwd()
 bool wxSetWorkingDirectory(const wxString& d)
 {
     bool success = false;
-#if defined(__UNIX__) || defined(__WXMAC__) || defined(__DOS__)
+#if defined(__UNIX__) || defined(__WXMAC__)
     success = (chdir(wxFNSTRINGCAST d.fn_str()) == 0);
 #elif defined(__WINDOWS__)
 
 #ifdef __WIN32__
-#ifdef __WXWINCE__
-    // No equivalent in WinCE
-    wxUnusedVar(d);
-#else
     success = (SetCurrentDirectory(d.t_str()) != 0);
-#endif
 #else
     // Must change drive, too.
     bool isDriveSpec = ((strlen(d) > 1) && (d[1] == ':'));
@@ -1474,9 +1427,7 @@ bool wxSetWorkingDirectory(const wxString& d)
 // On non-Windows platform, probably just return the empty string.
 wxString wxGetOSDirectory()
 {
-#ifdef __WXWINCE__
-    return wxString(wxT("\\Windows"));
-#elif defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+#if defined(__WINDOWS__)
     wxChar buf[MAX_PATH];
     if ( !GetWindowsDirectory(buf, MAX_PATH) )
     {
@@ -1677,15 +1628,6 @@ static bool wxCheckWin32Permission(const wxString& path, DWORD access)
         return false;
     }
 
-    if ( wxGetOsVersion() == wxOS_WINDOWS_9X )
-    {
-        // FAT directories always allow all access, even if they have the
-        // readonly flag set, and FAT files can only be read-only
-        return (dwAttr & FILE_ATTRIBUTE_DIRECTORY) ||
-                    (access != GENERIC_WRITE ||
-                        !(dwAttr & FILE_ATTRIBUTE_READONLY));
-    }
-
     HANDLE h = ::CreateFile
                  (
                     path.t_str(),
@@ -1767,7 +1709,7 @@ bool wxIsExecutable(const wxString &path)
 //
 wxFileKind wxGetFileKind(int fd)
 {
-#if defined __WINDOWS__ && !defined __WXWINCE__ && defined wxGetOSFHandle
+#if defined __WINDOWS__ && defined wxGetOSFHandle
     switch (::GetFileType(wxGetOSFHandle(fd)) & ~FILE_TYPE_REMOTE)
     {
         case FILE_TYPE_CHAR:

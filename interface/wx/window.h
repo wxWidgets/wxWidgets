@@ -137,7 +137,7 @@ enum wxWindowVariant
            is the old name for this style. Windows only.
     @style{wxBORDER_THEME}
            Displays a native border suitable for a control, on the current
-           platform. On Windows XP or Vista, this will be a themed border; on
+           platform. On Windows, this will be a themed border; on
            most other platforms a sunken border will be used. For more
            information for themed borders on Windows, please see Themed
            borders on Windows.
@@ -943,6 +943,11 @@ public:
         controls automatic best size determination and using sizers to lay out
         them.
 
+        Also note that if either component of @a sz has the special value of
+        -1, it is returned unchanged independently of the current DPI, to
+        preserve the special value of -1 in wxWidgets API (it is often used to
+        mean "unspecified").
+
         @since 3.1.0
      */
     wxSize FromDIP(const wxSize& sz) const;
@@ -956,6 +961,9 @@ public:
 
         This is the same as FromDIP(const wxSize& sz) overload, but assumes
         that the resolution is the same in horizontal and vertical directions.
+
+        If @a d has the special value of -1, it is returned unchanged
+        independently of the current DPI.
 
         @since 3.1.0
      */
@@ -985,6 +993,73 @@ public:
 
     /// @overload
     static wxSize FromDIP(const wxSize& sz, const wxWindow* w);
+
+
+    /**
+    Convert pixel values of the current toolkit to DPI-independent pixel values.
+
+    A DPI-independent pixel is just a pixel at the standard 96 DPI
+    resolution. To keep the same physical size at higher resolution, the
+    physical pixel value must be scaled by GetContentScaleFactor() but this
+    scaling may be already done by the underlying toolkit (GTK+, Cocoa,
+    ...) automatically. This method performs the conversion only if it is
+    not already done by the lower level toolkit, For example, you may
+    want to use this to store window sizes and positions so that they
+    can be re-used regardless of the display DPI:
+    @code
+    wxPoint pt(ToDIP(GetPosition()));
+    wxSize size(ToDIP(GetSize()));
+    @endcode
+
+    Also note that if either component of @a sz has the special value of
+    -1, it is returned unchanged independently of the current DPI, to
+    preserve the special value of -1 in wxWidgets API (it is often used to
+    mean "unspecified").
+
+    @since 3.1.0
+    */
+    wxSize ToDIP(const wxSize& sz) const;
+
+    /// @overload
+    wxPoint ToDIP(const wxPoint& pt) const;
+
+    /**
+    Convert pixel values of the current toolkit to DPI-independent pixel values.
+
+    This is the same as ToDIP(const wxSize& sz) overload, but assumes
+    that the resolution is the same in horizontal and vertical directions.
+
+    If @a d has the special value of -1, it is returned unchanged
+    independently of the current DPI.
+
+    @since 3.1.0
+    */
+    int ToDIP(int d) const;
+
+    /**
+    Non window-specific pixel to DPI-independent pixels conversion functions.
+
+    The display resolution depends on the window in general as different
+    windows can appear on different monitors using different resolutions,
+    however sometimes no window is available for converting the resolution
+    independent pixels to the physical values and in this case these static
+    overloads can be used with @NULL value for @a w argument.
+
+    Using these methods is discouraged as passing @NULL will prevent your
+    application from correctly supporting monitors with different
+    resolutions even in the future wxWidgets versions which will add
+    support for them, and passing non-@NULL window is just a less
+    convenient way of calling the non-static ToDIP() method.
+
+    @since 3.1.0
+    */
+    static wxSize ToDIP(const wxSize& sz, const wxWindow* w);
+
+    /// @overload
+    static wxPoint ToDIP(const wxPoint& pt, const wxWindow* w);
+
+    /// @overload
+    static wxSize ToDIP(const wxSize& sz, const wxWindow* w);
 
     /**
         This functions returns the best acceptable minimal size for the window.
@@ -1647,6 +1722,11 @@ public:
     */
     void Move(const wxPoint& pt, int flags = wxSIZE_USE_EXISTING);
 
+    /**
+        Moves the window to the specified position.
+
+        This is exactly the same as calling Move() with the default arguments.
+     */
     void SetPosition(const wxPoint& pt);
 
     //@}
@@ -3522,7 +3602,7 @@ public:
 
         @remarks Use EVT_HOTKEY(hotkeyId, fnc) in the event table to capture the
                  event. This function is currently only implemented under MSW
-                 and OSX and always returns false in the other ports.
+                 and OS X and always returns false in the other ports.
 
         @see UnregisterHotKey()
     */

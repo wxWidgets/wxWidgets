@@ -886,7 +886,7 @@ extern wxAppInitializer wxTheAppInitializer;
 
 // deprecated variants _not_ requiring a semicolon after them
 // (note that also some wx-prefixed macro do _not_ require a semicolon because
-//  it's not always possible to force the compire to require it)
+// it's not always possible to force the compiler to require it)
 
 #define IMPLEMENT_WXWIN_MAIN_CONSOLE            wxIMPLEMENT_WXWIN_MAIN_CONSOLE
 #define IMPLEMENT_WXWIN_MAIN                    wxIMPLEMENT_WXWIN_MAIN

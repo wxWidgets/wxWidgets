@@ -11,6 +11,7 @@
 #ifndef _WX_QT_EVENTSIGNALFORWARDER_H_
 #define _WX_QT_EVENTSIGNALFORWARDER_H_
 
+#include "wx/log.h"
 #include "wx/window.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"

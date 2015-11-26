@@ -81,7 +81,7 @@ class ListboxWidgetsPage : public ItemContainerWidgetsPage
 public:
     ListboxWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxControl *GetWidget() const wxOVERRIDE { return m_lbox; }
+    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_lbox; }
     virtual wxItemContainer* GetContainer() const wxOVERRIDE { return m_lbox; }
     virtual void RecreateWidget() wxOVERRIDE { CreateLbox(); }
 
@@ -156,12 +156,7 @@ protected:
                *m_chkOwnerDraw;
 
     // the listbox itself and the sizer it is in
-#ifdef __WXWINCE__
-    wxListBoxBase
-#else
-    wxListBox
-#endif
-                  *m_lbox;
+    wxListBox *m_lbox;
 
     wxSizer *m_sizerLbox;
 

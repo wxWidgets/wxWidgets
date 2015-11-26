@@ -84,6 +84,7 @@ public:
     void OnTextPaste(wxClipboardTextEvent & event);
 
     void OnMouseEvent(wxMouseEvent& event);
+    void OnContextMenu(wxContextMenuEvent& event);
 
     void OnSetFocus(wxFocusEvent& event);
     void OnKillFocus(wxFocusEvent& event);
@@ -573,6 +574,7 @@ wxBEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
     EVT_TEXT_PASTE(wxID_ANY, MyTextCtrl::OnTextPaste)
 
     EVT_MOUSE_EVENTS(MyTextCtrl::OnMouseEvent)
+    EVT_CONTEXT_MENU(MyTextCtrl::OnContextMenu)
 
     EVT_SET_FOCUS(MyTextCtrl::OnSetFocus)
     EVT_KILL_FOCUS(MyTextCtrl::OnKillFocus)
@@ -774,7 +776,7 @@ void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
     if ( !ms_logMouse )
         return;
 
-    if ( !ev.Moving() )
+    if ( ev.GetEventType() != wxEVT_MOTION )
     {
         wxString msg;
         if ( ev.Entering() )
@@ -814,6 +816,17 @@ void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
         wxLogMessage(msg);
     }
     //else: we're not interested in mouse move events
+}
+
+void MyTextCtrl::OnContextMenu(wxContextMenuEvent& ev)
+{
+    ev.Skip();
+
+    if ( !ms_logMouse )
+        return;
+
+    const wxPoint pos = ev.GetPosition();
+    wxLogMessage("Context menu event at (%d, %d)", pos.x, pos.y);
 }
 
 void MyTextCtrl::OnSetFocus(wxFocusEvent& event)
@@ -1143,11 +1156,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #endif
 
     m_tab = new MyTextCtrl( this, 100, wxT("Multiline, allow <TAB> processing."),
-      wxPoint(180,90), wxDefaultSize, wxTE_MULTILINE |  wxTE_PROCESS_TAB );
+      wxPoint(180,90), wxSize(200,70), wxTE_MULTILINE |  wxTE_PROCESS_TAB );
     m_tab->SetClientData((void *)wxT("tab"));
 
     m_enter = new MyTextCtrl( this, 100, wxT("Multiline, allow <ENTER> processing."),
-      wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE);
+      wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE | wxTE_PROCESS_ENTER );
     m_enter->SetClientData((void *)wxT("enter"));
 
     m_textrich = new MyTextCtrl(this, wxID_ANY, wxT("Allows more than 30Kb of text\n")

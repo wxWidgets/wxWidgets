@@ -81,13 +81,13 @@ public :
             case NSRegularControlSize:
                 left = right = 2;
                 top = 0;
-                bottom = 4;
+                bottom = 3;
                 break;
             case NSMiniControlSize:
             case NSSmallControlSize:
                 left = right = 1;
                 top = 0;
-                bottom = 2;
+                bottom = 1;
                 break;
         }
     }

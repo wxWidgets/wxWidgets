@@ -68,6 +68,7 @@ protected:
 // NOTE: this style is supported just by wxColourButtonGeneric and
 //       thus is not exposed in wxColourPickerCtrl
 #define wxCLRP_SHOW_LABEL             0x0008
+#define wxCLRP_SHOW_ALPHA             0x0010
 
 // map platform-dependent controls which implement the wxColourPickerWidgetBase
 // under the name "wxColourPickerWidget".
@@ -146,7 +147,7 @@ public:        // internal functions
 
 protected:
     virtual long GetPickerStyle(long style) const wxOVERRIDE
-        { return (style & wxCLRP_SHOW_LABEL); }
+        { return (style & (wxCLRP_SHOW_LABEL | wxCLRP_SHOW_ALPHA)); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxColourPickerCtrl);

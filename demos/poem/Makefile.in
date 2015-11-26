@@ -183,7 +183,7 @@ wxpoem$(EXEEXT): $(WXPOEM_OBJECTS) $(__wxpoem___win32rc)
 
 data: 
 	@mkdir -p .
-	@for f in wxpoem.txt wxpoem.dat; do \
+	@for f in wxpoem.txt wxpoem.dat wxpoem.idx; do \
 	if test ! -f ./$$f -a ! -d ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \

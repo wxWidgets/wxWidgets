@@ -31,7 +31,7 @@ public:
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
     wxBitmap(const char* const* bits);
 #if wxUSE_IMAGE
-    wxBitmap(const wxImage& image, int depth = -1);
+    wxBitmap(const wxImage& image, int depth = -1, double WXUNUSED(scale) = 1.0);
 #endif
 
     bool Create(const wxIDirectFBSurfacePtr& surface);

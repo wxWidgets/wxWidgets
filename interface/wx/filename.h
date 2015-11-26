@@ -773,7 +773,8 @@ public:
     static wxULongLong GetSize(const wxString& filename);
 
     /**
-        Returns the directory used for temporary files.
+        Returns the directory used for temporary files, for current user. Same as
+        wxStandardPaths::GetTempDir().
     */
     static wxString GetTempDir();
 

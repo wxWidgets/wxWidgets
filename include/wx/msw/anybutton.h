@@ -36,7 +36,6 @@ public:
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
     virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
-    virtual State GetNormalState() const { return State_Normal; }
 
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const { return false; }

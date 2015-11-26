@@ -409,7 +409,21 @@ bool
 wxDatePickerCtrlGeneric::SetDateRange(const wxDateTime& lowerdate,
                                       const wxDateTime& upperdate)
 {
-    return m_popup->SetDateRange(lowerdate, upperdate);
+    if ( !m_popup->SetDateRange(lowerdate, upperdate) )
+        return false;
+
+    // If the limits were, check that our current value lies between them and
+    // adjust it if it doesn't.
+    const wxDateTime old = GetValue();
+    if ( old.IsValid() )
+    {
+        if ( lowerdate.IsValid() && old < lowerdate )
+            SetValue(lowerdate);
+        else if ( upperdate.IsValid() && old > upperdate )
+            SetValue(upperdate);
+    }
+
+    return true;
 }
 
 
@@ -436,7 +450,7 @@ bool wxDatePickerCtrlGeneric::GetRange(wxDateTime *dt1, wxDateTime *dt2) const
 void
 wxDatePickerCtrlGeneric::SetRange(const wxDateTime &dt1, const wxDateTime &dt2)
 {
-    m_popup->SetDateRange(dt1, dt2);
+    SetDateRange(dt1, dt2);
 }
 
 wxCalendarCtrl *wxDatePickerCtrlGeneric::GetCalendar() const

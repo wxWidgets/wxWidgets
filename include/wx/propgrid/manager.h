@@ -266,7 +266,7 @@ public:
         switching.
     */
     wxPropertyGridPage* AddPage( const wxString& label = wxEmptyString,
-                                 const wxBitmap& bmp = wxPG_NULL_BITMAP,
+                                 const wxBitmap& bmp = wxNullBitmap,
                                  wxPropertyGridPage* pageObj = NULL )
     {
         return InsertPage(-1, label, bmp, pageObj);
@@ -352,8 +352,8 @@ public:
     wxPropertyGridIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT,
                                         wxPGProperty* firstProp = NULL )
     {
-        wxFAIL_MSG( "Please only iterate through individual pages "
-                    "or use CreateVIterator()" );
+        wxFAIL_MSG( wxS("Please only iterate through individual pages ")
+                    wxS("or use CreateVIterator()") );
         return wxPropertyGridInterface::GetIterator( flags, firstProp );
     }
 
@@ -361,8 +361,8 @@ public:
     GetIterator(int flags = wxPG_ITERATE_DEFAULT,
                 wxPGProperty* firstProp = NULL) const
     {
-        wxFAIL_MSG( "Please only iterate through individual pages "
-                    " or use CreateVIterator()" );
+        wxFAIL_MSG( wxS("Please only iterate through individual pages ")
+                    wxS("or use CreateVIterator()") );
         return wxPropertyGridInterface::GetIterator( flags, firstProp );
     }
 
@@ -374,16 +374,16 @@ public:
     */
     wxPropertyGridIterator GetIterator( int flags, int startPos )
     {
-        wxFAIL_MSG( "Please only iterate through individual pages "
-                    "or use CreateVIterator()" );
+        wxFAIL_MSG( wxS("Please only iterate through individual pages ")
+                    wxS("or use CreateVIterator()") );
 
         return wxPropertyGridInterface::GetIterator( flags, startPos );
     }
 
     wxPropertyGridConstIterator GetIterator( int flags, int startPos ) const
     {
-        wxFAIL_MSG( "Please only iterate through individual pages "
-                    "or use CreateVIterator()" );
+        wxFAIL_MSG( wxS("Please only iterate through individual pages ")
+                    wxS("or use CreateVIterator()") );
         return wxPropertyGridInterface::GetIterator( flags, startPos );
     }
 
@@ -513,7 +513,7 @@ public:
     /** Select and displays a given page.
 
         @param index
-            Index of page being seleced. Can be -1 to select nothing.
+            Index of page being selected. Can be -1 to select nothing.
     */
     void SelectPage( int index );
 
@@ -521,7 +521,7 @@ public:
     void SelectPage( const wxString& label )
     {
         int index = GetPageByName(label);
-        wxCHECK_RET( index >= 0, wxT("No page with such name") );
+        wxCHECK_RET( index >= 0, wxS("No page with such name") );
         SelectPage( index );
     }
 
@@ -535,9 +535,14 @@ public:
     bool SelectProperty( wxPGPropArg id, bool focus = false )
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-        return p->GetParentState()->DoSelectProperty(p, focus);
+        unsigned int flags = wxPG_SEL_DONT_SEND_EVENT;
+        if ( focus )
+            flags |= wxPG_SEL_FOCUS;
+
+        return p->GetParentState()->DoSelectProperty(p, flags);
     }
 
+#if wxUSE_HEADERCTRL
     /**
         Sets a column title. Default title for column 0 is "Property",
         and "Value" for column 1.
@@ -546,6 +551,7 @@ public:
                  member function will make it visible.
     */
     void SetColumnTitle( int idx, const wxString& title );
+#endif // wxUSE_HEADERCTRL
 
     /**
         Sets number of columns on given page (default is current page).
@@ -621,7 +627,7 @@ protected:
     /**
         Creates property grid for the manager. Reimplement in derived class to
         use subclassed wxPropertyGrid. However, if you do this then you
-        must also use the two-step construction (ie. default constructor and
+        must also use the two-step construction (i.e. default constructor and
         Create() instead of constructor with arguments) when creating the
         manager.
     */

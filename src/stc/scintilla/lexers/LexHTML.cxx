@@ -576,8 +576,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 	WordList &keywords5 = *keywordlists[4];
 	WordList &keywords6 = *keywordlists[5]; // SGML (DTD) keywords
 
-	// Lexer for HTML requires more lexical states (8 bits worth) than most lexers
-	styler.StartAt(startPos, static_cast<char>(STYLE_MAX));
+	styler.StartAt(startPos);
 	char prevWord[200];
 	prevWord[0] = '\0';
 	char phpStringDelimiter[200]; // PHP is not limited in length, we are
@@ -609,7 +608,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 		if (startPos == 0)
 			state = SCE_H_DEFAULT;
 	}
-	styler.StartAt(startPos, static_cast<char>(STYLE_MAX));
+	styler.StartAt(startPos);
 
 	int lineCurrent = styler.GetLine(startPos);
 	int lineState;
@@ -811,8 +810,8 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 			}
 			styler.SetLineState(lineCurrent,
 			                    ((inScriptType & 0x03) << 0) |
-			                    ((tagOpened & 0x01) << 2) |
-			                    ((tagClosing & 0x01) << 3) |
+			                    ((tagOpened ? 1 : 0) << 2) |
+			                    ((tagClosing ? 1 : 0) << 3) |
 			                    ((aspScript & 0x0F) << 4) |
 			                    ((clientScript & 0x0F) << 8) |
 			                    ((beforePreProc & 0xFF) << 12));
@@ -823,18 +822,26 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 		// handle start of Mako comment line
 		if (isMako && ch == '#' && chNext == '#') {
 			makoComment = 1;
+			state = SCE_HP_COMMENTLINE;
 		}
 
 		// handle end of Mako comment line
 		else if (isMako && makoComment && (ch == '\r' || ch == '\n')) {
 			makoComment = 0;
-			styler.ColourTo(i, SCE_HP_COMMENTLINE);
-			state = SCE_HP_DEFAULT;
+			styler.ColourTo(i, StateToPrint);
+			if (scriptLanguage == eScriptPython) {
+				state = SCE_HP_DEFAULT;
+			} else {
+				state = SCE_H_DEFAULT;
+			}
 		}
 
 		// Allow falling through to mako handling code if newline is going to end a block
 		if (((ch == '\r' && chNext != '\n') || (ch == '\n')) &&
 			(!isMako || (0 != strcmp(makoBlockType, "%")))) {
+		}
+		// Ignore everything in mako comment until the line ends
+		else if (isMako && makoComment) {
 		}
 
 		// generic end of script processing
@@ -2180,6 +2187,6 @@ static const char * const phpscriptWordListDesc[] = {
 	0,
 };
 
-LexerModule lmHTML(SCLEX_HTML, ColouriseHTMLDoc, "hypertext", 0, htmlWordListDesc, 8);
-LexerModule lmXML(SCLEX_XML, ColouriseXMLDoc, "xml", 0, htmlWordListDesc, 8);
-LexerModule lmPHPSCRIPT(SCLEX_PHPSCRIPT, ColourisePHPScriptDoc, "phpscript", 0, phpscriptWordListDesc, 8);
+LexerModule lmHTML(SCLEX_HTML, ColouriseHTMLDoc, "hypertext", 0, htmlWordListDesc);
+LexerModule lmXML(SCLEX_XML, ColouriseXMLDoc, "xml", 0, htmlWordListDesc);
+LexerModule lmPHPSCRIPT(SCLEX_PHPSCRIPT, ColourisePHPScriptDoc, "phpscript", 0, phpscriptWordListDesc);

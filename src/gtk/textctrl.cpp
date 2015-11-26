@@ -695,6 +695,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
         gulong sig_id = g_signal_connect(m_buffer, "mark_set", G_CALLBACK(mark_set), &m_anonymousMarkList);
         // Create view
         m_text = gtk_text_view_new_with_buffer(m_buffer);
+        GTKConnectFreezeWidget(m_text);
         // gtk_text_view_set_buffer adds its own reference
         g_object_unref(m_buffer);
         g_signal_handler_disconnect(m_buffer, sig_id);
@@ -851,7 +852,10 @@ GtkEditable *wxTextCtrl::GetEditable() const
 
 GtkEntry *wxTextCtrl::GetEntry() const
 {
-    return GTK_ENTRY(m_text);
+    if (GTK_IS_ENTRY(m_text))
+        return (GtkEntry*)m_text;
+
+    return NULL;
 }
 
 int wxTextCtrl::GTKIMFilterKeypress(GdkEventKey* event) const
@@ -1972,6 +1976,8 @@ void wxTextCtrl::DoFreeze()
     wxCHECK_RET(m_text != NULL, wxT("invalid text ctrl"));
 
     GTKFreezeWidget(m_text);
+    if (m_widget != m_text)
+        GTKFreezeWidget(m_widget);
 
     if ( HasFlag(wxTE_MULTILINE) )
     {
@@ -2018,6 +2024,8 @@ void wxTextCtrl::DoThaw()
     }
 
     GTKThawWidget(m_text);
+    if (m_widget != m_text)
+        GTKThawWidget(m_widget);
 }
 
 // ----------------------------------------------------------------------------

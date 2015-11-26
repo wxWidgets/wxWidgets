@@ -192,7 +192,6 @@ void* wxJoystickThread::Entry()
         }
     }
 
-    close(m_device);
     return NULL;
 }
 
@@ -231,7 +230,8 @@ wxJoystick::~wxJoystick()
     ReleaseCapture();
     if (m_thread)
         m_thread->Delete();  // It's detached so it will delete itself
-    m_device = -1;
+    if (m_device != -1)
+        close(m_device);
 }
 
 

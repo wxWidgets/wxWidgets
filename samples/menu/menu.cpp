@@ -531,8 +531,11 @@ MyFrame::MyFrame()
     fileMenu->AppendSubMenu(stockSubMenu, wxT("&Standard items demo"));
 
 #if USE_LOG_WINDOW
+    wxMenu* sub = new wxMenu;
+    sub->Append(wxID_OPEN);
     wxMenuItem *item = new wxMenuItem(fileMenu, Menu_File_ClearLog,
-                                      wxT("Clear &log\tCtrl-L"));
+                                      wxT("Clear &log\tCtrl-L"),
+                                      "", wxITEM_NORMAL, sub);
     item->SetBitmap(copy_xpm);
     fileMenu->Append(item);
     fileMenu->AppendSeparator();
@@ -679,9 +682,6 @@ MyFrame::MyFrame()
                  wxT("The commands in the \"Menubar\" menu work with the ")
                  wxT("menubar itself.\n\n")
                  wxT("Right click the band below to test popup menus.\n"));
-#endif
-#ifdef __POCKETPC__
-    EnableContextMenu();
 #endif
 }
 
@@ -1329,9 +1329,6 @@ MyDialog::MyDialog(wxWindow* parent)
 
     m_textctrl->AppendText(wxT("Dialogs do not have menus, but popup menus should function the same\n\n")
                  wxT("Right click this text ctrl to test popup menus.\n"));
-#endif
-#ifdef __POCKETPC__
-    EnableContextMenu();
 #endif
 }
 

@@ -39,7 +39,7 @@ public:
 
     virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE;
 #ifdef __WXGTK3__
-    virtual bool SetFont(const wxFont& font);
+    virtual bool SetFont(const wxFont& font) wxOVERRIDE;
 #endif
 
 protected:

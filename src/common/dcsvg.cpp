@@ -385,11 +385,53 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     if (sTmp.Len() > 0)  s += wxT("style=\"font-family:") + sTmp + wxT("; ");
     else s += wxT("style=\" ");
 
-    wxString fontweights [3] = { wxT("normal"), wxT("lighter"), wxT("bold") };
-    s += wxT("font-weight:") + fontweights[m_font.GetWeight() - wxNORMAL] + wxT("; ");
+    wxString fontweight;
+    switch ( m_font.GetWeight() )
+    {
+        case wxFONTWEIGHT_MAX:
+            wxFAIL_MSG( wxS("invalid font weight value") );
+            wxFALLTHROUGH;
 
-    wxString fontstyles [5] = { wxT("normal"), wxT("style error"), wxT("style error"), wxT("italic"), wxT("oblique") };
-    s += wxT("font-style:") + fontstyles[m_font.GetStyle() - wxNORMAL] + wxT("; ");
+        case wxFONTWEIGHT_NORMAL:
+            fontweight = wxS("normal");
+            break;
+
+        case wxFONTWEIGHT_LIGHT:
+            fontweight = wxS("lighter");
+            break;
+
+        case wxFONTWEIGHT_BOLD:
+            fontweight = wxS("bold");
+            break;
+    }
+
+    wxASSERT_MSG( !fontweight.empty(), wxS("unknown font weight value") );
+
+    s += wxT("font-weight:") + fontweight + wxT("; ");
+
+    wxString fontstyle;
+    switch ( m_font.GetStyle() )
+    {
+        case wxFONTSTYLE_MAX:
+            wxFAIL_MSG( wxS("invalid font style value") );
+            wxFALLTHROUGH;
+
+        case wxFONTSTYLE_NORMAL:
+            fontstyle = wxS("normal");
+            break;
+
+        case wxFONTSTYLE_ITALIC:
+            fontstyle = wxS("italic");
+            break;
+
+        case wxFONTSTYLE_SLANT:
+            fontstyle = wxS("oblique");
+            break;
+    }
+
+    wxASSERT_MSG( !fontstyle.empty(), wxS("unknown font style value") );
+
+    s += wxT("font-style:") + fontstyle + wxT("; ");
 
     sTmp.Printf (wxT("font-size:%dpt; "), m_font.GetPointSize() );
     s += sTmp;

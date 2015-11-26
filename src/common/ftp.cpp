@@ -79,8 +79,6 @@ wxFTP::wxFTP()
     m_username = wxT("anonymous");
     m_password << wxGetUserId() << wxT('@') << wxGetFullHostName();
 
-    SetNotify(0);
-    SetFlags(wxSOCKET_NOWAIT);
     m_bPassive = true;
     m_bEncounteredError = false;
 }
@@ -781,8 +779,6 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
         m_lastError = wxPROTO_CONNERR;
         return NULL;
     }
-
-    sock->SetFlags(wxSOCKET_WAITALL);
 
     m_streaming = true;
 

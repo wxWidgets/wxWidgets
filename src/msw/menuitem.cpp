@@ -48,11 +48,6 @@
 #include "wx/msw/private.h"
 #include "wx/msw/dc.h"
 
-#ifdef __WXWINCE__
-// Implemented in menu.cpp
-UINT GetMenuState(HMENU hMenu, UINT id, UINT flags) ;
-#endif
-
 #if wxUSE_UXTHEME
     #include "wx/msw/uxtheme.h"
 #endif
@@ -615,7 +610,6 @@ void wxMenuItem::Check(bool check)
                 return;
             }
 
-#ifdef __WIN32__
             // calling CheckMenuRadioItem() with such parameters hangs my system
             // (NT4 SP6) and I suspect this could happen to the others as well,
             // so don't do it!
@@ -630,7 +624,6 @@ void wxMenuItem::Check(bool check)
             {
                 wxLogLastError(wxT("CheckMenuRadioItem"));
             }
-#endif // __WIN32__
 
             // also uncheck all the other items in this radio group
             wxMenuItemList::compatibility_iterator node = items.Item(start);
@@ -1076,13 +1069,13 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
             SIZE accelSize;
             ::GetTextExtentPoint32(hdc, accel.c_str(), accel.length(), &accelSize);
 
-            int flags = DST_TEXT;
+            flags = DST_TEXT;
             // themes menu is using specified color for disabled labels
             if ( data->MenuLayout() == MenuDrawData::Classic &&
                  (stat & wxODDisabled) && !(stat & wxODSelected) )
                 flags |= DSS_DISABLED;
 
-            int x = rcText.right - data->ArrowMargin.GetTotalX()
+            x = rcText.right - data->ArrowMargin.GetTotalX()
                                  - data->ArrowSize.cx
                                  - data->ArrowBorder;
 
@@ -1092,7 +1085,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
             else
                 x -= m_parentMenu->GetMaxAccelWidth();
 
-            int y = rcText.top + (rcText.bottom - rcText.top - accelSize.cy) / 2;
+            y = rcText.top + (rcText.bottom - rcText.top - accelSize.cy) / 2;
 
             ::DrawState(hdc, NULL, NULL, wxMSW_CONV_LPARAM(accel),
                         accel.length(), x, y, 0, 0, flags);
@@ -1410,7 +1403,7 @@ int wxMenuItem::MSGetMenuItemPos() const
     if ( !hMenu )
         return -1;
 
-    const UINT id = GetMSWId();
+    const WXWPARAM id = GetMSWId();
     const int menuItems = ::GetMenuItemCount(hMenu);
     for ( int i = 0; i < menuItems; i++ )
     {

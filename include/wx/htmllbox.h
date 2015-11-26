@@ -148,6 +148,9 @@ private:
     // returns index of item that contains given HTML cell
     size_t GetItemForCell(const wxHtmlCell *cell) const;
 
+    // Create the cell for the given item, caller is responsible for freeing it.
+    wxHtmlCell* CreateCellForItem(size_t n) const;
+
     // return physical coordinates of root wxHtmlCell of n-th item
     wxPoint GetRootCellCoords(size_t n) const;
 
@@ -269,7 +272,7 @@ public:
     virtual void SetString(unsigned int n, const wxString& s) wxOVERRIDE;
 
     // resolve ambiguity between wxItemContainer and wxVListBox versions
-    void Clear();
+    void Clear() wxOVERRIDE;
 
 protected:
     virtual int DoInsertItems(const wxArrayStringsAdapter & items,

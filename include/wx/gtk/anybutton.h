@@ -54,10 +54,10 @@ private:
     // update the bitmap to correspond to the current button state
     void GTKUpdateBitmap();
 
-    // return the current button state from m_isXXX flags (which means that it
-    // might not correspond to the real current state as e.g. m_isCurrent will
-    // never be true if we don't have a valid current bitmap)
-    State GTKGetCurrentState() const;
+    // return the state whose bitmap is being currently shown (so this is
+    // different from the real current state, e.g. it could be State_Normal
+    // even if the button is pressed if no button was set for State_Pressed)
+    State GTKGetCurrentBitmapState() const;
 
     // show the given bitmap (must be valid)
     void GTKDoShowBitmap(const wxBitmap& bitmap);

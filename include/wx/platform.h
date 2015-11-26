@@ -35,6 +35,9 @@
 #    ifndef MAC_OS_X_VERSION_10_9
 #       define MAC_OS_X_VERSION_10_9 1090
 #    endif
+#    ifndef MAC_OS_X_VERSION_10_10
+#       define MAC_OS_X_VERSION_10_10 101000
+#    endif
 #    include "wx/osx/config_xcode.h"
 #    ifndef __WXOSX__
 #        define __WXOSX__ 1
@@ -114,59 +117,6 @@
 #   endif
 
 #endif /* __WXGTK__ && __WINDOWS__ */
-
-/* detect MS SmartPhone */
-#if defined( WIN32_PLATFORM_WFSP )
-#   ifndef __SMARTPHONE__
-#       define __SMARTPHONE__
-#   endif
-#   ifndef __WXWINCE__
-#       define __WXWINCE__
-#   endif
-#endif
-
-/* detect PocketPC */
-#if defined( WIN32_PLATFORM_PSPC )
-#   ifndef __POCKETPC__
-#       define __POCKETPC__
-#   endif
-#   ifndef __WXWINCE__
-#       define __WXWINCE__
-#   endif
-#endif
-
-/* detect Standard WinCE SDK */
-#if defined( WCE_PLATFORM_STANDARDSDK )
-#   ifndef __WINCE_STANDARDSDK__
-#       define __WINCE_STANDARDSDK__
-#   endif
-#   ifndef __WXWINCE__
-#       define __WXWINCE__
-#   endif
-#endif
-
-#if defined(_WIN32_WCE) && !defined(WIN32_PLATFORM_WFSP) && !defined(WIN32_PLATFORM_PSPC)
-#   if (_WIN32_WCE >= 400)
-#       ifndef __WINCE_NET__
-#           define __WINCE_NET__
-#       endif
-#   elif (_WIN32_WCE >= 200)
-#       ifndef __HANDHELDPC__
-#           define __HANDHELDPC__
-#       endif
-#   endif
-#   ifndef __WXWINCE__
-#       define __WXWINCE__
-#   endif
-#endif
-
-#if defined(__WXWINCE__) && defined(_MSC_VER) && (_MSC_VER == 1201)
-    #define __EVC4__
-#endif
-
-#if defined(__POCKETPC__) || defined(__SMARTPHONE__) || defined(__WXGPE__)
-#   define __WXHANDHELD__
-#endif
 
 #ifdef __ANDROID__
 #   define __WXANDROID__
@@ -288,26 +238,11 @@
 #endif /* __BORLANDC__ */
 
 /*
-   OS: first of all, test for MS-DOS platform. We must do this before testing
-       for Unix, because DJGPP compiler defines __unix__ under MS-DOS
- */
-#if defined(__GO32__) || defined(__DJGPP__) || defined(__DOS__)
-#    ifndef __DOS__
-#        define __DOS__
-#    endif
-    /* define it if it hadn't been done by configure yet */
-#    if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
-#        ifdef __DJGPP__
-#            define wxSIZE_T_IS_ULONG
-#        endif
-#    endif
-
-/*
    OS: then test for generic Unix defines, then for particular flavours and
        finally for Unix-like systems
        Mac OS X matches this case (__MACH__), prior Mac OS do not.
  */
-#elif defined(__UNIX__) || defined(__unix) || defined(__unix__) || \
+#if defined(__UNIX__) || defined(__unix) || defined(__unix__) || \
       defined(____SVR4____) || defined(__LINUX__) || defined(__sgi) || \
       defined(__hpux) || defined(sun) || defined(__SUN__) || defined(_AIX) || \
       defined(__VMS) || defined(__BEOS__) || defined(__MACH__)
@@ -405,9 +340,7 @@
 #endif
 
 /* Force linking against required libraries under Windows: */
-#ifdef __WXWINCE__
-#   include "wx/msw/wince/libraries.h"
-#elif defined __WINDOWS__
+#if defined __WINDOWS__
 #   include "wx/msw/libraries.h"
 #endif
 
@@ -421,7 +354,6 @@
  */
 #if ( defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
     ( defined( __CYGWIN__ ) && defined( __WINDOWS__ ) ) ) && \
-    !defined(__DOS__) && \
     !defined(__WXMOTIF__) && \
     !defined(__WXX11__)
 #    include "wx/msw/gccpriv.h"
@@ -430,6 +362,7 @@
 #    define wxCHECK_W32API_VERSION(maj, min) (0)
 #    undef wxCHECK_MINGW32_VERSION
 #    define wxCHECK_MINGW32_VERSION( major, minor ) (0)
+#    define wxDECL_FOR_STRICT_MINGW32(rettype, func, params)
 #endif
 
 
@@ -532,6 +465,9 @@
 #        endif
 #        ifndef MAC_OS_X_VERSION_10_9
 #           define MAC_OS_X_VERSION_10_9 1090
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_10
+#           define MAC_OS_X_VERSION_10_10 101000
 #        endif
 #    else
 #        error "only mach-o configurations are supported"

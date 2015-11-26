@@ -654,7 +654,7 @@ void wxGridCellAttrData::UpdateAttrRows( size_t pos, int numRows )
         {
             if (numRows > 0)
             {
-                // If rows inserted, include row counter where necessary
+                // If rows inserted, increment row counter where necessary
                 coords.SetRow(row + numRows);
             }
             else if (numRows < 0)
@@ -688,15 +688,15 @@ void wxGridCellAttrData::UpdateAttrCols( size_t pos, int numCols )
         {
             if ( numCols > 0 )
             {
-                // If rows inserted, include row counter where necessary
+                // If cols inserted, increment col counter where necessary
                 coords.SetCol(col + numCols);
             }
             else if (numCols < 0)
             {
-                // If rows deleted ...
+                // If cols deleted ...
                 if ((size_t)col >= pos - numCols)
                 {
-                    // ...either decrement row counter (if row still exists)...
+                    // ...either decrement col counter (if col still exists)...
                     coords.SetCol(col + numCols);
                 }
                 else
@@ -800,12 +800,12 @@ void wxGridRowOrColAttrData::UpdateAttrRowsOrCols( size_t pos, int numRowsOrCols
         {
             if ( numRowsOrCols > 0 )
             {
-                // If rows inserted, include row counter where necessary
+                // If rows or cols inserted, increment row/col counter where necessary
                 rowOrCol += numRowsOrCols;
             }
             else if ( numRowsOrCols < 0)
             {
-                // If rows deleted, either decrement row counter (if row still exists)
+                // If rows/cols deleted, either decrement row/col counter (if row/col still exists)
                 if ((size_t)rowOrCol >= pos - numRowsOrCols)
                     rowOrCol += numRowsOrCols;
                 else
@@ -2714,7 +2714,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 
                 for ( i = pos; i < m_numRows; i++ )
                 {
-                    bottom += m_rowHeights[i];
+                    bottom += GetRowHeight(i);
                     m_rowBottoms[i] = bottom;
                 }
             }
@@ -2759,7 +2759,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 
                 for ( i = oldNumRows; i < m_numRows; i++ )
                 {
-                    bottom += m_rowHeights[i];
+                    bottom += GetRowHeight(i);
                     m_rowBottoms[i] = bottom;
                 }
             }
@@ -2795,7 +2795,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 int h = 0;
                 for ( i = 0; i < m_numRows; i++ )
                 {
-                    h += m_rowHeights[i];
+                    h += GetRowHeight(i);
                     m_rowBottoms[i] = h;
                 }
             }
@@ -2879,7 +2879,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 {
                     i = GetColAt( colPos );
 
-                    right += m_colWidths[i];
+                    right += GetColWidth(i);
                     m_colRights[i] = right;
                 }
             }
@@ -2937,7 +2937,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 {
                     i = GetColAt( colPos );
 
-                    right += m_colWidths[i];
+                    right += GetColWidth(i);
                     m_colRights[i] = right;
                 }
             }
@@ -2998,7 +2998,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 {
                     i = GetColAt( colPos );
 
-                    w += m_colWidths[i];
+                    w += GetColWidth(i);
                     m_colRights[i] = w;
                 }
             }
@@ -3941,7 +3941,9 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
         case wxMOD_CONTROL:
             if ( m_selectedBlockCorner == wxGridNoCellCoords)
                 m_selectedBlockCorner = coords;
-            UpdateBlockBeingSelected(m_selectedBlockCorner, coords);
+            if ( isFirstDrag )
+                SetGridCursor(coords);
+            UpdateBlockBeingSelected(m_currentCellCoords, coords);
             break;
 
         case wxMOD_NONE:
@@ -5184,7 +5186,7 @@ wxGrid::UpdateBlockBeingSelected(int topRow, int leftCol,
                 break;
 
             case wxGridSelectRows:
-                // only full rows selection allowd, ensure that we do select
+                // only full rows selection allowed, ensure that we do select
                 // full rows
                 leftCol = 0;
                 rightCol = GetNumberCols() - 1;

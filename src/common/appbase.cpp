@@ -88,7 +88,7 @@
     #endif
 #endif // wxUSE_EXCEPTIONS
 
-#if !defined(__WINDOWS__) || defined(__WXMICROWIN__)
+#if !defined(__WINDOWS__)
   #include  <signal.h>      // for SIGTRAP used by wxTrap()
 #endif  //Win/Unix
 
@@ -205,7 +205,7 @@ wxAppConsoleBase::~wxAppConsoleBase()
 
 bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **WXUNUSED(argv))
 {
-#if defined(__WINDOWS__) && !defined(__WXWINCE__)
+#if defined(__WINDOWS__)
     SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
 #endif
 
@@ -1012,25 +1012,37 @@ wxString wxAppTraitsBase::GetAssertStackTrace()
 #endif // !__WINDOWS__
 
 
-    wxString stackTrace;
-
     class StackDump : public wxStackWalker
     {
     public:
-        StackDump() { }
+        StackDump() { m_numFrames = 0; }
 
         const wxString& GetStackTrace() const { return m_stackTrace; }
 
     protected:
         virtual void OnStackFrame(const wxStackFrame& frame) wxOVERRIDE
         {
-            m_stackTrace << wxString::Format
-                            (
-                              wxT("[%02d] "),
-                              wx_truncate_cast(int, frame.GetLevel())
-                            );
+            // don't show more than maxLines or we could get a dialog too tall
+            // to be shown on screen: 20 should be ok everywhere as even with
+            // 15 pixel high characters it is still only 300 pixels...
+            if ( m_numFrames++ > 20 )
+                return;
 
-            wxString name = frame.GetName();
+            m_stackTrace << wxString::Format(wxT("[%02u] "), m_numFrames);
+
+            const wxString name = frame.GetName();
+            if ( name.StartsWith("wxOnAssert") )
+            {
+                // Ignore all frames until the wxOnAssert() one, they are
+                // internal to wxWidgets and not interesting for the user
+                // (but notice that if we never find the wxOnAssert() frame,
+                // e.g. because we don't have symbol info at all, we would show
+                // everything which is better than not showing anything).
+                m_stackTrace.clear();
+                m_numFrames = 0;
+                return;
+            }
+
             if ( !name.empty() )
             {
                 m_stackTrace << wxString::Format(wxT("%-40s"), name.c_str());
@@ -1053,22 +1065,12 @@ wxString wxAppTraitsBase::GetAssertStackTrace()
 
     private:
         wxString m_stackTrace;
+        unsigned m_numFrames;
     };
 
-    // don't show more than maxLines or we could get a dialog too tall to be
-    // shown on screen: 20 should be ok everywhere as even with 15 pixel high
-    // characters it is still only 300 pixels...
-    static const int maxLines = 20;
-
     StackDump dump;
-    dump.Walk(8, maxLines); // 8 is chosen to hide all OnAssert() calls
-    stackTrace = dump.GetStackTrace();
-
-    const int count = stackTrace.Freq(wxT('\n'));
-    for ( int i = 0; i < count - maxLines; i++ )
-        stackTrace = stackTrace.BeforeLast(wxT('\n'));
-
-    return stackTrace;
+    dump.Walk();
+    return dump.GetStackTrace();
 #else // !wxDEBUG_LEVEL
     // this function is still present for ABI-compatibility even in debug level
     // 0 build but is not used there and so can simply do nothing
@@ -1112,11 +1114,7 @@ bool wxAssertIsEqual(int x, int y)
 
 void wxAbort()
 {
-#ifdef __WXWINCE__
-    ExitThread(3);
-#else
     abort();
-#endif
 }
 
 #if wxDEBUG_LEVEL
@@ -1126,7 +1124,7 @@ void wxAbort()
 
 void wxTrap()
 {
-#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+#if defined(__WINDOWS__)
     DebugBreak();
 #elif defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
     Debugger();
@@ -1294,7 +1292,7 @@ static
 bool DoShowAssertDialog(const wxString& msg)
 {
     // under Windows we can show the dialog even in the console mode
-#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
+#if defined(__WINDOWS__)
     wxString msgDlg(msg);
 
     // this message is intentionally not translated -- it is for developers

@@ -842,32 +842,7 @@ void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoo
 
         if ( m_pen.IsNonTransparent() )
         {
-            if ((m_pen.GetWidth() == 2) && (m_pen.GetCap() == wxCAP_ROUND) &&
-                (m_pen.GetJoin() == wxJOIN_ROUND) && (m_pen.GetStyle() == wxPENSTYLE_SOLID))
-            {
-                // Use 2 1-line rects instead
-                gdk_gc_set_line_attributes( m_penGC, 1, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND );
-
-                if (m_signX == -1)
-                {
-                    // Different for RTL
-                    gdk_draw_rectangle( m_gdkwindow, m_penGC, FALSE, xx+1, yy, ww-2, hh-2 );
-                    gdk_draw_rectangle( m_gdkwindow, m_penGC, FALSE, xx, yy-1, ww, hh );
-                }
-                else
-                {
-                    gdk_draw_rectangle( m_gdkwindow, m_penGC, FALSE, xx, yy, ww-2, hh-2 );
-                    gdk_draw_rectangle( m_gdkwindow, m_penGC, FALSE, xx-1, yy-1, ww, hh );
-                }
-
-                // reset
-                gdk_gc_set_line_attributes( m_penGC, 2, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND );
-            }
-            else
-            {
-                // Just use X11 for other cases
-                gdk_draw_rectangle( m_gdkwindow, m_penGC, FALSE, xx, yy, ww-1, hh-1 );
-            }
+            gdk_draw_rectangle(m_gdkwindow, m_penGC, false, xx, yy, ww - 1, hh - 1);
         }
     }
 
@@ -1687,7 +1662,13 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
         case wxJOIN_BEVEL: { joinStyle = GDK_JOIN_BEVEL; break; }
         case wxJOIN_MITER: { joinStyle = GDK_JOIN_MITER; break; }
         case wxJOIN_ROUND:
-        default:           { joinStyle = GDK_JOIN_ROUND; break; }
+        default:
+            break;
+    }
+    if (width < 3)
+    {
+        // width 2 rounded join looks bad on X11 (missing one corner pixel)
+        joinStyle = GDK_JOIN_MITER;
     }
 
     gdk_gc_set_line_attributes( m_penGC, width, lineStyle, capStyle, joinStyle );

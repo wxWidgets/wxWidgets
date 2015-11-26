@@ -51,7 +51,7 @@
     #define WXDEBUG_REFRESH
 #endif
 
-#if defined(WXDEBUG_REFRESH) && defined(__WXMSW__) && !defined(__WXMICROWIN__)
+#if defined(WXDEBUG_REFRESH) && defined(__WXMSW__)
 #include "wx/msw/private.h"
 #endif
 
@@ -477,7 +477,7 @@ void wxWindow::Refresh(bool eraseBackground, const wxRect *rect)
         dc.DrawRectangle(rectWin);
 
         // under Unix we use "--sync" X option for this
-        #if defined(__WXMSW__) && !defined(__WXMICROWIN__)
+        #if defined(__WXMSW__)
             ::GdiFlush();
             ::Sleep(200);
         #endif // __WXMSW__

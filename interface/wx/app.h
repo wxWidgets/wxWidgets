@@ -222,6 +222,18 @@ public:
     //@}
 
 
+    /**
+        Yields control to pending messages in the event loop.
+
+        This method is a convenient wrapper for wxEvtLoopBase::Yield(). If the
+        main loop is currently running, it calls this method on it. Otherwise
+        it creates a temporary event loop and uses it instead, which can be
+        useful to process pending messages during the program startup, before
+        the main loop is created.
+
+        Use extreme caution when calling this function as, just as
+        wxEvtLoopBase::Yield(), it can result in unexpected reentrances.
+     */
     bool Yield(bool onlyIfNeeded = false);
 
     /**
@@ -1193,11 +1205,12 @@ void wxUninitialize();
 void wxWakeUpIdle();
 
 /**
-    Calls wxAppConsole::Yield.
+    Calls wxAppConsole::Yield if there is an existing application object.
 
-    @deprecated
-    This function is kept only for backwards compatibility. Please use
-    the wxAppConsole::Yield method instead in any new code.
+    Does nothing if there is no application (which typically only happens early
+    during the program startup or late during its shutdown).
+
+    @see wxEvtLoopBase::Yield()
 
     @header{wx/app.h}
 */
@@ -1228,8 +1241,7 @@ int wxEntry(int& argc, wxChar** argv);
 /**
     See wxEntry(int&,wxChar**) for more info about this function.
 
-    Notice that under Windows CE platform, and only there, the type of @a pCmdLine
-    is @c wchar_t *, otherwise it is @c char *, even in Unicode build.
+    Notice that the type of @a pCmdLine is @c char *, even in Unicode build.
 
     @remarks To clean up wxWidgets, call wxApp::OnExit followed by the static
              function wxApp::CleanUp. For example, if exiting from an MFC application

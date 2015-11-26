@@ -349,5 +349,15 @@ wxString wxGetOsDescription()
     return release;
 }
 
+// FIXME: This duplicates the function in src/unix/utilsunx.cpp, we should just
+//        reuse it instead of there is no iOS-specific implementation of this.
+bool wxCheckOsVersion(int majorVsn, int minorVsn)
+{
+    int majorCur, minorCur;
+    wxGetOsVersion(&majorCur, &minorCur);
+
+    return majorCur > majorVsn || (majorCur == majorVsn && minorCur >= minorVsn);
+}
+
 
 #endif // wxOSX_USE_IPHONE

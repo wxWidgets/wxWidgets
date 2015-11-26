@@ -15,6 +15,7 @@
 
 #include "wx/power.h"
 #include "wx/atomic.h"
+#include "wx/platinfo.h"
 #include "wx/osx/private.h"
 
 #include <IOKit/pwr_mgt/IOPMLib.h>
@@ -37,7 +38,7 @@ bool UpdatePowerResourceUsage(wxPowerResourceKind kind, const wxString& reason)
             cfreason = wxString("User Activity");
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
-        if ( UMAGetSystemVersion() >= 0x1090 )
+        if ( wxPlatformInfo::Get().CheckOSVersion(10, 9) )
         {
             // Use NSProcessInfo for 10.9 and newer
             if ( !g_processInfoActivity )
@@ -60,10 +61,16 @@ bool UpdatePowerResourceUsage(wxPowerResourceKind kind, const wxString& reason)
 #endif
         if ( !g_pmAssertionID )
         {
+            CFStringRef assertType;
+            if ( kind == wxPOWER_RESOURCE_SCREEN )
+                assertType = kIOPMAssertionTypeNoDisplaySleep;
+            else
+                assertType = kIOPMAssertionTypeNoIdleSleep;
+
             // Use power manager API for < 10.9 systems
             IOReturn success = IOPMAssertionCreateWithName
                                (
-                                    kIOPMAssertionTypeNoIdleSleep,
+                                    assertType,
                                     kIOPMAssertionLevelOn,
                                     cfreason,
                                     &g_pmAssertionID
@@ -76,7 +83,7 @@ bool UpdatePowerResourceUsage(wxPowerResourceKind kind, const wxString& reason)
     {
         // Release power assertion
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
-        if ( UMAGetSystemVersion() >= 0x1090 )
+        if ( wxPlatformInfo::Get().CheckOSVersion(10, 9) )
         {
             // Use NSProcessInfo for 10.9 and newer
             if ( g_processInfoActivity )

@@ -177,8 +177,8 @@ public:
 
     void Toggle() { Toggle(!IsToggled()); }
 
-    virtual void SetNormalBitmap(const wxBitmap& bmp) { m_bmpNormal = bmp; }
-    virtual void SetDisabledBitmap(const wxBitmap& bmp) { m_bmpDisabled = bmp; }
+    void SetNormalBitmap(const wxBitmap& bmp) { m_bmpNormal = bmp; }
+    void SetDisabledBitmap(const wxBitmap& bmp) { m_bmpDisabled = bmp; }
 
     virtual void SetLabel(const wxString& label) { m_label = label; }
 

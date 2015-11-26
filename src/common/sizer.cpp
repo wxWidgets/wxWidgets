@@ -2179,7 +2179,7 @@ void wxBoxSizer::RecalcSizes()
 
     // the amount of free space which we should redistribute among the
     // stretchable items (i.e. those with non zero proportion)
-    int delta = totalMajorSize - GetSizeInMajorDir(m_minSize);
+    int delta = totalMajorSize - GetSizeInMajorDir(m_calculatedMinSize);
 
     // declare loop variables used below:
     wxSizerItemList::const_iterator i;  // iterator in m_children list
@@ -2210,9 +2210,6 @@ void wxBoxSizer::RecalcSizes()
         }
         minMajorSize += GetSizeInMajorDir(item->GetMinSizeWithBorder());
     }
-
-    // update our min size have changed
-    SizeInMajorDir(m_minSize) = minMajorSize;
 
 
     // space and sum of proportions for the remaining items, both may change
@@ -2501,7 +2498,7 @@ void wxBoxSizer::RecalcSizes()
 wxSize wxBoxSizer::CalcMin()
 {
     m_totalProportion = 0;
-    m_minSize = wxSize(0, 0);
+    m_calculatedMinSize = wxSize(0, 0);
 
     // The minimal size for the sizer should be big enough to allocate its
     // element at least its minimal size but also, and this is the non trivial
@@ -2532,19 +2529,19 @@ wxSize wxBoxSizer::CalcMin()
         else // fixed size item
         {
             // Just account for its size directly
-            SizeInMajorDir(m_minSize) += GetSizeInMajorDir(sizeMinThis);
+            SizeInMajorDir(m_calculatedMinSize) += GetSizeInMajorDir(sizeMinThis);
         }
 
         // In the transversal direction we just need to find the maximum.
-        if ( GetSizeInMinorDir(sizeMinThis) > GetSizeInMinorDir(m_minSize) )
-            SizeInMinorDir(m_minSize) = GetSizeInMinorDir(sizeMinThis);
+        if ( GetSizeInMinorDir(sizeMinThis) > GetSizeInMinorDir(m_calculatedMinSize) )
+            SizeInMinorDir(m_calculatedMinSize) = GetSizeInMinorDir(sizeMinThis);
     }
 
     // Using the max ratio ensures that the min size is big enough for all
     // items to have their min size and satisfy the proportions among them.
-    SizeInMajorDir(m_minSize) += (int)(maxMinSizeToProp*m_totalProportion);
+    SizeInMajorDir(m_calculatedMinSize) += (int)(maxMinSizeToProp*m_totalProportion);
 
-    return m_minSize;
+    return m_calculatedMinSize;
 }
 
 //---------------------------------------------------------------------------
@@ -2709,18 +2706,11 @@ bool wxStaticBoxSizer::Detach( wxWindow *window )
 wxStdDialogButtonSizer::wxStdDialogButtonSizer()
     : wxBoxSizer(wxHORIZONTAL)
 {
-    // Vertical buttons with lots of space on either side
-    // looks rubbish on WinCE, so let's not do this for now.
-    // If we are going to use vertical buttons, we should
-    // put the sizer to the right of other controls in the dialog,
-    // and that's beyond the scope of this sizer.
-#ifndef __WXWINCE__
     bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
     // If we have a PDA screen, put yes/no button over
     // all other buttons, otherwise on the left side.
     if (is_pda)
         m_orient = wxVERTICAL;
-#endif
 
     m_buttonAffirmative = NULL;
     m_buttonApply = NULL;

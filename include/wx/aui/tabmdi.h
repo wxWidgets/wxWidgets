@@ -65,7 +65,7 @@ public:
     wxMenu* GetWindowMenu() const { return m_pWindowMenu; }
     void SetWindowMenu(wxMenu* pMenu);
 
-    virtual void SetMenuBar(wxMenuBar *pMenuBar);
+    virtual void SetMenuBar(wxMenuBar *pMenuBar) wxOVERRIDE;
 #endif // wxUSE_MENUS
 
     void SetChildMenuBar(wxAuiMDIChildFrame *pChild);
@@ -102,9 +102,9 @@ protected:
     void DoHandleUpdateUI(wxUpdateUIEvent &event);
 #endif // wxUSE_MENUS
 
-    virtual bool ProcessEvent(wxEvent& event);
+    virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE;
 
-    virtual void DoGetClientSize(int *width, int *height) const;
+    virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
 
 private:
     wxDECLARE_EVENT_TABLE();
@@ -151,9 +151,9 @@ public:
     virtual const wxIcon& GetIcon() const;
 
     virtual void Activate();
-    virtual bool Destroy();
+    virtual bool Destroy() wxOVERRIDE;
 
-    virtual bool Show(bool show = true);
+    virtual bool Show(bool show = true) wxOVERRIDE;
 
 #if wxUSE_STATUSBAR
     // no status bars
@@ -187,7 +187,7 @@ public:
     virtual bool ShowFullScreen(bool WXUNUSED(show), long WXUNUSED(style)) { return false; }
     virtual bool IsFullScreen() const { return false; }
 
-    virtual bool IsTopLevel() const { return false; }
+    virtual bool IsTopLevel() const wxOVERRIDE { return false; }
 
     void OnMenuHighlight(wxMenuEvent& evt);
     void OnActivate(wxActivateEvent& evt);
@@ -198,13 +198,13 @@ public:
 
 protected:
     void Init();
-    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags);
-    virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags) wxOVERRIDE;
+    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
 
     // no size hints
     virtual void DoSetSizeHints(int WXUNUSED(minW), int WXUNUSED(minH),
                                 int WXUNUSED(maxW), int WXUNUSED(maxH),
-                                int WXUNUSED(incW), int WXUNUSED(incH)) {}
+                                int WXUNUSED(incW), int WXUNUSED(incH)) wxOVERRIDE {}
 public:
     // This function needs to be called when a size change is confirmed,
     // we needed this function to prevent anybody from the outside
@@ -247,7 +247,7 @@ public:
     virtual bool CreateClient(wxAuiMDIParentFrame *parent,
                               long style = wxVSCROLL | wxHSCROLL);
 
-    virtual int SetSelection(size_t page);
+    virtual int SetSelection(size_t page) wxOVERRIDE;
     virtual wxAuiMDIChildFrame* GetActiveChild();
     virtual void SetActiveChild(wxAuiMDIChildFrame* pChildFrame)
     {

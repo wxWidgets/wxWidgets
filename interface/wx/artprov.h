@@ -89,6 +89,7 @@ wxArtID wxART_FIND;
 wxArtID wxART_FIND_AND_REPLACE;     
 
 wxArtID wxART_FULL_SCREEN;
+wxArtID wxART_EDIT;
 
 
 /**
@@ -191,6 +192,7 @@ wxArtID wxART_FULL_SCREEN;
      @li @c wxART_FIND
      @li @c wxART_FIND_AND_REPLACE
      @li @c wxART_FULL_SCREEN (since 3.1.0)
+     @li @c wxART_EDIT (since 3.1.0)
      @li @c wxART_HARDDISK
      @li @c wxART_FLOPPY
      @li @c wxART_CDROM

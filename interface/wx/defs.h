@@ -1063,7 +1063,7 @@ enum wxKeyModifier
     wxMOD_META      = 0x0008,
     wxMOD_WIN       = wxMOD_META,
     
-    /** used to describe the true Ctrl Key under OSX, 
+    /** used to describe the true Ctrl Key under OS X,
     identic to @c wxMOD_CONTROL on other platforms */
     wxMOD_RAW_CONTROL,
     

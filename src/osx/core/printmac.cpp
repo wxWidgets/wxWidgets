@@ -637,9 +637,20 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     }
 
     // Only set min and max, because from and to will be
-    // set by the user
+    // set by the user if prompted for the print dialog above
     m_printDialogData.SetMinPage(minPage);
     m_printDialogData.SetMaxPage(maxPage);
+
+    // Set from and to pages if bypassing the print dialog
+    if ( !prompt )
+    {
+        m_printDialogData.SetFromPage(fromPage);
+        
+        if( m_printDialogData.GetAllPages() )
+            m_printDialogData.SetToPage(maxPage);
+        else
+            m_printDialogData.SetToPage(toPage);
+    }
 
     printout->OnBeginPrinting();
 

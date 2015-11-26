@@ -1241,32 +1241,13 @@ bool wxMDIChildFrame::HandleWindowPosChanging(void *pos)
 
 bool wxMDIChildFrame::HandleGetMinMaxInfo(void *mmInfo)
 {
-    MINMAXINFO *info = (MINMAXINFO *)mmInfo;
+    // Get the window max size from DefMDIChildProc() as it calculates it
+    // correctly from the size of the MDI parent frame.
+    MSWDefWindowProc(WM_GETMINMAXINFO, 0, (LPARAM)mmInfo);
 
-    // let the default window proc calculate the size of MDI children
-    // frames because it is based on the size of the MDI client window,
-    // not on the values specified in wxWindow m_max variables
-    bool processed = MSWDefWindowProc(WM_GETMINMAXINFO, 0, (LPARAM)mmInfo) != 0;
-
-    int minWidth = GetMinWidth(),
-        minHeight = GetMinHeight();
-
-    // but allow GetSizeHints() to set the min size
-    if ( minWidth != wxDefaultCoord )
-    {
-        info->ptMinTrackSize.x = minWidth;
-
-        processed = true;
-    }
-
-    if ( minHeight != wxDefaultCoord )
-    {
-        info->ptMinTrackSize.y = minHeight;
-
-        processed = true;
-    }
-
-    return processed;
+    // But then handle the message as usual at the base class level to allow
+    // overriding min/max frame size as for the normal frames.
+    return false;
 }
 
 // ---------------------------------------------------------------------------
@@ -1514,6 +1495,59 @@ void MDISetMenu(wxWindow *win, HMENU hmenuFrame, HMENU hmenuWindow)
     ::DrawMenuBar(GetWinHwnd(parent));
 }
 
+class MenuIterator
+{
+public:
+    explicit MenuIterator(HMENU hmenu)
+        : m_hmenu(hmenu),
+          m_numItems(::GetMenuItemCount(hmenu)),
+          m_pos(-1)
+    {
+        m_mii.fMask = MIIM_STRING;
+        m_mii.dwTypeData = m_buf;
+    }
+
+    bool GetNext(wxString& str)
+    {
+        // Loop until we get the label of the next menu item.
+        for ( m_pos++; m_pos < m_numItems; m_pos++ )
+        {
+            // As cch field is updated by GetMenuItemInfo(), it's important to
+            // reset it to the size of the buffer before each call.
+            m_mii.cch = WXSIZEOF(m_buf);
+
+            if ( !::GetMenuItemInfo(m_hmenu, m_pos, TRUE, &m_mii) )
+            {
+                wxLogLastError(wxString::Format("GetMenuItemInfo(%d)", m_pos));
+                continue;
+            }
+
+            if ( !m_mii.cch )
+            {
+                // This isn't a string menu at all.
+                continue;
+            }
+
+            str = m_buf;
+            return true;
+        }
+
+        return false;
+    }
+
+    int GetPos() const { return m_pos; }
+
+private:
+    const HMENU m_hmenu;
+    const int m_numItems;
+    int m_pos;
+
+    wxChar m_buf[1024];
+    WinStruct<MENUITEMINFO> m_mii;
+
+    wxDECLARE_NO_COPY_CLASS(MenuIterator);
+};
+
 void MDIInsertWindowMenu(wxWindow *win, WXHMENU hMenu, HMENU menuWin)
 {
     HMENU hmenu = (HMENU)hMenu;
@@ -1521,23 +1555,17 @@ void MDIInsertWindowMenu(wxWindow *win, WXHMENU hMenu, HMENU menuWin)
     if ( menuWin )
     {
         // Try to insert Window menu in front of Help, otherwise append it.
-        int N = GetMenuItemCount(hmenu);
         bool inserted = false;
-        for ( int i = 0; i < N; i++ )
+        wxString buf;
+        MenuIterator it(hmenu);
+        while ( it.GetNext(buf) )
         {
-            wxChar buf[256];
-            if ( !::GetMenuString(hmenu, i, buf, WXSIZEOF(buf), MF_BYPOSITION) )
-            {
-                wxLogLastError(wxT("GetMenuString"));
-
-                continue;
-            }
-
             const wxString label = wxStripMenuCodes(buf);
             if ( label == wxGetStockLabel(wxID_HELP, wxSTOCK_NOFLAGS) )
             {
                 inserted = true;
-                ::InsertMenu(hmenu, i, MF_BYPOSITION | MF_POPUP | MF_STRING,
+                ::InsertMenu(hmenu, it.GetPos(),
+                             MF_BYPOSITION | MF_POPUP | MF_STRING,
                              (UINT_PTR)menuWin,
                              wxString(wxGetTranslation(WINDOW_MENU_LABEL)).t_str());
                 break;
@@ -1561,26 +1589,13 @@ void MDIRemoveWindowMenu(wxWindow *win, WXHMENU hMenu)
 
     if ( hmenu )
     {
-        wxChar buf[1024];
-
-        int N = ::GetMenuItemCount(hmenu);
-        for ( int i = 0; i < N; i++ )
+        wxString buf;
+        MenuIterator it(hmenu);
+        while ( it.GetNext(buf) )
         {
-            if ( !::GetMenuString(hmenu, i, buf, WXSIZEOF(buf), MF_BYPOSITION) )
-            {
-                // Ignore successful read of menu string with length 0 which
-                // occurs, for example, for a maximized MDI child system menu
-                if ( ::GetLastError() != 0 )
-                {
-                    wxLogLastError(wxT("GetMenuString"));
-                }
-
-                continue;
-            }
-
             if ( wxStrcmp(buf, wxGetTranslation(WINDOW_MENU_LABEL)) == 0 )
             {
-                if ( !::RemoveMenu(hmenu, i, MF_BYPOSITION) )
+                if ( !::RemoveMenu(hmenu, it.GetPos(), MF_BYPOSITION) )
                 {
                     wxLogLastError(wxT("RemoveMenu"));
                 }

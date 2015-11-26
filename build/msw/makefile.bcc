@@ -217,6 +217,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexBaan.obj \
 	$(OBJS)\wxscintilla_LexBash.obj \
 	$(OBJS)\wxscintilla_LexBasic.obj \
+	$(OBJS)\wxscintilla_LexBibTeX.obj \
 	$(OBJS)\wxscintilla_LexBullant.obj \
 	$(OBJS)\wxscintilla_LexCaml.obj \
 	$(OBJS)\wxscintilla_LexCLW.obj \
@@ -230,6 +231,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexCSS.obj \
 	$(OBJS)\wxscintilla_LexD.obj \
 	$(OBJS)\wxscintilla_LexDMAP.obj \
+	$(OBJS)\wxscintilla_LexDMIS.obj \
 	$(OBJS)\wxscintilla_LexECL.obj \
 	$(OBJS)\wxscintilla_LexEiffel.obj \
 	$(OBJS)\wxscintilla_LexErlang.obj \
@@ -240,6 +242,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexGAP.obj \
 	$(OBJS)\wxscintilla_LexGui4Cli.obj \
 	$(OBJS)\wxscintilla_LexHaskell.obj \
+	$(OBJS)\wxscintilla_LexHex.obj \
 	$(OBJS)\wxscintilla_LexHTML.obj \
 	$(OBJS)\wxscintilla_LexInno.obj \
 	$(OBJS)\wxscintilla_LexKix.obj \
@@ -275,6 +278,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexPython.obj \
 	$(OBJS)\wxscintilla_LexR.obj \
 	$(OBJS)\wxscintilla_LexRebol.obj \
+	$(OBJS)\wxscintilla_LexRegistry.obj \
 	$(OBJS)\wxscintilla_LexRuby.obj \
 	$(OBJS)\wxscintilla_LexRust.obj \
 	$(OBJS)\wxscintilla_LexScriptol.obj \
@@ -317,11 +321,14 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_ContractionState.obj \
 	$(OBJS)\wxscintilla_Decoration.obj \
 	$(OBJS)\wxscintilla_Document.obj \
+	$(OBJS)\wxscintilla_EditModel.obj \
+	$(OBJS)\wxscintilla_EditView.obj \
 	$(OBJS)\wxscintilla_Editor.obj \
 	$(OBJS)\wxscintilla_ExternalLexer.obj \
 	$(OBJS)\wxscintilla_Indicator.obj \
 	$(OBJS)\wxscintilla_KeyMap.obj \
 	$(OBJS)\wxscintilla_LineMarker.obj \
+	$(OBJS)\wxscintilla_MarginView.obj \
 	$(OBJS)\wxscintilla_PerLine.obj \
 	$(OBJS)\wxscintilla_PositionCache.obj \
 	$(OBJS)\wxscintilla_RESearch.obj \
@@ -1034,6 +1041,7 @@ HTMLDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 HTMLDLL_OBJECTS =  \
 	$(OBJS)\htmldll_dummy.obj \
 	$(OBJS)\htmldll_helpbest.obj \
+	$(OBJS)\htmldll_chm.obj \
 	$(OBJS)\htmldll_helpctrl.obj \
 	$(OBJS)\htmldll_helpdata.obj \
 	$(OBJS)\htmldll_helpdlg.obj \
@@ -1070,6 +1078,7 @@ HTMLLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 HTMLLIB_OBJECTS =  \
 	$(OBJS)\htmllib_dummy.obj \
 	$(OBJS)\htmllib_helpbest.obj \
+	$(OBJS)\htmllib_chm.obj \
 	$(OBJS)\htmllib_helpctrl.obj \
 	$(OBJS)\htmllib_helpdata.obj \
 	$(OBJS)\htmllib_helpdlg.obj \
@@ -1345,7 +1354,8 @@ AUIDLL_OBJECTS =  \
 	$(OBJS)\auidll_tabmdi.obj \
 	$(OBJS)\auidll_tabart.obj \
 	$(OBJS)\auidll_xh_auinotbk.obj \
-	$(OBJS)\auidll_xh_auitoolb.obj
+	$(OBJS)\auidll_xh_auitoolb.obj \
+	$(OBJS)\auidll_tabartmsw.obj
 AUILIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -1364,7 +1374,8 @@ AUILIB_OBJECTS =  \
 	$(OBJS)\auilib_tabmdi.obj \
 	$(OBJS)\auilib_tabart.obj \
 	$(OBJS)\auilib_xh_auinotbk.obj \
-	$(OBJS)\auilib_xh_auitoolb.obj
+	$(OBJS)\auilib_xh_auitoolb.obj \
+	$(OBJS)\auilib_tabartmsw.obj
 RIBBONDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -1617,6 +1628,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_mediactrl_wmp10.obj \
 	$(OBJS)\monodll_mediactrl_qt.obj \
 	$(OBJS)\monodll_helpbest.obj \
+	$(OBJS)\monodll_chm.obj \
 	$(OBJS)\monodll_helpctrl.obj \
 	$(OBJS)\monodll_helpdata.obj \
 	$(OBJS)\monodll_helpdlg.obj \
@@ -1724,6 +1736,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_tabart.obj \
 	$(OBJS)\monodll_xh_auinotbk.obj \
 	$(OBJS)\monodll_xh_auitoolb.obj \
+	$(OBJS)\monodll_tabartmsw.obj \
 	$(OBJS)\monodll_advprops.obj \
 	$(OBJS)\monodll_editors.obj \
 	$(OBJS)\monodll_manager.obj \
@@ -1874,6 +1887,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_textentry.obj \
 	$(OBJS)\monodll_msw_tglbtn.obj \
 	$(OBJS)\monodll_treectrl.obj \
+	$(OBJS)\monodll_systhemectrl.obj \
+	$(OBJS)\monodll_collheaderctrlg.obj \
 	$(OBJS)\monodll_msw_checklst.obj \
 	$(OBJS)\monodll_msw_fdrepdlg.obj \
 	$(OBJS)\monodll_fontdlg.obj \
@@ -2150,6 +2165,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_univ_toolbar.obj \
 	$(OBJS)\monodll_topluniv.obj \
 	$(OBJS)\monodll_winuniv.obj \
+	$(OBJS)\monodll_collheaderctrlg.obj \
 	$(OBJS)\monodll_gtk.obj \
 	$(OBJS)\monodll_metal.obj \
 	$(OBJS)\monodll_mono.obj \
@@ -2434,6 +2450,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_mediactrl_wmp10.obj \
 	$(OBJS)\monolib_mediactrl_qt.obj \
 	$(OBJS)\monolib_helpbest.obj \
+	$(OBJS)\monolib_chm.obj \
 	$(OBJS)\monolib_helpctrl.obj \
 	$(OBJS)\monolib_helpdata.obj \
 	$(OBJS)\monolib_helpdlg.obj \
@@ -2541,6 +2558,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_tabart.obj \
 	$(OBJS)\monolib_xh_auinotbk.obj \
 	$(OBJS)\monolib_xh_auitoolb.obj \
+	$(OBJS)\monolib_tabartmsw.obj \
 	$(OBJS)\monolib_advprops.obj \
 	$(OBJS)\monolib_editors.obj \
 	$(OBJS)\monolib_manager.obj \
@@ -2691,6 +2709,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_textentry.obj \
 	$(OBJS)\monolib_msw_tglbtn.obj \
 	$(OBJS)\monolib_treectrl.obj \
+	$(OBJS)\monolib_systhemectrl.obj \
+	$(OBJS)\monolib_collheaderctrlg.obj \
 	$(OBJS)\monolib_msw_checklst.obj \
 	$(OBJS)\monolib_msw_fdrepdlg.obj \
 	$(OBJS)\monolib_fontdlg.obj \
@@ -2967,6 +2987,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_univ_toolbar.obj \
 	$(OBJS)\monolib_topluniv.obj \
 	$(OBJS)\monolib_winuniv.obj \
+	$(OBJS)\monolib_collheaderctrlg.obj \
 	$(OBJS)\monolib_gtk.obj \
 	$(OBJS)\monolib_metal.obj \
 	$(OBJS)\monolib_mono.obj \
@@ -3383,6 +3404,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_textentry.obj \
 	$(OBJS)\coredll_msw_tglbtn.obj \
 	$(OBJS)\coredll_treectrl.obj \
+	$(OBJS)\coredll_systhemectrl.obj \
+	$(OBJS)\coredll_collheaderctrlg.obj \
 	$(OBJS)\coredll_msw_checklst.obj \
 	$(OBJS)\coredll_msw_fdrepdlg.obj \
 	$(OBJS)\coredll_fontdlg.obj \
@@ -3659,6 +3682,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_univ_toolbar.obj \
 	$(OBJS)\coredll_topluniv.obj \
 	$(OBJS)\coredll_winuniv.obj \
+	$(OBJS)\coredll_collheaderctrlg.obj \
 	$(OBJS)\coredll_gtk.obj \
 	$(OBJS)\coredll_metal.obj \
 	$(OBJS)\coredll_mono.obj \
@@ -3948,6 +3972,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_textentry.obj \
 	$(OBJS)\corelib_msw_tglbtn.obj \
 	$(OBJS)\corelib_treectrl.obj \
+	$(OBJS)\corelib_systhemectrl.obj \
+	$(OBJS)\corelib_collheaderctrlg.obj \
 	$(OBJS)\corelib_msw_checklst.obj \
 	$(OBJS)\corelib_msw_fdrepdlg.obj \
 	$(OBJS)\corelib_fontdlg.obj \
@@ -4224,6 +4250,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_univ_toolbar.obj \
 	$(OBJS)\corelib_topluniv.obj \
 	$(OBJS)\corelib_winuniv.obj \
+	$(OBJS)\corelib_collheaderctrlg.obj \
 	$(OBJS)\corelib_gtk.obj \
 	$(OBJS)\corelib_metal.obj \
 	$(OBJS)\corelib_mono.obj \
@@ -5941,6 +5968,9 @@ $(OBJS)\wxscintilla_LexBash.obj: ..\..\src\stc\scintilla\lexers\LexBash.cxx
 $(OBJS)\wxscintilla_LexBasic.obj: ..\..\src\stc\scintilla\lexers\LexBasic.cxx
 	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexBasic.cxx
 
+$(OBJS)\wxscintilla_LexBibTeX.obj: ..\..\src\stc\scintilla\lexers\LexBibTeX.cxx
+	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexBibTeX.cxx
+
 $(OBJS)\wxscintilla_LexBullant.obj: ..\..\src\stc\scintilla\lexers\LexBullant.cxx
 	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexBullant.cxx
 
@@ -5980,6 +6010,9 @@ $(OBJS)\wxscintilla_LexD.obj: ..\..\src\stc\scintilla\lexers\LexD.cxx
 $(OBJS)\wxscintilla_LexDMAP.obj: ..\..\src\stc\scintilla\lexers\LexDMAP.cxx
 	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexDMAP.cxx
 
+$(OBJS)\wxscintilla_LexDMIS.obj: ..\..\src\stc\scintilla\lexers\LexDMIS.cxx
+	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexDMIS.cxx
+
 $(OBJS)\wxscintilla_LexECL.obj: ..\..\src\stc\scintilla\lexers\LexECL.cxx
 	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexECL.cxx
 
@@ -6009,6 +6042,9 @@ $(OBJS)\wxscintilla_LexGui4Cli.obj: ..\..\src\stc\scintilla\lexers\LexGui4Cli.cx
 
 $(OBJS)\wxscintilla_LexHaskell.obj: ..\..\src\stc\scintilla\lexers\LexHaskell.cxx
 	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexHaskell.cxx
+
+$(OBJS)\wxscintilla_LexHex.obj: ..\..\src\stc\scintilla\lexers\LexHex.cxx
+	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexHex.cxx
 
 $(OBJS)\wxscintilla_LexHTML.obj: ..\..\src\stc\scintilla\lexers\LexHTML.cxx
 	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexHTML.cxx
@@ -6114,6 +6150,9 @@ $(OBJS)\wxscintilla_LexR.obj: ..\..\src\stc\scintilla\lexers\LexR.cxx
 
 $(OBJS)\wxscintilla_LexRebol.obj: ..\..\src\stc\scintilla\lexers\LexRebol.cxx
 	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexRebol.cxx
+
+$(OBJS)\wxscintilla_LexRegistry.obj: ..\..\src\stc\scintilla\lexers\LexRegistry.cxx
+	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexRegistry.cxx
 
 $(OBJS)\wxscintilla_LexRuby.obj: ..\..\src\stc\scintilla\lexers\LexRuby.cxx
 	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\lexers\LexRuby.cxx
@@ -6241,6 +6280,12 @@ $(OBJS)\wxscintilla_Decoration.obj: ..\..\src\stc\scintilla\src\Decoration.cxx
 $(OBJS)\wxscintilla_Document.obj: ..\..\src\stc\scintilla\src\Document.cxx
 	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\Document.cxx
 
+$(OBJS)\wxscintilla_EditModel.obj: ..\..\src\stc\scintilla\src\EditModel.cxx
+	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\EditModel.cxx
+
+$(OBJS)\wxscintilla_EditView.obj: ..\..\src\stc\scintilla\src\EditView.cxx
+	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\EditView.cxx
+
 $(OBJS)\wxscintilla_Editor.obj: ..\..\src\stc\scintilla\src\Editor.cxx
 	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\Editor.cxx
 
@@ -6255,6 +6300,9 @@ $(OBJS)\wxscintilla_KeyMap.obj: ..\..\src\stc\scintilla\src\KeyMap.cxx
 
 $(OBJS)\wxscintilla_LineMarker.obj: ..\..\src\stc\scintilla\src\LineMarker.cxx
 	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LineMarker.cxx
+
+$(OBJS)\wxscintilla_MarginView.obj: ..\..\src\stc\scintilla\src\MarginView.cxx
+	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\MarginView.cxx
 
 $(OBJS)\wxscintilla_PerLine.obj: ..\..\src\stc\scintilla\src\PerLine.cxx
 	$(CXX) -q -c -P -o$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\PerLine.cxx
@@ -6820,6 +6868,9 @@ $(OBJS)\monodll_msw_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
 $(OBJS)\monodll_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\treectrl.cpp
 
+$(OBJS)\monodll_systhemectrl.obj: ..\..\src\msw\systhemectrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\systhemectrl.cpp
+
 $(OBJS)\monodll_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -7017,6 +7068,9 @@ $(OBJS)\monodll_mediactrl_qt.obj: ..\..\src\msw\mediactrl_qt.cpp
 
 $(OBJS)\monodll_helpbest.obj: ..\..\src\msw\helpbest.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\helpbest.cpp
+
+$(OBJS)\monodll_chm.obj: ..\..\src\html\chm.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\html\chm.cpp
 
 $(OBJS)\monodll_helpctrl.obj: ..\..\src\html\helpctrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\html\helpctrl.cpp
@@ -7338,6 +7392,9 @@ $(OBJS)\monodll_xh_auinotbk.obj: ..\..\src\xrc\xh_auinotbk.cpp
 
 $(OBJS)\monodll_xh_auitoolb.obj: ..\..\src\xrc\xh_auitoolb.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\xrc\xh_auitoolb.cpp
+
+$(OBJS)\monodll_tabartmsw.obj: ..\..\src\aui\tabartmsw.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\aui\tabartmsw.cpp
 
 $(OBJS)\monodll_advprops.obj: ..\..\src\propgrid\advprops.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\propgrid\advprops.cpp
@@ -7747,6 +7804,11 @@ $(OBJS)\monodll_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_evtloop.obj: ..\..\src\msw\evtloop.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_collheaderctrlg.obj: ..\..\src\generic\collheaderctrlg.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\collheaderctrlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -9316,6 +9378,9 @@ $(OBJS)\monolib_msw_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
 $(OBJS)\monolib_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\treectrl.cpp
 
+$(OBJS)\monolib_systhemectrl.obj: ..\..\src\msw\systhemectrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\systhemectrl.cpp
+
 $(OBJS)\monolib_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -9513,6 +9578,9 @@ $(OBJS)\monolib_mediactrl_qt.obj: ..\..\src\msw\mediactrl_qt.cpp
 
 $(OBJS)\monolib_helpbest.obj: ..\..\src\msw\helpbest.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\helpbest.cpp
+
+$(OBJS)\monolib_chm.obj: ..\..\src\html\chm.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\html\chm.cpp
 
 $(OBJS)\monolib_helpctrl.obj: ..\..\src\html\helpctrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\html\helpctrl.cpp
@@ -9834,6 +9902,9 @@ $(OBJS)\monolib_xh_auinotbk.obj: ..\..\src\xrc\xh_auinotbk.cpp
 
 $(OBJS)\monolib_xh_auitoolb.obj: ..\..\src\xrc\xh_auitoolb.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\xrc\xh_auitoolb.cpp
+
+$(OBJS)\monolib_tabartmsw.obj: ..\..\src\aui\tabartmsw.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\aui\tabartmsw.cpp
 
 $(OBJS)\monolib_advprops.obj: ..\..\src\propgrid\advprops.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\propgrid\advprops.cpp
@@ -10243,6 +10314,11 @@ $(OBJS)\monolib_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_evtloop.obj: ..\..\src\msw\evtloop.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_collheaderctrlg.obj: ..\..\src\generic\collheaderctrlg.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\collheaderctrlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -12220,6 +12296,9 @@ $(OBJS)\coredll_msw_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
 $(OBJS)\coredll_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\treectrl.cpp
 
+$(OBJS)\coredll_systhemectrl.obj: ..\..\src\msw\systhemectrl.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\systhemectrl.cpp
+
 $(OBJS)\coredll_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -12679,6 +12758,11 @@ $(OBJS)\coredll_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_evtloop.obj: ..\..\src\msw\evtloop.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_collheaderctrlg.obj: ..\..\src\generic\collheaderctrlg.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\collheaderctrlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -13681,6 +13765,9 @@ $(OBJS)\corelib_msw_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
 $(OBJS)\corelib_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\treectrl.cpp
 
+$(OBJS)\corelib_systhemectrl.obj: ..\..\src\msw\systhemectrl.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\systhemectrl.cpp
+
 $(OBJS)\corelib_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -14140,6 +14227,11 @@ $(OBJS)\corelib_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_evtloop.obj: ..\..\src\msw\evtloop.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_collheaderctrlg.obj: ..\..\src\generic\collheaderctrlg.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\collheaderctrlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -15319,6 +15411,9 @@ $(OBJS)\htmldll_version.res: ..\..\src\msw\version.rc
 $(OBJS)\htmldll_helpbest.obj: ..\..\src\msw\helpbest.cpp
 	$(CXX) -q -c -P -o$@ $(HTMLDLL_CXXFLAGS) ..\..\src\msw\helpbest.cpp
 
+$(OBJS)\htmldll_chm.obj: ..\..\src\html\chm.cpp
+	$(CXX) -q -c -P -o$@ $(HTMLDLL_CXXFLAGS) ..\..\src\html\chm.cpp
+
 $(OBJS)\htmldll_helpctrl.obj: ..\..\src\html\helpctrl.cpp
 	$(CXX) -q -c -P -o$@ $(HTMLDLL_CXXFLAGS) ..\..\src\html\helpctrl.cpp
 
@@ -15399,6 +15494,9 @@ $(OBJS)\htmllib_dummy.obj: ..\..\src\common\dummy.cpp
 
 $(OBJS)\htmllib_helpbest.obj: ..\..\src\msw\helpbest.cpp
 	$(CXX) -q -c -P -o$@ $(HTMLLIB_CXXFLAGS) ..\..\src\msw\helpbest.cpp
+
+$(OBJS)\htmllib_chm.obj: ..\..\src\html\chm.cpp
+	$(CXX) -q -c -P -o$@ $(HTMLLIB_CXXFLAGS) ..\..\src\html\chm.cpp
 
 $(OBJS)\htmllib_helpctrl.obj: ..\..\src\html\helpctrl.cpp
 	$(CXX) -q -c -P -o$@ $(HTMLLIB_CXXFLAGS) ..\..\src\html\helpctrl.cpp
@@ -15994,6 +16092,9 @@ $(OBJS)\auidll_xh_auinotbk.obj: ..\..\src\xrc\xh_auinotbk.cpp
 $(OBJS)\auidll_xh_auitoolb.obj: ..\..\src\xrc\xh_auitoolb.cpp
 	$(CXX) -q -c -P -o$@ $(AUIDLL_CXXFLAGS) ..\..\src\xrc\xh_auitoolb.cpp
 
+$(OBJS)\auidll_tabartmsw.obj: ..\..\src\aui\tabartmsw.cpp
+	$(CXX) -q -c -P -o$@ $(AUIDLL_CXXFLAGS) ..\..\src\aui\tabartmsw.cpp
+
 $(OBJS)\auilib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(AUILIB_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
@@ -16023,6 +16124,9 @@ $(OBJS)\auilib_xh_auinotbk.obj: ..\..\src\xrc\xh_auinotbk.cpp
 
 $(OBJS)\auilib_xh_auitoolb.obj: ..\..\src\xrc\xh_auitoolb.cpp
 	$(CXX) -q -c -P -o$@ $(AUILIB_CXXFLAGS) ..\..\src\xrc\xh_auitoolb.cpp
+
+$(OBJS)\auilib_tabartmsw.obj: ..\..\src\aui\tabartmsw.cpp
+	$(CXX) -q -c -P -o$@ $(AUILIB_CXXFLAGS) ..\..\src\aui\tabartmsw.cpp
 
 $(OBJS)\ribbondll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(RIBBONDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp

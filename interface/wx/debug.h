@@ -11,9 +11,7 @@
 /**
     Exits the program immediately.
 
-    This is a simple wrapper for the standard abort() function which is not
-    available under all platforms (currently only Windows CE doesn't provide
-    it).
+    This is a simple wrapper for the standard abort() function.
 
     @since 2.9.4
  */

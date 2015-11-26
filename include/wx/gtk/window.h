@@ -64,6 +64,7 @@ public:
     virtual void Lower() wxOVERRIDE;
 
     virtual bool Show( bool show = true ) wxOVERRIDE;
+    virtual bool IsShown() const wxOVERRIDE;
 
     virtual bool IsRetained() const wxOVERRIDE;
 
@@ -383,6 +384,7 @@ protected:
     virtual void DoFreeze() wxOVERRIDE;
     virtual void DoThaw() wxOVERRIDE;
 
+    void GTKConnectFreezeWidget(GtkWidget* widget);
     void GTKFreezeWidget(GtkWidget *w);
     void GTKThawWidget(GtkWidget *w);
     void GTKDisconnect(void* instance);

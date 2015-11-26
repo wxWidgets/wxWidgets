@@ -10,7 +10,7 @@
     This allows the logs from builds done elsewhere to be included in the
     buildbot results, see:
 
-    http://www.wxwidgets.org/wiki/index.php/Development:_Buildbot#Sending_in_Logs_from_Builds_Done_Elsewhere
+    https://wiki.wxwidgets.org/Development:_Buildbot#Sending_in_Logs_from_Builds_Done_Elsewhere
 -->
 
 <bot xmlns:xi="http://www.w3.org/2001/XInclude">

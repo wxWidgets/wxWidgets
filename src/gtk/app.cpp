@@ -28,14 +28,6 @@
 #include "wx/apptrait.h"
 #include "wx/fontmap.h"
 
-#if wxUSE_LIBHILDON
-    #include <hildon-widgets/hildon-program.h>
-#endif // wxUSE_LIBHILDON
-
-#if wxUSE_LIBHILDON2
-    #include <hildon/hildon.h>
-#endif // wxUSE_LIBHILDON2
-
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
@@ -254,14 +246,6 @@ bool wxApp::OnInitGui()
     }
 #endif
 
-#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
-    if ( !GetHildonProgram() )
-    {
-        wxLogError(_("Unable to initialize Hildon program"));
-        return false;
-    }
-#endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2
-
     return true;
 }
 
@@ -444,7 +428,9 @@ void wxApp::CleanUp()
         g_source_remove(m_idleSourceId);
 
     // release reference acquired by Initialize()
-    g_type_class_unref(g_type_class_peek(GTK_TYPE_WIDGET));
+    gpointer gt = g_type_class_peek(GTK_TYPE_WIDGET);
+    if (gt != NULL)
+        g_type_class_unref(gt);
 
     gdk_threads_leave();
 
@@ -530,12 +516,3 @@ bool wxApp::GTKIsUsingGlobalMenu()
 
     return s_isUsingGlobalMenu == 1;
 }
-
-#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
-// Maemo-specific method: get the main program object
-HildonProgram *wxApp::GetHildonProgram()
-{
-    return hildon_program_get_instance();
-}
-
-#endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2

@@ -142,13 +142,44 @@ public:
         corner of a dialog) and the Close entry of the system menu (most often
         in the left upper corner of the dialog).
 
-        Currently only implemented for wxMSW and wxGTK.
-
         Returns @true if operation was successful. This may be wrong on X11
         (including GTK+) where the window manager may not support this operation
         and there is no way to find out.
     */
     virtual bool EnableCloseButton(bool enable = true);
+
+    /**
+        Enables or disables the Maximize button (in the right or left upper
+        corner of a frame or dialog).
+
+        Currently only implemented for wxMSW and wxOSX.
+
+        The window style must contain wxMAXIMIZE_BOX.
+
+        Returns @true if operation was successful. Note that a successful
+        operation does not change the window style flags.
+
+        @since 3.1.0
+    */
+    virtual bool EnableMaximizeButton(bool enable = true);
+
+    /**
+        Enables or disables the Minimize button (in the right or left upper
+        corner of a frame or dialog).
+
+        Currently only implemented for wxMSW and wxOSX.
+
+        The window style must contain wxMINIMIZE_BOX.
+
+        Note that in wxMSW a successful operation will change the window
+        style flags.
+
+        Returns @true if operation was successful. Note that a successful
+        operation does not change the window style flags.
+
+        @since 3.1.0
+    */
+    virtual bool EnableMinimizeButton(bool enable = true);
 
     /**
         Returns a pointer to the button which is the default for this window, or
@@ -193,14 +224,6 @@ public:
         @see SetTitle()
     */
     virtual wxString GetTitle() const;
-
-    /**
-        Unique to the wxWinCE port. Responds to showing/hiding SIP (soft input
-        panel) area and resize window accordingly. Override this if you want to
-        avoid resizing or do additional operations.
-    */
-    virtual bool HandleSettingChange(WXWPARAM wParam,
-                                     WXLPARAM lParam);
 
     /**
         Iconizes or restores the window.
@@ -372,24 +395,6 @@ public:
     virtual void SetIcons(const wxIconBundle& icons);
 
     /**
-        Sets action or menu activated by pressing left hardware button on the
-        smart phones. Unavailable on full keyboard machines.
-
-        @param id
-            Identifier for this button.
-        @param label
-            Text to be displayed on the screen area dedicated to this hardware
-            button.
-        @param subMenu
-            The menu to be opened after pressing this hardware button.
-
-        @see SetRightMenu().
-    */
-    void SetLeftMenu(int id = wxID_ANY,
-                     const wxString& label = wxEmptyString,
-                     wxMenu* subMenu = NULL);
-
-    /**
         A simpler interface for setting the size hints than SetSizeHints().
     */
     virtual void SetMaxSize(const wxSize& size);
@@ -398,24 +403,6 @@ public:
         A simpler interface for setting the size hints than SetSizeHints().
     */
     virtual void SetMinSize(const wxSize& size);
-
-    /**
-        Sets action or menu activated by pressing right hardware button on the
-        smart phones. Unavailable on full keyboard machines.
-
-        @param id
-            Identifier for this button.
-        @param label
-            Text to be displayed on the screen area dedicated to this hardware
-            button.
-        @param subMenu
-            The menu to be opened after pressing this hardware button.
-
-        @see SetLeftMenu().
-    */
-    void SetRightMenu(int id = wxID_ANY,
-                      const wxString& label = wxEmptyString,
-                      wxMenu* subMenu = NULL);
 
     /**
         Allows specification of minimum and maximum window sizes, and window
@@ -536,8 +523,9 @@ public:
     virtual void ShowWithoutActivating();
 
     /**
-        Adds or removes a full screen button to the right upper corner of a
-        window's title bar under OS X 10.7 and later.
+        Enables the maximize button to toggle full screen mode. Prior to 
+        OS X 10.10 a full screen button is added to the right upper corner
+        of a window's title bar.
 
         Currently only available for wxOSX/Cocoa.
 
@@ -546,7 +534,7 @@ public:
             if @false the button is removed.
 
         @return @true if the button was added or removed, @false if running
-        under a pre-OS X 10.7 system or another OS.
+        under another OS.
 
         @note Having the button is also required to let ShowFullScreen()
         make use of the full screen API available since OS X 10.7: a full

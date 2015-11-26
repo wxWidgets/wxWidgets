@@ -1688,6 +1688,10 @@ XML_ParseBuffer(XML_Parser parser, int len, int isFinal)
 void * XMLCALL
 XML_GetBuffer(XML_Parser parser, int len)
 {
+  if (len < 0) {
+    errorCode = XML_ERROR_NO_MEMORY;
+    return NULL;
+  }
   switch (ps_parsing) {
   case XML_SUSPENDED:
     errorCode = XML_ERROR_SUSPENDED;
@@ -1699,11 +1703,15 @@ XML_GetBuffer(XML_Parser parser, int len)
   }
 
   if (len > bufferLim - bufferEnd) {
-    /* FIXME avoid integer overflow */
-    int neededSize = len + (int)(bufferEnd - bufferPtr);
 #ifdef XML_CONTEXT_BYTES
     int keep = (int)(bufferPtr - buffer);
-
+#endif /* defined XML_CONTEXT_BYTES */
+    int neededSize = len + (int)(bufferEnd - bufferPtr);
+    if (neededSize < 0) {
+      errorCode = XML_ERROR_NO_MEMORY;
+      return NULL;
+    }
+#ifdef XML_CONTEXT_BYTES
     if (keep > XML_CONTEXT_BYTES)
       keep = XML_CONTEXT_BYTES;
     neededSize += keep;
@@ -1725,11 +1733,16 @@ XML_GetBuffer(XML_Parser parser, int len)
     else {
       char *newBuf;
       int bufferSize = (int)(bufferLim - bufferPtr);
-      if (bufferSize == 0)
-        bufferSize = INIT_BUFFER_SIZE;
-      do {
-        bufferSize *= 2;
-      } while (bufferSize < neededSize);
+      if (neededSize < INT_MAX/2) {
+        if (bufferSize == 0)
+          bufferSize = INIT_BUFFER_SIZE;
+        do {
+          bufferSize *= 2;
+        } while (bufferSize < neededSize);
+      }
+      else {
+        bufferSize = neededSize;
+      }
       newBuf = (char *)MALLOC(bufferSize);
       if (newBuf == 0) {
         errorCode = XML_ERROR_NO_MEMORY;

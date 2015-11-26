@@ -981,8 +981,8 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
                                       wxVERTICAL);
 
     groupSizer->Add( new wxStaticText(dlg, wxID_ANY,
-                     wxT("Writable, with margins, sorted:")), 0,
-                     wxALIGN_CENTER_VERTICAL|wxRIGHT|wxEXPAND, border );
+                     wxT("Writable, with margins, sorted:")),
+                     wxSizerFlags().Expand().Border(wxRIGHT, border) );
 
     odc = new wxOwnerDrawnComboBox(dlg,wxID_ANY,wxEmptyString,
                                    wxDefaultPosition, wxDefaultSize,
@@ -994,14 +994,14 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
 
     odc->SetValue(wxT("Dot Dash"));
     odc->SetMargins(15, 10);
-    groupSizer->Add( odc, 0, wxALIGN_CENTER_VERTICAL|wxALL, border );
+    groupSizer->Add( odc, wxSizerFlags().Border(wxALL, border) );
     groupSizer->AddStretchSpacer();
 
     //
     // Readonly ODComboBox
     groupSizer->Add( new wxStaticText(dlg, wxID_ANY,
-                     wxT("Read-only, big font:")), 0,
-                     wxALIGN_CENTER_VERTICAL|wxRIGHT, border );
+                     wxT("Read-only, big font:")),
+                     wxSizerFlags().Border(wxRIGHT, border) );
 
     odc = new wxOwnerDrawnComboBox(dlg,wxID_ANY,wxEmptyString,
                                    wxDefaultPosition, wxDefaultSize,
@@ -1018,8 +1018,8 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
 
     //
     // Disabled ODComboBox
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,wxT("Disabled:")), 0,
-                   wxALIGN_CENTER_VERTICAL|wxRIGHT, border );
+    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,wxT("Disabled:")),
+                   wxSizerFlags().Border(wxRIGHT, border) );
 
     odc = new wxOwnerDrawnComboBox(dlg,wxID_ANY,wxEmptyString,
                                      wxDefaultPosition, wxDefaultSize,
@@ -1030,7 +1030,7 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     odc->SetValue(wxT("Dot Dash"));
     odc->Enable(false);
 
-    groupSizer->Add( odc, 3, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
+    groupSizer->Add( odc, wxSizerFlags(3).Expand().Border(wxALL, border) );
 
     rowSizer->Add( groupSizer, 1, wxEXPAND|wxALL, border );
 
@@ -1042,8 +1042,8 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     // wxComboBox
     //
     groupSizer->Add( new wxStaticText(dlg,wxID_ANY,
-                     wxT("Writable, with margins, sorted:")), 0,
-                     wxALIGN_CENTER_VERTICAL|wxRIGHT|wxEXPAND, border );
+                     wxT("Writable, with margins, sorted:")),
+                     wxSizerFlags().Expand().Border(wxRIGHT, border) );
 
     cb = new wxComboBox(dlg,wxID_ANY,wxEmptyString,
                         wxDefaultPosition, wxDefaultSize,
@@ -1055,14 +1055,14 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
 
     cb->SetValue(wxT("Dot Dash"));
     cb->SetMargins(15, 10);
-    groupSizer->Add( cb, 0, wxALIGN_CENTER_VERTICAL|wxALL, border );
+    groupSizer->Add( cb, wxSizerFlags().Border(wxALL, border) );
     groupSizer->AddStretchSpacer();
 
     //
     // Readonly wxComboBox
     groupSizer->Add( new wxStaticText(dlg, wxID_ANY,
-                     wxT("Read-only, big font:")), 0,
-                     wxALIGN_CENTER_VERTICAL|wxRIGHT, border );
+                     wxT("Read-only, big font:")),
+                     wxSizerFlags().Border(wxRIGHT, border) );
 
     cb = new wxComboBox(dlg,wxID_ANY,wxEmptyString,
                         wxDefaultPosition, wxDefaultSize,
@@ -1078,8 +1078,8 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
 
     //
     // Disabled wxComboBox
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,wxT("Disabled:")), 0,
-                   wxALIGN_CENTER_VERTICAL|wxRIGHT, border );
+    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,wxT("Disabled:")),
+                   wxSizerFlags().Border(wxRIGHT, border) );
 
     cb = new wxComboBox(dlg,wxID_ANY,wxEmptyString,
                         wxDefaultPosition, wxDefaultSize,
@@ -1090,7 +1090,7 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     cb->SetValue(wxT("Dot Dash"));
     cb->Enable(false);
 
-    groupSizer->Add( cb, 3, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxALL, border );
+    groupSizer->Add( cb, wxSizerFlags(3).Expand().Border(wxALL, border) );
 
     rowSizer->Add( groupSizer, 1, wxEXPAND|wxALL, border );
 

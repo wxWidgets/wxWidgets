@@ -6,7 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-   On OSX Cocoa the taskbar icon can be in the doc or in the status area.
+   On wxOSX/Cocoa the taskbar icon can be in the doc or in the status area.
    This enumeration can be used to select which will be instantiated.
 */
 enum wxTaskBarIconType
@@ -91,7 +91,7 @@ class wxTaskBarIcon : public wxEvtHandler
 {
 public:
     /**
-        Default constructor.  The iconType is only applicable on wxOSX_Cocoa.
+        Default constructor.  The iconType is only applicable on wxOSX/Cocoa.
     */
     wxTaskBarIcon(wxTaskBarIconType iconType = wxTBI_DEFAULT_TYPE);
 

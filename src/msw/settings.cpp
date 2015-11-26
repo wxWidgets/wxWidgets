@@ -132,10 +132,6 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         }
     }
 
-#ifdef __WXWINCE__
-    index |= SYS_COLOR_INDEX_FLAG;
-#endif
-
     COLORREF colSys = ::GetSysColor(index);
 
     wxColour ret = wxRGBToColour(colSys);
@@ -159,14 +155,7 @@ wxFont wxCreateFontFromStockObject(int index)
         {
             wxNativeFontInfo info;
             info.lf = lf;
-            // Under MicroWindows we pass the HFONT as well
-            // because it's hard to convert HFONT -> LOGFONT -> HFONT
-            // It's OK to delete stock objects, the delete will be ignored.
-#ifdef __WXMICROWIN__
-            font.Create(info, (WXHFONT) hFont);
-#else
             font.Create(info);
-#endif
         }
         else
         {
@@ -183,19 +172,6 @@ wxFont wxCreateFontFromStockObject(int index)
 
 wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 {
-#ifdef __WXWINCE__
-    // under CE only a single SYSTEM_FONT exists
-    index;
-
-    if ( !gs_fontDefault )
-    {
-        gs_fontDefault = new wxFont(wxCreateFontFromStockObject(SYSTEM_FONT));
-    }
-
-    wxASSERT(gs_fontDefault->IsOk() &&
-             wxFontEnumerator::IsValidFacename(gs_fontDefault->GetFaceName()));
-    return *gs_fontDefault;
-#else // !__WXWINCE__
     // wxWindow ctor calls GetFont(wxSYS_DEFAULT_GUI_FONT) so we're
     // called fairly often -- this is why we cache this particular font
     if ( index == wxSYS_DEFAULT_GUI_FONT )
@@ -227,7 +203,6 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 #endif // wxUSE_FONTENUM
 
     return font;
-#endif // __WXWINCE__/!__WXWINCE__
 }
 
 // ----------------------------------------------------------------------------
@@ -244,11 +219,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 static const int gs_metricsMap[] =
 {
     -1,  // wxSystemMetric enums start at 1, so give a dummy value for pos 0.
-#if defined(__WIN32__) && !defined(__WXWINCE__)
     SM_CMOUSEBUTTONS,
-#else
-    -1,
-#endif
 
     SM_CXBORDER,
     SM_CYBORDER,
@@ -260,7 +231,7 @@ static const int gs_metricsMap[] =
 #endif
     SM_CXDOUBLECLK,
     SM_CYDOUBLECLK,
-#if defined(__WIN32__) && defined(SM_CXDRAG)
+#if defined(SM_CXDRAG)
     SM_CXDRAG,
     SM_CYDRAG,
     SM_CXEDGE,
@@ -288,7 +259,7 @@ static const int gs_metricsMap[] =
     SM_CXSCREEN,
     SM_CYSCREEN,
 
-#if defined(__WIN32__) && defined(SM_CXSIZEFRAME)
+#if defined(SM_CXSIZEFRAME)
     SM_CXSIZEFRAME,
     SM_CYSIZEFRAME,
     SM_CXSMICON,
@@ -307,7 +278,7 @@ static const int gs_metricsMap[] =
 #endif
     SM_CYCAPTION,
     SM_CYMENU,
-#if defined(__WIN32__) && defined(SM_NETWORK)
+#if defined(SM_NETWORK)
     SM_NETWORK,
 #else
     -1,
@@ -317,7 +288,7 @@ static const int gs_metricsMap[] =
 #else
     -1,
 #endif
-#if defined(__WIN32__) && defined(SM_SHOWSOUNDS)
+#if defined(SM_SHOWSOUNDS)
     SM_SHOWSOUNDS,
 #else
     -1,
@@ -335,10 +306,6 @@ static const int gs_metricsMap[] =
 // Get a system metric, e.g. scrollbar size
 int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(win))
 {
-#ifdef __WXMICROWIN__
-    // TODO: probably use wxUniv themes functionality
-    return 0;
-#else // !__WXMICROWIN__
     wxCHECK_MSG( index > 0 && (size_t)index < WXSIZEOF(gs_metricsMap), 0,
                  wxT("invalid metric") );
 
@@ -363,7 +330,6 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
     }
 
     return rc;
-#endif // __WXMICROWIN__/!__WXMICROWIN__
 }
 
 bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
@@ -392,7 +358,6 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
 
 extern wxFont wxGetCCDefaultFont()
 {
-#ifndef __WXWINCE__
     // the default font used for the common controls seems to be the desktop
     // font which is also used for the icon titles and not the stock default
     // GUI font
@@ -411,7 +376,6 @@ extern wxFont wxGetCCDefaultFont()
     {
         wxLogLastError(wxT("SystemParametersInfo(SPI_GETICONTITLELOGFONT"));
     }
-#endif // __WXWINCE__
 
     // fall back to the default font for the normal controls
     return wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);

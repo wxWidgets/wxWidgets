@@ -20,7 +20,7 @@
     RunScript return a value, which is a very critical feature in many web
     embedding scenarios.
 
-    This class is only available on OSX.
+    This class is only available on OS X.
 **/
 
 class wxWebKitCtrl : public wxControl

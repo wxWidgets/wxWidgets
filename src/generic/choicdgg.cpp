@@ -412,12 +412,7 @@ wxListBoxBase *wxAnyChoiceDialog::CreateList(int n, const wxString *choices, lon
 
 wxBEGIN_EVENT_TABLE(wxSingleChoiceDialog, wxDialog)
     EVT_BUTTON(wxID_OK, wxSingleChoiceDialog::OnOK)
-#ifndef __SMARTPHONE__
     EVT_LISTBOX_DCLICK(wxID_LISTBOX, wxSingleChoiceDialog::OnListBoxDClick)
-#endif
-#ifdef __WXWINCE__
-    EVT_JOY_BUTTON_DOWN(wxSingleChoiceDialog::OnJoystickButtonDown)
-#endif
 wxEND_EVENT_TABLE()
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSingleChoiceDialog, wxDialog);
@@ -475,19 +470,10 @@ void wxSingleChoiceDialog::OnOK(wxCommandEvent& WXUNUSED(event))
     DoChoice();
 }
 
-#ifndef __SMARTPHONE__
 void wxSingleChoiceDialog::OnListBoxDClick(wxCommandEvent& WXUNUSED(event))
 {
     DoChoice();
 }
-#endif
-
-#ifdef __WXWINCE__
-void wxSingleChoiceDialog::OnJoystickButtonDown(wxJoystickEvent& WXUNUSED(event))
-{
-    DoChoice();
-}
-#endif
 
 void wxSingleChoiceDialog::DoChoice()
 {

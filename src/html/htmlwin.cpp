@@ -1148,6 +1148,10 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     const wxRect rect = GetUpdateRegion().GetBox();
     const wxSize sz = GetClientSize();
 
+    // Don't bother drawing the empty window.
+    if ( sz.x == 0 || sz.y == 0 )
+        return;
+
     // set up the DC we're drawing on: if the window is already double buffered
     // we do it directly on wxPaintDC, otherwise we allocate a backing store
     // buffer and compose the drawing there and then blit it to screen all at

@@ -29,9 +29,9 @@ enum wxOperatingSystemId
     wxOS_MAC = wxOS_MAC_OS|wxOS_MAC_OSX_DARWIN,
 
     wxOS_WINDOWS_9X     = 1 << 2,     //!< Windows 9x family (95/98/ME)
-    wxOS_WINDOWS_NT     = 1 << 3,     //!< Windows NT family (NT/2000/XP/Vista/7)
+    wxOS_WINDOWS_NT     = 1 << 3,     //!< Windows NT family (XP/Vista/7/8/10)
     wxOS_WINDOWS_MICRO  = 1 << 4,     //!< MicroWindows
-    wxOS_WINDOWS_CE     = 1 << 5,     //!< Windows CE (Window Mobile)
+    wxOS_WINDOWS_CE     = 1 << 5,     //!< Windows CE (Windows Mobile)
     
     //! A combination of all @c wxOS_WINDOWS_* values previously listed.
     wxOS_WINDOWS = wxOS_WINDOWS_9X       |
@@ -63,9 +63,7 @@ enum wxOperatingSystemId
 /**
     The list of wxWidgets ports.
 
-    Some of them can be used with more than a single (native) toolkit;
-    e.g. wxWinCE port sources can be used with smartphones, pocket PCs
-    and handheld devices SDKs.
+    Some of them can be used with more than a single (native) toolkit.
 */
 enum wxPortId
 {
@@ -370,7 +368,7 @@ public:
     /**
         Returns the description of the operating system of this wxPlatformInfo instance.
         
-        See wxGetOSDescription() for more info.
+        See wxGetOsDescription() for more info.
     */
     wxString GetOperatingSystemDescription() const;
 

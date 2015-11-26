@@ -31,6 +31,7 @@
 #include "wx/socket.h"
 #include "wx/url.h"
 #include "wx/sstream.h"
+#include "wx/thread.h"
 #include <memory>
 
 // --------------------------------------------------------------------------
@@ -575,23 +576,13 @@ void MyFrame::OnDatagram(wxCommandEvent& WXUNUSED(event))
 
 #if wxUSE_URL
 
-void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
+void DoDownload(const wxString& urlname)
 {
-    // Ask for the URL
-    static wxString s_urlname("http://www.google.com/");
-    wxString urlname = wxGetTextFromUser
-                       (
-                        _("Enter an URL to get"),
-                        _("URL:"),
-                        s_urlname
-                       );
-    if ( urlname.empty() )
-        return; // cancelled by user
+    wxString testname("URL");
+    if ( !wxIsMainThread() )
+        testname += " in worker thread";
 
-    s_urlname = urlname;
-
-
-    TestLogger logtest("URL");
+    TestLogger logtest(testname);
 
     // Parse the URL
     wxURL url(urlname);
@@ -624,6 +615,51 @@ void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
 
     wxLogMessage("Text retrieved from URL \"%s\" follows:\n%s",
                  urlname, sout.GetString());
+}
+
+void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
+{
+    // Ask for the URL
+    static wxString s_urlname("http://www.google.com/");
+    wxString urlname = wxGetTextFromUser
+                       (
+                        _("Enter an URL to get"),
+                        _("URL:"),
+                        s_urlname
+                       );
+    if ( urlname.empty() )
+        return; // cancelled by user
+
+    s_urlname = urlname;
+
+    // First do it in this thread.
+    DoDownload(urlname);
+
+    // And then also in a worker thread.
+#if wxUSE_THREADS
+    class DownloadThread : public wxThread
+    {
+    public:
+        explicit DownloadThread(const wxString& url): m_url(url)
+        {
+            Run();
+        }
+
+        virtual void* Entry() wxOVERRIDE
+        {
+            DoDownload(m_url);
+
+            return NULL;
+        }
+
+    private:
+        const wxString m_url;
+    };
+
+    // NB: there is a race condition here, we don't check for this thread
+    // termination before exiting the application, don't do this in real code!
+    new DownloadThread(urlname);
+#endif // wxUSE_THREADS
 }
 
 #endif // wxUSE_URL

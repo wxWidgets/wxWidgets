@@ -64,19 +64,19 @@ public:
                 const wxString& name = wxListBoxNameStr);
 
     // items may be checked
-    bool  IsChecked(unsigned int uiIndex) const;
-    void  Check(unsigned int uiIndex, bool bCheck = true);
+    bool  IsChecked(unsigned int uiIndex) const wxOVERRIDE;
+    void  Check(unsigned int uiIndex, bool bCheck = true) wxOVERRIDE;
 
     // data callbacks
-    virtual void GetValueCallback( unsigned int n, wxListWidgetColumn* col , wxListWidgetCellValue& value );
-    virtual void SetValueCallback( unsigned int n, wxListWidgetColumn* col , wxListWidgetCellValue& value );
+    virtual void GetValueCallback( unsigned int n, wxListWidgetColumn* col , wxListWidgetCellValue& value ) wxOVERRIDE;
+    virtual void SetValueCallback( unsigned int n, wxListWidgetColumn* col , wxListWidgetCellValue& value ) wxOVERRIDE;
 
 protected:
    // override all methods which add/delete items to update m_checks array as
     // well
-    virtual void OnItemInserted(unsigned int pos);
-    virtual void DoDeleteOneItem(unsigned int n);
-    virtual void DoClear();
+    virtual void OnItemInserted(unsigned int pos) wxOVERRIDE;
+    virtual void DoDeleteOneItem(unsigned int n) wxOVERRIDE;
+    virtual void DoClear() wxOVERRIDE;
 
     // the array containing the checked status of the items
     wxArrayInt m_checks;

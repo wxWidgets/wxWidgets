@@ -39,6 +39,9 @@
     #include "wx/msw/uxtheme.h"
 #endif
 
+#include "wx/msw/wrapwin.h"
+#include <Shlwapi.h>
+
 #define GetEditHwnd() ((HWND)(GetEditHWND()))
 
 // ----------------------------------------------------------------------------
@@ -775,24 +778,6 @@ void wxTextEntry::GetSelection(long *from, long *to) const
 
 bool wxTextEntry::DoAutoCompleteFileNames(int flags)
 {
-    typedef HRESULT (WINAPI *SHAutoComplete_t)(HWND, DWORD);
-    static SHAutoComplete_t s_pfnSHAutoComplete = (SHAutoComplete_t)-1;
-    static wxDynamicLibrary s_dllShlwapi;
-    if ( s_pfnSHAutoComplete == (SHAutoComplete_t)-1 )
-    {
-        if ( !s_dllShlwapi.Load(wxT("shlwapi.dll"), wxDL_VERBATIM | wxDL_QUIET) )
-        {
-            s_pfnSHAutoComplete = NULL;
-        }
-        else
-        {
-            wxDL_INIT_FUNC(s_pfn, SHAutoComplete, s_dllShlwapi);
-        }
-    }
-
-    if ( !s_pfnSHAutoComplete )
-        return false;
-
     DWORD dwFlags = 0;
     if ( flags & wxFILE )
         dwFlags |= SHACF_FILESYS_ONLY;
@@ -804,7 +789,7 @@ bool wxTextEntry::DoAutoCompleteFileNames(int flags)
         return false;
     }
 
-    HRESULT hr = (*s_pfnSHAutoComplete)(GetEditHwnd(), dwFlags);
+    HRESULT hr = ::SHAutoComplete(GetEditHwnd(), dwFlags);
     if ( FAILED(hr) )
     {
         wxLogApiError(wxT("SHAutoComplete()"), hr);
@@ -978,7 +963,6 @@ wxString wxTextEntry::GetHint() const
 
 bool wxTextEntry::DoSetMargins(const wxPoint& margins)
 {
-#if !defined(__WXWINCE__)
     bool res = true;
 
     if ( margins.x != -1 )
@@ -997,22 +981,15 @@ bool wxTextEntry::DoSetMargins(const wxPoint& margins)
     }
 
     return res;
-#else
-    return false;
-#endif
 }
 
 wxPoint wxTextEntry::DoGetMargins() const
 {
-#if !defined(__WXWINCE__)
     LRESULT lResult = ::SendMessage(GetEditHwnd(), EM_GETMARGINS,
                                     0, 0);
     int left = LOWORD(lResult);
     int top = -1;
     return wxPoint(left, top);
-#else
-    return wxPoint(-1, -1);
-#endif
 }
 
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX

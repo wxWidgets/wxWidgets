@@ -992,6 +992,9 @@
 				RelativePath="..\..\src\msw\statusbar.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\msw\systhemectrl.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\msw\taskbarbutton.cpp">
 			</File>
 			<File
@@ -1066,6 +1069,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\clrpickerg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\collheaderctrlg.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\collpaneg.cpp">
@@ -1666,6 +1672,9 @@
 				RelativePath="..\..\include\wx\generic\clrpickerg.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\generic\collheaderctrl.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\generic\collpaneg.h">
 			</File>
 			<File
@@ -1981,6 +1990,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\cmndata.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\collheaderctrl.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\collpane.h">
@@ -2577,7 +2589,13 @@
 				RelativePath="..\..\include\wx\stc\stc.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\systhemectrl.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\aui\tabart.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\aui\tabartmsw.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\aui\tabmdi.h">

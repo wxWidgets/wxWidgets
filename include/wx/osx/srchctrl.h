@@ -42,17 +42,17 @@ public:
 #if wxUSE_MENUS
     // get/set search button menu
     // --------------------------
-    virtual void SetMenu( wxMenu* menu );
-    virtual wxMenu* GetMenu();
+    virtual void SetMenu( wxMenu* menu ) wxOVERRIDE;
+    virtual wxMenu* GetMenu() wxOVERRIDE;
 #endif  // wxUSE_MENUS
 
     // get/set search options
     // ----------------------
-    virtual void ShowSearchButton( bool show );
-    virtual bool IsSearchButtonVisible() const;
+    virtual void ShowSearchButton( bool show ) wxOVERRIDE;
+    virtual bool IsSearchButtonVisible() const wxOVERRIDE;
 
-    virtual void ShowCancelButton( bool show );
-    virtual bool IsCancelButtonVisible() const;
+    virtual void ShowCancelButton( bool show ) wxOVERRIDE;
+    virtual bool IsCancelButtonVisible() const wxOVERRIDE;
 
     // TODO: In 2.9 these should probably be virtual, and declared in the base class...
     void        SetDescriptiveText(const wxString& text);
@@ -65,7 +65,7 @@ public:
 
 protected:
 
-    wxSize DoGetBestSize() const;
+    wxSize DoGetBestSize() const wxOVERRIDE;
 
     void Init();
 

@@ -264,7 +264,7 @@ CGColorRef wxMacCreateCGColorFromHITheme( ThemeBrush brush )
 void wxMacStringToPascal( const wxString&from , unsigned char * to )
 {
     wxCharBuffer buf = from.mb_str( wxConvLocal );
-    int len = strlen(buf);
+    size_t len = buf.length();
 
     if ( len > 255 )
         len = 255;

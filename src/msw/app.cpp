@@ -61,11 +61,6 @@
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
-#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
-    #include <ole2.h>
-    #include <aygshell.h>
-#endif
-
 #if wxUSE_OLE
     #include <ole2.h>
 #endif
@@ -104,9 +99,7 @@
 // global variables
 // ---------------------------------------------------------------------------
 
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
 extern void wxSetKeyboardHook(bool doIt);
-#endif
 
 // because of mingw32 4.3 bug this struct can't be inside the namespace below:
 // see http://article.gmane.org/gmane.comp.lib.wxwidgets.devel/110282
@@ -251,11 +244,7 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer, int *minVer) const
     // as Windows integrates the OS kernel with the GUI toolkit.
     wxGetOsVersion(majVer, minVer);
 
-#if defined(__WXHANDHELD__) || defined(__WXWINCE__)
-    return wxPORT_WINCE;
-#else
     return wxPORT_MSW;
-#endif
 }
 
 #if wxUSE_TIMER
@@ -275,8 +264,6 @@ wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
 // ---------------------------------------------------------------------------
 // Stuff for using console from the GUI applications
 // ---------------------------------------------------------------------------
-
-#ifndef __WXWINCE__
 
 #if wxUSE_DYNLIB_CLASS
 
@@ -390,10 +377,7 @@ bool wxConsoleStderr::DoInit()
     if ( !m_dllKernel32.Load(wxT("kernel32.dll")) )
         return false;
 
-    typedef BOOL (WINAPI *AttachConsole_t)(DWORD dwProcessId);
-    AttachConsole_t wxDL_INIT_FUNC(pfn, AttachConsole, m_dllKernel32);
-
-    if ( !pfnAttachConsole || !pfnAttachConsole(ATTACH_PARENT_PROCESS) )
+    if ( !::AttachConsole(ATTACH_PARENT_PROCESS) )
         return false;
 
     // console attached, set m_hStderr now to ensure that we free it in the
@@ -570,8 +554,6 @@ bool wxGUIAppTraits::WriteToStderr(const wxString& WXUNUSED(text))
 
 #endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
 
-#endif // !__WXWINCE__
-
 // ===========================================================================
 // wxApp implementation
 // ===========================================================================
@@ -613,19 +595,11 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     // ensure that base cleanup is done if we return too early
     wxCallBaseCleanup callBaseCleanup(this);
 
-#if !defined(__WXMICROWIN__)
     InitCommonControls();
-#endif // !defined(__WXMICROWIN__)
-
-#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
-    SHInitExtraControls();
-#endif
 
     wxOleInitialize();
 
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     wxSetKeyboardHook(true);
-#endif
 
     callBaseCleanup.Dismiss();
 
@@ -730,9 +704,7 @@ void wxApp::CleanUp()
     // class method first and only then do our clean up
     wxAppBase::CleanUp();
 
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     wxSetKeyboardHook(false);
-#endif
 
     wxOleUninitialize();
 
@@ -786,7 +758,7 @@ void wxApp::WakeUpIdle()
 }
 
 // ----------------------------------------------------------------------------
-// other wxApp event hanlders
+// other wxApp event handlers
 // ----------------------------------------------------------------------------
 
 void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
@@ -825,9 +797,6 @@ void wxApp::OnQueryEndSession(wxCloseEvent& event)
 // ----------------------------------------------------------------------------
 // system DLL versions
 // ----------------------------------------------------------------------------
-
-// these functions have trivial inline implementations for CE
-#ifndef __WXWINCE__
 
 #if wxUSE_DYNLIB_CLASS
 
@@ -920,37 +889,6 @@ int wxApp::GetComCtl32Version()
     return s_verComCtl32;
 }
 
-/* static */
-int wxApp::GetShell32Version()
-{
-    static int s_verShell32 = -1;
-    if ( s_verShell32 == -1 )
-    {
-        // we're prepared to handle the errors
-        wxLogNull noLog;
-
-        wxDynamicLibrary dllShell32(wxT("shell32.dll"), wxDL_VERBATIM);
-        if ( dllShell32.IsLoaded() )
-        {
-            s_verShell32 = CallDllGetVersion(dllShell32);
-
-            if ( !s_verShell32 )
-            {
-                // there doesn't seem to be any way to distinguish between 4.00
-                // and 4.70 (starting from 4.71 we have DllGetVersion()) so
-                // just assume it is 4.0
-                s_verShell32 = 400;
-            }
-        }
-        else // failed load the DLL?
-        {
-            s_verShell32 = 0;
-        }
-    }
-
-    return s_verShell32;
-}
-
 #else // !wxUSE_DYNLIB_CLASS
 
 /* static */
@@ -959,15 +897,7 @@ int wxApp::GetComCtl32Version()
     return 0;
 }
 
-/* static */
-int wxApp::GetShell32Version()
-{
-    return 0;
-}
-
 #endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
-
-#endif // !__WXWINCE__
 
 #if wxUSE_EXCEPTIONS
 

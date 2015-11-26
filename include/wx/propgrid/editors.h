@@ -60,7 +60,7 @@ public:
       calling wxPropertyGrid::RegisterAdditionalEditors() prior use.
 
     - Pointer to builtin editor is available as wxPGEditor_EditorName
-      (eg. wxPGEditor_TextCtrl).
+      (e.g. wxPGEditor_TextCtrl).
 
     - To add new editor you need to register it first using static function
       wxPropertyGrid::RegisterEditorClass(), with code like this:
@@ -93,7 +93,7 @@ public:
 
     /**
         Returns pointer to the name of the editor. For example,
-        wxPGEditor_TextCtrl has name "TextCtrl". If you dont' need to access
+        wxPGEditor_TextCtrl has name "TextCtrl". If you don't need to access
         your custom editor by string name, then you do not need to implement
         this function.
     */
@@ -148,7 +148,7 @@ public:
         @remarks wxPropertyGrid will automatically unfocus the editor when
                 wxEVT_TEXT_ENTER is received and when it results in
                 property value being modified. This happens regardless of
-                editor type (ie. behaviour is same for any wxTextCtrl and
+                editor type (i.e. behaviour is same for any wxTextCtrl and
                 wxComboBox based editor).
     */
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
@@ -254,24 +254,24 @@ public:
     virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
                                           wxPGProperty* property,
                                           const wxPoint& pos,
-                                          const wxSize& size) const;
+                                          const wxSize& size) const wxOVERRIDE;
     virtual void UpdateControl( wxPGProperty* property,
-                                wxWindow* ctrl ) const;
+                                wxWindow* ctrl ) const wxOVERRIDE;
     virtual bool OnEvent( wxPropertyGrid* propgrid,
                           wxPGProperty* property,
                           wxWindow* primaryCtrl,
-                          wxEvent& event ) const;
+                          wxEvent& event ) const wxOVERRIDE;
     virtual bool GetValueFromControl( wxVariant& variant,
                                       wxPGProperty* property,
-                                      wxWindow* ctrl ) const;
+                                      wxWindow* ctrl ) const wxOVERRIDE;
 
-    virtual wxString GetName() const;
+    virtual wxString GetName() const wxOVERRIDE;
 
     //virtual wxPGCellRenderer* GetCellRenderer() const;
     virtual void SetControlStringValue( wxPGProperty* property,
                                         wxWindow* ctrl,
-                                        const wxString& txt ) const;
-    virtual void OnFocus( wxPGProperty* property, wxWindow* wnd ) const;
+                                        const wxString& txt ) const wxOVERRIDE;
+    virtual void OnFocus( wxPGProperty* property, wxWindow* wnd ) const wxOVERRIDE;
 
     // Provided so that, for example, ComboBox editor can use the same code
     // (multiple inheritance would get way too messy).
@@ -297,32 +297,32 @@ public:
     virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
                                           wxPGProperty* property,
                                           const wxPoint& pos,
-                                          const wxSize& size) const;
+                                          const wxSize& size) const wxOVERRIDE;
     virtual void UpdateControl( wxPGProperty* property,
-                                wxWindow* ctrl ) const;
+                                wxWindow* ctrl ) const wxOVERRIDE;
     virtual bool OnEvent( wxPropertyGrid* propgrid,
                           wxPGProperty* property,
                           wxWindow* primaryCtrl,
-                          wxEvent& event ) const;
+                          wxEvent& event ) const wxOVERRIDE;
     virtual bool GetValueFromControl( wxVariant& variant,
                                       wxPGProperty* property,
-                                      wxWindow* ctrl ) const;
+                                      wxWindow* ctrl ) const wxOVERRIDE;
     virtual void SetValueToUnspecified( wxPGProperty* property,
-                                        wxWindow* ctrl ) const;
-    virtual wxString GetName() const;
+                                        wxWindow* ctrl ) const wxOVERRIDE;
+    virtual wxString GetName() const wxOVERRIDE;
 
     virtual void SetControlIntValue( wxPGProperty* property,
                                      wxWindow* ctrl,
-                                     int value ) const;
+                                     int value ) const wxOVERRIDE;
     virtual void SetControlStringValue( wxPGProperty* property,
                                         wxWindow* ctrl,
-                                        const wxString& txt ) const;
+                                        const wxString& txt ) const wxOVERRIDE;
 
     virtual int InsertItem( wxWindow* ctrl,
                             const wxString& label,
-                            int index ) const;
-    virtual void DeleteItem( wxWindow* ctrl, int index ) const;
-    virtual bool CanContainCustomImage() const;
+                            int index ) const wxOVERRIDE;
+    virtual void DeleteItem( wxWindow* ctrl, int index ) const wxOVERRIDE;
+    virtual bool CanContainCustomImage() const wxOVERRIDE;
 
     // CreateControls calls this with CB_READONLY in extraStyle
     wxWindow* CreateControlsBase( wxPropertyGrid* propgrid,
@@ -344,20 +344,20 @@ public:
     virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
                                           wxPGProperty* property,
                                           const wxPoint& pos,
-                                          const wxSize& size) const;
+                                          const wxSize& size) const wxOVERRIDE;
 
-    virtual wxString GetName() const;
+    virtual wxString GetName() const wxOVERRIDE;
 
-    virtual void UpdateControl( wxPGProperty* property, wxWindow* ctrl ) const;
+    virtual void UpdateControl( wxPGProperty* property, wxWindow* ctrl ) const wxOVERRIDE;
 
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
-        wxWindow* ctrl, wxEvent& event ) const;
+        wxWindow* ctrl, wxEvent& event ) const wxOVERRIDE;
 
     virtual bool GetValueFromControl( wxVariant& variant,
                                       wxPGProperty* property,
-                                      wxWindow* ctrl ) const;
+                                      wxWindow* ctrl ) const wxOVERRIDE;
 
-    virtual void OnFocus( wxPGProperty* property, wxWindow* wnd ) const;
+    virtual void OnFocus( wxPGProperty* property, wxWindow* wnd ) const wxOVERRIDE;
 
 };
 
@@ -367,12 +367,12 @@ class WXDLLIMPEXP_PROPGRID wxPGChoiceAndButtonEditor : public wxPGChoiceEditor
 public:
     wxPGChoiceAndButtonEditor() {}
     virtual ~wxPGChoiceAndButtonEditor();
-    virtual wxString GetName() const;
+    virtual wxString GetName() const wxOVERRIDE;
 
     virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
                                           wxPGProperty* property,
                                           const wxPoint& pos,
-                                          const wxSize& size) const;
+                                          const wxSize& size) const wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxPGChoiceAndButtonEditor);
 };
@@ -383,12 +383,12 @@ wxPGTextCtrlAndButtonEditor : public wxPGTextCtrlEditor
 public:
     wxPGTextCtrlAndButtonEditor() {}
     virtual ~wxPGTextCtrlAndButtonEditor();
-    virtual wxString GetName() const;
+    virtual wxString GetName() const wxOVERRIDE;
 
     virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
                                           wxPGProperty* property,
                                           const wxPoint& pos,
-                                          const wxSize& size) const;
+                                          const wxSize& size) const wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxPGTextCtrlAndButtonEditor);
 };
@@ -398,7 +398,7 @@ public:
 
 //
 // Use custom check box code instead of native control
-// for cleaner (ie. more integrated) look.
+// for cleaner (i.e. more integrated) look.
 //
 class WXDLLIMPEXP_PROPGRID wxPGCheckBoxEditor : public wxPGEditor
 {
@@ -407,39 +407,39 @@ public:
     wxPGCheckBoxEditor() {}
     virtual ~wxPGCheckBoxEditor();
 
-    virtual wxString GetName() const;
+    virtual wxString GetName() const wxOVERRIDE;
     virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
                                           wxPGProperty* property,
                                           const wxPoint& pos,
-                                          const wxSize& size) const;
+                                          const wxSize& size) const wxOVERRIDE;
     virtual void UpdateControl( wxPGProperty* property,
-                                wxWindow* ctrl ) const;
+                                wxWindow* ctrl ) const wxOVERRIDE;
     virtual bool OnEvent( wxPropertyGrid* propgrid,
                           wxPGProperty* property,
                           wxWindow* primaryCtrl,
-                          wxEvent& event ) const;
+                          wxEvent& event ) const wxOVERRIDE;
     virtual bool GetValueFromControl( wxVariant& variant,
                                       wxPGProperty* property,
-                                      wxWindow* ctrl ) const;
+                                      wxWindow* ctrl ) const wxOVERRIDE;
     virtual void SetValueToUnspecified( wxPGProperty* property,
-                                        wxWindow* ctrl ) const;
+                                        wxWindow* ctrl ) const wxOVERRIDE;
 
     virtual void DrawValue( wxDC& dc,
                             const wxRect& rect,
                             wxPGProperty* property,
-                            const wxString& text ) const;
+                            const wxString& text ) const wxOVERRIDE;
     //virtual wxPGCellRenderer* GetCellRenderer() const;
 
     virtual void SetControlIntValue( wxPGProperty* property,
                                      wxWindow* ctrl,
-                                     int value ) const;
+                                     int value ) const wxOVERRIDE;
 };
 
 #endif
 
 
 // -----------------------------------------------------------------------
-// Editor class registeration macro (mostly for internal use)
+// Editor class registration macro (mostly for internal use)
 
 #define wxPGRegisterEditorClass(EDITOR) \
     if ( wxPGEditor_##EDITOR == NULL ) \

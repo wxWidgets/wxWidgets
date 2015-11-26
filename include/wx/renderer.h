@@ -62,6 +62,7 @@ enum
     wxCONTROL_EXPANDED   = wxCONTROL_SPECIAL, // only for the tree items
     wxCONTROL_SIZEGRIP   = wxCONTROL_SPECIAL, // only for the status bar panes
     wxCONTROL_FLAT       = wxCONTROL_SPECIAL, // checkboxes only: flat border
+    wxCONTROL_CELL       = wxCONTROL_SPECIAL, // only for item selection rect
     wxCONTROL_CURRENT    = 0x00000010,  // mouse is currently over the control
     wxCONTROL_SELECTED   = 0x00000020,  // selected item in e.g. listbox
     wxCONTROL_CHECKED    = 0x00000040,  // (check/radio button) is checked
@@ -260,6 +261,17 @@ public:
                                 const wxRect& rect,
                                 int flags = 0) = 0;
 
+    // draw collapse button
+    //
+    // flags may use wxCONTROL_CHECKED, wxCONTROL_UNDETERMINED and wxCONTROL_CURRENT
+    virtual void DrawCollapseButton(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0) = 0;
+
+    // Returns the default size of a collapse button
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc) = 0;
+
     // draw rectangle indicating that an item in e.g. a list control
     // has been selected or focused
     //
@@ -328,6 +340,15 @@ public:
                            int value,
                            int max,
                            int flags = 0) = 0;
+
+    // Draw text using the appropriate color for normal and selected states.
+    virtual void DrawItemText(wxWindow* win,
+                              wxDC& dc,
+                              const wxString& text,
+                              const wxRect& rect,
+                              int align = wxALIGN_LEFT | wxALIGN_TOP,
+                              int flags = 0,
+                              wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END) = 0;
 
     // geometry functions
     // ------------------
@@ -462,6 +483,15 @@ public:
                                 int flags = 0)
         { m_rendererNative.DrawPushButton( win, dc, rect, flags ); }
 
+    virtual void DrawCollapseButton(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0)
+        { m_rendererNative.DrawCollapseButton(win, dc, rect, flags); }
+
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc)
+        { return m_rendererNative.GetCollapseButtonSize(win, dc); }
+
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
                                        const wxRect& rect,
@@ -514,6 +544,15 @@ public:
                            int max,
                            int flags = 0)
         { m_rendererNative.DrawGauge(win, dc, rect, value, max, flags); }
+
+    virtual void DrawItemText(wxWindow* win,
+                              wxDC& dc,
+                              const wxString& text,
+                              const wxRect& rect,
+                              int align = wxALIGN_LEFT | wxALIGN_TOP,
+                              int flags = 0,
+                              wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END)
+        { m_rendererNative.DrawItemText(win, dc, text, rect, align, flags, ellipsizeMode); }
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
         { return m_rendererNative.GetSplitterParams(win); }

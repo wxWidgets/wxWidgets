@@ -167,16 +167,9 @@ bool wxToolbook::SetPageImage(size_t n, int imageId)
     if (!GetImageList())
         return false;
 
-    wxToolBarToolBase* tool = GetToolBar()->FindById(n + 1);
-    if (tool)
-    {
-        // Find the image list index for this tool
-        wxBitmap bitmap = GetImageList()->GetBitmap(imageId);
-        tool->SetNormalBitmap(bitmap);
-        return true;
-    }
-    else
-        return false;
+    GetToolBar()->SetToolNormalBitmap(n + 1, GetImageList()->GetBitmap(imageId));
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------

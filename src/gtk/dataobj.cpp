@@ -235,16 +235,22 @@ wxTextDataObject::GetAllFormats(wxDataFormat *formats,
 
 bool wxFileDataObject::GetDataHere(void *buf) const
 {
-    wxString filenames;
+    char* out = static_cast<char*>(buf);
 
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
-        filenames += wxT("file:");
-        filenames += m_filenames[i];
-        filenames += wxT("\r\n");
+        char* uri = g_filename_to_uri(m_filenames[i].mbc_str(), 0, 0);
+        if (uri)
+        {
+            size_t const len = strlen(uri);
+            memcpy(out, uri, len);
+            out += len;
+            *(out++) = '\r';
+            *(out++) = '\n';
+            g_free(uri);
+        }
     }
-
-    memcpy( buf, filenames.mbc_str(), filenames.length() + 1 );
+    *out = 0;
 
     return true;
 }
@@ -255,9 +261,11 @@ size_t wxFileDataObject::GetDataSize() const
 
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
-        // This is junk in UTF-8
-        res += m_filenames[i].length();
-        res += 5 + 2; // "file:" (5) + "\r\n" (2)
+        char* uri = g_filename_to_uri(m_filenames[i].mbc_str(), 0, 0);
+        if (uri) {
+            res += strlen(uri) + 2; // Including "\r\n"
+            g_free(uri);
+        }
     }
 
     return res + 1;

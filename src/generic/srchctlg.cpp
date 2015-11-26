@@ -60,24 +60,24 @@ public:
         InvalidateBestSize();
     }
 
-    virtual wxWindow* GetMainWindowOfCompositeControl()
+    virtual wxWindow* GetMainWindowOfCompositeControl() wxOVERRIDE
     {
         return m_search;
     }
 
     // provide access to the base class protected methods to wxSearchCtrl which
     // needs to forward to them
-    void DoSetValue(const wxString& value, int flags)
+    void DoSetValue(const wxString& value, int flags) wxOVERRIDE
     {
         wxTextCtrl::DoSetValue(value, flags);
     }
 
-    bool DoLoadFile(const wxString& file, int fileType)
+    bool DoLoadFile(const wxString& file, int fileType) wxOVERRIDE
     {
         return wxTextCtrl::DoLoadFile(file, fileType);
     }
 
-    bool DoSaveFile(const wxString& file, int fileType)
+    bool DoSaveFile(const wxString& file, int fileType) wxOVERRIDE
     {
         return wxTextCtrl::DoSaveFile(file, fileType);
     }
@@ -180,15 +180,15 @@ public:
     // control and not give it to the button inside the same control. Besides,
     // the search button can be already activated by pressing "Enter" so there
     // is really no reason for it to be able to get focus from keyboard.
-    virtual bool AcceptsFocusFromKeyboard() const { return false; }
+    virtual bool AcceptsFocusFromKeyboard() const wxOVERRIDE { return false; }
 
-    virtual wxWindow* GetMainWindowOfCompositeControl()
+    virtual wxWindow* GetMainWindowOfCompositeControl() wxOVERRIDE
     {
         return m_search;
     }
 
 protected:
-    wxSize DoGetBestSize() const
+    wxSize DoGetBestSize() const wxOVERRIDE
     {
         return wxSize(m_bmp.GetWidth(), m_bmp.GetHeight());
     }
@@ -926,10 +926,6 @@ bool wxSearchCtrl::ShouldInheritColours() const
 // antialiasing
 static int GetMultiplier()
 {
-#ifdef __WXWINCE__
-    // speed up bitmap generation by using a small bitmap
-    return 3;
-#else
     int depth = ::wxDisplayDepth();
 
     if  ( depth >= 24 )
@@ -937,7 +933,6 @@ static int GetMultiplier()
         return 8;
     }
     return 6;
-#endif
 }
 
 wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )

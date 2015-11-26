@@ -996,12 +996,6 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
                                const wxString& name )
 {
 #ifdef __WXMAC__
-    int major, minor;
-    wxGetOsVersion(&major, &minor);
-
-    if (major < 10)
-        style |= wxTR_ROW_LINES;
-
     if (style & wxTR_HAS_BUTTONS)
         style |= wxTR_NO_LINES;
 #endif // __WXMAC__

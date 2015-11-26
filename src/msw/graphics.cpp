@@ -49,7 +49,7 @@
 
 #include "wx/msw/private.h" // needs to be before #include <commdlg.h>
 
-#if wxUSE_COMMON_DIALOGS && !defined(__WXMICROWIN__)
+#if wxUSE_COMMON_DIALOGS
 #include <commdlg.h>
 #endif
 
@@ -1761,11 +1761,11 @@ void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxD
             interim.GetPixelFormat(),&data);
 
         bool hasAlpha = false;
-        for ( size_t y = 0 ; y < height && !hasAlpha ; ++y)
+        for ( size_t yy = 0 ; yy < height && !hasAlpha ; ++yy)
         {
-            for( size_t x = 0 ; x < width && !hasAlpha; ++x)
+            for( size_t xx = 0 ; xx < width && !hasAlpha; ++xx)
             {
-                ARGB *dest = (ARGB*)((BYTE*)data.Scan0 + data.Stride*y + x*4);
+                ARGB *dest = (ARGB*)((BYTE*)data.Scan0 + data.Stride*yy + xx*4);
                 if ( ( *dest & Color::AlphaMask ) != 0 )
                     hasAlpha = true;
             }

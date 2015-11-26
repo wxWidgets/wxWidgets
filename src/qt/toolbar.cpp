@@ -8,13 +8,22 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/toolbar.h"
-#include "wx/qt/private/winevent.h"
-#include "wx/qt/private/converter.h"
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
 #if wxUSE_TOOLBAR
 
+#include <QActionGroup>
 #include <QtWidgets/QToolButton>
+
+#ifndef WX_PRECOMP
+    #include "wx/menu.h"
+#endif // WX_PRECOMP
+
+#include "wx/toolbar.h"
+#include "wx/qt/private/winevent.h"
+#include "wx/qt/private/converter.h"
 
 class wxQtToolButton;
 class wxToolBarTool : public wxToolBarToolBase

@@ -138,7 +138,7 @@ public:
     TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~TextWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const wxOVERRIDE { return m_text; }
+    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_text; }
     virtual wxTextEntryBase *GetTextEntry() const wxOVERRIDE { return m_text; }
     virtual void RecreateWidget() wxOVERRIDE { CreateText(); }
 

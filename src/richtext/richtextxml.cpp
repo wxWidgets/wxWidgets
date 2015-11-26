@@ -535,7 +535,10 @@ bool wxRichTextPlainText::ExportXML(wxOutputStream& stream, int indent, wxRichTe
 #else
         int c = (int) wxUChar(text[i]);
 #endif
-        if ((c < 32 || c == 34) && /* c != 9 && */ c != 10 && c != 13)
+        if (((c < 32 || c == 34) && /* c != 9 && */ c != 10 && c != 13)
+            // XML ranges
+            || (!(c >= 32 && c <= 55295) && !(c >= 57344 && c <= 65533))
+            )
         {
             if (i > 0)
             {

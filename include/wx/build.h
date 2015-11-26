@@ -52,8 +52,17 @@
 // GCC and Intel C++ share same C++ ABI (and possibly others in the future),
 // check if compiler versions are compatible:
 #if defined(__GXX_ABI_VERSION)
+    // The changes between ABI versions 1002 through 1008 (documented at
+    // https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Dialect-Options.html
+    // under -fabi-version) don't affect wxWidgets, so we allow a library
+    // and an application to differ within that range.
+    #if ((__GXX_ABI_VERSION >= 1002) && (__GXX_ABI_VERSION <= 1008))
+        #define wxGXX_EFFECTIVE_ABI_VERSION 1002
+    #else
+        #define wxGXX_EFFECTIVE_ABI_VERSION __GXX_ABI_VERSION
+    #endif
     #define __WX_BO_COMPILER \
-            ",compiler with C++ ABI " __WX_BO_STRINGIZE(__GXX_ABI_VERSION)
+            ",compiler with C++ ABI " __WX_BO_STRINGIZE(wxGXX_EFFECTIVE_ABI_VERSION)
 #elif defined(__GNUG__)
     #define __WX_BO_COMPILER ",GCC " \
             __WX_BO_STRINGIZE(__GNUC__) "." __WX_BO_STRINGIZE(__GNUC_MINOR__)
@@ -89,7 +98,7 @@
     #define __WX_BO_STL ",wx containers"
 #endif
 
-// This macro is passed as argument to wxConsoleApp::CheckBuildOptions()
+// This macro is passed as argument to wxAppConsole::CheckBuildOptions()
 #define WX_BUILD_OPTIONS_SIGNATURE \
     __WX_BO_VERSION(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER) \
     " (" __WX_BO_UNICODE \

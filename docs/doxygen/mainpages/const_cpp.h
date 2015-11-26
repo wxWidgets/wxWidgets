@@ -25,7 +25,6 @@ using @ifdef_ and not @if_.
 @beginDefList
 @itemdef{__WXBASE__, Only wxBase, no GUI features (same as @c wxUSE_GUI == 0)}
 @itemdef{__WXDFB__, wxUniversal using DirectFB}
-@itemdef{__WXWINCE__, Windows CE}
 @itemdef{__WXGTK__, GTK+}
 @itemdef{__WXGTK12__, GTK+ 1.2 or higher}
 @itemdef{__WXGTK20__, GTK+ 2.0 or higher}
@@ -55,7 +54,7 @@ while <tt>__WINDOWS__</tt> should be used for the platform tests.}
 
 There are two wxWidgets ports to Mac OS X. One of them, wxOSX is the successor of the
 venerable wxMac, it currently exists in three versions: Carbon and Cocoa for the
-desktop and a very early iPhone port. And there is the Cocoa port named wxCocoa 
+desktop and a very early iPhone port. And there is the Cocoa port named wxCocoa
 which has not been updated very actively since beginning 2008. To summarize:
 
 @li If you want to test for wxOSX on the desktop, use
@@ -103,7 +102,6 @@ symbols, although this has not always been followed.
 @itemdef{__WIN32__, Win32 API}
 @itemdef{__WIN64__, Win64 (mostly same as Win32 but data type sizes are different)}
 @itemdef{__WINE__, Wine}
-@itemdef{_WIN32_WCE, Windows CE version}
 @endDefList
 
 
@@ -122,28 +120,12 @@ compiler used.
 
 
 
-@section page_cppconst_hardware Hardware Type
-
-@beginDefList
-@itemdef{__SMARTPHONE__, Generic mobile devices with phone buttons and a small display}
-@itemdef{__PDA__, Personal digital assistant, usually with touch screen}
-@itemdef{__HANDHELD__, Small but powerful computer, usually with a keyboard}
-@itemdef{__POCKETPC__, Microsoft-powered PocketPC devices with touch-screen}
-@itemdef{__WINCE_STANDARDSDK__, Microsoft-powered Windows CE devices, for generic Windows CE applications}
-@itemdef{__WINCE_NET__, Microsoft-powered Windows CE .NET devices (_WIN32_WCE is 400 or greater)}
-@itemdef{WIN32_PLATFORM_WFSP, Microsoft-powered smartphone}
-@endDefList
-
-
-
 @section page_cppconst_compiler Compilers
 
 @beginDefList
 @itemdef{__BORLANDC__, Borland C++. The value of the macro corresponds
                         to the compiler version: 500 is 5.0.}
-@itemdef{__DJGPP__, DJGPP}
 @itemdef{__DIGITALMARS__, Digital Mars (not used any more).}
-@itemdef{__EVC4__, Embedded Visual C++ 4 (can be only used for building wxWinCE)}
 @itemdef{__GNUG__, Gnu C++ on any platform, see also wxCHECK_GCC_VERSION}
 @itemdef{__GNUWIN32__, Gnu-Win32 compiler, see also wxCHECK_W32API_VERSION}
 @itemdef{__INTELC__, Intel C++ compiler}
@@ -159,7 +141,7 @@ compiler used.
                     @c 1020 for @c 4.2 (the first supported version), @c 1100 for
                     @c 5.0, @c 1200 for @c 6.0 and so on. For convenience, the symbols
                     __VISUALCn__ are also defined for each major compiler version from
-                    5 to 12, i.e. you can use tests such as <tt>#ifdef \_\_VISUALC7\_\_</tt>
+                    5 to 12, i.e. you can use tests such as <tt>\#ifdef \_\_VISUALC7\_\_</tt>
                     to test for compiler version being precisely 7.}
 @itemdef{__XLC__, AIX compiler}
 @itemdef{__WATCOMC__, Watcom C++. The value of this macro corresponds to
@@ -207,6 +189,7 @@ Currently the following symbols exist:
     decide whether some function should be overloaded for both
     <code>long</code> and <code>long long</code> types.}
 @itemdef{wxHAS_MULTIPLE_FILEDLG_FILTERS, Defined if wxFileDialog supports multiple ('|'-separated) filters.}
+@itemdef{wxHAS_NATIVE_WINDOW, Defined if wxNativeWindow class is available.}
 @itemdef{wxHAS_IMAGES_IN_RESOURCES, Defined if <a href="http://en.wikipedia.org/wiki/Resource_(Windows)">
     Windows resource files</a> or OS/2 resource files are available on the current platform.}
 @itemdef{wxHAS_POWER_EVENTS, Defined if wxPowerEvent are ever generated on the current platform.}
@@ -277,7 +260,7 @@ configuration.
         includes a number of wxWidgets headers thus making it unnecessary to include
         them explicitly. However if this is not defined, you do need to include them
         and so the usual idiom which allows to support both cases is to first include
-        @c wx/wxprec.h} and then, inside <tt>#ifndef WX_PRECOMP</tt>, individual
+        @c wx/wxprec.h} and then, inside <tt>\#ifndef WX_PRECOMP</tt>, individual
         headers you need.}
 @itemdef{_UNICODE and UNICODE, both are defined if wxUSE_UNICODE is set to @c 1}
 @itemdef{wxUSE_GUI,

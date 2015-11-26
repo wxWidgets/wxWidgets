@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 1 April 2014                                                        *
+# Date : 13 July 2015                                                        *
 #                                                                            *
 #*****************************************************************************
 
@@ -14,28 +14,32 @@
 .ifdef __WXMOTIF__
 CXX_DEFINE = /define=(__WX__=1,__WXMOTIF__=1,__USE_STD_IOSTREAM=1)/name=(as_is,short)\
 	   /assume=(nostdnew,noglobal_array_new)\
-	   /include=([],[-.src],[-.include],[-.lexlib])
+	   /include=([],[-.src],[-.include],[-.lexlib])\
+	   /warn=disable=(INTSIGNCHANGE)
 CC_DEFINE = /define=(__WX__=1,__WXMOTIF__=1)/name=(as_is,short)\
 	/include=([],[-.src],[-.include],[-.lexlib])
 .else
 .ifdef __WXGTK__
 CXX_DEFINE = /define=(__WX__=1,__WXGTK__=1,__USE_STD_IOSTREAM=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)\
-	   /include=([],[-.src],[-.include],[-.lexlib])
+	   /include=([],[-.src],[-.include],[-.lexlib])\
+	   /warn=disable=(INTSIGNCHANGE)
 CC_DEFINE = /define=(__WX__=1,__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	/include=([],[-.src],[-.include],[-.lexlib])
 .else
 .ifdef __WXGTK2__
 CXX_DEFINE = /define=(__WX__=1,__WXGTK__=1,VMS_GTK2=1,__USE_STD_IOSTREAM=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)\
-	   /include=([],[-.src],[-.include],[-.lexlib])
+	   /include=([],[-.src],[-.include],[-.lexlib])\
+	   /warn=disable=(INTSIGNCHANGE)
 CC_DEFINE = /define=(__WX__=1,__WXGTK__=1,VMS_GTK2=1)/float=ieee/name=(as_is,short)\
 	/ieee=denorm/include=([],[-.src],[-.include],[-.lexlib])
 .else
 .ifdef __WXX11__
 CXX_DEFINE = /define=(__WX__=1,__WXX11__=1,__WXUNIVERSAL__==1,__USE_STD_IOSTREAM=1)/float=ieee\
 	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)\
-	/include=([],[-.src],[-.include],[-.lexlib])
+	/include=([],[-.src],[-.include],[-.lexlib])\
+	/warn=disable=(INTSIGNCHANGE)
 CC_DEFINE = /define=(__WX__=1,__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
 	/name=(as_is,short)/include=([],[-.src],[-.include],[-.lexlib])
 .else
@@ -72,7 +76,8 @@ OBJECTS1=LexMMIXAL.obj,LexModula.obj,LexMPT.obj,LexMSSQL.obj,LexMySQL.obj,\
 	LexScriptol.obj,LexSmalltalk.obj,LexSML.obj,LexSorcus.obj,LexSpecman.obj,\
 	LexSpice.obj,LexSQL.obj,LexSTTXT.obj,LexTACL.obj,LexTADS3.obj,LexTAL.obj,\
 	LexTCL.obj,LexTCMD.obj,LexTeX.obj,LexTxt2tags.obj,LexVB.obj,\
-	LexVerilog.obj,LexVHDL.obj,LexVisualProlog.obj,LexYAML.obj,LexDMAP.obj
+	LexVerilog.obj,LexVHDL.obj,LexVisualProlog.obj,LexYAML.obj,\
+	LexDMAP.obj,LexHex.obj,LexBibTeX.obj,LexDMIS.obj,LexRegistry.obj
 
 SOURCES=LexA68k.cxx,LexAbaqus.cxx,LexAda.cxx,LexAPDL.cxx,LexAsm.cxx,\
 	LexAsn1.cxx,LexASY.cxx,LexAU3.cxx,LexAVE.cxx,LexAVS.cxx,LexBaan.cxx,\
@@ -92,7 +97,8 @@ SOURCES=LexA68k.cxx,LexAbaqus.cxx,LexAda.cxx,LexAPDL.cxx,LexAsm.cxx,\
 	LexScriptol.cxx,LexSmalltalk.cxx,LexSML.cxx,LexSorcus.cxx,LexSpecman.cxx,\
 	LexSpice.cxx,LexSQL.cxx,LexSTTXT.cxx,LexTACL.cxx,LexTADS3.cxx,LexTAL.cxx,\
 	LexTCL.cxx,LexTCMD.cxx,LexTeX.cxx,LexTxt2tags.cxx,LexVB.cxx,\
-	LexVerilog.cxx,LexVHDL.cxx,LexVisualProlog.cxx,LexYAML.cxx,LexDMAP.cxx
+	LexVerilog.cxx,LexVHDL.cxx,LexVisualProlog.cxx,LexYAML.cxx,\
+	LexDMAP.cxx LexHex.cxx LexBibTeX.cxx LexDMIS.cxx LexRegistry.cxx
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -218,3 +224,7 @@ LexVHDL.obj : LexVHDL.cxx
 LexVisualProlog.obj : LexVisualProlog.cxx
 LexYAML.obj : LexYAML.cxx
 LexDMAP.obj : LexDMAP.cxx
+LexHex.obj : LexHex.cxx
+LexBibTeX.obj : LexBibTeX.cxx
+LexDMIS.obj : LexDMIS.cxx
+LexRegistry.obj : LexRegistry.cxx

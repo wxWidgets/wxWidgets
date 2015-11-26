@@ -183,7 +183,7 @@ wxPG_ITERATE_DEFAULT = wxPG_ITERATE_NORMAL
 // Macro to test if children of PWC should be iterated through
 #define wxPG_ITERATOR_PARENTEXMASK_TEST(PWC, PARENTMASK) \
         ( \
-        !(PWC->GetFlags() & PARENTMASK) && \
+        !PWC->HasFlag(PARENTMASK) && \
         PWC->GetChildCount() \
         )
 
@@ -223,7 +223,7 @@ public:
     void Prev();
 
     /**
-        Set base parent, ie a property when, in which iteration returns, it
+        Set base parent, i.e. a property when, in which iteration returns, it
         ends.
 
         Default base parent is the root of the used wxPropertyGridPageState.
@@ -240,8 +240,8 @@ private:
     wxPGProperty*               m_baseParent;
 
     // Masks are used to quickly exclude items
-    int                         m_itemExMask;
-    int                         m_parentExMask;
+    wxPGProperty::FlagType      m_itemExMask;
+    wxPGProperty::FlagType      m_parentExMask;
 };
 
 
@@ -402,7 +402,7 @@ protected:
 /** @class wxPropertyGridPageState
 
     Contains low-level property page information (properties, column widths,
-    etc) of a single wxPropertyGrid or single wxPropertyGridPage. Generally you
+    etc.) of a single wxPropertyGrid or single wxPropertyGridPage. Generally you
     should not use this class directly, but instead member functions in
     wxPropertyGridInterface, wxPropertyGrid, wxPropertyGridPage, and
     wxPropertyGridManager.
@@ -526,9 +526,7 @@ public:
     */
     wxPGProperty* GetSelection() const
     {
-        if ( m_selection.size() == 0 )
-            return NULL;
-        return m_selection[0];
+        return m_selection.empty()? NULL: m_selection[0];
     }
 
     void DoSetSelection( wxPGProperty* prop )

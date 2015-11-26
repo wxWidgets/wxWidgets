@@ -195,12 +195,6 @@ public:
         return true;
     }
 
-    virtual void SetNormalBitmap(const wxBitmap& bmp)
-    {
-        wxToolBarToolBase::SetNormalBitmap(bmp);
-        UpdateToggleImage(CanBeToggled() && IsToggled());
-    }
-
     virtual void SetLabel(const wxString& label)
     {
         wxToolBarToolBase::SetLabel(label);

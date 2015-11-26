@@ -14,8 +14,8 @@
 
     // the exception handler which should be called from the exception filter
     //
-    // it calsl wxApp::OnFatalException() if possible
-    extern unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs);
+    // it calls wxApp::OnFatalException() if wxTheApp object exists
+    WXDLLIMPEXP_BASE unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs);
 
     // helper macro for wxSEH_HANDLE
 #if defined(__BORLANDC__)
@@ -46,7 +46,7 @@
     #define wxSEH_HANDLE(rc)
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
-#if wxUSE_ON_FATAL_EXCEPTION && defined(__VISUALC__) && !defined(__WXWINCE__)
+#if wxUSE_ON_FATAL_EXCEPTION && defined(__VISUALC__)
     #include <eh.h>
 
     // C++ exception to structured exceptions translator: we need it in order

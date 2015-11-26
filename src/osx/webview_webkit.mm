@@ -345,6 +345,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
                                  const wxString& name)
 {
     m_busy = false;
+    m_nextNavigationIsNewWindow = false;
 
     DontCreatePeer();
     wxControl::Create(parent, winID, pos, size, style, wxDefaultValidator, name);
@@ -1228,8 +1229,26 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 {
     wxUnusedVar(frame);
 
-    webKitWindow->m_busy = true;
     NSString *url = [[request URL] absoluteString];
+    if (webKitWindow->m_nextNavigationIsNewWindow)
+    {
+        // This navigation has been marked as a new window
+        // cancel the request here and send an apropriate event
+        // to the application code
+        webKitWindow->m_nextNavigationIsNewWindow = false;
+
+        wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW,
+                             webKitWindow->GetId(),
+                             wxCFStringRef::AsString( url ), "");
+
+        if (webKitWindow && webKitWindow->GetEventHandler())
+            webKitWindow->GetEventHandler()->ProcessEvent(event);
+
+        [listener ignore];
+        return;
+    }
+
+    webKitWindow->m_busy = true;
     wxString target = wxCFStringRef::AsString([frame name]);
     wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING,
                          webKitWindow->GetId(),
@@ -1358,6 +1377,15 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
     [super init];
     webKitWindow = inWindow;    // non retained
     return self;
+}
+
+- (WebView *)webView:(WebView *)sender createWebViewWithRequest:(NSURLRequest *)request
+{
+    // This method is called when window.open() is used in javascript with a target != _self
+    // request is always nil, so it can't be used for event generation
+    // Mark the next navigation as "new window"
+    webKitWindow->m_nextNavigationIsNewWindow = true;
+    return sender;
 }
 
 - (void)webView:(WebView *)sender printFrameView:(WebFrameView *)frameView

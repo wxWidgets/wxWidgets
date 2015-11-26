@@ -10,9 +10,7 @@
 #ifndef _WX_DEBUG_H_
 #define _WX_DEBUG_H_
 
-#if !defined(__WXWINCE__)
-    #include  <assert.h>
-#endif // systems without assert.h
+#include  <assert.h>
 
 #include <limits.h>          // for CHAR_BIT used below
 

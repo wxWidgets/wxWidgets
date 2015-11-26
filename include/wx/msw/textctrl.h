@@ -74,9 +74,7 @@ public:
     virtual void MarkDirty();
     virtual void DiscardEdits();
 
-#ifdef __WIN32__
     virtual bool EmulateKeyPress(const wxKeyEvent& event);
-#endif // __WIN32__
 
 #if wxUSE_RICHEDIT
     // apply text attribute to the range of text (only works with richedit
@@ -101,10 +99,8 @@ public:
         return wxTextCtrlBase::HitTest(pt, col, row);
     }
 
-#ifndef __WXWINCE__
     virtual void SetLayoutDirection(wxLayoutDirection dir) wxOVERRIDE;
     virtual wxLayoutDirection GetLayoutDirection() const wxOVERRIDE;
-#endif // !__WXWINCE__
 
     // Caret handling (Windows only)
     bool ShowNativeCaret(bool show = true);

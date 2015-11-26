@@ -75,6 +75,10 @@ enum
     implementations use the short help string for the tooltip text which is
     popped up when the mouse pointer enters the tool and the long help string
     for the applications status bar.
+
+    Notice that the toolbar can @e not be modified by changing its tools via
+    the (intentionally undocumented here) setter methods of this class, all the
+    modifications must be done using the methods of wxToolBar itself.
 */
 class wxToolBarToolBase : public wxObject
 {
@@ -93,8 +97,6 @@ public:
                       wxControl *control,
                       const wxString& label);
 
-    virtual ~wxToolBarToolBase();
-
     int GetId() const;
 
     wxControl *GetControl() const;
@@ -107,7 +109,6 @@ public:
     bool IsStretchableSpace() const;
     int GetStyle() const;
     wxItemKind GetKind() const;
-    void MakeStretchable();
 
     bool IsEnabled() const;
     bool IsToggled() const;
@@ -124,21 +125,9 @@ public:
 
     wxObject *GetClientData() const;
 
-    virtual bool Enable(bool enable);
-    virtual bool Toggle(bool toggle);
-    virtual bool SetToggle(bool toggle);
-    virtual bool SetShortHelp(const wxString& help);
-    virtual bool SetLongHelp(const wxString& help);
-    void Toggle();
-    virtual void SetNormalBitmap(const wxBitmap& bmp);
-    virtual void SetDisabledBitmap(const wxBitmap& bmp);
-    virtual void SetLabel(const wxString& label);
-    void SetClientData(wxObject *clientData);
-    
     virtual void Detach();
     virtual void Attach(wxToolBarBase *tbar);
 
-    virtual void SetDropdownMenu(wxMenu *menu);
     wxMenu *GetDropdownMenu() const;
 };
 
@@ -415,7 +404,10 @@ public:
             An integer by which the tool may be identified in subsequent
             operations.
         @param label
-            The string to be displayed with the tool.
+            The string to be displayed with the tool. This string may include
+            mnemonics, i.e. characters prefixed by an ampersand ("&"), but they
+            are stripped from it and not actually shown in the toolbar as tools
+            can't be activated from keyboard.
         @param bitmap
             The primary tool bitmap.
         @param shortHelp
@@ -811,16 +803,6 @@ public:
         @see DeleteTool()
     */
     virtual wxToolBarToolBase* RemoveTool(int id);
-
-    /**
-        Sets the bitmap resource identifier for specifying tool bitmaps as
-        indices into a custom bitmap.
-
-        This is a Windows CE-specific method not available in the other ports.
-
-        @onlyfor{wxmsw_wince}
-    */
-    void SetBitmapResource(int resourceId);
 
     /**
         Sets the dropdown menu for the tool given by its @e id. The tool itself

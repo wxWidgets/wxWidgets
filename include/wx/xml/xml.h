@@ -236,6 +236,35 @@ inline void wxXmlNode::SetProperties(wxXmlAttribute *prop)
 
 
 
+class WXDLLIMPEXP_XML wxXmlDoctype
+{
+public:
+    explicit
+    wxXmlDoctype(const wxString& name = wxString(),
+                 const wxString& sysid = wxString(),
+                 const wxString& pubid = wxString())
+                 : m_rootName(name), m_systemId(sysid), m_publicId(pubid)
+                 {}
+
+    // Default copy ctor and assignment operators are ok.
+
+    bool IsValid() const;
+    void Clear();
+
+    const wxString& GetRootName() const { return m_rootName; }
+    const wxString& GetSystemId() const { return m_systemId; }
+    const wxString& GetPublicId() const { return m_publicId; }
+
+    wxString GetFullString() const;
+
+private:
+    wxString m_rootName;
+    wxString m_systemId;
+    wxString m_publicId;
+};
+
+
+
 // special indentation value for wxXmlDocument::Save
 #define wxXML_NO_INDENTATION           (-1)
 
@@ -287,6 +316,7 @@ public:
     // Note: this is the encoding original file was saved in, *not* the
     // encoding of in-memory representation!
     const wxString& GetFileEncoding() const { return m_fileEncoding; }
+    const wxXmlDoctype& GetDoctype() const { return m_doctype; }
 
     // Write-access methods:
     wxXmlNode *DetachDocumentNode() { wxXmlNode *old=m_docNode; m_docNode=NULL; return old; }
@@ -295,6 +325,7 @@ public:
     void SetRoot(wxXmlNode *node);
     void SetVersion(const wxString& version) { m_version = version; }
     void SetFileEncoding(const wxString& encoding) { m_fileEncoding = encoding; }
+    void SetDoctype(const wxXmlDoctype& doctype) { m_doctype = doctype; }
     void AppendToProlog(wxXmlNode *node);
 
 #if !wxUSE_UNICODE
@@ -313,6 +344,7 @@ private:
 #if !wxUSE_UNICODE
     wxString   m_encoding;
 #endif
+    wxXmlDoctype m_doctype;
     wxXmlNode *m_docNode;
 
     void DoCopy(const wxXmlDocument& doc);

@@ -177,14 +177,6 @@
 // Use this macro to generate standard custom image height from
 #define wxPG_STD_CUST_IMAGE_HEIGHT(LINEHEIGHT)  (LINEHEIGHT-3)
 
-
-#if defined(__WXWINCE__)
-    #define wxPG_SMALL_SCREEN       1
-#else
-    #define wxPG_SMALL_SCREEN       0
-#endif
-
-
 // Undefine wxPG_ICON_WIDTH to use supplied xpm bitmaps instead
 // (for tree buttons)
 //#undef wxPG_ICON_WIDTH
@@ -232,9 +224,9 @@ class wxPGValidationInfo;
 
 // -----------------------------------------------------------------------
 
-/** @section propgrid_misc wxPropertyGrid Miscellanous
+/** @section propgrid_misc wxPropertyGrid Miscellaneous
 
-    This section describes some miscellanous values, types and macros.
+    This section describes some miscellaneous values, types and macros.
     @{
 */
 
@@ -243,7 +235,9 @@ class wxPGValidationInfo;
 
 // This is the value placed in wxPGProperty::sm_wxPG_LABEL
 #define wxPG_LABEL_STRING       wxS("@!")
+#if WXWIN_COMPATIBILITY_3_0
 #define wxPG_NULL_BITMAP        wxNullBitmap
+#endif // WXWIN_COMPATIBILITY_3_0
 #define wxPG_COLOUR_BLACK       (*wxBLACK)
 
 /** Convert Red, Green and Blue to a single 32-bit value.
@@ -254,7 +248,7 @@ class wxPGValidationInfo;
 /** If property is supposed to have custom-painted image, then returning
     this in OnMeasureImage() will usually be enough.
 */
-#define wxPG_DEFAULT_IMAGE_SIZE             wxSize(-1, -1)
+#define wxPG_DEFAULT_IMAGE_SIZE  wxDefaultSize
 
 
 /** This callback function is used for sorting properties.
@@ -288,7 +282,7 @@ typedef wxString wxPGCachedString;
 
 // -----------------------------------------------------------------------
 
-// Used to indicate wxPGChoices::Add etc that the value is actually not given
+// Used to indicate wxPGChoices::Add etc. that the value is actually not given
 // by the caller.
 #define wxPG_INVALID_VALUE      INT_MAX
 
@@ -327,19 +321,6 @@ WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(wxObject*, wxArrayPGObject,
                                   wxBaseArrayPtrVoid,
                                   class WXDLLIMPEXP_PROPGRID);
 
-// Utility to find if specific item is in a vector. Returns index to
-// the item, or wxNOT_FOUND if not present.
-template<typename CONTAINER, typename T>
-int wxPGFindInVector( CONTAINER vector, const T& item )
-{
-    for ( unsigned int i=0; i<vector.size(); i++ )
-    {
-        if ( vector[i] == item )
-            return (int) i;
-    }
-    return wxNOT_FOUND;
-}
-
 // -----------------------------------------------------------------------
 
 enum wxPG_GETPROPERTYVALUES_FLAGS
@@ -372,7 +353,7 @@ wxPG_SORT_TOP_LEVEL_ONLY          = 0x00000200
 
 // -----------------------------------------------------------------------
 
-// Misc argument flags.
+// Misc. argument flags.
 enum wxPG_MISC_ARG_FLAGS
 {
     // Get/Store full value instead of displayed value.
@@ -397,7 +378,7 @@ enum wxPG_MISC_ARG_FLAGS
     // (guarantees that input wxVariant value is current own value)
     wxPG_VALUE_IS_CURRENT               = 0x00000040,
 
-    // Value is being set programmatically (ie. not by user)
+    // Value is being set programmatically (i.e. not by user)
     wxPG_PROGRAMMATIC_VALUE             = 0x00000080
 };
 
@@ -431,7 +412,7 @@ enum wxPG_SETVALUE_FLAGS
 // -----------------------------------------------------------------------
 // Editor class.
 
-// Editor accessor (for backwards compatiblity use only).
+// Editor accessor (for backwards compatibility use only).
 #define wxPG_EDITOR(T)          wxPGEditor_##T
 
 // Macro for declaring editor class, with optional impexpdecl part.
@@ -448,7 +429,7 @@ enum wxPG_SETVALUE_FLAGS
 extern wxPGEditor* wxPGEditor_##EDITOR; \
 extern wxPGEditor* wxPGConstruct##EDITOR##EditorClass();
 
-// Declare builtin editor classes.
+// Declare built-in editor classes.
 WX_PG_DECLARE_EDITOR_WITH_DECL(TextCtrl,WXDLLIMPEXP_PROPGRID)
 WX_PG_DECLARE_EDITOR_WITH_DECL(Choice,WXDLLIMPEXP_PROPGRID)
 WX_PG_DECLARE_EDITOR_WITH_DECL(ComboBox,WXDLLIMPEXP_PROPGRID)
@@ -469,7 +450,7 @@ WX_PG_DECLARE_EDITOR_WITH_DECL(ChoiceAndButton,WXDLLIMPEXP_PROPGRID)
 template<class T>
 wxVariant WXVARIANT( const T& WXUNUSED(value) )
 {
-    wxFAIL_MSG("Code should always call specializations of this template");
+    wxFAIL_MSG(wxS("Code should always call specializations of this template"));
     return wxVariant();
 }
 
@@ -499,7 +480,7 @@ template<> inline wxVariant WXVARIANT( const wxDateTime& value )
 
 //
 // These are modified versions of DECLARE/WX_PG_IMPLEMENT_VARIANT_DATA
-// macros found in variant.h. Difference are as follows:
+// macros found in variant.h. Differences are as follows:
 //   * These support non-wxObject data
 //   * These implement classname##RefFromVariant function which returns
 //     reference to data within.
@@ -526,7 +507,7 @@ extern expdecl const char* classname##_VariantType;
 #define WX_PG_IMPLEMENT_VARIANT_DATA(classname) \
     WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED(classname, wxEMPTY_PARAMETER_VALUE)
 
-// Add getter (ie. classname << variant) separately to allow
+// Add getter (i.e. classname << variant) separately to allow
 // custom implementations.
 #define WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_NO_EQ_NO_GETTER(classname,expdecl) \
 const char* classname##_VariantType = #classname; \
@@ -540,11 +521,11 @@ public:\
 \
     const classname &GetValue() const { return m_value; } \
 \
-    virtual bool Eq(wxVariantData& data) const; \
+    virtual bool Eq(wxVariantData& data) const wxOVERRIDE; \
 \
-    virtual wxString GetType() const; \
+    virtual wxString GetType() const wxOVERRIDE; \
 \
-    virtual wxVariantData* Clone() const { return new classname##VariantData(m_value); } \
+    virtual wxVariantData* Clone() const wxOVERRIDE { return new classname##VariantData(m_value); } \
 \
     DECLARE_WXANY_CONVERSION() \
 protected:\
@@ -567,8 +548,8 @@ expdecl wxVariant& operator << ( wxVariant &variant, const classname &value )\
 expdecl classname& classname##RefFromVariant( wxVariant& variant ) \
 { \
     wxASSERT_MSG( variant.GetType() == wxS(#classname), \
-                  wxString::Format("Variant type should have been '%s'" \
-                                   "instead of '%s'", \
+                  wxString::Format(wxS("Variant type should have been '%s'") \
+                                   wxS("instead of '%s'"), \
                                    wxS(#classname), \
                                    variant.GetType().c_str())); \
     classname##VariantData *data = \
@@ -578,8 +559,8 @@ expdecl classname& classname##RefFromVariant( wxVariant& variant ) \
 expdecl const classname& classname##RefFromVariant( const wxVariant& variant ) \
 { \
     wxASSERT_MSG( variant.GetType() == wxS(#classname), \
-                  wxString::Format("Variant type should have been '%s'" \
-                                   "instead of '%s'", \
+                  wxString::Format(wxS("Variant type should have been '%s'") \
+                                   wxS("instead of '%s'"), \
                                    wxS(#classname), \
                                    variant.GetType().c_str())); \
     classname##VariantData *data = \
@@ -700,7 +681,7 @@ template<> inline wxVariant WXVARIANT( const wxColour& value )
 class WXDLLIMPEXP_PROPGRID wxPGStringTokenizer
 {
 public:
-    wxPGStringTokenizer( const wxString& str, wxChar delimeter );
+    wxPGStringTokenizer( const wxString& str, wxChar delimiter );
     ~wxPGStringTokenizer();
 
     bool HasMoreTokens(); // not const so we can do some stuff in it
@@ -710,7 +691,7 @@ protected:
     const wxString*             m_str;
     wxString::const_iterator    m_curPos;
     wxString                    m_readyToken;
-    wxUniChar                   m_delimeter;
+    wxUniChar                   m_delimiter;
 };
 
 #define WX_PG_TOKENIZER2_BEGIN(WXSTRING,DELIMITER) \

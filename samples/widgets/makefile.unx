@@ -71,6 +71,7 @@ WIDGETS_OBJECTS =  \
 	widgets_hyperlnk.o \
 	widgets_itemcontainer.o \
 	widgets_listbox.o \
+	widgets_native.o \
 	widgets_notebook.o \
 	widgets_odcombobox.o \
 	widgets_radiobox.o \
@@ -171,6 +172,9 @@ widgets_itemcontainer.o: ./itemcontainer.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 widgets_listbox.o: ./listbox.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
+
+widgets_native.o: ./native.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 widgets_notebook.o: ./notebook.cpp

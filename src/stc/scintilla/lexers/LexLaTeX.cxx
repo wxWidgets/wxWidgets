@@ -60,7 +60,7 @@ private:
 		if (static_cast<int>(modes.size()) > numLines * 2 + 256)
 			modes.resize(numLines + 128);
 	}
-
+	
 	vector<latexFoldSave> saves;
 	void setSave(int line, const latexFoldSave &save) {
 		if (line >= static_cast<int>(saves.size())) saves.resize(line + 1);
@@ -192,7 +192,7 @@ void SCI_METHOD LexerLaTeX::Lex(unsigned int startPos, int length, int initStyle
 	int state = initStyle;
 	if (state == SCE_L_ERROR || state == SCE_L_SHORTCMD || state == SCE_L_SPECIAL)   // should not happen
 		latexStateReset(mode, state);
-
+	
 	char chNext = styler.SafeGetCharAt(startPos);
 	char chVerbatimDelim = '\0';
 	styler.StartSegment(startPos);
@@ -207,7 +207,7 @@ void SCI_METHOD LexerLaTeX::Lex(unsigned int startPos, int length, int initStyle
 			chNext = styler.SafeGetCharAt(i + 1);
 			continue;
 		}
-
+		
 		if (ch == '\r' || ch == '\n')
 			setMode(styler.GetLine(i), mode);
 
@@ -256,7 +256,7 @@ void SCI_METHOD LexerLaTeX::Lex(unsigned int startPos, int length, int initStyle
 				state = SCE_L_COMMENT;
 				break;
 			}
-			break;
+			break;	
 		// These 3 will never be reached.
 		case SCE_L_ERROR:
 		case SCE_L_SPECIAL:
@@ -400,7 +400,7 @@ void SCI_METHOD LexerLaTeX::Lex(unsigned int startPos, int length, int initStyle
 					chNext = styler.SafeGetCharAt(i + 1);
 					mode = 0;
 					state = SCE_L_DEFAULT;
-				} else { // This may not be an error, e.g. \begin{equation}\text{$a$}\end{equation}
+				} else { // This may not be an error, e.g. \begin{equation}\text{$a$}\end{equation}	
 					styler.ColourTo(i, SCE_L_SHORTCMD);
 				}
 				break;

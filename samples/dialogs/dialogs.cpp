@@ -140,6 +140,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif // wxUSE_RICHMSGDLG
 #if wxUSE_COLOURDLG
     EVT_MENU(DIALOGS_CHOOSE_COLOUR,                 MyFrame::ChooseColour)
+    EVT_MENU(DIALOGS_CHOOSE_COLOUR_ALPHA,           MyFrame::ChooseColour)
     EVT_MENU(DIALOGS_GET_COLOUR,                    MyFrame::GetColour)
 #endif // wxUSE_COLOURDLG
 
@@ -221,6 +222,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 #if USE_COLOURDLG_GENERIC
     EVT_MENU(DIALOGS_CHOOSE_COLOUR_GENERIC,         MyFrame::ChooseColourGeneric)
+    EVT_MENU(DIALOGS_CHOOSE_COLOUR_GENERIC_ALPHA,   MyFrame::ChooseColourGeneric)
 #endif // USE_COLOURDLG_GENERIC
 
 #if wxUSE_PROGRESSDLG
@@ -374,7 +376,10 @@ bool MyApp::OnInit()
     wxMenu *choices_menu = new wxMenu;
 
     #if wxUSE_COLOURDLG
-        choices_menu->Append(DIALOGS_CHOOSE_COLOUR, wxT("&Choose bg colour"));
+        wxMenu *choices_bg_colour = new wxMenu;
+        choices_bg_colour->Append(DIALOGS_CHOOSE_COLOUR, wxT("&No opacity"));
+        choices_bg_colour->Append(DIALOGS_CHOOSE_COLOUR_ALPHA, wxT("&With opacity"));
+        choices_menu->Append(wxID_ANY, wxT("&Choose bg colour"), choices_bg_colour);
         choices_menu->Append(DIALOGS_GET_COLOUR, wxT("&Choose fg colour"));
     #endif // wxUSE_COLOURDLG
 
@@ -400,7 +405,10 @@ bool MyApp::OnInit()
     #endif // USE_COLOURDLG_GENERIC || USE_FONTDLG_GENERIC
 
     #if USE_COLOURDLG_GENERIC
-        choices_menu->Append(DIALOGS_CHOOSE_COLOUR_GENERIC, wxT("&Choose colour (generic)"));
+        wxMenu *colourGeneric_menu = new wxMenu;
+        colourGeneric_menu->Append(DIALOGS_CHOOSE_COLOUR_GENERIC, wxT("&No opacity"));
+        colourGeneric_menu->Append(DIALOGS_CHOOSE_COLOUR_GENERIC_ALPHA, wxT("&With opacity"));
+        choices_menu->Append(wxID_ANY, wxT("&Choose colour (generic)"), colourGeneric_menu);
     #endif // USE_COLOURDLG_GENERIC
 
     #if USE_FONTDLG_GENERIC
@@ -706,9 +714,10 @@ MyFrame::~MyFrame()
 
 #if wxUSE_COLOURDLG
 
-void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event))
+void MyFrame::ChooseColour(wxCommandEvent& event)
 {
     m_clrData.SetColour(m_canvas->GetBackgroundColour());
+    m_clrData.SetChooseAlpha(event.GetId() == DIALOGS_CHOOSE_COLOUR_ALPHA);
 
     wxColourDialog dialog(this, &m_clrData);
     dialog.SetTitle(_("Please choose the background colour"));
@@ -741,21 +750,18 @@ void MyFrame::GetColour(wxCommandEvent& WXUNUSED(event))
 
 
 #if USE_COLOURDLG_GENERIC
-void MyFrame::ChooseColourGeneric(wxCommandEvent& WXUNUSED(event))
+void MyFrame::ChooseColourGeneric(wxCommandEvent& event)
 {
     m_clrData.SetColour(m_canvas->GetBackgroundColour());
 
     //FIXME:TODO:This has no effect...
     m_clrData.SetChooseFull(true);
+    m_clrData.SetChooseAlpha(event.GetId() == DIALOGS_CHOOSE_COLOUR_GENERIC_ALPHA);
 
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < wxColourData::NUM_CUSTOM; i++)
     {
-        wxColour colour(
-            (unsigned char)(i*16),
-            (unsigned char)(i*16),
-            (unsigned char)(i*16)
-        );
-        m_clrData.SetCustomColour(i, colour);
+        unsigned char n = i*(256/wxColourData::NUM_CUSTOM);
+        m_clrData.SetCustomColour(i, wxColour(n, n, n));
     }
 
     wxGenericColourDialog *dialog = new wxGenericColourDialog(this, &m_clrData);
@@ -1675,10 +1681,6 @@ void MyFrame::FileOpenGeneric(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::FilesOpenGeneric(wxCommandEvent& WXUNUSED(event) )
 {
-    // On PocketPC you can disable OK-only dialogs policy using system option
-    int buttons = wxSystemOptions::GetOptionInt(wxT("wince.dialog.real-ok-cancel"));
-    wxSystemOptions::SetOption(wxT("wince.dialog.real-ok-cancel"), 1);
-
     wxString wildcards = wxT("All files (*.*)|*.*|C++ files (*.cpp;*.h)|*.cpp;*.h");
     wxGenericFileDialog dialog(this, wxT("Testing open multiple file dialog"),
                         wxEmptyString, wxEmptyString, wildcards,
@@ -1706,9 +1708,6 @@ void MyFrame::FilesOpenGeneric(wxCommandEvent& WXUNUSED(event) )
         wxMessageDialog dialog2(this, msg, wxT("Selected files"));
         dialog2.ShowModal();
     }
-
-    // restore system option
-    wxSystemOptions::SetOption(wxT("wince.dialog.real-ok-cancel"), buttons);
 }
 
 void MyFrame::FileSaveGeneric(wxCommandEvent& WXUNUSED(event) )
@@ -2695,9 +2694,7 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
     dc.SetBackgroundMode(wxTRANSPARENT);
     dc.DrawText(
                 wxT("wxWidgets common dialogs")
-#if !defined(__SMARTPHONE__)
                 wxT(" test application")
-#endif
                 , 10, 10);
 }
 
@@ -3073,7 +3070,7 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
     itemSizer8->Add(checkBox6, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
     item0->Add(itemSizer8, 0, wxGROW|wxALL, 0);
 
-    topSizer->Add( item0, 1, wxGROW|wxALIGN_CENTRE|wxALL, 5 );
+    topSizer->Add( item0, wxSizerFlags(1).Expand().Border(wxALL, 5) );
 
     panel->SetSizerAndFit(topSizer);
 
@@ -3130,7 +3127,7 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
     item0->Add(itemSizer5, 0, wxGROW|wxLEFT|wxRIGHT, 5);
 #endif
 
-    topSizer->Add( item0, 1, wxGROW|wxALIGN_CENTRE|wxALL, 5 );
+    topSizer->Add( item0, wxSizerFlags(1).Expand().Border(wxALL, 5) );
     topSizer->AddSpacer(5);
 
     panel->SetSizerAndFit(topSizer);
@@ -3211,7 +3208,7 @@ bool TestMessageBoxDialog::Create()
         sizerBtns->Add(m_buttons[n], wxSizerFlags().Centre().Left());
 
         m_labels[n] = new wxTextCtrl(this, wxID_ANY);
-        sizerBtns->Add(m_labels[n], wxSizerFlags().Centre().Expand());
+        sizerBtns->Add(m_labels[n], wxSizerFlags().Expand());
 
         m_labels[n]->Connect(wxEVT_UPDATE_UI,
                              wxUpdateUIEventHandler(

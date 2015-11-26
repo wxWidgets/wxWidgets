@@ -8,14 +8,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/window.h"
-#include "wx/log.h"
-#include "wx/menu.h"
-#include "wx/tooltip.h"
-#include "wx/scrolbar.h"
-#include "wx/qt/private/utils.h"
-#include "wx/qt/private/converter.h"
-#include "wx/qt/private/winevent.h"
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
 #include <QtGui/QPicture>
 #include <QtGui/QPainter>
@@ -23,6 +18,20 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QScrollArea>
+
+#ifndef WX_PRECOMP
+    #include "wx/dcclient.h"
+    #include "wx/frame.h"
+    #include "wx/log.h"
+    #include "wx/menu.h"
+    #include "wx/scrolbar.h"
+#endif // WX_PRECOMP
+
+#include "wx/window.h"
+#include "wx/tooltip.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
+#include "wx/qt/private/winevent.h"
 
 
 #define VERT_SCROLLBAR_POSITION 0, 1

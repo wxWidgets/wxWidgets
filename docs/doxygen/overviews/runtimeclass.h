@@ -72,8 +72,8 @@ record runtime information about a class, including:
 @li A string representation of the class name.
 @li A function that can be called to construct an instance of this class.
 
-The DECLARE_... macros declare a static wxClassInfo variable in a class, which
-is initialized by macros of the form IMPLEMENT_... in the implementation C++
+The wxDECLARE_... macros declare a static wxClassInfo variable in a class, which
+is initialized by macros of the form wxIMPLEMENT_... in the implementation C++
 file. Classes whose instances may be constructed dynamically are given a global
 constructor function which returns a new object.
 

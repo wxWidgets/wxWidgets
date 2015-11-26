@@ -23,7 +23,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_TEXTCTRL && !(defined(__SMARTPHONE__) && defined(__WXWINCE__))
+#if wxUSE_TEXTCTRL
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
@@ -58,15 +58,17 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifndef __WXWINCE__
 #include <sys/types.h>
-#endif
 
 #if wxUSE_RICHEDIT
     #include <richedit.h>
     #include <richole.h>
     #include "wx/msw/ole/oleutils.h"
 #endif // wxUSE_RICHEDIT
+
+#if wxUSE_INKEDIT
+    #include <wx/dynlib.h>
+#endif
 
 #include "wx/msw/missing.h"
 
@@ -366,12 +368,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
 // returns true if the platform should explicitly apply a theme border
 bool wxTextCtrl::CanApplyThemeBorder() const
 {
-#ifdef __WXWINCE__
-    return false;
-#else
     // Standard text control already handles theming
     return ((GetWindowStyle() & (wxTE_RICH|wxTE_RICH2)) != 0);
-#endif
 }
 
 bool wxTextCtrl::MSWCreateText(const wxString& value,
@@ -383,12 +381,6 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
 
     // do create the control - either an EDIT or RICHEDIT
     wxString windowClass = wxT("EDIT");
-
-#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
-    // A control that capitalizes the first letter
-    if ( HasFlag(wxTE_CAPITALIZE) )
-        windowClass = wxT("CAPEDIT");
-#endif
 
 #if wxUSE_RICHEDIT
     if ( m_windowStyle & wxTE_AUTO_URL )
@@ -592,7 +584,6 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
         SetBackgroundColour(GetClassDefaultAttributes().colBg);
     }
 
-#ifndef __WXWINCE__
     // Without this, if we pass the size in the constructor and then don't change it,
     // the themed borders will be drawn incorrectly.
     SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
@@ -628,7 +619,6 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
 
         ::SendMessage(GetHwnd(), EM_SETMARGINS, wParam, lParam);
     }
-#endif // !__WXWINCE__
 
     return true;
 }
@@ -1272,8 +1262,6 @@ void wxTextCtrl::Clear()
     }
 }
 
-#ifdef __WIN32__
-
 bool wxTextCtrl::EmulateKeyPress(const wxKeyEvent& event)
 {
     SetFocus();
@@ -1288,8 +1276,6 @@ bool wxTextCtrl::EmulateKeyPress(const wxKeyEvent& event)
     // in the control - this should work in 99% of cases
     return GetValue().length() != lenOld;
 }
-
-#endif // __WIN32__
 
 // ----------------------------------------------------------------------------
 // Accessors
@@ -1793,8 +1779,6 @@ void wxTextCtrl::SetMaxLength(unsigned long len)
     }
 }
 
-#ifndef __WXWINCE__
-
 // ----------------------------------------------------------------------------
 // RTL support
 // ----------------------------------------------------------------------------
@@ -1825,8 +1809,6 @@ wxLayoutDirection wxTextCtrl::GetLayoutDirection() const
     return IsRich() ? wxTextCtrlBase::GetLayoutDirection()
                     : wxGetEditLayoutDirection(GetHwnd());
 }
-
-#endif // !__WXWINCE__
 
 // ----------------------------------------------------------------------------
 // Undo/redo
@@ -1978,13 +1960,13 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     {
         case WXK_RETURN:
             {
-                wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
-                InitCommandEvent(event);
-                event.SetString(GetValue());
-                if ( HandleWindowEvent(event) )
-                if ( !HasFlag(wxTE_MULTILINE) )
-                    return;
-                //else: multiline controls need Enter for themselves
+                wxCommandEvent evt(wxEVT_TEXT_ENTER, m_windowId);
+                InitCommandEvent(evt);
+                evt.SetString(GetValue());
+                if ( HandleWindowEvent(evt) )
+                    if ( !HasFlag(wxTE_MULTILINE) )
+                        return;
+                    //else: multiline controls need Enter for themselves
             }
             break;
 
@@ -2277,7 +2259,7 @@ bool wxTextCtrl::AcceptsFocusFromKeyboard() const
 
 wxSize wxTextCtrl::DoGetBestSize() const
 {
-    return DoGetSizeFromTextSize( DEFAULT_ITEM_WIDTH );
+    return DoGetSizeFromTextSize( FromDIP(DEFAULT_ITEM_WIDTH) );
 }
 
 wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
@@ -3149,4 +3131,4 @@ bool wxRichEditModule::LoadInkEdit()
 
 #endif // wxUSE_RICHEDIT
 
-#endif // wxUSE_TEXTCTRL && !(__SMARTPHONE__ && __WXWINCE__)
+#endif // wxUSE_TEXTCTRL

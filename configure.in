@@ -14,7 +14,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [3.1.0], [wx-dev@lists.wxwidgets.org])
+AC_INIT([wxWidgets], [3.1.0], [wx-dev@googlegroups.com])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -99,7 +99,7 @@ NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 dnl the list of all available toolkits
 dnl
 dnl update NUM_TOOLKITS calculation below when adding a new toolkit here!
-ALL_TOOLKITS="GTK OSX_CARBON OSX_COCOA OSX_IPHONE MICROWIN MOTIF MSW X11 DFB QT"
+ALL_TOOLKITS="GTK OSX_CARBON OSX_COCOA OSX_IPHONE MOTIF MSW X11 DFB QT"
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
@@ -107,7 +107,6 @@ DEFAULT_wxUSE_GTK=0
 DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_wxUSE_OSX_COCOA=0
 DEFAULT_wxUSE_OSX_IPHONE=0
-DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_wxUSE_MOTIF=0
 DEFAULT_wxUSE_MSW=0
 DEFAULT_wxUSE_X11=0
@@ -121,7 +120,6 @@ DEFAULT_DEFAULT_wxUSE_GTK=0
 DEFAULT_DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_DEFAULT_wxUSE_OSX_COCOA=0
 DEFAULT_DEFAULT_wxUSE_OSX_IPHONE=0
-DEFAULT_DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_DEFAULT_wxUSE_MOTIF=0
 DEFAULT_DEFAULT_wxUSE_MSW=0
 DEFAULT_DEFAULT_wxUSE_X11=0
@@ -274,13 +272,6 @@ case "${host}" in
     DEFAULT_DEFAULT_wxUSE_MSW=1
   ;;
 
-  *-pc-msdosdjgpp )
-    USE_UNIX=0
-    USE_DOS=1
-    AC_DEFINE(__DOS__)
-    PROGRAM_EXT=".exe"
-  ;;
-
   arm-apple-darwin*)
     dnl iPhone
     USE_BSD=1
@@ -308,7 +299,7 @@ case "${host}" in
 
   *)
     AC_MSG_WARN([*** System type ${host} is unknown, assuming generic Unix and continuing nevertheless.])
-    AC_MSG_WARN([*** Please report the build results to wx-dev@lists.wxwidgets.org.])
+    AC_MSG_WARN([*** Please report the build results to wx-dev@googlegroups.com.])
 
     DEFAULT_DEFAULT_wxUSE_X11=1
     DEFAULT_wxUSE_SHARED=no
@@ -338,8 +329,6 @@ DEFAULT_wxUSE_STD_STRING=$DEFAULT_STD_FLAG
 dnl libraries disabled by default
 DEFAULT_wxUSE_DMALLOC=no
 DEFAULT_wxUSE_LIBGNOMEVFS=no
-DEFAULT_wxUSE_LIBHILDON=no
-DEFAULT_wxUSE_LIBHILDON2=no
 DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
 
@@ -442,7 +431,6 @@ AC_ARG_WITH(mac,           [  --with-mac              same as --with-osx], [wxUS
 AC_ARG_WITH(wine,          [  --with-wine             use Wine], [wxUSE_WINE="$withval" CACHE_WINE=1])
 AC_ARG_WITH(msw,           [  --with-msw              use MS-Windows], [wxUSE_MSW="$withval" CACHE_MSW=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(directfb,      [  --with-directfb         use DirectFB], [wxUSE_DFB="$withval" wxUSE_UNIVERSAL="yes" CACHE_DFB=1 TOOLKIT_GIVEN=1])
-AC_ARG_WITH(microwin,      [  --with-microwin         use MicroWindows], [wxUSE_MICROWIN="$withval" CACHE_MICROWIN=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(qt,            [  --with-qt               use Qt], [wxUSE_QT="$withval" CACHE_QT=1 TOOLKIT_GIVEN=1])
 WX_ARG_ENABLE(nanox,       [  --enable-nanox          use NanoX], wxUSE_NANOX)
@@ -499,7 +487,7 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl this? what about using ALL_TOOLKITS? TODO)
     NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
                   + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_OSX_IPHONE:-0} + ${wxUSE_DFB:-0} \
-                  + ${wxUSE_MICROWIN:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} \
+                  + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} \
                   + ${wxUSE_X11:-0} + ${wxUSE_QT:-0}`
 
 
@@ -551,7 +539,6 @@ WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help fi
 WX_ARG_WITHOUT(gtkprint,   [  --without-gtkprint      don't use GTK printing support], wxUSE_GTKPRINT)
 WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associating MIME types], wxUSE_LIBGNOMEVFS)
 WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifications], wxUSE_LIBNOTIFY)
-WX_ARG_WITH(hildon,        [  --with-hildon           use Hildon framework for Nokia 770/800/810], wxUSE_LIBHILDON)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 
 fi
@@ -1218,7 +1205,7 @@ elif test "x$wxUSE_MACOSX_VERSION_MIN" = "x"; then
     wxUSE_MACOSX_VERSION_MIN=10.5
 fi
 
-if test "x$MACOSX_SDK_OPTS" != "x"; then 
+if test "x$MACOSX_SDK_OPTS" != "x"; then
     eval "CC=\"$CC $MACOSX_SDK_OPTS\""
     eval "CXX=\"$CXX $MACOSX_SDK_OPTS\""
     eval "LD=\"$LD $MACOSX_SDK_OPTS\""
@@ -2639,7 +2626,7 @@ if test "$USE_WIN32" = 1 ; then
     ],
     [ ])
 
-    LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -ladvapi32 -lwsock32 -lgdi32"
+    LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lcomdlg32 -ladvapi32 -lversion -lwsock32 -lgdi32"
     case "${host}" in
         x86_64-*-mingw32* )
             dnl we need to define this to embed the manifest for correct
@@ -2923,32 +2910,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                            AC_MSG_ERROR([DirectFB not found.])
                          ]
                          )
-    fi
-
-    if test "$wxUSE_MICROWIN" = 1; then
-        AC_MSG_CHECKING(for MicroWindows)
-        if test "x$MICROWINDOWS" = x ; then
-            AC_MSG_RESULT(not found)
-            AC_MSG_ERROR([Cannot find MicroWindows library. Make sure MICROWINDOWS is set.])
-        else
-            AC_MSG_RESULT($MICROWINDOWS)
-        fi
-
-        if test -f $MICROWINDOWS/lib/libmwin.a; then
-            AC_MSG_RESULT(MicroWindows' libraries found.)
-        else
-            AC_MSG_ERROR([Cannot find MicroWindows libraries, make sure they are compiled.])
-        fi
-
-        TOOLKIT_INCLUDE="-I$MICROWINDOWS/include"
-        GUI_TK_LIBRARY="-L$MICROWINDOWS/lib -lmwin -lmwengine -mwfonts -mwdrivers -mwinlib"
-
-        wxUSE_UNIVERSAL="yes"
-
-        TOOLKIT=MICROWIN
-        GUIDIST=MICROWIN_DIST
-
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXMSW__ -D__WIN95__ -D__WIN32__ -DMWIN -DMICROWIN_NOCONTROLS -DMICROWIN_TODO=1"
     fi
 
     dnl common part of X11 and Motif port checks
@@ -3563,16 +3524,6 @@ fi
 
 
 dnl --- the marker for quick search, leave it here: SHARED_LIB_SETUP ---
-
-if test "$wxUSE_SHARED" = "yes"; then
-    case "${host}" in
-      *-pc-msdosdjgpp )
-        dnl only static for now
-        wxUSE_SHARED=no
-        AC_MSG_WARN([Host system doesn't support shared libraries, disabling])
-      ;;
-    esac
-fi
 
 if test "$wxUSE_SHARED" = "yes"; then
 
@@ -5150,10 +5101,7 @@ else
         fi
     else
         if test "$GCC" = yes ; then
-            dnl Switch on optimisation but keep strict-aliasing off for
-            dnl now (see -fstrict-aliasing in the gcc manual). When it is
-            dnl switched back on consider using -Wstrict-aliasing=2.
-            OPTIMISE_CFLAGS="-O2 -fno-strict-aliasing"
+            OPTIMISE_CFLAGS="-O2"
         else
             OPTIMISE_CFLAGS="-O"
         fi
@@ -5514,39 +5462,6 @@ if test "$WXGTK2" = 1; then
         fi
     fi
 
-    if test "$wxUSE_LIBHILDON" = "yes" ; then
-        PKG_CHECK_MODULES(HILDON,
-                          [hildon-lgpl >= 0.9],
-            [
-                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $HILDON_LIBS"
-                CFLAGS="$CFLAGS $HILDON_CFLAGS"
-                CXXFLAGS="$CXXFLAGS $HILDON_CFLAGS"
-                AC_DEFINE(wxUSE_LIBHILDON)
-                ac_hildon_lgpl=1
-            ],
-            [
-                AC_MSG_WARN([libhildon_lgpl not found])
-                        wxUSE_LIBHILDON="no"
-                        ac_hildon_lgpl=0
-            ]
-        )
-
-        if test "$ac_hildon_lgpl" = 0 ; then
-            PKG_CHECK_MODULES(HILDON2,
-                              [hildon-1 >= 1.99],
-                [
-                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $HILDON2_LIBS"
-                    CFLAGS="$CFLAGS $HILDON2_CFLAGS"
-                    CXXFLAGS="$CXXFLAGS $HILDON2_CFLAGS"
-                    AC_DEFINE(wxUSE_LIBHILDON2)
-                ],
-                [
-                    AC_MSG_WARN([libhildon_1 not found])
-                            wxUSE_LIBHILDON2="no"
-                ]
-            )
-        fi
-    fi
 fi
 
 if test "$wxUSE_CMDLINE_PARSER" = "yes"; then
@@ -7371,12 +7286,12 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
             USE_MEDIA=0
         fi
 
-    elif test "$wxUSE_MAC" = 1; then 
+    elif test "$wxUSE_MAC" = 1; then
         if test "$wxUSE_OSX_IPHONE" = 1; then
             dnl this will also be used for cocoa in the future
             GST_LIBS="-framework AVFoundation -framework CoreMedia"
         else
-            dnl We always have the necessary libraries under Mac 
+            dnl We always have the necessary libraries under Mac
             dnl but we need to link with it explicitly.
             GST_LIBS="-framework QTKit"
         fi
@@ -7394,21 +7309,6 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
         fi
     fi
 fi
-
-dnl ---------------------------------------------------------------------------
-dnl get the string with OS info - used by wxGetOsDescription() on MacOS X
-dnl ---------------------------------------------------------------------------
-
-if test "$cross_compiling" != "no"; then
-    dnl Use best guess from host as we can't use uname when cross compiling
-    OSINFO="\"$host\""
-else
-    dnl attualy work out OS version
-    OSINFO=`uname -s -r -m`
-    OSINFO="\"$OSINFO\""
-fi
-
-AC_DEFINE_UNQUOTED(WXWIN_OS_DESCRIPTION, $OSINFO)
 
 dnl ---------------------------------------------------------------------------
 dnl define the variable containing the installation prefix (used in dcpsg.cpp)
@@ -7810,12 +7710,6 @@ case "$TOOLKIT" in
             fi
             if test "$wxUSE_LIBNOTIFY" = "yes" ; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA libnotify"
-            fi
-            if test "$wxUSE_LIBHILDON" = "yes"; then
-                TOOLKIT_EXTRA="$TOOLKIT_EXTRA hildon"
-            fi
-            if test "$wxUSE_LIBHILDON2" = "yes"; then
-                TOOLKIT_EXTRA="$TOOLKIT_EXTRA hildon"
             fi
 
             if test "$TOOLKIT_EXTRA" != ""; then

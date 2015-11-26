@@ -27,7 +27,7 @@ dnl
 
 dnl ---------------------------------------------------------------------------
 dnl Lots of compiler & linker detection code contained here was taken from
-dnl wxWidgets configure.in script (see http://www.wxwidgets.org)
+dnl wxWidgets configure.in script (see https://www.wxwidgets.org)
 dnl ---------------------------------------------------------------------------
 
 
@@ -69,7 +69,6 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
 [
     PLATFORM_UNIX=0
     PLATFORM_WIN32=0
-    PLATFORM_MSDOS=0
     PLATFORM_MAC=0
     PLATFORM_MACOS=0
     PLATFORM_MACOSX=0
@@ -79,9 +78,6 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
         case "${BAKEFILE_HOST}" in
             *-*-mingw32* )
                 PLATFORM_WIN32=1
-            ;;
-            *-pc-msdosdjgpp )
-                PLATFORM_MSDOS=1
             ;;
             *-*-darwin* )
                 PLATFORM_MAC=1
@@ -103,9 +99,6 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
             win32 )
                 PLATFORM_WIN32=1
             ;;
-            msdos )
-                PLATFORM_MSDOS=1
-            ;;
             darwin )
                 PLATFORM_MAC=1
                 PLATFORM_MACOSX=1
@@ -124,7 +117,6 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
 
     AC_SUBST(PLATFORM_UNIX)
     AC_SUBST(PLATFORM_WIN32)
-    AC_SUBST(PLATFORM_MSDOS)
     AC_SUBST(PLATFORM_MAC)
     AC_SUBST(PLATFORM_MACOS)
     AC_SUBST(PLATFORM_MACOSX)
@@ -209,11 +201,6 @@ AC_DEFUN([AC_BAKEFILE_SUFFIXES],
             SO_SUFFIX="dll"
             SO_SUFFIX_MODULE="dll"
             DLLIMP_SUFFIX="dll.a"
-            EXEEXT=".exe"
-            DLLPREFIX=""
-            dlldir="$bindir"
-        ;;
-        *-pc-msdosdjgpp )
             EXEEXT=".exe"
             DLLPREFIX=""
             dlldir="$bindir"
@@ -403,8 +390,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
       *-*-sunos4* | \
       *-*-osf* | \
       *-*-dgux5* | \
-      *-*-sysv5* | \
-      *-pc-msdosdjgpp )
+      *-*-sysv5* )
         dnl defaults are ok
       ;;
 
@@ -583,7 +569,7 @@ AC_DEFUN([AC_BAKEFILE_CHECK_BASIC_STUFF],
         AC_SUBST(AR)
     else
         AC_CHECK_TOOL(AR, ar, ar)
-        AROPTIONS=rcu
+        AROPTIONS=rc
     fi
     AC_SUBST(AROPTIONS)
 
@@ -960,7 +946,7 @@ while test ${D}# -gt 0; do
         args="${D}{args} ${D}1 ${D}2"
         shift
         ;;
-       
+
        -arch|-isysroot)
         # collect these options and values
         ldargs="${D}{ldargs} ${D}1 ${D}2"

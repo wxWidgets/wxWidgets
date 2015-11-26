@@ -267,8 +267,6 @@ public:
     #include "wx/msw/apptrait.h"
 #elif defined(__UNIX__)
     #include "wx/unix/apptrait.h"
-#elif defined(__DOS__)
-    #include "wx/msdos/apptrait.h"
 #else
     #if wxUSE_GUI
         class wxGUIAppTraits : public wxGUIAppTraitsBase

@@ -34,9 +34,7 @@
 
 #include <ctype.h>
 
-#ifndef __WXWINCE__
-    #include <errno.h>
-#endif
+#include <errno.h>
 
 #include <string.h>
 #include <stdlib.h>

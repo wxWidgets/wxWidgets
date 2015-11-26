@@ -279,8 +279,8 @@ protected:
     {
         wxASSERT_MSG(e.udata, "Null user data associated with kevent!");
 
-        wxLogTrace(wxTRACE_FSWATCHER, "Event: ident=%d, filter=%d, flags=%u, "
-                   "fflags=%u, data=%d, user_data=%p",
+        wxLogTrace(wxTRACE_FSWATCHER, "Event: ident=%llu, filter=%d, flags=%u, "
+                   "fflags=%u, data=%lld, user_data=%lp",
                    e.ident, e.filter, e.flags, e.fflags, e.data, e.udata);
 
         // for ease of use

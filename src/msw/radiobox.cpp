@@ -101,10 +101,8 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl);
 // ---------------------------------------------------------------------------
 
 // wnd proc for radio buttons
-LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hWnd,
-                                           UINT message,
-                                           WPARAM wParam,
-                                           LPARAM lParam);
+LRESULT APIENTRY
+wxRadioBtnWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 // ---------------------------------------------------------------------------
 // global vars
@@ -238,11 +236,6 @@ bool wxRadioBox::Create(wxWindow *parent,
 
 
     m_radioButtons->SetFont(GetFont());
-
-#ifdef __WXWINCE__
-    // Set the z-order correctly
-    SetWindowPos(GetHwnd(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
-#endif
 
     SetMajorDim(majorDim == 0 ? n : majorDim, style);
     // Select the first radio button if we have any buttons at all.
@@ -545,10 +538,6 @@ bool wxRadioBox::Reparent(wxWindowBase *newParent)
     {
         ::SetParent((*m_radioButtons)[item], hwndParent);
     }
-#ifdef __WXWINCE__
-    // put static box under the buttons in the Z-order
-    SetWindowPos(GetHwnd(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
-#endif
     return true;
 }
 
@@ -784,8 +773,6 @@ int wxRadioBox::GetItemFromPoint(const wxPoint& pt) const
 // radio box drawing
 // ----------------------------------------------------------------------------
 
-#ifndef __WXWINCE__
-
 WXHRGN wxRadioBox::MSWGetRegionWithoutChildren()
 {
     RECT rc;
@@ -807,16 +794,12 @@ WXHRGN wxRadioBox::MSWGetRegionWithoutChildren()
     return (WXHRGN)hrgn;
 }
 
-#endif // __WXWINCE__
-
 // ---------------------------------------------------------------------------
 // window proc for radio buttons
 // ---------------------------------------------------------------------------
 
-LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
-                                           UINT message,
-                                           WPARAM wParam,
-                                           LPARAM lParam)
+LRESULT APIENTRY
+wxRadioBtnWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 
     wxRadioBox * const radiobox = wxRadioBox::GetFromRadioButtonHWND(hwnd);
@@ -903,7 +886,6 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
             }
             break;
 
-#ifndef __WXWINCE__
         case WM_HELP:
             {
                 bool processed = false;
@@ -940,7 +922,6 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
                     return 0;
             }
             break;
-#endif // !__WXWINCE__
     }
 
     return ::CallWindowProc(CASTWNDPROC s_wndprocRadioBtn, hwnd, message, wParam, lParam);

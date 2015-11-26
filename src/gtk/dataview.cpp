@@ -1494,8 +1494,6 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
         state |= wxDATAVIEW_CELL_PRELIT;
     if (flags & GTK_CELL_RENDERER_INSENSITIVE)
         state |= wxDATAVIEW_CELL_INSENSITIVE;
-    if (flags & GTK_CELL_RENDERER_INSENSITIVE)
-        state |= wxDATAVIEW_CELL_INSENSITIVE;
     if (flags & GTK_CELL_RENDERER_FOCUSED)
         state |= wxDATAVIEW_CELL_FOCUSED;
     cell->WXCallRender( rect, dc, state );
@@ -1852,6 +1850,24 @@ wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype, wxDataViewC
     //       after the m_renderer pointer has been initialized
 }
 
+bool wxDataViewRenderer::FinishEditing()
+{
+    wxWindow* editorCtrl = m_editorCtrl;
+
+    bool ret = wxDataViewRendererBase::FinishEditing();
+
+    if (editorCtrl && wxGetTopLevelParent(editorCtrl)->IsBeingDeleted())
+    {
+        // remove editor widget before editor control is deleted,
+        // to prevent several GTK warnings
+        gtk_cell_editable_remove_widget(GTK_CELL_EDITABLE(editorCtrl->m_widget));
+        // delete editor control now, if it is deferred multiple erroneous
+        // focus-out events will occur, causing debug warnings
+        delete editorCtrl;
+    }
+    return ret;
+}
+
 void wxDataViewRenderer::GtkPackIntoColumn(GtkTreeViewColumn *column)
 {
     gtk_tree_view_column_pack_end( column, m_renderer, TRUE /* expand */);
@@ -1871,6 +1887,24 @@ void wxDataViewRenderer::SetMode( wxDataViewCellMode mode )
     m_mode = mode;
 
     GtkSetMode(mode);
+}
+
+void wxDataViewRenderer::SetEnabled(bool enabled)
+{
+    // a) this sets the appearance to disabled grey and should only be done for
+    // the active cells which are disabled, not for the cells which can never
+    // be edited at all
+    if ( GetMode() != wxDATAVIEW_CELL_INERT )
+    {
+        GValue gvalue = G_VALUE_INIT;
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, enabled );
+        g_object_set_property( G_OBJECT(m_renderer), "sensitive", &gvalue );
+        g_value_unset( &gvalue );
+    }
+
+    // b) this actually disables the control/renderer
+    GtkSetMode(enabled ? GetMode() : wxDATAVIEW_CELL_INERT);
 }
 
 void wxDataViewRenderer::GtkSetMode( wxDataViewCellMode mode )
@@ -2015,6 +2049,12 @@ wxDataViewRenderer::GtkOnCellChanged(const wxVariant& value,
     model->ChangeValue( value, item, col );
 }
 
+void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& WXUNUSED(attr))
+{
+    // There is no way to apply attributes to an arbitrary renderer, so we
+    // simply can't do anything here.
+}
+
 // ---------------------------------------------------------
 // wxDataViewTextRenderer
 // ---------------------------------------------------------
@@ -2038,10 +2078,9 @@ namespace
 
 // helper function used by wxDataViewTextRenderer and
 // wxDataViewCustomRenderer::RenderText(): it applies the attributes to the
-// given text renderer and returns true if anything was done
-bool GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
+// given text renderer
+void GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
 {
-    bool usingDefaultAttrs = true;
     if (attr.HasColour())
     {
         const GdkColor * const gcol = attr.GetColour().GetColor();
@@ -2051,8 +2090,6 @@ bool GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
         g_value_set_boxed( &gvalue, gcol );
         g_object_set_property( G_OBJECT(renderer), "foreground_gdk", &gvalue );
         g_value_unset( &gvalue );
-
-        usingDefaultAttrs = false;
     }
     else
     {
@@ -2070,8 +2107,6 @@ bool GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
         g_value_set_enum( &gvalue, PANGO_STYLE_ITALIC );
         g_object_set_property( G_OBJECT(renderer), "style", &gvalue );
         g_value_unset( &gvalue );
-
-        usingDefaultAttrs = false;
     }
     else
     {
@@ -2090,8 +2125,6 @@ bool GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
         g_value_set_enum( &gvalue, PANGO_WEIGHT_BOLD );
         g_object_set_property( G_OBJECT(renderer), "weight", &gvalue );
         g_value_unset( &gvalue );
-
-        usingDefaultAttrs = false;
     }
     else
     {
@@ -2123,8 +2156,6 @@ bool GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
         g_value_unset( &gvalue );
     }
 #endif
-
-    return !usingDefaultAttrs;
 }
 
 } // anonymous namespace
@@ -2201,9 +2232,16 @@ void wxDataViewTextRenderer::SetAlignment( int align )
     g_value_unset( &gvalue );
 }
 
-bool wxDataViewTextRenderer::GtkSetAttr(const wxDataViewItemAttr& attr)
+void wxDataViewTextRenderer::SetAttr(const wxDataViewItemAttr& attr)
 {
-    return GtkApplyAttr(GtkGetTextRenderer(), attr);
+    // An optimization: don't bother resetting the attributes if we're already
+    // using the defaults.
+    if ( attr.IsDefault() && m_usingDefaultAttrs )
+        return;
+
+    GtkApplyAttr(GtkGetTextRenderer(), attr);
+
+    m_usingDefaultAttrs = attr.IsDefault();
 }
 
 GtkCellRendererText *wxDataViewTextRenderer::GtkGetTextRenderer() const
@@ -2423,6 +2461,7 @@ void wxDataViewCustomRenderer::GtkInitTextRenderer()
     g_object_ref_sink(m_text_renderer);
 
     GtkApplyAlignment(GTK_CELL_RENDERER(m_text_renderer));
+    gtk_cell_renderer_set_padding(GTK_CELL_RENDERER(m_text_renderer), 0, 0);
 }
 
 GtkCellRendererText *wxDataViewCustomRenderer::GtkGetTextRenderer() const
@@ -2873,6 +2912,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     wxDataViewRenderer *cell = (wxDataViewRenderer*) data;
 
     wxDataViewItem item( (void*) iter->user_data );
+    const unsigned column = cell->GetOwner()->GetModelColumn();
 
     wxDataViewModel *wx_model = tree_model->internal->GetDataViewModel();
 
@@ -2881,8 +2921,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
         gboolean visible;
         if (wx_model->IsContainer( item ))
         {
-            visible = wx_model->HasContainerColumns( item ) ||
-                        (cell->GetOwner()->GetModelColumn() == 0);
+            visible = wx_model->HasContainerColumns( item ) || (column == 0);
         }
         else
         {
@@ -2899,53 +2938,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
             return;
     }
 
-    wxVariant value;
-    wx_model->GetValue( value, item, cell->GetOwner()->GetModelColumn() );
-
-    // It is always possible to leave a cell empty, don't warn about type
-    // mismatch in this case.
-    if (!value.IsNull())
-    {
-        if (value.GetType() != cell->GetVariantType())
-        {
-            wxLogDebug("Wrong type returned from the model: "
-                       "%s required but actual type is %s",
-                       cell->GetVariantType(),
-                       value.GetType());
-        }
-    }
-
-    cell->SetValue( value );
-
-    // deal with disabled items
-    bool enabled = wx_model->IsEnabled( item, cell->GetOwner()->GetModelColumn() );
-
-    // a) this sets the appearance to disabled grey    
-    GValue gvalue = G_VALUE_INIT;
-    g_value_init( &gvalue, G_TYPE_BOOLEAN );
-    g_value_set_boolean( &gvalue, enabled );
-    g_object_set_property( G_OBJECT(renderer), "sensitive", &gvalue );
-    g_value_unset( &gvalue );
-
-    // b) this actually disables the control/renderer
-    cell->GtkSetMode(enabled ? cell->GetMode() : wxDATAVIEW_CELL_INERT);
-
-    // deal with attributes: if the renderer doesn't support them at all, we
-    // don't even need to query the model for them
-    if ( !cell->GtkSupportsAttrs() )
-        return;
-
-    // it can support attributes so check if this item has any
-    wxDataViewItemAttr attr;
-    if ( wx_model->GetAttr( item, cell->GetOwner()->GetModelColumn(), attr )
-            || !cell->GtkIsUsingDefaultAttrs() )
-    {
-        bool usingDefaultAttrs = !cell->GtkSetAttr(attr);
-        cell->GtkSetUsingDefaultAttrs(usingDefaultAttrs);
-    }
-    // else: no custom attributes specified and we're already using the default
-    //       ones -- nothing to do
-    
+    cell->PrepareForItem(wx_model, item, column);
 }
 
 } // extern "C"
@@ -3154,12 +3147,17 @@ void wxDataViewColumn::SetSortOrder( bool ascending )
 {
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
 
+    GtkSortType order = GTK_SORT_DESCENDING;
     if (ascending)
-        gtk_tree_view_column_set_sort_order( column, GTK_SORT_ASCENDING );
-    else
-        gtk_tree_view_column_set_sort_order( column, GTK_SORT_DESCENDING );
+        order = GTK_SORT_ASCENDING;
 
+    gtk_tree_view_column_set_sort_order(column, order);
     gtk_tree_view_column_set_sort_indicator( column, TRUE );
+
+    wxDataViewCtrlInternal* internal = m_owner->GtkGetInternal();
+    internal->SetSortOrder(order);
+    internal->SetSortColumn(m_model_column);
+    internal->SetDataViewSortColumn(this);
 }
 
 bool wxDataViewColumn::IsSortOrderAscending() const

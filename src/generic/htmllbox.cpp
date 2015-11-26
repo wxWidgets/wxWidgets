@@ -295,37 +295,40 @@ wxString wxHtmlListBox::OnGetItemMarkup(size_t n) const
 // wxHtmlListBox cache handling
 // ----------------------------------------------------------------------------
 
+wxHtmlCell* wxHtmlListBox::CreateCellForItem(size_t n) const
+{
+    if ( !m_htmlParser )
+    {
+        wxHtmlListBox *self = wxConstCast(this, wxHtmlListBox);
+
+        self->m_htmlParser = new wxHtmlWinParser(self);
+        m_htmlParser->SetDC(new wxClientDC(self));
+        m_htmlParser->SetFS(&self->m_filesystem);
+#if !wxUSE_UNICODE
+        if (GetFont().IsOk())
+            m_htmlParser->SetInputEncoding(GetFont().GetEncoding());
+#endif
+        // use system's default GUI font by default:
+        m_htmlParser->SetStandardFonts();
+    }
+
+    wxHtmlContainerCell *cell = (wxHtmlContainerCell *)m_htmlParser->
+            Parse(OnGetItemMarkup(n));
+    wxCHECK_MSG( cell, NULL, wxT("wxHtmlParser::Parse() returned NULL?") );
+
+    // set the cell's ID to item's index so that CellCoordsToPhysical()
+    // can quickly find the item:
+    cell->SetId(wxString::Format(wxT("%lu"), (unsigned long)n));
+
+    cell->Layout(GetClientSize().x - 2*GetMargins().x);
+
+    return cell;
+}
+
 void wxHtmlListBox::CacheItem(size_t n) const
 {
     if ( !m_cache->Has(n) )
-    {
-        if ( !m_htmlParser )
-        {
-            wxHtmlListBox *self = wxConstCast(this, wxHtmlListBox);
-
-            self->m_htmlParser = new wxHtmlWinParser(self);
-            m_htmlParser->SetDC(new wxClientDC(self));
-            m_htmlParser->SetFS(&self->m_filesystem);
-#if !wxUSE_UNICODE
-            if (GetFont().IsOk())
-                m_htmlParser->SetInputEncoding(GetFont().GetEncoding());
-#endif
-            // use system's default GUI font by default:
-            m_htmlParser->SetStandardFonts();
-        }
-
-        wxHtmlContainerCell *cell = (wxHtmlContainerCell *)m_htmlParser->
-                Parse(OnGetItemMarkup(n));
-        wxCHECK_RET( cell, wxT("wxHtmlParser::Parse() returned NULL?") );
-
-        // set the cell's ID to item's index so that CellCoordsToPhysical()
-        // can quickly find the item:
-        cell->SetId(wxString::Format(wxT("%lu"), (unsigned long)n));
-
-        cell->Layout(GetClientSize().x - 2*GetMargins().x);
-
-        m_cache->Store(n, cell);
-    }
+        m_cache->Store(n, CreateCellForItem(n));
 }
 
 void wxHtmlListBox::OnSize(wxSizeEvent& event)
@@ -425,12 +428,18 @@ void wxHtmlListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
 
 wxCoord wxHtmlListBox::OnMeasureItem(size_t n) const
 {
-    CacheItem(n);
+    // Notice that we can't cache the cell here because we could be called from
+    // some code updating an existing cell which could be displaced from the
+    // cache if we called CacheItem() and destroyed -- resulting in a crash
+    // when we return to its method from here, see #16651.
+    wxHtmlCell * const cell = CreateCellForItem(n);
+    if ( !cell )
+        return 0;
 
-    wxHtmlCell *cell = m_cache->Get(n);
-    wxCHECK_MSG( cell, 0, wxT("this cell should be cached!") );
+    const wxCoord h = cell->GetHeight() + cell->GetDescent() + 4;
+    delete cell;
 
-    return cell->GetHeight() + cell->GetDescent() + 4;
+    return h;
 }
 
 // ----------------------------------------------------------------------------

@@ -353,7 +353,7 @@ void wxPGTextCtrlEditor::DrawValue( wxDC& dc, wxPGProperty* property, const wxRe
         // Code below should no longer be needed, as the obfuscation
         // is now done in GetValueAsString.
         /*if ( property->HasFlag(wxPG_PROP_PASSWORD) &&
-             property->IsKindOf(WX_PG_CLASSINFO(wxStringProperty)) )
+             wxDynamicCast(property, wxStringProperty) )
         {
             size_t a = drawStr.length();
             drawStr.Empty();
@@ -523,7 +523,7 @@ public:
         : wxEvtHandler()
     {
         wxASSERT_MSG( wxDynamicCast(property, wxBoolProperty),
-           wxT("Double-click processor should be used only with wxBoolProperty") );
+           wxS("Double-click processor should be used only with wxBoolProperty") );
 
         m_timeLastMouseUp = 0;
         m_combo = combo;
@@ -536,7 +536,7 @@ protected:
     void OnMouseEvent( wxMouseEvent& event )
     {
         wxMilliClock_t t = ::wxGetLocalTimeMillis();
-        int evtType = event.GetEventType();
+        wxEventType evtType = event.GetEventType();
 
         if ( m_property->HasFlag(wxPG_PROP_USE_DCC) &&
              !m_combo->IsPopupShown() )
@@ -731,20 +731,18 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     wxString text;
 
     const wxPGChoices& choices = p->GetChoices();
-    const wxPGCommonValue* comVal = NULL;
-    int comVals = p->GetDisplayedCommonValueCount();
     int comValIndex = -1;
 
-    int choiceCount = 0;
-    if ( choices.IsOk() )
-        choiceCount = choices.GetCount();
+    const int choiceCount = choices.IsOk()? choices.GetCount(): 0;
 
-    if ( item >= choiceCount && comVals > 0 )
+    if ( item >= choiceCount && p->GetDisplayedCommonValueCount() > 0 )
     {
         comValIndex = item - choiceCount;
-        comVal = GetCommonValue(comValIndex);
         if ( !p->IsValueUnspecified() )
-            text = comVal->GetLabel();
+        {
+            const wxPGCommonValue* cv = GetCommonValue(comValIndex);
+            text = cv->GetLabel();
+        }
     }
     else
     {
@@ -802,7 +800,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     if ( (flags & wxODCB_PAINTING_CONTROL) )
         paintdata.m_choiceItem = -1;
 
-    wxCHECK_RET( pDc, wxT("Invalid DC") );
+    wxCHECK_RET( pDc, wxS("Invalid DC") );
 
     wxDC& dc = *pDc;
     dc.SetBrush(*wxWHITE_BRUSH);
@@ -863,7 +861,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         if ( useCustomPaintProcedure )
         {
             pt.x += wxCC_CUSTOM_IMAGE_MARGIN1;
-            wxRect r(pt.x,pt.y,cis.x,cis.y);
+            wxRect r(pt, cis);
 
             if ( flags & wxODCB_PAINTING_CONTROL )
             {
@@ -897,7 +895,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         {
             // TODO: This aligns text so that it seems to be horizontally
             //       on the same line as property values. Not really
-            //       sure if its needed, but seems to not cause any harm.
+            //       sure if it is needed, but seems to not cause any harm.
             pt.x -= 1;
 
             if ( item < 0 && (flags & wxODCB_PAINTING_CONTROL) )
@@ -905,9 +903,15 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 
             if ( choices.IsOk() && item >= 0 && comValIndex < 0 )
             {
+                // This aligns bitmap horizontally so that it is
+                // on the same position as bitmap drawn for static content
+                // (without editor).
+                wxRect r(rect);
+                r.x -= 1;
+
                 cell = &choices.Item(item);
                 renderer = wxPGGlobalVars->m_defaultRenderer;
-                int imageOffset = renderer->PreDrawCell(dc, rect, *cell,
+                int imageOffset = renderer->PreDrawCell(dc, r, *cell,
                                                         renderFlags );
                 if ( imageOffset )
                     imageOffset += wxCC_CUSTOM_IMAGE_MARGIN1 +
@@ -1032,8 +1036,7 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
             }
         }
 
-        unsigned int i;
-        for ( i=0; i<cmnVals; i++ )
+        for ( unsigned int i = 0; i < cmnVals; i++ )
             labels.Add(propGrid->GetCommonValueLabel(i));
     }
 
@@ -1043,7 +1046,7 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
 #endif
     cb->Create(ctrlParent,
                wxID_ANY,
-               wxString(),
+               wxEmptyString,
                po,
                si,
                labels,
@@ -1770,7 +1773,7 @@ void wxPropertyGrid::CorrectEditorWidgetSizeX()
 
     // Use fixed selColumn 1 for main editor widgets
     int newSplitterx = m_pState->DoGetSplitterPosition(0);
-    int newWidth = newSplitterx + m_pState->m_colWidths[1];
+    int newWidth = newSplitterx + m_pState->GetColumnWidth(1);
 
     if ( m_wndEditor2 )
     {
@@ -1880,8 +1883,7 @@ void wxPropertyGrid::FixPosForTextCtrl( wxWindow* ctrl,
     finalPos.x += textCtrlXAdjust;
     finalPos.width -= textCtrlXAdjust;
 
-    finalPos.x += offset.x;
-    finalPos.y += offset.y;
+    finalPos.Offset(offset);
 
     ctrl->SetSize(finalPos);
 }
@@ -1904,8 +1906,8 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     if ( prop->HasFlag(wxPG_PROP_READONLY) && forColumn == 1 )
         tcFlags |= wxTE_READONLY;
 
-    wxPoint p(pos.x,pos.y);
-    wxSize s(sz.x,sz.y);
+    wxPoint p(pos);
+    wxSize s(sz);
 
    // Need to reduce width of text control on Mac
 #if defined(__WXMAC__)
@@ -1916,7 +1918,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     if ( forColumn != 1 )
         s.x -= 2;
 
-    // Take button into acccount
+    // Take button into account
     if ( secondary )
     {
         s.x -= (secondary->GetSize().x + wxPG_TEXTCTRL_AND_BUTTON_SPACING);
@@ -1924,10 +1926,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     }
 
     // If the height is significantly higher, then use border, and fill the rect exactly.
-    bool hasSpecialSize = false;
-
-    if ( (sz.y - m_lineHeight) > 5 )
-        hasSpecialSize = true;
+    const bool hasSpecialSize = (sz.y - m_lineHeight) > 5;
 
     wxWindow* ctrlParent = GetPanel();
 
@@ -2007,7 +2006,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
 
    wxPoint p(pos.x+sz.x,
              pos.y+wxPG_BUTTON_SIZEDEC-wxPG_NAT_BUTTON_BORDER_Y);
-   wxSize s(25, -1);
+   wxSize s(25, wxDefaultCoord);
 
    wxButton* but = new wxButton();
    but->Create(GetPanel(),wxID_ANY,wxS("..."),p,s,wxWANTS_CHARS);
@@ -2020,7 +2019,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
     wxSize s(sz.y-(wxPG_BUTTON_SIZEDEC*2)+(wxPG_NAT_BUTTON_BORDER_Y*2),
         sz.y-(wxPG_BUTTON_SIZEDEC*2)+(wxPG_NAT_BUTTON_BORDER_Y*2));
 
-    // Reduce button width to lineheight
+    // Reduce button width to line height
     if ( s.x > m_lineHeight )
         s.x = m_lineHeight;
 

@@ -655,8 +655,8 @@ typedef wxVarVScrollHelper wxVarVScrollLegacyAdaptor;
 // classes
 #define WX_FORWARD_TO_VAR_SCROLL_HELPER()                                     \
 public:                                                                       \
-    virtual void PrepareDC(wxDC& dc) { DoPrepareDC(dc); }                     \
-    virtual bool Layout() { return ScrollLayout(); }
+    virtual void PrepareDC(wxDC& dc) wxOVERRIDE { DoPrepareDC(dc); }                     \
+    virtual bool Layout() wxOVERRIDE { return ScrollLayout(); }
 
 
 
@@ -727,7 +727,7 @@ public:
 
 #ifdef __WXMAC__
 protected:
-    virtual void UpdateMacScrollWindow() { Update(); }
+    virtual void UpdateMacScrollWindow() wxOVERRIDE { Update(); }
 #endif // __WXMAC__
 
 private:
@@ -794,7 +794,7 @@ public:
 
 #ifdef __WXMAC__
 protected:
-    virtual void UpdateMacScrollWindow() { Update(); }
+    virtual void UpdateMacScrollWindow() wxOVERRIDE { Update(); }
 #endif // __WXMAC__
 
 private:
@@ -859,7 +859,7 @@ public:
 
 #ifdef __WXMAC__
 protected:
-    virtual void UpdateMacScrollWindow() { Update(); }
+    virtual void UpdateMacScrollWindow() wxOVERRIDE { Update(); }
 #endif // __WXMAC__
 
 private:

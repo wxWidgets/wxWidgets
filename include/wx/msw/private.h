@@ -15,11 +15,6 @@
 
 #include "wx/msw/wrapwin.h"
 
-#ifdef __WXMICROWIN__
-    // Extra prototypes and symbols not defined by MicroWindows
-    #include "wx/msw/microwin.h"
-#endif
-
 #include "wx/log.h"
 
 #if wxUSE_GUI
@@ -72,12 +67,6 @@ WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
 // define things missing from some compilers' headers
 // ---------------------------------------------------------------------------
 
-#if defined(__WXWINCE__)
-#ifndef ZeroMemory
-    inline void ZeroMemory(void *buf, size_t len) { memset(buf, 0, len); }
-#endif
-#endif // old mingw32
-
 // this defines a CASTWNDPROC macro which casts a pointer to the type of a
 // window proc
 #if defined(STRICT) || defined(__GNUC__)
@@ -97,22 +86,6 @@ WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
 
 #if !defined(APIENTRY)  // NT defines APIENTRY, 3.x not
     #define APIENTRY FAR PASCAL
-#endif
-
-#ifdef __WIN32__
-    #define _EXPORT
-#else
-    #define _EXPORT _export
-#endif
-
-#ifndef __WIN32__
-    typedef signed short int SHORT;
-#endif
-
-#if !defined(__WIN32__)  // 3.x uses FARPROC for dialogs
-#ifndef STRICT
-    #define DLGPROC FARPROC
-#endif
 #endif
 
 /*
@@ -152,7 +125,7 @@ WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
 
 // Generic subclass proc, for panel item moving/sizing and intercept
 // EDIT control VK_RETURN messages
-extern LONG APIENTRY _EXPORT
+extern LONG APIENTRY
   wxSubclassedGenericControlProc(WXHWND hWnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 // ---------------------------------------------------------------------------
@@ -160,27 +133,22 @@ extern LONG APIENTRY _EXPORT
 // ---------------------------------------------------------------------------
 
 // a wrapper macro for ZeroMemory()
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
 #define wxZeroMemory(obj)   ::ZeroMemory(&obj, sizeof(obj))
-#else
-#define wxZeroMemory(obj)   memset((void*) & obj, 0, sizeof(obj))
-#endif
 
 // This one is a macro so that it can be tested with #ifdef, it will be
 // undefined if it cannot be implemented for a given compiler.
 // Vc++, bcc, dmc, ow, mingw akk have _get_osfhandle() and Cygwin has
 // get_osfhandle. Others are currently unknown, e.g. Salford, Intel, Visual
 // Age.
-#if defined(__WXWINCE__)
-    #define wxGetOSFHandle(fd) ((HANDLE)fd)
-    #define wxOpenOSFHandle(h, flags) ((int)wxPtrToUInt(h))
-#elif defined(__CYGWIN__)
+#if defined(__CYGWIN__)
     #define wxGetOSFHandle(fd) ((HANDLE)get_osfhandle(fd))
 #elif defined(__VISUALC__) \
    || defined(__BORLANDC__) \
    || defined(__MINGW32__)
     #define wxGetOSFHandle(fd) ((HANDLE)_get_osfhandle(fd))
     #define wxOpenOSFHandle(h, flags) (_open_osfhandle(wxPtrToUInt(h), flags))
+
+    wxDECL_FOR_STRICT_MINGW32(FILE*, _fdopen, (int, const char*))
     #define wx_fdopen _fdopen
 #endif
 
@@ -665,12 +633,6 @@ private:
 };
 
 // set the given map mode for the life time of this object
-//
-// NB: SetMapMode() is not supported by CE so we also define a helper macro
-//     to avoid using it there
-#ifdef __WXWINCE__
-    #define wxCHANGE_HDC_MAP_MODE(hdc, mm)
-#else // !__WXWINCE__
     class HDCMapModeChanger
     {
     public:
@@ -699,7 +661,6 @@ private:
 
     #define wxCHANGE_HDC_MAP_MODE(hdc, mm) \
         HDCMapModeChanger wxMAKE_UNIQUE_NAME(wxHDCMapModeChanger)(hdc, mm)
-#endif // __WXWINCE__/!__WXWINCE__
 
 // smart pointer using GlobalAlloc/GlobalFree()
 class GlobalPtr
@@ -949,7 +910,7 @@ inline wxString wxGetFullModuleName()
 //      0x0601      Windows 7
 //      0x0602      Windows 8 (currently also returned for 8.1 if program does not have a manifest indicating 8.1 support)
 //      0x0603      Windows 8.1 (currently only returned for 8.1 if program has a manifest indicating 8.1 support)
-//      0x0604      Windows 10 (currently only returned for 10 if program has a manifest indicating 10 support)
+//      0x1000      Windows 10 (currently only returned for 10 if program has a manifest indicating 10 support)
 //
 // for the other Windows versions 0 is currently returned
 enum wxWinVersion
@@ -982,7 +943,7 @@ enum wxWinVersion
     wxWinVersion_8 = 0x602,
     wxWinVersion_8_1 = 0x603,
 
-    wxWinVersion_10 = 0x604
+    wxWinVersion_10 = 0x1000
 };
 
 WXDLLIMPEXP_BASE wxWinVersion wxGetWinVersion();

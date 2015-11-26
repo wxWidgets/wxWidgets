@@ -78,6 +78,7 @@ enum
     Widgets_SetPageBg,
     Widgets_SetFont,
     Widgets_Enable,
+    Widgets_Show,
 
     Widgets_BorderNone,
     Widgets_BorderStatic,
@@ -172,6 +173,7 @@ protected:
     void OnSetPageBg(wxCommandEvent& event);
     void OnSetFont(wxCommandEvent& event);
     void OnEnable(wxCommandEvent& event);
+    void OnShow(wxCommandEvent &event);
     void OnSetBorder(wxCommandEvent& event);
     void OnSetVariant(wxCommandEvent& event);
 
@@ -297,6 +299,7 @@ wxBEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
     EVT_MENU(Widgets_SetPageBg,   WidgetsFrame::OnSetPageBg)
     EVT_MENU(Widgets_SetFont,     WidgetsFrame::OnSetFont)
     EVT_MENU(Widgets_Enable,      WidgetsFrame::OnEnable)
+    EVT_MENU(Widgets_Show,        WidgetsFrame::OnShow)
 
     EVT_MENU_RANGE(Widgets_BorderNone, Widgets_BorderDefault,
                    WidgetsFrame::OnSetBorder)
@@ -396,6 +399,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     menuWidget->Append(Widgets_SetPageBg,   wxT("Set &page background...\tShift-Ctrl-B"));
     menuWidget->Append(Widgets_SetFont,     wxT("Set f&ont...\tCtrl-O"));
     menuWidget->AppendCheckItem(Widgets_Enable,  wxT("&Enable/disable\tCtrl-E"));
+    menuWidget->AppendCheckItem(Widgets_Show, wxT("Show/Hide"));
 
     wxMenu *menuBorders = new wxMenu;
     menuBorders->AppendRadioItem(Widgets_BorderDefault, wxT("De&fault\tCtrl-Shift-9"));
@@ -447,6 +451,8 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     SetMenuBar(mbar);
 
     mbar->Check(Widgets_Enable, true);
+    mbar->Check(Widgets_Show, true);
+
     mbar->Check(Widgets_VariantNormal, true);
 #endif // wxUSE_MENUS
 
@@ -468,7 +474,6 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
     InitBook();
 
-#ifndef __WXHANDHELD__
     // the lower one only has the log listbox and a button to clear it
 #if USE_LOG
     wxSizer *sizerDown = new wxStaticBoxSizer(
@@ -498,12 +503,6 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     sizerTop->Add(0, 5, 0, wxGROW); // spacer in between
     sizerTop->Add(sizerDown, 0,  wxGROW | (wxALL & ~wxTOP), 10);
 
-#else // !__WXHANDHELD__/__WXHANDHELD__
-
-    sizerTop->Add(m_book, 1, wxGROW | wxALL );
-
-#endif // __WXHANDHELD__
-
     m_panel->SetSizer(sizerTop);
 
     const wxSize sizeMin = m_panel->GetBestSize();
@@ -521,14 +520,10 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
 void WidgetsFrame::InitBook()
 {
-#if USE_ICONS_IN_BOOK
     wxImageList *imageList = new wxImageList(ICON_SIZE, ICON_SIZE);
 
     wxImage img(sample_xpm);
     imageList->Add(wxBitmap(img.Scale(ICON_SIZE, ICON_SIZE)));
-#else
-    wxImageList *imageList = NULL;
-#endif
 
 #if !USE_TREEBOOK
     WidgetsBookCtrl *books[MAX_PAGES];
@@ -602,9 +597,7 @@ void WidgetsFrame::InitBook()
 
     GetMenuBar()->Append(menuPages, wxT("&Page"));
 
-#if USE_ICONS_IN_BOOK
     m_book->AssignImageList(imageList);
-#endif
 
     for ( cat = 0; cat < MAX_PAGES; cat++ )
     {
@@ -612,9 +605,7 @@ void WidgetsFrame::InitBook()
         m_book->AddPage(NULL,WidgetsCategories[cat],false,0);
 #else
         m_book->AddPage(books[cat],WidgetsCategories[cat],false,0);
-#if USE_ICONS_IN_BOOK
         books[cat]->SetImageList(imageList);
-#endif
 #endif
 
         // now do add them
@@ -876,6 +867,13 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
 void WidgetsFrame::OnEnable(wxCommandEvent& event)
 {
     WidgetsPage::GetAttrs().m_enabled = event.IsChecked();
+
+    CurrentPage()->SetUpWidget();
+}
+
+void WidgetsFrame::OnShow(wxCommandEvent &event)
+{
+    WidgetsPage::GetAttrs().m_show = event.IsChecked();
 
     CurrentPage()->SetUpWidget();
 }
@@ -1229,12 +1227,7 @@ WidgetsPage::WidgetsPage(WidgetsBookCtrl *book,
                      wxCLIP_CHILDREN |
                      wxTAB_TRAVERSAL)
 {
-#if USE_ICONS_IN_BOOK
     imaglist->Add(wxBitmap(wxImage(icon).Scale(ICON_SIZE, ICON_SIZE)));
-#else
-    wxUnusedVar(imaglist);
-    wxUnusedVar(icon);
-#endif
 }
 
 /* static */
@@ -1253,6 +1246,8 @@ void WidgetsPage::SetUpWidget()
             it != widgets.end();
             ++it )
     {
+        wxCHECK_RET(*it, "NULL widget");
+
 #if wxUSE_TOOLTIPS
         (*it)->SetToolTip(GetAttrs().m_tooltip);
 #endif // wxUSE_TOOLTIPS
@@ -1274,6 +1269,7 @@ void WidgetsPage::SetUpWidget()
 
         (*it)->SetLayoutDirection(GetAttrs().m_dir);
         (*it)->Enable(GetAttrs().m_enabled);
+        (*it)->Show(GetAttrs().m_show);
 
         if ( GetAttrs().m_cursor.IsOk() )
         {

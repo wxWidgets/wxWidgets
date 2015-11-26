@@ -25,12 +25,7 @@ class WXDLLIMPEXP_FWD_CORE wxSizerItem;
 class WXDLLIMPEXP_FWD_CORE wxSizer;
 
 #ifndef wxUSE_BORDER_BY_DEFAULT
-    #ifdef __SMARTPHONE__
-        // no borders by default on limited size screen
-        #define wxUSE_BORDER_BY_DEFAULT 0
-    #else
-        #define wxUSE_BORDER_BY_DEFAULT 1
-    #endif
+    #define wxUSE_BORDER_BY_DEFAULT 1
 #endif
 
 // ----------------------------------------------------------------------------
@@ -1021,7 +1016,7 @@ protected:
 
     // the minimal size needed for this sizer as calculated by the last call to
     // our CalcMin()
-    wxSize m_minSize;
+    wxSize m_calculatedMinSize;
 
 private:
     wxDECLARE_CLASS(wxBoxSizer);

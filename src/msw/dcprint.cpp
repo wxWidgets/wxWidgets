@@ -46,10 +46,6 @@
 #include "wx/printdlg.h"
 #include "wx/msw/printdlg.h"
 
-#ifndef __WIN32__
-    #include <print.h>
-#endif
-
 // mingw32 defines GDI_ERROR incorrectly
 #if defined(__GNUWIN32__) || !defined(GDI_ERROR)
     #undef GDI_ERROR

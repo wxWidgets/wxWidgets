@@ -39,12 +39,6 @@
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h" // IDC_HAND
 
-// define functions missing in MicroWin
-#ifdef __WXMICROWIN__
-    static inline void DestroyCursor(HCURSOR) { }
-    static inline void SetCursor(HCURSOR) { }
-#endif // __WXMICROWIN__
-
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -151,10 +145,8 @@ void wxCursorRefData::Free()
 {
     if ( m_hCursor )
     {
-#ifndef __WXWINCE__
         if ( m_destroyCursor )
             ::DestroyCursor((HCURSOR)m_hCursor);
-#endif
 
         m_hCursor = 0;
     }
@@ -217,15 +209,6 @@ wxCursor::wxCursor(const wxImage& image)
 }
 #endif // wxUSE_IMAGE
 
-// MicroWin doesn't have support needed for the other ctors
-#ifdef __WXMICROWIN__
-
-wxCursor::InitFromStock(wxStockCursor WXUNUSED(cursor_type))
-{
-}
-
-#else // !__WXMICROWIN__
-
 wxCursor::wxCursor(const wxString& filename,
                    wxBitmapType kind,
                    int hotSpotX,
@@ -238,12 +221,10 @@ wxCursor::wxCursor(const wxString& filename,
             hcursor = ::LoadCursor(wxGetInstance(), filename.t_str());
             break;
 
-#ifndef __WXWINCE__
         case wxBITMAP_TYPE_ANI:
         case wxBITMAP_TYPE_CUR:
             hcursor = ::LoadCursorFromFile(filename.t_str());
             break;
-#endif
 
         case wxBITMAP_TYPE_ICO:
             hcursor = wxBitmapToHCURSOR
@@ -410,8 +391,6 @@ void wxCursor::InitFromStock(wxStockCursor idCursor)
         m_refData = new wxCursorRefData(hcursor, deleteLater);
     }
 }
-
-#endif // __WXMICROWIN__/!__WXMICROWIN__
 
 wxCursor::~wxCursor()
 {

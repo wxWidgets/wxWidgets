@@ -26,6 +26,7 @@
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/window.h"
+    #include "wx/control.h"     // for wxControl::Ellipsize()
     #include "wx/dc.h"
     #include "wx/settings.h"
 #endif //WX_PRECOMP
@@ -103,15 +104,26 @@
     #define PP_BAR 1
     #define PP_CHUNK 3
 
-#endif
+    #define LISS_NORMAL 1
+    #define LISS_HOT 2
+    #define LISS_SELECTED 3
+    #define LISS_DISABLED 4
+    #define LISS_SELECTEDNOTFOCUS 5
+    #define LISS_HOTSELECTED 6
 
-#if defined(__WXWINCE__)
-    #ifndef DFCS_FLAT
-        #define DFCS_FLAT 0
-    #endif
-    #ifndef DFCS_MONO
-        #define DFCS_MONO 0
-    #endif
+    #define LVP_LISTITEM 1
+
+    #define DTT_TEXTCOLOR       (1UL << 0)      // crText has been specified
+    #define DTT_STATEID         (1UL << 8)      // IStateId has been specified
+
+    #define TDLG_EXPANDOBUTTON 13
+
+    #define TDLGEBS_NORMAL 1
+    #define TDLGEBS_HOVER 2
+    #define TDLGEBS_PRESSED 3
+    #define TDLGEBS_EXPANDEDNORMAL 4
+    #define TDLGEBS_EXPANDEDHOVER 5
+    #define TDLGEBS_EXPANDEDPRESSED 6
 #endif
 
 #ifndef DFCS_HOT
@@ -283,6 +295,18 @@ public:
             m_rendererNative.DrawPushButton(win, dc, rect, flags);
     }
 
+    virtual void DrawCollapseButton(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0);
+
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc);
+
+    virtual void DrawItemSelectionRect(wxWindow *win,
+                                       wxDC& dc,
+                                       const wxRect& rect,
+                                       int flags = 0);
+
     virtual void DrawTextCtrl(wxWindow* win,
                               wxDC& dc,
                               const wxRect& rect,
@@ -310,6 +334,13 @@ public:
                            int max,
                            int flags = 0);
 
+    virtual void DrawItemText(wxWindow* win,
+                              wxDC& dc,
+                              const wxString& text,
+                              const wxRect& rect,
+                              int align = wxALIGN_LEFT | wxALIGN_TOP,
+                              int flags = 0,
+                              wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END);
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
@@ -356,6 +387,12 @@ void wxRendererMSWBase::DrawItemSelectionRect(wxWindow *win,
                                               const wxRect& rect,
                                               int flags)
 {
+    if ( flags & wxCONTROL_CELL )
+    {
+        m_rendererNative.DrawItemSelectionRect(win, dc, rect, flags);
+        return;
+    }
+
     wxBrush brush;
     if ( flags & wxCONTROL_SELECTED )
     {
@@ -552,11 +589,11 @@ wxSize wxRendererMSW::GetCheckBoxSize(wxWindow * WXUNUSED(win))
                   ::GetSystemMetrics(SM_CYMENUCHECK));
 }
 
-int wxRendererMSW::GetHeaderButtonHeight(wxWindow * WXUNUSED(win))
+int wxRendererMSW::GetHeaderButtonHeight(wxWindow * win)
 {
     // some "reasonable" value returned in case of error, it doesn't really
     // correspond to anything but it's better than returning 0
-    static const int DEFAULT_HEIGHT = 20;
+    static const int DEFAULT_HEIGHT = wxWindow::FromDIP(20, win);
 
 
     // create a temporary header window just to get its geometry
@@ -566,6 +603,14 @@ int wxRendererMSW::GetHeaderButtonHeight(wxWindow * WXUNUSED(win))
         return DEFAULT_HEIGHT;
 
     wxON_BLOCK_EXIT1( ::DestroyWindow, hwndHeader );
+
+    // Set the font, even if it's the default one, before measuring the window.
+    wxFont font;
+    if ( win )
+        font = win->GetFont();
+    if ( !font.IsOk() )
+        wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    ::SendMessage(hwndHeader, WM_SETFONT, (WPARAM)GetHfontOf(font), 0);
 
     // initialize the struct filled with the values by Header_Layout()
     RECT parentRect = { 0, 0, 100, 100 };
@@ -585,6 +630,27 @@ int wxRendererMSW::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
 // ============================================================================
 
 #if wxUSE_UXTHEME
+
+namespace
+{
+
+int GetListItemState(int flags)
+{
+    int itemState = (flags & wxCONTROL_CURRENT) ? LISS_HOT : LISS_NORMAL;
+    if ( flags & wxCONTROL_SELECTED )
+    {
+        itemState = (flags & wxCONTROL_CURRENT) ? LISS_HOTSELECTED : LISS_SELECTED;
+        if ( !(flags & wxCONTROL_FOCUSED) )
+            itemState = LISS_SELECTEDNOTFOCUS;
+    }
+
+    if ( flags & wxCONTROL_DISABLED )
+        itemState = LISS_DISABLED;
+
+    return itemState;
+}
+
+} // anonymous namespace
 
 /* static */
 wxRendererNative& wxRendererXP::Get()
@@ -834,6 +900,181 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
     }
 
     DoDrawButtonLike(hTheme, part, dc, rect, flags);
+}
+
+void
+wxRendererXP::DrawCollapseButton(wxWindow *win,
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags)
+{
+    wxUxThemeHandle hTheme(win, L"TASKDIALOG");
+    wxUxThemeEngine* const te = wxUxThemeEngine::Get();
+
+    int state;
+    if (flags & wxCONTROL_PRESSED)
+        state = TDLGEBS_PRESSED;
+    else if (flags & wxCONTROL_CURRENT)
+        state = TDLGEBS_HOVER;
+    else
+        state = TDLGEBS_NORMAL;
+
+    if ( flags & wxCONTROL_EXPANDED )
+        state += 3;
+
+    if ( te->IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, state) )
+    {
+        if (flags & wxCONTROL_EXPANDED)
+            flags |= wxCONTROL_CHECKED;
+
+        wxRect adjustedRect = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
+
+        RECT r;
+        wxCopyRectToRECT(adjustedRect, r);
+
+        te->DrawThemeBackground
+            (
+            hTheme,
+            GetHdcOf(dc.GetTempHDC()),
+            TDLG_EXPANDOBUTTON,
+            state,
+            &r,
+            NULL
+            );
+    }
+    else
+        m_rendererNative.DrawCollapseButton(win, dc, rect, flags);
+}
+
+wxSize wxRendererXP::GetCollapseButtonSize(wxWindow *win, wxDC& dc)
+{
+    wxUxThemeHandle hTheme(win, L"TASKDIALOG");
+    wxUxThemeEngine* const te = wxUxThemeEngine::Get();
+
+    // EXPANDOBUTTON scales ugly if not using the correct size, get size from theme
+
+    if ( te->IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL) )
+    {
+        SIZE s;
+        te->GetThemePartSize(hTheme,
+            GetHdcOf(dc.GetTempHDC()),
+            TDLG_EXPANDOBUTTON,
+            TDLGEBS_NORMAL,
+            NULL,
+            TS_TRUE,
+            &s);
+
+        return wxSize(s.cx, s.cy);
+    }
+    else
+        return m_rendererNative.GetCollapseButtonSize(win, dc);
+}
+
+void
+wxRendererXP::DrawItemSelectionRect(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags)
+{
+    wxUxThemeHandle hTheme(win, L"LISTVIEW");
+
+    const int itemState = GetListItemState(flags);
+
+    wxUxThemeEngine* const te = wxUxThemeEngine::Get();
+    if ( te->IsThemePartDefined(hTheme, LVP_LISTITEM, itemState) )
+    {
+        RECT rc;
+        wxCopyRectToRECT(rect, rc);
+        if ( te->IsThemeBackgroundPartiallyTransparent(hTheme, LVP_LISTITEM, itemState) )
+            te->DrawThemeParentBackground(GetHwndOf(win), GetHdcOf(dc.GetTempHDC()), &rc);
+
+        te->DrawThemeBackground(hTheme, GetHdcOf(dc.GetTempHDC()), LVP_LISTITEM, itemState, &rc, 0);
+    }
+    else
+    {
+        m_rendererNative.DrawItemSelectionRect(win, dc, rect, flags);
+    }
+}
+
+void wxRendererXP::DrawItemText(wxWindow* win,
+                                wxDC& dc,
+                                const wxString& text,
+                                const wxRect& rect,
+                                int align,
+                                int flags,
+                                wxEllipsizeMode ellipsizeMode)
+{
+    wxUxThemeHandle hTheme(win, L"LISTVIEW");
+
+    const int itemState = GetListItemState(flags);
+
+    wxUxThemeEngine* te = wxUxThemeEngine::Get();
+    if ( te->DrawThemeTextEx && // Might be not available if we're under XP
+            te->IsThemePartDefined(hTheme, LVP_LISTITEM, itemState) )
+    {
+        RECT rc;
+        wxCopyRectToRECT(rect, rc);
+
+        DTTOPTS textOpts;
+        textOpts.dwSize = sizeof(textOpts);
+        textOpts.dwFlags = DTT_STATEID;
+        textOpts.iStateId = itemState;
+        if (flags & wxCONTROL_DISABLED)
+        {
+            textOpts.dwFlags |= DTT_TEXTCOLOR;
+            textOpts.crText = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT).GetPixel();
+        }
+
+        DWORD textFlags = DT_NOPREFIX;
+        if ( align & wxALIGN_CENTER_HORIZONTAL )
+            textFlags |= DT_CENTER;
+        else if ( align & wxALIGN_RIGHT )
+        {
+            textFlags |= DT_RIGHT;
+            rc.right--; // Alignment is inconsistent with DrawLabel otherwise
+        }
+        else
+            textFlags |= DT_LEFT;
+
+        if ( align & wxALIGN_BOTTOM )
+            textFlags |= DT_BOTTOM;
+        else if ( align & wxALIGN_CENTER_VERTICAL )
+            textFlags |= DT_VCENTER;
+        else
+            textFlags |= DT_TOP;
+
+        const wxString* drawText = &text;
+        wxString ellipsizedText;
+        switch ( ellipsizeMode )
+        {
+            case wxELLIPSIZE_NONE:
+                // no flag required
+                break;
+
+            case wxELLIPSIZE_START:
+            case wxELLIPSIZE_MIDDLE:
+                // no native support for this ellipsize modes, use wxWidgets
+                // implementation (may not be 100% accurate because per
+                // definition the theme defines the font but should be close
+                // enough with current windows themes)
+                drawText = &ellipsizedText;
+                ellipsizedText = wxControl::Ellipsize(text, dc, ellipsizeMode,
+                                                      rect.width,
+                                                      wxELLIPSIZE_FLAGS_NONE);
+                break;
+
+            case wxELLIPSIZE_END:
+                textFlags |= DT_END_ELLIPSIS;
+                break;
+        }
+
+        te->DrawThemeTextEx(hTheme, dc.GetHDC(), LVP_LISTITEM, itemState,
+                            drawText->wchar_str(), -1, textFlags, &rc, &textOpts);
+    }
+    else
+    {
+        m_rendererNative.DrawItemText(win, dc, text, rect, align, flags, ellipsizeMode);
+    }
 }
 
 // Uses the theme to draw the border and fill for something like a wxTextCtrl

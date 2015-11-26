@@ -181,17 +181,6 @@
 #endif
 
 /*
-   Win64-specific checks.
- */
-#ifdef __WIN64__
-#   if wxUSE_STACKWALKER
-#       undef wxUSE_CRASHREPORT
-#       define wxUSE_CRASHREPORT 0
-#   endif
-#endif /* __WIN64__ */
-
-
-/*
    Compiler-specific checks.
  */
 
@@ -263,6 +252,17 @@
 #       endif
 #   endif
 #endif /* !wxUSE_VARIANT */
+
+#if !wxUSE_DATAOBJ
+#   if wxUSE_OLE
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_OLE requires wxDataObject"
+#       else
+#           undef wxUSE_OLE
+#           define wxUSE_OLE 0
+#       endif
+#   endif
+#endif /* !wxUSE_DATAOBJ */
 
 #if !wxUSE_DYNAMIC_LOADER
 #    if wxUSE_MS_HTML_HELP

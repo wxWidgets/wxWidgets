@@ -135,6 +135,13 @@ public:
         State_Max
     };
 
+    // return the current setting for the "normal" state of the button, it can
+    // be different from State_Normal for a wxToggleButton
+    virtual State GetNormalState() const
+    {
+        return State_Normal;
+    }
+
     // return true if this button shouldn't show the text label, either because
     // it doesn't have it or because it was explicitly disabled with wxBU_NOTEXT
     bool DontShowLabel() const

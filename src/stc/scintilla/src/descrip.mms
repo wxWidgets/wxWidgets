@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 24 August 2012                                                      *
+# Date : 13 July 2015                                                        *
 #                                                                            *
 #*****************************************************************************
 
@@ -58,14 +58,14 @@ OBJECTS=AutoComplete.obj,CallTip.obj,CaseConvert.obj,CaseFolder.obj,\
 	Decoration.obj,Document.obj,Editor.obj,ExternalLexer.obj,Indicator.obj,\
 	KeyMap.obj,LineMarker.obj,PerLine.obj,PositionCache.obj,RESearch.obj,\
 	RunStyles.obj,ScintillaBase.obj,Selection.obj,Style.obj,UniConversion.obj,\
-	ViewStyle.obj,XPM.obj
+	ViewStyle.obj,XPM.obj,EditModel.obj,EditView.obj,MarginView.obj
 
 SOURCES=AutoComplete.cxx,CallTip.cxx,CaseConvert.cxx,CaseFolder.cxx,\
 	Catalogue.cxx,CellBuffer.cxx,CharClassify.cxx,ContractionState.cxx,\
 	Decoration.cxx,Document.cxx,Editor.cxx,ExternalLexer.cxx,Indicator.cxx,\
 	KeyMap.cxx,LineMarker.cxx,PerLine.cxx,PositionCache.cxx,RESearch.cxx,\
 	RunStyles.cxx,ScintillaBase.cxx,Selection.cxx,Style.cxx,UniConversion.cxx,\
-	ViewStyle.cxx,XPM.cxx
+	ViewStyle.cxx,XPM.cxx,EditModel.cxx,EditView.cxx,MarginView.cxx
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -117,3 +117,6 @@ Style.obj : Style.cxx
 UniConversion.obj : UniConversion.cxx
 ViewStyle.obj : ViewStyle.cxx
 XPM.obj : XPM.cxx
+EditModel.obj : EditModel.cxx
+EditView.obj : EditView.cxx
+MarginView.obj : MarginView.cxx

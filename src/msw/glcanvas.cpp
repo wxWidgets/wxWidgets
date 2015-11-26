@@ -35,8 +35,8 @@
 #include "wx/glcanvas.h"
 
 // from src/msw/window.cpp
-LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
-                                   WPARAM wParam, LPARAM lParam);
+LRESULT WXDLLEXPORT APIENTRY
+wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 #ifdef GL_EXT_vertex_array
     #define WXUNUSED_WITHOUT_GL_EXT_vertex_array(name) name

@@ -34,6 +34,7 @@
     #include "wx/menuitem.h"
     #include "wx/treectrl.h"
     #include "wx/listctrl.h"
+    #include "wx/platinfo.h"
 #endif
 
 #include "wx/tooltip.h"
@@ -356,7 +357,8 @@ void wxWindowMac::SetPeer(wxOSXWidgetImpl* peer)
         if ( !m_hasFont )
             DoSetWindowVariant( m_windowVariant );
         
-        GetPeer()->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics), GetFont().GetEncoding() ) ;
+        if ( !m_label.empty() )
+            GetPeer()->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics), GetFont().GetEncoding() ) ;
         
         // for controls we want to use best size for wxDefaultSize params )
         if ( !GetPeer()->IsUserPane() )
@@ -456,32 +458,15 @@ void wxWindowMac::MacChildAdded()
 #endif
 }
 
-void wxWindowMac::MacPostControlCreate(const wxPoint& WXUNUSED(pos),
+void wxWindowMac::MacPostControlCreate(const wxPoint& pos,
                                        const wxSize& WXUNUSED(size))
 {
-    // todo remove if refactoring works correctly
-#if 0
-    wxASSERT_MSG( GetPeer() != NULL && GetPeer()->IsOk() , wxT("No valid mac control") ) ;
-
-    if (!GetParent()->GetChildren().Find((wxWindow*)this))
-        GetParent()->AddChild( this );
-
-    GetPeer()->InstallEventHandler();
-    GetPeer()->Embed(GetParent()->GetPeer());
-
-    GetParent()->MacChildAdded() ;
-
-    // adjust font, controlsize etc
-    DoSetWindowVariant( m_windowVariant ) ;
-
-    GetPeer()->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics), GetFont().GetEncoding() ) ;
-
-    // for controls we want to use best size for wxDefaultSize params )
-    if ( !GetPeer()->IsUserPane() )
-        SetInitialSize(size);
-
-    SetCursor( *wxSTANDARD_CURSOR ) ;
-#endif
+    // Some controls may have a nonzero layout inset,
+    // so we may need to adjust control position.
+    if ( pos.IsFullySpecified() && GetPosition() != pos )
+    {
+        SetPosition(pos);
+    }
 }
 
 void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
@@ -2208,7 +2193,7 @@ bool wxWindowMac::MacHasScrollBarCorner() const
             if ( frame )
             {
                 // starting from 10.7 there are no resize indicators anymore
-                if ( (frame->GetWindowStyleFlag() & wxRESIZE_BORDER) && UMAGetSystemVersion() < 0x1070)
+                if ( (frame->GetWindowStyleFlag() & wxRESIZE_BORDER) && !wxPlatformInfo::Get().CheckOSVersion(10, 7) )
                 {
                     // Parent frame has resize handle
                     wxPoint frameBottomRight = frame->GetScreenRect().GetBottomRight();

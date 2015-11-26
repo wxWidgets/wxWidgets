@@ -45,8 +45,8 @@
 extern "C" WXDLLIMPEXP_BASE HINSTANCE wxGetInstance(void);
 extern WXDLLIMPEXP_CORE const wxChar *wxCanvasClassName;
 
-LRESULT WXDLLIMPEXP_CORE APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
-                                   WPARAM wParam, LPARAM lParam);
+LRESULT WXDLLIMPEXP_CORE APIENTRY
+wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 //---------------------------------------------------------------------------
 // Killed MSVC warnings

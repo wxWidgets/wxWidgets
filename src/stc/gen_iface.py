@@ -371,6 +371,12 @@ methodOverrideMap = {
     'IndicGetFore' : ('IndicatorGetForeground', 0, 0, 0),
     'IndicSetUnder': ('IndicatorSetUnder', 0, 0, 0),
     'IndicGetUnder': ('IndicatorGetUnder', 0, 0, 0),
+    'IndicSetHoverStyle': ('IndicatorSetHoverStyle', 0, 0, 0),
+    'IndicGetHoverStyle': ('IndicatorGetHoverStyle', 0, 0, 0),
+    'IndicSetHoverFore': ('IndicatorSetHoverForeground', 0, 0, 0),
+    'IndicGetHoverFore': ('IndicatorGetHoverForeground', 0, 0, 0),
+    'IndicSetFlags': ('IndicatorSetFlags', 0, 0, 0),
+    'IndicGetFlags': ('IndicatorGetFlags', 0, 0, 0),
 
     'SetWhitespaceFore' : ('SetWhitespaceForeground', 0, 0, 0),
     'SetWhitespaceBack' : ('SetWhitespaceBackground', 0, 0, 0),
@@ -406,6 +412,8 @@ methodOverrideMap = {
     'AutoCGetMaxHeight'     : ('AutoCompGetMaxHeight', 0, 0, 0),
     'AutoCSetCaseInsensitiveBehaviour'     : ('AutoCompSetCaseInsensitiveBehaviour', 0, 0, 0),
     'AutoCGetCaseInsensitiveBehaviour'     : ('AutoCompGetCaseInsensitiveBehaviour', 0, 0, 0),
+    'AutoCSetMulti'         : ('AutoCompSetMulti', 0, 0, 0),
+    'AutoCGetMulti'         : ('AutoCompGetMulti', 0, 0, 0),
     'AutoCSetOrder'         : ('AutoCompSetOrder', 0, 0, 0),
     'AutoCGetOrder'         : ('AutoCompGetOrder', 0, 0, 0),
 
@@ -585,6 +593,22 @@ methodOverrideMap = {
 
     'GetDirectFunction' : (None, 0, 0, 0),
     'GetDirectPointer' : (None, 0, 0, 0),
+
+    'GetTargetText' :
+    (0,
+     'wxString %s() const;',
+
+     '''wxString %s() const {
+         int startPos = GetTargetStart();
+         int endPos = GetTargetEnd();
+         wxMemoryBuffer mbuf(endPos-startPos+1);   // leave room for the null...
+         char* buf = (char*)mbuf.GetWriteBuf(endPos-startPos+1);
+         SendMsg(%s, 0, (sptr_t)buf);
+         mbuf.UngetWriteBuf(endPos-startPos);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
+
+     0),
 
     'CallTipPosStart'   : ('CallTipPosAtStart', 0, 0, 0),
     'CallTipSetPosStart': ('CallTipSetPosAtStart', 0, 0, 0),

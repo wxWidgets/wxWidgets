@@ -173,9 +173,9 @@ void wxTextEntry::DoSetValue(const wxString& value, int flags)
 {
     if (value != DoGetValue())
     {
-        // use Remove() rather than SelectAll() to avoid unnecessary clipboard
+        // Use Remove() rather than SelectAll() to avoid unnecessary clipboard
         // operations, and prevent triggering an apparent bug in GTK which
-        // causes the the subsequent WriteText() to append rather than overwrite
+        // causes the subsequent WriteText() to append rather than overwrite.
         {
             EventsSuppressor noevents(this);
             Remove(0, -1);
@@ -521,7 +521,7 @@ bool wxTextEntry::SetHint(const wxString& hint)
 {
 #if GTK_CHECK_VERSION(3,2,0)
     GtkEntry *entry = GetEntry();
-    if (entry && GTK_IS_ENTRY(entry) && gtk_check_version(3,2,0) == NULL)
+    if (entry && gtk_check_version(3,2,0) == NULL)
     {
         gtk_entry_set_placeholder_text(entry, wxGTK_CONV(hint));
         return true;

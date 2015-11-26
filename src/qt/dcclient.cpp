@@ -8,11 +8,20 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/dcclient.h"
-#include "wx/log.h"
-#include "wx/qt/dcclient.h"
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
 #include <QtGui/QPicture>
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/window.h"
+#endif // WX_PRECOMP
+
+#include "wx/dcclient.h"
+#include "wx/qt/dcclient.h"
+
 
 //##############################################################################
 

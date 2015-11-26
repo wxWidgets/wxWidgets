@@ -213,17 +213,29 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
         {
             if (commandSelector == @selector(insertNewline:))
             {
-                wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(wxpeer), wxTopLevelWindow);
-                if ( tlw && tlw->GetDefaultItem() )
+                if ( wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER )
                 {
-                    wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
-                    if ( def && def->IsEnabled() )
+                    wxCommandEvent event(wxEVT_TEXT_ENTER, wxpeer->GetId());
+                    event.SetEventObject( wxpeer );
+                    wxTextWidgetImpl* impl = (wxNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );
+                    wxTextEntry * const entry = impl->GetTextEntry();
+                    event.SetString( entry->GetValue() );
+                    handled = wxpeer->HandleWindowEvent( event );
+                }
+                else
+                {
+                    wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(wxpeer), wxTopLevelWindow);
+                    if ( tlw && tlw->GetDefaultItem() )
                     {
-                        wxCommandEvent event(wxEVT_BUTTON, def->GetId() );
-                        event.SetEventObject(def);
-                        def->Command(event);
-                        handled = YES;
-                    }
+                        wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
+                        if ( def && def->IsEnabled() )
+                        {
+                            wxCommandEvent event(wxEVT_BUTTON, def->GetId() );
+                            event.SetEventObject(def);
+                            def->Command(event);
+                            handled = YES;
+                        }
+                     }
                 }
             }
         }
@@ -290,8 +302,9 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     // programmatically.
     if ( !wxMacEditHelper::IsCurrentEditor(self) )
     {
+        NSString *text = [str isKindOfClass:[NSAttributedString class]] ? [str string] : str;
         wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
-        if ( impl && lastKeyDownEvent && impl->DoHandleCharEvent(lastKeyDownEvent, str) )
+        if ( impl && lastKeyDownEvent && impl->DoHandleCharEvent(lastKeyDownEvent, text) )
             return;
     }
 
@@ -548,25 +561,48 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 // wxNSTextViewControl
 
-wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w )
+wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long style )
     : wxWidgetCocoaImpl(wxPeer, w),
       wxTextWidgetImpl(wxPeer)
 {
     wxNSTextScrollView* sv = (wxNSTextScrollView*) w;
     m_scrollView = sv;
 
-    [m_scrollView setHasVerticalScroller:YES];
-    [m_scrollView setHasHorizontalScroller:NO];
-    // TODO Remove if no regression, this was causing automatic resizes of multi-line textfields when the tlw changed
-    // [m_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-    NSSize contentSize = [m_scrollView contentSize];
+    const bool hasHScroll = (style & wxHSCROLL) != 0;
 
-    wxNSTextView* tv = [[wxNSTextView alloc] initWithFrame: NSMakeRect(0, 0,
-            contentSize.width, contentSize.height)];
+    [m_scrollView setHasVerticalScroller:YES];
+    [m_scrollView setHasHorizontalScroller:hasHScroll];
+    NSSize contentSize = [m_scrollView contentSize];
+    NSRect viewFrame = NSMakeRect(
+            0, 0,
+            hasHScroll ? FLT_MAX : contentSize.width, contentSize.height
+        );
+
+    wxNSTextView* const tv = [[wxNSTextView alloc] initWithFrame: viewFrame];
     m_textView = tv;
     [tv setVerticallyResizable:YES];
-    [tv setHorizontallyResizable:NO];
+    [tv setHorizontallyResizable:hasHScroll];
     [tv setAutoresizingMask:NSViewWidthSizable];
+
+    if ( hasHScroll )
+    {
+        [[tv textContainer] setContainerSize:NSMakeSize(FLT_MAX, FLT_MAX)];
+        [[tv textContainer] setWidthTracksTextView:NO];
+    }
+
+    if ( style & wxTE_RIGHT)
+    {
+        [tv setAlignment:NSRightTextAlignment];
+    }
+    else if ( style & wxTE_CENTRE)
+    {
+        [tv setAlignment:NSCenterTextAlignment];
+    }
+
+    if ( !wxPeer->HasFlag(wxTE_RICH | wxTE_RICH2) )
+    {
+        [tv setRichText:NO];
+    }
 
     [m_scrollView setDocumentView: tv];
 
@@ -809,7 +845,7 @@ wxNSTextFieldControl::wxNSTextFieldControl(wxWindow *wxPeer,
 
 void wxNSTextFieldControl::Init(WXWidget w)
 {
-    NSTextField wxOSX_10_6_AND_LATER(<NSTextFieldDelegate>) *tf = (NSTextField wxOSX_10_6_AND_LATER(<NSTextFieldDelegate>)*) w;
+    NSTextField <NSTextFieldDelegate> *tf = (NSTextField <NSTextFieldDelegate>*) w;
     m_textField = tf;
     [m_textField setDelegate: tf];
     m_selStart = m_selEnd = 0;
@@ -1046,7 +1082,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
     {
         wxNSTextScrollView* v = nil;
         v = [[wxNSTextScrollView alloc] initWithFrame:r];
-        c = new wxNSTextViewControl( wxpeer, v );
+        c = new wxNSTextViewControl( wxpeer, v, style );
         c->SetNeedsFocusRect( true );
     }
     else
@@ -1081,8 +1117,6 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
             // we have to emulate this
             [v setBezeled:NO];
             [v setBordered:NO];
-            if ( UMAGetSystemVersion() < 0x1070 )
-                c->SetNeedsFocusRect( true );
         }
         else
         {

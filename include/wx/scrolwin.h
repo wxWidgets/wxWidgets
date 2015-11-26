@@ -341,13 +341,13 @@ protected:
 // methods to corresponding wxScrollHelper methods
 #define WX_FORWARD_TO_SCROLL_HELPER()                                         \
 public:                                                                       \
-    virtual void PrepareDC(wxDC& dc) { DoPrepareDC(dc); }                     \
-    virtual bool Layout() { return ScrollLayout(); }                          \
-    virtual bool CanScroll(int orient) const                                  \
+    virtual void PrepareDC(wxDC& dc) wxOVERRIDE { DoPrepareDC(dc); }          \
+    virtual bool Layout() wxOVERRIDE { return ScrollLayout(); }               \
+    virtual bool CanScroll(int orient) const wxOVERRIDE                       \
         { return IsScrollbarShown(orient); }                                  \
-    virtual void DoSetVirtualSize(int x, int y)                               \
+    virtual void DoSetVirtualSize(int x, int y) wxOVERRIDE                    \
         { ScrollDoSetVirtualSize(x, y); }                                     \
-    virtual wxSize GetBestVirtualSize() const                                 \
+    virtual wxSize GetBestVirtualSize() const wxOVERRIDE                      \
         { return ScrollGetBestVirtualSize(); }
 
 // include the declaration of the real wxScrollHelper
@@ -446,7 +446,7 @@ public:
     WX_FORWARD_TO_SCROLL_HELPER()
 
 protected:
-    virtual wxSize DoGetBestSize() const
+    virtual wxSize DoGetBestSize() const wxOVERRIDE
     {
         return FilterBestSize(this, this, T::DoGetBestSize());
     }

@@ -30,9 +30,6 @@
 
 #endif /* __cplusplus */
 
-/* fill in with the string wxGetOsDescription() will return */
-#define WXWIN_OS_DESCRIPTION "OpenVMS"
-
 /* the installation location prefix from configure */
 #undef wxINSTALL_PREFIX
 
@@ -885,14 +882,6 @@ typedef pid_t GPid;
  * Use GNOME VFS for MIME types
  */
 #define wxUSE_LIBGNOMEVFS 0
-/*
- * Use the Hildon framework
- */
-#define wxUSE_LIBHILDON 0
-/*
- * Use the Hildon 2.0 framework
- */
-#define wxUSE_LIBHILDON2 0
 
 #define wxUSE_DC_TRANSFORM_MATRIX 1
 

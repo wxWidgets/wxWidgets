@@ -34,7 +34,7 @@ Running Doxygen
 ---------------
 
 First, make sure you have a recent version of Doxygen installed in your system
-(currently Doxygen 1.8.2 is used).
+(currently Doxygen 1.8.8 is used).
 
 On Unix:
 

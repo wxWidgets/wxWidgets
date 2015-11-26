@@ -198,14 +198,12 @@ LifeFrame::LifeFrame() :
     menuFile->Append(wxID_OPEN, wxEmptyString, _("Open an existing Life pattern"));
 #endif
     menuFile->Append(ID_SAMPLES, _("&Sample game..."), _("Select a sample configuration"));
-#if ! (defined(__SMARTPHONE__) || defined(__POCKETPC__))
     menuFile->AppendSeparator();
     menuFile->Append(wxID_EXIT);
 
     menuView->Append(ID_SHOWNAV, _("Navigation &toolbox"), _("Show or hide toolbox"), wxITEM_CHECK);
     menuView->Check(ID_SHOWNAV, true);
     menuView->AppendSeparator();
-#endif
 
     menuView->Append(ID_ORIGIN, _("&Absolute origin"), _("Go to (0, 0)"));
     menuView->Append(ID_CENTER, _("&Center of mass"), _("Find center of mass"));
@@ -250,7 +248,6 @@ LifeFrame::LifeFrame() :
     toolBar->SetToolBitmapSize(wxSize(16, 16));
 
     ADD_TOOL(wxID_NEW, tbBitmaps[0], wxGetStockLabel(wxID_NEW, wxSTOCK_NOFLAGS), _("Start a new game"));
-#ifndef __POCKETPC__
 #if wxUSE_FILEDLG
     ADD_TOOL(wxID_OPEN, tbBitmaps[1], wxGetStockLabel(wxID_OPEN, wxSTOCK_NOFLAGS), _("Open an existing Life pattern"));
 #endif // wxUSE_FILEDLG
@@ -260,7 +257,6 @@ LifeFrame::LifeFrame() :
     ADD_TOOL(wxID_ZOOM_OUT, tbBitmaps[3], wxGetStockLabel(wxID_ZOOM_OUT, wxSTOCK_NOFLAGS), _("Zoom out"));
     ADD_TOOL(ID_INFO, tbBitmaps[4], _("Description"), _("Show description"));
     toolBar->AddSeparator();
-#endif // __POCKETPC__
     ADD_TOOL(ID_START, tbBitmaps[5], _("Start"), _("Start"));
     ADD_TOOL(wxID_STOP, tbBitmaps[6], _("Stop"), _("Stop"));
 
@@ -332,7 +328,6 @@ LifeFrame::LifeFrame() :
     sizer3->Add( panel2, 0, wxGROW );
     SetSizer( sizer3 );
 
-#ifndef __WXWINCE__
     sizer3->Fit( this );
 
     // set minimum frame size
@@ -340,7 +335,6 @@ LifeFrame::LifeFrame() :
 
     // navigator frame - not appropriate for small devices
     m_navigator = new LifeNavigator(this);
-#endif
 
 }
 
@@ -703,11 +697,7 @@ void LifeNavigator::OnClose(wxCloseEvent& event)
 LifeCanvas::LifeCanvas(wxWindow *parent, Life *life, bool interactive)
           : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(100, 100),
             wxFULL_REPAINT_ON_RESIZE | wxHSCROLL | wxVSCROLL
-#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
             |wxSUNKEN_BORDER
-#else
-            |wxSIMPLE_BORDER
-#endif
             )
 {
     m_life        = life;

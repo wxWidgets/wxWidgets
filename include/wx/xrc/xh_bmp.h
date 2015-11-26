@@ -20,8 +20,8 @@ class WXDLLIMPEXP_XRC wxBitmapXmlHandler : public wxXmlResourceHandler
 
 public:
     wxBitmapXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+    virtual wxObject *DoCreateResource() wxOVERRIDE;
+    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
 };
 
 class WXDLLIMPEXP_XRC wxIconXmlHandler : public wxXmlResourceHandler
@@ -30,8 +30,8 @@ class WXDLLIMPEXP_XRC wxIconXmlHandler : public wxXmlResourceHandler
 
 public:
     wxIconXmlHandler();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+    virtual wxObject *DoCreateResource() wxOVERRIDE;
+    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
 };
 
 #endif // wxUSE_XRC

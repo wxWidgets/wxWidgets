@@ -53,8 +53,8 @@ public:
     //     but still make it pure virtual because for some platforms it's not
     //     implemented there and also because the derived class has to override
     //     it anyhow to avoid ambiguity with the other GetSelection()
-    virtual int GetSelection() const = 0;
-    virtual void GetSelection(long *from, long *to) const = 0;
+    virtual int GetSelection() const wxOVERRIDE = 0;
+    virtual void GetSelection(long *from, long *to) const wxOVERRIDE = 0;
 
     virtual void Popup() { wxFAIL_MSG( wxT("Not implemented") ); }
     virtual void Dismiss() { wxFAIL_MSG( wxT("Not implemented") ); }
