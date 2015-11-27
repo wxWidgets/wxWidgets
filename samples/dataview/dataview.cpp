@@ -173,10 +173,12 @@ private:
 class MyCustomRenderer: public wxDataViewCustomRenderer
 {
 public:
-    MyCustomRenderer()
-        : wxDataViewCustomRenderer("string",
-                                   wxDATAVIEW_CELL_ACTIVATABLE,
-                                   wxALIGN_CENTER)
+    // This renderer can be either activatable or editable, for demonstration
+    // purposes. In real programs, you should select whether the user should be
+    // able to activate or edit the cell and it doesn't make sense to switch
+    // between the two -- but this is just an example, so it doesn't stop us.
+    explicit MyCustomRenderer(wxDataViewCellMode mode)
+        : wxDataViewCustomRenderer("string", mode, wxALIGN_CENTER)
        { }
 
     virtual bool Render( wxRect rect, wxDC *dc, int state ) wxOVERRIDE
@@ -222,6 +224,34 @@ public:
     }
 
     virtual bool GetValue( wxVariant &WXUNUSED(value) ) const wxOVERRIDE { return true; }
+
+    virtual bool HasEditorCtrl() const wxOVERRIDE { return true; }
+
+    virtual wxWindow*
+    CreateEditorCtrl(wxWindow* parent,
+                     wxRect labelRect,
+                     const wxVariant& value) wxOVERRIDE
+    {
+        wxTextCtrl* text = new wxTextCtrl(parent, wxID_ANY, value,
+                                          labelRect.GetPosition(),
+                                          labelRect.GetSize(),
+                                          wxTE_PROCESS_ENTER);
+        text->SetInsertionPointEnd();
+
+        return text;
+    }
+
+    virtual bool
+    GetValueFromEditorCtrl(wxWindow* ctrl, wxVariant& value) wxOVERRIDE
+    {
+        wxTextCtrl* text = wxDynamicCast(ctrl, wxTextCtrl);
+        if ( !text )
+            return false;
+
+        value = text->GetValue();
+
+        return true;
+    }
 
 private:
     wxString m_value;
@@ -614,7 +644,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
 
             // column 5 of the view control:
 
-            MyCustomRenderer *cr = new MyCustomRenderer;
+            MyCustomRenderer *cr = new MyCustomRenderer(wxDATAVIEW_CELL_ACTIVATABLE);
             wxDataViewColumn *column5 =
                 new wxDataViewColumn( "custom", cr, 5, -1, wxALIGN_LEFT,
                                       wxDATAVIEW_COL_RESIZABLE );
@@ -662,7 +692,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
 
             m_ctrl[1]->AppendColumn(
                 new wxDataViewColumn("custom renderer",
-                                     new MyCustomRenderer,
+                                     new MyCustomRenderer(wxDATAVIEW_CELL_EDITABLE),
                                      MyListModel::Col_Custom)
             );
         }
