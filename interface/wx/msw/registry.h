@@ -112,7 +112,7 @@ public:
     HKUSR, ///< HKEY_USERS
     HKPD,  ///< HKEY_PERFORMANCE_DATA
     HKCC,  ///< HKEY_CURRENT_CONFIG
-    HKDD,  ///< HKEY_DYN_DATA (Obsolete: Windows 9x only)
+    HKDD,  ///< HKEY_DYN_DATA (Obsolete)
     HKMAX
     };
 
