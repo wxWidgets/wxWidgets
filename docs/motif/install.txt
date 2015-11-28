@@ -171,66 +171,6 @@ make install
 ldconfig
 exit
 
-* Building wxMotif on OS/2
---------------------------
-
-Please send comments and question about the OS/2 installation
-to Stefan Neis <Stefan.Neis@t-online.de> and patches to
-the wxWidgets mailing list.
-
-In the following list, the version numbers indicate the configuration that
-was actually used by myself, newer version should cause no problems and
-even older ones are expected to work most of the time.
-
-You'll need OS/2 Warp (4.51) or eCS(1.0), X-Free86/2 (3.3.6 or newer),
-Lesstif (0.92.7 or newer), emx (0.9d fix 4), a Unix like shell (pdksh-5.2.14
-or ash), Autoconf (2.57), GNU file utilities (3.13), GNU text utilities (1.19),
-GNU shell utilites (1.12), m4 (1.4), sed (2.05), grep (2.0), Awk (3.0.3),
-GNU Make (3.75).
-
-Preferably, you should have Posix/2 installed and C(PLUS)_INCLUDE_PATH and
-LIBRARY_PATH set up accordingly, however, wxGTK will even work without it.
-Presence of Posix/2 will be auto-detected.
-
-Open an OS/2 prompt and switch to the directory above.
-Set MAKESHELL or MAKE_SHELL (which one is needed depends on the version of
-make) to a Unix like shell, e.g.
-SET MAKESHELL=ash
-If you have a really deficient version of GNU make, it might even be
-necessary to set SHELL or even COMSPEC to a unix like shell as well.
-Depending on your installation you might want to also set INSTALL, for me
-it tends to try to use the system's tcpip\pcomos\install.exe which causes
-problems, e.g.
-SET INSTALL=<path_to_src_directory>/install-sh -c
-
-Notice that the delivered configure scripts are fully OS/2 aware, so you
-can simply run
-    ash -c "configure --with-motif"
-and make and possibly make install as described above.
-
-To verify Lesstif installation, configure will try to compile a
-sample program that requires X headers/libraries to be either
-available via C_INCLUDE_PATH and LIBRARY_PATH or you need to
-explicitly set CFLAGS prior to running configure.
-
-* Building wxMotif on SGI
--------------------------
-
-Using the SGI native compilers, it is recommended that you
-also set CFLAGS and CXXFLAGS before running configure. These
-should be set to :
-
-CFLAGS="-mips3 -n32"
-CXXFLAGS="-mips3 -n32"
-
-This is essential if you want to use the resultant binaries
-on any other machine than the one it was compiled on. If you
-have a 64bit machine (Octane) you should also do this to ensure
-you don't accidently build the libraries as 64bit (which is
-untested).
-
-The SGI native compiler support has only been tested on Irix 6.5.
-
 * Building wxMotif on Cygwin
 ----------------------------
 
@@ -367,8 +307,6 @@ are
 	--without-libpng	Disables PNG image format code.
 
 	--without-libjpeg	Disables JPEG image format code.
-
-	--without-odbc          Disables ODBC code.
 
 	--without-libtiff       Disables TIFF image format code.
 

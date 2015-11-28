@@ -164,7 +164,7 @@ the border.
 
 If you don't specify a border style for a wxTextCtrl in rich edit mode,
 wxWidgets now gives the control themed borders automatically, where previously
-they would take the Windows 95-style sunken border. Other native controls such
+they would take the sunken border style. Other native controls such
 as wxTextCtrl in non-rich edit mode, and wxComboBox already paint themed
 borders where appropriate. To use themed borders on other windows, such as
 wxPanel, pass the @c wxBORDER_THEME style, or (apart from wxPanel) pass no
