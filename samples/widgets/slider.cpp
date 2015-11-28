@@ -277,7 +277,7 @@ void SliderWidgetsPage::CreateContent()
     m_chkBothSides = CreateCheckBoxAndAddToSizer
                      (sizerLeft, wxT("&Both sides"), SliderPage_BothSides);
 #if wxUSE_TOOLTIPS
-    m_chkBothSides->SetToolTip( wxT("\"Both sides\" is only supported \nin Win95 and Universal") );
+    m_chkBothSides->SetToolTip( wxT("\"Both sides\" is only supported \nin Universal") );
 #endif // wxUSE_TOOLTIPS
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
