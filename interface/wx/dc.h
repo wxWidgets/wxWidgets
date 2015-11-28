@@ -546,7 +546,7 @@ public:
         Notice that, as with DrawText(), the @a text can contain multiple lines
         separated by the new line (@c '\\n') characters.
 
-        @note Under Win9x only TrueType fonts can be drawn by this function. In
+        @note Under MSW only TrueType fonts can be drawn by this function. In
               particular, a font different from @c wxNORMAL_FONT should be used
               as the latter is not a TrueType font. @c wxSWISS_FONT is an
               example of a font which is.

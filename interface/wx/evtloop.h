@@ -217,8 +217,8 @@ public:
 
         This can be useful, for example, when a time-consuming process writes to a
         text window. Without an occasional yield, the text window will not be updated
-        properly, and on systems with cooperative multitasking, such as Windows 3.1
-        other processes will not respond.
+        properly, and on systems with cooperative multitasking, other processes
+        will not respond.
 
         Caution should be exercised, however, since yielding may allow the
         user to perform actions which are not compatible with the current task.

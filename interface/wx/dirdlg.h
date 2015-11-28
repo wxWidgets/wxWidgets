@@ -45,11 +45,11 @@ const char wxDirDialogNameStr[] = "wxDirCtrl";
            user.
     @endStyleTable
 
-    Notice that @c wxRESIZE_BORDER has special side effect under recent (i.e.
-    later than Win9x) Windows where two different directory selection dialogs
-    are available and this style also implicitly selects the new version as the
-    old one always has fixed size. As the new version is almost always
-    preferable, it is recommended that @c wxRESIZE_BORDER style be always used.
+    Notice that @c wxRESIZE_BORDER has special side effect under Windows
+    where two different directory selection dialogs are available and this
+    style also implicitly selects the new version as the old one always has
+    fixed size. As the new version is almost always preferable, it is
+    recommended that @c wxRESIZE_BORDER style be always used.
     This is the case if the dialog is created with the default style value but
     if you need to use any additional styles you should still specify @c
     wxDD_DEFAULT_STYLE unless you explicitly need to use the old dialog version
