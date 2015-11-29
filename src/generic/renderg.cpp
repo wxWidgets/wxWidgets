@@ -959,9 +959,12 @@ wxRendererGeneric::DrawItemText(wxWindow* WXUNUSED(win),
         textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
     }
 
+    // Be careful to avoid using the default flags here as otherwise any
+    // ampersands in the text would be consumed (and tabs expanded).
     const wxString paintText = wxControl::Ellipsize(text, dc,
                                                     ellipsizeMode,
-                                                    rect.GetWidth());
+                                                    rect.GetWidth(),
+                                                    wxELLIPSIZE_FLAGS_NONE);
 
     // Draw text taking care not to change its colour if it had been set by the
     // caller for a normal item to allow having items in non-default colours.
