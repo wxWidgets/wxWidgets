@@ -460,7 +460,10 @@ int wxMessageDialog::ShowMessageBox()
     const long wxStyle = GetMessageDialogStyle();
     if ( wxStyle & wxYES_NO )
     {
-         msStyle = MB_YESNO;
+        if (wxStyle & wxCANCEL)
+            msStyle = MB_YESNOCANCEL;
+        else
+            msStyle = MB_YESNO;
 
         if ( wxStyle & wxNO_DEFAULT )
             msStyle |= MB_DEFBUTTON2;
