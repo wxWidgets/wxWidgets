@@ -107,6 +107,7 @@ public:
 
     void Resolve(const wxURI& base, int flags = wxURI_STRICT);
     bool IsReference() const;
+    bool IsRelative() const;
 
 protected:
     void Clear();
