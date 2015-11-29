@@ -75,6 +75,10 @@
 
 #if wxPG_USE_GC_FOR_ALPHA
 #include "wx/dcgraph.h"
+#include "wx/dcmemory.h" // for wxDynamicCast purposes
+#if wxUSE_METAFILE
+    #include "wx/metafile.h"  // for wxDynamicCast purposes
+#endif // wxUSE_METAFILE
 #endif // wxPG_USE_GC_FOR_ALPHA
 
 // -----------------------------------------------------------------------
