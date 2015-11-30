@@ -608,8 +608,7 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y,
                 image.InitAlpha();
             }
             image.Rescale(m_Width, m_Height, wxIMAGE_QUALITY_HIGH);
-            delete m_bitmap;
-            m_bitmap = new wxBitmap(image);
+            (*m_bitmap) = wxBitmap(image);
         }
 #endif 
 
