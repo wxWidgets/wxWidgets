@@ -598,7 +598,7 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y,
 
         // Optimisation for Windows: WIN32 scaling for window DCs is very poor,
         // so unless we're using a printer DC, do the scaling ourselves.
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && wxUSE_IMAGE
         if (m_Width >= 0 && m_Width != m_bitmap->GetWidth() && !dc.IsKindOf(CLASSINFO(wxPrinterDC)))
         {
             wxImage image(m_bitmap->ConvertToImage());
