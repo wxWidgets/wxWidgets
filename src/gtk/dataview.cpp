@@ -1790,20 +1790,11 @@ bool wxGtkDataViewModelNotifier::Cleared()
 // wxDataViewRenderer
 // ---------------------------------------------------------
 
-static gpointer s_user_data = NULL;
-
 static void
 wxgtk_cell_editable_editing_done( GtkCellEditable *WXUNUSED(editable),
                                   wxDataViewRenderer *wxrenderer )
 {
-    wxDataViewColumn *column = wxrenderer->GetOwner();
-    wxDataViewCtrl *dv = column->GetOwner();
-    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_EDITING_DONE, dv->GetId() );
-    event.SetDataViewColumn( column );
-    event.SetModel( dv->GetModel() );
-    wxDataViewItem item( s_user_data );
-    event.SetItem( item );
-    dv->HandleWindowEvent( event );
+    wxrenderer->FinishEditing();
 }
 
 static void
@@ -1820,8 +1811,6 @@ wxgtk_renderer_editing_started( GtkCellRenderer *WXUNUSED(cell), GtkCellEditable
 
     if (GTK_IS_CELL_EDITABLE(editable))
     {
-        s_user_data = item.GetID();
-
         g_signal_connect (editable, "editing_done",
             G_CALLBACK (wxgtk_cell_editable_editing_done),
             (gpointer) wxrenderer );
