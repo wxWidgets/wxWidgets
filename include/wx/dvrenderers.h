@@ -202,7 +202,7 @@ protected:
     wxString                m_variantType;
     wxDataViewColumn       *m_owner;
     wxWeakRef<wxWindow>     m_editorCtrl;
-    wxDataViewItem          m_item; // for m_editorCtrl
+    wxDataViewItem          m_item; // Item being currently edited, if valid.
 
     // internal utility, may be used anywhere the window associated with the
     // renderer is required

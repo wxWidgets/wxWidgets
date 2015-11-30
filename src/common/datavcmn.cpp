@@ -681,8 +681,6 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     if( !start_event.IsAllowed() )
         return false;
 
-    m_item = item; // remember for later
-
     unsigned int col = GetOwner()->GetModelColumn();
     const wxVariant& value = CheckedGetValue(dv_ctrl->GetModel(), item, col);
 
@@ -708,6 +706,9 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 
 void wxDataViewRendererBase::NotifyEditingStarted(const wxDataViewItem& item)
 {
+    // Remember the item being edited for use in FinishEditing() later.
+    m_item = item;
+
     wxDataViewColumn* const column = GetOwner();
     wxDataViewCtrl* const dv_ctrl = column->GetOwner();
 
@@ -778,13 +779,16 @@ bool wxDataViewRendererBase::FinishEditing()
     event.SetEventObject( dv_ctrl );
     dv_ctrl->GetEventHandler()->ProcessEvent( event );
 
+    bool accepted = false;
     if ( isValid && event.IsAllowed() )
     {
         dv_ctrl->GetModel()->ChangeValue(value, m_item, col);
-        return true;
+        accepted = true;
     }
 
-    return false;
+    m_item = wxDataViewItem();
+
+    return accepted;
 }
 
 wxVariant
