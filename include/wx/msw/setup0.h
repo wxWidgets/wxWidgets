@@ -1216,7 +1216,7 @@
 #define wxUSE_PROGRESSDLG 1
 
 // native MSW progress dialog class, flickering not yet debugged
-#define wxUSE_NATIVE_PROGRESSDLG 0
+#define wxUSE_NATIVE_PROGRESSDLG 1
 
 // support for startup tips (wxShowTip &c)
 #define wxUSE_STARTUP_TIPS 1
