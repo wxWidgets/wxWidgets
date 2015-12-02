@@ -145,6 +145,7 @@ bool shouldHandleSelector(SEL selector)
 //
 
 static NSResponder* s_nextFirstResponder = NULL;
+static NSResponder* s_formerFirstResponder = NULL;
 
 @interface wxNSWindow : NSWindow
 {
@@ -210,9 +211,13 @@ static NSResponder* s_nextFirstResponder = NULL;
 
 - (BOOL)makeFirstResponder:(NSResponder *)aResponder
 {
+    NSResponder* tempFormer = s_formerFirstResponder;
+    NSResponder* tempNext = s_nextFirstResponder;
     s_nextFirstResponder = aResponder;
+    s_formerFirstResponder = [[NSApp keyWindow] firstResponder];
     BOOL retval = [super makeFirstResponder:aResponder];
-    s_nextFirstResponder = nil;
+    s_nextFirstResponder = tempNext;
+    s_formerFirstResponder = tempFormer;
     return retval;
 }
 
@@ -278,9 +283,13 @@ static NSResponder* s_nextFirstResponder = NULL;
 
 - (BOOL)makeFirstResponder:(NSResponder *)aResponder
 {
+    NSResponder* tempFormer = s_formerFirstResponder;
+    NSResponder* tempNext = s_nextFirstResponder;
     s_nextFirstResponder = aResponder;
+    s_formerFirstResponder = [[NSApp keyWindow] firstResponder];
     BOOL retval = [super makeFirstResponder:aResponder];
-    s_nextFirstResponder = nil;
+    s_nextFirstResponder = tempNext;
+    s_formerFirstResponder = tempFormer;
     return retval;
 }
 
@@ -300,6 +309,8 @@ static NSResponder* s_nextFirstResponder = NULL;
 - (void)windowDidResignKey:(NSNotification *)notification;
 - (void)windowDidBecomeKey:(NSNotification *)notification;
 - (void)windowDidMove:(NSNotification *)notification;
+- (void)windowDidMiniaturize:(NSNotification *)notification;
+- (void)windowDidDeminiaturize:(NSNotification *)notification;
 - (BOOL)windowShouldClose:(id)window;
 - (BOOL)windowShouldZoom:(NSWindow *)window toFrame:(NSRect)newFrame;
 
@@ -386,6 +397,28 @@ extern int wxOSXGetIdFromSelector(SEL action );
 {
     wxUnusedVar(sender);
     [self triggerMenu:_cmd];
+}
+
+- (void)windowDidMiniaturize:(NSNotification *)notification
+{
+    NSWindow* window = (NSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
+    if ( windowimpl )
+    {
+        if ( wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer() )
+            wxpeer->OSXHandleMiniaturize(0, [window isMiniaturized]);
+    }
+}
+
+- (void)windowDidDeminiaturize:(NSNotification *)notification
+{
+    NSWindow* window = (NSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
+    if ( windowimpl )
+    {
+        if ( wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer() )
+            wxpeer->OSXHandleMiniaturize(0, [window isMiniaturized]);
+    }
 }
 
 - (BOOL)windowShouldClose:(id)nwindow
@@ -498,6 +531,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
         {
             editor = [[wxNSTextFieldEditor alloc] init];
             [editor setFieldEditor:YES];
+            [editor setTextField:tf];
             [tf setFieldEditor:editor];
             [editor release];
         }
@@ -511,6 +545,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
         {
             editor = [[wxNSTextFieldEditor alloc] init];
             [editor setFieldEditor:YES];
+            [editor setTextField:cb];
             [cb setFieldEditor:editor];
             [editor release];
         }
@@ -1066,6 +1101,10 @@ WX_NSResponder wxNonOwnedWindowCocoaImpl::GetNextFirstResponder()
     return s_nextFirstResponder;
 }
 
+WX_NSResponder wxNonOwnedWindowCocoaImpl::GetFormerFirstResponder()
+{
+    return s_formerFirstResponder;
+}
 
 //
 //

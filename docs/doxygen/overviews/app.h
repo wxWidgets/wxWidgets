@@ -41,7 +41,7 @@ public:
     virtual bool OnInit();
 };
 
-IMPLEMENT_APP(DerivedApp)
+wxIMPLEMENT_APP(DerivedApp);
 
 bool DerivedApp::OnInit()
 {
@@ -53,14 +53,14 @@ bool DerivedApp::OnInit()
 }
 @endcode
 
-Note the use of IMPLEMENT_APP(appClass), which allows wxWidgets to dynamically
+Note the use of wxIMPLEMENT_APP(appClass), which allows wxWidgets to dynamically
 create an instance of the application object at the appropriate point in
 wxWidgets initialization. Previous versions of wxWidgets used to rely on the
 creation of a global application object, but this is no longer recommended,
 because required global initialization may not have been performed at
 application object construction time.
 
-You can also use DECLARE_APP(appClass) in a header file to declare the wxGetApp
+You can also use wxDECLARE_APP(appClass) in a header file to declare the wxGetApp
 function which returns a reference to the application object. Otherwise you can
 only use the global @c wxTheApp pointer which is of type @c wxApp*.
 

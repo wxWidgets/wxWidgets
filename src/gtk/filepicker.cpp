@@ -18,6 +18,10 @@
 
 #if wxUSE_FILEPICKERCTRL
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/filepicker.h"
 #include "wx/tooltip.h"
 
@@ -180,7 +184,13 @@ static void file_set(GtkFileChooser* widget, wxDirButton* p)
     // thus we need to make sure the current working directory is updated if wxDIRP_CHANGE_DIR
     // style was given.
     if (p->HasFlag(wxDIRP_CHANGE_DIR))
-        chdir(filename);
+    {
+        if ( chdir(filename) != 0 )
+        {
+            wxLogSysError(_("Changing current directory to \"%s\" failed"),
+                          wxString::FromUTF8(filename));
+        }
+    }
 
     // ...and fire an event
     wxFileDirPickerEvent event(wxEVT_DIRPICKER_CHANGED, p, p->GetId(), p->GetPath());

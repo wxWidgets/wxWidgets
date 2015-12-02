@@ -196,13 +196,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     wxUnusedVar(aNotification);
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
-    {
-        NSResponder * responder = wxNonOwnedWindowCocoaImpl::GetNextFirstResponder();
-        NSView* otherView = wxOSXGetViewFromResponder(responder);
-        
-        wxWidgetImpl* otherWindow = impl->FindBestFromWXWidget(otherView);
-        impl->DoNotifyFocusEvent( false, otherWindow );
-    }
+        impl->DoNotifyFocusLost();
 }
 
 - (BOOL)control:(NSControl*)control textView:(NSTextView*)textView doCommandBySelector:(SEL)commandSelector
@@ -219,17 +213,29 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
         {
             if (commandSelector == @selector(insertNewline:))
             {
-                wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(wxpeer), wxTopLevelWindow);
-                if ( tlw && tlw->GetDefaultItem() )
+                if ( wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER )
                 {
-                    wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
-                    if ( def && def->IsEnabled() )
+                    wxCommandEvent event(wxEVT_TEXT_ENTER, wxpeer->GetId());
+                    event.SetEventObject( wxpeer );
+                    wxTextWidgetImpl* impl = (wxNSTextFieldControl * ) wxWidgetImpl::FindFromWXWidget( self );
+                    wxTextEntry * const entry = impl->GetTextEntry();
+                    event.SetString( entry->GetValue() );
+                    handled = wxpeer->HandleWindowEvent( event );
+                }
+                else
+                {
+                    wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(wxpeer), wxTopLevelWindow);
+                    if ( tlw && tlw->GetDefaultItem() )
                     {
-                        wxCommandEvent event(wxEVT_BUTTON, def->GetId() );
-                        event.SetEventObject(def);
-                        def->Command(event);
-                        handled = YES;
-                    }
+                        wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
+                        if ( def && def->IsEnabled() )
+                        {
+                            wxCommandEvent event(wxEVT_BUTTON, def->GetId() );
+                            event.SetEventObject(def);
+                            def->Command(event);
+                            handled = YES;
+                        }
+                     }
                 }
             }
         }
@@ -296,13 +302,37 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     // programmatically.
     if ( !wxMacEditHelper::IsCurrentEditor(self) )
     {
+        NSString *text = [str isKindOfClass:[NSAttributedString class]] ? [str string] : str;
         wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
-        if ( impl && lastKeyDownEvent && impl->DoHandleCharEvent(lastKeyDownEvent, str) )
+        if ( impl && lastKeyDownEvent && impl->DoHandleCharEvent(lastKeyDownEvent, text) )
             return;
     }
 
     [super insertText:str];
 }
+
+- (BOOL) resignFirstResponder
+{
+    return [super resignFirstResponder];
+}
+
+- (BOOL) becomeFirstResponder
+{
+    // we need the stored text field, as at this point the delegate is not yet set
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) textField );
+
+    BOOL r = [super becomeFirstResponder];
+    if ( impl != NULL && r )
+        impl->DoNotifyFocusSet();
+    
+    return r;
+}
+
+- (void) setTextField:(NSTextField*) field
+{
+    textField = field;
+}
+
 
 @end
 
@@ -359,13 +389,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
-    {
-        NSResponder * responder = wxNonOwnedWindowCocoaImpl::GetNextFirstResponder();
-        NSView* otherView = wxOSXGetViewFromResponder(responder);
-        
-        wxWidgetImpl* otherWindow = impl->FindBestFromWXWidget(otherView);
-        impl->DoNotifyFocusEvent( false, otherWindow );
-    }
+        impl->DoNotifyFocusLost();
 }
 
 @end
@@ -528,17 +552,9 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     if ( impl )
     {
         wxNSTextFieldControl* timpl = dynamic_cast<wxNSTextFieldControl*>(impl);
-        if ( fieldEditor )
-        {
-            NSRange range = [fieldEditor selectedRange];
-            timpl->SetInternalSelection(range.location, range.location + range.length);
-        }
-
-        NSResponder * responder = wxNonOwnedWindowCocoaImpl::GetNextFirstResponder();
-        NSView* otherView = wxOSXGetViewFromResponder(responder);
-        
-        wxWidgetImpl* otherWindow = impl->FindBestFromWXWidget(otherView);
-        impl->DoNotifyFocusEvent( false, otherWindow );
+        if ( timpl )
+            timpl->UpdateInternalSelectionFromEditor(fieldEditor);
+        impl->DoNotifyFocusLost();
     }
 }
 @end
@@ -564,6 +580,11 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w )
     [tv setVerticallyResizable:YES];
     [tv setHorizontallyResizable:NO];
     [tv setAutoresizingMask:NSViewWidthSizable];
+
+    if ( !wxPeer->HasFlag(wxTE_RICH | wxTE_RICH2) )
+    {
+        [tv setRichText:NO];
+    }
 
     [m_scrollView setDocumentView: tv];
 
@@ -956,6 +977,15 @@ void wxNSTextFieldControl::SetInternalSelection( long from , long to )
 {
     m_selStart = from;
     m_selEnd = to;
+}
+
+void wxNSTextFieldControl::UpdateInternalSelectionFromEditor( wxNSTextFieldEditor* fieldEditor )
+{
+    if ( fieldEditor )
+    {
+        NSRange range = [fieldEditor selectedRange];
+        SetInternalSelection(range.location, range.location + range.length);
+    }
 }
 
 // as becoming first responder on a window - triggers a resign on the same control, we have to avoid

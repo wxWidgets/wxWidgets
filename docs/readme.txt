@@ -81,7 +81,7 @@ to earlier versions of wxWidgets, please read it, and especially its
 "INCOMPATIBLE CHANGES" section, if you are upgrading from wxWidgets
 2.8 or earlier. And for even more details, please see
 
-    http://docs.wxwidgets.org/3.0.0/overview_changes_since28.html
+    http://docs.wxwidgets.org/3.0.3/overview_changes_since28.html
 
 
 Platforms supported
@@ -89,7 +89,7 @@ Platforms supported
 
 wxWidgets currently supports the following primary platforms:
 
-- Windows 95/98/ME, NT, 2000, XP, Vista, 7 (32/64 bits).
+- Windows 95/98/ME, NT, 2000, XP, Vista, 7, 8, 10 (32/64 bits).
 - Most Unix variants using the GTK+ toolkit (version 2.6 or newer)
 - Mac OS X (10.5 or newer) using Cocoa (32/64 bits) or Carbon (32 only)
 

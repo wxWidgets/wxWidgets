@@ -356,7 +356,8 @@ void wxWindowMac::SetPeer(wxOSXWidgetImpl* peer)
         if ( !m_hasFont )
             DoSetWindowVariant( m_windowVariant );
         
-        GetPeer()->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics), GetFont().GetEncoding() ) ;
+        if ( !m_label.empty() )
+            GetPeer()->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics), GetFont().GetEncoding() ) ;
         
         // for controls we want to use best size for wxDefaultSize params )
         if ( !GetPeer()->IsUserPane() )
@@ -456,9 +457,16 @@ void wxWindowMac::MacChildAdded()
 #endif
 }
 
-void wxWindowMac::MacPostControlCreate(const wxPoint& WXUNUSED(pos),
+void wxWindowMac::MacPostControlCreate(const wxPoint& pos,
                                        const wxSize& WXUNUSED(size))
 {
+    // Some controls may have a nonzero layout inset,
+    // so we may need to adjust control position.
+    if ( pos.IsFullySpecified() && GetPosition() != pos )
+    {
+        SetPosition(pos);
+    }
+
     // todo remove if refactoring works correctly
 #if 0
     wxASSERT_MSG( GetPeer() != NULL && GetPeer()->IsOk() , wxT("No valid mac control") ) ;

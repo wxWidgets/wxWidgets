@@ -684,7 +684,7 @@ public:
 */
 #define WX_DECLARE_OBJARRAY(T, name)
 #define WX_DECLARE_EXPORTED_OBJARRAY(T, name)
-#define WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name)
+#define WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, expmode)
 //@}
 
 //@{
@@ -792,7 +792,7 @@ public:
 */
 #define WX_DEFINE_SORTED_ARRAY(T, name)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY(T, name)
-#define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY(T, name)
+#define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY(T, name, expmode)
 //@}
 
 /**

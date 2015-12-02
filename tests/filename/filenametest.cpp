@@ -133,6 +133,7 @@ private:
         CPPUNIT_TEST( TestSetPath );
         CPPUNIT_TEST( TestStrip );
         CPPUNIT_TEST( TestNormalize );
+        CPPUNIT_TEST( TestRelative );
         CPPUNIT_TEST( TestReplace );
         CPPUNIT_TEST( TestGetHumanReadable );
 #ifdef __WINDOWS__
@@ -158,6 +159,7 @@ private:
     void TestSplit();
     void TestSetPath();
     void TestStrip();
+    void TestRelative();
     void TestNormalize();
     void TestReplace();
     void TestGetHumanReadable();
@@ -439,6 +441,24 @@ void FileNameTestCase::TestNormalize()
     }
     //else: when in doubt, don't run the test
 #endif // __WINDOWS__
+}
+
+void FileNameTestCase::TestRelative()
+{
+    const wxString pathSep = wxFileName::GetPathSeparator();
+
+    wxFileName fn("a" + pathSep + "b.cpp");
+    fn.MakeRelativeTo("a");
+    CPPUNIT_ASSERT_EQUAL( "b.cpp", fn.GetFullPath() );
+
+    fn.AssignDir("a" + pathSep + "b");
+    fn.MakeRelativeTo("a");
+
+    CPPUNIT_ASSERT_EQUAL( "b" + pathSep, fn.GetFullPath() );
+
+    fn.AssignDir("a");
+    fn.MakeRelativeTo("a");
+    CPPUNIT_ASSERT_EQUAL( "." + pathSep, fn.GetFullPath() );
 }
 
 void FileNameTestCase::TestReplace()

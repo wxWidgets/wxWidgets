@@ -82,7 +82,7 @@ static void gtk_spinctrl_callback( GtkWidget *WXUNUSED(widget), wxSpinCtrl *win 
     if (!win->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
-    wxCommandEvent event( wxEVT_SPINCTRL, win->GetId());
+    wxSpinEvent event( wxEVT_SPINCTRL, win->GetId());
     event.SetEventObject( win );
 
     // note that we don't use wxSpinCtrl::GetValue() here because it would

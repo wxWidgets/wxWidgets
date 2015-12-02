@@ -236,7 +236,8 @@ void wxCursor::InitFromStock( wxStockCursor cursorId )
             break;
     }
 
-    M_CURSORDATA->m_cursor = gdk_cursor_new( gdk_cur );
+    GdkDisplay* display = gtk_widget_get_display(wxGetRootWindow());
+    M_CURSORDATA->m_cursor = gdk_cursor_new_for_display(display, gdk_cur);
 }
 
 #if wxUSE_IMAGE

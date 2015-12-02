@@ -224,7 +224,7 @@ private:
         CPPUNIT_TEST( TestTimeParse );
         CPPUNIT_TEST( TestTimeSpanFormat );
         CPPUNIT_TEST( TestTimeTicks );
-        CPPUNIT_TEST( TestParceRFC822 );
+        CPPUNIT_TEST( TestParseRFC822 );
         CPPUNIT_TEST( TestDateParse );
         CPPUNIT_TEST( TestDateParseISO );
         CPPUNIT_TEST( TestDateTimeParse );
@@ -244,7 +244,7 @@ private:
     void TestTimeParse();
     void TestTimeSpanFormat();
     void TestTimeTicks();
-    void TestParceRFC822();
+    void TestParseRFC822();
     void TestDateParse();
     void TestDateParseISO();
     void TestDateTimeParse();
@@ -948,7 +948,7 @@ void DateTimeTestCase::TestTimeTicks()
 }
 
 // test parsing dates in RFC822 format
-void DateTimeTestCase::TestParceRFC822()
+void DateTimeTestCase::TestParseRFC822()
 {
     static const struct ParseTestData
     {

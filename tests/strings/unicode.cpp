@@ -277,7 +277,7 @@ void UnicodeTestCase::ConversionWithNULs()
     wxString szTheString2("The\0String", wxConvLocal, lenNulString);
     CPPUNIT_ASSERT_EQUAL( lenNulString, szTheString2.length() );
     CPPUNIT_ASSERT( wxTmemcmp(szTheString2.c_str(), L"The\0String",
-                    lenNulString + 1) == 0 );
+                    lenNulString) == 0 );
 #else // !wxUSE_UNICODE
     wxString szTheString("TheString");
     szTheString.insert(3, 1, '\0');
@@ -291,6 +291,10 @@ void UnicodeTestCase::ConversionWithNULs()
 
     CPPUNIT_ASSERT( memcmp(theLocalBuffer.data(), L"The\0String", 11 * sizeof(wchar_t)) == 0 );
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
+
+    const char *null4buff = "\0\0\0\0";
+    wxString null4str(null4buff, 4);
+    CPPUNIT_ASSERT_EQUAL( 4, null4str.length() );
 }
 
 void UnicodeTestCase::ConversionUTF7()
@@ -390,10 +394,14 @@ void UnicodeTestCase::ConversionUTF16()
     conv.cMB2WC("\x01\0\0B\0C" /* A macron BC */, 6, &len);
     CPPUNIT_ASSERT_EQUAL( 3, len );
 
+    // When using UTF-16 internally (i.e. MSW), we don't have any surrogate
+    // support, so the length of the string below is 2, not 1.
+#if SIZEOF_WCHAR_T == 4
     // Another one: verify that the length of the resulting string is computed
     // correctly when there is a surrogate in the input.
     wxMBConvUTF16BE().cMB2WC("\xd8\x03\xdc\x01\0" /* OLD TURKIC LETTER YENISEI A */, wxNO_LEN, &len);
     CPPUNIT_ASSERT_EQUAL( 1, len );
+#endif // UTF-32 internal representation
 }
 
 void UnicodeTestCase::ConversionUTF32()

@@ -129,6 +129,8 @@ public :
     virtual bool        DoHandleMouseEvent(NSEvent *event);
     virtual bool        DoHandleKeyEvent(NSEvent *event);
     virtual bool        DoHandleCharEvent(NSEvent *event, NSString *text);
+    virtual void        DoNotifyFocusSet();
+    virtual void        DoNotifyFocusLost();
     virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow);
 
     virtual void        SetupKeyEvent(wxKeyEvent &wxevent, NSEvent * nsEvent, NSString* charString = NULL);
@@ -260,6 +262,7 @@ public :
     void            RestoreWindowLevel();
     
     static WX_NSResponder GetNextFirstResponder() ;
+    static WX_NSResponder GetFormerFirstResponder() ;
 protected :
     CGWindowLevel   m_macWindowLevel;
     WXWindow        m_macWindow;
@@ -321,8 +324,10 @@ public:
     @interface wxNSTextFieldEditor : NSTextView
     {
         NSEvent* lastKeyDownEvent;
+        NSTextField* textField;
     }
 
+    - (void) setTextField:(NSTextField*) field;
     @end
 
     @interface wxNSTextField : NSTextField wxOSX_10_6_AND_LATER(<NSTextFieldDelegate>)

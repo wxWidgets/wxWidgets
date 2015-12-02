@@ -232,6 +232,19 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
                     data[p++] = NSOpenGLPFASamples;
                     data[p++] = (NSOpenGLPixelFormatAttribute) attribList[arg++];
                     break;
+
+                case WX_GL_CORE_PROFILE:
+                    // NSOpenGLPFAOpenGLProfile and NSOpenGLProfileVersion3_2Core
+                    // are only defined in 10.7 SDK, we can't support this
+                    // attribute with 10.6.
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
+                    data[p++] = NSOpenGLPFAOpenGLProfile;
+                    // request an OpenGL core profile
+                    // will use the highest available OpenGL version
+                    // which will be at least 3.2
+                    data[p++] = NSOpenGLProfileVersion3_2Core;
+#endif // 10.7+
+                    break;
             }
         }
 

@@ -69,6 +69,7 @@ protected:
     virtual void *Entry()
     {
         wxSocketServer srv(LocalAddress(m_port), wxSOCKET_REUSEADDR);
+        CPPUNIT_ASSERT( srv.IsOk() );
 
         // FIXME: this is still not atomic, of course and the main thread could
         //        call Connect() before we have time to Accept() but there is

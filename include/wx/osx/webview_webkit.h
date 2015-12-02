@@ -146,6 +146,7 @@ public:
     void OnMouseEvents(wxMouseEvent &event);
 
     bool m_busy;
+    bool m_nextNavigationIsNewWindow;
 
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl);
@@ -158,7 +159,7 @@ private:
     wxWindowID m_windowID;
     wxString m_pageTitle;
 
-    wxObjCID m_webView;
+    OSXWebViewPtr m_webView;
 
     // we may use this later to setup our own mouse events,
     // so leave it in for now.

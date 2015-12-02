@@ -1338,7 +1338,8 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
     wxDataViewItem
         item(cell->GetOwner()->GetOwner()->GTKPathToItem(wxGtkTreePath(path)));
 
-    cell->StartEditing( item, renderrect );
+    if (cell->StartEditing(item, renderrect))
+        return GTK_CELL_EDITABLE(cell->GetEditorCtrl()->m_widget);
 
     return NULL;
 }
@@ -1479,8 +1480,6 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
         state |= wxDATAVIEW_CELL_SELECTED;
     if (flags & GTK_CELL_RENDERER_PRELIT)
         state |= wxDATAVIEW_CELL_PRELIT;
-    if (flags & GTK_CELL_RENDERER_INSENSITIVE)
-        state |= wxDATAVIEW_CELL_INSENSITIVE;
     if (flags & GTK_CELL_RENDERER_INSENSITIVE)
         state |= wxDATAVIEW_CELL_INSENSITIVE;
     if (flags & GTK_CELL_RENDERER_FOCUSED)
@@ -1837,6 +1836,24 @@ wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype, wxDataViewC
 
     // NOTE: SetMode() and SetAlignment() needs to be called in the renderer's ctor,
     //       after the m_renderer pointer has been initialized
+}
+
+bool wxDataViewRenderer::FinishEditing()
+{
+    wxWindow* editorCtrl = m_editorCtrl;
+
+    bool ret = wxDataViewRendererBase::FinishEditing();
+
+    if (editorCtrl && wxGetTopLevelParent(editorCtrl)->IsBeingDeleted())
+    {
+        // remove editor widget before editor control is deleted,
+        // to prevent several GTK warnings
+        gtk_cell_editable_remove_widget(GTK_CELL_EDITABLE(editorCtrl->m_widget));
+        // delete editor control now, if it is deferred multiple erroneous
+        // focus-out events will occur, causing debug warnings
+        delete editorCtrl;
+    }
+    return ret;
 }
 
 void wxDataViewRenderer::GtkPackIntoColumn(GtkTreeViewColumn *column)
@@ -2432,6 +2449,7 @@ void wxDataViewCustomRenderer::GtkInitTextRenderer()
     g_object_ref_sink(m_text_renderer);
 
     GtkApplyAlignment(GTK_CELL_RENDERER(m_text_renderer));
+    gtk_cell_renderer_set_padding(GTK_CELL_RENDERER(m_text_renderer), 0, 0);
 }
 
 GtkCellRendererText *wxDataViewCustomRenderer::GtkGetTextRenderer() const
@@ -3161,12 +3179,17 @@ void wxDataViewColumn::SetSortOrder( bool ascending )
 {
     GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
 
+    GtkSortType order = GTK_SORT_DESCENDING;
     if (ascending)
-        gtk_tree_view_column_set_sort_order( column, GTK_SORT_ASCENDING );
-    else
-        gtk_tree_view_column_set_sort_order( column, GTK_SORT_DESCENDING );
+        order = GTK_SORT_ASCENDING;
 
+    gtk_tree_view_column_set_sort_order(column, order);
     gtk_tree_view_column_set_sort_indicator( column, TRUE );
+
+    wxDataViewCtrlInternal* internal = m_owner->GtkGetInternal();
+    internal->SetSortOrder(order);
+    internal->SetSortColumn(m_model_column);
+    internal->SetDataViewSortColumn(this);
 }
 
 bool wxDataViewColumn::IsSortOrderAscending() const
@@ -4338,39 +4361,10 @@ wxdataview_row_collapsed_callback( GtkTreeView* WXUNUSED(treeview), GtkTreeIter*
     // wxDataViewCtrl
 //-----------------------------------------------------------------------------
 
-void wxDataViewCtrl::AddChildGTK(wxWindowGTK* child)
+void wxDataViewCtrl::AddChildGTK(wxWindowGTK*)
 {
-    GtkWidget* treeview = GtkGetTreeView();
-
-    // Insert widget in GtkTreeView
-    if (gtk_widget_get_realized(treeview))
-        gtk_widget_set_parent_window( child->m_widget,
-          gtk_tree_view_get_bin_window( GTK_TREE_VIEW(treeview) ) );
-    gtk_widget_set_parent( child->m_widget, treeview );
-}
-
-static
-void gtk_dataviewctrl_size_callback( GtkWidget *WXUNUSED(widget),
-                                     GtkAllocation *WXUNUSED(gtk_alloc),
-                                     wxDataViewCtrl *win )
-{
-    wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
-    while (node)
-    {
-        wxWindow *child = node->GetData();
-
-        GtkRequisition req;
-        gtk_widget_get_preferred_size(child->m_widget, NULL, &req);
-
-        GtkAllocation alloc;
-        alloc.x = child->m_x;
-        alloc.y = child->m_y;
-        alloc.width = child->m_width;
-        alloc.height = child->m_height;
-        gtk_widget_size_allocate( child->m_widget, &alloc );
-
-        node = node->GetNext();
-    }
+    // this is for cell editing controls, which will be
+    // made children of the GtkTreeView automatically
 }
 
 
@@ -4526,9 +4520,6 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     gtk_container_add (GTK_CONTAINER (m_widget), m_treeview);
 
     m_focusWidget = GTK_WIDGET(m_treeview);
-
-    g_signal_connect (m_treeview, "size_allocate",
-                     G_CALLBACK (gtk_dataviewctrl_size_callback), this);
 
     bool fixed = (style & wxDV_VARIABLE_LINE_HEIGHT) == 0;
     gtk_tree_view_set_fixed_height_mode( GTK_TREE_VIEW(m_treeview), fixed );

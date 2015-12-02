@@ -1076,7 +1076,7 @@ public:
         See @ref thread_deletion for a broader explanation of this routine.
     */
     wxThreadError Delete(ExitCode *rc = NULL,
-                         wxThreadWait waitMode = wxTHREAD_WAIT_BLOCK);
+                         wxThreadWait waitMode = wxTHREAD_WAIT_DEFAULT);
 
     /**
         Returns the number of system CPUs or -1 if the value is unknown.

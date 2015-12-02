@@ -345,9 +345,9 @@ Changes in behaviour which may result in compilation errors
 - Removed global GetLine() function from wx/protocol/protocol.h, use
   wxProtocol::ReadLine() instead.
 
-- wxVariant no longer derives from wxObject. wxVariantData also no longer
-  derives from wxObject; instead of using wxDynamicCast with wxVariantData you
-  can use the macro wxDynamicCastVariantData with the same arguments.
+- wxVariantData no longer derives from wxObject; instead of using
+  wxDynamicCast with wxVariantData you can use the macro
+  wxDynamicCastVariantData with the same arguments.
 
 - wxWindow::Next/PrevControlId() don't exist any more as they couldn't be
   implemented correctly any longer because automatically generated ids are not
@@ -577,35 +577,87 @@ Major new features in this release
 3.0.3: (released 2015-??-??)
 ----------------------------
 
+All:
+
+- Fix wxFileName::MakeRelativeTo() for directory relatively to itself.
+- Fix wxLocale::IsOk() return true even if setting the locale failed.
+
+Unix:
+
+- Fix wxIPaddress::Hostname() failing if /etc/hosts contained very long names.
+- Fix wxDateTime::ParseRfc822Date() for some TZ/DST combinations.
+
 All (GUI):
 
+- Fix hang when deleting columns from wxTreeListCtrl.
+- Fix crash when deleting items from wxTreeListCtrl (Rexxar).
+- Allow requesting modern (3.x+) OpenGL version in wxGLCanvas (Fabio Arnold).
+- Allow using Ctrl-dragging to add to selection in wxGrid (Knut Petter Lehre).
 - Fix several floating point rounding bugs in wxPropertyGrid (Artur Wieczorek).
 - Restore support for wxFD_OVERWRITE_PROMPT and wxFD_FILE_MUST_EXIST in
   wxGenericFileDialog which was accidentally lost some time ago (Carl Godkin).
 - Fix handling of fast consecutive clicks in wxRibbonBar (atobi).
+- Fix updating nested window scrollbars in some cases (sbrowne).
+- Improve wxLIST_AUTOSIZE_XXX support in generic wxListCtrl (Kinaou Hervé).
+- Fix wxPGChoices copy ctor (Snoits).
+- Fix wxPixelData<wxImage>::Offset() for alpha (Markus Rollmann).
+- Fix bug in wxImage::ClearAlpha() for shared data (Markus Rollmann).
+- Accept wxALIGN_CENTRE_HORIZONTAL in wxStaticText XRC handler (David Hart).
+- Fix appearance after updating a wxGrid with hidden rows/columns (iwbnwif).
+- Make wxAuiNotebookXmlHandler actually work.
 
 wxGTK:
 
 - Fix infinite sizing loop with GTK3 when using wxScrolled with a non-default
   target window.
 - Fix crashes in wxGTK3 when running with non-X11 backend (Marco Trevisan).
+- Fix coordinates of wxSetCursorEvent propagated to parent windows.
+- Fix GTK+ warnings when refreshing wxListCtrl items (Scott Talbert).
+- Fix using wxHTTP and wxFTP from worker thread.
 
 wxMSW:
 
+- Fix compilation with g++ 4.9 in non-C++11 mode.
+- Fix regression in accessibility support (Leland Lucius).
+- Fix regression in wxDC drawing with bottom-to-top y axis (Artur Wieczorek).
 - Fix compilation with C++Builder XE compiler (Nichka).
 - Fix best height of wxSlider with labels but without ticks (Artur Wieczorek).
 - Fix initial text value of wxSpinCtrlDouble (Laurent Poujoulat).
 - Fix best size calculation for bitmaps with buttons (Artur Wieczorek).
+- Fix flicker when resizing windows with status bar (Artur Wieczorek).
 - Fix size of the icon returned from wxFSVolume::GetIcon() (troelsk).
 - Fix autosize after expanding/collapsing items in wxDataViewCtrl (ciglesias).
 - Fix inserting tools removed from wxToolBar back into it (sbrowne).
 - Fix disabling submenu items in the menus (Artur Wieczorek).
 - Fix wxEVT_TREE_STATE_IMAGE_CLICK generation (Antal).
+- Fix wxDV_ROW_LINES in horizontally scrolled wxDataViewCtrl.
+- Fix RegisterHotKey() with negative IDs (troelsk).
+- Fix event object type for wxEVT_SPINCTRL events.
+- Fix bug if wxToolBar tool was deleted from its own handler (Artur Wieczorek).
 
 wxOSX:
 
+- Compilation fix for wxWebView under 10.10.
 - Fix conversion of wxBitmap to wxImage in 64 bit builds.
+- Fix length of text in wxTextDataObject.
+- Fix using wxHTTP and wxFTP from worker thread.
 - Fix wxFileDialog::GetFilterIndex() for file open dialogs (phsilva).
+- Fix wxSearchCtrl appearance under 10.10 (John Roberts).
+- Fix handling of "Cancel" button in wxSearchCtrl (John Roberts).
+- Generate correct events for WXK_NUMPAD_ENTER (John Roberts).
+- Fix handling of WXK_NUMPAD_ENTER in wxTextCtrl (John Roberts).
+- Don't show wxDatePickerCtrl as being disabled when it isn't (John Roberts).
+- Generate wxEVT_TEXT_ENTER for wxTE_PASSWORD controls too (mj_smoker).
+- Send wxIconizeEvent when a window is iconized/restore (Rob Krakora).
+- Use correct colour for disabled wxStaticText (sbrowne).
+- Fix too large top and left margins inside wxStaticBox (sbrowne).
+- Fix bottom margins sizes for several controls (sbrowne).
+- Fix initial position of controls with layout insets (Tim Kosse).
+- Don't allow pasting rich text in non-wxTE_RICH text controls (Tim Kosse).
+- Fix printing all pages non-interactively (John Roberts).
+- Fix custom paper support (tijsv).
+- Return false from wxSound::Create()/IsOk() if the file doesn't exist.
+- Fix scrolling behaviour of wxSearchCtrl (John Roberts).
 
 
 3.0.2: (released 2014-10-06)
@@ -656,6 +708,7 @@ wxMSW:
 - Fix setting label of submenu items (Artur Wieczorek).
 - Fix using Esc as accelerator in the menus.
 - Fix wrong initial status bar height in some cases (Artur Wieczorek).
+- Correct wxGetOsDescription() for Windows 10 (Tobias Taschner).
 
 
 3.0.1: (released 2014-06-15)

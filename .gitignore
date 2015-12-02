@@ -1,0 +1,432 @@
+# /
+/.gdb_history
+/config.cache
+/configarg.cache
+/config.status
+/wx-config
+/config.log
+/stamp-h.in
+/Makefile
+/setup.h
+/*tags
+/autom4te.cache
+
+# /build/
+
+# /build/autoconf_prepend-include/autoconf/
+/build/autoconf_prepend-include/autoconf/autoconf.m4f
+
+# /build/bakefiles/
+/build/bakefiles/.bakefile_gen.state
+/build/bakefiles/Bakefiles.local.bkgen
+/build/bakefiles/wxwin.pyc
+/build/bakefiles/wxpresets/presets/wx_presets.pyc
+
+# /build/msw/
+/build/msw/.m*
+/build/msw/config.dmc
+/build/msw/makefile.dmc
+/build/msw/*c*_msw
+/build/msw/*c*_mswd
+/build/msw/*c*_mswu
+/build/msw/*c*_mswud
+/build/msw/*c*_mswdll
+/build/msw/*c*_mswddll
+/build/msw/*c*_mswudll
+/build/msw/*c*_mswuddll
+/build/msw/*c*_mswuniv
+/build/msw/*c*_mswunivd
+/build/msw/*c*_mswunivu
+/build/msw/*c*_mswunivud
+/build/msw/*c*_mswunivdll
+/build/msw/*c*_mswunivddll
+/build/msw/*c*_mswunivudll
+/build/msw/*c*_mswunivuddll
+/build/msw/*c*_mswhdll
+/build/msw/*c*_mswuhdll
+/build/msw/*.vcproj.*.user
+/build/msw/*.vcxproj.user
+/build/msw/vc*_mswud
+/build/msw/wx_vc8arm_*.vcproj
+/build/msw/wx_vc8arm.sln
+/build/msw/ipch
+/build/msw/wx_vc12.opensdf
+/build/msw/wx_vc12.sdf
+/build/msw/*.suo
+
+# /demos/
+/demos/*/*.sln
+/demos/*/*.dsw
+/demos/*/vc_msw
+/demos/*/vc_msw_x64
+/demos/*/vc_mswd
+/demos/*/vc_mswd_x64
+/demos/*/vc_mswu
+/demos/*/vc_mswu_x64
+/demos/*/vc_mswud
+/demos/*/vc_mswud_x64
+/demos/*/vc_mswdll
+/demos/*/vc_mswdll_x64
+/demos/*/vc_mswddll
+/demos/*/vc_mswddll_x64
+/demos/*/vc_mswudll
+/demos/*/vc_mswudll_x64
+/demos/*/vc_mswuddll
+/demos/*/vc_mswuddll_x64
+/demos/*/vc_mswuniv
+/demos/*/vc_mswuniv_x64
+/demos/*/vc_mswunivd
+/demos/*/vc_mswunivd_x64
+/demos/*/vc_mswunivu
+/demos/*/vc_mswunivu_x64
+/demos/*/vc_mswunivud
+/demos/*/vc_mswunivud_x64
+/demos/*/vc_mswunivdll
+/demos/*/vc_mswunivdll_x64
+/demos/*/vc_mswunivddll
+/demos/*/vc_mswunivddll_x64
+/demos/*/vc_mswunivudll
+/demos/*/vc_mswunivudll_x64
+/demos/*/vc_mswunivuddll
+/demos/*/vc_mswunivuddll_x64
+/demos/*/*Classic?Debug*
+/demos/*/*Classic?Release*
+/demos/*/*Carbon?Debug*
+/demos/*/*Carbon?Release*
+
+# /demos/bombs/
+/demos/bombs/bombsM5.mcp
+/demos/bombs/bombsM*Data
+
+# /demos/forty/
+/demos/forty/fortyM5.mcp
+/demos/forty/fortyM*Data
+
+# /demos/fractal/
+/demos/fractal/fractalM5.mcp
+/demos/fractal/fractalM*Data
+
+# /demos/life/
+/demos/life/lifeM5.mcp
+/demos/life/lifeM*Data
+
+# /demos/poem/
+/demos/poem/poemM5.mcp
+/demos/poem/poemM*Data
+
+# /distrib/release/
+/distrib/release
+
+# /docs/doxygen/
+/docs/doxygen/doxygen.log
+/docs/doxygen/out
+
+# /include/
+/include/Makefile.in
+/include/*.mch
+
+# /include/wx/
+/include/wx/Makefile.in
+
+# /include/wx/generic/
+/include/wx/generic/Makefile.in
+
+# /include/wx/gtk/
+/include/wx/gtk/setup.h
+/include/wx/gtk/Makefile.in
+
+# /include/wx/gtk1/
+/include/wx/gtk1/setup.h
+/include/wx/gtk1/Makefile.in
+
+# /include/wx/html/
+/include/wx/html/Makefile.in
+
+# /include/wx/motif/
+/include/wx/motif/Makefile.in
+
+# /include/wx/msw/
+/include/wx/msw/setup.h
+/include/wx/msw/Makefile.in
+/include/wx/msw/Makefile
+
+# /include/wx/osx/
+/include/wx/osx/setup.h
+
+# /include/wx/protocol/
+/include/wx/protocol/Makefile.in
+
+# /include/wx/univ/
+/include/wx/univ/setup.h
+
+# /include/wx/unix/
+/include/wx/unix/Makefile.in
+
+# /lib/
+/lib/base
+/lib/based
+/lib/basedll
+/lib/basedlld
+/lib/basedllu
+/lib/basedllud
+/lib/baseu
+/lib/baseud
+/lib/bcc_lib
+/lib/cdef*.res
+/lib/dmc_lib
+/lib/evc_armv4_lib
+/lib/evc_emulator_lib
+/lib/expat*.lib
+/lib/gcc_lib
+/lib/gcc_lib32
+/lib/gcc_lib64
+/lib/jpeg*.lib
+/lib/ldef*.res
+/lib/Linux
+/lib/linux
+/lib/linux-gnu
+/lib/msw
+/lib/mswd
+/lib/mswdll
+/lib/mswdlld
+/lib/mswdllu
+/lib/mswdllud
+/lib/mswu
+/lib/mswud
+/lib/png*.lib
+/lib/regex*.lib
+/lib/shell32_sc.lib
+/lib/tiff*.lib
+/lib/univ
+/lib/univd
+/lib/univdll
+/lib/univdlld
+/lib/vc_dll
+/lib/vc_lib
+/lib/vc_x64_dll
+/lib/vc_x64_lib
+/lib/wat_lib
+/lib/winmm32_sc.lib
+/lib/wsock32_sc.lib
+/lib/wx_*.rsrc
+/lib/wxbase*.dll
+/lib/wxbase*.exp
+/lib/wxbase*.ilk
+/lib/wxbase*.lib
+/lib/wxmsw*.dll
+/lib/wxmsw*.exp
+/lib/wxmsw*.ilk
+/lib/wxmsw*.lib
+/lib/zlib*.lib
+
+# /locale/
+/locale/*.mo
+
+# /locale/msw/
+/locale/msw/*.mo
+
+# /misc/
+/misc/system.list
+/misc/bin
+/misc/.gdb_history
+/misc/Test
+/misc/config.cache
+/misc/config.status
+/misc/system.list
+/misc/linux.system.cache
+/misc/wx-config
+/misc/config.log
+/misc/linux-gnu.system.cache
+/misc/*.dsp
+/misc/*.dsw
+/misc/*.plg
+/misc/*.opt
+/misc/*.aps
+/misc/*.ncb
+/misc/*.pro
+/misc/*.opt
+/misc/Release
+/misc/Debug
+/misc/ReleaseDLL
+/misc/DebugDLL
+/misc/robert
+/misc/Makefile.in
+/misc/setup.h.in
+/misc/stamp-h.in
+/misc/Makefile
+/misc/configure
+/misc/setup.h
+/misc/stamp-h
+/misc/libtool
+
+# /samples/
+/samples/**/*.sln
+/samples/**/*.dsw
+/samples/**/vc_msw
+/samples/**/vc_msw_x64
+/samples/**/vc_mswd
+/samples/**/vc_mswd_x64
+/samples/**/vc_mswu
+/samples/**/vc_mswu_x64
+/samples/**/vc_mswud
+/samples/**/vc_mswud_x64
+/samples/**/vc_mswdll
+/samples/**/vc_mswdll_x64
+/samples/**/vc_mswddll
+/samples/**/vc_mswddll_x64
+/samples/**/vc_mswudll
+/samples/**/vc_mswudll_x64
+/samples/**/vc_mswuddll
+/samples/**/vc_mswuddll_x64
+/samples/**/vc_mswuniv
+/samples/**/vc_mswuniv_x64
+/samples/**/vc_mswunivd
+/samples/**/vc_mswunivd_x64
+/samples/**/vc_mswunivu
+/samples/**/vc_mswunivu_x64
+/samples/**/vc_mswunivud
+/samples/**/vc_mswunivud_x64
+/samples/**/vc_mswunivdll
+/samples/**/vc_mswunivdll_x64
+/samples/**/vc_mswunivddll
+/samples/**/vc_mswunivddll_x64
+/samples/**/vc_mswunivudll
+/samples/**/vc_mswunivudll_x64
+/samples/**/vc_mswunivuddll
+/samples/**/vc_mswunivuddll_x64
+
+# /samples/image/
+/samples/image/saved.xpm
+/samples/image/test.png
+/samples/image/test.xpm
+
+# /src/
+/src/FreeBSD
+/src/Linux
+/src/linux
+/src/linux-gnu
+/src/Makefile.in
+/src/*.lo
+/src/*.la
+/src/make.env
+/src/makeprog.env
+/src/makelib.env
+/src/ReleaseDebug
+/src/wxwindowsM*Data
+/src/wxwindowsM5.mcp
+/src/build
+/src/*.ncb
+/src/*.opt
+/src/*.plg
+
+# /src/common/
+/src/common/y_tab.c
+
+# /src/gtk/
+/src/gtk/Makefile.in
+/src/gtk/*.lo
+/src/gtk/*.la
+
+# /src/gtk1/
+/src/gtk1/Makefile.in
+/src/gtk1/*.lo
+/src/gtk1/*.la
+
+# /src/jpeg/
+/src/jpeg/jpegM*Data
+/src/jpeg/jpegM5.mcp
+/src/jpeg/Debug
+/src/jpeg/Release
+
+# /src/motif/
+/src/motif/Makefile.in
+
+# /src/msw/
+/src/msw/Makefile.in
+
+# /src/regex/
+/src/regex/Debug
+/src/regex/Release
+/src/regex/*.vcl
+
+# /src/zlib/
+/src/zlib/zlibM*Data
+/src/zlib/zlibM5.mcp
+/src/zlib/Debug
+/src/zlib/Release
+
+# /tests/
+/tests/*.sln
+/tests/*.dsw
+/tests/vc_msw
+/tests/vc_msw_x64
+/tests/vc_mswd
+/tests/vc_mswd_x64
+/tests/vc_mswu
+/tests/vc_mswu_x64
+/tests/vc_mswud
+/tests/vc_mswud_x64
+/tests/vc_mswdll
+/tests/vc_mswdll_x64
+/tests/vc_mswddll
+/tests/vc_mswddll_x64
+/tests/vc_mswudll
+/tests/vc_mswudll_x64
+/tests/vc_mswuddll
+/tests/vc_mswuddll_x64
+/tests/vc_mswuniv
+/tests/vc_mswuniv_x64
+/tests/vc_mswunivd
+/tests/vc_mswunivd_x64
+/tests/vc_mswunivu
+/tests/vc_mswunivu_x64
+/tests/vc_mswunivud
+/tests/vc_mswunivud_x64
+/tests/vc_mswunivdll
+/tests/vc_mswunivdll_x64
+/tests/vc_mswunivddll
+/tests/vc_mswunivddll_x64
+/tests/vc_mswunivudll
+/tests/vc_mswunivudll_x64
+/tests/vc_mswunivuddll
+/tests/vc_mswunivuddll_x64
+/tests/test_test.dsw
+/tests/test.opt
+/tests/test.sln
+/tests/test.suo
+/tests/test_test.vcproj
+
+# /tests/benchmarks/
+/tests/benchmarks/*.sln
+/tests/benchmarks/*.dsw
+
+# /utils/
+/utils/**/vc_mswu
+/utils/**/vc_mswu_x64
+/utils/**/vc_mswud
+/utils/**/vc_mswud_x64
+/utils/**/vc_mswudll
+/utils/**/vc_mswudll_x64
+/utils/**/vc_mswuddll
+/utils/**/vc_mswuddll_x64
+
+# /utils/emulator/src/
+/utils/emulator/src/*.sln
+/utils/emulator/src/*.dsw
+
+# /utils/helpview/src/
+/utils/helpview/src/*.sln
+/utils/helpview/src/*.dsw
+
+# /utils/hhp2cached/
+/utils/hhp2cached/*.sln
+/utils/hhp2cached/*.dsw
+/utils/hhp2cached/HHP2CachedM*Data
+/utils/hhp2cached/*Classic?Debug*
+/utils/hhp2cached/*Classic?Release*
+/utils/hhp2cached/*Carbon?Debug*
+/utils/hhp2cached/*Carbon?Release*
+
+# /utils/wxrc/
+/utils/wxrc/*.sln
+/utils/wxrc/*.dsw

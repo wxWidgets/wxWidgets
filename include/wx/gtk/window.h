@@ -62,6 +62,7 @@ public:
     virtual void Lower();
 
     virtual bool Show( bool show = true );
+    virtual bool IsShown() const;
 
     virtual bool IsRetained() const;
 
@@ -185,6 +186,7 @@ public:
     // This is called when capture is taken from the window. It will
     // fire off capture lost events.
     void GTKReleaseMouseAndNotify();
+    static void GTKHandleCaptureLost();
 
     GdkWindow* GTKGetDrawingWindow() const;
 
@@ -374,6 +376,7 @@ protected:
     virtual void DoFreeze();
     virtual void DoThaw();
 
+    void GTKConnectFreezeWidget(GtkWidget* widget);
     void GTKFreezeWidget(GtkWidget *w);
     void GTKThawWidget(GtkWidget *w);
     void GTKDisconnect(void* instance);

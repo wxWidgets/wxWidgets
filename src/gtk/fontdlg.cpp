@@ -78,6 +78,7 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
         gtk_parent = GTK_WINDOW(parent->m_widget);
 
 #if GTK_CHECK_VERSION(3,2,0)
+    g_type_ensure(PANGO_TYPE_FONT_FACE);
     if (gtk_check_version(3,2,0) == NULL)
         m_widget = gtk_font_chooser_dialog_new(wxGTK_CONV(message), gtk_parent);
     else

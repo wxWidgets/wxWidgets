@@ -552,4 +552,12 @@ bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
     return DoSetRegionShape(wxRegion(bmp));
 }
 
+void
+wxNonOwnedWindow::OSXHandleMiniaturize(double WXUNUSED(timestampsec),
+                                       bool miniaturized)
+{
+    if ( wxTopLevelWindowMac* top = (wxTopLevelWindowMac*) MacGetTopLevelWindow() )
+        top->OSXSetIconizeState(miniaturized);
+}
+
 #endif // wxUSE_GRAPHICS_CONTEXT

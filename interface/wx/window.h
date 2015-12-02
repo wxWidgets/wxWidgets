@@ -1568,6 +1568,11 @@ public:
     */
     void Move(const wxPoint& pt, int flags = wxSIZE_USE_EXISTING);
 
+    /**
+        Moves the window to the specified position.
+
+        This is exactly the same as calling Move() with the default arguments.
+     */
     void SetPosition(const wxPoint& pt);
 
     //@}

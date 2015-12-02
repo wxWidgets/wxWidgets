@@ -198,8 +198,18 @@ void wxOSXPrintData::TransferPaperInfoFrom( const wxPrintData &data )
                     wxString id, name(wxT("Custom paper"));
                     id.Printf(wxT("wxPaperCustom%dx%d"), papersize.x, papersize.y);
 
-                    PMPaperCreateCustom(printer, wxCFStringRef( id, wxFont::GetDefaultEncoding() ), wxCFStringRef( name, wxFont::GetDefaultEncoding() ),
-                                            papersize.x, papersize.y, &margins, &paper);
+                    if ( PMPaperCreateCustom
+                         (
+                            printer,
+                            wxCFStringRef(id, wxFont::GetDefaultEncoding()),
+                            wxCFStringRef(name, wxFont::GetDefaultEncoding()),
+                            papersize.x, papersize.y,
+                            &margins,
+                            &paper
+                         ) )
+                    {
+                        bestPaper = paper;
+                    }
                 }
                 if ( bestPaper != kPMNoData )
                 {
@@ -627,9 +637,20 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     }
 
     // Only set min and max, because from and to will be
-    // set by the user
+    // set by the user if prompted for the print dialog above
     m_printDialogData.SetMinPage(minPage);
     m_printDialogData.SetMaxPage(maxPage);
+
+    // Set from and to pages if bypassing the print dialog
+    if ( !prompt )
+    {
+        m_printDialogData.SetFromPage(fromPage);
+        
+        if( m_printDialogData.GetAllPages() )
+            m_printDialogData.SetToPage(maxPage);
+        else
+            m_printDialogData.SetToPage(toPage);
+    }
 
     printout->OnBeginPrinting();
 

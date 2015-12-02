@@ -89,52 +89,65 @@ void GarbageTestCase::LoadGarbage()
     }
 }
 
+// Execute the given macro with the given first and second parameters and
+// bitmap type as its third parameter for all bitmap types.
+#define wxFOR_ALL_VALID_BITMAP_TYPES(m, p1, p2) \
+    for ( wxBitmapType type = wxBitmapType(wxBITMAP_TYPE_INVALID + 1); \
+          type < wxBITMAP_TYPE_MAX; \
+          type = (wxBitmapType)(type + 1) ) \
+        m(p1, p2, type)
+
+// Similar to above but for animation types.
+#define wxFOR_ALL_VALID_ANIMATION_TYPES(m, p1, p2) \
+    for ( wxAnimationType type = wxAnimationType(wxANIMATION_TYPE_INVALID + 1); \
+          type < wxANIMATION_TYPE_ANY; \
+          type = (wxAnimationType)(type + 1) ) \
+        m(p1, p2, type)
+
+// This macro is used as an argument to wxFOR_ALL_VALID_BITMAP_TYPES() to
+// include the information about the type for which the test failed.
+#define ASSERT_FUNC_FAILS_FOR_TYPE(func, arg, type) \
+    WX_ASSERT_MESSAGE \
+    ( \
+      (#func "() unexpectedly succeeded for type %d", type), \
+      !func(arg) \
+    )
+
+// And this one exists mostly just for consistency with the one above.
+#define ASSERT_FUNC_FAILS(func, arg) \
+    WX_ASSERT_MESSAGE \
+    ( \
+      (#func "() unexpectedly succeeded for default type"), \
+      !func(arg) \
+    )
+
 void GarbageTestCase::DoLoadFile(const wxString& fullname)
 {
-    int type;
-
     // test wxImage
     wxImage img;
-    CPPUNIT_ASSERT( img.LoadFile(fullname) == false );
-        // test with the default wxBITMAP_TYPE_ANY
-
-    for (type = wxBITMAP_TYPE_BMP; type < wxBITMAP_TYPE_ANY; type++)
-        CPPUNIT_ASSERT( img.LoadFile(fullname, (wxBitmapType)type) == false );
-            // test with all other possible wxBITMAP_TYPE_* flags
+    ASSERT_FUNC_FAILS(img.LoadFile, fullname);
+    wxFOR_ALL_VALID_BITMAP_TYPES(ASSERT_FUNC_FAILS_FOR_TYPE, img.LoadFile, fullname);
 
     // test wxBitmap
     wxBitmap bmp;
-    CPPUNIT_ASSERT( bmp.LoadFile(fullname) == false );
-        // test with the default wxBITMAP_TYPE_ANY
-
-    for (type = wxBITMAP_TYPE_BMP; type < wxBITMAP_TYPE_ANY; type++)
-        CPPUNIT_ASSERT( bmp.LoadFile(fullname, (wxBitmapType)type) == false );
-            // test with all other possible wxBITMAP_TYPE_* flags
+    ASSERT_FUNC_FAILS(bmp.LoadFile, fullname);
+    wxFOR_ALL_VALID_BITMAP_TYPES(ASSERT_FUNC_FAILS_FOR_TYPE, bmp.LoadFile, fullname);
 
     // test wxIcon
     wxIcon icon;
-    CPPUNIT_ASSERT( icon.LoadFile(fullname) == false );
-        // test with the default wxICON_DEFAULT_TYPE
-
-    for (type = wxBITMAP_TYPE_BMP; type < wxBITMAP_TYPE_ANY; type++)
-        CPPUNIT_ASSERT( icon.LoadFile(fullname, (wxBitmapType)type) == false );
-            // test with all other possible wxBITMAP_TYPE_* flags
-
+    ASSERT_FUNC_FAILS(icon.LoadFile, fullname);
+    wxFOR_ALL_VALID_BITMAP_TYPES(ASSERT_FUNC_FAILS_FOR_TYPE, icon.LoadFile, fullname);
 
     // test wxAnimation
     wxAnimation anim;
-    CPPUNIT_ASSERT( anim.LoadFile(fullname) == false );
-        // test with the default wxANIMATION_TYPE_ANY
-
-    for (type = wxANIMATION_TYPE_INVALID+1; type < wxANIMATION_TYPE_ANY; type++)
-        CPPUNIT_ASSERT( anim.LoadFile(fullname, (wxAnimationType)type) == false );
-            // test with all other possible wxANIMATION_TYPE_* flags
+    ASSERT_FUNC_FAILS(anim.LoadFile, fullname);
+    wxFOR_ALL_VALID_ANIMATION_TYPES(ASSERT_FUNC_FAILS_FOR_TYPE, anim.LoadFile, fullname);
 
 
     // test wxDynamicLibrary
     wxDynamicLibrary lib;
     CPPUNIT_ASSERT( lib.Load(fullname) == false );
-        // test with the default wxANIMATION_TYPE_ANY
+
 /*
 #if wxUSE_MEDIACTRL
     // test wxMediaCtrl
@@ -153,29 +166,19 @@ void GarbageTestCase::DoLoadFile(const wxString& fullname)
 
 void GarbageTestCase::DoLoadStream(wxInputStream& stream)
 {
-    int type;
-
     // NOTE: not all classes tested by DoLoadFile() supports loading
     //       from an input stream!
 
     // test wxImage
     wxImage img;
-    CPPUNIT_ASSERT( img.LoadFile(stream) == false );
-        // test with the default wxBITMAP_TYPE_ANY
-
-    for (type = wxBITMAP_TYPE_INVALID+1; type < wxBITMAP_TYPE_ANY; type++)
-        CPPUNIT_ASSERT( img.LoadFile(stream, (wxBitmapType)type) == false );
-            // test with all other possible wxBITMAP_TYPE_* flags
-
+    ASSERT_FUNC_FAILS(img.LoadFile, stream);
+    wxFOR_ALL_VALID_BITMAP_TYPES(ASSERT_FUNC_FAILS_FOR_TYPE, img.LoadFile, stream);
 
     // test wxAnimation
     wxAnimation anim;
-    CPPUNIT_ASSERT( anim.Load(stream) == false );
-        // test with the default wxANIMATION_TYPE_ANY
+    ASSERT_FUNC_FAILS(anim.Load, stream);
+    wxFOR_ALL_VALID_BITMAP_TYPES(ASSERT_FUNC_FAILS_FOR_TYPE, anim.Load, stream);
 
-    for (type = wxANIMATION_TYPE_INVALID+1; type < wxANIMATION_TYPE_ANY; type++)
-        CPPUNIT_ASSERT( anim.Load(stream, (wxAnimationType)type) == false );
-            // test with all other possible wxANIMATION_TYPE_* flags
 /*
     // test wxHtmlWindow
     wxHtmlWindow *htmlwin = new wxHtmlWindow(wxTheApp->GetTopWindow());
@@ -184,3 +187,7 @@ void GarbageTestCase::DoLoadStream(wxInputStream& stream)
 */
 }
 
+#undef ASSERT_FUNC_FAILS
+#undef ASSERT_FUNC_FAILS_FOR_TYPE
+#undef wxFOR_ALL_VALID_ANIMATION_TYPES
+#undef wxFOR_ALL_VALID_BITMAP_TYPES

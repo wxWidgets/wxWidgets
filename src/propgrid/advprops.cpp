@@ -1543,28 +1543,46 @@ bool wxSystemColourProperty::DoSetAttribute( const wxString& name, wxVariant& va
 
 static const wxChar* const gs_cp_es_normcolour_labels[] = {
     wxT("Black"),
-    wxT("Red"),
+    wxT("Maroon"),
+    wxT("Navy"),
+    wxT("Purple"),
+    wxT("Teal"),
+    wxT("Gray"),
     wxT("Green"),
+    wxT("Olive"),
+    wxT("Brown"),
     wxT("Blue"),
-    wxT("Cyan"),
-    wxT("Magenta"),
+    wxT("Fuchsia"),
+    wxT("Red"),
+    wxT("Orange"),
+    wxT("Silver"),
+    wxT("Lime"),
+    wxT("Aqua"),
     wxT("Yellow"),
     wxT("White"),
-    wxT("Grey"),
     wxT("Custom"),
     (const wxChar*) NULL
 };
 
 static const unsigned long gs_cp_es_normcolour_colours[] = {
     wxPG_COLOUR(0,0,0),
-    wxPG_COLOUR(255,0,0),
-    wxPG_COLOUR(0,255,0),
+    wxPG_COLOUR(128,0,0),
+    wxPG_COLOUR(0,0,128),
+    wxPG_COLOUR(128,0,128),
+    wxPG_COLOUR(0,128,128),
+    wxPG_COLOUR(128,128,128),
+    wxPG_COLOUR(0,128,0),
+    wxPG_COLOUR(128,128,0),
+    wxPG_COLOUR(166,124,81),
     wxPG_COLOUR(0,0,255),
-    wxPG_COLOUR(0,255,255),
     wxPG_COLOUR(255,0,255),
+    wxPG_COLOUR(255,0,0),
+    wxPG_COLOUR(247,148,28),
+    wxPG_COLOUR(192,192,192),
+    wxPG_COLOUR(0,255,0),
+    wxPG_COLOUR(0,255,255),
     wxPG_COLOUR(255,255,0),
     wxPG_COLOUR(255,255,255),
-    wxPG_COLOUR(128,128,128),
     wxPG_COLOUR(0,0,0)
 };
 
@@ -1580,6 +1598,24 @@ wxColourProperty::wxColourProperty( const wxString& label,
                              NULL,
                              &gs_wxColourProperty_choicesCache, value )
 {
+     wxASSERT_MSG( wxTheColourDatabase, wxT("No colour database") );
+     if ( wxTheColourDatabase )
+     {
+        // Extended colour database with custom PG colours.
+        const wxChar* const* colourLabels = gs_cp_es_normcolour_labels;
+        for ( int i = 0; *colourLabels; colourLabels++, i++ )
+        {
+            wxColour clr = wxTheColourDatabase->Find(*colourLabels);
+            // Use standard wx colour value if its label was found,
+            // otherwise register custom PG colour.
+            if ( !clr.IsOk() )
+            {
+                clr.Set(gs_cp_es_normcolour_colours[i]);
+                wxTheColourDatabase->AddColour(*colourLabels, clr);
+            }
+        }
+     }
+
     Init( value );
 
     m_flags |= wxPG_PROP_TRANSLATE_CUSTOM;
@@ -1616,7 +1652,7 @@ wxString wxColourProperty::ValueToString( wxVariant& value,
 
 wxColour wxColourProperty::GetColour( int index ) const
 {
-    return gs_cp_es_normcolour_colours[m_choices.GetValue(index)];
+    return wxColour(gs_cp_es_normcolour_labels[m_choices.GetValue(index)]);
 }
 
 wxVariant wxColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const

@@ -316,7 +316,9 @@ public:
                                 const wxString& text,
                                 int argFlags = 0 ) const;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
+#if wxABI_VERSION >= 30003
     virtual wxVariant DoGetAttribute( const wxString& name ) const;
+#endif
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const;
 
