@@ -208,11 +208,54 @@ public:
     //@}
 
     /**
+        This function is used by controls to calculate the drop hint rectangle.
+
+        The method first calls DoDrop() to determine the exact position the
+        pane would be at were if dropped.
+
+        @param paneWindow The window pointer of the pane being dragged.
+        @param pt The mouse position, in client coordinates.
+        @param offset Describes the offset that the mouse is from the upper-left
+            corner of the item being dragged.
+        @return The rectangle hint will be returned in screen coordinates if the pane
+            would indeed become docked at the specified drop point.
+            Otherwise, an empty rectangle is returned.
+    */
+    wxRect CalculateHintRect(wxWindow* paneWindow, const wxPoint& pt, const wxPoint& offset);
+
+    /**
+        Check if a key modifier is pressed (actually ::WXK_CONTROL or
+        ::WXK_ALT) while dragging the frame to not dock the window.
+    */
+    virtual bool CanDockPanel(const wxAuiPaneInfo & p);
+
+    /**
+        Destroys or hides the given pane depending on its flags.
+
+        @see wxAuiPaneInfo::DestroyOnClose
+    */
+    void ClosePane(wxAuiPaneInfo& paneInfo);
+
+    /**
+        Creates a floating frame in this wxAuiManager with the given parent and
+        wxAuiPaneInfo.
+    */
+    virtual wxAuiFloatingFrame* CreateFloatingFrame(wxWindow* parent, const wxAuiPaneInfo& p);
+
+    /**
         Tells the wxAuiManager to stop managing the pane specified by window.
         The window, if in a floated frame, is reparented to the frame managed
         by wxAuiManager.
     */
     bool DetachPane(wxWindow* window);
+
+    /**
+        This function is used by controls to draw the hint window.
+
+        It is rarely called, and is mostly used by controls implementing custom
+        pane drag/drop behaviour.
+    */
+    void DrawHintRect(wxWindow* paneWindow, const wxPoint& pt, const wxPoint& offset);
 
     /**
         Returns an array of all panes managed by the frame manager.
@@ -302,6 +345,21 @@ public:
                          bool update = true);
 
     /**
+        Maximize the given pane.
+    */
+    void MaximizePane(wxAuiPaneInfo& paneInfo);
+
+    /**
+        Restore the last state of the given pane.
+    */
+    void RestorePane(wxAuiPaneInfo& paneInfo);
+
+    /**
+        Restore the previously maximized pane.
+    */
+    void RestoreMaximizedPane();
+
+    /**
         SavePaneInfo() is similar to SavePerspective, with the exception that it only
         saves information about a single pane.  It is used in combination with
         LoadPaneInfo().
@@ -320,7 +378,7 @@ public:
     /**
         Instructs wxAuiManager to use art provider specified by parameter
         @a art_provider for all drawing calls.
-        This allows plugable look-and-feel features. The previous art provider object,
+        This allows pluggable look-and-feel features. The previous art provider object,
         if any, will be deleted by wxAuiManager.
 
         @see wxAuiDockArt.
@@ -329,7 +387,7 @@ public:
 
     /**
         When a user creates a new dock by dragging a window into a docked position,
-        often times the large size of the window will create a dock that is unwieldly
+        often times the large size of the window will create a dock that is unwieldy
         large. wxAuiManager by default limits the size of any new dock to 1/3 of the
         window size.  For horizontal docks, this would be 1/3 of the window height.
         For vertical docks, 1/3 of the width.
@@ -361,6 +419,11 @@ public:
         The specified rectangle should be in screen coordinates.
     */
     virtual void ShowHint(const wxRect& rect);
+
+    /**
+        Mostly used internally to define the drag action parameters.
+    */
+    void StartPaneDrag(wxWindow* paneWindow, const wxPoint& offset);
 
     /**
         Uninitializes the framework and should be called before a managed frame or
