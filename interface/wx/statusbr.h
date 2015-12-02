@@ -54,6 +54,33 @@ public:
         Returns the text currently shown in this pane.
      */
     wxString GetText() const;
+
+    
+    bool IsEllipsized() const;
+    void SetIsEllipsized(bool isEllipsized);
+
+    void SetWidth(int width);
+    void SetStyle(int style);
+
+    /**
+       Set text. Returns true if it changed or false if it was already set to
+       this value.
+    */
+    bool SetText(const wxString& text);
+
+    /**
+       Save the existing text on top of a stack and make the new text
+       current. Returns true if the text really changed.
+    */
+    bool PushText(const wxString& text);
+
+    /**
+       Restore the message saved by the last call to Push() (unless it was
+       changed by an intervening call to SetText()) and return true if we
+       really restored anything.
+    */
+    bool PopText();
+
 };
 
 /**
