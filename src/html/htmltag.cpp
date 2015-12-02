@@ -464,6 +464,9 @@ wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
         { "vertical-align",     "VALIGN"        },
         { "background",         "BGCOLOR"       },
         { "background-color",   "BGCOLOR"       },
+        { "color",              "COLOR"         },
+        { "size",               "SIZE"          },
+        { "face",               "FACE"          },
     };
 
     wxHtmlStyleParams styleParams(*this);
@@ -612,6 +615,10 @@ wxHtmlTag::GetParamAsIntOrPercent(const wxString& par,
     if ( param.EndsWith("%", &num) )
     {
         isPercent = true;
+    }
+    else if ( param.EndsWith("px", &num) )
+    {
+        isPercent = false;
     }
     else
     {
