@@ -490,20 +490,6 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
     return CreateFileType(wxEmptyString, ext);
 }
 
-/*
-wxFileType *
-wxMimeTypesManagerImpl::GetOrAllocateFileTypeFromExtension(const wxString& ext)
-{
-    wxFileType *fileType = GetFileTypeFromExtension(ext);
-    if ( !fileType )
-    {
-        fileType = CreateFileType(wxEmptyString, ext);
-    }
-
-    return fileType;
-}
-*/
-
 // MIME type -> extension -> file type
 wxFileType *
 wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
@@ -701,64 +687,12 @@ bool wxFileTypeImpl::SetCommand(const wxString& cmd,
         return false;
 
     wxRegKey rkey(wxRegKey::HKCR, GetVerbPath(verb));
-#if 0
-    if ( rkey.Exists() && overwriteprompt )
-    {
-#if wxUSE_GUI
-        wxString old;
-        rkey.QueryValue(wxEmptyString, old);
-        if ( wxMessageBox
-             (
-                wxString::Format(
-                    _("Do you want to overwrite the command used to %s "
-                      "files with extension \"%s\" ?\nCurrent value is \n%s, "
-                      "\nNew value is \n%s %1"), // bug here FIX need %1 ??
-                    verb.c_str(),
-                    m_ext.c_str(),
-                    old.c_str(),
-                    cmd.c_str()),
-                _("Confirm registry update"),
-                wxYES_NO | wxICON_QUESTION
-             ) != wxYES )
-#endif // wxUSE_GUI
-        {
-            // cancelled by user
-            return false;
-        }
-    }
-#endif
+
     // TODO:
     // 1. translate '%s' to '%1' instead of always adding it
     // 2. create DDEExec value if needed (undo GetCommand)
     return rkey.Create() && rkey.SetValue(wxEmptyString, cmd + wxT(" \"%1\"") );
 }
-
-/* // no longer used
-bool wxFileTypeImpl::SetMimeType(const wxString& mimeTypeOrig)
-{
-    wxCHECK_MSG( !m_ext.empty(), false, wxT("SetMimeType() needs extension") );
-
-    if ( !EnsureExtKeyExists() )
-        return false;
-
-    // VZ: is this really useful? (FIXME)
-    wxString mimeType;
-    if ( !mimeTypeOrig )
-    {
-        // make up a default value for it
-        wxString cmd;
-        wxFileName::SplitPath(GetCommand(wxT("open")), NULL, &cmd, NULL);
-        mimeType << wxT("application/x-") << cmd;
-    }
-    else
-    {
-        mimeType = mimeTypeOrig;
-    }
-
-    wxRegKey rkey(wxRegKey::HKCR, m_ext);
-    return rkey.Create() && rkey.SetValue(wxT("Content Type"), mimeType);
-}
-*/
 
 bool wxFileTypeImpl::SetDefaultIcon(const wxString& cmd, int index)
 {
@@ -807,16 +741,6 @@ bool wxFileTypeImpl::Unassociate()
     if ( !RemoveDescription() )
         result = false;
 
-/*
-    //this might hold other keys, eg some have CSLID keys
-    if ( result )
-    {
-        // delete the root key
-        wxRegKey key(wxRegKey::HKCR, m_ext);
-        if ( key.Exists() )
-            result = key.DeleteSelf();
-    }
-*/
     return result;
 }
 
