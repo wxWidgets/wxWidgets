@@ -22,7 +22,7 @@ enum
 /**
     Default wildcard string used in wxFileDialog corresponding to all files.
 
-    It is defined as "*.*" under MSW and OS/2 and "*" everywhere else.
+    It is defined as "*.*" under MSW and "*" everywhere else.
 */
 const char wxFileSelectorDefaultWildcardStr[];
 

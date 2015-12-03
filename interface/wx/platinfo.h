@@ -28,16 +28,10 @@ enum wxOperatingSystemId
     //! A combination of all @c wxOS_MAC_* values previously listed.
     wxOS_MAC = wxOS_MAC_OS|wxOS_MAC_OSX_DARWIN,
 
-    wxOS_WINDOWS_9X     = 1 << 2,     //!< Windows 9x family (95/98/ME)
     wxOS_WINDOWS_NT     = 1 << 3,     //!< Windows NT family (XP/Vista/7/8/10)
-    wxOS_WINDOWS_MICRO  = 1 << 4,     //!< MicroWindows
-    wxOS_WINDOWS_CE     = 1 << 5,     //!< Windows CE (Windows Mobile)
     
-    //! A combination of all @c wxOS_WINDOWS_* values previously listed.
-    wxOS_WINDOWS = wxOS_WINDOWS_9X       |
-                    wxOS_WINDOWS_NT      |
-                    wxOS_WINDOWS_MICRO   |
-                    wxOS_WINDOWS_CE,
+    //! A combination of all @c wxOS_WINDOWS_* values.
+    wxOS_WINDOWS = wxOS_WINDOWS_NT,
 
     wxOS_UNIX_LINUX     = 1 << 6,       //!< Linux
     wxOS_UNIX_FREEBSD   = 1 << 7,       //!< FreeBSD
@@ -54,10 +48,7 @@ enum wxOperatingSystemId
                 wxOS_UNIX_NETBSD    |
                 wxOS_UNIX_SOLARIS   |
                 wxOS_UNIX_AIX       |
-                wxOS_UNIX_HPUX,
-
-    wxOS_DOS            = 1 << 15,      //!< Microsoft DOS
-    wxOS_OS2            = 1 << 16       //!< OS/2
+                wxOS_UNIX_HPUX
 };
 
 /**
@@ -73,13 +64,12 @@ enum wxPortId
 
     wxPORT_MSW      = 1 << 1,       //!< wxMSW, native toolkit is Windows API
     wxPORT_MOTIF    = 1 << 2,       //!< wxMotif, using [Open]Motif or Lesstif
-    wxPORT_GTK      = 1 << 3,       //!< wxGTK, using GTK+ 1.x, 2.x, GPE or Maemo
+    wxPORT_GTK      = 1 << 3,       //!< wxGTK, using GTK+ 1.x, 2.x, 3.x, GPE
     wxPORT_DFB      = 1 << 4,       //!< wxDFB, using wxUniversal
     wxPORT_X11      = 1 << 5,       //!< wxX11, using wxUniversal
-    wxPORT_OS2      = 1 << 6,       //!< wxOS2, using OS/2 Presentation Manager
     wxPORT_MAC      = 1 << 7,       //!< wxMac, using Carbon or Classic Mac API
     wxPORT_COCOA    = 1 << 8,       //!< wxCocoa, using Cocoa NextStep/Mac API
-    wxPORT_WINCE    = 1 << 9        //!< wxWinCE, toolkit is WinCE SDK API
+    wxPORT_QT       = 1 << 10       //!< wxQT, using QT4
 };
 
 
@@ -285,8 +275,8 @@ public:
     
     /**
         Returns the operating system family name for the given wxOperatingSystemId
-        enumeration value: @c Unix for @c wxOS_UNIX, @c Macintosh for @c wxOS_MAC,
-        @c Windows for @c wxOS_WINDOWS, @c DOS for @c wxOS_DOS, @c OS/2 for @c wxOS_OS2.
+        enumeration value: @c Unix for @c wxOS_UNIX, @c OSX for @c wxOS_MAC_OS,
+        @c Windows for @c wxOS_WINDOWS.
     */
     static wxString GetOperatingSystemFamilyName(wxOperatingSystemId os);
 
