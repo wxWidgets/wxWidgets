@@ -125,7 +125,12 @@ public:
 class WXDLLIMPEXP_HTML wxHtmlRenderingInfo
 {
 public:
-    wxHtmlRenderingInfo() : m_selection(NULL), m_style(NULL) {}
+    wxHtmlRenderingInfo()
+        : m_selection(NULL),
+          m_style(NULL),
+          m_prevUnderlined(false)
+    {
+    }
 
     void SetSelection(wxHtmlSelection *s) { m_selection = s; }
     wxHtmlSelection *GetSelection() const { return m_selection; }
@@ -133,12 +138,16 @@ public:
     void SetStyle(wxHtmlRenderingStyle *style) { m_style = style; }
     wxHtmlRenderingStyle& GetStyle() { return *m_style; }
 
+    void SetCurrentUnderlined(bool u) { m_prevUnderlined = u; }
+    bool WasPreviousUnderlined() const { return m_prevUnderlined; }
+
     wxHtmlRenderingState& GetState() { return m_state; }
 
 protected:
     wxHtmlSelection      *m_selection;
     wxHtmlRenderingStyle *m_style;
     wxHtmlRenderingState m_state;
+    bool m_prevUnderlined;
 };
 
 

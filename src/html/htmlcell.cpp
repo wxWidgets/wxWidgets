@@ -480,6 +480,25 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
         wxHtmlSelectionState selstate = info.GetState().GetSelectionState();
         // Not changing selection state, draw the word in single mode:
         SwitchSelState(dc, info, selstate != wxHTML_SEL_OUT);
+
+        // This is a quite horrible hack but it fixes a nasty user-visible
+        // problem: when drawing underlined text, which is common in wxHTML as
+        // all links are underlined, there is a 1 pixel gap between the
+        // underlines because we draw separate words in separate DrawText()
+        // calls. The right thing to do would be to draw all of them appearing
+        // on the same line at once (this would probably be more efficient as
+        // well), but this doesn't seem simple to do, so instead we just draw
+        // an extra space at a negative offset to ensure that the underline
+        // spans the previous pixel and so overlaps the one from the previous
+        // word, if any.
+        const bool prevUnderlined = info.WasPreviousUnderlined();
+        const bool thisUnderlined = dc.GetFont().GetUnderlined();
+        if ( prevUnderlined && thisUnderlined )
+        {
+            dc.DrawText(wxS(" "), x + m_PosX - 1, y + m_PosY);
+        }
+        info.SetCurrentUnderlined(thisUnderlined);
+
         dc.DrawText(m_Word, x + m_PosX, y + m_PosY);
         drawSelectionAfterCell = (selstate != wxHTML_SEL_OUT);
     }
