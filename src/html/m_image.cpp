@@ -17,6 +17,7 @@
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/dc.h"
+    #include "wx/dcprint.h"
     #include "wx/scrolwin.h"
     #include "wx/timer.h"
     #include "wx/dcmemory.h"
