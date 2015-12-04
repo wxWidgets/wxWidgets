@@ -349,8 +349,6 @@ void wxHtmlWordCell::Split(const wxDC& dc,
 
     // before selection:
     // (include character under caret only if in first half of width)
-#ifdef __WXMAC__
-    // implementation using PartialExtents to support fractional widths
     wxArrayInt widths ;
     dc.GetPartialTextExtents(m_Word,widths) ;
     while( i < len && pt1.x >= widths[i] )
@@ -361,24 +359,10 @@ void wxHtmlWordCell::Split(const wxDC& dc,
         if ( widths[i] - pt1.x < charW/2 )
             i++;
     }
-#else // !__WXMAC__
-    wxCoord charW, charH;
-    while ( pt1.x > 0 && i < len )
-    {
-        dc.GetTextExtent(m_Word[i], &charW, &charH);
-        pt1.x -= charW;
-        if ( pt1.x >= -charW/2 )
-        {
-            pos1 += charW;
-            i++;
-        }
-    }
-#endif // __WXMAC__/!__WXMAC__
 
     // in selection:
     // (include character under caret only if in first half of width)
     unsigned j = i;
-#ifdef __WXMAC__
     while( j < len && pt2.x >= widths[j] )
         j++ ;
     if ( j < len )
@@ -387,20 +371,6 @@ void wxHtmlWordCell::Split(const wxDC& dc,
         if ( widths[j] - pt2.x < charW/2 )
             j++;
     }
-#else // !__WXMAC__
-    pos2 = pos1;
-    pt2.x -= pos2;
-    while ( pt2.x > 0 && j < len )
-    {
-        dc.GetTextExtent(m_Word[j], &charW, &charH);
-        pt2.x -= charW;
-        if ( pt2.x >= -charW/2 )
-        {
-            pos2 += charW;
-            j++;
-        }
-    }
-#endif // __WXMAC__/!__WXMAC__
 
     pos1 = i;
     pos2 = j;
