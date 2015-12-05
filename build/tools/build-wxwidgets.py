@@ -295,7 +295,7 @@ def main(scriptName, args):
         if sys.platform.startswith("darwin"):
             for xcodePath in getXcodePaths():
                 sdks = [ xcodePath+"/SDKs/MacOSX10.{}.sdk".format(n) 
-                         for n in xrange(5, 15) ]
+                         for n in range(5, 15) ]
             
                 # use the lowest available sdk on the build machine
                 for sdk in sdks:
