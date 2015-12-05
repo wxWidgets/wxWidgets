@@ -16,6 +16,8 @@ import shutil
 import types
 import subprocess
 
+PY3 = sys.version_info[0] == 3
+
 # builder object
 wxBuilder = None
 
@@ -406,17 +408,22 @@ def main(scriptName, args):
     
         mswIncludeDir = os.path.join(wxRootDir, "include", "wx", "msw")
         setup0File = os.path.join(mswIncludeDir, "setup0.h")
-        setupText = open(setup0File, "rb").read()
-        
+        with open(setup0File, "rb") as f:
+            setupText = f.read()
+            if PY3:
+                setupText = setupText.decode('utf-8')
+            
         for flag in flags:
             setupText, subsMade = re.subn(flag + "\s+?\d", "%s %s" % (flag, flags[flag]), setupText)
             if subsMade == 0:
                 print("Flag %s wasn't found in setup0.h!" % flag)
                 sys.exit(1)
-    
-        setupFile = open(os.path.join(mswIncludeDir, "setup.h"), "wb")
-        setupFile.write(setupText)
-        setupFile.close()
+                
+        with open(os.path.join(mswIncludeDir, "setup.h"), "wb") as f:
+            if PY3:
+                setupText = setupText.encode('utf-8')
+            f.write(setupText)
+
         args = []
         if toolkit == "msvc":
             print("setting build options...")
