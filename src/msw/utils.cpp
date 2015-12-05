@@ -384,9 +384,9 @@ const wxChar* wxGetHomeDir(wxString *pstr)
         // Cygwin returns unix type path but that does not work well
         static wxChar windowsPath[MAX_PATH];
         #if CYGWIN_VERSION_DLL_MAJOR >= 1007
-            cygwin_conv_path(CCP_POSIX_TO_WIN_W, strDir, windowsPath, MAX_PATH);
+            cygwin_conv_path(CCP_POSIX_TO_WIN_W, strDir.c_str(), windowsPath, MAX_PATH);
         #else
-            cygwin_conv_to_full_win32_path(strDir, windowsPath);
+            cygwin_conv_to_full_win32_path(strDir.c_str(), windowsPath);
         #endif
         strDir = windowsPath;
     #endif
