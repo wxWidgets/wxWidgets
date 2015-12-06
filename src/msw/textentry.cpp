@@ -40,7 +40,7 @@
 #endif
 
 #include "wx/msw/wrapwin.h"
-#include <Shlwapi.h>
+#include <shlwapi.h>
 
 #define GetEditHwnd() ((HWND)(GetEditHWND()))
 
