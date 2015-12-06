@@ -32,7 +32,7 @@
 #include "wx/msw/private.h"     // includes <windows.h>
 
 #include "wx/msw/wrapwin.h"
-#include <Shlwapi.h>
+#include <shlwapi.h>
 
 // ============================================================================
 // implementation

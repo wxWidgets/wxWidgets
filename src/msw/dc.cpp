@@ -2620,16 +2620,23 @@ static bool AlphaBlt(wxMSWDCImpl* dcDst,
         // Notice the extra block: we must destroy wxAlphaPixelData
         // before selecting the bitmap into the DC again.
         {
+            // Since drawn bitmap can only partially overlap
+            // with destination bitmap we need to calculate
+            // efective drawing area location.
+            const wxRect rectDst(bmpOld.GetSize());
+            const wxRect rectDrawn(x, y, dstWidth, dstHeight);
+            const wxRect r = rectDrawn.Intersect(rectDst);
+
             wxAlphaPixelData data(bmpOld);
             if ( data )
             {
                 wxAlphaPixelData::Iterator p(data);
-                p.Offset(data, x, y);
-                for ( int yDst = 0; yDst < dstHeight; yDst++ )
+
+                p.Offset(data, r.GetLeft(), r.GetTop());
+                for ( int old_y = 0; old_y < r.GetHeight(); old_y++ )
                 {
                     wxAlphaPixelData::Iterator rowStart = p;
-
-                    for ( int xDst = 0; xDst < dstWidth; xDst++ )
+                    for ( int old_x = 0; old_x < r.GetWidth(); old_x++ )
                     {
                         // We choose to use wxALPHA_TRANSPARENT instead
                         // of perhaps more logical wxALPHA_OPAQUE here

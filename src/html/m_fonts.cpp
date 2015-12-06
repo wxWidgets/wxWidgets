@@ -21,6 +21,7 @@
 #include "wx/html/m_templ.h"
 #include "wx/fontenum.h"
 #include "wx/tokenzr.h"
+#include "wx/html/styleparams.h"
 
 FORCE_LINK_ME(m_fonts)
 
@@ -35,8 +36,18 @@ TAG_HANDLER_BEGIN(FONT, "FONT" )
     TAG_HANDLER_PROC(tag)
     {
         wxColour oldclr = m_WParser->GetActualColor();
+        wxColour oldbackclr = m_WParser->GetActualBackgroundColor();
+        int oldbackmode = m_WParser->GetActualBackgroundMode();
         int oldsize = m_WParser->GetFontSize();
+        int oldbold = m_WParser->GetFontBold();
+        int olditalic = m_WParser->GetFontItalic();
+        int oldunderlined = m_WParser->GetFontUnderlined();
         wxString oldface = m_WParser->GetFontFace();
+
+        // Load any style parameters
+        wxHtmlStyleParams styleParams(tag);
+
+        ApplyStyle(styleParams);
 
         {
             wxColour clr;
@@ -44,6 +55,11 @@ TAG_HANDLER_BEGIN(FONT, "FONT" )
             {
                 m_WParser->SetActualColor(clr);
                 m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(clr));
+            }
+            if (tag.GetParamAsColour(wxT("BGCOLOR"), &clr))
+            {
+                m_WParser->SetActualBackgroundColor(clr);
+                m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(clr, wxHTML_CLR_BACKGROUND));
             }
         }
 
@@ -84,14 +100,33 @@ TAG_HANDLER_BEGIN(FONT, "FONT" )
 
         ParseInner(tag);
 
-        if (oldface != m_WParser->GetFontFace())
+        if ((oldface       != m_WParser->GetFontFace()) ||
+            (oldunderlined != m_WParser->GetFontUnderlined()) ||
+            (olditalic     != m_WParser->GetFontItalic()) ||
+            (oldbold       != m_WParser->GetFontBold()) ||
+            (oldsize       != m_WParser->GetFontSize()))
         {
-            m_WParser->SetFontFace(oldface);
-            m_WParser->GetContainer()->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
-        }
-        if (oldsize != m_WParser->GetFontSize())
-        {
-            m_WParser->SetFontSize(oldsize);
+
+            if (oldface != m_WParser->GetFontFace())
+            {
+                m_WParser->SetFontFace(oldface);
+            }
+            if (oldunderlined != m_WParser->GetFontUnderlined())
+            {
+                m_WParser->SetFontUnderlined(oldunderlined);
+            }
+            if (olditalic != m_WParser->GetFontItalic())
+            {
+                m_WParser->SetFontItalic(olditalic);
+            }
+            if (oldbold != m_WParser->GetFontBold())
+            {
+                m_WParser->SetFontBold(oldbold);
+            }
+            if (oldsize != m_WParser->GetFontSize())
+            {
+                m_WParser->SetFontSize(oldsize);
+            }
             m_WParser->GetContainer()->InsertCell(new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
         }
         if (oldclr != m_WParser->GetActualColor())
@@ -99,6 +134,15 @@ TAG_HANDLER_BEGIN(FONT, "FONT" )
             m_WParser->SetActualColor(oldclr);
             m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(oldclr));
         }
+        if (oldbackmode != m_WParser->GetActualBackgroundMode() ||
+            oldbackclr != m_WParser->GetActualBackgroundColor())
+        {
+            m_WParser->SetActualBackgroundMode(oldbackmode);
+            m_WParser->SetActualBackgroundColor(oldbackclr);
+            m_WParser->GetContainer()->InsertCell(
+                new wxHtmlColourCell(oldbackclr, oldbackmode == wxTRANSPARENT ? wxHTML_CLR_TRANSPARENT_BACKGROUND : wxHTML_CLR_BACKGROUND));
+        }
+
         return true;
     }
 

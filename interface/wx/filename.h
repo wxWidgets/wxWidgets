@@ -814,8 +814,7 @@ public:
      /**
         This function builds a volume path string, for example "C:\\".
 
-        Implemented for the platforms which use drive letters, i.e. DOS, MSW
-        and OS/2 only.
+        Implemented for the platforms which use drive letters, i.e. MSW only.
 
         @since 2.9.0
 

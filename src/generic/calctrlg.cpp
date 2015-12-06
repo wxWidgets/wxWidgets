@@ -1325,13 +1325,26 @@ bool wxGenericCalendarCtrl::GetDateCoord(const wxDateTime& date, int *day, int *
 
 void wxGenericCalendarCtrl::OnDClick(wxMouseEvent& event)
 {
-    if ( HitTest(event.GetPosition()) != wxCAL_HITTEST_DAY )
+    wxDateTime date;
+    switch ( HitTest(event.GetPosition(), &date) )
     {
-        event.Skip();
-    }
-    else
-    {
-        GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED);
+        case wxCAL_HITTEST_DAY:
+            GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED);
+            break;
+
+        case wxCAL_HITTEST_DECMONTH:
+        case wxCAL_HITTEST_INCMONTH:
+            // Consecutive simple clicks result in a series of simple and
+            // double click events, so handle them in the same way.
+            SetDateAndNotify(date);
+            break;
+
+        case wxCAL_HITTEST_WEEK:
+        case wxCAL_HITTEST_HEADER:
+        case wxCAL_HITTEST_SURROUNDING_WEEK:
+        case wxCAL_HITTEST_NOWHERE:
+            event.Skip();
+            break;
     }
 }
 
@@ -1353,14 +1366,14 @@ void wxGenericCalendarCtrl::OnClick(wxMouseEvent& event)
                 // GenerateAllChangeEvents() here, we know which event to send
                 GenerateEvent(wxEVT_CALENDAR_DAY_CHANGED);
             }
-        break;
+            break;
 
         case wxCAL_HITTEST_WEEK:
-        {
-            wxCalendarEvent send( this, date, wxEVT_CALENDAR_WEEK_CLICKED );
-            HandleWindowEvent( send );
-        }
-        break;
+            {
+                wxCalendarEvent send( this, date, wxEVT_CALENDAR_WEEK_CLICKED );
+                HandleWindowEvent( send );
+            }
+            break;
 
         case wxCAL_HITTEST_HEADER:
             {

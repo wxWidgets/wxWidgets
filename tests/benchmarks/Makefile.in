@@ -30,6 +30,7 @@ TOOLCHAIN_FULLNAME = @TOOLCHAIN_FULLNAME@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_XML = @EXTRALIBS_XML@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
+EXTRALIBS_OPENGL = @EXTRALIBS_OPENGL@
 CXXWARNINGS = @CXXWARNINGS@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
@@ -65,6 +66,13 @@ BENCH_GUI_OBJECTS =  \
 	$(__bench_gui___win32rc) \
 	bench_gui_bench.o \
 	bench_gui_image.o
+BENCH_GRAPHICS_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples \
+	$(CXXWARNINGS) $(SAMPLES_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+BENCH_GRAPHICS_OBJECTS =  \
+	$(__bench_graphics___win32rc) \
+	bench_graphics_graphics.o
 
 ### Conditionally set variables: ###
 
@@ -92,19 +100,13 @@ COND_MONOLITHIC_0___WXLIB_NET_p = \
 @COND_PLATFORM_MAC_0@__bench_gui___mac_setfilecmd = @true
 @COND_PLATFORM_MAC_1@__bench_gui___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL bench_gui$(EXEEXT)
-@COND_WXUNIV_1@__WXUNIV_DEFINE_p_5 = --define __WXUNIVERSAL__
-@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p_5 = --define wxDEBUG_LEVEL=0
-@COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_5 = --define wxNO_EXCEPTIONS
-@COND_USE_RTTI_0@__RTTI_DEFINE_p_5 = --define wxNO_RTTI
-@COND_USE_THREADS_0@__THREAD_DEFINE_p_5 = --define wxNO_THREADS
-@COND_SHARED_1@__DLLFLAG_p_5 = --define WXUSINGDLL
-@COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
-@COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__bench_gui___win32rc = bench_gui_sample_rc.o
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@__bench_gui_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	= bench_gui.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@__bench_gui_bundle___depname \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	= bench_gui_bundle
+@COND_TOOLKIT_COCOA@____bench_gui_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_COCOA@	$(__bench_gui_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_MAC@____bench_gui_BUNDLE_TGT_REF_DEP = \
 @COND_TOOLKIT_MAC@	$(__bench_gui_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____bench_gui_BUNDLE_TGT_REF_DEP \
@@ -113,11 +115,52 @@ COND_MONOLITHIC_0___WXLIB_NET_p = \
 @COND_TOOLKIT_OSX_COCOA@	= $(__bench_gui_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_IPHONE@____bench_gui_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_IPHONE@	= $(__bench_gui_app_Contents_PkgInfo___depname)
-@COND_TOOLKIT_COCOA@____bench_gui_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	$(__bench_gui_app_Contents_PkgInfo___depname)
+@COND_USE_GUI_1@__bench_graphics___depname = bench_graphics$(EXEEXT)
+@COND_PLATFORM_MAC_0@__bench_graphics___mac_setfilecmd = @true
+@COND_PLATFORM_MAC_1@__bench_graphics___mac_setfilecmd \
+@COND_PLATFORM_MAC_1@	= $(SETFILE) -t APPL bench_graphics$(EXEEXT)
+@COND_PLATFORM_WIN32_1@__bench_graphics___win32rc = \
+@COND_PLATFORM_WIN32_1@	bench_graphics_sample_rc.o
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@__bench_graphics_app_Contents_PkgInfo___depname \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	= bench_graphics.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@__bench_graphics_bundle___depname \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	= bench_graphics_bundle
+@COND_TOOLKIT_COCOA@____bench_graphics_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_COCOA@	= $(__bench_graphics_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_MAC@____bench_graphics_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	$(__bench_graphics_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_OSX_CARBON@____bench_graphics_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_OSX_CARBON@	= \
+@COND_TOOLKIT_OSX_CARBON@	$(__bench_graphics_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_OSX_COCOA@____bench_graphics_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_OSX_COCOA@	= \
+@COND_TOOLKIT_OSX_COCOA@	$(__bench_graphics_app_Contents_PkgInfo___depname)
+@COND_TOOLKIT_OSX_IPHONE@____bench_graphics_BUNDLE_TGT_REF_DEP \
+@COND_TOOLKIT_OSX_IPHONE@	= \
+@COND_TOOLKIT_OSX_IPHONE@	$(__bench_graphics_app_Contents_PkgInfo___depname)
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p_0 = --define __WXUNIVERSAL__
+@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
+@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p_0 = --define wxDEBUG_LEVEL=0
+@COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
+@COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_0 = --define wxNO_EXCEPTIONS
+@COND_USE_RTTI_0@__RTTI_DEFINE_p = -DwxNO_RTTI
+@COND_USE_RTTI_0@__RTTI_DEFINE_p_0 = --define wxNO_RTTI
+@COND_USE_THREADS_0@__THREAD_DEFINE_p = -DwxNO_THREADS
+@COND_USE_THREADS_0@__THREAD_DEFINE_p_0 = --define wxNO_THREADS
+@COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
+@COND_SHARED_1@__DLLFLAG_p_0 = --define WXUSINGDLL
+@COND_TOOLKIT_MSW@__RCDEFDIR_p = --include-dir \
+@COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
+COND_MONOLITHIC_0___WXLIB_BASE_p = \
+	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
+COND_MONOLITHIC_1___WXLIB_MONO_p = \
+	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
 @COND_MONOLITHIC_1_USE_STC_1@__LIB_SCINTILLA_IF_MONO_p \
 @COND_MONOLITHIC_1_USE_STC_1@	= \
 @COND_MONOLITHIC_1_USE_STC_1@	-lwxscintilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
@@ -127,18 +170,6 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 @COND_USE_GUI_1_wxUSE_LIBJPEG_builtin@__LIB_JPEG_p \
 @COND_USE_GUI_1_wxUSE_LIBJPEG_builtin@	= \
 @COND_USE_GUI_1_wxUSE_LIBJPEG_builtin@	-lwxjpeg$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
-@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
-@COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
-@COND_USE_RTTI_0@__RTTI_DEFINE_p = -DwxNO_RTTI
-@COND_USE_THREADS_0@__THREAD_DEFINE_p = -DwxNO_THREADS
-@COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
-COND_MONOLITHIC_0___WXLIB_BASE_p = \
-	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
-COND_MONOLITHIC_1___WXLIB_MONO_p = \
-	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
 @COND_USE_GUI_1_wxUSE_LIBPNG_builtin@__LIB_PNG_p \
 @COND_USE_GUI_1_wxUSE_LIBPNG_builtin@	= \
 @COND_USE_GUI_1_wxUSE_LIBPNG_builtin@	-lwxpng$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
@@ -152,7 +183,7 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: bench$(EXEEXT) data $(__bench_gui___depname) $(__bench_gui_bundle___depname) data-image
+all: bench$(EXEEXT) data $(__bench_gui___depname) $(__bench_gui_bundle___depname) $(__bench_graphics___depname) $(__bench_graphics_bundle___depname) data-image
 
 install: 
 
@@ -166,6 +197,8 @@ clean:
 	rm -f bench$(EXEEXT)
 	rm -f bench_gui$(EXEEXT)
 	rm -rf bench_gui.app
+	rm -f bench_graphics$(EXEEXT)
+	rm -rf bench_graphics.app
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -214,6 +247,33 @@ data:
 
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@bench_gui_bundle: $(____bench_gui_BUNDLE_TGT_REF_DEP)
 
+@COND_USE_GUI_1@bench_graphics$(EXEEXT): $(BENCH_GRAPHICS_OBJECTS) $(__bench_graphics___win32rc)
+@COND_USE_GUI_1@	$(CXX) -o $@ $(BENCH_GRAPHICS_OBJECTS)    -L$(LIBDIRNAME) $(SAMPLES_RPATH_FLAG)  $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl-$(WX_RELEASE)$(HOST_SUFFIX) $(EXTRALIBS_OPENGL) $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+@COND_USE_GUI_1@	
+@COND_USE_GUI_1@	$(__bench_graphics___mac_setfilecmd)
+
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@bench_graphics.app/Contents/PkgInfo: $(__bench_graphics___depname) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p bench_graphics.app/Contents
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p bench_graphics.app/Contents/MacOS
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p bench_graphics.app/Contents/Resources
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/EXECUTABLE/bench_graphics/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/VERSION/$(WX_VERSION)/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >bench_graphics.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	/bin/echo "APPL????" >bench_graphics.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	ln -f bench_graphics$(EXEEXT) bench_graphics.app/Contents/MacOS/bench_graphics
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns bench_graphics.app/Contents/Resources/wxmac.icns
+
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@bench_graphics_bundle: $(____bench_graphics_BUNDLE_TGT_REF_DEP)
+
 data-image: 
 	@mkdir -p .
 	@for f in ../../samples/image/horse.bmp ../../samples/image/horse.jpg ../../samples/image/horse.png ../../samples/image/horse.tif; do \
@@ -257,7 +317,7 @@ bench_printfbench.o: $(srcdir)/printfbench.cpp
 	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/printfbench.cpp
 
 bench_gui_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5) $(__DEBUG_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)  --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)  --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 bench_gui_bench.o: $(srcdir)/bench.cpp
 	$(CXXC) -c -o $@ $(BENCH_GUI_CXXFLAGS) $(srcdir)/bench.cpp
@@ -265,8 +325,15 @@ bench_gui_bench.o: $(srcdir)/bench.cpp
 bench_gui_image.o: $(srcdir)/image.cpp
 	$(CXXC) -c -o $@ $(BENCH_GUI_CXXFLAGS) $(srcdir)/image.cpp
 
+bench_graphics_sample_rc.o: $(srcdir)/../../samples/sample.rc
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)  --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
+
+bench_graphics_graphics.o: $(srcdir)/graphics.cpp
+	$(CXXC) -c -o $@ $(BENCH_GRAPHICS_CXXFLAGS) $(srcdir)/graphics.cpp
+
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
-.PHONY: all install uninstall clean distclean data bench_gui_bundle data-image
+.PHONY: all install uninstall clean distclean data bench_gui_bundle \
+	bench_graphics_bundle data-image

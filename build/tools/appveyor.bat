@@ -18,11 +18,12 @@ echo --- Tools versions:
 g++ --version | head -1
 mingw32-make --version | head -1
 ar --version | head -1
+path C:\MinGW\bin;
 echo.
 echo --- Starting the build
 echo.
-mingw32-make SHELL=cmd -f makefile.gcc setup_h BUILD=debug SHARED=0 USE_GUI=0
-mingw32-make SHELL=cmd -j3 -f makefile.gcc BUILD=debug SHARED=0 USE_GUI=0
+mingw32-make -f makefile.gcc setup_h BUILD=debug SHARED=0
+mingw32-make -j3 -f makefile.gcc BUILD=debug SHARED=0
 goto :eof
 
 :msys2

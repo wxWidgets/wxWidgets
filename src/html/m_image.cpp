@@ -17,6 +17,7 @@
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
     #include "wx/dc.h"
+    #include "wx/dcprint.h"
     #include "wx/scrolwin.h"
     #include "wx/timer.h"
     #include "wx/dcmemory.h"
@@ -465,17 +466,7 @@ void wxHtmlImageCell::SetImage(const wxImage& img)
         if ( m_bmpH == wxDefaultCoord)
             m_bmpH = hh;
 
-        // Only scale the bitmap at the rendering stage,
-        // so we don't lose quality twice
-/*
-        if ((m_bmpW != ww) || (m_bmpH != hh))
-        {
-            wxImage img2 = img.Scale(m_bmpW, m_bmpH);
-            m_bitmap = new wxBitmap(img2);
-        }
-        else
-*/
-            m_bitmap = new wxBitmap(img);
+        m_bitmap = new wxBitmap(img);
     }
 #endif
 }
@@ -605,6 +596,23 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y,
         // and height, so we only do the scaling once.
         double imageScaleX = 1.0;
         double imageScaleY = 1.0;
+
+        // Optimisation for Windows: WIN32 scaling for window DCs is very poor,
+        // so unless we're using a printer DC, do the scaling ourselves.
+#if defined(__WXMSW__) && wxUSE_IMAGE
+        if (m_Width >= 0 && m_Width != m_bitmap->GetWidth() && !dc.IsKindOf(CLASSINFO(wxPrinterDC)))
+        {
+            wxImage image(m_bitmap->ConvertToImage());
+            if (image.HasMask())
+            {
+                // Convert the mask to an alpha channel or scaling won't work correctly
+                image.InitAlpha();
+            }
+            image.Rescale(m_Width, m_Height, wxIMAGE_QUALITY_HIGH);
+            (*m_bitmap) = wxBitmap(image);
+        }
+#endif 
+
         if (m_Width != m_bitmap->GetWidth())
             imageScaleX = (double) m_Width / (double) m_bitmap->GetWidth();
         if (m_Height != m_bitmap->GetHeight())

@@ -6,7 +6,6 @@ for writing advanced GUI applications using native controls.
 
 ![wxWidgets Logo](https://www.wxwidgets.org/assets/img/header-logo.png)
 
-
 wxWidgets allows you to write native-looking GUI applications for
 all the major desktop platforms and also helps with abstracting
 the differences in the non-GUI aspects between them. It is free
@@ -19,6 +18,9 @@ and read its documentation online at http://docs.wxwidgets.org/
 
 Platforms
 ---------
+
+[![AppVeyor](https://img.shields.io/appveyor/ci/wxWidgets/wxWidgets/master.svg?label=Windows)](https://ci.appveyor.com/project/wxWidgets/wxwidgets)
+[![Travis](https://img.shields.io/travis/wxWidgets/wxWidgets/master.svg?label=Linux)](https://travis-ci.org/wxWidgets/wxWidgets)
 
 wxWidgets currently supports the following primary platforms:
 

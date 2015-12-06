@@ -4473,7 +4473,7 @@ public:
 
     The values of this type should only be created using wxNewEventType().
 
-    See the macro DEFINE_EVENT_TYPE() for more info.
+    See the macro wxDEFINE_EVENT_TYPE() for more information.
 
     @see @ref overview_events
 */

@@ -71,12 +71,6 @@ Unfortunately we don't have makefiles for any other compilers yet.
 Please contact us if you would like to help us with creating one for the
 compiler you use.
 
-Note that you can use the wxUniversal classes, wxMSW and MicroWindows (from
-Century Software) to build a different variant of wxUniversal than that
-documented here. Please see docs/univ/readme.txt for further information.
-Note that this port is not up-to-date and probably needs work
-to compile.
-
 Note that by default, wxUniv under MSW uses PostScript printing,
 not Windows printing. To change to Windows printing, set
 wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW to 0 in include/wx/univ/setup.h

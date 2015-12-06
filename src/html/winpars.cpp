@@ -296,7 +296,7 @@ wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
         myfullurl = current.BuildURI();
 
         // if not absolute then ...
-        if( current.IsReference() )
+        if( current.IsRelative() )
         {
             wxString basepath = GetFS()->GetPath();
             wxURI base(basepath);

@@ -1164,7 +1164,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_enter->SetClientData((void *)wxT("enter"));
 
     m_textrich = new MyTextCtrl(this, wxID_ANY, wxT("Allows more than 30Kb of text\n")
-                                wxT("(even under broken Win9x)\n")
+                                wxT("(on all Windows versions)\n")
                                 wxT("and a very very very very very ")
                                 wxT("very very very long line to test ")
                                 wxT("wxHSCROLL style\n")
@@ -1545,7 +1545,7 @@ void MyFrame::OnFileSave(wxCommandEvent& WXUNUSED(event))
     if ( m_panel->m_textrich->SaveFile(wxT("dummy.txt")) )
     {
 #if wxUSE_FILE
-        // verify that the fil length is correct (it wasn't under Win95)
+        // verify that the file length is correct
         wxFile file(wxT("dummy.txt"));
         wxLogStatus(this,
                     wxT("Successfully saved file (text len = %lu, file size = %ld)"),

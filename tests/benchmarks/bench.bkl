@@ -42,6 +42,20 @@
         <wx-lib>base</wx-lib>
     </exe>
 
+    <exe id="bench_graphics" template="wx_sample,wx_bench"
+                             template_append="wx_append"
+         cond="USE_GUI=='1'">
+
+        <app-type>console</app-type>
+
+        <sources>
+            graphics.cpp
+        </sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <wx-lib>gl</wx-lib>
+    </exe>
+
     <wx-data id="data-image">
         <files>
             ../../samples/image/horse.bmp

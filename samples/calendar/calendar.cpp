@@ -704,7 +704,7 @@ MyPanel::MyPanel(wxWindow *parent)
     m_calendar = DoCreateCalendar(wxDefaultDateTime,
                                   wxCAL_MONDAY_FIRST | wxCAL_SHOW_HOLIDAYS);
 
-    // adjust to vertical/horizontal display, check mostly dedicated to WinCE
+    // adjust to vertical/horizontal display
     bool horizontal = ( wxSystemSettings::GetMetric(wxSYS_SCREEN_X) > wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) );
     m_sizer = new wxBoxSizer( horizontal ? wxHORIZONTAL : wxVERTICAL );
 

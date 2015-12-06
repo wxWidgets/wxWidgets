@@ -431,7 +431,7 @@ void ComboboxWidgetsPage::CreateCombo()
             break;
 
         case ComboKind_DropDown:
-            flags = wxCB_DROPDOWN;
+            flags |= wxCB_DROPDOWN;
             break;
     }
 

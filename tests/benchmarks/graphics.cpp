@@ -103,6 +103,7 @@ public:
 
 #if wxUSE_GLCANVAS
         m_glCanvas = NULL;
+        m_glContext = NULL;
 
         if ( opts.useGL )
         {
@@ -137,7 +138,9 @@ public:
 
         Connect(wxEVT_SIZE, wxSizeEventHandler(GraphicsBenchmarkFrame::OnSize));
 
-        m_bitmap.Create(64, 64, 32);
+        m_bitmapARGB.Create(64, 64, 32);
+        m_bitmapARGB.UseAlpha(true);
+        m_bitmapRGB.Create(64, 64, 24);
 
         Show();
     }
@@ -228,10 +231,33 @@ private:
 
         if ( opts.useMemory )
         {
-            wxBitmap bmp(opts.width, opts.height);
-            wxMemoryDC dc(bmp);
-            wxGCDC gcdc(dc);
-            BenchmarkDCAndGC("memory", dc, gcdc);
+            {
+                wxBitmap bmp(opts.width, opts.height);
+                wxMemoryDC dc(bmp);
+                wxGCDC gcdc(dc);
+                BenchmarkDCAndGC("default memory", dc, gcdc);
+            }
+            {
+                wxBitmap bmp(opts.width, opts.height, 24);
+                wxMemoryDC dc(bmp);
+                wxGCDC gcdc(dc);
+                BenchmarkDCAndGC("RGB memory", dc, gcdc);
+            }
+            {
+                wxBitmap bmp(opts.width, opts.height, 32);
+                bmp.UseAlpha(false);
+                wxMemoryDC dc(bmp);
+                wxGCDC gcdc(dc);
+                BenchmarkDCAndGC("0RGB memory", dc, gcdc);
+            }
+            {
+                wxBitmap bmp(opts.width, opts.height, 32);
+                bmp.UseAlpha(true);
+                wxMemoryDC dc(bmp);
+                wxGCDC gcdc(dc);
+                BenchmarkDCAndGC("ARGB memory", dc, gcdc);
+            }
+
         }
 
         wxTheApp->ExitMainLoop();
@@ -337,13 +363,30 @@ private:
             int x = rand() % opts.width,
                 y = rand() % opts.height;
 
-            dc.DrawBitmap(m_bitmap, x, y, true);
+            dc.DrawBitmap(m_bitmapARGB, x, y, true);
         }
 
         const long t = sw.Time();
 
-        wxPrintf("%ld bitmaps done in %ldms = %gus/bitmap\n",
+        wxPrintf("%ld ARGB bitmaps done in %ldms = %gus/bitmap\n",
                  opts.numIters, t, (1000. * t)/opts.numIters);
+
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        sw.Start();
+        for ( int n = 0; n < opts.numIters; n++ )
+        {
+            int x = rand() % opts.width,
+                y = rand() % opts.height;
+
+            dc.DrawBitmap(m_bitmapRGB, x, y, true);
+        }
+        const long t2 = sw.Time();
+
+        wxPrintf("%ld RGB bitmaps done in %ldms = %gus/bitmap\n",
+                 opts.numIters, t2, (1000. * t2)/opts.numIters);
+
     }
 
     void BenchmarkImages(const wxString& msg, wxDC& dc)
@@ -422,7 +465,8 @@ private:
     }
 
 
-    wxBitmap m_bitmap;
+    wxBitmap m_bitmapARGB;
+    wxBitmap m_bitmapRGB;
 #if wxUSE_GLCANVAS
     wxGLCanvas* m_glCanvas;
     wxGLContext* m_glContext;
