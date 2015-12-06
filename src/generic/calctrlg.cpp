@@ -1339,8 +1339,12 @@ void wxGenericCalendarCtrl::OnDClick(wxMouseEvent& event)
             SetDateAndNotify(date);
             break;
 
-        default:
+        case wxCAL_HITTEST_WEEK:
+        case wxCAL_HITTEST_HEADER:
+        case wxCAL_HITTEST_SURROUNDING_WEEK:
+        case wxCAL_HITTEST_NOWHERE:
             event.Skip();
+            break;
     }
 }
 
