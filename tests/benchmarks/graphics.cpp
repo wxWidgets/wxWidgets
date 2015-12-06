@@ -103,6 +103,7 @@ public:
 
 #if wxUSE_GLCANVAS
         m_glCanvas = NULL;
+        m_glContext = NULL;
 
         if ( opts.useGL )
         {
