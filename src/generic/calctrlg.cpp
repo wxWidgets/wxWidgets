@@ -1329,17 +1329,17 @@ void wxGenericCalendarCtrl::OnDClick(wxMouseEvent& event)
     {
         case wxCAL_HITTEST_DAY:
             GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED);
-        break;
+            break;
+
         case wxCAL_HITTEST_DECMONTH:
         case wxCAL_HITTEST_INCMONTH:
-            
             // allow quickly clicking the inc/dec button any number of
             // times in a row by handling also the double-click event.
             OnClick(event);
-        break;
+            break;
+
         default:
             event.Skip();
-        break;
     }
 }
 
@@ -1361,14 +1361,14 @@ void wxGenericCalendarCtrl::OnClick(wxMouseEvent& event)
                 // GenerateAllChangeEvents() here, we know which event to send
                 GenerateEvent(wxEVT_CALENDAR_DAY_CHANGED);
             }
-        break;
+            break;
 
         case wxCAL_HITTEST_WEEK:
-        {
-            wxCalendarEvent send( this, date, wxEVT_CALENDAR_WEEK_CLICKED );
-            HandleWindowEvent( send );
-        }
-        break;
+            {
+                wxCalendarEvent send( this, date, wxEVT_CALENDAR_WEEK_CLICKED );
+                HandleWindowEvent( send );
+            }
+            break;
 
         case wxCAL_HITTEST_HEADER:
             {
