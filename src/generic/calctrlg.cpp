@@ -1325,13 +1325,21 @@ bool wxGenericCalendarCtrl::GetDateCoord(const wxDateTime& date, int *day, int *
 
 void wxGenericCalendarCtrl::OnDClick(wxMouseEvent& event)
 {
-    if ( HitTest(event.GetPosition()) != wxCAL_HITTEST_DAY )
+    switch ( HitTest(event.GetPosition()) )
     {
-        event.Skip();
-    }
-    else
-    {
-        GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED);
+        case wxCAL_HITTEST_DAY:
+            GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED);
+        break;
+        case wxCAL_HITTEST_DECMONTH:
+        case wxCAL_HITTEST_INCMONTH:
+            
+            // allow quickly clicking the inc/dec button any number of
+            // times in a row by handling also the double-click event.
+            OnClick(event);
+        break;
+        default:
+            event.Skip();
+        break;
     }
 }
 
