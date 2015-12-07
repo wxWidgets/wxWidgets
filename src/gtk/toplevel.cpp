@@ -27,7 +27,6 @@
     #include "wx/frame.h"
     #include "wx/icon.h"
     #include "wx/log.h"
-    #include "wx/app.h"
 #endif
 
 #include "wx/evtloop.h"
@@ -71,12 +70,6 @@ int wxOpenModalDialogsCount = 0;
 // used to generate wxActivateEvents
 static wxTopLevelWindowGTK *g_activeFrame = NULL;
 static wxTopLevelWindowGTK *g_lastActiveFrame = NULL;
-
-// if we detect that the app has got/lost the focus, we set this variable to
-// either TRUE or FALSE and an activate event will be sent during the next
-// OnIdle() call and it is reset to -1: this value means that we shouldn't
-// send any activate events at all
-static int g_sendActivateEvent = -1;
 
 extern wxCursor g_globalCursor;
 extern wxCursor g_busyCursor;
@@ -147,20 +140,6 @@ static gboolean gtk_frame_focus_in_callback( GtkWidget *widget,
                                          GdkEvent *WXUNUSED(event),
                                          wxTopLevelWindowGTK *win )
 {
-    switch ( g_sendActivateEvent )
-    {
-        case -1:
-            // we've got focus from outside, synthetize wxActivateEvent
-            g_sendActivateEvent = 1;
-            break;
-
-        case 0:
-            // another our window just lost focus, it was already ours before
-            // - don't send any wxActivateEvent
-            g_sendActivateEvent = -1;
-            break;
-    }
-
     g_activeFrame = win;
     g_lastActiveFrame = g_activeFrame;
 
@@ -180,7 +159,6 @@ static gboolean gtk_frame_focus_in_callback( GtkWidget *widget,
         case -2: break;
     }
 
-    wxLogTrace(wxT("activate"), wxT("Activating frame %p (from focus_in)"), g_activeFrame);
     wxActivateEvent event(wxEVT_ACTIVATE, true, g_activeFrame->GetId());
     event.SetEventObject(g_activeFrame);
     g_activeFrame->HandleWindowEvent(event);
@@ -199,18 +177,8 @@ gboolean gtk_frame_focus_out_callback(GtkWidget * WXUNUSED(widget),
                                       GdkEventFocus *WXUNUSED(gdk_event),
                                       wxTopLevelWindowGTK * WXUNUSED(win))
 {
-    // if the focus goes out of our app altogether, OnIdle() will send
-    // wxActivateEvent, otherwise gtk_window_focus_in_callback() will reset
-    // g_sendActivateEvent to -1
-    g_sendActivateEvent = 0;
-
-    // wxASSERT_MSG( (g_activeFrame == win), wxT("TLW deactivatd although it wasn't active") );
-
-    // wxPrintf( wxT("inactive: %s\n"), win->GetTitle().c_str() );
-
     if (g_activeFrame)
     {
-        wxLogTrace(wxT("activate"), wxT("Activating frame %p (from focus_in)"), g_activeFrame);
         wxActivateEvent event(wxEVT_ACTIVATE, false, g_activeFrame->GetId());
         event.SetEventObject(g_activeFrame);
         g_activeFrame->HandleWindowEvent(event);
@@ -1353,20 +1321,6 @@ wxTopLevelWindowGTK::DecorSize& wxTopLevelWindowGTK::GetCachedDecorSize()
 void wxTopLevelWindowGTK::OnInternalIdle()
 {
     wxTopLevelWindowBase::OnInternalIdle();
-
-    // Synthetize activate events.
-    if ( g_sendActivateEvent != -1 )
-    {
-        bool activate = g_sendActivateEvent != 0;
-
-        // if (!activate) wxPrintf( wxT("de") );
-        // wxPrintf( wxT("activate\n") );
-
-        // do it only once
-        g_sendActivateEvent = -1;
-
-        wxTheApp->SetActive(activate, (wxWindow *)g_lastActiveFrame);
-    }
 }
 
 // ----------------------------------------------------------------------------
