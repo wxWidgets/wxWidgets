@@ -90,8 +90,6 @@ public:
     // --------------------------
 
     // GTK callbacks
-    virtual void OnInternalIdle() wxOVERRIDE;
-
     virtual void GTKHandleRealized() wxOVERRIDE;
 
     void GTKConfigureEvent(int x, int y);

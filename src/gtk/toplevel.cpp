@@ -1264,11 +1264,6 @@ wxTopLevelWindowGTK::DecorSize& wxTopLevelWindowGTK::GetCachedDecorSize()
     return size[index];
 }
 
-void wxTopLevelWindowGTK::OnInternalIdle()
-{
-    wxTopLevelWindowBase::OnInternalIdle();
-}
-
 // ----------------------------------------------------------------------------
 // frame title/icon
 // ----------------------------------------------------------------------------
