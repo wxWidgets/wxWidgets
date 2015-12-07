@@ -424,3 +424,15 @@ void wxSetCursor(const wxCursor& cursor)
             *gs_globalCursor = cursor;
     }
 }
+wxCursor wxGetCursor()
+{
+	//GetCursor can return NULL if it is not available, in this case IsOk will return false as it should
+	HCURSOR hc = ::GetCursor();
+	//windows returns a handle to a shared cursor, but does not increment its internal ref count on GetCursor, so the cursor could be destroyed at any time. 
+	//CopyCursor increments the reference count of the cursor. This is so that the cursor can still be acccessed if it is no longer used by by the OS
+	if (hc != NULL) hc = CopyCursor(hc);
+	wxCursor cr;
+	cr.SetRefData(new wxCursorRefData(hc, true));//make sure and call destroy on the cursor so it can be properly cleaned up
+	//not sure if gs_globalcursor should be set here? 
+	return cr;
+}
