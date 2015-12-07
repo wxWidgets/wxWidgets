@@ -69,7 +69,6 @@ int wxOpenModalDialogsCount = 0;
 // the frame that is currently active (i.e. its child has focus). It is
 // used to generate wxActivateEvents
 static wxTopLevelWindowGTK *g_activeFrame = NULL;
-static wxTopLevelWindowGTK *g_lastActiveFrame = NULL;
 
 extern wxCursor g_globalCursor;
 extern wxCursor g_busyCursor;
@@ -141,9 +140,6 @@ static gboolean gtk_frame_focus_in_callback( GtkWidget *widget,
                                          wxTopLevelWindowGTK *win )
 {
     g_activeFrame = win;
-    g_lastActiveFrame = g_activeFrame;
-
-    // wxPrintf( wxT("active: %s\n"), win->GetTitle().c_str() );
 
     // MR: wxRequestUserAttention related block
     switch( win->m_urgency_hint )
@@ -799,8 +795,6 @@ wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
 
     if (g_activeFrame == this)
         g_activeFrame = NULL;
-    if (g_lastActiveFrame == this)
-        g_lastActiveFrame = NULL;
 }
 
 bool wxTopLevelWindowGTK::EnableCloseButton( bool enable )
