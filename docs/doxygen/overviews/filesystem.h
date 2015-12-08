@@ -42,7 +42,8 @@ Locations (aka filenames aka addresses) are constructed from four parts:
 @li @b protocol - handler can recognize if it is able to open a
     file by checking its protocol. Examples are "http", "file" or "ftp".
 @li <b>right location</b> - is the name of file within the protocol.
-    In "http://www.wxwidgets.org/index.html" the right location is "//www.wxwidgets.org/index.html".
+    In "https://www.wxwidgets.org/index.html" the right location is
+    "//www.wxwidgets.org/index.html".
 @li @b anchor - an anchor is optional and is usually not present.
     In "index.htm#chapter2" the anchor is "chapter2".
 @li <b>left location</b> - this is usually an empty string.

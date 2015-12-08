@@ -813,12 +813,14 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
                                        const wxDataViewItem& item,
                                        unsigned column)
 {
-    // Now check if we have a value and remember it if we do.
+    // Now check if we have a value and remember it for rendering it later.
+    // Notice that we do it even if it's null, as the cell should be empty then
+    // and not show the last used value.
     const wxVariant& value = CheckedGetValue(model, item, column);
+    SetValue(value);
+
     if ( !value.IsNull() )
     {
-        SetValue(value);
-
         // Also set up the attributes for this item if it's not empty.
         wxDataViewItemAttr attr;
         model->GetAttr(item, column, attr);
@@ -981,34 +983,20 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
     rectText.x += xoffset;
     rectText.width -= xoffset;
 
-    // check if we want to ellipsize the text if it doesn't fit
-    wxString ellipsizedText;
-    if ( GetEllipsizeMode() != wxELLIPSIZE_NONE )
-    {
-        ellipsizedText = wxControl::Ellipsize
-                                    (
-                                        text,
-                                        *dc,
-                                        GetEllipsizeMode(),
-                                        rectText.width,
-                                        wxELLIPSIZE_FLAGS_NONE
-                                    );
-    }
-
     int flags = 0;
     if ( state & wxDATAVIEW_CELL_SELECTED )
         flags |= wxCONTROL_SELECTED | wxCONTROL_FOCUSED;
     if ( !GetOwner()->GetOwner()->IsEnabled() )
         flags |= wxCONTROL_DISABLED;
 
-    // get the alignment to use
     wxRendererNative::Get().DrawItemText(
         GetOwner()->GetOwner(),
         *dc,
-        ellipsizedText.empty() ? text : ellipsizedText,
+        text,
         rectText,
         GetEffectiveAlignment(),
-        flags);
+        flags,
+        GetEllipsizeMode());
 }
 
 void wxDataViewCustomRendererBase::SetEnabled(bool enabled)
@@ -1583,6 +1571,7 @@ wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEvent );
 wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_DROP, wxDataViewEvent );
 
 
+#if wxUSE_SPINCTRL
 
 // -------------------------------------
 // wxDataViewSpinRenderer
@@ -1651,6 +1640,8 @@ bool wxDataViewSpinRenderer::GetValue( wxVariant &value ) const
     value = m_data;
     return true;
 }
+
+#endif // wxUSE_SPINCTRL
 
 // -------------------------------------
 // wxDataViewChoiceRenderer

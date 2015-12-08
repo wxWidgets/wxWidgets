@@ -213,6 +213,17 @@ public:
     virtual void Cut();
 
     /**
+        Convert all text entered into the control to upper case.
+
+        Call this method to ensure that all text entered into the control is
+        converted on the fly to upper case. If the control is not empty, its
+        existing contents is also converted to upper case.
+
+        @since 3.1.0
+     */
+    void ForceUpper();
+
+    /**
         Returns the insertion point, or cursor, position.
 
         This is defined as the zero based index of the character position to

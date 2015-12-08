@@ -33,6 +33,11 @@ Changes in behaviour which may result in build errors
 - "webview" library is not included in `wx-config --libs` output any more, you
   need to request it explicitly, e.g. `wx-config --libs std,webview`.
 
+- wxMSW now requires linking with shlwapi.lib and version.lib. This is done
+  automatically in most cases, but if you use a static build of the library
+  with a non-MSVC compiler such as MinGW and do not use wx-config, then you
+  will need to add these libraries to your make or project files yourself.
+
 - WXWIN_OS_DESCRIPTION doesn't exist any longer, use wxGetOsDescription().
 
 
@@ -50,6 +55,7 @@ Changes in behaviour which may result in build errors
 All:
 
 - Add UTF-8 and ZIP 64 support to wxZip{Input,Output}Stream (Tobias Taschner).
+- Add wxStandardPaths::GetUserDir() (Tobias Taschner).
 - Allow calling wxItemContainer::Add() and similar with std::vector<> argument.
 - Add "%z" support to printf()-like functions like wxString::Format() (RIVDSL).
 - Add DOCTYPE support to wxXmlDocument (Nick Matthews).
@@ -84,6 +90,7 @@ All (GUI):
 - Allow customizing window shown by wxBusyInfo.
 - Add wxAddRemoveCtrl.
 - Add wxAppProgressIndicator for MSW (Chaobin Zhang) and OS X (Tobias Taschner).
+- Add wxTextEntry::ForceUpper().
 - Add wxEVT_MAGNIFY mouse event (Joost Nieuwenhuijse).
 - Add wxProcess::Activate().
 - Fix setting colours of labels in wxSlider.
@@ -92,6 +99,7 @@ All (GUI):
 - Make results of wxDC::DrawEllipticArc() consistent across all platforms.
 - XRC handler for wxAuiToolBar added (Kinaou Hervé, David Hart).
 - Improve wxLIST_AUTOSIZE_XXX support in generic wxListCtrl (Kinaou Hervé).
+- Support "color", "size" and "font" CSS for fonts in wxHTML (Kinaou Hervé).
 - Add wxCursor::GetHotSpot().
 - Add wxFD_NO_FOLLOW style for wxFileDialog (Luca Bacci).
 - Add support for embedding bitmaps in generated SVG in wxSVGFileDC (iwbnwif).
@@ -140,6 +148,7 @@ wxGTK:
 wxMSW:
 
 - Make default wxSizer border DPI-aware.
+- Implement native tab art for wxAUI (Tobias Taschner).
 - Improve wxMimeTypesManager open command detection (Eric Jensen).
 - Make wxFILTER_INCLUDE_LIST in wxTextValidator actually usable.
 - Fix handling crashes in wxEVT_PAINT event handlers.
@@ -174,6 +183,7 @@ wxMSW:
 - Correct wxGetOsDescription() for Windows 10 (Tobias Taschner).
 - Make wxListCtrl &c appearance more native on modern systems (Tobias Taschner).
 - Don't send wxActivateEvent for minimized windows (bzcdr).
+- Return correct OS version under Windows 8.1 and later.
 
 wxOSX/Cocoa:
 
@@ -184,3 +194,7 @@ wxOSX/Cocoa:
 - Add support for wxEVT_COMBOBOX_DROPDOWN and wxEVT_COMBOBOX_CLOSEUP
   events (Igor Korot).
 - Implement strike-through support in wxFont (Igor Korot).
+- Provide native implementation of wxStandardPaths (Tobias Taschner).
+- Add wxTE_{RIGHT,CENTER} support for multiline wxTextCtrl (Andreas Falkenhahn).
+- Don't leave wxSlider labels shown when the slider itself is hidden.
+- Don't generate wxEVT_TEXT_ENTER for controls without wxTE_PROCESS_ENTER.

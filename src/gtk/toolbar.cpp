@@ -281,7 +281,10 @@ void wxToolBarTool::CreateDropDown()
     GtkWidget* box = gtk_box_new(orient, 0);
     GtkWidget* arrow = gtk_arrow_new(arrowType, GTK_SHADOW_NONE);
     GtkWidget* tool_button = gtk_bin_get_child(GTK_BIN(m_item));
-    gtk_widget_reparent(tool_button, box);
+    g_object_ref(tool_button);
+    gtk_container_remove(GTK_CONTAINER(m_item), tool_button);
+    gtk_container_add(GTK_CONTAINER(box), tool_button);
+    g_object_unref(tool_button);
     GtkWidget* arrow_button = gtk_toggle_button_new();
     gtk_button_set_relief(GTK_BUTTON(arrow_button),
         gtk_tool_item_get_relief_style(GTK_TOOL_ITEM(m_item)));
@@ -532,8 +535,11 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             }
             if (!tool->GetLabel().empty())
             {
+                wxString const
+                    label = wxControl::RemoveMnemonics(tool->GetLabel());
+
                 gtk_tool_button_set_label(
-                    GTK_TOOL_BUTTON(tool->m_item), wxGTK_CONV(tool->GetLabel()));
+                    GTK_TOOL_BUTTON(tool->m_item), wxGTK_CONV(label));
                 // needed for labels in horizontal toolbar with wxTB_HORZ_LAYOUT
                 gtk_tool_item_set_is_important(tool->m_item, true);
             }

@@ -8,13 +8,18 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#include <QtGui/QFont>
+#include <QtGui/QFontInfo>
+
 #include "wx/font.h"
 #include "wx/fontutil.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 
-#include <QtGui/QFont>
-#include <QtGui/QFontInfo>
 
 static QFont::StyleHint ConvertFontFamily(wxFontFamily family)
 {

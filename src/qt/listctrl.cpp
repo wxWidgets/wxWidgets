@@ -8,11 +8,19 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#include <QHeaderView>
+
+#ifndef WX_PRECOMP
+    #include "wx/bitmap.h"
+#endif // WX_PRECOMP
+
 #include "wx/listctrl.h"
 #include "wx/imaglist.h"
 #include "wx/qt/private/winevent.h"
-
-#include <QHeaderView>
 
 
 class wxQtTreeWidget : public wxQtEventSignalHandler< QTreeWidget, wxListCtrl >

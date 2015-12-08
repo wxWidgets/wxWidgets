@@ -282,6 +282,25 @@ void ScintillaWX::Initialise() {
     stc->SetDropTarget(dropTarget);
 #endif // wxUSE_DRAG_AND_DROP
     vs.extraFontFlag = true;   // UseAntiAliasing
+
+    // Set up default OS X key mappings. Remember that SCI_CTRL stands for
+    // "Cmd" key here, as elsewhere in wx API, while SCI_ALT is the "Option"
+    // key (and "Ctrl" key, if we ever need it, should be represented by
+    // SCI_META).
+#ifdef __WXMAC__
+    kmap.AssignCmdKey(SCK_LEFT, SCI_CTRL, SCI_VCHOME);
+    kmap.AssignCmdKey(SCK_RIGHT, SCI_CTRL, SCI_LINEEND);
+    kmap.AssignCmdKey(SCK_LEFT, SCI_ALT, SCI_WORDLEFT);
+    kmap.AssignCmdKey(SCK_RIGHT, SCI_ALT, SCI_WORDRIGHT);
+    kmap.AssignCmdKey(SCK_LEFT, SCI_ALT | SCI_SHIFT, SCI_WORDLEFTEXTEND);
+    kmap.AssignCmdKey(SCK_RIGHT, SCI_ALT | SCI_SHIFT, SCI_WORDRIGHTEXTEND);
+    kmap.AssignCmdKey(SCK_LEFT, SCI_CTRL | SCI_SHIFT, SCI_VCHOMEEXTEND);
+    kmap.AssignCmdKey(SCK_RIGHT, SCI_CTRL | SCI_SHIFT, SCI_LINEENDEXTEND);
+    kmap.AssignCmdKey(SCK_UP, SCI_CTRL | SCI_SHIFT, SCI_DOCUMENTSTARTEXTEND);
+    kmap.AssignCmdKey(SCK_DOWN, SCI_CTRL | SCI_SHIFT, SCI_DOCUMENTENDEXTEND);
+    kmap.AssignCmdKey(SCK_UP, SCI_CTRL, SCI_DOCUMENTSTART);
+    kmap.AssignCmdKey(SCK_DOWN, SCI_CTRL, SCI_DOCUMENTEND);
+#endif // __WXMAC__
 }
 
 
@@ -705,13 +724,18 @@ bool ScintillaWX::CreateSystemCaret() {
 
 bool ScintillaWX::DestroySystemCaret() {
 #ifdef __WXMSW__
-    ::HideCaret(GetHwndOf(stc));
-    BOOL retval = ::DestroyCaret();
-    if (sysCaretBitmap) {
-        ::DeleteObject(sysCaretBitmap);
-        sysCaretBitmap = 0;
+    if (sysCaretBitmap)
+    {
+        ::HideCaret(GetHwndOf(stc));
+        BOOL retval = ::DestroyCaret();
+        if (sysCaretBitmap) {
+            ::DeleteObject(sysCaretBitmap);
+            sysCaretBitmap = 0;
+        }
+        return retval != 0;
     }
-    return retval != 0;
+    else
+        return false;
 #else
     return false;
 #endif
@@ -1032,11 +1056,7 @@ int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
         return 0;
     }
 
-    bool shift = evt.ShiftDown(),
-         ctrl  = evt.ControlDown(),
-         alt   = evt.AltDown();
-
-    if (ctrl && key >= 1 && key <= 26 && key != WXK_BACK)
+    if (evt.RawControlDown() && key >= 1 && key <= 26 && key != WXK_BACK)
         key += 'A' - 1;
 
     switch (key) {
@@ -1077,23 +1097,25 @@ int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
     case WXK_MENU:              key = SCK_MENU; break;
     }
 
+    int rv = KeyDownWithModifiers
+             (
+                key,
+                ModifierFlags
+                (
+                    evt.ShiftDown(),
+                    evt.ControlDown(),
+                    evt.AltDown(),
+                    // Under Mac, ControlDown() returns the status of Cmd key,
+                    // so we sneak the status of the real Ctrl key via SCI_META
+                    // but we shouldn't be doing this elsewhere.
 #ifdef __WXMAC__
-    if ( evt.MetaDown() ) {
-        // check for a few common Mac Meta-key combos and remap them to Ctrl
-        // for Scintilla
-        switch ( key ) {
-        case 'Z':       // Undo
-        case 'X':       // Cut
-        case 'C':       // Copy
-        case 'V':       // Paste
-        case 'A':       // Select All
-            ctrl = true;
-            break;
-        }
-    }
+                    evt.RawControlDown()
+#else
+                    0
 #endif
-
-    int rv = KeyDown(key, shift, ctrl, alt, consumed);
+                ),
+                consumed
+             );
 
     if (key)
         return rv;

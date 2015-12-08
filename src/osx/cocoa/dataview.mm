@@ -2729,11 +2729,7 @@ void wxDataViewRenderer::SetAttr(const wxDataViewItemAttr& attr)
                 data->SaveOriginalTextColour([(id)cell textColor]);
             }
 
-            const wxColour& c = attr.GetColour();
-            colText = [NSColor colorWithCalibratedRed:c.Red() / 255.
-                green:c.Green() / 255.
-                blue:c.Blue() / 255.
-                alpha:c.Alpha() / 255.];
+            colText = attr.GetColour().OSXGetNSColor();
         }
     }
 

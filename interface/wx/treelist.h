@@ -311,7 +311,7 @@ public:
 
 
     /**
-        Image list methods.
+        @name Image list methods.
 
         Like wxTreeCtrl and wxListCtrl this class uses wxImageList so if you
         intend to use item icons with it, you must construct wxImageList
@@ -349,7 +349,7 @@ public:
 
 
     /**
-        Column methods.
+        @name Column methods.
      */
     //@{
 
@@ -425,7 +425,7 @@ public:
 
 
     /**
-        Adding and removing items.
+        @name Adding and removing items.
 
         When adding items, the parent and text of the first column of the new item
         must always be specified, the rest is optional.
@@ -494,7 +494,7 @@ public:
 
 
     /**
-        Methods for the tree navigation.
+        @name Methods for the tree navigation.
 
         The tree has an invisible root item which is the hidden parent of all
         top-level items in the tree. Starting from it it is possible to iterate
@@ -564,7 +564,7 @@ public:
 
 
     /**
-        Items attributes
+        @name Items attributes
      */
     //@{
 
@@ -616,7 +616,7 @@ public:
 
 
     /**
-        Expanding and collapsing tree branches.
+        @name Expanding and collapsing tree branches.
 
         Notice that calling neither Expand() nor Collapse() method generates
         any events.
@@ -642,7 +642,7 @@ public:
 
 
     /**
-        Selection methods.
+        @name Selection methods.
 
         The behaviour of the control is different in single selection mode (the
         default) and multi-selection mode (if @c wxTL_MULTIPLE was specified
@@ -721,7 +721,7 @@ public:
 
 
     /**
-        Checkbox handling
+        @name Checkbox handling
 
         Methods in this section can only be used with the controls created with
         wxTL_CHECKBOX style.
@@ -799,7 +799,7 @@ public:
     //@}
 
     /**
-        Sorting.
+        @name Sorting.
 
         If some control columns were added with wxCOL_SORTABLE flag, clicking
         on them will automatically resort the control using the custom
@@ -864,7 +864,7 @@ public:
 
 
     /**
-        View window.
+        @name View window.
 
         This control itself is entirely covered by the "view window" which is
         currently a wxDataViewCtrl but if you want to avoid relying on this to

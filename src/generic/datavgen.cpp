@@ -1801,44 +1801,6 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
 
 #endif // wxUSE_DRAG_AND_DROP
 
-
-// Draw focus rect for individual cell. Unlike native focus rect, we render
-// this in foreground text color (typically white) to enhance contrast and
-// make it visible.
-static void DrawSelectedCellFocusRect(wxDC& dc, const wxRect& rect)
-{
-    // (This code is based on wxRendererGeneric::DrawFocusRect and modified.)
-
-    // draw the pixels manually because the "dots" in wxPen with wxDOT style
-    // may be short traits and not really dots
-    //
-    // note that to behave in the same manner as DrawRect(), we must exclude
-    // the bottom and right borders from the rectangle
-    wxCoord x1 = rect.GetLeft(),
-            y1 = rect.GetTop(),
-            x2 = rect.GetRight(),
-            y2 = rect.GetBottom();
-
-    wxDCPenChanger pen(dc, wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
-
-    wxCoord z;
-    for ( z = x1 + 1; z < x2; z += 2 )
-        dc.DrawPoint(z, rect.GetTop());
-
-    wxCoord shift = z == x2 ? 0 : 1;
-    for ( z = y1 + shift; z < y2; z += 2 )
-        dc.DrawPoint(x2, z);
-
-    shift = z == y2 ? 0 : 1;
-    for ( z = x2 - shift; z > x1; z -= 2 )
-        dc.DrawPoint(z, y2);
-
-    shift = z == x1 ? 0 : 1;
-    for ( z = y2 - shift; z > y1; z -= 2 )
-        dc.DrawPoint(x1, z);
-}
-
-
 void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxDataViewModel *model = GetModel();
@@ -1994,29 +1956,18 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         if (selected || item == m_currentRow)
         {
-            wxRect rect( x_start, GetLineStart( item ),
+            wxRect rowRect( x_start, GetLineStart( item ),
                          x_last - x_start, GetLineHeight( item ) );
 
-            // draw selection and whole-item focus:
-            if ( selected )
-            {
-                int flags = wxCONTROL_SELECTED;
-                if (m_hasFocus)
-                    flags |= wxCONTROL_FOCUSED;
+            bool renderColumnFocus = false;
 
-                wxRendererNative::Get().DrawItemSelectionRect
-                                    (
-                                        this,
-                                        dc,
-                                        rect,
-                                        flags
-                                    );
-            }
+            int flags = wxCONTROL_SELECTED;
+            if ( m_hasFocus )
+                flags |= wxCONTROL_FOCUSED;
 
             // draw keyboard focus rect if applicable
             if ( item == m_currentRow && m_hasFocus )
             {
-                bool renderColumnFocus = false;
 
                 if ( m_useCellFocus && m_currentCol && m_currentColSetByKeyboard )
                 {
@@ -2033,54 +1984,76 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
                 if ( renderColumnFocus )
                 {
+                    wxRect colRect(rowRect);
+
                     for ( unsigned int i = col_start; i < col_last; i++ )
                     {
                         wxDataViewColumn *col = GetOwner()->GetColumnAt(i);
                         if ( col->IsHidden() )
                             continue;
 
-                        rect.width = col->GetWidth();
+                        colRect.width = col->GetWidth();
 
                         if ( col == m_currentCol )
                         {
-                            // make the rect more visible by adding a small
-                            // margin around it:
-                            rect.Deflate(1, 1);
+                            // Draw selection rect left of column
+                            {
+                                wxRect clipRect(rowRect);
+                                clipRect.width = colRect.x;
 
-                            if ( selected )
-                            {
-                                // DrawFocusRect() uses XOR and is all but
-                                // invisible against dark-blue background. Use
-                                // the same color used for selected text.
-                                DrawSelectedCellFocusRect(dc, rect);
+                                wxDCClipper clip(dc, clipRect);
+                                wxRendererNative::Get().DrawItemSelectionRect
+                                    (
+                                    this,
+                                    dc,
+                                    rowRect,
+                                    flags
+                                    );
                             }
-                            else
+
+                            // Draw selection rect right of column
                             {
-                                wxRendererNative::Get().DrawFocusRect
-                                                    (
-                                                        this,
-                                                        dc,
-                                                        rect,
-                                                        0
-                                                );
+                                wxRect clipRect(rowRect);
+                                clipRect.x = colRect.x + colRect.width;
+                                clipRect.width = rowRect.width - clipRect.x;
+
+                                wxDCClipper clip(dc, clipRect);
+                                wxRendererNative::Get().DrawItemSelectionRect
+                                    (
+                                    this,
+                                    dc,
+                                    rowRect,
+                                    flags
+                                    );
                             }
+
+                            // Draw column selection rect
+                            wxRendererNative::Get().DrawItemSelectionRect
+                                (
+                                this,
+                                dc,
+                                colRect,
+                                flags | wxCONTROL_CURRENT | wxCONTROL_CELL
+                                );
+
                             break;
                         }
 
-                        rect.x += rect.width;
+                        colRect.x += colRect.width;
                     }
                 }
-                else
-                {
-                    // render focus rectangle for the whole row
-                    wxRendererNative::Get().DrawFocusRect
-                                        (
-                                            this,
-                                            dc,
-                                            rect,
-                                            selected ? (int)wxCONTROL_SELECTED : 0
-                                        );
-                }
+            }
+
+            // draw selection and whole-item focus:
+            if ( selected && !renderColumnFocus )
+            {
+                wxRendererNative::Get().DrawItemSelectionRect
+                    (
+                    this,
+                    dc,
+                    rowRect,
+                    flags | wxCONTROL_CURRENT
+                    );
             }
         }
     }

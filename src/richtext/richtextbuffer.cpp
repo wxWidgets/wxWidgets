@@ -979,18 +979,13 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxRi
 
         wxColour col(borders.GetTop().GetColour());
         wxPenStyle penStyle = wxPENSTYLE_SOLID;
-        if (borders.GetRight().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
+        if (borders.GetTop().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
             penStyle = wxPENSTYLE_DOT;
-        else if (borders.GetRight().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
+        else if (borders.GetTop().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
             penStyle = wxPENSTYLE_LONG_DASH;
 
         if (borderTop == 1 || penStyle != wxPENSTYLE_SOLID)
         {
-            wxPenStyle penStyle = wxPENSTYLE_SOLID;
-            if (borders.GetTop().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
-                penStyle = wxPENSTYLE_DOT;
-            else if (borders.GetTop().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
-                penStyle = wxPENSTYLE_LONG_DASH;
             wxPen pen(col, borderTop, penStyle);
             dc.SetPen(pen);
             // See note above.
@@ -2886,6 +2881,7 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
     if (para)
     {
         wxRichTextAttr originalAttr = para->GetAttributes();
+        wxRichTextProperties originalProperties = para->GetProperties();
 
         wxRichTextObjectList::compatibility_iterator node = m_children.Find(para);
 
@@ -2955,7 +2951,10 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
             wxASSERT(firstPara != NULL);
 
             if (!(fragment.GetAttributes().GetFlags() & wxTEXT_ATTR_KEEP_FIRST_PARA_STYLE))
+            {
                 para->SetAttributes(firstPara->GetAttributes());
+                para->SetProperties(firstPara->GetProperties());
+            }
 
             // Save empty paragraph attributes for appending later
             // These are character attributes deliberately set for a new paragraph. Without this,
@@ -3033,9 +3032,15 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
             }
 
             if ((fragment.GetAttributes().GetFlags() & wxTEXT_ATTR_KEEP_FIRST_PARA_STYLE) && firstPara)
+            {
                 finalPara->SetAttributes(firstPara->GetAttributes());
+                finalPara->SetProperties(firstPara->GetProperties());
+            }
             else if (finalPara && finalPara != para)
+            {
                 finalPara->SetAttributes(originalAttr);
+                finalPara->SetProperties(originalProperties);
+            }
 
             return true;
         }
@@ -5023,7 +5028,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
     }
 
     // Make space for a bullet with no subindent.
-    if ((leftIndent == 0) && (attr.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE))
+    if ((leftSubIndent == 0) && (attr.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE))
     {
         wxSize bulletSize;
         if (wxRichTextBuffer::GetRenderer() && wxRichTextBuffer::GetRenderer()->MeasureBullet(this, dc, attr, bulletSize))
@@ -5220,6 +5225,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
                 wxRect floatAvailableRect = collector->GetAvailableRect(rect.y + currentPosition.y, rect.y + currentPosition.y + lineHeight);
                 int x1 = wxMax(availableRect.x, (floatAvailableRect.x + startOffset));
                 int x2 = wxMin(availableRect.GetRight(), (floatAvailableRect.GetRight() - rightIndent));
+                oldAvailableRect = availableRect;
                 availableRect.x = x1;
                 availableRect.width = x2 - x1 + 1;
             }
@@ -11649,11 +11655,13 @@ void wxRichTextModuleInit()
 wxRichTextCommand::wxRichTextCommand(const wxString& name, wxRichTextCommandId id, wxRichTextBuffer* buffer,
                                      wxRichTextParagraphLayoutBox* container, wxRichTextCtrl* ctrl, bool ignoreFirstTime): wxCommand(true, name)
 {
+    m_freeze = ctrl ? ctrl->IsFrozen() : false;
     /* wxRichTextAction* action = */ new wxRichTextAction(this, name, id, buffer, container, ctrl, ignoreFirstTime);
 }
 
 wxRichTextCommand::wxRichTextCommand(const wxString& name): wxCommand(true, name)
 {
+    m_freeze = false;
 }
 
 wxRichTextCommand::~wxRichTextCommand()
@@ -11665,6 +11673,9 @@ void wxRichTextCommand::AddAction(wxRichTextAction* action)
 {
     if (!m_actions.Member(action))
         m_actions.Append(action);
+
+    if (!m_freeze && action->GetRichTextCtrl() && action->GetRichTextCtrl()->IsFrozen())
+        m_freeze = true;
 }
 
 bool wxRichTextCommand::Do()
@@ -11672,7 +11683,13 @@ bool wxRichTextCommand::Do()
     for (wxList::compatibility_iterator node = m_actions.GetFirst(); node; node = node->GetNext())
     {
         wxRichTextAction* action = (wxRichTextAction*) node->GetData();
+        if (GetFreeze() && node == m_actions.GetFirst() && action->GetRichTextCtrl())
+            action->GetRichTextCtrl()->Freeze();
+
         action->Do();
+
+        if (GetFreeze() && node == m_actions.GetLast() && action->GetRichTextCtrl())
+            action->GetRichTextCtrl()->Thaw();
     }
 
     return true;
@@ -11683,7 +11700,13 @@ bool wxRichTextCommand::Undo()
     for (wxList::compatibility_iterator node = m_actions.GetLast(); node; node = node->GetPrevious())
     {
         wxRichTextAction* action = (wxRichTextAction*) node->GetData();
+        if (GetFreeze() && node == m_actions.GetLast() && action->GetRichTextCtrl())
+            action->GetRichTextCtrl()->Freeze();
+
         action->Undo();
+
+        if (GetFreeze() && node == m_actions.GetFirst() && action->GetRichTextCtrl())
+            action->GetRichTextCtrl()->Thaw();
     }
 
     return true;
@@ -12460,7 +12483,7 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context
     // Don't repeat unless absolutely necessary
     if (m_imageCache.IsOk() && !resetCache && !context.GetLayingOut())
     {
-        retImageSize = wxSize(m_imageCache.GetWidth(), m_imageCache.GetHeight());
+        retImageSize = wxSize(m_imageCache.GetScaledWidth(), m_imageCache.GetScaledHeight());
         return true;
     }
 
@@ -12613,16 +12636,16 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context
     retImageSize = wxSize(width, height);
 
     bool changed = false;
-    return LoadAndScaleImageCache(image, retImageSize, context.GetDelayedImageLoading(), changed);
+    return LoadAndScaleImageCache(image, retImageSize, context, changed);
 }
 
 // Do the loading and scaling
-bool wxRichTextImage::LoadAndScaleImageCache(wxImage& image, const wxSize& sz, bool delayLoading, bool& changed)
+bool wxRichTextImage::LoadAndScaleImageCache(wxImage& image, const wxSize& sz, wxRichTextDrawingContext& context, bool& changed)
 {
     int width = sz.x;
     int height = sz.y;
 
-    if (m_imageCache.IsOk() && m_imageCache.GetWidth() == width && m_imageCache.GetHeight() == height)
+    if (m_imageCache.IsOk() && m_imageCache.GetScaledWidth() == width && m_imageCache.GetScaledHeight() == height)
     {
         // Do nothing, we didn't need to change the image cache
         changed = false;
@@ -12631,7 +12654,7 @@ bool wxRichTextImage::LoadAndScaleImageCache(wxImage& image, const wxSize& sz, b
     {
         changed = true;
 
-        if (delayLoading)
+        if (context.GetDelayedImageLoading())
         {
             if (m_imageCache.IsOk())
                 m_imageCache = wxNullBitmap;
@@ -12657,6 +12680,13 @@ bool wxRichTextImage::LoadAndScaleImageCache(wxImage& image, const wxSize& sz, b
             m_imageCache = wxBitmap(image);
         else
         {
+            double scaleFactor = 1.0;
+            // Scaled bitmaps only work on Mac currently
+#ifdef __WXOSX_COCOA__
+            if (context.GetBuffer() && context.GetBuffer()->GetRichTextCtrl())
+                scaleFactor = context.GetBuffer()->GetRichTextCtrl()->GetContentScaleFactor();
+#endif
+
             // If the original width and height is small, e.g. 400 or below,
             // scale up and then down to improve image quality. This can make
             // a big difference, with not much performance hit.
@@ -12665,11 +12695,14 @@ bool wxRichTextImage::LoadAndScaleImageCache(wxImage& image, const wxSize& sz, b
             if (image.GetWidth() <= upscaleThreshold || image.GetHeight() <= upscaleThreshold)
             {
                 img = image.Scale(image.GetWidth()*2, image.GetHeight()*2);
-                img.Rescale(width, height, wxIMAGE_QUALITY_HIGH);
+                img.Rescale(width*scaleFactor, height*scaleFactor, wxIMAGE_QUALITY_HIGH);
             }
             else
-                img = image.Scale(width, height, wxIMAGE_QUALITY_HIGH);
-            m_imageCache = wxBitmap(img);
+                img = image.Scale(width*scaleFactor, height*scaleFactor, wxIMAGE_QUALITY_HIGH);
+                
+            // On Mac, this will create a bitmap that is twice as big as the required dimensions,
+            // with a scale factor that indicates that the extra detail should be used on HiDPI displays.
+            m_imageCache = wxBitmap(img, wxBITMAP_SCREEN_DEPTH, scaleFactor);
         }
     }
 

@@ -351,9 +351,9 @@ const wxChar* wxGetHomeDir(wxString *pstr)
         // Cygwin returns unix type path but that does not work well
         static wxChar windowsPath[MAX_PATH];
         #if CYGWIN_VERSION_DLL_MAJOR >= 1007
-            cygwin_conv_path(CCP_POSIX_TO_WIN_W, strDir, windowsPath, MAX_PATH);
+            cygwin_conv_path(CCP_POSIX_TO_WIN_W, strDir.c_str(), windowsPath, MAX_PATH);
         #else
-            cygwin_conv_to_full_win32_path(strDir, windowsPath);
+            cygwin_conv_to_full_win32_path(strDir.c_str(), windowsPath);
         #endif
         strDir = windowsPath;
     #endif
@@ -997,23 +997,37 @@ wxLoadUserResource(const wxString& resourceName,
 namespace
 {
 
-// Helper function wrapping Windows GetVersionEx() which is deprecated since
-// Windows 8. For now, all we do in this wrapper is to avoid the deprecation
-// warnings but this is not enough as the function now actually doesn't return
-// the correct value any more and we need to use VerifyVersionInfo() to perform
-// binary search to find the real Windows version.
-OSVERSIONINFOEX wxGetWindowsVersionInfo()
+// Helper trying to get the real Windows version which is needed because
+// GetVersionEx() doesn't return it any more since Windows 8.
+OSVERSIONINFOEXW wxGetWindowsVersionInfo()
 {
-    OSVERSIONINFOEX info;
+    OSVERSIONINFOEXW info;
     wxZeroMemory(info);
+    info.dwOSVersionInfoSize = sizeof(info);
+
+    // The simplest way to get the version is to call the kernel
+    // RtlGetVersion() directly, if it is available.
+#if wxUSE_DYNLIB_CLASS
+    wxDynamicLibrary dllNtDll;
+    if ( dllNtDll.Load(wxS("ntdll.dll"), wxDL_VERBATIM | wxDL_QUIET) )
+    {
+        typedef LONG /* NTSTATUS */ (WINAPI *RtlGetVersion_t)(OSVERSIONINFOEXW*);
+
+        RtlGetVersion_t wxDL_INIT_FUNC(pfn, RtlGetVersion, dllNtDll);
+        if ( pfnRtlGetVersion &&
+                (pfnRtlGetVersion(&info) == 0 /* STATUS_SUCCESS */) )
+        {
+            return info;
+        }
+    }
+#endif // wxUSE_DYNLIB_CLASS
 
 #ifdef __VISUALC__
     #pragma warning(push)
     #pragma warning(disable:4996) // 'xxx': was declared deprecated
 #endif
 
-    info.dwOSVersionInfoSize = sizeof(info);
-    if ( !::GetVersionEx(reinterpret_cast<OSVERSIONINFO *>(&info)) )
+    if ( !::GetVersionExW(reinterpret_cast<OSVERSIONINFOW *>(&info)) )
     {
         // This really shouldn't ever happen.
         wxFAIL_MSG( "GetVersionEx() unexpectedly failed" );
@@ -1056,7 +1070,7 @@ wxString wxGetOsDescription()
 {
     wxString str;
 
-    const OSVERSIONINFOEX info = wxGetWindowsVersionInfo();
+    const OSVERSIONINFOEXW info = wxGetWindowsVersionInfo();
     switch ( info.dwPlatformId )
     {
 #ifdef VER_PLATFORM_WIN32_CE
@@ -1236,7 +1250,7 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
     // query the OS info only once as it's not supposed to change
     if ( !s_version.initialized )
     {
-        const OSVERSIONINFOEX info = wxGetWindowsVersionInfo();
+        const OSVERSIONINFOEXW info = wxGetWindowsVersionInfo();
 
         s_version.initialized = true;
 
@@ -1265,7 +1279,10 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 
 bool wxCheckOsVersion(int majorVsn, int minorVsn)
 {
-    OSVERSIONINFOEX osvi = { sizeof(osvi), 0, 0, 0, 0, { 0 }, 0, 0 };
+    OSVERSIONINFOEX osvi;
+    wxZeroMemory(osvi);
+    osvi.dwOSVersionInfoSize = sizeof(osvi);
+
     DWORDLONG const dwlConditionMask =
         ::VerSetConditionMask(
         ::VerSetConditionMask(

@@ -116,27 +116,34 @@ protected :
 
 NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
-// a minimal NSFormatter that just avoids getting too long entries
-@interface wxMaximumLengthFormatter : NSFormatter
+// an NSFormatter used to implement SetMaxLength() and ForceUpper() methods
+@interface wxTextEntryFormatter : NSFormatter
 {
     int maxLength;
     wxTextEntry* field;
+    bool forceUpper;
 }
 
 @end
 
-@implementation wxMaximumLengthFormatter
+@implementation wxTextEntryFormatter
 
 - (id)init 
 {
     self = [super init];
     maxLength = 0;
+    forceUpper = false;
     return self;
 }
 
 - (void) setMaxLength:(int) maxlen 
 {
     maxLength = maxlen;
+}
+
+- (void) forceUpper
+{
+    forceUpper = true;
 }
 
 - (NSString *)stringForObjectValue:(id)anObject 
@@ -155,12 +162,25 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 - (BOOL)isPartialStringValid:(NSString **)partialStringPtr proposedSelectedRange:(NSRangePointer)proposedSelRangePtr 
               originalString:(NSString *)origString originalSelectedRange:(NSRange)origSelRange errorDescription:(NSString **)error
 {
-    int len = [*partialStringPtr length];
-    if ( maxLength > 0 && len > maxLength )
+    if ( maxLength > 0 )
     {
-        field->SendMaxLenEvent();
-        return NO;
+        if ( [*partialStringPtr length] > maxLength )
+        {
+            field->SendMaxLenEvent();
+            return NO;
+        }
     }
+
+    if ( forceUpper )
+    {
+        NSString* upper = [*partialStringPtr uppercaseString];
+        if ( ![*partialStringPtr isEqual:upper] )
+        {
+            *partialStringPtr = upper;
+            return NO;
+        }
+    }
+
     return YES;
 }
 
@@ -302,8 +322,9 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     // programmatically.
     if ( !wxMacEditHelper::IsCurrentEditor(self) )
     {
+        NSString *text = [str isKindOfClass:[NSAttributedString class]] ? [str string] : str;
         wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
-        if ( impl && lastKeyDownEvent && impl->DoHandleCharEvent(lastKeyDownEvent, str) )
+        if ( impl && lastKeyDownEvent && impl->DoHandleCharEvent(lastKeyDownEvent, text) )
             return;
     }
 
@@ -560,25 +581,43 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 // wxNSTextViewControl
 
-wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w )
+wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long style )
     : wxWidgetCocoaImpl(wxPeer, w),
       wxTextWidgetImpl(wxPeer)
 {
     wxNSTextScrollView* sv = (wxNSTextScrollView*) w;
     m_scrollView = sv;
 
-    [m_scrollView setHasVerticalScroller:YES];
-    [m_scrollView setHasHorizontalScroller:NO];
-    // TODO Remove if no regression, this was causing automatic resizes of multi-line textfields when the tlw changed
-    // [m_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-    NSSize contentSize = [m_scrollView contentSize];
+    const bool hasHScroll = (style & wxHSCROLL) != 0;
 
-    wxNSTextView* tv = [[wxNSTextView alloc] initWithFrame: NSMakeRect(0, 0,
-            contentSize.width, contentSize.height)];
+    [m_scrollView setHasVerticalScroller:YES];
+    [m_scrollView setHasHorizontalScroller:hasHScroll];
+    NSSize contentSize = [m_scrollView contentSize];
+    NSRect viewFrame = NSMakeRect(
+            0, 0,
+            hasHScroll ? FLT_MAX : contentSize.width, contentSize.height
+        );
+
+    wxNSTextView* const tv = [[wxNSTextView alloc] initWithFrame: viewFrame];
     m_textView = tv;
     [tv setVerticallyResizable:YES];
-    [tv setHorizontallyResizable:NO];
+    [tv setHorizontallyResizable:hasHScroll];
     [tv setAutoresizingMask:NSViewWidthSizable];
+
+    if ( hasHScroll )
+    {
+        [[tv textContainer] setContainerSize:NSMakeSize(FLT_MAX, FLT_MAX)];
+        [[tv textContainer] setWidthTracksTextView:NO];
+    }
+
+    if ( style & wxTE_RIGHT)
+    {
+        [tv setAlignment:NSRightTextAlignment];
+    }
+    else if ( style & wxTE_CENTRE)
+    {
+        [tv setAlignment:NSCenterTextAlignment];
+    }
 
     if ( !wxPeer->HasFlag(wxTE_RICH | wxTE_RICH2) )
     {
@@ -850,12 +889,30 @@ void wxNSTextFieldControl::SetStringValue( const wxString &str)
     [m_textField setStringValue: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
 }
 
+wxTextEntryFormatter* wxNSTextFieldControl::GetFormatter()
+{
+    // We only ever call setFormatter with wxTextEntryFormatter, so the cast is
+    // safe.
+    wxTextEntryFormatter*
+        formatter = (wxTextEntryFormatter*)[m_textField formatter];
+    if ( !formatter )
+    {
+        formatter = [[[wxTextEntryFormatter alloc] init] autorelease];
+        [formatter setTextEntry:GetTextEntry()];
+        [m_textField setFormatter:formatter];
+    }
+
+    return formatter;
+}
+
 void wxNSTextFieldControl::SetMaxLength(unsigned long len)
 {
-    wxMaximumLengthFormatter* formatter = [[[wxMaximumLengthFormatter alloc] init] autorelease];
-    [formatter setMaxLength:len];
-    [formatter setTextEntry:GetTextEntry()];
-    [m_textField setFormatter:formatter];
+    [GetFormatter() setMaxLength:len];
+}
+
+void wxNSTextFieldControl::ForceUpper()
+{
+    [GetFormatter() forceUpper];
 }
 
 void wxNSTextFieldControl::Copy()
@@ -1063,7 +1120,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
     {
         wxNSTextScrollView* v = nil;
         v = [[wxNSTextScrollView alloc] initWithFrame:r];
-        c = new wxNSTextViewControl( wxpeer, v );
+        c = new wxNSTextViewControl( wxpeer, v, style );
         c->SetNeedsFocusRect( true );
     }
     else

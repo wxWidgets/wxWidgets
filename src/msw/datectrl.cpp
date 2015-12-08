@@ -70,9 +70,7 @@ WXDWORD wxDatePickerCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD styleMSW = wxDatePickerCtrlBase::MSWGetStyle(style, exstyle);
 
-    // although MSDN doesn't mention it, DTS_UPDOWN doesn't work with
-    // comctl32.dll 4.72
-    if ( wxApp::GetComCtl32Version() > 472 && (style & wxDP_SPIN) )
+    if ( style & wxDP_SPIN )
         styleMSW |= DTS_UPDOWN;
     //else: drop down by default
 

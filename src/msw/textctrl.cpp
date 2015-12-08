@@ -66,6 +66,10 @@
     #include "wx/msw/ole/oleutils.h"
 #endif // wxUSE_RICHEDIT
 
+#if wxUSE_INKEDIT
+    #include <wx/dynlib.h>
+#endif
+
 #include "wx/msw/missing.h"
 
 #if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
@@ -2255,7 +2259,7 @@ bool wxTextCtrl::AcceptsFocusFromKeyboard() const
 
 wxSize wxTextCtrl::DoGetBestSize() const
 {
-    return DoGetSizeFromTextSize( DEFAULT_ITEM_WIDTH );
+    return DoGetSizeFromTextSize( FromDIP(DEFAULT_ITEM_WIDTH) );
 }
 
 wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const

@@ -47,7 +47,7 @@ public:
     virtual wxString GetLocalizedResourcesDir(const wxString& lang,
                                               ResourceCat category) const wxOVERRIDE;
 #ifndef __VMS
-    virtual wxString GetDocumentsDir() const wxOVERRIDE;
+    virtual wxString GetUserDir(Dir userDir) const wxOVERRIDE;
 #endif
 
 protected:

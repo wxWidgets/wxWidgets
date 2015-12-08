@@ -1005,8 +1005,7 @@ enum
         Under Unix, if the process is the group leader then passing
         wxKILL_CHILDREN to wxKill() kills all children as well as pid.
 
-        Under MSW, applies only to console applications and is only supported
-        under NT family (i.e. not under Windows 9x). It corresponds to the
+        Under MSW, applies only to console applications. It corresponds to the
         native @c CREATE_NEW_PROCESS_GROUP and, in particular, ensures that
         Ctrl-Break signals will be sent to all children of this process as well
         to the process itself. Support for this flag under MSW was added in
@@ -1341,7 +1340,7 @@ bool wxShell(const wxString& command = wxEmptyString);
     the @a flags.
 
     @note Note that performing the shutdown requires the corresponding access
-        rights (superuser under Unix, SE_SHUTDOWN privilege under Windows NT)
+        rights (superuser under Unix, SE_SHUTDOWN privilege under Windows)
         and that this function is only implemented under Unix and MSW.
 
     @param flags

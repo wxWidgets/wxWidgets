@@ -26,7 +26,7 @@ ShortName: wxgtk
 Maintainer: Francesco Montorsi <frm@users.sourceforge.net>
 Packager: Francesco Montorsi <frm@users.sourceforge.net>
 Summary: Library for cross-platform GUI programming (gtk2-unicode-release port)
-URL: http://www.wxwidgets.org/
+URL: https://www.wxwidgets.org/
 Licence: wxWindows licence
 SoftwareVersion: @PACKAGE_VERSION@
 PackageVersion: 1

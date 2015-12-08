@@ -29,9 +29,10 @@
     #include "wx/utils.h"
 #endif //WX_PRECOMP
 
-#include "wx/dynlib.h"
-
 #include "wx/msw/private.h"     // includes <windows.h>
+
+#include "wx/msw/wrapwin.h"
+#include <shlwapi.h>
 
 // ============================================================================
 // implementation
@@ -264,34 +265,7 @@ void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2)
 
 extern bool wxEnableFileNameAutoComplete(HWND hwnd)
 {
-#if wxUSE_DYNLIB_CLASS
-    typedef HRESULT (WINAPI *SHAutoComplete_t)(HWND, DWORD);
-
-    static SHAutoComplete_t s_pfnSHAutoComplete = NULL;
-    static bool s_initialized = false;
-
-    if ( !s_initialized )
-    {
-        s_initialized = true;
-
-        wxLogNull nolog;
-        wxDynamicLibrary dll(wxT("shlwapi.dll"));
-        if ( dll.IsLoaded() )
-        {
-            s_pfnSHAutoComplete =
-                (SHAutoComplete_t)dll.GetSymbol(wxT("SHAutoComplete"));
-            if ( s_pfnSHAutoComplete )
-            {
-                // won't be unloaded until the process termination, no big deal
-                dll.Detach();
-            }
-        }
-    }
-
-    if ( !s_pfnSHAutoComplete )
-        return false;
-
-    HRESULT hr = s_pfnSHAutoComplete(hwnd, 0x10 /* SHACF_FILESYS_ONLY */);
+    HRESULT hr = ::SHAutoComplete(hwnd, 0x10 /* SHACF_FILESYS_ONLY */);
     if ( FAILED(hr) )
     {
         wxLogApiError(wxT("SHAutoComplete"), hr);
@@ -299,8 +273,4 @@ extern bool wxEnableFileNameAutoComplete(HWND hwnd)
     }
 
     return true;
-#else
-    wxUnusedVar(hwnd);
-    return false;
-#endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
 }

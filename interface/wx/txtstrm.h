@@ -292,8 +292,8 @@ typedef enum
     cout << 1.23456;
     @endcode
 
-    The wxTextOutputStream writes text files (or streams) on DOS, Macintosh and
-    Unix in their native formats (concerning the line ending).
+    The wxTextOutputStream writes text files (or streams) on Windows or Unix in
+    their native formats (concerning the line ending).
 
     @library{wxbase}
     @category{streams}

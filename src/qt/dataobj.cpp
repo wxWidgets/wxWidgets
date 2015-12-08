@@ -8,6 +8,12 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#include <QObject>
+
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"
 #include "wx/dataobj.h"

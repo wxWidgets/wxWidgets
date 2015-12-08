@@ -40,6 +40,12 @@
     #include "wx/msw/registry.h"
     #include "wx/msw/private.h"
     #include <shlwapi.h>
+
+    // For MSVC we can link in the required library explicitly, for the other
+    // compilers (e.g. MinGW) this needs to be done at makefiles level.
+    #ifdef __VISUALC__
+        #pragma comment(lib, "shlwapi")
+    #endif
 #endif // OS
 
 // Unfortunately the corresponding SDK constants are absent from the headers
@@ -74,6 +80,17 @@ class WXDLLIMPEXP_FWD_CORE wxIcon;
 //   c) shell\open\command and shell\open\print subkeys containing the commands
 //      to open/print the file (the positional parameters are introduced by %1,
 //      %2, ... in these strings, we change them to %s ourselves)
+
+// Notice that HKCR can be used only when reading from the registry, when
+// writing to it, we need to write to HKCU\Software\Classes instead as HKCR is
+// a merged view of that location and HKLM\Software\Classes that we generally
+// wouldn't have the write permissions to but writing to HKCR will try writing
+// to the latter unless the key being written to already exists under the
+// former, resulting in a "Permission denied" error without administrative
+// permissions. So the right thing to do is to use HKCR when reading, to
+// respect both per-user and machine-global associations, but only write under
+// HKCU.
+static const wxChar *CLASSES_ROOT_KEY = wxS("Software\\Classes\\");
 
 // although I don't know of any official documentation which mentions this
 // location, uses it, so it isn't likely to change
@@ -199,7 +216,7 @@ size_t wxFileTypeImpl::GetAllCommands(wxArrayString *verbs,
 
 bool wxFileTypeImpl::EnsureExtKeyExists()
 {
-    wxRegKey rkey(wxRegKey::HKCR, m_ext);
+    wxRegKey rkey(wxRegKey::HKCU, CLASSES_ROOT_KEY + m_ext);
     if ( !rkey.Exists() )
     {
         if ( !rkey.Create() || !rkey.SetValue(wxEmptyString, m_strFileType) )
@@ -227,31 +244,13 @@ wxString wxAssocQueryString(ASSOCSTR assoc,
                             wxString ext,
                             const wxString& verb = wxString())
 {
-    typedef HRESULT (WINAPI *AssocQueryString_t)(ASSOCF, ASSOCSTR,
-                                                  LPCTSTR, LPCTSTR, LPTSTR,
-                                                  DWORD *);
-    static AssocQueryString_t s_pfnAssocQueryString = (AssocQueryString_t)-1;
-    static wxDynamicLibrary s_dllShlwapi;
-
-    if ( s_pfnAssocQueryString == (AssocQueryString_t)-1 )
-    {
-        if ( !s_dllShlwapi.Load(wxT("shlwapi.dll"), wxDL_VERBATIM | wxDL_QUIET) )
-            s_pfnAssocQueryString = NULL;
-        else
-            wxDL_INIT_FUNC_AW(s_pfn, AssocQueryString, s_dllShlwapi);
-    }
-
-    if ( !s_pfnAssocQueryString )
-        return wxString();
-
-
     DWORD dwSize = MAX_PATH;
     TCHAR bufOut[MAX_PATH] = { 0 };
 
     if ( ext.empty() || ext[0] != '.' )
         ext.Prepend('.');
 
-    HRESULT hr = s_pfnAssocQueryString
+    HRESULT hr = ::AssocQueryString
                  (
                     wxASSOCF_NOTRUNCATE,// Fail if buffer is too small.
                     assoc,              // The association to retrieve.
@@ -502,20 +501,6 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
     return CreateFileType(wxEmptyString, ext);
 }
 
-/*
-wxFileType *
-wxMimeTypesManagerImpl::GetOrAllocateFileTypeFromExtension(const wxString& ext)
-{
-    wxFileType *fileType = GetFileTypeFromExtension(ext);
-    if ( !fileType )
-    {
-        fileType = CreateFileType(wxEmptyString, ext);
-    }
-
-    return fileType;
-}
-*/
-
 // MIME type -> extension -> file type
 wxFileType *
 wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
@@ -579,11 +564,11 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
         extWithDot = wxT('.');
     extWithDot += ext;
 
-    // start by setting the HKCR\\.ext entries
+    // start by setting the entries under ".ext"
     // default is filetype; content type is mimetype
     const wxString& filetypeOrig = ftInfo.GetShortDesc();
 
-    wxRegKey key(wxRegKey::HKCR, extWithDot);
+    wxRegKey key(wxRegKey::HKCU, CLASSES_ROOT_KEY + extWithDot);
     if ( !key.Exists() )
     {
         // create the mapping from the extension to the filetype
@@ -631,7 +616,7 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
             // create the MIME key
             wxString strKey = MIME_DATABASE_KEY;
             strKey << mimetype;
-            wxRegKey keyMIME(wxRegKey::HKCR, strKey);
+            wxRegKey keyMIME(wxRegKey::HKCU, CLASSES_ROOT_KEY + strKey);
             ok = keyMIME.Create();
 
             if ( ok )
@@ -652,7 +637,7 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
            extWithDot = wxT('.');
         extWithDot += ext;
 
-        wxRegKey key2(wxRegKey::HKCR, extWithDot);
+        wxRegKey key2(wxRegKey::HKCU, CLASSES_ROOT_KEY + extWithDot);
         if ( !key2.Exists() )
             key2.Create();
         key2.SetValue(wxEmptyString, filetype);
@@ -669,7 +654,7 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
                 // create the MIME key
                 wxString strKey = MIME_DATABASE_KEY;
                 strKey << mimetype2;
-                wxRegKey keyMIME(wxRegKey::HKCR, strKey);
+                wxRegKey keyMIME(wxRegKey::HKCU, CLASSES_ROOT_KEY + strKey);
                 ok = keyMIME.Create();
 
                 if ( ok )
@@ -680,11 +665,11 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
             }
         }
 
-    } // end of for loop; all extensions now point to HKCR\.ext\Default
+    } // end of for loop; all extensions now point to .ext\Default
 
     // create the filetype key itself (it will be empty for now, but
     // SetCommand(), SetDefaultIcon() &c will use it later)
-    wxRegKey keyFT(wxRegKey::HKCR, filetype);
+    wxRegKey keyFT(wxRegKey::HKCU, CLASSES_ROOT_KEY + filetype);
     keyFT.Create();
 
     wxFileType *ft = CreateFileType(filetype, extWithDot);
@@ -712,65 +697,13 @@ bool wxFileTypeImpl::SetCommand(const wxString& cmd,
     if ( !EnsureExtKeyExists() )
         return false;
 
-    wxRegKey rkey(wxRegKey::HKCR, GetVerbPath(verb));
-#if 0
-    if ( rkey.Exists() && overwriteprompt )
-    {
-#if wxUSE_GUI
-        wxString old;
-        rkey.QueryValue(wxEmptyString, old);
-        if ( wxMessageBox
-             (
-                wxString::Format(
-                    _("Do you want to overwrite the command used to %s "
-                      "files with extension \"%s\" ?\nCurrent value is \n%s, "
-                      "\nNew value is \n%s %1"), // bug here FIX need %1 ??
-                    verb.c_str(),
-                    m_ext.c_str(),
-                    old.c_str(),
-                    cmd.c_str()),
-                _("Confirm registry update"),
-                wxYES_NO | wxICON_QUESTION
-             ) != wxYES )
-#endif // wxUSE_GUI
-        {
-            // cancelled by user
-            return false;
-        }
-    }
-#endif
+    wxRegKey rkey(wxRegKey::HKCU, CLASSES_ROOT_KEY + GetVerbPath(verb));
+
     // TODO:
     // 1. translate '%s' to '%1' instead of always adding it
     // 2. create DDEExec value if needed (undo GetCommand)
     return rkey.Create() && rkey.SetValue(wxEmptyString, cmd + wxT(" \"%1\"") );
 }
-
-/* // no longer used
-bool wxFileTypeImpl::SetMimeType(const wxString& mimeTypeOrig)
-{
-    wxCHECK_MSG( !m_ext.empty(), false, wxT("SetMimeType() needs extension") );
-
-    if ( !EnsureExtKeyExists() )
-        return false;
-
-    // VZ: is this really useful? (FIXME)
-    wxString mimeType;
-    if ( !mimeTypeOrig )
-    {
-        // make up a default value for it
-        wxString cmd;
-        wxFileName::SplitPath(GetCommand(wxT("open")), NULL, &cmd, NULL);
-        mimeType << wxT("application/x-") << cmd;
-    }
-    else
-    {
-        mimeType = mimeTypeOrig;
-    }
-
-    wxRegKey rkey(wxRegKey::HKCR, m_ext);
-    return rkey.Create() && rkey.SetValue(wxT("Content Type"), mimeType);
-}
-*/
 
 bool wxFileTypeImpl::SetDefaultIcon(const wxString& cmd, int index)
 {
@@ -782,7 +715,8 @@ bool wxFileTypeImpl::SetDefaultIcon(const wxString& cmd, int index)
     if ( !EnsureExtKeyExists() )
         return false;
 
-    wxRegKey rkey(wxRegKey::HKCR, m_strFileType + wxT("\\DefaultIcon"));
+    wxRegKey rkey(wxRegKey::HKCU,
+                  CLASSES_ROOT_KEY + m_strFileType + wxT("\\DefaultIcon"));
 
     return rkey.Create() &&
            rkey.SetValue(wxEmptyString,
@@ -797,7 +731,7 @@ bool wxFileTypeImpl::SetDescription (const wxString& desc)
     if ( !EnsureExtKeyExists() )
         return false;
 
-    wxRegKey rkey(wxRegKey::HKCR, m_strFileType );
+    wxRegKey rkey(wxRegKey::HKCU, CLASSES_ROOT_KEY + m_strFileType );
 
     return rkey.Create() &&
            rkey.SetValue(wxEmptyString, desc);
@@ -819,16 +753,6 @@ bool wxFileTypeImpl::Unassociate()
     if ( !RemoveDescription() )
         result = false;
 
-/*
-    //this might hold other keys, eg some have CSLID keys
-    if ( result )
-    {
-        // delete the root key
-        wxRegKey key(wxRegKey::HKCR, m_ext);
-        if ( key.Exists() )
-            result = key.DeleteSelf();
-    }
-*/
     return result;
 }
 
@@ -842,7 +766,7 @@ bool wxFileTypeImpl::RemoveCommand(const wxString& verb)
     wxCHECK_MSG( !m_ext.empty() && !verb.empty(), false,
                  wxT("RemoveCommand() needs an extension and a verb") );
 
-    wxRegKey rkey(wxRegKey::HKCR, GetVerbPath(verb));
+    wxRegKey rkey(wxRegKey::HKCU, CLASSES_ROOT_KEY + GetVerbPath(verb));
 
     // if the key already doesn't exist, it's a success
     return !rkey.Exists() || rkey.DeleteSelf();
@@ -852,7 +776,7 @@ bool wxFileTypeImpl::RemoveMimeType()
 {
     wxCHECK_MSG( !m_ext.empty(), false, wxT("RemoveMimeType() needs extension") );
 
-    wxRegKey rkey(wxRegKey::HKCR, m_ext);
+    wxRegKey rkey(wxRegKey::HKCU, CLASSES_ROOT_KEY + m_ext);
     return !rkey.Exists() || rkey.DeleteSelf();
 }
 
@@ -861,7 +785,8 @@ bool wxFileTypeImpl::RemoveDefaultIcon()
     wxCHECK_MSG( !m_ext.empty(), false,
                  wxT("RemoveDefaultIcon() needs extension") );
 
-    wxRegKey rkey (wxRegKey::HKCR, m_strFileType  + wxT("\\DefaultIcon"));
+    wxRegKey rkey (wxRegKey::HKCU,
+                   CLASSES_ROOT_KEY + m_strFileType  + wxT("\\DefaultIcon"));
     return !rkey.Exists() || rkey.DeleteSelf();
 }
 
@@ -870,7 +795,7 @@ bool wxFileTypeImpl::RemoveDescription()
     wxCHECK_MSG( !m_ext.empty(), false,
                  wxT("RemoveDescription() needs extension") );
 
-    wxRegKey rkey (wxRegKey::HKCR, m_strFileType );
+    wxRegKey rkey (wxRegKey::HKCU, CLASSES_ROOT_KEY + m_strFileType );
     return !rkey.Exists() || rkey.DeleteSelf();
 }
 

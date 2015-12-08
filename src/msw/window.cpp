@@ -232,9 +232,21 @@ bool gs_insideCaptureChanged = false;
 LRESULT WXDLLEXPORT APIENTRY
 wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-
 #if wxDEBUG_LEVEL >= 2
-    const wxChar *wxGetMessageName(int message);
+const wxChar *wxGetMessageName(int message);
+
+inline
+void wxTraceMSWMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    // The casts to size_t allow to avoid having different code for Win32 and
+    // Win64 as size_t is of the right size in both cases, unlike int or long.
+    wxLogTrace("winmsg",
+               wxT("Processing %s(hWnd=%p, wParam=%zx, lParam=%zx)"),
+               wxGetMessageName(message),
+               hWnd,
+               static_cast<size_t>(wParam),
+               static_cast<size_t>(lParam));
+}
 #endif  // wxDEBUG_LEVEL >= 2
 
 void wxRemoveHandleAssociation(wxWindowMSW *win);
@@ -512,8 +524,14 @@ void wxWindowMSW::SetId(wxWindowID winid)
     // changing its ID because Windows still uses the old one.
     if ( GetHwnd() )
     {
+        ::SetLastError(0);
+
         if ( !::SetWindowLong(GetHwnd(), GWL_ID, winid) )
-            wxLogLastError(wxT("SetWindowLong(GWL_ID)"));
+        {
+            const DWORD err = ::GetLastError();
+            if ( err )
+                wxLogApiError(wxT("SetWindowLong(GWL_ID)"), err);
+        }
     }
 }
 
@@ -637,24 +655,6 @@ wxWindowMSW::MSWShowWithEffect(bool show,
     if ( !wxWindowBase::Show(show) )
         return false;
 
-    typedef BOOL (WINAPI *AnimateWindow_t)(HWND, DWORD, DWORD);
-
-    static AnimateWindow_t s_pfnAnimateWindow = NULL;
-    static bool s_initDone = false;
-    if ( !s_initDone )
-    {
-        wxDynamicLibrary dllUser32(wxT("user32.dll"), wxDL_VERBATIM | wxDL_QUIET);
-        wxDL_INIT_FUNC(s_pfn, AnimateWindow, dllUser32);
-
-        s_initDone = true;
-
-        // notice that it's ok to unload user32.dll here as it won't be really
-        // unloaded, being still in use because we link to it statically too
-    }
-
-    if ( !s_pfnAnimateWindow )
-        return Show(show);
-
     // Show() has a side effect of sending a WM_SIZE to the window, which helps
     // ensuring that it's laid out correctly, but AnimateWindow() doesn't do
     // this so send the event ourselves
@@ -719,7 +719,7 @@ wxWindowMSW::MSWShowWithEffect(bool show,
             return false;
     }
 
-    if ( !(*s_pfnAnimateWindow)(GetHwnd(), timeout, dwFlags) )
+    if ( !::AnimateWindow(GetHwnd(), timeout, dwFlags) )
     {
         wxLogLastError(wxT("AnimateWindow"));
 
@@ -1540,8 +1540,6 @@ void wxWindowMSW::Update()
 // drag and drop
 // ---------------------------------------------------------------------------
 
-#if wxUSE_DRAG_AND_DROP
-
 #if wxUSE_STATBOX
 
 // we need to lower the sibling static boxes so controls contained within can be
@@ -1573,9 +1571,8 @@ static inline void AdjustStaticBoxZOrder(wxWindow * WXUNUSED(parent))
 
 #endif // wxUSE_STATBOX/!wxUSE_STATBOX
 
-#endif // drag and drop is used
-
 #if wxUSE_DRAG_AND_DROP
+
 void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
 {
     if ( m_dropTarget != 0 ) {
@@ -1590,6 +1587,7 @@ void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
         m_dropTarget->Register(m_hWnd);
     }
 }
+
 #endif // wxUSE_DRAG_AND_DROP
 
 // old-style file manager drag&drop support: we retain the old-style
@@ -2618,14 +2616,10 @@ wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     // trace all messages: useful for the debugging but noticeably slows down
     // the code so don't do it by default
 #if wxDEBUG_LEVEL >= 2
-    // notice that we cast wParam and lParam to long to avoid mismatch with
-    // format specifiers in 64 bit builds where they are both int64 quantities
-    //
-    // casting like this loses information, of course, but it shouldn't matter
-    // much for this diagnostic code and it keeps the code simple
-    wxLogTrace("winmsg",
-               wxT("Processing %s(hWnd=%p, wParam=%08lx, lParam=%08lx)"),
-               wxGetMessageName(message), hWnd, (long)wParam, (long)lParam);
+    // We have to do this inside a helper function as wxLogTrace() constructs
+    // an object internally, but objects can't be used in functions using __try
+    // (expanded from wxSEH_TRY below) with MSVC.
+    wxTraceMSWMessage(hWnd, message, wParam, lParam);
 #endif // wxDEBUG_LEVEL >= 2
 
     wxWindowMSW *wnd = wxFindWinFromHandle(hWnd);
@@ -3009,6 +3003,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     case VK_OEM_5:
                     case VK_OEM_6:
                     case VK_OEM_7:
+                    case VK_OEM_8:
                     case VK_OEM_102:
                     case VK_OEM_PLUS:
                     case VK_OEM_COMMA:
@@ -6051,6 +6046,7 @@ int VKToWX(WXWORD vk, WXLPARAM lParam, wchar_t *uc)
         case VK_OEM_5:
         case VK_OEM_6:
         case VK_OEM_7:
+        case VK_OEM_8:
         case VK_OEM_102:
             // MapVirtualKey() returns 0 if it fails to convert the virtual
             // key which nicely corresponds to our WXK_NONE.

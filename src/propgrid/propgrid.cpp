@@ -4660,13 +4660,20 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
 
     if ( !HasExtraStyle(wxPG_EX_NATIVE_DOUBLE_BUFFERING) )
     {
+        // Scaled bitmaps only work on Mac currently
+#ifdef __WXOSX_COCOA__
+        double scaleFactor = GetContentScaleFactor();
+#else
+        double scaleFactor = 1.0;
+#endif
         int dblh = (m_lineHeight*2);
         if ( !m_doubleBuffer )
         {
             // Create double buffer bitmap to draw on, if none
             int w = wxMax(width, 250);
             int h = wxMax(height + dblh, 400);
-            m_doubleBuffer = new wxBitmap( w, h );
+            m_doubleBuffer = new wxBitmap;
+            m_doubleBuffer->CreateScaled( w, h, wxBITMAP_SCREEN_DEPTH, scaleFactor );
         }
         else
         {
@@ -4679,7 +4686,8 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
                 if ( w < width ) w = width;
                 if ( h < (height+dblh) ) h = height + dblh;
                 delete m_doubleBuffer;
-                m_doubleBuffer = new wxBitmap( w, h );
+                m_doubleBuffer = new wxBitmap;
+                m_doubleBuffer->CreateScaled( w, h, wxBITMAP_SCREEN_DEPTH, scaleFactor );
             }
         }
     }

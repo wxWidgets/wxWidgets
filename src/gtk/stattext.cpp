@@ -236,11 +236,20 @@ wxSize wxStaticText::DoGetBestSize() const
     gtk_label_set_line_wrap(GTK_LABEL(m_widget), false);
 #else
     GTK_LABEL(m_widget)->wrap = FALSE;
+
+    // Reset the ellipsize mode while computing the best size, otherwise it's
+    // going to be too small as the control knows that it can be shrunk to the
+    // bare minimum and just hide most of the text replacing it with ellipsis.
+    // This is especially important because we can enable ellipsization
+    // implicitly for GTK+ 2, see the code dealing with alignment in the ctor.
+    const PangoEllipsizeMode ellipsizeMode = gtk_label_get_ellipsize(GTK_LABEL(m_widget));
+    gtk_label_set_ellipsize(GTK_LABEL(m_widget), PANGO_ELLIPSIZE_NONE);
 #endif
     wxSize size = wxStaticTextBase::DoGetBestSize();
 #ifdef __WXGTK3__
     gtk_label_set_line_wrap(GTK_LABEL(m_widget), true);
 #else
+    gtk_label_set_ellipsize(GTK_LABEL(m_widget), ellipsizeMode);
     GTK_LABEL(m_widget)->wrap = TRUE; // restore old value
 #endif
 

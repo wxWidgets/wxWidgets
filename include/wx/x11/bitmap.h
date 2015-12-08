@@ -100,7 +100,7 @@ public:
     int GetDepth() const;
 
 #if wxUSE_IMAGE
-    wxBitmap( const wxImage& image, int depth = -1 ) { (void)CreateFromImage(image, depth); }
+    wxBitmap( const wxImage& image, int depth = -1, double WXUNUSED(scale) = 1.0 ) { (void)CreateFromImage(image, depth); }
     wxImage ConvertToImage() const;
     bool CreateFromImage(const wxImage& image, int depth = -1);
 #endif // wxUSE_IMAGE

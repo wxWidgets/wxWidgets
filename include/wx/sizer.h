@@ -1016,7 +1016,7 @@ protected:
 
     // the minimal size needed for this sizer as calculated by the last call to
     // our CalcMin()
-    wxSize m_minSize;
+    wxSize m_calculatedMinSize;
 
 private:
     wxDECLARE_CLASS(wxBoxSizer);

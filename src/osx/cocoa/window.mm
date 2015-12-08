@@ -2402,10 +2402,7 @@ void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
 
     if ( [targetView respondsToSelector:@selector(setBackgroundColor:) ] )
     {
-        [targetView setBackgroundColor:[NSColor colorWithCalibratedRed:(CGFloat) (col.Red() / 255.0)
-                                                                green:(CGFloat) (col.Green() / 255.0)
-                                                                 blue:(CGFloat) (col.Blue() / 255.0)
-                                                                alpha:(CGFloat) (col.Alpha() / 255.0)]];
+        [targetView setBackgroundColor: col.OSXGetNSColor()];
     }
 }
 
@@ -2668,10 +2665,7 @@ void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&col, long, bo
     if ([targetView respondsToSelector:@selector(setFont:)])
         [targetView setFont: font.OSXGetNSFont()];
     if ([targetView respondsToSelector:@selector(setTextColor:)])
-        [targetView setTextColor:[NSColor colorWithCalibratedRed:(CGFloat) (col.Red() / 255.0)
-                                                                 green:(CGFloat) (col.Green() / 255.0)
-                                                                  blue:(CGFloat) (col.Blue() / 255.0)
-                                                                 alpha:(CGFloat) (col.Alpha() / 255.0)]];
+        [targetView setTextColor: col.OSXGetNSColor()];
 }
 
 void wxWidgetCocoaImpl::SetToolTip(wxToolTip* tooltip)

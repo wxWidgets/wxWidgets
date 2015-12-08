@@ -41,6 +41,7 @@ private:
         CPPUNIT_TEST( Size1 );
         CPPUNIT_TEST( Size3 );
         CPPUNIT_TEST( CalcMin );
+        CPPUNIT_TEST( SetMinSize );
         CPPUNIT_TEST( BestSizeRespectsMaxSize );
         CPPUNIT_TEST( RecalcSizesRespectsMaxSize1 );
         CPPUNIT_TEST( RecalcSizesRespectsMaxSize2 );
@@ -50,6 +51,7 @@ private:
     void Size1();
     void Size3();
     void CalcMin();
+    void SetMinSize();
     void BestSizeRespectsMaxSize();
     void RecalcSizesRespectsMaxSize1();
     void RecalcSizesRespectsMaxSize2();
@@ -305,6 +307,21 @@ void BoxSizerTestCase::CalcMin()
             cmtd.total, m_sizer->CalcMin().x
         );
     }
+}
+
+void BoxSizerTestCase::SetMinSize()
+{
+    wxWindow* const child = new wxWindow(m_win, wxID_ANY);
+    child->SetInitialSize(wxSize(10, -1));
+    m_sizer->Add(child);
+
+    // Setting minimal size explicitly must make GetMinSize() return at least
+    // this size even if it needs a much smaller one.
+    m_sizer->SetMinSize(100, 0);
+    CPPUNIT_ASSERT_EQUAL( 100, m_sizer->GetMinSize().x );
+
+    m_sizer->Layout();
+    CPPUNIT_ASSERT_EQUAL( 100, m_sizer->GetMinSize().x );
 }
 
 void BoxSizerTestCase::BestSizeRespectsMaxSize()

@@ -8,12 +8,18 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#include <QApplication>
+#include <QClipboard>
+
 #include "wx/clipbrd.h"
 #include "wx/scopedarray.h"
 #include "wx/scopeguard.h"
 #include "wx/qt/private/converter.h"
 
-#include <QClipboard>
 
 // ----------------------------------------------------------------------------
 // wxClipboard ctor/dtor

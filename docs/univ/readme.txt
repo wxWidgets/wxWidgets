@@ -11,11 +11,7 @@ Tom Ryan!
 ---------------
 
 wxUniversal is a port of wxWidgets which implements the various GUI controls
-by drawing them itself (using low level wxWidgets classes). Please see
-
-                     http://www.wxwidgets.org/wxuniv.htm
-
-for more details about it.
+by drawing them itself (using low level wxWidgets classes).
 
 The advantage of wxUniversal is that you have precise control over the
 controls' appearance (it is not always possible to change all aspects of the
@@ -50,7 +46,7 @@ to include/wx/univ/setup.h before following these steps.
 
 a) Using Visual C++ 6.0/7.x
 
-   Follow wxMSW instructions but make sure to choose one of the "Universal" 
+   Follow wxMSW instructions but make sure to choose one of the "Universal"
    configurations before building.
 
 b) Cygwin
@@ -64,7 +60,7 @@ b) Cygwin
 ** the instructions may be out of date as for wxWidgets 2.5.2+ **
 
 c) Other compilers
-   Borland: 
+   Borland:
    in the wxwindows\src\msw directory run
    'make -f makefile.b32 WXUSINGUNIV=1' to build the library and then run
    'make -f makefile.b32 WXUSINGUNIV=1' in the sample directory  which you wish
@@ -74,12 +70,6 @@ c) Other compilers
 Unfortunately we don't have makefiles for any other compilers yet.
 Please contact us if you would like to help us with creating one for the
 compiler you use.
-
-Note that you can use the wxUniversal classes, wxMSW and MicroWindows (from
-Century Software) to build a different variant of wxUniversal than that
-documented here. Please see docs/univ/readme.txt for further information.
-Note that this port is not up-to-date and probably needs work
-to compile.
 
 Note that by default, wxUniv under MSW uses PostScript printing,
 not Windows printing. To change to Windows printing, set
@@ -127,12 +117,8 @@ documentation instead.
 Support for wxUniversal is available from the same places as for wxWidgets
 itself, namely:
 
-* Usenet newsgroup comp.soft-sys.wxwindows
-
-* Mailing lists: see http://lists.wxwindows.org/ for more information
-
-* WWW page: http://www.wxwidgets.org/
-
+* Website: https://www.wxwidgets.org/
+* Mailing Lists: https://www.wxwidgets.org/support/mailing-lists/
 
  Hope you find wxUniversal useful!
 
@@ -141,4 +127,3 @@ itself, namely:
 
 This file is accurate for the version 2.3.4 of wxUniversal. It was last
 modified on Apr 15, 2002.
-

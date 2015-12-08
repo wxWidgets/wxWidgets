@@ -32,23 +32,6 @@ The following is a summary of the toolbar classes and their differences:
 
 @li wxToolBarBase: This is a base class with pure virtual functions, and should
     not be used directly.
-@li wxToolBarSimple: A simple toolbar class written entirely with generic
-    wxWidgets functionality. A simple 3D effect for buttons is possible, but it
-    is not consistent with the Windows look and feel. This toolbar can scroll,
-    and you can have arbitrary numbers of rows and columns.
-@li wxToolBarMSW: This class implements an old-style Windows toolbar, only on
-    Windows. There are small, three-dimensional buttons, which do not
-    (currently) reflect the current Windows colour settings: the buttons are
-    grey. This is the default wxToolBar on 16-bit windows.
-@li wxToolBar95: Uses the native Windows 95 toolbar class. It dynamically
-    adjusts it's background and button colours according to user colour
-    settings. CreateTools must be called after the tools have been added. No
-    absolute positioning is supported but you can specify the number of rows,
-    and add tool separators with @c AddSeparator. Tooltips are supported.
-    @c OnRightClick is not supported. This is the default wxToolBar on Windows
-    95, Windows NT 4 and above. With the style wxTB_FLAT, the flat toolbar look
-    is used, with a border that is highlighted when the cursor moves over the
-    buttons.
 
 A toolbar might appear as a single row of images under the menubar, or it might
 be in a separate frame layout in several rows and columns. The class handles
@@ -71,11 +54,7 @@ give it.
 
 @section overview_toolbar_library Using the Toolbar Library
 
-Include @c "wx/toolbar.h", or if using a class directly, one of:
-
-- @c "wx/msw/tbarmsw.h" for wxToolBarMSW
-- @c "wx/msw/tbar95.h" for wxToolBar95
-- @c "wx/tbarsmpl.h" for wxToolBarSimple
+Include @c "wx/toolbar.h"
 
 An example of using a toolbar is given in the "toolbar" sample.
 

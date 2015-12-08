@@ -244,7 +244,7 @@
  */
 #if defined(__UNIX__) || defined(__unix) || defined(__unix__) || \
       defined(____SVR4____) || defined(__LINUX__) || defined(__sgi) || \
-      defined(__hpux) || defined(sun) || defined(__SUN__) || defined(_AIX) || \
+      defined(__hpux) || defined(__sun) || defined(__SUN__) || defined(_AIX) || \
       defined(__VMS) || defined(__BEOS__) || defined(__MACH__)
 
 #    define __UNIX_LIKE__

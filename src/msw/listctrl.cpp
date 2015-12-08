@@ -54,6 +54,18 @@
     #define NMLVFINDITEM NM_FINDITEM
 #endif
 
+// MinGW headers lack casts to WPARAM inside several ListView_XXX() macros, so
+// add them to suppress the warnings about implicit conversions/truncation.
+// However do not add them for MSVC as it has casts not only to WPARAM but
+// actually to int first, and then to WPARAM, and casting to WPARAM here would
+// result in warnings when casting 64 bit WPARAM to 32 bit int inside the
+// macros in Win64 builds.
+#ifdef __MINGW32__
+    #define NO_ITEM (static_cast<WPARAM>(-1))
+#else
+    #define NO_ITEM (-1)
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -277,26 +289,20 @@ bool wxListCtrl::Create(wxWindow *parent,
 
 void wxListCtrl::MSWSetExListStyles()
 {
-    // for comctl32.dll v 4.70+ we want to have some non default extended
+    // we want to have some non default extended
     // styles because it's prettier (and also because wxGTK does it like this)
-    if ( wxApp::GetComCtl32Version() >= 470 )
-    {
-        ::SendMessage
-        (
-            GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0,
-            // LVS_EX_LABELTIP shouldn't be used under Windows CE where it's
-            // not defined in the SDK headers
-#ifdef LVS_EX_LABELTIP
-            LVS_EX_LABELTIP |
-#endif
-            LVS_EX_FULLROWSELECT |
-            LVS_EX_SUBITEMIMAGES |
-            // normally this should be governed by a style as it's probably not
-            // always appropriate, but we don't have any free styles left and
-            // it seems better to enable it by default than disable
-            LVS_EX_HEADERDRAGDROP
-        );
-    }
+    ::SendMessage
+    (
+        GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0,
+        LVS_EX_LABELTIP |
+        LVS_EX_FULLROWSELECT |
+        LVS_EX_SUBITEMIMAGES |
+        LVS_EX_DOUBLEBUFFER |
+        // normally this should be governed by a style as it's probably not
+        // always appropriate, but we don't have any free styles left and
+        // it seems better to enable it by default than disable
+        LVS_EX_HEADERDRAGDROP
+    );
 }
 
 WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -359,13 +365,6 @@ WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 #if !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
     if ( style & wxLC_VIRTUAL )
     {
-        int ver = wxApp::GetComCtl32Version();
-        if ( ver < 470 )
-        {
-            wxLogWarning(_("Please install a newer version of comctl32.dll\n(at least version 4.70 is required but you have %d.%02d)\nor this program won't operate correctly."),
-                        ver / 100, ver % 100);
-        }
-
         wstyle |= LVS_OWNERDATA;
     }
 #endif // ancient cygwin
@@ -1337,10 +1336,7 @@ void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
 
 wxSize wxListCtrl::MSWGetBestViewRect(int x, int y) const
 {
-    // The cast is necessary to suppress a MinGW warning due to a missing cast
-    // to WPARAM in the definition of ListView_ApproximateViewRect() in its
-    // own headers (this was the case up to at least MinGW 4.8).
-    const DWORD rc = ListView_ApproximateViewRect(GetHwnd(), x, y, (WPARAM)-1);
+    const DWORD rc = ListView_ApproximateViewRect(GetHwnd(), x, y, NO_ITEM);
 
     wxSize size(LOWORD(rc), HIWORD(rc));
 
@@ -1416,7 +1412,18 @@ bool wxListCtrl::DeleteAllItems()
 {
     // Calling ListView_DeleteAllItems() will always generate an event but we
     // shouldn't do it if the control is empty
-    return !GetItemCount() || ListView_DeleteAllItems(GetHwnd()) != 0;
+    if ( !GetItemCount() )
+        return true;
+
+    if ( !ListView_DeleteAllItems(GetHwnd()) )
+        return false;
+
+    // Virtual controls don't refresh their scrollbar position automatically,
+    // do it for them when clearing them.
+    if ( IsVirtual() )
+        Refresh();
+
+    return true;
 }
 
 // Deletes all items
@@ -1622,7 +1629,7 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
 
     long item;
 #ifdef LVM_SUBITEMHITTEST
-    if ( ptrSubItem && wxApp::GetComCtl32Version() >= 470 )
+    if ( ptrSubItem )
     {
         item = ListView_SubItemHitTest(GetHwnd(), &hitTestInfo);
         *ptrSubItem = hitTestInfo.iSubItem;
@@ -2738,12 +2745,8 @@ static void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
     }
 
     // same thing for CDIS_FOCUS (except simpler as there is only one of them)
-    //
-    // NB: cast is needed to work around the bug in mingw32 headers which don't
-    //     have it inside ListView_GetNextItem() itself (unlike SDK ones)
     if ( ::GetFocus() == hwndList &&
-            ListView_GetNextItem(
-                hwndList, static_cast<WPARAM>(-1), LVNI_FOCUSED) == item )
+            ListView_GetNextItem(hwndList, NO_ITEM, LVNI_FOCUSED) == item )
     {
         nmcd.uItemState |= CDIS_FOCUS;
     }
@@ -3280,40 +3283,36 @@ static void wxConvertToMSWListCol(HWND hwndList,
 #ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
-        if ( wxApp::GetComCtl32Version() >= 470 )
+        lvCol.mask |= LVCF_IMAGE;
+
+        // we use LVCFMT_BITMAP_ON_RIGHT because the images on the right
+        // seem to be generally nicer than on the left and the generic
+        // version only draws them on the right (we don't have a flag to
+        // specify the image location anyhow)
+        //
+        // we don't use LVCFMT_COL_HAS_IMAGES because it doesn't seem to
+        // make any difference in my tests -- but maybe we should?
+        if ( item.m_image != -1 )
         {
-            lvCol.mask |= LVCF_IMAGE;
-
-            // we use LVCFMT_BITMAP_ON_RIGHT because the images on the right
-            // seem to be generally nicer than on the left and the generic
-            // version only draws them on the right (we don't have a flag to
-            // specify the image location anyhow)
-            //
-            // we don't use LVCFMT_COL_HAS_IMAGES because it doesn't seem to
-            // make any difference in my tests -- but maybe we should?
-            if ( item.m_image != -1 )
+            // as we're going to overwrite the format field, get its
+            // current value first -- unless we want to overwrite it anyhow
+            if ( !(lvCol.mask & LVCF_FMT) )
             {
-                // as we're going to overwrite the format field, get its
-                // current value first -- unless we want to overwrite it anyhow
-                if ( !(lvCol.mask & LVCF_FMT) )
+                LV_COLUMN lvColOld;
+                wxZeroMemory(lvColOld);
+                lvColOld.mask = LVCF_FMT;
+                if ( ListView_GetColumn(hwndList, col, &lvColOld) )
                 {
-                    LV_COLUMN lvColOld;
-                    wxZeroMemory(lvColOld);
-                    lvColOld.mask = LVCF_FMT;
-                    if ( ListView_GetColumn(hwndList, col, &lvColOld) )
-                    {
-                        lvCol.fmt = lvColOld.fmt;
-                    }
-
-                    lvCol.mask |= LVCF_FMT;
+                    lvCol.fmt = lvColOld.fmt;
                 }
 
-                lvCol.fmt |= LVCFMT_BITMAP_ON_RIGHT | LVCFMT_IMAGE;
+                lvCol.mask |= LVCF_FMT;
             }
 
-            lvCol.iImage = item.m_image;
+            lvCol.fmt |= LVCFMT_BITMAP_ON_RIGHT | LVCFMT_IMAGE;
         }
-        //else: it doesn't support item images anyhow
+
+        lvCol.iImage = item.m_image;
     }
 #endif // _WIN32_IE >= 0x0300
 }

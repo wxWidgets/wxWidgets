@@ -140,6 +140,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif // wxUSE_RICHMSGDLG
 #if wxUSE_COLOURDLG
     EVT_MENU(DIALOGS_CHOOSE_COLOUR,                 MyFrame::ChooseColour)
+    EVT_MENU(DIALOGS_CHOOSE_COLOUR_ALPHA,           MyFrame::ChooseColour)
     EVT_MENU(DIALOGS_GET_COLOUR,                    MyFrame::GetColour)
 #endif // wxUSE_COLOURDLG
 
@@ -221,6 +222,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 #if USE_COLOURDLG_GENERIC
     EVT_MENU(DIALOGS_CHOOSE_COLOUR_GENERIC,         MyFrame::ChooseColourGeneric)
+    EVT_MENU(DIALOGS_CHOOSE_COLOUR_GENERIC_ALPHA,   MyFrame::ChooseColourGeneric)
 #endif // USE_COLOURDLG_GENERIC
 
 #if wxUSE_PROGRESSDLG
@@ -374,7 +376,10 @@ bool MyApp::OnInit()
     wxMenu *choices_menu = new wxMenu;
 
     #if wxUSE_COLOURDLG
-        choices_menu->Append(DIALOGS_CHOOSE_COLOUR, wxT("&Choose bg colour"));
+        wxMenu *choices_bg_colour = new wxMenu;
+        choices_bg_colour->Append(DIALOGS_CHOOSE_COLOUR, wxT("&No opacity"));
+        choices_bg_colour->Append(DIALOGS_CHOOSE_COLOUR_ALPHA, wxT("&With opacity"));
+        choices_menu->Append(wxID_ANY, wxT("&Choose bg colour"), choices_bg_colour);
         choices_menu->Append(DIALOGS_GET_COLOUR, wxT("&Choose fg colour"));
     #endif // wxUSE_COLOURDLG
 
@@ -400,7 +405,10 @@ bool MyApp::OnInit()
     #endif // USE_COLOURDLG_GENERIC || USE_FONTDLG_GENERIC
 
     #if USE_COLOURDLG_GENERIC
-        choices_menu->Append(DIALOGS_CHOOSE_COLOUR_GENERIC, wxT("&Choose colour (generic)"));
+        wxMenu *colourGeneric_menu = new wxMenu;
+        colourGeneric_menu->Append(DIALOGS_CHOOSE_COLOUR_GENERIC, wxT("&No opacity"));
+        colourGeneric_menu->Append(DIALOGS_CHOOSE_COLOUR_GENERIC_ALPHA, wxT("&With opacity"));
+        choices_menu->Append(wxID_ANY, wxT("&Choose colour (generic)"), colourGeneric_menu);
     #endif // USE_COLOURDLG_GENERIC
 
     #if USE_FONTDLG_GENERIC
@@ -706,9 +714,10 @@ MyFrame::~MyFrame()
 
 #if wxUSE_COLOURDLG
 
-void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event))
+void MyFrame::ChooseColour(wxCommandEvent& event)
 {
     m_clrData.SetColour(m_canvas->GetBackgroundColour());
+    m_clrData.SetChooseAlpha(event.GetId() == DIALOGS_CHOOSE_COLOUR_ALPHA);
 
     wxColourDialog dialog(this, &m_clrData);
     dialog.SetTitle(_("Please choose the background colour"));
@@ -741,21 +750,18 @@ void MyFrame::GetColour(wxCommandEvent& WXUNUSED(event))
 
 
 #if USE_COLOURDLG_GENERIC
-void MyFrame::ChooseColourGeneric(wxCommandEvent& WXUNUSED(event))
+void MyFrame::ChooseColourGeneric(wxCommandEvent& event)
 {
     m_clrData.SetColour(m_canvas->GetBackgroundColour());
 
     //FIXME:TODO:This has no effect...
     m_clrData.SetChooseFull(true);
+    m_clrData.SetChooseAlpha(event.GetId() == DIALOGS_CHOOSE_COLOUR_GENERIC_ALPHA);
 
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < wxColourData::NUM_CUSTOM; i++)
     {
-        wxColour colour(
-            (unsigned char)(i*16),
-            (unsigned char)(i*16),
-            (unsigned char)(i*16)
-        );
-        m_clrData.SetCustomColour(i, colour);
+        unsigned char n = i*(256/wxColourData::NUM_CUSTOM);
+        m_clrData.SetCustomColour(i, wxColour(n, n, n));
     }
 
     wxGenericColourDialog *dialog = new wxGenericColourDialog(this, &m_clrData);

@@ -482,6 +482,7 @@
     <ClCompile Include="..\..\src\html\m_tables.cpp" />
     <ClCompile Include="..\..\src\html\styleparams.cpp" />
     <ClCompile Include="..\..\src\html\winpars.cpp" />
+    <ClCompile Include="..\..\src\html\chm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">

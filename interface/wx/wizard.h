@@ -53,7 +53,7 @@ public:
        Default constructor.
     */
     wxWizardPage();
-    
+
     /**
         Constructor accepts an optional bitmap which will be used for this page
         instead of the default one for this wizard (note that all bitmaps used should
@@ -206,7 +206,7 @@ public:
        Default constructor.
     */
     wxWizardPageSimple();
-    
+
     /**
         Constructor takes the previous and next pages.
         They may be modified later by SetPrev() or SetNext().
@@ -220,7 +220,7 @@ public:
        Creates the wizard page.
        Must be called if the default constructor had been used to create the object.
     */
-    bool Create(wxWizard *parent = NULL, 
+    bool Create(wxWizard *parent = NULL,
                 wxWizardPage *prev = NULL,
                 wxWizardPage *next = NULL,
                 const wxBitmap& bitmap = wxNullBitmap);
@@ -546,7 +546,7 @@ public:
         - @b wxWIZARD_HALIGN_LEFT: Left-aligns the bitmap.
         - @b wxWIZARD_HALIGN_CENTRE: Centres the bitmap horizontally.
         - @b wxWIZARD_HALIGN_RIGHT: Right-aligns the bitmap.
-        - @b wxWIZARD_TILE: @todo describe this
+        - @b wxWIZARD_TILE: The bitmap will be tiled to fit available space.
 
         See also SetMinimumBitmapWidth().
     */
@@ -585,4 +585,3 @@ public:
     */
     virtual void SetPageSize(const wxSize& sizePage);
 };
-

@@ -8,12 +8,21 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#include <QtWidgets/QScrollArea>
+
+#ifndef WX_PRECOMP
+    #include "wx/menu.h"
+    #include "wx/toolbar.h"
+#endif // WX_PRECOMP
+
 #include "wx/frame.h"
-#include "wx/menu.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
-#include <QtWidgets/QScrollArea>
 
 
 class wxQtMainWindow : public wxQtEventSignalHandler< QMainWindow, wxFrame >

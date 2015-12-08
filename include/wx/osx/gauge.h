@@ -17,9 +17,9 @@
 class WXDLLIMPEXP_CORE wxGauge: public wxGaugeBase
 {
  public:
-  inline wxGauge() { }
+  wxGauge() { }
 
-  inline wxGauge(wxWindow *parent, wxWindowID id,
+  wxGauge(wxWindow *parent, wxWindowID id,
            int range,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,

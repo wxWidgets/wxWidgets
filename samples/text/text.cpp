@@ -1093,6 +1093,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxSize size2 = m_limited->GetSizeFromTextSize(m_limited->GetTextExtent("WWWWWWWW"));
     m_limited->SetSizeHints(size2, size2);
 
+    wxTextCtrl* upperOnly = new MyTextCtrl(this, wxID_ANY, "Only upper case",
+                                           wxDefaultPosition, wxDefaultSize);
+    upperOnly->ForceUpper();
+
     // multi line text controls
 
     wxString string3L("Read only\nMultiline\nFitted size");
@@ -1156,15 +1160,15 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #endif
 
     m_tab = new MyTextCtrl( this, 100, wxT("Multiline, allow <TAB> processing."),
-      wxPoint(180,90), wxDefaultSize, wxTE_MULTILINE |  wxTE_PROCESS_TAB );
+      wxPoint(180,90), wxSize(200,70), wxTE_MULTILINE |  wxTE_PROCESS_TAB );
     m_tab->SetClientData((void *)wxT("tab"));
 
     m_enter = new MyTextCtrl( this, 100, wxT("Multiline, allow <ENTER> processing."),
-      wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE);
+      wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE | wxTE_PROCESS_ENTER );
     m_enter->SetClientData((void *)wxT("enter"));
 
     m_textrich = new MyTextCtrl(this, wxID_ANY, wxT("Allows more than 30Kb of text\n")
-                                wxT("(even under broken Win9x)\n")
+                                wxT("(on all Windows versions)\n")
                                 wxT("and a very very very very very ")
                                 wxT("very very very long line to test ")
                                 wxT("wxHSCROLL style\n")
@@ -1194,6 +1198,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     column1->Add( m_password, 0, wxALL | wxEXPAND, 10 );
     column1->Add( m_readonly, 0, wxALL, 10 );
     column1->Add( m_limited, 0, wxALL, 10 );
+    column1->Add( upperOnly, 0, wxALL, 10 );
     column1->Add( m_horizontal, 1, wxALL | wxEXPAND, 10 );
 
     wxBoxSizer *column2 = new wxBoxSizer(wxVERTICAL);
@@ -1545,7 +1550,7 @@ void MyFrame::OnFileSave(wxCommandEvent& WXUNUSED(event))
     if ( m_panel->m_textrich->SaveFile(wxT("dummy.txt")) )
     {
 #if wxUSE_FILE
-        // verify that the fil length is correct (it wasn't under Win95)
+        // verify that the file length is correct
         wxFile file(wxT("dummy.txt"));
         wxLogStatus(this,
                     wxT("Successfully saved file (text len = %lu, file size = %ld)"),

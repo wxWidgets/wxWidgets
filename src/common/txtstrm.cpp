@@ -36,6 +36,10 @@ wxTextInputStream::wxTextInputStream(wxInputStream &s,
   : m_input(s), m_separators(sep), m_conv(conv.Clone())
 {
     memset((void*)m_lastBytes, 0, 10);
+
+#if SIZEOF_WCHAR_T == 2
+    m_lastWChar = 0;
+#endif // SIZEOF_WCHAR_T == 2
 }
 #else
 wxTextInputStream::wxTextInputStream(wxInputStream &s, const wxString &sep)
@@ -64,6 +68,17 @@ void wxTextInputStream::UngetLast()
 wxChar wxTextInputStream::NextChar()
 {
 #if wxUSE_UNICODE
+#if SIZEOF_WCHAR_T == 2
+    // Return the already raed character remaining from the last call to this
+    // function, if any.
+    if ( m_lastWChar )
+    {
+        const wxChar wc = m_lastWChar;
+        m_lastWChar = 0;
+        return wc;
+    }
+#endif // !SWIG_ONLY_SCRIPT_API
+
     wxChar wbuf[2];
     memset((void*)m_lastBytes, 0, 10);
     for(size_t inlen = 0; inlen < 9; inlen++)
@@ -91,10 +106,23 @@ wxChar wxTextInputStream::NextChar()
                 // if we couldn't decode a single character during the last
                 // loop iteration we shouldn't be able to decode 2 or more of
                 // them with an extra single byte, something fishy is going on
+                // (except if we use UTF-16, see below)
                 wxFAIL_MSG("unexpected decoding result");
-                wxFALLTHROUGH;// fall through nevertheless and return at least something
+                return wxEOT;
+
+#if SIZEOF_WCHAR_T == 2
+            case 2:
+                // When wchar_t uses UTF-16, we could have decoded a single
+                // Unicode code point as 2 wchar_t characters and there is
+                // nothing else to do here but to return the first one now and
+                // remember the second one for the next call, as there is no
+                // way to fit both of them into a single wxChar in this case.
+                m_lastWChar = wbuf[1];
+#endif // !SWIG_ONLY_SCRIPT_API
+                wxFALLTHROUGH;
 
             case 1:
+
                 // we finally decoded a character
                 return wbuf[0];
         }
@@ -374,6 +402,10 @@ wxTextOutputStream::wxTextOutputStream(wxOutputStream& s, wxEOL mode)
         m_mode = wxEOL_UNIX;
 #endif
     }
+
+#if wxUSE_UNICODE && SIZEOF_WCHAR_T == 2
+    m_lastWChar = 0;
+#endif // SIZEOF_WCHAR_T == 2
 }
 
 wxTextOutputStream::~wxTextOutputStream()
@@ -480,7 +512,66 @@ void wxTextOutputStream::WriteString(const wxString& string)
 wxTextOutputStream& wxTextOutputStream::PutChar(wxChar c)
 {
 #if wxUSE_UNICODE
+#if SIZEOF_WCHAR_T == 2
+    wxCharBuffer buffer;
+    size_t len;
+    if ( m_lastWChar )
+    {
+        wxChar buf[2];
+        buf[0] = m_lastWChar;
+        buf[1] = c;
+        buffer = m_conv->cWC2MB(buf, WXSIZEOF(buf), &len);
+        m_lastWChar = 0;
+    }
+    else
+    {
+        buffer = m_conv->cWC2MB(&c, 1, &len);
+    }
+
+    if ( !len )
+    {
+        // Conversion failed, possibly because we have the first half of a
+        // surrogate character, so just store it and write it out when the
+        // second half is written to the stream too later.
+        //
+        // Notice that if we already had had a valid m_lastWChar, it is simply
+        // discarded here which is very bad, but there is no way to signal an
+        // error from here and this is not worse than the old code behaviour.
+        m_lastWChar = c;
+    }
+    else
+    {
+        for ( size_t n = 0; n < len; n++ )
+        {
+            const char c = buffer[n];
+            if ( c == '\n' )
+            {
+                switch ( m_mode )
+                {
+                    case wxEOL_DOS:
+                        m_output.Write("\r\n", 2);
+                        continue;
+
+                    case wxEOL_MAC:
+                        m_output.Write("\r", 1);
+                        continue;
+
+                    default:
+                        wxFAIL_MSG( wxT("unknown EOL mode in wxTextOutputStream") );
+                        wxFALLTHROUGH;
+
+                    case wxEOL_UNIX:
+                        // don't treat '\n' specially
+                        ;
+                }
+            }
+
+            m_output.Write(&c, 1);
+        }
+    }
+#else // SIZEOF_WCHAR_T == 4
     WriteString( wxString(&c, *m_conv, 1) );
+#endif // SIZEOF_WCHAR_T == 2 or 4
 #else
     WriteString( wxString(&c, wxConvLocal, 1) );
 #endif

@@ -488,7 +488,12 @@ wxMBConv::cWC2MB(const wchar_t *inBuff, size_t inLen, size_t *outLen) const
         // the input is not
         wxCharBuffer buf(dstLen + nulLen - 1);
         memset(buf.data() + dstLen, 0, nulLen);
-        if ( FromWChar(buf.data(), dstLen, inBuff, inLen) != wxCONV_FAILED )
+
+        // Notice that return value of the call to FromWChar() here may be
+        // different from the one above as it could have overestimated the
+        // space needed, while what we get here is the exact length.
+        dstLen = FromWChar(buf.data(), dstLen, inBuff, inLen);
+        if ( dstLen != wxCONV_FAILED )
         {
             if ( outLen )
             {
@@ -1122,13 +1127,30 @@ wxMBConvStrictUTF8::FromWChar(char *dst, size_t dstLen,
 
         wxUint32 code;
 #ifdef WC_UTF16
-        // cast is ok for WC_UTF16
-        if ( decode_utf16((const wxUint16 *)wp, code) == 2 )
+        // Be careful here: decode_utf16() may need to read the next wchar_t
+        // but we might not have any left, so pass it a temporary buffer which
+        // always has 2 wide characters and take care to set its second element
+        // to 0, which is invalid as a second half of a surrogate, to ensure
+        // that we return an error when trying to convert a buffer ending with
+        // half of a surrogate.
+        wxUint16 tmp[2];
+        tmp[0] = wp[0];
+        tmp[1] = srcLen != 0 ? wp[1] : 0;
+        switch ( decode_utf16(tmp, code) )
         {
-            // skip the next char too as we decoded a surrogate
-            wp++;
-            if ( srcLen != wxNO_LEN )
-                srcLen--;
+            case 1:
+                // Nothing special to do, just a character from BMP.
+                break;
+
+            case 2:
+                // skip the next char too as we decoded a surrogate
+                wp++;
+                if ( srcLen != wxNO_LEN )
+                    srcLen--;
+                break;
+
+            case wxCONV_FAILED:
+                return wxCONV_FAILED;
         }
 #else // wchar_t is UTF-32
         code = *wp & 0x7fffffff;
@@ -1397,7 +1419,12 @@ size_t wxMBConvUTF8::FromWChar(char *buf, size_t n,
 #ifdef WC_UTF16
         // cast is ok for WC_UTF16
         size_t pa = decode_utf16((const wxUint16 *)psz, cc);
+
+        // we could have consumed two input code units if we decoded a
+        // surrogate, so adjust the input pointer and, if necessary, the length
         psz += (pa == wxCONV_FAILED) ? 1 : pa;
+        if ( pa == 2 && !isNulTerminated )
+            srcLen--;
 #else
         cc = (*psz++) & 0x7fffffff;
 #endif

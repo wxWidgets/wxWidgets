@@ -6,60 +6,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    Flags used by wxControl::Ellipsize function.
-*/
-enum wxEllipsizeFlags
-{
-    /// No special flags.
-    wxELLIPSIZE_FLAGS_NONE = 0,
-
-    /**
-        Take mnemonics into account when calculating the text width.
-
-        With this flag when calculating the size of the passed string,
-        mnemonics characters (see wxControl::SetLabel) will be automatically
-        reduced to a single character. This leads to correct calculations only
-        if the string passed to Ellipsize() will be used with
-        wxControl::SetLabel. If you don't want ampersand to be interpreted as
-        mnemonics (e.g. because you use wxControl::SetLabelText) then don't use
-        this flag.
-     */
-    wxELLIPSIZE_FLAGS_PROCESS_MNEMONICS = 1,
-
-    /**
-        Expand tabs in spaces when calculating the text width.
-
-        This flag tells wxControl::Ellipsize() to calculate the width of tab
-        characters @c '\\t' as 6 spaces.
-     */
-    wxELLIPSIZE_FLAGS_EXPAND_TABS = 2,
-
-    /// The default flags for wxControl::Ellipsize.
-    wxELLIPSIZE_FLAGS_DEFAULT = wxELLIPSIZE_FLAGS_PROCESS_MNEMONICS|
-                                wxELLIPSIZE_FLAGS_EXPAND_TABS
-};
-
-
-/**
-    The different ellipsization modes supported by the
-    wxControl::Ellipsize function.
-*/
-enum wxEllipsizeMode
-{
-    /// Don't ellipsize the text at all. @since 2.9.1
-    wxELLIPSIZE_NONE,
-
-    /// Put the ellipsis at the start of the string, if the string needs ellipsization.
-    wxELLIPSIZE_START,
-
-    /// Put the ellipsis in the middle of the string, if the string needs ellipsization.
-    wxELLIPSIZE_MIDDLE,
-
-    /// Put the ellipsis at the end of the string, if the string needs ellipsization.
-    wxELLIPSIZE_END
-};
-
-/**
     @class wxControl
 
     This is the base class for a control or "widget".
@@ -437,7 +383,8 @@ public:     // static functions
             wxDC::GetPartialTextExtents() function.
         @param mode
             The ellipsization mode. This is the setting which determines
-            which part of the string should be replaced by the ellipsis.
+            which part of the string should be replaced by the ellipsis
+            (unless it is ::wxELLIPSIZE_NONE in which case nothing is done).
             See ::wxEllipsizeMode enumeration values for more info.
         @param maxWidth
             The maximum width of the returned string in pixels.

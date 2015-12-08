@@ -12,7 +12,7 @@
     column in the waterfall display.
 
     For full documentation see:
-    http://www.wxwidgets.org/wiki/index.php/Development:_Buildbot
+    https://wiki.wxwidgets.org/Development:_Buildbot
 -->
 
 <bot xmlns:xi="http://www.w3.org/2001/XInclude">

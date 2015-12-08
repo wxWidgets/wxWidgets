@@ -30,7 +30,7 @@
 
 #include "wx/generic/progdlgg.h"
 
-#if defined(__WXMSW__) && wxUSE_THREADS && !defined(__WXUNIVERSAL__)
+#if defined(__WXMSW__) && wxUSE_THREADS && !defined(__WXUNIVERSAL__) && wxUSE_NATIVE_PROGRESSDLG
     #include "wx/msw/progdlg.h"
 #else
     class WXDLLIMPEXP_CORE wxProgressDialog

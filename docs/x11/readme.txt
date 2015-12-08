@@ -9,9 +9,9 @@ intention is to have it run on NanoX as well as desktop X11.
 More information about the wxWidgets project as a whole
 can be found at:
 
-  http://www.wxwidgets.org
-  
-Information on how to install can be found in the file 
+  https://www.wxwidgets.org
+
+Information on how to install can be found in the file
 install.txt, but if you cannot wait, this should work on
 many systems:
 
@@ -31,17 +31,17 @@ YOUR PROBLEM, SUCH AS YOUR VERSION OF X, WHAT DISTRIBUTION YOU USE
 AND WHAT ERROR WAS REPORTED. Alternatively, you may also use the bug
 reporting system linked from the wxWidgets web page.
 
-The library produced by the install process will be called 
+The library produced by the install process will be called
 libwx_x11univ[d].a (static) and libwx_x11univ[d]-2.3.so.0.0.0
 (shared) so that once a binary incompatible version of
 wxWidgets/X11 comes out we'll augment the library version number
 to avoid linking problems.
 
-Please send problems concerning installation, feature requests, 
-bug reports or comments to the wxWidgets users list. Information 
+Please send problems concerning installation, feature requests,
+bug reports or comments to the wxWidgets users list. Information
 on how to subscribe is available from www.wxwidgets.org.
 
-wxWidgets/X11 doesn't come with any guarantee whatsoever. It might 
+wxWidgets/X11 doesn't come with any guarantee whatsoever. It might
 crash your hard disk or destroy your monitor. It doesn't claim to be
 suitable for any special or general purpose.
 
@@ -67,4 +67,3 @@ Some remaining issues:
   Regards,
 
   The wxWidgets team
-

@@ -2499,6 +2499,12 @@ public:
 
     bool GetDelayedImageLoading() const { return m_enableDelayedImageLoading; }
 
+    /**
+        Returns the buffer pointer.
+    */
+
+    wxRichTextBuffer* GetBuffer() const { return m_buffer; }
+
     wxRichTextBuffer*   m_buffer;
     bool                m_enableVirtualAttributes;
     bool                m_enableImages;
@@ -5064,7 +5070,7 @@ public:
     /**
         Do the loading and scaling
     */
-    virtual bool LoadAndScaleImageCache(wxImage& image, const wxSize& sz, bool delayLoading, bool& changed);
+    virtual bool LoadAndScaleImageCache(wxImage& image, const wxSize& sz, wxRichTextDrawingContext& context, bool& changed);
 
     /**
         Gets the original image size.
@@ -6375,9 +6381,16 @@ public:
     */
     wxList& GetActions() { return m_actions; }
 
+    /**
+        Indicate whether the control should be frozen when performing Do/Undo
+    */
+    bool GetFreeze() const { return m_freeze; }
+    void SetFreeze(bool freeze) { m_freeze = freeze; }
+
 protected:
 
     wxList  m_actions;
+    bool    m_freeze;
 };
 
 /**
@@ -6447,6 +6460,11 @@ public:
         and the action's range start position.
     */
     wxRichTextObject* GetObject() const { return m_object; }
+
+    /**
+        Returns the associated rich text control.
+    */
+    wxRichTextCtrl* GetRichTextCtrl() const { return m_ctrl; }
 
     /**
         Stores the object to replace the one at the position defined by the container address

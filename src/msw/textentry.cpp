@@ -39,6 +39,9 @@
     #include "wx/msw/uxtheme.h"
 #endif
 
+#include "wx/msw/wrapwin.h"
+#include <shlwapi.h>
+
 #define GetEditHwnd() ((HWND)(GetEditHWND()))
 
 // ----------------------------------------------------------------------------
@@ -775,24 +778,6 @@ void wxTextEntry::GetSelection(long *from, long *to) const
 
 bool wxTextEntry::DoAutoCompleteFileNames(int flags)
 {
-    typedef HRESULT (WINAPI *SHAutoComplete_t)(HWND, DWORD);
-    static SHAutoComplete_t s_pfnSHAutoComplete = (SHAutoComplete_t)-1;
-    static wxDynamicLibrary s_dllShlwapi;
-    if ( s_pfnSHAutoComplete == (SHAutoComplete_t)-1 )
-    {
-        if ( !s_dllShlwapi.Load(wxT("shlwapi.dll"), wxDL_VERBATIM | wxDL_QUIET) )
-        {
-            s_pfnSHAutoComplete = NULL;
-        }
-        else
-        {
-            wxDL_INIT_FUNC(s_pfn, SHAutoComplete, s_dllShlwapi);
-        }
-    }
-
-    if ( !s_pfnSHAutoComplete )
-        return false;
-
     DWORD dwFlags = 0;
     if ( flags & wxFILE )
         dwFlags |= SHACF_FILESYS_ONLY;
@@ -804,7 +789,7 @@ bool wxTextEntry::DoAutoCompleteFileNames(int flags)
         return false;
     }
 
-    HRESULT hr = (*s_pfnSHAutoComplete)(GetEditHwnd(), dwFlags);
+    HRESULT hr = ::SHAutoComplete(GetEditHwnd(), dwFlags);
     if ( FAILED(hr) )
     {
         wxLogApiError(wxT("SHAutoComplete()"), hr);
@@ -913,7 +898,7 @@ void wxTextEntry::SetEditable(bool editable)
 }
 
 // ----------------------------------------------------------------------------
-// max length
+// input restrictions
 // ----------------------------------------------------------------------------
 
 void wxTextEntry::SetMaxLength(unsigned long len)
@@ -926,6 +911,15 @@ void wxTextEntry::SetMaxLength(unsigned long len)
     }
 
     ::SendMessage(GetEditHwnd(), EM_LIMITTEXT, len, 0);
+}
+
+void wxTextEntry::ForceUpper()
+{
+    ConvertToUpperCase();
+
+    const HWND hwnd = GetEditHwnd();
+    const LONG styleOld = ::GetWindowLong(hwnd, GWL_STYLE);
+    ::SetWindowLong(hwnd, GWL_STYLE, styleOld | ES_UPPERCASE);
 }
 
 // ----------------------------------------------------------------------------

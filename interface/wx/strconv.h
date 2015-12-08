@@ -121,7 +121,7 @@ public:
             including the terminating @c NUL character(s).
 
         @return
-            The number of character written (or which would have been written
+            The number of characters written (or which would have been written
             if it were non-@NULL) to @a dst or @c wxCONV_FAILED on error.
     */
     virtual size_t ToWChar(wchar_t* dst, size_t dstLen, const char* src,
@@ -148,8 +148,13 @@ public:
             including the terminating @c NUL character.
 
         @return
-            The number of character written (or which would have been written
-            if it were non-@NULL) to @a dst or @c wxCONV_FAILED on error.
+            If @dst is non-@NULL, the number of characters actually written to
+            it. If @dst is @NULL, the returned value is at least equal to the
+            number of characters that would have been written out if it were
+            non-@NULL, but can be larger than it under the platforms using
+            UTF-16 as @c wchar_t encoding (this allows a useful optimization in
+            the implementation of this function for UTF-32). In any case,
+            @c wxCONV_FAILED is returned on conversion error.
     */
     virtual size_t FromWChar(char* dst, size_t dstLen, const wchar_t* src,
                              size_t srcLen = wxNO_LEN) const;

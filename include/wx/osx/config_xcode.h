@@ -122,7 +122,7 @@
 #define HAVE_LOCALE_T 1
 #define wxHAS_KQUEUE 1
 
-#define PACKAGE_BUGREPORT "wx-dev@lists.wxwidgets.org"
+#define PACKAGE_BUGREPORT "wx-dev@googlegroups.com"
 #define PACKAGE_NAME "wxWidgets"
 #define PACKAGE_STRING "wxWidgets 3.1.0"
 #define PACKAGE_TARNAME "wxwidgets"

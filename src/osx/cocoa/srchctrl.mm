@@ -204,6 +204,10 @@ wxWidgetImplType* wxWidgetImpl::CreateSearchControl( wxSearchCtrl* wxpeer,
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSSearchField* v = [[wxNSSearchField alloc] initWithFrame:r];
+
+    // Make it behave consistently with the single line wxTextCtrl
+    [[v cell] setScrollable:YES];
+
     [[v cell] setSendsWholeSearchString:YES];
     // per wx default cancel is not shown
     [[v cell] setCancelButtonCell:nil];

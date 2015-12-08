@@ -126,8 +126,7 @@ Since wxWidgets 3.0 Unicode support is always enabled and while building the
 library without it is still possible, it is not recommended any longer and will
 cease to be supported in the near future. This means that internally only
 Unicode strings are used and that, under Microsoft Windows, Unicode system API
-is used which means that wxWidgets programs require the Microsoft Layer for
-Unicode to run on Windows 95/98/ME.
+is used.
 
 However, unlike the Unicode build mode of the previous versions of wxWidgets, this
 support is mostly transparent: you can still continue to work with the @b narrow

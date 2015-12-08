@@ -33,7 +33,6 @@
     <include file="version.bkl"/>
 
     <set var="ARCH_SUFFIX">
-        <if cond="FORMAT=='msevc4prj'">_$(CPU)</if>
         <if cond="FORMAT=='msvs2005prj' and MSVS_PLATFORM=='win64'">_x64</if>
         <if cond="FORMAT=='msvs2008prj' and MSVS_PLATFORM=='win64'">_x64</if>
         <if cond="TARGET_CPU=='amd64'">_x64</if>
@@ -393,14 +392,14 @@
     </define-tag>
 
     <set var="msvc_copy_setup_h_script">
-        <if cond="IS_MSVC_PRJ=='1' and FORMAT not in ['msvc6prj','msevc4prj']">
+        <if cond="IS_MSVC_PRJ=='1' and FORMAT!='msvc6prj'">
 Creating $(SETUPHDIR)\wx\setup.h
 InputPath=..\..\include\wx\%s
 
 "$(SETUPHDIR)\wx\setup.h" : 
 $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         </if>
-        <if cond="IS_MSVC_PRJ=='1' and FORMAT in ['msvc6prj','msevc4prj']">
+        <if cond="IS_MSVC_PRJ=='1' and FORMAT=='msvc6prj'">
 Creating $(SETUPHDIR)\wx\setup.h
 InputPath=..\..\include\wx\%s
 
@@ -449,17 +448,12 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
             <msvc-headers-setup-h>
                 msw/genrcdefs.h
             </msvc-headers-setup-h>
-            <!-- FIXME: we need another way to get the compiler name -->
-            <set var="VC_COMPILER">
-                <if cond="FORMAT=='msevc4prj'">$(_COMPILER)</if>
-                <if cond="FORMAT!='msevc4prj'">cl</if>
-            </set>
             <set var="_custom_build_include_wx_msw_genrcdefs_h">
 Creating $(SETUPHDIR)\wx\msw\rcdefs.h
 InputPath=..\..\include\wx\msw\genrcdefs.h
 
 "$(SETUPHDIR)\wx\msw\rcdefs.h" : "$(DOLLAR)(SOURCE)" "$(SETUPHDIR)\wx\msw"
-$(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
+$(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
             </set>
         </if>
     </define-tag>
@@ -551,15 +545,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
             <if cond="FORMAT=='borland'">
                 <sys-lib>ole2w32</sys-lib>
             </if>
-            <if cond="FORMAT=='msevc4prj'">
-                <sys-lib>ole32</sys-lib>
-                <sys-lib>oleaut32</sys-lib>
-                <sys-lib>uuid</sys-lib>
-                <sys-lib>commctrl</sys-lib>
-                <sys-lib>winsock</sys-lib>
-                <sys-lib>wininet</sys-lib>
-            </if>
-            <if cond="FORMAT!='borland' and FORMAT!='msevc4prj'">
+            <if cond="FORMAT!='borland'">
                 <sys-lib>kernel32</sys-lib>
                 <sys-lib>user32</sys-lib>
                 <sys-lib>gdi32</sys-lib>
@@ -567,12 +553,14 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
                 <sys-lib>winspool</sys-lib>
                 <sys-lib>winmm</sys-lib>
                 <sys-lib>shell32</sys-lib>
+                <sys-lib>shlwapi</sys-lib>
                 <sys-lib>comctl32</sys-lib>
                 <sys-lib>ole32</sys-lib>
                 <sys-lib>oleaut32</sys-lib>
                 <sys-lib>uuid</sys-lib>
                 <sys-lib>rpcrt4</sys-lib>
                 <sys-lib>advapi32</sys-lib>
+                <sys-lib>version</sys-lib>
                 <sys-lib>wsock32</sys-lib>
                 <!-- this one is only used if wxUSE_URL_NATIVE==1 but we don't
                      know if it is here so just add it unconditionally -->
@@ -793,7 +781,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <sys-lib>$(wxwin.libToLink(value))</sys-lib>
         <ldlibs>$(wxwin.extraLdflags(value))</ldlibs>
         <!-- msvs200?prj formats don't support external dependencies yet: -->
-        <if cond="FORMAT in ['msvc6prj','msevc4prj'] and MONOLITHIC=='0'">
+        <if cond="FORMAT=='msvc6prj' and MONOLITHIC=='0'">
             <depends-on-dsp>$(wxwin.makeDspDependency(value))</depends-on-dsp>
         </if>
     </define-tag>

@@ -107,12 +107,7 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 
     [[NSColorPanel sharedColorPanel] setShowsAlpha:YES];
     if(m_colourData.GetColour().IsOk())
-        [[NSColorPanel sharedColorPanel] setColor:
-            [NSColor colorWithCalibratedRed:(CGFloat) (m_colourData.GetColour().Red() / 255.0)
-                                        green:(CGFloat) (m_colourData.GetColour().Green() / 255.0)
-                                        blue:(CGFloat) (m_colourData.GetColour().Blue() / 255.0)
-                                        alpha:(CGFloat) (m_colourData.GetColour().Alpha() / 255.0)]
-        ];
+        [[NSColorPanel sharedColorPanel] setColor:m_colourData.GetColour().OSXGetNSColor()];
     else
         [[NSColorPanel sharedColorPanel] setColor:[NSColor blackColor]];
 
@@ -162,14 +157,7 @@ int wxColourDialog::ShowModal()
     [theCPDelegate release];
 
     //Get the shared color panel along with the chosen color and set the chosen color
-    NSColor* theColor = [[theColorPanel color] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-
-    m_colourData.GetColour().Set(
-                                (unsigned char) ([theColor redComponent] * 255.0),
-                                (unsigned char) ([theColor greenComponent] * 255.0),
-                                (unsigned char) ([theColor blueComponent] * 255.0),
-                                (unsigned char) ([theColor alphaComponent] * 255.0)
-                                 );
+    m_colourData.GetColour() = wxColour([theColorPanel color]);
 
     //Release the pool, we're done :)
     [thePool release];

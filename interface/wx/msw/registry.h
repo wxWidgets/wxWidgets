@@ -110,9 +110,9 @@ public:
     HKCU,  ///< HKEY_CURRENT_USER
     HKLM,  ///< HKEY_LOCAL_MACHINE
     HKUSR, ///< HKEY_USERS
-    HKPD,  ///< HKEY_PERFORMANCE_DATA (Windows NT and 2K only)
+    HKPD,  ///< HKEY_PERFORMANCE_DATA
     HKCC,  ///< HKEY_CURRENT_CONFIG
-    HKDD,  ///< HKEY_DYN_DATA (Windows 95 and 98 only)
+    HKDD,  ///< HKEY_DYN_DATA (Obsolete)
     HKMAX
     };
 

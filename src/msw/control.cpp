@@ -253,7 +253,7 @@ wxSize wxControl::DoGetBestSize() const
     if (m_windowSizer)
        return wxControlBase::DoGetBestSize();
 
-    return wxSize(DEFAULT_ITEM_WIDTH, DEFAULT_ITEM_HEIGHT);
+    return FromDIP(wxSize(DEFAULT_ITEM_WIDTH, DEFAULT_ITEM_HEIGHT));
 }
 
 wxBorder wxControl::GetDefaultBorder() const

@@ -115,7 +115,7 @@ wxRichTextFormattingDialog::~wxRichTextFormattingDialog()
 bool wxRichTextFormattingDialog::Create(long flags, wxWindow* parent, const wxString& title, wxWindowID id,
         const wxPoint& pos, const wxSize& sz, long style)
 {
-    SetExtraStyle(wxDIALOG_EX_CONTEXTHELP|wxWS_EX_VALIDATE_RECURSIVELY);
+    SetExtraStyle(wxDIALOG_EX_CONTEXTHELP|wxWS_EX_VALIDATE_RECURSIVELY|wxWS_EX_BLOCK_EVENTS);
 #ifdef __WXMAC__
     SetWindowVariant(wxWINDOW_VARIANT_SMALL);
 #endif

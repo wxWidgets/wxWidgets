@@ -9,8 +9,8 @@ IMPORTANT NOTE:
   mailing wxwin-users or the author. Preferably, try to fix the
   problem first and then send a patch to the author.
 
-  When sending bug reports tell us what version of wxWidgets you are 
-  using (including the beta) and what compiler on what system. One 
+  When sending bug reports tell us what version of wxWidgets you are
+  using (including the beta) and what compiler on what system. One
   example: wxX11 2.8.0, gcc 2.95.4, Redhat 6.2
 
 First steps
@@ -32,7 +32,7 @@ First steps
   Using configure is the recommended way to build the library. If it doesn't
   work for you for whatever reason, please report it (together with detailed
   information about your platform and the (relevant part of) contents of
-  config.log file) to wx-dev@lists.wxwidgets.org.
+  config.log file).
 
 COMPILING USING CONFIGURE
 =========================
@@ -40,7 +40,7 @@ COMPILING USING CONFIGURE
 * The simplest case
 -------------------
 
-If you compile wxWidgets on Linux for the first time and don't like to read 
+If you compile wxWidgets on Linux for the first time and don't like to read
 install instructions just do (in the base dir):
 
 > ./configure --with-x11
@@ -68,16 +68,16 @@ If you want to remove wxWidgets on Unix you can do this:
 * The expert case
 -----------------
 
-If you want to do some more serious cross-platform programming with wxWidgets, 
-such as for GTK and X11, you can now build two complete libraries and use 
-them concurrently. For this end, you have to create a directory for each build 
+If you want to do some more serious cross-platform programming with wxWidgets,
+such as for GTK and X11, you can now build two complete libraries and use
+them concurrently. For this end, you have to create a directory for each build
 of wxWidgets - you may also want to create different versions of wxWidgets
-and test them concurrently. Most typically, this would be a version configured 
+and test them concurrently. Most typically, this would be a version configured
 with --enable-debug_flag and one without. Note, that only one build can
 currently be installed, so you'd have to use local version of the library for
 that purpose.
 
-For building three versions (one GTK, one X11 and a debug version of the GTK 
+For building three versions (one GTK, one X11 and a debug version of the GTK
 source) you'd do this:
 
 md buildx11
@@ -125,20 +125,20 @@ g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
 The Unix variants of wxWidgets use GNU configure. If you have problems with
 your make use GNU make instead.
 
-If you have general problems with installation, see the wxWidgets website at 
+If you have general problems with installation, see the wxWidgets website at
 
-  http://www.wxwidgets.org/
-  
-for newest information. If you still don't have any success, please send a bug 
-report to one of our mailing lists (see my homepage) INCLUDING A DESCRIPTION OF 
-YOUR SYSTEM AND YOUR PROBLEM, SUCH AS YOUR VERSION OF X, WHAT DISTRIBUTION 
+    https://www.wxwidgets.org/
+
+for newest information. If you still don't have any success, please send a bug
+report to one of our mailing lists (see my homepage) INCLUDING A DESCRIPTION OF
+YOUR SYSTEM AND YOUR PROBLEM, SUCH AS YOUR VERSION OF X, WHAT DISTRIBUTION
 YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect, but I tried...
 
 * GUI libraries
 ---------------
 
 wxWidgets/X11 requires the X11 library to be installed on your system.
-  
+
 * Additional libraries
 ----------------------
 
@@ -148,7 +148,7 @@ Linux-Versions that are based on glibc 2 except RedHat 5.0 which is broken in
 many aspects.  As of writing this, virtually all Linux distributions have
 +correct glibc 2 support.
 
-You can disable thread support by running 
+You can disable thread support by running
 
 ./configure --disable-threads
 make
@@ -156,66 +156,6 @@ su <type root password>
 make install
 ldconfig
 exit
-  
-* Building wxX11 on OS/2
-------------------------
-
-Please send comments and question about the OS/2 installation
-to Stefan Neis <Stefan.Neis@t-online.de> and patches to
-the wxWidgets mailing list.
-
-In the following list, the version numbers indicate the configuration that
-was actually used by myself, newer version should cause no problems and
-even older ones are expected to work most of the time.
-
-You'll need OS/2 Warp (4.51) or eCS(1.0), X-Free86/2 (3.3.6 or newer),
-emx (0.9d fix 4), flex (2.5.4), yacc (1.8) or bison (1.25),
-a Unix like shell (pdksh-5.2.14 or ash), Autoconf (2.57), GNU file
-utilities (3.13), GNU text utilities (1.19), GNU shell utilites (1.12),
-m4 (1.4), sed (2.05), grep (2.0), Awk (3.0.3), GNU Make (3.75).
-
-Preferably, you should have Posix/2 installed and C(PLUS)_INCLUDE_PATH and
-LIBRARY_PATH set up accordingly, however, wxGTK will even work without it.
-Presence of Posix/2 will be auto-detected.
-
-Open an OS/2 prompt and switch to the directory above.
-Set MAKESHELL (and depending on your installation also INSTALL, for me
-it tends to try to use the system's tcpip\pcomos\install.exe which causes
-problems...) to a Unix like shell, e.g.
-SET MAKESHELL=ash
-
-Be warned that depending on the precise version of your make, the
-variable that needs to be set might be MAKE_SHELL instead of MAKESHELL.
-If you have a really deficient version of GNU make, it might even be
-necessary to set SHELL or even COMSPEC to a unix like shell as well. 
-
-Notice that the delivered configure scripts are fully OS/2 aware, so you
-can simply run
-    ash -c "configure --with-x11"
-and make and possibly make install as described above.
-
-To verify X11 installation, configure will try to compile a
-sample program that requires X headers/libraries to be either
-available via C_INCLUDE_PATH and LIBRARY_PATH or you need to
-explicitly set CFLAGS prior to running configure.
-
-* Building wxX11 on SGI
------------------------
-
-Using the SGI native compilers, it is recommended that you
-also set CFLAGS and CXXFLAGS before running configure. These 
-should be set to :
-
-CFLAGS="-mips3 -n32" 
-CXXFLAGS="-mips3 -n32"
-
-This is essential if you want to use the resultant binaries 
-on any other machine than the one it was compiled on. If you 
-have a 64bit machine (Octane) you should also do this to ensure 
-you don't accidently build the libraries as 64bit (which is 
-untested).
-
-The SGI native compiler support has only been tested on Irix 6.5.
 
 * Building wxX11 on Cygwin
 --------------------------
@@ -249,16 +189,16 @@ to see all the options please use:
 	./configure --help
 
 The basic philosophy is that if you want to use different
-configurations, like a debug and a release version, 
+configurations, like a debug and a release version,
 or use the same source tree on different systems,
 you have only to change the environment variable OSTYPE.
 (Sadly this variable is not set by default on some systems
-in some shells - on SGI's for example). So you will have to 
-set it there. This variable HAS to be set before starting 
-configure, so that it knows which system it tries to 
+in some shells - on SGI's for example). So you will have to
+set it there. This variable HAS to be set before starting
+configure, so that it knows which system it tries to
 configure for.
 
-Configure will complain if the system variable OSTYPE has 
+Configure will complain if the system variable OSTYPE has
 not been defined. And Make in some circumstances as well...
 
 
@@ -292,33 +232,33 @@ The following options handle the kind of library you want to build.
 				such as Sun with gcc 2.8.X which
 				would otherwise produce segvs.
 
-	--enable-profile        Add profiling info to the object 
+	--enable-profile        Add profiling info to the object
 				files. Currently broken, I think.
-				
+
 	--enable-no_rtti        Enable compilation without creation of
-	                        C++ RTTI information in object files. 
-				This will speed-up compilation and reduce 
+	                        C++ RTTI information in object files.
+				This will speed-up compilation and reduce
 				binary size.
-				
+
 	--enable-no_exceptions  Enable compilation without creation of
-	                        C++ exception information in object files. 
-				This will speed-up compilation and reduce 
+	                        C++ exception information in object files.
+				This will speed-up compilation and reduce
 				binary size. Also fewer crashes during the
 				actual compilation...
-				
+
 	--enable-no_deps        Enable compilation without creation of
 	                        dependency information.
-				
+
         --enable-permissive     Enable compilation without checking for strict
                                 ANSI conformance.  Useful to prevent the build
                                 dying with errors as soon as you compile with
                                 Solaris' ANSI-defying headers.
-				
-	--enable-mem_tracing    Add built-in memory tracing. 
-				
+
+	--enable-mem_tracing    Add built-in memory tracing.
+
 	--enable-dmalloc        Use the dmalloc memory debugger.
 	                        Read more at www.letters.com/dmalloc/
-				
+
 	--enable-debug_info	Add debug info to object files and
 	                        executables for use with debuggers
 				such as gdb (or its many frontends).
@@ -328,7 +268,7 @@ The following options handle the kind of library you want to build.
 				useful internal debugging tricks (such
 				as automatically reporting illegal calls)
 				to work. Note that program and library
-				must be compiled with the same debug 
+				must be compiled with the same debug
 				options.
 
 * Feature Options
@@ -339,44 +279,42 @@ in wxWidgets snapshot 6, but not yet all (ODBC not).
 
 When producing an executable that is linked statically with wxX11
 you'll be surprised at its immense size. This can sometimes be
-drastically reduced by removing features from wxWidgets that 
+drastically reduced by removing features from wxWidgets that
 are not used in your program. The most relevant such features
 are
 
 	--without-libpng	Disables PNG image format code.
-	
+
 	--without-libjpeg	Disables JPEG image format code.
-	
-{	--without-odbc          Disables ODBC code. Not yet. }
 
     --without-expat         Disable XML classes based on Expat parser.
-	
+
         --disable-resources     Disables the use of *.wxr type
 	                        resources.
-		
+
 	--disable-threads       Disables threads. Will also
 	                        disable sockets.
 
 	--disable-sockets       Disables sockets.
 
 	--disable-dnd           Disables Drag'n'Drop.
-	
+
 	--disable-clipboard     Disables Clipboard.
-	
+
 	--disable-serial        Disables object instance serialisation.
-	
+
 	--disable-streams       Disables the wxStream classes.
-	
+
 	--disable-file          Disables the wxFile class.
-	
+
 	--disable-textfile      Disables the wxTextFile class.
-	
+
 	--disable-intl          Disables the internationalisation.
-	
+
 	--disable-validators    Disables validators.
-	
+
 	--disable-accel         Disables accel.
-	
+
 Apart from disabling certain features you can very often "strip"
 the program of its debugging information resulting in a significant
 reduction in size.
@@ -391,13 +329,13 @@ of all configurable options.
 The following must be done in the base directory (e.g. ~/wxX11
 or whatever)
 
-Now the makefiles are created (by configure) and you can compile 
+Now the makefiles are created (by configure) and you can compile
 the library by typing:
 
 	make
 
 make yourself some coffee, as it will take some time. On an old
-386SX possibly two weeks. During compilation, you'll get a few 
+386SX possibly two weeks. During compilation, you'll get a few
 warning messages depending in your compiler.
 
 If you want to be more selective, you can change into a specific
@@ -408,12 +346,12 @@ Then you may install the library and its header files under
 have to log in as root (i.e. run "su" and enter the root
 password) and type
 
-        make install	
+        make install
 
 You can remove any traces of wxWidgets by typing
 
         make uninstall
-	
+
 If you want to save disk space by removing unnecessary
 object-files:
 
@@ -435,12 +373,12 @@ like this
 CXX = g++
 
 minimal: minimal.o
-    $(CXX) -o minimal minimal.o `wx-config --libs` 
+    $(CXX) -o minimal minimal.o `wx-config --libs`
 
 minimal.o: minimal.cpp
     $(CXX) `wx-config --cxxflags` -c minimal.cpp -o minimal.o
 
-clean: 
+clean:
 	rm -f *.o minimal
 
 This is certain to become the standard way unless we decide
@@ -452,7 +390,7 @@ specify required libraries when running wx-config. For example,
 with libraries required by core GUI classes and wxHTML classes. See
 the manual for more information on the libraries.
 
-2) The other way creates a project within the source code 
+2) The other way creates a project within the source code
 directories of wxWidgets. For this endeavour, you'll need
 GNU autoconf version 2.14 and add an entry to your Makefile.in
 to the bottom of the configure.in script and run autoconf
@@ -518,8 +456,6 @@ Bug reports
 -----------
 
 Please send bug reports with a description of your environment,
-compiler and the error message(s) to the wxwin-developers mailing list at:
+compiler and the error message(s) to the developers mailing list at:
 
-    wx-dev@lists.wxwidgets.org
-
-
+    https://www.wxwidgets.org/support/mailing-lists/

@@ -33,7 +33,8 @@
 
     This window is rather plain by default but can be customized by passing
     wxBusyInfo constructor an object of wxBusyInfoFlags class instead of a
-    simple message. Here is an example from the @ref page_samples_dialogs:
+    simple message. Here is an example from the dialogs sample:
+
     @code
         wxBusyInfo info
             (
@@ -48,7 +49,8 @@
                     .Transparency(4*wxALPHA_OPAQUE/5)
             );
     @endcode
-    showing that separate title and text can be set, and that simple markup
+
+    This shows that separate title and text can be set, and that simple markup
     (@ref wxControl::SetLabelMarkup()) can be used in them, and that it's also
     possible to add an icon and customize the colours and transparency of the
     window.

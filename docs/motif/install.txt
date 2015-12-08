@@ -8,9 +8,9 @@ IMPORTANT NOTE:
   osname.txt for your platform if it exists) carefully before
   mailing wx-users or the author. Preferably, try to fix the
   problem first and then send a patch to the author.
-  
-  When sending bug reports tell us what version of wxWidgets you are 
-  using (including the beta) and what compiler on what system. One 
+
+  When sending bug reports tell us what version of wxWidgets you are
+  using (including the beta) and what compiler on what system. One
   example: wxMotif 2.8.1, gcc 2.95.4, Redhat 6.1
 
 First steps
@@ -37,7 +37,7 @@ First steps
   Using configure is the only way to build the library. If it doesn't
   work for you for whatever reason, please report it (together with detailed
   information about your platform and the (relevant part of) contents of
-  config.log file) to wx-dev@lists.wxwidgets.org.
+  config.log file).
 
 
 COMPILING USING CONFIGURE
@@ -46,7 +46,7 @@ COMPILING USING CONFIGURE
 * The simplest case
 -------------------
 
-If you compile wxWidgets on Linux for the first time and don't like to read 
+If you compile wxWidgets on Linux for the first time and don't like to read
 install instructions just do (in the base dir):
 
 > ./configure --with-motif
@@ -74,11 +74,11 @@ If you want to remove wxWidgets on Unix you can do this:
 * The expert case
 -----------------
 
-If you want to do some more serious cross-platform programming with wxWidgets, 
-such as for GTK and Motif, you can now build two complete libraries and use 
-them concurrently. For this end, you have to create a directory for each build 
+If you want to do some more serious cross-platform programming with wxWidgets,
+such as for GTK and Motif, you can now build two complete libraries and use
+them concurrently. For this end, you have to create a directory for each build
 of wxWidgets - you may also want to create different versions of wxWidgets
-and test them concurrently. Most typically, this would be a version configured 
+and test them concurrently. Most typically, this would be a version configured
 with --enable-debug and one without.
 
 For building three versions (one GTK, one Motif and a debug version of the GTK
@@ -132,11 +132,11 @@ g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
 The Unix variants of wxWidgets use GNU configure. If you have problems with
 your make use GNU make instead.
 
-If you have general problems with installation, see the wxWidgets website at 
+If you have general problems with installation, see the wxWidgets website at
 
-  http://www.wxwidgets.org/
-  
-for newest information. If you still don't have any success, please send a bug 
+  https://www.wxwidgets.org/
+
+for newest information. If you still don't have any success, please send a bug
 report to one of our mailing lists (see my homepage) INCLUDING A DESCRIPTION OF
 YOUR SYSTEM AND YOUR PROBLEM, SUCH AS YOUR VERSION OF MOTIF, WXMOTIF, WHAT
 DISTRIBUTION YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect,
@@ -151,8 +151,8 @@ most of the Motif API without the licence restrictions of Motif.
 
 You can get the newest version of the Lesstif from the lesstif homepage at:
 
-  http://www.lesstif.org/
-  
+  http://lesstif.sourceforge.net/
+
 * Additional libraries
 ----------------------
 
@@ -162,7 +162,7 @@ Linux-Versions that are based on glibc 2 except RedHat 5.0 which is broken in
 many aspects. As of writing this, virtually all Linux distributions have
 correct glibc 2 support.
 
-You can disable thread support by running 
+You can disable thread support by running
 
 ./configure --disable-threads
 make
@@ -170,66 +170,6 @@ su <type root password>
 make install
 ldconfig
 exit
-  
-* Building wxMotif on OS/2
---------------------------
-
-Please send comments and question about the OS/2 installation
-to Stefan Neis <Stefan.Neis@t-online.de> and patches to
-the wxWidgets mailing list.
-
-In the following list, the version numbers indicate the configuration that
-was actually used by myself, newer version should cause no problems and
-even older ones are expected to work most of the time.
-
-You'll need OS/2 Warp (4.51) or eCS(1.0), X-Free86/2 (3.3.6 or newer),
-Lesstif (0.92.7 or newer), emx (0.9d fix 4), a Unix like shell (pdksh-5.2.14
-or ash), Autoconf (2.57), GNU file utilities (3.13), GNU text utilities (1.19),
-GNU shell utilites (1.12), m4 (1.4), sed (2.05), grep (2.0), Awk (3.0.3),
-GNU Make (3.75).
-
-Preferably, you should have Posix/2 installed and C(PLUS)_INCLUDE_PATH and
-LIBRARY_PATH set up accordingly, however, wxGTK will even work without it.
-Presence of Posix/2 will be auto-detected.
-
-Open an OS/2 prompt and switch to the directory above.
-Set MAKESHELL or MAKE_SHELL (which one is needed depends on the version of
-make) to a Unix like shell, e.g.
-SET MAKESHELL=ash
-If you have a really deficient version of GNU make, it might even be
-necessary to set SHELL or even COMSPEC to a unix like shell as well. 
-Depending on your installation you might want to also set INSTALL, for me
-it tends to try to use the system's tcpip\pcomos\install.exe which causes
-problems, e.g.
-SET INSTALL=<path_to_src_directory>/install-sh -c
-
-Notice that the delivered configure scripts are fully OS/2 aware, so you
-can simply run
-    ash -c "configure --with-motif"
-and make and possibly make install as described above.
-
-To verify Lesstif installation, configure will try to compile a
-sample program that requires X headers/libraries to be either
-available via C_INCLUDE_PATH and LIBRARY_PATH or you need to
-explicitly set CFLAGS prior to running configure.
-
-* Building wxMotif on SGI
--------------------------
-
-Using the SGI native compilers, it is recommended that you
-also set CFLAGS and CXXFLAGS before running configure. These 
-should be set to :
-
-CFLAGS="-mips3 -n32" 
-CXXFLAGS="-mips3 -n32"
-
-This is essential if you want to use the resultant binaries 
-on any other machine than the one it was compiled on. If you 
-have a 64bit machine (Octane) you should also do this to ensure 
-you don't accidently build the libraries as 64bit (which is 
-untested).
-
-The SGI native compiler support has only been tested on Irix 6.5.
 
 * Building wxMotif on Cygwin
 ----------------------------
@@ -263,16 +203,16 @@ to see all the options please use:
 	./configure --help
 
 The basic philosophy is that if you want to use different
-configurations, like a debug and a release version, 
+configurations, like a debug and a release version,
 or use the same source tree on different systems,
 you have only to change the environment variable OSTYPE.
 (Sadly this variable is not set by default on some systems
-in some shells - on SGI's for example). So you will have to 
-set it there. This variable HAS to be set before starting 
-configure, so that it knows which system it tries to 
+in some shells - on SGI's for example). So you will have to
+set it there. This variable HAS to be set before starting
+configure, so that it knows which system it tries to
 configure for.
 
-Configure will complain if the system variable OSTYPE has 
+Configure will complain if the system variable OSTYPE has
 not been defined. And Make in some circumstances as well...
 
 
@@ -290,7 +230,7 @@ You have to add --with-motif on platforms, where Motif is
 not the default (on Linux, configure will default to GTK).
 
 	--with-motif             Use either Motif or Lesstif
-	                         Configure will look for both. 
+	                         Configure will look for both.
 
 The following options handle the kind of library you want to build.
 
@@ -310,29 +250,29 @@ The following options handle the kind of library you want to build.
 	                        such as Sun with gcc 2.8.X which
 	                        would otherwise produce segvs.
 
-	--enable-profile        Add profiling info to the object 
+	--enable-profile        Add profiling info to the object
 				files. Currently broken, I think.
-				
+
 	--enable-no_rtti        Enable compilation without creation of
-	                        C++ RTTI information in object files. 
-				This will speed-up compilation and reduce 
+	                        C++ RTTI information in object files.
+				This will speed-up compilation and reduce
 				binary size.
-				
+
 	--enable-no_exceptions  Enable compilation without creation of
-	                        C++ exception information in object files. 
-				This will speed-up compilation and reduce 
+	                        C++ exception information in object files.
+				This will speed-up compilation and reduce
 				binary size. Also fewer crashes during the
 				actual compilation...
-				
+
 	--enable-no_deps        Enable compilation without creation of
 	                        dependency information.
-				
+
 	--enable-permissive     Enable compilation without checking for strict
 	                        ANSI conformance.  Useful to prevent the build
 	                        dying with errors as soon as you compile with
 	                        Solaris' ANSI-defying headers.
 
-	--enable-mem_tracing    Add built-in memory tracing. 
+	--enable-mem_tracing    Add built-in memory tracing.
 
 	--enable-dmalloc        Use the dmalloc memory debugger.
 	                        Read more at www.letters.com/dmalloc/
@@ -349,7 +289,7 @@ The following options handle the kind of library you want to build.
 				useful internal debugging tricks (such
 				as automatically reporting illegal calls)
 				to work. Note that program and library
-				must be compiled with the same debug 
+				must be compiled with the same debug
 				options.
 
 * Feature Options
@@ -360,15 +300,13 @@ in wxWidgets snapshot 6, but not yet all (ODBC not).
 
 When producing an executable that is linked statically with wxGTK
 you'll be surprised at its immense size. This can sometimes be
-drastically reduced by removing features from wxWidgets that 
+drastically reduced by removing features from wxWidgets that
 are not used in your program. The most relevant such features
 are
 
 	--without-libpng	Disables PNG image format code.
 
 	--without-libjpeg	Disables JPEG image format code.
-
-	--without-odbc          Disables ODBC code.
 
 	--without-libtiff       Disables TIFF image format code.
 
@@ -394,7 +332,7 @@ are
 	--disable-validators    Disables validators.
 
 	--disable-accel         Disables accel.
-	
+
 Apart from disabling certain features you can very often "strip"
 the program of its debugging information resulting in a significant
 reduction in size.
@@ -409,13 +347,13 @@ of all configurable options.
 The following must be done in the base directory (e.g. ~/wxMotif
 or ~/wxWin or whatever)
 
-Now the makefiles are created (by configure) and you can compile 
+Now the makefiles are created (by configure) and you can compile
 the library by typing:
 
 	make
 
 make yourself some coffee, as it will take some time. On an old
-Pentium 200 around 40 minutes. During compilation, you may get a few 
+Pentium 200 around 40 minutes. During compilation, you may get a few
 warning messages depending in your compiler.
 
 If you want to be more selective, you can change into a specific
@@ -426,12 +364,12 @@ Then you may install the library and its header files under
 have to log in as root (i.e. run "su" and enter the root
 password) and type
 
-        make install	
+        make install
 
 You can remove any traces of wxWidgets by typing
 
         make uninstall
-	
+
 If you want to save disk space by removing unnecessary
 object-files:
 
@@ -453,12 +391,12 @@ like this
 CXX = g++
 
 minimal: minimal.o
-    $(CXX) -o minimal minimal.o `wx-config --libs` 
+    $(CXX) -o minimal minimal.o `wx-config --libs`
 
 minimal.o: minimal.cpp
     $(CXX) `wx-config --cxxflags` -c minimal.cpp -o minimal.o
 
-clean: 
+clean:
 	rm -f *.o minimal
 
 If your application uses only some of wxWidgets libraries, you can
@@ -467,7 +405,7 @@ specify required libraries when running wx-config. For example,
 with libraries required by core GUI classes and wxHTML classes. See
 the manual for more information on the libraries.
 
-2) The other way creates a project within the source code 
+2) The other way creates a project within the source code
 directories of wxWidgets. For this endeavour, you'll need
 GNU autoconf version 2.14 and add an entry to your Makefile.in
 to the bottom of the configure.in script and run autoconf
@@ -535,9 +473,8 @@ Bug reports
 -----------
 
 Please send bug reports with a description of your environment,
-compiler and the error message(s) to the wxwin-developers mailing list at:
+compiler and the error message(s) to the developers mailing list at:
 
-    wx-dev@lists.wxwidgets.org
+    https://www.wxwidgets.org/support/mailing-lists/
 
 Julian Smart, Robert Roebling and Vadim Zeitlin, November 1999.
-

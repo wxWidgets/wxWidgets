@@ -790,6 +790,14 @@ public:
     void SetAlternateRowColour(const wxColour& colour);
 
     /**
+        Get the alternative row background colour.
+
+        @since 3.1.0
+        @see SetAlternateRowColour()
+     */
+    wxColour GetAlternateRowColour() const;
+
+    /**
         Determines which item (if any) is at the specified point, giving details
         in @a flags. Returns index of the item or @c wxNOT_FOUND if no item is at
         the specified point.
@@ -1148,6 +1156,10 @@ public:
 
         Consider using wxListView if possible to avoid dealing with this
         error-prone and confusing method.
+
+        Also notice that contrary to the usual rule that only user actions
+        generate events, this method does generate wxEVT_LIST_ITEM_SELECTED
+        event when it is used to select an item.
     */
     bool SetItemState(long item, long state, long stateMask);
 
@@ -1631,12 +1643,15 @@ public:
     /**
         Selects or unselects the given item.
 
+        Notice that this method inherits the unusual behaviour of
+        wxListCtrl::SetItemState() which sends a wxEVT_LIST_ITEM_SELECTED event
+        when it is used to select an item, contrary to the usual rule that only
+        the user actions result in selection.
+
         @param n
             the item to select or unselect
         @param on
             if @true (default), selects the item, otherwise unselects it
-
-        @see wxListCtrl::SetItemState
     */
     void Select(long n, bool on = true);
 

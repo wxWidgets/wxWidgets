@@ -7,9 +7,9 @@
     #define WXW_DIR "..\.."
 #endif
 
-#if GetEnv("WXW_VER") == "git"
-    #define INFOFILE  WXW_DIR + "\BuildGit.txt"
-    #define WX_VERSION "SVN"
+#if GetEnv("WXW_VER") == "Snapshot"
+    #define INFOFILE WXW_DIR + "\BuildGit.txt"
+    #define WX_VERSION "Snapshot"
 #elif GetEnv("WXW_VER") != ""
     #define INFOFILE WXW_DIR + "\docs\msw\install.txt"
     #define WX_VERSION GetEnv("WXW_VER")
@@ -25,9 +25,9 @@
 AppName=wxWidgets
 AppVerName=wxWidgets {#WX_VERSION}
 AppPublisher=wxWidgets
-AppPublisherURL=http://www.wxwidgets.org
-AppSupportURL=http://www.wxwidgets.org
-AppUpdatesURL=http://www.wxwidgets.org
+AppPublisherURL=https://www.wxwidgets.org
+AppSupportURL=https://www.wxwidgets.org
+AppUpdatesURL=https://www.wxwidgets.org
 DefaultDirName={sd}\wxWidgets-{#WX_VERSION}
 DefaultGroupName=wxWidgets {#WX_VERSION}
 UsePreviousAppDir=no
@@ -47,7 +47,7 @@ SolidCompression=yes
 Source: "{#WXW_DIR}\*"; DestDir: "{app}"; Excludes: "cocoa,dfb,gtk,gtk1,motif,osx,wxWindows.xcod*,x11,distrib"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [INI]
-Filename: "{app}\wx.url"; Section: "InternetShortcut"; Key: "URL"; String: "http://www.wxwidgets.org"
+Filename: "{app}\wx.url"; Section: "InternetShortcut"; Key: "URL"; String: "https://www.wxwidgets.org"
 
 [Icons]
 Name: "{group}\{cm:ProgramOnTheWeb,wxWidgets}"; Filename: "{app}\wx.url"

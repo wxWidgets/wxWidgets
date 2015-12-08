@@ -693,7 +693,10 @@ bool wxRichTextListStylePage::TransferDataFromWindow()
 
     // if (m_hasBulletSymbol)
     {
-        attr->SetBulletText(m_symbolCtrl->GetValue());
+        if (!m_symbolCtrl->GetValue().IsEmpty())
+            attr->SetBulletText(m_symbolCtrl->GetValue());
+        else
+            attr->SetFlags(attr->GetFlags() & ~wxTEXT_ATTR_BULLET_TEXT);
         attr->SetBulletFont(m_symbolFontCtrl->GetValue());
     }
 

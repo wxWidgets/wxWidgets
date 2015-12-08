@@ -316,6 +316,14 @@ bool wxIcon::LoadIconFromSystemResource(const wxString& resourceName, int desire
     {
         theId = kGenericDocumentIcon ;
     }
+    else if ( resourceName == wxT( "wxICON_PRINT" ) )
+    {
+        theId = kPrintMonitorFolderIcon;
+    }
+    else if ( resourceName == wxT( "wxICON_HELP_FOLDER" ) )
+    {
+        theId = kHelpFolderIcon;
+    }
 
     if ( theId != 0 )
     {

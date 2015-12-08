@@ -1403,7 +1403,7 @@ int wxMenuItem::MSGetMenuItemPos() const
     if ( !hMenu )
         return -1;
 
-    const UINT id = GetMSWId();
+    const WXWPARAM id = GetMSWId();
     const int menuItems = ::GetMenuItemCount(hMenu);
     for ( int i = 0; i < menuItems; i++ )
     {

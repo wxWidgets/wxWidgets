@@ -467,8 +467,8 @@ Here are the steps you should follow:
    and it will be added to the next wxWidgets release or snapshot.
 
 In addition, please consider subscribing to the very low volume
-<a href="http://lists.wxwidgets.org/mailman/listinfo/wx-translators">
-wxWidgets translators</a> mailing list on which the news especially important
+<a href="https://www.wxwidgets.org/support/mailing-lists/">
+wxWidgets translators mailing list</a> on which the news especially important
 for the translators are announced.
 
 Thank you in advance for your help!

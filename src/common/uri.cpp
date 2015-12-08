@@ -314,6 +314,17 @@ bool wxURI::IsReference() const
 }
 
 // ---------------------------------------------------------------------------
+// IsRelative
+//
+// FIXME: may need refinement
+// ---------------------------------------------------------------------------
+
+bool wxURI::IsRelative() const
+{
+    return !HasScheme() && !HasServer();
+}
+
+// ---------------------------------------------------------------------------
 // Parse
 //
 // Master URI parsing method.  Just calls the individual parsing methods

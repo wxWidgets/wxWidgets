@@ -68,6 +68,8 @@ wxObject *wxTextCtrlXmlHandler::DoCreateResource()
 
     if (HasParam(wxT("maxlength")))
         text->SetMaxLength(GetLong(wxT("maxlength")));
+    if (GetBool(wxS("forceupper")))
+        text->ForceUpper();
 
     const wxString hint = GetText(wxS("hint"));
     if (!hint.empty())

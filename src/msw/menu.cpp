@@ -580,21 +580,11 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                     // boxes are used together with bitmaps and this is not the
                     // case in wx API
                     WinStruct<MENUINFO> mi;
-
-                    // don't call SetMenuInfo() directly, this would prevent
-                    // the app from starting up under Windows 95/NT 4
-                    typedef BOOL (WINAPI *SetMenuInfo_t)(HMENU, MENUINFO *);
-
-                    wxDynamicLibrary dllUser(wxT("user32"));
-                    wxDYNLIB_FUNCTION(SetMenuInfo_t, SetMenuInfo, dllUser);
-                    if ( pfnSetMenuInfo )
+                    mi.fMask = MIM_STYLE;
+                    mi.dwStyle = MNS_CHECKORBMP;
+                    if ( !::SetMenuInfo(GetHmenu(), &mi) )
                     {
-                        mi.fMask = MIM_STYLE;
-                        mi.dwStyle = MNS_CHECKORBMP;
-                        if ( !(*pfnSetMenuInfo)(GetHmenu(), &mi) )
-                        {
-                            wxLogLastError(wxT("SetMenuInfo(MNS_NOCHECK)"));
-                        }
+                        wxLogLastError(wxT("SetMenuInfo(MNS_NOCHECK)"));
                     }
                 }
         }
@@ -748,10 +738,12 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
     // Update indices of radio groups.
     if ( m_radioData )
     {
-        bool inExistingGroup = m_radioData->UpdateOnRemoveItem(pos);
-
-        wxASSERT_MSG( !inExistingGroup || item->GetKind() == wxITEM_RADIO,
-                      wxT("Removing non radio button from radio group?") );
+        if ( m_radioData->UpdateOnRemoveItem(pos) )
+        {
+            wxASSERT_MSG( item->GetKind() == wxITEM_RADIO,
+                          wxT("Removing non radio button from radio group?") );
+        }
+        //else: item being removed is not in a radio group
     }
 
     // remove the item from the menu

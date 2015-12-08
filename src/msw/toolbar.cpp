@@ -386,8 +386,7 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
     ::SendMessage(GetHwnd(), TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
 
 #ifdef TB_SETEXTENDEDSTYLE
-    if ( wxApp::GetComCtl32Version() >= 471 )
-        ::SendMessage(GetHwnd(), TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_DRAWDDARROWS);
+    ::SendMessage(GetHwnd(), TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_DRAWDDARROWS);
 #endif
 
     return true;
@@ -497,6 +496,20 @@ wxSize wxToolBar::DoGetBestSize() const
 
     if ( !IsVertical() )
     {
+        wxToolBarToolsList::compatibility_iterator node;
+        for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+        {
+            wxToolBarTool * const
+                tool = static_cast<wxToolBarTool *>(node->GetData());
+            if (tool->IsControl())
+            {
+                int y = tool->GetControl()->GetSize().y;
+                // Approximate border size
+                if (y > (sizeBest.y - 4))
+                    sizeBest.y = y + 4;
+            }
+        }
+
         // Without the extra height, DoGetBestSize can report a size that's
         // smaller than the actual window, causing windows to overlap slightly
         // in some circumstances, leading to missing borders (especially noticeable
@@ -523,10 +536,10 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     if ( !(style & wxTB_NO_TOOLTIPS) )
         msStyle |= TBSTYLE_TOOLTIPS;
 
-    if ( style & wxTB_FLAT && wxApp::GetComCtl32Version() > 400 )
+    if ( style & wxTB_FLAT )
         msStyle |= TBSTYLE_FLAT;
 
-    if ( style & wxTB_HORZ_LAYOUT && wxApp::GetComCtl32Version() >= 470 )
+    if ( style & wxTB_HORZ_LAYOUT )
         msStyle |= TBSTYLE_LIST;
 
     if ( style & wxTB_NODIVIDER )
@@ -607,34 +620,27 @@ void wxToolBar::CreateDisabledImageList()
 {
     wxDELETE(m_disabledImgList);
 
-    // as we can't use disabled image list with older versions of comctl32.dll,
-    // don't even bother creating it
-    if ( wxApp::GetComCtl32Version() >= 470 )
+    // search for the first disabled button img in the toolbar, if any
+    for ( wxToolBarToolsList::compatibility_iterator
+            node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
-        // search for the first disabled button img in the toolbar, if any
-        for ( wxToolBarToolsList::compatibility_iterator
-                node = m_tools.GetFirst(); node; node = node->GetNext() )
+        wxToolBarToolBase *tool = node->GetData();
+        wxBitmap bmpDisabled = tool->GetDisabledBitmap();
+        if ( bmpDisabled.IsOk() )
         {
-            wxToolBarToolBase *tool = node->GetData();
-            wxBitmap bmpDisabled = tool->GetDisabledBitmap();
-            if ( bmpDisabled.IsOk() )
-            {
-                const wxSize sizeBitmap = bmpDisabled.GetSize();
-                m_disabledImgList = new wxImageList
-                                        (
-                                            sizeBitmap.x,
-                                            sizeBitmap.y,
-                                            // Don't use mask if we have alpha
-                                            // (wxImageList will fall back to
-                                            // mask if alpha not supported)
-                                            !bmpDisabled.HasAlpha(),
-                                            GetToolsCount()
-                                        );
-                break;
-            }
+            const wxSize sizeBitmap = bmpDisabled.GetSize();
+            m_disabledImgList = new wxImageList
+                                    (
+                                        sizeBitmap.x,
+                                        sizeBitmap.y,
+                                        // Don't use mask if we have alpha
+                                        // (wxImageList will fall back to
+                                        // mask if alpha not supported)
+                                        !bmpDisabled.HasAlpha(),
+                                        GetToolsCount()
+                                    );
+            break;
         }
-
-        // we don't have any disabled bitmaps
     }
 }
 
@@ -824,35 +830,30 @@ bool wxToolBar::Realize()
         if ( oldToolBarBitmap )
         {
 #ifdef TB_REPLACEBITMAP
-            if ( wxApp::GetComCtl32Version() >= 400 )
+            TBREPLACEBITMAP replaceBitmap;
+            replaceBitmap.hInstOld = NULL;
+            replaceBitmap.hInstNew = NULL;
+            replaceBitmap.nIDOld = (UINT_PTR)oldToolBarBitmap;
+            replaceBitmap.nIDNew = (UINT_PTR)hBitmap;
+            replaceBitmap.nButtons = nButtons;
+            if ( !::SendMessage(GetHwnd(), TB_REPLACEBITMAP,
+                                0, (LPARAM) &replaceBitmap) )
             {
-                TBREPLACEBITMAP replaceBitmap;
-                replaceBitmap.hInstOld = NULL;
-                replaceBitmap.hInstNew = NULL;
-                replaceBitmap.nIDOld = (UINT_PTR)oldToolBarBitmap;
-                replaceBitmap.nIDNew = (UINT_PTR)hBitmap;
-                replaceBitmap.nButtons = nButtons;
-                if ( !::SendMessage(GetHwnd(), TB_REPLACEBITMAP,
-                                    0, (LPARAM) &replaceBitmap) )
-                {
-                    wxFAIL_MSG(wxT("Could not replace the old bitmap"));
-                }
-
-                ::DeleteObject(oldToolBarBitmap);
-
-                // already done
-                addBitmap = false;
+                wxFAIL_MSG(wxT("Could not replace the old bitmap"));
             }
-            else
+
+            ::DeleteObject(oldToolBarBitmap);
+
+            // already done
+            addBitmap = false;
+#else
+            // we can't replace the old bitmap, so we will add another one
+            // (awfully inefficient, but what else to do?) and shift the bitmap
+            // indices accordingly
+            addBitmap = true;
+
+            bitmapId = m_nButtons;
 #endif // TB_REPLACEBITMAP
-            {
-                // we can't replace the old bitmap, so we will add another one
-                // (awfully inefficient, but what else to do?) and shift the bitmap
-                // indices accordingly
-                addBitmap = true;
-
-                bitmapId = m_nButtons;
-            }
         }
 
         if ( addBitmap ) // no old bitmap or we can't replace it
@@ -867,22 +868,18 @@ bool wxToolBar::Realize()
             }
         }
 
-        // disable image lists are only supported in comctl32.dll 4.70+
-        if ( wxApp::GetComCtl32Version() >= 470 )
-        {
-            HIMAGELIST hil = m_disabledImgList
-                                ? GetHimagelistOf(m_disabledImgList)
-                                : 0;
+        HIMAGELIST hil = m_disabledImgList
+                            ? GetHimagelistOf(m_disabledImgList)
+                            : 0;
 
-            // notice that we set the image list even if don't have one right
-            // now as we could have it before and need to reset it in this case
-            HIMAGELIST oldImageList = (HIMAGELIST)
-              ::SendMessage(GetHwnd(), TB_SETDISABLEDIMAGELIST, 0, (LPARAM)hil);
+        // notice that we set the image list even if don't have one right
+        // now as we could have it before and need to reset it in this case
+        HIMAGELIST oldImageList = (HIMAGELIST)
+          ::SendMessage(GetHwnd(), TB_SETDISABLEDIMAGELIST, 0, (LPARAM)hil);
 
-            // delete previous image list if any
-            if ( oldImageList )
-                ::DeleteObject(oldImageList);
-        }
+        // delete previous image list if any
+        if ( oldImageList )
+            ::DeleteObject(oldImageList);
     }
 
 
@@ -899,14 +896,6 @@ bool wxToolBar::Realize()
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
         wxToolBarTool *tool = static_cast<wxToolBarTool *>(node->GetData());
-
-        // don't add separators to the vertical toolbar with old comctl32.dll
-        // versions as they didn't handle this properly
-        if ( IsVertical() && tool->IsSeparator() &&
-                wxApp::GetComCtl32Version() <= 472 )
-        {
-            continue;
-        }
 
         TBBUTTON& button = buttons[i];
 
@@ -1115,7 +1104,9 @@ bool wxToolBar::Realize()
             if ( diff < 0 )
             {
                 // the control is too high, resize to fit
-                control->SetSize(wxDefaultCoord, height - 2);
+                // Actually don't set the size, otherwise we can never fit
+                // the toolbar around the controls.
+                // control->SetSize(wxDefaultCoord, height - 2);
 
                 diff = 2;
             }
@@ -1492,21 +1483,9 @@ void wxToolBar::SetRows(int nRows)
 // The button size is bigger than the bitmap size
 wxSize wxToolBar::GetToolSize() const
 {
-    // TB_GETBUTTONSIZE is supported from version 4.70
-#if defined(_WIN32_IE) && (_WIN32_IE >= 0x300 ) \
-    && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
-    if ( wxApp::GetComCtl32Version() >= 470 )
-    {
-        DWORD dw = ::SendMessage(GetHwnd(), TB_GETBUTTONSIZE, 0, 0);
+    DWORD dw = ::SendMessage(GetHwnd(), TB_GETBUTTONSIZE, 0, 0);
 
-        return wxSize(LOWORD(dw), HIWORD(dw));
-    }
-    else
-#endif // comctl32.dll 4.70+
-    {
-        // defaults
-        return wxSize(m_defaultWidth + 8, m_defaultHeight + 7);
-    }
+    return wxSize(LOWORD(dw), HIWORD(dw));
 }
 
 wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
@@ -1770,6 +1749,20 @@ bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
             h = r.bottom - r.top - 3;
         else
             h = r.bottom - r.top;
+
+        // Take control height into account
+        for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+        {
+            wxToolBarTool * const
+                tool = static_cast<wxToolBarTool *>(node->GetData());
+            if (tool->IsControl())
+            {
+                int y = (tool->GetControl()->GetSize().y - 2); // -2 since otherwise control height + 4 (below) is too much
+                if (y > h)
+                    h = y;
+            }
+        }
+
         if ( m_maxRows )
         {
             // FIXME: hardcoded separator line height...

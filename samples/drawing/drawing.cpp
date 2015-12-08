@@ -822,7 +822,7 @@ void MyCanvas::DrawText(wxDC& dc)
     dc.DrawRotatedText( wxT("That is text"), 20, 10, -45 );
 
     // use wxSWISS_FONT and not wxNORMAL_FONT as the latter can't be rotated
-    // under Win9x (it is not TrueType)
+    // under MSW (it is not TrueType)
     dc.SetFont( *wxSWISS_FONT );
 
     wxString text;

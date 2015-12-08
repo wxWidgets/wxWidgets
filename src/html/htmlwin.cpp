@@ -485,7 +485,12 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
     SetBackgroundColour(wxColour(0xFF, 0xFF, 0xFF));
     SetBackgroundImage(wxNullBitmap);
 
-    m_Parser->SetDC(&dc);
+    double pixelScale = 1.0;
+#ifndef wxHAVE_DPI_INDEPENDENT_PIXELS
+    pixelScale = GetContentScaleFactor();
+#endif
+
+    m_Parser->SetDC(&dc, pixelScale, 1.0);
 
     // notice that it's important to set m_Cell to NULL here before calling
     // Parse() below, even if it will be overwritten by its return value as

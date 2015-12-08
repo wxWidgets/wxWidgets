@@ -64,6 +64,23 @@
 #include "wx/odcombo.h"
 #include "wx/numformatter.h"
 
+// Drawing ARGB on standard DC is supported by OSX and GTK3
+#if defined(__WXOSX__) || defined(__WXGTK3__)
+#define wxPG_DC_SUPPORTS_ALPHA 1
+#else
+#define wxPG_DC_SUPPORTS_ALPHA 0
+#endif // __WXOSX__ || __WXGTK3__
+
+#define wxPG_USE_GC_FOR_ALPHA  (wxUSE_GRAPHICS_CONTEXT && !wxPG_DC_SUPPORTS_ALPHA)
+
+#if wxPG_USE_GC_FOR_ALPHA
+#include "wx/dcgraph.h"
+#include "wx/dcmemory.h" // for wxDynamicCast purposes
+#if wxUSE_METAFILE
+    #include "wx/metafile.h"  // for wxDynamicCast purposes
+#endif // wxUSE_METAFILE
+#endif // wxPG_USE_GC_FOR_ALPHA
+
 // -----------------------------------------------------------------------
 
 #if defined(__WXMSW__)
@@ -1237,11 +1254,12 @@ bool wxSystemColourProperty::QueryColourFromUser( wxVariant& variant ) const
 
     wxColourData data;
     data.SetChooseFull(true);
+    data.SetChooseAlpha(GetAttributeAsLong(wxPG_COLOUR_HAS_ALPHA, 0) != 0);
     data.SetColour(val.m_colour);
-    for ( int i = 0; i < 16; i++ )
+    for ( int i = 0; i < wxColourData::NUM_CUSTOM; i++ )
     {
-        wxColour colour(i*16, i*16, i*16);
-        data.SetCustomColour(i, colour);
+        unsigned char n = i*(256/wxColourData::NUM_CUSTOM);
+        data.SetCustomColour(i, wxColour(n, n, n));
     }
 
     wxColourDialog dialog(propgrid, &data);
@@ -1395,8 +1413,42 @@ void wxSystemColourProperty::OnCustomPaint( wxDC& dc, const wxRect& rect,
 
     if ( col.IsOk() )
     {
-        dc.SetBrush(col);
-        dc.DrawRectangle(rect);
+#if wxPG_USE_GC_FOR_ALPHA
+        wxGCDC *gdc = NULL;
+        if ( col.Alpha() != wxALPHA_OPAQUE )
+        {
+            if ( wxPaintDC *paintdc = wxDynamicCast(&dc, wxPaintDC) )
+            {
+                gdc = new wxGCDC(*paintdc);
+            }
+            else if ( wxMemoryDC *memdc = wxDynamicCast(&dc, wxMemoryDC) )
+            {
+                gdc = new wxGCDC(*memdc);
+            }
+#if wxUSE_METAFILE && defined(wxMETAFILE_IS_ENH)
+            else if ( wxMetafileDC *metadc = wxDynamicCast(&dc, wxMetafileDC) )
+            {
+                gdc = new wxGCDC(*metadc);
+            }
+#endif
+            else
+            {
+                wxFAIL_MSG( wxS("Unknown wxDC kind") );
+            }
+        }
+
+        if ( gdc )
+        {
+            gdc->SetBrush(col);
+            gdc->DrawRectangle(rect);
+            delete gdc;
+        }
+        else
+#endif // wxPG_USE_GC_FOR_ALPHA
+        {
+            dc.SetBrush(col);
+            dc.DrawRectangle(rect);
+        }
     }
 }
 
