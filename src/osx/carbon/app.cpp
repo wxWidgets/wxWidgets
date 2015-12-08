@@ -443,6 +443,12 @@ bool wxApp::OSXOnShouldTerminate()
     ProcessEvent(event);
     return !event.GetVeto();
 }
+
+wxMenu* wxApp::MacGetDockMenu()
+{
+    return NULL;
+}
+
 #endif
 
 //----------------------------------------------------------------------

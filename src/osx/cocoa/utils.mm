@@ -20,6 +20,7 @@
         #include "wx/dialog.h"
         #include "wx/toplevel.h"
         #include "wx/font.h"
+        #include "wx/menu.h"
     #endif
 #endif
 
@@ -224,6 +225,19 @@ void wxBell()
     if ( wxTheApp )
         wxTheApp->SetActive( false , NULL ) ;
 }
+
+#if wxUSE_MENUS
+- (NSMenu *)applicationDockMenu:(NSApplication *)sender
+{
+    wxMenu *menu = wxTheApp->MacGetDockMenu();
+    if ( menu ) {
+        return (NSMenu*) menu->GetPeer()->GetHMenu();
+    }
+    else {
+        return nil;
+    }
+}
+#endif
 
 @end
 

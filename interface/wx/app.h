@@ -1017,6 +1017,22 @@ public:
     virtual void MacOpenFiles(const wxArrayString& fileNames);
 
     /**
+        Called in response to the applicationDockMenu message
+
+        Override this method to add custom menu items to the context menu which
+        appears when right-clicking on the application icon in the Dock (while
+        the application is running).
+
+        Note that WX does not take ownership of the menu. The application should
+        keep a pointer to the wxMenu and destroy it when the application exits.
+
+        @onlyfor{wxosx}
+
+        @since 3.1.0
+    */
+    virtual wxMenu* MacGetDockMenu();
+
+    /**
         Called in response of an "open-document" Apple event.
 
         @deprecated
