@@ -921,7 +921,7 @@ bool wxToolBar::Realize()
                     button.iBitmap = IsVertical() ? sizeControl.y : sizeControl.x;
                 }
 
-                // Fall through
+                wxFALLTHROUGH;
 
             case wxTOOL_STYLE_SEPARATOR:
                 if ( tool->IsStretchableSpace() )
