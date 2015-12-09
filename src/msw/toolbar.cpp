@@ -469,9 +469,7 @@ wxSize wxToolBar::DoGetBestSize() const
         // reverse horz and vertical components if necessary
         if ( IsVertical() )
         {
-            int t = sizeBest.x;
-            sizeBest.x = sizeBest.y;
-            sizeBest.y = t;
+            wxSwap(sizeBest.x, sizeBest.y);
         }
     }
     else // TB_GETMAXSIZE succeeded
