@@ -16,6 +16,7 @@
 
     Notice that this class is not a window and so doesn't derive from wxWindow.
 
+    @since 2.9.0
     @library{wxadv}
     @category{misc}
 */
