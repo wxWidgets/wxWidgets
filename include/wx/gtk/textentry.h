@@ -21,7 +21,7 @@ typedef struct _GtkEntry GtkEntry;
 class WXDLLIMPEXP_CORE wxTextEntry : public wxTextEntryBase
 {
 public:
-    wxTextEntry() { }
+    wxTextEntry() { m_isUpperCase = false; }
 
     // implement wxTextEntryBase pure virtual methods
     virtual void WriteText(const wxString& text) wxOVERRIDE;
@@ -47,6 +47,7 @@ public:
     virtual void SetEditable(bool editable) wxOVERRIDE;
 
     virtual void SetMaxLength(unsigned long len) wxOVERRIDE;
+    virtual void ForceUpper() wxOVERRIDE;
 
 #ifdef __WXGTK3__
     virtual bool SetHint(const wxString& hint) wxOVERRIDE;
@@ -56,6 +57,7 @@ public:
     // implementation only from now on
     void SendMaxLenEvent();
     bool GTKEntryOnInsertText(const char* text);
+    bool GTKIsUpperCase() const { return m_isUpperCase; }
 
 protected:
     // This method must be called from the derived class Create() to connect
@@ -85,7 +87,12 @@ private:
 
     // implement this to return the associated GtkEntry
     virtual GtkEntry *GetEntry() const = 0;
+
+    bool m_isUpperCase;
 };
+
+// We don't need the generic version.
+#define wxHAS_NATIVE_TEXT_FORCEUPPER
 
 #endif // _WX_GTK_TEXTENTRY_H_
 

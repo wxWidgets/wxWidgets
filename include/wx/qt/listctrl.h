@@ -173,12 +173,6 @@ public:
     wxImageList *GetImageList(int which) const;
 
     // Sets the image list
-    // N.B. There's a quirk in the Win95 list view implementation.
-    // If in wxLC_LIST mode, it'll *still* display images by the labels if
-    // there's a small-icon image list set for the control - even though you
-    // haven't specified wxLIST_MASK_IMAGE when inserting.
-    // So you have to set a NULL small-icon image list to be sure that
-    // the wxLC_LIST mode works without icons. Of course, you may want icons...
     void SetImageList(wxImageList *imageList, int which);
     void AssignImageList(wxImageList *imageList, int which);
 
