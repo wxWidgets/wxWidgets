@@ -18,6 +18,8 @@
 
     @library{wxcore}
     @category{managedwnd}
+
+    @see @ref wxToolTip
 */
 class wxTipWindow : public wxWindow
 {
