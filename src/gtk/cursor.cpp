@@ -418,3 +418,8 @@ void wxSetCursor( const wxCursor& cursor )
     g_globalCursor = cursor;
     SetGlobalCursor(cursor);
 }
+wxCursor wxGetCursor()
+{
+	//implementation needed here
+	return wxNullCursor;
+}

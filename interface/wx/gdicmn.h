@@ -1204,7 +1204,15 @@ int wxDisplayDepth();
     @header{wx/gdicmn.h}
 */
 void wxSetCursor(const wxCursor& cursor);
+/**
+Gets the Global cursor; only has an effect on Windows, Mac and GTK+. If wxNullCursor 
+is returned, the cursor could not be retrived
 
+@see wxCursor
+
+@header{wx/gdicmn.h}
+*/
+wxCursor wxGetCursor(const wxCursor& cursor);
 //@}
 
 /** @addtogroup group_funcmacro_gdi */

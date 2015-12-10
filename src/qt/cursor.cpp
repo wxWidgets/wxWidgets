@@ -29,6 +29,11 @@ void wxSetCursor(const wxCursor& cursor)
     else
         QApplication::setOverrideCursor(cursor.m_qtCursor);
 }
+wxCursor wxGetCursor()
+{
+	//implementation needed here
+	return wxNullCursor;
+}
 
 void wxBeginBusyCursor(const wxCursor *cursor)
 {

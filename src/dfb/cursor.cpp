@@ -82,6 +82,11 @@ void wxSetCursor(const wxCursor& cursor)
 {
 #warning "FIXME: implement"
 }
+wxCursor wxGetCursor()
+{
+	return wxNullCursor;
+#warning "FIXME: implement"
+}
 
 
 

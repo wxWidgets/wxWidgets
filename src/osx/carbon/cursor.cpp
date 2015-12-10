@@ -696,3 +696,9 @@ void wxSetCursor(const wxCursor& cursor)
     cursor.MacInstall() ;
     gGlobalCursor = cursor;
 }
+
+wxCursor wxGetCursor()
+{
+	//implementation needed here
+	return wxNullCursor;
+}

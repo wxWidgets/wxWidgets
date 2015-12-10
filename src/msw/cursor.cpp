@@ -430,7 +430,12 @@ wxCursor wxGetCursor()
 	HCURSOR hc = ::GetCursor();
 	//windows returns a handle to a shared cursor, but does not increment its internal ref count on GetCursor, so the cursor could be destroyed at any time. 
 	//CopyCursor increments the reference count of the cursor. This is so that the cursor can still be acccessed if it is no longer used by by the OS
-	if (hc != NULL) hc = CopyCursor(hc);
+	if (hc != NULL) {
+		hc = CopyCursor(hc);
+	}
+	else {
+		return wxNullCursor;
+	}
 	wxCursor cr;
 	cr.SetRefData(new wxCursorRefData(hc, true));//make sure and call destroy on the cursor so it can be properly cleaned up
 	//not sure if gs_globalcursor should be set here? 
