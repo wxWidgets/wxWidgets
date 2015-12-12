@@ -556,6 +556,12 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                     mii.wID = id;
                 }
 
+                if ( flags & MF_GRAYED )
+                {
+                    mii.fMask |= MIIM_STATE;
+                    mii.fState = MFS_GRAYED;
+                }
+
                 if ( flags & MF_CHECKED )
                 {
                     mii.fMask |= MIIM_STATE;
