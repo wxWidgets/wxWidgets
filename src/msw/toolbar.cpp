@@ -469,9 +469,7 @@ wxSize wxToolBar::DoGetBestSize() const
         // reverse horz and vertical components if necessary
         if ( IsVertical() )
         {
-            int t = sizeBest.x;
-            sizeBest.x = sizeBest.y;
-            sizeBest.y = t;
+            wxSwap(sizeBest.x, sizeBest.y);
         }
     }
     else // TB_GETMAXSIZE succeeded
@@ -921,7 +919,7 @@ bool wxToolBar::Realize()
                     button.iBitmap = IsVertical() ? sizeControl.y : sizeControl.x;
                 }
 
-                // Fall through
+                wxFALLTHROUGH;
 
             case wxTOOL_STYLE_SEPARATOR:
                 if ( tool->IsStretchableSpace() )
@@ -1020,13 +1018,15 @@ bool wxToolBar::Realize()
                         break;
                 }
 
-                // Instead of using fixed widths for all buttons, size them
+                // When toolbar has wxTB_HORZ_LAYOUT style then
+                // instead of using fixed widths for all buttons, size them
                 // automatically according to the size of their bitmap and text
-                // label, if present. This particularly matters for toolbars
-                // with the wxTB_HORZ_LAYOUT style: they look hideously ugly
-                // without autosizing when the labels have even slightly
-                // different lengths.
-                button.fsStyle |= TBSTYLE_AUTOSIZE;
+                // label, if present. They look hideously ugly without autosizing
+                // when the labels have even slightly different lengths.
+                if ( !IsVertical() )
+                {
+                    button.fsStyle |= TBSTYLE_AUTOSIZE;
+                }
 
                 bitmapId++;
                 break;
