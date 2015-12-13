@@ -210,6 +210,7 @@ void ColourPickerWidgetsPage::Reset()
 {
     m_chkColourTextCtrl->SetValue((wxCLRP_DEFAULT_STYLE & wxCLRP_USE_TEXTCTRL) != 0);
     m_chkColourShowLabel->SetValue((wxCLRP_DEFAULT_STYLE & wxCLRP_SHOW_LABEL) != 0);
+    m_chkColourShowAlpha->SetValue((wxCLRP_DEFAULT_STYLE & wxCLRP_SHOW_ALPHA) != 0);
 }
 
 
