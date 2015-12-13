@@ -70,11 +70,13 @@ static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask);
 wxImageList::wxImageList()
 {
     m_hImageList = 0;
+    m_size = wxSize(0,0);
 }
 
 // Creates an image list
 bool wxImageList::Create(int width, int height, bool mask, int initial)
 {
+    m_size = wxSize(width, height);
     UINT flags = 0;
 
     // as we want to be able to use 32bpp bitmaps in the image lists, we always

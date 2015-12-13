@@ -186,6 +186,14 @@ public:
     virtual bool GetSize(int index, int& width, int& height) const;
 
     /**
+        Retrieves the size of the image list as passed to Create().
+
+        @return the size of the image list, which may be zero if the image list
+            was not yet initialised.
+    */
+    virtual wxSize GetSize() const;
+
+    /**
         Removes the image at the given position.
     */
     bool Remove(int index);

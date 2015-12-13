@@ -46,6 +46,9 @@ public:
   // Returns the size (same for all images) of the images in the list
   bool GetSize(int index, int &width, int &height) const;
 
+  // Returns the overall size
+  wxSize GetSize() const { return m_size; }
+
   // Operations
   ////////////////////////////////////////////////////////////////////////////
 
@@ -197,6 +200,7 @@ public:
 
 protected:
   WXHIMAGELIST m_hImageList;
+  wxSize m_size;
 
   wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxImageList);
 };
