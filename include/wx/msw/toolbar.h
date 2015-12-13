@@ -56,6 +56,8 @@ public:
     virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
     virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap);
 
+    virtual void SetToolPacking(int packing);
+
     // implementation only from now on
     // -------------------------------
 
