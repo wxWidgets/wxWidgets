@@ -420,6 +420,19 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     if (m_filterListCtrl)
         m_filterListCtrl->FillFilterList(filter, defaultFilter);
 
+    // TODO: set the icon size according to current scaling for this window.
+    // Currently, there's insufficient API in wxWidgets to determine what icons
+    // are available and whether to take the nearest size according to a tolerance
+    // instead of scaling.
+    // if (!wxTheFileIconsTable->IsOk())
+    //     wxTheFileIconsTable->SetSize(scaledSize);
+        
+    // Meanwhile, in your application initialisation, where you have better knowledge of what
+    // icons are available and whether to scale, you can do this:
+    //
+    // wxTheFileIconsTable->SetSize(calculatedIconSizeForDPI);
+    //
+    // Obviously this can't take into account monitors with different DPI.
     m_treeCtrl->SetImageList(wxTheFileIconsTable->GetSmallImageList());
 
     m_showHidden = false;
@@ -1335,6 +1348,7 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
 // wxFileIconsTable icons
 // ----------------------------------------------------------------------------
 
+#if 0
 #ifndef __WXGTK20__
 /* Computer (c) Julian Smart */
 static const char* const file_icons_tbl_computer_xpm[] = {
@@ -1401,6 +1415,7 @@ static const char* const file_icons_tbl_computer_xpm[] = {
 "                "
 };
 #endif // !GTK+ 2
+#endif
 
 // ----------------------------------------------------------------------------
 // wxFileIconsTable & friends
@@ -1437,6 +1452,7 @@ wxFileIconsTable::wxFileIconsTable()
 {
     m_HashTable = NULL;
     m_smallImageList = NULL;
+    m_size = wxSize(16, 16);
 }
 
 wxFileIconsTable::~wxFileIconsTable()
@@ -1450,55 +1466,59 @@ wxFileIconsTable::~wxFileIconsTable()
 }
 
 // delayed initialization - wait until first use (wxArtProv not created yet)
-void wxFileIconsTable::Create()
+void wxFileIconsTable::Create(const wxSize& sz)
 {
     wxCHECK_RET(!m_smallImageList && !m_HashTable, wxT("creating icons twice"));
     m_HashTable = new wxHashTable(wxKEY_STRING);
-    m_smallImageList = new wxImageList(16, 16);
+    m_smallImageList = new wxImageList(sz.x, sz.y);
 
     // folder:
     m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_FOLDER,
                                                    wxART_CMN_DIALOG,
-                                                   wxSize(16, 16)));
+                                                   sz));
     // folder_open
     m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_FOLDER_OPEN,
                                                    wxART_CMN_DIALOG,
-                                                   wxSize(16, 16)));
+                                                   sz));
     // computer
 #ifdef __WXGTK20__
     // GTK24 uses this icon in the file open dialog
     m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_HARDDISK,
                                                    wxART_CMN_DIALOG,
-                                                   wxSize(16, 16)));
+                                                   sz));
 #else
-    m_smallImageList->Add(wxIcon(file_icons_tbl_computer_xpm));
+    m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_HARDDISK,
+                                                   wxART_CMN_DIALOG,
+                                                   sz));
+    // TODO: add computer icon if really necessary
+    //m_smallImageList->Add(wxIcon(file_icons_tbl_computer_xpm));
 #endif
     // drive
     m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_HARDDISK,
                                                    wxART_CMN_DIALOG,
-                                                   wxSize(16, 16)));
+                                                   sz));
     // cdrom
     m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_CDROM,
                                                    wxART_CMN_DIALOG,
-                                                   wxSize(16, 16)));
+                                                   sz));
     // floppy
     m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_FLOPPY,
                                                    wxART_CMN_DIALOG,
-                                                   wxSize(16, 16)));
+                                                   sz));
     // removeable
     m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_REMOVABLE,
                                                    wxART_CMN_DIALOG,
-                                                   wxSize(16, 16)));
+                                                   sz));
     // file
     m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE,
                                                    wxART_CMN_DIALOG,
-                                                   wxSize(16, 16)));
+                                                   sz));
     // executable
     if (GetIconID(wxEmptyString, wxT("application/x-executable")) == file)
     {
         m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_EXECUTABLE_FILE,
                                                        wxART_CMN_DIALOG,
-                                                       wxSize(16, 16)));
+                                                       sz));
         delete m_HashTable->Get(wxT("exe"));
         m_HashTable->Delete(wxT("exe"));
         m_HashTable->Put(wxT("exe"), new wxFileIconEntry(executable));
@@ -1511,7 +1531,7 @@ void wxFileIconsTable::Create()
 wxImageList *wxFileIconsTable::GetSmallImageList()
 {
     if (!m_smallImageList)
-        Create();
+        Create(m_size);
 
     return m_smallImageList;
 }
@@ -1520,9 +1540,9 @@ wxImageList *wxFileIconsTable::GetSmallImageList()
 // VS: we don't need this function w/o wxMimeTypesManager because we'll only have
 //     one icon and we won't resize it
 
-static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
+static wxBitmap CreateAntialiasedBitmap(const wxImage& img, const wxSize& sz)
 {
-    const unsigned int size = 16;
+    const unsigned int size = sz.x;
 
     wxImage smallimg (size, size);
     unsigned char *p1, *p2, *ps;
@@ -1626,7 +1646,7 @@ static wxImage CutEmptyBorders(const wxImage& img)
 int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
 {
     if (!m_smallImageList)
-        Create();
+        Create(m_size);
 
 #if wxUSE_MIMETYPE
     if (!extension.empty())
@@ -1669,7 +1689,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
         return newid;
     }
 
-    const unsigned int size = 16;
+    int size = m_size.x;
 
     int treeid = m_smallImageList->GetImageCount();
     if ((bmp.GetWidth() == (int) size) && (bmp.GetHeight() == (int) size))
@@ -1683,9 +1703,9 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
 
         if ((img.GetWidth() != size*2) || (img.GetHeight() != size*2))
 //            m_smallImageList->Add(CreateAntialiasedBitmap(CutEmptyBorders(img).Rescale(size*2, size*2)));
-            m_smallImageList->Add(CreateAntialiasedBitmap(img.Rescale(size*2, size*2)));
+            m_smallImageList->Add(CreateAntialiasedBitmap(img.Rescale(size*2, size*2), m_size));
         else
-            m_smallImageList->Add(CreateAntialiasedBitmap(img));
+            m_smallImageList->Add(CreateAntialiasedBitmap(img, m_size));
     }
 #endif // wxUSE_IMAGE
 

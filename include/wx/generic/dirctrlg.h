@@ -300,11 +300,17 @@ public:
     int GetIconID(const wxString& extension, const wxString& mime = wxEmptyString);
     wxImageList *GetSmallImageList();
 
+    const wxSize& GetSize() const { return m_size; }
+    void SetSize(const wxSize& sz) { m_size = sz; }
+    
+    bool IsOk() const { return m_smallImageList != NULL; }
+
 protected:
-    void Create();  // create on first use
+    void Create(const wxSize& sz);  // create on first use
 
     wxImageList *m_smallImageList;
     wxHashTable *m_HashTable;
+    wxSize  m_size;
 };
 
 // The global fileicons table
