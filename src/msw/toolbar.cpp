@@ -377,6 +377,15 @@ bool wxToolBar::Create(wxWindow *parent,
     return true;
 }
 
+void wxToolBar::MSWSetPadding(WXWORD padding)
+{
+    DWORD curPadding = ::SendMessage(GetHwnd(), TB_GETPADDING, 0, 0);
+    // Preserve orthogonal padding
+    DWORD newPadding = IsVertical() ? MAKELPARAM(LOWORD(curPadding), padding)
+                                    : MAKELPARAM(padding, HIWORD(curPadding));
+    ::SendMessage(GetHwnd(), TB_SETPADDING, 0, newPadding);
+}
+
 bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
 {
     if ( !MSWCreateControl(TOOLBARCLASSNAME, wxEmptyString, pos, size) )
@@ -388,6 +397,19 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
 #ifdef TB_SETEXTENDEDSTYLE
     ::SendMessage(GetHwnd(), TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_DRAWDDARROWS);
 #endif
+
+    // Retrieve or apply/restore tool packing value.
+    if ( m_toolPacking <= 0 )
+    {
+        // Retrieve packing value if it hasn't been yet set with SetToolPacking.
+        DWORD padding = ::SendMessage(GetHwnd(), TB_GETPADDING, 0, 0);
+        m_toolPacking = IsVertical() ? HIWORD(padding) : LOWORD(padding);
+    }
+    else
+    {
+        // Apply packing value if it has been already set with SetToolPacking.
+        MSWSetPadding(m_toolPacking);
+    }
 
     return true;
 }

@@ -136,6 +136,8 @@ protected:
     // get the Windows toolbar style of this control
     long GetMSWToolbarStyle() const;
 
+    // set native toolbar padding
+    void MSWSetPadding(WXWORD padding);
 
     // the big bitmap containing all bitmaps of the toolbar buttons
     WXHBITMAP m_hBitmap;
