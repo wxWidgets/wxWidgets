@@ -1637,6 +1637,7 @@ void wxToolBar::SetToolPacking(int packing)
             ::SendMessage(GetHWND(), TB_SETPADDING, 0, MAKELPARAM(0, m_toolPacking));
         else
             ::SendMessage(GetHWND(), TB_SETPADDING, 0, MAKELPARAM(m_toolPacking, 0));
+        Realize();
     }
 }
 
