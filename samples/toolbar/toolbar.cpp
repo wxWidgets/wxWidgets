@@ -123,6 +123,8 @@ public:
     void OnDeletePrint(wxCommandEvent& WXUNUSED(event)) { DoDeletePrint(); }
     void OnInsertPrint(wxCommandEvent& event);
     void OnChangeToolTip(wxCommandEvent& event);
+    void OnIncToolSpacing(wxCommandEvent& event);
+    void OnDecToolSpacing(wxCommandEvent& event);
     void OnToggleHelp(wxCommandEvent& WXUNUSED(event)) { DoToggleHelp(); }
     void OnToggleSearch(wxCommandEvent& event);
     void OnToggleRadioBtn(wxCommandEvent& event);
@@ -221,6 +223,8 @@ enum
     IDM_TOOLBAR_TOGGLERADIOBTN2,
     IDM_TOOLBAR_TOGGLERADIOBTN3,
     IDM_TOOLBAR_CHANGE_TOOLTIP,
+    IDM_TOOLBAR_INC_TOOL_SPACING,
+    IDM_TOOLBAR_DEC_TOOL_SPACING,
 
     ID_COMBO = 1000
 };
@@ -256,6 +260,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU_RANGE(IDM_TOOLBAR_TOGGLERADIOBTN1, IDM_TOOLBAR_TOGGLERADIOBTN3,
                    MyFrame::OnToggleRadioBtn)
     EVT_MENU(IDM_TOOLBAR_CHANGE_TOOLTIP, MyFrame::OnChangeToolTip)
+    EVT_MENU(IDM_TOOLBAR_INC_TOOL_SPACING, MyFrame::OnIncToolSpacing)
+    EVT_MENU(IDM_TOOLBAR_DEC_TOOL_SPACING, MyFrame::OnDecToolSpacing)
 
     EVT_MENU_RANGE(IDM_TOOLBAR_SHOW_TEXT, IDM_TOOLBAR_SHOW_BOTH,
                    MyFrame::OnToolbarStyle)
@@ -600,6 +606,9 @@ MyFrame::MyFrame(wxFrame* parent,
     toolMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN3, wxT("Toggle &3rd radio button\tCtrl-3"));
     toolMenu->AppendSeparator();
     toolMenu->Append(IDM_TOOLBAR_CHANGE_TOOLTIP, wxT("Change tooltip of \"New\""));
+    toolMenu->AppendSeparator();
+    toolMenu->Append(IDM_TOOLBAR_INC_TOOL_SPACING, wxT("Increase spacing\tCtrl-+"));
+    toolMenu->Append(IDM_TOOLBAR_DEC_TOOL_SPACING, wxT("Decrease spacing\tCtrl--"));
 
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append(wxID_EXIT, wxT("E&xit\tAlt-X"), wxT("Quit toolbar sample") );
@@ -920,6 +929,18 @@ void MyFrame::OnUpdateToggleHorzText(wxUpdateUIEvent& event)
 void MyFrame::OnChangeToolTip(wxCommandEvent& WXUNUSED(event))
 {
     GetToolBar()->SetToolShortHelp(wxID_NEW, wxT("New toolbar button"));
+}
+
+void MyFrame::OnIncToolSpacing(wxCommandEvent& WXUNUSED(event))
+{
+    wxToolBar *tb = GetToolBar();
+    tb->SetToolPacking(tb->GetToolPacking()+1);
+}
+
+void MyFrame::OnDecToolSpacing(wxCommandEvent& WXUNUSED(event))
+{
+    wxToolBar *tb = GetToolBar();
+    tb->SetToolPacking(tb->GetToolPacking()-1);
 }
 
 void MyFrame::OnToolbarStyle(wxCommandEvent& event)
