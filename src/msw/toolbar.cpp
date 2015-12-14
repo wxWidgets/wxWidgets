@@ -1630,14 +1630,14 @@ void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
 
 void wxToolBar::SetToolPacking(int packing)
 {
-    m_toolPacking = packing;
-    if (m_toolPacking > 0 && GetHWND())
+    if ( packing > 0 && packing != m_toolPacking )
     {
-        if (IsVertical())
-            ::SendMessage(GetHWND(), TB_SETPADDING, 0, MAKELPARAM(0, m_toolPacking));
-        else
-            ::SendMessage(GetHWND(), TB_SETPADDING, 0, MAKELPARAM(m_toolPacking, 0));
-        Realize();
+        m_toolPacking = packing;
+        if ( GetHwnd() )
+        {
+            MSWSetPadding(packing);
+            Realize();
+        }
     }
 }
 
