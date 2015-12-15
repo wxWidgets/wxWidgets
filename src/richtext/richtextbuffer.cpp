@@ -12758,7 +12758,13 @@ bool wxRichTextImage::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
     {
         wxCheckSetBrush(dc, *wxBLACK_BRUSH);
         wxCheckSetPen(dc, *wxBLACK_PEN);
+
+#if defined(__WXMAC__) && wxOSX_USE_COCOA
+        dc.SetLogicalFunction(wxXOR);
+#else
         dc.SetLogicalFunction(wxINVERT);
+#endif
+
 #ifdef __WXMAC__
         if (m_imageCache.IsOk())
             dc.DrawBitmap(m_imageCache, contentRect.x, contentRect.y, true);
