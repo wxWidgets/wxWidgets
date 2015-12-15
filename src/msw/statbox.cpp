@@ -507,6 +507,11 @@ void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
     ::GetClientRect(GetHwnd(), &rc);
     wxPaintDC dc(this);
 
+	// No need to do anything if the client rectangle is empty and, worse,
+    // doing it would result in an assert when creating the bitmap below.
+	if ( !rc.right || !rc.bottom )
+		return;
+
     // draw the entire box in a memory DC
     wxMemoryDC memdc(&dc);
     wxBitmap bitmap(rc.right, rc.bottom);
