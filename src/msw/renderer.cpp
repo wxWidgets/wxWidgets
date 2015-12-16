@@ -1036,10 +1036,20 @@ void wxRendererXP::DrawItemText(wxWindow* win,
         textOpts.dwSize = sizeof(textOpts);
         textOpts.dwFlags = DTT_STATEID;
         textOpts.iStateId = itemState;
-        if (flags & wxCONTROL_DISABLED)
+
+        wxColour textColour = dc.GetTextForeground();
+        if (flags & wxCONTROL_SELECTED)
         {
+            textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
+        }
+        else if (flags & wxCONTROL_DISABLED)
+        {
+            textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
+        }
+
+        if (textColour.IsOk()) {
             textOpts.dwFlags |= DTT_TEXTCOLOR;
-            textOpts.crText = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT).GetPixel();
+            textOpts.crText = textColour.GetPixel();
         }
 
         DWORD textFlags = DT_NOPREFIX;
