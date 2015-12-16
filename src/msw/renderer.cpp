@@ -327,6 +327,8 @@ public:
                                     wxTitleBarButton button,
                                     int flags = 0);
 
+    virtual wxSize GetCheckBoxSize(wxWindow *win);
+
     virtual void DrawGauge(wxWindow* win,
                            wxDC& dc,
                            const wxRect& rect,
@@ -900,6 +902,21 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
     }
 
     DoDrawButtonLike(hTheme, part, dc, rect, flags);
+}
+
+wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win)
+{
+    wxUxThemeHandle hTheme(win, L"BUTTON");
+    wxUxThemeEngine* const te = wxUxThemeEngine::Get();
+
+    if (te->IsThemePartDefined(hTheme, BP_CHECKBOX, 0))
+    {
+        SIZE checkSize;
+        te->GetThemePartSize(hTheme, NULL, BP_CHECKBOX, CBS_UNCHECKEDNORMAL, NULL, TS_DRAW, &checkSize);
+        return wxSize(checkSize.cx, checkSize.cy);
+    }
+    else
+        return m_rendererNative.GetCheckBoxSize(win);
 }
 
 void

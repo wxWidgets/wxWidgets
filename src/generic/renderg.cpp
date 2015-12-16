@@ -712,9 +712,9 @@ wxRendererGeneric::DrawCheckBox(wxWindow *WXUNUSED(win),
     }
 }
 
-wxSize wxRendererGeneric::GetCheckBoxSize(wxWindow *WXUNUSED(win))
+wxSize wxRendererGeneric::GetCheckBoxSize(wxWindow *win)
 {
-    return wxSize(16, 16);
+    return win->FromDIP(wxSize(16, 16));
 }
 
 void
