@@ -935,10 +935,11 @@ bool wxToolBar::Realize()
                 }
 
                 // Set separator width/height to fit the control width/height
+                // taking into account tool padding value.
                 // (height is not used but it is set for the sake of consistency).
                 {
                     const wxSize sizeControl = tool->GetControl()->GetSize();
-                    button.iBitmap = IsVertical() ? sizeControl.y : sizeControl.x;
+                    button.iBitmap = m_toolPacking + (IsVertical() ? sizeControl.y : sizeControl.x);
                 }
 
                 wxFALLTHROUGH;
@@ -1139,14 +1140,15 @@ bool wxToolBar::Realize()
                 staticText->Show();
         }
 
-        control->Move(r.left, r.top + (diff + 1) / 2);
+        // Take also into account tool padding value.
+        control->Move(r.left + m_toolPacking/2, r.top + (diff + 1) / 2);
         if ( staticText )
         {
-            staticText->Move(r.left + (size.x - staticTextSize.x)/2,
+            staticText->Move(r.left + m_toolPacking/2 + (size.x - staticTextSize.x)/2,
                              r.bottom - staticTextSize.y);
         }
 
-        m_totalFixedSize += size.x;
+        m_totalFixedSize += r.right - r.left;
     }
 
     // the max index is the "real" number of buttons - i.e. counting even the
