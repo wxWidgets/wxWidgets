@@ -939,7 +939,7 @@ wxRendererXP::DrawCollapseButton(wxWindow *win,
     if ( flags & wxCONTROL_EXPANDED )
         state += 3;
 
-    if ( te->IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, state) )
+    if ( te->IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, 0) )
     {
         if (flags & wxCONTROL_EXPANDED)
             flags |= wxCONTROL_CHECKED;
@@ -970,7 +970,7 @@ wxSize wxRendererXP::GetCollapseButtonSize(wxWindow *win, wxDC& dc)
 
     // EXPANDOBUTTON scales ugly if not using the correct size, get size from theme
 
-    if ( te->IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL) )
+    if ( te->IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, 0) )
     {
         SIZE s;
         te->GetThemePartSize(hTheme,
@@ -998,7 +998,7 @@ wxRendererXP::DrawItemSelectionRect(wxWindow *win,
     const int itemState = GetListItemState(flags);
 
     wxUxThemeEngine* const te = wxUxThemeEngine::Get();
-    if ( te->IsThemePartDefined(hTheme, LVP_LISTITEM, itemState) )
+    if ( te->IsThemePartDefined(hTheme, LVP_LISTITEM, 0) )
     {
         RECT rc;
         wxCopyRectToRECT(rect, rc);
@@ -1027,7 +1027,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
 
     wxUxThemeEngine* te = wxUxThemeEngine::Get();
     if ( te->DrawThemeTextEx && // Might be not available if we're under XP
-            te->IsThemePartDefined(hTheme, LVP_LISTITEM, itemState) )
+            te->IsThemePartDefined(hTheme, LVP_LISTITEM, 0) )
     {
         RECT rc;
         wxCopyRectToRECT(rect, rc);
