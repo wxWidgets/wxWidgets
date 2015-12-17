@@ -215,6 +215,7 @@ wxDEFINE_EVENT( wxEVT_CHAR_HOOK, wxKeyEvent );
 wxDEFINE_EVENT( wxEVT_NAVIGATION_KEY, wxNavigationKeyEvent );
 wxDEFINE_EVENT( wxEVT_KEY_DOWN, wxKeyEvent );
 wxDEFINE_EVENT( wxEVT_KEY_UP, wxKeyEvent );
+wxDEFINE_EVENT( wxEVT_APPCOMMAND, wxKeyEvent );
 #if wxUSE_HOTKEY
 wxDEFINE_EVENT( wxEVT_HOTKEY, wxKeyEvent );
 #endif

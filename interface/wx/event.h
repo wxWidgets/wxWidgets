@@ -4729,6 +4729,7 @@ wxEventType wxEVT_CHAR_HOOK;
 wxEventType wxEVT_NAVIGATION_KEY;
 wxEventType wxEVT_KEY_DOWN;
 wxEventType wxEVT_KEY_UP;
+wxEventType wxEVT_APPCOMMAND;
 wxEventType wxEVT_HOTKEY;
 wxEventType wxEVT_SET_CURSOR;
 wxEventType wxEVT_SCROLL_TOP;

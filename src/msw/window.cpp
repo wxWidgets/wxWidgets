@@ -2896,6 +2896,18 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             break;
 #endif // MM_JOY1MOVE
 
+        case WM_APPCOMMAND:
+            {
+                short cmd;
+                cmd = GET_APPCOMMAND_LPARAM(lParam);
+                wxKeyEvent event(wxEVT_APPCOMMAND);
+                InitAnyKeyEvent(event, 0, 0);
+                event.m_keyCode = cmd;
+                event.m_rawCode = wParam;
+                event.m_rawFlags = lParam;
+                processed = HandleWindowEvent(event);
+            }
+            break;
         case WM_COMMAND:
             {
                 WORD id, cmd;
