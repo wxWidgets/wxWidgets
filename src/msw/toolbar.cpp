@@ -377,6 +377,15 @@ bool wxToolBar::Create(wxWindow *parent,
     return true;
 }
 
+void wxToolBar::MSWSetPadding(WXWORD padding)
+{
+    DWORD curPadding = ::SendMessage(GetHwnd(), TB_GETPADDING, 0, 0);
+    // Preserve orthogonal padding
+    DWORD newPadding = IsVertical() ? MAKELPARAM(LOWORD(curPadding), padding)
+                                    : MAKELPARAM(padding, HIWORD(curPadding));
+    ::SendMessage(GetHwnd(), TB_SETPADDING, 0, newPadding);
+}
+
 bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
 {
     if ( !MSWCreateControl(TOOLBARCLASSNAME, wxEmptyString, pos, size) )
@@ -388,6 +397,19 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
 #ifdef TB_SETEXTENDEDSTYLE
     ::SendMessage(GetHwnd(), TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_DRAWDDARROWS);
 #endif
+
+    // Retrieve or apply/restore tool packing value.
+    if ( m_toolPacking <= 0 )
+    {
+        // Retrieve packing value if it hasn't been yet set with SetToolPacking.
+        DWORD padding = ::SendMessage(GetHwnd(), TB_GETPADDING, 0, 0);
+        m_toolPacking = IsVertical() ? HIWORD(padding) : LOWORD(padding);
+    }
+    else
+    {
+        // Apply packing value if it has been already set with SetToolPacking.
+        MSWSetPadding(m_toolPacking);
+    }
 
     return true;
 }
@@ -913,10 +935,11 @@ bool wxToolBar::Realize()
                 }
 
                 // Set separator width/height to fit the control width/height
+                // taking into account tool padding value.
                 // (height is not used but it is set for the sake of consistency).
                 {
                     const wxSize sizeControl = tool->GetControl()->GetSize();
-                    button.iBitmap = IsVertical() ? sizeControl.y : sizeControl.x;
+                    button.iBitmap = m_toolPacking + (IsVertical() ? sizeControl.y : sizeControl.x);
                 }
 
                 wxFALLTHROUGH;
@@ -1117,14 +1140,15 @@ bool wxToolBar::Realize()
                 staticText->Show();
         }
 
-        control->Move(r.left, r.top + (diff + 1) / 2);
+        // Take also into account tool padding value.
+        control->Move(r.left + m_toolPacking/2, r.top + (diff + 1) / 2);
         if ( staticText )
         {
-            staticText->Move(r.left + (size.x - staticTextSize.x)/2,
+            staticText->Move(r.left + m_toolPacking/2 + (size.x - staticTextSize.x)/2,
                              r.bottom - staticTextSize.y);
         }
 
-        m_totalFixedSize += size.x;
+        m_totalFixedSize += r.right - r.left;
     }
 
     // the max index is the "real" number of buttons - i.e. counting even the
@@ -1608,13 +1632,14 @@ void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
 
 void wxToolBar::SetToolPacking(int packing)
 {
-    m_toolPacking = packing;
-    if (m_toolPacking > 0 && GetHWND())
+    if ( packing > 0 && packing != m_toolPacking )
     {
-        if (IsVertical())
-            ::SendMessage(GetHWND(), TB_SETPADDING, 0, MAKELPARAM(0, m_toolPacking));
-        else
-            ::SendMessage(GetHWND(), TB_SETPADDING, 0, MAKELPARAM(m_toolPacking, 0));
+        m_toolPacking = packing;
+        if ( GetHwnd() )
+        {
+            MSWSetPadding(packing);
+            Realize();
+        }
     }
 }
 
