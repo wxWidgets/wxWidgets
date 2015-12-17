@@ -256,6 +256,12 @@ enum
     @event{EVT_LIST_CACHE_HINT(id, func)}
            Prepare cache for a virtual list control.
            Processes a @c wxEVT_LIST_CACHE_HINT event type.
+    @event{EVT_LIST_ITEM_CHECKED(id, func)}
+           The item has been checked.
+           Processes a @c wxEVT_LIST_ITEM_CHECKED event type (new since wxWidgets 3.1.0).
+    @event{EVT_LIST_ITEM_UNCHECKED(id, func)}
+           The item has been unchecked.
+           Processes a @c wxEVT_LIST_ITEM_UNCHECKED event type (new since wxWidgets 3.1.0).
     @endEventTable
 
     @note Under wxMSW this control uses wxSystemThemedControl for an explorer
@@ -1221,6 +1227,54 @@ public:
     */
     bool SortItems(wxListCtrlCompare fnSortCallBack, wxIntPtr data);
 
+    /**
+        Returns true if checkboxes are enabled for list items.
+
+        @since 3.1.0
+
+        @onlyfor{wxmsw}
+    */
+    bool GetCheckboxesEnabled() const;
+
+    /**
+        Enable or disable checkboxes for list items.
+
+        @param enable
+        If @true, enable checkboxes, otherwise disable checkboxes.
+
+        @since 3.1.0
+
+        @onlyfor{wxmsw}
+    */
+    void EnableCheckboxes(bool enable = true);
+
+    /**
+        Return true if the checkbox if a wxListItem is checked.
+
+        @param item
+        Item (zero-based) index.
+
+        @since 3.1.0
+
+        @onlyfor{wxmsw}
+    */
+    bool IsItemChecked(long item) const;
+
+    /**
+        Check or uncheck a wxListItem.
+
+        @param item
+        Item (zero-based) index.
+
+        @param check
+        If @true, check the item, otherwise uncheck.
+
+        @since 3.1.0
+
+        @onlyfor{wxmsw}
+    */
+    void CheckItem(long item, bool check);
+
 protected:
 
     /**
@@ -1343,6 +1397,10 @@ protected:
         A column has been resized by the user.
     @event{EVT_LIST_CACHE_HINT(id, func)}
         Prepare cache for a virtual list control
+    @event{EVT_LIST_ITEM_CHECKED(id, func)}
+        The item has been checked (new since wxWidgets 3.1.0).
+    @event{EVT_LIST_ITEM_UNCHECKED(id, func)}
+        The item has been unchecked (new since wxWidgets 3.1.0).
     @endEventTable
 
 
@@ -1456,6 +1514,8 @@ wxEventType wxEVT_LIST_COL_BEGIN_DRAG;
 wxEventType wxEVT_LIST_COL_DRAGGING;
 wxEventType wxEVT_LIST_COL_END_DRAG;
 wxEventType wxEVT_LIST_ITEM_FOCUSED;
+wxEventType wxEVT_LIST_ITEM_CHECKED;
+wxEventType wxEVT_LIST_ITEM_UNCHECKED;
 
 
 /**
