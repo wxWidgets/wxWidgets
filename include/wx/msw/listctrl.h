@@ -216,6 +216,12 @@ public:
     void SetItemFont( long item, const wxFont &f);
     wxFont GetItemFont( long item ) const;
 
+    // Checkbox state of an item
+    bool HasCheckboxes() const;
+    void EnableCheckboxes(bool enable = true);
+    bool IsItemChecked(long item) const;
+    void CheckItem(long item, bool check);
+
     // Gets the number of selected items in the list control
     int GetSelectedItemCount() const;
 

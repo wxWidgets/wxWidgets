@@ -1211,6 +1211,28 @@ wxFont wxListCtrl::GetItemFont( long item ) const
     return f;
 }
 
+bool wxListCtrl::HasCheckboxes() const
+{
+    DWORD currStyle = ListView_GetExtendedListViewStyle(GetHwnd());
+    return ((currStyle & LVS_EX_CHECKBOXES) > 0);
+}
+
+void wxListCtrl::EnableCheckboxes(bool enable)
+{
+    DWORD cbStyle = enable ? LVS_EX_CHECKBOXES : 0;
+    ListView_SetExtendedListViewStyleEx(GetHwnd(), LVS_EX_CHECKBOXES, cbStyle);
+}
+
+void wxListCtrl::CheckItem(long item, bool state)
+{
+    ListView_SetCheckState(GetHwnd(), (UINT)item, (BOOL)state);
+}
+
+bool wxListCtrl::IsItemChecked(long item) const
+{
+    return (ListView_GetCheckState(GetHwnd(), (UINT)item) != 0);
+}
+
 // Gets the number of selected items in the list control
 int wxListCtrl::GetSelectedItemCount() const
 {
@@ -2212,6 +2234,30 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         eventType = stNew & LVIS_SELECTED
                                         ? wxEVT_LIST_ITEM_SELECTED
                                         : wxEVT_LIST_ITEM_DESELECTED;
+                    }
+
+                    if ((stNew & LVIS_STATEIMAGEMASK) != (stOld & LVIS_STATEIMAGEMASK))
+                    {
+                        if (stOld == INDEXTOSTATEIMAGEMASK(0))
+                        {
+                            // item does not yet have a state
+                            // occurs when checkboxes are enabled and when a new item is added
+                            eventType = wxEVT_NULL;
+                        }
+                        else if (stNew == INDEXTOSTATEIMAGEMASK(1))
+                        {
+                            eventType = wxEVT_LIST_ITEM_UNCHECKED;
+                        }
+                        else if (stNew == INDEXTOSTATEIMAGEMASK(2))
+                        {
+                            eventType = wxEVT_LIST_ITEM_CHECKED;
+                        }
+                        else {
+                            eventType = wxEVT_NULL;
+                            wxLogDebug(wxT("Unknown LVIS_STATEIMAGE state: %u"), stNew);
+                        }
+
+                        event.m_itemIndex = iItem;
                     }
                 }
 

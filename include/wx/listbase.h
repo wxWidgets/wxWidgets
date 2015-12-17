@@ -460,6 +460,12 @@ public:
     void SetAlternateRowColour(const wxColour& colour);
     wxColour GetAlternateRowColour() const { return m_alternateRowColour.GetBackgroundColour(); }
 
+    //checkboxes
+    virtual bool HasCheckboxes() const { return false; }
+    virtual void EnableCheckboxes(bool WXUNUSED(enable) = true) { }
+    virtual bool IsItemChecked(long WXUNUSED(item)) const { return false; }
+    virtual void CheckItem(long WXUNUSED(item), bool WXUNUSED(check)) { }
+
 protected:
     // Real implementations methods to which our public forwards.
     virtual long DoInsertColumn(long col, const wxListItem& info) = 0;
@@ -563,6 +569,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_LIST_COL_BEGIN_DRAG, wxListEve
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_LIST_COL_DRAGGING, wxListEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_LIST_COL_END_DRAG, wxListEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_LIST_ITEM_FOCUSED, wxListEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_LIST_ITEM_CHECKED, wxListEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_LIST_ITEM_UNCHECKED, wxListEvent );
 
 typedef void (wxEvtHandler::*wxListEventFunction)(wxListEvent&);
 
@@ -593,6 +601,8 @@ typedef void (wxEvtHandler::*wxListEventFunction)(wxListEvent&);
 #define EVT_LIST_ITEM_MIDDLE_CLICK(id, fn) wx__DECLARE_LISTEVT(ITEM_MIDDLE_CLICK, id, fn)
 #define EVT_LIST_ITEM_ACTIVATED(id, fn) wx__DECLARE_LISTEVT(ITEM_ACTIVATED, id, fn)
 #define EVT_LIST_ITEM_FOCUSED(id, fn) wx__DECLARE_LISTEVT(ITEM_FOCUSED, id, fn)
+#define EVT_LIST_ITEM_CHECKED(id, fn) wx__DECLARE_LISTEVT(ITEM_CHECKED, id, fn)
+#define EVT_LIST_ITEM_UNCHECKED(id, fn) wx__DECLARE_LISTEVT(ITEM_UNCHECKED, id, fn)
 
 #define EVT_LIST_CACHE_HINT(id, fn) wx__DECLARE_LISTEVT(CACHE_HINT, id, fn)
 
