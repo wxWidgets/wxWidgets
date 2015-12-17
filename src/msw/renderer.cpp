@@ -907,16 +907,18 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
 wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win)
 {
     wxUxThemeHandle hTheme(win, L"BUTTON");
-    wxUxThemeEngine* const te = wxUxThemeEngine::Get();
-
-    if (te->IsThemePartDefined(hTheme, BP_CHECKBOX, 0))
+    if (hTheme)
     {
-        SIZE checkSize;
-        te->GetThemePartSize(hTheme, NULL, BP_CHECKBOX, CBS_UNCHECKEDNORMAL, NULL, TS_DRAW, &checkSize);
-        return wxSize(checkSize.cx, checkSize.cy);
+        wxUxThemeEngine* const te = wxUxThemeEngine::Get();
+
+        if (te && te->IsThemePartDefined(hTheme, BP_CHECKBOX, 0))
+        {
+            SIZE checkSize;
+            if (te->GetThemePartSize(hTheme, NULL, BP_CHECKBOX, CBS_UNCHECKEDNORMAL, NULL, TS_DRAW, &checkSize) == S_OK)
+                return wxSize(checkSize.cx, checkSize.cy);
+        }
     }
-    else
-        return m_rendererNative.GetCheckBoxSize(win);
+    return m_rendererNative.GetCheckBoxSize(win);
 }
 
 void
