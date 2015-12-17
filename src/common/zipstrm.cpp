@@ -1016,22 +1016,36 @@ void wxZipEntry::UnsetNotifier()
 
 bool wxZipEntry::LoadExtraInfo(const char* extraData, wxUint16 extraLen, bool localInfo)
 {
-    wxZipHeader ds(extraData, extraLen);
-
-    // A file may contain larger size, compressed size or offset
-    // in a zip64 extra data block. Use the 64 bit values if available
-    if ( extraLen > 4 && ds.Read16() == 1 )
+    // We need to iterate over all headers
+    // seeking for the field with Header ID = 1.
+    // (There is not stated in the documentation
+    // that it should be the first one in the collection.)
+    while ( extraLen >= 4 )
     {
-        ds.Read16(); // skip record size
-        if ( m_Size == 0xffffffff )
-            m_Size = ds.Read64();
-        if ( m_CompressedSize == 0xffffffff )
-            m_CompressedSize = ds.Read64();
-        if ( !localInfo && m_Offset == 0xffffffff )
-            m_Offset = ds.Read64();
+        // Parse extra header
+        wxZipHeader hds(extraData, 4);
+        wxUint16 fieldID = hds.Read16();
+        wxUint16 fieldLen = hds.Read16();
+        if ( fieldID == 1 )
+        {
+            // Data block for extra field with Header ID = 1 (ZIP64)
+            // can have length up to 28 bytes.
+            wxZipHeader ds(extraData+4, wxMin(fieldLen, 28));
+            // A file may contain larger size, compressed size or offset
+            // in a zip64 extra data block. Use the 64 bit values if available
+            if ( m_Size == 0xffffffff )
+                m_Size = ds.Read64();
+            if ( m_CompressedSize == 0xffffffff )
+                m_CompressedSize = ds.Read64();
+            if ( !localInfo && m_Offset == 0xffffffff )
+                m_Offset = ds.Read64();
+            // extraInfo was used and parsed
+            return true;
+        }
 
-        // extraInfo was used and parsed
-        return true;
+        fieldLen += 4;
+        extraData += fieldLen;
+        extraLen -= fieldLen;
     }
 
     // extraInfo had unknown format
