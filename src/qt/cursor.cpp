@@ -29,11 +29,15 @@ void wxSetCursor(const wxCursor& cursor)
     else
         QApplication::setOverrideCursor(cursor.m_qtCursor);
 }
+
 wxCursor wxGetCursor()
 {
-	//implementation needed here
+	//XFixesCursorImage *xfcursorImage = XFixesGetCursorImage(QX11Info::display());
+	//QImage mouseCursor((uchar*)xfcursorImage->pixels, xfcursorImage->width, xfcursorImage->height, QImage::Format_ARGB32_Premultiplied);
+
 	return wxNullCursor;
 }
+
 
 void wxBeginBusyCursor(const wxCursor *cursor)
 {

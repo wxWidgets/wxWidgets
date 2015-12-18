@@ -420,6 +420,12 @@ void wxSetCursor( const wxCursor& cursor )
 }
 wxCursor wxGetCursor()
 {
-	//implementation needed here
-	return wxNullCursor;
+	GdkWindow*	rootwnd = gdk_get_default_root_window();
+	if(rootwnd==NULL) return wxNullCursor;
+	wxCursor cur;
+	wxCursorRefData* m_refData = new wxCursorRefData();
+	m_refData->m_cursor = gdk_window_get_cursor(rootwnd);
+	cur.SetRefData(m_refData);
+
+	return cur;
 }

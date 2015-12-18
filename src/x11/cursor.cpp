@@ -222,6 +222,7 @@ void wxSetCursor( const wxCursor& cursor )
 }
 wxCursor wxGetCursor()
 {
-	//implementation needed here
+	//Display *display = XOpenDisplay(NULL);
+
 	return wxNullCursor;
 }
