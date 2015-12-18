@@ -726,6 +726,57 @@ static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
         case GDK_F12:
             key_code = WXK_F1 + keysym - GDK_F1;
             break;
+        case GDK_Back:
+            key_code = WXK_BROWSER_BACK;
+            break;
+        case GDK_Forward:
+            key_code = WXK_BROWSER_FORWARD;
+            break;
+        case GDK_Refresh:
+            key_code = WXK_BROWSER_REFRESH;
+            break;
+        case GDK_Stop:
+            key_code = WXK_BROWSER_STOP;
+            break;
+        case GDK_Search:
+            key_code = WXK_BROWSER_SEARCH;
+            break;
+        case GDK_Favorites:
+            key_code = WXK_BROWSER_FAVORITES;
+            break;
+        case GDK_HomePage:
+            key_code = WXK_BROWSER_HOME;
+            break;
+        case GDK_AudioMute:
+            key_code = WXK_VOLUME_MUTE;
+            break;
+        case GDK_AudioLowerVolume:
+            key_code = WXK_VOLUME_DOWN;
+            break;
+        case GDK_AudioRaiseVolume:
+            key_code = WXK_VOLUME_UP;
+            break;
+        case GDK_AudioNext:
+            key_code = WXK_MEDIA_NEXT_TRACK;
+            break;
+        case GDK_AudioPrev:
+            key_code = WXK_MEDIA_PREV_TRACK;
+            break;
+        case GDK_AudioStop:
+            key_code = WXK_MEDIA_STOP;
+            break;
+        case GDK_AudioPlay:
+            key_code = WXK_MEDIA_PLAY_PAUSE;
+            break;
+        case GDK_Mail:
+            key_code = WXK_LAUNCH_MAIL;
+            break;
+        case GDK_LaunchA:
+            key_code = WXK_LAUNCH_APP1;
+            break;
+        case GDK_LaunchB:
+            key_code = WXK_LAUNCH_APP2;
+            break;
 
         default:
             key_code = 0;

@@ -2899,13 +2899,72 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_APPCOMMAND:
             {
                 short cmd;
+                processed = false;
                 cmd = GET_APPCOMMAND_LPARAM(lParam);
-                wxKeyEvent event(wxEVT_APPCOMMAND);
+
+                wxKeyEvent event(wxEVT_KEY_DOWN);
                 InitAnyKeyEvent(event, 0, 0);
-                event.m_keyCode = cmd;
+                event.m_keyCode = 0;
                 event.m_rawCode = wParam;
                 event.m_rawFlags = lParam;
-                processed = HandleWindowEvent(event);
+                switch ( cmd )
+                {
+                    case APPCOMMAND_BROWSER_BACKWARD:
+                        event.m_keyCode = WXK_BROWSER_BACK;
+                        break;
+                    case APPCOMMAND_BROWSER_FORWARD:
+                        event.m_keyCode = WXK_BROWSER_FORWARD;
+                        break;
+                    case APPCOMMAND_BROWSER_REFRESH:
+                        event.m_keyCode = WXK_BROWSER_REFRESH;
+                        break;
+                    case APPCOMMAND_BROWSER_STOP:
+                        event.m_keyCode = WXK_BROWSER_STOP;
+                        break;
+                    case APPCOMMAND_BROWSER_SEARCH:
+                        event.m_keyCode = WXK_BROWSER_SEARCH;
+                        break;
+                    case APPCOMMAND_BROWSER_FAVORITES:
+                        event.m_keyCode = WXK_BROWSER_FAVORITES;
+                        break;
+                    case APPCOMMAND_BROWSER_HOME:
+                        event.m_keyCode = WXK_BROWSER_HOME;
+                        break;
+                    case APPCOMMAND_VOLUME_MUTE:
+                        event.m_keyCode = WXK_VOLUME_MUTE;
+                        break;
+                    case APPCOMMAND_VOLUME_DOWN:
+                        event.m_keyCode = WXK_VOLUME_DOWN;
+                        break;
+                    case APPCOMMAND_VOLUME_UP:
+                        event.m_keyCode = WXK_VOLUME_UP;
+                        break;
+                    case APPCOMMAND_MEDIA_NEXTTRACK:
+                        event.m_keyCode = WXK_MEDIA_NEXT_TRACK;
+                        break;
+                    case APPCOMMAND_MEDIA_PREVIOUSTRACK:
+                        event.m_keyCode = WXK_MEDIA_PREV_TRACK;
+                        break;
+                    case APPCOMMAND_MEDIA_STOP:
+                        event.m_keyCode = WXK_MEDIA_STOP;
+                        break;
+                    case APPCOMMAND_MEDIA_PLAY_PAUSE:
+                        event.m_keyCode = WXK_MEDIA_PLAY_PAUSE;
+                        break;
+                    case APPCOMMAND_LAUNCH_MAIL:
+                        event.m_keyCode = WXK_LAUNCH_MAIL;
+                        break;
+                    case APPCOMMAND_LAUNCH_APP1:
+                        event.m_keyCode = WXK_LAUNCH_APP1;
+                        break;
+                    case APPCOMMAND_LAUNCH_APP2:
+                        event.m_keyCode = WXK_LAUNCH_APP2;
+                        break;
+                }
+                if ( event.m_keyCode > 0 )
+                {
+                    processed = HandleWindowEvent(event);
+                }
             }
             break;
         case WM_COMMAND:
