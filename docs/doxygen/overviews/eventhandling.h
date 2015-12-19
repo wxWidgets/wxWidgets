@@ -58,7 +58,8 @@ unbind, the handlers dynamically, i.e. during run-time depending on some
 conditions. It also allows the direct binding of events to:
 @li A handler method in another object.
 @li An ordinary function like a static method or a global function.
-@li An arbitrary functor like boost::function<>.
+@li An arbitrary functor such as boost::function<> or, in C++11,
+std::function<> or a lambda expression.
 
 The static event tables can only handle events in the object where they are
 defined so using Bind<>() is more flexible than using the event tables. On the
@@ -254,7 +255,8 @@ Now let us describe the semantic differences:
         which allows to bind an event to:
         @li A method in another object.
         @li An ordinary function like a static method or a global function.
-        @li An arbitrary functor like boost::function<>.
+        @li An arbitrary functor such as boost::function<> or, in C++11,
+        std::function<> or a lambda expression.
 
         This is impossible to do with the event tables because it is not
         possible to specify these handlers to dispatch the event to, so it
@@ -368,10 +370,30 @@ MyFrame::MyFrame()
 }
 @endcode
 
-A common example of a functor is boost::function<>:
+In C++11 a lambda expression can be used directly, without having to define a
+separate functor class:
 
 @code
+MyFrame::MyFrame()
+{
+    Bind(wxEVT_COMMAND_MENU_SELECTED,
+         [](wxCommandEvent&) {
+            // Do something useful
+         },
+         wxID_EXIT);
+}
+@endcode
+
+Another common example of a generic functor is boost::function<> or, since
+C++11, std::function<>:
+
+@code
+#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
+using namespace std;
+using namespace std::placeholders;
+#else // Pre C++11 compiler
 using namespace boost;
+#endif
 
 void MyHandler::OnExit( wxCommandEvent & )
 {
@@ -389,7 +411,7 @@ MyFrame::MyFrame()
 @endcode
 
 
-With the aid of boost::bind<>() you can even use methods or functions which
+With the aid of @c bind<>() you can even use methods or functions which
 don't quite have the correct signature:
 
 @code
