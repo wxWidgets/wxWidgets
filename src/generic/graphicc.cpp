@@ -511,6 +511,11 @@ public:
 
     virtual ~wxCairoImageContext()
     {
+        Flush();
+    }
+
+    virtual void Flush() wxOVERRIDE
+    {
         m_image = m_data.ConvertToImage();
     }
 
