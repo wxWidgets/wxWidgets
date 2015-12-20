@@ -51,7 +51,17 @@ public:
     static wxBitmap* GetBuffer(int w, int h)
     {
         if ( ms_usingSharedBuffer )
+        {
+#ifdef __WXOSX_COCOA__
+            if (wxOSXGetMainScreenContentScaleFactor() > 1.0)
+            {
+                wxBitmap* bitmap = new wxBitmap;
+                bitmap->CreateScaled(w, h, -1, 2.0);
+                return bitmap;
+            }
+ #endif
             return new wxBitmap(w, h);
+        }
 
         if ( !ms_buffer ||
                 w > ms_buffer->GetWidth() ||
@@ -66,7 +76,15 @@ public:
             if ( !h )
                 h = 1;
 
-            ms_buffer = new wxBitmap(w, h);
+#ifdef __WXOSX_COCOA__
+            if (wxOSXGetMainScreenContentScaleFactor() > 1.0)
+            {
+                ms_buffer = new wxBitmap;
+                ms_buffer->CreateScaled(w, h, -1, 2.0);
+            }
+            else
+ #endif
+                ms_buffer = new wxBitmap(w, h);
         }
 
         ms_usingSharedBuffer = true;
