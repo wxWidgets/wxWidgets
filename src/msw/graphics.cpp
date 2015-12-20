@@ -460,6 +460,11 @@ public:
 
     virtual ~wxGDIPlusImageContext()
     {
+        Flush();
+    }
+
+    virtual void Flush()
+    {
         m_image = m_bitmap.ConvertToImage();
     }
 

@@ -500,6 +500,11 @@ public:
 
     virtual ~wxCairoImageContext()
     {
+        Flush();
+    }
+
+    virtual void Flush()
+    {
         m_image = m_data.ConvertToImage();
     }
 
