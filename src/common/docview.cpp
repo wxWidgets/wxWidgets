@@ -532,7 +532,8 @@ bool wxDocument::OnSaveModified()
                      GetUserReadableName()
                     ),
                     wxTheApp->GetAppDisplayName(),
-                    wxYES_NO | wxCANCEL | wxICON_QUESTION | wxCENTRE
+                    wxYES_NO | wxCANCEL | wxICON_QUESTION | wxCENTRE,
+                    GetDocumentWindow()
                  ) )
         {
             case wxNO:
