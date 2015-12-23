@@ -481,22 +481,30 @@ bool wxBitmapComboBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     if ( lpDrawItem->itemState & ODS_SELECTED )
         flags |= wxODCB_PAINTING_SELECTED;
 
+    wxPaintDCEx dc(this, lpDrawItem->hDC);
+    wxRect rect = wxRectFromRECT(lpDrawItem->rcItem);
+    wxBitmapComboBoxBase::DrawBackground(dc, rect, pos, flags);
+
     wxString text;
 
     if ( flags & wxODCB_PAINTING_CONTROL )
     {
-        text = GetValue();
+        // Don't draw anything in the editable selection field.
         if ( !HasFlag(wxCB_READONLY) )
-            text.clear();
+            return true;
+
+        pos = GetSelection();
+        // Skip drawing if there is nothing selected.
+        if ( pos < 0 )
+            return true;
+
+        text = GetValue();
     }
     else
     {
         text = GetString(pos);
     }
 
-    wxPaintDCEx dc(this, lpDrawItem->hDC);
-    wxRect rect = wxRectFromRECT(lpDrawItem->rcItem);
-    wxBitmapComboBoxBase::DrawBackground(dc, rect, pos, flags);
     wxBitmapComboBoxBase::DrawItem(dc, rect, pos, text, flags);
 
     // If the item has the focus, draw focus rectangle.
