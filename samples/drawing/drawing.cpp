@@ -257,7 +257,7 @@ public:
                 m_colourBackground;
     wxBrush     m_backgroundBrush;
     MyCanvas   *m_canvas;
-
+    wxMenuItem *m_menuItemUseDC;
 private:
     // any class wishing to process wxWidgets events must use this macro
     wxDECLARE_EVENT_TABLE();
@@ -1901,7 +1901,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxMenu *menuFile = new wxMenu;
 #if wxUSE_GRAPHICS_CONTEXT
     menuFile->AppendCheckItem(File_GC_Default, "Use default wx&GraphicContext\tCtrl-Y");
-    menuFile->AppendRadioItem(File_DC, "Use wx&DC\tShift-Ctrl-Y");
+    m_menuItemUseDC = menuFile->AppendRadioItem(File_DC, "Use wx&DC\tShift-Ctrl-Y");
 #if wxUSE_CAIRO
     menuFile->AppendRadioItem(File_GC_Cairo, "Use &Cairo\tCtrl-O");
 #endif // wxUSE_CAIRO
@@ -2071,6 +2071,12 @@ void MyFrame::OnShow(wxCommandEvent& event)
     {
         if ( !m_canvas->HasRenderer() )
             m_canvas->UseGraphicRenderer(wxGraphicsRenderer::GetDefaultRenderer());
+        // Disable selecting wxDC, if necessary.
+        m_menuItemUseDC->Enable(!m_canvas->HasRenderer());
+    }
+    else
+    {
+        m_menuItemUseDC->Enable(true);
     }
 #endif // wxUSE_GRAPHICS_CONTEXT
 
