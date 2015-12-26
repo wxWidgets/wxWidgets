@@ -54,6 +54,12 @@
 
 #include "tiffiop.h"
 
+typedef union fd_as_handle_union
+{
+	int fd;
+	thandle_t h;
+} fd_as_handle_union_t;
+
 static tmsize_t
 _tiffReadProc(thandle_t fd, void* buf, tmsize_t size)
 {
