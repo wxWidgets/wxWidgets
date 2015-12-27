@@ -1209,25 +1209,34 @@ void wxD2DPathData::AddCircle(wxDouble x, wxDouble y, wxDouble r)
 // appends an ellipse
 void wxD2DPathData::AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 {
-    Flush();
+    if ( w <= 0.0 || h <= 0.0 )
+      return;
 
-    wxCOMPtr<ID2D1EllipseGeometry> ellipseGeometry;
-    wxCOMPtr<ID2D1PathGeometry> newPathGeometry;
+    // Calculate radii
+    const wxDouble rx = w / 2.0;
+    const wxDouble ry = h / 2.0;
 
-    D2D1_ELLIPSE ellipse = { { (FLOAT)(x + w / 2), (FLOAT)(y + h / 2) }, (FLOAT)(w / 2), (FLOAT)(h / 2) };
+    MoveToPoint(x, y + ry);
 
-    m_direct2dfactory->CreateEllipseGeometry(ellipse, &ellipseGeometry);
+    D2D1_ARC_SEGMENT arcSegmentUpper =
+    {
+        D2D1::Point2((FLOAT)(x + w), (FLOAT)(y + ry)), // end point
+        D2D1::SizeF((FLOAT)(rx), (FLOAT)(ry)),         // size
+        0.0f,
+        D2D1_SWEEP_DIRECTION_CLOCKWISE,
+        D2D1_ARC_SIZE_SMALL
+    };
+    m_geometrySink->AddArc(arcSegmentUpper);
 
-    m_direct2dfactory->CreatePathGeometry(&newPathGeometry);
-
-    m_geometrySink = NULL;
-    newPathGeometry->Open(&m_geometrySink);
-
-    m_geometryWritable = true;
-
-    ellipseGeometry->CombineWithGeometry(m_pathGeometry, D2D1_COMBINE_MODE_UNION, NULL, m_geometrySink);
-
-    m_pathGeometry = newPathGeometry;
+    D2D1_ARC_SEGMENT arcSegmentLower =
+    {
+        D2D1::Point2((FLOAT)(x), (FLOAT)(y + ry)),     // end point
+        D2D1::SizeF((FLOAT)(rx), (FLOAT)(ry)),         // size
+        0.0f,
+        D2D1_SWEEP_DIRECTION_CLOCKWISE,
+        D2D1_ARC_SIZE_SMALL
+    };
+    m_geometrySink->AddArc(arcSegmentLower);
 }
 
 // gets the last point of the current path, (0,0) if not yet set
