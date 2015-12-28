@@ -46,23 +46,12 @@
 #endif
 
 /*
-    Using -std=c++{98,0x} option with mingw32 disables most of standard
-    library extensions, so we can't rely on the presence of common non-ANSI
-    functions, define a special symbol to test for this. Notice that this
-    doesn't need to be done for g++ under Linux where _GNU_SOURCE (which is
-    defined by default) still makes all common extensions available even in
-    ANSI mode.
- */
-#if defined(__MINGW32__) && defined(__STRICT_ANSI__)
-    #define __WX_STRICT_ANSI_GCC__
-#endif
-
-/*
-   a few compilers don't have the (non standard but common) isascii function,
-   define it ourselves for them
+   Traditional MinGW doesn't declare isascii() in strict ANSI mode and we can't
+   declare it here ourselves as it's an inline function, so use our own
+   replacement instead.
  */
 #ifndef isascii
-    #if defined(__WX_STRICT_ANSI_GCC__)
+    #if defined(wxNEEDS_STRICT_ANSI_WORKAROUNDS)
         #define wxNEED_ISASCII
     #endif
 #endif /* isascii */
@@ -140,20 +129,19 @@
 #define wxCRT_StrxfrmW   wcsxfrm
 
 /* Almost all compilers have strdup(), but VC++ and MinGW call it _strdup().
-   And it's not available in MinGW strict ANSI mode nor under Windows CE. */
+   And we need to declare it manually for MinGW in strict ANSI mode. */
 #if (defined(__VISUALC__) && __VISUALC__ >= 1400)
     #define wxCRT_StrdupA _strdup
 #elif defined(__MINGW32__)
-    #ifndef __WX_STRICT_ANSI_GCC__
-        #define wxCRT_StrdupA _strdup
-    #endif
+    wxDECL_FOR_STRICT_MINGW32(char*, _strdup, (const char *))
+    #define wxCRT_StrdupA _strdup
 #else
     #define wxCRT_StrdupA strdup
 #endif
 
-/* most Windows compilers provide _wcsdup() */
-#if defined(__WINDOWS__) && \
-        !(defined(__CYGWIN__) || defined(__WX_STRICT_ANSI_GCC__))
+/* Windows compilers provide _wcsdup() except for (old) Cygwin */
+#if defined(__WINDOWS__) && !defined(__CYGWIN__)
+    wxDECL_FOR_STRICT_MINGW32(wchar_t*, _wcsdup, (const wchar_t*))
     #define wxCRT_StrdupW _wcsdup
 #elif defined(HAVE_WCSDUP)
     #define wxCRT_StrdupW wcsdup
@@ -231,10 +219,13 @@ extern unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int 
 #if defined(__BORLANDC__)
     #define wxCRT_StricmpA stricmp
     #define wxCRT_StrnicmpA strnicmp
-#elif defined(__VISUALC__)
+#elif defined(__VISUALC__) || defined(__MINGW32__)
+    wxDECL_FOR_STRICT_MINGW32(int, _stricmp, (const char*, const char*))
+    wxDECL_FOR_STRICT_MINGW32(int, _strnicmp, (const char*, const char*, size_t))
+
     #define wxCRT_StricmpA _stricmp
     #define wxCRT_StrnicmpA _strnicmp
-#elif defined(__UNIX__) || (defined(__GNUWIN32__) && !defined(__WX_STRICT_ANSI_GCC__))
+#elif defined(__UNIX__)
     #define wxCRT_StricmpA strcasecmp
     #define wxCRT_StrnicmpA strncasecmp
 /* #else -- use wxWidgets implementation */
@@ -509,7 +500,10 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
 #define wxCRT_AtoiA                 atoi
 #define wxCRT_AtolA                 atol
 
-#if defined(wxHAVE_TCHAR_SUPPORT) && !defined(__WX_STRICT_ANSI_GCC__)
+#if defined(wxHAVE_TCHAR_SUPPORT)
+    wxDECL_FOR_STRICT_MINGW32(int, _wtoi, (const wchar_t*))
+    wxDECL_FOR_STRICT_MINGW32(long, _wtol, (const wchar_t*))
+
     #define  wxCRT_AtoiW           _wtoi
     #define  wxCRT_AtolW           _wtol
     /* _wtof doesn't exist */
