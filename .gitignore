@@ -430,3 +430,16 @@
 # /utils/wxrc/
 /utils/wxrc/*.sln
 /utils/wxrc/*.dsw
+*.o
+Makefile
+.deps
+version-script
+utils/wxrc/wxrc
+utils/ifacecheck/rungccxml.sh
+*.so*
+*.a
+.pch
+bk-deps
+bk-make-pch
+change-install-names
+lib/wx
