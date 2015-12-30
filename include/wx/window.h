@@ -1994,10 +1994,19 @@ inline wxWindow *wxWindowBase::GetGrandParent() const
 
 #ifdef wxHAVE_DPI_INDEPENDENT_PIXELS
 
-// FromDIP() becomes trivial in this case, so make it inline to avoid overhead.
+// FromDIP() and ToDIP() become trivial in this case, so make them inline to
+// avoid any overhead.
+
 /* static */
 inline wxSize
 wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
+{
+    return sz;
+}
+
+/* static */
+inline wxSize
+wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
 {
     return sz;
 }
