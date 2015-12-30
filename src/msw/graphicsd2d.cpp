@@ -3759,7 +3759,10 @@ public:
 
     virtual bool OnInit() wxOVERRIDE
     {
-        return true;
+        HRESULT hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+        // RPC_E_CHANGED_MODE is not considered as an error
+        // - see remarks for wxOleInitialize().
+        return SUCCEEDED(hr) || hr == RPC_E_CHANGED_MODE;
     }
 
     virtual void OnExit() wxOVERRIDE
@@ -3781,6 +3784,8 @@ public:
             delete gs_D2DRenderer;
             gs_D2DRenderer = NULL;
         }
+
+        ::CoUninitialize();
     }
 
 private:
