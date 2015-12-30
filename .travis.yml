@@ -5,7 +5,22 @@
 language: cpp
 sudo: required
 
-compiler: gcc
+matrix:
+    include:
+        - compiler: gcc
+        - compiler: gcc
+          env: wxCONFIGURE_FLAGS="--disable-precomp-headers --enable-monolithic"
+        - dist: trusty
+          compiler: gcc
+        - dist: trusty
+          compiler: gcc
+          env: wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl"
+        - dist: trusty
+          compiler: clang
+          env: wxCONFIGURE_FLAGS="--disable-shared"
+        - os: osx
+          compiler: clang
+          env: wxCONFIGURE_FLAGS="--enable-cxx11"
 
 branches:
     only:
@@ -20,12 +35,6 @@ notifications:
         on_failure: change
 
 before_install: ./build/tools/before_install.sh
-
-env:
-    - wxCONFIGURE_FLAGS=
-    - wxCONFIGURE_FLAGS="--disable-shared"
-    - wxCONFIGURE_FLAGS="--disable-precomp-headers --enable-monolithic"
-    - wxCONFIGURE_FLAGS="--enable-stl" CXXFLAGS=-std=c++0x
 
 script:
     - echo 'Configuring...' && echo -en 'travis_fold:start:script.1\\r'
