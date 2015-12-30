@@ -7079,6 +7079,9 @@ fi
 
 if test "$wxUSE_PROGRESSDLG" = "yes"; then
     AC_DEFINE(wxUSE_PROGRESSDLG)
+    dnl No special option for this one yet as it's supposed to be temporary and
+    dnl disappear later anyhow.
+    AC_DEFINE(wxUSE_NATIVE_PROGRESSDLG)
 fi
 
 if test "$wxUSE_SPLASH" = "yes"; then

@@ -36492,6 +36492,8 @@ fi
 if test "$wxUSE_PROGRESSDLG" = "yes"; then
     $as_echo "#define wxUSE_PROGRESSDLG 1" >>confdefs.h
 
+            $as_echo "#define wxUSE_NATIVE_PROGRESSDLG 1" >>confdefs.h
+
 fi
 
 if test "$wxUSE_SPLASH" = "yes"; then

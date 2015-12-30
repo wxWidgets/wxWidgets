@@ -1215,7 +1215,8 @@
 // progress dialog class for lengthy operations
 #define wxUSE_PROGRESSDLG 1
 
-// native MSW progress dialog class, flickering not yet debugged
+// Set to 0 to disable the use of the native progress dialog (currently only
+// available under MSW and suffering from some bugs there, hence this option).
 #define wxUSE_NATIVE_PROGRESSDLG 1
 
 // support for startup tips (wxShowTip &c)
