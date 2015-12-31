@@ -1104,20 +1104,37 @@ wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer,
 
 wxImage wxGDIPlusBitmapData::ConvertToImage() const
 {
-    // We could use Bitmap::LockBits() and convert to wxImage directly but
-    // passing by wxBitmap is easier. It would be nice to measure performance
-    // of the two methods but for this the second one would need to be written
-    // first...
-    HBITMAP hbmp;
-    if ( m_bitmap->GetHBITMAP(Color(0xffffffff), &hbmp) != Gdiplus::Ok )
-        return wxNullImage;
+    // We need to use Bitmap::LockBits() to convert bitmap to wxImage
+    // because this way we can retrieve also alpha channel data.
+    // Alternative way by retrieving bitmap handle with Bitmap::GetHBITMAP
+    // (to pass it to wxBitmap) doesn't preserve real alpha channel data.
+    const UINT w = m_bitmap->GetWidth();
+    const UINT h = m_bitmap->GetHeight();
 
-    wxBitmap bmp;
-    bmp.SetWidth(m_bitmap->GetWidth());
-    bmp.SetHeight(m_bitmap->GetHeight());
-    bmp.SetHBITMAP(hbmp);
-    bmp.SetDepth(IsAlphaPixelFormat(m_bitmap->GetPixelFormat()) ? 32 : 24);
-    return bmp.ConvertToImage();
+    wxImage img(w, h);
+    img.InitAlpha();
+
+    BitmapData bitmapData;
+    Rect rect(0, 0, w, h);
+    m_bitmap->LockBits(&rect, ImageLockModeRead, PixelFormat32bppARGB, &bitmapData);
+
+    const BYTE* pixels = static_cast<const BYTE*>(bitmapData.Scan0);
+    for( UINT y = 0; y < h; y++ )
+    {
+        for( UINT x = 0; x < w; x++ )
+        {
+            ARGB c = reinterpret_cast<const ARGB*>(pixels)[x];
+            img.SetRGB(x, y, (c >> 16) & 0xFF,
+                             (c >> 8) & 0xFF,
+                             (c >> 0) & 0xFF);
+            img.SetAlpha(x, y, (c >> 24) & 0xFF);
+        }
+
+        pixels += bitmapData.Stride;
+    }
+    m_bitmap->UnlockBits(&bitmapData);
+
+    return img;
 }
 
 #endif // wxUSE_IMAGE
