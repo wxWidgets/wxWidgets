@@ -10,6 +10,34 @@
 /setup.h
 /*tags
 /autom4te.cache
+/.deps
+/.pch
+/version-script
+/bk-deps
+/bk-make-pch
+/change-install-names
+
+# ignore all Linux GTK+ 3 compile objects
+/advdll*.o
+/auidll*.o
+/basedll*.o
+/coredll*.o
+/gldll*.o
+/htmldll*.o
+/mediadll*.o
+/netdll*.o
+/propgriddll*.o
+/qadll*.o
+/ribbondll*.o
+/richtextdll*.o
+/sound*.o
+/stcdll*.o
+/utils/wxrc/wxrc*.o
+/webviewdll*.o
+/wxregex*.o
+/wxscintilla*.o
+/xmldll*.o
+/xrcdll*.o
 
 # /build/
 
@@ -182,6 +210,10 @@
 /lib/gcc_lib64
 /lib/jpeg*.lib
 /lib/ldef*.res
+/lib/libwx_baseu
+/lib/libwx_gtk3u
+/lib/libwxregexu
+/lib/libwxscintilla
 /lib/Linux
 /lib/linux
 /lib/linux-gnu
@@ -427,6 +459,10 @@
 /utils/hhp2cached/*Carbon?Debug*
 /utils/hhp2cached/*Carbon?Release*
 
+# /utils/ifacecheck/
+/utils/ifacecheck/rungccxml.sh
+
 # /utils/wxrc/
+/utils/wxrc/wxrc
 /utils/wxrc/*.sln
 /utils/wxrc/*.dsw
