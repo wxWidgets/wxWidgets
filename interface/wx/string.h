@@ -739,17 +739,21 @@ public:
         a wxCharBuffer (Unicode builds only) or a C string (ANSI builds).
 
         Note that this conversion is only lossless if the string contains only
-        ASCII characters as all the non-ASCII ones are replaced with the @c '_'
-        (underscore) character.
+        ASCII characters as all the non-ASCII ones are replaced with the (same)
+        provided replacement character.
 
         Use mb_str() or utf8_str() to convert to other encodings.
+
+        @param replaceWith
+            The character used to replace any non-ASCII characters, default to
+            underscore (@c "_"). This parameter is new since wxWidgets 3.1.0.
     */
-    const char* ToAscii() const;
+    const char* ToAscii(char replaceWith = '_') const;
 
     /**
         @overload
     */
-    const wxCharBuffer ToAscii() const;
+    const wxCharBuffer ToAscii(char replaceWith = '_') const;
 
     /**
         Return the string as an std::string in current locale encoding.

@@ -1556,13 +1556,13 @@ public:
     static wxString FromAscii(const char *ascii, size_t len);
     static wxString FromAscii(const char *ascii);
     static wxString FromAscii(char ascii);
-    const wxScopedCharBuffer ToAscii() const;
+    const wxScopedCharBuffer ToAscii(char replaceWith = '_') const;
 #else // ANSI
     static wxString FromAscii(const char *ascii) { return wxString( ascii ); }
     static wxString FromAscii(const char *ascii, size_t len)
         { return wxString( ascii, len ); }
     static wxString FromAscii(char ascii) { return wxString( ascii ); }
-    const char *ToAscii() const { return c_str(); }
+    const char *ToAscii(char WXUNUSED(replaceWith) = '_') const { return c_str(); }
 #endif // Unicode/!Unicode
 
     // also provide unsigned char overloads as signed/unsigned doesn't matter
