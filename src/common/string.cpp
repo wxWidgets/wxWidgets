@@ -1205,7 +1205,7 @@ wxString wxString::FromAscii(char ascii)
     return wxString(wxUniChar((wchar_t)c));
 }
 
-const wxScopedCharBuffer wxString::ToAscii() const
+const wxScopedCharBuffer wxString::ToAscii(char replaceWith) const
 {
     // this will allocate enough space for the terminating NUL too
     wxCharBuffer buffer(length());
@@ -1215,7 +1215,7 @@ const wxScopedCharBuffer wxString::ToAscii() const
     {
         wxUniChar c(*i);
         // FIXME-UTF8: unify substituted char ('_') with wxUniChar ('?')
-        *dest++ = c.IsAscii() ? (char)c : '_';
+        *dest++ = c.IsAscii() ? (char)c : replaceWith;
 
         // the output string can't have embedded NULs anyhow, so we can safely
         // stop at first of them even if we do have any
