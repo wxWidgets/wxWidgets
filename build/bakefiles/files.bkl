@@ -1181,6 +1181,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xmlreshandler.h
     wx/systhemectrl.h
     wx/collheaderctrl.h
+    wx/generic/collheaderctrl.h
 </set>
 
 <!-- ====================================================================== -->

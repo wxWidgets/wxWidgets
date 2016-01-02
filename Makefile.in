@@ -4114,6 +4114,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xmlreshandler.h \
 	wx/systhemectrl.h \
 	wx/collheaderctrl.h \
+	wx/generic/collheaderctrl.h \
 	$(LOWLEVEL_HDR) \
 	$(GUI_CORE_HEADERS) \
 	$(ADVANCED_HDR) \
