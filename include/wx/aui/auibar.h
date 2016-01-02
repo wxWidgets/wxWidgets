@@ -274,6 +274,8 @@ public:
     virtual unsigned int GetFlags() = 0;
     virtual void SetFont(const wxFont& font) = 0;
     virtual wxFont GetFont() = 0;
+    virtual void SetBackgroundColour(const wxColour& colour) = 0;
+    virtual wxColour GetBackgroundColour() = 0;
     virtual void SetTextOrientation(int orientation) = 0;
     virtual int GetTextOrientation() = 0;
 
@@ -360,6 +362,8 @@ public:
     virtual unsigned int GetFlags() wxOVERRIDE;
     virtual void SetFont(const wxFont& font) wxOVERRIDE;
     virtual wxFont GetFont() wxOVERRIDE;
+    virtual void SetBackgroundColour(const wxColour& colour) wxOVERRIDE;
+    virtual wxColour GetBackgroundColour() wxOVERRIDE;
     virtual void SetTextOrientation(int orientation) wxOVERRIDE;
     virtual int GetTextOrientation() wxOVERRIDE;
 
@@ -481,6 +485,7 @@ public:
     wxAuiToolBarArt* GetArtProvider() const;
 
     bool SetFont(const wxFont& font) wxOVERRIDE;
+    bool SetBackgroundColour(const wxColour &colour) wxOVERRIDE;
 
 
     wxAuiToolBarItem* AddTool(int toolId,
