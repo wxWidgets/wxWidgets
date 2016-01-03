@@ -199,6 +199,12 @@ Currently the following symbols exist:
 @itemdef{wxHAS_RAW_KEY_CODES, Defined if raw key codes (see wxKeyEvent::GetRawKeyCode are supported.}
 @itemdef{wxHAS_REGEX_ADVANCED, Defined if advanced syntax is available in wxRegEx.}
 @itemdef{wxHAS_TASK_BAR_ICON, Defined if wxTaskBarIcon is available on the current platform.}
+@itemdef{wxHAS_NO_MODE_T, Defined when we need to link with another library
+    that also defines mode_t (http://www.cs.wustl.edu/~schmidt/ACE.html).
+    wxWidgets defines mode_t when __VISUALC__ is defined. It is required to
+    #include the definition where mode_t is defined within the other library
+    (#include "ace/os_include/sys/os_types.h") before any #include of wxWidgets
+    in all source file.}
 @endDefList
 
 
