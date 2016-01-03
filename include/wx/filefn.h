@@ -44,7 +44,7 @@
 // constants
 // ----------------------------------------------------------------------------
 
-#if defined(__VISUALC__) && !defined(WX_HIDE_MODE_T)
+#if defined(__VISUALC__) && !defined(wxHAS_NO_MODE_T)
     typedef int mode_t;
 #endif
 
