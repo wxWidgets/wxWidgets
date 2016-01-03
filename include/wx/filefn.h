@@ -44,7 +44,10 @@
 // constants
 // ----------------------------------------------------------------------------
 
-#if defined(__VISUALC__)
+// MSVC doesn't define mode_t, so do it ourselves unless someone else
+// had already predefined it.
+#if defined(__VISUALC__) && !defined(wxHAS_MODE_T)
+    #define wxHAS_MODE_T
     typedef int mode_t;
 #endif
 

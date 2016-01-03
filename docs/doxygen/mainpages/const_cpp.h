@@ -199,6 +199,13 @@ Currently the following symbols exist:
 @itemdef{wxHAS_RAW_KEY_CODES, Defined if raw key codes (see wxKeyEvent::GetRawKeyCode are supported.}
 @itemdef{wxHAS_REGEX_ADVANCED, Defined if advanced syntax is available in wxRegEx.}
 @itemdef{wxHAS_TASK_BAR_ICON, Defined if wxTaskBarIcon is available on the current platform.}
+@itemdef{wxHAS_MODE_T, Defined when wxWidgets defines @c mode_t typedef for the
+    compilers not providing it. If another library used in a wxWidgets
+    application, such as ACE (http://www.cs.wustl.edu/~schmidt/ACE.html), also
+    defines @c mode_t, this symbol can be predefined after including the other
+    library header, such as @c "ace/os_include/sys/os_types.h" in ACE case,
+    but before including any wxWidgets headers, to prevent a definition
+    conflict.}
 @endDefList
 
 
