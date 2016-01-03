@@ -2293,14 +2293,28 @@ private:
         BYTE* buffer = new BYTE[bufferSize];
         m_wicBitmap->CopyPixels(NULL, 4 * width, bufferSize, buffer);
         unsigned char* dest = m_resultImage->GetData();
+        unsigned char* destAlpha = m_resultImage->GetAlpha();
+
+        WICPixelFormatGUID pixelFormat;
+        m_wicBitmap->GetPixelFormat(&pixelFormat);
+        wxASSERT_MSG( pixelFormat == GUID_WICPixelFormat32bppPBGRA ||
+                  pixelFormat == GUID_WICPixelFormat32bppBGR,
+                  wxS("Unsupported pixel format") );
+
+        // Only premultiplied ARGB bitmaps are supported.
+        const bool hasAlpha = pixelFormat == GUID_WICPixelFormat32bppPBGRA;
 
         int k = 0;
         while (k < width * height)
         {
             wxPBGRAColor color = wxPBGRAColor(buffer + k * 4);
-            dest[k * 3 + 0] = color.r;
-            dest[k * 3 + 1] = color.g;
-            dest[k * 3 + 2] = color.b;
+            unsigned char a =  hasAlpha ? color.a : 255;
+            // Undo premultiplication for ARGB bitmap
+            dest[k * 3 + 0] = (a > 0 && a < 255) ? ( color.r * 255 ) / a : color.r;
+            dest[k * 3 + 1] = (a > 0 && a < 255) ? ( color.g * 255 ) / a : color.g;
+            dest[k * 3 + 2] = (a > 0 && a < 255) ? ( color.b * 255 ) / a : color.b;
+            if ( destAlpha )
+                *destAlpha++ = a;
             ++k;
         }
 
