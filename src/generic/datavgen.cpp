@@ -1152,9 +1152,7 @@ bool wxDataViewToggleRenderer::WXActivateCell(const wxRect& WXUNUSED(cellRect),
 
 wxSize wxDataViewToggleRenderer::GetSize() const
 {
-    // the window parameter is not used by GetCheckBoxSize() so it's
-    // safe to pass NULL
-    return wxRendererNative::Get().GetCheckBoxSize(NULL);
+    return wxRendererNative::Get().GetCheckBoxSize(GetView());
 }
 
 // ---------------------------------------------------------
