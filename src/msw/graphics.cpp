@@ -1118,16 +1118,18 @@ wxImage wxGDIPlusBitmapData::ConvertToImage() const
     Rect rect(0, 0, w, h);
     m_bitmap->LockBits(&rect, ImageLockModeRead, PixelFormat32bppARGB, &bitmapData);
 
+    unsigned char *imgRGB = img.GetData();    // destination RGB buffer
+    unsigned char *imgAlpha = img.GetAlpha(); // destination alpha buffer
     const BYTE* pixels = static_cast<const BYTE*>(bitmapData.Scan0);
     for( UINT y = 0; y < h; y++ )
     {
         for( UINT x = 0; x < w; x++ )
         {
             ARGB c = reinterpret_cast<const ARGB*>(pixels)[x];
-            img.SetRGB(x, y, (c >> 16) & 0xFF,
-                             (c >> 8) & 0xFF,
-                             (c >> 0) & 0xFF);
-            img.SetAlpha(x, y, (c >> 24) & 0xFF);
+            *imgRGB++ = (c >> 16) & 0xFF;  // R
+            *imgRGB++ = (c >> 8) & 0xFF;   // G
+            *imgRGB++ = (c >> 0) & 0xFF;   // B
+            *imgAlpha++ = (c >> 24) & 0xFF;
         }
 
         pixels += bitmapData.Stride;
