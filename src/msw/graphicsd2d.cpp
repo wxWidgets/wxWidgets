@@ -2336,17 +2336,41 @@ protected:
 private:
     void FlushRenderTargetToImage()
     {
-        int width = m_resultImage->GetWidth();
-        int height = m_resultImage->GetHeight();
-        int bufferSize = 4 * width * height;
+        const int width = m_resultImage->GetWidth();
+        const int height = m_resultImage->GetHeight();
 
-        BYTE* buffer = new BYTE[bufferSize];
-        m_wicBitmap->CopyPixels(NULL, 4 * width, bufferSize, buffer);
-        unsigned char* dest = m_resultImage->GetData();
-        unsigned char* destAlpha = m_resultImage->GetAlpha();
+        WICRect rcLock = { 0, 0, width, height };
+        IWICBitmapLock *pLock = NULL;
+        HRESULT hr = m_wicBitmap->Lock(&rcLock, WICBitmapLockRead, &pLock);
+        wxCHECK_HRESULT_RET(hr);
+
+        UINT rowStride = 0;
+        hr = pLock->GetStride(&rowStride);
+        if ( FAILED(hr) )
+        {
+            pLock->Release();
+            wxFAILED_HRESULT_MSG(hr);
+            return;
+        }
+
+        UINT bufferSize = 0;
+        BYTE *pBmpBuffer = NULL;
+        hr = pLock->GetDataPointer(&bufferSize, &pBmpBuffer);
+        if ( FAILED(hr) )
+        {
+            pLock->Release();
+            wxFAILED_HRESULT_MSG(hr);
+            return;
+        }
 
         WICPixelFormatGUID pixelFormat;
-        m_wicBitmap->GetPixelFormat(&pixelFormat);
+        hr = pLock->GetPixelFormat(&pixelFormat);
+        if ( FAILED(hr) )
+        {
+            pLock->Release();
+            wxFAILED_HRESULT_MSG(hr);
+            return;
+        }
         wxASSERT_MSG( pixelFormat == GUID_WICPixelFormat32bppPBGRA ||
                   pixelFormat == GUID_WICPixelFormat32bppBGR,
                   wxS("Unsupported pixel format") );
@@ -2354,22 +2378,30 @@ private:
         // Only premultiplied ARGB bitmaps are supported.
         const bool hasAlpha = pixelFormat == GUID_WICPixelFormat32bppPBGRA;
 
-        int k = 0;
-        while (k < width * height)
+        unsigned char* destRGB = m_resultImage->GetData();
+        unsigned char* destAlpha = m_resultImage->GetAlpha();
+        for( int y = 0; y < height; y++ )
         {
-            wxPBGRAColor color = wxPBGRAColor(buffer + k * 4);
-            unsigned char a =  hasAlpha ? color.a : 255;
-            // Undo premultiplication for ARGB bitmap
-            dest[k * 3 + 0] = (a > 0 && a < 255) ? ( color.r * 255 ) / a : color.r;
-            dest[k * 3 + 1] = (a > 0 && a < 255) ? ( color.g * 255 ) / a : color.g;
-            dest[k * 3 + 2] = (a > 0 && a < 255) ? ( color.b * 255 ) / a : color.b;
-            if ( destAlpha )
-                *destAlpha++ = a;
-            ++k;
+            BYTE *pPixByte = pBmpBuffer;
+            for ( int x = 0; x < width; x++ )
+            {
+                wxPBGRAColor color = wxPBGRAColor(pPixByte);
+                unsigned char a =  hasAlpha ? color.a : 255;
+                // Undo premultiplication for ARGB bitmap
+                *destRGB++ = (a > 0 && a < 255) ? ( color.r * 255 ) / a : color.r;
+                *destRGB++ = (a > 0 && a < 255) ? ( color.g * 255 ) / a : color.g;
+                *destRGB++ = (a > 0 && a < 255) ? ( color.b * 255 ) / a : color.b;
+                if ( destAlpha )
+                    *destAlpha++ = a;
+
+                pPixByte += 4;
+            }
+
+            pBmpBuffer += rowStride;
         }
 
-        delete[] buffer;
-    }
+        pLock->Release();
+   }
 
 private:
     wxImage* m_resultImage;
