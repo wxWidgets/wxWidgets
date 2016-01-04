@@ -6826,9 +6826,9 @@ void wxGrid::MakeCellVisible( int row, int col )
 
         if ( xpos != -1 || ypos != -1 )
         {
-            if ( xpos != -1 )
+            if ( xpos != -1 && m_xScrollPixelsPerLine != 0 )
                 xpos /= m_xScrollPixelsPerLine;
-            if ( ypos != -1 )
+            if ( ypos != -1 && m_yScrollPixelsPerLine != 0 )
                 ypos /= m_yScrollPixelsPerLine;
             Scroll( xpos, ypos );
             AdjustScrollbars();
