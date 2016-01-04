@@ -1112,7 +1112,12 @@ wxImage wxGDIPlusBitmapData::ConvertToImage() const
     const UINT h = m_bitmap->GetHeight();
 
     wxImage img(w, h);
-    img.InitAlpha();
+    // Set up wxImage buffer for alpha channel values
+    // only if bitmap contains alpha channel.
+    if ( IsAlphaPixelFormat(m_bitmap->GetPixelFormat()) )
+    {
+        img.InitAlpha();
+    }
 
     BitmapData bitmapData;
     Rect rect(0, 0, w, h);
@@ -1129,7 +1134,8 @@ wxImage wxGDIPlusBitmapData::ConvertToImage() const
             *imgRGB++ = (c >> 16) & 0xFF;  // R
             *imgRGB++ = (c >> 8) & 0xFF;   // G
             *imgRGB++ = (c >> 0) & 0xFF;   // B
-            *imgAlpha++ = (c >> 24) & 0xFF;
+            if ( imgAlpha )
+                *imgAlpha++ = (c >> 24) & 0xFF;
         }
 
         pixels += bitmapData.Stride;
