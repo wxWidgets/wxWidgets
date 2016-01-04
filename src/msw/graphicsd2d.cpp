@@ -2273,6 +2273,56 @@ protected:
             &m_wicBitmap);
         wxCHECK_HRESULT_RET(hr);
 
+        // Copy contents of source image to the WIC bitmap.
+        const int width = m_resultImage->GetWidth();
+        const int height = m_resultImage->GetHeight();
+        WICRect rcLock = { 0, 0, width, height };
+        IWICBitmapLock *pLock = NULL;
+        hr = m_wicBitmap->Lock(&rcLock, WICBitmapLockWrite, &pLock);
+        wxCHECK_HRESULT_RET(hr);
+
+        UINT rowStride = 0;
+        hr = pLock->GetStride(&rowStride);
+        if ( FAILED(hr) )
+        {
+            pLock->Release();
+            wxFAILED_HRESULT_MSG(hr);
+            return;
+        }
+
+        UINT bufferSize = 0;
+        BYTE *pBmpBuffer = NULL;
+        hr = pLock->GetDataPointer(&bufferSize, &pBmpBuffer);
+        if ( FAILED(hr) )
+        {
+            pLock->Release();
+            wxFAILED_HRESULT_MSG(hr);
+            return;
+        }
+
+        const unsigned char *imgRGB = m_resultImage->GetData();    // source RGB buffer
+        const unsigned char *imgAlpha = m_resultImage->GetAlpha(); // source alpha buffer
+        for( int y = 0; y < height; y++ )
+        {
+            BYTE *pPixByte = pBmpBuffer;
+            for ( int x = 0; x < width; x++ )
+            {
+                unsigned char r = *imgRGB++;
+                unsigned char g = *imgRGB++;
+                unsigned char b = *imgRGB++;
+                unsigned char a = imgAlpha ? *imgAlpha++ : 255;
+                // Premultiply RGB values
+                *pPixByte++ = (b * a + 127) / 255;
+                *pPixByte++ = (g * a + 127) / 255;
+                *pPixByte++ = (r * a + 127) / 255;
+                *pPixByte++ = a;
+            }
+
+            pBmpBuffer += rowStride;
+        }
+
+        pLock->Release();
+
         // Create the render target
         hr = m_factory->CreateWicBitmapRenderTarget(
             m_wicBitmap,
