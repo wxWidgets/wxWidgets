@@ -437,6 +437,40 @@ public:
     */
     virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
 
+    /**
+        Create a bitmap compatible with the given DC, inheriting its magnification factor
+
+        @param width
+            The width of the bitmap in pixels, must be strictly positive.
+        @param height
+            The height of the bitmap in pixels, must be strictly positive.
+        @param dc
+            DC from wich the scaling factor is inherited
+
+        @return @true if the creation was successful.
+
+        @since 3.1.0
+    */
+    bool Create(int width, int height, const wxDC& dc);
+
+    /**
+        Create a bitmap with a scale factor, width and height are multiplied with that factor
+
+        @param width
+            The width of the bitmap in pixels, must be strictly positive.
+        @param height
+            The height of the bitmap in pixels, must be strictly positive.
+        @param depth
+            The number of bits used to represent each bitmap pixel.
+        @param logicalScale
+            Scale factor used by the bitmap
+
+        @return @true if the creation was successful.
+
+        @since 3.1.0
+    */
+    bool CreateScaled(int logwidth, int logheight, int depth, double logicalScale);
+
     /*
         Creates a bitmap from the given data, which can be of arbitrary type.
 

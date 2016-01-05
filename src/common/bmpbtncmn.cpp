@@ -103,12 +103,13 @@ GetCloseButtonBitmap(wxWindow *win,
                      const wxColour& colBg,
                      int flags = 0)
 {
-    wxBitmap bmp(size);
+    wxBitmap bmp;
+    bmp.CreateScaled(size.x, size.y, wxBITMAP_SCREEN_DEPTH, win->GetContentScaleFactor());
     wxMemoryDC dc(bmp);
     dc.SetBackground(colBg);
     dc.Clear();
     wxRendererNative::Get().
-        DrawTitleBarBitmap(win, dc, size, wxTITLEBAR_BUTTON_CLOSE, flags);
+        DrawTitleBarBitmap(win, dc, win->FromDIP(size), wxTITLEBAR_BUTTON_CLOSE, flags);
     return bmp;
 }
 

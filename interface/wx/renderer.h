@@ -520,10 +520,6 @@ public:
         The presence of this function is indicated by @c
         wxHAS_DRAW_TITLE_BAR_BITMAP symbol being defined.
 
-        Also notice that PNG handler must be enabled using wxImage::AddHandler()
-        to use this function under OS X currently as the bitmaps are embedded
-        in the library itself in PNG format.
-
         @since 2.9.1
      */
     virtual void DrawTitleBarBitmap(wxWindow *win,
