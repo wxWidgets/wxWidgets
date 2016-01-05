@@ -2936,7 +2936,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     GetSelection(&startOld, &endOld);
 
     // but do we really have to change the selection?
-    bool changeSel = position != startOld || position != endOld;
+    const bool changeSel = position != startOld;
 
     if ( changeSel )
     {
