@@ -684,18 +684,23 @@ void wxMenuItem::Check( bool check )
     if (check == m_isChecked)
         return;
 
-    wxMenuItemBase::Check( check );
-
     switch ( GetKind() )
     {
-        case wxITEM_CHECK:
         case wxITEM_RADIO:
+            // It doesn't make sense to uncheck a radio item.
+            if ( !check )
+                return;
+
+            wxFALLTHROUGH;
+        case wxITEM_CHECK:
             gtk_check_menu_item_set_active( (GtkCheckMenuItem*)m_menuItem, (gint)check );
             break;
 
         default:
             wxFAIL_MSG( wxT("can't check this item") );
     }
+
+    wxMenuItemBase::Check( check );
 }
 
 void wxMenuItem::Enable( bool enable )
