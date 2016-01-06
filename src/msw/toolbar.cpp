@@ -627,7 +627,23 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
 
     static_cast<wxToolBarTool*>(tool)->ToBeDeleted();
 
-    // and finally rearrange the tools
+    // and finally rearrange the tools:
+
+    // by shifting left all controls on the right hand side
+    wxToolBarToolsList::compatibility_iterator node;
+    for ( node = m_tools.Find(tool); node; node = node->GetNext() )
+    {
+        wxToolBarTool * const tool = static_cast<wxToolBarTool*>(node->GetData());
+
+        if ( tool->IsToBeDeleted() )
+            continue;
+
+        if ( tool->IsControl() )
+        {
+            tool->MoveBy(-delta);
+        }
+    }
+
     // by recalculating stretchable spacers, if there are any
     UpdateStretchableSpacersSize();
 
