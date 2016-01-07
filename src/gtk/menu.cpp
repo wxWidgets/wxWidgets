@@ -693,14 +693,13 @@ void wxMenuItem::Check( bool check )
 
             wxFALLTHROUGH;
         case wxITEM_CHECK:
+            wxMenuItemBase::Check( check );
             gtk_check_menu_item_set_active( (GtkCheckMenuItem*)m_menuItem, (gint)check );
             break;
 
         default:
             wxFAIL_MSG( wxT("can't check this item") );
     }
-
-    wxMenuItemBase::Check( check );
 }
 
 void wxMenuItem::Enable( bool enable )
