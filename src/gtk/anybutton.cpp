@@ -230,6 +230,11 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
                 {
                     image = gtk_image_new();
                     gtk_button_set_image(GTK_BUTTON(m_widget), image);
+
+                    // Setting the image recreates the label, so we need to
+                    // reapply the styles to it to preserve the existing text
+                    // font and colour if they're different from defaults.
+                    GTKApplyWidgetStyle();
                 }
                 else // image presence or absence didn't change
                 {
@@ -411,6 +416,11 @@ void wxAnyButton::DoSetBitmapPosition(wxDirection dir)
         }
 
         gtk_button_set_image_position(GTK_BUTTON(m_widget), gtkpos);
+
+        // As in DoSetBitmap() above, the above call can invalidate the label
+        // style, so reapply it to preserve its font and colour.
+        GTKApplyWidgetStyle();
+
         InvalidateBestSize();
     }
 #endif // GTK+ 2.10+
