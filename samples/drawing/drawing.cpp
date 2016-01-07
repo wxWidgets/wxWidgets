@@ -1027,14 +1027,14 @@ void MyCanvas::DrawAlpha(wxDC& dc)
     dc.DrawRoundedRectangle( r.x, r.y, r.width, r.width, radius ) ;
 
     dc.SetPen( wxPen( wxColour( 0, 0, 128 ), 12));
-    dc.SetBrush(*wxBLUE_BRUSH);
+    dc.SetBrush( wxColour(0, 0, 255, 192) );
 
     r.Offset( width * 0.8 , - width * 0.66 ) ;
 
     dc.DrawRoundedRectangle( r.x, r.y, r.width, r.width, radius ) ;
 
     dc.SetPen( wxPen( wxColour( 128, 128, 0 ), 12));
-    dc.SetBrush( wxBrush( wxColour( 192, 192, 0)));
+    dc.SetBrush( wxBrush( wxColour( 192, 192, 0, 192)));
 
     r.Offset( width * 0.8 , width *0.5 ) ;
 
@@ -1044,7 +1044,8 @@ void MyCanvas::DrawAlpha(wxDC& dc)
     dc.SetBrush( wxBrush( wxColour(255,255,128,128) ) );
     dc.DrawRoundedRectangle( 0 , margin + width / 2 , width * 3 , 100 , radius) ;
 
-    dc.SetTextForeground( wxColour(255,255,0,128) );
+    dc.SetTextBackground( wxColour(160, 192, 160, 160) );
+    dc.SetTextForeground( wxColour(255, 128, 128, 128) );
     dc.SetFont( wxFont( 40, wxFONTFAMILY_SWISS, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL ) );
     dc.DrawText( wxT("Hello!"), 120, 80 );
 }
