@@ -137,6 +137,7 @@ All (GUI):
 - Improve wxFileCtrl::SetFilename() and SetPath() (Kevin B. McCarty).
 - Fix a crash when using animated GIFs in wxHtmlListBox.
 - Use platform-specific stock icons for wxEditableListBox buttons.
+- Add support for the evnets from multimedia keys (Jens Göpfert).
 
 wxGTK:
 
