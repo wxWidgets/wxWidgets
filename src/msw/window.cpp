@@ -6134,6 +6134,58 @@ int VKToWX(WXWORD vk, WXLPARAM lParam, wchar_t *uc)
                 *uc = WXK_RETURN;
             break;
 
+        case VK_BROWSER_BACK:
+            wxk = WXK_BROWSER_BACK;
+            break;
+        case VK_BROWSER_FORWARD:
+            wxk = WXK_BROWSER_FORWARD;
+            break;
+        case VK_BROWSER_REFRESH:
+            wxk = WXK_BROWSER_REFRESH;
+            break;
+        case VK_BROWSER_STOP:
+            wxk = WXK_BROWSER_STOP;
+            break;
+        case VK_BROWSER_SEARCH:
+            wxk = WXK_BROWSER_SEARCH;
+            break;
+        case VK_BROWSER_FAVORITES:
+            wxk = WXK_BROWSER_FAVORITES;
+            break;
+        case VK_BROWSER_HOME:
+            wxk = WXK_BROWSER_HOME;
+            break;
+        case VK_VOLUME_MUTE:
+            wxk = WXK_VOLUME_MUTE;
+            break;
+        case VK_VOLUME_DOWN:
+            wxk = WXK_VOLUME_DOWN;
+            break;
+        case VK_VOLUME_UP:
+            wxk = WXK_VOLUME_UP;
+            break;
+        case VK_MEDIA_NEXT_TRACK:
+            wxk = WXK_MEDIA_NEXT_TRACK;
+            break;
+        case VK_MEDIA_PREV_TRACK:
+            wxk = WXK_MEDIA_PREV_TRACK;
+            break;
+        case VK_MEDIA_STOP:
+            wxk = WXK_MEDIA_STOP;
+            break;
+        case VK_MEDIA_PLAY_PAUSE:
+            wxk = WXK_MEDIA_PLAY_PAUSE;
+            break;
+        case VK_LAUNCH_MAIL:
+            wxk = WXK_LAUNCH_MAIL;
+            break;
+        case VK_LAUNCH_APP1:
+            wxk = WXK_LAUNCH_APP1;
+            break;
+        case VK_LAUNCH_APP2:
+            wxk = WXK_LAUNCH_APP2;
+            break;
+
         default:
             if ( (vk >= '0' && vk <= '9') || (vk >= 'A' && vk <= 'Z') )
             {
