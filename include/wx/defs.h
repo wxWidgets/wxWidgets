@@ -2676,7 +2676,7 @@ enum wxKeyCode
     WXK_COMMAND = WXK_CONTROL,
 
     /* Hardware-specific buttons */
-    WXK_SPECIAL1 = 193,
+    WXK_SPECIAL1 = WXK_WINDOWS_MENU + 2, /* Skip WXK_RAW_CONTROL if necessary */
     WXK_SPECIAL2,
     WXK_SPECIAL3,
     WXK_SPECIAL4,
