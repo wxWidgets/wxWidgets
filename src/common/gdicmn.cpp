@@ -793,20 +793,18 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
              font->GetWeight () == weight &&
              font->GetUnderlined () == underline )
         {
-            bool same = font->GetFamily() == family;
-
             // empty facename matches anything at all: this is bad because
             // depending on which fonts are already created, we might get back
             // a different font if we create it with empty facename, but it is
             // still better than never matching anything in the cache at all
             // in this case
-            if ( same && !facename.empty() )
-            {
-                const wxString& fontFace = font->GetFaceName();
+            bool same;
+            const wxString fontFaceName(font->GetFaceName());
 
-                // empty facename matches everything
-                same = !fontFace || fontFace == facename;
-            }
+            if (facename.empty() || fontFaceName.empty())
+                same = font->GetFamily() == family;
+            else
+                same = fontFaceName == facename;
 
             if ( same && (encoding != wxFONTENCODING_DEFAULT) )
             {
