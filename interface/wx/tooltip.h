@@ -54,7 +54,7 @@ public:
     /**
         Set the delay after which the tooltip appears.
 
-        @note May not be supported on all platforms (eg. wxCocoa).
+        @note May not be supported on all platforms.
     */
     static void SetDelay(long msecs);
 

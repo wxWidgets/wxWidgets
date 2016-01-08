@@ -199,3 +199,4 @@ wxOSX/Cocoa:
 - Add wxTE_{RIGHT,CENTER} support for multiline wxTextCtrl (Andreas Falkenhahn).
 - Don't leave wxSlider labels shown when the slider itself is hidden.
 - Don't generate wxEVT_TEXT_ENTER for controls without wxTE_PROCESS_ENTER.
+- Implement wxToolTip::SetDelay() (David Vanderson).
