@@ -289,7 +289,13 @@ gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event,
             }
             gdk_window_set_cursor(window, cursor);
             if (cursor)
+            {
+#ifdef __WXGTK3__
                 g_object_unref(cursor);
+#else
+                gdk_cursor_unref(cursor);
+#endif
+            }
         }
         return TRUE;
     }
