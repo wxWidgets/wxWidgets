@@ -3713,26 +3713,17 @@ void wxWindowGTK::DoMoveInTabOrder(wxWindow *win, WindowOrder move)
 
 bool wxWindowGTK::DoNavigateIn(int flags)
 {
-    if ( flags & wxNavigationKeyEvent::WinChange )
-    {
-        wxFAIL_MSG( wxT("not implemented") );
+    wxWindow *parent = wxGetTopLevelParent((wxWindow *)this);
+    wxCHECK_MSG( parent, false, wxT("every window must have a TLW parent") );
 
-        return false;
-    }
-    else // navigate inside the container
-    {
-        wxWindow *parent = wxGetTopLevelParent((wxWindow *)this);
-        wxCHECK_MSG( parent, false, wxT("every window must have a TLW parent") );
+    GtkDirectionType dir;
+    dir = flags & wxNavigationKeyEvent::IsForward ? GTK_DIR_TAB_FORWARD
+                                                  : GTK_DIR_TAB_BACKWARD;
 
-        GtkDirectionType dir;
-        dir = flags & wxNavigationKeyEvent::IsForward ? GTK_DIR_TAB_FORWARD
-                                                      : GTK_DIR_TAB_BACKWARD;
+    gboolean rc;
+    g_signal_emit_by_name(parent->m_widget, "focus", dir, &rc);
 
-        gboolean rc;
-        g_signal_emit_by_name(parent->m_widget, "focus", dir, &rc);
-
-        return rc != 0;
-    }
+    return rc != 0;
 }
 
 bool wxWindowGTK::GTKWidgetNeedsMnemonic() const
