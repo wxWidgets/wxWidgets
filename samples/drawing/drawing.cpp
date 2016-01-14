@@ -48,6 +48,13 @@
     #include "../sample.xpm"
 #endif
 
+// Standard DC supports drawing with alpha on OSX and GTK3.
+#if defined(__WXOSX__) || defined(__WXGTK3__)
+#define wxDRAWING_DC_SUPPORTS_ALPHA 1
+#else
+#define wxDRAWING_DC_SUPPORTS_ALPHA 0
+#endif // __WXOSX__ || __WXGTK3__
+
 // ----------------------------------------------------------------------------
 // global variables
 // ----------------------------------------------------------------------------
@@ -131,8 +138,10 @@ protected:
     void DrawText(wxDC& dc);
     void DrawImages(wxDC& dc, DrawMode mode);
     void DrawWithLogicalOps(wxDC& dc);
-#if wxUSE_GRAPHICS_CONTEXT
+#if wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
     void DrawAlpha(wxDC& dc);
+#endif
+#if wxUSE_GRAPHICS_CONTEXT
     void DrawGraphics(wxGraphicsContext* gc);
 #endif
     void DrawRegions(wxDC& dc);
@@ -286,8 +295,10 @@ enum
     File_ShowRegions,
     File_ShowCircles,
     File_ShowSplines,
-#if wxUSE_GRAPHICS_CONTEXT
+#if wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
     File_ShowAlpha,
+#endif // wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
+#if wxUSE_GRAPHICS_CONTEXT
     File_ShowGraphics,
 #endif
     File_ShowGradients,
@@ -1003,18 +1014,9 @@ void MyCanvas::DrawWithLogicalOps(wxDC& dc)
     }
 }
 
-#if wxUSE_GRAPHICS_CONTEXT
-#ifdef __WXGTK20__
-void MyCanvas::DrawAlpha(wxDC& WXUNUSED(dummyDC))
-#else
+#if wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
 void MyCanvas::DrawAlpha(wxDC& dc)
-#endif
 {
-#ifdef __WXGTK__
-    wxGCDC dc( this );
-    PrepareDC( dc );
-#endif
-
     wxDouble margin = 20 ;
     wxDouble width = 180 ;
     wxDouble radius = 30 ;
@@ -1049,8 +1051,7 @@ void MyCanvas::DrawAlpha(wxDC& dc)
     dc.SetFont( wxFont( 40, wxFONTFAMILY_SWISS, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL ) );
     dc.DrawText( wxT("Hello!"), 120, 80 );
 }
-
-#endif
+#endif // wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
 
 #if wxUSE_GRAPHICS_CONTEXT
 
@@ -1731,10 +1732,12 @@ void MyCanvas::Draw(wxDC& pdc)
             DrawWithLogicalOps(dc);
             break;
 
-#if wxUSE_GRAPHICS_CONTEXT
+#if wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
         case File_ShowAlpha:
             DrawAlpha(dc);
             break;
+#endif // wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
+#if wxUSE_GRAPHICS_CONTEXT
         case File_ShowGraphics:
             DrawGraphics(gdc.GetGraphicsContext());
             break;
@@ -1890,9 +1893,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuScreen->Append(File_ShowOps, wxT("&Raster operations screen\tF7"));
     menuScreen->Append(File_ShowRegions, wxT("Re&gions screen\tF8"));
     menuScreen->Append(File_ShowCircles, wxT("&Circles screen\tF9"));
-#if wxUSE_GRAPHICS_CONTEXT
+#if wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
     menuScreen->Append(File_ShowAlpha, wxT("&Alpha screen\tF10"));
-#endif
+#endif // wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
     menuScreen->Append(File_ShowSplines, wxT("Spl&ines screen\tF11"));
     menuScreen->Append(File_ShowGradients, wxT("&Gradients screen\tF12"));
 #if wxUSE_GRAPHICS_CONTEXT
@@ -2065,10 +2068,18 @@ void MyFrame::OnShow(wxCommandEvent& event)
 {
     const int show = event.GetId();
 
-#if wxUSE_GRAPHICS_CONTEXT
+#if wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
     // Make sure we do use a graphics context when selecting one of the screens
     // requiring it.
+#if wxDRAWING_DC_SUPPORTS_ALPHA
+    // If DC supports drawing with alpha
+    // then GC is necessary only for graphics screen.
+    if ( show == File_ShowGraphics )
+#else // wxUSE_GRAPHICS_CONTEXT
+    // DC doesn't support drawing with alpha
+    // so GC is necessary both for alpha and graphics screen.
     if ( show == File_ShowAlpha || show == File_ShowGraphics )
+#endif // wxDRAWING_DC_SUPPORTS_ALPHA, wxUSE_GRAPHICS_CONTEXT
     {
         if ( !m_canvas->HasRenderer() )
             m_canvas->UseGraphicRenderer(wxGraphicsRenderer::GetDefaultRenderer());
@@ -2079,8 +2090,7 @@ void MyFrame::OnShow(wxCommandEvent& event)
     {
         m_menuItemUseDC->Enable(true);
     }
-#endif // wxUSE_GRAPHICS_CONTEXT
-
+#endif // wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
     m_canvas->ToShow(show);
 }
 
