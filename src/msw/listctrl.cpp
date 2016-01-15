@@ -1219,8 +1219,9 @@ bool wxListCtrl::HasCheckboxes() const
 
 void wxListCtrl::EnableCheckboxes(bool enable)
 {
-    DWORD cbStyle = enable ? LVS_EX_CHECKBOXES : 0;
-    ListView_SetExtendedListViewStyleEx(GetHwnd(), LVS_EX_CHECKBOXES, cbStyle);
+    LPARAM newStyle = enable ? LVS_EX_CHECKBOXES : 0;
+    DWORD oldStyle = ListView_SetExtendedListViewStyleEx(GetHwnd(), LVS_EX_CHECKBOXES, newStyle);
+    wxUnusedVar(oldStyle);
 }
 
 void wxListCtrl::CheckItem(long item, bool state)
