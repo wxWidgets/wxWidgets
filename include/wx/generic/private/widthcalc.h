@@ -106,7 +106,7 @@ public:
                        "plus %zu more visible items out of %zu total",
                        top_part_end,
                        count - bottom_part_start,
-                       wxMax(0, last_visible - first_visible),
+                       last_visible - first_visible,
                        count);
         }
     }
