@@ -93,7 +93,7 @@ private:
     wxHtmlWinParser *m_Parser;
     wxFileSystem *m_FS;
     wxHtmlContainerCell *m_Cells;
-    int m_MaxWidth, m_Width, m_Height;
+    int m_Width, m_Height;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlDCRenderer);
 };

@@ -140,7 +140,6 @@ class HP_TagHandler : public wxHtmlTagHandler
         wxString m_name, m_page;
         int m_level;
         int m_id;
-        int m_index;
         int m_count;
         wxHtmlHelpDataItem *m_parentItem;
         wxHtmlBookRecord *m_book;
