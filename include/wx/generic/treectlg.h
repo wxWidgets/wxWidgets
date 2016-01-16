@@ -200,7 +200,7 @@ public:
     virtual void Refresh(bool eraseBackground = true, const wxRect *rect = NULL) wxOVERRIDE;
 
     virtual bool SetFont( const wxFont &font ) wxOVERRIDE;
-    virtual void SetWindowStyle(const long styles);
+    virtual void SetWindowStyleFlag(long styles) wxOVERRIDE;
 
     // callbacks
     void OnPaint( wxPaintEvent &event );

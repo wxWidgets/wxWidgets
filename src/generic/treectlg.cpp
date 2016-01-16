@@ -1096,7 +1096,7 @@ wxGenericTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
     return ((wxGenericTreeItem*) item.m_pItem)->GetChildrenCount(recursively);
 }
 
-void wxGenericTreeCtrl::SetWindowStyle(const long styles)
+void wxGenericTreeCtrl::SetWindowStyleFlag(long styles)
 {
     // Do not try to expand the root node if it hasn't been created yet
     if (m_anchor && !HasFlag(wxTR_HIDE_ROOT) && (styles & wxTR_HIDE_ROOT))
