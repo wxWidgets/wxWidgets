@@ -116,9 +116,9 @@ public:
     virtual void DrawCollapseButton(wxWindow *win,
         wxDC& dc,
         const wxRect& rect,
-        int flags = 0);
+        int flags = 0) wxOVERRIDE;
 
-    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc);
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc) wxOVERRIDE;
 
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
