@@ -165,7 +165,7 @@ class WXDLLIMPEXP_CORE wxWebKitStateChangedEvent : public wxCommandEvent
 
 public:
     int GetState() { return m_state; }
-    void SetState(const int state) { m_state = state; }
+    void SetState(int state) { m_state = state; }
     wxString GetURL() { return m_url; }
     void SetURL(const wxString& url) { m_url = url; }
 

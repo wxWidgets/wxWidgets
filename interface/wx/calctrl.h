@@ -62,7 +62,7 @@ public:
         Sets the week day carried by the event, normally only used by the
         library internally.
     */
-    void SetWeekDay(const wxDateTime::WeekDay day);
+    void SetWeekDay(wxDateTime::WeekDay day);
 };
 
 wxEventType wxEVT_CALENDAR_SEL_CHANGED;

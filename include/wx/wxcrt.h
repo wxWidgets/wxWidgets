@@ -95,7 +95,7 @@ WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *psz, size_t n);
         return (wxChar*) memmove(szOut, szIn, len * sizeof(wxChar));
     }
 
-    inline wxChar* wxTmemset(wxChar* szOut, const wxChar cIn, size_t len)
+    inline wxChar* wxTmemset(wxChar* szOut, wxChar cIn, size_t len)
     {
         wxChar* szRet = szOut;
 
@@ -117,7 +117,7 @@ inline char* wxTmemcpy(char* szOut, const char* szIn, size_t len)
     { return (char*)memcpy(szOut, szIn, len); }
 inline char* wxTmemmove(char* szOut, const char* szIn, size_t len)
     { return (char*)memmove(szOut, szIn, len); }
-inline char* wxTmemset(char* szOut, const char cIn, size_t len)
+inline char* wxTmemset(char* szOut, char cIn, size_t len)
     { return (char*)memset(szOut, cIn, len); }
 
 

@@ -180,7 +180,7 @@ public:
     wxTextCtrl& operator<<(long i);
     wxTextCtrl& operator<<(float f);
     wxTextCtrl& operator<<(double d);
-    wxTextCtrl& operator<<(const wxChar c);
+    wxTextCtrl& operator<<(wxChar c);
 #endif
 
     // do the window-specific processing after processing the update event

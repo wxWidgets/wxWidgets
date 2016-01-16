@@ -701,7 +701,7 @@ bool wxHtmlHelpWindow::Display(const wxString& x)
     return false;
 }
 
-bool wxHtmlHelpWindow::Display(const int id)
+bool wxHtmlHelpWindow::Display(int id)
 {
     wxString url = m_Data->FindPageById(id);
     if (!url.empty())

@@ -98,7 +98,7 @@ public:
         @param name
             The window name.
     */
-    wxGenericDirCtrl(wxWindow* parent, const wxWindowID id = wxID_ANY,
+    wxGenericDirCtrl(wxWindow* parent, wxWindowID id = wxID_ANY,
                      const wxString& dir = wxDirDialogDefaultFolderStr,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
@@ -126,7 +126,7 @@ public:
         Create function for two-step construction. See wxGenericDirCtrl() for
         details.
     */
-    bool Create(wxWindow* parent, const wxWindowID id = wxID_ANY,
+    bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
                 const wxString& dir = wxDirDialogDefaultFolderStr,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -268,11 +268,11 @@ class wxDirFilterListCtrl: public wxChoice
 {
 public:
     wxDirFilterListCtrl();
-    wxDirFilterListCtrl(wxGenericDirCtrl* parent, const wxWindowID id = wxID_ANY,
+    wxDirFilterListCtrl(wxGenericDirCtrl* parent, wxWindowID id = wxID_ANY,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = 0);
-    bool Create(wxGenericDirCtrl* parent, const wxWindowID id = wxID_ANY,
+    bool Create(wxGenericDirCtrl* parent, wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0);

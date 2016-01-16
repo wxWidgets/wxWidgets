@@ -2117,21 +2117,21 @@ protected:
 
     // generate the appropriate grid event and return -1 if it was vetoed, 1 if
     // it was processed (but not vetoed) and 0 if it wasn't processed
-    int SendEvent(const wxEventType evtType,
+    int SendEvent(wxEventType evtType,
                   int row, int col,
                   const wxMouseEvent& e);
-    int SendEvent(const wxEventType evtType,
+    int SendEvent(wxEventType evtType,
                   const wxGridCellCoords& coords,
                   const wxMouseEvent& e)
         { return SendEvent(evtType, coords.GetRow(), coords.GetCol(), e); }
-    int SendEvent(const wxEventType evtType,
+    int SendEvent(wxEventType evtType,
                   int row, int col,
                   const wxString& s = wxString());
-    int SendEvent(const wxEventType evtType,
+    int SendEvent(wxEventType evtType,
                   const wxGridCellCoords& coords,
                   const wxString& s = wxString())
         { return SendEvent(evtType, coords.GetRow(), coords.GetCol(), s); }
-    int SendEvent(const wxEventType evtType, const wxString& s = wxString())
+    int SendEvent(wxEventType evtType, const wxString& s = wxString())
         { return SendEvent(evtType, m_currentCellCoords, s); }
 
     // send wxEVT_GRID_{ROW,COL}_SIZE or wxEVT_GRID_COL_AUTO_SIZE, return true

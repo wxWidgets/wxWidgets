@@ -108,7 +108,7 @@ public:
 
     // Alternative version that works with numeric ID.
     // (uses extension to MS format, <param name="ID" value=id>, see docs)
-    bool Display(const int id);
+    bool Display(int id);
 
     // Displays help window and focuses contents.
     bool DisplayContents();

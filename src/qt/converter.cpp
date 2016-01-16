@@ -142,7 +142,7 @@ wxOrientation wxQtConvertOrientation( Qt::Orientation qtOrientation )
 
 /* Auxiliar function for key events. Returns the wx keycode for a qt one.
  * The event is needed to check it flags (numpad key or not) */
-wxKeyCode wxQtConvertKeyCode( int key, const Qt::KeyboardModifiers modifiers )
+wxKeyCode wxQtConvertKeyCode( int key, Qt::KeyboardModifiers modifiers )
 {
     /* First treat common ranges and then handle specific values
      * The macro takes Qt first and last codes and the first wx code

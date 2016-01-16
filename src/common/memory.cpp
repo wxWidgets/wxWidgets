@@ -490,7 +490,7 @@ char * wxDebugContext::CallerMemPos (const char * buf)
 }
 
 
-char * wxDebugContext::EndMarkerPos (const char * buf, const size_t size)
+char * wxDebugContext::EndMarkerPos (const char * buf, size_t size)
 {
     return CallerMemPos (buf) + PaddedSize (size);
 }
@@ -517,13 +517,13 @@ char * wxDebugContext::StartPos (const char * caller)
   // Note: this function is now obsolete (along with CalcAlignment)
   // because the calculations are done statically, for greater speed.
 */
-size_t wxDebugContext::GetPadding (const size_t size)
+size_t wxDebugContext::GetPadding (size_t size)
 {
     size_t pad = size % CalcAlignment ();
     return (pad) ? sizeof(wxMarkerType) - pad : 0;
 }
 
-size_t wxDebugContext::PaddedSize (const size_t size)
+size_t wxDebugContext::PaddedSize (size_t size)
 {
     // Added by Terry Farnham <TJRT@pacbell.net> to replace
     // slow GetPadding call.
@@ -541,7 +541,7 @@ size_t wxDebugContext::PaddedSize (const size_t size)
   in order to satisfy a caller request. This includes space for the struct
   plus markers and the caller's memory as well.
 */
-size_t wxDebugContext::TotSize (const size_t reqSize)
+size_t wxDebugContext::TotSize (size_t reqSize)
 {
     return (PaddedSize (sizeof (wxMemStruct)) + PaddedSize (reqSize) +
             2 * sizeof(wxMarkerType));

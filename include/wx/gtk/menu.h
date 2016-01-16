@@ -75,7 +75,7 @@ public:
 
     void Attach(wxMenuBarBase *menubar) wxOVERRIDE;
 
-    void SetLayoutDirection(const wxLayoutDirection dir);
+    void SetLayoutDirection(wxLayoutDirection dir);
     wxLayoutDirection GetLayoutDirection() const;
 
     // Returns the title, with mnemonics translated to wx format

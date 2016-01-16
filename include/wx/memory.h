@@ -215,7 +215,7 @@ protected:
     // Returns the amount of padding needed after something of the given
     // size. This is so that when we cast pointers backwards and forwards
     // the pointer value will be valid for a wxMarkerType.
-    static size_t GetPadding (const size_t size) ;
+    static size_t GetPadding (size_t size) ;
 
     // Traverse the list.
     static void TraverseList (PmSFV, wxMemStruct *from = NULL);
@@ -244,17 +244,17 @@ public:
 
     // Calculated from the request size and any padding needed
     // before the final marker.
-    static size_t PaddedSize (const size_t reqSize);
+    static size_t PaddedSize (size_t reqSize);
 
     // Calc the total amount of space we need from the system
     // to satisfy a caller request. This includes all padding.
-    static size_t TotSize (const size_t reqSize);
+    static size_t TotSize (size_t reqSize);
 
     // Return valid pointers to offsets within the allocated memory.
     static char * StructPos (const char * buf);
     static char * MidMarkerPos (const char * buf);
     static char * CallerMemPos (const char * buf);
-    static char * EndMarkerPos (const char * buf, const size_t size);
+    static char * EndMarkerPos (const char * buf, size_t size);
 
     // Given a pointer to the start of the caller requested area
     // return a pointer to the start of the entire alloc\'d buffer.

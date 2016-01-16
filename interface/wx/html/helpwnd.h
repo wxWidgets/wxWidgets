@@ -110,7 +110,7 @@ public:
         This form takes numeric ID as the parameter (uses an extension to MS format,
         param name="ID" value=id).
     */
-    bool Display(const int id);
+    bool Display(int id);
 
     /**
         Displays contents panel.

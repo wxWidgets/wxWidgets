@@ -371,7 +371,7 @@ void wxGenericDirCtrl::ExpandRoot()
 }
 
 bool wxGenericDirCtrl::Create(wxWindow *parent,
-                              const wxWindowID treeid,
+                              wxWindowID treeid,
                               const wxString& dir,
                               const wxPoint& pos,
                               const wxSize& size,
@@ -1272,7 +1272,7 @@ wxBEGIN_EVENT_TABLE(wxDirFilterListCtrl, wxChoice)
 wxEND_EVENT_TABLE()
 
 bool wxDirFilterListCtrl::Create(wxGenericDirCtrl* parent,
-                                 const wxWindowID treeid,
+                                 wxWindowID treeid,
                                  const wxPoint& pos,
                                  const wxSize& size,
                                  long style)

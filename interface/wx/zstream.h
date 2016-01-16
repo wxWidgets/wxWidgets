@@ -85,7 +85,7 @@ public:
 
         Returns @true if the dictionary was successfully set.
     */
-    bool SetDictionary(const char *data, const size_t datalen);
+    bool SetDictionary(const char *data, size_t datalen);
     bool SetDictionary(const wxMemoryBuffer &buf);
     //@}
 };
@@ -144,7 +144,7 @@ public:
 
         Returns @true if the dictionary was successfully set.
     */
-    bool SetDictionary(const char *data, const size_t datalen);
+    bool SetDictionary(const char *data, size_t datalen);
     bool SetDictionary(const wxMemoryBuffer &buf);
     //@}
 };

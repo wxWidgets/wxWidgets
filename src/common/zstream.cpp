@@ -266,7 +266,7 @@ size_t wxZlibInputStream::OnSysRead(void *buffer, size_t size)
   return major > 1 || (major == 1 && minor >= 2);
 }
 
-bool wxZlibInputStream::SetDictionary(const char *data, const size_t datalen)
+bool wxZlibInputStream::SetDictionary(const char *data, size_t datalen)
 {
     return (inflateSetDictionary(m_inflate, (Bytef*)data, datalen) == Z_OK);
 }
@@ -437,7 +437,7 @@ size_t wxZlibOutputStream::OnSysWrite(const void *buffer, size_t size)
   return wxZlibInputStream::CanHandleGZip();
 }
 
-bool wxZlibOutputStream::SetDictionary(const char *data, const size_t datalen)
+bool wxZlibOutputStream::SetDictionary(const char *data, size_t datalen)
 {
     return (deflateSetDictionary(m_deflate, (Bytef*)data, datalen) == Z_OK);
 }
