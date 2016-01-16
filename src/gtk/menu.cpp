@@ -810,7 +810,7 @@ wxMenu::~wxMenu()
     g_object_unref(m_accel);
 }
 
-void wxMenu::SetLayoutDirection(const wxLayoutDirection dir)
+void wxMenu::SetLayoutDirection(wxLayoutDirection dir)
 {
     if ( m_owner )
         wxWindow::GTKSetLayout(m_owner, dir);
