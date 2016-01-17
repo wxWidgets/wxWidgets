@@ -1204,7 +1204,13 @@ wxDC *wxBitmap::GetSelectedInto() const
 void wxBitmap::UseAlpha(bool use)
 {
     if ( GetBitmapData() )
+    {
+        // Only 32bpp bitmaps can contain alpha channel.
+        if ( use && GetBitmapData()->m_depth < 32 )
+            use = false;
+
         GetBitmapData()->m_hasAlpha = use;
+    }
 }
 
 bool wxBitmap::HasAlpha() const
