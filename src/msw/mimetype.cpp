@@ -90,7 +90,7 @@ class WXDLLIMPEXP_FWD_CORE wxIcon;
 // permissions. So the right thing to do is to use HKCR when reading, to
 // respect both per-user and machine-global associations, but only write under
 // HKCU.
-static const wxChar *CLASSES_ROOT_KEY = wxS("Software\\Classes\\");
+static const wxStringCharType *CLASSES_ROOT_KEY = wxS("Software\\Classes\\");
 
 // although I don't know of any official documentation which mentions this
 // location, uses it, so it isn't likely to change
