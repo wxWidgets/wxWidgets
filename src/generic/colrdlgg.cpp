@@ -501,43 +501,31 @@ void wxGenericColourDialog::PaintHighlight(wxDC& dc, bool draw)
   if ( m_colourSelection < 0 )
       return;
 
-  // Number of pixels bigger than the standard rectangle size
-  // for drawing a highlight
-  int deltaX = 2;
-  int deltaY = 2;
-
-  // Frame for highlighted element is black.
-  // Frame is removed by drawing in dialog background colour.
-  wxPen pen(draw ? *wxBLACK_PEN : wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE)));
-
+  wxRect r(m_smallRectangleSize);
   if (m_whichKind == 1)
   {
     // Standard colours
-    int y = (int)(m_colourSelection / 8);
-    int x = (int)(m_colourSelection - (y*8));
-
-    x = (x*(m_smallRectangleSize.x + m_gridSpacing) + m_standardColoursRect.x) - deltaX;
-    y = (y*(m_smallRectangleSize.y + m_gridSpacing) + m_standardColoursRect.y) - deltaY;
-
-    dc.SetPen(pen);
-
-    dc.SetBrush(*wxTRANSPARENT_BRUSH);
-    dc.DrawRectangle( x, y, (m_smallRectangleSize.x + (2*deltaX)), (m_smallRectangleSize.y + (2*deltaY)));
+    r.Offset(m_standardColoursRect.GetLeftTop());
   }
   else
   {
     // User-defined colours
-    int y = (int)(m_colourSelection / 8);
-    int x = (int)(m_colourSelection - (y*8));
-
-    x = (x*(m_smallRectangleSize.x + m_gridSpacing) + m_customColoursRect.x) - deltaX;
-    y = (y*(m_smallRectangleSize.y + m_gridSpacing) + m_customColoursRect.y) - deltaY;
-
-    dc.SetPen(pen);
-
-    dc.SetBrush(*wxTRANSPARENT_BRUSH);
-    dc.DrawRectangle( x, y, (m_smallRectangleSize.x + (2*deltaX)), (m_smallRectangleSize.y + (2*deltaY)));
+    r.Offset(m_customColoursRect.GetLeftTop());
   }
+
+  const int x = (m_colourSelection % 8) * (m_smallRectangleSize.x + m_gridSpacing);
+  const int y = (m_colourSelection / 8) * (m_smallRectangleSize.y + m_gridSpacing);
+  r.Offset(x, y);
+  // Highlight is drawn with rectangle bigger than the item rectangle.
+  r.Inflate(2, 2);
+
+  // Highlighting frame is drawn with black colour.
+  // Highlighting frame is removed by drawing using dialog background colour.
+  wxPen pen(draw ? *wxBLACK_PEN : wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE)));
+
+  dc.SetPen(pen);
+  dc.SetBrush(*wxTRANSPARENT_BRUSH);
+  dc.DrawRectangle(r);
 }
 
 void wxGenericColourDialog::PaintCustomColour(wxDC& dc)
