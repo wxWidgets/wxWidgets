@@ -1067,7 +1067,8 @@ void wxGridTableBase::SetRowAttr(wxGridCellAttr *attr, int row)
 {
     if ( m_attrProvider )
     {
-        attr->SetKind(wxGridCellAttr::Row);
+        if ( attr )
+            attr->SetKind(wxGridCellAttr::Row);
         m_attrProvider->SetRowAttr(attr, row);
     }
     else
@@ -1082,7 +1083,8 @@ void wxGridTableBase::SetColAttr(wxGridCellAttr *attr, int col)
 {
     if ( m_attrProvider )
     {
-        attr->SetKind(wxGridCellAttr::Col);
+        if ( attr )
+            attr->SetKind(wxGridCellAttr::Col);
         m_attrProvider->SetColAttr(attr, col);
     }
     else
