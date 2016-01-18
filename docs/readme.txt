@@ -146,4 +146,4 @@ If you are looking for support, you can get it from
 
 Have fun!
 
-The wxWidgets Team, October 2015
+The wxWidgets Team, June 2016
