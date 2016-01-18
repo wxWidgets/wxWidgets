@@ -506,6 +506,10 @@ void wxGenericColourDialog::PaintHighlight(wxDC& dc, bool draw)
   int deltaX = 2;
   int deltaY = 2;
 
+  // Frame for highlighted element is black.
+  // Frame is removed by drawing in dialog background colour.
+  wxPen pen(draw ? *wxBLACK_PEN : wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE)));
+
   if (m_whichKind == 1)
   {
     // Standard colours
@@ -515,10 +519,7 @@ void wxGenericColourDialog::PaintHighlight(wxDC& dc, bool draw)
     x = (x*(m_smallRectangleSize.x + m_gridSpacing) + m_standardColoursRect.x) - deltaX;
     y = (y*(m_smallRectangleSize.y + m_gridSpacing) + m_standardColoursRect.y) - deltaY;
 
-    if (draw)
-      dc.SetPen(*wxBLACK_PEN);
-    else
-      dc.SetPen(*wxLIGHT_GREY_PEN);
+    dc.SetPen(pen);
 
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     dc.DrawRectangle( x, y, (m_smallRectangleSize.x + (2*deltaX)), (m_smallRectangleSize.y + (2*deltaY)));
@@ -532,10 +533,7 @@ void wxGenericColourDialog::PaintHighlight(wxDC& dc, bool draw)
     x = (x*(m_smallRectangleSize.x + m_gridSpacing) + m_customColoursRect.x) - deltaX;
     y = (y*(m_smallRectangleSize.y + m_gridSpacing) + m_customColoursRect.y) - deltaY;
 
-    if (draw)
-      dc.SetPen(*wxBLACK_PEN);
-    else
-      dc.SetPen(*wxLIGHT_GREY_PEN);
+    dc.SetPen(pen);
 
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     dc.DrawRectangle( x, y, (m_smallRectangleSize.x + (2*deltaX)), (m_smallRectangleSize.y + (2*deltaY)));
