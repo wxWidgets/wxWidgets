@@ -2926,7 +2926,10 @@ wxMacCoreGraphicsRenderer::CreateFont(double sizeInPixels,
                                         : wxFONTWEIGHT_NORMAL,
                 (flags & wxFONTFLAG_UNDERLINED) != 0,
                 facename);
-
+    
+    if ((flags & wxFONTFLAG_STRIKETHROUGH) != 0) {
+        font.MakeStrikethrough();
+    }
     wxGraphicsFont f;
     f.SetRefData(new wxMacCoreGraphicsFontData(this, font, col));
     return f;
