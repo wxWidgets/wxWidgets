@@ -25,6 +25,14 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxStaticBitmapNameStr[];
 class WXDLLIMPEXP_CORE wxStaticBitmapBase : public wxControl
 {
 public:
+    enum ScaleMode
+    {
+        Scale_None,
+        Scale_Fill,
+        Scale_AspectFit,
+        Scale_AspectFill
+    };
+
     wxStaticBitmapBase() { }
     virtual ~wxStaticBitmapBase();
 
@@ -38,6 +46,8 @@ public:
         // should)
         return wxIcon();
     }
+    virtual void SetScaleMode(ScaleMode WXUNUSED(scaleMode)) { }
+    virtual ScaleMode GetScaleMode() const { return Scale_None; }
 
     // overridden base class virtuals
     virtual bool AcceptsFocus() const wxOVERRIDE { return false; }

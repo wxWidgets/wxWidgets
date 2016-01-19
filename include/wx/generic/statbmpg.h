@@ -56,6 +56,13 @@ public:
     wxIcon GetIcon() const wxOVERRIDE  { return (const wxIcon &)m_bitmap; }
 #endif
 
+    virtual void SetScaleMode(ScaleMode scaleMode) wxOVERRIDE
+    {
+        m_scaleMode = scaleMode;
+        Refresh();
+    }
+
+    virtual ScaleMode GetScaleMode() const wxOVERRIDE { return m_scaleMode; }
 
 private:
     wxSize GetBitmapSize()
@@ -67,6 +74,7 @@ private:
     void OnPaint(wxPaintEvent& event);
 
     wxBitmap m_bitmap;
+    ScaleMode m_scaleMode;
 
     wxDECLARE_DYNAMIC_CLASS(wxGenericStaticBitmap);
 };
