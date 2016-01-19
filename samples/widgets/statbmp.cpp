@@ -67,6 +67,7 @@ private:
     wxStaticBitmapBase *m_statbmp;
     wxFilePickerCtrl *m_filepicker;
     wxRadioBox *m_radio;
+    wxRadioBox *m_scaleRadio;
     wxStaticBoxSizer *m_sbsizer;
 
     DECLARE_WIDGETS_PAGE(StatBmpWidgetsPage)
@@ -82,6 +83,10 @@ void StatBmpWidgetsPage::CreateContent()
     m_radio = new wxRadioBox(this, wxID_ANY, "implementation",
                              wxDefaultPosition, wxDefaultSize,
                              WXSIZEOF(choices), choices);
+    static const wxString scaleChoices[] = { "None", "Fill", "Aspect Fit", "Aspect Fill" };
+    m_scaleRadio = new wxRadioBox(this, wxID_ANY, "Scale Mode",
+                                  wxDefaultPosition, wxDefaultSize,
+                                  WXSIZEOF(scaleChoices), scaleChoices);
 
     wxString testImage;
 #if wxUSE_LIBPNG
@@ -95,6 +100,7 @@ void StatBmpWidgetsPage::CreateContent()
 
     wxSizer *leftsizer = new wxBoxSizer(wxVERTICAL);
     leftsizer->Add(m_radio, wxSizerFlags().Expand().Border());
+    leftsizer->Add(m_scaleRadio, wxSizerFlags().Expand().Border());
     leftsizer->Add(m_filepicker, wxSizerFlags().Expand().Border());
     wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
     sizer->Add(leftsizer, wxSizerFlags().Border());
@@ -130,6 +136,22 @@ void StatBmpWidgetsPage::RecreateWidget()
         m_statbmp = new wxStaticBitmap(this, wxID_ANY, wxBitmap(image));
     else
         m_statbmp = new wxGenericStaticBitmap(this, wxID_ANY, wxBitmap(image));
+
+    wxStaticBitmapBase::ScaleMode scaleMode = (wxStaticBitmapBase::ScaleMode) m_scaleRadio->GetSelection();
+    m_statbmp->SetScaleMode(scaleMode);
+    if ( m_statbmp->GetScaleMode() != scaleMode )
+        wxLogError("Scale mode not supported by current implementation");
+    wxSizerItem* sbsizerItem = GetSizer()->GetItem(m_sbsizer);
+    if ( scaleMode == wxStaticBitmapBase::Scale_None )
+    {
+        sbsizerItem->SetProportion(0);
+        sbsizerItem->SetFlag(wxCENTER);
+    }
+    else
+    {
+        sbsizerItem->SetProportion(1);
+        sbsizerItem->SetFlag(wxEXPAND);
+    }
     m_sbsizer->Add(m_statbmp, wxSizerFlags(1).Expand());
     GetSizer()->Layout();
     m_statbmp->Connect(wxEVT_LEFT_DOWN,
