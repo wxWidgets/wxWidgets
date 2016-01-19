@@ -692,6 +692,23 @@ void MyTextCtrl::LogKeyEvent(const wxChar *name, wxKeyEvent& event) const
             case WXK_NUMPAD_SEPARATOR: key = wxT("NUMPAD_SEPARATOR"); break;
             case WXK_NUMPAD_SUBTRACT: key = wxT("NUMPAD_SUBTRACT"); break;
             case WXK_NUMPAD_DECIMAL: key = wxT("NUMPAD_DECIMAL"); break;
+            case WXK_BROWSER_BACK: key = wxT("BROWSER_BACK"); break;
+            case WXK_BROWSER_FORWARD: key = wxT("BROWSER_FORWARD"); break;
+            case WXK_BROWSER_REFRESH: key = wxT("BROWSER_REFRESH"); break;
+            case WXK_BROWSER_STOP: key = wxT("BROWSER_STOP"); break;
+            case WXK_BROWSER_SEARCH: key = wxT("BROWSER_SEARCH"); break;
+            case WXK_BROWSER_FAVORITES: key = wxT("BROWSER_FAVORITES"); break;
+            case WXK_BROWSER_HOME: key = wxT("BROWSER_HOME"); break;
+            case WXK_VOLUME_MUTE: key = wxT("VOLUME_MUTE"); break;
+            case WXK_VOLUME_DOWN: key = wxT("VOLUME_DOWN"); break;
+            case WXK_VOLUME_UP: key = wxT("VOLUME_UP"); break;
+            case WXK_MEDIA_NEXT_TRACK: key = wxT("MEDIA_NEXT_TRACK"); break;
+            case WXK_MEDIA_PREV_TRACK: key = wxT("MEDIA_PREV_TRACK"); break;
+            case WXK_MEDIA_STOP: key = wxT("MEDIA_STOP"); break;
+            case WXK_MEDIA_PLAY_PAUSE: key = wxT("MEDIA_PLAY_PAUSE"); break;
+            case WXK_LAUNCH_MAIL: key = wxT("LAUNCH_MAIL"); break;
+            case WXK_LAUNCH_APP1: key = wxT("LAUNCH_APP1"); break;
+            case WXK_LAUNCH_APP2: key = wxT("LAUNCH_APP2"); break;
 
             default:
             {
