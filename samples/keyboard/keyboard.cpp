@@ -456,6 +456,23 @@ const char* GetVirtualKeyCodeName(int keycode)
 #ifdef __WXOSX__
         WXK_(RAW_CONTROL)
 #endif
+        WXK_(BROWSER_BACK)
+        WXK_(BROWSER_FORWARD)
+        WXK_(BROWSER_REFRESH)
+        WXK_(BROWSER_STOP)
+        WXK_(BROWSER_SEARCH)
+        WXK_(BROWSER_FAVORITES)
+        WXK_(BROWSER_HOME)
+        WXK_(VOLUME_MUTE)
+        WXK_(VOLUME_DOWN)
+        WXK_(VOLUME_UP)
+        WXK_(MEDIA_NEXT_TRACK)
+        WXK_(MEDIA_PREV_TRACK)
+        WXK_(MEDIA_STOP)
+        WXK_(MEDIA_PLAY_PAUSE)
+        WXK_(LAUNCH_MAIL)
+        WXK_(LAUNCH_APP1)
+        WXK_(LAUNCH_APP2)
 #undef WXK_
 
     default:

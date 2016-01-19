@@ -1218,6 +1218,23 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             case WXK_NUMPAD_BEGIN:
             case WXK_NUMPAD_INSERT:
             case WXK_WINDOWS_LEFT:
+            case WXK_BROWSER_BACK:
+            case WXK_BROWSER_FORWARD:
+            case WXK_BROWSER_REFRESH:
+            case WXK_BROWSER_STOP:
+            case WXK_BROWSER_SEARCH:
+            case WXK_BROWSER_FAVORITES:
+            case WXK_BROWSER_HOME:
+            case WXK_VOLUME_MUTE:
+            case WXK_VOLUME_DOWN:
+            case WXK_VOLUME_UP:
+            case WXK_MEDIA_NEXT_TRACK:
+            case WXK_MEDIA_PREV_TRACK:
+            case WXK_MEDIA_STOP:
+            case WXK_MEDIA_PLAY_PAUSE:
+            case WXK_LAUNCH_MAIL:
+            case WXK_LAUNCH_APP1:
+            case WXK_LAUNCH_APP2:
             {
                 return;
             }
