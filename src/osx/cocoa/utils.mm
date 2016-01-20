@@ -555,7 +555,8 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     int width = subrect != NULL ? subrect->width : sz.x;
     int height = subrect !=  NULL ? subrect->height : sz.y ;
 
-    wxBitmap bitmap(width, height);
+    wxBitmap bitmap;
+    bitmap.CreateScaled(width, height, -1, m_contentScaleFactor);
 
     NSView* view = (NSView*) m_window->GetHandle();
     if ( [view isHiddenOrHasHiddenAncestor] == NO )
@@ -569,7 +570,10 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
         {
             CGImageRef cgImageRef = (CGImageRef)[rep CGImage];
 
-            CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
+            CGRect r = CGRectMake( 0 , 0 ,
+                                  CGImageGetWidth(cgImageRef) / m_contentScaleFactor ,
+                                  CGImageGetHeight(cgImageRef) / m_contentScaleFactor );
+            
             // since our context is upside down we dont use CGContextDrawImage
             wxMacDrawCGImage( (CGContextRef) bitmap.GetHBITMAP() , &r, cgImageRef ) ;
         }
@@ -579,7 +583,6 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
         }
         [rep release];
     }
-
     return bitmap;
 }
 
