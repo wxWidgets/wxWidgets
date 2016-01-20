@@ -28,7 +28,9 @@
 #ifndef WX_PRECOMP
     #include "wx/module.h"
 #endif
-
+#ifdef __WXOSX_COCOA__
+    #include "wx/osx/private.h"
+#endif
 // ============================================================================
 // implementation
 // ============================================================================
@@ -51,8 +53,18 @@ public:
     static wxBitmap* GetBuffer(int w, int h)
     {
         if ( ms_usingSharedBuffer )
+        {
+            #ifdef __WXOSX_COCOA__
+            if (wxOSXGetMainScreenContentScaleFactor() > 1.0)
+            {
+                wxBitmap* bitmap = new wxBitmap;
+                bitmap->CreateScaled(w, h, -1, 2.0);
+                return bitmap;
+            }
+            #endif
             return new wxBitmap(w, h);
-
+        }
+        
         if ( !ms_buffer ||
                 w > ms_buffer->GetWidth() ||
                     h > ms_buffer->GetHeight() )
@@ -66,6 +78,14 @@ public:
             if ( !h )
                 h = 1;
 
+            #ifdef __WXOSX_COCOA__
+            if (wxOSXGetMainScreenContentScaleFactor() > 1.0)
+            {
+                ms_buffer = new wxBitmap;
+                ms_buffer->CreateScaled(w, h, -1, 2.0);
+            }
+            else
+            #endif
             ms_buffer = new wxBitmap(w, h);
         }
 
