@@ -932,7 +932,14 @@ wxImage wxBitmap::ConvertToImage() const
     }
 
     // and then DIB to our wxImage
-    wxImage image = dib.ConvertToImage();
+    // By default, we autodetect the presence of alpha and consider unnecessary
+    // to create the alpha channel in wxImage if we don't have any effective
+    // alpha in the bitmap because its depth, on its own, is not an indicator
+    // that it uses alpha as it could be just the default screen depth. However
+    // if the user had explicitly called UseAlpha(), then we consider
+    // that the resulting image should really have the alpha channel too.
+    wxImage image = dib.ConvertToImage(HasAlpha() ?
+               wxDIB::Convert_AlphaAlwaysIf32bpp : wxDIB::Convert_AlphaAuto);
     if ( !image.IsOk() )
     {
         return wxNullImage;
