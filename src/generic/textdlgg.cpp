@@ -152,6 +152,8 @@ void wxTextEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event) )
 
 void wxTextEntryDialog::SetMaxLength(unsigned long len)
 {
+    wxCHECK_RET( m_textctrl, wxS("Must be created first") );
+
     m_textctrl->SetMaxLength(len);
 }
 
@@ -159,7 +161,10 @@ void wxTextEntryDialog::SetValue(const wxString& val)
 {
     m_value = val;
 
-    m_textctrl->SetValue(val);
+    if ( m_textctrl )
+    {
+        m_textctrl->SetValue(val);
+    }
 }
 
 #if wxUSE_VALIDATORS
@@ -178,6 +183,8 @@ void wxTextEntryDialog::SetTextValidator( wxTextValidatorStyle style )
 
 void wxTextEntryDialog::SetTextValidator( const wxTextValidator& validator )
 {
+    wxCHECK_RET( m_textctrl, wxS("Must be created first") );
+
     m_textctrl->SetValidator( validator );
 }
 
