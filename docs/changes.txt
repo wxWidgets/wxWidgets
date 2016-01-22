@@ -92,6 +92,7 @@ All (GUI):
 - Add wxAddRemoveCtrl.
 - Add wxAppProgressIndicator for MSW (Chaobin Zhang) and OS X (Tobias Taschner).
 - Add wxTextEntry::ForceUpper().
+- Add wxTextEntryDialog::ForceUpper().
 - Add wxEVT_MAGNIFY mouse event (Joost Nieuwenhuijse).
 - Add wxProcess::Activate().
 - Fix setting colours of labels in wxSlider.

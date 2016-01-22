@@ -174,6 +174,20 @@ public:
     void SetValue(const wxString& value);
 
     /**
+        Convert all text entered into the text control used by the dialog to upper case.
+
+        Call this method to ensure that all text entered into the text control
+        used by the dialog is converted on the fly to upper case. If the text
+        control is not empty, its existing contents is also converted to upper
+        case.
+
+        @see wxTextEntry::ForceUpper()
+
+        @since 3.1.0
+     */
+    void ForceUpper();
+
+    /**
         Shows the dialog, returning wxID_OK if the user pressed OK, and wxID_CANCEL
         otherwise.
 

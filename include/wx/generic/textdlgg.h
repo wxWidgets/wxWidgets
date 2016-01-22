@@ -63,6 +63,8 @@ public:
 
     void SetMaxLength(unsigned long len);
 
+    void ForceUpper();
+
 #if wxUSE_VALIDATORS
     void SetTextValidator( const wxTextValidator& validator );
 #if WXWIN_COMPATIBILITY_2_8

@@ -130,14 +130,20 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
 
 bool wxTextEntryDialog::TransferDataToWindow()
 {
-    m_textctrl->SetValue(m_value);
+    if ( m_textctrl )
+    {
+        m_textctrl->SetValue(m_value);
+    }
 
     return wxDialog::TransferDataToWindow();
 }
 
 bool wxTextEntryDialog::TransferDataFromWindow()
 {
-    m_value = m_textctrl->GetValue();
+    if ( m_textctrl )
+    {
+        m_value = m_textctrl->GetValue();
+    }
 
     return wxDialog::TransferDataFromWindow();
 }
@@ -152,9 +158,10 @@ void wxTextEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event) )
 
 void wxTextEntryDialog::SetMaxLength(unsigned long len)
 {
-    wxCHECK_RET( m_textctrl, wxS("Must be created first") );
-
-    m_textctrl->SetMaxLength(len);
+    if ( m_textctrl )
+    {
+        m_textctrl->SetMaxLength(len);
+    }
 }
 
 void wxTextEntryDialog::SetValue(const wxString& val)
@@ -164,6 +171,14 @@ void wxTextEntryDialog::SetValue(const wxString& val)
     if ( m_textctrl )
     {
         m_textctrl->SetValue(val);
+    }
+}
+
+void wxTextEntryDialog::ForceUpper()
+{
+    if ( m_textctrl )
+    {
+        m_textctrl->ForceUpper();
     }
 }
 
@@ -183,9 +198,10 @@ void wxTextEntryDialog::SetTextValidator( wxTextValidatorStyle style )
 
 void wxTextEntryDialog::SetTextValidator( const wxTextValidator& validator )
 {
-    wxCHECK_RET( m_textctrl, wxS("Must be created first") );
-
-    m_textctrl->SetValidator( validator );
+    if ( m_textctrl )
+    {
+        m_textctrl->SetValidator( validator );
+    }
 }
 
 #endif // wxUSE_VALIDATORS
