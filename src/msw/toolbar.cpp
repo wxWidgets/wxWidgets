@@ -633,14 +633,14 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
     wxToolBarToolsList::compatibility_iterator node;
     for ( node = m_tools.Find(tool); node; node = node->GetNext() )
     {
-        wxToolBarTool * const tool = static_cast<wxToolBarTool*>(node->GetData());
+        wxToolBarTool * const ctool = static_cast<wxToolBarTool*>(node->GetData());
 
-        if ( tool->IsToBeDeleted() )
+        if ( ctool->IsToBeDeleted() )
             continue;
 
-        if ( tool->IsControl() )
+        if ( ctool->IsControl() )
         {
-            tool->MoveBy(-delta);
+            ctool->MoveBy(-delta);
         }
     }
 

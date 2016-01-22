@@ -543,8 +543,8 @@ wxTextOutputStream& wxTextOutputStream::PutChar(wxChar c)
     {
         for ( size_t n = 0; n < len; n++ )
         {
-            const char c = buffer[n];
-            if ( c == '\n' )
+            const char c2 = buffer[n];
+            if ( c2 == '\n' )
             {
                 switch ( m_mode )
                 {
@@ -566,7 +566,7 @@ wxTextOutputStream& wxTextOutputStream::PutChar(wxChar c)
                 }
             }
 
-            m_output.Write(&c, 1);
+            m_output.Write(&c2, 1);
         }
     }
 #else // SIZEOF_WCHAR_T == 4
