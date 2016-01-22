@@ -215,9 +215,7 @@ void wxFrame::DetachMenuBar()
 
 void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
 {
-#if wxOSX_USE_CARBON
-    wxFrame* tlf = wxDynamicCast( wxNonOwnedWindow::GetFromWXWindow( (WXWindow) FrontNonFloatingWindow() ) , wxFrame );
-#elif wxOSX_USE_COCOA
+#if wxOSX_USE_COCOA
     wxFrame* tlf = wxDynamicCast( wxNonOwnedWindow::GetFromWXWindow( wxOSXGetMainWindow() ) , wxFrame );
 #else
     wxFrame* tlf = wxDynamicCast( wxTheApp->GetTopWindow(), wxFrame );

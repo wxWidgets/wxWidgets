@@ -139,14 +139,6 @@ public:
 
     // Mac-specific, risks to change, don't use in portable code
 
-#if wxOSX_USE_CARBON && wxOSX_USE_ATSU_TEXT
-    wxUint16 MacGetThemeFontID() const ;
-
-    // 'old' Quickdraw accessors
-    short MacGetFontNum() const;
-    wxByte  MacGetFontStyle() const;
-#endif
-
 #if wxOSX_USE_COCOA_OR_CARBON
     CGFontRef OSXGetCGFont() const;
 #endif

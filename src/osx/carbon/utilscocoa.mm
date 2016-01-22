@@ -29,15 +29,6 @@
 
 #ifdef __WXMAC__
 
-#if wxOSX_USE_CARBON
-bool wxMacInitCocoa()
-{
-    bool cocoaLoaded = NSApplicationLoad();
-    wxASSERT_MSG(cocoaLoaded,wxT("Couldn't load Cocoa in Carbon Environment")) ;
-    return cocoaLoaded;
-}
-#endif
-
 wxMacAutoreleasePool::wxMacAutoreleasePool()
 {
     m_pool = [[NSAutoreleasePool alloc] init];
@@ -395,15 +386,6 @@ double wxOSXGetMainScreenContentScaleFactor()
     }
     
     return scale;
-}
-
-#endif
-
-#if wxOSX_USE_CARBON
-
-double wxOSXGetMainScreenContentScaleFactor()
-{
-    return 1.0;
 }
 
 #endif

@@ -770,7 +770,7 @@ wxSize wxRendererGeneric::GetCollapseButtonSize(wxWindow *WXUNUSED(win), wxDC& W
 }
 
 void
-wxRendererGeneric::DrawItemSelectionRect(wxWindow * win,
+wxRendererGeneric::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
                                          wxDC& dc,
                                          const wxRect& rect,
                                          int flags)
@@ -793,11 +793,7 @@ wxRendererGeneric::DrawItemSelectionRect(wxWindow * win,
     }
 
     dc.SetBrush(brush);
-    bool drawFocusRect = (flags & wxCONTROL_CURRENT) && (flags & wxCONTROL_FOCUSED)
-#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
-                && IsControlActive( (ControlRef)win->GetHandle() )
-#endif
-        ;
+    bool drawFocusRect = (flags & wxCONTROL_CURRENT) && (flags & wxCONTROL_FOCUSED);
 
     if ( drawFocusRect && !(flags & wxCONTROL_CELL) )
         dc.SetPen( *wxBLACK_PEN );
@@ -813,9 +809,6 @@ wxRendererGeneric::DrawItemSelectionRect(wxWindow * win,
 
         DrawSelectedCellFocusRect(dc, focusRect);
     }
-
-    // it's unused everywhere except in wxOSX/Carbon
-    wxUnusedVar(win);
 }
 
 void

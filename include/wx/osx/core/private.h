@@ -128,11 +128,7 @@ class wxSearchCtrl;
 
 WXDLLIMPEXP_CORE wxWindowMac * wxFindWindowFromWXWidget(WXWidget inControl );
 
-#if wxOSX_USE_CARBON
-typedef wxMacControl wxWidgetImplType;
-#else
 typedef wxWidgetImpl wxWidgetImplType;
-#endif
 
 #if wxUSE_MENUS
 class wxMenuItemImpl : public wxObject

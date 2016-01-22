@@ -171,10 +171,6 @@ public:
     wxUint32        m_atsuFontID;
     // the qd styles that are not intrinsic to the font above
     wxInt16         m_atsuAdditionalQDStyles;
-#if wxOSX_USE_CARBON
-    wxInt16         m_qdFontFamily;
-    wxInt16         m_qdFontStyle;
-#endif
 #endif
 
     int           m_pointSize;

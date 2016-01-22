@@ -182,9 +182,6 @@ public:
         @return
             @true if this item should be enabled, @false otherwise.
 
-        @note Currently disabling items is not supported by the wxOSX/Carbon
-              implementation.
-
         @since 2.9.2
     */
     virtual bool IsEnabled(const wxDataViewItem &item,
@@ -1273,8 +1270,6 @@ public:
         Programmatically starts editing given cell of @a item.
 
         Doesn't do anything if the item or this column is not editable.
-
-        @note Currently not implemented in wxOSX/Carbon.
 
         @since 2.9.4
     */

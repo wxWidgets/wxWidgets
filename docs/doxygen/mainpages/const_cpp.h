@@ -37,11 +37,10 @@ using @ifdef_ and not @if_.
 Notice that for compatibility reasons, this symbol is defined for console
 applications under Windows as well, but it should only be used in the GUI code
 while <tt>__WINDOWS__</tt> should be used for the platform tests.}
-@itemdef{__WXOSX__, OS X GUI using any Apple widget framework (Carbon, AppKit or UIKit)}
+@itemdef{__WXOSX__, OS X GUI using any Apple widget framework (AppKit or UIKit)}
 @itemdef{__WXOSX_IPHONE__, OS X iPhone (UIKit)}
-@itemdef{__WXOSX_CARBON__, Mac OS X using Carbon}
 @itemdef{__WXOSX_COCOA__, Mac OS X using Cocoa (AppKit)}
-@itemdef{__WXOSX_MAC__, Mac OS X (Carbon or Cocoa)}
+@itemdef{__WXOSX_MAC__, Mac OS X (Cocoa)}
 @itemdef{__WXPM__, OS/2 native Presentation Manager (not used any longer).}
 @itemdef{__WXSTUBS__, Stubbed version ('template' wxWin implementation)}
 @itemdef{__WXXT__, Xt; mutually exclusive with WX_MOTIF, not implemented in wxWidgets 2.x}
@@ -52,17 +51,13 @@ while <tt>__WINDOWS__</tt> should be used for the platform tests.}
 @itemdef{__X__, any X11-based GUI toolkit except GTK+}
 @endDefList
 
-There are two wxWidgets ports to Mac OS X. One of them, wxOSX is the successor of the
-venerable wxMac, it currently exists in three versions: Carbon and Cocoa for the
-desktop and a very early iPhone port. And there is the Cocoa port named wxCocoa
-which has not been updated very actively since beginning 2008. To summarize:
+wxOSX is the successor of the venerable wxMac, it currently exists in two
+versions: Cocoa for the desktop and a very early iPhone port. To summarize:
 
 @li If you want to test for wxOSX on the desktop, use
     <tt>__WXOSX_MAC__</tt>.
 @li If you want to test for wxOSX on the iPhone, use
     <tt>__WXOSX_IPHONE__</tt>.
-@li If you want to test for a particular GUI Mac port under OS X, use
-    <tt>__WXOSX_CARBON__</tt> or <tt>__WXOSX_COCOA__</tt>.
 @li If you want to test for any port under Mac OS X, including, for
     example, wxGTK and also wxBase, use <tt>__DARWIN__</tt> (see below).
 

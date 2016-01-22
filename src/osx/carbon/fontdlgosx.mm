@@ -148,13 +148,6 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     // setting up the ok/cancel buttons
     NSFontPanel* fontPanel = [NSFontPanel sharedFontPanel] ;
 
-    // adjust modality for carbon environment
-#if wxOSX_USE_CARBON
-    WindowRef carbonWindowRef = (WindowRef)[fontPanel windowRef] ;
-    SetWindowModality(carbonWindowRef, kWindowModalityAppModal , 0) ;
-    SetWindowGroup(carbonWindowRef , GetWindowGroupOfClass(kMovableModalWindowClass));
-#endif
-
     [fontPanel setFloatingPanel:NO] ;
     [[fontPanel standardWindowButton:NSWindowCloseButton] setEnabled:NO] ;
 
@@ -193,14 +186,9 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     
     // if we don't reenable it, FPShowHideFontPanel does not work
     [[fontPanel standardWindowButton:NSWindowCloseButton] setEnabled:YES] ;
-#if wxOSX_USE_CARBON
-    if( FPIsFontPanelVisible())
-        FPShowHideFontPanel() ;
-#else
     // we must pick the selection before closing, otherwise a native textcontrol interferes
     NSFont* theFont = [fontPanel panelConvertFont:[NSFont userFontOfSize:0]];
     [fontPanel close];
-#endif
 
     if ( [accessoryView closedWithOk])
     {

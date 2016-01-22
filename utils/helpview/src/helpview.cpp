@@ -56,11 +56,6 @@ bool hvApp::OnInit()
 
     wxArtProvider::Push(new AlternateArtProvider);
 
-#if defined( __WXOSX_MAC__ ) && wxOSX_USE_CARBON
-    wxApp::s_macAboutMenuItemId = wxID_ABOUT;
-    wxFileName::MacRegisterDefaultTypeAndCreator( wxT("htb") , 'HTBD' , 'HTBA' ) ;
-#endif
-
     int istyle = wxHF_DEFAULT_STYLE;
 
     wxString service, windowName, titleFormat, argStr;

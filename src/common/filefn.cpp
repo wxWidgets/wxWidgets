@@ -1435,8 +1435,6 @@ wxString wxGetOSDirectory()
     }
 
     return wxString(buf);
-#elif defined(__WXMAC__) && wxOSX_USE_CARBON
-    return wxMacFindFolderNoSeparator(kOnSystemDisk, 'macs', false);
 #else
     return wxEmptyString;
 #endif

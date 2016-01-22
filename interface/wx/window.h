@@ -588,7 +588,7 @@ public:
         @param vflag
             Whether the vertical scroll bar should always be visible.
 
-        @remarks This function is currently only implemented under Mac/Carbon.
+        @remarks This function is currently not implemented.
     */
     virtual void AlwaysShowScrollbars(bool hflag = true, bool vflag = true);
 
@@ -2750,9 +2750,7 @@ public:
             animation time for the current platform is used.
 
         @note Currently this function is only implemented in wxMSW and wxOSX
-              (for wxTopLevelWindows only in Carbon version and for any kind of
-              windows in Cocoa) and does the same thing as Show() in the other
-              ports.
+              and does the same thing as Show() in the other ports.
 
         @since 2.9.0
 

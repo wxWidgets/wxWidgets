@@ -31,8 +31,8 @@ const char wxMessageBoxCaptionStr[] = "Message";
         Puts a Help button to the message box. This button can have special
         appearance or be specially positioned if its label is not changed from
         the default one. Notice that using this button is not supported when
-        showing a message box from non-main thread in wxOSX/Cocoa and it is not
-        supported in wxOSX/Carbon at all. Available since wxWidgets 2.9.3.
+        showing a message box from non-main thread in wxOSX/Cocoa.
+        Available since wxWidgets 2.9.3.
     @style{wxNO_DEFAULT}
         Makes the "No" button default, can only be used with @c wxYES_NO.
     @style{wxCANCEL_DEFAULT}

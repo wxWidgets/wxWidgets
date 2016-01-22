@@ -415,10 +415,10 @@
     whatever reason.
 
     The primary symbol remains __WXOSX_XXX__ one, __WXOSX__ exists to allow
-    checking for any OS X port (Carbon and Cocoa) and __WXMAC__ is an old name
+    checking for any OS X port (Cocoa) and __WXMAC__ is an old name
     for it.
  */
-#if defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__) || defined(__WXOSX_IPHONE__)
+#if defined(__WXOSX_COCOA__) || defined(__WXOSX_IPHONE__)
 #   ifndef __WXOSX__
 #       define __WXOSX__ 1
 #   endif
@@ -435,8 +435,8 @@
 #           error "incorrect SDK for an iPhone build"
 #       endif
 #   else
-#       if wxUSE_GUI && !(defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__))
-#           error "one of __WXOSX_IPHONE__, __WXOSX_CARBON__ or __WXOSX_COCOA__ must be defined for the GUI build"
+#       if wxUSE_GUI && !defined(__WXOSX_COCOA__)
+#           error "one of __WXOSX_IPHONE__ or __WXOSX_COCOA__ must be defined for the GUI build"
 #       endif
 #       if !( defined(TARGET_OS_MAC) && TARGET_OS_MAC )
 #           error "incorrect SDK for a Mac OS X build"

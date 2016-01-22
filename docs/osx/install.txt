@@ -1,11 +1,7 @@
 wxWidgets for Mac OS X installation
 -----------------------------------
 
-wxWidgets can be compiled using Apple's Cocoa or Carbon libraries.
-Cocoa is the more modern library, and Carbon is the older deprecated library.
-
-In wxWidgets 3, Cocoa is the recommended library.  While Carbon is still
-supported by Apple, little new work is being done in Carbon.
+wxWidgets can be compiled using Apple's Cocoa library.
 
 Most Mac OS X developers should start by downloading and installing Xcode 
 from http://developer.apple.com.  It is a free IDE from Apple that provides
@@ -17,10 +13,6 @@ double-click on it to unpack it to create a wxWidgets directory.
 Next use Terminal (under Applications, Utilities, Terminal) to access a command 
 prompt.  Use cd to change directories to your wxWidgets directory and execute 
 one of the following sets of commands from the wxWidgets directory.
-
-For Carbon, you'll need to have Xcode 3.x installed (you can also have Xcode 4.x
-installed, but the Carbon build needs 3.x, and the /Developer directory which is
-installed when you install Xcode 3.x.
 
 ---------
 
@@ -34,22 +26,9 @@ cd demos;   make;cd ..
 
 ---------
 
-# Build the library for Carbon (old, deprecated, 32 bits only)
-mkdir build-carbon-debug
-cd build-carbon-debug
-../configure --with-carbon --enable-debug --disable-shared --enable-macosx_arch=i386 --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk  CC=/Developer/usr/bin/gcc-4.2 CXX=/Developer/usr/bin/g++-4.2 LD=/Developer/usr/bin/ld
-make
-# Build the samples and demos
-cd samples;make;cd ..
-cd demos;  make;cd ..
-
----------
-
 After the compilation completes, use Finder to run the samples and demos
   Go to build-cocoa-debug/samples to experiment with the Cocoa samples.
   Go to build-cocoa-debug/demos to experiment with the Cocoa demos.
-  Go to build-carbon-debug/samples to experiment with the Carbon samples.
-  Go to build-carbon-debug/demos to experiment with the Carbon demos.
 Double-click on the executables which have an icon showing three small squares.
 The source code for the samples is in wxWidgets/samples
 The source code for the demos is in wxWidgets/demos
@@ -92,8 +71,7 @@ Apple Developer Tools: Xcode
 ----------------------------
 
 You can use the project in build/osx/wxcocoa.xcodeproj to build the Cocoa
-version of wxWidgets (wxOSX/Cocoa) and build/osx/wxcarbon.xcodeproj to
-build the Carbon version of wxWidgets (wxOSX/Carbon). There are also sample
+version of wxWidgets (wxOSX/Cocoa). There are also sample
 projects supplied with the minimal sample.
 
 Notice that the command line build above builds not just the library itself but
@@ -112,9 +90,9 @@ to create universal binaries.
 
 If using the Apple command line tools, pass --enable-universal_binary when
 configuring wxWidgets. This will create the libraries for all the supported
-architectures, currently ppc, i386 and x86_64 when using Cocoa (Carbon isn't
-available in 64 bit builds). You may explicitly specify the architectures to
-use as a comma-separated list, e.g. --enable-universal_binary=i386,x86_64.
+architectures, currently ppc, i386 and x86_64 . You may explicitly specify
+the architectures to use as a comma-separated list,
+e.g. --enable-universal_binary=i386,x86_64.
 
 Notice that if you use wx-config --libs to link your application, the -arch
 flags are not added automatically as it is possible to link e.g. x86_64-only

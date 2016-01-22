@@ -119,15 +119,6 @@ public:
     bool    MacSendKeyUpEvent( wxWindow* focus , long keyval , long modifiers , long when , wxChar uniChar ) ;
     bool    MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers , long when , wxChar uniChar ) ;
     void    MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymessage , long modifiers , long when , wxChar uniChar ) ;
-#if wxOSX_USE_CARBON
-    // we only have applescript on these
-    virtual short         MacHandleAEODoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
-    virtual short         MacHandleAEGURL(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
-    virtual short         MacHandleAEPDoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
-    virtual short         MacHandleAEOApp(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
-    virtual short         MacHandleAEQuit(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
-    virtual short         MacHandleAERApp(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
-#endif
     // in response of an openFiles message with Cocoa and an
     // open-document apple event
     virtual void         MacOpenFiles(const wxArrayString &fileNames) ;

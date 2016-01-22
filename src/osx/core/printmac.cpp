@@ -525,8 +525,6 @@ wxPrintNativeDataBase* wxOSXCreatePrintData()
 {
 #if wxOSX_USE_COCOA
     return new wxOSXCocoaPrintData();
-#elif wxOSX_USE_CARBON
-    return new wxOSXCarbonPrintData();
 #else
     return NULL;
 #endif
@@ -811,36 +809,5 @@ void wxMacPrintPreview::DetermineScaling(void)
 //
 // end of print_osx.cpp
 //
-
-#if wxOSX_USE_CARBON
-
-wxIMPLEMENT_DYNAMIC_CLASS(wxOSXCarbonPrintData, wxOSXPrintData);
-
-wxOSXCarbonPrintData::wxOSXCarbonPrintData()
-{
-    if ( PMCreateSession( &m_macPrintSession ) == noErr )
-    {
-        if ( PMCreatePageFormat(&m_macPageFormat) == noErr )
-        {
-            PMSessionDefaultPageFormat(m_macPrintSession,
-                    m_macPageFormat);
-            PMGetPageFormatPaper(m_macPageFormat, &m_macPaper);
-        }
-
-        if ( PMCreatePrintSettings(&m_macPrintSettings) == noErr )
-        {
-            PMSessionDefaultPrintSettings(m_macPrintSession,
-                m_macPrintSettings);
-        }
-    }
-}
-
-wxOSXCarbonPrintData::~wxOSXCarbonPrintData()
-{
-    (void)PMRelease(m_macPageFormat);
-    (void)PMRelease(m_macPrintSettings);
-    (void)PMRelease(m_macPrintSession);
-}
-#endif
 
 #endif

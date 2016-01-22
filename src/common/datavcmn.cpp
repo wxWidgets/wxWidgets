@@ -1647,7 +1647,7 @@ bool wxDataViewSpinRenderer::GetValue( wxVariant &value ) const
 // wxDataViewChoiceRenderer
 // -------------------------------------
 
-#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(__WXOSX_CARBON__)
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL)
 
 wxDataViewChoiceRenderer::wxDataViewChoiceRenderer( const wxArrayString& choices, wxDataViewCellMode mode, int alignment ) :
    wxDataViewCustomRenderer(wxT("string"), mode, alignment )

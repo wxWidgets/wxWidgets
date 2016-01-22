@@ -131,20 +131,6 @@ public:
 
     // implementation-only from now on
 
-#if wxOSX_USE_CARBON
-    // Unlike some other platforms, this must get called if you override it,
-    // i.e. don't forget "event.Skip()" in your EVT_SIZE handler
-    void OnSize(wxSizeEvent& event);
-
-    virtual void MacSuperChangedPosition();
-    virtual void MacTopLevelWindowChangedPosition();
-    virtual void MacVisibilityChanged();
-
-    void MacUpdateView();
-
-    GLint GetAglBufferName() const { return m_bufferName; }
-#endif
-
 protected:
     WXGLPixelFormat m_glFormat;
 

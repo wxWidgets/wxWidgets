@@ -53,48 +53,6 @@ extern WXDLLIMPEXP_BASE wxSocketManager *wxOSXSocketManagerCF;
 wxSocketManager *wxOSXSocketManagerCF = NULL;
 #endif // wxUSE_SOCKETS
 
-#if wxOSX_USE_CARBON
-
-// our OS version is the same in non GUI and GUI cases
-wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
-{
-    // This returns 10 and 6 for OS X 10.6, consistent with behaviour on
-    // other platforms.
-    SInt32 maj, min;
-    Gestalt(gestaltSystemVersionMajor, &maj);
-    Gestalt(gestaltSystemVersionMinor, &min);
-
-    if ( majorVsn != NULL )
-        *majorVsn = maj;
-
-    if ( minorVsn != NULL )
-        *minorVsn = min;
-
-    return wxOS_MAC_OSX_DARWIN;
-}
-
-bool wxCheckOsVersion(int majorVsn, int minorVsn)
-{
-    int majorCur, minorCur;
-    wxGetOsVersion(&majorCur, &minorCur);
-
-    return majorCur > majorVsn || (majorCur == majorVsn && minorCur >= minorVsn);
-}
-
-#include <sys/utsname.h>
-
-wxString wxGetOsDescription()
-{
-    struct utsname name;
-    uname(&name);
-    return wxString::Format(wxT("Mac OS X (%s %s %s)"),
-            wxString::FromAscii(name.sysname).c_str(),
-            wxString::FromAscii(name.release).c_str(),
-            wxString::FromAscii(name.machine).c_str());
-}
-
-#endif // wxOSX_USE_CARBON
-
 #if ( !wxUSE_GUI && !wxOSX_USE_IPHONE ) || wxOSX_USE_COCOA_OR_CARBON
 
 //===========================================================================

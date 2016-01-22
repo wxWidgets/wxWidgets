@@ -26,44 +26,10 @@
 
 #include "wx/vector.h"
 
-#if wxOSX_USE_CARBON
-
-#include "wx/timer.h"
-
-class wxSoundTimer : public wxTimer
-{
-public:
-    wxSoundTimer(wxSoundData* snd)
-    : m_sound(snd)
-    {
-    }
-
-    virtual ~wxSoundTimer()
-    {
-        Stop();
-        if (m_sound)
-            m_sound->DoStop();
-    }
-
-    void Notify() wxOVERRIDE
-    {
-        if (m_sound)
-            m_sound->SoundTask();
-    }
-
-protected:
-    wxSoundData* m_sound;
-};
-
-#endif // wxOSX_USE_CARBON
-
 wxVector<wxSoundData*> s_soundsPlaying;
 
 wxSoundData::wxSoundData()
 {
-#if wxOSX_USE_CARBON
-    m_pTimer = NULL;
-#endif // wxOSX_USE_CARBON
     m_markedForDeletion = false;
 }
 
@@ -79,28 +45,7 @@ void wxSoundData::MarkForDeletion()
 void wxSoundData::Stop()
 {
     DoStop();
-#if wxOSX_USE_CARBON
-    wxDELETE(m_pTimer);
-#endif // wxOSX_USE_CARBON
 }
-
-#if wxOSX_USE_CARBON
-
-//Time between timer calls
-#define MOVIE_DELAY 100
-
-void wxSoundData::SoundTask()
-{
-}
-
-void wxSoundData::CreateAndStartTimer()
-{
-    //Start timer and play movie asyncronously
-    m_pTimer = new wxSoundTimer(this);
-    m_pTimer->Start(MOVIE_DELAY, wxTIMER_CONTINUOUS);
-}
-
-#endif // wxOSX_USE_CARBON
 
 wxSound::wxSound()
 {

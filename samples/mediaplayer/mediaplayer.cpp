@@ -27,8 +27,6 @@
 //
 // 1) Certain backends can't play the same media file at the same time (MCI,
 //    Cocoa NSMovieView-Quicktime).
-// 2) Positioning on Mac Carbon is messed up if put in a sub-control like a
-//    Notebook (like this sample does).
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 // ============================================================================

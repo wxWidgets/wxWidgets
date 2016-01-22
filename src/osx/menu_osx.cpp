@@ -75,18 +75,7 @@ void wxMenu::Init()
 
 wxMenu::~wxMenu()
 {
-#if wxOSX_USE_CARBON
-    // when destroying the empty menu bar from the static scoped ptr
-    // the peer destructor removes an association from an already deleted
-    // hashmap leading to crashes. The guard avoids this, accepting some leaks...
-    static bool finalmenubar = false;
-    
-    if ( this == gs_emptyMenuBar.get() )
-        finalmenubar = true;
-    
-    if ( !finalmenubar )
-#endif
-        delete m_peer;
+    delete m_peer;
 }
 
 WXHMENU wxMenu::GetHMenu() const
@@ -465,32 +454,6 @@ bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item, wxWindow* senderWindow
         if (event.GetSetEnabled())
             Enable(menuid, event.GetEnabled());
     }
-    else
-    {
-#if wxOSX_USE_CARBON
-        // these two items are also managed by the Carbon Menu Manager, therefore we must
-        // always reset them ourselves
-        UInt32 cmd = 0;
-
-        if ( menuid == wxApp::s_macExitMenuItemId )
-        {
-            cmd = kHICommandQuit;
-        }
-        else if (menuid == wxApp::s_macPreferencesMenuItemId )
-        {
-            cmd = kHICommandPreferences;
-        }
-
-        if ( cmd != 0 )
-        {
-            if ( !item->IsEnabled() || wxDialog::OSXHasModalDialogsOpen() )
-                DisableMenuCommand( NULL , cmd ) ;
-            else
-                EnableMenuCommand( NULL , cmd ) ;
-
-        }
-#endif
-    }
 
     return processed;
 }
@@ -599,7 +562,6 @@ static wxMenu *CreateAppleMenu()
         appleMenu->AppendSeparator();
     }
 
-#if !wxOSX_USE_CARBON
     if ( wxApp::s_macPreferencesMenuItemId != wxID_NONE )
     {
         appleMenu->Append( wxApp::s_macPreferencesMenuItemId,
@@ -622,7 +584,6 @@ static wxMenu *CreateAppleMenu()
     wxString quitLabel;
     quitLabel = wxString::Format(_("Quit %s"), wxTheApp ? wxTheApp->GetAppDisplayName() : _("Application"));
     appleMenu->Append( wxApp::s_macExitMenuItemId, quitLabel + "\tCtrl+Q" );
-#endif // !wxOSX_USE_CARBON
 
     return appleMenu;
 }

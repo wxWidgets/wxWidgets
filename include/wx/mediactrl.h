@@ -218,13 +218,6 @@ protected:
     virtual void DoMoveWindow(int x, int y, int w, int h) wxOVERRIDE;
     wxSize DoGetBestSize() const wxOVERRIDE;
 
-    //FIXME:  This is nasty... find a better way to work around
-    //inheritance issues
-#if defined(__WXOSX_CARBON__)
-    virtual void MacVisibilityChanged();
-
-    friend class wxQTMediaBackend;
-#endif
     class wxMediaBackend* m_imp;
     bool m_bLoaded;
 

@@ -440,14 +440,6 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
     rect.y -= 2;
     rect.width  += 8;
     rect.height += 4;
-#elif defined(wxOSX_USE_CARBON) && wxOSX_USE_CARBON
-    int bestHeight = GetBestSize().y - 8;
-    if ( rect.height > bestHeight )
-    {
-        int diff = rect.height - bestHeight;
-        rect.height -= diff;
-        rect.y += diff / 2;
-    }
 #endif // platforms
 
     (void)Create(m_owner, wxID_ANY, m_startValue,
@@ -2591,11 +2583,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         else
         {
             int flags = wxCONTROL_SELECTED;
-            if (m_hasFocus
-#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON // TODO CS
-                && IsControlActive( (ControlRef)GetHandle() )
-#endif
-            )
+            if (m_hasFocus)
                 flags |= wxCONTROL_FOCUSED;
             if ((item == m_current) && (m_hasFocus))
                 flags |= wxCONTROL_CURRENT;
@@ -2788,15 +2776,7 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
             wxTRANSPARENT_PEN;
 
         wxColour colText;
-        if ( item->IsSelected()
-#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON // TODO CS
-            // On wxMac, if the tree doesn't have the focus we draw an empty
-            // rectangle, so we want to make sure that the text is visible
-            // against the normal background, not the highlightbackground, so
-            // don't use the highlight text colour unless we have the focus.
-             && m_hasFocus && IsControlActive( (ControlRef)GetHandle() )
-#endif
-            )
+        if ( item->IsSelected() )
         {
 #ifdef __WXMAC__
             colText = *wxWHITE;

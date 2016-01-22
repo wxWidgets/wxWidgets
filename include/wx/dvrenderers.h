@@ -385,7 +385,7 @@ private:
 
 #endif // wxUSE_SPINCTRL
 
-#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(__WXOSX_CARBON__)
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL)
 
 // ----------------------------------------------------------------------------
 // wxDataViewChoiceRenderer
@@ -432,7 +432,7 @@ public:
 };
 
 
-#endif // generic or Carbon versions
+#endif // generic version
 
 #if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(__WXGTK__)
 

@@ -17,7 +17,7 @@ reads in the files lists from the files.bkl in the build/bakefiles directory, ev
 conditions in these definitions and then adds the correct files to the newly created Xcode
 projects
 
-if you only need a specific target and not all three of them (carbon, cocoa, iphone) then you can 
+if you only need a specific target and not all of them (cocoa, iphone) then you can 
 comment the unneeded makeProject calls.
 
 Prerequisites

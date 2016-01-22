@@ -1070,11 +1070,9 @@ enable_universal
 with_themes
 with_gtk
 with_motif
-with_osx_carbon
 with_osx_cocoa
 with_osx_iphone
 with_osx
-with_carbon
 with_cocoa
 with_iphone
 with_mac
@@ -2295,11 +2293,9 @@ Optional Packages:
   --with-themes=all|list  use only the specified comma-separated list of wxUniversal themes
   --with-gtk[=VERSION]    use GTK+, VERSION can be 3, 2 (default), 1 or "any"
   --with-motif            use Motif/Lesstif
-  --with-osx_carbon       use Mac OS X (Carbon)
   --with-osx_cocoa        use Mac OS X (Cocoa)
   --with-osx_iphone       use iPhone OS X port
   --with-osx              use Mac OS X (default port, Cocoa)
-  --with-carbon           same as --with-osx_carbon
   --with-cocoa            same as --with-osx_cocoa
   --with-iphone           same as --with-osx_iphone
   --with-mac              same as --with-osx
@@ -3690,10 +3686,9 @@ USE_ALPHA=
 
 NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 
-ALL_TOOLKITS="GTK OSX_CARBON OSX_COCOA OSX_IPHONE MOTIF MSW X11 DFB QT"
+ALL_TOOLKITS="GTK OSX_COCOA OSX_IPHONE MOTIF MSW X11 DFB QT"
 
 DEFAULT_wxUSE_GTK=0
-DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_wxUSE_OSX_COCOA=0
 DEFAULT_wxUSE_OSX_IPHONE=0
 DEFAULT_wxUSE_MOTIF=0
@@ -3703,7 +3698,6 @@ DEFAULT_wxUSE_DFB=0
 DEFAULT_wxUSE_QT=0
 
 DEFAULT_DEFAULT_wxUSE_GTK=0
-DEFAULT_DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_DEFAULT_wxUSE_OSX_COCOA=0
 DEFAULT_DEFAULT_wxUSE_OSX_IPHONE=0
 DEFAULT_DEFAULT_wxUSE_MOTIF=0
@@ -4349,12 +4343,6 @@ if test "${with_motif+set}" = set; then :
 fi
 
 
-# Check whether --with-osx_carbon was given.
-if test "${with_osx_carbon+set}" = set; then :
-  withval=$with_osx_carbon; wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1
-fi
-
-
 # Check whether --with-osx_cocoa was given.
 if test "${with_osx_cocoa+set}" = set; then :
   withval=$with_osx_cocoa; wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1
@@ -4370,12 +4358,6 @@ fi
 # Check whether --with-osx was given.
 if test "${with_osx+set}" = set; then :
   withval=$with_osx; wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1
-fi
-
-
-# Check whether --with-carbon was given.
-if test "${with_carbon+set}" = set; then :
-  withval=$with_carbon; wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1
 fi
 
 
@@ -4559,7 +4541,7 @@ if test "$wxUSE_GUI" = "yes"; then
       done
     fi
 
-            NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
+            NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} \
                   + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_OSX_IPHONE:-0} + ${wxUSE_DFB:-0} \
                   + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} \
                   + ${wxUSE_X11:-0} + ${wxUSE_QT:-0}`
@@ -4595,8 +4577,7 @@ $as_echo "base only" >&6; }
 fi
 
 wxUSE_MAC=0
-if test "$wxUSE_OSX_CARBON" = 1 \
-       -o "$wxUSE_OSX_COCOA" = 1 \
+if test "$wxUSE_OSX_COCOA" = 1 \
        -o "$wxUSE_OSX_IPHONE" = 1; then
     wxUSE_MAC=1
 fi
@@ -27030,35 +27011,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
         fi
     fi
 
-    if test "$wxUSE_OSX_CARBON" = 1; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for compiler syntax to enable Pascal strings" >&5
-$as_echo_n "checking for compiler syntax to enable Pascal strings... " >&6; }
-        if test "$GCC" = yes; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: gcc" >&5
-$as_echo "gcc" >&6; }
-            CPPFLAGS_PASCAL="-fpascal-strings"
-        elif test "`echo $CXX | sed -e 's@.*/@@'`" = "xlC"; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: xlc" >&5
-$as_echo "xlc" >&6; }
-            CPPFLAGS_PASCAL="-qmacpstr"
-        else
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: none" >&5
-$as_echo "none" >&6; }
-        fi
-
-        if test "x$wxUSE_UNIX" = "xyes"; then
-            CPPFLAGS="$CPPFLAGS_PASCAL -I/Developer/Headers/FlatCarbon $CPPFLAGS"
-        else
-                        CPPFLAGS="$CPPFLAGS_PASCAL -DTARGET_CARBON $CPPFLAGS"
-        fi
-
-        TOOLKIT=OSX_CARBON
-                GUIDIST=OSX_CARBON_DIST
-                        WXBASEPORT="_carbon"
-
-                                        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXMAC__ -D__WXOSX__"
-    fi
-
     if test "$wxUSE_OSX_COCOA" = 1; then
         TOOLKIT=OSX_COCOA
         GUIDIST=OSX_COCOA_DIST
@@ -28267,7 +28219,7 @@ USE_OPENGL=0
 if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
 
 
-    if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1; then
+    if test "$wxUSE_OSX_COCOA" = 1; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
@@ -29902,7 +29854,7 @@ TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffi
 TOOLCHAIN_FULLNAME="${HOST_PREFIX}${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-${WX_CHARTYPE}${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
 
 
-if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1; then
+if test "$wxUSE_OSX_COCOA" = 1; then
     WX_LIBRARY_BASENAME_NOGUI="wx_base${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 else
     WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
@@ -35166,13 +35118,13 @@ if test "$wxUSE_BUSYINFO" = "yes"; then
 fi
 
 if test "$wxUSE_HOTKEY" = "yes"; then
-  if test "$wxUSE_MSW" != 1 -a "$wxUSE_OSX_COCOA" != 1 -a "$wxUSE_OSX_CARBON" != 1; then
+  if test "$wxUSE_MSW" != 1 -a "$wxUSE_OSX_COCOA" != 1; then
     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Hot keys not supported by the current toolkit, disabled" >&5
 $as_echo "$as_me: WARNING: Hot keys not supported by the current toolkit, disabled" >&2;}
     wxUSE_HOTKEY=no
   fi
 elif test "$wxUSE_HOTKEY" = "auto"; then
-  if test "$wxUSE_MSW" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_OSX_CARBON" = 1; then
+  if test "$wxUSE_MSW" = 1 -o "$wxUSE_OSX_COCOA" = 1; then
     wxUSE_HOTKEY=yes
   fi
 fi
@@ -40815,15 +40767,9 @@ fi
 
     MACSETFILE="\$(SETFILE)"
 
-            if test "$wxUSE_OSX_CARBON" = 1; then
-        POSTLINK_COMMAND="\$(REZ) -d __DARWIN__ -t APPL Carbon.r -o"
-        RESCOMP="$REZ"
-        WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL Carbon.r -o"
-    else
-        POSTLINK_COMMAND="cat /dev/null | \$(REZ) -d __DARWIN__ -t APPL ${LIBWXMACRES}"
-        RESCOMP="cat /dev/null \| $REZ"
-        WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL \$libdir/$WX_RESOURCES_MACOSX_ASCII"
-    fi
+            POSTLINK_COMMAND="cat /dev/null | \$(REZ) -d __DARWIN__ -t APPL ${LIBWXMACRES}"
+    RESCOMP="cat /dev/null \| $REZ"
+    WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL \$libdir/$WX_RESOURCES_MACOSX_ASCII"
 
 else
         MACSETFILE="@true"
@@ -42691,3 +42637,4 @@ echo "                                       libmspack          ${wxUSE_LIBMSPAC
 echo "                                       sdl                ${wxUSE_LIBSDL}"
 
 echo ""
+

@@ -178,9 +178,6 @@ bool MyApp::OnInit()
     new wxDocTemplate(docManager, "Drawing", "*.drw", "", "drw",
                       "Drawing Doc", "Drawing View",
                       CLASSINFO(DrawingDocument), CLASSINFO(DrawingView));
-#if defined( __WXMAC__ )  && wxOSX_USE_CARBON
-    wxFileName::MacRegisterDefaultTypeAndCreator("drw" , 'WXMB' , 'WXMA');
-#endif
 
     if ( m_mode == Mode_Single )
     {
@@ -194,9 +191,6 @@ bool MyApp::OnInit()
         new wxDocTemplate(docManager, "Text", "*.txt;*.text", "", "txt;text",
                           "Text Doc", "Text View",
                           CLASSINFO(TextEditDocument), CLASSINFO(TextEditView));
-#if defined( __WXMAC__ ) && wxOSX_USE_CARBON
-        wxFileName::MacRegisterDefaultTypeAndCreator("txt" , 'TEXT' , 'WXMA');
-#endif
         // Create a template relating image documents to their views
         new wxDocTemplate(docManager, "Image", "*.png;*.jpg", "", "png;jpg",
                           "Image Doc", "Image View",

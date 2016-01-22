@@ -80,9 +80,6 @@ void wxMenuItem::Enable(bool bDoEnable)
       // avoid changing menuitem state when menu is disabled
       // eg. BeginAppModalStateForWindow() will disable menus and ignore this change
       // which in turn causes m_isEnabled to become out of sync with real menuitem state
-#if wxOSX_USE_CARBON
-         && !(m_parentMenu && !IsMenuItemEnabled(MAC_WXHMENU(m_parentMenu->GetHMenu()), 0))
-#endif
          )
       // always update builtin menuitems
          || (   GetId() == wxApp::s_macPreferencesMenuItemId
