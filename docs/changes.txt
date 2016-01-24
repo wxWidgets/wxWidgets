@@ -81,6 +81,7 @@ Unix:
 
 - Fix bug in wxExecute() if child exited too quickly (Kevin B. McCarty).
 - Add --disable-sys-libs configure option.
+- Add --enable-cxx11 configure option.
 
 All (GUI):
 

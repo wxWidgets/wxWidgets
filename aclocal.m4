@@ -1,7 +1,8 @@
-# generated automatically by aclocal 1.10.3 -*- Autoconf -*-
+# generated automatically by aclocal 1.11.6 -*- Autoconf -*-
 
 # Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
-# 2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc.
+# 2005, 2006, 2007, 2008, 2009, 2010, 2011 Free Software Foundation,
+# Inc.
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -14,6 +15,7 @@
 m4_include([build/aclocal/ac_raf_func_which_getservbyname_r.m4])
 m4_include([build/aclocal/atomic_builtins.m4])
 m4_include([build/aclocal/ax_cflags_gcc_option.m4])
+m4_include([build/aclocal/ax_cxx_compile_stdcxx.m4])
 m4_include([build/aclocal/ax_func_which_gethostbyname_r.m4])
 m4_include([build/aclocal/ax_gcc_option.m4])
 m4_include([build/aclocal/ax_gxx_version.m4])

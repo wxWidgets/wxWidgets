@@ -631,6 +631,7 @@ dnl global compile options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_DISABLE(shared,     [  --disable-shared        create static library instead of shared], wxUSE_SHARED)
+WX_ARG_ENABLE(cxx11,       [  --enable-cxx11          use C++11 compiler], wxUSE_CXX11)
 WX_ARG_ENABLE(stl,         [  --enable-stl            use standard C++ classes for everything], wxUSE_STL)
 if test "$wxUSE_STL" = "yes"; then
     DEFAULT_wxUSE_STD_CONTAINERS=yes
@@ -1060,6 +1061,12 @@ if test "$CXX" = "g++" -a "$GXX" != "yes"; then
     AC_MSG_ERROR([C++ compiler is needed to build wxWidgets])
 fi
 
+if test "$wxUSE_CXX11" = "yes"; then
+    dnl We still continue even if C++11 support is not available, would it be
+    dnl better to stop with an error in this case?
+    AX_CXX_COMPILE_STDCXX(11,,optional)
+fi
+
 dnl ar command
 dnl   defines AR with the appropriate command
 dnl
@@ -1222,6 +1229,12 @@ if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
     eval "CXX=\"$CXX $MACOSX_VERSION_MIN_OPTS\""
     eval "LD=\"$LD $MACOSX_VERSION_MIN_OPTS\""
     retest_macosx_linking=yes
+fi
+
+if test "$HAVE_CXX11" = "1" ; then
+    dnl We also need to use libc++ standard library instead of libstdc++ for
+    dnl C++11 support.
+    CXX="$CXX -stdlib=libc++"
 fi
 
 dnl If either an SDK or a version option was added, make sure that we can
@@ -1966,7 +1979,18 @@ if test "$wxUSE_STL" = "yes"; then
     fi
 fi
 
-AC_CHECK_HEADERS([type_traits tr1/type_traits], break)
+dnl Check for type_traits header if necessary: we know that it's always present
+dnl in C++11 mode. Also notice that it's important to pass AC_INCLUDES_DEFAULT()
+dnl as the last argument because otherwise autoconf would perform the check
+dnl using both the compiler and the preprocessor and the latter could fail if
+dnl the preprocessor is not in C++11 mode, resulting in a warning when running
+dnl configure, while providing this argument allows to skip the preprocessor
+dnl check.
+if test "$HAVE_CXX11" != "1" ; then
+    AC_CHECK_HEADERS([type_traits tr1/type_traits], break, [], [AC_INCLUDES_DEFAULT()])
+else
+    AC_DEFINE(HAVE_TYPE_TRAITS)
+fi
 
 dnl check for atomic operations builtins for wx/atomic.h:
 WX_ATOMIC_BUILTINS
