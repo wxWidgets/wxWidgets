@@ -968,6 +968,12 @@ void StringTestCase::DoCStrDataTernaryOperator(bool cond)
 
     wxString s("foo");
 
+    // Using literal strings in ternary operator below results in these
+    // warnings, but they're unavoidable if we want such code to continue to
+    // compile at all, as it used to in pre-3.0 versions, so just suppress them.
+    wxGCC_WARNING_SUPPRESS(write-strings)
+    wxCLANG_WARNING_SUPPRESS(c++11-compat-deprecated-writable-strings)
+
     const wchar_t *wcStr = L"foo";
     CPPUNIT_ASSERT( CheckStr(s, (cond ? s.c_str() : wcStr)) );
     CPPUNIT_ASSERT( CheckStr(s, (cond ? s.c_str() : L"foo")) );
@@ -979,6 +985,9 @@ void StringTestCase::DoCStrDataTernaryOperator(bool cond)
     CPPUNIT_ASSERT( CheckStr(s, (cond ? s.c_str() : "foo")) );
     CPPUNIT_ASSERT( CheckStr(s, (cond ? mbStr : s.c_str())) );
     CPPUNIT_ASSERT( CheckStr(s, (cond ? "foo" : s.c_str())) );
+
+    wxGCC_WARNING_RESTORE(write-strings)
+    wxCLANG_WARNING_RESTORE(c++11-compat-deprecated-writable-strings)
 
     wxString empty("");
     CPPUNIT_ASSERT( CheckStr(empty, (cond ? empty.c_str() : wxEmptyString)) );
