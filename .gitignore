@@ -53,6 +53,7 @@
 /build/msw/wx_vc12.opensdf
 /build/msw/wx_vc12.sdf
 /build/msw/*.suo
+/build/msw/.vs/
 
 # /demos/
 /demos/*/*.sln
