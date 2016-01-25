@@ -1597,12 +1597,24 @@ void wxToolBar::SetWindowStyleFlag(long style)
 
 void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
 {
-    ::SendMessage(GetHwnd(), TB_ENABLEBUTTON,
-                  (WPARAM)tool->GetId(), (LPARAM)MAKELONG(enable, 0));
+    if ( tool->IsButton() )
+    {
+        ::SendMessage(GetHwnd(), TB_ENABLEBUTTON,
+                      (WPARAM)tool->GetId(), (LPARAM)MAKELONG(enable, 0));
 
-    // Adjust displayed checked state -- it could have changed if the tool is
-    // disabled and has a custom "disabled state" bitmap.
-    DoToggleTool(tool, tool->IsToggled());
+        // Adjust displayed checked state -- it could have changed if the tool is
+        // disabled and has a custom "disabled state" bitmap.
+        DoToggleTool(tool, tool->IsToggled());
+    }
+    else if ( tool->IsControl() )
+    {
+        wxToolBarTool* tbTool = static_cast<wxToolBarTool*>(tool);
+
+        tbTool->GetControl()->Enable(enable);
+        wxStaticText* text = tbTool->GetStaticText();
+        if ( text )
+            text->Enable(enable);
+    }
 }
 
 void wxToolBar::DoToggleTool(wxToolBarToolBase *tool,
