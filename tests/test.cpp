@@ -443,6 +443,16 @@ extern void SetProcessEventFunc(ProcessEventFunc func)
 
 extern bool IsNetworkAvailable()
 {
+    // Somehow even though network is available on Travis CI build machines,
+    // attempts to open remote URIs sporadically fail, so don't run these tests
+    // under Travis to avoid false positives.
+    static int s_isTravis = -1;
+    if ( s_isTravis == -1 )
+        s_isTravis = wxGetEnv("TRAVIS", NULL);
+
+    if ( s_isTravis )
+        return false;
+
     // NOTE: we could use wxDialUpManager here if it was in wxNet; since it's in
     //       wxCore we use a simple rough test:
     
