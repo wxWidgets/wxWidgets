@@ -20186,6 +20186,10 @@ $as_echo "#define HAVE_CXX11 1" >>confdefs.h
 
   fi
 
+
+    if test "$HAVE_CXX11" = "1" ; then
+                        OBJCXXFLAGS="$OBJCXXFLAGS $switch"
+    fi
 fi
 
 if test "x$SUNCXX" != xyes; then
@@ -20415,7 +20419,8 @@ if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
 fi
 
 if test "$HAVE_CXX11" = "1" ; then
-            CXXFLAGS="$CXXFLAGS -stdlib=libc++"
+                CXXFLAGS="$CXXFLAGS -stdlib=libc++"
+    OBJCXXFLAGS="$OBJCXXFLAGS -stdlib=libc++"
     LDFLAGS="$LDFLAGS -stdlib=libc++"
 fi
 

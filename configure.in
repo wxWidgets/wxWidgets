@@ -1065,6 +1065,12 @@ if test "$wxUSE_CXX11" = "yes"; then
     dnl We still continue even if C++11 support is not available, would it be
     dnl better to stop with an error in this case?
     AX_CXX_COMPILE_STDCXX(11,,optional)
+
+    if test "$HAVE_CXX11" = "1" ; then
+        dnl The standard macro above doesn't set Objective-C++ flags, but we do
+        dnl need them too.
+        OBJCXXFLAGS="$OBJCXXFLAGS $switch"
+    fi
 fi
 
 dnl ar command
@@ -1233,8 +1239,10 @@ fi
 
 if test "$HAVE_CXX11" = "1" ; then
     dnl We also need to use libc++ standard library instead of libstdc++ for
-    dnl C++11 support, both when compiling and when linking.
+    dnl C++11 support, both when compiling (for both C++ and Objective-C++) and
+    dnl when linking.
     CXXFLAGS="$CXXFLAGS -stdlib=libc++"
+    OBJCXXFLAGS="$OBJCXXFLAGS -stdlib=libc++"
     LDFLAGS="$LDFLAGS -stdlib=libc++"
 fi
 
