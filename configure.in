@@ -1233,8 +1233,9 @@ fi
 
 if test "$HAVE_CXX11" = "1" ; then
     dnl We also need to use libc++ standard library instead of libstdc++ for
-    dnl C++11 support.
-    CXX="$CXX -stdlib=libc++"
+    dnl C++11 support, both when compiling and when linking.
+    CXXFLAGS="$CXXFLAGS -stdlib=libc++"
+    LDFLAGS="$LDFLAGS -stdlib=libc++"
 fi
 
 dnl If either an SDK or a version option was added, make sure that we can

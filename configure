@@ -20415,7 +20415,8 @@ if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
 fi
 
 if test "$HAVE_CXX11" = "1" ; then
-            CXX="$CXX -stdlib=libc++"
+            CXXFLAGS="$CXXFLAGS -stdlib=libc++"
+    LDFLAGS="$LDFLAGS -stdlib=libc++"
 fi
 
 if test "x$retest_macosx_linking" = "xyes"; then
