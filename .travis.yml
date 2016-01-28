@@ -20,7 +20,7 @@ matrix:
           env: wxCONFIGURE_FLAGS="--disable-shared"
         - os: osx
           compiler: clang
-          env: wxCONFIGURE_FLAGS="--enable-cxx11" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11"
+          env: wxCONFIGURE_FLAGS="--enable-cxx11" wxMAKEFILE_FLAGS="CXXFLAGS='-std=c++11 -stdlib=libc++'"
 
 branches:
     only:
