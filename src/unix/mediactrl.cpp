@@ -45,8 +45,8 @@
    This is the GStreamer backend for unix. Currently we require 0.10.
    Here we use the "playbin" GstElement for ease of use.
 
-   Note that now we compare state change functions to GST_STATE_FAILURE
-   now rather than GST_STATE_SUCCESS as newer gstreamer versions return
+   Note that now we compare state change functions to GST_STATE_CHANGE_FAILURE
+   now rather than GST_STATE_CHANGE_SUCCESS as newer gstreamer versions return
    non-success values for returns that are otherwise successful but not
    immediate.
 
@@ -112,9 +112,6 @@
 
 // Other 0.10 macros
 #if GST_VERSION_MAJOR > 0 || GST_VERSION_MINOR >= 10
-#   define GST_STATE_FAILURE GST_STATE_CHANGE_FAILURE
-#   define GST_STATE_SUCCESS GST_STATE_CHANGE_SUCCESS
-#   define GstElementState GstState
 #   define gst_gconf_get_default_video_sink() \
         gst_element_factory_make ("gconfvideosink", "video-sink");
 #   define gst_gconf_get_default_audio_sink() \
@@ -183,11 +180,11 @@ public:
     bool CheckForErrors();
     bool DoLoad(const wxString& locstring);
     wxMediaCtrl* GetControl() { return m_ctrl; } // for C Callbacks
-    void HandleStateChange(GstElementState oldstate, GstElementState newstate);
+    void HandleStateChange(GstState oldstate, GstState newstate);
     bool QueryVideoSizeFromElement(GstElement* element);
     bool QueryVideoSizeFromPad(GstPad* caps);
     void SetupXOverlay();
-    bool SyncStateChange(GstElement* element, GstElementState state,
+    bool SyncStateChange(GstElement* element, GstState state,
                          gint64 llTimeout = wxGSTREAMER_TIMEOUT);
     bool TryAudioSink(GstElement* audiosink);
     bool TryVideoSink(GstElement* videosink);
@@ -512,8 +509,8 @@ static GstBusSyncReply gst_bus_sync_callback(GstBus* bus,
 // the async queue in 0.10. (Mostly this is here to avoid locking the
 // the mutex twice...)
 //-----------------------------------------------------------------------------
-void wxGStreamerMediaBackend::HandleStateChange(GstElementState oldstate,
-                                                GstElementState newstate)
+void wxGStreamerMediaBackend::HandleStateChange(GstState oldstate,
+                                                GstState newstate)
 {
     switch(newstate)
     {
@@ -702,7 +699,7 @@ void wxGStreamerMediaBackend::SetupXOverlay()
 // PRECONDITION: Assumes m_asynclock is Lock()ed
 //-----------------------------------------------------------------------------
 bool wxGStreamerMediaBackend::SyncStateChange(GstElement* element,
-                                              GstElementState desiredstate,
+                                              GstState desiredstate,
                                               gint64 llTimeout)
 {
     GstBus* bus = gst_element_get_bus(element);
@@ -1153,7 +1150,7 @@ bool wxGStreamerMediaBackend::DoLoad(const wxString& locstring)
 
     // Set playbin to ready to stop the current media...
     if( gst_element_set_state (m_playbin,
-                               GST_STATE_READY) == GST_STATE_FAILURE ||
+                               GST_STATE_READY) == GST_STATE_CHANGE_FAILURE ||
         !SyncStateChange(m_playbin, GST_STATE_READY))
     {
         CheckForErrors();
@@ -1176,7 +1173,7 @@ bool wxGStreamerMediaBackend::DoLoad(const wxString& locstring)
     // Try to pause media as gstreamer won't let us query attributes
     // such as video size unless it is paused or playing
     if( gst_element_set_state (m_playbin,
-                               GST_STATE_PAUSED) == GST_STATE_FAILURE ||
+                               GST_STATE_PAUSED) == GST_STATE_CHANGE_FAILURE ||
         !SyncStateChange(m_playbin, GST_STATE_PAUSED))
     {
         CheckForErrors();
@@ -1207,7 +1204,7 @@ bool wxGStreamerMediaBackend::DoLoad(const wxString& locstring)
 bool wxGStreamerMediaBackend::Play()
 {
     if (gst_element_set_state (m_playbin,
-                               GST_STATE_PLAYING) == GST_STATE_FAILURE)
+                               GST_STATE_PLAYING) == GST_STATE_CHANGE_FAILURE)
     {
         CheckForErrors();
         return false;
@@ -1227,7 +1224,7 @@ bool wxGStreamerMediaBackend::Pause()
 {
     m_llPausedPos = wxGStreamerMediaBackend::GetPosition();
     if (gst_element_set_state (m_playbin,
-                               GST_STATE_PAUSED) == GST_STATE_FAILURE)
+                               GST_STATE_PAUSED) == GST_STATE_CHANGE_FAILURE)
     {
         CheckForErrors();
         return false;
@@ -1248,7 +1245,7 @@ bool wxGStreamerMediaBackend::Stop()
     {   // begin state lock
         wxMutexLocker lock(m_asynclock);
         if(gst_element_set_state (m_playbin,
-                                  GST_STATE_PAUSED) == GST_STATE_FAILURE ||
+                                  GST_STATE_PAUSED) == GST_STATE_CHANGE_FAILURE ||
           !SyncStateChange(m_playbin, GST_STATE_PAUSED))
         {
             CheckForErrors();
