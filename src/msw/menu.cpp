@@ -632,7 +632,11 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 {
                     wxMenuItem* item = node->GetData();
 
-                    if ( !item->IsOwnerDrawn())
+                    // Current item is already added to the list of items
+                    // but is not yet physically attached to the menu
+                    // so we have to skip setting it as an owner drawn.
+                    // It will be done later on when the item will be created.
+                    if ( !item->IsOwnerDrawn() && item != pItem )
                     {
                         item->SetOwnerDrawn(true);
                         SetOwnerDrawnMenuItem(GetHmenu(), position,
@@ -642,7 +646,12 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                     item->SetMarginWidth(m_maxBitmapWidth);
 
                     node = node->GetNext();
-                    position++;
+                    // Current item is already added to the list of items
+                    // but is not yet physically attached to the menu
+                    // so it cannot be counted while determining position
+                    // in the menu.
+                    if ( item != pItem )
+                        position++;
                 }
 
                 // set menu as ownerdrawn
