@@ -202,8 +202,8 @@ public:
     - @b wxMEDIABACKEND_QUICKTIME: Use QuickTime. Mac Only.
       WARNING: May not working correctly embedded in a wxNotebook.
     - @b wxMEDIABACKEND_GSTREAMER, Use GStreamer. Unix Only.
-      Requires GStreamer 0.8 along with at the very least the xvimagesink, xoverlay,
-      and gst-play modules of gstreamer to function.
+      Requires GStreamer 0.10 along with at the very least the xvimagesink,
+      xoverlay and gst-play modules of gstreamer to function.
       You need the correct modules to play the relevant files, for example the
       mad module to play mp3s, etc.
     - @b wxMEDIABACKEND_WMP10, Uses Windows Media Player 10 (Windows only) -
