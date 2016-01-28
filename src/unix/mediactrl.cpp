@@ -83,27 +83,6 @@
 //  Declarations
 //=============================================================================
 
-//-----------------------------------------------------------------------------
-//  GStreamer (most version compatibility) macros
-//-----------------------------------------------------------------------------
-
-// In 0.9 there was a HUGE change to GstQuery and the
-// gst_element_query function changed dramatically and split off
-// into two separate ones
-#if GST_VERSION_MAJOR == 0 && GST_VERSION_MINOR <= 8
-#    define wxGst_element_query_position(e, f, p) \
-                gst_element_query(e, GST_QUERY_POSITION, f, p)
-#elif GST_VERSION_MAJOR == 0 && GST_VERSION_MINOR == 9
-// However, the actual 0.9 version has a slightly different definition
-// and instead of gst_element_query_duration it has two parameters to
-// gst_element_query_position instead
-#    define wxGst_element_query_position(e, f, p) \
-                gst_element_query_position(e, f, p, 0)
-#else
-#    define wxGst_element_query_position \
-                gst_element_query_position
-#endif
-
 // Max wait time for element state waiting - GST_CLOCK_TIME_NONE for inf
 #define wxGSTREAMER_TIMEOUT (100 * GST_MSECOND) // Max 100 milliseconds
 
@@ -1297,7 +1276,7 @@ wxLongLong wxGStreamerMediaBackend::GetPosition()
         gint64 pos;
         GstFormat fmtTime = GST_FORMAT_TIME;
 
-        if (!wxGst_element_query_position(m_playbin, &fmtTime, &pos) ||
+        if (!gst_element_query_position(m_playbin, &fmtTime, &pos) ||
             fmtTime != GST_FORMAT_TIME || pos == -1)
             return 0;
         return pos / GST_MSECOND ;
