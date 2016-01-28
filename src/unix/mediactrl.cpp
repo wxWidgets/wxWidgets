@@ -91,21 +91,15 @@
 // gst_element_query function changed dramatically and split off
 // into two separate ones
 #if GST_VERSION_MAJOR == 0 && GST_VERSION_MINOR <= 8
-#    define wxGst_element_query_duration(e, f, p) \
-                gst_element_query(e, GST_QUERY_TOTAL, f, p)
 #    define wxGst_element_query_position(e, f, p) \
                 gst_element_query(e, GST_QUERY_POSITION, f, p)
 #elif GST_VERSION_MAJOR == 0 && GST_VERSION_MINOR == 9
 // However, the actual 0.9 version has a slightly different definition
 // and instead of gst_element_query_duration it has two parameters to
 // gst_element_query_position instead
-#    define wxGst_element_query_duration(e, f, p) \
-                gst_element_query_position(e, f, 0, p)
 #    define wxGst_element_query_position(e, f, p) \
                 gst_element_query_position(e, f, p, 0)
 #else
-#    define wxGst_element_query_duration \
-                gst_element_query_duration
 #    define wxGst_element_query_position \
                 gst_element_query_position
 #endif
@@ -1350,7 +1344,7 @@ wxLongLong wxGStreamerMediaBackend::GetDuration()
     gint64 length;
     GstFormat fmtTime = GST_FORMAT_TIME;
 
-    if(!wxGst_element_query_duration(m_playbin, &fmtTime, &length) ||
+    if(!gst_element_query_duration(m_playbin, &fmtTime, &length) ||
        fmtTime != GST_FORMAT_TIME || length == -1)
         return 0;
     return length / GST_MSECOND ;
@@ -1452,7 +1446,7 @@ wxLongLong wxGStreamerMediaBackend::GetDownloadTotal()
     gint64 length;
     GstFormat fmtBytes = GST_FORMAT_BYTES;
 
-    if (!wxGst_element_query_duration(m_playbin, &fmtBytes, &length) ||
+    if (!gst_element_query_duration(m_playbin, &fmtBytes, &length) ||
           fmtBytes != GST_FORMAT_BYTES || length == -1)
         return 0;
     return length;
