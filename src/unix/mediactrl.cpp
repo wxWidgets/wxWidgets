@@ -110,14 +110,6 @@
                 gst_element_query_position
 #endif
 
-// Other 0.10 macros
-#if GST_VERSION_MAJOR > 0 || GST_VERSION_MINOR >= 10
-#   define gst_gconf_get_default_video_sink() \
-        gst_element_factory_make ("gconfvideosink", "video-sink");
-#   define gst_gconf_get_default_audio_sink() \
-        gst_element_factory_make ("gconfaudiosink", "audio-sink");
-#endif
-
 // Max wait time for element state waiting - GST_CLOCK_TIME_NONE for inf
 #define wxGSTREAMER_TIMEOUT (100 * GST_MSECOND) // Max 100 milliseconds
 
@@ -1034,7 +1026,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                      G_CALLBACK(gst_notify_stream_info_callback), this);
 
     // Get the audio sink
-    GstElement* audiosink = gst_gconf_get_default_audio_sink();
+    GstElement* audiosink = gst_element_factory_make ("gconfaudiosink", "audio-sink");
     if( !TryAudioSink(audiosink) )
     {
         // fallback to autodetection, then alsa, then oss as a stopgap
@@ -1056,7 +1048,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 
     // Setup video sink - first try gconf, then auto, then xvimage and
     // then finally plain ximage
-    GstElement* videosink = gst_gconf_get_default_video_sink();
+    GstElement* videosink = gst_element_factory_make ("gconfvideosink", "video-sink");
     if( !TryVideoSink(videosink) )
     {
         videosink = gst_element_factory_make ("autovideosink", "video-sink");
