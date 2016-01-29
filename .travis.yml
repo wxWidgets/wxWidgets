@@ -56,5 +56,5 @@ script:
     - sudo make install
     - echo -en 'travis_fold:end:script.5\\r'
     - echo 'Testing building with the installed version...' && echo -en 'travis_fold:start:script.6\\r'
-    - make -C samples/minimal -f makefile.unx -B $wxMAKEFILE_FLAGS
+    - make -C samples/minimal -f makefile.unx $wxMAKEFILE_FLAGS
     - echo -en 'travis_fold:end:script.6\\r'
