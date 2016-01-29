@@ -360,7 +360,7 @@ bool wxHTTP::BuildRequest(const wxString& path, const wxString& method)
 
     // If there is no User-Agent defined, define it.
     if ( GetHeader(wxT("User-Agent")).empty() )
-        SetHeader(wxT("User-Agent"), wxT("wxWidgets 2.x"));
+        SetHeader(wxT("User-Agent"), wxVERSION_STRING);
 
     // Send authentication information
     if (!m_username.empty() || !m_password.empty()) {
