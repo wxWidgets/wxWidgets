@@ -164,7 +164,18 @@ public:
     bool Create(const wxImage& image, PixelFormat pf = PixelFormat_PreMultiplied);
 
     // create wxImage having the same data as this DIB
-    wxImage ConvertToImage() const;
+
+    // Possible options of conversion to wxImage
+    enum ConversionFlags
+    {
+        // Determine whether 32bpp DIB contains real alpha channel
+        // and return wxImage with or without alpha channel values.
+        Convert_AlphaAuto,
+        // Assume that 32bpp DIB contains valid alpha channel and always
+        // return wxImage with alpha channel values in this case.
+        Convert_AlphaAlwaysIf32bpp
+    };
+    wxImage ConvertToImage(ConversionFlags flags = Convert_AlphaAuto) const;
 #endif // wxUSE_IMAGE
 
 

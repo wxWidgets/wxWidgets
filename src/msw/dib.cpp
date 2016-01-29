@@ -676,7 +676,7 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf)
     return true;
 }
 
-wxImage wxDIB::ConvertToImage() const
+wxImage wxDIB::ConvertToImage(ConversionFlags flags) const
 {
     wxCHECK_MSG( IsOk(), wxNullImage,
                     wxT("can't convert invalid DIB to wxImage") );
@@ -776,7 +776,7 @@ wxImage wxDIB::ConvertToImage() const
     if ( hasOpaque && hasTransparent )
         hasAlpha = true;
 
-    if ( !hasAlpha && image.HasAlpha() )
+    if ( !hasAlpha && image.HasAlpha() && flags == Convert_AlphaAuto )
         image.ClearAlpha();
 
     return image;
