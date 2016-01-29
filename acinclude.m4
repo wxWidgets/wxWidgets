@@ -379,7 +379,6 @@ dnl  4. Otherwise the default value is "yes", meaning that either the system
 dnl     (preferred) or builtin version of the library will be used.
 AC_DEFUN([WX_ARG_SYS_WITH],
         [
-          AC_MSG_CHECKING([for --with-$1])
           AC_ARG_WITH($1, [$2],
                       [
                         if test "$withval" = yes; then
@@ -409,18 +408,6 @@ AC_DEFUN([WX_ARG_SYS_WITH],
                       ])
 
           eval "$AS_TR_SH(wx_cv_use_$1)"
-
-          if test "$$3" = yes; then
-            AC_MSG_RESULT(yes)
-          elif test "$$3" = no; then
-            AC_MSG_RESULT(no)
-          elif test "$$3" = sys; then
-            AC_MSG_RESULT([system version])
-          elif test "$$3" = builtin; then
-            AC_MSG_RESULT([builtin version])
-          else
-            AC_MSG_ERROR([Invalid value for --with-$1: should be yes, no, sys, or builtin])
-          fi
         ])
 
 dnl this macro simply checks for a command line argument
@@ -436,7 +423,6 @@ AC_DEFUN([WX_ARG_WITH],
                   defaultval=no
               fi
           fi
-          AC_MSG_CHECKING([for --${withstring:-with}-$1])
           AC_ARG_WITH($1, [$2],
                       [
                         if test "$withval" = yes; then
@@ -450,18 +436,6 @@ AC_DEFUN([WX_ARG_WITH],
                       ])
 
           eval "$AS_TR_SH(wx_cv_use_$1)"
-
-          if test x"$withstring" = xwithout; then
-            if test $$3 = yes; then
-              result=no
-            else
-              result=yes
-            fi
-          else
-            result=$$3
-          fi
-
-          AC_MSG_RESULT($result)
         ])
 
 dnl same as WX_ARG_WITH but makes it clear that the option is enabled by default
@@ -489,7 +463,6 @@ AC_DEFUN([WX_ARG_ENABLE],
               fi
           fi
 
-          AC_MSG_CHECKING([for --${enablestring:-enable}-$1])
           AC_ARG_ENABLE($1, [$2],
                         [
                           if test "$enableval" = yes; then
@@ -503,18 +476,6 @@ AC_DEFUN([WX_ARG_ENABLE],
                         ])
 
           eval "$AS_TR_SH(wx_cv_use_$1)"
-
-          if test x"$enablestring" = xdisable; then
-            if test $$3 = no; then
-              result=yes
-            else
-              result=no
-            fi
-          else
-            result=$$3
-          fi
-
-          AC_MSG_RESULT($result)
         ])
 
 dnl the same as WX_ARG_ENABLE but makes it more clear that the option is
@@ -540,7 +501,6 @@ dnl
 AC_DEFUN([WX_ARG_ENABLE_PARAM],
         [
           enablestring=$4
-          AC_MSG_CHECKING([for --${enablestring:-enable}-$1])
           AC_ARG_ENABLE($1, [$2],
                         [
                           wx_cv_use_$1="$3='$enableval'"
@@ -550,8 +510,6 @@ AC_DEFUN([WX_ARG_ENABLE_PARAM],
                         ])
 
           eval "$wx_cv_use_$1"
-
-          AC_MSG_RESULT([$$3])
         ])
 
 dnl ===========================================================================
