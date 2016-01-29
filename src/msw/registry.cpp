@@ -1023,7 +1023,9 @@ bool wxRegKey::QueryValue(const wxString& szValue,
                 return false;
             }
 
-            if ( !dwSize )
+            // We need length in characters, not bytes.
+            DWORD chars = dwSize / sizeof(wxChar);
+            if ( !chars )
             {
                 // must treat this case specially as GetWriteBuf() doesn't like
                 // being called with 0 size
@@ -1033,9 +1035,6 @@ bool wxRegKey::QueryValue(const wxString& szValue,
             {
                 // extra scope for wxStringBufferLength
                 {
-                    // We need length in characters, not bytes.
-                    DWORD chars = dwSize / sizeof(wxChar);
-
                     wxStringBufferLength strBuf(strValue, chars);
                     m_dwLastError = RegQueryValueEx((HKEY) m_hKey,
                                                     RegValueStr(szValue),
