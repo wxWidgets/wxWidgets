@@ -560,9 +560,10 @@ bool wxRegKey::CopyValue(const wxString& szValue,
 
     switch ( GetValueType(szValue) ) {
         case Type_String:
+        case Type_Expand_String:
             {
                 wxString strVal;
-                return QueryValue(szValue, strVal) &&
+                return QueryRawValue(szValue, strVal) &&
                        keyDst.SetValue(valueNew, strVal);
             }
 
@@ -586,7 +587,6 @@ bool wxRegKey::CopyValue(const wxString& szValue,
         // occur among the application keys (supposedly created with
         // this class)
         case Type_None:
-        case Type_Expand_String:
         case Type_Dword_big_endian:
         case Type_Link:
         case Type_Multi_String:
@@ -1324,9 +1324,10 @@ wxString wxRegKey::FormatValue(const wxString& name) const
     switch ( type )
     {
         case Type_String:
+        case Type_Expand_String:
             {
                 wxString value;
-                if ( !QueryValue(name, value) )
+                if ( !QueryRawValue(name, value) )
                     break;
 
                 // quotes and backslashes must be quoted, linefeeds are not
@@ -1375,7 +1376,6 @@ wxString wxRegKey::FormatValue(const wxString& name) const
             }
             break;
 
-        case Type_Expand_String:
         case Type_Multi_String:
             {
                 wxString value;
