@@ -3276,21 +3276,24 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
         case WM_CONTEXTMENU:
             {
-                // Ignore the events that are propagated from a child window by
-                // DefWindowProc(): as wxContextMenuEvent is already propagated
-                // upwards the window hierarchy by us, not doing this would
-                // result in duplicate events being sent.
-                WXHWND hWnd = (WXHWND)wParam;
-                if ( hWnd != m_hWnd )
+                // As with WM_HELP above, we need to avoid duplicate events due
+                // to wxContextMenuEvent being a (propagatable) wxCommandEvent
+                // at wx level but WM_CONTEXTMENU also being propagated upwards
+                // by DefWindowProc(). Unlike WM_HELP, we still need to pass
+                // this one to DefWindowProc() as it sometimes does useful
+                // things with it, e.g. displays the default context menu in
+                // EDIT controls. So we do let the default processing to take
+                // place but set this flag before calling into DefWindowProc()
+                // and don't do anything if we're called from inside it.
+                static bool s_propagatedByDefWndProc = false;
+                if ( s_propagatedByDefWndProc )
                 {
-                    wxWindowMSW *win = FindItemByHWND(hWnd);
-                    if ( win && IsDescendant(win) )
-                    {
-                        // We had already generated wxContextMenuEvent when we
-                        // got WM_CONTEXTMENU for that window.
-                        processed = true;
-                        break;
-                    }
+                    // We could also return false from here, it shouldn't
+                    // matter, the important thing is to not send any events.
+                    // But returning true prevents the message from bubbling up
+                    // even further upwards and so seems to be better.
+                    processed = true;
+                    break;
                 }
 
                 // we don't convert from screen to client coordinates as
@@ -3298,9 +3301,40 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 wxPoint pt(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 
                 wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU, GetId(), pt);
-                evtCtx.SetEventObject(this);
 
-                processed = HandleWindowEvent(evtCtx);
+                // we could have got an event from our child, reflect it back
+                // to it if this is the case
+                wxWindowMSW *win = NULL;
+                WXHWND hWnd = (WXHWND)wParam;
+                if ( hWnd != m_hWnd )
+                {
+                    win = FindItemByHWND(hWnd);
+                }
+
+                if ( !win )
+                    win = this;
+
+                evtCtx.SetEventObject(win);
+                processed = win->HandleWindowEvent(evtCtx);
+
+                if ( !processed )
+                {
+                    // Temporarily set the flag before calling out.
+                    s_propagatedByDefWndProc = true;
+                    wxON_BLOCK_EXIT_SET(s_propagatedByDefWndProc, false);
+
+                    // Now do whatever the default handling does, which could
+                    // be nothing at all -- but we can't know this, so we still
+                    // need to call it.
+                    win->MSWDefWindowProc(message, wParam, lParam);
+
+                    // And finally pretend that we processed the message in any
+                    // case because otherwise DefWindowProc() that we're called
+                    // from would pass the message to our parent resulting in
+                    // duplicate events. As it is, we ensure that only one
+                    // wxWindow ever gets this message for any given click.
+                    processed = true;
+                }
             }
             break;
 
