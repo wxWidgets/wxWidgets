@@ -18,7 +18,7 @@ AC_PREREQ([2.68])
 
 dnl Version number stuff here:
 
-AC_INIT([libpng],[1.6.2],[png-mng-implement@lists.sourceforge.net])
+AC_INIT([libpng],[1.6.21],[png-mng-implement@lists.sourceforge.net])
 AC_CONFIG_MACRO_DIR([scripts])
 
 # libpng does not follow GNU file name conventions (hence 'foreign')
@@ -27,7 +27,7 @@ AC_CONFIG_MACRO_DIR([scripts])
 # dist-xz requires automake 1.11 or later
 # 1.12.2 fixes a security issue in 1.11.2 and 1.12.1
 # 1.13 is required for parallel tests
-AM_INIT_AUTOMAKE([1.13 foreign dist-xz color-tests silent-rules])
+AM_INIT_AUTOMAKE([1.13 foreign dist-xz color-tests silent-rules subdir-objects])
 # The following line causes --disable-maintainer-mode to be the default to
 # configure, this is necessary because libpng distributions cannot rely on the
 # time stamps of the autotools generated files being correct
@@ -39,10 +39,10 @@ dnl automake, so the following is not necessary (and is not defined anyway):
 dnl AM_PREREQ([1.11.2])
 dnl stop configure from automagically running automake
 
-PNGLIB_VERSION=1.6.2
+PNGLIB_VERSION=1.6.21
 PNGLIB_MAJOR=1
 PNGLIB_MINOR=6
-PNGLIB_RELEASE=2
+PNGLIB_RELEASE=21
 
 dnl End of version number stuff
 
@@ -226,35 +226,93 @@ AC_ARG_WITH(libpng-prefix,
     fi])
 AM_CONDITIONAL([DO_PNG_PREFIX], [test "${with_libpng_prefix:-no}" != "no"])
 
-# Because GCC by default assembles code with an executable stack, even though it
-# compiles C code with a non-executable stack, it is necessary to do a fixup
-# here (this may by GCC specific)
-# AC_SUBST([AM_CCASFLAGS], [-Wa,--noexecstack])
+# Control over what links are made for installed files.  Versioned files are
+# always installed, when the following options are turned on corresponding
+# unversioned links are also created (normally as symbolic links):
+AC_ARG_ENABLE([unversioned-links],
+   AS_HELP_STRING([[[--enable-unversioned-links]]],
+      [Installed libpng header files are placed in a versioned subdirectory]
+      [and installed libpng library (including DLL) files are versioned.]
+      [If this option is enabled unversioned links will be created pointing to]
+      [the corresponding installed files.  If you use libpng.pc or]
+      [libpng-config for all builds you do not need these links, but if you]
+      [compile programs directly they will typically #include <png.h> and]
+      [link with -lpng; in that case you need the links.]
+      [The links can be installed manually using 'make install-header-links']
+      [and 'make install-library-links' and can be removed using the]
+      [corresponding uninstall- targets.  If you do enable this option every]
+      [libpng 'make install' will recreate the links to point to the just]
+      [installed version of libpng.  The default is to create the links;]
+      [use --disable-unversioned-links to change this]))
+
+# The AM_CONDITIONAL test is written so that the default is enabled;
+# --disable-unversioned-links must be given to turn the option off.
+AM_CONDITIONAL([DO_INSTALL_LINKS],[test "$enable_unversioned_links" != "no"])
+
+AC_ARG_ENABLE([unversioned-libpng-pc],
+   AS_HELP_STRING([[[--enable-unversioned-libpng-pc]]],
+      [Install the configuration file 'libpng.pc' as a link to the versioned]
+      [version.  This is done by default - use --disable-unversioned-libpng-pc]
+      [to change this.]))
+AM_CONDITIONAL([DO_INSTALL_LIBPNG_PC],
+   [test "$enable_unversioned_libpng_pc" != "no"])
+
+AC_ARG_ENABLE([unversioned-libpng-config],
+   AS_HELP_STRING([[[--enable-unversioned-libpng-config]]],
+      [Install the configuration file 'libpng-config' as a link to the]
+      [versioned version.  This is done by default - use]
+      [--disable-unversioned-libpng-config to change this.]))
+AM_CONDITIONAL([DO_INSTALL_LIBPNG_CONFIG],
+   [test "$enable_unversioned_libpng_config" != "no"])
+
+# HOST SPECIFIC OPTIONS
+# =====================
+#
+# ARM
+# ===
+#
+# ARM NEON (SIMD) support.
 
 AC_ARG_ENABLE([arm-neon],
    AS_HELP_STRING([[[--enable-arm-neon]]],
-      [Enable ARM NEON optimizations: =off, check, api, on:]
-      [off: disable the optimizations; check: use internal checking code]
+      [Enable ARM NEON optimizations: =no/off, check, api, yes/on:]
+      [no/off: disable the optimizations; check: use internal checking code]
       [(deprecated and poorly supported); api: disable by default, enable by]
-      [a call to png_set_option; on: turn on unconditionally.  The]
-      [default is 'on' if __ARM_NEON__ is defined, otherwise 'off'.]),
+      [a call to png_set_option; yes/on: turn on unconditionally.]
+      [If not specified: determined by the compiler.]),
    [case "$enableval" in
-      off)
-         AC_DEFINE([PNG_NO_ARM_NEON], [],
-                   [Disable ARM Neon optimizations]);;
+      no|off)
+         # disable the default enabling on __ARM_NEON__ systems:
+         AC_DEFINE([PNG_ARM_NEON_OPT], [0],
+                   [Disable ARM Neon optimizations])
+         # Prevent inclusion of the assembler files below:
+         enable_arm_neon=no;;
       check)
          AC_DEFINE([PNG_ARM_NEON_CHECK_SUPPORTED], [],
                    [Check for ARM Neon support at run-time]);;
       api)
          AC_DEFINE([PNG_ARM_NEON_API_SUPPORTED], [],
                    [Turn on ARM Neon optimizations at run-time]);;
-      on)
-         AC_DEFINE([PNG_ARM_NEON_SUPPORTED], [],
-                   [Enable ARM Neon optimizations]);;
+      yes|on)
+         AC_DEFINE([PNG_ARM_NEON_OPT], [2],
+                   [Enable ARM Neon optimizations])
+         AC_MSG_WARN([--enable-arm-neon: please specify 'check' or 'api', if]
+            [you want the optimizations unconditionally pass -mfpu=neon]
+            [to the compiler.]);;
       *)
-         AC_MSG_ERROR([arm-neon: option value required (off/check/api/on)]);;
+         AC_MSG_ERROR([--enable-arm-neon=${enable_arm_neon}: invalid value])
    esac])
-AM_CONDITIONAL([PNG_ARM_NEON], [test "${enable_arm_neon:-no}" != "no"])
+
+# Add ARM specific files to all builds where the host_cpu is arm ('arm*') or
+# where ARM optimizations were explicitly requested (this allows a fallback if a
+# future host CPU does not match 'arm*')
+
+AM_CONDITIONAL([PNG_ARM_NEON],
+   [test "$enable_arm_neon" != 'no' &&
+    case "$host_cpu" in
+      arm*|aarch64*) :;;
+      *)    test "$enable_arm_neon" != '';;
+    esac])
 
 AC_MSG_NOTICE([[Extra options for compiler: $PNG_COPTS]])
 

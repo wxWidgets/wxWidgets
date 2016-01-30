@@ -1,11 +1,10 @@
 
 /* pnginfo.h - header file for PNG reference library
  *
- * Copyright (c) 1998-2013 Glenn Randers-Pehrson
+ * Last changed in libpng 1.6.1 [March 28, 2013]
+ * Copyright (c) 1998-2002,2004,2006-2013 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
- *
- * Last changed in libpng 1.6.1 [March 28, 2013]
  *
  * This code is released under the libpng license.
  * For conditions of distribution and use, see the disclaimer
@@ -121,7 +120,7 @@ struct png_info_def
    int num_text; /* number of comments read or comments to write */
    int max_text; /* current size of text array */
    png_textp text; /* array of comments read or comments to write */
-#endif /* PNG_TEXT_SUPPORTED */
+#endif /* TEXT */
 
 #ifdef PNG_tIME_SUPPORTED
    /* The tIME chunk holds the last time the displayed image data was
@@ -224,7 +223,7 @@ defined(PNG_READ_BACKGROUND_SUPPORTED)
    /* Storage for unknown chunks that the library doesn't recognize. */
    png_unknown_chunkp unknown_chunks;
 
-   /* The type of this field is limited by the type of 
+   /* The type of this field is limited by the type of
     * png_struct::user_chunk_cache_max, else overflow can occur.
     */
    int                unknown_chunks_num;
