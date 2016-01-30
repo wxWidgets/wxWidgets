@@ -3349,9 +3349,16 @@ void wxD2DContext::SetPen(const wxGraphicsPen& pen)
 void wxD2DContext::AdjustRenderTargetSize()
 {
     m_renderTargetHolder->Resize();
+
+    // Currently GetSize() can only be called when using MSVC because gcc
+    // doesn't handle returning aggregates by value as done by D2D libraries,
+    // see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=64384. Not updating the
+    // size is not great, but it's better than crashing.
+#ifdef __VISUALC__
     D2D1_SIZE_F renderTargetSize = m_renderTargetHolder->GetD2DResource()->GetSize();
     m_width = renderTargetSize.width;
     m_height =  renderTargetSize.height;
+#endif // __VISUALC__
 }
 
 void wxD2DContext::ReleaseDeviceDependentResources()

@@ -189,6 +189,7 @@ wxMSW:
 - Make wxListCtrl &c appearance more native on modern systems (Tobias Taschner).
 - Don't send wxActivateEvent for minimized windows (bzcdr).
 - Return correct OS version under Windows 8.1 and later.
+- Fix crash in wxD2DContext when using non-MSVC compiler (iwbnwif).
 
 wxOSX/Cocoa:
 
