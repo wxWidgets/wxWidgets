@@ -576,6 +576,9 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w )
 
     wxNSTextView* tv = [[wxNSTextView alloc] initWithFrame: NSMakeRect(0, 0,
             contentSize.width, contentSize.height)];
+    [tv setAutomaticDashSubstitutionEnabled:false];
+
+    
     m_textView = tv;
     [tv setVerticallyResizable:YES];
     [tv setHorizontallyResizable:NO];
@@ -1056,6 +1059,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         wxNSTextScrollView* v = nil;
         v = [[wxNSTextScrollView alloc] initWithFrame:r];
         c = new wxNSTextViewControl( wxpeer, v );
+
         c->SetNeedsFocusRect( true );
     }
     else
