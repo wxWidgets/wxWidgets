@@ -679,6 +679,7 @@ void MyFrame::OnHitTest(wxCommandEvent& WXUNUSED(event))
     AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_NOWHERE, wxT("wxBK_HITTEST_NOWHERE") );
     AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_ONICON,  wxT("wxBK_HITTEST_ONICON") );
     AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_ONLABEL, wxT("wxBK_HITTEST_ONLABEL") );
+    AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_ONITEM,  wxT("wxBK_HITTEST_ONITEM") );
     AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_ONPAGE,  wxT("wxBK_HITTEST_ONPAGE") );
 
     wxLogMessage(wxT("HitTest at (%d,%d): %d: %s"),
