@@ -620,7 +620,8 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long s
     [tv setVerticallyResizable:YES];
     [tv setHorizontallyResizable:hasHScroll];
     [tv setAutoresizingMask:NSViewWidthSizable];
-
+    [tv setAutomaticDashSubstitutionEnabled:false];
+    
     if ( hasHScroll )
     {
         [[tv textContainer] setContainerSize:NSMakeSize(FLT_MAX, FLT_MAX)];
