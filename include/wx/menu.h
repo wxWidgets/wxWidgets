@@ -275,9 +275,11 @@ public:
     // implementation helpers
     // ----------------------
 
-    // Updates the UI for a menu and all submenus recursively. source is the
-    // object that has the update event handlers defined for it. If NULL, the
-    // menu or associated window will be used.
+    // Updates the UI for a menu and all submenus recursively by generating
+    // wxEVT_UPDATE_UI for all the items.
+    //
+    // Do not use the "source" argument, it allows to override the event
+    // handler to use for these events, but this should never be needed.
     void UpdateUI(wxEvtHandler* source = NULL);
 
     // get the menu bar this menu is attached to (may be NULL, always NULL for

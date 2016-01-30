@@ -593,9 +593,6 @@ wxMenuItem* wxMenuBase::FindItemByPosition(size_t position) const
 // wxMenu helpers used by derived classes
 // ----------------------------------------------------------------------------
 
-// Update a menu and all submenus recursively. source is the object that has
-// the update event handlers defined for it. If NULL, the menu or associated
-// window will be used.
 void wxMenuBase::UpdateUI(wxEvtHandler* source)
 {
     wxWindow * const win = GetWindow();
@@ -1095,7 +1092,7 @@ void wxMenuBarBase::UpdateMenus()
     {
         menu = GetMenu( n );
         if (menu != NULL)
-            menu->UpdateUI( NULL );
+            menu->UpdateUI();
     }
 }
 
