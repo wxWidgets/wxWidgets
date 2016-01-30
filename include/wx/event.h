@@ -1502,8 +1502,10 @@ public:
     {
         m_clientData = NULL;
         m_clientObject = NULL;
+        m_isCommandEvent = true;
 
-        Init();
+        // the command events are propagated upwards by default
+        m_propagationLevel = wxEVENT_PROPAGATE_MAX;
     }
 
     wxCommandEvent(const wxCommandEvent& event)
@@ -1516,8 +1518,6 @@ public:
         // need to copy it explicitly.
         if ( m_cmdString.empty() )
             m_cmdString = event.GetString();
-
-        Init();
     }
 
     // Set/Get client data from controls
@@ -1549,13 +1549,6 @@ protected:
     wxClientData*     m_clientObject;  // Arbitrary client object
 
 private:
-    void Init()
-    {
-        m_isCommandEvent = true;
-
-        // the command events are propagated upwards by default
-        m_propagationLevel = wxEVENT_PROPAGATE_MAX;
-    }
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxCommandEvent);
 };
