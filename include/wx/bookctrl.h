@@ -38,7 +38,7 @@ enum
     wxBK_HITTEST_NOWHERE = 1,   // not on tab
     wxBK_HITTEST_ONICON  = 2,   // on icon
     wxBK_HITTEST_ONLABEL = 4,   // on label
-    wxBK_HITTEST_ONITEM  = wxBK_HITTEST_ONICON | wxBK_HITTEST_ONLABEL,
+    wxBK_HITTEST_ONITEM  = 16,  // on tab control but not on its icon or label
     wxBK_HITTEST_ONPAGE  = 8    // not on tab control, but over the selected page
 };
 
