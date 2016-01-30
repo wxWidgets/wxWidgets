@@ -342,12 +342,12 @@ private:
                     wxT("compression = 1, memory = 9, strategy = 2, filter = 5"),
                 };
 
-                int sel = wxGetSingleChoiceIndex(wxT("Select compression option (Cancel to use default)\n"),
-                                                 wxT("PNG Compression Options"),
-                                                 WXSIZEOF(compressionChoices),
-                                                 compressionChoices,
-                                                 this);
-                if (sel != -1)
+                sel = wxGetSingleChoiceIndex(wxT("Select compression option (Cancel to use default)\n"),
+                                             wxT("PNG Compression Options"),
+                                             WXSIZEOF(compressionChoices),
+                                             compressionChoices,
+                                             this);
+                if ( sel != -1 )
                 {
                     const int zc[] = {9, 9, 9, 9, 1, 1, 9, 9, 9, 9, 1, 1};
                     const int zm[] = {8, 9, 8, 9, 8, 9, 8, 9, 8, 9, 8, 9};
