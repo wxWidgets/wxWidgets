@@ -253,7 +253,7 @@ wxMenuBar *MyFrame::CreateMainMenubar()
 void MyFrame::OnClose(wxCloseEvent& event)
 {
     unsigned numChildren = MyChild::GetChildrenCount();
-    if ( event.CanVeto() && (numChildren > 0) )
+    if ( event.CanVeto() && (numChildren > 1) )
     {
         wxString msg;
         msg.Printf("%d windows still open, close anyhow?", numChildren);
