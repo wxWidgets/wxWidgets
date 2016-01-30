@@ -631,8 +631,7 @@ void wxFrameBase::DoMenuUpdates(wxMenu* menu)
 {
     if (menu)
     {
-        wxEvtHandler* source = GetEventHandler();
-        menu->UpdateUI(source);
+        menu->UpdateUI();
     }
     else
     {

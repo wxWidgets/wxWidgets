@@ -4685,8 +4685,6 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 {
     wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
 
-    menu->UpdateUI();
-
     wxPoint pos;
     gpointer userdata;
     GtkMenuPositionFunc posfunc;
