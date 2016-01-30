@@ -1105,7 +1105,7 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 
                 break;
             }
-            if (ancestor->IsTopLevel())
+            if (ancestor->IsTopNavigationDomain())
                 break;
             ancestor = ancestor->GetParent();
         }
