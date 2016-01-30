@@ -130,7 +130,7 @@ int DecodeRLE(unsigned char* imageData, unsigned long imageSize,
 
             index += current * pixelSize;
 
-            if (index >= imageSize)
+            if (index > imageSize)
             {
                 return wxTGA_IOERR;
             }
@@ -155,7 +155,7 @@ int DecodeRLE(unsigned char* imageData, unsigned long imageSize,
 
             index += length;
 
-            if (index >= imageSize)
+            if (index > imageSize)
             {
                 return wxTGA_IOERR;
             }
