@@ -7489,7 +7489,7 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl      library features they need are present)
 
     dnl TODO some samples are never built so far: mfc (requires VC++)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs drawing \
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov dialogs drawing \
                      erase event exec font image minimal power render \
                      shaped svg taborder vscroll widgets wrapsizer"
 

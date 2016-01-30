@@ -133,37 +133,6 @@ See @ref overview_config for the descriptions of all features of this class.
 
 @sampledir{console}
 
-@section page_samples_controls Controls Sample
-
-The controls sample is the main test program for most simple controls used in
-wxWidgets. The sample tests their basic functionality, events, placement,
-modification in terms of colour and font as well as the possibility to change
-the controls programmatically, such as adding an item to a list box etc. Apart
-from that, the sample uses a wxNotebook and tests most
-features of this special control (using bitmap in the tabs, using
-wxSizer instances and wxLayoutConstraints within notebook pages, advancing pages
-programmatically and vetoing a page change by intercepting the wxNotebookEvent.
-
-The various controls tested are listed here:
-
-@li wxButton
-@li wxBitmapButton
-@li wxCheckBox
-@li wxChoice
-@li wxComboBox
-@li wxGauge
-@li wxStaticBox
-@li wxListBox
-@li wxSpinCtrl
-@li wxSpinButton
-@li wxStaticText
-@li wxStaticBitmap
-@li wxRadioBox
-@li wxRadioButton
-@li wxSlider
-
-@sampledir{controls}
-
 @section page_samples_dataview wxDataViewCtrl Sample
 
 @sampleabout{wxDataViewCtrl}

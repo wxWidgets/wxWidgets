@@ -23,7 +23,6 @@
     <subproject id="combo" template="sub"/>
     <subproject id="config" template="sub"/>
     <subproject id="console" template="sub"/>
-    <subproject id="controls" template="sub"/>
     <subproject id="dataview" template="sub"/>
     <subproject id="dialogs" template="sub"/>
     <subproject id="dialup" template="sub"/>

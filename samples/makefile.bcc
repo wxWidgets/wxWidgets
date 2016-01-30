@@ -45,7 +45,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer xrc
+all: access animate artprov aui calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll webview widgets wizard wrapsizer xrc
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -95,10 +95,6 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>console.bat
 	call console.bat
 	@del console.bat
-	@echo cd controls >controls.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>controls.bat
-	call controls.bat
-	@del controls.bat
 	@echo cd dataview >dataview.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>dataview.bat
 	call dataview.bat
@@ -441,12 +437,6 @@ console:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>console.bat
 	call console.bat
 	@del console.bat
-
-controls: 
-	@echo cd controls >controls.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>controls.bat
-	call controls.bat
-	@del controls.bat
 
 dataview: 
 	@echo cd dataview >dataview.bat

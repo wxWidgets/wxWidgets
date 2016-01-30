@@ -37856,7 +37856,7 @@ LIBS="$ZLIB_LINK $POSIX4_LINK $INET_LINK $WCHAR_LINK $DL_LINK $LIBS"
 if test "$wxUSE_GUI" = "yes"; then
 
 
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs drawing \
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov dialogs drawing \
                      erase event exec font image minimal power render \
                      shaped svg taborder vscroll widgets wrapsizer"
 
