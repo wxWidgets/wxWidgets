@@ -112,10 +112,14 @@ wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_MENU_HIGHLIGHT(wxID_ABOUT, MyCanvas::OnMenuHighlight)
     EVT_MENU_HIGHLIGHT(MDI_REFRESH, MyCanvas::OnMenuHighlight)
     EVT_MENU_CLOSE(MyCanvas::OnMenuClose)
+
+    EVT_UPDATE_UI(MDI_DISABLED_FROM_CANVAS, MyCanvas::OnUpdateUIDisable)
 wxEND_EVENT_TABLE()
 
 wxBEGIN_EVENT_TABLE(MyChild::EventHandler, wxEvtHandler)
     EVT_MENU(MDI_REFRESH, MyChild::EventHandler::OnRefresh)
+
+    EVT_UPDATE_UI(MDI_DISABLED_FROM_CHILD, MyChild::OnUpdateUIDisable)
 wxEND_EVENT_TABLE()
 
 // ===========================================================================
@@ -436,6 +440,8 @@ void MyCanvas::OnMenu(wxContextMenuEvent& event)
 {
     wxMenu menu;
     menu.Append(MDI_REFRESH, "&Refresh picture");
+    menu.Append(MDI_DISABLED_FROM_CANVAS, "Item disabled by canvas");
+    menu.Append(MDI_DISABLED_FROM_CHILD, "Item disabled by child");
     PopupMenu(&menu, ScreenToClient(event.GetPosition()));
 }
 
@@ -478,6 +484,9 @@ MyChild::MyChild(wxMDIParentFrame *parent)
         menuChild->Append(MDI_CHANGE_SIZE, "Resize frame\tCtrl-S");
     }
 #if wxUSE_CLIPBOARD
+    menuChild->AppendSeparator();
+    menuChild->Append(MDI_DISABLED_FROM_CANVAS, "Item not disabled by canvas");
+    menuChild->Append(MDI_DISABLED_FROM_CHILD, "Item disabled by child");
     menuChild->AppendSeparator();
     menuChild->Append(wxID_PASTE, "Copy text from clipboard\tCtrl-V");
 #endif // wxUSE_CLIPBOARD

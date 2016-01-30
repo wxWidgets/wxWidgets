@@ -410,12 +410,11 @@ void wxMDIParentFrame::DoMenuUpdates(wxMenu* menu)
     wxMDIChildFrame *child = GetActiveChild();
     if ( child )
     {
-        wxEvtHandler* source = child->GetEventHandler();
         wxMenuBar* bar = child->GetMenuBar();
 
         if (menu)
         {
-            menu->UpdateUI(source);
+            menu->UpdateUI();
         }
         else
         {
@@ -423,7 +422,7 @@ void wxMDIParentFrame::DoMenuUpdates(wxMenu* menu)
             {
                 int nCount = bar->GetMenuCount();
                 for (int n = 0; n < nCount; n++)
-                    bar->GetMenu(n)->UpdateUI(source);
+                    bar->GetMenu(n)->UpdateUI();
             }
         }
     }

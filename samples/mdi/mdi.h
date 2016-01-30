@@ -73,6 +73,8 @@ private:
     void OnMenuHighlight(wxMenuEvent& event) { LogMenuHighlight(event); }
     void OnMenuClose(wxMenuEvent& event) { LogMenuOpenClose(event, "closed"); }
 
+    void OnUpdateUIDisable(wxUpdateUIEvent& event) { event.Enable(false); }
+
     void OnMenu(wxContextMenuEvent& event);
     void OnEvent(wxMouseEvent& event);
 
@@ -137,6 +139,7 @@ private:
     void OnMenuOpen(wxMenuEvent& event) { LogMenuOpenClose(event, "opened"); }
     void OnMenuHighlight(wxMenuEvent& event) { LogMenuHighlight(event); }
     void OnMenuClose(wxMenuEvent& event) { LogMenuOpenClose(event, "closed"); }
+    void OnUpdateUIDisable(wxUpdateUIEvent& event) { event.Enable(false); }
     void OnCloseWindow(wxCloseEvent& event);
 
 #if wxUSE_CLIPBOARD
@@ -176,6 +179,8 @@ enum
 {
     MDI_FULLSCREEN = 100,
     MDI_REFRESH,
+    MDI_DISABLED_FROM_CANVAS,
+    MDI_DISABLED_FROM_CHILD,
     MDI_CHANGE_TITLE,
     MDI_CHANGE_POSITION,
     MDI_CHANGE_SIZE
