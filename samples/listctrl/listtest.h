@@ -61,6 +61,7 @@ public:
     void OnListKeyDown(wxListEvent& event);
     void OnActivated(wxListEvent& event);
     void OnFocused(wxListEvent& event);
+    void OnItemRightClick(wxListEvent& event);
     void OnCacheHint(wxListEvent& event);
 
     void OnChar(wxKeyEvent& event);

@@ -936,6 +936,8 @@ wxBEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
     EVT_LIST_ITEM_ACTIVATED(LIST_CTRL, MyListCtrl::OnActivated)
     EVT_LIST_ITEM_FOCUSED(LIST_CTRL, MyListCtrl::OnFocused)
 
+    EVT_LIST_ITEM_RIGHT_CLICK(LIST_CTRL, MyListCtrl::OnItemRightClick)
+
     EVT_LIST_COL_CLICK(LIST_CTRL, MyListCtrl::OnColClick)
     EVT_LIST_COL_RIGHT_CLICK(LIST_CTRL, MyListCtrl::OnColRightClick)
     EVT_LIST_COL_BEGIN_DRAG(LIST_CTRL, MyListCtrl::OnColBeginDrag)
@@ -1114,6 +1116,13 @@ void MyListCtrl::OnActivated(wxListEvent& event)
 void MyListCtrl::OnFocused(wxListEvent& event)
 {
     LogEvent(event, wxT("OnFocused"));
+
+    event.Skip();
+}
+
+void MyListCtrl::OnItemRightClick(wxListEvent& event)
+{
+    LogEvent(event, wxT("OnItemRightClick"));
 
     event.Skip();
 }
