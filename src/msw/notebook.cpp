@@ -750,15 +750,18 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
         *flags = 0;
 
         if ((hitTestInfo.flags & TCHT_NOWHERE) == TCHT_NOWHERE)
+        {
+            wxASSERT( item == wxNOT_FOUND );
             *flags |= wxBK_HITTEST_NOWHERE;
-        if ((hitTestInfo.flags & TCHT_ONITEM) == TCHT_ONITEM)
+            if ( GetPageSize().Contains(pt) )
+                *flags |= wxBK_HITTEST_ONPAGE;
+        }
+        else if ((hitTestInfo.flags & TCHT_ONITEM) == TCHT_ONITEM)
             *flags |= wxBK_HITTEST_ONITEM;
-        if ((hitTestInfo.flags & TCHT_ONITEMICON) == TCHT_ONITEMICON)
+        else if ((hitTestInfo.flags & TCHT_ONITEMICON) == TCHT_ONITEMICON)
             *flags |= wxBK_HITTEST_ONICON;
-        if ((hitTestInfo.flags & TCHT_ONITEMLABEL) == TCHT_ONITEMLABEL)
+        else if ((hitTestInfo.flags & TCHT_ONITEMLABEL) == TCHT_ONITEMLABEL)
             *flags |= wxBK_HITTEST_ONLABEL;
-        if ( item == wxNOT_FOUND && GetPageSize().Contains(pt) )
-            *flags |= wxBK_HITTEST_ONPAGE;
     }
 
     return item;

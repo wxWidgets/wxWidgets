@@ -8,6 +8,8 @@
 /**
     Bit flags returned by wxBookCtrl::HitTest().
 
+    Only one of wxBK_HITTEST_ONICON, wxBK_HITTEST_ONLABEL, wxBK_HITTEST_ONITEM
+    bits is set if point is over a tab.
     Notice that wxOSX currently only returns wxBK_HITTEST_ONLABEL or
     wxBK_HITTEST_NOWHERE and never the other values, so you should only test
     for these two in the code that should be portable under OS X.
@@ -24,7 +26,7 @@ enum
     wxBK_HITTEST_ONLABEL = 4,
 
     /// The point if over a tab item but not over its icon or label.
-    wxBK_HITTEST_ONITEM  = wxBK_HITTEST_ONICON | wxBK_HITTEST_ONLABEL,
+    wxBK_HITTEST_ONITEM  = 16,
 
     /// The point is over the page area.
     wxBK_HITTEST_ONPAGE  = 8
