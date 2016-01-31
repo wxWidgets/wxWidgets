@@ -408,6 +408,22 @@ public:
     // colour given.
     bool ConvertColourToAlpha( unsigned char r, unsigned char g, unsigned char b );
 
+    // Methods for controlling LoadFile() behaviour. Currently they allow to
+    // specify whether the function should log warnings if there are any
+    // problems with the image file not completely preventing it from being
+    // loaded. By default the warnings are logged, but this can be disabled
+    // either globally or for a particular image object.
+    enum
+    {
+        Load_Verbose = 1
+    };
+
+    static void SetDefaultLoadFlags(int flags);
+    static int GetDefaultLoadFlags();
+
+    void SetLoadFlags(int flags);
+    int GetLoadFlags() const;
+
     static bool CanRead( const wxString& name );
     static int GetImageCount( const wxString& name, wxBitmapType type = wxBITMAP_TYPE_ANY );
     virtual bool LoadFile( const wxString& name, wxBitmapType type = wxBITMAP_TYPE_ANY, int index = -1 );

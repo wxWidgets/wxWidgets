@@ -87,6 +87,10 @@ public:
     // same as m_static but for m_alpha
     bool            m_staticAlpha;
 
+    // global and per-object flags determining LoadFile() behaviour
+    int             m_loadFlags;
+    static int      sm_defaultLoadFlags;
+
 #if wxUSE_PALETTE
     wxPalette       m_palette;
 #endif // wxUSE_PALETTE
@@ -96,6 +100,9 @@ public:
 
     wxDECLARE_NO_COPY_CLASS(wxImageRefData);
 };
+
+// For compatibility, if nothing else, loading is verbose by default.
+int wxImageRefData::sm_defaultLoadFlags = wxImage::Load_Verbose;
 
 wxImageRefData::wxImageRefData()
 {
@@ -113,6 +120,8 @@ wxImageRefData::wxImageRefData()
     m_ok = false;
     m_static =
     m_staticAlpha = false;
+
+    m_loadFlags = sm_defaultLoadFlags;
 }
 
 wxImageRefData::~wxImageRefData()
@@ -2341,6 +2350,30 @@ bool wxImage::HasOption(const wxString& name) const
 // image I/O
 // ----------------------------------------------------------------------------
 
+/* static */
+void wxImage::SetDefaultLoadFlags(int flags)
+{
+    wxImageRefData::sm_defaultLoadFlags = flags;
+}
+
+/* static */
+int wxImage::GetDefaultLoadFlags()
+{
+    return wxImageRefData::sm_defaultLoadFlags;
+}
+
+void wxImage::SetLoadFlags(int flags)
+{
+    AllocExclusive();
+
+    M_IMGDATA->m_loadFlags = flags;
+}
+
+int wxImage::GetLoadFlags() const
+{
+    return M_IMGDATA ? M_IMGDATA->m_loadFlags : wxImageRefData::sm_defaultLoadFlags;
+}
+
 // Under Windows we can load wxImage not only from files but also from
 // resources.
 #if defined(__WINDOWS__) && wxUSE_WXDIB && wxUSE_IMAGE
@@ -2629,7 +2662,8 @@ bool wxImage::DoLoad(wxImageHandler& handler, wxInputStream& stream, int index)
     if ( stream.IsSeekable() )
         posOld = stream.TellI();
 
-    if ( !handler.LoadFile(this, stream, true/*verbose*/, index) )
+    if ( !handler.LoadFile(this, stream,
+                           (M_IMGDATA->m_loadFlags & Load_Verbose) != 0, index) )
     {
         if ( posOld != wxInvalidOffset )
             stream.SeekI(posOld);

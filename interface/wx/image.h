@@ -1373,6 +1373,12 @@ public:
     /**
         Loads an image from an input stream.
 
+        If the file can't be loaded, this function returns false and logs an
+        error using wxLogError(). If the file can be loaded but some problems
+        were detected while doing it, it can also call wxLogWarning() to notify
+        about these problems. If this is undesirable, use SetLoadFlags() to
+        reset @c Load_Verbose flag and suppress these warnings.
+
         @param stream
             Opened input stream from which to load the image.
             Currently, the stream must support seeking.
@@ -1604,6 +1610,47 @@ public:
     */
     void SetData(unsigned char* data, int new_width, int new_height,
                  bool static_data = false);
+
+    /**
+        Sets the default value for the flags used for loading image files.
+
+        This method changes the global value of the flags used for all the
+        subsequently created wxImage objects by default. It doesn't affect the
+        already existing objects.
+
+        By default, the global flags include @c Load_Verbose flag value.
+
+        @see LoadFile(), SetLoadFlags(), GetDefaultLoadFlags()
+
+        @since 3.1.0
+     */
+    static void SetDefaultLoadFlags(int flags);
+
+    /**
+        Sets the flags used for loading image files by this object.
+
+        The flags will affect any future calls to LoadFile() for this object.
+        To change the flags for all image objects, call SetDefaultLoadFlags()
+        before creating any of them.
+
+        Currently the only defined flag is @c Load_Verbose which determines if
+        the non-fatal (i.e. not preventing the file from being loaded
+        completely) problems should result in the calls to wxLogWarning()
+        function. It is recommended to customize handling of these warnings by
+        e.g. defining a custom log target (see @ref overview_log), but if such
+        warnings should be completely suppressed, clearing this flag provides a
+        simple way to do it, for example:
+        @code
+            wxImage image;
+            image.SetLoadFlags(image.GetLoadFlags() & ~wxImage::Load_Verbose);
+            image.LoadFile(...);
+        @endcode
+
+        @see LoadFile(), SetLoadFlags(), GetLoadFlags()
+
+        @since 3.1.0
+     */
+    void SetLoadFlags(int flags);
 
     /**
         Specifies whether there is a mask or not.
@@ -1852,6 +1899,15 @@ public:
     */
     static bool CanRead(wxInputStream& stream);
 
+    /**
+        Returns the currently used default file load flags.
+
+        See SetDefaultLoadFlags() for more information about these flags.
+
+        @since 3.1.0
+     */
+    static int GetDefaultLoadFlags();
+
     //@{
     /**
         If the image file contains more than one image and the image handler is
@@ -1908,6 +1964,15 @@ public:
         @see wxImageHandler
     */
     static wxString GetImageExtWildcard();
+
+    /**
+        Returns the file load flags used for this object.
+
+        See SetLoadFlags() for more information about these flags.
+
+        @since 3.1.0
+     */
+    int GetLoadFlags() const;
 
     /**
         Converts a color in RGB color space to HSV color space.
