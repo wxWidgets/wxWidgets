@@ -99,6 +99,13 @@ public:
 protected:
     virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
+    // Initialize m_appProgressIndicator if necessary, i.e. if this object has
+    // wxGA_PROGRESS style. This method is supposed to be called from the
+    // derived class Create() if it doesn't call the base class Create(), which
+    // already does it, after initializing the window style and range.
+    void InitProgressIndicatorIfNeeded();
+
+
     // the max position
     int m_rangeMax;
 

@@ -104,6 +104,20 @@ wxCONSTRUCTOR_6( wxGauge, wxWindow*, Parent, wxWindowID, Id, int, Range, \
 // wxGauge creation
 // ----------------------------------------------------------------------------
 
+void wxGaugeBase::InitProgressIndicatorIfNeeded()
+{
+    m_appProgressIndicator = NULL;
+    if ( HasFlag(wxGA_PROGRESS) )
+    {
+        wxWindow* topParent = wxGetTopLevelParent(this);
+        if ( topParent != NULL )
+        {
+            m_appProgressIndicator =
+                new wxAppProgressIndicator(topParent, GetRange());
+        }
+    }
+}
+
 bool wxGaugeBase::Create(wxWindow *parent,
                          wxWindowID id,
                          int range,
@@ -122,22 +136,14 @@ bool wxGaugeBase::Create(wxWindow *parent,
     SetValidator(validator);
 #endif // wxUSE_VALIDATORS
 
-    m_appProgressIndicator = NULL;
-    if ( (style & wxGA_PROGRESS) != 0 )
-    {
-        wxWindow* topParent = wxGetTopLevelParent(this);
-        if ( topParent != NULL )
-        {
-            m_appProgressIndicator =
-                new wxAppProgressIndicator(topParent, range);
-        }
-    }
-
     SetRange(range);
     SetValue(0);
+
 #if wxGAUGE_EMULATE_INDETERMINATE_MODE
     m_nDirection = wxRIGHT;
 #endif
+
+    InitProgressIndicatorIfNeeded();
 
     return true;
 }

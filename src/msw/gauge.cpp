@@ -97,6 +97,8 @@ bool wxGauge::Create(wxWindow *parent,
 
     SetRange(range);
 
+    InitProgressIndicatorIfNeeded();
+
     return true;
 }
 
