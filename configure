@@ -4765,6 +4765,11 @@ $as_echo "builtin version" >&6; }
           fi
 
 
+if test "$wxUSE_LIBTIFF" = "builtin" ; then
+    wxUSE_LIBJBIG=no
+    wxUSE_LIBLZMA=no
+else
+
           withstring=without
           defaultval=$wxUSE_ALL_FEATURES
           if test -z "$defaultval"; then
@@ -4851,6 +4856,8 @@ fi
 
           { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
 $as_echo "$result" >&6; }
+
+fi
 
 
           { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --with-libxpm" >&5
