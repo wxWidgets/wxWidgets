@@ -634,7 +634,8 @@ dnl global compile options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_DISABLE(shared,     [  --disable-shared        create static library instead of shared], wxUSE_SHARED)
-WX_ARG_ENABLE(cxx11,       [  --enable-cxx11          use C++11 compiler], wxUSE_CXX11)
+AC_ARG_ENABLE(cxx11,       [  --enable-cxx11          use C++11 compiler if available], [wxWITH_CXX=11 wxWITH_CXX_IS_OPTIONAL=1])
+AC_ARG_WITH(cxx,           [  --with-cxx=11|14        use the given C++11], [wxWITH_CXX="$withval"])
 WX_ARG_ENABLE(stl,         [  --enable-stl            use standard C++ classes for everything], wxUSE_STL)
 if test "$wxUSE_STL" = "yes"; then
     DEFAULT_wxUSE_STD_CONTAINERS=yes
@@ -1064,10 +1065,31 @@ if test "$CXX" = "g++" -a "$GXX" != "yes"; then
     AC_MSG_ERROR([C++ compiler is needed to build wxWidgets])
 fi
 
-if test "$wxUSE_CXX11" = "yes"; then
-    dnl We still continue even if C++11 support is not available, would it be
-    dnl better to stop with an error in this case?
-    AX_CXX_COMPILE_STDCXX(11,,optional)
+if test -n "$wxWITH_CXX"; then
+    dnl AX_CXX_COMPILE_STDCXX requires its VERSION argument to be specified at
+    dnl autoconf, not run, time.
+    case "$wxWITH_CXX" in
+        11)
+            if test -n "$wxWITH_CXX_IS_OPTIONAL"; then
+                AX_CXX_COMPILE_STDCXX(11,,optional)
+            else
+                AX_CXX_COMPILE_STDCXX(11)
+            fi
+            have_cxxN=$HAVE_CXX11
+            ;;
+
+        14)
+            dnl This check can't be optional because we have only --with-cxx=14
+            dnl and not --enable-cxx14 option.
+            AX_CXX_COMPILE_STDCXX(14)
+
+            dnl If we have C++14, we necessarily have C++11 too.
+            HAVE_CXX11=1
+            ;;
+
+        *)
+            AC_MSG_ERROR([Invalid --with-cxx="$wxWITH_CXX" option value, only 11 or 14 supported])
+    esac
 
     if test "$HAVE_CXX11" = "1" ; then
         dnl The standard macro above doesn't set Objective-C++ flags, but we do
