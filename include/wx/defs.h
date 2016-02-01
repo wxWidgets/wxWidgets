@@ -341,7 +341,9 @@ typedef short int WXTYPE;
 #define wxConstCast(obj, className) wx_const_cast(className *, obj)
 
 #ifndef HAVE_STD_WSTRING
-    #if defined(__VISUALC__)
+    #if __cplusplus >= 201103L
+        #define HAVE_STD_WSTRING
+    #elif defined(__VISUALC__)
         #define HAVE_STD_WSTRING
     #elif defined(__MINGW32__)
         #define HAVE_STD_WSTRING
@@ -349,7 +351,9 @@ typedef short int WXTYPE;
 #endif
 
 #ifndef HAVE_STD_STRING_COMPARE
-    #if defined(__VISUALC__)
+    #if __cplusplus >= 201103L
+        #define HAVE_STD_STRING_COMPARE
+    #elif defined(__VISUALC__)
         #define HAVE_STD_STRING_COMPARE
     #elif defined(__MINGW32__) || defined(__CYGWIN32__)
         #define HAVE_STD_STRING_COMPARE
