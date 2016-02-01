@@ -18,6 +18,7 @@
 #endif
 
 #include "wx/osx/core/private.h"
+#include "wx/osx/cocoa/private.h"
 
 #import <AppKit/NSColor.h>
 
@@ -45,7 +46,6 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         // fall through, window background is reasonable
     case wxSYS_COLOUR_MENU:
     case wxSYS_COLOUR_MENUBAR:
-    case wxSYS_COLOUR_WINDOW:
     case wxSYS_COLOUR_WINDOWFRAME:
     case wxSYS_COLOUR_ACTIVEBORDER:
     case wxSYS_COLOUR_INACTIVEBORDER:
@@ -53,9 +53,10 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
         sysColor = [NSColor windowFrameColor];
         break;
+    case wxSYS_COLOUR_WINDOW:
+        return wxColour(wxMacCreateCGColorFromHITheme( 15 /* kThemeBrushDocumentWindowBackground */ )) ;
     case wxSYS_COLOUR_BTNFACE:
-        sysColor = [NSColor controlColor];
-        break;
+        return wxColour(wxMacCreateCGColorFromHITheme( 3 /* kThemeBrushDialogBackgroundActive */));
     case wxSYS_COLOUR_LISTBOX:
         sysColor = [NSColor controlBackgroundColor];
         break;
@@ -72,7 +73,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         sysColor = [NSColor controlTextColor];
         break;
     case wxSYS_COLOUR_HIGHLIGHT:
-        sysColor = [NSColor selectedControlColor];
+        sysColor = [NSColor selectedTextBackgroundColor];
         break;
     case wxSYS_COLOUR_BTNHIGHLIGHT:
         sysColor = [NSColor controlHighlightColor];
@@ -88,7 +89,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         break;
     case wxSYS_COLOUR_HIGHLIGHTTEXT:
     case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
-        sysColor = [NSColor alternateSelectedControlTextColor];
+        sysColor = [NSColor selectedTextColor];
         break;
     case wxSYS_COLOUR_INFOBK:
         // tooltip (bogus)
