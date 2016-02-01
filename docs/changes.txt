@@ -209,3 +209,4 @@ wxOSX/Cocoa:
 - Don't leave wxSlider labels shown when the slider itself is hidden.
 - Don't generate wxEVT_TEXT_ENTER for controls without wxTE_PROCESS_ENTER.
 - Implement wxToolTip::SetDelay() (David Vanderson).
+- Correct positioning of popup menus relative to mouse pointer (John Roberts).
