@@ -4602,8 +4602,8 @@ fi
 
           eval "$wx_cv_use_liblzma"
 
-
 fi
+
 
 
 # Check whether --with-libxpm was given.
@@ -17801,6 +17801,118 @@ if test $ac_cv_c_bigendian = yes; then
 fi
 
 
+if test "x$SUNCXX" = xyes; then
+    CXXFLAGS="-features=tmplife $GNU_SOURCE_FLAG $CXXFLAGS"
+fi
+
+if test "x$SUNCC" = xyes; then
+    CFLAGS="-erroff=E_NO_EXPLICIT_TYPE_GIVEN $CFLAGS"
+fi
+
+if test "x$SGICC" = "xyes"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking if cc version is 7.4.4 or greater" >&5
+$as_echo_n "checking if cc version is 7.4.4 or greater... " >&6; }
+if ${wx_cv_prog_sgicc744+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+                    #if _SGI_COMPILER_VERSION >= 744
+                    chock me: mipsPro is 7.4.4 or later
+                    #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  wx_cv_prog_sgicc744=no
+else
+  wx_cv_prog_sgicc744=yes
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_prog_sgicc744" >&5
+$as_echo "$wx_cv_prog_sgicc744" >&6; }
+
+    if test "x$wx_cv_prog_sgicc744" = "xyes"; then
+        CFLAGS="-woff 3970 $CFLAGS"
+    fi
+fi
+if test "x$SGICXX" = "xyes"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking if CC version is 7.4.4 or greater" >&5
+$as_echo_n "checking if CC version is 7.4.4 or greater... " >&6; }
+if ${wx_cv_prog_sgicxx744+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+            ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+                    #if _SGI_COMPILER_VERSION >= 744
+                    chock me: mipsPro is 7.4.4 or later
+                    #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  wx_cv_prog_sgicxx744=no
+else
+  wx_cv_prog_sgicxx744=yes
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+            ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_prog_sgicxx744" >&5
+$as_echo "$wx_cv_prog_sgicxx744" >&6; }
+
+    if test "x$wx_cv_prog_sgicxx744" = "xyes"; then
+        CXXFLAGS="-woff 3970 $CXXFLAGS"
+    fi
+fi
+
+if test "x$HPCC" = "xyes"; then
+                    CFLAGS="+W 2011,2450 $CFLAGS"
+fi
+if test "x$HPCXX" = "xyes"; then
+                            CXXFLAGS="+W 2340,4232 $CXXFLAGS"
+fi
+
+if test "x$COMPAQCXX" = "xyes"; then
+                                CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit"
+fi
+
+if test "$HAVE_CXX11" != "1" ; then
+
 
 
     ac_ext=cpp
@@ -17918,116 +18030,6 @@ $as_echo "$wx_cv_explicit" >&6; }
 
   fi
 
-
-if test "x$SUNCXX" = xyes; then
-    CXXFLAGS="-features=tmplife $GNU_SOURCE_FLAG $CXXFLAGS"
-fi
-
-if test "x$SUNCC" = xyes; then
-    CFLAGS="-erroff=E_NO_EXPLICIT_TYPE_GIVEN $CFLAGS"
-fi
-
-if test "x$SGICC" = "xyes"; then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking if cc version is 7.4.4 or greater" >&5
-$as_echo_n "checking if cc version is 7.4.4 or greater... " >&6; }
-if ${wx_cv_prog_sgicc744+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-                    #if _SGI_COMPILER_VERSION >= 744
-                    chock me: mipsPro is 7.4.4 or later
-                    #endif
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  wx_cv_prog_sgicc744=no
-else
-  wx_cv_prog_sgicc744=yes
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_prog_sgicc744" >&5
-$as_echo "$wx_cv_prog_sgicc744" >&6; }
-
-    if test "x$wx_cv_prog_sgicc744" = "xyes"; then
-        CFLAGS="-woff 3970 $CFLAGS"
-    fi
-fi
-if test "x$SGICXX" = "xyes"; then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking if CC version is 7.4.4 or greater" >&5
-$as_echo_n "checking if CC version is 7.4.4 or greater... " >&6; }
-if ${wx_cv_prog_sgicxx744+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-            ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-                    #if _SGI_COMPILER_VERSION >= 744
-                    chock me: mipsPro is 7.4.4 or later
-                    #endif
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  wx_cv_prog_sgicxx744=no
-else
-  wx_cv_prog_sgicxx744=yes
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-            ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_prog_sgicxx744" >&5
-$as_echo "$wx_cv_prog_sgicxx744" >&6; }
-
-    if test "x$wx_cv_prog_sgicxx744" = "xyes"; then
-        CXXFLAGS="-woff 3970 $CXXFLAGS"
-    fi
-fi
-
-if test "x$HPCC" = "xyes"; then
-                    CFLAGS="+W 2011,2450 $CFLAGS"
-fi
-if test "x$HPCXX" = "xyes"; then
-                            CXXFLAGS="+W 2340,4232 $CXXFLAGS"
-fi
-
-if test "x$COMPAQCXX" = "xyes"; then
-                                CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit"
-fi
 
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -18436,8 +18438,7 @@ fi
     fi
 fi
 
-if test "$HAVE_CXX11" != "1" ; then
-    for ac_header in type_traits tr1/type_traits
+for ac_header in type_traits tr1/type_traits
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_cxx_check_header_compile "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default
@@ -18451,11 +18452,8 @@ fi
 
 done
 
-else
-    $as_echo "#define HAVE_TYPE_TRAITS 1" >>confdefs.h
 
 fi
-
 
 
   if test -n "$GCC"; then
@@ -18836,6 +18834,8 @@ $as_echo "no" >&6; }
     fi
 fi
 
+if test "$HAVE_CXX11" != "1" ; then
+
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -18964,6 +18964,7 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
+fi
 
 
 if test "$wxUSE_REGEX" != "no"; then

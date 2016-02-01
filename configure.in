@@ -1669,12 +1669,6 @@ fi
 dnl check for bytesex stuff (don't use AC_C_BIGENDIAN to allow cross-compiling)
 WX_C_BIGENDIAN
 
-dnl check for iostream (as opposed to iostream.h) standard header
-WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
-
-dnl check whether C++ compiler supports explicit keyword
-WX_CPP_EXPLICIT
-
 dnl With Sun CC, temporaries have block scope by default. This flag is needed
 dnl to get the expression scope behaviour that conforms to the standard.
 if test "x$SUNCXX" = xyes; then
@@ -1771,6 +1765,16 @@ if test "x$COMPAQCXX" = "xyes"; then
     dnl               them for now
     CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit"
 fi
+
+dnl The checks below are for ancient compilers and are unnecessary when using
+dnl C++11.
+if test "$HAVE_CXX11" != "1" ; then
+
+dnl check for iostream (as opposed to iostream.h) standard header
+WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
+
+dnl check whether C++ compiler supports explicit keyword
+WX_CPP_EXPLICIT
 
 dnl the next few tests are all for C++ features and so need to be done using
 dnl C++ compiler
@@ -1985,18 +1989,9 @@ if test "$wxUSE_STL" = "yes"; then
     fi
 fi
 
-dnl Check for type_traits header if necessary: we know that it's always present
-dnl in C++11 mode. Also notice that it's important to pass AC_INCLUDES_DEFAULT()
-dnl as the last argument because otherwise autoconf would perform the check
-dnl using both the compiler and the preprocessor and the latter could fail if
-dnl the preprocessor is not in C++11 mode, resulting in a warning when running
-dnl configure, while providing this argument allows to skip the preprocessor
-dnl check.
-if test "$HAVE_CXX11" != "1" ; then
-    AC_CHECK_HEADERS([type_traits tr1/type_traits], break, [], [AC_INCLUDES_DEFAULT()])
-else
-    AC_DEFINE(HAVE_TYPE_TRAITS)
-fi
+AC_CHECK_HEADERS([type_traits tr1/type_traits], break, [], [AC_INCLUDES_DEFAULT()])
+
+fi dnl End of pre-C++11 only checks section
 
 dnl check for atomic operations builtins for wx/atomic.h:
 WX_ATOMIC_BUILTINS
@@ -2227,6 +2222,8 @@ else
     fi
 fi
 
+if test "$HAVE_CXX11" != "1" ; then
+
 dnl check for C99 string to long long conversion functions, assume that if we
 dnl have the unsigned variants, then we have the signed ones as well
 dnl
@@ -2239,6 +2236,8 @@ else
     WX_CHECK_FUNCS(strtoull)
 fi
 AC_LANG_POP()
+
+fi dnl End of pre-C++11 only checks section
 
 dnl ---------------------------------------------------------------------------
 dnl Optional libraries
