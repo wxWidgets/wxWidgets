@@ -1218,7 +1218,6 @@ enable_logdialog
 enable_mdi
 enable_mdidoc
 enable_mediactrl
-enable_gstreamer8
 enable_richtext
 enable_postscript
 enable_printarch
@@ -2147,7 +2146,6 @@ Optional Features:
   --enable-mdi            use multiple document interface architecture
   --enable-mdidoc         use docview architecture with MDI
   --enable-mediactrl      use wxMediaCtrl class
-  --enable-gstreamer8     force GStreamer 0.8 instead of 0.10 with the wxMediaCtrl class on unix
   --enable-richtext       use wxRichTextCtrl
   --enable-postscript     use wxPostscriptDC device context (default for gtk+)
   --enable-printarch      use printing architecture
@@ -3925,7 +3923,6 @@ DEFAULT_wxUSE_LIBSDL=no
 
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_IPV6=no
-DEFAULT_wxUSE_GSTREAMER8=no
 DEFAULT_wxUSE_UNICODE_UTF8=no
 DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
@@ -8296,35 +8293,6 @@ fi
 
 
           eval "$wx_cv_use_mediactrl"
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          # Check whether --enable-gstreamer8 was given.
-if test "${enable_gstreamer8+set}" = set; then :
-  enableval=$enable_gstreamer8;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_gstreamer8='wxUSE_GSTREAMER8=yes'
-                          else
-                            wx_cv_use_gstreamer8='wxUSE_GSTREAMER8=no'
-                          fi
-
-else
-
-                          wx_cv_use_gstreamer8='wxUSE_GSTREAMER8=${'DEFAULT_wxUSE_GSTREAMER8":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_gstreamer8"
 
 
           enablestring=
@@ -35729,11 +35697,10 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
                 if test "$wxUSE_GTK" = 1; then
         wxUSE_GSTREAMER="no"
 
-                                                                GST_VERSION_MAJOR=0
+        GST_VERSION_MAJOR=0
         GST_VERSION_MINOR=10
         GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
 
-        if test "$wxUSE_GSTREAMER8" = "no"; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GST" >&5
@@ -35794,16 +35761,14 @@ fi
 	echo "$GST_PKG_ERRORS" >&5
 
 
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 0.10 not available, falling back to 0.8" >&5
-$as_echo "$as_me: WARNING: GStreamer 0.10 not available, falling back to 0.8" >&2;}
-                    GST_VERSION_MINOR=8
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 0.10 not available" >&5
+$as_echo "$as_me: WARNING: GStreamer 0.10 not available" >&2;}
 
 
 elif test $pkg_failed = untried; then
 
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 0.10 not available, falling back to 0.8" >&5
-$as_echo "$as_me: WARNING: GStreamer 0.10 not available, falling back to 0.8" >&2;}
-                    GST_VERSION_MINOR=8
+                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 0.10 not available" >&5
+$as_echo "$as_me: WARNING: GStreamer 0.10 not available" >&2;}
 
 
 else
@@ -35812,93 +35777,10 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                    wxUSE_GSTREAMER="yes"
-                    GST_LIBS="$GST_LIBS -lgstinterfaces-$GST_VERSION"
+                wxUSE_GSTREAMER="yes"
+                GST_LIBS="$GST_LIBS -lgstinterfaces-$GST_VERSION"
 
 fi
-        else
-                        GST_VERSION_MINOR=8
-        fi
-
-        if test $GST_VERSION_MINOR = "8"; then
-            GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GST" >&5
-$as_echo_n "checking for GST... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GST_CFLAGS"; then
-        pkg_cv_GST_CFLAGS="$GST_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-interfaces-\$GST_VERSION gstreamer-gconf-\$GST_VERSION\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_GST_CFLAGS=`$PKG_CONFIG --cflags "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GST_LIBS"; then
-        pkg_cv_GST_LIBS="$GST_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-interfaces-\$GST_VERSION gstreamer-gconf-\$GST_VERSION\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_GST_LIBS=`$PKG_CONFIG --libs "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        GST_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION"`
-        else
-	        GST_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$GST_PKG_ERRORS" >&5
-
-
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 0.8/0.10 not available." >&5
-$as_echo "$as_me: WARNING: GStreamer 0.8/0.10 not available." >&2;}
-
-elif test $pkg_failed = untried; then
-
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 0.8/0.10 not available." >&5
-$as_echo "$as_me: WARNING: GStreamer 0.8/0.10 not available." >&2;}
-
-else
-	GST_CFLAGS=$pkg_cv_GST_CFLAGS
-	GST_LIBS=$pkg_cv_GST_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	wxUSE_GSTREAMER="yes"
-fi
-        fi
-
 
         if test "$wxUSE_GSTREAMER" = "yes"; then
             CPPFLAGS="$GST_CFLAGS $CPPFLAGS"

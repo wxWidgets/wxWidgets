@@ -332,7 +332,6 @@ DEFAULT_wxUSE_LIBSDL=no
 dnl features disabled by default
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_IPV6=no
-DEFAULT_wxUSE_GSTREAMER8=no
 DEFAULT_wxUSE_UNICODE_UTF8=no
 DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
@@ -770,7 +769,6 @@ WX_ARG_FEATURE(logdialog,   [  --enable-logdialog      use wxLogDialog], wxUSE_L
 WX_ARG_FEATURE(mdi,         [  --enable-mdi            use multiple document interface architecture], wxUSE_MDI)
 WX_ARG_FEATURE(mdidoc,      [  --enable-mdidoc         use docview architecture with MDI], wxUSE_MDI_ARCHITECTURE)
 WX_ARG_FEATURE(mediactrl,   [  --enable-mediactrl      use wxMediaCtrl class], wxUSE_MEDIACTRL)
-WX_ARG_FEATURE(gstreamer8,  [  --enable-gstreamer8     force GStreamer 0.8 instead of 0.10 with the wxMediaCtrl class on unix], wxUSE_GSTREAMER8)
 WX_ARG_FEATURE(richtext,    [  --enable-richtext       use wxRichTextCtrl], wxUSE_RICHTEXT)
 WX_ARG_FEATURE(postscript,  [  --enable-postscript     use wxPostscriptDC device context (default for gtk+)], wxUSE_POSTSCRIPT)
 WX_ARG_FEATURE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
@@ -7247,44 +7245,20 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
     if test "$wxUSE_GTK" = 1; then
         wxUSE_GSTREAMER="no"
 
-        dnl -------------------------------------------------------------------
-        dnl Test for at least 0.8 gstreamer module from pkg-config
-        dnl Even totem doesn't accept 0.9 evidently.
-        dnl
-        dnl So, we first check to see if 0.10 if available - if not we
-        dnl try the older 0.8 version
-        dnl -------------------------------------------------------------------
         GST_VERSION_MAJOR=0
         GST_VERSION_MINOR=10
         GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
 
-        if test "$wxUSE_GSTREAMER8" = "no"; then
-            PKG_CHECK_MODULES(GST,
-                [gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION],
-                [
-                    wxUSE_GSTREAMER="yes"
-                    GST_LIBS="$GST_LIBS -lgstinterfaces-$GST_VERSION"
-                ],
-                [
-                    AC_MSG_WARN([GStreamer 0.10 not available, falling back to 0.8])
-                    GST_VERSION_MINOR=8
-                ]
-            )
-        else
-            dnl check only for 0.8
-            GST_VERSION_MINOR=8
-        fi
-
-        if test $GST_VERSION_MINOR = "8"; then
-            GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
-            PKG_CHECK_MODULES(GST,
-                [gstreamer-$GST_VERSION gstreamer-interfaces-$GST_VERSION gstreamer-gconf-$GST_VERSION],
-                wxUSE_GSTREAMER="yes",
-                [
-                    AC_MSG_WARN([GStreamer 0.8/0.10 not available.])
-                ])
-        fi
-
+        PKG_CHECK_MODULES(GST,
+            [gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION],
+            [
+                wxUSE_GSTREAMER="yes"
+                GST_LIBS="$GST_LIBS -lgstinterfaces-$GST_VERSION"
+            ],
+            [
+                AC_MSG_WARN([GStreamer 0.10 not available])
+            ]
+        )
 
         if test "$wxUSE_GSTREAMER" = "yes"; then
             CPPFLAGS="$GST_CFLAGS $CPPFLAGS"
