@@ -29,8 +29,6 @@
 
 // automatically detect the URLs and generate the events when mouse is
 // moved/clicked over an URL
-//
-// this is for Win32 richedit and wxGTK2 multiline controls only so far
 #define wxTE_AUTO_URL       0x1000
 
 // by default, the Windows text control doesn't show the selection when it
@@ -967,8 +965,7 @@ public:
            ignored under other platforms
     @style{wxTE_AUTO_URL}
            Highlight the URLs and generate the wxTextUrlEvents when mouse
-           events occur over them. This style is only supported for wxTE_RICH
-           Win32 and multi-line wxGTK2 text controls.
+           events occur over them.
     @style{wxTE_NOHIDESEL}
            By default, the Windows text control doesn't show the selection
            when it doesn't have focus - use this style to force it to always
@@ -1148,8 +1145,7 @@ public:
         pressed in a text control which must have wxTE_PROCESS_ENTER style for
         this event to be generated.
     @event{EVT_TEXT_URL(id, func)}
-        A mouse event occurred over an URL in the text control (wxMSW and
-        wxGTK2 only currently).
+        A mouse event occurred over an URL in the text control.
     @event{EVT_TEXT_MAXLEN(id, func)}
         This event is generated when the user tries to enter more text into the
         control than the limit set by wxTextCtrl::SetMaxLength(), see its description.
