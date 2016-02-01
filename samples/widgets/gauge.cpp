@@ -293,10 +293,8 @@ void GaugeWidgetsPage::CreateGauge()
     if ( m_chkSmooth->GetValue() )
         flags |= wxGA_SMOOTH;
 
-#if wxUSE_TASKBARBUTTON
     if ( m_chkProgress->GetValue() )
         flags |= wxGA_PROGRESS;
-#endif
 
     int val = 0;
     if ( m_gauge )

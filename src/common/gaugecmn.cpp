@@ -155,6 +155,9 @@ bool wxGaugeBase::Create(wxWindow *parent,
 void wxGaugeBase::SetRange(int range)
 {
     m_rangeMax = range;
+
+    if ( m_appProgressIndicator )
+        m_appProgressIndicator->SetRange(m_rangeMax);
 }
 
 int wxGaugeBase::GetRange() const
@@ -165,6 +168,15 @@ int wxGaugeBase::GetRange() const
 void wxGaugeBase::SetValue(int pos)
 {
     m_gaugePos = pos;
+
+    if ( m_appProgressIndicator )
+    {
+        m_appProgressIndicator->SetValue(pos);
+        if ( pos == 0 )
+        {
+            m_appProgressIndicator->Reset();
+        }
+    }
 }
 
 int wxGaugeBase::GetValue() const
@@ -203,6 +215,9 @@ void wxGaugeBase::Pulse()
         }
     }
 #endif
+
+    if ( m_appProgressIndicator )
+        m_appProgressIndicator->Pulse();
 }
 
 #endif // wxUSE_GAUGE
