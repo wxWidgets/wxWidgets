@@ -69,12 +69,15 @@ bool wxButton::Create(wxWindow *parent,
 
     wxString label;
 
-    // Ignore the standard label for help buttons if possible, they use "?"
-    // label under Mac which looks better.
-    if ( !IsHelpButtonWithStandardLabel(id, labelOrig) )
+    if ( !(style & wxBU_NOTEXT) )
     {
-        label = labelOrig.empty() && wxIsStockID(id) ? wxGetStockLabel(id)
-                                                     : labelOrig;
+        // Ignore the standard label for help buttons if possible, they use "?"
+        // label under Mac which looks better.
+        if ( !IsHelpButtonWithStandardLabel(id, labelOrig) )
+        {
+            label = labelOrig.empty() && wxIsStockID(id) ? wxGetStockLabel(id)
+                                                         : labelOrig;
+        }
     }
 
 

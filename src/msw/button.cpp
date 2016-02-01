@@ -82,17 +82,21 @@ bool wxButton::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
-    wxString label(lbl);
-    if (label.empty() && wxIsStockID(id))
+    wxString label;
+    if ( !(style & wxBU_NOTEXT) )
     {
-        // On Windows, some buttons aren't supposed to have mnemonics
-        label = wxGetStockLabel
-                (
-                    id,
-                    id == wxID_OK || id == wxID_CANCEL || id == wxID_CLOSE
-                        ? wxSTOCK_NOFLAGS
-                        : wxSTOCK_WITH_MNEMONIC
-                );
+        label = lbl;
+        if (label.empty() && wxIsStockID(id))
+        {
+            // On Windows, some buttons aren't supposed to have mnemonics
+            label = wxGetStockLabel
+                    (
+                        id,
+                        id == wxID_OK || id == wxID_CANCEL || id == wxID_CLOSE
+                            ? wxSTOCK_NOFLAGS
+                            : wxSTOCK_WITH_MNEMONIC
+                    );
+        }
     }
 
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
