@@ -2039,7 +2039,7 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     menuTools1->Append(ID_APPENDPROP, wxT("Append New Property") );
     menuTools1->Append(ID_APPENDCAT, wxT("Append New Category\tCtrl-S") );
     menuTools1->AppendSeparator();
-    menuTools1->Append(ID_INSERTPROP, wxT("Insert New Property\tCtrl-Q") );
+    menuTools1->Append(ID_INSERTPROP, wxT("Insert New Property\tCtrl-I") );
     menuTools1->Append(ID_INSERTCAT, wxT("Insert New Category\tCtrl-W") );
     menuTools1->AppendSeparator();
     menuTools1->Append(ID_DELETE, wxT("Delete Selected") );

@@ -443,7 +443,7 @@ bool MyApp::OnInit()
     wxMenu *filedlg_menu = new wxMenu;
     filedlg_menu->Append(DIALOGS_FILE_OPEN,  wxT("&Open file\tCtrl-O"));
     filedlg_menu->Append(DIALOGS_FILE_OPEN2,  wxT("&Second open file\tCtrl-2"));
-    filedlg_menu->Append(DIALOGS_FILES_OPEN,  wxT("Open &files\tCtrl-Q"));
+    filedlg_menu->Append(DIALOGS_FILES_OPEN,  wxT("Open &files\tShift-Ctrl-O"));
     filedlg_menu->Append(DIALOGS_FILE_SAVE,  wxT("Sa&ve file\tCtrl-S"));
 
 #if USE_FILEDLG_GENERIC

@@ -225,7 +225,7 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
   m_menuSocket->Append(CLIENT_TEST2, _("Test &2\tCtrl-F2"), _("Test ReadMsg and WriteMsg"));
   m_menuSocket->Append(CLIENT_TEST3, _("Test &3\tCtrl-F3"), _("Test large data transfer"));
   m_menuSocket->AppendSeparator();
-  m_menuSocket->Append(CLIENT_CLOSE, _("&Close session\tCtrl-Q"), _("Close connection"));
+  m_menuSocket->Append(CLIENT_CLOSE, _("&Close session\tCtrl-C"), _("Close connection"));
 
   m_menuDatagramSocket = new wxMenu();
   m_menuDatagramSocket->Append(CLIENT_DGRAM, _("&Datagram test\tCtrl-D"), _("Test UDP sockets"));
