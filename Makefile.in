@@ -283,7 +283,12 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexNsis.o \
 	wxscintilla_LexOpal.o \
 	wxscintilla_LexOScript.o \
-	wxscintilla_LexOthers.o \
+	wxscintilla_LexBatch.o \
+	wxscintilla_LexDiff.o \
+	wxscintilla_LexErrorList.o \
+	wxscintilla_LexMake.o \
+	wxscintilla_LexNull.o \
+	wxscintilla_LexProps.o \
 	wxscintilla_LexPascal.o \
 	wxscintilla_LexPB.o \
 	wxscintilla_LexPerl.o \
@@ -15309,8 +15314,23 @@ wxscintilla_LexOpal.o: $(srcdir)/src/stc/scintilla/lexers/LexOpal.cxx
 wxscintilla_LexOScript.o: $(srcdir)/src/stc/scintilla/lexers/LexOScript.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexOScript.cxx
 
-wxscintilla_LexOthers.o: $(srcdir)/src/stc/scintilla/lexers/LexOthers.cxx
-	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexOthers.cxx
+wxscintilla_LexBatch.o: $(srcdir)/src/stc/scintilla/lexers/LexBatch.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexBatch.cxx
+
+wxscintilla_LexDiff.o: $(srcdir)/src/stc/scintilla/lexers/LexDiff.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexDiff.cxx
+
+wxscintilla_LexErrorList.o: $(srcdir)/src/stc/scintilla/lexers/LexErrorList.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexErrorList.cxx
+
+wxscintilla_LexMake.o: $(srcdir)/src/stc/scintilla/lexers/LexMake.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexMake.cxx
+
+wxscintilla_LexNull.o: $(srcdir)/src/stc/scintilla/lexers/LexNull.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexNull.cxx
+
+wxscintilla_LexProps.o: $(srcdir)/src/stc/scintilla/lexers/LexProps.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexProps.cxx
 
 wxscintilla_LexPascal.o: $(srcdir)/src/stc/scintilla/lexers/LexPascal.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexPascal.cxx

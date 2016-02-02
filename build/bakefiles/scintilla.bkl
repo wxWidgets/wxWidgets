@@ -116,7 +116,6 @@
             src/stc/scintilla/lexers/LexNsis.cxx
             src/stc/scintilla/lexers/LexOpal.cxx
             src/stc/scintilla/lexers/LexOScript.cxx
-            src/stc/scintilla/lexers/LexOthers.cxx
             src/stc/scintilla/lexers/LexPascal.cxx
             src/stc/scintilla/lexers/LexPB.cxx
             src/stc/scintilla/lexers/LexPerl.cxx

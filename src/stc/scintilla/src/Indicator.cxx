@@ -5,6 +5,7 @@
 // Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
+#include <stdexcept>
 #include <vector>
 #include <map>
 
@@ -127,7 +128,7 @@ void Indicator::Draw(Surface *surface, const PRectangle &rc, const PRectangle &r
 			rcBox.top = rcLine.top + 1;
 		rcBox.left = rc.left;
 		rcBox.right = rc.right;
-		surface->AlphaRectangle(rcBox, (sacDraw.style == INDIC_ROUNDBOX) ? 1 : 0, 
+		surface->AlphaRectangle(rcBox, (sacDraw.style == INDIC_ROUNDBOX) ? 1 : 0,
 			sacDraw.fore, fillAlpha, sacDraw.fore, outlineAlpha, 0);
 	} else if (sacDraw.style == INDIC_DOTBOX) {
 		PRectangle rcBox = PixelGridAlign(rc);

@@ -1135,7 +1135,7 @@ void ScintillaWX::DoContextMenu(Point pt) {
 }
 
 void ScintillaWX::DoOnListBox() {
-    AutoCompleteCompleted();
+    AutoCompleteCompleted(0, SC_AC_COMMAND);
 }
 
 

@@ -12,6 +12,7 @@
 #include <assert.h>
 #include <ctype.h>
 
+#include <stdexcept>
 #include <vector>
 
 #include "ILexer.h"

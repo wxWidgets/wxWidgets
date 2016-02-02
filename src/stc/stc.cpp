@@ -560,7 +560,7 @@ void wxStyledTextCtrl::SetCodePage(int codePage) {
     SendMsg(SCI_SETCODEPAGE, codePage);
 }
 
-// Is the IME displayed in a winow or inline?
+// Is the IME displayed in a window or inline?
 int wxStyledTextCtrl::GetIMEInteraction() const
 {
     return SendMsg(SCI_GETIMEINTERACTION, 0, 0);
@@ -1889,6 +1889,18 @@ wxString wxStyledTextCtrl::GetTargetText() const {
          return stc2wx(buf);
 }
 
+// Make the target range start and end be the same as the selection range start and end.
+void wxStyledTextCtrl::TargetFromSelection()
+{
+    SendMsg(SCI_TARGETFROMSELECTION, 0, 0);
+}
+
+// Sets the target to the whole document.
+void wxStyledTextCtrl::TargetWholeDocument()
+{
+    SendMsg(SCI_TARGETWHOLEDOCUMENT, 0, 0);
+}
+
 // Replace the target text with the argument text.
 // Text is counted so it can contain NULs.
 // Returns the length of the replacement text.
@@ -2186,6 +2198,24 @@ int wxStyledTextCtrl::WordEndPosition(int pos, bool onlyWordCharacters)
     return SendMsg(SCI_WORDENDPOSITION, pos, onlyWordCharacters);
 }
 
+// Is the range start..end considered a word?
+bool wxStyledTextCtrl::IsRangeWord(int start, int end)
+{
+    return SendMsg(SCI_ISRANGEWORD, start, end) != 0;
+}
+
+// Sets limits to idle styling.
+void wxStyledTextCtrl::SetIdleStyling(int idleStyling)
+{
+    SendMsg(SCI_SETIDLESTYLING, idleStyling, 0);
+}
+
+// Retrieve the limits to idle styling.
+int wxStyledTextCtrl::GetIdleStyling() const
+{
+    return SendMsg(SCI_GETIDLESTYLING, 0, 0);
+}
+
 // Sets whether text is word wrapped.
 void wxStyledTextCtrl::SetWrapMode(int mode)
 {
@@ -2388,12 +2418,6 @@ wxString wxStyledTextCtrl::GetTag(int tagNumber) const {
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
          return stc2wx(buf);
-}
-
-// Make the target range start and end be the same as the selection range start and end.
-void wxStyledTextCtrl::TargetFromSelection()
-{
-    SendMsg(SCI_TARGETFROMSELECTION, 0, 0);
 }
 
 // Join the lines in the target.
@@ -3399,7 +3423,7 @@ void wxStyledTextCtrl::AutoCompSetMulti(int multi)
     SendMsg(SCI_AUTOCSETMULTI, multi, 0);
 }
 
-// Retrieve the effect of autocompleting when there are multiple selections..
+// Retrieve the effect of autocompleting when there are multiple selections.
 int wxStyledTextCtrl::AutoCompGetMulti() const
 {
     return SendMsg(SCI_AUTOCGETMULTI, 0, 0);
@@ -4101,6 +4125,20 @@ void wxStyledTextCtrl::RotateSelection()
 void wxStyledTextCtrl::SwapMainAnchorCaret()
 {
     SendMsg(SCI_SWAPMAINANCHORCARET, 0, 0);
+}
+
+// Add the next occurrence of the main selection to the set of selections as main.
+// If the current selection is empty then select word around caret.
+void wxStyledTextCtrl::MultipleSelectAddNext()
+{
+    SendMsg(SCI_MULTIPLESELECTADDNEXT, 0, 0);
+}
+
+// Add each occurrence of the main selection in the target to the set of selections.
+// If the current selection is empty then select word around caret.
+void wxStyledTextCtrl::MultipleSelectAddEach()
+{
+    SendMsg(SCI_MULTIPLESELECTADDEACH, 0, 0);
 }
 
 // Indicate that the internal state of a lexer has changed over a range and therefore
@@ -5430,7 +5468,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
 {
-    return wxVersionInfo("Scintilla", 3, 5, 5, "Scintilla 3.5.5");
+    return wxVersionInfo("Scintilla", 3, 6, 3, "Scintilla 3.6.3");
 }
 
 #endif // wxUSE_STC
