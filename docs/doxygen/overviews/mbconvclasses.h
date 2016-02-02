@@ -20,23 +20,25 @@ convert between Unicode and the variety of 8-bit encoding systems still in use.
 
 @section overview_mbconv_need Background: The Need for Conversion
 
-As programs are becoming more and more globalized, and users exchange documents
-across country boundaries as never before, applications increasingly need to
-take into account all the different character sets in use around the world. It
-is no longer enough to just depend on the default byte-sized character set that
-computers have traditionally used.
+As programs have become more and more globalized, and users are exchanging documents
+across country boundaries as never before, applications need to take into account
+the different letters and symbols in use around the world. It is no longer enough
+to just depend on the default byte-sized character sets that computers have
+traditionally used.
 
-A few years ago, a solution was proposed: the Unicode standard. Able to contain
-the complete set of characters in use in one unified global coding system, it
-would resolve the character set problems once and for all.
+The Unicode standard is the solution to most tasks involving processing and exchanging
+text in arbitrary languages. Unicode is able to contain the complete set of characters
+used in all languages of the world in one unified global coding system.
 
-But it hasn't happened yet, and the migration towards Unicode has created new
-challenges, resulting in "compatibility encodings" such as UTF-8. A large
-number of systems out there still depends on the old 8-bit encodings, hampered
-by the huge amounts of legacy code still widely deployed. Even sending Unicode
-data from one Unicode-aware system to another may need encoding to an 8-bit
-multibyte encoding (UTF-7 or UTF-8 is typically used for this purpose), to pass
-unhindered through any traditional transport channels.
+Unicode text can be represented in various encodings, one of the most commonly used
+being UTF-8. UTF-8 along with UTF-7 are so-called "compatibility encodings", which
+exist to facilitate the migration from old 8-bit encodings to Unicode. Despite the
+wide adoption of Unicode, a number of legacy systems out there still depends on the
+old 8-bit encodings.
+
+Sending Unicode data from one Unicode-aware system to another, e.g. through a network
+connection or regular files, is typically done by encoding the data into a multibyte
+encoding; usually UTF-8.
 
 
 @section overview_mbconv_string Background: The wxString Class
