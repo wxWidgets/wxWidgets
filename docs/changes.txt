@@ -27,6 +27,9 @@ Changes in behaviour not resulting in compilation errors
 - Using invalid flags with wxBoxSizer or wxGridSizer items now triggers asserts
   when done from the code or error messages when done in XRC.
 
+- wxOSX/Carbon port doesn't exist any more, wxOSX/Cocoa will be silently used
+  instead even if configure --with-osx_carbon option is used.
+
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
 
