@@ -285,7 +285,6 @@ case "${host}" in
     USE_DARWIN=1
     AC_DEFINE(__BSD__)
     AC_DEFINE(__DARWIN__)
-    AC_DEFINE(TARGET_CARBON)
     DEFAULT_DEFAULT_wxUSE_OSX_COCOA=1
   ;;
 
@@ -2309,53 +2308,42 @@ if test "$wxUSE_ZLIB" != "no" ; then
     AC_DEFINE(wxUSE_ZLIB)
 
     if test "$wxUSE_ZLIB" = "sys" -o "$wxUSE_ZLIB" = "yes" ; then
-        dnl don't test for zlib under Mac -- its verson there is 1.1.3 but we
-        dnl should still use it because hopefully (can someone confirm this?)
-        dnl Apple did fix the security problem in it and not using the system
-        dnl library results in a whole bunch of warnings when linking with
-        dnl Carbon framework
-        if test "$USE_DARWIN" = 1; then
-            system_zlib_h_ok="yes"
-        else
-            dnl we have troubles with ancient zlib versions (e.g. 1.0.4 is
-            dnl known to not work) and although I don't know which is
-            dnl the minimal required version it's safer to test for 1.1.4 as
-            dnl it fixes a security problem in 1.1.3 -- and hopefully nobody
-            dnl has anything more ancient (1.1.3 was released in July 1998)
-            dnl anyhow
-            AC_CACHE_CHECK([for zlib.h >= 1.1.4], ac_cv_header_zlib_h,
-                [AC_TRY_RUN(
-                    dnl zlib.h defines ZLIB_VERSION="x.y.z"
-                    [
-                        #include <zlib.h>
-                        #include <stdio.h>
+        dnl we have troubles with ancient zlib versions (e.g. 1.0.4 is
+        dnl known to not work) and although I don't know which is
+        dnl the minimal required version it's safer to test for 1.1.4 as
+        dnl it fixes a security problem in 1.1.3 -- and hopefully nobody
+        dnl has anything more ancient (1.1.3 was released in July 1998)
+        dnl anyhow
+        AC_CACHE_CHECK([for zlib.h >= 1.1.4], ac_cv_header_zlib_h,
+            [AC_TRY_RUN(
+                dnl zlib.h defines ZLIB_VERSION="x.y.z"
+                [
+                    #include <zlib.h>
+                    #include <stdio.h>
 
-                        int main()
-                        {
-                            FILE *f=fopen("conftestval", "w");
-                            if (!f) exit(1);
-                            fprintf(f, "%s",
-                                    ZLIB_VERSION[0] == '1' &&
-                                    (ZLIB_VERSION[2] > '1' ||
-                                    (ZLIB_VERSION[2] == '1' &&
-                                     ZLIB_VERSION[4] >= '4')) ? "yes" : "no");
-                            exit(0);
-                        }
-                    ],
-                    ac_cv_header_zlib_h=`cat conftestval`,
-                    ac_cv_header_zlib_h=no,
-                    dnl cross-compiling: don't have an answer, try later
-                    unset ac_cv_header_zlib_h
-                )]
-            )
-            dnl If the test above did not come up with a value (e.g. cross
-            dnl compiling) then this should give a definitive answer
-            AC_CHECK_HEADER(zlib.h,,, [ ])
+                    int main()
+                    {
+                        FILE *f=fopen("conftestval", "w");
+                        if (!f) exit(1);
+                        fprintf(f, "%s",
+                                ZLIB_VERSION[0] == '1' &&
+                                (ZLIB_VERSION[2] > '1' ||
+                                (ZLIB_VERSION[2] == '1' &&
+                                 ZLIB_VERSION[4] >= '4')) ? "yes" : "no");
+                        exit(0);
+                    }
+                ],
+                ac_cv_header_zlib_h=`cat conftestval`,
+                ac_cv_header_zlib_h=no,
+                dnl cross-compiling: don't have an answer, try later
+                unset ac_cv_header_zlib_h
+            )]
+        )
+        dnl If the test above did not come up with a value (e.g. cross
+        dnl compiling) then this should give a definitive answer
+        AC_CHECK_HEADER(zlib.h,,, [ ])
 
-            system_zlib_h_ok=$ac_cv_header_zlib_h
-        fi
-
-        if test "$system_zlib_h_ok" = "yes"; then
+        if test "$ac_cv_header_zlib_h" = "yes"; then
             AC_CHECK_LIB(z, deflate, ZLIB_LINK=" -lz")
         fi
 
@@ -3273,7 +3261,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         TOOLKIT=OSX_COCOA
         GUIDIST=OSX_COCOA_DIST
 
-        dnl see the comment above in wxUSE_OSX_CARBON branch
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXMAC__ -D__WXOSX__"
     fi
 
@@ -7410,10 +7397,8 @@ if test "$wxUSE_MAC" = 1 ; then
             dnl need it in 32 bit builds and not in 64 bit and, moreover,
             dnl linking with it in 64 bit builds results in a warning because
             dnl the framework is not available in 64 bits itself. So make an
-            dnl effort to avoid using it unnecessarily. Note that with Carbon
-            dnl we also need it for wxSound an as Carbon is itself not
-            dnl available in 64 bits anyhow, there is no reason to avoid it.
-            if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_MEDIACTRL" = "yes"; then
+            dnl effort to avoid using it unnecessarily.
+            if "$wxUSE_MEDIACTRL" = "yes"; then
 
             if test "$cross_compiling" != "no"; then
                 dnl The check below doesn't work well when cross-compiling
@@ -7524,7 +7509,7 @@ elif test "$GXX" = yes ; then
     AX_CXXFLAGS_GCC_OPTION(-Woverloaded-virtual, CXXWARNINGS)
 
     dnl when building under Mac we currently get hundreds of deprecation
-    dnl warnings for Carbon symbols from the standard headers -- disable them
+    dnl warnings for Cocoa symbols from the standard headers -- disable them
     dnl as we already know that they're deprecated and nothing else can be seen
     dnl with these warnings on
     if test "$wxUSE_MAC" = 1 ; then

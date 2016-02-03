@@ -290,10 +290,6 @@
 #        ifndef __DARWIN__
 #            define __DARWIN__ 1
 #        endif
-        /*  NOTE: TARGET_CARBON is actually a 0/1 and must be 1 for OS X */
-#        ifndef TARGET_CARBON
-#            define TARGET_CARBON 1
-#        endif
         /* OS X uses unsigned long size_t for both ILP32 and LP64 modes. */
 #        if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
 #            define wxSIZE_T_IS_ULONG

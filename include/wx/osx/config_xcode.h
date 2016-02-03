@@ -20,7 +20,6 @@
 #define __BSD__ 1
 #define __DARWIN__ 1
 #define wx_USE_NANOX 0
-#define TARGET_CARBON 1
 
 #define HAVE_EXPLICIT 1
 #define HAVE_VA_COPY 1
