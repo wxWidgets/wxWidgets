@@ -1797,7 +1797,6 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
 
     DynamicEvents& dynamicEvents = *m_dynamicEvents;
 
-    bool processed = false;
     bool needToPruneDeleted = false;
 
     // We can't use Get{First,Next}DynamicEntry() here as they hide the deleted
@@ -1824,8 +1823,20 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
                handler = this;
             if ( ProcessEventIfMatchesId(*entry, handler, event) )
             {
-                processed = true;
-                break;
+                // It's important to skip pruning of the unbound event entries
+                // below because this object itself could have been deleted by
+                // the event handler making m_dynamicEvents a dangling pointer
+                // which can't be accessed any longer in the code below.
+                //
+                // In practice, it hopefully shouldn't be a problem to wait
+                // until we get an event that we don't handle before pruning
+                // because this should happen soon enough and even if it
+                // doesn't the worst possible outcome is slightly increased
+                // memory consumption while not skipping pruning can result in
+                // hard to reproduce (because they require the disconnection
+                // and deletion happen at the same time which is not always the
+                // case) crashes.
+                return true;
             }
         }
     }
@@ -1843,7 +1854,7 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
         dynamicEvents.resize(nNew);
     }
 
-    return processed;
+    return false;
 }
 
 void wxEvtHandler::DoSetClientObject( wxClientData *data )
