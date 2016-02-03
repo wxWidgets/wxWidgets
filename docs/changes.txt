@@ -198,6 +198,7 @@ wxMSW:
 - Don't send wxActivateEvent for minimized windows (bzcdr).
 - Return correct OS version under Windows 8.1 and later.
 - Fix crash in wxD2DContext when using non-MSVC compiler (iwbnwif).
+- Notify shell about the changes done by wxMimeTypesManager (Maarten Bent).
 
 wxOSX/Cocoa:
 
