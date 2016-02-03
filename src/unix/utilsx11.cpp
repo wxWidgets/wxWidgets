@@ -39,7 +39,9 @@
 #include <gtk/gtk.h>
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
+#if GTK_CHECK_VERSION(2,14,0)
 #include "wx/gtk/private/gtk2-compat.h"     // gdk_window_get_screen()
+#endif
 #endif
 GdkWindow* wxGetTopLevelGDK();
 #endif
