@@ -678,11 +678,7 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
 
     wxWindow * const listctrl = m_owner->GetParent();
 
-    const bool hasFocus = listctrl->HasFocus()
-#if defined(__WXMAC__) && !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
-                && IsControlActive( (ControlRef)listctrl->GetHandle() )
-#endif
-                ;
+    const bool hasFocus = listctrl->HasFocus();
 
     // fg colour
 

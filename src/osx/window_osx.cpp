@@ -64,11 +64,7 @@
 
 #include "wx/graphics.h"
 
-#if wxOSX_USE_CARBON
-    #include "wx/osx/uma.h"
-#else
-    #include "wx/osx/private.h"
-#endif
+#include "wx/osx/private.h"
 
 #define MAC_SCROLLBAR_SIZE 15
 #define MAC_SMALL_SCROLLBAR_SIZE 11
@@ -1320,11 +1316,7 @@ bool wxWindowMac::MacIsReallyEnabled()
 
 bool wxWindowMac::MacIsReallyHilited()
 {
-#if wxOSX_USE_CARBON
-    return GetPeer()->IsActive();
-#else
     return true; // TODO
-#endif
 }
 
 int wxWindowMac::GetCharHeight() const
@@ -1928,97 +1920,6 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion( bool includeOuterStructures )
 
 void wxWindowMac::MacUpdateClippedRects() const
 {
-#if wxOSX_USE_CARBON
-    if ( m_cachedClippedRectValid )
-        return ;
-
-    // includeOuterStructures is true if we try to draw somthing like a focus ring etc.
-    // also a window dc uses this, in this case we only clip in the hierarchy for hard
-    // borders like a scrollwindow, splitter etc otherwise we end up in a paranoia having
-    // to add focus borders everywhere
-
-    Rect rIncludingOuterStructures ;
-
-    int tx,ty,tw,th;
-
-    GetPeer()->GetSize( tw, th );
-    GetPeer()->GetPosition( tx, ty );
-
-    Rect r  = { ty,tx, ty+th, tx+tw };
-
-    r.left -= MacGetLeftBorderSize() ;
-    r.top -= MacGetTopBorderSize() ;
-    r.bottom += MacGetBottomBorderSize() ;
-    r.right += MacGetRightBorderSize() ;
-
-    r.right -= r.left ;
-    r.bottom -= r.top ;
-    r.left = 0 ;
-    r.top = 0 ;
-
-    rIncludingOuterStructures = r ;
-    InsetRect( &rIncludingOuterStructures , -4 , -4 ) ;
-
-    wxRect cl = GetClientRect() ;
-    Rect rClient = { cl.y , cl.x , cl.y + cl.height , cl.x + cl.width } ;
-
-    int x , y ;
-    wxSize size ;
-    const wxWindow* child = (wxWindow*) this ;
-    const wxWindow* parent = NULL ;
-
-    while ( !child->IsTopLevel() && ( parent = child->GetParent() ) != NULL )
-    {
-        if ( parent->MacIsChildOfClientArea(child) )
-        {
-            size = parent->GetClientSize() ;
-            wxPoint origin = parent->GetClientAreaOrigin() ;
-            x = origin.x ;
-            y = origin.y ;
-        }
-        else
-        {
-            // this will be true for scrollbars, toolbars etc.
-            size = parent->GetSize() ;
-            y = parent->MacGetTopBorderSize() ;
-            x = parent->MacGetLeftBorderSize() ;
-            size.x -= parent->MacGetLeftBorderSize() + parent->MacGetRightBorderSize() ;
-            size.y -= parent->MacGetTopBorderSize() + parent->MacGetBottomBorderSize() ;
-        }
-
-        parent->MacWindowToRootWindow( &x, &y ) ;
-        MacRootWindowToWindow( &x , &y ) ;
-
-        Rect rparent = { y , x , y + size.y , x + size.x } ;
-
-        // the wxwindow and client rects will always be clipped
-        SectRect( &r , &rparent , &r ) ;
-        SectRect( &rClient , &rparent , &rClient ) ;
-
-        // the structure only at 'hard' borders
-        if ( parent->MacClipChildren() ||
-            ( parent->GetParent() && parent->GetParent()->MacClipGrandChildren() ) )
-        {
-            SectRect( &rIncludingOuterStructures , &rparent , &rIncludingOuterStructures ) ;
-        }
-
-        child = parent ;
-    }
-
-    m_cachedClippedRect = wxRect( r.left , r.top , r.right - r.left , r.bottom - r.top ) ;
-    m_cachedClippedClientRect = wxRect( rClient.left , rClient.top ,
-        rClient.right - rClient.left , rClient.bottom - rClient.top ) ;
-    m_cachedClippedRectWithOuterStructure = wxRect(
-        rIncludingOuterStructures.left , rIncludingOuterStructures.top ,
-        rIncludingOuterStructures.right - rIncludingOuterStructures.left ,
-        rIncludingOuterStructures.bottom - rIncludingOuterStructures.top ) ;
-
-    m_cachedClippedRegionWithOuterStructure = wxRegion( m_cachedClippedRectWithOuterStructure ) ;
-    m_cachedClippedRegion = wxRegion( m_cachedClippedRect ) ;
-    m_cachedClippedClientRegion = wxRegion( m_cachedClippedClientRect ) ;
-
-    m_cachedClippedRectValid = true ;
-#endif
 }
 
 /*

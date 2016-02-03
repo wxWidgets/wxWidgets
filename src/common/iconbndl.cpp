@@ -273,14 +273,7 @@ wxIcon wxIconBundle::GetIcon(const wxSize& size, int flags) const
         }
     }
 
-#if defined( __WXMAC__ ) && wxOSX_USE_CARBON
-    if (!iconBest.IsOk())
-        return wxNullIcon;
-
-    return wxIcon(iconBest.GetHICON(), size);
-#else
     return iconBest;
-#endif
 }
 
 wxIcon wxIconBundle::GetIconOfExactSize(const wxSize& size) const

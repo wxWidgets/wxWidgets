@@ -244,10 +244,6 @@ set theProject to {projectName:"", conditions:{}, bklfiles:{¬
 	{label:"libscintilla", entries:{"$(wxscintilla)"}, targets:{"dynamic", "static", "wxscintilla"}}, ¬
 	{label:"libexpat", entries:{"$(wxexpat)"}, targets:{"dynamic", "static", "wxexpat"}} ¬
 		}}
-set conditions of theProject to {"PLATFORM_MACOSX=='1'", "TOOLKIT=='OSX_CARBON'", "WXUNIV=='0'", "USE_GUI=='1' and WXUNIV=='0'"}
-set projectName of theProject to "wxcarbon"
-makeProject(theProject)
-
 set conditions of theProject to {"PLATFORM_MACOSX=='1'", "TOOLKIT=='OSX_COCOA'", "WXUNIV=='0'", "USE_GUI=='1' and WXUNIV=='0'"}
 set projectName of theProject to "wxcocoa"
 

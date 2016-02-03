@@ -26,7 +26,6 @@
 #   elif !defined(__WXMOTIF__) && \
          !defined(__WXMSW__)   && \
          !defined(__WXGTK__)   && \
-         !defined(__WXOSX_CARBON__)   && \
          !defined(__WXOSX_COCOA__)   && \
          !defined(__WXOSX_IPHONE__)   && \
          !defined(__X__)       && \
@@ -2991,12 +2990,6 @@ typedef unsigned long   WXDWORD;
 typedef unsigned short  WXWORD;
 
 typedef WX_OPAQUE_TYPE(PicHandle ) * WXHMETAFILE ;
-#if wxOSX_USE_CARBON
-typedef struct OpaqueControlRef* WXWidget ;
-typedef struct OpaqueWindowPtr* WXWindow ;
-typedef struct __AGLPixelFormatRec   *WXGLPixelFormat;
-typedef struct __AGLContextRec       *WXGLContext;
-#endif
 
 typedef void*       WXDisplay;
 
@@ -3041,9 +3034,6 @@ DECLARE_WXMAC_OPAQUE_REF( MenuRef )
 
 typedef IconRef WXHICON ;
 typedef HIShapeRef WXHRGN;
-#if wxOSX_USE_CARBON
-typedef MenuRef WXHMENU;
-#endif
 
 #endif
 

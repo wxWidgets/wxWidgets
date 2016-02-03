@@ -407,10 +407,6 @@ bool wxDocument::OnSaveDocument(const wxString& file)
     Modify(false);
     SetFilename(file);
     SetDocumentSaved(true);
-#if defined( __WXOSX_MAC__ ) && wxOSX_USE_CARBON
-    wxFileName fn(file) ;
-    fn.MacSetDefaultTypeAndCreator() ;
-#endif
     return true;
 }
 

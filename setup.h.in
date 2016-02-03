@@ -113,7 +113,6 @@
 
 /* PowerPC Darwin & Mac OS X */
 #undef __POWERPC__
-#undef TARGET_CARBON
 
 /* Hack to make IOGraphicsTypes.h not define Point conflicting with MacTypes */
 #undef __Point__

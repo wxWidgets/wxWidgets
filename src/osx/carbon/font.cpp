@@ -157,11 +157,6 @@ protected:
     void Init();
 public:
     bool            m_fontValid;
-#if wxOSX_USE_CARBON && wxOSX_USE_ATSU_TEXT
-    // for true theming support we must store the correct font
-    // information here, as this speeds up and optimizes rendering
-    ThemeFontID     m_macThemeFontID ;
-#endif
     wxCFRef<CTFontRef> m_ctFont;
 #if wxOSX_USE_ATSU_TEXT
     void CreateATSUFont();
@@ -185,9 +180,6 @@ wxFontRefData::wxFontRefData(const wxFontRefData& data) : wxGDIRefData()
     Init();
     m_info = data.m_info;
     m_fontValid = data.m_fontValid;
-#if wxOSX_USE_CARBON && wxOSX_USE_ATSU_TEXT
-    m_macThemeFontID = data.m_macThemeFontID;
-#endif
     m_ctFont = data.m_ctFont;
     m_cgFont = data.m_cgFont;
 #if wxOSX_USE_ATSU_TEXT
@@ -219,9 +211,6 @@ static CTFontDescriptorRef wxMacCreateCTFontDescriptor(CFStringRef iFamilyName, 
 
 void wxFontRefData::Init()
 {
-#if wxOSX_USE_CARBON && wxOSX_USE_ATSU_TEXT
-    m_macThemeFontID = kThemeCurrentPortFont ;
-#endif
 #if wxOSX_USE_ATSU_TEXT
     m_macATSUStyle = NULL ;
 #endif
@@ -244,9 +233,6 @@ void wxFontRefData::Free()
     m_ctFont.reset();
     m_cgFont.reset();
 #if wxOSX_USE_ATSU_TEXT
-#if wxOSX_USE_CARBON
-    m_macThemeFontID = kThemeCurrentPortFont ;
-#endif
     if ( m_macATSUStyle )
     {
         ::ATSUDisposeStyle((ATSUStyle)m_macATSUStyle);
@@ -313,10 +299,8 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
     }
 #if wxOSX_USE_ATSU_TEXT
     {
-#if !wxOSX_USE_CARBON
         // not needed outside
         ThemeFontID m_macThemeFontID = kThemeSystemFont;
-#endif
         switch( font )
         {
             case wxOSX_SYSTEM_FONT_NORMAL:
@@ -826,37 +810,6 @@ wxFontEncoding wxFont::GetEncoding() const
     return M_FONTDATA->GetEncoding() ;
 }
 
-#if wxOSX_USE_ATSU_TEXT && wxOSX_USE_CARBON
-
-short wxFont::MacGetFontNum() const
-{
-    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
-
-    // cast away constness otherwise lazy font resolution is not possible
-    const_cast<wxFont *>(this)->RealizeResource();
-
-    return M_FONTDATA->m_info.m_qdFontFamily;
-}
-
-wxByte wxFont::MacGetFontStyle() const
-{
-    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
-
-    // cast away constness otherwise lazy font resolution is not possible
-    const_cast<wxFont *>(this)->RealizeResource();
-
-    return M_FONTDATA->m_info.m_qdFontStyle;
-}
-
-wxUint16 wxFont::MacGetThemeFontID() const
-{
-    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
-
-    return M_FONTDATA->m_macThemeFontID;
-}
-
-#endif
-
 #if wxOSX_USE_ATSU_TEXT
 void * wxFont::MacGetATSUStyle() const
 {
@@ -1020,10 +973,6 @@ void wxNativeFontInfo::Init()
     m_atsuFontID = 0 ;
     m_atsuAdditionalQDStyles = 0;
     m_atsuFontValid = false;
-#if wxOSX_USE_CARBON
-    m_qdFontStyle = 0;
-    m_qdFontFamily = 0;
-#endif
 #endif
     m_pointSize = 0;
     m_family = wxFONTFAMILY_DEFAULT;
@@ -1069,11 +1018,9 @@ void wxNativeFontInfo::EnsureValid()
 #if wxOSX_USE_ATSU_TEXT
     if ( !m_atsuFontValid )
     {
-#if !wxOSX_USE_CARBON
         // not needed outside
         wxInt16 m_qdFontFamily;
         wxInt16 m_qdFontStyle;
-#endif
         wxCFStringRef cf( m_faceName, wxLocale::GetSystemEncoding() );
         ATSFontFamilyRef atsfamily = ATSFontFamilyFindFromName( cf , kATSOptionFlagsDefault );
         if ( atsfamily == (ATSFontFamilyRef) -1 )
@@ -1118,10 +1065,6 @@ void wxNativeFontInfo::Init(const wxNativeFontInfo& info)
     m_atsuFontValid = info.m_atsuFontValid;
     m_atsuFontID = info.m_atsuFontID ;
     m_atsuAdditionalQDStyles = info.m_atsuAdditionalQDStyles;
-#if wxOSX_USE_CARBON
-    m_qdFontFamily = info.m_qdFontFamily;
-    m_qdFontStyle = info.m_qdFontStyle;
-#endif
 #endif
     m_pointSize = info.m_pointSize;
     m_family = info.m_family;

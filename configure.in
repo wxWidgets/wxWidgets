@@ -99,12 +99,11 @@ NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 dnl the list of all available toolkits
 dnl
 dnl update NUM_TOOLKITS calculation below when adding a new toolkit here!
-ALL_TOOLKITS="GTK OSX_CARBON OSX_COCOA OSX_IPHONE MOTIF MSW X11 DFB QT"
+ALL_TOOLKITS="GTK OSX_COCOA OSX_IPHONE MOTIF MSW X11 DFB QT"
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
 DEFAULT_wxUSE_GTK=0
-DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_wxUSE_OSX_COCOA=0
 DEFAULT_wxUSE_OSX_IPHONE=0
 DEFAULT_wxUSE_MOTIF=0
@@ -117,7 +116,6 @@ dnl these are the values which are really default for the given platform:
 dnl they're used if no --with-<toolkit> options were given to detect the
 dnl toolkit to use by default for the target platform
 DEFAULT_DEFAULT_wxUSE_GTK=0
-DEFAULT_DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_DEFAULT_wxUSE_OSX_COCOA=0
 DEFAULT_DEFAULT_wxUSE_OSX_IPHONE=0
 DEFAULT_DEFAULT_wxUSE_MOTIF=0
@@ -287,7 +285,6 @@ case "${host}" in
     USE_DARWIN=1
     AC_DEFINE(__BSD__)
     AC_DEFINE(__DARWIN__)
-    AC_DEFINE(TARGET_CARBON)
     DEFAULT_DEFAULT_wxUSE_OSX_COCOA=1
   ;;
 
@@ -420,11 +417,9 @@ dnl we use AC_ARG_WITH and not WX_ARG_WITH for the toolkit options as they
 dnl shouldn't default to wxUSE_ALL_FEATURES
 AC_ARG_WITH(gtk,          [[  --with-gtk[=VERSION]    use GTK+, VERSION can be 3, 2 (default), 1 or "any"]], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
-AC_ARG_WITH(osx_carbon,    [  --with-osx_carbon       use Mac OS X (Carbon)], [wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(osx_cocoa,     [  --with-osx_cocoa        use Mac OS X (Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(osx_iphone,    [  --with-osx_iphone       use iPhone OS X port], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(osx,           [  --with-osx              use Mac OS X (default port, Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
-AC_ARG_WITH(carbon,        [  --with-carbon           same as --with-osx_carbon], [wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(cocoa,         [  --with-cocoa            same as --with-osx_cocoa], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(iphone,        [  --with-iphone           same as --with-osx_iphone], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mac,           [  --with-mac              same as --with-osx], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
@@ -485,7 +480,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
     dnl we suppose that expr is available (maybe there is a better way to do
     dnl this? what about using ALL_TOOLKITS? TODO)
-    NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
+    NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} \
                   + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_OSX_IPHONE:-0} + ${wxUSE_DFB:-0} \
                   + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} \
                   + ${wxUSE_X11:-0} + ${wxUSE_QT:-0}`
@@ -518,8 +513,7 @@ else
 fi
 
 wxUSE_MAC=0
-if test "$wxUSE_OSX_CARBON" = 1 \
-       -o "$wxUSE_OSX_COCOA" = 1 \
+if test "$wxUSE_OSX_COCOA" = 1 \
        -o "$wxUSE_OSX_IPHONE" = 1; then
     wxUSE_MAC=1
 fi
@@ -2314,53 +2308,42 @@ if test "$wxUSE_ZLIB" != "no" ; then
     AC_DEFINE(wxUSE_ZLIB)
 
     if test "$wxUSE_ZLIB" = "sys" -o "$wxUSE_ZLIB" = "yes" ; then
-        dnl don't test for zlib under Mac -- its verson there is 1.1.3 but we
-        dnl should still use it because hopefully (can someone confirm this?)
-        dnl Apple did fix the security problem in it and not using the system
-        dnl library results in a whole bunch of warnings when linking with
-        dnl Carbon framework
-        if test "$USE_DARWIN" = 1; then
-            system_zlib_h_ok="yes"
-        else
-            dnl we have troubles with ancient zlib versions (e.g. 1.0.4 is
-            dnl known to not work) and although I don't know which is
-            dnl the minimal required version it's safer to test for 1.1.4 as
-            dnl it fixes a security problem in 1.1.3 -- and hopefully nobody
-            dnl has anything more ancient (1.1.3 was released in July 1998)
-            dnl anyhow
-            AC_CACHE_CHECK([for zlib.h >= 1.1.4], ac_cv_header_zlib_h,
-                [AC_TRY_RUN(
-                    dnl zlib.h defines ZLIB_VERSION="x.y.z"
-                    [
-                        #include <zlib.h>
-                        #include <stdio.h>
+        dnl we have troubles with ancient zlib versions (e.g. 1.0.4 is
+        dnl known to not work) and although I don't know which is
+        dnl the minimal required version it's safer to test for 1.1.4 as
+        dnl it fixes a security problem in 1.1.3 -- and hopefully nobody
+        dnl has anything more ancient (1.1.3 was released in July 1998)
+        dnl anyhow
+        AC_CACHE_CHECK([for zlib.h >= 1.1.4], ac_cv_header_zlib_h,
+            [AC_TRY_RUN(
+                dnl zlib.h defines ZLIB_VERSION="x.y.z"
+                [
+                    #include <zlib.h>
+                    #include <stdio.h>
 
-                        int main()
-                        {
-                            FILE *f=fopen("conftestval", "w");
-                            if (!f) exit(1);
-                            fprintf(f, "%s",
-                                    ZLIB_VERSION[0] == '1' &&
-                                    (ZLIB_VERSION[2] > '1' ||
-                                    (ZLIB_VERSION[2] == '1' &&
-                                     ZLIB_VERSION[4] >= '4')) ? "yes" : "no");
-                            exit(0);
-                        }
-                    ],
-                    ac_cv_header_zlib_h=`cat conftestval`,
-                    ac_cv_header_zlib_h=no,
-                    dnl cross-compiling: don't have an answer, try later
-                    unset ac_cv_header_zlib_h
-                )]
-            )
-            dnl If the test above did not come up with a value (e.g. cross
-            dnl compiling) then this should give a definitive answer
-            AC_CHECK_HEADER(zlib.h,,, [ ])
+                    int main()
+                    {
+                        FILE *f=fopen("conftestval", "w");
+                        if (!f) exit(1);
+                        fprintf(f, "%s",
+                                ZLIB_VERSION[0] == '1' &&
+                                (ZLIB_VERSION[2] > '1' ||
+                                (ZLIB_VERSION[2] == '1' &&
+                                 ZLIB_VERSION[4] >= '4')) ? "yes" : "no");
+                        exit(0);
+                    }
+                ],
+                ac_cv_header_zlib_h=`cat conftestval`,
+                ac_cv_header_zlib_h=no,
+                dnl cross-compiling: don't have an answer, try later
+                unset ac_cv_header_zlib_h
+            )]
+        )
+        dnl If the test above did not come up with a value (e.g. cross
+        dnl compiling) then this should give a definitive answer
+        AC_CHECK_HEADER(zlib.h,,, [ ])
 
-            system_zlib_h_ok=$ac_cv_header_zlib_h
-        fi
-
-        if test "$system_zlib_h_ok" = "yes"; then
+        if test "$ac_cv_header_zlib_h" = "yes"; then
             AC_CHECK_LIB(z, deflate, ZLIB_LINK=" -lz")
         fi
 
@@ -3274,44 +3257,10 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         fi
     fi
 
-    if test "$wxUSE_OSX_CARBON" = 1; then
-        AC_MSG_CHECKING([for compiler syntax to enable Pascal strings])
-        if test "$GCC" = yes; then
-            AC_MSG_RESULT([gcc])
-            CPPFLAGS_PASCAL="-fpascal-strings"
-        elif test "`echo $CXX | sed -e 's@.*/@@'`" = "xlC"; then
-            AC_MSG_RESULT([xlc])
-            CPPFLAGS_PASCAL="-qmacpstr"
-        else
-            AC_MSG_RESULT([none])
-        fi
-
-        if test "x$wxUSE_UNIX" = "xyes"; then
-            CPPFLAGS="$CPPFLAGS_PASCAL -I/Developer/Headers/FlatCarbon $CPPFLAGS"
-        else
-            dnl platform.h needs TARGET_CARBON before setup.h
-            CPPFLAGS="$CPPFLAGS_PASCAL -DTARGET_CARBON $CPPFLAGS"
-        fi
-
-        TOOLKIT=OSX_CARBON
-        dnl we can't call this MAC_DIST or autoconf thinks its a macro
-        GUIDIST=OSX_CARBON_DIST
-        dnl wxMac version of wxBase and wxCocoa or wxBase-only built on Darwin
-        dnl are different, so they need different names:
-        WXBASEPORT="_carbon"
-
-        dnl in addition to defining __WXOSX_CARBON__ for this toolkit we want
-        dnl to also define these extra symbols to make it possible to test for
-        dnl any Mac port (__WXMAC__ is for backwards compatibility, __WXOSX__
-        dnl is a new name)
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXMAC__ -D__WXOSX__"
-    fi
-
     if test "$wxUSE_OSX_COCOA" = 1; then
         TOOLKIT=OSX_COCOA
         GUIDIST=OSX_COCOA_DIST
 
-        dnl see the comment above in wxUSE_OSX_CARBON branch
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXMAC__ -D__WXOSX__"
     fi
 
@@ -3462,7 +3411,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
 
     dnl look in glcanvas.h for the list of platforms supported by wxGlCanvas:
 
-    if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1; then
+    if test "$wxUSE_OSX_COCOA" = 1; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
@@ -3709,7 +3658,7 @@ dnl library link name
 dnl These just save us from exporting lib_{unicode,flavour}_suffix.
 dnl If we ever need to do that, we won't need to keep these.
 
-if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1; then
+if test "$wxUSE_OSX_COCOA" = 1; then
     WX_LIBRARY_BASENAME_NOGUI="wx_base${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 else
     WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
@@ -5620,12 +5569,12 @@ if test "$wxUSE_BUSYINFO" = "yes"; then
 fi
 
 if test "$wxUSE_HOTKEY" = "yes"; then
-  if test "$wxUSE_MSW" != 1 -a "$wxUSE_OSX_COCOA" != 1 -a "$wxUSE_OSX_CARBON" != 1; then
+  if test "$wxUSE_MSW" != 1 -a "$wxUSE_OSX_COCOA" != 1; then
     AC_MSG_WARN([Hot keys not supported by the current toolkit, disabled])
     wxUSE_HOTKEY=no
   fi
 elif test "$wxUSE_HOTKEY" = "auto"; then
-  if test "$wxUSE_MSW" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_OSX_CARBON" = 1; then
+  if test "$wxUSE_MSW" = 1 -o "$wxUSE_OSX_COCOA" = 1; then
     wxUSE_HOTKEY=yes
   fi
 fi
@@ -7448,10 +7397,8 @@ if test "$wxUSE_MAC" = 1 ; then
             dnl need it in 32 bit builds and not in 64 bit and, moreover,
             dnl linking with it in 64 bit builds results in a warning because
             dnl the framework is not available in 64 bits itself. So make an
-            dnl effort to avoid using it unnecessarily. Note that with Carbon
-            dnl we also need it for wxSound an as Carbon is itself not
-            dnl available in 64 bits anyhow, there is no reason to avoid it.
-            if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_MEDIACTRL" = "yes"; then
+            dnl effort to avoid using it unnecessarily.
+            if "$wxUSE_MEDIACTRL" = "yes"; then
 
             if test "$cross_compiling" != "no"; then
                 dnl The check below doesn't work well when cross-compiling
@@ -7562,7 +7509,7 @@ elif test "$GXX" = yes ; then
     AX_CXXFLAGS_GCC_OPTION(-Woverloaded-virtual, CXXWARNINGS)
 
     dnl when building under Mac we currently get hundreds of deprecation
-    dnl warnings for Carbon symbols from the standard headers -- disable them
+    dnl warnings for Cocoa symbols from the standard headers -- disable them
     dnl as we already know that they're deprecated and nothing else can be seen
     dnl with these warnings on
     if test "$wxUSE_MAC" = 1 ; then
@@ -7861,15 +7808,9 @@ if test "$wxUSE_MAC" = 1; then
 
     dnl resources are bundled both with shared library and applications
     dnl since the carb resource *must* be included in the application
-    if test "$wxUSE_OSX_CARBON" = 1; then
-        POSTLINK_COMMAND="\$(REZ) -d __DARWIN__ -t APPL Carbon.r -o"
-        RESCOMP="$REZ"
-        WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL Carbon.r -o"
-    else
-        POSTLINK_COMMAND="cat /dev/null | \$(REZ) -d __DARWIN__ -t APPL ${LIBWXMACRES}"
-        RESCOMP="cat /dev/null \| $REZ"
-        WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL \$libdir/$WX_RESOURCES_MACOSX_ASCII"
-    fi
+    POSTLINK_COMMAND="cat /dev/null | \$(REZ) -d __DARWIN__ -t APPL ${LIBWXMACRES}"
+    RESCOMP="cat /dev/null \| $REZ"
+    WXCONFIG_RESFLAGS="-d __DARWIN__ -t APPL \$libdir/$WX_RESOURCES_MACOSX_ASCII"
 
 else
     dnl default value is to (silently) do nothing in the makefile

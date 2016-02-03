@@ -1033,10 +1033,6 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
 
   ResetDirty();
 
-#if defined( __WXOSX_MAC__ ) && wxOSX_USE_CARBON
-  m_fnLocalFile.MacSetTypeAndCreator('TEXT', 'ttxt');
-#endif // __WXMAC__
-
   return true;
 }
 

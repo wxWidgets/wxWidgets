@@ -99,12 +99,6 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
 
 bool wxTopLevelWindowMac::Destroy()
 {
-    // NB: this will get called during destruction if we don't do it now,
-    // and may fire a kill focus event on a control being destroyed
-#if wxOSX_USE_CARBON
-    if (m_nowpeer && m_nowpeer->GetWXWindow())
-        ClearKeyboardFocus( (WindowRef)m_nowpeer->GetWXWindow() );
-#endif
     // delayed destruction: the tlw will be deleted during the next idle
     // loop iteration
     if ( !wxPendingDelete.Member(this) )

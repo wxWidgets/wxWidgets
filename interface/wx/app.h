@@ -1000,8 +1000,7 @@ public:
     virtual void MacNewFile();
 
     /**
-        Called in response of an openFiles message with Cocoa, or an
-        "open-document" Apple event with Carbon.
+        Called in response of an openFiles message.
 
         You need to override this method in order to open one or more document
         files after the user double clicked on it or if the files and/or

@@ -61,36 +61,13 @@ distribution.
 
 @subsection page_port_wxosx_cocoa wxOSX/Cocoa
 
-wxOSX/Cocoa is the currently recommended port of wxWidgets for the Macintosh OS
-platform. It requires OS X 10.7 or later and, unlike wxOSX/Carbon, fully
-supports 64 bit builds.
+wxOSX/Cocoa is the only port of wxWidgets for the OS X platform. It requires
+OS X 10.7 or later and fully supports 64 bit builds.
 
 This is the default port when building wxOSX, but in order to select it
 explicitly you can use
 
 @verbatim configure --with-osx_cocoa @endverbatim
-
-For further information, please see the files in @c docs/osx in the
-distribution.
-
-
-@subsection page_port_wxosx_carbon wxOSX/Carbon
-
-wxOSX/Carbon is an older port of wxWidgets for the Macintosh OS platform. Currently
-OS X 10.5 or higher are supported. wxOSX/Carbon can be compiled both using
-Apple's command line developer tools as well as Apple's Xcode IDE. wxOSX/Carbon
-supports Intel and PowerPC architectures and can be used to produce
-"universal binaries" in order create application which can run both
-architecture. Unfortunately, wxOSX/Carbon does not support any 64-bit
-architecture since Apple decided not to port its Carbon API entirely to 64-bit.
-
-@note Carbon has been deprecated by Apple as of OS X 10.5 and will likely be
-removed entirely in a future OS version. It's recommended you look into
-switching your app over to wxOSX/Cocoa as soon as possible.
-
-To build wxWidgets using wxOSX/Carbon you need to do
-
-@verbatim configure --with-osx_carbon @endverbatim
 
 For further information, please see the files in @c docs/osx in the
 distribution.
@@ -207,7 +184,6 @@ necessary to use the underlying toolkit API directly:
   - GLib docs at http://library.gnome.org/devel/glib/unstable/
   - GObject docs at http://library.gnome.org/devel/gobject/unstable/
   - Pango docs at http://library.gnome.org/devel/pango/unstable/
-- wxMac port uses the Carbon API: see Carbon docs at http://developer.apple.com/carbon
-- wxCocoa port uses the Cocoa API: see Cocoa docs at http://developer.apple.com/cocoa
+- wxOSX port uses the Cocoa API: see Cocoa docs at http://developer.apple.com/cocoa
 
 */

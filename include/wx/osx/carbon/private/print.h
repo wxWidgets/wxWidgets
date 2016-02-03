@@ -60,17 +60,6 @@ private:
 
 WXDLLIMPEXP_CORE wxPrintNativeDataBase* wxOSXCreatePrintData();
 
-#if wxOSX_USE_CARBON
-class WXDLLIMPEXP_CORE wxOSXCarbonPrintData : public wxOSXPrintData
-{
-public:
-                            wxOSXCarbonPrintData();
-    virtual                 ~wxOSXCarbonPrintData();
-private:
-    wxDECLARE_DYNAMIC_CLASS(wxOSXCarbonPrintData);
-} ;
-#endif
-
 #if wxOSX_USE_COCOA
 class WXDLLIMPEXP_CORE wxOSXCocoaPrintData : public wxOSXPrintData
 {

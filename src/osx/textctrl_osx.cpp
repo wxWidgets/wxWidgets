@@ -128,16 +128,10 @@ bool wxTextCtrl::Create( wxWindow *parent,
 void wxTextCtrl::MacSuperChangedPosition()
 {
     wxWindow::MacSuperChangedPosition() ;
-#if wxOSX_USE_CARBON
-    GetPeer()->SuperChangedPosition() ;
-#endif
 }
 
 void wxTextCtrl::MacVisibilityChanged()
 {
-#if wxOSX_USE_CARBON
-    GetPeer()->VisibilityChanged( GetPeer()->IsVisible() );
-#endif
 }
 
 void wxTextCtrl::MacCheckSpelling(bool check)
@@ -457,19 +451,6 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     }
 
     // osx_cocoa sends its event upon insertText
-#if wxOSX_USE_CARBON
-    if ( ( key >= 0x20 && key < WXK_START ) ||
-         ( key >= WXK_NUMPAD0 && key <= WXK_DIVIDE ) ||
-         key == WXK_RETURN ||
-         key == WXK_DELETE ||
-         key == WXK_NUMPAD_ENTER ||
-         key == WXK_BACK)
-    {
-        wxCommandEvent event1(wxEVT_TEXT, m_windowId);
-        event1.SetEventObject( this );
-        wxPostEvent( GetEventHandler(), event1 );
-    }
-#endif
 }
 
 void wxTextCtrl::Command(wxCommandEvent & event)

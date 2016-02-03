@@ -45,31 +45,7 @@ static const int IDM_WINDOWTILEVERT = 4005;
 
 void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
 {
-#if wxOSX_USE_CARBON // TODO REMOVE
-    if ( inWindowRef )
-    {
-//        bool isHighlighted = IsWindowHighlited( inWindowRef ) ;
-//        if ( inActivate != isHighlighted )
-#ifndef __LP64__
-        GrafPtr port ;
-        GetPort( &port ) ;
-        SetPortWindowPort( inWindowRef ) ;
-#endif
-        HiliteWindow( inWindowRef , inActivate ) ;
-        ControlRef control = NULL ;
-        ::GetRootControl( inWindowRef , &control ) ;
-        if ( control )
-        {
-            if ( inActivate )
-                ::ActivateControl( control ) ;
-            else
-                ::DeactivateControl( control ) ;
-        }
-#ifndef __LP64__
-        SetPort( port ) ;
-#endif
-    }
-#elif defined(wxOSX_USE_COCOA)
+#if defined(wxOSX_USE_COCOA)
     wxUnusedVar(inActivate);
     wxUnusedVar(inWindowRef);
 // TODO: implement me!

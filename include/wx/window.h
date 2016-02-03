@@ -58,12 +58,8 @@
     // must do everything ourselves
     #undef wxHAS_NATIVE_ENABLED_MANAGEMENT
 #elif defined(__WXOSX__)
-    #if wxOSX_USE_CARBON
-        #define wxHAS_NATIVE_ENABLED_MANAGEMENT
-    #else
-        // must do everything ourselves
-        #undef wxHAS_NATIVE_ENABLED_MANAGEMENT
-    #endif
+    // must do everything ourselves
+    #undef wxHAS_NATIVE_ENABLED_MANAGEMENT
 #else
     #define wxHAS_NATIVE_ENABLED_MANAGEMENT
 #endif

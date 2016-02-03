@@ -1279,7 +1279,7 @@ public:
         The returned number is the number of logical lines, i.e. just the count
         of the number of newline characters in the control + 1, for wxGTK and
         wxOSX/Cocoa ports while it is the number of physical lines, i.e. the
-        count of lines actually shown in the control, in wxMSW and wxOSX/Carbon.
+        count of lines actually shown in the control, in wxMSW.
         Because of this discrepancy, it is not recommended to use this function.
 
         @remarks

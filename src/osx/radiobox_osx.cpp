@@ -363,12 +363,8 @@ void wxRadioBox::SetFocus()
 
 // Simulates the effect of the user issuing a command to the item
 //
-#if wxOSX_USE_CARBON
-    #define RADIO_SIZE 20
-#else
-    // Cocoa has an additional border are of about 3 pixels
-    #define RADIO_SIZE 23
-#endif
+// Cocoa has an additional border are of about 3 pixels
+#define RADIO_SIZE 23
 
 void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
