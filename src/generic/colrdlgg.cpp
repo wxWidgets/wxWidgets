@@ -18,6 +18,7 @@
 #if wxUSE_COLOURDLG
 
 #ifndef WX_PRECOMP
+    #include "wx/settings.h"
     #include "wx/utils.h"
     #include "wx/intl.h"
     #include "wx/dialog.h"
