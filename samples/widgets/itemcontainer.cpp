@@ -68,7 +68,13 @@ private:
 ItemContainerWidgetsPage::ItemContainerWidgetsPage(WidgetsBookCtrl *book,
                                                    wxImageList *image_list,
                                                    const char *const icon[])
-: WidgetsPage(book, image_list, icon), m_trackedDataObjects(0)
+: WidgetsPage(book, image_list, icon)
+#if defined(__WXMSW__) || defined(__WXGTK__)
+// Reference data needs to be sorted in a dictionary order
+// since control's items are sorted in this order too.
+, m_itemsSorted(wxDictionaryStringSortAscending)
+#endif // __WXMSW__ || __WXGTK__
+, m_trackedDataObjects(0)
 {
     m_items.Add(wxT("This"));
     m_items.Add(wxT("is"));
