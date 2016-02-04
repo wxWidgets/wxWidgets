@@ -587,6 +587,7 @@ void wxVListBoxComboPopup::ClearClientDatas()
     }
 
     m_clientDatas.Empty();
+    m_clientDataItemsType = wxClientData_None;
 }
 
 void wxVListBoxComboPopup::SetItemClientData( unsigned int n,
@@ -998,6 +999,7 @@ void wxOwnerDrawnComboBox::DoClear()
 void wxOwnerDrawnComboBox::Clear()
 {
     DoClear();
+    SetClientDataType(wxClientData_None);
 }
 
 void wxOwnerDrawnComboBox::DoDeleteOneItem(unsigned int n)
