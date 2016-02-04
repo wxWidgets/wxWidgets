@@ -57,17 +57,10 @@ distribution.
 
 
 
-@section page_port_wxosx wxOSX
+@section page_port_wxosx wxOSX/Cocoa
 
-@subsection page_port_wxosx_cocoa wxOSX/Cocoa
-
-wxOSX/Cocoa is the only port of wxWidgets for the OS X platform. It requires
+wxOSX/Cocoa is the port of wxWidgets for the OS X platform. It requires
 OS X 10.7 or later and fully supports 64 bit builds.
-
-This is the default port when building wxOSX, but in order to select it
-explicitly you can use
-
-@verbatim configure --with-osx_cocoa @endverbatim
 
 For further information, please see the files in @c docs/osx in the
 distribution.

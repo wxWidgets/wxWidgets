@@ -4,7 +4,7 @@ wxWidgets for Mac OS X installation
 wxWidgets can be compiled using Apple's Cocoa library.
 
 Most Mac OS X developers should start by downloading and installing Xcode 
-from http://developer.apple.com.  It is a free IDE from Apple that provides
+from the App Store.  It is a free IDE from Apple that provides
 all of the tools you need for working with wxWidgets.
 
 After Xcode is installed, download wxWidgets-{version}.tar.bz2 and then 
@@ -12,7 +12,7 @@ double-click on it to unpack it to create a wxWidgets directory.
 
 Next use Terminal (under Applications, Utilities, Terminal) to access a command 
 prompt.  Use cd to change directories to your wxWidgets directory and execute 
-one of the following sets of commands from the wxWidgets directory.
+the following sets of commands from the wxWidgets directory.
 
 ---------
 
