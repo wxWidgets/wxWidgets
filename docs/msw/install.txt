@@ -150,6 +150,17 @@ updated with it. For example the version information in wx_setup.props could
 change and the information in your wx_local.props would be outdated. It is
 your responsibility to monitor for such situations.
 
+Improve debugging for Visual Studio 2012+:
+
+Debug visualizers for Visual Studio 2012+ are provided which makes inspecting
+various wxWidgets classes easier to view while debugging. To use them:
+
+1. Open the folder misc/msvc
+2. Open the folder %USERPROFILE%\My Documents\Visual Studio 2012\Visualizers\
+   (or the corresponding location for newer versions, e.g. ...2013\Visualizers)
+3. Copy wxWidgets.natvis and autoexp.inc
+4. For Visual Studio 2013+ additionally copy wxWidgets.2013.natvis
+
 
 Cygwin/MinGW Compilation
 ----------------------------------------------------------------
