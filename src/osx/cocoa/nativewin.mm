@@ -59,10 +59,18 @@ wxNativeWindow::Create(wxWindow* parent,
     else if ( [view respondsToSelector:@selector(stringValue)] )
         m_label = wxCFStringRef::AsString([(id)view stringValue]);
 
+    // As wxWidgets will release the view when this object is destroyed, retain
+    // it here to avoid destroying the view owned by the user code.
+    [view retain];
     SetPeer(new wxWidgetCocoaImpl(this, view));
 
     // It doesn't seem necessary to use MacPostControlCreate() here as we never
     // change the native control geometry here.
 
     return true;
+}
+
+void wxNativeWindow::DoDisown()
+{
+    [GetPeer()->GetWXWidget() release];
 }

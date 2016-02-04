@@ -95,6 +95,16 @@ public:
         (void)Create(parent, wxID_ANY, hwnd);
     }
 
+    virtual ~NativeWindow()
+    {
+        // If you don't call this, you need to call DestroyWindow() later.
+        //
+        // Also notice that a HWND can't continue to exist under MSW if its
+        // parent its destroyed, so you may also want to reparent it under some
+        // other window if the parent of this window is also getting destroyed.
+        Disown();
+    }
+
 protected:
     // This code requires NMBCDROPDOWN to work, we don't really want to
     // reproduce its definition here for very old compilers not having it.
@@ -146,7 +156,16 @@ public:
         );
 #endif // GTK+ 3.6/earlier
 
+        g_object_ref_sink(widget);
+
         (void)Create(parent, wxID_ANY, widget);
+    }
+
+    virtual ~NativeWindow()
+    {
+        // If you don't call this, you need to call g_object_unref() on the
+        // widget from elsewhere later.
+        Disown();
     }
 
 private:
@@ -184,6 +203,13 @@ public:
         [v setAutoenablesItems:NO];
 
         (void)Create(parent, wxID_ANY, v);
+    }
+
+    virtual ~NativeWindow()
+    {
+        // If you don't call this, you need to call -release: on the button
+        // from elsewhere later.
+        Disown();
     }
 };
 

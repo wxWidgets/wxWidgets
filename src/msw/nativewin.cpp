@@ -79,6 +79,19 @@ wxNativeWindow::Create(wxWindow* parent,
     return true;
 }
 
+void wxNativeWindow::DoDisown()
+{
+    // We don't do anything here, clearing m_ownedByUser flag is enough.
+}
+
+wxNativeWindow::~wxNativeWindow()
+{
+    // Restore the original window proc and reset HWND to 0 to prevent it from
+    // being destroyed in the base class dtor if it's owned by user code.
+    if ( m_ownedByUser )
+        UnsubclassWin();
+}
+
 // ----------------------------------------------------------------------------
 // wxNativeContainerWindow
 // ----------------------------------------------------------------------------
