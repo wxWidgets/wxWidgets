@@ -163,6 +163,12 @@ create a window with no border (for example, notebook pages). So wxPanel
 overrides GetDefaultBorder() in order to call the generic
 wxWindowBase::GetDefaultBorder(), returning wxBORDER_NONE.
 
+@section page_port_wxQt wxQt
+
+wxQt is a port of wxWidgets using Qt libraries. It requires Qt 5 or later.
+
+For further information, please see the files in docs/qt in the distribution.
+
 @section page_port_nativedocs Native Toolkit Documentation
 
 It's sometimes useful to interface directly with the underlying toolkit
