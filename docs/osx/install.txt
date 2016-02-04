@@ -1,9 +1,9 @@
-wxWidgets for Mac OS X installation
+wxWidgets for OS X installation
 -----------------------------------
 
 wxWidgets can be compiled using Apple's Cocoa library.
 
-Most Mac OS X developers should start by downloading and installing Xcode 
+Most OS X developers should start by downloading and installing Xcode 
 from the App Store.  It is a free IDE from Apple that provides
 all of the tools you need for working with wxWidgets.
 
@@ -35,7 +35,7 @@ The source code for the demos is in wxWidgets/demos
 
 ---------
 
-More information about building on Mac OS X is available in the wxWiki.
+More information about building on OS X is available in the wxWiki.
 Here are two useful links
   http://wiki.wxwidgets.org/Guides_%26_Tutorials
   http://wiki.wxwidgets.org/Development:_wxMac 

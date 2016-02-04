@@ -39,8 +39,8 @@ applications under Windows as well, but it should only be used in the GUI code
 while <tt>__WINDOWS__</tt> should be used for the platform tests.}
 @itemdef{__WXOSX__, OS X GUI using any Apple widget framework (AppKit or UIKit)}
 @itemdef{__WXOSX_IPHONE__, OS X iPhone (UIKit)}
-@itemdef{__WXOSX_COCOA__, Mac OS X using Cocoa (AppKit)}
-@itemdef{__WXOSX_MAC__, Mac OS X (Cocoa)}
+@itemdef{__WXOSX_COCOA__, OS X using Cocoa (AppKit)}
+@itemdef{__WXOSX_MAC__, OS X (Cocoa)}
 @itemdef{__WXPM__, OS/2 native Presentation Manager (not used any longer).}
 @itemdef{__WXSTUBS__, Stubbed version ('template' wxWin implementation)}
 @itemdef{__WXXT__, Xt; mutually exclusive with WX_MOTIF, not implemented in wxWidgets 2.x}
@@ -58,7 +58,7 @@ versions: Cocoa for the desktop and a very early iPhone port. To summarize:
     <tt>__WXOSX_MAC__</tt>.
 @li If you want to test for wxOSX on the iPhone, use
     <tt>__WXOSX_IPHONE__</tt>.
-@li If you want to test for any port under Mac OS X, including, for
+@li If you want to test for any port under OS X, including, for
     example, wxGTK and also wxBase, use <tt>__DARWIN__</tt> (see below).
 
 The convention is to use the <tt>__WX</tt> prefix for these
@@ -73,13 +73,13 @@ symbols, although this has not always been followed.
 @itemdef{__AIX__, AIX}
 @itemdef{__BSD__, Any *BSD system}
 @itemdef{__CYGWIN__, Cygwin: Unix on Win32}
-@itemdef{__DARWIN__, Mac OS X (with BSD C library), using any port (see also <tt>__WXOSX__</tt>)}
+@itemdef{__DARWIN__, OS X (with BSD C library), using any port (see also <tt>__WXOSX__</tt>)}
 @itemdef{__DATA_GENERAL__, DG-UX}
 @itemdef{__FREEBSD__, FreeBSD}
 @itemdef{__HPUX__, HP-UX (Unix)}
 @itemdef{__GNU__, GNU Hurd}
 @itemdef{__LINUX__, Linux}
-@itemdef{__MACH__, Mach-O Architecture (Mac OS X only builds)}
+@itemdef{__MACH__, Mach-O Architecture (OS X only builds)}
 @itemdef{__OSF__, OSF/1}
 @itemdef{__QNX__, QNX Neutrino RTOS}
 @itemdef{__SGI__, IRIX}
