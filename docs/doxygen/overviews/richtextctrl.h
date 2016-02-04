@@ -42,7 +42,7 @@ list styles with a renumber option.
 There are a few disadvantages to using wxRichTextCtrl. It is not native, so
 does not behave exactly as a native wxTextCtrl, although common editing
 conventions are followed. Users may miss the built-in spelling correction on
-Mac OS X, or any special character input that may be provided by the native
+OS X, or any special character input that may be provided by the native
 control. It would also be a poor choice if intended users rely on screen
 readers that would be not work well with non-native text input implementation.
 You might mitigate this by providing the choice between wxTextCtrl and
@@ -495,7 +495,7 @@ tables, text boxes, and floating images, in addition to a simplified-HTML mode f
 
 There are also things that could be done to take advantage of the underlying
 text capabilities of the platform; higher-level text formatting APIs are
-available on some platforms, such as Mac OS X, and some of translation from
+available on some platforms, such as OS X, and some of translation from
 high level to low level wxDC API is unnecessary. However this would require
 additions to the wxWidgets API.
 
