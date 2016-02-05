@@ -27,6 +27,7 @@
 #include "wx/tracker.h"
 #include "wx/typeinfo.h"
 #include "wx/any.h"
+#include "wx/vector.h"
 
 #include "wx/meta/convertible.h"
 
