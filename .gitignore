@@ -259,7 +259,6 @@
 /misc/libtool
 
 # /samples/
-/samples/**/*.sln
 /samples/**/vc_msw
 /samples/**/vc_msw_x64
 /samples/**/vc_mswd
