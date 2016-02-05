@@ -38,17 +38,15 @@
     <wxSuffixDebug>
     </wxSuffixDebug>
   </PropertyGroup>
-  <PropertyGroup Label="UserMacros" Condition="'$(Configuration)'=='DLL Debug'">
-    <wxOutDir>..\..\lib\$(wxCompilerPrefix)$(wxArchSuffix)_dll$(wxCfg)\</wxOutDir>
+  <PropertyGroup Label="UserMacros" Condition="'$(Configuration)'=='DLL Debug' or '$(Configuration)'=='DLL Release'">
+    <wxLibTypeSuffix>dll</wxLibTypeSuffix>
   </PropertyGroup>
-  <PropertyGroup Label="UserMacros" Condition="'$(Configuration)'=='DLL Release'">
-    <wxOutDir>..\..\lib\$(wxCompilerPrefix)$(wxArchSuffix)_dll$(wxCfg)\</wxOutDir>
+  <PropertyGroup Label="UserMacros" Condition="'$(Configuration)'!='DLL Debug' and '$(Configuration)'!='DLL Release'">
+    <wxLibTypeSuffix>lib</wxLibTypeSuffix>
   </PropertyGroup>
-  <PropertyGroup Label="UserMacros" Condition="'$(Configuration)'=='Debug'">
-    <wxOutDir>..\..\lib\$(wxCompilerPrefix)$(wxArchSuffix)_lib$(wxCfg)\</wxOutDir>
-  </PropertyGroup>
-  <PropertyGroup Label="UserMacros" Condition="'$(Configuration)'=='Release'">
-    <wxOutDir>..\..\lib\$(wxCompilerPrefix)$(wxArchSuffix)_lib$(wxCfg)\</wxOutDir>
+  <PropertyGroup Label="UserMacros">
+    <wxOutDirName>$(wxCompilerPrefix)$(wxArchSuffix)_$(wxLibTypeSuffix)$(wxCfg)</wxOutDirName>
+    <wxOutDir>..\..\lib\$(wxOutDirName)\</wxOutDir>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="'$(Configuration)'=='DLL Debug'">
     <wxIntRootDir>$(wxCompilerPrefix)$(wxArchSuffix)_$(wxToolkitPrefix)$(wxSuffix)dll\</wxIntRootDir>
@@ -95,6 +93,9 @@
     </BuildMacro>
     <BuildMacro Include="wxOutDir">
       <Value>$(wxOutDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="wxOutDirName">
+      <Value>$(wxOutDirName)</Value>
     </BuildMacro>
     <BuildMacro Include="wxIntRootDir">
       <Value>$(wxIntRootDir)</Value>
