@@ -553,19 +553,15 @@ WX_ARG_SYS_WITH(regex,     [  --with-regex            enable support for wxRegEx
 WX_ARG_SYS_WITH(zlib,      [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
 WX_ARG_SYS_WITH(expat,     [  --with-expat            enable XML support using expat parser], wxUSE_EXPAT)
 
-AC_MSG_CHECKING([for --with-macosx-sdk])
 AC_ARG_WITH(macosx-sdk,    [  --with-macosx-sdk=PATH  use an OS X SDK at PATH], [
         wxUSE_MACOSX_SDK=$withval
         wx_cv_use_macosx_sdk="wxUSE_MACOSX_SDK=$withval"
     ])
-AC_MSG_RESULT([$wxUSE_MACOSX_SDK])
 
-AC_MSG_CHECKING([for --with-macosx-version-min])
 AC_ARG_WITH(macosx-version-min,    [  --with-macosx-version-min=VER   build binaries which require at least this OS X version], [
         wxUSE_MACOSX_VERSION_MIN=$withval
         wx_cv_use_macosx_version_min="wxUSE_MACOSX_VERSION_MIN=$withval"
     ])
-AC_MSG_RESULT([$wxUSE_MACOSX_VERSION_MIN])
 
 dnl ---------------------------------------------------------------------------
 dnl debugging options
@@ -573,7 +569,6 @@ dnl ---------------------------------------------------------------------------
 
 dnl don't use WX_ARG_ENABLE as it just gets in the way instead of helping with
 dnl this rather unusual option
-AC_MSG_CHECKING([for --enable-debug])
 AC_ARG_ENABLE(debug,       [  --enable-debug          build library for debugging],
     [
         if test "$enableval" = yes; then
@@ -589,7 +584,6 @@ AC_ARG_ENABLE(debug,       [  --enable-debug          build library for debuggin
     ],
     wxUSE_DEBUG=default
 )
-AC_MSG_RESULT([${enable_debug-default}])
 
 case "$wxUSE_DEBUG" in
     yes)
@@ -634,7 +628,8 @@ dnl global compile options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_DISABLE(shared,     [  --disable-shared        create static library instead of shared], wxUSE_SHARED)
-WX_ARG_ENABLE(cxx11,       [  --enable-cxx11          use C++11 compiler], wxUSE_CXX11)
+AC_ARG_ENABLE(cxx11,       [  --enable-cxx11          use C++11 compiler if available], [wxWITH_CXX=11 wxWITH_CXX_IS_OPTIONAL=1])
+AC_ARG_WITH(cxx,           [  --with-cxx=11|14        use the given C++11], [wxWITH_CXX="$withval"])
 WX_ARG_ENABLE(stl,         [  --enable-stl            use standard C++ classes for everything], wxUSE_STL)
 if test "$wxUSE_STL" = "yes"; then
     DEFAULT_wxUSE_STD_CONTAINERS=yes
@@ -1064,10 +1059,31 @@ if test "$CXX" = "g++" -a "$GXX" != "yes"; then
     AC_MSG_ERROR([C++ compiler is needed to build wxWidgets])
 fi
 
-if test "$wxUSE_CXX11" = "yes"; then
-    dnl We still continue even if C++11 support is not available, would it be
-    dnl better to stop with an error in this case?
-    AX_CXX_COMPILE_STDCXX(11,,optional)
+if test -n "$wxWITH_CXX"; then
+    dnl AX_CXX_COMPILE_STDCXX requires its VERSION argument to be specified at
+    dnl autoconf, not run, time.
+    case "$wxWITH_CXX" in
+        11)
+            if test -n "$wxWITH_CXX_IS_OPTIONAL"; then
+                AX_CXX_COMPILE_STDCXX(11,,optional)
+            else
+                AX_CXX_COMPILE_STDCXX(11)
+            fi
+            have_cxxN=$HAVE_CXX11
+            ;;
+
+        14)
+            dnl This check can't be optional because we have only --with-cxx=14
+            dnl and not --enable-cxx14 option.
+            AX_CXX_COMPILE_STDCXX(14)
+
+            dnl If we have C++14, we necessarily have C++11 too.
+            HAVE_CXX11=1
+            ;;
+
+        *)
+            AC_MSG_ERROR([Invalid --with-cxx="$wxWITH_CXX" option value, only 11 or 14 supported])
+    esac
 
     if test "$HAVE_CXX11" = "1" ; then
         dnl The standard macro above doesn't set Objective-C++ flags, but we do
@@ -1675,12 +1691,6 @@ fi
 dnl check for bytesex stuff (don't use AC_C_BIGENDIAN to allow cross-compiling)
 WX_C_BIGENDIAN
 
-dnl check for iostream (as opposed to iostream.h) standard header
-WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
-
-dnl check whether C++ compiler supports explicit keyword
-WX_CPP_EXPLICIT
-
 dnl With Sun CC, temporaries have block scope by default. This flag is needed
 dnl to get the expression scope behaviour that conforms to the standard.
 if test "x$SUNCXX" = xyes; then
@@ -1777,6 +1787,16 @@ if test "x$COMPAQCXX" = "xyes"; then
     dnl               them for now
     CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit"
 fi
+
+dnl The checks below are for ancient compilers and are unnecessary when using
+dnl C++11.
+if test "$HAVE_CXX11" != "1" ; then
+
+dnl check for iostream (as opposed to iostream.h) standard header
+WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
+
+dnl check whether C++ compiler supports explicit keyword
+WX_CPP_EXPLICIT
 
 dnl the next few tests are all for C++ features and so need to be done using
 dnl C++ compiler
@@ -1991,18 +2011,9 @@ if test "$wxUSE_STL" = "yes"; then
     fi
 fi
 
-dnl Check for type_traits header if necessary: we know that it's always present
-dnl in C++11 mode. Also notice that it's important to pass AC_INCLUDES_DEFAULT()
-dnl as the last argument because otherwise autoconf would perform the check
-dnl using both the compiler and the preprocessor and the latter could fail if
-dnl the preprocessor is not in C++11 mode, resulting in a warning when running
-dnl configure, while providing this argument allows to skip the preprocessor
-dnl check.
-if test "$HAVE_CXX11" != "1" ; then
-    AC_CHECK_HEADERS([type_traits tr1/type_traits], break, [], [AC_INCLUDES_DEFAULT()])
-else
-    AC_DEFINE(HAVE_TYPE_TRAITS)
-fi
+AC_CHECK_HEADERS([type_traits tr1/type_traits], break, [], [AC_INCLUDES_DEFAULT()])
+
+fi dnl End of pre-C++11 only checks section
 
 dnl check for atomic operations builtins for wx/atomic.h:
 WX_ATOMIC_BUILTINS
@@ -2233,6 +2244,8 @@ else
     fi
 fi
 
+if test "$HAVE_CXX11" != "1" ; then
+
 dnl check for C99 string to long long conversion functions, assume that if we
 dnl have the unsigned variants, then we have the signed ones as well
 dnl
@@ -2245,6 +2258,8 @@ else
     WX_CHECK_FUNCS(strtoull)
 fi
 AC_LANG_POP()
+
+fi dnl End of pre-C++11 only checks section
 
 dnl ---------------------------------------------------------------------------
 dnl Optional libraries
