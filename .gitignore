@@ -57,7 +57,6 @@
 
 # /demos/
 /demos/*/*.sln
-/demos/*/*.dsw
 /demos/*/vc_msw
 /demos/*/vc_msw_x64
 /demos/*/vc_mswd
@@ -239,7 +238,6 @@
 /misc/config.log
 /misc/linux-gnu.system.cache
 /misc/*.dsp
-/misc/*.dsw
 /misc/*.plg
 /misc/*.opt
 /misc/*.aps
@@ -262,7 +260,6 @@
 
 # /samples/
 /samples/**/*.sln
-/samples/**/*.dsw
 /samples/**/vc_msw
 /samples/**/vc_msw_x64
 /samples/**/vc_mswd
@@ -358,7 +355,6 @@
 
 # /tests/
 /tests/*.sln
-/tests/*.dsw
 /tests/vc_msw
 /tests/vc_msw_x64
 /tests/vc_mswd
@@ -391,7 +387,6 @@
 /tests/vc_mswunivudll_x64
 /tests/vc_mswunivuddll
 /tests/vc_mswunivuddll_x64
-/tests/test_test.dsw
 /tests/test.opt
 /tests/test.sln
 /tests/test.suo
@@ -399,7 +394,6 @@
 
 # /tests/benchmarks/
 /tests/benchmarks/*.sln
-/tests/benchmarks/*.dsw
 
 # /utils/
 /utils/**/vc_mswu
@@ -413,15 +407,12 @@
 
 # /utils/emulator/src/
 /utils/emulator/src/*.sln
-/utils/emulator/src/*.dsw
 
 # /utils/helpview/src/
 /utils/helpview/src/*.sln
-/utils/helpview/src/*.dsw
 
 # /utils/hhp2cached/
 /utils/hhp2cached/*.sln
-/utils/hhp2cached/*.dsw
 /utils/hhp2cached/HHP2CachedM*Data
 /utils/hhp2cached/*Classic?Debug*
 /utils/hhp2cached/*Classic?Release*
@@ -430,4 +421,3 @@
 
 # /utils/wxrc/
 /utils/wxrc/*.sln
-/utils/wxrc/*.dsw
