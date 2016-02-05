@@ -354,7 +354,6 @@
 /src/zlib/Release
 
 # /tests/
-/tests/*.sln
 /tests/vc_msw
 /tests/vc_msw_x64
 /tests/vc_mswd
