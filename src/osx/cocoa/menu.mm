@@ -237,7 +237,7 @@ public :
     {
         win->ScreenToClient( &x , &y ) ;
         NSView *view = win->GetPeer()->GetWXWidget();
-        [m_osxMenu popUpMenuPositioningItem:nil atLocation:CGPointMake(x, y) inView:view];
+        [m_osxMenu popUpMenuPositioningItem:nil atLocation:NSMakePoint(x, y) inView:view];
     }
     
     virtual void GetMenuBarDimensions(int &x, int &y, int &width, int &height) const wxOVERRIDE
