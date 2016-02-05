@@ -40,6 +40,15 @@
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
     #include <gdk/gdkwayland.h>
+    #define HAS_CLIENT_DECOR
+#endif
+#ifdef GDK_WINDOWING_MIR
+    #include <gdk/gdkmir.h>
+    #define HAS_CLIENT_DECOR
+#endif
+#ifdef GDK_WINDOWING_BROADWAY
+    #include <gdk/gdkbroadway.h>
+    #define HAS_CLIENT_DECOR
 #endif
 
 #include "wx/gtk/private.h"
@@ -81,6 +90,26 @@ static enum {
 
 static bool gs_decorCacheValid;
 #endif
+
+#ifdef HAS_CLIENT_DECOR
+static bool HasClientDecor(GtkWidget* widget)
+{
+    GdkDisplay* display = gtk_widget_get_display(widget);
+#ifdef GDK_WINDOWING_WAYLAND
+    if (GDK_IS_WAYLAND_DISPLAY(display))
+        return true;
+#endif
+#ifdef GDK_WINDOWING_MIR
+    if (GDK_IS_MIR_DISPLAY(display))
+        return true;
+#endif
+#ifdef GDK_WINDOWING_BROADWAY
+    if (GDK_IS_BROADWAY_DISPLAY(display))
+        return true;
+#endif
+    return false;
+}
+#endif // HAS_CLIENT_DECOR
 
 //-----------------------------------------------------------------------------
 // RequestUserAttention related functions
@@ -235,8 +264,24 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
         GtkAllocation a;
         gtk_widget_get_allocation(win->m_widget, &a);
         wxSize size(a.width, a.height);
-        size.x += win->m_decorSize.left + win->m_decorSize.right;
-        size.y += win->m_decorSize.top + win->m_decorSize.bottom;
+#ifdef HAS_CLIENT_DECOR
+        if (HasClientDecor(win->m_widget))
+        {
+            GtkAllocation a2;
+            gtk_widget_get_allocation(win->m_mainWidget, &a2);
+            wxTopLevelWindowGTK::DecorSize decorSize;
+            decorSize.left = a2.x;
+            decorSize.right = a.width - a2.width - a2.x;
+            decorSize.top = a2.y;
+            decorSize.bottom = a.height - a2.height - a2.y;
+            win->GTKUpdateDecorSize(decorSize);
+        }
+        else
+#endif
+        {
+            size.x += win->m_decorSize.left + win->m_decorSize.right;
+            size.y += win->m_decorSize.top + win->m_decorSize.bottom;
+        }
         win->m_width  = size.x;
         win->m_height = size.y;
 
@@ -1062,8 +1107,13 @@ void wxTopLevelWindowGTK::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXU
 void wxTopLevelWindowGTK::GTKDoGetSize(int *width, int *height) const
 {
     wxSize size(m_width, m_height);
-    size.x -= m_decorSize.left + m_decorSize.right;
-    size.y -= m_decorSize.top + m_decorSize.bottom;
+#ifdef HAS_CLIENT_DECOR
+    if (!HasClientDecor(m_widget))
+#endif
+    {
+        size.x -= m_decorSize.left + m_decorSize.right;
+        size.y -= m_decorSize.top + m_decorSize.bottom;
+    }
     if (size.x < 0) size.x = 0;
     if (size.y < 0) size.y = 0;
 #if wxUSE_LIBHILDON2
@@ -1171,7 +1221,12 @@ void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const
         base_type::DoGetClientSize(width, height);
     else
     {
-        GTKDoGetSize(width, height);
+        int w = m_width - (m_decorSize.left + m_decorSize.right);
+        int h = m_height - (m_decorSize.top + m_decorSize.bottom);
+        if (w < 0) w = 0;
+        if (h < 0) h = 0;
+        if (width) *width = w;
+        if (height) *height = h;
     }
 }
 
@@ -1193,8 +1248,20 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
     hints.min_height = 1;
     hints.max_width = INT_MAX;
     hints.max_height = INT_MAX;
-    const int decorSize_x = m_decorSize.left + m_decorSize.right;
-    const int decorSize_y = m_decorSize.top + m_decorSize.bottom;
+    int decorSize_x;
+    int decorSize_y;
+#ifdef HAS_CLIENT_DECOR
+    if (HasClientDecor(m_widget))
+    {
+        decorSize_x = 0;
+        decorSize_y = 0;
+    }
+    else
+#endif
+    {
+        decorSize_x = m_decorSize.left + m_decorSize.right;
+        decorSize_y = m_decorSize.top + m_decorSize.bottom;
+    }
     if (minSize.x > decorSize_x)
         hints.min_width = minSize.x - decorSize_x;
     if (minSize.y > decorSize_y)
@@ -1221,11 +1288,19 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
         (GtkWindow*)m_widget, NULL, &hints, (GdkWindowHints)hints_mask);
 }
 
-#ifdef GDK_WINDOWING_X11
 void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
 {
     if (!IsMaximized() && !IsFullScreen())
         GetCachedDecorSize() = decorSize;
+
+#ifdef HAS_CLIENT_DECOR
+    if (HasClientDecor(m_widget))
+    {
+        m_decorSize = decorSize;
+        return;
+    }
+#endif
+#ifdef GDK_WINDOWING_X11
     if (m_updateDecorSize && memcmp(&m_decorSize, &decorSize, sizeof(DecorSize)))
     {
         m_useCachedClientSize = false;
@@ -1292,8 +1367,8 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
         showEvent.SetEventObject(this);
         HandleWindowEvent(showEvent);
     }
-}
 #endif // GDK_WINDOWING_X11
+}
 
 wxTopLevelWindowGTK::DecorSize& wxTopLevelWindowGTK::GetCachedDecorSize()
 {
