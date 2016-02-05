@@ -156,6 +156,7 @@ wxGTK:
 - Fix setting "pressed" bitmap for wxToggleButton (Kevin B. McCarty).
 - Fix GTK+ warnings for wxFileDialog with wxFD_MULTIPLE style.
 - Don't generate wxEVT_LIST_ITEM_RIGHT_CLICK outside of item area (Igor Korot).
+- Implement wxDataViewCtrl::SetIndent().
 
 wxMSW:
 

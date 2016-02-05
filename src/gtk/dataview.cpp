@@ -5077,6 +5077,12 @@ void wxDataViewCtrl::DoSetExpanderColumn()
 
 void wxDataViewCtrl::DoSetIndent()
 {
+#if GTK_CHECK_VERSION(2, 12, 0)
+    if ( gtk_check_version(2, 12, 0) == NULL )
+    {
+        gtk_tree_view_set_level_indentation(GTK_TREE_VIEW(m_treeview), GetIndent());
+    }
+#endif // GTK+ 2.12+
 }
 
 void wxDataViewCtrl::GtkDisableSelectionEvents()

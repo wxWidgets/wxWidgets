@@ -75,6 +75,9 @@ private:
     void OnStyleChange(wxCommandEvent& event);
     void OnSetBackgroundColour(wxCommandEvent& event);
     void OnSetForegroundColour(wxCommandEvent& event);
+    void OnIncIndent(wxCommandEvent& event);
+    void OnDecIndent(wxCommandEvent& event);
+
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
@@ -258,6 +261,8 @@ enum
     ID_BACKGROUND_COLOUR,
     ID_FOREGROUND_COLOUR,
     ID_STYLE_MENU,
+    ID_INC_INDENT,
+    ID_DEC_INDENT,
 
     // file menu
     //ID_SINGLE,        wxDV_SINGLE==0 so it's always present
@@ -309,6 +314,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU( ID_FOREGROUND_COLOUR, MyFrame::OnSetForegroundColour )
     EVT_MENU( ID_BACKGROUND_COLOUR, MyFrame::OnSetBackgroundColour )
+    EVT_MENU( ID_INC_INDENT, MyFrame::OnIncIndent )
+    EVT_MENU( ID_DEC_INDENT, MyFrame::OnDecIndent )
 
     EVT_NOTEBOOK_PAGE_CHANGED( wxID_ANY, MyFrame::OnPageChanged )
 
@@ -395,6 +402,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     file_menu->Append(ID_FOREGROUND_COLOUR, "Set &foreground colour...\tCtrl-S");
     file_menu->Append(ID_BACKGROUND_COLOUR, "Set &background colour...\tCtrl-B");
     file_menu->Append(ID_STYLE_MENU, "&Style", style_menu);
+    file_menu->Append(ID_INC_INDENT, "&Increase indent\tCtrl-I");
+    file_menu->Append(ID_DEC_INDENT, "&Decrease indent\tShift-Ctrl-I");
     file_menu->AppendSeparator();
     file_menu->Append(ID_EXIT, "E&xit");
 
@@ -747,6 +756,20 @@ void MyFrame::OnSetBackgroundColour(wxCommandEvent& WXUNUSED(event))
         dvc->SetBackgroundColour(col);
         Refresh();
     }
+}
+
+void MyFrame::OnIncIndent(wxCommandEvent& WXUNUSED(event))
+{
+    wxDataViewCtrl * const dvc = m_ctrl[m_notebook->GetSelection()];
+    dvc->SetIndent(dvc->GetIndent() + 5);
+    wxLogMessage("Indent is now %d", dvc->GetIndent());
+}
+
+void MyFrame::OnDecIndent(wxCommandEvent& WXUNUSED(event))
+{
+    wxDataViewCtrl * const dvc = m_ctrl[m_notebook->GetSelection()];
+    dvc->SetIndent(wxMax(dvc->GetIndent() - 5, 0));
+    wxLogMessage("Indent is now %d", dvc->GetIndent());
 }
 
 void MyFrame::OnPageChanged( wxBookCtrlEvent& WXUNUSED(event) )
