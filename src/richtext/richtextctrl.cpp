@@ -705,12 +705,12 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
             m_preDrag = false; // Tell DnD not to happen now: we are processing Left Up ourselves.
 
             // Do the actions that would have been done in OnLeftClick if we hadn't tried to drag
-            long position = 0;
-            wxRichTextObject* hitObj = NULL;
-            wxRichTextObject* contextObj = NULL;
-            int hit = GetBuffer().HitTest(dc, context, GetUnscaledPoint(event.GetLogicalPosition(dc)), position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
+            long prePosition = 0;
+            wxRichTextObject* preHitObj = NULL;
+            wxRichTextObject* preContextObj = NULL;
+            int preHit = GetBuffer().HitTest(dc, context, GetUnscaledPoint(event.GetLogicalPosition(dc)), prePosition, & preHitObj, & preContextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
             wxRichTextParagraphLayoutBox* oldFocusObject = GetFocusObject();
-            wxRichTextParagraphLayoutBox* container = wxDynamicCast(contextObj, wxRichTextParagraphLayoutBox);
+            wxRichTextParagraphLayoutBox* container = wxDynamicCast(preContextObj, wxRichTextParagraphLayoutBox);
             bool needsCaretSet = false;
             if (container && container != GetFocusObject() && container->AcceptsFocus())
             {
@@ -718,7 +718,7 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
                 needsCaretSet = true;
             }
 
-            if (wxRichTextBuffer::GetFloatingLayoutMode() && hitObj && hitObj->IsFloating() && !hitObj->AcceptsFocus())
+            if (wxRichTextBuffer::GetFloatingLayoutMode() && preHitObj && preHitObj->IsFloating() && !preHitObj->AcceptsFocus())
             {
                 if (needsCaretSet)
                     SetInsertionPoint(0);
@@ -727,7 +727,7 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
             {
                 long oldCaretPos = m_caretPosition;
 
-                SetCaretPositionAfterClick(container, position, hit);
+                SetCaretPositionAfterClick(container, prePosition, preHit);
 
                 // For now, don't handle shift-click when we're selecting multiple objects.
                 if (event.ShiftDown() && GetFocusObject() == oldFocusObject && m_selectionState == wxRichTextCtrlSelectionState_Normal)
@@ -5502,8 +5502,8 @@ int wxRichTextContextMenuPropertiesInfo::AddMenuItems(wxMenu* menu, int startCmd
         // Find the position of the first properties item
         for (i = 0; i < (int) menu->GetMenuItemCount(); i++)
         {
-            wxMenuItem* item = menu->FindItemByPosition(i);
-            if (item && item->GetId() == startCmd)
+            wxMenuItem* searchItem = menu->FindItemByPosition(i);
+            if (searchItem && searchItem->GetId() == startCmd)
             {
                 pos = i;
                 break;

@@ -96,8 +96,8 @@ wxRichTextAttr wxRichTextStyleDefinition::GetStyleMergedWithBase(const wxRichTex
     wxList::compatibility_iterator node = styles.GetFirst();
     while (node)
     {
-        wxRichTextStyleDefinition* def = (wxRichTextStyleDefinition*) node->GetData();
-        attr.Apply(def->GetStyle(), NULL);
+        wxRichTextStyleDefinition* nodeDef = (wxRichTextStyleDefinition*) node->GetData();
+        attr.Apply(nodeDef->GetStyle(), NULL);
         node = node->GetNext();
     }
 
@@ -327,10 +327,10 @@ bool wxRichTextStyleSheet::RemoveStyle(wxList& list, wxRichTextStyleDefinition* 
     wxList::compatibility_iterator node = list.Find(def);
     if (node)
     {
-        wxRichTextStyleDefinition* def = (wxRichTextStyleDefinition*) node->GetData();
+        wxRichTextStyleDefinition* nodeDef = (wxRichTextStyleDefinition*) node->GetData();
         list.Erase(node);
         if (deleteStyle)
-            delete def;
+            delete nodeDef;
         return true;
     }
     else

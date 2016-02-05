@@ -437,12 +437,12 @@ bool wxRichTextPlainText::ImportFromXML(wxRichTextBuffer* buffer, wxXmlNode* nod
                 // Skip past the whitespace after the properties
                 while (textChild && (textChild->GetType() == wxXML_TEXT_NODE))
                 {
-                    wxString text = textChild->GetContent();
-                    text.Trim(true);
-                    text.Trim(false);
-                    if (!text.IsEmpty())
+                    wxString cText = textChild->GetContent();
+                    cText.Trim(true);
+                    cText.Trim(false);
+                    if (!cText.IsEmpty())
                     {
-                        textChild->SetContent(text);
+                        textChild->SetContent(cText);
                         break;
                     }
                     else
@@ -2387,11 +2387,11 @@ bool wxRichTextXMLHelper::ExportStyleDefinition(wxOutputStream& stream, wxRichTe
             wxRichTextAttr* levelAttr = listDef->GetLevelAttributes(i);
             if (levelAttr)
             {
-                wxString style = AddAttributes(def->GetStyle(), true);
+                wxString levelStyle = AddAttributes(def->GetStyle(), true);
                 wxString levelStr = wxString::Format(wxT(" level=\"%d\" "), (i+1));
 
                 OutputIndentation(stream, level);
-                OutputString(stream, wxT("<style ") + levelStr + style + wxT(">"));
+                OutputString(stream, wxT("<style ") + levelStr + levelStyle + wxT(">"));
 
                 OutputIndentation(stream, level);
                 OutputString(stream, wxT("</style>"));

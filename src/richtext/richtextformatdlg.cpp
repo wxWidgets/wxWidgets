@@ -331,68 +331,60 @@ bool wxRichTextFormattingDialogFactory::CreatePages(long pages, wxRichTextFormat
 /// Create a page, given a page identifier
 wxPanel* wxRichTextFormattingDialogFactory::CreatePage(int page, wxString& title, wxRichTextFormattingDialog* dialog)
 {
+    wxPanel* panel = NULL;
+
     if (page == wxRICHTEXT_FORMAT_STYLE_EDITOR)
     {
-        wxRichTextStylePage* page = new wxRichTextStylePage(dialog->GetBookCtrl(), wxID_ANY);
+        panel = new wxRichTextStylePage(dialog->GetBookCtrl(), wxID_ANY);
         title = _("Style");
-        return page;
     }
     else if (page == wxRICHTEXT_FORMAT_FONT)
     {
-        wxRichTextFontPage* page = new wxRichTextFontPage(dialog->GetBookCtrl(), wxID_ANY);
+        panel = new wxRichTextFontPage(dialog->GetBookCtrl(), wxID_ANY);
         title = _("Font");
-        return page;
     }
     else if (page == wxRICHTEXT_FORMAT_INDENTS_SPACING)
     {
-        wxRichTextIndentsSpacingPage* page = new wxRichTextIndentsSpacingPage(dialog->GetBookCtrl(), wxID_ANY);
+        panel = new wxRichTextIndentsSpacingPage(dialog->GetBookCtrl(), wxID_ANY);
         title = _("Indents && Spacing");
-        return page;
     }
     else if (page == wxRICHTEXT_FORMAT_TABS)
     {
-        wxRichTextTabsPage* page = new wxRichTextTabsPage(dialog->GetBookCtrl(), wxID_ANY);
+        panel = new wxRichTextTabsPage(dialog->GetBookCtrl(), wxID_ANY);
         title = _("Tabs");
-        return page;
     }
     else if (page == wxRICHTEXT_FORMAT_BULLETS)
     {
-        wxRichTextBulletsPage* page = new wxRichTextBulletsPage(dialog->GetBookCtrl(), wxID_ANY);
+        panel = new wxRichTextBulletsPage(dialog->GetBookCtrl(), wxID_ANY);
         title = _("Bullets");
-        return page;
     }
     else if (page == wxRICHTEXT_FORMAT_LIST_STYLE)
     {
-        wxRichTextListStylePage* page = new wxRichTextListStylePage(dialog->GetBookCtrl(), wxID_ANY);
+        panel = new wxRichTextListStylePage(dialog->GetBookCtrl(), wxID_ANY);
         title = _("List Style");
-        return page;
     }
     else if (page == wxRICHTEXT_FORMAT_SIZE)
     {
-        wxRichTextSizePage* page = new wxRichTextSizePage(dialog->GetBookCtrl(), wxID_ANY);
+        panel = new wxRichTextSizePage(dialog->GetBookCtrl(), wxID_ANY);
         title = _("Size");
-        return page;
     }
     else if (page == wxRICHTEXT_FORMAT_MARGINS)
     {
-        wxRichTextMarginsPage* page = new wxRichTextMarginsPage(dialog->GetBookCtrl(), wxID_ANY);
+        panel = new wxRichTextMarginsPage(dialog->GetBookCtrl(), wxID_ANY);
         title = _("Margins");
-        return page;
     }
     else if (page == wxRICHTEXT_FORMAT_BORDERS)
     {
-        wxRichTextBordersPage* page = new wxRichTextBordersPage(dialog->GetBookCtrl(), wxID_ANY);
+        panel = new wxRichTextBordersPage(dialog->GetBookCtrl(), wxID_ANY);
         title = _("Borders");
-        return page;
     }
     else if (page == wxRICHTEXT_FORMAT_BACKGROUND)
     {
-        wxRichTextBackgroundPage* page = new wxRichTextBackgroundPage(dialog->GetBookCtrl(), wxID_ANY);
+        panel = new wxRichTextBackgroundPage(dialog->GetBookCtrl(), wxID_ANY);
         title = _("Background");
-        return page;
     }
-    else
-        return NULL;
+
+    return panel;
 }
 
 /// Enumerate all available page identifiers
@@ -524,8 +516,8 @@ void wxRichTextFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     if ((GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT) || (GetTextEffects() & wxTEXT_ATTR_EFFECT_SUBSCRIPT))
     {
-        double size = static_cast<double>(font.GetPointSize()) / wxSCRIPT_MUL_FACTOR;
-        font.SetPointSize( static_cast<int>(size) );
+        double fontSize = static_cast<double>(font.GetPointSize()) / wxSCRIPT_MUL_FACTOR;
+        font.SetPointSize( static_cast<int>(fontSize) );
     }
 
     if ( font.IsOk() )
@@ -795,8 +787,8 @@ void wxRichTextColourSwatchCtrl::OnMouseEvent(wxMouseEvent& event)
 #endif // wxUSE_COLOURDLG
         Refresh();
 
-        wxCommandEvent event(wxEVT_BUTTON, GetId());
-        GetEventHandler()->ProcessEvent(event);
+        wxCommandEvent btnEvent(wxEVT_BUTTON, GetId());
+        GetEventHandler()->ProcessEvent(btnEvent);
     }
 }
 
