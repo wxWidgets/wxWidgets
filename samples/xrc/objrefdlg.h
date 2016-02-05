@@ -63,7 +63,6 @@ private:
     void ClearCalculator();
 
     wxNotebook *nb;
-    wxTextCtrl *text;
     wxTextCtrl *result_txt;
     int current;
     int previous;

@@ -120,7 +120,7 @@ void ObjrefDialog::OnNotebookPageChanged( wxNotebookEvent &event )
         case icons_page:
             {
                 wxNotebookPage *page = nb->GetPage(icons_page);
-                text = XRCCTRL(*page, "log_text", wxTextCtrl);
+                wxTextCtrl* const text = XRCCTRL(*page, "log_text", wxTextCtrl);
                 if (text)
                     delete wxLog::SetActiveTarget(new wxLogTextCtrl(text));
                 break;
@@ -130,7 +130,7 @@ void ObjrefDialog::OnNotebookPageChanged( wxNotebookEvent &event )
             {
                 wxNotebookPage *page = nb->GetPage(calc_page);
                 result_txt = XRCCTRL(*page, "result", wxTextCtrl);
-                text = XRCCTRL(*page, "log_text", wxTextCtrl);
+                wxTextCtrl* const text = XRCCTRL(*page, "log_text", wxTextCtrl);
                 if (text)
                     delete wxLog::SetActiveTarget(new wxLogTextCtrl(text));
 
