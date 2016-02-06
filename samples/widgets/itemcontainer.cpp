@@ -272,8 +272,7 @@ void ItemContainerWidgetsPage::OnButtonTestItemContainer(wxCommandEvent&)
 
     StartTest(wxT("Append some items with data objects"));
     wxClientData **objects = new wxClientData *[m_items.GetCount()];
-    unsigned i;
-    for ( i = 0; i < m_items.GetCount(); ++i )
+    for ( unsigned i = 0; i < m_items.GetCount(); ++i )
         objects[i] = CreateClientData(i);
     m_container->Append(m_items, objects);
     EndTest(expected_result);
@@ -281,19 +280,19 @@ void ItemContainerWidgetsPage::OnButtonTestItemContainer(wxCommandEvent&)
 
     StartTest(wxT("Append some items with data"));
     void **data = new void *[m_items.GetCount()];
-    for ( i = 0; i < m_items.GetCount(); ++i )
+    for ( unsigned i = 0; i < m_items.GetCount(); ++i )
         data[i] = wxUIntToPtr(i);
     m_container->Append(m_items, data);
     EndTest(expected_result);
     delete[] data;
 
     StartTest(wxT("Append some items with data, one by one"));
-    for ( i = 0; i < m_items.GetCount(); ++i )
+    for ( unsigned i = 0; i < m_items.GetCount(); ++i )
         m_container->Append(m_items[i], wxUIntToPtr(i));
     EndTest(expected_result);
 
     StartTest(wxT("Append some items with data objects, one by one"));
-    for ( i = 0; i < m_items.GetCount(); ++i )
+    for ( unsigned i = 0; i < m_items.GetCount(); ++i )
         m_container->Append(m_items[i], CreateClientData(i));
     EndTest(expected_result);
 
