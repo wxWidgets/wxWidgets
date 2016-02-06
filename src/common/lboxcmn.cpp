@@ -31,6 +31,7 @@
     #include "wx/dynarray.h"
     #include "wx/arrstr.h"
     #include "wx/log.h"
+    #include "wx/dcclient.h"
 #endif
 
 // the spacing between the lines (in report mode)
