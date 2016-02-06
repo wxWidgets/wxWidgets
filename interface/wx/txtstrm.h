@@ -251,7 +251,7 @@ public:
 /**
     Specifies the end-of-line characters to use with wxTextOutputStream.
 */
-typedef enum
+enum wxEOL
 {
     /**
         Specifies wxTextOutputStream to use the native end-of-line characters.
@@ -272,7 +272,7 @@ typedef enum
         Specifies wxTextOutputStream to use DOS end-of-line characters.
     */
     wxEOL_DOS
-} wxEOL;
+};
 
 
 /**

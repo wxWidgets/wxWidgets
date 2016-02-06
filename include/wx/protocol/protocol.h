@@ -29,7 +29,7 @@ class WXDLLIMPEXP_FWD_NET wxProtocolLog;
 // constants
 // ----------------------------------------------------------------------------
 
-typedef enum
+enum wxProtocolError
 {
     wxPROTO_NOERR = 0,
     wxPROTO_NETERR,
@@ -41,7 +41,7 @@ typedef enum
     wxPROTO_ABRT,
     wxPROTO_RCNCT,
     wxPROTO_STREAMING
-} wxProtocolError;
+};
 
 // ----------------------------------------------------------------------------
 // wxProtocol: abstract base class for all protocols

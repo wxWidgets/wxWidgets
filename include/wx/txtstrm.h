@@ -107,13 +107,13 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxTextInputStream);
 };
 
-typedef enum
+enum wxEOL
 {
   wxEOL_NATIVE,
   wxEOL_UNIX,
   wxEOL_MAC,
   wxEOL_DOS
-} wxEOL;
+};
 
 class WXDLLIMPEXP_BASE wxTextOutputStream
 {

@@ -2742,7 +2742,7 @@ enum wxKeyModifier
 #define wxDLG_UNIT(parent, pt) parent->ConvertDialogToPixels(pt)
 
 /* Paper types */
-typedef enum
+enum wxPaperSize
 {
     wxPAPER_NONE,               /*  Use specific dimensions */
     wxPAPER_LETTER,             /*  Letter, 8 1/2 by 11 inches */
@@ -2865,7 +2865,7 @@ typedef enum
     wxPAPER_PENV_10_ROTATED,    /* PRC Envelope #10 Rotated 458 x 324 m */
     wxPAPER_A0,                 /* A0 Sheet 841 x 1189 mm */
     wxPAPER_A1                  /* A1 Sheet 594 x 841 mm */
-} wxPaperSize;
+};
 
 /* Printing orientation */
 enum wxPrintOrientation

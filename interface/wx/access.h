@@ -10,20 +10,20 @@
     wxAccessible functions return a wxAccStatus error code,
     which may be one of this enum's values.
 */
-typedef enum
+enum wxAccStatus
 {
     wxACC_FAIL,            //!< The function failed.
     wxACC_FALSE,           //!< The function returned false.
     wxACC_OK,              //!< The function completed successfully.
     wxACC_NOT_IMPLEMENTED, //!< The function is not implemented.
     wxACC_NOT_SUPPORTED    //!< The function is not supported.
-} wxAccStatus;
+};
 
 
 /**
     Directions of navigation are represented by this enum.
 */
-typedef enum
+enum wxNavDir
 {
     wxNAVDIR_DOWN,
     wxNAVDIR_FIRSTCHILD,
@@ -33,13 +33,13 @@ typedef enum
     wxNAVDIR_PREVIOUS,
     wxNAVDIR_RIGHT,
     wxNAVDIR_UP
-} wxNavDir;
+};
 
 
 /**
     The role of a user interface element is represented by the values of this enum.
 */
-typedef enum {
+enum wxAccRole {
     wxROLE_NONE,
     wxROLE_SYSTEM_ALERT,
     wxROLE_SYSTEM_ANIMATION,
@@ -102,12 +102,12 @@ typedef enum {
     wxROLE_SYSTEM_TOOLTIP,
     wxROLE_SYSTEM_WHITESPACE,
     wxROLE_SYSTEM_WINDOW
-} wxAccRole;
+};
 
 /**
     Objects are represented by a wxAccObject enum value.
 */
-typedef enum {
+enum wxAccObject {
     wxOBJID_WINDOW =    0x00000000,
     wxOBJID_SYSMENU =   0xFFFFFFFF,
     wxOBJID_TITLEBAR =  0xFFFFFFFE,
@@ -120,13 +120,13 @@ typedef enum {
     wxOBJID_CURSOR =    0xFFFFFFF7,
     wxOBJID_ALERT =     0xFFFFFFF6,
     wxOBJID_SOUND =     0xFFFFFFF5
-} wxAccObject;
+};
 
 
 /**
     Selection actions are identified by the wxAccSelectionFlags values.
 */
-typedef enum
+enum wxAccSelectionFlags
 {
     wxACC_SEL_NONE            = 0,
     wxACC_SEL_TAKEFOCUS       = 1,
@@ -134,7 +134,7 @@ typedef enum
     wxACC_SEL_EXTENDSELECTION = 4,
     wxACC_SEL_ADDSELECTION    = 8,
     wxACC_SEL_REMOVESELECTION = 16
-} wxAccSelectionFlags;
+};
 
 //@{
 /**

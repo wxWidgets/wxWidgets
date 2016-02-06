@@ -8,7 +8,7 @@
 /**
     Error types returned from wxURL::GetError().
 */
-typedef enum {
+enum wxURLError {
     wxURL_NOERR = 0,    ///< No error.
     wxURL_SNTXERR,      ///< Syntax error in the URL string.
     wxURL_NOPROTO,      ///< Found no protocol which can get this URL.
@@ -16,7 +16,7 @@ typedef enum {
     wxURL_NOPATH,       ///< A path is required for this protocol.
     wxURL_CONNERR,      ///< Connection error.
     wxURL_PROTOERR      ///< An error occurred during negotiation.
-} wxURLError;
+};
 
 /**
     @class wxURL
