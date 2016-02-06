@@ -220,16 +220,9 @@ wxSize wxCollapsiblePane::DoGetBestSize() const
 {
     wxASSERT_MSG( m_widget, wxT("DoGetBestSize called before creation") );
 
-    GtkRequisition req;
-#ifdef __WXGTK3__
-    gtk_widget_get_preferred_size(m_widget, NULL, &req);
-#else
-    GTK_WIDGET_GET_CLASS(m_widget)->size_request(m_widget, &req);
-#endif
-
     // notice that we do not cache our best size here as it changes
     // all times the user expands/hide our pane
-    return wxSize(req.width, req.height);
+    return GTKGetPreferredSize(m_widget);
 }
 
 void wxCollapsiblePane::Collapse(bool collapse)
