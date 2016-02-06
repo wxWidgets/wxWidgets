@@ -850,6 +850,7 @@ private:
     // Compute the minimal width needed to fully display the column header.
     int ComputeMinHeaderWidth(const wxListHeaderData* header) const;
 
+    bool IsClickInsideCheckbox(long item, int x, int y);
 
     // the height of one line using the current font
     wxCoord m_lineHeight;

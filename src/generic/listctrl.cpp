@@ -2579,11 +2579,18 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         {
             if ( IsSingleSel() || !IsHighlighted(current) )
             {
-                HighlightAll( false );
+                if (IsClickInsideCheckbox(current, x, y))
+                {
+                    CheckItem(current, !IsItemChecked(current));
+                }
+                else
+                {
+                    HighlightAll(false);
 
-                ChangeCurrent(current);
+                    ChangeCurrent(current);
 
-                ReverseHighlight(m_current);
+                    ReverseHighlight(m_current);
+                }
             }
             else // multi sel & current is highlighted & no mod keys
             {
@@ -3737,6 +3744,19 @@ bool wxListMainWindow::IsItemChecked(long item) const
 {
     wxListLineData *line = GetLine((size_t)item);
     return line->IsChecked();
+}
+
+bool wxListMainWindow::IsClickInsideCheckbox(long item, int x, int y)
+{
+    if (HasCheckboxes()) {
+        wxRect lineRect = GetLineRect(item);
+        wxSize cbSize = wxRendererNative::Get().GetCheckBoxSize(this);
+        int yOffset = (lineRect.height - cbSize.GetHeight()) / 2;
+        wxRect rr(0, lineRect.y + yOffset, cbSize.GetWidth(), cbSize.GetHeight());
+
+        return (rr.Contains(wxPoint(x, y)));
+    }
+    return false;
 }
 
 // ----------------------------------------------------------------------------
