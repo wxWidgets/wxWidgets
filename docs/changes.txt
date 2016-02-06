@@ -96,6 +96,7 @@ All (GUI):
 - Allow customizing window shown by wxBusyInfo.
 - Add wxAddRemoveCtrl.
 - Add wxAppProgressIndicator for MSW (Chaobin Zhang) and OS X (Tobias Taschner).
+- Add support for using checkboxes to wxListCtrl (Maarten Bent).
 - Add wxListBox::GetTopItem() and GetCountPerPage() (Andreas Falkenhahn).
 - Add wxTextEntry::ForceUpper().
 - Add wxTextEntryDialog::ForceUpper().
@@ -201,7 +202,6 @@ wxMSW:
 - Return correct OS version under Windows 8.1 and later.
 - Fix crash in wxD2DContext when using non-MSVC compiler (iwbnwif).
 - Notify shell about the changes done by wxMimeTypesManager (Maarten Bent).
-- Add support for using checkboxes to wxListCtrl (Maarten Bent);
 
 wxOSX/Cocoa:
 

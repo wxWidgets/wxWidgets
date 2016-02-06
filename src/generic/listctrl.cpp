@@ -46,7 +46,7 @@
 #endif
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
-    #define "wx/msw/wrapwin.h"
+    #include "wx/msw/wrapwin.h"
 #endif
 
 // NOTE: If using the wxListBox visual attributes works everywhere then this can
@@ -102,6 +102,8 @@ static const int IMAGE_MARGIN_IN_REPORT_MODE = 5;
 // the space between the image and the text in the report mode in header
 static const int HEADER_IMAGE_MARGIN_IN_REPORT_MODE = 2;
 
+// space after a checkbox
+static const int MARGIN_AROUND_CHECKBOX = 5;
 
 
 // ----------------------------------------------------------------------------
@@ -410,6 +412,7 @@ wxListLineData::wxListLineData( wxListMainWindow *owner )
         m_gi = new GeometryInfo;
 
     m_highlighted = false;
+    m_checked = false;
 
     InitItems( GetMode() == wxLC_REPORT ? m_owner->GetColumnCount() : 1 );
 }
@@ -794,6 +797,21 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     x += 2;
 #endif
 
+    if ( m_owner->HasCheckboxes() )
+    {
+        wxSize cbSize = wxRendererNative::Get().GetCheckBoxSize(m_owner);
+        int yOffset = (rect.height - cbSize.GetHeight()) / 2;
+        wxRect rr(wxPoint(x, rect.y + yOffset), cbSize);
+        rr.x += MARGIN_AROUND_CHECKBOX;
+
+        int flags = 0;
+        if (m_checked)
+            flags |= wxCONTROL_CHECKED;
+        wxRendererNative::Get().DrawCheckBox(m_owner, *dc, rr, flags);
+
+        x += cbSize.GetWidth() + (2 * MARGIN_AROUND_CHECKBOX);
+    }
+
     size_t col = 0;
     for ( wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
           node;
@@ -802,6 +820,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         wxListItemData *item = node->GetData();
 
         int width = m_owner->GetColumnWidth(col);
+        if (col == 0 && m_owner->HasCheckboxes())
+            width -= x;
         int xOld = x;
         x += width;
 
@@ -1588,6 +1608,8 @@ void wxListMainWindow::Init()
     m_lineLastClicked =
     m_lineSelectSingleOnUp =
     m_lineBeforeLastClicked = (size_t)-1;
+
+    m_hasCheckboxes = false;
 }
 
 wxListMainWindow::wxListMainWindow()
@@ -2557,9 +2579,13 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         bool cmdModifierDown = event.CmdDown();
         if ( IsSingleSel() || !(cmdModifierDown || event.ShiftDown()) )
         {
-            if ( IsSingleSel() || !IsHighlighted(current) )
+            if (IsInsideCheckbox(current, x, y))
             {
-                HighlightAll( false );
+                CheckItem(current, !IsItemChecked(current));
+            }
+            else if (IsSingleSel() || !IsHighlighted(current))
+            {
+                HighlightAll(false);
 
                 ChangeCurrent(current);
 
@@ -3674,6 +3700,58 @@ bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos) const
 }
 
 // ----------------------------------------------------------------------------
+// checkboxes
+// ----------------------------------------------------------------------------
+
+bool wxListMainWindow::HasCheckboxes() const
+{
+    return m_hasCheckboxes;
+}
+
+bool wxListMainWindow::EnableCheckboxes(bool enable)
+{
+    m_hasCheckboxes = enable;
+
+    m_dirty = true;
+    m_headerWidth = 0;
+    Refresh();
+
+    return true;
+}
+
+void wxListMainWindow::CheckItem(long item, bool state)
+{
+    wxListLineData *line = GetLine((size_t)item);
+    line->Check(state);
+
+    RefreshLine(item);
+
+    SendNotify(item, state ? wxEVT_LIST_ITEM_CHECKED
+        : wxEVT_LIST_ITEM_UNCHECKED);
+}
+
+bool wxListMainWindow::IsItemChecked(long item) const
+{
+    wxListLineData *line = GetLine((size_t)item);
+    return line->IsChecked();
+}
+
+bool wxListMainWindow::IsInsideCheckbox(long item, int x, int y)
+{
+    if ( HasCheckboxes() )
+    {
+        wxRect lineRect = GetLineRect(item);
+        wxSize cbSize = wxRendererNative::Get().GetCheckBoxSize(this);
+        int yOffset = (lineRect.height - cbSize.GetHeight()) / 2;
+        wxRect rr(wxPoint(MARGIN_AROUND_CHECKBOX, lineRect.y + yOffset), cbSize);
+
+        return rr.Contains(wxPoint(x, y));
+    }
+
+    return false;
+}
+
+// ----------------------------------------------------------------------------
 // geometry calculation
 // ----------------------------------------------------------------------------
 
@@ -4589,7 +4667,7 @@ void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
                         ),
                         wxTAB_TRAVERSAL
                       );
-        
+
 #if defined( __WXMAC__ )
         static wxFont font( wxOSX_SYSTEM_FONT_SMALL );
         m_headerWin->SetFont( font );
@@ -4689,6 +4767,36 @@ void wxGenericListCtrl::OnScroll(wxScrollWinEvent& event)
 
     // Let the window be scrolled as usual by the default handler.
     event.Skip();
+}
+
+bool wxGenericListCtrl::HasCheckboxes() const
+{
+    if (!InReportView())
+        return false;
+
+    return m_mainWin->HasCheckboxes();
+}
+
+bool wxGenericListCtrl::EnableCheckboxes(bool enable)
+{
+    if (!InReportView())
+        return false;
+
+    return m_mainWin->EnableCheckboxes(enable);
+}
+
+void wxGenericListCtrl::CheckItem(long item, bool state)
+{
+    if (InReportView())
+        m_mainWin->CheckItem(item, state);
+}
+
+bool wxGenericListCtrl::IsItemChecked(long item) const
+{
+    if (!InReportView())
+        return false;
+
+    return m_mainWin->IsItemChecked(item);
 }
 
 void wxGenericListCtrl::SetSingleStyle( long style, bool add )
