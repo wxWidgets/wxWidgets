@@ -103,7 +103,7 @@ static const int IMAGE_MARGIN_IN_REPORT_MODE = 5;
 static const int HEADER_IMAGE_MARGIN_IN_REPORT_MODE = 2;
 
 // space after a checkbox
-static const int MARGIN_AFTER_CHECKBOX = 5;
+static const int MARGIN_AROUND_CHECKBOX = 5;
 
 
 // ----------------------------------------------------------------------------
@@ -801,13 +801,14 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         wxSize cbSize = wxRendererNative::Get().GetCheckBoxSize(m_owner);
         int yOffset = (rect.height - cbSize.GetHeight()) / 2;
         wxRect rr(x, rect.y + yOffset, cbSize.GetWidth(), cbSize.GetHeight());
+        rr.x += MARGIN_AROUND_CHECKBOX;
 
         int flags = 0;
         if (m_checked)
             flags |= wxCONTROL_CHECKED;
         wxRendererNative::Get().DrawCheckBox(m_owner, *dc, rr, flags);
 
-        x += cbSize.GetWidth() + MARGIN_AFTER_CHECKBOX;
+        x += cbSize.GetWidth() + (2 * MARGIN_AROUND_CHECKBOX);
     }
 
     size_t col = 0;
@@ -2577,20 +2578,17 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         bool cmdModifierDown = event.CmdDown();
         if ( IsSingleSel() || !(cmdModifierDown || event.ShiftDown()) )
         {
-            if ( IsSingleSel() || !IsHighlighted(current) )
+            if (IsClickInsideCheckbox(current, x, y))
             {
-                if (IsClickInsideCheckbox(current, x, y))
-                {
-                    CheckItem(current, !IsItemChecked(current));
-                }
-                else
-                {
-                    HighlightAll(false);
+                CheckItem(current, !IsItemChecked(current));
+            }
+            else if (IsSingleSel() || !IsHighlighted(current))
+            {
+                HighlightAll(false);
 
-                    ChangeCurrent(current);
+                ChangeCurrent(current);
 
-                    ReverseHighlight(m_current);
-                }
+                ReverseHighlight(m_current);
             }
             else // multi sel & current is highlighted & no mod keys
             {
@@ -3743,7 +3741,7 @@ bool wxListMainWindow::IsClickInsideCheckbox(long item, int x, int y)
         wxRect lineRect = GetLineRect(item);
         wxSize cbSize = wxRendererNative::Get().GetCheckBoxSize(this);
         int yOffset = (lineRect.height - cbSize.GetHeight()) / 2;
-        wxRect rr(0, lineRect.y + yOffset, cbSize.GetWidth(), cbSize.GetHeight());
+        wxRect rr(MARGIN_AROUND_CHECKBOX, lineRect.y + yOffset, cbSize.GetWidth(), cbSize.GetHeight());
 
         return (rr.Contains(wxPoint(x, y)));
     }
