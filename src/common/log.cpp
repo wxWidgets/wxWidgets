@@ -882,7 +882,11 @@ wxLogStream::wxLogStream(wxSTD ostream *ostr)
 
 void wxLogStream::DoLogText(const wxString& msg)
 {
-    (*m_ostr) << msg << wxSTD endl;
+    const wxSTD string msgStdStr = msg.ToStdString();
+    if ( !msgStdStr.empty() )
+        (*m_ostr) << msgStdStr << wxSTD endl;
+    else // charset conversion probably has failed; log at least something
+        (*m_ostr) << msg.ToAscii() << wxSTD endl;
 }
 #endif // wxUSE_STD_IOSTREAM
 
