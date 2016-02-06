@@ -387,6 +387,8 @@ static inline gboolean wx_gtk_window_has_group(GtkWindow* window)
 // ----------------------------------------------------------------------------
 // the following were introduced in GTK+ 2.24
 
+#define gdk_window_get_visual gdk_drawable_get_visual
+
 static inline GdkDisplay* wx_gdk_window_get_display(GdkWindow* window)
 {
     return gdk_drawable_get_display(window);
