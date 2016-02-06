@@ -46,7 +46,7 @@
 #endif
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
-    #define "wx/msw/wrapwin.h"
+    #include "wx/msw/wrapwin.h"
 #endif
 
 // NOTE: If using the wxListBox visual attributes works everywhere then this can
@@ -4589,7 +4589,7 @@ void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
                         ),
                         wxTAB_TRAVERSAL
                       );
-        
+
 #if defined( __WXMAC__ )
         static wxFont font( wxOSX_SYSTEM_FONT_SMALL );
         m_headerWin->SetFont( font );
