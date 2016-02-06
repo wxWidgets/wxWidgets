@@ -33,6 +33,7 @@
 #include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private/treeentry_gtk.h"
+#include "wx/gtk/private/treeview.h"
 
 #include <gdk/gdkkeysyms.h>
 #ifdef __WXGTK3__
@@ -525,18 +526,14 @@ bool wxListBox::GTKGetIteratorFor(unsigned pos, GtkTreeIter *iter) const
 
 int wxListBox::GTKGetIndexFor(GtkTreeIter& iter) const
 {
-    GtkTreePath *path =
-        gtk_tree_model_get_path(GTK_TREE_MODEL(m_liststore), &iter);
+    wxGtkTreePath path(
+        gtk_tree_model_get_path(GTK_TREE_MODEL(m_liststore), &iter));
 
     gint* pIntPath = gtk_tree_path_get_indices(path);
 
     wxCHECK_MSG( pIntPath, wxNOT_FOUND, wxT("failed to get iterator path") );
 
-    int idx = pIntPath[0];
-
-    gtk_tree_path_free( path );
-
-    return idx;
+    return pIntPath[0];
 }
 
 // get GtkTreeEntry from position (note: you need to g_unref it if valid)
@@ -586,9 +583,8 @@ void wxListBox::SetString(unsigned int n, const wxString& label)
 
     // signal row changed
     GtkTreeModel* tree_model = GTK_TREE_MODEL(m_liststore);
-    GtkTreePath* path = gtk_tree_model_get_path(tree_model, &iter);
+    wxGtkTreePath path(gtk_tree_model_get_path(tree_model, &iter));
     gtk_tree_model_row_changed(tree_model, path, &iter);
-    gtk_tree_path_free(path);
 }
 
 wxString wxListBox::GetString(unsigned int n) const
@@ -728,12 +724,10 @@ void wxListBox::DoSetSelection( int n, bool select )
     else
         gtk_tree_selection_unselect_iter(selection, &iter);
 
-    GtkTreePath* path = gtk_tree_model_get_path(
-                        GTK_TREE_MODEL(m_liststore), &iter);
+    wxGtkTreePath path(
+            gtk_tree_model_get_path(GTK_TREE_MODEL(m_liststore), &iter));
 
     gtk_tree_view_scroll_to_cell(m_treeview, path, NULL, FALSE, 0.0f, 0.0f);
-
-    gtk_tree_path_free(path);
 
     GTKEnableEvents();
 }
@@ -751,14 +745,12 @@ void wxListBox::DoScrollToCell(int n, float alignY, float alignX)
     if ( !GTKGetIteratorFor(n, &iter) )
         return;
 
-    GtkTreePath* path = gtk_tree_model_get_path(
-                            GTK_TREE_MODEL(m_liststore), &iter);
+    wxGtkTreePath path(
+            gtk_tree_model_get_path(GTK_TREE_MODEL(m_liststore), &iter));
 
     // Scroll to the desired cell (0.0 == topleft alignment)
     gtk_tree_view_scroll_to_cell(m_treeview, path, NULL,
                                  TRUE, alignY, alignX);
-
-    gtk_tree_path_free(path);
 }
 
 void wxListBox::DoSetFirstItem(int n)
@@ -775,15 +767,13 @@ int wxListBox::GetTopItem() const
 {
     int idx = wxNOT_FOUND;
 
-    GtkTreePath *start;
-    if ( gtk_tree_view_get_visible_range(m_treeview, &start, NULL) )
+    wxGtkTreePath start;
+    if ( gtk_tree_view_get_visible_range(m_treeview, start.ByRef(), NULL) )
     {
         gint *ptr = gtk_tree_path_get_indices(start);
 
         if ( ptr )
             idx = *ptr;
-
-        gtk_tree_path_free(start);
     }
 
     return idx;
@@ -805,13 +795,13 @@ int wxListBox::DoListHitTest(const wxPoint& point) const
     gdk_window_get_geometry(gtk_tree_view_get_bin_window(m_treeview),
                             &binx, &biny, NULL, NULL);
 
-    GtkTreePath* path;
+    wxGtkTreePath path;
     if ( !gtk_tree_view_get_path_at_pos
           (
             m_treeview,
             point.x - binx,
             point.y - biny,
-            &path,
+            path.ByRef(),
             NULL,   // [out] column (always 0 here)
             NULL,   // [out] x-coord relative to the cell (not interested)
             NULL    // [out] y-coord relative to the cell
@@ -820,10 +810,7 @@ int wxListBox::DoListHitTest(const wxPoint& point) const
         return wxNOT_FOUND;
     }
 
-    int index = gtk_tree_path_get_indices(path)[0];
-    gtk_tree_path_free(path);
-
-    return index;
+    return gtk_tree_path_get_indices(path)[0];
 }
 
 // ----------------------------------------------------------------------------

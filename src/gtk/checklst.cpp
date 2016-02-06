@@ -16,6 +16,7 @@
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/treeview.h"
 
 //-----------------------------------------------------------------------------
 // "toggled"
@@ -27,13 +28,12 @@ static void gtk_checklist_toggled(GtkCellRendererToggle * WXUNUSED(renderer),
 {
     wxCHECK_RET( listbox->m_treeview != NULL, wxT("invalid listbox") );
 
-    GtkTreePath* path = gtk_tree_path_new_from_string(stringpath);
+    wxGtkTreePath path(stringpath);
     wxCommandEvent new_event( wxEVT_CHECKLISTBOX,
                               listbox->GetId() );
     new_event.SetEventObject( listbox );
     new_event.SetInt( gtk_tree_path_get_indices(path)[0] );
     new_event.SetString( listbox->GetString( new_event.GetInt() ));
-    gtk_tree_path_free(path);
     listbox->Check( new_event.GetInt(), !listbox->IsChecked(new_event.GetInt()));
     listbox->HandleWindowEvent( new_event );
 }
