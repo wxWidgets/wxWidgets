@@ -95,6 +95,9 @@ public:
 
     virtual void EnsureVisible(int n);
 
+    virtual int GetTopItem() const;
+    virtual int GetCountPerPage() const;
+
     // ownerdrawn wxListBox and wxCheckListBox support
 #if wxUSE_OWNER_DRAWN
     // override base class virtuals

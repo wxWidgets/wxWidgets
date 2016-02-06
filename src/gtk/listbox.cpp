@@ -771,6 +771,24 @@ void wxListBox::EnsureVisible(int n)
     DoScrollToCell(n, 0.5, 0);
 }
 
+int wxListBox::GetTopItem() const
+{
+    int idx = wxNOT_FOUND;
+
+    GtkTreePath *start;
+    if ( gtk_tree_view_get_visible_range(m_treeview, &start, NULL) )
+    {
+        gint *ptr = gtk_tree_path_get_indices(start);
+
+        if ( ptr )
+            idx = *ptr;
+
+        gtk_tree_path_free(start);
+    }
+
+    return idx;
+}
+
 // ----------------------------------------------------------------------------
 // hittest
 // ----------------------------------------------------------------------------

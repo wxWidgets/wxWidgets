@@ -129,6 +129,8 @@ public :
 
     virtual void            ListScrollTo( unsigned int n ) wxOVERRIDE ;
 
+    virtual int             ListGetTopItem() conswxOVERRIDE t;
+
     // accessing content
 
     virtual unsigned int    ListGetCount() const wxOVERRIDE ;
@@ -534,6 +536,13 @@ void wxListWidgetCocoaImpl::ListScrollTo( unsigned int n )
     [m_tableView scrollRowToVisible:n];
 }
 
+int wxListWidgetCocoaImpl::ListGetTopItem() const
+{
+     NSScrollView *scrollView = [m_tableView enclosingScrollView];
+     NSRect visibleRect = scrollView.contentView.visibleRect;
+     NSRange range = [m_tableView rowsInRect:visibleRect];
+     return range.location;
+}
 
 void wxListWidgetCocoaImpl::UpdateLine( unsigned int WXUNUSED(n), wxListWidgetColumn* WXUNUSED(col) )
 {

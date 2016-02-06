@@ -145,6 +145,11 @@ void wxListBox::EnsureVisible(int n)
     GetListPeer()->ListScrollTo( n );
 }
 
+int wxListBox::GetTopItem() const
+{
+    return GetListPeer()->ListGetTopItem();
+}
+
 void wxListBox::DoDeleteOneItem(unsigned int n)
 {
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxListBox::Delete") );

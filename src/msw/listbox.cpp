@@ -253,6 +253,22 @@ void wxListBox::EnsureVisible(int n)
     DoSetFirstItem(n - countVisible + 1);
 }
 
+int wxListBox::GetTopItem() const
+{
+    return SendMessage(GetHwnd(), LB_GETTOPINDEX, 0, 0);
+}
+
+int wxListBox::GetCountPerPage() const
+{
+    const LRESULT lineHeight = SendMessage(GetHwnd(), LB_GETITEMHEIGHT, 0, 0);
+    if ( lineHeight == LB_ERR || lineHeight == 0 )
+        return -1;
+
+    const RECT r = wxGetClientRect(GetHwnd());
+
+    return (r.bottom - r.top) / lineHeight;
+}
+
 void wxListBox::DoSetFirstItem(int N)
 {
     wxCHECK_RET( IsValid(N),

@@ -69,7 +69,9 @@ enum
     ListboxPage_Listbox,
     ListboxPage_EnsureVisible,
     ListboxPage_EnsureVisibleText,
-    ListboxPage_ContainerTests
+    ListboxPage_ContainerTests,
+    ListboxPage_GetTopItem,
+    ListboxPage_GetCountPerPage
 };
 
 // ----------------------------------------------------------------------------
@@ -99,6 +101,8 @@ protected:
     void OnButtonAdd(wxCommandEvent& event);
     void OnButtonAddSeveral(wxCommandEvent& event);
     void OnButtonAddMany(wxCommandEvent& event);
+    void OnButtonTopItem(wxCommandEvent& event);
+    void OnButtonPageCount(wxCommandEvent& event);
 
     void OnListbox(wxCommandEvent& event);
     void OnListboxDClick(wxCommandEvent& event);
@@ -186,6 +190,8 @@ wxBEGIN_EVENT_TABLE(ListboxWidgetsPage, WidgetsPage)
     EVT_BUTTON(ListboxPage_AddSeveral, ListboxWidgetsPage::OnButtonAddSeveral)
     EVT_BUTTON(ListboxPage_AddMany, ListboxWidgetsPage::OnButtonAddMany)
     EVT_BUTTON(ListboxPage_ContainerTests, ItemContainerWidgetsPage::OnButtonTestItemContainer)
+    EVT_BUTTON(ListboxPage_GetTopItem, ListboxWidgetsPage::OnButtonTopItem)
+    EVT_BUTTON(ListboxPage_GetCountPerPage, ListboxWidgetsPage::OnButtonPageCount)
 
     EVT_TEXT_ENTER(ListboxPage_AddText, ListboxWidgetsPage::OnButtonAdd)
     EVT_TEXT_ENTER(ListboxPage_DeleteText, ListboxWidgetsPage::OnButtonDelete)
@@ -331,6 +337,12 @@ void ListboxWidgetsPage::CreateContent()
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
     btn = new wxButton(this, ListboxPage_Clear, wxT("&Clear"));
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+
+    btn = new wxButton(this, ListboxPage_GetTopItem, wxT("Get top item"));
+    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+
+    btn = new wxButton(this, ListboxPage_GetCountPerPage, wxT("Get count per page"));
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
     btn = new wxButton(this, ListboxPage_ContainerTests, wxT("Run &tests"));
@@ -512,6 +524,18 @@ void ListboxWidgetsPage::OnButtonDeleteSel(wxCommandEvent& WXUNUSED(event))
 void ListboxWidgetsPage::OnButtonClear(wxCommandEvent& WXUNUSED(event))
 {
     m_lbox->Clear();
+}
+
+void ListboxWidgetsPage::OnButtonTopItem(wxCommandEvent& WXUNUSED(event))
+{
+    int item = m_lbox->GetTopItem();
+    wxLogMessage("Topmost visible item is: %d", item);
+}
+
+void ListboxWidgetsPage::OnButtonPageCount(wxCommandEvent& WXUNUSED(event))
+{
+    int count = m_lbox->GetCountPerPage();
+    wxLogMessage("%d items fit into this listbox.", count);
 }
 
 void ListboxWidgetsPage::OnButtonAdd(wxCommandEvent& WXUNUSED(event))

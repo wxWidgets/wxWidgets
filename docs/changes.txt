@@ -96,6 +96,7 @@ All (GUI):
 - Allow customizing window shown by wxBusyInfo.
 - Add wxAddRemoveCtrl.
 - Add wxAppProgressIndicator for MSW (Chaobin Zhang) and OS X (Tobias Taschner).
+- Add wxListBox::GetTopItem() and GetCountPerPage() (Andreas Falkenhahn).
 - Add wxTextEntry::ForceUpper().
 - Add wxTextEntryDialog::ForceUpper().
 - Add wxEVT_MAGNIFY mouse event (Joost Nieuwenhuijse).

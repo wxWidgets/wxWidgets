@@ -108,6 +108,8 @@ public:
 
     virtual void EnsureVisible(int n) wxOVERRIDE;
 
+    virtual int GetTopItem() const wxOVERRIDE;
+
     virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
     {
         return GetClassDefaultAttributes(GetWindowVariant());

@@ -72,6 +72,9 @@ public:
     // necessary
     virtual void EnsureVisible(int n);
 
+    virtual int GetTopItem() const { return wxNOT_FOUND; }
+    virtual int GetCountPerPage() const;
+
     // a combination of Append() and EnsureVisible(): appends the item to the
     // listbox and ensures that it is visible i.e. not scrolled out of view
     void AppendAndEnsureVisible(const wxString& s);
@@ -132,6 +135,8 @@ protected:
     // Update m_oldSelections with currently selected items (does nothing in
     // single selection mode on platforms other than MSW).
     void UpdateOldSelections();
+
+    wxCoord GetLineHeight() const;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxListBoxBase);
