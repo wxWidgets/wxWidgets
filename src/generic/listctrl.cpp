@@ -3711,16 +3711,7 @@ bool wxListMainWindow::HasCheckboxes() const
 
 bool wxListMainWindow::EnableCheckboxes(bool enable)
 {
-    bool changed = enable != m_hasCheckboxes;
     m_hasCheckboxes = enable;
-
-    if (changed) {
-        int cbWidth = wxRendererNative::Get().GetCheckBoxSize(this).GetWidth() + MARGIN_AFTER_CHECKBOX;
-        if (m_hasCheckboxes)
-            SetColumnWidth(0, GetColumnWidth(0) + cbWidth);
-        else
-            SetColumnWidth(0, GetColumnWidth(0) - cbWidth);
-    }
 
     m_dirty = true;
     m_headerWidth = 0;
