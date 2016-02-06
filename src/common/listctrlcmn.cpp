@@ -52,6 +52,8 @@ wxDEFINE_EVENT( wxEVT_LIST_ITEM_RIGHT_CLICK, wxListEvent );
 wxDEFINE_EVENT( wxEVT_LIST_ITEM_MIDDLE_CLICK, wxListEvent );
 wxDEFINE_EVENT( wxEVT_LIST_ITEM_ACTIVATED, wxListEvent );
 wxDEFINE_EVENT( wxEVT_LIST_ITEM_FOCUSED, wxListEvent );
+wxDEFINE_EVENT( wxEVT_LIST_ITEM_CHECKED, wxListEvent );
+wxDEFINE_EVENT( wxEVT_LIST_ITEM_UNCHECKED, wxListEvent );
 wxDEFINE_EVENT( wxEVT_LIST_CACHE_HINT, wxListEvent );
 
 // -----------------------------------------------------------------------------
