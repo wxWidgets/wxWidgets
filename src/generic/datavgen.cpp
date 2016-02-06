@@ -741,7 +741,18 @@ public:
     const wxSelectionStore& GetSelections() const { return m_selection; }
     void ClearSelection() { m_selection.SelectRange(0, GetRowCount() - 1, false); }
     void Select( const wxArrayInt& aSelections );
-    void SelectAllRows( bool on );
+
+    void SelectAllRows()
+    {
+        m_selection.SelectRange(0, GetRowCount() - 1);
+        Refresh();
+    }
+
+    // If a valid row is specified and it was previously selected, it is left
+    // selected and the function returns false. Otherwise, i.e. if there is
+    // really no selection left in the control, it returns true.
+    bool UnselectAllRows(unsigned int except = (unsigned int)-1);
+
     void SelectRow( unsigned int row, bool on );
     void SelectRows( unsigned int from, unsigned int to );
     void ReverseRowSelection( unsigned int row );
@@ -2726,25 +2737,36 @@ void wxDataViewMainWindow::ChangeCurrentRow( unsigned int row )
     // send event
 }
 
-void wxDataViewMainWindow::SelectAllRows( bool on )
+bool wxDataViewMainWindow::UnselectAllRows(unsigned int except)
 {
-    if (IsEmpty())
-        return;
-
-    if (on)
-    {
-        m_selection.SelectRange(0, GetRowCount() - 1);
-        Refresh();
-    }
-    else if (!m_selection.IsEmpty())
+    if (!m_selection.IsEmpty())
     {
         for (unsigned i = GetFirstVisibleRow(); i <= GetLastVisibleRow(); i++)
         {
-            if (m_selection.IsSelected(i))
+            if (m_selection.IsSelected(i) && i != except)
                 RefreshRow(i);
         }
-        ClearSelection();
+
+        if (except != (unsigned int)-1)
+        {
+            const bool wasSelected = m_selection.IsSelected(except);
+            ClearSelection();
+            if (wasSelected)
+            {
+                m_selection.SelectItem(except);
+
+                // The special item is still selected.
+                return false;
+            }
+        }
+        else
+        {
+            ClearSelection();
+        }
     }
+
+    // There are no selected items left.
+    return true;
 }
 
 void wxDataViewMainWindow::SelectRow( unsigned int row, bool on )
@@ -3837,7 +3859,7 @@ void wxDataViewMainWindow::OnVerticalNavigation(const wxKeyEvent& event, int del
 
         // all previously selected items are unselected unless ctrl is held
         if ( !event.ControlDown() )
-            SelectAllRows(false);
+            UnselectAllRows();
 
         ChangeCurrentRow( newCurrent );
 
@@ -4264,9 +4286,12 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         if (m_lineSelectSingleOnUp != (unsigned int)-1)
         {
             // select single line
-            SelectAllRows( false );
-            SelectRow( m_lineSelectSingleOnUp, true );
-            SendSelectionChangedEvent( GetItemByRow(m_lineSelectSingleOnUp) );
+            if ( UnselectAllRows(m_lineSelectSingleOnUp) )
+            {
+                SelectRow( m_lineSelectSingleOnUp, true );
+                SendSelectionChangedEvent( GetItemByRow(m_lineSelectSingleOnUp) );
+            }
+            //else: it was already selected, nothing to do
         }
 
         // If the user click the expander, we do not do editing even if the column
@@ -4301,7 +4326,8 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         // Multi-selections should not be cleared if a selected item is clicked.
         if (!IsRowSelected(current))
         {
-            SelectAllRows(false);
+            UnselectAllRows();
+
             const unsigned oldCurrent = m_currentRow;
             ChangeCurrentRow(current);
             SelectRow(m_currentRow,true);
@@ -4338,10 +4364,12 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         {
             if ( IsSingleSel() || !IsRowSelected(current) )
             {
-                SelectAllRows( false );
                 ChangeCurrentRow(current);
-                SelectRow(m_currentRow,true);
-                SendSelectionChangedEvent(GetItemByRow( m_currentRow ) );
+                if ( UnselectAllRows(current) )
+                {
+                    SelectRow(m_currentRow,true);
+                    SendSelectionChangedEvent(GetItemByRow( m_currentRow ) );
+                }
             }
             else // multi sel & current is highlighted & no mod keys
             {
@@ -5185,7 +5213,7 @@ void wxDataViewCtrl::Select( const wxDataViewItem & item )
     {
         // Unselect all rows before select another in the single select mode
         if (m_clientArea->IsSingleSel())
-            m_clientArea->SelectAllRows(false);
+            m_clientArea->UnselectAllRows();
 
         m_clientArea->SelectRow(row, true);
 
@@ -5218,12 +5246,12 @@ void wxDataViewCtrl::SetAlternateRowColour(const wxColour& colour)
 
 void wxDataViewCtrl::SelectAll()
 {
-    m_clientArea->SelectAllRows(true);
+    m_clientArea->SelectAllRows();
 }
 
 void wxDataViewCtrl::UnselectAll()
 {
-    m_clientArea->SelectAllRows(false);
+    m_clientArea->UnselectAllRows();
 }
 
 void wxDataViewCtrl::EnsureVisible( int row, int column )

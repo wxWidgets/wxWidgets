@@ -183,6 +183,7 @@ wxMSW:
 - Fix updating wxSlider background when its parent background changes.
 - Implement wxListBox::EnsureVisible() (RIVDSL).
 - Drastically improve efficiency of selecting all items in wxDataViewCtrl.
+- Fix spurious selection events generation in wxDataViewCtrl.
 - Fix wxMenuEvent::GetMenu() for wxEVT_MENU_{OPEN,CLOSE} in MDI frames.
 - Fix updating wxSpinCtrlDouble tooltip text (Laurent Poujoulat).
 - Fix appearance of checked disabled wxToolBar tools with custom images.
