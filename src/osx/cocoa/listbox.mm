@@ -129,7 +129,7 @@ public :
 
     virtual void            ListScrollTo( unsigned int n ) wxOVERRIDE ;
 
-    virtual int             ListGetTopItem() conswxOVERRIDE t;
+    virtual int             ListGetTopItem() const wxOVERRIDE;
 
     // accessing content
 
