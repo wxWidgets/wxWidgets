@@ -102,6 +102,8 @@ static const int IMAGE_MARGIN_IN_REPORT_MODE = 5;
 // the space between the image and the text in the report mode in header
 static const int HEADER_IMAGE_MARGIN_IN_REPORT_MODE = 2;
 
+// space after a checkbox
+static const int MARGIN_AFTER_CHECKBOX = 5;
 
 
 // ----------------------------------------------------------------------------
@@ -795,6 +797,19 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     x += 2;
 #endif
 
+    if (m_owner->HasCheckboxes()) {
+        wxSize cbSize = wxRendererNative::Get().GetCheckBoxSize(m_owner);
+        int yOffset = (rect.height - cbSize.GetHeight()) / 2;
+        wxRect rr(x, rect.y + yOffset, cbSize.GetWidth(), cbSize.GetHeight());
+
+        int flags = 0;
+        if (m_checked)
+            flags |= wxCONTROL_CHECKED;
+        wxRendererNative::Get().DrawCheckBox(m_owner, *dc, rr, flags);
+
+        x += cbSize.GetWidth() + MARGIN_AFTER_CHECKBOX;
+    }
+
     size_t col = 0;
     for ( wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
           node;
@@ -803,6 +818,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         wxListItemData *item = node->GetData();
 
         int width = m_owner->GetColumnWidth(col);
+        if (col == 0 && m_owner->HasCheckboxes())
+            width -= x;
         int xOld = x;
         x += width;
 
@@ -3680,7 +3697,6 @@ bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos) const
 // checkboxes
 // ----------------------------------------------------------------------------
 
-
 bool wxListMainWindow::HasCheckboxes() const
 {
     return m_hasCheckboxes;
@@ -3688,7 +3704,19 @@ bool wxListMainWindow::HasCheckboxes() const
 
 bool wxListMainWindow::EnableCheckboxes(bool enable)
 {
+    bool changed = enable != m_hasCheckboxes;
     m_hasCheckboxes = enable;
+
+    if (changed) {
+        int cbWidth = wxRendererNative::Get().GetCheckBoxSize(this).GetWidth() + MARGIN_AFTER_CHECKBOX;
+        if (m_hasCheckboxes)
+            SetColumnWidth(0, GetColumnWidth(0) + cbWidth);
+        else
+            SetColumnWidth(0, GetColumnWidth(0) - cbWidth);
+    }
+
+    m_dirty = true;
+    m_headerWidth = 0;
     Refresh();
 
     return true;
