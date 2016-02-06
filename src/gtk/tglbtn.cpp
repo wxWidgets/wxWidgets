@@ -22,6 +22,7 @@
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/eventsdisabler.h"
 #include "wx/gtk/private/list.h"
 
 extern bool      g_blockEventsOnDrag;
@@ -145,11 +146,9 @@ void wxToggleButton::SetValue(bool state)
     if (state == GetValue())
         return;
 
-    GTKDisableEvents();
+    wxGtkEventsDisabler<wxToggleButton> noEvents(this);
 
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_widget), state);
-
-    GTKEnableEvents();
 }
 
 // bool GetValue() const

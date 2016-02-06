@@ -30,6 +30,7 @@
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/eventsdisabler.h"
 #include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private/treeentry_gtk.h"
@@ -479,13 +480,13 @@ void wxListBox::DoClear()
 {
     wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
 
-    GTKDisableEvents(); // just in case
+    {
+        wxGtkEventsDisabler<wxListBox> noEvents(this);
 
-    InvalidateBestSize();
+        InvalidateBestSize();
 
-    gtk_list_store_clear( m_liststore ); /* well, THAT was easy :) */
-
-    GTKEnableEvents();
+        gtk_list_store_clear( m_liststore ); /* well, THAT was easy :) */
+    }
 
     UpdateOldSelections();
 }
@@ -496,7 +497,7 @@ void wxListBox::DoDeleteOneItem(unsigned int n)
 
     InvalidateBestSize();
 
-    GTKDisableEvents(); // just in case
+    wxGtkEventsDisabler<wxListBox> noEvents(this);
 
     GtkTreeIter iter;
     wxCHECK_RET( GTKGetIteratorFor(n, &iter), wxT("wrong listbox index") );
@@ -504,8 +505,6 @@ void wxListBox::DoDeleteOneItem(unsigned int n)
     // this returns false if iter is invalid (e.g. deleting item at end) but
     // since we don't use iter, we ignore the return value
     gtk_list_store_remove(m_liststore, &iter);
-
-    GTKEnableEvents();
 }
 
 // ----------------------------------------------------------------------------
@@ -701,7 +700,7 @@ void wxListBox::DoSetSelection( int n, bool select )
 {
     wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
 
-    GTKDisableEvents();
+    wxGtkEventsDisabler<wxListBox> noEvents(this);
 
     GtkTreeSelection* selection = gtk_tree_view_get_selection(m_treeview);
 
@@ -709,7 +708,6 @@ void wxListBox::DoSetSelection( int n, bool select )
     if ( n == wxNOT_FOUND )
     {
         gtk_tree_selection_unselect_all(selection);
-        GTKEnableEvents();
         return;
     }
 
@@ -728,8 +726,6 @@ void wxListBox::DoSetSelection( int n, bool select )
             gtk_tree_model_get_path(GTK_TREE_MODEL(m_liststore), &iter));
 
     gtk_tree_view_scroll_to_cell(m_treeview, path, NULL, FALSE, 0.0f, 0.0f);
-
-    GTKEnableEvents();
 }
 
 void wxListBox::DoScrollToCell(int n, float alignY, float alignX)

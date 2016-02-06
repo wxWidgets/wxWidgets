@@ -54,10 +54,10 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-protected:
     void GTKDisableEvents();
     void GTKEnableEvents();
 
+protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
     virtual void DoApplyWidgetStyle(GtkRcStyle *style) wxOVERRIDE;
 
