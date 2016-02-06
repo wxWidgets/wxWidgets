@@ -837,15 +837,15 @@ wxString wxZipEntry::GetName(wxPathFormat format /*=wxPATH_NATIVE*/) const
     switch (wxFileName::GetFormat(format)) {
         case wxPATH_DOS:
         {
-            wxString name(isDir ? m_Name + wxT("\\") : m_Name);
-            for (size_t i = 0; i < name.length(); i++)
-                if (name[i] == wxT('/'))
-                    name[i] = wxT('\\');
+            wxString name(m_Name);
+            name.Replace(wxFILE_SEP_PATH_UNIX, wxFILE_SEP_PATH_DOS);
+            if (isDir)
+                name += wxFILE_SEP_PATH_DOS;
             return name;
         }
 
         case wxPATH_UNIX:
-            return isDir ? m_Name + wxT("/") : m_Name;
+            return isDir ? m_Name + wxFILE_SEP_PATH_UNIX : m_Name;
 
         default:
             ;
