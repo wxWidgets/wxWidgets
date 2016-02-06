@@ -726,6 +726,7 @@ static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
         case GDK_F12:
             key_code = WXK_F1 + keysym - GDK_F1;
             break;
+#if GTK_CHECK_VERSION(2,18,0)
         case GDK_Back:
             key_code = WXK_BROWSER_BACK;
             break;
@@ -777,6 +778,7 @@ static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
         case GDK_LaunchB:
             key_code = WXK_LAUNCH_APP2;
             break;
+#endif // GTK_CHECK_VERSION(2,18,0)
 
         default:
             key_code = 0;
