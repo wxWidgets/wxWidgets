@@ -24,14 +24,9 @@
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
-// compatibility with older GTK+ versions:
-#ifndef GTK_STOCK_FILE
-    #define GTK_STOCK_FILE "gtk-file"
+#if !GTK_CHECK_VERSION(2,8,0)
+    #define GTK_STOCK_FULLSCREEN "gtk-fullscreen"
 #endif
-#ifndef GTK_STOCK_DIRECTORY
-    #define GTK_STOCK_DIRECTORY "gtk-directory"
-#endif
-
 
 // ----------------------------------------------------------------------------
 // wxGTK2ArtProvider
