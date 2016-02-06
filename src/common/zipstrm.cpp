@@ -861,6 +861,18 @@ wxString wxZipEntry::GetName(wxPathFormat format /*=wxPATH_NATIVE*/) const
     return fn.GetFullPath(format);
 }
 
+namespace
+{
+
+// Accept both slashes and backslashes for compatibility as a lot of broken
+// programs create such archives even though the ZIP specification explicitly
+// says to use slashes (see 4.4.17.1).
+inline bool IsDOSPathSep(wxUniChar ch)
+{
+    return ch == wxFILE_SEP_PATH_DOS || ch == wxFILE_SEP_PATH_UNIX;
+}
+} // anonymous namespace
+
 // Static - Internally tars and zips use forward slashes for the path
 // separator, absolute paths aren't allowed, and directory names have a
 // trailing slash.  This function converts a path into this internal format,
@@ -877,15 +889,16 @@ wxString wxZipEntry::GetInternalName(const wxString& name,
     else
         internal = name;
 
-    bool isDir = !internal.empty() && internal.Last() == '/';
+    bool isDir = !internal.empty() && IsDOSPathSep(internal.Last());
     if (pIsDir)
         *pIsDir = isDir;
     if (isDir)
         internal.erase(internal.length() - 1);
 
-    while (!internal.empty() && *internal.begin() == '/')
+    while (!internal.empty() && IsDOSPathSep(*internal.begin()))
         internal.erase(0, 1);
-    while (!internal.empty() && internal.compare(0, 2, wxT("./")) == 0)
+    while (!internal.empty() &&
+            (internal[0] == wxS('.') && IsDOSPathSep(internal[1])))
         internal.erase(0, 2);
     if (internal == wxT(".") || internal == wxT(".."))
         internal = wxEmptyString;
