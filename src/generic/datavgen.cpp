@@ -4233,12 +4233,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
     if (event.LeftDClick())
     {
-        if(hoverOverExpander)
-        {
-            // a double click on the expander will be converted into a "simulated" normal click
-            simulateClick = true;
-        }
-        else if ( current == m_lineLastClicked )
+        if ( !hoverOverExpander && (current == m_lineLastClicked) )
         {
             wxWindow *parent = GetParent();
             wxDataViewEvent le(wxEVT_DATAVIEW_ITEM_ACTIVATED, parent->GetId());
@@ -4248,15 +4243,19 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             le.SetEventObject(parent);
             le.SetModel(GetModel());
 
-            parent->ProcessWindowEvent(le);
-            return;
+            if ( parent->ProcessWindowEvent(le) )
+            {
+                // Item activation was handled from the user code.
+                return;
+            }
         }
-        else
-        {
-            // The first click was on another item, so don't interpret this as
-            // a double click, but as a simple click instead
-            simulateClick = true;
-        }
+
+        // Either it was a double click over the expander, or the second click
+        // happened on another item than the first one or it was a bona fide
+        // double click which was unhandled. In all these cases we continue
+        // processing this event as a simple click, e.g. to select the item or
+        // activate the renderer.
+        simulateClick = true;
     }
 
     if (event.LeftUp() && !hoverOverExpander)
