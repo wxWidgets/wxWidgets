@@ -200,6 +200,8 @@ public:
     // is this item selected? [NB: not used in virtual mode]
     bool m_highlighted;
 
+    bool m_checked;
+
     // back pointer to the list ctrl
     wxListMainWindow *m_owner;
 
@@ -248,6 +250,9 @@ public:
     int GetImage() const { return GetImage(0); }
     void SetImage( int index, int image );
     int GetImage( int index ) const;
+
+    void Check(bool check) {m_checked = check; }
+    bool IsChecked() { return m_checked; }
 
     bool HasImage() const { return GetImage() != -1; }
     bool HasText() const { return !GetText(0).empty(); }
@@ -636,6 +641,11 @@ public:
     bool GetItemPosition( long item, wxPoint& pos ) const;
     int GetSelectedItemCount() const;
 
+    bool HasCheckboxes() const;
+    bool EnableCheckboxes(bool enable = true);
+    bool IsItemChecked(long item) const;
+    void CheckItem(long item, bool check);
+
     wxString GetItemText(long item, int col = 0) const
     {
         wxListItem info;
@@ -778,6 +788,8 @@ protected:
     size_t m_lineLastClicked,
            m_lineBeforeLastClicked,
            m_lineSelectSingleOnUp;
+
+    bool m_hasCheckboxes;
 
 protected:
     wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE { return GetParent(); }

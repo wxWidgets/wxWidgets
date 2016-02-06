@@ -410,6 +410,7 @@ wxListLineData::wxListLineData( wxListMainWindow *owner )
         m_gi = new GeometryInfo;
 
     m_highlighted = false;
+    m_checked = false;
 
     InitItems( GetMode() == wxLC_REPORT ? m_owner->GetColumnCount() : 1 );
 }
@@ -1588,6 +1589,8 @@ void wxListMainWindow::Init()
     m_lineLastClicked =
     m_lineSelectSingleOnUp =
     m_lineBeforeLastClicked = (size_t)-1;
+
+    m_hasCheckboxes = false;
 }
 
 wxListMainWindow::wxListMainWindow()
@@ -3674,6 +3677,41 @@ bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos) const
 }
 
 // ----------------------------------------------------------------------------
+// checkboxes
+// ----------------------------------------------------------------------------
+
+
+bool wxListMainWindow::HasCheckboxes() const
+{
+    return m_hasCheckboxes;
+}
+
+bool wxListMainWindow::EnableCheckboxes(bool enable)
+{
+    m_hasCheckboxes = enable;
+    Refresh();
+
+    return true;
+}
+
+void wxListMainWindow::CheckItem(long item, bool state)
+{
+    wxListLineData *line = GetLine((size_t)item);
+    line->Check(state);
+
+    RefreshLine(item);
+
+    SendNotify(item, state ? wxEVT_LIST_ITEM_CHECKED
+        : wxEVT_LIST_ITEM_UNCHECKED);
+}
+
+bool wxListMainWindow::IsItemChecked(long item) const
+{
+    wxListLineData *line = GetLine((size_t)item);
+    return line->IsChecked();
+}
+
+// ----------------------------------------------------------------------------
 // geometry calculation
 // ----------------------------------------------------------------------------
 
@@ -4689,6 +4727,36 @@ void wxGenericListCtrl::OnScroll(wxScrollWinEvent& event)
 
     // Let the window be scrolled as usual by the default handler.
     event.Skip();
+}
+
+bool wxGenericListCtrl::HasCheckboxes() const
+{
+    if (!InReportView())
+        return false;
+
+    return m_mainWin->HasCheckboxes();
+}
+
+bool wxGenericListCtrl::EnableCheckboxes(bool enable)
+{
+    if (!InReportView())
+        return false;
+
+    return m_mainWin->EnableCheckboxes(enable);
+}
+
+void wxGenericListCtrl::CheckItem(long item, bool state)
+{
+    if (InReportView())
+        m_mainWin->CheckItem(item, state);
+}
+
+bool wxGenericListCtrl::IsItemChecked(long item) const
+{
+    if (!InReportView())
+        return false;
+
+    return m_mainWin->IsItemChecked(item);
 }
 
 void wxGenericListCtrl::SetSingleStyle( long style, bool add )
