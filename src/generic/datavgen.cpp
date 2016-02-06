@@ -3806,6 +3806,9 @@ void wxDataViewMainWindow::OnVerticalNavigation(const wxKeyEvent& event, int del
     unsigned int oldCurrent = m_currentRow;
     unsigned int newCurrent = (unsigned int)newRow;
 
+    if ( newCurrent == oldCurrent )
+        return;
+
     // in single selection we just ignore Shift as we can't select several
     // items anyhow
     if ( event.ShiftDown() && !IsSingleSel() )
@@ -3822,13 +3825,11 @@ void wxDataViewMainWindow::OnVerticalNavigation(const wxKeyEvent& event, int del
         }
 
         SelectRows(oldCurrent, newCurrent);
-        if (oldCurrent!=newCurrent)
-        {
-            wxSelectionStore::IterationState cookie;
-            const unsigned firstSel = m_selection.GetFirstSelectedItem(cookie);
-            if ( firstSel != wxSelectionStore::NO_SELECTION )
-                SendSelectionChangedEvent(GetItemByRow(firstSel));
-        }
+
+        wxSelectionStore::IterationState cookie;
+        const unsigned firstSel = m_selection.GetFirstSelectedItem(cookie);
+        if ( firstSel != wxSelectionStore::NO_SELECTION )
+            SendSelectionChangedEvent(GetItemByRow(firstSel));
     }
     else // !shift
     {
