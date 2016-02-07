@@ -66,7 +66,7 @@ if (!$only_bkl) {
     # containing the files that should appear in them.
     my %projects_vars = (
             adv      => [qw(ADVANCED_CMN ADVANCED_MSW ADVANCED_MSW_DESKTOP ADVANCED_MSW_NATIVE)],
-            aui      => [qw(AUI_CMN)],
+            aui      => [qw(AUI_CMN AUI_MSW)],
             base     => [qw(BASE_CMN BASE_AND_GUI_CMN BASE_WIN32 BASE_AND_GUI_WIN32)],
             core     => [qw(BASE_AND_GUI_CMN BASE_AND_GUI_WIN32 MSW_LOWLEVEL MSW_DESKTOP_LOWLEVEL MSW MSW_DESKTOP GUI_CMN)],
             gl       => [qw(OPENGL_CMN OPENGL_MSW)],
