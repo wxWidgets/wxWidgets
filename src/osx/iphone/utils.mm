@@ -28,6 +28,7 @@
 #include "wx/osx/private.h"
 
 #if wxUSE_GUI
+    #include "wx/private/launchbrowser.h"
     #include "wx/osx/private/timer.h"
     #include "wx/osx/dcclient.h"
 #endif // wxUSE_GUI
@@ -102,9 +103,9 @@ void wxBell()
 // Launch default browser
 // ----------------------------------------------------------------------------
 
-bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
+bool wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 {
-    return [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wxCFStringRef(url).AsNSString()]]
+    return [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wxCFStringRef(params.url).AsNSString()]]
         == YES;
 }
 

@@ -36,6 +36,10 @@
 
 #include <AudioToolbox/AudioServices.h>
 
+#if wxUSE_GUI
+    #include "wx/private/launchbrowser.h"
+#endif
+
 #include "wx/osx/private.h"
 #include "wx/osx/private/timer.h"
 
@@ -130,11 +134,10 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
 // Launch default browser
 // ----------------------------------------------------------------------------
 
-bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
+bool wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 {
-    wxUnusedVar(flags);
     wxCFRef< CFURLRef > curl( CFURLCreateWithString( kCFAllocatorDefault,
-                              wxCFStringRef( url ), NULL ) );
+                              wxCFStringRef( params.url ), NULL ) );
     OSStatus err = LSOpenCFURLRef( curl , NULL );
 
     if (err == noErr)

@@ -24,6 +24,7 @@
 
 #include "wx/iconbndl.h"
 #include "wx/apptrait.h"
+#include "wx/private/launchbrowser.h"
 
 #ifdef __VMS
 #pragma message disable nosimpint
@@ -2609,10 +2610,9 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
 // Launch default browser
 // ----------------------------------------------------------------------------
 
-bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
+bool
+wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 {
-    wxUnusedVar(flags);
-
 #ifdef __WXGTK__
 #if GTK_CHECK_VERSION(2,14,0)
 #ifndef __WXGTK3__
@@ -2620,7 +2620,7 @@ bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
 #endif
     {
         GdkScreen* screen = gdk_window_get_screen(wxGetTopLevelGDK());
-        if (gtk_show_uri(screen, url.utf8_str(), GDK_CURRENT_TIME, NULL))
+        if (gtk_show_uri(screen, params.url.utf8_str(), GDK_CURRENT_TIME, NULL))
             return true;
     }
 #endif // GTK_CHECK_VERSION(2,14,0)
@@ -2636,7 +2636,7 @@ bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
     if ( wxGetEnv("PATH", &path) &&
          wxFindFileInPath(&xdg_open, path, "xdg-open") )
     {
-        if ( wxExecute(xdg_open + " " + url) )
+        if ( wxExecute(xdg_open + " " + params.GetPathOrURL()) )
             return true;
     }
 
@@ -2655,7 +2655,7 @@ bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
         if (res >= 0 && errors.GetCount() == 0)
         {
             wxString cmd = output[0];
-            cmd << wxT(' ') << url;
+            cmd << wxT(' ') << params.GetPathOrURL();
             if (wxExecute(cmd))
                 return true;
         }
@@ -2663,7 +2663,7 @@ bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
     else if (desktop == wxT("KDE"))
     {
         // kfmclient directly opens the given URL
-        if (wxExecute(wxT("kfmclient openURL ") + url))
+        if (wxExecute(wxT("kfmclient openURL ") + params.GetPathOrURL()))
             return true;
     }
 
