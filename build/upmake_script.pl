@@ -53,7 +53,7 @@ my $vars = read_files_list($files);
 
 if (!$only_msvs) {
     if (call_upmake("$Bin/bakefiles/files.bkl", \&update_bakefile_0, $vars)) {
-        print qq{Don't forget to run "bakefile_gen -b wx.bkl".} if $verbose;
+        print qq{Don't forget to run "bakefile_gen -b wx.bkl".\n} if $verbose;
     }
 }
 
