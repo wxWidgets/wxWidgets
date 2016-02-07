@@ -27,6 +27,10 @@ Changes in behaviour not resulting in compilation errors
 - Using invalid flags with wxBoxSizer or wxGridSizer items now triggers asserts
   when done from the code or error messages when done in XRC.
 
+- wxWS_EX_VALIDATE_RECURSIVELY is now the default behaviour, i.e. calling
+  Validate() or TransferData{From,To}Window() will now also call the same
+  function for all children.
+
 - wxOSX/Carbon port doesn't exist any more, wxOSX/Cocoa will be silently used
   instead even if configure --with-osx_carbon option is used.
 

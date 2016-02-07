@@ -101,6 +101,7 @@
 
 #include "wx/spinctrl.h"
 #include "wx/propdlg.h"
+#include "wx/valgen.h"
 
 #include "dialogs.h"
 
@@ -1885,7 +1886,7 @@ void MyFrame::ShowTip(wxCommandEvent& WXUNUSED(event))
 #if USE_SETTINGS_DIALOG
 void MyFrame::OnPropertySheet(wxCommandEvent& event)
 {
-    SettingsDialog dialog(this, event.GetId());
+    SettingsDialog dialog(this, m_settingsData, event.GetId());
     dialog.ShowModal();
 }
 #endif // USE_SETTINGS_DIALOG
@@ -2960,9 +2961,10 @@ wxIMPLEMENT_CLASS(SettingsDialog, wxPropertySheetDialog);
 wxBEGIN_EVENT_TABLE(SettingsDialog, wxPropertySheetDialog)
 wxEND_EVENT_TABLE()
 
-SettingsDialog::SettingsDialog(wxWindow* win, int dialogType)
+SettingsDialog::SettingsDialog(wxWindow* win, SettingsData& settingsData, int dialogType)
+    : m_settingsData(settingsData)
 {
-    SetExtraStyle(wxDIALOG_EX_CONTEXTHELP|wxWS_EX_VALIDATE_RECURSIVELY);
+    SetExtraStyle(wxDIALOG_EX_CONTEXTHELP);
 
     int tabImage1 = -1;
     int tabImage2 = -1;
@@ -3040,6 +3042,7 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
 
     wxBoxSizer* itemSizer3 = new wxBoxSizer( wxHORIZONTAL );
     wxCheckBox* checkBox3 = new wxCheckBox(panel, ID_LOAD_LAST_PROJECT, _("&Load last project on startup"), wxDefaultPosition, wxDefaultSize);
+    checkBox3->SetValidator(wxGenericValidator(&m_settingsData.m_loadLastOnStartup));
     itemSizer3->Add(checkBox3, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
     item0->Add(itemSizer3, 0, wxGROW|wxALL, 0);
 
@@ -3054,6 +3057,7 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
 #if wxUSE_SPINCTRL
     wxSpinCtrl* spinCtrl12 = new wxSpinCtrl(panel, ID_AUTO_SAVE_MINS, wxEmptyString,
         wxDefaultPosition, wxSize(40, wxDefaultCoord), wxSP_ARROW_KEYS, 1, 60, 1);
+    spinCtrl12->SetValidator(wxGenericValidator(&m_settingsData.m_autoSaveInterval));
 #endif
 
     itemSizer12->Add(checkBox12, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
@@ -3067,6 +3071,7 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
 
     wxBoxSizer* itemSizer8 = new wxBoxSizer( wxHORIZONTAL );
     wxCheckBox* checkBox6 = new wxCheckBox(panel, ID_SHOW_TOOLTIPS, _("Show &tooltips"), wxDefaultPosition, wxDefaultSize);
+    checkBox6->SetValidator(wxGenericValidator(&m_settingsData.m_showToolTips));
     itemSizer8->Add(checkBox6, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
     item0->Add(itemSizer8, 0, wxGROW|wxALL, 0);
 
@@ -3091,6 +3096,7 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
 
     wxRadioBox* projectOrGlobal = new wxRadioBox(panel, ID_APPLY_SETTINGS_TO, _("&Apply settings to:"),
         wxDefaultPosition, wxDefaultSize, 2, globalOrProjectChoices);
+    projectOrGlobal->SetValidator(wxGenericValidator(&m_settingsData.m_applyTo));
     item0->Add(projectOrGlobal, 0, wxGROW|wxALL, 5);
 
     projectOrGlobal->SetSelection(0);
@@ -3107,6 +3113,7 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
     wxBoxSizer* itemSizer2 = new wxBoxSizer( wxHORIZONTAL );
 
     wxChoice* choice2 = new wxChoice(panel, ID_BACKGROUND_STYLE, wxDefaultPosition, wxDefaultSize, backgroundStyleChoices);
+    choice2->SetValidator(wxGenericValidator(&m_settingsData.m_bgStyle));
 
     itemSizer2->Add(new wxStaticText(panel, wxID_ANY, _("&Window:")), 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
     itemSizer2->Add(5, 5, 1, wxALL, 0);
@@ -3122,6 +3129,7 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
 
     wxSpinCtrl* spinCtrl = new wxSpinCtrl(panel, ID_FONT_SIZE, wxEmptyString, wxDefaultPosition,
         wxSize(80, wxDefaultCoord));
+    spinCtrl->SetValidator(wxGenericValidator(&m_settingsData.m_titleFontSize));
     itemSizer5->Add(spinCtrl, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 
     item0->Add(itemSizer5, 0, wxGROW|wxLEFT|wxRIGHT, 5);

@@ -48,8 +48,8 @@ The second type of validation is performed when the dialog is about to be dismis
 so if the default string contained invalid characters already, a dialog box is shown
 giving the error, and the dialog is not dismissed.
 
-Note that any wxWindow may have a validator; using the @c wxWS_EX_VALIDATE_RECURSIVELY
-style (see wxWindow extended styles) you can also implement recursive validation.
+Note that any wxWindow may have a validator and it will be used when
+transferring data to or from the parent window.
 
 @see wxValidator, wxTextValidator, wxGenericValidator, wxIntegerValidator,
      wxFloatingPointValidator

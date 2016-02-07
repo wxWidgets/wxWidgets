@@ -74,7 +74,6 @@ wxRichTextBackgroundPage::wxRichTextBackgroundPage( wxWindow* parent, wxWindowID
 bool wxRichTextBackgroundPage::Create( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 {
 ////@begin wxRichTextBackgroundPage creation
-    SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
     wxRichTextDialogPage::Create( parent, id, pos, size, style );
 
     CreateControls();

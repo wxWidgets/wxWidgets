@@ -27,7 +27,7 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 extern WXDLLIMPEXP_DATA_CORE(const char) wxGetTextFromUserPromptStr[];
 extern WXDLLIMPEXP_DATA_CORE(const char) wxGetPasswordFromUserPromptStr[];
 
-#define wxTextEntryDialogStyle (wxOK | wxCANCEL | wxCENTRE | wxWS_EX_VALIDATE_RECURSIVELY)
+#define wxTextEntryDialogStyle (wxOK | wxCANCEL | wxCENTRE)
 
 // ----------------------------------------------------------------------------
 // wxTextEntryDialog: a dialog with text control, [ok] and [cancel] buttons
