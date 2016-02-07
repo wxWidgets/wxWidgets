@@ -8,7 +8,7 @@
 /**
     Default text dialog style.
 */
-#define wxTextEntryDialogStyle (wxOK | wxCANCEL | wxCENTRE | wxWS_EX_VALIDATE_RECURSIVELY)
+#define wxTextEntryDialogStyle (wxOK | wxCANCEL | wxCENTRE)
 
 /// Default text dialog caption.
 const char wxGetTextFromUserPromptStr[] = "Input Text";

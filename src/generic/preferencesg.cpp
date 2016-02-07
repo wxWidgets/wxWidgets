@@ -48,8 +48,6 @@ public:
                    wxDefaultPosition, wxDefaultSize,
                    wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX | wxMINIMIZE_BOX))
     {
-        SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
-
         wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
         m_notebook = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_MULTILINE);

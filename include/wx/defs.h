@@ -1872,10 +1872,9 @@ enum wxBorder
  * should be passed to wxWindow::SetExtraStyle(), not SetWindowStyle())
  */
 
-/*  by default, TransferDataTo/FromWindow() only work on direct children of the */
-/*  window (compatible behaviour), set this flag to make them recursively */
-/*  descend into all subwindows */
-#define wxWS_EX_VALIDATE_RECURSIVELY    0x00000001
+/* This flag is obsolete as recursive validation is now the default (and only
+ * possible) behaviour. Simply don't use it any more in the new code. */
+#define wxWS_EX_VALIDATE_RECURSIVELY    0x00000000 /* used to be 1 */
 
 /*  wxCommandEvents and the objects of the derived classes are forwarded to the */
 /*  parent window and so on recursively by default. Using this flag for the */

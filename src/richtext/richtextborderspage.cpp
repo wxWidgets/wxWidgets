@@ -122,7 +122,6 @@ wxRichTextBordersPage::wxRichTextBordersPage( wxWindow* parent, wxWindowID id, c
 bool wxRichTextBordersPage::Create( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style )
 {
 ////@begin wxRichTextBordersPage creation
-    SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
     wxRichTextDialogPage::Create( parent, id, pos, size, style );
 
     CreateControls();
@@ -221,7 +220,6 @@ void wxRichTextBordersPage::CreateControls()
     wxNotebook* itemNotebook4 = new wxNotebook( itemRichTextDialogPage1, ID_RICHTEXTBORDERSPAGE_NOTEBOOK, wxDefaultPosition, wxDefaultSize, wxBK_DEFAULT );
 
     wxPanel* itemPanel5 = new wxPanel( itemNotebook4, ID_RICHTEXTBORDERSPAGE_BORDERS, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-    itemPanel5->SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
     wxBoxSizer* itemBoxSizer6 = new wxBoxSizer(wxVERTICAL);
     itemPanel5->SetSizer(itemBoxSizer6);
 
@@ -390,7 +388,6 @@ void wxRichTextBordersPage::CreateControls()
     itemNotebook4->AddPage(itemPanel5, _("Border"));
 
     wxPanel* itemPanel48 = new wxPanel( itemNotebook4, ID_RICHTEXTBORDERSPAGE_OUTLINE, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL );
-    itemPanel48->SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
     wxBoxSizer* itemBoxSizer49 = new wxBoxSizer(wxVERTICAL);
     itemPanel48->SetSizer(itemBoxSizer49);
 

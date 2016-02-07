@@ -301,12 +301,34 @@ private:
 
 
 #if USE_SETTINGS_DIALOG
+
+// Struct containing properties edited by SettingsDialog.
+struct SettingsData
+{
+    SettingsData() :
+        m_loadLastOnStartup(false),
+        m_autoSaveInterval(1),
+        m_showToolTips(false),
+        m_applyTo(0),
+        m_bgStyle(0),
+        m_titleFontSize(10)
+    {
+    }
+
+    bool m_loadLastOnStartup;
+    int m_autoSaveInterval;
+    bool m_showToolTips;
+    int m_applyTo;
+    int m_bgStyle;
+    int m_titleFontSize;
+};
+
 // Property sheet dialog
 class SettingsDialog: public wxPropertySheetDialog
 {
     wxDECLARE_CLASS(SettingsDialog);
 public:
-    SettingsDialog(wxWindow* parent, int dialogType);
+    SettingsDialog(wxWindow* parent, SettingsData& settingsData, int dialogType);
     ~SettingsDialog();
 
     wxPanel* CreateGeneralSettingsPage(wxWindow* parent);
@@ -326,6 +348,8 @@ protected:
     };
 
     wxImageList*    m_imageList;
+
+    SettingsData& m_settingsData;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -508,6 +532,10 @@ private:
     wxInfoBar *m_infoBarSimple,
               *m_infoBarAdvanced;
 #endif // wxUSE_INFOBAR
+
+#if USE_SETTINGS_DIALOG
+    SettingsData m_settingsData;
+#endif // USE_SETTINGS_DIALOG
 
     wxDECLARE_EVENT_TABLE();
 };

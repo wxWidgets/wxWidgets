@@ -190,11 +190,6 @@ enum wxWindowVariant
     @endStyleTable
 
     @beginExtraStyleTable
-    @style{wxWS_EX_VALIDATE_RECURSIVELY}
-           By default, wxWindow::Validate(), wxWindow::TransferDataTo() and
-           wxWindow::TransferDataFromWindow() only work on
-           direct children of the window (compatible behaviour).
-           Set this flag to make them recursively descend into all subwindows.
     @style{wxWS_EX_BLOCK_EVENTS}
            wxCommandEvents and the objects of the derived classes are
            forwarded to the parent window and so on recursively by default.
@@ -2936,8 +2931,8 @@ public:
         Transfers values from child controls to data areas specified by their
         validators. Returns @false if a transfer failed.
 
-        If the window has @c wxWS_EX_VALIDATE_RECURSIVELY extra style flag set,
-        the method will also call TransferDataFromWindow() of all child windows.
+        Notice that this also calls TransferDataFromWindow() for all children
+        recursively.
 
         @see TransferDataToWindow(), wxValidator, Validate()
     */
@@ -2947,8 +2942,8 @@ public:
         Transfers values to child controls from data areas specified by their
         validators.
 
-        If the window has @c wxWS_EX_VALIDATE_RECURSIVELY extra style flag set,
-        the method will also call TransferDataToWindow() of all child windows.
+        Notice that this also calls TransferDataToWindow() for all children
+        recursively.
 
         @return Returns @false if a transfer failed.
 
@@ -2958,8 +2953,8 @@ public:
 
     /**
         Validates the current values of the child controls using their validators.
-        If the window has @c wxWS_EX_VALIDATE_RECURSIVELY extra style flag set,
-        the method will also call Validate() of all child windows.
+
+        Notice that this also calls Validate() for all children recursively.
 
         @return Returns @false if any of the validations failed.
 
