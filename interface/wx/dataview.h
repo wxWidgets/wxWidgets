@@ -836,9 +836,7 @@ wxEventType wxEVT_DATAVIEW_ITEM_DROP;
     @style{wxDV_MULTIPLE}
            Multiple selection mode.
     @style{wxDV_ROW_LINES}
-           Use alternating colours for rows if supported by platform and theme.
-           Currently only supported by the native GTK and OS X implementations
-           but not by the generic one.
+           Use alternating colours for odd and even rows.
     @style{wxDV_HORIZ_RULES}
            Display the separator lines between rows.
     @style{wxDV_VERT_RULES}
