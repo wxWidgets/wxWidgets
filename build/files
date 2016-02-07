@@ -160,12 +160,6 @@ BASE_OSX_SHARED_HDR =
     $(BASE_UNIX_AND_DARWIN_HDR)
 
 # Base and GUI files used by OS X
-BASE_AND_GUI_OSX_CARBON_SRC =
-    src/osx/carbon/utils.cpp
-    src/osx/carbon/uma.cpp
-    src/unix/stdpaths.cpp
-    src/osx/core/stdpaths_cf.cpp
-
 BASE_AND_GUI_OSX_COCOA_SRC =
     src/osx/cocoa/utils.mm
     src/osx/cocoa/power.mm
@@ -1880,7 +1874,7 @@ OSX_LOWLEVEL_SRC =
 
 OSX_LOWLEVEL_HDR =
 
-OSX_CARBON_COCOA_SRC =
+OSX_COMMON_SRC =
 <if cond="PLATFORM_MACOSX=='1'">
     # Common controls implementation
     src/osx/anybutton_osx.cpp
@@ -2054,63 +2048,10 @@ OSX_SHARED_HDR =
     wx/generic/prntdlgg.h
     wx/generic/statusbr.h
 
-# wxOSX/Carbon
-
-OSX_CARBON_SRC =
-    # carbon files
-    $(OSX_CARBON_COCOA_SRC)
-    src/osx/carbon/anybutton.cpp
-    src/osx/carbon/bmpbuttn.cpp
-    src/osx/carbon/button.cpp
-    src/osx/carbon/checkbox.cpp
-    src/osx/carbon/choice.cpp
-    src/osx/carbon/colordlg.cpp
-    src/osx/carbon/dialog.cpp
-    src/osx/carbon/dirdlg.cpp
-    src/osx/carbon/dnd.cpp
-    src/osx/carbon/evtloop.cpp
-    src/osx/carbon/filedlg.cpp
-    src/osx/carbon/gauge.cpp
-    src/osx/carbon/listbox.cpp
-    src/osx/carbon/listctrl_mac.cpp
-    src/osx/carbon/menu.cpp
-    src/osx/carbon/menuitem.cpp
-    src/osx/carbon/msgdlg.cpp
-    src/osx/carbon/nonownedwnd.cpp
-    src/osx/carbon/notebmac.cpp
-    src/osx/carbon/printdlg.cpp
-    src/osx/carbon/radiobut.cpp
-    src/osx/carbon/scrolbar.cpp
-    src/osx/carbon/settings.cpp
-    src/osx/carbon/slider.cpp
-    src/osx/carbon/spinbutt.cpp
-    src/osx/carbon/srchctrl.cpp
-    src/osx/carbon/statbmp.cpp
-    src/osx/carbon/statbox.cpp
-    src/osx/carbon/statlmac.cpp
-    src/osx/carbon/stattext.cpp
-    src/osx/carbon/textctrl.cpp
-    src/osx/carbon/tglbtn.cpp
-    src/osx/carbon/toolbar.cpp
-    src/osx/carbon/tooltip.cpp
-    src/osx/carbon/window.cpp
-
-# wxMac Carbon header files
-OSX_CARBON_HDR =
-    # core files
-    wx/osx/core/colour.h
-    # carbon files
-    wx/osx/carbon/chkconf.h
-    wx/osx/carbon/evtloop.h
-    wx/osx/carbon/private.h
-    wx/osx/carbon/region.h
-    wx/osx/carbon/statbmp.h
-    wx/osx/carbon/uma.h
-
 # wxOSX/Cocoa
 
 OSX_COCOA_SRC =
-    $(OSX_CARBON_COCOA_SRC)
+    $(OSX_COMMON_SRC)
     src/osx/cocoa/anybutton.mm
     src/osx/cocoa/appprogress.mm
     src/osx/cocoa/button.mm
@@ -2152,16 +2093,14 @@ OSX_COCOA_HDR =
     wx/osx/cocoa/evtloop.h
     wx/osx/cocoa/private.h
     wx/osx/cocoa/stdpaths.h
-    $(OSX_CARBON_HDR) # FIXME: these headers need moved somewhere shared...
     wx/generic/region.h
 
 # wxOSX/iPhone
 
 OSX_IPHONE_SRC =
-    $(OSX_CARBON_COCOA_SRC)
+    $(OSX_COMMON_SRC)
     src/generic/regiong.cpp
     src/generic/icon.cpp
-    src/osx/carbon/settings.cpp
     src/osx/cocoa/stdpaths.mm
     # iphone files
     src/osx/iphone/anybutton.mm
@@ -2184,7 +2123,6 @@ OSX_IPHONE_HDR =
     wx/osx/iphone/chkconf.h
     wx/osx/iphone/evtloop.h
     wx/osx/iphone/private.h
-    $(OSX_CARBON_HDR) # FIXME: these headers need moved somewhere shared...
     wx/generic/region.h
 
 # wxCocoa
@@ -2631,32 +2569,6 @@ ADVANCED_MSW_DESKTOP_SRC =
 ADVANCED_MSW_DESKTOP_HDR =
     wx/msw/joystick.h
 
-ADVANCED_OSX_CARBON_SRC =
-    src/common/taskbarcmn.cpp
-    src/generic/activityindicator.cpp
-    src/generic/animateg.cpp
-    src/osx/carbon/aboutdlg.cpp
-    src/osx/carbon/drawer.cpp
-    src/osx/dataview_osx.cpp
-    src/osx/carbon/dataview.cpp
-    src/osx/sound_osx.cpp
-    src/osx/carbon/sound.cpp
-    src/osx/carbon/taskbar.cpp
-    src/osx/core/hidjoystick.cpp
-
-ADVANCED_OSX_CARBON_HDR =
-    wx/generic/activityindicator.h
-    wx/generic/animate.h
-    wx/osx/dataview.h
-    wx/osx/dvrenderer.h
-    wx/osx/dvrenderers.h
-    wx/osx/joystick.h
-    wx/osx/sound.h
-    wx/osx/taskbarosx.h
-    wx/osx/carbon/drawer.h
-    wx/osx/carbon/dataview.h
-    wx/osx/core/joystick.h
-
 ADVANCED_OSX_COCOA_SRC =
     src/common/taskbarcmn.cpp
     src/generic/animateg.cpp
@@ -2795,10 +2707,6 @@ MEDIA_MSW_HDR =
 # not built on WindowsCE:
 MEDIA_MSW_DESKTOP_SRC =
 MEDIA_MSW_DESKTOP_HDR =
-
-MEDIA_OSX_CARBON_SRC =
-    src/osx/carbon/mediactrl.cpp
-MEDIA_OSX_CARBON_HDR =
 
 MEDIA_OSX_COCOA_SRC =
     src/osx/cocoa/mediactrl.mm
