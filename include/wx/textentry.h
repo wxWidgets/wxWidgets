@@ -57,7 +57,7 @@ public:
 
     virtual void Replace(long from, long to, const wxString& value);
     virtual void Remove(long from, long to) = 0;
-    virtual void Clear() { SetValue(wxString()); }
+    virtual void Clear() { Remove(0, -1); }
     void RemoveSelection();
 
 
