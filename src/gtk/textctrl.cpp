@@ -1828,22 +1828,25 @@ void wxTextCtrl::DoApplyWidgetStyle(GtkRcStyle *style)
     const bool bg_ok = m_backgroundColour.IsOk();
     if (fg_ok || bg_ok)
     {
-        GdkRGBA fg_orig, bg_orig;
+        GdkRGBA *fg_orig, *bg_orig;
         GtkStyleContext* context = gtk_widget_get_style_context(m_text);
         if (IsMultiLine())
         {
             gtk_style_context_save(context);
             gtk_style_context_add_class(context, GTK_STYLE_CLASS_VIEW);
         }
-        gtk_style_context_get_color(context, selectedFocused, &fg_orig);
-        gtk_style_context_get_background_color(context, selectedFocused, &bg_orig);
+        gtk_style_context_get(context, selectedFocused,
+            "color", &fg_orig, "background-color", &bg_orig);
         if (IsMultiLine())
             gtk_style_context_restore(context);
 
         if (fg_ok)
-            gtk_widget_override_color(m_text, selectedFocused, &fg_orig);
+            gtk_widget_override_color(m_text, selectedFocused, fg_orig);
         if (bg_ok)
-            gtk_widget_override_background_color(m_text, selectedFocused, &bg_orig);
+            gtk_widget_override_background_color(m_text, selectedFocused, bg_orig);
+
+        gdk_rgba_free(fg_orig);
+        gdk_rgba_free(bg_orig);
     }
 #endif // __WXGTK3__
 

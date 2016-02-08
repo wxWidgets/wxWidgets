@@ -372,9 +372,10 @@ draw_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
     {
 #ifdef __WXGTK3__
         GtkStyleContext* sc = gtk_widget_get_style_context(win->m_wxwindow);
-        GdkRGBA c;
-        gtk_style_context_get_border_color(sc, GTK_STATE_FLAG_NORMAL, &c);
-        gdk_cairo_set_source_rgba(cr, &c);
+        GdkRGBA* c;
+        gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL, "border-color", &c, NULL);
+        gdk_cairo_set_source_rgba(cr, c);
+        gdk_rgba_free(c);
         cairo_set_line_width(cr, 1);
         cairo_rectangle(cr, x + 0.5, y + 0.5, w - 1, h - 1);
         cairo_stroke(cr);
