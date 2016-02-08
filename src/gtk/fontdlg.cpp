@@ -41,9 +41,11 @@ static void response(GtkDialog* dialog, int response_id, wxFontDialog* win)
         else
 #endif
         {
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations)
             GtkFontSelectionDialog* sel = GTK_FONT_SELECTION_DIALOG(dialog);
             wxGtkString name(gtk_font_selection_dialog_get_font_name(sel));
             win->GetFontData().SetChosenFont(wxFont(wxString::FromUTF8(name)));
+            wxGCC_WARNING_RESTORE()
         }
     }
 
@@ -86,9 +88,11 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
     else
 #endif
     {
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         m_widget = gtk_font_selection_dialog_new(wxGTK_CONV(message));
         if (gtk_parent)
             gtk_window_set_transient_for(GTK_WINDOW(m_widget), gtk_parent);
+        wxGCC_WARNING_RESTORE()
     }
     g_object_ref(m_widget);
 
@@ -107,9 +111,11 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
             else
 #endif
             {
+                wxGCC_WARNING_SUPPRESS(deprecated-declarations)
                 const wxString& fontname = info->ToString();
                 GtkFontSelectionDialog* sel = GTK_FONT_SELECTION_DIALOG(m_widget);
                 gtk_font_selection_dialog_set_font_name(sel, wxGTK_CONV(fontname));
+                wxGCC_WARNING_RESTORE()
             }
         }
         else
