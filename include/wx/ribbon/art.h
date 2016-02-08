@@ -131,7 +131,11 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR,
     wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_COLOUR,
     wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
-    wxRIBBON_ART_BUTTON_BAR_LABEL_DISABLED_COLOUR
+    wxRIBBON_ART_BUTTON_BAR_LABEL_DISABLED_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_GRADIENT_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_TOP_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_GRADIENT_TOP_COLOUR
 };
 
 enum wxRibbonScrollButtonStyle
@@ -660,6 +664,10 @@ protected:
     wxColour m_tab_hover_background_gradient_colour;
     wxColour m_tab_hover_background_top_colour;
     wxColour m_tab_hover_background_top_gradient_colour;
+    wxColour m_tab_highlight_top_colour;
+    wxColour m_tab_highlight_top_gradient_colour;
+    wxColour m_tab_highlight_colour;
+    wxColour m_tab_highlight_gradient_colour;
     wxColour m_panel_label_colour;
     wxColour m_panel_minimised_label_colour;
     wxColour m_panel_hover_label_colour;

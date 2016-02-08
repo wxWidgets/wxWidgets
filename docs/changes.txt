@@ -149,6 +149,7 @@ All (GUI):
 - Add support for the events from multimedia keys (Jens Göpfert).
 - Improve wxAUI appearance in high contrast themes (Zane U. Ji).
 - Allow suppressing warnings from wxImage::LoadFile().
+- Allow customizing wxRibbon highlight colours (wxBen).
 
 wxGTK:
 

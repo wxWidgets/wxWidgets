@@ -87,6 +87,11 @@ wxRibbonArtProvider* wxRibbonAUIArtProvider::Clone() const
     copy->m_gallery_button_hover_background_brush = m_gallery_button_hover_background_brush;
     copy->m_gallery_button_disabled_background_brush = m_gallery_button_disabled_background_brush;
 
+    copy->m_tab_highlight_top_colour = m_tab_highlight_top_colour;
+    copy->m_tab_highlight_top_gradient_colour = m_tab_highlight_top_gradient_colour;
+    copy->m_tab_highlight_colour = m_tab_highlight_colour;
+    copy->m_tab_highlight_gradient_colour = m_tab_highlight_gradient_colour;
+
     copy->m_toolbar_hover_borden_pen = m_toolbar_hover_borden_pen;
     copy->m_tool_hover_background_brush = m_tool_hover_background_brush;
     copy->m_tool_active_background_brush = m_tool_active_background_brush;
@@ -141,6 +146,14 @@ wxColour wxRibbonAUIArtProvider::GetColour(int id) const
     case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_COLOUR:
     case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_GRADIENT_COLOUR:
         return m_gallery_button_disabled_background_brush.GetColour();
+    case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_TOP_COLOUR:
+       return m_tab_highlight_top_colour;
+    case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_GRADIENT_TOP_COLOUR:
+       return m_tab_highlight_top_gradient_colour;
+    case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_COLOUR:
+       return m_tab_highlight_colour;
+    case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_GRADIENT_COLOUR:
+       return m_tab_highlight_gradient_colour;
     default:
         return wxRibbonMSWArtProvider::GetColour(id);
     }
@@ -190,6 +203,18 @@ void wxRibbonAUIArtProvider::SetColour(int id, const wxColor& colour)
     case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_GRADIENT_COLOUR:
         m_gallery_button_disabled_background_brush.SetColour(colour);
         break;
+    case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_TOP_COLOUR:
+       m_tab_highlight_top_colour = colour;
+       break;
+    case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_GRADIENT_TOP_COLOUR:
+       m_tab_highlight_top_gradient_colour = colour;
+       break;
+    case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_COLOUR:
+       m_tab_highlight_colour = colour;
+       break;
+    case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_GRADIENT_COLOUR:
+       m_tab_highlight_gradient_colour = colour;
+       break;
     default:
         wxRibbonMSWArtProvider::SetColour(id, colour);
         break;
@@ -263,6 +288,21 @@ void wxRibbonAUIArtProvider::SetColourScheme(
     m_toolbar_hover_borden_pen = m_button_bar_hover_border_pen;
     m_tool_hover_background_brush = m_button_bar_hover_background_brush;
     m_tool_active_background_brush = m_button_bar_active_background_brush;
+
+    //For highlight pages
+    wxColour top_colour1((m_tab_active_background_colour.Red()   + m_tab_hover_background_top_colour.Red())/2,
+                         (m_tab_active_background_colour.Green() + m_tab_hover_background_top_colour.Green())/2,
+                         (m_tab_active_background_colour.Blue()  + m_tab_hover_background_top_colour.Blue())/2);
+
+    wxColour bottom_colour1((m_tab_active_background_gradient_colour.Red()   + m_tab_hover_background_top_gradient_colour.Red())/2,
+                            (m_tab_active_background_gradient_colour.Green() + m_tab_hover_background_top_gradient_colour.Green())/2,
+                            (m_tab_active_background_gradient_colour.Blue()  + m_tab_hover_background_top_gradient_colour.Blue())/2);
+
+    m_tab_highlight_top_colour = top_colour1;
+    m_tab_highlight_top_gradient_colour = bottom_colour1;
+
+    m_tab_highlight_colour = top_colour1;
+    m_tab_highlight_gradient_colour = bottom_colour1;
 
 #undef LikeSecondary
 #undef LikePrimary
@@ -345,16 +385,7 @@ void wxRibbonAUIArtProvider::DrawTab(wxDC& dc,
             grad_rect.y - tab.rect.y - 3);
         if(tab.highlight)
         {
-            wxColour top_colour((m_tab_active_background_colour.Red()   + m_tab_hover_background_top_colour.Red())/2,
-                                (m_tab_active_background_colour.Green() + m_tab_hover_background_top_colour.Green())/2,
-                                (m_tab_active_background_colour.Blue()  + m_tab_hover_background_top_colour.Blue())/2);
-
-            wxColour bottom_colour((m_tab_active_background_gradient_colour.Red()   + m_tab_hover_background_top_gradient_colour.Red())/2,
-                                   (m_tab_active_background_gradient_colour.Green() + m_tab_hover_background_top_gradient_colour.Green())/2,
-                                   (m_tab_active_background_gradient_colour.Blue()  + m_tab_hover_background_top_gradient_colour.Blue())/2);
-
-            dc.GradientFillLinear(grad_rect, top_colour,
-                bottom_colour, wxSOUTH);
+            dc.GradientFillLinear(grad_rect, m_tab_highlight_top_colour, m_tab_highlight_top_gradient_colour, wxSOUTH);
         }
         else
         {

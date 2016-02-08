@@ -462,6 +462,29 @@ void wxRibbonMSWArtProvider::SetColourScheme(
     m_tool_active_background_colour = LikeSecondary(-7.9, 0.16, -0.20);
     m_tool_active_background_gradient_colour = LikeSecondary(-6.6, 0.16, -0.10);
 
+    //For highlight pages we show a colour between the active page and for a hovered page:
+    wxColour top_colour1((m_tab_active_background_colour.Red()   + m_tab_hover_background_top_colour.Red())/2,
+                         (m_tab_active_background_colour.Green() + m_tab_hover_background_top_colour.Green())/2,
+                         (m_tab_active_background_colour.Blue()  + m_tab_hover_background_top_colour.Blue())/2);
+
+    wxColour bottom_colour1((m_tab_active_background_gradient_colour.Red()   + m_tab_hover_background_top_gradient_colour.Red())/2,
+                            (m_tab_active_background_gradient_colour.Green() + m_tab_hover_background_top_gradient_colour.Green())/2,
+                            (m_tab_active_background_gradient_colour.Blue()  + m_tab_hover_background_top_gradient_colour.Blue())/2);
+
+    m_tab_highlight_top_colour = top_colour1;
+    m_tab_highlight_top_gradient_colour = bottom_colour1;
+
+    wxColour top_colour2((m_tab_active_background_colour.Red()   + m_tab_hover_background_colour.Red())/2,
+                         (m_tab_active_background_colour.Green() + m_tab_hover_background_colour.Green())/2,
+                         (m_tab_active_background_colour.Blue()  + m_tab_hover_background_colour.Blue())/2);
+
+    wxColour bottom_colour2((m_tab_active_background_gradient_colour.Red()   + m_tab_hover_background_gradient_colour.Red())/2,
+                            (m_tab_active_background_gradient_colour.Green() + m_tab_hover_background_gradient_colour.Green())/2,
+                            (m_tab_active_background_gradient_colour.Blue()  + m_tab_hover_background_gradient_colour.Blue())/2);
+
+    m_tab_highlight_colour = top_colour2;
+    m_tab_highlight_gradient_colour = bottom_colour2;
+
 #undef LikePrimary
 #undef LikeSecondary
 
@@ -550,6 +573,11 @@ void wxRibbonMSWArtProvider::CloneTo(wxRibbonMSWArtProvider* copy) const
     copy->m_gallery_button_hover_face_colour = m_gallery_button_hover_face_colour;
     copy->m_gallery_button_active_face_colour = m_gallery_button_active_face_colour;
     copy->m_gallery_button_disabled_face_colour = m_gallery_button_disabled_face_colour;
+
+    copy->m_tab_highlight_top_colour = m_tab_highlight_top_colour;
+    copy->m_tab_highlight_top_gradient_colour = m_tab_highlight_top_gradient_colour;
+    copy->m_tab_highlight_colour = m_tab_highlight_colour;
+    copy->m_tab_highlight_gradient_colour = m_tab_highlight_gradient_colour;
 
     copy->m_tab_ctrl_background_brush = m_tab_ctrl_background_brush;
     copy->m_panel_label_background_brush = m_panel_label_background_brush;
@@ -901,6 +929,14 @@ wxColour wxRibbonMSWArtProvider::GetColour(int id) const
             return m_page_toggle_face_colour;
         case wxRIBBON_ART_PAGE_TOGGLE_HOVER_FACE_COLOUR:
             return m_page_toggle_hover_face_colour;
+        case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_TOP_COLOUR:
+           return m_tab_highlight_top_colour;
+        case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_GRADIENT_TOP_COLOUR:
+           return m_tab_highlight_top_gradient_colour;
+        case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_COLOUR:
+           return m_tab_highlight_colour;
+        case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_GRADIENT_COLOUR:
+           return m_tab_highlight_gradient_colour;
         default:
             wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
             break;
@@ -1188,6 +1224,18 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             m_ribbon_toggle_pin_bitmap[1] = wxRibbonLoadPixmap(ribbon_toggle_pin_xpm, colour);
             m_ribbon_bar_help_button_bitmap[1] = wxRibbonLoadPixmap(ribbon_help_button_xpm, colour);
             break;
+        case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_TOP_COLOUR:
+           m_tab_highlight_top_colour = colour;
+           break;
+        case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_GRADIENT_TOP_COLOUR:
+           m_tab_highlight_top_gradient_colour = colour;
+           break;
+        case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_COLOUR:
+           m_tab_highlight_colour = colour;
+           break;
+        case wxRIBBON_ART_BUTTON_BAR_LABEL_HIGHLIGHT_GRADIENT_COLOUR:
+           m_tab_highlight_gradient_colour = colour;
+           break;
         default:
             wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
             break;
@@ -1268,29 +1316,12 @@ void wxRibbonMSWArtProvider::DrawTab(
             int h = background.height;
             background.height /= 2;
 
-            //For highlight pages we show a colour between the active page and for a hovered page:
-            wxColour top_colour1((m_tab_active_background_colour.Red()   + m_tab_hover_background_top_colour.Red())/2,
-                                 (m_tab_active_background_colour.Green() + m_tab_hover_background_top_colour.Green())/2,
-                                 (m_tab_active_background_colour.Blue()  + m_tab_hover_background_top_colour.Blue())/2);
-
-            wxColour bottom_colour1((m_tab_active_background_gradient_colour.Red()   + m_tab_hover_background_top_gradient_colour.Red())/2,
-                                    (m_tab_active_background_gradient_colour.Green() + m_tab_hover_background_top_gradient_colour.Green())/2,
-                                    (m_tab_active_background_gradient_colour.Blue()  + m_tab_hover_background_top_gradient_colour.Blue())/2);
-
-            dc.GradientFillLinear(background, top_colour1, bottom_colour1, wxSOUTH);
+            dc.GradientFillLinear(background, m_tab_highlight_top_colour, m_tab_highlight_top_gradient_colour, wxSOUTH);
 
             background.y += background.height;
             background.height = h - background.height;
 
-            wxColour top_colour2((m_tab_active_background_colour.Red()   + m_tab_hover_background_colour.Red())/2,
-                                 (m_tab_active_background_colour.Green() + m_tab_hover_background_colour.Green())/2,
-                                 (m_tab_active_background_colour.Blue()  + m_tab_hover_background_colour.Blue())/2);
-
-            wxColour bottom_colour2((m_tab_active_background_gradient_colour.Red()   + m_tab_hover_background_gradient_colour.Red())/2,
-                                    (m_tab_active_background_gradient_colour.Green() + m_tab_hover_background_gradient_colour.Green())/2,
-                                    (m_tab_active_background_gradient_colour.Blue()  + m_tab_hover_background_gradient_colour.Blue())/2);
-
-            dc.GradientFillLinear(background, top_colour2, bottom_colour2, wxSOUTH);
+            dc.GradientFillLinear(background, m_tab_highlight_colour, m_tab_highlight_gradient_colour, wxSOUTH);
         }
 
         wxPoint border_points[6];
