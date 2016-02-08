@@ -908,6 +908,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/buttonbar.cpp
     src/generic/choicdgg.cpp
     src/generic/choicbkg.cpp
+    src/generic/collheaderctrlg.cpp
     src/generic/combog.cpp
     src/generic/dcpsg.cpp
     src/generic/dirctrlg.cpp
@@ -1550,7 +1551,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk1/toolbar.cpp
     src/gtk1/textctrl.cpp
     src/gtk1/tglbtn.cpp
-    src/generic/collheaderctrlg.cpp
 </set>
 <set var="GTK1_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -1692,7 +1692,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/statline.cpp
     src/generic/statusbr.cpp
     src/generic/tabg.cpp
-    src/generic/collheaderctrlg.cpp
 </set>
 <set var="MOTIF_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -1978,7 +1977,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/tglbtn.cpp
     src/msw/treectrl.cpp
     src/msw/systhemectrl.cpp
-    src/generic/collheaderctrlg.cpp
 </set>
 <set var="MSW_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -2076,7 +2074,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/toplevel.h
     wx/msw/treectrl.h
     wx/msw/window.h
-    wx/generic/collheaderctrl.h
 </set>
 <set var="MSW_RSC" hints="files">
     <!-- Resources must be installed together with headers: -->
@@ -2293,7 +2290,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- Generic implementations used by wxOSX: -->
     src/generic/caret.cpp
     src/generic/clrpickerg.cpp
-    src/generic/collheaderctrlg.cpp
     src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
@@ -2593,7 +2589,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/regiong.cpp
     src/generic/statusbr.cpp
     src/generic/textmeasure.cpp
-    src/generic/collheaderctrlg.cpp
 </set>
 <set var="COCOA_HDR" hints="files">
     wx/cocoa/NSApplication.h
@@ -2760,7 +2755,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/toolbar.cpp
     src/univ/topluniv.cpp
     src/univ/winuniv.cpp
-    src/generic/collheaderctrlg.cpp
 </set>
 <set var="UNIV_HDR" hints="files">
     $(UNIV_PLATFORM_HDR)
