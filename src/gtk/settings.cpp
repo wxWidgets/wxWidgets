@@ -152,38 +152,33 @@ static GtkWidget* ToolTipWidget()
 }
 
 #ifdef __WXGTK3__
-static void bg(GtkWidget* widget, GtkStateFlags state, GdkRGBA& gdkRGBA)
+static void get_color(const char* name, GtkWidget* widget, GtkStateFlags state, GdkRGBA& gdkRGBA)
 {
     GtkStyleContext* sc = gtk_widget_get_style_context(widget);
-    gtk_style_context_get_background_color(sc, state, &gdkRGBA);
+    GdkRGBA* rgba;
+    gtk_style_context_get(sc, state, name, &rgba, NULL);
+    gdkRGBA = *rgba;
+    gdk_rgba_free(rgba);
     if (gdkRGBA.alpha <= 0)
     {
         widget = gtk_widget_get_parent(GTK_WIDGET(ContainerWidget()));
         sc = gtk_widget_get_style_context(widget);
-        gtk_style_context_get_background_color(sc, state, &gdkRGBA);
+        gtk_style_context_get(sc, state, name, &rgba, NULL);
+        gdkRGBA = *rgba;
+        gdk_rgba_free(rgba);
     }
+}
+static void bg(GtkWidget* widget, GtkStateFlags state, GdkRGBA& gdkRGBA)
+{
+    get_color("background-color", widget, state, gdkRGBA);
 }
 static void fg(GtkWidget* widget, GtkStateFlags state, GdkRGBA& gdkRGBA)
 {
-    GtkStyleContext* sc = gtk_widget_get_style_context(widget);
-    gtk_style_context_get_color(sc, state, &gdkRGBA);
-    if (gdkRGBA.alpha <= 0)
-    {
-        widget = gtk_widget_get_parent(GTK_WIDGET(ContainerWidget()));
-        sc = gtk_widget_get_style_context(widget);
-        gtk_style_context_get_color(sc, state, &gdkRGBA);
-    }
+    get_color("color", widget, state, gdkRGBA);
 }
 static void border(GtkWidget* widget, GtkStateFlags state, GdkRGBA& gdkRGBA)
 {
-    GtkStyleContext* sc = gtk_widget_get_style_context(widget);
-    gtk_style_context_get_border_color(sc, state, &gdkRGBA);
-    if (gdkRGBA.alpha <= 0)
-    {
-        widget = gtk_widget_get_parent(GTK_WIDGET(ContainerWidget()));
-        sc = gtk_widget_get_style_context(widget);
-        gtk_style_context_get_border_color(sc, state, &gdkRGBA);
-    }
+    get_color("border-color", widget, state, gdkRGBA);
 }
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)

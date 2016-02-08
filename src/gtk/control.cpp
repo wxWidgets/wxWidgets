@@ -250,15 +250,16 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
         stateFlag = GTK_STATE_FLAG_ACTIVE;
     }
     GtkStyleContext* sc = gtk_widget_get_style_context(widget);
-    GdkRGBA c;
-    gtk_style_context_get_color(sc, stateFlag, &c);
-    attr.colFg = wxColour(c);
-    gtk_style_context_get_background_color(sc, stateFlag, &c);
-    attr.colBg = wxColour(c);
+    GdkRGBA *fc, *bc;
     wxNativeFontInfo info;
-    gtk_style_context_get(
-        sc, stateFlag, GTK_STYLE_PROPERTY_FONT, &info.description, NULL);
+    gtk_style_context_get(sc, stateFlag,
+        "color", &fc, "background-color", &bc,
+        GTK_STYLE_PROPERTY_FONT, &info.description, NULL);
+    attr.colFg = wxColour(*fc);
+    attr.colBg = wxColour(*bc);
     attr.font = wxFont(info);
+    gdk_rgba_free(fc);
+    gdk_rgba_free(bc);
 #else
     GtkStyle* style;
 
