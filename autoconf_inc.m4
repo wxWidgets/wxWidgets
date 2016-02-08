@@ -644,12 +644,6 @@ dnl ### begin block 20_COND_TOOLKIT_COCOA_USE_GUI_1[wx.bkl] ###
         COND_TOOLKIT_COCOA_USE_GUI_1=""
     fi
     AC_SUBST(COND_TOOLKIT_COCOA_USE_GUI_1)
-dnl ### begin block 20_COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0[wx.bkl] ###
-    COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xCOCOA" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0=""
-    fi
-    AC_SUBST(COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0)
 dnl ### begin block 20_COND_TOOLKIT_DFB[wx.bkl] ###
     COND_TOOLKIT_DFB="#"
     if test "x$TOOLKIT" = "xDFB" ; then
