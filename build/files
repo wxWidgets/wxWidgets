@@ -620,6 +620,7 @@ GUI_CMN_SRC =
     src/generic/buttonbar.cpp
     src/generic/choicdgg.cpp
     src/generic/choicbkg.cpp
+    src/generic/collheaderctrlg.cpp
     src/generic/combog.cpp
     src/generic/dcpsg.cpp
     src/generic/dirctrlg.cpp
@@ -1186,7 +1187,6 @@ GTK1_SRC =
     # Generic implementations used by wxGTK1:
     src/generic/accel.cpp
     src/generic/clrpickerg.cpp
-    src/generic/collheaderctrlg.cpp
     src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
@@ -1351,7 +1351,6 @@ MOTIF_SRC =
     src/motif/xmcombo/xmcombo.c
     # Generic files used by wxMotif:
     src/generic/clrpickerg.cpp
-    src/generic/collheaderctrlg.cpp
     src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
@@ -1579,7 +1578,6 @@ MSW_DESKTOP_LOWLEVEL_HDR =
 
 MSW_SRC =
     src/generic/clrpickerg.cpp
-    src/generic/collheaderctrlg.cpp
     src/generic/collpaneg.cpp
     src/generic/filepickerg.cpp
     src/generic/fontpickerg.cpp
@@ -1641,7 +1639,6 @@ MSW_SRC =
     src/msw/treectrl.cpp
 MSW_HDR =
     wx/generic/clrpickerg.h
-    wx/generic/collheaderctrl.h
     wx/generic/collpaneg.h
     wx/generic/filepickerg.h
     wx/generic/fontpickerg.h
@@ -1938,7 +1935,6 @@ OSX_COMMON_SRC =
     # Generic implementations used by wxOSX:
     src/generic/caret.cpp
     src/generic/clrpickerg.cpp
-    src/generic/collheaderctrlg.cpp
     src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
@@ -2212,7 +2208,6 @@ COCOA_SRC =
     src/generic/accel.cpp
     src/generic/caret.cpp
     src/generic/clrpickerg.cpp
-    src/generic/collheaderctrlg.cpp
     src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
     src/generic/fdrepdlg.cpp
@@ -2327,7 +2322,6 @@ UNIV_SRC =
     $(UNIV_PLATFORM_SRC)
     src/generic/accel.cpp
     src/generic/clrpickerg.cpp
-    src/generic/collheaderctrlg.cpp
     src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
