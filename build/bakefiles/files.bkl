@@ -2487,201 +2487,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <!-- ====================================================================== -->
-<!--                              wxCocoa                                   -->
-<!-- ====================================================================== -->
-
-<set var="COCOA_LOWLEVEL_SRC" hints="files">
-    <!-- Shared wxMac and wxCocoa files -->
-    src/osx/core/hid.cpp
-    src/osx/core/utilsexc_cf.cpp
-</set>
-<set var="COCOA_LOWLEVEL_HDR" hints="files">
-</set>
-<set var="COCOA_SRC" hints="files">
-    src/cocoa/NSBox.mm
-    src/cocoa/NSButton.mm
-    src/cocoa/NSControl.mm
-    src/cocoa/NSMenu.mm
-    src/cocoa/NSPanel.mm
-    src/cocoa/NSScroller.mm
-    src/cocoa/NSSlider.mm
-    src/cocoa/NSTabView.mm
-    src/cocoa/NSTableView.mm
-    src/cocoa/NSTextField.mm
-    src/cocoa/NSView.mm
-    src/cocoa/NSWindow.mm
-    src/cocoa/ObjcRef.mm
-    src/cocoa/app.mm
-    src/cocoa/bitmap.mm
-    src/cocoa/bmpbuttn.mm
-    src/cocoa/brush.mm
-    src/cocoa/button.mm
-    src/cocoa/checkbox.mm
-    src/cocoa/checklst.mm
-    src/cocoa/choice.mm
-    src/cocoa/clipbrd.mm
-    src/cocoa/colordlg.mm
-    src/cocoa/colour.mm
-    src/cocoa/combobox.mm
-    src/cocoa/control.mm
-    src/cocoa/cursor.mm
-    src/cocoa/data.cpp
-    src/cocoa/dataobj.mm
-    src/cocoa/dc.mm
-    src/cocoa/dcclient.mm
-    src/cocoa/dcmemory.mm
-    src/cocoa/dcscreen.cpp
-    src/cocoa/dialog.mm
-    src/cocoa/dirdlg.mm
-    src/cocoa/display.mm
-    src/cocoa/drawer.mm
-    src/cocoa/evtloop.mm
-    src/cocoa/filedlg.mm
-    src/cocoa/font.mm
-    src/cocoa/fontdlg.mm
-    src/cocoa/fontenum.mm
-    src/cocoa/fontutil.cpp
-    src/cocoa/frame.mm
-    src/cocoa/gauge.mm
-    src/cocoa/icon.mm
-    src/cocoa/listbox.mm
-    src/cocoa/main.cpp
-    src/cocoa/mbarman.mm
-    src/cocoa/mdi.mm
-    src/cocoa/menu.mm
-    src/cocoa/menuitem.mm
-    src/cocoa/msgdlg.mm
-    src/cocoa/notebook.mm
-    src/cocoa/pen.mm
-    src/cocoa/radiobox.mm
-    src/cocoa/radiobut.mm
-    src/cocoa/region.mm
-    src/cocoa/scrolbar.mm
-    src/cocoa/settings.mm
-    src/cocoa/slider.mm
-    src/cocoa/sound.mm
-    src/cocoa/spinbutt.mm
-    src/cocoa/statbmp.mm
-    src/cocoa/statbox.mm
-    src/cocoa/statline2.mm
-    src/cocoa/stattext.mm
-    src/cocoa/textctrl.mm
-    src/cocoa/timer.mm
-    src/cocoa/toolbar.mm
-    src/cocoa/tooltip.mm
-    src/cocoa/toplevel.mm
-    src/cocoa/utils.mm
-    src/cocoa/utilsexc.mm
-    src/cocoa/window.mm
-    <!-- Generic implementations used by wxCocoa: -->
-    src/generic/accel.cpp
-    src/generic/caret.cpp
-    src/generic/clrpickerg.cpp
-    src/generic/collpaneg.cpp
-    src/generic/colrdlgg.cpp
-    src/generic/fdrepdlg.cpp
-    src/generic/filepickerg.cpp
-    src/generic/fontdlgg.cpp
-    src/generic/fontpickerg.cpp
-    src/generic/imaglist.cpp
-    src/generic/listctrl.cpp
-    src/generic/paletteg.cpp
-    src/generic/regiong.cpp
-    src/generic/statusbr.cpp
-    src/generic/textmeasure.cpp
-</set>
-<set var="COCOA_HDR" hints="files">
-    wx/cocoa/NSApplication.h
-    wx/cocoa/NSBox.h
-    wx/cocoa/NSButton.h
-    wx/cocoa/NSControl.h
-    wx/cocoa/NSMenu.h
-    wx/cocoa/NSPanel.h
-    wx/cocoa/NSScroller.h
-    wx/cocoa/NSSlider.h
-    wx/cocoa/NSTabView.h
-    wx/cocoa/NSTableView.h
-    wx/cocoa/NSTextField.h
-    wx/cocoa/NSView.h
-    wx/cocoa/NSWindow.h
-    wx/cocoa/ObjcAssociate.h
-    wx/cocoa/ObjcPose.h
-    wx/cocoa/ObjcRef.h
-    wx/cocoa/app.h
-    wx/cocoa/bitmap.h
-    wx/cocoa/bmpbuttn.h
-    wx/cocoa/brush.h
-    wx/cocoa/button.h
-    wx/cocoa/checkbox.h
-    wx/cocoa/checklst.h
-    wx/cocoa/choice.h
-    wx/cocoa/clipbrd.h
-    wx/cocoa/colordlg.h
-    wx/cocoa/colour.h
-    wx/cocoa/combobox.h
-    wx/cocoa/control.h
-    wx/cocoa/cursor.h
-    wx/cocoa/dataform.h
-    wx/cocoa/dataobj.h
-    wx/cocoa/dataobj2.h
-    wx/cocoa/dc.h
-    wx/cocoa/dcclient.h
-    wx/cocoa/dcmemory.h
-    wx/cocoa/dcscreen.h
-    wx/cocoa/dialog.h
-    wx/cocoa/dirdlg.h
-    wx/cocoa/drawer.h
-    wx/cocoa/evtloop.h
-    wx/cocoa/filedlg.h
-    wx/cocoa/font.h
-    wx/cocoa/fontdlg.h
-    wx/cocoa/frame.h
-    wx/cocoa/gauge.h
-    wx/cocoa/icon.h
-    wx/cocoa/listbox.h
-    wx/cocoa/log.h
-    wx/cocoa/mbarman.h
-    wx/cocoa/mdi.h
-    wx/cocoa/menu.h
-    wx/cocoa/menuitem.h
-    wx/cocoa/msgdlg.h
-    wx/cocoa/notebook.h
-    wx/cocoa/pen.h
-    wx/cocoa/radiobox.h
-    wx/cocoa/radiobut.h
-    wx/cocoa/region.h
-    wx/cocoa/scrolbar.h
-    wx/cocoa/slider.h
-    wx/cocoa/sound.h
-    wx/cocoa/spinbutt.h
-    wx/cocoa/statbmp.h
-    wx/cocoa/statbox.h
-    wx/cocoa/statline.h
-    wx/cocoa/stattext.h
-    wx/cocoa/textctrl.h
-    wx/cocoa/toolbar.h
-    wx/cocoa/tooltip.h
-    wx/cocoa/toplevel.h
-    wx/cocoa/window.h
-    <!-- Semi-private headers -->
-    wx/cocoa/objc/objc_uniquifying.h
-    <!-- Generic implementations used by wxCocoa: -->
-    wx/generic/caret.h
-    wx/generic/clrpickerg.h
-    wx/generic/collpaneg.h
-    wx/generic/fdrepdlg.h
-    wx/generic/fontdlgg.h
-    wx/generic/fontpickerg.h
-    wx/generic/imaglist.h
-    wx/generic/listctrl.h
-    wx/generic/paletteg.h
-    wx/generic/region.h
-    wx/generic/statusbr.h
-</set>
-
-
-
-<!-- ====================================================================== -->
 <!--                              wxUniversal                               -->
 <!-- ====================================================================== -->
 
@@ -3797,7 +3602,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_SRC) $(MSW_DESKTOP_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_LOWLEVEL_SRC)</if>
-        <if cond="TOOLKIT=='COCOA'">$(COCOA_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='QT'">$(QT_LOWLEVEL_SRC)</if>
@@ -3810,7 +3614,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_HDR) $(MSW_DESKTOP_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_LOWLEVEL_HDR)</if>
-        <if cond="TOOLKIT=='COCOA'">$(COCOA_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='QT'">$(QT_LOWLEVEL_HDR)</if>
@@ -3829,7 +3632,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MSW'">$(MSW_SRC) $(MSW_DESKTOP_SRC)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_COCOA_SRC)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_IPHONE_SRC)</if>
-        <if cond="TOOLKIT=='COCOA'">$(COCOA_SRC)</if>
         <if cond="TOOLKIT=='QT'">$(QT_SRC)</if>
     </set>
     <set var="GUI_HDR" hints="files">
@@ -3840,7 +3642,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MSW'">$(MSW_HDR) $(MSW_DESKTOP_HDR) $(MSW_RSC)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_SHARED_HDR) $(OSX_COCOA_HDR)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_SHARED_HDR) $(OSX_IPHONE_HDR)</if>
-        <if cond="TOOLKIT=='COCOA'">$(COCOA_HDR)</if>
         <if cond="TOOLKIT=='QT'">$(QT_HDR)</if>
     </set>
 
