@@ -1907,7 +1907,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_msw_tglbtn.o \
 	$(OBJS)\monodll_treectrl.o \
 	$(OBJS)\monodll_systhemectrl.o \
-	$(OBJS)\monodll_collheaderctrlg.o \
 	$(OBJS)\monodll_msw_checklst.o \
 	$(OBJS)\monodll_msw_fdrepdlg.o \
 	$(OBJS)\monodll_fontdlg.o \
@@ -2043,6 +2042,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_generic_buttonbar.o \
 	$(OBJS)\monodll_choicdgg.o \
 	$(OBJS)\monodll_choicbkg.o \
+	$(OBJS)\monodll_collheaderctrlg.o \
 	$(OBJS)\monodll_combog.o \
 	$(OBJS)\monodll_dcpsg.o \
 	$(OBJS)\monodll_dirctrlg.o \
@@ -2186,7 +2186,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_univ_toolbar.o \
 	$(OBJS)\monodll_topluniv.o \
 	$(OBJS)\monodll_winuniv.o \
-	$(OBJS)\monodll_collheaderctrlg.o \
 	$(OBJS)\monodll_gtk.o \
 	$(OBJS)\monodll_metal.o \
 	$(OBJS)\monodll_mono.o \
@@ -2323,6 +2322,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_generic_buttonbar.o \
 	$(OBJS)\monodll_choicdgg.o \
 	$(OBJS)\monodll_choicbkg.o \
+	$(OBJS)\monodll_collheaderctrlg.o \
 	$(OBJS)\monodll_combog.o \
 	$(OBJS)\monodll_dcpsg.o \
 	$(OBJS)\monodll_dirctrlg.o \
@@ -2735,7 +2735,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_msw_tglbtn.o \
 	$(OBJS)\monolib_treectrl.o \
 	$(OBJS)\monolib_systhemectrl.o \
-	$(OBJS)\monolib_collheaderctrlg.o \
 	$(OBJS)\monolib_msw_checklst.o \
 	$(OBJS)\monolib_msw_fdrepdlg.o \
 	$(OBJS)\monolib_fontdlg.o \
@@ -2871,6 +2870,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_generic_buttonbar.o \
 	$(OBJS)\monolib_choicdgg.o \
 	$(OBJS)\monolib_choicbkg.o \
+	$(OBJS)\monolib_collheaderctrlg.o \
 	$(OBJS)\monolib_combog.o \
 	$(OBJS)\monolib_dcpsg.o \
 	$(OBJS)\monolib_dirctrlg.o \
@@ -3014,7 +3014,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_univ_toolbar.o \
 	$(OBJS)\monolib_topluniv.o \
 	$(OBJS)\monolib_winuniv.o \
-	$(OBJS)\monolib_collheaderctrlg.o \
 	$(OBJS)\monolib_gtk.o \
 	$(OBJS)\monolib_metal.o \
 	$(OBJS)\monolib_mono.o \
@@ -3151,6 +3150,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_generic_buttonbar.o \
 	$(OBJS)\monolib_choicdgg.o \
 	$(OBJS)\monolib_choicbkg.o \
+	$(OBJS)\monolib_collheaderctrlg.o \
 	$(OBJS)\monolib_combog.o \
 	$(OBJS)\monolib_dcpsg.o \
 	$(OBJS)\monolib_dirctrlg.o \
@@ -3446,7 +3446,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_msw_tglbtn.o \
 	$(OBJS)\coredll_treectrl.o \
 	$(OBJS)\coredll_systhemectrl.o \
-	$(OBJS)\coredll_collheaderctrlg.o \
 	$(OBJS)\coredll_msw_checklst.o \
 	$(OBJS)\coredll_msw_fdrepdlg.o \
 	$(OBJS)\coredll_fontdlg.o \
@@ -3582,6 +3581,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_buttonbar.o \
 	$(OBJS)\coredll_choicdgg.o \
 	$(OBJS)\coredll_choicbkg.o \
+	$(OBJS)\coredll_collheaderctrlg.o \
 	$(OBJS)\coredll_combog.o \
 	$(OBJS)\coredll_dcpsg.o \
 	$(OBJS)\coredll_dirctrlg.o \
@@ -3725,7 +3725,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_univ_toolbar.o \
 	$(OBJS)\coredll_topluniv.o \
 	$(OBJS)\coredll_winuniv.o \
-	$(OBJS)\coredll_collheaderctrlg.o \
 	$(OBJS)\coredll_gtk.o \
 	$(OBJS)\coredll_metal.o \
 	$(OBJS)\coredll_mono.o \
@@ -3862,6 +3861,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_buttonbar.o \
 	$(OBJS)\coredll_choicdgg.o \
 	$(OBJS)\coredll_choicbkg.o \
+	$(OBJS)\coredll_collheaderctrlg.o \
 	$(OBJS)\coredll_combog.o \
 	$(OBJS)\coredll_dcpsg.o \
 	$(OBJS)\coredll_dirctrlg.o \
@@ -4022,7 +4022,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_msw_tglbtn.o \
 	$(OBJS)\corelib_treectrl.o \
 	$(OBJS)\corelib_systhemectrl.o \
-	$(OBJS)\corelib_collheaderctrlg.o \
 	$(OBJS)\corelib_msw_checklst.o \
 	$(OBJS)\corelib_msw_fdrepdlg.o \
 	$(OBJS)\corelib_fontdlg.o \
@@ -4158,6 +4157,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_buttonbar.o \
 	$(OBJS)\corelib_choicdgg.o \
 	$(OBJS)\corelib_choicbkg.o \
+	$(OBJS)\corelib_collheaderctrlg.o \
 	$(OBJS)\corelib_combog.o \
 	$(OBJS)\corelib_dcpsg.o \
 	$(OBJS)\corelib_dirctrlg.o \
@@ -4301,7 +4301,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_univ_toolbar.o \
 	$(OBJS)\corelib_topluniv.o \
 	$(OBJS)\corelib_winuniv.o \
-	$(OBJS)\corelib_collheaderctrlg.o \
 	$(OBJS)\corelib_gtk.o \
 	$(OBJS)\corelib_metal.o \
 	$(OBJS)\corelib_mono.o \
@@ -4438,6 +4437,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_buttonbar.o \
 	$(OBJS)\corelib_choicdgg.o \
 	$(OBJS)\corelib_choicbkg.o \
+	$(OBJS)\corelib_collheaderctrlg.o \
 	$(OBJS)\corelib_combog.o \
 	$(OBJS)\corelib_dcpsg.o \
 	$(OBJS)\corelib_dirctrlg.o \
@@ -7982,11 +7982,6 @@ $(OBJS)\monodll_evtloop.o: ../../src/msw/evtloop.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_collheaderctrlg.o: ../../src/generic/collheaderctrlg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_accelcmn.o: ../../src/common/accelcmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8643,6 +8638,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_choicbkg.o: ../../src/generic/choicbkg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_collheaderctrlg.o: ../../src/generic/collheaderctrlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10492,11 +10492,6 @@ $(OBJS)\monolib_evtloop.o: ../../src/msw/evtloop.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_collheaderctrlg.o: ../../src/generic/collheaderctrlg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_accelcmn.o: ../../src/common/accelcmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11153,6 +11148,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_choicbkg.o: ../../src/generic/choicbkg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_collheaderctrlg.o: ../../src/generic/collheaderctrlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -12936,11 +12936,6 @@ $(OBJS)\coredll_evtloop.o: ../../src/msw/evtloop.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_collheaderctrlg.o: ../../src/generic/collheaderctrlg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_accelcmn.o: ../../src/common/accelcmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13597,6 +13592,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_choicbkg.o: ../../src/generic/choicbkg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_collheaderctrlg.o: ../../src/generic/collheaderctrlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -14405,11 +14405,6 @@ $(OBJS)\corelib_evtloop.o: ../../src/msw/evtloop.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_collheaderctrlg.o: ../../src/generic/collheaderctrlg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_accelcmn.o: ../../src/common/accelcmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -15066,6 +15061,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_choicbkg.o: ../../src/generic/choicbkg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_collheaderctrlg.o: ../../src/generic/collheaderctrlg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
