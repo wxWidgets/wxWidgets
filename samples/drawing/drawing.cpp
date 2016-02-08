@@ -38,6 +38,7 @@
 #include "wx/graphics.h"
 #include "wx/filename.h"
 #include "wx/metafile.h"
+#include "wx/settings.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -149,6 +150,7 @@ protected:
     void DrawSplines(wxDC& dc);
     void DrawDefault(wxDC& dc);
     void DrawGradients(wxDC& dc);
+    void DrawSystemColours(wxDC& dc);
 
     void DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime);
 
@@ -301,6 +303,7 @@ enum
 #if wxUSE_GRAPHICS_CONTEXT
     File_ShowGraphics,
 #endif
+    File_ShowSystemColours,
     File_ShowGradients,
     MenuShow_Last = File_ShowGradients,
 
@@ -1548,6 +1551,47 @@ void MyCanvas::DrawGradients(wxDC& dc)
 #endif // wxUSE_GRAPHICS_CONTEXT
 }
 
+void MyCanvas::DrawSystemColours(wxDC& dc)
+{
+    wxSize textSize = dc.GetTextExtent("#WWWWgy");
+    int lineHeight = textSize.GetHeight();
+    wxRect r(textSize.GetWidth() + 10, 10, 100, lineHeight);
+
+    dc.SetPen(*wxTRANSPARENT_PEN);
+
+    static const char* sysColNames[] = {
+        "wxSYS_COLOUR_SCROLLBAR", "wxSYS_COLOUR_DESKTOP", "wxSYS_COLOUR_ACTIVECAPTION",
+        "wxSYS_COLOUR_INACTIVECAPTION", "wxSYS_COLOUR_MENU", "wxSYS_COLOUR_WINDOW",
+        "wxSYS_COLOUR_WINDOWFRAME", "wxSYS_COLOUR_MENUTEXT", "wxSYS_COLOUR_WINDOWTEXT",
+        "wxSYS_COLOUR_CAPTIONTEXT", "wxSYS_COLOUR_ACTIVEBORDER", "wxSYS_COLOUR_INACTIVEBORDER",
+        "wxSYS_COLOUR_APPWORKSPACE", "wxSYS_COLOUR_HIGHLIGHT", "wxSYS_COLOUR_HIGHLIGHTTEXT",
+        "wxSYS_COLOUR_BTNFACE", "wxSYS_COLOUR_BTNSHADOW", "wxSYS_COLOUR_GRAYTEXT",
+        "wxSYS_COLOUR_BTNTEXT", "wxSYS_COLOUR_INACTIVECAPTIONTEXT", "wxSYS_COLOUR_BTNHIGHLIGHT",
+        "wxSYS_COLOUR_3DDKSHADOW", "wxSYS_COLOUR_3DLIGHT", "wxSYS_COLOUR_INFOTEXT",
+        "wxSYS_COLOUR_INFOBK", "wxSYS_COLOUR_LISTBOX", "wxSYS_COLOUR_HOTLIGHT",
+        "wxSYS_COLOUR_GRADIENTACTIVECAPTION", "wxSYS_COLOUR_GRADIENTINACTIVECAPTION",
+        "wxSYS_COLOUR_MENUHILIGHT", "wxSYS_COLOUR_MENUBAR", "wxSYS_COLOUR_LISTBOXTEXT",
+        "wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT"
+    };
+
+    for (int i = wxSYS_COLOUR_SCROLLBAR; i < wxSYS_COLOUR_MAX; i++)
+    {
+        wxSystemColour sysColour = (wxSystemColour)i;
+
+        wxString colourName = sysColNames[sysColour];
+
+        wxColour c = wxSystemSettings::GetColour(sysColour);
+        dc.DrawText(c.GetAsString(wxC2S_HTML_SYNTAX), 10, r.y);
+
+        dc.SetBrush(wxBrush(c));
+        dc.DrawRectangle(r);
+        
+        dc.DrawText(colourName, r.GetRight() + 10, r.y);
+
+        r.y += lineHeight + 4;
+    }
+}
+
 void MyCanvas::DrawRegions(wxDC& dc)
 {
     dc.DrawText(wxT("You should see a red rect partly covered by a cyan one ")
@@ -1746,6 +1790,10 @@ void MyCanvas::Draw(wxDC& pdc)
         case File_ShowGradients:
             DrawGradients(dc);
             break;
+            
+        case File_ShowSystemColours:
+            DrawSystemColours(dc);
+            break;
 
         default:
             break;
@@ -1901,6 +1949,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #if wxUSE_GRAPHICS_CONTEXT
     menuScreen->Append(File_ShowGraphics, wxT("&Graphics screen"));
 #endif
+    menuScreen->Append(File_ShowSystemColours, wxT("System &colours"));
 
     wxMenu *menuFile = new wxMenu;
 #if wxUSE_GRAPHICS_CONTEXT
