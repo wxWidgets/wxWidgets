@@ -35,6 +35,7 @@
     #include "wx/textdlg.h"       // for wxGetTextFromUser
 #endif
 
+#include "wx/collheaderctrl.h"
 #include "wx/collpane.h"
 #include "wx/sizer.h"
 #include "wx/stattext.h"
@@ -98,8 +99,11 @@ public:
     void OnCollapseUpdateUI(wxUpdateUIEvent& event);
     void OnExpandUpdateUI(wxUpdateUIEvent& event);
 
+    void OnCollapsibleHeaderChanged(wxCommandEvent& event);
+
 private:
     wxCollapsiblePane *m_collPane;
+    wxCollapsibleHeaderCtrl *m_collHeaderCtrl;
     wxBoxSizer *m_paneSizer;
 
     wxDECLARE_EVENT_TABLE();
@@ -161,6 +165,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_UPDATE_UI(PANE_COLLAPSE, MyFrame::OnCollapseUpdateUI)
     EVT_UPDATE_UI(PANE_EXPAND, MyFrame::OnExpandUpdateUI)
+
+    EVT_COLLAPSIBLEHEADER_CHANGED(wxID_ANY, MyFrame::OnCollapsibleHeaderChanged)
 wxEND_EVENT_TABLE()
 
 // My frame constructor
@@ -194,7 +200,7 @@ MyFrame::MyFrame()
     menuBar->Append(helpMenu, wxT("&Help"));
     SetMenuBar(menuBar);
 
-    m_collPane = new wxCollapsiblePane(this, -1, wxT("test!"));
+    m_collPane = new wxCollapsiblePane(this, -1, "This is a wxCollapsiblePane");
     wxWindow *win = m_collPane->GetPane();
 
     m_paneSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -208,6 +214,13 @@ MyFrame::MyFrame()
     paneSubSizer->Add( new wxButton(win, PANE_BUTTON, wxT("Press to align right") ), 0, wxALIGN_LEFT | wxALL, 3 );
 
     win->SetSizer( m_paneSizer );
+
+    m_collHeaderCtrl = new wxCollapsibleHeaderCtrl(this, wxID_ANY, "Collapsed wxCollapsibleHeaderCtrl");
+
+    wxSizer* const sizerTop = new wxBoxSizer(wxVERTICAL);
+    sizerTop->Add(m_collPane, wxSizerFlags(1).Expand());
+    sizerTop->Add(m_collHeaderCtrl);
+    SetSizer(sizerTop);
 }
 
 MyFrame::~MyFrame()
@@ -268,6 +281,17 @@ void MyFrame::OnExpandUpdateUI(wxUpdateUIEvent& event)
     event.Enable(m_collPane->IsCollapsed());
 }
 
+void MyFrame::OnCollapsibleHeaderChanged(wxCommandEvent& WXUNUSED(event))
+{
+    m_collHeaderCtrl->SetLabel
+        (
+            wxString::Format
+            (
+                "%s wxCollapsibleHeaderCtrl",
+                m_collHeaderCtrl->IsCollapsed() ? "Collapsed" : "Expanded"
+            )
+        );
+}
 
 // ----------------------------------------------------------------------------
 // MyDialog
