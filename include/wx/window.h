@@ -1030,6 +1030,9 @@ public:
         // return true if the window contents is double buffered by the system
     virtual bool IsDoubleBuffered() const { return false; }
 
+        // turn on or off double buffering of the window if the system supports it
+    virtual void SetDoubleBuffered(bool WXUNUSED(on)) { }
+
         // the update region of the window contains the areas which must be
         // repainted by the program
     const wxRegion& GetUpdateRegion() const { return m_updateRegion; }
