@@ -2320,14 +2320,17 @@ enum wxStandardID
 };
 
 /*  ---------------------------------------------------------------------------- */
-/*  wxWindowID type (after wxID_XYZ enum, platform detection, and dlimpexp.h)    */
+/*  wxWindowID type                                                              */
 /*  ---------------------------------------------------------------------------- */
 
-/*  special care should be taken with this type under Windows where the real */
-/*  window id is unsigned, so we must always do the cast before comparing them */
-/*  (or else they would be always different!). Using wxGetWindowId() which does */
-/*  the cast itself is recommended. Note that this type can't be unsigned */
-/*  because wxID_ANY == -1 is a valid (and largely used) value for window id. */
+/*
+ * wxWindowID used to be just a typedef defined here, now it's a class, but we
+ * still continue to define it here for compatibility, so that the code using
+ * it continues to compile even if it includes just wx/defs.h.
+ *
+ * Notice that wx/windowid.h can only be included after wxID_XYZ definitions
+ * (as it uses them).
+ */
 #if defined(__cplusplus) && wxUSE_GUI
     #include "wx/windowid.h"
 #endif
