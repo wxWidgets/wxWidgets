@@ -87,9 +87,6 @@ void UnreserveIdRefCount(wxWindowID winid)
 // Get the usage count of an id
 int GetIdRefCount(wxWindowID winid)
 {
-    wxCHECK_MSG(winid >= wxID_AUTO_LOWEST && winid <= wxID_AUTO_HIGHEST, 0,
-            wxT("invalid id range"));
-
     winid -= wxID_AUTO_LOWEST;
     int refCount = gs_autoIdsRefCount[winid];
     if (refCount == ID_COUNTTOOLARGE)
@@ -100,9 +97,6 @@ int GetIdRefCount(wxWindowID winid)
 // Increase the count for an id
 void IncIdRefCount(wxWindowID winid)
 {
-    wxCHECK_RET(winid >= wxID_AUTO_LOWEST && winid <= wxID_AUTO_HIGHEST,
-            wxT("invalid id range"));
-
     winid -= wxID_AUTO_LOWEST;
 
     wxCHECK_RET(gs_autoIdsRefCount[winid] != ID_FREE, wxT("id should first be reserved"));
@@ -133,9 +127,6 @@ void IncIdRefCount(wxWindowID winid)
 // Decrease the count for an id
 void DecIdRefCount(wxWindowID winid)
 {
-    wxCHECK_RET(winid >= wxID_AUTO_LOWEST && winid <= wxID_AUTO_HIGHEST,
-            wxT("invalid id range"));
-
     winid -= wxID_AUTO_LOWEST;
 
     wxCHECK_RET(gs_autoIdsRefCount[winid] != ID_FREE, wxT("id count already 0"));
