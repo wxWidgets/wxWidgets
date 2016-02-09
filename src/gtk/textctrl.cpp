@@ -1836,7 +1836,8 @@ void wxTextCtrl::DoApplyWidgetStyle(GtkRcStyle *style)
             gtk_style_context_add_class(context, GTK_STYLE_CLASS_VIEW);
         }
         gtk_style_context_get(context, selectedFocused,
-            "color", &fg_orig, "background-color", &bg_orig);
+            "color", &fg_orig, "background-color", &bg_orig,
+            NULL);
         if (IsMultiLine())
             gtk_style_context_restore(context);
 
