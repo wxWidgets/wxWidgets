@@ -88,8 +88,10 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         sysColor = [NSColor controlHighlightColor];
         break;
     case wxSYS_COLOUR_HIGHLIGHTTEXT:
-    case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
         sysColor = [NSColor selectedTextColor];
+        break;
+    case wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT:
+        sysColor = [NSColor alternateSelectedControlTextColor];
         break;
     case wxSYS_COLOUR_INFOBK:
         // tooltip (bogus)
