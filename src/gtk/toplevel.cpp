@@ -371,6 +371,7 @@ void wxTopLevelWindowGTK::GTKHandleRealized()
         gdk_window_set_cursor(window, cursor);
 
 #ifdef __WXGTK3__
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     if (gtk_window_get_has_resize_grip(GTK_WINDOW(m_widget)))
     {
         // Grip window can end up obscured, probably due to deferred show.
@@ -378,6 +379,7 @@ void wxTopLevelWindowGTK::GTKHandleRealized()
         gtk_window_set_has_resize_grip(GTK_WINDOW(m_widget), false);
         gtk_window_set_has_resize_grip(GTK_WINDOW(m_widget), true);
     }
+    wxGCC_WARNING_RESTORE()
 #endif
 }
 

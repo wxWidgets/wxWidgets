@@ -409,8 +409,10 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 #ifdef __WXGTK3__
         GtkWidget* toplevel = gtk_widget_get_toplevel(m_widget);
         GdkRectangle rect;
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         if (toplevel && (!gtk_window_get_resize_grip_area(GTK_WINDOW(toplevel), &rect) ||
             rect.width == 0 || rect.height == 0))
+        wxGCC_WARNING_RESTORE()
         {
             GtkStyleContext* sc = gtk_widget_get_style_context(toplevel);
             gtk_style_context_save(sc);
@@ -468,8 +470,10 @@ void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
     GtkWidget* ancestor = gtk_widget_get_toplevel(m_widget);
 #ifdef __WXGTK3__
     GdkRectangle rect;
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     if (ancestor && gtk_window_get_resize_grip_area(GTK_WINDOW(ancestor), &rect) &&
         rect.width && rect.height)
+    wxGCC_WARNING_RESTORE()
     {
         ancestor = NULL;
     }
@@ -516,8 +520,10 @@ void wxStatusBarGeneric::OnRightDown(wxMouseEvent& event)
     GtkWidget* ancestor = gtk_widget_get_toplevel(m_widget);
 #ifdef __WXGTK3__
     GdkRectangle rect;
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     if (ancestor && gtk_window_get_resize_grip_area(GTK_WINDOW(ancestor), &rect) &&
         rect.width && rect.height)
+    wxGCC_WARNING_RESTORE()
     {
         ancestor = NULL;
     }
