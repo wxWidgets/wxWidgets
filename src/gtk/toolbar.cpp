@@ -187,15 +187,13 @@ image_expose_event(GtkWidget* widget, GdkEventExpose*, wxToolBarTool* tool)
     // draw disabled bitmap ourselves, GtkImage has no way to specify it
     GtkAllocation alloc;
     gtk_widget_get_allocation(widget, &alloc);
-    GtkRequisition req;
-    gtk_widget_get_requisition(widget, &req);
+    int x = (alloc.width - bitmap.GetWidth()) / 2;
+    int y = (alloc.height - bitmap.GetHeight()) / 2;
 #ifdef __WXGTK3__
-    const int x = (alloc.width - req.width) / 2;
-    const int y = (alloc.height - req.height) / 2;
     bitmap.Draw(cr, x, y);
 #else
-    const int x = alloc.x + (alloc.width - req.width) / 2;
-    const int y = alloc.y + (alloc.height - req.height) / 2;
+    x += alloc.x;
+    y += alloc.y;
     gdk_draw_pixbuf(
         gtk_widget_get_window(widget), gtk_widget_get_style(widget)->black_gc, bitmap.GetPixbuf(),
         0, 0, x, y,
