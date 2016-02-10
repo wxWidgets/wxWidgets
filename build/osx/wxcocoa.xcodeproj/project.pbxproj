@@ -514,6 +514,8 @@
 		242E1D1A9BF331BA918134EC /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 0964797530CF3FE7B8DB6242 /* pngwtran.c */; };
 		242E1D1A9BF331BA918134ED /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 0964797530CF3FE7B8DB6242 /* pngwtran.c */; };
 		242E1D1A9BF331BA918134EE /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 0964797530CF3FE7B8DB6242 /* pngwtran.c */; };
+		243367CB1C6B91A9000B8ED5 /* utils_base.mm in Sources */ = {isa = PBXBuildFile; fileRef = 243367CA1C6B91A9000B8ED5 /* utils_base.mm */; };
+		243367CC1C6B91A9000B8ED5 /* utils_base.mm in Sources */ = {isa = PBXBuildFile; fileRef = 243367CA1C6B91A9000B8ED5 /* utils_base.mm */; };
 		246B4FF96BA135258FE45F4F /* encconv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C269E9CA99DF3AE5B1BD6AFA /* encconv.cpp */; };
 		246B4FF96BA135258FE45F50 /* encconv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C269E9CA99DF3AE5B1BD6AFA /* encconv.cpp */; };
 		246B4FF96BA135258FE45F51 /* encconv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C269E9CA99DF3AE5B1BD6AFA /* encconv.cpp */; };
@@ -3961,6 +3963,7 @@
 		239D386E9D7D39C5A1E859C6 /* clipcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = clipcmn.cpp; path = ../../src/common/clipcmn.cpp; sourceTree = "<group>"; };
 		23FC98E2305230E2990471E3 /* wxcrt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = wxcrt.cpp; path = ../../src/common/wxcrt.cpp; sourceTree = "<group>"; };
 		242BF97B558634A79322052C /* prntbase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = prntbase.cpp; path = ../../src/common/prntbase.cpp; sourceTree = "<group>"; };
+		243367CA1C6B91A9000B8ED5 /* utils_base.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = utils_base.mm; path = ../../src/osx/cocoa/utils_base.mm; sourceTree = "<group>"; };
 		24396D584D053948A3FF0DCD /* imagpng.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imagpng.cpp; path = ../../src/common/imagpng.cpp; sourceTree = "<group>"; };
 		24930711031D35288D28B04B /* choiccmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = choiccmn.cpp; path = ../../src/common/choiccmn.cpp; sourceTree = "<group>"; };
 		24BD2EF635673E819B8406CB /* LexRust.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexRust.cxx; path = ../../src/stc/scintilla/lexers/LexRust.cxx; sourceTree = "<group>"; };
@@ -6013,6 +6016,7 @@
 				C9A305CEC03B3085B159B617 /* fs_mem.cpp */,
 				E968913A9A593B258BD8EACB /* msgout.cpp */,
 				4188821BBA833CCAA678B234 /* utilscmn.cpp */,
+				243367CA1C6B91A9000B8ED5 /* utils_base.mm */,
 				789F45D14FF23E248FCFB5FA /* utils.mm */,
 				60DFD5962DE3379F801AF78F /* power.mm */,
 				190409DF8A3C3D9580FBB8AA /* stdpaths.mm */,
@@ -6924,6 +6928,8 @@
 /* Begin PBXProject section */
 		19367367C9323490BB936F06 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 6976B5F5F3A63A21A92029E3 /* Build configuration list for PBXProject "wxcocoa" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
@@ -8428,6 +8434,7 @@
 				652CFDD9A1C1366E99B5D6BD /* socketiohandler.cpp in Sources */,
 				346D274E17673A01B0177D5C /* sockunix.cpp in Sources */,
 				AD07124BBA613B47829F0693 /* sockosx.cpp in Sources */,
+				243367CC1C6B91A9000B8ED5 /* utils_base.mm in Sources */,
 				CFDBB80A4C9A3BA092273937 /* animatecmn.cpp in Sources */,
 				5C44446AB150378696CD6B3D /* bmpcboxcmn.cpp in Sources */,
 				901F659891613419B8643953 /* calctrlcmn.cpp in Sources */,
@@ -9634,6 +9641,7 @@
 				652CFDD9A1C1366E99B5D6BC /* socketiohandler.cpp in Sources */,
 				346D274E17673A01B0177D5B /* sockunix.cpp in Sources */,
 				AD07124BBA613B47829F0692 /* sockosx.cpp in Sources */,
+				243367CB1C6B91A9000B8ED5 /* utils_base.mm in Sources */,
 				CFDBB80A4C9A3BA092273936 /* animatecmn.cpp in Sources */,
 				5C44446AB150378696CD6B3C /* bmpcboxcmn.cpp in Sources */,
 				901F659891613419B8643952 /* calctrlcmn.cpp in Sources */,
