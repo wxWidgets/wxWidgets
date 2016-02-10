@@ -207,6 +207,7 @@ wxMSW:
 - Return correct OS version under Windows 8.1 and later.
 - Fix crash in wxD2DContext when using non-MSVC compiler (iwbnwif).
 - Notify shell about the changes done by wxMimeTypesManager (Maarten Bent).
+- Fix wxPrintf() and friends when using MinGW with ANSI stdio option.
 
 wxOSX/Cocoa:
 
