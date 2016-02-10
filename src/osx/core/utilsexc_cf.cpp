@@ -160,12 +160,7 @@ wxStandardPaths& wxGUIAppTraits::GetStandardPaths()
     // Derive a class just to be able to create it: wxStandardPaths ctor is
     // protected to prevent its misuse, but it also means we can't create an
     // object of this class directly.
-    class wxStandardPathsDefault : public
-#if defined(__WXOSX_COCOA__) || defined(__WXOSX_IPHONE__)
-    wxStandardPaths
-#else
-    wxStandardPathsCF
-#endif
+    class wxStandardPathsDefault : public wxStandardPaths
     {
     public:
         wxStandardPathsDefault() { }

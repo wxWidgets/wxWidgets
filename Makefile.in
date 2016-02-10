@@ -882,9 +882,8 @@ ALL_BASE_SOURCES =  \
 	src/common/fs_mem.cpp \
 	src/common/msgout.cpp \
 	src/common/utilscmn.cpp \
-	src/osx/cocoa/utils.mm \
 	src/osx/cocoa/power.mm \
-	src/osx/cocoa/stdpaths.mm \
+	src/osx/cocoa/utils.mm \
 	src/msw/main.cpp \
 	src/msw/volume.cpp \
 	src/common/fs_inet.cpp \
@@ -2233,6 +2232,7 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp \
+	src/osx/cocoa/utils_base.mm \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
 	src/unix/appunix.cpp \
@@ -2248,7 +2248,8 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/unix/utilsunx.cpp \
 	src/unix/wakeuppipe.cpp \
 	src/unix/fswatcher_kqueue.cpp \
-	src/osx/fswatcher_fsevents.cpp
+	src/osx/fswatcher_fsevents.cpp \
+	src/osx/cocoa/stdpaths.mm
 @COND_TOOLKIT_OSX_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC)
 COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
 	src/osx/core/mimetype.cpp \
@@ -2256,6 +2257,7 @@ COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp \
+	src/osx/cocoa/utils_base.mm \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
 	src/unix/appunix.cpp \
@@ -2271,7 +2273,8 @@ COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
 	src/unix/utilsunx.cpp \
 	src/unix/wakeuppipe.cpp \
 	src/unix/fswatcher_kqueue.cpp \
-	src/osx/fswatcher_fsevents.cpp
+	src/osx/fswatcher_fsevents.cpp \
+	src/osx/cocoa/stdpaths.mm
 @COND_TOOLKIT_OSX_IPHONE@BASE_OSX_SRC = $(COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC)
 COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2293,7 +2296,8 @@ COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
-	src/osx/core/utilsexc_base.cpp
+	src/osx/core/utilsexc_base.cpp \
+	src/osx/cocoa/utils_base.mm
 @COND_TOOLKIT_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_COCOA_BASE_OSX_SRC)
 COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2315,7 +2319,8 @@ COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
-	src/osx/core/utilsexc_base.cpp
+	src/osx/core/utilsexc_base.cpp \
+	src/osx/cocoa/utils_base.mm
 @COND_TOOLKIT_GTK@BASE_OSX_SRC = $(COND_TOOLKIT_GTK_BASE_OSX_SRC)
 COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2337,7 +2342,8 @@ COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
-	src/osx/core/utilsexc_base.cpp
+	src/osx/core/utilsexc_base.cpp \
+	src/osx/cocoa/utils_base.mm
 @COND_TOOLKIT_X11@BASE_OSX_SRC = $(COND_TOOLKIT_X11_BASE_OSX_SRC)
 COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2359,7 +2365,8 @@ COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
-	src/osx/core/utilsexc_base.cpp
+	src/osx/core/utilsexc_base.cpp \
+	src/osx/cocoa/utils_base.mm
 @COND_TOOLKIT_MOTIF@BASE_OSX_SRC = $(COND_TOOLKIT_MOTIF_BASE_OSX_SRC)
 COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2381,7 +2388,8 @@ COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
-	src/osx/core/utilsexc_base.cpp
+	src/osx/core/utilsexc_base.cpp \
+	src/osx/cocoa/utils_base.mm
 @COND_TOOLKIT_@BASE_OSX_SRC = $(COND_TOOLKIT__BASE_OSX_SRC)
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/osx/core/cfdataref.h \
@@ -4077,6 +4085,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_evtloop_cf.o \
 	monodll_strconv_cf.o \
 	monodll_utilsexc_base.o \
+	monodll_utils_base.o \
 	monodll_fdiodispatcher.o \
 	monodll_selectdispatcher.o \
 	monodll_appunix.o \
@@ -4092,7 +4101,8 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_utilsunx.o \
 	monodll_wakeuppipe.o \
 	monodll_fswatcher_kqueue.o \
-	monodll_fswatcher_fsevents.o
+	monodll_fswatcher_fsevents.o \
+	monodll_cocoa_stdpaths.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_fdiodispatcher.o \
@@ -4138,8 +4148,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_WIN32_1@	= monodll_msw_main.o monodll_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS \
-@COND_TOOLKIT_OSX_COCOA@	= monodll_cocoa_utils.o monodll_cocoa_power.o \
-@COND_TOOLKIT_OSX_COCOA@	monodll_cocoa_stdpaths.o
+@COND_TOOLKIT_OSX_COCOA@	= monodll_cocoa_power.o monodll_cocoa_utils.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_MACOSX_1@	= monodll_socketiohandler.o monodll_sockunix.o \
 @COND_PLATFORM_MACOSX_1@	monodll_sockosx.o
@@ -6072,6 +6081,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_evtloop_cf.o \
 	monolib_strconv_cf.o \
 	monolib_utilsexc_base.o \
+	monolib_utils_base.o \
 	monolib_fdiodispatcher.o \
 	monolib_selectdispatcher.o \
 	monolib_appunix.o \
@@ -6087,7 +6097,8 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_utilsunx.o \
 	monolib_wakeuppipe.o \
 	monolib_fswatcher_kqueue.o \
-	monolib_fswatcher_fsevents.o
+	monolib_fswatcher_fsevents.o \
+	monolib_cocoa_stdpaths.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_fdiodispatcher.o \
@@ -6133,8 +6144,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_WIN32_1@	= monolib_msw_main.o monolib_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1 \
-@COND_TOOLKIT_OSX_COCOA@	= monolib_cocoa_utils.o monolib_cocoa_power.o \
-@COND_TOOLKIT_OSX_COCOA@	monolib_cocoa_stdpaths.o
+@COND_TOOLKIT_OSX_COCOA@	= monolib_cocoa_power.o monolib_cocoa_utils.o
 @COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_MACOSX_1@	= monolib_socketiohandler.o monolib_sockunix.o \
 @COND_PLATFORM_MACOSX_1@	monolib_sockosx.o
@@ -8120,6 +8130,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_evtloop_cf.o \
 	basedll_strconv_cf.o \
 	basedll_utilsexc_base.o \
+	basedll_utils_base.o \
 	basedll_fdiodispatcher.o \
 	basedll_selectdispatcher.o \
 	basedll_appunix.o \
@@ -8135,7 +8146,8 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_utilsunx.o \
 	basedll_wakeuppipe.o \
 	basedll_fswatcher_kqueue.o \
-	basedll_fswatcher_fsevents.o
+	basedll_fswatcher_fsevents.o \
+	basedll_cocoa_stdpaths.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_fdiodispatcher.o \
@@ -8181,8 +8193,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_WIN32_1@	= basedll_main.o basedll_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_2 \
-@COND_TOOLKIT_OSX_COCOA@	= basedll_cocoa_utils.o basedll_cocoa_power.o \
-@COND_TOOLKIT_OSX_COCOA@	basedll_cocoa_stdpaths.o
+@COND_TOOLKIT_OSX_COCOA@	= basedll_cocoa_power.o basedll_cocoa_utils.o
 COND_MONOLITHIC_0_SHARED_0___baselib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_MONOLITHIC_0_SHARED_0@__baselib___depname = $(COND_MONOLITHIC_0_SHARED_0___baselib___depname)
@@ -8200,6 +8211,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_evtloop_cf.o \
 	baselib_strconv_cf.o \
 	baselib_utilsexc_base.o \
+	baselib_utils_base.o \
 	baselib_fdiodispatcher.o \
 	baselib_selectdispatcher.o \
 	baselib_appunix.o \
@@ -8215,7 +8227,8 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_utilsunx.o \
 	baselib_wakeuppipe.o \
 	baselib_fswatcher_kqueue.o \
-	baselib_fswatcher_fsevents.o
+	baselib_fswatcher_fsevents.o \
+	baselib_cocoa_stdpaths.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_fdiodispatcher.o \
@@ -8261,8 +8274,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_WIN32_1@	= baselib_main.o baselib_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_3 \
-@COND_TOOLKIT_OSX_COCOA@	= baselib_cocoa_utils.o baselib_cocoa_power.o \
-@COND_TOOLKIT_OSX_COCOA@	baselib_cocoa_stdpaths.o
+@COND_TOOLKIT_OSX_COCOA@	= baselib_cocoa_power.o baselib_cocoa_utils.o
 @COND_SHARED_1@____wxbase_namedll_DEP = $(__basedll___depname)
 @COND_SHARED_0@____wxbase_namelib_DEP = $(__baselib___depname)
 COND_MONOLITHIC_0_SHARED_1___netdll___depname = \
@@ -8427,8 +8439,7 @@ COND_USE_SOVERSOLARIS_1___coredll___so_symlinks_uninst_cmd = rm -f \
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4 \
 @COND_PLATFORM_WIN32_1@	= coredll_msw_main.o coredll_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_4 \
-@COND_TOOLKIT_OSX_COCOA@	= coredll_cocoa_utils.o coredll_power.o \
-@COND_TOOLKIT_OSX_COCOA@	coredll_stdpaths.o
+@COND_TOOLKIT_OSX_COCOA@	= coredll_power.o coredll_cocoa_utils.o
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_4) \
 	$(__PLATFORM_SRC_OBJECTS_8) \
@@ -9893,8 +9904,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname = \
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_5 \
 @COND_PLATFORM_WIN32_1@	= corelib_msw_main.o corelib_volume.o
 @COND_TOOLKIT_OSX_COCOA@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_5 \
-@COND_TOOLKIT_OSX_COCOA@	= corelib_cocoa_utils.o corelib_power.o \
-@COND_TOOLKIT_OSX_COCOA@	corelib_stdpaths.o
+@COND_TOOLKIT_OSX_COCOA@	= corelib_power.o corelib_cocoa_utils.o
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_6) \
 	$(__PLATFORM_SRC_OBJECTS_9) \
@@ -15802,6 +15812,9 @@ monodll_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(MONODLL_ODEP)
 monodll_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_base.cpp
 
+monodll_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils_base.mm
+
 monodll_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
 
@@ -15823,11 +15836,11 @@ monodll_msw_main.o: $(srcdir)/src/msw/main.cpp $(MONODLL_ODEP)
 monodll_volume.o: $(srcdir)/src/msw/volume.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
 
-monodll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
-
 monodll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
+
+monodll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
 
 monodll_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fs_inet.cpp
@@ -17149,8 +17162,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@monodll_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
 
-@COND_TOOLKIT_OSX_COCOA@monodll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONODLL_ODEP)
-@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+@COND_PLATFORM_MACOSX_1@monodll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
@@ -20602,6 +20615,9 @@ monolib_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(MONOLIB_ODEP)
 monolib_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_base.cpp
 
+monolib_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils_base.mm
+
 monolib_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
 
@@ -20623,11 +20639,11 @@ monolib_msw_main.o: $(srcdir)/src/msw/main.cpp $(MONOLIB_ODEP)
 monolib_volume.o: $(srcdir)/src/msw/volume.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
 
-monolib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
-
 monolib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
+
+monolib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
 
 monolib_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fs_inet.cpp
@@ -21949,8 +21965,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@monolib_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
 
-@COND_TOOLKIT_OSX_COCOA@monolib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONOLIB_ODEP)
-@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+@COND_PLATFORM_MACOSX_1@monolib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
@@ -25402,8 +25418,14 @@ basedll_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(BASEDLL_ODEP)
 basedll_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_base.cpp
 
+basedll_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils_base.mm
+
 basedll_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
+
+basedll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 basedll_event.o: $(srcdir)/src/common/event.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/event.cpp
@@ -25423,14 +25445,11 @@ basedll_main.o: $(srcdir)/src/msw/main.cpp $(BASEDLL_ODEP)
 basedll_volume.o: $(srcdir)/src/msw/volume.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
 
-basedll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
-
 basedll_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
-basedll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+basedll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
 
 @COND_PLATFORM_UNIX_1@basedll_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
@@ -25864,8 +25883,14 @@ baselib_strconv_cf.o: $(srcdir)/src/osx/core/strconv_cf.cpp $(BASELIB_ODEP)
 baselib_utilsexc_base.o: $(srcdir)/src/osx/core/utilsexc_base.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/utilsexc_base.cpp
 
+baselib_utils_base.o: $(srcdir)/src/osx/cocoa/utils_base.mm $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils_base.mm
+
 baselib_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
+
+baselib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 baselib_event.o: $(srcdir)/src/common/event.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/event.cpp
@@ -25885,14 +25910,11 @@ baselib_main.o: $(srcdir)/src/msw/main.cpp $(BASELIB_ODEP)
 baselib_volume.o: $(srcdir)/src/msw/volume.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
 
-baselib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
-
 baselib_cocoa_power.o: $(srcdir)/src/osx/cocoa/power.mm $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
 
-baselib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+baselib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
 
 @COND_PLATFORM_UNIX_1@baselib_fdiodispatcher.o: $(srcdir)/src/common/fdiodispatcher.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/fdiodispatcher.cpp
@@ -26110,11 +26132,11 @@ coredll_msw_main.o: $(srcdir)/src/msw/main.cpp $(COREDLL_ODEP)
 coredll_volume.o: $(srcdir)/src/msw/volume.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
 
-coredll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
-
 coredll_power.o: $(srcdir)/src/osx/cocoa/power.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
+
+coredll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
 
 coredll_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/bmpbuttn.cpp
@@ -26698,6 +26720,9 @@ coredll_iphone_utils.o: $(srcdir)/src/osx/iphone/utils.mm $(COREDLL_ODEP)
 coredll_iphone_window.o: $(srcdir)/src/osx/iphone/window.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/window.mm
 
+coredll_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+
 coredll_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
 
@@ -26820,12 +26845,6 @@ coredll_mono.o: $(srcdir)/src/univ/themes/mono.cpp $(COREDLL_ODEP)
 
 coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/themes/win32.cpp
-
-@COND_TOOLKIT_OSX_COCOA@coredll_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(COREDLL_ODEP)
-@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
-
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(COREDLL_ODEP)
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/caret.cpp
@@ -29497,11 +29516,11 @@ corelib_msw_main.o: $(srcdir)/src/msw/main.cpp $(CORELIB_ODEP)
 corelib_volume.o: $(srcdir)/src/msw/volume.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/volume.cpp
 
-corelib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
-
 corelib_power.o: $(srcdir)/src/osx/cocoa/power.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/power.mm
+
+corelib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
 
 corelib_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/bmpbuttn.cpp
@@ -30085,6 +30104,9 @@ corelib_iphone_utils.o: $(srcdir)/src/osx/iphone/utils.mm $(CORELIB_ODEP)
 corelib_iphone_window.o: $(srcdir)/src/osx/iphone/window.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/window.mm
 
+corelib_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+
 corelib_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
 
@@ -30207,12 +30229,6 @@ corelib_mono.o: $(srcdir)/src/univ/themes/mono.cpp $(CORELIB_ODEP)
 
 corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/themes/win32.cpp
-
-@COND_TOOLKIT_OSX_COCOA@corelib_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(CORELIB_ODEP)
-@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
-
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(CORELIB_ODEP)
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_generic_caret.o: $(srcdir)/src/generic/caret.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/caret.cpp

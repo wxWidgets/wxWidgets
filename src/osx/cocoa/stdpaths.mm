@@ -37,7 +37,7 @@ static wxString GetFMDirectory(
                                            inDomain:domainMask
                                   appropriateForURL:nil
                                              create:NO error:nil];
-    return wxCFStringRef::AsString(url.path);
+    return wxCFStringRef::AsString((CFStringRef)url.path);
 }
 
 wxStandardPaths::wxStandardPaths()
@@ -52,7 +52,7 @@ wxStandardPaths::~wxStandardPaths()
 
 wxString wxStandardPaths::GetExecutablePath() const
 {
-    return wxCFStringRef::AsString([NSBundle mainBundle].executablePath);
+    return wxCFStringRef::AsString((CFStringRef)[NSBundle mainBundle].executablePath);
 }
 
 wxString wxStandardPaths::GetConfigDir() const
@@ -67,7 +67,7 @@ wxString wxStandardPaths::GetUserConfigDir() const
 
 wxString wxStandardPaths::GetDataDir() const
 {
-    return wxCFStringRef::AsString([NSBundle mainBundle].sharedSupportPath);
+    return wxCFStringRef::AsString((CFStringRef)[NSBundle mainBundle].sharedSupportPath);
 }
 
 wxString wxStandardPaths::GetLocalDataDir() const
@@ -82,12 +82,12 @@ wxString wxStandardPaths::GetUserDataDir() const
 
 wxString wxStandardPaths::GetPluginsDir() const
 {
-    return wxCFStringRef::AsString([NSBundle mainBundle].builtInPlugInsPath);
+    return wxCFStringRef::AsString((CFStringRef)[NSBundle mainBundle].builtInPlugInsPath);
 }
 
 wxString wxStandardPaths::GetResourcesDir() const
 {
-    return wxCFStringRef::AsString([NSBundle mainBundle].resourcePath);
+    return wxCFStringRef::AsString((CFStringRef)[NSBundle mainBundle].resourcePath);
 }
 
 wxString
