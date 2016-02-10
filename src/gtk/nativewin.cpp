@@ -65,7 +65,7 @@ wxNativeWindow::Create(wxWindow* parent,
     // Ensure that the best (and minimal) size is set to fully display the
     // widget.
     GtkRequisition req;
-    gtk_widget_size_request(widget, &req);
+    gtk_widget_get_preferred_size(widget, NULL, &req);
     SetInitialSize(wxSize(req.width, req.height));
 
     return true;
