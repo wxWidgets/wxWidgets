@@ -317,48 +317,4 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
 #endif // wxUSE_GUI
 
-// TODO move these into a BASE file
-
-wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
-{
-    // get OS version
-    int major, minor;
-
-    wxString release = wxCFStringRef( wxCFRetain( [ [UIDevice currentDevice] systemVersion] ) ).AsString() ;
-
-    if ( release.empty() ||
-        // TODO use wx method
-         scanf(release.c_str(), wxT("%d.%d"), &major, &minor) != 2 )
-    {
-        // failed to get version string or unrecognized format
-        major =
-        minor = -1;
-    }
-
-    if ( verMaj )
-        *verMaj = major;
-    if ( verMin )
-        *verMin = minor;
-
-    return wxOS_MAC_OSX_DARWIN;
-}
-
-wxString wxGetOsDescription()
-{
-    wxString release = wxCFStringRef( wxCFRetain([ [UIDevice currentDevice] systemName] )).AsString() ;
-
-    return release;
-}
-
-// FIXME: This duplicates the function in src/unix/utilsunx.cpp, we should just
-//        reuse it instead of there is no iOS-specific implementation of this.
-bool wxCheckOsVersion(int majorVsn, int minorVsn)
-{
-    int majorCur, minorCur;
-    wxGetOsVersion(&majorCur, &minorCur);
-
-    return majorCur > majorVsn || (majorCur == majorVsn && minorCur >= minorVsn);
-}
-
-
 #endif // wxOSX_USE_IPHONE

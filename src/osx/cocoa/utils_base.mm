@@ -25,7 +25,7 @@
 // our OS version is the same in non GUI and GUI cases
 wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 || defined(__WXOSX_IPHONE__)
     if ([NSProcessInfo instancesRespondToSelector:@selector(operatingSystemVersion)])
     {
         NSOperatingSystemVersion osVer = [NSProcessInfo processInfo].operatingSystemVersion;
@@ -43,8 +43,13 @@ wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
         // Deprecated Gestalt calls are required instead
 wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         SInt32 maj, min;
+#ifdef __WXOSX_IPHONE__
+		maj = 7;
+		min = 0;
+#else
         Gestalt(gestaltSystemVersionMajor, &maj);
         Gestalt(gestaltSystemVersionMinor, &min);
+#endif
 wxGCC_WARNING_RESTORE()
 
         if ( majorVsn != NULL )
@@ -59,7 +64,7 @@ wxGCC_WARNING_RESTORE()
 
 bool wxCheckOsVersion(int majorVsn, int minorVsn)
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10 || defined(__WXOSX_IPHONE__)
     if ([NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)])
     {
         NSOperatingSystemVersion osVer;
@@ -85,6 +90,7 @@ wxString wxGetOsDescription()
     int majorVer, minorVer;
     wxGetOsVersion(&majorVer, &minorVer);
 
+#ifndef __WXOSX_IPHONE__
     // Notice that neither the OS name itself nor the code names seem to be
     // ever translated, OS X itself uses the English words even for the
     // languages not using Roman alphabet.
@@ -113,6 +119,10 @@ wxString wxGetOsDescription()
                 break;
         };
     }
+#else
+    wxString osBrand = "iOS";
+    wxString osName;
+#endif
 
     wxString osDesc = osBrand;
     if (!osName.empty())
