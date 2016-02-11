@@ -43,7 +43,9 @@
     #define HAS_CLIENT_DECOR
 #endif
 #ifdef GDK_WINDOWING_MIR
+    extern "C" {
     #include <gdk/gdkmir.h>
+    }
     #define HAS_CLIENT_DECOR
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
