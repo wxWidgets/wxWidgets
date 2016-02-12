@@ -1253,14 +1253,14 @@ void MyCanvas::DrawSplines(wxDC& dc)
     const wxPoint center( R + 20, R + 20 );
     const int angles[7] = { 0, 10, 33, 77, 13, 145, 90 };
     const int radii[5] = { 100 , 59, 85, 33, 90 };
-    const int n = 200;
-    wxPoint pts[n];
+    const int numPoints = 200;
+    wxPoint pts[numPoints];
 
     // background spline calculation
     unsigned int radius_pos = 0;
     unsigned int angle_pos = 0;
     int angle = 0;
-    for ( int i = 0; i < n; i++ )
+    for ( int i = 0; i < numPoints; i++ )
     {
         angle += angles[ angle_pos ];
         int r = R * radii[ radius_pos ] / 100;
