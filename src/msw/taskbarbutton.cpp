@@ -126,16 +126,15 @@ typedef enum TBPFLAG
     TBPF_PAUSED = 0x8
 } TBPFLAG;
 
+#ifndef PROPERTYKEY_DEFINED
 typedef struct _tagpropertykey
 {
     GUID fmtid;
     DWORD pid;
 } PROPERTYKEY;
+#endif // !PROPERTYKEY_DEFINED
 
 #define REFPROPERTYKEY const PROPERTYKEY &
-
-typedef struct tagPROPVARIANT PROPVARIANT;
-#define REFPROPVARIANT const PROPVARIANT &
 
 #define DEFINE_PROPERTYKEY(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8, pid) \
     const PROPERTYKEY name  = \
@@ -292,7 +291,7 @@ public:
     virtual HRESULT wxSTDCALL GetCount(DWORD *) = 0;
     virtual HRESULT wxSTDCALL GetAt(DWORD, PROPERTYKEY *) = 0;
     virtual HRESULT wxSTDCALL GetValue(REFPROPERTYKEY, PROPVARIANT *) = 0;
-    virtual HRESULT wxSTDCALL SetValue(REFPROPERTYKEY, REFPROPVARIANT) = 0;
+    virtual HRESULT wxSTDCALL SetValue(REFPROPERTYKEY, const PROPVARIANT&) = 0;
     virtual HRESULT wxSTDCALL Commit() = 0;
 };
 
