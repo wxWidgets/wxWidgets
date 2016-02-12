@@ -27,7 +27,7 @@
 // before including windows.h, define version macros at (currently) maximal
 // values because we do all our checks at run-time anyhow
 #ifndef WINVER
-    #define WINVER 0x0600
+    #define WINVER 0x0603
 #endif
 
 // define _WIN32_WINNT and _WIN32_IE to the highest possible values because we
@@ -36,7 +36,7 @@
 // doesn't want to use APIs only available on later OS versions and had defined
 // them to (presumably lower) values
 #ifndef _WIN32_WINNT
-    #define _WIN32_WINNT 0x0600
+    #define _WIN32_WINNT 0x0603
 #endif
 
 #ifndef _WIN32_IE
