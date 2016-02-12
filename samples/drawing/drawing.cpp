@@ -1596,18 +1596,24 @@ void MyCanvas::DrawSystemColours(wxDC& dc)
         "wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT"
     };
 
-    for (int i = wxSYS_COLOUR_SCROLLBAR; i < wxSYS_COLOUR_MAX; i++)
+    wxFont mono(wxFontInfo().Family(wxFONTFAMILY_TELETYPE));
+
+    for (int i = 0; i < wxSYS_COLOUR_MAX; i++)
     {
         wxSystemColour sysColour = (wxSystemColour)i;
 
         wxString colourName = sysColNames[sysColour];
 
         wxColour c = wxSystemSettings::GetColour(sysColour);
-        dc.DrawText(c.GetAsString(wxC2S_HTML_SYNTAX), 10, r.y);
+
+        {
+            wxDCFontChanger setMono(dc, mono);
+            dc.DrawText(c.GetAsString(wxC2S_HTML_SYNTAX), 10, r.y);
+        }
 
         dc.SetBrush(wxBrush(c));
         dc.DrawRectangle(r);
-        
+
         dc.DrawText(colourName, r.GetRight() + 10, r.y);
 
         r.y += lineHeight + 4;
