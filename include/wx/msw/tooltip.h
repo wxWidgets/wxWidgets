@@ -74,6 +74,9 @@ public:
     static void UpdateVisibility();
 
 private:
+    // This module calls our DeleteToolTipCtrl().
+    friend class wxToolTipModule;
+
     // Adds a window other than our main m_window to this tooltip.
     void DoAddHWND(WXHWND hWnd);
 
@@ -91,6 +94,9 @@ private:
 
     // create the tooltip ctrl if it doesn't exist yet and return its HWND
     static WXHWND GetToolTipCtrl();
+
+    // to be used in wxModule for deleting tooltip ctrl window when exiting mainloop
+    static void DeleteToolTipCtrl();
 
     // new tooltip maximum width, defaults to min(display width, 400)
     static int ms_maxWidth;
