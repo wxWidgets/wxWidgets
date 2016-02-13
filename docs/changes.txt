@@ -63,6 +63,7 @@ All:
 
 - Add UTF-8 and ZIP 64 support to wxZip{Input,Output}Stream (Tobias Taschner).
 - Upgrade libpng to 1.6.21 fixing several security bugs (Paul Kulchenko).
+- Fix handling of Unicode file names in wxFileSystem::FindFirst().
 - Add wxStandardPaths::GetUserDir() (Tobias Taschner).
 - Allow calling wxItemContainer::Add() and similar with std::vector<> argument.
 - Add "%z" support to printf()-like functions like wxString::Format() (RIVDSL).

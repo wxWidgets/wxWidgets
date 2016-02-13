@@ -338,6 +338,15 @@ void URITestCase::Unescaping()
                             "\xD1\x87\xD0\xB8\xD1\x81\xD0\xBB\xD0\xBE"
                           ),
                           unescaped );
+
+    escaped = L"file://\u043C\u043E\u0439%5C%d1%84%d0%b0%d0%b9%d0%bb";
+    unescaped = wxURI::Unescape(escaped);
+
+    CPPUNIT_ASSERT_EQUAL
+    (
+        L"file://\u043C\u043E\u0439\\\u0444\u0430\u0439\u043B",
+        unescaped
+    );
 #endif // wxUSE_UNICODE
 }
 
