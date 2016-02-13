@@ -541,6 +541,7 @@ bool TestApp::OnInit()
     if ( !TestAppBase::OnInit() )
         return false;
 
+    // Output some important information about the test environment.
 #if wxUSE_GUI
     cout << "Test program for wxWidgets GUI features\n"
 #else
@@ -548,14 +549,14 @@ bool TestApp::OnInit()
 #endif
          << "build: " << WX_BUILD_OPTIONS_SIGNATURE << "\n"
          << "running under " << wxGetOsDescription()
-         << " as " << wxGetUserId() << std::endl;
+         << " as " << wxGetUserId();
 
     if ( m_detail )
     {
-        // Output some important information about the test environment.
-        cout << "Running under " << wxGetOsDescription() << ", "
-                "locale is " << setlocale(LC_ALL, NULL) << std::endl;
+        cout << ", locale is " << setlocale(LC_ALL, NULL);
     }
+
+    cout << std::endl;
 
 #if wxUSE_GUI
     // create a hidden parent window to be used as parent for the GUI controls
