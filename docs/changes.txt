@@ -209,6 +209,7 @@ wxMSW:
 - Fix crash in wxD2DContext when using non-MSVC compiler (iwbnwif).
 - Notify shell about the changes done by wxMimeTypesManager (Maarten Bent).
 - Fix wxPrintf() and friends when using MinGW with ANSI stdio option.
+- Fix strike-through support in wxFont with GDI+ (David Vanderson).
 
 wxOSX/Cocoa:
 

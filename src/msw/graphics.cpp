@@ -962,6 +962,8 @@ wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
         style |= FontStyleItalic;
     if ( font.GetUnderlined() )
         style |= FontStyleUnderline;
+    if ( font.GetStrikethrough() )
+        style |= FontStyleStrikeout;
     if ( font.GetWeight() == wxFONTWEIGHT_BOLD )
         style |= FontStyleBold;
 
