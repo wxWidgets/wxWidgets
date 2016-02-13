@@ -75,7 +75,7 @@ bool wxTextFile::OnOpen(const wxString &strBufferName, wxTextBufferOpenMode Open
             break;
     }
 
-    return m_file.Open(strBufferName.c_str(), FileOpenMode);
+    return m_file.Open(strBufferName, FileOpenMode);
 }
 
 
@@ -267,7 +267,7 @@ bool wxTextFile::OnWrite(wxTextFileType typeNew, const wxMBConv& conv)
     wxTempFile fileTmp(fn.GetFullPath());
 
     if ( !fileTmp.IsOpened() ) {
-        wxLogError(_("can't write buffer '%s' to disk."), m_strBufferName.c_str());
+        wxLogError(_("can't write buffer '%s' to disk."), m_strBufferName);
         return false;
     }
 
