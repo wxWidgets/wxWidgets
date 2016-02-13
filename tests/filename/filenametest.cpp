@@ -827,9 +827,6 @@ void FileNameTestCase::TestSymlinks()
 
     wxFileName tmpfn(wxFileName::DirName(tmpdir));
 
-    wxDateTime dtAccessTmp, dtModTmp, dtCreateTmp;
-    CPPUNIT_ASSERT(tmpfn.GetTimes(&dtAccessTmp, &dtModTmp, &dtCreateTmp));
-
     // Create a temporary directory
 #ifdef __VMS
     wxString name = tmpdir + ".filenametestXXXXXX]";
@@ -915,18 +912,6 @@ void FileNameTestCase::TestSymlinks()
         (
             "Getting times of a directory" + msg,
             linktodir.GetTimes(&dtAccess, &dtMod, &dtCreate)
-        );
-
-        // IsEqualTo() should be true only when dereferencing. Don't test each
-        // individually: accessing to create the link will have updated some
-        bool equal = dtCreate.IsEqualTo(dtCreateTmp) &&
-                     dtMod.IsEqualTo(dtModTmp) &&
-                     dtAccess.IsEqualTo(dtAccessTmp);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE
-        (
-            "Comparing directory times" + msg,
-            deref,
-            equal
         );
 
         // Test (File|Dir)Exists()
