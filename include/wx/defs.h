@@ -911,10 +911,8 @@ typedef short int WXTYPE;
 /*  where should i put this? we need to make sure of this as it breaks */
 /*  the <iostream> code. */
 #if !wxUSE_IOSTREAMH && defined(__WXDEBUG__)
-#    ifdef wxUSE_DEBUG_NEW_ALWAYS
 #    undef wxUSE_DEBUG_NEW_ALWAYS
 #    define wxUSE_DEBUG_NEW_ALWAYS 0
-#    endif
 #endif
 
 /*  ---------------------------------------------------------------------------- */
