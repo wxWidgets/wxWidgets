@@ -137,11 +137,6 @@ protected:
     static bool ParseIPv6address(const char*& uri);
     static bool ParseIPvFuture(const char*& uri);
 
-    // should be called with i pointing to '%', returns the encoded character
-    // following it or -1 if invalid and advances i past it (so that it points
-    // to the last character consumed on return)
-    static int DecodeEscape(wxString::const_iterator& i);
-
     // append next character pointer to by p to the string in an escaped form
     // and advance p past it
     //
