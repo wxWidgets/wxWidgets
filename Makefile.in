@@ -2225,7 +2225,7 @@ COND_TOOLKIT_MSW_WEBVIEW_HDR_PLATFORM =  \
 @COND_TOOLKIT_MOTIF@OPENGL_HDR_PLATFORM = wx/x11/glcanvas.h wx/unix/glx11.h
 @COND_TOOLKIT_X11@OPENGL_HDR_PLATFORM = wx/x11/glcanvas.h wx/unix/glx11.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@AUI_GTK_HDR = wx/aui/tabartgtk.h
-@COND_TOOLKIT_MSW@AUI_PLATFORM_HDR = wx/aui/tabartmsw.h
+@COND_TOOLKIT_MSW@AUI_PLATFORM_HDR = wx/aui/tabartmsw.h wx/aui/barartmsw.h
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
@@ -6056,7 +6056,8 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_MSW@__WEBVIEW_SRC_PLATFORM_OBJECTS = monodll_webview_ie.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__AUI_GTK_SRC_OBJECTS \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monodll_tabartgtk.o
-@COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS = monodll_tabartmsw.o
+@COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS = \
+@COND_TOOLKIT_MSW@	monodll_tabartmsw.o monodll_barartmsw.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= monodll_sound_sdl.o
 @COND_PLATFORM_WIN32_1@__monodll___win32rc = monodll_version_rc.o
@@ -8054,7 +8055,8 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_MSW@__WEBVIEW_SRC_PLATFORM_OBJECTS_1 = monolib_webview_ie.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__AUI_GTK_SRC_OBJECTS_1 \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monolib_tabartgtk.o
-@COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS_1 = monolib_tabartmsw.o
+@COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS_1 = \
+@COND_TOOLKIT_MSW@	monolib_tabartmsw.o monolib_barartmsw.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_1 \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= monolib_sound_sdl.o
 COND_MONOLITHIC_0_SHARED_1___basedll___depname = \
@@ -12611,7 +12613,8 @@ COND_USE_SOVERSOLARIS_1___auidll___so_symlinks_uninst_cmd = rm -f \
 @COND_PLATFORM_WIN32_1@__auidll___win32rc = auidll_version_rc.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__AUI_GTK_SRC_OBJECTS_2 \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= auidll_tabartgtk.o
-@COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS_2 = auidll_tabartmsw.o
+@COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS_2 = \
+@COND_TOOLKIT_MSW@	auidll_tabartmsw.o auidll_barartmsw.o
 COND_MONOLITHIC_0_SHARED_0_USE_AUI_1___auilib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_MONOLITHIC_0_SHARED_0_USE_AUI_1@__auilib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_AUI_1___auilib___depname)
@@ -12626,7 +12629,8 @@ COND_MONOLITHIC_0_SHARED_0_USE_AUI_1___auilib___depname = \
 @COND_USE_PCH_1@	= ./.pch/wxprec_auilib/wx/wxprec.h.gch
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__AUI_GTK_SRC_OBJECTS_3 \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= auilib_tabartgtk.o
-@COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS_3 = auilib_tabartmsw.o
+@COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS_3 = \
+@COND_TOOLKIT_MSW@	auilib_tabartmsw.o auilib_barartmsw.o
 @COND_SHARED_1@____wxaui_namedll_DEP = $(__auidll___depname)
 @COND_SHARED_0@____wxaui_namelib_DEP = $(__auilib___depname)
 COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1___ribbondll___depname = \
@@ -16963,6 +16967,9 @@ monodll_tabartgtk.o: $(srcdir)/src/aui/tabartgtk.cpp $(MONODLL_ODEP)
 
 monodll_tabartmsw.o: $(srcdir)/src/aui/tabartmsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/aui/tabartmsw.cpp
+
+monodll_barartmsw.o: $(srcdir)/src/aui/barartmsw.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/aui/barartmsw.cpp
 
 monodll_advprops.o: $(srcdir)/src/propgrid/advprops.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/propgrid/advprops.cpp
@@ -21766,6 +21773,9 @@ monolib_tabartgtk.o: $(srcdir)/src/aui/tabartgtk.cpp $(MONOLIB_ODEP)
 
 monolib_tabartmsw.o: $(srcdir)/src/aui/tabartmsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/aui/tabartmsw.cpp
+
+monolib_barartmsw.o: $(srcdir)/src/aui/barartmsw.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/aui/barartmsw.cpp
 
 monolib_advprops.o: $(srcdir)/src/propgrid/advprops.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/propgrid/advprops.cpp
@@ -34523,6 +34533,9 @@ auidll_tabartgtk.o: $(srcdir)/src/aui/tabartgtk.cpp $(AUIDLL_ODEP)
 auidll_tabartmsw.o: $(srcdir)/src/aui/tabartmsw.cpp $(AUIDLL_ODEP)
 	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/aui/tabartmsw.cpp
 
+auidll_barartmsw.o: $(srcdir)/src/aui/barartmsw.cpp $(AUIDLL_ODEP)
+	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/aui/barartmsw.cpp
+
 auilib_framemanager.o: $(srcdir)/src/aui/framemanager.cpp $(AUILIB_ODEP)
 	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/framemanager.cpp
 
@@ -34555,6 +34568,9 @@ auilib_tabartgtk.o: $(srcdir)/src/aui/tabartgtk.cpp $(AUILIB_ODEP)
 
 auilib_tabartmsw.o: $(srcdir)/src/aui/tabartmsw.cpp $(AUILIB_ODEP)
 	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/tabartmsw.cpp
+
+auilib_barartmsw.o: $(srcdir)/src/aui/barartmsw.cpp $(AUILIB_ODEP)
+	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/barartmsw.cpp
 
 ribbondll_version_rc.o: $(srcdir)/src/msw/version.rc $(RIBBONDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)  --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_RIBBON

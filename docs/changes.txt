@@ -168,7 +168,7 @@ wxGTK:
 wxMSW:
 
 - Make default wxSizer border DPI-aware.
-- Implement native tab art for wxAUI (Tobias Taschner).
+- Implement native appearance for wxAUI tabs and toolbars (Tobias Taschner).
 - Improve wxMimeTypesManager open command detection (Eric Jensen).
 - Make wxFILTER_INCLUDE_LIST in wxTextValidator actually usable.
 - Fix handling crashes in wxEVT_PAINT event handlers.

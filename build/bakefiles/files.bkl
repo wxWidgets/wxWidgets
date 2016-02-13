@@ -3356,9 +3356,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="AUI_MSW_SRC" hints="files">
     src/aui/tabartmsw.cpp
+    src/aui/barartmsw.cpp
 </set>
 <set var="AUI_MSW_HDR" hints="files">
     wx/aui/tabartmsw.h
+    wx/aui/barartmsw.h
 </set>
 <set var="AUI_PLATFORM_SRC" hints="files">
     <if cond="TOOLKIT=='MSW'">$(AUI_MSW_SRC)</if>

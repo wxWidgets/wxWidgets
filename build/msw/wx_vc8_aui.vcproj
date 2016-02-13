@@ -1066,6 +1066,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\aui\barartmsw.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\aui\dockart.h"
 				>
 			</File>
@@ -1109,6 +1113,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\aui\auibook.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\aui\barartmsw.cpp"
 				>
 			</File>
 			<File
