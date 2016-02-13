@@ -78,6 +78,10 @@ private:
     wxString m_fileNameNonASCII;
     wxString m_fileNameWork;
 
+#ifndef __DARWIN__
+    wxMBConv* m_convFNOld;
+#endif
+
     wxDECLARE_NO_COPY_CLASS(FileFunctionsTestCase);
 };
 
@@ -94,6 +98,16 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FileFunctionsTestCase, "FileFunctionsTest
 
 void FileFunctionsTestCase::setUp()
 {
+    // Under Unix we need to use UTF-8 for the tests using non-ASCII filenames
+    // and this is not necessarily the case because the tests don't call
+    // setlocale(LC_ALL, ""), so ensure it explicitly. This is just a temporary
+    // hack until we find the solution to make the library work with Unicode
+    // filenames irrespectively of the current locale.
+#ifndef __DARWIN__
+    m_convFNOld = wxConvFileName;
+    wxConvFileName = &wxConvUTF8;
+#endif
+
     // Initialize local data
 
     wxFileName fn1(wxFileName::GetTempDir(), wxT("wx_file_mask.txt"));
@@ -123,6 +137,10 @@ void FileFunctionsTestCase::tearDown()
     {
         wxRemoveFile(m_fileNameWork);
     }
+
+#ifndef __DARWIN__
+    wxConvFileName = m_convFNOld;
+#endif
 }
 
 void FileFunctionsTestCase::GetTempFolder()
