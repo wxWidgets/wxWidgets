@@ -58,21 +58,24 @@ bool wxTextFile::OnExists() const
 
 bool wxTextFile::OnOpen(const wxString &strBufferName, wxTextBufferOpenMode openMode)
 {
-    wxFile::OpenMode fileOpenMode;
+    wxFile::OpenMode fileOpenMode = wxFile::read_write;
 
     switch ( openMode )
     {
-        default:
-            wxFAIL_MSG( wxT("unknown open mode in wxTextFile::Open") );
-            wxFALLTHROUGH;
-
-        case ReadAccess :
+        case ReadAccess:
             fileOpenMode = wxFile::read;
             break;
 
-        case WriteAccess :
+        case WriteAccess:
             fileOpenMode = wxFile::write;
             break;
+    }
+
+    if ( fileOpenMode == wxFile::read_write )
+    {
+        // This must mean it hasn't been initialized in the switch above.
+        wxFAIL_MSG( wxT("unknown open mode in wxTextFile::Open") );
+        return false;
     }
 
     return m_file.Open(strBufferName, fileOpenMode);
