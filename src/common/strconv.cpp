@@ -3295,7 +3295,7 @@ wxWCharBuffer wxSafeConvertMB2WX(const char *s)
 
     wxWCharBuffer wbuf(wxConvLibc.cMB2WX(s));
     if ( !wbuf )
-        wbuf = wxMBConvUTF8().cMB2WX(s);
+        wbuf = wxConvUTF8.cMB2WX(s);
     if ( !wbuf )
         wbuf = wxConvISO8859_1.cMB2WX(s);
 
@@ -3309,7 +3309,7 @@ wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws)
 
     wxCharBuffer buf(wxConvLibc.cWX2MB(ws));
     if ( !buf )
-        buf = wxMBConvUTF8(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL).cWX2MB(ws);
+        buf = wxConvUTF8.cWX2MB(ws);
 
     return buf;
 }

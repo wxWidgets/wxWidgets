@@ -652,8 +652,7 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI;
     // next if it fails and, finally, wxConvISO8859_1 which always succeeds
     extern WXDLLIMPEXP_BASE wxWCharBuffer wxSafeConvertMB2WX(const char *s);
 
-    // this function uses wxConvLibc and wxConvUTF8(MAP_INVALID_UTF8_TO_OCTAL)
-    // if it fails
+    // this function uses wxConvLibc and wxConvUTF8 if it fails
     extern WXDLLIMPEXP_BASE wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws);
 #else // ANSI
     // no conversions to do
