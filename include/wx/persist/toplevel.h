@@ -67,6 +67,12 @@ public:
 
         SaveValue(wxPERSIST_TLW_MAXIMIZED, tlw->IsMaximized());
         SaveValue(wxPERSIST_TLW_ICONIZED, tlw->IsIconized());
+#ifdef __WXGTK20__
+        SaveValue("decor_l", tlw->m_decorSize.left);
+        SaveValue("decor_r", tlw->m_decorSize.right);
+        SaveValue("decor_t", tlw->m_decorSize.top);
+        SaveValue("decor_b", tlw->m_decorSize.bottom);
+#endif
     }
 
     virtual bool Restore() wxOVERRIDE
@@ -81,6 +87,17 @@ public:
                             RestoreValue(wxPERSIST_TLW_Y, &y);
         const bool hasSize = RestoreValue(wxPERSIST_TLW_W, &w) &&
                              RestoreValue(wxPERSIST_TLW_H, &h);
+#ifdef __WXGTK20__
+        wxTopLevelWindowGTK::DecorSize decorSize;
+        if (tlw->m_decorSize.top == 0 &&
+            RestoreValue("decor_l", &decorSize.left) &&
+            RestoreValue("decor_r", &decorSize.right) &&
+            RestoreValue("decor_t", &decorSize.top) &&
+            RestoreValue("decor_b", &decorSize.bottom))
+        {
+            tlw->m_decorSize = decorSize;
+        }
+#endif
 
         if ( hasPos )
         {
