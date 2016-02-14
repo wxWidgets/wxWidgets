@@ -52,13 +52,6 @@ bool IsOpaque(unsigned char a)
     return a == 0xff;
 }
 
-// is the pixel with this value of alpha a fully transparent one?
-static inline
-bool IsTransparent(unsigned char a)
-{
-    return !a;
-}
-
 // ============================================================================
 // wxPNGHandler implementation
 // ============================================================================
