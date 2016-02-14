@@ -90,7 +90,10 @@ public:
         { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
     bool Create(int width, int height, const wxDC& WXUNUSED(dc))
         { return Create(width,height); }
-    
+#ifdef __WXGTK3__
+    virtual bool CreateScaled(int w, int h, int depth, double scale) wxOVERRIDE;
+    virtual double GetScaleFactor() const wxOVERRIDE;
+#endif
 
     virtual int GetHeight() const wxOVERRIDE;
     virtual int GetWidth() const wxOVERRIDE;

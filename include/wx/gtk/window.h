@@ -92,6 +92,7 @@ public:
 
     virtual int GetCharHeight() const wxOVERRIDE;
     virtual int GetCharWidth() const wxOVERRIDE;
+    virtual double GetContentScaleFactor() const wxOVERRIDE;
 
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = true ) wxOVERRIDE;

@@ -343,8 +343,8 @@ void wxMemoryDCImpl::Setup()
     m_ok = m_bitmap.IsOk();
     if (m_ok)
     {
-        m_width = m_bitmap.GetWidth();
-        m_height = m_bitmap.GetHeight();
+        m_width = int(m_bitmap.GetScaledWidth());
+        m_height = int(m_bitmap.GetScaledHeight());
         cairo_t* cr = m_bitmap.CairoCreate();
         gc = wxGraphicsContext::CreateFromNative(cr);
         gc->EnableOffset(true);

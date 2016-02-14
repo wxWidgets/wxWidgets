@@ -338,6 +338,7 @@ public:
     GdkPixbuf* m_pixbufMask;
     GdkPixbuf* m_pixbufNoMask;
     cairo_surface_t* m_surface;
+    double m_scaleFactor;
 #else
     GdkPixmap      *m_pixmap;
     GdkPixbuf      *m_pixbuf;
@@ -363,6 +364,7 @@ wxBitmapRefData::wxBitmapRefData(int width, int height, int depth)
     m_pixbufMask = NULL;
     m_pixbufNoMask = NULL;
     m_surface = NULL;
+    m_scaleFactor = 1;
 #else
     m_pixmap = NULL;
     m_pixbuf = NULL;
@@ -590,7 +592,7 @@ static void CopyImageData(
 
 #if wxUSE_IMAGE
 #ifdef __WXGTK3__
-wxBitmap::wxBitmap(const wxImage& image, int depth, double WXUNUSED(scale))
+wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
 {
     wxCHECK_RET(image.IsOk(), "invalid image");
 
@@ -602,6 +604,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double WXUNUSED(scale))
     else if (depth != 1 && depth != 32)
         depth = 24;
     wxBitmapRefData* bmpData = new wxBitmapRefData(w, h, depth);
+    bmpData->m_scaleFactor = scale;
     m_refData = bmpData;
     GdkPixbuf* pixbuf_dst = gdk_pixbuf_new(GDK_COLORSPACE_RGB, depth == 32, 8, w, h);
     bmpData->m_pixbufNoMask = pixbuf_dst;
@@ -970,6 +973,18 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 }
 
 #ifdef __WXGTK3__
+bool wxBitmap::CreateScaled(int w, int h, int depth, double scale)
+{
+    Create(int(w * scale), int(h * scale), depth);
+    M_BMPDATA->m_scaleFactor = scale;
+    return true;
+}
+
+double wxBitmap::GetScaleFactor() const
+{
+    return M_BMPDATA->m_scaleFactor;
+}
+
 static cairo_surface_t* GetSubSurface(cairo_surface_t* surface, const wxRect& rect)
 {
     cairo_surface_flush(surface);
@@ -1008,6 +1023,7 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
     ret.m_refData = newRef;
 
 #ifdef __WXGTK3__
+    newRef->m_scaleFactor = bmpData->m_scaleFactor;
     if (bmpData->m_pixbufNoMask)
     {
         GdkPixbuf* pixbuf = gdk_pixbuf_new_subpixbuf(bmpData->m_pixbufNoMask, rect.x, rect.y, w, h);
@@ -1318,6 +1334,8 @@ cairo_t* wxBitmap::CairoCreate() const
         bmpData->m_pixbufMask = NULL;
     }
     wxASSERT(cr && cairo_status(cr) == 0);
+    if (!wxIsSameDouble(bmpData->m_scaleFactor, 1))
+        cairo_scale(cr, bmpData->m_scaleFactor, bmpData->m_scaleFactor);
     return cr;
 }
 
@@ -1326,6 +1344,14 @@ void wxBitmap::Draw(cairo_t* cr, int x, int y, bool useMask, const wxColour* fg,
     wxCHECK_RET(IsOk(), "invalid bitmap");
 
     wxBitmapRefData* bmpData = M_BMPDATA;
+    if (!wxIsSameDouble(bmpData->m_scaleFactor, 1))
+    {
+        cairo_translate(cr, x, y);
+        const double scale = 1 / bmpData->m_scaleFactor;
+        cairo_scale(cr, scale, scale);
+        x = 0;
+        y = 0;
+    }
     SetSourceSurface(cr, x, y, fg, bg);
     cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_NEAREST);
     cairo_surface_t* mask = NULL;
@@ -1490,6 +1516,7 @@ wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
                                                          oldRef->m_height,
                                                          oldRef->m_bpp);
 #ifdef __WXGTK3__
+    newRef->m_scaleFactor = oldRef->m_scaleFactor;
     if (oldRef->m_pixbufNoMask)
         newRef->m_pixbufNoMask = gdk_pixbuf_copy(oldRef->m_pixbufNoMask);
     if (oldRef->m_surface)
