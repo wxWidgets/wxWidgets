@@ -1384,7 +1384,7 @@ double wxGStreamerMediaBackend::GetPlaybackRate()
                     // plugins that support it...
 }
 
-bool wxGStreamerMediaBackend::SetPlaybackRate(double dRate)
+bool wxGStreamerMediaBackend::SetPlaybackRate(double /* dRate */)
 {
 #if 0 // not tested enough
     if( gst_element_seek (m_playbin, dRate, GST_FORMAT_TIME,
