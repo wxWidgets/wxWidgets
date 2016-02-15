@@ -142,6 +142,7 @@ BASE_COREFOUNDATION_HDR =
     wx/osx/core/cfdataref.h
     wx/osx/core/cfref.h
     wx/osx/core/cfstring.h
+    wx/osx/core/colour.h
     wx/osx/core/hid.h
     wx/osx/core/evtloop.h
     wx/osx/core/objcid.h

@@ -194,6 +194,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/core/objcid.h
     wx/osx/core/private.h
     wx/osx/core/stdpaths.h
+    wx/osx/core/colour.h
 </set>
 
 <!-- Base files used by OS X ports (not Carbon) -->
