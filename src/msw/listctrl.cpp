@@ -1341,6 +1341,18 @@ void wxListCtrl::SetImageList(wxImageList *imageList, int which)
         m_ownsImageListState = false;
     }
     (void) ListView_SetImageList(GetHwnd(), (HIMAGELIST) imageList ? imageList->GetHIMAGELIST() : 0, flags);
+
+    // For ComCtl32 prior 6.0 we need to re-assign all existing
+    // text labels in order to position them correctly.
+    if ( wxApp::GetComCtl32Version() < 600 )
+    {
+        const int n = GetItemCount();
+        for( int i = 0; i < n; i++ )
+        {
+            wxString text = GetItemText(i);
+            SetItemText(i, text);
+        }
+    }
 }
 
 void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
