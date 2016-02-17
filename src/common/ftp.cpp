@@ -237,7 +237,7 @@ char wxFTP::SendCommand(const wxString& command)
 
     wxString tmp_str = command + wxT("\r\n");
     const wxWX2MBbuf tmp_buf = tmp_str.mb_str();
-    if ( Write(wxMBSTRINGCAST tmp_buf, strlen(tmp_buf)).Error())
+    if ( Write(static_cast<const char *>(tmp_buf), strlen(tmp_buf)).Error())
     {
         m_lastError = wxPROTO_NETERR;
         return 0;

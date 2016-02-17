@@ -2336,7 +2336,7 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
 
     long sum=0;
     float height=fontSize; /* by default */
-    unsigned char *p=(unsigned char *)wxMBSTRINGCAST strbuf;
+    const unsigned char *p=reinterpret_cast<const unsigned char *>(static_cast<const char *>(strbuf));
     if(!p)
     {
         // String couldn't be converted which used to SEGV as reported here:
