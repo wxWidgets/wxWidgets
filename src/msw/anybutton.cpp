@@ -44,6 +44,7 @@
 #include "wx/stockitem.h"
 #include "wx/msw/private/button.h"
 #include "wx/msw/private/dc.h"
+#include "wx/msw/uxtheme.h"
 #include "wx/private/window.h"
 
 #if wxUSE_MARKUP
@@ -53,8 +54,6 @@
 using namespace wxMSWImpl;
 
 #if wxUSE_UXTHEME
-    #include "wx/msw/uxtheme.h"
-
     // no need to include tmschema.h
     #ifndef BP_PUSHBUTTON
         #define BP_PUSHBUTTON 1
