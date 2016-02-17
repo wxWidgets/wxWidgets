@@ -1388,7 +1388,7 @@ bool wxSetWorkingDirectory(const wxString& d)
 {
     bool success = false;
 #if defined(__UNIX__) || defined(__WXMAC__)
-    success = (chdir(wxFNSTRINGCAST d.fn_str()) == 0);
+    success = (chdir(d.fn_str()) == 0);
 #elif defined(__WINDOWS__)
     success = (SetCurrentDirectory(d.t_str()) != 0);
 #endif
