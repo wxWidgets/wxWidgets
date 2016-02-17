@@ -236,7 +236,7 @@ void wxMetafileDCImpl::DoGetTextExtent(const wxString& string,
 
     SIZE sizeRect;
     TEXTMETRIC tm;
-    ::GetTextExtentPoint32(dc, WXSTRINGCAST string, wxStrlen(WXSTRINGCAST string), &sizeRect);
+    ::GetTextExtentPoint32(dc, string.c_str(), string.length(), &sizeRect);
     ::GetTextMetrics(dc, &tm);
 
     if ( x )
