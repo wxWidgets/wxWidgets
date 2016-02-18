@@ -3973,10 +3973,12 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     private:                                                            \
         static const wxEventTableEntry sm_eventTableEntries[];          \
     protected:                                                          \
+        wxCLANG_WARNING_SUPPRESS(inconsistent-missing-override)         \
+        const wxEventTable* GetEventTable() const;                      \
+        wxEventHashTable& GetEventHashTable() const;                    \
+        wxCLANG_WARNING_RESTORE(inconsistent-missing-override)          \
         static const wxEventTable        sm_eventTable;                 \
-        const wxEventTable* GetEventTable() const wxOVERRIDE;           \
-        static wxEventHashTable          sm_eventHashTable;             \
-        wxEventHashTable& GetEventHashTable() const wxOVERRIDE
+        static wxEventHashTable          sm_eventHashTable
 
 // N.B.: when building DLL with Borland C++ 5.5 compiler, you must initialize
 //       sm_eventTable before using it in GetEventTable() or the compiler gives
