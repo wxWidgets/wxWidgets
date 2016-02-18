@@ -48,6 +48,9 @@
     <ClCompile Include="..\..\src\common\hyperlnkcmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\notifmsgcmn.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\common\odcombocmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
@@ -171,6 +174,9 @@
     <ClCompile Include="..\..\src\msw\richtooltip.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\rt\notifmsgrt.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\sound.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
@@ -329,9 +335,6 @@
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\joystick.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\notifmsg.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\sound.h">

@@ -511,6 +511,12 @@
 		23E9AF567E873B948EFEA180 /* gauge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 98A7F0605AAC3D28A8C9F253 /* gauge.mm */; };
 		23E9AF567E873B948EFEA181 /* gauge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 98A7F0605AAC3D28A8C9F253 /* gauge.mm */; };
 		23E9AF567E873B948EFEA182 /* gauge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 98A7F0605AAC3D28A8C9F253 /* gauge.mm */; };
+		24133CCD1B78C2E80019C10F /* notifmsg.mm in Sources */ = {isa = PBXBuildFile; fileRef = 24133CCC1B78C2E80019C10F /* notifmsg.mm */; };
+		24133CCF1B78C3230019C10F /* notifmsgcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24133CCE1B78C3230019C10F /* notifmsgcmn.cpp */; };
+		24133CD01B78C3390019C10F /* notifmsgcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24133CCE1B78C3230019C10F /* notifmsgcmn.cpp */; };
+		24133CD11B78C3390019C10F /* notifmsg.mm in Sources */ = {isa = PBXBuildFile; fileRef = 24133CCC1B78C2E80019C10F /* notifmsg.mm */; };
+		24133CD21B78C33A0019C10F /* notifmsgcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 24133CCE1B78C3230019C10F /* notifmsgcmn.cpp */; };
+		24133CD31B78C33A0019C10F /* notifmsg.mm in Sources */ = {isa = PBXBuildFile; fileRef = 24133CCC1B78C2E80019C10F /* notifmsg.mm */; };
 		242E1D1A9BF331BA918134EC /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 0964797530CF3FE7B8DB6242 /* pngwtran.c */; };
 		242E1D1A9BF331BA918134ED /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 0964797530CF3FE7B8DB6242 /* pngwtran.c */; };
 		242E1D1A9BF331BA918134EE /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 0964797530CF3FE7B8DB6242 /* pngwtran.c */; };
@@ -3962,6 +3968,8 @@
 		238741BDA2C73E56899CCB04 /* dcprint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dcprint.cpp; path = ../../src/osx/carbon/dcprint.cpp; sourceTree = "<group>"; };
 		239D386E9D7D39C5A1E859C6 /* clipcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = clipcmn.cpp; path = ../../src/common/clipcmn.cpp; sourceTree = "<group>"; };
 		23FC98E2305230E2990471E3 /* wxcrt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = wxcrt.cpp; path = ../../src/common/wxcrt.cpp; sourceTree = "<group>"; };
+		24133CCC1B78C2E80019C10F /* notifmsg.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = notifmsg.mm; path = ../../src/osx/cocoa/notifmsg.mm; sourceTree = "<group>"; };
+		24133CCE1B78C3230019C10F /* notifmsgcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = notifmsgcmn.cpp; path = ../../src/common/notifmsgcmn.cpp; sourceTree = "<group>"; };
 		242BF97B558634A79322052C /* prntbase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = prntbase.cpp; path = ../../src/common/prntbase.cpp; sourceTree = "<group>"; };
 		243367CA1C6B91A9000B8ED5 /* utils_base.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = utils_base.mm; path = ../../src/osx/cocoa/utils_base.mm; sourceTree = "<group>"; };
 		24396D584D053948A3FF0DCD /* imagpng.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imagpng.cpp; path = ../../src/common/imagpng.cpp; sourceTree = "<group>"; };
@@ -5557,6 +5565,8 @@
 		2FF0B5E0505D3AEA9A4ACF11 /* adv */ = {
 			isa = PBXGroup;
 			children = (
+				24133CCE1B78C3230019C10F /* notifmsgcmn.cpp */,
+				24133CCC1B78C2E80019C10F /* notifmsg.mm */,
 				A8ABD099BCEA30DCBF7A04F4 /* animatecmn.cpp */,
 				8CF560E06F2A3B6088203D09 /* bmpcboxcmn.cpp */,
 				8D0EF4BDCB5F329ABE15EEED /* calctrlcmn.cpp */,
@@ -7773,6 +7783,8 @@
 				B4425B59CC27389CA9FF81D3 /* datectlg.cpp in Sources */,
 				5557AA36FBCC3ED9A5F5751C /* editlbox.cpp in Sources */,
 				A139B846584436BCBEBAE3C1 /* grid.cpp in Sources */,
+				24133CD21B78C33A0019C10F /* notifmsgcmn.cpp in Sources */,
+				24133CD31B78C33A0019C10F /* notifmsg.mm in Sources */,
 				2E930206397C3EDCBD8206FE /* gridctrl.cpp in Sources */,
 				E5D698D2606A304DA743AF94 /* grideditors.cpp in Sources */,
 				187F921A95DA3594B0AD980F /* gridsel.cpp in Sources */,
@@ -8649,6 +8661,7 @@
 				42260A6F1853361083803B0D /* zutil.c in Sources */,
 				99E7A46106C03484BA70D29F /* tif_unix.c in Sources */,
 				4E396D8D2E9138D797F320C7 /* tif_aux.c in Sources */,
+				24133CD01B78C3390019C10F /* notifmsgcmn.cpp in Sources */,
 				1EE845DDFDDE36CA8A218206 /* tif_close.c in Sources */,
 				8E674574343A3C009B1BCD01 /* tif_codec.c in Sources */,
 				D95C5F467D37339AB8DF2355 /* tif_color.c in Sources */,
@@ -8796,6 +8809,7 @@
 				E3AD8574E13B39BDB8D4E92F /* LexKVIrc.cxx in Sources */,
 				62331487C17B32E081B8FEA8 /* LexLaTeX.cxx in Sources */,
 				DF8124E5E17D386A84CEEA28 /* LexLisp.cxx in Sources */,
+				24133CD11B78C3390019C10F /* notifmsg.mm in Sources */,
 				D13AE659C3AC37B68D39B2CA /* LexLout.cxx in Sources */,
 				9D003890CB7035A298DB7057 /* LexLua.cxx in Sources */,
 				E80BEED62EBF34F09B3F4020 /* LexMagik.cxx in Sources */,
@@ -9732,6 +9746,7 @@
 				D5C304182151365FA9FF8A3D /* xh_bttn.cpp in Sources */,
 				FE9A662A1F9B34D099C45C1D /* xh_cald.cpp in Sources */,
 				6138BCBC8E4438FA91E0EF9F /* xh_chckb.cpp in Sources */,
+				24133CCF1B78C3230019C10F /* notifmsgcmn.cpp in Sources */,
 				5F2C2A46781739D897CF293D /* xh_chckl.cpp in Sources */,
 				CE17002B5B7E375582747639 /* xh_choic.cpp in Sources */,
 				26E4813A97DE323E88119163 /* xh_choicbk.cpp in Sources */,
@@ -10009,6 +10024,7 @@
 				E0E40333B61C33B58787078E /* LexMarkdown.cxx in Sources */,
 				5AEA6E94FB76371D928D371C /* LexMatlab.cxx in Sources */,
 				1A4F9F18BBEB3515AC7C7CC6 /* LexMetapost.cxx in Sources */,
+				24133CCD1B78C2E80019C10F /* notifmsg.mm in Sources */,
 				3C394FBD47B6310C80577E3B /* LexMMIXAL.cxx in Sources */,
 				7CC211E10D853B958250A4CE /* LexModula.cxx in Sources */,
 				EC43AFB3670A3D459D9B388D /* LexMPT.cxx in Sources */,

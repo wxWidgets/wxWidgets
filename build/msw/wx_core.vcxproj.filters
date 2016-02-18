@@ -813,6 +813,9 @@
     <ClCompile Include="..\..\src\msw\richmsgdlg.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\rt\utilsrt.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\scrolbar.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
@@ -1604,6 +1607,9 @@
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\richmsgdlg.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\rt\utils.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\scrolbar.h">

@@ -838,6 +838,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\notifmsgcmn.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\odcombocmn.cpp"
 				>
 			</File>
@@ -929,6 +933,10 @@
 					Name="Release|x64"
 					ExcludedFromBuild="true"
 				/>
+			</File>
+			<File
+				RelativePath="..\..\src\msw\rt\notifmsgrt.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
@@ -1283,10 +1291,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\joystick.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\msw\notifmsg.h"
 				>
 			</File>
 			<File

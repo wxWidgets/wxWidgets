@@ -170,6 +170,7 @@ wxMSW:
 
 - Make default wxSizer border DPI-aware.
 - Implement native appearance for wxAUI tabs and toolbars (Tobias Taschner).
+- Show more modern-looking wxNotificationMessages under 8+ (Tobias Taschner).
 - Improve wxMimeTypesManager open command detection (Eric Jensen).
 - Make wxFILTER_INCLUDE_LIST in wxTextValidator actually usable.
 - Fix handling crashes in wxEVT_PAINT event handlers.

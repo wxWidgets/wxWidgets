@@ -22,6 +22,14 @@
 #    endif
 #endif /* !defined(wxUSE_ACTIVEX) */
 
+#ifndef wxUSE_WINRT
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_WINRT must be defined."
+#    else
+#        define wxUSE_WINRT 0
+#    endif
+#endif /* !defined(wxUSE_ACTIVEX) */
+
 #ifndef wxUSE_CRASHREPORT
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_CRASHREPORT must be defined."

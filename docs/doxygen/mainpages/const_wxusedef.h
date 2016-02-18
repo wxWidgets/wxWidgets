@@ -346,6 +346,7 @@ compilers. See also wxUSE_NO_MANIFEST.}
 @itemdef{wxUSE_VC_CRTDBG, See wx/msw/msvcrt.h file.}
 @itemdef{wxUSE_UXTHEME, Enable support for XP themes.}
 @itemdef{wxUSE_WIN_METAFILES_ALWAYS, Use wxMetaFile even when wxUSE_ENH_METAFILE=1.}
+@itemdef{wxUSE_WINRT, Enable WinRT support.}
 @itemdef{wxUSE_WXDIB, Use wxDIB class.}
 @endDefList
 

@@ -1896,6 +1896,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/uxtheme.cpp
     src/msw/window.cpp
     src/msw/graphicsd2d.cpp
+    src/msw/rt/utilsrt.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
     wx/msw/nonownedwnd.h
@@ -2076,6 +2077,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/toplevel.h
     wx/msw/treectrl.h
     wx/msw/window.h
+    wx/msw/rt/utils.h
 </set>
 <set var="MSW_RSC" hints="files">
     <!-- Resources must be installed together with headers: -->
@@ -2664,6 +2666,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/treelist.cpp
     src/generic/wizard.cpp
     src/common/addremovectrl.cpp
+    src/common/notifmsgcmn.cpp
 </set>
 
 <set var="ADVANCED_CMN_HDR" hints="files">
@@ -2727,9 +2730,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/richtooltip.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
+    src/msw/rt/notifmsgrt.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
-    wx/msw/notifmsg.h
     wx/msw/sound.h
     wx/msw/taskbar.h
 </set>
@@ -2783,6 +2786,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/taskbar.mm
     src/osx/core/hidjoystick.cpp
     src/osx/cocoa/activityindicator.mm
+    src/osx/cocoa/notifmsg.mm
 </set>
 
 <set var="ADVANCED_OSX_COCOA_HDR" hints="files">
@@ -2880,7 +2884,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="ADVANCED_GTK_HDR" hints="files">
     $(ADVANCED_GTK_PLATFORM_HDR)
-    wx/gtk/notifmsg.h
     wx/gtk/taskbar.h
     wx/generic/activityindicator.h
 </set>

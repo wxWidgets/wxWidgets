@@ -1051,6 +1051,9 @@
 			<File
 				RelativePath="..\..\src\msw\window.cpp">
 			</File>
+			<File
+				RelativePath="..\..\src\msw\rt\utilsrt.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Generic Sources"
@@ -1506,9 +1509,6 @@
 				RelativePath="..\..\include\wx\msw\notebook.h">
 			</File>
 			<File
-				RelativePath="..\..\include\wx\msw\notifmsg.h">
-			</File>
-			<File
 				RelativePath="..\..\include\wx\msw\ole\oleutils.h">
 			</File>
 			<File
@@ -1636,6 +1636,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\window.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\rt\utils.h">
 			</File>
 		</Filter>
 		<Filter

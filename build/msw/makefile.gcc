@@ -1846,6 +1846,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_uxtheme.o \
 	$(OBJS)\monodll_window.o \
 	$(OBJS)\monodll_graphicsd2d.o \
+	$(OBJS)\monodll_utilsrt.o \
 	$(OBJS)\monodll_helpchm.o \
 	$(OBJS)\monodll_helpwin.o \
 	$(OBJS)\monodll_automtn.o \
@@ -2134,6 +2135,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_uxtheme.o \
 	$(OBJS)\monodll_window.o \
 	$(OBJS)\monodll_graphicsd2d.o \
+	$(OBJS)\monodll_utilsrt.o \
 	$(OBJS)\monodll_helpchm.o \
 	$(OBJS)\monodll_helpwin.o \
 	$(OBJS)\monodll_automtn.o \
@@ -2396,12 +2398,14 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_treelist.o \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_addremovectrl.o \
+	$(OBJS)\monodll_notifmsgcmn.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_aboutdlg.o \
 	$(OBJS)\monodll_notifmsg.o \
 	$(OBJS)\monodll_richtooltip.o \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
+	$(OBJS)\monodll_notifmsgrt.o \
 	$(OBJS)\monodll_joystick.o \
 	$(OBJS)\monodll_animateg.o \
 	$(OBJS)\monodll_bmpcbox.o \
@@ -2450,12 +2454,14 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_treelist.o \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_addremovectrl.o \
+	$(OBJS)\monodll_notifmsgcmn.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_aboutdlg.o \
 	$(OBJS)\monodll_notifmsg.o \
 	$(OBJS)\monodll_richtooltip.o \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
+	$(OBJS)\monodll_notifmsgrt.o \
 	$(OBJS)\monodll_joystick.o \
 	$(OBJS)\monodll_animateg.o
 endif
@@ -2675,6 +2681,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_uxtheme.o \
 	$(OBJS)\monolib_window.o \
 	$(OBJS)\monolib_graphicsd2d.o \
+	$(OBJS)\monolib_utilsrt.o \
 	$(OBJS)\monolib_helpchm.o \
 	$(OBJS)\monolib_helpwin.o \
 	$(OBJS)\monolib_automtn.o \
@@ -2963,6 +2970,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_uxtheme.o \
 	$(OBJS)\monolib_window.o \
 	$(OBJS)\monolib_graphicsd2d.o \
+	$(OBJS)\monolib_utilsrt.o \
 	$(OBJS)\monolib_helpchm.o \
 	$(OBJS)\monolib_helpwin.o \
 	$(OBJS)\monolib_automtn.o \
@@ -3225,12 +3233,14 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_treelist.o \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_addremovectrl.o \
+	$(OBJS)\monolib_notifmsgcmn.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_aboutdlg.o \
 	$(OBJS)\monolib_notifmsg.o \
 	$(OBJS)\monolib_richtooltip.o \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
+	$(OBJS)\monolib_notifmsgrt.o \
 	$(OBJS)\monolib_joystick.o \
 	$(OBJS)\monolib_animateg.o \
 	$(OBJS)\monolib_bmpcbox.o \
@@ -3279,12 +3289,14 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_treelist.o \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_addremovectrl.o \
+	$(OBJS)\monolib_notifmsgcmn.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_aboutdlg.o \
 	$(OBJS)\monolib_notifmsg.o \
 	$(OBJS)\monolib_richtooltip.o \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
+	$(OBJS)\monolib_notifmsgrt.o \
 	$(OBJS)\monolib_joystick.o \
 	$(OBJS)\monolib_animateg.o
 endif
@@ -3386,6 +3398,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_uxtheme.o \
 	$(OBJS)\coredll_window.o \
 	$(OBJS)\coredll_graphicsd2d.o \
+	$(OBJS)\coredll_utilsrt.o \
 	$(OBJS)\coredll_helpchm.o \
 	$(OBJS)\coredll_helpwin.o \
 	$(OBJS)\coredll_automtn.o \
@@ -3674,6 +3687,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_uxtheme.o \
 	$(OBJS)\coredll_window.o \
 	$(OBJS)\coredll_graphicsd2d.o \
+	$(OBJS)\coredll_utilsrt.o \
 	$(OBJS)\coredll_helpchm.o \
 	$(OBJS)\coredll_helpwin.o \
 	$(OBJS)\coredll_automtn.o \
@@ -3962,6 +3976,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_uxtheme.o \
 	$(OBJS)\corelib_window.o \
 	$(OBJS)\corelib_graphicsd2d.o \
+	$(OBJS)\corelib_utilsrt.o \
 	$(OBJS)\corelib_helpchm.o \
 	$(OBJS)\corelib_helpwin.o \
 	$(OBJS)\corelib_automtn.o \
@@ -4250,6 +4265,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_uxtheme.o \
 	$(OBJS)\corelib_window.o \
 	$(OBJS)\corelib_graphicsd2d.o \
+	$(OBJS)\corelib_utilsrt.o \
 	$(OBJS)\corelib_helpchm.o \
 	$(OBJS)\corelib_helpwin.o \
 	$(OBJS)\corelib_automtn.o \
@@ -4526,12 +4542,14 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_treelist.o \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_addremovectrl.o \
+	$(OBJS)\advdll_notifmsgcmn.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_aboutdlg.o \
 	$(OBJS)\advdll_notifmsg.o \
 	$(OBJS)\advdll_richtooltip.o \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
+	$(OBJS)\advdll_notifmsgrt.o \
 	$(OBJS)\advdll_joystick.o \
 	$(OBJS)\advdll_animateg.o \
 	$(OBJS)\advdll_bmpcbox.o \
@@ -4580,12 +4598,14 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_treelist.o \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_addremovectrl.o \
+	$(OBJS)\advdll_notifmsgcmn.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_aboutdlg.o \
 	$(OBJS)\advdll_notifmsg.o \
 	$(OBJS)\advdll_richtooltip.o \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
+	$(OBJS)\advdll_notifmsgrt.o \
 	$(OBJS)\advdll_joystick.o \
 	$(OBJS)\advdll_animateg.o
 endif
@@ -4633,12 +4653,14 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_treelist.o \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_addremovectrl.o \
+	$(OBJS)\advlib_notifmsgcmn.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_aboutdlg.o \
 	$(OBJS)\advlib_notifmsg.o \
 	$(OBJS)\advlib_richtooltip.o \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
+	$(OBJS)\advlib_notifmsgrt.o \
 	$(OBJS)\advlib_joystick.o \
 	$(OBJS)\advlib_animateg.o \
 	$(OBJS)\advlib_bmpcbox.o \
@@ -4687,12 +4709,14 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_treelist.o \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_addremovectrl.o \
+	$(OBJS)\advlib_notifmsgcmn.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_aboutdlg.o \
 	$(OBJS)\advlib_notifmsg.o \
 	$(OBJS)\advlib_richtooltip.o \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
+	$(OBJS)\advlib_notifmsgrt.o \
 	$(OBJS)\advlib_joystick.o \
 	$(OBJS)\advlib_animateg.o
 endif
@@ -7939,6 +7963,11 @@ $(OBJS)\monodll_graphicsd2d.o: ../../src/msw/graphicsd2d.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_utilsrt.o: ../../src/msw/rt/utilsrt.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_helpchm.o: ../../src/msw/helpchm.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8984,6 +9013,11 @@ $(OBJS)\monodll_addremovectrl.o: ../../src/common/addremovectrl.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_notifmsgcmn.o: ../../src/common/notifmsgcmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9010,6 +9044,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_taskbar.o: ../../src/msw/taskbar.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_notifmsgrt.o: ../../src/msw/rt/notifmsgrt.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10452,6 +10491,11 @@ $(OBJS)\monolib_graphicsd2d.o: ../../src/msw/graphicsd2d.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_utilsrt.o: ../../src/msw/rt/utilsrt.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_helpchm.o: ../../src/msw/helpchm.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11497,6 +11541,11 @@ $(OBJS)\monolib_addremovectrl.o: ../../src/common/addremovectrl.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_notifmsgcmn.o: ../../src/common/notifmsgcmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11523,6 +11572,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_taskbar.o: ../../src/msw/taskbar.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_notifmsgrt.o: ../../src/msw/rt/notifmsgrt.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -12892,6 +12946,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_graphicsd2d.o: ../../src/msw/graphicsd2d.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_utilsrt.o: ../../src/msw/rt/utilsrt.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -14365,6 +14424,11 @@ $(OBJS)\corelib_graphicsd2d.o: ../../src/msw/graphicsd2d.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_utilsrt.o: ../../src/msw/rt/utilsrt.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_helpchm.o: ../../src/msw/helpchm.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -15374,6 +15438,9 @@ $(OBJS)\advdll_wizard.o: ../../src/generic/wizard.cpp
 $(OBJS)\advdll_addremovectrl.o: ../../src/common/addremovectrl.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_notifmsgcmn.o: ../../src/common/notifmsgcmn.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -15390,6 +15457,9 @@ $(OBJS)\advdll_sound.o: ../../src/msw/sound.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advdll_taskbar.o: ../../src/msw/taskbar.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advdll_notifmsgrt.o: ../../src/msw/rt/notifmsgrt.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advdll_joystick.o: ../../src/msw/joystick.cpp
@@ -15530,6 +15600,9 @@ $(OBJS)\advlib_wizard.o: ../../src/generic/wizard.cpp
 $(OBJS)\advlib_addremovectrl.o: ../../src/common/addremovectrl.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advlib_notifmsgcmn.o: ../../src/common/notifmsgcmn.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advlib_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -15546,6 +15619,9 @@ $(OBJS)\advlib_sound.o: ../../src/msw/sound.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_taskbar.o: ../../src/msw/taskbar.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_notifmsgrt.o: ../../src/msw/rt/notifmsgrt.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_joystick.o: ../../src/msw/joystick.cpp
