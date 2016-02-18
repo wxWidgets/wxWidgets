@@ -3050,10 +3050,10 @@ void FormMain::OnMisc ( wxCommandEvent& event )
     else if ( id == ID_COLLAPSE )
     {
         // Collapses selected.
-        wxPGProperty* id = m_pPropGridManager->GetSelection();
-        if ( id )
+        wxPGProperty* selProp = m_pPropGridManager->GetSelection();
+        if ( selProp )
         {
-            m_pPropGridManager->Collapse(id);
+            m_pPropGridManager->Collapse(selProp);
         }
     }
     else if ( id == ID_RUNTESTFULL )

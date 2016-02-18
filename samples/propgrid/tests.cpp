@@ -575,12 +575,11 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
             wxVariant values = page->GetPropertyValues();
 
-            unsigned int i;
-            for ( i = 0; i < (unsigned int)values.GetCount(); i++ )
+            for (unsigned int j = 0; j < (unsigned int)values.GetCount(); j++ )
             {
-                wxVariant& v = values[i];
+                wxVariant& v = values[j];
 
-                t.Printf(wxT("%i: name=\"%s\"  type=\"%s\"\n"),(int)i,
+                t.Printf(wxT("%i: name=\"%s\"  type=\"%s\"\n"),(int)j,
                     v.GetName().c_str(),v.GetType().c_str());
 
                 text += t;
@@ -821,7 +820,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             CreateGrid( -1, wxPG_EX_MULTIPLE_SELECTION);
         pgman = m_pPropGridManager;
 
-        wxPropertyGrid* pg = pgman->GetGrid();
+        pg = pgman->GetGrid();
 
         wxPGProperty* prop1 = pg->GetProperty(wxT("Label"));
         wxPGProperty* prop2 = pg->GetProperty(wxT("Cell Text Colour"));
@@ -875,7 +874,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         // Test label editing
         RT_START_TEST(LABEL_EDITING)
 
-        wxPropertyGrid* pg = pgman->GetGrid();
+        pg = pgman->GetGrid();
 
         // Just mostly test that these won't crash
         pg->MakeColumnEditable(0, true);
