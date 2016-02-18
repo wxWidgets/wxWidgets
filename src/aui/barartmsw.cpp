@@ -257,7 +257,7 @@ void wxAuiMSWToolBarArt::DrawDropDownButton(
         int dropDownWidth = 14;
 
         int textWidth = 0, textHeight = 0, textX = 0, textY = 0;
-        int bmpX = 0, bmpY = 0, dropBmpX = 0, dropBmpY = 0;
+        int bmpX = 0, bmpY = 0;
 
         wxRect buttonRect = wxRect(rect.x,
             rect.y,
@@ -312,14 +312,6 @@ void wxAuiMSWToolBarArt::DrawDropDownButton(
             btnState,
             &dropDownR,
             NULL);
-
-        dropBmpX = dropDownRect.x +
-            (dropDownRect.width / 2) -
-            (m_buttonDropDownBmp.GetWidth() / 2);
-        dropBmpY = dropDownRect.y +
-            (dropDownRect.height / 2) -
-            (m_buttonDropDownBmp.GetHeight() / 2);
-
 
         if ( m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM )
         {
