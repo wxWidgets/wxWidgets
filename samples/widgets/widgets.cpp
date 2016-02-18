@@ -717,15 +717,15 @@ void WidgetsFrame::OnPageChanged(WidgetsBookCtrlEvent& event)
 
     // create the pages on demand, otherwise the sample startup is too slow as
     // it creates hundreds of controls
-    WidgetsPage *page = CurrentPage();
-    if ( page->GetChildren().empty() )
+    WidgetsPage *curPage = CurrentPage();
+    if ( curPage->GetChildren().empty() )
     {
-        wxWindowUpdateLocker noUpdates(page);
-        page->CreateContent();
-        //page->Layout();
-        page->GetSizer()->Fit(page);
+        wxWindowUpdateLocker noUpdates(curPage);
+        curPage->CreateContent();
+        //curPage->Layout();
+        curPage->GetSizer()->Fit(curPage);
 
-        WidgetsBookCtrl *book = wxStaticCast(page->GetParent(), WidgetsBookCtrl);
+        WidgetsBookCtrl *book = wxStaticCast(curPage->GetParent(), WidgetsBookCtrl);
         wxSize size;
         for ( size_t i = 0; i < book->GetPageCount(); ++i )
         {
@@ -735,10 +735,10 @@ void WidgetsFrame::OnPageChanged(WidgetsBookCtrlEvent& event)
                 size.IncTo(page->GetSize());
             }
         }
-        page->SetSize(size);
+        curPage->SetSize(size);
     }
     // re-apply the attributes to the widget(s)
-    page->SetUpWidget();
+    curPage->SetUpWidget();
 
     event.Skip();
 }
