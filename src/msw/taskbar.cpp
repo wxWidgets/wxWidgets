@@ -230,6 +230,8 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
     wxStrlcpy(notifyData.szInfoTitle, title.t_str(),
                 WXSIZEOF(notifyData.szInfoTitle));
 
+    wxUnusedVar(icon); // It's only unused if not supported actually.
+
 #ifdef NIIF_LARGE_ICON
     // User specified icon is only supported since Vista
     if ( icon.IsOk() && wxPlatformInfo::Get().CheckOSVersion(6, 0) )
