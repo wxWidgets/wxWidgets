@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:		src/gtk/notifmsg.cpp
-// Purpose:		wxNotificationMessage for wxGTK using libnotify.
-// Author:		Vadim Zeitlin
-// Created:		2012-07-25
-// Copyright:	(c) 2012 Vadim Zeitlin <vadim@wxwidgets.org>
-// Licence:		wxWindows licence
+// Name:        src/gtk/notifmsg.cpp
+// Purpose:     wxNotificationMessage for wxGTK using libnotify.
+// Author:      Vadim Zeitlin
+// Created:     2012-07-25
+// Copyright:   (c) 2012 Vadim Zeitlin <vadim@wxwidgets.org>
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -92,7 +92,7 @@ void wxLibNotifyMsgImplActionCallback(NotifyNotification *notification,
                                                          gpointer user_data);
 
 extern "C" {
-static gboolean closed_notification(NotifyNotification *notification, 
+static gboolean closed_notification(NotifyNotification *notification,
     const char* WXUNUSED(data), void* user_data);
 }
 
@@ -106,7 +106,7 @@ public:
     {
         if ( !wxLibnotifyModule::Initialize() )
             wxLogError(_("Could not initalize libnotify."));
-        
+
     }
 
     virtual ~wxLibNotifyMsgImpl()
@@ -114,7 +114,7 @@ public:
         if ( m_notification )
             g_object_unref(m_notification);
     }
-    
+
     bool CreateOrUpdateNotification()
     {
         if ( !wxLibnotifyModule::Initialize() )
@@ -166,9 +166,9 @@ public:
                 return false;
             }
 
-                
+
             g_signal_connect(m_notification, "closed", G_CALLBACK(closed_notification), this);
-            
+
         }
         else
         {
@@ -195,7 +195,7 @@ public:
             );
 #endif
         }
-        
+
         return true;
     }
 
@@ -246,7 +246,7 @@ public:
 
         return true;
     }
-    
+
     virtual bool Close() wxOVERRIDE
     {
         wxCHECK_MSG( m_notification, false,
@@ -262,41 +262,41 @@ public:
 
         return true;
     }
-    
+
     virtual void SetTitle(const wxString& title) wxOVERRIDE
     {
         m_title = title;
     }
-    
+
     virtual void SetMessage(const wxString& message) wxOVERRIDE
     {
         m_message = message;
     }
-    
+
     virtual void SetParent(wxWindow *WXUNUSED(parent)) wxOVERRIDE
     {
     }
-    
+
     virtual void SetFlags(int flags) wxOVERRIDE
     {
         m_flags = flags;
     }
-    
+
     virtual void SetIcon(const wxIcon& icon) wxOVERRIDE
     {
         m_icon = icon;
         CreateOrUpdateNotification();
     }
-    
+
     virtual bool AddAction(wxWindowID actionid, const wxString &label)
     {
         if ( !CreateOrUpdateNotification() )
             return false;
-        
+
         wxString labelStr = label;
         if ( labelStr.empty() )
             labelStr = wxGetStockLabel(actionid, wxSTOCK_NOFLAGS);
-        
+
         notify_notification_add_action
             (
                 m_notification,
@@ -306,15 +306,15 @@ public:
                 this,
                 NULL
             );
-           
+
         return true;
     }
-    
+
     void NotifyClose(int closeReason)
     {
         // Values according to the OpenDesktop specification at:
         // https://developer.gnome.org/notification-spec/
-        
+
         switch (closeReason)
         {
             case 1: // Expired
@@ -325,15 +325,15 @@ public:
                 break;
             }
         }
-        
+
     }
-    
+
     void NotifyAction(wxWindowID actionid)
     {
         wxCommandEvent evt(wxEVT_NOTIFICATION_MESSAGE_ACTION, actionid);
         ProcessNotificationEvent(evt);
     }
-    
+
 private:
     NotifyNotification* m_notification;
     wxString m_title;
@@ -347,12 +347,12 @@ void wxLibNotifyMsgImplActionCallback(NotifyNotification *WXUNUSED(notification)
                                                          gpointer user_data)
 {
     wxLibNotifyMsgImpl* impl = (wxLibNotifyMsgImpl*) user_data;
-    
+
     impl->NotifyAction(wxAtoi(action));
 }
 
 extern "C" {
-static gboolean closed_notification(NotifyNotification *notification, 
+static gboolean closed_notification(NotifyNotification *notification,
     const char* WXUNUSED(data), void* user_data)
 {
     wxLibNotifyMsgImpl* impl = (wxLibNotifyMsgImpl*) user_data;

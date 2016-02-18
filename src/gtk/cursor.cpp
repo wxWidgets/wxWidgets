@@ -180,14 +180,14 @@ wxPoint wxCursor::GetHotSpot() const
             GdkPixbuf *pixbuf = gdk_cursor_get_image(GetCursor());
             if (pixbuf)
             {
-		wxPoint hotSpot = wxDefaultPosition;
+                wxPoint hotSpot = wxDefaultPosition;
                 const gchar* opt_xhot = gdk_pixbuf_get_option(pixbuf, "x_hot");
                 const gchar* opt_yhot = gdk_pixbuf_get_option(pixbuf, "y_hot");
                 if (opt_xhot && opt_yhot)
                 {
-		    const int xhot = atoi(opt_xhot);
-		    const int yhot = atoi(opt_yhot);
-		    hotSpot = wxPoint(xhot, yhot);
+                    const int xhot = atoi(opt_xhot);
+                    const int yhot = atoi(opt_yhot);
+                    hotSpot = wxPoint(xhot, yhot);
                 }
                 g_object_unref(pixbuf);
                 return hotSpot;

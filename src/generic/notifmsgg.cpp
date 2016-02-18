@@ -26,7 +26,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
-	#include "wx/timer.h"
+    #include "wx/timer.h"
     #include "wx/sizer.h"
     #include "wx/statbmp.h"
     #include "wx/settings.h"
