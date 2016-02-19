@@ -57,7 +57,7 @@ If you are looking for support, you can get it from
   (tag your questions with `wxwidgets`)
 - Please report bugs at http://trac.wxwidgets.org/newticket
 
-We would also gladly welcome [your contributions](github/CONTRIBUTING.md).
+We would also gladly welcome [your contributions](.github/CONTRIBUTING.md).
 
 
 Have fun!
