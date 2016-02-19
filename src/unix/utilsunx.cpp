@@ -400,7 +400,7 @@ public:
 
         for ( int i = 0; i < m_argc; i++ )
         {
-            m_argv[i] = wxStrdup(args[i]);
+            m_argv[i] = wxStrdup(args[i].mb_str(wxConvWhateverWorks));
         }
     }
 
