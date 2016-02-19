@@ -483,6 +483,30 @@ public:
     bool IsOk() const;
 };
 
+/**
+    Conversion object always producing non-empty output for non-empty input.
+
+    Conversions done using this object never lose data, at the cost of possibly
+    producing the output in an unwanted encoding or misinterpreting input
+    encoding.
+
+    To be precise, converting Unicode to multibyte strings using this object
+    tries to use the current locale encoding first but if this doesn't work, it
+    falls back to using UTF-8. In the other direction, UTF-8 is tried first,
+    then the current locale encoding and if this fails too, input is
+    interpreted as using ISO 8859-1, which never fails.
+
+    It is almost always @e wrong to use this converter for multibyte-to-Unicode
+    direction as the program should know which encoding the input data is
+    supposed to use and use the appropriate converter instead. However it may
+    be useful in the Unicode-to-multibyte direction if the goal is to produce
+    the output in the current locale encoding if possible, but still output
+    something, instead of nothing at all, even if the Unicode string is not
+    representable in this encoding.
+
+    @since 3.1.0
+ */
+extern wxMBConv& wxConvWhateverWorks;
 
 
 /**

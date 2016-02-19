@@ -3286,35 +3286,39 @@ bool wxCSConv::IsUTF8() const
 #endif
 
 
-#if wxUSE_UNICODE
+// ============================================================================
+// wxWhateverWorksConv
+// ============================================================================
 
-wxWCharBuffer wxSafeConvertMB2WX(const char *s)
+size_t
+wxWhateverWorksConv::ToWChar(wchar_t *dst, size_t dstLen,
+                             const char *src, size_t srcLen) const
 {
-    if ( !s )
-        return wxWCharBuffer();
+    size_t rc = wxConvUTF8.ToWChar(dst, dstLen, src, srcLen);
+    if ( rc != wxCONV_FAILED )
+        return rc;
 
-    wxWCharBuffer wbuf(wxConvLibc.cMB2WX(s));
-    if ( !wbuf )
-        wbuf = wxConvUTF8.cMB2WX(s);
-    if ( !wbuf )
-        wbuf = wxConvISO8859_1.cMB2WX(s);
+    rc = wxConvLibc.ToWChar(dst, dstLen, src, srcLen);
+    if ( rc != wxCONV_FAILED )
+        return rc;
 
-    return wbuf;
+    rc = wxConvISO8859_1.ToWChar(dst, dstLen, src, srcLen);
+
+    return rc;
 }
 
-wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws)
+size_t
+wxWhateverWorksConv::FromWChar(char *dst, size_t dstLen,
+                               const wchar_t *src, size_t srcLen) const
 {
-    if ( !ws )
-        return wxCharBuffer();
+    size_t rc = wxConvLibc.FromWChar(dst, dstLen, src, srcLen);
+    if ( rc != wxCONV_FAILED )
+        return rc;
 
-    wxCharBuffer buf(wxConvLibc.cWX2MB(ws));
-    if ( !buf )
-        buf = wxConvUTF8.cWX2MB(ws);
+    rc = wxConvUTF8.FromWChar(dst, dstLen, src, srcLen);
 
-    return buf;
+    return rc;
 }
-
-#endif // wxUSE_UNICODE
 
 // ----------------------------------------------------------------------------
 // globals
@@ -3330,6 +3334,7 @@ wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws)
 #undef wxConvLibc
 #undef wxConvUTF8
 #undef wxConvUTF7
+#undef wxConvWhateverWorks
 #undef wxConvLocal
 #undef wxConvISO8859_1
 
@@ -3369,6 +3374,7 @@ wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws)
 //     empty statement (and hope that no compilers warns about this)
 WX_DEFINE_GLOBAL_CONV(wxMBConvStrictUTF8, wxConvUTF8, ;);
 WX_DEFINE_GLOBAL_CONV(wxMBConvUTF7, wxConvUTF7, ;);
+WX_DEFINE_GLOBAL_CONV(wxWhateverWorksConv, wxConvWhateverWorks, ;);
 
 WX_DEFINE_GLOBAL_CONV(wxCSConv, wxConvLocal, (wxFONTENCODING_SYSTEM));
 WX_DEFINE_GLOBAL_CONV(wxCSConv, wxConvISO8859_1, (wxFONTENCODING_ISO8859_1));
@@ -3387,5 +3393,5 @@ WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName =
 #ifdef __DARWIN__
                                     &wxConvMacUTF8DObj;
 #else // !__DARWIN__
-                                    wxGet_wxConvLibcPtr();
+                                    wxGet_wxConvWhateverWorksPtr();
 #endif // __DARWIN__/!__DARWIN__
