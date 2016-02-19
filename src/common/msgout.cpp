@@ -148,13 +148,8 @@ wxString wxMessageOutputStderr::AppendLineFeedIfNeeded(const wxString& str)
 void wxMessageOutputStderr::Output(const wxString& str)
 {
     const wxString strWithLF = AppendLineFeedIfNeeded(str);
-    const wxWX2MBbuf buf = strWithLF.mb_str();
 
-    if ( buf )
-        fprintf(m_fp, "%s", (const char*) buf);
-    else // print at least something
-        fprintf(m_fp, "%s", (const char*) strWithLF.ToAscii());
-
+    fprintf(m_fp, "%s", (const char*) strWithLF.mb_str(wxConvWhateverWorks));
     fflush(m_fp);
 }
 
