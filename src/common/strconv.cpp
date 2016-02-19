@@ -3320,36 +3320,6 @@ wxWhateverWorksConv::FromWChar(char *dst, size_t dstLen,
     return rc;
 }
 
-#if wxUSE_UNICODE
-
-wxWCharBuffer wxSafeConvertMB2WX(const char *s)
-{
-    if ( !s )
-        return wxWCharBuffer();
-
-    wxWCharBuffer wbuf(wxConvLibc.cMB2WX(s));
-    if ( !wbuf )
-        wbuf = wxConvUTF8.cMB2WX(s);
-    if ( !wbuf )
-        wbuf = wxConvISO8859_1.cMB2WX(s);
-
-    return wbuf;
-}
-
-wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws)
-{
-    if ( !ws )
-        return wxCharBuffer();
-
-    wxCharBuffer buf(wxConvLibc.cWX2MB(ws));
-    if ( !buf )
-        buf = wxConvUTF8.cWX2MB(ws);
-
-    return buf;
-}
-
-#endif // wxUSE_UNICODE
-
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------

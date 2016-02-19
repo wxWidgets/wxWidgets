@@ -687,12 +687,15 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI;
     // function which would crash if we passed NULL to it), so these functions
     // always return a valid pointer if their argument is non-NULL
 
-    // this function safety is achieved by trying wxConvLibc first, wxConvUTF8
-    // next if it fails and, finally, wxConvISO8859_1 which always succeeds
-    extern WXDLLIMPEXP_BASE wxWCharBuffer wxSafeConvertMB2WX(const char *s);
+    inline wxWCharBuffer wxSafeConvertMB2WX(const char *s)
+    {
+        return wxConvWhateverWorks.cMB2WC(s);
+    }
 
-    // this function uses wxConvLibc and wxConvUTF8 if it fails
-    extern WXDLLIMPEXP_BASE wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws);
+    inline wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws)
+    {
+        return wxConvWhateverWorks.cWC2MB(ws);
+    }
 #else // ANSI
     // no conversions to do
     #define wxConvertWX2MB(s)   (s)
