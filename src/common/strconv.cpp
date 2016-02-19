@@ -3286,6 +3286,40 @@ bool wxCSConv::IsUTF8() const
 #endif
 
 
+// ============================================================================
+// wxWhateverWorksConv
+// ============================================================================
+
+size_t
+wxWhateverWorksConv::ToWChar(wchar_t *dst, size_t dstLen,
+                             const char *src, size_t srcLen) const
+{
+    size_t rc = wxConvUTF8.ToWChar(dst, dstLen, src, srcLen);
+    if ( rc != wxCONV_FAILED )
+        return rc;
+
+    rc = wxConvLibc.ToWChar(dst, dstLen, src, srcLen);
+    if ( rc != wxCONV_FAILED )
+        return rc;
+
+    rc = wxConvISO8859_1.ToWChar(dst, dstLen, src, srcLen);
+
+    return rc;
+}
+
+size_t
+wxWhateverWorksConv::FromWChar(char *dst, size_t dstLen,
+                               const wchar_t *src, size_t srcLen) const
+{
+    size_t rc = wxConvLibc.FromWChar(dst, dstLen, src, srcLen);
+    if ( rc != wxCONV_FAILED )
+        return rc;
+
+    rc = wxConvUTF8.FromWChar(dst, dstLen, src, srcLen);
+
+    return rc;
+}
+
 #if wxUSE_UNICODE
 
 wxWCharBuffer wxSafeConvertMB2WX(const char *s)
@@ -3330,6 +3364,7 @@ wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws)
 #undef wxConvLibc
 #undef wxConvUTF8
 #undef wxConvUTF7
+#undef wxConvWhateverWorks
 #undef wxConvLocal
 #undef wxConvISO8859_1
 
@@ -3369,6 +3404,7 @@ wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws)
 //     empty statement (and hope that no compilers warns about this)
 WX_DEFINE_GLOBAL_CONV(wxMBConvStrictUTF8, wxConvUTF8, ;);
 WX_DEFINE_GLOBAL_CONV(wxMBConvUTF7, wxConvUTF7, ;);
+WX_DEFINE_GLOBAL_CONV(wxWhateverWorksConv, wxConvWhateverWorks, ;);
 
 WX_DEFINE_GLOBAL_CONV(wxCSConv, wxConvLocal, (wxFONTENCODING_SYSTEM));
 WX_DEFINE_GLOBAL_CONV(wxCSConv, wxConvISO8859_1, (wxFONTENCODING_ISO8859_1));
@@ -3387,5 +3423,5 @@ WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName =
 #ifdef __DARWIN__
                                     &wxConvMacUTF8DObj;
 #else // !__DARWIN__
-                                    wxGet_wxConvLibcPtr();
+                                    wxGet_wxConvWhateverWorksPtr();
 #endif // __DARWIN__/!__DARWIN__
