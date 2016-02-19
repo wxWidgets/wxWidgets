@@ -116,6 +116,16 @@ void FileTestCase::DoRoundTripTest(const wxMBConv& conv)
         wxString dataReadBack(buf, conv, len);
         CPPUNIT_ASSERT_EQUAL( data, dataReadBack );
     }
+
+    {
+        wxFile fin(tf.GetName(), wxFile::read);
+        CPPUNIT_ASSERT( fin.IsOpened() );
+
+        wxString dataReadBack;
+        CPPUNIT_ASSERT( fin.ReadAll(&dataReadBack, conv) );
+
+        CPPUNIT_ASSERT_EQUAL( data, dataReadBack );
+    }
 }
 
 #endif // wxUSE_UNICODE
