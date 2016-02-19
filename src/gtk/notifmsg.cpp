@@ -288,7 +288,7 @@ public:
         CreateOrUpdateNotification();
     }
 
-    virtual bool AddAction(wxWindowID actionid, const wxString &label)
+    virtual bool AddAction(wxWindowID actionid, const wxString &label) wxOVERRIDE
     {
         if ( !CreateOrUpdateNotification() )
             return false;
