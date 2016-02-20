@@ -11,6 +11,7 @@
 #include <ctype.h>
 #include <assert.h>
 
+#include <cmath>
 #include <string>
 #include <vector>
 #include <map>
@@ -5841,9 +5842,9 @@ void Editor::GoToLine(int lineNo) {
 }
 
 static bool Close(Point pt1, Point pt2) {
-	if (abs(pt1.x - pt2.x) > 3)
+	if (std::abs(pt1.x - pt2.x) > 3)
 		return false;
-	if (abs(pt1.y - pt2.y) > 3)
+	if (std::abs(pt1.y - pt2.y) > 3)
 		return false;
 	return true;
 }
