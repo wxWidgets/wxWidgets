@@ -36,7 +36,10 @@
     #include "wx/settings.h"
 #endif
 
+#include <windowsx.h> // needed by GET_X_LPARAM and GET_Y_LPARAM macros
+
 #include "wx/msw/private.h"
+#include "wx/msw/winundef.h"
 
 #include "wx/imaglist.h"
 #include "wx/msw/dragimag.h"

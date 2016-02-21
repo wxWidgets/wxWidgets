@@ -39,6 +39,9 @@
 #include "wx/sysopt.h"
 
 #include "wx/msw/uxtheme.h"
+
+#include <windowsx.h> // needed by GET_X_LPARAM and GET_Y_LPARAM macros
+
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h"
 #include "wx/msw/dc.h"
