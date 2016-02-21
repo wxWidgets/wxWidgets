@@ -1079,10 +1079,6 @@ wxString wxGetOsDescription()
                 case 5:
                     switch ( info.dwMinorVersion )
                     {
-                        case 0:
-                            str = _("Windows 2000");
-                            break;
-
                         case 2:
                             // we can't distinguish between XP 64 and 2003
                             // as they both are 5.2, so examine the product
@@ -1138,7 +1134,7 @@ wxString wxGetOsDescription()
 
             if ( str.empty() )
             {
-                str.Printf(_("Windows NT %lu.%lu"),
+                str.Printf(_("Windows %lu.%lu"),
                            info.dwMajorVersion,
                            info.dwMinorVersion);
             }
@@ -1207,11 +1203,6 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
         {
             case VER_PLATFORM_WIN32_NT:
                 s_version.os = wxOS_WINDOWS_NT;
-                break;
-
-            case VER_PLATFORM_WIN32_WINDOWS:
-                s_version.os = wxOS_WINDOWS_9X;
-                break;
         }
 
         s_version.verMaj = info.dwMajorVersion;
