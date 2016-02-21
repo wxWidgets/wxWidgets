@@ -21,6 +21,7 @@
 
 #include <sys/types.h>
 
+#include "wx/thread.h"
 #include "wx/private/fdiodispatcher.h"
 
 // helper class storing all the select() fd sets
@@ -107,6 +108,10 @@ private:
     // specified timeout
     int DoSelect(wxSelectSets& sets, int timeout) const;
 
+
+#if wxUSE_THREADS
+    wxCriticalSection m_cs;
+#endif // wxUSE_THREADS
 
     // the select sets containing all the registered fds
     wxSelectSets m_sets;
