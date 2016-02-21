@@ -625,7 +625,6 @@ ac_includes_default="\
 enable_option_checking=no
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-CPPUNIT_CONFIG
 DLLTOOL
 GCC
 MACSETFILE
@@ -1352,8 +1351,6 @@ with_sdl_exec_prefix
 enable_sdltest
 enable_dependency_tracking
 enable_precomp_headers
-with_cppunit_prefix
-with_cppunit_exec_prefix
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1398,7 +1395,9 @@ WEBKIT_LIBS
 CAIRO_CFLAGS
 CAIRO_LIBS
 GST_CFLAGS
-GST_LIBS'
+GST_LIBS
+CPPUNIT_CFLAGS
+CPPUNIT_LIBS'
 ac_subdirs_all='src/tiff
 src/expat'
 
@@ -2325,8 +2324,6 @@ Optional Packages:
   --with-libiconv-prefix=DIR  search for libiconv in DIR/include and DIR/lib
   --with-sdl-prefix=PFX   Prefix where SDL is installed (optional)
   --with-sdl-exec-prefix=PFX Exec prefix where SDL is installed (optional)
-  --with-cppunit-prefix=PFX   Prefix where CppUnit is installed (optional)
-  --with-cppunit-exec-prefix=PFX  Exec prefix where CppUnit is installed (optional)
 
 Some influential environment variables:
   CC          C compiler command
@@ -2390,6 +2387,10 @@ Some influential environment variables:
   CAIRO_LIBS  linker flags for CAIRO, overriding pkg-config
   GST_CFLAGS  C compiler flags for GST, overriding pkg-config
   GST_LIBS    linker flags for GST, overriding pkg-config
+  CPPUNIT_CFLAGS
+              C compiler flags for CPPUNIT, overriding pkg-config
+  CPPUNIT_LIBS
+              linker flags for CPPUNIT, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -39060,135 +39061,95 @@ else
             SUBDIRS="samples utils"
 fi
 
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CPPUNIT" >&5
+$as_echo_n "checking for CPPUNIT... " >&6; }
 
-
-# Check whether --with-cppunit-prefix was given.
-if test "${with_cppunit_prefix+set}" = set; then :
-  withval=$with_cppunit_prefix; cppunit_config_prefix="$withval"
-else
-  cppunit_config_prefix=""
-fi
-
-
-# Check whether --with-cppunit-exec-prefix was given.
-if test "${with_cppunit_exec_prefix+set}" = set; then :
-  withval=$with_cppunit_exec_prefix; cppunit_config_exec_prefix="$withval"
-else
-  cppunit_config_exec_prefix=""
-fi
-
-
-  if test x$cppunit_config_exec_prefix != x ; then
-     cppunit_config_args="$cppunit_config_args --exec-prefix=$cppunit_config_exec_prefix"
-     if test x${CPPUNIT_CONFIG+set} != xset ; then
-        CPPUNIT_CONFIG=$cppunit_config_exec_prefix/bin/cppunit-config
-     fi
-  fi
-  if test x$cppunit_config_prefix != x ; then
-     cppunit_config_args="$cppunit_config_args --prefix=$cppunit_config_prefix"
-     if test x${CPPUNIT_CONFIG+set} != xset ; then
-        CPPUNIT_CONFIG=$cppunit_config_prefix/bin/cppunit-config
-     fi
-  fi
-
-  # Extract the first word of "cppunit-config", so it can be a program name with args.
-set dummy cppunit-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_CPPUNIT_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $CPPUNIT_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_CPPUNIT_CONFIG="$CPPUNIT_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_CPPUNIT_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  test -z "$ac_cv_path_CPPUNIT_CONFIG" && ac_cv_path_CPPUNIT_CONFIG="no"
-  ;;
-esac
-fi
-CPPUNIT_CONFIG=$ac_cv_path_CPPUNIT_CONFIG
-if test -n "$CPPUNIT_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CPPUNIT_CONFIG" >&5
-$as_echo "$CPPUNIT_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-  cppunit_version_min=1.8.0
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Cppunit - version >= $cppunit_version_min" >&5
-$as_echo_n "checking for Cppunit - version >= $cppunit_version_min... " >&6; }
-  no_cppunit=""
-  if test "$CPPUNIT_CONFIG" = "no" ; then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-    no_cppunit=yes
-  else
-    CPPUNIT_CFLAGS=`$CPPUNIT_CONFIG --cflags`
-    CPPUNIT_LIBS=`$CPPUNIT_CONFIG --libs`
-    cppunit_version=`$CPPUNIT_CONFIG --version`
-
-    cppunit_major_version=`echo $cppunit_version | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
-    cppunit_minor_version=`echo $cppunit_version | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
-    cppunit_micro_version=`echo $cppunit_version | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
-
-    cppunit_major_min=`echo $cppunit_version_min | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
-    cppunit_minor_min=`echo $cppunit_version_min | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
-    cppunit_micro_min=`echo $cppunit_version_min | \
-           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
-
-    cppunit_version_proper=`expr \
-        $cppunit_major_version \> $cppunit_major_min \| \
-        $cppunit_major_version \= $cppunit_major_min \& \
-        $cppunit_minor_version \> $cppunit_minor_min \| \
-        $cppunit_major_version \= $cppunit_major_min \& \
-        $cppunit_minor_version \= $cppunit_minor_min \& \
-        $cppunit_micro_version \>= $cppunit_micro_min `
-
-    if test "$cppunit_version_proper" = "1" ; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: $cppunit_major_version.$cppunit_minor_version.$cppunit_micro_version" >&5
-$as_echo "$cppunit_major_version.$cppunit_minor_version.$cppunit_micro_version" >&6; }
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CPPUNIT_CFLAGS"; then
+        pkg_cv_CPPUNIT_CFLAGS="$CPPUNIT_CFLAGS"
     else
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-      no_cppunit=yes
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cppunit >= 1.8.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cppunit >= 1.8.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CPPUNIT_CFLAGS=`$PKG_CONFIG --cflags "cppunit >= 1.8.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
     fi
-  fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CPPUNIT_LIBS"; then
+        pkg_cv_CPPUNIT_LIBS="$CPPUNIT_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cppunit >= 1.8.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cppunit >= 1.8.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CPPUNIT_LIBS=`$PKG_CONFIG --libs "cppunit >= 1.8.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
 
-  if test "x$no_cppunit" = x ; then
-     SUBDIRS="$SUBDIRS tests"
-  else
-     CPPUNIT_CFLAGS=""
-     CPPUNIT_LIBS=""
-     :
-  fi
 
 
+if test $pkg_failed = yes; then
 
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CPPUNIT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cppunit >= 1.8.0"`
+        else
+	        CPPUNIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cppunit >= 1.8.0"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CPPUNIT_PKG_ERRORS" >&5
 
+	as_fn_error $? "Package requirements (cppunit >= 1.8.0) were not met:
+
+$CPPUNIT_PKG_ERRORS
+
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+Alternatively, you may set the environment variables CPPUNIT_CFLAGS
+and CPPUNIT_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
+" "$LINENO" 5
+elif test $pkg_failed = untried; then
+	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
+
+Alternatively, you may set the environment variables CPPUNIT_CFLAGS
+and CPPUNIT_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
+
+To get pkg-config, see <http://www.freedesktop.org/software/pkgconfig>.
+See \`config.log' for more details" "$LINENO" 5; }
+else
+	CPPUNIT_CFLAGS=$pkg_cv_CPPUNIT_CFLAGS
+	CPPUNIT_LIBS=$pkg_cv_CPPUNIT_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	SUBDIRS="$SUBDIRS tests"
+fi
 
 for subdir in $SUBDIRS; do
     if test -d ${srcdir}/${subdir} ; then
