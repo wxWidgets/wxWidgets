@@ -486,7 +486,6 @@ bool wxRegKey::Create(bool bOkIfExists)
 
   HKEY tmpKey;
   DWORD disposition;
-  // Minimum supported OS for RegCreateKeyEx: Win 95, Win NT 3.1, Win CE 1.0
   m_dwLastError = RegCreateKeyEx((HKEY) m_hRootKey, m_strKey.t_str(),
       0,    // reserved and must be 0
       NULL, // The user-defined class type of this key.
