@@ -48,7 +48,6 @@ enum
 #define wxNB_FIXEDWIDTH       0x0100
 #define wxNB_MULTILINE        0x0200
 #define wxNB_NOPAGETHEME      0x0400
-#define wxNB_FLAT             0x0800
 
 
 typedef wxWindow wxNotebookPage;  // so far, any window can be a page
