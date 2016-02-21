@@ -900,10 +900,6 @@ inline wxString wxGetFullModuleName()
 // return the run-time version of the OS in a format similar to
 // WINVER/_WIN32_WINNT compile-time macros:
 //
-//      0x0300      Windows NT 3.51
-//      0x0400      Windows 95, NT4
-//      0x0410      Windows 98
-//      0x0500      Windows ME, 2000
 //      0x0501      Windows XP, 2003
 //      0x0502      Windows XP SP2, 2003 SP1
 //      0x0600      Windows Vista, 2008
@@ -1095,7 +1091,6 @@ extern WXDLLIMPEXP_CORE wxWindow *wxGetWindowFromHWND(WXHWND hwnd);
 // Get the size of an icon
 extern WXDLLIMPEXP_CORE wxSize wxGetHiconSize(HICON hicon);
 
-// Lines are drawn differently for WinCE and regular WIN32
 WXDLLIMPEXP_CORE void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2);
 
 // fill the client rect of the given window on the provided dc using this brush

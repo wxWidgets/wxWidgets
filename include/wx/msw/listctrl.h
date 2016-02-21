@@ -58,8 +58,7 @@ class wxMSWListItemData;
     which item. Each image in an image list can contain a mask, and can be made out
     of either a bitmap, two bitmaps or an icon. See ImagList.h for more details.
 
-    Notifications are passed via the wxWidgets 2.0 event system, or using virtual
-    functions in wxWidgets 1.66.
+    Notifications are passed via the event system.
 
     See the sample wxListCtrl app for API usage.
 
@@ -67,9 +66,6 @@ class wxMSWListItemData;
      - addition of further convenience functions
        to avoid use of wxListItem in some functions
      - state/overlay images: probably not needed.
-     - in Win95, you can be called back to supply other information
-       besides text, such as state information. This saves no memory
-       and is probably superfluous to requirements.
      - testing of whole API, extending current sample.
 
 
@@ -251,12 +247,6 @@ public:
     wxImageList *GetImageList(int which) const;
 
     // Sets the image list
-    // N.B. There's a quirk in the Win95 list view implementation.
-    // If in wxLC_LIST mode, it'll *still* display images by the labels if
-    // there's a small-icon image list set for the control - even though you
-    // haven't specified wxLIST_MASK_IMAGE when inserting.
-    // So you have to set a NULL small-icon image list to be sure that
-    // the wxLC_LIST mode works without icons. Of course, you may want icons...
     void SetImageList(wxImageList *imageList, int which);
     void AssignImageList(wxImageList *imageList, int which);
 

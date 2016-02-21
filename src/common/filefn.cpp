@@ -1157,7 +1157,7 @@ bool wxMkdir(const wxString& dir, int perm)
 #if defined(__WXMAC__) && !defined(__UNIX__)
     if ( mkdir(dir.fn_str(), 0) != 0 )
 
-    // assume mkdir() has 2 args on non Windows-OS/2 platforms and on Windows too
+    // assume mkdir() has 2 args on all platforms
     // for the GNU compiler
 #elif (!defined(__WINDOWS__)) || \
       (defined(__GNUWIN32__) && !defined(__MINGW32__)) ||                \
@@ -1169,7 +1169,7 @@ bool wxMkdir(const wxString& dir, int perm)
   #else
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
   #endif
-#else  // !MSW and !OS/2 VAC++
+#else  // MSW and VC++
     wxUnusedVar(perm);
     if ( wxMkDir(dir.fn_str()) != 0 )
 #endif // !MSW/MSW
@@ -1617,8 +1617,7 @@ int WXDLLIMPEXP_BASE wxParseCommonDialogsFilter(const wxString& filterStr,
 static bool wxCheckWin32Permission(const wxString& path, DWORD access)
 {
     // quoting the MSDN: "To obtain a handle to a directory, call the
-    // CreateFile function with the FILE_FLAG_BACKUP_SEMANTICS flag", but this
-    // doesn't work under Win9x/ME but then it's not needed there anyhow
+    // CreateFile function with the FILE_FLAG_BACKUP_SEMANTICS flag"
     const DWORD dwAttr = ::GetFileAttributes(path.t_str());
     if ( dwAttr == INVALID_FILE_ATTRIBUTES )
     {
