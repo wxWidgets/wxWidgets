@@ -7387,7 +7387,7 @@ if test "$wxUSE_MAC" = 1 ; then
             dnl linking with it in 64 bit builds results in a warning because
             dnl the framework is not available in 64 bits itself. So make an
             dnl effort to avoid using it unnecessarily.
-            if "$wxUSE_MEDIACTRL" = "yes"; then
+            if test "$wxUSE_MEDIACTRL" = "yes"; then
 
             if test "$cross_compiling" != "no"; then
                 dnl The check below doesn't work well when cross-compiling
