@@ -1085,13 +1085,13 @@ wxString wxGetOsDescription()
                             // type to resolve this ambiguity
                             if ( wxIsWindowsServer() == 1 )
                             {
-                                str = _("Windows Server 2003");
+                                str = "Windows Server 2003";
                                 break;
                             }
                             //else: must be XP, fall through
 
                         case 1:
-                            str = _("Windows XP");
+                            str = "Windows XP";
                             break;
                     }
                     break;
@@ -1101,40 +1101,40 @@ wxString wxGetOsDescription()
                     {
                         case 0:
                             str = wxIsWindowsServer() == 1
-                                    ? _("Windows Server 2008")
-                                    : _("Windows Vista");
+                                    ? "Windows Server 2008"
+                                    : "Windows Vista";
                             break;
 
                         case 1:
                             str = wxIsWindowsServer() == 1
-                                    ? _("Windows Server 2008 R2")
-                                    : _("Windows 7");
+                                    ? "Windows Server 2008 R2"
+                                    : "Windows 7";
                             break;
 
                         case 2:
                             str = wxIsWindowsServer() == 1
-                                    ? _("Windows Server 2012")
-                                    : _("Windows 8");
+                                    ? "Windows Server 2012"
+                                    : "Windows 8";
                             break;
 
                         case 3:
                             str = wxIsWindowsServer() == 1
-                                    ? _("Windows Server 2012 R2")
-                                    : _("Windows 8.1");
+                                    ? "Windows Server 2012 R2"
+                                    : "Windows 8.1";
                             break;
                     }
                     break;
 
                 case 10:
                     str = wxIsWindowsServer() == 1
-                            ? _("Windows Server 2016")
-                            : _("Windows 10");
+                            ? "Windows Server 2016"
+                            : "Windows 10";
                     break;
             }
 
             if ( str.empty() )
             {
-                str.Printf(_("Windows %lu.%lu"),
+                str.Printf("Windows %lu.%lu",
                            info.dwMajorVersion,
                            info.dwMinorVersion);
             }
