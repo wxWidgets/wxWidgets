@@ -211,6 +211,7 @@ wxMSW:
 - Notify shell about the changes done by wxMimeTypesManager (Maarten Bent).
 - Fix wxPrintf() and friends when using MinGW with ANSI stdio option.
 - Fix strike-through support in wxFont with GDI+ (David Vanderson).
+- Fix UTF-32 conversion for non-BMP characters (ARATA Mizuki).
 
 wxOSX/Cocoa:
 

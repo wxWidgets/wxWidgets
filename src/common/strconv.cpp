@@ -1887,18 +1887,6 @@ wxMBConvUTF32straight::FromWChar(char *dst, size_t dstLen,
     if ( srcLen == wxNO_LEN )
         srcLen = wxWcslen(src) + 1;
 
-    if ( !dst )
-    {
-        // optimization: return maximal space which could be needed for this
-        // string instead of the exact amount which could be less if there are
-        // any surrogates in the input
-        //
-        // we consider that surrogates are rare enough to make it worthwhile to
-        // avoid running the loop below at the cost of slightly extra memory
-        // consumption
-        return srcLen * BYTES_PER_CHAR;
-    }
-
     wxUint32 *outBuff = reinterpret_cast<wxUint32 *>(dst);
     size_t outLen = 0;
     for ( const wchar_t * const srcEnd = src + srcLen; src < srcEnd; )
@@ -1909,10 +1897,13 @@ wxMBConvUTF32straight::FromWChar(char *dst, size_t dstLen,
 
         outLen += BYTES_PER_CHAR;
 
-        if ( outLen > dstLen )
-            return wxCONV_FAILED;
+        if ( outBuff )
+        {
+            if ( outLen > dstLen )
+                return wxCONV_FAILED;
 
-        *outBuff++ = ch;
+            *outBuff++ = ch;
+        }
     }
 
     return outLen;
@@ -1965,18 +1956,6 @@ wxMBConvUTF32swap::FromWChar(char *dst, size_t dstLen,
     if ( srcLen == wxNO_LEN )
         srcLen = wxWcslen(src) + 1;
 
-    if ( !dst )
-    {
-        // optimization: return maximal space which could be needed for this
-        // string instead of the exact amount which could be less if there are
-        // any surrogates in the input
-        //
-        // we consider that surrogates are rare enough to make it worthwhile to
-        // avoid running the loop below at the cost of slightly extra memory
-        // consumption
-        return srcLen*BYTES_PER_CHAR;
-    }
-
     wxUint32 *outBuff = reinterpret_cast<wxUint32 *>(dst);
     size_t outLen = 0;
     for ( const wchar_t * const srcEnd = src + srcLen; src < srcEnd; )
@@ -1987,10 +1966,13 @@ wxMBConvUTF32swap::FromWChar(char *dst, size_t dstLen,
 
         outLen += BYTES_PER_CHAR;
 
-        if ( outLen > dstLen )
-            return wxCONV_FAILED;
+        if ( outBuff )
+        {
+            if ( outLen > dstLen )
+                return wxCONV_FAILED;
 
-        *outBuff++ = wxUINT32_SWAP_ALWAYS(ch);
+            *outBuff++ = wxUINT32_SWAP_ALWAYS(ch);
+        }
     }
 
     return outLen;

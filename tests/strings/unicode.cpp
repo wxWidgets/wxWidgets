@@ -403,6 +403,19 @@ void UnicodeTestCase::ConversionUTF16()
     wxMBConvUTF16BE().cMB2WC("\xd8\x03\xdc\x01\0" /* OLD TURKIC LETTER YENISEI A */, wxNO_LEN, &len);
     CPPUNIT_ASSERT_EQUAL( 1, len );
 #endif // UTF-32 internal representation
+
+#if SIZEOF_WCHAR_T == 2
+    // Verify that the length of UTF-32 string is correct even when converting
+    // to it from a longer UTF-16 string with surrogates.
+
+    // Construct CAT FACE U+1F431 without using \U which is not supported by
+    // ancient compilers and without using \u with surrogates which is
+    // (correctly) flagged as an error by the newer ones.
+    wchar_t ws[2];
+    ws[0] = 0xd83d;
+    ws[1] = 0xdc31;
+    CPPUNIT_ASSERT_EQUAL( 4, wxMBConvUTF32BE().FromWChar(NULL, 0, ws, 2) );
+#endif // UTF-16 internal representation
 }
 
 void UnicodeTestCase::ConversionUTF32()
