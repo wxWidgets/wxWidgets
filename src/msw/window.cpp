@@ -296,8 +296,7 @@ static void EnsureParentHasControlParentStyle(wxWindow *parent)
 
 // GetCursorPos can return an error, so use this function
 // instead.
-// Error originally observed with WinCE, but later using Remote Desktop
-// to connect to XP.
+// Error observed when using Remote Desktop to connect to XP.
 void wxGetCursorPosMSW(POINT* pt)
 {
     if (!GetCursorPos(pt))
