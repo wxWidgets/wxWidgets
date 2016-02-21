@@ -49,7 +49,7 @@
 typedef unsigned char *RegString;
 typedef BYTE* RegBinary;
 
-#ifndef HKEY_PERFORMANCE_DATA
+#ifndef HKEY_PERFORMANCE_DATA // (Obsolete under XP and later)
     #define HKEY_PERFORMANCE_DATA ((HKEY)0x80000004)
 #endif
 
@@ -57,7 +57,7 @@ typedef BYTE* RegBinary;
     #define HKEY_CURRENT_CONFIG ((HKEY)0x80000005)
 #endif
 
-#ifndef HKEY_DYN_DATA
+#ifndef HKEY_DYN_DATA // (Obsolete under XP and later)
     #define HKEY_DYN_DATA ((HKEY)0x80000006)
 #endif
 
@@ -83,9 +83,9 @@ aStdKeys[] =
   { HKEY_CURRENT_USER,      wxT("HKEY_CURRENT_USER"),      wxT("HKCU") },
   { HKEY_LOCAL_MACHINE,     wxT("HKEY_LOCAL_MACHINE"),     wxT("HKLM") },
   { HKEY_USERS,             wxT("HKEY_USERS"),             wxT("HKU")  }, // short name?
-  { HKEY_PERFORMANCE_DATA,  wxT("HKEY_PERFORMANCE_DATA"),  wxT("HKPD") },
+  { HKEY_PERFORMANCE_DATA,  wxT("HKEY_PERFORMANCE_DATA"),  wxT("HKPD") }, // (Obsolete under XP and later)
   { HKEY_CURRENT_CONFIG,    wxT("HKEY_CURRENT_CONFIG"),    wxT("HKCC") },
-  { HKEY_DYN_DATA,          wxT("HKEY_DYN_DATA"),          wxT("HKDD") }, // short name?
+  { HKEY_DYN_DATA,          wxT("HKEY_DYN_DATA"),          wxT("HKDD") }, // (Obsolete under XP and later)
 };
 
 // the registry name separator (perhaps one day MS will change it to '/' ;-)
