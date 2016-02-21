@@ -1300,8 +1300,6 @@ It uses wxDCBase::CalculateEllipticPoints(...) and wxDCBase::Rotate(...),
 which are also new.
 
 All methods are generic, so they can be implemented in wxDCBase.
-DoDrawEllipticArcRot(...) is virtual, so it can be called from deeper
-methods like (WinCE) wxDC::DoDrawArc(...).
 
 CalculateEllipticPoints(...) fills a given list of wxPoints with some points
 of an elliptic arc. The algorithm is pixel-based: In every row (in flat
