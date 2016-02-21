@@ -176,10 +176,9 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject);
         //  (a) if hdc is specified, the caller explicitly wants DDB
         //  (b) otherwise, create a DIB if depth >= 24 (we don't support 16bpp
         //      or less DIBs anyhow)
-        //  (c) finally, create DIBs under Win9x even if the depth hasn't been
+        //  (c) finally, create DIBs under MSW even if the depth hasn't been
         //      explicitly specified but the current display depth is 24 or
-        //      more and the image is "big", i.e. > 16Mb which is the
-        //      theoretical limit for DDBs under Win9x
+        //      more and the image is "big", i.e. > 16Mb
         //
         // consequences (all of which seem to make sense):
         //

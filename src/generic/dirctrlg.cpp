@@ -95,7 +95,7 @@ wxDEFINE_EVENT( wxEVT_DIRCTRL_SELECTIONCHANGED, wxTreeEvent );
 wxDEFINE_EVENT( wxEVT_DIRCTRL_FILEACTIVATED, wxTreeEvent );
 
 // ----------------------------------------------------------------------------
-// wxGetAvailableDrives, for WINDOWS, DOS, MAC, UNIX (returns "/")
+// wxGetAvailableDrives, for WINDOWS, OSX, UNIX (returns "/")
 // ----------------------------------------------------------------------------
 
 size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayInt &icon_ids)

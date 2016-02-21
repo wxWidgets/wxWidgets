@@ -260,9 +260,9 @@ wxVideoMode wxDisplayMSW::GetCurrentMode() const
 {
     wxVideoMode mode;
 
-    // The first parameter of EnumDisplaySettings() must be NULL under Win95
-    // according to MSDN.  The version of GetName() we implement for Win95
-    // returns an empty string.
+    // Having NULL as the first parameter of EnumDisplaySettings() specifies
+    // the current display device on the computer on which the calling
+    // thread is running, according to MSDN.
     const wxString name = GetName();
     const wxChar * const deviceName = name.empty()
                                           ? (const wxChar*)NULL

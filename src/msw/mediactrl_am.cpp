@@ -8,31 +8,22 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// TODO: Actually test the CE IWMP....
 // TODO: Actually test HTTP proxies...
 
 //-----------------Introduction----------------------------------------------
-// This is the media backend for Windows Media Player 6 and ActiveMovie,
-// as well as PocketPC 2000, Windows Media Player Mobile 7 and 8.
+// This is the media backend for Windows Media Player 6 and ActiveMovie.
 //
 // We use a combination of the WMP 6 IMediaPlayer interface as well as the
-// ActiveMovie interface IActiveMovie that even exists on Windows 3. For
-// mobile systems we switch to IWMP for WMP mobile 7 and 8 and possibly
-// earlier. We just use ifdefs for differentiating between IWMP and
-// IActiveMovie/IMediaPlayer as the IWMP and IMediaPlayer are virtually
-// identical with a few minor exceptions.
+// ActiveMovie interface IActiveMovie.
 //
 // For supporting HTTP proxies and such we query the media player
-// interface (IActiveMovie/IWMP) for the INSPlay (NetShow) interface.
+// interface (IActiveMovie) for the INSPlay (NetShow) interface.
 //
-// The IMediaPlayer/IActiveMovie/IWMP are rather clean and straightforward
+// The IMediaPlayer/IActiveMovie are rather clean and straightforward
 // interfaces that are fairly simplistic.
 //
 // Docs for IMediaPlayer are at
 // http://msdn.microsoft.com/library/en-us/wmp6sdk/htm/microsoftwindowsmediaplayercontrolversion64sdk.asp
-//
-// Docs for IWMP are at
-// http://msdn.microsoft.com/library/en-us/wcewmp/html/_wcesdk_asx_wmp_control_reference.asp
 
 //===========================================================================
 //  DECLARATIONS
@@ -86,14 +77,6 @@
 //  argument to make it generate stubs (a .h & .c file), then clean up the
 //  generated interfaces I want with the STDMETHOD wrappers and then put them
 //  into mediactrl.cpp.
-//
-//  According to the MSDN docs, IMediaPlayer requires Windows 98 SE
-//  or greater.  NetShow is available on Windows 3.1 and I'm guessing
-//  IActiveMovie is too.  IMediaPlayer is essentially the Windows Media
-//  Player 6.4 SDK.
-//
-//  IWMP is from PlayerOCX.idl on PocketPC 2000, which uses CLSID_MediaPlayer
-//  as well as the main windows line.
 //
 //  Some of these are not used but are kept here for future reference anyway
 //---------------------------------------------------------------------------
