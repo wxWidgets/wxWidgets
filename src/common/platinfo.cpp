@@ -235,10 +235,6 @@ wxString wxPlatformInfo::GetOperatingSystemFamilyName(wxOperatingSystemId os)
         string = wxT("Windows");
     else if ( os & wxOS_UNIX )
         string = wxT("Unix");
-    else if ( os == wxOS_DOS )
-        string = wxT("DOS");
-    else if ( os == wxOS_OS2 )
-        string = wxT("OS/2");
 
     return string;
 }
