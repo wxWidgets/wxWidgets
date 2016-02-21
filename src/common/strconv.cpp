@@ -122,18 +122,12 @@ static size_t decode_utf16(const wxUint16* input, wxUint32& output)
     }
 }
 
-#ifdef WC_UTF16
-    typedef wchar_t wxDecodeSurrogate_t;
-#else // !WC_UTF16
-    typedef wxUint16 wxDecodeSurrogate_t;
-#endif // WC_UTF16/!WC_UTF16
-
 // returns the next UTF-32 character from the wchar_t buffer and advances the
 // pointer to the character after this one
 //
 // if an invalid character is found, *pSrc is set to NULL, the caller must
 // check for this
-static wxUint32 wxDecodeSurrogate(const wxDecodeSurrogate_t **pSrc)
+static wxUint32 wxDecodeSurrogate(const wxChar16 **pSrc)
 {
     wxUint32 out;
     const size_t
