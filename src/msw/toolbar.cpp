@@ -2042,11 +2042,7 @@ WXLRESULT wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam
 
 #ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
         case WM_PAINT:
-            // refreshing the controls in the toolbar inside a composite window
-            // results in an endless stream of WM_PAINT messages -- and seems
-            // to be unnecessary anyhow as everything works just fine without
-            // any special workarounds in this case
-            if ( !IsDoubleBuffered() && HandlePaint(wParam, lParam) )
+            if ( HandlePaint(wParam, lParam) )
                 return 0;
             break;
 #endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
