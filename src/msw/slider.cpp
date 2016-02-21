@@ -431,6 +431,8 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
             labelOffset = longestLabelWidth + HGAP;
         }
 
+        int labelHeightUsed = 0 ;
+
         if ( HasFlag(wxSL_MIN_MAX_LABELS) )
         {
             if ( HasFlag(wxSL_INVERSE) )
@@ -446,6 +448,8 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
                 holdBottomX,
                 y + height - labelHeight,
                 maxLabelWidth, labelHeight);
+
+            labelHeightUsed = labelHeight ;
         }
 
         if ( HasFlag(wxSL_VALUE_LABEL) )
@@ -459,9 +463,9 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
         // position the slider itself along the left/right edge
         wxSliderBase::DoMoveWindow(
             x + labelOffset,
-            y + labelHeight,
+            y + labelHeightUsed,
             THUMB + tickOffset + HGAP,
-            height - (labelHeight * 2));
+            height - (labelHeightUsed * 2));
     }
     else // horizontal
     {
@@ -473,6 +477,8 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
             (longestLabelWidth / 2);
 
         int ySlider = y;
+        int minLabelWidthUsed = 0 ;
+        int maxLabelWidthUsed = 0 ;
 
         if ( HasFlag(wxSL_VALUE_LABEL) )
         {
@@ -498,13 +504,16 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
                 x + width - maxLabelWidth,
                 yLabelMinMax,
                 maxLabelWidth, labelHeight);
+
+            minLabelWidthUsed = minLabelWidth + VGAP ;
+            maxLabelWidthUsed = maxLabelWidth + VGAP ;
         }
 
         // position the slider itself along the top/bottom edge
         wxSliderBase::DoMoveWindow(
-            x + minLabelWidth + VGAP,
+            x + minLabelWidthUsed,
             ySlider,
-            width  - (minLabelWidth + maxLabelWidth  + (VGAP*2)),
+            width - (minLabelWidthUsed + maxLabelWidthUsed),
             THUMB + tickOffset);
     }
 }

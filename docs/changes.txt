@@ -213,6 +213,7 @@ wxMSW:
 - Fix strike-through support in wxFont with GDI+ (David Vanderson).
 - Fix UTF-32 conversion for non-BMP characters (ARATA Mizuki).
 - Use correct parent for the native modal dialogs (Andreas Falkenhahn).
+- Fix layout of wxSlider with wxSL_VALUE_LABEL only (gafatoa).
 
 wxOSX/Cocoa:
 
