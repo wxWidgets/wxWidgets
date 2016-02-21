@@ -94,7 +94,7 @@ public:
 
 #if wxUSE_RICHEDIT
     // initialize the richedit DLL of (at least) given version, return true if
-    // ok (Win95 has version 1, Win98/NT4 has 1 and 2, W2K has 3)
+    // ok
     static bool InitRichEdit(int version = 2);
 #endif // wxUSE_RICHEDIT
 
