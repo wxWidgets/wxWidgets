@@ -333,15 +333,6 @@ BOOL wxDrawStateBitmap(HDC hDC, HBITMAP hBitmap, int x, int y, UINT uState);
 
 #endif // wxUSE_OWNER_DRAWN
 
-// get (x, y) from DWORD - notice that HI/LOWORD can *not* be used because they
-// will fail on system with multiple monitors where the coords may be negative
-//
-// these macros are standard now (Win98) but some older headers don't have them
-#ifndef GET_X_LPARAM
-    #define GET_X_LPARAM(lp) ((int)(short)LOWORD(lp))
-    #define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
-#endif // GET_X_LPARAM
-
 // get the current state of SHIFT/CTRL/ALT keys
 inline bool wxIsModifierDown(int vk)
 {
