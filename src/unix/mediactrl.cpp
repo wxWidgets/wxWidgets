@@ -19,7 +19,11 @@
 
 #include <gst/gst.h>                // main gstreamer header
 
+#if GST_CHECK_VERSION(1,0,0)
+#include <gst/video/video.h>
+#else
 #include <gst/interfaces/xoverlay.h>
+#endif
 
 #ifndef  WX_PRECOMP
     #include "wx/log.h"             // wxLogDebug/wxLogSysError/wxLogTrace
@@ -159,7 +163,11 @@ public:
     double          m_dRate;        // Current playback rate -
                                     // see GetPlaybackRate for notes
     wxLongLong      m_llPausedPos;  // Paused position - see Pause()
+#if GST_CHECK_VERSION(1,0,0)
+    GstVideoOverlay* m_xoverlay;     // X Overlay that contains the GST video
+#else
     GstXOverlay*    m_xoverlay;     // X Overlay that contains the GST video
+#endif
     wxMutex         m_asynclock;    // See "discussion of internals"
     class wxGStreamerMediaEventHandler* m_eventHandler; // see below
 
@@ -250,7 +258,11 @@ expose_event(GtkWidget* widget, GdkEventExpose* event, wxGStreamerMediaBackend* 
         // GST Doesn't redraw automatically while paused
         // Plus, the video sometimes doesn't redraw when it looses focus
         // or is painted over so we just tell it to redraw...
+#if GST_CHECK_VERSION(1,0,0)
+        gst_video_overlay_expose(be->m_xoverlay);
+#else
         gst_x_overlay_expose(be->m_xoverlay);
+#endif
     }
     else
     {
@@ -290,9 +302,15 @@ static gint gtk_window_realize_callback(GtkWidget* widget,
     GdkWindow* window = gtk_widget_get_window(widget);
     wxASSERT(window);
 
+#if GST_CHECK_VERSION(1,0,0)
+    gst_video_overlay_set_window_handle(be->m_xoverlay,
+                                GDK_WINDOW_XID(window)
+                                );
+#else
     gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(be->m_xoverlay),
                                 GDK_WINDOW_XID(window)
                                 );
+#endif
     GtkWidget* w = be->GetControl()->m_wxwindow;
 #ifdef __WXGTK3__
     g_signal_connect(w, "draw", G_CALLBACK(draw), be);
@@ -356,6 +374,7 @@ static void gst_notify_caps_callback(GstPad* pad,
 }
 }
 
+#if !GST_CHECK_VERSION(1,0,0)
 //-----------------------------------------------------------------------------
 // "notify::stream-info" from m_playbin
 //
@@ -377,6 +396,7 @@ static void gst_notify_stream_info_callback(GstElement* WXUNUSED(element),
     be->QueryVideoSizeFromElement(be->m_playbin);
 }
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // gst_bus_async_callback [static]
@@ -440,8 +460,12 @@ static GstBusSyncReply gst_bus_sync_callback(GstBus* bus,
 {
     // Pass a non-xwindowid-setting event on to the async handler where it
     // belongs
+#if GST_CHECK_VERSION(1,0,0)
+    if (!gst_is_video_overlay_prepare_window_handle_message (message))
+#else
     if (GST_MESSAGE_TYPE (message) != GST_MESSAGE_ELEMENT ||
         !gst_structure_has_name (message->structure, "prepare-xwindow-id"))
+#endif
     {
         //
         // NB: Unfortunately, the async callback can be quite
@@ -505,6 +529,7 @@ void wxGStreamerMediaBackend::HandleStateChange(GstState oldstate,
     }
 }
 
+#if !GST_CHECK_VERSION(1,0,0)
 //-----------------------------------------------------------------------------
 // wxGStreamerMediaBackend::QueryVideoSizeFromElement
 //
@@ -566,6 +591,7 @@ bool wxGStreamerMediaBackend::QueryVideoSizeFromElement(GstElement* element)
 
     return true;
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // wxGStreamerMediaBackend::QueryVideoSizeFromPad
@@ -574,7 +600,11 @@ bool wxGStreamerMediaBackend::QueryVideoSizeFromElement(GstElement* element)
 //-----------------------------------------------------------------------------
 bool wxGStreamerMediaBackend::QueryVideoSizeFromPad(GstPad* pad)
 {
+#if GST_CHECK_VERSION(1,0,0)
+    GstCaps* caps = gst_pad_get_current_caps(pad);
+#else
     const GstCaps* caps = GST_PAD_CAPS(pad);
+#endif
     if ( caps )
     {
         const GstStructure *s = gst_caps_get_structure (caps, 0);
@@ -600,11 +630,15 @@ bool wxGStreamerMediaBackend::QueryVideoSizeFromPad(GstPad* pad)
                 m_videoSize.y = (int) ((float) den * m_videoSize.y / num);
         }
 
-         wxLogTrace(wxTRACE_GStreamer, wxT("Adjusted video size: [%i,%i]"),
-                     m_videoSize.x, m_videoSize.y);
+        wxLogTrace(wxTRACE_GStreamer, wxT("Adjusted video size: [%i,%i]"),
+                    m_videoSize.x, m_videoSize.y);
+#if GST_CHECK_VERSION(1,0,0)
+        gst_caps_unref (caps);
+#endif
         return true;
     } // end if caps
 
+    m_videoSize = wxSize(0,0);
     return false; // not ready/massive failure
 }
 
@@ -633,7 +667,11 @@ void wxGStreamerMediaBackend::SetupXOverlay()
         GdkWindow* window = gtk_widget_get_window(m_ctrl->m_wxwindow);
         wxASSERT(window);
 #endif
+#if GST_CHECK_VERSION(1,0,0)
+        gst_video_overlay_set_window_handle(m_xoverlay,
+#else
         gst_x_overlay_set_xwindow_id(GST_X_OVERLAY(m_xoverlay),
+#endif
 #ifdef __WXGTK__
                         GDK_WINDOW_XID(window)
 #else
@@ -760,6 +798,31 @@ bool wxGStreamerMediaBackend::TryAudioSink(GstElement* audiosink)
 
 bool wxGStreamerMediaBackend::TryVideoSink(GstElement* videosink)
 {
+#if GST_CHECK_VERSION(1,0,0)
+    // Check if the video sink either is an xoverlay or might contain one...
+    if( !GST_IS_BIN(videosink) && !GST_IS_VIDEO_OVERLAY(videosink) )
+    {
+        if(G_IS_OBJECT(videosink))
+            g_object_unref(videosink);
+        return false;
+    }
+
+    // Make our video sink and make sure it supports the x overlay interface
+    // the x overlay enables us to put the video in our control window
+    // (i.e. we NEED it!) - also connect to the natural video size change event
+    if( GST_IS_BIN(videosink) )
+        m_xoverlay = (GstVideoOverlay*)
+                        gst_bin_get_by_interface (GST_BIN (videosink),
+                                                  GST_TYPE_VIDEO_OVERLAY);
+    else
+        m_xoverlay = (GstVideoOverlay*) videosink;
+
+    if ( !GST_IS_VIDEO_OVERLAY(m_xoverlay) )
+    {
+        g_object_unref(videosink);
+        return false;
+    }
+#else
     // Check if the video sink either is an xoverlay or might contain one...
     if( !GST_IS_BIN(videosink) && !GST_IS_X_OVERLAY(videosink) )
     {
@@ -783,7 +846,7 @@ bool wxGStreamerMediaBackend::TryVideoSink(GstElement* videosink)
         g_object_unref(videosink);
         return false;
     }
-
+#endif
     return true;
 }
 
@@ -993,15 +1056,21 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     // handler as well so we can set the X window id of our xoverlay
     gst_bus_add_watch (gst_element_get_bus(m_playbin),
                        (GstBusFunc) gst_bus_async_callback, this);
+#if GST_CHECK_VERSION(1,0,0)
+    gst_bus_set_sync_handler(gst_element_get_bus(m_playbin),
+                             (GstBusSyncHandler) gst_bus_sync_callback, this, NULL);
+#else
     gst_bus_set_sync_handler(gst_element_get_bus(m_playbin),
                              (GstBusSyncHandler) gst_bus_sync_callback, this);
-    g_signal_connect(m_playbin, "notify::stream-info",
-                     G_CALLBACK(gst_notify_stream_info_callback), this);
+#endif
 
     // Get the audio sink
-    GstElement* audiosink = gst_element_factory_make ("gconfaudiosink", "audio-sink");
+    GstElement* audiosink;
+#if !GST_CHECK_VERSION(1,0,0)
+    audiosink = gst_element_factory_make ("gconfaudiosink", "audio-sink");
     if( !TryAudioSink(audiosink) )
     {
+#endif
         // fallback to autodetection, then alsa, then oss as a stopgap
         audiosink = gst_element_factory_make ("autoaudiosink", "audio-sink");
         if( !TryAudioSink(audiosink) )
@@ -1017,13 +1086,18 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                 }
             }
         }
+#if !GST_CHECK_VERSION(1,0,0)
     }
+#endif
 
     // Setup video sink - first try gconf, then auto, then xvimage and
     // then finally plain ximage
-    GstElement* videosink = gst_element_factory_make ("gconfvideosink", "video-sink");
+    GstElement* videosink;
+#if !GST_CHECK_VERSION(1,0,0)
+    videosink = gst_element_factory_make ("gconfvideosink", "video-sink");
     if( !TryVideoSink(videosink) )
     {
+#endif
         videosink = gst_element_factory_make ("autovideosink", "video-sink");
         if( !TryVideoSink(videosink) )
         {
@@ -1041,7 +1115,18 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                 }
             }
         }
+#if !GST_CHECK_VERSION(1,0,0)
     }
+#endif
+
+#if GST_CHECK_VERSION(1,0,0)
+    GstPad *video_sinkpad = gst_element_get_static_pad (videosink, "sink");
+    g_signal_connect (video_sinkpad, "notify::caps", G_CALLBACK (gst_notify_caps_callback), this);
+    gst_object_unref (video_sinkpad);
+#else
+    g_signal_connect(m_playbin, "notify::stream-info",
+                     G_CALLBACK(gst_notify_stream_info_callback), this);
+#endif
 
     // Tell GStreamer which window to draw to in 0.8 - 0.10
     // sometimes needs this too...
@@ -1078,6 +1163,7 @@ bool wxGStreamerMediaBackend::Load(const wxString& fileName)
 //-----------------------------------------------------------------------------
 bool wxGStreamerMediaBackend::Load(const wxURI& location)
 {
+#if !GST_CHECK_VERSION(1,0,0)
     if(location.GetScheme().CmpNoCase(wxT("file")) == 0)
     {
         wxString uristring = location.BuildUnescapedURI();
@@ -1089,6 +1175,7 @@ bool wxGStreamerMediaBackend::Load(const wxURI& location)
                      );
     }
     else
+#endif
         return DoLoad(location.BuildURI());
 }
 
@@ -1274,11 +1361,17 @@ wxLongLong wxGStreamerMediaBackend::GetPosition()
     else
     {
         gint64 pos;
+#if GST_CHECK_VERSION(1,0,0)
+        if (!gst_element_query_position(m_playbin, GST_FORMAT_TIME, &pos) ||
+            pos == -1)
+            return 0;
+#else
         GstFormat fmtTime = GST_FORMAT_TIME;
 
         if (!gst_element_query_position(m_playbin, &fmtTime, &pos) ||
             fmtTime != GST_FORMAT_TIME || pos == -1)
             return 0;
+#endif
         return pos / GST_MSECOND ;
     }
 }
@@ -1321,11 +1414,17 @@ bool wxGStreamerMediaBackend::SetPosition(wxLongLong where)
 wxLongLong wxGStreamerMediaBackend::GetDuration()
 {
     gint64 length;
+#if GST_CHECK_VERSION(1,0,0)
+    if(!gst_element_query_duration(m_playbin, GST_FORMAT_TIME, &length) ||
+       length == -1)
+        return 0;
+#else
     GstFormat fmtTime = GST_FORMAT_TIME;
 
     if(!gst_element_query_duration(m_playbin, &fmtTime, &length) ||
        fmtTime != GST_FORMAT_TIME || length == -1)
         return 0;
+#endif
     return length / GST_MSECOND ;
 }
 
@@ -1423,11 +1522,17 @@ wxLongLong wxGStreamerMediaBackend::GetDownloadProgress()
 wxLongLong wxGStreamerMediaBackend::GetDownloadTotal()
 {
     gint64 length;
+#if GST_CHECK_VERSION(1,0,0)
+    if (!gst_element_query_duration(m_playbin, GST_FORMAT_BYTES, &length) ||
+         length == -1)
+        return 0;
+#else
     GstFormat fmtBytes = GST_FORMAT_BYTES;
 
     if (!gst_element_query_duration(m_playbin, &fmtBytes, &length) ||
           fmtBytes != GST_FORMAT_BYTES || length == -1)
         return 0;
+#endif
     return length;
 }
 
