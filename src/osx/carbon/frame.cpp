@@ -412,4 +412,17 @@ void wxFrame::PositionBars()
 #endif
 }
 
+bool wxFrame::Show(bool show)
+{
+    if ( !show )
+    {
+#if wxUSE_MENUS
+        if (m_frameMenuBar != NULL)
+        {
+          m_frameMenuBar->MacUninstallMenuBar();
+        }
+#endif
+    }
+    return wxFrameBase::Show(show);
+}
 

@@ -51,6 +51,7 @@ public:
     virtual wxPoint GetClientAreaOrigin() const wxOVERRIDE;
 
     // override some more virtuals
+    virtual bool Show(bool show = true) wxOVERRIDE;
     virtual bool Enable(bool enable = true) wxOVERRIDE;
 
     // event handlers

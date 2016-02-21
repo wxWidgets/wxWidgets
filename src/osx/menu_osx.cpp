@@ -633,11 +633,7 @@ wxMenuBar::~wxMenuBar()
     if (s_macCommonMenuBar == this)
         s_macCommonMenuBar = NULL;
 
-    if (s_macInstalledMenuBar == this)
-    {
-        gs_emptyMenuBar->GetPeer()->MakeRoot();
-        s_macInstalledMenuBar = NULL;
-    }
+    MacUninstallMenuBar();
     wxDELETE( m_rootMenu );
     // apple menu is a submenu, therefore we don't have to delete it
     m_appleMenu = NULL;
@@ -650,6 +646,15 @@ wxMenuBar::~wxMenuBar()
 void wxMenuBar::Refresh(bool WXUNUSED(eraseBackground), const wxRect *WXUNUSED(rect))
 {
     wxCHECK_RET( IsAttached(), wxT("can't refresh unatteched menubar") );
+}
+
+void wxMenuBar::MacUninstallMenuBar()
+{
+  if (s_macInstalledMenuBar == this)
+  {
+    gs_emptyMenuBar->GetPeer()->MakeRoot();
+    s_macInstalledMenuBar = NULL;
+  }
 }
 
 void wxMenuBar::MacInstallMenuBar()
