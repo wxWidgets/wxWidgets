@@ -635,10 +635,16 @@ bool wxGStreamerMediaBackend::QueryVideoSizeFromPad(GstPad* pad)
 #if GST_CHECK_VERSION(1,0,0)
         gst_caps_unref (caps);
 #endif
+
+        NotifyMovieSizeChanged ();
+
         return true;
     } // end if caps
 
     m_videoSize = wxSize(0,0);
+
+    NotifyMovieSizeChanged ();
+
     return false; // not ready/massive failure
 }
 
