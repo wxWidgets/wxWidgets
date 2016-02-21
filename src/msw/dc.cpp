@@ -2327,11 +2327,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                                      dwRop
                                      ) == (int)GDI_ERROR )
                 {
-                    // On Win9x this API fails most (all?) of the time, so
-                    // logging it becomes quite distracting.  Since it falls
-                    // back to the code below this is not really serious, so
-                    // don't log it.
-                    //wxLogLastError(wxT("StretchDIBits"));
+                    wxLogLastError(wxT("StretchDIBits"));
                 }
                 else
                 {
