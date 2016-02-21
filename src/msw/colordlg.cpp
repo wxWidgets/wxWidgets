@@ -116,6 +116,9 @@ int wxColourDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
+    wxWindow* const parent = GetParentForModalDialog(m_parent, GetWindowStyle());
+    WXHWND hWndParent = parent ? GetHwndOf(parent) : NULL;
+
     // initialize the struct used by Windows
     CHOOSECOLOR chooseColorStruct;
     memset(&chooseColorStruct, 0, sizeof(CHOOSECOLOR));
@@ -133,8 +136,7 @@ int wxColourDialog::ShowModal()
     }
 
     chooseColorStruct.lStructSize = sizeof(CHOOSECOLOR);
-    if ( m_parent )
-        chooseColorStruct.hwndOwner = GetHwndOf(m_parent);
+    chooseColorStruct.hwndOwner = hWndParent;
     chooseColorStruct.rgbResult = wxColourToRGB(m_colourData.GetColour());
     chooseColorStruct.lpCustColors = custColours;
 

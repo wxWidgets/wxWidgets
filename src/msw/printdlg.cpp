@@ -743,16 +743,14 @@ int wxWindowsPrintDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
+    wxWindow* const parent = GetParentForModalDialog(m_parent, GetWindowStyle());
+    WXHWND hWndParent = parent ? GetHwndOf(parent) : NULL;
+
     ConvertToNative( m_printDialogData );
 
     PRINTDLG *pd = (PRINTDLG*) m_printDlg;
 
-    if (m_dialogParent)
-        pd->hwndOwner = (HWND) m_dialogParent->GetHWND();
-    else if (wxTheApp->GetTopWindow())
-        pd->hwndOwner = (HWND) wxTheApp->GetTopWindow()->GetHWND();
-    else
-        pd->hwndOwner = 0;
+    pd->hwndOwner = hWndParent;
 
     bool ret = (PrintDlg( pd ) != 0);
 

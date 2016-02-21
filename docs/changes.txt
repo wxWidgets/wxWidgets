@@ -212,6 +212,7 @@ wxMSW:
 - Fix wxPrintf() and friends when using MinGW with ANSI stdio option.
 - Fix strike-through support in wxFont with GDI+ (David Vanderson).
 - Fix UTF-32 conversion for non-BMP characters (ARATA Mizuki).
+- Use correct parent for the native modal dialogs (Andreas Falkenhahn).
 
 wxOSX/Cocoa:
 

@@ -465,10 +465,8 @@ int wxFileDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
-    HWND hWnd = 0;
-    if (m_parent) hWnd = (HWND) m_parent->GetHWND();
-    if (!hWnd && wxTheApp->GetTopWindow())
-        hWnd = (HWND) wxTheApp->GetTopWindow()->GetHWND();
+    wxWindow* const parent = GetParentForModalDialog(m_parent, GetWindowStyle());
+    WXHWND hWndParent = parent ? GetHwndOf(parent) : NULL;
 
     static wxChar fileNameBuffer [ wxMAXPATH ];           // the file-name
     wxChar        titleBuffer    [ wxMAXFILE+1+wxMAXEXT ];  // the file-name, without path
@@ -523,7 +521,7 @@ int wxFileDialog::ShowModal()
     wxZeroMemory(of);
 
     of.lStructSize       = gs_ofStructSize;
-    of.hwndOwner         = hWnd;
+    of.hwndOwner         = hWndParent;
     of.lpstrTitle        = m_message.t_str();
     of.lpstrFileTitle    = titleBuffer;
     of.nMaxFileTitle     = wxMAXFILE + 1 + wxMAXEXT;
