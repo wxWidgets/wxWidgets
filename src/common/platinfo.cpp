@@ -42,15 +42,17 @@ static wxPlatformInfo gs_platInfo(wxPORT_UNKNOWN);
 // constants
 // ----------------------------------------------------------------------------
 
+// Keep "Unknown" entries to avoid breaking the indexes
+
 static const wxChar* const wxOperatingSystemIdNames[] =
 {
     wxT("Apple Mac OS"),
     wxT("Apple Mac OS X"),
 
-    wxT("Microsoft Windows 9X"),
+    wxT("Unknown"), // STL build: cannot use _() to translate strings here
     wxT("Microsoft Windows NT"),
-    wxT("Microsoft Windows Micro"),
-    wxT("Microsoft Windows CE"),
+    wxT("Unknown"),
+    wxT("Unknown"),
 
     wxT("Linux"),
     wxT("FreeBSD"),
@@ -64,8 +66,8 @@ static const wxChar* const wxOperatingSystemIdNames[] =
     wxT("Other Unix"),
     wxT("Other Unix"),
 
-    wxT("DOS"),
-    wxT("OS/2"),
+    wxT("Unknown"),
+    wxT("Unknown"),
 
 };
 
@@ -77,10 +79,10 @@ static const wxChar* const wxPortIdNames[] =
     wxT("wxGTK"),
     wxT("wxDFB"),
     wxT("wxX11"),
-    wxT("wxOS2"),
+    wxT("Unknown"),
     wxT("wxMac"),
     wxT("wxCocoa"),
-    wxT("wxWinCE"),
+    wxT("Unknown"),
     wxT("wxQT")
 };
 
@@ -365,4 +367,3 @@ wxEndianness wxPlatformInfo::GetEndianness(const wxString& end)
 
     return wxENDIAN_INVALID;
 }
-
