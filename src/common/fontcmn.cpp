@@ -981,6 +981,11 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
         {
             SetStrikethrough(true);
         }
+        else if ( token == wxT("underlinedstrikethrough") )
+        {
+            SetUnderlined(true);
+            SetStrikethrough(true);
+        }
         else if ( token == wxT("light") || token == _("light") )
         {
             SetWeight(wxFONTWEIGHT_LIGHT);
