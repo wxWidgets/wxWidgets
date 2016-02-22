@@ -43,6 +43,7 @@ public:
                info.GetStyle(),
                info.GetWeight(),
                info.IsUnderlined(),
+               info.IsStrikethrough(),
                info.GetFaceName(),
                info.GetEncoding());
 
@@ -84,6 +85,16 @@ public:
                 wxFontStyle style,
                 wxFontWeight weight,
                 bool underlined = false,
+                const wxString& face = wxEmptyString,
+                wxFontEncoding encoding = wxFONTENCODING_DEFAULT) {
+        return Create(size, family, style, weight, underlined, false, face, encoding);
+    }
+    bool Create(int size,
+                wxFontFamily family,
+                wxFontStyle style,
+                wxFontWeight weight,
+                bool underlined = false,
+                bool strikethrough = false,
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 

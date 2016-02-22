@@ -589,6 +589,7 @@ bool wxFont::Create(int pointSize,
                     wxFontStyle style,
                     wxFontWeight weight,
                     bool underlined,
+                    bool strikethrough,
                     const wxString& faceNameParam,
                     wxFontEncoding encoding)
 {
@@ -628,7 +629,7 @@ bool wxFont::Create(int pointSize,
     wxNativeFontInfo info;
 
     info.Init(pointSize, family, style, weight,
-        underlined, false, faceName, encoding);
+        underlined, strikethrough, faceName, encoding);
 
     m_refData = new wxFontRefData(info);
 
