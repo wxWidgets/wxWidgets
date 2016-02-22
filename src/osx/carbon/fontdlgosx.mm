@@ -41,6 +41,65 @@
 
 #include "wx/osx/private.h"
 
+
+@interface wxFontPanelDelegate : NSObject<NSWindowDelegate>
+{
+    @public
+    bool m_isUnderline;
+    bool m_isStrikethrough;
+}
+
+// Delegate methods
+- (id)init;
+- (void)changeAttributes:(id)sender;
+- (void)changeFont:(id)sender;
+@end // interface wxNSFontPanelDelegate : NSObject
+
+
+
+@implementation wxFontPanelDelegate : NSObject
+
+- (id)init
+{
+    [super init];
+    m_isUnderline = false;
+    m_isStrikethrough = false;
+    return self;
+}
+
+- (void)changeAttributes:(id)sender
+{
+    NSDictionary *dummyAttribs = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   [NSNumber numberWithInt:m_isUnderline?NSUnderlineStyleSingle:NSUnderlineStyleNone], NSUnderlineStyleAttributeName,
+                                   [NSNumber numberWithInt:m_isStrikethrough?NSUnderlineStyleSingle:NSUnderlineStyleNone], NSStrikethroughStyleAttributeName,
+                                   nil];
+    NSDictionary *attribs = [sender convertAttributes:dummyAttribs];
+
+    m_isUnderline = m_isStrikethrough = false;
+    for (id key in attribs) {
+        NSNumber *number = static_cast<NSNumber *>([attribs objectForKey:key]);
+        int i = [number intValue];
+        if ([key isEqual:NSUnderlineStyleAttributeName]) {
+            m_isUnderline = [number intValue] != NSUnderlineStyleNone;
+        } else if ([key isEqual:NSStrikethroughStyleAttributeName]) {
+            m_isStrikethrough = [number intValue] != NSUnderlineStyleNone;
+        }
+    }
+
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [NSNumber numberWithInt:m_isUnderline?NSUnderlineStyleSingle:NSUnderlineStyleNone], NSUnderlineStyleAttributeName,
+                                [NSNumber numberWithInt:m_isStrikethrough?NSUnderlineStyleSingle:NSUnderlineStyleNone], NSStrikethroughStyleAttributeName,
+                                nil];
+    [[NSFontManager sharedFontManager] setSelectedAttributes:attributes isMultiple:false];
+}
+- (void)changeFont:(id)sender
+{
+    NSFont *dummyFont = [NSFont userFontOfSize:12.0];
+    [[NSFontPanel sharedFontPanel] setPanelFont:[sender convertFont:dummyFont] isMultiple:NO];
+    [[NSFontManager sharedFontManager] setSelectedFont:[sender convertFont:dummyFont] isMultiple:false];
+}
+@end
+
 @interface wxMacFontPanelAccView : NSView
 {
     BOOL m_okPressed ;
@@ -148,6 +207,10 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     // setting up the ok/cancel buttons
     NSFontPanel* fontPanel = [NSFontPanel sharedFontPanel] ;
 
+    wxFontPanelDelegate* theFPDelegate = [[wxFontPanelDelegate alloc] init];
+    [fontPanel setDelegate:theFPDelegate];
+
+
     [fontPanel setFloatingPanel:NO] ;
     [[fontPanel standardWindowButton:NSWindowCloseButton] setEnabled:NO] ;
 
@@ -173,8 +236,24 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     {
         font = fontdata.m_initialFont ;
     }
+    theFPDelegate->m_isStrikethrough = font.GetStrikethrough();
+    theFPDelegate->m_isUnderline = font.GetUnderlined();
 
     [[NSFontPanel sharedFontPanel] setPanelFont: font.OSXGetNSFont() isMultiple:NO];
+    [[NSFontManager sharedFontManager] setSelectedFont:font.OSXGetNSFont() isMultiple:false];
+
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [NSNumber numberWithInt:font.GetUnderlined()
+                                    ? NSUnderlineStyleSingle
+                                    : NSUnderlineStyleNone],
+                                NSUnderlineStyleAttributeName,
+                                [NSNumber numberWithInt:font.GetStrikethrough()
+                                    ? NSUnderlineStyleSingle
+                                    : NSUnderlineStyleNone],
+                                NSStrikethroughStyleAttributeName,
+                                nil];
+
+    [[NSFontManager sharedFontManager] setSelectedAttributes:attributes isMultiple:false];
 
     if(fontdata.m_fontColour.IsOk())
         [[NSColorPanel sharedColorPanel] setColor: fontdata.m_fontColour.OSXGetNSColor()];
@@ -194,6 +273,8 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     {
 #if wxOSX_USE_COCOA
         fontdata.m_chosenFont = wxFont( theFont );
+        fontdata.m_chosenFont.SetUnderlined(theFPDelegate->m_isUnderline);
+        fontdata.m_chosenFont.SetStrikethrough(theFPDelegate->m_isStrikethrough);
 
         //Get the shared color panel along with the chosen color and set the chosen color
         fontdata.m_fontColour = wxColour([[NSColorPanel sharedColorPanel] color]);
@@ -201,7 +282,7 @@ int RunMixedFontDialog(wxFontDialog* dialog)
         retval = wxID_OK ;
     }
     [fontPanel setAccessoryView:nil];
-
+    [theFPDelegate release];
     return retval ;
 }
 
@@ -393,6 +474,7 @@ bool wxFontDialog::Create(wxWindow *parent)
         //However, 10.3 doesn't seem to create the font panel
         //is this is done, so create it ourselves
         [[NSFontPanel sharedFontPanel] setPanelFont:theDefaultFont isMultiple:NO];
+        [[NSFontManager sharedFontManager] setSelectedFont:theDefaultFont isMultiple:false];
 
     }
 
