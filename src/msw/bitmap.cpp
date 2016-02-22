@@ -176,7 +176,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject);
         //  (a) if hdc is specified, the caller explicitly wants DDB
         //  (b) otherwise, create a DIB if depth >= 24 (we don't support 16bpp
         //      or less DIBs anyhow)
-        //  (c) finally, create DIBs under MSW even if the depth hasn't been
+        //  (c) finally, create DIBs even if the depth hasn't been
         //      explicitly specified but the current display depth is 24 or
         //      more and the image is "big", i.e. > 16Mb
         //
