@@ -48,25 +48,18 @@ public:
     virtual bool OnInit() wxOVERRIDE { return true; }
     virtual void OnExit() wxOVERRIDE { wxDELETE(ms_buffer); }
 
-    static wxBitmap* GetBuffer(int w, int h)
+    static wxBitmap* GetBuffer(wxDC* dc, int w, int h)
     {
         if ( ms_usingSharedBuffer )
-            return new wxBitmap(w, h);
+            return DoCreateBuffer(dc, w, h);
 
         if ( !ms_buffer ||
-                w > ms_buffer->GetWidth() ||
-                    h > ms_buffer->GetHeight() )
+                w > ms_buffer->GetScaledWidth() ||
+                    h > ms_buffer->GetScaledHeight() )
         {
             delete ms_buffer;
 
-            // we must always return a valid bitmap but creating a bitmap of
-            // size 0 would fail, so create a 1*1 bitmap in this case
-            if ( !w )
-                w = 1;
-            if ( !h )
-                h = 1;
-
-            ms_buffer = new wxBitmap(w, h);
+            ms_buffer = DoCreateBuffer(dc, w, h);
         }
 
         ms_usingSharedBuffer = true;
@@ -87,6 +80,18 @@ public:
     }
 
 private:
+    static wxBitmap* DoCreateBuffer(wxDC* dc, int w, int h)
+    {
+        const double scale = dc ? dc->GetContentScaleFactor() : 1.0;
+        wxBitmap* const buffer = new wxBitmap;
+
+        // we must always return a valid bitmap but creating a bitmap of
+        // size 0 would fail, so create a 1*1 bitmap in this case
+        buffer->CreateScaled(wxMax(w, 1), wxMax(h, 1), -1, scale);
+
+        return buffer;
+    }
+
     static wxBitmap *ms_buffer;
     static bool ms_usingSharedBuffer;
 
@@ -111,7 +116,7 @@ void wxBufferedDC::UseBuffer(wxCoord w, wxCoord h)
         if ( w == -1 || h == -1 )
             m_dc->GetSize(&w, &h);
 
-        m_buffer = wxSharedDCBufferManager::GetBuffer(w, h);
+        m_buffer = wxSharedDCBufferManager::GetBuffer(m_dc, w, h);
         m_style |= wxBUFFER_USES_SHARED_BUFFER;
         m_area.Set(w,h);
     }
