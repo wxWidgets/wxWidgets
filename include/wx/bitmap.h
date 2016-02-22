@@ -302,7 +302,8 @@ wxBitmap::
 #endif
 ConvertToDisabled(unsigned char brightness) const
 {
-    return ConvertToImage().ConvertToDisabled(brightness);
+    const wxImage imgDisabled = ConvertToImage().ConvertToDisabled(brightness);
+    return wxBitmap(imgDisabled, -1, GetScaleFactor());
 }
 #endif // wxUSE_IMAGE
 
