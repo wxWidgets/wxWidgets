@@ -1724,7 +1724,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
     m_width = width;
     m_height = height;
 
-    m_enableOffset = true;
+    m_enableOffset = dc.GetContentScaleFactor() <= 1;
 
 #ifdef __WXMSW__
     m_mswSurface = cairo_win32_surface_create((HDC)dc.GetHDC());
@@ -1789,7 +1789,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     m_width = width;
     m_height = height;
 
-    m_enableOffset = true;
+    m_enableOffset = dc.GetContentScaleFactor() <= 1;
 
 #ifdef __WXMSW__
 
@@ -1919,7 +1919,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
     , m_mswWindowHDC(GetHwndOf(window))
 #endif
 {
-    m_enableOffset = true;    
+    m_enableOffset = window->GetContentScaleFactor() <= 1;
 #ifdef __WXGTK__
     // something along these lines (copied from dcclient)
 

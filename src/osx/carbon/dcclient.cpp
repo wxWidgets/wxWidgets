@@ -76,7 +76,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
             CGContextTranslateCTM( cg , -window->MacGetLeftBorderSize() , -window->MacGetTopBorderSize() );
 
         wxGraphicsContext* context = wxGraphicsContext::CreateFromNative( cg );
-        context->EnableOffset(true);
+        context->EnableOffset(m_contentScaleFactor <= 1);
         SetGraphicsContext( context );
     }
     DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;

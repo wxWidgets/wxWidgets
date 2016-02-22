@@ -210,7 +210,7 @@ wxWindowDCImpl::wxWindowDCImpl(wxWindowDC* owner, wxWindow* window)
     {
         cairo_t* cr = gdk_cairo_create(gdkWindow);
         wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
-        gc->EnableOffset(true);
+        gc->EnableOffset(m_contentScaleFactor <= 1);
         SetGraphicsContext(gc);
         GtkAllocation a;
         gtk_widget_get_allocation(widget, &a);
@@ -255,7 +255,7 @@ wxClientDCImpl::wxClientDCImpl(wxClientDC* owner, wxWindow* window)
     {
         cairo_t* cr = gdk_cairo_create(gdkWindow);
         wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
-        gc->EnableOffset(true);
+        gc->EnableOffset(m_contentScaleFactor <= 1);
         SetGraphicsContext(gc);
         if (gtk_widget_get_has_window(widget))
         {
@@ -288,7 +288,7 @@ wxPaintDCImpl::wxPaintDCImpl(wxPaintDC* owner, wxWindow* window)
     m_height = gdk_window_get_height(gdkWindow);
     cairo_reference(cr);
     wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
-    gc->EnableOffset(true);
+    gc->EnableOffset(m_contentScaleFactor <= 1);
     SetGraphicsContext(gc);
 }
 //-----------------------------------------------------------------------------
@@ -301,7 +301,7 @@ wxScreenDCImpl::wxScreenDCImpl(wxScreenDC* owner)
     m_height = gdk_window_get_height(window);
     cairo_t* cr = gdk_cairo_create(window);
     wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
-    gc->EnableOffset(true);
+    gc->EnableOffset(m_contentScaleFactor <= 1);
     SetGraphicsContext(gc);
 }
 //-----------------------------------------------------------------------------
@@ -357,7 +357,7 @@ void wxMemoryDCImpl::Setup()
         m_contentScaleFactor = m_bitmap.GetScaleFactor();
         cairo_t* cr = m_bitmap.CairoCreate();
         gc = wxGraphicsContext::CreateFromNative(cr);
-        gc->EnableOffset(true);
+        gc->EnableOffset(m_contentScaleFactor <= 1);
     }
     SetGraphicsContext(gc);
 }
@@ -368,7 +368,7 @@ wxGTKCairoDC::wxGTKCairoDC(cairo_t* cr, wxWindow* window)
 {
     cairo_reference(cr);
     wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);
-    gc->EnableOffset(true);
+    gc->EnableOffset(window->GetContentScaleFactor() <= 1);
     SetGraphicsContext(gc);
 }
 

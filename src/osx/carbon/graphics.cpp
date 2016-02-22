@@ -1532,7 +1532,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 {
     Init();
 
-    m_enableOffset = true;
+    m_enableOffset = window->GetContentScaleFactor() <= 1;
     wxSize sz = window->GetSize();
     m_width = sz.x;
     m_height = sz.y;
@@ -2622,7 +2622,7 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& 
         // this is the case for all wxWindowDCs except wxPaintDC
         wxMacCoreGraphicsContext *context = 
             new wxMacCoreGraphicsContext( this, cgctx, (wxDouble) w, (wxDouble) h );
-        context->EnableOffset(true);
+        context->EnableOffset(dc.GetContentScaleFactor() < 2);
         return context;
     }
     return NULL;
@@ -2639,7 +2639,7 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& 
         mem_impl->GetSize( &w, &h );
         wxMacCoreGraphicsContext* context = new wxMacCoreGraphicsContext( this,
             (CGContextRef)(mem_impl->GetGraphicsContext()->GetNativeContext()), (wxDouble) w, (wxDouble) h );
-        context->EnableOffset(true);
+        context->EnableOffset(dc.GetContentScaleFactor() < 2);
         return context;
     }
 #endif
