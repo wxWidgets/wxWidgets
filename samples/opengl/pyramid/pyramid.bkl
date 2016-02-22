@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+
+<makefile>
+
+    <include file="../../../build/bakefiles/common_samples.bkl"/>
+
+    <if cond="OUT_OF_TREE_MAKEFILES=='1'">
+        <set var="USE_OPENGL">1</set>
+    </if>
+
+    <exe id="pyramid" template="wx_sample" template_append="wx_append" cond="USE_OPENGL=='1'">
+        <sources>
+            pyramid.cpp
+            oglstuff.cpp
+            mathstuff.cpp
+            oglpfuncs.cpp
+        </sources>
+        <headers>
+            pyramid.h
+            oglstuff.h
+            mathstuff.h
+            oglpfuncs.h
+        </headers>
+        <wx-lib>gl</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+</makefile>

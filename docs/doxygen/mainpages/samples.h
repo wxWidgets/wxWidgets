@@ -553,6 +553,8 @@ commands through the menu.
     Arrow keys rotate the cube. Space bar toggles spinning.
 @li @b isosurf Draws a surface by reading coordinates from a DAT file.
 @li @b penguin Draws a rotatable penguin by reading data from a DXF file.
+@li @b pyramid Draws a rotatable tetrahedron and some strings.
+    It uses OpenGL 3.2 Core Profile context.
 
 @sampledir{opengl}
 

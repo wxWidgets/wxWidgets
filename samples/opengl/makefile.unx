@@ -28,7 +28,7 @@ TOOLKIT ?= MSW
 
 ### Targets: ###
 
-all: cube isosurf penguin
+all: cube isosurf penguin pyramid
 
 install: 
 
@@ -40,6 +40,7 @@ clean:
 	-(cd cube && $(MAKE) clean)
 	-(cd isosurf && $(MAKE) clean)
 	-(cd penguin && $(MAKE) clean)
+	-(cd pyramid && $(MAKE) clean)
 
 cube: 
 	(cd cube && $(MAKE) all)
@@ -50,7 +51,10 @@ isosurf:
 penguin: 
 	(cd penguin && $(MAKE) all)
 
-.PHONY: all install uninstall clean cube isosurf penguin
+pyramid: 
+	(cd pyramid && $(MAKE) all)
+
+.PHONY: all install uninstall clean cube isosurf penguin pyramid
 
 
 # Dependencies tracking:

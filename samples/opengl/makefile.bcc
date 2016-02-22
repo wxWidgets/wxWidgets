@@ -45,7 +45,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: cube isosurf penguin
+all: cube isosurf penguin pyramid
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -63,6 +63,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>penguin.bat
 	call penguin.bat
 	@del penguin.bat
+	@echo cd pyramid >pyramid.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>pyramid.bat
+	call pyramid.bat
+	@del pyramid.bat
 
 cube: 
 	@echo cd cube >cube.bat
@@ -81,4 +85,10 @@ penguin:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>penguin.bat
 	call penguin.bat
 	@del penguin.bat
+
+pyramid: 
+	@echo cd pyramid >pyramid.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>pyramid.bat
+	call pyramid.bat
+	@del pyramid.bat
 

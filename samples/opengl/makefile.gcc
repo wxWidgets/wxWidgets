@@ -38,7 +38,7 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 
 ### Targets: ###
 
-all: cube isosurf penguin
+all: cube isosurf penguin pyramid
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -46,6 +46,7 @@ clean:
 	$(MAKE) -C cube -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C isosurf -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C penguin -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C pyramid -f makefile.gcc $(MAKEARGS) clean
 
 cube: 
 	$(MAKE) -C cube -f makefile.gcc $(MAKEARGS) all
@@ -56,7 +57,10 @@ isosurf:
 penguin: 
 	$(MAKE) -C penguin -f makefile.gcc $(MAKEARGS) all
 
-.PHONY: all clean cube isosurf penguin
+pyramid: 
+	$(MAKE) -C pyramid -f makefile.gcc $(MAKEARGS) all
+
+.PHONY: all clean cube isosurf penguin pyramid
 
 
 SHELL := $(COMSPEC)
