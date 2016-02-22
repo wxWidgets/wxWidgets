@@ -141,6 +141,8 @@
 		23E9AF567E873B948EFEA180 /* gauge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 98A7F0605AAC3D28A8C9F253 /* gauge.mm */; };
 		242E1D1A9BF331BA918134EC /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 0964797530CF3FE7B8DB6242 /* pngwtran.c */; };
 		246B4FF96BA135258FE45F4F /* encconv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C269E9CA99DF3AE5B1BD6AFA /* encconv.cpp */; };
+		247B3B991C6C9731001ABFA2 /* utils_base.mm in Sources */ = {isa = PBXBuildFile; fileRef = 247B3B981C6C9731001ABFA2 /* utils_base.mm */; };
+		247B3B9B1C6C975B001ABFA2 /* settings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 247B3B9A1C6C975B001ABFA2 /* settings.mm */; };
 		2480859662ED399799E120A5 /* pen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BA819575B5136B09FA8FEB1 /* pen.cpp */; };
 		249C9177B1A33EFEAB30F93F /* tipwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E8BF36D3A7C309482CBA9EC /* tipwin.cpp */; };
 		24A5A71C79733E9CB913C5B7 /* LexPB.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8744F2C80ECF375999195935 /* LexPB.cxx */; };
@@ -238,7 +240,6 @@
 		427E6AF88CF73D799206E37D /* checkboxcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC2F076657431458896115A /* checkboxcmn.cpp */; };
 		42AC484FDD7D3E948CEA801C /* inflate.c in Sources */ = {isa = PBXBuildFile; fileRef = B5370A676AAC32419D7FDD87 /* inflate.c */; };
 		42ED9BAFD6E936849F1D36CB /* xtixml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4048A3523EC03409BD899BEF /* xtixml.cpp */; };
-		437519A6002A3A0FB2C9A8FC /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6CC2B05353C3284B37B2DD7 /* settings.cpp */; };
 		438EAEA4B30C325C827F6197 /* xh_fontpicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87E609641B583666AB9D1D58 /* xh_fontpicker.cpp */; };
 		4442EA28B0B3373B9A2D0862 /* collheaderctrlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92F377099B8B37F18C26716B /* collheaderctrlg.cpp */; };
 		447FEC72F3C234378CE28DE7 /* effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48D72D20DB1D3E1CA5ED112A /* effects.cpp */; };
@@ -962,6 +963,8 @@
 		23FC98E2305230E2990471E3 /* wxcrt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = wxcrt.cpp; path = ../../src/common/wxcrt.cpp; sourceTree = "<group>"; };
 		242BF97B558634A79322052C /* prntbase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = prntbase.cpp; path = ../../src/common/prntbase.cpp; sourceTree = "<group>"; };
 		24396D584D053948A3FF0DCD /* imagpng.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imagpng.cpp; path = ../../src/common/imagpng.cpp; sourceTree = "<group>"; };
+		247B3B981C6C9731001ABFA2 /* utils_base.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = utils_base.mm; path = ../../src/osx/cocoa/utils_base.mm; sourceTree = "<group>"; };
+		247B3B9A1C6C975B001ABFA2 /* settings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = settings.mm; path = ../../src/osx/iphone/settings.mm; sourceTree = "<group>"; };
 		24930711031D35288D28B04B /* choiccmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = choiccmn.cpp; path = ../../src/common/choiccmn.cpp; sourceTree = "<group>"; };
 		24BD2EF635673E819B8406CB /* LexRust.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexRust.cxx; path = ../../src/stc/scintilla/lexers/LexRust.cxx; sourceTree = "<group>"; };
 		24DF23D67E693D999B875101 /* toolbkg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = toolbkg.cpp; path = ../../src/generic/toolbkg.cpp; sourceTree = "<group>"; };
@@ -1612,7 +1615,6 @@
 		E5A9B63746753EDFB2EC48D3 /* xh_frame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_frame.cpp; path = ../../src/xrc/xh_frame.cpp; sourceTree = "<group>"; };
 		E685D81FB9FF3081B6C5C321 /* EditModel.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EditModel.cxx; path = ../../src/stc/scintilla/src/EditModel.cxx; sourceTree = "<group>"; };
 		E6AB648BC5173104A96CAE66 /* xml.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xml.cpp; path = ../../src/xml/xml.cpp; sourceTree = "<group>"; };
-		E6CC2B05353C3284B37B2DD7 /* settings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = settings.cpp; path = ../../src/osx/carbon/settings.cpp; sourceTree = "<group>"; };
 		E72CF5F9C1E53BCFAA2BC253 /* KeyMap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = KeyMap.cxx; path = ../../src/stc/scintilla/src/KeyMap.cxx; sourceTree = "<group>"; };
 		E72F0A2EE3DB34E193D8CCA7 /* LexLaTeX.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexLaTeX.cxx; path = ../../src/stc/scintilla/lexers/LexLaTeX.cxx; sourceTree = "<group>"; };
 		E78CBF86AAE637CB982B2EC0 /* LexMarkdown.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexMarkdown.cxx; path = ../../src/stc/scintilla/lexers/LexMarkdown.cxx; sourceTree = "<group>"; };
@@ -2019,7 +2021,6 @@
 				A3BF8C9FF2D5314591329D0D /* toolbar.mm */,
 				789F45D14FF23E248FCFB5FA /* utils.mm */,
 				C94DC3402FAE3C4FA776DEEA /* window.mm */,
-				E6CC2B05353C3284B37B2DD7 /* settings.cpp */,
 				190409DF8A3C3D9580FBB8AA /* stdpaths.mm */,
 				A436B55DC44E3827A757A6D8 /* accelcmn.cpp */,
 				8555204EBA8930809B732842 /* accesscmn.cpp */,
@@ -2647,6 +2648,8 @@
 				C9A305CEC03B3085B159B617 /* fs_mem.cpp */,
 				E968913A9A593B258BD8EACB /* msgout.cpp */,
 				4188821BBA833CCAA678B234 /* utilscmn.cpp */,
+				247B3B9A1C6C975B001ABFA2 /* settings.mm */,
+				247B3B981C6C9731001ABFA2 /* utils_base.mm */,
 			);
 			name = base;
 			sourceTree = "<group>";
@@ -2804,7 +2807,9 @@
 /* Begin PBXProject section */
 		19367367C9323490BB936F06 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiphone" */;
+			attributes = {
+			};
+			buildConfigurationList = A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiPhone" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -2921,6 +2926,7 @@
 				DAAFBED07FF8365B96D20B99 /* unichar.cpp in Sources */,
 				2E8440A2BDD53BE7B01547C2 /* uri.cpp in Sources */,
 				C425A172B0AB3EBD9AC9A590 /* ustring.cpp in Sources */,
+				247B3B991C6C9731001ABFA2 /* utils_base.mm in Sources */,
 				65E8A5F333D7336C816F0D0C /* variant.cpp in Sources */,
 				E53AFF04877D34C386D77380 /* wfstream.cpp in Sources */,
 				319EA32592DA3C74B86DDDFF /* wxcrt.cpp in Sources */,
@@ -3066,7 +3072,6 @@
 				A53B8C3ED0D33A1D9AA8219A /* toolbar.mm in Sources */,
 				A1A7D793B034398B8696EF33 /* utils.mm in Sources */,
 				815AE3FED68330F4933AA16F /* window.mm in Sources */,
-				437519A6002A3A0FB2C9A8FC /* settings.cpp in Sources */,
 				DA71FBB9EFB2350ABB3CEC80 /* stdpaths.mm in Sources */,
 				3CDE2B6BF88D326189F069BD /* accelcmn.cpp in Sources */,
 				BDB8EF0E0DA03693BFB77EF7 /* accesscmn.cpp in Sources */,
@@ -3492,6 +3497,7 @@
 				894D43C8F224394FB3171F26 /* jcapimin.c in Sources */,
 				743BB23211B336A6A0F26E57 /* jcapistd.c in Sources */,
 				CCE4ECA9CE883B008065C6FB /* jctrans.c in Sources */,
+				247B3B9B1C6C975B001ABFA2 /* settings.mm in Sources */,
 				ACD644CFA85A3B70A3E3B118 /* jcparam.c in Sources */,
 				76A83A293C9F33BCB7DFDE26 /* jdatadst.c in Sources */,
 				86003C8EB906304F9025F788 /* jcinit.c in Sources */,
@@ -3743,7 +3749,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiphone" */ = {
+		A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiPhone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				55C93151F6053EBCBDD70DF9 /* Debug */,

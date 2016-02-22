@@ -217,6 +217,7 @@ wxMSW:
 
 wxOSX/Cocoa:
 
+- Make wxiOS (iPhone) port build and minimally work again (Tobias Taschner).
 - Use more efficient FSEvents (10.7+) in wxFileSystemWatcher (Roberto Perpuly).
 - Implement wxWindow::Disable() for non-native controls too (Steve Browne).
 - Implement wxTopLevelWindow::EnableCloseButton() (John Roberts).

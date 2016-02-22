@@ -164,7 +164,13 @@ MyFrame::MyFrame(const wxString& title)
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
-#endif // wxUSE_MENUS
+#else // !wxUSE_MENUS
+    // If menus are not available add a button to access the about box
+    wxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+    wxButton* aboutBtn = new wxButton(this, wxID_ANY, "About...");
+    aboutBtn->Bind(wxEVT_BUTTON, &MyFrame::OnAbout, this);
+    sizer->Add(aboutBtn, wxSizerFlags().Center());
+#endif // wxUSE_MENUS/!wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)

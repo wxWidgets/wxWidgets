@@ -169,6 +169,14 @@ wxQt is a port of wxWidgets using Qt libraries. It requires Qt 5 or later.
 
 For further information, please see the files in docs/qt in the distribution.
 
+@section page_port_wxiOS wxiOS
+
+wxiOS is a port of wxWidgets using Cocoa touch libraries for iOS. It is very
+basic in it current form, but is included for further improvements and very
+simple applications.
+
+For further information, please see the files in docs/ios in the distribution.
+
 @section page_port_nativedocs Native Toolkit Documentation
 
 It's sometimes useful to interface directly with the underlying toolkit

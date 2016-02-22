@@ -2112,6 +2112,7 @@ OSX_IPHONE_SRC =
     src/osx/iphone/msgdlg.mm
     src/osx/iphone/nonownedwnd.mm
     src/osx/iphone/scrolbar.mm
+    src/osx/iphone/settings.mm
     src/osx/iphone/slider.mm
     src/osx/iphone/stattext.mm
     src/osx/iphone/textctrl.mm

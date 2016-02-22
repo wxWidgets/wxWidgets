@@ -5403,7 +5403,8 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	monodll_iphone_toolbar.o \
 	monodll_iphone_utils.o \
 	monodll_iphone_window.o \
-	monodll_cocoa_stdpaths.o
+	monodll_cocoa_stdpaths.o \
+	monodll_iphone_settings.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS)
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS = 
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
@@ -7408,7 +7409,8 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	monolib_iphone_toolbar.o \
 	monolib_iphone_utils.o \
 	monolib_iphone_window.o \
-	monolib_cocoa_stdpaths.o
+	monolib_cocoa_stdpaths.o \
+	monolib_iphone_settings.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1)
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_1 = 
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
@@ -9556,7 +9558,8 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	coredll_iphone_toolbar.o \
 	coredll_iphone_utils.o \
 	coredll_iphone_window.o \
-	coredll_stdpaths.o
+	coredll_stdpaths.o \
+	coredll_iphone_settings.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2)
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_2 = 
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
@@ -11023,7 +11026,8 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	corelib_iphone_toolbar.o \
 	corelib_iphone_utils.o \
 	corelib_iphone_window.o \
-	corelib_stdpaths.o
+	corelib_stdpaths.o \
+	corelib_iphone_settings.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3)
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_3 = 
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
@@ -16503,6 +16507,9 @@ monodll_iphone_utils.o: $(srcdir)/src/osx/iphone/utils.mm $(MONODLL_ODEP)
 monodll_iphone_window.o: $(srcdir)/src/osx/iphone/window.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/window.mm
 
+monodll_iphone_settings.o: $(srcdir)/src/osx/iphone/settings.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/settings.mm
+
 monodll_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
 
@@ -21320,6 +21327,9 @@ monolib_iphone_utils.o: $(srcdir)/src/osx/iphone/utils.mm $(MONOLIB_ODEP)
 
 monolib_iphone_window.o: $(srcdir)/src/osx/iphone/window.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/window.mm
+
+monolib_iphone_settings.o: $(srcdir)/src/osx/iphone/settings.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/settings.mm
 
 monolib_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
@@ -26793,6 +26803,9 @@ coredll_iphone_window.o: $(srcdir)/src/osx/iphone/window.mm $(COREDLL_ODEP)
 coredll_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
+coredll_iphone_settings.o: $(srcdir)/src/osx/iphone/settings.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/settings.mm
+
 coredll_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
 
@@ -30179,6 +30192,9 @@ corelib_iphone_window.o: $(srcdir)/src/osx/iphone/window.mm $(CORELIB_ODEP)
 
 corelib_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+
+corelib_iphone_settings.o: $(srcdir)/src/osx/iphone/settings.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/settings.mm
 
 corelib_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
