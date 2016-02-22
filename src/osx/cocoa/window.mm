@@ -2420,6 +2420,46 @@ bool wxWidgetCocoaImpl::SetBackgroundStyle( wxBackgroundStyle style )
 
 void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding )
 {
+    if ( [m_osxView respondsToSelector:@selector(setAttributedTitle:) ] )
+    {
+        wxFont f = GetWXPeer()->GetFont();
+        if ( f.GetStrikethrough() || f.GetUnderlined() )
+        {
+            wxCFStringRef cf(title, encoding );
+
+            NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc]
+                                                     initWithString:cf.AsNSString()];
+
+            [attrString beginEditing];
+            [attrString setAlignment:NSCenterTextAlignment
+                               range:NSMakeRange(0, [attrString length])];
+
+            [attrString addAttribute:NSFontAttributeName
+                               value:f.OSXGetNSFont()
+                               range:NSMakeRange(0, [attrString length])];
+            if ( f.GetStrikethrough() )
+            {
+                [attrString addAttribute:NSStrikethroughStyleAttributeName
+                                   value:@(NSUnderlineStyleSingle)
+                                   range:NSMakeRange(0, [attrString length])];
+            }
+
+            if ( f.GetUnderlined() )
+            {
+                [attrString addAttribute:NSUnderlineStyleAttributeName
+                                   value:@(NSUnderlineStyleSingle)
+                                   range:NSMakeRange(0, [attrString length])];
+
+            }
+
+            [attrString endEditing];
+
+            [(id)m_osxView setAttributedTitle:attrString];
+
+            return;
+        }
+    }
+
     if ( [m_osxView respondsToSelector:@selector(setTitle:) ] )
     {
         wxCFStringRef cf( title , encoding );
