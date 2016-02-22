@@ -43,6 +43,7 @@ public:
                info.GetStyle(),
                info.GetWeight(),
                info.IsUnderlined(),
+               info.IsStrikethrough(),
                info.GetFaceName(),
                info.GetEncoding());
 
@@ -98,6 +99,16 @@ public:
                 wxFontWeight weight,
                 bool underlined = false,
                 const wxString& face = wxEmptyString,
+                wxFontEncoding encoding = wxFONTENCODING_DEFAULT) {
+        return Create(size, family, style, weight, underlined, false, face, encoding);
+    }
+    bool Create(int size,
+                wxFontFamily family,
+                wxFontStyle style,
+                wxFontWeight weight,
+                bool underlined = false,
+                bool strikethrough = false,
+                const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
     wxFont(const wxNativeFontInfo& info)
@@ -117,6 +128,7 @@ public:
     virtual wxFontStyle GetStyle() const;
     virtual wxFontWeight GetWeight() const;
     virtual bool GetUnderlined() const;
+    virtual bool GetStrikethrough() const;
     virtual wxString GetFaceName() const;
     virtual wxFontEncoding GetEncoding() const;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const;
@@ -129,6 +141,7 @@ public:
     virtual void SetWeight(wxFontWeight weight);
     virtual bool SetFaceName(const wxString& faceName);
     virtual void SetUnderlined(bool underlined);
+    virtual void SetStrikethrough(bool strikethrough);
     virtual void SetEncoding(wxFontEncoding encoding);
 
     wxDECLARE_COMMON_FONT_METHODS();
