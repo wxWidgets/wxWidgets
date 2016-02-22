@@ -715,7 +715,6 @@ COND_TOOLKIT_OSX_COCOA_WXUNIV_0
 COND_TOOLKIT_OSX_COCOA_USE_GUI_1
 COND_TOOLKIT_OSX_COCOA
 COND_TOOLKIT_OSX_CARBON
-COND_TOOLKIT_MSW_WXUNIV_0
 COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_MSW_USE_GUI_1
 COND_TOOLKIT_MSW
@@ -1033,6 +1032,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -1444,6 +1444,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1696,6 +1697,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1833,7 +1843,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1986,6 +1996,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -35911,6 +35922,89 @@ if test -n "$PKG_CONFIG"; then
         pkg_cv_GST_CFLAGS="$GST_CFLAGS"
     else
         if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-video-\$GST_VERSION gstreamer-player-\$GST_VERSION >= 1.7.2.1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_GST_CFLAGS=`$PKG_CONFIG --cflags "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$GST_LIBS"; then
+        pkg_cv_GST_LIBS="$GST_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-video-\$GST_VERSION gstreamer-player-\$GST_VERSION >= 1.7.2.1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_GST_LIBS=`$PKG_CONFIG --libs "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        GST_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1"`
+        else
+	        GST_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$GST_PKG_ERRORS" >&5
+
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: GStreamer 1.7.2+ not available. Not using GstPlayer and falling back to 1.0" >&5
+$as_echo "$as_me: GStreamer 1.7.2+ not available. Not using GstPlayer and falling back to 1.0" >&6;}
+
+
+elif test $pkg_failed = untried; then
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: GStreamer 1.7.2+ not available. Not using GstPlayer and falling back to 1.0" >&5
+$as_echo "$as_me: GStreamer 1.7.2+ not available. Not using GstPlayer and falling back to 1.0" >&6;}
+
+
+else
+	GST_CFLAGS=$pkg_cv_GST_CFLAGS
+	GST_LIBS=$pkg_cv_GST_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                wxUSE_GSTREAMER="yes"
+                $as_echo "#define wxUSE_GSTREAMER_PLAYER 1" >>confdefs.h
+
+
+fi
+
+        if test $wxUSE_GSTREAMER = "no"; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GST" >&5
+$as_echo_n "checking for GST... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$GST_CFLAGS"; then
+        pkg_cv_GST_CFLAGS="$GST_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-video-\$GST_VERSION\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION") 2>&5
   ac_status=$?
@@ -35961,20 +36055,20 @@ fi
 	echo "$GST_PKG_ERRORS" >&5
 
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&5
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&5
 $as_echo "$as_me: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&2;}
-                GST_VERSION_MAJOR=0
-                GST_VERSION_MINOR=10
-                GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
+                    GST_VERSION_MAJOR=0
+                    GST_VERSION_MINOR=10
+                    GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
 
 
 elif test $pkg_failed = untried; then
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&5
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&5
 $as_echo "$as_me: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&2;}
-                GST_VERSION_MAJOR=0
-                GST_VERSION_MINOR=10
-                GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
+                    GST_VERSION_MAJOR=0
+                    GST_VERSION_MINOR=10
+                    GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
 
 
 else
@@ -35983,9 +36077,10 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                wxUSE_GSTREAMER="yes"
+                    wxUSE_GSTREAMER="yes"
 
 fi
+        fi
 
         if test $GST_VERSION_MINOR = "10"; then
 
@@ -38822,11 +38917,6 @@ EOF
     COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xMSW" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
         COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0=""
-    fi
-
-    COND_TOOLKIT_MSW_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xMSW" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_MSW_WXUNIV_0=""
     fi
 
     COND_TOOLKIT_OSX_CARBON="#"
