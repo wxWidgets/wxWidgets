@@ -120,20 +120,6 @@ wxGCDC::~wxGCDC()
 {
 }
 
-wxGraphicsContext* wxGCDC::GetGraphicsContext() const
-{
-    if (!m_pimpl) return NULL;
-    wxGCDCImpl *gc_impl = (wxGCDCImpl*) m_pimpl;
-    return gc_impl->GetGraphicsContext();
-}
-
-void wxGCDC::SetGraphicsContext( wxGraphicsContext* ctx )
-{
-    if (!m_pimpl) return;
-    wxGCDCImpl *gc_impl = (wxGCDCImpl*) m_pimpl;
-    gc_impl->SetGraphicsContext( ctx );
-}
-
 wxIMPLEMENT_ABSTRACT_CLASS(wxGCDCImpl, wxDCImpl);
 
 wxGCDCImpl::wxGCDCImpl( wxDC *owner ) :

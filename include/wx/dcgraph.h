@@ -36,9 +36,6 @@ public:
     wxGCDC();
     virtual ~wxGCDC();
 
-    wxGraphicsContext* GetGraphicsContext() const wxOVERRIDE;
-    void SetGraphicsContext( wxGraphicsContext* ctx ) wxOVERRIDE;
-
 #ifdef __WXMSW__
     // override wxDC virtual functions to provide access to HDC associated with
     // this Graphics object (implemented in src/msw/graphics.cpp)
