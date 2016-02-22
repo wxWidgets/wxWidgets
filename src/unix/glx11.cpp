@@ -64,6 +64,16 @@
 #define GLX_DIRECT_COLOR_EXT               0x8003
 #endif
 
+#ifndef GLX_ARB_framebuffer_sRGB
+#define GLX_ARB_framebuffer_sRGB
+#define GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB   0x20B2
+#endif
+
+/* Typedef for the GL 3.0 context creation function */
+typedef GLXContext(*PFNGLXCREATECONTEXTATTRIBSARBPROC)
+    (Display * dpy, GLXFBConfig config, GLXContext share_context,
+    Bool direct, const int *attrib_list);
+
 #ifndef GLX_ARB_create_context
 #define GLX_ARB_create_context
 #define GLX_CONTEXT_MAJOR_VERSION_ARB      0x2091
@@ -71,11 +81,6 @@
 #define GLX_CONTEXT_FLAGS_ARB              0x2094
 #define GLX_CONTEXT_DEBUG_BIT_ARB          0x0001
 #define GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB 0x0002
-
-/* Typedef for the GL 3.0 context creation function */
-typedef GLXContext(*PFNGLXCREATECONTEXTATTRIBSARBPROC)
-    (Display * dpy, GLXFBConfig config, GLXContext share_context,
-    Bool direct, const int *attrib_list);
 #endif
 
 #ifndef GLX_ARB_create_context_profile
@@ -93,79 +98,450 @@ typedef GLXContext(*PFNGLXCREATECONTEXTATTRIBSARBPROC)
 #define GLX_LOSE_CONTEXT_ON_RESET_ARB                   0x8252
 #endif
 
-#ifndef GLX_EXT_create_context_es2_profile
-#define GLX_EXT_create_context_es2_profile
-#ifndef GLX_CONTEXT_ES2_PROFILE_BIT_EXT
-#define GLX_CONTEXT_ES2_PROFILE_BIT_EXT    0x00000002
+#ifndef GLX_ARB_robustness_application_isolation
+#define GLX_ARB_robustness_application_isolation
+#define GLX_CONTEXT_RESET_ISOLATION_BIT_ARB             0x00000008
 #endif
+#ifndef GLX_ARB_robustness_share_group_isolation
+#define GLX_ARB_robustness_share_group_isolation
 #endif
 
-#ifndef GLX_ARB_framebuffer_sRGB
-#define GLX_ARB_framebuffer_sRGB
-#ifndef GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB
-#define GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB                0x20B2
+#ifndef GLX_ARB_context_flush_control
+#define GLX_ARB_context_flush_control
+#define GLX_CONTEXT_RELEASE_BEHAVIOR_ARB            0x2097
+#define GLX_CONTEXT_RELEASE_BEHAVIOR_NONE_ARB       0
+#define GLX_CONTEXT_RELEASE_BEHAVIOR_FLUSH_ARB      0x2098
 #endif
+
+#ifndef GLX_EXT_create_context_es2_profile
+#define GLX_EXT_create_context_es2_profile
+#define GLX_CONTEXT_ES2_PROFILE_BIT_EXT    0x00000004
 #endif
+
+#ifndef GLX_EXT_create_context_es_profile
+#define GLX_EXT_create_context_es_profile
+#define GLX_CONTEXT_ES2_PROFILE_BIT_EXT    0x00000004
+#endif
+
+// ----------------------------------------------------------------------------
+// wxGLContextAttrs: OpenGL rendering context attributes
+// ----------------------------------------------------------------------------
+// GLX specific values
+
+wxGLContextAttrs& wxGLContextAttrs::CoreProfile()
+{
+    AddAttribBits(GLX_CONTEXT_PROFILE_MASK_ARB,
+                  GLX_CONTEXT_CORE_PROFILE_BIT_ARB);
+    SetNeedsARB();
+    return *this;
+}
+
+wxGLContextAttrs& wxGLContextAttrs::MajorVersion(int val)
+{
+    if ( val > 0 )
+    {
+        AddAttribute(GLX_CONTEXT_MAJOR_VERSION_ARB);
+        AddAttribute(val);
+        if ( val >= 3 )
+            SetNeedsARB();
+    }
+    return *this;
+}
+
+wxGLContextAttrs& wxGLContextAttrs::MinorVersion(int val)
+{
+    if ( val >= 0 )
+    {
+        AddAttribute(GLX_CONTEXT_MINOR_VERSION_ARB);
+        AddAttribute(val);
+    }
+    return *this;
+}
+
+wxGLContextAttrs& wxGLContextAttrs::CompatibilityProfile()
+{
+    AddAttribBits(GLX_CONTEXT_PROFILE_MASK_ARB,
+                  GLX_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB);
+    SetNeedsARB();
+    return *this;
+}
+
+wxGLContextAttrs& wxGLContextAttrs::ForwardCompatible()
+{
+    AddAttribBits(GLX_CONTEXT_FLAGS_ARB,
+                  GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB);
+    SetNeedsARB();
+    return *this;
+}
+
+wxGLContextAttrs& wxGLContextAttrs::ES2()
+{
+    AddAttribBits(GLX_CONTEXT_PROFILE_MASK_ARB,
+                  GLX_CONTEXT_ES2_PROFILE_BIT_EXT);
+    SetNeedsARB();
+    return *this;
+}
+
+wxGLContextAttrs& wxGLContextAttrs::DebugCtx()
+{
+    AddAttribBits(GLX_CONTEXT_FLAGS_ARB,
+                  GLX_CONTEXT_DEBUG_BIT_ARB);
+    SetNeedsARB();
+    return *this;
+}
+
+wxGLContextAttrs& wxGLContextAttrs::Robust()
+{
+    AddAttribBits(GLX_CONTEXT_FLAGS_ARB,
+                  GLX_CONTEXT_ROBUST_ACCESS_BIT_ARB);
+    SetNeedsARB();
+    return *this;
+}
+
+wxGLContextAttrs& wxGLContextAttrs::NoResetNotify()
+{
+    AddAttribute(GLX_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB);
+    AddAttribute(GLX_NO_RESET_NOTIFICATION_ARB);
+    SetNeedsARB();
+    return *this;
+}
+
+wxGLContextAttrs& wxGLContextAttrs::LoseOnReset()
+{
+    AddAttribute(GLX_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB);
+    AddAttribute(GLX_LOSE_CONTEXT_ON_RESET_ARB);
+    SetNeedsARB();
+    return *this;
+}
+
+wxGLContextAttrs& wxGLContextAttrs::ResetIsolation()
+{
+    AddAttribBits(GLX_CONTEXT_FLAGS_ARB,
+                  GLX_CONTEXT_RESET_ISOLATION_BIT_ARB);
+    SetNeedsARB();
+    return *this;
+}
+
+wxGLContextAttrs& wxGLContextAttrs::ReleaseFlush(int val)
+{
+    AddAttribute(GLX_CONTEXT_RELEASE_BEHAVIOR_ARB);
+    if ( val == 1 )
+        AddAttribute(GLX_CONTEXT_RELEASE_BEHAVIOR_FLUSH_ARB);
+    else
+        AddAttribute(GLX_CONTEXT_RELEASE_BEHAVIOR_NONE_ARB);
+    SetNeedsARB();
+    return *this;
+}
+
+wxGLContextAttrs& wxGLContextAttrs::PlatformDefaults()
+{
+    renderTypeRGBA = true;
+    x11Direct = true;
+    return *this;
+}
+
+void wxGLContextAttrs::EndList()
+{
+    AddAttribute(None);
+}
+
+// ----------------------------------------------------------------------------
+// wxGLAttributes: Visual/FBconfig attributes
+// ----------------------------------------------------------------------------
+// GLX specific values
+
+//   Different versions of GLX API use rather different attributes lists, see
+//   the following URLs:
+//
+//   - <= 1.2: http://www.opengl.org/sdk/docs/man/xhtml/glXChooseVisual.xml
+//   - >= 1.3: http://www.opengl.org/sdk/docs/man/xhtml/glXChooseFBConfig.xml
+//
+//   Notice in particular that
+//   - GLX_RGBA is boolean attribute in the old version of the API but a
+//     value of GLX_RENDER_TYPE in the new one
+//   - Boolean attributes such as GLX_DOUBLEBUFFER don't take values in the
+//     old version but must be followed by True or False in the new one.
+
+wxGLAttributes& wxGLAttributes::RGBA()
+{
+    if ( wxGLCanvasX11::GetGLXVersion() >= 13 )
+        AddAttribBits(GLX_RENDER_TYPE, GLX_RGBA_BIT);
+    else
+        AddAttribute(GLX_RGBA);
+    return *this;
+}
+
+wxGLAttributes& wxGLAttributes::BufferSize(int val)
+{
+    if ( val >= 0 )
+    {
+        AddAttribute(GLX_BUFFER_SIZE);
+        AddAttribute(val);
+    }
+    return *this;
+}
+
+wxGLAttributes& wxGLAttributes::Level(int val)
+{
+    AddAttribute(GLX_LEVEL);
+    AddAttribute(val);
+    return *this;
+}
+
+wxGLAttributes& wxGLAttributes::DoubleBuffer()
+{
+    AddAttribute(GLX_DOUBLEBUFFER);
+    if ( wxGLCanvasX11::GetGLXVersion() >= 13 )
+        AddAttribute(True);
+    return *this;
+}
+
+wxGLAttributes& wxGLAttributes::Stereo()
+{
+    AddAttribute(GLX_STEREO);
+    if ( wxGLCanvasX11::GetGLXVersion() >= 13 )
+        AddAttribute(True);
+    return *this;
+}
+
+wxGLAttributes& wxGLAttributes::AuxBuffers(int val)
+{
+    if ( val >= 0 )
+    {
+        AddAttribute(GLX_AUX_BUFFERS);
+        AddAttribute(val);
+    }
+    return *this;
+}
+
+wxGLAttributes& wxGLAttributes::MinRGBA(int mRed, int mGreen, int mBlue, int mAlpha)
+{
+    if ( mRed >= 0)
+    {
+        AddAttribute(GLX_RED_SIZE);
+        AddAttribute(mRed);
+    }
+    if ( mGreen >= 0)
+    {
+        AddAttribute(GLX_GREEN_SIZE);
+        AddAttribute(mGreen);
+    }
+    if ( mBlue >= 0)
+    {
+        AddAttribute(GLX_BLUE_SIZE);
+        AddAttribute(mBlue);
+    }
+    if ( mAlpha >= 0)
+    {
+        AddAttribute(GLX_ALPHA_SIZE);
+        AddAttribute(mAlpha);
+    }
+    return *this;
+}
+
+wxGLAttributes& wxGLAttributes::Depth(int val)
+{
+    if ( val >= 0 )
+    {
+        AddAttribute(GLX_DEPTH_SIZE);
+        AddAttribute(val);
+    }
+    return *this;
+}
+
+wxGLAttributes& wxGLAttributes::Stencil(int val)
+{
+    if ( val >= 0 )
+    {
+        AddAttribute(GLX_STENCIL_SIZE);
+        AddAttribute(val);
+    }
+    return *this;
+}
+
+wxGLAttributes& wxGLAttributes::MinAcumRGBA(int mRed, int mGreen, int mBlue, int mAlpha)
+{
+    if ( mRed >= 0)
+    {
+        AddAttribute(GLX_ACCUM_RED_SIZE);
+        AddAttribute(mRed);
+    }
+    if ( mGreen >= 0)
+    {
+        AddAttribute(GLX_ACCUM_GREEN_SIZE);
+        AddAttribute(mGreen);
+    }
+    if ( mBlue >= 0)
+    {
+        AddAttribute(GLX_ACCUM_BLUE_SIZE);
+        AddAttribute(mBlue);
+    }
+    if ( mAlpha >= 0)
+    {
+        AddAttribute(GLX_ACCUM_ALPHA_SIZE);
+        AddAttribute(mAlpha);
+    }
+    return *this;
+}
+
+wxGLAttributes& wxGLAttributes::SampleBuffers(int val)
+{
+#ifdef GLX_SAMPLE_BUFFERS_ARB
+    if ( val >= 0 && wxGLCanvasX11::IsGLXMultiSampleAvailable() )
+    {
+        AddAttribute(GLX_SAMPLE_BUFFERS_ARB);
+        AddAttribute(val);
+    }
+#endif
+    return *this;
+}
+
+wxGLAttributes& wxGLAttributes::Samplers(int val)
+{
+#ifdef GLX_SAMPLES_ARB
+    if ( val >= 0 && wxGLCanvasX11::IsGLXMultiSampleAvailable() )
+    {
+        AddAttribute(GLX_SAMPLES_ARB);
+        AddAttribute(val);
+    }
+#endif
+    return *this;
+}
+
+wxGLAttributes& wxGLAttributes::FrameBuffersRGB()
+{
+    AddAttribute(GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB);
+    AddAttribute(True);
+    return *this;
+}
+
+void wxGLAttributes::EndList()
+{
+    AddAttribute(None);
+}
+
+wxGLAttributes& wxGLAttributes::PlatformDefaults()
+{
+    // No GLX specific values
+    return *this;
+}
+
+wxGLAttributes& wxGLAttributes::Defaults()
+{
+    RGBA().DoubleBuffer();
+    if ( wxGLCanvasX11::GetGLXVersion() < 13 )
+        Depth(1).MinRGBA(1, 1, 1, 0);
+    else
+        Depth(16).SampleBuffers(1).Samplers(4);
+    return *this;
+}
 
 
 // ============================================================================
 // wxGLContext implementation
 // ============================================================================
 
+// Need this X error handler for the case context creation fails
+static bool g_ctxErrorOccurred = false;
+static int CTXErrorHandler( Display* WXUNUSED(dpy), XErrorEvent* WXUNUSED(ev) )
+{
+    g_ctxErrorOccurred = true;
+    return 0;
+}
+
 wxIMPLEMENT_CLASS(wxGLContext, wxObject);
 
-wxGLContext::wxGLContext(wxGLCanvas *gc, const wxGLContext *other)
+wxGLContext::wxGLContext(wxGLCanvas *win,
+                         const wxGLContext *other,
+                         const wxGLContextAttrs *ctxAttrs)
 {
-    if ( gc->GetGLXContextAttribs()[0] != 0 ) // OpenGL 3 context creation
+    const int* contextAttribs = NULL;
+    Bool x11Direct = True;
+    int renderType = GLX_RGBA_TYPE;
+    bool needsARB = false;
+
+    if ( ctxAttrs )
     {
-        XVisualInfo *vi = gc->GetXVisualInfo();
-        wxCHECK_RET( vi, wxT("invalid visual for OpenGL") );
+        contextAttribs = ctxAttrs->GetGLAttrs();
+        x11Direct = ctxAttrs->x11Direct;
+        renderType = ctxAttrs->renderTypeRGBA ? GLX_RGBA_TYPE : GLX_COLOR_INDEX_TYPE;
+        needsARB = ctxAttrs->NeedsARB();
+    }
+    else if ( win->GetGLCTXAttrs().GetGLAttrs() )
+    {
+        // If OpenGL context parameters were set at wxGLCanvas ctor, get them now
+        contextAttribs = win->GetGLCTXAttrs().GetGLAttrs();
+        x11Direct = win->GetGLCTXAttrs().x11Direct;
+        renderType = win->GetGLCTXAttrs().renderTypeRGBA ? GLX_RGBA_TYPE : GLX_COLOR_INDEX_TYPE;
+        needsARB = win->GetGLCTXAttrs().NeedsARB();
+    }
+    // else use GPU driver defaults and x11Direct renderType ones
 
-        // We need to create a temporary context to get the
-        // glXCreateContextAttribsARB function
-        GLXContext tempContext = glXCreateContext( wxGetX11Display(), vi,
-                                                   NULL,
-                                                   GL_TRUE );
-        wxCHECK_RET( tempContext, wxT("Couldn't create OpenGL context") );
+    m_isOk = false;
 
-        PFNGLXCREATECONTEXTATTRIBSARBPROC glXCreateContextAttribsARB
-            = (PFNGLXCREATECONTEXTATTRIBSARBPROC)
-            glXGetProcAddress((GLubyte *)"glXCreateContextAttribsARB");
-        if ( !glXCreateContextAttribsARB )
-        {
-            wxLogError(_("Core OpenGL profile is not supported by the OpenGL driver."));
-            return;
-        }
+    Display* dpy = wxGetX11Display();
+    XVisualInfo *vi = win->GetXVisualInfo();
+    wxCHECK_RET( vi, "invalid visual for OpenGL" );
 
-        GLXFBConfig *fbc = gc->GetGLXFBConfig();
-        wxCHECK_RET( fbc, wxT("invalid GLXFBConfig for OpenGL") );
+    // We need to create a temporary context to get the
+    // glXCreateContextAttribsARB function
+    GLXContext tempContext = glXCreateContext(dpy, vi, NULL,
+                                              win->GetGLCTXAttrs().x11Direct );
+    wxCHECK_RET(tempContext, "glXCreateContext failed" );
 
-        m_glContext = glXCreateContextAttribsARB( wxGetX11Display(), fbc[0],
-            other ? other->m_glContext : None,
-            GL_TRUE, gc->GetGLXContextAttribs() );
+    PFNGLXCREATECONTEXTATTRIBSARBPROC glXCreateContextAttribsARB
+        = (PFNGLXCREATECONTEXTATTRIBSARBPROC)
+        glXGetProcAddress((GLubyte *)"glXCreateContextAttribsARB");
 
-        glXDestroyContext( wxGetX11Display(), tempContext );
+    glXDestroyContext( dpy, tempContext );
+
+    // The preferred way is using glXCreateContextAttribsARB, even for old context
+    if ( !glXCreateContextAttribsARB && needsARB ) // OpenGL 3 context creation
+    {
+        wxLogMessage(_("OpenGL 3.0 or later is not supported by the OpenGL driver."));
+        return;
+    }
+
+    // Install a X error handler, so as to the app doesn't exit (without
+    // even a warning) if GL >= 3.0 context creation fails
+    g_ctxErrorOccurred = false;
+    int (*oldHandler)(Display*, XErrorEvent*) = XSetErrorHandler(&CTXErrorHandler);
+
+    if ( glXCreateContextAttribsARB )
+    {
+        GLXFBConfig *fbc = win->GetGLXFBConfig();
+        wxCHECK_RET( fbc, "Invalid GLXFBConfig for OpenGL" );
+
+        m_glContext = glXCreateContextAttribsARB( dpy, fbc[0],
+                                other ? other->m_glContext : None,
+                                x11Direct, contextAttribs );
     }
     else if ( wxGLCanvas::GetGLXVersion() >= 13 )
     {
-        GLXFBConfig *fbc = gc->GetGLXFBConfig();
-        wxCHECK_RET( fbc, wxT("invalid GLXFBConfig for OpenGL") );
+        GLXFBConfig *fbc = win->GetGLXFBConfig();
+        wxCHECK_RET( fbc, "Invalid GLXFBConfig for OpenGL" );
 
-        m_glContext = glXCreateNewContext( wxGetX11Display(), fbc[0], GLX_RGBA_TYPE,
+        m_glContext = glXCreateNewContext( dpy, fbc[0], renderType,
                                            other ? other->m_glContext : None,
-                                           GL_TRUE );
+                                           x11Direct );
     }
     else // GLX <= 1.2
     {
-        XVisualInfo *vi = gc->GetXVisualInfo();
-        wxCHECK_RET( vi, wxT("invalid visual for OpenGL") );
-
-        m_glContext = glXCreateContext( wxGetX11Display(), vi,
+        m_glContext = glXCreateContext( dpy, vi,
                                         other ? other->m_glContext : None,
-                                        GL_TRUE );
+                                        x11Direct );
     }
 
-    wxASSERT_MSG( m_glContext, wxT("Couldn't create OpenGL context") );
+    // Sync to ensure any errors generated are processed.
+    XSync( dpy, False );
+
+    if ( g_ctxErrorOccurred || !m_glContext )
+        wxLogMessage(_("Couldn't create OpenGL context"));
+    else
+        m_isOk = true;
+
+    // Restore old error handler
+    XSetErrorHandler( oldHandler );
 }
 
 wxGLContext::~wxGLContext()
@@ -213,14 +589,16 @@ wxGLCanvasX11::wxGLCanvasX11()
 {
     m_fbc = NULL;
     m_vi = NULL;
-    m_glxContextAttribs[0] = 0;
 }
 
-bool wxGLCanvasX11::InitVisual(const int *attribList)
+bool wxGLCanvasX11::InitVisual(const wxGLAttributes& dispAttrs)
 {
-    InitGLXContextAttribs(attribList, m_glxContextAttribs);
-
-    return InitXVisualInfo(attribList, &m_fbc, &m_vi);
+    bool ret = InitXVisualInfo(dispAttrs, &m_fbc, &m_vi);
+    if ( !ret )
+    {
+        wxFAIL_MSG("Failed to get a XVisualInfo for the requested attributes.");
+    }
+    return ret;
 }
 
 wxGLCanvasX11::~wxGLCanvasX11()
@@ -258,276 +636,28 @@ bool wxGLCanvasX11::IsGLXMultiSampleAvailable()
 
 
 /* static */
-void wxGLCanvasX11::InitGLXContextAttribs(const int *wxattrs, int *wxctxattrs)
+bool wxGLCanvasX11::InitXVisualInfo(const wxGLAttributes& dispAttrs,
+                                    GLXFBConfig** pFBC,
+                                    XVisualInfo** pXVisual)
 {
-    wxctxattrs[0] = 0; // default is legacy context
-
-    if ( !wxattrs )    // default attribs
-        return;
-
-    bool useGLCoreProfile = false;
-
-    // the minimum gl core version would be 3.0
-    int glVersionMajor = 3,
-        glVersionMinor = 0;
-
-    for ( int arg = 0; wxattrs[arg] != 0; )
+    // GLX_XX attributes
+    const int* attrsListGLX = dispAttrs.GetGLAttrs();
+    if ( !attrsListGLX )
     {
-        switch ( wxattrs[arg++] )
-        {
-            case WX_GL_CORE_PROFILE:
-                useGLCoreProfile = true;
-                break;
-
-            case WX_GL_MAJOR_VERSION:
-                glVersionMajor = wxattrs[arg++];
-                break;
-
-            case WX_GL_MINOR_VERSION:
-                glVersionMinor = wxattrs[arg++];
-                break;
-
-            default: break;
-        }
-    }
-
-    if ( useGLCoreProfile )
-    {
-        wxctxattrs[0] = GLX_CONTEXT_MAJOR_VERSION_ARB;
-        wxctxattrs[1] = glVersionMajor;
-        wxctxattrs[2] = GLX_CONTEXT_MINOR_VERSION_ARB;
-        wxctxattrs[3] = glVersionMinor;
-        wxctxattrs[4] = GLX_CONTEXT_FLAGS_ARB;
-        wxctxattrs[5] = GLX_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB;
-        wxctxattrs[6] = GLX_CONTEXT_PROFILE_MASK_ARB;
-        wxctxattrs[7] = GLX_CONTEXT_CORE_PROFILE_BIT_ARB;
-        wxctxattrs[8] = 0; // terminate
-    }
-}
-
-/* static */
-bool
-wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
-{
-    wxCHECK_MSG( n >= 16, false, wxT("GL attributes buffer too small") );
-
-    /*
-       Different versions of GLX API use rather different attributes lists, see
-       the following URLs:
-
-        - <= 1.2: http://www.opengl.org/sdk/docs/man/xhtml/glXChooseVisual.xml
-        - >= 1.3: http://www.opengl.org/sdk/docs/man/xhtml/glXChooseFBConfig.xml
-
-       Notice in particular that
-        - GLX_RGBA is boolean attribute in the old version of the API but a
-          value of GLX_RENDER_TYPE in the new one
-        - Boolean attributes such as GLX_DOUBLEBUFFER don't take values in the
-          old version but must be followed by True or False in the new one.
-     */
-
-    if ( !wxattrs )
-    {
-        size_t i = 0;
-
-        // use double-buffered true colour by default
-        glattrs[i++] = GLX_DOUBLEBUFFER;
-
-        if ( GetGLXVersion() < 13 )
-        {
-            // default settings if attriblist = 0
-            glattrs[i++] = GLX_RGBA;
-            glattrs[i++] = GLX_DEPTH_SIZE;   glattrs[i++] = 1;
-            glattrs[i++] = GLX_RED_SIZE;     glattrs[i++] = 1;
-            glattrs[i++] = GLX_GREEN_SIZE;   glattrs[i++] = 1;
-            glattrs[i++] = GLX_BLUE_SIZE;    glattrs[i++] = 1;
-            glattrs[i++] = GLX_ALPHA_SIZE;   glattrs[i++] = 0;
-        }
-        else // recent GLX can choose the defaults on its own just fine
-        {
-            // we just need to have a value after GLX_DOUBLEBUFFER
-            glattrs[i++] = True;
-        }
-
-        glattrs[i] = None;
-
-        wxASSERT_MSG( i < n, wxT("GL attributes buffer too small") );
-    }
-    else // have non-default attributes
-    {
-        size_t p = 0;
-        for ( int arg = 0; wxattrs[arg] != 0; )
-        {
-            // check if we have any space left, knowing that we may insert 2
-            // more elements during this loop iteration and we always need to
-            // terminate the list with None (hence -3)
-            if ( p > n - 3 )
-                return false;
-
-            // indicates whether we have a boolean attribute
-            bool isBoolAttr = false;
-
-            switch ( wxattrs[arg++] )
-            {
-                case WX_GL_BUFFER_SIZE:
-                    glattrs[p++] = GLX_BUFFER_SIZE;
-                    break;
-
-                case WX_GL_LEVEL:
-                    glattrs[p++] = GLX_LEVEL;
-                    break;
-
-                case WX_GL_RGBA:
-                    if ( GetGLXVersion() >= 13 )
-                    {
-                        // this is the default GLX_RENDER_TYPE anyhow
-                        continue;
-                    }
-
-                    glattrs[p++] = GLX_RGBA;
-                    isBoolAttr = true;
-                    break;
-
-                case WX_GL_DOUBLEBUFFER:
-                    glattrs[p++] = GLX_DOUBLEBUFFER;
-                    isBoolAttr = true;
-                    break;
-
-                case WX_GL_STEREO:
-                    glattrs[p++] = GLX_STEREO;
-                    isBoolAttr = true;
-                    break;
-
-                case WX_GL_AUX_BUFFERS:
-                    glattrs[p++] = GLX_AUX_BUFFERS;
-                    break;
-
-                case WX_GL_MIN_RED:
-                    glattrs[p++] = GLX_RED_SIZE;
-                    break;
-
-                case WX_GL_MIN_GREEN:
-                    glattrs[p++] = GLX_GREEN_SIZE;
-                    break;
-
-                case WX_GL_MIN_BLUE:
-                    glattrs[p++] = GLX_BLUE_SIZE;
-                    break;
-
-                case WX_GL_MIN_ALPHA:
-                    glattrs[p++] = GLX_ALPHA_SIZE;
-                    break;
-
-                case WX_GL_DEPTH_SIZE:
-                    glattrs[p++] = GLX_DEPTH_SIZE;
-                    break;
-
-                case WX_GL_STENCIL_SIZE:
-                    glattrs[p++] = GLX_STENCIL_SIZE;
-                    break;
-
-                case WX_GL_MIN_ACCUM_RED:
-                    glattrs[p++] = GLX_ACCUM_RED_SIZE;
-                    break;
-
-                case WX_GL_MIN_ACCUM_GREEN:
-                    glattrs[p++] = GLX_ACCUM_GREEN_SIZE;
-                    break;
-
-                case WX_GL_MIN_ACCUM_BLUE:
-                    glattrs[p++] = GLX_ACCUM_BLUE_SIZE;
-                    break;
-
-                case WX_GL_MIN_ACCUM_ALPHA:
-                    glattrs[p++] = GLX_ACCUM_ALPHA_SIZE;
-                    break;
-
-                case WX_GL_SAMPLE_BUFFERS:
-#ifdef GLX_SAMPLE_BUFFERS_ARB
-                    if ( IsGLXMultiSampleAvailable() )
-                    {
-                        glattrs[p++] = GLX_SAMPLE_BUFFERS_ARB;
-                        break;
-                    }
-#endif // GLX_SAMPLE_BUFFERS_ARB
-                    // if it was specified just to disable it, no problem
-                    if ( !wxattrs[arg++] )
-                        continue;
-
-                    // otherwise indicate that it's not supported
-                    return false;
-
-                case WX_GL_SAMPLES:
-#ifdef GLX_SAMPLES_ARB
-                    if ( IsGLXMultiSampleAvailable() )
-                    {
-                        glattrs[p++] = GLX_SAMPLES_ARB;
-                        break;
-                    }
-#endif // GLX_SAMPLES_ARB
-
-                    if ( !wxattrs[arg++] )
-                        continue;
-
-                    return false;
-
-                // the following constants are context attribs
-                // ignore them
-                case WX_GL_CORE_PROFILE:
-                    continue;
-
-                case WX_GL_MAJOR_VERSION:
-                    arg++; // skip int
-                    continue;
-
-                case WX_GL_MINOR_VERSION:
-                    arg++; // skip int
-                    continue;
-
-                default:
-                    wxLogDebug(wxT("Unsupported OpenGL attribute %d"),
-                               wxattrs[arg - 1]);
-                    continue;
-            }
-
-            if ( isBoolAttr )
-            {
-                // as explained above, for pre 1.3 API the attribute just needs
-                // to be present so we only add its value when using the new API
-                if ( GetGLXVersion() >= 13 )
-                    glattrs[p++] = True;
-            }
-            else // attribute with real (non-boolean) value
-            {
-                // copy attribute value as is
-                glattrs[p++] = wxattrs[arg++];
-            }
-        }
-
-        glattrs[p] = None;
-    }
-
-    return true;
-}
-
-/* static */
-bool
-wxGLCanvasX11::InitXVisualInfo(const int *attribList,
-                               GLXFBConfig **pFBC,
-                               XVisualInfo **pXVisual)
-{
-    int data[512];
-    if ( !ConvertWXAttrsToGL(attribList, data, WXSIZEOF(data)) )
+        wxFAIL_MSG("wxGLAttributes object is empty.");
         return false;
+    }
 
-    Display * const dpy = wxGetX11Display();
+    Display* dpy = wxGetX11Display();
 
     if ( GetGLXVersion() >= 13 )
     {
         int returned;
-        *pFBC = glXChooseFBConfig(dpy, DefaultScreen(dpy), data, &returned);
+        *pFBC = glXChooseFBConfig(dpy, DefaultScreen(dpy), attrsListGLX, &returned);
 
         if ( *pFBC )
         {
+            // Use the first good match
             *pXVisual = glXGetVisualFromFBConfig(wxGetX11Display(), **pFBC);
             if ( !*pXVisual )
             {
@@ -539,21 +669,20 @@ wxGLCanvasX11::InitXVisualInfo(const int *attribList,
     else // GLX <= 1.2
     {
         *pFBC = NULL;
-        *pXVisual = glXChooseVisual(dpy, DefaultScreen(dpy), data);
+        *pXVisual = glXChooseVisual(dpy, DefaultScreen(dpy),
+                                   wx_const_cast(int*, attrsListGLX) );
     }
 
     return *pXVisual != NULL;
 }
 
 /* static */
-bool
-wxGLCanvasBase::IsDisplaySupported(const int *attribList)
+bool wxGLCanvasBase::IsDisplaySupported(const wxGLAttributes& dispAttrs)
 {
     GLXFBConfig *fbc = NULL;
     XVisualInfo *vi = NULL;
 
-    const bool
-        isSupported = wxGLCanvasX11::InitXVisualInfo(attribList, &fbc, &vi);
+    bool isSupported = wxGLCanvasX11::InitXVisualInfo(dispAttrs, &fbc, &vi);
 
     if ( fbc )
         XFree(fbc);
@@ -561,6 +690,15 @@ wxGLCanvasBase::IsDisplaySupported(const int *attribList)
         XFree(vi);
 
     return isSupported;
+}
+
+/* static */
+bool wxGLCanvasBase::IsDisplaySupported(const int *attribList)
+{
+    wxGLAttributes dispAttrs;
+    ParseAttribList(attribList, dispAttrs);
+
+    return IsDisplaySupported(dispAttrs);
 }
 
 // ----------------------------------------------------------------------------
@@ -574,8 +712,10 @@ GLXFBConfig *wxGLCanvasX11::ms_glFBCInfo = NULL;
 bool wxGLCanvasX11::InitDefaultVisualInfo(const int *attribList)
 {
     FreeDefaultVisualInfo();
+    wxGLAttributes dispAttrs;
+    ParseAttribList(attribList, dispAttrs);
 
-    return InitXVisualInfo(attribList, &ms_glFBCInfo, &ms_glVisualInfo);
+    return InitXVisualInfo(dispAttrs, &ms_glFBCInfo, &ms_glVisualInfo);
 }
 
 /* static */

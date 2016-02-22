@@ -136,6 +136,21 @@ gtk_glcanvas_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, w
 wxIMPLEMENT_CLASS(wxGLCanvas, wxWindow);
 
 wxGLCanvas::wxGLCanvas(wxWindow *parent,
+                       const wxGLAttributes& dispAttrs,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name,
+                       const wxPalette& palette)
+#if WXWIN_COMPATIBILITY_2_8
+    : m_createImplicitContext(false)
+#endif
+{
+    Create(parent, dispAttrs, id, pos, size, style, name, palette);
+}
+
+wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        wxWindowID id,
                        const int *attribList,
                        const wxPoint& pos,
@@ -206,10 +221,29 @@ bool wxGLCanvas::Create(wxWindow *parent,
                         const int *attribList,
                         const wxPalette& palette)
 {
+    // Separate 'GLXFBConfig/XVisual' attributes.
+    // Also store context attributes for wxGLContext ctor
+    wxGLAttributes dispAttrs;
+    if ( ! ParseAttribList(attribList, dispAttrs, &m_GLCTXAttrs) )
+        return false;
+
+    return Create(parent, dispAttrs, id, pos, size, style, name, palette);
+}
+
+bool wxGLCanvas::Create(wxWindow *parent,
+                        const wxGLAttributes& dispAttrs,
+                        wxWindowID id,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        long style,
+                        const wxString& name,
+                        const wxPalette& palette)
+{
+
     m_noExpose = true;
     m_nativeSizeEvent = true;
 
-    if ( !InitVisual(attribList) )
+    if ( !InitVisual(dispAttrs) )
         return false;
 
     GdkVisual *visual = gdkx_visual_get( GetXVisualInfo()->visualid );

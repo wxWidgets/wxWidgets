@@ -12,6 +12,9 @@
 
 #include <GL/glx.h>
 
+class wxGLContextAttrs;
+class wxGLAttributes;
+
 // ----------------------------------------------------------------------------
 // wxGLContext
 // ----------------------------------------------------------------------------
@@ -19,7 +22,9 @@
 class WXDLLIMPEXP_GL wxGLContext : public wxGLContextBase
 {
 public:
-    wxGLContext(wxGLCanvas *win, const wxGLContext *other = NULL);
+    wxGLContext(wxGLCanvas *win,
+                const wxGLContext *other = NULL,
+                const wxGLContextAttrs *ctxAttrs = NULL);
     virtual ~wxGLContext();
 
     virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
@@ -46,8 +51,8 @@ public:
     // default ctor doesn't do anything, InitVisual() must be called
     wxGLCanvasX11();
 
-    // initializes the XVisualInfo corresponding to the given attributes
-    bool InitVisual(const int *attribList);
+    // initializes GLXFBConfig and XVisualInfo corresponding to the given attributes
+    bool InitVisual(const wxGLAttributes& dispAttrs);
 
     // frees XVisualInfo info
     virtual ~wxGLCanvasX11();
@@ -74,10 +79,6 @@ public:
 
     // GLX-specific methods
     // --------------------
-
-    // return attribs for glXCreateContextAttribsARB
-    const int *GetGLXContextAttribs() const { return m_glxContextAttribs; }
-
 
     // override some wxWindow methods
     // ------------------------------
@@ -108,22 +109,10 @@ public:
     //
     // returns false if XVisualInfo couldn't be initialized, otherwise caller
     // is responsible for freeing the pointers
-    static bool InitXVisualInfo(const int *attribList,
+    static bool InitXVisualInfo(const wxGLAttributes& dispAttrs,
                                 GLXFBConfig **pFBC, XVisualInfo **pXVisual);
 
 private:
-    // initializes glxContextAttribs as defined by wxattrs which must be
-    // 0-terminated
-    static void InitGLXContextAttribs(const int *wxattrs, int *glxctxattribs);
-
-    // fills in glattrs with attributes defined by wxattrs which must be
-    // 0-terminated if it is non-NULL
-    // will ignore any gl context attribs
-    //
-    // n is the max size of glattrs, false is returned if we overflow it, it
-    // should be at least 16 to accommodate the default attributes
-    static bool ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n);
-
 
     // this is only used if it's supported i.e. if GL >= 1.3
     GLXFBConfig *m_fbc;
@@ -134,10 +123,6 @@ private:
     // the global/default versions of the above
     static GLXFBConfig *ms_glFBCInfo;
     static XVisualInfo *ms_glVisualInfo;
-
-    // max 8 attributes plus terminator
-    // if first is 0, create legacy context
-    int m_glxContextAttribs[9];
 };
 
 // ----------------------------------------------------------------------------

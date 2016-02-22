@@ -59,6 +59,8 @@ Changes in behaviour which may result in build errors
 
 - Added wxNativeWindow allowing to embed native widgets in wxWidgets programs.
 
+- Improve wxGLCanvas to be more type safe and better support modern OpenGL.
+
 All:
 
 - Add UTF-8 and ZIP 64 support to wxZip{Input,Output}Stream (Tobias Taschner).
