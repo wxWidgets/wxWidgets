@@ -395,7 +395,7 @@ WXHWND wxComboBox::GetEditHWNDIfAvailable() const
     }
 
     // we assume that the only child of the combobox is the edit window
-    return (WXHWND)::FindWindowEx(GetHwnd(), NULL, NULL, NULL);
+    return (WXHWND)::FindWindowEx(GetHwnd(), NULL, wxT("EDIT"), NULL);
 }
 
 WXHWND wxComboBox::GetEditHWND() const
