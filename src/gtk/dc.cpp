@@ -34,6 +34,14 @@ wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner, int)
     m_height = 0;
 }
 
+wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner, double scaleFactor)
+    : base_type(owner, 0)
+{
+    m_width = 0;
+    m_height = 0;
+    m_contentScaleFactor = scaleFactor;
+}
+
 wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner, wxWindow* window)
     : base_type(owner, 0)
 {
@@ -43,6 +51,7 @@ wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner, wxWindow* window)
     m_textBackgroundColour = window->GetBackgroundColour();
     m_width = 0;
     m_height = 0;
+    m_contentScaleFactor = window->GetContentScaleFactor();
 }
 
 void wxGTKCairoDCImpl::DoDrawBitmap(const wxBitmap& bitmap, int x, int y, bool useMask)
@@ -345,6 +354,7 @@ void wxMemoryDCImpl::Setup()
     {
         m_width = int(m_bitmap.GetScaledWidth());
         m_height = int(m_bitmap.GetScaledHeight());
+        m_contentScaleFactor = m_bitmap.GetScaleFactor();
         cairo_t* cr = m_bitmap.CairoCreate();
         gc = wxGraphicsContext::CreateFromNative(cr);
         gc->EnableOffset(true);
@@ -353,8 +363,8 @@ void wxMemoryDCImpl::Setup()
 }
 //-----------------------------------------------------------------------------
 
-wxGTKCairoDC::wxGTKCairoDC(cairo_t* cr)
-    : base_type(new wxGTKCairoDCImpl(this, 0))
+wxGTKCairoDC::wxGTKCairoDC(cairo_t* cr, wxWindow* window)
+    : base_type(new wxGTKCairoDCImpl(this, window->GetContentScaleFactor()))
 {
     cairo_reference(cr);
     wxGraphicsContext* gc = wxGraphicsContext::CreateFromNative(cr);

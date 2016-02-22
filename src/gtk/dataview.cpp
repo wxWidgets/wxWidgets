@@ -2492,17 +2492,19 @@ wxDC *wxDataViewCustomRenderer::GetDC()
 {
     if (m_dc == NULL)
     {
+        wxDataViewCtrl* ctrl = NULL;
+        wxDataViewColumn* column = GetOwner();
+        if (column)
+            ctrl = column->GetOwner();
 #ifdef __WXGTK3__
         wxASSERT(m_renderParams);
         cairo_t* cr = m_renderParams->cr;
         wxASSERT(cr && cairo_status(cr) == 0);
-        m_dc = new wxGTKCairoDC(cr);
+        m_dc = new wxGTKCairoDC(cr, ctrl);
 #else
-        if (GetOwner() == NULL)
+        if (ctrl == NULL)
             return NULL;
-        if (GetOwner()->GetOwner() == NULL)
-            return NULL;
-        m_dc = new wxDataViewCtrlDC( GetOwner()->GetOwner() );
+        m_dc = new wxDataViewCtrlDC(ctrl);
 #endif
     }
 

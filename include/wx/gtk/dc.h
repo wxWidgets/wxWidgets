@@ -19,6 +19,7 @@ class wxGTKCairoDCImpl: public wxGCDCImpl
 public:
     wxGTKCairoDCImpl(wxDC* owner);
     wxGTKCairoDCImpl(wxDC* owner, int);
+    wxGTKCairoDCImpl(wxDC* owner, double scaleFactor);
     wxGTKCairoDCImpl(wxDC* owner, wxWindow* window);
 
     virtual void DoDrawBitmap(const wxBitmap& bitmap, int x, int y, bool useMask) wxOVERRIDE;
@@ -103,7 +104,7 @@ class WXDLLIMPEXP_CORE wxGTKCairoDC: public wxDC
 {
     typedef wxDC base_type;
 public:
-    wxGTKCairoDC(cairo_t* cr);
+    wxGTKCairoDC(cairo_t* cr, wxWindow* window);
 
     wxDECLARE_NO_COPY_CLASS(wxGTKCairoDC);
 };

@@ -56,7 +56,7 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose* gdk_event, wxMin
     gtk_render_frame(sc, cr, 0, 0, win->m_width, win->m_height);
     gtk_style_context_restore(sc);
 
-    wxGTKCairoDC dc(cr);
+    wxGTKCairoDC dc(cr, win);
 #else
     if (gdk_event->count > 0 ||
         gdk_event->window != gtk_widget_get_window(widget))
