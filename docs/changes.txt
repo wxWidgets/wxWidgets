@@ -223,7 +223,7 @@ wxOSX/Cocoa:
 - Fix wxEVT_CHAR for non-BMP Unicode characters (ARATA Mizuki).
 - Add wxTE_AUTO_URL support to wxTextCtrl (Igor Korot).
 - Add support for wxEVT_COMBOBOX_{DROPDOWN, CLOSEUP} events (Igor Korot).
-- Implement strike-through support in wxFont (Igor Korot).
+- Implement strike-through support in wxFont (Igor Korot, Daniel Kulp).
 - Provide native implementation of wxStandardPaths (Tobias Taschner).
 - Add wxTE_{RIGHT,CENTER} support for multiline wxTextCtrl (Andreas Falkenhahn).
 - Don't leave wxSlider labels shown when the slider itself is hidden.
