@@ -634,6 +634,7 @@ wxMSW:
 - Fix RegisterHotKey() with negative IDs (troelsk).
 - Fix event object type for wxEVT_SPINCTRL events.
 - Fix bug if wxToolBar tool was deleted from its own handler (Artur Wieczorek).
+- Improve wxSearchCtrl appearance, don't make it too tall (Artur Wieczorek).
 - Fix creating or modifying file associations under recent Windows versions.
 
 wxOSX:
