@@ -7497,11 +7497,12 @@ elif test "$GXX" = yes ; then
     CXXWARNINGS="-Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy"
     AX_CXXFLAGS_GCC_OPTION(-Woverloaded-virtual, CXXWARNINGS)
 
-    dnl when building under Mac we currently get hundreds of deprecation
-    dnl warnings for Cocoa symbols from the standard headers -- disable them
-    dnl as we already know that they're deprecated and nothing else can be seen
-    dnl with these warnings on
-    if test "$wxUSE_MAC" = 1 ; then
+    dnl when building using GTK+ 3 or Cocoa we currently get tons of deprecation
+    dnl warnings from the standard headers -- disable them as we already know
+    dnl that they're deprecated but we still have to use them to support older
+    dnl toolkit versions and leaving this warning enabled prevents seeing any
+    dnl other ones
+    if test "$WXGTK3" = 1 -o "$wxUSE_MAC" = 1 ; then
         CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations"
     fi
 fi

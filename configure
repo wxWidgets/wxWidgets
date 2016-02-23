@@ -36039,7 +36039,7 @@ case ".$ac_cv_cxxflags_gcc_option__Woverloaded_virtual" in
 esac
 
 
-                    if test "$wxUSE_MAC" = 1 ; then
+                        if test "$WXGTK3" = 1 -o "$wxUSE_MAC" = 1 ; then
         CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations"
     fi
 fi
