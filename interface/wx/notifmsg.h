@@ -21,7 +21,7 @@
     @section platform_notes Platform Notes
 
     @par Windows
-    Up to Windows 8.1 balloon notifications are displayed from an icon in the
+    Up to Windows 8 balloon notifications are displayed from an icon in the
     notification area of the taskbar. If your application uses a wxTaskBarIcon
     you should call UseTaskBarIcon() to ensure that only one icon is shown in
     the notification area. Windows 10 displays all notifications as popup
@@ -39,8 +39,8 @@
     
     
     @beginEventEmissionTable{wxCommandEvent}
-    @event{EVT_NOTIFICATION_MESSAGE_CLICK(id, func)}
-           Process a @c EVT_NOTIFICATION_MESSAGE_CLICK event, when a notification
+    @event{wxEVT_NOTIFICATION_MESSAGE_CLICK(id, func)}
+           Process a @c wxEVT_NOTIFICATION_MESSAGE_CLICK event, when a notification
            is clicked.
     @event{wxEVT_NOTIFICATION_MESSAGE_DISMISSED(id, func)}
            Process a @c wxEVT_NOTIFICATION_MESSAGE_DISMISSED event, when a notification
