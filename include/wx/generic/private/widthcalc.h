@@ -102,8 +102,8 @@ public:
             }
 
             wxLogTrace("items container",
-                       "determined best size from %d top, %d bottom "
-                       "plus %d more visible items out of %d total",
+                       "determined best size from %zu top, %zu bottom "
+                       "plus %zu more visible items out of %zu total",
                        top_part_end,
                        count - bottom_part_start,
                        wxMax(0, last_visible - first_visible),

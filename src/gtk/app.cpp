@@ -108,6 +108,21 @@ static gboolean wxapp_idle_callback(gpointer)
 }
 }
 
+// 0: no change, 1: focus in, 2: focus out
+static int gs_focusChange;
+
+extern "C" {
+static gboolean
+wx_focus_event_hook(GSignalInvocationHint*, unsigned, const GValue* param_values, void* data)
+{
+    // If focus change on TLW
+    if (GTK_IS_WINDOW(g_value_peek_pointer(param_values)))
+        gs_focusChange = GPOINTER_TO_INT(data);
+
+    return true;
+}
+}
+
 bool wxApp::DoIdle()
 {
     guint id_save;
@@ -131,6 +146,12 @@ bool wxApp::DoIdle()
     }
 
     gdk_threads_enter();
+
+    if (gs_focusChange) {
+        SetActive(gs_focusChange == 1, NULL);
+        gs_focusChange = 0;
+    }
+
     bool needMore;
     do {
         ProcessPendingEvents();
@@ -447,8 +468,18 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
 #endif
 
-    // make sure GtkWidget type is loaded, idle hooks need it
-    g_type_class_ref(GTK_TYPE_WIDGET);
+    // make sure GtkWidget type is loaded, signal emission hooks need it
+    const GType widgetType = GTK_TYPE_WIDGET;
+    g_type_class_ref(widgetType);
+
+    // focus in/out hooks used for generating wxEVT_ACTIVATE_APP
+    g_signal_add_emission_hook(
+        g_signal_lookup("focus_in_event", widgetType),
+        0, wx_focus_event_hook, GINT_TO_POINTER(1), NULL);
+    g_signal_add_emission_hook(
+        g_signal_lookup("focus_out_event", widgetType),
+        0, wx_focus_event_hook, GINT_TO_POINTER(2), NULL);
+
     WakeUpIdle();
 
     return true;
@@ -460,7 +491,9 @@ void wxApp::CleanUp()
         g_source_remove(m_idleSourceId);
 
     // release reference acquired by Initialize()
-    g_type_class_unref(g_type_class_peek(GTK_TYPE_WIDGET));
+    gpointer gt = g_type_class_peek(GTK_TYPE_WIDGET);
+    if (gt != NULL)
+        g_type_class_unref(gt);
 
     gdk_threads_leave();
 
