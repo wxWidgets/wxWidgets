@@ -28,6 +28,7 @@ The library can also be build via configure/make:
     cd build_ios
     ../configure --with-osx_iphone --enable-monolithic \
         --with-macosx-version-min=8.0 --disable-shared \
+        --enable-macosx_arch=i386 \
         --with-macosx-sdk=$(xcrun --sdk iphonesimulator --show-sdk-path)
     make
 
