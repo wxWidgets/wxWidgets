@@ -279,7 +279,13 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 #if wxUSE_THREADS
     if (!g_thread_supported())
     {
+        // g_thread_init() does nothing and is deprecated in recent glib but
+        // might still be needed in the older versions, which are the only ones
+        // for which this code is going to be executed (as g_thread_supported()
+        // is always TRUE in these recent glib versions anyhow).
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         g_thread_init(NULL);
+        wxGCC_WARNING_RESTORE()
         gdk_threads_init();
     }
 #endif // wxUSE_THREADS
