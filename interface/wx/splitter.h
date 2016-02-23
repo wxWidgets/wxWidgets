@@ -164,7 +164,7 @@ public:
     /**
         Returns the default sash size in pixels or 0 if it is invisible.
 
-        @see GetDefaultSashSize(), IsSashInvisible()
+        @see GetDefaultSashSize(), IsSashInvisible(), SetSashSize()
      */
     int GetSashSize() const;
 
@@ -341,6 +341,13 @@ public:
         @see GetSashPosition()
     */
     void SetSashPosition(int position, bool redraw = true);
+
+        /**
+        Returns the default sash size in pixels or 0 if it is invisible.
+
+        @see GetDefaultSashSize(), GetSashSize(), IsSashInvisible()
+     */
+    void SetSashSize(int size);
 
     /**
         Sets the split mode.
