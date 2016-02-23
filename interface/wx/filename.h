@@ -980,33 +980,6 @@ public:
     bool IsRelative(wxPathFormat format = wxPATH_NATIVE) const;
 
     /**
-        On Mac OS, gets the common type and creator for the given extension.
-
-        @onlyfor{wxosx}
-    */
-    static bool MacFindDefaultTypeAndCreator(const wxString& ext,
-                                            wxUint32* type,
-                                            wxUint32* creator);
-
-    /**
-        On Mac OS, registers application defined extensions and their default type
-        and creator.
-
-        @onlyfor{wxosx}
-    */
-    static void MacRegisterDefaultTypeAndCreator(const wxString& ext,
-                                                wxUint32 type,
-                                                wxUint32 creator);
-
-    /**
-        On Mac OS, looks up the appropriate type and creator from the registration
-        and then sets it.
-
-        @onlyfor{wxosx}
-    */
-    bool MacSetDefaultTypeAndCreator();
-
-    /**
         Make the file name absolute.
         This is a shortcut for
         @code
