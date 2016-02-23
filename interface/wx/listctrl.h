@@ -1239,9 +1239,6 @@ public:
     /**
         Enable or disable checkboxes for list items.
 
-        This method is only implemented for wxMSW native control currently, it
-        will always simply return false in the other ports.
-
         @param enable If @true, enable checkboxes, otherwise disable checkboxes.
         @return @true if checkboxes are supported, @false otherwise.
 
