@@ -182,7 +182,7 @@ public:
       so that this button is only added to a dialog for non-Windows platforms
       (use wxDIALOG_EX_CONTEXTHELP on Windows).
 
-    Note that on Mac OS X, the cursor does not change when in context-sensitive
+    Note that on OS X, the cursor does not change when in context-sensitive
     help mode.
 
     @library{wxcore}

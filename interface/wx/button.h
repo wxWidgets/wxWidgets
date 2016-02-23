@@ -115,7 +115,7 @@ public:
         @ref page_stockitems "this list", a standard label will be used. In
         other words, if you use a predefined @c wxID_XXX constant, just omit
         the label completely rather than specifying it. In particular, help
-        buttons (the ones with @a id of @c wxID_HELP) under Mac OS X can't
+        buttons (the ones with @a id of @c wxID_HELP) under OS X can't
         display any label at all and while wxButton will detect if the standard
         "Help" label is used and ignore it, using any other label will prevent
         the button from correctly appearing as a help button and so should be
