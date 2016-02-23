@@ -8039,7 +8039,15 @@ else
     SUBDIRS="samples utils"
 fi
 dnl Add tests to the list of subdirs if cppunit 1.8.0+ is detected
-AM_PATH_CPPUNIT(1.8.0, [SUBDIRS="$SUBDIRS tests"])
+AM_PATH_CPPUNIT(1.8.0,
+    [SUBDIRS="$SUBDIRS tests"],
+    [
+        PKG_CHECK_MODULES(CPPUNIT, [cppunit >= 1.8.0],
+            [SUBDIRS="$SUBDIRS tests"],
+            [AC_MSG_WARN([cppunit not found])]
+        )
+    ]
+)
 
 for subdir in $SUBDIRS; do
     if test -d ${srcdir}/${subdir} ; then
