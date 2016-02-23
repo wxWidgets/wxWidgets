@@ -574,6 +574,10 @@ public:
     wxAuiToolBar is a dockable toolbar, part of the wxAUI class framework.
     See also @ref overview_aui.
 
+    The appearance of this class is configurable and can be changed by calling
+    wxAuiToolBar::SetArtProvider(). By default, native art provider is used if
+    available (currently only in wxMSW) and wxAuiGenericToolBarArt otherwise.
+
     @beginStyleTable
     @style{wxAUI_TB_TEXT}
     @style{wxAUI_TB_NO_TOOLTIPS}

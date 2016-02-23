@@ -22,7 +22,7 @@
 
     The appearance of this class is configurable and can be changed by calling
     wxAuiNotebook::SetArtProvider(). By default, native art provider is used if
-    available (currently only in wxGTK) and wxAuiGenericTabArt otherwise.
+    available (currently only in wxGTK and wxMSW) and wxAuiGenericTabArt otherwise.
 
     @beginStyleTable
     @style{wxAUI_NB_DEFAULT_STYLE}
