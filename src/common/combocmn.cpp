@@ -1279,9 +1279,9 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
     m_btnArea.width = butAreaWid;
     m_btnArea.height = sz.y - ((btnBorder+FOCUS_RING)*2);
 
-    m_tcArea.x = ( m_btnSide==wxRIGHT ? 0 : butAreaWid ) + customBorder + FOCUS_RING;
+    m_tcArea.x = ( m_btnSide==wxRIGHT ? 0 : butAreaWid ) + customBorder;
     m_tcArea.y = customBorder + FOCUS_RING;
-    m_tcArea.width = sz.x - butAreaWid - (customBorder*2) - (FOCUS_RING*2);
+    m_tcArea.width = sz.x - butAreaWid - (customBorder*2) - FOCUS_RING;
     m_tcArea.height = sz.y - ((customBorder+FOCUS_RING)*2);
 
 /*
