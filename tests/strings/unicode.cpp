@@ -364,6 +364,14 @@ void UnicodeTestCase::ConversionUTF8()
     CPPUNIT_ASSERT_EQUAL( 0, c.ToWChar(NULL, 0, u25a6, 0) );
     CPPUNIT_ASSERT_EQUAL( 1, c.ToWChar(NULL, 0, u25a6, 3) );
     CPPUNIT_ASSERT_EQUAL( 2, c.ToWChar(NULL, 0, u25a6, 4) );
+
+    // Verify that converting a string with embedded NULs works.
+    CPPUNIT_ASSERT_EQUAL( 5, wxString::FromUTF8("abc\0\x32", 5).length() );
+
+    // Verify that converting a string containing invalid UTF-8 does not work,
+    // even if it happens after an embedded NUL.
+    CPPUNIT_ASSERT( wxString::FromUTF8("abc\xff").empty() );
+    CPPUNIT_ASSERT( wxString::FromUTF8("abc\0\xff", 5).empty() );
 }
 
 void UnicodeTestCase::ConversionUTF16()
