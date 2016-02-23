@@ -1454,7 +1454,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
     
     wxSize toolSize = GetToolSize();
     WXWidget controlHandle = NULL;
-    NSRect toolrect = NSMakeRect(0, 0, toolSize.x, toolSize.y );
+    NSRect toolrect = NSMakeRect(0, 0, toolSize.x, toolSize.y + 2 );
 
 #if wxOSX_USE_NATIVE_TOOLBAR
     wxString label = tool->GetLabel();
