@@ -958,7 +958,7 @@ public:
     and ordering defined by the platform or toolkit's user interface guidelines
     (if such things exist). By using this class, you can ensure that all your
     standard dialogs look correct on all major platforms. Currently it conforms to
-    the Windows, GTK+ and Mac OS X human interface guidelines.
+    the Windows, GTK+ and OS X human interface guidelines.
 
     When there aren't interface guidelines defined for a particular platform or
     toolkit, wxStdDialogButtonSizer reverts to the Windows implementation.
@@ -969,9 +969,9 @@ public:
     and then call Realize in order to create the actual button layout used.
     Other than these special operations, this sizer works like any other sizer.
 
-    If you add a button with wxID_SAVE, on Mac OS X the button will be renamed to
+    If you add a button with wxID_SAVE, on OS X the button will be renamed to
     "Save" and the wxID_NO button will be renamed to "Don't Save" in accordance
-    with the Mac OS X Human Interface Guidelines.
+    with the OS X Human Interface Guidelines.
 
     @library{wxcore}
     @category{winlayout}

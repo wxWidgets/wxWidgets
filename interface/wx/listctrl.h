@@ -580,7 +580,7 @@ public:
         Returns @NULL if no label is being edited.
 
         @note It is currently only implemented for wxMSW and the generic version,
-              not for the native Mac OS X version.
+              not for the native OS X version.
     */
     wxTextCtrl* GetEditControl() const;
 

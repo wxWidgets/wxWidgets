@@ -19,7 +19,7 @@
     methods.
 
     In the description of the methods below, the example return values are given
-    for the Unix, Windows and Mac OS X systems, however please note that these are
+    for the Unix, Windows and OS X systems, however please note that these are
     just the examples and the actual values may differ. For example, under Windows:
     the system administrator may change the standard directories locations, e.g.
     the Windows directory may be named @c "W:\Win2003" instead of
@@ -240,7 +240,7 @@ public:
         specified category for the given language.
 
         In general this is just the same as @a lang subdirectory of GetResourcesDir()
-        (or @c lang.lproj under Mac OS X) but is something quite different for
+        (or @c lang.lproj under OS X) but is something quite different for
         message catalog category under Unix where it returns the standard
         @c prefix/share/locale/lang/LC_MESSAGES directory.
 
@@ -267,7 +267,7 @@ public:
         The resources are the auxiliary data files needed for the application to run
         and include, for example, image and sound files it might use.
 
-        This function is the same as GetDataDir() for all platforms except Mac OS X.
+        This function is the same as GetDataDir() for all platforms except OS X.
         Example return values:
         - Unix: @c prefix/share/appinfo
         - Windows: the directory where the executable file is located

@@ -849,9 +849,9 @@ wxString wxGetOsDescription();
     contain the kernel major and minor version numbers (as returned by the
     'uname -r' command); e.g. "4" and "1" if the machine is using kernel 4.1.4.
 
-    For Mac OS X systems (@c wxOS_MAC) the major and minor version integers are the
+    For OS X systems (@c wxOS_MAC) the major and minor version integers are the
     natural version numbers associated with the OS; e.g. "10" and "11" if the machine
-    is using Mac OS X El Capitan.
+    is using OS X El Capitan.
     
     For Windows-like systems (@c wxOS_WINDOWS) the major and minor version integers will 
     contain the following values:

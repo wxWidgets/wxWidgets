@@ -805,7 +805,7 @@ public:
         page rectangle, or page margins rectangle to perform your own scaling.
 
         @note
-        While the underlying drawing model of Mac OS X is floating-point,
+        While the underlying drawing model of OS X is floating-point,
         wxWidgets's drawing model scales from integer coordinates.
     */
     void MapScreenSizeToDevice();

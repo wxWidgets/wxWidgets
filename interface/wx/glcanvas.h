@@ -205,7 +205,7 @@ enum
     be set up and their meanings will be described below.
 
     @note
-        On those platforms which use a configure script (e.g. Linux and Mac OS)
+        On those platforms which use a configure script (e.g. Linux and OS X)
         OpenGL support is automatically enabled if the relative headers and
         libraries are found.
         To switch it on under the other platforms (e.g. Windows), you need to edit

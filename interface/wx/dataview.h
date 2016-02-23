@@ -1332,7 +1332,7 @@ public:
         style as in the case of single selection it returns the same thing as
         GetSelection().
 
-        Notice that under all platforms except Mac OS X the currently focused
+        Notice that under all platforms except OS X the currently focused
         item may be selected or not but under OS X the current item is always
         selected.
 

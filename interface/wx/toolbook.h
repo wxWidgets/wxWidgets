@@ -25,7 +25,7 @@ wxEventType wxEVT_TOOLBOOK_PAGE_CHANGING;
 
     @beginStyleTable
     @style{wxTBK_BUTTONBAR}
-        Use wxButtonToolBar-based implementation under Mac OS (ignored under
+        Use wxButtonToolBar-based implementation under OS X (ignored under
         other platforms).
     @style{wxTBK_HORZ_LAYOUT}
         Shows the text and the icons alongside, not vertically stacked (only
