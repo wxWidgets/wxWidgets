@@ -13,6 +13,7 @@
 #endif
 
 #include <QtTest/QtTestGui>
+#include <QApplication>
 
 #include "wx/qt/defs.h"
 #include "wx/qt/private/utils.h"

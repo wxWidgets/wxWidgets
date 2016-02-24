@@ -22,6 +22,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/bitmap.h"
+#include "wx/cursor.h"
 #include "wx/rawbmp.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"

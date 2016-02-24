@@ -13,6 +13,7 @@
 
 #include <QtWidgets/QDesktopWidget>
 #include <QtGui/QScreen>
+#include <QApplication>
 #include <QPixmap>
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl);
