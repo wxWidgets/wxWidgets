@@ -214,7 +214,7 @@ void wxGenericColourDialog::OnCustomColourMouseClick(wxMouseEvent& event)
 {
     // Find index of custom colour
     // and call the handler.
-    for (int i = 0; i < WXSIZEOF(m_customColoursBmp); i++)
+    for (unsigned i = 0; i < WXSIZEOF(m_customColoursBmp); i++)
     {
         if ( m_customColoursBmp[i]->GetId() == event.GetId() )
         {
@@ -284,7 +284,7 @@ void wxGenericColourDialog::CreateWidgets()
                                            wxBORDER_SUNKEN);
 
     // 16 bitmaps to preview custom colours (with alpha channel)
-    for (int i = 0; i < WXSIZEOF(m_customColoursBmp); i++)
+    for (unsigned i = 0; i < WXSIZEOF(m_customColoursBmp); i++)
     {
         int x = ((i % 8)*(m_smallRectangleSize.x+m_gridSpacing)) + m_customColoursRect.x;
         int y = ((i / 8)*(m_smallRectangleSize.y+m_gridSpacing)) + m_customColoursRect.y;
@@ -471,7 +471,7 @@ void wxGenericColourDialog::PaintCustomColours(wxDC& dc, int clrIndex)
     int idxStart;
     int idxEnd;
     // For clrIndex == -1 redraw all custom colours
-    if ( clrIndex < 0 || clrIndex >= WXSIZEOF(m_customColours) )
+    if ( clrIndex < 0 || static_cast<unsigned>(clrIndex) >= WXSIZEOF(m_customColours) )
     {
         idxStart = 0;
         idxEnd = WXSIZEOF(m_customColours) - 1;
