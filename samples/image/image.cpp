@@ -78,6 +78,7 @@ public:
 
     void OnAbout( wxCommandEvent &event );
     void OnNewFrame( wxCommandEvent &event );
+    void OnNewFrameHiDPI(wxCommandEvent&);
     void OnImageInfo( wxCommandEvent &event );
     void OnThumbnail( wxCommandEvent &event );
 
@@ -123,9 +124,10 @@ enum
 class MyImageFrame : public wxFrame
 {
 public:
-    MyImageFrame(wxFrame *parent, const wxString& desc, const wxImage& image)
+    MyImageFrame(wxFrame *parent, const wxString& desc, const wxImage& image, double scale = 1.0)
     {
-        Create(parent, desc, wxBitmap(image), image.GetImageCount(desc));
+        Create(parent, desc, wxBitmap(image, wxBITMAP_SCREEN_DEPTH, scale),
+            image.GetImageCount(desc));
     }
 
     MyImageFrame(wxFrame *parent, const wxString& desc, const wxBitmap& bitmap)
@@ -622,6 +624,7 @@ enum
     ID_QUIT  = wxID_EXIT,
     ID_ABOUT = wxID_ABOUT,
     ID_NEW = 100,
+    ID_NEW_HIDPI,
     ID_INFO,
     ID_SHOWRAW,
     ID_GRAPHICS,
@@ -633,6 +636,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU    (ID_ABOUT, MyFrame::OnAbout)
     EVT_MENU    (ID_QUIT,  MyFrame::OnQuit)
     EVT_MENU    (ID_NEW,   MyFrame::OnNewFrame)
+    EVT_MENU    (ID_NEW_HIDPI,   MyFrame::OnNewFrameHiDPI)
     EVT_MENU    (ID_INFO,  MyFrame::OnImageInfo)
     EVT_MENU    (ID_SHOWTHUMBNAIL, MyFrame::OnThumbnail)
 #ifdef wxHAVE_RAW_BITMAP
@@ -657,6 +661,8 @@ MyFrame::MyFrame()
 
     wxMenu *menuImage = new wxMenu;
     menuImage->Append( ID_NEW, wxT("&Show any image...\tCtrl-O"));
+    if (GetContentScaleFactor() > 1)
+        menuImage->Append(ID_NEW_HIDPI, wxS("Show any image as &HiDPI...\tCtrl-H"));
     menuImage->Append( ID_INFO, wxT("Show image &information...\tCtrl-I"));
 #ifdef wxHAVE_RAW_BITMAP
     menuImage->AppendSeparator();
@@ -761,6 +767,14 @@ void MyFrame::OnNewFrame( wxCommandEvent &WXUNUSED(event) )
     wxString filename = LoadUserImage(image);
     if ( !filename.empty() )
         new MyImageFrame(this, filename, image);
+}
+
+void MyFrame::OnNewFrameHiDPI(wxCommandEvent&)
+{
+    wxImage image;
+    wxString filename = LoadUserImage(image);
+    if (!filename.empty())
+        new MyImageFrame(this, filename, image, GetContentScaleFactor());
 }
 
 void MyFrame::OnImageInfo( wxCommandEvent &WXUNUSED(event) )
