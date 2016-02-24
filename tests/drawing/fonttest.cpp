@@ -36,7 +36,9 @@ GraphicsContextDrawingTestCase::ms_drawingFontTc = {
 void GraphicsContextDrawingTestCase::DoFontDrawings (wxGraphicsContext *gc)
 {
 #ifdef __WXGTK__
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     g_type_init();
+    wxGCC_WARNING_RESTORE()
 #endif
 
     // This test is expected to treat about fonts/texts. Fonts are a bit special
