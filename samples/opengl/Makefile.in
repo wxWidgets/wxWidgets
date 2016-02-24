@@ -21,7 +21,7 @@ DESTDIR =
 
 ### Targets: ###
 
-all: cube isosurf penguin
+all: cube isosurf penguin pyramid
 
 install: 
 
@@ -35,12 +35,14 @@ clean:
 	-(cd cube && $(MAKE) clean)
 	-(cd isosurf && $(MAKE) clean)
 	-(cd penguin && $(MAKE) clean)
+	-(cd pyramid && $(MAKE) clean)
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 	-(cd cube && $(MAKE) distclean)
 	-(cd isosurf && $(MAKE) distclean)
 	-(cd penguin && $(MAKE) distclean)
+	-(cd pyramid && $(MAKE) distclean)
 
 cube: 
 	(cd cube && $(MAKE) all)
@@ -51,8 +53,11 @@ isosurf:
 penguin: 
 	(cd penguin && $(MAKE) all)
 
+pyramid: 
+	(cd pyramid && $(MAKE) all)
+
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
-.PHONY: all install uninstall clean distclean cube isosurf penguin
+.PHONY: all install uninstall clean distclean cube isosurf penguin pyramid

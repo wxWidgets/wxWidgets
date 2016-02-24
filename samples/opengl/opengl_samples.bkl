@@ -2,7 +2,7 @@
 <makefile>
 
     <include file="../../build/bakefiles/config.bkl"/>
-    
+
     <template id="sub">
         <dir>$(id)</dir>
         <installable>no</installable>
@@ -13,5 +13,6 @@
     <subproject id="cube" template="sub"/>
     <subproject id="isosurf" template="sub"/>
     <subproject id="penguin" template="sub"/>
+    <subproject id="pyramid" template="sub"/>
 
 </makefile>

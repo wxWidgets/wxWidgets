@@ -36,7 +36,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 
 ### Targets: ###
 
-all: sub_cube sub_isosurf sub_penguin
+all: sub_cube sub_isosurf sub_penguin sub_pyramid
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -49,6 +49,9 @@ clean:
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
 	cd penguin
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd "$(MAKEDIR)"
+	cd pyramid
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
 
@@ -64,6 +67,11 @@ sub_isosurf:
 
 sub_penguin: 
 	cd penguin
+	$(MAKE) -f makefile.vc $(MAKEARGS) all
+	cd "$(MAKEDIR)"
+
+sub_pyramid: 
+	cd pyramid
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 

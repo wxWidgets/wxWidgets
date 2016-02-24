@@ -18,6 +18,16 @@ class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasX11
 {
 public:
     wxGLCanvas(wxWindow *parent,
+               const wxGLAttributes& dispAttrs,
+               wxWindowID id = wxID_ANY,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
+               const wxString& name = wxGLCanvasName,
+               const wxPalette& palette = wxNullPalette);
+
+    wxEXPLICIT // avoid implicitly converting a wxWindow* to wxGLCanvas
+    wxGLCanvas(wxWindow *parent,
                wxWindowID id = wxID_ANY,
                const int *attribList = NULL,
                const wxPoint& pos = wxDefaultPosition,
@@ -25,6 +35,15 @@ public:
                long style = 0,
                const wxString& name = wxGLCanvasName,
                const wxPalette& palette = wxNullPalette);
+
+    bool Create(wxWindow *parent,
+                const wxGLAttributes& dispAttrs,
+                wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxGLCanvasName,
+                const wxPalette& palette = wxNullPalette);
 
     bool Create(wxWindow *parent,
                 wxWindowID id = wxID_ANY,

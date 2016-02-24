@@ -27611,7 +27611,7 @@ $as_echo "$as_me: WARNING: wxGLCanvas not implemented for this port, library wil
 
         $as_echo "#define wxUSE_GLCANVAS 1" >>confdefs.h
 
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl opengl/cube opengl/penguin opengl/isosurf"
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl opengl/cube opengl/penguin opengl/isosurf opengl/pyramid"
     fi
 fi
 
@@ -40907,4 +40907,3 @@ echo "                                       libmspack          ${wxUSE_LIBMSPAC
 echo "                                       sdl                ${wxUSE_LIBSDL}"
 
 echo ""
-
