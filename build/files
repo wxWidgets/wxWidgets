@@ -2137,6 +2137,7 @@ UNIV_THEMES_SRC =
 UNIV_SRC =
     $(UNIV_PLATFORM_SRC)
     src/generic/accel.cpp
+    src/generic/activityindicator.cpp
     src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
@@ -2340,6 +2341,7 @@ ADVANCED_CMN_HDR =
     wx/wizard.h
 
 ADVANCED_MSW_SRC =
+    src/generic/activityindicator.cpp
     src/common/taskbarcmn.cpp
     src/msw/aboutdlg.cpp
     src/msw/notifmsg.cpp
@@ -2348,12 +2350,12 @@ ADVANCED_MSW_SRC =
     src/msw/sound.cpp
     src/msw/taskbar.cpp
 ADVANCED_MSW_HDR =
+    wx/generic/activityindicator.h
     wx/msw/sound.h
     wx/msw/taskbar.h
 
 # not used with wxUniv
 ADVANCED_MSW_NATIVE_SRC =
-    src/generic/activityindicator.cpp
     src/generic/animateg.cpp
     src/msw/bmpcbox.cpp
     src/msw/calctrl.cpp
@@ -2364,7 +2366,6 @@ ADVANCED_MSW_NATIVE_SRC =
     src/msw/hyperlink.cpp
     src/msw/timectrl.cpp
 ADVANCED_MSW_NATIVE_HDR =
-    wx/generic/activityindicator.h
     wx/generic/animate.h
     wx/msw/bmpcbox.h
     wx/msw/commandlinkbutton.h

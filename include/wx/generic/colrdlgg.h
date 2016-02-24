@@ -18,9 +18,12 @@
     class WXDLLIMPEXP_FWD_CORE wxSlider;
 #endif // wxUSE_SLIDER
 
-// Preview with opacity is possible only
-// if wxGCDC and wxStaticBitmap are available.
-#define wxCLRDLGG_USE_PREVIEW_WITH_ALPHA (wxUSE_GRAPHICS_CONTEXT && wxUSE_STATBMP)
+// Preview with opacity is possible only if wxGCDC and wxStaticBitmap are
+// available and currently it only works in wxOSX and wxMSW as it uses wxBitmap
+// UseAlpha() and HasAlpha() methods which only these ports provide.
+#define wxCLRDLGG_USE_PREVIEW_WITH_ALPHA \
+    ((wxUSE_GRAPHICS_CONTEXT && wxUSE_STATBMP) && \
+     (defined(__WXMSW__) || defined(__WXOSX__)))
 
 #if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
 class wxStaticBitmap;

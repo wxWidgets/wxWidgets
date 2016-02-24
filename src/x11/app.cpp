@@ -184,8 +184,11 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
         return false;
 
 #if wxUSE_UNICODE
-    // Glib's type system required by Pango
+    // Glib's type system required by Pango (deprecated since glib 2.36 but
+    // used to be required, so still call it, it's harmless).
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     g_type_init();
+    wxGCC_WARNING_RESTORE()
 #endif
 
 #if wxUSE_INTL
