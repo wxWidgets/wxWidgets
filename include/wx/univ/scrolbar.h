@@ -191,7 +191,7 @@ private:
     // the object handling the arrows
     wxScrollArrows m_arrows;
 
-    friend WXDLLIMPEXP_CORE class wxControlRenderer; // for geometry methods
+    friend class WXDLLIMPEXP_FWD_CORE wxControlRenderer; // for geometry methods
     friend class wxStdScrollBarInputHandler; // for geometry methods
 
     wxDECLARE_EVENT_TABLE();
