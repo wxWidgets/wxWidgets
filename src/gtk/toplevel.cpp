@@ -1542,7 +1542,19 @@ bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
     if (gtk_check_version(2,12,0) == NULL)
 #endif
     {
-        gtk_window_set_opacity(GTK_WINDOW(m_widget), alpha / 255.0);
+#if GTK_CHECK_VERSION(3,8,0)
+        if(gtk_check_version(3,8,0) == NULL)
+        {
+            gtk_widget_set_opacity(m_widget, alpha / 255.0);
+        }
+        else
+#endif
+        {
+            // Can't avoid using this deprecated function with older GTK+.
+            wxGCC_WARNING_SUPPRESS(deprecated-declarations);
+            gtk_window_set_opacity(GTK_WINDOW(m_widget), alpha / 255.0);
+            wxGCC_WARNING_RESTORE();
+        }
         return true;
     }
 #endif // GTK_CHECK_VERSION(2,12,0)
