@@ -7245,20 +7245,35 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
     if test "$wxUSE_GTK" = 1; then
         wxUSE_GSTREAMER="no"
 
-        GST_VERSION_MAJOR=0
-        GST_VERSION_MINOR=10
+        GST_VERSION_MAJOR=1
+        GST_VERSION_MINOR=0
         GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
 
         PKG_CHECK_MODULES(GST,
-            [gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION],
+            [gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION],
             [
                 wxUSE_GSTREAMER="yes"
-                GST_LIBS="$GST_LIBS -lgstinterfaces-$GST_VERSION"
             ],
             [
-                AC_MSG_WARN([GStreamer 0.10 not available])
+                AC_MSG_WARN([GStreamer 1.0 not available, falling back to 0.10])
+                GST_VERSION_MAJOR=0
+                GST_VERSION_MINOR=10
+                GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
             ]
         )
+
+        if test $GST_VERSION_MINOR = "10"; then
+            PKG_CHECK_MODULES(GST,
+                [gstreamer-$GST_VERSION gstreamer-plugins-base-$GST_VERSION],
+                [
+                    wxUSE_GSTREAMER="yes"
+                    GST_LIBS="$GST_LIBS -lgstinterfaces-$GST_VERSION"
+                ],
+                [
+                    AC_MSG_WARN([GStreamer 0.10 not available])
+                ]
+            )
+        fi
 
         if test "$wxUSE_GSTREAMER" = "yes"; then
             CPPFLAGS="$GST_CFLAGS $CPPFLAGS"
