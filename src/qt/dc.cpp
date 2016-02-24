@@ -409,9 +409,6 @@ void wxQtDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
         QTransform qtrans = m_qtPainter->worldTransform();
         // Reset transofrmation to match device coordinates
         m_qtPainter->setWorldTransform( QTransform() );
-        wxLogDebug(wxT("wxQtDCImpl::DoSetDeviceClippingRegion rect %d %d %d %d"),
-                   qregion.boundingRect().x(), qregion.boundingRect().y(),
-                   qregion.boundingRect().width(), qregion.boundingRect().height());
         // Set QPainter clipping (intersection if not the first one)
         m_qtPainter->setClipRegion( qregion,
                                  m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );

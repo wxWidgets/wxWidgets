@@ -63,8 +63,6 @@ public:
 
     void HandleDestroyedSignal()
     {
-        wxLogDebug( wxT("%s was destroyed by Qt. pointer=%p"),
-                    QObject::staticMetaObject.className(), this );
     }
 
     virtual Handler *GetHandler() const
@@ -72,9 +70,6 @@ public:
         // Only process the signal / event if the wxWindow is not destroyed
         if ( !wxWindow::QtRetrieveWindowPointer( this ) )
         {
-            wxLogDebug( wxT("%s win pointer is NULL (wxWindow is deleted)!"),
-                        Widget::staticMetaObject.className()
-                        );
             return NULL;
         }
         else
@@ -90,9 +85,9 @@ protected:
     virtual void changeEvent ( QEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::changeEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleChangeEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleChangeEvent(this, event) )
             Widget::changeEvent(event);
         else
             event->accept();
@@ -102,9 +97,9 @@ protected:
     virtual void closeEvent ( QCloseEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::closeEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleCloseEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleCloseEvent(this, event) )
             Widget::closeEvent(event);
         else
             event->accept();
@@ -114,9 +109,9 @@ protected:
     virtual void contextMenuEvent ( QContextMenuEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::contextMenuEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleContextMenuEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleContextMenuEvent(this, event) )
             Widget::contextMenuEvent(event);
         else
             event->accept();
@@ -129,9 +124,9 @@ protected:
     virtual void enterEvent ( QEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::enterEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleEnterEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleEnterEvent(this, event) )
             Widget::enterEvent(event);
         else
             event->accept();
@@ -141,9 +136,9 @@ protected:
     virtual void focusInEvent ( QFocusEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::focusInEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleFocusEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleFocusEvent(this, event) )
             Widget::focusInEvent(event);
         else
             event->accept();
@@ -153,9 +148,9 @@ protected:
     virtual void focusOutEvent ( QFocusEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::focusOutEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleFocusEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleFocusEvent(this, event) )
             Widget::focusOutEvent(event);
         else
             event->accept();
@@ -165,9 +160,9 @@ protected:
     virtual void hideEvent ( QHideEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::hideEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleShowEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleShowEvent(this, event) )
             Widget::hideEvent(event);
         else
             event->accept();
@@ -177,9 +172,9 @@ protected:
     virtual void keyPressEvent ( QKeyEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::keyPressEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleKeyEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleKeyEvent(this, event) )
             Widget::keyPressEvent(event);
         else
             event->accept();
@@ -189,9 +184,9 @@ protected:
     virtual void keyReleaseEvent ( QKeyEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::keyReleaseEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleKeyEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleKeyEvent(this, event) )
             Widget::keyReleaseEvent(event);
         else
             event->accept();
@@ -201,9 +196,9 @@ protected:
     virtual void leaveEvent ( QEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::leaveEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleEnterEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleEnterEvent(this, event) )
             Widget::leaveEvent(event);
         else
             event->accept();
@@ -213,9 +208,9 @@ protected:
     virtual void mouseDoubleClickEvent ( QMouseEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::mouseDoubleClickEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleMouseEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleMouseEvent(this, event) )
             Widget::mouseDoubleClickEvent(event);
         else
             event->accept();
@@ -225,9 +220,9 @@ protected:
     virtual void mouseMoveEvent ( QMouseEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::mouseMoveEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleMouseEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleMouseEvent(this, event) )
             Widget::mouseMoveEvent(event);
         else
             event->accept();
@@ -237,9 +232,9 @@ protected:
     virtual void mousePressEvent ( QMouseEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::mousePressEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleMouseEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleMouseEvent(this, event) )
             Widget::mousePressEvent(event);
         else
             event->accept();
@@ -249,9 +244,9 @@ protected:
     virtual void mouseReleaseEvent ( QMouseEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::mouseReleaseEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleMouseEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleMouseEvent(this, event) )
             Widget::mouseReleaseEvent(event);
         else
             event->accept();
@@ -261,9 +256,9 @@ protected:
     virtual void moveEvent ( QMoveEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::moveEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleMoveEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleMoveEvent(this, event) )
             Widget::moveEvent(event);
         else
             event->accept();
@@ -273,9 +268,9 @@ protected:
     virtual void paintEvent ( QPaintEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::paintEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandlePaintEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandlePaintEvent(this, event) )
             Widget::paintEvent(event);
         else
             event->accept();
@@ -285,9 +280,9 @@ protected:
     virtual void resizeEvent ( QResizeEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::resizeEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleResizeEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleResizeEvent(this, event) )
             Widget::resizeEvent(event);
         else
             event->accept();
@@ -297,9 +292,9 @@ protected:
     virtual void showEvent ( QShowEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::showEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleShowEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleShowEvent(this, event) )
             Widget::showEvent(event);
         else
             event->accept();
@@ -309,9 +304,9 @@ protected:
     virtual void wheelEvent ( QWheelEvent * event )
     {
         if ( !this->GetHandler() )
-            wxLogDebug( wxT("%s::wheelEvent for invalid handler!"),
-                        Widget::staticMetaObject.className() );
-        else if ( !this->GetHandler()->QtHandleWheelEvent(this, event) )
+            return;
+
+        if ( !this->GetHandler()->QtHandleWheelEvent(this, event) )
             Widget::wheelEvent(event);
         else
             event->accept();

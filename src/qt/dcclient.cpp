@@ -102,9 +102,6 @@ wxClientDCImpl::~wxClientDCImpl()
             {
                 // only force the update of the rect affected by the DC
                 widget->repaint( rect );
-                wxLogDebug( wxT("wxClientDC Repainting %s (%d %d %d %d)"),
-                           (const char*) m_window->GetName(),
-                           rect.left(), rect.top(), rect.width(), rect.height());
             }
             else
             {
