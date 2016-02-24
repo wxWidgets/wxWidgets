@@ -156,14 +156,16 @@ static void get_color(const char* name, GtkWidget* widget, GtkStateFlags state, 
 {
     GtkStyleContext* sc = gtk_widget_get_style_context(widget);
     GdkRGBA* rgba;
-    gtk_style_context_get(sc, state, name, &rgba, NULL);
+    gtk_style_context_set_state(sc, state);
+    gtk_style_context_get(sc, gtk_style_context_get_state(sc), name, &rgba, NULL);
     gdkRGBA = *rgba;
     gdk_rgba_free(rgba);
     if (gdkRGBA.alpha <= 0)
     {
         widget = gtk_widget_get_parent(GTK_WIDGET(ContainerWidget()));
         sc = gtk_widget_get_style_context(widget);
-        gtk_style_context_get(sc, state, name, &rgba, NULL);
+        gtk_style_context_set_state(sc, state);
+        gtk_style_context_get(sc, gtk_style_context_get_state(sc), name, &rgba, NULL);
         gdkRGBA = *rgba;
         gdk_rgba_free(rgba);
     }
@@ -448,7 +450,8 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
                 wxNativeFontInfo info;
 #ifdef __WXGTK3__
                 GtkStyleContext* sc = gtk_widget_get_style_context(ButtonWidget());
-                gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
+                gtk_style_context_set_state(sc, GTK_STATE_FLAG_NORMAL);
+                gtk_style_context_get(sc, gtk_style_context_get_state(sc),
                     GTK_STYLE_PROPERTY_FONT, &info.description, NULL);
 #else
                 info.description = ButtonStyle()->font_desc;

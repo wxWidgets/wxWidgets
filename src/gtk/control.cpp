@@ -252,7 +252,8 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
     GtkStyleContext* sc = gtk_widget_get_style_context(widget);
     GdkRGBA *fc, *bc;
     wxNativeFontInfo info;
-    gtk_style_context_get(sc, stateFlag,
+    gtk_style_context_set_state(sc, stateFlag);
+    gtk_style_context_get(sc, gtk_style_context_get_state(sc),
         "color", &fc, "background-color", &bc,
         GTK_STYLE_PROPERTY_FONT, &info.description, NULL);
     attr.colFg = wxColour(*fc);
