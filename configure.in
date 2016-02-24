@@ -3283,16 +3283,26 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
 
     if test "$wxUSE_QT" = 1; then
-        TOOLKIT=QT
-        GUIDIST=QT_DIST
-        TOOLKIT_DIR="qt"
-        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test --cflags` -DQT_WIDGETS_LIB"
-        GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test --libs`"
-        if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
-            dnl build with position independent code if Qt needs it
-            SAMPLES_CXXFLAGS="-fPIC $SAMPLES_CXXFLAGS"
-            WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS $TOOLKIT_INCLUDE"
-        fi
+        PKG_PROG_PKG_CONFIG()
+
+        PKG_CHECK_MODULES(QT5,
+                          [Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test],
+            [
+                TOOLKIT=QT
+                GUIDIST=QT_DIST
+                TOOLKIT_DIR="qt"
+                TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} ${QT5_CFLAGS}"
+                GUI_TK_LIBRARY="${GUI_TK_LIBRARY} ${QT5_LIBS}"
+                if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
+                    dnl build with position independent code if Qt needs it
+                    SAMPLES_CXXFLAGS="-fPIC $SAMPLES_CXXFLAGS"
+                    WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS $TOOLKIT_INCLUDE"
+                fi
+            ],
+            [
+                AC_MSG_ERROR([Qt5 libraries are not available])
+            ]
+        )
     fi
     dnl the name of the directory where the files for this toolkit live
     TOOLKIT_DIR=`echo ${TOOLKIT} | tr '[[A-Z]]' '[[a-z]]'`
