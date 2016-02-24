@@ -67,8 +67,7 @@
            Process a @c wxEVT_COMBOBOX_CLOSEUP event, which is generated
            when the list box of the combo box disappears (closes up). This
            event is only generated for the same platforms as
-           @c wxEVT_COMBOBOX_DROPDOWN above. Also note that only wxMSW and
-           wxOSX/Cocoa support adding or deleting items in this event.
+           @c wxEVT_COMBOBOX_DROPDOWN above.
     @endEventTable
 
     @library{wxcore}

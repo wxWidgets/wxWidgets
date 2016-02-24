@@ -55,7 +55,19 @@ gtkcombobox_popupshown_callback(GObject *WXUNUSED(gobject),
                                   : wxEVT_COMBOBOX_CLOSEUP,
                           combo->GetId() );
     event.SetEventObject( combo );
-    combo->HandleWindowEvent( event );
+
+#ifndef __WXGTK3__
+    // Process the close up event once the combobox is already closed with GTK+
+    // 2, otherwise changing the combobox from its handler result in errors.
+    if ( !isShown )
+    {
+        combo->GetEventHandler()->AddPendingEvent( event );
+    }
+    else
+#endif // GTK+ < 3
+    {
+        combo->HandleWindowEvent( event );
+    }
 }
 
 }

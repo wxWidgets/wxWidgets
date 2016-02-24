@@ -74,7 +74,8 @@ enum
     ComboPage_SetValue,
     ComboPage_SetValueText,
     ComboPage_Combo,
-    ComboPage_ContainerTests
+    ComboPage_ContainerTests,
+    ComboPage_Dynamic
 };
 
 // kinds of comboboxes
@@ -121,6 +122,8 @@ protected:
 
     void OnDropdown(wxCommandEvent& event);
     void OnCloseup(wxCommandEvent& event);
+    void OnPopup(wxCommandEvent &event);
+    void OnDismiss(wxCommandEvent &event);
     void OnComboBox(wxCommandEvent& event);
     void OnComboText(wxCommandEvent& event);
     void OnComboTextPasted(wxClipboardTextEvent& event);
@@ -155,7 +158,7 @@ protected:
                *m_chkProcessEnter;
 
     // the combobox itself and the sizer it is in
-    wxComboBox *m_combobox;
+    wxComboBox *m_combobox, *m_combobox1;
     wxSizer *m_sizerCombo;
 
     // the text entries for "Add/change string" and "Delete" buttons
@@ -380,6 +383,13 @@ void ComboboxWidgetsPage::CreateContent()
                                 0, NULL,
                                 0);
     sizerRight->Add(m_combobox, 0, wxGROW | wxALL, 5);
+    m_combobox1 = new wxComboBox( this, ComboPage_Dynamic );
+    m_combobox1->Append( "Dynamic ComboBox Test - Click me!" );
+    m_combobox1->SetSelection( 0 );
+    sizerRight->Add( 20, 20, 0, wxEXPAND, 0 );
+    sizerRight->Add( m_combobox1, 0, wxGROW | wxALL, 5 );
+    m_combobox1->Bind( wxEVT_COMBOBOX_DROPDOWN, &ComboboxWidgetsPage::OnPopup, this );
+    m_combobox1->Bind( wxEVT_COMBOBOX_CLOSEUP, &ComboboxWidgetsPage::OnDismiss, this );
     sizerRight->SetMinSize(150, 0);
     m_sizerCombo = sizerRight; // save it to modify it later
 
@@ -697,6 +707,26 @@ void ComboboxWidgetsPage::OnDropdown(wxCommandEvent& WXUNUSED(event))
 void ComboboxWidgetsPage::OnCloseup(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(wxT("Combobox closed up"));
+}
+
+void ComboboxWidgetsPage::OnPopup(wxCommandEvent &WXUNUSED(event))
+{
+    m_combobox1->Clear();
+    m_combobox1->Append( "Selection 1" );
+    m_combobox1->Append( "Selection 2" );
+    m_combobox1->Append( "Selection 3" );
+    wxLogMessage("The number of items is %d", m_combobox1->GetCount());
+}
+
+void ComboboxWidgetsPage::OnDismiss(wxCommandEvent &WXUNUSED(event))
+{
+    if ( m_combobox1->GetSelection() == wxNOT_FOUND )
+    {
+        m_combobox1->Clear();
+        m_combobox1->Append( "Dynamic ComboBox Test - Click me!" );
+        m_combobox1->SetSelection( 0 );
+    }
+    wxLogMessage("The number of items is %d", m_combobox1->GetCount());
 }
 
 #endif // wxUSE_COMBOBOX
