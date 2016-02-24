@@ -14,6 +14,7 @@
 
 #include <QtTest/QtTestGui>
 #include <QApplication>
+#include <QWidget>
 
 #include "wx/qt/defs.h"
 #include "wx/qt/private/utils.h"
@@ -25,6 +26,16 @@
 
 using namespace Qt;
 using namespace QTest;
+
+// Apparently {mouse,key}Event() functions signature has changed somewhere
+// between Qt 5.3 and 5.5 as they're documented to take QWidget in the latter
+// but actually take QWindow in the former, so use this helper to hide the
+// difference.
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
+inline QWidget* argForEvents(QWidget* w) { return w; }
+#else
+inline QWindow* argForEvents(QWidget* w) { return w->windowHandle(); }
+#endif
 
 static MouseButton ConvertMouseButton( int button )
 {
@@ -66,7 +77,7 @@ static bool SimulateMouseButton( MouseAction mouseAction, MouseButton mouseButto
     QPoint mousePosition = QCursor::pos();
     QWidget *widget = QApplication::widgetAt( mousePosition );
     if ( widget != NULL )
-        mouseEvent( mouseAction, widget, mouseButton, NoModifier, mousePosition );
+        mouseEvent( mouseAction, argForEvents(widget), mouseButton, NoModifier, mousePosition );
 
     // If we found a widget then we successfully simulated an event:
 
@@ -77,7 +88,7 @@ static bool SimulateKeyboardKey( KeyAction keyAction, Key key )
 {
     QWidget *widget = QApplication::focusWidget();
     if ( widget != NULL )
-        keyEvent( keyAction, widget, key );
+        keyEvent( keyAction, argForEvents(widget), key );
 
     // If we found a widget then we successfully simulated an event:
 
