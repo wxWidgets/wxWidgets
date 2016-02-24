@@ -2191,6 +2191,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_univ_toolbar.o \
 	$(OBJS)\monodll_topluniv.o \
 	$(OBJS)\monodll_winuniv.o \
+	$(OBJS)\monodll_activityindicator.o \
 	$(OBJS)\monodll_gtk.o \
 	$(OBJS)\monodll_metal.o \
 	$(OBJS)\monodll_mono.o \
@@ -2406,6 +2407,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
 	$(OBJS)\monodll_notifmsgrt.o \
+	$(OBJS)\monodll_activityindicator.o \
 	$(OBJS)\monodll_joystick.o \
 	$(OBJS)\monodll_animateg.o \
 	$(OBJS)\monodll_bmpcbox.o \
@@ -2415,8 +2417,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datectrl.o \
 	$(OBJS)\monodll_datetimectrl.o \
 	$(OBJS)\monodll_hyperlink.o \
-	$(OBJS)\monodll_timectrl.o \
-	$(OBJS)\monodll_activityindicator.o
+	$(OBJS)\monodll_timectrl.o
 endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
@@ -2462,6 +2463,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
 	$(OBJS)\monodll_notifmsgrt.o \
+	$(OBJS)\monodll_activityindicator.o \
 	$(OBJS)\monodll_joystick.o \
 	$(OBJS)\monodll_animateg.o
 endif
@@ -3026,6 +3028,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_univ_toolbar.o \
 	$(OBJS)\monolib_topluniv.o \
 	$(OBJS)\monolib_winuniv.o \
+	$(OBJS)\monolib_activityindicator.o \
 	$(OBJS)\monolib_gtk.o \
 	$(OBJS)\monolib_metal.o \
 	$(OBJS)\monolib_mono.o \
@@ -3241,6 +3244,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
 	$(OBJS)\monolib_notifmsgrt.o \
+	$(OBJS)\monolib_activityindicator.o \
 	$(OBJS)\monolib_joystick.o \
 	$(OBJS)\monolib_animateg.o \
 	$(OBJS)\monolib_bmpcbox.o \
@@ -3250,8 +3254,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datectrl.o \
 	$(OBJS)\monolib_datetimectrl.o \
 	$(OBJS)\monolib_hyperlink.o \
-	$(OBJS)\monolib_timectrl.o \
-	$(OBJS)\monolib_activityindicator.o
+	$(OBJS)\monolib_timectrl.o
 endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
@@ -3297,6 +3300,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
 	$(OBJS)\monolib_notifmsgrt.o \
+	$(OBJS)\monolib_activityindicator.o \
 	$(OBJS)\monolib_joystick.o \
 	$(OBJS)\monolib_animateg.o
 endif
@@ -3743,6 +3747,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_univ_toolbar.o \
 	$(OBJS)\coredll_topluniv.o \
 	$(OBJS)\coredll_winuniv.o \
+	$(OBJS)\coredll_activityindicator.o \
 	$(OBJS)\coredll_gtk.o \
 	$(OBJS)\coredll_metal.o \
 	$(OBJS)\coredll_mono.o \
@@ -4321,6 +4326,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_univ_toolbar.o \
 	$(OBJS)\corelib_topluniv.o \
 	$(OBJS)\corelib_winuniv.o \
+	$(OBJS)\corelib_activityindicator.o \
 	$(OBJS)\corelib_gtk.o \
 	$(OBJS)\corelib_metal.o \
 	$(OBJS)\corelib_mono.o \
@@ -4550,6 +4556,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
 	$(OBJS)\advdll_notifmsgrt.o \
+	$(OBJS)\advdll_activityindicator.o \
 	$(OBJS)\advdll_joystick.o \
 	$(OBJS)\advdll_animateg.o \
 	$(OBJS)\advdll_bmpcbox.o \
@@ -4559,8 +4566,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_datectrl.o \
 	$(OBJS)\advdll_datetimectrl.o \
 	$(OBJS)\advdll_hyperlink.o \
-	$(OBJS)\advdll_timectrl.o \
-	$(OBJS)\advdll_activityindicator.o
+	$(OBJS)\advdll_timectrl.o
 endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
@@ -4606,6 +4612,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
 	$(OBJS)\advdll_notifmsgrt.o \
+	$(OBJS)\advdll_activityindicator.o \
 	$(OBJS)\advdll_joystick.o \
 	$(OBJS)\advdll_animateg.o
 endif
@@ -4661,6 +4668,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
 	$(OBJS)\advlib_notifmsgrt.o \
+	$(OBJS)\advlib_activityindicator.o \
 	$(OBJS)\advlib_joystick.o \
 	$(OBJS)\advlib_animateg.o \
 	$(OBJS)\advlib_bmpcbox.o \
@@ -4670,8 +4678,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_datectrl.o \
 	$(OBJS)\advlib_datetimectrl.o \
 	$(OBJS)\advlib_hyperlink.o \
-	$(OBJS)\advlib_timectrl.o \
-	$(OBJS)\advlib_activityindicator.o
+	$(OBJS)\advlib_timectrl.o
 endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
@@ -4717,6 +4724,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
 	$(OBJS)\advlib_notifmsgrt.o \
+	$(OBJS)\advlib_activityindicator.o \
 	$(OBJS)\advlib_joystick.o \
 	$(OBJS)\advlib_animateg.o
 endif
@@ -7254,9 +7262,6 @@ $(OBJS)\monodll_hyperlink.o: ../../src/msw/hyperlink.cpp
 $(OBJS)\monodll_timectrl.o: ../../src/msw/timectrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_activityindicator.o: ../../src/generic/activityindicator.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monodll_mediactrlcmn.o: ../../src/common/mediactrlcmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -8843,6 +8848,18 @@ $(OBJS)\monodll_xmlreshandler.o: ../../src/xrc/xmlreshandler.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_activityindicator.o: ../../src/generic/activityindicator.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),1)
+$(OBJS)\monodll_activityindicator.o: ../../src/generic/activityindicator.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_animatecmn.o: ../../src/common/animatecmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9780,9 +9797,6 @@ $(OBJS)\monolib_hyperlink.o: ../../src/msw/hyperlink.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_timectrl.o: ../../src/msw/timectrl.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_activityindicator.o: ../../src/generic/activityindicator.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_mediactrlcmn.o: ../../src/common/mediactrlcmn.cpp
@@ -11371,6 +11385,18 @@ $(OBJS)\monolib_xmlreshandler.o: ../../src/xrc/xmlreshandler.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_activityindicator.o: ../../src/generic/activityindicator.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(WXUNIV),1)
+$(OBJS)\monolib_activityindicator.o: ../../src/generic/activityindicator.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_animatecmn.o: ../../src/common/animatecmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12680,6 +12706,9 @@ $(OBJS)\coredll_topluniv.o: ../../src/univ/topluniv.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_winuniv.o: ../../src/univ/winuniv.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\coredll_activityindicator.o: ../../src/generic/activityindicator.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_gtk.o: ../../src/univ/themes/gtk.cpp
@@ -14156,6 +14185,9 @@ $(OBJS)\corelib_topluniv.o: ../../src/univ/topluniv.cpp
 $(OBJS)\corelib_winuniv.o: ../../src/univ/winuniv.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\corelib_activityindicator.o: ../../src/generic/activityindicator.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\corelib_gtk.o: ../../src/univ/themes/gtk.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -15333,9 +15365,6 @@ $(OBJS)\advdll_hyperlink.o: ../../src/msw/hyperlink.cpp
 $(OBJS)\advdll_timectrl.o: ../../src/msw/timectrl.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\advdll_activityindicator.o: ../../src/generic/activityindicator.cpp
-	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\advdll_animatecmn.o: ../../src/common/animatecmn.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -15462,6 +15491,9 @@ $(OBJS)\advdll_taskbar.o: ../../src/msw/taskbar.cpp
 $(OBJS)\advdll_notifmsgrt.o: ../../src/msw/rt/notifmsgrt.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_activityindicator.o: ../../src/generic/activityindicator.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_joystick.o: ../../src/msw/joystick.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -15493,9 +15525,6 @@ $(OBJS)\advlib_hyperlink.o: ../../src/msw/hyperlink.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_timectrl.o: ../../src/msw/timectrl.cpp
-	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\advlib_activityindicator.o: ../../src/generic/activityindicator.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_animatecmn.o: ../../src/common/animatecmn.cpp
@@ -15622,6 +15651,9 @@ $(OBJS)\advlib_taskbar.o: ../../src/msw/taskbar.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_notifmsgrt.o: ../../src/msw/rt/notifmsgrt.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_activityindicator.o: ../../src/generic/activityindicator.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_joystick.o: ../../src/msw/joystick.cpp

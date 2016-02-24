@@ -3389,8 +3389,12 @@ COND_TOOLKIT_MOTIF_ADVANCED_PLATFORM_HDR =  \
 	wx/generic/animate.h \
 	wx/generic/animateanimate.h
 @COND_TOOLKIT_MOTIF@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_MOTIF_ADVANCED_PLATFORM_HDR)
-@COND_TOOLKIT_MSW@ADVANCED_PLATFORM_HDR = wx/msw/sound.h \
-@COND_TOOLKIT_MSW@	wx/msw/taskbar.h wx/msw/joystick.h
+COND_TOOLKIT_MSW_ADVANCED_PLATFORM_HDR =  \
+	wx/msw/sound.h \
+	wx/msw/taskbar.h \
+	wx/generic/activityindicator.h \
+	wx/msw/joystick.h
+@COND_TOOLKIT_MSW@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_MSW_ADVANCED_PLATFORM_HDR)
 COND_TOOLKIT_OSX_COCOA_ADVANCED_PLATFORM_HDR =  \
 	wx/generic/animate.h \
 	wx/osx/activityindicator.h \
@@ -3446,8 +3450,7 @@ COND_TOOLKIT_MSW_ADVANCED_PLATFORM_NATIVE_HDR =  \
 	wx/msw/datectrl.h \
 	wx/msw/datetimectrl.h \
 	wx/msw/hyperlink.h \
-	wx/msw/timectrl.h \
-	wx/generic/activityindicator.h
+	wx/msw/timectrl.h
 @COND_TOOLKIT_MSW@ADVANCED_PLATFORM_NATIVE_HDR = $(COND_TOOLKIT_MSW_ADVANCED_PLATFORM_NATIVE_HDR)
 COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/aboutdlg.h \
@@ -4533,6 +4536,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_univ_toolbar.o \
 	monodll_topluniv.o \
 	monodll_winuniv.o \
+	monodll_generic_activityindicator.o \
 	monodll_gtk.o \
 	monodll_metal.o \
 	monodll_mono.o \
@@ -5883,6 +5887,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_msw_sound.o \
 	monodll_msw_taskbar.o \
 	monodll_notifmsgrt.o \
+	monodll_generic_activityindicator.o \
 	monodll_msw_joystick.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS =  \
@@ -5952,8 +5957,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 	monodll_datectrl.o \
 	monodll_msw_datetimectrl.o \
 	monodll_msw_hyperlink.o \
-	monodll_timectrl.o \
-	monodll_generic_activityindicator.o
+	monodll_timectrl.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
 COND_TOOLKIT_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monodll_src_cocoa_taskbar.o \
@@ -5999,6 +6003,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monodll_msw_sound.o \
 	monodll_msw_taskbar.o \
 	monodll_notifmsgrt.o \
+	monodll_generic_activityindicator.o \
 	monodll_msw_joystick.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_1)
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
@@ -6539,6 +6544,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_univ_toolbar.o \
 	monolib_topluniv.o \
 	monolib_winuniv.o \
+	monolib_generic_activityindicator.o \
 	monolib_gtk.o \
 	monolib_metal.o \
 	monolib_mono.o \
@@ -7889,6 +7895,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_2 =  \
 	monolib_msw_sound.o \
 	monolib_msw_taskbar.o \
 	monolib_notifmsgrt.o \
+	monolib_generic_activityindicator.o \
 	monolib_msw_joystick.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_2)
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_2 =  \
@@ -7958,8 +7965,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 	monolib_datectrl.o \
 	monolib_msw_datetimectrl.o \
 	monolib_msw_hyperlink.o \
-	monolib_timectrl.o \
-	monolib_generic_activityindicator.o
+	monolib_timectrl.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
 COND_TOOLKIT_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 	monolib_src_cocoa_taskbar.o \
@@ -8005,6 +8011,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 	monolib_msw_sound.o \
 	monolib_msw_taskbar.o \
 	monolib_notifmsgrt.o \
+	monolib_generic_activityindicator.o \
 	monolib_msw_joystick.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_3)
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
@@ -8688,6 +8695,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_univ_toolbar.o \
 	coredll_topluniv.o \
 	coredll_winuniv.o \
+	coredll_activityindicator.o \
 	coredll_gtk.o \
 	coredll_metal.o \
 	coredll_mono.o \
@@ -10156,6 +10164,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_univ_toolbar.o \
 	corelib_topluniv.o \
 	corelib_winuniv.o \
+	corelib_activityindicator.o \
 	corelib_gtk.o \
 	corelib_metal.o \
 	corelib_mono.o \
@@ -11575,6 +11584,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_4 =  \
 	advdll_msw_sound.o \
 	advdll_msw_taskbar.o \
 	advdll_notifmsgrt.o \
+	advdll_generic_activityindicator.o \
 	advdll_msw_joystick.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_4 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_4)
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_4 =  \
@@ -11644,8 +11654,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 =  \
 	advdll_datectrl.o \
 	advdll_msw_datetimectrl.o \
 	advdll_msw_hyperlink.o \
-	advdll_timectrl.o \
-	advdll_generic_activityindicator.o
+	advdll_timectrl.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
 COND_TOOLKIT_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_5 =  \
 	advdll_src_cocoa_taskbar.o \
@@ -11691,6 +11700,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_5 =  \
 	advdll_msw_sound.o \
 	advdll_msw_taskbar.o \
 	advdll_notifmsgrt.o \
+	advdll_generic_activityindicator.o \
 	advdll_msw_joystick.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_5 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_5)
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_5 =  \
@@ -11873,6 +11883,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_6 =  \
 	advlib_msw_sound.o \
 	advlib_msw_taskbar.o \
 	advlib_notifmsgrt.o \
+	advlib_generic_activityindicator.o \
 	advlib_msw_joystick.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_6 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_6)
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_6 =  \
@@ -11942,8 +11953,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 =  \
 	advlib_datectrl.o \
 	advlib_msw_datetimectrl.o \
 	advlib_msw_hyperlink.o \
-	advlib_timectrl.o \
-	advlib_generic_activityindicator.o
+	advlib_timectrl.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
 COND_TOOLKIT_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_7 =  \
 	advlib_src_cocoa_taskbar.o \
@@ -11989,6 +11999,7 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_7 =  \
 	advlib_msw_sound.o \
 	advlib_msw_taskbar.o \
 	advlib_notifmsgrt.o \
+	advlib_generic_activityindicator.o \
 	advlib_msw_joystick.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_7 = $(COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_7)
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_7 =  \
@@ -19891,6 +19902,21 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_xmlreshandler.o: $(srcdir)/src/xrc/xmlreshandler.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xmlreshandler.cpp
 
+@COND_USE_GUI_1_WXUNIV_1@monodll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
 @COND_USE_GUI_1@monodll_animatecmn.o: $(srcdir)/src/common/animatecmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/animatecmn.cpp
 
@@ -20217,18 +20243,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_gtk_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
@@ -24712,6 +24726,21 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_xmlreshandler.o: $(srcdir)/src/xrc/xmlreshandler.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xmlreshandler.cpp
 
+@COND_USE_GUI_1_WXUNIV_1@monolib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
 @COND_USE_GUI_1@monolib_animatecmn.o: $(srcdir)/src/common/animatecmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/animatecmn.cpp
 
@@ -25038,18 +25067,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_gtk_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
@@ -26916,6 +26933,9 @@ coredll_topluniv.o: $(srcdir)/src/univ/topluniv.cpp $(COREDLL_ODEP)
 
 coredll_winuniv.o: $(srcdir)/src/univ/winuniv.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/winuniv.cpp
+
+coredll_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
 
 coredll_gtk.o: $(srcdir)/src/univ/themes/gtk.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/themes/gtk.cpp
@@ -30307,6 +30327,9 @@ corelib_topluniv.o: $(srcdir)/src/univ/topluniv.cpp $(CORELIB_ODEP)
 corelib_winuniv.o: $(srcdir)/src/univ/winuniv.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/winuniv.cpp
 
+corelib_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
 corelib_gtk.o: $(srcdir)/src/univ/themes/gtk.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/themes/gtk.cpp
 
@@ -33172,6 +33195,18 @@ advdll_notifmsgcmn.o: $(srcdir)/src/common/notifmsgcmn.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@advdll_notifmsgrt.o: $(srcdir)/src/msw/rt/notifmsgrt.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/rt/notifmsgrt.cpp
 
+@COND_TOOLKIT_MSW@advdll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
+@COND_TOOLKIT_MOTIF@advdll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@advdll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
 @COND_TOOLKIT_MSW@advdll_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
@@ -33330,18 +33365,6 @@ advdll_notifmsgcmn.o: $(srcdir)/src/common/notifmsgcmn.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_X11@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
-
-@COND_TOOLKIT_MSW_WXUNIV_0@advdll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
-
-@COND_TOOLKIT_MOTIF@advdll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@advdll_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_gtk_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp
@@ -33622,6 +33645,18 @@ advlib_notifmsgcmn.o: $(srcdir)/src/common/notifmsgcmn.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@advlib_notifmsgrt.o: $(srcdir)/src/msw/rt/notifmsgrt.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/rt/notifmsgrt.cpp
 
+@COND_TOOLKIT_MSW@advlib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
+@COND_TOOLKIT_MOTIF@advlib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@advlib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
+
 @COND_TOOLKIT_MSW@advlib_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
@@ -33780,18 +33815,6 @@ advlib_notifmsgcmn.o: $(srcdir)/src/common/notifmsgcmn.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_X11@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
-
-@COND_TOOLKIT_MSW_WXUNIV_0@advlib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
-
-@COND_TOOLKIT_MOTIF@advlib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@advlib_generic_activityindicator.o: $(srcdir)/src/generic/activityindicator.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/activityindicator.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_gtk_notifmsg.o: $(srcdir)/src/gtk/notifmsg.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/notifmsg.cpp

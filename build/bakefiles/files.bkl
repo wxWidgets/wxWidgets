@@ -2565,6 +2565,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/toolbar.cpp
     src/univ/topluniv.cpp
     src/univ/winuniv.cpp
+    src/generic/activityindicator.cpp
 </set>
 <set var="UNIV_HDR" hints="files">
     $(UNIV_PLATFORM_HDR)
@@ -2732,10 +2733,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/sound.cpp
     src/msw/taskbar.cpp
     src/msw/rt/notifmsgrt.cpp
+    src/generic/activityindicator.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
     wx/msw/sound.h
     wx/msw/taskbar.h
+    wx/generic/activityindicator.h
 </set>
 
 <!-- not used with wxUniv -->
@@ -2749,7 +2752,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/datetimectrl.cpp
     src/msw/hyperlink.cpp
     src/msw/timectrl.cpp
-    src/generic/activityindicator.cpp
 </set>
 <set var="ADVANCED_MSW_NATIVE_HDR" hints="files">
     wx/generic/animate.h
@@ -2760,7 +2762,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/datetimectrl.h
     wx/msw/hyperlink.h
     wx/msw/timectrl.h
-    wx/generic/activityindicator.h
 </set>
 
 <!-- not built on WindowsCE: -->
