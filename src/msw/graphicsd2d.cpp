@@ -2239,6 +2239,7 @@ public:
     }
 };
 
+#if wxUSE_IMAGE
 class wxD2DImageRenderTargetResourceHolder : public wxD2DRenderTargetResourceHolder
 {
 public:
@@ -2409,6 +2410,7 @@ private:
 
     ID2D1Factory* m_factory;
 };
+#endif // wxUSE_IMAGE
 
 class wxD2DHwndRenderTargetResourceHolder : public wxD2DRenderTargetResourceHolder
 {
@@ -2802,7 +2804,9 @@ public:
 
     wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, HDC hdc, const wxSize& dcSize);
 
+#if wxUSE_IMAGE
     wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, wxImage& image);
+#endif // wxUSE_IMAGE
 
     wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, void* nativeContext);
 
@@ -2951,12 +2955,14 @@ wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dF
     Init();
 }
 
+#if wxUSE_IMAGE
 wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, wxImage& image) :
     wxGraphicsContext(renderer), m_direct2dFactory(direct2dFactory),
     m_renderTargetHolder(new wxD2DImageRenderTargetResourceHolder(&image, direct2dFactory))
 {
     Init();
 }
+#endif // wxUSE_IMAGE
 
 wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, void* nativeContext) :
     wxGraphicsContext(renderer), m_direct2dFactory(direct2dFactory)
