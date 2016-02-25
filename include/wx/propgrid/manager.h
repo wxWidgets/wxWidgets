@@ -459,9 +459,11 @@ public:
         return m_pPropGrid->GetSelection();
     }
 
+#if wxUSE_TOOLBAR
     /** Returns a pointer to the toolbar currently associated with the
         wxPropertyGridManager (if any). */
     wxToolBar* GetToolBar() const { return m_pToolbar; }
+#endif // wxUSE_TOOLBAR
 
     /** Creates new property page. Note that the first page is not created
         automatically.

@@ -1409,6 +1409,7 @@ void wxPropertyGridManager::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
     if ( HasExtraStyle(wxPG_EX_TOOLBAR_SEPARATOR) )
     {
+#if wxUSE_TOOLBAR
         if (m_pToolbar && m_pPropGrid)
         {
             wxPen marginPen(m_pPropGrid->GetMarginColour());
@@ -1417,6 +1418,7 @@ void wxPropertyGridManager::OnPaint( wxPaintEvent& WXUNUSED(event) )
             int y = m_pPropGrid->GetPosition().y-1;
             dc.DrawLine(0, y, GetClientSize().x, y);
         }
+#endif // wxUSE_TOOLBAR
     }
 
     // Repaint splitter and any other description box decorations
