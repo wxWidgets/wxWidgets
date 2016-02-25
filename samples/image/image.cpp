@@ -81,6 +81,7 @@ public:
     void OnNewFrameHiDPI(wxCommandEvent&);
     void OnImageInfo( wxCommandEvent &event );
     void OnThumbnail( wxCommandEvent &event );
+    void OnUpdateNewFrameHiDPI(wxUpdateUIEvent&);
 
 #ifdef wxHAVE_RAW_BITMAP
     void OnTestRawBitmap( wxCommandEvent &event );
@@ -649,6 +650,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_COPY, MyFrame::OnCopy)
     EVT_MENU(wxID_PASTE, MyFrame::OnPaste)
 #endif // wxUSE_CLIPBOARD
+    EVT_UPDATE_UI(ID_NEW_HIDPI, MyFrame::OnUpdateNewFrameHiDPI)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
@@ -661,8 +663,7 @@ MyFrame::MyFrame()
 
     wxMenu *menuImage = new wxMenu;
     menuImage->Append( ID_NEW, wxT("&Show any image...\tCtrl-O"));
-    if (GetContentScaleFactor() > 1)
-        menuImage->Append(ID_NEW_HIDPI, wxS("Show any image as &HiDPI...\tCtrl-H"));
+    menuImage->Append(ID_NEW_HIDPI, wxS("Show any image as &HiDPI...\tCtrl-H"));
     menuImage->Append( ID_INFO, wxT("Show image &information...\tCtrl-I"));
 #ifdef wxHAVE_RAW_BITMAP
     menuImage->AppendSeparator();
@@ -775,6 +776,11 @@ void MyFrame::OnNewFrameHiDPI(wxCommandEvent&)
     wxString filename = LoadUserImage(image);
     if (!filename.empty())
         new MyImageFrame(this, filename, image, GetContentScaleFactor());
+}
+
+void MyFrame::OnUpdateNewFrameHiDPI(wxUpdateUIEvent& event)
+{
+    event.Enable(GetContentScaleFactor() > 1);
 }
 
 void MyFrame::OnImageInfo( wxCommandEvent &WXUNUSED(event) )
