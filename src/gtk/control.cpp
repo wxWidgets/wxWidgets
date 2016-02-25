@@ -251,6 +251,7 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
     }
     GtkStyleContext* sc = gtk_widget_get_style_context(widget);
     GdkRGBA c;
+    gtk_style_context_set_state(sc, stateFlag);
     gtk_style_context_get_color(sc, stateFlag, &c);
     attr.colFg = wxColour(c);
     gtk_style_context_get_background_color(sc, stateFlag, &c);
