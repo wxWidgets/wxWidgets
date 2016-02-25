@@ -452,6 +452,7 @@ void wxPizza::get_border(GtkBorder& border)
         else
             sc = gtk_widget_get_style_context(wxGTKPrivate::GetEntryWidget());
 
+        gtk_style_context_set_state(sc, GTK_STATE_FLAG_NORMAL);
         gtk_style_context_get_border(sc, GTK_STATE_FLAG_NORMAL, &border);
 #else // !__WXGTK3__
         GtkStyle* style;
