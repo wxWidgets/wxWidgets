@@ -192,8 +192,24 @@ static void pizza_remove(GtkContainer* container, GtkWidget* widget)
 }
 
 #ifdef __WXGTK3__
+// Get preferred size of children, to avoid GTK+ warnings complaining
+// that they were size-allocated without asking their preferred size
+static void children_get_preferred_size(const GList* p)
+{
+    for (; p; p = p->next)
+    {
+        const wxPizzaChild* child = static_cast<wxPizzaChild*>(p->data);
+        if (gtk_widget_get_visible(child->widget))
+        {
+            GtkRequisition req;
+            gtk_widget_get_preferred_size(child->widget, &req, NULL);
+        }
+    }
+}
+
 static void pizza_get_preferred_width(GtkWidget* widget, int* minimum, int* natural)
 {
+    children_get_preferred_size(WX_PIZZA(widget)->m_children);
     *minimum = 0;
     gtk_widget_get_size_request(widget, natural, NULL);
     if (*natural < 0)
@@ -202,6 +218,7 @@ static void pizza_get_preferred_width(GtkWidget* widget, int* minimum, int* natu
 
 static void pizza_get_preferred_height(GtkWidget* widget, int* minimum, int* natural)
 {
+    children_get_preferred_size(WX_PIZZA(widget)->m_children);
     *minimum = 0;
     gtk_widget_get_size_request(widget, NULL, natural);
     if (*natural < 0)
