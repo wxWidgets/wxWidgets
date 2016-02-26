@@ -27,14 +27,14 @@
 using namespace Qt;
 using namespace QTest;
 
-// Apparently {mouse,key}Event() functions signature has changed somewhere
-// between Qt 5.3 and 5.5 as they're documented to take QWidget in the latter
-// but actually take QWindow in the former, so use this helper to hide the
-// difference.
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
-inline QWidget* argForEvents(QWidget* w) { return w; }
-#else
+// Apparently {mouse,key}Event() functions signature has changed from QWidget
+// to QWindow at some time during Qt5, but we don't know when exactly. We do
+// know that they take QWindow for 5.3 and, presumably, later versions (but not
+// for whichever version this code was originally written for).
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 3, 0))
 inline QWindow* argForEvents(QWidget* w) { return w->windowHandle(); }
+#else
+inline QWidget* argForEvents(QWidget* w) { return w; }
 #endif
 
 static MouseButton ConvertMouseButton( int button )
