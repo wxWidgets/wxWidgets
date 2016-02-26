@@ -158,6 +158,8 @@
         (cairo_t *cr, double *x1, double *y1, double *x2, double *y2), (cr, x1, y1, x2, y2) ) \
     m( cairo_stroke_preserve, \
         (cairo_t *cr), (cr) ) \
+    m( cairo_surface_flush, \
+        (cairo_surface_t *surface), (surface) ) \
     m( cairo_surface_destroy, \
         (cairo_surface_t *surface), (surface) ) \
     m( cairo_text_extents, \
