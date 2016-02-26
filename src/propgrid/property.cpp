@@ -515,13 +515,13 @@ void wxPGProperty::Init()
 
 void wxPGProperty::Init( const wxString& label, const wxString& name )
 {
-    // We really need to check if &label and &name are NULL pointers
-    // (this can if we are called before property grid has been initialized)
+    // wxPG_LABEL reference can be NULL if we are called before property
+    // grid has been initialized
 
-    if ( (&label) != NULL && label != wxPG_LABEL )
+    if ( sm_wxPG_LABEL && label != wxPG_LABEL )
         m_label = label;
 
-    if ( (&name) != NULL && name != wxPG_LABEL )
+    if ( sm_wxPG_LABEL && name != wxPG_LABEL )
         DoSetName( name );
     else
         DoSetName( m_label );
