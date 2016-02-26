@@ -90,7 +90,10 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
     {
         n1--; // skip the ending '0'
         while ( p < n1 )
-            data[p++] = (NSOpenGLPixelFormatAttribute) GLAttrs[p];
+        {
+            data[p] = (NSOpenGLPixelFormatAttribute) GLAttrs[p];
+            p++;
+        }
     }
 
     if ( ctxAttrs && n2 > 1 )
