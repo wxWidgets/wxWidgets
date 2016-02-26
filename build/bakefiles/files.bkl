@@ -416,6 +416,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/dvrenderer.h
     wx/qt/dvrenderers.h
     wx/qt/taskbar.h
+    wx/generic/activityindicator.h
 </set>
 
 <set var="ADVANCED_QT_SRC" hints="files">
@@ -430,6 +431,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/taskbar.cpp
     src/common/taskbarcmn.cpp
     src/qt/utils.cpp
+    src/generic/activityindicator.cpp
 </set>
 
 <set var="QT_HDR" hints="files">

@@ -353,6 +353,7 @@ QT_LOWLEVEL_SRC=
     src/qt/window.cpp
 
 ADVANCED_QT_HDR=
+    wx/generic/activityindicator.h
     wx/generic/animate.h
     wx/qt/calctrl.h
     wx/qt/dataview.h
@@ -361,6 +362,7 @@ ADVANCED_QT_HDR=
     wx/qt/taskbar.h
 
 ADVANCED_QT_SRC=
+    src/generic/activityindicator.cpp
     src/generic/animateg.cpp
     src/qt/calctrl.cpp
     src/qt/converter.cpp
