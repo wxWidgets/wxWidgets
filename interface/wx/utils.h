@@ -897,7 +897,7 @@ wxOperatingSystemId wxGetOsVersion(int* major = NULL, int* minor = NULL, int* mi
 
     @header{wx/utils.h}
 */
-bool wxCheckOsVersion(int majorVsn, int minorVsn = 0);
+bool wxCheckOsVersion(int majorVsn, int minorVsn = 0, int microVsn = 0);
 
 /**
     Returns @true if the operating system the program is running under is 64

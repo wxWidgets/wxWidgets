@@ -1155,12 +1155,14 @@ wxString wxGetOsDescription()
     return wxGetCommandOutput(wxT("uname -s -r -m"));
 }
 
-bool wxCheckOsVersion(int majorVsn, int minorVsn)
+bool wxCheckOsVersion(int majorVsn, int minorVsn, int microVsn)
 {
-    int majorCur, minorCur;
-    wxGetOsVersion(&majorCur, &minorCur);
+    int majorCur, minorCur, microCur;
+    wxGetOsVersion(&majorCur, &minorCur, &microCur);
 
-    return majorCur > majorVsn || (majorCur == majorVsn && minorCur >= minorVsn);
+    return majorCur > majorVsn
+        || (majorCur == majorVsn && minorCur >= minorVsn)
+        || (majorCur == majorVsn && minorCur == minorVsn && microCur >= microVsn);
 }
 
 #endif // !__DARWIN__

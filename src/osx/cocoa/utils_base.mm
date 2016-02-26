@@ -75,7 +75,7 @@ wxGCC_WARNING_RESTORE()
     return wxOS_MAC_OSX_DARWIN;
 }
 
-bool wxCheckOsVersion(int majorVsn, int minorVsn)
+bool wxCheckOsVersion(int majorVsn, int minorVsn, int microVsn)
 {
 #ifdef wxHAS_NSPROCESSINFO
     if ([NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)])
@@ -83,17 +83,19 @@ bool wxCheckOsVersion(int majorVsn, int minorVsn)
         NSOperatingSystemVersion osVer;
         osVer.majorVersion = majorVsn;
         osVer.minorVersion = minorVsn;
-        osVer.patchVersion = 0;
+        osVer.patchVersion = microVsn;
 
         return [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:osVer] != NO;
     }
     else
 #endif
     {
-        int majorCur, minorCur;
-        wxGetOsVersion(&majorCur, &minorCur);
+        int majorCur, minorCur, microCur;
+        wxGetOsVersion(&majorCur, &minorCur, &microCur);
 
-        return majorCur > majorVsn || (majorCur == majorVsn && minorCur >= minorVsn);
+        return majorCur > majorVsn
+            || (majorCur == majorVsn && minorCur >= minorVsn)
+            || (majorCur == majorVsn && minorCur == minorVsn && microCur >= microVsn);
     }
 }
 

@@ -309,7 +309,7 @@ bool wxPlatformInfo::CheckOSVersion(int major, int minor, int micro) const
     // this check gets forwarded to the wxCheckOsVersion which might do more than a simple
     // number check if supported by the platform
     if (m_initializedForCurrentPlatform)
-        return wxCheckOsVersion(major, minor);
+        return wxCheckOsVersion(major, minor, micro);
     else
         return DoCheckVersion(GetOSMajorVersion(),
                             GetOSMinorVersion(),
