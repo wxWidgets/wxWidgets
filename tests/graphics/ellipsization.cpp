@@ -86,7 +86,8 @@ void EllipsizationTestCase::NormalCase()
         wxELLIPSIZE_END
     };
 
-    int widthsToTest[] = { 50, 100, 150 };
+    const int charWidth = dc.GetCharWidth();
+    int widthsToTest[] = { 6*charWidth, 10*charWidth, 15*charWidth };
 
     for ( unsigned int s = 0; s < WXSIZEOF(stringsToTest); s++ )
     {
@@ -110,8 +111,10 @@ void EllipsizationTestCase::NormalCase()
                     WX_ASSERT_MESSAGE
                     (
                      (
-                        "invalid ellipsization for \"%s\" (%dpx, should be <=%dpx)",
+                        "Test #(%u,%u.%u): \"%s\" -> \"%s\"; width=%dpx > %dpx",
+                        s, f, m,
                         str,
+                        ret,
                         dc.GetMultiLineTextExtent(ret).GetWidth(),
                         widthsToTest[w]
                      ),
