@@ -454,6 +454,7 @@ wxIMPLEMENT_CLASS(wxGLContext, wxObject);
 wxGLContext::wxGLContext(wxGLCanvas *win,
                          const wxGLContext *other,
                          const wxGLContextAttrs *ctxAttrs)
+    : m_glContext(NULL)
 {
     const int* contextAttribs = NULL;
     Bool x11Direct = True;

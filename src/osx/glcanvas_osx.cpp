@@ -359,6 +359,7 @@ wxGLAttributes& wxGLAttributes::Defaults()
 wxGLContext::wxGLContext(wxGLCanvas *win,
                          const wxGLContext *other,
                          const wxGLContextAttrs *ctxAttrs)
+    : m_glContext(NULL)
 {
     const int* contextAttribs = NULL;
     int ctxSize = 0;
