@@ -211,21 +211,6 @@ private:
 
 void TextEntryTestCase::Editable()
 {
-
-#ifdef __WXGTK__
-    // FIXME: For some reason this test regularly (although not always) fails
-    //        in wxGTK build bot builds when testing wxBitmapComboBox, but I
-    //        can't reproduce the failure locally. For now, disable this check
-    //        to let the entire test suite pass in automatic tests instead of
-    //        failing sporadically.
-    if ( wxStrcmp(GetTestWindow()->GetClassInfo()->GetClassName(),
-                  "wxBitmapComboBox") == 0 &&
-           IsAutomaticTest() )
-    {
-        return;
-    }
-#endif // __WGTK__
-
     wxTextEntry * const entry = GetTestEntry();
     wxWindow * const window = GetTestWindow();
 
@@ -233,6 +218,13 @@ void TextEntryTestCase::Editable()
 
     window->SetFocus();
     wxYield();
+
+#ifdef __WXGTK__
+    // For some reason, wxBitmapComboBox doesn't appear on the screen without
+    // this (due to wxTLW size hacks perhaps?). It would be nice to avoid doing
+    // this, but without this hack the test often (although not always) fails.
+    wxMilliSleep(50);
+#endif // __WGTK__
 
     // Check that we get the expected number of events.
     wxUIActionSimulator sim;
