@@ -1244,7 +1244,7 @@ public:
 
         @since 3.1.0
     */
-    void EnableCheckboxes(bool enable = true);
+    bool EnableCheckboxes(bool enable = true);
 
     /**
         Return true if the checkbox for the given wxListItem is checked.
