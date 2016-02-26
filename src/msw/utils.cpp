@@ -1244,7 +1244,8 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
         wxOperatingSystemId os;
 
         int verMaj,
-            verMin;
+            verMin,
+            verMicro;
     } s_version;
 
     // query the OS info only once as it's not supposed to change
@@ -1267,6 +1268,7 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 
         s_version.verMaj = info.dwMajorVersion;
         s_version.verMin = info.dwMinorVersion;
+        s_version.verMicro = info.dwBuildNumber;
     }
 
     if ( verMaj )
@@ -1274,7 +1276,7 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
     if ( verMin )
         *verMin = s_version.verMin;
     if ( verMicro )
-        *verMicro = 0;
+        *verMicro = s_version.verMicro;
 
     return s_version.os;
 }
