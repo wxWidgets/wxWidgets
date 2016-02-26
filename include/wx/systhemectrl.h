@@ -48,7 +48,7 @@ protected:
 };
 
 // Only __WXMSW__ has a non-trivial implementation currently.
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #define wxHAS_SYSTEM_THEMED_CONTROL
 #endif
 

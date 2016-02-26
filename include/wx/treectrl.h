@@ -26,7 +26,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
-#ifndef __WXMSW__
+#if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
     #define wxHAS_GENERIC_TREECTRL
 #endif
 
