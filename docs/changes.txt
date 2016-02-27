@@ -234,3 +234,4 @@ wxOSX/Cocoa:
 - Don't generate wxEVT_TEXT_ENTER for controls without wxTE_PROCESS_ENTER.
 - Implement wxToolTip::SetDelay() (David Vanderson).
 - Correct positioning of popup menus relative to mouse pointer (John Roberts).
+- Add support for right-aligned checkboxes (John Roberts).

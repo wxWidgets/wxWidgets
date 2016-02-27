@@ -56,8 +56,7 @@ enum wxCheckBoxState
            It can only be done from code. Using this flags allows the user to
            set the checkbox to the third state by clicking.
     @style{wxALIGN_RIGHT}
-           Makes the text appear on the left of the checkbox. Not implemented
-           in wxOSX.
+           Makes the text appear on the left of the checkbox.
     @endStyleTable
 
     @beginEventEmissionTable{wxCommandEvent}
