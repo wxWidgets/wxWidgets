@@ -79,6 +79,13 @@ void ModalDialogsTestCase::FileDialog()
     CPPUNIT_ASSERT_EQUAL((int)wxID_OK, rc);
 
     CPPUNIT_ASSERT_EQUAL("test.txt", dlg.GetFilename());
+
+#ifdef __WXGTK3__
+    // The native file dialog in GTK+ 3 launches an async operation which tries
+    // to dereference the already deleted dialog object if we don't let it to
+    // complete before leaving this function.
+    wxYield();
+#endif
 }
 
 
