@@ -559,9 +559,8 @@ bool TestApp::OnInit()
     cout << std::endl;
 
 #if wxUSE_GUI
-    // create a hidden parent window to be used as parent for the GUI controls
-    wxTestableFrame* frame = new wxTestableFrame();
-    frame->Show();
+    // create a parent window to be used as parent for the GUI controls
+    new wxTestableFrame();
 
     Connect(wxEVT_IDLE, wxIdleEventHandler(TestApp::OnIdle));
 #endif // wxUSE_GUI

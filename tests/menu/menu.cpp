@@ -499,6 +499,12 @@ void MenuTestCase::Events()
     m_frame->SetFocus();
     wxYield();
 
+#ifdef __WXGTK__
+    // This is another test which fails with wxGTK without this delay because
+    // the frame doesn't appear on screen in time.
+    wxMilliSleep(50);
+#endif // __WXGTK__
+
     wxUIActionSimulator sim;
     sim.KeyDown(WXK_F1);
     sim.KeyUp(WXK_F1);

@@ -114,9 +114,13 @@ void FontTestCase::Construct()
         #pragma warning(disable:4996)
     #endif
 
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
     // Tests relying on the soon-to-be-deprecated ctor taking ints and not
     // wxFontXXX enum elements.
     CPPUNIT_ASSERT( wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL).IsOk() );
+
+    wxGCC_WARNING_RESTORE()
 
     #ifdef __VISUALC__
         #pragma warning(pop)

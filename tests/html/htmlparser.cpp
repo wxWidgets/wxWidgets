@@ -19,9 +19,10 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/dcmemory.h"
 #endif // WX_PRECOMP
 
-#include "wx/html/htmlpars.h"
+#include "wx/html/winpars.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -55,7 +56,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( HtmlParserTestCase, "HtmlParserTestCase" 
 // Test that parsing invalid HTML simply fails but doesn't crash for example.
 void HtmlParserTestCase::Invalid()
 {
-    class NullParser : public wxHtmlParser
+    class NullParser : public wxHtmlWinParser
     {
     public:
         virtual wxObject *GetProduct() { return NULL; }
@@ -65,6 +66,9 @@ void HtmlParserTestCase::Invalid()
     };
 
     NullParser p;
+    wxMemoryDC dc;
+    p.SetDC(&dc);
+
     p.Parse("<");
     p.Parse("<foo");
     p.Parse("<!--");
