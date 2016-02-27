@@ -145,10 +145,16 @@ void ComboBoxTestCase::PopDismiss()
     EventCounter close(m_combo, wxEVT_COMBOBOX_CLOSEUP);
 
     m_combo->Popup();
+    CPPUNIT_ASSERT_EQUAL(1, drop.GetCount());
+
     m_combo->Dismiss();
 
-    CPPUNIT_ASSERT_EQUAL(1, drop.GetCount());
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
+    // Under wxGTK2, the event is sent only during idle time and not
+    // immediately, so we need this yield to get it.
+    wxYield();
     CPPUNIT_ASSERT_EQUAL(1, close.GetCount());
+#endif // wxGTK2
 #endif
 }
 
