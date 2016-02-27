@@ -286,11 +286,11 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebKitCtrlEventHandler )
 // This causes various problems when the WebView is editable, though, and it is still possible
 // to clear the selection when the view loses focus, so for now, just have it always retain
 // selection regardless of focus state.
-@interface WebView (Utilities)
+@interface WebView (Helpers)
 - (BOOL) maintainsInactiveSelection;
 @end
 
-@implementation WebView (Utilities)
+@implementation WebView (Helpers)
 
 - (BOOL) maintainsInactiveSelection
 {
