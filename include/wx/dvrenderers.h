@@ -180,6 +180,9 @@ public:
     // wxDVR_DEFAULT_ALIGNMENT.
     int GetEffectiveAlignment() const;
 
+    // Send wxEVT_DATAVIEW_ITEM_EDITING_STARTED event.
+    void NotifyEditingStarted(const wxDataViewItem& item);
+
 protected:
     // These methods are called from PrepareForItem() and should do whatever is
     // needed for the current platform to ensure that the item is rendered
@@ -199,7 +202,7 @@ protected:
     wxString                m_variantType;
     wxDataViewColumn       *m_owner;
     wxWeakRef<wxWindow>     m_editorCtrl;
-    wxDataViewItem          m_item; // for m_editorCtrl
+    wxDataViewItem          m_item; // Item being currently edited, if valid.
 
     // internal utility, may be used anywhere the window associated with the
     // renderer is required

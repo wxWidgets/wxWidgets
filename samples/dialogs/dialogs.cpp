@@ -2603,7 +2603,14 @@ void TestDefaultActionDialog::OnCatchListBoxDClick(wxCommandEvent& WXUNUSED(even
 
 void TestDefaultActionDialog::OnTextEnter(wxCommandEvent& event)
 {
-    wxLogMessage("Text \"%s\" entered.", event.GetString());
+    const wxString& text = event.GetString();
+    if ( text.empty() )
+    {
+        event.Skip();
+        return;
+    }
+
+    wxLogMessage("Text \"%s\" entered.", text);
 }
 
 void MyFrame::OnTestDefaultActionDialog(wxCommandEvent& WXUNUSED(event))

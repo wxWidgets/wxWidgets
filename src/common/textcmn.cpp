@@ -1194,6 +1194,21 @@ void wxTextCtrlBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
     }
 }
 
+bool wxTextCtrlBase::OnDynamicBind(wxDynamicEventTableEntry& entry)
+{
+    if ( entry.m_eventType == wxEVT_TEXT_ENTER )
+    {
+        wxCHECK_MSG
+        (
+            HasFlag(wxTE_PROCESS_ENTER),
+            false,
+            wxS("Must have wxTE_PROCESS_ENTER for wxEVT_TEXT_ENTER to work")
+        );
+    }
+
+    return wxControl::OnDynamicBind(entry);
+}
+
 // ----------------------------------------------------------------------------
 // hit testing
 // ----------------------------------------------------------------------------

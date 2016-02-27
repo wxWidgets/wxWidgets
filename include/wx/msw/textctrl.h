@@ -181,7 +181,10 @@ public:
     void OnSetFocus(wxFocusEvent& event);
 
     // intercept WM_GETDLGCODE
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    virtual bool MSWHandleMessage(WXLRESULT *result,
+                                  WXUINT message,
+                                  WXWPARAM wParam,
+                                  WXLPARAM lParam);
 
     virtual bool MSWShouldPreProcessMessage(WXMSG* pMsg);
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;

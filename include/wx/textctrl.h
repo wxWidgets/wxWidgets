@@ -743,6 +743,11 @@ public:
     }
 
 protected:
+    // Override wxEvtHandler method to check for a common problem of binding
+    // wxEVT_TEXT_ENTER to a control without wxTE_PROCESS_ENTER style, which is
+    // never going to work.
+    virtual bool OnDynamicBind(wxDynamicEventTableEntry& entry);
+
     // override streambuf method
 #if wxHAS_TEXT_WINDOW_STREAM
     int overflow(int i) wxOVERRIDE;

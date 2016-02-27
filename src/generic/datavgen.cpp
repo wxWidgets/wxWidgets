@@ -120,8 +120,8 @@ wxDataViewColumn* GetExpanderColumnOrFirstOne(wxDataViewCtrl* dataview)
 wxTextCtrl *CreateEditorTextCtrl(wxWindow *parent, const wxRect& labelRect, const wxString& value)
 {
     wxTextCtrl* ctrl = new wxTextCtrl(parent, wxID_ANY, value,
-                                      wxPoint(labelRect.x,labelRect.y),
-                                      wxSize(labelRect.width,labelRect.height),
+                                      labelRect.GetPosition(),
+                                      labelRect.GetSize(),
                                       wxTE_PROCESS_ENTER);
 
     // Adjust size of wxTextCtrl editor to fit text, even if it means being
@@ -2251,6 +2251,8 @@ wxDataViewMainWindow::StartEditing(const wxDataViewItem& item,
     const wxRect itemRect = GetItemRect(item, col);
     if ( renderer->StartEditing(item, itemRect) )
     {
+        renderer->NotifyEditingStarted(item);
+
         // Save the renderer to be able to finish/cancel editing it later and
         // save the control to be able to detect if we're still editing it.
         m_editorRenderer = renderer;
@@ -3632,7 +3634,17 @@ void wxDataViewMainWindow::OnCharHook(wxKeyEvent& event)
                 return;
 
             case WXK_RETURN:
+                // Shift-Enter is not special neither.
+                if ( event.ShiftDown() )
+                    break;
+                wxFALLTHROUGH;
+
             case WXK_TAB:
+                // Ctrl/Alt-Tab or Enter could be used for something else, so
+                // don't handle them here.
+                if ( event.HasModifiers() )
+                    break;
+
                 m_editorRenderer->FinishEditing();
                 return;
         }
