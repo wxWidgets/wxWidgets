@@ -1194,6 +1194,14 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
     }
 }
 
+extern "C" {
+static gboolean reset_size_request(void* data)
+{
+    gtk_widget_set_size_request(GTK_WIDGET(data), -1, -1);
+    return false;
+}
+}
+
 void wxTopLevelWindowGTK::DoSetClientSize(int width, int height)
 {
     base_type::DoSetClientSize(width, height);
@@ -1202,6 +1210,25 @@ void wxTopLevelWindowGTK::DoSetClientSize(int width, int height)
     // Has to be done after calling base because it calls SetSize,
     // which sets this true
     m_deferShowAllowed = false;
+
+    if (m_wxwindow)
+    {
+        // If window is not resizable or not yet shown, set size request on
+        // client widget, to make it more likely window will get correct size
+        // even if our decorations size cache is incorrect (as it will be before
+        // showing first TLW).
+        if (!gtk_window_get_resizable(GTK_WINDOW(m_widget)))
+        {
+            gtk_widget_set_size_request(m_widget, -1, -1);
+            gtk_widget_set_size_request(m_wxwindow, m_clientWidth, m_clientHeight);
+        }
+        else if (!IsShown())
+        {
+            gtk_widget_set_size_request(m_wxwindow, m_clientWidth, m_clientHeight);
+            // Cancel size request at next idle to allow resizing
+            g_idle_add_full(G_PRIORITY_LOW, reset_size_request, m_wxwindow, NULL);
+        }
+    }
 }
 
 void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const

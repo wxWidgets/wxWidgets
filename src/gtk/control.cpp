@@ -251,6 +251,7 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
     }
     GtkStyleContext* sc = gtk_widget_get_style_context(widget);
     GdkRGBA c;
+    gtk_style_context_set_state(sc, stateFlag);
     gtk_style_context_get_color(sc, stateFlag, &c);
     attr.colFg = wxColour(c);
     gtk_style_context_get_background_color(sc, stateFlag, &c);
@@ -319,7 +320,11 @@ wxSize wxControl::GTKGetPreferredSize(GtkWidget* widget) const
 {
     GtkRequisition req;
 #ifdef __WXGTK3__
+    int w, h;
+    gtk_widget_get_size_request(widget, &w, &h);
+    gtk_widget_set_size_request(widget, -1, -1);
     gtk_widget_get_preferred_size(widget, NULL, &req);
+    gtk_widget_set_size_request(widget, w, h);
 #else
     GTK_WIDGET_GET_CLASS(widget)->size_request(widget, &req);
 #endif
