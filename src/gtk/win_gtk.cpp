@@ -115,7 +115,14 @@ static void pizza_size_allocate(GtkWidget* widget, GtkAllocation* alloc)
             child_alloc.height = child->height;
             if (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL)
                 child_alloc.x = w - child_alloc.x - child_alloc.width;
-            gtk_widget_size_allocate(child->widget, &child_alloc);
+
+            // GTK+3 doesn't like allocating 0 size, so don't do it.
+#ifdef __WXGTK3__
+            if (child_alloc.width && child_alloc.height)
+#endif
+            {
+                gtk_widget_size_allocate(child->widget, &child_alloc);
+            }
         }
     }
 }
