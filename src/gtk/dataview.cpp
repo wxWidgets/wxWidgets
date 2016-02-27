@@ -1670,20 +1670,27 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
                     GTK_TREE_MODEL(wxgtk_model), &iter ));
                 GdkRectangle cell_area;
                 gtk_tree_view_get_cell_area( widget, path, gcolumn, &cell_area );
-#ifdef __WXGTK3__
-                GtkAdjustment* hadjust = gtk_scrollable_get_hadjustment(GTK_SCROLLABLE(widget));
-#else
-                GtkAdjustment* hadjust = gtk_tree_view_get_hadjustment( widget );
-#endif
-                double d = gtk_adjustment_get_value( hadjust );
-                int xdiff = (int) d;
 
-                GtkAllocation a;
-                gtk_widget_get_allocation(GTK_WIDGET(gtk_tree_view_column_get_button(gcolumn)), &a);
-                int ydiff = a.height;
-                // Redraw
-                gtk_widget_queue_draw_area( GTK_WIDGET(widget),
-                    cell_area.x - xdiff, ydiff + cell_area.y, cell_area.width, cell_area.height );
+                // Don't try to redraw the column if it's invisible, this just
+                // results in "BUG" messages from pixman_region32_init_rect()
+                // and would be useful even if it didn't anyhow.
+                if ( cell_area.width > 0 && cell_area.height > 0 )
+                {
+#ifdef __WXGTK3__
+                    GtkAdjustment* hadjust = gtk_scrollable_get_hadjustment(GTK_SCROLLABLE(widget));
+#else
+                    GtkAdjustment* hadjust = gtk_tree_view_get_hadjustment( widget );
+#endif
+                    double d = gtk_adjustment_get_value( hadjust );
+                    int xdiff = (int) d;
+
+                    GtkAllocation a;
+                    gtk_widget_get_allocation(GTK_WIDGET(gtk_tree_view_column_get_button(gcolumn)), &a);
+                    int ydiff = a.height;
+                    // Redraw
+                    gtk_widget_queue_draw_area( GTK_WIDGET(widget),
+                        cell_area.x - xdiff, ydiff + cell_area.y, cell_area.width, cell_area.height );
+                }
             }
 
             m_internal->ValueChanged( item, model_column );
