@@ -3309,19 +3309,15 @@ int wxDataViewColumn::GetWidth() const
 
 void wxDataViewColumn::SetWidth( int width )
 {
-    if ( width == wxCOL_WIDTH_AUTOSIZE )
+    // Notice that we don't have anything to do for wxCOL_WIDTH_DEFAULT and
+    // wxCOL_WIDTH_AUTOSIZE as the native control tries to use the appropriate
+    // width by default anyhow, don't use GTK_TREE_VIEW_COLUMN_AUTOSIZE to
+    // force it because, as mentioned in GTK+ documentation, it's completely
+    // inappropriate for controls with a lot of items (because it's O(N)) and
+    // it would also prevent the user from resizing the column manually which
+    // we want to allow for resizeable columns.
+    if ( width >= 0 )
     {
-        // NB: this disables user resizing
-        gtk_tree_view_column_set_sizing( GTK_TREE_VIEW_COLUMN(m_column), GTK_TREE_VIEW_COLUMN_AUTOSIZE );
-    }
-    else
-    {
-        if ( width == wxCOL_WIDTH_DEFAULT )
-        {
-            // TODO find a better calculation
-            width = wxDVC_DEFAULT_WIDTH;
-        }
-
         gtk_tree_view_column_set_sizing( GTK_TREE_VIEW_COLUMN(m_column), GTK_TREE_VIEW_COLUMN_FIXED );
         gtk_tree_view_column_set_fixed_width( GTK_TREE_VIEW_COLUMN(m_column), width );
     }
