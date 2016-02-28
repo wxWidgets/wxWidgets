@@ -1109,7 +1109,7 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 
                 break;
             }
-            if (ancestor->IsTopNavigationDomain())
+            if (ancestor->IsTopNavigationDomain(wxWindow::Navigation_Accel))
                 break;
             ancestor = ancestor->GetParent();
         }

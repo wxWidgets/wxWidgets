@@ -182,7 +182,21 @@ public:
     // In all ports keyboard navigation must stop at MDI child frame level and
     // can't cross its boundary. Indicate this by overriding this function to
     // return true.
-    virtual bool IsTopNavigationDomain() const wxOVERRIDE { return true; }
+    virtual bool IsTopNavigationDomain(NavigationKind kind) const wxOVERRIDE
+    {
+        switch ( kind )
+        {
+            case Navigation_Tab:
+                return true;
+
+            case Navigation_Accel:
+                // Parent frame accelerators should work inside MDI child, so
+                // don't block their processing by returning true for them.
+                break;
+        }
+
+        return false;
+    }
 
     // Raising any frame is supposed to show it but wxFrame Raise()
     // implementation doesn't work for MDI child frames in most forms so

@@ -1537,13 +1537,23 @@ public:
     virtual wxWindow *GetMainWindowOfCompositeControl()
         { return (wxWindow*)this; }
 
-    // If this function returns true, keyboard navigation events shouldn't
+    enum NavigationKind
+    {
+        Navigation_Tab,
+        Navigation_Accel
+    };
+
+    // If this function returns true, keyboard events of the given kind can't
     // escape from it. A typical example of such "navigation domain" is a top
     // level window because pressing TAB in one of them must not transfer focus
     // to a different top level window. But it's not limited to them, e.g. MDI
     // children frames are not top level windows (and their IsTopLevel()
-    // returns false) but still are self-contained navigation domains as well.
-    virtual bool IsTopNavigationDomain() const { return false; }
+    // returns false) but still are self-contained navigation domains for the
+    // purposes of TAB navigation -- but not for the accelerators.
+    virtual bool IsTopNavigationDomain(NavigationKind WXUNUSED(kind)) const
+    {
+        return false;
+    }
 
 
 protected:

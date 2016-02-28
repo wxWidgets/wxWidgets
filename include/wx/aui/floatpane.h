@@ -44,7 +44,7 @@ public:
     wxAuiManager* GetOwnerManager() const;
 
     // Allow processing accelerators to the parent frame
-    virtual bool IsTopNavigationDomain() const wxOVERRIDE { return false; }
+    virtual bool IsTopNavigationDomain(NavigationKind kind) const wxOVERRIDE;
 
 protected:
     virtual void OnMoveStart();

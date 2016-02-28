@@ -2662,7 +2662,7 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
                 break;
             }
 
-            if (ancestor->IsTopNavigationDomain())
+            if (ancestor->IsTopNavigationDomain(wxWindow::Navigation_Accel))
                 break;
 
             ancestor = ancestor->GetParent();

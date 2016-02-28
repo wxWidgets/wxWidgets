@@ -134,10 +134,8 @@ bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
         if ( wnd->MSWTranslateMessage((WXMSG *)msg))
             return true;
 
-        // stop at first top level window, i.e. don't try to process the key
-        // strokes originating in a dialog using the accelerators of the parent
-        // frame - this doesn't make much sense
-        if ( wnd->IsTopNavigationDomain() )
+        // stop at top navigation domain, i.e. typically a top level window
+        if ( wnd->IsTopNavigationDomain(wxWindow::Navigation_Accel) )
             break;
     }
 
@@ -151,7 +149,7 @@ bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
         // if we don't do this, pressing ESC on a modal dialog shown as child
         // of a modal dialog with wxID_CANCEL will cause the parent dialog to
         // be closed, for example
-        if ( wnd->IsTopNavigationDomain() )
+        if ( wnd->IsTopNavigationDomain(wxWindow::Navigation_Accel) )
             break;
     }
 
