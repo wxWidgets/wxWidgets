@@ -1886,6 +1886,9 @@ outlineView:(NSOutlineView*)outlineView
     wxDataViewColumn* const
         col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
 
+    wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
+
+
     // stop editing of a custom item first (if necessary)
     dvc->FinishCustomItemEditing();
 
