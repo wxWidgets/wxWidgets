@@ -59,25 +59,25 @@ double MyDistance(const myVec3& v1, const myVec3& v2);
 double AngleBetween(myVec3 v1, myVec3 v2);
 
 // Matrix 4x4 by 4x1 multiplication
-myVec4 MyMatMul4x1(const float *m1, const myVec4& v);
+myVec4 MyMatMul4x1(const double *m1, const myVec4& v);
 
 // Matrix 4x4 by 4x4 multiplication
-void MyMatMul4x4(const float *m1, const float *m2, float* mm);
+void MyMatMul4x4(const double *m1, const double *m2, double* mm);
 
 // Matrix inverse. Returns the determinant
-double MyMatInverse(const float *m, float *minv);
+double MyMatInverse(const double *m, double *minv);
 
 // Matrix of rotation around an axis in the origin
-void MyRotate(const myVec3& axis, double angle, float *mrot);
+void MyRotate(const myVec3& axis, double angle, double *mrot);
 
 // Matrix for defining the viewing transformation
-void MyLookAt(const myVec3& camPos, const myVec3& camUp, const myVec3& targ, float *mt);
+void MyLookAt(const myVec3& camPos, const myVec3& camUp, const myVec3& targ, double *mt);
 
 // Matrix for defining the perspective projection with symmetric frustum
-void MyPerspective(double fov, double aspect, double zNear, double zFar, float *mp);
+void MyPerspective(double fov, double aspect, double zNear, double zFar, double *mp);
 
 // Matrix for defining the orthogonal projection
 void MyOrtho(double left, double right, double bottom, double top,
-             double zNear, double zFar, float *mo);
+             double zNear, double zFar, double *mo);
 
 #endif // MATHSTUFF_H

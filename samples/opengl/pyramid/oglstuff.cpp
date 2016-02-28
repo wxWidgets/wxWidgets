@@ -39,6 +39,20 @@ bool MyOnGLError(int err, const GLchar* glMsg = NULL)
     return err == myoglERR_JUSTLOG ? true : false;
 }
 
+
+// We do calculations with 'doubles'. We pass 'GLFloats' to the shaders
+// because OGL added 'doubles' since OGL 4.0, and this sample is for 3.2
+// Due to asynchronous nature of OGL, we can't not trust in the passed matrix
+// to be stored by GPU before the passing-function returns. So we don't use
+// temporary storage, but dedicated matrices
+void SetAsGLFloat4x4(double *matD, GLfloat *matF, int msize)
+{
+    for (int i = 0; i < msize; i++)
+    {
+        matF[i] = (GLfloat) matD[i];
+    }
+}
+
 // ----------------------------------------------------------------------------
 // Data for a regular tetrahedron with edge length 200, centered at the origin
 // ----------------------------------------------------------------------------
@@ -497,10 +511,10 @@ void myOGLShaders::DisableGenericVAA()
 void myLight::Set(const myVec3& position, GLfloat intensity,
                   GLfloat R, GLfloat G, GLfloat B)
 {
-    m_PosAndIntensisty[0] = position.x;
-    m_PosAndIntensisty[1] = position.y;
-    m_PosAndIntensisty[2] = position.z;
-    m_PosAndIntensisty[3] = intensity;
+    m_PosAndIntensisty[0] = (GLfloat) position.x;
+    m_PosAndIntensisty[1] = (GLfloat) position.y;
+    m_PosAndIntensisty[2] = (GLfloat) position.z;
+    m_PosAndIntensisty[3] = (GLfloat) intensity;
     m_Colour[0] = R;
     m_Colour[1] = G;
     m_Colour[2] = B;
@@ -900,21 +914,27 @@ void myOGLImmutString::SetImmutString(myOGLShaders* theShader,
 {
     // Make a rectangle of the same size as the image. Order of vertices matters.
     // Set a 2 pixels margin
-    GLfloat imaVerts[12];
+    double imaVerts[12];
     imaVerts[0] = 2.0         ;   imaVerts[1] = 2.0         ; imaVerts[2]  = -1.0;
     imaVerts[3] = 2.0         ;   imaVerts[4] = 2.0 + tHeigh; imaVerts[5]  = -1.0;
     imaVerts[6] = 2.0 + tWidth;   imaVerts[7] = 2.0         ; imaVerts[8]  = -1.0;
     imaVerts[9] = 2.0 + tWidth;  imaVerts[10] = 2.0 + tHeigh; imaVerts[11] = -1.0;
 
+    // GLFloat version
+    GLfloat fimaVerts[12];
+    SetAsGLFloat4x4(imaVerts, fimaVerts, 12);
+
     // Call the base class without normals, it will handle this case
-    SetStringWithVerts(theShader, tImage, tWidth, tHeigh, imaVerts, NULL);
+    SetStringWithVerts(theShader, tImage, tWidth, tHeigh, fimaVerts, NULL);
 }
 
 void myOGLImmutString::SetOrtho(int winWidth, int winHeight)
 {
     // We want an image always of the same size, regardless of window size.
     // The orthogonal projection with the whole window achieves it.
-    MyOrtho(0.0, winWidth, 0.0, winHeight, -1.0, 1.0, m_fOrtho);
+    MyOrtho(0.0, winWidth, 0.0, winHeight, -1.0, 1.0, m_dOrtho);
+    // Store the 'float' matrix
+    SetAsGLFloat4x4(m_dOrtho, m_fOrtho, 16);
 }
 
 
@@ -966,10 +986,10 @@ void myOGLCamera::InitPositions()
     m_farD = tmpv + 1.10 * m_radiusOfWorld + 5.0;
 
     // The "View" matrix. We will not change it any more in this sample
-    MyLookAt(m_camPosition, m_camUp, m_camTarget, m_fView);
+    MyLookAt(m_camPosition, m_camUp, m_camTarget, m_dView);
 
     // The initial "Model" matrix is the Identity matrix
-    MyRotate(myVec3(0.0, 0.0, 1.0), 0.0, m_fMode);
+    MyRotate(myVec3(0.0, 0.0, 1.0), 0.0, m_dMode);
 
     // Nothing else. "View" matrix is calculated at ViewSizeChanged()
 }
@@ -982,7 +1002,7 @@ void myOGLCamera::ViewSizeChanged(int newWidth, int newHeight)
 
     // Calculate the projection matrix
     double aspect = (double) newWidth / newHeight;
-    MyPerspective(m_fov, aspect, m_nearD, m_farD, m_fProj);
+    MyPerspective(m_fov, aspect, m_nearD, m_farD, m_dProj);
 
     // Inform we need to calculate MVP matrix
     m_needMVPUpdate = true;
@@ -1006,8 +1026,11 @@ void myOGLCamera::UpdateMatrices()
 {
    if ( m_needMVPUpdate )
     {
-        MyMatMul4x4(m_fView, m_fMode, m_fToVw);
-        MyMatMul4x4(m_fProj, m_fToVw, m_fMVP);
+        MyMatMul4x4(m_dView, m_dMode, m_dToVw);
+        MyMatMul4x4(m_dProj, m_dToVw, m_dMVP);
+        // Store the 'float' matrices
+        SetAsGLFloat4x4(m_dToVw, m_fToVw, 16);
+        SetAsGLFloat4x4(m_dMVP, m_fMVP, 16);
         m_needMVPUpdate = false;
     }
 }
@@ -1037,8 +1060,8 @@ void myOGLCamera::MouseRotation(int fromX, int fromY, int toX, int toY)
     myVec3 axis(MyCross(v1, v2));
 
     // 'axis' is in camera coordinates. Transform it to world coordinates.
-    float mtmp[16];
-    MyMatInverse(m_fView, mtmp);
+    double mtmp[16];
+    MyMatInverse(m_dView, mtmp);
     myVec4 res = MyMatMul4x1(mtmp, myVec4(axis));
     axis.x = res.x;
     axis.y = res.y;
@@ -1050,10 +1073,10 @@ void myOGLCamera::MouseRotation(int fromX, int fromY, int toX, int toY)
     // 2. Compute the model transformation (rotate the model) matrix
     MyRotate(axis, angle, mtmp);
     // Update "Model" matrix
-    float mnew[16];
-    MyMatMul4x4(mtmp, m_fMode, mnew);
+    double mnew[16];
+    MyMatMul4x4(mtmp, m_dMode, mnew);
     for (size_t i = 0; i<16; ++i)
-        m_fMode[i] = mnew[i];
+        m_dMode[i] = mnew[i];
 
     // Inform we need to calculate MVP matrix
     m_needMVPUpdate = true;
@@ -1161,19 +1184,19 @@ void myOGLManager::SetStringOnPyr(const unsigned char* strImage, int iWidth, int
     // If h/rw = Prop then
     //    rw = edgeLength / (1+4/sqrt(3)*Prop) and h = Prop * rw
 
-    GLfloat edgeLen = MyDistance(myVec3(gVerts[0], gVerts[1], gVerts[2]),
+    double edgeLen = MyDistance(myVec3(gVerts[0], gVerts[1], gVerts[2]),
                                  myVec3(gVerts[6], gVerts[7], gVerts[8]));
-    GLfloat prop = (double) iHeigh / iWidth;
-    GLfloat rw = (double) edgeLen / (1 + 4.0 * prop / sqrt(3.0));
+    GLfloat prop = ((GLfloat) iHeigh) / ((GLfloat) iWidth);
+    GLfloat rw = (GLfloat) (edgeLen / (1 + 4.0 * prop / sqrt(3.0)));
     GLfloat h = prop * rw;
-    GLfloat de = 2.0 * h / sqrt(3.0);
+    GLfloat de = (GLfloat)(2.0 * h / sqrt(3.0));
     // A bit of separation of the face so as to avoid z-fighting
-    GLfloat rY = gVerts[1] - 0.01; // Towards outside
+    GLfloat rY = gVerts[1] - (GLfloat)0.01; // Towards outside
     GLfloat sVerts[12];
     // The image was created top to bottom, but OpenGL axis are bottom to top.
     // The image would display upside down. We avoid it choosing the right
     // order of vertices and texture coords. See myOGLString::SetStringWithVerts()
-    sVerts[0] = gVerts[6] + de;  sVerts[1] = rY;   sVerts[2] = gVerts[8] + h / 2.0;
+    sVerts[0] = gVerts[6] + de;  sVerts[1] = rY;   sVerts[2] = gVerts[8] + h / (GLfloat)2.0;
     sVerts[3] = sVerts[0]     ;  sVerts[4] = rY;   sVerts[5] = sVerts[2] + h;
     sVerts[6] = sVerts[0] + rw;  sVerts[7] = rY;   sVerts[8] = sVerts[2];
     sVerts[9] = sVerts[6]     ; sVerts[10] = rY;  sVerts[11] = sVerts[5];
@@ -1215,7 +1238,7 @@ void myOGLManager::Render()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glClearColor(0.15, 0.15, 0.0 ,1.0); // Dark, but not black. Isn't it nice?
+    glClearColor((GLfloat)0.15, (GLfloat)0.15, 0.0, (GLfloat)1.0); // Dark, but not black.
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     m_Triangles.Draw(m_Camera.GetFloatMVP(), m_Camera.GetFloatToVw(), &m_Light);
@@ -1238,4 +1261,3 @@ void myOGLManager::OnMouseRotDragging(int posX, int posY)
     m_mousePrevX = posX;
     m_mousePrevY = posY;
 }
-

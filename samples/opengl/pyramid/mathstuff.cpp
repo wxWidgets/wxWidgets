@@ -66,68 +66,68 @@ double AngleBetween(myVec3 v1, myVec3 v2)
 
 // Matrix 4x4 by 4x1 multiplication
 // Attention: No bounds check!
-myVec4 MyMatMul4x1(const float *m1, const myVec4& v)
+myVec4 MyMatMul4x1(const double *m1, const myVec4& v)
 {
     myVec4 mmv;
-    mmv.x = (double) m1[0] * v.x + m1[4] * v.y +  m1[8] * v.z + m1[12] * v.w ;
-    mmv.y = (double) m1[1] * v.x + m1[5] * v.y +  m1[9] * v.z + m1[13] * v.w ;
-    mmv.z = (double) m1[2] * v.x + m1[6] * v.y + m1[10] * v.z + m1[14] * v.w ;
-    mmv.w = (double) m1[3] * v.x + m1[7] * v.y + m1[11] * v.z + m1[15] * v.w ;
+    mmv.x = m1[0] * v.x + m1[4] * v.y +  m1[8] * v.z + m1[12] * v.w ;
+    mmv.y = m1[1] * v.x + m1[5] * v.y +  m1[9] * v.z + m1[13] * v.w ;
+    mmv.z = m1[2] * v.x + m1[6] * v.y + m1[10] * v.z + m1[14] * v.w ;
+    mmv.w = m1[3] * v.x + m1[7] * v.y + m1[11] * v.z + m1[15] * v.w ;
 
     return mmv;
 }
 
 // Matrix 4x4 multiplication
 // Attention: No bounds check!
-void MyMatMul4x4(const float *m1, const float *m2, float* mm)
+void MyMatMul4x4(const double *m1, const double *m2, double* mm)
 {
-     mm[0] = (double) m1[0] *  m2[0] + m1[4] *  m2[1] +  m1[8] *  m2[2] + m1[12] *  m2[3] ;
-     mm[1] = (double) m1[1] *  m2[0] + m1[5] *  m2[1] +  m1[9] *  m2[2] + m1[13] *  m2[3] ;
-     mm[2] = (double) m1[2] *  m2[0] + m1[6] *  m2[1] + m1[10] *  m2[2] + m1[14] *  m2[3] ;
-     mm[3] = (double) m1[3] *  m2[0] + m1[7] *  m2[1] + m1[11] *  m2[2] + m1[15] *  m2[3] ;
-     mm[4] = (double) m1[0] *  m2[4] + m1[4] *  m2[5] +  m1[8] *  m2[6] + m1[12] *  m2[7] ;
-     mm[5] = (double) m1[1] *  m2[4] + m1[5] *  m2[5] +  m1[9] *  m2[6] + m1[13] *  m2[7] ;
-     mm[6] = (double) m1[2] *  m2[4] + m1[6] *  m2[5] + m1[10] *  m2[6] + m1[14] *  m2[7] ;
-     mm[7] = (double) m1[3] *  m2[4] + m1[7] *  m2[5] + m1[11] *  m2[6] + m1[15] *  m2[7] ;
-     mm[8] = (double) m1[0] *  m2[8] + m1[4] *  m2[9] +  m1[8] * m2[10] + m1[12] * m2[11] ;
-     mm[9] = (double) m1[1] *  m2[8] + m1[5] *  m2[9] +  m1[9] * m2[10] + m1[13] * m2[11] ;
-    mm[10] = (double) m1[2] *  m2[8] + m1[6] *  m2[9] + m1[10] * m2[10] + m1[14] * m2[11] ;
-    mm[11] = (double) m1[3] *  m2[8] + m1[7] *  m2[9] + m1[11] * m2[10] + m1[15] * m2[11] ;
-    mm[12] = (double) m1[0] * m2[12] + m1[4] * m2[13] +  m1[8] * m2[14] + m1[12] * m2[15] ;
-    mm[13] = (double) m1[1] * m2[12] + m1[5] * m2[13] +  m1[9] * m2[14] + m1[13] * m2[15] ;
-    mm[14] = (double) m1[2] * m2[12] + m1[6] * m2[13] + m1[10] * m2[14] + m1[14] * m2[15] ;
-    mm[15] = (double) m1[3] * m2[12] + m1[7] * m2[13] + m1[11] * m2[14] + m1[15] * m2[15] ;
+     mm[0] = m1[0] *  m2[0] + m1[4] *  m2[1] +  m1[8] *  m2[2] + m1[12] *  m2[3] ;
+     mm[1] = m1[1] *  m2[0] + m1[5] *  m2[1] +  m1[9] *  m2[2] + m1[13] *  m2[3] ;
+     mm[2] = m1[2] *  m2[0] + m1[6] *  m2[1] + m1[10] *  m2[2] + m1[14] *  m2[3] ;
+     mm[3] = m1[3] *  m2[0] + m1[7] *  m2[1] + m1[11] *  m2[2] + m1[15] *  m2[3] ;
+     mm[4] = m1[0] *  m2[4] + m1[4] *  m2[5] +  m1[8] *  m2[6] + m1[12] *  m2[7] ;
+     mm[5] = m1[1] *  m2[4] + m1[5] *  m2[5] +  m1[9] *  m2[6] + m1[13] *  m2[7] ;
+     mm[6] = m1[2] *  m2[4] + m1[6] *  m2[5] + m1[10] *  m2[6] + m1[14] *  m2[7] ;
+     mm[7] = m1[3] *  m2[4] + m1[7] *  m2[5] + m1[11] *  m2[6] + m1[15] *  m2[7] ;
+     mm[8] = m1[0] *  m2[8] + m1[4] *  m2[9] +  m1[8] * m2[10] + m1[12] * m2[11] ;
+     mm[9] = m1[1] *  m2[8] + m1[5] *  m2[9] +  m1[9] * m2[10] + m1[13] * m2[11] ;
+    mm[10] = m1[2] *  m2[8] + m1[6] *  m2[9] + m1[10] * m2[10] + m1[14] * m2[11] ;
+    mm[11] = m1[3] *  m2[8] + m1[7] *  m2[9] + m1[11] * m2[10] + m1[15] * m2[11] ;
+    mm[12] = m1[0] * m2[12] + m1[4] * m2[13] +  m1[8] * m2[14] + m1[12] * m2[15] ;
+    mm[13] = m1[1] * m2[12] + m1[5] * m2[13] +  m1[9] * m2[14] + m1[13] * m2[15] ;
+    mm[14] = m1[2] * m2[12] + m1[6] * m2[13] + m1[10] * m2[14] + m1[14] * m2[15] ;
+    mm[15] = m1[3] * m2[12] + m1[7] * m2[13] + m1[11] * m2[14] + m1[15] * m2[15] ;
 }
 
 // Matrix 4x4 inverse. Returns the determinant.
 // Attention: No bounds check!
 // Method used is "adjugate matrix" with "cofactors".
 // A faster method, such as "LU decomposition", isn't much faster than this code.
-double MyMatInverse(const float *m, float *minv)
+double MyMatInverse(const double *m, double *minv)
 {
     double det;
     double cof[16], sdt[19];
 
     // The 2x2 determinants used for cofactors
-    sdt[0]  = (double) m[10] * m[15] - m[14] * m[11] ;
-    sdt[1]  = (double)  m[9] * m[15] - m[13] * m[11] ;
-    sdt[2]  = (double)  m[9] * m[14] - m[13] * m[10] ;
-    sdt[3]  = (double)  m[8] * m[15] - m[12] * m[11] ;
-    sdt[4]  = (double)  m[8] * m[14] - m[12] * m[10] ;
-    sdt[5]  = (double)  m[8] * m[13] - m[12] *  m[9] ;
-    sdt[6]  = (double)  m[6] * m[15] - m[14] *  m[7] ;
-    sdt[7]  = (double)  m[5] * m[15] - m[13] *  m[7] ;
-    sdt[8]  = (double)  m[5] * m[14] - m[13] *  m[6] ;
-    sdt[9]  = (double)  m[4] * m[15] - m[12] *  m[7] ;
-    sdt[10] = (double)  m[4] * m[14] - m[12] *  m[6] ;
-    sdt[11] = (double)  m[5] * m[15] - m[13] *  m[7] ;
-    sdt[12] = (double)  m[4] * m[13] - m[12] *  m[5] ;
-    sdt[13] = (double)  m[6] * m[11] - m[10] *  m[7] ;
-    sdt[14] = (double)  m[5] * m[11] -  m[9] *  m[7] ;
-    sdt[15] = (double)  m[5] * m[10] -  m[9] *  m[6] ;
-    sdt[16] = (double)  m[4] * m[11] -  m[8] *  m[7] ;
-    sdt[17] = (double)  m[4] * m[10] -  m[8] *  m[6] ;
-    sdt[18] = (double)  m[4] *  m[9] -  m[8] *  m[5] ;
+    sdt[0]  = m[10] * m[15] - m[14] * m[11] ;
+    sdt[1]  =  m[9] * m[15] - m[13] * m[11] ;
+    sdt[2]  =  m[9] * m[14] - m[13] * m[10] ;
+    sdt[3]  =  m[8] * m[15] - m[12] * m[11] ;
+    sdt[4]  =  m[8] * m[14] - m[12] * m[10] ;
+    sdt[5]  =  m[8] * m[13] - m[12] *  m[9] ;
+    sdt[6]  =  m[6] * m[15] - m[14] *  m[7] ;
+    sdt[7]  =  m[5] * m[15] - m[13] *  m[7] ;
+    sdt[8]  =  m[5] * m[14] - m[13] *  m[6] ;
+    sdt[9]  =  m[4] * m[15] - m[12] *  m[7] ;
+    sdt[10] =  m[4] * m[14] - m[12] *  m[6] ;
+    sdt[11] =  m[5] * m[15] - m[13] *  m[7] ;
+    sdt[12] =  m[4] * m[13] - m[12] *  m[5] ;
+    sdt[13] =  m[6] * m[11] - m[10] *  m[7] ;
+    sdt[14] =  m[5] * m[11] -  m[9] *  m[7] ;
+    sdt[15] =  m[5] * m[10] -  m[9] *  m[6] ;
+    sdt[16] =  m[4] * m[11] -  m[8] *  m[7] ;
+    sdt[17] =  m[4] * m[10] -  m[8] *  m[6] ;
+    sdt[18] =  m[4] *  m[9] -  m[8] *  m[5] ;
     // The cofactors, transposed
     cof[0]  =   m[5] *  sdt[0] - m[6] *  sdt[1] + m[7] *  sdt[2] ;
     cof[1]  = - m[1] *  sdt[0] + m[2] *  sdt[1] - m[3] *  sdt[2] ;
@@ -166,7 +166,7 @@ double MyMatInverse(const float *m, float *minv)
 // Matrix of rotation around an axis in the origin.
 // angle is positive if follows axis (right-hand rule)
 // Attention: No bounds check!
-void MyRotate(const myVec3& axis, double angle, float *mrot)
+void MyRotate(const myVec3& axis, double angle, double *mrot)
 {
     double c = cos(angle);
     double s = sin(angle);
@@ -197,7 +197,7 @@ void MyRotate(const myVec3& axis, double angle, float *mrot)
 // Unchecked conditions:
 //   camPos != targ  && camUp != {0,0,0}
 //   camUo can't be parallel to camPos - targ
-void MyLookAt(const myVec3& camPos, const myVec3& camUp, const myVec3& targ, float *mt)
+void MyLookAt(const myVec3& camPos, const myVec3& camUp, const myVec3& targ, double *mt)
 {
     myVec3 tc = MyNormalize(targ - camPos);
     myVec3 up = MyNormalize(camUp);
@@ -228,7 +228,7 @@ void MyLookAt(const myVec3& camPos, const myVec3& camUp, const myVec3& targ, flo
 // From camera coordinates to canonical (2x2x2 cube) coordinates.
 // Attention: No bounds check!
 // Unchecked conditions: fov > 0 && zNear > 0 && zFar > zNear && aspect > 0
-void MyPerspective(double fov, double aspect, double zNear, double zFar, float *mp)
+void MyPerspective(double fov, double aspect, double zNear, double zFar, double *mp)
 {
     double f = 1.0 / tan(fov / 2.0);
 
@@ -251,7 +251,7 @@ void MyPerspective(double fov, double aspect, double zNear, double zFar, float *
 // Attention: No bounds check!
 // Unchecked conditions: left != right && bottom != top && zNear != zFar
 void MyOrtho(double left, double right, double bottom, double top,
-             double zNear, double zFar, float *mo)
+             double zNear, double zFar, double *mo)
 {
     // Store the matrix in column order
     mo[0]  = 2.0 / (right - left) ;

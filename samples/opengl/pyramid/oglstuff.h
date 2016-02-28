@@ -230,7 +230,8 @@ public:
     const GLfloat* GetFloatMVP() { return m_fOrtho; }
 
 private:
-    GLfloat m_fOrtho[16]; // The orthogonal projection matrix
+    double m_dOrtho[16]; // The orthogonal projection matrix
+    GLfloat m_fOrtho[16]; // Same as float
 };
 
 //-----------------------------------------------------------------------------
@@ -257,11 +258,14 @@ public:
     double GetTrackballZ(double x, double y, double r);
 
     // The used matrices
-    GLfloat m_fMode[16]; // The model matrix, rotation in this sample
-    GLfloat m_fView[16]; // The view matrix
-    GLfloat m_fProj[16]; // The projection matrix
-    GLfloat m_fMVP[16];  // The whole transform matrix
-    GLfloat m_fToVw[16]; // The 'to View' transform matrix
+    double m_dMode[16]; // The model matrix, rotation in this sample
+    double m_dView[16]; // The view matrix
+    double m_dProj[16]; // The projection matrix
+    double m_dMVP[16];  // The whole transform matrix
+    double m_dToVw[16]; // The 'to View' transform matrix
+    // GLFloat versions. GLdouble is available since OGL 4.0, and we use 3.2
+    GLfloat m_fMVP[16];
+    GLfloat m_fToVw[16];
 private:
     bool m_needMVPUpdate;
 
