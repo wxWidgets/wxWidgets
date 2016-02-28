@@ -162,6 +162,7 @@ All (GUI):
 wxGTK:
 
 - Support building wxGTK3 under Windows (Kolya Kosenko).
+- Implement support for non-wxTextCtrl custom editors in wxDataViewCtrl.
 - Fix vertical cell alignment in wxDataViewCtrl.
 - Fix clearing of wxComboBox with wxCB_READONLY (Chuddah).
 - Fix setting "pressed" bitmap for wxToggleButton (Kevin B. McCarty).

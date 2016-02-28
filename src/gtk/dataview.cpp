@@ -1143,6 +1143,168 @@ static GtkCellEditable *gtk_wx_cell_renderer_text_start_editing(
         return NULL;
 }
 
+// ----------------------------------------------------------------------------
+// GTK+ class GtkWxCellEditorBin: needed only to implement GtkCellEditable for
+// our editor widgets which don't necessarily implement it on their own.
+// ----------------------------------------------------------------------------
+
+enum
+{
+    CELL_EDITOR_BIN_PROP_0,
+    CELL_EDITOR_BIN_PROP_EDITING_CANCELED
+};
+
+extern "C" {
+
+#define GTK_TYPE_WX_CELL_EDITOR_BIN               (gtk_wx_cell_editor_bin_get_type ())
+#define GTK_WX_CELL_EDITOR_BIN(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_WX_CELL_EDITOR_BIN, GtkWxCellEditorBin))
+#define GTK_IS_WX_CELL_EDITOR_BIN(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_WX_CELL_EDITOR_BIN))
+#define GTK_IS_WX_CELL_EDITOR_BIN_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WX_CELL_EDITOR_BIN))
+
+GType gtk_wx_cell_editor_bin_get_type();
+
+struct GtkWxCellEditorBin
+{
+    GtkBin parent;
+
+    // The actual user-created editor.
+    wxWindow* editor;
+};
+
+static GtkWidget* gtk_wx_cell_editor_bin_new(wxWindow* editor);
+static void gtk_wx_cell_editor_bin_init(GTypeInstance* instance, void*);
+static void gtk_wx_cell_editor_bin_class_init(void* klass, void*);
+static void gtk_wx_cell_editor_bin_get_property(GObject*, guint, GValue*, GParamSpec*);
+static void gtk_wx_cell_editor_bin_set_property(GObject*, guint, const GValue*, GParamSpec*);
+
+static void gtk_wx_cell_editor_bin_cell_editable_init(void* g_iface, void*);
+static void gtk_wx_cell_editor_bin_cell_editable_start_editing(
+                        GtkCellEditable *cell_editable,
+                        GdkEvent        *event);
+
+}
+
+GType
+gtk_wx_cell_editor_bin_get_type()
+{
+    static GType cell_editor_bin_type = 0;
+
+    if ( !cell_editor_bin_type )
+    {
+        const GTypeInfo cell_editor_bin_info =
+        {
+            sizeof (GtkBinClass),
+            NULL, /* base_init */
+            NULL, /* base_finalize */
+            gtk_wx_cell_editor_bin_class_init,
+            NULL, /* class_finalize */
+            NULL, /* class_data */
+            sizeof (GtkWxCellEditorBin),
+            0,    /* n_preallocs */
+            gtk_wx_cell_editor_bin_init,
+            NULL
+        };
+
+        cell_editor_bin_type = g_type_register_static( GTK_TYPE_BIN,
+            "GtkWxCellEditorBin", &cell_editor_bin_info, (GTypeFlags)0 );
+
+
+        static const GInterfaceInfo cell_editable_iface_info =
+        {
+            gtk_wx_cell_editor_bin_cell_editable_init,
+            NULL,
+            NULL
+        };
+
+        g_type_add_interface_static (cell_editor_bin_type,
+                                     GTK_TYPE_CELL_EDITABLE,
+                                     &cell_editable_iface_info);
+    }
+
+    return cell_editor_bin_type;
+}
+
+static void
+gtk_wx_cell_editor_bin_init(GTypeInstance* instance, void*)
+{
+    GtkWxCellEditorBin* const bin = GTK_WX_CELL_EDITOR_BIN(instance);
+    bin->editor = NULL;
+}
+
+static void gtk_wx_cell_editor_bin_class_init(void* klass, void*)
+{
+    GObjectClass* const oclass = G_OBJECT_CLASS(klass);
+
+    oclass->set_property = gtk_wx_cell_editor_bin_set_property;
+    oclass->get_property = gtk_wx_cell_editor_bin_get_property;
+
+    g_object_class_override_property(oclass,
+                                     CELL_EDITOR_BIN_PROP_EDITING_CANCELED,
+                                     "editing-canceled");
+}
+
+// We need to provide these virtual methods as we must support the
+// editing-canceled property, but they don't seem to be actually ever called,
+// so it's not clear if we must implement them and how. For now just do
+// nothing.
+
+static void
+gtk_wx_cell_editor_bin_get_property(GObject*, guint, GValue*, GParamSpec*)
+{
+}
+
+static void
+gtk_wx_cell_editor_bin_set_property(GObject*, guint, const GValue*, GParamSpec*)
+{
+}
+
+GtkWidget*
+gtk_wx_cell_editor_bin_new(wxWindow* editor)
+{
+    if ( !editor )
+        return NULL;
+
+    GtkWxCellEditorBin* const
+        bin = (GtkWxCellEditorBin*)g_object_new (GTK_TYPE_WX_CELL_EDITOR_BIN, NULL);
+
+    bin->editor = editor;
+    gtk_container_add(GTK_CONTAINER(bin), editor->m_widget);
+
+    return GTK_WIDGET(bin);
+}
+
+// GtkCellEditable interface implementation for GtkWxCellEditorBin
+
+static void
+gtk_wx_cell_editor_bin_cell_editable_init(void* g_iface, void*)
+{
+    GtkCellEditableIface* iface = static_cast<GtkCellEditableIface*>(g_iface);
+    iface->start_editing = gtk_wx_cell_editor_bin_cell_editable_start_editing;
+}
+
+static void
+gtk_wx_cell_editor_bin_cell_editable_start_editing(GtkCellEditable *cell_editable,
+                                                   GdkEvent        *event)
+{
+    GtkWxCellEditorBin* const bin = (GtkWxCellEditorBin *)cell_editable;
+
+    // If we have an editable widget inside the editor, forward to it.
+    for ( wxWindow* win = bin->editor; win; )
+    {
+        GtkWidget* const widget = win->m_widget;
+        if ( GTK_IS_CELL_EDITABLE(widget) )
+        {
+            gtk_cell_editable_start_editing(GTK_CELL_EDITABLE(widget), event);
+            break;
+        }
+
+        if ( win == bin->editor )
+            win = win->GetChildren().front();
+        else
+            win = win->GetNextSibling();
+    }
+}
+
 //-----------------------------------------------------------------------------
 // define new GTK+ class GtkWxCellRenderer
 //-----------------------------------------------------------------------------
@@ -1164,6 +1326,9 @@ struct _GtkWxCellRenderer
 
   /*< private >*/
   wxDataViewCustomRenderer *cell;
+
+  // Non null only while editing.
+  GtkWidget* editor_bin;
 };
 
 static GtkCellRenderer *gtk_wx_cell_renderer_new   (void);
@@ -1245,6 +1410,7 @@ gtk_wx_cell_renderer_init(GTypeInstance* instance, void*)
 {
     GtkWxCellRenderer* cell = GTK_WX_CELL_RENDERER(instance);
     cell->cell = NULL;
+    cell->editor_bin = NULL;
 }
 
 static void
@@ -1302,10 +1468,13 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
     wxDataViewItem
         item(cell->GetOwner()->GetOwner()->GTKPathToItem(wxGtkTreePath(path)));
 
-    if (cell->StartEditing(item, renderrect))
-        return GTK_CELL_EDITABLE(cell->GetEditorCtrl()->m_widget);
+    if (!cell->StartEditing(item, renderrect))
+        return NULL;
 
-    return NULL;
+    wxrenderer->editor_bin = gtk_wx_cell_editor_bin_new(cell->GetEditorCtrl());
+    gtk_widget_show(wxrenderer->editor_bin);
+
+    return GTK_CELL_EDITABLE(wxrenderer->editor_bin);
 }
 
 static void
@@ -1804,7 +1973,7 @@ bool wxDataViewRenderer::FinishEditing()
     {
         // remove editor widget before editor control is deleted,
         // to prevent several GTK warnings
-        gtk_cell_editable_remove_widget(GTK_CELL_EDITABLE(editorCtrl->m_widget));
+        gtk_cell_editable_remove_widget(GTK_CELL_EDITABLE(GtkGetEditorWidget()));
         // delete editor control now, if it is deferred multiple erroneous
         // focus-out events will occur, causing debug warnings
         delete editorCtrl;
@@ -1824,6 +1993,11 @@ void wxDataViewRenderer::GtkInitHandlers()
             G_CALLBACK (wxgtk_renderer_editing_started),
             this);
     }
+}
+
+GtkWidget* wxDataViewRenderer::GtkGetEditorWidget() const
+{
+    return GetEditorCtrl()->m_widget;
 }
 
 void wxDataViewRenderer::SetMode( wxDataViewCellMode mode )
@@ -2417,6 +2591,11 @@ GtkCellRendererText *wxDataViewCustomRenderer::GtkGetTextRenderer() const
     }
 
     return m_text_renderer;
+}
+
+GtkWidget* wxDataViewCustomRenderer::GtkGetEditorWidget() const
+{
+    return GTK_WX_CELL_RENDERER(m_renderer)->editor_bin;
 }
 
 void wxDataViewCustomRenderer::RenderText( const wxString &text,

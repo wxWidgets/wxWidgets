@@ -137,6 +137,7 @@ public:
     }
 
     virtual GtkCellRendererText *GtkGetTextRenderer() const wxOVERRIDE;
+    virtual GtkWidget* GtkGetEditorWidget() const wxOVERRIDE;
 
 private:
     bool Init(wxDataViewCellMode mode, int align);

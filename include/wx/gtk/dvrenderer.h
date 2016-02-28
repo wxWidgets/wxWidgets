@@ -60,6 +60,10 @@ public:
     // text
     virtual GtkCellRendererText *GtkGetTextRenderer() const { return NULL; }
 
+    // return the widget actually used by the renderer for editing, this may be
+    // different from the editor control widget for the custom renderers
+    virtual GtkWidget* GtkGetEditorWidget() const;
+
 private:
     // Change the mode at GTK level without touching m_mode, this is useful for
     // temporarily making the renderer insensitive but does mean that GetMode()
