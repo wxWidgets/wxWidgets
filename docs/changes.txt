@@ -48,7 +48,7 @@ Changes in behaviour which may result in build errors
 - WXWIN_OS_DESCRIPTION doesn't exist any longer, use wxGetOsDescription().
 
 
-3.1.0: (released 2016-xx-xx)
+3.1.0: (released 2016-02-29)
 ----------------------------
 
 - Many improvements for high DPI monitors support, notably XRC now interprets

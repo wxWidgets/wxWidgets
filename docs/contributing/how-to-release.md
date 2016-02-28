@@ -17,9 +17,9 @@ Add the missing installed folder locations of any executables to your Path.
 
 ## Pre-Release Steps
 
-* Change the version in `include/wx/version.h`.
 * Update `docs/readme.txt`. Please review its contents in addition to just
   changing the version number.
+* Update `docs/release.md` (except for the release sha1sums).
 * Put a date on the release line in `docs/changes.txt`.
 * Update the date in the manual (`docs/doxygen/mainpages/manual.h`).
 * Update the release announcement post in `docs/publicity/announce.txt`.
@@ -48,16 +48,18 @@ ensure you have the appropriate tag or commit checked out.
    directory so you can continue with the upload step with all packages
    available:
 
-   ```
-   wxMSW-x.y.z-Setup.exe
-   wxWidgets-x.y.z.chm
-   ```
+    wxMSW-x.y.z-Setup.exe
+    wxWidgets-x.y.z.chm
+
+5. Update the sha1sums in `docs/release.md`.
 
 ## Uploading
 
-Upload the files to SourceForge. This can be done via the web interface or just
-scp to sfusername,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z
-The following files need to be uploaded:
+Create a new release on GitHub using vX.Y.Z tag and title.
+
+Use `docs/release.md` for the release description box.
+
+Attach the following files to it:
 
     wxMSW-Setup-x.y.z.exe
     wxWidgets-x.y.z.7z
@@ -67,28 +69,6 @@ The following files need to be uploaded:
     wxWidgets-x.y.z-docs-html.tar.bz2
     wxWidgets-x.y.z-docs-html.zip
     wxWidgets-x.y.z-headers.7z
-
-You will need to use the web interface to mark the latest uploaded files as
-being "default downloads" for the appropriate platforms (.zip or .exe for MSW,
-.tar.bz2 for everything else) as otherwise SourceForge would continue to suggest
-people to download old files.
-
-Next, update (at least the versions and SHA1 sums, but maybe more) and upload
-docs/release_files.mdwn and docs/release_binaries.mdwn files. They need to be
-renamed to README.md on SF to be shown when the directory is viewed, i.e. do:
-
-    scp docs/release_files.mdwn \
-        sfuser,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z/README.md
-    scp docs/release_binaries.mdwn \
-        sfuser,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z/binaries/README.md
-
-And upload the change log too:
-
-    scp docs/changes.txt \
-        sfuser,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z
-
-Also upload the files to the FTP mirror at ftp.wxwidgets.org (ask Chris for
-access if you don't have it).
 
 Create http://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it if not done yet).
 
@@ -109,7 +89,7 @@ For major releases, submit the announcement to https://slashdot.org/submission
 Modify the links at downloads/index.html to point to the new release. Also
 update the release date on this page.
 
-Also update docs/index.html for the minor or major (i.e. not micro) releases.
+Also update docs/index.htm for the minor or major (i.e. not micro) releases.
 
 Post to wxBlog if necessary.
 

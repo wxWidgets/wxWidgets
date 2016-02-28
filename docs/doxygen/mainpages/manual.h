@@ -14,7 +14,7 @@
 @author Julian Smart, Vadim Zeitlin, Robin Dunn, Stefan Csomor,
         Bryan Petty, Francesco Montorsi, Robert Roebling et al
 
-@date November 19, 2014
+@date February 29, 2016
 
 @n
 
