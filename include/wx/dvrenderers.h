@@ -164,7 +164,7 @@ public:
     virtual void CancelEditing();
     virtual bool FinishEditing();
 
-    wxWindow *GetEditorCtrl() { return m_editorCtrl; }
+    wxWindow *GetEditorCtrl() const { return m_editorCtrl; }
 
     virtual bool IsCustomRenderer() const { return false; }
 
