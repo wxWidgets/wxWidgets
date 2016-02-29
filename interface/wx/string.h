@@ -1953,7 +1953,7 @@ public:
         Basically, this is equivalent to calling wxString::GetWriteBuf and
         saving the result.
     */
-    wxStringBufferLength(const wxString& str, size_t len);
+    wxStringBufferLength(wxString& str, size_t len);
 
     /**
         Restores the string passed to the constructor to the usable state by calling
@@ -2014,7 +2014,7 @@ public:
         Basically, this is equivalent to calling wxString::GetWriteBuf() and
         saving the result.
     */
-    wxStringBuffer(const wxString& str, size_t len);
+    wxStringBuffer(wxString& str, size_t len);
 
     /**
         Restores the string passed to the constructor to the usable state by calling
