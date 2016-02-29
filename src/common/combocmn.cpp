@@ -1100,9 +1100,12 @@ wxComboCtrlBase::CreateTextCtrl(int style)
         m_text->Connect(id, wxEVT_TEXT,
                         wxCommandEventHandler(wxComboCtrlBase::OnTextCtrlEvent),
                         NULL, this);
-        m_text->Connect(id, wxEVT_TEXT_ENTER,
-                        wxCommandEventHandler(wxComboCtrlBase::OnTextCtrlEvent),
-                        NULL, this);
+        if ( style & wxTE_PROCESS_ENTER )
+        {
+            m_text->Connect(id, wxEVT_TEXT_ENTER,
+                            wxCommandEventHandler(wxComboCtrlBase::OnTextCtrlEvent),
+                            NULL, this);
+        }
 
         m_text->SetHint(m_hintText);
     }
