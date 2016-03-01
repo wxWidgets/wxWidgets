@@ -972,6 +972,19 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 
     webKitWindow->Print(true);
 }
+
+- (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element defaultMenuItems:(NSArray *)defaultMenuItems
+{
+    wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU,
+                                  webKitWindow->GetId(),
+                                  wxGetMousePosition());
+    evtCtx.SetEventObject(webKitWindow);
+    if ( ! webKitWindow->HandleWindowEvent(evtCtx) ) {
+        return defaultMenuItems;
+    }
+
+    return 0;
+}
 @end
 
 #endif //wxUSE_WEBKIT
