@@ -81,6 +81,11 @@ public:
           m_icon(icon)
     {
     }
+    
+	virtual bool Destroy()
+	{
+		return true;
+	}
 
     WXLRESULT MSWWindowProc(WXUINT msg,
                             WXWPARAM wParam, WXLPARAM lParam)
