@@ -1679,7 +1679,7 @@ void wxWindowDCImpl::DoDrawRotatedText(const wxString& text,
     // and wxWidgets is counter clock, so plus minus.
     cairo_rotate(cr, -angle * (M_PI / 180));
 
-    cairo_show_text(cr, text);
+    cairo_show_text(cr, text.utf8_str());
     cairo_restore(cr);
     cairo_destroy(cr);
 }
