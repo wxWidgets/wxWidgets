@@ -48,6 +48,13 @@ Changes in behaviour which may result in build errors
 - WXWIN_OS_DESCRIPTION doesn't exist any longer, use wxGetOsDescription().
 
 
+3.1.1: (not released yet)
+----------------------------
+
+wxMSW:
+
+- Fix crash when using wxCHMHelpController() in 64 bit builds (Xlord2).
+
 3.1.0: (released 2016-02-29)
 ----------------------------
 
