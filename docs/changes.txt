@@ -597,6 +597,7 @@ wxMSW:
 
 - Fix handling of AUX2 mouse button events (Trylz).
 - Honour alignment flags for multiline buttons using custom colours too.
+- Fix crash when using wxCHMHelpController() in 64 bit builds (Xlord2).
 
 wxGTK:
 
