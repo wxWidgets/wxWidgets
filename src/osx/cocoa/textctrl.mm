@@ -621,6 +621,7 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long s
     [tv setHorizontallyResizable:hasHScroll];
     [tv setAutoresizingMask:NSViewWidthSizable];
     [tv setAutomaticDashSubstitutionEnabled:false];
+    [tv setAutomaticQuoteSubstitutionEnabled:false];
     
     if ( hasHScroll )
     {
