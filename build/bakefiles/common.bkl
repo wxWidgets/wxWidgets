@@ -555,6 +555,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
                 <sys-lib>shell32</sys-lib>
                 <sys-lib>shlwapi</sys-lib>
                 <sys-lib>comctl32</sys-lib>
+                <sys-lib>imm32</sys-lib>
                 <sys-lib>ole32</sys-lib>
                 <sys-lib>oleaut32</sys-lib>
                 <sys-lib>uuid</sys-lib>
