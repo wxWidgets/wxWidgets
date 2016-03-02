@@ -1560,7 +1560,7 @@
 // SDK components manually, you need to change this setting.
 //
 // Recommended setting: 1
-#if defined(_MSC_VER) && _MSC_VER >= 1700
+#if defined(_MSC_VER) && _MSC_VER >= 1700 && !defined(_USING_V110_SDK71_)
     #define wxUSE_WINRT 1
 #else
     #define wxUSE_WINRT 0
