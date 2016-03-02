@@ -55,6 +55,11 @@ wxMSW:
 
 - Fix crash when using wxCHMHelpController() in 64 bit builds (Xlord2).
 
+wxOSX:
+
+- Turn off automatic quotes substitutions in wxTextCtrl (Xlord2).
+
+
 3.1.0: (released 2016-02-29)
 ----------------------------
 
