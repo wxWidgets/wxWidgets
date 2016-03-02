@@ -69,7 +69,7 @@ public:
 
         See Create() for the detailed parameters documentation.
      */
-    wxNativeWindow(wxWindow* parent, wxWindowID winid, wxNativeWindowHandle handle)
+    wxNativeWindow(wxWindow* parent, wxWindowID winid, wxNativeWindowHandle handle);
 
     /**
         Really create the window after using the default ctor to create the C++
