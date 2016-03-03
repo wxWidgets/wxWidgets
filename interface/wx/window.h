@@ -150,7 +150,9 @@ enum wxWindowVariant
            The window is transparent, that is, it will not receive paint
            events. Windows only.
     @style{wxTAB_TRAVERSAL}
-           Use this to enable tab traversal for non-dialog windows.
+           This style is used by wxWidgets for the windows supporting TAB
+           navigation among their children, such as wxDialog and wxPanel. It
+           should almost never be used in the application code.
     @style{wxWANTS_CHARS}
            Use this to indicate that the window wants to get all char/key
            events for all keys - even for keys like TAB or ENTER which are
