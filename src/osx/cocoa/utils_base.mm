@@ -28,18 +28,21 @@
 #endif
 
 // our OS version is the same in non GUI and GUI cases
-wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
+wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 {
 #ifdef wxHAS_NSPROCESSINFO
     if ([NSProcessInfo instancesRespondToSelector:@selector(operatingSystemVersion)])
     {
         NSOperatingSystemVersion osVer = [NSProcessInfo processInfo].operatingSystemVersion;
 
-        if ( majorVsn != NULL )
-            *majorVsn = osVer.majorVersion;
+        if ( verMaj != NULL )
+            *verMaj = osVer.majorVersion;
 
-        if ( minorVsn != NULL )
-            *minorVsn = osVer.minorVersion;
+        if ( verMin != NULL )
+            *verMin = osVer.minorVersion;
+
+        if ( verMicro != NULL )
+            *verMicro = osVer.patchVersion;
     }
     else
 #endif
@@ -47,27 +50,32 @@ wxOperatingSystemId wxGetOsVersion(int *majorVsn, int *minorVsn)
         // On OS X versions prior to 10.10 NSProcessInfo does not provide the OS version
         // Deprecated Gestalt calls are required instead
 wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        SInt32 maj, min;
+        SInt32 maj, min, micro;
 #ifdef __WXOSX_IPHONE__
         maj = 7;
         min = 0;
+        micro = 0;
 #else
         Gestalt(gestaltSystemVersionMajor, &maj);
         Gestalt(gestaltSystemVersionMinor, &min);
+        Gestalt(gestaltSystemVersionBugFix, &micro);
 #endif
 wxGCC_WARNING_RESTORE()
 
-        if ( majorVsn != NULL )
-            *majorVsn = maj;
+        if ( verMaj != NULL )
+            *verMaj = maj;
 
-        if ( minorVsn != NULL )
-            *minorVsn = min;
+        if ( verMin != NULL )
+            *verMin = min;
+
+        if ( verMicro != NULL )
+            *verMicro = micro;
     }
 
     return wxOS_MAC_OSX_DARWIN;
 }
 
-bool wxCheckOsVersion(int majorVsn, int minorVsn)
+bool wxCheckOsVersion(int majorVsn, int minorVsn, int microVsn)
 {
 #ifdef wxHAS_NSPROCESSINFO
     if ([NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)])
@@ -75,17 +83,19 @@ bool wxCheckOsVersion(int majorVsn, int minorVsn)
         NSOperatingSystemVersion osVer;
         osVer.majorVersion = majorVsn;
         osVer.minorVersion = minorVsn;
-        osVer.patchVersion = 0;
+        osVer.patchVersion = microVsn;
 
         return [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:osVer] != NO;
     }
     else
 #endif
     {
-        int majorCur, minorCur;
-        wxGetOsVersion(&majorCur, &minorCur);
+        int majorCur, minorCur, microCur;
+        wxGetOsVersion(&majorCur, &minorCur, &microCur);
 
-        return majorCur > majorVsn || (majorCur == majorVsn && minorCur >= minorVsn);
+        return majorCur > majorVsn
+            || (majorCur == majorVsn && minorCur >= minorVsn)
+            || (majorCur == majorVsn && minorCur == minorVsn && microCur >= microVsn);
     }
 }
 

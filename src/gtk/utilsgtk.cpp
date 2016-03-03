@@ -183,12 +183,16 @@ const gchar *wx_pango_version_check (int major, int minor, int micro)
 // wxPlatformInfo-related
 // ----------------------------------------------------------------------------
 
-wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj,
+                                           int *verMin,
+                                           int *verMicro) const
 {
     if ( verMaj )
         *verMaj = gtk_major_version;
     if ( verMin )
         *verMin = gtk_minor_version;
+    if ( verMicro )
+        *verMicro = gtk_micro_version;
 
     return wxPORT_GTK;
 }

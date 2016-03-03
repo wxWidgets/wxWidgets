@@ -842,16 +842,23 @@ wxString wxGetOsDescription();
 /**
     Gets the version and the operating system ID for currently running OS. 
     The returned wxOperatingSystemId value can be used for a basic categorization
-    of the OS family; the major and minor version numbers allows to detect a specific
-    system.
-    
-    For Unix-like systems (@c wxOS_UNIX) the major and minor version integers will 
-    contain the kernel major and minor version numbers (as returned by the
-    'uname -r' command); e.g. "4" and "1" if the machine is using kernel 4.1.4.
+    of the OS family; the major, minor, and micro version numbers allows to
+    detect a specific system.
+
+    If on Unix-like systems the version can't be detected all three version
+    numbers will have a value of -1.
+
+    On systems where only the micro version can't be detected or doesn't make
+    sense such as Windows, it will have a value of 0.
+
+    For Unix-like systems (@c wxOS_UNIX) the major, minor, and micro version
+    integers will contain the kernel's major, minor, and micro version
+    numbers (as returned by the 'uname -r' command); e.g. "4", "1", and "4" if
+    the machine is using kernel 4.1.4.
 
     For OS X systems (@c wxOS_MAC) the major and minor version integers are the
-    natural version numbers associated with the OS; e.g. "10" and "11" if the machine
-    is using OS X El Capitan.
+    natural version numbers associated with the OS; e.g. "10", "11" and "2" if
+    the machine is using OS X El Capitan 10.11.2.
     
     For Windows-like systems (@c wxOS_WINDOWS) the major and minor version integers will 
     contain the following values:
@@ -878,7 +885,7 @@ wxString wxGetOsDescription();
 
     @header{wx/utils.h}
 */
-wxOperatingSystemId wxGetOsVersion(int* major = NULL, int* minor = NULL);
+wxOperatingSystemId wxGetOsVersion(int* major = NULL, int* minor = NULL, int* micro = NULL);
 
 /**
     Returns @true if the version of the operating system on which the program
@@ -890,7 +897,7 @@ wxOperatingSystemId wxGetOsVersion(int* major = NULL, int* minor = NULL);
 
     @header{wx/utils.h}
 */
-bool wxCheckOsVersion(int majorVsn, int minorVsn = 0);
+bool wxCheckOsVersion(int majorVsn, int minorVsn = 0, int microVsn = 0);
 
 /**
     Returns @true if the operating system the program is running under is 64

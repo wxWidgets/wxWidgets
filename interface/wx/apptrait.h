@@ -100,8 +100,8 @@ public:
 
     /**
         Returns the wxWidgets port ID used by the running program and eventually
-        fills the given pointers with the values of the major and minor digits
-        of the native toolkit currently used.
+        fills the given pointers with the values of the major, minor, and micro
+        digits of the native toolkit currently used.
 
         The version numbers returned are thus detected at run-time and not compile-time
         (except when this is not possible e.g. wxMotif).
@@ -109,8 +109,12 @@ public:
         E.g. if your program is using wxGTK port this function will return wxPORT_GTK
         and put in given pointers the versions of the GTK library in use.
         See wxPlatformInfo for more details.
+
+        If a micro version is not available it will have a value of 0.
     */
-    virtual wxPortId GetToolkitVersion(int* major = NULL, int* minor = NULL) const = 0;
+    virtual wxPortId GetToolkitVersion(int* major = NULL,
+                                       int* minor = NULL,
+                                       int* micro = NULL) const = 0;
 
     /**
         Returns @true if @c fprintf(stderr) goes somewhere, @false otherwise.

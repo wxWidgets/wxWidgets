@@ -1235,7 +1235,7 @@ bool wxIsPlatform64Bit()
 #endif // Win64/Win32
 }
 
-wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
+wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 {
     static struct
     {
@@ -1244,7 +1244,8 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
         wxOperatingSystemId os;
 
         int verMaj,
-            verMin;
+            verMin,
+            verMicro;
     } s_version;
 
     // query the OS info only once as it's not supposed to change
@@ -1267,17 +1268,20 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 
         s_version.verMaj = info.dwMajorVersion;
         s_version.verMin = info.dwMinorVersion;
+        s_version.verMicro = info.dwBuildNumber;
     }
 
     if ( verMaj )
         *verMaj = s_version.verMaj;
     if ( verMin )
         *verMin = s_version.verMin;
+    if ( verMicro )
+        *verMicro = s_version.verMicro;
 
     return s_version.os;
 }
 
-bool wxCheckOsVersion(int majorVsn, int minorVsn)
+bool wxCheckOsVersion(int majorVsn, int minorVsn, int microVsn)
 {
     OSVERSIONINFOEX osvi;
     wxZeroMemory(osvi);
@@ -1286,13 +1290,17 @@ bool wxCheckOsVersion(int majorVsn, int minorVsn)
     DWORDLONG const dwlConditionMask =
         ::VerSetConditionMask(
         ::VerSetConditionMask(
+        ::VerSetConditionMask(
         0, VER_MAJORVERSION, VER_GREATER_EQUAL),
-        VER_MINORVERSION, VER_GREATER_EQUAL);
+        VER_MINORVERSION, VER_GREATER_EQUAL),
+        VER_BUILDNUMBER, VER_GREATER_EQUAL);
 
     osvi.dwMajorVersion = majorVsn;
     osvi.dwMinorVersion = minorVsn;
+    osvi.dwBuildNumber = microVsn;
 
-    return ::VerifyVersionInfo(&osvi, VER_MAJORVERSION | VER_MINORVERSION, dwlConditionMask) != FALSE;
+    return ::VerifyVersionInfo(&osvi,
+        VER_MAJORVERSION | VER_MINORVERSION | VER_BUILDNUMBER, dwlConditionMask) != FALSE;
 }
 
 wxWinVersion wxGetWinVersion()

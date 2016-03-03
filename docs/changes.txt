@@ -34,6 +34,10 @@ Changes in behaviour not resulting in compilation errors
 - wxOSX/Carbon port doesn't exist any more, wxOSX/Cocoa will be silently used
   instead even if configure --with-osx_carbon option is used.
 
+- The pure virtual function wxAppTrait::GetToolkitVersion() now has a parameter
+  for getting the micro version. If you override GetToolkitVersion() you need
+  to add this new third parameter.
+
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
 
@@ -100,6 +104,8 @@ All:
 - Fix wxStringTokenizer copy ctor and assignment operator.
 - Added wxASSERT_MSG_AT() and wxFAIL_MSG_AT() macros.
 - Accept replacement character in wxString::ToAscii() (Stefano D. Mtangoo).
+- Add parameter to get the micro version to OS and toolkit version
+  functions. See wxGetOsVersion(), wxPlatformInfo, and wxAppTraits.
 
 Unix:
 
