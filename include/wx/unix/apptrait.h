@@ -58,9 +58,6 @@ public:
     virtual void MutexGuiLeave() wxOVERRIDE;
 #endif
 
-#if defined(__WXMAC__) && wxUSE_STDPATHS
-    virtual wxStandardPaths& GetStandardPaths() wxOVERRIDE;
-#endif
     wxPortId GetToolkitVersion(int *majVer = NULL,
                                int *minVer = NULL,
                                int *microVer = NULL) const wxOVERRIDE;
