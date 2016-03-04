@@ -13209,7 +13209,6 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS =  \
 	monodll_carbon_gdiobj.o \
 	monodll_carbon_icon.o \
 	monodll_carbon_app.o \
-	monodll_carbon_combobox.o \
 	monodll_carbon_control.o \
 	monodll_carbon_dataobj.o \
 	monodll_carbon_dcclient.o \
@@ -13354,7 +13353,6 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_0 =  \
 	monolib_carbon_gdiobj.o \
 	monolib_carbon_icon.o \
 	monolib_carbon_app.o \
-	monolib_carbon_combobox.o \
 	monolib_carbon_control.o \
 	monolib_carbon_dataobj.o \
 	monolib_carbon_dcclient.o \
@@ -13499,7 +13497,6 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_8 =  \
 	coredll_carbon_gdiobj.o \
 	coredll_carbon_icon.o \
 	coredll_carbon_app.o \
-	coredll_carbon_combobox.o \
 	coredll_carbon_control.o \
 	coredll_carbon_dataobj.o \
 	coredll_carbon_dcclient.o \
@@ -13629,7 +13626,6 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_9 =  \
 	corelib_carbon_gdiobj.o \
 	corelib_carbon_icon.o \
 	corelib_carbon_app.o \
-	corelib_carbon_combobox.o \
 	corelib_carbon_control.o \
 	corelib_carbon_dataobj.o \
 	corelib_carbon_dcclient.o \
@@ -19314,12 +19310,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_carbon_app.o: $(srcdir)/src/osx/carbon/app.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/app.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_carbon_combobox.o: $(srcdir)/src/osx/carbon/combobox.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/combobox.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_carbon_combobox.o: $(srcdir)/src/osx/carbon/combobox.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/combobox.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_carbon_control.o: $(srcdir)/src/osx/carbon/control.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/control.cpp
 
@@ -24140,12 +24130,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_carbon_app.o: $(srcdir)/src/osx/carbon/app.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/app.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_carbon_combobox.o: $(srcdir)/src/osx/carbon/combobox.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/combobox.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_carbon_combobox.o: $(srcdir)/src/osx/carbon/combobox.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/combobox.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_carbon_control.o: $(srcdir)/src/osx/carbon/control.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/control.cpp
@@ -29022,12 +29006,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_carbon_app.o: $(srcdir)/src/osx/carbon/app.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/app.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_carbon_combobox.o: $(srcdir)/src/osx/carbon/combobox.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/combobox.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_carbon_combobox.o: $(srcdir)/src/osx/carbon/combobox.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/combobox.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_carbon_control.o: $(srcdir)/src/osx/carbon/control.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/control.cpp
 
@@ -32414,12 +32392,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_carbon_app.o: $(srcdir)/src/osx/carbon/app.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/app.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_carbon_combobox.o: $(srcdir)/src/osx/carbon/combobox.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/combobox.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_carbon_combobox.o: $(srcdir)/src/osx/carbon/combobox.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/combobox.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_carbon_control.o: $(srcdir)/src/osx/carbon/control.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/control.cpp

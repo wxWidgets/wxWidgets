@@ -605,7 +605,6 @@
 		BAA75384DA82370298672333 /* helpctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42E433D1700631A8907B8227 /* helpctrl.cpp */; };
 		BAAB6B1D80A33843A8436B10 /* appunix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B40E0F6AA0273ACD9BDEAD72 /* appunix.cpp */; };
 		BAFF04F1680F32DA988EB03D /* stockitem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B180290089B139F18B0C7BBA /* stockitem.cpp */; };
-		BB31D65BA1253A1CB64CE9D2 /* combobox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A3F26F539473705AA82411D /* combobox.cpp */; };
 		BB6FE851028C3DE7A070C213 /* convauto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 20B922D61CDB3CCEB59A5194 /* convauto.cpp */; };
 		BBAABF3C693E37D3B0FF2502 /* colrdlgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66AC0EA493AB3B6A86DAE174 /* colrdlgg.cpp */; };
 		BCD81FD3D1EC305F801E1C1B /* sckipc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F6E23CCDC1932BC985EFBD2 /* sckipc.cpp */; };
@@ -1246,7 +1245,6 @@
 		7A1CE0B28CB73F90AE92B5AB /* richtooltipcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = richtooltipcmn.cpp; path = ../../src/common/richtooltipcmn.cpp; sourceTree = "<group>"; };
 		7A24E9101688368296C21EBE /* gzclose.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = gzclose.c; path = ../../src/zlib/gzclose.c; sourceTree = "<group>"; };
 		7A34C5BBBA543DC0A50DE1B6 /* event.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = event.cpp; path = ../../src/common/event.cpp; sourceTree = "<group>"; };
-		7A3F26F539473705AA82411D /* combobox.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = combobox.cpp; path = ../../src/osx/carbon/combobox.cpp; sourceTree = "<group>"; };
 		7AF8F8A78A5130DCB4D46729 /* LexCmake.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexCmake.cxx; path = ../../src/stc/scintilla/lexers/LexCmake.cxx; sourceTree = "<group>"; };
 		7B389A14D6BF3AFD8CCE0807 /* protocol.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = protocol.cpp; path = ../../src/common/protocol.cpp; sourceTree = "<group>"; };
 		7BA6ADD758693BD180D3275B /* treebase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = treebase.cpp; path = ../../src/common/treebase.cpp; sourceTree = "<group>"; };
@@ -1972,7 +1970,6 @@
 				377056CEB1FC3EEB8526E7A6 /* gdiobj.cpp */,
 				F5DAF1F49F0F3F41A427A21D /* icon.cpp */,
 				757B31FCCA1F381C95B30DF8 /* app.cpp */,
-				7A3F26F539473705AA82411D /* combobox.cpp */,
 				12363D1F50FE301DAEE7F04A /* control.cpp */,
 				271B4B77622B3411A7BF6634 /* dataobj.cpp */,
 				B17772732159304AA7312D72 /* dcclient.cpp */,
@@ -3023,7 +3020,6 @@
 				692FCCABFB963696AFC1E122 /* gdiobj.cpp in Sources */,
 				01D4C5F2147F3942A7CE91AA /* icon.cpp in Sources */,
 				B0E94A59C83637C09FAAE71C /* app.cpp in Sources */,
-				BB31D65BA1253A1CB64CE9D2 /* combobox.cpp in Sources */,
 				EB52C6A915943813932944FE /* control.cpp in Sources */,
 				45AB45C6B24A3983B22E56A5 /* dataobj.cpp in Sources */,
 				D088E7DDE38C31DC9C9B3417 /* dcclient.cpp in Sources */,
