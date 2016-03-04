@@ -55,6 +55,11 @@ Changes in behaviour which may result in build errors
 3.1.1: (not released yet)
 ----------------------------
 
+All:
+
+- Add support for the micro version (third component) to OS and toolkit version
+  functions. See wxGetOsVersion(), wxPlatformInfo, and wxAppTraits.
+
 wxMSW:
 
 - Fix crash when using wxCHMHelpController() in 64 bit builds (Xlord2).
@@ -104,8 +109,6 @@ All:
 - Fix wxStringTokenizer copy ctor and assignment operator.
 - Added wxASSERT_MSG_AT() and wxFAIL_MSG_AT() macros.
 - Accept replacement character in wxString::ToAscii() (Stefano D. Mtangoo).
-- Add parameter to get the micro version to OS and toolkit version
-  functions. See wxGetOsVersion(), wxPlatformInfo, and wxAppTraits.
 
 Unix:
 
