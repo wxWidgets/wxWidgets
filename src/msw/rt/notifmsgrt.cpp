@@ -348,9 +348,9 @@ public:
         else
         {
             // Create new shortcut
-            if ( FAILED(shellLink->SetPath(wxStandardPaths::Get().GetExecutablePath().wc_str())) )
+            if ( FAILED(shellLink->SetPath(wxStandardPaths::Get().GetExecutablePath().t_str())) )
                 return false;
-            if ( FAILED(shellLink->SetArguments(L"")) )
+            if ( FAILED(shellLink->SetArguments(wxT(""))) )
                 return false;
 
             writeShortcut = true;
