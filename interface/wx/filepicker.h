@@ -36,7 +36,7 @@ wxEventType wxEVT_DIRPICKER_CHANGED;
     @beginStyleTable
     @style{wxFLP_DEFAULT_STYLE}
            The default style: includes wxFLP_OPEN | wxFLP_FILE_MUST_EXIST and,
-           under wxMSW only, wxFLP_USE_TEXTCTRL.
+           under wxMSW and wxOSX, wxFLP_USE_TEXTCTRL.
     @style{wxFLP_USE_TEXTCTRL}
            Creates a text control to the left of the picker button which is
            completely managed by the wxFilePickerCtrl and which can be used by
