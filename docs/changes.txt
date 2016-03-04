@@ -59,6 +59,8 @@ All:
 
 - Add support for the micro version (third component) to OS and toolkit version
   functions. See wxGetOsVersion(), wxPlatformInfo, and wxAppTraits.
+- wxLogInfo() now logs messages if the log level is high enough, even without
+  wxLog::SetVerbose() which now only affects wxLogVerbose().
 
 wxMSW:
 

@@ -341,7 +341,6 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
     switch ( level )
     {
         case wxLOG_Info:
-            if ( GetVerbose() )
         case wxLOG_Message:
             {
                 m_aMessages.Add(msg);
