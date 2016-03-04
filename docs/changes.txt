@@ -66,6 +66,7 @@ wxMSW:
 
 wxOSX:
 
+- Remove extra borders around wxFilePickerCtrl (John Roberts).
 - Turn off automatic quotes substitutions in wxTextCtrl (Xlord2).
 
 
