@@ -606,7 +606,18 @@ int wxFileDialog::ShowModal()
         [oPanel setMessage:cf.AsNSString()];
         [oPanel setAllowsMultipleSelection: (HasFlag(wxFD_MULTIPLE) ? YES : NO )];
 
-        [oPanel setAllowedFileTypes: (m_delegate == nil ? types : nil)];
+        // Note that the test here is intentionally different from the one
+        // above, in the wxFD_SAVE case: we need to call DoOnFilterSelected()
+        // even for m_firstFileTypeFilter == 0, i.e. when using the default
+        // filter.
+        if ( m_firstFileTypeFilter >= 0 )
+        {
+            DoOnFilterSelected(m_firstFileTypeFilter);
+        }
+        else
+        {
+            [oPanel setAllowedFileTypes: (m_delegate == nil ? types : nil)];
+        }
         if ( !m_dir.IsEmpty() )
             [oPanel setDirectoryURL:[NSURL fileURLWithPath:dir.AsNSString() 
                                                isDirectory:YES]];
