@@ -66,6 +66,7 @@ All:
 wxMSW:
 
 - Fix crash when using wxCHMHelpController() in 64 bit builds (Xlord2).
+- Fix MDI menu display after failure to create a child frame (troelsk).
 
 wxOSX:
 
