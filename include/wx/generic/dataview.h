@@ -245,7 +245,7 @@ public:
     void SetAlternateRowColour(const wxColour& colour);
 
 protected:
-    virtual void EnsureVisible( int row, int column );
+    void EnsureVisibleRowCol( int row, int column );
 
     // Notice that row here may be invalid (i.e. >= GetRowCount()), this is not
     // an error and this function simply returns an invalid item in this case.

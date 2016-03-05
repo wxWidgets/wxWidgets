@@ -3884,7 +3884,7 @@ void wxDataViewMainWindow::OnVerticalNavigation(const wxKeyEvent& event, int del
             RefreshRow( m_currentRow );
     }
 
-    GetOwner()->EnsureVisible( m_currentRow, -1 );
+    GetOwner()->EnsureVisibleRowCol( m_currentRow, -1 );
 }
 
 void wxDataViewMainWindow::OnLeftKey(wxKeyEvent& event)
@@ -3932,7 +3932,7 @@ void wxDataViewMainWindow::OnLeftKey(wxKeyEvent& event)
                     SelectRow( row, false);
                     SelectRow( parent, true );
                     ChangeCurrentRow( parent );
-                    GetOwner()->EnsureVisible( parent, -1 );
+                    GetOwner()->EnsureVisibleRowCol( parent, -1 );
                     SendSelectionChangedEvent( parent_node->GetItem() );
                 }
             }
@@ -3965,7 +3965,7 @@ void wxDataViewMainWindow::OnRightKey(wxKeyEvent& event)
                 SelectRow( row, false );
                 SelectRow( row + 1, true );
                 ChangeCurrentRow( row + 1 );
-                GetOwner()->EnsureVisible( row + 1, -1 );
+                GetOwner()->EnsureVisibleRowCol( row + 1, -1 );
                 SendSelectionChangedEvent( GetItemByRow(row+1) );
             }
         }
@@ -4046,7 +4046,7 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, wxK
         }
     }
 
-    GetOwner()->EnsureVisible(m_currentRow, idx);
+    GetOwner()->EnsureVisibleRowCol(m_currentRow, idx);
 
     if ( idx < 1 )
     {
@@ -5266,7 +5266,7 @@ void wxDataViewCtrl::UnselectAll()
     m_clientArea->UnselectAllRows();
 }
 
-void wxDataViewCtrl::EnsureVisible( int row, int column )
+void wxDataViewCtrl::EnsureVisibleRowCol( int row, int column )
 {
     if( row < 0 )
         row = 0;
@@ -5293,9 +5293,9 @@ void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, const wxDataVie
     if( row >= 0 )
     {
         if( column == NULL )
-            EnsureVisible(row, -1);
+            EnsureVisibleRowCol(row, -1);
         else
-            EnsureVisible( row, GetColumnIndex(column) );
+            EnsureVisibleRowCol( row, GetColumnIndex(column) );
     }
 
 }
