@@ -338,33 +338,19 @@ wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
     return command;
 }
 
-bool
-wxFileTypeImpl::GetOpenCommand(wxString *openCmd,
-                               const wxFileType::MessageParameters& params)
-                               const
+
+wxString
+wxFileTypeImpl::GetExpandedCommand(const wxString & verb,
+                                   const wxFileType::MessageParameters& params) const
 {
-    wxString cmd = GetCommand(wxT("open"));
+    wxString cmd = GetCommand(verb);
 
     // Some viewers don't define the "open" verb but do define "show" one, try
     // to use it as a fallback.
-    if ( cmd.empty() )
+    if ( cmd.empty() && (verb == wxT("open")) )
         cmd = GetCommand(wxT("show"));
 
-    *openCmd = wxFileType::ExpandCommand(cmd, params);
-
-    return !openCmd->empty();
-}
-
-bool
-wxFileTypeImpl::GetPrintCommand(wxString *printCmd,
-                                const wxFileType::MessageParameters& params)
-                                const
-{
-    wxString cmd = GetCommand(wxT("print"));
-
-    *printCmd = wxFileType::ExpandCommand(cmd, params);
-
-    return !printCmd->empty();
+    return wxFileType::ExpandCommand(cmd, params);
 }
 
 // ----------------------------------------------------------------------------

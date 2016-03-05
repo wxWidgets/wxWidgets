@@ -42,9 +42,18 @@ public:
     bool GetIcon(wxIconLocation *iconLoc) const;
     bool GetDescription(wxString *desc) const;
     bool GetOpenCommand(wxString *openCmd,
-                        const wxFileType::MessageParameters& params) const;
+                        const wxFileType::MessageParameters& params) const
+    {
+        *openCmd = GetExpandedCommand(wxS("open"), params);
+        return !openCmd->empty();
+    }
+
     bool GetPrintCommand(wxString *printCmd,
-                         const wxFileType::MessageParameters& params) const;
+                         const wxFileType::MessageParameters& params) const
+    {
+        *printCmd = GetExpandedCommand(wxS("print"), params);
+        return !printCmd->empty();
+    }
 
     size_t GetAllCommands(wxArrayString * verbs, wxArrayString * commands,
                           const wxFileType::MessageParameters& params) const;
@@ -76,6 +85,9 @@ public:
     // explicitly.
     void MSWSuppressNotifications(bool supress);
 
+    wxString
+    GetExpandedCommand(const wxString& verb,
+                       const wxFileType::MessageParameters& params) const;
 private:
     // helper function: reads the command corresponding to the specified verb
     // from the registry (returns an empty string if not found)
