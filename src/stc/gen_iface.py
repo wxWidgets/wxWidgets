@@ -1188,8 +1188,6 @@ def processMethods(methods):
             theImp = '%s wxStyledTextCtrl::%s(%s)' % (retType, name, params)
             if is_const:
                 theImp = theImp + ' const'
-            if is_override:
-                theImp = theImp + ' wxOVERRIDE'
             theImp = theImp + '\n{\n    '
             if retType == 'wxColour':
                 theImp = theImp + 'long c = '

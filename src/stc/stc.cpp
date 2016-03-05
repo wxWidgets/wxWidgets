@@ -335,7 +335,7 @@ int wxStyledTextCtrl::GetStyleAt(int pos) const {
 }
 
 // Redoes the next action on the undo history.
-void wxStyledTextCtrl::Redo() wxOVERRIDE
+void wxStyledTextCtrl::Redo()
 {
     SendMsg(SCI_REDO, 0, 0);
 }
@@ -348,7 +348,7 @@ void wxStyledTextCtrl::SetUndoCollection(bool collectUndo)
 }
 
 // Select all the text in the document.
-void wxStyledTextCtrl::SelectAll() wxOVERRIDE
+void wxStyledTextCtrl::SelectAll()
 {
     SendMsg(SCI_SELECTALL, 0, 0);
 }
@@ -380,7 +380,7 @@ wxMemoryBuffer wxStyledTextCtrl::GetStyledText(int startPos, int endPos) {
 }
 
 // Are there any redoable actions in the undo history?
-bool wxStyledTextCtrl::CanRedo() const wxOVERRIDE
+bool wxStyledTextCtrl::CanRedo() const
 {
     return SendMsg(SCI_CANREDO, 0, 0) != 0;
 }
@@ -1751,13 +1751,13 @@ void wxStyledTextCtrl::SetReadOnly(bool readOnly)
 }
 
 // Will a paste succeed?
-bool wxStyledTextCtrl::CanPaste() const wxOVERRIDE
+bool wxStyledTextCtrl::CanPaste() const
 {
     return SendMsg(SCI_CANPASTE, 0, 0) != 0;
 }
 
 // Are there any undoable actions in the undo history?
-bool wxStyledTextCtrl::CanUndo() const wxOVERRIDE
+bool wxStyledTextCtrl::CanUndo() const
 {
     return SendMsg(SCI_CANUNDO, 0, 0) != 0;
 }
@@ -1769,31 +1769,31 @@ void wxStyledTextCtrl::EmptyUndoBuffer()
 }
 
 // Undo one action in the undo history.
-void wxStyledTextCtrl::Undo() wxOVERRIDE
+void wxStyledTextCtrl::Undo()
 {
     SendMsg(SCI_UNDO, 0, 0);
 }
 
 // Cut the selection to the clipboard.
-void wxStyledTextCtrl::Cut() wxOVERRIDE
+void wxStyledTextCtrl::Cut()
 {
     SendMsg(SCI_CUT, 0, 0);
 }
 
 // Copy the selection to the clipboard.
-void wxStyledTextCtrl::Copy() wxOVERRIDE
+void wxStyledTextCtrl::Copy()
 {
     SendMsg(SCI_COPY, 0, 0);
 }
 
 // Paste the contents of the clipboard into the document replacing the selection.
-void wxStyledTextCtrl::Paste() wxOVERRIDE
+void wxStyledTextCtrl::Paste()
 {
     SendMsg(SCI_PASTE, 0, 0);
 }
 
 // Clear the selection.
-void wxStyledTextCtrl::Clear() wxOVERRIDE
+void wxStyledTextCtrl::Clear()
 {
     SendMsg(SCI_CLEAR, 0, 0);
 }
