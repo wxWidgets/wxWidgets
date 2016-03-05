@@ -11,11 +11,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_MEDIACTRL
+#if wxUSE_MEDIACTRL && wxUSE_GSTREAMER && !wxUSE_GSTREAMER_PLAYER
 
 #include "wx/mediactrl.h"
-
-#if wxUSE_GSTREAMER
 
 #include <gst/gst.h>                // main gstreamer header
 
@@ -1589,10 +1587,8 @@ double wxGStreamerMediaBackend::GetVolume()
     return dVolume;
 }
 
-#endif //wxUSE_GSTREAMER
-
 // Force link into main library so this backend can be loaded
 #include "wx/html/forcelnk.h"
 FORCE_LINK_ME(basewxmediabackends)
 
-#endif //wxUSE_MEDIACTRL
+#endif // wxUSE_MEDIACTRL && wxUSE_GSTREAMER && !wxUSE_GSTREAMER_PLAYER

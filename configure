@@ -35910,6 +35910,89 @@ if test -n "$PKG_CONFIG"; then
         pkg_cv_GST_CFLAGS="$GST_CFLAGS"
     else
         if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-video-\$GST_VERSION gstreamer-player-\$GST_VERSION >= 1.7.2.1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_GST_CFLAGS=`$PKG_CONFIG --cflags "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$GST_LIBS"; then
+        pkg_cv_GST_LIBS="$GST_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-video-\$GST_VERSION gstreamer-player-\$GST_VERSION >= 1.7.2.1\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_GST_LIBS=`$PKG_CONFIG --libs "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        GST_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1"`
+        else
+	        GST_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$GST_PKG_ERRORS" >&5
+
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: GStreamer 1.7.2+ not available. Not using GstPlayer and falling back to 1.0" >&5
+$as_echo "$as_me: GStreamer 1.7.2+ not available. Not using GstPlayer and falling back to 1.0" >&6;}
+
+
+elif test $pkg_failed = untried; then
+
+                { $as_echo "$as_me:${as_lineno-$LINENO}: GStreamer 1.7.2+ not available. Not using GstPlayer and falling back to 1.0" >&5
+$as_echo "$as_me: GStreamer 1.7.2+ not available. Not using GstPlayer and falling back to 1.0" >&6;}
+
+
+else
+	GST_CFLAGS=$pkg_cv_GST_CFLAGS
+	GST_LIBS=$pkg_cv_GST_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                wxUSE_GSTREAMER="yes"
+                $as_echo "#define wxUSE_GSTREAMER_PLAYER 1" >>confdefs.h
+
+
+fi
+
+        if test $wxUSE_GSTREAMER = "no"; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GST" >&5
+$as_echo_n "checking for GST... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$GST_CFLAGS"; then
+        pkg_cv_GST_CFLAGS="$GST_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gstreamer-\$GST_VERSION gstreamer-video-\$GST_VERSION\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION") 2>&5
   ac_status=$?
@@ -35960,20 +36043,20 @@ fi
 	echo "$GST_PKG_ERRORS" >&5
 
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&5
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&5
 $as_echo "$as_me: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&2;}
-                GST_VERSION_MAJOR=0
-                GST_VERSION_MINOR=10
-                GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
+                    GST_VERSION_MAJOR=0
+                    GST_VERSION_MINOR=10
+                    GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
 
 
 elif test $pkg_failed = untried; then
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&5
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&5
 $as_echo "$as_me: WARNING: GStreamer 1.0 not available, falling back to 0.10" >&2;}
-                GST_VERSION_MAJOR=0
-                GST_VERSION_MINOR=10
-                GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
+                    GST_VERSION_MAJOR=0
+                    GST_VERSION_MINOR=10
+                    GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
 
 
 else
@@ -35982,9 +36065,10 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                wxUSE_GSTREAMER="yes"
+                    wxUSE_GSTREAMER="yes"
 
 fi
+        fi
 
         if test $GST_VERSION_MINOR = "10"; then
 

@@ -6055,8 +6055,11 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_X11@__ADVANCED_UNIV_SRC_OBJECTS = monodll_animateg.o
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_COCOA@	monodll_src_cocoa_mediactrl.o
-@COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_unix_mediactrl.o 
-@COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_unix_mediactrl.o
+@COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS = \
+@COND_TOOLKIT_GTK@	monodll_unix_mediactrl.o monodll_mediactrl_gstplayer.o
+@COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS = \
+@COND_TOOLKIT_MOTIF@	monodll_unix_mediactrl.o \
+@COND_TOOLKIT_MOTIF@	monodll_mediactrl_gstplayer.o
 @COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_MSW@	monodll_mediactrl_am.o monodll_mediactrl_wmp10.o \
 @COND_TOOLKIT_MSW@	monodll_mediactrl_qt.o
@@ -6065,7 +6068,8 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_OSX_IPHONE@__MEDIA_PLATFORM_SRC_OBJECTS \
 @COND_TOOLKIT_OSX_IPHONE@	= monodll_osx_cocoa_mediactrl.o
 @COND_TOOLKIT_QT@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_qt_mediactrl.o
-@COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_unix_mediactrl.o
+@COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS = \
+@COND_TOOLKIT_X11@	monodll_unix_mediactrl.o monodll_mediactrl_gstplayer.o
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS = \
@@ -8066,9 +8070,10 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_COCOA@	monolib_src_cocoa_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
-@COND_TOOLKIT_GTK@	monolib_unix_mediactrl.o
+@COND_TOOLKIT_GTK@	monolib_unix_mediactrl.o monolib_mediactrl_gstplayer.o
 @COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
-@COND_TOOLKIT_MOTIF@	monolib_unix_mediactrl.o
+@COND_TOOLKIT_MOTIF@	monolib_unix_mediactrl.o \
+@COND_TOOLKIT_MOTIF@	monolib_mediactrl_gstplayer.o
 @COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_MSW@	monolib_mediactrl_am.o monolib_mediactrl_wmp10.o \
 @COND_TOOLKIT_MSW@	monolib_mediactrl_qt.o
@@ -8077,7 +8082,8 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_OSX_IPHONE@__MEDIA_PLATFORM_SRC_OBJECTS_1 \
 @COND_TOOLKIT_OSX_IPHONE@	= monolib_osx_cocoa_mediactrl.o
 @COND_TOOLKIT_QT@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_qt_mediactrl.o
-@COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_unix_mediactrl.o
+@COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
+@COND_TOOLKIT_X11@	monolib_unix_mediactrl.o monolib_mediactrl_gstplayer.o
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_1 = \
@@ -12131,9 +12137,11 @@ COND_USE_SOVERSOLARIS_1___mediadll___so_symlinks_uninst_cmd = rm -f \
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_COCOA@	mediadll_src_cocoa_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS_2 = \
-@COND_TOOLKIT_GTK@	mediadll_unix_mediactrl.o
+@COND_TOOLKIT_GTK@	mediadll_unix_mediactrl.o \
+@COND_TOOLKIT_GTK@	mediadll_mediactrl_gstplayer.o
 @COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS_2 = \
-@COND_TOOLKIT_MOTIF@	mediadll_unix_mediactrl.o
+@COND_TOOLKIT_MOTIF@	mediadll_unix_mediactrl.o \
+@COND_TOOLKIT_MOTIF@	mediadll_mediactrl_gstplayer.o
 COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_2 =  \
 	mediadll_mediactrl_am.o \
 	mediadll_mediactrl_wmp10.o \
@@ -12145,7 +12153,8 @@ COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_OSX_IPHONE@	= mediadll_osx_cocoa_mediactrl.o
 @COND_TOOLKIT_QT@__MEDIA_PLATFORM_SRC_OBJECTS_2 = mediadll_qt_mediactrl.o
 @COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS_2 = \
-@COND_TOOLKIT_X11@	mediadll_unix_mediactrl.o
+@COND_TOOLKIT_X11@	mediadll_unix_mediactrl.o \
+@COND_TOOLKIT_X11@	mediadll_mediactrl_gstplayer.o
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1___medialib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1@__medialib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1___medialib___depname)
@@ -12161,9 +12170,11 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1___medialib___depname = \
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_COCOA@	medialib_src_cocoa_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS_3 = \
-@COND_TOOLKIT_GTK@	medialib_unix_mediactrl.o
+@COND_TOOLKIT_GTK@	medialib_unix_mediactrl.o \
+@COND_TOOLKIT_GTK@	medialib_mediactrl_gstplayer.o
 @COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS_3 = \
-@COND_TOOLKIT_MOTIF@	medialib_unix_mediactrl.o
+@COND_TOOLKIT_MOTIF@	medialib_unix_mediactrl.o \
+@COND_TOOLKIT_MOTIF@	medialib_mediactrl_gstplayer.o
 COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_3 =  \
 	medialib_mediactrl_am.o \
 	medialib_mediactrl_wmp10.o \
@@ -12175,7 +12186,8 @@ COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_OSX_IPHONE@	= medialib_osx_cocoa_mediactrl.o
 @COND_TOOLKIT_QT@__MEDIA_PLATFORM_SRC_OBJECTS_3 = medialib_qt_mediactrl.o
 @COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS_3 = \
-@COND_TOOLKIT_X11@	medialib_unix_mediactrl.o
+@COND_TOOLKIT_X11@	medialib_unix_mediactrl.o \
+@COND_TOOLKIT_X11@	medialib_mediactrl_gstplayer.o
 @COND_SHARED_1@____wxmedia_namedll_DEP = $(__mediadll___depname)
 @COND_SHARED_0@____wxmedia_namelib_DEP = $(__medialib___depname)
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1___htmldll___depname = \
@@ -20339,6 +20351,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
 
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
+@COND_TOOLKIT_GTK_USE_GUI_1@monodll_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monodll_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_chm.o: $(srcdir)/src/html/chm.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
 
@@ -25159,6 +25180,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
+@COND_TOOLKIT_GTK_USE_GUI_1@monolib_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monolib_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_chm.o: $(srcdir)/src/html/chm.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
@@ -33929,6 +33959,15 @@ mediadll_qt_mediactrl.o: $(srcdir)/src/qt/mediactrl.cpp $(MEDIADLL_ODEP)
 @COND_TOOLKIT_X11@mediadll_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MEDIADLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
 
+@COND_TOOLKIT_MOTIF@mediadll_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MEDIADLL_ODEP)
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
+@COND_TOOLKIT_GTK@mediadll_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MEDIADLL_ODEP)
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
+@COND_TOOLKIT_X11@mediadll_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MEDIADLL_ODEP)
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
 medialib_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MEDIALIB_ODEP)
 	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/common/mediactrlcmn.cpp
 
@@ -33961,6 +34000,15 @@ medialib_qt_mediactrl.o: $(srcdir)/src/qt/mediactrl.cpp $(MEDIALIB_ODEP)
 
 @COND_TOOLKIT_X11@medialib_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MEDIALIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
+
+@COND_TOOLKIT_MOTIF@medialib_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MEDIALIB_ODEP)
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
+@COND_TOOLKIT_GTK@medialib_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MEDIALIB_ODEP)
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
+@COND_TOOLKIT_X11@medialib_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MEDIALIB_ODEP)
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
 
 htmldll_version_rc.o: $(srcdir)/src/msw/version.rc $(HTMLDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)  --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_HTML

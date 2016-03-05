@@ -2732,6 +2732,7 @@ MEDIA_COCOA_HDR =
 
 MEDIA_UNIX_SRC =
     src/unix/mediactrl.cpp
+    src/unix/mediactrl_gstplayer.cpp
 MEDIA_UNIX_HDR =
 
 MEDIA_GTK_SRC =
