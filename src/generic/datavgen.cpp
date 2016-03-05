@@ -4577,7 +4577,11 @@ void wxDataViewMainWindow::UpdateColumnSizes()
     if ( lastColX < fullWinWidth )
     {
         int desiredWidth = wxMax(fullWinWidth - lastColX, lastCol->GetMinWidth());
-        lastCol->SetWidth(desiredWidth);
+        if ( !lastCol->WXUpdateWidth(desiredWidth) )
+        {
+            // The column width didn't change, no need to do anything else.
+            return;
+        }
 
         // All columns fit on screen, so we don't need horizontal scrolling.
         // To prevent flickering scrollbar when resizing the window to be

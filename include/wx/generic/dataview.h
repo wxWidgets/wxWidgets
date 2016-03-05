@@ -64,11 +64,10 @@ public:
 
     virtual void SetWidth(int width) wxOVERRIDE
     {
-        if ( width != m_width )
-        {
-            m_width = width;
-            UpdateDisplay();
-        }
+        // As a small optimization, use this method to avoid calling
+        // UpdateDisplay() if the width didn't really change, even if we don't
+        // care about its return value.
+        (void)WXUpdateWidth(width);
     }
     virtual int GetWidth() const wxOVERRIDE;
 
@@ -122,6 +121,18 @@ public:
         UpdateDisplay();
     }
 
+    // This method is specific to the generic implementation and is used only
+    // by wxWidgets itself.
+    bool WXUpdateWidth(int width)
+    {
+        if ( width == m_width )
+            return false;
+
+        m_width = width;
+        UpdateDisplay();
+
+        return true;
+    }
 
 private:
     // common part of all ctors
