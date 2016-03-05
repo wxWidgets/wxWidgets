@@ -662,6 +662,9 @@ public:
         return !allow;
     }
 
+    // Return true if multi column sort is currently allowed.
+    virtual bool IsMultiColumnSortAllowed() const { return false; }
+
     // This should also be overridden to actually use the specified column for
     // sorting if using multiple columns is supported.
     virtual void ToggleSortByColumn(int WXUNUSED(column)) { }

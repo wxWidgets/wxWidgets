@@ -227,7 +227,7 @@ public:
     virtual bool SetFont(const wxFont & font) wxOVERRIDE;
 
     virtual bool AllowMultiColumnSort(bool allow) wxOVERRIDE;
-    virtual bool IsMultiColumnSortAllowed() { return m_allowMultiColumnSort; }
+    virtual bool IsMultiColumnSortAllowed() const wxOVERRIDE { return m_allowMultiColumnSort; }
     virtual void ToggleSortByColumn(int column) wxOVERRIDE;
 
 #if wxUSE_DRAG_AND_DROP
