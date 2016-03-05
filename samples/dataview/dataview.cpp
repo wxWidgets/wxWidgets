@@ -739,14 +739,14 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             ilist->Add( wxIcon(wx_small_xpm) );
             tc->AssignImageList( ilist );
 
-            wxDataViewItem parent =
+            const wxDataViewItem root =
                 tc->AppendContainer( wxDataViewItem(0), "The Root", 0 );
-            tc->AppendItem( parent, "Child 1", 0 );
-            tc->AppendItem( parent, "Child 2", 0 );
-            tc->AppendItem( parent, "Child 3, very long, long, long, long", 0 );
+            tc->AppendItem( root, "Child 1", 0 );
+            tc->AppendItem( root, "Child 2", 0 );
+            tc->AppendItem( root, "Child 3, very long, long, long, long", 0 );
 
             wxDataViewItem cont =
-                tc->AppendContainer( parent, "Container child", 0 );
+                tc->AppendContainer( root, "Container child", 0 );
             tc->AppendItem( cont, "Child 4", 0 );
             tc->AppendItem( cont, "Child 5", 0 );
 
