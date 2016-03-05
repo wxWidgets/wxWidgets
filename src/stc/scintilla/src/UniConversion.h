@@ -61,7 +61,8 @@ enum { SURROGATE_TRAIL_FIRST = 0xDC00 };
 enum { SURROGATE_TRAIL_LAST = 0xDFFF };
 enum { SUPPLEMENTAL_PLANE_FIRST = 0x10000 };
 
-inline unsigned int UTF16CharLength(wchar_t uch) {
+inline unsigned int UTF16CharLength(wchar_t wch) {
+	const int uch = wch;
 	return ((uch >= SURROGATE_LEAD_FIRST) && (uch <= SURROGATE_LEAD_LAST)) ? 2 : 1;
 }
 
