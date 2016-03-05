@@ -15,7 +15,7 @@
 
 #include "wx/mediactrl.h"
 
-#if wxUSE_GSTREAMER
+#if wxUSE_GSTREAMER && !wxUSE_GSTREAMER_PLAYER
 
 #include <gst/gst.h>                // main gstreamer header
 
@@ -1589,10 +1589,10 @@ double wxGStreamerMediaBackend::GetVolume()
     return dVolume;
 }
 
-#endif //wxUSE_GSTREAMER
-
 // Force link into main library so this backend can be loaded
 #include "wx/html/forcelnk.h"
 FORCE_LINK_ME(basewxmediabackends)
+
+#endif //wxUSE_GSTREAMER && !wxUSE_GSTREAMER_PLAYER
 
 #endif //wxUSE_MEDIACTRL
