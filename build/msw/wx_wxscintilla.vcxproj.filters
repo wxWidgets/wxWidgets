@@ -107,6 +107,9 @@
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexBasic.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexBatch.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexBibTeX.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -146,6 +149,9 @@
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexD.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexDiff.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexDMAP.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -162,6 +168,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexErlang.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexErrorList.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexFlagship.cxx">
@@ -221,6 +230,9 @@
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexMagik.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexMake.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexMarkdown.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -242,13 +254,13 @@
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexNsis.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexNull.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexOScript.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexOpal.cxx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexOthers.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexPB.cxx">
@@ -279,6 +291,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexProgress.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexProps.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexPython.cxx">
