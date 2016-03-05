@@ -64,8 +64,11 @@ public:
 
     virtual void SetWidth(int width) wxOVERRIDE
     {
-        m_width = width;
-        UpdateDisplay();
+        if ( width != m_width )
+        {
+            m_width = width;
+            UpdateDisplay();
+        }
     }
     virtual int GetWidth() const wxOVERRIDE;
 
