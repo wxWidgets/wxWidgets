@@ -105,12 +105,6 @@ run_sed samples/docview/Info.plist \
     "/versionon/s/$ver_for_sed/$ver_string_new/" \
     "/<string>/s/$ver_for_sed/$ver_string_new/"
 
-msgn "	processing MSVS 200x project files ...	"
-for f in build/msw/wx_vc[789]*.vcproj; do
-    sed -i -e 's/\(\(msw\|base\)$ver_major$ver_minor\)$ver_release/\1$ver_release_new/g' $f
-done
-msgc "done"
-
 run_sed build/msw/wx_setup.props \
     "/<wxVersionString>/s/\($ver_major$ver_minor\)$ver_release/\1$ver_release_new/"
 
