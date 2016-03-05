@@ -14,7 +14,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [3.1.0], [wx-dev@googlegroups.com])
+AC_INIT([wxWidgets], [3.1.1], [wx-dev@googlegroups.com])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -40,7 +40,7 @@ dnl wx_release_number += 1
 
 wx_major_version_number=3
 wx_minor_version_number=1
-wx_release_number=0
+wx_release_number=1
 wx_subrelease_number=0
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
@@ -7260,17 +7260,30 @@ if test "$wxUSE_MEDIACTRL" = "yes" -o "$wxUSE_MEDIACTRL" = "auto"; then
         GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
 
         PKG_CHECK_MODULES(GST,
-            [gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION],
+            [gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION gstreamer-player-$GST_VERSION >= 1.7.2.1],
             [
                 wxUSE_GSTREAMER="yes"
+                AC_DEFINE(wxUSE_GSTREAMER_PLAYER)
             ],
             [
-                AC_MSG_WARN([GStreamer 1.0 not available, falling back to 0.10])
-                GST_VERSION_MAJOR=0
-                GST_VERSION_MINOR=10
-                GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
+                AC_MSG_NOTICE([GStreamer 1.7.2+ not available. Not using GstPlayer and falling back to 1.0])
             ]
         )
+
+        if test $wxUSE_GSTREAMER = "no"; then
+            PKG_CHECK_MODULES(GST,
+                [gstreamer-$GST_VERSION gstreamer-video-$GST_VERSION],
+                [
+                    wxUSE_GSTREAMER="yes"
+                ],
+                [
+                    AC_MSG_WARN([GStreamer 1.0 not available, falling back to 0.10])
+                    GST_VERSION_MAJOR=0
+                    GST_VERSION_MINOR=10
+                    GST_VERSION=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
+                ]
+            )
+        fi
 
         if test $GST_VERSION_MINOR = "10"; then
             PKG_CHECK_MODULES(GST,

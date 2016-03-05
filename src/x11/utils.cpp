@@ -100,7 +100,9 @@ void wxBell()
     XBell ((Display*) wxGetDisplay(), 0);
 }
 
-wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj,
+                                           int *verMin,
+                                           int *verMicro) const
 {
     // get X protocol version
     Display *display = wxGlobalDisplay();
@@ -110,6 +112,8 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
             *verMaj = ProtocolVersion (display);
         if ( verMin )
             *verMin = ProtocolRevision (display);
+        if ( verMicro )
+            *verMicro = 0;
     }
 
     return wxPORT_X11;

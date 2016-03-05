@@ -176,13 +176,17 @@ void wxBell()
     XBell (wxGlobalDisplay(), 0);
 }
 
-wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
+wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj,
+                                           int *verMin,
+                                           int *verMicro) const
 {
     // XmVERSION and XmREVISION are defined in Xm/Xm.h
     if ( verMaj )
         *verMaj = XmVERSION;
     if ( verMin )
         *verMin = XmREVISION;
+    if ( verMicro )
+        *verMicro = 0;
 
     return wxPORT_MOTIF;
 }

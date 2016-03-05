@@ -30,12 +30,6 @@
         autoconf,borland,dmars_smake,dmars,mingw,msvc,msvc6prj,msvs2003prj,msvs2005prj,msvs2008prj,watcom
     </add-formats>
 
-    <!-- MSVC projects for the library itself (but not the samples etc) are now
-         kept up to date with upmake, not bakefile -->
-    <del-formats files="wx.bkl">
-        msvs2003prj,msvs2005prj,msvs2008prj
-    </del-formats>
-
     <del-formats files="../../samples/*.bkl">
         autoconf,msvc6prj,msvs2003prj,msvs2005prj,msvs2008prj
     </del-formats>

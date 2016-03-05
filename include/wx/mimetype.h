@@ -353,6 +353,9 @@ public:
     // dtor (not virtual, shouldn't be derived from)
     ~wxFileType();
 
+    wxString
+    GetExpandedCommand(const wxString& verb,
+                       const wxFileType::MessageParameters& params) const;
 private:
     // default ctor is private because the user code never creates us
     wxFileType();

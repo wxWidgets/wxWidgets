@@ -152,25 +152,12 @@ protected:
 
     int GetDefaultPickerCtrlFlag() const
     {
-        // on macintosh, without additional borders
-        // there's not enough space for focus rect
-        return wxALIGN_CENTER_VERTICAL
-#ifdef __WXMAC__
-            | wxTOP | wxRIGHT | wxBOTTOM
-#endif
-            ;
+        return wxALIGN_CENTER_VERTICAL;
     }
 
     int GetDefaultTextCtrlFlag() const
     {
-        // on macintosh, without wxALL there's not enough space for focus rect
-        return wxALIGN_CENTER_VERTICAL
-#ifdef __WXMAC__
-            | wxALL
-#else
-            | wxRIGHT
-#endif
-            ;
+        return wxALIGN_CENTER_VERTICAL | wxRIGHT;
     }
 
     void PostCreation();

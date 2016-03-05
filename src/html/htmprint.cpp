@@ -593,8 +593,13 @@ void wxHtmlPrintout::SetMargins(float top, float bottom, float left, float right
     m_MarginSpace = spaces;
 }
 
-
-
+void wxHtmlPrintout::SetMargins(const wxPageSetupDialogData& pageSetupData)
+{
+    SetMargins(pageSetupData.GetMarginTopLeft().y,
+               pageSetupData.GetMarginBottomRight().y,
+               pageSetupData.GetMarginTopLeft().x,
+               pageSetupData.GetMarginBottomRight().x);
+}
 
 void wxHtmlPrintout::SetFonts(const wxString& normal_face, const wxString& fixed_face,
                               const int *sizes)
@@ -818,10 +823,7 @@ wxHtmlPrintout *wxHtmlEasyPrinting::CreatePrintout()
     p->SetFooter(m_Footers[0], wxPAGE_EVEN);
     p->SetFooter(m_Footers[1], wxPAGE_ODD);
 
-    p->SetMargins(m_PageSetupData->GetMarginTopLeft().y,
-                    m_PageSetupData->GetMarginBottomRight().y,
-                    m_PageSetupData->GetMarginTopLeft().x,
-                    m_PageSetupData->GetMarginBottomRight().x);
+    p->SetMargins(*m_PageSetupData);
 
     return p;
 }

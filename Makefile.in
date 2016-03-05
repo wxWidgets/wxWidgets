@@ -77,8 +77,8 @@ wx_top_builddir = @wx_top_builddir@
 DESTDIR = 
 WX_RELEASE = 3.1
 WX_RELEASE_NODOT = 31
-WX_VERSION = $(WX_RELEASE).0
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
+WX_VERSION = $(WX_RELEASE).1
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)1
 LIBDIRNAME = $(wx_top_builddir)/lib
 WXREGEX_CFLAGS = -DNDEBUG -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(____SHARED) \
 	$(CPPFLAGS) $(CFLAGS)
@@ -6060,8 +6060,11 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_X11@__ADVANCED_UNIV_SRC_OBJECTS = monodll_animateg.o
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_COCOA@	monodll_src_cocoa_mediactrl.o
-@COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_unix_mediactrl.o 
-@COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_unix_mediactrl.o
+@COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS = \
+@COND_TOOLKIT_GTK@	monodll_unix_mediactrl.o monodll_mediactrl_gstplayer.o
+@COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS = \
+@COND_TOOLKIT_MOTIF@	monodll_unix_mediactrl.o \
+@COND_TOOLKIT_MOTIF@	monodll_mediactrl_gstplayer.o
 @COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_MSW@	monodll_mediactrl_am.o monodll_mediactrl_wmp10.o \
 @COND_TOOLKIT_MSW@	monodll_mediactrl_qt.o
@@ -6070,7 +6073,8 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_OSX_IPHONE@__MEDIA_PLATFORM_SRC_OBJECTS \
 @COND_TOOLKIT_OSX_IPHONE@	= monodll_osx_cocoa_mediactrl.o
 @COND_TOOLKIT_QT@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_qt_mediactrl.o
-@COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_unix_mediactrl.o
+@COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS = \
+@COND_TOOLKIT_X11@	monodll_unix_mediactrl.o monodll_mediactrl_gstplayer.o
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS = \
@@ -8071,9 +8075,10 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_COCOA@	monolib_src_cocoa_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
-@COND_TOOLKIT_GTK@	monolib_unix_mediactrl.o
+@COND_TOOLKIT_GTK@	monolib_unix_mediactrl.o monolib_mediactrl_gstplayer.o
 @COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
-@COND_TOOLKIT_MOTIF@	monolib_unix_mediactrl.o
+@COND_TOOLKIT_MOTIF@	monolib_unix_mediactrl.o \
+@COND_TOOLKIT_MOTIF@	monolib_mediactrl_gstplayer.o
 @COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_MSW@	monolib_mediactrl_am.o monolib_mediactrl_wmp10.o \
 @COND_TOOLKIT_MSW@	monolib_mediactrl_qt.o
@@ -8082,7 +8087,8 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_OSX_IPHONE@__MEDIA_PLATFORM_SRC_OBJECTS_1 \
 @COND_TOOLKIT_OSX_IPHONE@	= monolib_osx_cocoa_mediactrl.o
 @COND_TOOLKIT_QT@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_qt_mediactrl.o
-@COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_unix_mediactrl.o
+@COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
+@COND_TOOLKIT_X11@	monolib_unix_mediactrl.o monolib_mediactrl_gstplayer.o
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_1 = \
@@ -12136,9 +12142,11 @@ COND_USE_SOVERSOLARIS_1___mediadll___so_symlinks_uninst_cmd = rm -f \
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_COCOA@	mediadll_src_cocoa_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS_2 = \
-@COND_TOOLKIT_GTK@	mediadll_unix_mediactrl.o
+@COND_TOOLKIT_GTK@	mediadll_unix_mediactrl.o \
+@COND_TOOLKIT_GTK@	mediadll_mediactrl_gstplayer.o
 @COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS_2 = \
-@COND_TOOLKIT_MOTIF@	mediadll_unix_mediactrl.o
+@COND_TOOLKIT_MOTIF@	mediadll_unix_mediactrl.o \
+@COND_TOOLKIT_MOTIF@	mediadll_mediactrl_gstplayer.o
 COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_2 =  \
 	mediadll_mediactrl_am.o \
 	mediadll_mediactrl_wmp10.o \
@@ -12150,7 +12158,8 @@ COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_OSX_IPHONE@	= mediadll_osx_cocoa_mediactrl.o
 @COND_TOOLKIT_QT@__MEDIA_PLATFORM_SRC_OBJECTS_2 = mediadll_qt_mediactrl.o
 @COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS_2 = \
-@COND_TOOLKIT_X11@	mediadll_unix_mediactrl.o
+@COND_TOOLKIT_X11@	mediadll_unix_mediactrl.o \
+@COND_TOOLKIT_X11@	mediadll_mediactrl_gstplayer.o
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1___medialib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1@__medialib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1___medialib___depname)
@@ -12166,9 +12175,11 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1___medialib___depname = \
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_COCOA@	medialib_src_cocoa_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS_3 = \
-@COND_TOOLKIT_GTK@	medialib_unix_mediactrl.o
+@COND_TOOLKIT_GTK@	medialib_unix_mediactrl.o \
+@COND_TOOLKIT_GTK@	medialib_mediactrl_gstplayer.o
 @COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS_3 = \
-@COND_TOOLKIT_MOTIF@	medialib_unix_mediactrl.o
+@COND_TOOLKIT_MOTIF@	medialib_unix_mediactrl.o \
+@COND_TOOLKIT_MOTIF@	medialib_mediactrl_gstplayer.o
 COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_3 =  \
 	medialib_mediactrl_am.o \
 	medialib_mediactrl_wmp10.o \
@@ -12180,7 +12191,8 @@ COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_OSX_IPHONE@	= medialib_osx_cocoa_mediactrl.o
 @COND_TOOLKIT_QT@__MEDIA_PLATFORM_SRC_OBJECTS_3 = medialib_qt_mediactrl.o
 @COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS_3 = \
-@COND_TOOLKIT_X11@	medialib_unix_mediactrl.o
+@COND_TOOLKIT_X11@	medialib_unix_mediactrl.o \
+@COND_TOOLKIT_X11@	medialib_mediactrl_gstplayer.o
 @COND_SHARED_1@____wxmedia_namedll_DEP = $(__mediadll___depname)
 @COND_SHARED_0@____wxmedia_namelib_DEP = $(__medialib___depname)
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1___htmldll___depname = \
@@ -13170,7 +13182,7 @@ COND_WITH_PLUGIN_SDL_1___sound_sdl___depname = \
 @COND_USE_XRC_1@__clean_wxrc___depname = clean-wxrc
 @COND_USE_XRC_1@__install_wxrc___depname = install-wxrc
 @COND_TOOLKIT_MSW@RCDEFS_H = msw/rcdefs.h
-@COND_TOOLKIT_COCOA@__cocoa_res___depname = lib/libwx_$(TOOLCHAIN_NAME).0.r
+@COND_TOOLKIT_COCOA@__cocoa_res___depname = lib/libwx_$(TOOLCHAIN_NAME).1.r
 @COND_TOOLKIT_COCOA@__cocoa_res_install___depname = cocoa-res-install
 @COND_SHARED_0@____SHARED = 
 @COND_SHARED_1@____SHARED = $(PIC_FLAG)
@@ -13214,7 +13226,6 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS =  \
 	monodll_carbon_gdiobj.o \
 	monodll_carbon_icon.o \
 	monodll_carbon_app.o \
-	monodll_carbon_combobox.o \
 	monodll_carbon_control.o \
 	monodll_carbon_dataobj.o \
 	monodll_carbon_dcclient.o \
@@ -13359,7 +13370,6 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_0 =  \
 	monolib_carbon_gdiobj.o \
 	monolib_carbon_icon.o \
 	monolib_carbon_app.o \
-	monolib_carbon_combobox.o \
 	monolib_carbon_control.o \
 	monolib_carbon_dataobj.o \
 	monolib_carbon_dcclient.o \
@@ -13504,7 +13514,6 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_8 =  \
 	coredll_carbon_gdiobj.o \
 	coredll_carbon_icon.o \
 	coredll_carbon_app.o \
-	coredll_carbon_combobox.o \
 	coredll_carbon_control.o \
 	coredll_carbon_dataobj.o \
 	coredll_carbon_dcclient.o \
@@ -13634,7 +13643,6 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_9 =  \
 	corelib_carbon_gdiobj.o \
 	corelib_carbon_icon.o \
 	corelib_carbon_app.o \
-	corelib_carbon_combobox.o \
 	corelib_carbon_control.o \
 	corelib_carbon_dataobj.o \
 	corelib_carbon_dcclient.o \
@@ -13767,17 +13775,17 @@ COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1___htmldll_library_link_LIBR_0 \
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_65 = --define wxNO_EXCEPTIONS
 @COND_USE_RTTI_0@__RTTI_DEFINE_p_65 = --define wxNO_RTTI
 @COND_USE_THREADS_0@__THREAD_DEFINE_p_65 = --define wxNO_THREADS
-@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@dll___targetsuf2 = .$(SO_SUFFIX).0
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf2 = .0.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@dll___targetsuf2 = .$(SO_SUFFIX).1
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf2 = .1.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@dll___targetsuf2 = .$(SO_SUFFIX)
 @COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@dll___targetsuf3 \
 @COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	= \
-@COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	.$(SO_SUFFIX).0.0.0
+@COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	.$(SO_SUFFIX).1.0.0
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf3 \
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.0.0.$(SO_SUFFIX)
-@COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1@dll___targetsuf3 = -0.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .1.0.0.$(SO_SUFFIX)
+@COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1@dll___targetsuf3 = -1.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@dll___targetsuf3 = .$(SO_SUFFIX)
-@COND_USE_SOVERSION_1_USE_SOVERSOLARIS_1@dll___targetsuf3 = .$(SO_SUFFIX).0
+@COND_USE_SOVERSION_1_USE_SOVERSOLARIS_1@dll___targetsuf3 = .$(SO_SUFFIX).1
 @COND_TOOLKIT_MSW@__RCDEFDIR_p = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_wxUSE_LIBTIFF_builtin@__INC_TIFF_BUILD_p_66 \
@@ -13975,7 +13983,7 @@ clean: $(__clean_wxrc___depname)
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 	rm -f $(DLLPREFIX_MODULE)sound_sdl$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
 	-(cd samples && $(MAKE) clean)
-	rm -f lib/libwx_$(TOOLCHAIN_NAME).0.rsrc lib/libwx_$(TOOLCHAIN_NAME).0.r
+	rm -f lib/libwx_$(TOOLCHAIN_NAME).1.rsrc lib/libwx_$(TOOLCHAIN_NAME).1.r
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -14754,13 +14762,13 @@ locale_msw_uninstall:
 	fi ; \
 	done
 
-@COND_TOOLKIT_COCOA@lib/libwx_$(TOOLCHAIN_NAME).0.r: 
-@COND_TOOLKIT_COCOA@	$(REZ) -d __UNIX__ -useDF $(top_srcdir)/src/cocoa/dummy.r -o lib/libwx_$(TOOLCHAIN_NAME).0.rsrc
-@COND_TOOLKIT_COCOA@	$(DEREZ) lib/libwx_$(TOOLCHAIN_NAME).0.rsrc -useDF >lib/libwx_$(TOOLCHAIN_NAME).0.r
+@COND_TOOLKIT_COCOA@lib/libwx_$(TOOLCHAIN_NAME).1.r: 
+@COND_TOOLKIT_COCOA@	$(REZ) -d __UNIX__ -useDF $(top_srcdir)/src/cocoa/dummy.r -o lib/libwx_$(TOOLCHAIN_NAME).1.rsrc
+@COND_TOOLKIT_COCOA@	$(DEREZ) lib/libwx_$(TOOLCHAIN_NAME).1.rsrc -useDF >lib/libwx_$(TOOLCHAIN_NAME).1.r
 
 @COND_TOOLKIT_COCOA@cocoa-res-install: $(__cocoa_res___depname)
-@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).0.r $(libdir)
-@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).0.rsrc $(libdir)
+@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).1.r $(libdir)
+@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).1.rsrc $(libdir)
 
 wxregex_regcomp.o: $(srcdir)/src/regex/regcomp.c
 	$(CCC) -c -o $@ $(WXREGEX_CFLAGS) $(srcdir)/src/regex/regcomp.c
@@ -19334,12 +19342,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_carbon_app.o: $(srcdir)/src/osx/carbon/app.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/app.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_carbon_combobox.o: $(srcdir)/src/osx/carbon/combobox.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/combobox.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_carbon_combobox.o: $(srcdir)/src/osx/carbon/combobox.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/combobox.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_carbon_control.o: $(srcdir)/src/osx/carbon/control.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/control.cpp
 
@@ -20368,6 +20370,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
+@COND_TOOLKIT_GTK_USE_GUI_1@monodll_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monodll_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_chm.o: $(srcdir)/src/html/chm.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/chm.cpp
@@ -24161,12 +24172,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_carbon_app.o: $(srcdir)/src/osx/carbon/app.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/app.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_carbon_combobox.o: $(srcdir)/src/osx/carbon/combobox.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/combobox.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_carbon_combobox.o: $(srcdir)/src/osx/carbon/combobox.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/combobox.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_carbon_control.o: $(srcdir)/src/osx/carbon/control.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/control.cpp
 
@@ -25195,6 +25200,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
+@COND_TOOLKIT_GTK_USE_GUI_1@monolib_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monolib_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_chm.o: $(srcdir)/src/html/chm.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/chm.cpp
@@ -29042,12 +29056,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_carbon_app.o: $(srcdir)/src/osx/carbon/app.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/app.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_carbon_combobox.o: $(srcdir)/src/osx/carbon/combobox.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/combobox.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_carbon_combobox.o: $(srcdir)/src/osx/carbon/combobox.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/combobox.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_carbon_control.o: $(srcdir)/src/osx/carbon/control.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/control.cpp
 
@@ -32435,12 +32443,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_carbon_app.o: $(srcdir)/src/osx/carbon/app.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/app.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_carbon_combobox.o: $(srcdir)/src/osx/carbon/combobox.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/combobox.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_carbon_combobox.o: $(srcdir)/src/osx/carbon/combobox.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/combobox.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_carbon_control.o: $(srcdir)/src/osx/carbon/control.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/control.cpp
 
@@ -33977,6 +33979,15 @@ mediadll_qt_mediactrl.o: $(srcdir)/src/qt/mediactrl.cpp $(MEDIADLL_ODEP)
 @COND_TOOLKIT_X11@mediadll_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MEDIADLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
 
+@COND_TOOLKIT_MOTIF@mediadll_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MEDIADLL_ODEP)
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
+@COND_TOOLKIT_GTK@mediadll_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MEDIADLL_ODEP)
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
+@COND_TOOLKIT_X11@mediadll_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MEDIADLL_ODEP)
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
 medialib_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MEDIALIB_ODEP)
 	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/common/mediactrlcmn.cpp
 
@@ -34009,6 +34020,15 @@ medialib_qt_mediactrl.o: $(srcdir)/src/qt/mediactrl.cpp $(MEDIALIB_ODEP)
 
 @COND_TOOLKIT_X11@medialib_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MEDIALIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
+
+@COND_TOOLKIT_MOTIF@medialib_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MEDIALIB_ODEP)
+@COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
+@COND_TOOLKIT_GTK@medialib_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MEDIALIB_ODEP)
+@COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
+
+@COND_TOOLKIT_X11@medialib_mediactrl_gstplayer.o: $(srcdir)/src/unix/mediactrl_gstplayer.cpp $(MEDIALIB_ODEP)
+@COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl_gstplayer.cpp
 
 htmldll_version_rc.o: $(srcdir)/src/msw/version.rc $(HTMLDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)  --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_HTML

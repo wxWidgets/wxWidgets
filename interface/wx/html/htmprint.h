@@ -444,5 +444,12 @@ public:
                     float left = 25.2,
                     float right = 25.2,
                     float spaces = 5);
+
+    /**
+        Sets margins from wxPageSetupDialogData.
+
+        @since 3.1.0
+    */
+    void SetMargins(const wxPageSetupDialogData& pageSetupData);
 };
 

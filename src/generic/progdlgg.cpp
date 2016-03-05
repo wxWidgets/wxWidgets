@@ -109,6 +109,8 @@ void wxGenericProgressDialog::Init()
 
     m_winDisabler = NULL;
     m_tempEventLoop = NULL;
+
+    SetWindowStyle(wxDEFAULT_DIALOG_STYLE);
 }
 
 wxGenericProgressDialog::wxGenericProgressDialog()
@@ -148,7 +150,7 @@ bool wxGenericProgressDialog::Create( const wxString& title,
     wxWindow* const
         realParent = GetParentForModalDialog(parent, GetWindowStyle());
 
-    if (!wxDialog::Create(realParent, wxID_ANY, title))
+    if (!wxDialog::Create(realParent, wxID_ANY, title, wxDefaultPosition, wxDefaultSize, GetWindowStyle()))
         return false;
 
     SetMaximum(maximum);
@@ -238,10 +240,7 @@ bool wxGenericProgressDialog::Create( const wxString& title,
     }
     sizerTop->Add(sizerLabels, 0, wxALIGN_CENTER_HORIZONTAL | wxTOP, LAYOUT_MARGIN);
 
-    m_btnAbort =
-    m_btnSkip = NULL;
-
-    wxStdDialogButtonSizer *buttonSizer = new wxStdDialogButtonSizer();
+    wxStdDialogButtonSizer *buttonSizer = wxDialog::CreateStdDialogButtonSizer(0);
 
     const int borderFlags = wxALL;
 
@@ -259,7 +258,7 @@ bool wxGenericProgressDialog::Create( const wxString& title,
     {
         m_btnAbort = new wxButton(this, wxID_CANCEL);
 
-        buttonSizer->AddButton(m_btnAbort);
+        buttonSizer->SetCancelButton(m_btnAbort);
     }
 
     if ( !HasPDFlag(wxPD_CAN_SKIP | wxPD_CAN_ABORT) )

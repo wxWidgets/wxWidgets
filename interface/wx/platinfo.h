@@ -12,11 +12,11 @@
 
     The values of the constants are chosen so that they can be combined as flags;
     this allows to check for operating system families like e.g. @c wxOS_MAC and @c wxOS_UNIX.
-    
+
     Note that you can obtain more detailed information about the current OS
-    version in use by checking the major and minor version numbers returned
-    by ::wxGetOsVersion() or by wxPlatformInfo::GetOSMajorVersion(), 
-    wxPlatformInfo::GetOSMinorVersion().
+    version in use by checking the major, minor, and micro version numbers
+    returned by ::wxGetOsVersion() or by wxPlatformInfo::GetOSMajorVersion(),
+    wxPlatformInfo::GetOSMinorVersion(), and wxPlatformInfo::GetOSMicroVersion().
 */
 enum wxOperatingSystemId
 {
@@ -177,21 +177,20 @@ public:
 
 
     /**
-        Returns @true if the OS version is at least @c major.minor.
+        Returns @true if the OS version is at least @c major.minor.micro.
 
-        @see GetOSMajorVersion(), GetOSMinorVersion(),
+        @see GetOSMajorVersion(), GetOSMinorVersion(), GetOSMicroVersion(),
              CheckToolkitVersion()
     */
-    bool CheckOSVersion(int major, int minor) const;
+    bool CheckOSVersion(int major, int minor, int micro = 0) const;
 
     /**
-        Returns @true if the toolkit version is at least @c major.minor.
+        Returns @true if the toolkit version is at least @c major.minor.micro.
 
-        @see GetToolkitMajorVersion(),
-             GetToolkitMinorVersion(), CheckOSVersion()
+        @see GetToolkitMajorVersion(), GetToolkitMinorVersion(),
+             GetToolkitMicroVersion(), CheckOSVersion()
     */
-    bool CheckToolkitVersion(int major, int minor) const;
-    
+    bool CheckToolkitVersion(int major, int minor, int micro = 0) const;
 
     /**
         Returns @true if this instance is fully initialized with valid values.
@@ -349,6 +348,16 @@ public:
     int GetOSMinorVersion() const;
 
     /**
+        Returns the run-time micro version of the OS associated with this
+        wxPlatformInfo instance.
+
+        @see ::wxGetOsVersion(), CheckOSVersion()
+
+        @since 3.1.1
+    */
+    int GetOSMicroVersion() const;
+
+    /**
         Returns the operating system ID of this wxPlatformInfo instance.
         
         See wxGetOsVersion() for more info.
@@ -406,7 +415,22 @@ public:
         @see CheckToolkitVersion()
     */
     int GetToolkitMinorVersion() const;
-    
+
+    /**
+        Returns the run-time micro version of the toolkit associated with this
+        wxPlatformInfo instance.
+
+        Note that if GetPortId() returns @c wxPORT_BASE, then this value is zero
+        (unless externally modified with SetToolkitVersion()); that is, no native
+        toolkit is in use.
+        See wxAppTraits::GetToolkitVersion() for more info.
+
+        @see CheckToolkitVersion()
+
+        @since 3.1.1
+    */
+    int GetToolkitMicroVersion() const;
+
     //@}
 
 
@@ -472,7 +496,7 @@ public:
         Sets the version of the operating system associated with this wxPlatformInfo
         instance.
     */
-    void SetOSVersion(int major, int minor);
+    void SetOSVersion(int major, int minor, int micro = 0);
 
     /**
         Sets the operating system associated with this wxPlatformInfo instance.
@@ -487,7 +511,7 @@ public:
     /**
         Sets the version of the toolkit associated with this wxPlatformInfo instance.
     */
-    void SetToolkitVersion(int major, int minor);
+    void SetToolkitVersion(int major, int minor, int micro = 0);
 
     /**
         Sets the operating system description associated with this wxPlatformInfo instance.

@@ -50,6 +50,7 @@
     #include "wx/sizer.h"
 #endif
 
+#include "wx/filename.h"
 #include "wx/txtstrm.h"
 #include "wx/numdlg.h"
 #include "wx/textdlg.h"
@@ -1078,7 +1079,7 @@ void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
     if ( !AskUserForFileName() )
         return;
 
-    wxString ext = gs_lastFile.AfterLast(wxT('.'));
+    wxString ext = wxFileName(gs_lastFile).GetExt();
     wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
     if ( !ft )
     {
@@ -1088,8 +1089,15 @@ void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
     }
 
     wxString cmd;
-    bool ok = ft->GetOpenCommand(&cmd,
-                                 wxFileType::MessageParameters(gs_lastFile));
+    bool ok = false;
+    const wxFileType::MessageParameters params(gs_lastFile);
+#ifdef __WXMSW__
+    // try editor, for instance Notepad if extension is .xml
+    cmd = ft->GetExpandedCommand(wxT("edit"), params);
+    ok = !cmd.empty();
+#endif
+    if (!ok) // else try viewer
+        ok = ft->GetOpenCommand(&cmd, params);
     delete ft;
     if ( !ok )
     {

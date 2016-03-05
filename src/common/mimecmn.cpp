@@ -428,6 +428,13 @@ wxFileType::GetPrintCommand(wxString *printCmd,
     return m_impl->GetPrintCommand(printCmd, params);
 }
 
+wxString
+wxFileType::GetExpandedCommand(const wxString& verb,
+                               const wxFileType::MessageParameters& params) const
+{
+    return m_impl->GetExpandedCommand(verb, params);
+}
+
 
 size_t wxFileType::GetAllCommands(wxArrayString *verbs,
                                   wxArrayString *commands,

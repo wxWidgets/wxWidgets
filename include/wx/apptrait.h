@@ -73,7 +73,6 @@ public:
     virtual wxRendererNative *CreateRenderer() = 0;
 
     // wxStandardPaths object is normally the same for wxBase and wxGUI
-    // except in the case of wxMac and wxCocoa
     virtual wxStandardPaths& GetStandardPaths();
 
 
@@ -130,7 +129,9 @@ public:
     // runtime (not compile-time) version.
     // returns wxPORT_BASE for console applications and one of the remaining
     // wxPORT_* values for GUI applications.
-    virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const = 0;
+    virtual wxPortId GetToolkitVersion(int *majVer = NULL,
+                                       int *minVer = NULL,
+                                       int *microVer = NULL) const = 0;
 
     // return true if the port is using wxUniversal for the GUI, false if not
     virtual bool IsUsingUniversalWidgets() const = 0;
@@ -209,13 +210,16 @@ public:
     virtual bool HasStderr() wxOVERRIDE;
 
     // the GetToolkitVersion for console application is always the same
-    virtual wxPortId GetToolkitVersion(int *verMaj = NULL, int *verMin = NULL) const wxOVERRIDE
+    wxPortId GetToolkitVersion(int *verMaj = NULL,
+                               int *verMin = NULL,
+                               int *verMicro = NULL) const wxOVERRIDE
     {
         // no toolkits (wxBase is for console applications without GUI support)
         // NB: zero means "no toolkit", -1 means "not initialized yet"
         //     so we must use zero here!
         if (verMaj) *verMaj = 0;
         if (verMin) *verMin = 0;
+        if (verMicro) *verMicro = 0;
         return wxPORT_BASE;
     }
 

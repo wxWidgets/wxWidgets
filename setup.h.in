@@ -635,6 +635,8 @@
  */
 #define wxUSE_GSTREAMER 0
 
+#define wxUSE_GSTREAMER_PLAYER 0
+
 /* --- start MSW options --- */
 
 

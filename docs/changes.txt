@@ -34,6 +34,10 @@ Changes in behaviour not resulting in compilation errors
 - wxOSX/Carbon port doesn't exist any more, wxOSX/Cocoa will be silently used
   instead even if configure --with-osx_carbon option is used.
 
+- The pure virtual function wxAppTrait::GetToolkitVersion() now has a parameter
+  for getting the micro version. If you override GetToolkitVersion() you need
+  to add this new third parameter.
+
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
 
@@ -51,13 +55,28 @@ Changes in behaviour which may result in build errors
 3.1.1: (not released yet)
 ----------------------------
 
+All:
+
+- Add support for the micro version (third component) to OS and toolkit version
+  functions. See wxGetOsVersion(), wxPlatformInfo, and wxAppTraits.
+- wxLogInfo() now logs messages if the log level is high enough, even without
+  wxLog::SetVerbose() which now only affects wxLogVerbose().
+- Add wxFileType::GetExpandedCommand() (troelsk).
+
 wxMSW:
 
 - Fix crash when using wxCHMHelpController() in 64 bit builds (Xlord2).
+- Fix MDI menu display after failure to create a child frame (troelsk).
 
 wxOSX:
 
+- Remove extra borders around wxFilePickerCtrl (John Roberts).
+- Set up extensions filter correctly in wxFileDialog (nick863).
 - Turn off automatic quotes substitutions in wxTextCtrl (Xlord2).
+
+Unix:
+
+- Support new gstreamer API in 1.7.2+ in wxMediaCtrl (Sebastian Dröge).
 
 
 3.1.0: (released 2016-02-29)

@@ -1272,6 +1272,10 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 #define wxLogMessage wxDO_LOG_IF_ENABLED(Message)
 #define wxVLogMessage(format, argptr) wxDO_LOGV(Message, format, argptr)
 
+#define wxLogInfo wxDO_LOG_IF_ENABLED(Info)
+#define wxVLogInfo(format, argptr) wxDO_LOGV(Info, format, argptr)
+
+
 // this one is special as it only logs if we're in verbose mode
 #define wxLogVerbose                                                          \
     if ( !(wxLog::IsLevelEnabled(wxLOG_Info, wxLOG_COMPONENT) &&              \
@@ -1285,11 +1289,6 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
     {}                                                                        \
     else                                                                      \
         wxDO_LOGV(Info, format, argptr)
-
-// deprecated synonyms for wxLogVerbose() and wxVLogVerbose()
-#define wxLogInfo wxLogVerbose
-#define wxVLogInfo wxVLogVerbose
-
 
 // another special case: the level is passed as first argument of the function
 // and so is not available to the macro

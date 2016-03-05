@@ -910,7 +910,9 @@ wxMDIChildFrame::~wxMDIChildFrame()
     if ( !m_hWnd )
         return;
 
-    GetMDIParent()->RemoveMDIChild(this);
+    wxMDIParentFrame * const parent = GetMDIParent();
+
+    parent->RemoveMDIChild(this);
 
     // will be destroyed by DestroyChildren() but reset them before calling it
     // to avoid using dangling pointers if a callback comes in the meanwhile
@@ -924,6 +926,12 @@ wxMDIChildFrame::~wxMDIChildFrame()
     DestroyChildren();
 
     MDIRemoveWindowMenu(NULL, m_hMenu);
+
+    // MDIRemoveWindowMenu() doesn't update the MDI menu when called with NULL
+    // window, so do it ourselves.
+    MDISetMenu(parent->GetClientWindow(),
+               (HMENU)parent->MSWGetActiveMenu(),
+               GetMDIWindowMenu(parent));
 
     MSWDestroyWindow();
 }

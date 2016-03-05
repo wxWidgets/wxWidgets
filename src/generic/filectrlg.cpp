@@ -421,7 +421,7 @@ void wxFileListCtrl::ChangeToReportMode()
     GetTextExtent(txt, &w, &h);
 
     InsertColumn( 0, _("Name"), wxLIST_FORMAT_LEFT, w );
-    InsertColumn( 1, _("Size"), wxLIST_FORMAT_LEFT, w/2 );
+    InsertColumn( 1, _("Size"), wxLIST_FORMAT_RIGHT, w/2 );
     InsertColumn( 2, _("Type"), wxLIST_FORMAT_LEFT, w/2 );
     InsertColumn( 3, _("Modified"), wxLIST_FORMAT_LEFT, w );
 #if defined(__UNIX__)

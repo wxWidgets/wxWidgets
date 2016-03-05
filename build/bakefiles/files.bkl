@@ -2275,7 +2275,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/gdiobj.cpp
     src/osx/carbon/icon.cpp
     src/osx/carbon/app.cpp
-    src/osx/carbon/combobox.cpp
     src/osx/carbon/control.cpp
     src/osx/carbon/dataobj.cpp
     src/osx/carbon/dcclient.cpp
@@ -2991,6 +2990,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="MEDIA_UNIX_SRC" hints="files">
     src/unix/mediactrl.cpp
+    src/unix/mediactrl_gstplayer.cpp
 </set>
 <set var="MEDIA_UNIX_HDR" hints="files">
 </set>

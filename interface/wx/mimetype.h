@@ -376,6 +376,22 @@ public:
     bool GetPrintCommand(wxString* command,
                          const MessageParameters& params) const;
 
+
+    /**
+        The returned string is the command to be executed in order to
+        open/print/edit the file of the given type.
+
+        If the string is empty, the lookup for the @a verb failed.
+
+        The name of the file is retrieved from the MessageParameters class.
+
+        @see wxExecute()
+
+        @since 3.1.1
+    */
+    wxString GetExpandedCommand(const wxString& verb,
+                                const wxFileType::MessageParameters& params) const;
+
     /**
        Returns the number of commands for this mime type, and fills the verbs
        and commands arrays with the command information.
