@@ -249,8 +249,8 @@ protected:
 
     // Notice that row here may be invalid (i.e. >= GetRowCount()), this is not
     // an error and this function simply returns an invalid item in this case.
-    virtual wxDataViewItem GetItemByRow( unsigned int row ) const;
-    virtual int GetRowByItem( const wxDataViewItem & item ) const;
+    wxDataViewItem GetItemByRow( unsigned int row ) const;
+    int GetRowByItem( const wxDataViewItem & item ) const;
 
     // Mark the column as being used or not for sorting.
     void UseColumnForSorting(int idx);
