@@ -36,7 +36,7 @@ public:
 
 /**
  * When platform has a way to generate an event before painting,
- * accumulate needed styling range and other work items in 
+ * accumulate needed styling range and other work items in
  * WorkNeeded to avoid unnecessary work inside paint handler
  */
 class WorkNeeded {
@@ -153,7 +153,7 @@ struct WrapPending {
  */
 class Editor : public EditModel, public DocWatcher {
 	// Private so Editor objects can not be copied
-	Editor(const Editor &);
+	explicit Editor(const Editor &);
 	Editor &operator=(const Editor &);
 
 protected:	// ScintillaBase subclass needs access to much of Editor
@@ -234,6 +234,8 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	bool paintingAllText;
 	bool willRedrawAll;
 	WorkNeeded workNeeded;
+	int idleStyling;
+	bool needIdleStyling;
 
 	int modEventMask;
 
@@ -313,18 +315,22 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void SetRectangularRange();
 	void ThinRectangularRange();
 	void InvalidateSelection(SelectionRange newMain, bool invalidateWholeSelection=false);
+	void InvalidateWholeSelection();
 	void SetSelection(SelectionPosition currentPos_, SelectionPosition anchor_);
 	void SetSelection(int currentPos_, int anchor_);
 	void SetSelection(SelectionPosition currentPos_);
 	void SetSelection(int currentPos_);
 	void SetEmptySelection(SelectionPosition currentPos_);
 	void SetEmptySelection(int currentPos_);
+	enum AddNumber { addOne, addEach };
+	void MultipleSelectAdd(AddNumber addNumber);
 	bool RangeContainsProtected(int start, int end) const;
 	bool SelectionContainsProtected();
 	int MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd=true) const;
 	SelectionPosition MovePositionOutsideChar(SelectionPosition pos, int moveDir, bool checkLineEnd=true) const;
-	int MovePositionTo(SelectionPosition newPos, Selection::selTypes selt=Selection::noSel, bool ensureVisible=true);
-	int MovePositionTo(int newPos, Selection::selTypes selt=Selection::noSel, bool ensureVisible=true);
+	void MovedCaret(SelectionPosition newPos, SelectionPosition previousPos, bool ensureVisible);
+	void MovePositionTo(SelectionPosition newPos, Selection::selTypes selt=Selection::noSel, bool ensureVisible=true);
+	void MovePositionTo(int newPos, Selection::selTypes selt=Selection::noSel, bool ensureVisible=true);
 	SelectionPosition MovePositionSoVisible(SelectionPosition pos, int moveDir);
 	SelectionPosition MovePositionSoVisible(int pos, int moveDir);
 	Point PointMainCaret();
@@ -388,7 +394,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int InsertSpace(int position, unsigned int spaces);
 	void AddChar(char ch);
 	virtual void AddCharUTF(const char *s, unsigned int len, bool treatAsDBCS=false);
-	void FillVirtualSpace();
+	void ClearBeforeTentativeStart();
 	void InsertPaste(const char *text, int len);
 	enum PasteShape { pasteStream=0, pasteRectangular = 1, pasteLine = 2 };
 	void InsertPasteShape(const char *text, int len, PasteShape shape);
@@ -455,9 +461,15 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void Duplicate(bool forLine);
 	virtual void CancelModes();
 	void NewLine();
-	void CursorUpOrDown(int direction, Selection::selTypes selt=Selection::noSel);
-	void ParaUpOrDown(int direction, Selection::selTypes selt=Selection::noSel);
+	SelectionPosition PositionUpOrDown(SelectionPosition spStart, int direction, int lastX);
+	void CursorUpOrDown(int direction, Selection::selTypes selt);
+	void ParaUpOrDown(int direction, Selection::selTypes selt);
 	int StartEndDisplayLine(int pos, bool start);
+	int VCHomeDisplayPosition(int position);
+	int VCHomeWrapPosition(int position);
+	int LineEndWrapPosition(int position);
+	int HorizontalMove(unsigned int iMessage);
+	int DelWordOrLine(unsigned int iMessage);
 	virtual int KeyCommand(unsigned int iMessage);
 	virtual int KeyDefault(int /* key */, int /*modifiers*/);
 	int KeyDownWithModifiers(int key, int modifiers, bool *consumed);
@@ -515,6 +527,10 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	int PositionAfterArea(PRectangle rcArea) const;
 	void StyleToPositionInView(Position pos);
+	int PositionAfterMaxStyling(int posMax, bool scrolling) const;
+	void StartIdleStyling(bool truncatedLastStyling);
+	void StyleAreaBounded(PRectangle rcArea, bool scrolling);
+	void IdleStyling();
 	virtual void IdleWork();
 	virtual void QueueIdleWork(WorkNeeded::workItems items, int upTo=0);
 

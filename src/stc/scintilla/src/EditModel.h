@@ -25,7 +25,7 @@ public:
 
 class EditModel {
 	// Private so EditModel objects can not be copied
-	EditModel(const EditModel &);
+	explicit EditModel(const EditModel &);
 	EditModel &operator=(const EditModel &);
 
 public:
@@ -42,7 +42,7 @@ public:
 	Selection sel;
 	bool primarySelection;
 
-	enum IMEInteraction { imeWindowed, imeInline } imeInteraction; 
+	enum IMEInteraction { imeWindowed, imeInline } imeInteraction;
 
 	int foldFlags;
 	ContractionState cs;

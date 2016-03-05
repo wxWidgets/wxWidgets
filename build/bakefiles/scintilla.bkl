@@ -69,6 +69,7 @@
             src/stc/scintilla/lexers/LexBaan.cxx
             src/stc/scintilla/lexers/LexBash.cxx
             src/stc/scintilla/lexers/LexBasic.cxx
+            src/stc/scintilla/lexers/LexBatch.cxx
             src/stc/scintilla/lexers/LexBibTeX.cxx
             src/stc/scintilla/lexers/LexBullant.cxx
             src/stc/scintilla/lexers/LexCaml.cxx
@@ -82,11 +83,13 @@
             src/stc/scintilla/lexers/LexCsound.cxx
             src/stc/scintilla/lexers/LexCSS.cxx
             src/stc/scintilla/lexers/LexD.cxx
+            src/stc/scintilla/lexers/LexDiff.cxx
             src/stc/scintilla/lexers/LexDMAP.cxx
             src/stc/scintilla/lexers/LexDMIS.cxx
             src/stc/scintilla/lexers/LexECL.cxx
             src/stc/scintilla/lexers/LexEiffel.cxx
             src/stc/scintilla/lexers/LexErlang.cxx
+            src/stc/scintilla/lexers/LexErrorList.cxx
             src/stc/scintilla/lexers/LexEScript.cxx
             src/stc/scintilla/lexers/LexFlagship.cxx
             src/stc/scintilla/lexers/LexForth.cxx
@@ -104,6 +107,7 @@
             src/stc/scintilla/lexers/LexLout.cxx
             src/stc/scintilla/lexers/LexLua.cxx
             src/stc/scintilla/lexers/LexMagik.cxx
+            src/stc/scintilla/lexers/LexMake.cxx
             src/stc/scintilla/lexers/LexMarkdown.cxx
             src/stc/scintilla/lexers/LexMatlab.cxx
             src/stc/scintilla/lexers/LexMetapost.cxx
@@ -114,9 +118,9 @@
             src/stc/scintilla/lexers/LexMySQL.cxx
             src/stc/scintilla/lexers/LexNimrod.cxx
             src/stc/scintilla/lexers/LexNsis.cxx
+            src/stc/scintilla/lexers/LexNull.cxx
             src/stc/scintilla/lexers/LexOpal.cxx
             src/stc/scintilla/lexers/LexOScript.cxx
-            src/stc/scintilla/lexers/LexOthers.cxx
             src/stc/scintilla/lexers/LexPascal.cxx
             src/stc/scintilla/lexers/LexPB.cxx
             src/stc/scintilla/lexers/LexPerl.cxx
@@ -126,6 +130,7 @@
             src/stc/scintilla/lexers/LexPowerPro.cxx
             src/stc/scintilla/lexers/LexPowerShell.cxx
             src/stc/scintilla/lexers/LexProgress.cxx
+            src/stc/scintilla/lexers/LexProps.cxx
             src/stc/scintilla/lexers/LexPS.cxx
             src/stc/scintilla/lexers/LexPython.cxx
             src/stc/scintilla/lexers/LexR.cxx

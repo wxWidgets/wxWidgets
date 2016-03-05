@@ -344,6 +344,9 @@
 				RelativePath="..\..\src\stc\scintilla\lexers\LexBasic.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexBatch.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexBibTeX.cxx">
 			</File>
 			<File
@@ -389,6 +392,9 @@
 				RelativePath="..\..\src\stc\scintilla\lexers\LexDMIS.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexDiff.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexECL.cxx">
 			</File>
 			<File
@@ -399,6 +405,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexErlang.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexErrorList.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexFlagship.cxx">
@@ -458,6 +467,9 @@
 				RelativePath="..\..\src\stc\scintilla\lexers\LexMagik.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexMake.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexMarkdown.cxx">
 			</File>
 			<File
@@ -479,13 +491,13 @@
 				RelativePath="..\..\src\stc\scintilla\lexers\LexNsis.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexNull.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexOScript.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexOpal.cxx">
-			</File>
-			<File
-				RelativePath="..\..\src\stc\scintilla\lexers\LexOthers.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexPB.cxx">
@@ -516,6 +528,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexProgress.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexProps.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexPython.cxx">

@@ -68,6 +68,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_WS_INVISIBLE 0
 #define wxSTC_WS_VISIBLEALWAYS 1
 #define wxSTC_WS_VISIBLEAFTERINDENT 2
+#define wxSTC_WS_VISIBLEONLYININDENT 3
 #define wxSTC_EOL_CRLF 0
 #define wxSTC_EOL_CR 1
 #define wxSTC_EOL_LF 2
@@ -158,6 +159,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_CHARSET_MAC 77
 #define wxSTC_CHARSET_OEM 255
 #define wxSTC_CHARSET_RUSSIAN 204
+#define wxSTC_CHARSET_OEM866 866
 #define wxSTC_CHARSET_CYRILLIC 1251
 #define wxSTC_CHARSET_SHIFTJIS 128
 #define wxSTC_CHARSET_SYMBOL 2
@@ -171,6 +173,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_CASE_MIXED 0
 #define wxSTC_CASE_UPPER 1
 #define wxSTC_CASE_LOWER 2
+#define wxSTC_CASE_CAMEL 3
 #define wxSTC_FONT_SIZE_MULTIPLIER 100
 #define wxSTC_WEIGHT_NORMAL 400
 #define wxSTC_WEIGHT_SEMIBOLD 600
@@ -248,6 +251,10 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_FOLDFLAG_LEVELNUMBERS 0x0040
 #define wxSTC_FOLDFLAG_LINESTATE 0x0080
 #define wxSTC_TIME_FOREVER 10000000
+#define wxSTC_IDLESTYLING_NONE 0
+#define wxSTC_IDLESTYLING_TOVISIBLE 1
+#define wxSTC_IDLESTYLING_AFTERVISIBLE 2
+#define wxSTC_IDLESTYLING_ALL 3
 #define wxSTC_WRAP_NONE 0
 #define wxSTC_WRAP_WORD 1
 #define wxSTC_WRAP_CHAR 2
@@ -317,7 +324,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 /// If CARET_EVEN is not set, instead of having symmetrical UZs,
 /// the left and bottom UZs are extended up to right and top UZs respectively.
-/// This way, we favour the displaying of useful information: the begining of lines,
+/// This way, we favour the displaying of useful information: the beginning of lines,
 /// where most code reside, and the lines after the caret, eg. the body of a function.
 #define wxSTC_CARET_EVEN 0x08
 #define wxSTC_SEL_STREAM 0
@@ -428,6 +435,11 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_SCMOD_ALT 4
 #define wxSTC_SCMOD_SUPER 8
 #define wxSTC_SCMOD_META 16
+#define wxSTC_AC_FILLUP 1
+#define wxSTC_AC_DOUBLECLICK 2
+#define wxSTC_AC_TAB 3
+#define wxSTC_AC_NEWLINE 4
+#define wxSTC_AC_COMMAND 5
 
 /// For SciLexer.h
 #define wxSTC_LEX_CONTAINER 0
@@ -571,7 +583,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_P_WORD2 14
 #define wxSTC_P_DECORATOR 15
 
-/// Lexical states for SCLEX_CPP
+/// Lexical states for SCLEX_CPP, SCLEX_BULLANT, SCLEX_COBOL, SCLEX_TACL, SCLEX_TAL
 #define wxSTC_C_DEFAULT 0
 #define wxSTC_C_COMMENT 1
 #define wxSTC_C_COMMENTLINE 2
@@ -870,7 +882,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_RB_STDERR 40
 #define wxSTC_RB_UPPER_BOUND 41
 
-/// Lexical states for SCLEX_VB, SCLEX_VBSCRIPT, SCLEX_POWERBASIC
+/// Lexical states for SCLEX_VB, SCLEX_VBSCRIPT, SCLEX_POWERBASIC, SCLEX_BLITZBASIC, SCLEX_PUREBASIC, SCLEX_FREEBASIC
 #define wxSTC_B_DEFAULT 0
 #define wxSTC_B_COMMENT 1
 #define wxSTC_B_NUMBER 2
@@ -965,6 +977,24 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_ERR_JAVA_STACK 20
 #define wxSTC_ERR_VALUE 21
 #define wxSTC_ERR_GCC_INCLUDED_FROM 22
+#define wxSTC_ERR_ESCSEQ 23
+#define wxSTC_ERR_ESCSEQ_UNKNOWN 24
+#define wxSTC_ERR_ES_BLACK 40
+#define wxSTC_ERR_ES_RED 41
+#define wxSTC_ERR_ES_GREEN 42
+#define wxSTC_ERR_ES_BROWN 43
+#define wxSTC_ERR_ES_BLUE 44
+#define wxSTC_ERR_ES_MAGENTA 45
+#define wxSTC_ERR_ES_CYAN 46
+#define wxSTC_ERR_ES_GRAY 47
+#define wxSTC_ERR_ES_DARK_GRAY 48
+#define wxSTC_ERR_ES_BRIGHT_RED 49
+#define wxSTC_ERR_ES_BRIGHT_GREEN 50
+#define wxSTC_ERR_ES_YELLOW 51
+#define wxSTC_ERR_ES_BRIGHT_BLUE 52
+#define wxSTC_ERR_ES_BRIGHT_MAGENTA 53
+#define wxSTC_ERR_ES_BRIGHT_CYAN 54
+#define wxSTC_ERR_ES_WHITE 55
 
 /// Lexical states for SCLEX_BATCH
 #define wxSTC_BAT_DEFAULT 0
@@ -2175,6 +2205,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_COFFEESCRIPT_COMMENTBLOCK 22
 #define wxSTC_COFFEESCRIPT_VERBOSE_REGEX 23
 #define wxSTC_COFFEESCRIPT_VERBOSE_REGEX_COMMENT 24
+#define wxSTC_COFFEESCRIPT_INSTANCEPROPERTY 25
 
 /// Lexical states for SCLEX_AVS
 #define wxSTC_AVS_DEFAULT 0
@@ -2900,7 +2931,7 @@ public:
     // Set the code page used to interpret the bytes of the document as characters.
     void SetCodePage(int codePage);
 
-    // Is the IME displayed in a winow or inline?
+    // Is the IME displayed in a window or inline?
     int GetIMEInteraction() const;
 
     // Choose to display the the IME in a winow or inline.
@@ -3526,6 +3557,12 @@ public:
     // Retrieve the text in the target.
     wxString GetTargetText() const;
 
+    // Make the target range start and end be the same as the selection range start and end.
+    void TargetFromSelection();
+
+    // Sets the target to the whole document.
+    void TargetWholeDocument();
+
     // Replace the target text with the argument text.
     // Text is counted so it can contain NULs.
     // Returns the length of the replacement text.
@@ -3679,6 +3716,15 @@ public:
     // Get position of end of word.
     int WordEndPosition(int pos, bool onlyWordCharacters);
 
+    // Is the range start..end considered a word?
+    bool IsRangeWord(int start, int end);
+
+    // Sets limits to idle styling.
+    void SetIdleStyling(int idleStyling);
+
+    // Retrieve the limits to idle styling.
+    int GetIdleStyling() const;
+
     // Sets whether text is word wrapped.
     void SetWrapMode(int mode);
 
@@ -3781,9 +3827,6 @@ public:
     // Retrieve the value of a tag from a regular expression search.
     // Result is NUL-terminated.
     wxString GetTag(int tagNumber) const;
-
-    // Make the target range start and end be the same as the selection range start and end.
-    void TargetFromSelection();
 
     // Join the lines in the target.
     void LinesJoin();
@@ -4285,7 +4328,7 @@ public:
     // Change the effect of autocompleting when there are multiple selections.
     void AutoCompSetMulti(int multi);
 
-    // Retrieve the effect of autocompleting when there are multiple selections..
+    // Retrieve the effect of autocompleting when there are multiple selections.
     int AutoCompGetMulti() const;
 
     // Set the way autocompletion lists are ordered.
@@ -4610,6 +4653,14 @@ public:
 
     // Swap that caret and anchor of the main selection.
     void SwapMainAnchorCaret();
+
+    // Add the next occurrence of the main selection to the set of selections as main.
+    // If the current selection is empty then select word around caret.
+    void MultipleSelectAddNext();
+
+    // Add each occurrence of the main selection in the target to the set of selections.
+    // If the current selection is empty then select word around caret.
+    void MultipleSelectAddEach();
 
     // Indicate that the internal state of a lexer has changed over a range and therefore
     // there may be a need to redraw.

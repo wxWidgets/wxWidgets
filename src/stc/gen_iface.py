@@ -105,7 +105,7 @@ methodOverrideMap = {
                        0),
 
     'AppendText' : (0,
-                 'void %s(const wxString& text);',
+                 'void %s(const wxString& text) wxOVERRIDE;',
 
                  '''void %s(const wxString& text) {
                     const wxWX2MBbuf buf = wx2stc(text);
@@ -1001,6 +1001,21 @@ constNonGetterMethods = (
     'CanUndo',
 )
 
+# several methods require wxOVERRIDE
+overrideNeeded = (
+    'Redo',
+    'SelectAll',
+    'Undo',
+    'Cut',
+    'Copy',
+    'Paste',
+    'CanPaste',
+    'CanRedo',
+    'CanUndo',
+    'Clear',
+    'AppendText',
+)
+
 #----------------------------------------------------------------------------
 
 def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_dest, ih_dest, msgcodes):
@@ -1120,7 +1135,7 @@ def processMethods(methods):
     imps = []
     dstr = []
 
-    for retType, name, number, param1, param2, docs, is_const in methods:
+    for retType, name, number, param1, param2, docs, is_const, is_override in methods:
         retType = retTypeMap.get(retType, retType)
         params = makeParamString(param1, param2)
 
@@ -1143,8 +1158,14 @@ def processMethods(methods):
             theDef = '    %s %s(%s)' % (retType, name, params)
             if is_const:
                 theDef = theDef + ' const'
+            if is_override:
+                theDef = theDef + ' wxOVERRIDE'
             theDef = theDef + ';'
         defs.append(theDef)
+
+        # Skip override from the interface file
+        if is_override:
+          theDef = theDef.replace(' wxOVERRIDE', '')
 
         # Build the method definition for the interface .h file
         if docs:
@@ -1300,7 +1321,7 @@ def parseFun(line, methods, docs, values, is_const, msgcodes):
     else:
         code = number
     methods.append( (retType, name, code, param1, param2, tuple(docs),
-                     is_const or name in constNonGetterMethods) )
+                     is_const or name in constNonGetterMethods, name in overrideNeeded) )
 
 
 #----------------------------------------------------------------------------

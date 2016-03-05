@@ -63,6 +63,10 @@ All:
   wxLog::SetVerbose() which now only affects wxLogVerbose().
 - Add wxFileType::GetExpandedCommand() (troelsk).
 
+All (GUI):
+
+- Update Scintilla to v3.6.3 (Paul Kulchenko).
+
 wxMSW:
 
 - Fix crash when using wxCHMHelpController() in 64 bit builds (Xlord2).
