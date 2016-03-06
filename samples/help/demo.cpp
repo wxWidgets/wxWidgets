@@ -531,7 +531,7 @@ void MyFrame::OnBestHelp(wxCommandEvent& event)
 #if USE_HTML_HELP
 void MyFrame::OnModalHtmlHelp(wxCommandEvent& WXUNUSED(event))
 {
-    wxHtmlModalHelp modalHelp(this, wxT("doc.zip"), wxT("Introduction"));
+    wxHtmlModalHelp(this, wxT("doc.zip"), wxT("Introduction"));
 }
 #endif
 
