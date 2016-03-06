@@ -60,11 +60,6 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpFrame, wxFrame);
 wxBEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
     EVT_ACTIVATE(wxHtmlHelpFrame::OnActivate)
     EVT_CLOSE(wxHtmlHelpFrame::OnCloseWindow)
-#ifdef __WXMAC__
-    EVT_MENU(wxID_CLOSE, wxHtmlHelpFrame::OnClose)
-    EVT_MENU(wxID_ABOUT, wxHtmlHelpFrame::OnAbout)
-    EVT_MENU(wxID_HELP_CONTENTS, wxHtmlHelpFrame::OnAbout)
-#endif
 wxEND_EVENT_TABLE()
 
 wxHtmlHelpFrame::wxHtmlHelpFrame(wxWindow* parent, wxWindowID id, const wxString& title,
@@ -126,27 +121,6 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
     GetPosition(& (m_HtmlHelpWin->GetCfgData().x), & (m_HtmlHelpWin->GetCfgData()).y);
 
     SetIcons(wxArtProvider::GetIconBundle(wxART_HELP, wxART_FRAME_ICON));
-
-    // On the Mac, each modeless frame must have a menubar.
-    // TODO: add more menu items, and perhaps add a style to show
-    // the menubar: compulsory on the Mac, optional elsewhere.
-#ifdef __WXMAC__
-    wxMenuBar* menuBar = new wxMenuBar;
-
-    wxMenu* fileMenu = new wxMenu;
-    fileMenu->Append(wxID_HTML_OPENFILE, _("&Open..."));
-    fileMenu->AppendSeparator();
-    fileMenu->Append(wxID_CLOSE, _("&Close"));
-
-    wxMenu* helpMenu = new wxMenu;
-    helpMenu->Append(wxID_ABOUT, _("&About"));
-    // Ensures we don't get an empty help menu
-    helpMenu->Append(wxID_HELP_CONTENTS, _("&About"));
-
-    menuBar->Append(fileMenu,_("&File"));
-    menuBar->Append(helpMenu,_("&Help"));
-    SetMenuBar(menuBar);
-#endif
 
     m_HtmlHelpWin->GetHtmlWindow()->SetRelatedFrame(this, m_TitleFormat);
 #if wxUSE_STATUSBAR
@@ -250,18 +224,5 @@ void wxHtmlHelpFrame::SetShouldPreventAppExit(bool enable)
 {
     m_shouldPreventAppExit = enable;
 }
-
-#ifdef __WXMAC__
-void wxHtmlHelpFrame::OnClose(wxCommandEvent& WXUNUSED(event))
-{
-    Close(true);
-}
-
-void wxHtmlHelpFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
-{
-    wxMessageBox(wxT("wxWidgets HTML Help Viewer (c) 1998-2006, Vaclav Slavik et al"), wxT("HelpView"),
-        wxICON_INFORMATION|wxOK, this);
-}
-#endif
 
 #endif // wxUSE_WXHTML_HELP
