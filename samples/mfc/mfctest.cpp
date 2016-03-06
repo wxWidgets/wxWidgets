@@ -295,9 +295,14 @@ BOOL CTheApp::PreTranslateMessage(MSG *msg)
     return CWinApp::PreTranslateMessage(msg);
 }
 
-BOOL CTheApp::OnIdle(LONG WXUNUSED(lCount))
+BOOL CTheApp::OnIdle(LONG lCount)
 {
-    return wxTheApp && wxTheApp->ProcessIdle();
+    BOOL moreIdle = CWinApp::OnIdle(lCount);
+
+    if ( wxTheApp && wxTheApp->ProcessIdle() )
+        moreIdle = TRUE;
+
+    return moreIdle;
 }
 
 /*********************************************************************
