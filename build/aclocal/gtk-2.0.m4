@@ -24,19 +24,8 @@ AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run 
 
   no_gtk=""
 
-  AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
-
-  if test x$PKG_CONFIG != xno ; then
-    if pkg-config --atleast-pkgconfig-version 0.7 ; then
-      :
-    else
-      echo "*** pkg-config too old; version 0.7 or better required."
-      no_gtk=yes
-      PKG_CONFIG=no
-    fi
-  else
-    no_gtk=yes
-  fi
+  AC_REQUIRE([PKG_PROG_PKG_CONFIG])
+  PKG_PROG_PKG_CONFIG([0.7])
 
   min_gtk_version=ifelse([$1], ,2.0.0,$1)
   AC_MSG_CHECKING(for GTK+ - version >= $min_gtk_version)
@@ -85,7 +74,7 @@ main ()
   int major, minor, micro;
   char *tmp_version;
 
-  system ("touch conf.gtktest");
+  fclose (fopen ("conf.gtktest", "w"));
 
   /* HP/UX 9 (%@#!) writes to sscanf strings */
   tmp_version = g_strdup("$min_gtk_version");
@@ -103,7 +92,7 @@ main ()
              gtk_major_version, gtk_minor_version, gtk_micro_version);
       printf ("*** was found! If pkg-config was correct, then it is best\n");
       printf ("*** to remove the old version of GTK+. You may also be able to fix the error\n");
-      printf("*** by modifying your LD_LIBRARY_PATH environment variable, or by editing\n");
+      printf("*** by modifying your LD_LIBRARY_PATH enviroment variable, or by editing\n");
       printf("*** /etc/ld.so.conf. Make sure you have run ldconfig if that is\n");
       printf("*** required on your system.\n");
       printf("*** If pkg-config was wrong, set the environment variable PKG_CONFIG_PATH\n");
@@ -139,7 +128,7 @@ main ()
         printf("*** being found. The easiest way to fix this is to remove the old version\n");
         printf("*** of GTK+, but you can also set the PKG_CONFIG environment to point to the\n");
         printf("*** correct copy of pkg-config. (In this case, you will have to\n");
-        printf("*** modify your LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf\n");
+        printf("*** modify your LD_LIBRARY_PATH enviroment variable, or edit /etc/ld.so.conf\n");
         printf("*** so that the correct libraries are found at run-time))\n");
       }
     }
@@ -181,7 +170,7 @@ main ()
           echo "*** If you have an old version installed, it is best to remove it, although"
           echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH" ],
         [ echo "*** The test program failed to compile or link. See the file config.log for the"
-          echo "*** exact error that occurred. This usually means GTK+ is incorrectly installed."])
+          echo "*** exact error that occured. This usually means GTK+ is incorrectly installed."])
           CFLAGS="$ac_save_CFLAGS"
           LIBS="$ac_save_LIBS"
        fi
