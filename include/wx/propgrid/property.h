@@ -2651,7 +2651,7 @@ protected:
     unsigned int GetTextColIndex() const
         { return (unsigned int) m_capFgColIndex; }
 
-    void CalculateTextExtent( wxWindow* wnd, const wxFont& font );
+    void CalculateTextExtent(const wxWindow* wnd, const wxFont& font);
 
     int     m_textExtent;  // pre-calculated length of text
     wxByte  m_capFgColIndex;  // caption text colour index

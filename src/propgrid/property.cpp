@@ -2944,7 +2944,7 @@ int wxPropertyCategory::GetTextExtent( const wxWindow* wnd, const wxFont& font )
     return DoGetTextExtent(wnd, m_label, font);
 }
 
-void wxPropertyCategory::CalculateTextExtent( wxWindow* wnd, const wxFont& font )
+void wxPropertyCategory::CalculateTextExtent(const wxWindow* wnd, const wxFont& font)
 {
     m_textExtent = DoGetTextExtent(wnd, m_label, font);
 }
