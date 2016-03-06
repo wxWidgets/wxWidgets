@@ -630,54 +630,57 @@ enum wxPG_SET_SPLITTER_POSITION_SPLITTER_FLAGS
 // -----------------------------------------------------------------------
 
 // Internal flags
-#define wxPG_FL_INITIALIZED                 0x0001
-// Set when creating editor controls if it was clicked on.
-#define wxPG_FL_ACTIVATION_BY_CLICK         0x0002
-#define wxPG_FL_DONT_CENTER_SPLITTER        0x0004
-#define wxPG_FL_FOCUSED                     0x0008
-#define wxPG_FL_MOUSE_CAPTURED              0x0010
-#define wxPG_FL_MOUSE_INSIDE                0x0020
-#define wxPG_FL_VALUE_MODIFIED              0x0040
-// don't clear background of m_wndEditor
-#define wxPG_FL_PRIMARY_FILLS_ENTIRE        0x0080
-// currently active editor uses custom image
-#define wxPG_FL_CUR_USES_CUSTOM_IMAGE       0x0100
-// cell colours override selection colours for selected cell
-#define wxPG_FL_CELL_OVERRIDES_SEL          0x0200
-#define wxPG_FL_SCROLLED                    0x0400
-// set when all added/inserted properties get hideable flag
-#define wxPG_FL_ADDING_HIDEABLES            0x0800
-// Disables showing help strings on statusbar.
-#define wxPG_FL_NOSTATUSBARHELP             0x1000
-// Marks that we created the state, so we have to destroy it too.
-#define wxPG_FL_CREATEDSTATE                0x2000
-// Set if scrollbar's existence was detected in last onresize.
-#define wxPG_FL_SCROLLBAR_DETECTED          0x4000
-// Set if wxPGMan requires redrawing of description text box.
-#define wxPG_FL_DESC_REFRESH_REQUIRED       0x8000
-// Set if contained in wxPropertyGridManager
-#define wxPG_FL_IN_MANAGER                  0x00020000
-// Set after wxPropertyGrid is shown in its initial good size
-#define wxPG_FL_GOOD_SIZE_SET               0x00040000
-// Set when in SelectProperty.
-#define wxPG_FL_IN_SELECT_PROPERTY          0x00100000
-// Set when help string is shown in status bar
-#define wxPG_FL_STRING_IN_STATUSBAR         0x00200000
-// Auto sort is enabled (for categorized mode)
-#define wxPG_FL_CATMODE_AUTO_SORT           0x01000000
-// Set after page has been inserted to manager
-#define wxPG_MAN_FL_PAGE_INSERTED           0x02000000
-// Active editor control is abnormally large
-#define wxPG_FL_ABNORMAL_EDITOR             0x04000000
-// Recursion guard for HandleCustomEditorEvent
-#define wxPG_FL_IN_HANDLECUSTOMEDITOREVENT  0x08000000
-#define wxPG_FL_VALUE_CHANGE_IN_EVENT       0x10000000
-// Editor control width should not change on resize
-#define wxPG_FL_FIXED_WIDTH_EDITOR          0x20000000
-// Width of panel can be different than width of grid
-#define wxPG_FL_HAS_VIRTUAL_WIDTH           0x40000000
-// Prevents RecalculateVirtualSize re-entrancy
-#define wxPG_FL_RECALCULATING_VIRTUAL_SIZE  0x80000000
+enum wxPG_INTERNAL_FLAGS
+{
+    wxPG_FL_INITIALIZED                 =     0x0001,
+    // Set when creating editor controls if it was clicked on.
+    wxPG_FL_ACTIVATION_BY_CLICK         =     0x0002,
+    wxPG_FL_DONT_CENTER_SPLITTER        =     0x0004,
+    wxPG_FL_FOCUSED                     =     0x0008,
+    wxPG_FL_MOUSE_CAPTURED              =     0x0010,
+    wxPG_FL_MOUSE_INSIDE                =     0x0020,
+    wxPG_FL_VALUE_MODIFIED              =     0x0040,
+    // don't clear background of m_wndEditor
+    wxPG_FL_PRIMARY_FILLS_ENTIRE        =     0x0080,
+    // currently active editor uses custom image
+    wxPG_FL_CUR_USES_CUSTOM_IMAGE       =     0x0100,
+    // cell colours override selection colours for selected cell
+    wxPG_FL_CELL_OVERRIDES_SEL          =     0x0200,
+    wxPG_FL_SCROLLED                    =     0x0400,
+    // set when all added/inserted properties get hideable flag
+    wxPG_FL_ADDING_HIDEABLES            =     0x0800,
+    // Disables showing help strings on statusbar.
+    wxPG_FL_NOSTATUSBARHELP             =     0x1000,
+    // Marks that we created the state, so we have to destroy it too.
+    wxPG_FL_CREATEDSTATE                =     0x2000,
+    // Set if scrollbar's existence was detected in last onresize.
+    wxPG_FL_SCROLLBAR_DETECTED          =     0x4000,
+    // Set if wxPGMan requires redrawing of description text box.
+    wxPG_FL_DESC_REFRESH_REQUIRED       =     0x8000,
+    // Set if contained in wxPropertyGridManager
+    wxPG_FL_IN_MANAGER                  = 0x00020000,
+    // Set after wxPropertyGrid is shown in its initial good size
+    wxPG_FL_GOOD_SIZE_SET               = 0x00040000,
+    // Set when in SelectProperty.
+    wxPG_FL_IN_SELECT_PROPERTY          = 0x00100000,
+    // Set when help string is shown in status bar
+    wxPG_FL_STRING_IN_STATUSBAR         = 0x00200000,
+    // Auto sort is enabled (for categorized mode)
+    wxPG_FL_CATMODE_AUTO_SORT           = 0x01000000,
+    // Set after page has been inserted to manager
+    wxPG_MAN_FL_PAGE_INSERTED           = 0x02000000,
+    // Active editor control is abnormally large
+    wxPG_FL_ABNORMAL_EDITOR             = 0x04000000,
+    // Recursion guard for HandleCustomEditorEvent
+    wxPG_FL_IN_HANDLECUSTOMEDITOREVENT  = 0x08000000,
+    wxPG_FL_VALUE_CHANGE_IN_EVENT       = 0x10000000,
+    // Editor control width should not change on resize
+    wxPG_FL_FIXED_WIDTH_EDITOR          = 0x20000000,
+    // Width of panel can be different than width of grid
+    wxPG_FL_HAS_VIRTUAL_WIDTH           = 0x40000000,
+    // Prevents RecalculateVirtualSize re-entrancy
+    wxPG_FL_RECALCULATING_VIRTUAL_SIZE  = 0x80000000
+};
 
 #if !defined(__wxPG_SOURCE_FILE__)
     // Reduce compile time, but still include in user app
