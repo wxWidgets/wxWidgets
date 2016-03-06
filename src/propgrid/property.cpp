@@ -2930,20 +2930,23 @@ wxString wxPropertyCategory::GetValueAsString( int argFlags ) const
     return wxPGProperty::GetValueAsString(argFlags);
 }
 
+static int DoGetTextExtent(const wxWindow* wnd, const wxString& label, const wxFont& font)
+{
+    int x = 0, y = 0;
+    wnd->GetTextExtent(label, &x, &y, 0, 0, &font);
+    return x;
+}
+
 int wxPropertyCategory::GetTextExtent( const wxWindow* wnd, const wxFont& font ) const
 {
     if ( m_textExtent > 0 )
         return m_textExtent;
-    int x = 0, y = 0;
-    ((wxWindow*)wnd)->GetTextExtent( m_label, &x, &y, 0, 0, &font );
-    return x;
+    return DoGetTextExtent(wnd, m_label, font);
 }
 
 void wxPropertyCategory::CalculateTextExtent( wxWindow* wnd, const wxFont& font )
 {
-    int x = 0, y = 0;
-    wnd->GetTextExtent( m_label, &x, &y, 0, 0, &font );
-    m_textExtent = x;
+    m_textExtent = DoGetTextExtent(wnd, m_label, font);
 }
 
 // -----------------------------------------------------------------------
