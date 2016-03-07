@@ -1079,7 +1079,10 @@ bool wxPropertyGridManager::IsPageModified( size_t index ) const
 {
     wxCHECK_MSG( index < GetPageCount(), false, wxS("Invalid page index") );
 
-    return m_arrPages[index]->GetStatePtr()->m_anyModified;
+    if ( m_arrPages[index]->GetStatePtr()->m_anyModified )
+        return true;
+
+    return false;
 }
 
 // -----------------------------------------------------------------------
