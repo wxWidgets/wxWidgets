@@ -13,6 +13,12 @@
 
 #include "wx/generic/hyperlink.h"
 
+#include "wx/scopedptr.h"
+
+#ifdef __WXGTK3__
+class wxHyperlinkCtrlColData;
+#endif
+
 // ----------------------------------------------------------------------------
 // wxHyperlinkCtrl
 // ----------------------------------------------------------------------------
@@ -71,6 +77,19 @@ protected:
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
+
+private:
+    enum LinkKind
+    {
+        Link_Normal,
+        Link_Visited
+    };
+
+    void DoSetLinkColour(LinkKind linkKind, const wxColour& colour);
+
+#ifdef __WXGTK3__
+    wxScopedPtr<wxHyperlinkCtrlColData> m_colData;
+#endif
 
     wxDECLARE_DYNAMIC_CLASS(wxHyperlinkCtrl);
 };
