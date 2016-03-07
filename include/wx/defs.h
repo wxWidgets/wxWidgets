@@ -367,7 +367,8 @@ typedef short int WXTYPE;
 
 /*
     Check for C++11 compilers, it is important to do it before the
-    __has_include() checks because of g++ 4.9.2+ complications below.
+    __has_include() checks because at least g++ 4.9.2+ __has_include() returns
+    true for C++11 headers which can't be compiled in non-C++11 mode.
  */
 #if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
     #ifndef HAVE_TYPE_TRAITS
@@ -381,46 +382,20 @@ typedef short int WXTYPE;
     #endif
 #elif defined(__has_include)
     /*
-        Notice that we trust our configure tests more than __has_include(),
-        notably the latter can return true even if the header exists but isn't
-        actually usable, as it happens with <type_traits> in non C++11 mode.
-        So if configure already detected at least one working alternative,
-        just use it.
+        We're in non-C++11 mode here, so only test for pre-C++11 headers. As
+        mentioned above, using __has_include() to test for C++11 would wrongly
+        detect them even though they can't be used in this case, don't do it.
      */
-
-    /*
-        Since 4.9.2, g++ provides __has_include() but, unlike clang, refuses to
-        compile the C++11 headers in C++98 mode (and we are sure we use the
-        latter because we explicitly checked for C++11 above).
-     */
-    #if defined(__GNUC__) && !defined(__clang__)
-        #define wx_has_cpp11_include(h) 0
-    #else
-        #define wx_has_cpp11_include(h) __has_include(h)
+    #if !defined(HAVE_TR1_TYPE_TRAITS) && __has_include(<tr1/type_traits>)
+        #define HAVE_TR1_TYPE_TRAITS
     #endif
 
-    #if !defined(HAVE_TYPE_TRAITS) && !defined(HAVE_TR1_TYPE_TRAITS)
-        #if wx_has_cpp11_include(<type_traits>)
-            #define HAVE_TYPE_TRAITS
-        #elif __has_include(<tr1/type_traits>)
-            #define HAVE_TR1_TYPE_TRAITS
-        #endif
+    #if !defined(HAVE_TR1_UNORDERED_MAP) && __has_include(<tr1/unordered_map>)
+        #define HAVE_TR1_UNORDERED_MAP
     #endif
 
-    #if !defined(HAVE_STD_UNORDERED_MAP) && !defined(HAVE_TR1_UNORDERED_MAP)
-        #if wx_has_cpp11_include(<unordered_map>)
-            #define HAVE_STD_UNORDERED_MAP
-        #elif __has_include(<tr1/unordered_map>)
-            #define HAVE_TR1_UNORDERED_MAP
-        #endif
-    #endif
-
-    #if !defined(HAVE_STD_UNORDERED_SET) && !defined(HAVE_TR1_UNORDERED_SET)
-        #if wx_has_cpp11_include(<unordered_set>)
-            #define HAVE_STD_UNORDERED_SET
-        #elif __has_include(<tr1/unordered_set>)
-            #define HAVE_TR1_UNORDERED_SET
-        #endif
+    #if !defined(HAVE_TR1_UNORDERED_SET) && __has_include(<tr1/unordered_set>)
+        #define HAVE_TR1_UNORDERED_SET
     #endif
 #endif /* defined(__has_include) */
 
