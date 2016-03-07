@@ -4426,7 +4426,21 @@ PangoContext *wxWindowGTK::GTKGetPangoDefaultContext()
     return gtk_widget_get_pango_context( m_widget );
 }
 
-#ifndef __WXGTK3__
+#ifdef __WXGTK3__
+void wxWindowGTK::ApplyCssStyle(GtkCssProvider* provider, const char* style)
+{
+    wxCHECK_RET(m_widget, "invalid window");
+
+    gtk_style_context_remove_provider(gtk_widget_get_style_context(m_widget),
+                                      GTK_STYLE_PROVIDER(provider));
+
+    gtk_css_provider_load_from_data(provider, style, -1, NULL);
+
+    gtk_style_context_add_provider(gtk_widget_get_style_context(m_widget),
+                                   GTK_STYLE_PROVIDER(provider),
+                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+}
+#else // GTK+ < 3
 GtkRcStyle* wxWindowGTK::GTKCreateWidgetStyle()
 {
     GtkRcStyle *style = gtk_rc_style_new();
