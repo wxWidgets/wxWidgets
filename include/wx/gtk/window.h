@@ -14,6 +14,7 @@
 #ifdef __WXGTK3__
     typedef struct _cairo cairo_t;
     typedef struct _GtkStyleProvider GtkStyleProvider;
+    typedef struct _GtkCssProvider GtkCssProvider;
     #define WXUNUSED_IN_GTK2(x) x
     #define WXUNUSED_IN_GTK3(x)
 #else
@@ -409,7 +410,11 @@ protected:
     // Copies m_children tab order to GTK focus chain:
     void RealizeTabOrder();
 
-#ifndef __WXGTK3__
+#ifdef __WXGTK3__
+    // Use the given CSS string for styling the widget. The provider must be
+    // allocated, and remains owned, by the caller.
+    void ApplyCssStyle(GtkCssProvider* provider, const char* style);
+#else // GTK+ < 3
     // Called by ApplyWidgetStyle (which is called by SetFont() and
     // SetXXXColour etc to apply style changed to native widgets) to create
     // modified GTK style with non-standard attributes.
