@@ -392,36 +392,36 @@ typedef short int WXTYPE;
         Since 4.9.2, g++ provides __has_include() but, unlike clang, refuses to
         compile the C++11 headers in C++98 mode (and we are sure we use the
         latter because we explicitly checked for C++11 above).
+
+        Note that clang < 3.3 does not support the following syntax:
+            #define foo(h) __has_include(h)
+            #foo(<bar>)
      */
-    #if defined(__GNUC__) && !defined(__clang__)
-        #define wx_has_cpp11_include(h) 0
-    #else
-        #define wx_has_cpp11_include(h) __has_include(h)
-    #endif
-
-    #if !defined(HAVE_TYPE_TRAITS) && !defined(HAVE_TR1_TYPE_TRAITS)
-        #if wx_has_cpp11_include(<type_traits>)
-            #define HAVE_TYPE_TRAITS
-        #elif __has_include(<tr1/type_traits>)
-            #define HAVE_TR1_TYPE_TRAITS
+    #if defined(__GNUC__)
+        #if !defined(HAVE_TYPE_TRAITS) && !defined(HAVE_TR1_TYPE_TRAITS)
+            #if defined(__clang__) && __has_include(<type_traits>)
+                #define HAVE_TYPE_TRAITS
+            #elif __has_include(<tr1/type_traits>)
+                #define HAVE_TR1_TYPE_TRAITS
+            #endif
         #endif
-    #endif
 
-    #if !defined(HAVE_STD_UNORDERED_MAP) && !defined(HAVE_TR1_UNORDERED_MAP)
-        #if wx_has_cpp11_include(<unordered_map>)
-            #define HAVE_STD_UNORDERED_MAP
-        #elif __has_include(<tr1/unordered_map>)
-            #define HAVE_TR1_UNORDERED_MAP
+        #if !defined(HAVE_STD_UNORDERED_MAP) && !defined(HAVE_TR1_UNORDERED_MAP)
+            #if defined(__clang__) && __has_include(<unordered_map>)
+                #define HAVE_STD_UNORDERED_MAP
+            #elif __has_include(<tr1/unordered_map>)
+                #define HAVE_TR1_UNORDERED_MAP
+            #endif
         #endif
-    #endif
 
-    #if !defined(HAVE_STD_UNORDERED_SET) && !defined(HAVE_TR1_UNORDERED_SET)
-        #if wx_has_cpp11_include(<unordered_set>)
-            #define HAVE_STD_UNORDERED_SET
-        #elif __has_include(<tr1/unordered_set>)
-            #define HAVE_TR1_UNORDERED_SET
+        #if !defined(HAVE_STD_UNORDERED_SET) && !defined(HAVE_TR1_UNORDERED_SET)
+            #if defined(__clang__) && __has_include(<unordered_set>)
+                #define HAVE_STD_UNORDERED_SET
+            #elif __has_include(<tr1/unordered_set>)
+                #define HAVE_TR1_UNORDERED_SET
+            #endif
         #endif
-    #endif
+    #endif /* defined(__GNUC__) */
 #endif /* defined(__has_include) */
 
 #endif /* __cplusplus */
