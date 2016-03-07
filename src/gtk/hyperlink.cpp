@@ -110,6 +110,22 @@ public:
 // wxHyperlinkCtrl
 // ----------------------------------------------------------------------------
 
+wxHyperlinkCtrl::wxHyperlinkCtrl()
+{
+}
+
+wxHyperlinkCtrl::wxHyperlinkCtrl(wxWindow *parent,
+                                 wxWindowID id,
+                                 const wxString& label,
+                                 const wxString& url,
+                                 const wxPoint& pos,
+                                 const wxSize& size,
+                                 long style,
+                                 const wxString& name)
+{
+    (void)Create(parent, id, label, url, pos, size, style, name);
+}
+
 wxHyperlinkCtrl::~wxHyperlinkCtrl()
 {
 #ifndef __WXGTK3__
