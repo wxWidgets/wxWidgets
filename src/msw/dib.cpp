@@ -509,7 +509,7 @@ HGLOBAL wxDIB::ConvertFromBitmap(HBITMAP hbmp)
 // palette support
 // ----------------------------------------------------------------------------
 
-#if wxUSE_PALETTE
+#if defined(__WXMSW__) && wxUSE_PALETTE
 
 wxPalette *wxDIB::CreatePalette() const
 {
@@ -582,7 +582,7 @@ wxPalette *wxDIB::CreatePalette() const
     return palette;
 }
 
-#endif // wxUSE_PALETTE
+#endif // defined(__WXMSW__) && wxUSE_PALETTE
 
 // ----------------------------------------------------------------------------
 // wxImage support

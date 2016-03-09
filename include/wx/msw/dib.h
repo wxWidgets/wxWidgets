@@ -79,10 +79,10 @@ public:
     // the DIB after this (but the caller should do it)
     HBITMAP Detach() { HBITMAP hbmp = m_handle; m_handle = 0; return hbmp; }
 
-#if wxUSE_PALETTE
+#if defined(__WXMSW__) && wxUSE_PALETTE
     // create a palette for this DIB (always a trivial/default one for 24bpp)
     wxPalette *CreatePalette() const;
-#endif // wxUSE_PALETTE
+#endif // defined(__WXMSW__) && wxUSE_PALETTE
 
     // save the DIB as a .BMP file to the file with the given name
     bool Save(const wxString& filename);
