@@ -2751,7 +2751,7 @@
 				RelativePath="..\..\include\wx\xrc\xh_animatctrl.h">
 			</File>
 			<File
-				RelativePath="..\..\include\wx\xrc\xh_auinotbk.h">
+				RelativePath="..\..\include\wx\xrc\xh_aui.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\xrc\xh_auitoolb.h">

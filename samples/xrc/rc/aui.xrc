@@ -4,12 +4,163 @@
     <title>AUI XRC demo</title>
     <centered>1</centered>
     <style>wxCAPTION|wxRESIZE_BORDER</style>
-    <size>500,300</size>
     <object class="wxBoxSizer">
       <orient>wxVERTICAL</orient>
       <object class="sizeritem">
+        <option>1</option>
         <flag>wxEXPAND</flag>
-        <object class="wxAuiToolBar" name="aui_toolbar">
+        <object class="wxPanel" name="aui_client_area">
+          <object class="wxAuiManager" name="aui_manager">
+            <object class="wxAuiPaneInfo" name="aui_tool_bar_top">
+              <caption>Main Toolbar</caption>
+              <top/>
+              <left_dockable>0</left_dockable>
+              <right_dockable>0</right_dockable>
+              <toolbar_pane/>
+              <object class="wxToolBar">
+                  <style>wxTB_FLAT|wxTB_NODIVIDER</style>
+                  <margins>2,2</margins>
+                  <object class="tool" name="New">
+                      <bitmap stock_id="wxART_NEW"/>
+                      <label>New</label>
+                  </object>
+                  <object class="tool" name="view_auto">
+                      <bitmap stock_id="wxART_FILE_OPEN"/>
+                      <label>View</label>
+                      <dropdown>
+                          <object class="wxMenu">
+                              <object class="wxMenuItem" name="view_as_text">
+                                  <label>View as text</label>
+                              </object>
+                              <object class="wxMenuItem" name="view_as_hex">
+                                  <label>View as binary</label>
+                              </object>
+                          </object>
+                      </dropdown>
+                  </object>
+                  <object class="separator"/>
+                  <object class="tool" name="home">
+                      <toggle>1</toggle>
+                      <bitmap stock_id="wxART_GO_HOME"/>
+                      <label>Home</label>
+                  </object>
+                  <object class="separator"/>
+                  <object class="tool" name="up">
+                      <radio>1</radio>
+                      <bitmap stock_id="wxART_GO_UP"/>
+                      <label>Up</label>
+                  </object>
+                  <object class="tool" name="down">
+                      <radio>1</radio>
+                      <bitmap stock_id="wxART_GO_DOWN"/>
+                      <label>Down</label>
+                  </object>
+                  <object class="space"/>
+                  <object class="wxComboBox">
+                      <content>
+                          <item>Just</item>
+                          <item>a combobox</item>
+                          <item>in the toolbar</item>
+                      </content>
+                  </object>
+                  <object class="wxOwnerDrawnComboBox">
+                      <content>
+                          <item>Owner Drawn</item>
+                          <item>combobox</item>
+                          <item>in the toolbar</item>
+                      </content>
+                  </object>
+              </object>
+            </object>
+            <object class="wxAuiPaneInfo" name="TreeViewPane">
+              <caption>Tree View</caption>
+              <left/>
+              <close_button>0</close_button>
+              <top_dockable>0</top_dockable>
+              <bottom_dockable>0</bottom_dockable>
+              <floating_size>150,300</floating_size>
+              <min_size>90,-1</min_size>
+              <layer>1</layer>
+              <object class="wxTreeCtrl" name="TreeView"/>
+            </object>
+            <object class="wxAuiPaneInfo" name="aui_notebook">
+              <caption>Notebook</caption>
+              <min_size>-1,200</min_size>
+              <center/>
+              <close_button>0</close_button>
+              <maximize_button>1</maximize_button>
+              <dock_fixed>1</dock_fixed>
+              <object class="wxAuiNotebook" name="aui_notebook">
+                <object class="notebookpage">
+                  <label>Page 1</label>
+                  <bitmap stock_id="wxART_WARNING"/>
+                  <object class="wxPanel" name="page1">
+                    <object class="wxBoxSizer">
+                      <object class="sizeritem">
+                        <object class="wxTextCtrl" name="description_text">
+                          <value>Notice the wxAuiToolBar added above this wxAuiNotebook</value>
+                          <style>wxTE_MULTILINE|wxTE_READONLY</style>
+                        </object>
+                        <option>1</option>
+                        <flag>wxEXPAND</flag>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+                <object class="notebookpage">
+                  <label>Page 2</label>
+                  <bitmap stock_id="wxART_INFORMATION"/>
+                  <object class="wxPanel" name="page2">
+                    <object class="wxBoxSizer">
+                      <object class="sizeritem">
+                        <object class="wxTextCtrl" name="description_text">
+                          <value>The wxAuiNotebook pages are added by XRC</value>
+                          <style>wxTE_MULTILINE|wxTE_READONLY</style>
+                        </object>
+                        <option>1</option>
+                        <flag>wxEXPAND</flag>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+                <object class="notebookpage">
+                  <label>Page 3</label>
+                  <bitmap stock_id="wxART_QUESTION"/>
+                  <object class="wxPanel" name="page3">
+                    <object class="wxBoxSizer">
+                      <object class="sizeritem">
+                        <object class="wxTextCtrl" name="description_text">
+                          <value></value>
+                          <style>wxTE_MULTILINE|wxTE_READONLY</style>
+                        </object>
+                        <option>1</option>
+                        <flag>wxEXPAND</flag>
+                      </object>
+                    </object>
+                  </object>
+                </object>
+              </object>
+            </object>
+            <object class="wxAuiPaneInfo" name="aui_text">
+              <caption>Just a test text</caption>
+              <bottom/>
+              <close_button>0</close_button>
+              <left_dockable>0</left_dockable>
+              <right_dockable>0</right_dockable>
+              <min_size>-1,60</min_size>
+              <floating_size>300,150</floating_size>
+              <object class="wxTextCtrl" name="TextLog">
+                  <style>wxTE_MULTILINE</style>
+                  <value>Notice that the toolbar above is a simple wxToolBar
+inside wxAuiPaneInfo while the toolbar below is a wxAuiToolBar</value>
+              </object>
+            </object>
+          </object>
+        </object>
+      </object>
+      <object class="sizeritem">
+        <flag>wxEXPAND</flag>
+        <object class="wxAuiToolBar" name="aui_toolbar_bottom">
           <style>wxAUI_TB_TEXT|wxAUI_TB_GRIPPER</style>
           <object class="label" name="label1">
             <label>Tools:</label>
@@ -53,60 +204,6 @@
             </content>
           </object>
           <object class="space"/>
-      </object>
-      </object>
-      <object class="sizeritem">
-        <option>1</option>
-        <flag>wxEXPAND</flag>
-        <object class="wxAuiNotebook" name="aui_notebook">
-          <object class="notebookpage">
-            <label>Page 1</label>
-            <bitmap stock_id="wxART_WARNING"/>
-            <object class="wxPanel" name="page1">
-              <object class="wxBoxSizer">
-                <object class="sizeritem">
-                  <object class="wxTextCtrl" name="description_text">
-                    <value>Notice the wxAuiToolBar added above this wxAuiNotebook</value>
-                    <style>wxTE_MULTILINE|wxTE_READONLY</style>
-                  </object>
-                  <option>1</option>
-                  <flag>wxEXPAND</flag>
-                </object>
-              </object>
-            </object>
-          </object>
-          <object class="notebookpage">
-            <label>Page 2</label>
-            <bitmap stock_id="wxART_INFORMATION"/>
-            <object class="wxPanel" name="page2">
-              <object class="wxBoxSizer">
-                <object class="sizeritem">
-                  <object class="wxTextCtrl" name="description_text">
-                    <value>The wxAuiNotebook pages are added by XRC</value>
-                    <style>wxTE_MULTILINE|wxTE_READONLY</style>
-                  </object>
-                  <option>1</option>
-                  <flag>wxEXPAND</flag>
-                </object>
-              </object>
-            </object>
-          </object>
-          <object class="notebookpage">
-            <label>Page 3</label>
-            <bitmap stock_id="wxART_QUESTION"/>
-            <object class="wxPanel" name="page3">
-              <object class="wxBoxSizer">
-                <object class="sizeritem">
-                  <object class="wxTextCtrl" name="description_text">
-                    <value></value>
-                    <style>wxTE_MULTILINE|wxTE_READONLY</style>
-                  </object>
-                  <option>1</option>
-                  <flag>wxEXPAND</flag>
-                </object>
-              </object>
-            </object>
-          </object>
         </object>
       </object>
       <object class="sizeritem">

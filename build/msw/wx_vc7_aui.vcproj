@@ -444,7 +444,7 @@
 				RelativePath="..\..\include\wx\aui\tabmdi.h">
 			</File>
 			<File
-				RelativePath="..\..\include\wx\xrc\xh_auinotbk.h">
+				RelativePath="..\..\include\wx\xrc\xh_aui.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\xrc\xh_auitoolb.h">
@@ -482,7 +482,7 @@
 				RelativePath="..\..\src\aui\tabmdi.cpp">
 			</File>
 			<File
-				RelativePath="..\..\src\xrc\xh_auinotbk.cpp">
+				RelativePath="..\..\src\xrc\xh_aui.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\xrc\xh_auitoolb.cpp">

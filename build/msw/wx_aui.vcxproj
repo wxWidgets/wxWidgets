@@ -463,10 +463,10 @@
     <ClCompile Include="..\..\src\aui\framemanager.cpp" />
     <ClCompile Include="..\..\src\aui\tabart.cpp" />
     <ClCompile Include="..\..\src\aui\tabmdi.cpp" />
-    <ClCompile Include="..\..\src\xrc\xh_auinotbk.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_auitoolb.cpp" />
     <ClCompile Include="..\..\src\aui\tabartmsw.cpp" />
     <ClCompile Include="..\..\src\aui\barartmsw.cpp" />
+    <ClCompile Include="..\..\src\xrc\xh_aui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -505,10 +505,10 @@
     <ClInclude Include="..\..\include\wx\aui\framemanager.h" />
     <ClInclude Include="..\..\include\wx\aui\tabart.h" />
     <ClInclude Include="..\..\include\wx\aui\tabmdi.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_auinotbk.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_auitoolb.h" />
     <ClInclude Include="..\..\include\wx\aui\tabartmsw.h" />
     <ClInclude Include="..\..\include\wx\aui\barartmsw.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xh_aui.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1364,7 +1364,7 @@ AUIDLL_OBJECTS =  \
 	$(OBJS)\auidll_auibar.o \
 	$(OBJS)\auidll_tabmdi.o \
 	$(OBJS)\auidll_tabart.o \
-	$(OBJS)\auidll_xh_auinotbk.o \
+	$(OBJS)\auidll_xh_aui.o \
 	$(OBJS)\auidll_xh_auitoolb.o \
 	$(OBJS)\auidll_tabartmsw.o \
 	$(OBJS)\auidll_barartmsw.o
@@ -1385,7 +1385,7 @@ AUILIB_OBJECTS =  \
 	$(OBJS)\auilib_auibar.o \
 	$(OBJS)\auilib_tabmdi.o \
 	$(OBJS)\auilib_tabart.o \
-	$(OBJS)\auilib_xh_auinotbk.o \
+	$(OBJS)\auilib_xh_aui.o \
 	$(OBJS)\auilib_xh_auitoolb.o \
 	$(OBJS)\auilib_tabartmsw.o \
 	$(OBJS)\auilib_barartmsw.o
@@ -1759,7 +1759,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_auibar.o \
 	$(OBJS)\monodll_tabmdi.o \
 	$(OBJS)\monodll_tabart.o \
-	$(OBJS)\monodll_xh_auinotbk.o \
+	$(OBJS)\monodll_xh_aui.o \
 	$(OBJS)\monodll_xh_auitoolb.o \
 	$(OBJS)\monodll_tabartmsw.o \
 	$(OBJS)\monodll_barartmsw.o \
@@ -2596,7 +2596,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_auibar.o \
 	$(OBJS)\monolib_tabmdi.o \
 	$(OBJS)\monolib_tabart.o \
-	$(OBJS)\monolib_xh_auinotbk.o \
+	$(OBJS)\monolib_xh_aui.o \
 	$(OBJS)\monolib_xh_auitoolb.o \
 	$(OBJS)\monolib_tabartmsw.o \
 	$(OBJS)\monolib_barartmsw.o \
@@ -7615,7 +7615,7 @@ $(OBJS)\monodll_tabmdi.o: ../../src/aui/tabmdi.cpp
 $(OBJS)\monodll_tabart.o: ../../src/aui/tabart.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_xh_auinotbk.o: ../../src/xrc/xh_auinotbk.cpp
+$(OBJS)\monodll_xh_aui.o: ../../src/xrc/xh_aui.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_xh_auitoolb.o: ../../src/xrc/xh_auitoolb.cpp
@@ -10152,7 +10152,7 @@ $(OBJS)\monolib_tabmdi.o: ../../src/aui/tabmdi.cpp
 $(OBJS)\monolib_tabart.o: ../../src/aui/tabart.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monolib_xh_auinotbk.o: ../../src/xrc/xh_auinotbk.cpp
+$(OBJS)\monolib_xh_aui.o: ../../src/xrc/xh_aui.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_xh_auitoolb.o: ../../src/xrc/xh_auitoolb.cpp
@@ -16399,7 +16399,7 @@ $(OBJS)\auidll_tabmdi.o: ../../src/aui/tabmdi.cpp
 $(OBJS)\auidll_tabart.o: ../../src/aui/tabart.cpp
 	$(CXX) -c -o $@ $(AUIDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\auidll_xh_auinotbk.o: ../../src/xrc/xh_auinotbk.cpp
+$(OBJS)\auidll_xh_aui.o: ../../src/xrc/xh_aui.cpp
 	$(CXX) -c -o $@ $(AUIDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\auidll_xh_auitoolb.o: ../../src/xrc/xh_auitoolb.cpp
@@ -16435,7 +16435,7 @@ $(OBJS)\auilib_tabmdi.o: ../../src/aui/tabmdi.cpp
 $(OBJS)\auilib_tabart.o: ../../src/aui/tabart.cpp
 	$(CXX) -c -o $@ $(AUILIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\auilib_xh_auinotbk.o: ../../src/xrc/xh_auinotbk.cpp
+$(OBJS)\auilib_xh_aui.o: ../../src/xrc/xh_aui.cpp
 	$(CXX) -c -o $@ $(AUILIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\auilib_xh_auitoolb.o: ../../src/xrc/xh_auitoolb.cpp
