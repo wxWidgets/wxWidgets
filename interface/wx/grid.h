@@ -1265,6 +1265,114 @@ public:
 };
 
 /**
+    Message class used by the grid table to send requests and notifications to
+    the grid view.
+
+    A message object of this class must be sent to the grid using
+    wxGrid::ProcessTableMessage() every time the table changes, e.g. rows are
+    added/deleted. The messages are just notifications and don't result in any
+    actual changes but just allow the view to react to changes to the model.
+*/
+class wxGridTableMessage
+{
+public:
+    /**
+        Default constructor initializes the object to invalid state.
+     */
+    wxGridTableMessage();
+
+    /**
+        Constructor really initialize the message.
+
+        @param table Pointer to the grid table
+        @param id One of wxGridTableRequest enum elements.
+        @param comInt1 Position after which the rows are inserted/deleted
+        @param comInt2 Number of rows to be inserted/deleted
+    */
+    wxGridTableMessage(wxGridTableBase *table, int id, int comInt1 = -1, int comInt2 = -1);
+
+    /**
+        Sets the table object
+    */
+    void SetTableObject( wxGridTableBase *table );
+
+    /**
+        Gets the table object
+    */
+    wxGridTableBase * GetTableObject() const;
+
+    /**
+        Sets an id
+    */
+    void SetId( int id );
+
+    /**
+        Gets an id
+    */
+    int  GetId();
+
+    /**
+        Set the position after which the insertion/deletion occur
+    */
+    void SetCommandInt( int comInt1 );
+
+    /**
+        Get the position after which the insertion/deletion occur
+    */
+    int  GetCommandInt();
+
+    /**
+        Set the number of rows to be inserted/deleted
+    */
+    void SetCommandInt2( int comInt2 );
+
+    /**
+        Get the number of rows to be inserted/deleted
+    */
+    int  GetCommandInt2();
+};
+
+
+/**
+    Simplest type of data table for a grid for small tables of strings that are
+    stored in memory.
+
+    The number of rows and columns in the table can be specified initially but
+    may also be changed later dynamically.
+ */
+class wxGridStringTable
+{
+public:
+    /**
+        Default constructor creates an empty table.
+     */
+    wxGridStringTable();
+
+    /**
+        Constructor taking number of rows and columns.
+     */
+    wxGridStringTable( int numRows, int numCols );
+
+    virtual int GetNumberRows();
+    virtual int GetNumberCols();
+    virtual wxString GetValue( int row, int col );
+    virtual void SetValue( int row, int col, const wxString& s );
+
+    void Clear();
+    bool InsertRows( size_t pos = 0, size_t numRows = 1 );
+    bool AppendRows( size_t numRows = 1 );
+    bool DeleteRows( size_t pos = 0, size_t numRows = 1 );
+    bool InsertCols( size_t pos = 0, size_t numCols = 1 );
+    bool AppendCols( size_t numCols = 1 );
+    bool DeleteCols( size_t pos = 0, size_t numCols = 1 );
+
+    void SetRowLabelValue( int row, const wxString& );
+    void SetColLabelValue( int col, const wxString& );
+    wxString GetRowLabelValue( int row );
+    wxString GetColLabelValue( int col );
+};
+
+/**
     Represents coordinates of a grid cell.
 
     An object of this class is simply a (row, column) pair.
@@ -1753,16 +1861,22 @@ public:
 };
 
 
-
+/**
+    Possible types for grid table notifications.
+ */
 enum wxGridTableRequest
 {
-    wxGRIDTABLE_REQUEST_VIEW_GET_VALUES = 2000,
-    wxGRIDTABLE_REQUEST_VIEW_SEND_VALUES,
+    /// New rows have been inserted into the table.
     wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
+    /// New rows have been append to the table.
     wxGRIDTABLE_NOTIFY_ROWS_APPENDED,
+    /// Rows have been deleted from the table.
     wxGRIDTABLE_NOTIFY_ROWS_DELETED,
+    /// New columns have been inserted into the table.
     wxGRIDTABLE_NOTIFY_COLS_INSERTED,
+    /// New columns have been append to the table.
     wxGRIDTABLE_NOTIFY_COLS_APPENDED,
+    /// Columns have been deleted from the table.
     wxGRIDTABLE_NOTIFY_COLS_DELETED
 };
 
