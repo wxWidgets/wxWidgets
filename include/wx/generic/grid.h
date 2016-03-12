@@ -789,9 +789,12 @@ private:
 //
 enum wxGridTableRequest
 {
+    // The first two requests never did anything, simply don't use them.
+#if WXWIN_COMPATIBILITY_3_0
     wxGRIDTABLE_REQUEST_VIEW_GET_VALUES = 2000,
     wxGRIDTABLE_REQUEST_VIEW_SEND_VALUES,
-    wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
+#endif // WXWIN_COMPATIBILITY_3_0
+    wxGRIDTABLE_NOTIFY_ROWS_INSERTED = 2002,
     wxGRIDTABLE_NOTIFY_ROWS_APPENDED,
     wxGRIDTABLE_NOTIFY_ROWS_DELETED,
     wxGRIDTABLE_NOTIFY_COLS_INSERTED,
@@ -2163,11 +2166,6 @@ protected:
                         const wxGridCellCoords& bottomRight)
         { UpdateBlockBeingSelected(topLeft.GetRow(), topLeft.GetCol(),
                          bottomRight.GetRow(), bottomRight.GetCol()); }
-
-    // ------ functions to get/send data (see also public functions)
-    //
-    bool GetModelValues();
-    bool SetModelValues();
 
     friend class WXDLLIMPEXP_FWD_ADV wxGridSelection;
     friend class wxGridRowOperations;
