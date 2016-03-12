@@ -1032,6 +1032,7 @@ ldlibs_html="@EXTRALIBS_HTML@"
 ldlibs_xml="@EXTRALIBS_XML@"
 ldlibs_adv="@EXTRALIBS_SDL@"
 ldlibs_stc="@EXTRALIBS_STC@"
+ldlibs_webview="@EXTRALIBS_WEBVIEW@"
 
 
 # Order the libraries passed to us correctly for static linking.
