@@ -2994,7 +2994,7 @@ AUI_CMN_SRC =
     src/aui/auibar.cpp
     src/aui/tabmdi.cpp
     src/aui/tabart.cpp
-    src/xrc/xh_auinotbk.cpp
+    src/xrc/xh_aui.cpp
     src/xrc/xh_auitoolb.cpp
 AUI_CMN_HDR =
     wx/aui/framemanager.h
@@ -3005,7 +3005,7 @@ AUI_CMN_HDR =
     wx/aui/tabmdi.h
     wx/aui/aui.h
     wx/aui/tabart.h
-    wx/xrc/xh_auinotbk.h
+    wx/xrc/xh_aui.h
     wx/xrc/xh_auitoolb.h
 
 AUI_MSW_HDR =

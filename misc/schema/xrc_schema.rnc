@@ -158,7 +158,9 @@ builtinWindowClasses =
     ( unknown
     | wxActivityIndicator
     | wxAnimationCtrl
+    | wxAuiManager
     | wxAuiNotebook
+    | wxAuiPaneInfo
     | wxAuiToolBar
     | wxBannerWindow
     | wxBitmapButton
@@ -252,7 +254,9 @@ builtinClassesNames =
 
     | "wxActivityIndicator"
     | "wxAnimationCtrl"
+    | "wxAuiManager"
     | "wxAuiNotebook"
+    | "wxAuiPaneInfo"
     | "wxAuiToolBar"
     | "wxBannerWindow"
     | "wxBitmapButton"
@@ -534,6 +538,14 @@ wxAnimationCtrl =
     }
 
 
+wxAuiManager =
+    element object {
+        attribute class { "wxAuiManager" } &
+        stdObjectNodeAttributes &
+        (wxAuiPaneInfo | objectRef)*
+    }
+
+
 wxAuiNotebook =
     element object {
         attribute class { "wxAuiNotebook" } &
@@ -548,6 +560,48 @@ wxAuiNotebook_notebookpage =
         [xrc:p="important"] element label {_, t_text }* &
         [xrc:p="o"] element bitmap   {_, t_bitmap }* &
         [xrc:p="o"] element selected {_, t_bool }* &
+        windowNode
+    }
+
+
+wxAuiPaneInfo =
+    element object {
+        attribute class { "wxAuiPaneInfo" } &
+        stdObjectNodeAttributes &
+        [xrc:p="important"] element caption {_, t_text }* &
+        [xrc:p="o"] element caption_visible {_, t_bool }* &
+        [xrc:p="o"] element close_button    {_, t_bool }* &
+        [xrc:p="o"] element minimize_button {_, t_bool }* &
+        [xrc:p="o"] element maximize_button {_, t_bool }* &
+        [xrc:p="o"] element pin_button      {_, t_bool }* &
+        [xrc:p="o"] element gripper         {_, t_bool }* &
+        [xrc:p="o"] element pane_border     {_, t_bool }* &
+        [xrc:p="o"] element dock            {_} * &
+        [xrc:p="o"] element float           {_} * &
+        [xrc:p="o"] element top_dockable    {_, t_bool }* &
+        [xrc:p="o"] element bottom_dockable {_, t_bool }* &
+        [xrc:p="o"] element left_dockable   {_, t_bool }* &
+        [xrc:p="o"] element right_dockable  {_, t_bool }* &
+        [xrc:p="o"] element dock_fixed      {_, t_bool }* &
+        [xrc:p="o"] element resizable       {_, t_bool }* &
+        [xrc:p="o"] element movable         {_, t_bool }* &
+        [xrc:p="o"] element floatable       {_, t_bool }* &
+        [xrc:p="o"] element floating_size   {_, t_size }* &
+        [xrc:p="o"] element min_size        {_, t_size }* &
+        [xrc:p="o"] element max_size        {_, t_size }* &
+        [xrc:p="o"] element best_size       {_, t_size }* &
+        [xrc:p="o"] element row             {_, t_integer }* &
+        [xrc:p="o"] element layer           {_, t_integer }* &
+        [xrc:p="o"] element default_pane    {_} * &
+        [xrc:p="o"] element toolbar_pane    {_} * &
+        [xrc:p="o"] element center_pane     {_} * &
+        [xrc:p="o"] element direction       {_, t_integer }* &
+        [xrc:p="o"] element top             {_} * &
+        [xrc:p="o"] element bottom          {_} * &
+        [xrc:p="o"] element left            {_} * &
+        [xrc:p="o"] element right           {_} * &
+        [xrc:p="o"] element centre          {_} * &
+        [xrc:p="o"] element center          {_} * &
         windowNode
     }
 

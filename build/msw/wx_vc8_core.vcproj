@@ -4169,7 +4169,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\xrc\xh_auinotbk.h"
+				RelativePath="..\..\include\wx\xrc\xh_aui.h"
 				>
 			</File>
 			<File

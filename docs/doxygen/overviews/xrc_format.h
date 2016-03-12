@@ -560,6 +560,96 @@ controls cannot have children.
 @endTable
 
 
+@subsubsection xrc_wxauimanager wxAuiManager
+
+Notice that wxAUI support in XRC is available in wxWidgets 3.1.1 and
+later only and you need to explicitly register its handler using
+@code
+    #include <wx/xrc/xh_aui.h>
+
+    AddHandler(new wxAuiXmlHandler);
+@endcode
+to use it.
+
+A wxAuiManager can have one or more child objects of the
+wxAuiPaneInfo class.
+wxAuiPaneInfo objects have the following properties:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{caption, @ref overview_xrcformat_type_text,
+    Sets the caption of the pane.}
+@row3col{caption_visible, @ref overview_xrcformat_type_bool,
+    Indicates that a pane caption should be visible.}
+@row3col{close_button, @ref overview_xrcformat_type_bool,
+    Indicates that a close button should be drawn for the pane.}
+@row3col{maximize_button, @ref overview_xrcformat_type_bool,
+    Indicates that a maximize button should be drawn for the pane.}
+@row3col{minimize_button, @ref overview_xrcformat_type_bool,
+    Indicates that a minimize button should be drawn for the pane.}
+@row3col{pin_button, @ref overview_xrcformat_type_bool,
+    Indicates that a pin button should be drawn for the pane.}
+@row3col{gripper, @ref overview_xrcformat_type_bool,
+    Indicates that a gripper should be drawn for the pane.}
+@row3col{pane_border, @ref overview_xrcformat_type_bool,
+    Indicates that a border should be drawn for the pane.}
+@row3col{dock, ,
+    Indicates that a pane should be docked.}
+@row3col{float, ,
+    Indicates that a pane should be floated.}
+@row3col{top_dockable, @ref overview_xrcformat_type_bool,
+    Indicates whether a pane can be docked at the top of the frame.}
+@row3col{bottom_dockable, @ref overview_xrcformat_type_bool,
+    Indicates whether a pane can be docked at the bottom of the frame.}
+@row3col{left_dockable, @ref overview_xrcformat_type_bool,
+    Indicates whether a pane can be docked on the left of the frame.}
+@row3col{right_dockable, @ref overview_xrcformat_type_bool,
+    Indicates whether a pane can be docked on the right of the frame.}
+@row3col{dock_fixed, @ref overview_xrcformat_type_bool,
+    Causes the containing dock to have no resize sash.}
+@row3col{resizable, @ref overview_xrcformat_type_bool,
+    Allows a pane to be resized if the parameter is @true, and forces it
+    to be a fixed size if the parameter is @false.}
+@row3col{movable, @ref overview_xrcformat_type_bool,
+    Indicates whether a pane can be moved.}
+@row3col{floatable, @ref overview_xrcformat_type_bool,
+    Sets whether the user will be able to undock a pane and turn it
+    into a floating window.}
+@row3col{best_size, @ref overview_xrcformat_type_size,
+    Sets the ideal size for the pane.}
+@row3col{floating_size, @ref overview_xrcformat_type_size,
+    Sets the size of the floating pane.}
+@row3col{min_size, @ref overview_xrcformat_type_size,
+    Sets the minimum size of the pane.}
+@row3col{max_size, @ref overview_xrcformat_type_size,
+    Sets the maximum size of the pane.}
+@row3col{default_pane, ,
+    Specifies that the pane should adopt the default pane settings.}
+@row3col{toolbar_pane, ,
+    Specifies that the pane should adopt the default toolbar pane settings.}
+@row3col{layer, , Determines the layer of the docked pane.}
+@row3col{row, , Determines the row of the docked pane.}
+@row3col{center_pane, ,
+    Specifies that the pane should adopt the default center pane settings.}
+@row3col{centre_pane, ,
+    Same as center_pane.}
+@row3col{direction, ,
+    Determines the direction of the docked pane.}
+@row3col{top, ,
+    Sets the pane dock position to the top of the frame.}
+@row3col{bottom, ,
+    Sets the pane dock position to the bottom side of the frame.}
+@row3col{left, ,
+    Sets the pane dock position to the left side of the frame.}
+@row3col{right, ,
+    Sets the pane dock position to the right side of the frame.}
+@row3col{center, ,
+    Sets the pane dock position to the center of the frame.}
+@row3col{centre, ,
+    Same as center.}
+@endTable
+
+
 @subsubsection xrc_wxauinotebook wxAuiNotebook
 
 A wxAuiNotebook can have one or more child objects of the @c notebookpage
@@ -592,14 +682,7 @@ Example:
 </object>
 @endcode
 
-Notice that wxAuiNotebook support in XRC is available in wxWidgets 2.9.5 and
-later only and you need to explicitly register its handler using
-@code
-    #include <wx/xrc/xh_auinotbk.h>
-
-    AddHandler(new wxAuiNotebookXmlHandler);
-@endcode
-to use it.
+@note See @ref xrc_wxauimanager about using wxAUI classes in XRC.
 
 @subsubsection xrc_wxauitoolbar wxAuiToolBar
 
