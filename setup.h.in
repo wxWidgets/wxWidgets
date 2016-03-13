@@ -691,6 +691,12 @@
 #define wxUSE_TIMEPICKCTRL_GENERIC 0
 
 
+#if defined(__VISUALC__) || defined(__MINGW64_TOOLCHAIN__)
+    #define wxUSE_DBGHELP 0
+#else
+    #define wxUSE_DBGHELP 0
+#endif
+
 #define wxUSE_CRASHREPORT 0
 /* --- end MSW options --- */
 
