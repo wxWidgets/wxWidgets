@@ -7745,6 +7745,7 @@ fi
           eval "$wx_cv_use_threads"
 
 
+if test "$wxUSE_MSW" = 1 ; then
 
           enablestring=
           defaultval=
@@ -7803,6 +7804,7 @@ fi
 
           eval "$wx_cv_use_regkey"
 
+fi
 
 if test "$wxUSE_GUI" = "yes"; then
 

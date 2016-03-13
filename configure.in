@@ -743,8 +743,10 @@ WX_ARG_FEATURE(protocol_file, [  --enable-protocol-file  FILE support in wxProto
 
 WX_ARG_FEATURE(threads,     [  --enable-threads        use threads], wxUSE_THREADS)
 
+if test "$wxUSE_MSW" = 1 ; then
 WX_ARG_ENABLE(iniconf,      [  --enable-iniconf        use wxIniConfig (Win32 only)], wxUSE_INICONF)
 WX_ARG_FEATURE(regkey,      [  --enable-regkey         use wxRegKey class (Win32 only)], wxUSE_REGKEY)
+fi
 
 if test "$wxUSE_GUI" = "yes"; then
 
