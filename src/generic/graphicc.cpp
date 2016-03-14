@@ -2539,11 +2539,14 @@ wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext(void * conte
 {
     ENSURE_LOADED_OR_RETURN(NULL);
 #ifdef __WXMSW__
-    if (::GetObjectType((HGDIOBJ)context) == OBJ_DC)
-    {
+    DWORD objType = ::GetObjectType((HGDIOBJ)context);
+    if (objType == 0)
+        return new wxCairoContext(this, (cairo_t*)context);
+
+    if (objType == OBJ_DC || objType == OBJ_MEMDC)
         return new wxCairoContext(this, (HDC)context);
-    }
-    return new wxCairoContext(this, (cairo_t*)context);
+
+    return NULL;
 #else
     return new wxCairoContext(this,(cairo_t*)context);
 #endif
