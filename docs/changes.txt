@@ -589,7 +589,7 @@ All:
 
 All (GUI):
 
-- 
+- Add support for wxSL_MIN_MAX_LABELS and wxSL_VALUE_LABEL to XRC (ousnius).
 
 wxMSW:
 
