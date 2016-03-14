@@ -1908,6 +1908,9 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, HDC handle )
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
 : wxGraphicsContext(renderer)
 {
+#ifdef __WXMSW__
+    m_mswSurface = NULL;
+#endif // __WXMSW__
     Init( context );
     m_width =
     m_height = 0;
@@ -2532,11 +2535,15 @@ wxGraphicsContext * wxCairoRenderer::CreateContext( const wxEnhMetaFileDC& WXUNU
 #endif
 #endif
 
-wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext( void * context )
+wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext(void * context)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
 #ifdef __WXMSW__
-    return new wxCairoContext(this,(HDC)context);
+    if (::GetObjectType((HGDIOBJ)context) == OBJ_DC)
+    {
+        return new wxCairoContext(this, (HDC)context);
+    }
+    return new wxCairoContext(this, (cairo_t*)context);
 #else
     return new wxCairoContext(this,(cairo_t*)context);
 #endif
