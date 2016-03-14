@@ -308,26 +308,6 @@ void wxStackWalker::WalkFromException(size_t maxDepth)
 
 void wxStackWalker::Walk(size_t skip, size_t maxDepth)
 {
-    // We use it as a proxy for SEH support here.
-#if wxUSE_ON_FATAL_EXCEPTION
-    // to get a CONTEXT for the current location, simply force an exception and
-    // get EXCEPTION_POINTERS from it
-    //
-    // note:
-    //  1. we additionally skip RaiseException() and WalkFrom() frames
-    //  2. explicit cast to EXCEPTION_POINTERS is needed with VC7.1 even if it
-    //     shouldn't have been according to the docs
-    __try
-    {
-        RaiseException(0x1976, 0, 0, NULL);
-    }
-    __except( WalkFrom((EXCEPTION_POINTERS *)GetExceptionInformation(),
-                       skip + 2, maxDepth + 2), EXCEPTION_CONTINUE_EXECUTION )
-    {
-        // never executed because the above expression always evaluates to
-        // EXCEPTION_CONTINUE_EXECUTION
-    }
-#else // !wxUSE_ON_FATAL_EXCEPTION
     // This code is based on frames.cpp from Edd Dawson's dbg library
     // (https://bitbucket.org/edd/dbg/) which is distributed under Boost
     // Software License.
@@ -351,13 +331,21 @@ void wxStackWalker::Walk(size_t skip, size_t maxDepth)
         ctx.Eip = regEip;
         ctx.Esp = regEsp;
         ctx.Ebp = regEbp;
+    #elif __VISUALC__
+        __asm
+        {
+        Here:
+          mov [ctx.Ebp], ebp
+          mov [ctx.Esp], esp
+          mov eax, [Here]
+          mov [ctx.Eip], eax
+        }
     #else
         #error Missing implementation of RtlCaptureContext()
     #endif
 #endif // Win64/32
 
     WalkFrom(&ctx, skip, maxDepth);
-#endif // wxUSE_ON_FATAL_EXCEPTION
 }
 
 #endif // wxUSE_STACKWALKER
