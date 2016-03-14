@@ -304,7 +304,7 @@ void wxStackWalker::WalkFromException(size_t maxDepth)
 
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
-void wxStackWalker::Walk(size_t skip, size_t WXUNUSED(maxDepth))
+void wxStackWalker::Walk(size_t skip, size_t maxDepth)
 {
     // to get a CONTEXT for the current location, simply force an exception and
     // get EXCEPTION_POINTERS from it
@@ -318,7 +318,7 @@ void wxStackWalker::Walk(size_t skip, size_t WXUNUSED(maxDepth))
         RaiseException(0x1976, 0, 0, NULL);
     }
     __except( WalkFrom((EXCEPTION_POINTERS *)GetExceptionInformation(),
-                       skip + 2), EXCEPTION_CONTINUE_EXECUTION )
+                       skip + 2, maxDepth + 2), EXCEPTION_CONTINUE_EXECUTION )
     {
         // never executed because the above expression always evaluates to
         // EXCEPTION_CONTINUE_EXECUTION
