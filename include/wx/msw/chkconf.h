@@ -38,6 +38,14 @@
 #   endif
 #endif /* !defined(wxUSE_CRASHREPORT) */
 
+#ifndef wxUSE_DBGHELP
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_DBGHELP must be defined"
+#   else
+#       define wxUSE_DBGHELP 1
+#   endif
+#endif /* wxUSE_DBGHELP */
+
 #ifndef wxUSE_DC_CACHEING
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DC_CACHEING must be defined"
@@ -146,9 +154,6 @@
 
 #    undef wxUSE_CRASHREPORT
 #    define wxUSE_CRASHREPORT 0
-
-#    undef wxUSE_STACKWALKER
-#    define wxUSE_STACKWALKER 0
 #endif /* compiler doesn't support SEH */
 
 #if defined(__GNUWIN32__)
@@ -292,6 +297,14 @@
 #endif  /* !wxUSE_DYNAMIC_LOADER */
 
 #if !wxUSE_DYNLIB_CLASS
+#   if wxUSE_DBGHELP
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_DBGHELP requires wxUSE_DYNLIB_CLASS"
+#       else
+#           undef wxUSE_DBGHELP
+#           define wxUSE_DBGHELP 0
+#       endif
+#   endif
 #   if wxUSE_DC_TRANSFORM_MATRIX
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxUSE_DC_TRANSFORM_MATRIX requires wxUSE_DYNLIB_CLASS"
@@ -382,6 +395,22 @@
 #       define wxUSE_ACTIVITYINDICATOR 0
 #   endif
 #endif /* wxUSE_ACTIVITYINDICATOR */
+
+#if wxUSE_STACKWALKER && !wxUSE_DBGHELP
+    /*
+        Don't give an error in this case because wxUSE_DBGHELP could be 0
+        because the compiler just doesn't support it, there is really no other
+        choice than to disable wxUSE_STACKWALKER too in this case.
+
+        Unfortunately we can't distinguish between the missing compiler support
+        and explicitly disabling wxUSE_DBGHELP (which would ideally result in
+        an error if wxUSE_STACKWALKER is not disabled too), but it's better to
+        avoid giving a compiler error in the former case even if it means not
+        giving it neither in the latter one.
+     */
+    #undef wxUSE_STACKWALKER
+    #define wxUSE_STACKWALKER 0
+#endif /* wxUSE_STACKWALKER && !wxUSE_DBGHELP */
 
 #if !wxUSE_THREADS
 #   if wxUSE_FSWATCHER

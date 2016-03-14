@@ -31,8 +31,7 @@
 #include "wx/stackwalk.h"
 
 #include "wx/msw/debughlp.h"
-
-#if wxUSE_DBGHELP
+#include "wx/msw/seh.h"
 
 // ============================================================================
 // implementation
@@ -103,6 +102,8 @@ void wxStackFrame::OnParam(wxSYMBOL_INFO *pSymInfo)
     m_paramTypes.Add(wxEmptyString);
     m_paramNames.Add(pSymInfo->Name);
 
+    wxString value;
+
     // if symbol information is corrupted and we crash, the exception is going
     // to be ignored when we're called from WalkFromException() because of the
     // exception handler there returning EXCEPTION_CONTINUE_EXECUTION, but we'd
@@ -111,22 +112,23 @@ void wxStackFrame::OnParam(wxSYMBOL_INFO *pSymInfo)
 #ifdef _CPPUNWIND
     try
 #else
-    __try
+    wxSEH_TRY
 #endif
     {
         // as it is a parameter (and not a global var), it is always offset by
         // the frame address
         DWORD_PTR pValue = m_addrFrame + pSymInfo->Address;
-        m_paramValues.Add(wxDbgHelpDLL::DumpSymbol(pSymInfo, (void *)pValue));
+        value = wxDbgHelpDLL::DumpSymbol(pSymInfo, (void *)pValue);
     }
 #ifdef _CPPUNWIND
     catch ( ... )
-#else
-    __except ( EXCEPTION_EXECUTE_HANDLER )
-#endif
     {
-        m_paramValues.Add(wxEmptyString);
     }
+#else
+    wxSEH_IGNORE
+#endif
+
+    m_paramValues.Add(value);
 }
 
 BOOL CALLBACK
@@ -306,6 +308,8 @@ void wxStackWalker::WalkFromException(size_t maxDepth)
 
 void wxStackWalker::Walk(size_t skip, size_t maxDepth)
 {
+    // We use it as a proxy for SEH support here.
+#if wxUSE_ON_FATAL_EXCEPTION
     // to get a CONTEXT for the current location, simply force an exception and
     // get EXCEPTION_POINTERS from it
     //
@@ -323,72 +327,38 @@ void wxStackWalker::Walk(size_t skip, size_t maxDepth)
         // never executed because the above expression always evaluates to
         // EXCEPTION_CONTINUE_EXECUTION
     }
-}
+#else // !wxUSE_ON_FATAL_EXCEPTION
+    // This code is based on frames.cpp from Edd Dawson's dbg library
+    // (https://bitbucket.org/edd/dbg/) which is distributed under Boost
+    // Software License.
 
-#else // !wxUSE_DBGHELP
+    CONTEXT ctx;
+#ifdef __WIN64__
+    RtlCaptureContext(&ctx);
+#else // Win32
+    // RtlCaptureContext() is not implemented correctly for x86 and can even
+    // crash when frame pointer is omitted, don't use it.
+    wxZeroMemory(ctx);
+    ctx.ContextFlags = CONTEXT_CONTROL;
 
-// ============================================================================
-// stubs
-// ============================================================================
+    #ifdef __GNUC__
+        DWORD regEip, regEsp, regEbp;
 
-// ----------------------------------------------------------------------------
-// wxStackFrame
-// ----------------------------------------------------------------------------
+        asm volatile ("call 1f\n\t" "1: pop %0" : "=g"(regEip));
+        asm volatile ("movl %%esp, %0" : "=g"(regEsp));
+        asm volatile ("movl %%ebp, %0" : "=g"(regEbp));
 
-void wxStackFrame::OnGetName()
-{
-}
+        ctx.Eip = regEip;
+        ctx.Esp = regEsp;
+        ctx.Ebp = regEbp;
+    #else
+        #error Missing implementation of RtlCaptureContext()
+    #endif
+#endif // Win64/32
 
-void wxStackFrame::OnGetLocation()
-{
-}
-
-bool
-wxStackFrame::GetParam(size_t WXUNUSED(n),
-                       wxString * WXUNUSED(type),
-                       wxString * WXUNUSED(name),
-                       wxString * WXUNUSED(value)) const
-{
-    return false;
-}
-
-void wxStackFrame::OnParam(wxSYMBOL_INFO * WXUNUSED(pSymInfo))
-{
-}
-
-void wxStackFrame::OnGetParam()
-{
-}
-
-// ----------------------------------------------------------------------------
-// wxStackWalker
-// ----------------------------------------------------------------------------
-
-void
-wxStackWalker::WalkFrom(const CONTEXT * WXUNUSED(pCtx),
-                        size_t WXUNUSED(skip),
-                        size_t WXUNUSED(maxDepth))
-{
-}
-
-void
-wxStackWalker::WalkFrom(const _EXCEPTION_POINTERS * WXUNUSED(ep),
-                        size_t WXUNUSED(skip),
-                        size_t WXUNUSED(maxDepth))
-{
-}
-
-#if wxUSE_ON_FATAL_EXCEPTION
-void wxStackWalker::WalkFromException(size_t WXUNUSED(maxDepth))
-{
-}
+    WalkFrom(&ctx, skip, maxDepth);
 #endif // wxUSE_ON_FATAL_EXCEPTION
-
-void wxStackWalker::Walk(size_t WXUNUSED(skip), size_t WXUNUSED(maxDepth))
-{
 }
-
-#endif // wxUSE_DBGHELP/!wxUSE_DBGHELP
 
 #endif // wxUSE_STACKWALKER
 
