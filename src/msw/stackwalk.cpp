@@ -170,7 +170,7 @@ void wxStackFrame::OnGetParam()
     if ( !wxDbgHelpDLL::CallSymEnumSymbols
                         (
                             ::GetCurrentProcess(),
-                            NULL,               // DLL base: use current context
+                            0,                  // DLL base: use current context
                             EnumSymbolsProc,    // callback
                             this                // data to pass to it
                         ) )
