@@ -204,25 +204,38 @@ wxSize wxSVGFileDCImpl::GetPPI() const
     return wxSize( wxRound(m_dpi), wxRound(m_dpi) );
 }
 
-void wxSVGFileDCImpl::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
+void wxSVGFileDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
     NewGraphicsIfNeeded();
+
     wxString s;
-    s.Printf ( wxT("<path d=\"M%d %d L%d %d\" /> \n"), x1,y1,x2,y2 );
-    if (m_OK)
-    {
-        write(s);
-    }
+    s = wxString::Format(wxS("  <path d=\"M%d %d L%d %d\"/>\n"), x1, y1, x2, y2);
+
+    write(s);
+
     CalcBoundingBox(x1, y1);
     CalcBoundingBox(x2, y2);
 }
 
-void wxSVGFileDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset , wxCoord yoffset )
+void wxSVGFileDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
-    for ( int i = 1; i < n; i++ )
+    if (n > 1)
     {
-        DoDrawLine ( points [i-1].x + xoffset, points [i-1].y + yoffset,
-            points [ i ].x + xoffset, points [ i ].y + yoffset );
+        NewGraphicsIfNeeded();
+        wxString s;
+
+        s = wxString::Format(wxS("  <path d=\"M%d %d"), (points[0].x + xoffset), (points[0].y + yoffset));
+        CalcBoundingBox(points[0].x + xoffset, points[0].y + yoffset);
+
+        for (int i = 1; i < n; ++i)
+        {
+            s += wxString::Format(wxS(" L%d %d"), (points[i].x + xoffset), (points[i].y + yoffset));
+            CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
+        }
+
+        s += wxS("\" style=\"fill:none\"/>\n");
+
+        write(s);
     }
 }
 
