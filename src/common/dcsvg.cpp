@@ -71,18 +71,23 @@ wxString Col2SVG(wxColour c, float *opacity)
 wxString wxPenString(wxColour c, int style = wxPENSTYLE_SOLID)
 {
     float opacity;
-    wxString s = wxT("stroke:") + Col2SVG(c, &opacity)  + wxT("; ");
+    wxString s = wxS("stroke:") + Col2SVG(c, &opacity)  + wxS("; ");
 
     switch ( style )
     {
         case wxPENSTYLE_SOLID:
-            s += wxString::Format(wxT("stroke-opacity:%s; "), NumStr(opacity));
+        case wxPENSTYLE_DOT:
+        case wxPENSTYLE_SHORT_DASH:
+        case wxPENSTYLE_LONG_DASH:
+        case wxPENSTYLE_DOT_DASH:
+        case wxPENSTYLE_USER_DASH:
+            s += wxString::Format(wxS("stroke-opacity:%s; "), NumStr(opacity));
             break;
         case wxPENSTYLE_TRANSPARENT:
-            s += wxT("stroke-opacity:0.0; ");
+            s += wxS("stroke-opacity:0.0; ");
             break;
         default :
-            wxASSERT_MSG(false, wxT("wxSVGFileDC::Requested Pen Style not available"));
+            wxASSERT_MSG(false, wxS("wxSVGFileDC::Requested Pen Style not available"));
     }
 
     return s;
@@ -105,6 +110,71 @@ wxString wxBrushString(wxColour c, int style = wxBRUSHSTYLE_SOLID)
             wxASSERT_MSG(false, wxT("wxSVGFileDC::Requested Brush Style not available"));
     }
 
+    return s;
+}
+
+wxString wxGetPenPattern(wxPen& pen)
+{
+    wxString s;
+
+    // The length of the dashes and gaps have a constant factor.
+    // Dots have a width of 2, short dashes 10, long dashes 15 and gaps 8 (5 for dots).
+    // When the pen width increases, lines become thicker and unrecognizable.
+    // Multiplying with 1/3th of the width creates line styles matching the appearance of wxDC.
+    // The pen width is not used to modify user provided dash styles.
+    float w = pen.GetWidth();
+    if (pen.GetWidth() == 0)
+        w = 1;
+    w = w / 3;
+
+    switch (pen.GetStyle())
+    {
+        case wxPENSTYLE_DOT:
+            s = wxString::Format(wxS("stroke-dasharray=\"%f,%f\" "), w * 2, w * 5);
+            break;
+        case wxPENSTYLE_SHORT_DASH:
+            s = wxString::Format(wxS("stroke-dasharray=\"%f,%f\" "), w * 10, w * 8);
+            break;
+        case wxPENSTYLE_LONG_DASH:
+            s = wxString::Format(wxS("stroke-dasharray=\"%f,%f\" "), w * 15, w * 8);
+            break;
+        case wxPENSTYLE_DOT_DASH:
+            s = wxString::Format(wxS("stroke-dasharray=\"%f,%f,%f,%f\" "), w * 8, w * 8, w * 2, w * 8);
+            break;
+        case wxPENSTYLE_USER_DASH:
+        {
+            s = wxS("stroke-dasharray=\"");
+            wxDash *dashes;
+            int count = pen.GetDashes(&dashes);
+            if ((dashes != NULL) && (count > 0))
+            {
+                for (int i = 0; i < count; ++i)
+                {
+                    s << dashes[i];
+                    if (i < count - 1)
+                        s << ",";
+                }
+            }
+            s += wxS("\" ");
+            break;
+        }
+        case wxPENSTYLE_STIPPLE_MASK_OPAQUE:
+        case wxPENSTYLE_STIPPLE_MASK:
+        case wxPENSTYLE_STIPPLE:
+        case wxPENSTYLE_BDIAGONAL_HATCH:
+        case wxPENSTYLE_CROSSDIAG_HATCH:
+        case wxPENSTYLE_FDIAGONAL_HATCH:
+        case wxPENSTYLE_CROSS_HATCH:
+        case wxPENSTYLE_HORIZONTAL_HATCH:
+        case wxPENSTYLE_VERTICAL_HATCH:
+            wxASSERT_MSG(false, wxS("wxSVGFileDC::Requested Pen Pattern not available"));
+            break;
+        case wxPENSTYLE_SOLID:
+        case wxPENSTYLE_TRANSPARENT:
+        case wxPENSTYLE_INVALID:
+            // these penstyles do not need a pattern.
+            break;
+    }
     return s;
 }
 
@@ -220,7 +290,7 @@ void wxSVGFileDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
     NewGraphicsIfNeeded();
 
     wxString s;
-    s = wxString::Format(wxS("  <path d=\"M%d %d L%d %d\"/>\n"), x1, y1, x2, y2);
+    s = wxString::Format(wxS("  <path %sd=\"M%d %d L%d %d\"/>\n"), wxGetPenPattern(m_pen), x1, y1, x2, y2);
 
     write(s);
 
@@ -235,7 +305,8 @@ void wxSVGFileDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset
         NewGraphicsIfNeeded();
         wxString s;
 
-        s = wxString::Format(wxS("  <path d=\"M%d %d"), (points[0].x + xoffset), (points[0].y + yoffset));
+        s = wxS("  <path ") + wxGetPenPattern(m_pen);
+        s += wxString::Format(wxS("d=\"M%d %d"), (points[0].x + xoffset), (points[0].y + yoffset));
         CalcBoundingBox(points[0].x + xoffset, points[0].y + yoffset);
 
         for (int i = 1; i < n; ++i)
