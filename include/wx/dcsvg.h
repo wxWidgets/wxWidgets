@@ -58,10 +58,10 @@ public:
     virtual wxCoord GetCharHeight() const;
     virtual wxCoord GetCharWidth() const;
 
-    virtual void SetClippingRegion(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
-                                   wxCoord WXUNUSED(w), wxCoord WXUNUSED(h))
+    virtual void SetClippingRegion(wxCoord x, wxCoord y,
+                                   wxCoord w, wxCoord h)
     {
-        wxFAIL_MSG(wxT("wxSVGFILEDC::SetClippingRegion not implemented"));
+        DoSetClippingRegion(x, y, w, h);
     }
 
     virtual void SetPalette(const wxPalette&  WXUNUSED(palette))
@@ -69,10 +69,10 @@ public:
         wxFAIL_MSG(wxT("wxSVGFILEDC::SetPalette not implemented"));
     }
 
-    virtual void GetClippingBox(wxCoord *WXUNUSED(x), wxCoord *WXUNUSED(y),
-                                wxCoord *WXUNUSED(w), wxCoord *WXUNUSED(h))
+    virtual void GetClippingBox(wxCoord *x, wxCoord *y,
+                                wxCoord *w, wxCoord *h)
     {
-        wxFAIL_MSG(wxT("wxSVGFILEDC::GetClippingBox not implemented"));
+        DoGetClippingBox(x, y, w, h);
     }
 
     virtual void SetLogicalFunction(wxRasterOperationMode WXUNUSED(function))
@@ -166,9 +166,10 @@ private:
                                 wxCoord *externalLeading = NULL,
                                 const wxFont *font = NULL) const;
 
-   virtual void DoSetDeviceClippingRegion(const wxRegion& WXUNUSED(region))
+   virtual void DoSetDeviceClippingRegion(const wxRegion& region)
    {
-       wxFAIL_MSG(wxT("wxSVGFILEDC::DoSetDeviceClippingRegion not yet implemented"));
+        DoSetClippingRegion(region.GetBox().x, region.GetBox().y,
+                            region.GetBox().width, region.GetBox().height);
    }
 
    virtual void DoSetClippingRegion(int x,  int y, int width, int height);

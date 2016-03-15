@@ -178,7 +178,13 @@ void wxSVGFileDCImpl::Init (const wxString &filename, int Width, int Height, dou
 
 wxSVGFileDCImpl::~wxSVGFileDCImpl()
 {
-    wxString s = wxT("</g> \n</svg> \n");
+    wxString s;
+
+    // Close remaining clipping group elements
+    for (size_t i = 0; i < m_clipUniqueId; i++)
+        s += wxS("</g>\n");
+
+    s += wxS("</g>\n</svg>\n");
     write(s);
     delete m_outfile;
 }
@@ -516,7 +522,7 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,
     }
 }
 
-void wxSVGFileDCImpl::DoSetClippingRegion( int x,  int y, int width, int height )
+void wxSVGFileDCImpl::DoSetClippingRegion(int x, int y, int width, int height)
 {
     wxString svg;
 
@@ -524,14 +530,14 @@ void wxSVGFileDCImpl::DoSetClippingRegion( int x,  int y, int width, int height 
     // graphics can be subsequently changed inside the clipping region)
     svg << "</g>\n"
            "<defs>\n"
-           "<clipPath id=\"clip" << m_clipNestingLevel << "\">\n"
-           "<rect id=\"cliprect" << m_clipNestingLevel << "\" "
+           "  <clipPath id=\"clip" << m_clipNestingLevel << "\">\n"
+           "    <rect id=\"cliprect" << m_clipNestingLevel << "\" "
                 "x=\"" << x << "\" "
                 "y=\"" << y << "\" "
                 "width=\"" << width << "\" "
                 "height=\"" << height << "\" "
                 "style=\"stroke: gray; fill: none;\"/>\n"
-           "</clipPath>\n"
+           "  </clipPath>\n"
            "</defs>\n"
            "<g style=\"clip-path: url(#clip" << m_clipNestingLevel << ");\">\n";
 
@@ -555,9 +561,8 @@ void wxSVGFileDCImpl::DestroyClippingRegion()
     // Close clipping group elements
     for ( size_t i = 0; i < m_clipUniqueId; i++ )
     {
-        svg << "</g>";
+        svg << "</g>\n";
     }
-    svg << "\n";
 
     write(svg);
 
