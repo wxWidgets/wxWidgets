@@ -96,18 +96,23 @@ wxString wxPenString(wxColour c, int style = wxPENSTYLE_SOLID)
 wxString wxBrushString(wxColour c, int style = wxBRUSHSTYLE_SOLID)
 {
     float opacity;
-    wxString s = wxT("fill:") + Col2SVG(c, &opacity)  + wxT("; ");
+    wxString s = wxS("fill:") + Col2SVG(c, &opacity)  + wxS("; ");
 
     switch ( style )
     {
         case wxBRUSHSTYLE_SOLID:
-            s += wxString::Format(wxT("fill-opacity:%s; "), NumStr(opacity));
+        case wxBRUSHSTYLE_FDIAGONAL_HATCH:
+        case wxBRUSHSTYLE_CROSSDIAG_HATCH:
+        case wxBRUSHSTYLE_CROSS_HATCH:
+        case wxBRUSHSTYLE_VERTICAL_HATCH:
+        case wxBRUSHSTYLE_HORIZONTAL_HATCH:
+            s += wxString::Format(wxS("fill-opacity:%s; "), NumStr(opacity));
             break;
         case wxBRUSHSTYLE_TRANSPARENT:
-            s += wxT("fill-opacity:0.0; ");
+            s += wxS("fill-opacity:0.0; ");
             break;
         default :
-            wxASSERT_MSG(false, wxT("wxSVGFileDC::Requested Brush Style not available"));
+            wxASSERT_MSG(false, wxS("wxSVGFileDC::Requested Brush Style not available"));
     }
 
     return s;
@@ -175,6 +180,92 @@ wxString wxGetPenPattern(wxPen& pen)
             // these penstyles do not need a pattern.
             break;
     }
+    return s;
+}
+
+wxString wxGetBrushStyleName(wxBrush& brush)
+{
+    wxString brushStyle;
+
+    switch (brush.GetStyle())
+    {
+        case wxBRUSHSTYLE_FDIAGONAL_HATCH:
+            brushStyle = wxS("FdiagonalHatch");
+            break;
+        case wxBRUSHSTYLE_CROSSDIAG_HATCH:
+            brushStyle = wxS("CrossDiagHatch");
+            break;
+        case wxBRUSHSTYLE_CROSS_HATCH:
+            brushStyle = wxS("CrossHatch");
+            break;
+        case wxBRUSHSTYLE_VERTICAL_HATCH:
+            brushStyle = wxS("VerticalHatch");
+            break;
+        case wxBRUSHSTYLE_HORIZONTAL_HATCH:
+            brushStyle = wxS("HorizontalHatch");
+            break;
+        case wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE:
+        case wxBRUSHSTYLE_STIPPLE_MASK:
+        case wxBRUSHSTYLE_STIPPLE:
+        case wxBRUSHSTYLE_BDIAGONAL_HATCH:
+            wxASSERT_MSG(false, wxS("wxSVGFileDC::Requested Brush Fill not available"));
+            break;
+        case wxBRUSHSTYLE_SOLID:
+        case wxBRUSHSTYLE_TRANSPARENT:
+        case wxBRUSHSTYLE_INVALID:
+            // these brushstyles do not need a fill.
+            break;
+    }
+
+    return brushStyle;
+}
+
+wxString wxGetBrushFill(wxBrush& brush)
+{
+    wxString s;
+    wxString brushStyle = wxGetBrushStyleName(brush);
+
+    if (!brushStyle.IsEmpty())
+        s = wxS(" fill=\"url(#") + brushStyle + brush.GetColour().GetAsString(wxC2S_HTML_SYNTAX).substr(1) + wxS(")\"");
+
+    return s;
+}
+
+wxString wxCreateBrushFill(wxBrush& brush)
+{
+    wxString s;
+    wxString patternName = wxGetBrushStyleName(brush);
+
+    if (!patternName.IsEmpty())
+    {
+        patternName += brush.GetColour().GetAsString(wxC2S_HTML_SYNTAX).substr(1);
+        s = wxS("<pattern id=\"") + patternName + wxS("\" patternUnits=\"userSpaceOnUse\" width=\"8\" height=\"8\">\n");
+        s += wxS("  <path style=\"stroke:") + brush.GetColour().GetAsString(wxC2S_HTML_SYNTAX) + wxS(";\" ");
+
+        switch (brush.GetStyle())
+        {
+            case wxBRUSHSTYLE_FDIAGONAL_HATCH:
+                s += wxS("d=\"M7,-1 l2,2 M0,0 l8,8 M-1,7 l2,2\"");
+                break;
+            case wxBRUSHSTYLE_CROSSDIAG_HATCH:
+                s += wxS("d=\"M7,-1 l2,2 M0,0 l8,8 M-1,7 l2,2 M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2\"");
+                break;
+            case wxBRUSHSTYLE_CROSS_HATCH:
+                s += wxS("d=\"M4,0 l0,8 M0,4 l8,0\"");
+                break;
+            case wxBRUSHSTYLE_VERTICAL_HATCH:
+                s += wxS("d=\"M4,0 l0,8\"");
+                break;
+            case wxBRUSHSTYLE_HORIZONTAL_HATCH:
+                s += wxS("d=\"M0,4 l8,0\"");
+                break;
+            default:
+                break;
+        }
+
+        s += wxS("/>\n</pattern>\n");
+    }
+
     return s;
 }
 
@@ -476,8 +567,8 @@ void wxSVGFileDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width
     NewGraphicsIfNeeded();
     wxString s;
 
-    s.Printf ( wxT(" <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%s\" "),
-            x, y, width, height, NumStr(radius) );
+    s.Printf ( wxT(" <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%s\" %s"),
+            x, y, width, height, NumStr(radius) , wxGetBrushFill(m_brush));
 
     s += wxT(" /> \n");
     write(s);
@@ -498,7 +589,7 @@ void wxSVGFileDCImpl::DoDrawPolygon(int n, const wxPoint points[],
     else
         s += wxT("fill-rule:nonzero; ");
 
-    s += wxT("\" \npoints=\"");
+    s += wxT("\"") + wxGetBrushFill(m_brush) + wxT("\npoints=\"");
 
     for (int i = 0; i < n;  i++)
     {
@@ -780,6 +871,9 @@ void wxSVGFileDCImpl::SetBrush(const wxBrush& brush)
     m_brush = brush;
 
     m_graphics_changed = true;
+
+    wxString pattern = wxCreateBrushFill(m_brush);
+    write(pattern);
 }
 
 
