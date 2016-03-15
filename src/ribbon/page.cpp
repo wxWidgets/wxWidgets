@@ -224,6 +224,14 @@ void wxRibbonPage::SetArtProvider(wxRibbonArtProvider* art)
             ribbon_child->SetArtProvider(art);
         }
     }
+
+    // The scroll buttons are children of the parent ribbon control, not the
+    // page, so they're not taken into account by the loop above, but they
+    // still use the same art provider, so we need to update them too.
+    if ( m_scroll_left_btn )
+        m_scroll_left_btn->SetArtProvider(art);
+    if ( m_scroll_right_btn )
+        m_scroll_right_btn->SetArtProvider(art);
 }
 
 void wxRibbonPage::AdjustRectToIncludeScrollButtons(wxRect* rect) const
