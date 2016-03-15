@@ -81,10 +81,7 @@ public:
         return -1;
     }
 
-    virtual void Clear() wxOVERRIDE
-    {
-        wxFAIL_MSG(wxT("wxSVGFILEDC::Clear() Call not implemented \nNot sensible for an output file?"));
-    }
+    virtual void Clear() wxOVERRIDE;
 
     virtual void DestroyClippingRegion() wxOVERRIDE;
 
