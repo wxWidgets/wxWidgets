@@ -264,7 +264,7 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
 {
     //known bug; if the font is drawn in a scaled DC, it will not behave exactly as wxMSW
     NewGraphicsIfNeeded();
-    wxString s, sTmp;
+    wxString s;
 
     // Get extent of whole text.
     wxCoord w, h, heightLine;
@@ -275,11 +275,11 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     const double dx = heightLine * sin(rad);
     const double dy = heightLine * cos(rad);
 
-    // wxT("upper left") and wxT("upper right")
+    // wxS("upper left") and wxS("upper right")
     CalcBoundingBox(x, y);
     CalcBoundingBox((wxCoord)(x + w*cos(rad)), (wxCoord)(y - h*sin(rad)));
 
-    // wxT("bottom left") and wxT("bottom right")
+    // wxS("bottom left") and wxS("bottom right")
     CalcBoundingBox((wxCoord)(x + h*sin(rad)), (wxCoord)(y + h*cos(rad)));
     CalcBoundingBox((wxCoord)(x + h*sin(rad) + w*cos(rad)), (wxCoord)(y + h*cos(rad) - w*sin(rad)));
 
@@ -287,12 +287,11 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     {
         // draw background first
         // just like DoDrawRectangle except we pass the text color to it and set the border to a 1 pixel wide text background
-
-        sTmp.Printf ( wxT(" <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" "), x, y, w, h );
-        s = sTmp + wxT("style=\"") + wxBrushString(m_textBackgroundColour);
-        s += wxT("stroke-width:1; ") + wxPenString(m_textBackgroundColour);
-        sTmp.Printf ( wxT("\" transform=\"rotate( %s %d %d )  \" />"), NumStr(-angle), x,y );
-        s += sTmp + wxT("\n");
+        s += wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" "), x, y, w, h);
+        s += wxS("style=\"") + wxBrushString(m_textBackgroundColour);
+        s += wxS("stroke-width:1; ") + wxPenString(m_textBackgroundColour);
+        s += wxString::Format(wxS("\" transform=\"rotate(%s %d %d)\"/>"), NumStr(-angle), x, y);
+        s += wxS("\n");
         write(s);
     }
 
@@ -307,11 +306,13 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
         int yy = y + wxRound(lineNum * dy) + (hh - desc) * cos(rad);
 
         //now do the text itself
-        s.Printf (wxT(" <text x=\"%d\" y=\"%d\" "), xx, yy );
+        s += wxString::Format(wxS("  <text x=\"%d\" y=\"%d\" textLength=\"%d\" "), xx, yy, ww);
 
-        sTmp = m_font.GetFaceName();
-        if (sTmp.Len() > 0)  s += wxT("style=\"font-family:") + sTmp + wxT("; ");
-        else s += wxT("style=\" ");
+        wxString fontName(m_font.GetFaceName());
+        if (fontName.Len() > 0)
+            s += wxS("style=\"font-family:") + fontName + wxS("; ");
+        else
+            s += wxS("style=\" ");
 
         wxString fontweight;
         switch (m_font.GetWeight())
@@ -335,7 +336,7 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
 
         wxASSERT_MSG(!fontweight.empty(), wxS("unknown font weight value"));
 
-        s += wxT("font-weight:") + fontweight + wxT("; ");
+        s += wxS("font-weight:") + fontweight + wxS("; ");
 
         wxString fontstyle;
         switch (m_font.GetStyle())
@@ -359,18 +360,26 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
 
         wxASSERT_MSG(!fontstyle.empty(), wxS("unknown font style value"));
 
-        s += wxT("font-style:") + fontstyle + wxT("; ");
+        s += wxS("font-style:") + fontstyle + wxS("; ");
 
-        sTmp.Printf(wxT("font-size:%dpt; "), m_font.GetPointSize());
-        s += sTmp;
+        wxString textDecoration;
+        if (m_font.GetUnderlined())
+            textDecoration += wxS(" underline");
+        if (m_font.GetStrikethrough())
+            textDecoration += wxS(" line-through");
+        if (textDecoration.IsEmpty())
+            textDecoration = wxS(" none");
+
+        s += wxS("text-decoration:") + textDecoration + wxS("; ");
+
+        s += wxString::Format(wxS("font-size:%dpt; "), m_font.GetPointSize());
         //text will be solid, unless alpha value isn't opaque in the foreground colour
         s += wxBrushString(m_textForegroundColour) + wxPenString(m_textForegroundColour);
-        sTmp.Printf ( wxT("stroke-width:0;\"  transform=\"rotate( %s %d %d )  \" >"),  NumStr(-angle), xx, yy );
-        s += sTmp + wxMarkupParser::Quote(lines[lineNum]) + wxT("</text> ") + wxT("\n");
-        if (m_OK)
-        {
-            write(s);
-        }
+        s += wxString::Format(wxS("stroke-width:0;\" transform=\"rotate(%s %d %d)\""), NumStr(-angle), xx, yy);
+        s += wxS(" xml:space=\"preserve\">");
+        s += wxMarkupParser::Quote(lines[lineNum]) + wxS("</text>\n");
+
+        write(s);
     }
 }
 
