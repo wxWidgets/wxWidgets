@@ -2609,6 +2609,7 @@ static bool AlphaBlt(wxMSWDCImpl* dcDst,
     // this to avoid "losing" the existing bitmap contents outside of
     // the area affected by AlphaBlt(), see #14403.
 #ifdef wxHAS_RAW_BITMAP
+/*
     const wxBitmap& bmpDst = dcDst->GetSelectedBitmap();
     if ( bmpDst.IsOk() && !bmpDst.HasAlpha() && bmpDst.GetDepth() == 32 )
     {
@@ -2659,6 +2660,7 @@ static bool AlphaBlt(wxMSWDCImpl* dcDst,
 
         dcDst->DoSelect(bmpOld);
     }
+*/
 #endif // wxHAS_RAW_BITMAP
 
     return true;
