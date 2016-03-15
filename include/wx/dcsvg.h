@@ -229,14 +229,14 @@ private:
    // their current values in wxDC.
    void DoStartNewGraphics();
 
-   wxFileOutputStream *m_outfile;
    wxString            m_filename;
    int                 m_sub_images; // number of png format images we have
    bool                m_OK;
    bool                m_graphics_changed;  // set by Set{Brush,Pen}()
    int                 m_width, m_height;
    double              m_dpi;
-   wxSVGBitmapHandler* m_bmp_handler; // class to handle bitmaps
+   wxScopedPtr<wxFileOutputStream> m_outfile;
+   wxScopedPtr<wxSVGBitmapHandler> m_bmp_handler; // class to handle bitmaps
 
    // The clipping nesting level is incremented by every call to
    // SetClippingRegion() and reset when DestroyClippingRegion() is called.

@@ -409,8 +409,8 @@ void wxSVGFileDCImpl::Init (const wxString &filename, int Width, int Height,
 
     ////////////////////code here
 
-    m_bmp_handler = NULL;
-    m_outfile = new wxFileOutputStream(filename);
+    m_bmp_handler.reset();
+    m_outfile.reset(new wxFileOutputStream(filename));
     m_OK = m_outfile->IsOk();
     if (m_OK)
     {
@@ -438,7 +438,6 @@ wxSVGFileDCImpl::~wxSVGFileDCImpl()
 
     s += wxS("</g>\n</svg>\n");
     write(s);
-    delete m_outfile;
 }
 
 void wxSVGFileDCImpl::DoGetSizeMM( int *width, int *height ) const
@@ -956,8 +955,7 @@ void wxSVGFileDCImpl::SetBackgroundMode( int mode )
 
 void wxSVGFileDCImpl::SetBitmapHandler(wxSVGBitmapHandler* handler)
 {
-    delete m_bmp_handler;
-    m_bmp_handler = handler;
+    m_bmp_handler.reset(handler);
 }
 
 void wxSVGFileDCImpl::SetBrush(const wxBrush& brush)
@@ -1080,7 +1078,7 @@ void wxSVGFileDCImpl::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoor
 
     // If we don't have any bitmap handler yet, use the default one.
     if ( !m_bmp_handler )
-        m_bmp_handler = new wxSVGBitmapFileHandler();
+        m_bmp_handler.reset(new wxSVGBitmapFileHandler());
 
     m_bmp_handler->ProcessBitmap(bmp, x, y, *m_outfile);
 }
