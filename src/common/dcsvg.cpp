@@ -266,11 +266,14 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     NewGraphicsIfNeeded();
     wxString s, sTmp;
 
-    // calculate bounding box
-    wxCoord w, h, desc;
-    DoGetTextExtent(sText, &w, &h, &desc);
+    // Get extent of whole text.
+    wxCoord w, h, heightLine;
+    GetOwner()->GetMultiLineTextExtent(sText, &w, &h, &heightLine);
 
-    double rad = DegToRad(angle);
+    // Compute the shift for the origin of the next line.
+    const double rad = DegToRad(angle);
+    const double dx = heightLine * sin(rad);
+    const double dy = heightLine * cos(rad);
 
     // wxT("upper left") and wxT("upper right")
     CalcBoundingBox(x, y);
@@ -293,74 +296,81 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
         write(s);
     }
 
-    // convert x,y to SVG text x,y (the coordinates of the text baseline)
-    x = (wxCoord)(x + (h-desc)*sin(rad));
-    y = (wxCoord)(y + (h-desc)*cos(rad));
-
-    //now do the text itself
-    s.Printf (wxT(" <text x=\"%d\" y=\"%d\" "),x,y );
-
-    sTmp = m_font.GetFaceName();
-    if (sTmp.Len() > 0)  s += wxT("style=\"font-family:") + sTmp + wxT("; ");
-    else s += wxT("style=\" ");
-
-    wxString fontweight;
-    switch ( m_font.GetWeight() )
+    // Draw all text line by line
+    const wxArrayString lines = wxSplit(sText, '\n', '\0');
+    for (size_t lineNum = 0; lineNum < lines.size(); lineNum++)
     {
-        case wxFONTWEIGHT_MAX:
-            wxFAIL_MSG( wxS("invalid font weight value") );
-            wxFALLTHROUGH;
+        // convert x,y to SVG text x,y (the coordinates of the text baseline)
+        wxCoord ww, hh, desc;
+        DoGetTextExtent(lines[lineNum], &ww, &hh, &desc);
+        int xx = x + wxRound(lineNum * dx) + (hh - desc) * sin(rad);
+        int yy = y + wxRound(lineNum * dy) + (hh - desc) * cos(rad);
 
-        case wxFONTWEIGHT_NORMAL:
-            fontweight = wxS("normal");
-            break;
+        //now do the text itself
+        s.Printf (wxT(" <text x=\"%d\" y=\"%d\" "), xx, yy );
 
-        case wxFONTWEIGHT_LIGHT:
-            fontweight = wxS("lighter");
-            break;
+        sTmp = m_font.GetFaceName();
+        if (sTmp.Len() > 0)  s += wxT("style=\"font-family:") + sTmp + wxT("; ");
+        else s += wxT("style=\" ");
 
-        case wxFONTWEIGHT_BOLD:
-            fontweight = wxS("bold");
-            break;
-    }
+        wxString fontweight;
+        switch (m_font.GetWeight())
+        {
+            case wxFONTWEIGHT_MAX:
+                wxFAIL_MSG(wxS("invalid font weight value"));
+                wxFALLTHROUGH;
 
-    wxASSERT_MSG( !fontweight.empty(), wxS("unknown font weight value") );
+            case wxFONTWEIGHT_NORMAL:
+                fontweight = wxS("normal");
+                break;
 
-    s += wxT("font-weight:") + fontweight + wxT("; ");
+            case wxFONTWEIGHT_LIGHT:
+                fontweight = wxS("lighter");
+                break;
 
-    wxString fontstyle;
-    switch ( m_font.GetStyle() )
-    {
-        case wxFONTSTYLE_MAX:
-            wxFAIL_MSG( wxS("invalid font style value") );
-            wxFALLTHROUGH;
+            case wxFONTWEIGHT_BOLD:
+                fontweight = wxS("bold");
+                break;
+        }
 
-        case wxFONTSTYLE_NORMAL:
-            fontstyle = wxS("normal");
-            break;
+        wxASSERT_MSG(!fontweight.empty(), wxS("unknown font weight value"));
 
-        case wxFONTSTYLE_ITALIC:
-            fontstyle = wxS("italic");
-            break;
+        s += wxT("font-weight:") + fontweight + wxT("; ");
 
-        case wxFONTSTYLE_SLANT:
-            fontstyle = wxS("oblique");
-            break;
-    }
+        wxString fontstyle;
+        switch (m_font.GetStyle())
+        {
+            case wxFONTSTYLE_MAX:
+                wxFAIL_MSG(wxS("invalid font style value"));
+                wxFALLTHROUGH;
 
-    wxASSERT_MSG( !fontstyle.empty(), wxS("unknown font style value") );
+            case wxFONTSTYLE_NORMAL:
+                fontstyle = wxS("normal");
+                break;
 
-    s += wxT("font-style:") + fontstyle + wxT("; ");
+            case wxFONTSTYLE_ITALIC:
+                fontstyle = wxS("italic");
+                break;
 
-    sTmp.Printf (wxT("font-size:%dpt; "), m_font.GetPointSize() );
-    s += sTmp;
-    //text will be solid, unless alpha value isn't opaque in the foreground colour
-    s += wxBrushString(m_textForegroundColour) + wxPenString(m_textForegroundColour);
-    sTmp.Printf ( wxT("stroke-width:0;\"  transform=\"rotate( %s %d %d )  \" >"),  NumStr(-angle), x,y );
-    s += sTmp + wxMarkupParser::Quote(sText) + wxT("</text> ") + wxT("\n");
-    if (m_OK)
-    {
-        write(s);
+            case wxFONTSTYLE_SLANT:
+                fontstyle = wxS("oblique");
+                break;
+        }
+
+        wxASSERT_MSG(!fontstyle.empty(), wxS("unknown font style value"));
+
+        s += wxT("font-style:") + fontstyle + wxT("; ");
+
+        sTmp.Printf(wxT("font-size:%dpt; "), m_font.GetPointSize());
+        s += sTmp;
+        //text will be solid, unless alpha value isn't opaque in the foreground colour
+        s += wxBrushString(m_textForegroundColour) + wxPenString(m_textForegroundColour);
+        sTmp.Printf ( wxT("stroke-width:0;\"  transform=\"rotate( %s %d %d )  \" >"),  NumStr(-angle), xx, yy );
+        s += sTmp + wxMarkupParser::Quote(lines[lineNum]) + wxT("</text> ") + wxT("\n");
+        if (m_OK)
+        {
+            write(s);
+        }
     }
 }
 
