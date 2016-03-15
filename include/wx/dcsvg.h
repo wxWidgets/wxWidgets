@@ -16,7 +16,7 @@
 
 #if wxUSE_SVG
 
-#define wxSVGVersion wxT("v0100")
+#define wxSVGVersion wxT("v0101")
 
 #ifdef __BORLANDC__
 #pragma warn -8008
