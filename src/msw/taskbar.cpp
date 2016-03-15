@@ -82,6 +82,12 @@ public:
     {
     }
 
+    //wxFrame may receive WM_CLOSE events, but we're owned by wxTaskBarIcon below!
+    virtual bool Destroy()
+	{
+		return true;
+	}
+	
     WXLRESULT MSWWindowProc(WXUINT msg,
                             WXWPARAM wParam, WXLPARAM lParam)
     {
