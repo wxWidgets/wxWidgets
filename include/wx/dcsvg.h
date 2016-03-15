@@ -66,7 +66,8 @@ class WXDLLIMPEXP_CORE wxSVGFileDCImpl : public wxDCImpl
 {
 public:
     wxSVGFileDCImpl( wxSVGFileDC *owner, const wxString &filename,
-                     int width=320, int height=240, double dpi=72.0 );
+                     int width = 320, int height = 240, double dpi = 72.0,
+                     const wxString &title = wxString() );
 
     virtual ~wxSVGFileDCImpl();
 
@@ -214,7 +215,8 @@ private:
 
    virtual wxSize GetPPI() const wxOVERRIDE;
 
-   void Init (const wxString &filename, int width, int height, double dpi);
+   void Init (const wxString &filename, int width, int height,
+              double dpi, const wxString &title);
 
    void write( const wxString &s );
 
@@ -254,8 +256,9 @@ public:
     wxSVGFileDC(const wxString& filename,
                 int width = 320,
                 int height = 240,
-                double dpi = 72.0)
-        : wxDC(new wxSVGFileDCImpl(this, filename, width, height, dpi))
+                double dpi = 72.0,
+                const wxString& title = wxString())
+        : wxDC(new wxSVGFileDCImpl(this, filename, width, height, dpi, title))
     {
     }
 
