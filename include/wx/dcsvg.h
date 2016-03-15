@@ -48,10 +48,7 @@ public:
         return -1;
     }
 
-    virtual void Clear()
-    {
-        wxFAIL_MSG(wxT("wxSVGFILEDC::Clear() Call not implemented \nNot sensible for an output file?"));
-    }
+    virtual void Clear();
 
     virtual void DestroyClippingRegion();
 

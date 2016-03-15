@@ -56,7 +56,7 @@ public:
     void EndPage();
 
     /**
-        This makes no sense in wxSVGFileDC and does nothing.
+        Draws a rectangle the size of the SVG using the wxDC::SetBackground() brush.
     */
     void Clear();
 

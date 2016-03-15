@@ -204,6 +204,17 @@ wxSize wxSVGFileDCImpl::GetPPI() const
     return wxSize( wxRound(m_dpi), wxRound(m_dpi) );
 }
 
+void wxSVGFileDCImpl::Clear()
+{
+    {
+        wxDCBrushChanger setBackground(*GetOwner(), m_backgroundBrush);
+        wxDCPenChanger setTransp(*GetOwner(), *wxTRANSPARENT_PEN);
+        DoDrawRectangle(0, 0, m_width, m_height);
+    }
+
+    NewGraphicsIfNeeded();
+}
+
 void wxSVGFileDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
     NewGraphicsIfNeeded();
