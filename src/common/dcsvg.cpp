@@ -26,6 +26,7 @@
 #include "wx/dcsvg.h"
 #include "wx/wfstream.h"
 #include "wx/filename.h"
+#include "wx/scopedarray.h"
 
 #include "wx/private/markupparser.h"
 
@@ -393,6 +394,48 @@ void wxSVGFileDCImpl::DoDrawPolygon(int n, const wxPoint points[],
     }
     s += wxT("\" /> \n");
     write(s);
+}
+
+void wxSVGFileDCImpl::DoDrawPolyPolygon(int n, const int count[], const wxPoint points[],
+                                        wxCoord xoffset, wxCoord yoffset,
+                                        wxPolygonFillMode fillStyle)
+{
+    if (n == 1)
+    {
+        DoDrawPolygon(count[0], points, xoffset, yoffset, fillStyle);
+        return;
+    }
+
+    int i, j;
+    int totalPts = 0;
+    for (j = 0; j < n; ++j)
+        totalPts += count[j];
+
+    wxScopedArray<wxPoint> pts(new wxPoint[totalPts + n]);
+
+    int polyCounter = 0, polyIndex = 0;
+    for (i = j = 0; i < totalPts; ++i)
+    {
+        pts[j++] = points[i];
+        ++polyCounter;
+        if (polyCounter == count[polyIndex])
+        {
+            pts[j++] = points[i - count[polyIndex] + 1];
+            ++polyIndex;
+            polyCounter = 0;
+        }
+    }
+
+    {
+        wxDCPenChanger setTransp(*GetOwner(), *wxTRANSPARENT_PEN);
+        DoDrawPolygon(j, pts.get(), xoffset, yoffset, fillStyle);
+    }
+
+    for (i = j = 0; i < n; i++)
+    {
+        DoDrawLines(count[i] + 1, pts.get() + j, xoffset, yoffset);
+        j += count[i] + 1;
+    }
 }
 
 void wxSVGFileDCImpl::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord height)

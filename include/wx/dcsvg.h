@@ -134,6 +134,10 @@ private:
                               wxCoord xoffset, wxCoord yoffset,
                               wxPolygonFillMode fillStyle);
 
+   virtual void DoDrawPolyPolygon(int n, const int count[], const wxPoint points[],
+                                  wxCoord xoffset, wxCoord yoffset,
+                                  wxPolygonFillMode fillStyle);
+
    virtual void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
 
    virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
