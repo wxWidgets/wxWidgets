@@ -169,6 +169,10 @@ private:
                               wxCoord xoffset, wxCoord yoffset,
                               wxPolygonFillMode fillStyle) wxOVERRIDE;
 
+   virtual void DoDrawPolyPolygon(int n, const int count[], const wxPoint points[],
+                                  wxCoord xoffset, wxCoord yoffset,
+                                  wxPolygonFillMode fillStyle) wxOVERRIDE;
+
    virtual void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord w, wxCoord h) wxOVERRIDE;
 
    virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
