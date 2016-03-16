@@ -111,8 +111,7 @@ public:
     void Clip(bool clip) { m_clip = clip; Refresh(); }
 #if wxUSE_GRAPHICS_CONTEXT
     bool HasRenderer() const { return m_renderer != NULL; }
-    void UseGraphicRenderer(wxGraphicsRenderer* renderer)
-        { m_renderer = renderer; Refresh(); }
+    void UseGraphicRenderer(wxGraphicsRenderer* renderer);
     bool IsDefaultRenderer() const
     {   if ( !m_renderer ) return false;
         return m_renderer == wxGraphicsRenderer::GetDefaultRenderer();
@@ -1907,6 +1906,27 @@ void MyCanvas::OnMouseUp(wxMouseEvent &event)
         }
     }
 }
+
+#if wxUSE_GRAPHICS_CONTEXT
+void MyCanvas::UseGraphicRenderer(wxGraphicsRenderer* renderer)
+{
+    m_renderer = renderer;
+    if (renderer)
+    {
+        int major, minor, micro;
+        renderer->GetVersion(&major, &minor, &micro);
+        wxString str = wxString::Format("Graphic renderer: %s %i.%i.%i",
+                         renderer->GetName().c_str(), major, minor, micro);
+        m_owner->SetStatusText(str, 1);
+    }
+    else
+    {
+        m_owner->SetStatusText(wxEmptyString, 1);
+    }
+
+    Refresh();
+}
+#endif // wxUSE_GRAPHICS_CONTEXT
 
 // ----------------------------------------------------------------------------
 // MyFrame
