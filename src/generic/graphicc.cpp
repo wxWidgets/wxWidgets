@@ -400,6 +400,7 @@ public:
 #endif
 #ifdef __WXMSW__
     wxCairoContext( wxGraphicsRenderer* renderer, HDC context );
+    wxCairoContext(wxGraphicsRenderer* renderer, HWND hWnd);
 #endif
     wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context );
     wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window);
@@ -1921,7 +1922,19 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, HDC handle )
     m_width =
     m_height = 0;
 }
-#endif
+
+wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer, HWND hWnd)
+    : wxGraphicsContext(renderer)
+    , m_mswWindowHDC(hWnd)
+{
+    // See remarks for wxWindowBase::GetContentScaleFactor
+    double scaleY = ::GetDeviceCaps((HDC)m_mswWindowHDC, LOGPIXELSY) / 96.0f;
+    m_enableOffset = scaleY <= 1.0;
+
+    m_mswSurface = cairo_win32_surface_create((HDC)m_mswWindowHDC);
+    Init(cairo_create(m_mswSurface));
+}
+#endif // __WXMSW__
 
 
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
@@ -2574,8 +2587,11 @@ wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext(void * conte
 
 wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeWindow( void * window )
 {
+    ENSURE_LOADED_OR_RETURN(NULL);
 #ifdef __WXGTK__
     return new wxCairoContext(this, static_cast<GdkWindow*>(window));
+#elif defined(__WXMSW__)
+    return new wxCairoContext(this, static_cast<HWND>(window));
 #else
     wxUnusedVar(window);
     return NULL;
