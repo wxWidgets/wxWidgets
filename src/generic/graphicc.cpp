@@ -2330,7 +2330,25 @@ void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& 
     while (i++ < len)
         widths.Add(PANGO_PIXELS(w));
 #else
-    // TODO
+    const wxCharBuffer data = text.utf8_str();
+    for (size_t i = 0; i < data.length(); i++)
+    {
+        cairo_text_extents_t te;
+        char ch[2];
+
+        ch[0] = data[i];
+        ch[1] = '\0';
+        cairo_text_extents(m_context, ch, &te);
+
+        double w;
+        // Last character is interpreted in a different way.
+        if( i == data.length()-1 )
+            w = te.width;
+        else
+            w = te.x_advance;
+
+        widths.push_back(w);
+    }
 #endif
 }
 
