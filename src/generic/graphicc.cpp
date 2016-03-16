@@ -527,6 +527,25 @@ private:
 };
 #endif // wxUSE_IMAGE
 
+#ifdef __WXMSW__
+class wxCairoMeasuringContext : public wxCairoContext
+{
+public:
+    wxCairoMeasuringContext(wxGraphicsRenderer* renderer)
+        : wxCairoContext(renderer, m_hdc = ::GetDC(NULL))
+    {
+    }
+
+    virtual ~wxCairoMeasuringContext()
+    {
+        ::ReleaseDC(NULL, m_hdc);
+    }
+
+private:
+    HDC m_hdc;
+};
+#endif // __WXMSW__
+
 // ----------------------------------------------------------------------------
 // wxCairoPenBrushBaseData implementation
 //-----------------------------------------------------------------------------
@@ -2575,6 +2594,9 @@ wxGraphicsContext * wxCairoRenderer::CreateMeasuringContext()
 {
 #ifdef __WXGTK__
     return CreateContextFromNativeWindow(gdk_get_default_root_window());
+#elif defined(__WXMSW__)
+    ENSURE_LOADED_OR_RETURN(NULL);
+    return new wxCairoMeasuringContext(this);
 #else
     return NULL;
     // TODO
