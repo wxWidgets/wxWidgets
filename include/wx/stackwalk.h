@@ -15,6 +15,8 @@
 
 #if wxUSE_STACKWALKER
 
+#include "wx/string.h"
+
 class WXDLLIMPEXP_FWD_BASE wxStackFrame;
 
 #define wxSTACKWALKER_MAX_DEPTH       (200)

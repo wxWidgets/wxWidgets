@@ -25,13 +25,18 @@
     class from it and override this method.
 
     This class will not return anything except raw stack frame addresses if the
-    debug information is not available. Under Win32 this means that the PDB file
-    matching the program being executed should be present.
+    debug information is not available. Under Microsoft Windows this means that
+    the PDB file matching the program being executed should be present.
     Note that if you use Microsoft Visual C++ compiler, you can create PDB files
     even for the programs built in release mode and it doesn't affect the program
     size (at least if you don't forget to add @c /opt:ref option which is suppressed
     by using @c /debug linker option by default but should be always enabled for
-    release builds).
+    release builds). If your compiler doesn't provide a direct way of
+    generating PDB files but does produce debug information in the older "Code
+    View" format or compatible, which is the case for MinGW, you can use @c
+    cv2pdb tool available at https://github.com/rainers/cv2pdb to create PDB
+    for your binaries which will work well when using this class.
+
     Under Unix, you need to compile your program with debugging information
     (usually using @c -g compiler and linker options) to get the file and line
     numbers information, however function names should be available even without it.

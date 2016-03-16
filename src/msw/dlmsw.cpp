@@ -24,6 +24,8 @@
 
 #if wxUSE_DYNLIB_CLASS
 
+#include "wx/dynlib.h"
+
 #include "wx/msw/private.h"
 #include "wx/msw/debughlp.h"
 #include "wx/filename.h"

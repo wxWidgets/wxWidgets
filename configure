@@ -1195,6 +1195,7 @@ enable_protocol_http
 enable_protocol_ftp
 enable_protocol_file
 enable_threads
+enable_dbghelp
 enable_iniconf
 enable_regkey
 enable_docview
@@ -2127,6 +2128,7 @@ Optional Features:
   --enable-protocol-ftp   FTP support in wxProtocol
   --enable-protocol-file  FILE support in wxProtocol
   --enable-threads        use threads
+  --enable-dbghelp        use dbghelp.dll API (Win32 only)
   --enable-iniconf        use wxIniConfig (Win32 only)
   --enable-regkey         use wxRegKey class (Win32 only)
   --enable-docview        use document view architecture
@@ -7745,6 +7747,36 @@ fi
           eval "$wx_cv_use_threads"
 
 
+if test "$wxUSE_MSW" = 1 ; then
+
+          enablestring=disable
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-dbghelp was given.
+if test "${enable_dbghelp+set}" = set; then :
+  enableval=$enable_dbghelp;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_dbghelp='wxUSE_DBGHELP=yes'
+                          else
+                            wx_cv_use_dbghelp='wxUSE_DBGHELP=no'
+                          fi
+
+else
+
+                          wx_cv_use_dbghelp='wxUSE_DBGHELP=${'DEFAULT_wxUSE_DBGHELP":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_dbghelp"
+
 
           enablestring=
           defaultval=
@@ -7803,6 +7835,7 @@ fi
 
           eval "$wx_cv_use_regkey"
 
+fi
 
 if test "$wxUSE_GUI" = "yes"; then
 
@@ -35882,6 +35915,63 @@ if test "$wxUSE_AUTOID_MANAGEMENT" = "yes"; then
 fi
 
 if test "$USE_WIN32" = 1 ; then
+    if test "$wxUSE_DBGHELP" = "yes"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if debug help API is available" >&5
+$as_echo_n "checking if debug help API is available... " >&6; }
+if ${wx_cv_lib_debughlp+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+                                                ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+                cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <windows.h>
+                     #include <imagehlp.h>
+int
+main ()
+{
+
+                        #ifndef API_VERSION_NUMBER
+                        #error API_VERSION_NUMBER not defined!
+                        #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  wx_cv_lib_debughlp=yes
+else
+  wx_cv_lib_debughlp=no
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+                ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_lib_debughlp" >&5
+$as_echo "$wx_cv_lib_debughlp" >&6; }
+
+        if test "$wx_cv_lib_debughlp" = yes; then
+            $as_echo "#define wxUSE_DBGHELP 1" >>confdefs.h
+
+        else
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Debug help API and wxStackWalker won't be available" >&5
+$as_echo "$as_me: WARNING: Debug help API and wxStackWalker won't be available" >&2;}
+        fi
+    fi
+
     if test "$wxUSE_INICONF" = "yes"; then
         $as_echo "#define wxUSE_INICONF 1" >>confdefs.h
 
