@@ -55,7 +55,7 @@ public:
     virtual void SetTitle(const wxString& title) wxOVERRIDE
     {
         m_title = title;
-        UpdateDisplay();
+        UpdateWidth();
     }
     virtual wxString GetTitle() const wxOVERRIDE
     {
@@ -65,7 +65,7 @@ public:
     virtual void SetWidth(int width) wxOVERRIDE
     {
         // As a small optimization, use this method to avoid calling
-        // UpdateDisplay() if the width didn't really change, even if we don't
+        // UpdateWidth() if the width didn't really change, even if we don't
         // care about its return value.
         (void)WXUpdateWidth(width);
     }
@@ -74,7 +74,7 @@ public:
     virtual void SetMinWidth(int minWidth) wxOVERRIDE
     {
         m_minWidth = minWidth;
-        UpdateDisplay();
+        UpdateWidth();
     }
     virtual int GetMinWidth() const wxOVERRIDE
     {
@@ -118,7 +118,7 @@ public:
     virtual void SetBitmap( const wxBitmap& bitmap ) wxOVERRIDE
     {
         wxDataViewColumnBase::SetBitmap(bitmap);
-        UpdateDisplay();
+        UpdateWidth();
     }
 
     // This method is specific to the generic implementation and is used only
@@ -129,7 +129,7 @@ public:
             return false;
 
         m_width = width;
-        UpdateDisplay();
+        UpdateWidth();
 
         return true;
     }
@@ -138,7 +138,11 @@ private:
     // common part of all ctors
     void Init(int width, wxAlignment align, int flags);
 
+    // These methods forward to wxDataViewCtrl::OnColumnChange() and
+    // OnColumnWidthChange() respectively, i.e. the latter is stronger than the
+    // former.
     void UpdateDisplay();
+    void UpdateWidth();
 
     wxString m_title;
     int m_width,
@@ -288,6 +292,9 @@ public:     // utility functions not part of the API
 
     // update the display after a change to an individual column
     void OnColumnChange(unsigned int idx);
+
+    // update after the column width changes, also calls OnColumnChange()
+    void OnColumnWidthChange(unsigned int idx);
 
     // update after a change to the number of columns
     void OnColumnsCountChanged();

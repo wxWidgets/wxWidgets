@@ -186,6 +186,15 @@ void wxDataViewColumn::UpdateDisplay()
     }
 }
 
+void wxDataViewColumn::UpdateWidth()
+{
+    if (m_owner)
+    {
+        int idx = m_owner->GetColumnIndex( this );
+        m_owner->OnColumnWidthChange( idx );
+    }
+}
+
 void wxDataViewColumn::UnsetAsSortKey()
 {
     m_sort = false;
@@ -4844,6 +4853,13 @@ bool wxDataViewCtrl::InsertColumn( unsigned int pos, wxDataViewColumn *col )
     m_colsBestWidths.insert(m_colsBestWidths.begin() + pos, CachedColWidthInfo());
     OnColumnsCountChanged();
     return true;
+}
+
+void wxDataViewCtrl::OnColumnWidthChange(unsigned int idx)
+{
+    InvalidateColBestWidth(idx);
+
+    OnColumnChange(idx);
 }
 
 void wxDataViewCtrl::OnColumnChange(unsigned int idx)
