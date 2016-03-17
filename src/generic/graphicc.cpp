@@ -1988,6 +1988,9 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
 wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer) :
     wxGraphicsContext(renderer)
 {
+#ifdef __WXMSW__
+    m_mswSurface = NULL;
+#endif // __WXMSW__
     m_context = NULL;
 }
 
