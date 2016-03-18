@@ -57,11 +57,9 @@ public:
 
     virtual bool MacRender();
 
-#if wxOSX_USE_COCOA
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col);
-#endif // Cocoa
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer);
@@ -86,8 +84,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapRenderer);
 };
 
-#if wxOSX_USE_COCOA
-
 // -------------------------------------
 // wxDataViewChoiceRenderer
 // -------------------------------------
@@ -104,11 +100,9 @@ public:
     wxString GetChoice(size_t index) const { return m_choices[index]; }
     const wxArrayString& GetChoices() const { return m_choices; }
 
-#if wxOSX_USE_COCOA
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col);
-#endif // Cocoa
 
 private:
     wxArrayString m_choices;
@@ -135,8 +129,6 @@ public:
                                   unsigned col) wxOVERRIDE;
 };
 
-#endif // wxOSX_USE_COCOA
-
 // ---------------------------------------------------------
 // wxDataViewIconTextRenderer
 // ---------------------------------------------------------
@@ -151,11 +143,9 @@ public:
 
     virtual bool MacRender();
 
-#if wxOSX_USE_COCOA
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col);
-#endif // Cocoa
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewIconTextRenderer);
@@ -176,11 +166,9 @@ public:
 
     virtual bool MacRender();
 
-#if wxOSX_USE_COCOA
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col);
-#endif // Cocoa
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleRenderer);
@@ -202,11 +190,9 @@ public:
 
     virtual bool MacRender();
 
-#if wxOSX_USE_COCOA
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col);
-#endif // Cocoa
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressRenderer);
@@ -227,11 +213,9 @@ public:
 
     virtual bool MacRender();
 
-#if wxOSX_USE_COCOA
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col);
-#endif // Cocoa
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewDateRenderer);
