@@ -678,6 +678,9 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     if( !event.IsAllowed() )
         return false;
 
+    // Remember the item being edited for use in FinishEditing() later.
+    m_item = item;
+
     unsigned int col = GetOwner()->GetModelColumn();
     const wxVariant& value = CheckedGetValue(dv_ctrl->GetModel(), item, col);
 
@@ -685,7 +688,10 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 
     // there might be no editor control for the given item
     if(!m_editorCtrl)
+    {
+        m_item = wxDataViewItem();
         return false;
+    }
 
     wxDataViewEditorCtrlEvtHandler *handler =
         new wxDataViewEditorCtrlEvtHandler( m_editorCtrl, (wxDataViewRenderer*) this );
@@ -703,9 +709,6 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 
 void wxDataViewRendererBase::NotifyEditingStarted(const wxDataViewItem& item)
 {
-    // Remember the item being edited for use in FinishEditing() later.
-    m_item = item;
-
     wxDataViewColumn* const column = GetOwner();
     wxDataViewCtrl* const dv_ctrl = column->GetOwner();
 
