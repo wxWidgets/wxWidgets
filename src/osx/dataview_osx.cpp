@@ -122,13 +122,8 @@ bool wxOSXDataViewModelNotifier::ItemChanged(wxDataViewItem const& item)
   wxCHECK_MSG(GetOwner() != NULL,false,"Owner not initialized.");
   if (m_DataViewCtrlPtr->GetDataViewPeer()->Update(GetOwner()->GetParent(item),item))
   {
-   // sent the equivalent wxWidget event:
-    wxDataViewEvent dataViewEvent(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED,m_DataViewCtrlPtr->GetId());
-
-    dataViewEvent.SetEventObject(m_DataViewCtrlPtr);
-    dataViewEvent.SetModel(m_DataViewCtrlPtr->GetModel());
-    dataViewEvent.SetItem(item);
-   // sent the equivalent wxWidget event:
+   // send the equivalent wxWidgets event:
+    wxDataViewEvent dataViewEvent(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_DataViewCtrlPtr, item);
     m_DataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
    // row height may have to be adjusted:
     AdjustRowHeight(item);
@@ -144,16 +139,11 @@ bool wxOSXDataViewModelNotifier::ItemsChanged(wxDataViewItemArray const& items)
 {
   size_t const noOfItems = items.GetCount();
 
-  wxDataViewEvent dataViewEvent(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED,m_DataViewCtrlPtr->GetId());
-
-
-  dataViewEvent.SetEventObject(m_DataViewCtrlPtr);
-  dataViewEvent.SetModel(m_DataViewCtrlPtr->GetModel());
   for (size_t indexItem=0; indexItem<noOfItems; ++indexItem)
     if (m_DataViewCtrlPtr->GetDataViewPeer()->Update(GetOwner()->GetParent(items[indexItem]),items[indexItem]))
     {
-     // send for all changed items a wxWidget event:
-      dataViewEvent.SetItem(items[indexItem]);
+     // send for all changed items a wxWidgets event:
+      wxDataViewEvent dataViewEvent(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED,m_DataViewCtrlPtr,items[indexItem]);
       m_DataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
     }
     else
@@ -211,13 +201,9 @@ bool wxOSXDataViewModelNotifier::ValueChanged(wxDataViewItem const& item, unsign
   wxCHECK_MSG(GetOwner() != NULL,false,"Owner not initialized.");
   if (m_DataViewCtrlPtr->GetDataViewPeer()->Update(GetOwner()->GetParent(item),item))
   {
-    wxDataViewEvent dataViewEvent(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED,m_DataViewCtrlPtr->GetId());
+    wxDataViewEvent dataViewEvent(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_DataViewCtrlPtr, m_DataViewCtrlPtr->GetColumn(col), item);
 
-    dataViewEvent.SetEventObject(m_DataViewCtrlPtr);
-    dataViewEvent.SetModel(m_DataViewCtrlPtr->GetModel());
-    dataViewEvent.SetColumn(col);
-    dataViewEvent.SetItem(item);
-   // send the equivalent wxWidget event:
+   // send the equivalent wxWidgets event:
     m_DataViewCtrlPtr->HandleWindowEvent(dataViewEvent);
 
     AdjustAutosizedColumns();

@@ -669,16 +669,13 @@ wxDataViewCtrl* wxDataViewRendererBase::GetView() const
 
 bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect labelRect )
 {
-    wxDataViewCtrl* dv_ctrl = GetOwner()->GetOwner();
+    wxDataViewColumn* const column = GetOwner();
+    wxDataViewCtrl* const dv_ctrl = column->GetOwner();
 
     // Before doing anything we send an event asking if editing of this item is really wanted.
-    wxDataViewEvent start_event( wxEVT_DATAVIEW_ITEM_START_EDITING, dv_ctrl->GetId() );
-    start_event.SetDataViewColumn( GetOwner() );
-    start_event.SetModel( dv_ctrl->GetModel() );
-    start_event.SetItem( item );
-    start_event.SetEventObject( dv_ctrl );
-    dv_ctrl->GetEventHandler()->ProcessEvent( start_event );
-    if( !start_event.IsAllowed() )
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_START_EDITING, dv_ctrl, column, item);
+    dv_ctrl->GetEventHandler()->ProcessEvent( event );
+    if( !event.IsAllowed() )
         return false;
 
     unsigned int col = GetOwner()->GetModelColumn();
@@ -712,11 +709,7 @@ void wxDataViewRendererBase::NotifyEditingStarted(const wxDataViewItem& item)
     wxDataViewColumn* const column = GetOwner();
     wxDataViewCtrl* const dv_ctrl = column->GetOwner();
 
-    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_EDITING_STARTED, dv_ctrl->GetId() );
-    event.SetDataViewColumn( column );
-    event.SetModel( dv_ctrl->GetModel() );
-    event.SetItem( item );
-    event.SetEventObject( dv_ctrl );
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EDITING_STARTED, dv_ctrl, column, item);
     dv_ctrl->GetEventHandler()->ProcessEvent( event );
 }
 
@@ -756,7 +749,8 @@ bool wxDataViewRendererBase::FinishEditing()
     wxVariant value;
     const bool gotValue = GetValueFromEditorCtrl(m_editorCtrl, value);
 
-    wxDataViewCtrl* dv_ctrl = GetOwner()->GetOwner();
+    wxDataViewColumn* const column = GetOwner();
+    wxDataViewCtrl* const dv_ctrl = column->GetOwner();
 
     DestroyEditControl();
 
@@ -769,14 +763,9 @@ bool wxDataViewRendererBase::FinishEditing()
     unsigned int col = GetOwner()->GetModelColumn();
 
     // Now we should send Editing Done event
-    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_EDITING_DONE, dv_ctrl->GetId() );
-    event.SetDataViewColumn( GetOwner() );
-    event.SetModel( dv_ctrl->GetModel() );
-    event.SetItem( m_item );
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EDITING_DONE, dv_ctrl, column, m_item);
     event.SetValue( value );
-    event.SetColumn( col );
     event.SetEditCanceled( !isValid );
-    event.SetEventObject( dv_ctrl );
     dv_ctrl->GetEventHandler()->ProcessEvent( event );
 
     bool accepted = false;
@@ -1591,6 +1580,29 @@ wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, wxDataViewEvent );
 wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEvent );
 wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_DROP, wxDataViewEvent );
 
+// Common part of non-copy ctors.
+void wxDataViewEvent::Init(wxDataViewCtrlBase* dvc,
+                           wxDataViewColumn* column,
+                           const wxDataViewItem& item)
+{
+    m_item = item;
+    m_col = column ? column->GetModelColumn() : -1;
+    m_model = dvc->GetModel();
+    m_column = column;
+    m_pos = wxDefaultPosition;
+    m_cacheFrom = 0;
+    m_cacheTo = 0;
+    m_editCancelled = false;
+#if wxUSE_DRAG_AND_DROP
+    m_dataObject = NULL;
+    m_dataBuffer = NULL;
+    m_dataSize = 0;
+    m_dragFlags = 0;
+    m_dropEffect = wxDragNone;
+#endif // wxUSE_DRAG_AND_DROP
+
+    SetEventObject(dvc);
+}
 
 #if wxUSE_SPINCTRL
 
