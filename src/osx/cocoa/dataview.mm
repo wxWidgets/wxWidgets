@@ -2836,6 +2836,49 @@ bool wxDataViewChoiceRenderer::MacRender()
 
 wxIMPLEMENT_CLASS(wxDataViewChoiceRenderer, wxDataViewRenderer);
 
+// ----------------------------------------------------------------------------
+// wxDataViewChoiceByIndexRenderer
+// ----------------------------------------------------------------------------
+
+wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer(const wxArrayString& choices,
+                                                                 wxDataViewCellMode mode,
+                                                                 int alignment)
+    : wxDataViewChoiceRenderer(choices, mode, alignment)
+{
+    m_variantType = wxS("long");
+}
+
+void
+wxDataViewChoiceByIndexRenderer::OSXOnCellChanged(NSObject *value,
+                                                  const wxDataViewItem& item,
+                                                  unsigned col)
+{
+    wxVariant valueLong(ObjectToLong(value));
+    if ( !Validate(valueLong) )
+        return;
+
+    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
+    model->ChangeValue(valueLong, item, col);
+}
+
+bool
+wxDataViewChoiceByIndexRenderer::SetValue(const wxVariant& value)
+{
+    const wxVariant valueStr = GetChoice(value.GetLong());
+    return wxDataViewChoiceRenderer::SetValue(valueStr);
+}
+
+bool
+wxDataViewChoiceByIndexRenderer::GetValue(wxVariant& value) const
+{
+    wxVariant valueStr;
+    if ( !wxDataViewChoiceRenderer::GetValue(valueStr) )
+         return false;
+
+    value = (long) GetChoices().Index(valueStr.GetString());
+    return true;
+}
+
 // ---------------------------------------------------------
 // wxDataViewDateRenderer
 // ---------------------------------------------------------

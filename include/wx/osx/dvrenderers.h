@@ -116,6 +116,25 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewChoiceRenderer);
 };
 
+// ----------------------------------------------------------------------------
+// wxDataViewChoiceByIndexRenderer
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewChoiceByIndexRenderer: public wxDataViewChoiceRenderer
+{
+public:
+    wxDataViewChoiceByIndexRenderer(const wxArrayString& choices,
+                                    wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
+                                    int alignment = wxDVR_DEFAULT_ALIGNMENT);
+
+    virtual bool SetValue(const wxVariant& value) wxOVERRIDE;
+    virtual bool GetValue(wxVariant& value) const wxOVERRIDE;
+
+    virtual void OSXOnCellChanged(NSObject *value,
+                                  const wxDataViewItem& item,
+                                  unsigned col) wxOVERRIDE;
+};
+
 #endif // wxOSX_USE_COCOA
 
 // ---------------------------------------------------------
