@@ -18,11 +18,7 @@ Installation
 If you are using one of the supported compilers, you can download the
 pre-built in binaries from
 
-    https://sourceforge.net/projects/wxwindows/files/3.0.0/binaries/
-
-or
-
-             ftp://ftp.wxwidgets.org/pub/3.0.0/binaries/
+    https://github.com/wxWidgets/wxWidgets/releases/v3.1.1
 
 In this case, just uncompress the binaries archive under any directory
 and skip to "Building Applications Using wxWidgets" part.
