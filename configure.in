@@ -7182,7 +7182,7 @@ if test "$USE_WIN32" = 1 ; then
         )
 
         if test "$wx_cv_lib_debughlp" = yes; then
-            AC_DEFINE(wxUSE_DBGHELP)
+            AC_DEFINE(wxHAVE_DEBUGHLP_API)
         else
             AC_MSG_WARN([Debug help API and wxStackWalker won't be available])
         fi

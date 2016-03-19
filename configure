@@ -35964,7 +35964,7 @@ fi
 $as_echo "$wx_cv_lib_debughlp" >&6; }
 
         if test "$wx_cv_lib_debughlp" = yes; then
-            $as_echo "#define wxUSE_DBGHELP 1" >>confdefs.h
+            $as_echo "#define wxHAVE_DEBUGHLP_API 1" >>confdefs.h
 
         else
             { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Debug help API and wxStackWalker won't be available" >&5
