@@ -1299,8 +1299,8 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
             {
                 // if size hints match old size, assume hints were set to
                 // maintain current client size, and adjust hints accordingly
-                if (m_minWidth == m_height) m_minWidth += diff.x;
-                if (m_maxWidth == m_height) m_maxWidth += diff.x;
+                if (m_minWidth == m_width) m_minWidth += diff.x;
+                if (m_maxWidth == m_width) m_maxWidth += diff.x;
                 if (m_minHeight == m_height) m_minHeight += diff.y;
                 if (m_maxHeight == m_height) m_maxHeight += diff.y;
             }
