@@ -2109,6 +2109,14 @@ bool wxWidgetCocoaImpl::ShowWithEffect(bool show,
     return ShowViewOrWindowWithEffect(m_wxPeer, show, effect, timeout);
 }
 
+// To avoid warnings about incompatible pointer types with Xcode 7, we need to
+// constrain the comparison function arguments instead of just using "id".
+#if __has_feature(objc_kindof)
+typedef __kindof NSView* KindOfView;
+#else
+typedef id KindOfView;
+#endif
+
 class CocoaWindowCompareContext
 {
     wxDECLARE_NO_COPY_CLASS(CocoaWindowCompareContext);
@@ -2132,7 +2140,8 @@ public:
     {   return m_subviews; }
 
     /* Helper function that returns the comparison based off of the original ordering */
-    NSComparisonResult CompareUsingOriginalOrdering(id first, id second)
+    NSComparisonResult CompareUsingOriginalOrdering(KindOfView first,
+            KindOfView second)
     {
         NSUInteger firstI = [m_subviews indexOfObjectIdenticalTo:first];
         NSUInteger secondI = [m_subviews indexOfObjectIdenticalTo:second];
@@ -2163,7 +2172,7 @@ private:
  * the target view is always higher than every other view.  When comparing two views neither of
  * which is the target, it returns the correct response based on the original ordering
  */
-static NSComparisonResult CocoaRaiseWindowCompareFunction(id first, id second, void *ctx)
+static NSComparisonResult CocoaRaiseWindowCompareFunction(KindOfView first, KindOfView second, void *ctx)
 {
     CocoaWindowCompareContext *compareContext = (CocoaWindowCompareContext*)ctx;
     // first should be ordered higher
@@ -2191,7 +2200,7 @@ void wxWidgetCocoaImpl::Raise()
  * the target view is always lower than every other view.  When comparing two views neither of
  * which is the target, it returns the correct response based on the original ordering
  */
-static NSComparisonResult CocoaLowerWindowCompareFunction(id first, id second, void *ctx)
+static NSComparisonResult CocoaLowerWindowCompareFunction(KindOfView first, KindOfView second, void *ctx)
 {
     CocoaWindowCompareContext *compareContext = (CocoaWindowCompareContext*)ctx;
     // first should be ordered lower
