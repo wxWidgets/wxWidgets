@@ -182,7 +182,7 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     HIRect headerRect = CGRectMake( x, y, w, h );
     if ( !wxHasCGContext(win, dc) )
     {
-        win->Refresh( &rect );
+        win->RefreshRect(rect);
     }
     else
     {
@@ -271,7 +271,7 @@ void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     HIRect headerRect = CGRectMake( x, y, w, h );
     if ( !wxHasCGContext(win, dc) )
     {
-        win->Refresh( &rect );
+        win->RefreshRect(rect);
     }
     else
     {
@@ -423,7 +423,7 @@ wxRendererMac::DrawMacThemeButton(wxWindow *win,
     HIRect headerRect = CGRectMake( x, y, w, h );
     if ( !wxHasCGContext(win, dc) )
     {
-        win->Refresh( &rect );
+        win->RefreshRect(rect);
     }
     else
     {
@@ -668,7 +668,7 @@ void wxRendererMac::DrawTextCtrl(wxWindow* win, wxDC& dc,
     HIRect hiRect = CGRectMake( x, y, w, h );
     if ( !wxHasCGContext(win, dc) )
     {
-        win->Refresh( &rect );
+        win->RefreshRect(rect);
     }
     else
     {
