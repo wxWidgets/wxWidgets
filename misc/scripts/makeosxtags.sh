@@ -2,20 +2,13 @@
 . `dirname $0`/makeunixtags.sh
 create_tags osx
 
-osx_port=${1-cocoa}
-if [[ $osx_port = carbon ]]; then
-    ext=cpp
-else
-    ext=mm
-fi
-
 ctags --totals --c++-kinds=+px --language-force=c++ \
-    -f osx_$osx_port.tags \
+    -a \
     -I @misc/scripts/ctags.ignore \
     include/wx/osx/core/*.h \
     include/wx/osx/core/private/*.h \
     include/wx/osx/private/*.h \
-    include/wx/osx/$osx_port/*.h \
-    include/wx/osx/$osx_port/private/*.h \
+    include/wx/osx/cocoa/*.h \
+    include/wx/osx/cocoa/private/*.h \
     src/osx/core/*.cpp \
-    src/osx/$osx_port/*.$ext
+    src/osx/cocoa/*.mm
