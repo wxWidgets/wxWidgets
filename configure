@@ -35715,6 +35715,8 @@ esac
 
                         if test "$WXGTK3" = 1 -o "$wxUSE_MAC" = 1 ; then
         CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations"
+
+                        OBJCXXFLAGS="$OBJCXXFLAGS -Wno-deprecated-declarations"
     fi
 fi
 

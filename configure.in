@@ -7577,6 +7577,10 @@ elif test "$GXX" = yes ; then
     dnl other ones
     if test "$WXGTK3" = 1 -o "$wxUSE_MAC" = 1 ; then
         CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations"
+
+        dnl CXXWARNINGS is not used for Objective-C++ code compilation, but we
+        dnl want to avoid these warnings in it too when building wxOSX.
+        OBJCXXFLAGS="$OBJCXXFLAGS -Wno-deprecated-declarations"
     fi
 fi
 
