@@ -126,7 +126,7 @@ public:
 #endif
     }
     
-    virtual bool AddAction(wxWindowID actionid, const wxString &label)
+    virtual bool AddAction(wxWindowID actionid, const wxString &label) wxOVERRIDE
     {
         if (m_actions.size() >= 1) // Currently only 1 actions are supported
             return false;
