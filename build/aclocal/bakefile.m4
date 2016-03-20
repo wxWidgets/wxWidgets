@@ -501,10 +501,6 @@ AC_DEFUN([AC_BAKEFILE_DEPS],
             DEPSMODE=gcc
             DEPSFLAG="-MMD"
             AC_MSG_RESULT([gcc])
-        elif test "x$MWCC" = "xyes"; then
-            DEPSMODE=mwcc
-            DEPSFLAG="-MM"
-            AC_MSG_RESULT([mwcc])
         elif test "x$SUNCC" = "xyes"; then
             DEPSMODE=unixcc
             DEPSFLAG="-xM1"
@@ -841,34 +837,6 @@ if test ${D}DEPSMODE = gcc ; then
             rm -f ${D}depfile
         fi
     fi
-    exit 0
-
-elif test ${D}DEPSMODE = mwcc ; then
-    ${D}* || exit ${D}?
-    # Run mwcc again with -MM and redirect into the dep file we want
-    # NOTE: We can't use shift here because we need ${D}* to be valid
-    prevarg=
-    for arg in ${D}* ; do
-        if test "${D}prevarg" = "-o"; then
-            objfile=${D}arg
-        else
-            case "${D}arg" in
-                -* )
-                ;;
-                * )
-                    srcfile=${D}arg
-                ;;
-            esac
-        fi
-        prevarg="${D}arg"
-    done
-
-    objfilebase=\`basename ${D}objfile\`
-    builddir=\`dirname ${D}objfile\`
-    depsdir=${D}builddir/${D}DEPSDIRBASE
-    mkdir -p ${D}depsdir
-
-    ${D}* ${D}DEPSFLAG >${D}{depsdir}/${D}{objfilebase}.d
     exit 0
 
 elif test ${D}DEPSMODE = unixcc; then

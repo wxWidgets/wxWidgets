@@ -13210,144 +13210,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
     fi
 
         if test "x$GCC" != "xyes"; then
-        if test "xCC" = "xC"; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: checking if the C compiler requires -ext o" >&5
-$as_echo_n "checking if the C compiler requires -ext o... " >&6; }
-if ${bakefile_cv_c_exto+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest.$ac_ext.o
-if { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_compile\""; } >&5
-  (eval $ac_compile) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then :
-  for ac_file in `(ls conftest.* 2>/dev/null)`; do
-    case $ac_file in
-        conftest.$ac_ext.o)
-            bakefile_cv_c_exto="-ext o"
-            ;;
-        *)
-            ;;
-    esac
-done
-else
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "cannot figure out if compiler needs -ext o: cannot compile
-See \`config.log' for more details" "$LINENO" 5; }
-
-fi
-rm -f conftest.$ac_ext.o conftest.$ac_objext conftest.$ac_ext
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $bakefile_cv_c_exto" >&5
-$as_echo "$bakefile_cv_c_exto" >&6; }
-if test "x$bakefile_cv_c_exto" '!=' "x"; then
-    if test "c" = "c"; then
-        CFLAGS="$bakefile_cv_c_exto $CFLAGS"
-    fi
-    if test "c" = "cxx"; then
-        CXXFLAGS="$bakefile_cv_c_exto $CXXFLAGS"
-    fi
-fi
-
-            if test "x$bakefile_cv_c_exto" '!=' "x"; then
-                unset ac_cv_prog_cc_g
-                ac_test_CFLAGS=${CFLAGS+set}
-ac_save_CFLAGS=$CFLAGS
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $CC accepts -g" >&5
-$as_echo_n "checking whether $CC accepts -g... " >&6; }
-if ${ac_cv_prog_cc_g+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_save_c_werror_flag=$ac_c_werror_flag
-   ac_c_werror_flag=yes
-   ac_cv_prog_cc_g=no
-   CFLAGS="-g"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  ac_cv_prog_cc_g=yes
-else
-  CFLAGS=""
-      cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-else
-  ac_c_werror_flag=$ac_save_c_werror_flag
-	 CFLAGS="-g"
-	 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  ac_cv_prog_cc_g=yes
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   ac_c_werror_flag=$ac_save_c_werror_flag
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_cc_g" >&5
-$as_echo "$ac_cv_prog_cc_g" >&6; }
-if test "$ac_test_CFLAGS" = set; then
-  CFLAGS=$ac_save_CFLAGS
-elif test $ac_cv_prog_cc_g = yes; then
-  if test "$GCC" = yes; then
-    CFLAGS="-g -O2"
-  else
-    CFLAGS="-g"
-  fi
-else
-  if test "$GCC" = yes; then
-    CFLAGS="-O2"
-  else
-    CFLAGS=
-  fi
-fi
-            fi
-        fi
-
                         case `uname -s` in
             AIX*)
 
@@ -13414,60 +13276,6 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether we are using the Metrowerks C compiler" >&5
-$as_echo_n "checking whether we are using the Metrowerks C compiler... " >&6; }
-if ${bakefile_cv_c_compiler___MWERKS__+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-             #ifndef __MWERKS__
-                choke me
-             #endif
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  bakefile_cv_c_compiler___MWERKS__=yes
-else
-  bakefile_cv_c_compiler___MWERKS__=no
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $bakefile_cv_c_compiler___MWERKS__" >&5
-$as_echo "$bakefile_cv_c_compiler___MWERKS__" >&6; }
-    if test "x$bakefile_cv_c_compiler___MWERKS__" = "xyes"; then
-        :; MWCC=yes
-    else
-        :;
-    fi
-    ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-
-
-                if test "$MWCC" != "yes"; then
-
-
-    ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether we are using the IBM xlC C compiler" >&5
 $as_echo_n "checking whether we are using the IBM xlC C compiler... " >&6; }
 if ${bakefile_cv_c_compiler___xlC__+:} false; then :
@@ -13513,7 +13321,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-                fi
                 ;;
 
             IRIX*)
@@ -14540,144 +14347,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
     fi
 
         if test "x$GCXX" != "xyes"; then
-        if test "xCXX" = "xC"; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: checking if the C compiler requires -ext o" >&5
-$as_echo_n "checking if the C compiler requires -ext o... " >&6; }
-if ${bakefile_cv_c_exto+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest.$ac_ext.o
-if { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_compile\""; } >&5
-  (eval $ac_compile) 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then :
-  for ac_file in `(ls conftest.* 2>/dev/null)`; do
-    case $ac_file in
-        conftest.$ac_ext.o)
-            bakefile_cv_c_exto="-ext o"
-            ;;
-        *)
-            ;;
-    esac
-done
-else
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "cannot figure out if compiler needs -ext o: cannot compile
-See \`config.log' for more details" "$LINENO" 5; }
-
-fi
-rm -f conftest.$ac_ext.o conftest.$ac_objext conftest.$ac_ext
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $bakefile_cv_c_exto" >&5
-$as_echo "$bakefile_cv_c_exto" >&6; }
-if test "x$bakefile_cv_c_exto" '!=' "x"; then
-    if test "c" = "c"; then
-        CFLAGS="$bakefile_cv_c_exto $CFLAGS"
-    fi
-    if test "c" = "cxx"; then
-        CXXFLAGS="$bakefile_cv_c_exto $CXXFLAGS"
-    fi
-fi
-
-            if test "x$bakefile_cv_c_exto" '!=' "x"; then
-                unset ac_cv_prog_cc_g
-                ac_test_CFLAGS=${CFLAGS+set}
-ac_save_CFLAGS=$CFLAGS
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $CC accepts -g" >&5
-$as_echo_n "checking whether $CC accepts -g... " >&6; }
-if ${ac_cv_prog_cc_g+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_save_c_werror_flag=$ac_c_werror_flag
-   ac_c_werror_flag=yes
-   ac_cv_prog_cc_g=no
-   CFLAGS="-g"
-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  ac_cv_prog_cc_g=yes
-else
-  CFLAGS=""
-      cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-
-else
-  ac_c_werror_flag=$ac_save_c_werror_flag
-	 CFLAGS="-g"
-	 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  ac_cv_prog_cc_g=yes
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-   ac_c_werror_flag=$ac_save_c_werror_flag
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_cc_g" >&5
-$as_echo "$ac_cv_prog_cc_g" >&6; }
-if test "$ac_test_CFLAGS" = set; then
-  CFLAGS=$ac_save_CFLAGS
-elif test $ac_cv_prog_cc_g = yes; then
-  if test "$GCC" = yes; then
-    CFLAGS="-g -O2"
-  else
-    CFLAGS="-g"
-  fi
-else
-  if test "$GCC" = yes; then
-    CFLAGS="-O2"
-  else
-    CFLAGS=
-  fi
-fi
-            fi
-        fi
-
                         case `uname -s` in
             AIX*)
 
@@ -14744,60 +14413,6 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether we are using the Metrowerks C++ compiler" >&5
-$as_echo_n "checking whether we are using the Metrowerks C++ compiler... " >&6; }
-if ${bakefile_cv_cxx_compiler___MWERKS__+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-             #ifndef __MWERKS__
-                choke me
-             #endif
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  bakefile_cv_cxx_compiler___MWERKS__=yes
-else
-  bakefile_cv_cxx_compiler___MWERKS__=no
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $bakefile_cv_cxx_compiler___MWERKS__" >&5
-$as_echo "$bakefile_cv_cxx_compiler___MWERKS__" >&6; }
-    if test "x$bakefile_cv_cxx_compiler___MWERKS__" = "xyes"; then
-        :; MWCXX=yes
-    else
-        :;
-    fi
-    ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-
-
-                if test "$MWCXX" != "yes"; then
-
-
-    ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether we are using the IBM xlC C++ compiler" >&5
 $as_echo_n "checking whether we are using the IBM xlC C++ compiler... " >&6; }
 if ${bakefile_cv_cxx_compiler___xlC__+:} false; then :
@@ -14843,7 +14458,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-                fi
                 ;;
 
             IRIX*)
@@ -35739,13 +35353,6 @@ OBJCXXFLAGS=`echo $WXCONFIG_CXXFLAGS $C_AND_CXX_FLAGS $OBJCXXFLAGS `
 WXCONFIG_CPPFLAGS=`echo $WXCONFIG_CPPFLAGS $WXCONFIG_ONLY_CPPFLAGS`
 
 
-if test "x$MWCC" = "xyes"; then
-
-            CC="$CC -cwd source -I-"
-    CXX="$CXX -cwd source -I-"
-fi
-
-
 LIBS=`echo $LIBS`
 EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
 EXTRALIBS_XML="$EXPAT_LINK"
@@ -37044,11 +36651,6 @@ $as_echo "disabled" >&6; }
             DEPSFLAG="-MMD"
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: gcc" >&5
 $as_echo "gcc" >&6; }
-        elif test "x$MWCC" = "xyes"; then
-            DEPSMODE=mwcc
-            DEPSFLAG="-MM"
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: mwcc" >&5
-$as_echo "mwcc" >&6; }
         elif test "x$SUNCC" = "xyes"; then
             DEPSMODE=unixcc
             DEPSFLAG="-xM1"
@@ -37138,34 +36740,6 @@ if test ${D}DEPSMODE = gcc ; then
             rm -f ${D}depfile
         fi
     fi
-    exit 0
-
-elif test ${D}DEPSMODE = mwcc ; then
-    ${D}* || exit ${D}?
-    # Run mwcc again with -MM and redirect into the dep file we want
-    # NOTE: We can't use shift here because we need ${D}* to be valid
-    prevarg=
-    for arg in ${D}* ; do
-        if test "${D}prevarg" = "-o"; then
-            objfile=${D}arg
-        else
-            case "${D}arg" in
-                -* )
-                ;;
-                * )
-                    srcfile=${D}arg
-                ;;
-            esac
-        fi
-        prevarg="${D}arg"
-    done
-
-    objfilebase=\`basename ${D}objfile\`
-    builddir=\`dirname ${D}objfile\`
-    depsdir=${D}builddir/${D}DEPSDIRBASE
-    mkdir -p ${D}depsdir
-
-    ${D}* ${D}DEPSFLAG >${D}{depsdir}/${D}{objfilebase}.d
     exit 0
 
 elif test ${D}DEPSMODE = unixcc; then

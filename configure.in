@@ -7611,22 +7611,6 @@ dnl only stuff to it
 WXCONFIG_CPPFLAGS=`echo $WXCONFIG_CPPFLAGS $WXCONFIG_ONLY_CPPFLAGS`
 
 
-if test "x$MWCC" = "xyes"; then
-    dnl Correct MW 8.3 to be more similar to GCC.  In particular we
-    dnl must use <regex.h> from system not our local copy on OS X,
-    dnl but must use local not system on OS 9.
-    dnl The following should make all -I paths usable for <> includes
-    dnl while first checking in real system paths.  With 8.3 using
-    dnl -gccincludes it will actually check local paths before system
-    dnl even for <> which is totally wrong.
-
-    dnl Note that because this absolutely needs to be before any -I
-    dnl that we have to tack it on to the end of the compiler commandline.
-    CC="$CC -cwd source -I-"
-    CXX="$CXX -cwd source -I-"
-fi
-
-
 LIBS=`echo $LIBS`
 EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
 EXTRALIBS_XML="$EXPAT_LINK"
