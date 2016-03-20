@@ -45,6 +45,11 @@
 #       define wxUSE_DBGHELP 1
 #   endif
 #endif /* wxUSE_DBGHELP */
+// Set to 0 for old MinGW.
+#if wxUSE_DBGHELP && !defined(__VISUALC__) && !defined(__MINGW64_TOOLCHAIN__)
+#   undef wxUSE_DBGHELP
+#   define wxUSE_DBGHELP 0
+#endif
 
 #ifndef wxUSE_DC_CACHEING
 #   ifdef wxABORT_ON_CONFIG_ERROR
