@@ -2120,17 +2120,17 @@ public:
         // Cocoa sorts subviews in-place.. make a copy
         m_subviews = [subviews copy];
     }
-    
+
     ~CocoaWindowCompareContext()
     {   // release the copy
         [m_subviews release];
     }
     NSView* target()
     {   return m_target; }
-    
+
     NSArray* subviews()
     {   return m_subviews; }
-    
+
     /* Helper function that returns the comparison based off of the original ordering */
     NSComparisonResult CompareUsingOriginalOrdering(id first, id second)
     {
@@ -2142,14 +2142,14 @@ public:
         // sortSubviewsUsingFunction:context:.  Thus we don't bother checking.  Particularly because
         // that case should never occur anyway because that would imply a multi-threaded GUI call
         // which is a big no-no with Cocoa.
-		
+
         // Subviews are ordered from back to front meaning one that is already lower will have an lower index.
         NSComparisonResult result = (firstI < secondI)
-		?   NSOrderedAscending /* -1 */
-		:   (firstI > secondI)
-		?   NSOrderedDescending /* 1 */
-		:   NSOrderedSame /* 0 */;
-		
+        ?   NSOrderedAscending /* -1 */
+        :   (firstI > secondI)
+        ?   NSOrderedDescending /* 1 */
+        :   NSOrderedSame /* 0 */;
+
         return result;
     }
 private:
@@ -2177,15 +2177,14 @@ static NSComparisonResult CocoaRaiseWindowCompareFunction(id first, id second, v
 
 void wxWidgetCocoaImpl::Raise()
 {
-	NSView* nsview = m_osxView;
-	
+    NSView* nsview = m_osxView;
+
     NSView *superview = [nsview superview];
     CocoaWindowCompareContext compareContext(nsview, [superview subviews]);
-	
-    [superview sortSubviewsUsingFunction:
-	 CocoaRaiseWindowCompareFunction
-								 context: &compareContext];
-	
+
+    [superview sortSubviewsUsingFunction: CocoaRaiseWindowCompareFunction
+                                 context: &compareContext];
+
 }
 
 /* Causes Cocoa to lower the target view to the bottom of the Z-Order by telling the sort function that
@@ -2206,14 +2205,13 @@ static NSComparisonResult CocoaLowerWindowCompareFunction(id first, id second, v
 
 void wxWidgetCocoaImpl::Lower()
 {
-	NSView* nsview = m_osxView;
-	
+    NSView* nsview = m_osxView;
+
     NSView *superview = [nsview superview];
     CocoaWindowCompareContext compareContext(nsview, [superview subviews]);
-	
-    [superview sortSubviewsUsingFunction:
-	 CocoaLowerWindowCompareFunction
-								 context: &compareContext];
+
+    [superview sortSubviewsUsingFunction: CocoaLowerWindowCompareFunction
+                                 context: &compareContext];
 }
 
 void wxWidgetCocoaImpl::ScrollRect( const wxRect *WXUNUSED(rect), int WXUNUSED(dx), int WXUNUSED(dy) )
