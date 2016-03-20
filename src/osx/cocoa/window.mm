@@ -2109,21 +2109,6 @@ bool wxWidgetCocoaImpl::ShowWithEffect(bool show,
     return ShowViewOrWindowWithEffect(m_wxPeer, show, effect, timeout);
 }
 
-/* note that the drawing order between siblings is not defined under 10.4 */
-/* only starting from 10.5 the subview order is respected */
-
-/* NSComparisonResult is typedef'd as an enum pre-Leopard but typedef'd as
- * NSInteger post-Leopard.  Pre-Leopard the Cocoa toolkit expects a function
- * returning int and not NSComparisonResult.  Post-Leopard the Cocoa toolkit
- * expects a function returning the new non-enum NSComparsionResult.
- * Hence we create a typedef named CocoaWindowCompareFunctionResult.
- */
-#if defined(NSINTEGER_DEFINED)
-typedef NSComparisonResult CocoaWindowCompareFunctionResult;
-#else
-typedef int CocoaWindowCompareFunctionResult;
-#endif
-
 class CocoaWindowCompareContext
 {
     wxDECLARE_NO_COPY_CLASS(CocoaWindowCompareContext);
@@ -2147,7 +2132,7 @@ public:
     {   return m_subviews; }
     
     /* Helper function that returns the comparison based off of the original ordering */
-    CocoaWindowCompareFunctionResult CompareUsingOriginalOrdering(id first, id second)
+    NSComparisonResult CompareUsingOriginalOrdering(id first, id second)
     {
         NSUInteger firstI = [m_subviews indexOfObjectIdenticalTo:first];
         NSUInteger secondI = [m_subviews indexOfObjectIdenticalTo:second];
@@ -2178,7 +2163,7 @@ private:
  * the target view is always higher than every other view.  When comparing two views neither of
  * which is the target, it returns the correct response based on the original ordering
  */
-static CocoaWindowCompareFunctionResult CocoaRaiseWindowCompareFunction(id first, id second, void *ctx)
+static NSComparisonResult CocoaRaiseWindowCompareFunction(id first, id second, void *ctx)
 {
     CocoaWindowCompareContext *compareContext = (CocoaWindowCompareContext*)ctx;
     // first should be ordered higher
@@ -2207,7 +2192,7 @@ void wxWidgetCocoaImpl::Raise()
  * the target view is always lower than every other view.  When comparing two views neither of
  * which is the target, it returns the correct response based on the original ordering
  */
-static CocoaWindowCompareFunctionResult CocoaLowerWindowCompareFunction(id first, id second, void *ctx)
+static NSComparisonResult CocoaLowerWindowCompareFunction(id first, id second, void *ctx)
 {
     CocoaWindowCompareContext *compareContext = (CocoaWindowCompareContext*)ctx;
     // first should be ordered lower
