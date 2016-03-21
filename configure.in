@@ -1065,18 +1065,22 @@ if test -n "$wxWITH_CXX"; then
     dnl autoconf, not run, time.
     case "$wxWITH_CXX" in
         11)
+            AX_CXX_COMPILE_STDCXX(11,,optional)
             if test -n "$wxWITH_CXX_IS_OPTIONAL"; then
-                AX_CXX_COMPILE_STDCXX(11,,optional)
-            else
-                AX_CXX_COMPILE_STDCXX(11)
+                if test "$HAVE_CXX11" != 1; then
+                    AC_MSG_FAILURE([C++11 support was requested but is not available])
+                fi
             fi
-            have_cxxN=$HAVE_CXX11
             ;;
 
         14)
             dnl This check can't be optional because we have only --with-cxx=14
             dnl and not --enable-cxx14 option.
             AX_CXX_COMPILE_STDCXX(14)
+
+            dnl Notice that because it's not optional, the macro doesn't define
+            dnl HAVE_CXX14. We don't use it anyhow so far, so it doesn't
+            dnl matter, but we could need to do it ourselves here in the future.
 
             dnl If we have C++14, we necessarily have C++11 too.
             HAVE_CXX11=1
@@ -7576,6 +7580,10 @@ elif test "$GXX" = yes ; then
     dnl other ones
     if test "$WXGTK3" = 1 -o "$wxUSE_MAC" = 1 ; then
         CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations"
+
+        dnl CXXWARNINGS is not used for Objective-C++ code compilation, but we
+        dnl want to avoid these warnings in it too when building wxOSX.
+        OBJCXXFLAGS="$OBJCXXFLAGS -Wno-deprecated-declarations"
     fi
 fi
 
@@ -7604,22 +7612,6 @@ OBJCXXFLAGS=`echo $WXCONFIG_CXXFLAGS $C_AND_CXX_FLAGS $OBJCXXFLAGS `
 dnl now that we added WXCONFIG_CPPFLAGS to CPPFLAGS we can add the wx-config
 dnl only stuff to it
 WXCONFIG_CPPFLAGS=`echo $WXCONFIG_CPPFLAGS $WXCONFIG_ONLY_CPPFLAGS`
-
-
-if test "x$MWCC" = "xyes"; then
-    dnl Correct MW 8.3 to be more similar to GCC.  In particular we
-    dnl must use <regex.h> from system not our local copy on OS X,
-    dnl but must use local not system on OS 9.
-    dnl The following should make all -I paths usable for <> includes
-    dnl while first checking in real system paths.  With 8.3 using
-    dnl -gccincludes it will actually check local paths before system
-    dnl even for <> which is totally wrong.
-
-    dnl Note that because this absolutely needs to be before any -I
-    dnl that we have to tack it on to the end of the compiler commandline.
-    CC="$CC -cwd source -I-"
-    CXX="$CXX -cwd source -I-"
-fi
 
 
 LIBS=`echo $LIBS`
