@@ -35939,6 +35939,9 @@ main ()
                         #ifndef API_VERSION_NUMBER
                         #error API_VERSION_NUMBER not defined!
                         #endif
+                        #if API_VERSION_NUMBER < 9
+                        #error API_VERSION_NUMBER at least 9 required.
+                        #endif
 
   ;
   return 0;

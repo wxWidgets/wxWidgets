@@ -7173,6 +7173,9 @@ if test "$USE_WIN32" = 1 ; then
                         #ifndef API_VERSION_NUMBER
                         #error API_VERSION_NUMBER not defined!
                         #endif
+                        #if API_VERSION_NUMBER < 9
+                        #error API_VERSION_NUMBER at least 9 required.
+                        #endif
                     ],
                     wx_cv_lib_debughlp=yes,
                     wx_cv_lib_debughlp=no
