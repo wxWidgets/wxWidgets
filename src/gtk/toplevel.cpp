@@ -1229,8 +1229,9 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
     int hints_mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
     hints.min_width = 1;
     hints.min_height = 1;
-    hints.max_width = INT_MAX;
-    hints.max_height = INT_MAX;
+    // using INT_MAX for size will lead to integer overflow with HiDPI scaling
+    hints.max_width = INT_MAX / 16;
+    hints.max_height = INT_MAX / 16;
     int decorSize_x;
     int decorSize_y;
 #ifdef HAS_CLIENT_DECOR
