@@ -85,6 +85,7 @@ wxOSX:
 - Set up extensions filter correctly in wxFileDialog (nick863).
 - Turn off automatic quotes substitutions in wxTextCtrl (Xlord2).
 - Implement wxDataViewChoiceByIndexRenderer (wanup).
+- Fix unnecessary indentation in list-like wxDataViewCtrl (Andreas Falkenhahn).
 
 Unix:
 

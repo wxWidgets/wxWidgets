@@ -2239,6 +2239,15 @@ bool wxCocoaDataViewControl::AssociateModel(wxDataViewModel* model)
     else
         m_DataSource = NULL;
     [m_OutlineView setDataSource:m_DataSource]; // if there is a data source the data is immediately going to be requested
+
+    // By default, the first column is indented to leave enough place for the
+    // expanders, but this looks bad if there are no expanders, so don't use
+    // indent in this case.
+    if ( model && model->IsListModel() )
+    {
+        DoSetIndent(0);
+    }
+
     return true;
 }
 
