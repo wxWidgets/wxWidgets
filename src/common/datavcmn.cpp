@@ -26,6 +26,7 @@
 #endif
 
 #include "wx/datectrl.h"
+#include "wx/except.h"
 #include "wx/spinctrl.h"
 #include "wx/choice.h"
 #include "wx/imaglist.h"
@@ -818,6 +819,11 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
                                        const wxDataViewItem& item,
                                        unsigned column)
 {
+    // This method is called by the native control, so we shouldn't allow
+    // exceptions to escape from it.
+    wxTRY
+    {
+
     // Now check if we have a value and remember it for rendering it later.
     // Notice that we do it even if it's null, as the cell should be empty then
     // and not show the last used value.
@@ -848,6 +854,15 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
     }
 
     SetEnabled(enabled);
+
+    }
+    wxCATCH_ALL
+    (
+        // There is not much we can do about it here, just log it and don't
+        // show anything in this cell.
+        wxLogDebug("Retrieving the value from the model threw an exception");
+        SetValue(wxVariant());
+    )
 
     return true;
 }
