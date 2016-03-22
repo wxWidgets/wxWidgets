@@ -2248,7 +2248,6 @@ void GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
         g_value_unset( &gvalue );
     }
 
-#if 0
     if (attr.HasBackgroundColour())
     {
         wxColour colour = attr.GetBackgroundColour();
@@ -2268,7 +2267,6 @@ void GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
         g_object_set_property( G_OBJECT(renderer), "cell-background-set", &gvalue );
         g_value_unset( &gvalue );
     }
-#endif
 }
 
 } // anonymous namespace
