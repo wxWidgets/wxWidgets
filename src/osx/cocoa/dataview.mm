@@ -2156,7 +2156,7 @@ void wxCocoaDataViewControl::EnsureVisible(const wxDataViewItem& item, const wxD
     }
 }
 
-void wxCocoaDataViewControl::Expand(const wxDataViewItem& item)
+void wxCocoaDataViewControl::DoExpand(const wxDataViewItem& item)
 {
     [m_OutlineView expandItem:[m_DataSource getDataViewItemFromBuffer:item]];
 }

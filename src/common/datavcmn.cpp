@@ -1166,6 +1166,13 @@ const wxDataViewModel* wxDataViewCtrlBase::GetModel() const
     return m_model;
 }
 
+void wxDataViewCtrlBase::Expand(const wxDataViewItem& item)
+{
+    ExpandAncestors(item);
+
+    DoExpand(item);
+}
+
 void wxDataViewCtrlBase::ExpandAncestors( const wxDataViewItem & item )
 {
     if (!m_model) return;
@@ -1185,7 +1192,7 @@ void wxDataViewCtrlBase::ExpandAncestors( const wxDataViewItem & item )
     // then we expand the parents, starting at the root
     while (!parentChain.empty())
     {
-         Expand(parentChain.back());
+         DoExpand(parentChain.back());
          parentChain.pop_back();
     }
 }

@@ -705,7 +705,7 @@ public:
     virtual void SelectAll() = 0;
     virtual void UnselectAll() = 0;
 
-    virtual void Expand( const wxDataViewItem & item ) = 0;
+    void Expand( const wxDataViewItem & item );
     void ExpandAncestors( const wxDataViewItem & item );
     virtual void Collapse( const wxDataViewItem & item ) = 0;
     virtual bool IsExpanded( const wxDataViewItem & item ) const = 0;
@@ -746,6 +746,10 @@ public:
 protected:
     virtual void DoSetExpanderColumn() = 0 ;
     virtual void DoSetIndent() = 0;
+
+    // Just expand this item assuming it is already shown, i.e. its parent has
+    // been already expanded using ExpandAncestors().
+    virtual void DoExpand(const wxDataViewItem & item) = 0;
 
 private:
     // Implementation of the public Set/GetCurrentItem() methods which are only

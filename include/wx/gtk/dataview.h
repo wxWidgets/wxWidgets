@@ -161,7 +161,6 @@ public:
 
     virtual void EditItem(const wxDataViewItem& item, const wxDataViewColumn *column) wxOVERRIDE;
 
-    virtual void Expand( const wxDataViewItem & item ) wxOVERRIDE;
     virtual void Collapse( const wxDataViewItem & item ) wxOVERRIDE;
     virtual bool IsExpanded( const wxDataViewItem & item ) const wxOVERRIDE;
 
@@ -189,6 +188,8 @@ public:
 protected:
     virtual void DoSetExpanderColumn() wxOVERRIDE;
     virtual void DoSetIndent() wxOVERRIDE;
+
+    virtual void DoExpand(const wxDataViewItem& item) wxOVERRIDE;
 
     virtual void DoApplyWidgetStyle(GtkRcStyle *style) wxOVERRIDE;
 

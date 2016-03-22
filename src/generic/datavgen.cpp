@@ -5273,10 +5273,8 @@ int wxDataViewCtrl::GetRowByItem( const wxDataViewItem & item ) const
     return m_clientArea->GetRowByItem( item );
 }
 
-void wxDataViewCtrl::Expand( const wxDataViewItem & item )
+void wxDataViewCtrl::DoExpand( const wxDataViewItem & item )
 {
-    ExpandAncestors( item );
-
     int row = m_clientArea->GetRowByItem( item );
     if (row != -1)
         m_clientArea->Expand(row);

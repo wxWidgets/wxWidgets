@@ -4820,7 +4820,7 @@ wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
     return m_internal->GetDataViewSortColumn();
 }
 
-void wxDataViewCtrl::Expand( const wxDataViewItem & item )
+void wxDataViewCtrl::DoExpand( const wxDataViewItem & item )
 {
     GtkTreeIter iter;
     iter.user_data = item.GetID();

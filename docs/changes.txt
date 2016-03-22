@@ -67,6 +67,7 @@ All (GUI):
 
 - Add support for wxAuiManager and wxAuiPaneInfo to XRC (Andrea Zanellato).
 - Update Scintilla to v3.6.3 (Paul Kulchenko).
+- Make wxDataViewCtrl::Expand() expand ancestors in native ports too.
 
 wxGTK:
 

@@ -236,7 +236,6 @@ public:
 
     virtual bool SetRowHeight( int rowHeight ) wxOVERRIDE;
 
-    virtual void Expand( const wxDataViewItem & item ) wxOVERRIDE;
     virtual void Collapse( const wxDataViewItem & item ) wxOVERRIDE;
     virtual bool IsExpanded( const wxDataViewItem & item ) const wxOVERRIDE;
 
@@ -317,6 +316,8 @@ public:     // utility functions not part of the API
 private:
     virtual wxDataViewItem DoGetCurrentItem() const wxOVERRIDE;
     virtual void DoSetCurrentItem(const wxDataViewItem& item) wxOVERRIDE;
+
+    virtual void DoExpand(const wxDataViewItem& item) wxOVERRIDE;
 
     void InvalidateColBestWidths();
     void InvalidateColBestWidth(int idx);

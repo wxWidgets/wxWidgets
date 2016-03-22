@@ -447,7 +447,6 @@ public:
     virtual void Collapse(const wxDataViewItem& item);
     virtual void EnsureVisible(const wxDataViewItem& item,
                                wxDataViewColumn const* columnPtr);
-    virtual void Expand(const wxDataViewItem& item);
     virtual unsigned int GetCount() const;
     virtual wxRect GetRectangle(const wxDataViewItem& item,
                                 wxDataViewColumn const* columnPtr);
@@ -490,6 +489,9 @@ public:
     // other methods (inherited from wxDataViewWidgetImpl)
     //
     virtual void DoSetIndent(int indent);
+
+    virtual void DoExpand(const wxDataViewItem& item);
+
     virtual void HitTest(const wxPoint& point,
                          wxDataViewItem& item,
                          wxDataViewColumn*& columnPtr) const;
