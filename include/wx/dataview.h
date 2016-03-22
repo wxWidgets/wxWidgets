@@ -706,7 +706,7 @@ public:
     virtual void UnselectAll() = 0;
 
     virtual void Expand( const wxDataViewItem & item ) = 0;
-    virtual void ExpandAncestors( const wxDataViewItem & item );
+    void ExpandAncestors( const wxDataViewItem & item );
     virtual void Collapse( const wxDataViewItem & item ) = 0;
     virtual bool IsExpanded( const wxDataViewItem & item ) const = 0;
 

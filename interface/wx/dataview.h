@@ -1299,7 +1299,7 @@ public:
        ensures that the item itself as well as all ancestor
        items have been read from the model by the control.
     */
-    virtual void ExpandAncestors( const wxDataViewItem & item );
+    void ExpandAncestors( const wxDataViewItem & item );
 
     /**
         Returns pointer to the column. @a pos refers to the position in the
