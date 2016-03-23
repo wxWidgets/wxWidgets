@@ -40,7 +40,7 @@
     #include "wx/msw/registry.h"
     #include "wx/msw/private.h"
     #include <shlwapi.h>
-    #include <shlobj.h>
+    #include "wx/msw/wrapshl.h"
 
     // For MSVC we can link in the required library explicitly, for the other
     // compilers (e.g. MinGW) this needs to be done at makefiles level.

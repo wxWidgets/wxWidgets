@@ -39,7 +39,7 @@
 #include "wx/msw/private.h"         // includes <windows.h>
 
 #include <oleauto.h>
-#include <shlobj.h>
+#include "wx/msw/wrapshl.h"
 
 #include "wx/msw/ole/oleutils.h"
 

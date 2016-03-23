@@ -32,7 +32,7 @@
 
 #include "wx/msw/private.h"
 
-#include <shlobj.h>            // for DROPFILES structure
+#include "wx/msw/wrapshl.h"            // for DROPFILES structure
 
 #include "wx/dnd.h"
 

@@ -100,7 +100,7 @@
 
 #ifdef __WINDOWS__
     #include "wx/msw/private.h"
-    #include <shlobj.h>         // for CLSID_ShellLink
+    #include "wx/msw/wrapshl.h"         // for CLSID_ShellLink
     #include "wx/msw/missing.h"
     #include "wx/msw/ole/oleutils.h"
     #include "wx/msw/private/comptr.h"
