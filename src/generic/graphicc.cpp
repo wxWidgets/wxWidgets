@@ -97,6 +97,22 @@ using namespace std;
 #include <cairo-atsui.h>
 #endif
 
+// Helper functions for dealing with alpha pre-multiplication.
+namespace
+{
+
+    inline unsigned char Premultiply(unsigned char alpha, unsigned char data)
+    {
+        return alpha ? (data * alpha) / 0xff : data;
+    }
+
+    inline unsigned char Unpremultiply(unsigned char alpha, unsigned char data)
+    {
+        return alpha ? (data * 0xff) / alpha : data;
+    }
+
+} // anonymous namespace
+
 class WXDLLIMPEXP_CORE wxCairoPathData : public wxGraphicsPathData
 {
 public :
@@ -1370,19 +1386,31 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     // Create a surface object and copy the bitmap pixel data to it.  if the
     // image has alpha (or a mask represented as alpha) then we'll use a
     // different format and iterator than if it doesn't...
-    cairo_format_t bufferFormat = bmp.GetDepth() == 32
+    const bool isSrcBpp32 =
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
-                                            || bmp.GetMask()
+            bmp.GetDepth() == 32 || bmp.GetMask() != NULL;
+#else
+            bmp.GetDepth() == 32;
 #endif
-                                        ? CAIRO_FORMAT_ARGB32
-                                        : CAIRO_FORMAT_RGB24;
+
+    cairo_format_t bufferFormat =
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
+        isSrcBpp32
+#elif defined(__WXGTK3__)
+        isSrcBpp32 || bmp.GetMask() != NULL
+#elif defined(__WXMSW__)
+        (isSrcBpp32 && bmp.HasAlpha()) || bmp.GetMask() != NULL
+#else
+        isSrcBpp32
+#endif
+        ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24;
 
     int stride = InitBuffer(bmp.GetWidth(), bmp.GetHeight(), bufferFormat);
 
     wxBitmap bmpSource = bmp;  // we need a non-const instance
     wxUint32* data = (wxUint32*)m_buffer;
 
-    if ( bufferFormat == CAIRO_FORMAT_ARGB32 )
+    if ( isSrcBpp32 )
     {
         // use the bitmap's alpha
         wxAlphaPixelData
@@ -1400,14 +1428,19 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                 // with alpha in the upper 8 bits, then red, then green, then
                 // blue. The 32-bit quantities are stored native-endian.
                 // Pre-multiplied alpha is used.
-                unsigned char alpha = p.Alpha();
+                unsigned char alpha = (bufferFormat == CAIRO_FORMAT_ARGB32) ? p.Alpha() : 255;
+#ifdef __WXMSW__
+                // MSW bitmap pixel bits are already premultiplied.
+                *data = (alpha << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue());
+#else // !__WXMSW__
                 if (alpha == 0)
                     *data = 0;
                 else
-                    *data = ( alpha                      << 24
-                              | (p.Red() * alpha/255)    << 16
-                              | (p.Green() * alpha/255)  <<  8
-                              | (p.Blue() * alpha/255) );
+                    *data = (alpha << 24
+                        | Premultiply(alpha, p.Red()) << 16
+                        | Premultiply(alpha, p.Green()) << 8
+                        | Premultiply(alpha, p.Blue()));
+#endif // __WXMSW__ / !__WXMSW__
                 ++data;
                 ++p;
             }
@@ -1434,7 +1467,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                 // the upper 8 bits unused. Red, Green, and Blue are stored in
                 // the remaining 24 bits in that order.  The 32-bit quantities
                 // are stored native-endian.
-                *data = ( p.Red() << 16 | p.Green() << 8 | p.Blue() );
+                *data = (wxALPHA_OPAQUE << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue() );
                 ++data;
                 ++p;
             }
@@ -1444,13 +1477,17 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             p.OffsetY(pixData, 1);
         }
     }
+
 #if defined(__WXMSW__) || defined(__WXGTK3__)
     // if there is a mask, set the alpha bytes in the target buffer to 
     // fully transparent or fully opaque
-    if (bmpSource.GetMask())
+#if defined(__WXMSW__)
+    if (bmp.GetMask() != NULL && !bmp.HasAlpha())
+#else // __WXGTK3__
+    if (bmp.GetMask() != NULL)
+#endif // __WXMSW__ / __WXGTK3__
     {
-        wxBitmap bmpMask = bmpSource.GetMask()->GetBitmap();
-        bufferFormat = CAIRO_FORMAT_ARGB32;
+        wxBitmap bmpMask = bmp.GetMask()->GetBitmap();
         data = (wxUint32*)m_buffer;
         wxNativePixelData
             pixData(bmpMask, wxPoint(0, 0), wxSize(m_width, m_height));
@@ -1476,29 +1513,13 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             p.OffsetY(pixData, 1);
         }
     }
-#endif
+#endif // __WXMSW__ || __WXGTK3__
 
     InitSurface(bufferFormat, stride);
 #endif // wxHAS_RAW_BITMAP
 }
 
 #if wxUSE_IMAGE
-
-// Helper functions for dealing with alpha pre-multiplication.
-namespace
-{
-
-inline unsigned char Premultiply(unsigned char alpha, unsigned char data)
-{
-    return alpha ? (data * alpha)/0xff : data;
-}
-
-inline unsigned char Unpremultiply(unsigned char alpha, unsigned char data)
-{
-    return alpha ? (data * 0xff)/alpha : data;
-}
-
-} // anonymous namespace
 
 wxCairoBitmapData::wxCairoBitmapData(wxGraphicsRenderer* renderer,
                                      const wxImage& image)
