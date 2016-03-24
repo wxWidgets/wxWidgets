@@ -9,7 +9,11 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if (wxUSE_DATAVIEWCTRL != 0) && (!defined(wxUSE_GENERICDATAVIEWCTRL) || (wxUSE_GENERICDATAVIEWCTRL == 0))
+#if wxUSE_DATAVIEWCTRL
+
+#include "wx/dataview.h"
+
+#ifndef wxUSE_GENERICDATAVIEWCTRL
 
 #include <limits>
 
@@ -728,5 +732,6 @@ wxBEGIN_EVENT_TABLE(wxDataViewCtrl,wxDataViewCtrlBase)
   EVT_MOTION(wxDataViewCtrl::OnMouse)
 wxEND_EVENT_TABLE()
 
-#endif // (wxUSE_DATAVIEWCTRL != 0) && (!defined(wxUSE_GENERICDATAVIEWCTRL) || (wxUSE_GENERICDATAVIEWCTRL == 0))
+#endif // !wxUSE_GENERICDATAVIEWCTRL
 
+#endif // wxUSE_DATAVIEWCTRL
