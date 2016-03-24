@@ -2387,9 +2387,16 @@ wxGraphicsBitmap wxGDIPlusRenderer::CreateBitmapFromNativeBitmap( void *bitmap )
 wxGraphicsBitmap wxGDIPlusRenderer::CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  )
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsBitmap);
+
+    wxCHECK_MSG(!bitmap.IsNull(), wxNullGraphicsBitmap, wxS("Invalid bitmap"));
+
     Bitmap* image = static_cast<wxGDIPlusBitmapData*>(bitmap.GetRefData())->GetGDIPlusBitmap();
     if ( image )
     {
+        wxCHECK_MSG( x >= 0.0 && y >= 0.0 && w > 0.0 && h > 0.0 &&
+                     x + w <= image->GetWidth() && y + h <= image->GetHeight(),
+                     wxNullGraphicsBitmap, wxS("Invalid bitmap region"));
+
         wxGraphicsBitmap p;
         p.SetRefData(new wxGDIPlusBitmapData( this , image->Clone( (REAL) x , (REAL) y , (REAL) w , (REAL) h , PixelFormat32bppPARGB) ));
         return p;
