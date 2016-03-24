@@ -2818,6 +2818,8 @@ wxCairoRenderer::CreateSubBitmap(const wxGraphicsBitmap& bitmap,
 
     wxCairoBitmapData* dataSrc = static_cast<wxCairoBitmapData*>(bitmap.GetRefData());
     cairo_surface_t* srcSurface = dataSrc->GetCairoSurface();
+    wxCHECK_MSG(srcSurface, wxNullGraphicsBitmap, wxS("Invalid bitmap"));
+
     int srcWidth = cairo_image_surface_get_width(srcSurface);
     int srcHeight = cairo_image_surface_get_height(srcSurface);
 
