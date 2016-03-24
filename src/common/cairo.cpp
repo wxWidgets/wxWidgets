@@ -168,6 +168,8 @@
         (cairo_t *cr, double tx, double ty), (cr, tx, ty) ) \
     m( cairo_surface_flush, \
        (cairo_surface_t *surface), (surface) ) \
+    m( cairo_set_source_surface, \
+       (cairo_t *cr, cairo_surface_t *surface, double x, double y), (cr, surface, x, y) ) \
 
 #ifdef __WXMAC__
 #define wxCAIRO_PLATFORM_METHODS(m) \
@@ -230,6 +232,8 @@
        (cairo_surface_t *surface), (surface), -1) \
     m( const char *, cairo_version_string, \
        (), () , NULL ) \
+    m( cairo_surface_t*, cairo_surface_create_similar_image, \
+       (cairo_surface_t *other, cairo_format_t format, int width, int height), (other, format, width, height), NULL) \
     wxCAIRO_PLATFORM_METHODS(m)
 
 #define wxCAIRO_DECLARE_TYPE(rettype, name, args, argnames, defret) \

@@ -446,9 +446,6 @@ public:
 
     /**
         Extracts a sub-bitmap from an existing bitmap.
-
-        Currently this function is implemented in the native MSW and OS X
-        versions but not when using Cairo.
      */
     virtual wxGraphicsBitmap CreateSubBitmap(const wxGraphicsBitmap& bitmap,
                                              wxDouble x, wxDouble y,

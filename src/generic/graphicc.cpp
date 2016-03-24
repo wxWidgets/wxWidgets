@@ -2787,15 +2787,41 @@ wxGraphicsBitmap wxCairoRenderer::CreateBitmapFromNativeBitmap( void* bitmap )
 }
 
 wxGraphicsBitmap
-wxCairoRenderer::CreateSubBitmap(const wxGraphicsBitmap& WXUNUSED(bitmap),
-                                 wxDouble WXUNUSED(x),
-                                 wxDouble WXUNUSED(y),
-                                 wxDouble WXUNUSED(w),
-                                 wxDouble WXUNUSED(h))
+wxCairoRenderer::CreateSubBitmap(const wxGraphicsBitmap& bitmap,
+                                 wxDouble x, wxDouble y,
+                                 wxDouble w, wxDouble h)
 {
-    wxGraphicsBitmap p;
-    wxFAIL_MSG("wxCairoRenderer::CreateSubBitmap is not implemented.");
-    return p;
+    ENSURE_LOADED_OR_RETURN(wxNullGraphicsBitmap);
+
+    wxCHECK_MSG(!bitmap.IsNull(), wxNullGraphicsBitmap, wxS("Invalid bitmap"));
+
+    wxCairoBitmapData* dataSrc = static_cast<wxCairoBitmapData*>(bitmap.GetRefData());
+    cairo_surface_t* srcSurface = dataSrc->GetCairoSurface();
+    int srcWidth = cairo_image_surface_get_width(srcSurface);
+    int srcHeight = cairo_image_surface_get_height(srcSurface);
+
+    int dstWidth = wxRound(w);
+    int dstHeight = wxRound(h);
+
+    wxCHECK_MSG( x >= 0.0 && y >= 0.0 && dstWidth > 0 && dstHeight > 0 &&
+                 x + dstWidth <= srcWidth && y + dstHeight <= srcHeight,
+                 wxNullGraphicsBitmap, wxS("Invalid bitmap region"));
+
+    cairo_surface_t* dstSurface = cairo_surface_create_similar_image(srcSurface,
+        cairo_image_surface_get_format(srcSurface),
+        dstWidth, dstHeight);
+
+    cairo_t* cr = cairo_create(dstSurface);
+    cairo_set_source_surface(cr, srcSurface, -x, -y);
+
+    cairo_rectangle(cr, 0.0, 0.0, dstWidth, dstHeight);
+    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+    cairo_fill(cr);
+    cairo_destroy(cr);
+
+    wxGraphicsBitmap bmpRes;
+    bmpRes.SetRefData(new wxCairoBitmapData(this, dstSurface));
+    return bmpRes;
 }
 
 wxString wxCairoRenderer::GetName() const
