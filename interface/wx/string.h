@@ -1824,10 +1824,14 @@ public:
         alternative to this function called FromUTF8Unchecked() which, unlike
         this one, doesn't check that the input string is valid.
 
+        The overload taking @c std::string is only available starting with
+        wxWidgets 3.1.1.
+
         @since 2.8.4
     */
     static wxString FromUTF8(const char* s);
     static wxString FromUTF8(const char* s, size_t len);
+    static wxString FromUTF8(const std::string& s);
     //@}
 
     //@{
@@ -1844,10 +1848,14 @@ public:
         string to this function will result in creating a corrupted wxString
         and all the subsequent operations on it will be undefined.
 
+        The overload taking @c std::string is only available starting with
+        wxWidgets 3.1.1.
+
         @since 2.8.9
     */
     static wxString FromUTF8Unchecked(const char* s);
     static wxString FromUTF8Unchecked(const char* s, size_t len);
+    static wxString FromUTF8Unchecked(const std::string& s);
     //@}
 };
 
