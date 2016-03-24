@@ -2789,7 +2789,7 @@ public:
         if (height != NULL) *height = textMetrics.height;
 
         if (descent != NULL) *descent = fontMetrics.descent * ratio;
-        if (externalLeading != NULL) *externalLeading = std::max(0.0f, (fontMetrics.ascent + fontMetrics.descent) * ratio - textMetrics.height);
+        if (externalLeading != NULL) *externalLeading = wxMax(0.0f, (fontMetrics.ascent + fontMetrics.descent) * ratio - textMetrics.height);
     }
 };
 
@@ -3299,7 +3299,7 @@ bool wxD2DContext::ShouldOffset() const
     if (!m_pen.IsNull())
     {
         penWidth = wxGetD2DPenData(m_pen)->GetWidth();
-        penWidth = std::max(penWidth, 1);
+        penWidth = wxMax(penWidth, 1);
     }
 
     return (penWidth % 2) == 1;
