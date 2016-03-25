@@ -85,8 +85,8 @@
         - String in UTF-8 encoding using wxString::utf8_str().
         - String in any given encoding using mb_str() with the appropriate
         wxMBConv object. This is also a potentially destructive operation.
-        - Standard @c std::string using wxString::ToStdString(). The contents
-        of the returned string use the current locale encoding, so this
+        - Standard @c std::string using wxString::ToStdString(). The encoding
+        of the returned string is specified with a wxMBConv object, so this
         conversion is potentially destructive as well.
         - Wide C string using wxString::wc_str().
         - Standard @c std::wstring using wxString::ToStdWstring().
@@ -756,10 +756,10 @@ public:
     const wxCharBuffer ToAscii(char replaceWith = '_') const;
 
     /**
-        Return the string as an std::string in current locale encoding.
+        Return the string as an std::string using @e conv's wxMBConv::cWC2MB method.
 
-        Note that if the conversion of (Unicode) string contents to the current
-        locale fails, the return string will be empty. Be sure to check for
+        Note that if the conversion of (Unicode) string contents using @e conv
+        fails, the return string will be empty. Be sure to check for
         this to avoid silent data loss.
 
         Instead of using this function it's also possible to write
@@ -771,9 +771,12 @@ public:
         @endcode
         but using ToStdString() may make the code more clear.
 
+        @param conv
+            The converter to be used. This parameter is new in wxWidgets 3.1.1.
+
         @since 2.9.1
     */
-    std::string ToStdString() const;
+    std::string ToStdString(const wxMBConv& conv = wxConvLibc) const;
 
     /**
         Return the string as an std::wstring.

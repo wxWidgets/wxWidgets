@@ -1241,12 +1241,17 @@ public:
     // wxStringImpl is std::string in the encoding we want
     #define wxStringToStdStringRetType const std::string&
     const std::string& ToStdString() const { return m_impl; }
+    std::string ToStdString(const wxMBConv& conv) const
+    {
+        wxScopedCharBuffer buf(mb_str(conv));
+        return std::string(buf.data(), buf.length());
+    }
   #else
     // wxStringImpl is either not std::string or needs conversion
     #define wxStringToStdStringRetType std::string
-    std::string ToStdString() const
+    std::string ToStdString(const wxMBConv& conv = wxConvLibc) const
     {
-        wxScopedCharBuffer buf(mb_str());
+        wxScopedCharBuffer buf(mb_str(conv));
         return std::string(buf.data(), buf.length());
     }
   #endif
