@@ -656,18 +656,11 @@ public:
     /**
         Returns a string representation suitable for passing to OS' functions
         for file handling.
-    */
-    const wchar_t* fn_str() const;
 
-    /**
-        @overload
+        Depending on OS and configuration, TYPE is either @c wchar_t*,
+        @c char*, or wxCharBuffer.
     */
-    const char* fn_str() const;
-
-    /**
-        @overload
-    */
-    const wxCharBuffer fn_str() const;
+    const TYPE fn_str() const;
 
     /**
         Returns the multibyte (C string) representation of the string
@@ -692,16 +685,14 @@ public:
         or returns a pointer to the internal string contents in wide character
         mode (Windows).
 
+        Depending on OS and configuration, TYPE is either @c wchar_t*
+        or wxCharBuffer.
+
         The macro wxWX2WCbuf is defined as the correct return type (without const).
 
         @see utf8_str(), c_str(), mb_str(), fn_str(), wchar_str()
     */
-    const wchar_t* wc_str() const;
-
-    /**
-        @overload
-    */
-    const wxWCharBuffer wc_str() const;
+    const TYPE wc_str() const;
 
     /**
         Returns an object with string data that is implicitly convertible to
@@ -744,16 +735,14 @@ public:
 
         Use mb_str() or utf8_str() to convert to other encodings.
 
+        Depending on OS and configuration, TYPE is either @c char* or
+        wxCharBuffer.
+
         @param replaceWith
             The character used to replace any non-ASCII characters, default to
             underscore (@c "_"). This parameter is new since wxWidgets 3.1.0.
     */
-    const char* ToAscii(char replaceWith = '_') const;
-
-    /**
-        @overload
-    */
-    const wxCharBuffer ToAscii(char replaceWith = '_') const;
+    const TYPE ToAscii(char replaceWith = '_') const;
 
     /**
         Return the string as an std::string in current locale encoding.
