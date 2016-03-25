@@ -608,5 +608,12 @@ void StdStringTestCase::StdConversion()
 
     wxStdWideString s8(s4);
     CPPUNIT_ASSERT( s8 == "hello" );
+
+    std::string s9("\xF0\x9F\x90\xB1\0\xE7\x8C\xAB", 9); /* U+1F431 U+0000 U+732B */
+    wxString s10 = wxString::FromUTF8(s9);
+    CPPUNIT_ASSERT_EQUAL( s9, s10.ToStdString(wxConvUTF8) );
+
+    std::string s11("xyz\0\xFF", 5); /* an invalid UTF-8 sequence */
+    CPPUNIT_ASSERT_EQUAL( wxString::FromUTF8(s11), "" );
 }
 #endif // wxUSE_STD_STRING
