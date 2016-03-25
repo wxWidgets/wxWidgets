@@ -1168,9 +1168,15 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
 
     gc->PushState();
     gc->Translate(60, 400);
-    gc->DrawText("Scaled smiley inside a square", 0, 0);
-    gc->DrawRectangle(BASE2, BASE2, 100, 100);
-    gc->DrawBitmap(m_smile_bmp, BASE2, BASE2, 100, 100);
+    const wxString labelText(wxS("Scaled smiley inside a square"));
+    gc->DrawText(labelText, 0, 0);
+    // Center a bitmap horizontally
+    wxDouble textWidth;
+    gc->GetTextExtent(labelText, &textWidth, NULL);
+    const wxDouble rectWidth = 100;
+    wxDouble x0 = (textWidth - rectWidth) / 2;
+    gc->DrawRectangle(x0, BASE2, rectWidth, 100);
+    gc->DrawBitmap(m_smile_bmp, x0, BASE2, rectWidth, 100);
     gc->PopState();
 
     // Draw graphics bitmap and its subbitmap
