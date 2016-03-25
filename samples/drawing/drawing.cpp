@@ -1172,6 +1172,19 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
     gc->DrawRectangle(BASE2, BASE2, 100, 100);
     gc->DrawBitmap(m_smile_bmp, BASE2, BASE2, 100, 100);
     gc->PopState();
+
+    // Draw graphics bitmap and its subbitmap
+    gc->PushState();
+    gc->Translate(300, 400);
+    gc->DrawText(wxS("Smiley as a graphics bitmap"), 0, 0);
+
+    wxGraphicsBitmap gbmp1 = gc->CreateBitmap(m_smile_bmp);
+    gc->DrawBitmap(gbmp1, 0, BASE2, 50, 50);
+    int bmpw = m_smile_bmp.GetWidth();
+    int bmph = m_smile_bmp.GetHeight();
+    wxGraphicsBitmap gbmp2 = gc->CreateSubBitmap(gbmp1, 0, bmph/5, bmpw/2, bmph/2);
+    gc->DrawBitmap(gbmp2, 80, BASE2, 50, 50*(bmph/2)/(bmpw/2));
+    gc->PopState();
 }
 #endif // wxUSE_GRAPHICS_CONTEXT
 
