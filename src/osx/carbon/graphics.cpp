@@ -2360,8 +2360,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
 
 void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const
 {
-    widths.Empty();
-    widths.Add(0, text.length());
+    widths.clear();
 
     wxCHECK_RET( !m_font.IsNull(), wxT("wxMacCoreGraphicsContext::DrawText - no valid font set") );
 
@@ -2379,10 +2378,17 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
     wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, t, attributes) );
     wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
 
-    int chars = text.length();
-    for ( int pos = 0; pos < (int)chars; pos ++ )
+    widths.reserve(text.length());
+    CFIndex u16index = 1;
+    for ( wxString::const_iterator iter = text.begin(); iter != text.end(); ++iter, ++u16index )
     {
-        widths[pos] = CTLineGetOffsetForStringIndex( line, pos+1 , NULL );
+        // Take care of surrogate pairs: they take two, not one, of UTF-16 code
+        // units used by CoreText.
+        if ( *iter >= 0x10000 )
+        {
+            ++u16index;
+        }
+        widths.push_back( CTLineGetOffsetForStringIndex( line, u16index, NULL ) );
     }
 
     CheckInvariants();

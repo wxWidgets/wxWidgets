@@ -81,6 +81,7 @@ wxMSW:
 
 wxOSX:
 
+- Fix handling of non-BMP characters in GetPartialTextExtents() (ARATA Mizuki).
 - Remove extra borders around wxFilePickerCtrl (John Roberts).
 - Set up extensions filter correctly in wxFileDialog (nick863).
 - Turn off automatic quotes substitutions in wxTextCtrl (Xlord2).
