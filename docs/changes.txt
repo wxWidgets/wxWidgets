@@ -62,6 +62,7 @@ All:
 - wxLogInfo() now logs messages if the log level is high enough, even without
   wxLog::SetVerbose() which now only affects wxLogVerbose().
 - Add wxFileType::GetExpandedCommand() (troelsk).
+- Make it easier to convert to/from UTF-8-encoded std::string (ARATA Mizuki).
 
 All (GUI):
 
