@@ -2931,7 +2931,7 @@ public:
     @class wxDropFilesEvent
 
     This class is used for drop files events, that is, when files have been dropped
-    onto the window. This functionality is currently only available under Windows.
+    onto the window.
 
     The window must have previously been enabled for dropping by calling
     wxWindow::DragAcceptFiles().
@@ -2945,12 +2945,13 @@ public:
         Process a @c wxEVT_DROP_FILES event.
     @endEventTable
 
-    @onlyfor{wxmsw}
+    @remarks Windows only until version 2.8.9, available on all platforms
+             since 2.8.10.
 
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_events
+    @see @ref overview_events, wxWindow::DragAcceptFiles()
 */
 class wxDropFilesEvent : public wxEvent
 {
