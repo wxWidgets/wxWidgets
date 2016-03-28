@@ -61,8 +61,8 @@
 
     Currently this class is implemented generically (i.e. in the same
     platform-independent way for all ports) and also natively in wxGTK but the
-    native implementation requires a recent -- as of this writing -- GTK+ 2.18
-    version.
+    native implementation requires GTK+ 2.18 version or later (this requirement
+    should be satisfied by any desktop systems currently in use).
 
     @library{wxcore}
     @category{miscwnd}
