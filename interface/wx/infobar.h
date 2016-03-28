@@ -18,9 +18,10 @@
     higher chance to be noticed by the user but without being annoying.
 
     Info bar may show an icon (on the left), text message and, optionally,
-    buttons allowing the user to react to the information presented. It always
-    has a close button at the right allowing the user to dismiss it so it isn't
-    necessary to provide a button just to close it.
+    buttons allowing the user to react to the information presented. Unless
+    a custom button was added to the info bar, it also has a close button at
+    the right allowing the user to dismiss it so it isn't necessary to provide
+    a button just to close it.
 
     wxInfoBar calls its parent wxWindow::Layout() method and assumes that it
     will change the parent layout appropriately depending on whether the info
