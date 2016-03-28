@@ -2360,8 +2360,8 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
 
 void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const
 {
-    widths.Empty();
-    widths.Add(0, text.length());
+    widths.clear();
+    widths.reserve(text.length());
 
     wxCHECK_RET( !m_font.IsNull(), wxT("wxMacCoreGraphicsContext::DrawText - no valid font set") );
 
@@ -2379,10 +2379,17 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
     wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, t, attributes) );
     wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
 
-    int chars = text.length();
-    for ( int pos = 0; pos < (int)chars; pos ++ )
+    wxString::const_iterator iter = text.begin(), end = text.end();
+    CFIndex u16index = 1;
+    for ( ; iter != end; ++iter, ++u16index )
     {
-        widths[pos] = CTLineGetOffsetForStringIndex( line, pos+1 , NULL );
+        // CoreText API use UTF-16 code units,
+        // while wxString operates on UTF-32 code units on OS X.
+        // So we need to take care of surrogate pairs.
+        if ( *iter >= 0x10000 ) {
+            ++u16index;
+        }
+        widths.push_back( CTLineGetOffsetForStringIndex( line, u16index, NULL ) );
     }
 
     CheckInvariants();
