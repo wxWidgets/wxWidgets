@@ -2830,9 +2830,21 @@ wxCairoRenderer::CreateSubBitmap(const wxGraphicsBitmap& bitmap,
                  x + dstWidth <= srcWidth && y + dstHeight <= srcHeight,
                  wxNullGraphicsBitmap, wxS("Invalid bitmap region"));
 
-    cairo_surface_t* dstSurface = cairo_surface_create_similar_image(srcSurface,
-        cairo_image_surface_get_format(srcSurface),
-        dstWidth, dstHeight);
+    cairo_surface_t* dstSurface;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+    if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 12, 0) )
+    {
+        dstSurface = cairo_surface_create_similar_image(srcSurface,
+            cairo_image_surface_get_format(srcSurface),
+            dstWidth, dstHeight);
+    }
+    else
+#endif // Cairo 1.12
+    {
+        dstSurface = cairo_surface_create_similar(srcSurface,
+            CAIRO_CONTENT_COLOR_ALPHA,
+            dstWidth, dstHeight);
+    }
 
     cairo_t* cr = cairo_create(dstSurface);
     cairo_set_source_surface(cr, srcSurface, -x, -y);
