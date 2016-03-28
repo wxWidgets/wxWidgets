@@ -2671,8 +2671,8 @@ private:
 class wxD2DDCRenderTargetResourceHolder : public wxD2DRenderTargetResourceHolder
 {
 public:
-    wxD2DDCRenderTargetResourceHolder(ID2D1Factory* factory, HDC hdc, const wxSize dcSize, bool hasAlpha) :
-        m_factory(factory), m_hdc(hdc), m_hasAlpha(hasAlpha)
+    wxD2DDCRenderTargetResourceHolder(ID2D1Factory* factory, HDC hdc, const wxSize dcSize, D2D1_ALPHA_MODE alphaMode) :
+        m_factory(factory), m_hdc(hdc), m_alphaMode(alphaMode)
     {
         m_dcSize.left = 0;
         m_dcSize.top = 0;
@@ -2683,13 +2683,10 @@ public:
 protected:
     void DoAcquireResource()
     {
-        D2D1_ALPHA_MODE alphaMode = m_hasAlpha ?
-                                    D2D1_ALPHA_MODE_PREMULTIPLIED : D2D1_ALPHA_MODE_IGNORE;
-
         wxCOMPtr<ID2D1DCRenderTarget> renderTarget;
         D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties = D2D1::RenderTargetProperties(
             D2D1_RENDER_TARGET_TYPE_DEFAULT,
-            D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, alphaMode));
+            D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, m_alphaMode));
 
         HRESULT hr = m_factory->CreateDCRenderTarget(
             &renderTargetProperties,
@@ -2706,7 +2703,7 @@ private:
     ID2D1Factory* m_factory;
     HDC m_hdc;
     RECT m_dcSize;
-    bool m_hasAlpha;
+    D2D1_ALPHA_MODE m_alphaMode;
 };
 
 // The null context has no state of its own and does nothing.
@@ -2807,7 +2804,7 @@ public:
     wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, HWND hwnd);
 
     wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, HDC hdc, const wxSize& dcSize,
-                 bool hasAlpha = false);
+                 D2D1_ALPHA_MODE alphaMode = D2D1_ALPHA_MODE_IGNORE);
 
 #if wxUSE_IMAGE
     wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, wxImage& image);
@@ -2953,9 +2950,10 @@ wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dF
     Init();
 }
 
-wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, HDC hdc, const wxSize& dcSize, bool hasAlpha) :
+wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, HDC hdc,
+                           const wxSize& dcSize, D2D1_ALPHA_MODE alphaMode) :
     wxGraphicsContext(renderer), m_direct2dFactory(direct2dFactory),
-    m_renderTargetHolder(new wxD2DDCRenderTargetResourceHolder(direct2dFactory, hdc, dcSize, hasAlpha))
+    m_renderTargetHolder(new wxD2DDCRenderTargetResourceHolder(direct2dFactory, hdc, dcSize, alphaMode))
 {
     Init();
 }
@@ -3629,7 +3627,8 @@ wxGraphicsContext* wxD2DRenderer::CreateContext(const wxMemoryDC& dc)
     wxBitmap bmp = dc.GetSelectedBitmap();
     wxASSERT_MSG( bmp.IsOk(), wxS("Should select a bitmap before creating wxGraphicsContext") );
 
-    return new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), wxSize(width, height), bmp.HasAlpha());
+    return new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), wxSize(width, height),
+                            bmp.HasAlpha() ? D2D1_ALPHA_MODE_PREMULTIPLIED : D2D1_ALPHA_MODE_IGNORE);
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE
