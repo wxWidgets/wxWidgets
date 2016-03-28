@@ -224,6 +224,9 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
     // Make sure it can take the focus
     SetCanFocus(true);
 
+    // STC doesn't support RTL languages at all
+    SetLayoutDirection(wxLayout_LeftToRight);
+
     return true;
 }
 
