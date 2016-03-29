@@ -615,11 +615,6 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
         return wxLANGUAGE_ENGLISH_US;
     }
 
-    if ( langFull == wxS("C") || langFull == wxS("POSIX") )
-    {
-        // default C locale is English too
-        return wxLANGUAGE_ENGLISH_US;
-    }
 #endif
 
     // the language string has the following form
@@ -653,6 +648,12 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
     if ( posEndLang != wxString::npos )
     {
         langFull.Truncate(posEndLang);
+    }
+
+    if ( langFull == wxS("C") || langFull == wxS("POSIX") )
+    {
+        // default C locale is English too
+        return wxLANGUAGE_ENGLISH_US;
     }
 
     // do we have just the language (or sublang too)?
