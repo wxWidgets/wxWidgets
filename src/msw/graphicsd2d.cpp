@@ -30,6 +30,15 @@
 #define D2D1MakeRotateMatrix wxD2D1MakeRotateMatrix
 #define D2D1InvertMatrix wxD2D1InvertMatrix
 
+// There are clashes between the names of the member fields and parameters
+// in the standard d2d1helper.h header resulting in C4458 with VC14,
+// so disable this warning for this file as there is no other way to
+// avoid it.
+#ifdef __VISUALC__
+    #pragma warning(push)
+    #pragma warning(disable:4458) // declaration of 'xxx' hides class member
+#endif
+
 #include <d2d1.h>
 #include <dwrite.h>
 #include <wincodec.h>
@@ -38,6 +47,10 @@
 #include <D3D11.h>
 #include <D2d1_1.h>
 #include <DXGI1_2.h>
+#endif
+
+#ifdef __VISUALC__
+    #pragma warning(pop)
 #endif
 
 #ifdef __BORLANDC__
