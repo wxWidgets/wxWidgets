@@ -707,6 +707,8 @@ typedef pid_t GPid;
  */
 #define wxUSE_GSTREAMER 0
 
+#define wxUSE_GSTREAMER_PLAYER 0
+
 /* --- start MSW options --- */
 
 #define wxUSE_GRAPHICS_GDIPLUS wxUSE_GRAPHICS_CONTEXT
@@ -723,7 +725,7 @@ typedef pid_t GPid;
 
 #define wxUSE_ACTIVEX 0
 
-#if defined(_MSC_VER) && _MSC_VER >= 1700
+#if defined(_MSC_VER) && _MSC_VER >= 1700 && !defined(_USING_V110_SDK71_)
     #define wxUSE_WINRT 0
 #else
     #define wxUSE_WINRT 0
@@ -756,6 +758,12 @@ typedef pid_t GPid;
 #define wxUSE_DATEPICKCTRL_GENERIC 0
 
 #define wxUSE_TIMEPICKCTRL_GENERIC 0
+
+#if defined(__VISUALC__) || defined(__MINGW64_TOOLCHAIN__)
+    #define wxUSE_DBGHELP 0
+#else
+    #define wxUSE_DBGHELP 0
+#endif
 
 #define wxUSE_CRASHREPORT 0
 
