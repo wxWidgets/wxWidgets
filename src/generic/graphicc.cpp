@@ -1833,25 +1833,85 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     m_enableOffset = dc.GetContentScaleFactor() <= 1;
 
 #ifdef __WXMSW__
+    wxBitmap bmp = dc.GetSelectedBitmap();
+    wxASSERT_MSG(bmp.IsOk(),
+                 wxS("Should select a bitmap before creating wxCairoContext"));
 
-    HDC hdc = (HDC)dc.GetHDC();
-
-    HBITMAP bitmap = (HBITMAP)GetCurrentObject(hdc, OBJ_BITMAP);
-
-    BITMAP info;
     bool hasBitmap = false;
 
     // cairo_win32_surface_create creates a 24-bit bitmap,
-    // so if we have alpha, we need to create a 32-bit surface instead.
-    if (!GetObject(bitmap, sizeof(info), &info) || info.bmBitsPixel < 32)
-        m_mswSurface = cairo_win32_surface_create(hdc);
-    else {
-        hasBitmap = true;
+    // so if we 32bpp bitmap, we need to create a 32-bit surface instead.
+    if (bmp.GetDepth() < 32)
+    {
+        m_mswSurface = cairo_win32_surface_create(dc.GetHDC());
+    }
+    else
+    {
+#if wxUSE_WXDIB
+        // We need to convert the currently selected bitmap to a DIB
+        // because:
+        // 1. We need to correct alpha values if bitmap
+        //    doesn't contain real ARGB data.
+        // 2. We need to pass location of its bit values to Cairo function.
+
+        // We need to temporarily deselect this bitmap
+        // from the memory DC before modifying it.
+        const_cast<wxMemoryDC&>(dc).SelectObject(wxNullBitmap);
+
+        bmp.ConvertToDIB(); // Does nothing if already a DIB.
+
+        if (!bmp.HasAlpha())
+        {
+            // Initialize alpha channel, even if we don't have any alpha yet,
+            // we should have correct (opaque) alpha values in it for Cairo
+            // functions to work correctly.
+            {
+                wxAlphaPixelData data(bmp);
+                if (data)
+                {
+                    wxAlphaPixelData::Iterator p(data);
+                    for (int y = 0; y < data.GetHeight(); y++)
+                    {
+                        wxAlphaPixelData::Iterator rowStart = p;
+
+                        for (int x = 0; x < data.GetWidth(); x++)
+                        {
+                            p.Alpha() = wxALPHA_OPAQUE;
+                            ++p;
+                        }
+
+                        p = rowStart;
+                        p.OffsetY(data, 1);
+                    }
+                }
+            } // End of block modifying the bitmap.
+
+            // Using wxAlphaPixelData sets the internal "has alpha" flag but we
+            // don't really have any alpha yet, so reset it back for now.
+            bmp.ResetAlpha();
+        }
+
+        // Undo SelectObject() at the beginning of this block.
+        const_cast<wxMemoryDC&>(dc).SelectObjectAsSource(bmp);
+#endif // wxUSE_WXDIB
+
+        // We need to pass a pointer to the location
+        // of the bit values to Cairo function.
+        BITMAP info;
+        if (::GetObject(bmp.GetHBITMAP(), sizeof(info), &info) == 0)
+        {
+            wxLogLastError(wxS("wxCairoContext ctor - GetObject"));
+        }
+        wxASSERT_MSG(info.bmBits != NULL, wxS("Invalid bitmap"));
+
         m_mswSurface = cairo_image_surface_create_for_data((unsigned char*)info.bmBits,
-                                               CAIRO_FORMAT_ARGB32,
+                                               bmp.HasAlpha() ?
+                                               CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24,
                                                info.bmWidth,
                                                info.bmHeight,
                                                info.bmWidthBytes);
+
+        hasBitmap = true;
     }
 
     Init( cairo_create(m_mswSurface) );
