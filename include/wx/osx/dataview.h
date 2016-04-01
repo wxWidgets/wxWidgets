@@ -169,7 +169,6 @@ public:
 
   virtual void Collapse( const wxDataViewItem& item) wxOVERRIDE;
   virtual void EnsureVisible(const wxDataViewItem& item, const wxDataViewColumn* columnPtr=NULL) wxOVERRIDE;
-  virtual void Expand(const wxDataViewItem& item) wxOVERRIDE;
   virtual bool IsExpanded(const wxDataViewItem & item) const wxOVERRIDE;
 
   virtual unsigned int GetCount() const;
@@ -270,6 +269,8 @@ protected:
  // inherited methods from wxDataViewCtrlBase
   virtual void DoSetExpanderColumn() wxOVERRIDE;
   virtual void DoSetIndent() wxOVERRIDE;
+
+  virtual void DoExpand(const wxDataViewItem& item) wxOVERRIDE;
 
   virtual wxSize DoGetBestSize() const wxOVERRIDE;
 

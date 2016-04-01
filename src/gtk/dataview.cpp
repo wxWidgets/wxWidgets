@@ -979,9 +979,8 @@ wxgtk_tree_model_set_sort_column_id (GtkTreeSortable *sortable,
     if (gs_lastLeftClickHeader)
     {
         wxDataViewCtrl *dv = tree_model->internal->GetOwner();
-        wxDataViewEvent event( wxEVT_DATAVIEW_COLUMN_SORTED, dv->GetId() );
-        event.SetDataViewColumn( gs_lastLeftClickHeader );
-        event.SetModel( dv->GetModel() );
+        wxDataViewEvent
+            event(wxEVT_DATAVIEW_COLUMN_SORTED, dv, gs_lastLeftClickHeader);
         dv->HandleWindowEvent( event );
     }
 
@@ -1129,11 +1128,7 @@ static GtkCellEditable *gtk_wx_cell_renderer_text_start_editing(
         item(column->GetOwner()->GTKPathToItem(wxGtkTreePath(path)));
 
     wxDataViewCtrl *dv = column->GetOwner();
-    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_START_EDITING, dv->GetId() );
-    event.SetDataViewColumn( column );
-    event.SetModel( dv->GetModel() );
-    event.SetColumn( column->GetModelColumn() );
-    event.SetItem( item );
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_START_EDITING, dv, column, item);
     dv->HandleWindowEvent( event );
 
     if (event.IsAllowed())
@@ -2253,7 +2248,6 @@ void GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
         g_value_unset( &gvalue );
     }
 
-#if 0
     if (attr.HasBackgroundColour())
     {
         wxColour colour = attr.GetBackgroundColour();
@@ -2273,7 +2267,6 @@ void GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
         g_object_set_property( G_OBJECT(renderer), "cell-background-set", &gvalue );
         g_value_unset( &gvalue );
     }
-#endif
 }
 
 } // anonymous namespace
@@ -3002,9 +2995,7 @@ gtk_dataview_header_button_press_callback( GtkWidget *WXUNUSED(widget),
         gs_lastLeftClickHeader = column;
 
         wxDataViewCtrl *dv = column->GetOwner();
-        wxDataViewEvent event( wxEVT_DATAVIEW_COLUMN_HEADER_CLICK, dv->GetId() );
-        event.SetDataViewColumn( column );
-        event.SetModel( dv->GetModel() );
+        wxDataViewEvent event(wxEVT_DATAVIEW_COLUMN_HEADER_CLICK, dv, column);
         if (dv->HandleWindowEvent( event ))
             return FALSE;
     }
@@ -3012,9 +3003,8 @@ gtk_dataview_header_button_press_callback( GtkWidget *WXUNUSED(widget),
     if (gdk_event->button == 3)
     {
         wxDataViewCtrl *dv = column->GetOwner();
-        wxDataViewEvent event( wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, dv->GetId() );
-        event.SetDataViewColumn( column );
-        event.SetModel( dv->GetModel() );
+        wxDataViewEvent
+            event(wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, dv, column);
         if (dv->HandleWindowEvent( event ))
             return FALSE;
     }
@@ -3605,14 +3595,12 @@ gboolean wxDataViewCtrlInternal::row_draggable( GtkTreeDragSource *WXUNUSED(drag
     delete m_dragDataObject;
     m_dragDataObject = NULL;
 
-    wxDataViewItem item(GetOwner()->GTKPathToItem(path));
+    wxDataViewCtrl* const dvc = GetOwner();
+    wxDataViewItem item(dvc->GTKPathToItem(path));
     if ( !item )
         return FALSE;
 
-    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, m_owner->GetId() );
-    event.SetEventObject( m_owner );
-    event.SetItem( item );
-    event.SetModel( m_wx_model );
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, dvc, item);
     gint x, y;
     gtk_widget_get_pointer(m_owner->GtkGetTreeView(), &x, &y);
     event.SetPosition(x, y);
@@ -3676,10 +3664,7 @@ wxDataViewCtrlInternal::drag_data_received(GtkTreeDragDest *WXUNUSED(drag_dest),
 {
     wxDataViewItem item(GetOwner()->GTKPathToItem(path));
 
-    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_DROP, m_owner->GetId() );
-    event.SetEventObject( m_owner );
-    event.SetItem( item );
-    event.SetModel( m_wx_model );
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_DROP, m_owner, item);
     event.SetDataFormat(gtk_selection_data_get_target(selection_data));
     event.SetDataSize(gtk_selection_data_get_length(selection_data));
     event.SetDataBuffer(const_cast<guchar*>(gtk_selection_data_get_data(selection_data)));
@@ -3699,10 +3684,7 @@ wxDataViewCtrlInternal::row_drop_possible(GtkTreeDragDest *WXUNUSED(drag_dest),
 {
     wxDataViewItem item(GetOwner()->GTKPathToItem(path));
 
-    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner->GetId() );
-    event.SetEventObject( m_owner );
-    event.SetItem( item );
-    event.SetModel( m_wx_model );
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner, item);
     event.SetDataFormat(gtk_selection_data_get_target(selection_data));
     event.SetDataSize(gtk_selection_data_get_length(selection_data));
     if (!m_owner->HandleWindowEvent( event ))
@@ -3822,10 +3804,7 @@ bool wxDataViewCtrlInternal::ItemDeleted( const wxDataViewItem &parent, const wx
 
 bool wxDataViewCtrlInternal::ItemChanged( const wxDataViewItem &item )
 {
-    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner->GetId() );
-    event.SetEventObject( m_owner );
-    event.SetModel( m_owner->GetModel() );
-    event.SetItem( item );
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner, item);
     m_owner->HandleWindowEvent( event );
 
     return true;
@@ -3833,12 +3812,9 @@ bool wxDataViewCtrlInternal::ItemChanged( const wxDataViewItem &item )
 
 bool wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned int view_column )
 {
-    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner->GetId() );
-    event.SetEventObject( m_owner );
-    event.SetModel( m_owner->GetModel() );
-    event.SetColumn( view_column );
-    event.SetDataViewColumn( GetOwner()->GetColumn(view_column) );
-    event.SetItem( item );
+    wxDataViewColumn* const column = m_owner->GetColumn(view_column);
+    wxDataViewEvent
+        event(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner, column, item);
     m_owner->HandleWindowEvent( event );
 
     return true;
@@ -4371,10 +4347,8 @@ wxdataview_selection_changed_callback( GtkTreeSelection* WXUNUSED(selection), wx
     if (!gtk_widget_get_realized(dv->m_widget))
         return;
 
-    wxDataViewEvent event( wxEVT_DATAVIEW_SELECTION_CHANGED, dv->GetId() );
-    event.SetEventObject( dv );
-    event.SetItem( dv->GetSelection() );
-    event.SetModel( dv->GetModel() );
+    wxDataViewEvent
+        event(wxEVT_DATAVIEW_SELECTION_CHANGED, dv, dv->GetSelection());
     dv->HandleWindowEvent( event );
 }
 
@@ -4382,11 +4356,8 @@ static void
 wxdataview_row_activated_callback( GtkTreeView* WXUNUSED(treeview), GtkTreePath *path,
                                    GtkTreeViewColumn *WXUNUSED(column), wxDataViewCtrl *dv )
 {
-    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_ACTIVATED, dv->GetId() );
-
     wxDataViewItem item(dv->GTKPathToItem(path));
-    event.SetItem( item );
-    event.SetModel( dv->GetModel() );
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_ACTIVATED, dv, item);
     dv->HandleWindowEvent( event );
 }
 
@@ -4394,11 +4365,8 @@ static gboolean
 wxdataview_test_expand_row_callback( GtkTreeView* WXUNUSED(treeview), GtkTreeIter* iter,
                                      GtkTreePath *WXUNUSED(path), wxDataViewCtrl *dv )
 {
-    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_EXPANDING, dv->GetId() );
-
-    wxDataViewItem item( (void*) iter->user_data );;
-    event.SetItem( item );
-    event.SetModel( dv->GetModel() );
+    wxDataViewItem item( (void*) iter->user_data );
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EXPANDING, dv, item);
     dv->HandleWindowEvent( event );
 
     return !event.IsAllowed();
@@ -4408,11 +4376,8 @@ static void
 wxdataview_row_expanded_callback( GtkTreeView* WXUNUSED(treeview), GtkTreeIter* iter,
                                   GtkTreePath *WXUNUSED(path), wxDataViewCtrl *dv )
 {
-    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_EXPANDED, dv->GetId() );
-
-    wxDataViewItem item( (void*) iter->user_data );;
-    event.SetItem( item );
-    event.SetModel( dv->GetModel() );
+    wxDataViewItem item( (void*) iter->user_data );
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EXPANDED, dv, item);
     dv->HandleWindowEvent( event );
 }
 
@@ -4420,11 +4385,8 @@ static gboolean
 wxdataview_test_collapse_row_callback( GtkTreeView* WXUNUSED(treeview), GtkTreeIter* iter,
                                        GtkTreePath *WXUNUSED(path), wxDataViewCtrl *dv )
 {
-    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_COLLAPSING, dv->GetId() );
-
-    wxDataViewItem item( (void*) iter->user_data );;
-    event.SetItem( item );
-    event.SetModel( dv->GetModel() );
+    wxDataViewItem item( (void*) iter->user_data );
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_COLLAPSING, dv, item);
     dv->HandleWindowEvent( event );
 
     return !event.IsAllowed();
@@ -4434,11 +4396,8 @@ static void
 wxdataview_row_collapsed_callback( GtkTreeView* WXUNUSED(treeview), GtkTreeIter* iter,
                                    GtkTreePath *WXUNUSED(path), wxDataViewCtrl *dv )
 {
-    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_COLLAPSED, dv->GetId() );
-
-    wxDataViewItem item( (void*) iter->user_data );;
-    event.SetItem( item );
-    event.SetModel( dv->GetModel() );
+    wxDataViewItem item( (void*) iter->user_data );
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_COLLAPSED, dv, item);
     dv->HandleWindowEvent( event );
 }
 
@@ -4531,10 +4490,8 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
             gtk_tree_selection_select_path(selection, path);
         }
 
-        wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, dv->GetId() );
-        if (path)
-            event.SetItem(dv->GTKPathToItem(path));
-        event.SetModel( dv->GetModel() );
+        wxDataViewEvent
+            event(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, dv, dv->GTKPathToItem(path));
         return dv->HandleWindowEvent( event );
     }
 
@@ -4863,7 +4820,7 @@ wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
     return m_internal->GetDataViewSortColumn();
 }
 
-void wxDataViewCtrl::Expand( const wxDataViewItem & item )
+void wxDataViewCtrl::DoExpand( const wxDataViewItem & item )
 {
     GtkTreeIter iter;
     iter.user_data = item.GetID();

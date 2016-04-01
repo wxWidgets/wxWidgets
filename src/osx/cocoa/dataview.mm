@@ -10,7 +10,11 @@
 
 #include "wx/wxprec.h"
 
-#if (wxUSE_DATAVIEWCTRL == 1) && !defined(wxUSE_GENERICDATAVIEWCTRL)
+#if wxUSE_DATAVIEWCTRL
+
+#include "wx/dataview.h"
+
+#if !defined(wxUSE_GENERICDATAVIEWCTRL)
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -544,10 +548,7 @@ outlineView:(NSOutlineView*)outlineView
     wxCHECK_MSG( dvc->GetModel(), false,
                     "Pointer to model not set correctly." );
 
-    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_DROP, dvc->GetId());
-    event.SetEventObject(dvc);
-    event.SetItem(wxDataViewItemFromItem(item));
-    event.SetModel(dvc->GetModel());
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_DROP, dvc, wxDataViewItemFromItem(item));
 
     BOOL dragSuccessful = false;
     if ( [bestType compare:DataViewPboardType] == NSOrderedSame )
@@ -755,16 +756,10 @@ outlineView:(NSOutlineView*)outlineView
 
     // send first the event to wxWidgets that the sorting has changed so that
     // the program can do special actions before the sorting actually starts:
-    wxDataViewEvent event(wxEVT_DATAVIEW_COLUMN_SORTED,dvc->GetId()); // variable definition
-
-    event.SetEventObject(dvc);
-    if (noOfDescriptors > 0)
-    {
-        wxDataViewColumn* const col = [[wxSortDescriptors objectAtIndex:0] columnPtr];
-
-        event.SetColumn(dvc->GetColumnPosition(col));
-        event.SetDataViewColumn(col);
-    }
+    wxDataViewColumn* const col = noOfDescriptors > 0
+                                    ? [[wxSortDescriptors objectAtIndex:0] columnPtr]
+                                    : NULL;
+    wxDataViewEvent event(wxEVT_DATAVIEW_COLUMN_SORTED, dvc, col);
     dvc->GetEventHandler()->ProcessEvent(event);
 
     // start re-ordering the data;
@@ -793,12 +788,7 @@ outlineView:(NSOutlineView*)outlineView
     wxCHECK_MSG(dvc, false, "Pointer to data view control not set correctly.");
     wxCHECK_MSG(dvc->GetModel(), false, "Pointer to model not set correctly.");
 
-    wxDataViewEvent
-        event(wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE,dvc->GetId());
-
-    event.SetEventObject(dvc);
-    event.SetItem(wxDataViewItemFromItem(item));
-    event.SetModel(dvc->GetModel());
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, dvc, wxDataViewItemFromItem(item));
     if ([bestType compare:DataViewPboardType] == NSOrderedSame)
     {
         NSArray*               dataArray((NSArray*)[pasteboard propertyListForType:DataViewPboardType]);
@@ -898,22 +888,16 @@ outlineView:(NSOutlineView*)outlineView
 
         // send a begin drag event for all selected items and proceed with
         // dragging unless the event is vetoed:
-        wxDataViewEvent
-            event(wxEVT_DATAVIEW_ITEM_BEGIN_DRAG,dvc->GetId());
-
-        event.SetEventObject(dvc);
-        event.SetModel(dvc->GetModel());
         for (size_t itemCounter=0; itemCounter<[writeItems count]; ++itemCounter)
         {
             bool                   itemStringAvailable(false);              // a flag indicating if for the current item a string is available
             wxDataObjectComposite* itemObject(new wxDataObjectComposite()); // data object for current item
             wxString               itemString;                              // contains the TAB concatenated data of an item
 
-            event.SetItem(
-                wxDataViewItemFromItem([writeItems objectAtIndex:itemCounter]));
-            itemString = ::ConcatenateDataViewItemValues(dvc,event.GetItem());
+            const wxDataViewItem item = wxDataViewItemFromItem([writeItems objectAtIndex:itemCounter]);
+            wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, dvc, item);
+            itemString = ::ConcatenateDataViewItemValues(dvc, item);
             itemObject->Add(new wxTextDataObject(itemString));
-            event.SetDataObject(itemObject);
             // check if event has not been vetoed:
             if (dvc->HandleWindowEvent(event) && event.IsAllowed() && (event.GetDataObject()->GetFormatCount() > 0))
             {
@@ -1616,11 +1600,8 @@ outlineView:(NSOutlineView*)outlineView
     // sent whether the cell is editable or not
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_ACTIVATED,dvc->GetId());
-
-
-    event.SetEventObject(dvc);
-    event.SetItem(wxDataViewItemFromItem([self itemAtRow:[self clickedRow]]));
+    const wxDataViewItem item = wxDataViewItemFromItem([self itemAtRow:[self clickedRow]]);
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_ACTIVATED, dvc, item);
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
@@ -1633,12 +1614,8 @@ outlineView:(NSOutlineView*)outlineView
          characterAtIndex: 0] == NSCarriageReturnCharacter )
     {
         wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
-        
-        wxDataViewEvent eventDV( wxEVT_DATAVIEW_ITEM_ACTIVATED, dvc->GetId() );
-        eventDV.SetEventObject(dvc);
-        eventDV.SetItem( wxDataViewItem( [[self itemAtRow:[self selectedRow]] pointer]) );
-        eventDV.SetModel( dvc->GetModel() );
-        
+        const wxDataViewItem item = wxDataViewItem( [[self itemAtRow:[self selectedRow]] pointer]);
+        wxDataViewEvent eventDV(wxEVT_DATAVIEW_ITEM_ACTIVATED, dvc, item);
         if ( !dvc->GetEventHandler()->ProcessEvent(eventDV) )
             [super keyDown:event];
     }
@@ -1660,19 +1637,16 @@ outlineView:(NSOutlineView*)outlineView
     // menu should be shown or not
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU,dvc->GetId());
-
-    wxDataViewItemArray selectedItems;
-
-
-    event.SetEventObject(dvc);
-    event.SetModel(dvc->GetModel());
     // get the item information;
     // theoretically more than one ID can be returned but the event can only
     // handle one item, therefore only the first item of the array is
     // returned:
+    wxDataViewItem item;
+    wxDataViewItemArray selectedItems;
     if (dvc->GetSelections(selectedItems) > 0)
-        event.SetItem(selectedItems[0]);
+        item = selectedItems[0];
+
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, dvc, item);
     dvc->GetEventHandler()->ProcessEvent(event);
     // nothing is done:
     return nil;
@@ -1688,14 +1662,8 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent
-        event(wxEVT_DATAVIEW_COLUMN_HEADER_CLICK,dvc->GetId());
-
-
     // first, send an event that the user clicked into a column's header:
-    event.SetEventObject(dvc);
-    event.SetColumn(dvc->GetColumnPosition(col));
-    event.SetDataViewColumn(col);
+    wxDataViewEvent event(wxEVT_DATAVIEW_COLUMN_HEADER_CLICK, dvc, col);
     dvc->HandleWindowEvent(event);
 
     // now, check if the click may have had an influence on sorting, too;
@@ -1731,13 +1699,7 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_COLLAPSING,dvc->GetId());
-
-
-    event.SetEventObject(dvc);
-    event.SetItem       (wxDataViewItemFromItem(item));
-    event.SetModel      (dvc->GetModel());
-    // finally send the equivalent wxWidget event:
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_COLLAPSING, dvc, wxDataViewItemFromItem(item));
     dvc->GetEventHandler()->ProcessEvent(event);
     // opening the container is allowed if not vetoed:
     return event.IsAllowed();
@@ -1749,13 +1711,7 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EXPANDING,dvc->GetId());
-
-
-    event.SetEventObject(dvc);
-    event.SetItem       (wxDataViewItemFromItem(item));
-    event.SetModel      (dvc->GetModel());
-    // finally send the equivalent wxWidget event:
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EXPANDING, dvc, wxDataViewItemFromItem(item));
     dvc->GetEventHandler()->ProcessEvent(event);
     // opening the container is allowed if not vetoed:
     return event.IsAllowed();
@@ -1818,12 +1774,7 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_DATAVIEW_COLUMN_REORDERED,dvc->GetId());
-
-
-    event.SetEventObject(dvc);
-    event.SetColumn(dvc->GetColumnPosition(col));
-    event.SetDataViewColumn(col);
+    wxDataViewEvent event(wxEVT_DATAVIEW_COLUMN_REORDERED, dvc, col);
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
@@ -1831,12 +1782,9 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_COLLAPSED,dvc->GetId());
-
-
-    event.SetEventObject(dvc);
-    event.SetItem(wxDataViewItemFromItem(
-                    [[notification userInfo] objectForKey:@"NSObject"]));
+    const wxDataViewItem item = wxDataViewItemFromItem(
+                    [[notification userInfo] objectForKey:@"NSObject"]);
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_COLLAPSED, dvc, item);
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
@@ -1844,12 +1792,9 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EXPANDED,dvc->GetId());
-
-
-    event.SetEventObject(dvc);
-    event.SetItem(wxDataViewItemFromItem(
-                    [[notification userInfo] objectForKey:@"NSObject"]));
+    const wxDataViewItem item = wxDataViewItemFromItem(
+                    [[notification userInfo] objectForKey:@"NSObject"]);
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EXPANDED, dvc, item);
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
@@ -1859,11 +1804,7 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_DATAVIEW_SELECTION_CHANGED,dvc->GetId());
-
-    event.SetEventObject(dvc);
-    event.SetModel(dvc->GetModel());
-    event.SetItem(dvc->GetSelection());
+    wxDataViewEvent event(wxEVT_DATAVIEW_SELECTION_CHANGED, dvc, dvc->GetSelection());
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
@@ -1928,15 +1869,11 @@ outlineView:(NSOutlineView*)outlineView
 
         wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-        // send event to wxWidgets:
-        wxDataViewEvent
-            event(wxEVT_DATAVIEW_ITEM_EDITING_DONE,dvc->GetId());
+        const wxDataViewItem
+            item = wxDataViewItemFromItem([self itemAtRow:currentlyEditedRow]);
 
-        event.SetEventObject(dvc);
-        event.SetItem(
-                wxDataViewItemFromItem([self itemAtRow:currentlyEditedRow]));
-        event.SetColumn(dvc->GetColumnPosition(col));
-        event.SetDataViewColumn(col);
+        // send event to wxWidgets:
+        wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EDITING_DONE, dvc, col, item);
         dvc->GetEventHandler()->ProcessEvent(event);
 
 
@@ -2223,7 +2160,7 @@ void wxCocoaDataViewControl::EnsureVisible(const wxDataViewItem& item, const wxD
     }
 }
 
-void wxCocoaDataViewControl::Expand(const wxDataViewItem& item)
+void wxCocoaDataViewControl::DoExpand(const wxDataViewItem& item)
 {
     [m_OutlineView expandItem:[m_DataSource getDataViewItemFromBuffer:item]];
 }
@@ -2306,6 +2243,15 @@ bool wxCocoaDataViewControl::AssociateModel(wxDataViewModel* model)
     else
         m_DataSource = NULL;
     [m_OutlineView setDataSource:m_DataSource]; // if there is a data source the data is immediately going to be requested
+
+    // By default, the first column is indented to leave enough place for the
+    // expanders, but this looks bad if there are no expanders, so don't use
+    // indent in this case.
+    if ( model && model->IsListModel() )
+    {
+        DoSetIndent(0);
+    }
+
     return true;
 }
 
@@ -2903,6 +2849,49 @@ bool wxDataViewChoiceRenderer::MacRender()
 
 wxIMPLEMENT_CLASS(wxDataViewChoiceRenderer, wxDataViewRenderer);
 
+// ----------------------------------------------------------------------------
+// wxDataViewChoiceByIndexRenderer
+// ----------------------------------------------------------------------------
+
+wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer(const wxArrayString& choices,
+                                                                 wxDataViewCellMode mode,
+                                                                 int alignment)
+    : wxDataViewChoiceRenderer(choices, mode, alignment)
+{
+    m_variantType = wxS("long");
+}
+
+void
+wxDataViewChoiceByIndexRenderer::OSXOnCellChanged(NSObject *value,
+                                                  const wxDataViewItem& item,
+                                                  unsigned col)
+{
+    wxVariant valueLong(ObjectToLong(value));
+    if ( !Validate(valueLong) )
+        return;
+
+    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
+    model->ChangeValue(valueLong, item, col);
+}
+
+bool
+wxDataViewChoiceByIndexRenderer::SetValue(const wxVariant& value)
+{
+    const wxVariant valueStr = GetChoice(value.GetLong());
+    return wxDataViewChoiceRenderer::SetValue(valueStr);
+}
+
+bool
+wxDataViewChoiceByIndexRenderer::GetValue(wxVariant& value) const
+{
+    wxVariant valueStr;
+    if ( !wxDataViewChoiceRenderer::GetValue(valueStr) )
+         return false;
+
+    value = (long) GetChoices().Index(valueStr.GetString());
+    return true;
+}
+
 // ---------------------------------------------------------
 // wxDataViewDateRenderer
 // ---------------------------------------------------------
@@ -3305,4 +3294,6 @@ void wxDataViewColumn::SetNativeData(wxDataViewColumnNativeData* newNativeDataPt
     m_NativeDataPtr = newNativeDataPtr;
 }
 
-#endif // (wxUSE_DATAVIEWCTRL == 1) && !defined(wxUSE_GENERICDATAVIEWCTRL)
+#endif // !wxUSE_GENERICDATAVIEWCTRL
+
+#endif // wxUSE_DATAVIEWCTRL
