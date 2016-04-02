@@ -84,29 +84,39 @@ enum
     @library{wxbase}
     @category{data}
 
-    Examples:
+    Example:
 
-    A bad example of processing some text containing email addresses (the example
+    A (bad) example of processing some text containing email addresses (the example
     is bad because the real email addresses can have more complicated form than
     @c user@host.net):
 
     @code
-    wxString text;
-    ...
-    wxRegEx reEmail = "([^@]+)@([[:alnum:].-_].)+([[:alnum:]]+)";
-    if ( reEmail.Matches(text) )
+    wxString originalText = "This is some text with foo@example.com and bar@example.com";
+
+    // Regex. to match an email address and extract its subparts.
+    wxRegEx reEmail("([^@ -]+)@([[:alnum:]_]+).([[:alnum:]]{2,4})");
+
+    wxString processText = originalText;
+    while ( reEmail.Matches(processText) )
     {
-        wxString text = reEmail.GetMatch(email);
-        wxString username = reEmail.GetMatch(email, 1);
-        if ( reEmail.GetMatch(email, 3) == "com" ) // .com TLD?
-        {
-            ...
-        }
+        // Find the size of the first match and print it.
+        size_t start, len;
+        reEmail.GetMatch(&start, &len, 0);
+        std::cout << "Email: " << reEmail.GetMatch(processText, 0) << std::endl;
+
+        // Print the submatches.
+        std::cout << "Name: " << reEmail.GetMatch(processText, 1) << std::endl;
+        std::cout << "Domain: " << reEmail.GetMatch(processText, 2) << std::endl;
+        std::cout << "TLD: " << reEmail.GetMatch(processText, 3) << std::endl;
+
+        // Process the remainder of the text if there is any.
+        processText = processText.Mid (start + len);
     }
 
-    // or we could do this to hide the email address
-    size_t count = reEmail.ReplaceAll(text, "HIDDEN@\\2\\3");
-    printf("text now contains %u hidden addresses", count);
+    // Or this will replace all names with "HIDDEN".
+    size_t count = reEmail.ReplaceAll(&originalText, "HIDDEN@\\2.\\3");
+    std::cout << "text now contains " << count << " hidden addresses" << std::endl;
+    std::cout << originalText << std::endl;
     @endcode
 */
 class wxRegEx
