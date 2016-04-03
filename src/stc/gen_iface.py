@@ -762,12 +762,26 @@ methodOverrideMap = {
     'SetCursor' : ('SetSTCCursor', 0, 0, 0),
     'GetCursor' : ('GetSTCCursor', 0, 0, 0),
 
-    'LoadLexerLibrary' : (None, 0,0,0),
-
     'SetPositionCache' : ('SetPositionCacheSize', 0, 0, 0),
     'GetPositionCache' : ('GetPositionCacheSize', 0, 0, 0),
 
-    'GetLexerLanguage' : (None, 0, 0, 0),
+    'GetLexerLanguage' :(0,
+     'wxString %s() const;',
+
+     '''wxString %s() const {
+         const int msg = %s;
+         int len = SendMsg(msg, 0, (sptr_t)NULL);
+         if (!len) return wxEmptyString;
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, 0, (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
+
+         ('Retrieve the lexing language of the document.',)),
+
     'SetFontQuality' : (None, 0, 0, 0),
     'GetFontQuality' : (None, 0, 0, 0),
     'SetSelection' : (None, 0, 0, 0),

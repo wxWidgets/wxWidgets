@@ -6032,6 +6032,11 @@ public:
     void SetLexerLanguage(const wxString& language);
 
     /**
+        Load a lexer library (dll / so).
+    */
+    void LoadLexerLibrary(const wxString& path);
+
+    /**
         Retrieve a 'property' value previously set with SetProperty.
     */
     wxString GetProperty(const wxString& key);
@@ -6052,6 +6057,11 @@ public:
         Retrieve the number of bits the current lexer needs for styling.
     */
     int GetStyleBitsNeeded() const;
+
+    /**
+        Retrieve the lexing language of the document.
+    */
+    wxString GetLexerLanguage() const;
 
     /**
         For private communication between an application and a known lexer.

@@ -32,6 +32,7 @@
 #include "wx/image.h"
 #include "wx/imaglist.h"
 #include "wx/tokenzr.h"
+#include "wx/dynlib.h"
 
 #ifdef wxHAS_RAW_BITMAP
 #include "wx/rawbmp.h"
@@ -1440,9 +1441,37 @@ void Menu::Show(Point pt, Window &w) {
 
 //----------------------------------------------------------------------
 
-DynamicLibrary *DynamicLibrary::Load(const char *WXUNUSED(modulePath)) {
-    wxFAIL_MSG(wxT("Dynamic lexer loading not implemented yet"));
-    return NULL;
+class DynamicLibraryImpl : public DynamicLibrary {
+public:
+    explicit DynamicLibraryImpl(const char *modulePath)
+        : m_dynlib(wxString::FromUTF8(modulePath), wxDL_LAZY) {
+    }
+
+    // Use GetSymbol to get a pointer to the relevant function.
+    virtual Function FindFunction(const char *name) wxOVERRIDE {
+        if (m_dynlib.IsLoaded()) {
+            bool status;
+            void* fn_address = m_dynlib.GetSymbol(wxString::FromUTF8(name),
+                                                  &status);
+            if(status)
+                return fn_address;
+            else
+                return NULL;
+        }
+        else
+            return NULL;
+    }
+
+    virtual bool IsValid() wxOVERRIDE {
+        return m_dynlib.IsLoaded();
+    }
+
+private:
+    wxDynamicLibrary m_dynlib;
+};
+
+DynamicLibrary *DynamicLibrary::Load(const char *modulePath) {
+    return static_cast<DynamicLibrary *>( new DynamicLibraryImpl(modulePath) );
 }
 
 //----------------------------------------------------------------------

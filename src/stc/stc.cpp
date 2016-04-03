@@ -4365,6 +4365,12 @@ void wxStyledTextCtrl::SetLexerLanguage(const wxString& language)
     SendMsg(SCI_SETLEXERLANGUAGE, 0, (sptr_t)(const char*)wx2stc(language));
 }
 
+// Load a lexer library (dll / so).
+void wxStyledTextCtrl::LoadLexerLibrary(const wxString& path)
+{
+    SendMsg(SCI_LOADLEXERLIBRARY, 0, (sptr_t)(const char*)wx2stc(path));
+}
+
 // Retrieve a 'property' value previously set with SetProperty.
 wxString wxStyledTextCtrl::GetProperty(const wxString& key) {
          int len = SendMsg(SCI_GETPROPERTY, (sptr_t)(const char*)wx2stc(key), 0);
@@ -4403,6 +4409,20 @@ int wxStyledTextCtrl::GetPropertyInt(const wxString& key) const
 int wxStyledTextCtrl::GetStyleBitsNeeded() const
 {
     return SendMsg(SCI_GETSTYLEBITSNEEDED, 0, 0);
+}
+
+// Retrieve the lexing language of the document.
+wxString wxStyledTextCtrl::GetLexerLanguage() const {
+         const int msg = SCI_GETLEXERLANGUAGE;
+         int len = SendMsg(msg, 0, (sptr_t)NULL);
+         if (!len) return wxEmptyString;
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, 0, (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);
 }
 
 // For private communication between an application and a known lexer.
