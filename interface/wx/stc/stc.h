@@ -4020,6 +4020,21 @@ public:
     int GetTextLength() const;
 
     /**
+        Retrieve a pointer to a function that processes messages for this Scintilla.
+
+        @since 3.1.1
+    */
+    void* GetDirectFunction() const;
+
+    /**
+        Retrieve a pointer value to use as the first argument when calling
+        the function returned by GetDirectFunction.
+
+        @since 3.1.1
+    */
+    void* GetDirectPointer() const;
+
+    /**
         Set to overtype (true) or insert mode.
     */
     void SetOvertype(bool overtype);

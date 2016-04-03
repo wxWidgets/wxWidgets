@@ -1824,6 +1824,17 @@ int wxStyledTextCtrl::GetTextLength() const
     return SendMsg(SCI_GETTEXTLENGTH, 0, 0);
 }
 
+// Retrieve a pointer to a function that processes messages for this Scintilla.
+void* wxStyledTextCtrl::GetDirectFunction() const {
+         return (void*)SendMsg(SCI_GETDIRECTFUNCTION);
+}
+
+// Retrieve a pointer value to use as the first argument when calling
+// the function returned by GetDirectFunction.
+void* wxStyledTextCtrl::GetDirectPointer() const {
+         return (void*)SendMsg(SCI_GETDIRECTPOINTER);
+}
+
 // Set to overtype (true) or insert mode.
 void wxStyledTextCtrl::SetOvertype(bool overtype)
 {

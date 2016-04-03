@@ -800,6 +800,11 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
             LexerManager::GetInstance()->Load((const char*)lParam);
             break;
 #endif
+      case SCI_GETDIRECTFUNCTION:
+            return reinterpret_cast<sptr_t>(DirectFunction);
+
+      case SCI_GETDIRECTPOINTER:
+            return reinterpret_cast<sptr_t>(this);
 
       default:
           return ScintillaBase::WndProc(iMessage, wParam, lParam);
@@ -1244,6 +1249,11 @@ void ScintillaWX::SetUseAntiAliasing(bool useAA) {
 
 bool ScintillaWX::GetUseAntiAliasing() {
     return vs.extraFontFlag != 0;
+}
+
+sptr_t ScintillaWX::DirectFunction(
+    ScintillaWX* swx, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
+    return swx->WndProc(iMessage, wParam, lParam);
 }
 
 //----------------------------------------------------------------------

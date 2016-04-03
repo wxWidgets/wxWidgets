@@ -3525,6 +3525,13 @@ public:
     // Retrieve the number of characters in the document.
     int GetTextLength() const;
 
+    // Retrieve a pointer to a function that processes messages for this Scintilla.
+    void* GetDirectFunction() const;
+
+    // Retrieve a pointer value to use as the first argument when calling
+    // the function returned by GetDirectFunction.
+    void* GetDirectPointer() const;
+
     // Set to overtype (true) or insert mode.
     void SetOvertype(bool overtype);
 

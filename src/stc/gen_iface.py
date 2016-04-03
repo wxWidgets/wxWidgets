@@ -591,8 +591,19 @@ methodOverrideMap = {
 
      ('Retrieve all the text in the document.', )),
 
-    'GetDirectFunction' : (None, 0, 0, 0),
-    'GetDirectPointer' : (None, 0, 0, 0),
+    'GetDirectFunction' :
+    (0,
+     'void* %s() const;',
+     '''void* %s() const {
+         return (void*)SendMsg(%s);''',
+     0),
+
+    'GetDirectPointer' :
+    (0,
+     'void* %s() const;',
+     '''void* %s() const {
+         return (void*)SendMsg(%s);''',
+     0),
 
     'GetTargetText' :
     (0,

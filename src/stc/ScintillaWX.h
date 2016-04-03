@@ -210,6 +210,9 @@ private:
     bool HasCaretSizeChanged();
     bool CreateSystemCaret();
     bool DestroySystemCaret();
+
+    static sptr_t DirectFunction(ScintillaWX* swx, unsigned int iMessage,
+                                 uptr_t wParam, sptr_t lParam);
 #ifdef __WXMSW__
     HBITMAP sysCaretBitmap;
     int sysCaretWidth;
