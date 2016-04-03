@@ -355,7 +355,16 @@ GdkWindow *wxSpinCtrlGTKBase::GTKGetWindow(wxArrayGdkWindows& windows) const
 
 wxSize wxSpinCtrlGTKBase::DoGetBestSize() const
 {
-    return DoGetSizeFromTextSize(95); // TODO: 95 is completely arbitrary
+    const int minVal = static_cast<int>(DoGetMin());
+    const int lenMin = wxString::Format("%d", minVal).length();
+
+    const int maxVal = static_cast<int>(DoGetMax());
+    const int lenMax = wxString::Format("%d", maxVal).length();
+
+    wxString longestText(wxMax(lenMin, lenMax), '9');
+    if ( minVal < 0 )
+        longestText.insert(0, "-");
+    return DoGetSizeFromTextSize(GetTextExtent(longestText).x, -1);
 }
 
 wxSize wxSpinCtrlGTKBase::DoGetSizeFromTextSize(int xlen, int ylen) const
