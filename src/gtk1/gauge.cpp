@@ -70,7 +70,6 @@ wxSize wxGauge::DoGetBestSize() const
         best = wxSize(28, 100);
     else
         best = wxSize(100, 28);
-    CacheBestSize(best);
     return best;
 }
 

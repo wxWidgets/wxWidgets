@@ -615,9 +615,7 @@ wxSize wxRadioBox::DoGetBestSize() const
         return wxSize(1, 1);
     }
 
-    wxSize best = GetTotalButtonSize(GetMaxButtonSize());
-    CacheBestSize(best);
-    return best;
+    return GetTotalButtonSize(GetMaxButtonSize());
 }
 
 void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)

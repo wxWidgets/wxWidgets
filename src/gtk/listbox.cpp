@@ -886,9 +886,7 @@ wxSize wxListBox::DoGetBestSize() const
     // Don't make the listbox too tall but don't make it too small neither
     lbHeight = (cy+4) * wxMin(wxMax(count, 3), 10);
 
-    wxSize best(lbWidth, lbHeight);
-    CacheBestSize(best);
-    return best;
+    return wxSize(lbWidth, lbHeight);
 }
 
 // static

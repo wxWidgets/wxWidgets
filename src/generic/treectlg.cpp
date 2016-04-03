@@ -4153,9 +4153,6 @@ wxSize wxGenericTreeCtrl::DoGetBestSize() const
     if ( dy )
         size.y += PIXELS_PER_UNIT - dy;
 
-    // we need to update the cache too as the base class cached its own value
-    CacheBestSize(size);
-
     return size;
 }
 

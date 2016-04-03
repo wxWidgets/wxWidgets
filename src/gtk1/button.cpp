@@ -238,7 +238,6 @@ wxSize wxButton::DoGetBestSize() const
         if (ret.y < defaultSize.y) ret.y = defaultSize.y;
     }
 
-    CacheBestSize(ret);
     return ret;
 }
 

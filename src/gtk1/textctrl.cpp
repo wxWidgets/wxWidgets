@@ -1255,10 +1255,7 @@ void wxTextCtrl::OnInternalIdle()
 wxSize wxTextCtrl::DoGetBestSize() const
 {
     // FIXME should be different for multi-line controls...
-    wxSize ret( wxControl::DoGetBestSize() );
-    wxSize best(80, ret.y);
-    CacheBestSize(best);
-    return best;
+    return wxSize(80, wxControl::DoGetBestSize().y);
 }
 
 // ----------------------------------------------------------------------------

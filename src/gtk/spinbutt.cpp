@@ -204,7 +204,6 @@ wxSize wxSpinButton::DoGetBestSize() const
         w = 6;
     best.x = w + 2 * m_widget->style->xthickness;
 #endif
-    CacheBestSize(best);
     return best;
 }
 

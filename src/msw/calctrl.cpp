@@ -173,9 +173,7 @@ wxSize wxCalendarCtrl::DoGetBestSize() const
         return wxCalendarCtrlBase::DoGetBestSize();
     }
 
-    const wxSize best = wxRectFromRECT(rc).GetSize() + GetWindowBorderSize();
-    CacheBestSize(best);
-    return best;
+    return wxRectFromRECT(rc).GetSize() + GetWindowBorderSize();
 }
 
 wxCalendarHitTestResult

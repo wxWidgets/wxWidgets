@@ -175,10 +175,8 @@ wxSize wxBitmapComboBox::DoGetBestSize() const
 
     int delta = GetBitmapSize().y - GetCharHeight();
     if ( delta > 0 )
-    {
         best.y += delta;
-        CacheBestSize(best);
-    }
+
     return best;
 }
 

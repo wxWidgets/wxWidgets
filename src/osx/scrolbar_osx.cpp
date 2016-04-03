@@ -119,9 +119,7 @@ wxSize wxScrollBar::DoGetBestSize() const
         h = wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
     }
 
-    wxSize best(w, h);
-    CacheBestSize(best);
-    return best;
+    return wxSize(w, h);
 }
 
 void wxScrollBar::TriggerScrollEvent( wxEventType scrollEvent )

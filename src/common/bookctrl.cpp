@@ -146,9 +146,7 @@ wxSize wxBookCtrlBase::DoGetBestSize() const
 
     // convert display area to window area, adding the size necessary for the
     // tabs
-    wxSize best = CalcSizeFromPage(bestSize);
-    CacheBestSize(best);
-    return best;
+    return CalcSizeFromPage(bestSize);
 }
 
 wxRect wxBookCtrlBase::GetPageRect() const

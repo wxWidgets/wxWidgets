@@ -584,15 +584,9 @@ wxStaticBitmapBase::~wxStaticBitmapBase()
 
 wxSize wxStaticBitmapBase::DoGetBestSize() const
 {
-    wxSize best;
-    wxBitmap bmp = GetBitmap();
-    if ( bmp.IsOk() )
-        best = bmp.GetScaledSize();
-    else
-        // this is completely arbitrary
-        best = wxSize(16, 16);
-    CacheBestSize(best);
-    return best;
+    // the fall back size is completely arbitrary
+    const wxBitmap bmp = GetBitmap();
+    return bmp.IsOk() ? bmp.GetScaledSize() : wxSize(16, 16);
 }
 
 #endif // wxUSE_STATBMP

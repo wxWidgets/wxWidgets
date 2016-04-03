@@ -541,7 +541,6 @@ wxSize wxChoice::DoGetBestSize() const
     if (ret.y <= 18)
         ret.y = 8 + GetCharHeight();
 
-    CacheBestSize(ret);
     return ret;
 }
 

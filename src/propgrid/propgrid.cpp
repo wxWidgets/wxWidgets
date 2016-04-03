@@ -1214,10 +1214,7 @@ wxSize wxPropertyGrid::DoGetBestSize() const
         width += m_pState->GetColumnFitWidth(dc, m_pState->DoGetRoot(), i, true);
     }
 
-    const wxSize sz = wxSize(width, lineHeight*numLines + 40);
-
-    CacheBestSize(sz);
-    return sz;
+    return wxSize(width, lineHeight*numLines + 40);
 }
 
 // -----------------------------------------------------------------------

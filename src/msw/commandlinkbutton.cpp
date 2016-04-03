@@ -194,8 +194,6 @@ wxSize wxCommandLinkButton::DoGetBestSize() const
     if ( !GetNote().empty() )
         size.y += MAINLABEL_NOTE_MARGIN;
 
-    CacheBestSize(size);
-
     return size;
 }
 

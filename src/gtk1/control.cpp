@@ -64,9 +64,7 @@ wxSize wxControl::DoGetBestSize() const
     (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_widget) )->size_request )
         (m_widget, &req );
 
-    wxSize best(req.width, req.height);
-    CacheBestSize(best);
-    return best;
+    return wxSize(req.width, req.height);
 }
 
 

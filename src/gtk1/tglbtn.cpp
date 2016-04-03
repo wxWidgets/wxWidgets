@@ -208,7 +208,6 @@ wxSize wxToggleBitmapButton::DoGetBestSize() const
         best.x = m_bitmap.GetWidth()+border;
         best.y = m_bitmap.GetHeight()+border;
     }
-    CacheBestSize(best);
     return best;
 }
 
@@ -348,7 +347,6 @@ wxSize wxToggleButton::DoGetBestSize() const
         if (ret.x < 80) ret.x = 80;
     }
 
-    CacheBestSize(ret);
     return ret;
 }
 

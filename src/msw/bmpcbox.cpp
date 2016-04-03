@@ -226,10 +226,7 @@ wxSize wxBitmapComboBox::DoGetBestSize() const
 
     wxCoord useHeightBitmap = EDIT_HEIGHT_FROM_CHAR_HEIGHT(bitmapSize.y);
     if ( best.y < useHeightBitmap )
-    {
         best.y = useHeightBitmap;
-        CacheBestSize(best);
-    }
     return best;
 }
 

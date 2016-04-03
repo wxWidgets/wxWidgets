@@ -539,8 +539,6 @@ wxSize wxToolBar::DoGetBestSize() const
         sizeBest.y ++;
     }
 
-    CacheBestSize(sizeBest);
-
     return sizeBest;
 }
 

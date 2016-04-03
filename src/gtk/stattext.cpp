@@ -255,7 +255,6 @@ wxSize wxStaticText::DoGetBestSize() const
 
     // Adding 1 to width to workaround GTK sometimes wrapping the text needlessly
     size.x++;
-    CacheBestSize(size);
     return size;
 }
 

@@ -427,7 +427,6 @@ wxSize wxCheckListBox::DoGetBestClientSize() const
     if ( best.y < size.GetHeight() )
         best.y = size.GetHeight();
 
-    CacheBestSize(best);
     return best;
 }
 

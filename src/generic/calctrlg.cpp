@@ -709,8 +709,6 @@ wxSize wxGenericCalendarCtrl::DoGetBestSize() const
         best += GetWindowBorderSize();
     }
 
-    CacheBestSize(best);
-
     return best;
 }
 

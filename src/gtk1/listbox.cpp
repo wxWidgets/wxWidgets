@@ -1102,9 +1102,7 @@ wxSize wxListBox::DoGetBestSize() const
     // make it too small neither
     lbHeight = (cy+4) * wxMin(wxMax(GetCount(), 3), 10);
 
-    wxSize best(lbWidth, lbHeight);
-    CacheBestSize(best);
-    return best;
+    return wxSize(lbWidth, lbHeight);
 }
 
 void wxListBox::FixUpMouseEvent(GtkWidget *widget, wxCoord& x, wxCoord& y)

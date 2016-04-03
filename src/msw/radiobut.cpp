@@ -267,9 +267,7 @@ wxSize wxRadioButton::DoGetBestSize() const
         hRadio = s_radioSize;
     }
 
-    wxSize best(wRadio, hRadio);
-    CacheBestSize(best);
-    return best;
+    return wxSize(wRadio, hRadio);
 }
 
 WXDWORD wxRadioButton::MSWGetStyle(long style, WXDWORD *exstyle) const

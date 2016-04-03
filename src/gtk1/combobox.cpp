@@ -895,7 +895,6 @@ wxSize wxComboBox::DoGetBestSize() const
     if ( ret.x < 100 )
         ret.x = 100;
 
-    CacheBestSize(ret);
     return ret;
 }
 
