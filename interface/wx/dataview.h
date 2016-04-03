@@ -135,10 +135,42 @@ public:
     virtual bool Cleared();
 
     /**
-        The compare function to be used by control. The default compare function
-        sorts by container and other items separately and in ascending order.
+        The compare function to be used by the control. The default compare
+        function sorts most data types implemented by wxVariant (i.e. bool,
+        int, long, double, string) as well as datetime and wxDataViewIconText.
         Override this for a different sorting behaviour.
 
+        The function should return negative, null or positive for an ascending
+        comparison, depending on whether the first item is less than, equal to
+        or greater than the second one. The reverse is true for descending
+        comparisons. The items should be compared using the appropriate type
+        for the column passed.
+
+        @param item1
+            First item to compare.
+        @param item2
+            Second item to compare.
+        @param column
+            The column holding the items to be compared.
+        @param ascending
+            The sort is being peformed in ascending or descending order.
+        @return
+            For an ascending comparison: a negative value if the item1 is less
+            than (i.e. should appear above) item2, zero if the two items are
+            equal or a positive value if item1 is greater than (i.e. should
+            appear below) the second one. The reverse for a descending
+            comparison.
+        @note If there can be multiple rows with the same value, consider
+            differentiating them form each other by their ID's rather than
+            returning zero. This to prevent rows with the same value jumping
+            positions when items are added etc. For example:
+        @code
+            // Differentiate items with the same value.
+            wxUIntPtr id1 = wxPtrToUInt(item1.GetID()),
+                      id2 = wxPtrToUInt(item2.GetID());
+
+            return (ascending == (id1 > id2)) ? : 1 : -1;
+        @endcode
         @see HasDefaultCompare().
     */
     virtual int Compare(const wxDataViewItem& item1,
