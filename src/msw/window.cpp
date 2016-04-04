@@ -1822,6 +1822,26 @@ wxWindowMSW::DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height)
 
     // otherwise (or if deferring failed) move the window in place immediately
 #endif // wxUSE_DEFERRED_SIZING
+
+    // toplevel window's coordinates are mirrored if the TLW is a child of another
+    // RTL window and changing width without moving the position would enlarge the
+    // window in the wrong direction, so we need to adjust for it
+    if ( IsTopLevel() )
+    {
+        // note that this may be different from GetParent() for wxDialogs
+        HWND tlwParent = ::GetParent((HWND)hwnd);
+        if ( tlwParent && (::GetWindowLong(tlwParent, GWL_EXSTYLE) & WS_EX_LAYOUTRTL) != 0 )
+        {
+            RECT old;
+            ::GetWindowRect((HWND) hwnd, &old);
+            if ( old.left == x && old.right - old.left != width )
+            {
+                x -= width - (old.right - old.left);
+            }
+            // else: not a simple resize
+        }
+    }
+
     if ( !::MoveWindow((HWND)hwnd, x, y, width, height, IsShown()) )
     {
         wxLogLastError(wxT("MoveWindow"));
@@ -1967,10 +1987,25 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
         const int widthWin = rectWin.right - rectWin.left,
                   heightWin = rectWin.bottom - rectWin.top;
 
-        // MoveWindow positions the child windows relative to the parent, so
-        // adjust if necessary
-        if ( !IsTopLevel() )
+        if ( IsTopLevel() )
         {
+            // toplevel window's coordinates are mirrored if the TLW is a child of another
+            // RTL window and changing width without moving the position would enlarge the
+            // window in the wrong direction, so we need to adjust for it
+
+            // note that this may be different from GetParent() for wxDialogs
+            HWND tlwParent = ::GetParent(GetHwnd());
+            if ( tlwParent && (::GetWindowLong(tlwParent, GWL_EXSTYLE) & WS_EX_LAYOUTRTL) != 0 )
+            {
+                const int diffWidth = width - (rectClient.right - rectClient.left);
+                rectWin.left -= diffWidth;
+                rectWin.right -= diffWidth;
+            }
+        }
+        else
+        {
+            // MoveWindow positions the child windows relative to the parent, so
+            // adjust if necessary
             wxWindow *parent = GetParent();
             if ( parent )
             {
