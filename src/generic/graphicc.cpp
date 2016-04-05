@@ -442,10 +442,6 @@ public:
     }
 
     virtual void Clip( const wxRegion &region ) wxOVERRIDE;
-#ifdef __WXMSW__
-    cairo_surface_t* m_mswSurface;
-    WindowHDC m_mswWindowHDC;
-#endif
 
     // clips drawings to the rect
     virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
@@ -501,9 +497,14 @@ protected:
     QImage* m_qtImage;
     cairo_surface_t* m_qtSurface;
 #endif
+#ifdef __WXMSW__
+    cairo_surface_t* m_mswSurface;
+    WindowHDC m_mswWindowHDC;
+#endif
 
 private:
     cairo_t* m_context;
+    cairo_matrix_t m_internalTransform;
 
     wxVector<float> m_layerOpacities;
 
@@ -1915,14 +1916,36 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     }
 
     Init( cairo_create(m_mswSurface) );
-    // If we've created a image surface, we need to flip the Y axis so that 
-    // all drawing will appear right side up.
-    if (hasBitmap) {
-        cairo_matrix_t matrix;
-        cairo_matrix_init(&matrix, 1.0, 0.0, 0.0, -1.0, 0.0, height);
-        cairo_set_matrix(m_context, &matrix);
+    // If we've created a image surface, we need:
+    //   1. To flip the Y axis so that all drawing will appear right side up.
+    //   2. To explicitly transfer transformations settings from source DC
+    //      to Cairo context because they are not inherited implicitly.
+    // We have to remember these operations as an internal transformation
+    // which is not going to be exposed through e.g. GetTransform().
+    if (hasBitmap)
+    {
+        // Flip the Y axis.
+        cairo_matrix_init(&m_internalTransform, 1.0, 0.0, 0.0, -1.0, 0.0, height);
+
+        // Transfer transformation settings from source DC to Cairo context on our own.
+        wxPoint org = dc.GetDeviceOrigin();
+        cairo_matrix_translate(&m_internalTransform, org.x, org.y);
+
+        double sx, sy;
+        dc.GetUserScale(&sx, &sy);
+        double lsx, lsy;
+        dc.GetLogicalScale(&lsx, &lsy);
+        sx *= lsx;
+        sy *= lsy;
+        cairo_matrix_scale(&m_internalTransform, sx, sy);
+
+        org = dc.GetLogicalOrigin();
+        cairo_matrix_translate(&m_internalTransform, -org.x, -org.y);
+
+        // Apply all above transformations.
+        cairo_set_matrix(m_context, &m_internalTransform);
     }
-#endif
+#endif // __WXMSW__
     
 #ifdef __WXGTK3__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
@@ -2102,7 +2125,9 @@ wxCairoContext::~wxCairoContext()
 
 void wxCairoContext::Init(cairo_t *context)
 {
-    m_context = context ;
+    m_context = context;
+    cairo_matrix_init_identity(&m_internalTransform);
+
     PushState();
     PushState();
 }
@@ -2207,7 +2232,14 @@ void wxCairoContext::SetTransform( const wxGraphicsMatrix& matrix )
 wxGraphicsMatrix wxCairoContext::GetTransform() const
 {
     wxGraphicsMatrix matrix = CreateMatrix();
-    cairo_get_matrix(m_context,(cairo_matrix_t*) matrix.GetNativeMatrix());
+    cairo_matrix_t* transformMatrix = (cairo_matrix_t*)matrix.GetNativeMatrix();
+    cairo_get_matrix(m_context, transformMatrix);
+
+    // Don't expose internal transformations.
+    cairo_matrix_t intTransformMatrixRev = m_internalTransform;
+    if ( cairo_matrix_invert(&intTransformMatrixRev) == CAIRO_STATUS_SUCCESS )
+        cairo_matrix_multiply(transformMatrix, transformMatrix, &intTransformMatrixRev);
+
     return matrix;
 }
 

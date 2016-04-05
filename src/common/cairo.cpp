@@ -170,6 +170,8 @@
        (cairo_surface_t *surface), (surface) ) \
     m( cairo_set_source_surface, \
        (cairo_t *cr, cairo_surface_t *surface, double x, double y), (cr, surface, x, y) ) \
+    m( cairo_matrix_init_identity, \
+       (cairo_matrix_t *matrix), (matrix) ) \
 
 #ifdef __WXMAC__
 #define wxCAIRO_PLATFORM_METHODS(m) \
