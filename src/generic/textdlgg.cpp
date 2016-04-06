@@ -126,8 +126,6 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
     if ( style & wxCENTRE )
         Centre( wxBOTH );
 
-    m_textctrl->SetFocus();
-
     wxEndBusyCursor();
 
     return true;
@@ -138,7 +136,7 @@ bool wxTextEntryDialog::TransferDataToWindow()
     if ( m_textctrl )
     {
         m_textctrl->SetValue(m_value);
-        m_textctrl->SelectAll();
+        m_textctrl->SetFocus();
     }
 
     return wxDialog::TransferDataToWindow();
