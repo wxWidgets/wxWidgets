@@ -214,6 +214,8 @@ void wxMessageDialog::GTKCreateMsgDialog()
         defaultButton = GTK_RESPONSE_NO;
     else if ( m_dialogStyle & wxYES_NO )
         defaultButton = GTK_RESPONSE_YES;
+    else if ( m_dialogStyle & wxOK )
+        defaultButton = GTK_RESPONSE_OK;
     else // No need to change the default value, whatever it is.
         defaultButton = GTK_RESPONSE_NONE;
 
