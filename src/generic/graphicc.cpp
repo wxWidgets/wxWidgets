@@ -491,6 +491,7 @@ protected:
     virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y ) wxOVERRIDE;
 
     void Init(cairo_t *context);
+    void ApplyTransformFromDC(const wxDC& dc);
 
 #ifdef __WXQT__
     QPainter* m_qtPainter;
@@ -1928,22 +1929,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
         cairo_matrix_init(&m_internalTransform, 1.0, 0.0, 0.0, -1.0, 0.0, height);
 
         // Transfer transformation settings from source DC to Cairo context on our own.
-        wxPoint org = dc.GetDeviceOrigin();
-        cairo_matrix_translate(&m_internalTransform, org.x, org.y);
-
-        double sx, sy;
-        dc.GetUserScale(&sx, &sy);
-        double lsx, lsy;
-        dc.GetLogicalScale(&lsx, &lsy);
-        sx *= lsx;
-        sy *= lsy;
-        cairo_matrix_scale(&m_internalTransform, sx, sy);
-
-        org = dc.GetLogicalOrigin();
-        cairo_matrix_translate(&m_internalTransform, -org.x, -org.y);
-
-        // Apply all above transformations.
-        cairo_set_matrix(m_context, &m_internalTransform);
+        ApplyTransformFromDC(dc);
     }
 #endif // __WXMSW__
     
@@ -1955,21 +1941,8 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
 
-#if 0
-    wxGraphicsMatrix matrix = CreateMatrix();
-
-    wxPoint org = dc.GetDeviceOrigin();
-    matrix.Translate( org.x, org.y );
-
-    org = dc.GetLogicalOrigin();
-    matrix.Translate( -org.x, -org.y );
-
-    double sx,sy;
-    dc.GetUserScale( &sx, &sy );
-    matrix.Scale( sx, sy );
-
-    ConcatTransform( matrix );
-#endif
+    // Transfer transformation settings from source DC to Cairo context on our own.
+    ApplyTransformFromDC(dc);
 #endif
 
 #ifdef __WXX11__
@@ -2132,6 +2105,28 @@ void wxCairoContext::Init(cairo_t *context)
     PushState();
 }
 
+void wxCairoContext::ApplyTransformFromDC(const wxDC& dc)
+{
+    // Transfer transformation settings from source DC to Cairo context
+    // and store it as an internal transformation
+    // (which is not going to be exposed).
+    wxPoint org = dc.GetDeviceOrigin();
+    cairo_matrix_translate(&m_internalTransform, org.x, org.y);
+
+    double sx, sy;
+    dc.GetUserScale(&sx, &sy);
+    double lsx, lsy;
+    dc.GetLogicalScale(&lsx, &lsy);
+    sx *= lsx;
+    sy *= lsy;
+    cairo_matrix_scale(&m_internalTransform, sx, sy);
+
+    org = dc.GetLogicalOrigin();
+    cairo_matrix_translate(&m_internalTransform, -org.x, -org.y);
+
+    // Apply all above transformations.
+    cairo_set_matrix(m_context, &m_internalTransform);
+}
 
 void wxCairoContext::Clip( const wxRegion& region )
 {
