@@ -1591,4 +1591,9 @@ double wxGStreamerMediaBackend::GetVolume()
 #include "wx/html/forcelnk.h"
 FORCE_LINK_ME(basewxmediabackends)
 
+#elif defined( __VMS )
+// Mediactrl is presently not working on OpenVMS, but at least we need this
+// to link some tests (TO BE FIXED)
+# include "wx/html/forcelnk.h"
+FORCE_LINK_ME(basewxmediabackends)
 #endif // wxUSE_MEDIACTRL && wxUSE_GSTREAMER && !wxUSE_GSTREAMER_PLAYER

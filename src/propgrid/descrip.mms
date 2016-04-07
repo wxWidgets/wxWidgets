@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 20 April 2015                                                       *
+# Date : 31 March 2016                                                       *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -74,6 +74,7 @@ editors.obj : editors.cpp
 manager.obj : manager.cpp
 property.obj : property.cpp
 propgrid.obj : propgrid.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/warn=disable=(INTTRUNCATED) $(MMS$TARGET_NAME).cpp
 propgridiface.obj : propgridiface.cpp
 propgridpagestate.obj : propgridpagestate.cpp
 props.obj : props.cpp
