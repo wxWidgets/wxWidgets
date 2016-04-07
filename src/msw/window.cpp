@@ -5034,9 +5034,10 @@ bool wxWindowMSW::HandleExitSizeMove()
     return HandleWindowEvent(event);
 }
 
+#if wxUSE_DEFERRED_SIZING
+
 bool wxWindowMSW::BeginRepositioningChildren()
 {
-#if wxUSE_DEFERRED_SIZING
     int numChildren = 0;
     for ( HWND child = ::GetWindow(GetHwndOf(this), GW_CHILD);
           child;
@@ -5062,12 +5063,10 @@ bool wxWindowMSW::BeginRepositioningChildren()
 
     // Return true to indicate that EndDeferWindowPos() should be called.
     return true;
-#endif // wxUSE_DEFERRED_SIZING
 }
 
 void wxWindowMSW::EndRepositioningChildren()
 {
-#if wxUSE_DEFERRED_SIZING
     wxASSERT_MSG( m_hDWP, wxS("Shouldn't be called") );
 
     // reset m_hDWP to NULL so that child windows don't try to use our
@@ -5091,8 +5090,9 @@ void wxWindowMSW::EndRepositioningChildren()
         wxWindowMSW * const child = node->GetData();
         child->MSWEndDeferWindowPos();
     }
-#endif // wxUSE_DEFERRED_SIZING
 }
+
+#endif // wxUSE_DEFERRED_SIZING
 
 bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
 {

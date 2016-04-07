@@ -61,8 +61,10 @@ public:
     virtual void Raise();
     virtual void Lower();
 
+#if wxUSE_DEFERRED_SIZING
     virtual bool BeginRepositioningChildren();
     virtual void EndRepositioningChildren();
+#endif // wxUSE_DEFERRED_SIZING
 
     virtual bool Show(bool show = true);
     virtual bool ShowWithEffect(wxShowEffect effect,
