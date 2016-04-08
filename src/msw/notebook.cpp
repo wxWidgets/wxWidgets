@@ -1151,9 +1151,26 @@ WXHBRUSH wxNotebook::QueryBgBitmap()
     if ( r.IsEmpty() )
         return 0;
 
+    wxUxThemeHandle theme(this, L"TAB");
+    if ( !theme )
+        return 0;
+
+    RECT rc;
+    wxCopyRectToRECT(r, rc);
+
     WindowHDC hDC(GetHwnd());
+    wxUxThemeEngine::Get()->GetThemeBackgroundExtent
+                            (
+                                theme,
+                                (HDC) hDC,
+                                9 /* TABP_PANE */,
+                                0,
+                                &rc,
+                                &rc
+                            );
+
     MemoryHDC hDCMem(hDC);
-    CompatibleBitmap hBmp(hDC, r.x + r.width, r.y + r.height);
+    CompatibleBitmap hBmp(hDC, rc.right, rc.bottom);
 
     SelectInHDC selectBmp(hDCMem, hBmp);
 
