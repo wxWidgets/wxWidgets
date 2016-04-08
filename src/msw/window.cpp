@@ -4888,7 +4888,13 @@ wxWindowMSW::MSWGetBgBrushForChild(WXHDC hDC, wxWindowMSW *child)
         RECT rc;
         ::GetWindowRect(GetHwndOf(child), &rc);
 
-        ::MapWindowPoints(NULL, GetHwnd(), (POINT *)&rc, 1);
+        // It is important to pass both points to MapWindowPoints() as in
+        // addition to converting them to our coordinate system, this function
+        // will also exchange the left and right coordinates if this window
+        // uses RTL layout, which is exactly what we need here as the child
+        // window origin is its _right_ top corner in this case and not the
+        // left one.
+        ::MapWindowPoints(NULL, GetHwnd(), (POINT *)&rc, 2);
 
         int x = rc.left,
             y = rc.top;
