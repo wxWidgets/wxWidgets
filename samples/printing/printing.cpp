@@ -700,20 +700,20 @@ void MyPrintout::DrawPageTwo()
     { // GetTextExtent demo:
         wxString words[7] = { wxT("This "), wxT("is "), wxT("GetTextExtent "),
                              wxT("testing "), wxT("string. "), wxT("Enjoy "), wxT("it!") };
-        wxCoord w, h;
         long x = 200, y= 250;
 
         dc->SetFont(wxFontInfo(15).Family(wxFONTFAMILY_SWISS));
 
         for (int i = 0; i < 7; i++)
         {
+            wxCoord wordWidth, wordHeight;
             wxString word = words[i];
             word.Remove( word.Len()-1, 1 );
-            dc->GetTextExtent(word, &w, &h);
-            dc->DrawRectangle(x, y, w, h);
-            dc->GetTextExtent(words[i], &w, &h);
+            dc->GetTextExtent(word, &wordWidth, &wordHeight);
+            dc->DrawRectangle(x, y, wordWidth, wordHeight);
+            dc->GetTextExtent(words[i], &wordWidth, &wordHeight);
             dc->DrawText(words[i], x, y);
-            x += w;
+            x += wordWidth;
         }
 
     }
