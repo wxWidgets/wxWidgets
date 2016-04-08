@@ -227,6 +227,10 @@ void MyApp::Draw(wxDC&dc)
     if (window_dc)
         gc = wxGraphicsContext::Create( *window_dc );
 
+    wxMemoryDC *memory_dc = wxDynamicCast( &dc, wxMemoryDC );
+    if (memory_dc)
+        gc = wxGraphicsContext::Create( *memory_dc );
+
 #ifdef __WXMSW__
     wxEnhMetaFileDC *emf_dc = wxDynamicCast( &dc, wxEnhMetaFileDC );
     if (emf_dc)
