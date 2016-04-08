@@ -1,21 +1,13 @@
 # Danish translation for wxWidgets.
 # Copyright (C) 2016 wxWidgets development team
 # This file is distributed under the same license as the wxWidgets package.
-#
 # scootergrisen, 2016.
-#
-# Tjek dem der starter med '"Mac', de skal formodentligt oversættes
-# transverse - måske "vend og drej 90 grader"
-# beslut om vi skal bruge e eller é diverse steder
-# handler > ?
-# immutable > ?
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-23 22:46+0400\n"
-"PO-Revision-Date: 2016-03-03 00:00+0200\n"
+"PO-Revision-Date: 2016-04-08 00:00+0200\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish\n"
 "Language: da\n"
@@ -251,11 +243,10 @@ msgstr "&Bund:"
 msgid "&Box"
 msgstr "&Boks"
 
-# scootergrisen: måske typografi
 #: ../src/richtext/richtextbulletspage.cpp:146
 #: ../src/richtext/richtextliststylepage.cpp:210
 msgid "&Bullet style:"
-msgstr "&Punktstil:"
+msgstr "&Punkttegnstypografi:"
 
 #: ../src/common/stockitem.cpp:146
 msgid "&CD-Rom"
@@ -529,7 +520,6 @@ msgstr "&Næste typografi:"
 msgid "&No"
 msgstr "&Nej"
 
-# scootergrisen: som i kommentar/yderligere kommentar
 #: ../src/generic/dbgrptg.cpp:356
 msgid "&Notes:"
 msgstr "&Noter:"
@@ -607,11 +597,11 @@ msgstr "&Afslut"
 #: ../src/common/stockitem.cpp:185 ../src/msw/textctrl.cpp:2443
 #: ../src/osx/textctrl_osx.cpp:580 ../src/richtext/richtextctrl.cpp:330
 msgid "&Redo"
-msgstr "&Gentag"
+msgstr "&Omgør"
 
 #: ../src/common/cmdproc.cpp:289 ../src/common/cmdproc.cpp:309
 msgid "&Redo "
-msgstr "&Gentag "
+msgstr "&Omgør "
 
 #: ../src/richtext/richtextstyledlg.cpp:257
 msgid "&Rename Style..."
@@ -1118,7 +1108,6 @@ msgstr "A3 ekstra 322 x 445 mm"
 msgid "A3 Extra Transverse 322 x 445 mm"
 msgstr "A3 ekstra transverse 322 x 445 mm"
 
-# scootergrisen: lyder drejet bedre? se også diverse andre strenge
 #: ../src/common/paper.cpp:171
 msgid "A3 Rotated 420 x 297 mm"
 msgstr "A3 roteret 420 x 297 mm"
@@ -1151,7 +1140,6 @@ msgstr "A4 transverse 210 x 297 mm"
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "A4-ark, 210 x 297 mm"
 
-# scootergrisen: hvorfor hedder det lille hvis det har samme størrelse som A4?
 #: ../src/common/paper.cpp:108
 msgid "A4 small sheet, 210 x 297 mm"
 msgstr "A4-ark (lille), 210 x 297 mm"
@@ -1255,12 +1243,10 @@ msgstr "AddToPropertyCollection kaldt uden gyldig adder"
 msgid "Adding book %s"
 msgstr "Tilføjer bog %s"
 
-# scootergrisen: hvad er flavor?
 #: ../src/osx/carbon/dataview.cpp:1931
 msgid "Adding flavor TEXT failed"
 msgstr "Tilføjelse af flavor-tekst fejlede"
 
-# scootergrisen: hvad er flavor-utxt?
 #: ../src/osx/carbon/dataview.cpp:1952
 msgid "Adding flavor utxt failed"
 msgstr "Tilføjelse af flavor-utxt fejlede"
@@ -1970,11 +1956,10 @@ msgstr "Centreret"
 msgid "Central European (ISO-8859-2)"
 msgstr "Centraleuropæisk (ISO-8859-2)"
 
-# scootergrisen: måske Centrér
 #: ../src/richtext/richtextbulletspage.cpp:187
 #: ../src/richtext/richtextliststylepage.cpp:250
 msgid "Centre"
-msgstr "Centreret"
+msgstr "Centrér"
 
 #: ../src/richtext/richtextindentspage.cpp:162
 #: ../src/richtext/richtextindentspage.cpp:164
@@ -2368,17 +2353,15 @@ msgstr "Forbinder..."
 msgid "Contents"
 msgstr "Indhold"
 
-# scootergrisen: se hvad control hedder i Windows
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:866
 msgid "ControlDark"
-msgstr "Kontrol mørkt"
+msgstr "Kontrol mørk"
 
-# scootergrisen: se hvad control hedder i Windows
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:867
 msgid "ControlLight"
-msgstr "Kontrol lyst"
+msgstr "Kontrol lys"
 
 #: ../src/common/strconv.cpp:2251
 #, c-format
@@ -2529,7 +2512,7 @@ msgstr "Kunne ikke overføre data til vindue"
 #: ../src/msw/imaglist.cpp:189 ../src/msw/imaglist.cpp:226
 #: ../src/msw/imaglist.cpp:238
 msgid "Couldn't add an image to the image list."
-msgstr "Kunne ikek tilføje et billede til billedlisten."
+msgstr "Kunne ikke tilføje et billede til billedlisten."
 
 #: ../src/msw/timer.cpp:134
 msgid "Couldn't create a timer"
@@ -2548,10 +2531,9 @@ msgstr "Kunne ikke optælle oversættelser"
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Kunne ikke finde symbolet \"%s\" i et dynamisk bibliotek"
 
-# scootergrisen: måske aktuelle?
 #: ../src/msw/thread.cpp:922
 msgid "Couldn't get the current thread pointer"
-msgstr "Kunne ikke få nuværende trådpointer"
+msgstr "Kunne ikke få aktuelle trådpointer"
 
 #: ../src/osx/carbon/overlay.cpp:129
 msgid "Couldn't init the context on the overlay window"
@@ -3557,7 +3539,6 @@ msgstr "Kunne ikke åbne midlertidig fil."
 msgid "Failed to open the clipboard."
 msgstr "Kunne ikke åbne udklipsholder."
 
-# scootergrisen: se om skal være "Plural-Forms" eller "flertalsformer"
 #: ../src/common/translation.cpp:1184
 #, c-format
 msgid "Failed to parse Plural-Forms: '%s'"
@@ -4075,7 +4056,7 @@ msgstr "Hjælp"
 
 #: ../src/html/helpwnd.cpp:1200
 msgid "Help Browser Options"
-msgstr "Hjælp til browser indstillinger"
+msgstr "Hjælp til browserindstillinger"
 
 #: ../src/generic/helpext.cpp:454 ../src/generic/helpext.cpp:455
 msgid "Help Index"
@@ -4146,7 +4127,6 @@ msgstr "Hjemmemappe"
 msgid "How the object will float relative to the text."
 msgstr "Hvordan objektet placerer sig i forhold til teksten."
 
-# scootergrisen: "Lodret streg" eller "I-streg" lyder vist bedre end "I-jern"
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1721
 msgid "I-Beam"
@@ -4434,7 +4414,7 @@ msgstr "Ugyldigt regulært udtryk: \"%s\": %s"
 #: ../src/common/config.cpp:226
 #, c-format
 msgid "Invalid value %ld for a boolean key \"%s\" in config file."
-msgstr "Ugyldig værdi %ld for en boolsk nøglen \"%s\" i konfigurationsfilen."
+msgstr "Ugyldig værdi %ld for en boolesk nøglen \"%s\" i konfigurationsfilen."
 
 #: ../src/common/stockitem.cpp:168 ../src/generic/fontdlgg.cpp:329
 #: ../src/osx/carbon/fontdlg.cpp:531 ../src/richtext/richtextfontpage.cpp:349
@@ -6122,11 +6102,11 @@ msgstr "Rød"
 
 #: ../src/common/stockitem.cpp:185 ../src/stc/stc_i18n.cpp:16
 msgid "Redo"
-msgstr "Gentag"
+msgstr "Omgør"
 
 #: ../src/common/stockitem.cpp:264
 msgid "Redo last action"
-msgstr "Gentag seneste handling"
+msgstr "Omgør seneste handling"
 
 #: ../src/common/stockitem.cpp:186
 msgid "Refresh"
@@ -6824,7 +6804,7 @@ msgstr "FTP-serveren understøtter ikke PORT-kommandoen."
 #: ../src/richtext/richtextliststylepage.cpp:215
 #: ../src/richtext/richtextliststylepage.cpp:217
 msgid "The available bullet styles."
-msgstr "Tilgængelige punkttegn."
+msgstr "Tilgængelige Punkttegnstypografier."
 
 #: ../src/richtext/richtextstyledlg.cpp:202
 #: ../src/richtext/richtextstyledlg.cpp:204
@@ -7224,7 +7204,7 @@ msgid ""
 "The version of remote access service (RAS) installed on this machine is too "
 "old, please upgrade (the following required function is missing: %s)."
 msgstr ""
-"Udgaven af Remote Access Service (RAS), som er installeret på denne "
+"Versionen af Remote Access Service (RAS), som er installeret på denne "
 "computer, er for gammel, opgradering anbefales. (følgende nødvendige "
 "funktion mangler: %s)."
 
@@ -8281,7 +8261,7 @@ msgstr ""
 
 #: ../src/msw/dde.cpp:1150
 msgid "a client's attempt to establish a conversation has failed."
-msgstr "en klients forsøg på at starte en konversation slog fejl."
+msgstr "en klients forsøg på at starte en samtale slog fejl."
 
 #: ../src/msw/dde.cpp:1147
 msgid "a memory allocation failed."
@@ -8317,7 +8297,7 @@ msgid ""
 "that was terminated by the client, or the server\n"
 "terminated before completing a transaction."
 msgstr ""
-"en server-side transaktion blev forsøgt i en konversation\n"
+"en server-side transaktion blev forsøgt i en samtale\n"
 "der blev afsluttet af klienten, eller serveren afsluttede\n"
 "inden fuldførslen af en transaktion."
 
@@ -8693,7 +8673,7 @@ msgstr "fjerde"
 
 #: ../src/common/appbase.cpp:783
 msgid "generate verbose log messages"
-msgstr "lav udførlige logbeskedder"
+msgstr "lav udførlige logmeddelelser"
 
 #: ../src/richtext/richtextbuffer.cpp:13085
 #: ../src/richtext/richtextbuffer.cpp:13195
@@ -8949,7 +8929,7 @@ msgstr "skift"
 
 #: ../src/common/appbase.cpp:773
 msgid "show this help message"
-msgstr "vis denne hjælpebesked"
+msgstr "vis denne hjælpemeddelelse"
 
 #: ../src/common/datetimefmt.cpp:1972
 msgid "sixteenth"
