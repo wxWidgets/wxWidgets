@@ -1782,21 +1782,8 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
 
-#if 0
-    wxGraphicsMatrix matrix = CreateMatrix();
-
-    wxPoint org = dc.GetDeviceOrigin();
-    matrix.Translate( org.x, org.y );
-
-    org = dc.GetLogicalOrigin();
-    matrix.Translate( -org.x, -org.y );
-
-    double sx,sy;
-    dc.GetUserScale( &sx, &sy );
-    matrix.Scale( sx, sy );
-
-    ConcatTransform( matrix );
-#endif
+    // Transfer transformation settings from source DC to Cairo context on our own.
+    ApplyTransformFromDC(dc);
 #endif
 
 #ifdef __WXX11__
