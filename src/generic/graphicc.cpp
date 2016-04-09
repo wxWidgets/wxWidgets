@@ -1887,20 +1887,34 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
         // We need to pass a pointer to the location
         // of the bit values to Cairo function.
         BITMAP info;
-        if (::GetObject(bmp.GetHBITMAP(), sizeof(info), &info) == 0)
+        if ( ::GetObject(bmp.GetHBITMAP(), sizeof(info), &info) == sizeof(info) )
         {
-            wxLogLastError(wxS("wxCairoContext ctor - GetObject"));
-        }
-        wxASSERT_MSG(info.bmBits != NULL, wxS("Invalid bitmap"));
-
-        m_mswSurface = cairo_image_surface_create_for_data((unsigned char*)info.bmBits,
+            if( info.bmBits )
+            {
+                m_mswSurface = cairo_image_surface_create_for_data((unsigned char*)info.bmBits,
                                                bmp.HasAlpha() ?
                                                CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24,
                                                info.bmWidth,
                                                info.bmHeight,
                                                info.bmWidthBytes);
 
-        hasBitmap = true;
+                hasBitmap = true;
+            }
+            else
+            {
+                wxFAIL_MSG( wxS("Invalid bitmap") );
+            }
+        }
+        else
+        {
+            wxLogLastError( wxS("wxCairoContext ctor - GetObject") );
+        }
+
+        // Fallback if we failed to create Cairo surface from 32bpp bitmap.
+        if( !hasBitmap )
+        {
+            m_mswSurface = cairo_win32_surface_create(dc.GetHDC());
+        }
     }
 
     Init( cairo_create(m_mswSurface) );
