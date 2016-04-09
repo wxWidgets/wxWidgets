@@ -2221,7 +2221,10 @@ void wxCairoContext::ConcatTransform( const wxGraphicsMatrix& matrix )
 // sets the transform of this context
 void wxCairoContext::SetTransform( const wxGraphicsMatrix& matrix )
 {
-    cairo_set_matrix(m_context,(const cairo_matrix_t*) matrix.GetNativeMatrix());
+    // To get actual transformation we need to concatenate
+    // given transformation with internal transformation.
+    cairo_set_matrix(m_context, &m_internalTransform);
+    cairo_transform(m_context, (const cairo_matrix_t*)matrix.GetNativeMatrix());
 }
 
 // gets the matrix of this context
