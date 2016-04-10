@@ -1776,15 +1776,17 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 
 #ifdef __WXGTK3__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
-    if (cr)
-        Init(cairo_reference(cr));
+    Init(cr ? cairo_reference(cr) : NULL);
+    // Store transformation settings of the underlying source context.
+    if ( m_context )
+        cairo_get_matrix(m_context, &m_internalTransform);
 #elif defined __WXGTK20__
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
 
     // Transfer transformation settings from source DC to Cairo context on our own.
     ApplyTransformFromDC(dc);
-#endif
+#endif // __WXGTK3__ || __WXGTK20__
 
 #ifdef __WXX11__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
@@ -1936,15 +1938,17 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     
 #ifdef __WXGTK3__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
-    if (cr)
-        Init(cairo_reference(cr));
+    Init(cr ? cairo_reference(cr) : NULL);
+    // Store transformation settings of the underlying source context.
+    if ( m_context )
+        cairo_get_matrix(m_context, &m_internalTransform);
 #elif defined __WXGTK20__
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
 
     // Transfer transformation settings from source DC to Cairo context on our own.
     ApplyTransformFromDC(dc);
-#endif
+#endif // __WXGTK3__ || __WXGTK20__
 
 #ifdef __WXX11__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
@@ -2101,9 +2105,11 @@ void wxCairoContext::Init(cairo_t *context)
 {
     m_context = context;
     cairo_matrix_init_identity(&m_internalTransform);
-
-    PushState();
-    PushState();
+    if ( m_context )
+    {
+        PushState();
+        PushState();
+    }
 }
 
 void wxCairoContext::ApplyTransformFromDC(const wxDC& dc)
