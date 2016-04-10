@@ -178,11 +178,6 @@ protected:
 
   // creates the brush to be used for drawing the tab control background
   void UpdateBgBrush();
-
-  // common part of QueryBgBitmap() and MSWPrintChild()
-  //
-  // if child == NULL, draw background for the entire notebook itself
-  bool DoDrawBackground(WXHDC hDC, wxWindow *child = NULL);
 #endif // wxUSE_UXTHEME
 
   // these function are used for reducing flicker on notebook resize
