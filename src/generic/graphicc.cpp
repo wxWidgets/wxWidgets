@@ -1414,43 +1414,57 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
 
     if ( isSrcBpp32 )
     {
-        // use the bitmap's alpha
-        wxAlphaPixelData
-            pixData(bmpSource, wxPoint(0, 0), wxSize(m_width, m_height));
-        wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
+        // Using wxAlphaPixelData sets (on wxMSW and wxOSX) the internal
+        // "has alpha" flag but we want to leave it unchanged, so we need
+        // to save its current value now and restore it afterwards.
+#if defined(__WXMSW__) || defined(__WXOSX__)
+        const bool hasAlpha = bmpSource.HasAlpha();
+#endif // __WXMSW__ || __WXOSX__
 
-        wxAlphaPixelData::Iterator p(pixData);
-        for (int y=0; y<m_height; y++)
         {
-            wxAlphaPixelData::Iterator rowStart = p;
-            wxUint32* const rowStartDst = data;
-            for (int x=0; x<m_width; x++)
-            {
-                // Each pixel in CAIRO_FORMAT_ARGB32 is a 32-bit quantity,
-                // with alpha in the upper 8 bits, then red, then green, then
-                // blue. The 32-bit quantities are stored native-endian.
-                // Pre-multiplied alpha is used.
-                unsigned char alpha = (bufferFormat == CAIRO_FORMAT_ARGB32) ? p.Alpha() : 255;
-#ifdef __WXMSW__
-                // MSW bitmap pixel bits are already premultiplied.
-                *data = (alpha << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue());
-#else // !__WXMSW__
-                if (alpha == 0)
-                    *data = 0;
-                else
-                    *data = (alpha << 24
-                        | Premultiply(alpha, p.Red()) << 16
-                        | Premultiply(alpha, p.Green()) << 8
-                        | Premultiply(alpha, p.Blue()));
-#endif // __WXMSW__ / !__WXMSW__
-                ++data;
-                ++p;
-            }
+            // use the bitmap's alpha
+            wxAlphaPixelData pixData(bmpSource);
+            wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
 
-            data = rowStartDst + stride / 4;
-            p = rowStart;
-            p.OffsetY(pixData, 1);
+            wxAlphaPixelData::Iterator p(pixData);
+            for (int y=0; y<m_height; y++)
+            {
+                wxAlphaPixelData::Iterator rowStart = p;
+                wxUint32* const rowStartDst = data;
+                for (int x=0; x<m_width; x++)
+                {
+                    // Each pixel in CAIRO_FORMAT_ARGB32 is a 32-bit quantity,
+                    // with alpha in the upper 8 bits, then red, then green, then
+                    // blue. The 32-bit quantities are stored native-endian.
+                    // Pre-multiplied alpha is used.
+                    unsigned char alpha = (bufferFormat == CAIRO_FORMAT_ARGB32) ? p.Alpha() : 255;
+#ifdef __WXMSW__
+                    // MSW bitmap pixel bits are already premultiplied.
+                    *data = (alpha << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue());
+#else // !__WXMSW__
+                    if (alpha == 0)
+                        *data = 0;
+                    else
+                        *data = (alpha << 24
+                            | Premultiply(alpha, p.Red()) << 16
+                            | Premultiply(alpha, p.Green()) << 8
+                            | Premultiply(alpha, p.Blue()));
+#endif // __WXMSW__ / !__WXMSW__
+                    ++data;
+                    ++p;
+                }
+
+                data = rowStartDst + stride / 4;
+                p = rowStart;
+                p.OffsetY(pixData, 1);
+            }
         }
+
+#if defined(__WXMSW__) || defined(__WXOSX__)
+        // Reset "has alpha" flag back.
+        // (wxBitmap::UseAlpha() is used only on wxMSW and wxOSX.)
+        bmpSource.UseAlpha(hasAlpha);
+#endif // __WXMSW__ || __WXOSX__
     }
     else  // no alpha
     {
