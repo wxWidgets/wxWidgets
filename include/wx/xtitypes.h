@@ -30,7 +30,7 @@ class WXDLLIMPEXP_BASE wxClassInfo;
 // Enum Support
 //
 // In the header files XTI requires no change from pure c++ code, however in the
-// implementation, an enum needs to be enumerated eg:
+// implementation, an enum needs to be enumerated e.g.:
 //
 // wxBEGIN_ENUM( wxFlavor )
 //   wxENUM_MEMBER( Vanilla )
@@ -60,7 +60,7 @@ public:
     int GetEnumMemberValue(const wxChar *name ) const;
 
     // returns the name of the enum member having the passed in value
-    // returns an emtpy string if not found
+    // returns an empty string if not found
     const wxChar *GetEnumMemberName(int value) const;
 
     // returns the number of members in this enum

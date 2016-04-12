@@ -268,7 +268,7 @@ public:
 
         @param  rect
             The portion inside of the window. Setting with an empty wxRect will
-            restore the default diaplay of the thumbnail.
+            restore the default display of the thumbnail.
     */
     virtual void SetThumbnailClip(const wxRect& rect);
 

@@ -362,7 +362,7 @@ public:
 
         // this function is called to compare 2 items and should return -1, 0
         // or +1 if the first item is less than, equal to or greater than the
-        // second one. The base class version performs alphabetic comparaison
+        // second one. The base class version performs alphabetic comparison
         // of item labels (GetText)
     virtual int OnCompareItems(const wxTreeItemId& item1,
                                const wxTreeItemId& item2)

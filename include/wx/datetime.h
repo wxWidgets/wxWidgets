@@ -1243,7 +1243,7 @@ public:
         // there is intentionally no division because we don't want to
         // introduce rounding errors in time calculations
 
-    // comparaison (see also operator versions below)
+    // comparison (see also operator versions below)
     // ------------------------------------------------------------------------
 
         // is the timespan null?
