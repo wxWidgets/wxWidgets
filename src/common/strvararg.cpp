@@ -361,7 +361,7 @@ private:
             CopyAllBefore();
         }
 
-        *m_fmtLast = ch;
+        *m_fmtLast++ = ch;
     }
 
     void CopyAllBefore()
