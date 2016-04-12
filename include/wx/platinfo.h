@@ -108,7 +108,7 @@ enum wxEndianness
     wxENDIAN_MAX
 };
 
-// informations about a linux distro returned by the lsb_release utility
+// information about a linux distro returned by the lsb_release utility
 struct wxLinuxDistributionInfo
 {
     wxString Id;

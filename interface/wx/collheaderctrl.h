@@ -12,9 +12,9 @@
 
     Header control above a collapsible pane.
 
-    The collapsible header usually constists of a small indicator of the
+    The collapsible header usually consists of a small indicator of the
     collapsed state and the label text beside it.
-    This class is used by the generic implemetation of wxCollapsiblePane but
+    This class is used by the generic implementation of wxCollapsiblePane but
     maybe used in more complex layouts for other uses.
 
     @beginEventTable{wxCommandEvent}
@@ -65,7 +65,7 @@ public:
         const wxString& name = wxCollapsibleHeaderCtrlNameStr);
 
     /**
-        Set collpased state of the header.
+        Set collapsed state of the header.
     */
     virtual void SetCollapsed(bool collapsed = true);
 

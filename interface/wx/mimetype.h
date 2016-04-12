@@ -447,7 +447,7 @@ public:
                    ...);
     
     /**
-       Constuctor using an array of string elements corresponding to the
+       Constructor using an array of string elements corresponding to the
        parameters of the ctor above in the same order.
     */
     wxFileTypeInfo(const wxArrayString& sArray);

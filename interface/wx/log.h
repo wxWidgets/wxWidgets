@@ -134,7 +134,7 @@ public:
             associated with this log record.
 
         @return
-            The formated message.
+            The formatted message.
 
         @note
             Time stamping is disabled for Visual C++ users in debug builds by
@@ -157,7 +157,7 @@ protected:
             Time to format.
 
         @return
-            The formated time string, may be empty.
+            The formatted time string, may be empty.
     */
     virtual wxString FormatTime(time_t time) const;
 };

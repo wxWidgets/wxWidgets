@@ -626,7 +626,7 @@ public:
     @class wxGridCellEnumEditor
 
     Grid cell editor which displays an enum number as a textual equivalent
-    (eg. data in cell is 0,1,2 ... n the cell could be displayed as
+    (e.g. data in cell is 0,1,2 ... n the cell could be displayed as
     "John","Fred"..."Bob" in the combo choice box).
 
     @library{wxadv}
@@ -1741,8 +1741,8 @@ public:
     /*!
         @name Table Row and Column Labels
 
-        By default the numbers are used for labeling rows and Latin letters for
-        labeling columns. If the table has more than 26 columns, the pairs of
+        By default the numbers are used for labelling rows and Latin letters for
+        labelling columns. If the table has more than 26 columns, the pairs of
         letters are used starting from the 27-th one and so on, i.e. the
         sequence of labels is A, B, ..., Z, AA, AB, ..., AZ, BA, ..., ..., ZZ,
         AAA, ...
