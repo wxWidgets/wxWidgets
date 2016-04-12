@@ -198,16 +198,22 @@ public:
 
                 switch ( *format )
                 {
-#ifdef __VISUALC__
+                    // MSVC doesn't support C99 'z' size modifier, but it uses
+                    // 'I' with exactly the same meaning.
+                    //
+                    // MinGW does support 'z' but only in ANSI stdio mode, and
+                    // we can't be sure that this is what is actually going to
+                    // be used, application code could explicitly define
+                    // __USE_MINGW_ANSI_STDIO=0 (e.g. because it needs legacy
+                    // behaviour for its own printf() calls), so we map it to
+                    // 'I' for it too.
+#if defined(__VISUALC__) || defined(__MINGW32__)
                     case 'z':
-                        // Used for size_t printing (e.g. %zu) and is in C99,
-                        // but is not portable, MSVC uses 'I' with the same
-                        // meaning.
                         ChangeFmtChar('I');
                         format++;
                         size = Size_Default;
                         break;
-#endif // __VISUALC__
+#endif // __VISUALC__ || __MINGW32__
 
                     case 'h':
                         size = Size_Short;
