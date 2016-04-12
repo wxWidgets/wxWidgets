@@ -411,12 +411,14 @@ private:
 };
 
 // Distinguish between the traditional Windows (and MSVC) behaviour and Cygwin
-// (which is always Unix-like) and MinGW which can use either depending on the
-// "ANSI stdio" option value (which is normally set to either 0 or 1, but test
-// for it in a way which works even if it's not defined at all, just in case).
+// (which is always Unix-like) and MinGW. The last one is the most interesting
+// case as it can behave either as MSVC (__USE_MINGW_ANSI_STDIO=0) or as POSIX
+// (__USE_MINGW_ANSI_STDIO=1, which is explicitly set by including any standard
+// C++ header such as e.g. <string>). Luckily, "%ls" and "%lc" work in both
+// cases, at least for recent MinGW versions, so just use it always.
 #if defined(__WINDOWS__) && \
     !defined(__CYGWIN__) && \
-    (!defined(__MINGW32__) || (__USE_MINGW_ANSI_STDIO +0 == 0))
+    !defined(__MINGW32__)
 
 // on Windows, we should use %s and %c regardless of the build:
 class wxPrintfFormatConverterWchar : public wxFormatConverterBase<wchar_t>
