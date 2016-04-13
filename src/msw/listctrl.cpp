@@ -1372,7 +1372,11 @@ void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
 
 wxSize wxListCtrl::MSWGetBestViewRect(int x, int y) const
 {
-    const DWORD rc = ListView_ApproximateViewRect(GetHwnd(), x, y, NO_ITEM);
+    // Older Platform SDKs lack a cast to WPARAM inside the
+    // ListView_ApproximateViewRect macro, so cast -1 to
+    // WPARAM here to suppress a warning about signed/unsigned mismatch.
+    const DWORD rc = ListView_ApproximateViewRect(GetHwnd(), x, y,
+        static_cast<WPARAM>(-1));
 
     wxSize size(LOWORD(rc), HIWORD(rc));
 
