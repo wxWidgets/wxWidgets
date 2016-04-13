@@ -112,7 +112,7 @@ protected:
         CPPUNIT_ASSERT(!stream_in.Eof());
         CPPUNIT_ASSERT(stream_in.IsOk());
 
-        // Test the stream version aswell.
+        // Test the stream version as well.
         TStreamOut &stream_out = CreateOutStream();
         (void)stream_in.Read(stream_out);
 
@@ -142,10 +142,10 @@ protected:
             // EOF behaviour is different in streams, disabled (for now?)
 
             if (m_bEofAtLastRead)
-                // EOF should only occure after the last successful get.
+                // EOF should only occur after the last successful get.
                 CPPUNIT_ASSERT_MESSAGE("Eof is detected too late.", !(stream_in.LastRead() != 1 && stream_in.Eof()));
             else
-                // EOF should only occure after a failed get.
+                // EOF should only occur after a failed get.
                 CPPUNIT_ASSERT_MESSAGE("Eof is detected too soon.", !(stream_in.LastRead() == 1 && stream_in.Eof()));
 #endif
         }
@@ -386,14 +386,14 @@ protected:
                                 // Default false.
     bool m_bSeekInvalidBeyondEnd; // if true a SeekI|O beyond the end of the stream should return wxInvalidOffset
                                   // Default true.
-    bool m_bEofAtLastRead;      // Does EOF occure at the moment the last byte is read or when read past the last byte.
+    bool m_bEofAtLastRead;      // Does EOF occur at the moment the last byte is read or when read past the last byte.
                                 // Default true.
 protected:
     TStreamIn &CreateInStream()
     {
         if (m_pCurrentIn)
         {
-            wxFAIL_MSG(wxT("Error in test case, the previouse input stream needs to be delete first!"));
+            wxFAIL_MSG(wxT("Error in test case, the previous input stream needs to be delete first!"));
         }
 
         m_pCurrentIn = DoCreateInStream();
@@ -404,7 +404,7 @@ protected:
     {
         if (m_pCurrentOut)
         {
-            wxFAIL_MSG(wxT("Error in test case, the previouse output stream needs to be delete first!"));
+            wxFAIL_MSG(wxT("Error in test case, the previous output stream needs to be delete first!"));
         }
 
         m_pCurrentOut = DoCreateOutStream();

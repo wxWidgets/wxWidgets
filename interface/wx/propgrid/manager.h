@@ -132,8 +132,8 @@ public:
 
     wxPropertyGridManager inherits from wxPropertyGridInterface, and as such
     it has most property manipulation functions. However, only some of them affect
-    properties on all pages (eg. GetPropertyByName() and ExpandAll()), while some
-    (eg. Append()) only apply to the currently selected page.
+    properties on all pages (e.g. GetPropertyByName() and ExpandAll()), while some
+    (e.g. Append()) only apply to the currently selected page.
 
     To operate explicitly on properties on specific page, use
     wxPropertyGridManager::GetPage() to obtain pointer to page's
@@ -405,7 +405,7 @@ public:
         Select and displays a given page.
 
         @param index
-            Index of page being seleced. Can be -1 to select nothing.
+            Index of page being selected. Can be -1 to select nothing.
     */
     void SelectPage( int index );
 
