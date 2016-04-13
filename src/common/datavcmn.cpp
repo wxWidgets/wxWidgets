@@ -1612,7 +1612,7 @@ void wxDataViewEvent::Init(wxDataViewCtrlBase* dvc,
 {
     m_item = item;
     m_col = column ? column->GetModelColumn() : -1;
-    m_model = dvc->GetModel();
+    m_model = dvc ? dvc->GetModel() : NULL;
     m_column = column;
     m_pos = wxDefaultPosition;
     m_cacheFrom = 0;
