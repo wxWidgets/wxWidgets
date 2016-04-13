@@ -450,7 +450,7 @@ public:
     // ------------------------------------------------------------------------
 
         // default ctor does not initialize the object, use Set()!
-    wxDateTime() { m_time = wxLongLong(wxINT32_MIN, 0); }
+    wxDateTime() { m_time = wxINT64_MIN; }
 
         // from time_t: seconds since the Epoch 00:00:00 UTC, Jan 1, 1970)
     inline wxDateTime(time_t timet);
@@ -704,7 +704,7 @@ public:
     // ------------------------------------------------------------------------
 
         // is the date valid?
-    inline bool IsValid() const { return m_time != wxInvalidDateTime.m_time; }
+    inline bool IsValid() const { return m_time != wxLongLong(wxINT64_MIN); }
 
         // get the broken down date/time representation in the given timezone
         //
@@ -816,38 +816,35 @@ public:
 
     inline bool operator<(const wxDateTime& dt) const
     {
-        wxASSERT_MSG( IsValid() && dt.IsValid(), wxT("invalid wxDateTime") );
         return GetValue() < dt.GetValue();
     }
 
     inline bool operator<=(const wxDateTime& dt) const
     {
-        wxASSERT_MSG( IsValid() && dt.IsValid(), wxT("invalid wxDateTime") );
         return GetValue() <= dt.GetValue();
     }
 
     inline bool operator>(const wxDateTime& dt) const
     {
-        wxASSERT_MSG( IsValid() && dt.IsValid(), wxT("invalid wxDateTime") );
         return GetValue() > dt.GetValue();
     }
 
     inline bool operator>=(const wxDateTime& dt) const
     {
-        wxASSERT_MSG( IsValid() && dt.IsValid(), wxT("invalid wxDateTime") );
         return GetValue() >= dt.GetValue();
     }
 
     inline bool operator==(const wxDateTime& dt) const
     {
-        wxASSERT_MSG( IsValid() && dt.IsValid(), wxT("invalid wxDateTime") );
-        return GetValue() == dt.GetValue();
+        // Intentionally do not call GetValue() here, in order that
+        // invalid wxDateTimes may be compared for equality
+        return m_time == dt.m_time;
     }
 
     inline bool operator!=(const wxDateTime& dt) const
     {
-        wxASSERT_MSG( IsValid() && dt.IsValid(), wxT("invalid wxDateTime") );
-        return GetValue() != dt.GetValue();
+        // As above, don't use GetValue() here.
+        return m_time != dt.m_time;
     }
 
     // arithmetics with dates (see also below for more operators)
@@ -1774,23 +1771,17 @@ inline wxDateTime wxDateTime::GetYearDay(wxDateTime_t yday) const
 
 inline bool wxDateTime::IsEqualTo(const wxDateTime& datetime) const
 {
-    wxASSERT_MSG( IsValid() && datetime.IsValid(), wxT("invalid wxDateTime"));
-
-    return m_time == datetime.m_time;
+    return *this == datetime;
 }
 
 inline bool wxDateTime::IsEarlierThan(const wxDateTime& datetime) const
 {
-    wxASSERT_MSG( IsValid() && datetime.IsValid(), wxT("invalid wxDateTime"));
-
-    return m_time < datetime.m_time;
+    return *this < datetime;
 }
 
 inline bool wxDateTime::IsLaterThan(const wxDateTime& datetime) const
 {
-    wxASSERT_MSG( IsValid() && datetime.IsValid(), wxT("invalid wxDateTime"));
-
-    return m_time > datetime.m_time;
+    return *this > datetime;
 }
 
 inline bool wxDateTime::IsStrictlyBetween(const wxDateTime& t1,

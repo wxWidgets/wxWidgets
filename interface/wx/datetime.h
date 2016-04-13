@@ -645,7 +645,14 @@ public:
         @name Date Comparison
 
         There are several functions to allow date comparison. To supplement
-        them, a few global operators, etc taking wxDateTime are defined.
+        them, the usual comparison operators taking wxDateTime are defined as
+        well.
+
+        Notice that an invalid wxDateTime object can only be compared for
+        exact equality, i.e. using @c operator==(), @c operator!=() or
+        IsEqualTo(), but comparisons involving an invalid wxDateTime object
+        using any other operators or IsEarlierThan() or IsLaterThan() functions
+        would result in an assert because their result is not well-defined.
     */
     //@{
 
