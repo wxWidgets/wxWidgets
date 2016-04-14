@@ -222,6 +222,11 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageS
     g_signal_handlers_unblock_by_func(m_widget, (void*)gtk_value_changed, this);
 }
 
+void wxScrollBar::SetThumbSize(int thumbSize)
+{
+    SetScrollbar(GetThumbPosition(), thumbSize, GetRange(), GetPageSize());
+}
+
 void wxScrollBar::SetPageSize( int pageLength )
 {
     SetScrollbar(GetThumbPosition(), GetThumbSize(), GetRange(), pageLength);
