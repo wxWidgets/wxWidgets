@@ -40,6 +40,9 @@ bool wxCairoInit();
 #include "wx/private/graphics.h"
 #include "wx/rawbmp.h"
 #include "wx/vector.h"
+#if defined(__WXMSW__) && wxUSE_ENH_METAFILE
+    #include "wx/msw/enhmeta.h"
+#endif
 
 using namespace std;
 
@@ -415,6 +418,9 @@ public:
     wxCairoContext( wxGraphicsRenderer* renderer, GdkWindow *window );
 #endif
 #ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
+    wxCairoContext(wxGraphicsRenderer* renderer, const wxEnhMetaFileDC& dc);
+#endif // wxUSE_ENH_METAFILE
     wxCairoContext( wxGraphicsRenderer* renderer, HDC context );
     wxCairoContext(wxGraphicsRenderer* renderer, HWND hWnd);
 #endif
@@ -491,7 +497,9 @@ protected:
     virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y ) wxOVERRIDE;
 
     void Init(cairo_t *context);
-    void ApplyTransformFromDC(const wxDC& dc);
+
+    enum ApplyTransformMode { Apply_directly, Apply_scaled_dev_origin };
+    void ApplyTransformFromDC(const wxDC& dc, ApplyTransformMode mode = Apply_directly);
 
 #ifdef __WXQT__
     QPainter* m_qtPainter;
@@ -2010,6 +2018,29 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, GdkWindow *window 
 #endif
 
 #ifdef __WXMSW__
+
+#if wxUSE_ENH_METAFILE
+wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer, const wxEnhMetaFileDC& dc)
+: wxGraphicsContext(renderer)
+{
+    // wxMSW contexts always use MM_ANISOTROPIC, which messes up
+    // text rendering when printing using Cairo. Switch it to MM_TEXT
+    // map mode to avoid this problem.
+    HDC hdc = (HDC)dc.GetHDC();
+    ::SetMapMode(hdc, MM_TEXT);
+    m_mswSurface = cairo_win32_printing_surface_create(hdc);
+    Init( cairo_create(m_mswSurface) );
+
+    wxSize sz = dc.GetSize();
+    m_width = sz.x;
+    m_height = sz.y;
+    // Transfer transformation settings from source DC to Cairo context on our own.
+    // Since we switched from MM_ANISOTROPIC to MM_TEXT mapping mode
+    // we have to apply rescaled DC's device origin to Cairo context.
+    ApplyTransformFromDC(dc, Apply_scaled_dev_origin);
+}
+#endif // wxUSE_ENH_METAFILE
+
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, HDC handle )
 : wxGraphicsContext(renderer)
 {
@@ -2158,20 +2189,26 @@ void wxCairoContext::Init(cairo_t *context)
     }
 }
 
-void wxCairoContext::ApplyTransformFromDC(const wxDC& dc)
+void wxCairoContext::ApplyTransformFromDC(const wxDC& dc, ApplyTransformMode mode)
 {
     // Transfer transformation settings from source DC to Cairo context
     // and store it as an internal transformation
     // (which is not going to be exposed).
-    wxPoint org = dc.GetDeviceOrigin();
-    cairo_matrix_translate(&m_internalTransform, org.x, org.y);
-
     double sx, sy;
     dc.GetUserScale(&sx, &sy);
     double lsx, lsy;
     dc.GetLogicalScale(&lsx, &lsy);
     sx *= lsx;
     sy *= lsy;
+
+    wxPoint org = dc.GetDeviceOrigin();
+    if ( mode == Apply_scaled_dev_origin )
+        // This is used when mapping mode has been changed
+        // under wxMSW from MM_ANISOTROPIC to MM_TEXT.
+        cairo_matrix_translate(&m_internalTransform, org.x/sx, org.y/sy);
+    else
+        cairo_matrix_translate(&m_internalTransform, org.x, org.y);
+
     cairo_matrix_scale(&m_internalTransform, sx, sy);
 
     org = dc.GetLogicalOrigin();
@@ -2733,14 +2770,13 @@ wxGraphicsContext * wxCairoRenderer::CreateContext( const wxPrinterDC& dc)
 }
 #endif
 
-#ifdef __WXMSW__
-#if wxUSE_ENH_METAFILE
-wxGraphicsContext * wxCairoRenderer::CreateContext( const wxEnhMetaFileDC& WXUNUSED(dc) )
+#if defined(__WXMSW__) && wxUSE_ENH_METAFILE
+wxGraphicsContext * wxCairoRenderer::CreateContext(const wxEnhMetaFileDC& dc)
 {
-    return NULL;
+    ENSURE_LOADED_OR_RETURN(NULL);
+    return new wxCairoContext(this, dc);
 }
-#endif
-#endif
+#endif // __WXMSW__ && wxUSE_ENH_METAFILE
 
 wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext(void * context)
 {
