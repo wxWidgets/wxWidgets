@@ -289,8 +289,6 @@ wxObject *wxAuiXmlHandler::DoCreateResource()
 
         return anb;
     }
-
-    return NULL;
 }
 
 bool wxAuiXmlHandler::CanHandle( wxXmlNode *node )
