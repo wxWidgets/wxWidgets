@@ -1553,12 +1553,12 @@ public:
     // Converts escape sequences in src_str to newlines,
     // tabs, etc. and copies result to dst_str.
     static wxString& ExpandEscapeSequences( wxString& dst_str,
-                                            wxString& src_str );
+                                            const wxString& src_str );
 
     // Converts newlines, tabs, etc. in src_str to escape
     // sequences, and copies result to dst_str.
     static wxString& CreateEscapeSequences( wxString& dst_str,
-                                            wxString& src_str );
+                                            const wxString& src_str );
 
     // Checks system screen design used for laying out various dialogs.
     static bool IsSmallScreen();
