@@ -184,7 +184,9 @@
     m( cairo_surface_t*, cairo_win32_surface_create, \
         (HDC hdc), (hdc), NULL ) \
     m( cairo_surface_t*, cairo_win32_printing_surface_create, \
-        (HDC hdc), (hdc), NULL )
+        (HDC hdc), (hdc), NULL ) \
+    m( HDC, cairo_win32_surface_get_dc, \
+       (cairo_surface_t *surface), (surface), NULL )
 #else
 #define wxCAIRO_PLATFORM_METHODS(m) 
 #endif

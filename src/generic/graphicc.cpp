@@ -509,6 +509,7 @@ protected:
 #ifdef __WXMSW__
     cairo_surface_t* m_mswSurface;
     WindowHDC m_mswWindowHDC;
+    int m_mswStateSavedDC;
 #endif
 
 private:
@@ -1741,6 +1742,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
     // text rendering when printing using Cairo. Switch it to MM_TEXT
     // map mode to avoid this problem.
     HDC hdc = (HDC)dc.GetHDC();
+    m_mswStateSavedDC = ::SaveDC(hdc);
     ::SetMapMode(hdc, MM_TEXT);
     m_mswSurface = cairo_win32_printing_surface_create(hdc);
     Init( cairo_create(m_mswSurface) );
@@ -1792,7 +1794,9 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
     m_enableOffset = dc.GetContentScaleFactor() <= 1;
 
 #ifdef __WXMSW__
-    m_mswSurface = cairo_win32_surface_create((HDC)dc.GetHDC());
+    HDC hdc = (HDC)dc.GetHDC();
+    m_mswStateSavedDC = ::SaveDC(hdc);
+    m_mswSurface = cairo_win32_surface_create(hdc);
     Init( cairo_create(m_mswSurface) );
 #endif
 
@@ -1850,13 +1854,15 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     wxASSERT_MSG(bmp.IsOk(),
                  wxS("Should select a bitmap before creating wxCairoContext"));
 
+    HDC hdc = (HDC)dc.GetHDC();
+    m_mswStateSavedDC = ::SaveDC(hdc);
     bool hasBitmap = false;
 
     // cairo_win32_surface_create creates a 24-bit bitmap,
     // so if we 32bpp bitmap, we need to create a 32-bit surface instead.
     if (bmp.GetDepth() < 32)
     {
-        m_mswSurface = cairo_win32_surface_create(dc.GetHDC());
+        m_mswSurface = cairo_win32_surface_create(hdc);
     }
     else
     {
@@ -1937,7 +1943,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
         // Fallback if we failed to create Cairo surface from 32bpp bitmap.
         if( !hasBitmap )
         {
-            m_mswSurface = cairo_win32_surface_create(dc.GetHDC());
+            m_mswSurface = cairo_win32_surface_create(hdc);
         }
     }
 
@@ -2027,6 +2033,7 @@ wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer, const wxEnhMetaFile
     // text rendering when printing using Cairo. Switch it to MM_TEXT
     // map mode to avoid this problem.
     HDC hdc = (HDC)dc.GetHDC();
+    m_mswStateSavedDC = ::SaveDC(hdc);
     ::SetMapMode(hdc, MM_TEXT);
     m_mswSurface = cairo_win32_printing_surface_create(hdc);
     Init( cairo_create(m_mswSurface) );
@@ -2044,6 +2051,7 @@ wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer, const wxEnhMetaFile
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, HDC handle )
 : wxGraphicsContext(renderer)
 {
+    m_mswStateSavedDC = ::SaveDC(handle);
     m_mswSurface = cairo_win32_surface_create(handle);
     Init( cairo_create(m_mswSurface) );
     m_width = 0;
@@ -2082,6 +2090,7 @@ wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer, HWND hWnd)
     double scaleY = ::GetDeviceCaps((HDC)m_mswWindowHDC, LOGPIXELSY) / 96.0f;
     m_enableOffset = scaleY <= 1.0;
 
+    m_mswStateSavedDC = 0;
     m_mswSurface = cairo_win32_surface_create((HDC)m_mswWindowHDC);
     Init(cairo_create(m_mswSurface));
     m_width = 0;
@@ -2101,6 +2110,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
 {
 #ifdef __WXMSW__
     m_mswSurface = NULL;
+    m_mswStateSavedDC = 0;
 #endif // __WXMSW__
     Init( context );
     m_width =
@@ -2135,6 +2145,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
 #endif
 
 #ifdef __WXMSW__
+    m_mswStateSavedDC = 0;
     m_mswSurface = cairo_win32_surface_create((HDC)m_mswWindowHDC);
     Init(cairo_create(m_mswSurface));
 #endif
@@ -2149,6 +2160,7 @@ wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer) :
 {
 #ifdef __WXMSW__
     m_mswSurface = NULL;
+    m_mswStateSavedDC = 0;
 #endif // __WXMSW__
     m_context = NULL;
 }
@@ -2163,7 +2175,14 @@ wxCairoContext::~wxCairoContext()
     }
 #ifdef __WXMSW__
     if ( m_mswSurface )
+    {
+        HDC hdc = cairo_win32_surface_get_dc(m_mswSurface);
+
         cairo_surface_destroy(m_mswSurface);
+
+        if ( hdc && m_mswStateSavedDC != 0 )
+            ::RestoreDC(hdc, m_mswStateSavedDC);
+    }
 #endif
 #ifdef __WXQT__
     if ( m_qtPainter != NULL )
