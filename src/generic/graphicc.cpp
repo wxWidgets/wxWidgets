@@ -2059,25 +2059,11 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, HDC handle )
     // Try to determine DC size.
     if ( m_context )
     {
-        HBITMAP hBmp = (HBITMAP)::GetCurrentObject(handle, OBJ_BITMAP);
-        if ( hBmp )
+        RECT r;
+        if( ::GetClipBox(handle, &r) != ERROR )
         {
-            BITMAP info;
-            if ( ::GetObject(hBmp, sizeof(info), &info) == sizeof(info) )
-            {
-                m_width = info.bmWidth;
-                m_height = info.bmHeight;
-            }
-        }
-        else
-        {
-            HWND hWnd = ::WindowFromDC(handle);
-            if ( hWnd )
-            {
-                RECT r = wxGetWindowRect(hWnd);
-                m_width = r.right - r.left;
-                m_height = r.bottom - r.top;
-            }
+            m_width = r.right - r.left;
+            m_height = r.bottom - r.top;
         }
     }
 }
@@ -2148,7 +2134,11 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
     m_mswStateSavedDC = 0;
     m_mswSurface = cairo_win32_surface_create((HDC)m_mswWindowHDC);
     Init(cairo_create(m_mswSurface));
-#endif
+
+    wxSize sz = window->GetSize();
+    m_width = sz.x;
+    m_height = sz.y;
+#endif //  __WXMSW__
 
 #ifdef __WXQT__
     // direct m_qtSurface is not being used yet (this needs cairo qt surface)
@@ -2163,6 +2153,8 @@ wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer) :
     m_mswStateSavedDC = 0;
 #endif // __WXMSW__
     m_context = NULL;
+    m_width = 0;
+    m_height = 0;
 }
 
 wxCairoContext::~wxCairoContext()
