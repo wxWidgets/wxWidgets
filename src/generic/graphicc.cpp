@@ -2099,8 +2099,11 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
     m_mswStateSavedDC = 0;
 #endif // __WXMSW__
     Init( context );
-    m_width =
+    m_width = 0;
     m_height = 0;
+    // Store transformation settings of the underlying source context.
+    if ( m_context )
+        cairo_get_matrix(m_context, &m_internalTransform);
 }
 
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
