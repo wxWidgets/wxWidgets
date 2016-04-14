@@ -78,7 +78,7 @@ enum wxAuiPaneDockArtGradients
     /// No gradient on the captions, in other words a solid colour
     wxAUI_GRADIENT_NONE = 0,
 
-    /// Vertical gradient on the captions, in other words a gradal change in colours from top to bottom
+    /// Vertical gradient on the captions, in other words a gradual change in colours from top to bottom
     wxAUI_GRADIENT_VERTICAL = 1,
 
     /// Horizontal gradient on the captions, in other words a gradual change in colours from left to right
@@ -182,7 +182,7 @@ enum wxAuiButtonId
     See also @ref overview_aui.
 
     wxAuiDockArt is the art provider: provides all drawing functionality to the
-    wxAui dock manager. This allows the dock manager to have a plugable look-and-feel.
+    wxAui dock manager. This allows the dock manager to have a pluggable look-and-feel.
 
     By default, a wxAuiManager uses an instance of this class called
     wxAuiDefaultDockArt which provides bitmap art and a colour scheme that is

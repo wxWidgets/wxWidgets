@@ -173,7 +173,7 @@ private:
     void WrongFormatStrings();
 
     // compares the expectedString and the result of wxVsnprintf() char by char
-    // for all its lenght (not only for first expectedLen chars) and also
+    // for all its length (not only for first expectedLen chars) and also
     // checks the return value
     void DoMisc(int expectedLen, const wxString& expectedString,
                 size_t max, const wxChar *format, ...);
