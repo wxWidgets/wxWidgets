@@ -118,6 +118,16 @@ public:
     wxDynamicLibrary(const wxString& name, int flags = wxDL_DEFAULT);
 
     /**
+        Returns the platform-specific dynamic library file extension, or
+        depending on @a flags, the plugin file extension. The leading dot
+        is included.
+
+        For example, on Windows @c ".dll" is returned, and either @c ".dylib"
+        or @c ".bundle" on OS X.
+    */
+    static wxString GetDllExt(wxDynamicLibraryCategory cat = wxDL_LIBRARY);
+
+    /**
         Returns the platform-specific full name for the library called @a name.
         E.g. it adds a @c ".dll" extension under Windows and @c "lib" prefix
         and @c ".so", @c ".sl" or @c ".dylib" extension under Unix.
