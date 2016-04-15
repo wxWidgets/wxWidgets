@@ -18,6 +18,12 @@
         #define WIN32_LEAN_AND_MEAN 1
         #define LE_ME_ISDEF
     #endif
+
+    /*
+    APIENTRY is defined in oglpfuncs.h as well as by windows.h. Undefine
+    it to prevent a macro redefinition warning.
+    */
+    #undef APIENTRY
     #include <windows.h> //For wglGetProcAddress
     #ifdef LE_ME_ISDEF
         #undef WIN32_LEAN_AND_MEAN
