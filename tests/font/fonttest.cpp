@@ -120,7 +120,7 @@ void FontTestCase::Construct()
     // wxFontXXX enum elements.
     CPPUNIT_ASSERT( wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL).IsOk() );
 
-    wxGCC_WARNING_RESTORE()
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 
     #ifdef __VISUALC__
         #pragma warning(pop)
