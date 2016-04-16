@@ -1759,35 +1759,17 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
 #ifdef __WXGTK20__
     const wxDCImpl *impl = dc.GetImpl();
     cairo_t* cr = static_cast<cairo_t*>(impl->GetCairoContext());
-    if (cr)
-        Init(cairo_reference(cr));
-    else
-        m_context = NULL;
+    Init(cr ? cairo_reference(cr) : NULL);
 
     wxSize sz = dc.GetSize();
     m_width = sz.x;
     m_height = sz.y;
 
-    wxPoint org = dc.GetDeviceOrigin();
-    cairo_translate( m_context, org.x, org.y );
-
-    double sx,sy;
-    dc.GetUserScale( &sx, &sy );
-
-// TODO: Determine if these fixes are needed on other platforms too.
-// On MSW, without this the printer context will not respect wxDC SetMapMode calls.
-// For example, using dc.SetMapMode(wxMM_POINTS) can let us share printer and screen
-// drawing code
-#ifdef __WXMSW__
-    double lsx,lsy;
-    dc.GetLogicalScale( &lsx, &lsy );
-    sx *= lsx;
-    sy *= lsy;
-#endif
-    cairo_scale( m_context, sx, sy );
-
-    org = dc.GetLogicalOrigin();
-    cairo_translate( m_context, -org.x, -org.y );
+    // Store transformation settings of the underlying source context.
+    if ( m_context )
+        cairo_get_matrix(m_context, &m_internalTransform);
+    // Transfer transformation settings from source DC to Cairo context.
+    ApplyTransformFromDC(dc);
 #endif
 }
 #endif
