@@ -2089,7 +2089,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
     m_mswSurface = NULL;
     m_mswStateSavedDC = 0;
 #endif // __WXMSW__
-    Init( context );
+    Init( cairo_reference(context) );
     m_width = 0;
     m_height = 0;
     // Store transformation settings of the underlying source context.
