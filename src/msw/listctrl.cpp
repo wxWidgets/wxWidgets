@@ -198,7 +198,7 @@ private:
 ///////////////////////////////////////////////////////
 // Problem:
 // The MSW version had problems with SetTextColour() et
-// al as the wxListItemAttr's were stored keyed on the
+// al as the wxItemAttr's were stored keyed on the
 // item index. If a item was inserted anywhere but the end
 // of the list the text attributes (colour etc) for
 // the following items were out of sync.
@@ -223,7 +223,7 @@ public:
    wxMSWListItemData() : attr(NULL), lParam(0) {}
    ~wxMSWListItemData() { delete attr; }
 
-    wxListItemAttr *attr;
+    wxItemAttr *attr;
     LPARAM lParam; // real user data
 
     wxDECLARE_NO_COPY_CLASS(wxMSWListItemData);
@@ -811,13 +811,13 @@ bool wxListCtrl::SetItem(wxListItem& info)
         // attributes
         if ( info.HasAttributes() )
         {
-            const wxListItemAttr& attrNew = *info.GetAttributes();
+            const wxItemAttr& attrNew = *info.GetAttributes();
 
             // don't overwrite the already set attributes if we have them
             if ( data->attr )
                 data->attr->AssignFrom(attrNew);
             else
-                data->attr = new wxListItemAttr(attrNew);
+                data->attr = new wxItemAttr(attrNew);
         }
     }
 
@@ -1754,7 +1754,7 @@ long wxListCtrl::InsertItem(const wxListItem& info)
         if ( info.HasAttributes() )
         {
             // take copy of attributes
-            data->attr = new wxListItemAttr(*info.GetAttributes());
+            data->attr = new wxItemAttr(*info.GetAttributes());
 
             // and remember that we have some now...
             m_hasAnyAttr = true;
@@ -2858,7 +2858,7 @@ static void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 
 static WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
                                    LPNMLVCUSTOMDRAW pLVCD,
-                                   wxListItemAttr *attr)
+                                   wxItemAttr *attr)
 {
     if ( !attr )
     {
@@ -3103,7 +3103,7 @@ int wxListCtrl::OnGetItemColumnImage(long item, long column) const
     return -1;
 }
 
-wxListItemAttr *wxListCtrl::DoGetItemColumnAttr(long item, long column) const
+wxItemAttr *wxListCtrl::DoGetItemColumnAttr(long item, long column) const
 {
     if ( IsVirtual() )
         return OnGetItemColumnAttr(item, column);

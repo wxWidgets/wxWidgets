@@ -1226,7 +1226,7 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
 
                 GetItem(info);
 
-                wxListItemAttr *attr = info.GetAttributes();
+                wxItemAttr *attr = info.GetAttributes();
                 if ( !attr || !attr->HasTextColour() )
                 {
                     info.SetTextColour(*wxCYAN);
@@ -1416,13 +1416,13 @@ int MyListCtrl::OnGetItemColumnImage(long item, long column) const
     return -1;
 }
 
-wxListItemAttr *MyListCtrl::OnGetItemAttr(long item) const
+wxItemAttr *MyListCtrl::OnGetItemAttr(long item) const
 {
     // test to check that RefreshItem() works correctly: when m_updated is
     // set to some item and it is refreshed, we highlight the item
     if ( item == m_updated )
     {
-        static wxListItemAttr s_attrHighlight(*wxRED, wxNullColour, wxNullFont);
+        static wxItemAttr s_attrHighlight(*wxRED, wxNullColour, wxNullFont);
         return &s_attrHighlight;
     }
 

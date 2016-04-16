@@ -1039,6 +1039,7 @@ GUI_CMN_HDR =
     wx/imagtga.h
     wx/imagtiff.h
     wx/imagxpm.h
+    wx/itemattr.h
     wx/listbase.h
     wx/listbook.h
     wx/listctrl.h

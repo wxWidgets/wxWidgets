@@ -85,8 +85,8 @@ public:
 
     void GetItem( wxListItem &info ) const;
 
-    void SetAttr(wxListItemAttr *attr) { m_attr = attr; }
-    wxListItemAttr *GetAttr() const { return m_attr; }
+    void SetAttr(wxItemAttr *attr) { m_attr = attr; }
+    wxItemAttr *GetAttr() const { return m_attr; }
 
 public:
     // the item image or -1
@@ -103,7 +103,7 @@ public:
     wxListMainWindow *m_owner;
 
     // custom attributes or NULL
-    wxListItemAttr *m_attr;
+    wxItemAttr *m_attr;
 
 protected:
     // common part of all ctors
@@ -263,8 +263,8 @@ public:
     wxString GetText(int index) const;
     void SetText( int index, const wxString& s );
 
-    wxListItemAttr *GetAttr() const;
-    void SetAttr(wxListItemAttr *attr);
+    wxItemAttr *GetAttr() const;
+    void SetAttr(wxItemAttr *attr);
 
     // return true if the highlighting really changed
     bool Highlight( bool on );

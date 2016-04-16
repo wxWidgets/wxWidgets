@@ -690,6 +690,9 @@
     <ClCompile Include="..\..\src\msw\graphics.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\graphicsd2d.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\headerctrl.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
@@ -897,9 +900,6 @@
     <ClCompile Include="..\..\src\xrc\xmlreshandler.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\msw\graphicsd2d.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -926,6 +926,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\anybutton.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\appprogress.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\artprov.h">
@@ -1312,6 +1315,9 @@
     <ClInclude Include="..\..\include\wx\infobar.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\itemattr.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\itemid.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -1671,9 +1677,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\window.h">
       <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\appprogress.h">
-      <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\nativewin.h">
       <Filter>Common Headers</Filter>

@@ -1278,14 +1278,14 @@ protected:
         @c item or @NULL to use the default appearance parameters.
 
         wxListCtrl will not delete the pointer or keep a reference of it.
-        You can return the same wxListItemAttr pointer for every OnGetItemAttr() call.
+        You can return the same wxItemAttr pointer for every OnGetItemAttr() call.
 
         The base class version always returns @NULL.
 
         @see OnGetItemImage(), OnGetItemColumnImage(), OnGetItemText(),
              OnGetItemColumnAttr()
     */
-    virtual wxListItemAttr* OnGetItemAttr(long item) const;
+    virtual wxItemAttr* OnGetItemAttr(long item) const;
 
      /**
         This function may be overridden in the derived class for a control with
@@ -1302,7 +1302,7 @@ protected:
         @see OnGetItemAttr(), OnGetItemText(),
              OnGetItemImage(), OnGetItemColumnImage(),
     */
-    virtual wxListItemAttr* OnGetItemColumnAttr(long item, long column) const;
+    virtual wxItemAttr* OnGetItemColumnAttr(long item, long column) const;
 
     /**
         Override this function in the derived class for a control with
@@ -1511,80 +1511,6 @@ wxEventType wxEVT_LIST_COL_END_DRAG;
 wxEventType wxEVT_LIST_ITEM_FOCUSED;
 wxEventType wxEVT_LIST_ITEM_CHECKED;
 wxEventType wxEVT_LIST_ITEM_UNCHECKED;
-
-
-/**
-    @class wxListItemAttr
-
-    Represents the attributes (color, font, ...) of a wxListCtrl's wxListItem.
-
-    @library{wxcore}
-    @category{data}
-
-    @see @ref overview_listctrl, wxListCtrl, wxListItem
-*/
-class wxListItemAttr
-{
-public:
-    /**
-        Default Constructor.
-    */
-    wxListItemAttr();
-
-    /**
-        Construct a wxListItemAttr with the specified foreground and
-        background colors and font.
-    */
-    wxListItemAttr(const wxColour& colText,
-                   const wxColour& colBack,
-                   const wxFont& font);
-
-    /**
-        Returns the currently set background color.
-    */
-    const wxColour& GetBackgroundColour() const;
-
-    /**
-        Returns the currently set font.
-    */
-    const wxFont& GetFont() const;
-
-    /**
-        Returns the currently set text color.
-    */
-    const wxColour& GetTextColour() const;
-
-    /**
-        Returns @true if the currently set background color is valid.
-    */
-    bool HasBackgroundColour() const;
-
-    /**
-        Returns @true if the currently set font is valid.
-    */
-    bool HasFont() const;
-
-    /**
-        Returns @true if the currently set text color is valid.
-    */
-    bool HasTextColour() const;
-
-    /**
-        Sets a new background color.
-    */
-    void SetBackgroundColour(const wxColour& colour);
-
-    /**
-        Sets a new font.
-    */
-    void SetFont(const wxFont& font);
-
-    /**
-        Sets a new text color.
-    */
-    void SetTextColour(const wxColour& colour);
-};
-
 
 
 /**

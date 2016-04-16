@@ -39,6 +39,7 @@
 #include "wx/msw/private.h"
 
 #include "wx/imaglist.h"
+#include "wx/itemattr.h"
 #include "wx/msw/dragimag.h"
 #include "wx/msw/uxtheme.h"
 
@@ -1146,14 +1147,14 @@ void wxTreeCtrl::SetItemTextColour(const wxTreeItemId& item,
 {
     wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
 
-    wxTreeItemAttr *attr;
+    wxItemAttr *attr;
     wxMapTreeAttr::iterator it = m_attrs.find(item.m_pItem);
     if ( it == m_attrs.end() )
     {
         m_hasAnyAttr = true;
 
         m_attrs[item.m_pItem] =
-        attr = new wxTreeItemAttr;
+        attr = new wxItemAttr;
     }
     else
     {
@@ -1170,14 +1171,14 @@ void wxTreeCtrl::SetItemBackgroundColour(const wxTreeItemId& item,
 {
     wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
 
-    wxTreeItemAttr *attr;
+    wxItemAttr *attr;
     wxMapTreeAttr::iterator it = m_attrs.find(item.m_pItem);
     if ( it == m_attrs.end() )
     {
         m_hasAnyAttr = true;
 
         m_attrs[item.m_pItem] =
-        attr = new wxTreeItemAttr;
+        attr = new wxItemAttr;
     }
     else // already in the hash
     {
@@ -1193,14 +1194,14 @@ void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
 {
     wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
 
-    wxTreeItemAttr *attr;
+    wxItemAttr *attr;
     wxMapTreeAttr::iterator it = m_attrs.find(item.m_pItem);
     if ( it == m_attrs.end() )
     {
         m_hasAnyAttr = true;
 
         m_attrs[item.m_pItem] =
-        attr = new wxTreeItemAttr;
+        attr = new wxItemAttr;
     }
     else // already in the hash
     {
@@ -3550,7 +3551,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                                 break;
                             }
 
-                            wxTreeItemAttr * const attr = it->second;
+                            wxItemAttr * const attr = it->second;
 
                             wxTreeViewItem tvItem((void *)nmcd.dwItemSpec,
                                                   TVIF_STATE, TVIS_DROPHILITED);

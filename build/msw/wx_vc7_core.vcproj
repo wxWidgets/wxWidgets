@@ -2286,6 +2286,9 @@
 				RelativePath="..\..\include\wx\infobar.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\itemattr.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\itemid.h">
 			</File>
 			<File

@@ -181,40 +181,6 @@ static const int wxTREE_HITTEST_ONITEM  = wxTREE_HITTEST_ONITEMICON |
 extern WXDLLIMPEXP_DATA_CORE(const char) wxTreeCtrlNameStr[];
 
 // ----------------------------------------------------------------------------
-// wxTreeItemAttr: a structure containing the visual attributes of an item
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxTreeItemAttr
-{
-public:
-    // ctors
-    wxTreeItemAttr() { }
-    wxTreeItemAttr(const wxColour& colText,
-                   const wxColour& colBack,
-                   const wxFont& font)
-        : m_colText(colText), m_colBack(colBack), m_font(font) { }
-
-    // setters
-    void SetTextColour(const wxColour& colText) { m_colText = colText; }
-    void SetBackgroundColour(const wxColour& colBack) { m_colBack = colBack; }
-    void SetFont(const wxFont& font) { m_font = font; }
-
-    // accessors
-    bool HasTextColour() const { return m_colText.IsOk(); }
-    bool HasBackgroundColour() const { return m_colBack.IsOk(); }
-    bool HasFont() const { return m_font.IsOk(); }
-
-    const wxColour& GetTextColour() const { return m_colText; }
-    const wxColour& GetBackgroundColour() const { return m_colBack; }
-    const wxFont& GetFont() const { return m_font; }
-
-private:
-    wxColour m_colText,
-             m_colBack;
-    wxFont   m_font;
-};
-
-// ----------------------------------------------------------------------------
 // wxTreeEvent is a special class for all events associated with tree controls
 //
 // NB: note that not all accessors make sense for all events, see the event

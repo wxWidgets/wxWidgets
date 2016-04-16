@@ -84,7 +84,7 @@ private:
 
     virtual wxString OnGetItemText(long item, long column) const wxOVERRIDE;
     virtual int OnGetItemColumnImage(long item, long column) const wxOVERRIDE;
-    virtual wxListItemAttr *OnGetItemAttr(long item) const wxOVERRIDE;
+    virtual wxItemAttr *OnGetItemAttr(long item) const wxOVERRIDE;
 
     long m_updated;
 
