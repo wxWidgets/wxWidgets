@@ -36,6 +36,16 @@ public:
                const wxFont& font);
 
     /**
+        Compare two item attributes for equality.
+    */
+    bool operator==(const wxItemAttr& other) const;
+
+    /**
+        Compare two item attributes for inequality.
+    */
+    bool operator!=(const wxItemAttr& other) const;
+
+    /**
         Returns the currently set background colour.
     */
     const wxColour& GetBackgroundColour() const;

@@ -28,6 +28,17 @@ public:
 
     // default copy ctor, assignment operator and dtor are ok
 
+    bool operator==(const wxItemAttr& other) const
+    {
+        return m_colText == other.m_colText &&
+               m_colBack == other.m_colBack &&
+               m_font == other.m_font;
+    }
+
+    bool operator!=(const wxItemAttr& other) const
+    {
+        return !(*this == other);
+    }
 
     // setters
     void SetTextColour(const wxColour& colText) { m_colText = colText; }
