@@ -68,6 +68,7 @@ WIDGETS_OBJECTS =  \
 	widgets_filepicker.o \
 	widgets_fontpicker.o \
 	widgets_gauge.o \
+	widgets_headerctrl.o \
 	widgets_hyperlnk.o \
 	widgets_itemcontainer.o \
 	widgets_listbox.o \
@@ -163,6 +164,9 @@ widgets_fontpicker.o: ./fontpicker.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 widgets_gauge.o: ./gauge.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
+
+widgets_headerctrl.o: ./headerctrl.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 widgets_hyperlnk.o: ./hyperlnk.cpp

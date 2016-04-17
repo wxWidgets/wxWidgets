@@ -51,6 +51,7 @@ WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_filepicker.obj \
 	$(OBJS)\widgets_fontpicker.obj \
 	$(OBJS)\widgets_gauge.obj \
+	$(OBJS)\widgets_headerctrl.obj \
 	$(OBJS)\widgets_hyperlnk.obj \
 	$(OBJS)\widgets_itemcontainer.obj \
 	$(OBJS)\widgets_listbox.obj \
@@ -309,6 +310,9 @@ $(OBJS)\widgets_fontpicker.obj: .\fontpicker.cpp
 
 $(OBJS)\widgets_gauge.obj: .\gauge.cpp
 	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) .\gauge.cpp
+
+$(OBJS)\widgets_headerctrl.obj: .\headerctrl.cpp
+	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) .\headerctrl.cpp
 
 $(OBJS)\widgets_hyperlnk.obj: .\hyperlnk.cpp
 	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) .\hyperlnk.cpp
