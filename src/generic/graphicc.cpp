@@ -1765,9 +1765,6 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
     m_width = sz.x;
     m_height = sz.y;
 
-    // Store transformation settings of the underlying source context.
-    if ( m_context )
-        cairo_get_matrix(m_context, &m_internalTransform);
     // Transfer transformation settings from source DC to Cairo context.
     ApplyTransformFromDC(dc);
 #endif
@@ -1794,9 +1791,6 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 #ifdef __WXGTK3__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
     Init(cr ? cairo_reference(cr) : NULL);
-    // Store transformation settings of the underlying source context.
-    if ( m_context )
-        cairo_get_matrix(m_context, &m_internalTransform);
 #elif defined __WXGTK20__
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
@@ -1958,9 +1952,6 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 #ifdef __WXGTK3__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
     Init(cr ? cairo_reference(cr) : NULL);
-    // Store transformation settings of the underlying source context.
-    if ( m_context )
-        cairo_get_matrix(m_context, &m_internalTransform);
 #elif defined __WXGTK20__
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
@@ -2092,9 +2083,6 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
     Init( cairo_reference(context) );
     m_width = 0;
     m_height = 0;
-    // Store transformation settings of the underlying source context.
-    if ( m_context )
-        cairo_get_matrix(m_context, &m_internalTransform);
 }
 
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
@@ -2186,11 +2174,18 @@ wxCairoContext::~wxCairoContext()
 void wxCairoContext::Init(cairo_t *context)
 {
     m_context = context;
-    cairo_matrix_init_identity(&m_internalTransform);
     if ( m_context )
     {
+        // Store initial transformation settings
+        // of the underlying source context.
+        cairo_get_matrix(m_context, &m_internalTransform);
+
         PushState();
         PushState();
+    }
+    else
+    {
+        cairo_matrix_init_identity(&m_internalTransform);
     }
 }
 
