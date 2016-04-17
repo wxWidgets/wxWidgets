@@ -9,7 +9,7 @@
 /**
     @class wxItemAttr
 
-    Represents the attributes (color, font, ...) of an item of a control with
+    Represents the attributes (colour, font, ...) of an item of a control with
     multiple items such as e.g. wxListCtrl.
 
     @library{wxcore}
@@ -29,14 +29,14 @@ public:
 
     /**
         Construct a wxItemAttr with the specified foreground and
-        background colors and font.
+        background colours and font.
     */
     wxItemAttr(const wxColour& colText,
                const wxColour& colBack,
                const wxFont& font);
 
     /**
-        Returns the currently set background color.
+        Returns the currently set background colour.
     */
     const wxColour& GetBackgroundColour() const;
 
@@ -46,12 +46,12 @@ public:
     const wxFont& GetFont() const;
 
     /**
-        Returns the currently set text color.
+        Returns the currently set text colour.
     */
     const wxColour& GetTextColour() const;
 
     /**
-        Returns @true if the currently set background color is valid.
+        Returns @true if the currently set background colour is valid.
     */
     bool HasBackgroundColour() const;
 
@@ -68,7 +68,7 @@ public:
     bool HasFont() const;
 
     /**
-        Returns @true if the currently set text color is valid.
+        Returns @true if the currently set text colour is valid.
     */
     bool HasTextColour() const;
 
@@ -78,7 +78,7 @@ public:
     bool IsDefault() const;
 
     /**
-        Sets a new background color.
+        Sets a new background colour.
     */
     void SetBackgroundColour(const wxColour& colour);
 
@@ -88,7 +88,7 @@ public:
     void SetFont(const wxFont& font);
 
     /**
-        Sets a new text color.
+        Sets a new text colour.
     */
     void SetTextColour(const wxColour& colour);
 };
