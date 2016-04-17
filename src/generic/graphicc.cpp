@@ -2134,7 +2134,7 @@ wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer) :
     m_mswSurface = NULL;
     m_mswStateSavedDC = 0;
 #endif // __WXMSW__
-    m_context = NULL;
+    Init(NULL);
     m_width = 0;
     m_height = 0;
 }
