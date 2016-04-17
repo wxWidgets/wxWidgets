@@ -37,6 +37,7 @@
 
 #include "wx/msw/wrapcctl.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/customdraw.h"
 
 #ifndef HDM_SETBITMAPMARGIN
     #define HDM_SETBITMAPMARGIN 0x1234
@@ -49,6 +50,36 @@
 
 // from src/msw/listctrl.cpp
 extern int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick);
+
+// ----------------------------------------------------------------------------
+// wxMSWHeaderCtrlCustomDraw: our custom draw helper
+// ----------------------------------------------------------------------------
+
+class wxMSWHeaderCtrlCustomDraw : public wxMSWImpl::CustomDraw
+{
+public:
+    wxMSWHeaderCtrlCustomDraw()
+    {
+    }
+
+    // Make this field public to let wxHeaderCtrl update it directly when its
+    // attributes change.
+    wxItemAttr m_attr;
+
+private:
+    virtual bool HasCustomDrawnItems() const wxOVERRIDE
+    {
+        // We only exist if the header does need to be custom drawn.
+        return true;
+    }
+
+    virtual const wxItemAttr*
+    GetItemAttr(DWORD_PTR WXUNUSED(dwItemSpec)) const wxOVERRIDE
+    {
+        // We use the same attribute for all items for now.
+        return &m_attr;
+    }
+};
 
 // ============================================================================
 // wxHeaderCtrl implementation
@@ -64,6 +95,7 @@ void wxHeaderCtrl::Init()
     m_imageList = NULL;
     m_scrollOffset = 0;
     m_colBeingDragged = -1;
+    m_customDraw = NULL;
 }
 
 bool wxHeaderCtrl::Create(wxWindow *parent,
@@ -116,6 +148,7 @@ WXDWORD wxHeaderCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 wxHeaderCtrl::~wxHeaderCtrl()
 {
     delete m_imageList;
+    delete m_customDraw;
 }
 
 // ----------------------------------------------------------------------------
@@ -467,6 +500,73 @@ int wxHeaderCtrl::MSWFromNativeOrder(int order)
 }
 
 // ----------------------------------------------------------------------------
+// wxHeaderCtrl appearance
+// ----------------------------------------------------------------------------
+
+wxMSWHeaderCtrlCustomDraw* wxHeaderCtrl::GetCustomDraw()
+{
+    // There is no need to make the control custom drawn just because it has a
+    // custom font, the native control handles the font just fine on its own,
+    // so if our custom colours were reset, don't bother with custom drawing
+    // any longer.
+    if ( !m_hasBgCol && !m_hasFgCol )
+    {
+        if ( m_customDraw )
+        {
+            delete m_customDraw;
+            m_customDraw = NULL;
+        }
+
+        return NULL;
+    }
+
+    // We do have at least one custom colour, so enable custom drawing.
+    if ( !m_customDraw )
+        m_customDraw = new wxMSWHeaderCtrlCustomDraw();
+
+    return m_customDraw;
+}
+
+bool wxHeaderCtrl::SetBackgroundColour(const wxColour& colour)
+{
+    if ( !wxHeaderCtrlBase::SetBackgroundColour(colour) )
+        return false;
+
+    if ( wxMSWHeaderCtrlCustomDraw* customDraw = GetCustomDraw() )
+    {
+        customDraw->m_attr.SetBackgroundColour(colour);
+    }
+
+    return true;
+}
+
+bool wxHeaderCtrl::SetForegroundColour(const wxColour& colour)
+{
+    if ( !wxHeaderCtrlBase::SetForegroundColour(colour) )
+        return false;
+
+    if ( wxMSWHeaderCtrlCustomDraw* customDraw = GetCustomDraw() )
+    {
+        customDraw->m_attr.SetTextColour(colour);
+    }
+
+    return true;
+}
+
+bool wxHeaderCtrl::SetFont(const wxFont& font)
+{
+    if ( !wxHeaderCtrlBase::SetFont(font) )
+        return false;
+
+    if ( wxMSWHeaderCtrlCustomDraw* customDraw = GetCustomDraw() )
+    {
+        customDraw->m_attr.SetFont(font);
+    }
+
+    return true;
+}
+
+// ----------------------------------------------------------------------------
 // wxHeaderCtrl events
 // ----------------------------------------------------------------------------
 
@@ -669,6 +769,18 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             // Dragging the column was cancelled.
             m_colBeingDragged = -1;
+            break;
+
+        // other events
+        // ------------
+
+        case NM_CUSTOMDRAW:
+            if ( m_customDraw )
+            {
+                *result = m_customDraw->HandleCustomDraw(lParam);
+                if ( *result != CDRF_DODEFAULT )
+                    return true;
+            }
             break;
     }
 

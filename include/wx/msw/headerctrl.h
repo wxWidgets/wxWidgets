@@ -12,6 +12,8 @@
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
+class wxMSWHeaderCtrlCustomDraw;
+
 // ----------------------------------------------------------------------------
 // wxHeaderCtrl
 // ----------------------------------------------------------------------------
@@ -45,7 +47,11 @@ public:
 
     virtual ~wxHeaderCtrl();
 
-    
+    // Override to implement colours support via custom drawing.
+    virtual bool SetBackgroundColour(const wxColour& colour) wxOVERRIDE;
+    virtual bool SetForegroundColour(const wxColour& colour) wxOVERRIDE;
+    virtual bool SetFont(const wxFont& font) wxOVERRIDE;
+
 protected:
     // override wxWindow methods which must be implemented by a new control
     virtual wxSize DoGetBestSize() const;
@@ -98,6 +104,10 @@ private:
     // mouse button
     wxEventType GetClickEventType(bool dblclk, int button);
 
+    // allocate m_customDraw if we need it or free it if it no longer is,
+    // return the pointer which can be used to update it if it's non-null
+    wxMSWHeaderCtrlCustomDraw* GetCustomDraw();
+
 
     // the number of columns in the control, including the hidden ones (not
     // taken into account by the native control, see comment in DoGetCount())
@@ -128,6 +138,10 @@ private:
 
     // actual column we are dragging or -1 if not dragging anything
     int m_colBeingDragged;
+
+    // the custom draw helper: initially NULL, created on demand, use
+    // GetCustomDraw() to do it
+    wxMSWHeaderCtrlCustomDraw *m_customDraw;
 
     wxDECLARE_NO_COPY_CLASS(wxHeaderCtrl);
 };

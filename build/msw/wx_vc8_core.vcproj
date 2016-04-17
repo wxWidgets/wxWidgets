@@ -1431,6 +1431,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\customdraw.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\data.cpp"
 				>
 			</File>

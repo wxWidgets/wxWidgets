@@ -1798,6 +1798,7 @@ MSW_SRC =
     src/msw/combo.cpp
     src/msw/combobox.cpp
     src/msw/control.cpp
+    src/msw/customdraw.cpp
     src/msw/dialog.cpp
     src/msw/dirdlg.cpp
     src/msw/dragimag.cpp
