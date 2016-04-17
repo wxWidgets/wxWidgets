@@ -39,6 +39,9 @@ public:
     bool HasBackgroundColour() const { return m_colBack.IsOk(); }
     bool HasFont() const { return m_font.IsOk(); }
 
+    bool HasColours() const { return HasTextColour() || HasBackgroundColour(); }
+    bool IsDefault() const { return !HasColours() && !HasFont(); }
+
     const wxColour& GetTextColour() const { return m_colText; }
     const wxColour& GetBackgroundColour() const { return m_colBack; }
     const wxFont& GetFont() const { return m_font; }

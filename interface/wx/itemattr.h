@@ -17,7 +17,7 @@
 
     @see @ref overview_listctrl
 
-    @since 3.1.1 (previous versions had the identical wxListItemAttr class)
+    @since 3.1.1 (previous versions had a similar wxListItemAttr class)
 */
 class wxItemAttr
 {
@@ -56,6 +56,13 @@ public:
     bool HasBackgroundColour() const;
 
     /**
+        Returns @true if either text or background colour is set.
+
+        @see HasBackgroundColour(), HasTextColour()
+    */
+    bool HasColours() const;
+
+    /**
         Returns @true if the currently set font is valid.
     */
     bool HasFont() const;
@@ -64,6 +71,11 @@ public:
         Returns @true if the currently set text color is valid.
     */
     bool HasTextColour() const;
+
+    /**
+        Returns @true if this object has no custom attributes set.
+     */
+    bool IsDefault() const;
 
     /**
         Sets a new background color.
