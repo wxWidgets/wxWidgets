@@ -1436,11 +1436,11 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
 
             wxAlphaPixelData::Iterator p(pixData);
-            for (int y=0; y<m_height; y++)
+            for (int y=0; y < pixData.GetHeight(); y++)
             {
                 wxAlphaPixelData::Iterator rowStart = p;
                 wxUint32* const rowStartDst = data;
-                for (int x=0; x<m_width; x++)
+                for (int x=0; x < pixData.GetWidth(); x++)
                 {
                     // Each pixel in CAIRO_FORMAT_ARGB32 is a 32-bit quantity,
                     // with alpha in the upper 8 bits, then red, then green, then
@@ -1477,16 +1477,15 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     }
     else  // no alpha
     {
-        wxNativePixelData
-            pixData(bmpSource, wxPoint(0, 0), wxSize(m_width, m_height));
+        wxNativePixelData pixData(bmpSource);
         wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
 
         wxNativePixelData::Iterator p(pixData);
-        for (int y=0; y<m_height; y++)
+        for (int y=0; y < pixData.GetHeight(); y++)
         {
             wxNativePixelData::Iterator rowStart = p;
             wxUint32* const rowStartDst = data;
-            for (int x=0; x<m_width; x++)
+            for (int x=0; x < pixData.GetWidth(); x++)
             {
                 // Each pixel in CAIRO_FORMAT_RGB24 is a 32-bit quantity, with
                 // the upper 8 bits unused. Red, Green, and Blue are stored in
@@ -1514,16 +1513,15 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     {
         wxBitmap bmpMask = bmp.GetMask()->GetBitmap();
         data = (wxUint32*)m_buffer;
-        wxNativePixelData
-            pixData(bmpMask, wxPoint(0, 0), wxSize(m_width, m_height));
+        wxNativePixelData pixData(bmpMask);
         wxCHECK_RET( pixData, wxT("Failed to gain raw access to mask data."));
 
         wxNativePixelData::Iterator p(pixData);
-        for (int y=0; y<m_height; y++)
+        for (int y=0; y < pixData.GetHeight(); y++)
         {
             wxNativePixelData::Iterator rowStart = p;
             wxUint32* const rowStartDst = data;
-            for (int x=0; x<m_width; x++)
+            for (int x=0; x < pixData.GetWidth(); x++)
             {
                 if (p.Red()+p.Green()+p.Blue() == 0)
                     *data = 0;
