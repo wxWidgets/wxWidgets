@@ -42,6 +42,7 @@
 #include "wx/vector.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/customdraw.h"
 #include "wx/msw/private/keyboard.h"
 
 // Currently gcc doesn't define NMLVFINDITEM, and DMC only defines
@@ -229,6 +230,34 @@ public:
     wxDECLARE_NO_COPY_CLASS(wxMSWListItemData);
 };
 
+// wxMSWListHeaderCustomDraw: custom draw helper for the header
+class wxMSWListHeaderCustomDraw : public wxMSWImpl::CustomDraw
+{
+public:
+    wxMSWListHeaderCustomDraw()
+    {
+    }
+
+    // Make this field public to let wxListCtrl update it directly when its
+    // header attributes change.
+    wxItemAttr m_attr;
+
+private:
+    virtual bool HasCustomDrawnItems() const wxOVERRIDE
+    {
+        // We only exist if the header does need to be custom drawn.
+        return true;
+    }
+
+    virtual const wxItemAttr*
+    GetItemAttr(DWORD_PTR WXUNUSED(dwItemSpec)) const wxOVERRIDE
+    {
+        // We use the same attribute for all items for now.
+        return &m_attr;
+    }
+};
+
+
 wxBEGIN_EVENT_TABLE(wxListCtrl, wxListCtrlBase)
     EVT_PAINT(wxListCtrl::OnPaint)
     EVT_CHAR_HOOK(wxListCtrl::OnCharHook)
@@ -255,6 +284,8 @@ void wxListCtrl::Init()
     m_textCtrl = NULL;
 
     m_hasAnyAttr = false;
+
+    m_headerCustomDraw = NULL;
 }
 
 bool wxListCtrl::Create(wxWindow *parent,
@@ -434,6 +465,8 @@ wxListCtrl::~wxListCtrl()
         delete m_imageListSmall;
     if (m_ownsImageListState)
         delete m_imageListState;
+
+    delete m_headerCustomDraw;
 }
 
 // ----------------------------------------------------------------------------
@@ -516,6 +549,68 @@ bool wxListCtrl::SetBackgroundColour(const wxColour& col)
         wxLogLastError(wxS("ListView_SetBkColor()"));
     if ( !ListView_SetTextBkColor(GetHwnd(), color) )
         wxLogLastError(wxS("ListView_SetTextBkColor()"));
+
+    return true;
+}
+
+bool wxListCtrl::SetHeaderAttr(const wxItemAttr& attr)
+{
+    // We need to propagate the change of the font to the native header window
+    // as it also affects its layout.
+    bool fontChanged;
+
+    // Start or stop custom drawing the header.
+    if ( attr.IsDefault() )
+    {
+        if ( !m_headerCustomDraw )
+        {
+            // Nothing changed, skip refreshing the control below.
+            return true;
+        }
+
+        fontChanged = m_headerCustomDraw->m_attr.HasFont();
+
+        delete m_headerCustomDraw;
+        m_headerCustomDraw = NULL;
+    }
+    else // We do have custom attributes.
+    {
+        if ( !m_headerCustomDraw )
+            m_headerCustomDraw = new wxMSWListHeaderCustomDraw();
+
+        if ( m_headerCustomDraw->m_attr == attr )
+        {
+            // As above, skip refresh.
+            return true;
+        }
+
+        fontChanged = attr.GetFont() != m_headerCustomDraw->m_attr.GetFont();
+
+        m_headerCustomDraw->m_attr = attr;
+    }
+
+    if ( HWND hwndHdr = ListView_GetHeader(GetHwnd()) )
+    {
+        if ( fontChanged )
+        {
+            // Don't just reset the font if no font is specified, as the header
+            // uses the same font as the listview control and not the ugly
+            // default GUI font by default.
+            const wxFont& font = attr.HasFont() ? attr.GetFont() : GetFont();
+
+            // We need to tell the header about its new font to let it compute
+            // its new height.
+            ::SendMessage(hwndHdr, WM_SETFONT,
+                          (WPARAM)GetHfontOf(font), MAKELPARAM(TRUE, 0));
+        }
+
+        // Refreshing the listview makes it notice the change in height of its
+        // header and redraws it too. We probably could do something less than
+        // a full refresh, but it doesn't seem to be worth it, the header
+        // attributes won't be changed that often, so keep it simple for now.
+        Refresh();
+    }
+    //else: header not shown or not in report view?
 
     return true;
 }
@@ -2084,6 +2179,15 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 // reliably) but ignoring all these messages does fix it and
                 // doesn't seem to have any negative consequences
                 return true;
+
+            case NM_CUSTOMDRAW:
+                if ( m_headerCustomDraw )
+                {
+                    *result = m_headerCustomDraw->HandleCustomDraw(lParam);
+                    if ( *result != CDRF_DODEFAULT )
+                        return true;
+                }
+                wxFALLTHROUGH;
 
             default:
                 ignore = true;

@@ -1053,6 +1053,25 @@ public:
     bool SetColumnsOrder(const wxArrayInt& orders);
 
     /**
+        Change the font and the colours used for the list control header.
+
+        This method can be used to change the appearance of the header shown by
+        the control in report mode (unless @c wxLC_NO_HEADER style is used).
+
+        Currently it is implemented only for wxMSW and does nothing in the
+        other ports.
+
+        @param attr The object containing the font and text and background
+            colours to use. It may be default, i.e. not specify any custom font
+            nor colours, to reset any previously set custom attribute.
+        @return @true if the attributes have been updated or @false if this is
+            not supported by the current platform.
+
+        @since 3.1.1
+    */
+    bool SetHeaderAttr(const wxItemAttr& attr);
+
+    /**
         Sets the image list associated with the control.
 
         @a which is one of @c wxIMAGE_LIST_NORMAL, @c wxIMAGE_LIST_SMALL,

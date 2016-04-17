@@ -411,6 +411,9 @@ public:
     void SetAlternateRowColour(const wxColour& colour);
     wxColour GetAlternateRowColour() const { return m_alternateRowColour.GetBackgroundColour(); }
 
+    // Header attributes support: only implemented in wxMSW currently.
+    virtual bool SetHeaderAttr(const wxItemAttr& WXUNUSED(attr)) { return false; }
+
     // Checkboxes support: only implemented in wxMSW currently.
     virtual bool HasCheckboxes() const { return false; }
     virtual bool EnableCheckboxes(bool WXUNUSED(enable) = true) { return false; }
