@@ -57,18 +57,22 @@
 #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/dc.h"
+    #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
+    #include "wx/image.h"
+    #include "wx/module.h"
+    #include "wx/window.h"
+    #include "wx/msw/private.h"
+#endif // WX_PRECOMP
+
 #include "wx/graphics.h"
-#include "wx/dc.h"
-#include "wx/dcclient.h"
-#include "wx/dcmemory.h"
 #include "wx/dynlib.h"
-#include "wx/image.h"
-#include "wx/module.h"
 #include "wx/msw/private/comptr.h"
 #include "wx/private/graphics.h"
 #include "wx/stack.h"
 #include "wx/sharedptr.h"
-#include "wx/window.h"
 
 // This must be the last header included to only affect the DEFINE_GUID()
 // occurrences below but not any GUIDs declared in the standard files included
