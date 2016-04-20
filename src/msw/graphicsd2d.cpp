@@ -2960,6 +2960,9 @@ wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dF
     m_renderTargetHolder(new wxD2DHwndRenderTargetResourceHolder(hwnd, direct2dFactory))
 #endif
 {
+    RECT r = wxGetWindowRect(hwnd);
+    m_width = r.right - r.left;
+    m_height = r.bottom - r.top;
     Init();
 }
 
@@ -2968,6 +2971,8 @@ wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dF
     wxGraphicsContext(renderer), m_direct2dFactory(direct2dFactory),
     m_renderTargetHolder(new wxD2DDCRenderTargetResourceHolder(direct2dFactory, hdc, dcSize, alphaMode))
 {
+    m_width = dcSize.GetWidth();
+    m_height = dcSize.GetHeight();
     Init();
 }
 
@@ -2976,6 +2981,8 @@ wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dF
     wxGraphicsContext(renderer), m_direct2dFactory(direct2dFactory),
     m_renderTargetHolder(new wxD2DImageRenderTargetResourceHolder(&image, direct2dFactory))
 {
+    m_width = image.GetWidth();
+    m_height = image.GetHeight();
     Init();
 }
 #endif // wxUSE_IMAGE
@@ -2984,6 +2991,8 @@ wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dF
     wxGraphicsContext(renderer), m_direct2dFactory(direct2dFactory)
 {
     m_renderTargetHolder = *((wxSharedPtr<wxD2DRenderTargetResourceHolder>*)nativeContext);
+    m_width = 0;
+    m_height = 0;
     Init();
 }
 
@@ -3626,21 +3635,15 @@ wxD2DRenderer::~wxD2DRenderer()
 
 wxGraphicsContext* wxD2DRenderer::CreateContext(const wxWindowDC& dc)
 {
-    int width, height;
-    dc.GetSize(&width, &height);
-
-    return new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), wxSize(width, height));
+    return new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), dc.GetSize());
 }
 
 wxGraphicsContext* wxD2DRenderer::CreateContext(const wxMemoryDC& dc)
 {
-    int width, height;
-    dc.GetSize(&width, &height);
-
     wxBitmap bmp = dc.GetSelectedBitmap();
     wxASSERT_MSG( bmp.IsOk(), wxS("Should select a bitmap before creating wxGraphicsContext") );
 
-    return new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), wxSize(width, height),
+    return new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), dc.GetSize(),
                             bmp.HasAlpha() ? D2D1_ALPHA_MODE_PREMULTIPLIED : D2D1_ALPHA_MODE_IGNORE);
 }
 
