@@ -847,20 +847,20 @@ void MyFrame::OnUpdateToggleMultiSel(wxUpdateUIEvent& event)
 
 void MyFrame::OnToggleCheckboxes(wxCommandEvent& WXUNUSED(event))
 {
-    if ( !m_listCtrl->EnableCheckboxes(!m_listCtrl->HasCheckboxes()) )
+    if ( !m_listCtrl->EnableCheckBoxes(!m_listCtrl->HasCheckBoxes()) )
     {
         wxLogMessage("Failed to toggle checkboxes (not supported?)");
     }
     else
     {
         wxLogMessage("Checkboxes are now %s",
-                     m_listCtrl->HasCheckboxes() ? "enabled" : "disabled");
+                     m_listCtrl->HasCheckBoxes() ? "enabled" : "disabled");
     }
 }
 
 void MyFrame::OnUpdateToggleCheckboxes(wxUpdateUIEvent& event)
 {
-    bool cbEnabled = m_listCtrl->HasCheckboxes();
+    bool cbEnabled = m_listCtrl->HasCheckBoxes();
     event.Check(cbEnabled);
     GetMenuBar()->Enable(LIST_TOGGLE_CHECKBOX, cbEnabled);
     GetMenuBar()->Enable(LIST_GET_CHECKBOX, cbEnabled);

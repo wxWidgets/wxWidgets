@@ -1230,11 +1230,11 @@ public:
     /**
         Returns true if checkboxes are enabled for list items.
 
-        @see EnableCheckboxes()
+        @see EnableCheckBoxes()
 
         @since 3.1.0
     */
-    bool HasCheckboxes() const;
+    bool HasCheckBoxes() const;
 
     /**
         Enable or disable checkboxes for list items.
@@ -1244,7 +1244,7 @@ public:
 
         @since 3.1.0
     */
-    bool EnableCheckboxes(bool enable = true);
+    bool EnableCheckBoxes(bool enable = true);
 
     /**
         Return true if the checkbox for the given wxListItem is checked.
@@ -1261,7 +1261,7 @@ public:
         Check or uncheck a wxListItem in a control using checkboxes.
 
         This method only works if checkboxes support had been successfully
-        enabled using EnableCheckboxes().
+        enabled using EnableCheckBoxes().
 
         @param item Item (zero-based) index.
         @param check If @true, check the item, otherwise uncheck.

@@ -641,8 +641,8 @@ public:
     bool GetItemPosition( long item, wxPoint& pos ) const;
     int GetSelectedItemCount() const;
 
-    bool HasCheckboxes() const;
-    bool EnableCheckboxes(bool enable = true);
+    bool HasCheckBoxes() const;
+    bool EnableCheckBoxes(bool enable = true);
     bool IsItemChecked(long item) const;
     void CheckItem(long item, bool check);
 
@@ -789,7 +789,7 @@ protected:
            m_lineBeforeLastClicked,
            m_lineSelectSingleOnUp;
 
-    bool m_hasCheckboxes;
+    bool m_hasCheckBoxes;
 
 protected:
     wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE { return GetParent(); }

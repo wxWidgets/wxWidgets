@@ -797,7 +797,7 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     x += 2;
 #endif
 
-    if ( m_owner->HasCheckboxes() )
+    if ( m_owner->HasCheckBoxes() )
     {
         wxSize cbSize = wxRendererNative::Get().GetCheckBoxSize(m_owner);
         int yOffset = (rect.height - cbSize.GetHeight()) / 2;
@@ -820,7 +820,7 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         wxListItemData *item = node->GetData();
 
         int width = m_owner->GetColumnWidth(col);
-        if (col == 0 && m_owner->HasCheckboxes())
+        if (col == 0 && m_owner->HasCheckBoxes())
             width -= x;
         int xOld = x;
         x += width;
@@ -1609,7 +1609,7 @@ void wxListMainWindow::Init()
     m_lineSelectSingleOnUp =
     m_lineBeforeLastClicked = (size_t)-1;
 
-    m_hasCheckboxes = false;
+    m_hasCheckBoxes = false;
 }
 
 wxListMainWindow::wxListMainWindow()
@@ -3703,14 +3703,14 @@ bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos) const
 // checkboxes
 // ----------------------------------------------------------------------------
 
-bool wxListMainWindow::HasCheckboxes() const
+bool wxListMainWindow::HasCheckBoxes() const
 {
-    return m_hasCheckboxes;
+    return m_hasCheckBoxes;
 }
 
-bool wxListMainWindow::EnableCheckboxes(bool enable)
+bool wxListMainWindow::EnableCheckBoxes(bool enable)
 {
-    m_hasCheckboxes = enable;
+    m_hasCheckBoxes = enable;
 
     m_dirty = true;
     m_headerWidth = 0;
@@ -3738,7 +3738,7 @@ bool wxListMainWindow::IsItemChecked(long item) const
 
 bool wxListMainWindow::IsInsideCheckbox(long item, int x, int y)
 {
-    if ( HasCheckboxes() )
+    if ( HasCheckBoxes() )
     {
         wxRect lineRect = GetLineRect(item);
         wxSize cbSize = wxRendererNative::Get().GetCheckBoxSize(this);
@@ -4769,20 +4769,20 @@ void wxGenericListCtrl::OnScroll(wxScrollWinEvent& event)
     event.Skip();
 }
 
-bool wxGenericListCtrl::HasCheckboxes() const
+bool wxGenericListCtrl::HasCheckBoxes() const
 {
     if (!InReportView())
         return false;
 
-    return m_mainWin->HasCheckboxes();
+    return m_mainWin->HasCheckBoxes();
 }
 
-bool wxGenericListCtrl::EnableCheckboxes(bool enable)
+bool wxGenericListCtrl::EnableCheckBoxes(bool enable)
 {
     if (!InReportView())
         return false;
 
-    return m_mainWin->EnableCheckboxes(enable);
+    return m_mainWin->EnableCheckBoxes(enable);
 }
 
 void wxGenericListCtrl::CheckItem(long item, bool state)

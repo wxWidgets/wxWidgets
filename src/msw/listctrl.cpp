@@ -1211,13 +1211,13 @@ wxFont wxListCtrl::GetItemFont( long item ) const
     return f;
 }
 
-bool wxListCtrl::HasCheckboxes() const
+bool wxListCtrl::HasCheckBoxes() const
 {
     const DWORD currStyle = ListView_GetExtendedListViewStyle(GetHwnd());
     return (currStyle & LVS_EX_CHECKBOXES) != 0;
 }
 
-bool wxListCtrl::EnableCheckboxes(bool enable)
+bool wxListCtrl::EnableCheckBoxes(bool enable)
 {
     (void)ListView_SetExtendedListViewStyleEx(GetHwnd(), LVS_EX_CHECKBOXES,
                                               enable ? LVS_EX_CHECKBOXES : 0);

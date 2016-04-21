@@ -55,6 +55,13 @@ Changes in behaviour which may result in build errors
 3.1.1: (not released yet)
 ----------------------------
 
+INCOMPATIBLE CHANGES SINCE 3.1.0:
+
+- wxListCtrl::HasCheckboxes() and EnableCheckboxes(), which were added in
+  3.1.0, have been renamed to HasCheckBoxes and EnableCheckBoxes respectively
+  for consistency with wxCheckBox naming.
+
+
 All:
 
 - Add support for the micro version (third component) to OS and toolkit version
