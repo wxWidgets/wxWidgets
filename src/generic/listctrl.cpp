@@ -2579,7 +2579,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         bool cmdModifierDown = event.CmdDown();
         if ( IsSingleSel() || !(cmdModifierDown || event.ShiftDown()) )
         {
-            if (IsInsideCheckbox(current, x, y))
+            if (IsInsideCheckBox(current, x, y))
             {
                 CheckItem(current, !IsItemChecked(current));
             }
@@ -3736,7 +3736,7 @@ bool wxListMainWindow::IsItemChecked(long item) const
     return line->IsChecked();
 }
 
-bool wxListMainWindow::IsInsideCheckbox(long item, int x, int y)
+bool wxListMainWindow::IsInsideCheckBox(long item, int x, int y)
 {
     if ( HasCheckBoxes() )
     {
