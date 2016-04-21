@@ -41,6 +41,7 @@
 #include "wx/renderer.h"
 #include "wx/dcbuffer.h"
 #include "wx/icon.h"
+#include "wx/itemattr.h"
 #include "wx/list.h"
 #include "wx/listimpl.cpp"
 #include "wx/imaglist.h"
@@ -5200,6 +5201,24 @@ bool wxDataViewCtrl::IsSelected( const wxDataViewItem & item ) const
         return m_clientArea->IsRowSelected(row);
     }
     return false;
+}
+
+bool wxDataViewCtrl::SetHeaderAttr(const wxItemAttr& attr)
+{
+    if ( !m_headerArea )
+        return false;
+
+    // Call all functions unconditionally to reset the previously set
+    // attributes, if any.
+    m_headerArea->SetForegroundColour(attr.GetTextColour());
+    m_headerArea->SetBackgroundColour(attr.GetBackgroundColour());
+    m_headerArea->SetFont(attr.GetFont());
+
+    // If the font has changed, the size of the header might need to be
+    // updated.
+    Layout();
+
+    return true;
 }
 
 void wxDataViewCtrl::SetAlternateRowColour(const wxColour& colour)

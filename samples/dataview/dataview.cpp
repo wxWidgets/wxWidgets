@@ -32,6 +32,7 @@
 #include "wx/numdlg.h"
 #include "wx/spinctrl.h"
 #include "wx/imaglist.h"
+#include "wx/itemattr.h"
 #include "wx/notebook.h"
 
 #include "mymodels.h"
@@ -74,6 +75,7 @@ private:
     // event handlers
     void OnStyleChange(wxCommandEvent& event);
     void OnSetBackgroundColour(wxCommandEvent& event);
+    void OnCustomHeaderAttr(wxCommandEvent& event);
     void OnSetForegroundColour(wxCommandEvent& event);
     void OnIncIndent(wxCommandEvent& event);
     void OnDecIndent(wxCommandEvent& event);
@@ -290,6 +292,7 @@ enum
     ID_CLEARLOG = wxID_HIGHEST+1,
     ID_BACKGROUND_COLOUR,
     ID_FOREGROUND_COLOUR,
+    ID_CUSTOM_HEADER_ATTR,
     ID_STYLE_MENU,
     ID_INC_INDENT,
     ID_DEC_INDENT,
@@ -344,6 +347,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU( ID_FOREGROUND_COLOUR, MyFrame::OnSetForegroundColour )
     EVT_MENU( ID_BACKGROUND_COLOUR, MyFrame::OnSetBackgroundColour )
+    EVT_MENU( ID_CUSTOM_HEADER_ATTR, MyFrame::OnCustomHeaderAttr )
     EVT_MENU( ID_INC_INDENT, MyFrame::OnIncIndent )
     EVT_MENU( ID_DEC_INDENT, MyFrame::OnDecIndent )
 
@@ -431,6 +435,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     file_menu->Append(ID_CLEARLOG, "&Clear log\tCtrl-L");
     file_menu->Append(ID_FOREGROUND_COLOUR, "Set &foreground colour...\tCtrl-S");
     file_menu->Append(ID_BACKGROUND_COLOUR, "Set &background colour...\tCtrl-B");
+    file_menu->AppendCheckItem(ID_CUSTOM_HEADER_ATTR, "C&ustom header attributes");
     file_menu->Append(ID_STYLE_MENU, "&Style", style_menu);
     file_menu->Append(ID_INC_INDENT, "&Increase indent\tCtrl-I");
     file_menu->Append(ID_DEC_INDENT, "&Decrease indent\tShift-Ctrl-I");
@@ -786,6 +791,21 @@ void MyFrame::OnSetBackgroundColour(wxCommandEvent& WXUNUSED(event))
         dvc->SetBackgroundColour(col);
         Refresh();
     }
+}
+
+void MyFrame::OnCustomHeaderAttr(wxCommandEvent& event)
+{
+    wxItemAttr attr;
+    if ( event.IsChecked() )
+    {
+        attr.SetTextColour(*wxRED);
+        attr.SetFont(wxFontInfo(20).Bold());
+    }
+    //else: leave it as default to disable custom header attributes
+
+    wxDataViewCtrl * const dvc = m_ctrl[m_notebook->GetSelection()];
+    if ( !dvc->SetHeaderAttr(attr) )
+        wxLogMessage("Sorry, header attributes not supported on this platform");
 }
 
 void MyFrame::OnIncIndent(wxCommandEvent& WXUNUSED(event))
