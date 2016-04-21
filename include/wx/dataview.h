@@ -30,6 +30,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 class WXDLLIMPEXP_FWD_CORE wxItemAttr;
+class WXDLLIMPEXP_FWD_CORE wxHeaderCtrl;
 
 #if !(defined(__WXGTK20__) || defined(__WXOSX__) ) || defined(__WXUNIVERSAL__)
 // #if !(defined(__WXOSX__)) || defined(__WXUNIVERSAL__)

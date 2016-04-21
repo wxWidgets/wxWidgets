@@ -263,6 +263,11 @@ public:
     wxColour GetAlternateRowColour() const { return m_alternateRowColour; }
     void SetAlternateRowColour(const wxColour& colour);
 
+    // The returned pointer is null if the control has wxDV_NO_HEADER style.
+    //
+    // This method is only available in the generic versions.
+    wxHeaderCtrl* GenericGetHeader() const;
+
 protected:
     void EnsureVisibleRowCol( int row, int column );
 
