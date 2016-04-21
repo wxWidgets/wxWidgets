@@ -2688,13 +2688,9 @@ private:
 class wxD2DDCRenderTargetResourceHolder : public wxD2DRenderTargetResourceHolder
 {
 public:
-    wxD2DDCRenderTargetResourceHolder(ID2D1Factory* factory, HDC hdc, const wxSize dcSize, D2D1_ALPHA_MODE alphaMode) :
+    wxD2DDCRenderTargetResourceHolder(ID2D1Factory* factory, HDC hdc, D2D1_ALPHA_MODE alphaMode) :
         m_factory(factory), m_hdc(hdc), m_alphaMode(alphaMode)
     {
-        m_dcSize.left = 0;
-        m_dcSize.top = 0;
-        m_dcSize.right = dcSize.GetWidth();
-        m_dcSize.bottom = dcSize.GetHeight();
     }
 
 protected:
@@ -2710,7 +2706,14 @@ protected:
             &renderTarget);
         wxCHECK_HRESULT_RET(hr);
 
-        hr = renderTarget->BindDC(m_hdc, &m_dcSize);
+        // We want draw on the entire device area.
+        // GetClipBox() retrieves logical size of DC
+        // what is what we need to pass to BindDC.
+        RECT r;
+        int status = ::GetClipBox(m_hdc, &r);
+        wxCHECK_RET( status != ERROR, wxS("Error retrieving DC dimensions") );
+
+        hr = renderTarget->BindDC(m_hdc, &r);
         wxCHECK_HRESULT_RET(hr);
 
         m_nativeResource = renderTarget;
@@ -2719,7 +2722,6 @@ protected:
 private:
     ID2D1Factory* m_factory;
     HDC m_hdc;
-    RECT m_dcSize;
     D2D1_ALPHA_MODE m_alphaMode;
 };
 
@@ -2973,7 +2975,7 @@ wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dF
 wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, HDC hdc,
                            const wxSize& dcSize, D2D1_ALPHA_MODE alphaMode) :
     wxGraphicsContext(renderer), m_direct2dFactory(direct2dFactory),
-    m_renderTargetHolder(new wxD2DDCRenderTargetResourceHolder(direct2dFactory, hdc, dcSize, alphaMode))
+    m_renderTargetHolder(new wxD2DDCRenderTargetResourceHolder(direct2dFactory, hdc, alphaMode))
 {
     m_width = dcSize.GetWidth();
     m_height = dcSize.GetHeight();
