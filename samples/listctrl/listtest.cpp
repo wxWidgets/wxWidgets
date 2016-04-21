@@ -154,15 +154,15 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_MAC_USE_GENERIC, MyFrame::OnToggleMacUseGeneric)
 #endif // __WXOSX__
     EVT_MENU(LIST_FIND, MyFrame::OnFind)
-    EVT_MENU(LIST_TOGGLE_CHECKBOX, MyFrame::OnToggleItemCheckbox)
-    EVT_MENU(LIST_GET_CHECKBOX, MyFrame::OnGetItemCheckbox)
-    EVT_MENU(LIST_TOGGLE_CHECKBOXES, MyFrame::OnToggleCheckboxes)
+    EVT_MENU(LIST_TOGGLE_CHECKBOX, MyFrame::OnToggleItemCheckBox)
+    EVT_MENU(LIST_GET_CHECKBOX, MyFrame::OnGetItemCheckBox)
+    EVT_MENU(LIST_TOGGLE_CHECKBOXES, MyFrame::OnToggleCheckBoxes)
 
     EVT_UPDATE_UI(LIST_SHOW_COL_INFO, MyFrame::OnUpdateUIEnableInReport)
     EVT_UPDATE_UI(LIST_TOGGLE_HEADER, MyFrame::OnUpdateUIEnableInReport)
 
     EVT_UPDATE_UI(LIST_TOGGLE_MULTI_SEL, MyFrame::OnUpdateToggleMultiSel)
-    EVT_UPDATE_UI(LIST_TOGGLE_CHECKBOXES, MyFrame::OnUpdateToggleCheckboxes)
+    EVT_UPDATE_UI(LIST_TOGGLE_CHECKBOXES, MyFrame::OnUpdateToggleCheckBoxes)
     EVT_UPDATE_UI(LIST_TOGGLE_HEADER, MyFrame::OnUpdateToggleHeader)
     EVT_UPDATE_UI(LIST_ROW_LINES, MyFrame::OnUpdateRowLines)
 wxEND_EVENT_TABLE()
@@ -845,7 +845,7 @@ void MyFrame::OnUpdateToggleMultiSel(wxUpdateUIEvent& event)
      event.Check(!m_listCtrl->HasFlag(wxLC_SINGLE_SEL));
 }
 
-void MyFrame::OnToggleCheckboxes(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnToggleCheckBoxes(wxCommandEvent& WXUNUSED(event))
 {
     if ( !m_listCtrl->EnableCheckBoxes(!m_listCtrl->HasCheckBoxes()) )
     {
@@ -858,7 +858,7 @@ void MyFrame::OnToggleCheckboxes(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void MyFrame::OnUpdateToggleCheckboxes(wxUpdateUIEvent& event)
+void MyFrame::OnUpdateToggleCheckBoxes(wxUpdateUIEvent& event)
 {
     bool cbEnabled = m_listCtrl->HasCheckBoxes();
     event.Check(cbEnabled);
@@ -924,7 +924,7 @@ void MyFrame::OnEdit(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void MyFrame::OnToggleItemCheckbox(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnToggleItemCheckBox(wxCommandEvent& WXUNUSED(event))
 {
     long item = m_listCtrl->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     while (item != -1)
@@ -937,7 +937,7 @@ void MyFrame::OnToggleItemCheckbox(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void MyFrame::OnGetItemCheckbox(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnGetItemCheckBox(wxCommandEvent& WXUNUSED(event))
 {
     long item = m_listCtrl->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
     while (item != -1)
