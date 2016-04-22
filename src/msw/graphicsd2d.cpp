@@ -14,8 +14,6 @@
 // Minimum supported client: Windows 8 and Platform Update for Windows 7
 #define wxD2D_DEVICE_CONTEXT_SUPPORTED 0
 
-#include <list>
-
 // Ensure no previous defines interfere with the Direct2D API headers
 #undef GetHwnd
 
@@ -346,28 +344,28 @@ public:
 // A Direct2D resource manager handles the device-dependent
 // resource holders attached to it by requesting them to
 // release their resources when the API invalidates.
+// NOTE: We're using a list because we expect to have multiple
+// insertions but very rarely a traversal (if ever).
+WX_DECLARE_LIST(wxManagedResourceHolder, wxManagedResourceListType);
+#include <wx/listimpl.cpp>
+WX_DEFINE_LIST(wxManagedResourceListType);
+
 class wxD2DResourceManager: public wxD2DContextSupplier
 {
 public:
-    typedef wxManagedResourceHolder* ElementType;
-
-    // NOTE: We're using a list because we expect to have multiple
-    // insertions but very rarely a traversal (if ever).
-    typedef std::list<ElementType> ListType;
-
-    void RegisterResourceHolder(ElementType resourceHolder)
+    void RegisterResourceHolder(wxManagedResourceHolder* resourceHolder)
     {
         m_resources.push_back(resourceHolder);
     }
 
-    void UnregisterResourceHolder(ElementType resourceHolder)
+    void UnregisterResourceHolder(wxManagedResourceHolder* resourceHolder)
     {
         m_resources.remove(resourceHolder);
     }
 
     void ReleaseResources()
     {
-        ListType::iterator it;
+        wxManagedResourceListType::iterator it;
         for (it = m_resources.begin(); it != m_resources.end(); ++it)
         {
             (*it)->ReleaseResource();
@@ -390,7 +388,7 @@ public:
     }
 
 private:
-    ListType m_resources;
+    wxManagedResourceListType m_resources;
 };
 
 // A Direct2D resource holder manages device dependent resources
