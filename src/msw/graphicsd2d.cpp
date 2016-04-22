@@ -14,9 +14,6 @@
 // Minimum supported client: Windows 8 and Platform Update for Windows 7
 #define wxD2D_DEVICE_CONTEXT_SUPPORTED 0
 
-#include <algorithm>
-#include <cfloat>
-#include <cmath>
 #include <list>
 
 // Ensure no previous defines interfere with the Direct2D API headers
@@ -65,7 +62,8 @@
     #include "wx/module.h"
     #include "wx/window.h"
     #include "wx/msw/private.h"
-#endif // WX_PRECOMP
+    #include "wx/math.h"
+#endif // !WX_PRECOMP
 
 #include "wx/graphics.h"
 #include "wx/dynlib.h"
@@ -1171,8 +1169,8 @@ void wxD2DPathData::AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2, wx
 void wxD2DPathData::AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise)
 {
     wxPoint2DDouble center = wxPoint2DDouble(x, y);
-    wxPoint2DDouble start = wxPoint2DDouble(std::cos(startAngle) * r, std::sin(startAngle) * r);
-    wxPoint2DDouble end = wxPoint2DDouble(std::cos(endAngle) * r, std::sin(endAngle) * r);
+    wxPoint2DDouble start = wxPoint2DDouble(cos(startAngle) * r, sin(startAngle) * r);
+    wxPoint2DDouble end = wxPoint2DDouble(cos(endAngle) * r, sin(endAngle) * r);
 
     if (m_figureOpened)
     {
