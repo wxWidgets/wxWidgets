@@ -244,10 +244,10 @@ void wxListCtrlBase::EnableAlternateRowColours(bool enable)
     }
 }
 
-wxListItemAttr *wxListCtrlBase::OnGetItemAttr(long item) const
+wxItemAttr *wxListCtrlBase::OnGetItemAttr(long item) const
 {
     return (m_alternateRowColour.GetBackgroundColour().IsOk() && (item % 2))
-        ? wxConstCast(&m_alternateRowColour, wxListItemAttr)
+        ? wxConstCast(&m_alternateRowColour, wxItemAttr)
         : NULL; // no attributes by default
 }
 

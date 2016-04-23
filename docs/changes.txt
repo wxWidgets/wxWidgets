@@ -71,6 +71,8 @@ All (GUI):
 - Add support for wxSL_MIN_MAX_LABELS and wxSL_VALUE_LABEL to XRC (ousnius).
 - Update Scintilla to v3.6.3 (Paul Kulchenko).
 - Make wxDataViewCtrl::Expand() expand ancestors in native ports too.
+- Add wxDataViewCtrl::SetHeaderAttr().
+- Add wxListCtrl::SetHeaderAttr().
 
 wxGTK:
 

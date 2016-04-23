@@ -1181,6 +1181,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/systhemectrl.h
     wx/collheaderctrl.h
     wx/generic/collheaderctrl.h
+    wx/itemattr.h
 </set>
 
 <!-- ====================================================================== -->
@@ -1982,6 +1983,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/tglbtn.cpp
     src/msw/treectrl.cpp
     src/msw/systhemectrl.cpp
+    src/msw/customdraw.cpp
 </set>
 <set var="MSW_HDR" hints="files">
     wx/generic/clrpickerg.h

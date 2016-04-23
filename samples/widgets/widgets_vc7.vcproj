@@ -329,6 +329,9 @@
 				RelativePath=".\gauge.cpp">
 			</File>
 			<File
+				RelativePath=".\headerctrl.cpp">
+			</File>
+			<File
 				RelativePath=".\hyperlnk.cpp">
 			</File>
 			<File

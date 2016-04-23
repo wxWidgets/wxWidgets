@@ -1427,6 +1427,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\customdraw.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\data.cpp"
 				>
 			</File>
@@ -3542,6 +3546,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\infobar.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\itemattr.h"
 				>
 			</File>
 			<File

@@ -279,7 +279,7 @@ public:
     virtual int OnGetItemColumnImage(long item, long column) const;
 
     // return the attribute for the given item and column (may return NULL if none)
-    virtual wxListItemAttr *OnGetItemColumnAttr(long item, long WXUNUSED(column)) const
+    virtual wxItemAttr *OnGetItemColumnAttr(long item, long WXUNUSED(column)) const
     {
         return OnGetItemAttr(item);
     }

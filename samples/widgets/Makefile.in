@@ -70,6 +70,7 @@ WIDGETS_OBJECTS =  \
 	widgets_filepicker.o \
 	widgets_fontpicker.o \
 	widgets_gauge.o \
+	widgets_headerctrl.o \
 	widgets_hyperlnk.o \
 	widgets_itemcontainer.o \
 	widgets_listbox.o \
@@ -264,6 +265,9 @@ widgets_fontpicker.o: $(srcdir)/fontpicker.cpp
 
 widgets_gauge.o: $(srcdir)/gauge.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/gauge.cpp
+
+widgets_headerctrl.o: $(srcdir)/headerctrl.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/headerctrl.cpp
 
 widgets_hyperlnk.o: $(srcdir)/hyperlnk.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/hyperlnk.cpp

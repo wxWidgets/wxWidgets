@@ -16,6 +16,7 @@
 #include "wx/gdicmn.h"
 #include "wx/event.h"
 #include "wx/control.h"
+#include "wx/itemattr.h"
 #include "wx/systhemectrl.h"
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
@@ -158,60 +159,10 @@ enum
     wxLIST_FIND_RIGHT
 };
 
-// ----------------------------------------------------------------------------
-// wxListItemAttr: a structure containing the visual attributes of an item
-// ----------------------------------------------------------------------------
-
-// TODO: this should be renamed to wxItemAttr or something general like this
-//       and used as base class for wxTextAttr which duplicates this class
-//       entirely currently
-class WXDLLIMPEXP_CORE wxListItemAttr
-{
-public:
-    // ctors
-    wxListItemAttr() { }
-    wxListItemAttr(const wxColour& colText,
-                   const wxColour& colBack,
-                   const wxFont& font)
-        : m_colText(colText), m_colBack(colBack), m_font(font)
-    {
-    }
-
-    // default copy ctor, assignment operator and dtor are ok
-
-
-    // setters
-    void SetTextColour(const wxColour& colText) { m_colText = colText; }
-    void SetBackgroundColour(const wxColour& colBack) { m_colBack = colBack; }
-    void SetFont(const wxFont& font) { m_font = font; }
-
-    // accessors
-    bool HasTextColour() const { return m_colText.IsOk(); }
-    bool HasBackgroundColour() const { return m_colBack.IsOk(); }
-    bool HasFont() const { return m_font.IsOk(); }
-
-    const wxColour& GetTextColour() const { return m_colText; }
-    const wxColour& GetBackgroundColour() const { return m_colBack; }
-    const wxFont& GetFont() const { return m_font; }
-
-
-    // this is almost like assignment operator except it doesn't overwrite the
-    // fields unset in the source attribute
-    void AssignFrom(const wxListItemAttr& source)
-    {
-        if ( source.HasTextColour() )
-            SetTextColour(source.GetTextColour());
-        if ( source.HasBackgroundColour() )
-            SetBackgroundColour(source.GetBackgroundColour());
-        if ( source.HasFont() )
-            SetFont(source.GetFont());
-    }
-
-private:
-    wxColour m_colText,
-             m_colBack;
-    wxFont   m_font;
-};
+// For compatibility, define the old name for this class. There is no need to
+// deprecate it as it doesn't cost us anything to keep this typedef, but the
+// new code should prefer to use the new wxItemAttr name.
+typedef wxItemAttr wxListItemAttr;
 
 // ----------------------------------------------------------------------------
 // wxListItem: the item or column info, used to exchange data with wxListCtrl
@@ -237,7 +188,7 @@ public:
     {
         // copy list item attributes
         if ( item.HasAttributes() )
-            m_attr = new wxListItemAttr(*item.GetAttributes());
+            m_attr = new wxItemAttr(*item.GetAttributes());
     }
 
     wxListItem& operator=(const wxListItem& item)
@@ -254,7 +205,7 @@ public:
             m_data = item.m_data;
             m_format = item.m_format;
             m_width = item.m_width;
-            m_attr = item.m_attr ? new wxListItemAttr(*item.m_attr) : NULL;
+            m_attr = item.m_attr ? new wxItemAttr(*item.m_attr) : NULL;
         }
 
         return *this;
@@ -310,7 +261,7 @@ public:
     int GetWidth() const { return m_width; }
     wxListColumnFormat GetAlign() const { return (wxListColumnFormat)m_format; }
 
-    wxListItemAttr *GetAttributes() const { return m_attr; }
+    wxItemAttr *GetAttributes() const { return m_attr; }
     bool HasAttributes() const { return m_attr != NULL; }
 
     wxColour GetTextColour() const
@@ -342,10 +293,10 @@ public:
 
 protected:
     // creates m_attr if we don't have it yet
-    wxListItemAttr& Attributes()
+    wxItemAttr& Attributes()
     {
         if ( !m_attr )
-            m_attr = new wxListItemAttr;
+            m_attr = new wxItemAttr;
 
         return *m_attr;
     }
@@ -364,7 +315,7 @@ protected:
         m_width = 0;
     }
 
-    wxListItemAttr *m_attr;     // optional pointer to the items style
+    wxItemAttr *m_attr;     // optional pointer to the items style
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxListItem);
@@ -443,7 +394,7 @@ public:
     virtual bool SetColumnWidth(int col, int width) = 0;
 
     // return the attribute for the item (may return NULL if none)
-    virtual wxListItemAttr *OnGetItemAttr(long item) const;
+    virtual wxItemAttr *OnGetItemAttr(long item) const;
 
     // Other miscellaneous accessors.
     // ------------------------------
@@ -460,6 +411,9 @@ public:
     void SetAlternateRowColour(const wxColour& colour);
     wxColour GetAlternateRowColour() const { return m_alternateRowColour.GetBackgroundColour(); }
 
+    // Header attributes support: only implemented in wxMSW currently.
+    virtual bool SetHeaderAttr(const wxItemAttr& WXUNUSED(attr)) { return false; }
+
     // Checkboxes support: only implemented in wxMSW currently.
     virtual bool HasCheckboxes() const { return false; }
     virtual bool EnableCheckboxes(bool WXUNUSED(enable) = true) { return false; }
@@ -475,7 +429,7 @@ protected:
 
 private:
     // user defined color to draw row lines, may be invalid
-    wxListItemAttr m_alternateRowColour;
+    wxItemAttr m_alternateRowColour;
 };
 
 // ----------------------------------------------------------------------------

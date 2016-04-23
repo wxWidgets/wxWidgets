@@ -137,6 +137,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_SET_FG_COL, MyFrame::OnSetFgColour)
     EVT_MENU(LIST_SET_BG_COL, MyFrame::OnSetBgColour)
     EVT_MENU(LIST_ROW_LINES, MyFrame::OnSetRowLines)
+    EVT_MENU(LIST_CUSTOM_HEADER_ATTR, MyFrame::OnCustomHeaderAttr)
     EVT_MENU(LIST_TOGGLE_MULTI_SEL, MyFrame::OnToggleMultiSel)
     EVT_MENU(LIST_SHOW_COL_INFO, MyFrame::OnShowColInfo)
     EVT_MENU(LIST_SHOW_SEL_INFO, MyFrame::OnShowSelInfo)
@@ -160,6 +161,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_UPDATE_UI(LIST_SHOW_COL_INFO, MyFrame::OnUpdateUIEnableInReport)
     EVT_UPDATE_UI(LIST_TOGGLE_HEADER, MyFrame::OnUpdateUIEnableInReport)
+    EVT_UPDATE_UI(LIST_CUSTOM_HEADER_ATTR, MyFrame::OnUpdateUIEnableInReport)
 
     EVT_UPDATE_UI(LIST_TOGGLE_MULTI_SEL, MyFrame::OnUpdateToggleMultiSel)
     EVT_UPDATE_UI(LIST_TOGGLE_CHECKBOXES, MyFrame::OnUpdateToggleCheckboxes)
@@ -276,6 +278,7 @@ MyFrame::MyFrame(const wxChar *title)
     menuCol->Append(LIST_SET_FG_COL, wxT("&Foreground colour..."));
     menuCol->Append(LIST_SET_BG_COL, wxT("&Background colour..."));
     menuCol->AppendCheckItem(LIST_ROW_LINES, wxT("Alternating colours"));
+    menuCol->AppendCheckItem(LIST_CUSTOM_HEADER_ATTR, "&Custom header attributes");
 
     wxMenuBar *menubar = new wxMenuBar;
     menubar->Append(menuFile, wxT("&File"));
@@ -894,6 +897,20 @@ void MyFrame::OnSetRowLines(wxCommandEvent& event)
     m_listCtrl->Refresh();
 }
 
+void MyFrame::OnCustomHeaderAttr(wxCommandEvent& event)
+{
+    wxItemAttr attr;
+    if ( event.IsChecked() )
+    {
+        attr.SetTextColour(*wxBLUE);
+        attr.SetFont(wxFontInfo(24).Italic());
+    }
+    //else: leave it as default to disable custom header attributes
+
+    if ( !m_listCtrl->SetHeaderAttr(attr) )
+        wxLogMessage("Sorry, header attributes not supported on this platform");
+}
+
 void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))
 {
     m_listCtrl->InsertItem(m_listCtrl->GetItemCount(), wxT("Appended item"));
@@ -1226,7 +1243,7 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
 
                 GetItem(info);
 
-                wxListItemAttr *attr = info.GetAttributes();
+                wxItemAttr *attr = info.GetAttributes();
                 if ( !attr || !attr->HasTextColour() )
                 {
                     info.SetTextColour(*wxCYAN);
@@ -1416,13 +1433,13 @@ int MyListCtrl::OnGetItemColumnImage(long item, long column) const
     return -1;
 }
 
-wxListItemAttr *MyListCtrl::OnGetItemAttr(long item) const
+wxItemAttr *MyListCtrl::OnGetItemAttr(long item) const
 {
     // test to check that RefreshItem() works correctly: when m_updated is
     // set to some item and it is refreshed, we highlight the item
     if ( item == m_updated )
     {
-        static wxListItemAttr s_attrHighlight(*wxRED, wxNullColour, wxNullFont);
+        static wxItemAttr s_attrHighlight(*wxRED, wxNullColour, wxNullFont);
         return &s_attrHighlight;
     }
 

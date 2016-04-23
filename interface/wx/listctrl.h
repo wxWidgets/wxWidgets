@@ -1053,6 +1053,25 @@ public:
     bool SetColumnsOrder(const wxArrayInt& orders);
 
     /**
+        Change the font and the colours used for the list control header.
+
+        This method can be used to change the appearance of the header shown by
+        the control in report mode (unless @c wxLC_NO_HEADER style is used).
+
+        Currently it is implemented only for wxMSW and does nothing in the
+        other ports.
+
+        @param attr The object containing the font and text and background
+            colours to use. It may be default, i.e. not specify any custom font
+            nor colours, to reset any previously set custom attribute.
+        @return @true if the attributes have been updated or @false if this is
+            not supported by the current platform.
+
+        @since 3.1.1
+    */
+    bool SetHeaderAttr(const wxItemAttr& attr);
+
+    /**
         Sets the image list associated with the control.
 
         @a which is one of @c wxIMAGE_LIST_NORMAL, @c wxIMAGE_LIST_SMALL,
@@ -1278,14 +1297,14 @@ protected:
         @c item or @NULL to use the default appearance parameters.
 
         wxListCtrl will not delete the pointer or keep a reference of it.
-        You can return the same wxListItemAttr pointer for every OnGetItemAttr() call.
+        You can return the same wxItemAttr pointer for every OnGetItemAttr() call.
 
         The base class version always returns @NULL.
 
         @see OnGetItemImage(), OnGetItemColumnImage(), OnGetItemText(),
              OnGetItemColumnAttr()
     */
-    virtual wxListItemAttr* OnGetItemAttr(long item) const;
+    virtual wxItemAttr* OnGetItemAttr(long item) const;
 
      /**
         This function may be overridden in the derived class for a control with
@@ -1302,7 +1321,7 @@ protected:
         @see OnGetItemAttr(), OnGetItemText(),
              OnGetItemImage(), OnGetItemColumnImage(),
     */
-    virtual wxListItemAttr* OnGetItemColumnAttr(long item, long column) const;
+    virtual wxItemAttr* OnGetItemColumnAttr(long item, long column) const;
 
     /**
         Override this function in the derived class for a control with
@@ -1511,80 +1530,6 @@ wxEventType wxEVT_LIST_COL_END_DRAG;
 wxEventType wxEVT_LIST_ITEM_FOCUSED;
 wxEventType wxEVT_LIST_ITEM_CHECKED;
 wxEventType wxEVT_LIST_ITEM_UNCHECKED;
-
-
-/**
-    @class wxListItemAttr
-
-    Represents the attributes (color, font, ...) of a wxListCtrl's wxListItem.
-
-    @library{wxcore}
-    @category{data}
-
-    @see @ref overview_listctrl, wxListCtrl, wxListItem
-*/
-class wxListItemAttr
-{
-public:
-    /**
-        Default Constructor.
-    */
-    wxListItemAttr();
-
-    /**
-        Construct a wxListItemAttr with the specified foreground and
-        background colors and font.
-    */
-    wxListItemAttr(const wxColour& colText,
-                   const wxColour& colBack,
-                   const wxFont& font);
-
-    /**
-        Returns the currently set background color.
-    */
-    const wxColour& GetBackgroundColour() const;
-
-    /**
-        Returns the currently set font.
-    */
-    const wxFont& GetFont() const;
-
-    /**
-        Returns the currently set text color.
-    */
-    const wxColour& GetTextColour() const;
-
-    /**
-        Returns @true if the currently set background color is valid.
-    */
-    bool HasBackgroundColour() const;
-
-    /**
-        Returns @true if the currently set font is valid.
-    */
-    bool HasFont() const;
-
-    /**
-        Returns @true if the currently set text color is valid.
-    */
-    bool HasTextColour() const;
-
-    /**
-        Sets a new background color.
-    */
-    void SetBackgroundColour(const wxColour& colour);
-
-    /**
-        Sets a new font.
-    */
-    void SetFont(const wxFont& font);
-
-    /**
-        Sets a new text color.
-    */
-    void SetTextColour(const wxColour& colour);
-};
-
 
 
 /**

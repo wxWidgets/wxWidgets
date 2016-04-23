@@ -1007,6 +1007,7 @@
     <ClCompile Include="..\..\src\xrc\xmlreshandler.cpp" />
     <ClCompile Include="..\..\src\generic\collheaderctrlg.cpp" />
     <ClCompile Include="..\..\src\msw\rt\utilsrt.cpp" />
+    <ClCompile Include="..\..\src\msw\customdraw.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -1379,6 +1380,7 @@
     <ClInclude Include="..\..\include\wx\collheaderctrl.h" />
     <ClInclude Include="..\..\include\wx\generic\collheaderctrl.h" />
     <ClInclude Include="..\..\include\wx\msw\rt\utils.h" />
+    <ClInclude Include="..\..\include\wx\itemattr.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

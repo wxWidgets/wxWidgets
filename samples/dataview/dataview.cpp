@@ -32,7 +32,12 @@
 #include "wx/numdlg.h"
 #include "wx/spinctrl.h"
 #include "wx/imaglist.h"
+#include "wx/itemattr.h"
 #include "wx/notebook.h"
+
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    #include "wx/headerctrl.h"
+#endif // wxHAS_GENERIC_DATAVIEWCTRL
 
 #include "mymodels.h"
 
@@ -74,6 +79,10 @@ private:
     // event handlers
     void OnStyleChange(wxCommandEvent& event);
     void OnSetBackgroundColour(wxCommandEvent& event);
+    void OnCustomHeaderAttr(wxCommandEvent& event);
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    void OnCustomHeaderHeight(wxCommandEvent& event);
+#endif // wxHAS_GENERIC_DATAVIEWCTRL
     void OnSetForegroundColour(wxCommandEvent& event);
     void OnIncIndent(wxCommandEvent& event);
     void OnDecIndent(wxCommandEvent& event);
@@ -290,6 +299,10 @@ enum
     ID_CLEARLOG = wxID_HIGHEST+1,
     ID_BACKGROUND_COLOUR,
     ID_FOREGROUND_COLOUR,
+    ID_CUSTOM_HEADER_ATTR,
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    ID_CUSTOM_HEADER_HEIGHT,
+#endif // wxHAS_GENERIC_DATAVIEWCTRL
     ID_STYLE_MENU,
     ID_INC_INDENT,
     ID_DEC_INDENT,
@@ -344,6 +357,10 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU( ID_FOREGROUND_COLOUR, MyFrame::OnSetForegroundColour )
     EVT_MENU( ID_BACKGROUND_COLOUR, MyFrame::OnSetBackgroundColour )
+    EVT_MENU( ID_CUSTOM_HEADER_ATTR, MyFrame::OnCustomHeaderAttr )
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    EVT_MENU( ID_CUSTOM_HEADER_HEIGHT, MyFrame::OnCustomHeaderHeight )
+#endif // wxHAS_GENERIC_DATAVIEWCTRL
     EVT_MENU( ID_INC_INDENT, MyFrame::OnIncIndent )
     EVT_MENU( ID_DEC_INDENT, MyFrame::OnDecIndent )
 
@@ -431,6 +448,10 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     file_menu->Append(ID_CLEARLOG, "&Clear log\tCtrl-L");
     file_menu->Append(ID_FOREGROUND_COLOUR, "Set &foreground colour...\tCtrl-S");
     file_menu->Append(ID_BACKGROUND_COLOUR, "Set &background colour...\tCtrl-B");
+    file_menu->AppendCheckItem(ID_CUSTOM_HEADER_ATTR, "C&ustom header attributes");
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    file_menu->AppendCheckItem(ID_CUSTOM_HEADER_HEIGHT, "Custom header &height");
+#endif // wxHAS_GENERIC_DATAVIEWCTRL
     file_menu->Append(ID_STYLE_MENU, "&Style", style_menu);
     file_menu->Append(ID_INC_INDENT, "&Increase indent\tCtrl-I");
     file_menu->Append(ID_DEC_INDENT, "&Decrease indent\tShift-Ctrl-I");
@@ -787,6 +808,41 @@ void MyFrame::OnSetBackgroundColour(wxCommandEvent& WXUNUSED(event))
         Refresh();
     }
 }
+
+void MyFrame::OnCustomHeaderAttr(wxCommandEvent& event)
+{
+    wxItemAttr attr;
+    if ( event.IsChecked() )
+    {
+        attr.SetTextColour(*wxRED);
+        attr.SetFont(wxFontInfo(20).Bold());
+    }
+    //else: leave it as default to disable custom header attributes
+
+    wxDataViewCtrl * const dvc = m_ctrl[m_notebook->GetSelection()];
+    if ( !dvc->SetHeaderAttr(attr) )
+        wxLogMessage("Sorry, header attributes not supported on this platform");
+}
+
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+void MyFrame::OnCustomHeaderHeight(wxCommandEvent& event)
+{
+    wxDataViewCtrl * const dvc = m_ctrl[m_notebook->GetSelection()];
+    wxHeaderCtrl* const header = dvc->GenericGetHeader();
+    if ( !header )
+    {
+        wxLogMessage("No header");
+        return;
+    }
+
+    // Use a big height to show that this works.
+    wxSize size = event.IsChecked() ? FromDIP(wxSize(0, 80)) : wxDefaultSize;
+    header->SetMinSize(size);
+    header->Refresh();
+
+    dvc->Layout();
+}
+#endif // wxHAS_GENERIC_DATAVIEWCTRL
 
 void MyFrame::OnIncIndent(wxCommandEvent& WXUNUSED(event))
 {

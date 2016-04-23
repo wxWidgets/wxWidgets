@@ -1548,6 +1548,25 @@ public:
     void SetCurrentItem(const wxDataViewItem& item);
 
     /**
+        Set custom colours and/or font to use for the header.
+
+        This method allows to customize the display of the control header (it
+        does nothing if @c wxDV_NO_HEADER style is used).
+
+        Currently it is only implemented in the generic version and just
+        returns @false without doing anything elsewhere.
+
+        @param attr The attribute defining the colour(s) and font to use. It
+            can be default, in which case the attributes are reset to their
+            default values.
+        @return @true if the attributes were updated, @false if the method is
+            not implemented or failed.
+
+        @since 3.1.1
+    */
+    bool SetHeaderAttr(const wxItemAttr& attr);
+
+    /**
         Sets the indentation.
     */
     void SetIndent(int indent);

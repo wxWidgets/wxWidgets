@@ -29,6 +29,8 @@
 #include "wx/systhemectrl.h"
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
+class WXDLLIMPEXP_FWD_CORE wxItemAttr;
+class WXDLLIMPEXP_FWD_CORE wxHeaderCtrl;
 
 #if !(defined(__WXGTK20__) || defined(__WXOSX__) ) || defined(__WXUNIVERSAL__)
 // #if !(defined(__WXOSX__)) || defined(__WXUNIVERSAL__)
@@ -128,7 +130,7 @@ private:
 // wxDataViewItemAttr: a structure containing the visual attributes of an item
 // ----------------------------------------------------------------------------
 
-// TODO: this should be renamed to wxItemAttr or something general like this
+// TODO: Merge with wxItemAttr somehow.
 
 class WXDLLIMPEXP_ADV wxDataViewItemAttr
 {
@@ -731,6 +733,10 @@ public:
 
     // define control visual attributes
     // --------------------------------
+
+    // Header attributes: only implemented in the generic version currently.
+    virtual bool SetHeaderAttr(const wxItemAttr& WXUNUSED(attr))
+        { return false; }
 
     virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
     {

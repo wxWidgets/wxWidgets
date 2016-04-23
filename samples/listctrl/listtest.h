@@ -84,7 +84,7 @@ private:
 
     virtual wxString OnGetItemText(long item, long column) const wxOVERRIDE;
     virtual int OnGetItemColumnImage(long item, long column) const wxOVERRIDE;
-    virtual wxListItemAttr *OnGetItemAttr(long item) const wxOVERRIDE;
+    virtual wxItemAttr *OnGetItemAttr(long item) const wxOVERRIDE;
 
     long m_updated;
 
@@ -132,6 +132,7 @@ protected:
     void OnSetFgColour(wxCommandEvent& event);
     void OnSetBgColour(wxCommandEvent& event);
     void OnSetRowLines(wxCommandEvent& event);
+    void OnCustomHeaderAttr(wxCommandEvent& event);
     void OnToggleMultiSel(wxCommandEvent& event);
     void OnShowColInfo(wxCommandEvent& event);
     void OnShowSelInfo(wxCommandEvent& event);
@@ -221,6 +222,7 @@ enum
     LIST_SET_FG_COL,
     LIST_SET_BG_COL,
     LIST_ROW_LINES,
+    LIST_CUSTOM_HEADER_ATTR,
     LIST_TOGGLE_MULTI_SEL,
     LIST_TOGGLE_HEADER,
     LIST_TOGGLE_BELL,

@@ -34,7 +34,8 @@ class  WXDLLIMPEXP_FWD_CORE wxDragImage;
 struct WXDLLIMPEXP_FWD_CORE wxTreeViewItem;
 
 // hash storing attributes for our items
-WX_DECLARE_EXPORTED_VOIDPTR_HASH_MAP(wxTreeItemAttr *, wxMapTreeAttr);
+class wxItemAttr;
+WX_DECLARE_EXPORTED_VOIDPTR_HASH_MAP(wxItemAttr *, wxMapTreeAttr);
 
 // ----------------------------------------------------------------------------
 // wxTreeCtrl

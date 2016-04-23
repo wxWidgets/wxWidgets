@@ -37,6 +37,7 @@
             filepicker.cpp
             fontpicker.cpp
             gauge.cpp
+            headerctrl.cpp
             hyperlnk.cpp
             itemcontainer.cpp
             listbox.cpp
