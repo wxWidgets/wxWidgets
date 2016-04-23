@@ -22,6 +22,10 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/msw/private.h"
+#endif // !WX_PRECOMP
+
 #include "wx/msw/private/customdraw.h"
 
 // ============================================================================
