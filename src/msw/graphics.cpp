@@ -1508,6 +1508,18 @@ void wxGDIPlusContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDoub
     Brush *brush = m_brush.IsNull() ? NULL : ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush();
     Pen *pen = m_pen.IsNull() ? NULL : ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen();
 
+    if ( w < 0 )
+    {
+        x += w;
+        w = -w;
+    }
+
+    if ( h < 0 )
+    {
+        y += h;
+        h = -h;
+    }
+
     if ( brush )
     {
         // the offset is used to fill only the inside of the rectangle and not paint underneath

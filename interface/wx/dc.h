@@ -523,8 +523,14 @@ public:
                          wxPolygonFillMode fill_style = wxODDEVEN_RULE);
 
     /**
-        Draws a rectangle with the given top left corner, and with the given
-        size.  The current pen is used for the outline and the current brush
+        Draws a rectangle with the given corner coordinate and size.
+
+        Normally, @a x and @a y specify the top left corner coordinates and
+        both @a width and @a height are positive, however they are also allowed
+        to be negative, in which case the corresponding corner coordinate
+        refers to the right or bottom corner instead.
+
+        The current pen is used for the outline and the current brush
         for filling the shape.
     */
     void DrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
