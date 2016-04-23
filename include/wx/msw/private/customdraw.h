@@ -29,6 +29,11 @@ public:
     {
     }
 
+    // Virtual dtor for the base class.
+    virtual ~CustomDraw()
+    {
+    }
+
     // Implementation of NM_CUSTOMDRAW handler, returns one of CDRF_XXX
     // constants, possibly CDRF_DODEFAULT if custom drawing is not necessary.
     LPARAM HandleCustomDraw(LPARAM lParam);
