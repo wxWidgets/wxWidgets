@@ -101,8 +101,8 @@ public:
     void SetTextColour(const wxColour& col);
     long GetTopItem() const;
 
-    virtual bool HasCheckboxes() const wxOVERRIDE;
-    virtual bool EnableCheckboxes(bool enable = true) wxOVERRIDE;
+    virtual bool HasCheckBoxes() const wxOVERRIDE;
+    virtual bool EnableCheckBoxes(bool enable = true) wxOVERRIDE;
     virtual bool IsItemChecked(long item) const wxOVERRIDE;
     virtual void CheckItem(long item, bool check) wxOVERRIDE;
 

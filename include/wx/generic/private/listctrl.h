@@ -641,8 +641,8 @@ public:
     bool GetItemPosition( long item, wxPoint& pos ) const;
     int GetSelectedItemCount() const;
 
-    bool HasCheckboxes() const;
-    bool EnableCheckboxes(bool enable = true);
+    bool HasCheckBoxes() const;
+    bool EnableCheckBoxes(bool enable = true);
     bool IsItemChecked(long item) const;
     void CheckItem(long item, bool check);
 
@@ -789,7 +789,7 @@ protected:
            m_lineBeforeLastClicked,
            m_lineSelectSingleOnUp;
 
-    bool m_hasCheckboxes;
+    bool m_hasCheckBoxes;
 
 protected:
     wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE { return GetParent(); }
@@ -853,7 +853,7 @@ private:
     // Check if the given point is inside the checkbox of this item.
     //
     // Always returns false if there are no checkboxes.
-    bool IsInsideCheckbox(long item, int x, int y);
+    bool IsInsideCheckBox(long item, int x, int y);
 
     // the height of one line using the current font
     wxCoord m_lineHeight;

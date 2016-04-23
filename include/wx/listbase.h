@@ -415,8 +415,8 @@ public:
     virtual bool SetHeaderAttr(const wxItemAttr& WXUNUSED(attr)) { return false; }
 
     // Checkboxes support: only implemented in wxMSW currently.
-    virtual bool HasCheckboxes() const { return false; }
-    virtual bool EnableCheckboxes(bool WXUNUSED(enable) = true) { return false; }
+    virtual bool HasCheckBoxes() const { return false; }
+    virtual bool EnableCheckBoxes(bool WXUNUSED(enable) = true) { return false; }
     virtual bool IsItemChecked(long WXUNUSED(item)) const { return false; }
     virtual void CheckItem(long WXUNUSED(item), bool WXUNUSED(check)) { }
 

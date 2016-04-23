@@ -150,13 +150,13 @@ protected:
     void OnToggleMacUseGeneric(wxCommandEvent& event);
 #endif // __WXOSX__
     void OnFind(wxCommandEvent& event);
-    void OnToggleItemCheckbox(wxCommandEvent& event);
-    void OnGetItemCheckbox(wxCommandEvent& event);
-    void OnToggleCheckboxes(wxCommandEvent& event);
+    void OnToggleItemCheckBox(wxCommandEvent& event);
+    void OnGetItemCheckBox(wxCommandEvent& event);
+    void OnToggleCheckBoxes(wxCommandEvent& event);
 
     void OnUpdateUIEnableInReport(wxUpdateUIEvent& event);
     void OnUpdateToggleMultiSel(wxUpdateUIEvent& event);
-    void OnUpdateToggleCheckboxes(wxUpdateUIEvent& event);
+    void OnUpdateToggleCheckBoxes(wxUpdateUIEvent& event);
     void OnUpdateToggleHeader(wxUpdateUIEvent& event);
     void OnUpdateRowLines(wxUpdateUIEvent& event);
 
