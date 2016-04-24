@@ -1241,10 +1241,12 @@ public:
     // wxStringImpl is std::string in the encoding we want
     #define wxStringToStdStringRetType const std::string&
     const std::string& ToStdString() const { return m_impl; }
-    std::string ToStdString(const wxMBConv& conv) const
+    std::string ToStdString(const wxMBConv& WXUNUSED(conv)) const
     {
-        wxScopedCharBuffer buf(mb_str(conv));
-        return std::string(buf.data(), buf.length());
+        // No conversions are done when not using Unicode as everything is
+        // supposed to be in 7 bit ASCII anyhow, this method is provided just
+        // for compatibility with the Unicode build.
+        return ToStdString();
     }
   #else
     // wxStringImpl is either not std::string or needs conversion
