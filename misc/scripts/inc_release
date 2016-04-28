@@ -111,4 +111,7 @@ run_sed samples/docview/Info.plist \
 run_sed build/msw/wx_setup.props \
     "/<wxVersionString>/s/\($ver_major$ver_minor\)$ver_release/\1$ver_release_new/"
 
+run_sed build/tools/msvs/getversion.bat \
+    "/wxRELEASE_NUMBER=/s/$ver_release/$ver_release_new/"
+
 msg "Don't forget to change the C:R:A triplet in build/bakefiles/version.bkl now!"
