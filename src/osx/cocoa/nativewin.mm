@@ -30,6 +30,27 @@
 // implementation
 // ============================================================================
 
+namespace
+{
+
+class wxNativeWidgetCocoaImpl : public wxWidgetCocoaImpl
+{
+public:
+    wxNativeWidgetCocoaImpl(wxWindowMac* peer, WXWidget w) : wxWidgetCocoaImpl(peer, w)
+    {}
+
+    virtual void SetInitialLabel(const wxString& WXUNUSED(title), wxFontEncoding WXUNUSED(encoding)) wxOVERRIDE
+    {
+        // Don't set initial label, because the control was created by the
+        // caller and is already fully setup. And some controls (notably
+        // NSPathControl) assert if an unexpected string value, such as an empty
+        // string, is set.
+    }
+};
+
+} // anonymous namespace
+
+
 bool
 wxNativeWindow::Create(wxWindow* parent,
                        wxWindowID winid,
@@ -62,7 +83,7 @@ wxNativeWindow::Create(wxWindow* parent,
     // As wxWidgets will release the view when this object is destroyed, retain
     // it here to avoid destroying the view owned by the user code.
     [view retain];
-    SetPeer(new wxWidgetCocoaImpl(this, view));
+    SetPeer(new wxNativeWidgetCocoaImpl(this, view));
 
     // It doesn't seem necessary to use MacPostControlCreate() here as we never
     // change the native control geometry here.
