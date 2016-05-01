@@ -335,7 +335,7 @@ utf8_toUtf8(const ENCODING *enc,
       if (((unsigned char)fromLim[-1] & 0xc0) != 0x80)
         break;
   }
-  for (to = *toP, from = *fromP; from < fromLim; from++, to++)
+  for (to = *toP, from = *fromP; (from < fromLim) && (to < toLim); from++, to++)
     *to = *from;
   *fromP = from;
   *toP = to;
@@ -351,10 +351,14 @@ utf8_toUtf16(const ENCODING *enc,
   while (from < fromLim && to < toLim) {
     switch (((struct normal_encoding *)enc)->type[(unsigned char)*from]) {
     case BT_LEAD2:
+      if (from + 2 > fromLim)
+        break;
       *to++ = (unsigned short)(((from[0] & 0x1f) << 6) | (from[1] & 0x3f));
       from += 2;
       break;
     case BT_LEAD3:
+      if (from + 3 > fromLim)
+        break;
       *to++ = (unsigned short)(((from[0] & 0xf) << 12)
                                | ((from[1] & 0x3f) << 6) | (from[2] & 0x3f));
       from += 3;
@@ -363,6 +367,8 @@ utf8_toUtf16(const ENCODING *enc,
       {
         unsigned long n;
         if (to + 1 == toLim)
+          goto after;
+        if (from + 4 > fromLim)
           goto after;
         n = ((from[0] & 0x7) << 18) | ((from[1] & 0x3f) << 12)
             | ((from[2] & 0x3f) << 6) | (from[3] & 0x3f);
@@ -583,7 +589,7 @@ E ## toUtf8(const ENCODING *enc, \
       *(*toP)++ = ((lo & 0x3f) | 0x80); \
       break; \
     case 0xD8: case 0xD9: case 0xDA: case 0xDB: \
-      if (toLim -  *toP < 4) { \
+      if ((toLim - *toP < 4) || (from + 4 > fromLim)) { \
         *fromP = from; \
         return; \
       } \
