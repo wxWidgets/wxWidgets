@@ -1017,6 +1017,8 @@ private:
 
     void EnsureFigureOpen(wxDouble x = 0, wxDouble y = 0);
 
+    void EndFigure(D2D1_FIGURE_END figureEnd);
+
 private :
     wxCOMPtr<ID2D1PathGeometry> m_pathGeometry;
 
@@ -1129,13 +1131,20 @@ void wxD2DPathData::EnsureFigureOpen(wxDouble x, wxDouble y)
     }
 }
 
-void wxD2DPathData::MoveToPoint(wxDouble x, wxDouble y)
+void wxD2DPathData::EndFigure(D2D1_FIGURE_END figureEnd)
 {
     if (m_figureOpened)
     {
-        CloseSubpath();
+        m_geometrySink->EndFigure(figureEnd);
+        m_figureOpened = false;
     }
+}
 
+void wxD2DPathData::MoveToPoint(wxDouble x, wxDouble y)
+{
+    // Close current sub-path (leaving the figure as is).
+    EndFigure(D2D1_FIGURE_END_OPEN);
+    // And open a new sub-path.
     EnsureFigureOpen(x, y);
 
     m_currentPoint = D2D1::Point2F(x, y);
@@ -1275,11 +1284,8 @@ void wxD2DPathData::AddPath(const wxGraphicsPathData* path)
 // closes the current sub-path
 void wxD2DPathData::CloseSubpath()
 {
-    if (m_figureOpened)
-    {
-        m_geometrySink->EndFigure(D2D1_FIGURE_END_CLOSED);
-        m_figureOpened = false;
-    }
+    // Close sub-path and close the figure.
+    EndFigure(D2D1_FIGURE_END_CLOSED);
 }
 
 void* wxD2DPathData::GetNativePath() const
