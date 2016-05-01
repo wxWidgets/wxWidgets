@@ -5372,7 +5372,7 @@ reportDefault(XML_Parser parser, const ENCODING *enc,
       *eventEndPP = s;
       defaultHandler(handlerArg, dataBuf, (int)(dataPtr - (ICHAR *)dataBuf));
       *eventPP = s;
-    } while (s != end);
+    } while (s < end);
   }
   else
     defaultHandler(handlerArg, (XML_Char *)s, (int)((XML_Char *)end - (XML_Char *)s));
@@ -6174,12 +6174,15 @@ static XML_Char *
 poolAppend(STRING_POOL *pool, const ENCODING *enc,
            const char *ptr, const char *end)
 {
+  ICHAR* poolPtrPrev = NULL;
   if (!pool->ptr && !poolGrow(pool))
     return NULL;
   for (;;) {
     XmlConvert(enc, &ptr, end, (ICHAR **)&(pool->ptr), (ICHAR *)pool->end);
-    if (ptr == end)
+    /* complete or zero progress? */
+    if (ptr == end || pool->ptr == poolPtrPrev)
       break;
+    poolPtrPrev = pool->ptr;
     if (!poolGrow(pool))
       return NULL;
   }
