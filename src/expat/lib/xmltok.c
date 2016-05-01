@@ -322,15 +322,17 @@ enum {  /* UTF8_cvalN is value of masked first byte of N byte sequence */
   UTF8_cval4 = 0xf0
 };
 
-static void PTRCALL
+static enum XML_Convert_Result PTRCALL
 utf8_toUtf8(const ENCODING *enc,
             const char **fromP, const char *fromLim,
             char **toP, const char *toLim)
 {
+  enum XML_Convert_Result res = XML_CONVERT_COMPLETED;
   char *to;
   const char *from;
   if (fromLim - *fromP > toLim - *toP) {
     /* Avoid copying partial characters. */
+    res = XML_CONVERT_OUTPUT_EXHAUSTED;
     for (fromLim = *fromP + (toLim - *toP); fromLim > *fromP; fromLim--)
       if (((unsigned char)fromLim[-1] & 0xc0) != 0x80)
         break;
@@ -339,26 +341,36 @@ utf8_toUtf8(const ENCODING *enc,
     *to = *from;
   *fromP = from;
   *toP = to;
+
+  if ((to == toLim) && (from < fromLim))
+    return XML_CONVERT_OUTPUT_EXHAUSTED;
+  else
+    return res;
 }
 
-static void PTRCALL
+static enum XML_Convert_Result PTRCALL
 utf8_toUtf16(const ENCODING *enc,
              const char **fromP, const char *fromLim,
              unsigned short **toP, const unsigned short *toLim)
 {
+  enum XML_Convert_Result res = XML_CONVERT_COMPLETED;
   unsigned short *to = *toP;
   const char *from = *fromP;
   while (from < fromLim && to < toLim) {
     switch (((struct normal_encoding *)enc)->type[(unsigned char)*from]) {
     case BT_LEAD2:
-      if (from + 2 > fromLim)
+      if (from + 2 > fromLim) {
+        res = XML_CONVERT_INPUT_INCOMPLETE;
         break;
+      }
       *to++ = (unsigned short)(((from[0] & 0x1f) << 6) | (from[1] & 0x3f));
       from += 2;
       break;
     case BT_LEAD3:
-      if (from + 3 > fromLim)
+      if (from + 3 > fromLim) {
+        res = XML_CONVERT_INPUT_INCOMPLETE;
         break;
+      }
       *to++ = (unsigned short)(((from[0] & 0xf) << 12)
                                | ((from[1] & 0x3f) << 6) | (from[2] & 0x3f));
       from += 3;
@@ -366,10 +378,14 @@ utf8_toUtf16(const ENCODING *enc,
     case BT_LEAD4:
       {
         unsigned long n;
-        if (to + 1 == toLim)
+        if (to + 2 > toLim) {
+          res = XML_CONVERT_OUTPUT_EXHAUSTED;
           goto after;
-        if (from + 4 > fromLim)
+        }
+        if (from + 4 > fromLim) {
+          res = XML_CONVERT_INPUT_INCOMPLETE;
           goto after;
+        }
         n = ((from[0] & 0x7) << 18) | ((from[1] & 0x3f) << 12)
             | ((from[2] & 0x3f) << 6) | (from[3] & 0x3f);
         n -= 0x10000;
@@ -387,6 +403,7 @@ utf8_toUtf16(const ENCODING *enc,
 after:
   *fromP = from;
   *toP = to;
+  return res;
 }
 
 #ifdef XML_NS
@@ -435,7 +452,7 @@ static const struct normal_encoding internal_utf8_encoding = {
   STANDARD_VTABLE(sb_) NORMAL_VTABLE(utf8_)
 };
 
-static void PTRCALL
+static enum XML_Convert_Result PTRCALL
 latin1_toUtf8(const ENCODING *enc,
               const char **fromP, const char *fromLim,
               char **toP, const char *toLim)
@@ -443,30 +460,35 @@ latin1_toUtf8(const ENCODING *enc,
   for (;;) {
     unsigned char c;
     if (*fromP == fromLim)
-      break;
+      return XML_CONVERT_COMPLETED;
     c = (unsigned char)**fromP;
     if (c & 0x80) {
       if (toLim - *toP < 2)
-        break;
+        return XML_CONVERT_OUTPUT_EXHAUSTED;
       *(*toP)++ = (char)((c >> 6) | UTF8_cval2);
       *(*toP)++ = (char)((c & 0x3f) | 0x80);
       (*fromP)++;
     }
     else {
       if (*toP == toLim)
-        break;
+        return XML_CONVERT_OUTPUT_EXHAUSTED;
       *(*toP)++ = *(*fromP)++;
     }
   }
 }
 
-static void PTRCALL
+static enum XML_Convert_Result PTRCALL
 latin1_toUtf16(const ENCODING *enc,
                const char **fromP, const char *fromLim,
                unsigned short **toP, const unsigned short *toLim)
 {
   while (*fromP < fromLim && *toP < toLim)
     *(*toP)++ = (unsigned char)*(*fromP)++;
+
+  if ((*toP == toLim) && (*fromP < fromLim))
+    return XML_CONVERT_OUTPUT_EXHAUSTED;
+  else
+    return XML_CONVERT_COMPLETED;
 }
 
 #ifdef XML_NS
@@ -493,13 +515,18 @@ static const struct normal_encoding latin1_encoding = {
   STANDARD_VTABLE(sb_)
 };
 
-static void PTRCALL
+static enum XML_Convert_Result PTRCALL
 ascii_toUtf8(const ENCODING *enc,
              const char **fromP, const char *fromLim,
              char **toP, const char *toLim)
 {
   while (*fromP < fromLim && *toP < toLim)
     *(*toP)++ = *(*fromP)++;
+
+  if ((*toP == toLim) && (*fromP < fromLim))
+    return XML_CONVERT_OUTPUT_EXHAUSTED;
+  else
+    return XML_CONVERT_COMPLETED;
 }
 
 #ifdef XML_NS
@@ -546,7 +573,7 @@ unicode_byte_type(char hi, char lo)
 }
 
 #define DEFINE_UTF16_TO_UTF8(E) \
-static void  PTRCALL \
+static enum XML_Convert_Result  PTRCALL \
 E ## toUtf8(const ENCODING *enc, \
             const char **fromP, const char *fromLim, \
             char **toP, const char *toLim) \
@@ -563,7 +590,7 @@ E ## toUtf8(const ENCODING *enc, \
       if (lo < 0x80) { \
         if (*toP == toLim) { \
           *fromP = from; \
-          return; \
+          return XML_CONVERT_OUTPUT_EXHAUSTED; \
         } \
         *(*toP)++ = lo; \
         break; \
@@ -573,7 +600,7 @@ E ## toUtf8(const ENCODING *enc, \
     case 0x4: case 0x5: case 0x6: case 0x7: \
       if (toLim -  *toP < 2) { \
         *fromP = from; \
-        return; \
+        return XML_CONVERT_OUTPUT_EXHAUSTED; \
       } \
       *(*toP)++ = ((lo >> 6) | (hi << 2) |  UTF8_cval2); \
       *(*toP)++ = ((lo & 0x3f) | 0x80); \
@@ -581,7 +608,7 @@ E ## toUtf8(const ENCODING *enc, \
     default: \
       if (toLim -  *toP < 3)  { \
         *fromP = from; \
-        return; \
+        return XML_CONVERT_OUTPUT_EXHAUSTED; \
       } \
       /* 16 bits divided 4, 6, 6 amongst 3 bytes */ \
       *(*toP)++ = ((hi >> 4) | UTF8_cval3); \
@@ -589,9 +616,13 @@ E ## toUtf8(const ENCODING *enc, \
       *(*toP)++ = ((lo & 0x3f) | 0x80); \
       break; \
     case 0xD8: case 0xD9: case 0xDA: case 0xDB: \
-      if ((toLim - *toP < 4) || (from + 4 > fromLim)) { \
+      if (toLim -  *toP < 4) { \
         *fromP = from; \
-        return; \
+        return XML_CONVERT_OUTPUT_EXHAUSTED; \
+      } \
+      if (from + 4 > fromLim) { \
+        *fromP = from; \
+        return XML_CONVERT_INPUT_INCOMPLETE; \
       } \
       plane = (((hi & 0x3) << 2) | ((lo >> 6) & 0x3)) + 1; \
       *(*toP)++ = ((plane >> 2) | UTF8_cval4); \
@@ -607,21 +638,32 @@ E ## toUtf8(const ENCODING *enc, \
     } \
   } \
   *fromP = from; \
+  if (from < fromLim) \
+    return XML_CONVERT_INPUT_INCOMPLETE; \
+  else \
+    return XML_CONVERT_COMPLETED; \
 }
 
 #define DEFINE_UTF16_TO_UTF16(E) \
-static void  PTRCALL \
+static enum XML_Convert_Result  PTRCALL \
 E ## toUtf16(const ENCODING *enc, \
              const char **fromP, const char *fromLim, \
              unsigned short **toP, const unsigned short *toLim) \
 { \
+  enum XML_Convert_Result res = XML_CONVERT_COMPLETED; \
   fromLim = *fromP + (((fromLim - *fromP) >> 1) << 1);  /* shrink to even */ \
   /* Avoid copying first half only of surrogate */ \
   if (fromLim - *fromP > ((toLim - *toP) << 1) \
-      && (GET_HI(fromLim - 2) & 0xF8) == 0xD8) \
+      && (GET_HI(fromLim - 2) & 0xF8) == 0xD8) { \
     fromLim -= 2; \
+    res = XML_CONVERT_INPUT_INCOMPLETE; \
+  } \
   for (; *fromP < fromLim && *toP < toLim; *fromP += 2) \
     *(*toP)++ = (GET_HI(*fromP) << 8) | GET_LO(*fromP); \
+  if ((*toP == toLim) && (*fromP < fromLim)) \
+    return XML_CONVERT_OUTPUT_EXHAUSTED; \
+  else \
+    return res; \
 }
 
 #define SET2(ptr, ch) \
@@ -1300,7 +1342,7 @@ unknown_isInvalid(const ENCODING *enc, const char *p)
   return (c & ~0xFFFF) || checkCharRefNumber(c) < 0;
 }
 
-static void PTRCALL
+static enum XML_Convert_Result PTRCALL
 unknown_toUtf8(const ENCODING *enc,
                const char **fromP, const char *fromLim,
                char **toP, const char *toLim)
@@ -1311,21 +1353,21 @@ unknown_toUtf8(const ENCODING *enc,
     const char *utf8;
     int n;
     if (*fromP == fromLim)
-      break;
+      return XML_CONVERT_COMPLETED;
     utf8 = uenc->utf8[(unsigned char)**fromP];
     n = *utf8++;
     if (n == 0) {
       int c = uenc->convert(uenc->userData, *fromP);
       n = XmlUtf8Encode(c, buf);
       if (n > toLim - *toP)
-        break;
+        return XML_CONVERT_OUTPUT_EXHAUSTED;
       utf8 = buf;
       *fromP += (AS_NORMAL_ENCODING(enc)->type[(unsigned char)**fromP]
                  - (BT_LEAD2 - 2));
     }
     else {
       if (n > toLim - *toP)
-        break;
+        return XML_CONVERT_OUTPUT_EXHAUSTED;
       (*fromP)++;
     }
     do {
@@ -1334,7 +1376,7 @@ unknown_toUtf8(const ENCODING *enc,
   }
 }
 
-static void PTRCALL
+static enum XML_Convert_Result PTRCALL
 unknown_toUtf16(const ENCODING *enc,
                 const char **fromP, const char *fromLim,
                 unsigned short **toP, const unsigned short *toLim)
@@ -1352,6 +1394,11 @@ unknown_toUtf16(const ENCODING *enc,
       (*fromP)++;
     *(*toP)++ = c;
   }
+
+  if ((*toP == toLim) && (*fromP < fromLim))
+    return XML_CONVERT_OUTPUT_EXHAUSTED;
+  else
+    return XML_CONVERT_COMPLETED;
 }
 
 ENCODING *
