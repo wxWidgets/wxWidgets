@@ -335,7 +335,7 @@ utf8_toUtf8(const ENCODING *enc,
       if (((unsigned char)fromLim[-1] & 0xc0) != 0x80)
         break;
   }
-  for (to = *toP, from = *fromP; from != fromLim; from++, to++)
+  for (to = *toP, from = *fromP; from < fromLim; from++, to++)
     *to = *from;
   *fromP = from;
   *toP = to;
@@ -348,7 +348,7 @@ utf8_toUtf16(const ENCODING *enc,
 {
   unsigned short *to = *toP;
   const char *from = *fromP;
-  while (from != fromLim && to != toLim) {
+  while (from < fromLim && to < toLim) {
     switch (((struct normal_encoding *)enc)->type[(unsigned char)*from]) {
     case BT_LEAD2:
       *to++ = (unsigned short)(((from[0] & 0x1f) << 6) | (from[1] & 0x3f));
@@ -459,7 +459,7 @@ latin1_toUtf16(const ENCODING *enc,
                const char **fromP, const char *fromLim,
                unsigned short **toP, const unsigned short *toLim)
 {
-  while (*fromP != fromLim && *toP != toLim)
+  while (*fromP < fromLim && *toP < toLim)
     *(*toP)++ = (unsigned char)*(*fromP)++;
 }
 
@@ -492,7 +492,7 @@ ascii_toUtf8(const ENCODING *enc,
              const char **fromP, const char *fromLim,
              char **toP, const char *toLim)
 {
-  while (*fromP != fromLim && *toP != toLim)
+  while (*fromP < fromLim && *toP < toLim)
     *(*toP)++ = *(*fromP)++;
 }
 
@@ -545,8 +545,9 @@ E ## toUtf8(const ENCODING *enc, \
             const char **fromP, const char *fromLim, \
             char **toP, const char *toLim) \
 { \
-  const char *from; \
-  for (from = *fromP; from != fromLim; from += 2) { \
+  const char *from = *fromP; \
+  fromLim = from + (((fromLim - from) >> 1) << 1);  /* shrink to even */ \
+  for (; from < fromLim; from += 2) { \
     int plane; \
     unsigned char lo2; \
     unsigned char lo = GET_LO(from); \
@@ -608,11 +609,12 @@ E ## toUtf16(const ENCODING *enc, \
              const char **fromP, const char *fromLim, \
              unsigned short **toP, const unsigned short *toLim) \
 { \
+  fromLim = *fromP + (((fromLim - *fromP) >> 1) << 1);  /* shrink to even */ \
   /* Avoid copying first half only of surrogate */ \
   if (fromLim - *fromP > ((toLim - *toP) << 1) \
       && (GET_HI(fromLim - 2) & 0xF8) == 0xD8) \
     fromLim -= 2; \
-  for (; *fromP != fromLim && *toP != toLim; *fromP += 2) \
+  for (; *fromP < fromLim && *toP < toLim; *fromP += 2) \
     *(*toP)++ = (GET_HI(*fromP) << 8) | GET_LO(*fromP); \
 }
 
@@ -1332,7 +1334,7 @@ unknown_toUtf16(const ENCODING *enc,
                 unsigned short **toP, const unsigned short *toLim)
 {
   const struct unknown_encoding *uenc = AS_UNKNOWN_ENCODING(enc);
-  while (*fromP != fromLim && *toP != toLim) {
+  while (*fromP < fromLim && *toP < toLim) {
     unsigned short c = uenc->utf16[(unsigned char)**fromP];
     if (c == 0) {
       c = (unsigned short)
@@ -1507,7 +1509,7 @@ initScan(const ENCODING * const *encodingTable,
 {
   const ENCODING **encPtr;
 
-  if (ptr == end)
+  if (ptr >= end)
     return XML_TOK_NONE;
   encPtr = enc->encPtr;
   if (ptr + 1 == end) {
