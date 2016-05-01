@@ -60,7 +60,7 @@
     #include "wx/module.h"
     #include "wx/window.h"
     #include "wx/msw/private.h"
-    #include "wx/math.h"
+    #include <float.h> // for FLT_MAX
 #endif // !WX_PRECOMP
 
 #include "wx/graphics.h"
