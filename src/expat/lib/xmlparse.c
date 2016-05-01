@@ -6174,15 +6174,12 @@ static XML_Char *
 poolAppend(STRING_POOL *pool, const ENCODING *enc,
            const char *ptr, const char *end)
 {
-  ICHAR* poolPtrPrev = NULL;
   if (!pool->ptr && !poolGrow(pool))
     return NULL;
   for (;;) {
-    XmlConvert(enc, &ptr, end, (ICHAR **)&(pool->ptr), (ICHAR *)pool->end);
-    /* complete or zero progress? */
-    if (ptr == end || pool->ptr == poolPtrPrev)
+    const enum XML_Convert_Result convert_res = XmlConvert(enc, &ptr, end, (ICHAR **)&(pool->ptr), (ICHAR *)pool->end);
+    if ((convert_res == XML_CONVERT_COMPLETED) || (convert_res == XML_CONVERT_INPUT_INCOMPLETE))
       break;
-    poolPtrPrev = pool->ptr;
     if (!poolGrow(pool))
       return NULL;
   }
