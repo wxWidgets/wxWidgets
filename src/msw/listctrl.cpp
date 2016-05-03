@@ -3071,22 +3071,13 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     if (drawHRules)
     {
         const long top = GetTopItem();
-        for ( int i = top; i < top + GetCountPerPage() + 1; i++ )
+        const long bottom = wxMin(top + GetCountPerPage(), itemCount - 1);
+        for ( long i = top; i <= bottom; i++ )
         {
             if (GetItemRect(i, itemRect))
             {
-                int cy = itemRect.GetTop();
-                if (i != 0) // Don't draw the first one
-                {
-                    dc.DrawLine(0, cy, clientSize.x, cy);
-                }
-                // Draw last line
-                if (i == itemCount - 1)
-                {
-                    cy = itemRect.GetBottom();
-                    dc.DrawLine(0, cy, clientSize.x, cy);
-                    break;
-                }
+                const int cy = itemRect.GetBottom();
+                dc.DrawLine(0, cy, clientSize.x, cy);
             }
         }
     }
