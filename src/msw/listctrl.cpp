@@ -3066,12 +3066,20 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
     wxSize clientSize = GetClientSize();
-    wxRect itemRect;
+
+    const int countPerPage = GetCountPerPage();
+    if (countPerPage < 0)
+    {
+        // Can be -1 in which case it's useless to try to draw rules.
+        return;
+    }
+
+    const long top = GetTopItem();
+    const long bottom = wxMin(top + countPerPage, itemCount - 1);
 
     if (drawHRules)
     {
-        const long top = GetTopItem();
-        const long bottom = wxMin(top + GetCountPerPage(), itemCount - 1);
+        wxRect itemRect;
         for ( long i = top; i <= bottom; i++ )
         {
             if (GetItemRect(i, itemRect))
@@ -3084,10 +3092,10 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
 
     if (drawVRules)
     {
-        wxRect firstItemRect;
-        GetItemRect(0, firstItemRect);
+        wxRect topItemRect, bottomItemRect;
+        GetItemRect(top, topItemRect);
 
-        if (GetItemRect(itemCount - 1, itemRect))
+        if (GetItemRect(bottom, bottomItemRect))
         {
             /*
             This is a fix for ticket #747: erase the pixels which we would
@@ -3119,7 +3127,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
             {
                 dc.SetPen(*wxTRANSPARENT_PEN);
                 dc.SetBrush(wxBrush(GetBackgroundColour()));
-                dc.DrawRectangle(0, firstItemRect.GetY() - gap,
+                dc.DrawRectangle(0, topItemRect.GetY() - gap,
                                  clientSize.GetWidth(), gap);
 
                 dc.SetPen(pen);
@@ -3136,13 +3144,13 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
                 return;
             }
 
-            int x = itemRect.GetX();
+            int x = bottomItemRect.GetX();
             for (int col = 0; col < numCols; col++)
             {
                 int colWidth = GetColumnWidth(indexArray[col]);
                 x += colWidth ;
-                dc.DrawLine(x-1, firstItemRect.GetY() - gap,
-                            x-1, itemRect.GetBottom());
+                dc.DrawLine(x-1, topItemRect.GetY() - gap,
+                            x-1, bottomItemRect.GetBottom());
             }
         }
     }
