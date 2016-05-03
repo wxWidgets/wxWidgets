@@ -3098,16 +3098,42 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
 
         if (GetItemRect(itemCount - 1, itemRect))
         {
-            // this is a fix for bug 673394: erase the pixels which we would
-            // otherwise leave on the screen
-            static const int gap = 2;
-            dc.SetPen(*wxTRANSPARENT_PEN);
-            dc.SetBrush(wxBrush(GetBackgroundColour()));
-            dc.DrawRectangle(0, firstItemRect.GetY() - gap,
-                             clientSize.GetWidth(), gap);
+            /*
+            This is a fix for ticket #747: erase the pixels which we would
+            otherwise leave on the screen.
 
-            dc.SetPen(pen);
-            dc.SetBrush(*wxTRANSPARENT_BRUSH);
+            The drawing of the rectangle as a fix to erase trailing pixels
+            when resizing a column is only needed for ComCtl32 prior to
+            6.0, i.e. when not using a manifest in which case 5.82 is
+            used. And even then it only happens when "Show window contents
+            while dragging" is enabled under Windows, resulting in live
+            updates when resizing columns. Note that even with that setting
+            on, at least under Windows 7 and 10 no live updating is done when
+            using ComCtl32 5.82.
+
+            Revision b66c3a67519caa9debfd76e6d74954eaebfa56d9 made this fix
+            almost redundant, except that when you do NOT handle
+            EVT_LIST_COL_DRAGGING (or do and skip the event) the trailing
+            pixels still appear. In case of wanting to reproduce the problem
+            in the listctrl sample: comment out handling oF
+            EVT_LIST_COL_DRAGGING and also set useDrawFix to false and gap to
+            2 (not 0).
+            */
+
+            static const bool useDrawFix = wxApp::GetComCtl32Version() < 600;
+
+            static const int gap = useDrawFix ? 2 : 0;
+
+            if (useDrawFix)
+            {
+                dc.SetPen(*wxTRANSPARENT_PEN);
+                dc.SetBrush(wxBrush(GetBackgroundColour()));
+                dc.DrawRectangle(0, firstItemRect.GetY() - gap,
+                                 clientSize.GetWidth(), gap);
+
+                dc.SetPen(pen);
+                dc.SetBrush(*wxTRANSPARENT_BRUSH);
+            }
 
             const int numCols = GetColumnCount();
             wxVector<int> indexArray(numCols);
