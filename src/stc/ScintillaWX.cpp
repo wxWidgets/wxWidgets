@@ -544,14 +544,14 @@ void ScintillaWX::Paste() {
         evt.SetString(text);
         stc->GetEventHandler()->ProcessEvent(evt);
 
-        wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(evt.GetString());
+        const wxCharBuffer buf(wx2stc(evt.GetString()));
 
 #if wxUSE_UNICODE
         // free up the old character buffer in case the text is real big
         data.SetText(wxEmptyString);
         text = wxEmptyString;
 #endif
-        int len = strlen(buf);
+        const size_t len = buf.length();
         SelectionPosition selStart = sel.IsRectangular() ?
             sel.Rectangular().Start() :
             sel.Range(sel.Main()).Start();
@@ -1018,8 +1018,8 @@ void ScintillaWX::DoMiddleButtonUp(Point pt) {
     if (gotData) {
         wxString   text = wxTextBuffer::Translate(data.GetText(),
                                                   wxConvertEOLMode(pdoc->eolMode));
-        wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
-        int        len = strlen(buf);
+        const wxCharBuffer buf(wx2stc(text));
+        const size_t len = buf.length();
         int caretMain = sel.MainCaret();
         pdoc->InsertString(caretMain, buf, len);
         SetEmptySelection(caretMain + len);
@@ -1042,8 +1042,8 @@ void ScintillaWX::DoAddChar(int key) {
     wxChar wszChars[2];
     wszChars[0] = (wxChar)key;
     wszChars[1] = 0;
-    wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(wszChars);
-    AddCharUTF((char*)buf.data(), strlen(buf));
+    const wxCharBuffer buf(wx2stc(wszChars));
+    AddCharUTF(buf, buf.length());
 #else
     AddChar((char)key);
 #endif
