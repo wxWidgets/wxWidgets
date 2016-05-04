@@ -1190,7 +1190,9 @@ void wxGDIPlusPathData::MoveToPoint( wxDouble x , wxDouble y )
 
 void wxGDIPlusPathData::AddLineToPoint( wxDouble x , wxDouble y )
 {
-    m_path->AddLine((REAL) x,(REAL) y,(REAL) x,(REAL) y);
+    PointF start;
+    m_path->GetLastPoint(&start);
+    m_path->AddLine(start.X, start.Y, (REAL)x, (REAL)y);
 }
 
 void wxGDIPlusPathData::CloseSubpath()
