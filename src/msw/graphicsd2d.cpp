@@ -1153,7 +1153,7 @@ void wxD2DPathData::MoveToPoint(wxDouble x, wxDouble y)
 // adds a straight line from the current point to (x,y)
 void wxD2DPathData::AddLineToPoint(wxDouble x, wxDouble y)
 {
-    EnsureFigureOpen();
+    EnsureFigureOpen(m_currentPoint.x, m_currentPoint.y);
     m_geometrySink->AddLine(D2D1::Point2F(x, y));
 
     m_currentPoint = D2D1::Point2F(x, y);
