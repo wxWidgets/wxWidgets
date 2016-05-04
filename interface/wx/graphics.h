@@ -51,6 +51,7 @@ public:
     /**
         Appends a circle around (@a x,@a y) with radius @a r as a new closed
         subpath.
+        After this call the current point will be at (@a x+@a r, @a y).
     */
     virtual void AddCircle(wxDouble x, wxDouble y, wxDouble r);
 
@@ -70,7 +71,9 @@ public:
                          const wxPoint2DDouble& e);
 
     /**
-        Appends an ellipse fitting into the passed in rectangle.
+        Appends an ellipse fitting into the passed in rectangle as a new
+        closed subpath.
+        After this call the current point will be at (@a x+@a w, @a y+@a h/2).
     */
     virtual void AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 

@@ -1239,7 +1239,17 @@ void wxD2DPathData::AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
     const wxDouble rx = w / 2.0;
     const wxDouble ry = h / 2.0;
 
-    MoveToPoint(x, y + ry);
+    MoveToPoint(x + w, y + ry);
+
+    D2D1_ARC_SEGMENT arcSegmentLower =
+    {
+        D2D1::Point2((FLOAT)(x), (FLOAT)(y + ry)),     // end point
+        D2D1::SizeF((FLOAT)(rx), (FLOAT)(ry)),         // size
+        0.0f,
+        D2D1_SWEEP_DIRECTION_CLOCKWISE,
+        D2D1_ARC_SIZE_SMALL
+    };
+    m_geometrySink->AddArc(arcSegmentLower);
 
     D2D1_ARC_SEGMENT arcSegmentUpper =
     {
@@ -1251,15 +1261,7 @@ void wxD2DPathData::AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
     };
     m_geometrySink->AddArc(arcSegmentUpper);
 
-    D2D1_ARC_SEGMENT arcSegmentLower =
-    {
-        D2D1::Point2((FLOAT)(x), (FLOAT)(y + ry)),     // end point
-        D2D1::SizeF((FLOAT)(rx), (FLOAT)(ry)),         // size
-        0.0f,
-        D2D1_SWEEP_DIRECTION_CLOCKWISE,
-        D2D1_ARC_SIZE_SMALL
-    };
-    m_geometrySink->AddArc(arcSegmentLower);
+    CloseSubpath();
 }
 
 // gets the last point of the current path, (0,0) if not yet set
