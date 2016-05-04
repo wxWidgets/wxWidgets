@@ -548,7 +548,7 @@ public:
 
         @since 2.9.4
      */
-    bool IsDescendant(wxWindowBase* win) const;
+    bool IsDescendant(wxWindow* win) const;
 
     /**
         Reparents the window, i.e.\ the window will be removed from its
