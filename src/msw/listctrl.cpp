@@ -709,15 +709,7 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
     else if ( width == wxLIST_AUTOSIZE_USEHEADER)
         width = LVSCW_AUTOSIZE_USEHEADER;
 
-    if ( !ListView_SetColumnWidth(GetHwnd(), col, width) )
-        return false;
-
-    // Failure to explicitly refresh the control with horizontal rules results
-    // in corrupted rules display.
-    if ( HasFlag(wxLC_HRULES) )
-        Refresh();
-
-    return true;
+    return ListView_SetColumnWidth(GetHwnd(), col, width) != 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -3077,6 +3069,9 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     const long top = GetTopItem();
     const long bottom = wxMin(top + countPerPage, itemCount - 1);
 
+    wxRect clipRect;
+    dc.GetClippingBox(clipRect);
+
     if (drawHRules)
     {
         wxRect itemRect;
@@ -3085,8 +3080,23 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
             if (GetItemRect(i, itemRect))
             {
                 const int cy = itemRect.GetBottom();
-                dc.DrawLine(0, cy, clientSize.x, cy);
+                dc.DrawLine(clipRect.x, cy, clipRect.GetRight() + 1, cy);
             }
+        }
+
+        /*
+        The drawing can be clipped horizontally to the rightmost column. This
+        happens when an item is added (and visible) and results in a
+        horizontal rule being clipped instead of drawn across the entire list
+        control. In that case we request for the part to the right of the
+        rightmost column to be drawn as well.
+        */
+        if ( clipRect.GetRight()  != clientSize.GetWidth() - 1
+            && clipRect.width)
+        {
+            RefreshRect(wxRect(clipRect.GetRight(), clipRect.y,
+                clientSize.x - clipRect.width, clipRect.height),
+                false /* erase background? */);
         }
     }
 
