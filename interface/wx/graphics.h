@@ -99,7 +99,8 @@ public:
                                      wxDouble x, wxDouble y);
 
     /**
-        Appends a rectangle as a new closed subpath.
+        Appends a rectangle as a new closed subpath. After this call
+        the current point will be at (@a x, @a y).
     */
     virtual void AddRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 
@@ -110,7 +111,8 @@ public:
                                      wxDouble h, wxDouble radius);
 
     /**
-        Closes the current sub-path.
+        Closes the current sub-path. After this call the current point will be
+        at the joined endpoint of the sub-path.
     */
     virtual void CloseSubpath();
 

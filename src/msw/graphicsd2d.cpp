@@ -1033,6 +1033,7 @@ private :
     D2D1_MATRIX_3X2_F m_transformMatrix;
 
     bool m_figureOpened;
+    D2D1_POINT_2F m_figureStart;
 
     bool m_geometryWritable;
 };
@@ -1045,7 +1046,9 @@ wxD2DPathData::wxD2DPathData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFact
     wxGraphicsPathData(renderer), m_direct2dfactory(d2dFactory),
     m_currentPoint(D2D1::Point2F(0.0f, 0.0f)),
     m_transformMatrix(D2D1::Matrix3x2F::Identity()),
-    m_figureOpened(false), m_geometryWritable(true)
+    m_figureOpened(false),
+    m_figureStart(D2D1::Point2F(0.0f, 0.0f)),
+    m_geometryWritable(true)
 {
     m_direct2dfactory->CreatePathGeometry(&m_pathGeometry);
     // To properly initialize path geometry there is also
@@ -1069,6 +1072,10 @@ wxD2DPathData::wxGraphicsObjectRefData* wxD2DPathData::Clone() const
 
     newPathData->EnsureGeometryOpen();
     m_pathGeometry->Stream(newPathData->m_geometrySink);
+    newPathData->m_currentPoint = m_currentPoint;
+    newPathData->m_transformMatrix = m_transformMatrix;
+    newPathData->m_figureOpened = m_figureOpened;
+    newPathData->m_figureStart = m_figureStart;
 
     return newPathData;
 }
@@ -1125,9 +1132,10 @@ void wxD2DPathData::EnsureFigureOpen(wxDouble x, wxDouble y)
 
     if (!m_figureOpened)
     {
-        m_geometrySink->BeginFigure(D2D1::Point2F(x, y), D2D1_FIGURE_BEGIN_FILLED);
+        m_figureStart = D2D1::Point2F(x, y);
+        m_geometrySink->BeginFigure(m_figureStart, D2D1_FIGURE_BEGIN_FILLED);
         m_figureOpened = true;
-        m_currentPoint = D2D1::Point2F(x, y);
+        m_currentPoint = m_figureStart;
     }
 }
 
@@ -1137,6 +1145,11 @@ void wxD2DPathData::EndFigure(D2D1_FIGURE_END figureEnd)
     {
         m_geometrySink->EndFigure(figureEnd);
         m_figureOpened = false;
+
+        // If the figure is closed then current point
+        // should be moved to the beginning of the figure.
+        if( figureEnd == D2D1_FIGURE_END_CLOSED )
+            m_currentPoint = m_figureStart;
     }
 }
 
