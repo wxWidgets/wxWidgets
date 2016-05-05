@@ -37,18 +37,6 @@
     }
 }
 
-- (id) initWithFrame:(NSRect) frame
-{
-    self = [super initWithFrame:frame];
-
-    // NSButton uses "Button" as its title by default which is inconvenient as
-    // wxWidgets expects the control to not have any default label, so reset it
-    // here to resolve this mismatch.
-    [self setTitle:@""];
-
-    return self;
-}
-
 - (int) intValue
 {
     switch ( [self state] )

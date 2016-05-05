@@ -44,7 +44,7 @@
 // even if this is not necessary with most of them
 #include "wx/msw/wrapwin.h"
 #include <shellapi.h>
-#include <shlobj.h>
+#include "wx/msw/wrapshl.h"
 #include "wx/msw/missing.h"
 
 #if wxUSE_BASE
