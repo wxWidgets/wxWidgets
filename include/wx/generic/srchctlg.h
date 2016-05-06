@@ -166,6 +166,11 @@ public:
     virtual void SelectAll() wxOVERRIDE;
     virtual void SetEditable(bool editable) wxOVERRIDE;
 
+    // Autocomplete
+    virtual bool DoAutoCompleteStrings(const wxArrayString &choices) wxOVERRIDE;
+    virtual bool DoAutoCompleteFileNames(int flags) wxOVERRIDE;
+    virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) wxOVERRIDE;
+
 #if 0
 
     // override streambuf method

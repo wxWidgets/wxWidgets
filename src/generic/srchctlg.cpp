@@ -820,6 +820,24 @@ bool wxSearchCtrl::SetBackgroundColour(const wxColour& colour)
     return true;
 }
 
+
+// Autocomplete
+bool wxSearchCtrl::DoAutoCompleteStrings(const wxArrayString &choices)
+{
+    return m_text->AutoComplete( choices );
+}
+
+bool wxSearchCtrl::DoAutoCompleteFileNames(int flags)
+{
+    return flags == wxFILE ? m_text->AutoCompleteFileNames() : m_text->AutoCompleteDirectories();
+}
+
+bool wxSearchCtrl::DoAutoCompleteCustom(wxTextCompleter *completer)
+{
+    return m_text->AutoComplete(completer);
+}
+
+
 // search control generic only
 void wxSearchCtrl::SetSearchBitmap( const wxBitmap& bitmap )
 {
