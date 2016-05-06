@@ -106,6 +106,9 @@ public:
 
     /**
         Appends a rounded rectangle as a new closed subpath.
+        If @a radius equals 0 this function will behave as AddRectangle(),
+        otherwise after this call the current point will be at
+        (@a x+@a w, @a y + @a h/2).
     */
     virtual void AddRoundedRectangle(wxDouble x, wxDouble y, wxDouble w,
                                      wxDouble h, wxDouble radius);
