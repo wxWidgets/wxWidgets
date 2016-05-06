@@ -72,6 +72,10 @@
 
 #include "wx/msw/missing.h"
 
+#ifndef CFM_BACKCOLOR
+    #define CFM_BACKCOLOR 0x04000000
+#endif
+
 #if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
 
 // dummy value used for m_dropTarget, different from any valid pointer value
