@@ -1227,13 +1227,16 @@ void wxGDIPlusPathData::AddLineToPoint( wxDouble x , wxDouble y )
 
 void wxGDIPlusPathData::CloseSubpath()
 {
-    m_path->CloseFigure();
-    m_figureOpened = false;
-    // Since native GDI+ renderer doesn't move its current point
-    // to the starting point of the figure we need to maintain
-    // it on our own in this case.
-    m_logCurrentPoint = m_figureStart;
-    m_logCurrentPointSet = true;
+    if( m_figureOpened )
+    {
+        m_path->CloseFigure();
+        m_figureOpened = false;
+        // Since native GDI+ renderer doesn't move its current point
+        // to the starting point of the figure we need to maintain
+        // it on our own in this case.
+        m_logCurrentPoint = m_figureStart;
+        m_logCurrentPointSet = true;
+    }
 }
 
 void wxGDIPlusPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y )
