@@ -1175,7 +1175,7 @@ void wxD2DPathData::AddLineToPoint(wxDouble x, wxDouble y)
 // adds a cubic Bezier curve from the current point, using two control points and an end point
 void wxD2DPathData::AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y)
 {
-    EnsureFigureOpen();
+    EnsureFigureOpen(m_currentPoint.x, m_currentPoint.y);
     D2D1_BEZIER_SEGMENT bezierSegment = {
         { (FLOAT)cx1, (FLOAT)cy1 },
         { (FLOAT)cx2, (FLOAT)cy2 },
