@@ -1028,6 +1028,7 @@ private :
 
     mutable wxCOMPtr<ID2D1TransformedGeometry> m_transformedGeometry;
 
+    bool m_currentPointSet;
     D2D1_POINT_2F m_currentPoint;
 
     D2D1_MATRIX_3X2_F m_transformMatrix;
@@ -1044,6 +1045,7 @@ private :
 
 wxD2DPathData::wxD2DPathData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFactory) :
     wxGraphicsPathData(renderer), m_direct2dfactory(d2dFactory),
+    m_currentPointSet(false),
     m_currentPoint(D2D1::Point2F(0.0f, 0.0f)),
     m_transformMatrix(D2D1::Matrix3x2F::Identity()),
     m_figureOpened(false),
@@ -1161,11 +1163,20 @@ void wxD2DPathData::MoveToPoint(wxDouble x, wxDouble y)
     EnsureFigureOpen(x, y);
 
     m_currentPoint = D2D1::Point2F(x, y);
+    m_currentPointSet = true;
 }
 
 // adds a straight line from the current point to (x,y)
 void wxD2DPathData::AddLineToPoint(wxDouble x, wxDouble y)
 {
+    // If current point is not yet set then
+    // this function should behave as MoveToPoint.
+    if( !m_currentPointSet )
+    {
+        MoveToPoint(x, y);
+        return;
+    }
+
     EnsureFigureOpen(m_currentPoint.x, m_currentPoint.y);
     m_geometrySink->AddLine(D2D1::Point2F(x, y));
 
