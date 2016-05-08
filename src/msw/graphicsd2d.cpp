@@ -1145,6 +1145,10 @@ void wxD2DPathData::EndFigure(D2D1_FIGURE_END figureEnd)
 {
     if (m_figureOpened)
     {
+        // Ensure that sub-path being closed contains at least one point.
+        if( figureEnd == D2D1_FIGURE_END_CLOSED )
+            m_geometrySink->AddLine(m_currentPoint);
+
         m_geometrySink->EndFigure(figureEnd);
         m_figureOpened = false;
 
