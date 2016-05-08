@@ -1220,7 +1220,14 @@ void wxGDIPlusPathData::AddLineToPoint( wxDouble x , wxDouble y )
     }
     else
     {
-        m_path->GetLastPoint(&start);
+        Status st = m_path->GetLastPoint(&start);
+        // If current point is not yet set then
+        // this function should behave as MoveToPoint.
+        if ( st != Ok )
+        {
+            MoveToPoint(x, y);
+            return;
+        }
     }
     m_path->AddLine(start.X, start.Y, (REAL)x, (REAL)y);
 }

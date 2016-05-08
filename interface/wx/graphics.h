@@ -79,10 +79,14 @@ public:
 
     /**
         Adds a straight line from the current point to (@a x,@a y).
+        If current point is not yet set before the call to AddLineToPoint()
+        this function will behave as MoveToPoint().
     */
     virtual void AddLineToPoint(wxDouble x, wxDouble y);
     /**
         Adds a straight line from the current point to @a p.
+        If current point is not yet set before the call to AddLineToPoint()
+        this function will behave as MoveToPoint().
     */
     void AddLineToPoint(const wxPoint2DDouble& p);
 
@@ -108,7 +112,7 @@ public:
         Appends a rounded rectangle as a new closed subpath.
         If @a radius equals 0 this function will behave as AddRectangle(),
         otherwise after this call the current point will be at
-        (@a x+@a w, @a y + @a h/2).
+        (@a x+@a w, @a y+@a h/2).
     */
     virtual void AddRoundedRectangle(wxDouble x, wxDouble y, wxDouble w,
                                      wxDouble h, wxDouble radius);
