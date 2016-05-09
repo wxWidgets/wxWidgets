@@ -1255,6 +1255,8 @@ void wxGDIPlusPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx
     PointF c2(cx2,cy2);
     PointF end(x,y);
     PointF start;
+    // If no current point is set then this function should behave
+    // as if preceded by a call to MoveToPoint(cx1, cy1).
     if ( m_logCurrentPointSet )
     {
         start = m_logCurrentPoint;
@@ -1264,7 +1266,11 @@ void wxGDIPlusPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx
     }
     else
     {
-        m_path->GetLastPoint(&start);
+        if( m_path->GetLastPoint(&start) != Ok )
+        {
+            MoveToPoint(cx1, cy1);
+            start = c1;
+        }
     }
     m_path->AddBezier(start,c1,c2,end);
 }

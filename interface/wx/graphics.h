@@ -58,6 +58,9 @@ public:
     /**
         Adds a cubic bezier curve from the current point, using two control
         points and an end point.
+        If there is no current point before the call to AddCurveToPoint() this
+        function will behave as if preceded by a call to
+        MoveToPoint(@a cx1, @a cy1).
     */
     virtual void AddCurveToPoint(wxDouble cx1, wxDouble cy1,
                                  wxDouble cx2, wxDouble cy2,
@@ -65,6 +68,8 @@ public:
     /**
         Adds a cubic bezier curve from the current point, using two control
         points and an end point.
+        If there is no current point before the call to AddCurveToPoint() this
+        function will behave as if preceded by a call to MoveToPoint(@a c1).
     */
     void AddCurveToPoint(const wxPoint2DDouble& c1,
                          const wxPoint2DDouble& c2,
@@ -98,6 +103,9 @@ public:
     /**
         Adds a quadratic bezier curve from the current point, using a control
         point and an end point.
+        If there is no current point before the call to AddQuadCurveToPoint()
+        this function will behave as if preceded by a call to
+        MoveToPoint(@a cx, @a cy).
     */
     virtual void AddQuadCurveToPoint(wxDouble cx, wxDouble cy,
                                      wxDouble x, wxDouble y);
