@@ -1237,7 +1237,8 @@ void wxGDIPlusPathData::CloseSubpath()
     if( m_figureOpened )
     {
         // Ensure that sub-path being closed contains at least one point.
-        m_path->AddLine(m_logCurrentPoint, m_logCurrentPoint);
+        if ( m_logCurrentPointSet )
+            m_path->AddLine(m_logCurrentPoint, m_logCurrentPoint);
 
         m_path->CloseFigure();
         m_figureOpened = false;
