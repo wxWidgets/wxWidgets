@@ -1344,7 +1344,13 @@ void wxGDIPlusPathData::AddPath( const wxGraphicsPathData* path )
 // transforms each point of this path by the matrix
 void wxGDIPlusPathData::Transform( const wxGraphicsMatrixData* matrix )
 {
-    m_path->Transform( (Matrix*) matrix->GetNativeMatrix() );
+    const Matrix* m = static_cast<const Matrix*>(matrix->GetNativeMatrix());
+    m_path->Transform(m);
+    // Transform also auxiliary points.
+    if ( m_logCurrentPointSet )
+        m->TransformPoints(&m_logCurrentPoint, 1);
+    if ( m_figureOpened )
+        m->TransformPoints(&m_figureStart, 1);
 }
 
 // gets the bounding box enclosing all points (possibly including control points)
