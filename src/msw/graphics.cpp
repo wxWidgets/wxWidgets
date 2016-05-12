@@ -1327,11 +1327,19 @@ void wxGDIPlusPathData::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDoub
 
 void wxGDIPlusPathData::AddPath( const wxGraphicsPathData* path )
 {
-    m_path->AddPath( (GraphicsPath*) path->GetNativePath(), FALSE);
-    // We have to switch to the native current point.
-    m_logCurrentPointSet = false;
-}
+    const wxGDIPlusPathData* pathData = static_cast<const wxGDIPlusPathData*>(path);
+    const GraphicsPath* grPath = static_cast<const GraphicsPath*>(pathData->GetNativePath());
 
+    m_path->AddPath(grPath, FALSE);
+    // Copy auxiliary data if appended path is non-empty.
+    if( grPath->GetPointCount() > 0 || pathData->m_logCurrentPointSet || pathData->m_figureOpened )
+    {
+        m_logCurrentPointSet = pathData->m_logCurrentPointSet;
+        m_logCurrentPoint = pathData->m_logCurrentPoint;
+        m_figureOpened = pathData->m_figureOpened;
+        m_figureStart = pathData->m_figureStart;
+    }
+}
 
 // transforms each point of this path by the matrix
 void wxGDIPlusPathData::Transform( const wxGraphicsMatrixData* matrix )

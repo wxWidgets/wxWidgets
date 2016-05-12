@@ -96,7 +96,8 @@ public:
     void AddLineToPoint(const wxPoint2DDouble& p);
 
     /**
-        Adds another path.
+        Adds another path onto the current path. After this call the current
+        point will be at the added path's current point.
     */
     virtual void AddPath(const wxGraphicsPath& path);
 
