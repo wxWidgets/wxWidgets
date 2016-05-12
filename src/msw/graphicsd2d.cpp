@@ -1371,7 +1371,11 @@ void wxD2DPathData::AddPath(const wxGraphicsPathData* path)
 void wxD2DPathData::CloseSubpath()
 {
     // Close sub-path and close the figure.
-    EndFigure(D2D1_FIGURE_END_CLOSED);
+    if ( m_figureOpened )
+    {
+        EndFigure(D2D1_FIGURE_END_CLOSED);
+        MoveToPoint(m_figureStart.x, m_figureStart.y);
+    }
 }
 
 void* wxD2DPathData::GetNativePath() const
