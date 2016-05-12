@@ -1310,11 +1310,61 @@ void wxD2DPathData::GetCurrentPoint(wxDouble* x, wxDouble* y) const
 // adds another path
 void wxD2DPathData::AddPath(const wxGraphicsPathData* path)
 {
-    const wxD2DPathData* d2dPath = static_cast<const wxD2DPathData*>(path);
+    wxD2DPathData* d2dPath =
+         const_cast<wxD2DPathData*>(static_cast<const wxD2DPathData*>(path));
 
-    EnsureFigureOpen();
+    // Nothing to do if geometry of appended path is not initialized.
+    if ( d2dPath->m_pathGeometry == NULL || d2dPath->m_geometrySink == NULL )
+        return;
 
-    d2dPath->m_pathGeometry->Stream(m_geometrySink);
+    // Close current sub-path (leaving the figure as is).
+    EndFigure(D2D1_FIGURE_END_OPEN);
+
+    // Because only geometry with closed sink (immutable)
+    // can be transferred to another geometry object with
+    // ID2D1PathGeometry::Stream() so we have to make
+    // a writable copy of the appended geometry
+    // and re-assign it to the source path after actual appending.
+
+    // Close appended geometry sink.
+    d2dPath->EndFigure(D2D1_FIGURE_END_OPEN);
+    HRESULT hr;
+    hr = d2dPath->m_geometrySink->Close();
+    wxFAILED_HRESULT_MSG(hr);
+
+    // Transfer appended geometry to the current geometry sink.
+    hr = d2dPath->m_pathGeometry->Stream(m_geometrySink);
+    wxFAILED_HRESULT_MSG(hr);
+    // Copy auxiliary data if appended path is non-empty.
+    UINT32 segCount = 0;
+    UINT32 figCount = 0;
+    hr = d2dPath->m_pathGeometry->GetSegmentCount(&segCount);
+    wxFAILED_HRESULT_MSG(hr);
+    hr = d2dPath->m_pathGeometry->GetFigureCount(&figCount);
+    wxFAILED_HRESULT_MSG(hr);
+    if( segCount > 0 || figCount > 0 || d2dPath->m_currentPointSet || d2dPath->m_figureOpened )
+    {
+        m_currentPointSet = d2dPath->m_currentPointSet;
+        m_currentPoint = d2dPath->m_currentPoint;
+        m_figureOpened = d2dPath->m_figureOpened;
+        m_figureStart = d2dPath->m_figureStart;
+    }
+
+    // Make a writable copy of the appended geometry.
+    wxCOMPtr<ID2D1PathGeometry> srcPathGeometry;
+    wxCOMPtr<ID2D1GeometrySink> srcGeometrySink;
+    hr = m_direct2dfactory->CreatePathGeometry(&srcPathGeometry);
+    wxFAILED_HRESULT_MSG(hr);
+    hr = srcPathGeometry->Open(&srcGeometrySink);
+    wxFAILED_HRESULT_MSG(hr);
+    // Transfer appended geometry.
+    hr = d2dPath->m_pathGeometry->Stream(srcGeometrySink);
+    wxFAILED_HRESULT_MSG(hr);
+
+    // Assign a writable copy of the appendeed
+    // geometry back to the source path.
+    d2dPath->m_pathGeometry = srcPathGeometry;
+    d2dPath->m_geometrySink = srcGeometrySink;
 }
 
 // closes the current sub-path
