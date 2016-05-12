@@ -1245,8 +1245,7 @@ void wxGDIPlusPathData::CloseSubpath()
         // Since native GDI+ renderer doesn't move its current point
         // to the starting point of the figure we need to maintain
         // it on our own in this case.
-        m_logCurrentPoint = m_figureStart;
-        m_logCurrentPointSet = true;
+        MoveToPoint(m_figureStart.X, m_figureStart.Y);
     }
 }
 
@@ -1322,8 +1321,7 @@ void wxGDIPlusPathData::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDoub
     // current point is not moved to the starting point of the figure
     // (the same case as with CloseFigure) so we need to maintain it
     // on our own in this case.
-    m_logCurrentPoint = PointF((REAL)x, (REAL)y);
-    m_logCurrentPointSet = true;
+    MoveToPoint(x, y);
 }
 
 void wxGDIPlusPathData::AddPath( const wxGraphicsPathData* path )
