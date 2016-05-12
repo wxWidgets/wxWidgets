@@ -1073,7 +1073,21 @@ wxD2DPathData::wxGraphicsObjectRefData* wxD2DPathData::Clone() const
     wxD2DPathData* newPathData = new wxD2DPathData(GetRenderer(), m_direct2dfactory);
 
     newPathData->EnsureGeometryOpen();
-    m_pathGeometry->Stream(newPathData->m_geometrySink);
+
+    // Only geometry with closed sink (immutable)
+    // can be transferred to another geometry object with
+    // ID2D1PathGeometry::Stream() so we have to check
+    // if actual transfer succeeded.
+
+    // Transfer geometry to the new geometry sink.
+    HRESULT hr = m_pathGeometry->Stream(newPathData->m_geometrySink);
+    wxASSERT_MSG( SUCCEEDED(hr), wxS("Current geometry is in invalid state") );
+    if ( FAILED(hr) )
+    {
+        delete newPathData;
+        return NULL;
+    }
+    // Copy auxiliary data.
     newPathData->m_currentPoint = m_currentPoint;
     newPathData->m_transformMatrix = m_transformMatrix;
     newPathData->m_figureOpened = m_figureOpened;
