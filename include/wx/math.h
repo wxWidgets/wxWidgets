@@ -87,7 +87,11 @@
 #endif
 
 
-#if defined(__VISUALC__)||defined(__BORLAND__)
+/* Any C++11 compiler should provide isnan() */
+#if __cplusplus >= 201103
+    #include <cmath>
+    #define wxIsNaN(x) std::isnan(x)
+#elif defined(__VISUALC__)||defined(__BORLAND__)
     #define wxIsNaN(x) _isnan(x)
 #elif defined(__GNUG__)||defined(__GNUWIN32__)|| \
       defined(__SGI_CC__)||defined(__SUNCC__)||defined(__XLC__)|| \
