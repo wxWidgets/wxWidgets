@@ -53,11 +53,15 @@
 
 #ifdef __cplusplus
 
-/* Any C++11 compiler should provide isfinite() */
+/* Any C++11 compiler should provide isfinite() and isnan() */
 #if __cplusplus >= 201103
     #include <cmath>
     #define wxFinite(x) std::isfinite(x)
-#elif defined(__VISUALC__) || defined(__BORLANDC__)
+    #define wxIsNaN(x) std::isnan(x)
+
+#else /* !(__cplusplus >= 201103) */
+
+#if defined(__VISUALC__) || defined(__BORLANDC__)
     #include <float.h>
     #define wxFinite(x) _finite(x)
 #elif defined(__MINGW64_TOOLCHAIN__) || defined(__clang__)
@@ -96,6 +100,8 @@
 #else
     #define wxIsNaN(x) ((x) != (x))
 #endif
+
+#endif /* (__cplusplus >= 201103)/!(__cplusplus >= 201103) */
 
 #ifdef __INTELC__
 
