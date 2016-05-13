@@ -13,7 +13,7 @@
 // wxGauge
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGauge: public wxControl
+class WXDLLIMPEXP_CORE wxGauge: public wxGaugeBase
 {
 public:
     wxGauge() { Init(); }
@@ -40,17 +40,14 @@ public:
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxGaugeNameStr );
 
-    // determinate mode API
-    void SetRange( int r );
-    void SetValue( int pos );
+    // implement base class virtual methods
+    void SetRange(int range) wxOVERRIDE;
+    int GetRange() const wxOVERRIDE;
 
-    int GetRange() const;
-    int GetValue() const;
+    void SetValue(int pos) wxOVERRIDE;
+    int GetValue() const wxOVERRIDE;
 
-    // indeterminate mode API
-    virtual void Pulse();
-
-    bool IsVertical() const { return HasFlag(wxGA_VERTICAL); }
+    virtual void Pulse() wxOVERRIDE;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
