@@ -581,6 +581,7 @@ All:
 
 - Fix wxFileName::MakeRelativeTo() for directory relatively to itself.
 - Fix wxLocale::IsOk() return true even if setting the locale failed.
+- Null-terminate wxApp::argv for compatibility with the real argv.
 
 Unix:
 
