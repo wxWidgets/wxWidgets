@@ -847,7 +847,8 @@ void wxNSTextViewControl::SetStyle(long start,
         if( style.HasLeftIndent() )
         {
             storage = [m_textView textStorage];
-            range = NSMakeRange(0, storage.string.length);
+            NSInteger insPoint = [[[m_textView selectedRanges] objectAtIndex:0] rangeValue].location;
+            range = NSMakeRange(insPoint, storage.string.length - insPoint);
         }
     }
     else // Set the attributes just for this range.
@@ -874,8 +875,6 @@ void wxNSTextViewControl::SetStyle(long start,
         if( start == -1 && end == -1 )
         {
             [attrs setValue: paragraphStyle forKey: NSParagraphStyleAttributeName];
-//            NSDictionary *attrib = @{ NSParagraphStyleAttributeName : paragraphStyle };
-//            [m_textView setTypingAttributes: attrib];
             [m_textView setTypingAttributes:attrs];
         }
         [paragraphStyle release];
