@@ -850,6 +850,8 @@ void wxNSTextViewControl::SetStyle(long start,
             NSInteger insPoint = [[[m_textView selectedRanges] objectAtIndex:0] rangeValue].location;
             range = NSMakeRange(insPoint, storage.string.length - insPoint);
         }
+        else
+            [m_textView setTypingAttributes:attrs];
     }
     else // Set the attributes just for this range.
     {
