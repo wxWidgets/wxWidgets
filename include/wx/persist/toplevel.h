@@ -79,10 +79,10 @@ public:
     {
         wxTopLevelWindow * const tlw = Get();
 
-        long x wxDUMMY_INITIALIZE(-1),
-             y wxDUMMY_INITIALIZE(-1),
-             w wxDUMMY_INITIALIZE(-1),
-             h wxDUMMY_INITIALIZE(-1);
+        int x wxDUMMY_INITIALIZE(-1),
+            y wxDUMMY_INITIALIZE(-1),
+            w wxDUMMY_INITIALIZE(-1),
+            h wxDUMMY_INITIALIZE(-1);
         const bool hasPos = RestoreValue(wxPERSIST_TLW_X, &x) &&
                             RestoreValue(wxPERSIST_TLW_Y, &y);
         const bool hasSize = RestoreValue(wxPERSIST_TLW_W, &w) &&
