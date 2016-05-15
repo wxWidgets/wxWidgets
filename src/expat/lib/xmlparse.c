@@ -6264,7 +6264,7 @@ poolGrow(STRING_POOL *pool)
   }
   if (pool->blocks && pool->start == pool->blocks->s) {
     BLOCK *temp;
-    int blockSize = (int)(pool->end - pool->start)*2;
+    int blockSize = (int)((unsigned)(pool->end - pool->start)*2U);
 
     if (blockSize < 0)
       return XML_FALSE;
