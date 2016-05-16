@@ -220,10 +220,6 @@
     #define TB_SETDISABLEDIMAGELIST (WM_USER + 54)
 #endif // !defined(TB_SETDISABLEDIMAGELIST)
 
-#ifndef CFM_BACKCOLOR
-    #define CFM_BACKCOLOR 0x04000000
-#endif
-
 #ifndef HANGUL_CHARSET
     #define HANGUL_CHARSET 129
 #endif

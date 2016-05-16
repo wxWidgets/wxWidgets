@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 25 February 2016                                                    *
+# Date : 2 May 2016                                                          *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -686,6 +686,8 @@ arcall.obj : arcall.cpp
 arcfind.obj : arcfind.cpp
 tarstrm.obj : tarstrm.cpp
 datavcmn.obj : datavcmn.cpp
+	cxx$(CXX_DEFINE)/warn=disable=(INTSIGNCHANGE)/obj=datavcmn.obj \
+	datavcmn.cpp
 debugrpt.obj : debugrpt.cpp
 translation.obj : translation.cpp
 languageinfo.obj : languageinfo.cpp

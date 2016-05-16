@@ -60,7 +60,7 @@
     #include "wx/module.h"
     #include "wx/window.h"
     #include "wx/msw/private.h"
-    #include "wx/math.h"
+    #include <float.h> // for FLT_MAX
 #endif // !WX_PRECOMP
 
 #include "wx/graphics.h"
@@ -1017,6 +1017,8 @@ private:
 
     void EnsureFigureOpen(wxDouble x = 0, wxDouble y = 0);
 
+    void EndFigure(D2D1_FIGURE_END figureEnd);
+
 private :
     wxCOMPtr<ID2D1PathGeometry> m_pathGeometry;
 
@@ -1026,11 +1028,13 @@ private :
 
     mutable wxCOMPtr<ID2D1TransformedGeometry> m_transformedGeometry;
 
+    bool m_currentPointSet;
     D2D1_POINT_2F m_currentPoint;
 
     D2D1_MATRIX_3X2_F m_transformMatrix;
 
     bool m_figureOpened;
+    D2D1_POINT_2F m_figureStart;
 
     bool m_geometryWritable;
 };
@@ -1041,9 +1045,12 @@ private :
 
 wxD2DPathData::wxD2DPathData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFactory) :
     wxGraphicsPathData(renderer), m_direct2dfactory(d2dFactory),
+    m_currentPointSet(false),
     m_currentPoint(D2D1::Point2F(0.0f, 0.0f)),
     m_transformMatrix(D2D1::Matrix3x2F::Identity()),
-    m_figureOpened(false), m_geometryWritable(true)
+    m_figureOpened(false),
+    m_figureStart(D2D1::Point2F(0.0f, 0.0f)),
+    m_geometryWritable(true)
 {
     m_direct2dfactory->CreatePathGeometry(&m_pathGeometry);
     // To properly initialize path geometry there is also
@@ -1066,7 +1073,25 @@ wxD2DPathData::wxGraphicsObjectRefData* wxD2DPathData::Clone() const
     wxD2DPathData* newPathData = new wxD2DPathData(GetRenderer(), m_direct2dfactory);
 
     newPathData->EnsureGeometryOpen();
-    m_pathGeometry->Stream(newPathData->m_geometrySink);
+
+    // Only geometry with closed sink (immutable)
+    // can be transferred to another geometry object with
+    // ID2D1PathGeometry::Stream() so we have to check
+    // if actual transfer succeeded.
+
+    // Transfer geometry to the new geometry sink.
+    HRESULT hr = m_pathGeometry->Stream(newPathData->m_geometrySink);
+    wxASSERT_MSG( SUCCEEDED(hr), wxS("Current geometry is in invalid state") );
+    if ( FAILED(hr) )
+    {
+        delete newPathData;
+        return NULL;
+    }
+    // Copy auxiliary data.
+    newPathData->m_currentPoint = m_currentPoint;
+    newPathData->m_transformMatrix = m_transformMatrix;
+    newPathData->m_figureOpened = m_figureOpened;
+    newPathData->m_figureStart = m_figureStart;
 
     return newPathData;
 }
@@ -1123,28 +1148,54 @@ void wxD2DPathData::EnsureFigureOpen(wxDouble x, wxDouble y)
 
     if (!m_figureOpened)
     {
-        m_geometrySink->BeginFigure(D2D1::Point2F(x, y), D2D1_FIGURE_BEGIN_FILLED);
+        m_figureStart = D2D1::Point2F(x, y);
+        m_geometrySink->BeginFigure(m_figureStart, D2D1_FIGURE_BEGIN_FILLED);
         m_figureOpened = true;
-        m_currentPoint = D2D1::Point2F(x, y);
+        m_currentPoint = m_figureStart;
+    }
+}
+
+void wxD2DPathData::EndFigure(D2D1_FIGURE_END figureEnd)
+{
+    if (m_figureOpened)
+    {
+        // Ensure that sub-path being closed contains at least one point.
+        if( figureEnd == D2D1_FIGURE_END_CLOSED )
+            m_geometrySink->AddLine(m_currentPoint);
+
+        m_geometrySink->EndFigure(figureEnd);
+        m_figureOpened = false;
+
+        // If the figure is closed then current point
+        // should be moved to the beginning of the figure.
+        if( figureEnd == D2D1_FIGURE_END_CLOSED )
+            m_currentPoint = m_figureStart;
     }
 }
 
 void wxD2DPathData::MoveToPoint(wxDouble x, wxDouble y)
 {
-    if (m_figureOpened)
-    {
-        CloseSubpath();
-    }
-
+    // Close current sub-path (leaving the figure as is).
+    EndFigure(D2D1_FIGURE_END_OPEN);
+    // And open a new sub-path.
     EnsureFigureOpen(x, y);
 
     m_currentPoint = D2D1::Point2F(x, y);
+    m_currentPointSet = true;
 }
 
 // adds a straight line from the current point to (x,y)
 void wxD2DPathData::AddLineToPoint(wxDouble x, wxDouble y)
 {
-    EnsureFigureOpen();
+    // If current point is not yet set then
+    // this function should behave as MoveToPoint.
+    if( !m_currentPointSet )
+    {
+        MoveToPoint(x, y);
+        return;
+    }
+
+    EnsureFigureOpen(m_currentPoint.x, m_currentPoint.y);
     m_geometrySink->AddLine(D2D1::Point2F(x, y));
 
     m_currentPoint = D2D1::Point2F(x, y);
@@ -1153,7 +1204,13 @@ void wxD2DPathData::AddLineToPoint(wxDouble x, wxDouble y)
 // adds a cubic Bezier curve from the current point, using two control points and an end point
 void wxD2DPathData::AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y)
 {
-    EnsureFigureOpen();
+    // If no current point is set then this function should behave
+    // as if preceded by a call to MoveToPoint(cx1, cy1).
+    if( m_currentPointSet )
+        EnsureFigureOpen(m_currentPoint.x, m_currentPoint.y);
+    else
+        MoveToPoint(cx1, cy1);
+
     D2D1_BEZIER_SEGMENT bezierSegment = {
         { (FLOAT)cx1, (FLOAT)cy1 },
         { (FLOAT)cx2, (FLOAT)cy2 },
@@ -1230,7 +1287,17 @@ void wxD2DPathData::AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
     const wxDouble rx = w / 2.0;
     const wxDouble ry = h / 2.0;
 
-    MoveToPoint(x, y + ry);
+    MoveToPoint(x + w, y + ry);
+
+    D2D1_ARC_SEGMENT arcSegmentLower =
+    {
+        D2D1::Point2((FLOAT)(x), (FLOAT)(y + ry)),     // end point
+        D2D1::SizeF((FLOAT)(rx), (FLOAT)(ry)),         // size
+        0.0f,
+        D2D1_SWEEP_DIRECTION_CLOCKWISE,
+        D2D1_ARC_SIZE_SMALL
+    };
+    m_geometrySink->AddArc(arcSegmentLower);
 
     D2D1_ARC_SEGMENT arcSegmentUpper =
     {
@@ -1242,15 +1309,7 @@ void wxD2DPathData::AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
     };
     m_geometrySink->AddArc(arcSegmentUpper);
 
-    D2D1_ARC_SEGMENT arcSegmentLower =
-    {
-        D2D1::Point2((FLOAT)(x), (FLOAT)(y + ry)),     // end point
-        D2D1::SizeF((FLOAT)(rx), (FLOAT)(ry)),         // size
-        0.0f,
-        D2D1_SWEEP_DIRECTION_CLOCKWISE,
-        D2D1_ARC_SIZE_SMALL
-    };
-    m_geometrySink->AddArc(arcSegmentLower);
+    CloseSubpath();
 }
 
 // gets the last point of the current path, (0,0) if not yet set
@@ -1265,20 +1324,71 @@ void wxD2DPathData::GetCurrentPoint(wxDouble* x, wxDouble* y) const
 // adds another path
 void wxD2DPathData::AddPath(const wxGraphicsPathData* path)
 {
-    const wxD2DPathData* d2dPath = static_cast<const wxD2DPathData*>(path);
+    wxD2DPathData* d2dPath =
+         const_cast<wxD2DPathData*>(static_cast<const wxD2DPathData*>(path));
 
-    EnsureFigureOpen();
+    // Nothing to do if geometry of appended path is not initialized.
+    if ( d2dPath->m_pathGeometry == NULL || d2dPath->m_geometrySink == NULL )
+        return;
 
-    d2dPath->m_pathGeometry->Stream(m_geometrySink);
+    // Close current sub-path (leaving the figure as is).
+    EndFigure(D2D1_FIGURE_END_OPEN);
+
+    // Because only geometry with closed sink (immutable)
+    // can be transferred to another geometry object with
+    // ID2D1PathGeometry::Stream() so we have to make
+    // a writable copy of the appended geometry
+    // and re-assign it to the source path after actual appending.
+
+    // Close appended geometry sink.
+    d2dPath->EndFigure(D2D1_FIGURE_END_OPEN);
+    HRESULT hr;
+    hr = d2dPath->m_geometrySink->Close();
+    wxFAILED_HRESULT_MSG(hr);
+
+    // Transfer appended geometry to the current geometry sink.
+    hr = d2dPath->m_pathGeometry->Stream(m_geometrySink);
+    wxFAILED_HRESULT_MSG(hr);
+    // Copy auxiliary data if appended path is non-empty.
+    UINT32 segCount = 0;
+    UINT32 figCount = 0;
+    hr = d2dPath->m_pathGeometry->GetSegmentCount(&segCount);
+    wxFAILED_HRESULT_MSG(hr);
+    hr = d2dPath->m_pathGeometry->GetFigureCount(&figCount);
+    wxFAILED_HRESULT_MSG(hr);
+    if( segCount > 0 || figCount > 0 || d2dPath->m_currentPointSet || d2dPath->m_figureOpened )
+    {
+        m_currentPointSet = d2dPath->m_currentPointSet;
+        m_currentPoint = d2dPath->m_currentPoint;
+        m_figureOpened = d2dPath->m_figureOpened;
+        m_figureStart = d2dPath->m_figureStart;
+    }
+
+    // Make a writable copy of the appended geometry.
+    wxCOMPtr<ID2D1PathGeometry> srcPathGeometry;
+    wxCOMPtr<ID2D1GeometrySink> srcGeometrySink;
+    hr = m_direct2dfactory->CreatePathGeometry(&srcPathGeometry);
+    wxFAILED_HRESULT_MSG(hr);
+    hr = srcPathGeometry->Open(&srcGeometrySink);
+    wxFAILED_HRESULT_MSG(hr);
+    // Transfer appended geometry.
+    hr = d2dPath->m_pathGeometry->Stream(srcGeometrySink);
+    wxFAILED_HRESULT_MSG(hr);
+
+    // Assign a writable copy of the appendeed
+    // geometry back to the source path.
+    d2dPath->m_pathGeometry = srcPathGeometry;
+    d2dPath->m_geometrySink = srcGeometrySink;
 }
 
 // closes the current sub-path
 void wxD2DPathData::CloseSubpath()
 {
-    if (m_figureOpened)
+    // Close sub-path and close the figure.
+    if ( m_figureOpened )
     {
-        m_geometrySink->EndFigure(D2D1_FIGURE_END_CLOSED);
-        m_figureOpened = false;
+        EndFigure(D2D1_FIGURE_END_CLOSED);
+        MoveToPoint(m_figureStart.x, m_figureStart.y);
     }
 }
 

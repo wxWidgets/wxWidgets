@@ -51,12 +51,16 @@ public:
     /**
         Appends a circle around (@a x,@a y) with radius @a r as a new closed
         subpath.
+        After this call the current point will be at (@a x+@a r, @a y).
     */
     virtual void AddCircle(wxDouble x, wxDouble y, wxDouble r);
 
     /**
         Adds a cubic bezier curve from the current point, using two control
         points and an end point.
+        If there is no current point before the call to AddCurveToPoint() this
+        function will behave as if preceded by a call to
+        MoveToPoint(@a cx1, @a cy1).
     */
     virtual void AddCurveToPoint(wxDouble cx1, wxDouble cy1,
                                  wxDouble cx2, wxDouble cy2,
@@ -64,50 +68,67 @@ public:
     /**
         Adds a cubic bezier curve from the current point, using two control
         points and an end point.
+        If there is no current point before the call to AddCurveToPoint() this
+        function will behave as if preceded by a call to MoveToPoint(@a c1).
     */
     void AddCurveToPoint(const wxPoint2DDouble& c1,
                          const wxPoint2DDouble& c2,
                          const wxPoint2DDouble& e);
 
     /**
-        Appends an ellipse fitting into the passed in rectangle.
+        Appends an ellipse fitting into the passed in rectangle as a new
+        closed subpath.
+        After this call the current point will be at (@a x+@a w, @a y+@a h/2).
     */
     virtual void AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 
     /**
         Adds a straight line from the current point to (@a x,@a y).
+        If current point is not yet set before the call to AddLineToPoint()
+        this function will behave as MoveToPoint().
     */
     virtual void AddLineToPoint(wxDouble x, wxDouble y);
     /**
         Adds a straight line from the current point to @a p.
+        If current point is not yet set before the call to AddLineToPoint()
+        this function will behave as MoveToPoint().
     */
     void AddLineToPoint(const wxPoint2DDouble& p);
 
     /**
-        Adds another path.
+        Adds another path onto the current path. After this call the current
+        point will be at the added path's current point.
     */
     virtual void AddPath(const wxGraphicsPath& path);
 
     /**
         Adds a quadratic bezier curve from the current point, using a control
         point and an end point.
+        If there is no current point before the call to AddQuadCurveToPoint()
+        this function will behave as if preceded by a call to
+        MoveToPoint(@a cx, @a cy).
     */
     virtual void AddQuadCurveToPoint(wxDouble cx, wxDouble cy,
                                      wxDouble x, wxDouble y);
 
     /**
-        Appends a rectangle as a new closed subpath.
+        Appends a rectangle as a new closed subpath. After this call
+        the current point will be at (@a x, @a y).
     */
     virtual void AddRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 
     /**
         Appends a rounded rectangle as a new closed subpath.
+        If @a radius equals 0 this function will behave as AddRectangle(),
+        otherwise after this call the current point will be at
+        (@a x+@a w, @a y+@a h/2).
     */
     virtual void AddRoundedRectangle(wxDouble x, wxDouble y, wxDouble w,
                                      wxDouble h, wxDouble radius);
 
     /**
-        Closes the current sub-path.
+        Closes the current sub-path. After this call the current point will be
+        at the joined endpoint of the sub-path.
     */
     virtual void CloseSubpath();
 

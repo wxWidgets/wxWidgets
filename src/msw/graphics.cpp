@@ -181,6 +181,10 @@ public :
 
 private :
     GraphicsPath* m_path;
+    bool m_logCurrentPointSet;
+    PointF m_logCurrentPoint;
+    bool m_figureOpened;
+    PointF m_figureStart;
 };
 
 class wxGDIPlusMatrixData : public wxGraphicsMatrixData
@@ -1161,6 +1165,10 @@ wxGDIPlusBitmapData::~wxGDIPlusBitmapData()
 //-----------------------------------------------------------------------------
 
 wxGDIPlusPathData::wxGDIPlusPathData(wxGraphicsRenderer* renderer, GraphicsPath* path ) : wxGraphicsPathData(renderer)
+    , m_logCurrentPointSet(false)
+    , m_logCurrentPoint(0.0, 0.0)
+    , m_figureOpened(false)
+    , m_figureStart(0.0, 0.0)
 {
     if ( path )
         m_path = path;
@@ -1175,7 +1183,14 @@ wxGDIPlusPathData::~wxGDIPlusPathData()
 
 wxGraphicsObjectRefData* wxGDIPlusPathData::Clone() const
 {
-    return new wxGDIPlusPathData( GetRenderer() , m_path->Clone());
+    wxGDIPlusPathData* newPathData =
+                     new wxGDIPlusPathData(GetRenderer(), m_path->Clone());
+    newPathData->m_logCurrentPointSet = m_logCurrentPointSet;
+    newPathData->m_logCurrentPoint = m_logCurrentPoint;
+    newPathData->m_figureOpened = m_figureOpened;
+    newPathData->m_figureStart = m_figureStart;
+
+    return newPathData;
 }
 
 //
@@ -1185,17 +1200,53 @@ wxGraphicsObjectRefData* wxGDIPlusPathData::Clone() const
 void wxGDIPlusPathData::MoveToPoint( wxDouble x , wxDouble y )
 {
     m_path->StartFigure();
-    m_path->AddLine((REAL) x,(REAL) y,(REAL) x,(REAL) y);
+    m_figureOpened = true;
+    m_figureStart = PointF((REAL)x, (REAL)y);
+    // Since native current point is not updated in any way
+    // we have to maintain current point location on our own in this case.
+    m_logCurrentPoint = m_figureStart;
+    m_logCurrentPointSet = true;
 }
 
 void wxGDIPlusPathData::AddLineToPoint( wxDouble x , wxDouble y )
 {
-    m_path->AddLine((REAL) x,(REAL) y,(REAL) x,(REAL) y);
+    PointF start;
+    if ( m_logCurrentPointSet )
+    {
+        start = m_logCurrentPoint;
+        // After calling AddLine() the native current point
+        // will be updated and can be used.
+        m_logCurrentPointSet = false;
+    }
+    else
+    {
+        Status st = m_path->GetLastPoint(&start);
+        // If current point is not yet set then
+        // this function should behave as MoveToPoint.
+        if ( st != Ok )
+        {
+            MoveToPoint(x, y);
+            return;
+        }
+    }
+    m_path->AddLine(start.X, start.Y, (REAL)x, (REAL)y);
 }
 
 void wxGDIPlusPathData::CloseSubpath()
 {
-    m_path->CloseFigure();
+    if( m_figureOpened )
+    {
+        // Ensure that sub-path being closed contains at least one point.
+        if ( m_logCurrentPointSet )
+            m_path->AddLine(m_logCurrentPoint, m_logCurrentPoint);
+
+        m_path->CloseFigure();
+        m_figureOpened = false;
+        // Since native GDI+ renderer doesn't move its current point
+        // to the starting point of the figure we need to maintain
+        // it on our own in this case.
+        MoveToPoint(m_figureStart.X, m_figureStart.Y);
+    }
 }
 
 void wxGDIPlusPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y )
@@ -1204,7 +1255,23 @@ void wxGDIPlusPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx
     PointF c2(cx2,cy2);
     PointF end(x,y);
     PointF start;
-    m_path->GetLastPoint(&start);
+    // If no current point is set then this function should behave
+    // as if preceded by a call to MoveToPoint(cx1, cy1).
+    if ( m_logCurrentPointSet )
+    {
+        start = m_logCurrentPoint;
+        // After calling AddBezier() the native current point
+        // will be updated and can be used.
+        m_logCurrentPointSet = false;
+    }
+    else
+    {
+        if( m_path->GetLastPoint(&start) != Ok )
+        {
+            MoveToPoint(cx1, cy1);
+            start = c1;
+        }
+    }
     m_path->AddBezier(start,c1,c2,end);
 }
 
@@ -1212,7 +1279,11 @@ void wxGDIPlusPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx
 void wxGDIPlusPathData::GetCurrentPoint( wxDouble* x, wxDouble* y) const
 {
     PointF start;
-    m_path->GetLastPoint(&start);
+    if ( m_logCurrentPointSet )
+        start = m_logCurrentPoint;
+    else
+        m_path->GetLastPoint(&start);
+
     *x = start.X ;
     *y = start.Y ;
 }
@@ -1239,23 +1310,46 @@ void wxGDIPlusPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, double start
         }
    }
    m_path->AddArc((REAL) (x-r),(REAL) (y-r),(REAL) (2*r),(REAL) (2*r),wxRadToDeg(startAngle),wxRadToDeg(sweepAngle));
+   // After calling AddArc() the native current point will be updated and can be used.
+   m_logCurrentPointSet = false;
 }
 
 void wxGDIPlusPathData::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     m_path->AddRectangle(RectF(x,y,w,h));
+    // Drawn rectangle is an intrinsically closed shape but native
+    // current point is not moved to the starting point of the figure
+    // (the same case as with CloseFigure) so we need to maintain it
+    // on our own in this case.
+    MoveToPoint(x, y);
 }
 
 void wxGDIPlusPathData::AddPath( const wxGraphicsPathData* path )
 {
-    m_path->AddPath( (GraphicsPath*) path->GetNativePath(), FALSE);
-}
+    const wxGDIPlusPathData* pathData = static_cast<const wxGDIPlusPathData*>(path);
+    const GraphicsPath* grPath = static_cast<const GraphicsPath*>(pathData->GetNativePath());
 
+    m_path->AddPath(grPath, FALSE);
+    // Copy auxiliary data if appended path is non-empty.
+    if( grPath->GetPointCount() > 0 || pathData->m_logCurrentPointSet || pathData->m_figureOpened )
+    {
+        m_logCurrentPointSet = pathData->m_logCurrentPointSet;
+        m_logCurrentPoint = pathData->m_logCurrentPoint;
+        m_figureOpened = pathData->m_figureOpened;
+        m_figureStart = pathData->m_figureStart;
+    }
+}
 
 // transforms each point of this path by the matrix
 void wxGDIPlusPathData::Transform( const wxGraphicsMatrixData* matrix )
 {
-    m_path->Transform( (Matrix*) matrix->GetNativeMatrix() );
+    const Matrix* m = static_cast<const Matrix*>(matrix->GetNativeMatrix());
+    m_path->Transform(m);
+    // Transform also auxiliary points.
+    if ( m_logCurrentPointSet )
+        m->TransformPoints(&m_logCurrentPoint, 1);
+    if ( m_figureOpened )
+        m->TransformPoints(&m_figureStart, 1);
 }
 
 // gets the bounding box enclosing all points (possibly including control points)

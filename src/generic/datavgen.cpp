@@ -3959,7 +3959,7 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, wxK
     {
         if ( forward )
         {
-            m_currentCol = GetOwner()->GetColumnAt(1);
+            m_currentCol = GetOwner()->GetColumnAt(0);
             m_currentColSetByKeyboard = true;
             RefreshRow(m_currentRow);
             return true;
