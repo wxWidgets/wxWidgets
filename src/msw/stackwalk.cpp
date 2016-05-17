@@ -343,7 +343,7 @@ void wxStackWalker::Walk(size_t skip, size_t maxDepth)
         ctx.Eip = regEip;
         ctx.Esp = regEsp;
         ctx.Ebp = regEbp;
-    #elif __VISUALC__
+    #elif defined(__VISUALC__)
         __asm
         {
         Here:
