@@ -1231,6 +1231,14 @@
 #   endif
 #endif /* !defined(wxUSE_XRC) */
 
+#ifndef wxUSE_XTEST
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_XTEST must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_XTEST 0
+#   endif
+#endif /* !defined(wxUSE_XTEST) */
+
 #endif /* wxUSE_GUI */
 
 /*
