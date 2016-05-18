@@ -542,6 +542,7 @@ WX_ARG_WITHOUT(gtkprint,   [  --without-gtkprint      don't use GTK printing sup
 WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associating MIME types], wxUSE_LIBGNOMEVFS)
 WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifications], wxUSE_LIBNOTIFY)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
+WX_ARG_WITH(xtest,         [  --with-xtest            use XTest extension], wxUSE_XTEST)
 
 fi
 dnl for GUI only
@@ -6360,6 +6361,20 @@ fi
 if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
     AC_DEFINE(wxUSE_UIACTIONSIMULATOR)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
+    if test "$wxUSE_XTEST" = "yes" ; then
+        PKG_CHECK_MODULES(XTST, xtst,
+            [
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $XTST_LIBS"
+                CFLAGS="$XTST_CFLAGS $CFLAGS"
+                CXXFLAGS="$XTST_CFLAGS $CXXFLAGS"
+                AC_DEFINE(wxUSE_XTEST)
+            ],
+            [
+                AC_MSG_WARN([XTest extension not found])
+                wxUSE_XTEST="no"
+            ]
+        )
+    fi
 fi
 
 if test "$wxUSE_DC_TRANSFORM_MATRIX" = "yes" ; then
