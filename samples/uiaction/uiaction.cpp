@@ -141,9 +141,9 @@ MyFrame::MyFrame(const wxString& title)
     wxMenu *fileMenu = new wxMenu;
 
     fileMenu->Append(wxID_NEW, "&New File...", "Open a new file");
-    fileMenu->Append(RunSimulation, "&Run Simulation",
+    fileMenu->Append(RunSimulation, "&Run Simulation\tCtrl-R",
                      "Run predefined UI action simulation");
-    fileMenu->Append(SimulateText, "Simulate &text input...",
+    fileMenu->Append(SimulateText, "Simulate &text input...\tCtrl-T",
                      "Enter text to simulate");
     fileMenu->AppendSeparator();
 
@@ -174,7 +174,15 @@ MyFrame::MyFrame(const wxString& title)
 
 void MyFrame::OnRunSimulation(wxCommandEvent& WXUNUSED(event))
 {
-    m_text->SetValue("=== Starting the simulation ===\n");
+    m_text->SetValue("=== Starting the simulation "
+                     "(release any pressed keys) ===\n");
+
+    // This sleep is needed to give the time for the currently pressed modifier
+    // keys, if any, to be released. Notice that Control modifier could well be
+    // pressed if this command was activated from the menu using accelerator
+    // and keeping it pressed would totally derail the test below, e.g. "A" key
+    // press would actually become "Ctrl+A" selecting the entire text and so on.
+    wxMilliSleep(500);
 
     wxStopWatch sw;
 
