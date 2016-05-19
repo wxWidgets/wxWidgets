@@ -219,7 +219,9 @@ wxVideoMode wxXF86VidMode_GetCurrentMode(Display* display, int nScreen)
 {
   XF86VidModeModeLine VM;
   int nDotClock;
-  XF86VidModeGetModeLine(display, nScreen, &nDotClock, &VM);
+  if ( !XF86VidModeGetModeLine(display, nScreen, &nDotClock, &VM) )
+      return wxVideoMode();
+
   wxClearXVM(VM);
   return wxCVM2(VM, nDotClock, display, nScreen);
 }
