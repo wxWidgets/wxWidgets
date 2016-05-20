@@ -20,6 +20,9 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#if wxUSE_XTEST
+#include <X11/extensions/XTest.h>
+#endif
 
 #include "wx/unix/utilsx11.h"
 
@@ -48,6 +51,10 @@ void SendButtonEvent(int button, bool isDown)
     wxX11Display display;
     wxCHECK_RET(display, "No display available!");
 
+#if wxUSE_XTEST
+    XTestFakeButtonEvent(display, xbutton, isDown, 0);
+
+#else // !wxUSE_XTEST
     XEvent event;
     memset(&event, 0x00, sizeof(event));
 
@@ -71,6 +78,7 @@ void SendButtonEvent(int button, bool isDown)
     }
 
     XSendEvent(display, PointerWindow, True, 0xfff, &event);
+#endif // !wxUSE_XTEST
 }
 
 } // anonymous namespace
@@ -86,8 +94,13 @@ bool wxUIActionSimulator::MouseMove(long x, long y)
     wxX11Display display;
     wxASSERT_MSG(display, "No display available!");
 
+#if wxUSE_XTEST
+    XTestFakeMotionEvent(display, -1, x, y, 0);
+
+#else // !wxUSE_XTEST
     Window root = display.DefaultRoot();
     XWarpPointer(display, None, root, 0, 0, 0, 0, x, y);
+#endif // !wxUSE_XTEST
 
     // At least with wxGTK we must always process the pending events before the
     // mouse position change really takes effect, so just do it from here
@@ -130,6 +143,14 @@ bool wxUIActionSimulator::DoKey(int keycode, int modifiers, bool isDown)
     if ( xkeycode == NoSymbol )
         return false;
 
+#if wxUSE_XTEST
+    wxUnusedVar(modifiers);
+    wxUnusedVar(mask);
+    wxUnusedVar(type);
+    XTestFakeKeyEvent(display, xkeycode, isDown, 0);
+    return true;
+
+#else // !wxUSE_XTEST
     Window focus;
     int revert;
     XGetInputFocus(display, &focus, &revert);
@@ -164,6 +185,7 @@ bool wxUIActionSimulator::DoKey(int keycode, int modifiers, bool isDown)
     XSendEvent(event.display, event.window, True, mask, (XEvent*) &event);
 
     return true;
+#endif // !wxUSE_XTEST
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR

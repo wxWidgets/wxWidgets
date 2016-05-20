@@ -570,6 +570,8 @@
 
 #define wxUSE_UIACTIONSIMULATOR 0
 
+#define wxUSE_XTEST 0
+
 
 #define wxUSE_POSTSCRIPT  0
 
