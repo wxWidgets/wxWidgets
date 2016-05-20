@@ -14,6 +14,11 @@
     the other cases which ensures that it is the most efficient solution for
     working with 64 bit integers independently of the architecture.
 
+    @note This class is obsolete as there are no supported implementations not
+    providing a native 64 bit integer type any longer and the application code
+    can safely use "long long" or "std::int64_t" directly instead of using this
+    class.
+
     wxLongLong defines all usual arithmetic operations such as addition,
     subtraction, bitwise shifts and logical operations as well as multiplication
     and division (not yet for the machines without native @e long long).
