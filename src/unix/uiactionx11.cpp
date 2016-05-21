@@ -33,14 +33,7 @@ namespace
 class wxUIActionSimulatorX11Impl : public wxUIActionSimulatorImpl
 {
 public:
-    // Returns a pointer to the global simulator object: as it's stateless, we
-    // can reuse the same one without having to allocate it on the heap all the
-    // time.
-    static wxUIActionSimulatorX11Impl* Get()
-    {
-        static wxUIActionSimulatorX11Impl s_impl;
-        return &s_impl;
-    }
+    wxUIActionSimulatorX11Impl() { }
 
     virtual bool MouseMove(long x, long y) wxOVERRIDE;
     virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
@@ -49,17 +42,19 @@ public:
     virtual bool DoKey(int keycode, int modifiers, bool isDown) wxOVERRIDE;
 
 private:
-    // This class has no public ctors, use Get() instead.
-    wxUIActionSimulatorX11Impl() { }
-
     // Common implementation of Mouse{Down,Up}()
-    static void SendButtonEvent(int button, bool isDown);
+    bool SendButtonEvent(int button, bool isDown);
+
+    wxX11Display m_display;
 
     wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorX11Impl);
 };
 
-void wxUIActionSimulatorX11Impl::SendButtonEvent(int button, bool isDown)
+bool wxUIActionSimulatorX11Impl::SendButtonEvent(int button, bool isDown)
 {
+    if ( !m_display )
+        return false;
+
     int xbutton;
     switch (button)
     {
@@ -74,14 +69,11 @@ void wxUIActionSimulatorX11Impl::SendButtonEvent(int button, bool isDown)
             break;
         default:
             wxFAIL_MSG("Unsupported button passed in.");
-            return;
+            return false;
     }
 
-    wxX11Display display;
-    wxCHECK_RET(display, "No display available!");
-
 #if wxUSE_XTEST
-    XTestFakeButtonEvent(display, xbutton, isDown, 0);
+    XTestFakeButtonEvent(m_display, xbutton, isDown, 0);
 
 #else // !wxUSE_XTEST
     XEvent event;
@@ -91,7 +83,7 @@ void wxUIActionSimulatorX11Impl::SendButtonEvent(int button, bool isDown)
     event.xbutton.button = xbutton;
     event.xbutton.same_screen = True;
 
-    XQueryPointer(display, display.DefaultRoot(),
+    XQueryPointer(m_display, m_display.DefaultRoot(),
                   &event.xbutton.root, &event.xbutton.window,
                   &event.xbutton.x_root, &event.xbutton.y_root,
                   &event.xbutton.x, &event.xbutton.y, &event.xbutton.state);
@@ -100,35 +92,36 @@ void wxUIActionSimulatorX11Impl::SendButtonEvent(int button, bool isDown)
     while (event.xbutton.subwindow)
     {
         event.xbutton.window = event.xbutton.subwindow;
-        XQueryPointer(display, event.xbutton.window,
+        XQueryPointer(m_display, event.xbutton.window,
                       &event.xbutton.root, &event.xbutton.subwindow,
                       &event.xbutton.x_root, &event.xbutton.y_root,
                       &event.xbutton.x, &event.xbutton.y, &event.xbutton.state);
     }
 
-    XSendEvent(display, PointerWindow, True, 0xfff, &event);
+    XSendEvent(m_display, PointerWindow, True, 0xfff, &event);
 #endif // !wxUSE_XTEST
+
+    return true;
 }
 
 } // anonymous namespace
 
 bool wxUIActionSimulatorX11Impl::MouseDown(int button)
 {
-    SendButtonEvent(button, true);
-    return true;
+    return SendButtonEvent(button, true);
 }
 
 bool wxUIActionSimulatorX11Impl::MouseMove(long x, long y)
 {
-    wxX11Display display;
-    wxASSERT_MSG(display, "No display available!");
+    if ( !m_display )
+        return false;
 
 #if wxUSE_XTEST
-    XTestFakeMotionEvent(display, -1, x, y, 0);
+    XTestFakeMotionEvent(m_display, -1, x, y, 0);
 
 #else // !wxUSE_XTEST
-    Window root = display.DefaultRoot();
-    XWarpPointer(display, None, root, 0, 0, 0, 0, x, y);
+    Window root = m_display.DefaultRoot();
+    XWarpPointer(m_display, None, root, 0, 0, 0, 0, x, y);
 #endif // !wxUSE_XTEST
 
     // At least with wxGTK we must always process the pending events before the
@@ -145,14 +138,13 @@ bool wxUIActionSimulatorX11Impl::MouseMove(long x, long y)
 
 bool wxUIActionSimulatorX11Impl::MouseUp(int button)
 {
-    SendButtonEvent(button, false);
-    return true;
+    return SendButtonEvent(button, false);
 }
 
 bool wxUIActionSimulatorX11Impl::DoKey(int keycode, int modifiers, bool isDown)
 {
-    wxX11Display display;
-    wxCHECK_MSG(display, false, "No display available!");
+    if ( !m_display )
+        return false;
 
     int mask, type;
 
@@ -168,7 +160,7 @@ bool wxUIActionSimulatorX11Impl::DoKey(int keycode, int modifiers, bool isDown)
     }
 
     WXKeySym xkeysym = wxCharCodeWXToX(keycode);
-    KeyCode xkeycode = XKeysymToKeycode(display, xkeysym);
+    KeyCode xkeycode = XKeysymToKeycode(m_display, xkeysym);
     if ( xkeycode == NoSymbol )
         return false;
 
@@ -176,13 +168,13 @@ bool wxUIActionSimulatorX11Impl::DoKey(int keycode, int modifiers, bool isDown)
     wxUnusedVar(modifiers);
     wxUnusedVar(mask);
     wxUnusedVar(type);
-    XTestFakeKeyEvent(display, xkeycode, isDown, 0);
+    XTestFakeKeyEvent(m_display, xkeycode, isDown, 0);
     return true;
 
 #else // !wxUSE_XTEST
     Window focus;
     int revert;
-    XGetInputFocus(display, &focus, &revert);
+    XGetInputFocus(m_display, &focus, &revert);
     if (focus == None)
         return false;
 
@@ -197,7 +189,7 @@ bool wxUIActionSimulatorX11Impl::DoKey(int keycode, int modifiers, bool isDown)
         mod |= ControlMask;
 
     XKeyEvent event;
-    event.display = display;
+    event.display = m_display;
     event.window = focus;
     event.root = DefaultRootWindow(event.display);
     event.subwindow = None;
@@ -218,14 +210,13 @@ bool wxUIActionSimulatorX11Impl::DoKey(int keycode, int modifiers, bool isDown)
 }
 
 wxUIActionSimulator::wxUIActionSimulator()
-                   : m_impl(wxUIActionSimulatorX11Impl::Get())
+                   : m_impl(new wxUIActionSimulatorX11Impl())
 {
 }
 
 wxUIActionSimulator::~wxUIActionSimulator()
 {
-    // We can use a static wxUIActionSimulatorX11Impl object because it's
-    // stateless, so no need to delete it.
+    delete m_impl;
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR
