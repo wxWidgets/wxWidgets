@@ -30,10 +30,15 @@
 namespace
 {
 
+// Base class for both available X11 implementations.
 class wxUIActionSimulatorX11Impl : public wxUIActionSimulatorImpl
 {
 public:
-    wxUIActionSimulatorX11Impl() { }
+    // Return the most appopriate implementation to use: if XTest is available,
+    // use it, otherwise use plain X11 calls.
+    //
+    // The returned pointer is owned by the caller.
+    static wxUIActionSimulatorImpl* New();
 
     virtual bool MouseMove(long x, long y) wxOVERRIDE;
     virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
@@ -41,13 +46,42 @@ public:
 
     virtual bool DoKey(int keycode, int modifiers, bool isDown) wxOVERRIDE;
 
-private:
-    // Common implementation of Mouse{Down,Up}()
-    bool SendButtonEvent(int button, bool isDown);
+protected:
+    // This ctor takes ownership of the display.
+    explicit wxUIActionSimulatorX11Impl(wxX11Display& display)
+        : m_display(display)
+    {
+    }
 
     wxX11Display m_display;
 
+private:
+    // Common implementation of Mouse{Down,Up}() which just forwards to
+    // DoX11Button() after translating wx button to X button constant.
+    bool SendButtonEvent(int button, bool isDown);
+
+    virtual bool DoX11Button(int xbutton, bool isDown) = 0;
+    virtual bool DoX11MouseMove(long x, long y) = 0;
+    virtual bool DoX11Key(KeyCode xkeycode, int modifiers, bool isDown) = 0;
+
     wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorX11Impl);
+};
+
+// Implementation using just plain X11 calls.
+class wxUIActionSimulatorPlainX11Impl : public wxUIActionSimulatorX11Impl
+{
+public:
+    explicit wxUIActionSimulatorPlainX11Impl(wxX11Display& display)
+        : wxUIActionSimulatorX11Impl(display)
+    {
+    }
+
+private:
+    virtual bool DoX11Button(int xbutton, bool isDown) wxOVERRIDE;
+    virtual bool DoX11MouseMove(long x, long y) wxOVERRIDE;
+    virtual bool DoX11Key(KeyCode xkeycode, int modifiers, bool isDown) wxOVERRIDE;
+
+    wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorPlainX11Impl);
 };
 
 bool wxUIActionSimulatorX11Impl::SendButtonEvent(int button, bool isDown)
@@ -72,10 +106,11 @@ bool wxUIActionSimulatorX11Impl::SendButtonEvent(int button, bool isDown)
             return false;
     }
 
-#if wxUSE_XTEST
-    XTestFakeButtonEvent(m_display, xbutton, isDown, 0);
+    return DoX11Button(xbutton, isDown);
+}
 
-#else // !wxUSE_XTEST
+bool wxUIActionSimulatorPlainX11Impl::DoX11Button(int xbutton, bool isDown)
+{
     XEvent event;
     memset(&event, 0x00, sizeof(event));
 
@@ -99,53 +134,22 @@ bool wxUIActionSimulatorX11Impl::SendButtonEvent(int button, bool isDown)
     }
 
     XSendEvent(m_display, PointerWindow, True, 0xfff, &event);
-#endif // !wxUSE_XTEST
 
     return true;
 }
 
-} // anonymous namespace
-
-bool wxUIActionSimulatorX11Impl::MouseDown(int button)
+bool wxUIActionSimulatorPlainX11Impl::DoX11MouseMove(long x, long y)
 {
-    return SendButtonEvent(button, true);
-}
-
-bool wxUIActionSimulatorX11Impl::MouseMove(long x, long y)
-{
-    if ( !m_display )
-        return false;
-
-#if wxUSE_XTEST
-    XTestFakeMotionEvent(m_display, -1, x, y, 0);
-
-#else // !wxUSE_XTEST
     Window root = m_display.DefaultRoot();
     XWarpPointer(m_display, None, root, 0, 0, 0, 0, x, y);
-#endif // !wxUSE_XTEST
-
-    // At least with wxGTK we must always process the pending events before the
-    // mouse position change really takes effect, so just do it from here
-    // instead of forcing the client code using this function to always use
-    // wxYield() which is unnecessary under the other platforms.
-    if ( wxEventLoopBase* const loop = wxEventLoop::GetActive() )
-    {
-        loop->YieldFor(wxEVT_CATEGORY_USER_INPUT);
-    }
-
     return true;
 }
 
-bool wxUIActionSimulatorX11Impl::MouseUp(int button)
+bool
+wxUIActionSimulatorPlainX11Impl::DoX11Key(KeyCode xkeycode,
+                                          int modifiers,
+                                          bool isDown)
 {
-    return SendButtonEvent(button, false);
-}
-
-bool wxUIActionSimulatorX11Impl::DoKey(int keycode, int modifiers, bool isDown)
-{
-    if ( !m_display )
-        return false;
-
     int mask, type;
 
     if ( isDown )
@@ -159,19 +163,6 @@ bool wxUIActionSimulatorX11Impl::DoKey(int keycode, int modifiers, bool isDown)
         mask = KeyReleaseMask;
     }
 
-    WXKeySym xkeysym = wxCharCodeWXToX(keycode);
-    KeyCode xkeycode = XKeysymToKeycode(m_display, xkeysym);
-    if ( xkeycode == NoSymbol )
-        return false;
-
-#if wxUSE_XTEST
-    wxUnusedVar(modifiers);
-    wxUnusedVar(mask);
-    wxUnusedVar(type);
-    XTestFakeKeyEvent(m_display, xkeycode, isDown, 0);
-    return true;
-
-#else // !wxUSE_XTEST
     Window focus;
     int revert;
     XGetInputFocus(m_display, &focus, &revert);
@@ -206,11 +197,107 @@ bool wxUIActionSimulatorX11Impl::DoKey(int keycode, int modifiers, bool isDown)
     XSendEvent(event.display, event.window, True, mask, (XEvent*) &event);
 
     return true;
-#endif // !wxUSE_XTEST
+}
+
+#if wxUSE_XTEST
+
+// Implementation using XTest extension.
+class wxUIActionSimulatorXTestImpl : public wxUIActionSimulatorX11Impl
+{
+public:
+    explicit wxUIActionSimulatorXTestImpl(wxX11Display& display)
+        : wxUIActionSimulatorX11Impl(display)
+    {
+    }
+
+private:
+    virtual bool DoX11Button(int xbutton, bool isDown) wxOVERRIDE;
+    virtual bool DoX11MouseMove(long x, long y) wxOVERRIDE;
+    virtual bool DoX11Key(KeyCode xkeycode, int modifiers, bool isDown) wxOVERRIDE;
+
+    wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorXTestImpl);
+};
+
+bool wxUIActionSimulatorXTestImpl::DoX11Button(int xbutton, bool isDown)
+{
+    return XTestFakeButtonEvent(m_display, xbutton, isDown, 0) != 0;
+}
+
+bool wxUIActionSimulatorXTestImpl::DoX11MouseMove(long x, long y)
+{
+    return XTestFakeMotionEvent(m_display, -1, x, y, 0) != 0;
+}
+
+bool
+wxUIActionSimulatorXTestImpl::DoX11Key(KeyCode xkeycode,
+                                       int WXUNUSED(modifiers),
+                                       bool isDown)
+{
+    return XTestFakeKeyEvent(m_display, xkeycode, isDown, 0) != 0;
+}
+
+#endif // wxUSE_XTEST
+
+wxUIActionSimulatorImpl* wxUIActionSimulatorX11Impl::New()
+{
+    wxX11Display display;
+
+#if wxUSE_XTEST
+    int dummy;
+    if ( XTestQueryExtension(display, &dummy, &dummy, &dummy, &dummy) )
+        return new wxUIActionSimulatorXTestImpl(display);
+#endif // wxUSE_XTEST
+
+    return new wxUIActionSimulatorPlainX11Impl(display);
+}
+
+} // anonymous namespace
+
+bool wxUIActionSimulatorX11Impl::MouseDown(int button)
+{
+    return SendButtonEvent(button, true);
+}
+
+bool wxUIActionSimulatorX11Impl::MouseMove(long x, long y)
+{
+    if ( !m_display )
+        return false;
+
+    if ( !DoX11MouseMove(x, y) )
+        return false;
+
+    // At least with wxGTK we must always process the pending events before the
+    // mouse position change really takes effect, so just do it from here
+    // instead of forcing the client code using this function to always use
+    // wxYield() which is unnecessary under the other platforms.
+    if ( wxEventLoopBase* const loop = wxEventLoop::GetActive() )
+    {
+        loop->YieldFor(wxEVT_CATEGORY_USER_INPUT);
+    }
+
+    return true;
+}
+
+bool wxUIActionSimulatorX11Impl::MouseUp(int button)
+{
+    return SendButtonEvent(button, false);
+}
+
+bool wxUIActionSimulatorX11Impl::DoKey(int keycode, int modifiers, bool isDown)
+{
+    if ( !m_display )
+        return false;
+
+    WXKeySym xkeysym = wxCharCodeWXToX(keycode);
+    KeyCode xkeycode = XKeysymToKeycode(m_display, xkeysym);
+    if ( xkeycode == NoSymbol )
+        return false;
+
+    return DoX11Key(xkeycode, modifiers, isDown);
 }
 
 wxUIActionSimulator::wxUIActionSimulator()
-                   : m_impl(new wxUIActionSimulatorX11Impl())
+                   : m_impl(wxUIActionSimulatorX11Impl::New())
 {
 }
 
