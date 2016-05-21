@@ -52,10 +52,13 @@ private:
     // This class has no public ctors, use Get() instead.
     wxUIActionSimulatorX11Impl() { }
 
+    // Common implementation of Mouse{Down,Up}()
+    static void SendButtonEvent(int button, bool isDown);
+
     wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorX11Impl);
 };
 
-void SendButtonEvent(int button, bool isDown)
+void wxUIActionSimulatorX11Impl::SendButtonEvent(int button, bool isDown)
 {
     int xbutton;
     switch (button)
