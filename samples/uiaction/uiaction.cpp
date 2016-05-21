@@ -33,6 +33,8 @@
     #include "wx/uiaction.h"
 #endif
 
+#include "wx/stopwatch.h"
+
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
@@ -172,6 +174,10 @@ MyFrame::MyFrame(const wxString& title)
 
 void MyFrame::OnRunSimulation(wxCommandEvent& WXUNUSED(event))
 {
+    m_text->SetValue("=== Starting the simulation ===\n");
+
+    wxStopWatch sw;
+
     wxUIActionSimulator sim;
 
     // Add some extra distance to take account of window decorations
@@ -193,6 +199,10 @@ void MyFrame::OnRunSimulation(wxCommandEvent& WXUNUSED(event))
     sim.Text("1 234.57e-8");
     sim.Char(WXK_RETURN);
 
+    // Process the resulting text events
+    wxYield();
+
+    m_text->AppendText(wxString::Format("\n=== Done in %ldms ===\n", sw.Time()));
 }
 
 void MyFrame::OnSimulateText(wxCommandEvent& WXUNUSED(event))
