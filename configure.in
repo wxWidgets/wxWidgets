@@ -6361,19 +6361,21 @@ fi
 if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
     AC_DEFINE(wxUSE_UIACTIONSIMULATOR)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
-    if test "$wxUSE_XTEST" = "yes" ; then
-        PKG_CHECK_MODULES(XTST, xtst,
-            [
-                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $XTST_LIBS"
-                CFLAGS="$XTST_CFLAGS $CFLAGS"
-                CXXFLAGS="$XTST_CFLAGS $CXXFLAGS"
-                AC_DEFINE(wxUSE_XTEST)
-            ],
-            [
-                AC_MSG_WARN([XTest extension not found])
-                wxUSE_XTEST="no"
-            ]
-        )
+    if test "$wxUSE_GTK" = 1 -o "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1; then
+        if test "$wxUSE_XTEST" = "yes" ; then
+            PKG_CHECK_MODULES(XTST, xtst,
+                [
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $XTST_LIBS"
+                    CFLAGS="$XTST_CFLAGS $CFLAGS"
+                    CXXFLAGS="$XTST_CFLAGS $CXXFLAGS"
+                    AC_DEFINE(wxUSE_XTEST)
+                ],
+                [
+                    AC_MSG_WARN([XTest extension not found])
+                    wxUSE_XTEST="no"
+                ]
+            )
+        fi
     fi
 fi
 

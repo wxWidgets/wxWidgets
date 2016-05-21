@@ -33569,7 +33569,8 @@ if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
     $as_echo "#define wxUSE_UIACTIONSIMULATOR 1" >>confdefs.h
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
-    if test "$wxUSE_XTEST" = "yes" ; then
+    if test "$wxUSE_GTK" = 1 -o "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1; then
+        if test "$wxUSE_XTEST" = "yes" ; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for XTST" >&5
@@ -33630,16 +33631,16 @@ fi
 	echo "$XTST_PKG_ERRORS" >&5
 
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: XTest extension not found" >&5
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: XTest extension not found" >&5
 $as_echo "$as_me: WARNING: XTest extension not found" >&2;}
-                wxUSE_XTEST="no"
+                    wxUSE_XTEST="no"
 
 
 elif test $pkg_failed = untried; then
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: XTest extension not found" >&5
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: XTest extension not found" >&5
 $as_echo "$as_me: WARNING: XTest extension not found" >&2;}
-                wxUSE_XTEST="no"
+                    wxUSE_XTEST="no"
 
 
 else
@@ -33648,13 +33649,14 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $XTST_LIBS"
-                CFLAGS="$XTST_CFLAGS $CFLAGS"
-                CXXFLAGS="$XTST_CFLAGS $CXXFLAGS"
-                $as_echo "#define wxUSE_XTEST 1" >>confdefs.h
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $XTST_LIBS"
+                    CFLAGS="$XTST_CFLAGS $CFLAGS"
+                    CXXFLAGS="$XTST_CFLAGS $CXXFLAGS"
+                    $as_echo "#define wxUSE_XTEST 1" >>confdefs.h
 
 
 fi
+        fi
     fi
 fi
 
