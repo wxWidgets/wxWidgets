@@ -6359,8 +6359,6 @@ if test "$wxUSE_MOUSEWHEEL" = "yes" ; then
 fi
 
 if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
-    AC_DEFINE(wxUSE_UIACTIONSIMULATOR)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
     if test "$wxUSE_GTK" = 1 -o "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1; then
         if test "$wxUSE_XTEST" = "yes" ; then
             PKG_CHECK_MODULES(XTST, xtst,
@@ -6371,11 +6369,22 @@ if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
                     AC_DEFINE(wxUSE_XTEST)
                 ],
                 [
-                    AC_MSG_WARN([XTest extension not found])
+                    if test "$WXGTK3" = 1; then
+                        dnl This class can't work without XTest with GTK+ 3
+                        dnl which uses XInput2 and so ignores XSendEvent().
+                        AC_MSG_WARN([XTest not found, disabling wxUIActionSimulator])
+                        wxUSE_UIACTIONSIMULATOR=no
+                    fi
+                    dnl The other ports can use XSendEvent(), so don't warn
                     wxUSE_XTEST="no"
                 ]
             )
         fi
+    fi
+
+    if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
+        AC_DEFINE(wxUSE_UIACTIONSIMULATOR)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
     fi
 fi
 

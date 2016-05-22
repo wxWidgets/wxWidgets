@@ -33566,9 +33566,6 @@ if test "$wxUSE_MOUSEWHEEL" = "yes" ; then
 fi
 
 if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
-    $as_echo "#define wxUSE_UIACTIONSIMULATOR 1" >>confdefs.h
-
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
     if test "$wxUSE_GTK" = 1 -o "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1; then
         if test "$wxUSE_XTEST" = "yes" ; then
 
@@ -33631,16 +33628,22 @@ fi
 	echo "$XTST_PKG_ERRORS" >&5
 
 
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: XTest extension not found" >&5
-$as_echo "$as_me: WARNING: XTest extension not found" >&2;}
-                    wxUSE_XTEST="no"
+                    if test "$WXGTK3" = 1; then
+                                                                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: XTest not found, disabling wxUIActionSimulator" >&5
+$as_echo "$as_me: WARNING: XTest not found, disabling wxUIActionSimulator" >&2;}
+                        wxUSE_UIACTIONSIMULATOR=no
+                    fi
+                                        wxUSE_XTEST="no"
 
 
 elif test $pkg_failed = untried; then
 
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: XTest extension not found" >&5
-$as_echo "$as_me: WARNING: XTest extension not found" >&2;}
-                    wxUSE_XTEST="no"
+                    if test "$WXGTK3" = 1; then
+                                                                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: XTest not found, disabling wxUIActionSimulator" >&5
+$as_echo "$as_me: WARNING: XTest not found, disabling wxUIActionSimulator" >&2;}
+                        wxUSE_UIACTIONSIMULATOR=no
+                    fi
+                                        wxUSE_XTEST="no"
 
 
 else
@@ -33657,6 +33660,12 @@ $as_echo "yes" >&6; }
 
 fi
         fi
+    fi
+
+    if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
+        $as_echo "#define wxUSE_UIACTIONSIMULATOR 1" >>confdefs.h
+
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
     fi
 fi
 
