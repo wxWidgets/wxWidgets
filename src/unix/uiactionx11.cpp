@@ -106,6 +106,10 @@ bool wxUIActionSimulatorX11Impl::SendButtonEvent(int button, bool isDown)
             return false;
     }
 
+    // Ensure that the event is received by the correct window by processing
+    // all pending events, notably mouse moves.
+    XSync(m_display, False /* don't discard */);
+
     return DoX11Button(xbutton, isDown);
 }
 
