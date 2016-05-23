@@ -2,9 +2,9 @@
 // Name:        uiaction.cpp
 // Purpose:     wxUIActionSimulator sample
 // Author:      Kevin Ollivier
-// Modified by:
 // Created:     04/01/98
-// Copyright:   (c) Kevin Ollivier, Steven Lamerton
+// Copyright:   (c) 2010 Kevin Ollivier, Steven Lamerton
+//              (c) 2016 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -78,6 +78,7 @@ public:
     MyFrame(const wxString& title);
 
     void OnButtonPressed(wxCommandEvent& event);
+    void OnNew(wxCommandEvent& event);
     void OnRunSimulation(wxCommandEvent& event);
     void OnSimulateText(wxCommandEvent& event);
     void OnExit(wxCommandEvent& WXUNUSED(event)) { Close(); }
@@ -91,6 +92,7 @@ private:
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(wxID_ANY, MyFrame::OnButtonPressed)
+    EVT_MENU(wxID_NEW, MyFrame::OnNew)
     EVT_MENU(RunSimulation, MyFrame::OnRunSimulation)
     EVT_MENU(SimulateText, MyFrame::OnSimulateText)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
@@ -172,6 +174,11 @@ MyFrame::MyFrame(const wxString& title)
 
 // event handlers
 
+void MyFrame::OnNew(wxCommandEvent& WXUNUSED(event))
+{
+    m_text->AppendText("\"New\" menu item was selected\n");
+}
+
 void MyFrame::OnRunSimulation(wxCommandEvent& WXUNUSED(event))
 {
     m_text->SetValue("=== Starting the simulation "
@@ -208,6 +215,11 @@ void MyFrame::OnRunSimulation(wxCommandEvent& WXUNUSED(event))
     sim.Char(WXK_RETURN);
 
     // Process the resulting text events
+    wxYield();
+
+    // Emulate opening a menu from keyboard.
+    sim.Char('F', wxMOD_ALT);
+    sim.Char('N');
     wxYield();
 
     m_text->AppendText(wxString::Format("\n=== Done in %ldms ===\n", sw.Time()));
