@@ -27,6 +27,12 @@
 
 #include "wx/unix/utilsx11.h"
 
+// Normally we fall back on "plain X" implementation if XTest is not available,
+// but it's useless to do it when using GTK+ 3 as it's not going to work with
+// it anyhow because GTK+ 3 needs XInput2 events and not the "classic" ones we
+// synthesize here, so don't even compile in this code for wxGTK3 port.
+#define wxUSE_PLAINX_IMPL (!defined(__WXGTK3__))
+
 namespace
 {
 
@@ -67,23 +73,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorX11Impl);
 };
 
-// Implementation using just plain X11 calls.
-class wxUIActionSimulatorPlainX11Impl : public wxUIActionSimulatorX11Impl
-{
-public:
-    explicit wxUIActionSimulatorPlainX11Impl(wxX11Display& display)
-        : wxUIActionSimulatorX11Impl(display)
-    {
-    }
-
-private:
-    virtual bool DoX11Button(int xbutton, bool isDown) wxOVERRIDE;
-    virtual bool DoX11MouseMove(long x, long y) wxOVERRIDE;
-    virtual bool DoX11Key(KeyCode xkeycode, int modifiers, bool isDown) wxOVERRIDE;
-
-    wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorPlainX11Impl);
-};
-
 bool wxUIActionSimulatorX11Impl::SendButtonEvent(int button, bool isDown)
 {
     if ( !m_display )
@@ -112,6 +101,25 @@ bool wxUIActionSimulatorX11Impl::SendButtonEvent(int button, bool isDown)
 
     return DoX11Button(xbutton, isDown);
 }
+
+#if wxUSE_PLAINX_IMPL
+
+// Implementation using just plain X11 calls.
+class wxUIActionSimulatorPlainX11Impl : public wxUIActionSimulatorX11Impl
+{
+public:
+    explicit wxUIActionSimulatorPlainX11Impl(wxX11Display& display)
+        : wxUIActionSimulatorX11Impl(display)
+    {
+    }
+
+private:
+    virtual bool DoX11Button(int xbutton, bool isDown) wxOVERRIDE;
+    virtual bool DoX11MouseMove(long x, long y) wxOVERRIDE;
+    virtual bool DoX11Key(KeyCode xkeycode, int modifiers, bool isDown) wxOVERRIDE;
+
+    wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorPlainX11Impl);
+};
 
 bool wxUIActionSimulatorPlainX11Impl::DoX11Button(int xbutton, bool isDown)
 {
@@ -203,6 +211,8 @@ wxUIActionSimulatorPlainX11Impl::DoX11Key(KeyCode xkeycode,
     return true;
 }
 
+#endif // wxUSE_PLAINX_IMPL
+
 #if wxUSE_XTEST
 
 // Implementation using XTest extension.
@@ -247,12 +257,19 @@ wxUIActionSimulatorImpl* wxUIActionSimulatorX11Impl::New()
     wxX11Display display;
 
 #if wxUSE_XTEST
+    // If we can fall back on plain X implementation, check if XTest extension
+    // is available and if it isn't, use the other one. OTOH if we don't have
+    // the other one anyhow, then testing for XTest availability is useless.
+#if wxUSE_PLAINX_IMPL
     int dummy;
     if ( XTestQueryExtension(display, &dummy, &dummy, &dummy, &dummy) )
+#endif // wxUSE_PLAINX_IMPL
         return new wxUIActionSimulatorXTestImpl(display);
 #endif // wxUSE_XTEST
 
+#if wxUSE_PLAINX_IMPL
     return new wxUIActionSimulatorPlainX11Impl(display);
+#endif // wxUSE_PLAINX_IMPL
 }
 
 } // anonymous namespace
