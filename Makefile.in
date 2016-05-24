@@ -267,6 +267,7 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexHex.o \
 	wxscintilla_LexHTML.o \
 	wxscintilla_LexInno.o \
+	wxscintilla_LexJSON.o \
 	wxscintilla_LexKix.o \
 	wxscintilla_LexKVIrc.o \
 	wxscintilla_LexLaTeX.o \
@@ -15278,6 +15279,9 @@ wxscintilla_LexHTML.o: $(srcdir)/src/stc/scintilla/lexers/LexHTML.cxx
 
 wxscintilla_LexInno.o: $(srcdir)/src/stc/scintilla/lexers/LexInno.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexInno.cxx
+
+wxscintilla_LexJSON.o: $(srcdir)/src/stc/scintilla/lexers/LexJSON.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexJSON.cxx
 
 wxscintilla_LexKix.o: $(srcdir)/src/stc/scintilla/lexers/LexKix.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexKix.cxx

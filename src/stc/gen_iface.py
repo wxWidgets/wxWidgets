@@ -1085,7 +1085,6 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
         else:
             print('***** Unknown line type: %s' % line)
 
-
     # process templates
     data = {}
     data['VALUES'] = processVals(values)

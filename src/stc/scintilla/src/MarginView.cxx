@@ -243,7 +243,7 @@ void MarginView::PaintMargin(Surface *surface, int topLine, PRectangle rc, PRect
 						levelPrev = model.pdoc->GetLevel(lineBack);
 					}
 					if (!(levelPrev & SC_FOLDLEVELHEADERFLAG)) {
-						if ((level & SC_FOLDLEVELNUMBERMASK) < (levelPrev & SC_FOLDLEVELNUMBERMASK))
+						if (LevelNumber(level) < LevelNumber(levelPrev))
 							needWhiteClosure = true;
 					}
 				}
@@ -279,8 +279,8 @@ void MarginView::PaintMargin(Surface *surface, int topLine, PRectangle rc, PRect
 					// Decide which fold indicator should be displayed
 					const int level = model.pdoc->GetLevel(lineDoc);
 					const int levelNext = model.pdoc->GetLevel(lineDoc + 1);
-					const int levelNum = level & SC_FOLDLEVELNUMBERMASK;
-					const int levelNextNum = levelNext & SC_FOLDLEVELNUMBERMASK;
+					const int levelNum = LevelNumber(level);
+					const int levelNextNum = LevelNumber(levelNext);
 					if (level & SC_FOLDLEVELHEADERFLAG) {
 						if (firstSubLine) {
 							if (levelNum < levelNextNum) {
@@ -312,7 +312,7 @@ void MarginView::PaintMargin(Surface *surface, int topLine, PRectangle rc, PRect
 						needWhiteClosure = false;
 						const int firstFollowupLine = model.cs.DocFromDisplay(model.cs.DisplayFromDoc(lineDoc + 1));
 						const int firstFollowupLineLevel = model.pdoc->GetLevel(firstFollowupLine);
-						const int secondFollowupLineLevelNum = model.pdoc->GetLevel(firstFollowupLine + 1) & SC_FOLDLEVELNUMBERMASK;
+						const int secondFollowupLineLevelNum = LevelNumber(model.pdoc->GetLevel(firstFollowupLine + 1));
 						if (!model.cs.GetExpanded(lineDoc)) {
 							if ((firstFollowupLineLevel & SC_FOLDLEVELWHITEFLAG) &&
 								(levelNum > secondFollowupLineLevelNum))
@@ -380,7 +380,7 @@ void MarginView::PaintMargin(Surface *surface, int topLine, PRectangle rc, PRect
 								sprintf(number, "%c%c %03X %03X",
 									(lev & SC_FOLDLEVELHEADERFLAG) ? 'H' : '_',
 									(lev & SC_FOLDLEVELWHITEFLAG) ? 'W' : '_',
-									lev & SC_FOLDLEVELNUMBERMASK,
+									LevelNumber(lev),
 									lev >> 16
 									);
 							} else {
