@@ -715,6 +715,17 @@ wxCharBuffer wxStyledTextCtrl::GetSelectedTextRaw()
     return buf;
 }
 
+wxCharBuffer wxStyledTextCtrl::GetTargetTextRaw()
+{
+    // Calculate the length needed first.
+    const int len = SendMsg(SCI_GETTARGETEND, 0, 0) - SendMsg(SCI_GETTARGETSTART, 0, 0);
+
+    // And then really get the data.
+    wxCharBuffer buf(len);
+    SendMsg(SCI_GETTARGETTEXT, 0, (sptr_t)buf.data());
+    return buf;
+}
+
 wxCharBuffer wxStyledTextCtrl::GetTextRangeRaw(int startPos, int endPos)
 {
     if (endPos < startPos) {

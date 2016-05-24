@@ -6358,6 +6358,11 @@ public:
     wxCharBuffer GetSelectedTextRaw();
 
     /**
+       Retrieve the target text.
+    */
+    wxCharBuffer GetTargetTextRaw();
+
+    /**
        Retrieve a range of text.
     */
     wxCharBuffer GetTextRangeRaw(int startPos, int endPos);
