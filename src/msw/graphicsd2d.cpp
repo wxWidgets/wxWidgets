@@ -23,6 +23,8 @@
 // are not violating the ODR rule.
 #define D2D1CreateFactory wxD2D1CreateFactory
 #define D2D1MakeRotateMatrix wxD2D1MakeRotateMatrix
+#define D2D1MakeSkewMatrix wxD2D1MakeSkewMatrix
+#define D2D1IsMatrixInvertible wxD2D1IsMatrixInvertible
 #define D2D1InvertMatrix wxD2D1InvertMatrix
 
 // There are clashes between the names of the member fields and parameters
@@ -158,6 +160,8 @@ private:
 
         wxLOAD_FUNC(m_dllDirect2d, D2D1CreateFactory);
         wxLOAD_FUNC(m_dllDirect2d, D2D1MakeRotateMatrix);
+        wxLOAD_FUNC(m_dllDirect2d, D2D1MakeSkewMatrix);
+        wxLOAD_FUNC(m_dllDirect2d, D2D1IsMatrixInvertible);
         wxLOAD_FUNC(m_dllDirect2d, D2D1InvertMatrix);
         wxLOAD_FUNC(m_dllDirectWrite, DWriteCreateFactory);
 
@@ -172,6 +176,12 @@ public:
 
     typedef void (WINAPI *D2D1MakeRotateMatrix_t)(FLOAT, D2D1_POINT_2F, D2D1_MATRIX_3X2_F*);
     static D2D1MakeRotateMatrix_t D2D1MakeRotateMatrix;
+
+    typedef void (WINAPI *D2D1MakeSkewMatrix_t)(FLOAT, FLOAT, D2D1_POINT_2F, D2D1_MATRIX_3X2_F*);
+    static D2D1MakeSkewMatrix_t D2D1MakeSkewMatrix;
+
+    typedef BOOL (WINAPI *D2D1IsMatrixInvertible_t)(const D2D1_MATRIX_3X2_F*);
+    static D2D1IsMatrixInvertible_t D2D1IsMatrixInvertible;
 
     typedef BOOL (WINAPI *D2D1InvertMatrix_t)(D2D1_MATRIX_3X2_F*);
     static D2D1InvertMatrix_t D2D1InvertMatrix;
@@ -199,6 +209,8 @@ wxDynamicLibrary wxDirect2D::m_dllDirectWrite;
 // define the (not yet imported) functions
 wxDirect2D::D2D1CreateFactory_t wxDirect2D::D2D1CreateFactory = NULL;
 wxDirect2D::D2D1MakeRotateMatrix_t wxDirect2D::D2D1MakeRotateMatrix = NULL;
+wxDirect2D::D2D1MakeSkewMatrix_t wxDirect2D::D2D1MakeSkewMatrix = NULL;
+wxDirect2D::D2D1IsMatrixInvertible_t wxDirect2D::D2D1IsMatrixInvertible = NULL;
 wxDirect2D::D2D1InvertMatrix_t wxDirect2D::D2D1InvertMatrix = NULL;
 wxDirect2D::DWriteCreateFactory_t wxDirect2D::DWriteCreateFactory = NULL;
 
@@ -238,6 +250,27 @@ void WINAPI wxD2D1MakeRotateMatrix(
         return;
 
     wxDirect2D::D2D1MakeRotateMatrix(angle, center, matrix);
+}
+
+void WINAPI wxD2D1MakeSkewMatrix(
+    FLOAT angleX,
+    FLOAT angleY,
+    D2D1_POINT_2F center,
+    D2D1_MATRIX_3X2_F *matrix)
+{
+    if (!wxDirect2D::Initialize())
+        return;
+
+    wxDirect2D::D2D1MakeSkewMatrix(angleX, angleY, center, matrix);
+}
+
+BOOL WINAPI wxD2D1IsMatrixInvertible(
+    const D2D1_MATRIX_3X2_F *matrix)
+{
+    if (!wxDirect2D::Initialize())
+        return FALSE;
+
+    return wxDirect2D::D2D1IsMatrixInvertible(matrix);
 }
 
 BOOL WINAPI wxD2D1InvertMatrix(
